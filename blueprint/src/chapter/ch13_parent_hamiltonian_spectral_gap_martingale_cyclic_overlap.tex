@@ -445,7 +445,6 @@
     \label{lem:parent_hamiltonian_cyclic_overlap_norm_constant_gap}
     \lean{MPSTensor.parentHamiltonianES_gap_bound_of_cyclic_window_overlap_norm_bound_of_le}
     \lean{MPSTensor.parentHamiltonianES_gap_bound_of_cyclic_window_overlap_norm_bound_of_lt}
-    \lean{MPSTensor.parentHamiltonianES_gap_bound_of_principal_angle_compression}
     \leanok
     \uses{lem:parent_hamiltonian_finite_overlap_norm_quadratic,
         lem:cyclic_window_overlap_cardinality, lem:cyclic_window_nonoverlap_positive,
@@ -465,8 +464,9 @@
     every admissible $N$ and every
     $v\in(\mathcal G_{N,L}^{\mathrm{ES}}(A))^\perp$,
     $(1-\eta m)\|v\| \le \|H_{N,L}^{\mathrm{ES}}(A)v\|$.
-    This strict compression form is a norm-compression sufficient condition, not
-    the principal-angle estimate itself. It is a sufficient strengthening of the
+    This strict all-vector compression form is a stronger conditional
+    sufficient condition, not the source principal-angle estimate itself. It is
+    a sufficient strengthening of the
     anticommutator martingale estimate in
     Cirac--Perez-Garcia--Schuch--Verstraete~\cite[Section~IV.C]{Cirac2021Matrix}.
     It does not prove the remaining MPS-specific estimate; it isolates the

@@ -544,8 +544,13 @@ block components lie in \(G_N(A_j)\)) and does not assume the boundary-crossing
 comparison. The periodic-boundary upgrade encoded by `hTrace` — the boundary trace
 comparison with \(D^j_\beta=(\mu_j^NX_j)A^j_\beta\) — is the boundary-condition
 comparison of arXiv:quant-ph/0608197, Theorem 12, proof lines 1446--1456, and
-arXiv:2011.12127, Section IV.C, lines 2126--2128, not yet derived from the periodic
-ground-space constraint. Documented in
+arXiv:2011.12127, Section IV.C, lines 2126--2128, retained as an
+explicit assumption in this intermediate trace-decomposition theorem. The
+source-range conclusion without it is
+`exists_blockDiagonal_boundary_chainGroundSpace_of_global_cut_bnt_c1_pgvwc07`
+in `BNTBlockDiagonalBoundaryClosing`.
+
+This scope restriction is documented in
 `docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex`. -/
 theorem
     exists_blockDiagonal_boundary_chainGroundSpace_of_trace_decomposition_bnt_c1
@@ -620,8 +625,13 @@ comparison; the common middle-word span is supplied by the BNT block-separation
 theorem. The periodic-boundary upgrade encoded by `hTrace` — the boundary trace
 comparison with \(D^j_\beta=(\mu_j^NX_j)A^j_\beta\) — is the boundary-condition
 comparison of arXiv:quant-ph/0608197, Theorem 12, proof lines 1446--1456, and
-arXiv:2011.12127, Section IV.C, lines 2126--2128, not yet derived from the periodic
-ground-space constraint. Documented in
+arXiv:2011.12127, Section IV.C, lines 2126--2128, retained as an
+explicit assumption in this intermediate trace-decomposition theorem. The
+source-range conclusion without it is
+`exists_blockDiagonal_boundary_chainGroundSpace_of_global_cut_bnt_c1_pgvwc07`
+in `BNTBlockDiagonalBoundaryClosing`.
+
+This scope restriction is documented in
 `docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex`. -/
 theorem
     exists_blockDiagonal_boundary_chainGroundSpace_of_trace_decomposition_bnt_c1_span
@@ -688,9 +698,9 @@ trace-decomposition form of the boundary-condition comparison in
 arXiv:quant-ph/0608197, Theorem 12. It assumes a finite simultaneous word-spanning
 length \(m\) and the trace equality at that length, for every
 boundary-crossing interval and every block-diagonal boundary representation.
-Deriving that equality from the source \(C^j,D^j\) comparison, with
-\(D^j_\beta=(\mu_j^N X_j)A^j_\beta\), is the remaining step recorded in
-`docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex`.
+The trace equality remains the explicit input of this intermediate theorem. The
+source-range global-cut theorem proves the periodic-boundary conclusion without
+requiring this trace-decomposition hypothesis.
 
 **Scope restriction (periodic-boundary comparison):** The boundary trace
 decomposition `hTrace` is the explicit hypothesis here. The underlying
@@ -699,8 +709,12 @@ arXiv:quant-ph/0608197, Theorem 12, independent of the boundary-crossing
 comparison. The periodic-boundary upgrade encoded by `hTrace` — the boundary trace
 comparison with \(D^j_\beta=(\mu_j^NX_j)A^j_\beta\) — is the boundary-condition
 comparison of arXiv:quant-ph/0608197, Theorem 12, proof lines 1446--1456, and
-arXiv:2011.12127, Section IV.C, lines 2126--2128, not yet derived from the periodic
-ground-space constraint. Documented in
+arXiv:2011.12127, Section IV.C, lines 2126--2128, retained as an
+explicit assumption in this intermediate trace-decomposition theorem. The
+source-range conclusion without it is
+`chainGroundSpace_toTensorFromBlocks_eq_iSup_and_iSupIndep_of_global_cut_bnt_c1_pgvwc07`.
+
+This scope restriction is documented in
 `docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex`. -/
 theorem
     chainGroundSpace_toTensorFromBlocks_eq_iSup_and_iSupIndep_of_trace_decomposition
@@ -770,8 +784,12 @@ comparison; the common middle-word span is supplied by the BNT block-separation
 theorem. The periodic-boundary upgrade encoded by `hTrace` — the boundary trace
 comparison with \(D^j_\beta=(\mu_j^NX_j)A^j_\beta\) — is the boundary-condition
 comparison of arXiv:quant-ph/0608197, Theorem 12, proof lines 1446--1456, and
-arXiv:2011.12127, Section IV.C, lines 2126--2128, not yet derived from the periodic
-ground-space constraint. Documented in
+arXiv:2011.12127, Section IV.C, lines 2126--2128, retained as an
+explicit assumption in this intermediate trace-decomposition theorem. The
+source-range conclusion without it is
+`chainGroundSpace_toTensorFromBlocks_eq_iSup_and_iSupIndep_of_global_cut_bnt_c1_pgvwc07`.
+
+This scope restriction is documented in
 `docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex`. -/
 theorem
     chainGroundSpace_toTensorFromBlocks_eq_iSup_and_iSupIndep_of_trace_decomposition_bnt_c1_span

@@ -42,8 +42,12 @@ with periodic components \(\psi_j\in\mathcal G_{N,L}(A_j)\) is the explicit
 hypothesis `hBoundary` here. The span-based open-boundary decomposition is proved
 (its summands lie in \(G_N(A_j)\)); the periodic-boundary upgrade is the
 boundary-condition comparison of arXiv:quant-ph/0608197, Theorem 12, proof lines
-1446--1456, and arXiv:2011.12127, Section IV.C, lines 2126--2128, not yet derived
-from the periodic ground-space constraint. Documented in
+1446--1456, and arXiv:2011.12127, Section IV.C, lines 2126--2128. It is retained
+as the explicit hypothesis of this intermediate theorem; the source-range conclusion
+without it is
+`chainGroundSpace_toTensorFromBlocks_eq_iSup_and_iSupIndep_of_global_cut_bnt_c1_pgvwc07`.
+
+This scope restriction is documented in
 `docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex`. -/
 theorem chainGroundSpace_toTensorFromBlocks_eq_iSup_and_iSupIndep_of_bnt_c1_boundary_decomposition
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]

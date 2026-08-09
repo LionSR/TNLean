@@ -26,15 +26,11 @@ The source proof writes this comparison with boundary-indexed matrices
 \(\beta\) and \(\rho\) below are the word coordinates obtained by opening the
 periodic boundary at the chosen cut, not additional source terminology.
 
-**Proof-state note:** The \(E^j\)-normalization calculation is formalized by
-`pgvwc07_complementary_word_cde_identities_of_block_boundary_trace_decomposition`
-and `pgvwc07_complementary_word_boundary_identities_formula_of_compatibility`.
-The remaining comparison problem is to derive the displayed \(C^j,D^j\)
-compatibility from periodic-boundary membership in the source range
-\(b\ge2\), \(L\ge3(b-1)(L_0+1)+1\), and \(N\ge L+L_0\), where \(b\) is the
-number of blocks in arXiv:quant-ph/0608197, Theorem 12. This derivation should
-not use the short tail-word span hypothesis assumed by the conditional
-statements below.
+**Scope note:** The span-dependent and explicit-comparison declarations below
+record intermediate forms of the PGVWC07 \(C^j,D^j,E^j\) argument. The source-range
+conclusion without short crossing-tail span or external comparison hypotheses is
+`exists_blockDiagonal_boundary_chainGroundSpace_of_global_cut_bnt_c1_pgvwc07`
+in `BNTBlockDiagonalBoundaryClosing`.
 -/
 
 open scoped Matrix BigOperators
@@ -73,7 +69,12 @@ lines 2126--2128.
 
 **Scope restriction (crossing span):** The statement assumes the short
 tail-word span at length \(N-i\) for each boundary-crossing interval. This is
-the remaining visible source-range gap recorded in
+an explicit assumption of this intermediate span-dependent form.
+The
+source-range conclusion without it is the global-cut theorem in
+`BNTBlockDiagonalBoundaryClosing`.
+
+This scope restriction is documented in
 `docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex`. -/
 theorem blockDiagonal_boundary_crossing_pgvwc_comparison_of_chainGroundSpace
     {r : ℕ} {dim : Fin r → ℕ}
@@ -174,8 +175,8 @@ window, not terminology of the source statement.
 **Scope restriction (length-\(L_0\) injectivity range):** Theorem 12 of
 arXiv:quant-ph/0608197 assumes \(L\ge 3(b-1)(L_0+1)+1\). This theorem is stated in the current BNT
 range derived from length-\(L_0\) block injectivity,
-\((L_0+1)+3(r-1)(L_0+1)+1\le L\). The source-range comparison is recorded in
-`docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex`.
+\((L_0+1)+3(r-1)(L_0+1)+1\le L\). The source-range conclusion is
+`exists_blockDiagonal_boundary_chainGroundSpace_of_global_cut_bnt_c1_pgvwc07`.
 
 **Scope restriction (periodic-boundary comparison):** The opened-boundary
 \(C^j,D^j\) comparison `hComparison` is the explicit hypothesis here. The
@@ -185,8 +186,12 @@ is the boundary-comparison-free open-boundary inclusion of arXiv:quant-ph/060819
 block components lie in \(G_N(A_j)\)) and does not assume the boundary-crossing
 comparison. The periodic-boundary upgrade encoded by `hComparison` is the
 boundary-condition comparison of arXiv:quant-ph/0608197, Theorem 12, proof lines
-1446--1456, and arXiv:2011.12127, Section IV.C, lines 2126--2128, not yet derived
-from the periodic ground-space constraint. Documented in
+1446--1456, and arXiv:2011.12127, Section IV.C, lines 2126--2128,
+retained as an explicit assumption in this intermediate theorem. The
+source-range conclusion without it is the global-cut theorem in
+`BNTBlockDiagonalBoundaryClosing`.
+
+These scope restrictions are documented in
 `docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex`. -/
 theorem exists_blockDiagonal_boundary_chainGroundSpace_of_pgvwc_comparison_bnt_c1
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
@@ -258,8 +263,12 @@ block-diagonal boundary conditions in arXiv:2011.12127, Section IV.C, lines
 simultaneous block-word tuples of length \(N-i\) span the product algebra at
 each boundary-crossing interval \(i\). This is not a consequence of the
 large-length BNT product-span bound alone: for a crossing interval beginning at
-\(i=N-1\), the required tail length is \(1\). Removing that span hypothesis is
-part of the remaining comparison with the cited source recorded in
+\(i=N-1\), the required tail length is \(1\). Thus this theorem is only the
+span-dependent intermediate form; the global-cut
+theorem in `BNTBlockDiagonalBoundaryClosing` removes the hypothesis at the source
+range.
+
+This scope restriction is documented in
 `docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex`. -/
 theorem
     exists_blockDiagonal_boundary_chainGroundSpace_of_crossing_pgvwc_comparison_of_boundary
@@ -319,18 +328,20 @@ and \(i_{m+1}\).
 **Scope restriction (length-\(L_0\) injectivity range):** Theorem 12 of
 arXiv:quant-ph/0608197 assumes \(L\ge 3(b-1)(L_0+1)+1\). This theorem is stated in the current BNT
 range derived from length-\(L_0\) block injectivity,
-\((L_0+1)+3(r-1)(L_0+1)+1\le L\). The source-range comparison is recorded in
-`docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex`.
+\((L_0+1)+3(r-1)(L_0+1)+1\le L\). The source-range conclusion is
+`exists_blockDiagonal_boundary_chainGroundSpace_of_global_cut_bnt_c1_pgvwc07`.
 
 The block-diagonal boundary representation used here is the
 boundary-comparison-free open-boundary inclusion of arXiv:quant-ph/0608197,
 Theorem 12 (its block components lie in \(G_N(A_j)\)) and does not assume the
 boundary-crossing comparison.
 
-**Scope restriction (crossing span):** The residual source-scope gap is the
-crossing-tail span hypothesis noted above, which supplies the periodic-boundary
-upgrade (arXiv:quant-ph/0608197, Theorem 12, proof lines 1446--1456;
-arXiv:2011.12127, Section IV.C, lines 2126--2128). Documented in
+**Scope restriction (crossing span):** This intermediate theorem retains the
+crossing-tail span hypothesis. The global-cut theorem in
+`BNTBlockDiagonalBoundaryClosing` supplies the source-range periodic-boundary
+upgrade without that hypothesis.
+
+These scope restrictions are documented in
 `docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex`. -/
 theorem
     exists_blockDiagonal_boundary_chainGroundSpace_of_crossing_pgvwc_comparison_bnt_c1
@@ -410,15 +421,18 @@ block-diagonal boundary conditions of arXiv:2011.12127, Section IV.C, lines
 **Scope restriction (length-\(L_0\) injectivity range):** Theorem 12 of
 arXiv:quant-ph/0608197 assumes \(L\ge 3(b-1)(L_0+1)+1\). This theorem is stated
 in the current BNT range derived from length-\(L_0\) block injectivity,
-\((L_0+1)+3(r-1)(L_0+1)+1\le L\). The source-range comparison is recorded in
-`docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex`.
+\((L_0+1)+3(r-1)(L_0+1)+1\le L\). The source-range conclusion is
+`exists_blockDiagonal_boundary_chainGroundSpace_of_global_cut_bnt_c1_pgvwc07`.
 
 **Scope restriction (short crossing tails):** The hypothesis `hShortSpan`
 assumes the simultaneous tail-word span at the crossing tails of length
 \(N-i<(L_0+1)+3(r-1)(L_0+1)\). For the interval beginning at \(i=N-1\) the tail
-length is \(1\), so the finite BNT range does not supply this span. Replacing
-it by the source \(C^j,D^j\) comparison in the source range is the residual
-recorded in `docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex`. -/
+length is \(1\), so the finite BNT range does not supply this span. The global-cut theorem in
+`BNTBlockDiagonalBoundaryClosing` proves the
+source-range conclusion without `hShortSpan`.
+
+These scope restrictions are documented in
+`docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex`. -/
 theorem exists_blockDiagonal_boundary_chainGroundSpace_of_short_crossing_span_bnt_c1
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
     (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
@@ -488,8 +502,8 @@ arXiv:2011.12127, Section IV.C, lines 2126--2128.
 **Scope restriction (length-\(L_0\) injectivity range):** Theorem 12 of
 arXiv:quant-ph/0608197 assumes \(L\ge 3(b-1)(L_0+1)+1\). This theorem is stated
 in the current BNT range derived from length-\(L_0\) block injectivity,
-\((L_0+1)+3(r-1)(L_0+1)+1\le L\). The source-range comparison is recorded in
-`docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex`.
+\((L_0+1)+3(r-1)(L_0+1)+1\le L\). The source-range conclusion is
+`chainGroundSpace_toTensorFromBlocks_eq_iSup_and_iSupIndep_of_global_cut_bnt_c1_pgvwc07`.
 
 The block-diagonal boundary representation used here is the
 boundary-comparison-free open-boundary inclusion of arXiv:quant-ph/0608197,
@@ -500,10 +514,12 @@ boundary-crossing comparison.
 block-word tuples of length \(N-i\) span the product algebra for each
 boundary-crossing interval beginning at \(i\). The finite BNT range gives
 large-length simultaneous product spans; it does not by itself supply the
-shortest crossing tails, where \(N-i\) can be \(1\). This visible hypothesis is
-the residual source-scope gap in the periodic-boundary upgrade
-(arXiv:quant-ph/0608197, Theorem 12, proof lines 1446--1456;
-arXiv:2011.12127, Section IV.C, lines 2126--2128). Documented in
+shortest crossing tails, where \(N-i\) can be \(1\). This is therefore a
+span-dependent intermediate theorem. The global-cut
+theorem proves the source-range periodic-boundary
+upgrade without this hypothesis.
+
+These scope restrictions are documented in
 `docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex`. -/
 theorem
     chainGroundSpace_toTensorFromBlocks_eq_iSup_and_iSupIndep_of_crossing_pgvwc_comparison
@@ -551,8 +567,8 @@ which is the ground-space assertion in the source theorem.
 **Scope restriction (length-\(L_0\) injectivity range):** Theorem 12 of
 arXiv:quant-ph/0608197 assumes \(L\ge 3(b-1)(L_0+1)+1\). This theorem is stated
 in the current BNT range derived from length-\(L_0\) block injectivity,
-\((L_0+1)+3(r-1)(L_0+1)+1\le L\). The source-range comparison is recorded in
-`docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex`.
+\((L_0+1)+3(r-1)(L_0+1)+1\le L\). The source-range conclusion is
+`chainGroundSpace_toTensorFromBlocks_eq_iSup_of_global_cut_bnt_c1_pgvwc07`.
 
 The block-diagonal boundary representation used here is the
 boundary-comparison-free open-boundary inclusion of arXiv:quant-ph/0608197,
@@ -563,10 +579,12 @@ boundary-crossing comparison.
 block-word tuples of length \(N-i\) span the product algebra for each
 boundary-crossing interval beginning at \(i\). The finite BNT range gives
 large-length simultaneous product spans; it does not by itself supply the
-shortest crossing tails, where \(N-i\) can be \(1\). This visible hypothesis is
-the residual source-scope gap in the periodic-boundary upgrade
-(arXiv:quant-ph/0608197, Theorem 12, proof lines 1446--1456;
-arXiv:2011.12127, Section IV.C, lines 2126--2128). Documented in
+shortest crossing tails, where \(N-i\) can be \(1\). This is therefore a
+span-dependent intermediate theorem. The global-cut
+theorem proves the source-range periodic-boundary
+upgrade without this hypothesis.
+
+These scope restrictions are documented in
 `docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex`. -/
 theorem chainGroundSpace_toTensorFromBlocks_eq_iSup_of_crossing_pgvwc_comparison
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
@@ -616,8 +634,8 @@ periodic-boundary equality.
 **Scope restriction (length-\(L_0\) injectivity range):** Theorem 12 of
 arXiv:quant-ph/0608197 assumes \(L\ge 3(b-1)(L_0+1)+1\). This theorem is stated in the current BNT
 range derived from length-\(L_0\) block injectivity,
-\((L_0+1)+3(r-1)(L_0+1)+1\le L\). The source-range comparison is recorded in
-`docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex`.
+\((L_0+1)+3(r-1)(L_0+1)+1\le L\). The source-range conclusion is
+`chainGroundSpace_toTensorFromBlocks_eq_iSup_and_iSupIndep_of_global_cut_bnt_c1_pgvwc07`.
 
 **Scope restriction (periodic-boundary comparison):** The opened-boundary
 \(C^j,D^j\) comparison `hComparison` is the explicit hypothesis here. The
@@ -626,8 +644,12 @@ inclusion of arXiv:quant-ph/0608197, Theorem 12, independent of the
 boundary-crossing comparison. The periodic-boundary upgrade encoded by
 `hComparison` is the boundary-condition comparison of arXiv:quant-ph/0608197,
 Theorem 12, proof lines 1446--1456, and arXiv:2011.12127, Section IV.C, lines
-2126--2128, not yet derived from the periodic ground-space constraint. Documented
-in `docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex`. -/
+2126--2128, retained as an explicit assumption of this intermediate theorem. The
+source-range conclusion without it is the global-cut theorem in
+`BNTBlockDiagonalBoundaryClosing`.
+
+These scope restrictions are documented in
+`docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex`. -/
 theorem chainGroundSpace_toTensorFromBlocks_eq_iSup_and_iSupIndep_of_pgvwc_comparison
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
     (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
@@ -686,8 +708,8 @@ under the assumed opened-boundary \(C^j,D^j\) comparison.
 **Scope restriction (length-\(L_0\) injectivity range):** Theorem 12 of
 arXiv:quant-ph/0608197 assumes \(L\ge 3(b-1)(L_0+1)+1\). This theorem is stated in the current BNT
 range derived from length-\(L_0\) block injectivity,
-\((L_0+1)+3(r-1)(L_0+1)+1\le L\). The source-range comparison is recorded in
-`docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex`.
+\((L_0+1)+3(r-1)(L_0+1)+1\le L\). The source-range conclusion is
+`chainGroundSpace_toTensorFromBlocks_eq_iSup_of_global_cut_bnt_c1_pgvwc07`.
 
 **Scope restriction (periodic-boundary comparison):** The opened-boundary
 \(C^j,D^j\) comparison `hComparison` is the explicit hypothesis here. The
@@ -696,8 +718,12 @@ inclusion of arXiv:quant-ph/0608197, Theorem 12, independent of the
 boundary-crossing comparison. The periodic-boundary upgrade encoded by
 `hComparison` is the boundary-condition comparison of arXiv:quant-ph/0608197,
 Theorem 12, proof lines 1446--1456, and arXiv:2011.12127, Section IV.C, lines
-2126--2128, not yet derived from the periodic ground-space constraint. Documented
-in `docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex`. -/
+2126--2128, retained as an explicit assumption of this intermediate theorem. The
+source-range conclusion without it is the global-cut theorem in
+`BNTBlockDiagonalBoundaryClosing`.
+
+These scope restrictions are documented in
+`docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex`. -/
 theorem chainGroundSpace_toTensorFromBlocks_eq_iSup_of_pgvwc_comparison
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
     (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
@@ -758,8 +784,12 @@ inclusion of arXiv:quant-ph/0608197, Theorem 12, independent of the
 boundary-crossing comparison. The periodic-boundary upgrade encoded by
 `hComparison` is the boundary-condition comparison of arXiv:quant-ph/0608197,
 Theorem 12, proof lines 1446--1456, and arXiv:2011.12127, Section IV.C, lines
-2126--2128, not yet derived from the periodic ground-space constraint. Documented
-in `docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex`. -/
+2126--2128, retained as an explicit assumption of this intermediate theorem. The
+source-range conclusion without it is the global-cut theorem in
+`BNTBlockDiagonalBoundaryClosing`.
+
+This scope restriction is documented in
+`docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex`. -/
 theorem ker_parentHamiltonian_toTensorFromBlocks_le_bntMPSVectorSpan_of_pgvwc_comparison
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
     (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
@@ -834,8 +864,12 @@ lines 2126--2128.
 
 **Scope restriction (crossing span):** The statement assumes that the
 simultaneous tail-word products of length \(N-i\) span the product algebra for
-each boundary-crossing interval. This is the remaining visible gap relative to
-the source comparison; it is recorded in
+each boundary-crossing interval. This is an explicit assumption of this intermediate theorem;
+the source-range
+conclusion without it is the global-cut theorem in
+`BNTBlockDiagonalBoundaryClosing`.
+
+This scope restriction is documented in
 `docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex`. -/
 theorem
     ker_parentHamiltonian_toTensorFromBlocks_le_bntMPSVectorSpan_of_crossing_pgvwc_comparison

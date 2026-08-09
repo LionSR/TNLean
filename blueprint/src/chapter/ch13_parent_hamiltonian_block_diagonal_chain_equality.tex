@@ -424,9 +424,19 @@ Lemma~\ref{lem:complementary_word_boundary_identities_from_pgvwc}.
     tail-word span hypothesis and in the longer stated range. The independence
     of the $N$-site spaces is a separate conclusion of
     Lemma~\ref{lem:bnt_block_diagonal_crossing_pgvwc_comparison_equality}.
-    Thus the statement remains conditional on the short tail-word spans; it is
-    not the unconditional boundary-condition comparison in the source theorem.
-    % Source-faithful replacement of the tail-word span hypothesis is tracked in issue~\#3597.
+    This intermediate statement remains conditional on the short tail-word
+    spans. The source-range conclusion without them is supplied by the global
+    change-of-cut theorem
+    Theorem~\ref{thm:block_diagonal_boundary_periodic_components_from_global_cut}
+    only in the currently formalized doubly normalized specialization
+    $\Lambda_j=\Id$. For the unrestricted source normalization, with positive
+    definite dual fixed points satisfying
+    \begin{align}
+        \sum_a A_j^{a\,\dagger}\Lambda_j A_j^a&=\Lambda_j, \notag
+    \end{align}
+    the corresponding source-range theorem remains unformalized.
+    % General normalization is tracked in issues #5751 and #5770. Neither issue
+    % is cited here as a completed theorem.
 \end{lemma}
 
 \begin{proof}
