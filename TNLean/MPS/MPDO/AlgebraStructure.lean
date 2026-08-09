@@ -281,7 +281,7 @@ An MPO tensor satisfies `HasBlockedAdjointFixedPointAlgebraTower` when it admits
 of support algebras compatible with its blocked adjoint transfer maps.
 
 **Scope restriction (blocked fixed-point-algebra predicate):** This predicate
-packages the preceding blocked support-algebra tower and adjoint-fixed-point
+defines the preceding blocked support-algebra tower and adjoint-fixed-point
 compatibility. It is weaker than, and is not the formalization of,
 arXiv:1606.00608, Theorem `thm:IV.13` (Theorem 4.14(ii), lines 972--985), which
 also requires the uniform BNT-label coefficient family and its idempotent law.
