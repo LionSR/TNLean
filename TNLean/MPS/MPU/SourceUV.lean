@@ -160,10 +160,12 @@ translation/bond swap visible in the paper figures.
 Source: arXiv:1703.09188, equations `SVDforms2` and `uuvv`, lines 526--540. -/
 theorem mpo_two_reindex_eq_sourceU_transpose_mul_sourceV_swap_transpose
     (ρ : Matrix (Fin D) (Fin D) ℂ) (hρ : ρ.PosDef) :
-    Matrix.reindex (finTwoArrowEquiv (Fin d)) (finTwoArrowEquiv (Fin d)) (mpo U 2) =
+    Matrix.reindex (finTwoArrowEquiv (Fin d)) (finTwoArrowEquiv (Fin d))
+        (mpo U 2) =
       (sourceU U ρ hρ)ᵀ *
         (Matrix.reindex (Equiv.refl (Fin d × Fin d))
-          (Equiv.prodComm (Fin r[U]) (Fin ℓ[U])) (sourceV U ρ hρ))ᵀ := by
+          (Equiv.prodComm (Fin r[U]) (Fin ℓ[U]))
+          (sourceV U ρ hρ))ᵀ := by
   classical
   ext i j
   rcases i with ⟨i₁, i₂⟩
