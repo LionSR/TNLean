@@ -414,6 +414,34 @@ Theorem~\ref{thm:trace_norm_abs}.
     difference of positive semidefinite matrices, hence Hermitian.
 \end{proof}
 
+\begin{lemma}[Common projection estimate]
+    \label{lem:posPart_support_projection_estimate}
+    \lean{Matrix.re_trace_posPart_map_le_aux}
+    \leanok
+    \uses{def:positive_map_rectangular}
+    Let $T:\MN{D}\to\MN{D'}$ be a positive linear map and let
+    $H\in\MN{D}$ be Hermitian.  Then
+    $\tr[(TH)^+]\leq\tr[T(H^+)]$.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{lem:positive_map_hermitian,
+      lem:psd_trace_pairing_bounds,
+      lem:positive_part_support_projection}
+    Let $\Pi_+$ be the support projection of $(TH)^+$ from
+    Lemma~\ref{lem:positive_part_support_projection}, so that
+    $\Pi_+ T(H) = (T(H))^+$ and $0\leq\Pi_+\leq\Id$.  The estimate follows
+    from the chain
+    \begin{align}
+        \tr[(TH)^+] &= \tr[\Pi_+ T(H^+-H^-)] \notag\\
+        &= \tr[\Pi_+ T(H^+)] - \tr[\Pi_+ T(H^-)] \notag\\
+        &\leq \tr[\Pi_+ T(H^+)] \notag\\
+        &\leq \tr[T(H^+)] ,
+    \end{align}
+    using Lemmas~\ref{lem:psd_trace_pairing_bounds}
+    and~\ref{lem:positive_map_hermitian}.
+\end{proof}
+
 \begin{lemma}[Positive-part trace estimate]
     \label{lem:positive_part_trace_estimate}
     \lean{Matrix.re_trace_posPart_map_le}
@@ -425,26 +453,11 @@ Theorem~\ref{thm:trace_norm_abs}.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{lem:positive_part_support_projection,
-      lem:psd_trace_pairing_bounds, lem:positive_map_hermitian,
+    \uses{lem:posPart_support_projection_estimate,
       def:trace_preserving_rectangular}
-    The matrix $T(H)$ is Hermitian by
-    Lemma~\ref{lem:positive_map_hermitian}. Let $\Pi_+$ be the support
-    projection of $Q_+$ from
-    Lemma~\ref{lem:positive_part_support_projection}, so that
-    $\Pi_+T(H)=Q_+$ and $0\leq\Pi_+\leq\Id$. Then
-    \begin{align}
-        \tr[Q_+]
-        &=\tr[\Pi_+T(P_+)]-\tr[\Pi_+T(P_-)]
-          \leq\tr[\Pi_+T(P_+)]
-          \leq\tr[T(P_+)]
-          =\tr[P_+],
-        \notag
-    \end{align}
-    where the first inequality uses $\tr[\Pi_+T(P_-)]\geq0$
-    and the second uses $\Pi_+\leq\Id$ together with $T(P_+)\geq0$
-    (Lemma~\ref{lem:psd_trace_pairing_bounds}); the final step is trace
-    preservation.
+    Lemma~\ref{lem:posPart_support_projection_estimate} gives
+    $\tr[(TH)^+]\leq\tr[T(H^+)]$.  The result follows because
+    trace preservation gives $\tr[T(H^+)]=\tr[H^+]$.
 \end{proof}
 
 \begin{theorem}[Trace-norm contractivity]
@@ -494,6 +507,78 @@ Theorem~\ref{thm:trace_norm_abs}.
     By linearity $T(\rho_1)-T(\rho_2)=T(\rho_1-\rho_2)$, and
     $\rho_1-\rho_2$ is Hermitian as a difference of positive semidefinite
     matrices, so Theorem~\ref{thm:trace_norm_contractivity} applies.
+\end{proof}
+
+\begin{lemma}[Scaled positive-part trace estimate]
+    \label{lem:scaled_posPart_trace_estimate}
+    \lean{Matrix.re_trace_posPart_map_le_of_scaledTrace}
+    \leanok
+    \uses{def:positive_map_rectangular}
+    Let $T:\MN{D}\to\MN{D'}$ be a positive linear map with
+    $\tr[T(\rho)] = c\,\tr[\rho]$ for some nonnegative real $c$ and
+    all $\rho\in\MN{D}$. Then for all Hermitian $H\in\MN{D}$,
+    $\tr[(TH)^+]\leq c\cdot\tr[H^+]$.
+    Generalizes Lemma~\ref{lem:positive_part_trace_estimate} from the
+    trace-preserving case $c=1$.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{lem:posPart_support_projection_estimate}
+    Lemma~\ref{lem:posPart_support_projection_estimate} gives
+    $\tr[(TH)^+]\leq\tr[T(H^+)]$.  The trace-scaling hypothesis then
+    yields $\tr[T(H^+)] = c\,\tr[H^+]$, giving the claimed bound.
+\end{proof}
+
+\begin{theorem}[Scaled trace-norm contractivity]
+    \label{thm:scaled_trace_norm_contractivity}
+    \lean{Matrix.traceNorm_map_le_of_positive_of_scaledTrace}
+    \leanok
+    \uses{def:trace_norm, def:positive_map_rectangular}
+    Let $T:\MN{D}\to\MN{D'}$ be a positive linear map with
+    $\tr[T(\rho)] = c\,\tr[\rho]$ for some nonnegative real $c$ and
+    all $\rho\in\MN{D}$. Then for all Hermitian $H\in\MN{D}$,
+    $\lVert T(H)\rVert_{\tr}\leq c\cdot\lVert H\rVert_{\tr}$.
+    Generalizes Theorem~\ref{thm:trace_norm_contractivity} from the
+    trace-preserving case $c=1$.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{lem:positive_map_hermitian, lem:scaled_posPart_trace_estimate, lem:trace_norm_jordan}
+    Same argument as Theorem~\ref{thm:trace_norm_contractivity}: apply
+    Lemma~\ref{lem:scaled_posPart_trace_estimate} to $H$ and $-H$, then
+    sum using the Jordan trace-norm formula.
+\end{proof}
+
+\begin{theorem}[Quantum Doeblin contraction]
+    \label{thm:quantum_doeblin_contraction}
+    \lean{Matrix.traceNorm_map_sub_map_le_of_doeblin}
+    \leanok
+    \uses{def:trace_norm, def:positive_map_rectangular,
+      def:trace_preserving_rectangular, def:density_matrices}
+    Let $T,T':\MN{D}\to\MN{D'}$ be trace-preserving and
+    Hermiticity-preserving linear maps with
+    $T'(X)=\tr[X]\,Y$ for some fixed $Y\in\MN{D'}$.
+    If $T-\varepsilon T'$ is positive for some $\varepsilon\geq0$, then
+    for all density operators $\rho_1,\rho_2\in\MN{D}$,
+    \begin{align}
+        \lVert T(\rho_1)-T(\rho_2)\rVert_{\tr}
+        \leq(1-\varepsilon)\,\lVert\rho_1-\rho_2\rVert_{\tr}.
+        \label{eq:quantum_doeblin_contraction}
+    \end{align}
+    See \cite[Chapter~8, Theorem~8.17]{Wolf2012Quantum}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:scaled_trace_norm_contractivity}
+    The map $S:=T-\varepsilon T'$ is positive by hypothesis.
+    Since $T'(\rho_1-\rho_2)=\tr[\rho_1-\rho_2]\,Y=0$ (the densities
+    have unit trace), $T(\rho_1)-T(\rho_2)=S(\rho_1-\rho_2)$. The trace
+    of $S(\rho)$ is $(\tr[\rho])-\varepsilon\tr[\rho]=(1-\varepsilon)
+    \tr[\rho]$, so $S$ satisfies the scaled-trace hypothesis of
+    Theorem~\ref{thm:scaled_trace_norm_contractivity} with
+    $c=1-\varepsilon$. Positivity of $S$ on $\rho_1$ forces
+    $0\leq1-\varepsilon$ (by PSD trace nonnegativity), so the
+    scaled-trace theorem applies and yields the claimed bound.
 \end{proof}
 
 \section{Projective pinching}
