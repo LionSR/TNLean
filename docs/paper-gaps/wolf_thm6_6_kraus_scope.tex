@@ -1,0 +1,53 @@
+\documentclass[11pt]{article}
+
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[colorlinks=true,linkcolor=blue,citecolor=blue,urlcolor=blue]{hyperref}
+
+\input{./command.tex}
+
+\title{Complete-Positivity Scope of the Peripheral Cyclicity Theorem}
+\author{}
+\date{\today}
+
+\begin{document}
+\maketitle
+
+\section{The source theorem}
+
+Theorem 6.6 of \emph{Quantum Channels \& Operations} (Wolf 2012), stated at
+lines 244--246 of \texttt{Notes/WolfNotePDF/wolf\_ch6\_sections.txt}, concerns
+an irreducible positive unital map $T:M_D(\mathbb C)\to M_D(\mathbb C)$ that
+satisfies the Schwarz inequality. It concludes that the peripheral spectrum
+is a finite cyclic group. Complete positivity and a Kraus representation are
+not hypotheses of the theorem.
+
+\section{The restriction in the formalization}
+
+The available Lean statement is
+\leanid{MPSTensor.peripheralEigenvalues\_eq\_range\_primitiveRoot} in
+\texttt{TNLean/Channel/Peripheral/CyclicGroup.lean}. It is stated for a finite
+matrix family $K$ and its Kraus map
+\[
+    E(X)=\sum_i K_iXK_i^\dagger.
+\]
+It assumes that this Kraus map is unital and irreducible and that its adjoint
+has a positive-definite fixed point. A finite Kraus presentation implies
+complete positivity, which is strictly stronger than Wolf's positive Schwarz
+hypothesis. Thus the Lean theorem proves the completely positive
+specialization of Wolf Theorem 6.6, not the theorem at its full source scope.
+The corresponding Blueprint entry states this restriction explicitly and
+uses its own specialization title.
+
+\section{Elimination plan}
+
+To remove the restriction, formulate peripheral eigenvectors and their
+multiplicative-domain relations for an abstract positive unital Schwarz map.
+The proof must establish invertibility of peripheral eigenvectors and closure
+of peripheral eigenvalues under multiplication without choosing Kraus
+operators. The finite-group argument in the present cyclicity theorem then
+applies unchanged. Once that abstract result exists, the Kraus theorem should
+be retained as a specialization rather than serving as the source-facing form
+of Wolf Theorem 6.6.
+
+\end{document}
