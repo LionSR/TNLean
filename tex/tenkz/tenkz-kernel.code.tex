@@ -123,6 +123,9 @@
 \msg_new:nnn {tenkz}{kernel-metrics-scope}
   { [TKZ-METRICS-SCOPE]~metrics=~is~picture~policy:~a~group~shares~its~
     picture's~metric~context. }
+\msg_new:nnn {tenkz}{kernel-check-twice}
+  { [TKZ-EQ-CHECK-TWICE]~relation~#1~is~opted~out~twice;~one~relation~
+    carries~one~waiver~and~one~reason. }
 \msg_new:nnn {tenkz}{kernel-check-bar}
   { [TKZ-EQ-CHECK-BAR]~the~reason~for~relation~#1~carries~the~record~
     stream's~own~field~separator;~a~reason~is~prose~and~cannot~hold~one. }
@@ -17808,6 +17811,22 @@
           { \tl_use:N \l__tenkz_kernel_scratch_tl }
         \prop_remove:Nn \l__tenkz_kernel_stage_prop {check}
       }
+    % One equation, one pitch.  A panel that names a profile of its own would
+    % scale one side of an asserted equality and not the other, so inside an
+    % equation the profile belongs to the equation and a panel may not name
+    % one at all -- not even the equation's own word, which says nothing the
+    % equation has not said already.  The refusal reads the panel's own keys,
+    % before any merge puts the equation's among them and before they become
+    % the picture record, so a refused key reaches neither the page nor the
+    % stream.
+    \bool_if:NT \l__tenkz_kernel_ineq_bool
+      {
+        \prop_if_in:NnT \l__tenkz_kernel_stage_prop {metrics}
+          {
+            \msg_error:nn {tenkz}{kernel-metrics-panel}
+            \prop_remove:Nn \l__tenkz_kernel_stage_prop {metrics}
+          }
+      }
     \__tenkz_kernel_policy_merge:NN
       \g__tenkz_kernel_setup_prop \l__tenkz_kernel_stage_prop
     % Equation policy is the shared outer context, so it overrides a
@@ -17817,23 +17836,6 @@
       {
         \__tenkz_kernel_policy_merge:NN
           \l__tenkz_kernel_eq_policy_prop \l__tenkz_kernel_stage_prop
-      }
-    % One equation, one pitch.  A panel that named a profile of its own would
-    % scale one side of an asserted equality and not the other, so inside an
-    % equation the profile belongs to the equation and is refused on a panel.
-    % The refusal acts on the staged keys, before they become the picture
-    % record: a key the kernel refuses must not reach the stream either, or a
-    % reader is told of a pitch the picture was never drawn at.
-    \bool_if:NT \l__tenkz_kernel_ineq_bool
-      {
-        \prop_if_in:NnT \l__tenkz_kernel_stage_prop {metrics}
-          {
-            \prop_if_in:NnF \l__tenkz_kernel_eq_policy_prop {metrics}
-              {
-                \msg_error:nn {tenkz}{kernel-metrics-panel}
-                \prop_remove:Nn \l__tenkz_kernel_stage_prop {metrics}
-              }
-          }
       }
     \__tenkz_kernel_basis_rehydrate:
     \__tenkz_kernel_size_resolve:N \l__tenkz_kernel_stage_prop
@@ -17981,10 +17983,22 @@
             % relations: a waiver naming a relation the equation does not
             % perform is a mistyped one, and the stream must not carry a
             % record of a comparison that was never there to waive.
-            \clist_put_right:Ne \l__tenkz_kernel_check_off_clist
+            % One relation, one waiver.  Two opt-outs for one relation
+            % record the comparison as waived twice, and a reader counting
+            % records against relations finds an equation that does not
+            % add up.
+            \clist_if_in:NeTF \l__tenkz_kernel_check_off_clist
               { \int_eval:n { \l__tenkz_kernel_check_relation_tl } }
-            \seq_put_right:Ne \l__tenkz_kernel_check_reason_seq
-              { \tl_use:N \l__tenkz_kernel_check_reason_tl }
+              {
+                \msg_error:nne {tenkz}{kernel-check-twice}
+                  { \int_eval:n { \l__tenkz_kernel_check_relation_tl } }
+              }
+              {
+                \clist_put_right:Ne \l__tenkz_kernel_check_off_clist
+                  { \int_eval:n { \l__tenkz_kernel_check_relation_tl } }
+                \seq_put_right:Ne \l__tenkz_kernel_check_reason_seq
+                  { \tl_use:N \l__tenkz_kernel_check_reason_tl }
+              }
           }
       }
   }
@@ -17994,12 +18008,15 @@
 % census reading scopes rather than the insides of a value.
 \keys_define:nn { tenkz-check-spec }
   {
+    % The bare word supplies a value no author can type, so `signature',
+    % `signature=', and `signature=false' are three different spellings here
+    % and only the first is the audit's own name.
     signature .code:n =
       {
-        \tl_if_empty:nF {#1}
+        \quark_if_no_value:nF {#1}
           { \msg_error:nne {tenkz}{kernel-check-word} { signature=#1 } }
       } ,
-    signature .default:n = { } ,
+    signature .default:n = { \q_no_value } ,
     modulo .choice: ,
     modulo / bundles .code:n =
       { \bool_set_true:N \l__tenkz_kernel_check_bundles_bool } ,
