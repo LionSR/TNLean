@@ -1,13 +1,20 @@
 \section{Peripheral spectral refinements}
 
-\begin{theorem}[Peripheral eigenvalues form a cyclic group]%
+The first two results in this section concern finite Kraus maps and hence assume
+complete positivity. They do not supply the abstract Schwarz-map case of Wolf
+Theorem~6.6; see
+\texttt{docs/paper-gaps/wolf\_thm6\_6\_kraus\_scope.tex}.
+
+% Scope restriction (complete positivity): finite-Kraus specialization.
+\begin{theorem}[Peripheral eigenvalues form a cyclic group for Kraus maps]%
     \label{thm:peripheral_cyclic_group}
     \lean{PeripheralSpectrum.peripheral_eigenvalues_form_cyclic_group}
     \leanok
     \uses{thm:peripheral_cyclic_structure}
-    Let $E$ be an irreducible unital trace-preserving Schwarz map on
-    $\MN{D}$ with a positive-definite adjoint fixed point.
-    Then there exist $m\geq1$ and a primitive $m$-th root of unity
+    Let $E(X)=\sum_i K_iXK_i^\dagger$ be the Kraus map of a finite matrix
+    family on $\MN{D}$. Assume that $E$ is irreducible, unital, and
+    trace-preserving and has a positive-definite adjoint fixed point. Then
+    there exist $m\geq1$ and a primitive $m$-th root of unity
     $\gamma$ such that $m\mid D$ and the peripheral eigenvalues of $E$
     are exactly $\{1,\gamma,\gamma^2,\ldots,\gamma^{m-1}\}$.
 \end{theorem}
@@ -23,14 +30,15 @@
     $m\,\tr(P_0)=D$ with $\tr(P_0)\in\N$.
 \end{proof}
 
-\begin{theorem}[Period divides bond dimension]%
+\begin{theorem}[Kraus-map period divides bond dimension]%
     \label{thm:channel_period_divides_dim}
     \lean{PeripheralSpectrum.channel_period_divides_dim}
     \leanok
     \uses{thm:cyclic_decomposition_irreducible_schwarz}
-    Let $E$ be an irreducible unital trace-preserving Schwarz map on
-    $\MN{D}$ with a positive-definite adjoint fixed point. Let $\gamma$
-    be a primitive $m$-th root of unity such that the peripheral eigenvalues
+    Let $E(X)=\sum_i K_iXK_i^\dagger$ be the Kraus map of a finite matrix
+    family on $\MN{D}$. Assume that $E$ is irreducible, unital, and
+    trace-preserving and has a positive-definite adjoint fixed point. Let
+    $\gamma$ be a primitive $m$-th root of unity such that the peripheral eigenvalues
     are exactly $\{\gamma^k:k\in\Fin{m}\}$.
     Then $m\mid D$.
 \end{theorem}
