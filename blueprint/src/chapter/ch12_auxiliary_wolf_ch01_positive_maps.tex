@@ -1,0 +1,905 @@
+\section{Complete positivity from positivity}
+
+For a linear map $T:\MD\to\MD$, write $T^*$ for its trace-pairing adjoint
+(Definition~\ref{def:trace_pairing_adjoint}). Complete positivity is in
+general strictly stronger than positivity, but the two coincide once $T$'s
+range, or its adjoint's range, is commutative.
+
+\begin{definition}[Commutative range]\label{def:commutative_range}
+    \lean{PositiveOnAbelian.HasCommutingRange}
+    \leanok
+    A linear map $T:\MD\to\MD$ has \emph{commutative range} if $T(X)$ and
+    $T(Y)$ commute for all $X,Y\in\MD$. Since a family of pairwise-commuting
+    elements generates a commutative subalgebra, this is the statement that
+    $T$ maps into a commutative subalgebra of $\MD$.
+\end{definition}
+
+\begin{lemma}[Block quadratic form positivity for commuting images]
+    \label{lem:block_quadratic_form_nonneg_commuting}
+    \lean{PositiveOnAbelian.quadraticForm_nonneg_of_isPositiveMap_of_commuting_images}
+    \leanok
+    \uses{def:positive_map}
+    Let $T:\MD\to\MD$ be a positive linear map and let $[a_{ij}]_{i,j=1}^n$
+    be a positive semidefinite block matrix with entries in $\MD$ such that
+    the images $T(a_{ij})$ pairwise commute. Then
+    \begin{align}
+        \sum_{i,j=1}^{n}\bra{\psi_i}T(a_{ij})\ket{\psi_j}\ge 0
+        \notag
+    \end{align}
+    for every family of vectors $\{\psi_i\}_{i=1}^n\subset\C^D$.
+\end{lemma}
+
+\begin{proof}\leanok
+    As the $T(a_{ij})$ mutually commute, choose a basis in which they are
+    simultaneously diagonal, and write $\psi_{j,\beta}$ for the components
+    of $\ket{\psi_j}$ in this basis. Then
+    \begin{align}
+        \sum_{i,j=1}^{n}\bra{\psi_i}T(a_{ij})\ket{\psi_j}
+        = \sum_\beta\bra\beta
+          T\!\left(\sum_{i,j}\overline{\psi}_{i,\beta}\,a_{ij}\,\psi_{j,\beta}\right)
+          \ket\beta \ge 0,
+        \notag
+    \end{align}
+    by positivity of $T$ and of $[a_{ij}]$: the bracketed matrix is
+    $B_\beta^\dagger[a_{ij}]B_\beta$ for the column vector
+    $B_\beta=(\psi_{j,\beta})_j$, hence positive semidefinite.
+\end{proof}
+
+\begin{lemma}[Complete positivity from positivity, commutative codomain]
+    \label{lem:cp_from_positivity_commutative_codomain}
+    \lean{PositiveOnAbelian.isCPMap_of_isPositiveMap_of_hasCommutingRange}
+    \leanok
+    \uses{def:positive_map, def:cp_map, def:commutative_range,
+      thm:cp_iff_choi_posSemidef, lem:block_quadratic_form_nonneg_commuting}
+    Let $T:\MD\to\MD$ be a positive linear map with commutative range. Then
+    $T$ is completely positive.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{thm:cp_iff_choi_posSemidef, thm:choi_matrix_id,
+      lem:block_quadratic_form_nonneg_commuting}
+    By Theorem~\ref{thm:cp_iff_choi_posSemidef} it suffices to show that the
+    Choi matrix $\tau$ of $T$ satisfies $\bra{\phi}\tau\ket{\phi}\ge0$ for
+    every $\phi\in\C^D\otimes\C^D$. Let $a_{ij}\in\MD$, for
+    $i,j\in\{1,\dots,D\}$, be the blocks of $\ketbra\Omega\Omega$, the Choi
+    matrix of the identity map (Theorem~\ref{thm:choi_matrix_id}), and let
+    $\psi_k:=\phi(\cdot,k)\in\C^D$ be the reshaping of $\phi$ into a
+    $D$-indexed family of vectors. Then
+    \begin{align}
+        \bra{\phi}\tau\ket{\phi}
+        = \sum_{i,j=1}^{D}\bra{\psi_i}T(a_{ij})\ket{\psi_j},
+        \notag
+    \end{align}
+    the block quadratic form of
+    Lemma~\ref{lem:block_quadratic_form_nonneg_commuting} at $T$, $[a_{ij}]$,
+    and $\{\psi_i\}$. Since $[a_{ij}]\ge0$ (it is the block family of the
+    rank-one projector $\ketbra\Omega\Omega$) and, by commutative range, the
+    images $T(a_{ij})$ pairwise commute,
+    Lemma~\ref{lem:block_quadratic_form_nonneg_commuting} gives
+    $\bra{\phi}\tau\ket{\phi}\ge0$.
+\end{proof}
+
+\begin{lemma}[Positivity is trace-adjoint invariant]
+    \label{lem:positive_map_traceAdjointMap}
+    \lean{IsPositiveMap.traceAdjointMap}
+    \leanok
+    \uses{def:positive_map, def:trace_pairing_adjoint}
+    If $T:\MD\to\MD$ is positive, so is $T^*$.
+\end{lemma}
+
+\begin{proof}\leanok
+    For $X\ge0$, $T^*(X)$ is Hermitian since $T$ preserves the adjoint. For
+    every $B\ge0$, the trace-pairing identity $\tr[T^*(X)B]=\tr[X\,T(B)]$
+    and positivity of $X$ and of $T(B)$ (as $T$ is positive) give
+    $\tr[T^*(X)B]\ge0$; a Hermitian matrix with nonnegative trace pairing
+    against every positive semidefinite matrix is itself positive
+    semidefinite, so $T^*(X)\ge0$.
+\end{proof}
+
+\begin{lemma}[Complete positivity is trace-adjoint invariant]
+    \label{lem:cp_traceAdjointMap_iff}
+    \lean{isCPMap_traceAdjointMap_iff}
+    \leanok
+    \uses{def:cp_map, def:trace_pairing_adjoint}
+    A linear map $T:\MD\to\MD$ is completely positive if and only if $T^*$
+    is.
+\end{lemma}
+
+\begin{proof}\leanok
+    Complete positivity in Kraus form is preserved by the trace-pairing
+    adjoint, and the adjoint is an involution, so the two directions are
+    the same statement applied to $T$ and to $T^*$.
+\end{proof}
+
+\begin{lemma}[Complete positivity from positivity, commutative domain]
+    \label{lem:cp_from_positivity_commutative_domain}
+    \lean{PositiveOnAbelian.isCPMap_of_isPositiveMap_of_hasCommutingRange_adjoint}
+    \leanok
+    \uses{def:positive_map, def:cp_map, def:commutative_range,
+      def:trace_pairing_adjoint, lem:positive_map_traceAdjointMap,
+      lem:cp_from_positivity_commutative_codomain, lem:cp_traceAdjointMap_iff}
+    Let $T:\MD\to\MD$ be a positive linear map whose trace-pairing adjoint
+    $T^*$ has commutative range. Then $T$ is completely positive.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{lem:positive_map_traceAdjointMap,
+      lem:cp_from_positivity_commutative_codomain, lem:cp_traceAdjointMap_iff}
+    By Lemma~\ref{lem:positive_map_traceAdjointMap}, $T^*$ is positive, and
+    by hypothesis it has commutative range, so
+    Lemma~\ref{lem:cp_from_positivity_commutative_codomain} gives that $T^*$
+    is completely positive. Lemma~\ref{lem:cp_traceAdjointMap_iff} then
+    gives that $T$ is completely positive.
+\end{proof}
+
+\begin{theorem}[Complete positivity from positivity]\label{thm:cp_from_positivity_commutative}
+    \lean{PositiveOnAbelian.isCPMap_of_isPositiveMap_of_commutingRange_or}
+    \leanok
+    \uses{def:positive_map, def:cp_map, def:commutative_range,
+      def:trace_pairing_adjoint}
+    Let $T:\MD\to\MD$ be a positive linear map. If $T$ has commutative
+    range, or $T^*$ has commutative range, then $T$ is completely positive.
+    This is \cite[Proposition~1.6]{Wolf2012Quantum}; the commutative-range
+    hypothesis is the range-only reading of Wolf's ``$\mathcal A$ or
+    $\mathcal B$ commutative'' hypothesis that his own proof establishes and
+    that his remark immediately after the proof licenses for an arbitrary
+    operator system mapping into a commutative algebra. See
+    \path{docs/paper-gaps/wolf_prop16_cp_positivity_commutative_side.tex}
+    for the precise relationship between the two phrasings.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{lem:cp_from_positivity_commutative_codomain,
+      lem:cp_from_positivity_commutative_domain}
+    If $T$ has commutative range, apply
+    Lemma~\ref{lem:cp_from_positivity_commutative_codomain}. If instead
+    $T^*$ has commutative range, apply
+    Lemma~\ref{lem:cp_from_positivity_commutative_domain}.
+\end{proof}
+
+\section{Extending completely positive maps from operator systems}
+
+An \emph{operator system} inside a finite-dimensional $C^*$-algebra is a
+subspace closed under the adjoint and containing the unit. Every positive
+map defined only on such a subspace, with values in a commutative algebra,
+is automatically completely positive by the remark following
+Theorem~\ref{thm:cp_from_positivity_commutative}; extending it to a
+completely positive map on the whole algebra makes that observation useful
+for arbitrary target algebras as well.
+
+The source states the extension theorem for an operator system inside any
+finite-dimensional $C^*$-algebra, that is, any direct sum of matrix
+algebras. What follows treats the one-summand case, where the ambient
+algebra is a single full matrix algebra $\MN{m}$; see
+\path{docs/paper-gaps/wolf_ch01_operator_system_extension_matrix_scope.tex}.
+
+\begin{theorem}[Left partial trace of a Kronecker product]
+    \label{thm:mpdo_left_partial_trace_kronecker}
+    \lean{Matrix.partialTraceLeft_kronecker}
+    \leanok
+    \uses{def:partial_trace_left}
+    For square matrices $X$ on $A$ and $Y$ on $B$,
+    $\tr_{A}(X\otimes Y)=\tr(X)Y$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    For all $i,j$,
+    $[\tr_{A}(X\otimes Y)]_{ij}
+    =\sum_t X_{tt}Y_{ij}=\tr(X)Y_{ij}$.
+\end{proof}
+
+\begin{theorem}[Positivity of the maximally mixed matrix]
+    \label{thm:maximally_mixed_pos}
+    \lean{Matrix.maximallyMixedOn_posSemidef}
+    \leanok
+    For every natural number $m$, the matrix $m^{-1}\mathbb1_m$ is positive
+    semidefinite.
+\end{theorem}
+\begin{proof}
+    \leanok
+    The identity matrix is positive semidefinite, and $m^{-1}$ is nonnegative.
+\end{proof}
+
+\begin{theorem}[Trace of the maximally mixed matrix]
+    \label{thm:maximally_mixed_trace}
+    \lean{Matrix.maximallyMixedOn_trace}
+    \leanok
+    If $m\geq1$, then $\tr(m^{-1}\mathbb1_m)=1$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    Since $\tr(\mathbb1_m)=m$, scalar linearity of the trace gives the result.
+\end{proof}
+
+% Wolf ch01 source lines 616--626; one-block retraction from Proposition 1.5,
+% Equation (1.40), source lines 536--570.
+\begin{theorem}[Normalized partial-trace conditional expectation]
+    \label{thm:right_factor_conditional_expectation}
+    \lean{Matrix.rightFactorConditionalExpectation_apply}
+    \lean{Matrix.rightFactorConditionalExpectation_isKrausCPTP_and_isConditionalExpectation}
+    \leanok
+    \uses{def:is_kraus_cptp, def:is_conditional_expectation}
+    Let $m\geq1$. The linear map
+    $E:\MN{m}\otimes\MN{d}\to\MN{m}\otimes\MN{d}$ defined by
+    \begin{align}
+        E(A)&=\mathbb1_m\otimes\bigl(m^{-1}\tr_{m}(A)\bigr),
+        \notag
+    \end{align}
+    is trace-preserving and completely positive. It is a conditional
+    expectation onto the unital $*$-subalgebra
+    $\mathbb1_m\otimes\MN{d}$: it is unital and idempotent, its range lies
+    in that subalgebra, and it fixes the subalgebra pointwise. This is the
+    one-block trace-preserving choice in the family described by
+    \cite[Proposition~1.5 and Equation~(1.40)]{Wolf2012Quantum}; it supplies
+    the corresponding one-block codomain retraction for the extension
+    theorem, not the general finite-dimensional codomain construction.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpdo_equiv_reindex_cptp,
+      lem:mpdo_right_partial_trace_cptp,
+      thm:maximally_mixed_pos,
+      thm:maximally_mixed_trace,
+      lem:mpdo_state_preparation_cptp,
+      lem:is_kraus_cptp_comp,
+      lem:is_kraus_cp_basic,
+      lem:is_kraus_cp_iff_is_cp_map,
+      thm:cp_is_positive,
+      thm:mpdo_left_partial_trace_kronecker}
+    Interchange the two tensor factors, trace out the new right factor,
+    prepare the maximally mixed state $m^{-1}\mathbb1_m$, and interchange
+    the factors back. Theorem~\ref{thm:maximally_mixed_pos} and
+    Theorem~\ref{thm:maximally_mixed_trace} show that the prepared matrix is
+    positive semidefinite and has trace one. Theorem~\ref{thm:mpdo_equiv_reindex_cptp},
+    Lemma~\ref{lem:mpdo_right_partial_trace_cptp},
+    Lemma~\ref{lem:mpdo_state_preparation_cptp}, and
+    Lemma~\ref{lem:is_kraus_cptp_comp} then show that the resulting map is
+    trace-preserving and completely positive. Expanding the composition gives
+    \begin{align}
+        E(A)&=\mathbb1_m\otimes\bigl(m^{-1}\tr_{m}(A)\bigr).
+        \notag
+    \end{align}
+    The Kronecker-product partial-trace identity gives
+    \begin{align}
+        \tr_{m}(\mathbb1_m\otimes X)&=mX,
+        \notag
+    \end{align}
+    so $E(\mathbb1_m\otimes X)=\mathbb1_m\otimes X$. Pointwise fixation
+    gives both idempotence and unitality, while the evaluation identity gives
+    the range inclusion.
+\end{proof}
+
+% Coordinate finite-direct-sum consequence of the preceding one-block result.
+% This does not include unitary conjugation to an arbitrary represented algebra.
+\begin{theorem}[Coordinate direct-sum conditional expectation]
+    \label{thm:coordinate_direct_sum_conditional_expectation}
+    \lean{Matrix.coordinateDirectSumConditionalExpectation_apply}
+    \lean{Matrix.coordinateDirectSumConditionalExpectation_offDiagonal}
+    \lean{Matrix.coordinateDirectSumConditionalExpectation_isKrausCPTP}
+    \lean{Matrix.coordinateDirectSumConditionalExpectation_range_subset}
+    \lean{Matrix.coordinateDirectSumConditionalExpectation_fixes}
+    \lean{Matrix.coordinateDirectSumConditionalExpectation_idempotent}
+    \lean{Matrix.coordinateDirectSumConditionalExpectation_unital}
+    \lean{Matrix.coordinateDirectSumConditionalExpectation_isConditionalExpectation}
+    \lean{Matrix.coordinateDirectSumConditionalExpectation_isKrausCPTP_and_isConditionalExpectation}
+    \leanok
+    \uses{def:is_kraus_cptp, def:is_conditional_expectation}
+    Let $K$ be finite, let $m_k\geq1$, and set
+    \begin{align}
+        \mathcal H
+        &=\bigoplus_{k\in K}\bigl(\C^{m_k}\otimes\C^{d_k}\bigr).
+        \notag
+    \end{align}
+    For $A\in\End(\mathcal H)$, write $A_{kk}$ for its $k$-th diagonal
+    block. The map
+    \begin{align}
+        E(A)
+        &=\operatorname{diag}_{k\in K}\!\left(
+          \mathbb1_{m_k}\otimes
+          \bigl(m_k^{-1}\tr_{m_k}(A_{kk})\bigr)\right)
+        \notag
+    \end{align}
+    has zero off-diagonal output blocks. It is trace-preserving and completely
+    positive, and it is a conditional expectation onto the coordinate
+    subalgebra
+    \begin{align}
+        \bigoplus_{k\in K}
+          \bigl(\mathbb1_{m_k}\otimes\MN{d_k}\bigr)
+        &\subseteq\End(\mathcal H).
+        \notag
+    \end{align}
+    Thus its range lies in this subalgebra, it fixes the subalgebra pointwise,
+    and it is unital and idempotent. This is the normalized trace-preserving
+    coordinate choice obtained by
+    specializing the block densities in
+    \cite[Proposition~1.5 and Equation~(1.40)]{Wolf2012Quantum} to maximally
+    mixed densities. Relative to
+    Wolf's $\MN{d_k}\otimes\mathbb1_{m_k}$ convention, the displayed
+    $\mathbb1_{m_k}\otimes\MN{d_k}$ order is obtained by interchanging the
+    tensor factors. This theorem concerns only the displayed direct-sum
+    coordinates; it does not conjugate the subalgebra by an arbitrary unitary
+    or corestrict the codomain. This coordinate restriction is documented in
+    \path{docs/paper-gaps/wolf_prop1_5_one_factor_scope.tex}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:right_factor_conditional_expectation,
+      lem:direct_sum_kraus_composition_schwarz,
+      thm:direct_sum_map_extension_self,
+      thm:direct_sum_full_matrix_extension_compatibility,
+      thm:direct_sum_extension_embedding_fixed,
+      thm:is_kraus_cptp_of_is_kraus_cp_trace_preserving,
+      thm:is_kraus_cptp_trace_map,
+      lem:is_kraus_cp_basic,
+      lem:is_kraus_cp_iff_is_cp_map,
+      thm:cp_is_positive}
+    Compress $A$ to the family $(A_{kk})_{k\in K}$ and apply the normalized
+    partial-trace expectation from
+    Theorem~\ref{thm:right_factor_conditional_expectation} in each coordinate.
+    The coordinatewise Kraus theorem makes the resulting map on the finite
+    sum completely positive, and its canonical full-matrix extension discards
+    the off-diagonal blocks. Each coordinate preserves trace, so preservation
+    of the total block trace implies preservation of the trace on
+    $\End(\mathcal H)$. The displayed formula shows that the range lies in the
+    coordinate subalgebra. The one-block fixation identity holds in every
+    summand, hence $E$ fixes that subalgebra pointwise; idempotence and
+    unitality follow.
+\end{proof}
+
+% Unitary coordinate changes associated with Equation (1.39).
+\begin{theorem}[Positivity in unitary block coordinates]
+    \label{thm:unitary_reindex_posSemidef}
+    \lean{Matrix.unitaryReindexLinearEquiv_posSemidef}
+    \lean{Matrix.unitaryReindexLinearEquiv_symm_posSemidef}
+    \leanok
+    Let $e:H\simeq I$ be an equivalence of finite index sets and let
+    $U$ be a unitary matrix indexed by $I$. The mutually inverse coordinate
+    changes
+    \begin{align}
+        \Phi(A)&=e^{-1}(U^\dagger A U)
+        \notag
+    \end{align}
+    and
+    \begin{align}
+        \Phi^{-1}(X)&=Ue(X)U^\dagger
+        \notag
+    \end{align}
+    both preserve positive semidefiniteness.
+\end{theorem}
+
+\begin{proof}\leanok
+    Unitary conjugation preserves positive semidefiniteness, as does
+    reindexing a matrix along an equivalence. Apply these facts in the two
+    possible orders.
+\end{proof}
+
+\begin{theorem}[Unitary block-coordinate channels]
+    \label{thm:unitary_reindex_channels}
+    \lean{Matrix.unitaryReindexLinearEquiv_toLinearMap_isKrausCPTP}
+    \lean{Matrix.unitaryReindexLinearEquiv_symm_toLinearMap_isKrausCPTP}
+    \leanok
+    \uses{def:is_kraus_cptp}
+    Let $e:H\simeq I$ be an equivalence of finite index sets and let
+    $U$ be a unitary matrix indexed by $I$. Define
+    \begin{align}
+        \Phi(A)&=e^{-1}(U^\dagger A U)
+        \notag
+    \end{align}
+    and
+    \begin{align}
+        \Phi^{-1}(X)&=Ue(X)U^\dagger.
+        \notag
+    \end{align}
+    Both $\Phi$ and $\Phi^{-1}$ are trace-preserving and completely positive.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpdo_equiv_reindex_cptp,
+      thm:mpdo_single_kraus_map_cptp,
+      lem:is_kraus_cptp_comp}
+    The forward map is the composition of conjugation by $U^\dagger$ with
+    reindexing by $e^{-1}$, while the inverse is reindexing by $e$ followed
+    by conjugation by $U$. Unitarity makes both single-Kraus conjugations
+    trace preserving. Equivalence reindexing is trace preserving and
+    completely positive, and composition preserves these properties.
+\end{proof}
+
+% Wolf ch01 source lines 539--577: combine the unital block form (1.39),
+% the conditional expectations (1.40), and the two building blocks named at line 577.
+\begin{theorem}[Trace-preserving conditional expectation onto a matrix subalgebra]
+    \label{thm:matrix_star_subalgebra_cptp_conditional_expectation}
+    \lean{StarSubalgebra.exists_krausCPTP_conditionalExpectation}
+    \leanok
+    \uses{def:is_kraus_cptp, def:is_conditional_expectation}
+    For every unital $*$-subalgebra $\mathcal B\subseteq\MN{n}$, there is a
+    trace-preserving completely positive map $E:\MN{n}\to\MN{n}$ that is
+    a conditional expectation onto $\mathcal B$: it is unital and
+    idempotent, its range lies in $\mathcal B$, and it fixes every element
+    of $\mathcal B$. This is the normalized trace-preserving choice in the
+    family described by
+    \cite[Proposition~1.5 and Equation~(1.40)]{Wolf2012Quantum}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:starSubalgebra_unitary_block_diagonal_iff,
+      thm:coordinate_direct_sum_conditional_expectation,
+      thm:unitary_reindex_channels,
+      lem:is_kraus_cptp_comp,
+      lem:is_kraus_cp_basic,
+      lem:is_kraus_cp_iff_is_cp_map,
+      thm:cp_is_positive}
+    By the finite-dimensional block form, choose unitary coordinates in
+    which
+    \begin{align}
+        \mathcal B
+        &=\bigoplus_k\bigl(\mathbb1_{m_k}\otimes\MN{d_k}\bigr).
+        \notag
+    \end{align}
+    Let $E_0$ be the coordinate direct-sum expectation and set
+    \begin{align}
+        E&=\Phi^{-1}\circ E_0\circ\Phi.
+        \notag
+    \end{align}
+    Theorem~\ref{thm:unitary_reindex_channels} and closure under composition
+    show that $E$ is trace-preserving and completely positive. The identities
+    $\Phi\Phi^{-1}=\id$ and $E_0^2=E_0$ give $E^2=E$, and all three maps are
+    unital. Finally, the block-membership equivalence identifies
+    $\Phi(\mathcal B)$ with the coordinate subalgebra. Thus the range of $E$
+    lies in $\mathcal B$, and the pointwise fixation of that coordinate
+    subalgebra by $E_0$ implies $E(B)=B$ for every $B\in\mathcal B$.
+\end{proof}
+
+\begin{definition}[Operator system]\label{def:operator_system}
+    \lean{Matrix.IsOperatorSystem}
+    \leanok
+    A subspace $S\subseteq\MN{m}$ is an \emph{operator system} if it
+    contains the unit and is closed under the adjoint: $\mathbb 1\in S$ and
+    $X\in S\implies X^\dagger\in S$.
+\end{definition}
+
+\begin{definition}[Complete positivity on a subspace]
+    \label{def:cp_on_operator_system}
+    \lean{Matrix.IsCPOnOperatorSystem}
+    \leanok
+    Let $S\subseteq\MN{m}$ be a subspace and $T:S\to\MN{n}$ a linear map.
+    For a natural number $k$, write $T\otimes\mathrm{id}_k$ for the map
+    sending a $k\times k$ block matrix with entries in $S$ to the block
+    matrix obtained by applying $T$ to every entry. Then $T$ is \emph{completely
+    positive on $S$} if $T\otimes\mathrm{id}_k$ sends every positive
+    semidefinite such block matrix to a positive semidefinite matrix, for
+    every $k$ (the condition is vacuous at $k=0$). This makes no reference
+    to $S$ being an operator system; it is applied below to an operator
+    system $S$ because that is the situation in which the extension
+    theorem holds.
+\end{definition}
+
+For the rest of this section fix an operator system $S\subseteq\MN{m}$
+(Definition~\ref{def:operator_system}) and a linear map $T:S\to\MN{n}$
+completely positive on $S$ (Definition~\ref{def:cp_on_operator_system}),
+and write
+\[
+    \tau(A):=\braket{\Omega|(T\otimes\mathrm{id}_n)(A)|\Omega}
+    \qquad(A\in S\otimes\MN{n})
+\]
+for Wolf's functional, with $\Omega$ the maximally entangled vector of
+dimension $n$.
+
+\begin{lemma}[Norm domination for $\tau$]
+    \label{lem:tau_domination}
+    \lean{Matrix.tau_le_norm_mul_tau_one}
+    \leanok
+    \uses{def:operator_system, def:cp_on_operator_system}
+    For every Hermitian $A\in S\otimes\MN{n}$,
+    \[
+        \re\tau(A)\le\|A\|_\infty\,\re\tau(\mathbb 1).
+    \]
+\end{lemma}
+
+\begin{proof}\leanok
+    The matrix $\|A\|_\infty\mathbb1-A$ is positive semidefinite and lies
+    in $S\otimes\MN{n}$, so complete positivity of $T$ at level $n$ gives
+    that its image under $T\otimes\mathrm{id}_n$ is positive semidefinite.
+    Testing against $\Omega$ and using linearity of $\tau$,
+    \[
+        \braket{\Omega|(T\otimes\mathrm{id}_n)(\|A\|_\infty\mathbb1-A)|\Omega}
+        =\|A\|_\infty\,\tau(\mathbb1)-\tau(A)\ge0;
+    \]
+    both sides are real since $\|A\|_\infty\mathbb1-A$ is Hermitian, and
+    rearranging gives the bound.
+\end{proof}
+
+\begin{lemma}[Hahn--Banach extension of $\tau$]
+    \label{lem:tau_extension}
+    \lean{Matrix.exists_tau_extension}
+    \leanok
+    \uses{def:operator_system, def:cp_on_operator_system, lem:tau_domination}
+    There is a $\C$-linear functional $\tau'$ on $\MN{m}\otimes\MN{n}$
+    agreeing with $\tau$ on $S\otimes\MN{n}$ and satisfying
+    $\re\tau'(A)\le\|A\|_\infty\,\re\tau'(\mathbb1)$ for every Hermitian
+    $A\in\MN{m}\otimes\MN{n}$.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{lem:tau_domination}
+    The functional $f(A):=\|A\|_\infty\,\tau(\mathbb1)$ is sublinear, so by
+    Lemma~\ref{lem:tau_domination} the Hahn--Banach theorem extends $\tau$,
+    dominated by $f$, from the Hermitian matrices of $S\otimes\MN{n}$ to
+    those of $\MN{m}\otimes\MN{n}$ as a real-linear functional. Decomposing
+    each matrix of $\MN{m}\otimes\MN{n}$ into its Hermitian and
+    skew-Hermitian parts, both of which stay inside $S\otimes\MN{n}$
+    whenever the original matrix does (since $S$ is closed under the
+    adjoint), extends this further to a $\C$-linear functional $\tau'$
+    agreeing with $\tau$ on all of $S\otimes\MN{n}$ and obeying the same
+    bound throughout.
+\end{proof}
+
+\begin{lemma}[Positivity of a dominated functional]
+    \label{lem:tau_nonneg}
+    \lean{Matrix.tau'_nonneg_of_posSemidef}
+    \leanok
+    Let $\varphi:\MN{d}\to\C$ be a $\C$-linear functional satisfying
+    $\re\varphi(A)\le\|A\|_\infty\,\re\varphi(\mathbb1)$ for every Hermitian
+    $A\in\MN{d}$, with $\re\varphi(\mathbb1)\ge0$. Then $\re\varphi(A)\ge0$ for
+    every positive semidefinite $A\in\MN{d}$.
+\end{lemma}
+
+\begin{proof}\leanok
+    The matrix $\|A\|_\infty\mathbb1-A$ is positive semidefinite (hence
+    Hermitian) of norm at most $\|A\|_\infty$ whenever $A$ is positive
+    semidefinite, so the domination hypothesis applied to it gives
+    \[
+        \re\varphi(\|A\|_\infty\mathbb1-A)
+        =\|A\|_\infty\,\re\varphi(\mathbb1)-\re\varphi(A)
+        \le\|A\|_\infty\,\re\varphi(\mathbb1);
+    \]
+    since $\re\varphi(\mathbb1)\ge0$, rearranging gives $\re\varphi(A)\ge0$.
+\end{proof}
+
+\begin{lemma}[The Riesz matrix of the extension is positive semidefinite]
+    \label{lem:riesz_psd}
+    \lean{Matrix.rieszMatrix_complexify_posSemidef}
+    \leanok
+    Let $\tau'$ be a $\C$-linear functional on $\MN{m}\otimes\MN{n}$ built
+    from a $\R$-linear functional by the Hermitian-decomposition
+    construction of Lemma~\ref{lem:tau_extension}, and suppose
+    $\re\tau'(X)\ge0$ for every positive semidefinite
+    $X\in\MN{m}\otimes\MN{n}$. Let $Y$ be the matrix representing $\tau'$
+    through the trace pairing, $\tau'(X)=\tr(YX)$. Then $Y$ is positive
+    semidefinite.
+\end{lemma}
+
+\begin{proof}\leanok
+    Because $\tau'$ is built by the Hermitian-decomposition construction,
+    it sends the adjoint of a matrix to the conjugate of its value, so $Y$
+    is Hermitian. For a vector $v$, the trace-pairing identity gives
+    $v^\dagger Yv=\tau'(vv^\dagger)$, and $vv^\dagger$ is positive
+    semidefinite, so the hypothesis gives $\re(v^\dagger Yv)\ge0$; since $Y$
+    is Hermitian, $v^\dagger Yv$ is already real, hence nonnegative.
+\end{proof}
+
+\begin{lemma}[Reconstructing a Kraus map from $\tau'$]
+    \label{lem:reconstructed_kraus}
+    \lean{Matrix.reconstructedMap_eq_kraus_sum}
+    \leanok
+    Let $\tau'$ be as in Lemma~\ref{lem:tau_extension} and let
+    $Y=\sum_kv_kv_k^\dagger$ be any rank-one decomposition of its Riesz
+    matrix. Then the map $T'(B)_{ij}:=n\cdot\tau'(B\otimes\ket i\bra j)$
+    equals $\sum_kK_kBK_k^\dagger$ for the reshaped operators
+    $K_k:\C^m\to\C^n$, $K_k:=\sqrt n\,v_k^\dagger$ (viewing $v_k$ as an
+    $m\times n$ matrix). Complete positivity of $T'$ is assembled from this
+    identity together with the positive semidefiniteness of $Y$ at
+    Theorem~\ref{thm:extend_cp_operator_system}.
+\end{lemma}
+
+\begin{proof}\leanok
+    Both sides expand, entry by entry, to the same double sum
+    $n\sum_k\sum_{p,q}\overline{v_k(p,i)}\,B_{pq}\,v_k(q,j)$.
+\end{proof}
+
+\begin{lemma}[Wolf's inversion formula holds for $T$ on $S$]
+    \label{lem:tau_inversion}
+    \lean{Matrix.tau_kron_single}
+    \leanok
+    For every $B\in S$ and every $i,j$,
+    \[
+        \tau(B\otimes\ket i\bra j)=\tfrac1n\,T(B)_{ij}.
+    \]
+\end{lemma}
+
+\begin{proof}\leanok
+    Direct computation from the definition of $\tau$, expanding the trace
+    against $\Omega$ and collapsing the resulting sum using the structure
+    of $B\otimes\ket i\bra j$.
+\end{proof}
+
+\begin{theorem}[Extending cp maps from operator systems]
+    \label{thm:extend_cp_operator_system}
+    \lean{Matrix.exists_cp_extension_of_operatorSystem}
+    \leanok
+    \uses{def:operator_system, def:cp_on_operator_system, def:is_kraus_cp,
+      lem:tau_extension, lem:tau_nonneg, lem:riesz_psd,
+      lem:reconstructed_kraus, lem:tau_inversion}
+    Let $m,n\ge1$, let $S\subseteq\MN{m}$ be an operator system, and let
+    $T:S\to\MN{n}$ be a completely positive linear map on $S$. Then there
+    is a completely positive map $T':\MN{m}\to\MN{n}$, in rectangular Kraus
+    form, that agrees with $T$ on $S$.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{lem:tau_extension, lem:tau_nonneg, lem:riesz_psd,
+      lem:reconstructed_kraus, lem:tau_inversion}
+    By Lemma~\ref{lem:tau_extension}, $\tau$ extends to a $\C$-linear
+    functional $\tau'$ on $\MN{m}\otimes\MN{n}$ agreeing with $\tau$ on
+    $S\otimes\MN{n}$ and obeying the same norm-domination bound throughout.
+    By Lemma~\ref{lem:tau_nonneg}, $\tau'$ is nonnegative on positive
+    semidefinite matrices, so by Lemma~\ref{lem:riesz_psd} the matrix $Y$
+    representing $\tau'$ through the trace pairing is positive
+    semidefinite, hence a sum of rank-one terms $Y=\sum_kv_kv_k^\dagger$.
+    Lemma~\ref{lem:reconstructed_kraus} reshapes these into a rectangular
+    Kraus family for $T'(B)_{ij}:=n\cdot\tau'(B\otimes\ket i\bra j)$, so
+    $T'$ is completely positive. Lemma~\ref{lem:tau_inversion} gives
+    $\tau(B\otimes\ket i\bra j)=\tfrac1n\,T(B)_{ij}$ for $B\in S$, and
+    $\tau'$ agrees with $\tau$ on $S\otimes\MN{n}$, so $T'$ agrees with $T$
+    on $S$.
+\end{proof}
+
+\section{Extending completely positive maps from operator systems in a direct
+sum of matrix algebras}
+
+The one-summand case above (Theorem~\ref{thm:extend_cp_operator_system}) is
+generalized here to the source's full domain generality: the domain
+ranges over every finite-dimensional $C^*$-algebra, that is, every finite
+direct sum of matrix algebras $\bigoplus_{k<r}M_{d_k}(\C)$. The
+generalization transports the one-summand theorem along the block-diagonal
+embedding of $\bigoplus_{k<r}M_{d_k}(\C)$ into a single matrix algebra
+$M_M(\C)$, $M=\sum_kd_k$.
+
+\begin{definition}[Operator system in a direct sum of matrix algebras]
+    \label{def:operator_system_direct_sum}
+    \lean{Matrix.IsOperatorSystemDirectSum}
+    \leanok
+    A subspace $S\subseteq\bigoplus_{k<r}M_{d_k}(\C)$ is an \emph{operator
+    system} if it contains the unit and is closed under the entrywise
+    adjoint: $\mathbb1\in S$ and $X\in S\implies X^\dagger\in S$, where
+    $X^\dagger$ denotes the family $(X_k^\dagger)_{k<r}$.
+\end{definition}
+
+\begin{definition}[Complete positivity on a direct-sum operator system]
+    \label{def:cp_on_operator_system_direct_sum}
+    \lean{Matrix.IsCPOnOperatorSystemDirectSum}
+    \leanok
+    Let $S\subseteq\bigoplus_{k<r}M_{d_k}(\C)$ be a subspace and
+    $T:S\to\MN{p}$ a linear map. The level-$j$ ampliation of $T$ is defined
+    by bipartite slicing: for a family $X=(X_k)_{k<r}$ with
+    $X_k\in M_{d_k}(\C)\otimes\MN{j}$ whose slice families lie in $S$,
+    \begin{align}
+        \bigl((T\otimes\id_j)(X)\bigr)_{ab}
+        =T\Bigl(\bigl((X_k)_{ab}\bigr)_{k<r}\Bigr),
+        \qquad a,b<j,
+    \end{align}
+    and $T$ is \emph{completely positive on $S$} if entrywise positivity
+    $(\forall k<r,\ X_k\ge0)$ always implies $(T\otimes\id_j)(X)\ge0$, for
+    every $j$. This is Definition~\ref{def:cp_on_operator_system} applied
+    block by block, one summand at a time.
+\end{definition}
+
+\begin{definition}[Complete positivity on a direct sum of matrix algebras]
+    \label{def:cp_map_direct_sum}
+    \lean{Matrix.IsCPMapDirectSum}
+    \leanok
+    A linear map $T:\bigoplus_{k<r}M_{d_k}(\C)\to\MN{p}$ is \emph{completely
+    positive} if, for every natural number $j$ and every family
+    $X=(X_k)_{k<r}$ with $X_k\in M_{d_k}(\C)\otimes\MN{j}$,
+    entrywise positivity implies
+    \begin{align}
+        (\forall k<r,\ X_k\ge0)
+        \quad\Longrightarrow\quad (T\otimes\id_j)(X)\ge0,
+        \label{eq:cp_direct_sum_ampliation}
+    \end{align}
+    where the $(a,b)$ slice of $(T\otimes\id_j)(X)$ is $T$ applied to the
+    family of $(a,b)$ slices of the matrices $X_k$. This is the direct-sum
+    analogue of rectangular Kraus complete positivity
+    (Definition~\ref{def:is_kraus_cp}).
+\end{definition}
+
+\begin{theorem}[Block-diagonal transport at every matrix level]
+    \label{thm:direct_sum_level_transport}
+    \lean{Matrix.directSumEmbedFinLevel_posSemidef_iff}
+    \lean{Matrix.bipartiteSlice_directSumEmbedFinLevel}
+    \leanok
+    Let $\iota_j$ be the block-diagonal embedding
+    \begin{align}
+        \iota_j:\bigoplus_{k<r}
+          M_{d_k}(\C)\otimes\MN{j}
+          \longrightarrow M_{\sum_kd_k}(\C)\otimes\MN{j}.
+    \end{align}
+    Then $\iota_j(X)$ is positive semidefinite exactly when every $X_k$ is
+    positive semidefinite. Moreover, for all $a,b<j$,
+    \begin{align}
+        \bigl(\iota_j(X)\bigr)_{ab}
+        =\iota\bigl((X_k)_{ab}\bigr)_{k<r}.
+        \label{eq:direct_sum_slice_transport}
+    \end{align}
+\end{theorem}
+
+\begin{proof}\leanok
+    The first assertion follows from the corresponding block-diagonal
+    positivity equivalence and invariance of positivity under simultaneous
+    row and column reindexing. The second follows by evaluating both sides of
+    (\ref{eq:direct_sum_slice_transport}) at a pair of ambient matrix indices.
+\end{proof}
+
+\begin{theorem}[Complete positivity after tensoring with the identity]
+    \label{thm:kraus_cp_tensor_id}
+    \lean{Matrix.tensorMapIdLM_isKrausCP}
+    \lean{Matrix.tensorMapId_posSemidef_of_isKrausCP}
+    \leanok
+    If $\Phi(X)=\sum_iA_iXA_i^\dagger$ is a rectangular Kraus completely
+    positive map, then $\Phi\otimes\id_j$ is a Kraus completely positive
+    map with Kraus operators $A_i\otimes\mathbb1_j$. In particular,
+    $(\Phi\otimes\id_j)(X)$ is positive semidefinite whenever $X$ is.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:is_kraus_cp, lem:is_kraus_cp_basic}
+    Expanding matrix entries gives
+    \begin{align}
+        (\Phi\otimes\id_j)(X)
+        =\sum_i(A_i\otimes\mathbb1_j)X
+          (A_i\otimes\mathbb1_j)^\dagger.
+    \end{align}
+    Each summand preserves positive semidefiniteness, and so does their sum.
+\end{proof}
+
+\begin{theorem}[Transport through the block-diagonal embedding]
+    \label{thm:direct_sum_embedding_transport}
+    \lean{Matrix.isOperatorSystem_map_directSumEmbedFin}
+    \lean{Matrix.isCPOnOperatorSystem_transport}
+    \leanok
+    \uses{def:operator_system_direct_sum, def:cp_on_operator_system_direct_sum}
+    Let $\iota$ be the block-diagonal embedding of
+    $\bigoplus_{k<r}M_{d_k}(\C)$ into $M_M(\C)$, $M=\sum_kd_k$. If
+    $S\subseteq\bigoplus_{k<r}M_{d_k}(\C)$ is an operator system, then
+    $\iota(S)$ is an operator system in $M_M(\C)$; and if
+    $T:S\to\MN{p}$ is completely positive on $S$, then the induced map
+    $T'':\iota(S)\to\MN{p}$, $T''(\iota(X))=T(X)$, is completely positive
+    on $\iota(S)$.
+\end{theorem}
+
+\begin{proof}\leanok
+    The image of an operator system under an injective unital
+    $*$-homomorphism is an operator system. For complete positivity, a
+    level-$j$ matrix over the image $\iota(S)$ compresses blockwise to a
+    family over $S$: the block-diagonal compression left-inverts the
+    embedding on every slice,
+    \begin{align}
+        \bigl(\iota_j(X)\bigr)_{ab}
+        =\iota\bigl((X_k)_{ab}\bigr)_{k<r},
+        \qquad\text{so}\qquad
+        \bigl(\operatorname{compress}_j(\iota_j(X))\bigr)_k = X_k ,
+    \end{align}
+    and each block is positive semidefinite by invariance of positivity
+    under simultaneous row and column reindexing. Complete positivity of
+    $T$ on $S$ applies to this family, and the linear equivalence of $S$
+    and $\iota(S)$ converts the conclusion back to $T''$.
+\end{proof}
+
+\begin{theorem}[Extending cp maps from operator systems, direct-sum domain]
+    \label{thm:extend_cp_operator_system_direct_sum}
+    \lean{Matrix.exists_cp_extension_of_operatorSystem_directSum}
+    \leanok
+    \uses{def:operator_system_direct_sum, def:cp_on_operator_system_direct_sum,
+      def:cp_map_direct_sum, thm:extend_cp_operator_system}
+    Let $d_0,\dots,d_{r-1}$ be natural numbers, not all zero, let $p\ge1$,
+    let $S\subseteq\bigoplus_{k<r}M_{d_k}(\C)$ be an operator system
+    (Definition~\ref{def:operator_system_direct_sum}), and let $T:S\to\MN{p}$
+    be completely positive on $S$
+    (Definition~\ref{def:cp_on_operator_system_direct_sum}). Then there is a
+    completely positive map $T':\bigoplus_{k<r}M_{d_k}(\C)\to\MN{p}$
+    (Definition~\ref{def:cp_map_direct_sum}) that agrees with $T$ on $S$.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:extend_cp_operator_system, thm:direct_sum_level_transport,
+      thm:direct_sum_embedding_transport, thm:kraus_cp_tensor_id}
+    Let $\iota=\iota_1$ be the block-diagonal embedding. By
+    Theorem~\ref{thm:direct_sum_embedding_transport}, $\iota(S)$ is an
+    operator system in $M_M(\C)$ and the induced map $T''$ is completely
+    positive at every matrix level. Theorem~\ref{thm:extend_cp_operator_system} gives
+    a rectangular Kraus extension $\widetilde T:M_M(\C)\to\MN{p}$ of
+    $T''$. Define $T'=\widetilde T\circ\iota$.
+
+    To verify (\ref{eq:cp_direct_sum_ampliation}), fix $j$ and an entrywise
+    positive family $X$. The level embedding $\iota_j(X)$ is positive by
+    Theorem~\ref{thm:direct_sum_level_transport}. The Kraus ampliation theorem
+    (Theorem~\ref{thm:kraus_cp_tensor_id}) therefore gives
+    $(\widetilde T\otimes\id_j)(\iota_j(X))\ge0$. Using
+    (\ref{eq:direct_sum_slice_transport}) identifies this matrix with
+    $(T'\otimes\id_j)(X)$, proving complete positivity of $T'$. The defining
+    agreement of $\widetilde T$ with $T''$ shows that $T'$ agrees with $T$ on
+    $S$.
+\end{proof}
+
+% Wolf Chapter 1, lines 616--626: matrix-realized finite-dimensional codomain.
+\begin{theorem}[Postcomposition with a Kraus completely positive map]
+    \label{thm:cp_direct_sum_postcomp_kraus}
+    \lean{Matrix.IsCPMapDirectSum.comp_isKrausCP}
+    \leanok
+    \uses{def:cp_map_direct_sum, def:is_kraus_cp}
+    Let $F:\bigoplus_{k<r}M_{d_k}(\C)\to\MN{p}$ be completely positive and
+    let $E:\MN{p}\to\MN{q}$ have a Kraus representation. Then $E\circ F$ is
+    completely positive.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:kraus_cp_tensor_id}
+    At each matrix level $j$, the ampliations satisfy
+    \begin{align}
+        ((E\circ F)\otimes\id_j)(X)
+        &=(E\otimes\id_j)((F\otimes\id_j)(X)).
+    \end{align}
+    If every component of $X$ is positive semidefinite, complete positivity
+    of $F$ makes the inner matrix positive semidefinite. The Kraus
+    representation of $E\otimes\id_j$ then preserves its positivity.
+\end{proof}
+
+\begin{theorem}[Extension with range in a matrix subalgebra]
+    \label{thm:extend_cp_operator_system_subalgebra_range}
+    \lean{Matrix.exists_cp_extension_of_operatorSystem_directSum_starSubalgebra_range}
+    \leanok
+    \uses{def:operator_system_direct_sum, def:cp_on_operator_system_direct_sum,
+      def:cp_map_direct_sum}
+    Let $d_0,\dots,d_{r-1}$ be natural numbers, not all zero, let $p\geq1$,
+    let $S\subseteq\bigoplus_{k<r}M_{d_k}(\C)$ be an operator system, and let
+    $\mathcal B\subseteq\MN{p}$ be a unital $*$-subalgebra. Suppose that
+    $T:S\to\MN{p}$ is completely positive and $T(S)\subseteq\mathcal B$.
+    Then there is a completely positive map
+    $G:\bigoplus_{k<r}M_{d_k}(\C)\to\MN{p}$ such that
+    $G(\bigoplus_{k<r}M_{d_k}(\C))\subseteq\mathcal B$ and $G|_S=T$.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:extend_cp_operator_system_direct_sum,
+      thm:matrix_star_subalgebra_cptp_conditional_expectation,
+      lem:is_kraus_cp_basic,
+      thm:cp_direct_sum_postcomp_kraus}
+    Theorem~\ref{thm:extend_cp_operator_system_direct_sum} gives a completely
+    positive extension $F$ with values in $\MN{p}$. Choose the conditional
+    expectation $E:\MN{p}\to\MN{p}$ from
+    Theorem~\ref{thm:matrix_star_subalgebra_cptp_conditional_expectation}; its
+    range lies in $\mathcal B$. Set $G=E\circ F$.
+    Theorem~\ref{thm:cp_direct_sum_postcomp_kraus} shows that $G$ is completely
+    positive, while $E(\MN{p})\subseteq\mathcal B$.
+    For $x\in S$, one has $F(x)=T(x)\in\mathcal B$, and therefore
+    $G(x)=E(T(x))=T(x)$.
+\end{proof}
+
+\begin{theorem}[Extending cp maps from operator systems to matrix subalgebras]
+    \label{thm:extend_cp_operator_system_star_subalgebra}
+    \lean{Matrix.exists_cp_extension_of_operatorSystem_directSum_starSubalgebra}
+    \leanok
+    \uses{def:operator_system_direct_sum, def:cp_on_operator_system_direct_sum,
+      def:cp_map_direct_sum}
+    Let $d_0,\dots,d_{r-1}$ be natural numbers, not all zero, let $p\geq1$,
+    let $S\subseteq\bigoplus_{k<r}M_{d_k}(\C)$ be an operator system, let
+    $\mathcal B\subseteq\MN{p}$ be a unital $*$-subalgebra, and let
+    $T:S\to\mathcal B$ be completely positive, where positivity in
+    $\mathcal B$ is read through its inclusion in $\MN{p}$. Then there is a
+    linear map
+    \begin{align}
+        \widetilde T:
+        \bigoplus_{k<r}M_{d_k}(\C)&\longrightarrow\mathcal B
+    \end{align}
+    whose inclusion into $\MN{p}$ is completely positive and which satisfies
+    $\widetilde T|_S=T$.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:extend_cp_operator_system_subalgebra_range}
+    Apply Theorem~\ref{thm:extend_cp_operator_system_subalgebra_range} to the
+    composite of $T$ with the inclusion $\mathcal B\hookrightarrow\MN{p}$.
+    Since the resulting ambient map $G$ takes every value in $\mathcal B$, it
+    defines a map $\widetilde T$ with codomain $\mathcal B$. Its composite
+    with the inclusion is $G$, hence is completely positive, and equality in
+    $\MN{p}$ gives $\widetilde T|_S=T$.
+\end{proof}

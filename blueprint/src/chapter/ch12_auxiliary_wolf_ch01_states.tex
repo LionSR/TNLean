@@ -1,0 +1,259 @@
+\section{Bipartite systems and the Schmidt decomposition}
+
+Every pure state of a bipartite system can be brought into a normal form
+that exhibits its entanglement directly.
+
+\begin{definition}[Schmidt decomposition]\label{def:schmidt_decomposition}
+    \lean{Matrix.IsSchmidtDecomposition}
+    \leanok
+    For $\psi\in\C^{d_A}\otimes\C^{d_B}$ with $d=\min\{d_A,d_B\}$, a Schmidt
+    decomposition of $\psi$ is a choice of orthonormal bases
+    $\{e_j\in\C^{d_A}\}$, $\{f_j\in\C^{d_B}\}$ and nonnegative reals
+    $\lambda_j$, $j=1,\ldots,d$, satisfying
+    \[
+        \psi=\sum_{j=1}^d \sqrt{\lambda_j}\,\ket{e_j}\otimes\ket{f_j},
+        \qquad
+        \sum_j \lambda_j = \|\psi\|^2.
+    \]
+\end{definition}
+
+\begin{lemma}[Schmidt decomposition, $d_A\le d_B$ case]
+    \label{lem:schmidt_decomposition_le}
+    \lean{Matrix.exists_schmidtDecomposition_of_le}
+    \leanok
+    \uses{def:schmidt_decomposition}
+    If $d_A\le d_B$, every $\psi\in\C^{d_A}\otimes\C^{d_B}$ admits a Schmidt
+    decomposition.
+\end{lemma}
+
+\begin{proof}\leanok
+    Identify $\psi$ with its coefficient matrix $C\in \MN{d_A,d_B}$. The
+    spectral theorem applied to the positive semidefinite matrix $C\,C^\dagger$
+    supplies the eigenbasis $\{e_j\}$ of $\C^{d_A}$ and the eigenvalues
+    $\lambda_j$; the normalized images of the eigenvectors under $C^\dagger$,
+    conjugated and completed to an orthonormal basis, supply $\{f_j\}$.
+\end{proof}
+
+\begin{proposition}[Schmidt decomposition]\label{prop:schmidt_decomposition}
+    \lean{Matrix.exists_isSchmidtDecomposition}
+    \leanok
+    \uses{def:schmidt_decomposition, lem:schmidt_decomposition_le}
+    Every vector $\psi\in\C^{d_A}\otimes\C^{d_B}$ admits a Schmidt
+    decomposition. This is \cite[Proposition~1.1]{Wolf2012Quantum}.
+\end{proposition}
+
+\begin{proof}\leanok
+    \uses{lem:schmidt_decomposition_le}
+    The case $d_A\le d_B$ is Lemma~\ref{lem:schmidt_decomposition_le}. The
+    case $d_B<d_A$ reduces to it by applying the lemma to $\psi$ with its two
+    factors exchanged, then exchanging the two resulting bases back. This
+    matches Wolf's proof sketch: a change of local bases in the coefficient
+    matrix corresponds to left and right multiplication by two unitaries, so
+    the Schmidt coefficients are its singular values.
+\end{proof}
+
+\begin{theorem}[Schmidt rank counts the nonzero Schmidt coefficients]
+    \label{thm:schmidt_rank_of_schmidt_decomposition}
+    \lean{Matrix.IsSchmidtDecomposition.schmidtRank_eq_card_ne_zero}
+    \leanok
+    \uses{def:schmidt_decomposition, def:schmidt_rank}
+    For any Schmidt decomposition of $\psi$ with coefficients
+    $\{\lambda_j\}$, the number of nonzero $\lambda_j$ equals $\SR(\psi)$.
+    This is \cite[Proposition~1.1]{Wolf2012Quantum}.
+\end{theorem}
+
+\begin{proof}\leanok
+    The Schmidt decomposition factors the coefficient matrix of $\psi$
+    through the isometries with columns $\{e_j\}$ and $\{f_j\}$, so its rank
+    equals the rank of the diagonal matrix of Schmidt coefficients, which is
+    the number of nonzero entries.
+\end{proof}
+
+\section{Quantum steering}
+
+A purification of a density operator lets an observer on the purifying
+system remotely prepare, or ``steer,'' any ensemble consistent with the
+reduced state.
+
+\begin{definition}[Purification]\label{def:purification}
+    \lean{Matrix.IsPurification}
+    \leanok
+    A vector $\psi\in\C^{d_A}\otimes\C^{d_B}$ purifies a density operator
+    $\rho\in\MN{d_A}$ if $\tr_B[\ketbra{\psi}{\psi}]=\rho$.
+\end{definition}
+
+\begin{definition}[Convex decomposition]\label{def:convex_decomposition}
+    \lean{Matrix.IsConvexDecomposition}
+    \leanok
+    A convex decomposition of a density operator $\rho\in\MN{d_A}$ is a
+    finite family of nonnegative weights $\lambda_i$ summing to one together
+    with density operators $\rho_i\in\MN{d_A}$ satisfying
+    $\rho=\sum_i\lambda_i\rho_i$.
+\end{definition}
+
+\begin{theorem}[Partial-trace consequence of the transpose trick]\label{thm:transpose_trick}
+    \lean{Matrix.partialTraceRight_idTensorMap_vecMulVec}
+    \leanok
+    For a bipartite vector $\psi\in\C^{d_A}\otimes\C^{d_B}$ with coefficient
+    matrix $C$ and any linear map $T$ with domain $\MN{d_B}$,
+    \begin{align}
+        \tr_B\bigl[(\id\otimes T)(\ketbra{\psi}{\psi})\bigr] = C\,(T^*(\Id))^{\mathsf T}\,C^\dagger.
+        \notag
+    \end{align}
+\end{theorem}
+
+\begin{proof}\leanok
+    Tracing out the second factor of $(\id\otimes T)(\ketbra{\psi}{\psi})$
+    applies $T$ to each rank-one block $\ketbra{a}{b}\mapsto C_{i,a}\,
+    \overline{C_{j,b}}$ of the coefficient matrix and takes its trace; the
+    trace-pairing identity $\tr[T(M)]=\tr[M\,T^*(\Id)]$ turns this into the
+    displayed bilinear form in the rows of $C$. Wolf derives this identity
+    for the canonical purification $\psi=(\sqrt\rho\otimes\Id)\ket\Omega$;
+    the argument here uses only the coefficient matrix of $\psi$ and
+    linearity, so it holds for an arbitrary purification.
+\end{proof}
+
+\begin{theorem}[Quantum steering]\label{thm:quantum_steering}
+    \lean{Matrix.exists_instrument_of_isConvexDecomposition}
+    \leanok
+    \uses{def:purification, def:convex_decomposition, def:instrument}
+    Let $\rho\in\MN{d_A}$ be a density operator with purification
+    $\psi\in\C^{d_A}\otimes\C^{d_B}$. For every convex decomposition
+    $\rho=\sum_i\lambda_i\rho_i$ there is an instrument
+    $\{T_i:\MN{d_B}\to\MN{d_B}\}$ acting on Bob's system such that
+    \begin{align}
+        \lambda_i\rho_i = \tr_B\bigl[(\id\otimes T_i)(\ketbra{\psi}{\psi})\bigr]
+        \notag
+    \end{align}
+    for every $i$. This is \cite[Proposition~(Quantum steering)]{Wolf2012Quantum}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:transpose_trick}
+    Write $C$ for the coefficient matrix of $\psi$, so $C\,C^\dagger=\rho$,
+    and let $C^+:=C^\dagger\rho^+$ using the generalized inverse of $\rho$
+    on its support. Then $C\,C^+$ is the support projection of $\rho$, and
+    $C^+C$ is an orthogonal projection on $\C^{d_B}$ (the subspace of
+    $\C^{d_B}$ needed to purify $\rho$). For each $i$, the support
+    projection of $\rho$ absorbs $\lambda_i\rho_i$ on both sides (its range
+    lies in the range of $\rho$), so
+    $C\,(C^+(\lambda_i\rho_i)(C^+)^\dagger)\,C^\dagger=\lambda_i\rho_i$.
+    Transposing $C^+(\lambda_i\rho_i)(C^+)^\dagger$ gives an effect operator
+    $E_i$ with $C\,E_i^{\mathsf T}\,C^\dagger=\lambda_i\rho_i$; adding the
+    transpose of the orthogonal complement of $C^+C$ to one fixed $E_{i_0}$
+    keeps this identity (the complement contributes zero under $C(\cdot)C^\dagger$)
+    while making $\sum_i E_i=\Id$. Taking $T_i$ to be the Lüders instrument
+    $\sigma\mapsto\sqrt{E_i}\,\sigma\,\sqrt{E_i}$ gives
+    $T_i^*(\Id)=E_i$, so $\{T_i\}$ is an instrument, and
+    Theorem~\ref{thm:transpose_trick} recovers the displayed identity.
+
+    This route proves the proposition directly for an arbitrary purification
+    and an arbitrary convex decomposition, in place of Wolf's route through
+    the canonical purification $\psi=(\sqrt\rho\otimes\Id)\ket\Omega$ and
+    the transposition operator $\theta$ with respect to its Schmidt basis.
+\end{proof}
+
+\section{Maximal weight in convex decomposition}
+
+Given a density operator $\rho$ and a candidate term $\rho_1$, how large a
+weight can $\rho_1$ carry in a convex decomposition of $\rho$?
+
+\begin{definition}[Convex decomposition with a distinguished term]
+    \label{def:convex_decomposition_with}
+    \lean{Matrix.HasConvexDecompositionWith}
+    \leanok
+    For density operators $\rho,\rho_1$ on the same space and $c\in\R$, $\rho$
+    has a convex decomposition with $\rho_1$ carrying weight $c$ when
+    $\rho=\sum_i\lambda_i\rho_i$ for some finite index set, with every
+    $\rho_i$ a density operator, every $\lambda_i\ge0$, $\sum_i\lambda_i=1$,
+    and some index $i_1$ with $\lambda_{i_1}=c$, $\rho_{i_1}=\rho_1$.
+\end{definition}
+
+\begin{lemma}[Congruence criterion for positive-semidefinite domination]
+    \label{lem:sub_smul_posSemidef_iff}
+    \lean{Matrix.PosSemidef.sub_smul_posSemidef_iff}
+    \leanok
+    Let $A$, $B$ be positive semidefinite operators on the same space with
+    $\ker(A)\subseteq\ker(B)$, and let $c>0$. Then
+    \[
+        A-cB\ge0 \iff c\bigl\|A^{-1/2}BA^{-1/2}\bigr\|_\infty\le1,
+    \]
+    where the inverse is taken on the range of $A$.
+\end{lemma}
+
+\begin{proof}\leanok
+    Write $P$ for the support projection of $A$. The kernel inclusion
+    compresses $B$ onto the range of $A$, so $A^{-1/2}BA^{-1/2}$ lies
+    entirely inside $\mathrm{ran}(P)$, and conjugating by $A^{-1/2}$ and by
+    $A^{1/2}$ give mutually inverse congruences
+    \begin{align}
+        A^{-1/2}(A-cB)A^{-1/2} &= P - c\,A^{-1/2}BA^{-1/2},
+        \notag\\
+        A^{1/2}\bigl(P - c\,A^{-1/2}BA^{-1/2}\bigr)A^{1/2} &= A-cB,
+        \notag
+    \end{align}
+    so $A-cB\ge0$ iff $P-c\,A^{-1/2}BA^{-1/2}\ge0$. Since
+    $A^{-1/2}BA^{-1/2}$ is supported on $\mathrm{ran}(P)$, this last
+    inequality is in turn equivalent to $1-c\,A^{-1/2}BA^{-1/2}\ge0$, which
+    by the $C^*$-identity $\|X\|_\infty\le1\iff X\le1$ (for $X\ge0$) holds
+    iff $c\|A^{-1/2}BA^{-1/2}\|_\infty\le1$.
+\end{proof}
+
+\begin{lemma}[Necessity of the kernel inclusion]
+    \label{lem:ker_subset_of_convex_decomposition}
+    \lean{Matrix.ker_subset_of_hasConvexDecompositionWith}
+    \leanok
+    \uses{def:convex_decomposition_with}
+    If $\rho$ has a convex decomposition $\rho=\sum_i\lambda_i\rho_i$ giving
+    $\rho_1$ a positive weight $c$, then $\ker(\rho)\subseteq\ker(\rho_1)$.
+\end{lemma}
+
+\begin{proof}\leanok
+    If $\rho v=0$ for some vector $v$, every term of
+    $\rho=\sum_i\lambda_i\rho_i$ is positive semidefinite, so each
+    summand's quadratic form at $v$ vanishes; in particular
+    $c\langle v,\rho_1v\rangle=0$, and since $c>0$ and $\rho_1$ is positive
+    semidefinite, $\rho_1v=0$.
+\end{proof}
+
+\begin{theorem}[Maximal weight in convex decomposition]
+    \label{thm:maximal_weight_convex_decomposition}
+    \lean{Matrix.hasConvexDecompositionWith_iff}
+    \leanok
+    \uses{def:convex_decomposition_with, lem:sub_smul_posSemidef_iff,
+    lem:ker_subset_of_convex_decomposition}
+    Let $\rho$ and $\rho_1$ be two density operators acting on the same
+    space and let $c>0$. There is a convex decomposition of the form
+    $\rho=\sum_i\lambda_i\rho_i$ with $\rho_1$ carrying weight $c$ iff
+    $\ker(\rho)\subseteq\ker(\rho_1)$ and
+    \[
+        c\bigl\|\rho^{-1/2}\rho_1\rho^{-1/2}\bigr\|_\infty\le1,
+    \]
+    where the inverse is taken on the range of $\rho$. Wolf's Proposition
+    ``Maximal weight in convex decomposition'' \cite{Wolf2012Quantum}
+    states this with the inverse form $c\le\|\rho^{-1/2}\rho_1
+    \rho^{-1/2}\|_\infty^{-1}$; the two are equivalent here because the
+    kernel inclusion together with $\tr(\rho_1)=1$ (so $\rho_1\ne0$) forces
+    $\|\rho^{-1/2}\rho_1\rho^{-1/2}\|_\infty>0$, so dividing the displayed
+    multiplicative inequality through by that norm is valid.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{lem:sub_smul_posSemidef_iff, lem:ker_subset_of_convex_decomposition}
+    Necessity of the kernel inclusion is
+    Lemma~\ref{lem:ker_subset_of_convex_decomposition}.
+
+    The existence of a decomposition with weight $c$ on $\rho_1$ is
+    equivalent to $\rho-c\rho_1\ge0$: given the kernel inclusion, the
+    remaining terms of the decomposition sum to $\rho-c\rho_1$, itself a
+    positive-semidefinite combination; conversely, when
+    $\rho-c\rho_1\ge0$ its trace is $1-c\ge0$, so either $c=1$ and
+    $\rho=\rho_1$ (a zero-trace positive-semidefinite matrix vanishes), or
+    $c<1$ and $\sigma:=(1-c)^{-1}(\rho-c\rho_1)$ is a density operator with
+    $\rho=c\rho_1+(1-c)\sigma$.
+
+    Finally $\rho-c\rho_1\ge0$ is equivalent to
+    $c\|\rho^{-1/2}\rho_1\rho^{-1/2}\|_\infty\le1$ by
+    Lemma~\ref{lem:sub_smul_posSemidef_iff}, applied with $A=\rho$,
+    $B=\rho_1$ under the kernel inclusion.
+\end{proof}

@@ -1,0 +1,541 @@
+\section{Set spectra and spectral multiplicities}
+
+For a matrix $A\in M_d(\C)$, the spectrum $\sigma(A)$ is a set: it does not
+record how often a root of the characteristic polynomial occurs. Wolf's
+spectrum-preserver hypothesis is precisely equality of these sets on
+Hermitian inputs. The next results justify the continuity argument in
+\cite[Chapter~1, Spectrum preserving maps]{Wolf2012Quantum} without replacing
+that hypothesis by multiplicity preservation.
+
+\begin{theorem}[Hermitian trace power sums]
+    \label{thm:hermitian_trace_power_sum}
+    \lean{Matrix.IsHermitian.trace_pow_eq_sum_eigenvalues_pow}
+    \leanok
+    If $A$ is Hermitian with eigenvalues $\lambda_0,\ldots,\lambda_{d-1}$,
+    listed with multiplicity, then for every $k\in\N$,
+    \begin{align}
+        \tr(A^k)=\sum_{i=0}^{d-1}\lambda_i^k.
+        \label{eq:ch01_trace_power_sum}
+    \end{align}
+    This includes $d=0$, when both sides are empty sums.
+\end{theorem}
+
+\begin{proof}\leanok
+    Diagonalize $A=UDU^\dagger$, where
+    $D=\operatorname{diag}(\lambda_0,\ldots,\lambda_{d-1})$. Unitary
+    conjugation commutes with powers and leaves the trace unchanged, while
+    $D^k=\operatorname{diag}(\lambda_0^k,\ldots,\lambda_{d-1}^k)$.
+\end{proof}
+
+\begin{definition}[Ordered simple-spectrum perturbation]
+    \label{def:hermitian_simple_spectrum_perturbation}
+    \lean{Matrix.IsHermitian.orderedPerturbedEigenvalue}
+    \lean{Matrix.IsHermitian.simpleSpectrumPerturbation}
+    \leanok
+    Let $A=U\operatorname{diag}(\lambda_0,\ldots,\lambda_{d-1})U^\dagger$
+    be Hermitian with $\lambda_0\ge\cdots\ge\lambda_{d-1}$. For
+    $\varepsilon\in\R$, define
+    \begin{align}
+        \lambda_i(\varepsilon)
+        &=\lambda_i+\varepsilon(d-i).
+    \end{align}
+    Define the corresponding Hermitian matrix by
+    \begin{align}
+        A_\varepsilon
+        &=U\operatorname{diag}\bigl(\lambda_0(\varepsilon),\ldots,
+          \lambda_{d-1}(\varepsilon)\bigr)U^\dagger.
+        \label{eq:ch01_simple_perturbation}
+    \end{align}
+\end{definition}
+
+\begin{theorem}[Simple spectrum and convergence of the perturbations]
+    \label{thm:hermitian_simple_spectrum_perturbation}
+    \lean{Matrix.IsHermitian.orderedPerturbedEigenvalue_strictAnti}
+    \lean{Matrix.IsHermitian.orderedPerturbedEigenvalue_injective}
+    \lean{Matrix.IsHermitian.simpleSpectrumPerturbation_isHermitian}
+    \lean{Matrix.IsHermitian.simpleSpectrumPerturbation_zero}
+    \lean{Matrix.IsHermitian.simpleSpectrumPerturbation_roots_nodup}
+    \lean{Matrix.IsHermitian.continuous_simpleSpectrumPerturbation}
+    \lean{Matrix.IsHermitian.tendsto_simpleSpectrumPerturbation}
+    \lean{Matrix.IsHermitian.tendsto_simpleSpectrumPerturbation_one_div}
+    \leanok
+    \uses{def:hermitian_simple_spectrum_perturbation}
+    If $\varepsilon>0$, then
+    $\lambda_0(\varepsilon)>\cdots>\lambda_{d-1}(\varepsilon)$, so the roots
+    of $\chi_{A_\varepsilon}$ have no repetitions. Moreover,
+    $A_\varepsilon\to A$ as $\varepsilon\to0$. In particular, the positive
+    sequence $\varepsilon_n=1/(n+1)$ gives simple-spectrum matrices
+    $A_{\varepsilon_n}\to A$. All assertions remain valid for $d=0$.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:hermitian_simple_spectrum_perturbation}
+    For $i<j$, monotonicity of the ordered eigenvalues and positivity of
+    $\varepsilon$ give
+    \begin{align}
+        \lambda_j+\varepsilon(d-j)
+        <\lambda_i+\varepsilon(d-i).
+    \end{align}
+    Thus the diagonal entries in (\ref{eq:ch01_simple_perturbation}) are
+    distinct. The same formula is continuous in $\varepsilon$, and at
+    $\varepsilon=0$ it is the spectral decomposition of $A$.
+\end{proof}
+
+\begin{theorem}[Set spectrum determines multiplicities at simple spectrum]
+    \label{thm:set_spectrum_multiplicity}
+    \lean{Matrix.roots_charpoly_eq_of_spectrum_eq_of_roots_nodup}
+    \leanok
+    Let $A,B\in M_d(\C)$. Suppose $\sigma(B)=\sigma(A)$ and the roots of
+    $\chi_A$ have no repetitions. Then the root multisets of $\chi_A$ and
+    $\chi_B$ are equal.
+\end{theorem}
+
+\begin{proof}\leanok
+    The common spectrum is the common finite set underlying the two root
+    multisets. The roots of $\chi_A$ are distinct, so this set has $d$
+    elements. Both characteristic polynomials split over $\C$ and have degree
+    $d$, so the root multiset of $\chi_B$ also has cardinality $d$. Hence it
+    cannot repeat any root, and the two root multisets agree.
+\end{proof}
+
+\begin{theorem}[Hermitian trace powers from simple set spectrum]
+    \label{thm:hermitian_set_spectrum_multiplicity}
+    \lean{Matrix.IsHermitian.trace_pow_eq_of_spectrum_eq_of_roots_nodup}
+    \leanok
+    Let $A,B\in M_d(\C)$ be Hermitian. Suppose
+    $\sigma(B)=\sigma(A)$ and the roots of $\chi_A$ have no repetitions.
+    Then $\tr(B^k)=\tr(A^k)$ for every $k\in\N$.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:set_spectrum_multiplicity, thm:hermitian_trace_power_sum}
+    Theorem~\ref{thm:set_spectrum_multiplicity} gives equality of the root
+    multisets. Formula~(\ref{eq:ch01_trace_power_sum}) then gives equality of
+    trace powers.
+\end{proof}
+
+\begin{theorem}[Continuity of trace powers]
+    \label{thm:matrix_trace_power_continuity}
+    \lean{Matrix.continuous_trace_pow}
+    \lean{Matrix.tendsto_trace_pow}
+    \leanok
+    For each $k\in\N$, the function
+    $A\mapsto\tr(A^k)$ on $M_d(\C)$ is continuous. Thus $A_n\to A$ implies
+    $\tr(A_n^k)\to\tr(A^k)$.
+\end{theorem}
+
+\begin{proof}\leanok
+    Finite matrix multiplication is continuous, hence so is $A\mapsto A^k$;
+    the trace is a finite sum of matrix entries.
+\end{proof}
+
+\begin{theorem}[Newton--Girard trace recursion]\label{thm:newton_girard}
+    \lean{Matrix.charpoly_eq_of_forall_trace_pow_eq,
+        Matrix.charpoly_eq_of_trace_pow_eq_of_le_card}
+    \leanok
+    If $A, B \in \MN{n}$ satisfy
+    $\tr(A^k) = \tr(B^k)$ for all $k \ge 1$,
+    then $A$ and $B$ have the same characteristic polynomial.
+    It is enough to assume this equality for $1 \le k \le n$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Let $e_m$ denote the $m$th elementary symmetric polynomial in the
+    eigenvalues, with $e_0 = 1$. The Newton--Girard recursion
+    \begin{align}
+        m e_m
+         & = \sum_{i=1}^m (-1)^{i-1} e_{m-i} \tr(A^i)
+    \end{align}
+    expresses the coefficients of the characteristic polynomial in terms
+    of the power-sum traces $\tr(A^i)$. Equal power sums for $A$ and $B$
+    therefore give equal coefficients, hence equal characteristic
+    polynomials.
+\end{proof}
+
+\begin{theorem}[Characteristic-polynomial preservation from Hermitian set spectra]
+    \label{thm:hermitian_set_spectrum_charpoly}
+    \lean{Matrix.charpoly_map_eq_of_preserves_hermitian_spectrum}
+    \leanok
+    Let $T:M_d(\C)\to M_d(\C)$ be complex linear. Suppose that $T(A)$ is
+    Hermitian whenever $A$ is Hermitian and that
+    \begin{align}
+        \sigma(T(A))=\sigma(A)
+        \label{eq:ch01_set_spectrum_hypothesis}
+    \end{align}
+    for every Hermitian $A$. Then every Hermitian $A$ satisfies
+    \begin{align}
+        \chi_{T(A)}=\chi_A.
+    \end{align}
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:hermitian_simple_spectrum_perturbation,
+      thm:hermitian_simple_spectrum_perturbation,
+      thm:hermitian_set_spectrum_multiplicity,
+      thm:matrix_trace_power_continuity,
+      thm:newton_girard}
+    Fix Hermitian $A$ and use the positive simple-spectrum perturbations
+    $A_{\varepsilon_n}$ from
+    Theorem~\ref{thm:hermitian_simple_spectrum_perturbation}. The hypothesis
+    (\ref{eq:ch01_set_spectrum_hypothesis}) and
+    Theorem~\ref{thm:hermitian_set_spectrum_multiplicity} give
+    \begin{align}
+        \tr\bigl(T(A_{\varepsilon_n})^k\bigr)
+        =\tr(A_{\varepsilon_n}^k)
+    \end{align}
+    for every $n$ and $k$. Linearity makes $T$ continuous in finite
+    dimension. Since $A_{\varepsilon_n}\to A$, continuity from
+    Theorem~\ref{thm:matrix_trace_power_continuity} yields
+    $\tr(T(A)^k)=\tr(A^k)$. For $1\le k\le d$, Newton--Girard identities
+    determine all coefficients of the degree-$d$ characteristic polynomial,
+    proving $\chi_{T(A)}=\chi_A$. When $d=0$, the same argument consists of
+    empty sums and degree-zero characteristic polynomials.
+\end{proof}
+
+
+
+For a finite Hermitian matrix, the characteristic polynomial records the
+ordered eigenvalues with their multiplicities. This determines the matrix up
+to unitary conjugation.
+
+\begin{theorem}[Hermitian matrices with the same characteristic polynomial]
+    \label{thm:hermitian_charpoly_unitary_conjugacy}
+    \lean{Matrix.IsHermitian.exists_unitary_conj_of_charpoly_eq}
+    \leanok
+    Let $A,B\in M_d(\C)$ be Hermitian. If their characteristic polynomials
+    agree, then there is a unitary matrix $U\in M_d(\C)$ such that
+    \begin{align}
+        B=UAU^\dagger.
+    \end{align}
+\end{theorem}
+
+\begin{proof}\leanok
+    Equality of the characteristic polynomials gives equality of the ordered
+    eigenvalue lists. Write the two spectral decompositions as
+    \begin{align}
+        A=U_A D U_A^\dagger.
+    \end{align}
+    Likewise,
+    \begin{align}
+        B=U_B D U_B^\dagger.
+    \end{align}
+    Set
+    \begin{align}
+        U=U_BU_A^\dagger.
+    \end{align}
+    This matrix is unitary, and cancellation of $U_A^\dagger U_A$ gives
+    \begin{align}
+        B=UAU^\dagger.
+    \end{align}
+\end{proof}
+
+\section{Pure states, projective rays, and Wigner's theorem}
+
+A nonzero vector $v\in\C^d$ determines a ray $[v]$ and the normalized
+rank-one matrix
+\begin{align}
+    P_{[v]}=\frac{\ketbra{v}{v}}{\langle v,v\rangle}.
+    \label{eq:projective_pure_state_matrix}
+\end{align}
+The quotient in (\ref{eq:projective_pure_state_matrix}) is unchanged when
+$v$ is multiplied by a nonzero scalar.
+
+\begin{definition}[Projective pure-state matrix]
+    \label{def:projective_pure_state_matrix}
+    \lean{Projectivization.pureStateMatrix}
+    \leanok
+    For a ray $p=[v]$ in $\C^d$, define
+    \begin{align}
+        P_p=\frac{\ketbra{v}{v}}{\langle v,v\rangle}.
+    \end{align}
+\end{definition}
+
+\begin{definition}[Projective transition probability]
+    \label{def:projective_transition_probability}
+    \lean{Projectivization.transitionProbability}
+    \leanok
+    For each ray $p$, fix a nonzero representative $p^{\mathrm{rep}}$. Define
+    \begin{align}
+        \operatorname{tp}(p,q)
+        =\frac{\langle p^{\mathrm{rep}},q^{\mathrm{rep}}\rangle
+          \langle q^{\mathrm{rep}},p^{\mathrm{rep}}\rangle}
+        {\langle p^{\mathrm{rep}},p^{\mathrm{rep}}\rangle
+          \langle q^{\mathrm{rep}},q^{\mathrm{rep}}\rangle}.
+    \end{align}
+\end{definition}
+
+\begin{theorem}[Projective rays as normalized pure states]
+    \label{thm:projective_pure_state_bridge}
+    \lean{Projectivization.isOrthogonalProjection_pureStateMatrix}
+    \lean{Projectivization.trace_pureStateMatrix}
+    \lean{Projectivization.trace_pureStateMatrix_mul_pureStateMatrix}
+    \lean{Projectivization.pureStateMatrix_injective}
+    \lean{Projectivization.pureStateMatrix_unitaryAction}
+    \lean{Projectivization.pureStateMatrix_coordinateConjugation}
+    \leanok
+    \uses{def:orthogonal_projection_channel,
+      def:projective_pure_state_matrix,
+      def:projective_transition_probability}
+    The matrix $P_p$ is an orthogonal projection with trace one, and
+    \begin{align}
+        \tr(P_pP_q)=\operatorname{tp}(p,q).
+    \end{align}
+    The map $p\mapsto P_p$ is injective. Moreover, a unitary $U$ and
+    coordinatewise conjugation act by
+    \begin{align}
+        P_{U\cdot p}&=UP_pU^\dagger,
+        &
+        P_{\overline p}&=P_p^{\mathsf T}.
+    \end{align}
+    These are the pure-state matrix identities used in
+    \cite[Chapter~1, Wigner's theorem]{Wolf2012Quantum}.
+\end{theorem}
+
+\begin{proof}\leanok
+    The rank-one identity
+    $\ketbra{v}{v}^2=\langle v,v\rangle\ketbra{v}{v}$ gives idempotence,
+    while taking the adjoint gives Hermiticity. The trace of
+    $\ketbra{v}{v}$ is $\langle v,v\rangle$, and
+    \begin{align}
+        \tr(P_pP_q)
+        &=\frac{\langle p^{\mathrm{rep}},q^{\mathrm{rep}}\rangle
+          \langle q^{\mathrm{rep}},p^{\mathrm{rep}}\rangle}
+        {\langle p^{\mathrm{rep}},p^{\mathrm{rep}}\rangle
+          \langle q^{\mathrm{rep}},q^{\mathrm{rep}}\rangle}
+        =\operatorname{tp}(p,q).
+    \end{align}
+    Equality $P_p=P_q$ implies that a representative of one ray is a
+    nonzero scalar multiple of a representative of the other. Finally,
+    matrix multiplication sends $\ketbra{v}{v}$ to
+    $\ketbra{Uv}{Uv}$, and coordinatewise conjugation exchanges the two
+    factors of the outer product.
+\end{proof}
+
+\begin{theorem}[Recognizing pure states by the characteristic polynomial]
+    \label{thm:pure_state_matrix_of_hermitian_charpoly_eq}
+    \lean{Projectivization.exists_pureStateMatrix_eq_of_isHermitian_charpoly_eq}
+    \leanok
+    \uses{def:projective_pure_state_matrix}
+    Let $A\in M_d(\C)$ be Hermitian, and let $p$ be a projective ray. If
+    \begin{align}
+        \chi_A=\chi_{P_p},
+    \end{align}
+    then there is a projective ray $q$ such that
+    \begin{align}
+        P_q=A.
+    \end{align}
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:hermitian_charpoly_unitary_conjugacy,
+      thm:projective_pure_state_bridge}
+    The matrix $P_p$ is Hermitian. Equality of the characteristic polynomials
+    therefore gives a unitary $U$ such that
+    \begin{align}
+        A=UP_pU^\dagger.
+    \end{align}
+    Taking $q=U\cdot p$ and using $P_{U\cdot p}=UP_pU^\dagger$ proves the
+    claim.
+\end{proof}
+
+\begin{theorem}[Normalized and unnormalized pure states]
+    \label{thm:star_dot_self_smul_normalized_pure_state_matrix}
+    \lean{Projectivization.star_dot_self_smul_normalizedPureStateMatrix}
+    \leanok
+    \uses{def:projective_pure_state_matrix}
+    For every nonzero $v\in\C^d$,
+    \begin{align}
+        \langle v,v\rangle P_{[v]}=\ketbra{v}{v}.
+    \end{align}
+\end{theorem}
+
+\begin{proof}\leanok
+    Substitute the definition
+    $P_{[v]}=\langle v,v\rangle^{-1}\ketbra{v}{v}$ and use
+    $\langle v,v\rangle\ne0$.
+\end{proof}
+
+\begin{theorem}[Pure-state extensionality for linear maps]
+    \label{thm:linear_map_eq_of_eq_on_pure_state_matrix}
+    \lean{Projectivization.linearMap_eq_of_eq_on_pureStateMatrix}
+    \leanok
+    \uses{def:projective_pure_state_matrix}
+    Let $T,S:\MN{d}\to\MN{d}$ be complex-linear maps. If
+    \begin{align}
+        T(P_p)=S(P_p)
+    \end{align}
+    for every ray $p$ in $\C^d$, then $T=S$.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:star_dot_self_smul_normalized_pure_state_matrix,
+      thm:linearMap_eq_of_eq_on_rankOne}
+    For $v\ne0$, multiply the equality at $p=[v]$ by
+    $\langle v,v\rangle$ to obtain
+    $T(\ketbra{v}{v})=S(\ketbra{v}{v})$. The same equality is immediate for
+    $v=0$. Rank-one extensionality now gives $T=S$.
+\end{proof}
+
+\begin{theorem}[Transition probability on representatives]
+    \label{thm:projective_transition_probability_mk}
+    \lean{Projectivization.transitionProbability_mk}
+    \leanok
+    \uses{def:projective_transition_probability}
+    For arbitrary nonzero representatives $v,w\in\C^d$,
+    \begin{align}
+        \operatorname{tp}([v],[w])
+        =\frac{\langle v,w\rangle\langle w,v\rangle}
+        {\langle v,v\rangle\langle w,w\rangle}.
+    \end{align}
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:projective_pure_state_matrix,
+      thm:projective_pure_state_bridge}
+    By the trace-product identity above,
+    $\operatorname{tp}([v],[w])=\tr(P_{[v]}P_{[w]})$. Moreover,
+    \begin{align}
+        \tr(P_{[v]}P_{[w]})
+        &=\frac{\tr(\ketbra{v}{v}\ketbra{w}{w})}
+          {\langle v,v\rangle\langle w,w\rangle}
+        =\frac{\langle v,w\rangle\langle w,v\rangle}
+          {\langle v,v\rangle\langle w,w\rangle},
+    \end{align}
+    which gives the displayed quotient.
+\end{proof}
+
+\begin{theorem}[Characteristic polynomial of two pure states]
+    \label{thm:charpoly_sum_two_pure_states}
+    \lean{Projectivization.isEmpty_projectivization_fin_zero}
+    \lean{Projectivization.pureStateMatrix_fin_one}
+    \lean{Projectivization.charpoly_add_pureStateMatrix_fin_one}
+    \lean{Projectivization.charpoly_add_pureStateMatrix_of_two_le}
+    \leanok
+    \uses{def:projective_pure_state_matrix}
+    There are no projective rays when $d=0$. When $d=1$, every pure-state
+    matrix is the identity and
+    \begin{align}
+        \chi_{P_p+P_q}(X)=X-2.
+    \end{align}
+    If $d\geq2$, then
+    \begin{align}
+        \chi_{P_p+P_q}(X)
+        =X^{d-2}\bigl((X-1)^2-\tr(P_pP_q)\bigr).
+        \label{eq:charpoly_sum_two_pure_states}
+    \end{align}
+\end{theorem}
+% Source audit: Wolf's displayed pair of eigenvalues
+% $1\pm\sqrt{\tr(P_pP_q)}$ suppresses the $d-2$ zero eigenvalues and their
+% multiplicities; see Chapter 1, Corollary ``Spectrum preserving maps'' in
+% \cite{Wolf2012Quantum}. The local correction is recorded in
+% \path{docs/paper-gaps/wolf_ch01_two_pure_state_zero_multiplicities.tex}; it
+% does not assert that Wolf's intended argument is false.
+
+\begin{proof}\leanok
+    \uses{thm:projective_pure_state_bridge}
+    For $d\geq2$, choose nonzero representatives $v,w$ of $p,q$, and define
+    $A\in M_{d,2}(\C)$ and $B\in M_{2,d}(\C)$ by
+    \begin{align}
+        A=\begin{pmatrix}v&w\end{pmatrix}.
+    \end{align}
+    Define the second factor by
+    \begin{align}
+        B=\begin{pmatrix}
+          \langle v,v\rangle^{-1}v^\dagger\\
+          \langle w,w\rangle^{-1}w^\dagger
+        \end{pmatrix}.
+    \end{align}
+    Then $AB=P_p+P_q$. The characteristic-polynomial identity for rectangular
+    products gives
+    \begin{align}
+        \chi_{AB}(X)=X^{d-2}\chi_{BA}(X).
+    \end{align}
+    Direct calculation yields
+    \begin{align}
+        \tr(BA)=2.
+    \end{align}
+    It also gives
+    \begin{align}
+        \det(BA)=1-\tr(P_pP_q).
+    \end{align}
+    Substitution into the quadratic characteristic polynomial of $BA$ proves
+    (\ref{eq:charpoly_sum_two_pure_states}). In dimension one, trace one forces
+    each pure-state matrix to equal the identity. The zero-dimensional claim
+    follows because a projective ray would require a nonzero vector in
+    $\C^0$.
+\end{proof}
+
+\begin{theorem}[Recovering transition probability from sum characteristic polynomials]
+    \label{thm:transition_probability_of_sum_charpoly}
+    \lean{Projectivization.trace_pureStateMatrix_mul_eq_of_charpoly_add_eq}
+    \leanok
+    \uses{def:projective_pure_state_matrix}
+    For projective rays $p,q,r,s$ in $\C^d$, if
+    \begin{align}
+        \chi_{P_p+P_q}=\chi_{P_r+P_s},
+    \end{align}
+    then
+    \begin{align}
+        \tr(P_pP_q)=\tr(P_rP_s).
+    \end{align}
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:charpoly_sum_two_pure_states}
+    For $d\geq2$, apply
+    (\ref{eq:charpoly_sum_two_pure_states}) to both sums and cancel the nonzero
+    polynomial $X^{d-2}$. Equality of the remaining constant terms gives the
+    result. In dimension one both traces equal one, while in dimension zero
+    there are no rays.
+\end{proof}
+
+\begin{theorem}[Projective Wigner rigidity]
+    \label{thm:projective_wigner_rigidity}
+    \lean{Projectivization.wigner_rigidity_fin}
+    \leanok
+    \uses{def:projective_transition_probability}
+    Let $f$ be a map on the rays of $\C^d$ such that
+    \begin{align}
+        \operatorname{tp}(f(p),f(q))=\operatorname{tp}(p,q)
+    \end{align}
+    for all rays $p,q$. Then there is a unitary $U$ such that either
+    $f(p)=U\cdot p$ for every $p$, or
+    $f(p)=U\cdot\overline p$ for every $p$.
+\end{theorem}
+
+\begin{proof}\leanok
+    The canonical linear isometry between $\C^d$ and its Euclidean-space
+    realization induces inverse maps on rays. This identification preserves
+    transition probabilities and commutes with both the unitary action and
+    coordinatewise conjugation. Apply projective Wigner rigidity on the
+    Euclidean-space realization and return the two alternatives through the
+    inverse identification.
+\end{proof}
+
+\begin{theorem}[Wigner's theorem]\label{thm:wigner}
+    \lean{Projectivization.wolf_wigner_pureStateMatrix}
+    \leanok
+    \uses{def:projective_pure_state_matrix}
+    Let $F$ be a bijection of the normalized pure states $P_p$ such that
+    $\tr(F(P)F(Q))=\tr(PQ)$ for all normalized pure states $P,Q$.
+    Then there is a unitary $U$ such that either
+    $F(P)=UPU^\dagger$ for every $P$, or
+    $F(P)=UP^{\mathsf T}U^\dagger$ for every $P$.
+    This is a disjunction, not an exclusive alternative. For $d=0$ the set of
+    pure states is empty, while for $d=1$ it is a singleton and the two
+    alternatives coincide.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:projective_pure_state_bridge,
+      thm:projective_wigner_rigidity}
+    Use the bijection between rays and the range of $p\mapsto P_p$ to regard
+    $F$ as a map of projective rays. The trace identity
+    $\tr(P_pP_q)=\operatorname{tp}(p,q)$ shows that this map preserves
+    transition probabilities. Projective Wigner rigidity gives a unitary $U$
+    and either $p\mapsto U\cdot p$ or
+    $p\mapsto U\cdot\overline p$. The identities
+    $P_{U\cdot p}=UP_pU^\dagger$ and
+    $P_{\overline p}=P_p^{\mathsf T}$ give the two stated formulas.
+\end{proof}
