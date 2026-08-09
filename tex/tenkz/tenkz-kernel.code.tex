@@ -17818,6 +17818,23 @@
         \__tenkz_kernel_policy_merge:NN
           \l__tenkz_kernel_eq_policy_prop \l__tenkz_kernel_stage_prop
       }
+    % One equation, one pitch.  A panel that named a profile of its own would
+    % scale one side of an asserted equality and not the other, so inside an
+    % equation the profile belongs to the equation and is refused on a panel.
+    % The refusal acts on the staged keys, before they become the picture
+    % record: a key the kernel refuses must not reach the stream either, or a
+    % reader is told of a pitch the picture was never drawn at.
+    \bool_if:NT \l__tenkz_kernel_ineq_bool
+      {
+        \prop_if_in:NnT \l__tenkz_kernel_stage_prop {metrics}
+          {
+            \prop_if_in:NnF \l__tenkz_kernel_eq_policy_prop {metrics}
+              {
+                \msg_error:nn {tenkz}{kernel-metrics-panel}
+                \prop_remove:Nn \l__tenkz_kernel_stage_prop {metrics}
+              }
+          }
+      }
     \__tenkz_kernel_basis_rehydrate:
     \__tenkz_kernel_size_resolve:N \l__tenkz_kernel_stage_prop
     % the staged picture keys become the picture record and the policy the
@@ -17826,20 +17843,6 @@
     \prop_map_inline:Nn \l__tenkz_kernel_policy_prop
       { \exp_args:Ne \__tenkz_model_record_picture:n { ##1 = { \exp_not:n {##2} } } }
     \prop_clear:N \l__tenkz_kernel_stage_prop
-    % One equation, one pitch.  A panel that named a profile of its own would
-    % scale one side of an asserted equality and not the other, so inside an
-    % equation the profile belongs to the equation and is refused on a panel.
-    \bool_if:NT \l__tenkz_kernel_ineq_bool
-      {
-        \prop_if_in:NnT \l__tenkz_kernel_policy_prop {metrics}
-          {
-            \prop_if_in:NnF \l__tenkz_kernel_eq_policy_prop {metrics}
-              {
-                \msg_error:nn {tenkz}{kernel-metrics-panel}
-                \prop_remove:Nn \l__tenkz_kernel_policy_prop {metrics}
-              }
-          }
-      }
     % The named metric profile acts once, here, on the group-local pitch:
     % the pitch is the one base dimension, so scaling it scales every named
     % ratio while the print-size floors hold (tenkz-metric.code.tex).
