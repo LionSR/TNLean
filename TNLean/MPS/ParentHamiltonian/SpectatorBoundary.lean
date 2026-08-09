@@ -67,9 +67,9 @@ boundary coordinates.
 For Nachtergaele C3 (arXiv:cond-mat/9410110, eq. (2.4)), take
 \(K := n - l\), \(L := l + 1\), and let the common ambient space be
 \(\mathcal{H}_{K+L} = \mathcal{H}_{n+1}\).  After Euclidean-space transport,
-the tail window is the range of `tailBoundaryMap A K L`, while the left window
-(first \(K+L-1\) sites with one final spectator) is the range of
-`leftBoundaryMap A (K+L-1) 1`.  Thus the two transport theorems below realize
+the tail window is the range of \(\Gamma^{\mathrm{tail}}_{K,L}\), while the
+left window (first \(K+L-1\) sites with one final spectator) is the range of
+\(\Gamma^{\mathrm{left}}_{K+L-1,1}\).  Thus the two transport theorems below realize
 both C3 subspaces as boundary-map ranges in this common ambient space.
 
 ## References
@@ -349,8 +349,8 @@ maps, after transport by the canonical `WithLp` isomorphism, with the
 Hilbert-space ground submodules used in the open-chain martingale condition
 (Chapter~13, Nachtergaele C3). -/
 
-/-- For a suffix of length one, `prefixRestrictₗ τ` coincides with
-`restrictLast (τ 0)`.  This is used to connect the left boundary map range
+/-- For a one-site suffix \(\tau\), prefix restriction by \(\tau\) coincides
+with last-site restriction at \(\tau(0)\).  This is used to connect the left boundary map range
 (at \(L=1\)) to the open-chain left ground space defined by fixing the
 last site. -/
 lemma prefixRestrictₗ_one_eq_restrictLast {d K : ℕ} (τ : Fin 1 → Fin d)
