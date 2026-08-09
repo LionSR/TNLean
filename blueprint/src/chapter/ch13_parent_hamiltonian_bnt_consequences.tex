@@ -495,9 +495,9 @@ with the chosen basis of normal tensors.
     \leanok
     \uses{def:parent_hamiltonian, def:bnt_span, def:block_diagonal_tensor,
         def:irreducible_tensor, def:blocks_not_gauge_phase_equiv,
-        def:l_blk_injective, def:mpv_overlap}
-    Retain the same nonzero dimensions and weights, irreducibility, normalized
-    self-overlap, gauge-phase inequivalence, common block-injectivity length,
+        def:l_blk_injective}
+    Retain the same nonzero dimensions and weights, irreducibility,
+    gauge-phase inequivalence, common block-injectivity length,
     and source-length bounds, but do not assume left-canonicality. For every
     $0\le j<g$, assume there is a positive definite matrix $\Lambda_j$ such
     that
@@ -518,6 +518,9 @@ with the chosen basis of normal tensors.
 
 \begin{proof}
     \leanok
+    \uses{cor:block_diagonal_kernel_global_cut,
+        thm:chain_ground_space_eq_mpv_normal,
+        lem:bnt_span_le_parent_hamiltonian_kernel}
     Gauge each block by the positive square root of $\Lambda_j$ only inside the
     fixed-length simultaneous tuple-span argument, and transport that span back
     to the source representative. The source unital identity then propagates

@@ -175,9 +175,7 @@ theorem exists_blockDiagonal_boundary_chainGroundSpace_of_global_cut_of_openBoun
       φ ∈ chainGroundSpace (toTensorFromBlocks (d := d) (μ := μ) A) L N →
         ∃ X : (j : Fin r) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ,
           φ = groundSpaceMap (toTensorFromBlocks (d := d) (μ := μ) A) N
-            ((Matrix.reindex finSigmaFinEquiv finSigmaFinEquiv) (Matrix.blockDiagonal' X)) ∧
-          ∀ j : Fin r,
-            groundSpaceMap (A j) N ((μ j) ^ N • X j) ∈ groundSpace (A j) N)
+            ((Matrix.reindex finSigmaFinEquiv finSigmaFinEquiv) (Matrix.blockDiagonal' X)))
     (hSpan : WordTupleSpanTop A (N - L₀))
     {ψ : NSiteSpace d N}
     (hψ : ψ ∈ chainGroundSpace (toTensorFromBlocks (d := d) (μ := μ) A) L N) :
@@ -187,14 +185,14 @@ theorem exists_blockDiagonal_boundary_chainGroundSpace_of_global_cut_of_openBoun
       ∀ j : Fin r,
         groundSpaceMap (A j) N ((μ j) ^ N • X j) ∈ chainGroundSpace (A j) L N := by
   classical
-  obtain ⟨X, hψX, _⟩ := hOpenBoundary hψ
+  obtain ⟨X, hψX⟩ := hOpenBoundary hψ
   let s : Fin N := ⟨N - L₀, by omega⟩
   have hTranslate :
       cyclicTranslateState s ψ ∈
         chainGroundSpace (toTensorFromBlocks (d := d) (μ := μ) A) L N :=
     cyclicTranslateState_mem_chainGroundSpace
       (toTensorFromBlocks (d := d) (μ := μ) A) hN hLN s hψ
-  obtain ⟨Y, hψY, _⟩ := hOpenBoundary hTranslate
+  obtain ⟨Y, hψY⟩ := hOpenBoundary hTranslate
   have hXsum :
       ψ = ∑ j : Fin r, groundSpaceMap (A j) N ((μ j) ^ N • X j) := by
     calc
@@ -306,9 +304,10 @@ theorem exists_blockDiagonal_boundary_chainGroundSpace_of_global_cut_bnt_c1
   apply exists_blockDiagonal_boundary_chainGroundSpace_of_global_cut_of_openBoundary
     μ A hBlk hL₀ hN hLN (by omega)
   · intro φ hφ
-    exact
+    obtain ⟨X, hX, _⟩ :=
       exists_blockDiagonal_boundary_of_chainGroundSpace_toTensorFromBlocks_of_bnt_unital_c1
         μ A hμ hIrr hLeft hOverlap hBlocks hBlk hL₀ hUnital hN hL hLN hRange hφ
+    exact ⟨X, hX⟩
   · apply wordTupleSpanTop_of_ge_of_bnt_directSum_unital_c1
       A hIrr hLeft hOverlap hBlocks hBlk hL₀ hUnital
     omega
@@ -361,10 +360,11 @@ theorem exists_blockDiagonal_boundary_chainGroundSpace_of_global_cut_bnt_c1_pgvw
   apply exists_blockDiagonal_boundary_chainGroundSpace_of_global_cut_of_openBoundary
     μ A hBlk hL₀ hN hLN (by omega)
   · intro φ hφ
-    exact
+    obtain ⟨X, hX, _⟩ :=
       exists_blockDiagonal_boundary_of_chainGroundSpace_toTensorFromBlocks_of_bnt_unital_c1_pgvwc07
         μ A hr hμ hIrr hLeft hOverlap hBlocks hBlk hL₀ hUnital
           hN hL hLN hRange hφ
+    exact ⟨X, hX⟩
   · apply wordTupleSpanTop_of_ge_of_bnt_directSum_unital_c1_pgvwc07
       A hr hIrr hLeft hOverlap hBlocks hBlk hL₀ hUnital
     omega
@@ -381,7 +381,6 @@ theorem
     (hr : 2 ≤ r) (hμ : ∀ k : Fin r, μ k ≠ 0)
     {L₀ L N : ℕ}
     (hIrr : HasIrreducibleBlocks (d := d) A)
-    (hOverlap : HasNormalizedSelfOverlap (d := d) A)
     (hBlocks : BlocksNotGaugePhaseEquiv (d := d) A)
     (Λ : (j : Fin r) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ)
     (hΛ : ∀ j, Matrix.PosDef (Λ j))
@@ -407,12 +406,13 @@ theorem
   apply exists_blockDiagonal_boundary_chainGroundSpace_of_global_cut_of_openBoundary
     μ A hBlk hL₀ hN hLN (by omega)
   · intro φ hφ
-    exact
+    obtain ⟨X, hX, _⟩ :=
       exists_blockDiagonal_boundary_of_chainGroundSpace_toTensorFromBlocks_of_bnt_unital_c1_pgvwc07_of_dualFixedPoint
-        μ A hr hμ hIrr hOverlap hBlocks Λ hΛ hDualFixed hBlk hL₀ hUnital
+        μ A hr hμ hIrr hBlocks Λ hΛ hDualFixed hBlk hL₀ hUnital
           hN hL hLN hRange hφ
+    exact ⟨X, hX⟩
   · apply wordTupleSpanTop_of_ge_of_bnt_directSum_unital_c1_pgvwc07_of_dualFixedPoint
-      A hr hIrr hOverlap hBlocks Λ hΛ hDualFixed hBlk hL₀ hUnital
+      A hr hIrr hBlocks Λ hΛ hDualFixed hBlk hL₀ hUnital
     omega
   · exact hψ
 
@@ -427,7 +427,6 @@ theorem
     (hμ : ∀ k : Fin r, μ k ≠ 0)
     {L₀ L N : ℕ} (hr : 2 ≤ r)
     (hIrr : HasIrreducibleBlocks (d := d) A)
-    (hOverlap : HasNormalizedSelfOverlap (d := d) A)
     (hBlocks : BlocksNotGaugePhaseEquiv (d := d) A)
     (Λ : (j : Fin r) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ)
     (hΛ : ∀ j, Matrix.PosDef (Λ j))
@@ -451,7 +450,7 @@ theorem
     chainGroundSpace_toTensorFromBlocks_le_iSup_of_blockDiagonal_boundary_groundSpaceMap
       μ A (fun ψ hψ ↦
         exists_blockDiagonal_boundary_chainGroundSpace_of_global_cut_bnt_c1_pgvwc07_of_dualFixedPoint
-          μ A hr hμ hIrr hOverlap hBlocks Λ hΛ hDualFixed hBlk hL₀ hUnital
+          μ A hr hμ hIrr hBlocks Λ hΛ hDualFixed hBlk hL₀ hUnital
             hRange hNlarge hψ)
   refine ⟨?_, ?_⟩
   · exact
@@ -459,7 +458,7 @@ theorem
         μ A hμ hN hLN hClose
   · exact
       groundSpace_iSupIndep_of_ge_of_bnt_directSum_unital_c1_pgvwc07_of_dualFixedPoint
-        A hr hIrr hOverlap hBlocks Λ hΛ hDualFixed hBlk hL₀ hUnital (by omega)
+        A hr hIrr hBlocks Λ hΛ hDualFixed hBlk hL₀ hUnital (by omega)
 
 /-- The unrestricted PGVWC07 source-shaped periodic chain-space equality. -/
 theorem
@@ -469,7 +468,6 @@ theorem
     (hμ : ∀ k : Fin r, μ k ≠ 0)
     {L₀ L N : ℕ} (hr : 2 ≤ r)
     (hIrr : HasIrreducibleBlocks (d := d) A)
-    (hOverlap : HasNormalizedSelfOverlap (d := d) A)
     (hBlocks : BlocksNotGaugePhaseEquiv (d := d) A)
     (Λ : (j : Fin r) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ)
     (hΛ : ∀ j, Matrix.PosDef (Λ j))
@@ -485,7 +483,7 @@ theorem
     chainGroundSpace (toTensorFromBlocks (d := d) (μ := μ) A) L N =
       ⨆ j : Fin r, chainGroundSpace (A j) L N :=
   (chainGroundSpace_toTensorFromBlocks_eq_iSup_and_iSupIndep_of_global_cut_bnt_c1_pgvwc07_of_dualFixedPoint
-    μ A hμ hr hIrr hOverlap hBlocks Λ hΛ hDualFixed hBlk hL₀ hUnital
+    μ A hμ hr hIrr hBlocks Λ hΛ hDualFixed hBlk hL₀ hUnital
       hRange hNlarge).1
 
 /-- Under the unrestricted PGVWC07 source normalization, blockwise periodic
@@ -498,7 +496,6 @@ theorem
     (hμ : ∀ k : Fin r, μ k ≠ 0)
     {L₀ L N : ℕ} (hr : 2 ≤ r)
     (hIrr : HasIrreducibleBlocks (d := d) A)
-    (hOverlap : HasNormalizedSelfOverlap (d := d) A)
     (hBlocks : BlocksNotGaugePhaseEquiv (d := d) A)
     (Λ : (j : Fin r) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ)
     (hΛ : ∀ j, Matrix.PosDef (Λ j))
@@ -522,7 +519,7 @@ theorem
     μ A hN hLN ?_ hBlock
   exact le_of_eq
     (chainGroundSpace_toTensorFromBlocks_eq_iSup_of_global_cut_bnt_c1_pgvwc07_of_dualFixedPoint
-      μ A hμ hr hIrr hOverlap hBlocks Λ hΛ hDualFixed hBlk hL₀ hUnital
+      μ A hμ hr hIrr hBlocks Λ hΛ hDualFixed hBlk hL₀ hUnital
         hRange hNlarge)
 
 /-- The parent-Hamiltonian kernel of the unrestricted PGVWC07 source-shaped block
@@ -534,7 +531,6 @@ theorem
     (hμ : ∀ k : Fin r, μ k ≠ 0)
     {L₀ L N : ℕ} (hr : 2 ≤ r)
     (hIrr : HasIrreducibleBlocks (d := d) A)
-    (hOverlap : HasNormalizedSelfOverlap (d := d) A)
     (hBlocks : BlocksNotGaugePhaseEquiv (d := d) A)
     (Λ : (j : Fin r) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ)
     (hΛ : ∀ j, Matrix.PosDef (Λ j))
@@ -566,7 +562,7 @@ theorem
   apply le_antisymm
   · apply
       ker_parentHamiltonian_toTensorFromBlocks_le_bntMPSVectorSpan_of_global_cut_bnt_c1_pgvwc07_of_dualFixedPoint
-        μ A hμ hr hIrr hOverlap hBlocks Λ hΛ hDualFixed hBlk hL₀ hUnital
+        μ A hμ hr hIrr hBlocks Λ hΛ hDualFixed hBlk hL₀ hUnital
           hRange hNlarge
     intro j
     exact le_of_eq (chainGroundSpace_eq_mpvSubmodule_normal
@@ -602,7 +598,7 @@ theorem
     (hr : 2 ≤ r)
     (hIrr : HasIrreducibleBlocks (d := d) A)
     (hLeft : IsLeftCanonicalBlockFamily (d := d) A)
-    (hOverlap : HasNormalizedSelfOverlap (d := d) A)
+    (_hOverlap : HasNormalizedSelfOverlap (d := d) A)
     (hBlocks : BlocksNotGaugePhaseEquiv (d := d) A)
     (hBlk : ∀ k : Fin r, IsNBlkInjective (A k) L₀)
     (hL₀ : 0 < L₀)
@@ -616,7 +612,7 @@ theorem
       iSupIndep (fun j : Fin r ↦ groundSpace (A j) N) := by
   apply
     chainGroundSpace_toTensorFromBlocks_eq_iSup_and_iSupIndep_of_global_cut_bnt_c1_pgvwc07_of_dualFixedPoint
-      μ A hμ hr hIrr hOverlap hBlocks (fun _ ↦ 1) (fun _ ↦ Matrix.PosDef.one)
+      μ A hμ hr hIrr hBlocks (fun _ ↦ 1) (fun _ ↦ Matrix.PosDef.one)
         (fun j ↦ ?_) hBlk hL₀ hUnital hRange hNlarge
   simpa [transferMap] using hLeft.leftCanonical j
 
@@ -722,7 +718,7 @@ theorem ker_parentHamiltonian_toTensorFromBlocks_eq_bntMPSVectorSpan_of_global_c
     (hr : 2 ≤ r)
     (hIrr : HasIrreducibleBlocks (d := d) A)
     (hLeft : IsLeftCanonicalBlockFamily (d := d) A)
-    (hOverlap : HasNormalizedSelfOverlap (d := d) A)
+    (_hOverlap : HasNormalizedSelfOverlap (d := d) A)
     (hBlocks : BlocksNotGaugePhaseEquiv (d := d) A)
     (hBlk : ∀ k : Fin r, IsNBlkInjective (A k) L₀)
     (hL₀ : 0 < L₀)
@@ -734,28 +730,11 @@ theorem ker_parentHamiltonian_toTensorFromBlocks_eq_bntMPSVectorSpan_of_global_c
     LinearMap.ker (parentHamiltonian
       (toTensorFromBlocks (d := d) (μ := μ) A) L N) =
       bntMPSVectorSpan A N := by
-  have hL : L₀ < L := by
-    calc
-      L₀ < ((L₀ + 1) + ((L₀ + 1) + (L₀ + 1))) + 1 := by omega
-      _ ≤ (r - 1) * ((L₀ + 1) + ((L₀ + 1) + (L₀ + 1))) + 1 :=
-        Nat.add_le_add_right (by
-          simpa only [one_mul] using
-            (Nat.mul_le_mul_right ((L₀ + 1) + ((L₀ + 1) + (L₀ + 1)))
-              (show 1 ≤ r - 1 by omega))) 1
-      _ ≤ L := hRange
-  have hN : 0 < N := by omega
-  have hNtwo : 2 ≤ N := by omega
-  have hLN : L ≤ N := by omega
-  have hNstrict : L₀ + 1 < N := by omega
-  apply le_antisymm
-  · apply
-      ker_parentHamiltonian_toTensorFromBlocks_le_bntMPSVectorSpan_of_global_cut_bnt_c1_pgvwc07
-        μ A hμ hr hIrr hLeft hOverlap hBlocks hBlk hL₀ hUnital hRange hNlarge
-    intro j
-    exact le_of_eq (chainGroundSpace_eq_mpvSubmodule_normal
-      ⟨L₀, hL₀, hBlk j⟩ (hBlk j) hL₀ hNtwo hL hLN hNstrict)
-  · exact bntMPSVectorSpan_le_ker_parentHamiltonian_toTensorFromBlocks
-      μ A hμ hN hLN
+  apply
+    ker_parentHamiltonian_toTensorFromBlocks_eq_bntMPSVectorSpan_of_global_cut_bnt_c1_pgvwc07_of_dualFixedPoint
+      μ A hμ hr hIrr hBlocks (fun _ ↦ 1) (fun _ ↦ Matrix.PosDef.one)
+        (fun j ↦ ?_) hBlk hL₀ hUnital hRange hNlarge
+  simpa [transferMap] using hLeft.leftCanonical j
 
 /-- The normalized BNT block-diagonal periodic chain space is the sum of the
 single-block periodic chain spaces in the finite Condition C1 range, and the

@@ -180,7 +180,6 @@ theorem
     (hr : 2 ≤ r) (hμ : ∀ k : Fin r, μ k ≠ 0)
     {L₀ L N : ℕ}
     (hIrr : HasIrreducibleBlocks (d := d) A)
-    (hOverlap : HasNormalizedSelfOverlap (d := d) A)
     (hBlocks : BlocksNotGaugePhaseEquiv (d := d) A)
     (Λ : (j : Fin r) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ)
     (hΛ : ∀ j, Matrix.PosDef (Λ j))
@@ -204,7 +203,7 @@ theorem
     omega
   have hstep :=
     pgvwc07_iSup_restriction_intersection_of_ge_of_bnt_directSum_unital_c1_pgvwc07_of_dualFixedPoint
-      (d := d) (L₀ := L₀) A hr hIrr hOverlap hBlocks Λ hΛ hDualFixed hBlk hL₀
+      (d := d) (L₀ := L₀) A hr hIrr hBlocks Λ hΛ hDualFixed hBlk hL₀
       hUnital (n := M - 1) hbound
   have hM1 : M - 1 + 1 = M := Nat.sub_add_cancel (Nat.succ_le_iff.mpr hMpos)
   rw [← hM1]
@@ -219,7 +218,6 @@ theorem
     (hr : 2 ≤ r) (hμ : ∀ k : Fin r, μ k ≠ 0)
     {L₀ L N : ℕ}
     (hIrr : HasIrreducibleBlocks (d := d) A)
-    (hOverlap : HasNormalizedSelfOverlap (d := d) A)
     (hBlocks : BlocksNotGaugePhaseEquiv (d := d) A)
     (Λ : (j : Fin r) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ)
     (hΛ : ∀ j, Matrix.PosDef (Λ j))
@@ -237,11 +235,11 @@ theorem
   refine ⟨?_, ?_⟩
   · exact
       chainGroundSpace_toTensorFromBlocks_le_iSup_groundSpace_of_ge_of_bnt_directSum_unital_c1_pgvwc07_of_dualFixedPoint
-        μ A hr hμ hIrr hOverlap hBlocks Λ hΛ hDualFixed hBlk hL₀ hUnital
+        μ A hr hμ hIrr hBlocks Λ hΛ hDualFixed hBlk hL₀ hUnital
           hN hL hLN hRange
   · exact
       groundSpace_iSupIndep_of_ge_of_bnt_directSum_unital_c1_pgvwc07_of_dualFixedPoint
-        A hr hIrr hOverlap hBlocks Λ hΛ hDualFixed hBlk hL₀ hUnital (by omega)
+        A hr hIrr hBlocks Λ hΛ hDualFixed hBlk hL₀ hUnital (by omega)
 
 /-- Every source-shaped PGVWC07 block-diagonal chain vector has a unique sum
 decomposition into the open-boundary spaces of the blocks. -/
@@ -252,7 +250,6 @@ theorem
     (hr : 2 ≤ r) (hμ : ∀ k : Fin r, μ k ≠ 0)
     {L₀ L N : ℕ}
     (hIrr : HasIrreducibleBlocks (d := d) A)
-    (hOverlap : HasNormalizedSelfOverlap (d := d) A)
     (hBlocks : BlocksNotGaugePhaseEquiv (d := d) A)
     (Λ : (j : Fin r) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ)
     (hΛ : ∀ j, Matrix.PosDef (Λ j))
@@ -275,7 +272,7 @@ theorem
   classical
   obtain ⟨hLe, hIndep⟩ :=
     chainGroundSpace_toTensorFromBlocks_le_iSup_and_iSupIndep_of_bnt_unital_c1_pgvwc07_of_dualFixedPoint
-      μ A hr hμ hIrr hOverlap hBlocks Λ hΛ hDualFixed hBlk hL₀ hUnital
+      μ A hr hμ hIrr hBlocks Λ hΛ hDualFixed hBlk hL₀ hUnital
         hN hL hLN hRange
   obtain ⟨φ, hφ, hφsum⟩ :=
     (Submodule.mem_iSup_iff_exists_finsupp
@@ -553,7 +550,6 @@ theorem
     (hr : 2 ≤ r) (hμ : ∀ k : Fin r, μ k ≠ 0)
     {L₀ L N : ℕ}
     (hIrr : HasIrreducibleBlocks (d := d) A)
-    (hOverlap : HasNormalizedSelfOverlap (d := d) A)
     (hBlocks : BlocksNotGaugePhaseEquiv (d := d) A)
     (Λ : (j : Fin r) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ)
     (hΛ : ∀ j, Matrix.PosDef (Λ j))
@@ -575,7 +571,7 @@ theorem
   classical
   obtain ⟨φ, hφ, hψφ, _huniq⟩ :=
     exists_unique_sum_groundSpace_of_chainGroundSpace_toTensorFromBlocks_of_bnt_unital_c1_pgvwc07_of_dualFixedPoint
-      μ A hr hμ hIrr hOverlap hBlocks Λ hΛ hDualFixed hBlk hL₀ hUnital
+      μ A hr hμ hIrr hBlocks Λ hΛ hDualFixed hBlk hL₀ hUnital
         hN hL hLN hRange hψ
   have hφRange : ∀ j : Fin r, φ j ∈ (groundSpaceMap (A j) N).range := by
     intro j
