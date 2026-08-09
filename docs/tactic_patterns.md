@@ -356,6 +356,17 @@ abstracted — record why, so it is not re-proposed).
 
 ## Completed refactors
 
+### MPDO pair-trace separation duality
+- **Pattern:** use Hahn--Banach separation for a proper pair-matrix submodule,
+  represent the separating functional as a pair trace, and contradict trace
+  separation by proving the representing pair is zero.
+- **Reuse:** the private file-local helper
+  `pair_matrix_span_top_of_pair_trace_separating` in
+  `TNLean/MPS/MPDO/BiCFDerivation/Core.lean`.
+- **Result:** three copies in the homogeneous, cumulative, and all-word pair-span
+  criteria now reduce to generator membership facts. Public theorem statements and
+  trace-pairing order are unchanged.
+
 ### Martingale coefficient upper bound
 - **Pattern:** prove `((1 : ℝ) / (4 * (L : ℝ))) ≤ 1` from `hL : 1 < L` by
   deriving positivity of `L`, casting `1 ≤ L`, and clearing the positive denominator.
