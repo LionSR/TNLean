@@ -6,6 +6,7 @@ Authors: TNLean contributors
 import TNLean.MPS.CanonicalForm.ActiveBNTRefinement
 import TNLean.MPS.MPDO.BiCFDerivation.BNTDirectSum
 import TNLean.MPS.MPDO.SourceBNTBlocking
+import TNLean.MPS.SharedInfra.WordTupleGauge
 
 /-!
 # Sharp blocking bound for literal CPSV canonical form
@@ -33,49 +34,6 @@ open scoped Matrix BigOperators
 namespace MPSTensor
 
 variable {d D : ℕ}
-
-private theorem wordTupleSpanTop_of_family_gaugeEquiv
-    {g L : ℕ} {dim : Fin g → ℕ}
-    {A B : (j : Fin g) → MPSTensor d (dim j)}
-    (hSpan : WordTupleSpanTop A L)
-    (hGauge : ∀ j, GaugeEquiv (A j) (B j)) :
-    WordTupleSpanTop B L := by
-  classical
-  choose X hX using hGauge
-  unfold WordTupleSpanTop at hSpan ⊢
-  apply top_unique
-  intro M _
-  let M' : (j : Fin g) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ := fun j =>
-    (↑((X j)⁻¹) : Matrix _ _ ℂ) * M j * (X j : Matrix _ _ ℂ)
-  have hM' : M' ∈ Submodule.span ℂ (Set.range (wordTuple A L)) := by
-    rw [hSpan]
-    exact Submodule.mem_top
-  obtain ⟨c, hc⟩ := (Submodule.mem_span_range_iff_exists_fun ℂ).mp hM'
-  apply (Submodule.mem_span_range_iff_exists_fun ℂ).2
-  refine ⟨c, ?_⟩
-  funext j
-  have hcj : (∑ w, c w • evalWord (A j) (List.ofFn w)) = M' j := by
-    simpa [wordTuple, Fintype.linearCombination_apply] using congrFun hc j
-  have hGoal : (∑ w, c w • evalWord (B j) (List.ofFn w)) = M j := by
-    calc
-      (∑ w, c w • evalWord (B j) (List.ofFn w)) =
-          ∑ w, c w • ((X j : Matrix _ _ ℂ) *
-            evalWord (A j) (List.ofFn w) *
-            (↑((X j)⁻¹) : Matrix _ _ ℂ)) := by
-        apply Finset.sum_congr rfl
-        intro w _
-        rw [evalWord_gauge (X j) (hX j)]
-      _ = (X j : Matrix _ _ ℂ) *
-          (∑ w, c w • evalWord (A j) (List.ofFn w)) *
-          (↑((X j)⁻¹) : Matrix _ _ ℂ) := by
-        rw [Matrix.mul_sum, Finset.sum_mul]
-        apply Finset.sum_congr rfl
-        intro w _
-        simp
-      _ = (X j : Matrix _ _ ℂ) * M' j *
-          (↑((X j)⁻¹) : Matrix _ _ ℂ) := by rw [hcj]
-      _ = M j := by simp [M', Matrix.mul_assoc]
-  simpa [wordTuple] using hGoal
 
 /-- A CPSV basis of normal tensors with total representative bond dimension at most `K`
 has simultaneous product-algebra span at a positive length at most `3 * K ^ 5`.
@@ -142,8 +100,7 @@ theorem IsCPSVBasisOfNormalTensors.exists_positive_wordTupleSpanTop_le_three_cap
     · have hPreparedSpan :=
         wordTupleSpanTop_of_card_eq_one_of_isNBlkInjective
           prepared hCountOne hBlk0
-      exact wordTupleSpanTop_of_family_gaugeEquiv hPreparedSpan
-        (fun j => (hGauge j).symm)
+      exact wordTupleSpanTop_of_family_gaugeEquiv_symm hPreparedSpan hGauge
   · have hCountTwo : 2 ≤ g := by omega
     have hBlk1 : ∀ j, IsNBlkInjective (prepared j) (K ^ 4 + 1) := by
       intro j
@@ -167,8 +124,7 @@ theorem IsCPSVBasisOfNormalTensors.exists_positive_wordTupleSpanTop_le_three_cap
         hBlk0 hBlk1 hBlk3 hK4pos hCountTwo
     have hSpan : WordTupleSpanTop B
         ((g - 1) * ((K ^ 4 + 1) + ((K ^ 4 + 1) + (K ^ 4 + 1)))) :=
-      wordTupleSpanTop_of_family_gaugeEquiv hPreparedSpan
-        (fun j => (hGauge j).symm)
+      wordTupleSpanTop_of_family_gaugeEquiv_symm hPreparedSpan hGauge
     refine ⟨(g - 1) * ((K ^ 4 + 1) + ((K ^ 4 + 1) + (K ^ 4 + 1))),
       Nat.mul_pos (by omega) (by omega), ?_, hSpan⟩
     have hCountLeSum : g ≤ ∑ j, dim j := by
