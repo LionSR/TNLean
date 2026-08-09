@@ -70,7 +70,13 @@ DEFAULT_OUT = ROOT / "build/ctan"
 
 PACKAGE = "tenkz"
 DECLARATION = re.compile(r"^\\ProvidesPackage\{tenkz\}\[([^]]*)\]", re.MULTILINE)
-PAYLOAD = re.compile(r"(?P<date>[0-9]{4})/([0-9]{2})/([0-9]{2}) v(?P<version>[0-9.]+) ")
+# The version spelling `RELEASE-POLICY.md` §3 fixes: major, minor, and an
+# optional patch, each a nonempty run of digits. A typo such as `v1..0` is a
+# malformed declaration, not a version this tool carries into an archive name.
+PAYLOAD = re.compile(
+    r"(?P<date>[0-9]{4})/([0-9]{2})/([0-9]{2}) "
+    r"v(?P<version>[0-9]+\.[0-9]+(?:\.[0-9]+)?) "
+)
 INPUT_CALL = re.compile(r"\\input\{([^}]*)\}")
 REQUIRE_CALL = re.compile(r"\\RequirePackage(?:\[[^]]*\])?\{([^}]*)\}")
 LIBRARY_CALL = re.compile(r"\\usetikzlibrary\{([^}]*)\}", re.DOTALL)
@@ -192,7 +198,14 @@ def walk_closure(source: Path = SOURCE, entry: str = ENTRY.name) -> Closure:
 
 
 def read_manifest() -> dict:
-    return tomllib.loads(MANIFEST.read_text(encoding="utf-8"))
+    """The pinned staging tree, or a message naming what is wrong with it."""
+
+    try:
+        return tomllib.loads(MANIFEST.read_text(encoding="utf-8"))
+    except FileNotFoundError:
+        raise SystemExit(f"{MANIFEST.relative_to(ROOT)} is missing") from None
+    except tomllib.TOMLDecodeError as error:
+        raise SystemExit(f"{MANIFEST.relative_to(ROOT)} does not parse: {error}") from None
 
 
 # --------------------------------------------------------------------------
@@ -206,11 +219,31 @@ def staged_content(manifest: dict, closure: Closure) -> dict[str, Path]:
     Runtime files keep their load order, the reader-facing material follows in
     the order the manifest declares. Archive member order is part of the
     bytes, so it comes from the tree rather than from a directory listing.
+
+    Two manifest mistakes are refused here rather than reported later, because
+    the next thing that happens to this mapping is a write. A material entry
+    named after a runtime file would ship under a name the closure and header
+    checks read from a different file; a name outside the invariant subset —
+    a traversal, most of all — would be joined to the staging directory and
+    resolved before anybody read the report saying so.
     """
 
     content: dict[str, Path] = {name: SOURCE / name for name in closure.files}
+    collisions = sorted(set(manifest["material"]) & set(closure.files))
+    if collisions:
+        raise SystemExit(
+            f"{MANIFEST.relative_to(ROOT)} stages material under the runtime "
+            f"name(s) {collisions}; the archive would carry a file the closure "
+            "and header checks never read"
+        )
     for name, relative in manifest["material"].items():
         content[name] = ROOT / relative
+    refused = check_names(content).failures
+    if refused:
+        raise SystemExit(
+            f"{MANIFEST.relative_to(ROOT)} names a staged file that will not be "
+            "written: " + "; ".join(refused)
+        )
     return content
 
 

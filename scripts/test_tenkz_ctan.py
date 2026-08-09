@@ -119,7 +119,31 @@ def test_the_version_comes_from_one_declaration_or_from_none() -> None:
         assert _refuses(entry, "exactly one")
 
         entry.write_text("\\ProvidesPackage{tenkz}[whenever v0.7]\n", encoding="utf-8")
-        assert _refuses(entry, "not\nspelled".replace("\n", " "))
+        assert _refuses(entry, "not spelled")
+
+        # A dotted run of digits is not a version. Each of these would
+        # otherwise become an archive name and three citation strings.
+        for typo in ("v1..0", "v1.", "v.1", "v..."):
+            entry.write_text(
+                f"\\ProvidesPackage{{tenkz}}[2026/07/22 {typo} Diagrams]\n",
+                encoding="utf-8",
+            )
+            assert _refuses(entry, "not spelled"), typo
+
+
+def test_a_manifest_that_would_write_the_wrong_file_is_refused() -> None:
+    closure = tenkz_ctan.walk_closure()
+    for material, fragment in (
+        ({"tenkz.sty": "LICENSE"}, "runtime name"),
+        ({"../outside.md": "LICENSE"}, "will not be written"),
+        ({"README.md": "LICENSE", "readme.md": "LICENSE"}, "differ only in case"),
+    ):
+        try:
+            tenkz_ctan.staged_content({"material": material}, closure)
+        except SystemExit as refusal:
+            assert fragment in str(refusal), (material, str(refusal))
+        else:
+            raise AssertionError(f"{material} was staged rather than refused")
 
 
 def _refuses(entry: Path, fragment: str) -> bool:
