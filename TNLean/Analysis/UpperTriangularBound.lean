@@ -352,19 +352,38 @@ lemma wordProd_all_false (Λ N : Matrix (Fin D) (Fin D) R) (n : ℕ) :
 
 end WordProdLemma
 
+section SeminormHelpers
+
+variable {D : ℕ} {R : Type*} [Ring R]
+
+/-- For a submultiplicative nonnegative `f`, `f(a^n) ≤ f(a)^n` when `n ≠ 0`. -/
+lemma map_pow_le_pow_of_ne_zero_matrix (f : Matrix (Fin D) (Fin D) R → ℝ)
+    (hf_nonneg : ∀ x, 0 ≤ f x) (hf_mul : ∀ x y, f (x * y) ≤ f x * f y)
+    (a : Matrix (Fin D) (Fin D) R) {n : ℕ} (hn : n ≠ 0) : f (a ^ n) ≤ f a ^ n := by
+  induction' n with k ih
+  · exact (hn rfl).elim
+  · rw [pow_succ, pow_succ]
+    by_cases hk : k = 0
+    · subst hk; simp
+    · calc
+        f (a ^ k * a) ≤ f (a ^ k) * f a := hf_mul _ _
+        _ ≤ (f a) ^ k * f a := mul_le_mul_of_nonneg_right (ih hk) (hf_nonneg _)
+        _ = f a ^ (k + 1) := by ring
+
+end SeminormHelpers
+
 section SeminormBound
 
 variable {D : ℕ} {R : Type*} [Ring R]
 
 lemma wordProd_seminorm_le (f : Matrix (Fin D) (Fin D) R → ℝ)
     (hf_nonneg : ∀ x, 0 ≤ f x) (hf_mul : ∀ x y, f (x * y) ≤ f x * f y)
-    (hf1 : f 1 ≤ 1)
-    (Λ N : Matrix (Fin D) (Fin D) R) {n : ℕ} (w : Fin n → Bool) :
+    (Λ N : Matrix (Fin D) (Fin D) R) {n : ℕ} (w : Fin n → Bool)
+    (hpos : 1 ≤ countN w) :
     f (wordProd Λ N w) ≤ (f Λ) ^ (n - countN w) * (f N) ^ (countN w) := by
-  induction' n with n ih generalizing Λ N
+  cases' n with n
   · have h0 : countN w = 0 := by dsimp [countN]; simp
-    have h1 : wordProd Λ N w = 1 := by simp [wordProd]
-    rw [h0, h1, Nat.sub_self, pow_zero, pow_zero, one_mul]; exact hf1
+    omega
   · let w' := Fin.init w; let b := w (Fin.last n)
     have hw_eq : w = Fin.snoc w' b := (Fin.snoc_init_self w).symm
     rw [hw_eq, wordProd_snoc']
@@ -375,31 +394,67 @@ lemma wordProd_seminorm_le (f : Matrix (Fin D) (Fin D) R → ℝ)
             ≤ (Finset.univ : Finset (Fin n)).card := Finset.card_filter_le _ _
         _ = n := Finset.card_fin n
     rcases b with (rfl | rfl)
-    · simp
+    · -- false case: countN(snoc w' false) = countN w'
+      have hpos_w' : 1 ≤ countN w' := by
+        have h_snoc_eq : countN (Fin.snoc w' false) = countN w' := countN_snoc_false w'
+        rw [hw_eq] at hpos; rw [h_snoc_eq] at hpos; exact hpos
+      simp
       have h_exp : (n - countN w') + 1 = (n + 1) - countN w' := by omega
       have h_rearrange : ((f Λ) ^ (n - countN w') * (f N) ^ (countN w')) * f Λ
-          = (f Λ) ^ ((n - countN w') + 1) * (f N) ^ (countN w') := by
-        ring
+          = (f Λ) ^ ((n - countN w') + 1) * (f N) ^ (countN w') := by ring
       calc
         f (wordProd Λ N w' * Λ) ≤ f (wordProd Λ N w') * f Λ := hf_mul _ _
         _ ≤ ((f Λ) ^ (n - countN w') * (f N) ^ (countN w')) * f Λ :=
-          mul_le_mul_of_nonneg_right (ih Λ N w') (hf_nonneg _)
+          mul_le_mul_of_nonneg_right (wordProd_seminorm_le f hf_nonneg hf_mul Λ N w' hpos_w') (hf_nonneg _)
         _ = (f Λ) ^ ((n - countN w') + 1) * (f N) ^ (countN w') := by rw [h_rearrange]
         _ = (f Λ) ^ ((n + 1) - countN w') * (f N) ^ (countN w') := by rw [h_exp]
         _ = (f Λ) ^ ((n + 1) - countN (Fin.snoc w' false)) * (f N) ^ (countN (Fin.snoc w' false)) := by
           rw [countN_snoc_false w']
-    · simp
-      have h_exp : n - countN w' = (n + 1) - (countN w' + 1) := by omega
-      have h_rearrange : ((f Λ) ^ (n - countN w') * (f N) ^ (countN w')) * f N
-          = (f Λ) ^ (n - countN w') * (f N) ^ (countN w' + 1) := by
-        ring
-      calc
-        f (wordProd Λ N w' * N) ≤ f (wordProd Λ N w') * f N := hf_mul _ _
-        _ ≤ ((f Λ) ^ (n - countN w') * (f N) ^ (countN w')) * f N :=
-          mul_le_mul_of_nonneg_right (ih Λ N w') (hf_nonneg _)
-        _ = (f Λ) ^ (n - countN w') * (f N) ^ (countN w' + 1) := by rw [h_rearrange]
-        _ = (f Λ) ^ ((n + 1) - countN (Fin.snoc w' true)) * (f N) ^ (countN (Fin.snoc w' true)) := by
-          rw [countN_snoc_true w', h_exp]
+    · -- true case: countN(snoc w' true) = countN w' + 1 ≥ 1 (always true)
+      by_cases hzero_w' : countN w' = 0
+      · -- w' has no N's, so wordProd w' = Λ^n (w' is all-false)
+        -- Since countN w' = 0, w' i = false for all i
+        have hall_false : w' = (λ _ : Fin n => false) := by
+          ext i
+          have hfalse : w' i = false := by
+            by_cases h : w' i = true
+            · have hi_mem : i ∈ ((Finset.univ : Finset (Fin n)).filter (λ j => w' j = true)) := by
+                simp [h]
+              have hpos' : 1 ≤ countN w' := by
+                dsimp [countN]; exact Finset.one_le_card.mpr ⟨i, hi_mem⟩
+              omega
+            · -- w' i ≠ true, so w' i = false (Bool only has two values)
+              simpa using h
+          exact hfalse
+        have h_wordProd : wordProd Λ N w' = Λ ^ n := by
+          rw [hall_false, wordProd_all_false]
+        simp [h_wordProd]
+        by_cases hn0 : n = 0
+        · subst hn0
+          simp [hzero_w', countN_snoc_true]
+        · have h_pow_bound : f (Λ ^ n) ≤ (f Λ) ^ n :=
+            have hn0' : n ≠ 0 := hn0
+            map_pow_le_pow_of_ne_zero_matrix f hf_nonneg hf_mul Λ hn0'
+          calc
+            f (Λ ^ n * N) ≤ f (Λ ^ n) * f N := hf_mul _ _
+            _ ≤ (f Λ) ^ n * f N := mul_le_mul_of_nonneg_right h_pow_bound (hf_nonneg _)
+            _ = (f Λ) ^ ((n + 1) - (countN w' + 1)) * (f N) ^ (countN w' + 1) := by
+              simp [hzero_w']
+            _ = (f Λ) ^ ((n + 1) - countN (Fin.snoc w' true)) * (f N) ^ (countN (Fin.snoc w' true)) := by
+              rw [countN_snoc_true w']
+      · -- w' has at least one N
+        have hpos_w' : 1 ≤ countN w' := by omega
+        simp
+        have h_exp : n - countN w' = (n + 1) - (countN w' + 1) := by omega
+        have h_rearrange : ((f Λ) ^ (n - countN w') * (f N) ^ (countN w')) * f N
+            = (f Λ) ^ (n - countN w') * (f N) ^ (countN w' + 1) := by ring
+        calc
+          f (wordProd Λ N w' * N) ≤ f (wordProd Λ N w') * f N := hf_mul _ _
+          _ ≤ ((f Λ) ^ (n - countN w') * (f N) ^ (countN w')) * f N :=
+            mul_le_mul_of_nonneg_right (wordProd_seminorm_le f hf_nonneg hf_mul Λ N w' hpos_w') (hf_nonneg _)
+          _ = (f Λ) ^ (n - countN w') * (f N) ^ (countN w' + 1) := by rw [h_rearrange]
+          _ = (f Λ) ^ ((n + 1) - countN (Fin.snoc w' true)) * (f N) ^ (countN (Fin.snoc w' true)) := by
+            rw [countN_snoc_true w', h_exp]
 
 end SeminormBound
 
@@ -411,7 +466,6 @@ variable {D : ℕ} {R : Type*} [Ring R]
 theorem wolf_eq_105 (f : Matrix (Fin D) (Fin D) R → ℝ)
     (hf_nonneg : ∀ x, 0 ≤ f x) (hf_mul : ∀ x y, f (x * y) ≤ f x * f y)
     (hf_add : ∀ x y, f (x + y) ≤ f x + f y) (hf_zero : f 0 = 0)
-    (hf1 : f 1 ≤ 1)
     (hΛ_diag : IsDiagonal Λ) (hN_sut : IsStrictlyUpperTriangular N)
     (hDpos : D ≠ 0) (n : ℕ) :
     f ((Λ + N) ^ n) ≤ f (Λ ^ n) +
@@ -487,7 +541,10 @@ theorem wolf_eq_105 (f : Matrix (Fin D) (Fin D) R → ℝ)
   have h_rest_per_word : (∑ w ∈ kPos, f (wordProd Λ N w)) ≤
       (∑ w ∈ kPos, (f N) ^ (countN w) * (f Λ) ^ (n - countN w)) := by
     refine Finset.sum_le_sum (λ w hw => ?_)
-    have hbound := wordProd_seminorm_le f hf_nonneg hf_mul hf1 Λ N w
+    have hw_kPos : w ∈ kPos := hw
+    have hpos_countN : 1 ≤ countN w := by
+      rw [Finset.mem_filter] at hw_kPos; exact hw_kPos.2
+    have hbound := wordProd_seminorm_le f hf_nonneg hf_mul Λ N w hpos_countN
     rw [mul_comm]; exact hbound
   -- fiber regrouping: group by countN value
   have h_fiber_regroup : (∑ w ∈ kPos, (f N) ^ (countN w) * (f Λ) ^ (n - countN w)) =
@@ -560,13 +617,12 @@ open RingSeminorm
 
 /-- **Wolf Eq. (8.105) for `RingSeminorm`**. -/
 theorem wolf_eq_105_seminorm (ν : RingSeminorm (Matrix (Fin D) (Fin D) R))
-    (hν_one : ν 1 ≤ 1)
     (hΛ_diag : IsDiagonal Λ) (hN_sut : IsStrictlyUpperTriangular N)
     (hDpos : D ≠ 0) (n : ℕ) :
     ν ((Λ + N) ^ n) ≤ ν (Λ ^ n) +
       (∑ k ∈ Finset.Icc 1 (min n (D - 1)),
         ((Nat.choose n k : ℝ) * (ν N) ^ k * (ν Λ) ^ (n - k))) :=
   wolf_eq_105 ν (apply_nonneg ν) (λ x y => ν.mul_le' x y) (λ x y => ν.add_le' x y)
-    (map_zero ν) hν_one hΛ_diag hN_sut hDpos n
+    (map_zero ν) hΛ_diag hN_sut hDpos n
 
 end RingSeminormCorollary
