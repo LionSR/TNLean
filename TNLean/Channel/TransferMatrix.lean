@@ -8,6 +8,8 @@ import TNLean.Algebra.MatrixTracePairing
 import Mathlib.Analysis.Matrix.Order
 import Mathlib.LinearAlgebra.Matrix.Vec
 import Mathlib.LinearAlgebra.Matrix.Trace
+import Mathlib.LinearAlgebra.Matrix.StdBasis
+import Mathlib.LinearAlgebra.Eigenspace.Basic
 import Mathlib.Data.Matrix.Basis
 
 /-!
@@ -34,6 +36,9 @@ with composition. We also relate it to the Kraus representation.
 * `transferMatrix_mulVec_eq`: `T̂ *ᵥ vec(ρ) = vec(T(ρ))`
 * `transferMatrix_comp`: `(S ∘ T)^ = Ŝ * T̂`
 * `transferMatrix_id`: the transfer matrix of the identity is the identity
+* `transferMatrix_pow`: transfer matrices preserve powers
+* `trace_transferMatrix_eq_linearMap_trace`: matrix trace agrees with operator trace
+* `transferMatrix_hasEigenvalue_iff`: a map and its transfer matrix have the same eigenvalues
 * `transferMatrix_kraus`: for a Kraus map `T(X) = ∑ᵢ Kᵢ X Kᵢ†`, the transfer
   matrix is `∑ᵢ K'ᵢ ⊗ₖ Kᵢ`
 * `IsPositiveMap.comp_unitaryConjLM`: positive maps remain positive after
@@ -201,6 +206,66 @@ theorem transferMatrix_injective :
   have key := congr_fun (congr_fun (congrArg Matrix.mulVec h) M.vec) (j, i)
   simp only [transferMatrix_mulVec_eq, Matrix.vec] at key
   exact key
+
+/-- The transfer-matrix representation preserves powers of matrix endomorphisms. -/
+theorem transferMatrix_pow
+    (T : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ)
+    (N : ℕ) :
+    transferMatrix (T ^ N) = transferMatrix T ^ N := by
+  induction N with
+  | zero =>
+      change transferMatrix (LinearMap.id : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] _) = 1
+      exact transferMatrix_id
+  | succ N ih =>
+      rw [pow_succ, pow_succ]
+      change transferMatrix ((T ^ N) ∘ₗ T) = _
+      rw [transferMatrix_comp, ih]
+
+/-- Matrix trace of the transfer matrix equals the basis-independent operator trace.
+
+The nonzero bond-dimension assumption records the genuine matrix-algebra setting used in
+Wolf Section 2.2 and in the MPU transfer argument. -/
+theorem trace_transferMatrix_eq_linearMap_trace [NeZero D]
+    (T : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ) :
+    Matrix.trace (transferMatrix T) =
+      LinearMap.trace ℂ (Matrix (Fin D) (Fin D) ℂ) T := by
+  let b : Module.Basis (Fin D × Fin D) ℂ (Matrix (Fin D) (Fin D) ℂ) :=
+    Matrix.stdBasis ℂ (Fin D) (Fin D)
+  rw [LinearMap.trace_eq_matrix_trace ℂ b]
+  simp only [Matrix.trace, Matrix.diag, LinearMap.toMatrix_apply]
+  rw [Fintype.sum_prod_type, Fintype.sum_prod_type]
+  simp only [transferMatrix_apply, b, Matrix.stdBasis_eq_single]
+  simp only [Matrix.stdBasis, Module.Basis.map_repr]
+  exact Finset.sum_comm
+
+/-- A matrix endomorphism and its transfer matrix have the same eigenvalues. -/
+theorem transferMatrix_hasEigenvalue_iff
+    (T : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ)
+    (μ : ℂ) :
+    Module.End.HasEigenvalue T μ ↔
+      Module.End.HasEigenvalue (transferMatrix T).toLin' μ := by
+  constructor
+  · intro h
+    obtain ⟨X, hX⟩ := h.exists_hasEigenvector
+    apply Module.End.hasEigenvalue_of_hasEigenvector
+    rw [Module.End.hasEigenvector_iff]
+    constructor
+    · rw [Module.End.mem_eigenspace_iff, Matrix.toLin'_apply,
+        transferMatrix_mulVec_eq, hX.apply_eq_smul, Matrix.vec_smul]
+    · exact fun hv => hX.2 (Matrix.vec_inj.mp (by simpa using hv))
+  · intro h
+    obtain ⟨v, hv⟩ := h.exists_hasEigenvector
+    obtain ⟨X, rfl⟩ := Matrix.vec_bijective.2 v
+    apply Module.End.hasEigenvalue_of_hasEigenvector
+    rw [Module.End.hasEigenvector_iff]
+    constructor
+    · rw [Module.End.mem_eigenspace_iff]
+      apply Matrix.vec_inj.mp
+      rw [Matrix.vec_smul, ← transferMatrix_mulVec_eq, ← Matrix.toLin'_apply]
+      exact hv.apply_eq_smul
+    · intro hX
+      apply hv.2
+      simp [hX]
 
 /-! ### Transfer matrix as a linear map -/
 

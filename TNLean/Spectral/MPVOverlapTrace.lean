@@ -3,6 +3,7 @@ Copyright (c) 2025 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import TNLean.Channel.TransferMatrix
 import TNLean.MPS.Overlap.Basic
 import TNLean.Spectral.MixedTransfer
 import TNLean.Spectral.TraceExpansion
@@ -98,6 +99,22 @@ theorem trace_mixedTransferMap_pow_eq_mpvOverlap {d D : ℕ} [NeZero D]
             simp [Matrix.trace]
 
 end Main
+
+/-- The matrix trace of a power of the mixed transfer matrix is the MPV overlap. -/
+theorem trace_transferMatrix_mixedTransferMap_pow_eq_mpvOverlap
+    {d D : ℕ} [NeZero D] (A B : MPSTensor d D) (N : ℕ) :
+    Matrix.trace (transferMatrix (mixedTransferMap A B) ^ N) =
+      mpvOverlap (d := d) A B N := by
+  rw [← transferMatrix_pow, trace_transferMatrix_eq_linearMap_trace]
+  exact trace_mixedTransferMap_pow_eq_mpvOverlap A B N
+
+/-- The matrix trace of a power of an MPS transfer matrix is its self-overlap. -/
+theorem trace_transferMatrix_transferMap_pow_eq_mpvOverlap
+    {d D : ℕ} [NeZero D] (A : MPSTensor d D) (N : ℕ) :
+    Matrix.trace (transferMatrix (transferMap A) ^ N) =
+      mpvOverlap (d := d) A A N := by
+  rw [← mixedTransferMap_self]
+  exact trace_transferMatrix_mixedTransferMap_pow_eq_mpvOverlap A A N
 
 /-! ## Rectangular overlaps for different bond dimensions -/
 
