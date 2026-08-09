@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import TNLean.Algebra.FinSum
 import TNLean.MPS.MPDO.CyclicActiveFourthRegionContraction
 
 /-!
@@ -218,11 +219,8 @@ theorem reindex_threeSuffixSectorContraction_eq_cyclicActiveUnnormalized
       rw [sum_swap]
       have factor_sum (A : ℂ)
           (u v : F.CyclicActiveSector → ℂ) :
-          (∑ r, A * u r * v r) = A * ∑ r, u r * v r := by
-        rw [Finset.mul_sum]
-        apply Finset.sum_congr rfl
-        intro r hr
-        ring
+          (∑ r, A * u r * v r) = A * ∑ r, u r * v r :=
+        Fintype.sum_mul_mul_eq_mul_sum_mul A u v
       simp_rw [factor_sum]
       simp_rw [F.sum_cyclicActive_trace_mul_trace_eq_pow_two hpos]
       simp only [cyclicActiveRetainedWord]
@@ -230,14 +228,17 @@ theorem reindex_threeSuffixSectorContraction_eq_cyclicActiveUnnormalized
           (L C : F.CyclicActiveSector → F.CyclicActiveSector → ℂ) :
           (∑ q, B * (R q * ∑ h, L q h * C q h)) =
             B * ∑ q, ∑ h, C q h * (R q * L q h) := by
-        rw [Finset.mul_sum]
-        apply Finset.sum_congr rfl
-        intro q hq
-        rw [Finset.mul_sum]
-        congr 1
-        apply Finset.sum_congr rfl
-        intro h hh
-        ring
+        calc
+          _ = B * ∑ q, R q * ∑ h, L q h * C q h := by
+            simpa only [mul_assoc] using
+              Fintype.sum_mul_mul_eq_mul_sum_mul B R
+                (fun q => ∑ h, L q h * C q h)
+          _ = _ := by
+            congr 1
+            apply Finset.sum_congr rfl
+            intro q _
+            simpa only [mul_comm, mul_left_comm, mul_assoc] using
+              (Fintype.sum_mul_mul_eq_mul_sum_mul (R q) (L q) (C q)).symm
       exact distribute _ _ _ _
 
 /-- Every retained sector block of the three-suffix contraction has the

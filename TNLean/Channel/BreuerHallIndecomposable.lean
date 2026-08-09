@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import TNLean.Algebra.FinSum
 import TNLean.Channel.BreuerHallMap
 import TNLean.Channel.DecomposablePPT
 import TNLean.Channel.MaximallyEntangled
@@ -421,9 +422,9 @@ private theorem unitarity_sandwich_contraction
   have hstep3 : ∀ i1 : Fin d, star (U i1 i2) * (∑ a : Fin d, U i1 a * M j2 a)
       = ∑ a : Fin d, M j2 a * (star (U i1 i2) * U i1 a) := by
     intro i1
-    rw [Finset.mul_sum]
-    refine Finset.sum_congr rfl fun a _ => ?_
-    ring
+    simpa only [mul_comm, mul_left_comm, mul_assoc] using
+      (Fintype.sum_mul_mul_eq_mul_sum_mul (star (U i1 i2))
+        (fun a => U i1 a) (fun a => M j2 a)).symm
   simp_rw [hstep3]
   rw [Finset.sum_comm]
   simp_rw [← Finset.mul_sum, unitarity_column_contraction hUunit]
@@ -475,9 +476,10 @@ private theorem trace_breuerHall_trace_summand
             (∑ i1 : Fin d, star (U i1 i2) * U i1 j2) := by
       rw [Finset.sum_comm]
       refine Finset.sum_congr rfl fun j2 _ => ?_
-      rw [Finset.mul_sum]
-      refine Finset.sum_congr rfl fun i1 _ => ?_
-      ring
+      simpa only [mul_comm, mul_left_comm, mul_assoc] using
+        Fintype.sum_mul_mul_eq_mul_sum_mul
+          ((Matrix.bipartiteSlice ρ i2 j2).trace)
+          (fun i1 => star (U i1 i2)) (fun i1 => U i1 j2)
     rw [h1]
     simp_rw [unitarity_column_contraction hUunit]
     rw [Finset.sum_eq_single i2]

@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import TNLean.Algebra.FinSum
 import TNLean.MPS.RFP.StructuralForm
 import TNLean.Spectral.GaugeConstruction
 import TNLean.Channel.KrausRepresentation
@@ -842,8 +843,9 @@ theorem unitPairIsometry_transfer (U : MPSTensor d D)
         refine Finset.sum_congr rfl fun j _ => ?_
         rw [Finset.sum_comm]
         refine Finset.sum_congr rfl fun k _ => ?_
-        rw [Finset.mul_sum]
-        exact Finset.sum_congr rfl fun i _ => by ring
+        simpa only [mul_comm, mul_left_comm, mul_assoc] using
+          Fintype.sum_mul_mul_eq_mul_sum_mul (Z k j)
+            (fun i => U i x k) (fun i => star (U i y j))
     _ = ∑ j : Fin D, ∑ k : Fin D, Z k j * (if x = y ∧ k = j then 1 else 0) := by
         simp_rw [inner]
     _ = Matrix.trace Z * (if x = y then 1 else 0) := by

@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import TNLean.Algebra.FinSum
 import TNLean.PEPS.TorusWindowChain3
 import TNLean.PEPS.ConfigurationCalculus
 
@@ -451,7 +452,18 @@ theorem bareExtendInsert_trans {R S P : Finset V} (hRS : R ⊆ S) (hSP : S ⊆ P
             (regionComplementBoundaryConfig (G := G) A S ν')
             (restrictSubRegionσ (V := V) (d := d) Finset.sdiff_subset σ)
             (regionComplementBoundaryConfig (G := G) A P ν) from by
-      rw [Finset.mul_sum]; refine Finset.sum_congr rfl (fun ν' _ => ?_); ring]
+      simpa only [mul_comm, mul_left_comm, mul_assoc] using
+        Fintype.sum_mul_mul_eq_mul_sum_mul
+          (C μ (restrictSubRegionσ (V := V) (d := d) (hRS.trans hSP) σ))
+          (fun ν' => (nestedThreeBlockGeometry (V := V) hRS).threeBlockBlueCoeff
+            (regionComplementBoundaryConfig (G := G) A R μ)
+            (restrictSubRegionσ (V := V) (d := d) Finset.sdiff_subset
+              (restrictSubRegionσ (V := V) (d := d) hSP σ))
+            (regionComplementBoundaryConfig (G := G) A S ν'))
+          (fun ν' => (nestedThreeBlockGeometry (V := V) hSP).threeBlockBlueCoeff
+            (regionComplementBoundaryConfig (G := G) A S ν')
+            (restrictSubRegionσ (V := V) (d := d) Finset.sdiff_subset σ)
+            (regionComplementBoundaryConfig (G := G) A P ν))]
   rw [← mul_smul_comm]
   congr 1
   exact threeBlockBlueCoeff_comp (A := A) hRS hSP

@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import TNLean.Algebra.FinSum
 import TNLean.MPS.MPDO.BNTFusionIsometries
 
 /-!
@@ -64,9 +65,9 @@ private theorem kronecker_sum_mulTensor {p a bd1 bd2 : ℕ} (X : Matrix (Fin a) 
     Equiv.symm_symm, Equiv.prodCongr_apply, Prod.map_apply, Equiv.refl_symm, Equiv.coe_refl,
     id_eq, Equiv.prodAssoc_apply, Matrix.sum_apply, Matrix.kronecker_apply,
     Equiv.symm_apply_apply]
-  rw [Finset.mul_sum]
-  refine Finset.sum_congr rfl fun j _ => ?_
-  ring
+  simpa only [mul_assoc] using
+    Fintype.sum_mul_mul_eq_mul_sum_mul (X x1 y1)
+      (fun j => Y i j x2 y2) (fun j => Z j k x3 y3)
 
 namespace BNTFusionIsometryFamily
 

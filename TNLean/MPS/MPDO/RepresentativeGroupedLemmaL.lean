@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import TNLean.Algebra.FinSum
 import TNLean.Algebra.ScalarPowerSumIdentity
 import TNLean.MPS.MPDO.BiCFDerivation.Core
 import TNLean.MPS.SharedInfra.SectorDecomposition
@@ -107,8 +108,10 @@ theorem insertedTensor_basis_eq_of_firstSiteActionAgree_of_coeff_ne_zero
                 Matrix.trace (P.basis j i * evalWord (P.basis j) (List.ofFn w))) =
             P.coeff (L + 1) j * ∑ i : Fin d, W s i *
               Matrix.trace (P.basis j i * evalWord (P.basis j) (List.ofFn w)) := by
-                rw [Finset.mul_sum]
-                refine Finset.sum_congr rfl fun i _ ↦ by ring
+                simpa only [mul_comm, mul_left_comm, mul_assoc] using
+                  Fintype.sum_mul_mul_eq_mul_sum_mul (P.coeff (L + 1) j) (W s)
+                    (fun i => Matrix.trace
+                      (P.basis j i * evalWord (P.basis j) (List.ofFn w)))
         _ = P.coeff (L + 1) j * ∑ i : Fin d, Matrix.trace
               ((W s i • P.basis j i) * evalWord (P.basis j) (List.ofFn w)) := by
                 congr 1
