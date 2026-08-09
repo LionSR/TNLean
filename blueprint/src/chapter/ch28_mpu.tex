@@ -392,6 +392,7 @@ closing a chain of $N$ copies of $\mathcal U$.
     factor into the product of the physical traces.
 \end{proof}
 
+% Resolved local fix: docs/paper-gaps/mpu_one_letter_mixed_residual_trace.tex
 \begin{theorem}[Positive-length mixed residual traces]
     \label{thm:mpu_positive_mixed_residual_trace}
     \lean{MPOTensor.IsMPU.trace_residualSlice_doubleLayerTensor_eq_zero,
@@ -413,8 +414,9 @@ closing a chain of $N$ copies of $\mathcal U$.
     $d^{-1}\Id$ and residual factors by traceless physical arguments.  The
     multilinear contraction identity then vanishes.  For a single residual
     coefficient $A$, repeat the same coefficient at every length $q>1$ to
-    obtain $\tr(A^q)=0$.  The shifted zero-trace-power theorem makes $A$
-    nilpotent, and therefore $\tr(A)=0$.
+    obtain $\tr(A^q)=0$.  Thus the one-letter case is recovered after the
+    longer words: the shifted zero-trace-power theorem makes $A$ nilpotent,
+    and therefore $\tr(A)=0$.
 \end{proof}
 
 \begin{theorem}[Controlled mixed residual traces and rank-one sandwich]
