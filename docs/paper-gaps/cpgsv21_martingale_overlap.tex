@@ -599,10 +599,9 @@ open-chain left subspace \(\mathcal U_{K+L_0}(A)\), both in the common ambient
 The remaining task is to bound the projector defect
 \begin{align}
     \bigl\|
-        \mathcal P^{\mathrm{ES}}_{\mathcal V_{K,L_0+1}(A)}
-        \mathcal P^{\mathrm{ES}}_{\mathcal U_{K+L_0}(A)}
-      - \mathcal P^{\mathrm{ES}}_{\mathcal
-        G_{K+L_0+1}^{\mathrm{ES}}(A)}
+        P^{\mathrm{tail}}_{K,L_0+1}(A)\,
+        P^{\mathrm{left}}_{K+L_0}(A)
+      - P^{\mathrm{full}}_{K+L_0+1}(A)
     \bigr\|
 \end{align}
 in the common ambient \(\mathcal H_{K+L_0+1}\) (Nachtergaele C3,
@@ -613,8 +612,11 @@ left and tail ground subspaces of Definition~4.2
 \leanid{MPSTensor.openChainTailGroundSpaceES}), their intersection equals
 \(\mathcal G_{K+L_0+1}^{\mathrm{ES}}(A)\) under block injectivity
 (\leanid{MPSTensor.openChainLeft_inf_tailGroundSpaceES}),
-and \(\mathcal P^{\mathrm{ES}}\) denotes the orthogonal projector in
-the \(\ell^2\) Hilbert-space realization.
+and \(P^{\mathrm{left}}_{K+L_0}(A)\), \(P^{\mathrm{tail}}_{K,L_0+1}(A)\),
+and \(P^{\mathrm{full}}_{K+L_0+1}(A)\) denote the orthogonal projectors onto
+\(\mathcal U_{K+L_0}(A)\), \(\mathcal V_{K,L_0+1}(A)\), and
+\(\mathcal G_{K+L_0+1}^{\mathrm{ES}}(A)\), respectively (the canonical
+Chapter~13 notation of Definition~4.2).
 
 The two ranges are transported into this common ambient by
 \leanid{MPSTensor.tailBoundaryMap_range_map_symm_eq_openChainTailGroundSpaceES}
