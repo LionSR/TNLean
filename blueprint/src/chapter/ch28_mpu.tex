@@ -493,6 +493,68 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
     \end{align}
 \end{definition}
 
+\begin{definition}[Product-index source weight]
+    \label{def:mpu_source_weight}
+    \lean{MPOTensor.sourceWeight}
+    \leanok
+    \uses{def:mpu_source_matrix_one}
+    For $\rho\in\MN{D}$, in the row order $(\alpha,j)$ of $M_1$, define
+    \begin{align}
+        W_\rho&=\rho\otimes\Id_d.
+    \end{align}
+    This is the matrix denoted $\Id_d\otimes\rho$ in the graphical leg order
+    of \cite[Equation~\textup{Y1Y1X1X1}]{Cirac2017MPU}.
+\end{definition}
+
+\begin{theorem}[Positivity of the product-index source weight]
+    \label{thm:mpu_source_weight_posdef}
+    \lean{MPOTensor.sourceWeight_posDef}
+    \leanok
+    \uses{def:mpu_source_weight}
+    If $\rho$ is positive definite, then $W_\rho$ is positive definite.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    The Kronecker product of the positive-definite matrices $\rho$ and
+    $\Id_d$ is positive definite.
+\end{proof}
+
+\begin{definition}[Weighted source factors]
+    \label{def:mpu_weighted_source_factors}
+    \lean{MPOTensor.SourceFactors, MPOTensor.sourceFactors}
+    \leanok
+    \uses{thm:mpu_compact_svd,def:mpu_source_matrix_one,
+        def:mpu_source_matrix_two,def:mpu_right_rank,def:mpu_left_rank,
+        def:mpu_source_weight,thm:mpu_source_weight_posdef}
+    Let $\rho\in\MN{D}$ be positive definite. Choose compact
+    singular-value decompositions
+    \begin{align}
+        M_i&=V_i^\dagger D_iU_i,
+        &V_iV_i^\dagger&=\Id,
+        &U_iU_i^\dagger&=\Id,
+    \end{align}
+    with intermediate dimensions $r$ and $\ell$, respectively. Put
+    \begin{align}
+        A&=V_1W_\rho V_1^\dagger,\\
+        X_1&=V_1^\dagger A^{-1/2},
+        &Y_1&=A^{1/2}D_1U_1,
+        &Z_1&=U_1^\dagger D_1^{-1}A^{-1/2},\\
+        X_2&=V_2^\dagger,
+        &Y_2&=D_2U_2,
+        &Z_2&=U_2^\dagger D_2^{-1}.
+    \end{align}
+    Then
+    \begin{align}
+        M_1&=X_1Y_1, & M_2&=X_2Y_2,\\
+        X_1^\dagger W_\rho X_1&=\Id_r,
+        &X_2^\dagger X_2&=\Id_\ell,\\
+        Y_1Z_1&=\Id_r, &Y_2Z_2&=\Id_\ell.
+    \end{align}
+    These are \cite[Equations~\textup{eq:sf-svd}--\textup{YZ=1}]
+    {Cirac2017MPU}.
+\end{definition}
+
 \begin{theorem}[Right-rank bound]
     \label{thm:mpu_right_rank_bound}
     \lean{MPOTensor.rightRank_bound}
