@@ -25,7 +25,8 @@ namespace Projectivization
 variable {d : ℕ}
 
 /-- A Hermitian matrix with the characteristic polynomial of a normalized pure-state matrix is the
-normalized pure-state matrix of another projective ray. -/
+normalized pure-state matrix of another projective ray. This supplies the pure-state image
+identification used in the spectrum-preserving-map argument of Wolf, Chapter 1, lines 287--296. -/
 theorem exists_pureStateMatrix_eq_of_isHermitian_charpoly_eq
     (A : Matrix (Fin d) (Fin d) ℂ) (p : ℙ ℂ (Fin d → ℂ)) (hA : A.IsHermitian)
     (hcharpoly : A.charpoly = (pureStateMatrix p).charpoly) :
