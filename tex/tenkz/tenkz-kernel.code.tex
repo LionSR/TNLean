@@ -11558,6 +11558,30 @@
 \tl_new:N \l__tenkz_kernel_r_trace_ink_side_tl
 \tl_new:N \l__tenkz_kernel_r_trace_ink_label_tl
 \bool_new:N \l__tenkz_kernel_r_trace_ink_bool
+% A name an opening carries on the endpoint it consumed.  The port pass moves
+% an authored label onto the port node when a picture-level or cell-level
+% opening takes that port over, so the wire record has none and the node has
+% one.
+\cs_new_protected:Npn \__tenkz_kernel_r_trace_ink_end_label:n #1
+  {
+    \clist_map_inline:nn {from, to}
+      {
+        \quark_if_no_value:NT \l__tenkz_kernel_r_trace_ink_label_tl
+          {
+            \__tenkz_model_get:nnN {#1} {##1}
+              \l__tenkz_kernel_r_trace_ink_side_tl
+            \quark_if_no_value:NF \l__tenkz_kernel_r_trace_ink_side_tl
+              {
+                \prop_get:NeN \l__tenkz_kernel_node_prop
+                  {
+                    \tl_use:N \l__tenkz_kernel_r_trace_ink_side_tl
+                    / port-label
+                  }
+                  \l__tenkz_kernel_r_trace_ink_label_tl
+              }
+          }
+      }
+  }
 % The resolved tip stands in \l__tenkz_kernel_r_port_tip_y_fp and its host in
 % the row register: take its outward ordinate when the row is one the return
 % passes, and add the band a name occupies past it.
@@ -11585,6 +11609,12 @@
           {
             \__tenkz_model_get:nnN {#1} {port-label}
               \l__tenkz_kernel_r_trace_ink_label_tl
+            % An opening that consumed an authored port keeps that port's
+            % name on the endpoint node rather than on the wire, and the
+            % label pass reads it from there; so does this, or the return
+            % would clear a named index and run through its name.
+            \quark_if_no_value:NT \l__tenkz_kernel_r_trace_ink_label_tl
+              { \__tenkz_kernel_r_trace_ink_end_label:n {#1} }
             \quark_if_no_value:NF \l__tenkz_kernel_r_trace_ink_label_tl
               {
                 \tl_if_empty:NF \l__tenkz_kernel_r_trace_ink_label_tl
@@ -11673,6 +11703,28 @@
           \l__tenkz_kernel_r_trace_ink_bool
         \bool_if:NT \l__tenkz_kernel_r_trace_ink_bool
           {
+            % A south face belongs to the host's last spanned row, whether
+            % the picture's policy grew the leg or an author wrote the port.
+            \exp_args:Ne \__tenkz_kernel_r_face_side:n
+              {
+                \exp_args:NV \__tenkz_kernel_r_compass:n
+                  \l__tenkz_kernel_r_trace_ink_face_tl
+              }
+            \str_if_eq:VnT \l__tenkz_kernel_r_face_side_tl {s}
+              {
+                \exp_args:NV \__tenkz_kernel_r_span:nNN
+                  \l__tenkz_kernel_r_trace_ink_host_tl
+                  \l__tenkz_kernel_r_trace_ink_side_tl
+                  \l__tenkz_kernel_r_trace_ink_type_tl
+                \tl_set:Ne \l__tenkz_kernel_r_trace_ink_row_tl
+                  {
+                    \int_eval:n
+                      {
+                        \l__tenkz_kernel_r_trace_ink_row_tl
+                        + \l__tenkz_kernel_r_trace_ink_type_tl - 1
+                      }
+                  }
+              }
             % the record stores the spanned cell; the slot is its offset from
             % the host's anchor column
             \tl_set:Ne \l__tenkz_kernel_r_trace_ink_slot_tl

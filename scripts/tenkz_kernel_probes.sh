@@ -1244,13 +1244,14 @@ for line in open(sys.argv[1], encoding="utf-8"):
                               - (p[0] - west[0]) * slope)
 
         covers = []
-        for a, b in zip(points, points[1:]):
+        last = len(points) - 2
+        for index, (a, b) in enumerate(zip(points, points[1:])):
             lo, hi = max(min(a[0], b[0]), low), min(max(a[0], b[0]), high)
             if lo > hi:
                 continue
             if min(out(a), out(b)) + 655 >= owed:
                 covers.append((lo, hi))
-            elif lo != hi or not (low == high or lo in (low, high)):
+            elif lo != hi or index not in (0, last):
                 print("FAIL: a closure came inside its standoff across its row")
                 raise SystemExit(1)
         reach = low

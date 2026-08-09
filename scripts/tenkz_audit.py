@@ -947,7 +947,8 @@ class Audit:
 
         covers: list[tuple[int, int]] = []
         shallow: Optional[Fraction] = None
-        for start, end in zip(points, points[1:]):
+        last = len(points) - 2
+        for index, (start, end) in enumerate(zip(points, points[1:])):
             here = (max(min(start[0], end[0]), low),
                     min(max(start[0], end[0]), high))
             if here[0] > here[1]:
@@ -957,15 +958,13 @@ class Audit:
             if clipped + CLOSURE_JOIN_TOLERANCE_SP >= owed:
                 covers.append(here)
                 continue
-            # A stretch that meets the span at one x alone is a lead leaving
-            # a virtual end, and a lead stands on the row line by
-            # construction -- but only at an end.  A vertical detour toward
-            # the row at an interior column meets the span the same way and
-            # is ink across the indices, so it is read.  On a one-column row
-            # every stretch meets the span at its one column, and the
-            # covering is the whole reading.
-            if here[0] == here[1] and (low == high
-                                       or here[0] in (low, high)):
+            # A stretch that meets the span at one x alone is exempt when it
+            # is one of the two leads, which leave a virtual end and so
+            # stand on the row line by construction.  Any other stretch that
+            # touches the span at one column -- a vertical detour toward the
+            # row, or a second pass over a one-column row -- is ink across
+            # the indices and is read.
+            if here[0] == here[1] and index in (0, last):
                 continue
             if shallow is None or clipped < shallow:
                 shallow = clipped
