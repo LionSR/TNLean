@@ -154,30 +154,31 @@ and~\cite{Evans1978Spectral}.
 
 \begin{proof}
     \leanok
-    \uses{def:irreducible_cp}
-    Suppose $\rho$ is not positive definite, and let $Q$ be its support
-    projection. Since $\rho=Q\rho Q$ and
-    $\rho=\sum_iA^i\rho(A^i)^\dagger$, the $(\Id-Q)$ corner satisfies
+    \uses{def:cp_map, def:irreducible_cp}
+    Choose Kraus operators $K_i$ such that
+    $E(X)=\sum_iK_iXK_i^\dagger$. Suppose $\rho$ is not positive definite,
+    and let $Q$ be its support projection. Since $\rho=Q\rho Q$ and
+    $\rho=E(\rho)$, the $(\Id-Q)$ corner satisfies
     \begin{align}
         0
          & =(\Id-Q)\rho(\Id-Q) \notag \\
          & =\sum_i
-        \bigl((\Id-Q)A^iQ\bigr)\rho
-        \bigl((\Id-Q)A^iQ\bigr)^\dagger.
+        \bigl((\Id-Q)K_iQ\bigr)\rho
+        \bigl((\Id-Q)K_iQ\bigr)^\dagger.
         \notag
     \end{align}
     Every summand is positive semidefinite, so each vanishes. The restriction
     of $\rho$ to its support is positive definite; hence, for every~$i$,
     \begin{align}
-        (\Id-Q)A^iQ
+        (\Id-Q)K_iQ
          & =0.
         \notag
     \end{align}
-    Thus $A^iQ=QA^iQ$, and for every $X$ each summand
-    $A^iQXQ(A^i)^\dagger$ lies in the $Q$ corner. Therefore
+    Thus $K_iQ=QK_iQ$, and for every $X$ each summand
+    $K_iQXQK_i^\dagger$ lies in the $Q$ corner. Therefore
     \begin{align}
-        Q\E_A(QXQ)Q
-         & =\E_A(QXQ),
+        QE(QXQ)Q
+         & =E(QXQ),
         \notag
     \end{align}
     so $Q$ is invariant. Irreducibility forces $Q=0$ or $Q=\Id$. The first

@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.Irreducible.FormII
 import TNLean.MPS.Core.BlockingTransfer
+import TNLean.MPS.Core.TransferChannel
 import TNLean.MPS.Irreducible.FixedPointProjection
 import TNLean.Channel.Peripheral.ClosureFixedPoint
 import TNLean.Channel.Peripheral.PeriodicityRemoval
@@ -743,8 +744,7 @@ theorem exists_blockTensor_isPrimitive_of_TP_of_isIrreducibleTensor_CFII
   have hIrrC : IsIrreducibleMap (transferMap (d := d) (D := D) C) :=
     isIrreducibleCP_transferMap_of_isIrreducibleTensor (d := d) (D := D) C hIrrC_tensor
   have hC_map : Kraus.mapLM C = transferMap (d := d) (D := D) C :=
-    LinearMap.ext fun X => by
-      simp [Kraus.mapLM_apply, Kraus.map_apply, transferMap_apply]
+    Kraus.mapLM_eq_transferMap C
   have hIrrC_map : IsIrreducibleMap (Kraus.mapLM C) := by
     simpa only [hC_map] using hIrrC
 

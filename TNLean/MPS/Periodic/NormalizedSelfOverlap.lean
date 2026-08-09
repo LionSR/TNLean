@@ -6,6 +6,7 @@ Authors: TNLean contributors
 import TNLean.Channel.Peripheral.CyclicGroup
 import TNLean.MPS.CanonicalForm.BlockingViaAdjoint
 import TNLean.MPS.CanonicalForm.SectorComparison.NormalityChain
+import TNLean.MPS.Core.TransferChannel
 import TNLean.MPS.FundamentalTheorem.SectorBNT.Basic
 import TNLean.MPS.Periodic.Overlap.SelfOverlap
 import TNLean.MPS.SharedInfra.KrausAdjointSetup
@@ -67,8 +68,7 @@ theorem isPrimitive_and_isNormal_of_irreducible_leftCanonical_selfOverlap_tendst
     conjTranspose_kraus_setup A hLeft hIrr
   have hK_map : Kraus.mapLM (fun i ↦ (A i)ᴴ) =
       transferMap (d := d) (D := D) (fun i ↦ (A i)ᴴ) :=
-    LinearMap.ext fun X => by
-      simp [Kraus.mapLM_apply, Kraus.map_apply, transferMap_apply]
+    Kraus.mapLM_eq_transferMap _
   have hIrrK_map : IsIrreducibleMap (Kraus.mapLM (fun i ↦ (A i)ᴴ)) := by
     simpa only [hK_map] using hIrrK
   obtain ⟨hm, γ, hγroot, hPeriphK⟩ :=

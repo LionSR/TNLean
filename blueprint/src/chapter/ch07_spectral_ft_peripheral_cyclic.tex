@@ -11,10 +11,11 @@ Section~\ref{sec:app_spectral_periodicity}.
 
 \begin{theorem}[Peripheral eigenvalues: cyclic structure]%
     \label{thm:peripheral_cyclic_structure}
-    \lean{PeripheralSpectrum.peripheral_eigenvalues_cyclic_structure}
+    \lean{MPSTensor.peripheralEigenvalues_eq_range_primitiveRoot}
     \leanok
-    \uses{thm:ks_peripheral}
-    Let $E$ be an irreducible unital Schwarz map on $\MN{D}$ with a
+    \uses{def:kraus_map, def:kraus_adjoint_map, def:unital_kraus,
+        def:irreducible_cp, def:peripheral_eigenvalues}
+    Let $E$ be an irreducible unital Kraus map on $\MN{D}$ with a
     positive-definite adjoint fixed point (trace-preservation is \emph{not}
     required).
     Then there exist $m \ge 1$ and a primitive $m$-th root of unity
@@ -24,6 +25,8 @@ Section~\ref{sec:app_spectral_periodicity}.
 
 \begin{proof}
     \leanok
+    \uses{lem:peripheral_mul_closure, lem:peripheral_closed_powers_irred_fp,
+        thm:peripheral_roots_irred_fp}
     The peripheral eigenvalues form a finite subset of $\C$, contain $1$,
     and are closed under multiplication. Finiteness and product closure imply
     closure under inversion, so they form a finite subgroup of $\C^\times$.
