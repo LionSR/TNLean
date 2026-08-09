@@ -302,14 +302,15 @@ theorem cornerFixed_mul
   rw [hφX₁₂] at hfinal
   exact hfinal
 
-/-- **Wolf Corollary 6.6.**
+/-- **Finite-Kraus strengthening of Wolf Corollary 6.6.**
 
 Let `T*(Y) = ∑ᵢ Kᵢ† Y Kᵢ` (`= adjointMap K`) be a trace-preserving Schwarz map,
 so unitality of `T*` is `IsTP K`. Let `ρ` be a PSD fixed point of the Schrödinger
 map `T = map K`, with support projection `Q := stationaryProj`. Then the
 corner-restricted fixed-point set
 `{Y ∈ Q M_D(ℂ) Q | Q T*(Y) Q = Y}`
-is a `StarSubalgebra` of the corner algebra `Q M_D(ℂ) Q`.
+is a `StarSubalgebra` of the corner algebra `Q M_D(ℂ) Q`. Wolf Corollary 6.6 is
+recovered when `ρ` is chosen with maximum rank.
 
 The carrier consists of the corner elements `Y : hQ.Corner` (`Q Y Q = Y`) with
 `Q (adjointMap K Y) Q = Y`. -/
