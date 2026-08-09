@@ -406,6 +406,7 @@ theorem tendsto_pow_apply_peripheralProjection
   exact hsum.congr' (Filter.Eventually.of_forall fun i ↦ by
     rw [← map_add, add_sub_cancel])
 
+omit [NeZero D] in
 /-- The Dirichlet recurrent subsequence of the peripheral phases: strictly
 monotone exponents along which every peripheral eigenvalue's powers tend to
 one. Shared by the pointwise and operator-norm convergence statements of

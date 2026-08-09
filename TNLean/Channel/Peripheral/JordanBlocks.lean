@@ -86,7 +86,6 @@ lemma pow_apply_rank_two_genEig
         _ = μ • ((T - μ • (1 : V →ₗ[ℂ] V)) X) := by simp
     -- Substitute into the expression
     rw [h_TTX]
-
     have h_TX : T X = μ • X + (T - μ • (1 : V →ₗ[ℂ] V)) X := by
       calc
         T X = ((T - μ • (1 : V →ₗ[ℂ] V)) + μ • (1 : V →ₗ[ℂ] V)) X := by simp
@@ -419,7 +418,6 @@ private theorem peripheral_Jordan_trivial_of_hasBoundedOrbits
     simp [hX_zero]
   | succ m ih =>
     set N := T - μ • (1 : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ)
-
     by_cases hm : m = 0
     · subst hm; simpa using hNk
     · -- m ≥ 1, rank-2 reduction
