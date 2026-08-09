@@ -73,34 +73,26 @@ and the Schur product theorem (`Matrix.PosSemidef.hadamard`) gives `R_isMPDO`.
 The local-purification (LPDO) route does NOT apply: the undone-vertical
 letters entangle bra- and ket-side labels, so no purification tensor exists.
 
-## Remaining gap
+## Completed structure and remaining identification
 
-* The renormalization fixed-point maps of Definition 4.1 (`IsRFPViaTS`)
-  continue in `TNLean.MPS.MPDO.RescalingStableLengthDependentRFPViaTS`:
-  the refinement map `T` is proved trace-preserving completely positive
-  and satisfies the `eq:Tmap` equation for `R`; the coarse-graining map
-  `S` is defined but its trace-preserving completely positive property
-  and the `eq:Smap` equation are not yet proved (see that file's module
-  docstring for the precise remaining lemmas).
-* The existential tensor-attached BNT algebra clause is supplied by
-  `R_hasBNTAlgebraTensorClause`. The stronger identification of its vertical
-  BNT components, same-length coefficients, and positive diagonal data with
-  the explicit one-label families `oneLabelCoeffs` and `oneLabelChi` remains
-  open. In particular, no witness component operator is identified with the
-  original closed operator `mpo R L`. Documented in
-  `docs/paper-gaps/cpgsv17_blocked_chi_uniformity.tex`.
+* `TNLean.MPS.MPDO.RescalingStableLengthDependentRFPViaTS` proves that the
+  refinement and coarse-graining maps are trace-preserving completely positive,
+  establishes both local renormalization equations, and packages them as
+  `isRFPViaTS_R : IsRFPViaTS R`.
 * The literal CPSV canonical form of `R.toMPSTensor` (eq. `II_CF1`) is proved in
   `TNLean.MPS.MPDO.RescalingStableLengthDependentRFPCanonicalForm`
   (`R_toMPSTensor_isCPSVCanonicalForm`): a single retained normal block occupying the
   full ambient bond dimension `4`, with weight `weight = √(337/512)`, the unique
   positive scalar making the retained block's transfer map exactly idempotent (hence
-  spectral-radius one).  This corrects an earlier guess in this docstring of
-  `μ = (25/32)² = 625/1024`, which did not account for `transferMap R.toMPSTensor`'s
-  rank-one closed form; see that file's module docstring for the derivation.  The
-  letters of `R` form the full matrix‑unit basis of M₄ (irreducibility,
-  `R_toMPSTensor_isInjective`); this is not needed for `IsRFPViaTS R` as defined in
-  this repository (see the `RescalingStableLengthDependentRFPViaTS` file above), whose
-  direct route via `S`/`T` bypasses the canonical-form machinery.
+  spectral-radius one). The letters of `R` form the full matrix-unit basis of M₄
+  (`R_toMPSTensor_isInjective`).
+* The general Theorem 4.14 equivalence therefore supplies the existential
+  tensor-attached clause `R_hasBNTAlgebraTensorClause`. The remaining problem is to
+  identify its vertical BNT components, same-length coefficients, and positive
+  diagonal data with the explicit one-label families `oneLabelCoeffs` and
+  `oneLabelChi`. In particular, no witness component operator is identified with the
+  original closed operator `mpo R L`. This boundary is documented in
+  `docs/paper-gaps/cpgsv17_blocked_chi_uniformity.tex`.
 
 ## References
 
