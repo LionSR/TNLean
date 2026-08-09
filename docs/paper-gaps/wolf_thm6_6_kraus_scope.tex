@@ -36,28 +36,37 @@ matrix family $K$ and its Kraus map
 It assumes that this Kraus map is unital and irreducible and that its adjoint
 has a positive-definite fixed point. A finite Kraus presentation implies
 complete positivity, which is strictly stronger than Wolf's positive Schwarz
-hypothesis. Thus the Lean theorem proves the completely positive
-specialization of the cyclicity conclusion in Wolf Theorem 6.6(1), but not its
-bound $m\leq D^2$ and not items~(2)--(4). The corresponding Blueprint entry
-states this restriction explicitly and uses its own specialization title.
+hypothesis. The adjoint fixed point is also an extra signature-level datum:
+Wolf's theorem does not assume it. In the finite-dimensional Kraus setting it
+should instead be derived from unitality and irreducibility, but the present
+Lean declaration requires it explicitly. Thus the Lean theorem proves the
+completely positive specialization of the cyclicity conclusion in Wolf
+Theorem 6.6(1), but not its bound $m\leq D^2$ and not items~(2)--(4). The
+corresponding Blueprint entry states this restriction explicitly and uses its
+own specialization title.
 
 \section{Elimination plan}
 
-To remove the restriction, formulate peripheral eigenvectors and their
-multiplicative-domain relations for an abstract positive unital Schwarz map.
-The proof must establish invertibility of peripheral eigenvectors and closure
-of peripheral eigenvalues under multiplication without choosing Kraus
-operators. The finite-group argument in the present cyclicity theorem then
-applies unchanged. Once that abstract result exists, the Kraus theorem should
-be retained as a specialization rather than serving as the source-facing form
-of Wolf Theorem 6.6.
+First remove the extra fixed-point input from the finite-Kraus statement:
+derive a positive-semidefinite adjoint fixed point from trace preservation of
+the adjoint map, then use irreducibility to prove that it is positive definite.
+Next formulate peripheral eigenvectors and their multiplicative-domain
+relations for an abstract positive unital Schwarz map. The proof must establish
+invertibility of peripheral eigenvectors and closure of peripheral eigenvalues
+under multiplication without choosing Kraus operators. The finite-group
+argument in the present cyclicity theorem then applies unchanged. Once that
+abstract result exists, the Kraus theorem should be retained as a
+specialization rather than serving as the source-facing form of Wolf Theorem
+6.6.
 
 \section{Verdict}
 
 \textbf{Verdict: scope restriction.} The formal theorem proves only the
 cyclicity conclusion of Wolf Theorem 6.6(1), under the stronger
-complete-positivity hypothesis supplied by a finite Kraus representation. It
-does not include the bound $m\leq D^2$ or items~(2)--(4). The abstract
-Schwarz-map cyclicity statement remains open.
+complete-positivity hypothesis supplied by a finite Kraus representation and
+with an additional positive-definite adjoint fixed point as explicit input. It
+does not include the bound $m\leq D^2$ or items~(2)--(4). Derivation of the
+fixed point and the abstract Schwarz-map cyclicity statement remain open at the
+source-facing interface.
 
 \end{document}

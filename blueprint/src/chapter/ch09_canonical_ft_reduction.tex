@@ -51,24 +51,6 @@ the resulting splitting decomposes any tensor into irreducible blocks.
 \end{proof}
 
 
-\begin{definition}[Support projection]\label{def:support_proj}
-    \lean{MPSTensor.supportProj}
-    \leanok
-    For a positive semidefinite matrix $\rho\ge0$, the \emph{support
-        projection} $P$ is the orthogonal projection onto the range of $\rho$.
-    Via the spectral decomposition
-    $\rho=U\diag(\lambda_1,\ldots,\lambda_D)U^\dagger$, it is
-    \begin{align}
-        P
-         & =
-        U\diag\!\bigl(        \mathbf{1}_{\lambda_1>0},\ldots,
-        \mathbf{1}_{\lambda_D>0}
-        \bigr)U^\dagger,
-        \label{eq:canonical_support_projection}
-    \end{align}
-    where $\mathbf{1}_{\lambda_j>0}$ is $1$ if $\lambda_j>0$ and $0$ otherwise.
-\end{definition}
-
 \begin{definition}[Invariant projection condition]\label{def:has_inv_proj}
     \lean{MPSTensor.HasInvariantProj}
     \leanok
