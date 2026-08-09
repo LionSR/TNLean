@@ -11,5 +11,6 @@ Authors: TNLean contributors
 import TNLean.MPS.MPU.ActiveTransferMultiplicity
 import TNLean.MPS.MPU.Basic
 import TNLean.MPS.MPU.CanonicalForm
+import TNLean.MPS.MPU.Simple
 import TNLean.MPS.MPU.SourceCuts
 import TNLean.MPS.MPU.TransferMatrix

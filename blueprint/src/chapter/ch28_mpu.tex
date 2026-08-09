@@ -166,6 +166,110 @@ closing a chain of $N$ copies of $\mathcal U$.
     unitary.  Simultaneous reindexing preserves unitarity.
 \end{proof}
 
+
+\section{Simple matrix product unitary tensors}
+
+\begin{definition}[Double layer]
+    \label{def:mpu_double_layer}
+    \lean{MPOTensor.doubleLayerTensor,
+        MPOTensor.doubleLayerTensor_apply}
+    \leanok
+    \uses{def:mpdo_physical_adjoint,def:mpdo_operator_product}
+    For an MPO tensor $\mathcal U$, let $\mathcal W$ be the double-layer
+    tensor obtained by placing the physical adjoint above $\mathcal U$ and
+    contracting the adjacent physical legs:
+    \begin{align}
+        \mathcal W^{ik}
+        &=\sum_j (\mathcal U^\sharp)^{ij}\otimes\mathcal U^{jk}.
+    \end{align}
+    The bond space of $\mathcal W$ is the product of the two original bond
+    spaces.  The physical adjoint exchanges and conjugates the physical
+    indices without reversing the order of the virtual chain, exactly as in
+    the barred upper layer of Figures~\texttt{II\_Simple1.png} and
+    \texttt{II\_Simple2.png} of \cite{Cirac2017MPU}.
+\end{definition}
+
+\begin{theorem}[Closed double layer]
+    \label{thm:mpu_closed_double_layer}
+    \lean{MPOTensor.mpo_doubleLayerTensor}
+    \leanok
+    \uses{def:mpu_double_layer}
+    For every chain length $N$, closing the double layer gives
+    \begin{align}
+        W^{(N)}&=\bigl(U^{(N)}\bigr)^\dagger U^{(N)}.
+    \end{align}
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:mpdo_physical_adjoint, thm:mpdo_operator_product_mpo}
+    The operator family is multiplicative under the local product tensor, and
+    the physical adjoint generates the conjugate transpose without reflecting
+    the chain.
+\end{proof}
+
+\begin{definition}[Simple matrix product unitary tensor]
+    \label{def:mpu_simple}
+    \lean{MPOTensor.IsMPUSimple,
+        MPOTensor.IsMPUSimple.simple1,
+        MPOTensor.IsMPUSimple.simple2}
+    \leanok
+    \uses{def:mpu_double_layer}
+    The tensor $\mathcal U$ is \emph{simple} if there are vectors $a,b$ in
+    the double-layer bond space such that, for all physical indices
+    $i,j,k,\ell$,
+    \begin{align}
+        (a|W^{ij}|b)&=\delta_{ij},
+        \tag{simple1}\label{eq:mpu_simple1}\\
+        W^{ij}W^{k\ell}
+          &=W^{ij}|b)(a|W^{k\ell}.
+        \tag{simple2}\label{eq:mpu_simple2}
+    \end{align}
+    Thus (\ref{eq:mpu_simple1}) closes one double-layer letter to the
+    physical identity, while (\ref{eq:mpu_simple2}) inserts the rank-one
+    operator $|b)(a|$ between adjacent letters.  These are precisely the two
+    diagrams in \cite[Definition~III.2]{Cirac2017MPU}.
+\end{definition}
+
+\begin{theorem}[Sequential contraction of a simple double layer]
+    \label{thm:mpu_simple_closed_identity}
+    \lean{MPOTensor.IsMPUSimple.mpo_doubleLayerTensor_eq_one}
+    \leanok
+    \uses{def:mpu_simple}
+    If $\mathcal U$ is simple and $N>1$, then
+    \begin{align}
+        W^{(N)}&=\Id.
+    \end{align}
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:mpu_simple}
+    Apply (\ref{eq:mpu_simple2}) sequentially between neighboring letters.
+    The inserted rank-one operators split the periodic contraction into the
+    product of the one-letter contractions $(a|W^{\sigma_x\tau_x}|b)$.
+    Identity~(\ref{eq:mpu_simple1}) turns this product into
+    $\prod_x\delta_{\sigma_x,\tau_x}$, which is the matrix element of the
+    physical identity.
+\end{proof}
+
+\begin{theorem}[A simple tensor generates matrix product unitaries]
+    \label{thm:mpu_simple_is_mpu}
+    \lean{MPOTensor.IsMPUSimple.isMPU}
+    \leanok
+    \uses{def:mpu, def:mpu_simple}
+    Every simple tensor generates matrix product unitaries.
+    This is \cite[Proposition~III.3(i)]{Cirac2017MPU}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpu_closed_double_layer, thm:mpu_simple_closed_identity}
+    For every $N>1$, the closed-double-layer identity and the sequential
+    contraction give
+    \begin{align}
+        \bigl(U^{(N)}\bigr)^\dagger U^{(N)}&=\Id.
+    \end{align}
+    Hence $U^{(N)}$ is unitary.
+\end{proof}
+
 \section{Trace-power lemma}\label{sec:mpu_trace_power}
 
 For the transfer-matrix spectrum argument of
