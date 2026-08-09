@@ -802,8 +802,7 @@ class Audit:
 
         A rail is its polyline and the half-stroke it is drawn with."""
         rails: list[tuple[Event, tuple[Point, ...], int]] = []
-        required = {"name", "row", "side", "west", "east", "stroke", "clear",
-                    "points"}
+        required = {"name", "row", "side", "west", "east", "stroke", "points"}
         for event in pic.events:
             if event.kind != "closure-rail":
                 continue
@@ -811,7 +810,7 @@ class Audit:
                 continue
             if not _is_nonnegative_int(event.attrs["stroke"]):
                 continue  # FIELD_VALIDATORS already reported the bad value.
-            standoff = event.attrs["clear"]
+            standoff = event.attrs.get("clear", "none")
             if standoff != "none" and not _is_nonnegative_int(standoff):
                 continue  # FIELD_VALIDATORS already reported the bad value.
             try:
@@ -871,9 +870,9 @@ class Audit:
         box for the label gate to read.  The record names the standoff the
         rows it passes demand of it, measured outward from its own row line,
         and the contour says where the rail went; the rail must go at least
-        that far.  A frame arc stands off no row line and names no
-        standoff."""
-        standoff = event.attrs["clear"]
+        that far.  A frame arc stands off no row line and names no standoff,
+        and neither does a stream written before the field existed."""
+        standoff = event.attrs.get("clear", "none")
         if standoff == "none":
             return
         west, east = points[0], points[-1]

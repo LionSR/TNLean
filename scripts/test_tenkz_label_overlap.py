@@ -1411,6 +1411,24 @@ def main() -> int:
                 "audit rejected a closure standing exactly at its standoff"
             )
 
+        # A stream written before the standoff field existed is still a
+        # stream: the field arrived on an existing kind, and section 7 of
+        # TNLOG.md holds a reader to accepting both spellings.  The archived
+        # record reads clean, and the standoff rule asks nothing of it.
+        archived_status, archived_audit = audit_status(closure_log(
+            "closure-archived.tnlog",
+            "closure-rail|picture=1|name=wrap-1|row=1|side=west-east|"
+            "west=0,0|east=2000000,0|stroke=0|"
+            "points=0,0;-600000,0;-600000,-800000;2600000,-800000;"
+            "2600000,0;2000000,0\n",
+        ))
+        if archived_status != 0 or archived_audit.findings:
+            raise AssertionError(
+                "audit rejected a closure record written before the standoff "
+                "field existed: "
+                + "; ".join(finding.msg for finding in archived_audit.findings)
+            )
+
         # A ring's sector stands off no row line, so it names no standoff and
         # the rule has nothing to read.  Its ends are its two stations.
         arc_status, arc_audit = audit_status(closure_log(

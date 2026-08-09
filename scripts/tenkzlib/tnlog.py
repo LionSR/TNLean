@@ -85,7 +85,7 @@ def _is_sp_end(value: str) -> bool:
 
 
 def _is_sp_standoff(value: str) -> bool:
-    """A closure standoff: a page distance, or the word for a frame arc."""
+    """A closure standoff: integer scaled points, or the word for an arc."""
     return value == "none" or _is_nonnegative_int(value)
 
 
@@ -258,8 +258,12 @@ FIELD_VALIDATORS: dict[str, dict[str, Callable[[str], bool]]] = {
 # whose result determines whether the record can authorize a boundary check.
 REQUIRED_FIELDS: dict[str, frozenset[str]] = {
     "check": frozenset({"scope", "result"}),
+    # `clear` is deliberately absent: it was added to an existing kind, and
+    # section 7 of TNLOG.md holds a reader to accepting a stream written
+    # before an optional field arrived.  A live picture always writes it, and
+    # the kernel record gate reads that back off the streams it pins.
     "closure-rail": frozenset(
-        {"name", "row", "side", "west", "east", "stroke", "clear", "points"}),
+        {"name", "row", "side", "west", "east", "stroke", "points"}),
 }
 
 REQUIRED_CHECK_FIELDS_BY_RESULT: dict[str, frozenset[str]] = {

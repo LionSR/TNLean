@@ -11529,9 +11529,16 @@
 % is longer than a physical one, so the type it declares chooses its length.
 %
 % A leg the picture's own physical policy grew is an open index exactly as an
-% authored port is, and it records its face under its own key; both readings
-% run, so a policy row is not passed over the way it once was when the closure
-% read authored cells alone.
+% authored port is, and it records its face under its own key; a cell-level or
+% boundary opening is one again, and carries no host at all.  All three
+% readings run, so no row is passed over the way one was once passed over when
+% the closure read authored cells alone.
+%
+% A bearing is asked of the production that draws it.  An authored port leaves
+% along its host's own face; a physical leg leaves along the frame's physical
+% axis, which on a projected plane is a page-space vector of its own and not
+% the host's local north, so reading it as a face would put an upward leg
+% sideways and drop it from the answer.
 \fp_new:N \l__tenkz_kernel_r_trace_ink_fp
 \fp_new:N \l__tenkz_kernel_r_trace_pass_fp
 \fp_new:N \l__tenkz_kernel_r_trace_ink_reach_fp
@@ -11543,55 +11550,45 @@
 \tl_new:N \l__tenkz_kernel_r_trace_ink_face_tl
 \tl_new:N \l__tenkz_kernel_r_trace_ink_turn_tl
 \tl_new:N \l__tenkz_kernel_r_trace_ink_type_tl
+\tl_new:N \l__tenkz_kernel_r_trace_ink_side_tl
 \tl_new:N \l__tenkz_kernel_r_trace_ink_label_tl
 \bool_new:N \l__tenkz_kernel_r_trace_ink_bool
-\cs_new_protected:Npn \__tenkz_kernel_r_trace_leg_ink:nn #1#2
+% The reach standing in the reach register belongs to a row the return passes
+% and points the way the return runs: take it.
+\cs_new_protected:Npn \__tenkz_kernel_r_trace_ink_take:
   {
-    \__tenkz_model_get:nnN {#1} {host} \l__tenkz_kernel_r_trace_ink_host_tl
-    \quark_if_no_value:NF \l__tenkz_kernel_r_trace_ink_host_tl
+    \bool_lazy_all:nT
       {
-        \exp_args:NV \__tenkz_kernel_r_record_carrier:nNNN
-          \l__tenkz_kernel_r_trace_ink_host_tl
-          \l__tenkz_kernel_r_trace_ink_row_tl
-          \l__tenkz_kernel_r_trace_ink_col_tl
-          \l__tenkz_kernel_r_trace_ink_bool
-        \bool_lazy_all:nT
-          {
-            { \l__tenkz_kernel_r_trace_ink_bool }
+        {
+          \int_compare_p:nNn { \l__tenkz_kernel_r_trace_ink_row_tl }
+            > { \l__tenkz_kernel_r_trace_ink_lo_tl - 1 }
+        }
+        {
+          \int_compare_p:nNn { \l__tenkz_kernel_r_trace_ink_row_tl }
+            < { \l__tenkz_kernel_r_trace_ink_hi_tl + 1 }
+        }
+        {
+          \fp_compare_p:nNn
             {
-              \int_compare_p:nNn { \l__tenkz_kernel_r_trace_ink_row_tl }
-                > { \l__tenkz_kernel_r_trace_ink_lo_tl - 1 }
+              \l__tenkz_kernel_r_yc_fp
+              * sind( \l__tenkz_kernel_r_trace_ink_turn_tl )
             }
-            {
-              \int_compare_p:nNn { \l__tenkz_kernel_r_trace_ink_row_tl }
-                < { \l__tenkz_kernel_r_trace_ink_hi_tl + 1 }
-            }
-          }
+            > {0}
+        }
+      }
+      {
+        \fp_set:Nn \l__tenkz_kernel_r_trace_ink_fp
           {
-            \__tenkz_model_get:nnN {#1} {#2}
-              \l__tenkz_kernel_r_trace_ink_face_tl
-            \quark_if_no_value:NF \l__tenkz_kernel_r_trace_ink_face_tl
-              {
-                \tl_set:Ne \l__tenkz_kernel_r_trace_ink_face_tl
-                  {
-                    \exp_args:NV \__tenkz_kernel_r_compass:n
-                      \l__tenkz_kernel_r_trace_ink_face_tl
-                  }
-                \exp_args:NVV \__tenkz_kernel_r_page_face:nnN
-                  \l__tenkz_kernel_r_trace_ink_host_tl
-                  \l__tenkz_kernel_r_trace_ink_face_tl
-                  \l__tenkz_kernel_r_trace_ink_turn_tl
-                \fp_compare:nNnT
-                  {
-                    \l__tenkz_kernel_r_yc_fp
-                    * sind( \l__tenkz_kernel_r_trace_ink_turn_tl )
-                  }
-                  > {0}
-                  { \__tenkz_kernel_r_trace_leg_depth:n {#1} }
-              }
+            max
+              (
+                \l__tenkz_kernel_r_trace_ink_fp ,
+                \l__tenkz_kernel_r_trace_ink_reach_fp
+              )
           }
       }
   }
+% The length an open index reaches, and the band its name occupies past the
+% tip when it carries one.
 \cs_new_protected:Npn \__tenkz_kernel_r_trace_leg_depth:n #1
   {
     \__tenkz_model_get:nnN {#1} {port-type}
@@ -11615,19 +11612,123 @@
               { \__tenkz_metric_ratio:n {dotlabelband} }
           }
       }
-    \fp_set:Nn \l__tenkz_kernel_r_trace_ink_fp
+  }
+% An authored port: its host's row, and its host's own face.
+\cs_new_protected:Npn \__tenkz_kernel_r_trace_port_ink:n #1
+  {
+    \__tenkz_model_get:nnN {#1} {host} \l__tenkz_kernel_r_trace_ink_host_tl
+    \quark_if_no_value:NF \l__tenkz_kernel_r_trace_ink_host_tl
       {
-        max
-          (
-            \l__tenkz_kernel_r_trace_ink_fp ,
-            \l__tenkz_kernel_r_trace_ink_reach_fp
-          )
+        \exp_args:NV \__tenkz_kernel_r_record_carrier:nNNN
+          \l__tenkz_kernel_r_trace_ink_host_tl
+          \l__tenkz_kernel_r_trace_ink_row_tl
+          \l__tenkz_kernel_r_trace_ink_col_tl
+          \l__tenkz_kernel_r_trace_ink_bool
+        \bool_if:NT \l__tenkz_kernel_r_trace_ink_bool
+          {
+            \__tenkz_model_get:nnN {#1} {port-face}
+              \l__tenkz_kernel_r_trace_ink_face_tl
+            \quark_if_no_value:NF \l__tenkz_kernel_r_trace_ink_face_tl
+              {
+                \tl_set:Ne \l__tenkz_kernel_r_trace_ink_face_tl
+                  {
+                    \exp_args:NV \__tenkz_kernel_r_compass:n
+                      \l__tenkz_kernel_r_trace_ink_face_tl
+                  }
+                \exp_args:NVV \__tenkz_kernel_r_page_face:nnN
+                  \l__tenkz_kernel_r_trace_ink_host_tl
+                  \l__tenkz_kernel_r_trace_ink_face_tl
+                  \l__tenkz_kernel_r_trace_ink_turn_tl
+                \__tenkz_kernel_r_trace_leg_depth:n {#1}
+                \__tenkz_kernel_r_trace_ink_take:
+              }
+          }
       }
   }
-\cs_new_protected:Npn \__tenkz_kernel_r_trace_port_ink:n #1
-  { \__tenkz_kernel_r_trace_leg_ink:nn {#1} {port-face} }
+% A policy leg: its host's row, and the frame's physical axis on the face the
+% record names.  On every carrier but a projected plane that axis is the
+% host's own north or south, which is why a flat picture reads the same
+% either way.
 \cs_new_protected:Npn \__tenkz_kernel_r_trace_policy_ink:n #1
-  { \__tenkz_kernel_r_trace_leg_ink:nn {#1} {face} }
+  {
+    \__tenkz_model_get:nnN {#1} {host} \l__tenkz_kernel_r_trace_ink_host_tl
+    \quark_if_no_value:NF \l__tenkz_kernel_r_trace_ink_host_tl
+      {
+        \exp_args:NV \__tenkz_kernel_r_record_carrier:nNNN
+          \l__tenkz_kernel_r_trace_ink_host_tl
+          \l__tenkz_kernel_r_trace_ink_row_tl
+          \l__tenkz_kernel_r_trace_ink_col_tl
+          \l__tenkz_kernel_r_trace_ink_bool
+        \bool_if:NT \l__tenkz_kernel_r_trace_ink_bool
+          {
+            \__tenkz_model_get:nnN {#1} {face}
+              \l__tenkz_kernel_r_trace_ink_face_tl
+            \quark_if_no_value:NF \l__tenkz_kernel_r_trace_ink_face_tl
+              {
+                \exp_args:NVV \__tenkz_kernel_r_physical_axis:nnNN
+                  \l__tenkz_kernel_r_trace_ink_host_tl
+                  \l__tenkz_kernel_r_trace_ink_face_tl
+                  \l__tenkz_kernel_r_trace_ink_turn_tl
+                  \l__tenkz_kernel_r_trace_ink_side_tl
+                \__tenkz_kernel_r_trace_leg_depth:n {#1}
+                \__tenkz_kernel_r_trace_ink_take:
+              }
+          }
+      }
+  }
+% A cell-level or boundary opening.  It has no host: the picture asked for it,
+% so the side it opens gives both its row and its outward page bearing.  A
+% physical opening stands on the first row and leaves along the frame's
+% physical axis; a north or south boundary opening stands on the first or the
+% last row and leaves the way it opens.  A west or east opening leaves along
+% the row and hangs nothing on any return's side.
+\cs_new_protected:Npn \__tenkz_kernel_r_trace_open_ink:n #1
+  {
+    \tl_clear:N \l__tenkz_kernel_r_trace_ink_turn_tl
+    \__tenkz_model_get:nnN {#1} {mode}
+      \l__tenkz_kernel_r_trace_ink_type_tl
+    \str_if_eq:VnTF \l__tenkz_kernel_r_trace_ink_type_tl {physical}
+      {
+        \tl_set:Nn \l__tenkz_kernel_r_trace_ink_row_tl {1}
+        \fp_set:Nn \l__tenkz_kernel_r_trace_ink_reach_fp
+          { \__tenkz_metric_ratio:n {physleg} }
+        \__tenkz_model_get:nnN {#1} {from-host}
+          \l__tenkz_kernel_r_trace_ink_host_tl
+        \quark_if_no_value:NTF \l__tenkz_kernel_r_trace_ink_host_tl
+          { \tl_set:Nn \l__tenkz_kernel_r_trace_ink_turn_tl {90} }
+          {
+            \exp_args:NV \__tenkz_kernel_r_physical_axis:nnNN
+              \l__tenkz_kernel_r_trace_ink_host_tl {n}
+              \l__tenkz_kernel_r_trace_ink_turn_tl
+              \l__tenkz_kernel_r_trace_ink_side_tl
+          }
+      }
+      {
+        \__tenkz_model_get:nnN {#1} {side}
+          \l__tenkz_kernel_r_trace_ink_side_tl
+        \quark_if_no_value:NF \l__tenkz_kernel_r_trace_ink_side_tl
+          {
+            \str_case:Vn \l__tenkz_kernel_r_trace_ink_side_tl
+              {
+                {north}
+                  {
+                    \tl_set:Nn \l__tenkz_kernel_r_trace_ink_row_tl {1}
+                    \tl_set:Nn \l__tenkz_kernel_r_trace_ink_turn_tl {90}
+                  }
+                {south}
+                  {
+                    \tl_set:Ne \l__tenkz_kernel_r_trace_ink_row_tl
+                      { \int_use:N \l__tenkz_kernel_r_rows_int }
+                    \tl_set:Nn \l__tenkz_kernel_r_trace_ink_turn_tl {270}
+                  }
+              }
+            \fp_set:Nn \l__tenkz_kernel_r_trace_ink_reach_fp
+              { \__tenkz_metric_ratio:n {stub} }
+          }
+      }
+    \tl_if_empty:NF \l__tenkz_kernel_r_trace_ink_turn_tl
+      { \__tenkz_kernel_r_trace_ink_take: }
+  }
 \cs_new_protected:Npn \__tenkz_kernel_r_trace_row_ink:nn #1#2
   {
     \fp_zero:N \l__tenkz_kernel_r_trace_ink_fp
@@ -11637,6 +11738,8 @@
       \__tenkz_kernel_r_trace_port_ink:n
     \__tenkz_model_map_wires_origin:nN {policy-leg}
       \__tenkz_kernel_r_trace_policy_ink:n
+    \__tenkz_model_map_wires_origin:nN {open}
+      \__tenkz_kernel_r_trace_open_ink:n
   }
 % The side and reach of a traced row's return.  Reads the closed row from
 % \l__tenkz_kernel_r_row_tl and the row's west reach-point ordinate from
