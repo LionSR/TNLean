@@ -725,10 +725,11 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
         MPSTensor.toTensorFromBlocks_mul_blockInclusion}
     \leanok
     \uses{def:mpu_dependent_block_inclusion}
-    The inclusions satisfy
+    The inclusions satisfy the following identities, with the second holding
+    for distinct $k$ and $\ell$:
     \begin{align}
         J_k^\dagger J_k&=\Id,\\
-        J_k^\dagger J_\ell&=0\quad(k\ne\ell).
+        J_k^\dagger J_\ell&=0.
     \end{align}
     If $B^i=\bigoplus_k\mu_k A_k^i$ is a weighted block-diagonal tensor,
     then
@@ -738,7 +739,6 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{def:mpu_dependent_block_inclusion}
     The first two identities follow by evaluating the coordinate delta
     functions.  For the last identity, the $k$th column block of $B^i$ has
     only the $k$th row block nonzero, where it equals $\mu_kA_k^i$.
@@ -756,12 +756,14 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
         |K|&=1.
     \end{align}
     This is the active-block multiplicity consequence used in
-    \cite[Proposition~1, lines~349--354]{Cirac2017MPU}.
+    \cite[Proposition~III.1]{Cirac2017MPU}.
 \end{theorem}
 
 \begin{proof}\leanok
     \uses{thm:mpu_dependent_block_inclusion_identities,
+        thm:mpu_shifted_trace_power_moments,
         thm:mpu_shifted_trace_power_spectrum,thm:mpu_trace_power_all,
+        thm:mpu_transfer_matrix_power_trace,
         thm:mpu_transfer_matrix_vectorization,
         thm:mpu_transfer_matrix_eigenvalues}
     Each normal block $A_k$ has a nonzero transfer fixed vector $X_k$.

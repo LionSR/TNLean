@@ -4,7 +4,6 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.CanonicalForm.Definitions
-import TNLean.MPS.MPU.ActiveTransferMultiplicity
 import TNLean.MPS.CanonicalForm.Reduction
 
 /-!
