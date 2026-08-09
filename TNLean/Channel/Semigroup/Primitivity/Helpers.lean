@@ -261,7 +261,7 @@ theorem peripheral_powers_closed_of_irreducible_channel_with_fixed [NeZero D]
         have hK_fix : Kraus.mapLM K σ = σ := by
           rw [← hE_eq]
           exact hσ_fix
-        simpa [Kraus.mapLM_apply, Kraus.map_apply, MPSTensor.transferMap_apply] using hK_fix)
+        simpa [Kraus.mapLM_apply, Kraus.map_apply] using hK_fix)
   -- ── Step 5: Kraus.adjointMap L σ = σ ──
   have hL_adj : Kraus.adjointMap L σ = σ := by
     simp only [Kraus.adjointMap_apply, L]
