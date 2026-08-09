@@ -935,8 +935,6 @@
 \begin{theorem}[Explicit one-label tensor-attached BNT algebra clause for $R$]%
     \label{thm:mpdo_bnt_label_rescaling_stable_bnt_algebra_clause}
     \lean{MPOTensor.RescalingStableLengthDependentRFP.%
-        R_hasBNTAlgebraTensorClause}
-    \lean{MPOTensor.RescalingStableLengthDependentRFP.%
         R_oneLabelBNTAlgebraTensorClause}
     \leanok
     \uses{def:mpdo_bnt_algebra_tensor_clause,
@@ -973,21 +971,6 @@
             &=\frac{32}{25}\left(\frac{25}{32}\right)^2.
         \notag
     \end{align}
-
-    Let $\operatorname{rot}(\operatorname{vertical}(R))$ denote the MPO obtained
-    by separating the $16$-valued physical index of the vertical tensor into
-    two four-valued indices. Then
-    \begin{align}
-        \rho^{(L)}\!\left(
-            \operatorname{rot}(\operatorname{vertical}(R))\right)
-            &=\left(\frac{25}{32}\right)^L O_L(M_0).
-        \notag
-    \end{align}
-    This is a rotated vertical contraction, not the original horizontal tensor
-    $R$, even though both physical and bond dimensions equal $4$. Indeed,
-    $\rho^{(1)}(R)$ has rank two, whereas $O_1(M_0)$ has rank one, so these
-    operators are not proportional. In particular, no identity
-    $\rho^{(L)}(R)=(25/32)^L O_L(M_0)$ is asserted.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -1009,6 +992,23 @@
     $\tr(W^L)=\tr(\chi_{0,0,0}^L)=1+(7/25)^L$. The length-one identity is the
     displayed scalar calculation.
 \end{proof}
+
+\begin{remark}[Vertical and horizontal contractions]
+    Let $\operatorname{rot}(\operatorname{vertical}(R))$ denote the MPO obtained
+    by separating the $16$-valued physical index of the vertical tensor into
+    two four-valued indices. Then
+    \begin{align}
+        \rho^{(L)}\!\left(
+            \operatorname{rot}(\operatorname{vertical}(R))\right)
+            &=\left(\frac{25}{32}\right)^L O_L(M_0).
+        \notag
+    \end{align}
+    This is a rotated vertical contraction, not the original horizontal tensor
+    $R$, even though both physical and bond dimensions equal $4$. At length one,
+    $\rho^{(1)}(R)$ has rank two, whereas $O_1(M_0)$ has rank one, so these
+    operators are not proportional. In particular, no identity
+    $\rho^{(L)}(R)=(25/32)^L O_L(M_0)$ is asserted.
+\end{remark}
 
 \begin{theorem}[Closed-operator factorization and local diagonalization for $R$]%
     \label{thm:mpdo_bnt_label_rescaling_stable_chi_attachment}

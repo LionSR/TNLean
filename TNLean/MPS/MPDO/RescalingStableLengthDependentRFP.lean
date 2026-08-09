@@ -73,7 +73,7 @@ and the Schur product theorem (`Matrix.PosSemidef.hadamard`) gives `R_isMPDO`.
 The local-purification (LPDO) route does NOT apply: the undone-vertical
 letters entangle bra- and ket-side labels, so no purification tensor exists.
 
-## Completed structure and remaining identification
+## Completed structure and explicit vertical identification
 
 * `TNLean.MPS.MPDO.RescalingStableLengthDependentRFPViaTS` proves that the
   refinement and coarse-graining maps are trace-preserving completely positive,
@@ -86,12 +86,13 @@ letters entangle bra- and ket-side labels, so no purification tensor exists.
   positive scalar making the retained block's transfer map exactly idempotent (hence
   spectral-radius one). The letters of `R` form the full matrix-unit basis of M₄
   (`R_toMPSTensor_isInjective`).
-* The general Theorem 4.14 equivalence therefore supplies the existential
-  tensor-attached clause `R_hasBNTAlgebraTensorClause`. The remaining problem is to
-  identify its vertical BNT components, same-length coefficients, and positive
-  diagonal data with the explicit one-label families `oneLabelCoeffs` and
-  `oneLabelChi`. In particular, no witness component operator is identified with the
-  original closed operator `mpo R L`. This boundary is documented in
+* The general Theorem 4.14 equivalence supplies the existential tensor-attached
+  clause `R_hasBNTAlgebraTensorClause`. The module
+  `TNLean.MPS.MPDO.RescalingStableExplicitVerticalBNT` gives an explicit one-label
+  witness with normalized component `(doubledTensor A).toMPSTensor`, multiplicity
+  weight `25/32`, coefficients `oneLabelCoeffs`, and positive diagonal data
+  `oneLabelChi`. Its component operator is a rotated vertical contraction, not the
+  original horizontal operator `mpo R L`. This boundary is documented in
   `docs/paper-gaps/cpgsv17_blocked_chi_uniformity.tex`.
 
 ## References
@@ -499,12 +500,13 @@ identity `wMat_eq_conj_diagonal_oneLabelChi`, which identifies `wMat` itself
 (not only its spectral data) with `oneLabelChi` via the Walsh–Hadamard
 change of basis.
 
-**Scope restriction (partial BNT-coefficient link):** neither this lemma
-nor `wMat_eq_conj_diagonal_oneLabelChi` is the uniform BNT-label
-structure-coefficient statement of arXiv:1606.00608, Theorem 4.14(ii)
-(which requires the `AlgebraStructureData` witness that `R`'s same-length
-product algebra realizes `oneLabelCoeffs`).  That construction needs
-`IsRFPViaTS R`, itself future work (module docstring, *Remaining gap*).
+**Scope restriction (spectral link only):** neither this lemma nor
+`wMat_eq_conj_diagonal_oneLabelChi` alone proves the uniform BNT-label
+structure-coefficient statement of arXiv:1606.00608, Theorem 4.14(ii).
+The module `TNLean.MPS.MPDO.RescalingStableExplicitVerticalBNT` supplies that
+statement for the normalized vertical component and `oneLabelCoeffs`. It does
+not identify the component operator with the original horizontal operator
+`mpo R L` or attach arbitrary uniform rescalings of `oneLabelChi`.
 Documented in `docs/paper-gaps/cpgsv17_blocked_chi_uniformity.tex`. -/
 theorem wMat_eigenvalue_eq_oneLabelChi_entry (k : Fin 2) :
     ∃ v : Fin 2 → ℂ, v ≠ 0 ∧

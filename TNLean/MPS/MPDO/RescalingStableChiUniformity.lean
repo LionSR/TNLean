@@ -44,14 +44,13 @@ the trace of the `L`-fold ORDINARY matrix power of the fixed `2x2` matrix
 `wMat`. This is a different matrix power from the `N`-fold Kronecker
 (tensor) power `wN N` appearing inside `R`'s own closed-operator formula
 `mpo_R_eq_B_mul_wN_mul_transpose`; the two agree only at `L = N = 1`. This
-file does not establish the operator-multiplication closure law of
-arXiv:1606.00608, Theorem 4.14(ii),
-`O_L(M_0)O_L(M_0) = c^{(L)}O_L(M_0)`, for R's own closed operator
-`mpo R L`; that direct identification is false. The existential tensor-attached
-clause is supplied separately by `R_hasBNTAlgebraTensorClause`, while identifying
-its vertical BNT components and attached coefficient data with the explicit
-one-label families remains open in
-`docs/paper-gaps/cpgsv17_blocked_chi_uniformity.tex`.
+file alone does not establish the operator-multiplication closure law of
+arXiv:1606.00608, Theorem 4.14(ii). The module
+`TNLean.MPS.MPDO.RescalingStableExplicitVerticalBNT` proves that law for the
+normalized vertical component and identifies its attached data with
+`oneLabelCoeffs` and `oneLabelChi`. The component operator is not the original
+horizontal operator `mpo R L`, and no arbitrary rescaling is attached to a
+tensor presentation. See `docs/paper-gaps/cpgsv17_blocked_chi_uniformity.tex`.
 
 ## References
 
