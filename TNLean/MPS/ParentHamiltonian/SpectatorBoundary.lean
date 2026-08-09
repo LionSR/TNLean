@@ -22,12 +22,12 @@ estimate is asserted.
 
 * `MPSTensor.tailBoundaryMap A K L` --- maps a family
   \(\{Y_u\}\) (indexed by \(K\)-site prefix configurations) to a vector
-  on \(K+L\) sites via \(\psi(u,    au)=    r(A^    au Y_u)\).
-* `MPSTensor.prefixRestrictₗ` --- fixes a suffix \(    au\) and restricts
+  on \(K+L\) sites via \(\psi(u,\tau)=  \tr(A^{\tau} Y_u)\).
+* `MPSTensor.prefixRestrictₗ` --- fixes a suffix \(\tau\) and restricts
   to the prefix (the left-sided analogue of `tailRestrictₗ`).
 * `MPSTensor.leftBoundaryMap A K L` --- maps a family
-  \(\{Z_    au\}\) (indexed by \(L\)-site suffix configurations) to a vector
-  on \(K+L\) sites via \(\psi(u,    au)=    r(A^u Z_    au)\).
+  \(\{Z_{\tau}\}\) (indexed by \(L\)-site suffix configurations) to a vector
+  on \(K+L\) sites via \(\psi(u,\tau)=  \tr(A^{u} Z_{\tau})\).
 
 ## Main results
 
@@ -41,10 +41,10 @@ estimate is asserted.
   --- after Euclidean-space transport, the tail range identifies with
   `openChainTailGroundSpaceES`.
 * `MPSTensor.leftBoundaryMap_factorization` --- the symmetric factorization:
-  \(\Gamma_{K+L}(X)=\Gamma^{\mathrm{left}}_{K,L}(    au\mapsto A^    au X)\).
+  \(\Gamma_{K+L}(X)=\Gamma^{\mathrm{left}}_{K,L}(\tau\mapsto A^{\tau} X)\).
 * `MPSTensor.leftBoundaryMap_range_eq` --- the range of the left boundary
   map is exactly the left ground space
-  \(\{\psi\midorall    au,\;\operatorname{prefix\_restrict}_    au\psi\in G_K(A)\}\).
+  \(\{\psi\mid\forall \tau,\;\operatorname{prefix\_restrict}_{\tau}\psi\in G_K(A)\}\).
 * `MPSTensor.leftBoundaryMap_range_map_symm_eq_openChainLeftGroundSpaceES`
   --- at \(L=1\) (the C3 specialization), the Euclidean-space transport of the
   left range identifies with `openChainLeftGroundSpaceES`.
@@ -52,7 +52,7 @@ estimate is asserted.
 ## Scope restriction (FNW contraction not derived)
 
 The algebraic identities above place both ground spaces as ranges of boundary
-maps on the same ambient \(H_{K+L}\).  The FNW transfer-mixing estimate that
+maps on the same ambient \(\mathcal{H}_{K+L}\).  The FNW transfer-mixing estimate that
 would bound the defect \(\|P_{\mathrm{tail}}\circ P_{\mathrm{left}}
 -P_{\mathrm{full}}\|\) using the inverse-Gram range-projector formula
 (`GroundSpaceGram.lean`) and the spectral properties of the transfer operator
@@ -66,7 +66,7 @@ boundary coordinates.
 
 For Nachtergaele C3 (arXiv:cond-mat/9410110, eq. (2.4)), take
 \(K := n - l\), \(L := l + 1\), and let the common ambient space be
-\(H_{K+L}=H_{n+1}\).  The left window (first \(K+L-1\) sites) is not directly
+\(\mathcal{H}_{K+L} = \mathcal{H}_{n+1}\).  The left window (first \(K+L-1\) sites) is not directly
 the range of a spectator-indexed left boundary map; it is the subspace
 `InLeftGround` defined by fixing the *last* site.
 
@@ -183,22 +183,16 @@ theorem tailBoundaryMap_factorization (A : MPSTensor d D) (K L : ℕ)
   have hσ : σ = Fin.append u τ := Fin.append_castAdd_natAdd.symm
   calc
     Matrix.trace (evalWord A (List.ofFn τ) * (X * evalWord A (List.ofFn u)))
-        = Matrix.trace ((X * evalWord A (List.ofFn u)) *
-          evalWord A (List.ofFn τ)) := by
-      rw [Matrix.trace_mul_comm]
-    _ = Matrix.trace (X * (evalWord A (List.ofFn u) *
-      evalWord A (List.ofFn τ))) := by
+        = Matrix.trace (evalWord A (List.ofFn u) *
+          (evalWord A (List.ofFn τ) * X)) := by
+      rw [Matrix.trace_mul_cycle' (evalWord A (List.ofFn τ)) X
+        (evalWord A (List.ofFn u))]
+    _ = Matrix.trace ((evalWord A (List.ofFn u) * evalWord A (List.ofFn τ)) * X) := by
       simp [Matrix.mul_assoc]
+    _ = Matrix.trace (evalWord A (List.ofFn u ++ List.ofFn τ) * X) := by
+      simp [evalWord_append A]
     _ = Matrix.trace (evalWord A (List.ofFn (Fin.append u τ)) * X) := by
-      calc
-        Matrix.trace (X * (evalWord A (List.ofFn u) * evalWord A (List.ofFn τ)))
-            = Matrix.trace ((evalWord A (List.ofFn u) *
-              evalWord A (List.ofFn τ)) * X) := by
-          rw [Matrix.trace_mul_comm]
-        _ = Matrix.trace ((evalWord A (List.ofFn u ++ List.ofFn τ)) * X) := by
-          simp [evalWord_append A]
-        _ = Matrix.trace (evalWord A (List.ofFn (Fin.append u τ)) * X) := by
-          simp [List.ofFn_fin_append]
+      simp [List.ofFn_fin_append]
     _ = groundSpaceMap A (K + L) X σ := by simp [hσ, groundSpaceMap_apply]
 
 /-- The range of the tail boundary map equals the tail ground space:
