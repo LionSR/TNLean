@@ -1,0 +1,31 @@
+% Regression: the density of a picture's own writing follows the mathematics
+% around it, and the author states nothing.  A picture standing on its own --
+% in running text or in a display -- keeps the base class the glyphs were
+% calibrated on, and the stream says nothing about it.  A picture sharing a
+% line with other mathematics takes the denser class and the stream records
+% it.  A stated class outranks the sensing, which is how a picture inside a
+% line asks for the base measure back.
+\documentclass{article}
+\usepackage{tenkz}
+\begin{document}
+\tenkzkernel
+Standing in running text:
+\begin{tenkz}[rows={wire}, cols=2, west=open, east=open]
+  \tn[skin=box]{A} & \tn[skin=box]{B}
+\end{tenkz}
+
+Standing in a display:
+\[
+  \begin{tenkz}[rows={wire}, cols=2, west=open, east=open]
+    \tn[skin=box]{A} & \tn[skin=box]{B}
+  \end{tenkz}
+\]
+
+Sharing a line of mathematics $\begin{tenkz}[rows={wire}, cols=2,
+  west=open, east=open]
+  \tn[skin=box]{A} & \tn[skin=box]{B}
+\end{tenkz}$, and the same line with the base class asked for
+$\begin{tenkz}[size=m, rows={wire}, cols=2, west=open, east=open]
+  \tn[skin=box]{A} & \tn[skin=box]{B}
+\end{tenkz}$.
+\end{document}

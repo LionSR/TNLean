@@ -1,8 +1,22 @@
 % Negative regression: one equation audit scope cannot contain another.
+% The completed equation below stands first so the refusal can be read
+% against a stream that already holds one scope: a rejected equation must
+% take nothing away from the equations that finished before it, and must
+% claim no scope of its own -- neither the outer one, which never draws a
+% panel, nor the inner one, which is what the refusal is about.
 \documentclass{standalone}
 \usepackage{tenkz}
 \begin{document}
 \tenkzkernel
+\begin{tenkzeq}[check={signature}]
+  \begin{tenkz}[rows={wire}, cols=1, bonds=none]
+    \tn[ports={}]{P}
+  \end{tenkz}
+  =
+  \begin{tenkz}[rows={wire}, cols=1, bonds=none]
+    \tn[ports={}]{Q}
+  \end{tenkz}
+\end{tenkzeq}
 \begin{tenkzeq}[check={signature}]
   \begin{tenkz}[rows={wire}, cols=1, bonds=none]
     \tn[ports={}]{A}

@@ -2735,14 +2735,20 @@ grep -Fq '[TKZ-EQ-NESTED]' "$WORK/n_nested_equation.transcript" || {
   echo "FAIL: nested equation lacked TKZ-EQ-NESTED" >&2
   exit 1
 }
+# The refusal takes nothing from the equation that finished before it, and
+# the refused one claims no scope in the stream: neither the outer equation,
+# which never draws a panel, nor the inner one the refusal is about.
 grep -Eq '(^|[|])scope=1([|]|$)' "$WORK/n_nested_equation.tnlog" || {
-  echo "FAIL: nested equation did not preserve its outer audit scope" >&2
+  echo "FAIL: a rejected nested equation damaged a completed audit scope" >&2
   exit 1
 }
-if grep -Eq '(^|[|])scope=2([|]|$)' "$WORK/n_nested_equation.tnlog"; then
-  echo "FAIL: a rejected nested equation mutated scope ownership" >&2
-  exit 1
-fi
+for rejected in 2 3; do
+  if grep -Eq "(^|[|])scope=$rejected([|]|\$)" \
+    "$WORK/n_nested_equation.tnlog"; then
+    echo "FAIL: a rejected nested equation claimed scope $rejected" >&2
+    exit 1
+  fi
+done
 
 for arity_negative in n_missing_relation n_dangling_relation; do
   source="$KERNEL/negative/$arity_negative.tex"
@@ -2944,6 +2950,46 @@ for label in 'A=B' 'D=E'; do
     exit 1
   }
 done
+# One equation, one measure.  X and its inverse are two names of different
+# widths, and the equation draws the glyphs holding them at one size: both
+# measured silhouettes are the same rectangle, and it is the wider of the two
+# the panels asked for, never the narrower.  The measuring run leaves nothing
+# in the stream, so the equation still records exactly its two panels.
+shared_extents=$(grep '^glyph-geometry|' \
+  "$WORK/r_equation_shared_metric.tnlog" |
+  sed 's/.*|\(xmin=[^|]*|xmax=[^|]*|ymin=[^|]*|ymax=[^|]*\)|.*/\1/' |
+  sort -u | wc -l | tr -d ' ')
+[ "$shared_extents" = "1" ] || {
+  echo "FAIL: an equation drew an operator and its inverse at two sizes" >&2
+  grep '^glyph-geometry|' "$WORK/r_equation_shared_metric.tnlog" >&2
+  exit 1
+}
+grep -Fq '|xmin=-660985|xmax=660985|ymin=-530808|ymax=530808|' \
+  "$WORK/r_equation_shared_metric.tnlog" || {
+  echo "FAIL: the shared measure is not the widest name's own extent" >&2
+  exit 1
+}
+[ "$(grep -c '^picture|' "$WORK/r_equation_shared_metric.tnlog" || true)" \
+  -eq 2 ] || {
+  echo "FAIL: the measuring run left its panels in the event stream" >&2
+  exit 1
+}
+# Math-style sensing.  A picture standing on its own -- in running text or in
+# a display -- keeps the base class and the stream says nothing about it; one
+# sharing a line of mathematics takes the denser class and the stream records
+# it; and a stated class outranks the sensing.
+for picture in k1 k2 k4; do
+  grep -Fqx "picture|id=$picture|lang=kernel" \
+    "$WORK/r_math_style_sensing.tnlog" || {
+    echo "FAIL: picture $picture did not resolve to the base size class" >&2
+    exit 1
+  }
+done
+grep -Fq 'picture|id=k3|lang=kernel|size=s' \
+  "$WORK/r_math_style_sensing.tnlog" || {
+  echo "FAIL: a picture inside a line of mathematics did not sense s" >&2
+  exit 1
+}
 # A math alignment cell holds the body scan hostage to the alignment counter:
 # mathtools' gathered template and amsmath's aligned both leave it at zero,
 # where a raw tab once ended the cell mid-scan.  The chained fixture holds
