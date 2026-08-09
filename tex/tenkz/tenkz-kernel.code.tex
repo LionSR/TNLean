@@ -123,6 +123,13 @@
 \msg_new:nnn {tenkz}{kernel-metrics-scope}
   { [TKZ-METRICS-SCOPE]~metrics=~is~picture~policy:~a~group~shares~its~
     picture's~metric~context. }
+\msg_new:nnn {tenkz}{kernel-check-reason}
+  { [TKZ-EQ-CHECK-REASON]~relation~#1~is~opted~out~of~the~audit~with~no~
+    reason;~the~opt-out~records~the~mathematics~the~diagram~does~not~draw,~
+    and~an~opt-out~without~one~is~not~an~opt-out. }
+\msg_new:nnn {tenkz}{kernel-size-scope}
+  { [TKZ-SIZE-SCOPE]~size=~is~picture~and~equation~policy:~a~group~shares~
+    its~picture's~size~class,~and~an~atom~states~its~own. }
 \msg_new:nnn {tenkz}{kernel-frame-basis-circle}
   { [TKZ-FRAME-BASIS-CIRCLE]~basis=~currently~requires~flat~or~plane;~
     a~circle~basis~needs~a~declared~tangent-offset~contract. }
@@ -302,6 +309,7 @@
 \box_new:N  \l__tenkz_kernel_eq_probe_box
 \int_new:N  \l__tenkz_kernel_eq_saved_picture_int
 \int_new:N  \l__tenkz_kernel_eq_saved_scope_int
+\int_new:N  \l__tenkz_kernel_eq_saved_group_int
 \seq_new:N  \l__tenkz_kernel_eq_saved_seq
 \tl_new:N   \l__tenkz_kernel_eq_extent_key_tl
 \tl_new:N   \l__tenkz_kernel_eq_extent_tl
@@ -2481,11 +2489,26 @@
     \__tenkz_kernel_keys:nn { tenkz-kernel-picture } {#1}
     \bool_set_false:N \l__tenkz_kernel_group_keys_bool
     % The metric context is picture policy: a sub-frame shares its
-    % picture's pitch, so a group-scope profile is refused, not scaled.
+    % picture's pitch and its size class, so a group-scope profile or class
+    % is refused, not applied.  The audit belongs to the equation, which is
+    % further out still.  A key that would be silently inert here is a key
+    % the author has misplaced, and the kernel says so.
     \prop_if_in:NnT \l__tenkz_kernel_stage_prop {metrics}
       {
         \msg_error:nn {tenkz}{kernel-metrics-scope}
         \prop_remove:Nn \l__tenkz_kernel_stage_prop {metrics}
+      }
+    \prop_if_in:NnT \l__tenkz_kernel_stage_prop {size}
+      {
+        \msg_error:nn {tenkz}{kernel-size-scope}
+        \prop_remove:Nn \l__tenkz_kernel_stage_prop {size}
+      }
+    \prop_get:NnN \l__tenkz_kernel_stage_prop {check} \l__tenkz_kernel_scratch_tl
+    \quark_if_no_value:NF \l__tenkz_kernel_scratch_tl
+      {
+        \msg_error:nne {tenkz}{kernel-check-scope}
+          { \tl_use:N \l__tenkz_kernel_scratch_tl }
+        \prop_remove:Nn \l__tenkz_kernel_stage_prop {check}
       }
     \__tenkz_kernel_commit:
     % the group body arrives as one grabbed argument, so its column tabs
@@ -7504,12 +7527,16 @@
 % ---------- the equation's shared measure ---------------------------------------
 % The measure is held per size class, because the class is what an author
 % declares about how big a glyph is; two glyphs of one class in one equation
-% are two spellings of one extent, and the equation draws them so.  An
-% unclassed glyph carries the key of the skin's own default.
+% are two spellings of one extent, and the equation draws them so.  An atom
+% that states no class is in the `m' class, which is what the registry
+% declares its default to be, so stating it and omitting it are one key and
+% not two -- otherwise an equation of a bare X against an m-classed inverse
+% would keep the two measures apart and draw exactly the pair of sizes this
+% is here to stop.
 \cs_new_protected:Npn \__tenkz_kernel_eq_extent_key:nN #1#2
   {
     \__tenkz_model_get:nnN {#1} {size} #2
-    \quark_if_no_value:NT #2 { \tl_set:Nn #2 {default} }
+    \quark_if_no_value:NT #2 { \tl_set:Nn #2 {m} }
   }
 % Read one inscribed name during the measuring run and keep the largest of
 % each dimension seen so far.  Width, height, and depth are kept apart: the
@@ -17852,14 +17879,28 @@
         \int_step_inline:nnnn {2} {3}
           { \seq_count:N \l__tenkz_kernel_match_seq }
           {
-            \clist_put_right:Ne \l__tenkz_kernel_check_off_clist
-              { \seq_item:Nn \l__tenkz_kernel_match_seq {##1} }
-            \__tenkz_kernel_event:n
+            % An opt-out without a reason is not an opt-out: what the key
+            % records is the mathematics the diagram does not draw, and a
+            % blank reason records nothing while switching the comparison
+            % off.  The relation stays audited and the author is told.
+            \tl_set:Ne \l__tenkz_kernel_scratch_tl
+              { \seq_item:Nn \l__tenkz_kernel_match_seq { ##1 + 1 } }
+            \tl_trim_spaces:N \l__tenkz_kernel_scratch_tl
+            \tl_if_empty:NTF \l__tenkz_kernel_scratch_tl
               {
-                check|scope=\int_use:N \g__tenkz_kernel_eq_scope_int
-                |relation=\seq_item:Nn \l__tenkz_kernel_match_seq {##1}
-                |result=off
-                |reason=\seq_item:Nn \l__tenkz_kernel_match_seq { ##1 + 1 }
+                \msg_error:nne {tenkz}{kernel-check-reason}
+                  { \seq_item:Nn \l__tenkz_kernel_match_seq {##1} }
+              }
+              {
+                \clist_put_right:Ne \l__tenkz_kernel_check_off_clist
+                  { \seq_item:Nn \l__tenkz_kernel_match_seq {##1} }
+                \__tenkz_kernel_event:n
+                  {
+                    check|scope=\int_use:N \g__tenkz_kernel_eq_scope_int
+                    |relation=\seq_item:Nn \l__tenkz_kernel_match_seq {##1}
+                    |result=off
+                    |reason=\tl_use:N \l__tenkz_kernel_scratch_tl
+                  }
               }
           }
       }
@@ -18485,16 +18526,27 @@
         { \g__tenkz_kernel_picture_int }
       \int_set:Nn \l__tenkz_kernel_eq_saved_scope_int
         { \g__tenkz_kernel_eq_scope_int }
+      \int_set:Nn \l__tenkz_kernel_eq_saved_group_int
+        { \g__tenkz_kernel_group_int }
       \seq_clear:N \l__tenkz_kernel_eq_saved_seq
       \clist_map_inline:Nn \c__tenkz_kernel_eq_counters_clist
         {
           \seq_put_right:Ne \l__tenkz_kernel_eq_saved_seq
             { \int_use:c {##1} }
         }
+      % Only the panels are measured.  The measure is a fact about the
+      % pictures, so the mathematics standing between them contributes
+      % nothing to it, and running it twice is how a counter, a label, or
+      % a write in an author's own tokens would be performed twice.  The
+      % panels are lifted out whole and set on their own; a name inscribed
+      % in one is still typeset twice, which is what measuring a name costs.
+      \exp_args:NnV \regex_extract_all:nnN
+        { \c{begin} \s* \cB. tenkz \cE. .*? \c{end} \s* \cB. tenkz \cE. }
+        \l__tenkz_kernel_eq_body_tl \l__tenkz_kernel_match_seq
       \hbox_set:Nn \l__tenkz_kernel_eq_probe_box
         {
           \c_math_toggle_token
-          \tl_use:N \l__tenkz_kernel_eq_body_tl
+          \seq_map_inline:Nn \l__tenkz_kernel_match_seq {##1}
           \c_math_toggle_token
         }
       \clist_map_inline:Nn \c__tenkz_kernel_eq_msg_classes_clist
@@ -18503,6 +18555,8 @@
         { \l__tenkz_kernel_eq_saved_picture_int }
       \int_gset:Nn \g__tenkz_kernel_eq_scope_int
         { \l__tenkz_kernel_eq_saved_scope_int }
+      \int_gset:Nn \g__tenkz_kernel_group_int
+        { \l__tenkz_kernel_eq_saved_group_int }
       \int_zero:N \l_tmpa_int
       \clist_map_inline:Nn \c__tenkz_kernel_eq_counters_clist
         {

@@ -1,0 +1,18 @@
+% Negative regression: an opt-out without a reason is not an opt-out.  What
+% the key records is the mathematics the diagram does not draw; a blank
+% reason records nothing while switching a comparison off, which is the
+% silent audit switch the contract refuses to have.
+\documentclass{standalone}
+\usepackage{tenkz}
+\begin{document}
+\tenkzkernel
+\begin{tenkzeq}[check={signature, off={1: }}]
+  \begin{tenkz}[rows={wire}, cols=1, bonds=none, west=open]
+    \tn[ports={180:virtual}]{A}
+  \end{tenkz}
+  =
+  \begin{tenkz}[rows={wire}, cols=1, bonds=none, east=open]
+    \tn[ports={0:virtual}]{B}
+  \end{tenkz}
+\end{tenkzeq}
+\end{document}

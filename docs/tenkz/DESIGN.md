@@ -121,18 +121,27 @@ its own body twice. An equation states that its panels are one object written
 two ways, so the glyphs holding their inscribed names must come out the same
 size, and the first panel therefore has to know what the last one measures.
 Nothing else in the package needs a fact from later in the document; this
-does. The body is run once into a box that is dropped, with the event stream
-silent and every count the real run advances put back afterwards, which
-leaves behind only the widest and deepest name of each size class. The real
-run then sets every name of a class on that measure. It only ever grows a
-glyph, so a name is never pushed outside the ink holding it, and an equation
-whose panels already agreed is drawn exactly as it was.
+does. The panels are lifted out of the body and set once into a box that is
+dropped, with the event stream silent, its recoverable diagnostics held back,
+and every count the real run advances put back afterwards, which leaves
+behind only the widest and deepest name of each size class. The real run then
+sets every name of a class on that measure. It only ever grows a glyph, so a
+name is never pushed outside the ink holding it, and an equation whose panels
+already agreed is drawn exactly as it was.
+
+Only the panels are measured, and that is not an optimisation. The measure is
+a fact about the pictures, so the mathematics standing between them
+contributes nothing to it, and running that mathematics twice is how a
+counter, a cross-reference, or a write in an author's own tokens would be
+performed twice. What remains double is a name inscribed in a panel, which is
+what measuring a name costs and is the one place the language's own grammar
+guarantees there is nothing but mathematics to typeset.
 
 Three cheaper answers do not work. **Fixing the extent to the size class
 alone** is what the contract says in the abstract, and the corpus prices it:
-47 of the 1143 glyphs drawn across the benchmark stand wider than their class
+45 of the 1143 glyphs drawn across the benchmark stand wider than their class
 because of their name, and pinning the extent would evict those names from
-their ink and send 35 reviewed figures back to be re-authored. **Carrying the
+their ink and send 18 reviewed figures back to be re-authored. **Carrying the
 measure between LaTeX runs** through the auxiliary file fails because the
 fixture and benchmark harnesses compile once. **Fitting the name to the
 glyph** by shrinking type is refused on sight: names are set at named sizes
