@@ -5,23 +5,22 @@ Authors: TNLean contributors
 -/
 import TNLean.Algebra.OperatorNormFrobenius
 import TNLean.MPS.ParentHamiltonian.GroundSpaceGram
-import TNLean.Spectral.QuantitativeGap
+import TNLean.Spectral.TransferOperatorGapCommon
 
 /-!
 # Convergence of MPS ground-space Gram operators
 
 This file bounds the ground-space Gram operator by combining the exact Choi
 reshuffling identity with geometric decay of the complementary transfer map.
+
+## Main results
+
+- `MPSTensor.groundSpaceGram_sub_fixedPointProj_norm_sq_le_geometric`
+- `MPSTensor.groundSpaceGram_tendsto_gramReshuffle_fixedPointProj`
 -/
 
 open scoped Matrix Matrix.Norms.L2Operator NNReal ENNReal
 open Matrix
-
-attribute [local instance 1001]
-  ContinuousLinearMap.toNormedAddCommGroup
-  ContinuousLinearMap.toNormedSpace
-  ContinuousLinearMap.toNormedRing
-  ContinuousLinearMap.toNormedAlgebra
 
 namespace MPSTensor
 
