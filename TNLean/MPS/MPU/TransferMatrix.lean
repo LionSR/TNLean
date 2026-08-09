@@ -36,8 +36,8 @@ variable {d D : ℕ}
 /-- The paper-normalized doubled-index MPS tensor associated to an MPO tensor:
 `normalizedFlattening U = U.toMPSTensor / sqrt d`.
 
-Source: Cirac--Perez-Garcia--Schuch--Verstraete, Proposition `prop:normal-tensor`,
-lines 344--354. -/
+Source: Cirac--Perez-Garcia--Schuch--Verstraete, equation `eq:transfer-op`,
+lines 336--340. -/
 noncomputable def normalizedFlattening (U : MPOTensor d D) : MPSTensor (d * d) D :=
   fun ij => ((Real.sqrt d : ℂ)⁻¹) • U.toMPSTensor ij
 

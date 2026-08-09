@@ -36,6 +36,9 @@ with composition. We also relate it to the Kraus representation.
 * `transferMatrix_mulVec_eq`: `T̂ *ᵥ vec(ρ) = vec(T(ρ))`
 * `transferMatrix_comp`: `(S ∘ T)^ = Ŝ * T̂`
 * `transferMatrix_id`: the transfer matrix of the identity is the identity
+* `transferMatrix_pow`: transfer matrices preserve powers
+* `trace_transferMatrix_eq_linearMap_trace`: matrix trace agrees with operator trace
+* `transferMatrix_hasEigenvalue_iff`: a map and its transfer matrix have the same eigenvalues
 * `transferMatrix_kraus`: for a Kraus map `T(X) = ∑ᵢ Kᵢ X Kᵢ†`, the transfer
   matrix is `∑ᵢ K'ᵢ ⊗ₖ Kᵢ`
 * `IsPositiveMap.comp_unitaryConjLM`: positive maps remain positive after
