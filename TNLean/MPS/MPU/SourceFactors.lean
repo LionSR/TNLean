@@ -398,8 +398,8 @@ theorem sourceCutM₁_eq_sourceX₁_mul_sourceY₁
 /-- The second exact source-cut factorization $\mathcal M_2=X_2Y_2$.
 This is arXiv:1703.09188, `eq:sf-svd`, `XY`, and `SVDforms2` (lines 479--528). -/
 theorem sourceCutM₂_eq_sourceX₂_mul_sourceY₂ :
-    sourceCutM₂ U = sourceX₂ U * sourceY₂ U :=
-  (sourceFactors U (1 : Matrix (Fin D) (Fin D) ℂ) Matrix.PosDef.one).sourceCutM₂_eq
+    sourceCutM₂ U = sourceX₂ U * sourceY₂ U := by
+  simpa [sourceX₂, sourceY₂, Matrix.mul_assoc] using (sourceSVD₂ U).factorization
 
 /-- Entry form of the first graphical factorization, arXiv:1703.09188,
 `X1Y1` and `SVDforms2` (lines 508--528). -/
@@ -429,8 +429,8 @@ theorem sourceX₁_weighted_isometry
 
 /-- The ordinary $X_2$ normalization, arXiv:1703.09188,
 `Y1Y1X1X1` and its graphical form `X1X2b` (lines 487--524). -/
-theorem sourceX₂_isometry : (sourceX₂ U).IsIsometry :=
-  (sourceFactors U (1 : Matrix (Fin D) (Fin D) ℂ) Matrix.PosDef.one).X₂_isometry
+theorem sourceX₂_isometry : (sourceX₂ U).IsIsometry := by
+  exact (sourceSVD₂ U).V_coisometry.conjTranspose (sourceSVD₂ U).V
 
 /-- The weighted right-inverse identity $Y_1Z_1=I$ from arXiv:1703.09188,
 `YZ=1` (lines 503--506). -/
@@ -441,7 +441,15 @@ theorem sourceY₁_mul_sourceZ₁
 
 /-- The ordinary right-inverse identity $Y_2Z_2=I$ from arXiv:1703.09188,
 `YZ=1` (lines 503--506). -/
-theorem sourceY₂_mul_sourceZ₂ : sourceY₂ U * sourceZ₂ U = 1 :=
-  (sourceFactors U (1 : Matrix (Fin D) (Fin D) ℂ) Matrix.PosDef.one).Y₂_mul_Z₂
+theorem sourceY₂_mul_sourceZ₂ : sourceY₂ U * sourceZ₂ U = 1 := by
+  rw [sourceY₂, sourceZ₂]
+  calc
+    ((sourceSVD₂ U).diagonal * (sourceSVD₂ U).U) *
+        ((sourceSVD₂ U).Uᴴ * (sourceSVD₂ U).inverseDiagonal) =
+      (sourceSVD₂ U).diagonal * ((sourceSVD₂ U).U * (sourceSVD₂ U).Uᴴ) *
+        (sourceSVD₂ U).inverseDiagonal := by simp only [Matrix.mul_assoc]
+    _ = (sourceSVD₂ U).diagonal * (sourceSVD₂ U).inverseDiagonal := by
+      rw [(sourceSVD₂ U).U_coisometry, Matrix.mul_one]
+    _ = 1 := (sourceSVD₂ U).diagonal_mul_inverseDiagonal
 
 end MPOTensor

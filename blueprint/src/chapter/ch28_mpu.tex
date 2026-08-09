@@ -520,31 +520,55 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
     $\Id_d$ is positive definite.
 \end{proof}
 
-\begin{definition}[Weighted source factors]
-    \label{def:mpu_weighted_source_factors}
+\begin{definition}[Source singular-value data and normalization matrix]
+    \label{def:mpu_source_svd_data}
     \lean{MPOTensor.SourceCutSVD, MPOTensor.sourceSVD₁,
-        MPOTensor.sourceSVD₂, MPOTensor.sourceGram₁,
-        MPOTensor.sourceX₁,
-        MPOTensor.sourceY₁, MPOTensor.sourceZ₁, MPOTensor.sourceX₂,
-        MPOTensor.sourceY₂, MPOTensor.sourceZ₂, MPOTensor.sourceX₁_apply,
-        MPOTensor.sourceY₁_apply, MPOTensor.sourceZ₁_apply,
-        MPOTensor.sourceX₂_apply, MPOTensor.sourceY₂_apply,
-        MPOTensor.sourceZ₂_apply, MPOTensor.SourceFactors,
-        MPOTensor.sourceFactors}
+        MPOTensor.sourceSVD₂, MPOTensor.sourceGram₁}
     \leanok
     \uses{thm:mpu_compact_svd,def:mpu_source_matrix_one,
         def:mpu_source_matrix_two,def:mpu_right_rank,def:mpu_left_rank,
-        def:mpu_source_weight,thm:mpu_source_weight_posdef}
-    Let $\rho\in\MN{D}$ be positive definite. Choose compact
-    singular-value decompositions
+        def:mpu_source_weight}
+    Choose compact singular-value decompositions
     \begin{align}
         M_i&=V_i^\dagger D_iU_i,
         &V_iV_i^\dagger&=\Id,
         &U_iU_i^\dagger&=\Id,
     \end{align}
-    with intermediate dimensions $r$ and $\ell$, respectively. Put
+    with intermediate dimensions $r$ and $\ell$, respectively. For
+    $\rho\in\MN{D}$, put
     \begin{align}
-        A&=V_1W_\rho V_1^\dagger,\\
+        A&=V_1W_\rho V_1^\dagger.
+    \end{align}
+\end{definition}
+
+\begin{theorem}[Positivity of the first source normalization matrix]
+    \label{thm:mpu_source_gram_posdef}
+    \lean{MPOTensor.sourceGram₁_posDef}
+    \leanok
+    \uses{def:mpu_source_svd_data,thm:mpu_source_weight_posdef}
+    If $\rho$ is positive definite, then $A$ is positive definite.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    The map $V_1^\dagger$ is injective because $V_1V_1^\dagger=\Id_r$.
+    Positive definiteness of $W_\rho$ is therefore preserved by this
+    congruence.
+\end{proof}
+
+\begin{definition}[Weighted source factors]
+    \label{def:mpu_weighted_source_factors}
+    \lean{MPOTensor.sourceX₁, MPOTensor.sourceY₁,
+        MPOTensor.sourceZ₁, MPOTensor.sourceX₂, MPOTensor.sourceY₂,
+        MPOTensor.sourceZ₂, MPOTensor.sourceX₁_apply,
+        MPOTensor.sourceY₁_apply, MPOTensor.sourceZ₁_apply,
+        MPOTensor.sourceX₂_apply, MPOTensor.sourceY₂_apply,
+        MPOTensor.sourceZ₂_apply, MPOTensor.SourceFactors,
+        MPOTensor.sourceFactors}
+    \leanok
+    \uses{def:mpu_source_svd_data,thm:mpu_source_gram_posdef}
+    Let $\rho\in\MN{D}$ be positive definite. Define
+    \begin{align}
         X_1&=V_1^\dagger A^{-1/2},
         &Y_1&=A^{1/2}D_1U_1,
         &Z_1&=U_1^\dagger D_1^{-1}A^{-1/2},\\
@@ -555,25 +579,6 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
     These are the factors in
     \cite[Equations~\textup{eq:sf-svd}--\textup{Z1Z2}]{Cirac2017MPU}.
 \end{definition}
-
-\begin{theorem}[Positivity of the first source normalization matrix]
-    \label{thm:mpu_source_gram_posdef}
-    \lean{MPOTensor.sourceGram₁_posDef}
-    \leanok
-    \uses{def:mpu_weighted_source_factors,thm:mpu_source_weight_posdef}
-    If $\rho$ is positive definite, then
-    \begin{align}
-        A=V_1W_\rho V_1^\dagger
-    \end{align}
-    is positive definite.
-\end{theorem}
-
-\begin{proof}
-    \leanok
-    The map $V_1^\dagger$ is injective because $V_1V_1^\dagger=\Id_r$.
-    Positive definiteness of $W_\rho$ is therefore preserved by this
-    congruence.
-\end{proof}
 
 \begin{theorem}[Source-cut factorizations]
     \label{thm:mpu_source_factorizations}
@@ -601,11 +606,9 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
 \begin{proof}
     \leanok
     \uses{def:mpu_weighted_source_factors}
-    The source-factor construction includes the two matrix identities
-    \begin{align}
-        M_1&=X_1Y_1, &M_2&=X_2Y_2.
-    \end{align}
-    Evaluating them at $((\alpha,j),(i,\beta))$ and
+    The source-factor construction supplies $M_1=X_1Y_1$. The second
+    compact singular-value decomposition gives $M_2=X_2Y_2$ directly.
+    Evaluating these identities at $((\alpha,j),(i,\beta))$ and
     $((\alpha,i),(j,\beta))$, respectively, gives the entry formulas.
 \end{proof}
 
@@ -627,12 +630,10 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
 \begin{proof}
     \leanok
     \uses{def:mpu_weighted_source_factors}
-    These are the normalization identities carried by the source-factor
-    construction:
-    \begin{align}
-        X_1^\dagger W_\rho X_1&=\Id_r,
-        &X_2^\dagger X_2&=\Id_\ell.
-    \end{align}
+    The source-factor construction supplies
+    $X_1^\dagger W_\rho X_1=\Id_r$. Since $X_2=V_2^\dagger$, the
+    coisometry identity $V_2V_2^\dagger=\Id_\ell$ gives
+    $X_2^\dagger X_2=\Id_\ell$.
 \end{proof}
 
 \begin{theorem}[Right inverses of the source factors]
@@ -651,10 +652,12 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
 \begin{proof}
     \leanok
     \uses{def:mpu_weighted_source_factors}
-    These are the right-inverse identities carried by the source-factor
-    construction:
+    The source-factor construction supplies $Y_1Z_1=\Id_r$. For the
+    second cut,
     \begin{align}
-        Y_1Z_1&=\Id_r, &Y_2Z_2&=\Id_\ell.
+        Y_2Z_2
+        &=D_2U_2U_2^\dagger D_2^{-1}
+          =D_2D_2^{-1}=\Id_\ell.
     \end{align}
 \end{proof}
 
