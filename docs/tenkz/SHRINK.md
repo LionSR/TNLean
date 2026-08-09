@@ -2908,3 +2908,56 @@ production caller; it earns its place until those fixtures do not.
 
 The census does not move: no registry row, parser leaf, or alias changes, and
 no flag is raised that a previous session has not already answered.
+
+### 2026-08-09 — the equation's shared measure, and a sentence overturned
+
+Two rows the ledger had written off came back with consumers, and one piece
+of machinery arrived that the census does not measure.
+
+**`kernel-picture:check` is no longer sentenced.** Session 1 condemned it as
+an audit switch the author should not have, and the S4 verdict set its death
+at the surface swap. The corpus answered in the other direction: seven
+benchmark cases now write `check={off={<relation>: <reason>}}`, each naming a
+relation whose two sides are known, unequal, and equal anyway for a reason the
+diagram does not draw — a coproduct changing physical arity, a bulk-boundary
+reduction changing which sides carry indices, a source decorating each
+segment with the arrowhead of the tensor that claims it. The contract's
+elision covers the unknown operand and cannot say any of that, so deleting
+the key would have refused seven figures their own papers draw. The contract
+now sanctions the recorded opt-out as the audit's own spelling
+(`LANGUAGE-1.0` 7.4), the tombstone row is struck, and `check=` takes its
+place in the picture-and-equation key table. `check-spec` accordingly keeps
+its Session 1 verdict rather than dying with its key.
+
+**`kernel-picture:size` has its consumer, which is every equation.** The row
+parsed and reached nobody. It now carries the resolved size class of the
+metric context: unstated, it is sensed from the surrounding mathematics, and
+the class chooses the size a picture sets its inscribed names in. The census
+does not move — the row existed, the parser leaf existed, and no spelling was
+added — but the row stops being dead surface.
+
+**The measuring run is not census-visible and is worth recording anyway.** An
+equation now typesets its body twice, once into a box that is dropped with the
+event stream silent, to learn the widest and deepest name of each size class
+before the first panel draws. It is the only place in the package that needs a
+fact from later in the document, and the reason is in `DESIGN.md`: an equation
+says its panels are one object, so the glyphs holding their names must come out
+one size, and the first panel cannot otherwise know what the last one measures.
+The measure only grows a glyph, so no name is evicted from its ink and an
+equation whose panels already agreed is unchanged.
+
+Two ratio rows stay orphaned and are named here so the next session does not
+have to rediscover them. `inlinephysleg` and `inlinelabelclear` were declared
+for the retired inline profile and still have no consumer: the denser size
+class changes the size names are set in and does not yet reach the leg reach
+or the label band. They are candidates for deletion at the 1.0 close unless
+the denser class grows to use them.
+
+Census-correction: #4703 — M4 moves from 26.46 to 26.48. One frozen case
+gains two lines: `rmp-ii-mpu-brickwork` spelled its equality as a bare
+relation between two pictures standing outside every equation group, where
+the audit is advisory, and it is now an equation whose two sides are compared
+and found equal on the nose. The two lines buy the case its own audit.
+
+No registry row, parser leaf, alias, or overload moves; M1, M2, M3, M5, and
+M6 are unchanged.

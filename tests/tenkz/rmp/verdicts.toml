@@ -129,11 +129,11 @@ status = "faithful"
 pairing = "verified"
 pairing_by = "pairing-sweep-two-viewers-2026-07-23"
 defects = []
-case_sha256 = "8358866a3a190627e3bc9b3ca394c09798e5859a20574e316bd03b67ca8402cf"
-reviewed = "2026-08-05"
-renderer = "claude-kernel-w1a-review-2026-08-05-150dpi"
-second_viewer = "fable-w1a-vision-review-2026-08-05-200dpi"
-note = "Kernel flat frame keeps the six-tensor U word and the alternating three-u two-v brick layers as two-column-wide gates on wire pairs (1,2)(3,4)(5,6) over (2,3)(4,5), matching the author's vertical-wire uv units; all six circuit wires stay open at both ends, and labelled boxes stand in for the source's red/blue square-circle gate pairs (the recorded circuit presentation)."
+case_sha256 = "ccefc6d4dc50a1fce51b6492abbaa1ecf114c0b61fc83a7cb9e50bce21d3c282"
+reviewed = "2026-08-09"
+renderer = "claude-4703-equation-metric-2026-08-09-300dpi"
+second_viewer = "claude-4703-equation-metric-recheck-2026-08-09-400dpi"
+note = "Kernel flat frame keeps the six-tensor U word and the alternating three-u two-v brick layers as two-column-wide gates on wire pairs (1,2)(3,4)(5,6) over (2,3)(4,5), matching the author's vertical-wire uv units; all six circuit wires stay open at both ends, and labelled boxes stand in for the source's red/blue square-circle gate pairs (the recorded circuit presentation). The equality is now the equation group's own relation rather than a bare glyph between two pictures, and the audit compares the two sides and finds them equal on the nose: twelve physical ports each side, no opt-out. Under the equation's shared measure the u and v gate bars gain the height of the U boxes they are equated with, which is the one ink difference from the reviewed pass; every wire, opening, gate span, and the relation's own place are unmoved, and the page measures the same."
 
 [[verdict]]
 id = "rmp-ii-mpu-wrap"

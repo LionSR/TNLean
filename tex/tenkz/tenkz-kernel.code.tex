@@ -263,6 +263,7 @@
 \clist_new:N \l__tenkz_kernel_check_off_clist % relations opted out of check=
 \tl_new:N   \l__tenkz_kernel_scratch_tl
 \tl_new:N   \l__tenkz_kernel_sig_tl
+\tl_new:N   \l__tenkz_kernel_size_tl
 \tl_new:N   \l__tenkz_kernel_slot_tl
 \tl_new:N   \l__tenkz_kernel_child_tl
 \tl_new:N   \l__tenkz_kernel_parent_tl
@@ -285,6 +286,28 @@
 \seq_new:N  \g__tenkz_kernel_panel_kind_gseq  % diagram or prose per panel
 \seq_new:N  \g__tenkz_kernel_rel_gseq         % tenkzeq relation glyphs
 \seq_new:N  \g__tenkz_kernel_rel_pos_gseq     % panels closed before each relation
+
+% One equation, one measure.  An equation says its panels are one object
+% written two ways, so the names inscribed in them are set on a single
+% measure and their glyphs come out the same size: an operator and its
+% inverse are drawn alike, whatever the two names happen to measure
+% (LANGUAGE-1.0 section 7.1).  The equation learns that measure by running
+% its own body once with the event stream silent and the ink thrown away,
+% reading the widest and deepest inscribed name of each size class, and then
+% setting every name of that class on it.  A measuring run is the only way
+% the first panel can know what the last one needs, and the measure only
+% ever grows a glyph, so no name is ever pushed outside the ink holding it.
+\bool_new:N \l__tenkz_kernel_eq_probe_bool    % inside the measuring run
+\prop_new:N \g__tenkz_kernel_eq_extent_prop   % size class -> "wd,ht,dp"
+\box_new:N  \l__tenkz_kernel_eq_probe_box
+\int_new:N  \l__tenkz_kernel_eq_saved_picture_int
+\int_new:N  \l__tenkz_kernel_eq_saved_scope_int
+\seq_new:N  \l__tenkz_kernel_eq_saved_seq
+\tl_new:N   \l__tenkz_kernel_eq_extent_key_tl
+\tl_new:N   \l__tenkz_kernel_eq_extent_tl
+\dim_new:N  \l__tenkz_kernel_eq_extent_wd_dim
+\dim_new:N  \l__tenkz_kernel_eq_extent_ht_dim
+\dim_new:N  \l__tenkz_kernel_eq_extent_dp_dim
 
 % Key trees fill one staging table; each command copies it onto its record
 % and clears it, so one tree serves every use site.
@@ -1489,13 +1512,22 @@
     \cs_set:cpe {tenkz@auditpictureid}
       { k \int_use:N \g__tenkz_kernel_picture_int }
     % A declared metric profile is part of the picture record: the stream
-    % states it, since pitch-normalized coordinates cannot show it.
+    % states it, since pitch-normalized coordinates cannot show it.  The
+    % size class is stated on the same terms and for the same reason, and
+    % like the profile it is stated only where it departs from the base --
+    % the class the stream's own coordinates were calibrated on.
     \__tenkz_model_picture_get:nN {metrics} \l__tenkz_kernel_scratch_tl
+    \__tenkz_model_picture_get:nN {size} \l__tenkz_kernel_size_tl
     \__tenkz_kernel_event:n
       {
         picture|id=k \int_use:N \g__tenkz_kernel_picture_int |lang=kernel
         \quark_if_no_value:NF \l__tenkz_kernel_scratch_tl
           { |metrics=\tl_use:N \l__tenkz_kernel_scratch_tl }
+        \quark_if_no_value:NF \l__tenkz_kernel_size_tl
+          {
+            \str_if_eq:VnF \l__tenkz_kernel_size_tl {m}
+              { |size=\tl_use:N \l__tenkz_kernel_size_tl }
+          }
         \bool_if:NT \l__tenkz_kernel_ineq_bool
           { |scope=\int_use:N \g__tenkz_kernel_eq_scope_int }
       }
@@ -7469,6 +7501,84 @@
       }
   }
 
+% ---------- the equation's shared measure ---------------------------------------
+% The measure is held per size class, because the class is what an author
+% declares about how big a glyph is; two glyphs of one class in one equation
+% are two spellings of one extent, and the equation draws them so.  An
+% unclassed glyph carries the key of the skin's own default.
+\cs_new_protected:Npn \__tenkz_kernel_eq_extent_key:nN #1#2
+  {
+    \__tenkz_model_get:nnN {#1} {size} #2
+    \quark_if_no_value:NT #2 { \tl_set:Nn #2 {default} }
+  }
+% Read one inscribed name during the measuring run and keep the largest of
+% each dimension seen so far.  Width, height, and depth are kept apart: the
+% height and depth answer the ascender and the descender separately, so a
+% subscript in one panel never lifts the names in the others off their axis.
+\cs_new_protected:Npn \__tenkz_kernel_eq_extent_record:nN #1#2
+  {
+    \__tenkz_kernel_eq_extent_key:nN {#1} \l__tenkz_kernel_eq_extent_key_tl
+    \dim_set:Nn \l__tenkz_kernel_eq_extent_wd_dim { \box_wd:N #2 }
+    \dim_set:Nn \l__tenkz_kernel_eq_extent_ht_dim { \box_ht:N #2 }
+    \dim_set:Nn \l__tenkz_kernel_eq_extent_dp_dim { \box_dp:N #2 }
+    \prop_get:NVNT \g__tenkz_kernel_eq_extent_prop
+      \l__tenkz_kernel_eq_extent_key_tl \l__tenkz_kernel_eq_extent_tl
+      {
+        \dim_set:Nn \l__tenkz_kernel_eq_extent_wd_dim
+          {
+            \dim_max:nn { \l__tenkz_kernel_eq_extent_wd_dim }
+              { \clist_item:Nn \l__tenkz_kernel_eq_extent_tl {1} }
+          }
+        \dim_set:Nn \l__tenkz_kernel_eq_extent_ht_dim
+          {
+            \dim_max:nn { \l__tenkz_kernel_eq_extent_ht_dim }
+              { \clist_item:Nn \l__tenkz_kernel_eq_extent_tl {2} }
+          }
+        \dim_set:Nn \l__tenkz_kernel_eq_extent_dp_dim
+          {
+            \dim_max:nn { \l__tenkz_kernel_eq_extent_dp_dim }
+              { \clist_item:Nn \l__tenkz_kernel_eq_extent_tl {3} }
+          }
+      }
+    \prop_gput:NVe \g__tenkz_kernel_eq_extent_prop
+      \l__tenkz_kernel_eq_extent_key_tl
+      {
+        \dim_use:N \l__tenkz_kernel_eq_extent_wd_dim ,
+        \dim_use:N \l__tenkz_kernel_eq_extent_ht_dim ,
+        \dim_use:N \l__tenkz_kernel_eq_extent_dp_dim
+      }
+  }
+% Set one inscribed name on the equation's measure for its class.  Outside an
+% equation, and for the measuring run itself, the name is set as it comes.
+% The name is centred in the shared width and given the shared strut, so it
+% keeps its own baseline and the glyph around it keeps the class geometry.
+\cs_new_protected:Npn \__tenkz_kernel_eq_extent_set:nn #1#2
+  {
+    \bool_lazy_and:nnTF
+      { \bool_if_p:N \l__tenkz_kernel_ineq_bool }
+      { ! \bool_if_p:N \l__tenkz_kernel_eq_probe_bool }
+      {
+        \__tenkz_kernel_eq_extent_key:nN {#1} \l__tenkz_kernel_eq_extent_key_tl
+        \prop_get:NVNTF \g__tenkz_kernel_eq_extent_prop
+          \l__tenkz_kernel_eq_extent_key_tl \l__tenkz_kernel_eq_extent_tl
+          {
+            \hbox_to_wd:nn
+              { \clist_item:Nn \l__tenkz_kernel_eq_extent_tl {1} }
+              {
+                \tex_hss:D
+                \tex_vrule:D width \c_zero_dim
+                  height \clist_item:Nn \l__tenkz_kernel_eq_extent_tl {2}
+                  depth \clist_item:Nn \l__tenkz_kernel_eq_extent_tl {3}
+                \scan_stop:
+                #2
+                \tex_hss:D
+              }
+          }
+          {#2}
+      }
+      {#2}
+  }
+
 % Author label tokens enter one unturned box.  Each glyph-local consumer
 % applies the inverse carrier turn around a copy; a deferred page-space label
 % copies the raw box directly.  Sizing therefore cannot execute the author's
@@ -7546,10 +7656,13 @@
             {
               % Ellipsis glyphs use the live renderer's normal math size.
               % Inscribed labels use the audited smaller label size.
-              $
-                \str_if_eq:VnF \l__tenkz_kernel_hull_skin_tl {dots}
-                  { \use:c {tenkz@labelsize} }
-                \tl_use:N \l__tenkz_kernel_hull_a_tl $
+              \__tenkz_kernel_eq_extent_set:nn {#1}
+                {
+                  $
+                    \str_if_eq:VnF \l__tenkz_kernel_hull_skin_tl {dots}
+                      { \use:c {tenkz@labelsize} }
+                    \tl_use:N \l__tenkz_kernel_hull_a_tl $
+                }
             }
           \__tenkz_kernel_r_upright:n
             {
@@ -7558,6 +7671,16 @@
             }
         }
     \group_end:
+    % The measuring run reads the name it has just set.  An unnamed glyph --
+    % a bead, a junction, a void site -- shares nothing, so it contributes
+    % nothing to the class measure.
+    \bool_lazy_and:nnT
+      { \bool_if_p:N \l__tenkz_kernel_eq_probe_bool }
+      { ! \tl_if_empty_p:N \l__tenkz_kernel_hull_a_tl }
+      {
+        \exp_args:Nnc \__tenkz_kernel_eq_extent_record:nN {#1}
+          { \tl_use:N \l__tenkz_kernel_hull_box_tl }
+      }
     \tl_set:Ne \l__tenkz_kernel_hull_shape_tl
       {
         \use:c
@@ -15774,8 +15897,11 @@
           {
             \__tenkz_kernel_r_upright:n
               {
-                $ \use:c {tenkz@labelsize}
-                  \tl_use:N \l__tenkz_kernel_r_skin_label_tl $
+                \__tenkz_kernel_eq_extent_set:nn {#1}
+                  {
+                    $ \use:c {tenkz@labelsize}
+                      \tl_use:N \l__tenkz_kernel_r_skin_label_tl $
+                  }
               }
           }
       }
@@ -17497,6 +17623,52 @@
       { \tl_use:N \l__tenkz_kernel_scratch_tl }
   }
 
+% ---------- math-style sensing -----------------------------------------------------
+% The density of a picture's own writing follows the mathematics around it,
+% and the author states nothing (LANGUAGE-1.0 section 7.2).  XeLaTeX will not
+% name the math style in force, so the sensing reads the two entry flags
+% tenkz-core raises instead.  A picture in a line of running mathematics
+% takes the denser class, because there it shares a line with writing set
+% smaller than a display's; everything else -- a display, a sub-formula or
+% fence or alignment cell inside one, and running text -- takes the base
+% class the glyph geometry is calibrated on.  Equation panels never sense for
+% themselves: the equation senses once for all of them, so a fenced panel and
+% its unfenced partner cannot come out at two densities.
+\cs_new_protected:Npn \__tenkz_kernel_size_sense:N #1
+  {
+    \legacy_if:nTF {tenkz@mathinline}
+      { \tl_set:Nn #1 {s} }
+      { \tl_set:Nn #1 {m} }
+  }
+% An unstated size class resolves from the surrounding mathematics; a stated
+% one stands.  The resolved class enters the record either way, so a reader
+% of the stream never has to guess which one acted.
+\cs_new_protected:Npn \__tenkz_kernel_size_resolve:N #1
+  {
+    \prop_get:NnN #1 {size} \l__tenkz_kernel_scratch_tl
+    \quark_if_no_value:NT \l__tenkz_kernel_scratch_tl
+      {
+        \__tenkz_kernel_size_sense:N \l__tenkz_kernel_scratch_tl
+        \prop_put:NnV #1 {size} \l__tenkz_kernel_scratch_tl
+      }
+  }
+% The class chooses the size the picture writes its inscribed names at: a
+% picture sharing a line with other mathematics writes smaller, one meant to
+% be read across a room writes larger, and the base class is the script size
+% the glyphs were calibrated on.
+\cs_new_protected:Npn \__tenkz_kernel_size_profile:
+  {
+    \__tenkz_model_picture_get:nN {size} \l__tenkz_kernel_scratch_tl
+    \quark_if_no_value:NF \l__tenkz_kernel_scratch_tl
+      {
+        \str_case:Vn \l__tenkz_kernel_scratch_tl
+          {
+            {s} { \cs_set_eq:cN {tenkz@labelsize} \scriptscriptstyle }
+            {l} { \cs_set_eq:cN {tenkz@labelsize} \textstyle }
+          }
+      }
+  }
+
 \cs_new_protected:Npn \__tenkz_kernel_begin:n #1
   {
     \group_begin:
@@ -17552,6 +17724,7 @@
           \l__tenkz_kernel_eq_policy_prop \l__tenkz_kernel_stage_prop
       }
     \__tenkz_kernel_basis_rehydrate:
+    \__tenkz_kernel_size_resolve:N \l__tenkz_kernel_stage_prop
     % the staged picture keys become the picture record and the policy the
     % closure pass reads after the body ran
     \prop_set_eq:NN \l__tenkz_kernel_policy_prop \l__tenkz_kernel_stage_prop
@@ -17571,6 +17744,9 @@
               { \__tenkz_metric_ratio:n {compactpitch} \tenkz@pitch }
           }
       }
+    % The size class acts on the density of the picture's own writing, and
+    % it acts here, group-locally, for the same reason the pitch does.
+    \__tenkz_kernel_size_profile:
     \cs_set_eq:NN \tn \__tenkz_kernel_tn_cmd
     \cs_set_eq:NN \\ \__tenkz_kernel_newrow:
   }
@@ -17598,7 +17774,11 @@
     \int_gincr:N \g__tenkz_kernel_picture_int
     \__tenkz_kernel_render_prepare:
     \__tenkz_kernel_render:
-    \bool_if:NT \l__tenkz_kernel_ineq_bool
+    % The measuring run reads extents and asserts nothing: its panels are
+    % thrown away, so a panel signature taken there would be counted twice.
+    \bool_lazy_and:nnT
+      { \bool_if_p:N \l__tenkz_kernel_ineq_bool }
+      { ! \bool_if_p:N \l__tenkz_kernel_eq_probe_bool }
       {
         \__tenkz_kernel_signature:N \l__tenkz_kernel_sig_tl
         \seq_gput_right:NV \g__tenkz_kernel_panel_gseq \l__tenkz_kernel_sig_tl
@@ -17651,6 +17831,7 @@
     \seq_gclear:N \g__tenkz_kernel_panel_kind_gseq
     \seq_gclear:N \g__tenkz_kernel_rel_gseq
     \seq_gclear:N \g__tenkz_kernel_rel_pos_gseq
+    \prop_gclear:N \g__tenkz_kernel_eq_extent_prop
     \clist_clear:N \l__tenkz_kernel_check_off_clist
     \bool_set_false:N \l__tenkz_kernel_check_bundles_bool
     \prop_clear:N \l__tenkz_kernel_eq_policy_prop
@@ -17683,6 +17864,11 @@
           }
       }
     \prop_remove:Nn \l__tenkz_kernel_stage_prop {check}
+    % One metric context: the equation senses its class once, here, where it
+    % can still see the mathematics it stands in, and every panel inherits
+    % it.  A panel that is fenced or braced sits in inner mathematics of its
+    % own and would otherwise sense a denser class than its partner.
+    \__tenkz_kernel_size_resolve:N \l__tenkz_kernel_stage_prop
     \prop_set_eq:NN
       \l__tenkz_kernel_eq_policy_prop \l__tenkz_kernel_stage_prop
     \prop_clear:N \l__tenkz_kernel_stage_prop
@@ -18262,6 +18448,74 @@
     \group_align_safe_begin:
     \__tenkz_kernel_eq_body:w
   }
+% The measuring run.  The body is typeset once into a box that is dropped,
+% with the event stream silent and every count the real run advances put
+% back afterwards, so the run leaves nothing behind but the class measures
+% its panels asked for.  The body is mathematics, and the box it is measured
+% in is not, so the run supplies the mathematics it was written in.
+%
+% These are the counts the renderer advances globally: the ink, bounding-box,
+% and glyph-snapshot identities.  A run that did not put them back would
+% leave the equation's own panels numbered from wherever the dropped run
+% stopped, which is exactly the drift the record stream exists to catch.
+\clist_const:Nn \c__tenkz_kernel_eq_counters_clist
+  { tenkz@inkuid, tenkz@bboxuid, tenkz@glyphsnapuid }
+% Every recoverable complaint the measuring run could make, the real run
+% makes again from the same declaration, so the measuring run makes none and
+% a reader sees one copy of each message, raised where it was raised before
+% this machinery existed.  A fatal is not redirected: it is fatal because
+% carrying on is not possible, and a run that carried on past one would
+% report a torn token stream instead of the refusal that caused it.  The
+% redirection is global and is taken off by redirecting each class to
+% itself, which is l3msg's own spelling for cancelling one.
+\clist_const:Nn \c__tenkz_kernel_eq_msg_classes_clist
+  { error, warning }
+\cs_new_protected:Npn \__tenkz_kernel_eq_measure:
+  {
+    \group_begin:
+      \bool_set_true:N \l__tenkz_kernel_eq_probe_bool
+      % A picture's own topology prepass silences the stream and then puts
+      % the writer back, so silencing the writer is what silences the run.
+      \cs_set_eq:NN \__tenkz_kernel_event_writer:n
+        \__tenkz_kernel_event_suppress:n
+      \cs_set_eq:cN {tenkz@event} \__tenkz_kernel_event_suppress:n
+      \clist_map_inline:Nn \c__tenkz_kernel_eq_msg_classes_clist
+        { \msg_redirect_class:nn {##1} {none} }
+      \int_set:Nn \l__tenkz_kernel_eq_saved_picture_int
+        { \g__tenkz_kernel_picture_int }
+      \int_set:Nn \l__tenkz_kernel_eq_saved_scope_int
+        { \g__tenkz_kernel_eq_scope_int }
+      \seq_clear:N \l__tenkz_kernel_eq_saved_seq
+      \clist_map_inline:Nn \c__tenkz_kernel_eq_counters_clist
+        {
+          \seq_put_right:Ne \l__tenkz_kernel_eq_saved_seq
+            { \int_use:c {##1} }
+        }
+      \hbox_set:Nn \l__tenkz_kernel_eq_probe_box
+        {
+          \c_math_toggle_token
+          \tl_use:N \l__tenkz_kernel_eq_body_tl
+          \c_math_toggle_token
+        }
+      \clist_map_inline:Nn \c__tenkz_kernel_eq_msg_classes_clist
+        { \msg_redirect_class:nn {##1} {##1} }
+      \int_gset:Nn \g__tenkz_kernel_picture_int
+        { \l__tenkz_kernel_eq_saved_picture_int }
+      \int_gset:Nn \g__tenkz_kernel_eq_scope_int
+        { \l__tenkz_kernel_eq_saved_scope_int }
+      \int_zero:N \l_tmpa_int
+      \clist_map_inline:Nn \c__tenkz_kernel_eq_counters_clist
+        {
+          \int_incr:N \l_tmpa_int
+          \int_gset:cn {##1}
+            { \seq_item:Nn \l__tenkz_kernel_eq_saved_seq { \l_tmpa_int } }
+        }
+      \seq_gclear:N \g__tenkz_kernel_panel_gseq
+      \seq_gclear:N \g__tenkz_kernel_panel_kind_gseq
+      \seq_gclear:N \g__tenkz_kernel_rel_gseq
+      \seq_gclear:N \g__tenkz_kernel_rel_pos_gseq
+    \group_end:
+  }
 \cs_new_protected:Npn \__tenkz_kernel_eq_body:w #1 \end #2
   {
     \tl_put_right:Nn \l__tenkz_kernel_eq_body_tl {#1}
@@ -18269,6 +18523,7 @@
       {
         \group_align_safe_end:
         \__tenkz_kernel_rewrite_rels:N \l__tenkz_kernel_eq_body_tl
+        \__tenkz_kernel_eq_measure:
         \tl_use:N \l__tenkz_kernel_eq_body_tl
         \end {tenkzeq}
       }

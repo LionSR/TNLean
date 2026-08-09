@@ -5,9 +5,10 @@
 % Boundary: The U word and brickwork keep all six circuit wires open at both ends.
 % Source: paper TN-Review-main.tex line 387; author source ImagesReview Section
 %   II/ImagesReview Section II.tex lines 450-464
-% Capabilities: kernel, typed-ports
+% Capabilities: kernel, typed-ports, equation-composition
 \tenkzkernel
 \[
+  \begin{tenkzeq}
   % LHS: six simple MPU tensors, the bond closing trivially at both
   % outer ends so only the six physical wires stay open (Boundary)
   \begin{tenkz}[rows={wire}, cols=6, physical=updown, west=none, east=none]
@@ -38,4 +39,5 @@
     \tnwire{v1.270@1}{open s} \tnwire{v1.270@2}{open s}
     \tnwire{v2.270@1}{open s} \tnwire{v2.270@2}{open s}
   \end{tenkz}
+  \end{tenkzeq}
 \]

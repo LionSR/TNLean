@@ -66,8 +66,20 @@ generated reference.
    and `boundary=none` are different mathematical operations.
 6. A diagrammatic equation is valid only when corresponding sides have the
    intended boundary signatures.  The `.tnlog` stream records the resolved
-   signatures used for rendering.
-7. Raw TikZ is not public tenkz syntax.  House styles may change typography
+   signatures used for rendering.  An author may state, in writing, that one
+   relation's sides are known, unequal, and equal anyway for a reason the
+   diagram does not draw; the reason is recorded with the waiver.
+7. An equation is one metric context.  Its panels share the pitch, the size
+   classes, and one measure: the widest and deepest name inscribed in any
+   glyph of a class is the measure every glyph of that class is drawn on, so
+   an operator and its inverse come out the same size.  The measure only
+   grows a glyph, never shrinks one.
+8. A picture writes at the density of the mathematics around it, and the
+   author states nothing.  A picture in a line of running mathematics takes
+   the denser class; a display, anything inside a display, and running text
+   take the base class.  A stated size class outranks the sensing, and an
+   equation senses once for all of its panels.
+9. Raw TikZ is not public tenkz syntax.  House styles may change typography
    and semantic hues; they may not add topology or bypass validation.
 
 ## Scope and type rules
