@@ -512,10 +512,29 @@ Euclidean operator with matrix entries
 \end{align}
 The algebraic matrix $R(\mathcal L)$ with these entries is
 \leanid{Matrix.gramReshuffleMatrix}, and the operator
-$\mathscr R(\mathcal L)$ is \leanid{Matrix.gramReshuffle}.  The entrywise Frobenius squared sum is
-invariant under this reshuffling
-(\leanid{Matrix.gramReshuffleMatrix_norm_sq_eq_rectangularChoi_norm_sq});
-this entrywise identity does not establish an operator-norm comparison.
+$\mathscr R(\mathcal L)$ is \leanid{Matrix.gramReshuffle}.  The entrywise
+Frobenius squared sum is invariant under this reshuffling
+(\leanid{Matrix.gramReshuffleMatrix_norm_sq_eq_rectangularChoi_norm_sq}).
+The generic Euclidean estimate
+\leanid{Matrix.toEuclideanCLM_norm_sq_le_sum_norm_sq} proves, for every finite
+index set $I$ and every complex matrix $B\in\mathbb C^{I\times I}$,
+\begin{align}
+  \lVert B\rVert_{\ell^2(I)\to\ell^2(I)}^2
+  &\leq \sum_{i,j\in I}\lvert B_{ij}\rvert^2.
+\end{align}
+Combining these two facts gives the completed reshuffled-Choi corollary
+\leanid{Matrix.gramReshuffle_norm_sq_le_rectangularChoi_norm_sq}:
+\begin{align}
+  \lVert\mathscr R(\mathcal L)\rVert_{
+    \ell^2(I\times I)\to\ell^2(I\times I)}^2
+  &\leq \sum_{u,v\in I\times I}
+    \lvert J(\mathcal L)_{u,v}\rvert^2.
+\end{align}
+This proves only an operator-norm bound by entrywise Frobenius mass.  It proves
+neither operator-norm invariance nor preservation of singular values under
+reshuffling, and it gives no direct bound by the default operator norm of
+$\mathcal L$ as a map on matrices.
+
 \leanid{MPSTensor.groundSpaceGram_eq_gramReshuffle} upgrades the coordinate
 identity to the exact operator equality
 \begin{align}
@@ -523,7 +542,13 @@ identity to the exact operator equality
 \end{align}
 The ordering is a Choi reshuffling.  It must not be replaced by the generally
 false Hilbert--Schmidt expression
-$\langle E_{ab},\mathcal E_A^L(E_{ce})\rangle_{\mathrm{HS}}$.
+$\langle E_{ab},\mathcal E_A^L(E_{ce})\rangle_{\mathrm{HS}}$.  In the current
+unweighted Frobenius coordinates, a primitive trace-preserving transfer map
+converges to the fixed-point projection $P_{\mathrm{fix}}$, represented by
+\leanid{fixedPointProj}.  The limiting Gram operator is therefore
+$\mathscr R(P_{\mathrm{fix}})$, generally not the identity.  Thus the
+completed generic inequalities do not by themselves provide a Neumann-series
+estimate for $1-\mathcal K_L$.
 
 The generic identity
 \begin{align}
@@ -575,12 +600,18 @@ are parameters of the quoted FNW estimate, not bounds derived by the present
 formal development.
 
 What remains open is the source-specific comparison of these exact inverse-Gram
-range projectors on the two overlapping physical windows.  The first two formal
-steps are now completed:
+range projectors on the two overlapping physical windows.  The completed exact
+and generic prerequisites now include:
 \begin{itemize}
   \item The Choi reshuffling is packaged as the exact operator identity
     \leanid{MPSTensor.groundSpaceGram_eq_gramReshuffle} (module
     \path{TNLean/MPS/ParentHamiltonian/GroundSpaceGram.lean}).
+  \item The generic operator-norm--to--entrywise-Frobenius estimate and its
+    reshuffled-Choi corollary are
+    \leanid{Matrix.toEuclideanCLM_norm_sq_le_sum_norm_sq} and
+    \leanid{Matrix.gramReshuffle_norm_sq_le_rectangularChoi_norm_sq}.
+    These do not compare directly with the default operator norm of the
+    transfer map.
   \item The spectator-indexed boundary maps for the tail and left windows are
     defined in \path{TNLean/MPS/ParentHamiltonian/SpectatorBoundary.lean},
     together with their exact range equalities
@@ -617,7 +648,7 @@ left and tail ground subspaces of Definition~4.2
 \leanid{MPSTensor.openChainTailGroundSpaceES}), their intersection equals
 \(\mathcal G_{K+L_0+1}^{\mathrm{ES}}(A)\) under block injectivity
 with \(D\ge 1\) and \(L_0>0\)
-(\leanid{MPSTensor.openChainLeft_inf_tailGroundSpaceES}),
+(\leanid{MPSTensor.openChainLeft_inf_tailGroundSpaceES}).
 The symbols \(P^{\mathrm{left}}_{K+L_0}(A)\) and
 \(P^{\mathrm{tail}}_{K,L_0+1}(A)\) denote the orthogonal projectors onto
 \(\mathcal U_{K+L_0}(A)\) and \(\mathcal V_{K,L_0+1}(A)\), respectively,
