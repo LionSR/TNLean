@@ -19,16 +19,11 @@ This file contains the preferred live formulation of peripheral-spectrum
 closure under powers for finite Kraus maps, following the proof structure of
 the cyclicity conclusion in Wolf Theorem 6.6(1).
 
-**Scope restriction (complete positivity):** Wolf Theorem 6.6 assumes only
-positivity, unitality, and the Schwarz inequality. This module supplies steps
-toward the finite-Kraus, hence completely positive, specialization of the
-cyclicity conclusion in item (1); it does not formalize the other
-conclusions. See
+**Scope restriction (complete positivity and adjoint fixed point):** Wolf
+Theorem 6.6 assumes an irreducible positive unital Schwarz map. This module
+assumes a finite Kraus family and a positive-definite fixed point of its adjoint,
+and supplies steps toward the cyclicity conclusion in item (1). See
 `docs/paper-gaps/wolf_thm6_6_kraus_scope.tex`.
-
-Instead of assuming both unitality and trace preservation, we work with a
-unital Kraus family together with a **positive definite fixed point of the
-adjoint map** (a faithful invariant state).
 
 The key new input is the weighted Kadison–Schwarz equality
 `Kraus.ks_equality_of_peripheral_eigenvector_of_fixedPoint` from
@@ -59,7 +54,12 @@ namespace Kraus
 
 /-- A peripheral eigenvector of an irreducible unital Kraus map with a positive-definite
 adjoint fixed point is a unit. This is the finite-Kraus specialization of the
-peripheral-eigenvector normalization used in Wolf Theorem 6.6(1). -/
+peripheral-eigenvector normalization used in Wolf Theorem 6.6(1).
+
+**Scope restriction (complete positivity and adjoint fixed point):** Wolf
+Theorem 6.6 assumes an irreducible positive unital Schwarz map, whereas this
+declaration assumes a finite Kraus family and a positive-definite fixed point of
+its adjoint. See `docs/paper-gaps/wolf_thm6_6_kraus_scope.tex`. -/
 theorem isUnit_peripheral_eigenvector
     {d D : ℕ} [NeZero D]
     (K : Fin d → Matrix (Fin D) (Fin D) ℂ)
@@ -126,7 +126,12 @@ admitting a positive definite fixed point of the adjoint map.
 
 This is the preferred live formulation. The older unital + trace-preserving
 special case is recovered by taking `ρ = 1`. It is the power-closure step in the
-finite-Kraus specialization of Wolf Theorem 6.6(1). -/
+finite-Kraus specialization of Wolf Theorem 6.6(1).
+
+**Scope restriction (complete positivity and adjoint fixed point):** Wolf
+Theorem 6.6 assumes an irreducible positive unital Schwarz map, whereas this
+declaration assumes a finite Kraus family and a positive-definite fixed point of
+its adjoint. See `docs/paper-gaps/wolf_thm6_6_kraus_scope.tex`. -/
 theorem peripheralEigenvalues_pow_mem_of_irreducible_unital_of_adjoint_fixedPoint
     {d D : ℕ} [NeZero D]
     (K : Fin d → Matrix (Fin D) (Fin D) ℂ)
@@ -192,7 +197,12 @@ all peripheral eigenvalues are roots of unity.
 
 This is a direct formulation around `peripheral_isRootOfUnity_of_closed_powers`
 and supplies the roots-of-unity step in the finite-Kraus specialization of Wolf
-Theorem 6.6(1). -/
+Theorem 6.6(1).
+
+**Scope restriction (complete positivity and adjoint fixed point):** Wolf
+Theorem 6.6 assumes an irreducible positive unital Schwarz map, whereas this
+declaration assumes a finite Kraus family and a positive-definite fixed point of
+its adjoint. See `docs/paper-gaps/wolf_thm6_6_kraus_scope.tex`. -/
 theorem peripheral_isRootOfUnity_of_irreducible_unital_of_adjoint_fixedPoint
     {d D : ℕ} [NeZero D]
     (K : Fin d → Matrix (Fin D) (Fin D) ℂ)

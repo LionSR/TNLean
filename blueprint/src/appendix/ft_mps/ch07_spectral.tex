@@ -520,6 +520,8 @@ projections, and tracking how the channel shifts the resulting corners.
     \label{lem:isUnit_peripheral_eigenvector}
     \lean{Kraus.isUnit_peripheral_eigenvector}
     \leanok
+    \uses{def:kraus_map, def:unital_kraus, def:kraus_adjoint_map,
+        def:irreducible_cp}
     Let $E$ be an irreducible unital Kraus map on $\MN{D}$ with a
     positive-definite adjoint fixed point.
     If $X \ne 0$ satisfies $E(X) = \mu X$ with $|\mu| = 1$,
@@ -528,7 +530,8 @@ projections, and tracking how the channel shifts the resulting corners.
 
 \begin{proof}
     \leanok
-    \uses{thm:ks_peripheral, thm:psd_fp_pd_irred}
+    \uses{thm:ks_equality_of_peripheral_eigenvector_of_fixedPoint,
+        thm:psd_fp_pd_irred}
     By the Kadison--Schwarz inequality
     (\ref{eq:schwarz_kadison}), the gap
     $G=E(X^\dagger X)-E(X)^\dagger E(X)$ is positive semidefinite.
@@ -544,6 +547,8 @@ projections, and tracking how the channel shifts the resulting corners.
     \label{lem:peripheral_mul_closure}
     \lean{Kraus.peripheralEigenvalues_mul_mem_of_irreducible_unital_of_adjoint_fixedPoint}
     \leanok
+    \uses{def:kraus_map, def:unital_kraus, def:kraus_adjoint_map,
+        def:irreducible_cp, def:peripheral_eigenvalues}
     Let $E$ be an irreducible unital Kraus map on $\MN{D}$ with a
     positive-definite adjoint fixed point.
     If $\mu, \nu$ are peripheral eigenvalues of $E$, then so is $\mu\nu$.
@@ -551,7 +556,8 @@ projections, and tracking how the channel shifts the resulting corners.
 
 \begin{proof}
     \leanok
-    \uses{lem:isUnit_peripheral_eigenvector, thm:ks_peripheral,
+    \uses{lem:isUnit_peripheral_eigenvector,
+        thm:ks_equality_of_peripheral_eigenvector_of_fixedPoint,
         thm:right_multiplicative_identity}
     Take eigenvectors $X$ and $Y$ for $\mu$ and $\nu$, respectively.
     The Kadison--Schwarz equality at $X$ places $X$ in the multiplicative
