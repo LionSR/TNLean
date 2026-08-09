@@ -21,7 +21,13 @@ This file provides linear-algebraic tools for finite complex matrix algebras,
 including nondegeneracy of the trace pairing and the trace-pairing adjoint of a
 linear map between matrix algebras.
 
-## Main definitions and results
+## Main definitions
+
+* `Matrix.traceBilinForm` — the bilinear trace pairing
+* `Matrix.tracelessPart` — projection along the identity onto traceless matrices
+* `Matrix.traceAdjointMap` — the trace-pairing adjoint of a linear map between matrix algebras
+
+## Main results
 
 * `Matrix.span_range_mul_nonzero_mul_eq_top` — the two-sided products through a
   nonzero matrix span the full matrix algebra
@@ -29,10 +35,8 @@ linear map between matrix algebras.
   one-sided zero product cannot span the full matrix algebra
 * `Matrix.vec_one_dotProduct_vec_eq_trace` — vectorized identity pairing equals the trace
 * `Matrix.trace_mul_right_eq_zero_iff` — nondegeneracy of the trace pairing over `ℂ`
-* `Matrix.traceBilinForm` — the bilinear trace pairing as a nondegenerate form
+* `Matrix.traceBilinForm_nondegenerate` — nondegeneracy of the bilinear trace pairing
 * `Matrix.exists_identity_traceless_basis` — an identity-plus-traceless basis
-* `Matrix.tracelessPart` — projection along the identity onto traceless matrices
-* `Matrix.traceAdjointMap` — the trace-pairing adjoint of a linear map between matrix algebras
 * `Matrix.trace_traceAdjointMap_mul` — the adjoint satisfies `tr(E*(ρ) X) = tr(ρ E(X))`
 * `Matrix.traceAdjointMap_traceAdjointMap` — the trace-pairing adjoint is involutive
 * `Matrix.traceAdjointMap_comp` — the trace-pairing adjoint reverses composition

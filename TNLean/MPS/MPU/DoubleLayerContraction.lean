@@ -7,6 +7,7 @@ import Mathlib.LinearAlgebra.BilinearForm.Properties
 import TNLean.Algebra.ListProduct
 import TNLean.Algebra.MatrixTracePairing
 import TNLean.Algebra.RankOneSandwich
+import TNLean.Algebra.ShiftedZeroTraceNilpotent
 import TNLean.MPS.Core.BlockingTransfer
 import TNLean.MPS.MPDO.PhysicalBlocking
 import TNLean.MPS.MPU.Simple
@@ -18,10 +19,6 @@ import TNLean.MPS.MPU.TransferStabilization
 This file formalizes the first algebraic part of the blocking argument in
 arXiv:1703.09188, Proposition `blockingsimple`, lines 390--409.
 
-**Scope restriction (one-letter mixed trace):** `IsMPU` assumes closed-chain
-unitarity only for lengths greater than one, whereas the source also states the
-one-letter residual trace. See
-`docs/paper-gaps/mpu_one_letter_mixed_residual_trace.tex`.
 -/
 
 open scoped Matrix BigOperators Kronecker
@@ -378,12 +375,8 @@ theorem IsMPU.trace_prod_contractPhysical_doubleLayerTensor_eq_zero_of_exists_tr
   obtain ⟨k, hk⟩ := hX
   exact Finset.prod_eq_zero (Finset.mem_univ k) hk
 
-/-- Every nonempty closed word of residual slices has zero trace at lengths
-controlled by `IsMPU`.
-
-**Scope restriction (length greater than one):** MPU unitarity is assumed only
-at lengths `N > 1`, while the source also states the one-letter identity. See
-`docs/paper-gaps/mpu_one_letter_mixed_residual_trace.tex`.
+/-- Every closed word of residual slices has zero trace at lengths greater
+than one. This is the direct closed-chain consequence of MPU unitarity.
 
 Source: arXiv:1703.09188, lines 405--410. -/
 theorem IsMPU.trace_prod_residualSlice_doubleLayerTensor_eq_zero
@@ -396,19 +389,34 @@ theorem IsMPU.trace_prod_residualSlice_doubleLayerTensor_eq_zero
   let k : Fin N := ⟨0, by omega⟩
   exact ⟨k, Matrix.trace_tracelessPart (X k)⟩
 
+/-- Every individual residual slice of the double layer of an MPU is traceless.
+The proof recovers the missing one-letter moment from the moments at all lengths
+greater than one by nilpotence.
+
+Source: arXiv:1703.09188, lines 405--410. -/
+theorem IsMPU.trace_residualSlice_doubleLayerTensor_eq_zero
+    [NeZero d] {U : MPOTensor d D} (hU : IsMPU U)
+    (X : Matrix (Fin d) (Fin d) ℂ) :
+    Matrix.trace (residualSlice (doubleLayerTensor U) X) = 0 := by
+  classical
+  let A := residualSlice (doubleLayerTensor U) X
+  have hpow : ∀ N : ℕ, 1 < N → Matrix.trace (A ^ N) = 0 := by
+    intro N hN
+    have h := hU.trace_prod_residualSlice_doubleLayerTensor_eq_zero
+      hN (fun _ : Fin N ↦ X)
+    simpa [A, List.ofFn_const, List.prod_replicate] using h
+  have hnil := Matrix.isNilpotent_of_forall_trace_pow_eq_zero_of_one_lt A hpow
+  exact (Matrix.isNilpotent_trace_of_isNilpotent hnil).eq_zero
+
 /-- A site is either the normalized identity coefficient or a residual slice. -/
 noncomputable def mixedResidualFactor (W : MPOTensor d D)
     (isResidual : Bool) (X : Matrix (Fin d) (Fin d) ℂ) :
     Matrix (Fin D) (Fin D) ℂ :=
   if isResidual then residualSlice W X else normalizedDiagonal W
 
-/-- Every mixed closed word containing at least one residual factor has zero
-trace. This is the basis-free residual-slice form of the mixed `S'_α` trace
-identity.
-
-**Scope restriction (length greater than one):** This statement uses `N > 1`,
-exactly matching `IsMPU`, while the source states the identity at every positive
-length. See `docs/paper-gaps/mpu_one_letter_mixed_residual_trace.tex`.
+/-- Every mixed closed word of length greater than one containing at least
+one residual factor has zero trace. This is the direct closed-chain proof of the
+basis-free residual-slice form of the mixed `S'_α` trace identity.
 
 Source: arXiv:1703.09188, lines 405--410. -/
 theorem IsMPU.trace_prod_mixedResidualFactor_doubleLayerTensor_eq_zero
@@ -440,16 +448,32 @@ theorem IsMPU.trace_prod_mixedResidualFactor_doubleLayerTensor_eq_zero
   refine ⟨k, ?_⟩
   simp [Y, hk]
 
+/-- Every positive-length mixed closed word containing at least one residual
+factor has zero trace, including a single residual letter.
 
+Source: arXiv:1703.09188, lines 405--410. -/
+theorem IsMPU.trace_prod_mixedResidualFactor_doubleLayerTensor_eq_zero_of_pos
+    [NeZero d] {U : MPOTensor d D} (hU : IsMPU U) {N : ℕ} (hN : 0 < N)
+    (isResidual : Fin N → Bool)
+    (X : Fin N → Matrix (Fin d) (Fin d) ℂ)
+    (hmixed : ∃ k, isResidual k = true) :
+    Matrix.trace
+        (List.ofFn (fun k ↦ mixedResidualFactor (doubleLayerTensor U)
+          (isResidual k) (X k))).prod = 0 := by
+  by_cases hN' : 1 < N
+  · exact hU.trace_prod_mixedResidualFactor_doubleLayerTensor_eq_zero
+      hN' isResidual X hmixed
+  · have hN_one : N = 1 := by omega
+    subst N
+    obtain ⟨k, hk⟩ := hmixed
+    have hk0 : isResidual 0 = true := by
+      simpa only [Subsingleton.elim k 0] using hk
+    simpa [List.ofFn_succ, mixedResidualFactor, hk0] using
+      hU.trace_residualSlice_doubleLayerTensor_eq_zero (X 0)
 
 /-- A nonempty residual word is annihilated when sandwiched by a rank-one
 normalized diagonal. The trace premise is derived by adjoining the normalized
 diagonal as one extra closed-chain factor.
-
-**Local fix (nonempty sandwich):** Adjoining the normalized diagonal makes the
-closed chain have length at least two, so this consequence does not require the
-missing one-letter residual trace. See
-`docs/paper-gaps/mpu_one_letter_mixed_residual_trace.tex`.
 
 Source: arXiv:1703.09188, equation `ESE=0`, lines 405--409. -/
 theorem IsMPU.normalizedDiagonal_mul_prod_residualSlice_mul_normalizedDiagonal_eq_zero
