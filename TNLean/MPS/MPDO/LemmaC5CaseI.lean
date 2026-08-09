@@ -346,9 +346,10 @@ theorem trace_pow_similarity_diagonal (S : Matrix n n ℝ) (d : n → ℝ) (hd :
     Matrix.mul_nonsing_inv (Matrix.diagonal d) h_det
   have h_pow : ((Matrix.diagonal d)⁻¹ * S * Matrix.diagonal d) ^ N =
       (Matrix.diagonal d)⁻¹ * (S ^ N) * Matrix.diagonal d := by
-    induction' N with k ih
-    · simp [h_mul]
-    · rw [pow_succ, pow_succ, ih]
+    induction N with
+    | zero => simp [h_mul]
+    | succ k ih =>
+      rw [pow_succ, pow_succ, ih]
       calc
         ((Matrix.diagonal d)⁻¹ * (S ^ k) * Matrix.diagonal d) *
             ((Matrix.diagonal d)⁻¹ * S * Matrix.diagonal d) =
