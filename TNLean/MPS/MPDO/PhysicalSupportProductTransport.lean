@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.Algebra.KroneckerFactorPositivity
 import TNLean.MPS.MPDO.PhysicalSupportBondCommutativity
+import TNLean.MPS.ParentHamiltonian.CyclicWindowIndex
 
 /-!
 # Finite-chain products on an isometric physical support
@@ -81,49 +82,6 @@ theorem singleKrausMap_list_prod_of_ne_nil
           exact congrArg (singleKrausMap V X * ·)
             (ih (by simp))
 
-private def cyclicShiftEquiv (N : ℕ) (i : Fin N) : Fin N ≃ Fin N where
-  toFun k := ⟨(i.val + k.val) % N, Nat.mod_lt _ (Fin.pos i)⟩
-  invFun k := ⟨(k.val + N - i.val) % N, Nat.mod_lt _ (Fin.pos i)⟩
-  left_inv k := by
-    apply Fin.ext
-    exact MPSTensor.offset_mod_eq i.isLt k.isLt
-  right_inv k := by
-    apply Fin.ext
-    exact MPSTensor.add_offset_mod_eq i.isLt k.isLt
-
-private def cyclicWindowIndexEquiv (L N : ℕ) (hLN : L ≤ N) (i : Fin N) :
-    Fin L ⊕ Fin (N - L) ≃ Fin N :=
-  finSumFinEquiv |>.trans (finCongr (Nat.add_sub_of_le hLN)) |>.trans
-    (cyclicShiftEquiv N i)
-
-@[simp] private theorem cyclicWindowIndexEquiv_inl
-    (L N : ℕ) (hLN : L ≤ N) (i : Fin N) (r : Fin L) :
-    cyclicWindowIndexEquiv L N hLN i (Sum.inl r) =
-      ⟨(i.val + r.val) % N, Nat.mod_lt _ (Fin.pos i)⟩ := rfl
-
-@[simp] private theorem cyclicWindowIndexEquiv_inr
-    (L N : ℕ) (hLN : L ≤ N) (i : Fin N) (r : Fin (N - L)) :
-    cyclicWindowIndexEquiv L N hLN i (Sum.inr r) =
-      ⟨(i.val + L + r.val) % N, Nat.mod_lt _ (Fin.pos i)⟩ := by
-  apply Fin.ext
-  change (i.val + (L + r.val)) % N = (i.val + L + r.val) % N
-  congr 1
-  omega
-
-private theorem prod_cyclicWindow_complement
-    (L N : ℕ) (hLN : L ≤ N) (i : Fin N) (f : Fin N → ℂ) :
-    (∏ n : Fin N, f n) =
-      (∏ r : Fin L,
-        f ⟨(i.val + r.val) % N, Nat.mod_lt _ (Fin.pos i)⟩) *
-        (∏ r : Fin (N - L),
-          f ⟨(i.val + L + r.val) % N, Nat.mod_lt _ (Fin.pos i)⟩) := by
-  rw [Fintype.prod_equiv
-    (cyclicWindowIndexEquiv L N hLN i).symm f
-    (fun x ↦ f (cyclicWindowIndexEquiv L N hLN i x))
-    (fun n ↦ by simp)]
-  rw [Fintype.prod_sum_type]
-  simp only [cyclicWindowIndexEquiv_inl, cyclicWindowIndexEquiv_inr]
-
 private theorem reindex_sitewisePhysicalMatrix_windowComplement
     (V : Matrix (Fin d) (Fin e) ℂ) {N : ℕ} (hN : 2 ≤ N) (i : Fin N) :
     Matrix.reindex (windowComplementEquiv (d := d) 2 N hN i)
@@ -146,7 +104,7 @@ private theorem reindex_sitewisePhysicalMatrix_windowComplement
       Nat.mod_lt _ (Fin.pos i)⟩) = v :=
     congrArg Prod.snd (ee.apply_symm_apply (y, v))
   change (∏ n : Fin N, V (s n) (t n)) = _
-  rw [prod_cyclicWindow_complement 2 N hN i]
+  rw [MPSTensor.prod_cyclicWindow_complement 2 N hN i]
   simp only [MPSTensor.extractWindow] at hx hy
   simp only [sitewisePhysicalMatrix, Matrix.kroneckerMap_apply]
   apply congrArg₂ (fun a b : ℂ ↦ a * b)
@@ -171,7 +129,7 @@ private theorem embed_twoSiteSectorProjection_eq_finKronecker
   simp only [embedLocalOperator_apply, sitewisePhysicalMatrix,
     Matrix.finKronecker_apply]
   by_cases hAgree : AgreesOutsideWindow (d := d) 2 hN i σ τ
-  · rw [if_pos hAgree, prod_cyclicWindow_complement 2 N hN i]
+  · rw [if_pos hAgree, MPSTensor.prod_cyclicWindow_complement 2 N hN i]
     rw [agreesOutsideWindow_iff] at hAgree
     apply Eq.symm
     calc
