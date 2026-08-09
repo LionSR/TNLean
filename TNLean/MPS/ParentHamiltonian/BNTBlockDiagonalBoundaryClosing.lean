@@ -293,7 +293,16 @@ Let \(r\ge2\), let every block be injective at length \(L_0>0\), and assume
 on the complementary segment \(N-L_0\) identifies the boundary matrices before
 and after moving the cut. Each block component therefore satisfies every
 periodic local constraint. This is arXiv:quant-ph/0608197, Theorem 12, proof
-lines 1424--1456. -/
+lines 1424--1456.
+
+**Scope restriction (doubly normalized specialization):** At the PGVWC07 source
+length bound, `hUnital` is the source identity
+\(\sum_a A^j_a(A^j_a)^\dagger=1\), while `hLeft` additionally specializes the
+source dual fixed-point equation
+\(\sum_a (A^j_a)^\dagger\Lambda_j A^j_a=\Lambda_j\) to
+\(\Lambda_j=1\). The general normalization is tracked in issue #5751 and
+documented in `docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex`.
+-/
 theorem exists_blockDiagonal_boundary_chainGroundSpace_of_global_cut_bnt_c1_pgvwc07
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
     (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
@@ -402,7 +411,16 @@ interaction length is
 \[
   3(r-1)(L_0+1)+1 \leq L,
 \]
-and the chain length satisfies \(L+L_0\leq N\). -/
+and the chain length satisfies \(L+L_0\leq N\).
+
+**Scope restriction (doubly normalized specialization):** At the PGVWC07 source
+length bound, `hUnital` is the source identity
+\(\sum_a A^j_a(A^j_a)^\dagger=1\), while `hLeft` additionally specializes the
+source dual fixed-point equation
+\(\sum_a (A^j_a)^\dagger\Lambda_j A^j_a=\Lambda_j\) to
+\(\Lambda_j=1\). The general normalization is tracked in issue #5751 and
+documented in `docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex`.
+-/
 theorem
     chainGroundSpace_toTensorFromBlocks_eq_iSup_and_iSupIndep_of_global_cut_bnt_c1_pgvwc07
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
@@ -446,7 +464,16 @@ theorem
 chain space is the sum of the periodic chain spaces of its blocks.
 
 This is the equality in arXiv:quant-ph/0608197, Theorem 12, proof lines
-1424--1456. -/
+1424--1456.
+
+**Scope restriction (doubly normalized specialization):** At the PGVWC07 source
+length bound, `hUnital` is the source identity
+\(\sum_a A^j_a(A^j_a)^\dagger=1\), while `hLeft` additionally specializes the
+source dual fixed-point equation
+\(\sum_a (A^j_a)^\dagger\Lambda_j A^j_a=\Lambda_j\) to
+\(\Lambda_j=1\). The general normalization is tracked in issue #5751 and
+documented in `docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex`.
+-/
 theorem chainGroundSpace_toTensorFromBlocks_eq_iSup_of_global_cut_bnt_c1_pgvwc07
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
     (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
@@ -475,7 +502,16 @@ of the block-diagonal parent-Hamiltonian kernel in the span of the BNT matrix
 product vectors.
 
 This is the final conditional step in arXiv:quant-ph/0608197, Theorem 12, proof
-lines 1424--1456. -/
+lines 1424--1456.
+
+**Scope restriction (doubly normalized specialization):** At the PGVWC07 source
+length bound, `hUnital` is the source identity
+\(\sum_a A^j_a(A^j_a)^\dagger=1\), while `hLeft` additionally specializes the
+source dual fixed-point equation
+\(\sum_a (A^j_a)^\dagger\Lambda_j A^j_a=\Lambda_j\) to
+\(\Lambda_j=1\). The general normalization is tracked in issue #5751 and
+documented in `docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex`.
+-/
 theorem ker_parentHamiltonian_toTensorFromBlocks_le_bntMPSVectorSpan_of_global_cut_bnt_c1_pgvwc07
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
     (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
@@ -510,7 +546,16 @@ theorem ker_parentHamiltonian_toTensorFromBlocks_le_bntMPSVectorSpan_of_global_c
 BNT block direct sum is exactly the span of the periodic component vectors.
 
 This packages the final equality in arXiv:quant-ph/0608197, Theorem 12, proof
-lines 1424--1456. -/
+lines 1424--1456.
+
+**Scope restriction (doubly normalized specialization):** At the PGVWC07 source
+length bound, `hUnital` is the source identity
+\(\sum_a A^j_a(A^j_a)^\dagger=1\), while `hLeft` additionally specializes the
+source dual fixed-point equation
+\(\sum_a (A^j_a)^\dagger\Lambda_j A^j_a=\Lambda_j\) to
+\(\Lambda_j=1\). The general normalization is tracked in issue #5751 and
+documented in `docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex`.
+-/
 theorem ker_parentHamiltonian_toTensorFromBlocks_eq_bntMPSVectorSpan_of_global_cut_bnt_c1_pgvwc07
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
     (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))

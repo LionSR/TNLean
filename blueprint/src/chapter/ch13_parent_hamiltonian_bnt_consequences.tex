@@ -424,7 +424,7 @@ with the chosen basis of normal tensors.
     the displayed containment.
 \end{proof}
 
-\begin{theorem}[Parent-Hamiltonian kernel equality with the BNT span]
+\begin{theorem}[Doubly-normalized PGVWC07 source-length kernel equality]
     \label{thm:gs_eq_bnt_span}
     \lean{MPSTensor.ker_parentHamiltonian_toTensorFromBlocks_eq_bntMPSVectorSpan_of_global_cut_bnt_c1_pgvwc07}
     \leanok
@@ -434,11 +434,23 @@ with the chosen basis of normal tensors.
     normalized self-overlap. Assume that no two distinct blocks are equivalent
     up to gauge and phase. Let $\mu_j\ne0$ for every $j$. Suppose there is a
     common $L_0>0$ such that the words of length $L_0$ in each block $A_j$ span
-    $\MN{D_j}$, and suppose also, for every $1\le j\le g$, that
+    $\MN{D_j}$. In this doubly-normalized specialization, assume for every
+    $1\le j\le g$ that
     \begin{align}
-        \sum_{a=1}^d A_j^a A_j^{a\,\dagger}&=\Id.
+        \sum_{a=1}^d A_j^a A_j^{a\,\dagger}&=\Id,
+        \notag\\
+        \sum_{a=1}^d A_j^{a\,\dagger}A_j^a&=\Id.
         \notag
     \end{align}
+    The first identity is the normalization used in the source. In the general
+    source canonical form, the second identity is replaced by a positive
+    definite matrix $\Lambda_j$ satisfying
+    \begin{align}
+        \sum_{a=1}^d A_j^{a\,\dagger}\Lambda_j A_j^a&=\Lambda_j.
+        \notag
+    \end{align}
+    Thus the result below is the special case $\Lambda_j=\Id$ of the source
+    normalization.
     If
     \begin{align}
         L&\ge 3(g-1)(L_0+1)+1,
@@ -468,4 +480,35 @@ with the chosen basis of normal tensors.
     containment of the kernel in the BNT span. Conversely,
     Lemma~\ref{lem:bnt_span_le_parent_hamiltonian_kernel} gives the reverse
     containment directly.
+\end{proof}
+
+
+\begin{theorem}[PGVWC07 source-length kernel equality at general canonical normalization]
+    \label{thm:gs_eq_bnt_span_source_normalization}
+    \notready
+    \uses{def:parent_hamiltonian, def:bnt_span}
+    Retain the same block, injectivity, nonzero-dimension, nonzero-weight, and
+    source-length hypotheses. For every $1\le j\le g$, assume there is a
+    positive definite matrix $\Lambda_j$ such that
+    \begin{align}
+        \sum_{a=1}^d A_j^a A_j^{a\,\dagger}&=\Id,
+        \notag\\
+        \sum_{a=1}^d A_j^{a\,\dagger}\Lambda_j A_j^a&=\Lambda_j.
+        \notag
+    \end{align}
+    Then
+    \begin{align}
+        \ker H_L^{(N)}\!\left(\bigoplus_j \mu_j A_j\right)
+        &=
+        \spn\{V^{(N)}(A_j):j=1,\ldots,g\}.
+        \notag
+    \end{align}
+\end{theorem}
+
+\begin{proof}
+    \notready
+    The doubly-normalized case is Theorem~\ref{thm:gs_eq_bnt_span}. Passing
+    from the general positive dual fixed points to that case requires the
+    gauge-transport argument recorded in the normalization-scope note and
+    tracked in follow-up issue~\#5751.
 \end{proof}
