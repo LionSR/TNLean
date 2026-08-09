@@ -97,6 +97,31 @@ def audit_rules(log: str, source: str | None = None) -> list[tuple[str, str]]:
         return [(finding.rule, finding.severity) for finding in audit.findings]
 
 
+def waived_gap_pair(source: str) -> tuple[int, int] | None:
+    """The panels the waived-gap fixture's fallback actually compared."""
+    import re
+    from tenkz_audit import Audit
+    with tempfile.TemporaryDirectory(prefix="tenkz_equation_audit_") as tmp:
+        work = Path(tmp)
+        (work / "fixture.tex").write_text(source, encoding="utf-8")
+        (work / "fixture.tnlog").write_text(
+            panel(1, "open:w") + panel(2, "phys:up") + panel(3, "phys:up")
+            + "check|scope=1|relation=1|result=off|reason=drafted\n",
+            encoding="utf-8",
+        )
+        audit = Audit(work / "fixture.tnlog", work / "fixture.tex")
+        audit.parse_log()
+        audit.link_tex()
+        audit.check_equation_groups()
+        for finding in audit.findings:
+            if finding.rule != "eq-boundary-mismatch":
+                continue
+            match = re.search(r"pictures k(\d+) and k(\d+)", finding.msg)
+            if match is not None:
+                return int(match.group(1)), int(match.group(2))
+    return None
+
+
 def sibling_rules(separator: str) -> list[tuple[str, str]]:
     """Two mismatched pictures joined by `separator` outside every group."""
     return audit_rules(
@@ -489,6 +514,42 @@ def main() -> int:
     assert ("eq-check-drift", "HARD") in two_checks, two_checks
     assert ("eq-boundary-mismatch", "HARD") in two_checks, two_checks
 
+    # Seeded defect: `A B = C` waives its one relation, which sits on the
+    # second gap.  A waiver names a relation while a pairwise comparison walks
+    # gaps, so the fallback must skip the gap the relation is on and compare
+    # the juxtaposition -- not the reverse.
+    waived_gap_source = (
+        "\\begin{tenkzeq}[check={signature, off={1: drafted}}]\n"
+        f"{PANELS[0]}{PANELS[1]}=\n{PANELS[0]}"
+        "\\end{tenkzeq}\n"
+    )
+    waived_gap = audit_rules(
+        panel(1, "open:w") + panel(2, "phys:up") + panel(3, "phys:up")
+        + "check|scope=1|relation=1|result=off|reason=drafted\n",
+        waived_gap_source,
+    )
+    assert ("eq-unchecked", "HARD") in waived_gap, waived_gap
+    assert ("eq-check-off", "ADV") in waived_gap, waived_gap
+    assert waived_gap_pair(waived_gap_source) == (1, 2), waived_gap
+
+    # Seeded defect: two relation glyphs in one gap.  The scope is malformed
+    # -- a side with no panel -- but the second glyph is still the second
+    # relation, and a waiver naming it must reach the gap it sits on.
+    doubled_glyph_source = (
+        "\\begin{tenkzeq}[check={signature, off={2: drafted}}]\n"
+        f"{PANELS[0]}= =\n{PANELS[1]}"
+        "\\end{tenkzeq}\n"
+    )
+    doubled_glyph = audit_rules(
+        panel(1, "open:w") + panel(2, "phys:up")
+        + "check|scope=1|relation=1|result=off|reason=drafted\n"
+        "check|scope=1|relation=2|result=off|reason=drafted\n",
+        doubled_glyph_source,
+    )
+    assert "eq-boundary-mismatch" not in [
+        rule for rule, _ in doubled_glyph
+    ], doubled_glyph
+
     # A spaced environment name opens the same equation, so its declared
     # waiver is the source's and not a forgery.
     spaced = audit_rules(
@@ -507,7 +568,7 @@ def main() -> int:
     print(
         "tenkz-equation-audit: "
         f"{len(POSITIVE)} positive, {len(NEGATIVE)} negative, "
-        "and 33 seeded group checks passed"
+        "and 36 seeded group checks passed"
     )
     return 0
 
