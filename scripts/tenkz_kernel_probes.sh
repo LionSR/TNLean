@@ -1216,6 +1216,7 @@ closure_rails=$(grep -c '^closure-rail|' \
 # the drawn contour is held to it.
 python3 - "$WORK/r_trace_row_closure.tnlog" <<'PROBE' || exit 1
 import sys
+from fractions import Fraction
 
 joined = 0
 for line in open(sys.argv[1], encoding="utf-8"):
@@ -1232,17 +1233,26 @@ for line in open(sys.argv[1], encoding="utf-8"):
         raise SystemExit(1)
     owed = abs(int(fields["clear"]))
     outward = -1 if int(fields["clear"]) < 0 else 1
-    slope = (east[1] - west[1]) / (east[0] - west[0])
+    slope = Fraction(east[1] - west[1], east[0] - west[0])
     ends = [tuple(int(v) for v in fields[side].split(","))[0]
             for side in ("west", "east") if fields[side] != "none"]
     low, high = min(ends), max(ends)
+
+    def out(p):
+        return outward * (Fraction(p[1]) - west[1] - (p[0] - west[0]) * slope)
+
+    covers = []
+    for a, b in zip(points, points[1:]):
+        lo, hi = max(min(a[0], b[0]), low), min(max(a[0], b[0]), high)
+        if lo > hi:
+            continue
+        if min(out(a), out(b)) + 655 >= owed:
+            covers.append((lo, hi))
+        elif lo != hi:
+            print("FAIL: a closure came inside its standoff across its row")
+            raise SystemExit(1)
     reach = low
-    for a, b in sorted(
-            (min(s[0], e[0]), max(s[0], e[0]))
-            for s, e in zip(points, points[1:])
-            if min(outward * (s[1] - west[1] - (s[0] - west[0]) * slope),
-                   outward * (e[1] - west[1] - (e[0] - west[0]) * slope))
-            + 655 >= owed):
+    for a, b in sorted(covers):
         if a > reach:
             break
         reach = max(reach, b)

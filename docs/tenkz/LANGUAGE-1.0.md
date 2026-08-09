@@ -676,11 +676,13 @@ only because a label is measured after the closure is placed.
 
 The standoff those rows demand rides on the closure record beside the
 contour, signed by the side the return runs. A rail that does not **run
-across the row at that standoff** is a second hard finding: the stretches of
-it that stand off far enough, on the named side, must between them span every
-column of the row, so a rail that reaches the distance at one corner, or dips
-between two of them, or takes the whole distance on the wrong side, is
-reported rather than passed.
+across the row at that standoff** is a second hard finding: over the row's
+own columns no stretch of the rail may come nearer than the standoff, and
+the stretches that stand off far enough must between them span those columns.
+A rail that reaches the distance at one corner, that dips between two of
+them, that takes the whole distance on the wrong side, or that runs the row
+deep and then doubles back inside on the way home, is reported rather than
+passed.
 
 **Beads.** A small tensor on a string is an atom whose address is
 `on <wire> t`. There is no bead vocabulary.

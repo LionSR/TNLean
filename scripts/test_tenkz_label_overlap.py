@@ -1478,6 +1478,39 @@ def main() -> int:
                 "audit passed over a one-column closure inside its standoff"
             )
 
+        # A zero standoff carries no side and no distance, so it is not a
+        # standoff either.  It reads as a malformed value rather than as a
+        # rail with nothing to clear.
+        zero_status, zero_audit = audit_status(closure_log(
+            "closure-zero-standoff.tnlog",
+            "closure-rail|picture=1|name=wrap-1|row=1|side=west-east|"
+            "west=0,0|east=2000000,0|stroke=0|clear=0|"
+            "points=0,0;2000000,0\n",
+        ))
+        if zero_status != 1 or not any(
+                finding.rule == "malformed-event"
+                for finding in zero_audit.findings):
+            raise AssertionError(
+                "audit accepted a closure whose standoff was zero"
+            )
+
+        # A rail that runs the row at its standoff and then doubles back
+        # inside it has put ink across the indices on the way home.
+        back_status, back_audit = audit_status(closure_log(
+            "closure-doubled-back.tnlog",
+            "closure-rail|picture=1|name=wrap-1|row=1|side=west-east|"
+            "west=0,0|east=2000000,0|stroke=0|clear=-800000|"
+            "points=0,0;-600000,0;-600000,-800000;2600000,-800000;"
+            "2600000,-100000;-600000,-100000;-600000,0;2000000,0\n",
+        ))
+        if back_status != 1 or not any(
+                finding.rule == "closure-crossed"
+                for finding in back_audit.findings):
+            raise AssertionError(
+                "audit read a rail that doubled back inside its standoff "
+                "as clear"
+            )
+
         # `arc` is the only word for a closure with no row line.  A flat rail
         # that named any other would take the rule out of its own reading.
         word_status, word_audit = audit_status(closure_log(
@@ -1562,7 +1595,7 @@ def main() -> int:
         malformed_rail = closure_log(
             "closure-malformed.tnlog",
             "closure-rail|picture=1|name=wrap-1|row=1|side=west-east|"
-            "west=0,0|east=2000000,0|stroke=0|clear=0|points=0,0\n",
+            "west=0,0|east=2000000,0|stroke=0|clear=-700000|points=0,0\n",
         )
         malformed_status, malformed_audit = audit_status(malformed_rail)
         if malformed_status != 1 or not any(

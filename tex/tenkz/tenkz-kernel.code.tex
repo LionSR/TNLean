@@ -11618,6 +11618,33 @@
           \l__tenkz_kernel_r_trace_ink_bool
         \bool_if:NT \l__tenkz_kernel_r_trace_ink_bool
           {
+            % A glyph that spans wires stands on several rows, and a port on
+            % its south face is placed on the last of them.  The carrier
+            % answers with the anchor row, so the span moves a south port to
+            % the row it is actually drawn from; otherwise that row's own
+            % return would scan past its deepest index.
+            \__tenkz_model_get:nnN {#1} {port-face}
+              \l__tenkz_kernel_r_trace_ink_face_tl
+            \str_if_eq:eeT
+              {
+                \exp_args:NV \__tenkz_kernel_r_compass:n
+                  \l__tenkz_kernel_r_trace_ink_face_tl
+              }
+              {270}
+              {
+                \exp_args:NV \__tenkz_kernel_r_span:nNN
+                  \l__tenkz_kernel_r_trace_ink_host_tl
+                  \l__tenkz_kernel_r_trace_ink_slot_tl
+                  \l__tenkz_kernel_r_trace_ink_type_tl
+                \tl_set:Ne \l__tenkz_kernel_r_trace_ink_row_tl
+                  {
+                    \int_eval:n
+                      {
+                        \l__tenkz_kernel_r_trace_ink_row_tl
+                        + \l__tenkz_kernel_r_trace_ink_type_tl - 1
+                      }
+                  }
+              }
             \__tenkz_kernel_r_port_open_geometry:n {#1}
             \__tenkz_kernel_r_trace_ink_take:n {#1}
           }
@@ -11729,9 +11756,29 @@
               \l__tenkz_kernel_r_trace_ink_bool
             \bool_if:NT \l__tenkz_kernel_r_trace_ink_bool
               {
-                \__tenkz_kernel_r_wire_physical_axis_open:n {#1}
-                \fp_set_eq:NN \l__tenkz_kernel_r_port_tip_y_fp
-                  \l__tenkz_kernel_r_yb_fp
+                % The renderer's own two steps, taken without its third: it
+                % resolves the axis, starts at the glyph's support point and
+                % runs one leg along that axis -- and then strokes.  Asking
+                % it to stroke here would lay a second copy of the leg and
+                % save it under the closure's own path name, so the reach is
+                % read from the resolution and the ink left to the leg pass.
+                \__tenkz_model_get:nnN {#1} {from-axis}
+                  \l__tenkz_kernel_r_trace_ink_face_tl
+                \exp_args:NVV \__tenkz_kernel_r_physical_axis:nnNN
+                  \l__tenkz_kernel_r_trace_ink_host_tl
+                  \l__tenkz_kernel_r_trace_ink_face_tl
+                  \l__tenkz_kernel_leg_dir_tl
+                  \l__tenkz_kernel_r_physical_anchor_tl
+                \exp_args:NVV \__tenkz_kernel_r_glyph_anchor_or_site_xy:nnNN
+                  \l__tenkz_kernel_r_trace_ink_host_tl
+                  \l__tenkz_kernel_r_physical_anchor_tl
+                  \l__tenkz_kernel_r_x_fp \l__tenkz_kernel_r_y_fp
+                \fp_set:Nn \l__tenkz_kernel_r_port_tip_y_fp
+                  {
+                    \l__tenkz_kernel_r_y_fp
+                    + \__tenkz_metric_ratio:n {physleg}
+                      * sind( \l__tenkz_kernel_leg_dir_tl )
+                  }
                 \__tenkz_kernel_r_trace_ink_take:n {#1}
               }
           }

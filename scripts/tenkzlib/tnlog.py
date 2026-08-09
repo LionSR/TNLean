@@ -90,8 +90,10 @@ def _is_sp_standoff(value: str) -> bool:
     The sign is the side the closure runs, so a reader holds a rail to a
     distance on a named side.  `arc` is a frame sector, which stands off no
     row line; nothing else stands for the absence of a standoff, because a
-    flat rail that named none would take the rule out of the reading."""
-    return value == "arc" or _is_int(value)
+    flat rail that named none -- a word, or a zero, which carries no side --
+    would take the rule out of the reading."""
+    parsed = _parse_int(value)
+    return value == "arc" or (parsed is not None and parsed != 0)
 
 
 def _is_sp_polyline(value: str) -> bool:

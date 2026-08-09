@@ -896,10 +896,19 @@ class Audit:
         contour that stand off far enough, on the named side, must between
         them span every column of the row.
 
+        The same reading refuses a second pass: a rail that runs the row at
+        its standoff and then doubles back inside it has put ink across the
+        indices on the way home, so no stretch of contour may come nearer
+        than the standoff over the row's own columns.
+
         A frame arc says so and is exempt -- it stands off no row line -- and
         so is a stream written before the field existed.  A one-column row's
         two ends resolve to one coordinate; its row line is then the level of
-        that end, and the covering is of that single column."""
+        that end, and the covering is of that single column.  A row with one
+        end is read at that end alone: the record carries no coordinate for
+        the side that has no site, so the columns between are not knowable
+        from the stream.  A row with neither end is an empty lattice, which
+        hangs no index at all."""
         if "clear" not in event.attrs:
             return  # A stream written before the standoff was published.
         standoff = event.attrs["clear"]
@@ -930,25 +939,41 @@ class Audit:
             return outward * (Fraction(point[1]) - Fraction(west[1])
                               - (Fraction(point[0]) - west[0]) * slope)
 
+        def at(start: Point, end: Point, x: Fraction) -> Fraction:
+            """The contour's outward offset where a segment crosses `x`."""
+            if start[0] == end[0]:
+                return min(offset(start), offset(end))
+            return (offset(start)
+                    + (x - start[0]) * (offset(end) - offset(start))
+                    / (end[0] - start[0]))
+
         covers: list[tuple[int, int]] = []
+        shallow: Optional[Fraction] = None
         for start, end in zip(points, points[1:]):
-            if min(offset(start), offset(end)) + CLOSURE_JOIN_TOLERANCE_SP \
-                    < owed:
+            here = (max(min(start[0], end[0]), low),
+                    min(max(start[0], end[0]), high))
+            if here[0] > here[1]:
                 continue
-            here = (min(start[0], end[0]), max(start[0], end[0]))
-            if here[0] > high or here[1] < low:
+            clipped = min(at(start, end, Fraction(here[0])),
+                          at(start, end, Fraction(here[1])))
+            if clipped + CLOSURE_JOIN_TOLERANCE_SP >= owed:
+                covers.append(here)
                 continue
-            covers.append((max(here[0], low), min(here[1], high)))
+            # A stretch that meets the span at one x alone is a lead leaving
+            # a virtual end, and a lead stands on the row line by
+            # construction.  On a one-column row every stretch meets the span
+            # that way, and the covering is the whole reading.
+            if here[0] == here[1]:
+                continue
+            if shallow is None or clipped < shallow:
+                shallow = clipped
         gap = _first_uncovered(low, high, covers)
-        if gap is None:
+        if gap is None and shallow is None:
             return
-        reached = max(
-            (offset(start)
-             + (gap - start[0]) * Fraction(end[1] - start[1],
-                                           end[0] - start[0]) * outward
+        reached = shallow if shallow is not None else max(
+            (at(start, end, Fraction(gap))
              for start, end in zip(points, points[1:])
-             if start[0] != end[0]
-             and min(start[0], end[0]) <= gap <= max(start[0], end[0])),
+             if min(start[0], end[0]) <= gap <= max(start[0], end[0])),
             default=Fraction(0),
         )
         self.hard(
