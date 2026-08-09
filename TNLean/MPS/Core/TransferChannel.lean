@@ -9,9 +9,9 @@ import TNLean.MPS.Core.Transfer
 /-!
 # Channel compatibility for MPS transfer maps
 
-This adapter identifies the matrix-product-state transfer-map notation with the generic
-finite Kraus-map API. Generic channel developments should use `Kraus.map` and `Kraus.mapLM`
-directly.
+For a family $K$, the matrix-product-state transfer map is the finite Kraus action
+$X\mapsto\sum_i K_iXK_i^\dagger$. This file states its channel and trace-pairing
+properties in transfer-map notation.
 
 ## Main declarations
 
