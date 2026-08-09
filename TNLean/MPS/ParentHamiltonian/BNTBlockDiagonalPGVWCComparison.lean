@@ -503,7 +503,7 @@ arXiv:2011.12127, Section IV.C, lines 2126--2128.
 arXiv:quant-ph/0608197 assumes \(L\ge 3(b-1)(L_0+1)+1\). This theorem is stated
 in the current BNT range derived from length-\(L_0\) block injectivity,
 \((L_0+1)+3(r-1)(L_0+1)+1\le L\). The source-range conclusion is
-`exists_blockDiagonal_boundary_chainGroundSpace_of_global_cut_bnt_c1_pgvwc07`.
+`chainGroundSpace_toTensorFromBlocks_eq_iSup_and_iSupIndep_of_global_cut_bnt_c1_pgvwc07`.
 
 The block-diagonal boundary representation used here is the
 boundary-comparison-free open-boundary inclusion of arXiv:quant-ph/0608197,
@@ -516,8 +516,7 @@ boundary-crossing interval beginning at \(i\). The finite BNT range gives
 large-length simultaneous product spans; it does not by itself supply the
 shortest crossing tails, where \(N-i\) can be \(1\). This is therefore a
 span-dependent intermediate theorem. The global-cut
-theorem
-in `BNTBlockDiagonalBoundaryClosing` proves the source-range periodic-boundary
+theorem proves the source-range periodic-boundary
 upgrade without this hypothesis.
 
 These scope restrictions are documented in
@@ -569,7 +568,7 @@ which is the ground-space assertion in the source theorem.
 arXiv:quant-ph/0608197 assumes \(L\ge 3(b-1)(L_0+1)+1\). This theorem is stated
 in the current BNT range derived from length-\(L_0\) block injectivity,
 \((L_0+1)+3(r-1)(L_0+1)+1\le L\). The source-range conclusion is
-`exists_blockDiagonal_boundary_chainGroundSpace_of_global_cut_bnt_c1_pgvwc07`.
+`chainGroundSpace_toTensorFromBlocks_eq_iSup_of_global_cut_bnt_c1_pgvwc07`.
 
 The block-diagonal boundary representation used here is the
 boundary-comparison-free open-boundary inclusion of arXiv:quant-ph/0608197,
@@ -582,8 +581,7 @@ boundary-crossing interval beginning at \(i\). The finite BNT range gives
 large-length simultaneous product spans; it does not by itself supply the
 shortest crossing tails, where \(N-i\) can be \(1\). This is therefore a
 span-dependent intermediate theorem. The global-cut
-theorem
-in `BNTBlockDiagonalBoundaryClosing` proves the source-range periodic-boundary
+theorem proves the source-range periodic-boundary
 upgrade without this hypothesis.
 
 These scope restrictions are documented in
@@ -637,7 +635,7 @@ periodic-boundary equality.
 arXiv:quant-ph/0608197 assumes \(L\ge 3(b-1)(L_0+1)+1\). This theorem is stated in the current BNT
 range derived from length-\(L_0\) block injectivity,
 \((L_0+1)+3(r-1)(L_0+1)+1\le L\). The source-range conclusion is
-`exists_blockDiagonal_boundary_chainGroundSpace_of_global_cut_bnt_c1_pgvwc07`.
+`chainGroundSpace_toTensorFromBlocks_eq_iSup_and_iSupIndep_of_global_cut_bnt_c1_pgvwc07`.
 
 **Scope restriction (periodic-boundary comparison):** The opened-boundary
 \(C^j,D^j\) comparison `hComparison` is the explicit hypothesis here. The
@@ -711,7 +709,7 @@ under the assumed opened-boundary \(C^j,D^j\) comparison.
 arXiv:quant-ph/0608197 assumes \(L\ge 3(b-1)(L_0+1)+1\). This theorem is stated in the current BNT
 range derived from length-\(L_0\) block injectivity,
 \((L_0+1)+3(r-1)(L_0+1)+1\le L\). The source-range conclusion is
-`exists_blockDiagonal_boundary_chainGroundSpace_of_global_cut_bnt_c1_pgvwc07`.
+`chainGroundSpace_toTensorFromBlocks_eq_iSup_of_global_cut_bnt_c1_pgvwc07`.
 
 **Scope restriction (periodic-boundary comparison):** The opened-boundary
 \(C^j,D^j\) comparison `hComparison` is the explicit hypothesis here. The

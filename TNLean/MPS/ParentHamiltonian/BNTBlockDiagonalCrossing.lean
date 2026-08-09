@@ -888,8 +888,8 @@ comparison. The periodic-boundary upgrade encoded by `hIdentity` is the
 boundary-condition comparison of arXiv:quant-ph/0608197, Theorem 12, proof lines
 1446--1456, and arXiv:2011.12127, Section IV.C, lines 2126--2128, retained as
 an explicit hypothesis of this intermediate complementary-word API. The
-source-range conclusion without it is the global-cut theorem in
-`BNTBlockDiagonalBoundaryClosing`.
+source-range conclusion without it is the global-cut theorem
+`chainGroundSpace_toTensorFromBlocks_eq_iSup_and_iSupIndep_of_global_cut_bnt_c1_pgvwc07`.
 
 This scope restriction is documented in
 `docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex`. -/
