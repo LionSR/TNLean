@@ -281,7 +281,8 @@ following~\cite[Section~6.4, Propositions~6.10--6.11]{Wolf2012Quantum}.
 
 This subsection establishes the results on the corner algebra,
 $*$-structure, and compression of a PSD fixed point onto its support sector
-needed for~\cite[Corollary~6.6]{Wolf2012Quantum}: the corner carries a
+needed for the completely positive finite-Kraus specialization of
+\cite[Corollary~6.6]{Wolf2012Quantum}: the corner carries a
 $\C$-algebra and $*$-structure, the two standard presentations of the corner
 are identified, and the compression of a PSD fixed point onto its support
 sector is positive definite.
@@ -327,6 +328,76 @@ sector is positive definite.
     over~$\C$.
 \end{remark}
 
+\begin{theorem}[Compression of a supported finite Kraus family]%
+    \label{thm:supported_kraus_corner_compression}
+    \lean{Kraus.exists_corner_compression_of_supported_projection}
+    \leanok
+    Let $P\in\MN{D}$ be an orthogonal projection and let
+    $A_1,\ldots,A_d\in\MN{D}$ satisfy
+    \begin{align}
+        PA_iP
+         & =A_i,
+        \notag        \\
+        \sum_i A_i^\dagger A_i
+         & =P.
+        \label{eq:spectral_supported_kraus_normalization}
+    \end{align}
+    Then there are $n=\tr P$, matrices $C_i\in\MN{n}$, an isometry
+    $V:\C^n\to\C^D$, and a linear isomorphism
+    $\varphi:\MN{n}\xrightarrow{\sim}P\MN{D}P$ such that
+    \begin{align}
+        V^\dagger V
+         & =\Id_n,
+        \notag        \\
+        VV^\dagger
+         & =P,
+        \notag        \\
+        C_i
+         & =V^\dagger A_iV,
+        \notag        \\
+        \varphi(X)
+         & =VXV^\dagger,
+        \notag        \\
+        \varphi(C_i)
+         & =A_i,
+        \notag        \\
+        \sum_i C_i^\dagger C_i
+         & =\Id_n.
+        \label{eq:spectral_supported_kraus_compression}
+    \end{align}
+    If
+    $T_A^*(X)=\sum_iA_i^\dagger XA_i$ and
+    $T_C^*(X)=\sum_iC_i^\dagger XC_i$, then
+    \begin{align}
+        \varphi(T_C^*(X))
+         & =T_A^*(\varphi(X)),
+        \notag                              \\
+        \varphi(XY)
+         & =\varphi(X)\varphi(Y),
+        \notag                              \\
+        \varphi(X^\dagger)
+         & =\varphi(X)^\dagger.
+        \label{eq:spectral_supported_kraus_intertwining}
+    \end{align}
+\end{theorem}
+
+\begin{proof}\leanok
+    Diagonalize $P$ and let $V$ include its eigenvalue-one coordinates into
+    $\C^D$. Then $V^\dagger V=\Id_n$ and $VV^\dagger=P$. Define
+    $C_i=V^\dagger A_iV$ and $\varphi(X)=VXV^\dagger$. The support relation
+    $PA_iP=A_i$ gives $\varphi(C_i)=A_i$, while
+    \begin{align}
+        \sum_i C_i^\dagger C_i
+         & =V^\dagger\left(\sum_iA_i^\dagger A_i\right)V
+          =V^\dagger PV
+          =\Id_n.
+        \notag
+    \end{align}
+    Inserting $VV^\dagger=P$ and using $PA_iP=A_i$ gives the intertwining,
+    product, and adjoint identities in
+    (\ref{eq:spectral_supported_kraus_intertwining}).
+\end{proof}
+
 \begin{theorem}[Faithful compression onto the support]%
     \label{thm:compression_on_support_posDef}
     \lean{Matrix.PosSemidef.compression_on_support_posDef}
@@ -356,21 +427,27 @@ sector is positive definite.
     \leanok
     \uses{thm:compression_on_support_posDef, rem:corner_algebra_star_instances,
         thm:adjointFixedPointsStarSubalgebra, thm:support_proj_fixed}
-    Let $T(X)=\sum_iK_iXK_i^\dagger$ be trace-preserving, let its adjoint
-    $T^*(Y)=\sum_iK_i^\dagger YK_i$ satisfy the Schwarz inequality, let
-    $\rho\succeq0$ satisfy $T(\rho)=\rho$, and let $Q=\supp(\rho)$. Then
+    Let $T(X)=\sum_iK_iXK_i^\dagger$ be a trace-preserving finite Kraus map,
+    with adjoint $T^*(Y)=\sum_iK_i^\dagger YK_i$. Let $\rho\succeq0$ satisfy
+    $T(\rho)=\rho$, and let $Q=\supp(\rho)$. Then
     \begin{align}
         \{Y\in Q\MN{D}Q\mid QT^*(Y)Q=Y\}
         \label{eq:spectral_corner_fixed_set}
     \end{align}
-    is a $*$-subalgebra of the corner algebra $Q\MN{D}Q$. This finite-Kraus
-    statement strengthens Corollary~6.6 of~\cite{Wolf2012Quantum}, which is
-    recovered when $\rho$ is chosen with maximum rank.
+    is a $*$-subalgebra of the corner algebra $Q\MN{D}Q$. Within the
+    finite-Kraus setting, this strengthens the maximum-rank-fixed-point case
+    by allowing an arbitrary positive semidefinite fixed point. At maximum
+    rank it gives the completely positive finite-Kraus specialization of
+    Corollary~6.6 of~\cite{Wolf2012Quantum}, whose hypothesis is an abstract
+    unital Schwarz map.
+    % Scope restriction (finite Kraus family): see
+    % docs/paper-gaps/wolf_cor66_kraus_hypothesis_restriction.tex.
 \end{theorem}
 
 \begin{proof}
     \leanok
-    \uses{thm:compression_on_support_posDef, thm:adjointFixedPointsStarSubalgebra,
+    \uses{thm:supported_kraus_corner_compression,
+        thm:compression_on_support_posDef, thm:adjointFixedPointsStarSubalgebra,
         thm:support_proj_fixed}
     The set in (\ref{eq:spectral_corner_fixed_set}) is the fixed-point set
     of the compressed map $\widetilde{T}^*$ on the support sector. Since
@@ -378,8 +455,9 @@ sector is positive definite.
     $(\Id-Q)K_iQ=0$, so the compressed family $QK_iQ$ is supported on the
     corner and is trace-preserving there:
     $\sum_i(QK_iQ)^\dagger(QK_iQ)=Q$.
-    Compressing this family to the support sector gives a unital map, while
-    the compression of $\rho$ is a positive-definite fixed point by
+    Theorem~\ref{thm:supported_kraus_corner_compression} compresses this
+    family to a unital map on the support sector, while the compression of
+    $\rho$ is a positive-definite fixed point by
     Theorem~\ref{thm:compression_on_support_posDef}. The structure theorem
     for fixed points of unital Schwarz maps with a positive-definite fixed
     point (Theorem~\ref{thm:adjointFixedPointsStarSubalgebra}) makes the
