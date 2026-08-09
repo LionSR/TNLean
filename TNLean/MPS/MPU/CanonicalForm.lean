@@ -210,6 +210,36 @@ theorem isIrreducibleTensor_of_active_dim_eq
   funext i
   rw [hrec i, hinv, Algebra.mul_smul_comm, Algebra.smul_mul_assoc]
 
+/-- Under full active support, the unique active block has the ambient bond dimension. -/
+theorem active_dim_eq_of_card_active_eq_one_of_fullActiveSupport
+    (data : CPSVCanonicalFormData A) (hcard : Fintype.card data.Active = 1)
+    (hfull : data.HasFullActiveSupport) (k : data.Active) :
+    data.dim k.1 = D := by
+  classical
+  letI : Unique data.Active :=
+    Classical.choice (Fintype.card_eq_one_iff_nonempty_unique.mp hcard)
+  have hk : k = default := Subsingleton.elim _ _
+  have hsum : (∑ j : data.Active, data.dim j.1) = data.dim k.1 := by
+    rw [hk]
+    exact Fintype.sum_unique (fun j : data.Active => data.dim j.1)
+  exact hsum.symm.trans hfull
+
+/-- Under full active support, the unique active block inclusion is onto as well
+as isometric. -/
+theorem ambientBlockInclusion_mul_conjTranspose_eq_one
+    (data : CPSVCanonicalFormData A) (hcard : Fintype.card data.Active = 1)
+    (hfull : data.HasFullActiveSupport) (k : data.Active) :
+    data.ambientBlockInclusion k.1 * (data.ambientBlockInclusion k.1)ᴴ = 1 := by
+  have hdim := data.active_dim_eq_of_card_active_eq_one_of_fullActiveSupport
+    hcard hfull k
+  have hcarddim : Fintype.card (Fin D) = Fintype.card (Fin (data.dim k.1)) := by
+    simp [hdim]
+  exact (Matrix.mul_eq_one_comm_of_card_eq
+      (Fin D) (Fin (data.dim k.1)) ℂ
+      (A := data.ambientBlockInclusion k.1)
+      (B := (data.ambientBlockInclusion k.1)ᴴ) hcarddim).mpr
+    (data.ambientBlockInclusion_conjTranspose_mul_self k.1)
+
 /-- Full active support and a unique active block force ambient tensor irreducibility.
 
 **Scope restriction (unique full-support active block):** This is the algebraic
