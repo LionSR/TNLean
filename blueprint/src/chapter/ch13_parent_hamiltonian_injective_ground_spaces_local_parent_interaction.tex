@@ -142,20 +142,20 @@ orthogonal projector is the canonical representative used here.
     \label{def:ground_space_map_es}
     \lean{MPSTensor.groundSpaceMapES}
     \leanok
-    \uses{def:ground_space_map, def:ground_space_es}
+    \uses{def:ground_space_map}
     Equip $\MN{D}$ with the Hilbert--Schmidt inner product and the physical
     coefficient space with its computational-basis $\ell^2$ inner product.
     The resulting map is again denoted by
     $\Gamma_L\colon\MN{D}\to\ell^2(\Fin{d}^{L})$.
 \end{definition}
 
-\begin{lemma}[Exact range of the Hilbert-space boundary map]
-    \label{lem:range_ground_space_map_es}
+\begin{theorem}[Exact range of the Hilbert-space boundary map]
+    \label{thm:range_ground_space_map_es}
     \lean{MPSTensor.range_groundSpaceMapES}
     \leanok
     \uses{def:ground_space_map_es, def:ground_space_es}
     The range of $\Gamma_L$ is exactly $G_L^{\mathrm{ES}}(A)$.
-\end{lemma}
+\end{theorem}
 
 \begin{definition}[Ground-space Gram operator]
     \label{def:ground_space_gram}
@@ -163,47 +163,47 @@ orthogonal projector is the canonical representative used here.
     \leanok
     \uses{def:ground_space_map_es}
     The boundary Gram operator is
-    \[
+    \begin{align}
         \mathcal K_L:=\Gamma_L^\dagger\Gamma_L.
-    \]
+    \end{align}
 \end{definition}
 
-\begin{lemma}[Transfer--Gram Choi reshuffling]
-    \label{lem:ground_space_gram_choi_reshuffling}
+\begin{theorem}[Transfer--Gram Choi reshuffling]
+    \label{thm:ground_space_gram_choi_reshuffling}
     \lean{MPSTensor.inner_single_groundSpaceGram_single_eq_rectangularChoi}
     \leanok
-    \uses{def:ground_space_gram}
+    \uses{def:ground_space_gram, def:transfer_map, def:rectangular_choi}
     Let $E_{ab}$ denote the virtual matrix units and let $\mathcal E_A$ be the
     transfer map. Then
-    \[
+    \begin{align}
       \langle E_{ab},\mathcal K_L(E_{ce})\rangle_{\mathrm{HS}}
-      =J(\mathcal E_A^L)_{(c,e),(a,b)}.
-    \]
+      &=J(\mathcal E_A^L)_{(c,e),(a,b)}.
+    \end{align}
     Thus the Gram operator is the indicated Choi reshuffling; in particular it
     is not obtained by replacing the right-hand side with
     $\langle E_{ab},\mathcal E_A^L(E_{ce})\rangle_{\mathrm{HS}}$.
-\end{lemma}
+\end{theorem}
 
-\begin{lemma}[Injective range-projector formula]
-    \label{lem:injective_range_projector_inverse_gram}
+\begin{theorem}[Injective range-projector formula]
+    \label{thm:injective_range_projector_inverse_gram}
     \lean{ContinuousLinearMap.injectiveRangeProjector_eq_starProjection}
     \leanok
     If $T$ is an injective map between finite-dimensional Hilbert spaces, then
-    \[
-      P_{\range T}=T(T^\dagger T)^{-1}T^\dagger.
-    \]
-\end{lemma}
+    \begin{align}
+      P_{\range T}&=T(T^\dagger T)^{-1}T^\dagger.
+    \end{align}
+\end{theorem}
 
-\begin{lemma}[Neumann inverse estimate]
-    \label{lem:neumann_inverse_norm_bound}
+\begin{theorem}[Neumann inverse estimate]
+    \label{thm:neumann_inverse_norm_bound}
     \lean{NormedRing.norm_inverse_one_sub_le}
     \leanok
     If $\lVert t\rVert\le a<1$ in a normed ring with convergent geometric
     series and $\lVert 1\rVert=1$, then
-    \[
-      \lVert(1-t)^{-1}\rVert\le(1-a)^{-1}.
-    \]
-\end{lemma}
+    \begin{align}
+      \lVert(1-t)^{-1}\rVert&\le(1-a)^{-1}.
+    \end{align}
+\end{theorem}
 
 \begin{definition}[Canonical parent interaction]\label{def:parent_interaction}
     \lean{MPSTensor.parentInteraction}

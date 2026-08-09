@@ -5,8 +5,6 @@ Authors: TNLean contributors
 -/
 import TNLean.Algebra.FrobeniusHilbert
 import TNLean.Algebra.RectangularChoi
-import TNLean.Analysis.InjectiveRangeProjector
-import TNLean.Analysis.NeumannInverse
 import TNLean.MPS.ParentHamiltonian.Defs
 import TNLean.Spectral.MixedTransfer
 
