@@ -186,7 +186,6 @@ boundary conditions (PBC).
 
 \begin{definition}[Transfer map]\label{def:transfer_map}
     \lean{MPSTensor.transferMap}
-    \lean{Kraus.mapLM_eq_transferMap}
     \leanok
     \uses{def:mps_tensor}
     The \emph{transfer map} associated to a tensor~$A$ is the
@@ -214,6 +213,19 @@ boundary conditions (PBC).
     in which the upper node denotes $A$, the lower node denotes $A^\dagger$,
     and the physical index is summed over between them.
 \end{definition}
+
+\begin{theorem}[Kraus-map form of the transfer map]
+    \label{thm:kraus_map_eq_transfer_map}
+    \lean{Kraus.mapLM_eq_transferMap}
+    \leanok
+    \uses{def:kraus_map, def:transfer_map}
+    For every finite matrix family $A$, its Kraus map equals its transfer map.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Both maps send $X$ to $\sum_i A^iX(A^i)^\dagger$.
+\end{proof}
 
 \begin{remark}\leanok
     The transfer map is automatically positive: if $X \ge 0$ then
