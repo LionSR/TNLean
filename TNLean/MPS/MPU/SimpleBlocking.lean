@@ -10,9 +10,10 @@ import TNLean.MPS.MPU.ThreeFormSpan
 # Bounded blocking to a simple matrix product unitary
 
 This file completes the algebraic contraction step in arXiv:1703.09188,
-Proposition `blockingsimple`, lines 415--427.  It turns the basis-invariant
-three-form residual classification into the exact `simple1` and `simple2`
-identities.
+Proposition `blockingsimple`, lines 415--427, and its all-later-blocks
+corollary, lines 442--446.  It turns the basis-invariant three-form residual
+classification into the exact `simple1` and `simple2` identities and proves
+that simplicity persists at every larger direct blocking length.
 -/
 
 open scoped Matrix BigOperators
@@ -337,13 +338,107 @@ private theorem listProd_mul_eq_listProd_mul_rankOne_mul
           simpa only [List.prod_cons, Matrix.mul_assoc] using
             congrArg (fun X ↦ A * X) hih
 
+private theorem trace_mul_rankOne_mul_local {n : Type*} [Fintype n]
+    (a b : n → ℂ) (A X : Matrix n n ℂ) :
+    Matrix.trace (A * Matrix.vecMulVec b a * X) = a ⬝ᵥ ((X * A) *ᵥ b) := by
+  rw [Matrix.trace_mul_comm (A * Matrix.vecMulVec b a) X, ← Matrix.mul_assoc,
+    Matrix.mul_vecMulVec, Matrix.trace_vecMulVec, ← Matrix.mulVec_mulVec]
+  simp [dotProduct, mul_comm]
+
+private theorem trace_listProd_local {n : Type*} [Fintype n] [DecidableEq n]
+    (a b : n → ℂ) (P : Matrix n n ℂ → Prop)
+    (hpair : ∀ A B, P A → P B →
+      A * B = A * Matrix.vecMulVec b a * B)
+    (l : List (Matrix n n ℂ)) (hl : 1 < l.length) (hP : ∀ A ∈ l, P A) :
+    Matrix.trace l.prod = (l.map fun A ↦ a ⬝ᵥ (A *ᵥ b)).prod := by
+  rcases l with _ | ⟨A, l⟩
+  · simp at hl
+  cases l with
+  | nil => simp at hl
+  | cons B l =>
+      have hA : P A := hP A (by simp)
+      have hB : P B := hP B (by simp)
+      have hrot : ∀ X ∈ (B :: l) ++ [A], P X := by
+        intro X hX
+        apply hP X
+        simp only [List.mem_append, List.mem_cons] at hX ⊢
+        tauto
+      rw [List.prod_cons, List.prod_cons, ← Matrix.mul_assoc,
+        hpair A B hA hB, Matrix.mul_assoc, trace_mul_rankOne_mul_local]
+      have hprod : ((B :: l) ++ [A]).prod = B * l.prod * A := by
+        simp [Matrix.mul_assoc]
+      rw [← hprod, sandwich_listProd_local a b P hpair _ (by simp) hrot]
+      simp [mul_comm, mul_left_comm]
+
+/-- For an MPU, witnesses satisfying `simple2` automatically satisfy
+`simple1` with the same witnesses.
+
+The two- and three-site constant physical configurations give respectively
+$x^2=\delta_{ij}$ and $x^3=\delta_{ij}$ for
+$x=(a|W^{ij}|b)$.  These identities force $x=\delta_{ij}$.
+
+Source: arXiv:1703.09188, corollary following Proposition III.3,
+lines 442--446. -/
+theorem IsMPU.isMPUSimple_of_simple2 {U : MPOTensor d D} (hU : IsMPU U)
+    (a b : Fin (D * D) → ℂ)
+    (h₂ : ∀ i j k l : Fin d,
+      doubleLayerTensor U i j * doubleLayerTensor U k l =
+        doubleLayerTensor U i j * Matrix.vecMulVec b a *
+          doubleLayerTensor U k l) :
+    IsMPUSimple U := by
+  classical
+  let P : Matrix (Fin (D * D)) (Fin (D * D)) ℂ → Prop :=
+    fun A ↦ ∃ i j, A = doubleLayerTensor U i j
+  have hpair : ∀ A B, P A → P B →
+      A * B = A * Matrix.vecMulVec b a * B := by
+    rintro A B ⟨i, j, rfl⟩ ⟨k, l, rfl⟩
+    exact h₂ i j k l
+  have hpower (N : ℕ) (hN : 1 < N) (i j : Fin d) :
+      (a ⬝ᵥ (doubleLayerTensor U i j *ᵥ b)) ^ N =
+        if i = j then 1 else 0 := by
+    let σ : Fin N → Fin d := fun _ ↦ i
+    let τ : Fin N → Fin d := fun _ ↦ j
+    have hentry := congrArg (fun M ↦ M σ τ)
+      (show mpo (doubleLayerTensor U) N =
+          (1 : Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ) by
+        rw [mpo_doubleLayerTensor, hU.conjTranspose_mpo_mul_mpo hN])
+    rw [mpo_apply, mpoMatrixEntry, evalWord_ofFn] at hentry
+    let l := List.ofFn (fun _ : Fin N ↦ doubleLayerTensor U i j)
+    have hlP : ∀ A ∈ l, P A := by
+      intro A hA
+      simp only [l, List.mem_ofFn] at hA
+      obtain ⟨x, rfl⟩ := hA
+      exact ⟨i, j, rfl⟩
+    have htrace := trace_listProd_local a b P hpair l (by simp [l, hN]) hlP
+    rw [htrace] at hentry
+    have hστ : σ = τ ↔ i = j := by
+      constructor
+      · intro h
+        exact congrFun h ⟨0, by omega⟩
+      · intro h
+        subst j
+        rfl
+    simpa [l, σ, τ, List.map_ofFn, List.prod_ofFn, Matrix.one_apply, hστ] using hentry
+  refine ⟨a, b, ?_, h₂⟩
+  intro i j
+  let x := a ⬝ᵥ (doubleLayerTensor U i j *ᵥ b)
+  have hx2 : x ^ 2 = if i = j then 1 else 0 := hpower 2 (by omega) i j
+  have hx3 : x ^ 3 = if i = j then 1 else 0 := hpower 3 (by omega) i j
+  by_cases hij : i = j
+  · rw [if_pos hij] at hx2 hx3 ⊢
+    have hx3' : x ^ 2 * x = 1 := by simpa [pow_succ] using hx3
+    rw [hx2, one_mul] at hx3'
+    exact hx3'
+  · rw [if_neg hij] at hx2 hx3 ⊢
+    exact sq_eq_zero_iff.mp hx2
+
 /-- MPU simplicity is preserved by blocking an already simple tensor by any
 positive factor.
 
-This is the iterated-blocking preservation step used in Proposition III.3 of
-arXiv:1703.09188.  After canonical reindexing it applies at direct lengths
-\(kL\); it does not assert the source's stronger all-\(k' \geq k\) corollary at
-lines 442--445. -/
+This is the multiplicative iterated-blocking preservation step used in
+Proposition III.3 of arXiv:1703.09188.  After canonical reindexing it applies
+at direct lengths \(kL\); the all-\(k' \geq k\) direct-block conclusion is
+proved separately below, without a divisibility assumption. -/
 theorem IsMPUSimple.blockTensor {U : MPOTensor d D} (hU : IsMPUSimple U)
     (L : ℕ) (hL : 0 < L) : IsMPUSimple (MPOTensor.blockTensor U L) := by
   classical
@@ -398,6 +493,103 @@ theorem IsMPUSimple.blockTensor {U : MPOTensor d D} (hU : IsMPUSimple U)
       simp only [List.mem_ofFn] at hA
       obtain ⟨k, rfl⟩ := hA
       exact ⟨_, _, rfl⟩
+
+/-- If a positive direct block of an MPU is simple, then the direct block one
+site longer is simple with the same witnesses.
+
+The `simple2` contraction is applied to the suffix of the first blocked word
+and the prefix of the second blocked word, so the original order of all local
+letters is preserved.  MPU unitarity then recovers `simple1` for those same
+witnesses.
+
+Source: arXiv:1703.09188, corollary following Proposition III.3,
+lines 442--446. -/
+theorem IsMPU.blockTensor_succ_isMPUSimple {U : MPOTensor d D} (hU : IsMPU U)
+    {k : ℕ} (hk : 0 < k) (hsimple : IsMPUSimple (MPOTensor.blockTensor U k)) :
+    IsMPUSimple (MPOTensor.blockTensor U (k + 1)) := by
+  classical
+  obtain ⟨a, b, _, h₂⟩ := hsimple
+  let W := doubleLayerTensor U
+  let suffixIndex (I : Fin (MPSTensor.blockPhysDim d (k + 1))) :
+      Fin (MPSTensor.blockPhysDim d k) :=
+    (MPSTensor.decodeBlockEquiv d k).symm
+      (fun x : Fin k ↦ MPSTensor.decodeBlock d (k + 1) I x.succ)
+  let prefixIndex (I : Fin (MPSTensor.blockPhysDim d (k + 1))) :
+      Fin (MPSTensor.blockPhysDim d k) :=
+    (MPSTensor.decodeBlockEquiv d k).symm
+      (fun x : Fin k ↦ MPSTensor.decodeBlock d (k + 1) I x.castSucc)
+  have hmiddle (I J K L : Fin (MPSTensor.blockPhysDim d (k + 1))) :
+      evalWord W
+          (List.ofFn fun x : Fin k ↦ MPSTensor.decodeBlock d (k + 1) I x.succ)
+          (List.ofFn fun x : Fin k ↦ MPSTensor.decodeBlock d (k + 1) J x.succ) *
+        evalWord W
+          (List.ofFn fun x : Fin k ↦ MPSTensor.decodeBlock d (k + 1) K x.castSucc)
+          (List.ofFn fun x : Fin k ↦ MPSTensor.decodeBlock d (k + 1) L x.castSucc) =
+      evalWord W
+          (List.ofFn fun x : Fin k ↦ MPSTensor.decodeBlock d (k + 1) I x.succ)
+          (List.ofFn fun x : Fin k ↦ MPSTensor.decodeBlock d (k + 1) J x.succ) *
+        Matrix.vecMulVec b a *
+          evalWord W
+            (List.ofFn fun x : Fin k ↦ MPSTensor.decodeBlock d (k + 1) K x.castSucc)
+            (List.ofFn fun x : Fin k ↦ MPSTensor.decodeBlock d (k + 1) L x.castSucc) := by
+    have h := h₂ (suffixIndex I) (suffixIndex J) (prefixIndex K) (prefixIndex L)
+    simpa only [doubleLayerTensor_blockTensor, blockTensor_apply,
+      MPSTensor.wordOfBlock, MPSTensor.decodeBlock_decodeBlockEquiv_symm,
+      W, suffixIndex, prefixIndex] using h
+  have hfirst (I J : Fin (MPSTensor.blockPhysDim d (k + 1))) :
+      evalWord W (List.ofFn (MPSTensor.decodeBlock d (k + 1) I))
+          (List.ofFn (MPSTensor.decodeBlock d (k + 1) J)) =
+        W (MPSTensor.decodeBlock d (k + 1) I 0)
+            (MPSTensor.decodeBlock d (k + 1) J 0) *
+          evalWord W
+            (List.ofFn fun x : Fin k ↦ MPSTensor.decodeBlock d (k + 1) I x.succ)
+            (List.ofFn fun x : Fin k ↦ MPSTensor.decodeBlock d (k + 1) J x.succ) := by
+    rw [List.ofFn_succ, List.ofFn_succ, evalWord_cons]
+  have hlast (I J : Fin (MPSTensor.blockPhysDim d (k + 1))) :
+      evalWord W (List.ofFn (MPSTensor.decodeBlock d (k + 1) I))
+          (List.ofFn (MPSTensor.decodeBlock d (k + 1) J)) =
+        evalWord W
+            (List.ofFn fun x : Fin k ↦ MPSTensor.decodeBlock d (k + 1) I x.castSucc)
+            (List.ofFn fun x : Fin k ↦ MPSTensor.decodeBlock d (k + 1) J x.castSucc) *
+          W (MPSTensor.decodeBlock d (k + 1) I (Fin.last k))
+            (MPSTensor.decodeBlock d (k + 1) J (Fin.last k)) := by
+    rw [List.ofFn_succ', List.ofFn_succ', List.concat_eq_append,
+      List.concat_eq_append, evalWord_append W _ _ _ _ (by simp)]
+    simp
+  have h₂succ (I J K L : Fin (MPSTensor.blockPhysDim d (k + 1))) :
+      doubleLayerTensor (MPOTensor.blockTensor U (k + 1)) I J *
+          doubleLayerTensor (MPOTensor.blockTensor U (k + 1)) K L =
+        doubleLayerTensor (MPOTensor.blockTensor U (k + 1)) I J *
+          Matrix.vecMulVec b a *
+            doubleLayerTensor (MPOTensor.blockTensor U (k + 1)) K L := by
+    simp only [doubleLayerTensor_blockTensor, blockTensor_apply,
+      MPSTensor.wordOfBlock]
+    rw [hfirst I J, hlast K L]
+    have h := congrArg
+      (fun X ↦ W (MPSTensor.decodeBlock d (k + 1) I 0)
+          (MPSTensor.decodeBlock d (k + 1) J 0) * X *
+        W (MPSTensor.decodeBlock d (k + 1) K (Fin.last k))
+          (MPSTensor.decodeBlock d (k + 1) L (Fin.last k)))
+      (hmiddle I J K L)
+    simpa only [Matrix.mul_assoc] using h
+  exact (hU.blockTensor (k + 1) (by omega)).isMPUSimple_of_simple2 a b h₂succ
+
+/-- Once a positive direct blocking of an MPU is simple, every longer direct
+blocking is simple; no divisibility assumption on the two lengths is needed.
+
+Source: arXiv:1703.09188, corollary following Proposition III.3,
+lines 442--446. -/
+theorem IsMPU.blockTensor_isMPUSimple_of_le {U : MPOTensor d D} (hU : IsMPU U)
+    {k k' : ℕ} (hk : 0 < k) (hkk' : k ≤ k')
+    (hsimple : IsMPUSimple (MPOTensor.blockTensor U k)) :
+    IsMPUSimple (MPOTensor.blockTensor U k') := by
+  obtain ⟨r, rfl⟩ := Nat.exists_eq_add_of_le hkk'
+  clear hkk'
+  induction r with
+  | zero => simpa using hsimple
+  | succ r ih =>
+      rw [Nat.add_succ]
+      exact hU.blockTensor_succ_isMPUSimple (by omega) ih
 
 private theorem IsMPU.normalized_fixed_points_simple1_of_stabilization
     [NeZero d] [NeZero D] {U : MPOTensor d D} (hU : IsMPU U)
