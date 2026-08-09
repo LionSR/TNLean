@@ -191,11 +191,7 @@ theorem eigenvalue_unique_of_irreducible_cp
   have htrace : ∀ X : Matrix (Fin D) (Fin D) ℂ,
       Matrix.trace (τ * E X) =
         Matrix.trace (MPSTensor.transferMap (d := n) (D := D) (fun i => (K i)ᴴ) τ * X) :=
-    fun X => by
-      rw [hE_eq]
-      simpa only [Kraus.map, Kraus.adjointMap, MPSTensor.transferMap_apply,
-        Matrix.conjTranspose_conjTranspose] using
-          (Kraus.trace_mul_map_eq_trace_adjointMap_mul (K := K) τ X)
+    fun X => Kraus.trace_mul_transferMap_adjoint K hE_eq τ X
   have hEigenvalue_eq_t :
       ∀ (X : Matrix (Fin D) (Fin D) ℂ) (s : ℝ),
         X.PosSemidef → X ≠ 0 → E X = (s : ℂ) • X → s = t := by

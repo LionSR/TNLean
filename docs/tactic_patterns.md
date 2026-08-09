@@ -24,6 +24,41 @@ abstracted — record why, so it is not re-proposed).
 
 ## Promoted
 
+### CFC square-root Hermiticity — promoted
+- **Pattern:** derive `(CFC.sqrt ρ)ᴴ = CFC.sqrt ρ` from `CFC.sqrt_nonneg`,
+  `Matrix.nonneg_iff_posSemidef`, and positive-semidefinite Hermiticity.
+- **Seen:** six occurrences across `Channel/FixedPoint/Corollaries.lean`,
+  `MaximalRank.lean`, and `WeightedCornerFixedPoints.lean` before promotion
+  (2026-08-09).
+- **Abstraction:** `Matrix.conjTranspose_cfc_sqrt` in
+  `TNLean/Analysis/MatrixSqrt.lean`.
+- **Notes:** the helper needs no positivity hypothesis because `CFC.sqrt_nonneg`
+  is unconditional. All six motivating proofs are now one-line applications;
+  the caller files lose fifteen lines.
+
+### positive-definite CFC square-root determinant unit — promoted
+- **Pattern:** combine `CFC.isUnit_sqrt_iff`, `Matrix.PosDef.isUnit`, and
+  `Matrix.isUnit_iff_isUnit_det` to prove `IsUnit (CFC.sqrt ρ).det`.
+- **Seen:** four occurrences across `Channel/FixedPoint/Corollaries.lean` and
+  `WeightedCornerFixedPoints.lean` before promotion (2026-08-09).
+- **Abstraction:** `Matrix.PosDef.isUnit_det_cfc_sqrt` in
+  `TNLean/Analysis/MatrixSqrt.lean`.
+- **Notes:** the theorem retains the caller's `DecidableEq` instance so the
+  determinant does not require proof-irrelevance transport. The four proof
+  blocks become one-line applications.
+
+### transfer-map trace-adjoint pairing — promoted
+- **Pattern:** rewrite a linear map equality `E = transferMap K`, apply the
+  finite-Kraus trace-adjoint identity, and unfold the adjoint transfer family.
+- **Seen:** three occurrences across `Channel/Irreducible/FromSpectral.lean`,
+  `PerronFrobenius.lean`, and `SpectralRadius.lean` before promotion
+  (2026-08-09).
+- **Abstraction:** `Kraus.trace_mul_transferMap_adjoint` in
+  `TNLean/Channel/Irreducible/KrausSetup.lean`.
+- **Notes:** the bridge stays on the existing Channel-side Kraus setup import
+  boundary and removes twelve duplicated caller lines while preserving the
+  MPS transfer-map compatibility theorem and its FQN.
+
 ### pure gauge to heterogeneous repeated blocks — promoted
 - **Pattern:** convert `GaugeEquiv A B` to `HetRepeatedBlocks A B` by passing
   through `EquivalentBlocks`, choosing unit phase, and embedding the
