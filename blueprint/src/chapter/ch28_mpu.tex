@@ -720,6 +720,67 @@ closing a chain of $N$ copies of $\mathcal U$.
     The second identity multiplies the sitewise Kronecker deltas.
 \end{proof}
 
+\begin{theorem}[Matching contractions at the direct stabilized block]
+    \label{thm:mpu_matching_direct_block_contractions}
+    \lean{MPOTensor.IsMPU.blockTensor_mul_sq_simple_contractions_of_transfer_power,
+        MPOTensor.doubleLayerTensor_reindexPhysical}
+    \leanok
+    \uses{thm:mpu_blocked_double_layer_diagonal,
+        thm:mpu_second_block_simple,thm:mpu_bounded_simple_blocking}
+    Suppose that $\rho$ has trace one and that the normalized transfer matrix
+    satisfies
+    \begin{align}
+        E^J&=|\rho)(\Id|,
+        &J&>0.
+    \end{align}
+    Put $K=JD^2$.  After the standard product reindexing of the virtual
+    coordinates, the direct length-$K$ block satisfies \texttt{simple1} and
+    \texttt{simple2} with the specific witnesses $\rho$ and $\Id$ from this
+    transfer-power identity.
+\end{theorem}
+
+\begin{proof}\leanok
+    First block $J$ sites.  The normalized diagonal of this block is the
+    reindexed rank-one matrix $|\rho)(\Id|$, and the trace-one condition is
+    exactly $(\Id|\rho)=1$.  The exact second-block contraction theorem then
+    supplies both identities after a further $D^2$ sites.  The canonical
+    equivalence between iterated blocking and direct length-$JD^2$ blocking
+    transports each double-layer coefficient without changing either virtual
+    witness.
+\end{proof}
+
+\begin{theorem}[Normalized output-tail coisometry]
+    \label{thm:mpu_normalized_output_tail_coisometry}
+    \lean{MPOTensor.IsMPU.normalized_mpo_tail_coisometry}
+    \leanok
+    \uses{lem:mpu_mul_adjoint}
+    Let $K\geq0$, let $p,q\in\Fin d\times\Fin d$, and separate the first two
+    output sites from a tail $\tau\in\Fin K\to\Fin d$.  Then
+    \begin{align}
+        d^{-K}\sum_{\tau}\sum_{\eta}
+        U^{(K+2)}_{(q,\tau),\eta}
+        \overline{U^{(K+2)}_{(p,\tau),\eta}}
+        &=\delta_{p,q}.
+    \end{align}
+    The retained matrix entry has the reversed order $(q,p)$, and the global
+    contraction is the output-first equation
+    $U^{(K+2)}(U^{(K+2)})^\dagger=\Id$.
+\end{theorem}
+
+\begin{proof}\leanok
+    Apply output-first unitarity before performing any source-factor
+    rearrangement.  For each fixed tail, the inner sum is the corresponding
+    identity-matrix entry, hence it is $\delta_{p,q}$.  There are exactly
+    \begin{align}
+        |\Fin K\to\Fin d|=d^K
+    \end{align}
+    tails, and $d^{-K}d^K=1$ because $d>0$.
+\end{proof}
+
+% Formalization scope: identifying this normalized scalar with
+% $(\texttt{sourceU})^\dagger\texttt{sourceU}$ remains issue \#5835.
+
+
 \begin{theorem}[Simplicity at every later direct blocking]
     \label{thm:mpu_all_later_simple_blockings}
     \lean{MPOTensor.IsMPU.isMPUSimple_of_simple2,
