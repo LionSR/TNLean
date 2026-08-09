@@ -278,8 +278,8 @@ overlapping cyclic-window estimate
 positive lower bound on the parent Hamiltonian, independent of the chain length.
 
 This is the version of `parentHamiltonian_gapped` with an arbitrary compression
-constant. It is a stronger conditional interface, not the source
-principal-angle target: the cited estimates concern the reduced local
+constant. It assumes a stronger sufficient estimate, not the source
+principal-angle estimate: the cited estimates concern the reduced local
 ground-space projections, whereas this theorem assumes an all-vector estimate
 for the excitation projections. -/
 theorem parentHamiltonian_gapped_of_overlap_norm_constant
