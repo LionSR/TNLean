@@ -24,6 +24,18 @@ abstracted — record why, so it is not re-proposed).
 
 ## Promoted
 
+### transfer-map irreducibility in Kraus-map notation — promoted
+- **Pattern:** use `Kraus.mapLM_eq_transferMap` to restate
+  `IsIrreducibleMap (MPSTensor.transferMap F)` as
+  `IsIrreducibleMap (Kraus.mapLM F)` before applying generic peripheral
+  theorems.
+- **Seen:** the five transfer-map compatibility declarations in
+  `TNLean/Channel/Peripheral/{ClosureFixedPoint,CyclicGroup}.lean` (2026-08-09).
+- **Abstraction:** `Kraus.isIrreducibleMap_mapLM_of_transferMap` in
+  `TNLean/MPS/Core/TransferChannel.lean`.
+- **Notes:** the generic theorems use `Kraus.mapLM`; each transfer-map statement
+  applies this conversion once before invoking its generic counterpart.
+
 ### CFC square-root Hermiticity — promoted
 - **Pattern:** derive `(CFC.sqrt ρ)ᴴ = CFC.sqrt ρ` from `CFC.sqrt_nonneg`,
   `Matrix.nonneg_iff_posSemidef`, and positive-semidefinite Hermiticity.

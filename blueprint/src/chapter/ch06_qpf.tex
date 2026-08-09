@@ -143,47 +143,161 @@ and~\cite{Evans1978Spectral}.
     positive definite.
 \end{proof}
 
-\begin{theorem}[PSD fixed point is positive definite --- irreducible version]
-    \label{thm:psd_fp_pd_irred}
-    \lean{MPSTensor.posSemidef_fixedPoint_isPosDef_of_irreducible}
+\begin{definition}[Support projection]\label{def:support_proj}
+    \lean{MPSTensor.supportProj}
     \leanok
-    \uses{def:irreducible_cp, def:transfer_map}
-    If $\E_A$ is irreducible and $\rho \ge 0$, $\rho \neq 0$
-    is a fixed point, then $\rho$ is positive definite.
+    For a positive semidefinite matrix $\rho\ge0$, the \emph{support
+        projection} $P$ is the orthogonal projection onto the range of $\rho$.
+    Via the spectral decomposition
+    $\rho=U\diag(\lambda_1,\ldots,\lambda_D)U^\dagger$, it is
+    \begin{align}
+        P
+         & =
+        U\diag\!\bigl(        \mathbf{1}_{\lambda_1>0},\ldots,
+        \mathbf{1}_{\lambda_D>0}
+        \bigr)U^\dagger,
+        \label{eq:qpf_support_projection}
+    \end{align}
+    where $\mathbf{1}_{\lambda_j>0}$ is $1$ if $\lambda_j>0$ and $0$ otherwise.
+\end{definition}
+
+\begin{theorem}[Vanishing complementary Kraus corners]
+    \label{thm:kraus_fixed_support_lower_zero}
+    \lean{Kraus.lowerZero_of_posSemidef_fixedPoint}
+    \leanok
+    \uses{def:kraus_map, def:support_proj}
+    Let $\rho\geq0$ be fixed by the Kraus map of a finite matrix family $K$, and
+    let $Q$ be the support projection of $\rho$. Then $Q$ is an orthogonal
+    projection and
+    \begin{align}
+        (\Id-Q)K_iQ
+         & =0
+        \notag
+    \end{align}
+    for every $i$.
 \end{theorem}
 
 \begin{proof}
     \leanok
-    \uses{def:irreducible_cp}
-    Suppose $\rho$ is not positive definite, and let $Q$ be its support
-    projection. Since $\rho=Q\rho Q$ and
-    $\rho=\sum_iA^i\rho(A^i)^\dagger$, the $(\Id-Q)$ corner satisfies
+    The matrices $Q$ and $\rho$ have the same kernel. For a vector in the
+    orthogonal complement of the range of $Q$, the fixed-point identity writes
+    its zero quadratic form against $\rho$ as a sum of nonnegative quadratic
+    forms. Each summand vanishes, so $QK_i^\dagger(\Id-Q)=0$. Taking adjoints
+    gives $(\Id-Q)K_iQ=0$.
+\end{proof}
+
+\begin{theorem}[Vanishing lower corners imply invariant compression]
+    \label{thm:kraus_lower_zero_invariant_compression}
+    \lean{Kraus.lowerZero_implies_invariance}
+    \leanok
+    \uses{def:kraus_map}
+    Let $K$ be a finite matrix family with Kraus map $E$, and let $Q$ be an
+    orthogonal projection. If $(\Id-Q)K_iQ=0$ for every $i$, then
     \begin{align}
-        0
-         & =(\Id-Q)\rho(\Id-Q) \notag \\
-         & =\sum_i
-        \bigl((\Id-Q)A^iQ\bigr)\rho
-        \bigl((\Id-Q)A^iQ\bigr)^\dagger.
+        Q E(QXQ)Q
+         & =E(QXQ)
         \notag
     \end{align}
-    Every summand is positive semidefinite, so each vanishes. The restriction
-    of $\rho$ to its support is positive definite; hence, for every~$i$,
+    for every $X\in\MN{D}$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    The lower-corner identity gives $K_iQ=QK_iQ$; taking adjoints gives
+    $QK_i^\dagger=QK_i^\dagger Q$. Substituting these two equalities in every
+    summand of the Kraus representation of $E(QXQ)$ proves the compression
+    identity.
+\end{proof}
+
+\begin{theorem}[Invariant support compression for a CP fixed point]
+    \label{thm:cp_fixed_support_invariant}
+    \lean{Kraus.invariantCompression_of_supportProj_fixed_by_cpMap}
+    \leanok
+    \uses{def:cp_map, def:support_proj}
+    Let $E$ be completely positive, let $\rho\geq0$ satisfy $E(\rho)=\rho$,
+    and let $Q$ be the support projection of $\rho$. Then $Q$ is an
+    orthogonal projection and
     \begin{align}
-        (\Id-Q)A^iQ
-         & =0.
-        \notag
+        QE(QXQ)Q
+         & =E(QXQ).
+        \label{eq:cp_fixed_support_invariant}
     \end{align}
-    Thus $A^iQ=QA^iQ$, and for every $X$ each summand
-    $A^iQXQ(A^i)^\dagger$ lies in the $Q$ corner. Therefore
-    \begin{align}
-        Q\E_A(QXQ)Q
-         & =\E_A(QXQ),
-        \notag
-    \end{align}
-    so $Q$ is invariant. Irreducibility forces $Q=0$ or $Q=\Id$. The first
-    case contradicts $\rho\neq0$, while the second says that $\rho$ is
-    positive definite. This is the support-projection mechanism of
-    \cite[Theorem~6.2(1)]{Wolf2012Quantum}.
+    for every $X\in\MN{D}$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:kraus_fixed_support_lower_zero,
+        thm:kraus_lower_zero_invariant_compression}
+    The fixed-point equation makes the complementary Kraus corners vanish,
+    $(\Id-Q)K_iQ=0$. Expanding the Kraus sum then gives
+    Equation~(\ref{eq:cp_fixed_support_invariant}).
+\end{proof}
+
+\begin{theorem}[Nonzero matrix has nonzero support]
+    \label{thm:nonzero_psd_support}
+    \lean{Matrix.PosSemidef.supportProj_ne_zero_of_ne_zero}
+    \leanok
+    \uses{def:support_proj}
+    If $\rho\geq0$ and $\rho\neq0$, then its support projection is nonzero.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    A zero support projection would give $\rho=Q\rho=0$.
+\end{proof}
+
+\begin{theorem}[Full support implies positive definiteness]
+    \label{thm:full_support_posdef}
+    \lean{Matrix.PosSemidef.posDef_of_supportProj_eq_one}
+    \leanok
+    \uses{def:support_proj}
+    If $\rho\geq0$ and its support projection is the identity, then $\rho$ is
+    positive definite.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    The support is the orthogonal complement of the kernel. Thus full support
+    makes the kernel trivial, so $\rho$ is invertible and positive definite.
+\end{proof}
+
+\begin{theorem}[PSD fixed point is positive definite --- irreducible version]
+    \label{thm:psd_fp_pd_irred}
+    \lean{posDef_of_posSemidef_fixedPoint_irreducible_cp}
+    \leanok
+    \uses{def:cp_map, def:irreducible_cp}
+    If $E$ is completely positive and irreducible and $\rho \ge 0$, $\rho \neq 0$
+    is a fixed point of $E$, then $\rho$ is positive definite.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:cp_fixed_support_invariant, thm:nonzero_psd_support,
+        thm:full_support_posdef}
+    Let $Q$ be the support projection of $\rho$.
+    Theorem~\ref{thm:cp_fixed_support_invariant} makes $Q$ an invariant
+    orthogonal projection, so irreducibility gives $Q=0$ or $Q=\Id$.
+    Theorem~\ref{thm:nonzero_psd_support} excludes $Q=0$, and
+    Theorem~\ref{thm:full_support_posdef} turns $Q=\Id$ into positive
+    definiteness.
+\end{proof}
+
+\begin{theorem}[Transfer-map PSD fixed point --- irreducible version]
+    \label{thm:transfer_psd_fp_pd_irred}
+    \lean{MPSTensor.posSemidef_fixedPoint_isPosDef_of_irreducible}
+    \leanok
+    \uses{def:transfer_map, def:irreducible_cp}
+    Let $A$ be an MPS tensor whose transfer map $\E_A$ is irreducible. If
+    $\rho\geq0$, $\rho\neq0$, and $\E_A(\rho)=\rho$, then $\rho$ is positive
+    definite.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:transfer_cp, thm:psd_fp_pd_irred}
+    The transfer map is completely positive, so
+    Theorem~\ref{thm:psd_fp_pd_irred} applies.
 \end{proof}
 
 \begin{theorem}[PSD fixed point is positive definite]
@@ -197,9 +311,9 @@ and~\cite{Evans1978Spectral}.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:injective_irreducible, thm:psd_fp_pd_irred}
+    \uses{thm:injective_irreducible, thm:transfer_psd_fp_pd_irred}
     Injectivity implies irreducibility of the transfer map. Apply
-    Theorem~\ref{thm:psd_fp_pd_irred}.
+    Theorem~\ref{thm:transfer_psd_fp_pd_irred}.
 \end{proof}
 
 \begin{theorem}[Orthogonal trace condition]\label{thm:orthogonal_trace_cond}
@@ -249,9 +363,9 @@ and~\cite{Evans1978Spectral}.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:psd_fp_pd_irred}
+    \uses{thm:transfer_psd_fp_pd_irred}
     If $\sigma=0$, take $c=0$. Otherwise,
-    Theorem~\ref{thm:psd_fp_pd_irred} makes both $\rho$ and $\sigma$
+    Theorem~\ref{thm:transfer_psd_fp_pd_irred} makes both $\rho$ and $\sigma$
     positive definite. Write $\rho=SS^\dagger$ and set
     \begin{align}
         H
@@ -269,10 +383,10 @@ and~\cite{Evans1978Spectral}.
     \end{align}
     so $\tau$ is positive semidefinite and singular. Linearity makes $\tau$
     a fixed point. If $\tau\neq0$,
-    Theorem~\ref{thm:psd_fp_pd_irred} would make it positive
+    Theorem~\ref{thm:transfer_psd_fp_pd_irred} would make it positive
     definite, a contradiction. Thus $\tau=0$ and $\sigma=c_0\rho$.
     This is the minimal-eigenvalue mechanism of
-    \cite[Theorem~6.3(2)]{Wolf2012Quantum}.
+    \cite[Theorem~6.3(2)--(3)]{Wolf2012Quantum}.
 \end{proof}
 
 \begin{theorem}[Uniqueness of PSD fixed point]
@@ -411,7 +525,7 @@ and~\cite{Evans1978Spectral}.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:psd_fp_exists, thm:psd_fp_pd_irred,
+    \uses{thm:psd_fp_exists, thm:transfer_psd_fp_pd_irred,
         thm:psd_fp_unique_irred}
     Existence is the channel fixed-point theorem
     (Theorem~\ref{thm:psd_fp_exists}). Irreducibility upgrades the fixed point
@@ -645,13 +759,13 @@ The TP-gauge application follows~\cite[Appendix~A]{Cirac2016MPDO_arXiv}.
     This combines the eigenvector-existence part of
     \cite[Theorem~6.5]{Wolf2012Quantum} with the
     irreducible upgrade to positive definiteness
-    (\cite[Theorem~6.3(2)]{Wolf2012Quantum});
+    (\cite[Theorem~6.3(2)--(3)]{Wolf2012Quantum});
     the application to the adjoint transfer map follows~\cite[Appendix~A]{Cirac2016MPDO_arXiv}.
 \end{theorem}
 
 \begin{proof}\leanok
     \uses{thm:pf_eigenvector_existence, thm:irred_map_smul,
-        thm:adjoint_transfer_ne_zero, thm:psd_fp_pd_irred}
+        thm:adjoint_transfer_ne_zero, thm:transfer_psd_fp_pd_irred}
     By Theorem~\ref{thm:adjoint_transfer_ne_zero},
     $\E_A^\dagger \neq 0$.
     Since $\E_A^\dagger(X) = \sum_i (A^i)^\dagger X A^i$ is a
@@ -672,7 +786,7 @@ The TP-gauge application follows~\cite[Appendix~A]{Cirac2016MPDO_arXiv}.
     by Theorem~\ref{thm:irred_map_smul}, since irreducibility of $\E_A$
     transfers to the adjoint and is preserved under scaling.
     Since $\E_T$ is irreducible with a positive semidefinite fixed point,
-    Theorem~\ref{thm:psd_fp_pd_irred} gives that $\sigma_0$ is positive
+    Theorem~\ref{thm:transfer_psd_fp_pd_irred} gives that $\sigma_0$ is positive
     definite.
 \end{proof}
 

@@ -170,10 +170,10 @@
 
 \begin{proof}
     \leanok
-    \uses{thm:psd_fp_pd_irred}
+    \uses{thm:transfer_psd_fp_pd_irred}
     The TP hypothesis makes $\E_A$ a channel with a nonzero PSD fixed point.
     Irreducibility makes $\E_A$ an irreducible CP map, and
-    Theorem~\ref{thm:psd_fp_pd_irred} upgrades the fixed point to positive
+    Theorem~\ref{thm:transfer_psd_fp_pd_irred} upgrades the fixed point to positive
     definite. The spectral theorem diagonalizes it by a unitary conjugation,
     which preserves the TP normalization.
 \end{proof}
@@ -484,8 +484,8 @@ canonical form is Theorem~\ref{thm:pgvwc07_ti_canonical_form}.
     \label{thm:cyclic_sector_decomp_after_blocking_isometry}
     \lean{MPSTensor.exists_cyclic_sector_decomp_after_blocking_with_letter_and_isometry}
     \leanok
-    \uses{thm:peripheral_cyclic_structure,
-        thm:adjoint_fixed_projection_block_decomp_isometry}
+    \uses{def:blocked_tensor, def:transfer_map, def:left_canonical_tensor,
+        def:irreducible_tensor, def:peripheral_eigenvalues}
     Let $A$ be a left-canonical irreducible tensor, and suppose the adjoint
     transfer map $\E_{A^\dagger}$ has a positive-definite fixed point, is
     irreducible as a positive map, and has peripheral spectrum
@@ -512,10 +512,10 @@ canonical form is Theorem~\ref{thm:pgvwc07_ti_canonical_form}.
     These isometries also realize the blocked corner letters
     $\varphi_k(C_k^\alpha)=P_k(A^{[m]})^\alpha P_k$.
     \begin{proof}\leanok
-        \uses{thm:peripheral_cyclic_structure,
+        \uses{thm:cyclic_decomposition_irreducible_schwarz,
             thm:adjoint_fixed_projection_block_decomp_isometry}
-        The cyclic peripheral-spectrum decomposition applied to
-        $\E_{A^\dagger}$ provides projections $P_k$ satisfying
+        Theorem~\ref{thm:cyclic_decomposition_irreducible_schwarz}, applied to
+        $\E_{A^\dagger}$, provides projections $P_k$ satisfying
         $\E_{A^\dagger}(P_{k+1})=P_k$. Iterating $m$ times gives
         $(\E_{A^\dagger})^m(P_k)=P_k$, and
         $(\E_{A^\dagger})^m=\E_{(A^{[m]})^\dagger}$ shows that each $P_k$ is
@@ -548,11 +548,12 @@ Theorem.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:normal_from_primitive_posdef, thm:psd_fp_pd_irred}
-    Tensor irreducibility first gives irreducibility of the transfer map. That
-    map has a PSD fixed point by trace preservation, and irreducibility upgrades
-    it to a positive-definite fixed point
-    (Theorem~\ref{thm:psd_fp_pd_irred}).
+    \uses{lem:blocked_irreducibility_direct_support,
+        thm:normal_from_primitive_posdef}
+    The primitive peripheral spectrum, tensor irreducibility, and
+    left-canonical normalization give primitive fixed-point data. The fixed
+    point is positive definite by
+    Lemma~\ref{lem:blocked_irreducibility_direct_support}.
     Theorem~\ref{thm:normal_from_primitive_posdef} then gives normality.
 \end{proof}
 
