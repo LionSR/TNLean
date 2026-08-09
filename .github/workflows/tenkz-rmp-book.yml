@@ -38,8 +38,12 @@ jobs:
       - name: Install TeX dependencies
         uses: texra-ai/lean-env-action/blueprint-system-deps@v1
 
+      # Two parallel compiles, matching pr-ci.yml's tenkz-rmp job: GitHub's
+      # hosted runner has four shared cores, and four parallel compiles left
+      # one target no room to finish inside the harness's fixed per-target
+      # time limit.
       - name: Typeset the RMP benchmark book
-        run: TENKZ_RMP_JOBS=4 python3 scripts/tenkz_rmp.py book --all
+        run: TENKZ_RMP_JOBS=2 python3 scripts/tenkz_rmp.py book --all
 
       - name: Upload the compiled book
         if: success()

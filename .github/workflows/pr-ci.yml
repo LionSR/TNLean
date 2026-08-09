@@ -374,8 +374,12 @@ jobs:
       - name: Install TeX dependencies
         uses: texra-ai/lean-env-action/blueprint-system-deps@v1
 
+      # Each target's XeLaTeX compile has a fixed two-minute ceiling inside
+      # the harness. GitHub's hosted runner has four shared cores, and four
+      # parallel compiles left no slack: one run timed out a target under
+      # ordinary load. Two parallel compiles leave that headroom back.
       - name: Compile and audit the tenkz RMP benchmark
-        run: TENKZ_RMP_JOBS=4 python3 scripts/tenkz_rmp.py check --all
+        run: TENKZ_RMP_JOBS=2 python3 scripts/tenkz_rmp.py check --all
 
   build:
     needs: changes
