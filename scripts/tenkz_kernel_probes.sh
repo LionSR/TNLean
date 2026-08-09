@@ -1851,7 +1851,9 @@ for scope_case in n_group_size:TKZ-SIZE-SCOPE \
                   n_group_check:TKZ-EQ-CHECK-SCOPE \
                   n_check_reason_blank:TKZ-EQ-CHECK-REASON \
                   n_check_word:TKZ-EQ-CHECK-WORD \
-                  n_check_relation:TKZ-EQ-CHECK-RELATION; do
+                  n_check_relation:TKZ-EQ-CHECK-RELATION \
+                  n_check_bar:TKZ-EQ-CHECK-BAR \
+                  n_panel_metrics:TKZ-METRICS-PANEL; do
   scope_name=${scope_case%%:*}
   scope_code=${scope_case##*:}
   if ( cd "$WORK" &&
