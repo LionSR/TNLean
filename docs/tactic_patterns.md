@@ -83,21 +83,33 @@ abstracted — record why, so it is not re-proposed).
   intro i _
   ring
   ```
-- **Seen:** seven occurrences across
+- **Seen:** 19 occurrences across 14 files before promotion:
+  `TNLean/Channel/KoashiImoto/MarkovBipartiteBlockForm.lean`,
   `TNLean/Channel/Wigner/ProjectivePureState.lean`,
   `TNLean/Channel/Wigner/TwoPureStateCharpoly.lean`,
-  `TNLean/MPS/MPDO/BNTSectorAreaLaw.lean`, and
-  `TNLean/MPS/MPDO/TopologicalTerminalSpectral.lean` before promotion.
+  `TNLean/Entropy/ClassicalMutualInformation.lean`,
+  `TNLean/MPS/MPDO/BNTFusionTensorClauseFromRFP.lean`,
+  `TNLean/MPS/MPDO/BNTProjectorSelection.lean`,
+  `TNLean/MPS/MPDO/BNTSectorAreaLaw.lean`,
+  `TNLean/MPS/MPDO/BNTThreeSiteReducedClosure.lean`,
+  `TNLean/MPS/MPDO/CompleteZipperFusionPentagon.lean`,
+  `TNLean/MPS/MPDO/PhysicalSectorCoordinateTransport.lean`,
+  `TNLean/MPS/MPDO/TopologicalProjectorRecursion.lean`,
+  `TNLean/MPS/MPDO/TopologicalTerminalSpectral.lean`,
+  `TNLean/MPS/RFP/AppendixBSupport.lean`, and
+  `TNLean/MPS/RFP/BellPairCIDObstruction.lean`.
 - **Abstraction:** `Fintype.sum_mul_mul_eq_mul_sum_mul` in
   `TNLean/Algebra/FinSum.lean`.
 - **Notes:** the shared identity requires only a non-unital semiring and pulls
-  a common left factor from a sum of triple products. The three sites whose
-  common factor was in the middle first use commutativity to put it in the
-  canonical position. All seven sites now call the lemma, and all four
-  consumer files import `TNLean.Algebra.FinSum` directly. The consumer proofs
-  remove 28 repeated tactic lines; after the mathematical lemma documentation
-  and four direct imports, the cumulative Lean-source refactor removes one
-  line net (29 additions, 30 deletions).
+  a common left factor from a sum of triple products. Callers use commutativity
+  when the common factor is not initially on the left. All 19 sites now call
+  the lemma, and all 14 consumer files import `TNLean.Algebra.FinSum` directly.
+  This removes 76 repeated tactic lines. The final 12-site pass, including
+  three `simp_rw` variants, adds and removes 48 Lean-source lines; together
+  with the initial seven-site pass, the cumulative refactor has 77 additions
+  and 78 deletions, so it removes one Lean-source line net. A binder- and
+  `rw`/`simp_rw`-insensitive repository-wide assertion finds no equivalent
+  four-line block and exactly 19 calls of the shared lemma.
 
 ### dependent finite-sum flattening — promoted
 - **Pattern:** pass between the double sum over `j` and `q : Fin (mult j)` and the
