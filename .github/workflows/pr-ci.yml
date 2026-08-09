@@ -342,6 +342,41 @@ jobs:
       - name: Check string-engine event and pixel probes
         run: scripts/tenkz_string_probes.sh
 
+  # Compiles and audits the 130-target RMP benchmark: tenkz's own reproduction
+  # of the diagrams in the tensor-network review paper it is modeled on. This
+  # is the book the library was actually built against, and it is where every
+  # visual defect in the campaign was found — including one regression that
+  # every other job in this file missed (issue #5824). "check" compiles each
+  # target standalone and audits its render event log; a measured full run
+  # took about four to five minutes on a ten-core development machine at full
+  # harness parallelism, so it runs on every pull request that can move RMP
+  # ink, gated by the same `corpus` path filter already used above. The
+  # slower step -- typesetting the full illustrated book and rendering every
+  # page to an image -- runs weekly and on demand instead, in
+  # tenkz-rmp-book.yml, because that step is about producing the reviewable
+  # book, not about catching a regression quickly.
+  tenkz-rmp:
+    name: Check tenkz RMP benchmark corpus
+    needs: changes
+    if: |
+      !cancelled() && (
+        github.event_name != 'pull_request' ||
+        needs.changes.outputs.corpus == 'true' ||
+        needs.changes.outputs.workflow == 'true'
+      )
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Install TeX dependencies
+        uses: texra-ai/lean-env-action/blueprint-system-deps@v1
+
+      - name: Compile and audit the tenkz RMP benchmark
+        run: TENKZ_RMP_JOBS=4 python3 scripts/tenkz_rmp.py check --all
+
   build:
     needs: changes
     outputs:

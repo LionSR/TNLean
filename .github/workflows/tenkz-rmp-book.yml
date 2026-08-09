@@ -1,0 +1,44 @@
+name: Tenkz RMP benchmark book
+
+# The 130-target RMP benchmark is tenkz's own picture book: every case
+# reproduces a diagram from the tensor-network review paper the library is
+# modeled on, and every visual defect found during the campaign was found by
+# reading this book. `pr-ci.yml` compiles and audits all 130 targets on every
+# pull request that can move RMP ink (the `tenkz-rmp` job, gated by the
+# `corpus` path filter). What that job does not do is typeset the book itself
+# or render its pages to images, because that additional step costs about as
+# much time again as the per-target compile, and it exists to produce a book
+# a person reads, not to catch a regression fast. This workflow does that
+# slower step -- once a week, and any time someone asks for it by hand -- and
+# uploads the compiled PDF so a reviewer can open it without a local
+# checkout.
+
+on:
+  schedule:
+    - cron: "0 10 * * 1"  # Mondays at 10:00 UTC, clear of the housekeeping crons
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  book:
+    name: Typeset the RMP benchmark book
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Install TeX dependencies
+        uses: texra-ai/lean-env-action/blueprint-system-deps@v1
+
+      - name: Typeset the RMP benchmark book
+        run: TENKZ_RMP_JOBS=4 python3 scripts/tenkz_rmp.py book --all
+
+      - name: Upload the compiled book
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: tenkz-rmp-benchmark
+          path: output/pdf/tenkz-rmp-benchmark.pdf
+          retention-days: 30
