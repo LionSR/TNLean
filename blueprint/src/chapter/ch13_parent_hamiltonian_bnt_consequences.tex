@@ -475,18 +475,13 @@ with the chosen basis of normal tensors.
 
 \begin{proof}
     \leanok
-    \uses{cor:block_diagonal_kernel_global_cut,
-        thm:chain_ground_space_eq_mpv_normal,
-        lem:bnt_span_le_parent_hamiltonian_kernel}
+    \uses{thm:gs_eq_bnt_span_source_normalization}
     % Scope restriction documented in
     % docs/paper-gaps/pgvwc07_ti_canonical_form_scope.tex.
-    The source length bounds imply $L_0<L$, $L\le N$, and $L_0+1<N$.
-    Theorem~\ref{thm:chain_ground_space_eq_mpv_normal} therefore identifies
-    each single-block periodic chain space with its matrix-product-vector
-    line. Corollary~\ref{cor:block_diagonal_kernel_global_cut} gives the
-    containment of the kernel in the BNT span. Conversely,
-    Lemma~\ref{lem:bnt_span_le_parent_hamiltonian_kernel} gives the reverse
-    containment directly.
+    Apply the general-canonical-normalization theorem below with
+    $\Lambda_j=\Id$.  Positive definiteness is immediate, and the assumed
+    left-canonical identity is exactly the required dual fixed-point equation
+    at $\Lambda_j=\Id$.
 \end{proof}
 
 \begin{theorem}[PGVWC07 source-length kernel equality at general canonical normalization]
@@ -521,12 +516,11 @@ with the chosen basis of normal tensors.
     \uses{cor:block_diagonal_kernel_global_cut,
         thm:chain_ground_space_eq_mpv_normal,
         lem:bnt_span_le_parent_hamiltonian_kernel}
-    Gauge each block by the positive square root of $\Lambda_j$ only inside the
-    fixed-length simultaneous tuple-span argument, and transport that span back
-    to the source representative. The source unital identity then propagates
-    the span to the complementary segment used by the global change of cut.
-    Comparing the two block-diagonal boundary representations closes every
-    block component periodically. The resulting chain-space equality and
-    single-block uniqueness give the forward kernel containment; the periodic
-    component vectors give the reverse containment.
+    The source length bounds imply $L_0<L$, $L\le N$, and $L_0+1<N$.
+    Theorem~\ref{thm:chain_ground_space_eq_mpv_normal} identifies each
+    single-block periodic chain space with its matrix-product-vector line.
+    Corollary~\ref{cor:block_diagonal_kernel_global_cut} therefore gives the
+    containment of the parent-Hamiltonian kernel in the BNT span. Conversely,
+    Lemma~\ref{lem:bnt_span_le_parent_hamiltonian_kernel} gives the reverse
+    containment, and antisymmetry yields equality.
 \end{proof}

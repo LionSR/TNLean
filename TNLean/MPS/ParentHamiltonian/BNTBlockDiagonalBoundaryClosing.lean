@@ -163,7 +163,10 @@ theorem block_boundary_intertwines_of_cyclicTranslate_sum_groundSpaceMap_eq_of_a
 /-- Close block-diagonal boundary conditions from an open-boundary
 representation and a simultaneous span on the complement of an injective tail.
 This packages the common change-of-cut argument used by both the doubly
-normalized and positive-dual PGVWC07 routes. -/
+normalized and positive-dual PGVWC07 routes.
+
+The change-of-cut argument formalized here is the boundary-closing step in
+arXiv:quant-ph/0608197, Theorem 12, proof lines 1454--1456. -/
 theorem exists_blockDiagonal_boundary_chainGroundSpace_of_global_cut_of_openBoundary
     {r : ℕ} {dim : Fin r → ℕ}
     (μ : Fin r → ℂ) (A : (j : Fin r) → MPSTensor d (dim j))
