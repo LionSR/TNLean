@@ -127,7 +127,7 @@ private theorem spectralRadius_compl_lt_one_of_primitive_fixedPoint [NeZero D]
 
 /-- Gelfand's formula: if `spectralRadius(T) < 1`, then `‖T ^ n‖ ≤ C · r ^ n`
 for some `C > 0` and `0 < r < 1`, uniformly in `n`. -/
-private theorem geometric_bound_of_spectralRadius_lt_one
+theorem geometric_bound_of_spectralRadius_lt_one
     {V : Type*} [NormedAddCommGroup V] [NormedSpace ℂ V] [CompleteSpace V]
     (T : V →L[ℂ] V)
     (hT : spectralRadius ℂ T < 1) :
