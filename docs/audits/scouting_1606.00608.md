@@ -479,7 +479,7 @@ Tier 5 ────────────────────────�
   - `IsTransferIdempotent`, `IsZCL`, `IsCID`, `IsLocallyOrthogonal`,
     `IsDecorrelated`, `IsFrustrationFree`, `IsNNCPH`
 - **Theorems**: `zcl_iff_idempotent_transfer`, `rfp_iff_zcl`, `rfp_nt_structural`, `decorrelated_iff_commutingHam`, `isLPDO_of_purification`, `prfp_iff_zcl_of_isLPDO`
-- **Namespaces**: `MPSTensor.IsTransferIdempotent`, `MPOTensor.IsMPDO`, `MPOTensor.IsLPDO`, `MPOTensor.IsRFP`
+- **Namespaces**: `MPSTensor.IsTransferIdempotent`, `MPOTensor.IsMPDO`, `MPOTensor.IsLPDO`, `MPOTensor.IsZCL`
 
 ---
 

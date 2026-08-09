@@ -36,7 +36,7 @@ coincides with the fixed-point algebra of the adjoint blocked transfer map
 Under a trace-preserving normalization and a positive-definite fixed point of the
 MPO transfer map, doubled-index transfer-map idempotence yields a **stationary**
 algebra tower through
-`hasBlockedFixedPointAlgebraTower_of_isZCL_of_isTP_of_posDef_fixed`.
+`hasBlockedAdjointFixedPointAlgebraTower_of_isZCL_of_isTP_of_posDef_fixed`.
 Without idempotence, the adjoint fixed-point algebras of the blocked transfer
 maps need not stabilize with the blocking length.
 
@@ -70,8 +70,8 @@ BNT / coefficient-comparison layer from Appendix C.3--C.4.
 
 ### Why the converse algebra-to-fusion implication is blocked
 
-The lemma `adjoint_transferMap_apply_of_hasBlockedFixedPointAlgebraTower` below extracts
-the strongest direct consequence of `HasBlockedFixedPointAlgebraTower M`: the inclusion
+The lemma `adjoint_transferMap_apply_of_hasBlockedAdjointFixedPointAlgebraTower` below extracts
+the strongest direct consequence of `HasBlockedAdjointFixedPointAlgebraTower M`: the inclusion
 maps `iota n` force every adjoint fixed point of the blocked transfer map at
 positive blocking size `n` to be an adjoint fixed point of the unblocked
 transfer map, i.e. `Fix((blockedTransferMap M n).adjoint)` is contained in
@@ -89,7 +89,7 @@ produce a blocked adjoint fixed point at some positive `n` that is not fixed
 by the unblocked adjoint. It does *not* exclude unit-modulus eigenvalues of
 irrational phase, and a fortiori it is not enough to force `transferMap M`
 itself to be idempotent. Ergodic channels with a strict complementary gap on the
-`1`-complement therefore satisfy `HasBlockedFixedPointAlgebraTower M` without
+`1`-complement therefore satisfy `HasBlockedAdjointFixedPointAlgebraTower M` without
 having idempotent doubled-index transfer maps: on `M_D(ℂ)`, with `0 < ε < 1`, consider
 `E(X) = ε · X + (1 - ε) · Π_diag(X)`, where `Π_diag` is the projection that
 zeroes the off-diagonal entries of `X`. Then `Π_diag ∘ Π_diag = Π_diag`,
@@ -277,7 +277,7 @@ end AlgebraStructureData
 
 /-- The blocked fixed-point-algebra tower of an MPO tensor.
 
-An MPO tensor satisfies `HasBlockedFixedPointAlgebraTower` when it admits a tower
+An MPO tensor satisfies `HasBlockedAdjointFixedPointAlgebraTower` when it admits a tower
 of support algebras compatible with its blocked adjoint transfer maps.
 
 **Scope restriction (blocked fixed-point-algebra predicate):** This predicate
@@ -286,7 +286,7 @@ compatibility. It is weaker than, and is not the formalization of,
 arXiv:1606.00608, Theorem `thm:IV.13` (Theorem 4.14(ii), lines 972--985), which
 also requires the uniform BNT-label coefficient family and its idempotent law.
 See `docs/paper-gaps/cpgsv17_blocked_chi_uniformity.tex`. -/
-def HasBlockedFixedPointAlgebraTower (M : MPOTensor d D) : Prop :=
+def HasBlockedAdjointFixedPointAlgebraTower (M : MPOTensor d D) : Prop :=
   ∃ data : AlgebraStructureData d D, data.CompatibleWith M
 
 /-- A trace-preserving MPO with a positive-definite fixed point admits a
@@ -301,10 +301,10 @@ to invoke Wolf Theorem 6.12, are also absent from Theorem `thm:IV.13`
 an MPDO. Moreover, the conclusion is the blocked fixed-point-algebra predicate
 above, not the full coefficient statement in part (ii). See
 `docs/paper-gaps/cpgsv17_blocked_chi_uniformity.tex`. -/
-theorem hasBlockedFixedPointAlgebraTower_of_isZCL_of_isTP_of_posDef_fixed
+theorem hasBlockedAdjointFixedPointAlgebraTower_of_isZCL_of_isTP_of_posDef_fixed
     {M : MPOTensor d D} (hZCL : IsZCL M) (h_tp : Kraus.IsTP M.toMPSTensor)
     {ρ : Mat} (hρ : ρ.PosDef) (hρ_fix : transferMap M ρ = ρ) :
-    HasBlockedFixedPointAlgebraTower M :=
+    HasBlockedAdjointFixedPointAlgebraTower M :=
   ⟨AlgebraStructureData.stationaryOfFaithfulFixedPoint M h_tp hρ hρ_fix,
    AlgebraStructureData.stationaryOfFaithfulFixedPoint_compatible
      (M := M) (h_tp := h_tp) hρ hρ_fix hZCL⟩
@@ -313,12 +313,12 @@ theorem hasBlockedFixedPointAlgebraTower_of_isZCL_of_isTP_of_posDef_fixed
 fixed-point spaces stabilize across all positive powers. This extracts exactly
 what the present compatibility relation can see, without asserting the
 transfer-retract, equivalently idempotence, conclusion. -/
-theorem hasBlockedFixedPointAlgebraTower_of_adjointFixedPoints_eq_of_isTP_of_posDef_fixed
+theorem hasBlockedAdjointFixedPointAlgebraTower_of_adjointFixedPoints_eq_of_isTP_of_posDef_fixed
     {M : MPOTensor d D} (h_tp : Kraus.IsTP M.toMPSTensor)
     {ρ : Mat} (hρ : ρ.PosDef) (hρ_fix : transferMap M ρ = ρ)
     (hEq : ∀ n : ℕ, 0 < n → ∀ X : Mat,
       (transferMap M).adjoint X = X ↔ (blockedTransferMap M n).adjoint X = X) :
-    HasBlockedFixedPointAlgebraTower M :=
+    HasBlockedAdjointFixedPointAlgebraTower M :=
   ⟨AlgebraStructureData.stationaryOfFaithfulFixedPoint M h_tp hρ hρ_fix,
    AlgebraStructureData.stationaryOfFaithfulFixedPoint_compatible_of_adjointFixedPoints_eq
      (M := M) (h_tp := h_tp) hρ hρ_fix hEq⟩
@@ -496,15 +496,15 @@ through `pow_succ` and applying `LinearMap.adjoint_comp` then extracts
 `(transferMap M).adjoint X = X`.
 
 This is the strongest consequence available from the current
-`HasBlockedFixedPointAlgebraTower` predicate: it excludes *finite-order*
+`HasBlockedAdjointFixedPointAlgebraTower` predicate: it excludes *finite-order*
 (root-of-unity) peripheral eigenvalues of `(transferMap M).adjoint`, since
 any such eigenvalue would produce a blocked adjoint fixed point that is not
 fixed by the unblocked adjoint. It does not exclude unit-modulus eigenvalues
 of irrational phase, and is therefore not enough to force `transferMap M`
 to be idempotent. See the module docstring for the blocker on the converse
 algebra-to-fusion implication. -/
-theorem adjoint_transferMap_apply_of_hasBlockedFixedPointAlgebraTower
-    {M : MPOTensor d D} (hAlg : HasBlockedFixedPointAlgebraTower M)
+theorem adjoint_transferMap_apply_of_hasBlockedAdjointFixedPointAlgebraTower
+    {M : MPOTensor d D} (hAlg : HasBlockedAdjointFixedPointAlgebraTower M)
     {n : ℕ} (hn : 0 < n) {X : Mat}
     (hX : (blockedTransferMap M n).adjoint X = X) :
     (transferMap M).adjoint X = X := by
@@ -524,10 +524,10 @@ theorem adjoint_transferMap_apply_of_hasBlockedFixedPointAlgebraTower
 point of `transferMap M` is an adjoint fixed point of every blocked transfer
 map `blockedTransferMap M n`.
 
-Combined with `adjoint_transferMap_apply_of_hasBlockedFixedPointAlgebraTower`, this
+Combined with `adjoint_transferMap_apply_of_hasBlockedAdjointFixedPointAlgebraTower`, this
 establishes the fixed-point equality
 `Fix((blockedTransferMap M n).adjoint) = Fix((transferMap M).adjoint)` at every
-positive blocking size `n` under `HasBlockedFixedPointAlgebraTower`. The proof is a
+positive blocking size `n` under `HasBlockedAdjointFixedPointAlgebraTower`. The proof is a
 simple induction using `blockedTransferMap_eq_pow` and `LinearMap.adjoint_comp`,
 and does not require the algebra-structure data. -/
 theorem adjoint_blockedTransferMap_apply_of_adjoint_transferMap_apply
@@ -565,7 +565,7 @@ theorem adjoint_blockedTransferMap_apply_of_adjoint_transferMap_eigenvector
 eigenvalues different from $1$.
 
 More explicitly, let `E` be the one-site transfer map. If
-`HasBlockedFixedPointAlgebraTower M` holds, `X ≠ 0`,
+`HasBlockedAdjointFixedPointAlgebraTower M` holds, `X ≠ 0`,
 `E† X = λ X`, and `λ^n = 1` for some `n > 0`, then `λ = 1`. This is exactly the
 finite-order consequence of the fixed-point equality
 $\operatorname{Fix}((E^n)^\dagger)=\operatorname{Fix}(E^\dagger)$. It does not
@@ -576,8 +576,8 @@ tensors.
 Comparison: arXiv:1606.00608, Theorem IV.13(ii), lines 972--985, and Appendix
 C.4, lines 2065--2085 of `Papers/1606.00608/MPDO-22-12-17-2.tex`. The cited
 passages do not state this spectral consequence. -/
-theorem adjoint_transferMap_eigenvalue_eq_one_of_hasBlockedFixedPointAlgebraTower
-    {M : MPOTensor d D} (hAlg : HasBlockedFixedPointAlgebraTower M)
+theorem adjoint_transferMap_eigenvalue_eq_one_of_hasBlockedAdjointFixedPointAlgebraTower
+    {M : MPOTensor d D} (hAlg : HasBlockedAdjointFixedPointAlgebraTower M)
     {n : ℕ} (hn : 0 < n) {lam : ℂ} {X : Mat} (hX_ne : X ≠ 0)
     (hX : (transferMap M).adjoint X = lam • X) (hlam : lam ^ n = 1) :
     lam = 1 := by
@@ -585,7 +585,7 @@ theorem adjoint_transferMap_eigenvalue_eq_one_of_hasBlockedFixedPointAlgebraTowe
     rw [adjoint_blockedTransferMap_apply_of_adjoint_transferMap_eigenvector
       (M := M) n hX, hlam, one_smul]
   have hFix : (transferMap M).adjoint X = X :=
-    adjoint_transferMap_apply_of_hasBlockedFixedPointAlgebraTower hAlg hn hBlocked
+    adjoint_transferMap_apply_of_hasBlockedAdjointFixedPointAlgebraTower hAlg hn hBlocked
   have hLamX : lam • X = X := by
     rw [← hX]
     exact hFix
@@ -603,12 +603,12 @@ only the fixed-point consequence of the present algebra-tower predicate, not
 the converse from the algebra formulation to the paper's physical
 active-support fusion-coisometry formulation; the latter requires the positive
 trace-power coefficient comparison used in Appendix C.4. -/
-theorem adjoint_blockedTransferMap_apply_iff_of_hasBlockedFixedPointAlgebraTower
-    {M : MPOTensor d D} (hAlg : HasBlockedFixedPointAlgebraTower M)
+theorem adjoint_blockedTransferMap_apply_iff_of_hasBlockedAdjointFixedPointAlgebraTower
+    {M : MPOTensor d D} (hAlg : HasBlockedAdjointFixedPointAlgebraTower M)
     {n : ℕ} (hn : 0 < n) {X : Mat} :
     (blockedTransferMap M n).adjoint X = X ↔ (transferMap M).adjoint X = X := by
   constructor
-  · exact adjoint_transferMap_apply_of_hasBlockedFixedPointAlgebraTower hAlg hn
+  · exact adjoint_transferMap_apply_of_hasBlockedAdjointFixedPointAlgebraTower hAlg hn
   · exact adjoint_blockedTransferMap_apply_of_adjoint_transferMap_apply n
 
 /-- Under the current algebra-structure predicate and the faithful fixed-point
@@ -624,15 +624,15 @@ formulation.
 Comparison: arXiv:1606.00608, Theorem IV.13(ii), lines 972--985, and Appendix
 C.4, lines 2015--2067 of `Papers/1606.00608/MPDO-22-12-17-2.tex`. The cited
 passages do not state this stationary-tower consequence. -/
-theorem stationaryOfFaithfulFixedPoint_compatible_of_hasBlockedFixedPointAlgebraTower
-    {M : MPOTensor d D} (hAlg : HasBlockedFixedPointAlgebraTower M)
+theorem stationaryOfFaithfulFixedPoint_compatible_of_hasBlockedAdjointFixedPointAlgebraTower
+    {M : MPOTensor d D} (hAlg : HasBlockedAdjointFixedPointAlgebraTower M)
     (h_tp : Kraus.IsTP M.toMPSTensor)
     {ρ : Mat} (hρ : ρ.PosDef) (hρ_fix : transferMap M ρ = ρ) :
     (AlgebraStructureData.stationaryOfFaithfulFixedPoint M h_tp hρ hρ_fix).CompatibleWith M :=
   AlgebraStructureData.stationaryOfFaithfulFixedPoint_compatible_of_adjointFixedPoints_eq
     (M := M) (h_tp := h_tp) hρ hρ_fix
     (fun _ hn X =>
-      (adjoint_blockedTransferMap_apply_iff_of_hasBlockedFixedPointAlgebraTower
+      (adjoint_blockedTransferMap_apply_iff_of_hasBlockedAdjointFixedPointAlgebraTower
         (M := M) hAlg hn (X := X)).symm)
 
 /-! ### Diagonal $\chi$-matrices and the trace-power formula

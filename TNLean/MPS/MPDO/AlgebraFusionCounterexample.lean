@@ -170,9 +170,9 @@ private theorem phaseFlipMPO_one_fixed :
   rw [phaseFlipTensor_transferMap_apply]
   by_cases hij : i = j <;> simp [hij]
 
-private theorem phaseFlipMPO_hasBlockedFixedPointAlgebraTower :
-    HasBlockedFixedPointAlgebraTower phaseFlipTensor.toMPOTensor :=
-  hasBlockedFixedPointAlgebraTower_of_adjointFixedPoints_eq_of_isTP_of_posDef_fixed
+private theorem phaseFlipMPO_hasBlockedAdjointFixedPointAlgebraTower :
+    HasBlockedAdjointFixedPointAlgebraTower phaseFlipTensor.toMPOTensor :=
+  hasBlockedAdjointFixedPointAlgebraTower_of_adjointFixedPoints_eq_of_isTP_of_posDef_fixed
     phaseFlipMPO_isTP (Matrix.PosDef.one (n := Fin 2) (R := ℂ))
       phaseFlipMPO_one_fixed phaseFlipMPO_adjointFixedPoints_eq
 
@@ -201,13 +201,13 @@ while the transfer map is not idempotent.
 This does not contradict arXiv:1606.00608, Theorem 4.14(ii). The converse in
 Appendix C.4, lines 2046--2085, assumes the positive BNT-label coefficient
 formula and the length-one idempotent trace identity, neither of which is part
-of `HasBlockedFixedPointAlgebraTower`. -/
-theorem exists_hasBlockedFixedPointAlgebraTower_not_isZCL :
+of `HasBlockedAdjointFixedPointAlgebraTower`. -/
+theorem exists_hasBlockedAdjointFixedPointAlgebraTower_not_isZCL :
     ∃ (M : MPOTensor 2 2) (ρ : Matrix (Fin 2) (Fin 2) ℂ),
       Kraus.IsTP M.toMPSTensor ∧ ρ.PosDef ∧ MPOTensor.transferMap M ρ = ρ ∧
-        HasBlockedFixedPointAlgebraTower M ∧ ¬IsZCL M :=
+        HasBlockedAdjointFixedPointAlgebraTower M ∧ ¬IsZCL M :=
   ⟨phaseFlipTensor.toMPOTensor, 1, phaseFlipMPO_isTP,
     Matrix.PosDef.one (n := Fin 2) (R := ℂ), phaseFlipMPO_one_fixed,
-    phaseFlipMPO_hasBlockedFixedPointAlgebraTower, phaseFlipMPO_not_isZCL⟩
+    phaseFlipMPO_hasBlockedAdjointFixedPointAlgebraTower, phaseFlipMPO_not_isZCL⟩
 
 end MPOTensor

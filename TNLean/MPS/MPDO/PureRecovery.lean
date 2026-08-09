@@ -51,8 +51,8 @@ theorem toMPOTensor_isZCL_iff_isTransferIdempotent (A : MPSTensor d D) :
 /-- For a pure MPS embedded as a diagonal MPO, doubled-index transfer-map
 idempotence reduces to the pure-state zero-correlation-length condition via
 `MPSTensor.zcl_iff_idempotent_transfer`. -/
-theorem toMPOTensor_isZCL_iff_isZCL (A : MPSTensor d D) :
-    MPOTensor.IsZCL A.toMPOTensor ↔ IsZCL A :=
+theorem toMPOTensor_isZCL_iff_mps_isZCL (A : MPSTensor d D) :
+    MPOTensor.IsZCL A.toMPOTensor ↔ MPSTensor.IsZCL A :=
   (toMPOTensor_isZCL_iff_isTransferIdempotent A).trans
     (zcl_iff_idempotent_transfer A).symm
 

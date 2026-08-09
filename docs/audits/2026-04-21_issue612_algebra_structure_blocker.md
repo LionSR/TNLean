@@ -26,7 +26,7 @@ The file `TNLean/MPS/MPDO/AlgebraStructure.lean` still exposes a vacuous
 compatibility predicate:
 
 - `MPOTensor.AlgebraStructureData.CompatibleWith _ _ : Prop := True`
-- `MPOTensor.IsRFP_MPDO_via_algebra_scaffold M := ∃ data, data.CompatibleWith M`
+- the former scaffold predicate `∃ data, data.CompatibleWith M`
 
 So the current algebra-structure predicate is satisfied by every MPO tensor and
 cannot yet serve as a mathematical formulation of Theorem IV.13(ii) from
@@ -54,7 +54,7 @@ PR #665 (#611) added the transfer-retract formulation in
   `S ∘ₗ T = blockedTransferMap M n`.
 
 This is strong enough to prove
-`MPOTensor.isRFP_MPDO_via_transferRetract_iff_isRFP`, because an idempotent blocked
+`MPOTensor.transferRetractData_one_iff_isZCL`, because an idempotent blocked
 transfer map factors through its range and conversely any such retract makes the
 blocked transfer map idempotent.
 
