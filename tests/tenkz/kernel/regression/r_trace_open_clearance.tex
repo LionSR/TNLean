@@ -1,0 +1,92 @@
+% Regression: a traced row's return stands clear of the open indices the
+% picture asked for, not only of the ones its cells carry (issue #5766).
+%
+% An open index reaches a row through three productions.  A cell carries an
+% authored port; the picture's physical policy grows a leg; and the picture
+% opens an index that stands in no port list at all -- a cell-level physical
+% opening, or a boundary side left open.  The last kind carries no host, so
+% the side it opens is what says which row it hangs from and which way it
+% points, and a return that reads hosts alone passes straight through it.
+%
+% Two ladders, each traced west to east, each with the return of its first
+% row running north.  The first opens a physical index at column 1, the
+% second leaves its whole north boundary open, and the ordinary wire route
+% stands a free end one open index out either way.  The probes are written in
+% the metric names, so what is pinned is the clearance the table declares
+% rather than a number this file remembers.
+\documentclass{standalone}
+\usepackage{tenkz}
+\makeatletter
+\ExplSyntaxOn
+\file_input:n { tenkz-kernel.code.tex }
+\tl_new:N \l__tenkz_test_open_name_tl
+\int_new:N \l__tenkz_test_open_cross_int
+\int_new:N \g__tenkz_test_open_rows_int
+\cs_new_protected:Npn \__tenkz_test_open_probe:nnnnnn #1#2#3#4#5#6
+  {
+    \path [ spath/save = tenkz-test-open-probe ]
+      \__tenkz_kernel_r_pair:nn {#1} {#2}
+      --
+      \__tenkz_kernel_r_pair:nn {#3} {#4} ;
+    \__tenkz_string_count:nnN
+      {wrap-1} {tenkz-test-open-probe}
+      \l__tenkz_test_open_cross_int
+    \int_compare:nNnF { \l__tenkz_test_open_cross_int } = {#5}
+      { \errmessage {#6} }
+  }
+% The return of the first row runs north, so a probe reaching to just inside
+% the daylight beyond the opening meets nothing, and one reaching just past
+% it meets the return exactly once.
+\cs_new_protected:Npn \__tenkz_test_open_pair:n #1
+  {
+    \__tenkz_test_open_probe:nnnnnn
+      {0} { #1 }
+      {0} { #1 + \__tenkz_metric_ratio:n {daylight} - 0.01 }
+      {0}
+      {a~return~ran~inside~the~daylight~an~opened~index~owns}
+    \__tenkz_test_open_probe:nnnnnn
+      {0} { #1 }
+      {0} { #1 + \__tenkz_metric_ratio:n {daylight} + 0.01 }
+      {1}
+      {a~return~missed~one~daylight~beyond~an~opened~index}
+  }
+\cs_new_eq:NN
+  \__tenkz_test_open_stroke:nn
+  \__tenkz_kernel_r_wire_stroke:nn
+\cs_set_protected:Npn \__tenkz_kernel_r_wire_stroke:nn #1#2
+  {
+    \__tenkz_test_open_stroke:nn {#1} {#2}
+    \__tenkz_model_get:nnN
+      { \l__tenkz_kernel_r_wire_record_tl } {origin}
+      \l__tenkz_test_open_name_tl
+    \str_if_eq:VnT \l__tenkz_test_open_name_tl {trace}
+      {
+        \__tenkz_model_get:nnN
+          { \l__tenkz_kernel_r_wire_record_tl } {name}
+          \l__tenkz_test_open_name_tl
+        \str_if_eq:VnT \l__tenkz_test_open_name_tl {wrap-1}
+          {
+            \int_gincr:N \g__tenkz_test_open_rows_int
+            \__tenkz_test_open_pair:n { \__tenkz_metric_ratio:n {stub} }
+          }
+      }
+  }
+\AtEndDocument
+  {
+    \int_compare:nNnF { \g__tenkz_test_open_rows_int } = {2}
+      { \errmessage {a~first~row~of~the~two~pictures~did~not~close} }
+  }
+\ExplSyntaxOff
+\makeatother
+\begin{document}
+\tenkzkernel
+\begin{tenkz}[rows={wire,wire}, cols=2, west=trace, east=trace,
+              open={(physical,1)}]
+  \tn[skin=box]{A} & \tn[skin=box]{A} \\
+  \tn[skin=box]{B} & \tn[skin=box]{B}
+\end{tenkz}
+\begin{tenkz}[rows={wire,wire}, cols=2, west=trace, east=trace, north=open]
+  \tn[skin=box]{A} & \tn[skin=box]{A} \\
+  \tn[skin=box]{B} & \tn[skin=box]{B}
+\end{tenkz}
+\end{document}

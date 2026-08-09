@@ -25,6 +25,12 @@ Hard errors (exit 1):
                        diagrams" class.
   label-overlap       A measured `tn label` visible support strictly intersects
                       a sibling glyph node or explicit visible wire node.
+  closure-detached    A traced row's closure does not start and finish on the
+                      two virtual ends it names, so the picture records a
+                      periodic contraction and draws an open chain.
+  closure-crossed     A traced row's closure passes nearer its row than the
+                      open indices that row hangs on the closure's side, so
+                      a free index ends on the wire that contracts its row.
   bbox-coverage       A library-owned label, glyph, or wire use did not
                       produce its required measured geometry.
   kernel-crossing     A declared kernel crossing did not produce the
@@ -467,6 +473,21 @@ def parse_sp_point(value: str) -> Point:
     return (int(x), int(y))
 
 
+def _first_uncovered(low: int, high: int, covers: list[tuple[int, int]]):
+    """The first x of [low, high] no interval of `covers` reaches, or None.
+
+    A degenerate span -- a one-column row, whose two virtual ends resolve to
+    one coordinate -- is covered by any interval containing it."""
+    reach = low
+    for start, end in sorted(covers):
+        if start > reach:
+            break
+        reach = max(reach, end)
+        if reach >= high:
+            return None
+    return reach
+
+
 # A closure end and the rail's own end are computed from one number, so they
 # either coincide exactly or the rail was never joined to the row.  A
 # hundredth of a point absorbs a rounding step and is two orders of magnitude
@@ -845,6 +866,126 @@ class Audit:
                             f"{gap / 65536:.2f}pt short of the {side} virtual "
                             f"end of row {event.attrs['row']}",
                         )
+                self.check_closure_standoff(pic, event, points)
+
+    def check_closure_standoff(
+            self, pic: Picture, event: Event, points: tuple[Point, ...]
+    ) -> None:
+        """A traced row's closure must pass outside the row's open indices.
+
+        A row hangs its open indices on the side its return runs, and the
+        return used to be drawn a fixed reach from the row line -- shorter
+        than a bare physical leg.  Every such index then ended on the very
+        wire that contracts its row, which reads as a fourth contraction
+        rather than as a free index, and nothing saw it: `closure-detached`
+        asks only that the rail meet the row, and a leg carries no measured
+        box for the label gate to read.  The record names the standoff those
+        rows demand, signed by the side the return runs, and the contour says
+        where the rail went.
+
+        The rail must **run across the row at that standoff**, from one
+        virtual end to the other.  Three weaker readings all pass ink that
+        crosses the indices: a farthest-vertex reading passes a rail that
+        touches the standoff at one corner and runs back beside the row;
+        a single-sample reading passes one that dips between samples; and an
+        unsigned reading passes one routed the whole distance on the wrong
+        side, which in a multi-row picture takes it through the row it should
+        have stood clear of.  So the reading is a covering: the stretches of
+        contour that stand off far enough, on the named side, must between
+        them span every column of the row.
+
+        The same reading refuses a second pass: a rail that runs the row at
+        its standoff and then doubles back inside it has put ink across the
+        indices on the way home, so no stretch of contour may come nearer
+        than the standoff over the row's own columns.
+
+        A frame arc says so and is exempt -- it stands off no row line -- and
+        so is a stream written before the field existed.  A one-column row's
+        two ends resolve to one coordinate; its row line is then the level of
+        that end, and the covering is of that single column.  A row with one
+        end is read at that end alone: the record carries no coordinate for
+        the side that has no site, so the columns between are not knowable
+        from the stream.  A row with neither end is an empty lattice, which
+        hangs no index at all."""
+        if "clear" not in event.attrs:
+            return  # A stream written before the standoff was published.
+        standoff = event.attrs["clear"]
+        if standoff == "arc":
+            return  # A sector spans two stations and stands off no row line.
+        if not _is_int(standoff):
+            return  # FIELD_VALIDATORS already reported the bad value.
+        owed = abs(int(standoff))
+        outward = -1 if int(standoff) < 0 else 1
+        # The row line is the line the contour leaves and returns to; the
+        # columns to cover are the row's own, which its virtual ends name.  A
+        # row with neither end is an empty lattice: it has no site, so it
+        # hangs no index and there is nothing for the rail to stand outside.
+        west, east = points[0], points[-1]
+        if west[0] == east[0]:
+            slope = Fraction(0)
+        else:
+            slope = Fraction(east[1] - west[1], east[0] - west[0])
+        ends = [parse_sp_point(event.attrs[side])[0]
+                for side in ("west", "east")
+                if event.attrs[side] != "none"]
+        if not ends:
+            return
+        low, high = min(ends), max(ends)
+
+        def offset(point: Point) -> Fraction:
+            """How far outward of the row line the point stands."""
+            return outward * (Fraction(point[1]) - Fraction(west[1])
+                              - (Fraction(point[0]) - west[0]) * slope)
+
+        def at(start: Point, end: Point, x: Fraction) -> Fraction:
+            """The contour's outward offset where a segment crosses `x`."""
+            if start[0] == end[0]:
+                return min(offset(start), offset(end))
+            return (offset(start)
+                    + (x - start[0]) * (offset(end) - offset(start))
+                    / (end[0] - start[0]))
+
+        covers: list[tuple[int, int]] = []
+        shallow: Optional[Fraction] = None
+        last = len(points) - 2
+        for index, (start, end) in enumerate(zip(points, points[1:])):
+            here = (max(min(start[0], end[0]), low),
+                    min(max(start[0], end[0]), high))
+            if here[0] > here[1]:
+                continue
+            clipped = min(at(start, end, Fraction(here[0])),
+                          at(start, end, Fraction(here[1])))
+            if clipped + CLOSURE_JOIN_TOLERANCE_SP >= owed:
+                covers.append(here)
+                continue
+            # A stretch that meets the span at one x alone is exempt when it
+            # is one of the two leads, which leave a virtual end and so
+            # stand on the row line by construction.  Any other stretch that
+            # touches the span at one column -- a vertical detour toward the
+            # row, or a second pass over a one-column row -- is ink across
+            # the indices and is read.
+            if here[0] == here[1] and index in (0, last):
+                continue
+            if shallow is None or clipped < shallow:
+                shallow = clipped
+        gap = _first_uncovered(low, high, covers)
+        if gap is None and shallow is None:
+            return
+        reached = shallow if shallow is not None else max(
+            (at(start, end, Fraction(gap))
+             for start, end in zip(points, points[1:])
+             if min(start[0], end[0]) <= gap <= max(start[0], end[0])),
+            default=Fraction(0),
+        )
+        self.hard(
+            "closure-crossed",
+            f"{self.log_path.name}:{event.line}",
+            f"picture {pic.ident} closure {event.attrs['name']} runs "
+            f"{float(reached) / 65536:.2f}pt outside row "
+            f"{event.attrs['row']} over part of it where the open indices "
+            f"it passes need {owed / 65536:.2f}pt: an index of that row "
+            "ends on the closure that contracts it",
+        )
 
     def check_label_overlaps(self) -> None:
         """Reject label intersections with exact sibling visible geometry."""
