@@ -103,7 +103,7 @@ theorem exists_cornerCompression_of_supported_projection
       _ = P := hTP
       _ = expand 1 := by rw [hExpand_one]
   · intro Z
-    rw [hφ_apply]
+    change expand (adjointMap C Z) = adjointMap A (expand Z)
     simp only [adjointMap_apply]
     rw [map_sum]
     refine Finset.sum_congr rfl ?_
