@@ -17,41 +17,42 @@ for the MPU Transfer-Matrix Spectrum Argument}
 
 \section{Source statement}
 
-\cite[Proposition~1]{Cirac2017MPU} asserts: if $E$ is the
-transfer matrix of a matrix-product unitary with physical dimension $d$ and
-bond dimension $D$, then $\tr(E^N)=1$ for all $N>1$, and consequently the
-spectrum of $E$ contains a single eigenvalue equal to one with the rest
-vanishing.  The paper cites Lemma~A.5 of \cite{Cirac2016MPDO_arXiv} for
-this conclusion.
+\cite[Proposition~1]{Cirac2017MPU} asserts: if $E$ is the transfer matrix
+of a matrix-product unitary, then $\tr(E^N)=1$ for all $N>1$, and consequently
+the spectrum of $E$ contains a single eigenvalue equal to one with the rest
+vanishing.  The paper cites Lemma~A.5 of \cite{Cirac2016MPDO_arXiv}.
 
 \section{The present formalization}
 
-This PR (\ghpr{5732}) formalizes the algebraic step that a complex $n\times n$
-matrix whose positive powers all have trace~$1$ must satisfy
-$\chi_A(X) = X^{\,n-1}(X-1)$.  The proof is purely algebraic via Newton--Girard
-identities: equality of all positive-power traces to~$1$ forces the reverse
-characteristic polynomial to be $1-X$, hence the characteristic polynomial
-$X^n-X^{n-1}$.
+This PR (\ghpr{5732}) proves the algebraic statement: a complex $n\times n$
+matrix whose positive powers all have trace~$1$ satisfies
+$\chi_A(X)=X^{\,n-1}(X-1)$.  The proof is purely algebraic via Newton--Girard
+identities.  The hypothesis requires $\tr(A^k)=1$ for \emph{all} $k\ge 1$,
+including $k=1$.
 
-The hypothesis requires $\tr(A^k)=1$ for \emph{all} $k\ge 1$, including $k=1$.
-The source only supplies moments for $N>1$ from unitarity of blocked tensors.
-In the source context the first moment $\tr(E)=1$ follows from the definition
-of $E$ as a normalized partial trace of a unitary; the purely algebraic
-consequence of the stronger all-positive-moment hypothesis is the correct
-prerequisite for the downstream MPU transfer argument.
+The paper only supplies moments for $N>1$.  This PR does \emph{not} recover
+$\tr(E)=1$ from the definition of the transfer matrix or from the unitary
+hypothesis.  It is a self-contained Newton--Girard prerequisite that needs
+the stronger all-positive-moment input.
 
 \section{The $k>1$ conclusion}
 
 The source's exact $k>1$ conclusion is handled by \ghissue{5737}, which
-derives $\tr(E)=1$ from $\tr(E^N)=1$ ($N>1$) for the specific transfer matrix
-$E$ using the fact that $E$ is a positive map whose spectral radius is~$1$.
-The spectral mapping $k\mapsto k^2$ (or $k\mapsto k^3$) together with the
-Perron--Frobenius structure of the transfer matrix yields the missing first
-moment, after which the present theorem applies.  The algebraic multiplicity
-statement (exactly one eigenvalue~$1$, the rest~$0$) follows from the
-characteristic-polynomial factorization proved here, but the multiplicity
-witness (separation of the $1$-eigenspace) is a distinct theorem not included
-in this PR.
+proves the nonzero spectrum is $\{1\}$ directly, without recovering the
+first moment.  The proof uses the fact that $E$ is a positive map whose
+spectral radius is~$1$, together with the observations that both $E^2$
+and $E^3$ have trace~$1$.  For any nonzero eigenvalue $\lambda$ of $E$,
+$\lambda^2$ and $\lambda^3$ are eigenvalues of $E^2$ and $E^3$; since
+$\tr(E^2)=\tr(E^3)=1$, both $\lambda^2$ and $\lambda^3$ must be nonzero
+and their traces constrain them, yielding $\lambda^2=\lambda^3=1$, hence
+$\lambda=1$.  Thus $\operatorname{spectrum}(E)\setminus\{0\}=\{1\}$ as
+a set.
+
+This set-level result (the nonzero spectrum is exactly $\{1\}$) is
+\emph{distinct} from the characteristic-polynomial factorization proved
+in this PR, which additionally shows that the eigenvalue~$1$ has algebraic
+multiplicity~$1$ (all other roots are~$0$).  The algebraic multiplicity
+theorem is a separate, still-unpackaged result.
 
 \section{Formalization status}
 
@@ -65,10 +66,11 @@ for $k\ge 1$:
   \item \leanid{Matrix.charpoly_eq_X_pow_pred_mul_X_sub_one_of_forall_trace_pow_eq_one}
         (all $k\ge 1$, cardinality derived internally).
 \end{itemize}
-The source-level gap (restoring $k=1$ from the MPU transfer structure) is
-assigned to \ghissue{5737}, whose square-spectral-mapping proof is already
-on a stacked branch.  A separate issue tracks the algebraic multiplicity
-theorem (separation of the~$1$-eigenspace).
+The source-level gap (conclusion from $N>1$ moments alone) is assigned to
+\ghissue{5737}, which proves the set-spectrum result without recovering the
+first moment.  The algebraic multiplicity theorem follows from the charpoly
+factorization proved here once the spectral reduction in \ghissue{5737} is
+applied.
 
 \bibliographystyle{alpha}
 \bibliography{references}

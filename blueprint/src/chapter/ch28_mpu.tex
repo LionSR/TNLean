@@ -176,7 +176,7 @@ $X^{n-1}(X-1)$.
   \label{def:mpu_diagonal_one_at}
   \lean{Matrix.diagonalOneAt}
   \leanok
-  For an index $i_0$ in a finite type $n$, let $M_{i_0}$ be the $n\times n$
+  For an index $i_0$ in a finite set $I$ of cardinality $n$, let $M_{i_0}$ be the $n\times n$
   diagonal matrix with a $1$ at position $i_0$ and zeros elsewhere.
 \end{definition}
 
@@ -186,7 +186,8 @@ $X^{n-1}(X-1)$.
     Matrix.diagonalOneAt_pow, Matrix.trace_pow_diagonalOneAt,
     Matrix.charpoly_diagonalOneAt}
   \leanok
-  The matrix $M_{i_0}$ from Definition~\ref{def:mpu_diagonal_one_at} satisfies
+  \uses{def:mpu_diagonal_one_at}
+  The matrix $M_{i_0}$ from definition~\ref{def:mpu_diagonal_one_at} satisfies
   \begin{itemize}
     \item $M_{i_0}^k = M_{i_0}$ for every $k\ge 1$,
     \item $\tr(M_{i_0}^k) = 1$ for every $k\ge 1$,

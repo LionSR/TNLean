@@ -17,13 +17,12 @@ single nonzero eigenvalue equal to one, with the rest equal to zero.
 
 This is a Newton--Girard prerequisite for the transfer-matrix spectrum
 argument in arXiv:1703.09188 (Cirac--Perez-Garcia--Schuch--Verstraete),
-Proposition `prop:normal-tensor`, lines 349–354.  The paper's unitary
-hypothesis supplies `tr(E^N) = 1` for `N > 1`; the missing first moment
-`tr(E) = 1` follows from the definition of the transfer matrix `E` as a
-normalized partial trace of a unitary, not from the unitary hypothesis.
-The present file formalizes the algebraic consequence of the stronger
-all-positive-moment hypothesis; the bridge from `N > 1` to `N ≥ 1` in the
-MPU context is documented in `docs/paper-gaps/cpsv17_transfer_trace_power.tex`.
+Proposition `prop:normal-tensor`, lines 349–354.  The present file proves this statement for the stronger hypothesis
+`tr(A^k) = 1` for all `k ≥ 1` (the Newton--Girard prerequisite).
+The paper's exact `N > 1` hypothesis is handled by #5737, which does
+**not** recover `tr(E) = 1`; it proves directly that the nonzero spectrum
+equals `{1}` without computing the first moment.  The bridge between the
+two results is documented in `docs/paper-gaps/cpsv17_transfer_trace_power.tex`.
 
 The proof is purely algebraic: no spectral radius, positivity, normality, or
 diagonalizability is required.  We construct an explicit rank-one diagonal
@@ -191,11 +190,10 @@ type is empty, the trace is `0`, contradicting the hypothesis).
 This is a Newton--Girard prerequisite for the transfer-matrix spectrum
 argument in arXiv:1703.09188, Proposition `prop:normal-tensor`, lines
 349–354.  The paper supplies `tr(E^N) = 1` for `N > 1` from unitarity of
-blocked tensors; the missing first moment `tr(E) = 1` follows from the
-definition of the transfer matrix as a normalized partial trace of a
-unitary, not from the unitary hypothesis.  The bridge from the paper's
-`N > 1` hypothesis to the all-positive-moment hypothesis used here is
-documented in `docs/paper-gaps/cpsv17_transfer_trace_power.tex`. -/
+blocked tensors.  The present theorem uses the stronger hypothesis
+`tr(A^k) = 1` for all `k ≥ 1`; the paper's exact `N > 1` hypothesis is
+handled by #5737, which proves the nonzero spectrum is `{1}` without
+recovering `tr(E) = 1`.  See `docs/paper-gaps/cpsv17_transfer_trace_power.tex`. -/
 theorem charpoly_eq_X_pow_pred_mul_X_sub_one_of_forall_trace_pow_eq_one
     (A : Matrix n n ℂ)
     (h : ∀ k : ℕ, 0 < k → trace (A ^ k) = 1) :
