@@ -416,7 +416,6 @@ theorem commonWeightAbsorbedBasisMPOTensor_caseII_properties_of_literal_ZCL
             (((MPSTensor.globalGaugeOfBlocks X)⁻¹ :
                 GL (Fin S.totalDim) ℂ) :
               Matrix (Fin S.totalDim) (Fin S.totalDim) ℂ)))
-    (hM : MPSTensor.SameMPV₂Pos M.toMPSTensor S.toTensor)
     (hWeight : ∀ (j : Fin S.basisCount) (q q' : Fin (S.copies j)),
       S.weight j q = S.weight j q')
     (hnonNil : ∀ j,
@@ -431,6 +430,13 @@ theorem commonWeightAbsorbedBasisMPOTensor_caseII_properties_of_literal_ZCL
       physTraceTransfer (commonWeightAbsorbedBasisMPOTensor S hWeight s) *
           physTraceTransfer (commonWeightAbsorbedBasisMPOTensor S hWeight s) =
         physTraceTransfer (commonWeightAbsorbedBasisMPOTensor S hWeight s) := by
+  subst D
+  have hGauge : MPSTensor.GaugeEquiv S.toTensor M.toMPSTensor := by
+    refine ⟨MPSTensor.globalGaugeOfBlocks X, ?_⟩
+    intro i
+    simpa using hEq i
+  have hM : MPSTensor.SameMPV₂Pos M.toMPSTensor S.toTensor :=
+    fun N _hN σ ↦ (hGauge.sameMPV N σ).symm
   have hTransfer : physTraceTransfer M ≠ 0 := by
     intro hZero
     exact (Classical.choose_spec hSAL).1 1 Nat.zero_lt_one (by
@@ -442,8 +448,8 @@ theorem commonWeightAbsorbedBasisMPOTensor_caseII_properties_of_literal_ZCL
     commonWeightAbsorbedBasisMPOTensor_isMPDO_of_sameMPV₂Pos_isSAL
       M S hM hWeight hnonNil hSpan hSAL s,
     commonWeightAbsorbedBasisMPOTensor_isSAL_of_sameMPV₂Pos
-      M S hTotal X hEq hM hWeight hnonNil hSpan hSAL hSourceZCL s,
+      M S rfl X hEq hM hWeight hnonNil hSpan hSAL hSourceZCL s,
     commonWeightAbsorbedBasisMPOTensor_physTraceTransfer_sq_of_literal_ZCL
-      M S hTotal X hEq hZCL_sq hWeight s⟩
+      M S rfl X hEq hZCL_sq hWeight s⟩
 
 end MPOTensor
