@@ -185,6 +185,7 @@ import TNLean.MPS.MPDO.OrthogonalSectorAreaLaw
 import TNLean.MPS.MPDO.PRFP
 import TNLean.MPS.MPDO.PerCopyHorizontalCF
 import TNLean.MPS.MPDO.PeriodicExclusion
+import TNLean.MPS.MPDO.PhysicalAdjoint
 import TNLean.MPS.MPDO.PhysicalBlocking
 import TNLean.MPS.MPDO.PhysicalGibbsEmbedding
 import TNLean.MPS.MPDO.PhysicalSectorActiveBond
