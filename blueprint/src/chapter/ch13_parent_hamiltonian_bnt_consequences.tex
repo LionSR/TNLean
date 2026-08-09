@@ -454,8 +454,9 @@ with the chosen basis of normal tensors.
         \sum_{a=0}^{d-1} A_j^{a\,\dagger}\Lambda_j A_j^a&=\Lambda_j.
         \notag
     \end{align}
-    Thus this theorem has the explicit scope restriction $\Lambda_j=\Id$ and
-    does not assert the unrestricted source result. If
+    Thus this theorem has the explicit specialization $\Lambda_j=\Id$ and is
+    retained for compatibility; the unrestricted source result is stated below.
+    If
     \begin{align}
         L&\ge 3(g-1)(L_0+1)+1,
         \notag\\
@@ -474,28 +475,24 @@ with the chosen basis of normal tensors.
 
 \begin{proof}
     \leanok
-    \uses{cor:block_diagonal_kernel_global_cut,
-        thm:chain_ground_space_eq_mpv_normal,
-        lem:bnt_span_le_parent_hamiltonian_kernel}
+    \uses{thm:gs_eq_bnt_span_source_normalization}
     % Scope restriction documented in
     % docs/paper-gaps/pgvwc07_ti_canonical_form_scope.tex.
-    The source length bounds imply $L_0<L$, $L\le N$, and $L_0+1<N$.
-    Theorem~\ref{thm:chain_ground_space_eq_mpv_normal} therefore identifies
-    each single-block periodic chain space with its matrix-product-vector
-    line. Corollary~\ref{cor:block_diagonal_kernel_global_cut} gives the
-    containment of the kernel in the BNT span. Conversely,
-    Lemma~\ref{lem:bnt_span_le_parent_hamiltonian_kernel} gives the reverse
-    containment directly.
+    Apply the general-canonical-normalization theorem below with
+    $\Lambda_j=\Id$.  Positive definiteness is immediate, and the assumed
+    left-canonical identity is exactly the required dual fixed-point equation
+    at $\Lambda_j=\Id$.
 \end{proof}
 
 \begin{theorem}[PGVWC07 source-length kernel equality at general canonical normalization]
     \label{thm:gs_eq_bnt_span_source_normalization}
-    \notready
+    \lean{MPSTensor.ker_parentHamiltonian_toTensorFromBlocks_eq_bntMPSVectorSpan_of_global_cut_bnt_c1_pgvwc07_of_dualFixedPoint}
+    \leanok
     \uses{def:parent_hamiltonian, def:bnt_span, def:block_diagonal_tensor,
         def:irreducible_tensor, def:blocks_not_gauge_phase_equiv,
-        def:l_blk_injective, def:mpv_overlap}
-    Retain the same nonzero dimensions and weights, irreducibility, normalized
-    self-overlap, gauge-phase inequivalence, common block-injectivity length,
+        def:l_blk_injective}
+    Retain the same nonzero dimensions and weights, irreducibility,
+    gauge-phase inequivalence, common block-injectivity length,
     and source-length bounds, but do not assume left-canonicality. For every
     $0\le j<g$, assume there is a positive definite matrix $\Lambda_j$ such
     that
@@ -515,15 +512,15 @@ with the chosen basis of normal tensors.
 \end{theorem}
 
 \begin{proof}
-    \notready
-    A square-root gauge can normalize the dual fixed-point equation, but does
-    not in general preserve the source unital identity. The proof must first
-    transport the simultaneous fixed-length tuple-span equation through the
-    blockwise gauges. It must then use the source unital identity to propagate
-    that span to longer words and carry out the weighted boundary comparison.
-    Gauge-covariant identifications of the periodic chain spaces,
-    parent-Hamiltonian kernel, and component-vector span complete the route.
-    % The normalization scope and elimination plan are recorded in
-    % docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex. Tracking
-    % remains in issues #5751 and #5755.
+    \leanok
+    \uses{cor:block_diagonal_kernel_global_cut,
+        thm:chain_ground_space_eq_mpv_normal,
+        lem:bnt_span_le_parent_hamiltonian_kernel}
+    The source length bounds imply $L_0<L$, $L\le N$, and $L_0+1<N$.
+    Theorem~\ref{thm:chain_ground_space_eq_mpv_normal} identifies each
+    single-block periodic chain space with its matrix-product-vector line.
+    Corollary~\ref{cor:block_diagonal_kernel_global_cut} therefore gives the
+    containment of the parent-Hamiltonian kernel in the BNT span. Conversely,
+    Lemma~\ref{lem:bnt_span_le_parent_hamiltonian_kernel} gives the reverse
+    containment, and antisymmetry yields equality.
 \end{proof}

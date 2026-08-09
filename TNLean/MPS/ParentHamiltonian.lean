@@ -14,6 +14,7 @@ import TNLean.MPS.ParentHamiltonian.BNTBlockDiagonalChainBoundary
 import TNLean.MPS.ParentHamiltonian.BNTBlockDiagonalCrossing
 import TNLean.MPS.ParentHamiltonian.BNTBlockDiagonalCrossingTrace
 import TNLean.MPS.ParentHamiltonian.BNTBlockDiagonalPGVWCComparison
+import TNLean.MPS.ParentHamiltonian.BNTBlockDiagonalSourceNormalization
 import TNLean.MPS.ParentHamiltonian.BNTBlockDiagonalTraceDecomposition
 import TNLean.MPS.ParentHamiltonian.BNTBlockIntersection
 import TNLean.MPS.ParentHamiltonian.Basic

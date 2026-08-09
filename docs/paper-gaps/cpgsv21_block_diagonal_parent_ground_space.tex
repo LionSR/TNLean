@@ -61,7 +61,7 @@ of \cite{Cirac2021Matrix}.\footnote{For
 	\path{TNLean/MPS/ParentHamiltonian/BNTBlockDiagonalPGVWCComparison.lean}).
 		The short crossing-tail span hypothesis is removed by the global change-of-cut
 		comparison in
-		\leanid{MPSTensor.exists_blockDiagonal_boundary_chainGroundSpace_of_global_cut_bnt_c1_pgvwc07};
+		\leanid{MPSTensor.exists_blockDiagonal_boundary_chainGroundSpace_of_global_cut_bnt_c1_pgvwc07_of_dualFixedPoint};
 		this resolves
 		\href{https://github.com/LionSR/TNLean/issues/3597}{issue \#3597} at the
 		length bound of the source. The removal of the former extra $(L_0+1)$ in
@@ -143,27 +143,28 @@ definite fixed point $\Lambda_j$ satisfying
 \begin{align}
   \sum_a (A^j_a)^\dagger\Lambda_j A^j_a=\Lambda_j.
 \end{align}
-The source-shaped gauge-preparation, simultaneous word-span, internal-sum, and
-one-step restriction-intersection declarations no longer assume
-\begin{align}
-  \sum_a (A^j_a)^\dagger A^j_a=I.
-\end{align}
-They use the positive square root of $\Lambda_j$ only to prepare a temporary
-left-canonical gauge for the sharp fixed-length separation theorem, transport
-the resulting tuple span back to the original representatives, and propagate
-it there using the source identity
-$\sum_a A^j_a(A^j_a)^\dagger=I$.  This source-faithful local layer is completed
-by \href{https://github.com/LionSR/TNLean/issues/5764}{issue~\#5764}.
+The unrestricted source-length declarations assume these source identities and
+positive dual fixed-point data; unlike the diagonal-coordinate choice made in
+PGVWC07, the proofs do not require the matrices $\Lambda_j$ to be diagonal.
+A temporary square-root
+gauge makes each block left-canonical only inside the fixed-length simultaneous
+product-span proof; gauge invariance transports that span back to the source
+representatives.  Long-word propagation, the global change-of-cut comparison,
+the block-diagonal boundary calculation, and the parent-Hamiltonian kernel
+argument all remain in the original source-unital gauge.  In particular, the
+formalization does not assert that a nonunitary gauge preserves both
+normalization identities.
 
-The global-cut, boundary, periodic chain-space, and parent-Hamiltonian kernel
-declarations have not yet been threaded through the positive dual data.  They
-still additionally assume
-$\sum_a (A^j_a)^\dagger A^j_a=I$, the special case $\Lambda_j=I$, and hence
-remain doubly normalized specializations at the PGVWC07 source length bound.
-Transporting the source-shaped local result through those global arguments is
-tracked by \href{https://github.com/LionSR/TNLean/issues/5770}{issue~\#5770}.
-That issue has not merged, so the unrestricted parent-Hamiltonian theorem is
-not complete.
+The declarations ending in
+\texttt{\_pgvwc07\_of\_dualFixedPoint} give the unrestricted chain-space,
+boundary-closing, kernel-containment, and exact kernel-equality conclusions of
+Theorem~12.  The older declarations ending simply in \texttt{\_pgvwc07} remain
+available as the doubly normalized specialization $\Lambda_j=I$; their main
+chain-space capstone is proved by applying the unrestricted theorem to the
+identity dual fixed point.  This resolves the normalization restriction tracked
+by \href{https://github.com/LionSR/TNLean/issues/5751}{issue~\#5751}, with the
+source-range tuple-span layer supplied by issue~\#5764 and the global-cut/kernel
+threading by issue~\#5770.
 
 \section{The block-diagonal intersection identity}
 
@@ -286,28 +287,22 @@ propagates it with the source unital identity.\footnote{Lean declarations:
 The earlier doubly-normalized declarations remain available as special-purpose
 siblings.
 
-This normalization relaxation has not yet been threaded through the global
-change-of-cut and kernel statements.  Those declarations remain honestly
-restricted to the doubly-normalized specialization: in addition to
-$\sum_aA^j_aA^{j\dagger}_a=I$, they assume
-$\sum_aA^{j\dagger}_aA^j_a=I$, which specializes the positive dual fixed point
-to $\Lambda^j=I$.  Under that extra identity they propagate the cyclic local
-constraints to
+The normalization relaxation is now threaded through the open-boundary
+containment, unique block sum, block-diagonal boundary representation, global
+change of cut, periodic chain-space equality, kernel containment, and exact
+kernel equality.  In particular,
 \begin{align}
-  \mathcal K_{N,L}(\widehat A)\subseteq
-  S_N:=\bigvee_{j=1}^b\mathcal G_N^{A_j},
+  \mathcal K_{N,L}(\widehat A)&=
+  \bigvee_{j=1}^b\mathcal K_{N,L}(A_j),
+  &\ker H_L^{(N)}(\widehat A)&=
+  \operatorname{span}\{V^{(N)}(A_j):1\le j\le b\},
 \end{align}
-and make the sum defining $S_N$ internal.\footnote{Lean declarations:
-\leanid{MPSTensor.chainGroundSpace_toTensorFromBlocks_le_iSup_groundSpace_of_ge_of_bnt_directSum_unital_c1_pgvwc07},
-\leanid{MPSTensor.groundSpace_iSupIndep_of_ge_of_bnt_directSum_unital_c1_pgvwc07},
-and
-\leanid{MPSTensor.exists_blockDiagonal_boundary_of_chainGroundSpace_toTensorFromBlocks_of_bnt_unital_c1_pgvwc07}.}
-Threading the positive dual data through the global change-of-cut and kernel
-capstones remains open in
-\href{https://github.com/LionSR/TNLean/issues/5770}{issue~\#5770}; it is not
-completed by the source-shaped tuple-span and one-step intersection layer above.
-Consequently the full unrestricted parent-Hamiltonian theorem is not yet
-established.
+under the source unital and positive dual fixed-point hypotheses, with no source
+left-canonical assumption.\footnote{Lean declarations:
+\leanid{MPSTensor.chainGroundSpace_toTensorFromBlocks_le_iSup_groundSpace_of_ge_of_bnt_directSum_unital_c1_pgvwc07_of_dualFixedPoint},
+\leanid{MPSTensor.exists_unique_sum_groundSpace_of_chainGroundSpace_toTensorFromBlocks_of_bnt_unital_c1_pgvwc07_of_dualFixedPoint},
+\leanid{MPSTensor.exists_blockDiagonal_boundary_chainGroundSpace_of_global_cut_bnt_c1_pgvwc07_of_dualFixedPoint}, and
+\leanid{MPSTensor.ker_parentHamiltonian_toTensorFromBlocks_eq_bntMPSVectorSpan_of_global_cut_bnt_c1_pgvwc07_of_dualFixedPoint}.}
 
 Earlier conditional reductions isolated the source comparison in the coordinates
 obtained by opening the periodic boundary for boundary-crossing windows. Suppose
@@ -342,9 +337,9 @@ assuming those identities separately: it translates the whole periodic state
 past the final \(L_0\) sites and compares the two open-boundary decompositions
 against the long complementary segment.\footnote{Formal declarations:
 \leanid{MPSTensor.block_boundary_intertwines_of_cyclicTranslate_sum_groundSpaceMap_eq},
-\leanid{MPSTensor.exists_blockDiagonal_boundary_chainGroundSpace_of_global_cut_bnt_c1_pgvwc07},
+\leanid{MPSTensor.exists_blockDiagonal_boundary_chainGroundSpace_of_global_cut_bnt_c1_pgvwc07_of_dualFixedPoint},
 and
-\leanid{MPSTensor.chainGroundSpace_toTensorFromBlocks_eq_iSup_of_global_cut_bnt_c1_pgvwc07}.
+\leanid{MPSTensor.chainGroundSpace_toTensorFromBlocks_eq_iSup_of_global_cut_bnt_c1_pgvwc07_of_dualFixedPoint}.
 The earlier conditional declarations are
 \leanid{MPSTensor.blockDiagonal_boundary_component_chainGroundSpace_of_complementary_word_identities},
 \leanid{MPSTensor.blockDiagonal_boundary_component_chainGroundSpace_of_complementary_word_identities_of_injective},
@@ -650,9 +645,9 @@ the lower bound on \(L\) alone.
 
 The block-diagonal boundary representation itself is not an instance of the
 boundary-crossing comparison. The Lean theorem
-\leanid{MPSTensor.exists_blockDiagonal_boundary_of_chainGroundSpace_toTensorFromBlocks_of_bnt_unital_c1_pgvwc07}
-derives it from the span-based one-step intersection identity
-\leanid{MPSTensor.pgvwc07_iSup_restriction_intersection_of_ge_of_bnt_directSum_unital_c1_pgvwc07};
+\leanid{MPSTensor.exists_blockDiagonal_boundary_of_chainGroundSpace_toTensorFromBlocks_of_bnt_unital_c1_pgvwc07_of_dualFixedPoint}
+derives it from the source-shaped span-based one-step intersection identity
+\leanid{MPSTensor.pgvwc07_iSup_restriction_intersection_of_ge_of_bnt_directSum_unital_c1_pgvwc07_of_dualFixedPoint};
 its block components lie in the open-boundary ground spaces $\mathcal G_N^{A_j}$,
 and its proof does not use the periodic-boundary comparison at boundary-crossing
 windows. The earlier conditional block-diagonal parent-space statements retain
