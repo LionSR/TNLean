@@ -22,7 +22,7 @@ The product closure proof uses:
 - KS equality for peripheral eigenvectors (`ks_equality_of_peripheral_eigenvector_of_fixedPoint`)
 - Right multiplicative domain (`multiplicative_domain_right`)
 - Irreducibility → peripheral eigenvectors are invertible
-  (via `posSemidef_fixedPoint_isPosDef_of_irreducible`)
+  (via `posDef_of_posSemidef_fixedPoint_irreducible_cp`)
 
 The cyclic characterization uses product closure + closure under powers + roots of unity
 to conclude that the peripheral eigenvalues form a finite subgroup of `ℂˣ`, which is
