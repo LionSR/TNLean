@@ -9,6 +9,10 @@
 \usepackage{tenkz}
 \begin{document}
 \tenkzkernel
+A line of mathematics with no picture in it at all, $a = b$, stands first:
+entering and leaving one is a group, so what it senses is put back at its
+closing shift and the pictures after it are read in their own context.
+
 Standing in running text:
 \begin{tenkz}[rows={wire}, cols=2, west=open, east=open]
   \tn[skin=box]{A} & \tn[skin=box]{B}
@@ -21,7 +25,8 @@ Standing in a display:
   \end{tenkz}
 \]
 
-Sharing a line of mathematics $\begin{tenkz}[rows={wire}, cols=2,
+Another unrelated line, $c = d$, and then one sharing a line of mathematics
+$\begin{tenkz}[rows={wire}, cols=2,
   west=open, east=open]
   \tn[skin=box]{A} & \tn[skin=box]{B}
 \end{tenkz}$, and the same line with the base class asked for
