@@ -31,6 +31,67 @@ noncomputable def toTensorFromBlocks {r : ℕ} {dim : Fin r → ℕ}
   (Matrix.reindex finSigmaFinEquiv finSigmaFinEquiv)
     (Matrix.blockDiagonal' fun k => (μ k) • (A k i))
 
+/-- The coordinate inclusion of one dependent block into the flattened direct sum.
+
+This is the coordinate inclusion underlying the block reconstruction in
+arXiv:1606.00608, eq. `II_CF1`, lines 214--225. -/
+noncomputable def blockInclusion {r : ℕ} (dim : Fin r → ℕ) (k : Fin r) :
+    Matrix (Fin (∑ j : Fin r, dim j)) (Fin (dim k)) ℂ :=
+  fun x y => if x = finSigmaFinEquiv ⟨k, y⟩ then 1 else 0
+
+@[simp]
+theorem blockInclusion_apply {r : ℕ} (dim : Fin r → ℕ) (k : Fin r)
+    (x : Fin (∑ j : Fin r, dim j)) (y : Fin (dim k)) :
+    blockInclusion dim k x y = if x = finSigmaFinEquiv ⟨k, y⟩ then 1 else 0 := rfl
+
+/-- A flattened dependent-block coordinate inclusion is an isometry. -/
+theorem blockInclusion_conjTranspose_mul_self {r : ℕ} (dim : Fin r → ℕ) (k : Fin r) :
+    (blockInclusion dim k)ᴴ * blockInclusion dim k = 1 := by
+  classical
+  ext x y
+  by_cases hxy : x = y
+  · simp [Matrix.mul_apply, Matrix.one_apply, hxy]
+  · simp [Matrix.mul_apply, hxy, Ne.symm hxy]
+
+/-- Coordinate inclusions of distinct dependent blocks have orthogonal ranges. -/
+theorem blockInclusion_conjTranspose_mul_eq_zero {r : ℕ} (dim : Fin r → ℕ)
+    {k l : Fin r} (hkl : k ≠ l) :
+    (blockInclusion dim k)ᴴ * blockInclusion dim l = 0 := by
+  classical
+  ext x y
+  have hflat : finSigmaFinEquiv ⟨k, x⟩ ≠ finSigmaFinEquiv ⟨l, y⟩ := by
+    intro h
+    apply hkl
+    exact congrArg Sigma.fst (finSigmaFinEquiv.injective h)
+  simp [Matrix.mul_apply, Ne.symm hflat]
+
+/-- A flattened dependent-block inclusion intertwines the assembled tensor with its
+weighted block. This is the coordinate form of arXiv:1606.00608, eq. `II_CF1`,
+lines 214--225. -/
+theorem toTensorFromBlocks_mul_blockInclusion {r : ℕ} {dim : Fin r → ℕ}
+    (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
+    (k : Fin r) (i : Fin d) :
+    toTensorFromBlocks (d := d) μ A i * blockInclusion dim k =
+      blockInclusion dim k * (μ k • A k i) := by
+  classical
+  ext x y
+  generalize hs : finSigmaFinEquiv.symm x = sx
+  rcases sx with ⟨l, z⟩
+  by_cases hlk : l = k
+  · subst l
+    have hx : x = finSigmaFinEquiv ⟨k, z⟩ := by
+      rw [← finSigmaFinEquiv.apply_symm_apply x, hs]
+    simp [toTensorFromBlocks, blockInclusion, Matrix.mul_apply, hx]
+  · have hxne : ∀ z' : Fin (dim k), x ≠ finSigmaFinEquiv ⟨k, z'⟩ := by
+      intro z' hx
+      apply hlk
+      have : (⟨l, z⟩ : (j : Fin r) × Fin (dim j)) = ⟨k, z'⟩ := by
+        apply finSigmaFinEquiv.injective
+        rw [← hs, finSigmaFinEquiv.apply_symm_apply, hx]
+      exact congrArg Sigma.fst this
+    simp [toTensorFromBlocks, blockInclusion, Matrix.mul_apply, hs, hxne]
+    rw [Matrix.blockDiagonal'_apply_ne _ _ _ hlk]
+
 /-- Flatten the dependent block coordinates after reindexing the block family by an
 equivalence. -/
 noncomputable def blockIndexCoordinateEquiv {r : ℕ} {ι : Type*}

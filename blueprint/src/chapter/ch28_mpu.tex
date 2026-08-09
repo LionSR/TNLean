@@ -698,3 +698,85 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     \end{align}
     Here the fourth equality uses $N>1$, so that the MPU equation applies.
 \end{proof}
+
+\section{Active-block transfer multiplicity}
+
+\begin{definition}[Flattened dependent-block inclusion]
+    \label{def:mpu_dependent_block_inclusion}
+    \lean{MPSTensor.blockInclusion}
+    \leanok
+    Let $(n_k)_{k\in K}$ be a finite family of nonnegative integers and put
+    $n=\sum_{k\in K}n_k$.  For each $k\in K$, define
+    $J_k:\mathbb C^{n_k}\to\mathbb C^n$ by
+    \begin{align}
+        (J_k)_{x,a}&=\begin{cases}
+            1,&x=(k,a),\\
+            0,&x\ne(k,a),
+        \end{cases}
+    \end{align}
+    where the pairs $(k,a)$ are flattened in the direct-sum order.
+\end{definition}
+
+\begin{theorem}[Dependent-block inclusion identities]
+    \label{thm:mpu_dependent_block_inclusion_identities}
+    \lean{MPSTensor.blockInclusion_apply,
+        MPSTensor.blockInclusion_conjTranspose_mul_self,
+        MPSTensor.blockInclusion_conjTranspose_mul_eq_zero,
+        MPSTensor.toTensorFromBlocks_mul_blockInclusion}
+    \leanok
+    \uses{def:mpu_dependent_block_inclusion}
+    The inclusions satisfy
+    \begin{align}
+        J_k^\dagger J_k&=\Id,\\
+        J_k^\dagger J_\ell&=0\quad(k\ne\ell).
+    \end{align}
+    If $B^i=\bigoplus_k\mu_k A_k^i$ is a weighted block-diagonal tensor,
+    then
+    \begin{align}
+        B^iJ_k&=J_k(\mu_kA_k^i).
+    \end{align}
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:mpu_dependent_block_inclusion}
+    The first two identities follow by evaluating the coordinate delta
+    functions.  For the last identity, the $k$th column block of $B^i$ has
+    only the $k$th row block nonzero, where it equals $\mu_kA_k^i$.
+\end{proof}
+
+\begin{theorem}[Shifted transfer traces determine one active block]
+    \label{thm:mpu_shifted_transfer_trace_card_active}
+    \lean{MPSTensor.CPSVCanonicalFormData.card_active_eq_one_of_shifted_transfer_trace}
+    \leanok
+    \uses{def:cpsv_canonical_form,def:mpu_transfer_matrix}
+    Let $A$ have literal CPSV canonical-form data with active block set
+    $K=\{k:\mu_k\ne0\}$ and positive ambient bond dimension.  If its transfer
+    matrix $E$ satisfies $\tr(E^N)=1$ for every integer $N>1$, then
+    \begin{align}
+        |K|&=1.
+    \end{align}
+    This is the active-block multiplicity consequence used in
+    \cite[Proposition~1, lines~349--354]{Cirac2017MPU}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpu_dependent_block_inclusion_identities,
+        thm:mpu_shifted_trace_power_spectrum,thm:mpu_trace_power_all,
+        thm:mpu_transfer_matrix_vectorization,
+        thm:mpu_transfer_matrix_eigenvalues}
+    Each normal block $A_k$ has a nonzero transfer fixed vector $X_k$.
+    After weighting, its eigenvalue is
+    $q_k=\mu_k\overline{\mu_k}\ne0$.  The reconstruction coisometry and
+    Theorem~\ref{thm:mpu_dependent_block_inclusion_identities} transport
+    $X_k$ to a nonzero ambient eigenmatrix supported in the $k$th corner.
+    Theorem~\ref{thm:mpu_shifted_trace_power_spectrum} gives $q_k=1$.
+
+    Compression to the $k$th corner recovers $X_k$ and annihilates every
+    other corner, so the transported active-block vectors are linearly
+    independent.  Vectorizing places them in the $1$-eigenspace of $E^2$.
+    The shifted traces give $\tr((E^2)^r)=1$ for every $r\ge1$; hence
+    Theorem~\ref{thm:mpu_trace_power_all} gives
+    $\chi_{E^2}(X)=X^{D^2-1}(X-1)$.  Thus that eigenspace has dimension at
+    most one.  Finally, if $K$ were empty, every weight and therefore $A$
+    would vanish, contradicting $\tr(E^2)=1$.  Consequently $|K|=1$.
+\end{proof}
