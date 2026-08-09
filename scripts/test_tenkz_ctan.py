@@ -456,7 +456,29 @@ def test_a_material_name_pointed_at_the_wrong_file_is_reported() -> None:
         )
     }
     report = tenkz_ctan.check_material(swapped)
-    assert any("staged as LICENSE" in reason for reason in report.failures), report.failures
+    assert any(
+        "LICENSE is staged from" in reason for reason in report.failures
+    ), report.failures
+    assert any(
+        "CHANGES.md is staged from" in reason for reason in report.failures
+    ), report.failures
+
+    # The three recognized by content rather than by canonical path: the
+    # citation record staged from the BibTeX record and back.
+    crossed = {
+        "material": dict(
+            manifest["material"],
+            **{
+                "CITATION.cff": manifest["material"]["tenkz.bib"],
+                "tenkz.bib": manifest["material"]["CITATION.cff"],
+            },
+        )
+    }
+    report = tenkz_ctan.check_material(crossed)
+    assert any(
+        "staged as CITATION.cff does not read as one" in reason
+        for reason in report.failures
+    ), report.failures
 
 
 def test_material_from_outside_the_repository_is_refused() -> None:
@@ -480,6 +502,23 @@ def test_the_write_path_refuses_incomplete_material() -> None:
         assert "LICENSE" in str(refusal), str(refusal)
     else:
         raise AssertionError("an archive without a licence was allowed")
+
+    # Both writing commands, not only the reporting one.
+    good = (ROOT / "docs/tenkz/ctan/MANIFEST.toml").read_text(encoding="utf-8")
+    without = good.replace('"LICENSE" = "LICENSE"\n', "")
+    assert without != good
+    with tempfile.TemporaryDirectory() as directory:
+        broken = Path(directory) / "MANIFEST.toml"
+        broken.write_text(without, encoding="utf-8")
+        for command in ("stage", "archive"):
+            finished = subprocess.run(
+                [sys.executable, str(SCRIPT), command, "--out", f"{directory}/out"],
+                capture_output=True,
+                text=True,
+                env={**os.environ, "TENKZ_CTAN_MANIFEST": str(broken)},
+            )
+            assert finished.returncode != 0, (command, finished.stdout)
+            assert "LICENSE" in finished.stderr, (command, finished.stderr)
 
 
 def test_the_clean_install_failure_paths_report_what_went_wrong() -> None:
@@ -512,6 +551,38 @@ def test_the_clean_install_failure_paths_report_what_went_wrong() -> None:
         "the engine's own complaint" in reason for reason in failed.failures
     ), failed.failures
     assert any("120 seconds" in reason for reason in timed_out.failures), timed_out.failures
+
+
+def test_the_manifest_declares_the_schema_and_the_package() -> None:
+    good = (ROOT / "docs/tenkz/ctan/MANIFEST.toml").read_text(encoding="utf-8")
+    for edit, fragment in (
+        (("schema = 1", "schema = 999"), "this tool reads schema 1"),
+        (('package = "tenkz"', 'package = "not-tenkz"'), "not 'tenkz'"),
+    ):
+        with tempfile.TemporaryDirectory() as directory:
+            manifest = Path(directory) / "MANIFEST.toml"
+            manifest.write_text(good.replace(*edit), encoding="utf-8")
+            finished = subprocess.run(
+                [sys.executable, str(SCRIPT), "check"],
+                capture_output=True,
+                text=True,
+                env={**os.environ, "TENKZ_CTAN_MANIFEST": str(manifest)},
+            )
+        assert finished.returncode != 0, finished.stdout
+        assert "Traceback" not in finished.stderr, finished.stderr
+        assert fragment in finished.stderr, finished.stderr
+
+
+def test_a_runtime_source_outside_the_repository_is_refused() -> None:
+    try:
+        tenkz_ctan.inside_repository("tenkz.sty", Path("/etc/hosts"))
+    except SystemExit as refusal:
+        assert "outside the repository" in str(refusal), str(refusal)
+    else:
+        raise AssertionError("a source outside the tree was staged")
+    assert tenkz_ctan.inside_repository(
+        "tenkz.sty", ROOT / "tex/tenkz/tenkz.sty"
+    ) == (ROOT / "tex/tenkz/tenkz.sty").resolve()
 
 
 def test_the_release_report_survives_an_absent_artifact() -> None:

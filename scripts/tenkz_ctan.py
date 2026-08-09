@@ -77,6 +77,7 @@ MANIFEST_LABEL = (
 DEFAULT_OUT = ROOT / "build/ctan"
 
 PACKAGE = "tenkz"
+MANIFEST_SCHEMA = 1
 DECLARATION = re.compile(r"^\\ProvidesPackage\{tenkz\}\[([^]]*)\]", re.MULTILINE)
 # The version spelling `RELEASE-POLICY.md` §3 fixes: major, minor, and an
 # optional patch, each a nonempty run of digits, followed by a description.
@@ -137,14 +138,24 @@ ZIP_EPOCH_CEILING = int(
 # or without a change record, and every check below it would still pass.
 REQUIRED_MATERIAL = ("README.md", "LICENSE", "CHANGES.md", "CITATION.cff", "tenkz.bib")
 
-# A phrase each required file carries if it is the file its staged name says.
 # Existence is not identity: a manifest can point a staged name at the wrong
 # existing file, and an upload whose LICENSE is the change record is worse
 # than one with no licence at all, because it looks answered.
+#
+# Two of the five are named elsewhere already — `DESIGN.md` calls
+# `docs/tenkz/CHANGES.md` the release change record, and the licence is the
+# repository's — so those are pinned to their source rather than sniffed. A
+# phrase would not do for them: a change record has no durable sentence, and
+# the licence's name appears in the README that sits beside it.
+CANONICAL_MATERIAL = {
+    "LICENSE": "LICENSE",
+    "CHANGES.md": "docs/tenkz/CHANGES.md",
+}
+
+# The other three are recognized by a phrase each carries and the others do
+# not.
 MATERIAL_MARKS = {
     "README.md": "## Requirements",
-    "LICENSE": "Apache License",
-    "CHANGES.md": "# tenkz",
     "CITATION.cff": "cff-version:",
     "tenkz.bib": "@manual{tenkz",
 }
@@ -190,7 +201,13 @@ class Release:
 
 
 def read_release(entry: Path = ENTRY) -> Release:
-    declarations = DECLARATION.findall(entry.read_text(encoding="utf-8"))
+    try:
+        text = entry.read_bytes().decode("utf-8")
+    except FileNotFoundError:
+        raise SystemExit(f"{entry.name} is missing; there is no package to stage") from None
+    except UnicodeDecodeError as error:
+        raise SystemExit(f"{entry.name} is not UTF-8 and cannot be read: {error}") from None
+    declarations = DECLARATION.findall(text)
     if len(declarations) != 1:
         raise SystemExit(
             f"{entry.name} must carry exactly one "
@@ -262,16 +279,48 @@ def read_manifest() -> dict:
     """The pinned staging tree, or a message naming what is wrong with it."""
 
     try:
-        return tomllib.loads(MANIFEST.read_text(encoding="utf-8"))
+        manifest = tomllib.loads(MANIFEST.read_text(encoding="utf-8"))
     except FileNotFoundError:
         raise SystemExit(f"{MANIFEST_LABEL} is missing") from None
     except tomllib.TOMLDecodeError as error:
         raise SystemExit(f"{MANIFEST_LABEL} does not parse: {error}") from None
+    # The schema and the package are read before anything else is trusted: a
+    # later schema means this tool would be interpreting a manifest written
+    # for a different one, and a different package means it is not this
+    # package's manifest at all. Both fail closed.
+    if manifest.get("schema") != MANIFEST_SCHEMA:
+        raise SystemExit(
+            f"{MANIFEST_LABEL} declares schema {manifest.get('schema')!r}; this "
+            f"tool reads schema {MANIFEST_SCHEMA}"
+        )
+    if manifest.get("package") != PACKAGE:
+        raise SystemExit(
+            f"{MANIFEST_LABEL} declares package {manifest.get('package')!r}, "
+            f"not {PACKAGE!r}"
+        )
+    return manifest
 
 
 # --------------------------------------------------------------------------
 # Staging and the archive
 # --------------------------------------------------------------------------
+
+
+def inside_repository(name: str, source: Path) -> Path:
+    """The staged file's source, resolved, or a refusal to leave the tree.
+
+    Every source is resolved, runtime files included: a runtime file may be a
+    link, and a link out of the tree would put a machine's own files in an
+    archive that claims to be a function of this repository.
+    """
+
+    resolved = source.resolve()
+    if not resolved.is_relative_to(ROOT):
+        raise SystemExit(
+            f"{name} is staged from {resolved}, outside the repository; the "
+            "archive is built from the tree and from nothing else"
+        )
+    return resolved
 
 
 def staged_content(manifest: dict, closure: Closure) -> dict[str, Path]:
@@ -289,7 +338,9 @@ def staged_content(manifest: dict, closure: Closure) -> dict[str, Path]:
     resolved before anybody read the report saying so.
     """
 
-    content: dict[str, Path] = {name: SOURCE / name for name in closure.files}
+    content: dict[str, Path] = {}
+    for name in closure.files:
+        content[name] = inside_repository(name, SOURCE / name)
     collisions = sorted(set(manifest["material"]) & set(closure.files))
     if collisions:
         raise SystemExit(
@@ -298,14 +349,7 @@ def staged_content(manifest: dict, closure: Closure) -> dict[str, Path]:
             "and header checks never read"
         )
     for name, relative in manifest["material"].items():
-        source = (ROOT / relative).resolve()
-        if not source.is_relative_to(ROOT):
-            raise SystemExit(
-                f"{MANIFEST_LABEL} stages {name} from {source}, outside the "
-                "repository; the archive is built from the tree and from "
-                "nothing else"
-            )
-        content[name] = source
+        content[name] = inside_repository(name, ROOT / relative)
     refused = check_names(content).failures
     if refused:
         raise SystemExit(
@@ -578,6 +622,12 @@ def check_material(manifest: dict) -> Report:
     # What each required name must turn out to be. A manifest that points a
     # staged name at the wrong existing file — the change record staged as
     # LICENSE, say — passes every check that only asks whether a path exists.
+    for name, canonical in CANONICAL_MATERIAL.items():
+        report.require(
+            declared.get(name, canonical) == canonical,
+            f"{name} is staged from {declared.get(name)!r}; it is the "
+            f"repository's {canonical}",
+        )
     for name, mark in MATERIAL_MARKS.items():
         text = _material_text(manifest, name)
         if not text:
@@ -938,7 +988,9 @@ def command_closure() -> int:
 def command_stage(out: Path) -> int:
     release = read_release()
     epoch = chosen_epoch(release)
-    content = staged_content(read_manifest(), walk_closure())
+    manifest = read_manifest()
+    require_complete_material(manifest)
+    content = staged_content(manifest, walk_closure())
     tree = stage(out, epoch, content)
     print(f"staged {len(content)} files under {tree}")
     return 0
