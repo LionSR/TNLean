@@ -145,7 +145,7 @@ lemma add_offset_mod_eq {a b N : ℕ} (ha : a < N) (hb : b < N) :
       simpa using Nat.mod_eq_of_lt hsub
     rw [hmod, Nat.add_sub_of_le hab, Nat.mod_eq_of_lt hb]
 
-/-- Cyclically shift the indices of an `N`-site chain so that `i` becomes the
+/-- Cyclically shift the indices of an \(N\)-site chain so that \(i\) becomes the
 initial site. -/
 def cyclicShiftEquiv (N : ℕ) (i : Fin N) : Fin N ≃ Fin N where
   toFun k := ⟨(i.val + k.val) % N, Nat.mod_lt _ (Fin.pos i)⟩
@@ -157,7 +157,7 @@ def cyclicShiftEquiv (N : ℕ) (i : Fin N) : Fin N ≃ Fin N where
     apply Fin.ext
     exact add_offset_mod_eq i.isLt k.isLt
 
-/-- Split cyclic chain indices into a window of length `L` starting at `i` and
+/-- Split cyclic chain indices into a window of length \(L\) starting at \(i\) and
 its ordered complement. -/
 def cyclicWindowIndexEquiv (L N : ℕ) (hLN : L ≤ N) (i : Fin N) :
     Fin L ⊕ Fin (N - L) ≃ Fin N :=
