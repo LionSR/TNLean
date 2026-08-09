@@ -26,6 +26,5 @@ CmdLine
   -n 39  # Double-space heuristic.
   -n 26  # Space-before-punctuation heuristic; false positive on tenkz range syntax `..`.
   -n 40  # Punctuation around inline math heuristic.
-  -n 44  # Capitalize-before-reference heuristic; false positive on mid-sentence "theorem~\ref".
   -n 45  # Display-math delimiter heuristic.
 }
