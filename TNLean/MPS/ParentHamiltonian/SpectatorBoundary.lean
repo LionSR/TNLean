@@ -353,9 +353,10 @@ maps, after transport by the canonical `WithLp` isomorphism, with the
 Hilbert-space ground submodules used in the open-chain martingale condition
 (Chapter~13, Nachtergaele C3). -/
 
-/-- The Euclidean-space transport of the tail boundary map range
-equals the open-chain tail ground submodule. -/
-
+/-- For a suffix of length one, `prefixRestrictₗ τ` coincides with
+`restrictLast (τ 0)`.  This is used to connect the left boundary map range
+(at \(L=1\)) to the open-chain left ground space defined by fixing the
+last site. -/
 lemma prefixRestrictₗ_one_eq_restrictLast {d K : ℕ} (τ : Fin 1 → Fin d)
     (ψ : NSiteSpace d (K + 1)) :
     prefixRestrictₗ τ ψ = restrictLast ψ (τ 0) := by
@@ -363,6 +364,10 @@ lemma prefixRestrictₗ_one_eq_restrictLast {d K : ℕ} (τ : Fin 1 → Fin d)
   simp [prefixRestrictₗ_apply, restrictLast_apply, Fin.append_right_eq_snoc]
 
 
+/-- The Euclidean-space transport of the tail boundary map range identifies
+with `openChainTailGroundSpaceES`.  This is the exact common-ambient
+identification required for the open-chain martingale condition C3
+(Nachtergaele, arXiv:cond-mat/9410110, eq. (2.4)). -/
 theorem tailBoundaryMap_range_map_symm_eq_openChainTailGroundSpaceES
     (A : MPSTensor d D) (K L : ℕ) :
     Submodule.map ((WithLp.linearEquiv 2 ℂ (NSiteSpace d (K + L))).symm).toLinearMap
@@ -382,6 +387,11 @@ theorem tailBoundaryMap_range_map_symm_eq_openChainTailGroundSpaceES
     _ = openChainTailGroundSpaceES A K L := by
       simp [openChainTailGroundSpaceES]
 
+/-- At suffix length \(L=1\) (the C3 specialization), the Euclidean-space
+transport of the left boundary map range identifies with
+`openChainLeftGroundSpaceES`.  This complements the tail transport
+theorem to place both overlapping ground spaces in the same ambient
+Hilbert space. -/
 theorem leftBoundaryMap_range_map_symm_eq_openChainLeftGroundSpaceES
     (A : MPSTensor d D) (K : ℕ) :
     Submodule.map ((WithLp.linearEquiv 2 ℂ (NSiteSpace d (K + 1))).symm).toLinearMap
