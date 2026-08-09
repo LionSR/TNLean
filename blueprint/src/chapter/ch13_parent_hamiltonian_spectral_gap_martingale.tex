@@ -78,10 +78,49 @@
     $\lambda\ge\gamma$~\cite{Kastoryano2018Martingale}.
 \end{proof}
 
+\begin{theorem}[Reduced ground-space overlap bounds the excitation anticommutator]%
+    \label{thm:friedrichs_ground_space_excitation_anticommutator}
+    \lean{Submodule.re_inner_anticommutator_starProjection_orthogonal_ge_neg_of_friedrichs_bound}
+    \leanok
+    \uses{def:friedrichs_overlap_bound}
+    Let $U$ and $V$ be ground-space ranges in a finite-dimensional complex
+    Hilbert space, let $W=U\cap V$, and let $q_U$ and $q_V$ be the orthogonal
+    projectors onto $U$ and $V$. Suppose that $\eta\ge0$ and
+    \begin{align}
+        |\langle x,y\rangle|
+        &\le \eta\,\|x\|\,\|y\|
+        \label{eq:ph_reduced_friedrichs_overlap}
+    \end{align}
+    whenever $x\in U\cap W^\perp$ and $y\in V\cap W^\perp$. Define the
+    complementary excitation projections by $h_U=\Id-q_U$ and
+    $h_V=\Id-q_V$. Then, for every vector $v$,
+    \begin{align}
+        \re\langle h_Uv,h_Vv\rangle
+        +\re\langle h_Vv,h_Uv\rangle
+        &\ge
+        -\eta\bigl(
+            \re\langle h_Uv,v\rangle
+            +\re\langle h_Vv,v\rangle
+        \bigr).
+        \label{eq:ph_friedrichs_excitation_anticommutator}
+    \end{align}
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Remove the component of $v$ in the common intersection $W$; both
+    excitation projections are unchanged. If $\eta\le1$, apply
+    (\ref{eq:ph_reduced_friedrichs_overlap}) to the reduced ground-space
+    components $q_Uv$ and $q_Vv$, and combine the resulting principal-angle
+    estimate with the orthogonal decompositions
+    $v=q_Uv+h_Uv=q_Vv+h_Vv$. If $\eta>1$, the same conclusion follows from
+    the universal overlap bound with coefficient $1$ and the non-negativity
+    of the two diagonal excitation forms.
+\end{proof}
+
 \begin{lemma}[MPS anticommutator input for the martingale condition]\label{lem:martingale_mps}
     \notready
-    \uses{thm:martingale_criterion, def:parent_interaction,
-        def:local_term_parent, thm:ground_space_intersection, def:injective}
+    \uses{def:parent_interaction, def:local_term_parent, def:injective}
     Let $A$ be injective and fix an interaction range $L \ge 2$ as in
     Definition~\ref{def:parent_interaction}. Let
     $h_L(A):=\Pi_{G_L(A)^\perp}$ be the $L$-site parent interaction, and for
@@ -132,7 +171,8 @@
 \end{lemma}
 
 \begin{proof}
-    \uses{thm:ground_space_intersection, def:injective}
+    \uses{thm:friedrichs_ground_space_excitation_anticommutator,
+        thm:ground_space_intersection}
     \notready
     The cited martingale paragraph compares the anticommutator estimate with
     principal angles between the local ground spaces. If
@@ -140,12 +180,15 @@
     projectors, the Kastoryano--Lucia estimate cited there concerns
     $\delta(\ell)=\|q_iq_j-P\|$, where $P$ projects onto
     $\ker(h_i+h_j)=\ker h_i\cap\ker h_j$ and $\ell$ is the overlap length.
-    What remains is to derive the anticommutator estimate above, with its
-    blocking convention and constants, for the cyclic-window local terms. The
-    intersection property identifies $\ker h_i\cap\ker h_j$ with the parent
-    ground space on the union of the two windows, but it does not by itself
-    supply this numerical inequality. The directed excitation-projection
-    estimate
+    Theorem~\ref{thm:friedrichs_ground_space_excitation_anticommutator} supplies
+    the generic passage from such a reduced ground-space overlap bound to the
+    anticommutator estimate for the complementary excitation projections.
+    What remains is to obtain the required uniform Friedrichs bound, with the
+    source blocking convention and constants, for the cyclic-window local
+    ground spaces. The intersection property identifies
+    $\ker h_i\cap\ker h_j$ with the parent ground space on the union of the two
+    windows, but it does not by itself supply this numerical bound. The directed
+    excitation-projection estimate
     \begin{align}
         \|h_i h_j v\|
         &\le \eta\|h_i v\|,
