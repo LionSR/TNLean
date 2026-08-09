@@ -17962,6 +17962,13 @@
         \seq_pop_left:NN \l__tenkz_kernel_match_seq \l__tenkz_kernel_scratch_tl
         \tl_set:Ne \l__tenkz_kernel_check_reason_tl
           { \seq_use:Nn \l__tenkz_kernel_match_seq { \c_colon_str } }
+        % The reason is recorded as the author spelled it, not as it means:
+        % a record carrying a macro would be checked as one thing and
+        % written as another, and what a reader wants back is the sentence
+        % on the page.  Reducing it to characters here makes the checks
+        % below read exactly what the stream will carry.
+        \tl_set:Ne \l__tenkz_kernel_check_reason_tl
+          { \tl_to_str:N \l__tenkz_kernel_check_reason_tl }
         \tl_trim_spaces:N \l__tenkz_kernel_check_reason_tl
         \regex_match:nVTF { \A \d+ \Z } \l__tenkz_kernel_check_relation_tl
           { \__tenkz_kernel_check_off_record: }
