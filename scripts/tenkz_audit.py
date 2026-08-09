@@ -1531,11 +1531,27 @@ class Audit:
                 # what the kernel's own malformed-scope path does -- and it
                 # honours the source's waivers there for the same reason the
                 # kernel honours its own: an author who opted a relation out
-                # did not opt back in by losing a record elsewhere.
-                self._compare_adjacent(members, scope, modulo, waived)
+                # did not opt back in by losing a record elsewhere.  The
+                # waivers name relations and the walk visits gaps, so they are
+                # mapped onto the gaps their glyphs sit on first.
+                self._compare_adjacent(
+                    members, scope, modulo,
+                    _waived_gaps(waived, relation_gaps),
+                )
                 continue
             if not products:
-                self._compare_adjacent(members, scope, modulo, waived)
+                # Every side is one panel here, so the k-th relation is the
+                # k-th gap and the two numberings coincide.
+                for relation in range(1, len(members)):
+                    if relation in waived:
+                        continue
+                    self._compare_panels(
+                        self.pictures[members[relation - 1]],
+                        self.pictures[members[relation]],
+                        self.hard, "eq-boundary-mismatch",
+                        f"sit on relation {relation} of equation scope {scope}",
+                        modulo=modulo,
+                    )
                 continue
             # A composite side's signature is a fold over an interface the
             # kernel resolves, and its verdict is the `check` record that
@@ -1570,15 +1586,22 @@ class Audit:
         return sides
 
     def _compare_adjacent(self, members: list[int], scope: int, modulo: bool,
-                          waived: set[int]) -> None:
-        for relation in range(1, len(members)):
-            if relation in waived:
+                          waived_gaps: set[int]) -> None:
+        """Compare a scope's panels pair by pair, skipping the waived gaps.
+
+        The pairs are gaps, not relations: this runs where the group's own
+        account of its joiners did not hold, so a panel's neighbour is all
+        that is left to compare it against.
+        """
+        for gap in range(1, len(members)):
+            if gap in waived_gaps:
                 continue
             self._compare_panels(
-                self.pictures[members[relation - 1]],
-                self.pictures[members[relation]],
+                self.pictures[members[gap - 1]],
+                self.pictures[members[gap]],
                 self.hard, "eq-boundary-mismatch",
-                f"sit on relation {relation} of equation scope {scope}",
+                f"are adjacent panels {gap} and {gap + 1} of equation "
+                f"scope {scope}",
                 modulo=modulo,
             )
 
@@ -1827,6 +1850,24 @@ def _tenkzeq_declares_bundles(source: str, position: int) -> bool:
 _ORIENTATIONS = frozenset({"to", "from"})
 _BUNDLE = re.compile(r"bundle=([1-9]\d*)")
 _PRODUCT_PAIR = re.compile(r"(\d+)-(\d+)")
+
+
+def _waived_gaps(waived: set[int], relation_gaps: set[int]) -> set[int]:
+    """The gaps a scope's waived relations sit on.
+
+    A waiver names a relation by its ordinal while a pairwise comparison walks
+    gaps, and the two agree only where every side is one panel.  The k-th
+    relation glyph of a source sits on the k-th of its relation gaps, so where
+    the source is read the ordinals are mapped through it; with no source
+    there is nothing to map them through and they stand as they are.
+    """
+    if not relation_gaps:
+        return set(waived)
+    ordered = sorted(relation_gaps)
+    return {
+        ordered[relation - 1] for relation in waived
+        if 1 <= relation <= len(ordered)
+    }
 
 
 def _product_pair(event: Event, panels: int) -> int | None:
