@@ -32,7 +32,14 @@ jobs:
   book:
     name: Typeset and render the RMP benchmark book
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    # render --all does more than the pull-request check (it also rasterizes
+    # every target and book page), and its cost at this job's parallelism
+    # was not measured directly before this workflow's first real run -- see
+    # the timeout-minutes budget of the neighboring tenkz-corpus job in
+    # pr-ci.yml for the precedent this follows. Nothing in this workflow
+    # competes with pull-request turnaround, so the wide budget only guards
+    # against a genuine hang, not against a slow but honest compile.
+    timeout-minutes: 45
     steps:
       - uses: actions/checkout@v6
 
