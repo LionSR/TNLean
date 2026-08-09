@@ -424,50 +424,106 @@ with the chosen basis of normal tensors.
     the displayed containment.
 \end{proof}
 
-\begin{theorem}[Periodic-boundary equality with the BNT span]
+\begin{theorem}[Doubly-normalized PGVWC07 source-length kernel equality]
     \label{thm:gs_eq_bnt_span}
-    \notready
-    \uses{thm:parent_ground_space_le_bnt_span, lem:bnt_mpv_mem_ground_space,
-        def:parent_hamiltonian_ground_space_bnt, def:bnt_span}
-    Under the hypotheses of
-    Theorem~\ref{thm:parent_ground_space_le_bnt_span}, the corresponding
-    periodic-boundary ground space is exactly the span of the BNT component
+    \lean{MPSTensor.ker_parentHamiltonian_toTensorFromBlocks_eq_bntMPSVectorSpan_of_global_cut_bnt_c1_pgvwc07}
+    \leanok
+    \uses{def:parent_hamiltonian, def:bnt_span, def:block_diagonal_tensor,
+        def:irreducible_tensor, def:left_canonical_tensor,
+        def:blocks_not_gauge_phase_equiv, def:l_blk_injective, def:mpv_overlap}
+    % Scope restriction documented in
+    % docs/paper-gaps/pgvwc07_ti_canonical_form_scope.tex.
+    Let $d\ge1$ and $g\ge2$. For $0\le j<g$, let $D_j\ge1$ and
+    let $A_j=(A_j^a)_{a=0}^{d-1}$ be an irreducible left-canonical block with
+    normalized self-overlap. Assume that no two distinct blocks are equivalent
+    up to gauge and phase. For every $0\le j<g$, let $\mu_j\ne0$. Suppose
+    there is a common $L_0>0$ such that the words of length $L_0$ in each
+    block $A_j$ span $\MN{D_j}$. In this doubly-normalized specialization,
+    assume for every
+    $0\le j<g$ that
+    \begin{align}
+        \sum_{a=0}^{d-1} A_j^a A_j^{a\,\dagger}&=\Id,
+        \notag\\
+        \sum_{a=0}^{d-1} A_j^{a\,\dagger}A_j^a&=\Id.
+        \notag
+    \end{align}
+    The first identity is the normalization used in the source. In the general
+    source canonical form, the second identity is replaced by a positive
+    definite matrix $\Lambda_j$ satisfying
+    \begin{align}
+        \sum_{a=0}^{d-1} A_j^{a\,\dagger}\Lambda_j A_j^a&=\Lambda_j.
+        \notag
+    \end{align}
+    Thus this theorem has the explicit scope restriction $\Lambda_j=\Id$ and
+    does not assert the unrestricted source result. If
+    \begin{align}
+        L&\ge 3(g-1)(L_0+1)+1,
+        \notag\\
+        N&\ge L+L_0,
+        \notag
+    \end{align}
+    then the parent-Hamiltonian kernel is exactly the span of the BNT component
     vectors:
     \begin{align}
-        \mathcal G_{N,L}\!\left(\bigoplus_j \mu_j A_j\right)
+        \ker H_L^{(N)}\!\left(\bigoplus_j \mu_j A_j\right)
         &=
-        \spn\{V^{(N)}(A_j):j=1,\ldots,g\}.
+        \spn\{V^{(N)}(A_j):j=0,\ldots,g-1\}.
         \label{eq:parent_bnt_ground_space}
     \end{align}
 \end{theorem}
 
 \begin{proof}
-    \notready
-    \uses{thm:parent_ground_space_le_bnt_span, lem:bnt_mpv_mem_ground_space}
-    We prove the two inclusions separately. The inclusion
-    \begin{align}
-        \mathcal G_{N,L}\!\left(\bigoplus_j \mu_j A_j\right)
-        &\subseteq
-        \spn\{V^{(N)}(A_j):j=1,\ldots,g\}
-        \notag
-    \end{align}
-    is exactly Theorem~\ref{thm:parent_ground_space_le_bnt_span}. For the reverse
-    inclusion, the nonzero-weight hypothesis and
-    Lemma~\ref{lem:bnt_mpv_mem_ground_space} show that each vector
-    $V^{(N)}(A_j)$ lies in
-    $\mathcal G_{N,L}(\bigoplus_j \mu_j A_j)$. Since this ground space is
-    linear, it contains every linear combination of such vectors, and hence
-    contains $\spn\{V^{(N)}(A_j):j=1,\ldots,g\}$. Thus
-    \begin{align}
-        \spn\{V^{(N)}(A_j):j=1,\ldots,g\}
-        &\subseteq
-        \mathcal G_{N,L}\!\left(\bigoplus_j \mu_j A_j\right),
-        \notag
-    \end{align}
-    and the two spaces are equal, as stated in
-    (\ref{eq:parent_bnt_ground_space}).
+    \leanok
+    \uses{cor:block_diagonal_kernel_global_cut,
+        thm:chain_ground_space_eq_mpv_normal,
+        lem:bnt_span_le_parent_hamiltonian_kernel}
+    % Scope restriction documented in
+    % docs/paper-gaps/pgvwc07_ti_canonical_form_scope.tex.
+    The source length bounds imply $L_0<L$, $L\le N$, and $L_0+1<N$.
+    Theorem~\ref{thm:chain_ground_space_eq_mpv_normal} therefore identifies
+    each single-block periodic chain space with its matrix-product-vector
+    line. Corollary~\ref{cor:block_diagonal_kernel_global_cut} gives the
+    containment of the kernel in the BNT span. Conversely,
+    Lemma~\ref{lem:bnt_span_le_parent_hamiltonian_kernel} gives the reverse
+    containment directly.
 \end{proof}
 
-\noindent\emph{Remark.} A separate kernel-identification statement for these
-direct-sum block families would convert the periodic-boundary ground-space
-statement into the corresponding statement for $\ker(H_N)$.
+\begin{theorem}[PGVWC07 source-length kernel equality at general canonical normalization]
+    \label{thm:gs_eq_bnt_span_source_normalization}
+    \notready
+    \uses{def:parent_hamiltonian, def:bnt_span, def:block_diagonal_tensor,
+        def:irreducible_tensor, def:blocks_not_gauge_phase_equiv,
+        def:l_blk_injective, def:mpv_overlap}
+    Retain the same nonzero dimensions and weights, irreducibility, normalized
+    self-overlap, gauge-phase inequivalence, common block-injectivity length,
+    and source-length bounds, but do not assume left-canonicality. For every
+    $0\le j<g$, assume there is a positive definite matrix $\Lambda_j$ such
+    that
+    \begin{align}
+        \sum_{a=0}^{d-1} A_j^a A_j^{a\,\dagger}&=\Id,
+        \notag\\
+        \sum_{a=0}^{d-1} A_j^{a\,\dagger}\Lambda_j A_j^a&=\Lambda_j.
+        \notag
+    \end{align}
+    Then
+    \begin{align}
+        \ker H_L^{(N)}\!\left(\bigoplus_j \mu_j A_j\right)
+        &=
+        \spn\{V^{(N)}(A_j):j=0,\ldots,g-1\}.
+        \notag
+    \end{align}
+\end{theorem}
+
+\begin{proof}
+    \notready
+    A square-root gauge can normalize the dual fixed-point equation, but does
+    not in general preserve the source unital identity. The proof must first
+    transport the simultaneous fixed-length tuple-span equation through the
+    blockwise gauges. It must then use the source unital identity to propagate
+    that span to longer words and carry out the weighted boundary comparison.
+    Gauge-covariant identifications of the periodic chain spaces,
+    parent-Hamiltonian kernel, and component-vector span complete the route.
+    % The normalization scope and elimination plan are recorded in
+    % docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex. Tracking
+    % remains in issues #5751 and #5755.
+\end{proof}

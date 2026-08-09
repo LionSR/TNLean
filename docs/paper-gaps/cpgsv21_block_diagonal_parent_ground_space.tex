@@ -132,6 +132,38 @@ means boundary matrices of the form
   (X_j,Y_j\in M_{D_j}(\mathbb C)).
 \end{align}
 
+\section{Normalization scope}
+
+The PGVWC07 source normalization used in the block-intersection calculation is
+\begin{align}
+  \sum_a A^j_a(A^j_a)^\dagger=I.
+\end{align}
+For the dual transfer operator, the general canonical form has a positive
+definite fixed point $\Lambda_j$ satisfying
+\begin{align}
+  \sum_a (A^j_a)^\dagger\Lambda_j A^j_a=\Lambda_j.
+\end{align}
+The current source-length declarations additionally assume
+\begin{align}
+  \sum_a (A^j_a)^\dagger A^j_a=I,
+\end{align}
+which is the special case $\Lambda_j=I$. Consequently the declarations whose
+names end in \texttt{\_pgvwc07} along the global-cut route are doubly normalized
+specializations at the PGVWC07 source length bound, rather than formalizations
+of the unrestricted normalization in Theorem~12.
+
+Eliminating this restriction requires a gauge-covariant version of the route.
+For each positive definite $\Lambda_j$, conjugation by its positive square root
+turns the dual fixed-point equation into the identity fixed-point equation. One
+must transport the simultaneous word spans, open-boundary maps, periodic chain
+spaces, block direct sum, parent-Hamiltonian kernel, and component-vector span
+through these blockwise gauges. The source identity
+$\sum_a A^j_a(A^j_a)^\dagger=I$ must be retained by expressing the tuple-span
+propagation and boundary-matrix calculation in their corresponding weighted,
+gauge-covariant forms, rather than assuming that both unweighted identities
+hold in one gauge. This elimination is tracked by
+\href{https://github.com/LionSR/TNLean/issues/5751}{follow-up issue~\#5751}.
+
 \section{The block-diagonal intersection identity}
 
 The older representation paper \cite[Theorem \emph{Degeneracy of the ground
