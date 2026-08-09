@@ -16,14 +16,22 @@ import TNLean.MPS.MPDO.VerticalSectorCoordinates
 The normalized vertical component is the doubled tensor of the four matrices
 `A`.  It is not the original horizontal closed MPO.
 
+## Main definitions
+
+* `verticalComponent` is the normalized doubled vertical component.
+* `oneLabelVerticalCoisometry` is the identity coisometry for its singleton
+  weighted reconstruction.
+* `R_oneLabelBNTAlgebraTensorClause` packages the explicit tensor-attached
+  clause with multiplicity weight `25/32` and diagonal data `oneLabelChi`.
+
 ## Main results
 
 * `verticalComponent_isCPSVBasisOfNormalTensors` proves that the normalized
   component gives the one-label vertical BNT basis of `R`.
+* `verticalBNTMPO_verticalComponent` identifies the component's rotated MPO
+  tensor with `doubledTensor A`.
 * `mpvOverlap_A_eq_wMat_pow_trace` identifies the component square coefficient
   with the trace powers defining `oneLabelCoeffs`.
-* `R_oneLabelBNTAlgebraTensorClause` packages the explicit tensor-attached
-  clause with multiplicity weight `25/32` and diagonal data `oneLabelChi`.
 
 ## References
 
@@ -46,9 +54,7 @@ def verticalComponent : MPSTensor 16 4 :=
 theorem verticalTensor_R_eq_smul_verticalComponent :
     verticalTensor R = (25 / 32 : ℂ) • verticalComponent := by
   funext ab i j
-  rw [verticalTensor_apply]
-  change (25 / 32 : ℂ) * (A ab.divNat ⊗ₖ (A ab.modNat).map (starRingEnd ℂ))
-      (bondEquiv.symm i) (bondEquiv.symm j) = _
+  rw [verticalTensor_apply, R_apply]
   simp only [verticalComponent, doubledTensor, MPOTensor.toMPSTensor,
     Matrix.smul_apply, Pi.smul_apply, smul_eq_mul, bondEquiv,
     Matrix.submatrix_apply, Matrix.kroneckerMap_apply, Matrix.map_apply,
@@ -155,9 +161,6 @@ theorem verticalComponent_isLeftCanonical : verticalComponent.IsLeftCanonical :=
   change (∑ a : Fin 4, ∑ b : Fin 4,
       (((A a)ᴴ * A a) ⊗ₖ ((A b)ᴴ * A b))).submatrix
         bondEquiv.symm bondEquiv.symm = 1
-  change ((∑ a : Fin 4, ∑ b : Fin 4,
-      ((A a)ᴴ * A a) ⊗ₖ ((A b)ᴴ * A b)).submatrix
-        bondEquiv.symm bondEquiv.symm) = 1
   rw [← Matrix.sum_kronecker_sum, A_isLeftCanonical, Matrix.one_kronecker_one,
     Matrix.submatrix_one_equiv]
 
