@@ -1197,6 +1197,69 @@ for wrap_spec in 1:4 2:3 3:2; do
     exit 1
   }
 done
+# A traced row's closure is one contour with the row it closes (#5719).  The
+# rail publishes its own measured contour, and the two ends it names are the
+# two ends its polyline starts and finishes on; a rail that began at its reach
+# point instead reported a first point one wrap reach out from the row's west
+# end, which is the ink the print blueprint showed as an open periodic chain.
+closure_rails=$(grep -c '^closure-rail|' \
+  "$WORK/r_trace_row_closure.tnlog" || true)
+[ "$closure_rails" -eq 2 ] || {
+  echo "FAIL: the traced rows published $closure_rails measured closure" \
+    "contours, expected 2" >&2
+  exit 1
+}
+python3 - "$WORK/r_trace_row_closure.tnlog" <<'PROBE' || exit 1
+import sys
+
+joined = 0
+for line in open(sys.argv[1], encoding="utf-8"):
+    if not line.startswith("closure-rail|"):
+        continue
+    fields = dict(part.split("=", 1) for part in line.strip().split("|")[1:])
+    points = [tuple(int(v) for v in p.split(",")) for p in fields["points"].split(";")]
+    for end, corner in ((fields["west"], points[0]), (fields["east"], points[-1])):
+        if end == "none":
+            print("FAIL: a traced row reported no virtual end to close onto")
+            raise SystemExit(1)
+        anchor = tuple(int(v) for v in end.split(","))
+        if max(abs(a - c) for a, c in zip(anchor, corner)) > 655:
+            print("FAIL: a closure contour does not start on the end it names")
+            raise SystemExit(1)
+        joined += 1
+if joined != 4:
+    print(f"FAIL: {joined} closure ends were measured, expected 4")
+    raise SystemExit(1)
+PROBE
+# A row with one site closes onto the side that site is on.  The closure mints
+# the west port before the east one, so a row whose west boundary cell carries
+# no site puts its east port in the first endpoint slot; reading the slots in
+# order then named the east station the row's west end, led a flat rail out of
+# it across the empty row, and cut a chord to it across a ring.  The three
+# pictures are the east-only row, the west-only row, and the east-only ring.
+python3 - "$WORK/r_trace_end_sides.tnlog" <<'PROBE' || exit 1
+import sys
+
+expected = [("none", "named"), ("named", "none"), ("none", "named")]
+seen = []
+for line in open(sys.argv[1], encoding="utf-8"):
+    if not line.startswith("closure-rail|"):
+        continue
+    fields = dict(part.split("=", 1) for part in line.strip().split("|")[1:])
+    points = [tuple(int(v) for v in p.split(",")) for p in fields["points"].split(";")]
+    seen.append(tuple("none" if fields[side] == "none" else "named"
+                      for side in ("west", "east")))
+    for end, corner in ((fields["west"], points[0]), (fields["east"], points[-1])):
+        if end == "none":
+            continue
+        anchor = tuple(int(v) for v in end.split(","))
+        if max(abs(a - c) for a, c in zip(anchor, corner)) > 655:
+            print("FAIL: a one-sided closure does not meet the end it names")
+            raise SystemExit(1)
+if seen != expected:
+    print(f"FAIL: one-sided closures named {seen}, expected {expected}")
+    raise SystemExit(1)
+PROBE
 grep -Fq '|name=P|ports=n:physical|skin=box' \
     "$WORK/r_declare_atom.tnlog" || {
   echo "FAIL: an identifier atom declaration did not mint a typed command" >&2
@@ -1655,7 +1718,7 @@ for pixel_fixture in \
     r_mpo_skin_box r_mpo_skin_prelude r_parallel_lanes r_physical_dir \
     r_pill_skin_prelude r_pill_skin_roundrect r_region_diagonal \
     r_region_pinch_staircase r_ring_closure r_trace_return_rows \
-    r_wire_stroke \
+    r_trace_row_closure r_wire_stroke \
     r_noncell_port_slot r_noncell_port_slot_cell \
     r_wide_policy_legs r_wide_policy_ports \
     r_route_noncell_slots r_route_noncell_slots_cell; do
@@ -1724,7 +1787,8 @@ for path in sys.argv[1:]:
   "$WORK/r_metrics_compact.png" "$WORK/r_parallel_lanes.png" \
   "$WORK/r_physical_dir.png" "$WORK/r_region_diagonal.png" \
   "$WORK/r_region_pinch_staircase.png" "$WORK/r_ring_closure.png" \
-  "$WORK/r_trace_return_rows.png" "$WORK/r_wire_stroke.png" \
+  "$WORK/r_trace_return_rows.png" "$WORK/r_trace_row_closure.png" \
+  "$WORK/r_wire_stroke.png" \
   >"$PIXEL_CURRENT"
 
 negative="$KERNEL/negative/n_diagonal_port.tex"

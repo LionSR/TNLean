@@ -1,0 +1,95 @@
+% Regression: a traced row's closure is one contour with the row it closes,
+% and a name that speaks to the side the return runs on stands clear of it.
+%
+% The rail used to begin at its own reach point, one wrap reach out from the
+% row's first cell, so on the row's centreline no ink ran between the rail
+% and the chain: the picture recorded a periodic contraction and drew an open
+% one.  Two short probes astride the row line, one in each gap, count the
+% leads that close it.  A label band shallower than the trace reach put every
+% site name across that same return; the step a label owes the return is
+% counted through the one function that computes it.
+\documentclass{standalone}
+\usepackage{tenkz}
+\makeatletter
+\ExplSyntaxOn
+\file_input:n { tenkz-kernel.code.tex }
+\tl_new:N \l__tenkz_test_closure_name_tl
+\int_new:N \l__tenkz_test_closure_cross_int
+\int_new:N \g__tenkz_test_closure_rows_int
+\int_new:N \g__tenkz_test_closure_step_int
+\int_new:N \g__tenkz_test_closure_flat_int
+\cs_new_protected:Npn \__tenkz_test_closure_probe:nnnnn #1#2#3#4#5
+  {
+    \path [ spath/save = tenkz-test-closure-probe ]
+      \__tenkz_kernel_r_pair:nn {#1} {#2}
+      --
+      \__tenkz_kernel_r_pair:nn {#3} {#4} ;
+    \__tenkz_string_count:nnN
+      {wrap-1} {tenkz-test-closure-probe}
+      \l__tenkz_test_closure_cross_int
+    \int_compare:nNnF { \l__tenkz_test_closure_cross_int } = {1}
+      { \errmessage {#5} }
+  }
+\cs_new_eq:NN
+  \__tenkz_test_closure_stroke:nn
+  \__tenkz_kernel_r_wire_stroke:nn
+\cs_set_protected:Npn \__tenkz_kernel_r_wire_stroke:nn #1#2
+  {
+    \__tenkz_test_closure_stroke:nn {#1} {#2}
+    \__tenkz_model_get:nnN
+      { \l__tenkz_kernel_r_wire_record_tl } {origin}
+      \l__tenkz_test_closure_name_tl
+    \str_if_eq:VnT \l__tenkz_test_closure_name_tl {trace}
+      {
+        \__tenkz_model_get:nnN
+          { \l__tenkz_kernel_r_wire_record_tl } {side}
+          \l__tenkz_test_closure_name_tl
+        \str_if_eq:VnT \l__tenkz_test_closure_name_tl {west-east}
+          {
+            \int_gincr:N \g__tenkz_test_closure_rows_int
+            % The two gaps the rail used to leave, measured on the row's own
+            % centreline: a third of a pitch out from the first and the last
+            % cell, well inside the wrap reach the rail turned at.
+            \__tenkz_test_closure_probe:nnnnn
+              {-0.35} {-0.06} {-0.35} {0.06}
+              {traced~row~left~its~west~end~unjoined}
+            \__tenkz_test_closure_probe:nnnnn
+              {2.35} {-0.06} {2.35} {0.06}
+              {traced~row~left~its~east~end~unjoined}
+          }
+      }
+  }
+\cs_new_eq:NN
+  \__tenkz_test_closure_label_step:nn
+  \__tenkz_kernel_r_trace_label_step:nn
+\cs_set_protected:Npn \__tenkz_kernel_r_trace_label_step:nn #1#2
+  {
+    \__tenkz_test_closure_label_step:nn {#1} {#2}
+    \fp_compare:nNnTF { \l__tenkz_kernel_r_label_step_fp } = {0}
+      { \int_gincr:N \g__tenkz_test_closure_flat_int }
+      { \int_gincr:N \g__tenkz_test_closure_step_int }
+  }
+\AtEndDocument
+  {
+    \int_compare:nNnF { \g__tenkz_test_closure_rows_int } = {2}
+      { \errmessage {a~traced~row~of~the~two~pictures~did~not~close} }
+    % Three names speak south, over the return; three speak north, away from
+    % it.  Only the first three owe the step.
+    \int_compare:nNnF { \g__tenkz_test_closure_step_int } = {3}
+      { \errmessage {a~name~over~the~return~was~not~stepped~clear~of~it} }
+    \int_compare:nNnF { \g__tenkz_test_closure_flat_int } = {3}
+      { \errmessage {a~name~away~from~the~return~was~stepped~anyway} }
+  }
+\ExplSyntaxOff
+\makeatother
+\begin{document}
+\tenkzkernel
+\begin{tenkz}[rows={wire}, cols=3, boundary=periodic]
+  \tn[label pos=s, ports={270:physical:$\tau_1$}]{A_1} &
+  \tn[label pos=s, ports={270:physical:$\tau_2$}]{A_2} &
+  \tn[label pos=s, ports={270:physical:$\tau_3$}]{A_3}
+\end{tenkz}
+\begin{tenkz}[rows={wire}, cols=3, boundary=periodic]
+  \tn[label pos=n]{B_1} & \tn[label pos=n]{B_2} & \tn[label pos=n]{B_3}
+\end{tenkz}
+\end{document}

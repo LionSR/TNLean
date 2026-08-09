@@ -3941,10 +3941,18 @@
 \cs_new_protected:Npn
   \__tenkz_kernel_port_closure_cell:nnnn #1#2#3#4
   {
-    \prop_get:NeN \l__tenkz_kernel_cell_prop {#1-#2}
+    % Frame population is addressable even when no body atom claimed the
+    % cell -- the rule an open side already reads through
+    % \__tenkz_kernel_side_open_cell:nnn.  A closed side owes the same
+    % reading: a row whose sites the row policy grew has the same two
+    % virtual ends as a row whose sites were written out, and a closure that
+    % could not name them had nothing to close onto and drew beside its row.
+    \__tenkz_kernel_select_cell:nnN {#1}{#2}
       \l__tenkz_kernel_port_record_tl
     \quark_if_no_value:NF \l__tenkz_kernel_port_record_tl
       {
+        \prop_put:Nee \l__tenkz_kernel_cell_prop {#1-#2}
+          { \tl_use:N \l__tenkz_kernel_port_record_tl }
         \exp_args:NV \__tenkz_kernel_atom_rc:nNNN
           \l__tenkz_kernel_port_record_tl
           \l__tenkz_kernel_port_place_tl
@@ -11564,6 +11572,286 @@
         - \l__tenkz_kernel_r_yc_fp * \l__tenkz_kernel_r_y_fp
       }
   }
+% The outward step a label owes its row's return.  A label band shallower
+% than the trace reach puts every name that speaks to the traced side across
+% the return that closes its own row: on the sources' own MPO trace the site
+% names crossed the rail and the figure read as a strip of text over a wire.
+% Section 6 of the language settles the direction: a named placement is
+% honoured, and honouring it grows the host's contour on that side rather
+% than putting the label on ink.  The step is the rail's own reach, read
+% through the one function the stroke reads, so a label and the rail it
+% clears cannot drift.  Only a row closed west-to-east on a frame whose rows
+% are lines of the page owes the step; a ring closes at the frame radius and
+% grows no band beneath its row.
+\fp_new:N \l__tenkz_kernel_r_label_step_fp
+\tl_new:N \l__tenkz_kernel_r_label_b_tl
+\tl_new:N \l__tenkz_kernel_r_label_c_tl
+\fp_new:N \l__tenkz_kernel_r_label_keep_fp
+\cs_new_protected:Npn \__tenkz_kernel_r_trace_label_step:nn #1#2
+  {
+    \fp_zero:N \l__tenkz_kernel_r_label_step_fp
+    \bool_lazy_all:nT
+      {
+        {
+          \str_if_eq_p:ee
+            { \prop_item:Nn \l__tenkz_kernel_policy_prop {west} } {trace}
+        }
+        {
+          \str_if_eq_p:ee
+            { \prop_item:Nn \l__tenkz_kernel_policy_prop {east} } {trace}
+        }
+        { ! \str_if_eq_p:ee { \__tenkz_kernel_r_frame_word: } {circle} }
+        { \int_compare_p:nNn {#1} > {0} }
+        { \int_compare_p:nNn {#1} < { \l__tenkz_kernel_r_rows_int + 1 } }
+      }
+      {
+        \tl_set_eq:NN \l__tenkz_kernel_r_label_b_tl \l__tenkz_kernel_r_b_tl
+        \tl_set_eq:NN \l__tenkz_kernel_r_label_c_tl \l__tenkz_kernel_r_c_tl
+        \fp_set_eq:NN \l__tenkz_kernel_r_label_keep_fp
+          \l__tenkz_kernel_r_y_fp
+        \tl_set:Nn \l__tenkz_kernel_r_row_tl {#1}
+        \__tenkz_kernel_r_frame_xy:nnNN
+          {#1} { 1 - \__tenkz_metric_ratio:n {wrapreach} }
+          \l__tenkz_kernel_r_x_fp \l__tenkz_kernel_r_y_fp
+        \__tenkz_kernel_r_trace_side_reach:
+        \fp_compare:nNnT
+          { \l__tenkz_kernel_r_yc_fp * sind(#2) } > {0}
+          {
+            \fp_set:Nn \l__tenkz_kernel_r_label_step_fp
+              { \l__tenkz_kernel_r_yc_fp * \l__tenkz_kernel_r_reach_fp }
+          }
+        \fp_set_eq:NN \l__tenkz_kernel_r_y_fp
+          \l__tenkz_kernel_r_label_keep_fp
+        \tl_set_eq:NN \l__tenkz_kernel_r_b_tl \l__tenkz_kernel_r_label_b_tl
+        \tl_set_eq:NN \l__tenkz_kernel_r_c_tl \l__tenkz_kernel_r_label_c_tl
+      }
+  }
+% The two virtual ends a west-east closure joins.  The closure record already
+% carries them: \__tenkz_kernel_port_closure_consume:n materializes the west
+% port of the row's first cell and the east port of its last one before any
+% authored descriptor can refine them.  Reading those ends here is what makes
+% the closure one contour.  A rail that began at its own reach point instead
+% stopped one wrap reach short of the site it closes onto, so on the row's
+% centreline no ink ran between the rail and the chain and the periodic
+% chain read as open -- the drawn figure denied the contraction its record
+% asserts.  A row whose first or last cell carries no port (an unplaced or
+% sealed cell) has no virtual end to meet, and the rail keeps its reach point.
+\fp_new:N \l__tenkz_kernel_r_wrap_lx_fp
+\fp_new:N \l__tenkz_kernel_r_wrap_ly_fp
+\fp_new:N \l__tenkz_kernel_r_wrap_rx_fp
+\fp_new:N \l__tenkz_kernel_r_wrap_ry_fp
+\bool_new:N \l__tenkz_kernel_r_wrap_lend_bool
+\bool_new:N \l__tenkz_kernel_r_wrap_rend_bool
+\bool_new:N \l__tenkz_kernel_r_wrap_llead_bool
+\bool_new:N \l__tenkz_kernel_r_wrap_rlead_bool
+% Which end an endpoint is, is settled by the port's own face and not by the
+% slot the record happens to hold it in.  \__tenkz_kernel_port_closure_consume:n
+% fills `from` before `to`, so a row whose west boundary cell carries no port
+% puts the EAST port in `from`: reading the slots in order then called the
+% east station the row's west end, led the rail out of it across the whole
+% row, and drew a west lead where the row has no west site.  A port node
+% records the face it was minted on -- 180 for the west end, 0 for the east
+% one -- and that is the reading taken here.
+\cs_new_protected:Npn \__tenkz_kernel_r_wrap_end:nn #1#2
+  {
+    \__tenkz_model_get:nnN {#1} {#2} \l__tenkz_kernel_r_end_tl
+    \quark_if_no_value:NF \l__tenkz_kernel_r_end_tl
+      {
+        \str_if_eq:eeTF
+          { \__tenkz_kernel_node_item:nn
+              { \l__tenkz_kernel_r_end_tl } {face} } {0}
+          {
+            \__tenkz_kernel_r_wire_end_xy:VNN \l__tenkz_kernel_r_end_tl
+              \l__tenkz_kernel_r_wrap_rx_fp \l__tenkz_kernel_r_wrap_ry_fp
+            \bool_set_true:N \l__tenkz_kernel_r_wrap_rend_bool
+          }
+          {
+            \__tenkz_kernel_r_wire_end_xy:VNN \l__tenkz_kernel_r_end_tl
+              \l__tenkz_kernel_r_wrap_lx_fp \l__tenkz_kernel_r_wrap_ly_fp
+            \bool_set_true:N \l__tenkz_kernel_r_wrap_lend_bool
+          }
+      }
+  }
+\cs_new_protected:Npn \__tenkz_kernel_r_wrap_ends:n #1
+  {
+    \bool_set_false:N \l__tenkz_kernel_r_wrap_lend_bool
+    \bool_set_false:N \l__tenkz_kernel_r_wrap_rend_bool
+    \__tenkz_kernel_r_wrap_end:nn {#1} {from}
+    \__tenkz_kernel_r_wrap_end:nn {#1} {to}
+    % A flat rail reaches its end with a straight lead; a ring's sector
+    % already starts and finishes there and takes none.
+    \bool_set_eq:NN \l__tenkz_kernel_r_wrap_llead_bool
+      \l__tenkz_kernel_r_wrap_lend_bool
+    \bool_set_eq:NN \l__tenkz_kernel_r_wrap_rlead_bool
+      \l__tenkz_kernel_r_wrap_rend_bool
+  }
+% ---------- the measured contour of a traced closure -------------------------------------------
+% The audit cannot see a wire: the geometry stage measures glyphs and labels,
+% and a closure that stops short of the row it closes therefore passes a HARD
+% label and geometry gate untouched.  A west-east closure publishes its own
+% contour so that gate has something exact to read: the row's two virtual
+% ends, and the polyline the stroke laid between them, in scaled points on
+% the picture's own axes -- the units the measured label and glyph boxes
+% already use.  Each rounded corner enters as its two tangent points and the
+% arc's mid-point, so the reported contour lies inside the ink and claims no
+% clearance the drawing does not have.  The record carries the stroke it is
+% drawn with -- half the wire width, the half-stroke reach a measured glyph
+% already publishes -- because the polyline is the centreline of a wire that
+% is not thin: a name that clears the centreline by less than that stands on
+% the wire.
+\tl_new:N \l__tenkz_kernel_r_rail_tl
+\cs_new_protected:Npn \__tenkz_kernel_r_rail_pt:nn #1#2
+  {
+    \tl_if_empty:NF \l__tenkz_kernel_r_rail_tl
+      { \tl_put_right:Nn \l__tenkz_kernel_r_rail_tl { ; } }
+    \tl_put_right:Ne \l__tenkz_kernel_r_rail_tl
+      {
+        \dim_to_decimal_in_sp:n { \__tenkz_kernel_r_pt:n {#1} }
+        , \dim_to_decimal_in_sp:n { \__tenkz_kernel_r_pt:n {#2} }
+      }
+  }
+\cs_new:Npn \__tenkz_kernel_r_rail_end:NNN #1#2#3
+  {
+    \bool_if:NTF #1
+      {
+        \dim_to_decimal_in_sp:n { \__tenkz_kernel_r_pt:n {#2} }
+        , \dim_to_decimal_in_sp:n { \__tenkz_kernel_r_pt:n {#3} }
+      }
+      { none }
+  }
+% The flat rail, read from the registers the stroke itself read, in the order
+% the stroke laid them: the leads, the two descents, and the run between the
+% corners.  Half a trace reach is the corner radius, and one minus the cosine
+% of 45 degrees places the mid-point of a quarter turn.
+\cs_new_protected:Npn \__tenkz_kernel_r_rail_flat:
+  {
+    \tl_clear:N \l__tenkz_kernel_r_rail_tl
+    \bool_if:NT \l__tenkz_kernel_r_wrap_llead_bool
+      {
+        \__tenkz_kernel_r_rail_pt:nn
+          { \l__tenkz_kernel_r_wrap_lx_fp } { \l__tenkz_kernel_r_wrap_ly_fp }
+      }
+    \__tenkz_kernel_r_rail_pt:nn
+      { \l__tenkz_kernel_r_x_fp } { \l__tenkz_kernel_r_y_fp }
+    \__tenkz_kernel_r_rail_pt:nn
+      { \l__tenkz_kernel_r_wrap_wx_fp } { \l__tenkz_kernel_r_y_fp }
+    \__tenkz_kernel_r_rail_pt:nn
+      { \l__tenkz_kernel_r_wrap_wx_fp }
+      {
+        \l__tenkz_kernel_r_y_fp
+        + \l__tenkz_kernel_r_yc_fp
+          * ( \l__tenkz_kernel_r_reach_fp
+              - \__tenkz_metric_ratio:n {pairtracereach} / 2 )
+      }
+    \__tenkz_kernel_r_rail_pt:nn
+      {
+        \l__tenkz_kernel_r_wrap_wx_fp
+        + ( 1 - cosd(45) ) * \__tenkz_metric_ratio:n {pairtracereach} / 2
+      }
+      {
+        \l__tenkz_kernel_r_y_fp
+        + \l__tenkz_kernel_r_yc_fp
+          * ( \l__tenkz_kernel_r_reach_fp
+              - ( 1 - cosd(45) ) * \__tenkz_metric_ratio:n {pairtracereach} / 2 )
+      }
+    \__tenkz_kernel_r_rail_pt:nn
+      {
+        \l__tenkz_kernel_r_wrap_wx_fp
+        + \__tenkz_metric_ratio:n {pairtracereach} / 2
+      }
+      {
+        \l__tenkz_kernel_r_y_fp
+        + \l__tenkz_kernel_r_yc_fp * \l__tenkz_kernel_r_reach_fp
+      }
+    \__tenkz_kernel_r_rail_pt:nn
+      {
+        \l__tenkz_kernel_r_wrap_ex_fp
+        - \__tenkz_metric_ratio:n {pairtracereach} / 2
+      }
+      {
+        \l__tenkz_kernel_r_yb_fp
+        + \l__tenkz_kernel_r_yc_fp * \l__tenkz_kernel_r_reach_fp
+      }
+    \__tenkz_kernel_r_rail_pt:nn
+      {
+        \l__tenkz_kernel_r_wrap_ex_fp
+        - ( 1 - cosd(45) ) * \__tenkz_metric_ratio:n {pairtracereach} / 2
+      }
+      {
+        \l__tenkz_kernel_r_yb_fp
+        + \l__tenkz_kernel_r_yc_fp
+          * ( \l__tenkz_kernel_r_reach_fp
+              - ( 1 - cosd(45) ) * \__tenkz_metric_ratio:n {pairtracereach} / 2 )
+      }
+    \__tenkz_kernel_r_rail_pt:nn
+      { \l__tenkz_kernel_r_wrap_ex_fp }
+      {
+        \l__tenkz_kernel_r_yb_fp
+        + \l__tenkz_kernel_r_yc_fp
+          * ( \l__tenkz_kernel_r_reach_fp
+              - \__tenkz_metric_ratio:n {pairtracereach} / 2 )
+      }
+    \__tenkz_kernel_r_rail_pt:nn
+      { \l__tenkz_kernel_r_wrap_ex_fp } { \l__tenkz_kernel_r_yb_fp }
+    \__tenkz_kernel_r_rail_pt:nn
+      { \l__tenkz_kernel_r_xb_fp } { \l__tenkz_kernel_r_yb_fp }
+    \bool_if:NT \l__tenkz_kernel_r_wrap_rlead_bool
+      {
+        \__tenkz_kernel_r_rail_pt:nn
+          { \l__tenkz_kernel_r_wrap_rx_fp } { \l__tenkz_kernel_r_wrap_ry_fp }
+      }
+  }
+% The ring sector, sampled at sixteenths of its own extent: a chord of a
+% sixteenth of a quarter turn stands well inside the stroke it stands for.
+% The sector is the whole closure: a ring takes no lead, because a station
+% and a reach point both stand on the frame circle, so the sector already
+% starts and finishes on whatever the row has at either side.
+\cs_new_protected:Npn \__tenkz_kernel_r_rail_arc:
+  {
+    \tl_clear:N \l__tenkz_kernel_r_rail_tl
+    \int_step_inline:nnn {0} {16}
+      {
+        \__tenkz_kernel_r_rail_pt:nn
+          {
+            \l__tenkz_kernel_r_reach_fp
+            * cosd
+                (
+                  \l__tenkz_kernel_r_xc_fp
+                  + ##1 * ( \l__tenkz_kernel_r_yc_fp
+                            - \l__tenkz_kernel_r_xc_fp ) / 16
+                )
+          }
+          {
+            \l__tenkz_kernel_r_reach_fp
+            * sind
+                (
+                  \l__tenkz_kernel_r_xc_fp
+                  + ##1 * ( \l__tenkz_kernel_r_yc_fp
+                            - \l__tenkz_kernel_r_xc_fp ) / 16
+                )
+          }
+      }
+  }
+\cs_new_protected:Npn \__tenkz_kernel_r_rail_record:n #1
+  {
+    \__tenkz_model_get:nnN {#1} {name} \l__tenkz_kernel_r_tl
+    \__tenkz_kernel_event:n
+      {
+        closure-rail|picture=k\int_use:N \g__tenkz_kernel_picture_int
+        |name=\tl_use:N \l__tenkz_kernel_r_tl
+        |row=\tl_use:N \l__tenkz_kernel_r_row_tl
+        |side=west-east
+        |west=\__tenkz_kernel_r_rail_end:NNN
+          \l__tenkz_kernel_r_wrap_lend_bool
+          \l__tenkz_kernel_r_wrap_lx_fp \l__tenkz_kernel_r_wrap_ly_fp
+        |east=\__tenkz_kernel_r_rail_end:NNN
+          \l__tenkz_kernel_r_wrap_rend_bool
+          \l__tenkz_kernel_r_wrap_rx_fp \l__tenkz_kernel_r_wrap_ry_fp
+        |stroke=\dim_to_decimal_in_sp:n
+          { \__tenkz_dim:n {wirewidth} / 2 }
+        |points=\tl_use:N \l__tenkz_kernel_r_rail_tl
+      }
+  }
 \cs_new_protected:Npn \__tenkz_kernel_r_wire_trace:n #1
   {
     \__tenkz_model_get:nnN {#1} {side} \l__tenkz_kernel_r_tl
@@ -11571,6 +11859,9 @@
       {
         {west-east}
           {
+            % Resolving the ends walks the port nodes and so writes the row
+            % and column registers; take them before the row is read.
+            \__tenkz_kernel_r_wrap_ends:n {#1}
             \__tenkz_model_get:nnN {#1} {row} \l__tenkz_kernel_r_row_tl
             \__tenkz_kernel_r_frame_xy:nnNN
               { \l__tenkz_kernel_r_row_tl }
@@ -11593,6 +11884,37 @@
                 % The two reach points straddle the frame's closing sector.
                 % Follow that short sector at the frame radius; joining them
                 % directly cuts a chord through the ring.
+                %
+                % On a ring the row's own virtual ends stand on the frame
+                % circle, so the sector that joins them IS the closure: it
+                % starts and finishes on the two sites and needs no straight
+                % lead.  Reading the ends also repairs the sector's extent.
+                % A wrap reach beyond half a station puts the two reach
+                % points on the wrong side of one another, and the arc
+                % between them then ran backwards through a sliver of the
+                % closing sector instead of across it.  Each end is read on
+                % its own, and a ring never takes a lead: a station and a
+                % reach point both stand on the frame circle, so the sector
+                % spans whatever the row has at either side.  A row with one
+                % station closes from that station round to the other side's
+                % reach point, and is spared the straight chord a lead would
+                % otherwise have cut across the ring.
+                \bool_if:NT \l__tenkz_kernel_r_wrap_lend_bool
+                  {
+                    \fp_set_eq:NN \l__tenkz_kernel_r_x_fp
+                      \l__tenkz_kernel_r_wrap_lx_fp
+                    \fp_set_eq:NN \l__tenkz_kernel_r_y_fp
+                      \l__tenkz_kernel_r_wrap_ly_fp
+                  }
+                \bool_if:NT \l__tenkz_kernel_r_wrap_rend_bool
+                  {
+                    \fp_set_eq:NN \l__tenkz_kernel_r_xb_fp
+                      \l__tenkz_kernel_r_wrap_rx_fp
+                    \fp_set_eq:NN \l__tenkz_kernel_r_yb_fp
+                      \l__tenkz_kernel_r_wrap_ry_fp
+                  }
+                \bool_set_false:N \l__tenkz_kernel_r_wrap_llead_bool
+                \bool_set_false:N \l__tenkz_kernel_r_wrap_rlead_bool
                 \fp_set:Nn \l__tenkz_kernel_r_reach_fp
                   {
                     sqrt
@@ -11646,6 +11968,8 @@
                             { \l__tenkz_kernel_r_reach_fp }
                       ]
                   }
+                \__tenkz_kernel_r_rail_arc:
+                \__tenkz_kernel_r_rail_record:n {#1}
               }
               {
                 % A flat row closes the way the sources draw it: the rail
@@ -11685,6 +12009,13 @@
                   }
                 \__tenkz_kernel_r_wire_stroke:nn { bond }
                   {
+                    \bool_if:NT \l__tenkz_kernel_r_wrap_llead_bool
+                      {
+                        \__tenkz_kernel_r_pair:nn
+                          { \l__tenkz_kernel_r_wrap_lx_fp }
+                          { \l__tenkz_kernel_r_wrap_ly_fp }
+                        --
+                      }
                     \__tenkz_kernel_r_pair:nn
                       { \l__tenkz_kernel_r_x_fp }
                       { \l__tenkz_kernel_r_y_fp }
@@ -11757,7 +12088,16 @@
                     \__tenkz_kernel_r_pair:nn
                       { \l__tenkz_kernel_r_xb_fp }
                       { \l__tenkz_kernel_r_yb_fp }
+                    \bool_if:NT \l__tenkz_kernel_r_wrap_rlead_bool
+                      {
+                        --
+                        \__tenkz_kernel_r_pair:nn
+                          { \l__tenkz_kernel_r_wrap_rx_fp }
+                          { \l__tenkz_kernel_r_wrap_ry_fp }
+                      }
                   }
+                \__tenkz_kernel_r_rail_flat:
+                \__tenkz_kernel_r_rail_record:n {#1}
               }
           }
         {north-south}
@@ -14713,6 +15053,17 @@
                     \tl_set_eq:NN
                       \l__tenkz_kernel_r_c_tl \l__tenkz_kernel_r_tl
                   }
+                \fp_zero:N \l__tenkz_kernel_r_label_step_fp
+                \bool_if:NT \l__tenkz_kernel_turn_bool
+                  {
+                    \use:e
+                      {
+                        \exp_not:N
+                          \__tenkz_kernel_r_trace_label_step:nn
+                          { \tl_use:N \l__tenkz_kernel_r_row_tl }
+                          { \fp_eval:n { \l__tenkz_kernel_r_c_tl } }
+                      }
+                  }
                 \__tenkz_kernel_r_xy:nNN {#1}
                   \l__tenkz_kernel_r_x_fp \l__tenkz_kernel_r_y_fp
                 \fp_set:Nn \l__tenkz_kernel_r_x_fp
@@ -14726,6 +15077,7 @@
                     \l__tenkz_kernel_r_y_fp
                     + sind( \l__tenkz_kernel_r_c_tl )
                       * \__tenkz_metric_ratio:n {dotlabelband}
+                    + \l__tenkz_kernel_r_label_step_fp
                   }
                 \tl_set:Ne \l__tenkz_kernel_r_c_tl
                   {

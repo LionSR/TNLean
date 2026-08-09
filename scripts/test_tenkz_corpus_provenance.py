@@ -1942,10 +1942,22 @@ def main() -> int:
     with tempfile.TemporaryDirectory(prefix="tenkz-provenance-") as tmp:
         work = Path(tmp)
 
+        # Row order must not reach the canonical source-name digest.  The
+        # probe reads the two orders against each other and not the exit
+        # status of one of them: the driver validates the whole corpus, so
+        # every unrelated finding it can report -- the ratcheted render
+        # census above all -- used to arrive under this sentence and send a
+        # reader looking for a reordering nobody made.  A finding common to
+        # both orders is not a row-order finding, and the corpus run reports
+        # it in its own words.
+        canonical = work / "canonical.tsv"
+        write_rows(canonical, rows)
         reordered = work / "reordered.tsv"
         write_rows(reordered, [rows[0], *reversed(rows[1:])])
+        canonical_run = validate(canonical)
         reordered_run = validate(reordered)
-        if reordered_run.returncode:
+        if (reordered_run.returncode != canonical_run.returncode
+                or "source-file census SHA-256" in reordered_run.stderr):
             raise AssertionError(
                 "canonical source-name digest depended on TSV row order:\n"
                 + reordered_run.stdout

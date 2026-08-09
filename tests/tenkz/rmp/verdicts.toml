@@ -393,11 +393,10 @@ status = "cosmetic-gap"
 pairing = "verified"
 pairing_by = "pairing-sweep-two-viewers-2026-07-23"
 defects = ["placement-illegible"]
-case_sha256 = "4ac58906263086a1ec1d4721d06226ad203f3b5c7ad3f770168cd897a9a0593b"
-reviewed = "2026-08-05"
-renderer = "claude-kernel-mpo-source-review-2026-08-05-200dpi"
-second_viewer = "fable-vision-countersign-2026-08-05-600dpi"
-note = "K4 resolved: the ledger's extra-element defect was stale bookkeeping. Commit a98b1e282 (2026-07-26) already deleted the second 'racetrack override, for contrast' panel and its caption, which the source's author block (commented-out TikZ, lines 728-741) never draws; the live case has carried only the one panel since. Kernel migration: the periodic word now runs left-right on the stock MPO skin (#5362) instead of the source's top-down layout, since frame=vertical is retired; the west/east trace wire identifying the two ends is present in the model (the boundary audit closes) but draws flush with the chain rather than as a visible loop -- a kernel rendering gap distinct from the working trace=physical racetrack."
+case_sha256 = "191bc6d2dfd66e7ed4f4b8dc2bad1491b28c9ee2524c9d4f22fe0d01ccabecfd"
+reviewed = "2026-08-09"
+renderer = "claude-closure-join-review-2026-08-09-200dpi"
+note = "K4 resolved: the ledger's extra-element defect was stale bookkeeping. Commit a98b1e282 (2026-07-26) already deleted the second 'racetrack override, for contrast' panel and its caption, which the source's author block (commented-out TikZ, lines 728-741) never draws; the live case has carried only the one panel since. Kernel migration: the periodic word now runs left-right on the stock MPO skin (#5362) instead of the source's top-down layout, since frame=vertical is retired; the west/east trace now closes on the row's own virtual ends (#5719), so the identification of the two ends draws as the loop the source draws and the rendering gap recorded here is gone. The remaining deviation is the page layout alone, which is what placement-illegible now names. One viewer has seen the joined ink at 200 dpi; the verdict stays cosmetic-gap until a second viewer countersigns it."
 
 [[verdict]]
 id = "rmp-ii-peps-rg"
