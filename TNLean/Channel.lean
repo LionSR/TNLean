@@ -14,7 +14,6 @@ import TNLean.Channel.BreuerHallMap
 import TNLean.Channel.ChoiJamiolkowski
 import TNLean.Channel.ChoiRectangular
 import TNLean.Channel.ChoiTypeMap
-import TNLean.Channel.CompactSVD
 import TNLean.Channel.CompletelyPositiveBridge
 import TNLean.Channel.DecomposablePPT
 import TNLean.Channel.DensityRetract
