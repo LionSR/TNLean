@@ -86,13 +86,12 @@ letters entangle bra- and ket-side labels, so no purification tensor exists.
   positive scalar making the retained block's transfer map exactly idempotent (hence
   spectral-radius one). The letters of `R` form the full matrix-unit basis of M₄
   (`R_toMPSTensor_isInjective`).
-* The general Theorem 4.14 equivalence supplies the existential tensor-attached
-  clause `R_hasBNTAlgebraTensorClause`. The module
-  `TNLean.MPS.MPDO.RescalingStableExplicitVerticalBNT` gives an explicit one-label
-  witness with normalized component `(doubledTensor A).toMPSTensor`, multiplicity
-  weight `25/32`, coefficients `oneLabelCoeffs`, and positive diagonal data
-  `oneLabelChi`. Its component operator is a rotated vertical contraction, not the
-  original horizontal operator `mpo R L`. This boundary is documented in
+* The module `TNLean.MPS.MPDO.RescalingStableExplicitVerticalBNT` gives an explicit
+  one-label witness with normalized component `(doubledTensor A).toMPSTensor`.
+  The existential theorem `R_hasBNTAlgebraTensorClause` is immediate from this
+  clause. Its tensor-attached component is the rotated vertical contraction, not
+  the original horizontal operator `mpo R L`. The multiplicity matrix `[25/32]`
+  is distinct from the chi matrix `diag(1, 7/25)`. This boundary is documented in
   `docs/paper-gaps/cpgsv17_blocked_chi_uniformity.tex`.
 
 ## References
