@@ -525,7 +525,10 @@ def _read_key_as_written(macro_class) -> None:
 
     def invoke(self, tex):
         context = self.ownerDocument.context
-        categories = context.categories
+        # A copy, so the characters come back however plasTeX chooses to
+        # record the change: whether it replaces the table or edits it, what
+        # is put back is what was read.
+        categories = context.categories[:]
         for character in _REFERENCE_KEY_CHARACTERS:
             context.catcode(character, Token.CC_OTHER)
         try:
