@@ -190,22 +190,7 @@ private def cyclicShiftEquiv (N : ℕ) (i : Fin N) : Fin N ≃ Fin N where
     exact MPSTensor.offset_mod_eq i.isLt k.isLt
   right_inv k := by
     apply Fin.ext
-    change (i.val + ((k.val + N - i.val) % N)) % N = k.val
-    let offset := (k.val + N - i.val) % N
-    have hsite : (i.val + offset) % N = k.val := by
-      rcases lt_or_ge k.val i.val with hki | hik
-      · have hmod : offset = k.val + N - i.val := by
-          simp only [offset]
-          rw [Nat.mod_eq_of_lt (by omega)]
-        rw [hmod, show i.val + (k.val + N - i.val) = k.val + N by omega,
-          Nat.add_mod_right, Nat.mod_eq_of_lt k.isLt]
-      · have hmod : offset = k.val - i.val := by
-          simp only [offset]
-          have heq : k.val + N - i.val = N + (k.val - i.val) := by omega
-          rw [heq, Nat.add_mod_left,
-            Nat.mod_eq_of_lt (lt_of_le_of_lt (Nat.sub_le _ _) k.isLt)]
-        rw [hmod, Nat.add_sub_of_le hik, Nat.mod_eq_of_lt k.isLt]
-    exact hsite
+    exact MPSTensor.add_offset_mod_eq i.isLt k.isLt
 
 private def cyclicWindowIndexEquiv (L N : ℕ) (hLN : L ≤ N) (i : Fin N) :
     Fin L ⊕ Fin (N - L) ≃ Fin N :=

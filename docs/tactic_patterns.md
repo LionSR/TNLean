@@ -356,6 +356,17 @@ abstracted — record why, so it is not re-proposed).
 
 ## Completed refactors
 
+### Cyclic offset inverse identity
+- **Pattern:** adding the residue `(b + N - a) % N` to `a` modulo `N` recovers `b`
+  when `a` and `b` are both less than `N`.
+- **Reuse:** the public lemma `MPSTensor.add_offset_mod_eq` in
+  `TNLean/MPS/ParentHamiltonian/Defs.lean` records this inverse identity.
+- **Result:** `MPOTensor.windowComplementEquiv` in `CommutingForm.lean` and the private
+  `cyclicShiftEquiv` definitions in `PhysicalSectorProductTransport.lean` and
+  `PhysicalSupportProductTransport.lean` now apply the lemma directly, as does its original
+  `MPSTensor.replaceWindow_extractWindow` caller. The Lean sources lose 41 lines net
+  (6 insertions and 47 deletions).
+
 ### Product-marginal support kernel
 - **Pattern:** the simultaneous marginal-support whitening proof and the
   mutual-information estimate both need the support inclusion
