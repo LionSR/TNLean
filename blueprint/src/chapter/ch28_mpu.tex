@@ -559,7 +559,9 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
         thm:mixed_self}
     Replace the matrix power by the transfer matrix of the corresponding
     operator power, identify matrix trace with operator trace, and expand the
-    latter over periodic words.
+    latter over periodic words.  For the ordinary self-transfer statement,
+    specialize to $B=A$ and use the identity $F_{A,A}=\mathcal E_A$ from
+    Theorem~\ref{thm:mixed_self}.
 \end{proof}
 
 \begin{definition}[Normalized flattening of an MPO tensor]
@@ -630,8 +632,18 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     \uses{thm:mpu_transfer_matrix_overlap,thm:mpu_self_overlap_scaling,
         thm:mpdo_doubled_overlap_hilbert_schmidt,lem:mpu_mul_adjoint}
     Scaling both tensor copies by $1/\sqrt d$ multiplies the length-$N$
-    self-overlap by $d^{-N}$.  The raw self-overlap is the trace of
-    $U^{(N)}(U^{(N)})^\dagger$.  Since $N>1$,
-    the MPU equation makes this product the identity on a space of dimension
-    $d^N$.  Its trace is therefore $d^N$, and the normalization gives one.
+    self-overlap by $d^{-N}$.  The doubled-index overlap identity and MPU
+    unitarity give the complete chain
+    \begin{align}
+        \tr(E^N)
+        &=\sum_\sigma V^{(N)}(\widetilde U)_\sigma
+            \overline{V^{(N)}(\widetilde U)_\sigma}\\
+        &=d^{-N}\sum_\sigma V^{(N)}(U^{\mathrm{MPS}})_\sigma
+            \overline{V^{(N)}(U^{\mathrm{MPS}})_\sigma}\\
+        &=d^{-N}\tr\!\left(U^{(N)}(U^{(N)})^\dagger\right)\\
+        &=d^{-N}\tr(\Id)\\
+        &=d^{-N}d^N\\
+        &=1.
+    \end{align}
+    Here the fourth equality uses $N>1$, so that the MPU equation applies.
 \end{proof}
