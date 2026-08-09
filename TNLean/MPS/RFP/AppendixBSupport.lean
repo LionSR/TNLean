@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import TNLean.Algebra.FinSum
 import TNLean.MPS.RFP.CommutingBridge
 
 /-!
@@ -139,10 +140,10 @@ Source: arXiv:1606.00608, equations (3.16)--(3.17), lines 549--578. -/
           (∏ t : Fin N, hStruct.U (σ t) (q t).1 (q t).2)) * v q := by
       apply Finset.sum_congr rfl
       intro σ _
-      rw [Finset.mul_sum]
-      apply Finset.sum_congr rfl
-      intro q _
-      ring
+      simpa only [mul_comm, mul_left_comm, mul_assoc] using
+        (Fintype.sum_mul_mul_eq_mul_sum_mul
+          (∏ t : Fin N, star (hStruct.U (σ t) (p t).1 (p t).2)) v
+          (fun q => ∏ t : Fin N, hStruct.U (σ t) (q t).1 (q t).2)).symm
     _ = ∑ q : Fin N → Fin D × Fin D,
         (∑ σ : Cfg d N, (∏ t : Fin N,
           star (hStruct.U (σ t) (p t).1 (p t).2) *

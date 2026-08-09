@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import TNLean.Algebra.FinSum
 import TNLean.MPS.MPDO.RFPViaTS
 import TNLean.MPS.MPDO.SectorTrace
 import TNLean.MPS.MPDO.AreaLaw
@@ -454,7 +455,9 @@ private lemma katoCFBlock_transferMap_eq_id_aux (s : ℂ) (B : MPSTensor 4 1)
       refine Finset.sum_congr rfl (fun p _ => ?_)
       rw [one_by_one_mul_conj_apply (B p) X]
     _ = (X 0 0) * (∑ p : Fin 4, (B p 0 0) * star (B p 0 0)) := by
-      rw [Finset.mul_sum]; refine Finset.sum_congr rfl (fun p _ => ?_); ring
+      simpa only [mul_comm, mul_left_comm, mul_assoc] using
+        Fintype.sum_mul_mul_eq_mul_sum_mul (X 0 0)
+          (fun p => B p 0 0) (fun p => star (B p 0 0))
     _ = (X 0 0) * (1 : ℂ) := by
       have hsum : (∑ p : Fin 4, (B p 0 0) * star (B p 0 0)) = (1 : ℂ) := by
         rw [Fin.sum_univ_four, hB0, hB1, hB2, hB3]

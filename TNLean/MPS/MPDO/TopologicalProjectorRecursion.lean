@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import TNLean.Algebra.FinSum
 import TNLean.MPS.MPDO.TopologicalProjectors
 
 /-!
@@ -488,10 +489,12 @@ private theorem appendFusionFirstStage_reconstruction
         simp only [X, Y, mulTensor_apply, Matrix.submatrix_apply,
           finProdFinEquiv_symm_apply, Matrix.sum_apply, Matrix.smul_apply,
           Matrix.kroneckerMap_apply, smul_eq_mul]
-        rw [Finset.mul_sum]
-        apply Finset.sum_congr rfl
-        intro j _
-        ring
+        simpa only [mul_comm, mul_left_comm, mul_assoc] using
+          (Fintype.sum_mul_mul_eq_mul_sum_mul
+            (fusionHistoryWeight Fam α previous h.1 h.2)
+            (fun j => Fam.tensor β j k x.modNat y.modNat)
+            (fun j => Fam.tensor (fusionHistoryFinalLabel Fam α previous h)
+              i j x.divNat y.divNat)).symm
       _ = _ := by
         rw [← hblock]
         unfold recursiveProjectorQ X Y

@@ -75,6 +75,87 @@ abstracted — record why, so it is not re-proposed).
 - **Abstraction:** `@[mps_transfer]` simp set + `transfer_simp` macro
   (`TNLean/MPS/Tactic/Basic.lean`).
 
+### finite-sum common-left-factor normalization — promoted
+- **Pattern:** a finite sum differs from a factored form only by pulling one
+  index-independent left factor through summands of the form `a * f i * g i`.
+  The original proofs used `rw`, `simp_rw`, or `simp only` with
+  `Finset.mul_sum`, a `Finset.sum_congr` binder (tactic, functional, or
+  semicolon form), and `ring`.
+- **Seen:** 37 directly equivalent occurrences across 27 files:
+  `TNLean/Algebra/PerronFrobenius/PerronVector.lean`,
+  `TNLean/Analysis/MarginalSupport.lean`,
+  `TNLean/Channel/BreuerHallIndecomposable.lean`,
+  `TNLean/Channel/KoashiImoto/MarkovBipartiteBlockForm.lean`,
+  `TNLean/Channel/WolfProps.lean`,
+  `TNLean/Channel/Wigner/ProjectivePureState.lean`,
+  `TNLean/Channel/Wigner/TwoPureStateCharpoly.lean`,
+  `TNLean/Entropy/ClassicalMutualInformation.lean`,
+  `TNLean/MPS/MPDO/BNTFusionTensorClauseFromRFP.lean`,
+  `TNLean/MPS/MPDO/BNTLeftTripleFusion.lean`,
+  `TNLean/MPS/MPDO/BNTProjectorSelection.lean`,
+  `TNLean/MPS/MPDO/BNTRightTripleFusion.lean`,
+  `TNLean/MPS/MPDO/BNTSectorAreaLaw.lean`,
+  `TNLean/MPS/MPDO/BNTThreeSiteReducedClosure.lean`,
+  `TNLean/MPS/MPDO/CompleteZipperFusionPentagon.lean`,
+  `TNLean/MPS/MPDO/CyclicActiveFourthRegionFormula.lean`,
+  `TNLean/MPS/MPDO/KatoDeformedRFPObstruction.lean`,
+  `TNLean/MPS/MPDO/PerCopyHorizontalCF.lean`,
+  `TNLean/MPS/MPDO/PhysicalSectorCoordinateTransport.lean`,
+  `TNLean/MPS/MPDO/RepresentativeGroupedLemmaL.lean`,
+  `TNLean/MPS/MPDO/TopologicalProjectorRecursion.lean`,
+  `TNLean/MPS/MPDO/TopologicalTerminalSpectral.lean`,
+  `TNLean/MPS/MPDO/VerticalProductPairBlocks.lean`,
+  `TNLean/MPS/RFP/AppendixBSupport.lean`,
+  `TNLean/MPS/RFP/BellPairCIDObstruction.lean`,
+  `TNLean/MPS/RFP/StructuralFull.lean`, and
+  `TNLean/PEPS/TorusWindowChain4.lean`.
+- **Abstraction:** `Fintype.sum_mul_mul_eq_mul_sum_mul` in
+  `TNLean/Algebra/FinSum.lean`.
+- **Result:** all 37 sites call the shared lemma, and all 27 consumer files
+  import `TNLean.Algebra.FinSum` directly. The broad final passes found 18 sites
+  in 13 new files, including functional binders, one-line semicolon proofs,
+  both levels of the nested `distribute` identity in
+  `CyclicActiveFourthRegionFormula.lean`, and the two commutative-factor forms
+  in `WolfProps.lean`. They replaced 47 old tactic source lines; together with
+  the earlier 76, the promotion removes 123 repeated tactic lines. The broad
+  final passes have 85 additions and 50 deletions in Lean source.
+  Cumulatively, the promotion has 164 additions and 128 deletions, for a net
+  36 Lean-source lines added; the increase comes from explicit factors in
+  theorem applications rather than repeated per-summand proofs.
+- **Audit scope:** at reviewed head `2231755c7`, the final audit examined all
+  453 textual occurrences of `Finset.mul_sum` across 445 Lean source lines,
+  without assuming a tactic head, rewrite direction, binder spelling, line
+  breaks, or semicolon layout. Eight lines contain the token twice. The audit
+  therefore used token occurrences for the broad population, but source-line
+  windows and enclosing proof blocks for classification; duplicated tokens on
+  one line were not counted as separate proofs. The forward-window triage
+  retained 109 source-line windows across 55 files having `sum_congr` and
+  `ring` within the next 16 lines. Two windows were the directly equivalent
+  commutative-factor forms in `WolfProps.lean` and are now migrated. Among the
+  remaining audited windows, 21 are token/nearby-step false positives, 60
+  perform nested, two-sided, or reordered sums, and 26 use additional
+  per-summand mathematics. These residual windows are category (B), not further
+  instances identified as the promoted identity. Representative proofs
+  simultaneously distribute both left and right factors or reorder nested sums
+  (`EntropyMarkovReverse.lean`,
+  `ProjectionGeometry.lean`, `BNTMarkovKeyFormula.lean`,
+  `HayashiSectorComparison.lean`); rewrite each summand using mathematical
+  hypotheses, field identities, indicators, or case splits
+  (`Proportional.lean`, `CyclicActiveThreeBoundaryTrace.lean`, and the PEPS
+  kernel-descent files); or combine subtraction, division, real-part, and
+  two-sided sum transformations (the relative-entropy files). Some windows
+  are deliberate false positives where the `ring` belongs to a later proof
+  step, such as `TorusWindowChain3.lean`. The indicator expansion in
+  `UnionInjectivityOverlap3.lean` remains in this class: it is part of a sum
+  expansion and permutation, and replacing its inner reassociation by the
+  shared lemma increases AC-normalization cost without removing that
+  transformation. A stricter command-only screen leaves nine syntactic
+  occurrences, forming six nested or indicator proof blocks, all among these
+  category-(B) cases. Accordingly, this entry reports the 37 sites actually
+  migrated and the residual candidate classification at the audited head; it
+  does not claim repository-wide completeness or the absence of further
+  `Finset.mul_sum`/`sum_congr`/`ring` combinations.
+
 ### dependent finite-sum flattening — promoted
 - **Pattern:** pass between the double sum over `j` and `q : Fin (mult j)` and the
   single sum over `Fin (∑ j, mult j)` reindexed by `finSigmaFinEquiv.symm`.

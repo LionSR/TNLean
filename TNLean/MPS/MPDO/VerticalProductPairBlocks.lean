@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import TNLean.Algebra.FinSum
 import TNLean.MPS.MPDO.VerticalProductReconstruction
 
 /-!
@@ -628,8 +629,10 @@ theorem mulTensor_verticalAssembledTensor_reindex
     simp only [Matrix.submatrix_apply, Equiv.symm_apply_apply,
       Matrix.smul_apply, smul_eq_mul, Matrix.sum_apply,
       Matrix.kroneckerMap_apply]
-    rw [Finset.mul_sum]
-    exact Finset.sum_congr rfl fun x _ => by ring
+    simpa only [mul_comm, mul_left_comm, mul_assoc] using
+      Fintype.sum_mul_mul_eq_mul_sum_mul (weight α q * weight β r)
+        (fun x => B α (finProdFinEquiv (a, x)) i i')
+        (fun x => B β (finProdFinEquiv (x, b)) j j')
   · rw [Matrix.blockDiagonal'_apply_ne _ _ _ hp]
     simp only [Matrix.sum_apply, Matrix.kroneckerMap_apply]
     apply Finset.sum_eq_zero

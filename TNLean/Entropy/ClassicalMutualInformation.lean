@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import TNLean.Algebra.FinSum
 import Mathlib.Algebra.BigOperators.Field
 import Mathlib.LinearAlgebra.Matrix.Rank
 import TNLean.Analysis.ProbabilityEntropy
@@ -314,10 +315,8 @@ private theorem classicalMutualInformation_rowPerturbation
               ∑ x : X, ε * (∑ y : Y, β x * Real.negMulLog (P x y)) := by
             apply Finset.sum_congr rfl
             intro x _
-            rw [Finset.mul_sum]
-            apply Finset.sum_congr rfl
-            intro y _
-            ring
+            simpa only [mul_comm, mul_left_comm, mul_assoc] using
+              (Fintype.sum_mul_mul_eq_mul_sum_mul (R := ℝ) _ _ _)
           _ = ε * (∑ x : X, ∑ y : Y, β x * Real.negMulLog (P x y)) :=
             (Finset.mul_sum Finset.univ
               (fun x : X ↦ ∑ y : Y, β x * Real.negMulLog (P x y)) ε).symm

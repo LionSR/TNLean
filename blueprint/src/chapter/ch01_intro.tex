@@ -1488,6 +1488,91 @@ $v$ is multiplied by a nonzero scalar.
     which gives the displayed quotient.
 \end{proof}
 
+\begin{theorem}[Characteristic polynomial of two pure states]
+    \label{thm:charpoly_sum_two_pure_states}
+    \lean{Projectivization.isEmpty_projectivization_fin_zero}
+    \lean{Projectivization.pureStateMatrix_fin_one}
+    \lean{Projectivization.charpoly_add_pureStateMatrix_fin_one}
+    \lean{Projectivization.charpoly_add_pureStateMatrix_of_two_le}
+    \leanok
+    \uses{def:projective_pure_state_matrix}
+    There are no projective rays when $d=0$. When $d=1$, every pure-state
+    matrix is the identity and
+    \begin{align}
+        \chi_{P_p+P_q}(X)=X-2.
+    \end{align}
+    If $d\geq2$, then
+    \begin{align}
+        \chi_{P_p+P_q}(X)
+        =X^{d-2}\bigl((X-1)^2-\tr(P_pP_q)\bigr).
+        \label{eq:charpoly_sum_two_pure_states}
+    \end{align}
+\end{theorem}
+% Source audit: Wolf's displayed pair of eigenvalues
+% $1\pm\sqrt{\tr(P_pP_q)}$ suppresses the $d-2$ zero eigenvalues and their
+% multiplicities; see Chapter 1, Corollary ``Spectrum preserving maps'' in
+% \cite{Wolf2012Quantum}. The local correction is recorded in
+% \path{docs/paper-gaps/wolf_ch01_two_pure_state_zero_multiplicities.tex}; it
+% does not assert that Wolf's intended argument is false.
+
+\begin{proof}\leanok
+    \uses{thm:projective_pure_state_bridge}
+    For $d\geq2$, choose nonzero representatives $v,w$ of $p,q$, and define
+    $A\in M_{d,2}(\C)$ and $B\in M_{2,d}(\C)$ by
+    \begin{align}
+        A=\begin{pmatrix}v&w\end{pmatrix}.
+    \end{align}
+    Define the second factor by
+    \begin{align}
+        B=\begin{pmatrix}
+          \langle v,v\rangle^{-1}v^\dagger\\
+          \langle w,w\rangle^{-1}w^\dagger
+        \end{pmatrix}.
+    \end{align}
+    Then $AB=P_p+P_q$. The characteristic-polynomial identity for rectangular
+    products gives
+    \begin{align}
+        \chi_{AB}(X)=X^{d-2}\chi_{BA}(X).
+    \end{align}
+    Direct calculation yields
+    \begin{align}
+        \tr(BA)=2.
+    \end{align}
+    It also gives
+    \begin{align}
+        \det(BA)=1-\tr(P_pP_q).
+    \end{align}
+    Substitution into the quadratic characteristic polynomial of $BA$ proves
+    (\ref{eq:charpoly_sum_two_pure_states}). In dimension one, trace one forces
+    each pure-state matrix to equal the identity. The zero-dimensional claim
+    follows because a projective ray would require a nonzero vector in
+    $\C^0$.
+\end{proof}
+
+\begin{theorem}[Recovering transition probability from sum characteristic polynomials]
+    \label{thm:transition_probability_of_sum_charpoly}
+    \lean{Projectivization.trace_pureStateMatrix_mul_eq_of_charpoly_add_eq}
+    \leanok
+    \uses{def:projective_pure_state_matrix}
+    For projective rays $p,q,r,s$ in $\C^d$, if
+    \begin{align}
+        \chi_{P_p+P_q}=\chi_{P_r+P_s},
+    \end{align}
+    then
+    \begin{align}
+        \tr(P_pP_q)=\tr(P_rP_s).
+    \end{align}
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:charpoly_sum_two_pure_states}
+    For $d\geq2$, apply
+    (\ref{eq:charpoly_sum_two_pure_states}) to both sums and cancel the nonzero
+    polynomial $X^{d-2}$. Equality of the remaining constant terms gives the
+    result. In dimension one both traces equal one, while in dimension zero
+    there are no rays.
+\end{proof}
+
 \begin{theorem}[Projective Wigner rigidity]
     \label{thm:projective_wigner_rigidity}
     \lean{Projectivization.wigner_rigidity_fin}

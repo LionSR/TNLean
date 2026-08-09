@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import Mathlib.LinearAlgebra.Projectivization.Basic
+import TNLean.Algebra.FinSum
 import TNLean.Algebra.OrthogonalProjection
 import TNLean.Channel.WolfProps
 
@@ -25,6 +26,7 @@ Wigner rigidity.
 ## Main declarations
 
 * `Projectivization.pureStateMatrix`
+* `Projectivization.star_dot_self_ne_zero`
 * `Projectivization.star_dot_self_smul_normalizedPureStateMatrix`
 * `Projectivization.linearMap_eq_of_eq_on_pureStateMatrix`
 * `Projectivization.transitionProbability`
@@ -55,10 +57,8 @@ private theorem normalizedPureStateMatrix_smul (v : Fin d → ℂ) (c : ℂ) (hc
     Matrix.vecMulVec_apply, dotProduct, star_smul, star_mul, smul_eq_mul]
   rw [show (∑ x, star (v x) * star c * (c * v x)) =
       star c * c * ∑ x, star (v x) * v x by
-    rw [Finset.mul_sum]
-    apply Finset.sum_congr rfl
-    intro x _
-    ring]
+    simpa only [mul_comm, mul_left_comm, mul_assoc] using
+      Fintype.sum_mul_mul_eq_mul_sum_mul (star c * c) (fun x => star (v x)) v]
   have hsc : star c ≠ 0 := star_ne_zero.mpr hc
   field_simp [hsc]
 
@@ -80,7 +80,8 @@ theorem pureStateMatrix_mk (v : Fin d → ℂ) (hv : v ≠ 0) :
     pureStateMatrix (Projectivization.mk ℂ v hv) = normalizedPureStateMatrix v :=
   rfl
 
-private theorem star_dot_self_ne_zero (v : Fin d → ℂ) (hv : v ≠ 0) :
+/-- The Hermitian self-dot-product of a nonzero complex vector is nonzero. -/
+theorem star_dot_self_ne_zero (v : Fin d → ℂ) (hv : v ≠ 0) :
     star v ⬝ᵥ v ≠ 0 := by
   rw [dotProduct_comm]
   let w : EuclideanSpace ℂ (Fin d) := WithLp.toLp 2 v

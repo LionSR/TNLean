@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import TNLean.Algebra.FinSum
 import TNLean.MPS.BNT.Bridge
 import TNLean.MPS.MPDO.BNTAssociativity
 import TNLean.MPS.MPDO.BNTFusionTensorClause
@@ -281,10 +282,10 @@ theorem hasIdempotentCoefficientForm_of_blockedRepresentations
       intro q _
       apply Finset.sum_congr rfl
       intro r _
-      rw [Finset.mul_sum]
-      apply Finset.sum_congr rfl
-      intro k _
-      ring)
+      simpa only [mul_comm, mul_left_comm, mul_assoc] using
+        (Fintype.sum_mul_mul_eq_mul_sum_mul (D₁.weight α q ^ L)
+          (fun _ => D₁.weight β r ^ L)
+          (fun k => Fam.chi.entry α β γ k ^ L)).symm)
   intro γ
   have hTwoTrace : ∑ r, C.twoEntry γ r = m.traceScalar γ := by
     change ∑ r, twoEntry γ r = ∑ q, D₁.weight γ q

@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import TNLean.Algebra.FinSum
 import TNLean.MPS.MPDO.VerticalCF
 
 /-!
@@ -168,8 +169,10 @@ theorem blockwise_insert_eq_of_mpv_agree
                   Matrix.trace (A k i * MPSTensor.evalWord (A k) (List.ofFn w)))
             = (μ k) ^ (L + 1) * ∑ i : Fin d, W s i *
                 Matrix.trace (A k i * MPSTensor.evalWord (A k) (List.ofFn w)) := by
-              rw [Finset.mul_sum]
-              refine Finset.sum_congr rfl fun i _ => by ring
+              simpa only [mul_comm, mul_left_comm, mul_assoc] using
+                Fintype.sum_mul_mul_eq_mul_sum_mul ((μ k) ^ (L + 1)) (W s)
+                  (fun i => Matrix.trace
+                    (A k i * MPSTensor.evalWord (A k) (List.ofFn w)))
         _   = (μ k) ^ (L + 1) * ∑ i : Fin d, Matrix.trace
                 ((W s i • A k i) * MPSTensor.evalWord (A k) (List.ofFn w)) := by
               congr 1

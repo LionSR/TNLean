@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import TNLean.Algebra.FinSum
 import TNLean.MPS.MPDO.PhysicalSectorBlockedRFP
 
 /-!
@@ -113,10 +114,8 @@ theorem changePhysicalBasis_smul
   simp_rw [Finset.mul_sum, Finset.sum_mul]
   apply Finset.sum_congr rfl
   intro x _
-  rw [Finset.mul_sum]
-  apply Finset.sum_congr rfl
-  intro y _
-  ring
+  simpa only [mul_comm, mul_left_comm, mul_assoc] using
+    (Fintype.sum_mul_mul_eq_mul_sum_mul (R := ℂ) _ _ _)
 
 theorem sectorCoordinateTensor_eq_changePhysicalBasis
     (F : PhysicalSectorFactorization K) :
