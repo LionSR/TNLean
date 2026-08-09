@@ -705,16 +705,21 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     \label{def:mpu_dependent_block_inclusion}
     \lean{MPSTensor.blockInclusion}
     \leanok
-    Let $(n_k)_{k\in K}$ be a finite family of nonnegative integers and put
-    $n=\sum_{k\in K}n_k$.  For each $k\in K$, define
-    $J_k:\mathbb C^{n_k}\to\mathbb C^n$ by
+    Let the blocks be indexed by $k\in\Fin{r}$, let $n_k$ be their
+    nonnegative dimensions, and put $n=\sum_{k\in\Fin{r}}n_k$.  The standard
+    block-order bijection is
+    \begin{align}
+        \phi\colon \bigsqcup_{k\in\Fin{r}}\Fin{n_k}
+          &\longrightarrow \Fin{n},\\
+        \phi(k,a)&=\sum_{j=0}^{k-1}n_j+a.
+    \end{align}
+    For each $k\in\Fin{r}$, define $J_k:\mathbb C^{n_k}\to\mathbb C^n$ by
     \begin{align}
         (J_k)_{x,a}&=\begin{cases}
-            1,&x=(k,a),\\
-            0,&x\ne(k,a),
+            1,&x=\phi(k,a),\\
+            0,&x\ne\phi(k,a).
         \end{cases}
     \end{align}
-    where the pairs $(k,a)$ are flattened in the direct-sum order.
 \end{definition}
 
 \begin{theorem}[Dependent-block inclusion identities]
