@@ -45,8 +45,8 @@ open Matrix Finset Complex
 
 namespace KadisonSchwarz
 
-/-- Connection between the `KadisonSchwarz.IsUnitalKraus` and `Kraus.IsUnital`
-interfaces. Both express `∑ᵢ Kᵢ Kᵢ† = I` but live in different namespaces. -/
+/-- The predicate `KadisonSchwarz.IsUnitalKraus` implies `Kraus.IsUnital`.
+Both express `∑ᵢ Kᵢ Kᵢ† = I`. -/
 theorem IsUnitalKraus.toIsUnital {d D : ℕ}
     {K : Fin d → Matrix (Fin D) (Fin D) ℂ}
     (h : IsUnitalKraus (d := d) (D := D) K) : Kraus.IsUnital K := by
