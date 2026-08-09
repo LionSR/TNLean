@@ -359,9 +359,7 @@ orthogonal projector is the canonical representative used here.
     \label{thm:gram_reshuffle_norm_sq_le_rectangular_choi}
     \lean{Matrix.gramReshuffle_norm_sq_le_rectangularChoi_norm_sq}
     \leanok
-    \uses{def:gram_reshuffle,
-        thm:euclidean_operator_norm_sq_le_frobenius,
-        thm:gram_reshuffle_matrix_norm_sq}
+    \uses{def:gram_reshuffle}
     Let $I$ be a finite index set and let
     $\mathcal L\colon\mathbb C^{I\times I}\to\mathbb C^{I\times I}$ be
     complex-linear.  Then
@@ -377,7 +375,8 @@ orthogonal projector is the canonical representative used here.
 
 \begin{proof}
     \leanok
-    \uses{thm:euclidean_operator_norm_sq_le_frobenius,
+    \uses{def:gram_reshuffle,
+        thm:euclidean_operator_norm_sq_le_frobenius,
         thm:gram_reshuffle_matrix_norm_sq}
     Apply Theorem~\ref{thm:euclidean_operator_norm_sq_le_frobenius} to
     $R(\mathcal L)$, then use
