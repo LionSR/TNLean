@@ -63,9 +63,10 @@ representative before applying the proposition or explicitly assume full active
 support for the chosen ambient representative.  The formalization does not yet
 construct the representative reduction.  The latter
 implication is formalized by
-\leanid{MPSTensor.CPSVCanonicalFormData.isIrreducibleTensor_of_card_active_eq_one_of_fullActiveSupport};
-its normal-tensor conclusion still takes the spectral-radius and primitivity
-conclusions supplied by the proposition's spectral argument as separate data.
+\leanid{MPSTensor.CPSVCanonicalFormData.isIrreducibleTensor_of_card_active_eq_one_of_fullActiveSupport}.
+The spectral-radius and primitivity conclusions are derived from the shifted
+normalized transfer traces and combined with full active support in
+\leanid{MPOTensor.IsMPU.isNormalTensor_normalizedFlattening_of_cpsv}.
 Bare \leanid{MPOTensor.IsMPU} is deliberately not used to infer ambient
 normality.
 

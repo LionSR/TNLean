@@ -29,4 +29,5 @@ import TNLean.Channel.Peripheral.Powers
 import TNLean.Channel.Peripheral.SpectralProjection
 import TNLean.Channel.Peripheral.SpectralRadius
 import TNLean.Channel.Peripheral.Spectrum
+import TNLean.Channel.Peripheral.TransferMatrix
 import TNLean.Channel.Peripheral.UnitalKraus
