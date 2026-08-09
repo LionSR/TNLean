@@ -379,6 +379,43 @@ nonzero spectrum as a set.
   \end{align}
 \end{proof}
 
+The standard-form construction uses the compact singular-value decomposition in
+which the intermediate dimension is the rank rather than the smaller ambient
+dimension.
+
+\begin{theorem}[Compact rectangular singular-value decomposition]
+    \label{thm:mpu_compact_svd}
+    \lean{Matrix.exists_compactSVD}
+    \leanok
+    Let $M\in\MN{m,n}$ be a complex matrix of rank $r$. There are matrices
+    $V\in\MN{r,m}$ and $U\in\MN{r,n}$ and strictly positive real numbers
+    $s_0,\ldots,s_{r-1}$ such that, for $D=\diag(s_0,\ldots,s_{r-1})$,
+    \begin{align}
+        M&=V^\dagger D U, & VV^\dagger&=\Id_r, & UU^\dagger&=\Id_r.
+        \label{eq:mpu_compact_svd}
+    \end{align}
+    Thus no zero singular values occur in the intermediate space. This is the
+    compact decomposition used in the standard-form construction of
+    \cite[Section~III]{Cirac2017MPU}.
+\end{theorem}
+
+\begin{proof}\leanok
+    Apply the spectral theorem to $MM^\dagger$. Its nonzero eigenvalues are
+    positive, and their number is
+    $\operatorname{rank}(MM^\dagger)=\operatorname{rank}(M)=r$. For an
+    orthonormal eigenvector $e_j$ with eigenvalue $\lambda_j>0$, put
+    $w_j=M^\dagger e_j$. Then
+    $\langle w_j,w_k\rangle=\lambda_j\delta_{jk}$. Hence the vectors
+    $\lambda_j^{-1/2}w_j$ are orthonormal. Expanding each column of $M$ in the
+    eigenbasis and discarding the zero-eigenvalue terms gives
+    \begin{align}
+        M&=\sum_{\lambda_j>0}
+            \sqrt{\lambda_j}\,e_j
+            \bigl(\lambda_j^{-1/2}w_j\bigr)^\dagger,
+    \end{align}
+    which has the form in~(\ref{eq:mpu_compact_svd}).
+\end{proof}
+
 We now introduce the two matrices used for the singular-value decompositions of
 a Matrix Product Unitary tensor in Section~III of \cite{Cirac2017MPU}.  Write
 $\mathcal U^i_{j,\alpha,\beta}$ for the entries of the tensor, where $i,j$ are

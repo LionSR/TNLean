@@ -15,6 +15,7 @@ import TNLean.Algebra.BurnsideTheorem
 import TNLean.Algebra.CocycleCohomology
 import TNLean.Algebra.CommutingOverlappingDecomp
 import TNLean.Algebra.CommutingProjectionProduct
+import TNLean.Algebra.CompactSVD
 import TNLean.Algebra.ComplexPhasePositivity
 import TNLean.Algebra.ConstantPowerSums
 import TNLean.Algebra.CornerCompression
