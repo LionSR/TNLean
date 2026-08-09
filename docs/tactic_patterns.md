@@ -24,6 +24,21 @@ abstracted — record why, so it is not re-proposed).
 
 ## Promoted
 
+### transfer-map irreducibility in Kraus-map notation — promoted
+- **Pattern:** use `Kraus.mapLM_eq_transferMap` to restate
+  `IsIrreducibleMap (MPSTensor.transferMap F)` as
+  `IsIrreducibleMap (Kraus.mapLM F)` before applying generic peripheral
+  theorems.
+- **Seen:** 3 occurrences across 3 files (2026-08-09):
+  `TNLean/MPS/CanonicalForm/BlockingViaAdjoint.lean`,
+  `TNLean/MPS/Periodic/NormalizedSelfOverlap.lean`, and
+  `TNLean/Archive/BlockingPeriodicityCFII2.lean`.
+- **Abstraction:** `Kraus.isIrreducibleMap_mapLM_of_transferMap` in
+  `TNLean/MPS/Core/TransferChannel.lean`.
+- **Notes:** all three conversions now use the compatibility lemma. The two
+  consumers that also need the named map equality later retain that separate
+  equality; the duplicated irreducibility proof is removed.
+
 ### CFC square-root Hermiticity — promoted
 - **Pattern:** derive `(CFC.sqrt ρ)ᴴ = CFC.sqrt ρ` from `CFC.sqrt_nonneg`,
   `Matrix.nonneg_iff_posSemidef`, and positive-semidefinite Hermiticity.
@@ -749,23 +764,6 @@ abstracted — record why, so it is not re-proposed).
 
 Seeded from `scripts/tactic_pattern_scan.py` (2026-07-18 scan; re-run for
 current counts and full location lists).
-
-### transfer-map irreducibility in Kraus-map notation — candidate
-- **Pattern:** use `Kraus.mapLM_eq_transferMap` to restate
-  `IsIrreducibleMap (MPSTensor.transferMap F)` as
-  `IsIrreducibleMap (Kraus.mapLM F)` before applying the generic peripheral
-  theorems.
-- **Seen:** 3 occurrences across 3 files (2026-08-09):
-  `TNLean/MPS/CanonicalForm/BlockingViaAdjoint.lean`,
-  `TNLean/MPS/Periodic/NormalizedSelfOverlap.lean`, and
-  `TNLean/Archive/BlockingPeriodicityCFII2.lean`.
-- **Abstraction (proposed):** an MPS compatibility lemma deriving
-  `IsIrreducibleMap (Kraus.mapLM F)` from irreducibility of the transfer map.
-- **Notes:** recorded rather than promoted in the peripheral-decoupling PR.
-  Two of the three consumers also need the named map equality later, while
-  placing the irreducibility lemma in the low-level transfer-channel adapter
-  would add an irreducibility import to that module. Choose the helper's layer
-  together with the next refactor of these consumers.
 
 ### positive-part support-projection trace estimate — candidate
 - **Pattern:** for a positive linear map `T` and Hermitian `H`, decompose

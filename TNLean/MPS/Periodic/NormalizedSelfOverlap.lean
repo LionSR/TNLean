@@ -69,8 +69,8 @@ theorem isPrimitive_and_isNormal_of_irreducible_leftCanonical_selfOverlap_tendst
   have hK_map : Kraus.mapLM (fun i ↦ (A i)ᴴ) =
       transferMap (d := d) (D := D) (fun i ↦ (A i)ᴴ) :=
     Kraus.mapLM_eq_transferMap _
-  have hIrrK_map : IsIrreducibleMap (Kraus.mapLM (fun i ↦ (A i)ᴴ)) := by
-    simpa only [hK_map] using hIrrK
+  have hIrrK_map : IsIrreducibleMap (Kraus.mapLM (fun i ↦ (A i)ᴴ)) :=
+    Kraus.isIrreducibleMap_mapLM_of_transferMap _ hIrrK
   obtain ⟨hm, γ, hγroot, hPeriphK⟩ :=
     peripheralEigenvalues_eq_range_primitiveRoot
       (fun i ↦ (A i)ᴴ) hUnital ρ hρpd hρfix hIrrK_map

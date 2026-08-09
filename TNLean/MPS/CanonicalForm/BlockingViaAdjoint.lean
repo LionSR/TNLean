@@ -318,8 +318,8 @@ theorem exists_blockTensor_isPrimitive_of_TP_of_isIrreducibleTensor
     isIrreducibleCP_transferMap_conjTranspose_of_isIrreducibleTensor (d := d) (D := D) A hIrrT
   have hK_map : Kraus.mapLM K = transferMap (d := d) (D := D) K :=
     Kraus.mapLM_eq_transferMap K
-  have hIrrK_map : IsIrreducibleMap (Kraus.mapLM K) := by
-    simpa only [hK_map] using hIrrK
+  have hIrrK_map : IsIrreducibleMap (Kraus.mapLM K) :=
+    Kraus.isIrreducibleMap_mapLM_of_transferMap K hIrrK
   -- A positive definite fixed point for `transferMap A`, hence for `Kraus.adjointMap K`.
   have hCh : IsChannel (transferMap (d := d) (D := D) A) :=
     transferMap_isChannel (d := d) (D := D) A (by simpa only using hTP)
