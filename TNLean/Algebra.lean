@@ -44,6 +44,7 @@ import TNLean.Algebra.MatrixCongruence
 import TNLean.Algebra.MatrixFamilySupport
 import TNLean.Algebra.MatrixGramUnitary
 import TNLean.Algebra.MatrixOperatorSpace
+import TNLean.Algebra.MatrixPosDefTransport
 import TNLean.Algebra.MatrixRankBaseChange
 import TNLean.Algebra.MatrixRankClosed
 import TNLean.Algebra.MatrixReindexUnitary

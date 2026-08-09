@@ -1461,26 +1461,49 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
 
 \begin{lemma}[Identification with chosen reduced-CFII fixed points]
     \label{lem:mpu_reduced_cfii_transfer_stabilization}
-    Suppose the normalized flattening is presented by a chosen canonical-form-II
-    representative whose active blocks fill the bond space. Let $\rho$ and
-    $\Phi$ be the diagonal positive right fixed point and the identity left
-    fixed point supplied by that representative, normalized by
-    $(\Phi\mid\rho)=1$. Then
+    \lean{MPOTensor.IsMPU.normalized_transfer_power_eq_vecMulVec_of_reduced_cfii}
+    \leanok
+    Suppose $D>1$ and the normalized flattening is presented by chosen
+    canonical-form-II data whose active blocks fill the bond space. There is a
+    unique active block $k$. Normalize its diagonal positive definite fixed
+    matrix $\Lambda_k$ to have trace one, and let $V_k$ be its inclusion into
+    the ambient bond space. Then
+    \begin{align}
+        \rho&=V_k\Lambda_kV_k^\dagger,
+        &\rho&>0,
+        &\tr(\rho)&=1,\\
+        E\lvert\rho)&=\lvert\rho),
+        &(\Phi\rvert E&=(\Phi\rvert,
+        &(\Phi\mid\rho)&=1,
+    \end{align}
+    where $(\Phi\rvert$ is the vectorized identity. Consequently,
     \begin{align}
         E^{D^2-1}=\lvert\rho)(\Phi\rvert.
     \end{align}
-    This is a statement about the chosen reduced representative; it does not
-    assert that every ambient MPU tensor is itself in canonical form II.
+    % Source labels: Erightleft and prop:normal-tensor.
+    The diagonal matrix is the block matrix $\Lambda_k$ in the canonical-form-II
+    equations of \cite[lines 269--280]{Cirac2017MPU}; its ambient transport
+    $\rho$ need not be diagonal. This is a statement about the chosen reduced
+    representative and the blocking step in
+    \cite[proof of Proposition~III.2(ii)]{Cirac2017MPU}; it does not assert
+    that every ambient MPU tensor is itself in canonical form II.
 \end{lemma}
 
-\begin{proof}
-    \uses{thm:mpu_normalized_transfer_stabilization,
+\begin{proof}\leanok
+    \uses{def:mpu_full_active_support,
+        thm:mpu_shifted_transfer_trace_card_active,
+        thm:mpu_normalized_transfer_stabilization,
         thm:mpu_stabilized_fixed_pair_uniqueness}
-    The finite-blocking theorem shows that every normalized left and right fixed
-    pair factors the stabilized projector. It remains to transport the
-    blockwise canonical-form-II fixed points through the full-support ambient
-    reconstruction and prove the displayed pairing and fixed equations.
-    % Formalization of this remaining step is tracked in GitHub issue #5786.
+    The shifted trace identities select one active block. Full active support
+    makes its isometric inclusion onto, so conjugation by that inclusion
+    preserves positive definiteness and trace. Normalize the block fixed point
+    before conjugating it. The active weight has squared modulus one, hence the
+    intertwining equation transports block fixedness to $E(\rho)=\rho$.
+    Transporting the blockwise left-canonical identity shows that the ambient
+    transfer map preserves trace, so the vectorized identity is left fixed and
+    its pairing with $\rho$ is $\tr(\rho)=1$. Uniqueness of the normalized
+    fixed-pair factorization now identifies the stabilized power with
+    $\lvert\rho)(\Phi\rvert$.
 \end{proof}
 
 \begin{theorem}[One-dimensional normalized transfer matrix]
