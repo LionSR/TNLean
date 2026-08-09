@@ -498,7 +498,8 @@ nonzero spectrum as a set.
   \uses{thm:newton_girard}
   The zero matrix has the same positive trace powers as $A$ and characteristic
   polynomial $X^n$. Newton--Girard therefore identifies the two characteristic
-  polynomials.
+  polynomials. This is the characteristic-polynomial consequence of the
+  all-positive trace condition obtained in \cite[lines~405--410]{Cirac2017MPU}.
 \end{proof}
 
 \begin{theorem}[Shifted vanishing moments under matrix powers]
@@ -507,6 +508,8 @@ nonzero spectrum as a set.
   \leanok
   Let $A$ be an $n\times n$ complex matrix such that $\tr(A^k)=0$ for every
   $k>1$, and let $m>1$. Then $\tr((A^m)^r)=0$ for every $r\geq1$.
+  This auxiliary result supports the generalization below to a weaker
+  hypothesis; the source itself supplies vanishing for every positive exponent.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -525,9 +528,11 @@ nonzero spectrum as a set.
   \begin{align}
     \chi_A(X)&=X^n.
   \end{align}
-  This is the elementwise nilpotence assertion used
-  before the nil-matrix theorem in \cite[line~410]{Cirac2017MPU}. It requires
-  neither the missing first moment nor positivity, normality, or
+  The source obtains the all-positive trace hypothesis in
+  \cite[lines~405--410]{Cirac2017MPU}; its specialization is the elementwise
+  nilpotence assertion used before the nil-matrix theorem. The result above is
+  a stronger generalization because it assumes vanishing only for $N>1$. It is
+  useful independently and requires no positivity, normality, or
   diagonalizability.
 \end{theorem}
 
