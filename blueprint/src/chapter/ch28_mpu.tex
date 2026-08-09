@@ -517,6 +517,8 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     \begin{align}
         \widetilde U^{ij}&=\frac{1}{\sqrt d}\,U^{ij}.
     \end{align}
+    This is the normalization used in the normal-tensor argument of
+    \cite[lines~344--354]{Cirac2017MPU}.
 \end{definition}
 
 \begin{theorem}[Self-overlap scaling]
@@ -524,6 +526,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     \lean{MPSTensor.mpvOverlap_smul_self,
       MPOTensor.mpvOverlap_normalizedFlattening_self}
     \leanok
+    \uses{def:mpu_normalized_flattening}
     For a matrix product tensor $A$, a complex number $c$, and a nonnegative
     integer $N$, scaling every local matrix by $c$ gives
     \begin{align}
@@ -545,7 +548,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{def:mpu_normalized_flattening}
+    \uses{lem:eval_word_smul}
     Each length-$N$ coefficient is multiplied by $c^N$.  Multiplication by
     its complex conjugate gives the first identity.  Taking
     $c=1/\sqrt d$ gives the second.
@@ -555,18 +558,20 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     \label{thm:mpu_normalized_transfer_trace}
     \lean{MPOTensor.IsMPU.trace_transferMatrix_normalizedFlattening_pow_eq_one}
     \leanok
+    \uses{def:mpu,def:mpu_normalized_flattening}
     Let $U$ be an MPU tensor with positive physical and bond dimensions, and
     let $E$ be the transfer matrix of its normalized flattening.  For every
     integer $N>1$,
     \begin{align}
         \tr(E^N)&=1.
     \end{align}
+    This is the trace identity in the proof of the normal-tensor result
+    \cite[lines~344--354]{Cirac2017MPU}.
 \end{theorem}
 
 \begin{proof}\leanok
     \uses{thm:mpu_transfer_matrix_overlap,thm:mpu_self_overlap_scaling,
-        thm:mpdo_doubled_overlap_hilbert_schmidt,lem:mpu_mul_adjoint,
-        def:mpu_normalized_flattening}
+        thm:mpdo_doubled_overlap_hilbert_schmidt,lem:mpu_mul_adjoint}
     Scaling both tensor copies by $1/\sqrt d$ multiplies the length-$N$
     self-overlap by $d^{-N}$.  The raw self-overlap is the trace of
     $\operatorname{MPO}_N(U)\operatorname{MPO}_N(U)^\dagger$.  Since $N>1$,
