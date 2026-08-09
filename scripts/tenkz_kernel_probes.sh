@@ -1209,6 +1209,11 @@ closure_rails=$(grep -c '^closure-rail|' \
     "contours, expected 2" >&2
   exit 1
 }
+# The return also stands clear of the row it closes (#5766).  The standoff
+# the row's open indices demand rides on the same record, and a reader of an
+# archived stream is held to accepting one written before that field existed
+# -- so it is here, against the live library, that the field is required and
+# the drawn contour is held to it.
 python3 - "$WORK/r_trace_row_closure.tnlog" <<'PROBE' || exit 1
 import sys
 
@@ -1218,6 +1223,32 @@ for line in open(sys.argv[1], encoding="utf-8"):
         continue
     fields = dict(part.split("=", 1) for part in line.strip().split("|")[1:])
     points = [tuple(int(v) for v in p.split(",")) for p in fields["points"].split(";")]
+    if "clear" not in fields:
+        print("FAIL: a traced row's closure named no standoff")
+        raise SystemExit(1)
+    west, east = points[0], points[-1]
+    if west[0] == east[0]:
+        print("FAIL: a traced row's closure ran no length along its row")
+        raise SystemExit(1)
+    owed = abs(int(fields["clear"]))
+    outward = -1 if int(fields["clear"]) < 0 else 1
+    slope = (east[1] - west[1]) / (east[0] - west[0])
+    ends = [tuple(int(v) for v in fields[side].split(","))[0]
+            for side in ("west", "east") if fields[side] != "none"]
+    low, high = min(ends), max(ends)
+    reach = low
+    for a, b in sorted(
+            (min(s[0], e[0]), max(s[0], e[0]))
+            for s, e in zip(points, points[1:])
+            if min(outward * (s[1] - west[1] - (s[0] - west[0]) * slope),
+                   outward * (e[1] - west[1] - (e[0] - west[0]) * slope))
+            + 655 >= owed):
+        if a > reach:
+            break
+        reach = max(reach, b)
+    if reach < high:
+        print("FAIL: a closure did not run across its row at its standoff")
+        raise SystemExit(1)
     for end, corner in ((fields["west"], points[0]), (fields["east"], points[-1])):
         if end == "none":
             print("FAIL: a traced row reported no virtual end to close onto")

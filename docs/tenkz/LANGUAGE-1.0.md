@@ -651,6 +651,37 @@ that side, and its rail keeps the free racetrack an empty lattice draws; a
 row carrying a site on one side only closes onto that side, whichever side
 it is.
 
+A joined rail can still run through the row it joins. What a row hangs on
+the side its return runs is its open indices — a leg, and the band its name
+occupies when it carries one — and a return standing at a fixed reach from
+the row line stood inside them: at stroke width every such index ended on
+the very wire that contracts its row, and every name stood on the far side
+of that wire from the index it names. The leg is the open index and its
+length is its own contract; the return is the closure, and a closure placed
+beyond a row's outermost ink is exactly what the one daylight of the metric
+table measures. So the return yields. It stands one daylight beyond the
+deepest open index the rows it passes hang on its side, and one trace reach
+beyond the outermost of their row lines where they hang nothing; each
+further return crossed then adds one trace reach, which is the paper between
+two returns and not the drop of the first below its row.
+
+Where an index ends is asked of the production that draws it, never
+budgeted: an authored port, a leg the picture's physical policy grew, and an
+opening asked for at a cell or a boundary each answer with the tip they ink,
+so a leg lengthened to reach a waypoint or pierce an enclosure, an opening
+started at a glyph's own support point, a bearing that is the frame's
+transverse vector rather than a local north, and a face that points
+diagonally are all read as drawn. A name's band is the one budget left, and
+only because a label is measured after the closure is placed.
+
+The standoff those rows demand rides on the closure record beside the
+contour, signed by the side the return runs. A rail that does not **run
+across the row at that standoff** is a second hard finding: the stretches of
+it that stand off far enough, on the named side, must between them span every
+column of the row, so a rail that reaches the distance at one corner, or dips
+between two of them, or takes the whole distance on the wrong side, is
+reported rather than passed.
+
 **Beads.** A small tensor on a string is an atom whose address is
 `on <wire> t`. There is no bead vocabulary.
 

@@ -84,6 +84,16 @@ def _is_sp_end(value: str) -> bool:
     return value == "none" or _is_sp_point(value)
 
 
+def _is_sp_standoff(value: str) -> bool:
+    """A closure standoff: signed scaled points, or the word for an arc.
+
+    The sign is the side the closure runs, so a reader holds a rail to a
+    distance on a named side.  `arc` is a frame sector, which stands off no
+    row line; nothing else stands for the absence of a standoff, because a
+    flat rail that named none would take the rule out of the reading."""
+    return value == "arc" or _is_int(value)
+
+
 def _is_sp_polyline(value: str) -> bool:
     """A measured contour: at least two points, semicolon separated."""
     parts = value.split(";")
@@ -232,6 +242,7 @@ FIELD_VALIDATORS: dict[str, dict[str, Callable[[str], bool]]] = {
         "west": _is_sp_end,
         "east": _is_sp_end,
         "stroke": _is_nonnegative_int,
+        "clear": _is_sp_standoff,
         "points": _is_sp_polyline,
     },
     "tree": {
@@ -252,6 +263,10 @@ FIELD_VALIDATORS: dict[str, dict[str, Callable[[str], bool]]] = {
 # whose result determines whether the record can authorize a boundary check.
 REQUIRED_FIELDS: dict[str, frozenset[str]] = {
     "check": frozenset({"scope", "result"}),
+    # `clear` is deliberately absent: it was added to an existing kind, and
+    # section 7 of TNLOG.md holds a reader to accepting a stream written
+    # before an optional field arrived.  A live picture always writes it, and
+    # the kernel record gate reads that back off the streams it pins.
     "closure-rail": frozenset(
         {"name", "row", "side", "west", "east", "stroke", "points"}),
 }

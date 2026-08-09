@@ -11519,14 +11519,420 @@
           }
       }
   }
+% How far a passed row hangs its open indices on the return's side.  Daylight
+% separates a closure from a row's outermost ink, and what that ink is, is the
+% row's own business: a bare row hangs nothing, and an open index hangs a leg
+% and, when it carries a name, the band that name occupies past the tip.
+%
+% Every tip is resolved, not budgeted.  An open index reaches a row through
+% three productions -- an authored port, a leg the picture's physical policy
+% grew, and an opening the picture asked for at a cell or a boundary -- and
+% each of them can put its tip somewhere a metric alone does not predict: a
+% leg lengthened to reach a waypoint, an enclosure it pierces or a crossing
+% it must clear; a plane opening started at the glyph's own outward support
+% point rather than at the site; a bearing that is the frame's transverse
+% page vector rather than the host's local north; a face that points
+% diagonally, whose outward ordinate is its reach times the sine of its
+% bearing.  So the scan asks each production for the tip it draws and reads
+% that tip's outward ordinate, exactly as \__tenkz_kernel_r_mark_rail:n does
+% for the bar it steps past the same ink.  Only a name's band stays budgeted:
+% a label is measured after this pass, and \__tenkz_metric_ratio:n
+% {dotlabelband} is the band the renderer reserves for it.
+%
+% Those productions write the coordinate registers the reach itself is
+% computed in, so the scan saves them, runs, and puts them back.
+\fp_new:N \l__tenkz_kernel_r_trace_ink_fp
+\fp_new:N \l__tenkz_kernel_r_trace_pass_fp
+\fp_new:N \l__tenkz_kernel_r_trace_stand_fp
+\fp_new:N \l__tenkz_kernel_r_trace_ink_reach_fp
+\fp_new:N \l__tenkz_kernel_r_trace_ink_sign_fp
+\fp_new:N \l__tenkz_kernel_r_trace_ink_base_fp
+\tl_new:N \l__tenkz_kernel_r_trace_ink_lo_tl
+\tl_new:N \l__tenkz_kernel_r_trace_ink_hi_tl
+\tl_new:N \l__tenkz_kernel_r_trace_ink_host_tl
+\tl_new:N \l__tenkz_kernel_r_trace_ink_row_tl
+\tl_new:N \l__tenkz_kernel_r_trace_ink_col_tl
+\tl_new:N \l__tenkz_kernel_r_trace_ink_face_tl
+\tl_new:N \l__tenkz_kernel_r_trace_ink_slot_tl
+\tl_new:N \l__tenkz_kernel_r_trace_ink_type_tl
+\tl_new:N \l__tenkz_kernel_r_trace_ink_side_tl
+\tl_new:N \l__tenkz_kernel_r_trace_ink_label_tl
+\bool_new:N \l__tenkz_kernel_r_trace_ink_bool
+% The resolved tip stands in \l__tenkz_kernel_r_port_tip_y_fp and its host in
+% the row register: take its outward ordinate when the row is one the return
+% passes, and add the band a name occupies past it.
+\cs_new_protected:Npn \__tenkz_kernel_r_trace_ink_take:n #1
+  {
+    \bool_lazy_all:nT
+      {
+        {
+          \int_compare_p:nNn { \l__tenkz_kernel_r_trace_ink_row_tl }
+            > { \l__tenkz_kernel_r_trace_ink_lo_tl - 1 }
+        }
+        {
+          \int_compare_p:nNn { \l__tenkz_kernel_r_trace_ink_row_tl }
+            < { \l__tenkz_kernel_r_trace_ink_hi_tl + 1 }
+        }
+      }
+      {
+        \fp_set:Nn \l__tenkz_kernel_r_trace_ink_reach_fp
+          {
+            \l__tenkz_kernel_r_trace_ink_sign_fp
+            * ( \l__tenkz_kernel_r_port_tip_y_fp
+                - \l__tenkz_kernel_r_trace_ink_base_fp )
+          }
+        \fp_compare:nNnT { \l__tenkz_kernel_r_trace_ink_reach_fp } > {0}
+          {
+            \__tenkz_model_get:nnN {#1} {port-label}
+              \l__tenkz_kernel_r_trace_ink_label_tl
+            \quark_if_no_value:NF \l__tenkz_kernel_r_trace_ink_label_tl
+              {
+                \tl_if_empty:NF \l__tenkz_kernel_r_trace_ink_label_tl
+                  {
+                    \fp_add:Nn \l__tenkz_kernel_r_trace_ink_reach_fp
+                      { \__tenkz_metric_ratio:n {dotlabelband} }
+                  }
+              }
+            \fp_set:Nn \l__tenkz_kernel_r_trace_ink_fp
+              {
+                max
+                  (
+                    \l__tenkz_kernel_r_trace_ink_fp ,
+                    \l__tenkz_kernel_r_trace_ink_reach_fp
+                  )
+              }
+          }
+      }
+  }
+% An authored port: the port geometry leaves its tip where the leg pass will
+% ink it, lane plan, lengthening and all.
+\cs_new_protected:Npn \__tenkz_kernel_r_trace_port_ink:n #1
+  {
+    \__tenkz_model_get:nnN {#1} {host} \l__tenkz_kernel_r_trace_ink_host_tl
+    \quark_if_no_value:NF \l__tenkz_kernel_r_trace_ink_host_tl
+      {
+        \exp_args:NV \__tenkz_kernel_r_record_carrier:nNNN
+          \l__tenkz_kernel_r_trace_ink_host_tl
+          \l__tenkz_kernel_r_trace_ink_row_tl
+          \l__tenkz_kernel_r_trace_ink_col_tl
+          \l__tenkz_kernel_r_trace_ink_bool
+        \bool_if:NT \l__tenkz_kernel_r_trace_ink_bool
+          {
+            \__tenkz_kernel_r_port_open_geometry:n {#1}
+            \__tenkz_kernel_r_trace_ink_take:n {#1}
+          }
+      }
+  }
+% A policy leg: the leg geometry and the tip reading the annotation layering
+% takes, which follows a lane corridor through its bend when the leg has one.
+\cs_new_protected:Npn \__tenkz_kernel_r_trace_policy_ink:n #1
+  {
+    \__tenkz_model_get:nnN {#1} {host} \l__tenkz_kernel_r_trace_ink_host_tl
+    \__tenkz_model_get:nnN {#1} {face} \l__tenkz_kernel_r_trace_ink_face_tl
+    \__tenkz_model_get:nnN {#1} {col} \l__tenkz_kernel_r_trace_ink_slot_tl
+    \bool_lazy_all:nT
+      {
+        { ! \quark_if_no_value_p:N \l__tenkz_kernel_r_trace_ink_host_tl }
+        { ! \quark_if_no_value_p:N \l__tenkz_kernel_r_trace_ink_face_tl }
+        { ! \quark_if_no_value_p:N \l__tenkz_kernel_r_trace_ink_slot_tl }
+      }
+      {
+        \exp_args:NV \__tenkz_kernel_atom_rc:nNNN
+          \l__tenkz_kernel_r_trace_ink_host_tl
+          \l__tenkz_kernel_r_trace_ink_row_tl
+          \l__tenkz_kernel_r_trace_ink_col_tl
+          \l__tenkz_kernel_r_trace_ink_bool
+        \bool_if:NT \l__tenkz_kernel_r_trace_ink_bool
+          {
+            % the record stores the spanned cell; the slot is its offset from
+            % the host's anchor column
+            \tl_set:Ne \l__tenkz_kernel_r_trace_ink_slot_tl
+              {
+                \int_eval:n
+                  {
+                    \l__tenkz_kernel_r_trace_ink_slot_tl
+                    - \l__tenkz_kernel_r_trace_ink_col_tl + 1
+                  }
+              }
+            \__tenkz_kernel_r_leg_geometry:VVV
+              \l__tenkz_kernel_r_trace_ink_host_tl
+              \l__tenkz_kernel_r_trace_ink_face_tl
+              \l__tenkz_kernel_r_trace_ink_slot_tl
+            \bool_if:NT \l__tenkz_kernel_leg_geom_bool
+              {
+                \__tenkz_kernel_r_leg_tip_y:
+                \__tenkz_kernel_r_trace_ink_take:n {#1}
+              }
+          }
+      }
+  }
+% An opening the picture asked for.  It carries no host: one end is a port
+% node or a cell, and the other is the free end the wire renderer stands off
+% -- one open index along the compass word the record names, or, on a
+% projected plane, the tip that renderer resolves through the frame.  The row
+% is the row the anchored end stands in.
+\cs_new_protected:Npn \__tenkz_kernel_r_trace_open_end:nnn #1#2#3
+  {
+    \__tenkz_model_get:nnN {#1} {#2} \l__tenkz_kernel_r_trace_ink_side_tl
+    \quark_if_no_value:NF \l__tenkz_kernel_r_trace_ink_side_tl
+      {
+        \__tenkz_kernel_r_wire_end_xy:VNN \l__tenkz_kernel_r_trace_ink_side_tl
+          \l__tenkz_kernel_r_x_fp \l__tenkz_kernel_r_y_fp
+        \__tenkz_model_get:nnN {#1} {#3}
+          \l__tenkz_kernel_r_trace_ink_face_tl
+        \quark_if_no_value:NF \l__tenkz_kernel_r_trace_ink_face_tl
+          {
+            \str_if_eq:eeTF { \__tenkz_kernel_r_frame_word: } {plane}
+              {
+                \fp_set_eq:NN \l__tenkz_kernel_r_xc_fp
+                  \l__tenkz_kernel_r_x_fp
+                \fp_set_eq:NN \l__tenkz_kernel_r_yc_fp
+                  \l__tenkz_kernel_r_y_fp
+                \exp_args:NV \__tenkz_kernel_r_open_tip_affine_xy:nNN
+                  \l__tenkz_kernel_r_trace_ink_face_tl
+                  \l__tenkz_kernel_r_port_tip_x_fp
+                  \l__tenkz_kernel_r_port_tip_y_fp
+              }
+              {
+                \fp_set:Nn \l__tenkz_kernel_r_port_tip_y_fp
+                  {
+                    \l__tenkz_kernel_r_y_fp
+                    + \__tenkz_metric_ratio:n {stub}
+                      * sind
+                          (
+                            \__tenkz_kernel_r_compass:n
+                              { \l__tenkz_kernel_r_trace_ink_face_tl }
+                          )
+                  }
+              }
+            \__tenkz_kernel_r_trace_ink_take:n {#1}
+          }
+      }
+  }
+\cs_new_protected:Npn \__tenkz_kernel_r_trace_open_ink:n #1
+  {
+    \__tenkz_model_get:nnN {#1} {physical-axis}
+      \l__tenkz_kernel_r_trace_ink_type_tl
+    \str_if_eq:VnTF \l__tenkz_kernel_r_trace_ink_type_tl {transverse}
+      {
+        % The plane route inks a leg from the glyph's own outward support
+        % point along the frame's physical axis; the renderer that draws it
+        % answers where its tip stands.
+        \__tenkz_model_get:nnN {#1} {from-host}
+          \l__tenkz_kernel_r_trace_ink_host_tl
+        \quark_if_no_value:NF \l__tenkz_kernel_r_trace_ink_host_tl
+          {
+            \exp_args:NV \__tenkz_kernel_r_record_carrier:nNNN
+              \l__tenkz_kernel_r_trace_ink_host_tl
+              \l__tenkz_kernel_r_trace_ink_row_tl
+              \l__tenkz_kernel_r_trace_ink_col_tl
+              \l__tenkz_kernel_r_trace_ink_bool
+            \bool_if:NT \l__tenkz_kernel_r_trace_ink_bool
+              {
+                \__tenkz_kernel_r_wire_physical_axis_open:n {#1}
+                \fp_set_eq:NN \l__tenkz_kernel_r_port_tip_y_fp
+                  \l__tenkz_kernel_r_yb_fp
+                \__tenkz_kernel_r_trace_ink_take:n {#1}
+              }
+          }
+      }
+      {
+        \__tenkz_kernel_r_trace_open_row:n {#1}
+        \bool_if:NT \l__tenkz_kernel_r_trace_ink_bool
+          {
+            \__tenkz_kernel_r_trace_open_end:nnn {#1} {to} {from-open}
+            \__tenkz_kernel_r_trace_open_end:nnn {#1} {from} {to-open}
+          }
+      }
+  }
+% The row an opening's anchored end stands in.  A cell-level physical opening
+% and a north boundary opening stand on the first row, a south one on the
+% last, and an interface opening on the row its face names: `upper' hangs
+% from the row above the interface, `lower' from the row below it.  A west or
+% east opening leaves along its own row and hangs nothing on a return's side,
+% so its bearing takes it out of the answer rather than its row.
+\cs_new_protected:Npn \__tenkz_kernel_r_trace_open_row:n #1
+  {
+    \bool_set_true:N \l__tenkz_kernel_r_trace_ink_bool
+    \__tenkz_model_get:nnN {#1} {interface}
+      \l__tenkz_kernel_r_trace_ink_type_tl
+    \quark_if_no_value:NTF \l__tenkz_kernel_r_trace_ink_type_tl
+      {
+        \__tenkz_model_get:nnN {#1} {side}
+          \l__tenkz_kernel_r_trace_ink_side_tl
+        \quark_if_no_value:NTF \l__tenkz_kernel_r_trace_ink_side_tl
+          { \tl_set:Nn \l__tenkz_kernel_r_trace_ink_row_tl {1} }
+          {
+            \str_case:VnF \l__tenkz_kernel_r_trace_ink_side_tl
+              {
+                {south}
+                  {
+                    \tl_set:Ne \l__tenkz_kernel_r_trace_ink_row_tl
+                      { \int_use:N \l__tenkz_kernel_r_rows_int }
+                  }
+                {north}
+                  { \tl_set:Nn \l__tenkz_kernel_r_trace_ink_row_tl {1} }
+              }
+              {
+                \__tenkz_model_get:nnN {#1} {row}
+                  \l__tenkz_kernel_r_trace_ink_row_tl
+                \quark_if_no_value:NT \l__tenkz_kernel_r_trace_ink_row_tl
+                  { \bool_set_false:N \l__tenkz_kernel_r_trace_ink_bool }
+              }
+          }
+      }
+      {
+        \__tenkz_model_get:nnN {#1} {face}
+          \l__tenkz_kernel_r_trace_ink_side_tl
+        \str_if_eq:VnTF \l__tenkz_kernel_r_trace_ink_side_tl {lower}
+          {
+            \tl_set:Ne \l__tenkz_kernel_r_trace_ink_row_tl
+              { \int_eval:n { \l__tenkz_kernel_r_trace_ink_type_tl + 1 } }
+          }
+          {
+            \tl_set_eq:NN \l__tenkz_kernel_r_trace_ink_row_tl
+              \l__tenkz_kernel_r_trace_ink_type_tl
+          }
+      }
+  }
+% The answer for one range of rows, remembered.  A traced row's reach is read
+% by the stroke that draws its rail, by every name that owes the rail a step,
+% and by the annotation layering once per wire in the picture; a row's records
+% do not change under the render, so the walks the answer costs are paid once
+% per range and per picture rather than once per reader.  A range names its
+% closed row -- the rows a return passes run from that row outward -- so the
+% key is complete.
+%
+% The scan runs the productions that draw the ink, and those write the
+% coordinate registers the reach is computed in.  They are saved here and put
+% back, so the caller sees the reach it asked for and nothing else.
+\prop_new:N \g__tenkz_kernel_r_trace_ink_prop
+\tl_new:N \l__tenkz_kernel_r_trace_ink_key_tl
+\tl_new:N \l__tenkz_kernel_r_trace_ink_seen_tl
+\fp_new:N \l__tenkz_kernel_r_trace_keep_x_fp
+\fp_new:N \l__tenkz_kernel_r_trace_keep_y_fp
+\fp_new:N \l__tenkz_kernel_r_trace_keep_xb_fp
+\fp_new:N \l__tenkz_kernel_r_trace_keep_yb_fp
+\fp_new:N \l__tenkz_kernel_r_trace_keep_xc_fp
+\fp_new:N \l__tenkz_kernel_r_trace_keep_yc_fp
+\fp_new:N \l__tenkz_kernel_r_trace_keep_reach_fp
+\fp_new:N \l__tenkz_kernel_r_trace_keep_wx_fp
+\fp_new:N \l__tenkz_kernel_r_trace_keep_ex_fp
+\fp_new:N \l__tenkz_kernel_r_trace_keep_ylo_fp
+\fp_new:N \l__tenkz_kernel_r_trace_keep_yhi_fp
+\tl_new:N \l__tenkz_kernel_r_trace_keep_b_tl
+\tl_new:N \l__tenkz_kernel_r_trace_keep_c_tl
+\tl_new:N \l__tenkz_kernel_r_trace_keep_row_tl
+\tl_new:N \l__tenkz_kernel_r_trace_keep_col_tl
+\cs_new_protected:Npn \__tenkz_kernel_r_trace_ink_keep:
+  {
+    \fp_set_eq:NN \l__tenkz_kernel_r_trace_keep_x_fp
+      \l__tenkz_kernel_r_x_fp
+    \fp_set_eq:NN \l__tenkz_kernel_r_trace_keep_y_fp
+      \l__tenkz_kernel_r_y_fp
+    \fp_set_eq:NN \l__tenkz_kernel_r_trace_keep_xb_fp
+      \l__tenkz_kernel_r_xb_fp
+    \fp_set_eq:NN \l__tenkz_kernel_r_trace_keep_yb_fp
+      \l__tenkz_kernel_r_yb_fp
+    \fp_set_eq:NN \l__tenkz_kernel_r_trace_keep_xc_fp
+      \l__tenkz_kernel_r_xc_fp
+    \fp_set_eq:NN \l__tenkz_kernel_r_trace_keep_yc_fp
+      \l__tenkz_kernel_r_yc_fp
+    \fp_set_eq:NN \l__tenkz_kernel_r_trace_keep_reach_fp
+      \l__tenkz_kernel_r_reach_fp
+    \fp_set_eq:NN \l__tenkz_kernel_r_trace_keep_wx_fp
+      \l__tenkz_kernel_r_wrap_wx_fp
+    \fp_set_eq:NN \l__tenkz_kernel_r_trace_keep_ex_fp
+      \l__tenkz_kernel_r_wrap_ex_fp
+    \fp_set_eq:NN \l__tenkz_kernel_r_trace_keep_ylo_fp
+      \l__tenkz_kernel_r_wrap_ylo_fp
+    \fp_set_eq:NN \l__tenkz_kernel_r_trace_keep_yhi_fp
+      \l__tenkz_kernel_r_wrap_yhi_fp
+    \tl_set_eq:NN \l__tenkz_kernel_r_trace_keep_b_tl
+      \l__tenkz_kernel_r_b_tl
+    \tl_set_eq:NN \l__tenkz_kernel_r_trace_keep_c_tl
+      \l__tenkz_kernel_r_c_tl
+    \tl_set_eq:NN \l__tenkz_kernel_r_trace_keep_row_tl
+      \l__tenkz_kernel_r_row_tl
+    \tl_set_eq:NN \l__tenkz_kernel_r_trace_keep_col_tl
+      \l__tenkz_kernel_r_col_tl
+  }
+\cs_new_protected:Npn \__tenkz_kernel_r_trace_ink_restore:
+  {
+    \fp_set_eq:NN \l__tenkz_kernel_r_x_fp
+      \l__tenkz_kernel_r_trace_keep_x_fp
+    \fp_set_eq:NN \l__tenkz_kernel_r_y_fp
+      \l__tenkz_kernel_r_trace_keep_y_fp
+    \fp_set_eq:NN \l__tenkz_kernel_r_xb_fp
+      \l__tenkz_kernel_r_trace_keep_xb_fp
+    \fp_set_eq:NN \l__tenkz_kernel_r_yb_fp
+      \l__tenkz_kernel_r_trace_keep_yb_fp
+    \fp_set_eq:NN \l__tenkz_kernel_r_xc_fp
+      \l__tenkz_kernel_r_trace_keep_xc_fp
+    \fp_set_eq:NN \l__tenkz_kernel_r_yc_fp
+      \l__tenkz_kernel_r_trace_keep_yc_fp
+    \fp_set_eq:NN \l__tenkz_kernel_r_reach_fp
+      \l__tenkz_kernel_r_trace_keep_reach_fp
+    \fp_set_eq:NN \l__tenkz_kernel_r_wrap_wx_fp
+      \l__tenkz_kernel_r_trace_keep_wx_fp
+    \fp_set_eq:NN \l__tenkz_kernel_r_wrap_ex_fp
+      \l__tenkz_kernel_r_trace_keep_ex_fp
+    \fp_set_eq:NN \l__tenkz_kernel_r_wrap_ylo_fp
+      \l__tenkz_kernel_r_trace_keep_ylo_fp
+    \fp_set_eq:NN \l__tenkz_kernel_r_wrap_yhi_fp
+      \l__tenkz_kernel_r_trace_keep_yhi_fp
+    \tl_set_eq:NN \l__tenkz_kernel_r_b_tl
+      \l__tenkz_kernel_r_trace_keep_b_tl
+    \tl_set_eq:NN \l__tenkz_kernel_r_c_tl
+      \l__tenkz_kernel_r_trace_keep_c_tl
+    \tl_set_eq:NN \l__tenkz_kernel_r_row_tl
+      \l__tenkz_kernel_r_trace_keep_row_tl
+    \tl_set_eq:NN \l__tenkz_kernel_r_col_tl
+      \l__tenkz_kernel_r_trace_keep_col_tl
+  }
+\cs_new_protected:Npn \__tenkz_kernel_r_trace_row_ink:nn #1#2
+  {
+    \tl_set:Ne \l__tenkz_kernel_r_trace_ink_key_tl
+      { \int_use:N \g__tenkz_kernel_picture_int - #1 - #2 }
+    \prop_get:NVNTF \g__tenkz_kernel_r_trace_ink_prop
+      \l__tenkz_kernel_r_trace_ink_key_tl
+      \l__tenkz_kernel_r_trace_ink_seen_tl
+      {
+        \fp_set:Nn \l__tenkz_kernel_r_trace_ink_fp
+          { \l__tenkz_kernel_r_trace_ink_seen_tl }
+      }
+      {
+        \fp_zero:N \l__tenkz_kernel_r_trace_ink_fp
+        \tl_set:Nn \l__tenkz_kernel_r_trace_ink_lo_tl {#1}
+        \tl_set:Nn \l__tenkz_kernel_r_trace_ink_hi_tl {#2}
+        \fp_set_eq:NN \l__tenkz_kernel_r_trace_ink_sign_fp
+          \l__tenkz_kernel_r_yc_fp
+        \fp_set_eq:NN \l__tenkz_kernel_r_trace_ink_base_fp
+          \l__tenkz_kernel_r_y_fp
+        \__tenkz_kernel_r_trace_ink_keep:
+        \__tenkz_model_map_wires_origin:nN {port-open}
+          \__tenkz_kernel_r_trace_port_ink:n
+        \__tenkz_model_map_wires_origin:nN {policy-leg}
+          \__tenkz_kernel_r_trace_policy_ink:n
+        \__tenkz_model_map_wires_origin:nN {open}
+          \__tenkz_kernel_r_trace_open_ink:n
+        \__tenkz_kernel_r_trace_ink_restore:
+        \prop_gput:NVe \g__tenkz_kernel_r_trace_ink_prop
+          \l__tenkz_kernel_r_trace_ink_key_tl
+          { \fp_use:N \l__tenkz_kernel_r_trace_ink_fp }
+      }
+  }
 % The side and reach of a traced row's return.  Reads the closed row from
 % \l__tenkz_kernel_r_row_tl and the row's west reach-point ordinate from
 % \l__tenkz_kernel_r_y_fp; leaves the arc angles in the b/c registers, the
 % outward sign in \l__tenkz_kernel_r_yc_fp, the passed-row count less one in
 % \l__tenkz_kernel_r_xc_fp, the passed rows' envelope in the wrap registers,
-% and the reach in \l__tenkz_kernel_r_reach_fp.  The closure stroke and the
+% the passed rows' open-index depth in \l__tenkz_kernel_r_trace_ink_fp, and
+% the reach in \l__tenkz_kernel_r_reach_fp.  The closure stroke and the
 % annotation layering of \__tenkz_kernel_r_mark_rails:n both read the rail
-% through this one function, so the two cannot drift.
+% through this one function, so the two cannot drift.  The ink scan reads the
+% outward sign, and the envelope walk borrows the sign register as scratch for
+% the frame answers it collects, so the scan runs after the sign is restated.
 \cs_new_protected:Npn \__tenkz_kernel_r_trace_side_reach:
   {
     \int_compare:nNnTF
@@ -11541,6 +11947,8 @@
         \fp_set:Nn \l__tenkz_kernel_r_xc_fp
           { \l__tenkz_kernel_r_row_tl - 1 }
         \fp_set:Nn \l__tenkz_kernel_r_yc_fp {1}
+        \__tenkz_kernel_r_trace_row_ink:nn
+          {1} { \l__tenkz_kernel_r_row_tl }
       }
       {
         \tl_set:Nn \l__tenkz_kernel_r_b_tl {270}
@@ -11554,22 +11962,57 @@
             - \l__tenkz_kernel_r_row_tl
           }
         \fp_set:Nn \l__tenkz_kernel_r_yc_fp {-1}
+        \__tenkz_kernel_r_trace_row_ink:nn
+          { \l__tenkz_kernel_r_row_tl } { \l__tenkz_kernel_r_rows_int }
       }
-    % One trace reach past the outward extreme of the passed
-    % row lines per return crossed; the outward extreme is the
-    % signed maximum, so one formula serves both sides.
+    % Two separate distances used to wear one name.  The innermost return
+    % passes the row's own ink, and what a row hangs on its outward side is
+    % an open index -- a leg, and the band its name occupies when it has one.
+    % The trace reach is shorter than a bare physical leg, so the return
+    % crossed the very indices it was drawn beside and each of them read as
+    % ending on the contraction that closes their row.  The leg is the open
+    % index and its length is its own contract; the return is the closure,
+    % and a closure placed beyond a row's outermost ink is exactly what the
+    % metric table's one daylight measures.  So the return yields, by one
+    % daylight beyond the deepest open index the rows it passes hang on its
+    % side.
+    %
+    % Where they hang nothing there is still a row line to clear, and the
+    % return keeps its own trace reach beyond the outermost of them.  The two
+    % demands are read against the same origin -- the ink scan measures every
+    % tip outward from this row's own ordinate -- so the standoff is the
+    % greater of them and not their sum.  Every further return crossed then
+    % adds one trace reach, which is what that reach measures here: the paper
+    % between two returns, not the drop of the first below its row.
+    %
+    % The outward extreme of the passed row lines is the signed maximum, so
+    % one formula serves both sides.
+    \fp_set:Nn \l__tenkz_kernel_r_trace_pass_fp
+      {
+        max
+          (
+            \l__tenkz_kernel_r_yc_fp
+            * \l__tenkz_kernel_r_wrap_yhi_fp ,
+            \l__tenkz_kernel_r_yc_fp
+            * \l__tenkz_kernel_r_wrap_ylo_fp
+          )
+        - \l__tenkz_kernel_r_yc_fp * \l__tenkz_kernel_r_y_fp
+      }
+    \fp_set:Nn \l__tenkz_kernel_r_trace_stand_fp
+      {
+        max
+          (
+            \__tenkz_metric_ratio:n {pairtracereach}
+            + \l__tenkz_kernel_r_trace_pass_fp ,
+            \l__tenkz_kernel_r_trace_ink_fp
+            + \__tenkz_metric_ratio:n {daylight}
+          )
+      }
     \fp_set:Nn \l__tenkz_kernel_r_reach_fp
       {
-        ( \l__tenkz_kernel_r_xc_fp + 1 )
-        * \__tenkz_metric_ratio:n {pairtracereach}
-        + max
-            (
-              \l__tenkz_kernel_r_yc_fp
-              * \l__tenkz_kernel_r_wrap_yhi_fp ,
-              \l__tenkz_kernel_r_yc_fp
-              * \l__tenkz_kernel_r_wrap_ylo_fp
-            )
-        - \l__tenkz_kernel_r_yc_fp * \l__tenkz_kernel_r_y_fp
+        \l__tenkz_kernel_r_trace_stand_fp
+        + \l__tenkz_kernel_r_xc_fp
+          * \__tenkz_metric_ratio:n {pairtracereach}
       }
   }
 % The outward step a label owes its row's return.  A label band shallower
@@ -11719,12 +12162,35 @@
       }
       { none }
   }
+% The outward standoff the return owes the rows it passes, signed and
+% measured from its own row line: the greater of one daylight beyond the
+% deepest open index those rows hang on its side and one trace reach beyond
+% the outermost of the row lines themselves.  The sign is the side the return
+% runs, so a reader holds the rail to a distance on a named side rather than
+% to a magnitude on either.  A flat rail runs out of the row line and answers
+% with that signed page distance; a ring's sector stands off no row line and
+% answers with the word for a closure that has none.  The record publishes
+% the standoff beside the contour so a reader of the stream can hold the
+% drawn ink to the clearance the metric table declares, which is the reading
+% a wire's own ink cannot supply: a wire carries no measured box.
+\tl_new:N \l__tenkz_kernel_r_rail_clear_tl
 % The flat rail, read from the registers the stroke itself read, in the order
 % the stroke laid them: the leads, the two descents, and the run between the
 % corners.  Half a trace reach is the corner radius, and one minus the cosine
 % of 45 degrees places the mid-point of a quarter turn.
 \cs_new_protected:Npn \__tenkz_kernel_r_rail_flat:
   {
+    \tl_set:Ne \l__tenkz_kernel_r_rail_clear_tl
+      {
+        \dim_to_decimal_in_sp:n
+          {
+            \__tenkz_kernel_r_pt:n
+              {
+                \l__tenkz_kernel_r_yc_fp
+                * \l__tenkz_kernel_r_trace_stand_fp
+              }
+          }
+      }
     \tl_clear:N \l__tenkz_kernel_r_rail_tl
     \bool_if:NT \l__tenkz_kernel_r_wrap_llead_bool
       {
@@ -11808,6 +12274,7 @@
 % starts and finishes on whatever the row has at either side.
 \cs_new_protected:Npn \__tenkz_kernel_r_rail_arc:
   {
+    \tl_set:Nn \l__tenkz_kernel_r_rail_clear_tl {arc}
     \tl_clear:N \l__tenkz_kernel_r_rail_tl
     \int_step_inline:nnn {0} {16}
       {
@@ -11849,6 +12316,7 @@
           \l__tenkz_kernel_r_wrap_rx_fp \l__tenkz_kernel_r_wrap_ry_fp
         |stroke=\dim_to_decimal_in_sp:n
           { \__tenkz_dim:n {wirewidth} / 2 }
+        |clear=\tl_use:N \l__tenkz_kernel_r_rail_clear_tl
         |points=\tl_use:N \l__tenkz_kernel_r_rail_tl
       }
   }

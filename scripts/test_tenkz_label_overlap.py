@@ -1339,7 +1339,7 @@ def main() -> int:
         detached = closure_log(
             "closure-detached.tnlog",
             "closure-rail|picture=1|name=wrap-1|row=1|side=west-east|"
-            "west=0,0|east=2000000,0|stroke=0|"
+            "west=0,0|east=2000000,0|stroke=0|clear=-700000|"
             "points=-600000,0;-600000,-800000;2600000,-800000;2600000,0\n",
         )
         detached_status, detached_audit = audit_status(detached)
@@ -1358,7 +1358,7 @@ def main() -> int:
 
         joined_rail = (
             "closure-rail|picture=1|name=wrap-1|row=1|side=west-east|"
-            "west=0,0|east=2000000,0|stroke=0|"
+            "west=0,0|east=2000000,0|stroke=0|clear=-700000|"
             "points=0,0;-600000,0;-600000,-800000;2600000,-800000;"
             "2600000,0;2000000,0\n"
         )
@@ -1367,6 +1367,162 @@ def main() -> int:
         if joined_status != 0 or joined_audit.findings:
             raise AssertionError(
                 "audit rejected a closure that meets both of its row's ends"
+            )
+
+        # A joined rail can still run through the row it closes (#5766).  The
+        # return that shipped after the closure was joined stood a fixed reach
+        # from the row line, shorter than the open indices the row hangs on
+        # that side, so each of them ended on the wire that contracts the row.
+        # The record names the standoff those indices demand; a rail shallower
+        # than it is reported with both distances.
+        crossed = closure_log(
+            "closure-crossed.tnlog",
+            "closure-rail|picture=1|name=wrap-1|row=1|side=west-east|"
+            "west=0,0|east=2000000,0|stroke=0|clear=-1700000|"
+            "points=0,0;-600000,0;-600000,-800000;2600000,-800000;"
+            "2600000,0;2000000,0\n",
+        )
+        crossed_status, crossed_audit = audit_status(crossed)
+        crossed_findings = [finding for finding in crossed_audit.findings
+                            if finding.rule == "closure-crossed"]
+        if crossed_status != 1 or len(crossed_findings) != 1:
+            raise AssertionError(
+                "audit accepted a closure passing inside the open indices of "
+                "the row it closes"
+            )
+        crossed_msg = crossed_findings[0].msg
+        if ("12.21pt outside row 1 over part of it" not in crossed_msg
+                or "need 25.94pt" not in crossed_msg):
+            raise AssertionError(
+                "the crossed-closure finding did not measure both distances: "
+                + crossed_findings[0].msg
+            )
+
+        # The reading is over the row's own middle.  A rail that dips to its
+        # standoff at one corner and runs back beside the row for the rest of
+        # its length has cleared nothing, and a farthest-point reading would
+        # call it clear.
+        dipped = closure_log(
+            "closure-dipped.tnlog",
+            "closure-rail|picture=1|name=wrap-1|row=1|side=west-east|"
+            "west=0,0|east=2000000,0|stroke=0|clear=-800000|"
+            "points=0,0;-600000,0;-600000,-800000;-500000,-100000;"
+            "2600000,-100000;2600000,0;2000000,0\n",
+        )
+        dipped_status, dipped_audit = audit_status(dipped)
+        if dipped_status != 1 or not any(
+                finding.rule == "closure-crossed"
+                for finding in dipped_audit.findings):
+            raise AssertionError(
+                "audit read a closure's farthest corner as its clearance"
+            )
+
+        # A rail exactly at its standoff is clear: the daylight the standoff
+        # already carries is what separates the indices from the return.
+        flush_status, flush_audit = audit_status(closure_log(
+            "closure-flush.tnlog",
+            "closure-rail|picture=1|name=wrap-1|row=1|side=west-east|"
+            "west=0,0|east=2000000,0|stroke=0|clear=-800000|"
+            "points=0,0;-600000,0;-600000,-800000;2600000,-800000;"
+            "2600000,0;2000000,0\n",
+        ))
+        if flush_status != 0 or flush_audit.findings:
+            raise AssertionError(
+                "audit rejected a closure standing exactly at its standoff"
+            )
+
+        # The standoff is signed by the side the return runs, so a rail
+        # routed the whole distance on the wrong side is not clear of
+        # anything -- in a multi-row picture it has gone through the row it
+        # should have stood outside.
+        flipped_status, flipped_audit = audit_status(closure_log(
+            "closure-flipped.tnlog",
+            "closure-rail|picture=1|name=wrap-1|row=1|side=west-east|"
+            "west=0,0|east=2000000,0|stroke=0|clear=-800000|"
+            "points=0,0;-600000,0;-600000,800000;2600000,800000;"
+            "2600000,0;2000000,0\n",
+        ))
+        if flipped_status != 1 or not any(
+                finding.rule == "closure-crossed"
+                for finding in flipped_audit.findings):
+            raise AssertionError(
+                "audit read a return routed on the wrong side as clear"
+            )
+
+        # A one-column row's two virtual ends resolve to one coordinate.  Its
+        # row line is the level of that end and its span is that column, so
+        # the covering is of a single column rather than of nothing.
+        def single_column(name: str, run: int) -> Path:
+            return closure_log(
+                name,
+                "closure-rail|picture=1|name=wrap-1|row=1|side=west-east|"
+                "west=0,0|east=0,0|stroke=0|clear=-800000|"
+                f"points=0,0;-600000,0;-600000,{run};600000,{run};"
+                "600000,0;0,0\n",
+            )
+
+        column_status, column_audit = audit_status(
+            single_column("closure-one-column.tnlog", -800000)
+        )
+        if column_status != 0 or column_audit.findings:
+            raise AssertionError(
+                "audit rejected a one-column closure standing at its standoff"
+            )
+        shallow_status, shallow_audit = audit_status(
+            single_column("closure-one-column-shallow.tnlog", -100000)
+        )
+        if shallow_status != 1 or not any(
+                finding.rule == "closure-crossed"
+                for finding in shallow_audit.findings):
+            raise AssertionError(
+                "audit passed over a one-column closure inside its standoff"
+            )
+
+        # `arc` is the only word for a closure with no row line.  A flat rail
+        # that named any other would take the rule out of its own reading.
+        word_status, word_audit = audit_status(closure_log(
+            "closure-word-standoff.tnlog",
+            "closure-rail|picture=1|name=wrap-1|row=1|side=west-east|"
+            "west=0,0|east=2000000,0|stroke=0|clear=none|"
+            "points=0,0;-600000,0;-600000,-800000;2600000,-800000;"
+            "2600000,0;2000000,0\n",
+        ))
+        if word_status != 1 or not any(
+                finding.rule == "malformed-event"
+                for finding in word_audit.findings):
+            raise AssertionError(
+                "audit accepted a flat closure naming no standoff"
+            )
+
+        # A stream written before the standoff field existed is still a
+        # stream: the field arrived on an existing kind, and section 7 of
+        # TNLOG.md holds a reader to accepting both spellings.  The archived
+        # record reads clean, and the standoff rule asks nothing of it.
+        archived_status, archived_audit = audit_status(closure_log(
+            "closure-archived.tnlog",
+            "closure-rail|picture=1|name=wrap-1|row=1|side=west-east|"
+            "west=0,0|east=2000000,0|stroke=0|"
+            "points=0,0;-600000,0;-600000,-800000;2600000,-800000;"
+            "2600000,0;2000000,0\n",
+        ))
+        if archived_status != 0 or archived_audit.findings:
+            raise AssertionError(
+                "audit rejected a closure record written before the standoff "
+                "field existed: "
+                + "; ".join(finding.msg for finding in archived_audit.findings)
+            )
+
+        # A ring's sector stands off no row line, so it names no standoff and
+        # the rule has nothing to read.  Its ends are its two stations.
+        arc_status, arc_audit = audit_status(closure_log(
+            "closure-arc.tnlog",
+            "closure-rail|picture=1|name=wrap-1|row=1|side=west-east|"
+            "west=0,0|east=2000000,0|stroke=0|clear=arc|"
+            "points=0,0;1000000,-100000;2000000,0\n",
+        ))
+        if arc_status != 0 or arc_audit.findings:
+            raise AssertionError(
+                "audit demanded a row-line standoff of a frame arc"
             )
 
         # The site name that stood on the return: a box straddling the rail's
@@ -1406,7 +1562,7 @@ def main() -> int:
         malformed_rail = closure_log(
             "closure-malformed.tnlog",
             "closure-rail|picture=1|name=wrap-1|row=1|side=west-east|"
-            "west=0,0|east=2000000,0|stroke=0|points=0,0\n",
+            "west=0,0|east=2000000,0|stroke=0|clear=0|points=0,0\n",
         )
         malformed_status, malformed_audit = audit_status(malformed_rail)
         if malformed_status != 1 or not any(
@@ -1419,7 +1575,7 @@ def main() -> int:
         # hundredth of a point stands on the ink either side of it.
         stroked_rail = (
             "closure-rail|picture=1|name=wrap-1|row=1|side=west-east|"
-            "west=0,0|east=2000000,0|stroke=18023|"
+            "west=0,0|east=2000000,0|stroke=18023|clear=-700000|"
             "points=0,0;-600000,0;-600000,-800000;2600000,-800000;"
             "2600000,0;2000000,0\n"
         )
@@ -1460,7 +1616,7 @@ def main() -> int:
         corner_status, corner_audit = audit_status(closure_log(
             "closure-label-round-corner.tnlog",
             "closure-rail|picture=1|name=wrap-1|row=1|side=west-east|"
-            "west=0,0|east=2000000,0|stroke=0|"
+            "west=0,0|east=2000000,0|stroke=0|clear=400000|"
             "points=0,0;0,500000;400000,200000;2000000,0\n",
             "label-use|picture=1\n"
             "bbox|picture=1|class=label|id=1|owner=0|"
