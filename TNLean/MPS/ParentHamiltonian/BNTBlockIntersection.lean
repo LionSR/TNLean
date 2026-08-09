@@ -215,7 +215,16 @@ For at least two blocks, the sharp direct-sum argument gives the full tuple
 span at length \(3(r-1)(L_0+1)\). Right-canonical normalization then propagates
 that span to every larger length. Thus no additional injective prefix is
 needed. The base span is arXiv:quant-ph/0608197, lines 1346--1421; the unital
-propagation is lines 893--898. -/
+propagation is lines 893--898.
+
+**Scope restriction (doubly normalized specialization):** At the PGVWC07 source
+length bound, `hUnital` is the source identity
+\(\sum_a A^j_a(A^j_a)^\dagger=1\), while `hLeft` additionally specializes the
+source dual fixed-point equation
+\(\sum_a (A^j_a)^\dagger\Lambda_j A^j_a=\Lambda_j\) to
+\(\Lambda_j=1\). The general normalization is documented in
+`docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex`.
+-/
 theorem wordTupleSpanTop_of_ge_of_bnt_directSum_unital_c1_pgvwc07
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
     (A : (k : Fin r) → MPSTensor d (dim k))
@@ -294,7 +303,16 @@ theorem groundSpace_iSupIndep_of_ge_of_bnt_directSum_unital_c1
 /-- In the PGVWC07 source range, the normalized BNT local spaces form an
 internal direct sum.
 
-This is the direct-sum lemma in arXiv:quant-ph/0608197, lines 1346--1421. -/
+This is the direct-sum lemma in arXiv:quant-ph/0608197, lines 1346--1421.
+
+**Scope restriction (doubly normalized specialization):** At the PGVWC07 source
+length bound, `hUnital` is the source identity
+\(\sum_a A^j_a(A^j_a)^\dagger=1\), while `hLeft` additionally specializes the
+source dual fixed-point equation
+\(\sum_a (A^j_a)^\dagger\Lambda_j A^j_a=\Lambda_j\) to
+\(\Lambda_j=1\). The general normalization is documented in
+`docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex`.
+-/
 theorem groundSpace_iSupIndep_of_ge_of_bnt_directSum_unital_c1_pgvwc07
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
     (A : (k : Fin r) → MPSTensor d (dim k))
@@ -382,7 +400,16 @@ theorem pgvwc07_iSup_restriction_intersection_of_ge_of_bnt_directSum_unital_c1
 range in PGVWC07, Theorem 12.
 
 The internal middle-word length is at least \(3(r-1)(L_0+1)\). This is the
-intersection step in arXiv:quant-ph/0608197, lines 1424--1452. -/
+intersection step in arXiv:quant-ph/0608197, lines 1424--1452.
+
+**Scope restriction (doubly normalized specialization):** At the PGVWC07 source
+length bound, `hUnital` is the source identity
+\(\sum_a A^j_a(A^j_a)^\dagger=1\), while `hLeft` additionally specializes the
+source dual fixed-point equation
+\(\sum_a (A^j_a)^\dagger\Lambda_j A^j_a=\Lambda_j\) to
+\(\Lambda_j=1\). The general normalization is documented in
+`docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex`.
+-/
 theorem pgvwc07_iSup_restriction_intersection_of_ge_of_bnt_directSum_unital_c1_pgvwc07
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
     (A : (k : Fin r) → MPSTensor d (dim k))
