@@ -78,7 +78,9 @@ generated reference.
    author states nothing.  A picture in a line of running mathematics takes
    the denser class; a display, anything inside a display, and running text
    take the base class.  A stated size class outranks the sensing, and an
-   equation senses once for all of its panels.
+   equation settles the class once for all of its panels: a panel that
+   states none takes it, one that states its own keeps it, and an equation
+   that states a class outranks both.
 9. Raw TikZ is not public tenkz syntax.  House styles may change typography
    and semantic hues; they may not add topology or bypass validation.
 

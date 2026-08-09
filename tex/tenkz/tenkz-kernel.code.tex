@@ -123,6 +123,8 @@
 \msg_new:nnn {tenkz}{kernel-metrics-scope}
   { [TKZ-METRICS-SCOPE]~metrics=~is~picture~policy:~a~group~shares~its~
     picture's~metric~context. }
+\msg_new:nnn {tenkz}{kernel-check-off}
+  { [TKZ-EQ-CHECK-OFF]~an~opt-out~reads~off={<relation>:~<reason>};~got~'#1'. }
 \msg_new:nnn {tenkz}{kernel-check-word}
   { [TKZ-EQ-CHECK-WORD]~the~audit~does~not~know~'#1';~check=~states~the~
     audit~(signature),~the~equivalence~it~is~taken~up~to~
@@ -280,7 +282,9 @@
 \tl_new:N   \l__tenkz_kernel_scratch_tl
 \tl_new:N   \l__tenkz_kernel_sig_tl
 \tl_new:N   \l__tenkz_kernel_size_tl
-\tl_new:N   \l__tenkz_kernel_check_spec_tl
+\tl_new:N   \l__tenkz_kernel_eq_size_tl
+\tl_new:N   \l__tenkz_kernel_check_relation_tl
+\tl_new:N   \l__tenkz_kernel_check_reason_tl
 \tl_new:N   \l__tenkz_kernel_slot_tl
 \tl_new:N   \l__tenkz_kernel_child_tl
 \tl_new:N   \l__tenkz_kernel_parent_tl
@@ -17708,15 +17712,29 @@
       { \tl_set:Nn #1 {s} }
       { \tl_set:Nn #1 {m} }
   }
-% An unstated size class resolves from the surrounding mathematics; a stated
-% one stands.  The resolved class enters the record either way, so a reader
-% of the stream never has to guess which one acted.
+% An unstated size class resolves; a stated one stands.  Inside an equation
+% the unstated class comes from the equation, which sensed once for all its
+% panels; outside one it comes from the surrounding mathematics.  What the
+% equation sensed is not policy and does not reach the panel merge: a panel
+% that states a class of its own has said something, and the sensing has
+% only guessed, so the statement stands.  An equation that states a class
+% has said something too, and that one does outrank its panels -- the
+% equation is the shared outer context and its metric is the shared one.
+% The resolved class enters the record either way, so a reader of the stream
+% never has to guess which of them acted.
 \cs_new_protected:Npn \__tenkz_kernel_size_resolve:N #1
   {
     \prop_get:NnN #1 {size} \l__tenkz_kernel_scratch_tl
     \quark_if_no_value:NT \l__tenkz_kernel_scratch_tl
       {
-        \__tenkz_kernel_size_sense:N \l__tenkz_kernel_scratch_tl
+        \bool_lazy_and:nnTF
+          { \bool_if_p:N \l__tenkz_kernel_ineq_bool }
+          { ! \tl_if_empty_p:N \l__tenkz_kernel_eq_size_tl }
+          {
+            \tl_set:NV \l__tenkz_kernel_scratch_tl
+              \l__tenkz_kernel_eq_size_tl
+          }
+          { \__tenkz_kernel_size_sense:N \l__tenkz_kernel_scratch_tl }
         \prop_put:NnV #1 {size} \l__tenkz_kernel_scratch_tl
       }
   }
@@ -17888,6 +17906,72 @@
 % equation body records one relation together with its place in the panel
 % sequence, and the audit compares the composite sides those places
 % delimit.  The body capture below finds the glyphs.
+% One opt-out: the relation it names and the reason it records, split at the
+% first colon so the reason keeps every colon of its own.  The relation is
+% read as a number, so a leading zero names the relation it looks like rather
+% than a waiver that never matches.
+\cs_generate_variant:Nn \seq_set_split:Nnn { Nen }
+\cs_new_protected:Npn \__tenkz_kernel_check_off:n #1
+  {
+    % The author's colon is an ordinary character and the one written here
+    % is a letter, so the separator is spelt as the string it must equal.
+    \seq_set_split:Nen \l__tenkz_kernel_match_seq { \c_colon_str } {#1}
+    \int_compare:nNnTF { \seq_count:N \l__tenkz_kernel_match_seq } < {2}
+      { \msg_error:nnn {tenkz}{kernel-check-off} {#1} }
+      {
+        \tl_set:Ne \l__tenkz_kernel_check_relation_tl
+          { \seq_item:Nn \l__tenkz_kernel_match_seq {1} }
+        \tl_trim_spaces:N \l__tenkz_kernel_check_relation_tl
+        \seq_pop_left:NN \l__tenkz_kernel_match_seq \l__tenkz_kernel_scratch_tl
+        \tl_set:Ne \l__tenkz_kernel_check_reason_tl
+          { \seq_use:Nn \l__tenkz_kernel_match_seq { \c_colon_str } }
+        \tl_trim_spaces:N \l__tenkz_kernel_check_reason_tl
+        \regex_match:nVTF { \A \d+ \Z } \l__tenkz_kernel_check_relation_tl
+          { \__tenkz_kernel_check_off_record: }
+          { \msg_error:nnn {tenkz}{kernel-check-off} {#1} }
+      }
+  }
+\cs_new_protected:Npn \__tenkz_kernel_check_off_record:
+  {
+    % An opt-out without a reason is not an opt-out: what the key records is
+    % the mathematics the diagram does not draw, and a blank reason records
+    % nothing while switching the comparison off.  The relation stays
+    % audited and the author is told.
+    \tl_if_empty:NTF \l__tenkz_kernel_check_reason_tl
+      {
+        \msg_error:nne {tenkz}{kernel-check-reason}
+          { \tl_use:N \l__tenkz_kernel_check_relation_tl }
+      }
+      {
+        \clist_put_right:Ne \l__tenkz_kernel_check_off_clist
+          { \int_eval:n { \l__tenkz_kernel_check_relation_tl } }
+        \__tenkz_kernel_event:n
+          {
+            check|scope=\int_use:N \g__tenkz_kernel_eq_scope_int
+            |relation=\int_eval:n { \l__tenkz_kernel_check_relation_tl }
+            |result=off
+            |reason=\tl_use:N \l__tenkz_kernel_check_reason_tl
+          }
+      }
+  }
+% The audit's specification is the value grammar of one key, not a scope of
+% its own: the registry types it `check-spec' and owns exactly the one row.
+% Naming the tree after the value type says so, and keeps the public-surface
+% census reading scopes rather than the insides of a value.
+\keys_define:nn { tenkz-check-spec }
+  {
+    signature .code:n = { } ,
+    signature .default:n = { } ,
+    modulo .choice: ,
+    modulo / bundles .code:n =
+      { \bool_set_true:N \l__tenkz_kernel_check_bundles_bool } ,
+    modulo / unknown .code:n =
+      { \msg_error:nne {tenkz}{kernel-check-word} { modulo=\l_keys_value_tl } } ,
+    off .code:n = { \__tenkz_kernel_check_off:n {#1} } ,
+    unknown .code:n =
+      { \msg_error:nne {tenkz}{kernel-check-word} { \l_keys_key_str } }
+  }
+
 \cs_new_protected:Npn \__tenkz_kernel_eq_begin:n #1
   {
     \bool_if:NT \l__tenkz_kernel_ineq_bool
@@ -17900,81 +17984,38 @@
     \seq_gclear:N \g__tenkz_kernel_rel_gseq
     \seq_gclear:N \g__tenkz_kernel_rel_pos_gseq
     \prop_gclear:N \g__tenkz_kernel_eq_extent_prop
+    \tl_clear:N \l__tenkz_kernel_eq_size_tl
     \clist_clear:N \l__tenkz_kernel_check_off_clist
     \bool_set_false:N \l__tenkz_kernel_check_bundles_bool
     \prop_clear:N \l__tenkz_kernel_eq_policy_prop
     \prop_clear:N \l__tenkz_kernel_stage_prop
     \__tenkz_kernel_keys:nn { tenkz-kernel-picture } {#1}
-    % check={signature, off={k: reason}}: the reason is recorded, never lost
+    % check={signature, modulo=bundles, off={k: reason}}: the specification
+    % is a key list and is read as one.  A reason is prose an author writes
+    % about the mathematics, and prose carries commas and braces and words
+    % that look like options; letting TeX's own brace matching hand the
+    % reason over whole is what keeps all three out of the parser's way.
+    % A word the audit does not know is refused, because a spelling passed
+    % over in silence is a comparison the author believes is running.
     \prop_get:NnN \l__tenkz_kernel_stage_prop {check} \l__tenkz_kernel_scratch_tl
     \quark_if_no_value:NF \l__tenkz_kernel_scratch_tl
       {
-        % The options are read from the specification with the opt-out
-        % payloads taken out first: a reason is prose an author writes about
-        % the mathematics, and prose that happens to name an option is still
-        % prose.  What survives that removal must be one of the words the
-        % audit knows, or the author has written something the audit will
-        % not do and believes it will.
-        \tl_set_eq:NN \l__tenkz_kernel_check_spec_tl \l__tenkz_kernel_scratch_tl
-        \regex_replace_all:nnN
-          {
-            off \s* = \s* \{ \s* \d+ \s* : \s*
-              (?: [^\{\}] | \{ [^\{\}]* \} )* \}
-          }
-          { } \l__tenkz_kernel_check_spec_tl
-        \exp_args:NnV \regex_match:nnT
-          { modulo \s* = \s* bundles }
-          \l__tenkz_kernel_check_spec_tl
-          { \bool_set_true:N \l__tenkz_kernel_check_bundles_bool }
-        \regex_replace_all:nnN
-          { signature | modulo \s* = \s* bundles | [\s,] }
-          { } \l__tenkz_kernel_check_spec_tl
-        \tl_if_empty:NF \l__tenkz_kernel_check_spec_tl
-          {
-            \msg_error:nne {tenkz}{kernel-check-word}
-              { \tl_use:N \l__tenkz_kernel_check_spec_tl }
-          }
-        \exp_args:NnV \regex_extract_all:nnN
-          {
-            off \s* = \s* \{ \s* (\d+) \s* : \s*
-              ( (?: [^\{\}] | \{ [^\{\}]* \} )* ) \}
-          }
-          \l__tenkz_kernel_scratch_tl
-          \l__tenkz_kernel_match_seq
-        \int_step_inline:nnnn {2} {3}
-          { \seq_count:N \l__tenkz_kernel_match_seq }
-          {
-            % An opt-out without a reason is not an opt-out: what the key
-            % records is the mathematics the diagram does not draw, and a
-            % blank reason records nothing while switching the comparison
-            % off.  The relation stays audited and the author is told.
-            \tl_set:Ne \l__tenkz_kernel_scratch_tl
-              { \seq_item:Nn \l__tenkz_kernel_match_seq { ##1 + 1 } }
-            \tl_trim_spaces:N \l__tenkz_kernel_scratch_tl
-            \tl_if_empty:NTF \l__tenkz_kernel_scratch_tl
-              {
-                \msg_error:nne {tenkz}{kernel-check-reason}
-                  { \seq_item:Nn \l__tenkz_kernel_match_seq {##1} }
-              }
-              {
-                \clist_put_right:Ne \l__tenkz_kernel_check_off_clist
-                  { \seq_item:Nn \l__tenkz_kernel_match_seq {##1} }
-                \__tenkz_kernel_event:n
-                  {
-                    check|scope=\int_use:N \g__tenkz_kernel_eq_scope_int
-                    |relation=\seq_item:Nn \l__tenkz_kernel_match_seq {##1}
-                    |result=off
-                    |reason=\tl_use:N \l__tenkz_kernel_scratch_tl
-                  }
-              }
-          }
+        \keys_set:nV { tenkz-check-spec } \l__tenkz_kernel_scratch_tl
       }
     \prop_remove:Nn \l__tenkz_kernel_stage_prop {check}
-    % One metric context: the equation senses its class once, here, where it
-    % can still see the mathematics it stands in, and every panel inherits
-    % it.  A panel that is fenced or braced sits in inner mathematics of its
-    % own and would otherwise sense a denser class than its partner.
-    \__tenkz_kernel_size_resolve:N \l__tenkz_kernel_stage_prop
+    % One metric context: the equation settles its class once, here, where it
+    % can still see the mathematics it stands in, and every panel that states
+    % none takes it.  A panel that is fenced or braced sits in inner
+    % mathematics of its own and would otherwise sense a denser class than
+    % its partner.  A stated class stays in the policy, where it outranks the
+    % panels; a sensed one does not, so a panel's own statement survives it.
+    \prop_get:NnN \l__tenkz_kernel_stage_prop {size} \l__tenkz_kernel_scratch_tl
+    \quark_if_no_value:NTF \l__tenkz_kernel_scratch_tl
+      { \__tenkz_kernel_size_sense:N \l__tenkz_kernel_eq_size_tl }
+      {
+        \tl_set:NV \l__tenkz_kernel_eq_size_tl
+          \l__tenkz_kernel_scratch_tl
+      }
     \prop_set_eq:NN
       \l__tenkz_kernel_eq_policy_prop \l__tenkz_kernel_stage_prop
     \prop_clear:N \l__tenkz_kernel_stage_prop
