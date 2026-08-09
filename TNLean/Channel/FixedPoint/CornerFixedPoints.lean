@@ -11,29 +11,30 @@ import TNLean.Channel.Spectral.Support
 import TNLean.Channel.KrausCornerCompression
 
 /-!
-# Corner-restricted fixed points form a `*`-algebra (Wolf Corollary 6.6)
+# Corner-restricted fixed points for finite Kraus maps
 
-This file formalizes Wolf Corollary 6.6. Let `T*(Y) = ∑ᵢ Kᵢ† Y Kᵢ` be a
-trace-preserving Schwarz map (here represented by a Kraus family `K`, so that
-`T* = adjointMap K` and unitality of `T*` is `IsTP K`). Let `ρ` be the
-maximum-rank fixed point of the Schrödinger map `T(X) = ∑ᵢ Kᵢ X Kᵢ†` and let
-`Q := supportProj ρ` be its support projection. Then the corner-restricted
-fixed-point set
+This file proves the completely positive finite-Kraus specialization of Wolf
+Corollary 6.6. Wolf assumes an abstract unital Schwarz map, whereas the Kraus
+presentation here imposes complete positivity. Write
+`T(X) = ∑ᵢ Kᵢ X Kᵢ†` and `T*(Y) = ∑ᵢ Kᵢ† Y Kᵢ`. Within the finite-Kraus setting,
+the result strengthens the maximum-rank-fixed-point case by allowing any positive
+semidefinite fixed point `ρ` of `T`. If `Q := supportProj ρ`, then
 `{Y ∈ Q M_D(ℂ) Q | Q T*(Y) Q = Y}`
-is a `*`-subalgebra of the corner algebra `Q M_D(ℂ) Q`.
+is a `*`-subalgebra of the corner algebra `Q M_D(ℂ) Q`. At maximum rank this is
+the completely positive finite-Kraus specialization of Wolf Corollary 6.6.
 
-The proof follows Wolf: the stated set is exactly the fixed-point set of the
-compressed adjoint map on the support sector. The compressed Kraus family is
-trace-preserving on the sector and the compressed Schrödinger map has a
-positive-definite (full-rank) fixed point, so Wolf Theorem 6.12 applies.
-The `*`-algebra structure is then transported back to the ambient corner along
-the compression isomorphism `φ : M_n(ℂ) ≃ Q M_D(ℂ) Q`.
+The proof follows Wolf's support-compression argument. The stated set is the
+fixed-point set of the compressed adjoint map on the support sector. The
+compressed Kraus family is trace-preserving on the sector and the compressed
+Schrödinger map has a positive-definite fixed point, so Wolf Theorem 6.12
+applies. The `*`-algebra structure is then carried back to the ambient corner
+along the compression isomorphism `φ : M_n(ℂ) ≃ Q M_D(ℂ) Q`.
 
 ## Main declarations
 
 * `Kraus.cornerCompressionKraus`: the compressed Kraus family `Q Kᵢ Q`.
-* `Kraus.cornerFixedPointsStarSubalgebra`: Wolf Corollary 6.6 — the
-  corner-restricted fixed points form a `StarSubalgebra` of the corner algebra.
+* `Kraus.cornerFixedPointsStarSubalgebra`: the finite-Kraus support-corner fixed
+  points form a `StarSubalgebra` of the corner algebra.
 
 The block representation of this corner algebra, in the sense of Equation (1.39) of
 *Quantum Channels & Operations* (Wolf 2012) with the zero block on the complement of the
@@ -302,15 +303,22 @@ theorem cornerFixed_mul
   rw [hφX₁₂] at hfinal
   exact hfinal
 
-/-- **Finite-Kraus strengthening of Wolf Corollary 6.6.**
+/-- **Support-corner fixed points for finite Kraus maps.**
 
-Let `T*(Y) = ∑ᵢ Kᵢ† Y Kᵢ` (`= adjointMap K`) be a trace-preserving Schwarz map,
-so unitality of `T*` is `IsTP K`. Let `ρ` be a PSD fixed point of the Schrödinger
-map `T = map K`, with support projection `Q := stationaryProj`. Then the
-corner-restricted fixed-point set
+Let `T*(Y) = ∑ᵢ Kᵢ† Y Kᵢ` (`= adjointMap K`) be the adjoint of a
+trace-preserving finite Kraus map. Let `ρ` be a PSD fixed point of the
+Schrödinger map `T = map K`, with support projection `Q := stationaryProj`.
+Then the corner-restricted fixed-point set
 `{Y ∈ Q M_D(ℂ) Q | Q T*(Y) Q = Y}`
-is a `StarSubalgebra` of the corner algebra `Q M_D(ℂ) Q`. Wolf Corollary 6.6 is
-recovered when `ρ` is chosen with maximum rank.
+is a `StarSubalgebra` of the corner algebra `Q M_D(ℂ) Q`. Within the
+finite-Kraus setting, this strengthens the maximum-rank-fixed-point case by
+allowing an arbitrary PSD fixed point. At maximum rank it gives the completely
+positive finite-Kraus specialization of Wolf Corollary 6.6.
+
+**Scope restriction (finite Kraus family):** Wolf Corollary 6.6 assumes an
+abstract unital Schwarz map, while a finite Kraus representation imposes
+complete positivity. See
+`docs/paper-gaps/wolf_cor66_kraus_hypothesis_restriction.tex`.
 
 The carrier consists of the corner elements `Y : hQ.Corner` (`Q Y Q = Y`) with
 `Q (adjointMap K Y) Q = Y`. -/
