@@ -51,7 +51,7 @@ theorem grouped_sector_gram_eq_pos_smul_one
     {M : MPOTensor d D} (hCanonical : IsCPSVCanonicalForm M.toMPSTensor)
     (hM : IsMPDO M)
     (μ : Fin r → ℂ) (V : (k : Fin r) → Matrix (Fin d) (Fin (dim k)) ℂ)
-    (hDimPos : ∀ k, 0 < dim k)
+    (_hDimPos : ∀ k, 0 < dim k)
     (hNormal : ∀ k, MPSTensor.IsNormalTensor (blocks k))
     (hdim : ∀ j q, dim ((C).repr j) = dim ((C).enum j q))
     (X : (j : Fin (C).g) → (q : Fin ((C).copies j)) →
@@ -72,7 +72,7 @@ theorem grouped_sector_gram_eq_pos_smul_one
     ∃ ω : ℝ, 0 < ω ∧
       (X j q : Matrix (Fin (dim ((C).enum j q)))
         (Fin (dim ((C).enum j q))) ℂ)ᴴ * X j q = (ω : ℂ) • 1 := by
-  letI : NeZero (dim ((C).enum j q)) := ⟨(hDimPos _).ne'⟩
+  letI : NeZero (dim ((C).enum j q)) := ⟨(_hDimPos _).ne'⟩
   let A := cast (congrArg (MPSTensor (D * D)) (hdim j q))
     (blocks ((C).repr j))
   have hNormalA : MPSTensor.IsNormal A :=
