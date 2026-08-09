@@ -378,6 +378,12 @@ theorem IsMPU.trace_prod_contractPhysical_doubleLayerTensor_eq_zero_of_exists_tr
 /-- Every closed word of residual slices has zero trace at lengths greater
 than one. This is the direct closed-chain consequence of MPU unitarity.
 
+**Scope restriction (N > 1):** The source states the assertion for every
+positive length; this helper treats only `N > 1`. The one-letter case is
+recovered below in `IsMPU.trace_residualSlice_doubleLayerTensor_eq_zero`, and
+the full result is `IsMPU.trace_prod_mixedResidualFactor_doubleLayerTensor_eq_zero_of_pos`.
+See `docs/paper-gaps/mpu_one_letter_mixed_residual_trace.tex`.
+
 Source: arXiv:1703.09188, lines 405--410. -/
 theorem IsMPU.trace_prod_residualSlice_doubleLayerTensor_eq_zero
     [NeZero d] {U : MPOTensor d D} (hU : IsMPU U) {N : ℕ} (hN : 1 < N)
@@ -392,6 +398,11 @@ theorem IsMPU.trace_prod_residualSlice_doubleLayerTensor_eq_zero
 /-- Every individual residual slice of the double layer of an MPU is traceless.
 The proof recovers the missing one-letter moment from the moments at all lengths
 greater than one by nilpotence.
+
+**Local fix (shifted nilpotence):** The source asserts the one-letter trace as
+part of its all-positive statement. Here it is proved after the `N > 1` helper
+by shifted nilpotence, reversing the local proof order. See
+`docs/paper-gaps/mpu_one_letter_mixed_residual_trace.tex`.
 
 Source: arXiv:1703.09188, lines 405--410. -/
 theorem IsMPU.trace_residualSlice_doubleLayerTensor_eq_zero
@@ -417,6 +428,12 @@ noncomputable def mixedResidualFactor (W : MPOTensor d D)
 /-- Every mixed closed word of length greater than one containing at least
 one residual factor has zero trace. This is the direct closed-chain proof of the
 basis-free residual-slice form of the mixed `S'_α` trace identity.
+
+**Scope restriction (N > 1):** The source states the assertion for every
+positive length; this helper treats only `N > 1`. The complete positive-length
+statement is `IsMPU.trace_prod_mixedResidualFactor_doubleLayerTensor_eq_zero_of_pos`,
+whose one-letter branch uses shifted nilpotence. See
+`docs/paper-gaps/mpu_one_letter_mixed_residual_trace.tex`.
 
 Source: arXiv:1703.09188, lines 405--410. -/
 theorem IsMPU.trace_prod_mixedResidualFactor_doubleLayerTensor_eq_zero
@@ -450,6 +467,11 @@ theorem IsMPU.trace_prod_mixedResidualFactor_doubleLayerTensor_eq_zero
 
 /-- Every positive-length mixed closed word containing at least one residual
 factor has zero trace, including a single residual letter.
+
+**Local fix (shifted nilpotence):** The proof first establishes the `N > 1`
+helper and then recovers `N = 1` through the nilpotence of a residual slice,
+reversing the source's local proof order. See
+`docs/paper-gaps/mpu_one_letter_mixed_residual_trace.tex`.
 
 Source: arXiv:1703.09188, lines 405--410. -/
 theorem IsMPU.trace_prod_mixedResidualFactor_doubleLayerTensor_eq_zero_of_pos
