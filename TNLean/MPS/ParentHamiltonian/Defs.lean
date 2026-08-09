@@ -26,6 +26,11 @@ and the finite-chain parent Hamiltonian.
 * `MPSTensor.replaceWindow L i σ τ` — replaces the \(L\) consecutive site values in
   \(\sigma\) starting at position \(i\) with values from \(\tau\).
 
+* `MPSTensor.cyclicShiftEquiv` — rotates the site indices so that a chosen site is first.
+
+* `MPSTensor.cyclicWindowIndexEquiv` — splits the chain into a cyclic window and its
+  ordered complement.
+
 * `MPSTensor.localTerm A L N i` — the parent interaction embedded at site \(i\) on
   the \(N\)-site periodic chain, acting as `parentInteraction` on the window
   \(\{i, i+1, \ldots, i+L-1 \bmod N\}\) and as the identity on the complement.
@@ -34,6 +39,11 @@ and the finite-chain parent Hamiltonian.
 
 * `MPSTensor.IsFrustrationFree` — the parent-Hamiltonian ground-state
   condition \(hᵢ ψ = 0\) for every local term.
+
+## Main results
+
+* `MPSTensor.prod_cyclicWindow_complement` — factors a product into a cyclic window
+  and its ordered complement.
 -/
 
 open scoped BigOperators
