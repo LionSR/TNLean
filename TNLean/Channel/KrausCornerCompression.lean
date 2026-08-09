@@ -14,7 +14,7 @@ support coordinates of that projection. The resulting family is trace-preserving
 ambient normalization equals the projection. The support isometry identifies its Kraus map
 and adjoint map with the corresponding ambient corner actions.
 
-## Main declaration
+## Main results
 
 * `Kraus.exists_corner_compression_of_supported_projection`: compression of a supported
   finite Kraus family to the support matrix algebra.

@@ -16,19 +16,19 @@ import TNLean.Channel.Spectral.Support
 This file proves the completely positive finite-Kraus specialization of Wolf
 Corollary 6.6. Wolf assumes an abstract unital Schwarz map, whereas the Kraus
 presentation here imposes complete positivity. Write
-`T(X) = ∑ᵢ Kᵢ X Kᵢ†` and `T*(Y) = ∑ᵢ Kᵢ† Y Kᵢ`. Within the finite-Kraus setting,
+\(T(X) = ∑ᵢ Kᵢ X Kᵢ†\) and \(T^*(Y) = ∑ᵢ Kᵢ† Y Kᵢ\). Within the finite-Kraus setting,
 the result strengthens the maximum-rank-fixed-point case by allowing any positive
-semidefinite fixed point `ρ` of `T`. If `Q := supportProj ρ`, then
-`{Y ∈ Q M_D(ℂ) Q | Q T*(Y) Q = Y}`
-is a `*`-subalgebra of the corner algebra `Q M_D(ℂ) Q`. At maximum rank this is
+semidefinite fixed point \(ρ\) of \(T\). If \(Q\) is the support projection of \(ρ\), then
+\(\{Y ∈ Q M_D(ℂ) Q \mid Q T^*(Y) Q = Y\}\)
+is a \(*\)-subalgebra of the corner algebra \(Q M_D(ℂ) Q\). At maximum rank this is
 the completely positive finite-Kraus specialization of Wolf Corollary 6.6.
 
 The proof follows Wolf's support-compression argument. The stated set is the
 fixed-point set of the compressed adjoint map on the support sector. The
 compressed Kraus family is trace-preserving on the sector and the compressed
 Schrödinger map has a positive-definite fixed point, so Wolf Theorem 6.12
-applies. The `*`-algebra structure is then carried back to the ambient corner
-along the compression isomorphism `φ : M_n(ℂ) ≃ Q M_D(ℂ) Q`.
+applies. The \(*\)-algebra structure is then carried back to the ambient corner
+along the compression isomorphism \(φ : M_n(ℂ) ≃ Q M_D(ℂ) Q\).
 
 ## Main declarations
 
@@ -305,12 +305,12 @@ theorem cornerFixed_mul
 
 /-- **Support-corner fixed points for finite Kraus maps.**
 
-Let `T*(Y) = ∑ᵢ Kᵢ† Y Kᵢ` (`= adjointMap K`) be the adjoint of a
-trace-preserving finite Kraus map. Let `ρ` be a PSD fixed point of the
-Schrödinger map `T = map K`, with support projection `Q := stationaryProj`.
-Then the corner-restricted fixed-point set
-`{Y ∈ Q M_D(ℂ) Q | Q T*(Y) Q = Y}`
-is a `StarSubalgebra` of the corner algebra `Q M_D(ℂ) Q`. Within the
+Let \(T^*(Y) = ∑ᵢ Kᵢ† Y Kᵢ\), represented by `adjointMap K`, be the adjoint of a
+trace-preserving finite Kraus map. Let \(ρ\) be a PSD fixed point of the
+Schrödinger map \(T\), represented by `map K`, with support projection \(Q\),
+represented by `stationaryProj`. Then the corner-restricted fixed-point set
+\(\{Y ∈ Q M_D(ℂ) Q \mid Q T^*(Y) Q = Y\}\)
+is a `StarSubalgebra` of the corner algebra \(Q M_D(ℂ) Q\). Within the
 finite-Kraus setting, this strengthens the maximum-rank-fixed-point case by
 allowing an arbitrary PSD fixed point. At maximum rank it gives the completely
 positive finite-Kraus specialization of Wolf Corollary 6.6.
@@ -320,8 +320,8 @@ abstract unital Schwarz map, while a finite Kraus representation imposes
 complete positivity. See
 `docs/paper-gaps/wolf_cor66_kraus_hypothesis_restriction.tex`.
 
-The carrier consists of the corner elements `Y : hQ.Corner` (`Q Y Q = Y`) with
-`Q (adjointMap K Y) Q = Y`. -/
+The carrier consists of the corner elements `Y : hQ.Corner` satisfying \(QYQ=Y\) and
+\(Q\,T^*(Y)\,Q=Y\). -/
 noncomputable def cornerFixedPointsStarSubalgebra
     (K : Fin d → Mat) (h_tp : IsTP K) {ρ : Mat} (hρ_psd : ρ.PosSemidef)
     (hρ_fix : map K ρ = ρ) :
