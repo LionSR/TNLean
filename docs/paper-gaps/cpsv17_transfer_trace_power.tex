@@ -16,18 +16,27 @@
 
 \section{Source statement}
 
-Let $U$ be a matrix-product unitary of bond dimension $D$, and let
-$\widetilde U$ denote its normalized flattening.  Its transfer map is the
-linear endomorphism $T:M_D(\mathbb C)\to M_D(\mathbb C)$ given by
+Let $U$ be a matrix-product unitary of physical dimension $d$ and bond
+dimension $D$.  Combine its two physical indices into
+$a=(p,q)\in\{1,\ldots,d\}^2$ and define its normalized flattening by
+$\widetilde U^{(p,q)}=d^{-1/2}U^{p,q}$.  Its transfer map is the linear
+endomorphism $T:M_D(\mathbb C)\to M_D(\mathbb C)$ given by
 \begin{align}
-  T(X)&=\sum_a \widetilde U^a X(\widetilde U^a)^\dagger.
+  T(X)&=\sum_{a\in\{1,\ldots,d\}^2}
+    \widetilde U^a X(\widetilde U^a)^\dagger.
 \end{align}
+This is \leanid{MPSTensor.transferMap} applied to
+\leanid{MPOTensor.normalizedFlattening}.
 For matrix units $F_{k\ell}$, let $E=\widehat T$ be the column-stacked
-transfer-matrix representation of $T$, characterized by
+transfer-matrix representation of $T$.  Explicitly, column stacking means
+$\operatorname{vec}(X)_{(j,i)}=X_{ij}$, and $E$ is characterized by
 \begin{align}
   E_{(j,i),(\ell,k)}&=\bigl(T(F_{k\ell})\bigr)_{ij},\\
   E\,\operatorname{vec}(X)&=\operatorname{vec}(T(X)).
 \end{align}
+These identities are the defining convention of
+\leanid{transferMatrix} and its application lemma
+\leanid{transferMatrix_mulVec_eq}.
 Thus $E$ is indexed by pairs of bond indices and has matrix dimension
 $n=D^2$. For any $n\times n$ matrix $B$, write
 \begin{align}
