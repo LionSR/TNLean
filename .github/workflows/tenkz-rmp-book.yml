@@ -18,6 +18,12 @@ on:
     - cron: "0 10 * * 1"  # Mondays at 10:00 UTC, clear of the housekeeping crons
   workflow_dispatch:
 
+# A manual dispatch and the weekly schedule share one queue, so a person
+# asking for the book by hand never runs a second, duplicate compile
+# alongside the scheduled one -- the later run waits instead.
+concurrency:
+  group: tenkz-rmp-book
+
 permissions:
   contents: read
 
