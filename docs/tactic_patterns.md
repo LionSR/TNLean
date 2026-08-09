@@ -55,9 +55,12 @@ abstracted — record why, so it is not re-proposed).
   (2026-08-09).
 - **Abstraction:** `Kraus.trace_mul_transferMap_adjoint` in
   `TNLean/Channel/Irreducible/KrausSetup.lean`.
-- **Notes:** the bridge stays on the existing Channel-side Kraus setup import
-  boundary and removes twelve duplicated caller lines while preserving the
-  MPS transfer-map compatibility theorem and its FQN.
+- **Notes:** Channel callers use the theorem on the existing Kraus-setup import
+  boundary, while `MPS.Core.TransferChannel` provides the root-level transfer-map
+  compatibility statement without importing irreducibility theory. The declaration
+  `Kraus.isChannel_transferMap` retains its name and statement but now requires the
+  MPS compatibility import instead of `Channel.FixedPoint.MaximalSupport`; this
+  intentional import-level change removes the former Channel-to-MPS dependency.
 
 ### pure gauge to heterogeneous repeated blocks — promoted
 - **Pattern:** convert `GaugeEquiv A B` to `HetRepeatedBlocks A B` by passing
