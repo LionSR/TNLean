@@ -11,6 +11,7 @@ import Mathlib.Data.Nat.Choose.Basic
 import Mathlib.Data.Fintype.Card
 import Mathlib.Algebra.BigOperators.Group.Finset.Basic
 import Mathlib.Tactic
+import Mathlib.Analysis.Normed.Unbundled.RingSeminorm
 /-!
 # Upper-triangular power bound -- Wolf Eqs. (8.103) and (8.105)
 -/
@@ -299,3 +300,273 @@ lemma wordProd_eq_zero_of_N_count_ge_D [NeZero D] (Λ N : Matrix (Fin D) (Fin D)
 end WordVanishing
 
 end Matrix
+
+section CountCardinality
+
+variable {n : ℕ}
+
+def wordToSupport (w : Fin n → Bool) : Finset (Fin n) :=
+  (Finset.univ : Finset (Fin n)).filter (λ i => w i = true)
+
+@[simp] lemma wordToSupport_card (w : Fin n → Bool) : (wordToSupport w).card = countN w := rfl
+
+lemma wordToSupport_injective :
+    Function.Injective (wordToSupport : (Fin n → Bool) → Finset (Fin n)) := by
+  intro w1 w2 h; ext i
+  have h_mem : i ∈ wordToSupport w1 ↔ i ∈ wordToSupport w2 := by rw [h]
+  simp [wordToSupport] at h_mem ⊢; exact h_mem
+
+lemma card_countN_eq_choose (k : ℕ) :
+    ((Finset.univ : Finset (Fin n → Bool)).filter (λ w => countN w = k)).card = Nat.choose n k := by
+  let S := ((Finset.univ : Finset (Fin n → Bool)).filter (λ w => countN w = k))
+  let img := S.image wordToSupport
+  have h_card_image : img.card = S.card := Finset.card_image_of_injective S wordToSupport_injective
+  have h_img_eq_powerset : img = Finset.powersetCard k (Finset.univ : Finset (Fin n)) := by
+    ext s; constructor
+    · intro hs; rw [Finset.mem_image] at hs; rcases hs with ⟨w, hw, rfl⟩
+      rw [Finset.mem_filter] at hw; rcases hw with ⟨_, hcount⟩
+      rw [Finset.mem_powersetCard]
+      exact ⟨Finset.filter_subset _ _, by rw [wordToSupport_card, hcount]⟩
+    · intro hs; rw [Finset.mem_powersetCard] at hs; rcases hs with ⟨hs_sub, hs_card⟩
+      let w : Fin n → Bool := λ i => i ∈ s
+      have h_wordToSupport : wordToSupport w = s := by
+        ext i; dsimp [w, wordToSupport]; simp [hs_sub]
+      have h_countN : countN w = k := by rw [← wordToSupport_card, h_wordToSupport, hs_card]
+      rw [Finset.mem_image]
+      exact ⟨w, Finset.mem_filter.mpr ⟨Finset.mem_univ _, h_countN⟩, h_wordToSupport⟩
+  rw [← h_card_image, h_img_eq_powerset, Finset.card_powersetCard, Finset.card_fin]
+
+end CountCardinality
+
+section WordProdLemma
+
+variable {D : ℕ} {R : Type*} [Semiring R]
+
+lemma wordProd_all_false (Λ N : Matrix (Fin D) (Fin D) R) (n : ℕ) :
+    wordProd Λ N (λ _ : Fin n => false) = Λ ^ n := by
+  induction' n with k ih
+  · simp [wordProd]
+  · have h_snoc : (λ _ : Fin (k+1) => false) = Fin.snoc (λ _ : Fin k => false) false := by
+      ext i; simp [Fin.snoc]
+    rw [h_snoc, wordProd_snoc']; simp [ih, pow_succ]
+
+end WordProdLemma
+
+section SeminormBound
+
+variable {D : ℕ} {R : Type*} [Ring R]
+
+lemma wordProd_seminorm_le (f : Matrix (Fin D) (Fin D) R → ℝ)
+    (hf_nonneg : ∀ x, 0 ≤ f x) (hf_mul : ∀ x y, f (x * y) ≤ f x * f y)
+    (hf1 : f 1 ≤ 1)
+    (Λ N : Matrix (Fin D) (Fin D) R) {n : ℕ} (w : Fin n → Bool) :
+    f (wordProd Λ N w) ≤ (f Λ) ^ (n - countN w) * (f N) ^ (countN w) := by
+  induction' n with n ih generalizing Λ N
+  · have h0 : countN w = 0 := by dsimp [countN]; simp
+    have h1 : wordProd Λ N w = 1 := by simp [wordProd]
+    rw [h0, h1, Nat.sub_self, pow_zero, pow_zero, one_mul]; exact hf1
+  · let w' := Fin.init w; let b := w (Fin.last n)
+    have hw_eq : w = Fin.snoc w' b := (Fin.snoc_init_self w).symm
+    rw [hw_eq, wordProd_snoc']
+    have h_le : countN w' ≤ n := by
+      dsimp [countN]
+      calc
+        ((Finset.univ : Finset (Fin n)).filter (λ i => w' i = true)).card
+            ≤ (Finset.univ : Finset (Fin n)).card := Finset.card_filter_le _ _
+        _ = n := Finset.card_fin n
+    rcases b with (rfl | rfl)
+    · simp
+      have h_exp : (n - countN w') + 1 = (n + 1) - countN w' := by omega
+      have h_rearrange : ((f Λ) ^ (n - countN w') * (f N) ^ (countN w')) * f Λ
+          = (f Λ) ^ ((n - countN w') + 1) * (f N) ^ (countN w') := by
+        ring
+      calc
+        f (wordProd Λ N w' * Λ) ≤ f (wordProd Λ N w') * f Λ := hf_mul _ _
+        _ ≤ ((f Λ) ^ (n - countN w') * (f N) ^ (countN w')) * f Λ :=
+          mul_le_mul_of_nonneg_right (ih Λ N w') (hf_nonneg _)
+        _ = (f Λ) ^ ((n - countN w') + 1) * (f N) ^ (countN w') := by rw [h_rearrange]
+        _ = (f Λ) ^ ((n + 1) - countN w') * (f N) ^ (countN w') := by rw [h_exp]
+        _ = (f Λ) ^ ((n + 1) - countN (Fin.snoc w' false)) * (f N) ^ (countN (Fin.snoc w' false)) := by
+          rw [countN_snoc_false w']
+    · simp
+      have h_exp : n - countN w' = (n + 1) - (countN w' + 1) := by omega
+      have h_rearrange : ((f Λ) ^ (n - countN w') * (f N) ^ (countN w')) * f N
+          = (f Λ) ^ (n - countN w') * (f N) ^ (countN w' + 1) := by
+        ring
+      calc
+        f (wordProd Λ N w' * N) ≤ f (wordProd Λ N w') * f N := hf_mul _ _
+        _ ≤ ((f Λ) ^ (n - countN w') * (f N) ^ (countN w')) * f N :=
+          mul_le_mul_of_nonneg_right (ih Λ N w') (hf_nonneg _)
+        _ = (f Λ) ^ (n - countN w') * (f N) ^ (countN w' + 1) := by rw [h_rearrange]
+        _ = (f Λ) ^ ((n + 1) - countN (Fin.snoc w' true)) * (f N) ^ (countN (Fin.snoc w' true)) := by
+          rw [countN_snoc_true w', h_exp]
+
+end SeminormBound
+
+section WolfEq105
+
+variable {D : ℕ} {R : Type*} [Ring R]
+
+/-- **Wolf Eq. (8.105)**. -/
+theorem wolf_eq_105 (f : Matrix (Fin D) (Fin D) R → ℝ)
+    (hf_nonneg : ∀ x, 0 ≤ f x) (hf_mul : ∀ x y, f (x * y) ≤ f x * f y)
+    (hf_add : ∀ x y, f (x + y) ≤ f x + f y) (hf_zero : f 0 = 0)
+    (hf1 : f 1 ≤ 1)
+    (hΛ_diag : IsDiagonal Λ) (hN_sut : IsStrictlyUpperTriangular N)
+    (hDpos : D ≠ 0) (n : ℕ) :
+    f ((Λ + N) ^ n) ≤ f (Λ ^ n) +
+      (∑ k ∈ Finset.Icc 1 (min n (D - 1)),
+        ((Nat.choose n k : ℝ) * (f N) ^ k * (f Λ) ^ (n - k))) := by
+  haveI : NeZero D := ⟨hDpos⟩
+  have hposD : 0 < D := NeZero.pos D
+  have h_expand : (Λ + N) ^ n = ∑ w : Fin n → Bool, wordProd Λ N w :=
+    add_pow_eq_sum_wordProd Λ N n
+  rw [h_expand]
+  have h_surviving_sum : (∑ w : Fin n → Bool, wordProd Λ N w) =
+      (∑ w ∈ (Finset.univ : Finset (Fin n → Bool)).filter (λ w => countN w < D),
+        wordProd Λ N w) := by
+    rw [Finset.sum_filter]
+    refine Finset.sum_congr rfl (λ w hw => ?_)
+    by_cases h : countN w < D
+    · simp [h]
+    · have h_ge : D ≤ countN w := by omega
+      have h_zero : wordProd Λ N w = 0 :=
+        wordProd_eq_zero_of_N_count_ge_D Λ N hΛ_diag hN_sut w h_ge
+      simp [h, h_zero]
+  rw [h_surviving_sum]
+  have h_wordProd_zero : wordProd Λ N (λ _ : Fin n => false) = Λ ^ n :=
+    wordProd_all_false Λ N n
+  let allWords : Finset (Fin n → Bool) := Finset.univ
+  let surWords := allWords.filter (λ w => countN w < D)
+  let kZero := surWords.filter (λ w => countN w = 0)
+  let kPos := surWords.filter (λ w => 1 ≤ countN w)
+  have h_disjoint_union : surWords = kZero ∪ kPos := by
+    ext w;
+    simp [kZero, kPos, surWords]
+    by_cases hc0 : countN w = 0
+    · simp [hc0]
+    · have hc1 : 1 ≤ countN w := by omega
+      simp [hc0, hc1]
+  have h_disjoint : Disjoint kZero kPos := by
+    rw [Finset.disjoint_filter]; intro w _ h0 h1; omega
+  have h_sum_split : (∑ w ∈ surWords, wordProd Λ N w) =
+      (∑ w ∈ kZero, wordProd Λ N w) + (∑ w ∈ kPos, wordProd Λ N w) := by
+    rw [h_disjoint_union, Finset.sum_union h_disjoint]
+  have h_kZero_singleton : kZero = {(λ _ : Fin n => false)} := by
+    ext w; constructor
+    · intro hw
+      rw [Finset.mem_filter] at hw; rcases hw with ⟨hw_surv, hzero⟩
+      have hw_all_false : w = (λ _ : Fin n => false) := by
+        ext i
+        have hfalse : w i = false := by
+          by_contra hnotfalse
+          have htrue_val : w i = true := by
+            cases hwiv : w i
+            · exact (hnotfalse hwiv).elim
+            · rfl
+          have hi_mem : i ∈ ((Finset.univ : Finset (Fin n)).filter (λ j => w j = true)) := by
+            simp [htrue_val]
+          have hcard_pos : 0 < countN w := by
+            dsimp [countN]; exact Finset.card_pos.mpr ⟨i, hi_mem⟩
+          omega
+        exact hfalse
+      subst hw_all_false; simp
+    · intro hw; rw [Finset.mem_singleton] at hw; subst hw
+      refine Finset.mem_filter.mpr ⟨Finset.mem_filter.mpr ⟨Finset.mem_univ _, ?_⟩, ?_⟩
+      · simp [countN, hposD]
+      · simp [countN]
+  have h_kZero_sum : (∑ w ∈ kZero, wordProd Λ N w) = Λ ^ n := by
+    rw [h_kZero_singleton, Finset.sum_singleton, h_wordProd_zero]
+  rw [h_sum_split, h_kZero_sum]
+  have h_triangle : f (Λ ^ n + (∑ w ∈ kPos, wordProd Λ N w)) ≤
+      f (Λ ^ n) + f (∑ w ∈ kPos, wordProd Λ N w) := hf_add _ _
+  have h_zero_le : f 0 ≤ 0 := by rw [hf_zero]
+  have h_rest_subadd : f (∑ w ∈ kPos, wordProd Λ N w) ≤
+      (∑ w ∈ kPos, f (wordProd Λ N w)) :=
+    Finset.le_sum_of_subadditive f h_zero_le hf_add kPos (λ w => wordProd Λ N w)
+  have h_rest_per_word : (∑ w ∈ kPos, f (wordProd Λ N w)) ≤
+      (∑ w ∈ kPos, (f N) ^ (countN w) * (f Λ) ^ (n - countN w)) := by
+    refine Finset.sum_le_sum (λ w hw => ?_)
+    have hbound := wordProd_seminorm_le f hf_nonneg hf_mul hf1 Λ N w
+    rw [mul_comm]; exact hbound
+  -- fiber regrouping: group by countN value
+  have h_fiber_regroup : (∑ w ∈ kPos, (f N) ^ (countN w) * (f Λ) ^ (n - countN w)) =
+      (∑ k ∈ Finset.Icc 1 (min n (D - 1)),
+        ((Nat.choose n k : ℝ) * (f N) ^ k * (f Λ) ^ (n - k))) := by
+    have h_kPos_eq : kPos = allWords.filter (λ w => 1 ≤ countN w ∧ countN w < D) := by
+      ext w; simp [kPos, surWords, allWords]; omega
+    rw [h_kPos_eq]
+    let fibers (k : ℕ) : Finset (Fin n → Bool) := allWords.filter (λ w => countN w = k)
+    let keys := Finset.Icc 1 (min n (D - 1))
+    have h_filter_eq_biUnion :
+        allWords.filter (λ w => 1 ≤ countN w ∧ countN w < D) = keys.biUnion fibers := by
+      ext w; constructor
+      · intro hw
+        rw [Finset.mem_filter] at hw; rcases hw with ⟨hw_univ, ⟨hk_pos, hk_ltD⟩⟩
+        have hk_val_le_n : countN w ≤ n := by
+          dsimp [countN]
+          calc
+            ((Finset.univ : Finset (Fin n)).filter (λ i => w i = true)).card
+                ≤ (Finset.univ : Finset (Fin n)).card := Finset.card_filter_le _ _
+            _ = n := Finset.card_fin n
+        have hk_mem_keys : countN w ∈ keys := by
+          rw [Finset.mem_Icc]
+          exact ⟨hk_pos, Nat.le_min.mpr ⟨hk_val_le_n, by omega⟩⟩
+        apply Finset.mem_biUnion.mpr
+        exact ⟨countN w, hk_mem_keys, by simp [fibers, allWords, hw_univ]⟩
+      · intro hw
+        rw [Finset.mem_biUnion] at hw; rcases hw with ⟨k, hk_mem, hw_fiber⟩
+        rw [Finset.mem_Icc] at hk_mem; rcases hk_mem with ⟨hk_pos, hk_le⟩
+        rw [Finset.mem_filter] at hw_fiber; rcases hw_fiber with ⟨hw_univ, hcount⟩
+        have hk_ltD : k < D := by
+          have hk_le_Dm1 : k ≤ D - 1 := le_trans hk_le (Nat.min_le_right _ _)
+          omega
+        rw [Finset.mem_filter, hcount]
+        exact ⟨hw_univ, hk_pos, hk_ltD⟩
+    rw [h_filter_eq_biUnion]
+    have h_disjoint_fibers : (keys : Set ℕ).PairwiseDisjoint fibers := by
+      intro k₁ hk₁ k₂ hk₂ hne
+      have h_disjoint_filt : Disjoint (fibers k₁) (fibers k₂) := by
+        rw [Finset.disjoint_filter]; intro w _ h₁ h₂; rw [h₁] at h₂; exact hne h₂
+      exact h_disjoint_filt
+    rw [Finset.sum_biUnion h_disjoint_fibers]
+    refine Finset.sum_congr rfl (λ k hk => ?_)
+    rw [Finset.mem_Icc] at hk; rcases hk with ⟨hk_pos, hk_le⟩
+    have h_card : (fibers k).card = Nat.choose n k := by
+      dsimp [fibers, allWords]; exact card_countN_eq_choose k
+    calc
+      (∑ w ∈ fibers k, (f N) ^ (countN w) * (f Λ) ^ (n - countN w))
+      = (∑ w ∈ fibers k, (f N) ^ k * (f Λ) ^ (n - k)) := by
+        refine Finset.sum_congr rfl (λ w hw => ?_)
+        rw [Finset.mem_filter] at hw; rcases hw with ⟨_, hw_eq⟩; rw [hw_eq]
+      _ = ((fibers k).card : ℝ) * ((f N) ^ k * (f Λ) ^ (n - k)) := by simp
+      _ = ((Nat.choose n k : ℕ) : ℝ) * ((f N) ^ k * (f Λ) ^ (n - k)) := by rw [h_card]
+      _ = (Nat.choose n k : ℝ) * (f N) ^ k * (f Λ) ^ (n - k) := by ring
+  -- assemble final inequality
+  calc
+    f (Λ ^ n + (∑ w ∈ kPos, wordProd Λ N w)) ≤ f (Λ ^ n) + f (∑ w ∈ kPos, wordProd Λ N w) := h_triangle
+    _ ≤ f (Λ ^ n) + (∑ w ∈ kPos, f (wordProd Λ N w)) := by gcongr
+    _ ≤ f (Λ ^ n) + (∑ w ∈ kPos, (f N) ^ (countN w) * (f Λ) ^ (n - countN w)) := by gcongr
+    _ = f (Λ ^ n) + (∑ k ∈ Finset.Icc 1 (min n (D - 1)),
+        ((Nat.choose n k : ℝ) * (f N) ^ k * (f Λ) ^ (n - k))) := by rw [h_fiber_regroup]
+
+end WolfEq105
+
+section RingSeminormCorollary
+
+variable {D : ℕ} {R : Type*} [Ring R]
+
+open RingSeminorm
+
+/-- **Wolf Eq. (8.105) for `RingSeminorm`**. -/
+theorem wolf_eq_105_seminorm (ν : RingSeminorm (Matrix (Fin D) (Fin D) R))
+    (hν_one : ν 1 ≤ 1)
+    (hΛ_diag : IsDiagonal Λ) (hN_sut : IsStrictlyUpperTriangular N)
+    (hDpos : D ≠ 0) (n : ℕ) :
+    ν ((Λ + N) ^ n) ≤ ν (Λ ^ n) +
+      (∑ k ∈ Finset.Icc 1 (min n (D - 1)),
+        ((Nat.choose n k : ℝ) * (ν N) ^ k * (ν Λ) ^ (n - k))) :=
+  wolf_eq_105 ν (apply_nonneg ν) (λ x y => ν.mul_le' x y) (λ x y => ν.add_le' x y)
+    (map_zero ν) hν_one hΛ_diag hN_sut hDpos n
+
+end RingSeminormCorollary
