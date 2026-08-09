@@ -511,7 +511,8 @@ Theorem~\ref{thm:trace_norm_abs}.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{lem:positive_part_trace_estimate}
+    \uses{lem:positive_map_hermitian, lem:psd_trace_pairing_bounds,
+      lem:positive_part_support_projection}
     Same projection argument as Lemma~\ref{lem:positive_part_trace_estimate},
     with the trace identity replaced by the scaled version
     $(T\rho).\tr = c\cdot\rho.\tr$.
@@ -532,7 +533,7 @@ Theorem~\ref{thm:trace_norm_abs}.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:trace_norm_contractivity, lem:scaled_posPart_trace_estimate}
+    \uses{lem:scaled_posPart_trace_estimate, lem:trace_norm_jordan}
     Same argument as Theorem~\ref{thm:trace_norm_contractivity}: apply
     Lemma~\ref{lem:scaled_posPart_trace_estimate} to $H$ and $-H$, then
     sum using the Jordan trace-norm formula.
@@ -559,8 +560,7 @@ Theorem~\ref{thm:trace_norm_abs}.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:scaled_trace_norm_contractivity,
-      lem:scaled_posPart_trace_estimate}
+    \uses{thm:scaled_trace_norm_contractivity}
     The map $S:=T-\varepsilon T'$ is positive by hypothesis.
     Since $T'(\rho_1-\rho_2)=\tr[\rho_1-\rho_2]\,Y=0$ (the densities
     have unit trace), $T(\rho_1)-T(\rho_2)=S(\rho_1-\rho_2)$. The trace

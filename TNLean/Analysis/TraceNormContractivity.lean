@@ -38,12 +38,19 @@ requires no continuity hypothesis because the spectrum of a matrix is finite.
 * `Matrix.traceNorm_map_le_of_positive_of_tracePreserving` — Eq. (8.79).
 * `Matrix.traceNorm_map_sub_map_le_of_positive_of_tracePreserving` —
   Eq. (8.80).
+* `Matrix.re_trace_posPart_map_le_of_scaledTrace` — scaled positive-part
+  estimate, generalizes the projection estimate to maps with scaled trace.
+* `Matrix.traceNorm_map_le_of_positive_of_scaledTrace` — scaled trace-norm
+  contractivity, generalizes Eq. (8.79) to maps with scaled trace.
+* `Matrix.traceNorm_map_sub_map_le_of_doeblin` — Wolf Theorem 8.17
+  (quantum Doeblin), Eq. (8.82).
 
 ## References
 
 Michael M. Wolf, *Quantum Channels & Operations: Guided Tour* (July 5, 2012),
-Chapter 8, Theorem 8.16 (printed numbering);
-Notes/WolfNoteTexSource/ch08_distance_measures.tex lines 898-918.
+Chapter 8, Theorems 8.16 and 8.17 (printed numbering);
+Notes/WolfNoteTexSource/ch08_distance_measures.tex lines 898-918 (Thm. 8.16)
+and 943-977 (Thm. 8.17).
 -/
 
 open scoped Matrix ComplexOrder MatrixOrder
@@ -290,8 +297,8 @@ $\operatorname{tr}[(T H)^+] \le c \cdot \operatorname{tr}[H^+]$.
 Generalizes `re_trace_posPart_map_le` from the trace-preserving case
 `c = 1`.
 
-Wolf Ch. 8, generalized from Theorem 8.16 for use in Theorem 8.17;
-Notes/WolfNoteTexSource/ch08_distance_measures.tex lines 943–969. -/
+Wolf Ch. 8; the argument generalizes Theorem 8.16 (lines 898–918)
+and is used for Theorem 8.17 (lines 943–977). -/
 lemma re_trace_posPart_map_le_of_scaledTrace {c : ℝ}
     {T : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D') (Fin D') ℂ}
     (hpos : ∀ ρ : Matrix (Fin D) (Fin D) ℂ, ρ.PosSemidef → (T ρ).PosSemidef)
@@ -329,8 +336,8 @@ $\|T(H)\|_1 \le c \cdot \|H\|_1$.
 Generalizes `traceNorm_map_le_of_positive_of_tracePreserving` from the
 trace-preserving case `c = 1`.
 
-Wolf Ch. 8, generalized from Theorem 8.16 for use in Theorem 8.17;
-Notes/WolfNoteTexSource/ch08_distance_measures.tex lines 943–969. -/
+Wolf Ch. 8; the argument generalizes Theorem 8.16 (lines 898–918)
+and is used for Theorem 8.17 (lines 943–977). -/
 theorem traceNorm_map_le_of_positive_of_scaledTrace {c : ℝ}
     {T : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D') (Fin D') ℂ}
     (hpos : ∀ ρ : Matrix (Fin D) (Fin D) ℂ, ρ.PosSemidef → (T ρ).PosSemidef)
