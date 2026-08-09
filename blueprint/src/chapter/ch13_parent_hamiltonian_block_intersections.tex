@@ -168,7 +168,8 @@ formulation; the passage to $\ker H_N$ is kept separate.
 
 \begin{lemma}[Forward inclusion for the direct-sum tensor]
     \label{lem:isup_chain_ground_space_block_le_parent_ground_space}
-    \notready
+    \lean{MPSTensor.iSup_chainGroundSpace_block_le_toTensorFromBlocks}
+    \leanok
     \uses{def:parent_hamiltonian_ground_space_bnt,
         lem:isup_chain_ground_space_block_le_assembled}
     Let $A^i=\bigoplus_j\mu_j A_j^i$ be in block-injective canonical form,
@@ -183,8 +184,7 @@ formulation; the passage to $\ker H_N$ is kept separate.
     \end{align}
 \end{lemma}
 
-\begin{proof}
-    \notready
+\begin{proof}\leanok
     The block-injective canonical-form hypothesis supplies $\mu_j\neq0$ for
     every $j$, and the block-diagonal periodic-boundary ground space is
     $\mathcal G_{N,L}(\bigoplus_j \mu_j A_j)$ by definition.
