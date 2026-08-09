@@ -20,6 +20,15 @@ open scoped BigOperators
 
 namespace Fintype
 
+/-- In a non-unital semiring, a common left factor can be pulled out of a
+finite sum of triple products:
+$\sum_i (a f_i) g_i = a \sum_i f_i g_i$. -/
+theorem sum_mul_mul_eq_mul_sum_mul {ι R : Type*} [Fintype ι] [NonUnitalSemiring R]
+    (a : R) (f g : ι → R) :
+    (∑ i, a * f i * g i) = a * ∑ i, f i * g i := by
+  rw [Finset.mul_sum]
+  exact Finset.sum_congr rfl fun i _ => mul_assoc a (f i) (g i)
+
 /-- Reindex a sum over a finite dependent pair by `finSigmaFinEquiv`. -/
 theorem sum_finSigmaFinEquiv {g : ℕ} {mult : Fin g → ℕ} {β : Type*}
     [AddCommMonoid β] (f : ((j : Fin g) × Fin (mult j)) → β) :

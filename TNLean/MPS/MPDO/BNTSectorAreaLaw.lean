@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import TNLean.Algebra.FinSum
 import TNLean.MPS.MPDO.BNTSectorAnalyticProperties
 import TNLean.MPS.MPDO.LocalOrthogonalSumAreaLaw
 import TNLean.MPS.MPDO.PhysicalSupportRestriction
@@ -108,10 +109,10 @@ private theorem firstSiteMatrix_mul_normalizedMPO_of_ketLeftMul_eq
         = (mpo M (N + 1)).trace⁻¹ *
             ∑ i : Fin d, P a i *
               Matrix.trace (M i b * evalWord M (List.ofFn σ') (List.ofFn τ')) := by
-          rw [Finset.mul_sum]
-          apply Finset.sum_congr rfl
-          intro i _
-          ring
+          simpa only [mul_comm, mul_left_comm, mul_assoc] using
+            Fintype.sum_mul_mul_eq_mul_sum_mul
+              (mpo M (N + 1)).trace⁻¹ (fun i => P a i)
+              (fun i => Matrix.trace (M i b * evalWord M (List.ofFn σ') (List.ofFn τ')))
     _ = (mpo M (N + 1)).trace⁻¹ *
         Matrix.trace ((∑ i : Fin d, P a i • M i b) *
           evalWord M (List.ofFn σ') (List.ofFn τ')) := by

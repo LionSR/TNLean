@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import TNLean.Algebra.FinSum
 import TNLean.Algebra.PerronFrobenius.Idempotent
 import TNLean.Algebra.PerronFrobenius.Substochastic
 
@@ -58,9 +59,8 @@ theorem IsPrimitive.exists_pos_eigenvector_one_of_pow_two_eq_pow_three
     rw [hT2]
     ext i
     simp only [Matrix.mulVec, Matrix.vecMulVec_apply, dotProduct]
-    have hfactor : (∑ x, a i * b x * a x) = a i * ∑ x, b x * a x := by
-      rw [Finset.mul_sum]
-      exact Finset.sum_congr rfl (fun x _ => by ring)
+    have hfactor : (∑ x, a i * b x * a x) = a i * ∑ x, b x * a x :=
+      Fintype.sum_mul_mul_eq_mul_sum_mul (a i) b a
     rw [hfactor, show (∑ x, b x * a x) = b ⬝ᵥ a from rfl, dotProduct_comm b a, hab, mul_one]
   set u : n → ℝ := T.mulVec a with hu
   have hu_pos : ∀ i, 0 < u i := by
@@ -133,9 +133,8 @@ theorem IsPrimitive.exists_rowStochastic_diagonal_conj_of_pow_two_eq_pow_three
     refine ⟨hPnn, ?_⟩
     ext i
     simp only [Matrix.mulVec, dotProduct, Pi.one_apply, mul_one, hPapply]
-    have hfactor : (∑ j, (v i)⁻¹ * T i j * v j) = (v i)⁻¹ * ∑ j, T i j * v j := by
-      rw [Finset.mul_sum]
-      exact Finset.sum_congr rfl (fun j _ => by ring)
+    have hfactor : (∑ j, (v i)⁻¹ * T i j * v j) = (v i)⁻¹ * ∑ j, T i j * v j :=
+      Fintype.sum_mul_mul_eq_mul_sum_mul (v i)⁻¹ (T i) v
     rw [hfactor, show (∑ j, T i j * v j) = T.mulVec v i from rfl, hTv,
       inv_mul_cancel₀ (hv i).ne']
   · have hPpow : ∀ k, ((Matrix.diagonal v)⁻¹ * T * Matrix.diagonal v) ^ k =

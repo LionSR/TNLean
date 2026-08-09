@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import TNLean.Algebra.FinSum
 import TNLean.Channel.KrausFreedom
 import Mathlib.Data.Matrix.Basis
 import Mathlib.Tactic.LinearCombination
@@ -533,9 +534,10 @@ theorem exists_isometric_mixing_of_pureEnsembleDensity_eq
         fun i => sandwich_entry (ψ i) (K i) (hK_apply i) X a b c₀.isLt
       simp_rw [each_i]
       simp only [pureEnsembleDensity, Matrix.sum_apply, Matrix.vecMulVec_apply,
-        Pi.star_apply, Finset.mul_sum]
-      refine Finset.sum_congr rfl (fun i _ => ?_)
-      ring
+        Pi.star_apply]
+      simpa only [mul_comm, mul_left_comm, mul_assoc] using
+        Fintype.sum_mul_mul_eq_mul_sum_mul (X c₀ c₀)
+          (fun i => ψ i a) (fun i => star (ψ i b))
     have rhs_eq : (∑ j, L j * X * (L j)ᴴ) a b =
         X c₀ c₀ * (pureEnsembleDensity φ) a b := by
       rw [Matrix.sum_apply]
@@ -544,9 +546,10 @@ theorem exists_isometric_mixing_of_pureEnsembleDensity_eq
         fun j => sandwich_entry (φ j) (L j) (hL_apply j) X a b c₀.isLt
       simp_rw [each_j]
       simp only [pureEnsembleDensity, Matrix.sum_apply, Matrix.vecMulVec_apply,
-        Pi.star_apply, Finset.mul_sum]
-      refine Finset.sum_congr rfl (fun j _ => ?_)
-      ring
+        Pi.star_apply]
+      simpa only [mul_comm, mul_left_comm, mul_assoc] using
+        Fintype.sum_mul_mul_eq_mul_sum_mul (X c₀ c₀)
+          (fun j => φ j a) (fun j => star (φ j b))
     rw [lhs_eq, rhs_eq, hρ]
   -- Apply rectangular Kraus freedom to extract the isometry `V`.
   obtain ⟨V, hV_iso, hV_decomp⟩ := kraus_rectangular_freedom' K L hKraus hCard

@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import TNLean.Algebra.FinSum
 import TNLean.MPS.MPDO.BNTSourceSectorProjectors
 import TNLean.MPS.MPDO.CommonWeightAbsorption
 import TNLean.MPS.MPDO.SitewisePhysicalMatrix
@@ -562,10 +563,10 @@ theorem ketLeftMul_bntSectorProjection_commonWeightAbsorbedBasis
         S.commonWeight hWeight s *
           ∑ x, bntSectorProjection hC hρ hη hR s a x *
             S.basisMPOTensor s x b β α := by
-      rw [Finset.mul_sum]
-      apply Finset.sum_congr rfl
-      intro x _
-      ring
+      simpa only [mul_comm, mul_left_comm, mul_assoc] using
+        Fintype.sum_mul_mul_eq_mul_sum_mul (S.commonWeight hWeight s)
+          (fun x => bntSectorProjection hC hρ hη hR s a x)
+          (fun x => S.basisMPOTensor s x b β α)
     _ = _ := by rw [h]
 
 /-- Returning the absorbed-weight MPO representative to doubled-index MPS

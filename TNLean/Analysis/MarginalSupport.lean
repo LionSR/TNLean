@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import TNLean.Algebra.FinSum
 import TNLean.Analysis.MatrixSqrt
 import TNLean.Analysis.Entropy
 
@@ -286,9 +287,10 @@ theorem liftA_mul (M N : Matrix (Fin dB × Fin dC) (Fin dB × Fin dC) ℂ) :
       = (if p.1 = a then (1 : ℂ) else 0) * (if a = q.1 then 1 else 0)
           * ∑ bc, M p.2 bc * N bc q.2 := by
     intro a
-    rw [Finset.mul_sum]
-    refine Finset.sum_congr rfl fun bc _ => ?_
-    ring
+    simpa only [mul_comm, mul_left_comm, mul_assoc] using
+      Fintype.sum_mul_mul_eq_mul_sum_mul
+        ((if p.1 = a then (1 : ℂ) else 0) * (if a = q.1 then 1 else 0))
+        (fun bc => M p.2 bc) (fun bc => N bc q.2)
   rw [Finset.sum_congr rfl fun a _ => hstep a, ← Finset.sum_mul]
   congr 1
   -- ∑ a (if p.1 = a)·(if a = q.1) = if p.1 = q.1: the first indicator picks a = p.1.

@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import TNLean.Algebra.FinSum
 import TNLean.Channel.KoashiImoto.InvariantConditionalBlockForm
 
 /-!
@@ -319,10 +320,10 @@ private theorem exists_bipartiteBlockForm_of_conditionalSlice_blockForm
               rw [Finset.mul_sum]
               apply Finset.sum_congr rfl
               intro a _
-              rw [Finset.mul_sum]
-              apply Finset.sum_congr rfl
-              intro b _
-              ring
+              simpa only [mul_comm, mul_left_comm, mul_assoc] using
+                (Fintype.sum_mul_mul_eq_mul_sum_mul
+                  (σ j zk.1 zl.1) (fun x => informationallyCompleteEffect s x a)
+                  (fun x => ω j (a, zk.2) (x, zl.2))).symm
     · calc
         conditionalSlice R (informationallyCompleteEffect s)
             (e ⟨j, zk⟩) (e ⟨j', zl⟩) = 0 := by
