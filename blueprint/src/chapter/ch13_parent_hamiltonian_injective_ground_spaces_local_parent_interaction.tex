@@ -229,12 +229,16 @@ orthogonal projector is the canonical representative used here.
     \lean{MPSTensor.inner_single_groundSpaceGram_single_eq_rectangularChoi}
     \leanok
     \uses{def:ground_space_gram, def:transfer_map, def:rectangular_choi}
-    Let $E_{ab}$ denote the virtual matrix units and let $\mathcal E_A$ be the
-    transfer map. Then
+    Let $\mathbf e_{(j,i)}:=\operatorname{single}_{(j,i)}(1)$ denote the
+    standard unit vector in $\ell^2(\Fin{D}\times\Fin{D})$, and let
+    $\mathcal E_A$ be the transfer map.  Then
     \begin{align}
-      \langle E_{ab},\mathcal K_L(E_{ce})\rangle_{\mathrm{HS}}
+      \bigl\langle \mathbf e_{(b,a)},
+        \mathcal K_L(\mathbf e_{(e,c)})\bigr\rangle_{\ell^2}
       &=J(\mathcal E_A^L)_{(c,e),(a,b)}.
     \end{align}
+    Under Frobenius vectorization, $\mathbf e_{(b,a)}=U(E_{ab})$ and
+    $\mathbf e_{(e,c)}=U(E_{ce})$, explaining the reversed coordinate order.
     Thus the Gram operator is the indicated Choi reshuffling; in particular it
     is not obtained by replacing the right-hand side with
     $\langle E_{ab},\mathcal E_A^L(E_{ce})\rangle_{\mathrm{HS}}$.
