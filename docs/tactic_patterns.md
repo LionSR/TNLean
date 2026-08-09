@@ -356,6 +356,16 @@ abstracted — record why, so it is not re-proposed).
 
 ## Completed refactors
 
+### Vanishing-complement subtype sums
+- **Pattern:** replace a finite sum by the sum over a predicate subtype after proving that every
+  term outside the predicate is zero.
+- **Reuse:** apply Mathlib's `Finset.sum_congr_set` directly, with reflexivity on the predicate
+  and the existing proof that the summand vanishes off it.
+- **Result:** the two private copies were deleted, and all four call sites now use the Mathlib
+  theorem directly: three in `CyclicActiveAdjacentCoefficientExtraction.lean` and one in
+  `CyclicActiveFourthRegionFormula.lean`. The complete diff has 23 insertions and 34 deletions
+  across three files.
+
 ### Cyclic offset inverse identity
 - **Pattern:** adding the residue `(b + N - a) % N` to `a` modulo `N` recovers `b`
   when `a` and `b` are both less than `N`.

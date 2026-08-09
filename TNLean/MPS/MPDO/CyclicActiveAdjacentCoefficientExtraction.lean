@@ -39,21 +39,6 @@ private theorem reducedBlockState_eq_of_mpo_eq_smul
   unfold reducedBlockState
   rw [hnormalized]
 
-private theorem sum_eq_sum_subtype_of_eq_zero
-    {α M : Type*} [Fintype α] [AddCommMonoid M]
-    (p : α → Prop) [DecidablePred p] (f : α → M)
-    (hzero : ∀ x, ¬p x → f x = 0) :
-    ∑ x, f x = ∑ x : {x // p x}, f x := by
-  classical
-  calc
-    _ = ∑ x ∈ Finset.univ.filter p, f x := by
-      symm
-      apply Finset.sum_subset (Finset.filter_subset _ _)
-      intro x hx hxnot
-      rw [hzero x]
-      simpa using hxnot
-    _ = _ := Finset.sum_subtype _ (by simp) f
-
 private def cyclicActiveSectorSubtypeEquiv
     (F : PhysicalSectorFactorization K) :
     {q : Fin F.sectorCount // F.IsCyclicActiveSector q} ≃
@@ -331,7 +316,9 @@ private theorem sum_sector_trace_two_eq_cyclicActive_pow_two
     _ = ∑ r : {r : Fin F.sectorCount // F.IsCyclicActiveSector r},
         Matrix.trace (F.neighboringOperator q r) *
           Matrix.trace (F.neighboringOperator r h) := by
-      apply sum_eq_sum_subtype_of_eq_zero
+      apply Finset.sum_congr_set
+      · intro r hr
+        rfl
       intro r hr
       by_contra hne
       have hmul := mul_ne_zero_iff.mp hne
@@ -369,7 +356,9 @@ private theorem sum_sector_trace_three_eq_cyclicActive_pow_three
           Matrix.trace (F.neighboringOperator q a) *
             Matrix.trace (F.neighboringOperator a b) *
               Matrix.trace (F.neighboringOperator b h) := by
-      apply sum_eq_sum_subtype_of_eq_zero
+      apply Finset.sum_congr_set
+      · intro a ha
+        rfl
       intro a ha
       apply Finset.sum_eq_zero
       intro b _
@@ -397,7 +386,9 @@ private theorem sum_sector_trace_three_eq_cyclicActive_pow_three
               Matrix.trace (F.neighboringOperator b h) := by
       apply Finset.sum_congr rfl
       intro a _
-      apply sum_eq_sum_subtype_of_eq_zero
+      apply Finset.sum_congr_set
+      · intro b hb
+        rfl
       intro b hb
       by_contra hne
       have habc := mul_ne_zero_iff.mp hne
