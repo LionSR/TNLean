@@ -494,7 +494,12 @@ theorem peripheral_eigenvalues_form_cyclic_group
 Follows from `fixed_eq_scalar_of_irreducible_unital` in
 `CyclicDecomposition.lean`: if `E(X) = X` with `E` irreducible and unital,
 then `X = c · I`. Applied to `E^m` restricted to a cyclic sector, this
-forces one-dimensional eigenspaces. -/
+forces one-dimensional eigenspaces.
+
+**Scope restriction (complete positivity and adjoint fixed point):** Wolf
+Theorem 6.6 assumes an irreducible positive unital Schwarz map, whereas this
+declaration assumes a finite Kraus family and a positive-definite fixed point of
+its adjoint. See `docs/paper-gaps/wolf_thm6_6_kraus_scope.tex`. -/
 theorem peripheral_eigenvalue_multiplicity_one
     {r : ℕ} [NeZero D]
     (K : Fin r → MatrixAlg D)

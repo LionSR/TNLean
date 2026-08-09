@@ -24,9 +24,10 @@ The product closure proof uses:
 - Irreducibility → peripheral eigenvectors are invertible
   (via `posDef_of_posSemidef_fixedPoint_irreducible_cp`)
 
-The cyclic characterization uses product closure + closure under powers + roots of unity
-to conclude that the peripheral eigenvalues form a finite subgroup of `ℂˣ`, which is
-cyclic by `rootsOfUnity.isCyclic`.
+The cyclic characterization uses product and power closure to show directly
+that every peripheral eigenvalue is an `m`-th root of unity, where `m` is the
+number of peripheral eigenvalues. A primitive `m`-th root and a cardinality
+comparison then give the required parametrization.
 
 **Scope restriction (complete positivity and adjoint fixed point):** Wolf
 Theorem 6.6 assumes an irreducible positive unital Schwarz map. This module
@@ -159,10 +160,12 @@ Using product closure + power closure + root-of-unity property, we show
 `m`-th root of unity.
 
 The proof strategy:
-1. S is closed under products and inverses → S is a finite subgroup of `ℂˣ`
-2. Finite subgroups of `ℂˣ` are cyclic (`rootsOfUnity.isCyclic`)
-3. A cyclic subgroup of order `m` in `ℂˣ` consists of all `m`-th roots of unity
-4. The `m`-th roots of unity equal `{γ^j | j ∈ Fin m}` for any primitive root `γ`
+1. The peripheral set `S` is closed under products, powers, and inverses.
+2. Multiplication by any `μ ∈ S` permutes `S`, so a product comparison gives
+   `μ ^ |S| = 1`.
+3. Choose a primitive `|S|`-th root `γ` using `Complex.isPrimitiveRoot_exp`.
+4. Compare cardinalities with the set of `|S|`-th roots to obtain
+   `S = {γ^j | j ∈ Fin |S|}`.
 -/
 
 /-- The peripheral eigenvalues of an irreducible unital Kraus map with a PD
@@ -184,7 +187,7 @@ The proof uses:
 - Product closure (`peripheralEigenvalues_mul_mem_of_irreducible_unital_of_adjoint_fixedPoint`)
 - Power closure (`peripheralEigenvalues_pow_mem_of_irreducible_unital_of_adjoint_fixedPoint`)
 - Roots of unity property (`peripheral_isRootOfUnity_of_irreducible_unital_of_adjoint_fixedPoint`)
-- Finite subgroups of `ℂˣ` are cyclic (`rootsOfUnity.isCyclic` from Mathlib)
+- `Complex.isPrimitiveRoot_exp` and `IsPrimitiveRoot.card_nthRootsFinset`
 - `IsPrimitiveRoot.eq_pow_of_pow_eq_one`: elements of order dividing `m` are powers of a
   primitive `m`-th root -/
 theorem peripheralEigenvalues_eq_range_primitiveRoot [NeZero D]

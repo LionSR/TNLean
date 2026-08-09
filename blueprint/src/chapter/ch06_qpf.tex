@@ -161,6 +161,36 @@ and~\cite{Evans1978Spectral}.
     where $\mathbf{1}_{\lambda_j>0}$ is $1$ if $\lambda_j>0$ and $0$ otherwise.
 \end{definition}
 
+\begin{theorem}[Vanishing complementary Kraus corners]
+    \label{thm:kraus_fixed_support_lower_zero}
+    \lean{Kraus.lowerZero_of_posSemidef_fixedPoint}
+    \leanok
+    \uses{def:kraus_map, def:support_proj}
+    Let $\rho\geq0$ be fixed by the Kraus map of a finite matrix family $K$, and
+    let $Q$ be the support projection of $\rho$. Then $Q$ is an orthogonal
+    projection and
+    \begin{align}
+        (\Id-Q)K_iQ
+         & =0
+        \notag
+    \end{align}
+    for every $i$.
+\end{theorem}
+
+\begin{theorem}[Vanishing lower corners imply invariant compression]
+    \label{thm:kraus_lower_zero_invariant_compression}
+    \lean{Kraus.lowerZero_implies_invariance}
+    \leanok
+    \uses{def:kraus_map}
+    Let $Q$ be an orthogonal projection. If $(\Id-Q)K_iQ=0$ for every $i$,
+    then
+    \begin{align}
+        Q E_K(QXQ)Q
+         & =E_K(QXQ)
+        \notag
+    \end{align}
+    for every $X\in\MN{D}$.
+\end{theorem}
 
 \begin{theorem}[Invariant support compression for a CP fixed point]
     \label{thm:cp_fixed_support_invariant}
@@ -180,6 +210,8 @@ and~\cite{Evans1978Spectral}.
 
 \begin{proof}
     \leanok
+    \uses{thm:kraus_fixed_support_lower_zero,
+        thm:kraus_lower_zero_invariant_compression}
     The fixed-point equation makes the complementary Kraus corners vanish,
     $(\Id-Q)K_iQ=0$. Expanding the Kraus sum then gives
     Equation~(\ref{eq:cp_fixed_support_invariant}).
