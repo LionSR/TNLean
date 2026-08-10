@@ -726,14 +726,15 @@ closing a chain of $N$ copies of $\mathcal U$.
         MPOTensor.doubleLayerTensor_reindexPhysical}
     \leanok
     \uses{thm:mpu_blocked_double_layer_diagonal,
-        thm:mpu_second_block_simple,thm:mpu_bounded_simple_blocking}
+        thm:mpu_second_block_simple, thm:mpu_bounded_simple_blocking}
+    Let $\mathcal U$ be an MPU of positive physical and bond dimensions.
     Suppose that $\rho$ has trace one and that the normalized transfer matrix
     satisfies
     \begin{align}
         E^J&=|\rho)(\Id|,
         &J&>0.
     \end{align}
-    Put $K=JD^2$.  After the standard product reindexing of the virtual
+    Put $K=JD^2$. After the standard product reindexing of the physical
     coordinates, the direct length-$K$ block satisfies \texttt{simple1} and
     \texttt{simple2} with the specific witnesses $\rho$ and $\Id$ from this
     transfer-power identity.
@@ -778,7 +779,7 @@ closing a chain of $N$ copies of $\mathcal U$.
 \end{proof}
 
 % Formalization scope: identifying this normalized scalar with
-% $(\texttt{sourceU})^\dagger\texttt{sourceU}$ remains issue \#5835.
+% $(\texttt{sourceU})^\dagger\texttt{sourceU}$ is treated separately.
 
 
 \begin{theorem}[Simplicity at every later direct blocking]

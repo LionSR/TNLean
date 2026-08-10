@@ -9,12 +9,12 @@ import TNLean.MPS.MPU.SimpleBlocking
 # Matching blocked contractions and output-tail coisometry
 
 These results supply the two contraction ingredients for the later source-u
-Gram calculation.  They do not identify that Gram matrix; the finite-sum
-source-factor bridge is tracked separately in issue #5835.
+Gram calculation. They do not identify that Gram matrix; the finite-sum
+source-factor bridge is treated separately.
 
 These are the blocked matching and global coisometry contractions used in
 arXiv:1703.09188, Figure `II_uUnitary.png` and Lemma `lemuisometry` (lines
-536--554).  The output-tail proof keeps the paper's output-first coisometry
+536--556).  The output-tail proof keeps the paper's output-first coisometry
 orientation: in the present open-leg conventions the global unitary equation
 is `U Uᴴ = 1`, and the retained physical matrix is transposed relative to the
 graphical display.
@@ -33,7 +33,7 @@ The retained arguments occur in reversed matrix order, as required by the
 transpose in Figure `II_uUnitary.png`.
 
 Source: arXiv:1703.09188, equation `UisUnitary` and Figure
-`II_uUnitary.png`, lines 327--335 and 536--554. -/
+`II_uUnitary.png`, lines 327--335 and 536--556. -/
 theorem IsMPU.normalized_mpo_tail_coisometry [NeZero d]
     {U : MPOTensor d D} (hU : IsMPU U) (K : ℕ)
     (p q : Fin d × Fin d) :
