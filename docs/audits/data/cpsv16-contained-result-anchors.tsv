@@ -1,0 +1,61 @@
+label	line	result_anchor	anchor_regex	boundary_regex
+eq:II_auxcor	358	Corollary 2.11	(?<![A-Za-z0-9])Corollary 2\.11(?![0-9]|\.[0-9])	inactive\s+zero\-weight\s+block\s+boundary
+AA=A	401	Theorem 3.1	(?<![A-Za-z0-9])Theorem 3\.1(?![0-9]|\.[0-9])	malformed\s+source\s+blocking\s+indices
+III_CFI_RFP	546	Theorem 3.11	(?<![A-Za-z0-9])Theorem 3\.11(?![0-9]|\.[0-9])	repeated\-copy\s+physical\-routing\s+boundary
+eq:III_isometry	551	Theorem 3.11	(?<![A-Za-z0-9])Theorem 3\.11(?![0-9]|\.[0-9])	repeated\-copy\s+physical\-routing\s+boundary
+K=MM	854	Theorem 4.9	(?<![A-Za-z0-9])Theorem 4\.9(?![0-9]|\.[0-9])	all\-sector\s+Case\-II\s+boundary
+KxKy=0	866	Theorem 4.9	(?<![A-Za-z0-9])Theorem 4\.9(?![0-9]|\.[0-9])	all\-sector\s+Case\-II\s+boundary
+UkU=rl	872	Theorem 4.9	(?<![A-Za-z0-9])Theorem 4\.9(?![0-9]|\.[0-9])	all\-sector\s+Case\-II\s+boundary
+etakhetc	877	Theorem 4.9	(?<![A-Za-z0-9])Theorem 4\.9(?![0-9]|\.[0-9])	all\-sector\s+Case\-II\s+boundary
+tralktrrk	882	Theorem 4.9	(?<![A-Za-z0-9])Theorem 4\.9(?![0-9]|\.[0-9])	all\-sector\s+Case\-II\s+boundary
+PsiPhi	887	Theorem 4.9	(?<![A-Za-z0-9])Theorem 4\.9(?![0-9]|\.[0-9])	all\-sector\s+Case\-II\s+boundary
+UMU	948	Proposition 4.13	(?<![A-Za-z0-9])Proposition 4\.13(?![0-9]|\.[0-9])	rectangular\-coisometry\s+orientation
+eq:algebra	978	Theorem 4.14	(?i)^(?!.*proof\s+of\s+Theorem 4\.14).*?(?<![A-Za-z0-9])Theorem 4\.14(?![0-9]|\.[0-9])	algebra\s+characterization\s+containing\s+this\s+clause
+idempotent	982	Theorem 4.14	(?i)^(?!.*proof\s+of\s+Theorem 4\.14).*?(?<![A-Za-z0-9])Theorem 4\.14(?![0-9]|\.[0-9])	algebra\s+characterization\s+containing\s+this\s+clause
+Ualphabeta	988	Theorem 4.14	(?i)^(?!.*proof\s+of\s+Theorem 4\.14).*?(?<![A-Za-z0-9])Theorem 4\.14(?![0-9]|\.[0-9])	fusion\-clause\s+boundary
+scprod	1086	Appendix A's overlap lemma	(?<![A-Za-z0-9])Appendix A's overlap lemma(?![A-Za-z0-9])	normal\-tensor\s+hypothesis\s+boundary
+rel	1096	Appendix A's overlap lemma	(?<![A-Za-z0-9])Appendix A's overlap lemma(?![A-Za-z0-9])	normal\-tensor\s+hypothesis\s+boundary
+eq-Appendix:II:A=XAX	1139	Proposition 2.7	(?<![A-Za-z0-9])Proposition 2\.7(?![0-9]|\.[0-9])	inactive\s+zero\-weight\s+boundary
+eq:app_aux	1159	Lemma A.5	(?<![A-Za-z0-9])Lemma A\.5(?![0-9]|\.[0-9])	zero\-entry\s+boundary
+eq:II_auxcor	1176	Appendix A restatement	(?<![A-Za-z0-9])Appendix A restatement(?![A-Za-z0-9])	inactive\s+zero\-weight\s+block\s+boundary
+eq_III_NT_RFP	1277	Appendix B's RFP characterization	(?<![A-Za-z0-9])Appendix B's RFP characterization(?![A-Za-z0-9])	normal\-tensor\s+hypothesis\s+boundary
+sigma3	1355	Lemma Lsigma3	(?<![A-Za-z0-9])Lemma Lsigma3(?![0-9]|\.[0-9])	supported\-sector\s+normalization
+Qketc	1421	Lemma propSN	(?<![A-Za-z0-9])Lemma propSN(?![A-Za-z0-9])	active\-sector\s+restriction
+formK	1436	Lemma propSN	(?<![A-Za-z0-9])Lemma propSN(?![A-Za-z0-9])	active\-sector\s+restriction
+etarl	1443	Lemma propSN	(?<![A-Za-z0-9])Lemma propSN(?![A-Za-z0-9])	active\-sector\s+restriction
+StochT	1454	Lemma propSN	(?<![A-Za-z0-9])Lemma propSN(?![A-Za-z0-9])	active\-sector\s+restriction
+P1KP2	1467	Lemma propSN	(?<![A-Za-z0-9])Lemma propSN(?![A-Za-z0-9])	active\-sector\s+restriction
+3to5tcpm	1514	Proposition 3to5	(?<![A-Za-z0-9])Proposition 3to5(?![0-9]|\.[0-9])	zero\-weight\s+preparation\s+completion
+expression	1573	Proposition 3to4	(?<![A-Za-z0-9])Proposition 3to4(?![0-9]|\.[0-9])	SAL\-hypothesis\s+boundary
+sigmaNK2	1586	Proposition 3to4	(?<![A-Za-z0-9])Proposition 3to4(?![0-9]|\.[0-9])	SAL\-hypothesis\s+boundary
+eq:gibbs-sal	1608	Proposition 4to2	(?<![A-Za-z0-9])Proposition 4to2(?![0-9]|\.[0-9])	source\-ZCL\s+boundary
+Pis	1683	Appendix C separating-projector lemma	(?<![A-Za-z0-9])Appendix C separating\-projector lemma(?![A-Za-z0-9])	SAL\-hypothesis\s+boundary
+PjKiPj	1688	Appendix C separating-projector lemma	(?<![A-Za-z0-9])Appendix C separating\-projector lemma(?![A-Za-z0-9])	SAL\-hypothesis\s+boundary
+Qks	1700	Appendix C separating-projector lemma	(?<![A-Za-z0-9])Appendix C separating\-projector lemma(?![A-Za-z0-9])	SAL\-hypothesis\s+boundary
+QkKjs	1705	Appendix C separating-projector lemma	(?<![A-Za-z0-9])Appendix C separating\-projector lemma(?![A-Za-z0-9])	SAL\-hypothesis\s+boundary
+Qketc2	1724	Appendix C separating-projector lemma	(?<![A-Za-z0-9])Appendix C separating\-projector lemma(?![A-Za-z0-9])	SAL\-hypothesis\s+boundary
+keyformula	1730	Appendix C separating-projector lemma	(?<![A-Za-z0-9])Appendix C separating\-projector lemma(?![A-Za-z0-9])	SAL\-hypothesis\s+boundary
+generateMPDO	1748	Proposition prop2to3	(?<![A-Za-z0-9])Proposition prop2to3(?![0-9]|\.[0-9])	all\-sector\s+Case\-II\s+normality\s+boundary
+sigmaNKj	1756	Proposition prop2to3	(?<![A-Za-z0-9])Proposition prop2to3(?![0-9]|\.[0-9])	all\-sector\s+Case\-II\s+normality\s+boundary
+entropiesj	1768	Proposition prop2to3	(?<![A-Za-z0-9])Proposition prop2to3(?![0-9]|\.[0-9])	all\-sector\s+Case\-II\s+normality\s+boundary
+sumstron	1773	Proposition prop2to3	(?<![A-Za-z0-9])Proposition prop2to3(?![0-9]|\.[0-9])	all\-sector\s+Case\-II\s+normality\s+boundary
+strongj	1778	Proposition prop2to3	(?<![A-Za-z0-9])Proposition prop2to3(?![0-9]|\.[0-9])	all\-sector\s+Case\-II\s+normality\s+boundary
+eq1:proof.IV.12	1838	Lemma C.16	(?<![A-Za-z0-9])Lemma C\.16(?![0-9]|\.[0-9])	original\-space\s+insertion\s+status
+UMU-appendix	1866	Proposition 4.13	(?<![A-Za-z0-9])Proposition 4\.13(?![0-9]|\.[0-9])	rectangular\-coisometry\s+orientation
+eq1:proof.IV.12	1882	Proposition 4.13	(?<![A-Za-z0-9])Proposition 4\.13(?![0-9]|\.[0-9])	rectangular\-coisometry\s+status
+eq2:proof.IV.12	1890	Proposition 4.13	(?<![A-Za-z0-9])Proposition 4\.13(?![0-9]|\.[0-9])	rectangular\-coisometry\s+orientation
+eq3:proof.IV.12	1903	Proposition 4.13	(?<![A-Za-z0-9])Proposition 4\.13(?![0-9]|\.[0-9])	rectangular\-coisometry\s+orientation
+eq:algebra-appendix	1935	Theorem 4.14	(?i)^(?!.*proof\s+of\s+Theorem 4\.14).*?(?<![A-Za-z0-9])Theorem 4\.14(?![0-9]|\.[0-9])	algebra\s+characterization\s+containing\s+this\s+clause
+idempotent-appendix	1939	Theorem 4.14	(?i)^(?!.*proof\s+of\s+Theorem 4\.14).*?(?<![A-Za-z0-9])Theorem 4\.14(?![0-9]|\.[0-9])	algebra\s+characterization\s+containing\s+this\s+clause
+Figure9	1953	Appendix C.4 proof of Theorem 4.14	(?<![A-Za-z0-9])Appendix C\.4 proof of Theorem 4\.14(?![0-9]|\.[0-9])	active\-support\s+and\s+coisometry\s+corrections
+eq1-proof-main-thm	2016	Appendix C.4 proof of Theorem 4.14	(?<![A-Za-z0-9])Appendix C\.4 proof of Theorem 4\.14(?![0-9]|\.[0-9])	active\-support\s+and\s+coisometry\s+corrections
+Figure11	2022	Appendix C.4 proof of Theorem 4.14	(?<![A-Za-z0-9])Appendix C\.4 proof of Theorem 4\.14(?![0-9]|\.[0-9])	active\-support\s+and\s+coisometry\s+corrections
+eq2-proof-main-thm	2026	Appendix C.4 proof of Theorem 4.14	(?<![A-Za-z0-9])Appendix C\.4 proof of Theorem 4\.14(?![0-9]|\.[0-9])	active\-support\s+and\s+coisometry\s+corrections
+varphiPAXB	2228	Appendix D proposition	(?<![A-Za-z0-9])Appendix D proposition(?![A-Za-z0-9])	tripartite\-subspace\s+hypothesis\s+boundary
+Propproj	2233	Appendix D proposition	(?<![A-Za-z0-9])Appendix D proposition(?![A-Za-z0-9])	tripartite\-subspace\s+hypothesis\s+boundary
+PAXPXB	2245	Appendix D proposition	(?<![A-Za-z0-9])Appendix D proposition(?![A-Za-z0-9])	tripartite\-subspace\s+hypothesis\s+boundary
+PXBAXetc	2255	Appendix D proposition	(?<![A-Za-z0-9])Appendix D proposition(?![A-Za-z0-9])	tripartite\-subspace\s+hypothesis\s+boundary
+PPPAXB	2261	Appendix D proposition	(?<![A-Za-z0-9])Appendix D proposition(?![A-Za-z0-9])	tripartite\-subspace\s+hypothesis\s+boundary
+PAXQAX	2263	Appendix D proposition	(?<![A-Za-z0-9])Appendix D proposition(?![A-Za-z0-9])	tripartite\-subspace\s+hypothesis\s+boundary
+PXBQXB	2265	Appendix D proposition	(?<![A-Za-z0-9])Appendix D proposition(?![A-Za-z0-9])	tripartite\-subspace\s+hypothesis\s+boundary
+arrggg	2281	Appendix D proposition	(?<![A-Za-z0-9])Appendix D proposition(?![A-Za-z0-9])	tripartite\-subspace\s+hypothesis\s+boundary

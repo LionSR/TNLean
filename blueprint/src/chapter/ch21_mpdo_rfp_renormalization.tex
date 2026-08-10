@@ -711,6 +711,45 @@ the remaining sites unchanged.
     $\E_A^2=\E_A$. The physical-isometry formulation follows from
     Theorem~\ref{thm:physical_blocking_isometry_iff_transfer_idempotence}.
 \end{proof}
+% CPSV16 Appendix D (`Strong-RFP`, `rank-Fibonacci`, and `eq:1`),
+% lines 2109--2176.  The final label names an internal diagonalization step.
+% Tracking: issue #5921.
+\begin{theorem}[Fibonacci rank obstruction cited against strong fixed points]
+    \label{thm:cpsv_fibonacci_rank_obstruction_status}
+    \notready
+    \uses{def:mpo_family}
+    Let $A$ be the vacuum-sector boundary tensor described in
+    \cite[Appendix~D, lines~2118--2176]{Cirac2016MPDO_arXiv}.  Its bond
+    indices $\alpha,\beta$ and its three physical indices $i,j,k$ lie in
+    $\{0,1\}$, and its components are
+    \begin{align}
+        A^{ijk}_{\alpha,\beta}
+        &=\delta_{i,\alpha}\delta_{k,\beta}N_{ijk},
+        \notag
+    \end{align}
+    where $N_{ijk}=0$ if and only if exactly two of $i,j,k$ are zero, and
+    $N_{ijk}>0$ otherwise.  Set
+    \begin{align}
+        \tau_\pm&=\frac{1\pm\sqrt5}{2}.
+        \notag
+    \end{align}
+    For every $N>0$,
+    \begin{align}
+        \operatorname{rank}\rho^{(N)}(A)
+        &=\tau_+^{2N}+\tau_-^{2N}.
+        \notag
+    \end{align}
+    This sequence is not geometric: there do not exist natural numbers $r,s$
+    such that
+    \begin{align}
+        \operatorname{rank}\rho^{(N)}(A)&=rs^{N-1}
+        \notag
+    \end{align}
+    for every $N>0$.  The first two ranks are $3$ and $7$, which already
+    exclude such $r$ and $s$.  The diagram labelled ``Strong-RFP'' does not
+    specify an unambiguous algebraic predicate, so no general rank-growth
+    implication is asserted here.
+\end{theorem}
 
 \begin{definition}[Initial-coordinate regroupings]
     \label{def:finite_tuple_regroupings}

@@ -925,6 +925,26 @@ firstSiteMatrix_mul_reducedBlockState}
     then gives SAL for $M$.
 \end{proof}
 
+% CPSV16 Proposition C.14 (`prop4to2`), lines 1801--1808.
+% Tracking: issue #5917.
+% Gap: docs/paper-gaps/cpsv16_commuting_form_to_sal.tex.
+\begin{theorem}[Printed Case-II commuting-form implication]
+    \label{thm:cpsv_prop_c14_printed_status}
+    \notready
+    \uses{def:mpdo_simple_tensor, def:is_sal, def:mpdo_source_gsnnch,
+        def:mpo_source_zcl}
+    According to \cite[Proposition~C.14]{Cirac2016MPDO_arXiv}, a simple tensor
+    whose matrix product density operators have the displayed GSNNCH form
+    satisfies saturation of the area law.
+
+    The source proof applies Proposition~C.9 to each sector, but that
+    proposition also assumes zero correlation length.  Proposition~C.14 does
+    not include this ambient or sectorwise hypothesis, and its commuting-bond
+    realization is unambiguous only from length two onward.  With ambient zero
+    correlation length and one-site positivity for the absorbed sectors, the
+    asserted area law follows from the theorem below.
+\end{theorem}
+
 % Source: arXiv:1606.00608, Appendix C.2, Proposition `prop4to2`, lines
 % 1801--1808. The standing Case II biCF and source-ZCL hypotheses supply the
 % sector-decomposition data below, but are not assumptions of this theorem.

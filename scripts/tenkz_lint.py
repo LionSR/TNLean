@@ -44,7 +44,12 @@ from pathlib import Path
 
 from tenkz_audit import ENVIRONMENT_LANGS
 from tenkz_language import load_registry, parse_status
-from tenkzlib.texcase import match_group, scan_constructs, strip_comments
+from tenkzlib.texcase import (
+    TeXEnvironmentNestingError,
+    match_group,
+    scan_constructs,
+    strip_comments,
+)
 
 # Bodies scanned for the dots rule: the grid languages whose cells feed
 # the implicit wire.
@@ -189,7 +194,14 @@ def lint_file(path: Path) -> list[Finding]:
                 findings.append(Finding(path, lineno, rule, snippet,
                                         escaped(lineno, rule)))
 
-    for body in scan_bodies(src):
+    try:
+        bodies = scan_bodies(src)
+    except TeXEnvironmentNestingError as error:
+        findings.append(
+            Finding(path, 1, "environment-nesting", str(error), False)
+        )
+        bodies = []
+    for body in bodies:
         if body.name in DOTS_ENVS:
             scan(mask_option_groups(body.text), body.start, DOTS_PATTERNS)
         if body.name in INK_ENVS:
