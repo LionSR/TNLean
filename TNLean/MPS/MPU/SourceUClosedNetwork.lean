@@ -10,14 +10,14 @@ import TNLean.MPS.MPU.SourceURangeTransport
 # Closed source-u networks
 
 This file gives two exact closed-network formulas used in the proof of
-`lemuisometry` from arXiv:1703.09188, lines 545--557. The first writes an
+lemuisometry from arXiv:1703.09188, lines 545--557. The first writes an
 ordinary source-u Gram entry as an output-first double-layer letter whose
 remaining bond is closed by the second-cut range projector. The second writes
-the normalized `(K+2)`-site output-tail contraction as a trace of two retained
+the normalized $(K+2)$-site output-tail contraction as a trace of two retained
 output-first letters followed by the Kth normalized-diagonal power.
 
-The retained output pair `q` is unstarred and `p` is starred. Doubled bonds are
-ordered `(ket, bra)`. These formulas do not identify the two closed networks,
+The retained output pair $q$ is unstarred and $p$ is starred. Doubled bonds are
+ordered $(\text{ket}, \text{bra})$. These formulas do not identify the two closed networks,
 insert a rank-one tail projector, or assert an ambient coisometry.
 -/
 
@@ -28,7 +28,7 @@ namespace MPOTensor
 
 variable {d D : ℕ} (U : MPOTensor d D)
 
-/-- The weighted cut recovery identifies the Gram of `Y₁` with the weighted raw cut Gram. -/
+/-- The weighted cut recovery identifies the Gram of $Y_1$ with the weighted raw cut Gram. -/
 private lemma sourceY₁_conjTranspose_mul_self
     (ρ : Matrix (Fin D) (Fin D) ℂ) (hρ : ρ.PosDef) :
     (sourceY₁ U ρ hρ)ᴴ * sourceY₁ U ρ hρ =
@@ -104,9 +104,9 @@ private lemma sourceU_gram_eq_closed_cut
 
 /-- The source-u Gram as one output-first double-layer letter closed by the
 weighted left boundary and the range projector of the second source cut.
-The doubled bonds have order `(ket, bra)`.
+The doubled bonds have order $(\text{ket}, \text{bra})$.
 
-Source: arXiv:1703.09188, equation `uUnitary`, lines 545--556. -/
+Source: arXiv:1703.09188, equation uUnitary, lines 545--556. -/
 theorem sourceU_gram_apply_eq_closed_output_letter
     {d D : ℕ} (U : MPOTensor d D)
     (ρ : Matrix (Fin D) (Fin D) ℂ) (hρ : ρ.PosDef)
@@ -158,9 +158,9 @@ private lemma normalizedDiagonal_pow_eq_sum_evalWord
     (List.prod_ofFn_sum (fun _ : Fin K ↦ fun i : Fin d ↦ W i i))
 
 /-- The normalized output-tail contraction is a fully closed output-first
-double-layer trace, with retained letters in `(q,p)` order.
+double-layer trace, with retained letters in $(q,p)$ order.
 
-Source: arXiv:1703.09188, equation `uUnitary`, lines 550--556. -/
+Source: arXiv:1703.09188, equation uUnitary, lines 550--556. -/
 theorem normalized_mpo_output_tail_eq_closed_doubleLayer_trace
     [NeZero d] (U : MPOTensor d D) (K : ℕ) (p q : Fin d × Fin d) :
     ((d : ℂ)⁻¹) ^ K *
