@@ -160,7 +160,9 @@ private theorem scalarUnitTensor_transferMap :
   fin_cases b
   simp [transferMap_apply, scalarUnitTensor]
 
-/-- The one-dimensional scalar unit tensor is normal. -/
+/-- The one-dimensional scalar unit tensor is normal.
+
+Source: arXiv:1606.00608, canonical-form normal-block condition, lines 233--245. -/
 theorem scalarUnitTensor_isNormalTensor :
     IsNormalTensor scalarUnitTensor :=
   isNormalTensor_of_bondDim_one_of_transferMap_eq_id
