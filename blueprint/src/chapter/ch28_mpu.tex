@@ -1366,34 +1366,28 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
     \lean{MPOTensor.rightRank_blockTensor_succ_le,
         MPOTensor.leftRank_blockTensor_succ_le}
     \leanok
-    \uses{thm:mpu_compact_svd,def:mpu_source_matrix_one,
-        def:mpu_source_matrix_two,def:mpu_right_rank,def:mpu_left_rank,
-        thm:mpdo_closed_chain_physical_blocking}
-    Let $\mathcal U^{[k]}$ denote the direct blocking of $k$ sites of a tensor
-    $\mathcal U$ with physical dimension $d$, and let $r_k$ and $\ell_k$ be
+    \uses{def:mpdo_positive_physical_blocking,def:mpu_source_matrix_one,
+        def:mpu_source_matrix_two,def:mpu_right_rank,def:mpu_left_rank}
+    Let $\mathcal U^{[L]}$ denote the direct blocking of $L$ sites of a tensor
+    $\mathcal U$ with physical dimension $d$, and let $r_L$ and $\ell_L$ be
     its right and left source-cut ranks. Then
     \begin{align}
-        r_{k+1}&\leq d\,r_k.
-    \end{align}
-    Moreover,
-    \begin{align}
-        \ell_{k+1}&\leq d\,\ell_k.
+        r_{L+1}&\leq d\,r_L,\\
+        \ell_{L+1}&\leq d\,\ell_L.
     \end{align}
     These are the one-site forms of the two upper bounds in the proof of
-    \cite[Proposition~\texttt{index-well-defined}]{Cirac2017MPU}.
+    \cite[Proposition~IV.2]{Cirac2017MPU}.
 \end{theorem}
 
 \begin{proof}\leanok
+    \uses{thm:mpu_compact_svd}
     For the first cut, choose a compact factorization of the source matrix of
-    $\mathcal U^{[k]}$ through a space of dimension $r_k$. Split each physical
-    word of length $k+1$ into its first letter and its remaining word of length
-    $k$. The source matrix of $\mathcal U^{[k+1]}$ then factors through
-    \begin{align}
-        \mathbb C^d\otimes\mathbb C^{r_k}.
-    \end{align}
-    Its rank is therefore at most $d r_k$. Repeating the same argument with the
-    upper and lower physical indices interchanged factors the second source
-    matrix through $\mathbb C^d\otimes\mathbb C^{\ell_k}$ and gives the left
+    $\mathcal U^{[L]}$ through a space of dimension $r_L$. Split each physical
+    word of length $L+1$ into its first letter and its remaining word of length
+    $L$. The source matrix of $\mathcal U^{[L+1]}$ then factors through
+    $\mathbb C^d\otimes\mathbb C^{r_L}$, so its rank is at most $d r_L$.
+    Interchanging the upper and lower physical indices factors the second source
+    matrix through $\mathbb C^d\otimes\mathbb C^{\ell_L}$ and gives the left
     bound.
 \end{proof}
 
@@ -1403,20 +1397,17 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
         MPOTensor.leftRank_blockTensor_le_pow_mul}
     \leanok
     \uses{thm:mpu_source_cut_rank_blocking_succ}
-    If $k_0\leq k$, then
+    If $L_0\leq L$, then
     \begin{align}
-        r_k&\leq d^{k-k_0}r_{k_0}.
+        r_L&\leq d^{L-L_0}r_{L_0},\\
+        \ell_L&\leq d^{L-L_0}\ell_{L_0}.
     \end{align}
-    Likewise,
-    \begin{align}
-        \ell_k&\leq d^{k-k_0}\ell_{k_0}.
-    \end{align}
-    These are precisely the two blocking upper bounds used in the proof of
-    \cite[Proposition~\texttt{index-well-defined}]{Cirac2017MPU}.
+    These are the two blocking upper bounds used in the proof of
+    \cite[Proposition~IV.2]{Cirac2017MPU}.
 \end{theorem}
 
 \begin{proof}\leanok
-    Induct on $k-k_0$. The case $k=k_0$ is equality. At each successor step,
+    Induct on $L-L_0$. The case $L=L_0$ is equality. At each successor step,
     apply the corresponding one-site bound and multiply the preceding estimate
     by $d$.
 \end{proof}

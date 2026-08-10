@@ -10,7 +10,7 @@ import TNLean.MPS.MPU.SourceFactors
 # Source-cut ranks under physical blocking
 
 This module proves the blocking upper bounds for the right and left source-cut
-ranks in the proof of Proposition `index-well-defined` of
+ranks in the proof of Proposition IV.2 (`index-well-defined`) of
 [Cirac--Perez-Garcia--Schuch--Verstraete 2017, arXiv:1703.09188], lines 697--703.
 The first pair of results bounds a direct block one site longer. Iteration gives
 the factor $d^{k-k_0}$ between any two direct blocking lengths $k_0 \leq k$.
@@ -49,6 +49,15 @@ private lemma blockTensor_succ_apply (U : MPOTensor d D) (k : ℕ)
         blockTensor U k (blockTail k I) (blockTail k J) := by
   simp only [blockTensor_apply, wordOfBlock_succ, evalWord_cons]
 
+private lemma sourceCutSVD_factorization_apply
+    {α β : Type*} [Fintype α] [Fintype β] {M : Matrix α β ℂ} {r : ℕ}
+    (S : SourceCutSVD M r) (row : α) (col : β) :
+    ∑ q, Matrix.conjTranspose S.V row q * (S.diagonal * S.U) q col = M row col := by
+  have hfactor : M = Matrix.conjTranspose S.V * (S.diagonal * S.U) := by
+    simpa only [Matrix.mul_assoc] using S.factorization
+  have h := congrArg (fun A => A row col) hfactor
+  simpa only [Matrix.mul_apply] using h.symm
+
 private noncomputable def rightSuccLeft (U : MPOTensor d D) (k : ℕ) :
     Matrix (Fin D × Fin (MPSTensor.blockPhysDim d (k + 1)))
       (Fin d × Fin r[blockTensor U k]) ℂ :=
@@ -71,15 +80,6 @@ private theorem sourceCutM₁_blockTensor_succ_factorization
       rightSuccLeft U k * rightSuccRight U k := by
   classical
   let S := sourceSVD₁ (blockTensor U k)
-  have hfactor : sourceCutM₁ (blockTensor U k) =
-      Matrix.conjTranspose S.V * (S.diagonal * S.U) := by
-    simpa [S, Matrix.mul_assoc] using S.factorization
-  have hfactor_apply (row : Fin D × Fin (MPSTensor.blockPhysDim d k))
-      (col : Fin (MPSTensor.blockPhysDim d k) × Fin D) :
-      ∑ q, Matrix.conjTranspose S.V row q * (S.diagonal * S.U) q col =
-        sourceCutM₁ (blockTensor U k) row col := by
-    have h := congrArg (fun M => M row col) hfactor
-    simpa only [Matrix.mul_apply] using h.symm
   ext ⟨α, J⟩ ⟨I, β⟩
   symm
   simp only [sourceCutM₁_apply, Matrix.mul_apply, rightSuccLeft, rightSuccRight]
@@ -105,7 +105,7 @@ private theorem sourceCutM₁_blockTensor_succ_factorization
               (blockTail k I, β) := by
             apply Finset.sum_congr rfl
             intro γ _
-            rw [hfactor_apply]
+            rw [sourceCutSVD_factorization_apply S]
       _ = (U (blockHead k I) (blockHead k J) *
             blockTensor U k (blockTail k I) (blockTail k J)) α β := by
             simp only [sourceCutM₁_apply, Matrix.mul_apply]
@@ -136,15 +136,6 @@ private theorem sourceCutM₂_blockTensor_succ_factorization
       leftSuccLeft U k * leftSuccRight U k := by
   classical
   let S := sourceSVD₂ (blockTensor U k)
-  have hfactor : sourceCutM₂ (blockTensor U k) =
-      Matrix.conjTranspose S.V * (S.diagonal * S.U) := by
-    simpa [S, Matrix.mul_assoc] using S.factorization
-  have hfactor_apply (row : Fin D × Fin (MPSTensor.blockPhysDim d k))
-      (col : Fin (MPSTensor.blockPhysDim d k) × Fin D) :
-      ∑ q, Matrix.conjTranspose S.V row q * (S.diagonal * S.U) q col =
-        sourceCutM₂ (blockTensor U k) row col := by
-    have h := congrArg (fun M => M row col) hfactor
-    simpa only [Matrix.mul_apply] using h.symm
   ext ⟨α, I⟩ ⟨J, β⟩
   symm
   simp only [sourceCutM₂_apply, Matrix.mul_apply, leftSuccLeft, leftSuccRight]
@@ -170,7 +161,7 @@ private theorem sourceCutM₂_blockTensor_succ_factorization
               (blockTail k J, β) := by
             apply Finset.sum_congr rfl
             intro γ _
-            rw [hfactor_apply]
+            rw [sourceCutSVD_factorization_apply S]
       _ = (U (blockHead k I) (blockHead k J) *
             blockTensor U k (blockTail k I) (blockTail k J)) α β := by
             simp only [sourceCutM₂_apply, Matrix.mul_apply]
@@ -182,7 +173,7 @@ private theorem sourceCutM₂_blockTensor_succ_factorization
 /-- Blocking one additional site multiplies the right source-cut rank by at most $d$.
 
 This is the one-site form of the right-rank upper bound in the proof of
-arXiv:1703.09188, Proposition `index-well-defined`, lines 697--703. -/
+arXiv:1703.09188, Proposition IV.2 (`index-well-defined`), lines 697--703. -/
 theorem rightRank_blockTensor_succ_le (U : MPOTensor d D) (k : ℕ) :
     r[blockTensor U (k + 1)] ≤ d * r[blockTensor U k] := by
   rw [rightRank, sourceCutM₁_blockTensor_succ_factorization]
@@ -192,7 +183,7 @@ theorem rightRank_blockTensor_succ_le (U : MPOTensor d D) (k : ℕ) :
 /-- Blocking one additional site multiplies the left source-cut rank by at most $d$.
 
 This is the one-site form of the left-rank upper bound in the proof of
-arXiv:1703.09188, Proposition `index-well-defined`, lines 697--703. -/
+arXiv:1703.09188, Proposition IV.2 (`index-well-defined`), lines 697--703. -/
 theorem leftRank_blockTensor_succ_le (U : MPOTensor d D) (k : ℕ) :
     ℓ[blockTensor U (k + 1)] ≤ d * ℓ[blockTensor U k] := by
   rw [leftRank, sourceCutM₂_blockTensor_succ_factorization]
@@ -203,7 +194,7 @@ theorem leftRank_blockTensor_succ_le (U : MPOTensor d D) (k : ℕ) :
 $d^{k-k_0}$.
 
 This is the right-rank inequality in the proof of arXiv:1703.09188,
-Proposition `index-well-defined`, lines 697--703. -/
+Proposition IV.2 (`index-well-defined`), lines 697--703. -/
 theorem rightRank_blockTensor_le_pow_mul (U : MPOTensor d D) {k₀ k : ℕ}
     (h : k₀ ≤ k) :
     r[blockTensor U k] ≤ d ^ (k - k₀) * r[blockTensor U k₀] := by
@@ -223,7 +214,7 @@ theorem rightRank_blockTensor_le_pow_mul (U : MPOTensor d D) {k₀ k : ℕ}
 $d^{k-k_0}$.
 
 This is the left-rank inequality in the proof of arXiv:1703.09188,
-Proposition `index-well-defined`, lines 697--703. -/
+Proposition IV.2 (`index-well-defined`), lines 697--703. -/
 theorem leftRank_blockTensor_le_pow_mul (U : MPOTensor d D) {k₀ k : ℕ}
     (h : k₀ ≤ k) :
     ℓ[blockTensor U k] ≤ d ^ (k - k₀) * ℓ[blockTensor U k₀] := by
