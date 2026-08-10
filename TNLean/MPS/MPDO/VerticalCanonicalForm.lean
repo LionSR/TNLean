@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.MPDO.FigureEightPairwise
 import TNLean.MPS.MPDO.VerticalBNT
-import TNLean.MPS.MPDO.VerticalCanonicalFormAssembly
+import TNLean.MPS.MPDO.VerticalCanonicalFormConstruction
 
 /-!
 # Vertical canonical form of matrix product density operators

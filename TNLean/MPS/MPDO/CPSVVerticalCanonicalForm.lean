@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.MPDO.CPSVFigureEight
 import TNLean.MPS.MPDO.CPSVVerticalBNT
-import TNLean.MPS.MPDO.VerticalCanonicalFormAssembly
+import TNLean.MPS.MPDO.VerticalCanonicalFormConstruction
 
 /-!
 # Vertical canonical form from literal CPSV canonical form

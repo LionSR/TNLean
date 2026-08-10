@@ -10,17 +10,17 @@ import TNLean.MPS.MPDO.VerticalBNTConstruction
 import TNLean.MPS.MPDO.VerticalCoisometry
 
 /-!
-# Predicate-neutral vertical canonical-form assembly
+# Predicate-neutral vertical canonical form
 
 A grouped vertical BNT decomposition and pairwise grouped-corner Gram dressing
 supply all data needed for vertical canonical form. The grouped representatives
 form a BNT, Gram rigidity normalizes the physical sector maps, and their block
 row gives the required coisometry and exact reconstruction.
 
-## Main result
+## Main results
 
 * `MPOTensor.verticalCF_of_grouping_and_gramDressing`: grouped vertical BNT
-  data and the pairwise Figure 8 interface imply vertical canonical form.
+  data and the pairwise Figure 8 hypothesis imply vertical canonical form.
 
 ## References
 
@@ -34,12 +34,12 @@ namespace MPOTensor
 
 variable {d D : ℕ}
 
-/-- Grouped vertical BNT data with pairwise Figure 8 comparison assemble into
+/-- Grouped vertical BNT data with pairwise Figure 8 comparison determine a
 vertical canonical form.
 
 The grouping contains the normal representatives, positive grouped weights,
 orthogonal physical corners, and exact reconstruction. The Gram-dressing
-interface is the only canonical-form-specific input.
+hypothesis is the only canonical-form-specific input.
 
 Source: arXiv:1606.00608, Proposition 4.13, lines 1863--1921. -/
 theorem verticalCF_of_grouping_and_gramDressing (M : MPOTensor d D)
