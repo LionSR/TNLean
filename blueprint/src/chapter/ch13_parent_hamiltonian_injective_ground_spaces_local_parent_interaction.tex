@@ -885,10 +885,9 @@ windows.
     its inverse in the endomorphism ring.
 \end{proof}
 
-The next three results are reconstructed quantitative inverse infrastructure.
-They retain the nonidentity limiting metric $\mathscr R(P_\rho)$, require the
-fixed-point witness $\rho$ to be positive definite, and preserve the
-squared-bound normalization of
+The next three results give quantitative inverse bounds for the nonidentity
+limiting metric $\mathscr R(P_\rho)$.  They require the fixed-point witness
+$\rho$ to be positive definite and preserve the squared-bound normalization of
 Theorem~\ref{thm:primitive_ground_space_gram_geometric_fixed_point}.  They do
 not estimate a contraction between physical projectors on overlapping
 windows.
@@ -897,11 +896,7 @@ windows.
     \label{thm:primitive_ground_space_gram_geometric_inverse_bounds}
     \lean{MPSTensor.IsPrimitiveMPS.groundSpaceGram_geometric_inverse_bounds}
     \leanok
-    \uses{def:primitive_mps,
-        thm:primitive_ground_space_gram_geometric_fixed_point,
-        thm:fixed_point_gram_metric_is_unit,
-        thm:arbitrary_base_neumann_inverse_bound,
-        thm:arbitrary_base_neumann_inverse_displacement}
+    \uses{def:primitive_mps}
     Let $A$ be a primitive MPS tensor of nonzero bond dimension whose
     fixed-point witness $\rho$ is positive definite.  Put
     \begin{align}
@@ -985,10 +980,11 @@ windows.
     \label{thm:geometric_smallness_at_c3_lengths}
     \lean{MPSTensor.geometric_smallness_at_c3_lengths}
     \leanok
-    Let $c>0$ and $0<r<1$.  If $cr^l<1$, then for every $K\geq0$,
+    Let $c>0$, let $0<r<1$, and let $l,K\in\mathbb N$.  If $cr^l<1$,
+    then
     \begin{align}
-      cr^{l+1}&<1,&
-      cr^{K+l}&<1,&
+      cr^{l+1}&<1,\\
+      cr^{K+l}&<1,\\
       cr^{K+l+1}&<1.
     \end{align}
 \end{theorem}
