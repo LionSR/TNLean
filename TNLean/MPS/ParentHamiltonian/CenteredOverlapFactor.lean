@@ -10,16 +10,21 @@ import TNLean.MPS.ParentHamiltonian.TailVirtualGram
 /-!
 # Direct-sum factors for the centered overlap residual
 
-This file packages the two boundary multiplications in the centered overlapping
+This file defines the two boundary multiplications in the centered overlapping
 Gram as maps into a common direct sum indexed by a prefix and one final site.
 Their norms are controlled by the corresponding virtual word maps without a
 factor depending on the number of prefix configurations.  The construction and
 factorization are exact algebraic consequences of the boundary-map formulas.
 
-## Main results
+## Main definitions
 
 * `MPSTensor.c3LeftOverlapFactorES` and `MPSTensor.c3RightOverlapFactorES` are the two common
   direct-sum factors.
+* `MPSTensor.c3CenteredVirtualResidualES` is the centered virtual residual in the
+  tail-after-left overlap orientation.
+
+## Main results
+
 * `MPSTensor.c3LeftOverlapFactorES_norm_le` and
   `MPSTensor.c3RightOverlapFactorES_norm_le` give
   bounds uniform in the spectator configuration type.
