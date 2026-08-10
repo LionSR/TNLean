@@ -179,16 +179,6 @@ private theorem traceLeft_submatrix_swap
   simp only [Matrix.traceLeft_apply, Matrix.traceRight_apply,
     Matrix.submatrix_apply, Prod.swap_prod_mk]
 
-/-- Mutual information is independent of the proof of Hermiticity and is
-congruent under equality of the underlying bipartite matrices. -/
-private theorem mutualInformation_congr
-    {dA dB : ℕ}
-    {ρ σ : Matrix (Fin dA × Fin dB) (Fin dA × Fin dB) ℂ}
-    (h : ρ = σ) (hρ : ρ.IsHermitian) (hσ : σ.IsHermitian) :
-    Entropy.mutualInformation ρ hρ = Entropy.mutualInformation σ hσ := by
-  subst σ
-  rfl
-
 /-- Bipartite mutual information is invariant under exchanging the two tensor
 factors. -/
 private theorem mutualInformation_submatrix_swap
@@ -364,7 +354,7 @@ theorem IsKrausCPTP.mutualInformation_tensorMapId_le
           Entropy.mutualInformation
             ((Matrix.tensorMapId S ρ).submatrix Prod.swap Prod.swap)
             (hσ.isHermitian.submatrix Prod.swap) := by
-        exact mutualInformation_congr hC _ _
+        exact Entropy.mutualInformation_congr hC _ _
       _ = Entropy.mutualInformation (Matrix.tensorMapId S ρ)
           hσ.isHermitian :=
         mutualInformation_submatrix_swap

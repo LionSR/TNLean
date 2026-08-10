@@ -12,10 +12,12 @@ This module exposes the bipartite mutual information defined in
 `TNLean.Analysis.Entropy` under the `Entropy` namespace without importing
 strong subadditivity or its consequences.
 
-## Main declaration
+## Main declarations
 
 * `Entropy.mutualInformation` is the namespaced alias of
   `_root_.mutualInformation`.
+* `Entropy.mutualInformation_congr` shows that mutual information respects
+  equality of the matrix independently of its Hermiticity witness.
 -/
 
 namespace Entropy
@@ -28,5 +30,15 @@ between A and B. Definitionally equal to `_root_.mutualInformation`.
 
 Source: blueprint `def:entropy_mutual_information`. -/
 noncomputable alias mutualInformation := _root_.mutualInformation
+
+/-- Mutual information is independent of the Hermiticity witness and respects
+equality of the underlying bipartite matrix. -/
+theorem mutualInformation_congr
+    {dA dB : ℕ}
+    {ρ σ : Matrix (Fin dA × Fin dB) (Fin dA × Fin dB) ℂ}
+    (h : ρ = σ) (hρ : ρ.IsHermitian) (hσ : σ.IsHermitian) :
+    mutualInformation ρ hρ = mutualInformation σ hσ := by
+  subst σ
+  rfl
 
 end Entropy

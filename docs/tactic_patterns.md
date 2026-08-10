@@ -1178,3 +1178,16 @@ spectral split → block extraction → MPV calculation → strict bounds
   steps rather than remove duplication.
 - **Counts:** declarations 2 → 0; annotations 18 → 0; invocations 0 → 0;
   proof-body lines changed 0.
+
+### Dependent sector projections and structural map congruences
+- **Pattern:** cyclic-sector proofs duplicated the same heterogeneous projection lemmas,
+  local-operator constructions duplicated scalar compatibility, and two entropy arguments
+  wrapped equality rewriting solely to erase Hermiticity witnesses.
+- **Reuse:** `PhysicalSectorFactorization.sectorIndex_fst_heq_of_heq` and
+  `PhysicalSectorFactorization.sectorIndex_snd_heq_of_heq` now belong to the neutral
+  sector-index API, while `MPOTensor.embedLocalOperator_smul` belongs to the defining
+  local-embedding module. `Entropy.mutualInformation_congr` in the basic entropy API
+  handles the proof-dependent Hermiticity witnesses for all mutual-information callers.
+- **Result:** the two cyclic-active modules and the two local-embedding consumers retain their
+  existing propositions and declaration names with one proof body per shared fact; the two
+  terminal entropy modules no longer carry trivial local congruence wrappers.

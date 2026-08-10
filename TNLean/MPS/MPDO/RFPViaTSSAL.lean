@@ -82,16 +82,6 @@ theorem coarsenFirstBlock_isKrausCPTP
       (coarsenFirstTwoSites_isKrausCPTP hS n))
     (Matrix.equivReindexMap_isKrausCPTP finFunctionFinEquiv)
 
-/-- Mutual information is congruent under equality of the bipartite density
-matrix; the Hermiticity witnesses carry no additional data. -/
-private theorem mutualInformation_congr
-    {dA dB : ℕ}
-    {ρ σ : Matrix (Fin dA × Fin dB) (Fin dA × Fin dB) ℂ}
-    (h : ρ = σ) (hρ : ρ.IsHermitian) (hσ : σ.IsHermitian) :
-    Entropy.mutualInformation ρ hρ = Entropy.mutualInformation σ hσ := by
-  subst σ
-  rfl
-
 /-- Fixing the second block of a flattened bipartition leaves the first-block
 physical closure, with the fixed word inserted as its virtual boundary. -/
 private theorem splitMPO_slice
@@ -317,7 +307,7 @@ theorem mutualInformation_bipartition_eq_of_local_transfers
             (bipartitionedNormalizedMPO M N (a + 1) (b + 2) hIn))
           ((refineFirstBlock_isKrausCPTP hT a).tensorMapBoth_posSemidef
             (coarsenFirstBlock_isKrausCPTP hS b) hρ).isHermitian :=
-        (mutualInformation_congr hforward _ _).symm
+        (Entropy.mutualInformation_congr hforward _ _).symm
       _ ≤ _ := hforward_le
   have hρσ :
       Entropy.mutualInformation
@@ -330,7 +320,7 @@ theorem mutualInformation_bipartition_eq_of_local_transfers
             (bipartitionedNormalizedMPO M N (a + 2) (b + 1) hOut))
           ((coarsenFirstBlock_isKrausCPTP hS a).tensorMapBoth_posSemidef
             (refineFirstBlock_isKrausCPTP hT b) hσ).isHermitian :=
-        (mutualInformation_congr hbackward _ _).symm
+        (Entropy.mutualInformation_congr hbackward _ _).symm
       _ ≤ _ := hbackward_le
   exact le_antisymm hρσ hσρ
 

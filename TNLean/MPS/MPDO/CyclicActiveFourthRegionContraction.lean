@@ -149,20 +149,6 @@ private theorem neighboringOperator_trace_eq_of_eq
   subst h'
   rfl
 
-private theorem sectorIndex_fst_heq_of_heq
-    (F : PhysicalSectorFactorization K) {k h : Fin F.sectorCount}
-    (kh : k = h) {x : F.SectorIndex k} {y : F.SectorIndex h}
-    (hxy : x ≍ y) : x.1 ≍ y.1 := by
-  subst h
-  exact heq_of_eq (congrArg Prod.fst (eq_of_heq hxy))
-
-private theorem sectorIndex_snd_heq_of_heq
-    (F : PhysicalSectorFactorization K) {k h : Fin F.sectorCount}
-    (kh : k = h) {x : F.SectorIndex k} {y : F.SectorIndex h}
-    (hxy : x ≍ y) : x.2 ≍ y.2 := by
-  subst h
-  exact heq_of_eq (congrArg Prod.snd (eq_of_heq hxy))
-
 private theorem dependent_prod_fst_heq {ι : Type*} {α β : ι → Type*}
     (f : (i : ι) → α i × β i) {i j : ι} (h : i = j) :
     (f i).1 ≍ (f j).1 := by
