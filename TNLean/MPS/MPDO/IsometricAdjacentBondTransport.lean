@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import TNLean.Channel.SingleKrausPositivity
 import TNLean.MPS.MPDO.PhysicalSupportBondTransport
 
 /-!
@@ -32,15 +33,6 @@ namespace MPOTensor
 variable {d e : ℕ}
 
 open MPOTensor.PhysicalSectorFactorization
-
-private theorem singleKrausMap_kronecker
-    {a b c f : Type*} [Fintype a] [Fintype b] [Fintype c] [Fintype f]
-    (A : Matrix a b ℂ) (C : Matrix c f ℂ)
-    (X : Matrix b b ℂ) (Y : Matrix f f ℂ) :
-    singleKrausMap (A ⊗ₖ C) (X ⊗ₖ Y) =
-      singleKrausMap A X ⊗ₖ singleKrausMap C Y := by
-  simp only [singleKrausMap_apply, Matrix.conjTranspose_kronecker]
-  rw [← Matrix.mul_kronecker_mul, ← Matrix.mul_kronecker_mul]
 
 private theorem reindex_kronecker_assoc
     (V : Matrix (Fin d) (Fin e) ℂ) :
@@ -75,19 +67,9 @@ private theorem lift_leftPairMatrix
       (Equiv.prodAssoc (Fin e) (Fin e) (Fin e)).symm
       (Equiv.prodAssoc (Fin d) (Fin d) (Fin d)).symm,
     reindex_kronecker_assoc, reindex_leftPairMatrix,
-    singleKrausMap_kronecker]
+    Matrix.singleKrausMap_kronecker]
   ext
   simp [Matrix.reindex_apply]
-
-private theorem singleKrausMap_mul
-    {a b : Type*} [Fintype a] [Fintype b] [DecidableEq b]
-    (V : Matrix a b ℂ) (hV : Vᴴ * V = 1)
-    (X Y : Matrix b b ℂ) :
-    singleKrausMap V (X * Y) =
-      singleKrausMap V X * singleKrausMap V Y := by
-  simp only [singleKrausMap_apply, Matrix.mul_assoc]
-  rw [← Matrix.mul_assoc Vᴴ V, hV]
-  simp
 
 private theorem kronecker_isometry
     {a b c f : Type*} [Fintype a] [Fintype c]
@@ -141,7 +123,7 @@ private theorem lift_rightPairMatrix
     (B : Matrix (Fin e × Fin e) (Fin e × Fin e) ℂ) :
     singleKrausMap (V ⊗ₖ (V ⊗ₖ V)) (rightPairMatrix B) =
       singleKrausMap V 1 ⊗ₖ singleKrausMap (V ⊗ₖ V) B := by
-  rw [rightPairMatrix, singleKrausMap_kronecker]
+  rw [rightPairMatrix, Matrix.singleKrausMap_kronecker]
 
 private theorem leftPair_mul_lastProjection
     (A : Matrix (Fin d × Fin d) (Fin d × Fin d) ℂ)
@@ -277,7 +259,7 @@ private theorem pair_product_transport
     singleKrausMap W₃ (leftPairMatrix B * rightPairMatrix C) =
         singleKrausMap W₃ (leftPairMatrix B) *
           singleKrausMap W₃ (rightPairMatrix C) :=
-      singleKrausMap_mul W₃ hW₃ _ _
+      Matrix.singleKrausMap_mul_of_isometry W₃ hW₃ _ _
     _ = (leftPairMatrix B' * Q₂) * (Q₀ * rightPairMatrix C') := by
       rw [hleft, hright]
     _ = leftPairMatrix B' * (Q₂ * Q₀) * rightPairMatrix C' := by
@@ -511,7 +493,7 @@ theorem singleKrausMap_crossedTwoSiteBondProduct
       (_root_.finTwoArrowEquiv (Fin e))
       (_root_.finTwoArrowEquiv (Fin d)),
     reindex_sitewisePhysicalMatrix_two]
-  rw [singleKrausMap_mul _ (kronecker_isometry V V hV hV)]
+  rw [Matrix.singleKrausMap_mul_of_isometry _ (kronecker_isometry V V hV hV)]
   have hswap := swapPairMatrix_singleKraus_kronecker_self Vᴴ
     (Matrix.reindex (_root_.finTwoArrowEquiv (Fin e))
       (_root_.finTwoArrowEquiv (Fin e)) C)

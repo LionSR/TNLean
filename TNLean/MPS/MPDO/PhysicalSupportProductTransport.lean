@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.Algebra.KroneckerFactorPositivity
+import TNLean.Channel.SingleKrausPositivity
 import TNLean.MPS.MPDO.PhysicalSupportBondCommutativity
 import TNLean.MPS.ParentHamiltonian.CyclicWindowIndex
 
@@ -30,25 +31,6 @@ namespace MPOTensor
 variable {d e D : ℕ}
 
 open PhysicalSectorFactorization
-
-private theorem singleKrausMap_kronecker
-    {a b c f : Type*} [Fintype a] [Fintype b] [Fintype c] [Fintype f]
-    (A : Matrix a b ℂ) (C : Matrix c f ℂ)
-    (X : Matrix b b ℂ) (Y : Matrix f f ℂ) :
-    singleKrausMap (A ⊗ₖ C) (X ⊗ₖ Y) =
-      singleKrausMap A X ⊗ₖ singleKrausMap C Y := by
-  simp only [singleKrausMap_apply, Matrix.conjTranspose_kronecker]
-  rw [← Matrix.mul_kronecker_mul, ← Matrix.mul_kronecker_mul]
-
-private theorem singleKrausMap_mul_isometry
-    {a b : Type*} [Fintype a] [Fintype b] [DecidableEq b]
-    (V : Matrix a b ℂ) (hV : Vᴴ * V = 1)
-    (X Y : Matrix b b ℂ) :
-    singleKrausMap V (X * Y) =
-      singleKrausMap V X * singleKrausMap V Y := by
-  simp only [singleKrausMap_apply, Matrix.mul_assoc]
-  rw [← Matrix.mul_assoc Vᴴ V, hV]
-  simp
 
 private theorem finKronecker_mul {N : ℕ}
     (A B : Fin N → Matrix (Fin d) (Fin d) ℂ) :
@@ -78,7 +60,7 @@ theorem singleKrausMap_list_prod_of_ne_nil
       | nil => simp
       | cons Y l =>
           rw [List.prod_cons, List.map_cons, List.prod_cons,
-            singleKrausMap_mul_isometry V hV]
+            Matrix.singleKrausMap_mul_of_isometry V hV]
           exact congrArg (singleKrausMap V X * ·)
             (ih (by simp))
 
@@ -436,7 +418,7 @@ theorem singleKrausMap_embedLocalOperator_eq_range_mul_lift
       (sitewisePhysicalMatrix V 2 ⊗ₖ sitewisePhysicalMatrix V (N - 2))
         (B ⊗ₖ (1 : Matrix (Fin (N - 2) → Fin e)
           (Fin (N - 2) → Fin e) ℂ)) = _
-  rw [singleKrausMap_kronecker]
+  rw [Matrix.singleKrausMap_kronecker]
   have hone : Matrix.reindex ee ee
       (1 : Matrix (Fin N → Fin e) (Fin N → Fin e) ℂ) = 1 := by
     ext x y
@@ -521,7 +503,7 @@ theorem singleKrausMap_bondProduct_eq_liftedBondProduct
   have hQ : Q * Q = Q := by
     calc
       Q * Q = singleKrausMap W (1 * 1) :=
-        (singleKrausMap_mul_isometry W hW 1 1).symm
+        (Matrix.singleKrausMap_mul_of_isometry W hW 1 1).symm
       _ = Q := by simp [Q]
   have hmap : (List.ofFn X).map (singleKrausMap W) =
       List.ofFn (fun i ↦ Q * A i) := by

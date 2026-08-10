@@ -6,6 +6,7 @@ Authors: TNLean contributors
 import TNLean.Algebra.ListProduct
 import TNLean.MPS.MPDO.PhysicalSectorBondTwoSite
 import TNLean.MPS.MPDO.PhysicalSectorProductRealization
+import TNLean.MPS.MPDO.SitewisePhysicalMatrix
 import TNLean.MPS.ParentHamiltonian.CyclicWindowIndex
 
 /-!
@@ -96,22 +97,6 @@ private def braKetFunctionsEquiv {i a b : Type*} :
     ((i → b) × (i → a)) ≃ (i → a × b) :=
   (Equiv.prodComm _ _).trans (Equiv.arrowProdEquivProdArrow i (fun _ ↦ a) (fun _ ↦ b)).symm
 
-private theorem evalWord_changePhysicalBasis_ofFn {e : ℕ}
-    (V : Matrix (Fin e) (Fin d) ℂ) (M : MPOTensor d D) {N : ℕ}
-    (s t : Fin N → Fin e) :
-    MPOTensor.evalWord (changePhysicalBasis V M) (List.ofFn s) (List.ofFn t) =
-      ∑ x : Fin N → Fin d × Fin d,
-        (∏ i : Fin N, V (s i) (x i).1 * star (V (t i) (x i).2)) •
-          MPOTensor.evalWord M
-            (List.ofFn fun i : Fin N ↦ (x i).1)
-            (List.ofFn fun i : Fin N ↦ (x i).2) := by
-  rw [MPOTensor.evalWord_ofFn]
-  simp_rw [changePhysicalBasis_apply_eq_sum]
-  rw [List.prod_ofFn_sum]
-  apply Finset.sum_congr rfl
-  intro x _
-  rw [List.prod_ofFn_smul, MPOTensor.evalWord_ofFn]
-
 /-- The length-`N` MPO transforms by the sitewise physical coordinate
 matrix.
 
@@ -124,7 +109,7 @@ private theorem physicalCoordinateMatrixN_mpo
   ext s t
   simp only [singleKrausMap_apply, Matrix.mul_apply, Matrix.conjTranspose_apply,
     physicalCoordinateMatrixN, mpo_apply, mpoMatrixEntry,
-    evalWord_changePhysicalBasis_ofFn, Matrix.trace_sum, Matrix.trace_smul,
+    MPOTensor.evalWord_changePhysicalBasis_ofFn, Matrix.trace_sum, Matrix.trace_smul,
     smul_eq_mul, star_prod]
   have hexpand :
       (∑ q : Fin N → Fin d,

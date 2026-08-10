@@ -7,6 +7,7 @@ import Mathlib.Algebra.BigOperators.Fin
 import Mathlib.Algebra.BigOperators.Group.Finset.Basic
 import Mathlib.Algebra.Module.BigOperators
 import Mathlib.Data.Complex.Basic
+import Mathlib.Data.Matrix.Basic
 import Mathlib.LinearAlgebra.LinearIndependent.Defs
 import Mathlib.Order.Fin.Tuple
 
@@ -17,6 +18,17 @@ This file collects small finite-sum identities.
 -/
 
 open scoped BigOperators
+
+namespace Matrix
+
+/-- Taking a submatrix commutes with a finite sum. -/
+theorem submatrix_sum {ι l m p q R : Type*} [AddCommMonoid R]
+    (s : Finset ι) (M : ι → Matrix m p R) (f : l → m) (g : q → p) :
+    (∑ i ∈ s, M i).submatrix f g = ∑ i ∈ s, (M i).submatrix f g := by
+  ext a b
+  simp only [Matrix.submatrix_apply, Matrix.sum_apply]
+
+end Matrix
 
 namespace Fintype
 

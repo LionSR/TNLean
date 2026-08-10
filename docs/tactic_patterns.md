@@ -24,6 +24,29 @@ abstracted — record why, so it is not re-proposed).
 
 ## Promoted
 
+### single-Kraus Kronecker and isometric multiplication identities — promoted
+- **Pattern:** unfold `singleKrausMap`, reassociate matrix products, and use
+  Kronecker multiplication or the identity `Vᴴ * V = 1`.
+- **Seen:** duplicate 7-line and 8-line helpers in
+  `TNLean/MPS/MPDO/IsometricAdjacentBondTransport.lean` and
+  `TNLean/MPS/MPDO/PhysicalSupportProductTransport.lean` before promotion
+  (2026-08-10).
+- **Abstraction:** `Matrix.singleKrausMap_kronecker` and
+  `Matrix.singleKrausMap_mul_of_isometry` in
+  `TNLean/Channel/SingleKrausPositivity.lean`.
+- **Notes:** both consumer modules now invoke the two matrix identities directly;
+  the private helper copies were removed.
+
+### finite-sum submatrix distribution — promoted
+- **Pattern:** prove that taking a submatrix commutes with a finite sum by
+  extensionality and entrywise simplification.
+- **Seen:** duplicate 6-line helpers in `TNLean/MPS/RFP/BNTOrthogonality.lean`
+  and `TNLean/MPS/RFP/PhysicalObservableRealization.lean` before promotion
+  (2026-08-10).
+- **Abstraction:** `Matrix.submatrix_sum` in `TNLean/Algebra/FinSum.lean`.
+- **Notes:** the theorem is polymorphic over the entry additive commutative
+  monoid. Its four motivating calls now share the neutral matrix identity.
+
 ### transfer-map irreducibility in Kraus-map notation — promoted
 - **Pattern:** use `Kraus.mapLM_eq_transferMap` to restate
   `IsIrreducibleMap (MPSTensor.transferMap F)` as
