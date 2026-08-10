@@ -595,9 +595,14 @@ strictly below one.  They impose no positivity, injectivity, or uniqueness
 hypothesis.
 
 The limiting Gram operator is $\mathscr R(P_\rho)$, generally not the
-identity in the current unweighted Frobenius coordinates.  Thus this completed
-convergence theorem does not provide a Neumann-series estimate for
-$1-\mathcal K_L$.
+identity in the current unweighted Frobenius coordinates.  Its exact action is
+right multiplication,
+\begin{align}
+  \mathscr R(P_\rho)\operatorname{vec}(X)
+  &=\operatorname{vec}\!\left(\frac{X\rho}{\operatorname{tr}\rho}\right).
+\end{align}
+Hence a positive-definite fixed point makes the limiting Gram invertible.  The
+correct perturbation is around $\mathscr R(P_\rho)$, not around the identity.
 
 The generic identity
 \begin{align}
@@ -731,10 +736,20 @@ limiting Gram operator:
   &\le D^3\bigl(Cr^n\bigr)^2.
 \end{align}
 It does not control $\lVert1-\mathcal K_n\rVert$ in these unweighted
-coordinates, because $\mathscr R(P_\rho)$ is generally not the
-identity.  Hence it does not yet bound an inverse Gram operator around the
-identity.  It also does not compare the physical range projectors on the two
-overlapping windows.
+coordinates, because $\mathscr R(P_\rho)$ is generally not the identity.
+Under the additional hypothesis $\rho>0$, the limiting Gram is invertible and
+\leanid{MPSTensor.IsPrimitiveMPS.eventually_groundSpaceGram_isUnit_and_inverse_bound}
+proves eventual finite-volume invertibility with an arbitrary-base Neumann
+estimate.  Furthermore,
+\leanid{MPSTensor.IsPrimitiveMPS.groundSpaceGram_ringInverse_tendsto} proves
+\begin{align}
+  \mathcal K_n^{-1}&\longrightarrow\mathscr R(P_\rho)^{-1},
+\end{align}
+and
+\leanid{MPSTensor.IsPrimitiveMPS.eventually_groundSpaceMapES_injective_and_inverseGram_bound}
+transfers the quantitative estimate to the inverse Gram of the physical
+boundary map.  The remaining gap is the comparison of the two physical range
+projectors on overlapping windows.
 
 In particular, the development does not prove the overlapping-window FNW
 contraction

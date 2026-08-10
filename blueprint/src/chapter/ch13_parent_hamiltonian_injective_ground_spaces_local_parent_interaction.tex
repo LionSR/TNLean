@@ -694,9 +694,10 @@ orthogonal projector is the canonical representative used here.
 
 The limit in Theorem~\ref{thm:ground_space_gram_tendsto_fixed_point} is the
 reshuffled fixed-point projection $\mathscr R(P_\rho)$, not the identity in
-unweighted Frobenius coordinates.  These theorems therefore do not yet provide
-an inverse-Gram estimate around the identity or compare the physical range
-projectors on overlapping windows.
+unweighted Frobenius coordinates.  The limiting metric is generally nonidentity.  Under a positive-definite
+fixed-point hypothesis, the inverse estimates below perturb around
+$\mathscr R(P_ho)$ rather than around the identity.  They do not yet compare
+the physical range projectors on overlapping windows.
 
 \begin{definition}[Inverse Gram operator]
     \label{def:inverse_gram}
@@ -739,6 +740,92 @@ projectors on overlapping windows.
     (\ref{eq:inverse_gram_right}).  Together these equations characterize the
     canonical inverse of a continuous linear endomorphism, which agrees with
     its inverse in the endomorphism ring.
+\end{proof}
+
+\begin{theorem}[Eventual inverse-Gram control in the limiting metric]
+    \label{thm:primitive_ground_space_gram_eventual_inverse_bound}
+    \lean{MPSTensor.IsPrimitiveMPS.eventually_groundSpaceGram_isUnit_and_inverse_bound}
+    \leanok
+    \uses{def:primitive_mps,
+        thm:primitive_ground_space_gram_tendsto_fixed_point,
+        thm:inverse_gram_identities}
+    Let $A$ be a primitive MPS tensor whose fixed-point witness $\rho$ is
+    positive definite, and put
+    $\mathcal K_\infty=\mathscr R(P_\rho)$.  For every $0<a<1$, all
+    sufficiently large $n$ satisfy
+    \begin{align}
+      \mathcal K_n&\in\operatorname{GL},
+      \notag\\
+      \bigl\lVert\mathcal K_n^{-1}-\mathcal K_\infty^{-1}\bigr\rVert
+      &\leq
+      \frac{a}{1-a}\,\bigl\lVert\mathcal K_\infty^{-1}\bigr\rVert.
+      \label{eq:primitive_ground_space_gram_eventual_inverse_bound}
+    \end{align}
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:primitive_ground_space_gram_tendsto_fixed_point}
+    The positive-definite fixed point makes
+    $\mathcal K_\infty$ invertible.  Gram convergence implies that eventually
+    \begin{align}
+      \bigl\lVert\mathcal K_\infty^{-1}\bigr\rVert
+      \bigl\lVert\mathcal K_n-\mathcal K_\infty\bigr\rVert&\leq a.
+    \end{align}
+    Factoring $\mathcal K_n$ around the invertible base
+    $\mathcal K_\infty$ and applying the arbitrary-base Neumann estimate gives
+    (\ref{eq:primitive_ground_space_gram_eventual_inverse_bound}).
+\end{proof}
+
+\begin{theorem}[Convergence of finite-volume inverse Gram operators]
+    \label{thm:primitive_ground_space_gram_inverse_tendsto}
+    \lean{MPSTensor.IsPrimitiveMPS.groundSpaceGram_ringInverse_tendsto}
+    \leanok
+    \uses{def:primitive_mps,
+        thm:primitive_ground_space_gram_tendsto_fixed_point}
+    Under the same primitive-MPS and positive-definite fixed-point hypotheses,
+    \begin{align}
+      \mathcal K_n^{-1}&\longrightarrow\mathcal K_\infty^{-1}
+      \label{eq:primitive_ground_space_gram_inverse_tendsto}
+    \end{align}
+    in operator norm.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:primitive_ground_space_gram_tendsto_fixed_point}
+    Inversion is continuous at the invertible operator
+    $\mathcal K_\infty$, so the claim follows from
+    $\mathcal K_n\to\mathcal K_\infty$.
+\end{proof}
+
+\begin{theorem}[Eventual injectivity and inverse-Gram control]
+    \label{thm:primitive_ground_space_map_eventual_inverse_gram_bound}
+    \lean{MPSTensor.IsPrimitiveMPS.eventually_groundSpaceMapES_injective_and_inverseGram_bound}
+    \leanok
+    \uses{def:ground_space_map_es, def:inverse_gram,
+        thm:primitive_ground_space_gram_eventual_inverse_bound,
+        thm:inverse_gram_identities}
+    Under the same hypotheses, for every $0<a<1$ and all sufficiently large
+    $n$, the physical boundary map $\Gamma_n^{\mathrm{ES}}$ is injective and
+    its inverse Gram operator is $\mathcal K_n^{-1}$.  Moreover,
+    \begin{align}
+      \bigl\lVert S_{\Gamma_n^{\mathrm{ES}}}
+        -\mathcal K_\infty^{-1}\bigr\rVert
+      &\leq
+      \frac{a}{1-a}\,\bigl\lVert\mathcal K_\infty^{-1}\bigr\rVert.
+    \end{align}
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:primitive_ground_space_gram_eventual_inverse_bound,
+        thm:inverse_gram_identities}
+    Eventual invertibility of
+    $(\Gamma_n^{\mathrm{ES}})^\dagger\Gamma_n^{\mathrm{ES}}$ implies eventual
+    injectivity of $\Gamma_n^{\mathrm{ES}}$.  The inverse-Gram identities then
+    identify $S_{\Gamma_n^{\mathrm{ES}}}$ with $\mathcal K_n^{-1}$, and the
+    preceding estimate applies.
 \end{proof}
 
 \begin{definition}[Injective range-projector candidate]
