@@ -661,8 +661,8 @@ private theorem ft_sector_bnt_equal_mps_unitaryGauge_literal
 
 /-- **Restricted equal-case fundamental theorem.**
 
-This is the active, nonzero, converse-covered correction of CPSV16 Corollary
-2.11.  The CPSV16 convention permits an unrelated normal summand whose
+This is the active, nonzero, converse-covered correction of
+CPSV16 Corollary 2.11.  The CPSV16 convention permits an unrelated normal summand whose
 coefficient vanishes at every positive length; such a summand can change the
 ambient bond dimension while preserving all positive-length MPVs.
 
