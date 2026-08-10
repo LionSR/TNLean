@@ -25,8 +25,15 @@ def main() -> int:
     if len(manual) != 20:
         raise AssertionError(f"expected 20 displayed TeX examples, found {len(manual)}")
     refusals = [example for example in manual if example.expected_failure]
-    if [example.expected_failure for example in refusals] != ["[TKZ-EQ-SIGNATURE]"]:
-        raise AssertionError("the tutorial's refusal block was not pinned to its diagnostic")
+    if len(refusals) != 1:
+        raise AssertionError(
+            f"expected exactly one refusal block in the tutorial, found {len(refusals)}"
+        )
+    if refusals[0].expected_failure != "[TKZ-EQ-SIGNATURE]":
+        raise AssertionError(
+            "the tutorial's refusal block was not pinned to its diagnostic: "
+            f"found {refusals[0].expected_failure!r}"
+        )
     if len(reference) != 12:
         raise AssertionError(f"expected 12 reference examples, found {len(reference)}")
     if any(r"\begin{document}" not in example.document for example in manual):
