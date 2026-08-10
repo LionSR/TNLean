@@ -151,23 +151,6 @@ private theorem primitiveCubeRoot_two_pow_not_tendsto (z : ℂ) :
     primitiveCubeRoot_isPrimitiveRoot.pow_inj (by norm_num) (by norm_num) hpows
   omega
 
-private theorem scalarUnitTensor_transferMap :
-    transferMap scalarUnitTensor = LinearMap.id := by
-  apply LinearMap.ext
-  intro X
-  ext a b
-  fin_cases a
-  fin_cases b
-  simp [transferMap_apply, scalarUnitTensor]
-
-/-- The one-dimensional scalar unit tensor is normal.
-
-Source: arXiv:1606.00608, canonical-form normal-block condition, lines 233--245. -/
-theorem scalarUnitTensor_isNormalTensor :
-    IsNormalTensor scalarUnitTensor :=
-  isNormalTensor_of_bondDim_one_of_transferMap_eq_id
-    scalarUnitTensor scalarUnitTensor_transferMap
-
 /-- Canonical-form data for the two scalar normal blocks with weights `1` and
 `primitiveCubeRoot`.
 
@@ -179,7 +162,7 @@ noncomputable def cubePhaseCanonicalData : CPSVCanonicalFormData cubePhaseTensor
 
 /-- The cube-phase canonical-form data satisfy the normalization at
 arXiv:1606.00608, line 246. -/
-theorem cubePhaseCanonicalData_isWeightNormalized :
+private theorem cubePhaseCanonicalData_isWeightNormalized :
     cubePhaseCanonicalData.IsWeightNormalized := by
   refine {
     weight_norm_le_one := ?_
