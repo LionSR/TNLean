@@ -738,10 +738,12 @@ windows.
     \label{thm:fixed_point_gram_metric_is_unit}
     \lean{Matrix.gramReshuffleMatrix_fixedPointProj_posDef}
     \lean{Matrix.gramReshuffle_fixedPointProj_isUnit}
+    \lean{Matrix.gramReshuffle_fixedPointProj_injective}
     \leanok
     \uses{def:fixed_point_proj, def:gram_reshuffle}
     If $D>0$ and $\rho\in\MN{D}$ is positive definite, then
-    $R(P_\rho)$ is positive definite and $\mathscr R(P_\rho)$ is invertible.
+    $R(P_\rho)$ is positive definite and $\mathscr R(P_\rho)$ is invertible,
+    hence injective.
 \end{theorem}
 
 \begin{proof}
