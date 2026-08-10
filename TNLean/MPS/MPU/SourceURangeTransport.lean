@@ -8,9 +8,9 @@ import TNLean.MPS.MPU.MatchingContractions
 import TNLean.MPS.MPU.SourceUOpenTail
 
 /-!
-# Forward open-tail packaging for the source tensor u
+# Forward open-tail identities for the source tensor u
 
-This file packages the forward kernel occurring inside the complete source-$u$
+This file defines the forward kernel occurring inside the complete source-$u$
 network in arXiv:1703.09188, Figure `II_uUnitary.png` and Lemma
 `lemuisometry` (lines 536--557). The normalized internal sum is an output-first
 double-layer letter followed by a power of its normalized diagonal. It also
@@ -35,16 +35,16 @@ namespace MPOTensor
 
 variable {d D : ℕ} (U : MPOTensor d D)
 
-private lemma sum_rotate_five {A B C D E R : Type*}
-    [Fintype A] [Fintype B] [Fintype C] [Fintype D] [Fintype E]
-    [AddCommMonoid R] (f : A → B → C → D → E → R) :
-    (∑ a, ∑ b, ∑ c, ∑ d, ∑ e, f a b c d e) =
-      ∑ d, ∑ e, ∑ a, ∑ b, ∑ c, f a b c d e := by
-  let equiv : ((((A × B) × C) × D) × E) ≃ ((((D × E) × A) × B) × C) := {
+private lemma sum_rotate_five {A B C P Q R : Type*}
+    [Fintype A] [Fintype B] [Fintype C] [Fintype P] [Fintype Q]
+    [AddCommMonoid R] (f : A → B → C → P → Q → R) :
+    (∑ a, ∑ b, ∑ c, ∑ p, ∑ q, f a b c p q) =
+      ∑ p, ∑ q, ∑ a, ∑ b, ∑ c, f a b c p q := by
+  let equiv : ((((A × B) × C) × P) × Q) ≃ ((((P × Q) × A) × B) × C) := {
     toFun := fun x ↦ ((((x.1.2, x.2), x.1.1.1.1), x.1.1.1.2), x.1.1.2)
     invFun := fun x ↦ ((((x.1.1.2, x.1.2), x.2), x.1.1.1.1), x.1.1.1.2)
-    left_inv := by rintro ⟨⟨⟨⟨a, b⟩, c⟩, d⟩, e⟩; rfl
-    right_inv := by rintro ⟨⟨⟨⟨d, e⟩, a⟩, b⟩, c⟩; rfl
+    left_inv := by rintro ⟨⟨⟨⟨a, b⟩, c⟩, p⟩, q⟩; rfl
+    right_inv := by rintro ⟨⟨⟨⟨p, q⟩, a⟩, b⟩, c⟩; rfl
   }
   have h := Fintype.sum_equiv equiv
     (fun x ↦ f x.1.1.1.1 x.1.1.1.2 x.1.1.2 x.1.2 x.2)
