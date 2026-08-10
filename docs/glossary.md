@@ -512,6 +512,19 @@ The following notions use different transfer objects and are not interchangeable
   is distinct from pure MPS RFP, doubled-index transfer idempotence, and every
   physical-trace ZCL condition below.
 
+### One-letter blocking up to virtual gauge
+
+- **Declarations:** `MPOTensor.IsOneLetterRFPViaTSUpToVirtualGauge M` and
+  `MPSTensor.IsPureOneLetterRFPViaTSUpToVirtualGauge A`.
+- **Defined in:** `TNLean/MPS/RFP/GaugeBlockingCounterexample.lean`.
+- **Meaning:** after restricting to one physical letter, the two-site blocked
+  doubled tensor is virtually gauge equivalent to the original doubled tensor.
+- **Source:** CPSV16 Appendix D, equation `RFP-gauge`, lines 2091--2110.
+- **Caveat:** despite the source-derived name, these predicates do not contain
+  the trace-preserving completely positive maps $\mathcal S$ and $\mathcal T$
+  in `MPOTensor.IsRFPViaTS`. They encode only the one-letter virtual-gauge
+  specialization of the Appendix D diagram.
+
 ### Literal physical-trace idempotence
 
 - **Expression:**

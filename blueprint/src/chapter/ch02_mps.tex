@@ -443,6 +443,8 @@ boundary conditions (PBC).
 
 \begin{definition}[Gauge-phase equivalence]\label{def:gauge_phase_equiv}
     \lean{MPSTensor.GaugePhaseEquiv}
+    \lean{MPSTensor.UnitGaugePhaseEquiv}
+    \lean{MPSTensor.UnitGaugePhaseEquiv.toGaugePhaseEquiv}
     \lean{MPSTensor.GaugeEquiv.toGaugePhaseEquiv}
     \leanok
     \uses{def:mps_tensor}
@@ -461,10 +463,9 @@ boundary conditions (PBC).
 \end{proof}
 
 \begin{remark}\leanok
-    After spectral-radius normalization one may restrict $\zeta$
-    to a unit-modulus phase $e^{i\phi}$.
-    We allow an arbitrary nonzero scalar because later canonical-form
-    statements keep the block-scaling factors explicit.
+    Unit gauge-phase equivalence imposes $|\zeta|=1$. Since such a phase is
+    nonzero, unit gauge-phase equivalence implies gauge-phase equivalence. The
+    general definition retains arbitrary nonzero block-scaling factors.
 \end{remark}
 
 \begin{lemma}[Gauge-phase equivalence across equal bond dimensions]
