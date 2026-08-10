@@ -28,9 +28,10 @@ python3 scripts/audit_cpsv16_labels.py --list-duplicates
 from the repository root.  The command parses the source independently,
 strips unescaped TeX comments to derive the active occurrence inventory,
 checks each occurrence against the ledger activity, verifies the exact duplicate
-map, and requires the ledger to contain exactly the 183 lexical labels with one
-activity, classification, and nonempty disposition each.  The only inactive
-name is `biCF`.
+map, compares every label's classification with the maintained snapshot
+`docs/audits/data/cpsv16-label-classifications.tsv`, and requires the ledger to
+contain exactly the 183 lexical labels with one activity, classification, and
+nonempty disposition each.  The only inactive name is `biCF`.
 
 The classification totals are:
 
@@ -58,8 +59,10 @@ be classified as notation or standalone internal material when that is their
 actual role.  Every equation or figure label inside a theorem statement or
 proof instead explicitly inherits the enclosing result's status and semantic
 boundary.  The validator requires exactly 58 unique labels and 60 occurrences
-of this kind.  Thus, for example, the six
-displayed clauses of Theorem~4.9 inherit its partial all-sector Case-II status,
+of this kind.  For the two duplicated contained labels, it checks each source
+line separately against result-specific anchors in the combined disposition.
+Thus, for example, the six displayed clauses of Theorem~4.9 inherit its partial
+all-sector Case-II status,
 and the algebra and fusion clauses of Theorem~4.14 retain their different
 coverage boundaries.  This prevents an internal display from being treated as
 independently covered when its enclosing literal source result remains partial,

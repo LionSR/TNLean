@@ -20,6 +20,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 SOURCE = ROOT / "Papers/1606.00608/MPDO-22-12-17-2.tex"
 LEDGER = ROOT / "docs/audits/data/cpsv16-label-dispositions.tsv"
+CLASSIFICATION_SNAPSHOT = ROOT / "docs/audits/data/cpsv16-label-classifications.tsv"
 EXPECTED_LEXICAL_OCCURRENCES = 187
 EXPECTED_LEXICAL_NAMES = 183
 EXPECTED_ACTIVE_OCCURRENCES = 186
@@ -47,6 +48,25 @@ EXPECTED_DUPLICATES = {
     "II_cor2": (355, 1173),
     "eq:II_auxcor": (358, 1176),
     "eq1:proof.IV.12": (1838, 1882),
+}
+EXPECTED_DUPLICATE_CONTAINED_ANCHORS = {
+    ("eq:II_auxcor", 358): (
+        "line-358",
+        "Corollary 2.11",
+        "not-ready status",
+        "inactive zero-weight block boundary",
+    ),
+    ("eq:II_auxcor", 1176): ("line-1176", "Appendix A restatement"),
+    ("eq1:proof.IV.12", 1838): (
+        "line-1838",
+        "Lemma C.16",
+        "complete original-space insertion status",
+    ),
+    ("eq1:proof.IV.12", 1882): (
+        "line-1882",
+        "Proposition 4.13",
+        "complete rectangular-coisometry status",
+    ),
 }
 ALLOWED_ACTIVITY = {"active", "inactive"}
 ALLOWED_CLASSES = {
@@ -99,11 +119,11 @@ def source_inventory() -> tuple[list[tuple[str, int, int, bool]], list[str]]:
 
 def theorem_contained_labels(
     active_lines: list[str], ledger: dict[str, dict[str, str]]
-) -> list[str]:
+) -> list[tuple[str, int]]:
     """Find equation and figure label occurrences inside theorems or proofs."""
     stack: list[str] = []
-    result: list[str] = []
-    for line in active_lines:
+    result: list[tuple[str, int]] = []
+    for line_no, line in enumerate(active_lines, 1):
         begin = THEOREM_BEGIN_RE.search(line)
         if begin:
             stack.append(begin.group(1))
@@ -111,7 +131,7 @@ def theorem_contained_labels(
             for label in LABEL_RE.findall(line):
                 row = ledger.get(label)
                 if row and row["classification"] in {"equation", "figure"}:
-                    result.append(label)
+                    result.append((label, line_no))
         end = THEOREM_END_RE.search(line)
         if end:
             for index in range(len(stack) - 1, -1, -1):
@@ -121,7 +141,9 @@ def theorem_contained_labels(
     return result
 
 
-def inheritance_count_errors(contained_occurrences: list[str]) -> list[str]:
+def inheritance_count_errors(
+    contained_occurrences: list[tuple[str, int]],
+) -> list[str]:
     """Return errors when theorem/proof containment inventory totals drift."""
     errors: list[str] = []
     if len(contained_occurrences) != EXPECTED_THEOREM_CONTAINED_OCCURRENCES:
@@ -129,7 +151,7 @@ def inheritance_count_errors(contained_occurrences: list[str]) -> list[str]:
             "theorem/proof-contained occurrences: expected "
             f"{EXPECTED_THEOREM_CONTAINED_OCCURRENCES}, got {len(contained_occurrences)}"
         )
-    contained_names = set(contained_occurrences)
+    contained_names = {label for label, _ in contained_occurrences}
     if len(contained_names) != EXPECTED_THEOREM_CONTAINED_NAMES:
         errors.append(
             "theorem/proof-contained names: expected "
@@ -138,15 +160,111 @@ def inheritance_count_errors(contained_occurrences: list[str]) -> list[str]:
     return errors
 
 
-def classification_count_errors(ledger: dict[str, dict[str, str]]) -> list[str]:
-    """Return errors when lexical or active classification totals drift."""
-    lexical = Counter(row["classification"] for row in ledger.values())
+def inheritance_errors(
+    contained_occurrences: list[tuple[str, int]],
+    ledger: dict[str, dict[str, str]],
+) -> list[str]:
+    """Validate inheritance dispositions for every contained occurrence."""
+    errors: list[str] = []
+    occurrence_counts = Counter(label for label, _ in contained_occurrences)
+    duplicate_occurrences = {
+        occurrence
+        for occurrence in contained_occurrences
+        if occurrence_counts[occurrence[0]] > 1
+    }
+    expected_duplicate_occurrences = set(EXPECTED_DUPLICATE_CONTAINED_ANCHORS)
+    if duplicate_occurrences != expected_duplicate_occurrences:
+        errors.append(
+            "duplicate theorem/proof-contained occurrence map differs: expected "
+            f"{sorted(expected_duplicate_occurrences)!r}, "
+            f"got {sorted(duplicate_occurrences)!r}"
+        )
+
+    for label, line_no in contained_occurrences:
+        disposition = ledger[label]["disposition"]
+        if not (
+            INHERIT_RE.search(disposition)
+            and STATUS_RE.search(disposition)
+            and BOUNDARY_RE.search(disposition)
+        ):
+            errors.append(
+                f"{label} at line {line_no}: theorem/proof-contained "
+                f"{ledger[label]['classification']} disposition must explicitly "
+                "inherit the enclosing result's status and boundary"
+            )
+        for anchor in EXPECTED_DUPLICATE_CONTAINED_ANCHORS.get(
+            (label, line_no), ()
+        ):
+            if anchor not in disposition:
+                errors.append(
+                    f"{label} at line {line_no}: duplicate occurrence disposition "
+                    f"must contain {anchor!r}"
+                )
+    return errors
+
+
+def read_classification_snapshot(
+    path: Path = CLASSIFICATION_SNAPSHOT,
+) -> dict[str, str]:
+    """Read the exact expected classification of every lexical label."""
+    with path.open(newline="") as handle:
+        reader = csv.DictReader(handle, delimiter="\t")
+        expected_fields = ["label", "classification"]
+        if reader.fieldnames != expected_fields:
+            raise ValueError(
+                f"classification snapshot columns must be exactly {expected_fields}"
+            )
+        rows = list(reader)
+    result: dict[str, str] = {}
+    for row in rows:
+        if None in row:
+            raise ValueError(
+                f"classification snapshot row has surplus fields: {row[None]!r}"
+            )
+        label = row["label"]
+        classification = row["classification"]
+        if not label:
+            raise ValueError("empty label in classification snapshot")
+        if label in result:
+            raise ValueError(f"duplicate classification snapshot row for {label}")
+        if classification not in ALLOWED_CLASSES:
+            raise ValueError(
+                f"invalid snapshot classification for {label}: {classification}"
+            )
+        result[label] = classification
+    return result
+
+
+def classification_count_errors(
+    ledger: dict[str, dict[str, str]],
+    expected_by_label: dict[str, str] | None = None,
+) -> list[str]:
+    """Return per-label and aggregate classification errors."""
+    if expected_by_label is None:
+        expected_by_label = read_classification_snapshot()
+    actual_by_label = {
+        label: row["classification"] for label, row in ledger.items()
+    }
+    lexical = Counter(actual_by_label.values())
     active = Counter(
         row["classification"]
         for row in ledger.values()
         if row["activity"] == "active"
     )
     errors: list[str] = []
+    if set(actual_by_label) != set(expected_by_label):
+        missing = sorted(set(expected_by_label) - set(actual_by_label))
+        extra = sorted(set(actual_by_label) - set(expected_by_label))
+        errors.append(
+            "classification snapshot label mismatch; "
+            f"missing={missing}, extra={extra}"
+        )
+    for label in sorted(set(actual_by_label) & set(expected_by_label)):
+        if actual_by_label[label] != expected_by_label[label]:
+            errors.append(
+                f"{label}: classification {actual_by_label[label]!r}, "
+                f"expected {expected_by_label[label]!r}"
+            )
     if lexical != EXPECTED_LEXICAL_CLASSIFICATIONS:
         errors.append(
             "lexical classification totals: expected "
@@ -257,19 +375,9 @@ def main() -> int:
         errors.append(f"active names: expected {EXPECTED_ACTIVE_NAMES}, got {len(active_names)}")
 
     contained_occurrences = theorem_contained_labels(active_lines, ledger)
-    contained = set(contained_occurrences)
+    contained = {label for label, _ in contained_occurrences}
     errors.extend(inheritance_count_errors(contained_occurrences))
-    for label in sorted(contained):
-        disposition = ledger[label]["disposition"]
-        if not (
-            INHERIT_RE.search(disposition)
-            and STATUS_RE.search(disposition)
-            and BOUNDARY_RE.search(disposition)
-        ):
-            errors.append(
-                f"{label}: theorem/proof-contained {ledger[label]['classification']} disposition "
-                "must explicitly inherit the enclosing result's status and boundary"
-            )
+    errors.extend(inheritance_errors(contained_occurrences, ledger))
 
     if args.list_duplicates:
         for label, locations in actual_duplicates.items():
