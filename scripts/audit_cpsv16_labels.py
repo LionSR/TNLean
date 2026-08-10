@@ -26,6 +26,22 @@ EXPECTED_ACTIVE_OCCURRENCES = 186
 EXPECTED_ACTIVE_NAMES = 182
 EXPECTED_THEOREM_CONTAINED_OCCURRENCES = 60
 EXPECTED_THEOREM_CONTAINED_NAMES = 58
+EXPECTED_LEXICAL_CLASSIFICATIONS = {
+    "section": 10,
+    "definition": 10,
+    "equation": 80,
+    "figure": 46,
+    "example": 3,
+    "theorem-like": 34,
+}
+EXPECTED_ACTIVE_CLASSIFICATIONS = {
+    "section": 10,
+    "definition": 10,
+    "equation": 80,
+    "figure": 45,
+    "example": 3,
+    "theorem-like": 34,
+}
 EXPECTED_DUPLICATES = {
     "thm1": (350, 1168),
     "II_cor2": (355, 1173),
@@ -122,6 +138,28 @@ def inheritance_count_errors(contained_occurrences: list[str]) -> list[str]:
     return errors
 
 
+def classification_count_errors(ledger: dict[str, dict[str, str]]) -> list[str]:
+    """Return errors when lexical or active classification totals drift."""
+    lexical = Counter(row["classification"] for row in ledger.values())
+    active = Counter(
+        row["classification"]
+        for row in ledger.values()
+        if row["activity"] == "active"
+    )
+    errors: list[str] = []
+    if lexical != EXPECTED_LEXICAL_CLASSIFICATIONS:
+        errors.append(
+            "lexical classification totals: expected "
+            f"{EXPECTED_LEXICAL_CLASSIFICATIONS!r}, got {dict(lexical)!r}"
+        )
+    if active != EXPECTED_ACTIVE_CLASSIFICATIONS:
+        errors.append(
+            "active classification totals: expected "
+            f"{EXPECTED_ACTIVE_CLASSIFICATIONS!r}, got {dict(active)!r}"
+        )
+    return errors
+
+
 def read_ledger(path: Path = LEDGER) -> dict[str, dict[str, str]]:
     with path.open(newline="") as handle:
         reader = csv.DictReader(handle, delimiter="\t")
@@ -168,6 +206,7 @@ def main() -> int:
     ledger = read_ledger()
 
     errors: list[str] = []
+    errors.extend(classification_count_errors(ledger))
     if len(inventory) != EXPECTED_LEXICAL_OCCURRENCES:
         errors.append(
             f"lexical occurrences: expected {EXPECTED_LEXICAL_OCCURRENCES}, got {len(inventory)}"

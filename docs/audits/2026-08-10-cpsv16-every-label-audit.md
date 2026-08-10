@@ -38,8 +38,8 @@ The classification totals are:
 |---|---:|---:|
 | Section | 10 | 10 |
 | Definition | 10 | 10 |
-| Equation | 79 | 79 |
-| Figure | 47 | 46 |
+| Equation | 80 | 80 |
+| Figure | 46 | 45 |
 | Example | 3 | 3 |
 | Theorem-like | 34 | 34 |
 | **Total** | **183** | **182** |
