@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import Mathlib.Topology.Connected.PathConnected
+import TNLean.MPS.CanonicalForm.Definitions
 import TNLean.MPS.MPU.PhysicalAncilla
 
 /-!
@@ -28,23 +29,26 @@ namespace MPOTensor
 
 variable {da db D : ℕ}
 
-/-- Two fixed-bond MPU tensors are strictly equivalent when, after explicitly
-identifying their physical dimensions, they are joined by a continuous path all
-of whose points generate MPUs.
+/-- Two fixed-bond MPU tensors in canonical form are strictly equivalent when,
+after explicitly identifying their physical dimensions, they are joined by a
+continuous path all of whose points generate MPUs.
 
-The path is not required to remain in canonical form. The bond dimension `D` is
+Canonical form is required only at the endpoints. The bond dimension `D` is
 fixed throughout.
 
 **Scope restriction (arXiv:1703.09188, lines 706--724):** the paper does not
 specify a stabilization for unequal raw virtual bond dimensions, so this
-definition only compares tensors in one fixed ambient bond dimension.
+definition only compares tensors in one fixed ambient bond dimension. See
+`docs/paper-gaps/mpu_equivalence_fixed_bond.tex`.
 
 Source: arXiv:1703.09188, Definition `def:strictly-equivalent-tensors`,
 lines 708--714. -/
 def StrictlyEquivalent (U : MPOTensor da D) (V : MPOTensor db D)
     (hphys : da = db) : Prop :=
-  JoinedIn {W : MPOTensor db D | IsMPU W}
-    (reindexPhysical (finCongr hphys).symm U) V
+  MPSTensor.IsCPSVCanonicalForm U.toMPSTensor ∧
+    MPSTensor.IsCPSVCanonicalForm V.toMPSTensor ∧
+      JoinedIn {W : MPOTensor db D | IsMPU W}
+        (reindexPhysical (finCongr hphys).symm U) V
 
 private theorem blockedAncillaPhysicalDim_eq (k : ℕ) {pa pb : ℕ}
     (hphys : pa * da = pb * db) :
@@ -62,7 +66,8 @@ equation `pa * da = pb * db`; it supplies the explicit reindexing witness needed
 by `StrictlyEquivalent` after blocking.
 
 **Scope restriction (arXiv:1703.09188, lines 706--724):** the bond dimension `D`
-is fixed. No heterogeneous raw-bond stabilization is asserted.
+is fixed. No heterogeneous raw-bond stabilization is asserted. See
+`docs/paper-gaps/mpu_equivalence_fixed_bond.tex`.
 
 Source: arXiv:1703.09188, Definition `def:equivalent-tensors`, lines 716--724. -/
 def Equivalent (U : MPOTensor da D) (V : MPOTensor db D) : Prop :=

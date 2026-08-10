@@ -166,6 +166,47 @@ closing a chain of $N$ copies of $\mathcal U$.
     unitary.  Simultaneous reindexing preserves unitarity.
 \end{proof}
 
+\begin{definition}[Strict equivalence of matrix product unitary tensors]
+    \label{def:strictly-equivalent-tensors}
+    \lean{MPOTensor.StrictlyEquivalent}
+    \leanok
+    \uses{def:mpu}
+    Fix a virtual bond dimension $D$.  Let $\mathcal U$ and $\mathcal V$ be in
+    canonical form, with physical dimensions $d_a$ and $d_b$, respectively,
+    and let $h\colon d_a=d_b$ identify their physical indices.  They are
+    strictly equivalent if the tensor obtained from $\mathcal U$ by this
+    reindexing and $\mathcal V$ are joined by a continuous path
+    $\mathcal W(t)$ such that $\mathcal W(t)$ generates matrix product
+    unitaries for every $t\in[0,1]$.  The path need not remain in canonical
+    form.
+
+    The bond dimension is the same $D$ at both endpoints and along the path.
+    This is the fixed-bond case of
+    \cite[Definition~\texttt{def:strictly-equivalent-tensors}]{Cirac2017MPU};
+    no relation between unequal raw bond dimensions is imposed.
+\end{definition}
+
+\begin{definition}[Equivalence after ancilla attachment and blocking]
+    \label{def:equivalent-tensors}
+    \lean{MPOTensor.Equivalent}
+    \leanok
+    \uses{def:strictly-equivalent-tensors}
+    Fix a virtual bond dimension $D$.  Tensors $\mathcal U$ and $\mathcal V$
+    of physical dimensions $d_a$ and $d_b$ are equivalent if there are
+    positive integers $k,p_a,p_b$, with $p_a$ and $p_b$ coprime, such that
+    \begin{align}
+        p_a d_a &= p_b d_b
+    \end{align}
+    and the tensors obtained by first attaching physical identity ancillas of
+    dimensions $p_a$ and $p_b$, respectively, and then blocking the same $k$
+    sites are strictly equivalent.  Thus the compared tensors are
+    $\bigl(\mathcal U\otimes\Id_{p_a}\bigr)^{[k]}$ and
+    $\bigl(\mathcal V\otimes\Id_{p_b}\bigr)^{[k]}$.
+
+    This is \cite[Definition~\texttt{def:equivalent-tensors}]{Cirac2017MPU}
+    with one fixed ambient bond dimension $D$.  The definition does not add a
+    stabilization relation for unequal raw bond dimensions.
+\end{definition}
 
 \section{Simple matrix product unitary tensors}
 
