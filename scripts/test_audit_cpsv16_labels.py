@@ -299,6 +299,8 @@ def test_shared_tsv_schema_and_row_validation() -> None:
                         "columns must be exactly")
         assert_rejected(reader, header + row.rstrip("\n") + "\tsurplus\n",
                         "surplus fields")
+        short_row = row.rstrip("\n").rsplit("\t", 1)[0] + "\n"
+        assert_rejected(reader, header + short_row, "missing fields")
         assert_rejected(reader, header + row + row, f"duplicate {table_name} row")
         empty_label_row = row.replace("x", "", 1)
         assert_rejected(reader, header + empty_label_row, f"empty label in {table_name}")

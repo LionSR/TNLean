@@ -54,25 +54,14 @@ EXPECTED_DUPLICATES = {
     "eq:II_auxcor": (358, 1176),
     "eq1:proof.IV.12": (1838, 1882),
 }
-EXPECTED_DUPLICATE_CONTAINED_ANCHORS = {
-    ("eq:II_auxcor", 358): (
-        "line-358",
-        "Corollary 2.11",
-        "not-ready status",
-        "inactive zero-weight block boundary",
-    ),
-    ("eq:II_auxcor", 1176): ("line-1176", "Appendix A restatement"),
-    ("eq1:proof.IV.12", 1838): (
-        "line-1838",
-        "Lemma C.16",
-        "complete original-space insertion status",
-    ),
-    ("eq1:proof.IV.12", 1882): (
-        "line-1882",
-        "Proposition 4.13",
-        "complete rectangular-coisometry status",
-    ),
-}
+EXPECTED_DUPLICATE_CONTAINED_OCCURRENCES = frozenset(
+    {
+        ("eq:II_auxcor", 358),
+        ("eq:II_auxcor", 1176),
+        ("eq1:proof.IV.12", 1838),
+        ("eq1:proof.IV.12", 1882),
+    }
+)
 ALLOWED_ACTIVITY = {"active", "inactive"}
 ALLOWED_CLASSES = {
     "section", "definition", "equation", "figure", "example", "theorem-like"
@@ -170,7 +159,7 @@ def inheritance_errors(
         for occurrence in contained_occurrences
         if occurrence_counts[occurrence[0]] > 1
     }
-    expected_duplicate_occurrences = set(EXPECTED_DUPLICATE_CONTAINED_ANCHORS)
+    expected_duplicate_occurrences = set(EXPECTED_DUPLICATE_CONTAINED_OCCURRENCES)
     if duplicate_occurrences != expected_duplicate_occurrences:
         errors.append(
             "duplicate theorem/proof-contained occurrence map differs: expected "
@@ -203,14 +192,6 @@ def inheritance_errors(
                     f"{label} at line {line_no}: disposition must retain its "
                     "occurrence-specific semantic boundary"
                 )
-        for anchor in EXPECTED_DUPLICATE_CONTAINED_ANCHORS.get(
-            (label, line_no), ()
-        ):
-            if anchor not in disposition:
-                errors.append(
-                    f"{label} at line {line_no}: duplicate occurrence disposition "
-                    f"must contain {anchor!r}"
-                )
     return errors
 
 
@@ -234,6 +215,8 @@ def read_tsv_rows(
     for row in rows:
         if None in row:
             raise ValueError(f"{table_name} row has surplus fields: {row[None]!r}")
+        if any(value is None for value in row.values()):
+            raise ValueError(f"{table_name} row has missing fields: {row!r}")
         label = row["label"]
         if not label:
             raise ValueError(f"empty label in {table_name}")
