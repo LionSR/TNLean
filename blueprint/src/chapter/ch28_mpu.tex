@@ -672,6 +672,22 @@ closing a chain of $N$ copies of $\mathcal U$.
     \end{align}
 \end{definition}
 
+\begin{lemma}[Double layer under physical reindexing]
+    \label{lem:mpu_double_layer_physical_reindexing}
+    \lean{MPOTensor.doubleLayerTensor_reindexPhysical}
+    \leanok
+    \uses{def:mpu_physical_reindexing}
+    For every physical-index bijection $e$, taking the double layer commutes
+    with physical reindexing:
+    \begin{align}
+        W(e^*\mathcal U)^{ij}&=W(\mathcal U)^{e(i)e(j)}.
+    \end{align}
+\end{lemma}
+
+\begin{proof}\leanok
+    This follows entrywise from the definition of physical reindexing.
+\end{proof}
+
 \begin{theorem}[Bounded blocking to simplicity]
     \label{thm:mpu_bounded_simple_blocking}
     \lean{MPOTensor.IsMPU.exists_blockTensor_isMPUSimple_of_one_lt,
@@ -722,8 +738,7 @@ closing a chain of $N$ copies of $\mathcal U$.
 
 \begin{theorem}[Matching contractions at the direct stabilized block]
     \label{thm:mpu_matching_direct_block_contractions}
-    \lean{MPOTensor.IsMPU.blockTensor_mul_sq_simple_contractions_of_transfer_power,
-        MPOTensor.doubleLayerTensor_reindexPhysical}
+    \lean{MPOTensor.IsMPU.blockTensor_mul_sq_simple_contractions_of_transfer_power}
     \leanok
     Let $\mathcal U$ be an MPU of positive physical and bond dimensions.
     Suppose that $\rho$ has trace one and that, for some positive integer $J$,
@@ -740,7 +755,7 @@ closing a chain of $N$ copies of $\mathcal U$.
 \begin{proof}\leanok
     \uses{thm:mpu_blocked_double_layer_diagonal,
         thm:mpu_second_block_simple, thm:mpu_bounded_simple_blocking,
-        lem:mpu_blocking}
+        lem:mpu_blocking, lem:mpu_double_layer_physical_reindexing}
     First block $J$ sites.  The normalized diagonal of this block is the
     reindexed rank-one matrix $|\rho)(\Id|$, and the trace-one condition is
     exactly $(\Id|\rho)=1$.  The exact second-block contraction theorem then
@@ -754,8 +769,9 @@ closing a chain of $N$ copies of $\mathcal U$.
     \label{thm:mpu_normalized_output_tail_coisometry}
     \lean{MPOTensor.IsMPU.normalized_mpo_tail_coisometry}
     \leanok
-    Let $K\geq0$, let $p,q\in\Fin d\times\Fin d$, and separate the first two
-    output sites from a tail $\tau\in\Fin K\to\Fin d$.  Then
+    Let $d>0$, let $\mathcal U$ be an MPU, and let $K\geq0$. For
+    $p,q\in\Fin d\times\Fin d$, separate the first two output sites from a
+    tail $\tau\in\Fin K\to\Fin d$. Then
     \begin{align}
         d^{-K}\sum_{\tau}\sum_{\eta}
         U^{(K+2)}_{(q,\tau),\eta}
