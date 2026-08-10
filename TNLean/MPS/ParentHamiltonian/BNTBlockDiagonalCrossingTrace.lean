@@ -106,35 +106,8 @@ theorem blockDiagonal_boundary_crossing_trace_decomposition_of_sum_mem_iSup
   let tailWord : List (Fin d) := List.ofFn fun k : Fin (N - i.val) =>
     σ ⟨k.val, by omega⟩
   have hσ : List.ofFn σ = tailWord ++ headWord := by
-    apply List.ext_getElem
-    · simp [tailWord, headWord, List.length_ofFn]
-      omega
-    · intro k hk₁ hk₂
-      have hkL : k < L := by
-        simpa only [List.length_ofFn] using hk₁
-      simp only [List.getElem_ofFn]
-      by_cases hkTail : k < N - i.val
-      · rw [List.getElem_append_left]
-        · have htail :
-              tailWord[k]'(by simpa [tailWord, List.length_ofFn] using hkTail) =
-                σ ⟨k, hkL⟩ := by
-            simp only [tailWord, List.getElem_ofFn]
-          rw [htail]
-        · simpa [tailWord, List.length_ofFn] using hkTail
-      · rw [List.getElem_append_right]
-        · have hidx : k - tailWord.length < headWord.length := by
-            simp [tailWord, headWord, List.length_ofFn]
-            omega
-          have hhead :
-              headWord[k - tailWord.length]'hidx = σ ⟨k, hkL⟩ := by
-            simp only [headWord, List.getElem_ofFn]
-            congr 1
-            ext
-            simp [tailWord, List.length_ofFn]
-            omega
-          rw [hhead]
-        · simpa [tailWord, List.length_ofFn] using
-            (show tailWord.length ≤ k by simp [tailWord, List.length_ofFn]; omega)
+    simpa [tailWord, headWord] using
+      ofFn_eq_boundary_crossing_tail_append_head i hi σ
   have hLeft :
       (∑ j : Fin r,
           Matrix.trace
