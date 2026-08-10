@@ -332,6 +332,82 @@ norm estimate is derived here.
     unfolding Definition~\ref{def:open_chain_ground_subspaces_es} gives
     $\mathcal U_K(A)$.
 \end{proof}
+
+\begin{theorem}[Euclidean spectator boundary ranges and factorizations]%
+    \label{thm:spectator_boundary_hilbert_factorization}
+    \lean{MPSTensor.range_tailBoundaryMapES}
+    \lean{MPSTensor.range_leftBoundaryMapES_one}
+    \lean{MPSTensor.tailBoundaryMapES_comp_tailVirtualMapES}
+    \lean{MPSTensor.leftBoundaryMapES_comp_leftVirtualMapES}
+    \leanok
+    \uses{thm:tail_boundary_map_range_es_transport,thm:left_boundary_map_range_es_transport,
+      thm:tail_boundary_map_factorization,thm:left_boundary_map_factorization}
+    Equip each virtual matrix fiber with the unweighted Hilbert--Schmidt inner
+    product and flatten the finite family of fibers into a Euclidean space.
+    The resulting continuous tail and left boundary maps have ranges
+    $\mathcal V_{K,L}(A)$ and, at suffix length one, $\mathcal U_K(A)$.
+    Moreover, if $J^{\mathrm{tail}}_K(X)_u=XA^u$ and
+    $J^{\mathrm{left}}_L(X)_\tau=A^\tau X$, then
+    \begin{align}
+      \Gamma^{\mathrm{tail}}_{K,L}J^{\mathrm{tail}}_K&=\Gamma_{K+L},&
+      \Gamma^{\mathrm{left}}_{K,L}J^{\mathrm{left}}_L&=\Gamma_{K+L}.
+    \end{align}
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:tail_boundary_map_range_es_transport,thm:left_boundary_map_range_es_transport,
+      thm:tail_boundary_map_factorization,thm:left_boundary_map_factorization}
+    Transport the algebraic range descriptions through the Euclidean
+    identification.  The two factorization identities follow by evaluating a
+    virtual matrix \(X\) fiberwise and applying the corresponding algebraic
+    tail or left factorization.
+\end{proof}
+
+\begin{theorem}[Direct-sum spectator Gram operators]%
+    \label{thm:spectator_boundary_direct_sum_gram}
+    \lean{MPSTensor.tailBoundaryMapES_adjoint_comp_self_eq_fiberwise_groundSpaceGram}
+    \lean{MPSTensor.leftBoundaryMapES_adjoint_comp_self_eq_fiberwise_groundSpaceGram}
+    \lean{MPSTensor.inverseGram_tailBoundaryMapES_eq_fiberwise_inverseGram}
+    \lean{MPSTensor.inverseGram_leftBoundaryMapES_eq_fiberwise_inverseGram}
+    \leanok
+    The tail Gram is the direct sum over prefix configurations of copies of
+    $\mathcal K_L$, and the left Gram is the direct sum over suffix
+    configurations of copies of $\mathcal K_K$.  Whenever the
+    corresponding local boundary map is injective, the inverse Gram is the
+    direct sum of the local inverse Grams.  These identities include empty
+    spectator index types and assert no norm estimate.
+\end{theorem}
+\begin{proof}
+    \leanok
+    Reindex the physical inner product by prefix--suffix configurations and
+    evaluate each fiber.  This gives the direct-sum Gram identities.  Composing
+    fiberwise with the local inverse Gram on either side gives the stated
+    inverse formulas.
+\end{proof}
+
+\begin{theorem}[Exact C3 projector residual identity]%
+    \label{thm:c3_spectator_projector_residual}
+    \lean{MPSTensor.c3_injectiveRangeProjector_residual_eq}
+    \leanok
+    \uses{thm:spectator_boundary_hilbert_factorization}
+    Fix $K,L_0\in\mathbb N$.  Suppose that the tail boundary map for
+    $(K,L_0+1)$, the left boundary map for $(K+L_0,1)$, and
+    $\Gamma_{K+L_0+1}$ are injective.  The difference between the product of
+    the first two inverse-Gram range projectors and the third inverse-Gram range
+    projector is exactly the common-factorization residual obtained from the
+    tail and left virtual maps.  Their ranges are, respectively,
+    $\mathcal V_{K,L_0+1}(A)$, $\mathcal U_{K+L_0}(A)$, and
+    $\mathcal G_{K+L_0+1}(A)$.  This identity asserts no numerical contraction
+    estimate.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:spectator_boundary_hilbert_factorization}
+    Apply the common-factorization projector identity to the two spectator
+    boundary maps, the full boundary map, and their tail and left virtual maps.
+    The preceding range equalities identify the three physical ranges.
+\end{proof}
+
 \subsection{Martingale gap consequences}\label{subsec:spectral_gap_martingale}
 
 \begin{theorem}[Martingale criterion for spectral gap]\label{thm:martingale_criterion}

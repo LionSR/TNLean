@@ -683,15 +683,42 @@ and generic prerequisites now include:
     For $I=\Fin D$ this is norm factor $D^{3/2}$; it is not claimed sharp and
     is not the FNW prefactor $c=D^2$.
   \item The spectator-indexed boundary maps for the tail and left windows are
-    defined in \path{TNLean/MPS/ParentHamiltonian/SpectatorBoundary.lean},
-    together with their exact range equalities
-    (\leanid{MPSTensor.tailBoundaryMap_range_eq},
-     \leanid{MPSTensor.leftBoundaryMap_range_eq})
-    and word-factorization identities
-    (\leanid{MPSTensor.tailBoundaryMap_factorization},
-     \leanid{MPSTensor.leftBoundaryMap_factorization}).
-    These give exact range models in the physical space
-    \(\mathcal H_{K+L}\); the C3 specializations are stated next.
+    defined algebraically in
+    \path{TNLean/MPS/ParentHamiltonian/SpectatorBoundary.lean}.  Their
+    finite-dimensional Hilbert realizations are
+    \leanid{MPSTensor.tailBoundaryMapES} and
+    \leanid{MPSTensor.leftBoundaryMapES} in
+    \path{TNLean/MPS/ParentHamiltonian/SpectatorBoundaryGram.lean}.  The latter
+    module proves the exact physical ranges, the factorizations through
+    \(\Gamma_{K+L}^{\mathrm{ES}}\), and injectivity from the corresponding local
+    boundary map.  It also computes the Grams as direct sums of
+    \(\mathcal K_L\) on tail fibers and \(\mathcal K_K\) on left fibers:
+    \leanid{MPSTensor.tailBoundaryMapES_adjoint_comp_self_eq_fiberwise_groundSpaceGram}
+    and
+    \leanid{MPSTensor.leftBoundaryMapES_adjoint_comp_self_eq_fiberwise_groundSpaceGram}.
+    The inverse Grams are likewise fiberwise by
+    \leanid{MPSTensor.inverseGram_tailBoundaryMapES_eq_fiberwise_inverseGram}
+    and
+    \leanid{MPSTensor.inverseGram_leftBoundaryMapES_eq_fiberwise_inverseGram}.
+    These are exact unweighted identities, including empty spectator types;
+    they assert no direct-sum norm estimate.  The C3 specializations are stated
+    next.
+  \item For injective maps with common factorizations
+    \(T J_1=C=L J_2\),
+    \leanid{ContinuousLinearMap.injectiveRangeProjector_comp_sub_of_factorizations}
+    factors the exact projector residual through
+    \begin{align}
+      T^\dagger L-(T^\dagger T)J_1S_CJ_2^\dagger(L^\dagger L).
+    \end{align}
+    The concrete specialization
+    \leanid{MPSTensor.c3_injectiveRangeProjector_residual_eq} uses the tail map
+    at $(K,L_0+1)$, the left map at $(K+L_0,1)$, the common map
+    $\Gamma_{K+L_0+1}^{\mathrm{ES}}$, and the corresponding virtual maps.  Its
+    three inverse-Gram range projectors have the open-chain tail, open-chain
+    left, and full ground-space ranges by the exact range theorems above.  All
+    three injectivity assumptions are explicit.  This is an algebraic identity
+    only; a source-specific estimate of the mixed-Gram residual is still
+    required.
 \end{itemize}
 Fix \(K,L_0\in\mathbb N\) and let
 \(\mathcal H_{K+L_0+1}\) be the \((K+L_0+1)\)-site Euclidean space
