@@ -820,11 +820,121 @@ norm estimate is derived here.
     $\lVert J_K\rVert$.  No FNW or Nachtergaele contraction estimate enters.
 \end{proof}
 
+\begin{definition}[Common overlap factors and centered residual]
+    \label{def:c3_centered_overlap_factors_residual}
+    \lean{MPSTensor.c3LeftOverlapFactorES}
+    \lean{MPSTensor.c3RightOverlapFactorES}
+    \lean{MPSTensor.c3CenteredVirtualResidualES}
+    \leanok
+    \uses{def:fixed_point_proj, def:gram_reshuffle,
+        thm:spectator_boundary_hilbert_factorization}
+    Let $A$ be an MPS tensor, let $\Omega_K$ be the set of length-$K$ words
+    in the physical alphabet, and let
+    $\mathcal B_K=\bigoplus_{u\in\Omega_K}\MN{D}$ with its
+    Hilbert--Schmidt direct-sum norm.  Define
+    \begin{align}
+        F_K&:\mathcal B_K\longrightarrow
+          \bigoplus_{(u,j)\in\Omega_K\times\Omega_1}\MN{D}
+    \end{align}
+    by applying the one-site left virtual map independently to each prefix
+    fiber.  Define
+    \begin{align}
+        G_K&:\mathcal B_1\longrightarrow
+          \bigoplus_{(u,j)\in\Omega_K\times\Omega_1}\MN{D}
+    \end{align}
+    by applying the length-$K$ tail virtual map independently to each
+    final-site fiber.  These definitions make sense without any nonemptiness
+    assumption on the virtual dimension or on either configuration set.
+
+    When $D\geq1$ and $\rho\in\MN{D}$ is positive definite, set
+    $\mathcal K_\infty=\mathscr R(P_\rho)$ and define the centered virtual
+    residual by
+    \begin{align}
+      R_{K,l}={}&(\Gamma^{\mathrm{tail}}_{K,l+1})^\dagger
+        \Gamma^{\mathrm{left}}_{K+l,1}
+        -\mathcal K_\infty^{\oplus\Omega_K}J^{\mathrm{tail}}_K
+        \mathcal K_\infty^{-1}(J^{\mathrm{left}}_1)^\dagger
+        \mathcal K_\infty^{\oplus\Omega_1}.
+    \end{align}
+\end{definition}
+
+\begin{theorem}[Centered overlap factorization and geometric bound]
+    \label{thm:c3_centered_overlap_factorization_geometric}
+    \lean{MPSTensor.boundaryFamilyEquiv_c3LeftOverlapFactorES_apply}
+    \lean{MPSTensor.boundaryFamilyEquiv_c3RightOverlapFactorES_apply}
+    \lean{MPSTensor.c3LeftOverlapFactorES_norm_le}
+    \lean{MPSTensor.c3RightOverlapFactorES_norm_le}
+    \lean{MPSTensor.c3_centeredVirtualResidualES_eq_overlapFactors}
+    \lean{MPSTensor.c3_centeredVirtualResidualES_norm_le}
+    \lean{MPSTensor.IsPrimitiveMPS.c3_centeredVirtualResidualES_norm_sq_le_geometric}
+    \leanok
+    \uses{def:c3_centered_overlap_factors_residual, def:ground_space_gram,
+        def:primitive_mps}
+    For every $K\in\N$, the common overlap factors have fiber formulas
+    \begin{align}
+        (F_KX)_{u,j}&=A^jX_u,&
+        (G_KZ)_{u,j}&=Z_jA^u,
+    \end{align}
+    and norm bounds
+    \begin{align}
+        \lVert F_K\rVert&\leq\lVert J^{\mathrm{left}}_1\rVert,&
+        \lVert G_K\rVert&\leq\lVert J^{\mathrm{tail}}_K\rVert.
+    \end{align}
+    The formulas and bounds remain valid for empty direct sums and incur no
+    factor depending on the number of configurations.
+
+    Assume $D\geq1$ and that $\rho\in\MN{D}$ is positive definite.  The
+    centered residual of Definition~\ref{def:c3_centered_overlap_factors_residual}
+    factors exactly at the generally nonidentity limiting metric as
+    \begin{align}
+      R_{K,l}
+      &=F_K^\dagger
+        (\mathcal K_l-\mathcal K_\infty)^{\oplus
+          (\Omega_K\times\Omega_1)}G_K,
+    \end{align}
+    and hence
+    \begin{align}
+      \lVert R_{K,l}\rVert
+      &\leq \lVert J^{\mathrm{left}}_1\rVert
+        \lVert\mathcal K_l-\mathcal K_\infty\rVert
+        \lVert J^{\mathrm{tail}}_K\rVert.
+    \end{align}
+    If, in addition, $A$ is primitive with fixed-point witness $\rho$, then
+    there are constants $C>0$ and $0<r<1$ such that, for every $K\in\N$ and
+    every $l\geq1$,
+    \begin{align}
+      \lVert R_{K,l}\rVert^2
+      &\leq D^3\bigl(Cr^l\bigr)^2.
+    \end{align}
+    All formulas in this theorem are reconstructed algebra.  They are not
+    sourced formulas and assert neither a full projector-defect estimate nor
+    the FNW--Nachtergaele rational coefficient.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:c3_projector_gram_error_telescope,
+        thm:boundary_fiberwise_map_norm,
+        thm:primitive_ground_space_gram_geometric_fixed_point,
+        thm:primitive_tail_virtual_map_norm_uniform}
+    Evaluate the two factors on each common direct-sum fiber.  The direct-sum
+    norm identity gives the two bounds without a factor counting spectator
+    configurations.  Substitute these fiber formulas into the centered
+    residual identity from
+    Theorem~\ref{thm:c3_projector_gram_error_telescope} to obtain the exact
+    factorization.  Submultiplicativity and
+    Theorem~\ref{thm:boundary_fiberwise_map_norm} give the product bound.
+    Under primitivity, combine the uniform bound for
+    $J^{\mathrm{tail}}_K$ with the squared geometric Gram estimate and absorb
+    the fixed norm of $J^{\mathrm{left}}_1$ into the constant.
+\end{proof}
+
 \begin{lemma}[Uniform FNW overlapping-window contraction]
     \label{lem:fnw_overlapping_window_contraction}
     \notready
     \discussion{5923}
     \uses{thm:primitive_tail_virtual_map_norm_uniform,
+        thm:c3_centered_overlap_factorization_geometric,
         thm:fixed_point_gram_metric_exact,
         thm:fixed_point_gram_metric_is_unit,
         thm:primitive_ground_space_map_eventual_inverse_gram_bound,
@@ -851,8 +961,12 @@ norm estimate is derived here.
     \cite[Eq.~(6.1)]{Nachtergaele1996Spectral}, derived there from the
     Fannes--Nachtergaele--Werner estimates.  The remaining task is to realize
     that source estimate for the two physical boundary-map projectors above.
-    It must use the exact inverse-Gram range-projector formulas in the limiting
-    fixed-point metric before applying transfer mixing.
+    Theorem~\ref{thm:c3_centered_overlap_factorization_geometric} controls only
+    the centered term in the exact residual telescope.  The three correction
+    terms, their assembly into the full projector defect, the denominator, and
+    the coefficient in equation~(6.1) remain open.  The final argument must use
+    the exact inverse-Gram range-projector formulas in the limiting fixed-point
+    metric before applying transfer mixing.
 \end{lemma}
 
 \begin{lemma}[Uniform open-chain projector-defect threshold]

@@ -770,6 +770,62 @@ and generic prerequisites now include:
     decomposition, the geometric power bound, and the dimension conversion
     from the \(L^2\) operator norm to entrywise mass.  This is not an FNW or
     Nachtergaele contraction estimate.
+  \item Let $A$ be an MPS tensor, let $\Omega_K$ be the set of length-$K$
+    physical words, and let $\mathcal B_K=\bigoplus_{u\in\Omega_K}\MN{D}$.
+    Write $J^{\mathrm{left}}_1(X)=(A^jX)_{j\in\Omega_1}$ for the one-site
+    left virtual map and
+    $J^{\mathrm{tail}}_K(X)=(XA^u)_{u\in\Omega_K}$ for the length-$K$ tail
+    virtual map.  The two common direct-sum overlap factors
+    \leanid{MPSTensor.c3LeftOverlapFactorES} and
+    \leanid{MPSTensor.c3RightOverlapFactorES} have the exact fiber formulas
+    \begin{align}
+      (F_KX)_{u,j}&=A^jX_u,&
+      (G_KZ)_{u,j}&=Z_jA^u,
+    \end{align}
+    recorded by
+    \leanid{MPSTensor.boundaryFamilyEquiv_c3LeftOverlapFactorES_apply} and
+    \leanid{MPSTensor.boundaryFamilyEquiv_c3RightOverlapFactorES_apply}.
+    Their definitions and fiber formulas are valid for arbitrary finite,
+    possibly empty, configuration sets and require no nonzero-cardinality
+    assumption.  Moreover,
+    \leanid{MPSTensor.c3LeftOverlapFactorES_norm_le} and
+    \leanid{MPSTensor.c3RightOverlapFactorES_norm_le} give
+    \begin{align}
+      \lVert F_K\rVert&\leq\lVert J^{\mathrm{left}}_1\rVert,&
+      \lVert G_K\rVert&\leq\lVert J^{\mathrm{tail}}_K\rVert,
+    \end{align}
+    with no loss depending on the number of prefix configurations.
+
+    When $D\geq1$ and $\rho$ is explicitly positive definite, set
+    $\mathcal K_\infty=\mathscr R(P_\rho)$.  The centered residual
+    \leanid{MPSTensor.c3CenteredVirtualResidualES} factors exactly as
+    \begin{align}
+      R_{K,l}
+      &=F_K^\dagger
+        (\mathcal K_l-\mathcal K_\infty)^{\oplus
+          (\Omega_K\times\Omega_1)}G_K
+    \end{align}
+    by
+    \leanid{MPSTensor.c3_centeredVirtualResidualES_eq_overlapFactors}, and
+    \leanid{MPSTensor.c3_centeredVirtualResidualES_norm_le} gives
+    \begin{align}
+      \lVert R_{K,l}\rVert
+      &\leq \lVert J^{\mathrm{left}}_1\rVert
+        \lVert\mathcal K_l-\mathcal K_\infty\rVert
+        \lVert J^{\mathrm{tail}}_K\rVert.
+    \end{align}
+    Thus, if $A$ is primitive with fixed-point witness $\rho$, if $\rho$ is
+    explicitly positive definite, and if $l\geq1$, then
+    \leanid{MPSTensor.IsPrimitiveMPS.c3_centeredVirtualResidualES_norm_sq_le_geometric}
+    supplies constants $C>0$ and $0<r<1$, independent of $K$, for which
+    \begin{align}
+      \lVert R_{K,l}\rVert^2
+      &\leq D^3\bigl(Cr^l\bigr)^2
+    \end{align}
+    for every $K\in\mathbb N$.  These formulas are reconstructed algebra, not
+    formulas quoted from FNW or Nachtergaele.  They control only the centered
+    term and prove neither the full projector defect nor the rational
+    coefficient in equation~(6.1).
   \item For each length \(n\), let \(\mathcal K_n\) be the ground-space
     Gram, and whenever it is invertible set \(S_n=\mathcal K_n^{-1}\).  Let
     \(\mathcal K_\infty=\mathscr R(P_\rho)\), with \(\rho\) positive
@@ -798,8 +854,10 @@ and generic prerequisites now include:
     length-\(l\) Gram error.  The zeroth-order cancellation uses the explicit
     limiting metric, its inverse, and the virtual-map adjoints; no transfer
     fixed-point equation is needed.  These identities are reconstructed
-    algebra.  The final projector-defect estimate and the FNW--Nachtergaele
-    rational contraction remain open.
+    algebra.  The remaining norm argument must assemble all three correction
+    terms with the centered bound.  The resulting full projector defect, the
+    denominator $1-c\lambda^l$, and the coefficient in equation~(6.1) remain
+    open.
 \end{itemize}
 Fix \(K,L_0\in\mathbb N\) and let
 \(\mathcal H_{K+L_0+1}\) be the \((K+L_0+1)\)-site Euclidean space
