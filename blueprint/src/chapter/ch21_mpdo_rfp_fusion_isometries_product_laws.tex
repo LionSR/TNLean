@@ -367,6 +367,31 @@ of_verticalDecompositions_of_unitaryBlockEquiv}
     gives the tensor-attached algebra clause.
 \end{proof}
 
+% CPSV16 Theorem 4.14 (`thm:IV.13`), lines 972--993 and Appendix C.4.
+\begin{theorem}[Printed algebra and fusion characterization]
+    \label{thm:cpsv_theorem414_printed_status}
+    \notready
+    \discussion{5917}
+    \uses{def:mpdo, def:cpsv_canonical_form, def:is_rfp_via_ts,
+        def:mpdo_bnt_algebra_tensor_clause,
+        def:mpdo_bnt_fusion_tensor_clause}
+    For a canonical-form tensor generating matrix product density operators,
+    Theorem~4.14 of \cite{Cirac2016MPDO_arXiv} states that the fixed-point
+    condition, the tensor-attached BNT algebra clause, and the displayed fusion
+    isometry clause are equivalent.
+
+    The equivalence between the fixed-point condition and the tensor-attached
+    algebra clause is complete.  The fusion equivalence is complete for the
+    active-support reading in which an absent product sector has zero
+    multiplicity and the retained-row map is a coisometry with exact
+    reconstruction.  This corrected theorem is
+    Theorem~\ref{thm:mpdo_cpsv_bnt_rfp_equivalence}.  It is not coverage of the
+    unrestricted printed fusion clause.  The fixed-pair support and coisometry
+    corrections are documented in
+    \path{docs/paper-gaps/cpsv16_figure11_per_pair_support.tex} and
+    \path{docs/paper-gaps/cpsv16_figure11_fusion_coisometry.tex}.
+\end{theorem}
+
 \begin{theorem}[BNT characterizations of MPDO renormalization fixed points]
     \label{thm:mpdo_cpsv_bnt_rfp_equivalence}
     \lean{MPOTensor.isRFPViaTS_iff_hasBNTAlgebraTensorClause}

@@ -711,6 +711,36 @@ the remaining sites unchanged.
     $\E_A^2=\E_A$. The physical-isometry formulation follows from
     Theorem~\ref{thm:physical_blocking_isometry_iff_transfer_idempotence}.
 \end{proof}
+% CPSV16 Appendix D (`Strong-RFP`, `rank-Fibonacci`, and `eq:1`),
+% lines 2109--2176.  The final label names an internal diagonalization step.
+\begin{theorem}[Fibonacci rank obstruction cited against strong fixed points]
+    \label{thm:cpsv_fibonacci_rank_obstruction_status}
+    \notready
+    \discussion{5921}
+    \uses{def:is_rfp_via_ts}
+    Let $A$ be the vacuum-sector boundary tensor of the Fibonacci model
+    described in Appendix~D of \cite{Cirac2016MPDO_arXiv}, and set
+    \begin{align}
+        \tau_\pm&=\frac{1\pm\sqrt5}{2}.
+        \notag
+    \end{align}
+    The source claims that for every $N>0$,
+    \begin{align}
+        \operatorname{rank}\rho^{(N)}(A)
+        &=\tau_+^{2N}+\tau_-^{2N},
+        \notag
+    \end{align}
+    and that this sequence is not geometric: there do not exist natural
+    numbers $r,s$ such that
+    \begin{align}
+        \operatorname{rank}\rho^{(N)}(A)&=rs^{N-1}
+        \notag
+    \end{align}
+    for every $N>0$.  The first two ranks are $3$ and $7$, which already
+    exclude such $r$ and $s$.  The diagram labelled ``Strong-RFP'' does not yet
+    specify an unambiguous algebraic predicate, so its general rank-growth
+    implication is not included in this statement.
+\end{theorem}
 
 \begin{definition}[Initial-coordinate regroupings]
     \label{def:finite_tuple_regroupings}

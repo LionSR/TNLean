@@ -1,6 +1,28 @@
 \section{The proportional and equal cases}
 \label{sec:ft_equal_proportional_cases}
 
+% CPSV16 Theorem 2.10 (`thm1`), lines 349--352 and Appendix A restatement
+% at lines 1167--1170.
+\begin{theorem}[Printed proportional fundamental theorem]
+    \label{thm:cpsv_theorem210_printed_status}
+    \notready
+    \discussion{5917}
+    \uses{def:bnt_cpsv, def:cpsv_canonical_form}
+    Let $A$ and $B$ be tensors in canonical form whose matrix product vectors
+    are proportional at every positive length.  Theorem~2.10 of
+    \cite{Cirac2016MPDO_arXiv} asserts that arbitrary chosen bases of normal
+    tensors for $A$ and $B$ have the same cardinality and are related by a
+    bijective family of gauge-phase equivalences.
+
+    The literal statement is false.  The source definition permits adjoining
+    to a basis a normal tensor with coefficient zero at every positive length;
+    this changes the basis cardinality without changing the tensor or any
+    matrix product vector.  The corrected theorem requires active, nonzero
+    sector data and is Theorem~\ref{thm:cpgsv_multiblock_ft_source}.  The
+    counterexample is recorded in
+    \path{docs/paper-gaps/cpsv16_bnt_uniqueness_zero_coefficient.tex}.
+\end{theorem}
+
 \begin{theorem}[Multi-block fundamental theorem for normal tensors]%
     \label{thm:cpgsv_multiblock_ft_source}
     \lean{MPSTensor.fundamentalTheorem_proportional_canonicalForm}
@@ -96,6 +118,26 @@
     \end{align}
 \end{proof}
 
+% CPSV16 Corollary A.6 (`thm:Fundamental-CFII`), lines 1197--1199.
+\begin{corollary}[Printed Canonical Form II unitary refinement]
+    \label{cor:cpsv_corollary_a6_printed_status}
+    \notready
+    \discussion{5917}
+    \uses{thm:cpsv_theorem210_printed_status,
+        cor:cpsv_corollary211_printed_status}
+    Corollary~A.6 of \cite{Cirac2016MPDO_arXiv} asserts that the gauge matrices
+    in Theorem~2.10 and Corollary~2.11 may be chosen unitary when both tensors
+    are in Canonical Form II.
+
+    Canonical Form II does not remove inactive zero-weight blocks.  The literal
+    equal-MPV conclusion therefore still fails at the bond-dimension and
+    global-unitary level.  The proportional sector gauges and the equal global
+    gauge are unitary on the corrected active, nonzero surface; these are the
+    two results below.  The source boundary is recorded in
+    \path{docs/paper-gaps/cpsv16_bnt_characterization_active_blocks.tex} and
+    \path{docs/paper-gaps/cpsv16_global_vs_persector_unit_witness.tex}.
+\end{corollary}
+
 \begin{corollary}[Canonical Form II unitary refinement of proportional matching]%
     \label{cor:sector_bnt_proportional_unitary_sector_match}
     \lean{MPSTensor.ft_sector_bnt_proportional_unitary_sector_match_witnesses}
@@ -131,6 +173,27 @@
 
 \subsection{The equal case}
 \label{subsec:ft_equal_case}
+
+% CPSV16 Corollary 2.11 (`II_cor2`), lines 354--361 and Appendix A
+% restatement at lines 1172--1179.
+\begin{corollary}[Printed equal-MPV fundamental theorem]
+    \label{cor:cpsv_corollary211_printed_status}
+    \notready
+    \discussion{5917}
+    \uses{thm:cpsv_theorem210_printed_status, def:cpsv_canonical_form}
+    Corollary~2.11 of \cite{Cirac2016MPDO_arXiv} states that two canonical-form
+    tensors generating the same matrix product vectors at every positive
+    length have equal bond dimensions and are conjugate by one invertible
+    matrix.
+
+    Under the literal canonical-form display, an inactive zero-weight block
+    may be added to either tensor.  Such a block changes the ambient bond
+    dimension but contributes nothing at positive length.  The printed
+    dimension and global-conjugacy conclusion therefore fails.  The corrected
+    active, nonzero result is Theorem~\ref{thm:cpgsv_equal_case_source}; the
+    source distinction is recorded in
+    \path{docs/paper-gaps/cpsv16_bnt_characterization_active_blocks.tex}.
+\end{corollary}
 
 \begin{theorem}[Equal BNT canonical forms are globally conjugate]%
     \label{thm:cpgsv_equal_case_source}

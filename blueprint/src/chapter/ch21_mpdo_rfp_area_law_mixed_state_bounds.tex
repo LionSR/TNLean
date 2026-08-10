@@ -107,6 +107,26 @@
     Hence $S(B)=S_b$ and $S(BC)=S_{b+c}$.
 \end{proof}
 
+% CPSV16 Proposition 4.5 (`PropILILp1`), lines 801--807.
+\begin{theorem}[Printed mutual-information proposition]
+    \label{thm:cpsv_prop45_printed_status}
+    \notready
+    \discussion{5917}
+    \uses{def:mutual_info_chain, thm:parity_mpdo_no_thermodynamic_limit}
+    Proposition~4.5 of \cite{Cirac2016MPDO_arXiv} states that $I_L\le I_{L+1}$
+    for $L<\lfloor N/2\rfloor$, that the mutual information is bounded in terms
+    of the bond dimension, and that the indicated iterated thermodynamic limit
+    exists and is finite.
+
+    The monotonicity and finite-chain bound are valid and are formalized below.
+    The limit assertion is false without an additional convergence hypothesis:
+    the parity-sensitive positive MPDO of
+    Theorem~\ref{thm:parity_mpdo_no_thermodynamic_limit} has normalized reduced
+    states, and hence mutual information, which depend on the parity of the
+    chain length.  The printed proposition is therefore only partially covered;
+    see \path{docs/paper-gaps/cpgsv17_mpdo_mutual_information_bound.tex}.
+\end{theorem}
+
 \begin{proposition}[Monotonicity of the mutual information]
     \label{prop:mutual_info_monotone}
     \lean{mutualInfoChain_monotone}
