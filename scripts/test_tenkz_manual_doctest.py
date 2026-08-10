@@ -22,8 +22,8 @@ SPEC.loader.exec_module(DOCTEST)
 def main() -> int:
     manual = DOCTEST.displayed_examples()
     reference = DOCTEST.reference_examples()
-    if len(manual) != 20:
-        raise AssertionError(f"expected 20 displayed TeX examples, found {len(manual)}")
+    if len(manual) != 28:
+        raise AssertionError(f"expected 28 displayed TeX examples, found {len(manual)}")
     refusals = [example for example in manual if example.expected_failure]
     if len(refusals) != 1:
         raise AssertionError(

@@ -11,7 +11,7 @@
 % the deliberate exception: it prints without rendering, and the doctest
 % requires it to fail with the diagnostic the manual quotes.
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesPackage{tenkzmanual2}[2026/08/10 v2.2 compact tenkz manual typography]
+\ProvidesPackage{tenkzmanual2}[2026/08/10 v2.3 compact tenkz manual typography]
 
 % ---------------------------------------------------------------------------
 %  Page grid (Tufte-lite, one-sided; margin column on the right)
@@ -54,6 +54,13 @@
 \newcommand*{\mtwo@unitseam}{0.3\baselineskip}  % rule/caption/diagram/source seams
 \newcommand*{\mtwo@panelsep}{2.2em}             % gap between small-multiples panels
 \newcommand*{\mtwo@panellabelsep}{4pt}          % panel-to-variant-label gap
+% Clear paper a panel reserves below its variant label.  A row of panels
+% is one paragraph line; when the row wraps, TeX separates the deep lines
+% by \lineskip alone, which parks the next row's ink one point under the
+% caption band of the row above.  The panel's vertical extent therefore
+% includes its caption plus this clearance, so a wrapped panel always
+% starts on a clear row.
+\newcommand*{\mtwo@panelrowsep}{1.0\baselineskip}
 
 % ---------------------------------------------------------------------------
 %  Margin apparatus: sidenotes, margin formulas, thumb-tags
@@ -393,6 +400,8 @@
         \skip_vertical:n { \mtwo@panellabelsep }
         \hbox_to_wd:nn { \l_mtwo_panel_dim }
           { \tex_hss:D \box_use:N \l_mtwo_panellab_box \tex_hss:D }
+        % the caption band belongs to the panel (see \mtwo@panelrowsep)
+        \skip_vertical:n { \mtwo@panelrowsep }
       }
   }
 

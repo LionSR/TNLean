@@ -460,12 +460,26 @@ boundary conditions (PBC).
     Gauge equivalence is the special case $\zeta = 1$.
 \end{proof}
 
-\begin{remark}\leanok
-    After spectral-radius normalization one may restrict $\zeta$
-    to a unit-modulus phase $e^{i\phi}$.
-    We allow an arbitrary nonzero scalar because later canonical-form
-    statements keep the block-scaling factors explicit.
-\end{remark}
+\begin{definition}[Unit gauge-phase equivalence]
+    \label{def:unit_gauge_phase_equiv}
+    \lean{MPSTensor.UnitGaugePhaseEquiv}
+    \leanok
+    \uses{def:gauge_phase_equiv}
+    Two tensors are unit gauge-phase equivalent when the gauge-phase equation
+    holds with $|\zeta|=1$.
+\end{definition}
+
+\begin{lemma}[Unit gauge phase implies gauge phase]
+    \label{lem:unit_gauge_phase_to_gauge_phase}
+    \lean{MPSTensor.UnitGaugePhaseEquiv.toGaugePhaseEquiv}
+    \leanok
+    \uses{def:unit_gauge_phase_equiv, def:gauge_phase_equiv}
+    Unit gauge-phase equivalence implies gauge-phase equivalence.
+\end{lemma}
+
+\begin{proof}\leanok
+    A unit-modulus scalar is nonzero.
+\end{proof}
 
 \begin{lemma}[Gauge-phase equivalence across equal bond dimensions]
     \label{lem:gauge_phase_equiv_cast_compose}

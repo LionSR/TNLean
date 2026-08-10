@@ -101,7 +101,8 @@ private lemma transferMap_pow_lowerMatrixUnit (n : ℕ) :
       rw [pow_succ, Module.End.mul_apply, transferMap_lowerMatrixUnit,
         map_smul, ih, smul_smul, pow_succ, mul_comm]
 
-private theorem primitiveCubeRoot_isPrimitiveRoot :
+/-- The phase used by `cubePhaseTensor` is a primitive cube root of unity. -/
+theorem primitiveCubeRoot_isPrimitiveRoot :
     IsPrimitiveRoot primitiveCubeRoot 3 := by
   simpa [primitiveCubeRoot, mul_assoc] using
     Complex.isPrimitiveRoot_exp 3 (by norm_num)
@@ -150,20 +151,6 @@ private theorem primitiveCubeRoot_two_pow_not_tendsto (z : ℂ) :
     primitiveCubeRoot_isPrimitiveRoot.pow_inj (by norm_num) (by norm_num) hpows
   omega
 
-private theorem scalarUnitTensor_transferMap :
-    transferMap scalarUnitTensor = LinearMap.id := by
-  apply LinearMap.ext
-  intro X
-  ext a b
-  fin_cases a
-  fin_cases b
-  simp [transferMap_apply, scalarUnitTensor]
-
-private theorem scalarUnitTensor_isNormalTensor :
-    IsNormalTensor scalarUnitTensor :=
-  isNormalTensor_of_bondDim_one_of_transferMap_eq_id
-    scalarUnitTensor scalarUnitTensor_transferMap
-
 /-- Canonical-form data for the two scalar normal blocks with weights `1` and
 `primitiveCubeRoot`.
 
@@ -173,6 +160,8 @@ noncomputable def cubePhaseCanonicalData : CPSVCanonicalFormData cubePhaseTensor
     (fun _ => by simp) cubePhaseWeight (fun _ => scalarUnitTensor)
     (fun _ => scalarUnitTensor_isNormalTensor)
 
+/-- The cube-phase canonical-form data satisfy the normalization at
+arXiv:1606.00608, line 246. -/
 private theorem cubePhaseCanonicalData_isWeightNormalized :
     cubePhaseCanonicalData.IsWeightNormalized := by
   refine {

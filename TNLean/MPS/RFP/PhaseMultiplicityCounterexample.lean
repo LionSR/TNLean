@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import TNLean.MPS.CanonicalForm.Definitions
 import TNLean.MPS.RFP.StructuralFull
 
 /-!
@@ -31,6 +32,23 @@ namespace MPSTensor
 
 /-- The one-dimensional representative normal tensor in the counterexample. -/
 def scalarUnitTensor : MPSTensor 1 1 := fun _ => 1
+
+private theorem scalarUnitTensor_transferMap :
+    transferMap scalarUnitTensor = LinearMap.id := by
+  apply LinearMap.ext
+  intro X
+  ext a b
+  fin_cases a
+  fin_cases b
+  simp [transferMap_apply, scalarUnitTensor]
+
+/-- The one-dimensional scalar unit tensor is normal.
+
+Source: arXiv:1606.00608, canonical-form normal-block condition, lines 233--245. -/
+theorem scalarUnitTensor_isNormalTensor :
+    IsNormalTensor scalarUnitTensor :=
+  isNormalTensor_of_bondDim_one_of_transferMap_eq_id
+    scalarUnitTensor scalarUnitTensor_transferMap
 
 /-- The two unit-modulus phases $1$ and $-1$. -/
 def signPhase : Fin 2 → ℂ

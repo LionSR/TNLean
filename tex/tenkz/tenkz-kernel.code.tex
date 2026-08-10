@@ -5134,6 +5134,11 @@
 % physical legs (crossing-referenced legs are saved, not yet drawn); strings
 % (declare, crossings, surgery, then draw legs and strings from their saved
 % paths); atoms; marks.  A string's gap is cut before any of its ink exists.
+% One route family stands outside that surgery: a physical closure's `trace`
+% stroke carries its own paper halo instead of a crossing-derived gap, so it
+% must still be the last ink at any crossing it makes.  Among saved index
+% routes it therefore draws after the deferred legs it may cross, not before
+% them, while every other index route keeps the ordinary first-pass order.
 
 \msg_new:nnn {tenkz}{kernel-render-todo}
   { [TKZ-KERNEL-RENDER-TODO]~'#1'~does~not~draw~yet~(record~#2) }
@@ -5176,6 +5181,10 @@
 \prop_new:N \l__tenkz_kernel_r_port_host_routes_prop
 \clist_new:N \l__tenkz_kernel_r_skin_over_wire_clist
 \seq_new:N  \l__tenkz_kernel_r_index_routes_seq
+% A saved-route physical closure crosses a deferred leg's ink, not the other
+% way round: sieved out of the ordinary index-route pass and drawn again
+% after the deferred legs, so its `trace` paper halo remains the top ink.
+\seq_new:N  \l__tenkz_kernel_r_deferred_trace_routes_seq
 \seq_new:N  \l__tenkz_kernel_r_port_label_routes_seq
 \seq_new:N  \l__tenkz_kernel_r_strings_seq    % string wire record ids
 \seq_new:N  \l__tenkz_kernel_r_after_atom_seq % physical traces need glyph borders
@@ -13649,8 +13658,8 @@
         % never named as a crossing operand has always stood.
         \__tenkz_string_save_route:VV \l__tenkz_kernel_leg_name_tl
           \l__tenkz_kernel_r_leg_path_tl
-        \exp_args:NV \__tenkz_string_touch_all:n
-          \l__tenkz_kernel_leg_name_tl
+        \exp_args:NV \__tenkz_string_touch_all:nn
+          \l__tenkz_kernel_leg_name_tl {leg}
         \__tenkz_kernel_r_leg_skin_touch:n {#1}
         \exp_args:NnV \__tenkz_render_stroke:nn { bond }
           \l__tenkz_kernel_r_leg_path_tl
@@ -14365,6 +14374,12 @@
 
 \cs_new_protected:Npn \__tenkz_kernel_r_string_declare:n #1
   {
+    % Mark this route as author-declared before it is saved, so the string
+    % tier's crossing police can still catch it beside a renderer-owned
+    % touch-all route (typically a lattice bond) that would otherwise
+    % silence the pair -- issue #5825.
+    \__tenkz_kernel_r_sid:nN {#1} \l__tenkz_kernel_r_sid_tl
+    \exp_args:NV \__tenkz_string_author:n \l__tenkz_kernel_r_sid_tl
     \prop_if_in:NnTF \l__tenkz_kernel_ro_lane_prop {#1}
       { \__tenkz_kernel_r_route_string:n {#1} }
       { \__tenkz_kernel_r_string_free:n {#1} }
@@ -15165,11 +15180,31 @@
       { ! \prop_if_empty_p:N \l__tenkz_kernel_r_legdrawn_prop }
       { \__tenkz_string_resolve: }
     % Ordinary index wires retain their original first ink pass, now using
-    % the crossing-policed saved path.  Gapped legs and strings follow.
+    % the crossing-policed saved path.  Gapped legs and strings follow.  A
+    % physical closure's `trace` route is the one saved route that carries
+    % its own paper halo rather than a crossing-derived gap
+    % (`tenkz-core.code.tex`, the `trace` style), so it cannot settle for
+    % the ordinary first-pass slot: sieve it out here and hold it for a
+    % second pass after the deferred legs, so the halo remains the top ink
+    % at any deferred-leg crossing instead of being buried under the leg
+    % drawn over it.
+    \seq_clear:N \l__tenkz_kernel_r_deferred_trace_routes_seq
     \seq_map_inline:Nn \l__tenkz_kernel_r_index_routes_seq
-      { \__tenkz_kernel_r_index_route:n {##1} }
+      {
+        \prop_get:NnN \l__tenkz_kernel_r_index_style_prop {##1}
+          \l__tenkz_kernel_r_wire_style_tl
+        \regex_match:nVTF { \A trace \s* , }
+          \l__tenkz_kernel_r_wire_style_tl
+          {
+            \seq_put_right:Nn \l__tenkz_kernel_r_deferred_trace_routes_seq
+              {##1}
+          }
+          { \__tenkz_kernel_r_index_route:n {##1} }
+      }
     \prop_map_inline:Nn \l__tenkz_kernel_r_legdrawn_prop
       { \__tenkz_render_string:nn {##1} { draw = tenkzInk } }
+    \seq_map_inline:Nn \l__tenkz_kernel_r_deferred_trace_routes_seq
+      { \__tenkz_kernel_r_index_route:n {##1} }
     \seq_map_inline:Nn \l__tenkz_kernel_r_strings_seq
       {
         \__tenkz_kernel_r_sid:nN {##1} \l__tenkz_kernel_r_sid_tl
@@ -15189,7 +15224,7 @@
         \__tenkz_model_get:nnN {##2} {origin}
           \l__tenkz_kernel_scratch_tl
         \str_if_eq:VnF \l__tenkz_kernel_scratch_tl {port-open}
-          { \__tenkz_string_touch_all:n {##1} }
+          { \__tenkz_string_touch_all:nn {##1} {bond} }
         % Deferred physical legs have saved paths but no model-wire owner.
         % Preserve their explicit topology relation with every index route;
         % unlike the common index class, they still cross-check user strings.

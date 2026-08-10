@@ -70,7 +70,7 @@ lemma mpvOverlap_eq_star_mpvInner {d D₁ D₂ : ℕ} (A : MPSTensor d D₁) (B 
 state vectors.
 
 This algebraic identity is used in the proof of arXiv:1606.00608,
-Theorem II.1, Appendix MPV proof line 1182, to lift the BNT decomposition to a
+Theorem 2.10, Appendix MPV proof line 1182, to lift the BNT decomposition to a
 state-vector identity before taking inner products with individual blocks. -/
 lemma mpvState_eq_sum_of_decomp
     {d g Dtot : ℕ} {dim : Fin g → ℕ}
@@ -92,7 +92,7 @@ lemma mpvState_eq_sum_of_decomp
 decomposition.
 
 This algebraic identity is used in the proof of arXiv:1606.00608,
-Theorem II.1, Appendix MPV proof line 1182, when projecting the full
+Theorem 2.10, Appendix MPV proof line 1182, when projecting the full
 proportionality relation onto one block MPV. -/
 lemma mpvInner_eq_sum_of_decomp_right
     {d g D Dtot : ℕ} {dim : Fin g → ℕ}

@@ -23,9 +23,11 @@ is right multiplication by the fixed point, divided by its trace.
 * `Matrix.gramReshuffleMatrix_fixedPointProj_posDef` proves positive definiteness.
 * `Matrix.gramReshuffle_fixedPointProj_isUnit` proves invertibility.
 * `Matrix.gramReshuffle_fixedPointProj_injective` proves injectivity.
+* `Matrix.inverse_gramReshuffle_fixedPointProj_frobeniusEquivEuclidean_apply`
+  computes the inverse action.
 -/
 
-open scoped ComplexOrder Kronecker Matrix
+open scoped ComplexOrder Kronecker Matrix Matrix.Norms.Frobenius
 
 namespace Matrix
 
@@ -98,5 +100,34 @@ theorem gramReshuffle_fixedPointProj_injective [NeZero D]
       (gramReshuffle (fixedPointProj ρ (ne_of_gt hρ.trace_pos))) := by
   exact (ContinuousLinearMap.isUnit_iff_bijective.mp
     (gramReshuffle_fixedPointProj_isUnit hρ)).1
+
+/-- The inverse limiting Gram operator is right multiplication by the
+nonsingular inverse of the fixed point, with the reciprocal normalization
+cancelled. -/
+theorem inverse_gramReshuffle_fixedPointProj_frobeniusEquivEuclidean_apply [NeZero D]
+    {ρ : Matrix (Fin D) (Fin D) ℂ} (hρ : ρ.PosDef)
+    (X : Matrix (Fin D) (Fin D) ℂ) :
+    Ring.inverse (gramReshuffle (fixedPointProj ρ (ne_of_gt hρ.trace_pos)))
+        (frobeniusEquivEuclidean (Fin D) (Fin D) X) =
+      frobeniusEquivEuclidean (Fin D) (Fin D)
+        ((trace ρ) • (X * ρ⁻¹)) := by
+  let K := gramReshuffle (fixedPointProj ρ (ne_of_gt hρ.trace_pos))
+  have hK : IsUnit K := gramReshuffle_fixedPointProj_isUnit hρ
+  apply gramReshuffle_fixedPointProj_injective hρ
+  change K (Ring.inverse K (frobeniusEquivEuclidean (Fin D) (Fin D) X)) =
+    K (frobeniusEquivEuclidean (Fin D) (Fin D) ((trace ρ) • (X * ρ⁻¹)))
+  rw [← ContinuousLinearMap.comp_apply]
+  have hcancel : K.comp (Ring.inverse K) = 1 :=
+    Ring.isUnit_iff_mul_inverse_cancel.mp hK
+  rw [hcancel]
+  rw [gramReshuffle_fixedPointProj_frobeniusEquivEuclidean_apply]
+  change frobeniusEquivEuclidean (Fin D) (Fin D) X =
+    frobeniusEquivEuclidean (Fin D) (Fin D)
+      ((trace ρ)⁻¹ • ((trace ρ) • (X * ρ⁻¹) * ρ))
+  congr 1
+  rw [Matrix.smul_mul, Matrix.mul_assoc,
+    Matrix.nonsing_inv_mul ρ (ρ.isUnit_iff_isUnit_det.mp hρ.isUnit),
+    Matrix.mul_one, smul_smul, inv_mul_cancel₀ (ne_of_gt hρ.trace_pos), one_smul]
+
 
 end Matrix
