@@ -85,6 +85,32 @@
     values claimed.
 \end{proof}
 
+% CPSV16 Appendix D (`RFP-gauge`), lines 2094--2107.
+\begin{theorem}[Printed blocking-up-to-gauge equivalence]
+    \label{thm:cpsv_rfp_gauge_printed_status}
+    \notready
+    \discussion{5920}
+    \uses{thm:cpsv_canonical_form_flow_phase_obstruction,
+        def:mps_transfer_idempotence}
+    Let $\omega=e^{2\pi i/3}$, let
+    \begin{align}
+        A&=\begin{pmatrix}1&0\\0&\omega\end{pmatrix}, &
+        S&=\begin{pmatrix}0&1\\1&0\end{pmatrix}.
+        \notag
+    \end{align}
+    Then
+    \begin{align}
+        A&=\omega S A^2S^{-1}.
+        \notag
+    \end{align}
+    Thus blocking returns $A$ up to the swap gauge and a phase.  Nevertheless,
+    the transfer map of $A$ is not idempotent.  Hence the pure-state
+    equivalence asserted after the diagram labelled ``RFP-gauge'' in
+    \cite[Appendix~D, lines~2094--2107]{Cirac2016MPDO_arXiv} is false.  The
+    mixed-state question following the assertion therefore does not extend a
+    valid pure-state theorem.
+\end{theorem}
+
 \begin{remark}\label{rem:zero_correlation_length}
     \uses{thm:spectral_radius_le_one, def:correlation_length,
         def:mps_transfer_idempotence}
@@ -159,6 +185,30 @@
     gaps, corresponding to adjacent regions, are included. This is
     \cite[Definition~3.3 and lines~490--496]{Cirac2016MPDO_arXiv}.
 \end{definition}
+
+% CPSV16 Example 3.4 (`Ex:ZCL`), lines 450--465.
+\begin{theorem}[Printed CID but non-fixed-point example]
+    \label{thm:cpsv_example34_status}
+    \notready
+    \discussion{5916}
+    \uses{def:source_physical_cid, def:mps_transfer_idempotence}
+    Consider the tensor
+    \begin{align}
+        A^0&=\begin{pmatrix}1&0\\0&1/\sqrt2\end{pmatrix}, &
+        A^1&=\begin{pmatrix}0&0\\0&1/\sqrt2\end{pmatrix}.
+        \notag
+    \end{align}
+    Its length-$N$ matrix product vector is
+    \begin{align}
+        \ket{0}^{\otimes N}+\ket{+}^{\otimes N}.
+        \notag
+    \end{align}
+    Example~3.4 of \cite{Cirac2016MPDO_arXiv} asserts that its physical
+    correlations are independent of separation, while it is not a
+    renormalization fixed point.  The blocked local vectors satisfy
+    $\langle\widetilde 0\mid\widetilde +\rangle=2^{-n/2}$, which prevents an
+    exact blocking isometry at finite block length.
+\end{theorem}
 
 \begin{definition}[Positive-gap restriction of physical distance independence]%
     \label{def:is_positive_gap_physical_cid}
