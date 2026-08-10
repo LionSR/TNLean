@@ -71,7 +71,8 @@ private theorem sourceCutM₁_blockTensor_succ_factorization
       rightSuccLeft U k * rightSuccRight U k := by
   classical
   let S := sourceSVD₁ (blockTensor U k)
-  have hfactor : sourceCutM₁ (blockTensor U k) = Matrix.conjTranspose S.V * (S.diagonal * S.U) := by
+  have hfactor : sourceCutM₁ (blockTensor U k) =
+      Matrix.conjTranspose S.V * (S.diagonal * S.U) := by
     simpa [S, Matrix.mul_assoc] using S.factorization
   have hfactor_apply (row : Fin D × Fin (MPSTensor.blockPhysDim d k))
       (col : Fin (MPSTensor.blockPhysDim d k) × Fin D) :
@@ -135,7 +136,8 @@ private theorem sourceCutM₂_blockTensor_succ_factorization
       leftSuccLeft U k * leftSuccRight U k := by
   classical
   let S := sourceSVD₂ (blockTensor U k)
-  have hfactor : sourceCutM₂ (blockTensor U k) = Matrix.conjTranspose S.V * (S.diagonal * S.U) := by
+  have hfactor : sourceCutM₂ (blockTensor U k) =
+      Matrix.conjTranspose S.V * (S.diagonal * S.U) := by
     simpa [S, Matrix.mul_assoc] using S.factorization
   have hfactor_apply (row : Fin D × Fin (MPSTensor.blockPhysDim d k))
       (col : Fin (MPSTensor.blockPhysDim d k) × Fin D) :
