@@ -76,7 +76,9 @@ private noncomputable def cubeCoordinateSwap :
     (blockIndexCoordinateEquiv cubePhaseBondDim (Equiv.swap 0 1))
 
 /-- The invertible permutation gauge exchanging the $1$ and $\omega$ virtual
-coordinates of `cubePhaseTensor`. -/
+coordinates of `cubePhaseTensor`.
+
+Source: arXiv:1606.00608, Appendix D, equation `RFP-gauge`, lines 2091--2110. -/
 noncomputable def cubeSwapGauge :
     GL (Fin (∑ k : Fin 2, cubePhaseBondDim k)) ℂ :=
   permGL cubeCoordinateSwap
@@ -88,7 +90,10 @@ private lemma norm_primitiveCubeRoot : ‖primitiveCubeRoot‖ = 1 := by
   simp [primitiveCubeRoot, Complex.norm_exp, Complex.mul_re]
 
 /-- The weight $\mu_p\overline{\mu_q}$ of a flattened doubled bond coordinate
-$(p,q)$ in the four-block canonical decomposition. -/
+$(p,q)$ in the four-block canonical decomposition.
+
+Source: arXiv:1606.00608, equation `II_CF1` and canonical-form data and
+normalization at lines 219--246. -/
 private noncomputable def cubePhaseDoubledWeight (q : Fin 4) : ℂ :=
   let pair := (finProdFinEquiv :
     Fin (∑ k : Fin 2, cubePhaseBondDim k) ×
