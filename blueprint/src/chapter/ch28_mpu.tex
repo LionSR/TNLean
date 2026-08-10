@@ -3148,21 +3148,20 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
   \uses{SF,ThmFund1}
   Let $\mathcal U$ and $\mathcal V$ be simple tensors in standard form, with
   source unitaries $(u_{\mathcal U},v_{\mathcal U})$ and
-  $(u_{\mathcal V},v_{\mathcal V})$. They generate the same MPU,
+  $(u_{\mathcal V},v_{\mathcal V})$. They generate the same MPU for every
+  $N$,
   \begin{align}
-    U^{(N)}&=V^{(N)}\qquad\text{for every }N,
+    U^{(N)}&=V^{(N)},
   \end{align}
   if and only if their standard forms are related by the local unitary gauges
-  of equations \textup{(SFuu)} and \textup{(SFvv)} of
-  \cite{Cirac2017MPU}: there are unitaries $x$, $y$, and $z$ on the three
-  corresponding source and canonical-form-II legs. In particular, the source
-  unitaries obey the local relation
+  of \cite[Eqns.~(SFuu) and (SFvv)]{Cirac2017MPU}: there are unitaries $x$,
+  $y$, and $z$ on the three corresponding source and canonical-form-II legs.
+  In particular, the source unitaries obey the local relation
   \begin{align}
     u_{\mathcal V}&=(x\otimes y)u_{\mathcal U},
   \end{align}
-  and the two canonical-form-II tensors are related on their virtual leg by
-  $z$ and on their source legs by $x$ and $y$ exactly as in
-  \textup{(SFvv)}.
+  while the two canonical-form-II tensors are related on their virtual leg by
+  $z$ and on their source legs by $x$ and $y$.
 \end{theorem}
 
 \begin{lemma}[Rank of a Kronecker product]
@@ -3590,7 +3589,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
   four Case I classes of Theorem~\ref{prop:conjsym-strict-equiv}. With
   \begin{align}
     u'_\pm&=(\Id_{r\ell/4}\otimes R)u_\pm,&
-    v'_\pm&=(\Id_{r\ell/4}\otimes R)v_\pm,
+    v'_\pm&=v_\pm(\Id_{r\ell/4}\otimes R),
   \end{align}
   the four pairs $(u'_\pm,v'_\pm)$ represent the four Case II classes.
 \end{proposition}
@@ -3722,9 +3721,9 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
   \uses{threeMPU2,lemma:sym-trafo-swap,
     conjphs,prop:conjsym-strict-equiv,cor:equiv-under-conjugation}
   The MPUs $U_1^{(N)}$ and $U_2^{(N)}$ are in different strict phases under
-  conjugation exactly when
+  conjugation exactly when $k$ is a nonnegative integer and
   \begin{align}
-    d&=4k+2\qquad(k=0,1,2,\ldots).
+    d&=4k+2.
   \end{align}
   Otherwise they are in the same strict phase. All these standard forms lie
   in Case I, so $U_1^{(N)}$ and $U_2^{(N)}$ are equivalent after blocking and
