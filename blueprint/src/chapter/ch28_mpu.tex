@@ -725,22 +725,22 @@ closing a chain of $N$ copies of $\mathcal U$.
     \lean{MPOTensor.IsMPU.blockTensor_mul_sq_simple_contractions_of_transfer_power,
         MPOTensor.doubleLayerTensor_reindexPhysical}
     \leanok
-    \uses{thm:mpu_blocked_double_layer_diagonal,
-        thm:mpu_second_block_simple, thm:mpu_bounded_simple_blocking}
     Let $\mathcal U$ be an MPU of positive physical and bond dimensions.
-    Suppose that $\rho$ has trace one and that the normalized transfer matrix
-    satisfies
+    Suppose that $\rho$ has trace one and that, for some positive integer $J$,
+    the normalized transfer matrix satisfies
     \begin{align}
-        E^J&=|\rho)(\Id|,
-        &J&>0.
+        E^J&=|\rho)(\Id|.
     \end{align}
     Put $K=JD^2$. After the standard product reindexing of the physical
-    coordinates, the direct length-$K$ block satisfies \texttt{simple1} and
-    \texttt{simple2} with the specific witnesses $\rho$ and $\Id$ from this
-    transfer-power identity.
+    coordinates, the direct length-$K$ block satisfies the contractions
+    \ref{eq:mpu_simple1} and \ref{eq:mpu_simple2} with the specific witnesses
+    $\rho$ and $\Id$ from this transfer-power identity.
 \end{theorem}
 
 \begin{proof}\leanok
+    \uses{thm:mpu_blocked_double_layer_diagonal,
+        thm:mpu_second_block_simple, thm:mpu_bounded_simple_blocking,
+        lem:mpu_blocking}
     First block $J$ sites.  The normalized diagonal of this block is the
     reindexed rank-one matrix $|\rho)(\Id|$, and the trace-one condition is
     exactly $(\Id|\rho)=1$.  The exact second-block contraction theorem then
@@ -754,7 +754,6 @@ closing a chain of $N$ copies of $\mathcal U$.
     \label{thm:mpu_normalized_output_tail_coisometry}
     \lean{MPOTensor.IsMPU.normalized_mpo_tail_coisometry}
     \leanok
-    \uses{lem:mpu_mul_adjoint}
     Let $K\geq0$, let $p,q\in\Fin d\times\Fin d$, and separate the first two
     output sites from a tail $\tau\in\Fin K\to\Fin d$.  Then
     \begin{align}
@@ -769,6 +768,7 @@ closing a chain of $N$ copies of $\mathcal U$.
 \end{theorem}
 
 \begin{proof}\leanok
+    \uses{lem:mpu_mul_adjoint}
     Apply output-first unitarity before performing any source-factor
     rearrangement.  For each fixed tail, the inner sum is the corresponding
     identity-matrix entry, hence it is $\delta_{p,q}$.  There are exactly
