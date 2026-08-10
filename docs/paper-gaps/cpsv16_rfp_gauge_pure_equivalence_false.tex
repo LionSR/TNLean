@@ -1,0 +1,99 @@
+\documentclass{article}
+
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+
+\input{command}
+
+\title{The Pure-State Blocking-up-to-Gauge Equivalence Is False}
+\author{}
+\date{2026-08-10}
+
+\begin{document}
+\maketitle
+
+\section{The source claim}
+
+Appendix~D of \cite{Cirac2016MPDO_arXiv}, equation \texttt{RFP-gauge} and
+lines~2100--2107 of the local source, allows a renormalization step to introduce
+a gauge transformation on the virtual indices. The paragraph following the
+diagram claims that, for pure tensors in canonical form, this condition is
+equivalent to the ordinary renormalization fixed-point condition. Its first
+step asserts that similarity of the transfer maps $\mathcal E^2$ and
+$\mathcal E$ forces their eigenvalues to lie in $\{0,1\}$.
+
+That spectral inference is false. A finite spectrum can be invariant under
+squaring because its nonzero eigenvalues form a nontrivial root-of-unity cycle.
+Similarity of $\mathcal E^2$ and $\mathcal E$ does not imply
+$\mathcal E^2=\mathcal E$.
+
+\section{A source-shaped counterexample}
+
+Let $\omega=e^{2\pi i/3}$ and consider the pure one-letter tensor
+\begin{align}
+  A&=\begin{pmatrix}1&0\\0&\omega\end{pmatrix}.
+\end{align}
+Let
+\begin{align}
+  S&=\begin{pmatrix}0&1\\1&0\end{pmatrix}.
+\end{align}
+Since $\omega^3=1$, direct multiplication gives
+\begin{align}
+  A&=\omega S A^2S^{-1}.
+  \label{eq:cube-block-gauge}
+\end{align}
+This has the orientation of the printed diagram: the original tensor is the
+phase-scaled virtual conjugate of its two-site blocking. For one physical
+letter, the original and blocked physical spaces are both one-dimensional, so
+the physical unitary in the pure diagram is exactly the unit scalar $\omega$.
+The one-letter MPS lift used in the formalization is therefore
+\begin{align}
+  A&=\zeta X A^{[2]}X^{-1}.
+\end{align}
+The scalar obeys
+\begin{align}
+  |\zeta|&=1.
+\end{align}
+This is sufficient for the displayed witness and has the source orientation.
+No equivalence with the full doubled-MPDO $T/S$ diagram is claimed.
+
+The transfer map is not idempotent. On the off-diagonal matrix unit $e_{21}$,
+\begin{align}
+  \mathcal E_A(e_{21})&=\omega e_{21}.
+\end{align}
+A second application gives
+\begin{align}
+  \mathcal E_A^2(e_{21})&=\omega^2e_{21}.
+\end{align}
+Because $\omega\ne1$, these values differ. Equivalently, the dyadic powers
+$\mathcal E_A^{2^n}(e_{21})$ oscillate between the two nontrivial cube-root
+phases and cannot converge, whereas an idempotent transfer map has every
+positive power equal to itself.
+
+The formal declarations are
+\leanid{MPSTensor.IsBlockedGaugePhaseFixedPoint},
+\leanid{MPSTensor.cube_phase_blocked_gauge_identity},
+\leanid{MPSTensor.cubePhaseTensor_isBlockedGaugePhaseFixedPoint},
+\leanid{MPSTensor.cubePhaseTensor_not_isTransferIdempotent},
+\leanid{MPSTensor.cubePhaseTensor_normalized_canonical_gauge_not_rfp}, and
+\leanid{MPSTensor.cpsv16_pure_rfp_gauge_equivalence_false} in
+\doclink{TNLean/MPS/RFP/GaugeBlockingCounterexample}.
+
+\section{Source disposition}
+
+\textbf{Verdict: false as printed.}  The pure-state equivalence following
+equation \texttt{RFP-gauge} fails even for a line-246-normalized canonical
+one-letter tensor. The
+ordinary theorem that a virtual gauge preserves an already established
+renormalization fixed point is unaffected: gauge covariance cannot turn the
+blocking-up-to-gauge hypothesis into transfer-map idempotence.
+
+The printed pure spectral argument therefore cannot support the mixed-state
+continuation in the next paragraph. This counterexample does not decide the
+mixed-state question.
+
+\bibliographystyle{alpha}
+\bibliography{references}
+
+\end{document}
