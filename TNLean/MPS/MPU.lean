@@ -25,6 +25,7 @@ import TNLean.MPS.MPU.SourceUClosedNetwork
 import TNLean.MPS.MPU.SourceUContraction
 import TNLean.MPS.MPU.SourceUOpenTail
 import TNLean.MPS.MPU.SourceURangeTransport
+import TNLean.MPS.MPU.SourceUReflectedKernel
 import TNLean.MPS.MPU.SourceUSecondCutMetric
 import TNLean.MPS.MPU.SourceUV
 import TNLean.MPS.MPU.SuppliedFixedWitnesses

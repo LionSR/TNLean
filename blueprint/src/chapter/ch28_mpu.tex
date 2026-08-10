@@ -2288,6 +2288,69 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
     original supplied witnesses.
 \end{proof}
 
+\begin{theorem}[Reflected blocked-transfer coordinates]
+    \label{thm:mpu_reflected_blocked_transfer_coordinates}
+    \lean{MPOTensor.doubledBondSwap,
+        MPOTensor.doubledBondSwap_apply,
+        MPOTensor.doubledBondSwap_symm,
+        MPOTensor.blockWordReverseEquiv,
+        MPOTensor.decodeBlock_blockWordReverseEquiv,
+        MPOTensor.wordOfBlock_blockWordReverseEquiv,
+        MPOTensor.blockWordReverseEquiv_involutive}
+    \leanok
+    \uses{def:mpu_double_layer,def:mpdo_physical_adjoint}
+    Reflection exchanges the two factors of a doubled virtual bond and
+    reverses the decoded physical word:
+    \begin{align}
+      (a,b)&\longmapsto(b,a),&
+      (i_0,\ldots,i_{K-1})&\longmapsto(i_{K-1},\ldots,i_0).
+    \end{align}
+    Both reindexings are involutions.
+\end{theorem}
+
+\begin{proof}\leanok
+    Decode the doubled bond, apply the product swap, and encode it again.
+    Decode a blocked index as a function on $\Fin K$, precompose with
+    $k\mapsto K-1-k$, and use reversal of the corresponding finite list.
+\end{proof}
+
+\begin{theorem}[Reflected supplied transfer insertion]
+    \label{thm:mpu_reflected_supplied_transfer_insertion}
+    \lean{MPOTensor.normalizedDiagonal_doubleLayerTensor_physicalAdjointTensor,
+        MPOTensor.normalizedDiagonal_blockTensor_mul_sq_eq_vecMulVec_of_transfer_power,
+        MPOTensor.conjTranspose_normalizedDiagonal_reflected_eq_vecMulVec,
+        MPOTensor.conjTranspose_normalizedDiagonal_reflected_blockTensor_eq_vecMulVec,
+        MPOTensor.reflected_transfer_power_eq_vecMulVec_transpose,
+        MPOTensor.outputLayer_normalizedDiagonal_pow_eq_vecMulVec,
+        MPOTensor.IsMPU.reflected_blockTensor_mul_sq_simple_contractions_of_transfer_power,
+        MPOTensor.IsMPU.reflected_blockTensor_mul_sq_add_two_simple_contractions}
+    \leanok
+    \uses{thm:mpu_matching_direct_block_contractions,
+        thm:mpu_physical_adjoint_identities,
+        thm:mpu_reflected_blocked_transfer_coordinates,
+        thm:mpu_supplied_witness_overlapping_reblocking}
+    Let $E^J=|\rho)(1|$, where $\rho>0$, $\tr(\rho)=1$, and $J>0$, and set
+    $K=JD^2$.  Reflection and conjugate transposition give the insertion
+    $|1)(\rho|$.  At both lengths $K$ and $K+2$, the same reflected vectors
+    satisfy
+    \begin{align}
+      (\rho|\widehat W^{IJ\dagger}|1)&=\delta_{I,J},\\
+      \widehat W^{LM\dagger}\widehat W^{IJ\dagger}
+        &=\widehat W^{LM\dagger}|1)(\rho|\widehat W^{IJ\dagger}.
+    \end{align}
+    The common $K+2$ block is obtained by the overlapping-window theorem,
+    without replacing the supplied witnesses by existentially chosen ones.
+\end{theorem}
+
+\begin{proof}\leanok
+    Reindex the normalized reflected diagonal by the doubled-bond swap and
+    transport the stabilized power to $\rho^{\mathsf T}$.  Positivity gives
+    the Hermitian symmetry that converts its conjugate transpose to
+    $|1)(\rho|$.  Conjugate transposition reverses the two blocked letters;
+    supplied-witness overlapping reblocking preserves the same insertion at
+    length $K+2$.
+\end{proof}
+
 % The equality and range-insertion step remains tracked by issue #5971.
 \begin{remark}[Scope of the closed source-$u$ formulas]
     The first theorem rewrites the ordinary source-$u$ Gram entry, while the
