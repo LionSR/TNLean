@@ -10,8 +10,8 @@ import TNLean.MPS.ParentHamiltonian.SpectatorBoundaryGram
 
 This file computes the mixed Gram between the tail and left spectator boundary
 maps in the common ambient space used by Nachtergaele's martingale condition C3.
-The calculation is exact: after fixing the prefix spectator `u` and final-site
-spectator `j`, the overlap is the length-`l` MPS Gram pairing of the two virtual
+The calculation is exact: after fixing the prefix spectator \(u\) and final-site
+spectator \(j\), the overlap is the length-\(l\) MPS Gram pairing of the two virtual
 matrices obtained at the ends of the overlap.
 
 The identity below is reconstructed directly from the boundary-map definitions,
