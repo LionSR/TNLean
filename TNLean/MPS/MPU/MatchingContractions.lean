@@ -10,7 +10,7 @@ import TNLean.MPS.MPU.SimpleBlocking
 
 These results supply the two contraction ingredients for the later source-u
 Gram calculation. They do not identify that Gram matrix; the finite-sum
-source-factor bridge is treated separately.
+reduction to the source factors is treated separately.
 
 These are the blocked matching and global coisometry contractions used in
 arXiv:1703.09188, Figure `II_uUnitary.png` and Lemma `lemuisometry` (lines
@@ -27,8 +27,8 @@ namespace MPOTensor
 
 variable {d D : ℕ} (U : MPOTensor d D)
 
-/-- Output-first MPU coisometry, with a common length-`K` output tail traced
-out and normalized by `d⁻ᴷ`, leaves the identity on the first two output sites.
+/-- Output-first MPU coisometry, with a common output tail of length \(K\)
+traced out and normalized by \(d^{-K}\), leaves the identity on the first two output sites.
 The retained arguments occur in reversed matrix order, as required by the
 transpose in Figure `II_uUnitary.png`.
 
@@ -67,14 +67,14 @@ theorem IsMPU.normalized_mpo_tail_coisometry [NeZero d]
   · rw [if_neg hpq, if_neg (Ne.symm hpq)]
     simp
 
-/-- The stabilized first block followed by the corrected `D²` block has the
-exact `simple1` and `simple2` witnesses obtained from the supplied fixed
-matrix and the identity left vector.
+/-- The stabilized first block followed by the corrected \(D^2\) block has the
+exact simple contractions obtained from the supplied fixed matrix and the
+identity left vector.
 
 Source: arXiv:1703.09188, equations `Erightleft`, `simple1`, and `simple2`,
 lines 397--427.
 
-**Local fix:** the second blocking uses `D²`; see
+**Local fix (nil-matrix length):** the second blocking uses \(D^2\); see
 `docs/paper-gaps/mpu_nil_matrix_bound.tex`. -/
 theorem IsMPU.blockTensor_mul_sq_simple_contractions_of_transfer_power
     [NeZero d] [NeZero D] {U : MPOTensor d D} (hU : IsMPU U)
