@@ -2322,48 +2322,129 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
     list.
 \end{proof}
 
-\begin{theorem}[Reflected supplied transfer insertion]
-    \label{thm:mpu_reflected_supplied_transfer_insertion}
-    \lean{MPOTensor.normalizedDiagonal_doubleLayerTensor_physicalAdjointTensor,
-        MPOTensor.normalizedDiagonal_blockTensor_mul_sq_eq_vecMulVec_of_transfer_power,
-        MPOTensor.conjTranspose_normalizedDiagonal_reflected_eq_vecMulVec,
-        MPOTensor.conjTranspose_normalizedDiagonal_reflected_blockTensor_eq_vecMulVec,
-        MPOTensor.reflected_transfer_power_eq_vecMulVec_transpose,
-        MPOTensor.outputLayer_normalizedDiagonal_pow_eq_vecMulVec,
-        MPOTensor.IsMPU.reflected_blockTensor_mul_sq_simple_contractions_of_transfer_power,
-        MPOTensor.IsMPU.reflected_blockTensor_mul_sq_add_two_simple_contractions}
+\begin{theorem}[Normalized diagonal under output reflection]
+    \label{thm:mpu_reflected_normalized_diagonal}
+    \lean{MPOTensor.normalizedDiagonal_doubleLayerTensor_physicalAdjointTensor}
     \leanok
-    \uses{def:mpu,def:mpu_double_layer,def:mpdo_physical_adjoint,
+    \uses{def:mpu_double_layer,def:mpdo_physical_adjoint}
+    Let $R(\mathcal U)$ denote the normalized physical diagonal of the double
+    layer of an MPO tensor $\mathcal U$, and let $s(a,b)=(b,a)$ be the
+    doubled-bond swap.  Then
+    \begin{align}
+      R(\mathcal U^\sharp)_{x,y}=R(\mathcal U)_{s(x),s(y)}.
+    \end{align}
+    This identity requires neither the MPU property nor a positivity or
+    positive-dimension hypothesis.  It is a coordinate identity supporting
+    the graphical reflection in \cite[Figure~\texttt{II\_uUnitary.png}]
+    {Cirac2017MPU}, not a separate theorem printed there.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpu_reflected_blocked_transfer_coordinates}
+    Expand the two normalized diagonals.  Physical adjunction exchanges the
+    two physical indices, and exchanging the two finite physical sums leaves
+    precisely the simultaneous doubled-bond swap on the row and column.
+\end{proof}
+
+\begin{theorem}[Reflected transfer-power identities]
+    \label{thm:mpu_reflected_transfer_power}
+    \lean{MPOTensor.normalizedDiagonal_blockTensor_mul_sq_eq_vecMulVec_of_transfer_power,
+        MPOTensor.conjTranspose_normalizedDiagonal_reflected_eq_vecMulVec,
+        MPOTensor.reflected_transfer_power_eq_vecMulVec_transpose,
+        MPOTensor.conjTranspose_normalizedDiagonal_reflected_blockTensor_eq_vecMulVec,
+        MPOTensor.outputLayer_normalizedDiagonal_pow_eq_vecMulVec}
+    \leanok
+    \uses{def:mpu_double_layer,def:mpdo_physical_adjoint,
         def:mpdo_positive_physical_blocking,def:mpu_normalized_flattening,
         def:mpu_transfer_matrix}
-    Let $\mathcal U$ be an MPU with positive physical dimension $d$ and
-    positive bond dimension $D$.  Suppose $E^J=|\rho)(1|$, where $\rho>0$,
-    $\tr(\rho)=1$, and $J>0$, and set $K=JD^2$.  Doubled-bond reflection and
-    conjugate transposition give the insertion $|1)(\rho|$.  At both lengths
-    $K$ and $K+2$, the same reflected vectors satisfy
+    Let $\mathcal U$ be an MPO tensor.  Write $E$ for the transfer matrix of
+    its normalized flattening, $E^\sharp$ for that of $\mathcal U^\sharp$,
+    and $E_{\mathrm{out}}$ for the normalized diagonal of the double layer of
+    $\mathcal U^\sharp$.  If $d>0$ and
     \begin{align}
-      (\rho|\widehat W^{IJ\dagger}|1)&=\delta_{I,J},\\
-      \widehat W^{LM\dagger}\widehat W^{IJ\dagger}
-        &=\widehat W^{LM\dagger}|1)(\rho|\widehat W^{IJ\dagger}.
+      E^J=|\rho)(1|,
     \end{align}
-    The common $K+2$ block is obtained by the overlapping-window theorem,
-    without replacing the supplied witnesses by existentially chosen ones.
+    then
+    \begin{align}
+      (E^\sharp)^J=|\rho^{\mathsf T})(1|.
+    \end{align}
+    No MPU, positivity, trace, positive bond-dimension, or positivity of $J$
+    is needed for this implication.
+
+    Suppose in addition that $D>0$ and $\tr(\rho)=1$, and set $K=JD^2$.
+    Then the normalized diagonal $R_K$ of the double layer of the $K$-site
+    block of $\mathcal U$ satisfies
+    \begin{align}
+      R_K=|\rho)(1|.
+    \end{align}
+    More generally, if $d>0$, $\rho>0$, and the normalized diagonal $R_L$ of
+    an $L$-site block satisfies $R_L=|\rho)(1|$, write $R_L^\sharp$ for the
+    normalized diagonal of the corresponding block of $\mathcal U^\sharp$.
+    Then
+    \begin{align}
+      R_L^{\sharp\dagger}=|1)(\rho|.
+    \end{align}
+    Consequently, under the combined assumptions $d,D>0$, $\rho>0$,
+    $\tr(\rho)=1$, and $E^J=|\rho)(1|$,
+    \begin{align}
+      R_K^{\sharp\dagger}&=|1)(\rho|, &
+      E_{\mathrm{out}}^K&=|\rho^{\mathsf T})(1|.
+    \end{align}
+    Here all rank-one operators use the column-stacking identification
+    $M_D(\mathbb C)\cong\mathbb C^{D^2}$.
 \end{theorem}
 
 \begin{proof}\leanok
     \uses{thm:mpu_blocked_double_layer_diagonal,
         thm:mpu_double_layer_blocking,
-        thm:mpu_matching_direct_block_contractions,
+        thm:mpu_reflected_normalized_diagonal}
+    The blocked normalized diagonal is the corresponding transfer power.
+    Reindex the reflected diagonal by the doubled-bond swap to obtain the
+    transpose weight.  When $\rho$ is positive definite, its Hermitian
+    symmetry converts the conjugate-transposed reflected diagonal to
+    $|1)(\rho|$.  The trace-one condition makes $|\rho)(1|$ idempotent, so the
+    additional positive $D^2$ power leaves it unchanged.  Conjugating once
+    more gives the stated output-layer orientation.
+\end{proof}
+
+\begin{theorem}[Reflected supplied contractions]
+    \label{thm:mpu_reflected_supplied_contractions}
+    \lean{MPOTensor.IsMPU.reflected_blockTensor_mul_sq_simple_contractions_of_transfer_power,
+        MPOTensor.IsMPU.reflected_blockTensor_mul_sq_add_two_simple_contractions}
+    \leanok
+    \uses{def:mpu,def:mpu_double_layer,def:mpdo_physical_adjoint,
+        def:mpdo_positive_physical_blocking,def:mpu_normalized_flattening,
+        def:mpu_transfer_matrix}
+    Let $\mathcal U$ be an MPU with $d,D>0$.  Let $E$ be the transfer matrix
+    of its normalized flattening, and suppose
+    \begin{align}
+      E^J=|\rho)(1|,
+    \end{align}
+    where $\rho>0$, $\tr(\rho)=1$, and $J>0$.  Set $K=JD^2$.  For
+    $n\in\{K,K+2\}$, let $\widehat W_n$ be the double layer of the $n$-site
+    block of $\mathcal U^\sharp$.  Then, for all blocked physical indices,
+    \begin{align}
+      (\rho|\widehat W_n^{IJ\dagger}|1)&=\delta_{I,J},\\
+      \widehat W_n^{LM\dagger}\widehat W_n^{IJ\dagger}
+        &=\widehat W_n^{LM\dagger}|1)(\rho|
+          \widehat W_n^{IJ\dagger}.
+    \end{align}
+    The same supplied vectors occur at both lengths; the $K+2$ identities do
+    not replace them by existentially chosen witnesses.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpu_matching_direct_block_contractions,
         thm:mpu_physical_adjoint_identities,
-        thm:mpu_reflected_blocked_transfer_coordinates,
+        thm:mpu_reflected_transfer_power,
         thm:mpu_supplied_witness_overlapping_reblocking}
-    Reindex the normalized reflected diagonal by the doubled-bond swap and
-    transport the stabilized power to $\rho^{\mathsf T}$.  Positivity gives
-    the Hermitian symmetry that converts its conjugate transpose to
-    $|1)(\rho|$.  Conjugate transposition reverses the two blocked letters;
-    supplied-witness overlapping reblocking preserves the same insertion at
-    length $K+2$.  Thus these identities supply coordinates for the graphical
-    proof of \cite[Lemma~\texttt{lemuisometry}, Figure~
+    Apply the direct-block simple contractions to the reflected transfer power
+    $|\rho^{\mathsf T})(1|$.  Positivity identifies the conjugate-transposed
+    vectors with $(\rho|$ and $|1)$, while conjugate transposition reverses the
+    order of the two blocked letters.  Overlapping-window reblocking preserves
+    these witnesses through the two additional sites.  These contractions are
+    support identities for the graphical proof of
+    \cite[Lemma~\texttt{lemuisometry}, Figure~
     \texttt{II\_uUnitary.png}]{Cirac2017MPU}; they are not asserted as a
     separate printed theorem of that paper.
 \end{proof}
