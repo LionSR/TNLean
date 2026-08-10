@@ -167,7 +167,7 @@ theorem mpo_finAddTwo_eq_sum_sourceX₁_sourceU_sourceX₂_openTail
             star (sourceX₂ U (β, i) l) *
               (U i j.2 * evalWord U (List.ofFn τ) (List.ofFn ζ)) β α := by
   classical
-  have sourceY₂_apply (l : Fin ℓ[U]) (j : Fin d) (γ : Fin D) :
+  have hY₂ (l : Fin ℓ[U]) (j : Fin d) (γ : Fin D) :
       sourceY₂ U l (j, γ) =
         ∑ β : Fin D, ∑ i : Fin d, star (sourceX₂ U (β, i) l) * U i j β γ := by
     have h := congrArg (fun M ↦ M l (j, γ))
@@ -176,7 +176,7 @@ theorem mpo_finAddTwo_eq_sum_sourceX₁_sourceU_sourceX₂_openTail
     rw [Fintype.sum_prod_type] at h
     exact h
   rw [mpo_finAddTwo_eq_sum_sourceX₁_sourceU_sourceY₂_evalWord U ρ hρ K q j τ ζ]
-  simp_rw [sourceY₂_apply]
+  simp_rw [hY₂]
   simp only [Finset.mul_sum, Finset.sum_mul, Matrix.mul_apply, mul_assoc]
   apply Finset.sum_congr rfl
   intro α _
