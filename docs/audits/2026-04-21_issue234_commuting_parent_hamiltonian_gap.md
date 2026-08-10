@@ -32,7 +32,7 @@ The first parent-Hamiltonian follow-up added two theorem wrappers to
 - `MPSTensor.ProductPairBridge.isNNCPH`
 
 Those results are immediate from the already-proved unfolded commutation theorem in
-`TNLean/MPS/RFP/AppendixBStructuralData.lean`, but they matter conceptually: they isolate the internal
+`TNLean/MPS/ParentHamiltonian/ProductPair.lean`, but they matter conceptually: they isolate the internal
 `RFP ⟹ NNCPH` task to **constructing the product-pair witness**, rather than reproving the NNCPH
 wrapper each time.
 
