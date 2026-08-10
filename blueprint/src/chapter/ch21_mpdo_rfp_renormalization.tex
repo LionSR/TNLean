@@ -675,18 +675,34 @@ the remaining sites unchanged.
 \begin{proof}
     \leanok
     \uses{thm:physical_blocking_isometry_iff_transfer_idempotence,
-      thm:rfp_via_ts_physical_trace_idempotent,
-      thm:matrix_support_completion_cptp,
-      thm:mpdo_single_kraus_map_cptp}
+      thm:rfp_via_ts_physical_trace_idempotent}
     The blocking relation
     $A^{i_1}A^{i_2}=\sum_jV_{(i_1,i_2),j}A^j$ implies
     \begin{align}
         M_2(X)&=V M_1(X)V^\dagger.
         \notag
     \end{align}
-    Since $V^\dagger V=\Id$, both displayed channels give the required two
-    closure identities. Conversely, trace preservation of $\mathcal T$ gives
-    idempotence of the physical-trace transfer of $M(A)$, as in
+    For $d>0$, the refinement identity follows directly:
+    \begin{align}
+        \mathcal T(M_1(X))
+        &=V M_1(X)V^\dagger
+         =M_2(X).
+        \notag
+    \end{align}
+    For the coarse-graining identity, put $P=VV^\dagger$. Since
+    $V^\dagger V=\Id$ and $(\Id-P)V=0$, substitution gives
+    \begin{align}
+        \mathcal S(M_2(X))
+        &=V^\dagger(VM_1(X)V^\dagger)V
+          +\tr\!\bigl((\Id-P)(VM_1(X)V^\dagger)(\Id-P)\bigr)\rho_0
+        \notag\\
+        &=M_1(X)+0
+         =M_1(X).
+        \notag
+    \end{align}
+    If $d=0$, the unique zero channels satisfy both identities. Conversely,
+    trace preservation of $\mathcal T$ gives idempotence of the physical-trace
+    transfer of $M(A)$, as in
     \cite[Appendix C, lines~1333--1340]{Cirac2016MPDO_arXiv}. After exchanging
     the two tensor factors, this matrix is the transfer matrix of $\E_A$.
     Faithfulness of the transfer-matrix representation therefore gives
