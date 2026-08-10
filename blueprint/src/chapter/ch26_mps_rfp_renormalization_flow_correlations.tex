@@ -186,30 +186,6 @@
     \cite[Definition~3.3 and lines~490--496]{Cirac2016MPDO_arXiv}.
 \end{definition}
 
-% CPSV16 Example 3.4 (`Ex:ZCL`), lines 450--465.
-% Tracking: issue #5916.
-\begin{theorem}[Printed CID but non-fixed-point example]
-    \label{thm:cpsv_example34_status}
-    \notready
-    \uses{def:source_physical_cid, def:mps_transfer_idempotence}
-    Consider the tensor
-    \begin{align}
-        A^0&=\begin{pmatrix}1&0\\0&1/\sqrt2\end{pmatrix}, &
-        A^1&=\begin{pmatrix}0&0\\0&1/\sqrt2\end{pmatrix}.
-        \notag
-    \end{align}
-    Its length-$N$ matrix product vector is
-    \begin{align}
-        \ket{0}^{\otimes N}+\ket{+}^{\otimes N}.
-        \notag
-    \end{align}
-    According to \cite[Example~3.4]{Cirac2016MPDO_arXiv}, its physical
-    correlations are independent of separation, while it is not a
-    renormalization fixed point.  The blocked local vectors satisfy
-    $\langle\widetilde 0\mid\widetilde +\rangle=2^{-n/2}$, which prevents an
-    exact blocking isometry at finite block length.
-\end{theorem}
-
 \begin{definition}[Positive-gap restriction of physical distance independence]%
     \label{def:is_positive_gap_physical_cid}
     \lean{MPSTensor.IsPositiveGapPhysicalCID}

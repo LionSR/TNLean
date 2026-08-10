@@ -54,6 +54,20 @@ def test_classification_identity_regression() -> None:
     assert any("propblockinj: classification" in error for error in errors)
 
 
+def test_eq2_proof_main_classification_regression() -> None:
+    ledger = audit.read_ledger()
+    assert ledger["eq2-proof-main-thm"]["classification"] == "equation"
+    assert ledger["Figure11"]["classification"] == "figure"
+
+    mutated = {label: dict(row) for label, row in ledger.items()}
+    mutated["eq2-proof-main-thm"]["classification"] = "figure"
+    mutated["Figure11"]["classification"] = "equation"
+    errors = audit.classification_count_errors(mutated)
+    assert not any("classification totals" in error for error in errors)
+    assert any("eq2-proof-main-thm: classification" in error for error in errors)
+    assert any("Figure11: classification" in error for error in errors)
+
+
 def test_duplicate_occurrence_inheritance() -> None:
     _, active_lines = audit.source_inventory()
     ledger = audit.read_ledger()
@@ -90,6 +104,7 @@ def main() -> int:
     test_spaced_theorem_environments()
     test_inheritance_count_regression()
     test_classification_identity_regression()
+    test_eq2_proof_main_classification_regression()
     test_duplicate_occurrence_inheritance()
     test_surplus_tsv_fields()
     print("PASS: CPSV16 audit mutations are rejected")
