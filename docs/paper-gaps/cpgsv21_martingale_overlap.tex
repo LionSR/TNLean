@@ -742,9 +742,10 @@ and generic prerequisites now include:
     three injectivity assumptions are explicit.  This is an algebraic identity
     only; a source-specific estimate of the mixed-Gram residual is still
     required.
-  \item Let
-    \(\mathcal K_\infty=\operatorname{gramReshuffle}(P_\rho)\), with
-    \(\rho\) positive definite, and let \(S_\infty=\mathcal K_\infty^{-1}\).
+  \item For each length \(n\), let \(\mathcal K_n\) be the ground-space
+    Gram, and whenever it is invertible set \(S_n=\mathcal K_n^{-1}\).  Let
+    \(\mathcal K_\infty=\mathscr R(P_\rho)\), with \(\rho\) positive
+    definite, and set \(S_\infty=\mathcal K_\infty^{-1}\).
     The exact C3 virtual residual is telescoped by
     \leanid{MPSTensor.c3_virtualResidual_eq_centered_sub_gramErrors} into its
     limiting-center residual and three corrections containing, in order,
