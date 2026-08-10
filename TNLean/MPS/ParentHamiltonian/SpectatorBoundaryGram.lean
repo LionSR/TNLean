@@ -111,7 +111,7 @@ theorem range_leftBoundaryMapES_one (A : MPSTensor d D) (K : ℕ) :
 
 /-! ### Virtual factorizations -/
 
-/-- The virtual tail family before flattening, with fibers `X * evalWord A u`. -/
+/-- The virtual tail family before flattening, with fibers \(X * evalWord A u\). -/
 noncomputable def tailVirtualFamilyMap (A : MPSTensor d D) (K : ℕ) :
     EuclideanSpace ℂ (Fin D × Fin D) →ₗ[ℂ]
       (Cfg d K → Matrix (Fin D) (Fin D) ℂ) where
@@ -124,7 +124,7 @@ noncomputable def tailVirtualFamilyMap (A : MPSTensor d D) (K : ℕ) :
     funext u
     simp only [map_smul, RingHom.id_apply, Pi.smul_apply, Matrix.smul_mul]
 
-/-- The virtual tail map with fibers `X * evalWord A u`. -/
+/-- The virtual tail map with fibers \(X * evalWord A u\). -/
 noncomputable def tailVirtualMapES (A : MPSTensor d D) (K : ℕ) :
     EuclideanSpace ℂ (Fin D × Fin D) →L[ℂ]
       BoundaryFamilySpace (D := D) (Cfg d K) :=
@@ -132,7 +132,7 @@ noncomputable def tailVirtualMapES (A : MPSTensor d D) (K : ℕ) :
     (boundaryFamilyEquiv (D := D) (Cfg d K)).symm.toLinearMap.comp
       (tailVirtualFamilyMap A K)
 
-/-- The virtual left family before flattening, with fibers `evalWord A τ * X`. -/
+/-- The virtual left family before flattening, with fibers \(evalWord A τ * X\). -/
 noncomputable def leftVirtualFamilyMap (A : MPSTensor d D) (L : ℕ) :
     EuclideanSpace ℂ (Fin D × Fin D) →ₗ[ℂ]
       (Cfg d L → Matrix (Fin D) (Fin D) ℂ) where
@@ -145,7 +145,7 @@ noncomputable def leftVirtualFamilyMap (A : MPSTensor d D) (L : ℕ) :
     funext τ
     simp only [map_smul, RingHom.id_apply, Pi.smul_apply, Matrix.mul_smul]
 
-/-- The virtual left map with fibers `evalWord A τ * X`. -/
+/-- The virtual left map with fibers \(evalWord A τ * X\). -/
 noncomputable def leftVirtualMapES (A : MPSTensor d D) (L : ℕ) :
     EuclideanSpace ℂ (Fin D × Fin D) →L[ℂ]
       BoundaryFamilySpace (D := D) (Cfg d L) :=
