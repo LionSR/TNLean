@@ -1,0 +1,64 @@
+\section{The unnormalized strong fixed-point relation}
+
+Appendix~D of \cite[lines~2109--2116]{Cirac2016MPDO_arXiv} considers a
+stronger local relation in which the two-site tensor is obtained by adjoining
+a positive physical matrix to one copy of the tensor and applying a unitary
+change of basis. The matrix is not assumed to have trace one.
+
+\begin{definition}[Strong renormalization fixed-point relation]
+    \label{def:mpdo_strong_rfp}
+    \lean{MPOTensor.IsStrongRFP}
+    \leanok
+    \uses{def:mpo_tensor}
+    An MPO tensor $M$ satisfies the strong renormalization fixed-point relation
+    if there are a matrix $P\geq0$ on the physical space and a unitary $U$ on
+    the two-site physical space such that, for all two-site physical indices
+    $i=(i_1,i_2)$ and $j=(j_1,j_2)$,
+    \begin{align}
+        M^{i_1j_1}M^{i_2j_2}
+        &=\sum_{a,b}
+          U_{i,a}P_{a_2b_2}\overline{U_{j,b}}\,M^{a_1b_1}.
+        \label{eq:mpdo_strong_rfp_tensor}
+    \end{align}
+    Equivalently, the literal orientation of the source diagram is
+    $M_2=U(M_1\otimes P)U^\dagger$, with $M$ on the left physical site and
+    $P$ on the right. There is no virtual change of basis and no scalar
+    proportionality. This is the relation labelled \emph{Strong-RFP} in
+    \cite[Appendix~D, lines~2109--2113]{Cirac2016MPDO_arXiv}.
+\end{definition}
+
+\begin{theorem}[Physical closures of the strong fixed-point relation]
+    \label{thm:mpdo_strong_rfp_phys_close}
+    \lean{MPOTensor.strongRFP_tensor_relation_iff_physClose,
+      MPOTensor.isStrongRFP_iff_physClose}
+    \leanok
+    \uses{def:mpdo_strong_rfp, def:phys_close}
+    For fixed matrices $P$ and $U$, the tensor identity
+    (\ref{eq:mpdo_strong_rfp_tensor}) holds if and only if every virtual
+    matrix $X$ satisfies
+    \begin{align}
+        M_2(X)
+        &=U\bigl(M_1(X)\otimes P\bigr)U^\dagger.
+        \label{eq:mpdo_strong_rfp_closure}
+    \end{align}
+    Hence the strong renormalization fixed-point relation is equivalent to the
+    existence of $P\geq0$ and a two-site unitary $U$ satisfying
+    (\ref{eq:mpdo_strong_rfp_closure}) for every $X$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Multiplying (\ref{eq:mpdo_strong_rfp_tensor}) on the right by $X$ and
+    taking the virtual trace gives, entrywise,
+    \begin{align}
+        \tr\!\left(M^{i_1j_1}M^{i_2j_2}X\right)
+        &=\sum_{a,b}U_{i,a}P_{a_2b_2}\overline{U_{j,b}}
+          \tr\!\left(M^{a_1b_1}X\right),
+        \notag
+    \end{align}
+    which is (\ref{eq:mpdo_strong_rfp_closure}). Conversely, subtract the
+    right-hand side of (\ref{eq:mpdo_strong_rfp_tensor}). Equation
+    (\ref{eq:mpdo_strong_rfp_closure}) says that its product with every $X$
+    has trace zero. Nondegeneracy of the matrix trace pairing makes the
+    difference zero.
+\end{proof}
