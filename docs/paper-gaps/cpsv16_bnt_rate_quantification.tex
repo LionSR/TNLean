@@ -131,20 +131,23 @@ is bounded by
     \label{eq:product}
 \end{align}
 The right-hand side of~\eqref{eq:product} converges to $0$ exactly when
-\eqref{eq:hyp} holds. The qualitative limit~\eqref{eq:qual} alone
-gives $\eta_{j,k_0}<1$ but not the comparison
-$\eta_{j,k_0}\cdot|\lambda_j/\lambda_{k_0}|<1$, which was the content of
-the retired hypothesis.
+\eqref{eq:hyp} holds.  The qualitative limit~\eqref{eq:qual} alone provides no
+constants $C_{j,k_0}$ and $\eta_{j,k_0}<1$, and hence no geometric rate.  Such a
+bound requires a separate finite-dimensional spectral-radius analysis of the
+mixed transfer operator.  Even after obtaining a geometric rate, the comparison
+$\eta_{j,k_0}\cdot|\lambda_j/\lambda_{k_0}|<1$ is an additional compatibility
+condition required by the retired argument.
 
 \section{Classification}
 
 \emph{Historical analytic obstruction.}  The rate
 condition~\eqref{eq:hyp} is a structural input beyond what
 \cite[\S II]{Cirac2016MPDO_arXiv} and
-\cite[Definition~4.2]{Cirac2021Matrix} make explicit. A geometric rate may
-be derived from the spectral gap of the mixed transfer operator underlying
-\leanid{mpvOverlap_tendsto_zero_of_not_gaugePhaseEquiv_cast_left_of_irreducible_TP},
-but the compatibility inequality
+\cite[Definition~4.2]{Cirac2021Matrix} make explicit.  Obtaining a geometric
+rate requires a separate finite-dimensional spectral-radius input for the mixed
+transfer operator underlying
+\leanid{mpvOverlap_tendsto_zero_of_not_gaugePhaseEquiv_cast_left_of_irreducible_TP}.
+Moreover, the compatibility inequality
 $\eta_{j,k}\cdot|\lambda_j/\lambda_k|<1$ is not implied by the BNT
 structure. The retired projection argument would therefore have needed this
 condition as an additional hypothesis or a separate analytic theorem.

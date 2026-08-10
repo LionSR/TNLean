@@ -61,9 +61,13 @@ decay, the family
     \right)
     =r_A+1
 \end{align}
-for all sufficiently large $N$. Equivalently, the displayed family is linearly
-independent, so the selected block cannot be absorbed by the others without
-contradiction. \cite[Appendix MPV proof, line~1182]{Cirac2016MPDO_arXiv}
+for all sufficiently large $N$. Equivalently, this fixed-block family is
+linearly independent.  Line~1182 treats that conclusion as a contradiction to
+the full proportionality identity.  However, the identity also contains the
+vectors $V^{(N)}(B_k)$ for $k\ne k_0$, which are not controlled by this
+single-block linear-independence statement.  The source passage does not assert
+full combined-family independence. \cite[Appendix MPV proof,
+line~1182]{Cirac2016MPDO_arXiv}
 
 \section{Formal boundary}
 
@@ -78,13 +82,17 @@ The formal boundary in \cite{Cirac2016MPDO_arXiv} is narrower:
     \right)
     =r_A+1.
 \end{align}
-The surviving \leanid{SectorBNT} API does not contain this literal
-single-block linear-independence formulation.  It supplies the stronger
-full-family mechanism
-\leanid{MPSTensor.IsBNTCanonicalForm.combined_family_eventually_li},
-under all-pairwise cross-overlap decay.  That mechanism is sufficient for the
-coefficient-comparison contradiction used by the corrected theorem, without
-formalizing the source sentence as a separate fixed-block lemma.
+The surviving \leanid{SectorBNT} API does not formalize the source sentence as
+a standalone fixed-block contradiction.  Instead, the corrected theorem uses a
+restricted coefficient-comparison argument.  It separates the $P$-blocks whose
+overlaps with every $Q$-block decay, represents the complementary blocks by
+scalar multiples of matched $Q$-blocks, and applies
+\leanid{MPSTensor.restricted_combined_family_eventually_li} to the decaying
+subfamily together with all $Q$-blocks.  The full-family lemma
+\leanid{MPSTensor.IsBNTCanonicalForm.combined_family_eventually_li} is the
+special case in which every cross-family overlap decays.  This is a formal
+repair and replacement for the insufficient fixed-block inference, not a claim
+about what the source proves at line~1182.
 The historical target was
 \begin{align}
     (\forall j,  \langle V^{(N)}(B_{k_0}),V^{(N)}(A_j)\rangle\to 0)
@@ -103,11 +111,11 @@ The earlier conditional helpers requiring combined-family linear independence
 (\path{_phase_sum_li}) and the residual-span variants have been retired in
 the 2026-05-13 audit; see
 \path{docs/audits/2026-05-13_cpsv16_ft_paper_vs_code_structural_map.md}.
-Those helpers should not be used as replacements for the fixed-block sentence at
-Appendix MPV proof line~1182, because the needed combined-family independence is not
-supplied by Corollary~\texttt{Lem1}.  This mismatch explains why the fixed-block
-route was retired; it is not a pending obligation on the corrected proportional
-theorem.
+Those helpers should not be presented as consequences of the fixed-block
+sentence at Appendix MPV proof line~1182: Corollary~\texttt{Lem1} supplies only
+the displayed single-block family.  The current restricted-family proof is a
+separate repair.  This mismatch explains why the fixed-block route was retired;
+it is not a pending obligation on the corrected proportional theorem.
 
 Retirement note: this note intentionally no longer lists the retired no-tail,
 leading-only, partner-identification, leading-tail, residual-span, or
@@ -135,21 +143,24 @@ was superseded by direct coefficient comparison on active BNT families.
 The proposed factored analytic discharge used four explicit analytic
 hypotheses:
 \begin{enumerate}
-  \item unit-modulus sector weights on both the $A$-family and the $B$-family;
+  \item every sector weight in both families has unit modulus;
   \item off-diagonal cross-overlap decay on the fixed-block family, i.e.,
         $\langle V^{(N)}(B_{k_0}), V^{(N)}(B_k)\rangle \to 0$ for $k \neq k_0$;
   \item a nonzero limit of the self-overlap at the fixed block,
         $\langle V^{(N)}(B_{k_0}), V^{(N)}(B_{k_0})\rangle \to \ell \neq 0$; and
   \item an eventual positive lower bound $\|c_N\| \geq \delta > 0$.
 \end{enumerate}
-Hypotheses~(1)--(3) are present in the source via the BNT structure
-\cite[Theorem~\texttt{thm1}]{Cirac2016MPDO_arXiv}.  Hypothesis~(4) is not
-directly supplied: the cited argument rules out cancellation by appeal to the
-dominant-adjusted scalar limit, but the retired plan did not derive the explicit
-lower bound $\|c_N\|\geq\delta$ from the canonical-form data.  The earlier
-non-cancellation helpers carrying this lower-bound hypothesis belonged to the
-retired Tier~3 route and should not be cited as present declarations.  No
-current theorem depends on this lower-bound argument.
+Hypothesis~(1) was an extra assumption of the retired plan.  CPSV16 line~246
+states only that every weight has modulus at most one and that at least one
+weight has unit modulus globally; it does not make every sector weight unitary.
+The fixed-block overlap and self-overlap inputs in hypotheses~(2)--(3) come from
+the normal-block comparison at the selected block.  Hypothesis~(4) is also not
+directly supplied: the cited argument appeals to a dominant-adjusted scalar
+limit, but the retired plan did not derive the explicit lower bound
+$\|c_N\|\geq\delta$ from the canonical-form data.  The earlier non-cancellation
+helpers carrying these extra hypotheses belonged to the retired Tier~3 route
+and should not be cited as present declarations.  No current theorem depends on
+this lower-bound argument.
 
 \bibliographystyle{alpha}
 \bibliography{references}
