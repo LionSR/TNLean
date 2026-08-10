@@ -12783,15 +12783,11 @@
   {
     \__tenkz_model_map_ids:nn {atom}
       {
-        \__tenkz_model_get:nnN {##1} {physical} \l__tenkz_kernel_r_tl
-        \quark_if_no_value:NF \l__tenkz_kernel_r_tl
+        \__tenkz_model_get:nnN {##1} {skin} \l__tenkz_kernel_r_b_tl
+        \str_if_eq:VnF \l__tenkz_kernel_r_b_tl {dots}
           {
-            \__tenkz_model_get:nnN {##1} {skin} \l__tenkz_kernel_r_b_tl
-            \str_if_eq:VnF \l__tenkz_kernel_r_b_tl {dots}
-              {
-                \__tenkz_kernel_policy_faces:nn {##1}
-                  { \__tenkz_kernel_r_leg:nn {##1} {####1} }
-              }
+            \__tenkz_kernel_policy_faces:nn {##1}
+              { \__tenkz_kernel_r_leg:nn {##1} {####1} }
           }
       }
   }
