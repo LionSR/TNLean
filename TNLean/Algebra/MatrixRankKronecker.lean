@@ -17,7 +17,6 @@ This file proves that matrix rank is multiplicative under the Kronecker product 
 * `Matrix.rank_kronecker`: the rank of `A ⊗ₖ B` is the product of the ranks of `A` and `B`.
 -/
 
-open Module
 open scoped Kronecker
 
 namespace Matrix
