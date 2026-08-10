@@ -1796,6 +1796,132 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
     coefficient contains the unique normalization factor $d^{-K}$.
 \end{definition}
 
+
+\begin{definition}[Forward source-$u$ kernel]
+    \label{def:mpu_source_u_forward_kernel}
+    \lean{MPOTensor.sourceUForwardKernel}
+    \leanok
+    \uses{thm:mpu_source_u_open_periodic_tail}
+    For a tail of length $K$, define
+    \begin{align}
+      F^{(K)}_{ii';\beta\beta',\alpha\alpha'}
+      =d^{-K}\sum_{\tau,\zeta,j_2}
+        &(\mathcal U^{ij_2}T_{\tau,\zeta})_{\beta,\alpha}
+        \overline{(\mathcal U^{i'j_2}T_{\tau,\zeta})_{\beta',\alpha'}}.
+    \end{align}
+    The expression contains exactly one normalization factor $d^{-K}$.
+\end{definition}
+
+\begin{theorem}[Normalized output-layer tail entry]
+    \label{thm:mpu_source_u_output_layer_tail_entry}
+    \lean{MPOTensor.normalizedDiagonal_outputLayer_pow_apply}
+    \leanok
+    \uses{def:mpu_double_layer,thm:mpu_double_layer_blocking}
+    Let $W_{\mathrm{out}}$ be the output-first double layer. Then
+    \begin{align}
+      (E_{\mathrm{out}}^K)_{(\gamma,\gamma'),(\alpha,\alpha')}
+      =d^{-K}\sum_{\tau,\zeta}
+        (T_{\tau,\zeta})_{\gamma,\alpha}
+        \overline{(T_{\tau,\zeta})_{\gamma',\alpha'}}.
+    \end{align}
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpu_double_layer_blocking}
+    Expand the normalized diagonal of the blocked output layer, reindex a
+    blocked physical index by its decoded word, and evaluate the product
+    double layer.  The physical adjoint contributes the conjugated second
+    word, while the blocked physical dimension supplies $d^{-K}$.
+\end{proof}
+
+\begin{theorem}[Forward-kernel double-layer packaging]
+    \label{thm:mpu_source_u_forward_kernel_packaging}
+    \lean{MPOTensor.sourceUForwardKernel_eq_outputLayer_mul_normalizedDiagonal_pow}
+    \leanok
+    \uses{def:mpu_source_u_forward_kernel,
+        thm:mpu_source_u_output_layer_tail_entry,
+        thm:mpu_output_first_double_layer_entry}
+    The forward kernel is
+    \begin{align}
+      F^{(K)}_{ii'}
+        =W_{\mathrm{out}}^{ii'}E_{\mathrm{out}}^K.
+    \end{align}
+    Both doubled bond indices put the unstarred component before the starred
+    component.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpu_source_u_output_layer_tail_entry,
+        thm:mpu_output_first_double_layer_entry}
+    Expand the matrix product over its doubled bond index.  The first
+    output-layer letter supplies the sum over $j_2$, and the normalized
+    diagonal power supplies the common output word and contracted input word.
+    Reordering finite sums gives the defining forward kernel without reversing
+    the virtual chain.
+\end{proof}
+
+\begin{theorem}[First source-cut range projection]
+    \label{thm:mpu_source_x1_range_projection}
+    \lean{MPOTensor.sourceX₁_mul_conjTranspose_mul_weight_mul_sourceCutM₁}
+    \leanok
+    \uses{thm:mpu_source_factor_recovery}
+    On the range of the first source cut,
+    \begin{align}
+      X_1X_1^\dagger W_\rho M_1=M_1,
+      \qquad W_\rho=\rho\otimes 1_d.
+    \end{align}
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpu_source_factor_recovery}
+    Substitute $X_1^\dagger W_\rho M_1=Y_1$ and then use $M_1=X_1Y_1$.
+\end{proof}
+
+\begin{theorem}[Second source-cut range projection]
+    \label{thm:mpu_source_x2_range_projection}
+    \lean{MPOTensor.sourceX₂_mul_conjTranspose_mul_sourceCutM₂}
+    \leanok
+    \uses{thm:mpu_source_factor_recovery}
+    On the range of the second source cut,
+    \begin{align}
+      X_2X_2^\dagger M_2=M_2.
+    \end{align}
+    This does not assert $X_2X_2^\dagger=1$ on the ambient product-index
+    space.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpu_source_factor_recovery}
+    Substitute $X_2^\dagger M_2=Y_2$ and then use $M_2=X_2Y_2$.
+\end{proof}
+
+\begin{theorem}[Expanded normalized source-$u$ metric]
+    \label{thm:mpu_source_u_expanded_metric}
+    \lean{MPOTensor.IsMPU.normalized_sourceU_openTail_metric}
+    \leanok
+    \uses{thm:mpu_source_u_open_periodic_tail,
+        thm:mpu_normalized_output_tail_coisometry}
+    Expanding both $(K+2)$-site periodic entries through $X_1,u,X_2$ and the
+    open tail gives
+    \begin{align}
+      d^{-K}\sum_{\tau,j,\zeta}
+        \mathcal A_{q;\tau,j,\zeta}
+        \overline{\mathcal A_{p;\tau,j,\zeta}}
+      =\delta_{p,q},
+    \end{align}
+    where $\mathcal A_{q;\tau,j,\zeta}$ is the full source-$u$ expansion with
+    the $q$ entry unstarred.  This is the coefficient-weighted metric; it does
+    not identify the ambient coefficient with the identity.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpu_source_u_open_periodic_tail,
+        thm:mpu_normalized_output_tail_coisometry}
+    Replace each source-factor sum by its periodic MPO entry. Reindex the input
+    configuration into its first two coordinates and its length-$K$ tail, then
+    apply normalized output-first MPU coisometry.
+\end{proof}
+
 \begin{theorem}[Terminal source-factor boundary contraction]
     \label{thm:mpu_source_u_terminal_boundary}
     \lean{MPOTensor.sourceU_boundary_sandwich}
@@ -1833,12 +1959,12 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
 \end{proof}
 
 \begin{remark}[Scope of the open-tail algebra]
-    The preceding results do not identify the forward open-tail coefficient
-    with the reflected blocked contraction.  In particular, they prove
-    neither $u^\dagger u=\Id$ nor a rank bound for $u$, and they do not use
-    $X_2X_2^\dagger=\Id$, $M_2M_2^\dagger=\Id$, or
-    $Y_2Y_2^\dagger=\Id$.  The missing step must transport the internal tail
-    only inside the complete $X_1$--$X_2$ sandwich.
+    The preceding results identify the normalized coefficient-weighted metric,
+    but not the ordinary Gram matrix $u^\dagger u$.  The remaining independent
+    equality is between that ordinary Gram matrix and the normalized closed
+    $(K+2)$-site output tail, with both external source-$u$ tensors retained
+    before moving the cut.  No result uses $X_2X_2^\dagger=\Id$,
+    $M_2M_2^\dagger=\Id$, or $Y_2Y_2^\dagger=\Id$.
 \end{remark}
 
 \begin{theorem}[Right-rank bound]
