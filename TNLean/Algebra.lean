@@ -48,6 +48,7 @@ import TNLean.Algebra.MatrixOperatorSpace
 import TNLean.Algebra.MatrixPosDefTransport
 import TNLean.Algebra.MatrixRankBaseChange
 import TNLean.Algebra.MatrixRankClosed
+import TNLean.Algebra.MatrixRankKronecker
 import TNLean.Algebra.MatrixReindexUnitary
 import TNLean.Algebra.MatrixSpectralDecomp
 import TNLean.Algebra.MatrixStabilization
