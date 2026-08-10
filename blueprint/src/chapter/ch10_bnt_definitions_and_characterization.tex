@@ -56,30 +56,29 @@
 
 % CPSV16 Proposition 2.7 (`prop:char-BNT`), lines 278--280 and its
 % Appendix A restatement at lines 1137--1142.
+% Tracking: issue #5917.
+% Gap: docs/paper-gaps/cpsv16_bnt_characterization_active_blocks.tex.
 \begin{theorem}[Printed BNT characterization]
     \label{thm:cpsv_prop27_printed_status}
     \notready
-    \discussion{5917}
-    \uses{def:bnt_cpsv, def:cpsv_canonical_form}
+    \uses{def:bnt_cpsv, def:cpsv_canonical_form,
+        thm:cpsv_bnt_characterization}
     Let
     \begin{align}
         A^i&=\bigoplus_{k=1}^{r}\mu_k\widetilde A_k^i
         \notag
     \end{align}
-    be a tensor in canonical form.  Proposition~2.7 of
-    \cite{Cirac2016MPDO_arXiv} states that a family $(A_j)_j$ is a basis of
-    normal tensors for $A$ if and only if every listed normal block
+    be a tensor in canonical form.  According to
+    \cite[Proposition~2.7]{Cirac2016MPDO_arXiv}, a family $(A_j)_j$ is a basis
+    of normal tensors for $A$ if and only if every listed normal block
     $\widetilde A_k$ is gauge-phase equivalent to some $A_j$ and no two
     distinct $A_j$ are gauge-phase equivalent.
 
-    The statement is false under the literal displayed canonical-form
-    convention, which does not require $\mu_k\ne0$.  A zero-weight block is
-    invisible in every positive-length matrix product vector and need not be
-    represented by a basis obtained from those vectors.  The corrected
-    characterization restricts the coverage condition to the active indices
-    $k$ with $\mu_k\ne0$; this is
-    Theorem~\ref{thm:cpsv_bnt_characterization}.  The distinction is recorded
-    in \path{docs/paper-gaps/cpsv16_bnt_characterization_active_blocks.tex}.
+    This is false when a coefficient $\mu_k$ vanishes.  Such a block is
+    invisible in every positive-length matrix product vector and need not occur
+    in a basis recovered from those vectors.  If only the active indices $k$
+    with $\mu_k\ne0$ are required to be represented, the characterization
+    holds by Theorem~\ref{thm:cpsv_bnt_characterization}.
 \end{theorem}
 
 \begin{theorem}[Characterization by canonical-form representatives]

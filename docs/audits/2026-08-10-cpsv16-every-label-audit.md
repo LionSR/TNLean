@@ -57,7 +57,8 @@ Definitions, equations, and figures outside theorem statements and proofs may
 be classified as notation or standalone internal material when that is their
 actual role.  Every equation or figure label inside a theorem statement or
 proof instead explicitly inherits the enclosing result's status and semantic
-boundary.  The validator checks all 58 such labels.  Thus, for example, the six
+boundary.  The validator requires exactly 58 unique labels and 60 occurrences
+of this kind.  Thus, for example, the six
 displayed clauses of Theorem~4.9 inherit its partial all-sector Case-II status,
 and the algebra and fusion clauses of Theorem~4.14 retain their different
 coverage boundaries.  This prevents an internal display from being treated as
@@ -89,7 +90,7 @@ is unlabelled and is recorded here and in the maintained coverage crosswalk.
 | Example 3.4, `Ex:ZCL` | 453 | CID does not imply a renormalization fixed point | Exact active target of assigned issue #5916; Blueprint node `thm:cpsv_example34_status` |
 | Example 4.10, `ExZCLnoSAL` | 898 | ZCL does not imply SAL | Tracked with Examples 4.11--4.12 by active issue #5919; Blueprint node `thm:cpsv_examples410_412_status` |
 | Example 4.11, `ExSALnoZCL` | 908 | SAL does not imply ZCL | Tracked by issue #5919; the printed SAL claim must be checked rather than assumed |
-| Example 4.12, unlabelled | 929 | The toric-code boundary tensor is SAL and ZCL but is not of the simple GSNNCH form | Tracked by issue #5919 together with the two labelled examples |
+| Example 4.12, unlabelled | 929 | The toric-code boundary tensor is claimed to be SAL, ZCL, and RFP, but not of the simple GSNNCH form | Tracked by issue #5919; the MPO formula is explicit, while the trace-preserving maps needed for the printed RFP assertion remain to be constructed |
 
 ## Appendix D omissions and corrections
 

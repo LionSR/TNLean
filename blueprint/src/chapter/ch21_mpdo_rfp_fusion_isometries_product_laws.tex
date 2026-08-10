@@ -368,28 +368,29 @@ of_verticalDecompositions_of_unitaryBlockEquiv}
 \end{proof}
 
 % CPSV16 Theorem 4.14 (`thm:IV.13`), lines 972--993 and Appendix C.4.
+% Tracking: issue #5917.
+% Gaps: docs/paper-gaps/cpsv16_figure11_per_pair_support.tex and
+% docs/paper-gaps/cpsv16_figure11_fusion_coisometry.tex.
 \begin{theorem}[Printed algebra and fusion characterization]
     \label{thm:cpsv_theorem414_printed_status}
     \notready
-    \discussion{5917}
     \uses{def:mpdo, def:cpsv_canonical_form, def:is_rfp_via_ts,
         def:mpdo_bnt_algebra_tensor_clause,
-        def:mpdo_bnt_fusion_tensor_clause}
+        def:mpdo_bnt_fusion_tensor_clause,
+        thm:mpdo_cpsv_bnt_rfp_equivalence}
     For a canonical-form tensor generating matrix product density operators,
-    Theorem~4.14 of \cite{Cirac2016MPDO_arXiv} states that the fixed-point
+    \cite[Theorem~4.14]{Cirac2016MPDO_arXiv} states that the fixed-point
     condition, the tensor-attached BNT algebra clause, and the displayed fusion
     isometry clause are equivalent.
 
-    The equivalence between the fixed-point condition and the tensor-attached
-    algebra clause is complete.  The fusion equivalence is complete for the
-    active-support reading in which an absent product sector has zero
-    multiplicity and the retained-row map is a coisometry with exact
-    reconstruction.  This corrected theorem is
-    Theorem~\ref{thm:mpdo_cpsv_bnt_rfp_equivalence}.  It is not coverage of the
-    unrestricted printed fusion clause.  The fixed-pair support and coisometry
-    corrections are documented in
-    \path{docs/paper-gaps/cpsv16_figure11_per_pair_support.tex} and
-    \path{docs/paper-gaps/cpsv16_figure11_fusion_coisometry.tex}.
+    The fixed-point condition is equivalent to the tensor-attached algebra
+    clause.  For the fusion clause, an absent product sector must have
+    multiplicity zero, and the retained-row map is a coisometry with exact
+    reconstruction.  Under this active-support interpretation, the three
+    conditions are equivalent by
+    Theorem~\ref{thm:mpdo_cpsv_bnt_rfp_equivalence}.  Without these
+    qualifications, the displayed fusion clause is not well-defined on empty
+    product sectors and has the wrong isometry orientation.
 \end{theorem}
 
 \begin{theorem}[BNT characterizations of MPDO renormalization fixed points]
