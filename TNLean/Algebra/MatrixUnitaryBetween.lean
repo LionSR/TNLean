@@ -42,6 +42,8 @@ lines 534--605.
   coordinate-change and composition compatibility.
 * `Matrix.IsUnitaryBetween.of_mul_left` and `Matrix.IsUnitaryBetween.of_mul_right`
   cancel unitary-between factors from a unitary-between product.
+* `Matrix.conjTranspose_mul_mul_eq_conjTranspose_mul_iff_of_mul_eq_one` removes
+  a Gram dressing whose matrix has a right inverse.
 * `Matrix.isUnitaryBetween_iff_mem_unitaryGroup` identifies the square case with
   Mathlib's unitary group.
 -/
@@ -63,6 +65,29 @@ isometry and a coisometry. -/
 def IsUnitaryBetween [Fintype m] [Fintype n] [DecidableEq m] [DecidableEq n]
     (A : Matrix m n ℂ) : Prop :=
   A.IsIsometry ∧ A.IsCoisometry
+
+/-- If $YZ=1$, then the dressed Gram equation
+$Y^\dagger GY=Y^\dagger Y$ is equivalent to $G=1$.
+
+This is the right-inverse cancellation used in arXiv:1703.09188, equation
+`vUnitary`, lines 583--588. -/
+theorem conjTranspose_mul_mul_eq_conjTranspose_mul_iff_of_mul_eq_one
+    {a b : Type*} [Fintype a] [Fintype b] [DecidableEq a]
+    (Y : Matrix a b ℂ) (Z : Matrix b a ℂ) (G : Matrix a a ℂ)
+    (hYZ : Y * Z = 1) :
+    Yᴴ * G * Y = Yᴴ * Y ↔ G = 1 := by
+  have hZY : Zᴴ * Yᴴ = 1 := by
+    rw [← Matrix.conjTranspose_mul, hYZ, Matrix.conjTranspose_one]
+  constructor
+  · intro h
+    calc
+      G = (Zᴴ * Yᴴ) * G * (Y * Z) := by rw [hZY, hYZ, Matrix.one_mul, Matrix.mul_one]
+      _ = Zᴴ * (Yᴴ * G * Y) * Z := by simp only [Matrix.mul_assoc]
+      _ = Zᴴ * (Yᴴ * Y) * Z := by rw [h]
+      _ = (Zᴴ * Yᴴ) * (Y * Z) := by simp only [Matrix.mul_assoc]
+      _ = 1 := by rw [hZY, hYZ, Matrix.one_mul]
+  · rintro rfl
+    simp
 
 namespace IsIsometry
 

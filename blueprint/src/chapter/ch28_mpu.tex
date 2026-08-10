@@ -2211,6 +2211,123 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
     $Y_2Y_2^\dagger=\Id$.
 \end{remark}
 
+\begin{definition}[Tensorized source dressing]
+    \label{def:mpu_source_v_dressing}
+    \lean{MPOTensor.sourceYTensor,MPOTensor.sourceZTensor,
+        MPOTensor.sourceYTensor_apply,MPOTensor.sourceZTensor_apply,
+        MPOTensor.sourceVRegroupEquiv,
+        MPOTensor.sourceVRegroupEquiv_apply,
+        MPOTensor.sourceVRegroupEquiv_symm_apply,
+        MPOTensor.SourceVDressedGram}
+    \leanok
+    \uses{def:mpu_weighted_source_factors,def:mpu_source_uv}
+    Put
+    \begin{align}
+        Y&=Y_1\otimes Y_2,
+        &Z&=Z_1\otimes Z_2,
+    \end{align}
+    with source-bond order $r\times\ell$. Thus $Y$ maps
+    $(\C^d\otimes\C^D)^{\otimes 2}$ to
+    $\C^r\otimes\C^\ell$, and $Z$ maps in the opposite direction. The
+    regrouping of the open indices is
+    \begin{align}
+        R\bigl((i,a),(j,b)\bigr)
+          &=\bigl((i,j),\operatorname{flat}(a,b)\bigr),
+    \end{align}
+    where $\operatorname{flat}:\Fin D\times\Fin D\simeq\Fin(D^2)$ is the
+    canonical product enumeration. The dressed source-$v$ Gram equation is
+    \begin{align}
+        Y^\dagger(v^\dagger v)Y&=Y^\dagger Y.
+    \end{align}
+    These are the tensorized factors surrounding $v^\dagger v$ in
+    \cite[Section~III, equation \texttt{vUnitary}]{Cirac2017MPU}.
+\end{definition}
+
+\begin{theorem}[Tensorized source right inverse]
+    \label{thm:mpu_source_yz_tensor}
+    \lean{MPOTensor.sourceYTensor_mul_sourceZTensor}
+    \leanok
+    \uses{def:mpu_source_v_dressing}
+    The tensorized source factors satisfy
+    \begin{align}
+        YZ&=\Id_{r\ell}.
+    \end{align}
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:mpu_source_factor_right_inverses}
+    Multiplicativity of the Kronecker product gives
+    \begin{align}
+        YZ&=(Y_1Z_1)\otimes(Y_2Z_2)
+            =\Id_r\otimes\Id_\ell=\Id_{r\ell}.
+    \end{align}
+\end{proof}
+
+\begin{theorem}[Regrouped entries of the dressed Gram equation]
+    \label{thm:mpu_source_v_dressed_entries}
+    \lean{MPOTensor.sourceVDressedGram_iff_regrouped_entries}
+    \leanok
+    \uses{def:mpu_source_v_dressing}
+    For $x=R^{-1}(p,a)$ and $y=R^{-1}(q,b)$, the dressed Gram equation is
+    equivalent to
+    \begin{align}
+        \sum_t\left(\sum_s\overline{Y_{s,x}}
+            \sum_z\overline{v_{z,s}}v_{z,t}\right)Y_{t,y}
+          &=\sum_t\overline{Y_{t,x}}Y_{t,y}.
+    \end{align}
+    Here $p,q\in\Fin d\times\Fin d$, $a,b\in\Fin(D^2)$, the indices $s,t$
+    range over $\Fin r\times\Fin\ell$, and $z$ ranges over
+    $\Fin d\times\Fin d$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{def:mpu_source_v_dressing}
+    Evaluate both sides of $Y^\dagger(v^\dagger v)Y=Y^\dagger Y$ at
+    $(x,y)$ and expand the three matrix products. Conversely, apply the
+    displayed equality after regrouping each pair of open source-cut indices
+    by $R$.
+\end{proof}
+
+\begin{theorem}[Right-inverse cancellation of a dressed Gram equation]
+    \label{thm:mpu_dressed_gram_cancel}
+    \lean{Matrix.conjTranspose_mul_mul_eq_conjTranspose_mul_iff_of_mul_eq_one}
+    \leanok
+    If $Y$ has a right inverse $Z$, so that $YZ=\Id$, then for every square
+    matrix $G$ on the row space of $Y$,
+    \begin{align}
+        Y^\dagger GY=Y^\dagger Y
+        &\quad\Longleftrightarrow\quad G=\Id.
+    \end{align}
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Conjugate the first equality by $Z^\dagger$ on the left and $Z$ on the
+    right. Since $Z^\dagger Y^\dagger=(YZ)^\dagger=\Id$, both outer factors
+    cancel. The reverse implication follows by substituting $G=\Id$.
+\end{proof}
+
+\begin{theorem}[Cancellation of the source-$v$ dressing]
+    \label{thm:mpu_source_v_dressed_gram_cancel}
+    \lean{MPOTensor.sourceVDressedGram_iff_isIsometry}
+    \leanok
+    \uses{def:mpu_source_v_dressing,def:mpu_source_uv}
+    For every positive definite source weight $\rho$,
+    \begin{align}
+        Y^\dagger(v^\dagger v)Y=Y^\dagger Y
+        &\quad\Longleftrightarrow\quad v^\dagger v=\Id_{r\ell}.
+    \end{align}
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:mpu_source_yz_tensor,thm:mpu_dressed_gram_cancel}
+    Apply right-inverse cancellation with $G=v^\dagger v$ and
+    $Z=Z_1\otimes Z_2$.
+\end{proof}
+
 \begin{theorem}[Right-rank bound]
     \label{thm:mpu_right_rank_bound}
     \lean{MPOTensor.rightRank_bound}
