@@ -1,12 +1,28 @@
-% Five examples, designed to be completed in about fifteen minutes.
+% Five examples in the manner of The TeXbook: each adds one idea to the
+% one before it, dangerous bends mark skippable depth, one refusal is
+% shown on purpose, and the exercises' answers close the chapter.
 \section{A fifteen-minute tutorial}\label{ch:tutorial}
 
-The five examples use the same reading order: layout, picture policy, then
-body declarations.  Each source is complete and uses canonical public syntax.
+Everything you will type here is the kernel surface: the one language the
+package binds the moment it loads.  If you have met an older tenkz
+document, two sentences make you current.  \tncmd{tenkzkernel} is an inert
+word --- it rebinds what loading already bound --- and the spellings it
+once switched on are dead, tombstoned in Appendix~\ref{ch:compatibility}.
+New sources need neither.
 
-\subsection{An MPS word}
+Five examples take you from one word of tensors to an audited equation
+identity, and each adds exactly one idea to the one before it.  Every
+source is complete: paste it into any document that loads the package and
+it compiles as printed.  Read each one in the same order --- layout,
+picture policy, then body declarations.  This tutorial needs only
+\tnenv{tenkz} and, at the last step, \tnenv{tenkzeq}; when a figure of
+your own wants a lattice, a sheet, or a ring, the chooser in
+Section~\ref{ch:chooser} decides by topology.
+
+\subsection{A word of tensors}
 
 \begin{tnexample}[
+  label={tnex:tut-word},
   formula={(A^{i_1}A^{i_2}A^{i_3})_{\alpha\beta}},
   caption={a regular contraction},
   index={The horizontal bonds are summed virtual indices.  The two stubs are
@@ -21,20 +37,30 @@ body declarations.  Each source is complete and uses canonical public syntax.
 \end{tenkz}
 \end{tnexample}
 
-The environment is one typed tensor network in one frame.  Each \tncmd{tn}
-declares an atom; \verb|&| advances one site.  \tnkey{ports=} types each
-face and may label it, and a typed port with no partner is an open index:
-open ink is declared content, so the picture exposes exactly the indices its
-atoms state.
+You have drawn a matrix-product word.  \tnenv{tenkz} holds one typed
+tensor network in one frame: \tnkey{cols=3} lays three cells on a wire,
+each \tncmd{tn} declares an atom in the next cell, and \verb|&| advances
+one site.  Adjacent cells contract by default --- those are the horizontal
+bonds --- so the only indices you declare are the open ones.
+\tnkey{ports=} types each face and may label it, and a typed port with no
+partner is an open index.  Open ink is declared content: the picture
+exposes exactly the indices its atoms state, and the margin quotes the
+boundary signature the compiler wrote to the \tnfile{.tnlog} event stream
+--- two virtual stubs, three physical legs, nothing you did not say.
 
-Beamer reads a frame's body before typesetting it, so a chained picture
-reaches the environment with its \verb|&| already an ordinary alignment tab,
-and an equation reaches the wrapper with its relation glyph already an
-ordinary character.  Both read their bodies as captured tokens and find the
-tab and the glyph there themselves, so a chained picture and an equation
-each compile in a plain frame; no \texttt{[fragile]} marking is needed.
+\dbendpar Beamer reads a frame's body before typesetting it, so a chained
+picture reaches the environment with its \verb|&| already an ordinary
+alignment tab.  The picture reads its body as captured tokens and finds
+the tab there itself, so it compiles in a plain frame; no
+\texttt{[fragile]} marking is needed.
 
-\subsection{A channel sandwich}
+\tnexercise{ex:tut-matrix} Draw the plain matrix $M$ --- one atom, both
+virtual indices open, no physical leg --- and say what boundary signature
+it writes.
+
+\subsection{Layers and side policy}
+
+One new idea: rows are layers.
 
 \begin{tnexample}[
   formula={\mathcal E_A(X)=\sum_i A^i X A^{i\dagger}},
@@ -51,32 +77,258 @@ each compile in a plain frame; no \texttt{[fragile]} marking is needed.
 \end{tenkz}
 \end{tnexample}
 
-\tnkey{rows=} declares ket over bra and pairs their physical legs; the
-conjugate is label mathematics.  A cup connects adjacent layers; it is not a
-same-row trace.
+\tnkey{rows=} declares a ket layer over a bra layer, and the frame
+contracts their facing physical ports --- the vertical bond that sums $i$.
+The conjugate is label mathematics: $\overline{A}$ is a name, not a flag.
+The sides then state policy from a four-word alphabet.  \tnval{open} mints
+legs and puts them in the signature; \tnval{none}, the default, is a side
+with no indices at all; \tnval{trace} returns a row to itself; \tnval{cup}
+closes adjacent layers onto each other.  Here \tnkey{east=}\tnval{\{cup=\$X\$\}}
+closes the pair through the matrix $X$, and the west pair stays open, so
+the picture is a map --- which is exactly what its two-entry signature
+says.
 
-\subsection{Compose an equation}
+\dbendpar The labelled cup is sugar: it expands to the side word
+\tnval{cup} plus a ring atom standing halfway along the generated cup
+wire, so the kernel record stream never contains a ``labelled cup'',
+only a wire named \tnval{cup-1-2} and an atom on it.  Every sugar row in
+the registry states its expansion this way, and \tncmd{tnset}\tnval{\{strict\}}
+rejects sugar outright.
+
+\tnexercise{ex:tut-transfer} Draw the transfer matrix
+$E=\sum_i A^i\otimes\overline{A^i}$: ket over bra, the physical pair
+contracted, all four virtual ends open.
+
+\tnexercise{ex:tut-closed} The spelling
+\verb|\tnwire[closed]{(1,1)}{(2,1)}| refuses to compile.  Why?
+
+\subsection{The boundary alphabet, three ways}
+
+The pair spelling \tnkey{boundary=} states \tnkey{west=} and \tnkey{east=}
+at once, and its three words draw three different objects from one row of
+matrices:
+
+\begin{tnmultiples}[
+  formula={(M_1M_2M_3)_{\alpha\beta}},
+  caption={one row, three side policies},
+  index={Left to right: the outer bonds close trivially and nothing is
+    exposed; both ends open and the row is a matrix; the trace returns the
+    row to itself and the picture is a scalar.  The quoted signature is the
+    open panel's; the other two are empty.},
+  signature={kernel-boundary|signature=open:e, open:w},
+  variants={{boundary=none}{boundary=none},
+            {boundary=open}{boundary=open},
+            {boundary=periodic}{boundary=periodic}}]
+% Formula: M_1 M_2 M_3 under three side policies.
+\begin{tenkz}[rows={wire}, cols=3, variant]
+  \tn{$M_1$} & \tn{$M_2$} & \tn{$M_3$}
+\end{tenkz}
+\end{tnmultiples}
+
+One family, one figure: the three panels share every token except the
+word under them.  \tnval{none} is the explicit spelling of the default
+--- a side that says nothing exposes nothing, the way a bond that closes
+trivially at the chain's outer ends deserves no ink.  \tnval{open} turns
+the row into the matrix $M_1M_2M_3$, and \tnval{periodic} (sugar for
+\tnkey{west=}\tnval{trace}, \tnkey{east=}\tnval{trace}) closes the row on
+itself.  Same atoms, same bonds; only the boundary signature moves.
+
+\dbendpar The default is a statement, not an omission.  The deleted
+0.7 dialect drew west and east stubs unbidden and sealed them with
+\tnval{none}; the kernel mints a leg only on declaration, so
+\tnval{none} now changes nothing and merely says so.  That reading died
+with the old front end --- if you sealed stubs once, stop: there are no
+stubs to seal.
+
+\tnexercise{ex:tut-trace} Draw the scalar
+$\operatorname{tr}(M_1M_2M_3)$ and say what its boundary signature is.
+
+\subsection{A mark over a run}
 
 \begin{tnexample}[
+  formula={A^{[3]}=A^{i_1}A^{i_2}A^{i_3}},
+  caption={a bracket over a cell range},
+  index={The bracket speaks from the south, past the site names and their
+    ink.  The signature is Example \ref{tnex:tut-word}'s, unchanged: a
+    mark owns no topology.},
+  signature={kernel-boundary|signature=open:e, open:w, phys:n, phys:n, phys:n}]
+% Formula: the blocked word A^{[3]}; the mark adds no index.
+\begin{tenkz}[cols=3]
+  \tn[ports={180:virtual:$\alpha$, 0:virtual, 90:physical:$i_1$}]{A} &
+  \tn[ports={180:virtual, 0:virtual, 90:physical:$i_2$}]{A} &
+  \tn[ports={180:virtual, 0:virtual:$\beta$, 90:physical:$i_3$}]{A}
+  \tnmark[form=bracket]{(1,1) .. (1,3)}{$A^{[3]}$}
+\end{tenkz}
+\end{tnexample}
+
+\tncmd{tnmark} annotates a target without touching the contraction.  The
+target here is a selector: \tnval{(1,1)} names a cell of the frame, and
+the two-dot range \tnval{(1,1) .. (1,3)} names the records between two
+cells in the frame's own order.  A bracket that names no side speaks from
+the south, where a brace under a span belongs.  Compare the margin with
+Example~\ref{tnex:tut-word}: the signature has not moved, because marks
+never own topology --- delete every mark and no contraction changes.
+
+\dbendpar The range is written with two dots, never a hyphen, because
+generated record names carry hyphens of their own: a cluster member is
+named \tnval{a-2-2}, and a hyphen range could not be told from it.
+
+\tnexercise{ex:tut-enclosure} Restate the same run as a tinted enclosure
+whose label sits below the contour.
+
+\subsection{An equation under audit}
+
+The fifth idea is the one the others were preparing: whole pictures
+compose into an equation, and the equation is an audit scope.
+
+\begin{tnexample}[
+  label={tnex:tut-eq},
   formula={B^i=XA^iX^{-1}},
-  caption={pictures compose as mathematical atoms},
-  index={The capsules are matrices on the wire and add no indices.  Both
-    sides expose one west stub, one east stub, and one physical leg.},
-  signature={kernel-boundary|signature=open:e, open:w, phys:n}]
-% Formula: B^i = X A^i X^{-1}; both boundary signatures agree.
+  caption={a gauge identity, audited},
+  index={The rings are matrices on the wire and add no indices.  Both
+    panels expose one west stub, one east stub, and one physical leg, so
+    the audit records the relation as equal.},
+  signature={check|scope=1|relation=1|result=equal|signature=open:e, open:w, phys:n}]
+% Formula: B^i = X A^i X^{-1}; one relation, audited.
 \[
- \begin{tenkz}[cols=1]
-   \tn[ports={180:virtual, 0:virtual, 90:physical:$i$}]{B}
- \end{tenkz}
- =
- \begin{tenkz}[cols=3]
-   \tn[skin=ring, ports={180:virtual, 0:virtual}]{X} &
-   \tn[ports={180:virtual, 0:virtual, 90:physical:$i$}]{A} &
-   \tn[skin=ring, ports={180:virtual, 0:virtual}]{X^{-1}}
- \end{tenkz}
+\begin{tenkzeq}[check=signature]
+  \begin{tenkz}[cols=1]
+    \tn[ports={180:virtual, 0:virtual, 90:physical:$i$}]{B}
+  \end{tenkz}
+  =
+  \begin{tenkz}[cols=3]
+    \tn[skin=ring, ports={180:virtual, 0:virtual}]{X} &
+    \tn[ports={180:virtual, 0:virtual, 90:physical:$i$}]{A} &
+    \tn[skin=ring, ports={180:virtual, 0:virtual}]{X^{-1}}
+  \end{tenkz}
+\end{tenkzeq}
 \]
 \end{tnexample}
 
-Ordinary TeX owns the equals sign.  Each picture remains an independent
-model and event stream; the audit compares their boundary signatures.
+\tnenv{tenkzeq} places its panels around the mathematics between them ---
+the equals sign is ordinary TeX --- under one shared metric, so a glyph
+is one size on both sides of an equality.  Then it audits: every panel
+carries a boundary signature, and a relation requires its two sides to
+expose the same one.  \tnkey{check=}\tnval{signature} names that audit
+(it is also the default: writing it states what is already running), and
+the margin quotes the \tnval{check} event the equation wrote beside each
+panel's boundary line.  A diagrammatic identity in this language is not a
+juxtaposition that looks right; it is a comparison that ran.
 
+What does a failed comparison look like?  Drop the physical leg of $B$
+and the compiler answers:
+
+\begin{tnrefusal}[
+  caption={the audit catches a dropped leg},
+  index={The left panel now exposes two indices, the right three.  The
+    correction is one token: restore the port 90:physical:$i$ on $B$.},
+  diagnostic={[TKZ-EQ-SIGNATURE] sides 1 and 2 expose unequal boundaries:
+    (open:e, open:w) versus (open:e, open:w, phys:n).}]
+% Refused: B lost its physical leg, so the relation's two
+% sides no longer expose the same boundary.
+\[
+\begin{tenkzeq}[check=signature]
+  \begin{tenkz}[cols=1]
+    \tn[ports={180:virtual, 0:virtual}]{B}
+  \end{tenkz}
+  =
+  \begin{tenkz}[cols=3]
+    \tn[skin=ring, ports={180:virtual, 0:virtual}]{X} &
+    \tn[ports={180:virtual, 0:virtual, 90:physical:$i$}]{A} &
+    \tn[skin=ring, ports={180:virtual, 0:virtual}]{X^{-1}}
+  \end{tenkz}
+\end{tenkzeq}
+\]
+\end{tnrefusal}
+
+Read refusals as language, not as accidents: the code names the check
+that failed, and the message prints both signatures so the missing entry
+is visible at once.  The correction is the port list of
+Example~\ref{tnex:tut-eq}'s~$B$.
+
+\ddbendpar Relations are one of three joiner classes.  A sum also
+requires equal signatures; a product instead contracts the facing cut,
+east entries of the left factor cancelling west entries of the right,
+and exposes the rest.  The comparison can be taken up to bundling ---
+\tnkey{check=}\tnval{\{signature, modulo=bundles\}} reads a bundled index
+and its members as one entry --- and a relation whose two sides are
+known, unequal, and equal anyway for a reason the diagram does not draw
+carries a recorded opt-out,
+\tnval{off=\{<relation>: <reason>\}}, written to the event stream beside
+the waiver.  The audit cannot be switched off silently.
+
+\tnexercise{ex:tut-checkword} Why does
+\tnkey{check=}\tnval{\{signature, modulo=member\}} refuse?
+
+\subsection{Answers to the exercises}
+
+\begin{tnexample}[
+  answer={ex:tut-matrix},
+  formula={M_{\alpha\beta}},
+  index={Two typed ports with no partners: the matrix keeps two open
+    virtual indices and nothing else.},
+  signature={kernel-boundary|signature=open:e, open:w}]
+% Formula: the matrix M with both virtual indices open.
+\begin{tenkz}[cols=1]
+  \tn[ports={180:virtual:$\alpha$, 0:virtual:$\beta$}]{M}
+\end{tenkz}
+\end{tnexample}
+
+\begin{tnexample}[
+  answer={ex:tut-transfer},
+  formula={E=\sum_i A^i\otimes\overline{A^i}},
+  index={The frame contracts the ket-bra physical pair; all four virtual
+    ends stay open, so $E$ is a map on the doubled space.},
+  signature={kernel-boundary|signature=open:e, open:e, open:w, open:w}]
+% Formula: E = sum_i A^i tensor conj(A^i).
+\begin{tenkz}[rows={ket,bra}, cols=1, west=open, east=open]
+  \tn[label pos=180]{A} \\
+  \tn[label pos=180]{$\overline{A}$}
+\end{tenkz}
+\end{tnexample}
+
+\tnanswer{ex:tut-closed} A closed wire is a smooth cycle, so it has no
+ends to give; every other wire has exactly two.  The spelling states
+both at once and is refused with the coded error
+\tnval{[TKZ-LANG-WIRE-ARITY]}: \emph{a closed wire takes no positional
+ends; every other wire takes exactly two}.  Keep \tnval{closed} for a
+free loop, or keep the two ends for a bond.
+
+\begin{tnexample}[
+  answer={ex:tut-trace},
+  formula={\operatorname{tr}(M_1M_2M_3)},
+  index={The trace returns the row to itself; no index is left open, and
+    the empty signature says scalar.},
+  signature={kernel-boundary|signature=}]
+% Formula: tr(M_1 M_2 M_3); sugar: boundary=periodic
+% expands to west=trace, east=trace.
+\begin{tenkz}[rows={wire}, cols=3, boundary=periodic]
+  \tn{$M_1$} & \tn{$M_2$} & \tn{$M_3$}
+\end{tenkz}
+\end{tnexample}
+
+\begin{tnexample}[
+  answer={ex:tut-enclosure},
+  formula={A^{[3]}},
+  index={The enclosure strokes the offset hull of the selection and tint
+    lays ink over the paper inside it; the physical legs pierce the
+    contour, and the signature still does not move.},
+  signature={kernel-boundary|signature=open:e, open:w, phys:n, phys:n, phys:n}]
+% Formula: the blocked word inside one tinted contour.
+\begin{tenkz}[cols=3]
+  \tn[ports={180:virtual:$\alpha$, 0:virtual, 90:physical:$i_1$}]{A} &
+  \tn[ports={180:virtual, 0:virtual, 90:physical:$i_2$}]{A} &
+  \tn[ports={180:virtual, 0:virtual:$\beta$, 90:physical:$i_3$}]{A}
+  \tnmark[form=enclosure, tint,
+          label pos=270]{(1,1) .. (1,3)}{$A^{[3]}$}
+\end{tenkz}
+\end{tnexample}
+
+\tnanswer{ex:tut-checkword} The audit refuses words it does not know
+rather than passing over them, because a spelling the audit ignores is a
+comparison you believe is running and is not.  The coded error is
+\tnval{[TKZ-EQ-CHECK-WORD]}: \emph{the audit does not know
+`modulo=member'; check= states the audit (signature), the equivalence it
+is taken up to (modulo=bundles), and its recorded opt-outs
+(off=\{<relation>: <reason>\})}.  The one admitted equivalence word is
+\tnval{bundles}.
