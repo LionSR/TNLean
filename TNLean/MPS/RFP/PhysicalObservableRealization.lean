@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import TNLean.Algebra.FinSum
 import TNLean.MPS.MPDO.BiCFDerivation.BNTDirectSum
 import TNLean.MPS.RFP.BNTOrthogonality
 import TNLean.MPS.RFP.ZeroCorrelationLength
@@ -113,13 +114,6 @@ private theorem evalWord_directSumTensor
   rw [hDirect, evalWord_toTensorFromBlocks_eq_reindex_blockDiagonal]
   simp
 
-/-- Submatrices commute with finite sums. -/
-private theorem submatrix_sum {ι l m p q : Type*}
-    (s : Finset ι) (M : ι → Matrix m p ℂ) (f : l → m) (g : q → p) :
-    (∑ i ∈ s, M i).submatrix f g = ∑ i ∈ s, (M i).submatrix f g := by
-  ext a b
-  simp only [Matrix.submatrix_apply, Matrix.sum_apply]
-
 /-- The inserted transfer map of a direct sum is the reindexing of the
 corresponding block-diagonal word sum. -/
 private theorem physicalObservableTransfer_directSum_reindex
@@ -138,10 +132,10 @@ private theorem physicalObservableTransfer_directSum_reindex
   classical
   rw [physicalObservableTransfer_apply]
   simp only [evalWord_directSumTensor, Matrix.reindex_apply]
-  rw [submatrix_sum]
+  rw [Matrix.submatrix_sum]
   apply Finset.sum_congr rfl
   intro σ _
-  rw [submatrix_sum]
+  rw [Matrix.submatrix_sum]
   apply Finset.sum_congr rfl
   intro τ _
   rw [Matrix.conjTranspose_submatrix,
