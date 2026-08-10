@@ -3,8 +3,10 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import TNLean.Algebra.FinSum
 import TNLean.MPS.Overlap.Basic
 import TNLean.MPS.RFP.ZeroCorrelationLength
+import TNLean.MPS.Tactic.Basic
 
 /-!
 # CPSV16 Example 3.4: correlation independence without an RFP
@@ -136,6 +138,13 @@ private theorem diagonal_sandwich_apply (u v : Fin 2 → ℂ)
   fin_cases a <;> fin_cases b <;>
     simp [Matrix.mul_apply, Fin.sum_univ_two, mul_assoc]
 
+private theorem diagonal_sandwich_apply_left (u v : Fin 2 → ℂ)
+    (X : Matrix (Fin 2) (Fin 2) ℂ) (a b : Fin 2) :
+    (Matrix.diagonal u * X * (Matrix.diagonal v)ᴴ) a b =
+      u a * X a b * star (v b) := by
+  rw [Matrix.mul_assoc]
+  exact diagonal_sandwich_apply u v X a b
+
 private theorem cpsvExample34_physicalObservableTransfer_isEntrywiseMultiplier
     (L : ℕ) (O : Matrix (Fin L → Fin 2) (Fin L → Fin 2) ℂ) :
     IsEntrywiseMultiplier (physicalObservableTransfer cpsvExample34Tensor L O) := by
@@ -150,13 +159,11 @@ private theorem cpsvExample34_physicalObservableTransfer_isEntrywiseMultiplier
   simp_rw [Matrix.sum_apply, Matrix.smul_apply, smul_eq_mul]
   simp_rw [cpsvExample34_evalWord, diagonal_sandwich_apply]
   dsimp only [c]
-  rw [Finset.sum_mul]
-  apply Finset.sum_congr rfl
-  intro σ _
-  rw [Finset.sum_mul]
-  apply Finset.sum_congr rfl
-  intro τ _
-  ring
+  simpa only [Fintype.sum_prod_type, mul_comm, mul_left_comm, mul_assoc] using
+    (Fintype.sum_mul_mul_eq_mul_sum_mul (X a b)
+      (fun p : (Fin L → Fin 2) × (Fin L → Fin 2) =>
+        O p.2 p.1 * cpsvExample34WordDiag (List.ofFn p.1) a)
+      (fun p => star (cpsvExample34WordDiag (List.ofFn p.2) b)))
 
 private theorem cpsvExample34_letter_diagonal (i : Fin 2) :
     cpsvExample34Tensor i =
@@ -171,14 +178,15 @@ private theorem cpsvExample34_transferMap_isEntrywiseMultiplier :
       star (cpsvExample34WordDiag [i] b)
   refine ⟨c, ?_⟩
   intro X a b
-  change (∑ i : Fin 2, (cpsvExample34Tensor i *
-    (X * (cpsvExample34Tensor i)ᴴ)) a b) = c a b * X a b
-  simp_rw [cpsvExample34_letter_diagonal, diagonal_sandwich_apply]
+  transfer_simp
+  change (∑ i : Fin 2, (cpsvExample34Tensor i * X *
+    (cpsvExample34Tensor i)ᴴ) a b) = c a b * X a b
+  simp_rw [cpsvExample34_letter_diagonal, diagonal_sandwich_apply_left]
   dsimp only [c]
-  rw [Finset.sum_mul]
-  apply Finset.sum_congr rfl
-  intro i _
-  ring
+  simpa only [mul_comm, mul_left_comm, mul_assoc] using
+    (Fintype.sum_mul_mul_eq_mul_sum_mul (X a b)
+      (fun i : Fin 2 => cpsvExample34WordDiag [i] a)
+      (fun i => star (cpsvExample34WordDiag [i] b)))
 
 private theorem cpsvExample34_transfer_commutes_physicalObservableTransfer
     (L : ℕ) (O : Matrix (Fin L → Fin 2) (Fin L → Fin 2) ℂ) :
@@ -237,10 +245,11 @@ private theorem cpsvExample34_transferMap_offDiagonalUnit :
     transferMap cpsvExample34Tensor offDiagonalUnit =
       cpsvExample34InvSqrtTwo • offDiagonalUnit := by
   ext a b
-  change (∑ i : Fin 2, (cpsvExample34Tensor i *
-    (offDiagonalUnit * (cpsvExample34Tensor i)ᴴ)) a b) =
+  transfer_simp
+  change (∑ i : Fin 2, (cpsvExample34Tensor i * offDiagonalUnit *
+    (cpsvExample34Tensor i)ᴴ) a b) =
       (cpsvExample34InvSqrtTwo • offDiagonalUnit) a b
-  simp_rw [cpsvExample34_letter_diagonal, diagonal_sandwich_apply]
+  simp_rw [cpsvExample34_letter_diagonal, diagonal_sandwich_apply_left]
   fin_cases a <;> fin_cases b <;>
     simp [cpsvExample34WordDiag, offDiagonalUnit, star_cpsvExample34InvSqrtTwo]
 
