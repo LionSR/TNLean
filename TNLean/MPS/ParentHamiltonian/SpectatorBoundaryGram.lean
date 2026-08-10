@@ -24,7 +24,10 @@ and the fiberwise Gram identities. No contraction estimate is asserted.
 
 * `range_tailBoundaryMapES` and `range_leftBoundaryMapES_one` identify the physical ranges.
 * `c3_injectiveRangeProjector_residual_eq` is the exact C3 common-factorization identity.
-* The tail and left Gram and inverse-Gram theorems identify their fiberwise actions.
+* `tailBoundaryMapES_adjoint_comp_self_eq_fiberwise_groundSpaceGram` and
+  `leftBoundaryMapES_adjoint_comp_self_eq_fiberwise_groundSpaceGram` identify the Grams.
+* `inverseGram_tailBoundaryMapES_eq_fiberwise_inverseGram` and
+  `inverseGram_leftBoundaryMapES_eq_fiberwise_inverseGram` identify the inverse Grams.
 -/
 
 open scoped Matrix

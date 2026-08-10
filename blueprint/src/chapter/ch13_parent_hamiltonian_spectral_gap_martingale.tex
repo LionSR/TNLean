@@ -355,6 +355,8 @@ norm estimate is derived here.
 \end{theorem}
 \begin{proof}
     \leanok
+    \uses{thm:tail_boundary_map_range_es_transport,thm:left_boundary_map_range_es_transport,
+      thm:tail_boundary_map_factorization,thm:left_boundary_map_factorization}
     Transport the algebraic range descriptions through the Euclidean
     identification.  The two factorization identities follow by evaluating a
     virtual matrix \(X\) fiberwise and applying the corresponding algebraic
@@ -400,6 +402,7 @@ norm estimate is derived here.
 \end{theorem}
 \begin{proof}
     \leanok
+    \uses{thm:spectator_boundary_hilbert_factorization}
     Apply the common-factorization projector identity to the two spectator
     boundary maps, the full boundary map, and their tail and left virtual maps.
     The preceding range equalities identify the three physical ranges.
