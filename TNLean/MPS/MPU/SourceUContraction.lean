@@ -9,7 +9,7 @@ import TNLean.MPS.MPU.SourceFactors
 /-!
 # Algebraic identities for the source-u contraction
 
-This module packages the algebraic identities used before the finite-sum contraction in
+This module records the algebraic identities used before the finite-sum contraction in
 arXiv:1703.09188, Lemma `lemuisometry` (lines 545--557). It records how the physical adjoint
 acts on MPU tensors and their periodic operators, gives the exact output-first double-layer
 entry with its bond-pair order, and recovers the two right source factors from the source cuts.
