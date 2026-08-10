@@ -9,3 +9,4 @@ Authors: TNLean contributors
 -- Generated aggregator module: TNLean.QCA
 
 import TNLean.QCA.LocalAlgebra
+import TNLean.QCA.LocalLimit
