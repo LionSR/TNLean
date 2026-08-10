@@ -778,11 +778,53 @@ norm estimate is derived here.
     anticommutator inequality.
 \end{proof}
 
+\begin{theorem}[Uniform tail virtual-map bound]
+    \label{thm:primitive_tail_virtual_map_norm_uniform}
+    \lean{MPSTensor.IsPrimitiveMPS.tailVirtualMapES_norm_four_pow_uniform}
+    \lean{MPSTensor.IsPrimitiveMPS.tailVirtualMapES_norm_uniform}
+    \leanok
+    \uses{def:primitive_mps, thm:spectator_boundary_hilbert_factorization}
+    Let $A$ be a primitive MPS tensor with nonzero virtual dimension, and let
+    $J_K=J^{\mathrm{tail}}_K$ be its length-$K$ tail virtual map.  Then
+    \begin{align}
+        \exists C>0,\quad \forall K\in\N,\quad \lVert J_K\rVert&\leq C.
+    \end{align}
+    No positive-definiteness hypothesis on the fixed point is required.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:geometric_bound_of_spectral_radius_lt_one, thm:pow_decomp,
+        thm:sum_entry_norm_sq_le_card_mul_l2_operator_norm_sq}
+    Reconstruct the norm infrastructure from the exact adjoint--self identity
+    \begin{align}
+        J_K^\dagger J_K U(X)
+        &=U\!\left(X\,\mathcal E_A^K(\mathbf 1)\right).
+    \end{align}
+    The Hilbert--Schmidt product estimate then gives the fourth-power bound
+    \begin{align}
+        \lVert J_K\rVert^4
+        &\leq \sum_{i,j}\left\lvert
+          \mathcal E_A^K(\mathbf 1)_{ij}\right\rvert^2.
+    \end{align}
+    For $K\geq1$, decompose the transfer power into its fixed-point projection
+    and the $K$-th power of the complementary map.  The complementary powers
+    are geometrically bounded by
+    Theorem~\ref{thm:geometric_bound_of_spectral_radius_lt_one}, while the
+    entrywise mass is controlled by the $L^2$ operator norm with the virtual
+    dimension factor from
+    Theorem~\ref{thm:sum_entry_norm_sq_le_card_mul_l2_operator_norm_sq}.
+    The case $K=0$ is bounded directly.  This first gives a uniform bound for
+    $\lVert J_K\rVert^4$ and hence a strictly positive uniform bound for
+    $\lVert J_K\rVert$.  No FNW or Nachtergaele contraction estimate enters.
+\end{proof}
+
 \begin{lemma}[Uniform FNW overlapping-window contraction]
     \label{lem:fnw_overlapping_window_contraction}
     \notready
     \discussion{5923}
-    \uses{thm:fixed_point_gram_metric_exact,
+    \uses{thm:primitive_tail_virtual_map_norm_uniform,
+        thm:fixed_point_gram_metric_exact,
         thm:fixed_point_gram_metric_is_unit,
         thm:primitive_ground_space_map_eventual_inverse_gram_bound,
         thm:ground_space_es_projection_inverse_gram,
