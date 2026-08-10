@@ -37,8 +37,8 @@ namespace MPSTensor
 variable {d D : ℕ}
 
 /-- The left direct-sum factor in the centered overlapping Gram.  On the
-fiber indexed by a prefix `u` and final-site configuration `j`, it sends the
-input matrix `X_u` to `A^j X_u`. -/
+fiber indexed by a prefix \(u\) and final-site configuration \(j\), it sends the
+input matrix \(X_u\) to \(A^j X_u\). -/
 noncomputable def c3LeftOverlapFactorES (A : MPSTensor d D) (K : ℕ) :
     BoundaryFamilySpace (D := D) (Cfg d K) →L[ℂ]
       BoundaryFamilySpace (D := D) (Cfg d K × Cfg d 1) :=
@@ -71,8 +71,8 @@ noncomputable def c3LeftOverlapFactorES (A : MPSTensor d D) (K : ℕ) :
         rfl }
 
 /-- The right direct-sum factor in the centered overlapping Gram.  On the
-fiber indexed by a prefix `u` and final-site configuration `j`, it sends the
-input matrix `Z_j` to `Z_j A^u`. -/
+fiber indexed by a prefix \(u\) and final-site configuration \(j\), it sends the
+input matrix \(Z_j\) to \(Z_j A^u\). -/
 noncomputable def c3RightOverlapFactorES (A : MPSTensor d D) (K : ℕ) :
     BoundaryFamilySpace (D := D) (Cfg d 1) →L[ℂ]
       BoundaryFamilySpace (D := D) (Cfg d K × Cfg d 1) :=
