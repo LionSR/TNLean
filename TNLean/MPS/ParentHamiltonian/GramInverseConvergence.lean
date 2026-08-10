@@ -33,14 +33,14 @@ namespace MPSTensor
 
 variable {d D : ℕ}
 
-/-- For every relative tolerance `a` strictly between zero and one, the
+/-- For every relative tolerance \(a\) strictly between zero and one, the
 finite-volume Gram operator of a primitive MPS tensor is eventually a unit.
 Its ring inverse differs from the inverse of the reshuffled fixed-point
 projection by at most
 \((1-a)^{-1}a\lVert K_\infty^{-1}\rVert\), where
-`Kinf` is `Matrix.gramReshuffle (fixedPointProj ρ _)`.
+\(K_\infty\) is `Matrix.gramReshuffle (fixedPointProj ρ _)`.
 
-Positive definiteness of `ρ` is explicit: primitivity alone only supplies a
+Positive definiteness of \(\rho\) is explicit: primitivity alone only supplies a
 positive-semidefinite fixed point and does not justify invertibility of the
 limiting Gram operator. -/
 theorem IsPrimitiveMPS.eventually_groundSpaceGram_isUnit_and_inverse_bound
@@ -96,7 +96,7 @@ theorem IsPrimitiveMPS.groundSpaceGram_ringInverse_tendsto
   simpa only [Ring.inverse_unit] using hinv
 
 /-- Eventually the Hilbert-space boundary map is injective. For any relative
-tolerance `a` in `(0, 1)`, one may choose an injectivity proof so that its
+tolerance \(a\in(0,1)\), one may choose an injectivity proof so that its
 inverse-Gram operator is exactly the ring inverse of the finite-volume Gram
 operator and satisfies the same arbitrary-base Neumann estimate around the
 reshuffled fixed-point projection.
