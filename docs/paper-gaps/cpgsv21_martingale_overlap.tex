@@ -703,6 +703,29 @@ and generic prerequisites now include:
     These are exact unweighted identities, including empty spectator types;
     they assert no direct-sum norm estimate.  The C3 specializations are stated
     next.
+  \item The mixed Gram of the C3 tail map at
+    \((K,l+1)\) and left map at \((K+l,1)\) is computed exactly by
+    \leanid{MPSTensor.inner_tailBoundaryMapES_adjoint_leftBoundaryMapES}.
+    Write \(\Gamma^{\mathrm{tail}}_{K,l+1}\) and
+    \(\Gamma^{\mathrm{left}}_{K+l,1}\) for these two Hilbert-space maps.
+    For boundary-family vectors \(x\) and \(y\), write \(X_u\) and \(Z_j\)
+    for their matrix fibers.  Then
+    \begin{align}
+      \left\langle x,
+        (\Gamma^{\mathrm{tail}}_{K,l+1})^\dagger
+        \Gamma^{\mathrm{left}}_{K+l,1}y\right\rangle
+      &=\sum_{u\in\Fin d^K}\sum_{j\in\Fin d^1}
+        \left\langle U(A^jX_u),
+          \mathcal K_l U(Z_jA^u)\right\rangle.
+    \end{align}
+    This formula is an exact algebraic identity reconstructed from the
+    boundary-map definitions, word factorization, and trace cyclicity.  It is
+    not stated in
+    this form by FNW or Nachtergaele and is not attributed to them.  The
+    sourced target remains the projector defect in Nachtergaele's equation
+    (2.4), while the rational estimate is quoted after that equation and in
+    equation (6.1).  No mixed-Gram norm estimate follows from this identity
+    alone.
   \item For injective maps with common factorizations
     \(T J_1=C=L J_2\),
     \leanid{ContinuousLinearMap.injectiveRangeProjector_comp_sub_of_factorizations}
