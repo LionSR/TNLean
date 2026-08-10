@@ -65,7 +65,7 @@ end perturbationSetup
 theorem isUnit_and_norm_inverse_le_of_norm_inverse_mul_sub_le (K₀ K : R) {a : ℝ}
     (hK₀ : IsUnit K₀) (h : ‖Ring.inverse K₀ * (K - K₀)‖ ≤ a) (ha : a < 1) :
     IsUnit K ∧ ‖Ring.inverse K‖ ≤ (1 - a)⁻¹ * ‖Ring.inverse K₀‖ := by
-  obtain ⟨hK_unit, E, hE, hE_lt_one, hbase, hinverse⟩ :=
+  obtain ⟨hK_unit, E, hE, _, _, hinverse⟩ :=
     perturbation_setup K₀ K hK₀ h ha
   constructor
   · exact hK_unit
@@ -92,7 +92,7 @@ theorem norm_inverse_sub_inverse_le_of_norm_inverse_mul_sub_le (K₀ K : R) {a :
     (hK₀ : IsUnit K₀) (h : ‖Ring.inverse K₀ * (K - K₀)‖ ≤ a) (ha : a < 1) :
     ‖Ring.inverse K - Ring.inverse K₀‖ ≤
       (1 - a)⁻¹ * a * ‖Ring.inverse K₀‖ := by
-  obtain ⟨hK_unit, E, hE, hE_lt_one, hbase, hinverse⟩ :=
+  obtain ⟨_, E, hE, _, hbase, hinverse⟩ :=
     perturbation_setup K₀ K hK₀ h ha
   have hresolvent :
       Ring.inverse K - Ring.inverse K₀ =
