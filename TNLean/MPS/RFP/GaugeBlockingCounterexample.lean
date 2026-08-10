@@ -23,6 +23,8 @@ After doubling, the amplitude phase cancels and the blocked doubled-MPDO tensor 
 virtually gauge equivalent to the original tensor with the orientation printed in
 `APPE_Fig1.png`, while the pure transfer map is not idempotent.
 
+**Scope restriction (one-letter MPS lift):** The counterexample realizes the exact
+source diagram for one physical letter. It does not decide the mixed-state continuation.
 See `docs/paper-gaps/cpsv16_rfp_gauge_pure_equivalence_false.tex`.
 -/
 
@@ -35,7 +37,11 @@ Appendix D, equation `RFP-gauge`, of arXiv:1606.00608, lines 2091--2110.
 
 For a one-dimensional physical space, every unitary-conjugation channel on the original
 or blocked physical algebra is the identity. The virtual `GaugeEquiv` equation gives one
-direction of the printed diagram, and its symmetry gives the other. -/
+direction of the printed diagram, and its symmetry gives the other.
+
+**Scope restriction (one-letter MPS lift):** This predicate specializes the physical
+alphabet to one letter. See
+`docs/paper-gaps/cpsv16_rfp_gauge_pure_equivalence_false.tex`. -/
 def IsOneLetterRFPViaTSUpToVirtualGauge (M : MPOTensor 1 D) : Prop :=
   MPSTensor.GaugeEquiv (blockTwo M).toMPSTensor M.toMPSTensor
 
@@ -44,7 +50,10 @@ end MPOTensor
 namespace MPSTensor
 
 /-- The exact one-letter pure-state specialization of the doubled-MPDO condition
-`RFP-gauge` in arXiv:1606.00608, Appendix D, lines 2091--2110. -/
+`RFP-gauge` in arXiv:1606.00608, Appendix D, lines 2091--2110.
+
+**Scope restriction (one-letter MPS lift):** The physical alphabet has one letter. See
+`docs/paper-gaps/cpsv16_rfp_gauge_pure_equivalence_false.tex`. -/
 def IsPureOneLetterRFPViaTSUpToVirtualGauge (A : MPSTensor 1 D) : Prop :=
   MPOTensor.IsOneLetterRFPViaTSUpToVirtualGauge (doubledTensor A)
 
@@ -151,8 +160,8 @@ The scalar is an MPS amplitude phase. It is not a physical channel in the source
 after doubling it appears as $\zeta\overline{\zeta}=1$. The theorem below proves that
 this witness implies the exact doubled-MPDO predicate.
 
-**Scope restriction (stronger MPS witness):** This definition is sufficient but is not
-itself the source predicate. See
+**Scope restriction (one-letter MPS lift):** This stronger MPS-level definition is
+sufficient but is not itself the source predicate. See
 `docs/paper-gaps/cpsv16_rfp_gauge_pure_equivalence_false.tex`. -/
 def IsBlockedGaugePhaseFixedPoint (A : MPSTensor 1 D) : Prop :=
   ∃ (X : GL (Fin D) ℂ) (ζ : ℂ), ‖ζ‖ = 1 ∧ ∀ i : Fin 1,
