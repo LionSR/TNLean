@@ -14,6 +14,7 @@ sys.path.insert(0, str(ROOT / "scripts"))
 
 from tenkzlib.texcase import (
     Construct,
+    TeXEnvironmentNestingError,
     following_group,
     following_group_span,
     match_group,
@@ -859,4 +860,7 @@ def main() -> int:
 
 
 if __name__ == "__main__":
-    raise SystemExit(main())
+    try:
+        raise SystemExit(main())
+    except TeXEnvironmentNestingError as error:
+        fail(f"malformed TeX environment nesting: {error}")
