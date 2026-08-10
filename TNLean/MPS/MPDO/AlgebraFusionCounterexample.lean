@@ -10,8 +10,8 @@ import TNLean.MPS.MPDO.FusionIsometries
 # Counterexample to the support-algebra converse
 
 This file gives an explicit trace-preserving MPO tensor with a positive-definite
-fixed point which satisfies `MPOTensor.IsRFP_MPDO_via_algebra` but not
-`MPOTensor.IsRFP_MPDO_via_transferRetract`.
+fixed point whose blocked adjoint fixed points form an algebra tower, while its
+doubled-index transfer map is not idempotent.
 
 ## References
 
@@ -170,28 +170,28 @@ private theorem phaseFlipMPO_one_fixed :
   rw [phaseFlipTensor_transferMap_apply]
   by_cases hij : i = j <;> simp [hij]
 
-private theorem phaseFlipMPO_isRFP_MPDO_via_algebra :
-    IsRFP_MPDO_via_algebra phaseFlipTensor.toMPOTensor :=
-  isRFP_MPDO_via_algebra_of_adjointFixedPoints_eq_of_isTP_of_posDef_fixed
+private theorem phaseFlipMPO_hasBlockedAdjointFixedPointAlgebraTower :
+    HasBlockedAdjointFixedPointAlgebraTower phaseFlipTensor.toMPOTensor :=
+  hasBlockedAdjointFixedPointAlgebraTower_of_adjointFixedPoints_eq_of_isTP_of_posDef_fixed
     phaseFlipMPO_isTP (Matrix.PosDef.one (n := Fin 2) (R := ℂ))
       phaseFlipMPO_one_fixed phaseFlipMPO_adjointFixedPoints_eq
 
-private theorem phaseFlipMPO_not_isRFP_MPDO_via_transferRetract :
-    ¬IsRFP_MPDO_via_transferRetract phaseFlipTensor.toMPOTensor := by
-  intro hRetract
-  have hRFP := isRFP_of_isRFP_MPDO_via_transferRetract hRetract
+private theorem phaseFlipMPO_not_isZCL :
+    ¬IsZCL phaseFlipTensor.toMPOTensor := by
+  intro hZCL
   change MPOTensor.transferMap phaseFlipTensor.toMPOTensor ∘ₗ
       MPOTensor.transferMap phaseFlipTensor.toMPOTensor =
-        MPOTensor.transferMap phaseFlipTensor.toMPOTensor at hRFP
+        MPOTensor.transferMap phaseFlipTensor.toMPOTensor at hZCL
   let X : Matrix (Fin 2) (Fin 2) ℂ := !![0, 1; 0, 0]
-  have hEntry := congrArg (fun E => E X 0 1) hRFP
+  have hEntry := congrArg (fun E => E X 0 1) hZCL
   simp only [LinearMap.comp_apply, MPSTensor.toMPOTensor_transferMap] at hEntry
   rw [phaseFlipTensor_transferMap_apply,
     phaseFlipTensor_transferMap_apply] at hEntry
   norm_num [X] at hEntry
 
-/-- The support-algebra predicate does not imply the transfer-retract predicate, even
-under trace preservation and the existence of a positive-definite fixed point.
+/-- A blocked fixed-point-algebra tower does not imply doubled-index
+transfer-map idempotence, even under trace preservation and the existence of a
+positive-definite fixed point.
 
 The witness is the qubit phase-flip channel with Kraus operators
 \(K_0=\frac35 I\) and \(K_1=\frac45 Z\). Its off-diagonal eigenvalue is
@@ -201,13 +201,13 @@ while the transfer map is not idempotent.
 This does not contradict arXiv:1606.00608, Theorem 4.14(ii). The converse in
 Appendix C.4, lines 2046--2085, assumes the positive BNT-label coefficient
 formula and the length-one idempotent trace identity, neither of which is part
-of `IsRFP_MPDO_via_algebra`. -/
-theorem exists_isRFP_MPDO_via_algebra_not_isRFP_MPDO_via_transferRetract :
+of `HasBlockedAdjointFixedPointAlgebraTower`. -/
+theorem exists_hasBlockedAdjointFixedPointAlgebraTower_not_isZCL :
     ∃ (M : MPOTensor 2 2) (ρ : Matrix (Fin 2) (Fin 2) ℂ),
       Kraus.IsTP M.toMPSTensor ∧ ρ.PosDef ∧ MPOTensor.transferMap M ρ = ρ ∧
-        IsRFP_MPDO_via_algebra M ∧ ¬IsRFP_MPDO_via_transferRetract M :=
+        HasBlockedAdjointFixedPointAlgebraTower M ∧ ¬ IsZCL M :=
   ⟨phaseFlipTensor.toMPOTensor, 1, phaseFlipMPO_isTP,
     Matrix.PosDef.one (n := Fin 2) (R := ℂ), phaseFlipMPO_one_fixed,
-    phaseFlipMPO_isRFP_MPDO_via_algebra, phaseFlipMPO_not_isRFP_MPDO_via_transferRetract⟩
+    phaseFlipMPO_hasBlockedAdjointFixedPointAlgebraTower, phaseFlipMPO_not_isZCL⟩
 
 end MPOTensor
