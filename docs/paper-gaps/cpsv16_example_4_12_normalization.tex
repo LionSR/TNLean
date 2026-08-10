@@ -93,4 +93,26 @@ $\widehat M=(1/2)M$ is a separate task.  Likewise, the claim that the normalized
 family is not of the simple commuting GSNNCH form is separate.  Neither claim
 is inferred here from the unnormalized tensor.
 
+\section{Verdict}
+
+\textbf{Verdict: false as printed for the literal fixed representative.}
+The tensor $M$ printed in Example~4.12 is the formal tensor
+\leanid{MPOTensor.CPSVExample412Literal.M}.  Its positive-length operator
+formula is proved by
+\leanid{MPOTensor.CPSVExample412Literal.rho_eq_finKronecker}, and its
+saturation statement by \leanid{MPOTensor.CPSVExample412Literal.M_isSAL}.
+The transfer calculation
+\leanid{MPOTensor.CPSVExample412Literal.physTraceTransfer_M_sq} has scale
+$2$, while
+\leanid{MPOTensor.CPSVExample412Literal.physTraceTransfer_M_not_idempotent}
+proves failure of literal idempotence.  Therefore
+\leanid{MPOTensor.CPSVExample412Literal.M_not_isRFPViaTS} proves that the
+fixed-representative RFP assertion is false for the tensor exactly as printed.
+
+The normalized tensor $\widehat M=(1/2)M$ is a likely correction because its
+physical-trace transfer is idempotent and it generates the normalized density
+family.  This observation alone does not construct the required
+trace-preserving completely positive maps.  Their construction and proof remain
+open in \ghissue{6044}; no RFP verdict for $\widehat M$ is claimed here.
+
 \end{document}
