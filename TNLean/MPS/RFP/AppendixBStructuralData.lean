@@ -17,7 +17,7 @@ canonical-form RFP tensor as
   A^i = X\Lambda U^iX^{-1},
 \]
 with the source pair-index isometry condition on \(U\). The declarations construct
-the physical isometry, compare the core tensor \(\Lambda U\) with \(A\), and package
+the physical isometry, compare the core tensor \(\Lambda U\) with \(A\), and formulate
 the conditional Appendix B product-pair extraction.
 
 The tensor powers of \(U\), the two-site bond insertion, the equality of its physical

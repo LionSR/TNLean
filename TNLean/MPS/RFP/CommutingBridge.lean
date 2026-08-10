@@ -6,9 +6,8 @@ Authors: TNLean contributors
 import TNLean.MPS.RFP.AppendixBStructuralData
 
 /-!
-# Appendix B commuting-bridge compatibility import
+# Appendix B product-pair structure
 
-This module preserves the former public import path for the product-pair and
-Appendix B structural APIs. New files should import the module containing the
-mathematical declarations they use directly.
+This module collects the product-pair states and Appendix B structural data used
+in the conditional commuting parent-Hamiltonian theorem.
 -/
