@@ -3,8 +3,8 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.MPS.CanonicalForm.NormalCommutant
 import TNLean.MPS.MPDO.CPSVGroupedFigureEight
+import TNLean.MPS.MPDO.GroupedSectorGram
 
 /-!
 # Gram and unitary normalization of literal grouped vertical sectors
@@ -72,22 +72,16 @@ theorem grouped_sector_gram_eq_pos_smul_one
     ∃ ω : ℝ, 0 < ω ∧
       (X j q : Matrix (Fin (dim ((C).enum j q)))
         (Fin (dim ((C).enum j q))) ℂ)ᴴ * X j q = (ω : ℂ) • 1 := by
-  letI : NeZero (dim ((C).enum j q)) := ⟨(_hDimPos _).ne'⟩
-  let A := cast (congrArg (MPSTensor (D * D)) (hdim j q))
-    (blocks ((C).repr j))
-  have hNormalA : MPSTensor.IsNormal A :=
-    ((MPSTensor.isNormalTensor_cast_iff (hdim j q)
-      (blocks ((C).repr j))).2 (hNormal ((C).repr j))).isNormal
-  have hGramConj : ∀ v,
-      (X j q : Matrix (Fin (dim ((C).enum j q)))
-          (Fin (dim ((C).enum j q))) ℂ)ᴴ * X j q * A v *
-          (((X j q : Matrix (Fin (dim ((C).enum j q)))
-            (Fin (dim ((C).enum j q))) ℂ)ᴴ * X j q)⁻¹) = A v := by
-    intro v
-    simpa [A] using hCanonical.grouped_sector_gram_conj_eq blocks hM
-      μ V hdim X ζ hXDist hCoeffPos hCorner j q v
-  exact hNormalA.gram_eq_pos_smul_one_of_gram_conj_eq
-    (Matrix.isUnits_det_units (X j q)) hGramConj
+  apply MPOTensor.grouped_sector_gram_eq_pos_smul_one_of_dressing blocks
+    (M := M) (μ := μ) (V := V) (_hDimPos := _hDimPos) (hdim := hdim)
+      (X := X) (ζ := ζ) (hXDist := hXDist) (hCoeffPos := hCoeffPos)
+      (hCorner := hCorner)
+  · intro n A VX VY X' Y cX cY hcX hcY hcornerX hcornerY
+    exact hCanonical.gramDressing_eq_of_two_grouped_corners M hM
+      A VX VY X' Y cX cY hcX hcY hcornerX hcornerY
+  · intro l p
+    exact ((MPSTensor.isNormalTensor_cast_iff (hdim l p)
+      (blocks ((C).repr l))).2 (hNormal ((C).repr l))).isNormal
 
 /-- Every actual grouped vertical-sector gauge becomes unitary after division
 by the square root of its positive Gram scalar.
