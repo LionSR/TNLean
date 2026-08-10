@@ -366,18 +366,18 @@
         lem:fixed_complementary_word_boundary_compatibility_from_traces}
     Lemma~\ref{lem:block_diagonal_boundary_crossing_trace_decompositions_boundary}
     gives matrices $C^j_{i,\rho}$ such that, for every boundary-crossing start
-    $i$, outside word $\rho$, word $\beta$ before the cut, and word $w$ of
-    length $N-i$,
+    $i$, outside word $\rho$ of length $N-L$, word $\beta$ of length
+    $i+L-N$ before the cut, and wrapped tail word $\alpha$ of length $N-i$,
     \begin{align}
-        \sum_j\tr\!\left(A^j_\beta C^j_{i,\rho}A^j_w\right)
+        \sum_j\tr\!\left(A^j_\beta C^j_{i,\rho}A^j_\alpha\right)
         &=
-        \sum_j\tr\!\left(((\mu_j^NX_j)A^j_\beta)A^j_\rho A^j_w\right).
+        \sum_j\tr\!\left(((\mu_j^NX_j)A^j_\beta)A^j_\rho A^j_\alpha\right).
         \notag
     \end{align}
     Apply
     Lemma~\ref{lem:fixed_complementary_word_boundary_compatibility_from_traces}
     with the stated product-algebra span at length $N-i$. Equality of the
-    traces for all $w$ then gives
+    traces for all $\alpha$ then gives
     $A^j_\beta C^j_{i,\rho}=((\mu_j^NX_j)A^j_\beta)A^j_\rho$ for every block
     $j$.
 \end{proof}
