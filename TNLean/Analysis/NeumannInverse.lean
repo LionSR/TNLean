@@ -30,15 +30,17 @@ theorem norm_inverse_one_sub_le (t : R) {a : ℝ} (ht : ‖t‖ ≤ a) (ha : a <
     _ ≤ (1 - a)⁻¹ := by
       exact (inv_le_inv₀ (sub_pos.mpr ht_one) (sub_pos.mpr ha)).2 (by linarith)
 
-/-- If \(K_0\) is a unit and its relative perturbation toward \(K\) has norm at most
-\(a<1\), then \(K\) is a unit and its inverse norm is at most
-\((1-a)^{-1}\lVert K_0^{-1}\rVert\). -/
-theorem isUnit_and_norm_inverse_le_of_norm_inverse_mul_sub_le (K₀ K : R) {a : ℝ}
-    (hK₀ : IsUnit K₀) (h : ‖Ring.inverse K₀ * (K - K₀)‖ ≤ a) (ha : a < 1) :
-    IsUnit K ∧ ‖Ring.inverse K‖ ≤ (1 - a)⁻¹ * ‖Ring.inverse K₀‖ := by
+/-- For an invertible \(K_0\) and a perturbation \(K\) with
+\(\lVert K_0^{-1}(K-K_0)\rVert\le a<1\), \(K\) is invertible and its inverse factors
+through the perturbation \(E:=K_0^{-1}(K-K_0)\).  Returns \(E\) and its norm bounds,
+that \(1+E\) is a unit, and the factorization \(K^{-1}=(1+E)^{-1}K_0^{-1}\). -/
+private lemma perturbation_setup (K₀ K : R) (hK₀ : IsUnit K₀)
+    (h : ‖Ring.inverse K₀ * (K - K₀)‖ ≤ a) (ha : a < 1) :
+    IsUnit K ∧
+    (∃ E : R, ‖E‖ ≤ a ∧ ‖E‖ < 1 ∧ IsUnit (1 - -E) ∧
+      Ring.inverse K = Ring.inverse (1 - -E) * Ring.inverse K₀) := by
   let E := Ring.inverse K₀ * (K - K₀)
-  have hE : ‖E‖ ≤ a := h
-  have hE_lt_one : ‖E‖ < 1 := hE.trans_lt ha
+  have hE_lt_one : ‖E‖ < 1 := h.trans_lt ha
   have hbase : IsUnit (1 - -E) :=
     isUnit_one_sub_of_norm_lt_one (by simpa using hE_lt_one)
   have hfactor : K = K₀ * (1 - -E) := by
@@ -48,9 +50,21 @@ theorem isUnit_and_norm_inverse_le_of_norm_inverse_mul_sub_le (K₀ K : R) {a : 
     abel
   have hinverse : Ring.inverse K = Ring.inverse (1 - -E) * Ring.inverse K₀ := by
     rw [hfactor, Ring.inverse_mul (Or.inl hK₀)]
-  constructor
-  · rw [hfactor]
+  have hK_unit : IsUnit K := by
+    rw [hfactor]
     exact hK₀.mul hbase
+  refine ⟨hK_unit, E, h, hE_lt_one, hbase, hinverse⟩
+
+/-- If \(K_0\) is a unit and its relative perturbation toward \(K\) has norm at most
+\(a<1\), then \(K\) is a unit and its inverse norm is at most
+\((1-a)^{-1}\lVert K_0^{-1}\rVert\). -/
+theorem isUnit_and_norm_inverse_le_of_norm_inverse_mul_sub_le (K₀ K : R) {a : ℝ}
+    (hK₀ : IsUnit K₀) (h : ‖Ring.inverse K₀ * (K - K₀)‖ ≤ a) (ha : a < 1) :
+    IsUnit K ∧ ‖Ring.inverse K‖ ≤ (1 - a)⁻¹ * ‖Ring.inverse K₀‖ := by
+  obtain ⟨hK_unit, E, hE, hE_lt_one, hbase, hinverse⟩ :=
+    perturbation_setup K₀ K hK₀ h ha
+  constructor
+  · exact hK_unit
   · rw [hinverse]
     calc
       ‖Ring.inverse (1 - -E) * Ring.inverse K₀‖ ≤
@@ -74,18 +88,8 @@ theorem norm_inverse_sub_inverse_le_of_norm_inverse_mul_sub_le (K₀ K : R) {a :
     (hK₀ : IsUnit K₀) (h : ‖Ring.inverse K₀ * (K - K₀)‖ ≤ a) (ha : a < 1) :
     ‖Ring.inverse K - Ring.inverse K₀‖ ≤
       (1 - a)⁻¹ * a * ‖Ring.inverse K₀‖ := by
-  let E := Ring.inverse K₀ * (K - K₀)
-  have hE : ‖E‖ ≤ a := h
-  have hE_lt_one : ‖E‖ < 1 := hE.trans_lt ha
-  have hbase : IsUnit (1 - -E) :=
-    isUnit_one_sub_of_norm_lt_one (by simpa using hE_lt_one)
-  have hfactor : K = K₀ * (1 - -E) := by
-    dsimp [E]
-    rw [sub_neg_eq_add, mul_add, mul_one, ← mul_assoc,
-      Ring.mul_inverse_cancel K₀ hK₀, one_mul]
-    abel
-  have hinverse : Ring.inverse K = Ring.inverse (1 - -E) * Ring.inverse K₀ := by
-    rw [hfactor, Ring.inverse_mul (Or.inl hK₀)]
+  obtain ⟨hK_unit, E, hE, hE_lt_one, hbase, hinverse⟩ :=
+    perturbation_setup K₀ K hK₀ h ha
   have hresolvent :
       Ring.inverse K - Ring.inverse K₀ =
         -(Ring.inverse (1 - -E) * E) * Ring.inverse K₀ := by
