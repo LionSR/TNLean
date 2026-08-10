@@ -5144,6 +5144,11 @@
 % physical legs (crossing-referenced legs are saved, not yet drawn); strings
 % (declare, crossings, surgery, then draw legs and strings from their saved
 % paths); atoms; marks.  A string's gap is cut before any of its ink exists.
+% One route family stands outside that surgery: a physical closure's `trace`
+% stroke carries its own paper halo instead of a crossing-derived gap, so it
+% must still be the last ink at any crossing it makes.  Among saved index
+% routes it therefore draws after the deferred legs it may cross, not before
+% them, while every other index route keeps the ordinary first-pass order.
 
 \msg_new:nnn {tenkz}{kernel-render-todo}
   { [TKZ-KERNEL-RENDER-TODO]~'#1'~does~not~draw~yet~(record~#2) }
@@ -5186,6 +5191,10 @@
 \prop_new:N \l__tenkz_kernel_r_port_host_routes_prop
 \clist_new:N \l__tenkz_kernel_r_skin_over_wire_clist
 \seq_new:N  \l__tenkz_kernel_r_index_routes_seq
+% A saved-route physical closure crosses a deferred leg's ink, not the other
+% way round: sieved out of the ordinary index-route pass and drawn again
+% after the deferred legs, so its `trace` paper halo remains the top ink.
+\seq_new:N  \l__tenkz_kernel_r_deferred_trace_routes_seq
 \seq_new:N  \l__tenkz_kernel_r_port_label_routes_seq
 \seq_new:N  \l__tenkz_kernel_r_strings_seq    % string wire record ids
 \seq_new:N  \l__tenkz_kernel_r_after_atom_seq % physical traces need glyph borders
@@ -15226,11 +15235,30 @@
       { ! \prop_if_empty_p:N \l__tenkz_kernel_r_legdrawn_prop }
       { \__tenkz_string_resolve: }
     % Ordinary index wires retain their original first ink pass, now using
-    % the crossing-policed saved path.  Gapped legs and strings follow.
+    % the crossing-policed saved path.  Gapped legs and strings follow.  A
+    % physical closure's `trace` route is the one saved route that carries
+    % its own paper halo rather than a crossing-derived gap (`tenkz-core.
+    % code.tex`, the `trace` style), so it cannot settle for the ordinary
+    % first-pass slot: sieve it out here and hold it for a second pass after
+    % the deferred legs, so the halo remains the top ink at any deferred-leg
+    % crossing instead of being buried under the leg drawn over it.
+    \seq_clear:N \l__tenkz_kernel_r_deferred_trace_routes_seq
     \seq_map_inline:Nn \l__tenkz_kernel_r_index_routes_seq
-      { \__tenkz_kernel_r_index_route:n {##1} }
+      {
+        \prop_get:NnN \l__tenkz_kernel_r_index_style_prop {##1}
+          \l__tenkz_kernel_r_wire_style_tl
+        \regex_match:nnTF { \A trace \s* , }
+          { \tl_use:N \l__tenkz_kernel_r_wire_style_tl }
+          {
+            \seq_put_right:Nn \l__tenkz_kernel_r_deferred_trace_routes_seq
+              {##1}
+          }
+          { \__tenkz_kernel_r_index_route:n {##1} }
+      }
     \prop_map_inline:Nn \l__tenkz_kernel_r_legdrawn_prop
       { \__tenkz_render_string:nn {##1} { draw = tenkzInk } }
+    \seq_map_inline:Nn \l__tenkz_kernel_r_deferred_trace_routes_seq
+      { \__tenkz_kernel_r_index_route:n {##1} }
     \seq_map_inline:Nn \l__tenkz_kernel_r_strings_seq
       {
         \__tenkz_kernel_r_sid:nN {##1} \l__tenkz_kernel_r_sid_tl
