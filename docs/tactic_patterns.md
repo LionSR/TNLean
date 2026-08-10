@@ -648,6 +648,29 @@ abstracted — record why, so it is not re-proposed).
   below one second in the declaration profiler, and a clean full-source check
   completes in 15.39 seconds.
 
+### Fourfold F-move entry normalization
+- **Pattern:** five fourfold synthesis proofs separately took one matrix entry of
+  `rightTripleSynthesis_mul_printedFMatrix` and ran the same dependent-sum
+  normalization.
+- **Reuse:** the private theorem
+  `rightTripleSynthesis_mul_printedFMatrix_entry` records the normalized scalar
+  identity once; each fourfold proof specializes it to the relevant subtree.
+- **Result:** across five forced isolated rebuilds on one warm dependency cache,
+  median Lake time falls from 5.60 to 5.50 seconds, wall time from 7.37 to
+  7.24 seconds, and user CPU from 15.23 to 14.91 seconds.
+
+### Bilinear closure of cumulative word spans
+- **Pattern:** the cumulative-span multiplication proof expanded binary span
+  induction into seven branches, then normalized linearity with broad `simp`
+  calls.
+- **Reuse:** `LinearMap.BilinMap.apply_apply_mem_of_mem_span` extends matrix
+  multiplication from pairs of word generators to both spans; only the
+  generator-product lemma remains local.
+- **Result:** across five forced isolated rebuilds on one warm dependency cache,
+  median Lake time falls from 4.40 to 2.80 seconds, wall time from 6.74 to
+  4.55 seconds, and user CPU from 6.54 to 3.17 seconds. No event in the optimized
+  file exceeds the profiler's 100-millisecond reporting threshold.
+
 ### Positive-congruence similarity evaluation
 - **Pattern:** the spectral-radius proof repeatedly unfolded `similarityMap`
   and asked broad `simp` calls to rediscover the same inverse and Hermitian
