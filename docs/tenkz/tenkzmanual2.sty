@@ -7,9 +7,11 @@
 % quiet block.  Every example is live-compiled: the body of a tnexample or
 % tnmultiples environment is written verbatim to an auxiliary file and read
 % back, so the rendered output is produced by the exact source shown.  If an
-% example stops compiling, the manual stops compiling.
+% example stops compiling, the manual stops compiling.  A tnrefusal body is
+% the deliberate exception: it prints without rendering, and the doctest
+% requires it to fail with the diagnostic the manual quotes.
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesPackage{tenkzmanual2}[2026/07/22 v2.1 compact tenkz manual typography]
+\ProvidesPackage{tenkzmanual2}[2026/08/10 v2.2 compact tenkz manual typography]
 
 % ---------------------------------------------------------------------------
 %  Page grid (Tufte-lite, one-sided; margin column on the right)
@@ -101,6 +103,29 @@
 \newcommand{\tnlogline}[1]{{\ttfamily\scriptsize #1}}
 
 % ---------------------------------------------------------------------------
+%  Dangerous bends and exercises (the TeXbook devices)
+% ---------------------------------------------------------------------------
+\RequirePackage{manfnt}% \dbend, the road sign
+% \dbendpar / \ddbendpar — open a paragraph a first reading may skip: one
+% bend marks advanced or trap material, two bends the truly advanced.  The
+% sign stands in the margin; the paragraph itself is ordinary text.
+\newcommand*{\dbendpar}{\marginnote{\dbend}}
+\newcommand*{\ddbendpar}{\marginnote{\dbend\kern 2pt\dbend}}
+
+% \tnexercise{<label>} — an exercise, numbered per section; its answer
+% opens with \tnanswer{<label>} in the chapter's closing answers block,
+% and a pictured answer carries answer=<label> on its tnexample instead.
+\newcounter{tnexercise}[section]
+\renewcommand{\thetnexercise}{\arabic{section}.\arabic{tnexercise}}
+\providecommand*{\theHtnexercise}{}
+\renewcommand*{\theHtnexercise}{\thetnexercise}
+\newcommand{\tnexercise}[1]{\par\addvspace{0.52\baselineskip}%
+  \refstepcounter{tnexercise}\label{#1}%
+  \noindent{\small\scshape exercise~\thetnexercise}\enspace\ignorespaces}
+\newcommand{\tnanswer}[1]{\par\addvspace{0.52\baselineskip}%
+  \noindent{\small\scshape answer~\ref{#1}}\enspace\ignorespaces}
+
+% ---------------------------------------------------------------------------
 %  Inline markup
 % ---------------------------------------------------------------------------
 \newcommand{\meta}[1]{{\normalfont\itshape$\langle$#1$\rangle$}}
@@ -164,6 +189,8 @@
 \tl_new:N  \l_mtwo_index_tl
 \tl_new:N  \l_mtwo_signature_tl
 \tl_new:N  \l_mtwo_label_tl
+\tl_new:N  \l_mtwo_answer_tl
+\tl_new:N  \l_mtwo_diagnostic_tl
 \tl_new:N  \l_mtwo_variants_tl
 \bool_new:N \l_mtwo_wide_bool
 \bool_new:N \l_mtwo_source_bool
@@ -177,6 +204,8 @@
     index     .tl_set:N   = \l_mtwo_index_tl,
     signature .tl_set:N   = \l_mtwo_signature_tl,
     label     .tl_set:N   = \l_mtwo_label_tl,
+    answer    .tl_set:N   = \l_mtwo_answer_tl,
+    diagnostic .tl_set:N  = \l_mtwo_diagnostic_tl,
     variants  .tl_set:N   = \l_mtwo_variants_tl,
     wide      .bool_set:N = \l_mtwo_wide_bool,
     wide      .default:n  = { true },
@@ -190,6 +219,8 @@
     \tl_clear:N \l_mtwo_index_tl
     \tl_clear:N \l_mtwo_signature_tl
     \tl_clear:N \l_mtwo_label_tl
+    \tl_clear:N \l_mtwo_answer_tl
+    \tl_clear:N \l_mtwo_diagnostic_tl
     \tl_clear:N \l_mtwo_variants_tl
     \bool_set_false:N \l_mtwo_wide_bool
     \bool_set_true:N  \l_mtwo_source_bool
@@ -198,16 +229,20 @@
 
 % The caption line: rule, "example <n> . <caption>", label, sidenote mark,
 % and the combined margin block (formula over legend over signature).
+% A unit carrying answer=<exercise label> is an exercise answer: it heads
+% "answer <n>" from that exercise's number and steps no example counter.
 \cs_new_protected:Npn \mtwo_unit_head:
   {
     \par \addvspace{\mtwo@unitsep}
     \mtwo@thinrule
     \nobreak \vspace{\mtwo@unitseam}
-    \refstepcounter{tnexample}
+    \tl_if_empty:NT \l_mtwo_answer_tl { \refstepcounter{tnexample} }
     \noindent
     {
       \small
-      {\scshape example~\thetnexample}
+      \tl_if_empty:NTF \l_mtwo_answer_tl
+        { {\scshape example~\thetnexample} }
+        { {\scshape answer~\exp_args:NV \ref \l_mtwo_answer_tl} }
       \tl_if_empty:NF \l_mtwo_caption_tl
         { ~~\textcolor{mquiet}{$\cdot$}~~ \tl_use:N \l_mtwo_caption_tl }
     }
@@ -291,15 +326,55 @@
       { \mtwo_unit_source:n { \jobname.exa } }
   }
 
-% One small-multiples panel: define the `variant' style at grid and cell
-% level, render the shared body, set the variant keys beneath it.  The
-% panel's reference point is the render's own baseline (the wire axis),
-% so the wires of all panels in a row are collinear.
+% The refusal unit: head, printed source, and the coded diagnostic the
+% source raises — no rendered output, because the source does not compile.
+% The doctest compiles the body, requires the failure, and requires the
+% diagnostic's bracketed code in the transcript.
+\cs_new_protected:Npn \mtwo_refusal_render:
+  {
+    \par \addvspace{\mtwo@unitsep}
+    \mtwo@thinrule
+    \nobreak \vspace{\mtwo@unitseam}
+    \noindent
+    {
+      \small
+      {\scshape a~deliberate~refusal}
+      \tl_if_empty:NF \l_mtwo_caption_tl
+        { ~~\textcolor{mquiet}{$\cdot$}~~ \tl_use:N \l_mtwo_caption_tl }
+    }
+    \tl_if_empty:NF \l_mtwo_label_tl
+      { \exp_args:NV \label \l_mtwo_label_tl }
+    \tl_if_empty:NF \l_mtwo_index_tl
+      { \refstepcounter{sidenote} \, \msidemark }
+    \mtwo_unit_margin:
+    \par \nobreak
+    \mtwo_unit_source:n { \jobname.exa }
+    \par \nobreak \vspace{-0.45\baselineskip}
+    {
+      \noindent \footnotesize \ttfamily \color{mcmd}
+      \tl_use:N \l_mtwo_diagnostic_tl \par
+    }
+    \par \addvspace{\mtwo@unitsep}
+  }
+
+% One small-multiples panel: define the `variant' key at picture and atom
+% scope in the kernel's own key families, render the shared body, set the
+% variant keys beneath it.  The panel's reference point is the render's
+% own baseline (the wire axis), so the wires of all panels in a row are
+% collinear.
 \cs_new_protected:Npn \mtwo_variant_panel:nn #1 #2
   {
     \mode_leave_vertical:
-    \pgfqkeys{/tenkz/grid}{ variant/.style = {#2} }
-    \pgfqkeys{/tenkz/cell}{ variant/.style = {#2} }
+    \keys_define:nn { tenkz-kernel-picture }
+      {
+        variant .code:n    = { \keys_set:nn { tenkz-kernel-picture } {#2} },
+        variant .default:n = { },
+      }
+    \keys_define:nn { tenkz-kernel-atom }
+      {
+        variant .code:n    = { \keys_set:nn { tenkz-kernel-atom } {#2} },
+        variant .default:n = { },
+      }
     \hbox_set:Nn \l_mtwo_panel_box { \input{\jobname.exm} \unskip }
     \hbox_set:Nn \l_mtwo_panellab_box { \scriptsize \ttfamily #1 }
     \dim_set:Nn \l_mtwo_panel_dim
@@ -338,6 +413,7 @@
 
 \NewDocumentCommand{\mtwoUnitSetup}{m}{\mtwo_unit_setup:n {#1}}
 \NewDocumentCommand{\mtwoExampleRender}{}{\mtwo_example_render:}
+\NewDocumentCommand{\mtwoRefusalRender}{}{\mtwo_refusal_render:}
 \NewDocumentCommand{\mtwoMultiplesRender}{}{\mtwo_multiples_render:}
 \ExplSyntaxOff
 
@@ -369,6 +445,24 @@
    \begin{VerbatimOut}{\jobname.exa}}
   {\end{VerbatimOut}%
    \mtwoExampleRender}
+
+% ----- tnrefusal -----------------------------------------------------------
+% \begin{tnrefusal}[<keys>, diagnostic={<coded message>}]
+%   <tenkz source, verbatim>
+% \end{tnrefusal}
+%
+% A deliberate refusal: the source prints, the diagnostic it raises prints
+% beneath it, and nothing renders, because the source does not compile.
+% The diagnostic key quotes the coded message text; the doctest compiles
+% the body standalone, requires the failure, and requires the bracketed
+% code in the transcript, so the quoted message cannot rot.  The caption,
+% index, and label keys apply as in tnexample.
+\newenvironment{tnrefusal}[1][]
+  {\mtwoUnitSetup{#1}%
+   \VerbatimEnvironment
+   \begin{VerbatimOut}{\jobname.exa}}
+  {\end{VerbatimOut}%
+   \mtwoRefusalRender}
 
 % ----- tnmultiples ---------------------------------------------------------
 % \begin{tnmultiples}[<keys>, variants={{<lab>}{<opts>}, ...}]
