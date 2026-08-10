@@ -35,18 +35,8 @@ open scoped ComplexOrder
 
 namespace SpinChain
 
-noncomputable local instance (d : ℕ) (Λ : Finset ℤ) : Norm (LocalAlgebra d Λ) :=
-  CStarMatrix.instNorm
-
-noncomputable local instance (d : ℕ) (Λ : Finset ℤ) :
-    NormedAddCommGroup (LocalAlgebra d Λ) :=
-  CStarMatrix.instNormedAddCommGroup
-
-noncomputable local instance (d : ℕ) (Λ : Finset ℤ) : NormedRing (LocalAlgebra d Λ) :=
-  CStarMatrix.instNormedRing
-
-local instance (d : ℕ) (Λ : Finset ℤ) : CStarRing (LocalAlgebra d Λ) :=
-  CStarMatrix.instCStarRing
+attribute [local instance] CStarMatrix.instNorm CStarMatrix.instNormedAddCommGroup
+  CStarMatrix.instNormedRing CStarMatrix.instCStarRing
 
 /-- The operator norm of a local observable, defined from any finite-region representative.
 
@@ -69,6 +59,7 @@ lemma algebraicLocalOperatorNorm_localObservable (d : ℕ) [NeZero d]
     algebraicLocalOperatorNorm d (localObservable d Λ A) = ‖A‖ :=
   rfl
 
+/-- The operator norm on the algebraic local algebra. -/
 noncomputable instance instNormAlgebraicLocalAlgebra (d : ℕ) [NeZero d] :
     Norm (AlgebraicLocalAlgebra d) where
   norm := algebraicLocalOperatorNorm d
@@ -109,13 +100,17 @@ private lemma algebraicLocalOperatorNorm_eq_zero_iff (d : ℕ) [NeZero d]
   induction A using DirectLimit.induction with
   | _ Λ A =>
       change ‖A‖ = 0 ↔ localObservable d Λ A = 0
-      rw [norm_eq_zero]
       constructor
-      · rintro rfl
+      · rw [norm_eq_zero]
+        rintro rfl
         exact map_zero (localObservable d Λ)
       · intro hA
-        apply localObservable_injective d Λ
-        simpa using hA
+        calc
+          ‖A‖ = ‖localObservable d Λ A‖ := rfl
+          _ = ‖(0 : AlgebraicLocalAlgebra d)‖ := congrArg norm hA
+          _ = ‖localObservable d Λ (0 : LocalAlgebra d Λ)‖ := by rw [map_zero]
+          _ = ‖(0 : LocalAlgebra d Λ)‖ := rfl
+          _ = 0 := norm_zero
 
 private theorem algebraicLocalNormedSpaceCore (d : ℕ) [NeZero d] :
     NormedSpace.Core ℂ (AlgebraicLocalAlgebra d) where
@@ -158,23 +153,6 @@ noncomputable instance instNormedAlgebraAlgebraicLocalAlgebra (d : ℕ) [NeZero 
         rw [DirectLimit.smul_def]
         change ‖c • A‖ ≤ ‖c‖ * ‖A‖
         exact (norm_smul c A).le
-
-/-- The algebraic local algebra is a star ring. -/
-noncomputable instance instStarRingAlgebraicLocalAlgebra (d : ℕ) :
-    StarRing (AlgebraicLocalAlgebra d) where
-  star_involutive A := by
-    induction A using DirectLimit.induction with
-    | _ Λ A => rw [DirectLimit.star_def, DirectLimit.star_def, star_star]
-  star_mul A B := by
-    induction A, B using DirectLimit.induction₂ with
-    | _ Λ A B =>
-        rw [DirectLimit.mul_def, DirectLimit.star_def, DirectLimit.star_def,
-          DirectLimit.star_def, star_mul, DirectLimit.mul_def]
-  star_add A B := by
-    induction A, B using DirectLimit.induction₂ with
-    | _ Λ A B =>
-        rw [DirectLimit.add_def, DirectLimit.star_def, DirectLimit.star_def,
-          DirectLimit.star_def, star_add, DirectLimit.add_def]
 
 /-- The representative operator norm satisfies the C-star identity on the algebraic local
 algebra, before completion.
