@@ -880,10 +880,23 @@ The absorbed tensor $\mathcal K_s=\mu_sA_s$ is an absorbed BNT representative,
 not automatically a normal representative. Normality of $A_s$ fixes the
 spectral radius of its transfer map to one, whereas coefficient absorption
 changes it to $|\mu_s|^2$. The source's global normalization gives only one
-unit-modulus coefficient across the whole canonical form. It therefore does
-not supply the sectorwise equations $|\mu_s|=1$ needed to invoke the normal
-Case-I theorem for every $s$. This is the precise remaining obstruction in
-Propositions `prop2to3` and `prop2to5`. For the rescaling-stable example, the
+unit-modulus coefficient across the whole canonical form and does not supply
+$|\mu_s|=1$ for every $s$.
+
+The printed absorbed-normality step is now formally refuted by the reusable
+identity \leanid{MPSTensor.spectralRadius_transferMap_smul} and the explicit
+two-sector, bond-one construction
+\leanid{MPOTensor.CaseIIAbsorptionCounterexample.%
+printed_absorbed_normality_step_is_false}.  Its normal representatives have
+disjoint doubled-physical support, its global weights are
+$(1/\sqrt2,1)$, its ambient physical-trace transfer is literally idempotent,
+and its first absorbed representative has transfer spectral radius $1/2$ and
+is not normal.  The current declaration does not yet package biCF, simplicity,
+MPDO positivity, and SAL through the high-level Case-II interfaces.  That
+packaging is residual work; the counterexample already decides the scalar
+normality inference itself.  Propositions `prop2to3` and `prop2to5`, and the
+final Theorem~4.9 implications depending on them, remain not ready rather than
+being refuted by this slice. For the rescaling-stable example, the
 separate explicit vertical identification is complete in
 \leanid{MPOTensor.RescalingStableLengthDependentRFP.R_oneLabelBNTAlgebraTensorClause};
 it does not supply sectorwise normality and is not used in this descent
