@@ -30,9 +30,9 @@ theorem norm_inverse_one_sub_le (t : R) {a : ℝ} (ht : ‖t‖ ≤ a) (ha : a <
     _ ≤ (1 - a)⁻¹ := by
       exact (inv_le_inv₀ (sub_pos.mpr ht_one) (sub_pos.mpr ha)).2 (by linarith)
 
-/-- If `K₀` is a unit and its relative perturbation toward `K` has norm at most `a < 1`,
-then `K` is a unit and its inverse is bounded by
-`(1 - a)⁻¹ * ‖Ring.inverse K₀‖`. -/
+/-- If \(K_0\) is a unit and its relative perturbation toward \(K\) has norm at most
+\(a<1\), then \(K\) is a unit and its inverse norm is at most
+\((1-a)^{-1}\lVert K_0^{-1}\rVert\). -/
 theorem isUnit_and_norm_inverse_le_of_norm_inverse_mul_sub_le (K₀ K : R) {a : ℝ}
     (hK₀ : IsUnit K₀) (h : ‖Ring.inverse K₀ * (K - K₀)‖ ≤ a) (ha : a < 1) :
     IsUnit K ∧ ‖Ring.inverse K‖ ≤ (1 - a)⁻¹ * ‖Ring.inverse K₀‖ := by
@@ -68,8 +68,8 @@ theorem isUnit_and_norm_inverse_le_of_norm_mul_norm_sub_le (K₀ K : R) {a : ℝ
   apply isUnit_and_norm_inverse_le_of_norm_inverse_mul_sub_le K₀ K hK₀ _ ha
   exact (norm_mul_le _ _).trans h
 
-/-- Under a relative perturbation of size at most `a < 1`, the displacement of the inverse
-from the base inverse is at most `(1 - a)⁻¹ * a * ‖Ring.inverse K₀‖`. -/
+/-- Under a relative perturbation of size at most \(a<1\), the displacement of the inverse
+from the base inverse is at most \((1-a)^{-1}a\lVert K_0^{-1}\rVert\). -/
 theorem norm_inverse_sub_inverse_le_of_norm_inverse_mul_sub_le (K₀ K : R) {a : ℝ}
     (hK₀ : IsUnit K₀) (h : ‖Ring.inverse K₀ * (K - K₀)‖ ≤ a) (ha : a < 1) :
     ‖Ring.inverse K - Ring.inverse K₀‖ ≤
@@ -112,9 +112,6 @@ theorem norm_inverse_sub_inverse_le_of_norm_inverse_mul_sub_le (K₀ K : R) {a :
   rw [hresolvent]
   have hneumann : ‖Ring.inverse (1 - -E)‖ ≤ (1 - a)⁻¹ :=
     norm_inverse_one_sub_le (-E) (by simpa using hE) ha
-  have ha_nonneg : 0 ≤ a := (norm_nonneg E).trans hE
-  have hdenom_nonneg : 0 ≤ (1 - a)⁻¹ :=
-    inv_nonneg.mpr (sub_nonneg.mpr ha.le)
   calc
     ‖-(Ring.inverse (1 - -E) * E) * Ring.inverse K₀‖ ≤
         ‖-(Ring.inverse (1 - -E) * E)‖ * ‖Ring.inverse K₀‖ := norm_mul_le _ _
@@ -126,7 +123,8 @@ theorem norm_inverse_sub_inverse_le_of_norm_inverse_mul_sub_le (K₀ K : R) {a :
     _ = (1 - a)⁻¹ * a * ‖Ring.inverse K₀‖ := rfl
 
 /-- A product-form inverse-displacement estimate, obtained from
-`‖Ring.inverse K₀ * (K - K₀)‖ ≤ ‖Ring.inverse K₀‖ * ‖K - K₀‖`. -/
+\(\lVert K_0^{-1}(K-K_0)\rVert\le
+\lVert K_0^{-1}\rVert\,\lVert K-K_0\rVert\). -/
 theorem norm_inverse_sub_inverse_le_of_norm_mul_norm_sub_le (K₀ K : R) {a : ℝ}
     (hK₀ : IsUnit K₀) (h : ‖Ring.inverse K₀‖ * ‖K - K₀‖ ≤ a) (ha : a < 1) :
     ‖Ring.inverse K - Ring.inverse K₀‖ ≤
