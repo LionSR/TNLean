@@ -7,6 +7,7 @@ import TNLean.MPS.FundamentalTheorem.SectorBNT.FundamentalCoord
 import TNLean.MPS.MPDO.PhysicalBlocking
 import TNLean.MPS.MPDO.PureAreaLaw
 import TNLean.MPS.RFP.PhaseOscillation
+import TNLean.MPS.SharedInfra.BlockAssembly
 
 /-!
 # A counterexample to blocking up to virtual gauge implying an RFP
@@ -67,23 +68,12 @@ noncomputable def doubledVirtualGauge {D : ℕ} (X : GL (Fin D) ℂ) : GL (Fin (
     (Matrix.GeneralLinearGroup.kronecker X
       (Matrix.GeneralLinearGroup.map (starRingEnd ℂ) X))
 
-private noncomputable def cubeSigmaSwap :
-    ((k : Fin 2) × Fin (cubePhaseBondDim k)) ≃
-      ((k : Fin 2) × Fin (cubePhaseBondDim k)) where
-  toFun x := ⟨Equiv.swap 0 1 x.1, x.2⟩
-  invFun x := ⟨Equiv.swap 0 1 x.1, x.2⟩
-  left_inv x := by
-    rcases x with ⟨k, a⟩
-    simp
-  right_inv x := by
-    rcases x with ⟨k, a⟩
-    simp
-
 /-- The virtual-coordinate permutation exchanging the $1$ and $\omega$ blocks of
 `cubePhaseTensor`. -/
 private noncomputable def cubeCoordinateSwap :
     Equiv.Perm (Fin (∑ k : Fin 2, cubePhaseBondDim k)) :=
-  finSigmaFinEquiv.symm.trans (cubeSigmaSwap.trans finSigmaFinEquiv)
+  finSigmaFinEquiv.symm.trans
+    (blockIndexCoordinateEquiv cubePhaseBondDim (Equiv.swap 0 1))
 
 /-- The invertible permutation gauge exchanging the $1$ and $\omega$ virtual
 coordinates of `cubePhaseTensor`. -/
@@ -97,6 +87,8 @@ private lemma primitiveCubeRoot_pow_three : primitiveCubeRoot ^ 3 = 1 :=
 private lemma norm_primitiveCubeRoot : ‖primitiveCubeRoot‖ = 1 := by
   simp [primitiveCubeRoot, Complex.norm_exp, Complex.mul_re]
 
+/-- The weight $\mu_p\overline{\mu_q}$ of a flattened doubled bond coordinate
+$(p,q)$ in the four-block canonical decomposition. -/
 private noncomputable def cubePhaseDoubledWeight (q : Fin 4) : ℂ :=
   let pair := (finProdFinEquiv :
     Fin (∑ k : Fin 2, cubePhaseBondDim k) ×
@@ -283,8 +275,10 @@ theorem cube_phase_blocked_gauge_identity (i : Fin 1) :
           primitiveCubeRoot ^ 3 := by ring
       _ = 1 := primitiveCubeRoot_pow_three
   fin_cases ka <;> fin_cases aa <;> fin_cases kb <;> fin_cases bb <;>
-    simp [cubeCoordinateSwap, cubeSigmaSwap, cubePhaseTensor, toTensorFromBlocks,
-      Matrix.reindex_apply, Matrix.blockDiagonal'_apply, cubePhaseWeight, cubePhaseBondDim,
+    simp [cubeCoordinateSwap, blockIndexCoordinateEquiv, Equiv.sigmaCongr,
+      Equiv.sigmaCongrRight, Equiv.sigmaCongrLeft, cubePhaseTensor,
+      toTensorFromBlocks, Matrix.reindex_apply, Matrix.blockDiagonal'_apply,
+      cubePhaseWeight, cubePhaseBondDim,
       scalarUnitTensor, ha, hb, hcube]
 
 
