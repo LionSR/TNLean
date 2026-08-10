@@ -114,56 +114,92 @@
 % Source-status record for CPSV16 Appendix D, equation `RFP-gauge`,
 % lines 2100--2110. See
 % docs/paper-gaps/cpsv16_rfp_gauge_pure_equivalence_false.tex.
-\begin{definition}[One-letter blocking up to virtual gauge and phase]
+\begin{definition}[One-letter doubled-MPO virtual-gauge condition]
+    \label{def:one_letter_mpdo_virtual_gauge_rfp}
+    \lean{MPOTensor.IsOneLetterRFPViaTSUpToVirtualGauge}
+    \lean{MPSTensor.IsPureOneLetterRFPViaTSUpToVirtualGauge}
+    \leanok
+    \uses{def:blocked_tensor}
+    For an MPO tensor $M$ with one physical component, the Appendix~D
+    blocking diagram holds up to virtual gauge if $M^{[2]}$ and $M$ are related
+    by simultaneous similarity on the virtual indices. For a pure tensor $A$,
+    this condition is imposed on the doubled tensor
+    \begin{align}
+        M&=A\otimes\overline A.
+        \notag
+    \end{align}
+    Both physical matrix algebras are one-dimensional, so every physical
+    unitary-conjugation channel in the diagram is the identity. Similarity is
+    symmetric and hence gives both directions of the diagram in
+    \cite[Appendix~D, equation~\texttt{RFP-gauge}]{Cirac2016MPDO_arXiv}.
+\end{definition}
+
+\begin{definition}[One-letter MPS blocking witness]
     \label{def:blocked_gauge_phase_fixed_point}
     \lean{MPSTensor.IsBlockedGaugePhaseFixedPoint}
     \leanok
     \uses{def:blocked_tensor}
-    A tensor $A$ with one physical component is fixed by two-site blocking up
-    to virtual gauge and physical phase if there are an invertible matrix $X$
-    and a scalar $\zeta$ with $|\zeta|=1$ such that
+    A tensor $A$ with one physical component has a blocking witness if there
+    are an invertible matrix $X$ and a scalar $\zeta$ with $|\zeta|=1$ such
+    that
     \begin{align}
         A&=\zeta X A^{[2]}X^{-1}.
         \notag
     \end{align}
-    Since both physical spaces are one-dimensional, this is the one-letter MPS
-    lift of the pure-state diagram in
-    \cite[Appendix~D, equation~\texttt{RFP-gauge}]{Cirac2016MPDO_arXiv}.
-    It suffices for the counterexample below; no equivalence with the full
-    doubled-MPDO $T/S$ diagram is asserted.
+    This is a sufficient MPS-level witness, not the source condition itself.
 \end{definition}
+
+\begin{definition}[Doubled virtual gauge]
+    \label{def:doubled_virtual_gauge}
+    \lean{MPSTensor.doubledVirtualGauge}
+    \leanok
+    Given an invertible virtual matrix $X$, the induced gauge on the doubled
+    bond space is $X\otimes\overline X$.
+\end{definition}
+
+\begin{lemma}[An MPS blocking witness gives the doubled-MPO condition]
+    \label{lem:blocked_gauge_phase_to_doubled_mpdo}
+    \lean{MPSTensor.isPureOneLetterRFPViaTSUpToVirtualGauge_of_isBlockedGaugePhaseFixedPoint}
+    \leanok
+    \uses{def:one_letter_mpdo_virtual_gauge_rfp,
+        def:blocked_gauge_phase_fixed_point, def:doubled_virtual_gauge}
+    Every one-letter MPS blocking witness induces the exact doubled-MPO
+    virtual-gauge condition.
+\end{lemma}
+\begin{proof}\leanok
+    Tensor the identity $A=\zeta X A^{[2]}X^{-1}$ with its complex conjugate.
+    The virtual matrices combine to $X\otimes\overline X$, while the amplitude
+    factor is $\zeta\overline\zeta=|\zeta|^2=1$.
+\end{proof}
 
 \begin{theorem}[The printed pure blocking-up-to-gauge equivalence is false]
     \label{thm:cpsv_pure_rfp_gauge_status}
     \lean{MPSTensor.cube_phase_blocked_gauge_identity}
-    \lean{MPSTensor.cubePhaseTensor_isBlockedGaugePhaseFixedPoint}
+    \lean{MPSTensor.cubePhaseTensor_isPureOneLetterRFPViaTSUpToVirtualGauge}
     \lean{MPSTensor.cubePhaseTensor_not_isTransferIdempotent}
     \lean{MPSTensor.cubePhaseTensor_normalized_canonical_gauge_not_rfp}
     \lean{MPSTensor.cpsv16_pure_rfp_gauge_equivalence_false}
     \leanok
-    \uses{def:blocked_gauge_phase_fixed_point, def:cpsv_canonical_form,
+    \uses{def:one_letter_mpdo_virtual_gauge_rfp,
+        lem:blocked_gauge_phase_to_doubled_mpdo, def:cpsv_canonical_form,
         def:mps_transfer_idempotence,
         thm:cpsv_canonical_form_flow_phase_obstruction}
     Let $\omega=e^{2\pi i/3}$, and set
     \begin{align}
-        A&=\begin{pmatrix}1&0\\0&\omega\end{pmatrix}.
+        A&=\begin{pmatrix}1&0\\0&\omega\end{pmatrix},
+        &S&=\begin{pmatrix}0&1\\1&0\end{pmatrix}.
         \notag
     \end{align}
-    Define the virtual coordinate swap by
-    \begin{align}
-        S&=\begin{pmatrix}0&1\\1&0\end{pmatrix}.
-        \notag
-    \end{align}
-    Then $\omega^3=1$, $\omega\ne1$, and direct multiplication gives
+    Then $\omega^3=1$, $\omega\ne1$, and
     \begin{align}
         A&=\omega S A^2S^{-1}.
         \notag
     \end{align}
     The tensor is in CPSV canonical form and its weights satisfy the source
-    normalization convention. It satisfies the blocking-up-to-gauge
-    condition with a unit phase and the orientation of the source diagram, but
-    its transfer map is not idempotent. Hence the canonical-restricted
-    pure-state equivalence claimed after the displayed blocking identity in
+    normalization convention. Its doubled tensor satisfies the literal
+    one-letter virtual-gauge condition in the source diagram, but its transfer
+    map is not idempotent. Hence the canonical-restricted pure-state
+    equivalence claimed after
     \cite[Appendix~D, equation~\texttt{RFP-gauge}]{Cirac2016MPDO_arXiv} is false.
 
     The printed pure spectral argument cannot support the mixed-state
@@ -174,8 +210,9 @@
     Swapping the two virtual coordinates changes
     $\operatorname{diag}(1,\omega^2)$ into
     $\operatorname{diag}(\omega^2,1)$; multiplication by $\omega$ gives $A$.
-    On the off-diagonal matrix unit $e_{21}$, the transfer-map powers carry the
-    factors $\omega$ and $\omega^2$, so the transfer map cannot be idempotent.
+    Doubling cancels this phase. On the matrix unit $e_{21}$, the transfer-map
+    powers carry the distinct factors $\omega$ and $\omega^2$, so the transfer
+    map cannot be idempotent.
 \end{proof}
 
 \begin{remark}\label{rem:zero_correlation_length}

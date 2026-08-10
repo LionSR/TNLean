@@ -5,6 +5,8 @@ Authors: TNLean contributors
 -/
 import Mathlib.LinearAlgebra.Matrix.Permutation
 import TNLean.MPS.Core.Blocking
+import TNLean.MPS.MPDO.PhysicalBlocking
+import TNLean.MPS.MPDO.PureAreaLaw
 import TNLean.MPS.RFP.PhaseOscillation
 
 /-!
@@ -18,15 +20,42 @@ If `cubeSwapGauge` exchanges the two virtual coordinates, then
 $$
   A=\omega S A^2S^{-1}.
 $$
-Thus the two-site blocking is gauge-phase equivalent to the original tensor with the
-orientation printed in `APPE_Fig1.png`, while the transfer map is not idempotent.
+After doubling, the amplitude phase cancels and the blocked doubled-MPDO tensor is
+virtually gauge equivalent to the original tensor with the orientation printed in
+`APPE_Fig1.png`, while the pure transfer map is not idempotent.
 
 See `docs/paper-gaps/cpsv16_rfp_gauge_pure_equivalence_false.tex`.
 -/
 
-open scoped Matrix BigOperators
+open scoped Matrix BigOperators Kronecker
+
+namespace MPOTensor
+
+/-- The literal one-letter specialization of the doubled-MPDO virtual-gauge condition in
+Appendix D, equation `RFP-gauge`, of arXiv:1606.00608, lines 2091--2110.
+
+For a one-dimensional physical space, every unitary-conjugation channel on the original
+or blocked physical algebra is the identity. The virtual `GaugeEquiv` equation gives one
+direction of the printed diagram, and its symmetry gives the other. -/
+def IsOneLetterRFPViaTSUpToVirtualGauge (M : MPOTensor 1 D) : Prop :=
+  MPSTensor.GaugeEquiv (blockTwo M).toMPSTensor M.toMPSTensor
+
+end MPOTensor
 
 namespace MPSTensor
+
+/-- The exact one-letter pure-state specialization of the doubled-MPDO condition
+`RFP-gauge` in arXiv:1606.00608, Appendix D, lines 2091--2110. -/
+def IsPureOneLetterRFPViaTSUpToVirtualGauge (A : MPSTensor 1 D) : Prop :=
+  MPOTensor.IsOneLetterRFPViaTSUpToVirtualGauge (doubledTensor A)
+
+/-- The virtual gauge induced on the doubled bond space by $X$: after identifying
+`Fin (D * D)` with `Fin D × Fin D`, its matrix is $X \otimes \overline X$. -/
+noncomputable def doubledVirtualGauge (X : GL (Fin D) ℂ) : GL (Fin (D * D)) ℂ :=
+  Units.mapEquiv
+      (Matrix.reindexAlgEquiv ℂ ℂ finProdFinEquiv).toRingEquiv.toMulEquiv
+    (Matrix.GeneralLinearGroup.kronecker X
+      (Matrix.GeneralLinearGroup.map (starRingEnd ℂ) X))
 
 private noncomputable def cubeSigmaSwap :
     ((k : Fin 2) × Fin (cubePhaseBondDim k)) ≃
@@ -206,28 +235,137 @@ theorem cube_phase_blocked_gauge_identity (i : Fin 1) :
       scalarUnitTensor, ha, hb, hcube]
 
 
-/-- The one-physical-letter MPS lift of the blocking-up-to-virtual-gauge diagram
-`RFP-gauge` in arXiv:1606.00608, lines 2100--2107.
+/-- A stronger one-letter MPS-level witness for the doubled-MPDO virtual-gauge
+condition in Appendix D, equation `RFP-gauge`, of arXiv:1606.00608, lines 2091--2110.
 
-For one physical letter, both the original and two-site blocked physical spaces are
-singletons. The physical unitary in the pure-state source diagram is therefore a scalar
-of unit norm. This predicate states precisely the resulting MPS identity, with the
-orientation printed in the diagram. It is sufficient for the counterexample below.
+The scalar is an MPS amplitude phase. It is not a physical channel in the source diagram:
+after doubling it appears as $\zeta\overline{\zeta}=1$. The bridge below proves that
+this witness implies the exact doubled-MPDO predicate.
 
-**Scope restriction (one-letter MPS lift):** This definition does not assert equivalence
-with the full doubled-MPDO $T/S$ diagram. This restriction is documented in
+**Scope restriction (stronger MPS witness):** This definition is sufficient but is not
+itself the source predicate. See
 `docs/paper-gaps/cpsv16_rfp_gauge_pure_equivalence_false.tex`. -/
 def IsBlockedGaugePhaseFixedPoint (A : MPSTensor 1 D) : Prop :=
   ∃ (X : GL (Fin D) ℂ) (ζ : ℂ), ‖ζ‖ = 1 ∧ ∀ i : Fin 1,
     A i = ζ • ((X : Matrix (Fin D) (Fin D) ℂ) * blockTensor A 2 i *
       ((X⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ))
 
+/-- A one-letter MPS blocking identity with a unit amplitude phase gives the literal
+doubled-MPDO virtual-gauge condition from Appendix D, equation `RFP-gauge`, of
+arXiv:1606.00608, lines 2091--2110. The doubled scalar is
+$\zeta\overline{\zeta}=1$. -/
+theorem isPureOneLetterRFPViaTSUpToVirtualGauge_of_isBlockedGaugePhaseFixedPoint
+    (A : MPSTensor 1 D) (h : IsBlockedGaugePhaseFixedPoint A) :
+    IsPureOneLetterRFPViaTSUpToVirtualGauge A := by
+  obtain ⟨X, ζ, hζ, hA⟩ := h
+  refine ⟨doubledVirtualGauge X, ?_⟩
+  intro ij
+  fin_cases ij
+  simp only [MPOTensor.toMPSTensor, Fin.divNat, Fin.modNat]
+  simp only [doubledTensor, Nat.div_one, Fin.zero_eta, Fin.isValue, Nat.mod_succ,
+    Nat.reduceMul, mul_one, MPOTensor.blockTwo_apply, Matrix.coe_units_inv,
+    Matrix.submatrix_mul_equiv]
+  have h₁ : (finProdFinEquiv.symm (0 : Fin (1 * 1))).1 = (0 : Fin 1) :=
+    Subsingleton.elim _ _
+  have h₂ : (finProdFinEquiv.symm (0 : Fin (1 * 1))).2 = (0 : Fin 1) :=
+    Subsingleton.elim _ _
+  rw [h₁, h₂]
+  apply (Matrix.reindexAlgEquiv ℂ ℂ finProdFinEquiv).symm.injective
+  suffices hbase :
+      (A 0 ⊗ₖ (A 0).map (starRingEnd ℂ)) =
+        (↑(Matrix.GeneralLinearGroup.kronecker X
+            (Matrix.GeneralLinearGroup.map (starRingEnd ℂ) X)) :
+          Matrix (Fin D × Fin D) (Fin D × Fin D) ℂ) *
+          ((A 0 ⊗ₖ (A 0).map (starRingEnd ℂ)) *
+            (A 0 ⊗ₖ (A 0).map (starRingEnd ℂ))) *
+          (↑(Matrix.GeneralLinearGroup.kronecker X
+            (Matrix.GeneralLinearGroup.map (starRingEnd ℂ) X)) :
+              Matrix (Fin D × Fin D) (Fin D × Fin D) ℂ)⁻¹ by
+    simpa [Matrix.coe_reindexAlgEquiv, doubledVirtualGauge] using hbase
+  rw [show (↑(Matrix.GeneralLinearGroup.kronecker X
+      (Matrix.GeneralLinearGroup.map (starRingEnd ℂ) X)) :
+      Matrix (Fin D × Fin D) (Fin D × Fin D) ℂ) =
+      (X : Matrix _ _ ℂ) ⊗ₖ (X : Matrix _ _ ℂ).map (starRingEnd ℂ) from rfl]
+  rw [Matrix.inv_kronecker]
+  rw [← Matrix.GeneralLinearGroup.coe_inv X]
+  change (A 0 ⊗ₖ (A 0).map (starRingEnd ℂ)) =
+    ((X : Matrix _ _ ℂ) ⊗ₖ (X : Matrix _ _ ℂ).map (starRingEnd ℂ)) *
+      ((A 0 ⊗ₖ (A 0).map (starRingEnd ℂ)) *
+        (A 0 ⊗ₖ (A 0).map (starRingEnd ℂ))) *
+      (((X⁻¹ : GL (Fin D) ℂ) : Matrix _ _ ℂ) ⊗ₖ
+        ((X : Matrix _ _ ℂ).map (starRingEnd ℂ))⁻¹)
+  repeat' rw [← Matrix.mul_kronecker_mul]
+  have hmapinv : ((X : Matrix _ _ ℂ).map (starRingEnd ℂ))⁻¹ =
+      ((↑(X⁻¹) : Matrix (Fin D) (Fin D) ℂ).map (starRingEnd ℂ)) := by
+    calc
+      ((X : Matrix _ _ ℂ).map (starRingEnd ℂ))⁻¹ =
+          (↑((Matrix.GeneralLinearGroup.map (starRingEnd ℂ) X)⁻¹) :
+            Matrix (Fin D) (Fin D) ℂ) :=
+        (Matrix.GeneralLinearGroup.coe_inv
+          (Matrix.GeneralLinearGroup.map (starRingEnd ℂ) X)).symm
+      _ = ↑(Matrix.GeneralLinearGroup.map (starRingEnd ℂ) (X⁻¹)) := by
+        rw [map_inv]
+      _ = ((↑(X⁻¹) : Matrix (Fin D) (Fin D) ℂ).map (starRingEnd ℂ)) := rfl
+  rw [hmapinv]
+  have hblock : blockTensor A 2 (0 : Fin 1) = A 0 * A 0 := by
+    change evalWord A [0, 0] = A 0 * A 0
+    simp [evalWord]
+  have hA0 : A 0 = ζ • ((X : Matrix _ _ ℂ) * (A 0 * A 0) *
+      ((X⁻¹ : GL (Fin D) ℂ) : Matrix _ _ ℂ)) := by
+    simpa only [hblock] using hA 0
+  have hmapG :
+      ((X : Matrix _ _ ℂ) * (A 0 * A 0) *
+          ((X⁻¹ : GL (Fin D) ℂ) : Matrix _ _ ℂ)).map (starRingEnd ℂ) =
+        (X : Matrix _ _ ℂ).map (starRingEnd ℂ) *
+          ((A 0).map (starRingEnd ℂ) * (A 0).map (starRingEnd ℂ)) *
+          ((↑(X⁻¹) : Matrix (Fin D) (Fin D) ℂ).map (starRingEnd ℂ)) := by
+    calc
+      ((X : Matrix _ _ ℂ) * (A 0 * A 0) *
+          ((X⁻¹ : GL (Fin D) ℂ) : Matrix _ _ ℂ)).map (starRingEnd ℂ) =
+          ((X : Matrix _ _ ℂ) * (A 0 * A 0)).map (starRingEnd ℂ) *
+            ((↑(X⁻¹) : Matrix (Fin D) (Fin D) ℂ).map (starRingEnd ℂ)) :=
+        (starRingEnd ℂ).mapMatrix.map_mul _ _
+      _ = ((X : Matrix _ _ ℂ).map (starRingEnd ℂ) *
+            (A 0 * A 0).map (starRingEnd ℂ)) *
+            ((↑(X⁻¹) : Matrix (Fin D) (Fin D) ℂ).map (starRingEnd ℂ)) := by
+        congr 1
+        exact (starRingEnd ℂ).mapMatrix.map_mul _ _
+      _ = _ := by
+        congr 2
+        exact (starRingEnd ℂ).mapMatrix.map_mul _ _
+  rw [← hmapG]
+  conv_lhs => rw [hA0]
+  have hphase : ζ * star ζ = 1 := by
+    rw [RCLike.star_def, Complex.mul_conj, ← Complex.sq_norm, hζ]
+    norm_num
+  ext ⟨a, b⟩ ⟨c, d⟩
+  simp only [Matrix.kroneckerMap_apply, Matrix.smul_apply, Matrix.map_apply, smul_eq_mul]
+  let G : Matrix (Fin D) (Fin D) ℂ :=
+    (X : Matrix _ _ ℂ) * (A 0 * A 0) *
+      ((X⁻¹ : GL (Fin D) ℂ) : Matrix _ _ ℂ)
+  change ζ * G a c * star (ζ * G b d) = G a c * star (G b d)
+  have hstar : star (ζ * G b d) = star ζ * star (G b d) :=
+    (starRingEnd ℂ).map_mul ζ (G b d)
+  rw [hstar]
+  calc
+    ζ * G a c * (star ζ * star (G b d)) =
+        (ζ * star ζ) * (G a c * star (G b d)) := by ring
+    _ = G a c * star (G b d) := by rw [hphase, one_mul]
+
+
 /-- The cube-phase tensor satisfies equation `RFP-gauge` in arXiv:1606.00608,
-lines 2100--2107, with a unit physical phase. -/
+lines 2100--2107, with a unit MPS amplitude phase. -/
 theorem cubePhaseTensor_isBlockedGaugePhaseFixedPoint :
     IsBlockedGaugePhaseFixedPoint cubePhaseTensor := by
   refine ⟨cubeSwapGauge, primitiveCubeRoot, norm_primitiveCubeRoot, ?_⟩
   exact cube_phase_blocked_gauge_identity
+
+/-- The doubled cube-phase tensor satisfies the literal one-letter specialization of the
+Appendix D `RFP-gauge` diagram. The MPS amplitude phase cancels after doubling. -/
+theorem cubePhaseTensor_isPureOneLetterRFPViaTSUpToVirtualGauge :
+    IsPureOneLetterRFPViaTSUpToVirtualGauge cubePhaseTensor :=
+  isPureOneLetterRFPViaTSUpToVirtualGauge_of_isBlockedGaugePhaseFixedPoint
+    cubePhaseTensor cubePhaseTensor_isBlockedGaugePhaseFixedPoint
 
 /-- The cube-phase tensor is not an ordinary pure-state renormalization fixed point.
 
@@ -251,19 +389,20 @@ theorem cubePhaseTensor_not_isTransferIdempotent :
         dsimp
         rw [hIdem.pow_eq (pow_ne_zero n (by norm_num : (2 : ℕ) ≠ 0))])⟩
 
-/-- The cube-phase witness is in normalized CPSV canonical form, satisfies the
-one-letter blocking-up-to-gauge diagram with a unit phase, and is not transfer-idempotent.
+/-- The cube-phase witness is in normalized CPSV canonical form, satisfies
+the literal one-letter doubled-MPDO blocking-up-to-gauge diagram, and is not
+transfer-idempotent.
 
 Source: arXiv:1606.00608, canonical-form normalization at lines 238--246 and Appendix D,
 equation `RFP-gauge`, lines 2100--2107. -/
 theorem cubePhaseTensor_normalized_canonical_gauge_not_rfp :
     IsCPSVCanonicalForm cubePhaseTensor ∧
       cubePhaseCanonicalData.IsWeightNormalized ∧
-      IsBlockedGaugePhaseFixedPoint cubePhaseTensor ∧
+      IsPureOneLetterRFPViaTSUpToVirtualGauge cubePhaseTensor ∧
       ¬ IsTransferIdempotent cubePhaseTensor :=
   ⟨cubePhaseTensor_not_tendsto_dyadic_transferMap.1,
     cubePhaseCanonicalData_isWeightNormalized,
-    cubePhaseTensor_isBlockedGaugePhaseFixedPoint,
+    cubePhaseTensor_isPureOneLetterRFPViaTSUpToVirtualGauge,
     cubePhaseTensor_not_isTransferIdempotent⟩
 
 /-- The normalized canonical-form pure-state equivalence asserted after equation
@@ -272,13 +411,13 @@ one physical letter. -/
 theorem cpsv16_pure_rfp_gauge_equivalence_false :
     ¬ ∀ (D : ℕ) (A : MPSTensor 1 D), IsCPSVCanonicalForm A →
       (∃ data : CPSVCanonicalFormData A, data.IsWeightNormalized) →
-      (IsBlockedGaugePhaseFixedPoint A ↔ IsTransferIdempotent A) := by
+      (IsPureOneLetterRFPViaTSUpToVirtualGauge A ↔ IsTransferIdempotent A) := by
   intro hEquiv
   exact cubePhaseTensor_not_isTransferIdempotent
     ((hEquiv _ cubePhaseTensor
       cubePhaseTensor_normalized_canonical_gauge_not_rfp.1
       ⟨cubePhaseCanonicalData,
         cubePhaseTensor_normalized_canonical_gauge_not_rfp.2.1⟩).mp
-          cubePhaseTensor_isBlockedGaugePhaseFixedPoint)
+          cubePhaseTensor_isPureOneLetterRFPViaTSUpToVirtualGauge)
 
 end MPSTensor

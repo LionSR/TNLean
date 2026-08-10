@@ -44,19 +44,26 @@ Since $\omega^3=1$, direct multiplication gives
   \label{eq:cube-block-gauge}
 \end{align}
 This has the orientation of the printed diagram: the original tensor is the
-phase-scaled virtual conjugate of its two-site blocking. For one physical
-letter, the original and blocked physical spaces are both one-dimensional, so
-the physical unitary in the pure diagram is exactly the unit scalar $\omega$.
-The one-letter MPS lift used in the formalization is therefore
+phase-scaled virtual conjugate of its two-site blocking. The corresponding
+pure MPDO tensor is the doubled tensor
 \begin{align}
-  A&=\zeta X A^{[2]}X^{-1}.
+  M&=A\otimes\overline A.
 \end{align}
-The scalar obeys
+For one physical letter, both physical matrix algebras are one-dimensional.
+Every unitary-conjugation channel on either algebra is therefore the identity,
+so the physical maps $T$ and $S$ in the source diagram contribute no phase.
+Instead, the MPS amplitude phase cancels when the tensor is doubled:
 \begin{align}
-  |\zeta|&=1.
+  (\zeta X A^{[2]}X^{-1})\otimes
+  (\overline\zeta\,\overline X\,\overline{A^{[2]}}\,\overline X^{-1})
+  &=(\zeta\overline\zeta)
+    (X\otimes\overline X)M^{[2]}(X\otimes\overline X)^{-1}\notag\\
+  &=(X\otimes\overline X)M^{[2]}(X\otimes\overline X)^{-1}.
 \end{align}
-This is sufficient for the displayed witness and has the source orientation.
-No equivalence with the full doubled-MPDO $T/S$ diagram is claimed.
+Thus $M^{[2]}$ and $M$ are related by the literal virtual gauge condition in
+both directions of the Appendix~D diagram. The stronger MPS identity
+$A=\zeta X A^{[2]}X^{-1}$ is used only to construct this exact doubled-MPDO
+witness.
 
 For a bond matrix $\rho$, define the one-letter transfer map by
 \begin{align}
@@ -76,9 +83,13 @@ phases and cannot converge, whereas an idempotent transfer map has every
 positive power equal to itself.
 
 The formal declarations are
+\leanid{MPOTensor.IsOneLetterRFPViaTSUpToVirtualGauge},
+\leanid{MPSTensor.IsPureOneLetterRFPViaTSUpToVirtualGauge},
 \leanid{MPSTensor.IsBlockedGaugePhaseFixedPoint},
+\leanid{MPSTensor.doubledVirtualGauge},
+\leanid{MPSTensor.isPureOneLetterRFPViaTSUpToVirtualGauge_of_isBlockedGaugePhaseFixedPoint},
 \leanid{MPSTensor.cube_phase_blocked_gauge_identity},
-\leanid{MPSTensor.cubePhaseTensor_isBlockedGaugePhaseFixedPoint},
+\leanid{MPSTensor.cubePhaseTensor_isPureOneLetterRFPViaTSUpToVirtualGauge},
 \leanid{MPSTensor.cubePhaseTensor_not_isTransferIdempotent},
 \leanid{MPSTensor.cubePhaseTensor_normalized_canonical_gauge_not_rfp}, and
 \leanid{MPSTensor.cpsv16_pure_rfp_gauge_equivalence_false} in
