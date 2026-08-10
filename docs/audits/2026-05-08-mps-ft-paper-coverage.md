@@ -62,7 +62,7 @@ complete corrected active form of Corollary 3.12 does not change the status of
 the false arbitrary-BNT statement printed at line 583.
 
 The distinct count is the 40 source `thm`, `prop`, `cor`, and `lem`
-environments. The occurrence count adds five Appendix A/D restatements.
+environments. The occurrence count adds five Appendix A/C restatements.
 The following ledger makes the count reproducible from source line numbers:
 
 - **Complete (24 distinct):** 249, 253, 342, 398, 606, 945, 1013, 1080, 1121,
@@ -73,7 +73,7 @@ The following ledger makes the count reproducible from source line numbers:
   1197, 1740, and 1810.
 - **Additional occurrences:** the Appendix A restatements at 1137, 1167,
   and 1172 inherit partial, not-ready, and not-ready status, respectively; the
-  Appendix D restatements at 1863 and 1929 inherit complete and partial status.
+  Appendix C.3--C.4 restatements at 1863 and 1929 inherit complete and partial status.
   Thus the five restatements add one complete, two partial, and two not-ready
   occurrences, giving the displayed totals 25/7/13.
 
