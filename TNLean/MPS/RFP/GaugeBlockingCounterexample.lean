@@ -89,6 +89,12 @@ private lemma primitiveCubeRoot_pow_three : primitiveCubeRoot ^ 3 = 1 :=
 private lemma norm_primitiveCubeRoot : ‖primitiveCubeRoot‖ = 1 := by
   simp [primitiveCubeRoot, Complex.norm_exp, Complex.mul_re]
 
+private lemma primitiveCubeRoot_mul_star :
+    primitiveCubeRoot * star primitiveCubeRoot = 1 := by
+  rw [RCLike.star_def, Complex.mul_conj, ← Complex.sq_norm,
+    norm_primitiveCubeRoot]
+  norm_num
+
 /-- The weight $\mu_p\overline{\mu_q}$ of a flattened doubled bond coordinate
 $(p,q)$ in the four-block canonical decomposition.
 
@@ -184,6 +190,14 @@ private theorem norm_cubePhaseDoubledWeight (q : Fin 4) :
     simp [cubePhaseDoubledWeight, cubePhaseWeight, norm_primitiveCubeRoot,
       finProdFinEquiv.symm_apply_apply, finSigmaFinEquiv.symm_apply_apply]
 
+/-- Canonical-form data for the four scalar normal blocks of the doubled cube-phase tensor. -/
+private noncomputable def cubePhaseDoubledCanonicalData :
+    CPSVCanonicalFormData
+      (toTensorFromBlocks cubePhaseDoubledWeight (fun _ : Fin 4 => scalarUnitTensor)) :=
+  CPSVCanonicalFormData.ofBlocks (fun _ => by simp) cubePhaseDoubledWeight
+    (fun _ : Fin 4 => scalarUnitTensor)
+    (fun _ => scalarUnitTensor_isNormalTensor)
+
 /-- The doubled cube-phase tensor generates positive semidefinite operators on every
 nonempty chain and hence satisfies the MPDO standing hypothesis.
 
@@ -201,9 +215,7 @@ lines 2091--2110. -/
 theorem cubePhaseDoubledTensor_isCPSVCanonicalForm :
     IsCPSVCanonicalForm (doubledTensor cubePhaseTensor).toMPSTensor := by
   rw [cubePhaseDoubledTensor_eq_toTensorFromBlocks]
-  exact (CPSVCanonicalFormData.ofBlocks (fun _ => by simp) cubePhaseDoubledWeight
-    (fun _ : Fin 4 => scalarUnitTensor)
-    (fun _ => scalarUnitTensor_isNormalTensor)).isCPSVCanonicalForm
+  exact cubePhaseDoubledCanonicalData.isCPSVCanonicalForm
 
 /-- The doubled cube-phase MPO admits canonical data satisfying the normalization at
 arXiv:1606.00608, line 246. -/
@@ -211,9 +223,7 @@ theorem cubePhaseDoubledTensor_exists_weightNormalized :
     ∃ data : CPSVCanonicalFormData (doubledTensor cubePhaseTensor).toMPSTensor,
       data.IsWeightNormalized := by
   rw [cubePhaseDoubledTensor_eq_toTensorFromBlocks]
-  refine ⟨CPSVCanonicalFormData.ofBlocks (fun _ : Fin 4 => by simp)
-    cubePhaseDoubledWeight (fun _ : Fin 4 => scalarUnitTensor)
-    (fun _ => scalarUnitTensor_isNormalTensor), ?_⟩
+  refine ⟨cubePhaseDoubledCanonicalData, ?_⟩
   refine {
     weight_norm_le_one := ?_
     weight_unit_exists := ?_ }
@@ -298,9 +308,7 @@ this witness implies the exact doubled-MPDO predicate.
 sufficient but is not itself the source predicate. See
 `docs/paper-gaps/cpsv16_rfp_gauge_pure_equivalence_false.tex`. -/
 def IsBlockedGaugePhaseFixedPoint {D : ℕ} (A : MPSTensor 1 D) : Prop :=
-  ∃ (X : GL (Fin D) ℂ) (ζ : ℂ), ‖ζ‖ = 1 ∧ ∀ i : Fin 1,
-    A i = ζ • ((X : Matrix (Fin D) (Fin D) ℂ) * blockTensor A 2 i *
-      ((X⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ))
+  UnitGaugePhaseEquiv (blockTensor A 2) A
 
 /-- A one-letter MPS blocking identity with a unit amplitude phase gives the literal
 doubled-MPDO virtual-gauge condition from Appendix D, equation `RFP-gauge`, of
@@ -359,12 +367,27 @@ theorem isPureOneLetterRFPViaTSUpToVirtualGauge_of_isBlockedGaugePhaseFixedPoint
         rw [map_inv]
       _ = ((↑(X⁻¹) : Matrix (Fin D) (Fin D) ℂ).map (starRingEnd ℂ)) := rfl
   rw [hmapinv]
-  have hblock : blockTensor A 2 (0 : Fin 1) = A 0 * A 0 := by
-    change evalWord A [0, 0] = A 0 * A 0
+  have hdim : blockPhysDim 1 2 = 1 := by
+    rw [blockPhysDim_eq_pow]
+    norm_num
+  let i0 : Fin (blockPhysDim 1 2) := Fin.cast hdim.symm 0
+  have hword : wordOfBlock 1 2 i0 = [0, 0] := by
+    change List.ofFn (decodeBlock 1 2 i0) = [0, 0]
+    rw [show decodeBlock 1 2 i0 = fun _ => 0 from Subsingleton.elim _ _]
+    rfl
+  have hblock : blockTensor A 2 i0 = A 0 * A 0 := by
+    change evalWord A (wordOfBlock 1 2 i0) = A 0 * A 0
+    rw [hword]
     simp [evalWord]
+  have hcast : Fin.cast hdim i0 = (0 : Fin 1) := Subsingleton.elim _ _
   have hA0 : A 0 = ζ • ((X : Matrix _ _ ℂ) * (A 0 * A 0) *
       ((X⁻¹ : GL (Fin D) ℂ) : Matrix _ _ ℂ)) := by
-    simpa only [hblock] using hA 0
+    have hAi := hA i0
+    change A (Fin.cast hdim i0) = ζ •
+      ((X : Matrix _ _ ℂ) * blockTensor A 2 i0 *
+        ((X⁻¹ : GL (Fin D) ℂ) : Matrix _ _ ℂ)) at hAi
+    rw [hblock, hcast] at hAi
+    exact hAi
   have hmapG :
       ((X : Matrix _ _ ℂ) * (A 0 * A 0) *
           ((X⁻¹ : GL (Fin D) ℂ) : Matrix _ _ ℂ)).map (starRingEnd ℂ) =
@@ -387,9 +410,6 @@ theorem isPureOneLetterRFPViaTSUpToVirtualGauge_of_isBlockedGaugePhaseFixedPoint
         exact (starRingEnd ℂ).mapMatrix.map_mul _ _
   rw [← hmapG]
   conv_lhs => rw [hA0]
-  have hphase : ζ * star ζ = 1 := by
-    rw [RCLike.star_def, Complex.mul_conj, ← Complex.sq_norm, hζ]
-    norm_num
   ext ⟨a, b⟩ ⟨c, d⟩
   simp only [Matrix.kroneckerMap_apply, Matrix.smul_apply, Matrix.map_apply, smul_eq_mul]
   let G : Matrix (Fin D) (Fin D) ℂ :=
@@ -402,14 +422,14 @@ theorem isPureOneLetterRFPViaTSUpToVirtualGauge_of_isBlockedGaugePhaseFixedPoint
   calc
     ζ * G a c * (star ζ * star (G b d)) =
         (ζ * star ζ) * (G a c * star (G b d)) := by ring
-    _ = G a c * star (G b d) := by rw [hphase, one_mul]
+    _ = G a c * star (G b d) := by rw [hζ, one_mul]
 
 
 /-- The cube-phase tensor satisfies equation `RFP-gauge` in arXiv:1606.00608,
 lines 2100--2107, with a unit MPS amplitude phase. -/
 private theorem cubePhaseTensor_isBlockedGaugePhaseFixedPoint :
     IsBlockedGaugePhaseFixedPoint cubePhaseTensor := by
-  refine ⟨cubeSwapGauge, primitiveCubeRoot, norm_primitiveCubeRoot, ?_⟩
+  refine ⟨cubeSwapGauge, primitiveCubeRoot, primitiveCubeRoot_mul_star, ?_⟩
   exact cube_phase_blocked_gauge_identity
 
 /-- The doubled cube-phase tensor satisfies the literal one-letter specialization of the
@@ -443,25 +463,6 @@ theorem cubePhaseTensor_not_isTransferIdempotent :
         dsimp
         rw [hIdem.pow_eq (pow_ne_zero n (by norm_num : (2 : ℕ) ≠ 0))])⟩
 
-/-- The doubled cube-phase tensor is an MPDO in normalized CPSV canonical form,
-satisfies the literal one-letter blocking-up-to-gauge diagram, and its underlying
-transfer map is not idempotent.
-
-Source: arXiv:1606.00608, Definition `RFPMixedTS`, lines 657--660, canonical-form
-normalization at lines 238--246, and Appendix D, equation `RFP-gauge`, lines 2100--2107. -/
-theorem cubePhaseTensor_normalized_canonical_gauge_not_rfp :
-    MPOTensor.IsMPDO (doubledTensor cubePhaseTensor) ∧
-      IsCPSVCanonicalForm (doubledTensor cubePhaseTensor).toMPSTensor ∧
-      (∃ data : CPSVCanonicalFormData (doubledTensor cubePhaseTensor).toMPSTensor,
-        data.IsWeightNormalized) ∧
-      IsPureOneLetterRFPViaTSUpToVirtualGauge cubePhaseTensor ∧
-      ¬ IsTransferIdempotent cubePhaseTensor :=
-  ⟨cubePhaseDoubledTensor_isMPDO,
-    cubePhaseDoubledTensor_isCPSVCanonicalForm,
-    cubePhaseDoubledTensor_exists_weightNormalized,
-    cubePhaseTensor_isPureOneLetterRFPViaTSUpToVirtualGauge,
-    cubePhaseTensor_not_isTransferIdempotent⟩
-
 /-- The normalized canonical-form pure-state equivalence asserted after equation
 `RFP-gauge` in arXiv:1606.00608, lines 2100--2107, is false, already for tensors with
 one physical letter. The canonical-form hypothesis is imposed on the doubled MPO tensor
@@ -476,9 +477,9 @@ theorem cpsv16_pure_rfp_gauge_equivalence_false :
   intro hEquiv
   exact cubePhaseTensor_not_isTransferIdempotent
     ((hEquiv _ cubePhaseTensor
-      cubePhaseTensor_normalized_canonical_gauge_not_rfp.1
-      cubePhaseTensor_normalized_canonical_gauge_not_rfp.2.1
-      cubePhaseTensor_normalized_canonical_gauge_not_rfp.2.2.1).mp
-      cubePhaseTensor_normalized_canonical_gauge_not_rfp.2.2.2.1)
+      cubePhaseDoubledTensor_isMPDO
+      cubePhaseDoubledTensor_isCPSVCanonicalForm
+      cubePhaseDoubledTensor_exists_weightNormalized).mp
+      cubePhaseTensor_isPureOneLetterRFPViaTSUpToVirtualGauge)
 
 end MPSTensor

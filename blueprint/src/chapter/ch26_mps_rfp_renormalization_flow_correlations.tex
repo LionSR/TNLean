@@ -138,7 +138,7 @@
     \label{def:blocked_gauge_phase_fixed_point}
     \lean{MPSTensor.IsBlockedGaugePhaseFixedPoint}
     \leanok
-    \uses{def:blocked_tensor}
+    \uses{def:blocked_tensor, def:gauge_phase_equiv}
     A tensor $A$ with one physical component has a blocking witness if there
     are an invertible matrix $X$ and a scalar $\zeta$ with $|\zeta|=1$ such
     that
@@ -146,7 +146,7 @@
         A&=\zeta X A^{[2]}X^{-1}.
         \notag
     \end{align}
-    This is a sufficient MPS-level witness, not the source condition itself.
+    % This MPS-level witness is sufficient but is not the source condition itself.
 \end{definition}
 
 \begin{definition}[Doubled virtual gauge]
@@ -198,7 +198,6 @@
     \lean{MPSTensor.cubePhaseDoubledTensor_exists_weightNormalized}
     \lean{MPSTensor.cubePhaseTensor_isPureOneLetterRFPViaTSUpToVirtualGauge}
     \lean{MPSTensor.cubePhaseTensor_not_isTransferIdempotent}
-    \lean{MPSTensor.cubePhaseTensor_normalized_canonical_gauge_not_rfp}
     \lean{MPSTensor.cpsv16_pure_rfp_gauge_equivalence_false}
     \leanok
     \uses{def:blocked_tensor, def:doubled_tensor, def:mpdo,
@@ -222,17 +221,12 @@
     map is not idempotent. Hence the canonical-restricted pure-state
     equivalence claimed after
     \cite[Appendix~D, equation~\texttt{RFP-gauge}]{Cirac2016MPDO_arXiv} is false.
-
-    The printed pure spectral argument cannot support the mixed-state
-    continuation in the following source paragraph. This counterexample does
-    not decide the mixed-state question.
 \end{theorem}
 \begin{proof}
     \leanok
     \uses{def:ft_perm_gl, lem:ft_perm_matrix_conj_submatrix, def:mpdo,
         lem:bond_dimension_one_identity_transfer_normal,
         def:cpsv_canonical_form, thm:blocked_gauge_phase_to_doubled_mpdo,
-        thm:pure_doubled_tensor_rfp_via_ts,
         thm:cpsv_canonical_form_flow_phase_obstruction}
     On every nonempty chain, $M=A\otimes\overline A$ generates the rank-one
     operator $\ketbra{V^{(N)}(A)}{V^{(N)}(A)}$, which is positive semidefinite.
@@ -262,6 +256,11 @@
     shows that the dyadic orbit of $e_{21}$ alternates between the distinct
     factors $\omega$ and $\omega^2$.
 \end{proof}
+
+\begin{remark}
+    The counterexample refutes the printed pure equivalence. It does not decide
+    the mixed-state continuation in the following source paragraph.
+\end{remark}
 
 \begin{remark}\label{rem:zero_correlation_length}
     \uses{thm:spectral_radius_le_one, def:correlation_length,
