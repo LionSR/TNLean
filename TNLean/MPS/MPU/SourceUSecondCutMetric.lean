@@ -14,7 +14,7 @@ Gram entry. The metric is $H_2=Z_2Z_2^\dagger$; no result identifies $H_2$
 with the identity or asserts an ambient coisometry.
 
 These are the exact second-cut identities used in the closed contraction of
-arXiv:1703.09188, equation `uUnitary`, lines 545--556.
+arXiv:1703.09188, equation `uUnitary`, lines 545--557.
 -/
 
 open scoped Matrix BigOperators ComplexOrder
@@ -45,7 +45,7 @@ theorem sourceX₂_mul_conjTranspose_eq_sourceCutM₂_mul_secondCutMetric
 /-- The ordinary source-u Gram entry with the exact second-cut metric
 $H_2=Z_2Z_2^\dagger$ and all eight virtual and physical indices explicit.
 
-Source: arXiv:1703.09188, equation `uUnitary`, lines 545--556. -/
+Source: arXiv:1703.09188, equation `uUnitary`, lines 545--557. -/
 theorem sourceU_gram_apply_eq_secondCutMetric
     (ρ : Matrix (Fin D) (Fin D) ℂ) (hρ : ρ.PosDef)
     (p q : Fin d × Fin d) :
