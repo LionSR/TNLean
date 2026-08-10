@@ -17,7 +17,7 @@ the remaining virtual tail.
 
 The retained output pair is consistently denoted by \(q\); the corresponding
 pair in a conjugated expression is denoted by \(p\). Thus later contractions
-have the paper's order: the `q` term is unstarred and the `p` term is starred.
+have the paper's order: the \(q\) term is unstarred and the \(p\) term is starred.
 
 **Scope boundary:** no result here collapses the sandwiched open tail, proves
 that `sourceU` is an isometry, or derives its rank bound. In particular, the
