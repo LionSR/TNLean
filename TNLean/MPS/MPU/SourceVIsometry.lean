@@ -95,11 +95,19 @@ def sourceVRegroupEquiv :
     change ((i, j), finProdFinEquiv (finProdFinEquiv.symm a)) = ((i, j), a)
     rw [finProdFinEquiv.apply_symm_apply]
 
+/-- The regrouping equivalence sends two source-cut indices to their physical pair and
+flattened virtual pair.
+
+Source: arXiv:1703.09188, equation `vUnitary`, lines 577--588. -/
 @[simp] theorem sourceVRegroupEquiv_apply
     (x₁ x₂ : Fin d × Fin D) :
     sourceVRegroupEquiv (d := d) (D := D) (x₁, x₂) =
       ((x₁.1, x₂.1), finProdFinEquiv (x₁.2, x₂.2)) := rfl
 
+/-- The inverse regrouping equivalence separates a physical pair and flattened virtual pair
+into two source-cut indices.
+
+Source: arXiv:1703.09188, equation `vUnitary`, lines 577--588. -/
 @[simp] theorem sourceVRegroupEquiv_symm_apply
     (p : Fin d × Fin d) (a : Fin (D * D)) :
     (sourceVRegroupEquiv (d := d) (D := D)).symm (p, a) =
