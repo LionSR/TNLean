@@ -235,7 +235,7 @@ noncomputable def c3CenteredVirtualResidualES [NeZero D]
     Kinftail.comp ((tailVirtualMapES A K).comp
       (Iinf.comp ((leftVirtualMapES A 1).adjoint.comp Kinfleft)))
 
-/-- The centered overlap residual factors exactly through the length-`l` Gram
+/-- The centered overlap residual factors exactly through the length-\(l\) Gram
 error on the common direct sum. -/
 theorem c3_centeredVirtualResidualES_eq_overlapFactors [NeZero D]
     (A : MPSTensor d D) (K l : ℕ)
