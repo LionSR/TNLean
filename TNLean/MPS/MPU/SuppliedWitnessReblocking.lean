@@ -9,7 +9,7 @@ import TNLean.MPS.MPU.SimpleBlocking
 # Reblocking supplied MPU-simple witnesses
 
 This file preserves specified `simple1` and `simple2` witnesses when a direct
-physical block is extended by two sites. The proof uses the suffix of the
+physical block is extended by one or two sites. The proof uses the suffix of the
 first word and prefix of the second word, so no existentially chosen witnesses
 replace the supplied pair.
 
@@ -22,8 +22,11 @@ open Matrix
 
 namespace MPOTensor
 
-/-- Supplied `simple2` witnesses persist when a positive direct block is
-extended by one site; the suffix/prefix windows preserve the exact witnesses. -/
+/-- Supplied `simple2` witnesses persist when a direct block is extended by
+one site; the suffix/prefix windows preserve the exact witnesses.
+
+Source: arXiv:1703.09188, corollary following Proposition III.3, lines
+442--446. -/
 theorem blockTensor_succ_simple2_of_supplied
     {d D : ℕ} {U : MPOTensor d D} {k : ℕ}
     (a b : Fin (D * D) → ℂ)
@@ -99,7 +102,7 @@ theorem blockTensor_succ_simple2_of_supplied
 
 /-- Supplied `simple2` witnesses persist at the common direct block two sites
 longer, by two exact suffix/prefix window extensions. -/
-private theorem blockTensor_add_two_simple2
+private lemma blockTensor_add_two_simple2
     {d D : ℕ} {U : MPOTensor d D} {k : ℕ}
     (a b : Fin (D * D) → ℂ)
     (h₂ : ∀ i j m l : Fin (MPSTensor.blockPhysDim d k),
@@ -116,7 +119,7 @@ private theorem blockTensor_add_two_simple2
   have h₂₂ := blockTensor_succ_simple2_of_supplied (a := a) (b := b) h₂₁
   simpa only [Nat.add_assoc, Nat.reduceAdd] using h₂₂
 
-private theorem trace_mul_rankOne_mul_supplied {n : Type*} [Fintype n]
+private lemma trace_mul_rankOne_mul_supplied {n : Type*} [Fintype n]
     (a b : n → ℂ) (A X : Matrix n n ℂ) :
     Matrix.trace (A * Matrix.vecMulVec b a * X) =
       a ⬝ᵥ ((X * A) *ᵥ b) := by
@@ -125,7 +128,10 @@ private theorem trace_mul_rankOne_mul_supplied {n : Type*} [Fintype n]
   simp [dotProduct, mul_comm]
 
 /-- For specified witnesses, MPU unitarity and `simple2` recover `simple1`
-without changing either witness. -/
+without changing either witness.
+
+Source: arXiv:1703.09188, Definition III.2 and the corollary following
+Proposition III.3, lines 363--374 and 442--446. -/
 theorem IsMPU.simple1_of_simple2_supplied
     {d D : ℕ} {U : MPOTensor d D} (hU : IsMPU U)
     (a b : Fin (D * D) → ℂ)
@@ -202,8 +208,12 @@ theorem IsMPU.simple1_of_simple2_supplied
   · rw [if_neg hij] at hx2 hx3 ⊢
     exact sq_eq_zero_iff.mp hx2
 
-/-- Exact supplied witnesses extend from a direct block of length `k` to the
-common overlapping-window block of length `k+2`, without existential repackaging. -/
+/-- Exact supplied witnesses extend from a direct block of length $k$ to the
+common overlapping-window block of length $k+2$, without replacing them by
+existentially chosen witnesses.
+
+Source: arXiv:1703.09188, corollary following Proposition III.3, lines
+442--446. -/
 theorem IsMPU.blockTensor_add_two_simple_contractions_of_supplied
     {d D : ℕ} {U : MPOTensor d D} (hU : IsMPU U) {k : ℕ}
     (a b : Fin (D * D) → ℂ)

@@ -2046,23 +2046,34 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
         MPOTensor.IsMPU.simple1_of_simple2_supplied,
         MPOTensor.IsMPU.blockTensor_add_two_simple_contractions_of_supplied}
     \leanok
-    \uses{thm:mpu_all_later_simple_blockings,def:mpu_simple}
-    Suppose a direct block of length $K$ satisfies the two-letter simple
-    contraction with specified vectors $(a|$ and $|b)$.  At direct length
-    $K+2$, the suffix of the first blocked word and the prefix of the second
-    blocked word preserve the same insertion $|b)(a|$.  MPU unitarity at
-    lengths two and three then gives, with the same vectors,
+    \uses{def:mpu,def:mpu_double_layer,
+        thm:mpdo_closed_chain_physical_blocking}
+    Suppose a direct block of length $K$ satisfies the two-letter contraction
+    with specified vectors $(a|$ and $|b)$.  For an arbitrary MPO tensor, one
+    suffix/prefix extension preserves the same insertion $|b)(a|$ at direct
+    length $K+1$.  For any MPU tensor, specified vectors satisfying this
+    two-letter identity also satisfy the one-letter identity with the same
+    vectors.  Applying that implication after two extensions gives, at direct
+    length $K+2$,
     \begin{align}
       (a|W^{IJ}|b)&=\delta_{I,J},\\
       W^{IJ}W^{LM}&=W^{IJ}|b)(a|W^{LM}.
     \end{align}
+    No positivity or nonzero-dimension hypothesis is required.  This is the
+    corollary following Proposition~III.3 in
+    \cite[lines~442--446]{Cirac2017MPU}.
 \end{theorem}
 
 \begin{proof}\leanok
+    \uses{lem:mpu_blocking,thm:mpu_closed_double_layer,
+        thm:mpu_double_layer_blocking,lem:mpu_mul_adjoint}
     Extend the supplied two-letter identity twice by overlapping suffix and
     prefix windows.  For $x=(a|W^{IJ}|b)$, the constant configurations of
     lengths two and three give $x^2=\delta_{I,J}$ and
-    $x^3=\delta_{I,J}$, which force $x=\delta_{I,J}$.
+    $x^3=\delta_{I,J}$, which force $x=\delta_{I,J}$.  Physical blocking
+    preserves MPU unitarity, so this one-letter identity and the twice-extended
+    two-letter identity hold simultaneously at direct length $K+2$ with the
+    original supplied witnesses.
 \end{proof}
 
 % The equality and range-insertion step remains tracked by issue #5971.
