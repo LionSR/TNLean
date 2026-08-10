@@ -24,6 +24,8 @@ EXPECTED_LEXICAL_OCCURRENCES = 187
 EXPECTED_LEXICAL_NAMES = 183
 EXPECTED_ACTIVE_OCCURRENCES = 186
 EXPECTED_ACTIVE_NAMES = 182
+EXPECTED_THEOREM_CONTAINED_OCCURRENCES = 60
+EXPECTED_THEOREM_CONTAINED_NAMES = 58
 EXPECTED_DUPLICATES = {
     "thm1": (350, 1168),
     "II_cor2": (355, 1173),
@@ -35,8 +37,12 @@ ALLOWED_CLASSES = {
     "section", "definition", "equation", "figure", "example", "theorem-like"
 }
 LABEL_RE = re.compile(r"\\label\{([^}]*)\}")
-THEOREM_BEGIN_RE = re.compile(r"\\begin\{(thm\*?|prop\*?|lem\*?|cor\*?|proof)\}")
-THEOREM_END_RE = re.compile(r"\\end\{(thm\*?|prop\*?|lem\*?|cor\*?|proof)\}")
+THEOREM_BEGIN_RE = re.compile(
+    r"\\begin\s*\{\s*(thm\*?|prop\*?|lem\*?|cor\*?|proof)\s*\}"
+)
+THEOREM_END_RE = re.compile(
+    r"\\end\s*\{\s*(thm\*?|prop\*?|lem\*?|cor\*?|proof)\s*\}"
+)
 INHERIT_RE = re.compile(r"\binherit(?:s|ance|ances)?\b", re.IGNORECASE)
 STATUS_RE = re.compile(r"\bstatus\b", re.IGNORECASE)
 BOUNDARY_RE = re.compile(
@@ -77,10 +83,10 @@ def source_inventory() -> tuple[list[tuple[str, int, int, bool]], list[str]]:
 
 def theorem_contained_labels(
     active_lines: list[str], ledger: dict[str, dict[str, str]]
-) -> set[str]:
-    """Find equation and figure labels inside theorem statements or proofs."""
+) -> list[str]:
+    """Find equation and figure label occurrences inside theorems or proofs."""
     stack: list[str] = []
-    result: set[str] = set()
+    result: list[str] = []
     for line in active_lines:
         begin = THEOREM_BEGIN_RE.search(line)
         if begin:
@@ -89,7 +95,7 @@ def theorem_contained_labels(
             for label in LABEL_RE.findall(line):
                 row = ledger.get(label)
                 if row and row["classification"] in {"equation", "figure"}:
-                    result.add(label)
+                    result.append(label)
         end = THEOREM_END_RE.search(line)
         if end:
             for index in range(len(stack) - 1, -1, -1):
@@ -99,8 +105,25 @@ def theorem_contained_labels(
     return result
 
 
-def read_ledger() -> dict[str, dict[str, str]]:
-    with LEDGER.open(newline="") as handle:
+def inheritance_count_errors(contained_occurrences: list[str]) -> list[str]:
+    """Return errors when theorem/proof containment inventory totals drift."""
+    errors: list[str] = []
+    if len(contained_occurrences) != EXPECTED_THEOREM_CONTAINED_OCCURRENCES:
+        errors.append(
+            "theorem/proof-contained occurrences: expected "
+            f"{EXPECTED_THEOREM_CONTAINED_OCCURRENCES}, got {len(contained_occurrences)}"
+        )
+    contained_names = set(contained_occurrences)
+    if len(contained_names) != EXPECTED_THEOREM_CONTAINED_NAMES:
+        errors.append(
+            "theorem/proof-contained names: expected "
+            f"{EXPECTED_THEOREM_CONTAINED_NAMES}, got {len(contained_names)}"
+        )
+    return errors
+
+
+def read_ledger(path: Path = LEDGER) -> dict[str, dict[str, str]]:
+    with path.open(newline="") as handle:
         reader = csv.DictReader(handle, delimiter="\t")
         expected_fields = [
             "label", "occurrences", "lines", "activity", "classification", "disposition"
@@ -112,6 +135,8 @@ def read_ledger() -> dict[str, dict[str, str]]:
         raise ValueError("ledger must contain at least one row")
     result: dict[str, dict[str, str]] = {}
     for row in rows:
+        if None in row:
+            raise ValueError(f"ledger row has surplus fields: {row[None]!r}")
         label = row["label"]
         if not label:
             raise ValueError("empty label in ledger")
@@ -192,7 +217,9 @@ def main() -> int:
     if len(active_names) != EXPECTED_ACTIVE_NAMES:
         errors.append(f"active names: expected {EXPECTED_ACTIVE_NAMES}, got {len(active_names)}")
 
-    contained = theorem_contained_labels(active_lines, ledger)
+    contained_occurrences = theorem_contained_labels(active_lines, ledger)
+    contained = set(contained_occurrences)
+    errors.extend(inheritance_count_errors(contained_occurrences))
     for label in sorted(contained):
         disposition = ledger[label]["disposition"]
         if not (
@@ -221,7 +248,9 @@ def main() -> int:
         f"({len(active_names)} active, {len(inactive_names)} inactive)"
     )
     print(
-        f"Theorem/proof inheritance: {len(contained)} equation or figure labels checked"
+        "Theorem/proof inheritance: "
+        f"{len(contained)} unique equation or figure labels, "
+        f"{len(contained_occurrences)} occurrences checked"
     )
     if errors:
         for error in errors:

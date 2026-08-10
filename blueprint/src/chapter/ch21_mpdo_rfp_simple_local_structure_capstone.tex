@@ -905,16 +905,17 @@ This is the calculation in
 \cite[Appendix~C.2, lines~1745--1751]{Cirac2016MPDO_arXiv}.
 
 % CPSV16 Theorem 4.9 (`thm:main-simple`), lines 851--893 and Appendix C.2.
+% Tracking: issue #5917.
+% Gap: docs/paper-gaps/cpgsv17_pf_rank_one.tex.
 \begin{theorem}[Printed simple-MPDO implication chain]
     \label{thm:cpsv_theorem49_printed_status}
     \notready
-    \discussion{5917}
     \uses{def:is_rfp_via_ts, def:is_sal, def:mpo_physical_trace_transfer,
         thm:mpdo_sal_zcl_bnt_sector_structure,
         thm:mpdo_sal_zcl_blocking_channels}
     Let $K$ be a simple tensor in block-injective canonical form with a basis
-    of normal tensors, and let $M=K^{[2]}$.  Theorem~4.9 of
-    \cite{Cirac2016MPDO_arXiv} states the implication chain
+    of normal tensors, and let $M=K^{[2]}$.  According to
+    \cite[Theorem~4.9]{Cirac2016MPDO_arXiv},
     \begin{align}
         \textnormal{(i)}&\Longrightarrow\textnormal{(ii)}, &
         \textnormal{(ii)}&\Longleftrightarrow\textnormal{(iii)}, &
@@ -927,41 +928,45 @@ This is the calculation in
     length, the blockwise local structure, and the fixed-point condition for
     $M$.
 
-    The forward fixed-point implication, the Markov decomposition, the channel
-    constructions under the local factorization, and the sectorwise analytic
-    inheritance are formalized.  The remaining Case-II step is the all-sector
-    factorization: absorbing a coefficient $\mu_s$ multiplies the transfer
-    spectral radius by $|\mu_s|^2$, while the source normalization does not
-    imply $|\mu_s|=1$ for every sector.  The two not-ready nodes
-    Theorems~\ref{thm:mpdo_sal_zcl_bnt_sector_structure} and
-    \ref{thm:mpdo_sal_zcl_blocking_channels} record exactly this boundary.
+    In Case II, the implication from SAL and zero correlation length to the
+    blockwise local structure requires the normal Case-I factorization for each
+    absorbed BNT representative.  Absorbing a coefficient $\mu_s$ multiplies
+    the transfer spectral radius by $|\mu_s|^2$, while the source normalization
+    does not imply $|\mu_s|=1$ for every sector.  Thus a separate argument is
+    required to establish normality of every absorbed sector.
 \end{theorem}
 
 % CPSV16 Examples 4.10--4.12, lines 897--942.
+% Tracking: issue #5919.
+% The SAL assertion in Example 4.11 and the RFP maps in Example 4.12 require
+% independent verification from the displayed source data.
 \begin{theorem}[Printed mixed-state separation examples]
     \label{thm:cpsv_examples410_412_status}
     \notready
-    \discussion{5919}
     \uses{def:is_rfp_via_ts, def:is_sal, def:mpo_source_zcl}
-    Examples~4.10--4.12 of \cite{Cirac2016MPDO_arXiv} give three proposed
-    separations among zero correlation length, saturation of the area law, the
-    fixed-point condition, and the simple commuting form.  Example~4.10 uses a
-    four-spin ring of Bell pairs followed by correlated on-site bit-flip noise
-    and claims zero correlation length without saturation of the area law.
-    Example~4.11 uses the bond-weight matrix
+    The three examples in
+    \cite[Examples~4.10--4.12, lines~897--942]{Cirac2016MPDO_arXiv} assert the
+    following separations.  Example~4.10 applies correlated on-site bit-flip
+    noise to a four-spin ring of Bell pairs and claims zero correlation length
+    without saturation of the area law.  Example~4.11 uses the bond-weight
+    matrix
     \begin{align}
         W&=\begin{pmatrix}1&1/2\\1/2&1\end{pmatrix}
         \notag
     \end{align}
-    and claims saturation without zero correlation length.  Example~4.12 uses
-    an explicit two-dimensional tensor generating
+    and claims saturation without zero correlation length.  This saturation
+    claim requires an independent entropy calculation.
+
+    Example~4.12 uses a two-dimensional tensor generating
     \begin{align}
-        \rho^{(N)}&=I^{\otimes N}+\sigma_z^{\otimes N}
+        \rho^{(N)}&=I^{\otimes N}+\sigma_z^{\otimes N}.
         \notag
     \end{align}
-    and claims saturation and zero correlation length without the simple
-    commuting form.  The printed saturation claim in Example~4.11 requires an
-    independent calculation and is not assumed here.
+    The source asserts that this tensor has saturation of the area law and zero
+    correlation length, is not of the simple commuting form, and is nevertheless
+    a renormalization fixed point.  The displayed density formula alone does not
+    construct the trace-preserving completely positive maps required for the
+    last assertion; those maps must be exhibited separately.
 \end{theorem}
 
 % **All-sector Case-II boundary:**

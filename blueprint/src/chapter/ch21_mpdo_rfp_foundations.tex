@@ -954,26 +954,26 @@ Definition~\ref{def:mpo_source_zcl} permits the positive factor $\lambda$.
 \end{proof}
 
 % CPSV16 Theorem 4.4, the unlabeled theorem environment at lines 777--784.
+% Tracking: issue #5917.
+% Gap: docs/paper-gaps/cpsv16_purification_rfp_definition.tex.
 \begin{theorem}[Printed purification fixed-point equivalence]
     \label{thm:cpsv_theorem44_printed_status}
     \notready
-    \discussion{5917}
     \uses{def:mpdo_purification_rfp_witness, def:mpo_source_zcl,
         thm:global_prfp_not_source_zcl,
         thm:nonzero_global_prfp_not_source_zcl}
     Let an MPO tensor admit the global purification equation of
-    Definition~\ref{def:mpdo_global_purification_equation}.  Theorem~4.4 of
-    \cite{Cirac2016MPDO_arXiv} states that being a purification
+    Definition~\ref{def:mpdo_global_purification_equation}.  According to
+    \cite[Theorem~4.4]{Cirac2016MPDO_arXiv}, being a purification
     renormalization fixed point, having zero correlation length, and admitting
     the displayed trace-preserving purification form are equivalent.
 
     The global positive-length equations do not detect nilpotent hidden bond
     sectors.  Theorems~\ref{thm:global_prfp_not_source_zcl} and
     \ref{thm:nonzero_global_prfp_not_source_zcl} give purification fixed points,
-    including a nonzero MPDO example, which fail the source zero-correlation
-    relation.  Thus the printed equivalence is not covered by the corrected
-    local purification theorems.  The obstruction is documented in
-    \path{docs/paper-gaps/cpsv16_purification_rfp_definition.tex}.
+    including a nonzero matrix product density operator, whose physical-trace
+    transfer fails the source zero-correlation relation.  Hence the stated
+    equivalence is false for the global positive-length condition.
 \end{theorem}
 
 \begin{theorem}[The bare global PRFP predicate does not imply the nonzero
