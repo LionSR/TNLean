@@ -457,42 +457,23 @@ norm estimate is derived here.
     anticommutator inequality.
 \end{proof}
 
-\begin{lemma}[Limiting Gram metric and inverse-Gram control]
-    \label{lem:limiting_gram_inverse_control}
-    \notready
-    \discussion{5922}
-    \uses{thm:ground_space_gram_tendsto_fixed_point, def:inverse_gram,
-        thm:inverse_gram_identities, thm:neumann_inverse_norm_bound,
-        thm:ground_space_es_projection_inverse_gram}
-    Assume in addition that the fixed point $\rho$ is positive definite.  Under
-    column vectorization, the limiting Gram operator acts by
-    \begin{align}
-        \mathscr R(P_\rho)\operatorname{vec}(X)
-        &=\operatorname{vec}\!\left(
-            \frac{X\rho}{\tr(\rho)}\right).
-        \notag
-    \end{align}
-    Hence it is positive definite and invertible.  The finite-volume inverse
-    Gram operators are eventually uniformly bounded after perturbing around
-    this limiting metric, or equivalently after dressing the virtual boundary
-    coordinates so that the normalized Gram tends to the identity.
-\end{lemma}
-
 \begin{lemma}[Uniform FNW overlapping-window contraction]
     \label{lem:fnw_overlapping_window_contraction}
     \notready
     \discussion{5923}
-    \uses{lem:limiting_gram_inverse_control,
+    \uses{thm:fixed_point_gram_metric_exact,
+        thm:fixed_point_gram_metric_is_unit,
+        thm:primitive_ground_space_map_eventual_inverse_gram_bound,
+        thm:ground_space_es_projection_inverse_gram,
         thm:tail_boundary_map_factorization, thm:left_boundary_map_factorization,
         thm:tail_boundary_map_range_es_transport,
-        thm:left_boundary_map_range_es_transport,
-        thm:ground_space_map_es_injective_range_projector}
-    Let $A$ be an injective blocked tensor, and let
-    $P^{\mathrm{tail}}_{K,l+1}$ and
+        thm:left_boundary_map_range_es_transport}
+    Let $A$ be a primitive blocked tensor with a positive-definite fixed point,
+    and let $P^{\mathrm{tail}}_{K,l+1}$ and
     $P^{\mathrm{left}}_{K+l}$ be the tail and left ground-space projectors in
     their common $(K+l+1)$-site Hilbert space.  There are constants
-    $c>0$ and $0<\lambda<1$, independent of $K$, such that, whenever the
-    denominator is positive,
+    $c>0$ and $0<\lambda<1$, independent of $K$, such that, whenever
+    $c\lambda^l<1$,
     \begin{align}
         \left\|
         P^{\mathrm{tail}}_{K,l+1}P^{\mathrm{left}}_{K+l}
@@ -502,8 +483,12 @@ norm estimate is derived here.
         c\lambda^l\frac{1+c\lambda^l}{1-c\lambda^l}.
         \notag
     \end{align}
-    The proof must expand the physical range projectors through the exact
-    boundary maps and inverse Gram operators before applying transfer mixing.
+    The displayed coefficient is the commutation bound of
+    \cite[Eq.~(6.1)]{Nachtergaele1996Spectral}, derived there from the
+    Fannes--Nachtergaele--Werner estimates.  The remaining task is to realize
+    that source estimate for the two physical boundary-map projectors above.
+    It must use the exact inverse-Gram range-projector formulas in the limiting
+    fixed-point metric before applying transfer mixing.
 \end{lemma}
 
 \begin{lemma}[Uniform open-chain projector-defect threshold]
@@ -525,38 +510,46 @@ norm estimate is derived here.
     the required Friedrichs and anticommutator bounds for every left length.
 \end{lemma}
 
-\begin{lemma}[Blocked open-chain input for the cyclic martingale condition]
-    \label{lem:martingale_mps}
+\begin{lemma}[Blocked-to-cyclic ground-projector comparison]
+    \label{lem:blocked_to_cyclic_ground_projector_comparison}
     \notready
     \discussion{5925}
-    \uses{lem:nachtergaele_c3_blocked_length,
-        thm:friedrichs_ground_space_excitation_anticommutator,
-        lem:cyclic_window_overlap_cardinality}
+    \uses{lem:nachtergaele_c3_blocked_length}
     Let $A$ be a normal tensor, let $B$ be the injective tensor obtained from
     $A$ by the chosen blocking, and let $L>1$ be the resulting cyclic interaction
-    range.  Assume, in addition to
-    Lemma~\ref{lem:nachtergaele_c3_blocked_length}, a uniform blocked-to-cyclic
-    comparison: for every $N\ge2L$ and every overlapping off-diagonal pair of
-    cyclic windows, including pairs crossing the periodic cut, the corresponding
-    ground-space projectors $q_i,q_j$ and their common-ground projector $P_{ij}$
-    satisfy
+    range.  For every $N\ge2L$ and every overlapping off-diagonal pair of cyclic
+    windows, including pairs crossing the periodic cut, let $q_i,q_j$ be the
+    corresponding ground-space projectors and let $P_{ij}$ project onto their
+    common ground space.  Then
     \begin{align}
         \lVert q_iq_j-P_{ij}\rVert
         &\le
         \left(1-\frac{1}{4L}\right)\frac{1}{2(L-1)}.
         \notag
     \end{align}
-    Then the cyclic excitation projections $h_i=\Id-q_i$ satisfy
+    This blocked-to-cyclic comparison is a separate transport obligation after
+    condition C3.  It is not a pairwise consequence of the open-chain estimate.
+\end{lemma}
+
+\begin{lemma}[Blocked open-chain input for the cyclic martingale condition]
+    \label{lem:martingale_mps}
+    \notready
+    \discussion{5925}
+    \uses{lem:blocked_to_cyclic_ground_projector_comparison,
+        thm:friedrichs_ground_space_excitation_anticommutator,
+        lem:cyclic_window_overlap_cardinality}
+    Under the hypotheses and notation of
+    Lemma~\ref{lem:blocked_to_cyclic_ground_projector_comparison}, the cyclic
+    excitation projections $h_i=\Id-q_i$ satisfy
     \begin{align}
         h_i h_j+h_jh_i
         &\ge
         -\left(1-\frac{1}{4L}\right)\frac{1}{2(L-1)}(h_i+h_j)
         \notag
     \end{align}
-    in quadratic form.  Establishing the displayed projector comparison is the
-    separate transport obligation after condition C3; it is not a pairwise
-    consequence of C3 alone.  No all-vector excitation-compression estimate is
-    used.
+    in quadratic form for every overlapping off-diagonal pair.  The cyclic
+    overlap-cardinality bound makes these coefficients row summable.  No
+    all-vector excitation-compression estimate is used.
 \end{lemma}
 
 \begin{theorem}[Uniform gap for normal MPS parent Hamiltonians]
