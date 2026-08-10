@@ -69,8 +69,8 @@ theorem inverseGram_eq_ringInverse (T : E →L[𝕜] F) (hT : Function.Injective
   rw [ContinuousLinearMap.ringInverse_eq_inverse]
   exact inverseGram_eq_inverse T hT
 
-/-- If the Gram operator is within norm `a < 1` of the identity, then its inverse
-has norm at most `(1 - a)⁻¹`. The denominator is the Neumann inverse bound. -/
+/-- If the Gram operator is within norm \(a<1\) of the identity, then its inverse
+has norm at most \((1-a)^{-1}\). The denominator is the Neumann inverse bound. -/
 theorem norm_inverseGram_le_of_norm_one_sub_adjoint_comp_self_le
     (T : E →L[𝕜] F) (hT : Function.Injective T) {a : ℝ}
     (ha : ‖1 - T.adjoint.comp T‖ ≤ a) (ha_lt_one : a < 1) :
@@ -118,7 +118,7 @@ theorem injectiveRangeProjector_eq_starProjection (T : E →L[𝕜] F)
     rw [hGram, sub_self]
 
 /-- Exact residual identity for three injective maps with a common factorization.
-If `C = T ∘ J₁ = L ∘ J₂`, the difference of the range projectors of `T` and `L`,
+If \(C=T\circ J₁=L\circ J₂\), the difference of the range projectors of \(T\) and \(L\),
 after composition, factors through the mixed-Gram residual
 \[
   T^†L-(T^†T)J₁(C^†C)^{-1}J₂^†(L^†L).
