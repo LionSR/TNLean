@@ -13710,8 +13710,8 @@
         % never named as a crossing operand has always stood.
         \__tenkz_string_save_route:VV \l__tenkz_kernel_leg_name_tl
           \l__tenkz_kernel_r_leg_path_tl
-        \exp_args:NV \__tenkz_string_touch_all:n
-          \l__tenkz_kernel_leg_name_tl
+        \exp_args:NV \__tenkz_string_touch_all:nn
+          \l__tenkz_kernel_leg_name_tl {leg}
         \__tenkz_kernel_r_leg_skin_touch:n {#1}
         \exp_args:NnV \__tenkz_render_stroke:nn { bond }
           \l__tenkz_kernel_r_leg_path_tl
@@ -15256,7 +15256,7 @@
         \__tenkz_model_get:nnN {##2} {origin}
           \l__tenkz_kernel_scratch_tl
         \str_if_eq:VnF \l__tenkz_kernel_scratch_tl {port-open}
-          { \__tenkz_string_touch_all:n {##1} }
+          { \__tenkz_string_touch_all:nn {##1} {bond} }
         % Deferred physical legs have saved paths but no model-wire owner.
         % Preserve their explicit topology relation with every index route;
         % unlike the common index class, they still cross-check user strings.

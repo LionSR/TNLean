@@ -66,9 +66,9 @@
 \msg_new:nnnn {tenkz}{join-disjoint}
   { [TKZ-JOIN-DISJOINT]~strings~'#1'~and~'#2'~are~model-proven~disjoint }
   { Remove~their~join~declaration~or~change~the~route~model. }
-\msg_new:nnnn {tenkz}{cross-bond-undeclared}
-  { [TKZ-CROSS-BOND]~author~string~'#1'~crosses~lattice~bond~'#2'~with~
-    no~declared~crossing }
+\msg_new:nnnn {tenkz}{cross-touchall-undeclared}
+  { [TKZ-CROSS-TOUCHALL]~author~string~'#1'~crosses~#3~'#2'~with~no~
+    declared~crossing }
   { A~calibrated~break~was~cut~into~the~string~so~the~unbroken~ink~does~
     not~read~as~a~contraction;~declare~an~explicit~crossing~to~silence~
     this~warning. }
@@ -538,9 +538,14 @@
   { \__tenkz_string_pair_put:Nnn \l__tenkz_string_touch_prop {#1} {#2} }
 
 % A renderer-owned route may treat otherwise-unqualified overlaps as topology.
-% Store that route-class fact once instead of expanding it to every route pair.
-\cs_new_protected:Npn \__tenkz_string_touch_all:n #1
-  { \prop_put:Nnn \l__tenkz_string_touch_all_prop {#1} { } }
+% Store that route-class fact once instead of expanding it to every route
+% pair.  #2 names what kind of route this is (`bond` for an ordinary index
+% wire, `leg` for a deferred physical leg) so the crossing police can name
+% it correctly if it later has to warn about an author string crossing it
+% undeclared; an unrecognized or absent kind falls back to neutral wording
+% at the warn site rather than guessing.
+\cs_new_protected:Npn \__tenkz_string_touch_all:nn #1#2
+  { \prop_put:Nnn \l__tenkz_string_touch_all_prop {#1} {#2} }
 
 % Collision-sensitive routes, notably skin pairings, retain geometric checks
 % even beside a renderer-owned touch-all route.
@@ -1276,10 +1281,11 @@
       { \__tenkz_string_pair_key:nn {#1} {#2} }
       { \msg_error:nnnn {tenkz}{join-disjoint} {#1} {#2} }
   }
-% A renderer-owned touch-all route (e.g. a lattice bond) silences the
-% ordinary crossing police against every other route, which is right for
-% the topology it owns but wrong for a route it does not: an author string
-% is never touch-all's to silence.  If exactly one side of this pair is an
+% A renderer-owned touch-all route (an ordinary index wire or a deferred
+% physical leg -- see `\__tenkz_string_touch_all:nn`) silences the ordinary
+% crossing police against every other route, which is right for the
+% topology it owns but wrong for a route it does not: an author string is
+% never touch-all's to silence.  If exactly one side of this pair is an
 % author-declared string, police that pair on its own; a touch-all route
 % beside anything else (another touch-all route, or a route with no author
 % declaration at all) keeps the blanket skip.
@@ -1291,7 +1297,7 @@
         \prop_if_in:NnT \l__tenkz_string_touch_all_prop {#2}
           {
             \bool_set_true:N \l_tmpb_bool
-            \__tenkz_string_police_pair_bond:nn {#1} {#2}
+            \__tenkz_string_police_pair_touch_all_route:nn {#1} {#2}
           }
       }
     \bool_if:NF \l_tmpb_bool
@@ -1299,18 +1305,21 @@
         \prop_if_in:NnT \l__tenkz_string_author_prop {#2}
           {
             \prop_if_in:NnT \l__tenkz_string_touch_all_prop {#1}
-              { \__tenkz_string_police_pair_bond:nn {#2} {#1} }
+              { \__tenkz_string_police_pair_touch_all_route:nn {#2} {#1} }
           }
       }
   }
-% #1 is an author-declared string, #2 the touch-all route (lattice bond) it
-% was found to meet with no declared order.  A geometric meeting here is
-% not the author's to leave unbroken: cutting the calibrated break into the
-% string -- so the bond's own ink stays whole and the string reads as
-% passing behind it -- and warning is issue #5825's chosen middle ground;
-% turning every such silent overlap into a hard error is future work the
-% issue explicitly defers.
-\cs_new_protected:Npn \__tenkz_string_police_pair_bond:nn #1#2
+% #1 is an author-declared string, #2 the touch-all route it was found to
+% meet with no declared order -- an ordinary index wire (a lattice bond) or
+% a deferred physical leg, per the kind `\__tenkz_string_touch_all:nn`
+% recorded for #2.  A geometric meeting here is not the author's to leave
+% unbroken: cutting the calibrated break into the string -- so the other
+% route's own ink stays whole and the string reads as passing behind it --
+% and warning, naming which kind of route #2 actually is (falling back to
+% neutral wording if the kind was not recorded), is issue #5825's chosen
+% middle ground; turning every such silent overlap into a hard error is
+% future work the issue explicitly defers.
+\cs_new_protected:Npn \__tenkz_string_police_pair_touch_all_route:nn #1#2
   {
     \__tenkz_string_pair_count_get:NnnN
       \l__tenkz_string_cross_prop {#1} {#2}
@@ -1320,7 +1329,28 @@
         \__tenkz_string_count:nnN {#1} {#2} \l__tenkz_string_n_int
         \int_compare:nNnT { \l__tenkz_string_n_int } > {0}
           {
-            \msg_warning:nnnn {tenkz}{cross-bond-undeclared} {#1} {#2}
+            \prop_get:NnNTF \l__tenkz_string_touch_all_prop {#2}
+              \l__tenkz_string_tmp_tl
+              { }
+              { \tl_clear:N \l__tenkz_string_tmp_tl }
+            \str_case:VnF \l__tenkz_string_tmp_tl
+              {
+                {bond}
+                  {
+                    \msg_warning:nnnnn {tenkz}{cross-touchall-undeclared}
+                      {#1} {#2} {a~lattice~bond}
+                  }
+                {leg}
+                  {
+                    \msg_warning:nnnnn {tenkz}{cross-touchall-undeclared}
+                      {#1} {#2} {a~physical~leg}
+                  }
+              }
+              {
+                \msg_warning:nnnnn {tenkz}{cross-touchall-undeclared}
+                  {#1} {#2}
+                  {a~renderer-owned~route~(a~lattice~bond~or~physical~leg)}
+              }
             \__tenkz_string_under:nn {#1} {#2}
           }
       }

@@ -659,6 +659,23 @@ class Audit:
                 and event.attrs.get("kind") == "string"
             }
             string_kind_ids.discard("")
+            # The renderer's touch-all registration (tenkz-kernel.code.tex,
+            # `\__tenkz_kernel_r_index_joins:` and `\__tenkz_kernel_r_leg_ink:nnn`)
+            # covers exactly the `kind=index` wires whose `origin` is not
+            # `port-open`: an ordinary bond (no `origin` field) or a deferred
+            # physical leg (`origin=policy-leg`).  Both attributes are already
+            # in the event stream, so the carve-out below can check the
+            # non-string side actually is such a route instead of accepting
+            # any non-string side, mirroring the pairing carve-out's own
+            # precision.
+            touch_all_candidate_ids = {
+                event.attrs.get("name", event.attrs.get("id", ""))
+                for event in pic.events
+                if event.kind == "wire"
+                and event.attrs.get("kind") == "index"
+                and event.attrs.get("origin") != "port-open"
+            }
+            touch_all_candidate_ids.discard("")
             pairing_hosts = {
                 event.attrs.get("name", event.attrs.get("id", "")):
                     event.attrs.get("host", "")
@@ -786,13 +803,18 @@ class Audit:
             # `cross` field either: the string tier's own crossing police
             # cuts the break and warns instead of erroring (issue #5825), so
             # the occlusion it records here is expected without a matching
-            # declaration.  Exactly one side of the pair is a `kind=string`
-            # wire in this case; a string-vs-string or bond-vs-bond meeting
-            # is unaffected and stays checked against author input above.
+            # declaration.  Require exactly one side to be a `kind=string`
+            # wire and the other to be a `touch_all_candidate_ids` member, so
+            # this only absorbs the string/touch-all pair the police itself
+            # exempts -- not just any string/non-string meeting -- mirroring
+            # the pairing carve-out's own precision above; a string-vs-string
+            # or bond-vs-bond meeting stays checked against author input.
             for pair, count in rendered.items():
                 is_string = (pair[0] in string_kind_ids, pair[1] in string_kind_ids)
+                other = pair[1] if is_string[0] else pair[0]
                 if (
                     is_string[0] != is_string[1]
+                    and other in touch_all_candidate_ids
                     and frozenset(pair) not in explicit_pairs
                 ):
                     expected[pair] += count
