@@ -652,6 +652,13 @@ class Audit:
                 if event.kind == "wire"
             }
             wire_ids.discard("")
+            string_kind_ids = {
+                event.attrs.get("name", event.attrs.get("id", ""))
+                for event in pic.events
+                if event.kind == "wire"
+                and event.attrs.get("kind") == "string"
+            }
+            string_kind_ids.discard("")
             pairing_hosts = {
                 event.attrs.get("name", event.attrs.get("id", "")):
                     event.attrs.get("host", "")
@@ -773,6 +780,22 @@ class Audit:
                         sorted(pair, key=pairing_indices.__getitem__)
                     )
                     expected[ordered] += count
+
+            # An author string crossing a renderer-owned touch-all route
+            # (a lattice bond or a deferred physical leg) has no author-level
+            # `cross` field either: the string tier's own crossing police
+            # cuts the break and warns instead of erroring (issue #5825), so
+            # the occlusion it records here is expected without a matching
+            # declaration.  Exactly one side of the pair is a `kind=string`
+            # wire in this case; a string-vs-string or bond-vs-bond meeting
+            # is unaffected and stays checked against author input above.
+            for pair, count in rendered.items():
+                is_string = (pair[0] in string_kind_ids, pair[1] in string_kind_ids)
+                if (
+                    is_string[0] != is_string[1]
+                    and frozenset(pair) not in explicit_pairs
+                ):
+                    expected[pair] += count
 
             if expected != rendered:
                 self.hard(

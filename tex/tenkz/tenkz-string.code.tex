@@ -66,6 +66,12 @@
 \msg_new:nnnn {tenkz}{join-disjoint}
   { [TKZ-JOIN-DISJOINT]~strings~'#1'~and~'#2'~are~model-proven~disjoint }
   { Remove~their~join~declaration~or~change~the~route~model. }
+\msg_new:nnnn {tenkz}{cross-bond-undeclared}
+  { [TKZ-CROSS-BOND]~author~string~'#1'~crosses~lattice~bond~'#2'~with~
+    no~declared~crossing }
+  { A~calibrated~break~was~cut~into~the~string~so~the~unbroken~ink~does~
+    not~read~as~a~contraction;~declare~an~explicit~crossing~to~silence~
+    this~warning. }
 \msg_new:nnnn {tenkz}{string-library}
   { [TKZ-STRING-LIBRARY]~TikZ~library~'#1'~is~not~loaded }
   { The~string~engine~needs~hobby,~spath3,~and~intersections. }
@@ -80,6 +86,7 @@
 \__tenkz_prop_new_indexed:N \l__tenkz_string_touch_prop      % shared semantic wire ports
 \__tenkz_prop_new_indexed:N \l__tenkz_string_touch_all_prop  % topology-owned overlap route
 \__tenkz_prop_new_indexed:N \l__tenkz_string_touch_all_exempt_prop % route still checked
+\__tenkz_prop_new_indexed:N \l__tenkz_string_author_prop     % id -> author-declared string
 \__tenkz_prop_new_indexed:N \l__tenkz_string_disjoint_prop   % model-proven disjoint pairs
 \seq_new:N \l__tenkz_string_gap_ids_seq      % under paths awaiting one gap pass
 \seq_new:N \l__tenkz_string_self_gap_ids_seq % self paths awaiting branch gap
@@ -158,6 +165,7 @@
     \prop_clear:N \l__tenkz_string_touch_prop
     \prop_clear:N \l__tenkz_string_touch_all_prop
     \prop_clear:N \l__tenkz_string_touch_all_exempt_prop
+    \prop_clear:N \l__tenkz_string_author_prop
     \prop_clear:N \l__tenkz_string_disjoint_prop
     \seq_clear:N \l__tenkz_string_gap_ids_seq
     \seq_clear:N \l__tenkz_string_self_gap_ids_seq
@@ -538,6 +546,15 @@
 % even beside a renderer-owned touch-all route.
 \cs_new_protected:Npn \__tenkz_string_touch_all_exempt:n #1
   { \prop_put:Nnn \l__tenkz_string_touch_all_exempt_prop {#1} { } }
+
+% An author-declared route (a caller's index-route string, e.g. a trace or
+% marginal closure).  A touch-all route silences the ordinary crossing
+% police against every other route, but an author string crossing a
+% touch-all route -- typically a lattice bond -- is exactly the meeting the
+% author never declared: it still gets policed, with a break and a warning
+% in place of the pairwise skip.
+\cs_new_protected:Npn \__tenkz_string_author:n #1
+  { \prop_put:Nnn \l__tenkz_string_author_prop {#1} { } }
 
 % Record a pair whose owning model proves cannot meet.  The crossing police
 % can answer zero without asking the drawing engine to rediscover topology
@@ -1233,19 +1250,21 @@
           { \bool_set_true:N \l_tmpa_bool }
         \bool_if:NF \l_tmpa_bool
           {
+            \bool_set_false:N \l_tmpb_bool
             \prop_if_in:NnF \l__tenkz_string_touch_all_exempt_prop {#1}
               {
                 \prop_if_in:NnF \l__tenkz_string_touch_all_exempt_prop {#2}
                   {
                     \prop_if_in:NnT \l__tenkz_string_touch_all_prop {#1}
-                      { \bool_set_true:N \l_tmpa_bool }
+                      { \bool_set_true:N \l_tmpb_bool }
                     \prop_if_in:NnT \l__tenkz_string_touch_all_prop {#2}
-                      { \bool_set_true:N \l_tmpa_bool }
+                      { \bool_set_true:N \l_tmpb_bool }
                   }
               }
+            \bool_if:NTF \l_tmpb_bool
+              { \__tenkz_string_police_pair_touch_all:nn {#1} {#2} }
+              { \__tenkz_string_police_pair_cross:nn {#1} {#2} }
           }
-        \bool_if:NF \l_tmpa_bool
-          { \__tenkz_string_police_pair_cross:nn {#1} {#2} }
       }
   }
 \cs_new_protected:Npn \__tenkz_string_police_pair_disjoint:nn #1#2
@@ -1256,6 +1275,55 @@
     \prop_if_in:NeT \l__tenkz_string_join_prop
       { \__tenkz_string_pair_key:nn {#1} {#2} }
       { \msg_error:nnnn {tenkz}{join-disjoint} {#1} {#2} }
+  }
+% A renderer-owned touch-all route (e.g. a lattice bond) silences the
+% ordinary crossing police against every other route, which is right for
+% the topology it owns but wrong for a route it does not: an author string
+% is never touch-all's to silence.  If exactly one side of this pair is an
+% author-declared string, police that pair on its own; a touch-all route
+% beside anything else (another touch-all route, or a route with no author
+% declaration at all) keeps the blanket skip.
+\cs_new_protected:Npn \__tenkz_string_police_pair_touch_all:nn #1#2
+  {
+    \bool_set_false:N \l_tmpb_bool
+    \prop_if_in:NnT \l__tenkz_string_author_prop {#1}
+      {
+        \prop_if_in:NnT \l__tenkz_string_touch_all_prop {#2}
+          {
+            \bool_set_true:N \l_tmpb_bool
+            \__tenkz_string_police_pair_bond:nn {#1} {#2}
+          }
+      }
+    \bool_if:NF \l_tmpb_bool
+      {
+        \prop_if_in:NnT \l__tenkz_string_author_prop {#2}
+          {
+            \prop_if_in:NnT \l__tenkz_string_touch_all_prop {#1}
+              { \__tenkz_string_police_pair_bond:nn {#2} {#1} }
+          }
+      }
+  }
+% #1 is an author-declared string, #2 the touch-all route (lattice bond) it
+% was found to meet with no declared order.  A geometric meeting here is
+% not the author's to leave unbroken: cutting the calibrated break into the
+% string -- so the bond's own ink stays whole and the string reads as
+% passing behind it -- and warning is issue #5825's chosen middle ground;
+% turning every such silent overlap into a hard error is future work the
+% issue explicitly defers.
+\cs_new_protected:Npn \__tenkz_string_police_pair_bond:nn #1#2
+  {
+    \__tenkz_string_pair_count_get:NnnN
+      \l__tenkz_string_cross_prop {#1} {#2}
+      \l__tenkz_string_declared_int
+    \int_compare:nNnT { \l__tenkz_string_declared_int } = {0}
+      {
+        \__tenkz_string_count:nnN {#1} {#2} \l__tenkz_string_n_int
+        \int_compare:nNnT { \l__tenkz_string_n_int } > {0}
+          {
+            \msg_warning:nnnn {tenkz}{cross-bond-undeclared} {#1} {#2}
+            \__tenkz_string_under:nn {#1} {#2}
+          }
+      }
   }
 \cs_new_protected:Npn \__tenkz_string_police_pair_cross:nn #1#2
   {
