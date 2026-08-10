@@ -2544,20 +2544,30 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
 
 \section{Finite-region observable algebras}
 
-Fix a nonnegative integer $d$.  For a finite region
-$\Lambda\subset\mathbb Z$, let
-\begin{align}
-  \mathcal A_\Lambda
-    &= M_d^{\otimes\Lambda}
-     \cong M_{\{0,\ldots,d-1\}^{\Lambda}}(\mathbb C).
-\end{align}
-This algebra carries its operator norm.  It is the finite-region construction
-used in the QCA appendix of \cite{Cirac2017MPU}; no completion is taken here.
+\begin{definition}[Finite-region local algebra]
+  \label{def:qca_local_algebra}
+  \lean{SpinChain.Config,SpinChain.LocalAlgebra}
+  \leanok
+  Fix a nonnegative integer $d$.  For a finite region
+  $\Lambda\subset\mathbb Z$, the configuration space and local observable
+  algebra are
+  \begin{align}
+    \operatorname{Config}_d(\Lambda)
+      &=\{0,\ldots,d-1\}^{\Lambda},\\
+    \mathcal A_\Lambda
+      &=M_{\operatorname{Config}_d(\Lambda)}(\mathbb C)
+       \cong M_d^{\otimes\Lambda}.
+  \end{align}
+  The algebra $\mathcal A_\Lambda$ carries its operator norm.  This is the
+  finite-region construction used in the QCA appendix of
+  \cite{Cirac2017MPU}; no completion is taken here.
+\end{definition}
 
 \begin{definition}[Canonical inclusion of finite-region observables]
   \label{def:qca_local_inclusion}
   \lean{SpinChain.localInclusion}
   \leanok
+  \uses{def:qca_local_algebra}
   If $\Lambda\subseteq\Gamma$ are finite regions, define
   \begin{align}
     \iota_{\Lambda,\Gamma}&\colon\mathcal A_\Lambda\longrightarrow
