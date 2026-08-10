@@ -32,7 +32,7 @@ The first parent-Hamiltonian follow-up added two theorem wrappers to
 - `MPSTensor.ProductPairBridge.isNNCPH`
 
 Those results are immediate from the already-proved unfolded commutation theorem in
-`TNLean/MPS/RFP/CommutingBridge.lean`, but they matter conceptually: they isolate the internal
+`TNLean/MPS/RFP/AppendixBStructuralData.lean`, but they matter conceptually: they isolate the internal
 `RFP ⟹ NNCPH` task to **constructing the product-pair witness**, rather than reproving the NNCPH
 wrapper each time.
 
@@ -90,7 +90,7 @@ After the wrappers and Appendix B structural data above, the missing internal th
 
 - `TNLean/MPS/RFP/StructuralFull.lean` proves the full Appendix B structural form
   `rfp_nt_structural_full`.
-- `TNLean/MPS/RFP/CommutingBridge.lean` now records this output as
+- `TNLean/MPS/RFP/AppendixBStructuralData.lean` now records this output as
   `AppendixBStructuralData` and names the remaining chain-space extraction as
   `AppendixBProductPairExtraction`.
 - `Commuting.lean` exposes both the final wrapper `ProductPairBridge.isNNCPH` and the conditional
