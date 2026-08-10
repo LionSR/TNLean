@@ -368,6 +368,18 @@ abstracted — record why, so it is not re-proposed).
 
 ## Completed refactors
 
+### Matched BNT coefficient comparison with an eventual scalar
+- **Pattern:** expand both sector decompositions in MPV state space, substitute a full matched
+  `Q`-basis into the full `P`-basis, reindex along the basis equivalence, and compare exact
+  coefficients using eventual BNT linear independence.
+- **Reuse:** the private file-local lemma
+  `coeff_identity_via_matched_mpv_phase_scalar` in
+  `TNLean/MPS/FundamentalTheorem/SectorBNT/CoeffIdentity.lean` carries an arbitrary eventual
+  length-dependent scalar through the comparison.
+- **Result:** the equal theorem specializes the scalar to one, while the proportional theorem
+  retains its selected eventually nonzero scalar. The two public theorem names and statements
+  are unchanged, and the Lean source loses 58 lines net.
+
 ### MPDO pair-trace separation duality
 - **Pattern:** use Hahn--Banach separation for a proper pair-matrix submodule,
   represent the separating functional as a pair trace, and contradict trace
