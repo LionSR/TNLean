@@ -451,6 +451,30 @@ private theorem pairToRightAssoc_mul_rightAssocToPairInverse
 
 /-! ### Fourfold F-move identities -/
 
+private theorem rightTripleSynthesis_mul_printedFMatrix_entry
+    (a b c d e : Λ)
+    (xa : Fin (Fus.bondDim a)) (xb : Fin (Fus.bondDim b))
+    (xc : Fin (Fus.bondDim c))
+    (mu : Fin (Fus.fusionMultiplicity a b e))
+    (nu : Fin (Fus.fusionMultiplicity e c d))
+    (z : Fin (Fus.bondDim d)) :
+    (∑ f : Λ, ∑ lambda : Fin (Fus.fusionMultiplicity b c f),
+      ∑ sigma : Fin (Fus.fusionMultiplicity a f d),
+        (∑ y : Fin (Fus.bondDim f),
+          Fus.fusionTensor b c f lambda (xb, xc) y *
+            Fus.fusionTensor a f d sigma (xa, y) z) *
+          Fus.printedFMatrix a b c d ⟨f, lambda, sigma⟩ ⟨e, mu, nu⟩) =
+      ∑ y : Fin (Fus.bondDim e),
+        Fus.fusionTensor a b e mu (xa, xb) y *
+          Fus.fusionTensor e c d nu (y, xc) z := by
+  have h := congrArg
+    (fun M => M ⟨⟨xa, xb⟩, xc⟩ ⟨⟨e, mu, nu⟩, z⟩)
+      (Fus.rightTripleSynthesis_mul_printedFMatrix a b c d)
+  simpa only [Matrix.mul_apply, rightTripleSynthesis, kroneckerMap_apply,
+    Matrix.one_apply, mul_ite, mul_one, mul_zero, Fintype.sum_prod_type,
+    Finset.sum_ite_eq', Finset.mem_univ, ↓reduceIte, Fintype.sum_sigma,
+    leftTripleSynthesis] using h
+
 /-- The first edge of the three-edge path is the printed F-move on the first
 three tensor factors, with the last fusion multiplicity and final bond
 coordinate unchanged.
@@ -475,13 +499,8 @@ theorem leftInnerFourfoldSynthesis_mul_leftAssocToLeftInnerPrintedFMatrix
     Finset.sum_ite_eq', Finset.mem_univ, ↓reduceIte, Fintype.sum_sigma,
     Finset.sum_dite_irrel, Finset.sum_const_zero, Finset.sum_dite_eq',
     cast_eq, leftAssocFourfoldSynthesis]
-  have hF (yg : Fin (Fus.bondDim g)) := congrArg
-    (fun M => M ⟨⟨xa, xb⟩, xc⟩ ⟨⟨f, mu, nu⟩, yg⟩)
-      (Fus.rightTripleSynthesis_mul_printedFMatrix a b c g)
-  simp only [Matrix.mul_apply, rightTripleSynthesis, kroneckerMap_apply,
-    Matrix.one_apply, mul_ite, mul_one, mul_zero, Fintype.sum_prod_type,
-    Finset.sum_ite_eq', Finset.mem_univ, ↓reduceIte, Fintype.sum_sigma,
-    leftTripleSynthesis] at hF
+  have hF (yg : Fin (Fus.bondDim g)) :=
+    Fus.rightTripleSynthesis_mul_printedFMatrix_entry a b c g f xa xb xc mu nu yg
   have hSum := congrArg
     (fun q => ∑ yg, q yg * Fus.fusionTensor g d e rho (yg, xd) z)
     (funext hF)
@@ -532,13 +551,8 @@ theorem middleFourfoldSynthesis_mul_leftInnerToMiddlePrintedFMatrix
     Finset.mem_univ, ↓reduceIte, Fintype.sum_sigma,
     Finset.sum_dite_irrel, Finset.sum_const_zero, Finset.sum_dite_eq',
     cast_eq, Finset.sum_ite_irrel, leftInnerFourfoldSynthesis]
-  have hF (yh : Fin (Fus.bondDim h)) := congrArg
-    (fun M => M ⟨⟨xa, yh⟩, xd⟩ ⟨⟨g, lambda, rho⟩, z⟩)
-      (Fus.rightTripleSynthesis_mul_printedFMatrix a h d e)
-  simp only [Matrix.mul_apply, rightTripleSynthesis, kroneckerMap_apply,
-    Matrix.one_apply, mul_ite, mul_one, mul_zero, Fintype.sum_prod_type,
-    Finset.sum_ite_eq', Finset.mem_univ, ↓reduceIte, Fintype.sum_sigma,
-    leftTripleSynthesis] at hF
+  have hF (yh : Fin (Fus.bondDim h)) :=
+    Fus.rightTripleSynthesis_mul_printedFMatrix_entry a h d e g xa yh xd lambda rho z
   have hSum := congrArg
     (fun q => ∑ yh, Fus.fusionTensor b c h sigma (xb, xc) yh * q yh)
     (funext hF)
@@ -591,13 +605,8 @@ theorem rightAssocFourfoldSynthesis_mul_middleToRightAssocPrintedFMatrix
     Finset.sum_ite_eq', Finset.mem_univ, ↓reduceIte, Fintype.sum_sigma,
     Finset.sum_dite_irrel, Finset.sum_const_zero, Finset.sum_dite_eq',
     cast_eq, middleFourfoldSynthesis]
-  have hF (yi : Fin (Fus.bondDim i)) := congrArg
-    (fun M => M ⟨⟨xb, xc⟩, xd⟩ ⟨⟨h, sigma, omega⟩, yi⟩)
-      (Fus.rightTripleSynthesis_mul_printedFMatrix b c d i)
-  simp only [Matrix.mul_apply, rightTripleSynthesis, kroneckerMap_apply,
-    Matrix.one_apply, mul_ite, mul_one, mul_zero, Fintype.sum_prod_type,
-    Finset.sum_ite_eq', Finset.mem_univ, ↓reduceIte, Fintype.sum_sigma,
-    leftTripleSynthesis] at hF
+  have hF (yi : Fin (Fus.bondDim i)) :=
+    Fus.rightTripleSynthesis_mul_printedFMatrix_entry b c d i h xb xc xd sigma omega yi
   have hSum := congrArg
     (fun q => ∑ yi, q yi * Fus.fusionTensor a i e kappa (xa, yi) z)
     (funext hF)
@@ -648,13 +657,8 @@ theorem pairFourfoldSynthesis_mul_leftAssocToPairPrintedFMatrix
     Finset.mem_univ, ↓reduceIte, Fintype.sum_sigma,
     Finset.sum_dite_irrel, Finset.sum_const_zero, Finset.sum_dite_eq',
     cast_eq, Finset.sum_ite_irrel, leftAssocFourfoldSynthesis]
-  have hF (yf : Fin (Fus.bondDim f)) := congrArg
-    (fun M => M ⟨⟨yf, xc⟩, xd⟩ ⟨⟨g, nu, rho⟩, z⟩)
-      (Fus.rightTripleSynthesis_mul_printedFMatrix f c d e)
-  simp only [Matrix.mul_apply, rightTripleSynthesis, kroneckerMap_apply,
-    Matrix.one_apply, mul_ite, mul_one, mul_zero, Fintype.sum_prod_type,
-    Finset.sum_ite_eq', Finset.mem_univ, ↓reduceIte, Fintype.sum_sigma,
-    leftTripleSynthesis] at hF
+  have hF (yf : Fin (Fus.bondDim f)) :=
+    Fus.rightTripleSynthesis_mul_printedFMatrix_entry f c d e g yf xc xd nu rho z
   have hSum := congrArg
     (fun q => ∑ yf, Fus.fusionTensor a b f mu (xa, xb) yf * q yf)
     (funext hF)
@@ -708,13 +712,8 @@ theorem rightAssocFourfoldSynthesis_mul_pairToRightAssocPrintedFMatrix
     Finset.mem_univ, ↓reduceIte, Fintype.sum_sigma,
     Finset.sum_dite_irrel, Finset.sum_const_zero, Finset.sum_dite_eq',
     cast_eq, Finset.sum_ite_irrel, pairFourfoldSynthesis]
-  have hF (yj : Fin (Fus.bondDim j)) := congrArg
-    (fun M => M ⟨⟨xa, xb⟩, yj⟩ ⟨⟨f, mu, tau⟩, z⟩)
-      (Fus.rightTripleSynthesis_mul_printedFMatrix a b j e)
-  simp only [Matrix.mul_apply, rightTripleSynthesis, kroneckerMap_apply,
-    Matrix.one_apply, mul_ite, mul_one, mul_zero, Fintype.sum_prod_type,
-    Finset.sum_ite_eq', Finset.mem_univ, ↓reduceIte, Fintype.sum_sigma,
-    leftTripleSynthesis] at hF
+  have hF (yj : Fin (Fus.bondDim j)) :=
+    Fus.rightTripleSynthesis_mul_printedFMatrix_entry a b j e f xa xb yj mu tau z
   have hSum := congrArg
     (fun q => ∑ yj, Fus.fusionTensor c d j gamma (xc, xd) yj * q yj)
     (funext hF)
