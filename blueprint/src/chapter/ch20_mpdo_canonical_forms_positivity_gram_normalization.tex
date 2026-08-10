@@ -712,7 +712,7 @@
     \lean{MPOTensor.IsMPDO.grouped_sector_gram_eq_pos_smul_one}
     \lean{MPOTensor.IsMPDO.grouped_sector_exists_unitary_normalization}
     \leanok
-    \uses{thm:mpdo_grouped_sector_gram_conjugation,
+    \uses{thm:mpdo_pairwise_vertical_gram_conjugation,
         thm:eq3_of_dressed_adjoint,
         thm:mpdo_vertical_bnt_grouping_with_isometries}
     In the grouped vertical decomposition of a matrix-product density
@@ -740,12 +740,13 @@
 
 \begin{proof}
     \leanok
-    \uses{thm:mpdo_grouped_sector_gram_conjugation,
-        thm:eq3_of_dressed_adjoint}
+    \uses{thm:mpdo_pairwise_vertical_gram_conjugation,
+        thm:eq3_of_dressed_adjoint,
+        thm:mpdo_vertical_bnt_grouping_with_isometries}
     Transport the normal representative to the bond space of the chosen
-    copy. Theorem~\ref{thm:mpdo_grouped_sector_gram_conjugation} states that
-    conjugation by $X_{\alpha,k}^\dagger X_{\alpha,k}$ fixes every letter of
-    the transported tensor. Apply
+    copy. Compare its positive corner with the distinguished identity-gauge
+    corner using
+    Theorem~\ref{thm:mpdo_pairwise_vertical_gram_conjugation}. Then apply
     Theorem~\ref{thm:eq3_of_dressed_adjoint} with the second gauge equal to
     the identity. The resulting Gram identity has a positive real scalar,
     and division by its positive square root gives the stated unitary.
@@ -756,7 +757,7 @@
     \lean{MPSTensor.IsCPSVCanonicalForm.grouped_sector_gram_eq_pos_smul_one}
     \lean{MPSTensor.IsCPSVCanonicalForm.grouped_sector_exists_unitary_normalization}
     \leanok
-    \uses{thm:cpsv_literal_grouped_sector_gram_conjugation,
+    \uses{thm:cpsv_literal_pairwise_vertical_gram_conjugation,
         thm:eq3_of_dressed_adjoint,
         thm:cpsv_literal_vertical_bnt_grouping_with_isometries}
     In the actual phase-class grouping under literal CPSV canonical form,
@@ -776,14 +777,16 @@
 
 \begin{proof}
     \leanok
-    \uses{thm:cpsv_literal_grouped_sector_gram_conjugation,
-        thm:eq3_of_dressed_adjoint}
-    The representative on this bond space is normal.  Apply normal Gram
-    rigidity to
-    (\ref{eq:cpsv_literal_grouped_gram_conj}) with the distinguished gauge
-    equal to the identity.  This gives
+    \uses{thm:cpsv_literal_pairwise_vertical_gram_conjugation,
+        thm:eq3_of_dressed_adjoint,
+        thm:cpsv_literal_vertical_bnt_grouping_with_isometries}
+    The representative on this bond space is normal. Compare its positive
+    corner with the distinguished identity-gauge corner using the literal
+    pairwise Figure~8 theorem. Then apply
+    Theorem~\ref{thm:eq3_of_dressed_adjoint} with the second gauge equal to
+    the identity. This gives
     (\ref{eq:cpsv_literal_grouped_gram_scalar}) with
-    $\omega_{\alpha,q}>0$.  Dividing by its positive square root gives a
+    $\omega_{\alpha,q}>0$. Dividing by its positive square root gives a
     unitary matrix.
 \end{proof}
 
