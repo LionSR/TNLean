@@ -1,0 +1,71 @@
+\documentclass{article}
+
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+\setlength{\emergencystretch}{2em}
+
+\input{command}
+
+\title{The Hidden Range Restriction in the Source-$u$ Contraction}
+\author{}
+\date{2026-08-10}
+
+\begin{document}
+\maketitle
+
+\section{The graphical step}
+
+The proof of the source-tensor isometry in
+\cite[lines~536--557]{Cirac2017MPU} contracts a normalized open tail between
+source-cut factors and then simplifies the resulting diagram.  Read as an
+ambient matrix identity, the displayed simplification would identify the
+open-tail coefficient with the identity on the full product-index space.
+That statement is false in general: the source factors need not be onto, and
+only $X_2^\dagger X_2=1$ is available.
+
+\section{Range-restricted interpretation}
+
+The valid interpretation keeps the external source-$u$ tensors and closes the
+complete network before moving the cut.  The two elementary projection steps
+are only
+\begin{align}
+ X_1X_1^\dagger W_\rho M_1 &= M_1,
+ & X_2X_2^\dagger M_2 &= M_2,
+\end{align}
+where $W_\rho=\rho\otimes 1_d$.  They follow from the source-cut
+factorizations and the recovery formulas for $Y_1$ and $Y_2$.  Neither formula
+asserts an ambient coisometry.
+
+The forward internal kernel is also orientation-sensitive.  It is an
+output-first double-layer letter followed by the $K$th power of its normalized
+diagonal.  Conjugate transposition reverses the virtual chain, so the reflected
+simple-contraction equations cannot be inserted into this coefficient
+pointwise.  The remaining independent obligation is the equality between the
+ordinary source-$u$ Gram matrix and the normalized closed $(K+2)$-site output
+tail, proved with the full external network retained.
+
+\section{Verdict}
+
+\textbf{Classification: local fix (graphical clarification).}  The source
+argument is read as a range-restricted closed-network contraction, not as an
+identity on the ambient product-index space.  This does not classify the
+source lemma as false: its diagram retains the external network, but that
+restriction must not be discarded when translating the argument into indexed
+formulas.
+
+The forward kernel and its output-layer expression are formalized by
+\leanid{MPOTensor.sourceUForwardKernel} and
+\leanid{MPOTensor.sourceUForwardKernel_eq_outputLayer_mul_normalizedDiagonal_pow}.
+The range identities are
+\leanid{MPOTensor.sourceX₁_mul_conjTranspose_mul_weight_mul_sourceCutM₁} and
+\leanid{MPOTensor.sourceX₂_mul_conjTranspose_mul_sourceCutM₂}.  The fully
+expanded normalized metric is
+\leanid{MPOTensor.IsMPU.normalized_sourceU_openTail_metric}.  This last
+theorem does not identify that metric with the ordinary source-$u$ Gram
+matrix; the final closed-network equality remains a separate obligation.
+
+\bibliographystyle{alpha}
+\bibliography{references}
+
+\end{document}
