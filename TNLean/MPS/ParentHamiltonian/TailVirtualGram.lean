@@ -11,6 +11,11 @@ import TNLean.MPS.ParentHamiltonian.SpectatorBoundaryGram
 This file identifies the adjoint-self composition of the tail virtual map with right
 multiplication by an iterated transfer-map value. It also bounds the fourth power of the
 operator norm of the tail virtual map by the squared entrywise mass of that value.
+
+## Main results
+
+* `MPSTensor.tailVirtualMapES_adjoint_comp_self_apply`
+* `MPSTensor.tailVirtualMapES_norm_four_pow_le_transferMap_pow_one_entry_norm_sq`
 -/
 
 open scoped Matrix
