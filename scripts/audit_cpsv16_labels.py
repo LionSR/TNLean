@@ -215,7 +215,7 @@ def read_tsv_rows(
     table_name: str,
     *,
     require_rows: bool = False,
-    key_fields: tuple[str, ...] = ("label",),
+    key_fields: tuple[str, ...] | None = ("label",),
 ) -> list[dict[str, str]]:
     """Read a labelled TSV with shared schema and row validation."""
     with path.open(newline="") as handle:
@@ -232,15 +232,16 @@ def read_tsv_rows(
         label = row["label"]
         if not label:
             raise ValueError(f"empty label in {table_name}")
-        key = tuple(row[field] for field in key_fields)
-        if key in keys:
-            if key_fields == ("label",):
-                raise ValueError(f"duplicate {table_name} row for {label}")
-            raise ValueError(
-                f"duplicate {table_name} row for "
-                f"{dict(zip(key_fields, key, strict=True))!r}"
-            )
-        keys.add(key)
+        if key_fields is not None:
+            key = tuple(row[field] for field in key_fields)
+            if key in keys:
+                if key_fields == ("label",):
+                    raise ValueError(f"duplicate {table_name} row for {label}")
+                raise ValueError(
+                    f"duplicate {table_name} row for "
+                    f"{dict(zip(key_fields, key, strict=True))!r}"
+                )
+            keys.add(key)
     return rows
 
 
@@ -253,7 +254,7 @@ def read_contained_result_anchors(
         ["label", "line", "result_anchor", "anchor_regex"],
         "contained result-anchor snapshot",
         require_rows=True,
-        key_fields=("label", "line"),
+        key_fields=None,
     )
     result: dict[tuple[str, int], tuple[str, re.Pattern[str]]] = {}
     for row in rows:
@@ -267,6 +268,12 @@ def read_contained_result_anchors(
         if line <= 0:
             raise ValueError(
                 f"invalid contained result-anchor line for {label}: {line}"
+            )
+        key = (label, line)
+        if key in result:
+            raise ValueError(
+                "duplicate normalized contained result-anchor row for "
+                f"{label} at line {line}"
             )
         anchor = row["result_anchor"].strip()
         if not anchor:
@@ -285,7 +292,13 @@ def read_contained_result_anchors(
                 f"invalid contained result-anchor regex for {label} at line {line}: "
                 f"{anchor_regex!r}"
             ) from error
-        result[(label, line)] = (anchor, anchor_pattern)
+        result[key] = (anchor, anchor_pattern)
+    if len(rows) != EXPECTED_THEOREM_CONTAINED_OCCURRENCES:
+        raise ValueError(
+            "contained result-anchor snapshot must contain exactly "
+            f"{EXPECTED_THEOREM_CONTAINED_OCCURRENCES} physical rows, "
+            f"got {len(rows)}"
+        )
     return result
 
 
