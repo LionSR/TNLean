@@ -119,7 +119,7 @@
     \lean{MPOTensor.IsOneLetterRFPViaTSUpToVirtualGauge}
     \lean{MPSTensor.IsPureOneLetterRFPViaTSUpToVirtualGauge}
     \leanok
-    \uses{def:blocked_tensor}
+    \uses{def:mpdo_two_site_blocking, def:gauge_equiv}
     For an MPO tensor $M$ with one physical component, the Appendix~D
     blocking diagram holds up to virtual gauge if $M^{[2]}$ and $M$ are related
     by simultaneous similarity on the virtual indices. For a pure tensor $A$,
@@ -157,15 +157,15 @@
     bond space is $X\otimes\overline X$.
 \end{definition}
 
-\begin{lemma}[An MPS blocking witness gives the doubled-MPO condition]
-    \label{lem:blocked_gauge_phase_to_doubled_mpdo}
+\begin{theorem}[An MPS blocking witness gives the doubled-MPO condition]
+    \label{thm:blocked_gauge_phase_to_doubled_mpdo}
     \lean{MPSTensor.isPureOneLetterRFPViaTSUpToVirtualGauge_of_isBlockedGaugePhaseFixedPoint}
     \leanok
     \uses{def:one_letter_mpdo_virtual_gauge_rfp,
         def:blocked_gauge_phase_fixed_point}
     Every one-letter MPS blocking witness induces the exact doubled-MPO
     virtual-gauge condition.
-\end{lemma}
+\end{theorem}
 \begin{proof}
     \leanok
     \uses{def:doubled_virtual_gauge}
@@ -177,6 +177,8 @@
 \begin{theorem}[The printed pure blocking-up-to-gauge equivalence is false]
     \label{thm:cpsv_pure_rfp_gauge_status}
     \lean{MPSTensor.cube_phase_blocked_gauge_identity}
+    \lean{MPSTensor.cubePhaseDoubledTensor_isCPSVCanonicalForm}
+    \lean{MPSTensor.cubePhaseDoubledTensor_exists_weightNormalized}
     \lean{MPSTensor.cubePhaseTensor_isPureOneLetterRFPViaTSUpToVirtualGauge}
     \lean{MPSTensor.cubePhaseTensor_not_isTransferIdempotent}
     \lean{MPSTensor.cubePhaseTensor_normalized_canonical_gauge_not_rfp}
@@ -195,8 +197,8 @@
         A&=\omega S A^2S^{-1}.
         \notag
     \end{align}
-    The tensor is in CPSV canonical form and its weights satisfy the source
-    normalization convention. Its doubled tensor satisfies the literal
+    The doubled MPO tensor is in CPSV canonical form, and its four scalar-block
+    weights satisfy the source normalization convention. It also satisfies the literal
     one-letter virtual-gauge condition in the source diagram, but its transfer
     map is not idempotent. Hence the canonical-restricted pure-state
     equivalence claimed after
@@ -208,12 +210,19 @@
 \end{theorem}
 \begin{proof}
     \leanok
-    \uses{lem:blocked_gauge_phase_to_doubled_mpdo,
+    \uses{thm:blocked_gauge_phase_to_doubled_mpdo,
         thm:cpsv_canonical_form_flow_phase_obstruction}
     Swapping the two virtual coordinates changes
     $\operatorname{diag}(1,\omega^2)$ into
     $\operatorname{diag}(\omega^2,1)$; multiplication by $\omega$ gives $A$.
-    Doubling cancels this phase. If the transfer map were idempotent, all of
+    Writing $M=A\otimes\overline A$, doubling cancels the phase through
+    \begin{align}
+        (\omega X A^{[2]}X^{-1})\otimes
+        (\overline\omega\,\overline X\,\overline{A^{[2]}}\,\overline X^{-1})
+        &=(X\otimes\overline X)M^{[2]}(X\otimes\overline X)^{-1},
+        \notag
+    \end{align}
+    since $\omega\overline\omega=1$. If the transfer map were idempotent, all of
     its positive powers would equal the transfer map itself. Its dyadic powers
     would therefore form a constant, hence convergent, sequence. This
     contradicts the preceding phase-obstruction theorem, which shows that the
