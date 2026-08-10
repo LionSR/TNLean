@@ -209,6 +209,21 @@ def test_exact_result_anchor_matching() -> None:
     )
     assert not any("Figure9 at line 1953" in error for error in scope_errors)
 
+    uppercase_scope = {label: dict(row) for label, row in ledger.items()}
+    uppercase_scope["eq:algebra"]["disposition"] = ledger["Figure9"][
+        "disposition"
+    ].replace("proof of Theorem 4.14", "Proof of Theorem 4.14")
+    uppercase_errors = audit.inheritance_errors(
+        contained, uppercase_scope, anchors
+    )
+    assert any(
+        "eq:algebra at line 978" in error and "Theorem 4.14" in error
+        for error in uppercase_errors
+    )
+    assert not any(
+        "Figure9 at line 1953" in error for error in uppercase_errors
+    )
+
 
 def test_normalized_anchor_row_uniqueness_and_count() -> None:
     lines = audit.CONTAINED_RESULT_ANCHORS.read_text().splitlines()
