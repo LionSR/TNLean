@@ -10,6 +10,7 @@ Authors: TNLean contributors
 
 import TNLean.MPS.MPU.ActiveTransferMultiplicity
 import TNLean.MPS.MPU.Basic
+import TNLean.MPS.MPU.BlockingRanks
 import TNLean.MPS.MPU.CanonicalForm
 import TNLean.MPS.MPU.DoubleLayerContraction
 import TNLean.MPS.MPU.MatchingContractions
