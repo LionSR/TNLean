@@ -44,6 +44,8 @@ virtual diagonal entry of `cpsvExample34Tensor`. -/
 noncomputable def cpsvExample34PlusTensor : MPSTensor 2 1 :=
   fun i _ _ => cpsvExample34Tensor i 1 1
 
+/-- The two diagonal entries of the word operator: the all-zero indicator and
+$(1/\sqrt 2)^{|w|}$. -/
 private noncomputable def cpsvExample34WordDiag (w : List (Fin 2)) : Fin 2 → ℂ
   | 0 => if w.Forall (· = 0) then 1 else 0
   | 1 => cpsvExample34InvSqrtTwo ^ w.length
@@ -77,19 +79,20 @@ private theorem cpsvExample34_forall_ofFn_zero_iff {N : ℕ} (σ : Fin N → Fin
 private theorem cpsvExample34_component_evalWord (a : Fin 2) (w : List (Fin 2)) :
     evalWord (fun i : Fin 2 => fun _ _ : Fin 1 => cpsvExample34Tensor i a a) w =
       fun _ _ : Fin 1 => cpsvExample34WordDiag w a := by
-  induction w with
-  | nil =>
-      ext x y
-      fin_cases x
-      fin_cases y
-      fin_cases a <;> simp [cpsvExample34WordDiag]
-  | cons i w ih =>
-      rw [evalWord_cons, ih]
-      ext x y
-      fin_cases x
-      fin_cases y
-      fin_cases a <;> fin_cases i <;>
-        simp [cpsvExample34Tensor, cpsvExample34WordDiag, Matrix.mul_apply, pow_succ']
+  let B : MPSTensor 2 1 := fun i _ _ => cpsvExample34Tensor i a a
+  let V : Matrix (Fin 2) (Fin 1) ℂ := fun b _ => if b = a then 1 else 0
+  have hInt : ∀ i : Fin 2, cpsvExample34Tensor i * V = V * B i := by
+    intro i
+    ext b c
+    fin_cases a <;> fin_cases i <;> fin_cases b <;> fin_cases c <;>
+      simp [B, V, cpsvExample34Tensor, Matrix.mul_apply]
+  have hw := evalWord_intertwine cpsvExample34Tensor B V hInt w
+  rw [cpsvExample34_evalWord] at hw
+  ext x y
+  fin_cases x
+  fin_cases y
+  have haa := congrFun (congrFun hw a) 0
+  simpa [B, V, Matrix.mul_apply, Fin.sum_univ_two] using haa.symm
 
 private theorem cpsvExample34ZeroTensor_mpv {N : ℕ} (σ : Fin N → Fin 2) :
     mpv cpsvExample34ZeroTensor σ = if ∀ k, σ k = 0 then 1 else 0 := by
@@ -115,6 +118,7 @@ theorem cpsvExample34_mpv {N : ℕ} (_hN : 0 < N) (σ : Fin N → Fin 2) :
   rw [mpv, coeff, cpsvExample34_evalWord]
   simp [Matrix.trace, cpsvExample34WordDiag, cpsvExample34_forall_ofFn_zero_iff]
 
+/-- A linear map that multiplies each matrix entry by a fixed scalar. -/
 private def IsEntrywiseMultiplier
     (F : Matrix (Fin 2) (Fin 2) ℂ →ₗ[ℂ] Matrix (Fin 2) (Fin 2) ℂ) : Prop :=
   ∃ c : Matrix (Fin 2) (Fin 2) ℂ, ∀ X a b, F X a b = c a b * X a b
@@ -238,6 +242,7 @@ private theorem star_cpsvExample34InvSqrtTwo :
     star cpsvExample34InvSqrtTwo = cpsvExample34InvSqrtTwo := by
   simp [cpsvExample34InvSqrtTwo]
 
+/-- The off-diagonal matrix unit $E_{01}$. -/
 private def offDiagonalUnit : Matrix (Fin 2) (Fin 2) ℂ :=
   !![(0 : ℂ), 1; 0, 0]
 
