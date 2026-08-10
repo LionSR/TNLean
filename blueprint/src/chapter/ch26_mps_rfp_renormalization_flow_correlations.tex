@@ -231,6 +231,7 @@
         lem:ft_perm_matrix_conj_submatrix, def:mpdo,
         lem:mpo_doubled, lem:bond_dimension_one_identity_transfer_normal,
         def:cpsv_canonical_form, thm:blocked_gauge_phase_to_doubled_mpdo,
+        thm:pure_doubled_tensor_rfp_via_ts,
         thm:cpsv_canonical_form_flow_phase_obstruction}
     On every nonempty chain, $M=A\otimes\overline A$ generates the rank-one
     operator $\ketbra{V^{(N)}(A)}{V^{(N)}(A)}$, which is positive semidefinite.
@@ -249,12 +250,17 @@
         &=(S\otimes\overline S)M^{[2]}(S\otimes\overline S)^{-1},
         \notag
     \end{align}
-    since $\omega\overline\omega=1$. If the transfer map were idempotent, all of
-    its positive powers would equal the transfer map itself. Its dyadic powers
-    would therefore form a constant, hence convergent, sequence. This
-    contradicts the preceding phase-obstruction theorem, which shows that the
-    dyadic orbit of $e_{21}$ alternates between the distinct factors $\omega$
-    and $\omega^2$.
+    since $\omega\overline\omega=1$. Idempotence would imply
+    \begin{align}
+        \E_A^2=\E_A
+        &\Longrightarrow \E_A^{2^n}=\E_A
+        \qquad\text{for every }n\geq0.
+        \notag
+    \end{align}
+    The dyadic powers would therefore form a constant, hence convergent,
+    sequence. This contradicts the preceding phase-obstruction theorem, which
+    shows that the dyadic orbit of $e_{21}$ alternates between the distinct
+    factors $\omega$ and $\omega^2$.
 \end{proof}
 
 \begin{remark}\label{rem:zero_correlation_length}
