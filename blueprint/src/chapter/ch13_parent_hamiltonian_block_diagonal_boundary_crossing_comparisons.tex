@@ -331,8 +331,8 @@
     \label{thm:block_diagonal_boundary_crossing_pgvwc_comparison_chain_ground_space}
     \lean{MPSTensor.blockDiagonal_boundary_crossing_pgvwc_comparison_of_chainGroundSpace}
     \leanok
-    \uses{lem:block_diagonal_boundary_local_sum_mem,
-        thm:block_diagonal_boundary_crossing_pgvwc_comparison}
+    \uses{lem:block_diagonal_boundary_crossing_trace_decompositions_boundary,
+        lem:fixed_complementary_word_boundary_compatibility_from_traces}
     Let
     \begin{align}
         \psi
@@ -362,15 +362,24 @@
 
 \begin{proof}
     \leanok
-    \uses{lem:block_diagonal_boundary_local_sum_mem,
-        thm:block_diagonal_boundary_crossing_pgvwc_comparison}
-    For a boundary-crossing interval beginning at $i$ and an outside word
-    $\rho$, choose a configuration whose outside segment is $\rho$. The local
-    constraint on $\psi$ gives a vector in $\bigvee_jG_L(A_j)$ by
-    Lemma~\ref{lem:block_diagonal_boundary_local_sum_mem}.
-    Theorem~\ref{thm:block_diagonal_boundary_crossing_pgvwc_comparison}
-    applied with the stated span at length $N-i$ gives the displayed
-    $C^j,D^j$ comparison for that interval and outside word.
+    \uses{lem:block_diagonal_boundary_crossing_trace_decompositions_boundary,
+        lem:fixed_complementary_word_boundary_compatibility_from_traces}
+    Lemma~\ref{lem:block_diagonal_boundary_crossing_trace_decompositions_boundary}
+    gives matrices $C^j_{i,\rho}$ such that, for every boundary-crossing start
+    $i$, outside word $\rho$ of length $N-L$, word $\beta$ of length
+    $i+L-N$ before the cut, and wrapped tail word $\alpha$ of length $N-i$,
+    \begin{align}
+        \sum_j\tr\!\left(A^j_\beta C^j_{i,\rho}A^j_\alpha\right)
+        &=
+        \sum_j\tr\!\left(((\mu_j^NX_j)A^j_\beta)A^j_\rho A^j_\alpha\right).
+        \notag
+    \end{align}
+    Apply
+    Lemma~\ref{lem:fixed_complementary_word_boundary_compatibility_from_traces}
+    with the stated product-algebra span at length $N-i$. Equality of the
+    traces for all $\alpha$ then gives
+    $A^j_\beta C^j_{i,\rho}=((\mu_j^NX_j)A^j_\beta)A^j_\rho$ for every block
+    $j$.
 \end{proof}
 
 \begin{theorem}[Fixed boundary-crossing component in the local block space]
