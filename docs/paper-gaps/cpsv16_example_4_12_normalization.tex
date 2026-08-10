@@ -1,0 +1,96 @@
+\documentclass{article}
+
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+\setlength{\emergencystretch}{2em}
+
+\input{command}
+
+\title{Normalization of the tensor printed in CPSV16 Example 4.12}
+\author{}
+\date{2026-08-10}
+
+\begin{document}
+\maketitle
+
+\section{Printed representative}
+
+Example~4.12 of Cirac--Perez-Garcia--Schuch--Verstraete
+(\path{Papers/1606.00608/MPDO-22-12-17-2.tex:932--939}) prints a tensor $M$
+with $d=D=2$ and
+\[
+  1=M_{00}^{00}=M_{00}^{11}=M_{11}^{00}=-M_{11}^{11},
+\]
+all other components being zero.  In matrix notation this says
+\[
+  M^{00}=I,
+  \qquad
+  M^{11}=\sigma_z,
+  \qquad
+  M^{01}=M^{10}=0,
+\]
+where $\sigma_z=|0\rangle\langle0|-|1\rangle\langle1|$.  Closing the virtual
+indices gives exactly the displayed family
+\[
+  \rho^{(N)}(M)=I^{\otimes N}+\sigma_z^{\otimes N}
+  \qquad (N>0).
+\]
+Its trace is $2^N$, not $1$.  Thus the printed $M$ is an unnormalized tensor
+representative even though the resulting positive operator determines a
+normalized density operator after division by $2^N$.
+
+\section{The fixed-representative mismatch}
+
+The physical-trace transfer of the printed tensor is
+\[
+  \mathcal T_M=M^{00}+M^{11}=I+\sigma_z
+    =\begin{pmatrix}2&0\\0&0\end{pmatrix}.
+\]
+Consequently
+\[
+  \mathcal T_M^2=2\mathcal T_M
+  \qquad\text{but}\qquad
+  \mathcal T_M^2\ne\mathcal T_M.
+\]
+This proves scale-invariant source zero correlation length with scale $2$.
+However, the trace-preserving maps $\mathcal S$ and $\mathcal T$ in
+Definition~4.1 force equality of the one-site and two-site traces for every
+virtual boundary.  Equivalently, they force literal idempotence
+$\mathcal T_M^2=\mathcal T_M$.  The printed representative therefore cannot
+satisfy that fixed-tensor renormalization condition.
+
+This does not contradict the normalized density family.  Scaling the local
+tensor by $1/2$ gives the separate representative
+\[
+  \widehat M=\tfrac12 M,
+  \qquad
+  \mathcal T_{\widehat M}=\tfrac12\mathcal T_M,
+  \qquad
+  \mathcal T_{\widehat M}^2=\mathcal T_{\widehat M}.
+\]
+Moreover,
+\[
+  \rho^{(N)}(\widehat M)
+    =2^{-N}\bigl(I^{\otimes N}+\sigma_z^{\otimes N}\bigr),
+\]
+which is precisely the normalized density family.  This makes
+$\widehat M=(1/2)M$ the likely representative intended by the sentence on
+line~938 asserting the existence of trace-preserving maps.  The paper does not
+print this factor in the tensor components or explicitly change representatives
+before that sentence.
+
+\section{Formalization boundary}
+
+The current formalization keeps the two representatives separate.  For the
+literal printed $M$ it proves the exact positive-length formula, positivity,
+one-site loss of the $\sigma_z$ term, saturation of the area law, source zero
+correlation length with scale $2$, explicit non-idempotence, and hence failure
+of the fixed-representative trace-preserving renormalization condition.
+
+Constructing the parity coarse-graining and refinement channels for
+$\widehat M=(1/2)M$ is a separate task.  Likewise, the claim that the normalized
+family is not of the simple commuting GSNNCH form is separate.  Neither claim
+is inferred here from the unnormalized tensor.
+
+\end{document}
