@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.MPU.DoubleLayerContraction
 import TNLean.MPS.MPU.MatchingContractions
-import TNLean.MPS.MPU.SourceUBoundary
+import TNLean.MPS.MPU.SourceUOpenTail
 
 /-!
 # Forward open-tail packaging for the source tensor u
@@ -21,8 +21,10 @@ No declaration identifies the ambient open-tail coefficient with the identity
 or asserts an ambient coisometry. In particular, the range projections below
 apply only to the source-cut matrices $M_1$ and $M_2$.
 
-**Graphical-proof clarification:** the hidden range restriction and the
-remaining closed-network obligation are recorded in
+**Local fix (range-restricted graphical contraction):** the source diagram
+is read as a contraction of the complete external network, not as an ambient
+matrix identity. This clarification and the remaining closed-network
+obligation are recorded in
 `docs/paper-gaps/mpu_sourceu_range_restriction.tex`.
 -/
 
@@ -33,7 +35,7 @@ namespace MPOTensor
 
 variable {d D : ℕ} (U : MPOTensor d D)
 
-private theorem sum_rotate_five {A B C D E R : Type*}
+private lemma sum_rotate_five {A B C D E R : Type*}
     [Fintype A] [Fintype B] [Fintype C] [Fintype D] [Fintype E]
     [AddCommMonoid R] (f : A → B → C → D → E → R) :
     (∑ a, ∑ b, ∑ c, ∑ d, ∑ e, f a b c d e) =
@@ -169,7 +171,9 @@ theorem sourceX₂_mul_conjTranspose_mul_sourceCutM₂ :
 $X_2$, and the forward open tail gives the normalized source-$u$ metric. MPU
 output coisometry evaluates this complete expression to the retained physical
 Kronecker delta. The entry indexed by $q$ is unstarred and the entry indexed by
-$p$ is starred.
+$p$ is starred. The theorem evaluates the displayed expansion directly; it
+does not fold the sum through the separately defined open-tail coefficient
+or identify the ordinary Gram matrix `sourceUᴴ * sourceU`.
 
 Source: arXiv:1703.09188, Figure `II_uUnitary.png`, equation `uUnitary`, and
 Lemma `lemuisometry`, lines 536--557. -/
@@ -223,6 +227,5 @@ theorem IsMPU.normalized_sourceU_openTail_metric [NeZero d]
   apply Finset.sum_congr rfl
   intro τ _
   exact hreindex τ
-
 
 end MPOTensor
