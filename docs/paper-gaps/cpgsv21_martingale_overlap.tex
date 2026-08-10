@@ -561,13 +561,43 @@ identity to the exact operator equality
 \end{align}
 The ordering is a Choi reshuffling.  It must not be replaced by the generally
 false Hilbert--Schmidt expression
-$\langle E_{ab},\mathcal E_A^L(E_{ce})\rangle_{\mathrm{HS}}$.  In the current
-unweighted Frobenius coordinates, a primitive trace-preserving transfer map
-converges to the fixed-point projection $P_{\mathrm{fix}}$, represented by
-\leanid{fixedPointProj}.  The limiting Gram operator is therefore
-$\mathscr R(P_{\mathrm{fix}})$, generally not the identity.  Thus the
-completed generic inequalities do not by themselves provide a Neumann-series
-estimate for $1-\mathcal K_L$.
+$\langle E_{ab},\mathcal E_A^L(E_{ce})\rangle_{\mathrm{HS}}$.  Reshuffling commutes with subtraction by
+\leanid{Matrix.gramReshuffle_sub}.  Physical Gram convergence in these
+coordinates is now complete under the exact complementary spectral hypothesis.
+Let $\rho\in\mathbb C^{D\times D}$ have nonzero trace, let
+$P_{\mathrm{fix}}(X)=\operatorname{tr}(X)\rho/\operatorname{tr}(\rho)$, and
+suppose that $\mathcal E_A$ is trace-preserving,
+$\mathcal E_A(\rho)=\rho$, and
+\begin{align}
+  \rho_{\mathrm{spec}}(\mathcal E_A-P_{\mathrm{fix}})&<1.
+\end{align}
+The generic prerequisite
+\leanid{MPSTensor.geometric_bound_of_spectralRadius_lt_one} gives constants
+$C>0$ and $0<r<1$ with
+$\lVert(\mathcal E_A-P_{\mathrm{fix}})^n\rVert\le Cr^n$ for every $n$.
+Combining the transfer-power decomposition, the exact Gram reshuffling identity,
+subtraction compatibility, and the $D^3$ squared norm conversion gives
+\leanid{MPSTensor.groundSpaceGram_sub_fixedPointProj_norm_sq_le_geometric}:
+\begin{align}
+  \bigl\lVert\mathcal K_n-\mathscr R(P_{\mathrm{fix}})\bigr\rVert^2
+  &\le D^3\bigl(Cr^n\bigr)^2,
+  \qquad n\ge1.
+\end{align}
+Consequently,
+\leanid{MPSTensor.groundSpaceGram_tendsto_gramReshuffle_fixedPointProj}
+proves
+\begin{align}
+  \mathcal K_n&\longrightarrow\mathscr R(P_{\mathrm{fix}})
+\end{align}
+in operator norm.  These theorems require exactly nonzero trace,
+trace preservation, the fixed-point equation, and complementary spectral radius
+strictly below one.  They impose no positivity, injectivity, or uniqueness
+hypothesis.
+
+The limiting Gram operator is $\mathscr R(P_{\mathrm{fix}})$, generally not the
+identity in the current unweighted Frobenius coordinates.  Thus this completed
+convergence theorem does not provide a Neumann-series estimate for
+$1-\mathcal K_L$.
 
 The generic identity
 \begin{align}
@@ -624,7 +654,18 @@ and generic prerequisites now include:
 \begin{itemize}
   \item The Choi reshuffling is packaged as the exact operator identity
     \leanid{MPSTensor.groundSpaceGram_eq_gramReshuffle} (module
-    \path{TNLean/MPS/ParentHamiltonian/GroundSpaceGram.lean}).
+    \path{TNLean/MPS/ParentHamiltonian/GroundSpaceGram.lean}), and subtraction
+    compatibility is \leanid{Matrix.gramReshuffle_sub}.
+  \item The generic geometric power estimate is
+    \leanid{MPSTensor.geometric_bound_of_spectralRadius_lt_one}.  Under nonzero
+    trace, trace preservation, the fixed-point equation, and complementary
+    spectral radius below one, the quantitative and limiting physical Gram
+    theorems are
+    \leanid{MPSTensor.groundSpaceGram_sub_fixedPointProj_norm_sq_le_geometric}
+    and
+    \leanid{MPSTensor.groundSpaceGram_tendsto_gramReshuffle_fixedPointProj}.
+    Their limit is $\mathscr R(P_{\mathrm{fix}})$, and the quantitative squared
+    estimate has factor $D^3(Cr^n)^2$.
   \item The generic operator-norm--to--entrywise-Frobenius estimate, its
     reshuffled-Choi corollary, and the safe dimension conversion are
     \leanid{Matrix.toEuclideanCLM_norm_sq_le_sum_norm_sq},
@@ -683,24 +724,31 @@ The two ranges are transported into this common ambient by
 \leanid{MPSTensor.leftBoundaryMap_range_map_symm_eq_openChainLeftGroundSpaceES}
 (specialized to \((K+L_0, 1)\)).
 
-The present formal development does not yet
-bound \(\|1-\mathcal K_L\|\) (the deviation of the Gram operator from the
-correctly normalized limiting Gram) by the transfer-mixing rate, so the
-inverse-Gram estimate cannot yet be instantiated; the bound on the displayed
-projector defect is therefore conditional on both the transfer spectral
-estimate and the Gram-deviation control.  The development does not
-prove the contraction
+The present formal development now controls the deviation from the correct
+limiting Gram operator:
+\begin{align}
+  \bigl\lVert\mathcal K_n-\mathscr R(P_{\mathrm{fix}})\bigr\rVert^2
+  &\le D^3\bigl(Cr^n\bigr)^2.
+\end{align}
+It does not control $\lVert1-\mathcal K_n\rVert$ in these unweighted
+coordinates, because $\mathscr R(P_{\mathrm{fix}})$ is generally not the
+identity.  Hence it does not yet bound an inverse Gram operator around the
+identity.  It also does not compare the physical range projectors on the two
+overlapping windows.
+
+In particular, the development does not prove the overlapping-window FNW
+contraction
 \begin{align}
   c\lambda^l\frac{1+c\lambda^l}{1-c\lambda^l},
   \qquad c\lambda^l<1,
 \end{align}
 which appears as equation \path{boundAm} in
-\cite[Section~6]{Nachtergaele1996Spectral}; it does not identify the physical
-projector with a transfer fixed-point projector, and it does not establish the
-final numerical overlap or spectral-gap bound.  That overlapping-window
-estimate remains open; both boundary maps are unweighted (Frobenius) and the
-Gram identities are normalization-neutral, so the contraction estimate may
-require a second fixed-point metric or weighted boundary coordinates.
+\cite[Section~6]{Nachtergaele1996Spectral}, and it does not reconstruct the
+source constants.  It does not identify a physical range projector with the
+transfer fixed-point projector, nor does it establish the final numerical
+overlap or spectral-gap bound.  That overlapping-window estimate remains open;
+both boundary maps are unweighted (Frobenius), so the contraction estimate may
+require a fixed-point metric or weighted boundary coordinates.
 
 \textbf{Verdict:} open gap.
 
