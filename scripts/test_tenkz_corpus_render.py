@@ -90,7 +90,7 @@ def run_driver(*arguments: str) -> subprocess.CompletedProcess[str]:
     )
 
 
-def test_repo_relative_render_dir(work: Path) -> None:
+def check_repo_relative_render_dir(work: Path) -> None:
     bin_dir = work / "driver-bin"
     capture = work / "render-dir.txt"
     bin_dir.mkdir()
@@ -390,7 +390,7 @@ Path(sys.argv[-1] + '.png').write_bytes(
         if tree_bytes(output_dir) != before_missing:
             raise AssertionError("preflight failure changed the last complete baseline")
 
-        test_repo_relative_render_dir(work)
+        check_repo_relative_render_dir(work)
 
     print("PASS: tenkz corpus render baseline replacement")
     return 0
