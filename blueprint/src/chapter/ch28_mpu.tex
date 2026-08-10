@@ -1924,6 +1924,84 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
     apply normalized output-first MPU coisometry.
 \end{proof}
 
+\begin{theorem}[Closed output-letter formula for source-$u$ Gram entries]
+    \label{thm:mpu_source_u_gram_closed_output_letter}
+    \lean{MPOTensor.sourceU_gram_apply_eq_closed_output_letter}
+    \leanok
+    \uses{def:mpu_source_uv,def:mpu_double_layer,
+        def:mpu_weighted_source_factors}
+    Let $\mathcal U$ be an MPO tensor, let $\rho$ be positive definite, and
+    let $p,q\in\Fin d\times\Fin d$.  Write $W_{\mathrm{out}}$ for the
+    output-first double layer of $\mathcal U$.  Then
+    \begin{align}
+      \sum_{l,r}u_{(l,r),q}\overline{u_{(l,r),p}}
+      =\sum_{\beta,\delta,\gamma,\alpha}
+        &\rho_{\alpha,\gamma}
+        (W_{\mathrm{out}}^{q_1p_1})_{(\gamma,\alpha),(\beta,\delta)}\\
+        &\qquad\cdot
+        (X_2X_2^\dagger)_{(\beta,q_2),(\delta,p_2)}.
+    \end{align}
+    Thus $q$ is the unstarred ket index, $p$ is the starred bra index, and
+    each doubled bond is ordered as $(\text{ket},\text{bra})$.
+    This is the first closed network in
+    \cite[Eq.~\texttt{uUnitary} and lines~545--556]{Cirac2017MPU}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:mpu_source_matrix_one,thm:mpu_source_weight_posdef,
+        thm:mpu_source_factor_recovery,thm:mpu_source_x1_range_projection,
+        thm:mpu_output_first_double_layer_entry}
+    Expand both source-$u$ entries and contract their common source indices.
+    Weighted recovery of $Y_1$, followed by the first source-cut range
+    identity, replaces $Y_1^\dagger Y_1$ by
+    $M_1^\dagger W_\rho M_1$.  Expanding $M_1$ and the output-first double
+    layer gives the displayed $\rho$-weighted letter, while the remaining
+    $X_2$ factors form the stated range projector.
+\end{proof}
+
+\begin{theorem}[Closed double-layer trace for the normalized output tail]
+    \label{thm:mpu_normalized_output_tail_closed_trace}
+    \lean{MPOTensor.normalized_mpo_output_tail_eq_closed_doubleLayer_trace}
+    \leanok
+    \uses{def:mpo_family,def:mpu_double_layer}
+    Assume $d>0$.  For any MPO tensor $\mathcal U$, tail length $K$, and
+    $p,q\in\Fin d\times\Fin d$, let $W_{\mathrm{out}}$ be its output-first
+    double layer and let $E_{\mathrm{out}}$ be the normalized physical
+    diagonal of $W_{\mathrm{out}}$.  Then
+    \begin{align}
+      d^{-K}\sum_{\tau,\eta}
+        U^{(K+2)}_{(q,\tau),\eta}
+        \overline{U^{(K+2)}_{(p,\tau),\eta}}
+      =\tr\!\left[
+        W_{\mathrm{out}}^{q_1p_1}
+        W_{\mathrm{out}}^{q_2p_2}E_{\mathrm{out}}^K\right].
+    \end{align}
+    The retained letters occur in $(q,p)$ order, so $q$ is unstarred and
+    $p$ is starred; their doubled bonds are in $(\text{ket},\text{bra})$
+    order.  This is the normalized closed output tail in
+    \cite[Eq.~\texttt{uUnitary} and lines~550--556]{Cirac2017MPU}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:mpdo_physical_adjoint,thm:mpu_closed_double_layer}
+    Close the contracted input configuration as the periodic MPO of the
+    output-first double layer.  Splitting off the two retained sites leaves a
+    common diagonal word of length $K$.  Expanding the normalized diagonal
+    power as the normalized sum of those words and using linearity of the
+    trace gives the displayed closed trace.
+\end{proof}
+
+% The equality and range-insertion step remains tracked by issue #5971.
+\begin{remark}[Scope of the closed source-$u$ formulas]
+    The first theorem rewrites the ordinary source-$u$ Gram entry, while the
+    second independently rewrites the normalized closed output tail.  They do
+    not identify these two expressions or justify inserting the source-cut
+    range projections through the intervening chain.  That range-restricted
+    equality remains separate.  Neither theorem asserts an ambient
+    $X_2X_2^\dagger=\Id$, $M_2M_2^\dagger=\Id$, or
+    $Y_2Y_2^\dagger=\Id$ identity.
+\end{remark}
+
 \begin{theorem}[Terminal source-factor boundary contraction]
     \label{thm:mpu_source_u_terminal_boundary}
     \lean{MPOTensor.sourceU_boundary_sandwich}
