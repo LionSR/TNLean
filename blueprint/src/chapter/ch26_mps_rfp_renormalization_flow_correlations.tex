@@ -119,7 +119,7 @@
     \lean{MPOTensor.IsOneLetterRFPViaTSUpToVirtualGauge}
     \lean{MPSTensor.IsPureOneLetterRFPViaTSUpToVirtualGauge}
     \leanok
-    \uses{def:mpdo_two_site_blocking, def:gauge_equiv}
+    \uses{def:mpdo_two_site_blocking, def:gauge_equiv, def:doubled_tensor}
     For an MPO tensor $M$ with one physical component, the Appendix~D
     blocking diagram holds up to virtual gauge if $M^{[2]}$ and $M$ are related
     by simultaneous similarity on the virtual indices. For a pure tensor $A$,
@@ -157,6 +157,20 @@
     bond space is $X\otimes\overline X$.
 \end{definition}
 
+\begin{definition}[Cube-phase swap gauge]
+    \label{def:cube_phase_swap_gauge}
+    \lean{MPSTensor.cubeSwapGauge}
+    \leanok
+    \uses{def:ft_perm_gl}
+    The permutation matrix
+    \begin{align}
+        S&=\begin{pmatrix}0&1\\1&0\end{pmatrix}
+        \notag
+    \end{align}
+    defines an invertible virtual gauge that exchanges the $1$ and $\omega$
+    coordinates of the cube-phase tensor.
+\end{definition}
+
 \begin{theorem}[An MPS blocking witness gives the doubled-MPO condition]
     \label{thm:blocked_gauge_phase_to_doubled_mpdo}
     \lean{MPSTensor.isPureOneLetterRFPViaTSUpToVirtualGauge_of_isBlockedGaugePhaseFixedPoint}
@@ -184,7 +198,8 @@
     \lean{MPSTensor.cubePhaseTensor_normalized_canonical_gauge_not_rfp}
     \lean{MPSTensor.cpsv16_pure_rfp_gauge_equivalence_false}
     \leanok
-    \uses{def:blocked_tensor, def:one_letter_mpdo_virtual_gauge_rfp,
+    \uses{def:blocked_tensor, def:doubled_tensor,
+        def:one_letter_mpdo_virtual_gauge_rfp, def:cube_phase_swap_gauge,
         def:cpsv_canonical_form, def:mps_transfer_idempotence}
     Let $\omega=e^{2\pi i/3}$, and set
     \begin{align}
@@ -210,7 +225,9 @@
 \end{theorem}
 \begin{proof}
     \leanok
-    \uses{thm:blocked_gauge_phase_to_doubled_mpdo,
+    \uses{def:ft_perm_gl, lem:ft_perm_gl_identities,
+        lem:bond_dimension_one_identity_transfer_normal,
+        def:cpsv_canonical_form, thm:blocked_gauge_phase_to_doubled_mpdo,
         thm:cpsv_canonical_form_flow_phase_obstruction}
     Swapping the two virtual coordinates changes
     $\operatorname{diag}(1,\omega^2)$ into

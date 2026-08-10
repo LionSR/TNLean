@@ -83,8 +83,9 @@ private noncomputable def cubeCoordinateSwap :
     Equiv.Perm (Fin (∑ k : Fin 2, cubePhaseBondDim k)) :=
   finSigmaFinEquiv.symm.trans (cubeSigmaSwap.trans finSigmaFinEquiv)
 
-/-- The permutation matrix of `cubeCoordinateSwap`, regarded as an invertible virtual gauge. -/
-private noncomputable def cubeSwapGauge :
+/-- The invertible permutation gauge exchanging the $1$ and $\omega$ virtual
+coordinates of `cubePhaseTensor`. -/
+noncomputable def cubeSwapGauge :
     GL (Fin (∑ k : Fin 2, cubePhaseBondDim k)) ℂ :=
   permGL cubeCoordinateSwap
 
