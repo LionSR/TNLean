@@ -20,7 +20,7 @@ namespace MPSTensor
 
 variable {d D : ℕ}
 
-/-- Extract the `p`-th two-site physical pair from a configuration on `2 * N`
+/-- Extract the \(p\)-th two-site physical pair from a configuration on \(2N\)
 sites, using the pairs \((0,1),(2,3),\ldots\). -/
 def productPairWindow (N : ℕ) (σ : Cfg d (2 * N)) (p : Fin N) : Cfg d 2 :=
   fun j => σ ⟨2 * p.val + j.val, by
@@ -28,7 +28,7 @@ def productPairWindow (N : ℕ) (σ : Cfg d (2 * N)) (p : Fin N) : Cfg d 2 :=
     have hj : j.val < 2 := j.isLt
     omega⟩
 
-/-- Evaluating a physical pair window selects sites `2 * p` and `2 * p + 1`. -/
+/-- Evaluating a physical pair window selects sites \(2p\) and \(2p+1\). -/
 @[simp] lemma productPairWindow_apply (N : ℕ) (σ : Cfg d (2 * N)) (p : Fin N)
     (j : Fin 2) :
     productPairWindow N σ p j = σ ⟨2 * p.val + j.val, by
