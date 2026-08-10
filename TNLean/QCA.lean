@@ -10,3 +10,4 @@ Authors: TNLean contributors
 
 import TNLean.QCA.LocalAlgebra
 import TNLean.QCA.LocalLimit
+import TNLean.QCA.LocalNorm
