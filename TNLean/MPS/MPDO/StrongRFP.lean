@@ -23,12 +23,17 @@ The source only assumes `P ≥ 0`; in particular it does not normalize `P` by
 not the trace-preserving-CP-map predicate `MPOTensor.IsRFPViaTS` of Definition
 4.1. No virtual gauge or scalar proportionality is included.
 
-## Main definitions and results
+## Main definitions
 
 * `MPOTensor.IsStrongRFP`: the literal local tensor relation in the source
   diagram.
-* `MPOTensor.isStrongRFP_iff_physClose`: equivalence with the same identity for
-  every virtual physical closure.
+
+## Main results
+
+* `MPOTensor.strongRFP_tensor_relation_iff_physClose`: the fixed-witness tensor
+  relation is equivalent to the physical-closure identity.
+* `MPOTensor.isStrongRFP_iff_physClose`: the corresponding existential
+  equivalence.
 
 ## References
 
@@ -45,7 +50,7 @@ variable {d D : ℕ}
 /-- The unnormalized structural **Strong-RFP** relation from CPSV16 Appendix D,
 lines 2109--2113 and figure `APPE_Fig2.png` (paper label `Strong-RFP`).
 
-There are a positive semidefinite right-site physical matrix `P` and a square
+There exist a positive semidefinite right-site physical matrix `P` and a square
 unitary `U` on the two-site physical space such that, entrywise in the two open
 physical legs,
 
