@@ -25,6 +25,7 @@ convergence of the ring inverses are also recorded.
 
 ## Main results
 
+* `MPSTensor.groundSpaceMapES_injective_of_isUnit_groundSpaceGram`
 * `MPSTensor.IsPrimitiveMPS.groundSpaceGram_geometric_inverse_bounds`
 * `MPSTensor.IsPrimitiveMPS.groundSpaceMapES_geometric_inverseGram_bounds`
 * `MPSTensor.geometric_smallness_at_c3_lengths`
@@ -39,6 +40,20 @@ namespace MPSTensor
 
 variable {d D : ℕ}
 
+/-- A unit finite-volume Gram operator implies injectivity of the corresponding
+Hilbert-space boundary map. -/
+theorem groundSpaceMapES_injective_of_isUnit_groundSpaceGram {A : MPSTensor d D} {n : ℕ}
+    (hGramUnit : IsUnit (groundSpaceGram A n)) :
+    Function.Injective (groundSpaceMapES A n) := by
+  have hGramInj : Function.Injective (groundSpaceGram A n) :=
+    (ContinuousLinearMap.isUnit_iff_bijective.mp hGramUnit).1
+  apply (groundSpaceMapES A n).adjoint_comp_self_injective_iff.mp
+  intro x y hxy
+  apply hGramInj
+  change (groundSpaceMapES A n).adjoint (groundSpaceMapES A n x) =
+    (groundSpaceMapES A n).adjoint (groundSpaceMapES A n y)
+  exact hxy
+
 /-- Pointwise geometric control of the finite Gram operators and their ring inverses.
 
 Writing \(K_\infty\) for the reshuffled fixed-point projection and
@@ -49,9 +64,8 @@ operator is a unit and both its inverse norm and its displacement from
 \(I_\infty\) obey the corresponding Neumann bounds with denominator
 \(1-c r^n\).
 
-The choice of \(g\) preserves the dimension-cubed normalization in the
-available squared Gram estimate; in particular, its transfer-map constant is
-not reused without rescaling. -/
+The direct choice \(g=\sqrt{D^3} C_G\) is obtained by taking square roots
+of the available squared Gram estimate, without an additional dimension loss. -/
 theorem IsPrimitiveMPS.groundSpaceGram_geometric_inverse_bounds
     [NeZero D] {A : MPSTensor d D} {ρ : Matrix (Fin D) (Fin D) ℂ}
     (hP : IsPrimitiveMPS A ρ) (hρ : ρ.PosDef) :
@@ -70,13 +84,12 @@ theorem IsPrimitiveMPS.groundSpaceGram_geometric_inverse_bounds
   let Iinf := Ring.inverse Kinf
   obtain ⟨C_G, r, hC_G, hr_pos, hr_lt_one, hGramSq⟩ :=
     hP.groundSpaceGram_sub_fixedPointProj_norm_sq_le_geometric
-  let g := (D : ℝ) ^ 3 * C_G
+  let g := Real.sqrt ((D : ℝ) ^ 3) * C_G
   let c := ‖Iinf‖ * g
-  have hD_nat : 1 ≤ D := Nat.one_le_iff_ne_zero.mpr (NeZero.ne D)
-  have hD : 1 ≤ (D : ℝ) ^ 3 := by
-    apply one_le_pow₀
-    exact_mod_cast hD_nat
-  have hg : 0 < g := mul_pos (lt_of_lt_of_le zero_lt_one hD) hC_G
+  have hD_pos : 0 < (D : ℝ) := by
+    exact_mod_cast Nat.pos_of_ne_zero (NeZero.ne D)
+  have hD : 0 < (D : ℝ) ^ 3 := pow_pos hD_pos 3
+  have hg : 0 < g := mul_pos (Real.sqrt_pos.2 hD) hC_G
   have hKinf : IsUnit Kinf := by
     simpa only [Kinf] using Matrix.gramReshuffle_fixedPointProj_isUnit hρ
   have hIinf : IsUnit Iinf := by
@@ -93,8 +106,9 @@ theorem IsPrimitiveMPS.groundSpaceGram_geometric_inverse_bounds
     calc
       ‖groundSpaceGram A n - Kinf‖ ^ 2 ≤
           (D : ℝ) ^ 3 * (C_G * r ^ n) ^ 2 := hGramSq'
-      _ ≤ ((D : ℝ) ^ 3 * (C_G * r ^ n)) ^ 2 := by
-        nlinarith [sq_nonneg (C_G * r ^ n)]
+      _ = Real.sqrt ((D : ℝ) ^ 3) ^ 2 * (C_G * r ^ n) ^ 2 := by
+        rw [Real.sq_sqrt hD.le]
+      _ = (Real.sqrt ((D : ℝ) ^ 3) * (C_G * r ^ n)) ^ 2 := by ring
       _ = (g * r ^ n) ^ 2 := by simp only [g]; ring
   refine ⟨hGram, fun hsmall => ?_⟩
   have hrelative : ‖Iinf‖ * ‖groundSpaceGram A n - Kinf‖ ≤ c * r ^ n := by
@@ -143,15 +157,8 @@ theorem IsPrimitiveMPS.groundSpaceMapES_geometric_inverseGram_bounds
   obtain ⟨hGram, hpointwise⟩ := hbounds n hn
   refine ⟨hGram, fun hsmall => ?_⟩
   obtain ⟨hGramUnit, hInvNorm, hInvSub⟩ := hpointwise hsmall
-  have hGramInj : Function.Injective (groundSpaceGram A n) :=
-    (ContinuousLinearMap.isUnit_iff_bijective.mp hGramUnit).1
-  have hInj : Function.Injective (groundSpaceMapES A n) := by
-    apply (groundSpaceMapES A n).adjoint_comp_self_injective_iff.mp
-    intro x y hxy
-    apply hGramInj
-    change (groundSpaceMapES A n).adjoint (groundSpaceMapES A n x) =
-      (groundSpaceMapES A n).adjoint (groundSpaceMapES A n y)
-    exact hxy
+  have hInj : Function.Injective (groundSpaceMapES A n) :=
+    groundSpaceMapES_injective_of_isUnit_groundSpaceGram hGramUnit
   refine ⟨hInj, ?_, ?_, ?_⟩
   · simpa only [groundSpaceGram] using
       ContinuousLinearMap.inverseGram_eq_ringInverse (groundSpaceMapES A n) hInj
@@ -251,15 +258,8 @@ theorem IsPrimitiveMPS.eventually_groundSpaceMapES_injective_and_inverseGram_bou
                 (fixedPointProj ρ (ne_of_gt hρ.trace_pos)))‖ := by
   filter_upwards [hP.eventually_groundSpaceGram_isUnit_and_inverse_bound
     hρ ha_pos ha_lt_one] with n hn
-  have hGramInj : Function.Injective (groundSpaceGram A n) :=
-    (ContinuousLinearMap.isUnit_iff_bijective.mp hn.1).1
-  have hInj : Function.Injective (groundSpaceMapES A n) := by
-    apply (groundSpaceMapES A n).adjoint_comp_self_injective_iff.mp
-    intro x y hxy
-    apply hGramInj
-    change (groundSpaceMapES A n).adjoint (groundSpaceMapES A n x) =
-      (groundSpaceMapES A n).adjoint (groundSpaceMapES A n y)
-    exact hxy
+  have hInj : Function.Injective (groundSpaceMapES A n) :=
+    groundSpaceMapES_injective_of_isUnit_groundSpaceGram hn.1
   refine ⟨hInj, ?_, ?_⟩
   · simpa only [groundSpaceGram] using
       ContinuousLinearMap.inverseGram_eq_ringInverse (groundSpaceMapES A n) hInj
