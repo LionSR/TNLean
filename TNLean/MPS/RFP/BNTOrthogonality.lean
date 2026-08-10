@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.Algebra.ComplexPhasePositivity
+import TNLean.Algebra.FinSum
 import TNLean.MPS.RFP.ZeroCorrelationLength
 import TNLean.MPS.Core.MultiBlock
 import TNLean.Spectral.TransferOperatorGapNT
@@ -61,13 +62,6 @@ space, `α ↦ ⟨k, α⟩`. -/
 def blockIncl (k : Fin r) (dim : Fin r → ℕ) :
     Fin (dim k) → (k : Fin r) × Fin (dim k) :=
   fun a => ⟨k, a⟩
-
-/-- Submatrices commute with finite sums. -/
-private lemma submatrix_sum' {ι l m p q : Type*}
-    (s : Finset ι) (M : ι → Matrix m p ℂ) (f : l → m) (g : q → p) :
-    (∑ i ∈ s, M i).submatrix f g = ∑ i ∈ s, (M i).submatrix f g := by
-  ext a b
-  simp only [Matrix.submatrix_apply, Matrix.sum_apply]
 
 /-- Left block-diagonal action on a bond block: the `(j, j')` bond block of
 $(\bigoplus_k L_k)\, X$ is $L_j X_{j,j'}$ (arXiv:1606.00608, line 551). -/
@@ -144,7 +138,7 @@ theorem blockDiagonal'_transferSum_toBlock
       mixedTransferMap₂ (B j) (B j')
         (X.submatrix (blockIncl j dim) (blockIncl j' dim)) := by
   classical
-  rw [mixedTransferMap₂_apply, submatrix_sum']
+  rw [mixedTransferMap₂_apply, Matrix.submatrix_sum]
   refine Finset.sum_congr rfl fun i _ => ?_
   rw [Matrix.blockDiagonal'_conjTranspose, blockDiagonal'_mul_mul_toBlock]
 
@@ -182,7 +176,7 @@ theorem transferMap_directSumTensor_reindex
   set e := finSigmaFinEquiv (m := r) (n := dim) with he
   rw [transferMap_apply, blockTransferSum]
   simp only [Matrix.reindex_apply]
-  rw [submatrix_sum']
+  rw [Matrix.submatrix_sum]
   refine Finset.sum_congr rfl fun i _ => ?_
   simp only [directSumTensor, Matrix.reindex_apply]
   rw [Matrix.conjTranspose_submatrix, Matrix.submatrix_mul_equiv _ _ _ e.symm _,
