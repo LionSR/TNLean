@@ -115,7 +115,48 @@ is what makes the group enforceable: a mismatch inside one is a hard finding
 of the stream, needing no source file and no reading of the mathematics
 between the panels.
 
-Two other spellings were considered and are rejected.
+The group is also the metric context, and that forces the one piece of
+machinery in the environment a reader would not expect: the equation typesets
+its own body twice. An equation states that its panels are one object written
+two ways, so the glyphs holding their inscribed names must come out the same
+size, and the first panel therefore has to know what the last one measures.
+Nothing else in the package needs a fact from later in the document; this
+does. The panels are lifted out of the body and set once into a box that is
+dropped, with the event stream silent, its recoverable diagnostics held back,
+and every count the real run advances put back afterwards, which leaves
+behind only the widest and deepest name of each size class. The real run then
+sets every name of a class on that measure. It only ever grows a glyph, so a
+name is never pushed outside the ink holding it, and an equation whose panels
+already agreed is drawn exactly as it was.
+
+Only the panels are measured, and that is not an optimisation. The measure is
+a fact about the pictures, so the mathematics standing between them
+contributes nothing to it, and running that mathematics twice is how a
+counter, a cross-reference, or a write in an author's own tokens would be
+performed twice. What remains double is a name inscribed in a panel, which is
+what measuring a name costs and is the one place the language's own grammar
+guarantees there is nothing but mathematics to typeset.
+
+The panels are read from the body as written, which is the trade the previous
+paragraph buys. A panel standing behind a conditional the body never takes
+still lends its extent to the measure, and a panel arriving through a macro or
+an included file lends none and is drawn exactly as it would be alone. Both
+are wrong about the *sharing* and neither can misdraw a panel: the measure
+only grows a glyph, and a glyph sharing nothing keeps its own extent. Reading
+the panels along the executed path instead would be right about the sharing
+and wrong about the document, which is the trade this one refuses.
+
+Three cheaper answers do not work. **Fixing the extent to the size class
+alone** is what the contract says in the abstract, and the corpus prices it:
+45 of the 1143 glyphs drawn across the benchmark stand wider than their class
+because of their name, and pinning the extent would evict those names from
+their ink and send 18 reviewed figures back to be re-authored. **Carrying the
+measure between LaTeX runs** through the auxiliary file fails because the
+fixture and benchmark harnesses compile once. **Fitting the name to the
+glyph** by shrinking type is refused on sight: names are set at named sizes
+and are not scaled to fit.
+
+Two other spellings for the group were considered and are rejected.
 
 A shared **`equation=<id>` picture key** would let any pictures anywhere in a
 document declare themselves one group. It is rejected because it separates

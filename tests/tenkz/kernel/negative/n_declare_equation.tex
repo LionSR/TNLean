@@ -1,0 +1,21 @@
+% Negative regression: a declaration is setup, and setup does not stand
+% inside a composition form.  A declaration among an equation's panels is a
+% document-wide act performed in the middle of an assertion, ordered by
+% where it happens to sit, and read once for each time the equation is
+% measured.  The author writes it before the equation, where it says the
+% same thing once.
+\documentclass{standalone}
+\usepackage{tenkz}
+\begin{document}
+\tenkzkernel
+\begin{tenkzeq}[check={signature}]
+  \begin{tenkz}[rows={wire}, cols=1, bonds=none, west=open]
+    \tndeclare{atom}{\tnprojector}{skin=box, ports={180:virtual}}
+    \tnprojector{P}
+  \end{tenkz}
+  =
+  \begin{tenkz}[rows={wire}, cols=1, bonds=none, west=open]
+    \tn[skin=box, ports={180:virtual}]{Q}
+  \end{tenkz}
+\end{tenkzeq}
+\end{document}
