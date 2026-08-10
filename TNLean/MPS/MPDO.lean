@@ -240,6 +240,7 @@ import TNLean.MPS.MPDO.PositiveLinearExtensionCounterexample
 import TNLean.MPS.MPDO.PositiveMinimalRealizationCounterexample
 import TNLean.MPS.MPDO.PostBlockedRepresentativeSpan
 import TNLean.MPS.MPDO.PureAreaLaw
+import TNLean.MPS.MPDO.PureRFPBridge
 import TNLean.MPS.MPDO.PureRFPSAL
 import TNLean.MPS.MPDO.PureRecovery
 import TNLean.MPS.MPDO.Purity
