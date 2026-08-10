@@ -37,7 +37,7 @@ variable {R : Type*} [NormedRing R] [HasSummableGeomSeries R]
 \(\lVert K_0^{-1}(K-K_0)\rVert\le a<1\), \(K\) is invertible and its inverse factors
 through the perturbation \(E:=K_0^{-1}(K-K_0)\).  Returns \(E\) and its norm bounds,
 that \(1+E\) is a unit, and the factorization \(K^{-1}=(1+E)^{-1}K_0^{-1}\). -/
-private lemma perturbation_setup [NormOneClass R] {a : ℝ} (K₀ K : R) (hK₀ : IsUnit K₀)
+private lemma perturbation_setup {a : ℝ} (K₀ K : R) (hK₀ : IsUnit K₀)
     (h : ‖Ring.inverse K₀ * (K - K₀)‖ ≤ a) (ha : a < 1) :
     IsUnit K ∧
     (∃ E : R, ‖E‖ ≤ a ∧ ‖E‖ < 1 ∧ IsUnit (1 - -E) ∧
@@ -126,9 +126,8 @@ theorem norm_inverse_sub_inverse_le_of_norm_inverse_mul_sub_le (K₀ K : R) {a :
     _ ≤ (‖Ring.inverse (1 - -E)‖ * ‖E‖) * ‖Ring.inverse K₀‖ := by
       gcongr
       simpa only [norm_neg] using norm_mul_le (Ring.inverse (1 - -E)) E
-    _ ≤ ((1 - a)⁻¹ * a) * ‖Ring.inverse K₀‖ := by
+    _ ≤ (1 - a)⁻¹ * a * ‖Ring.inverse K₀‖ := by
       gcongr
-    _ = (1 - a)⁻¹ * a * ‖Ring.inverse K₀‖ := rfl
 
 /-- A product-form inverse-displacement estimate, obtained from
 \(\lVert K_0^{-1}(K-K_0)\rVert\le
