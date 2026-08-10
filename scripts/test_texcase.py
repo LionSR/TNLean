@@ -4,9 +4,11 @@
 from tenkz_audit import strip_comments as audit_strip_comments
 from tenkz_lint import scan_bodies
 from tenkzlib.texcase import (
+    TeXEnvironmentNestingError,
     following_group,
     following_group_span,
     scan_constructs,
+    scan_environments,
     scan_picture_event_constructs,
     strip_comments,
     top_level_options,
@@ -88,6 +90,40 @@ def main() -> int:
         (construct.name, construct.body_start, construct.body)
         for construct in constructs
     ]
+    environment_source = (
+        "\\begin{thm}\\begin{proof}x\\end{proof}\\end{thm}"
+        "\\begin{lem}y\\end{lem}"
+    )
+    environments = scan_environments(environment_source, {"thm", "proof", "lem"})
+    assert [environment.name for environment in environments] == [
+        "thm",
+        "proof",
+        "lem",
+    ]
+    assert [environment_source[environment.body_start : environment.body_end]
+            for environment in environments] == [
+        r"\begin{proof}x\end{proof}",
+        "x",
+        "y",
+    ]
+    assert all(environment.line == 1 for environment in environments)
+
+    nesting_failures = [
+        (r"\begin{thm}\begin{proof}\end{thm}", "mismatched", r"expected \end{proof}"),
+        (r"\end{thm}", "unexpected", r"\end{thm}"),
+        (r"\begin{thm}", "unclosed", r"\begin{thm}"),
+    ]
+    for malformed, diagnosis, token in nesting_failures:
+        try:
+            scan_environments(malformed, {"thm", "proof"})
+        except TeXEnvironmentNestingError as error:
+            message = str(error)
+            assert diagnosis in message
+            assert token in message
+            assert "line 1" in message
+        else:
+            raise AssertionError(f"malformed environment nesting was accepted: {malformed}")
+
     assert audit_strip_comments is strip_comments
     print(
         "texcase: comment parity, nested constructs, offsets, and shared scanners passed"

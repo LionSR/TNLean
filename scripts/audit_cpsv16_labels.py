@@ -17,6 +17,8 @@ import sys
 from collections import Counter, defaultdict
 from pathlib import Path
 
+from tenkzlib.texcase import scan_environments, strip_comments
+
 ROOT = Path(__file__).resolve().parents[1]
 SOURCE = ROOT / "Papers/1606.00608/MPDO-22-12-17-2.tex"
 LEDGER = ROOT / "docs/audits/data/cpsv16-label-dispositions.tsv"
@@ -73,11 +75,8 @@ ALLOWED_CLASSES = {
     "section", "definition", "equation", "figure", "example", "theorem-like"
 }
 LABEL_RE = re.compile(r"\\label\{([^}]*)\}")
-THEOREM_BEGIN_RE = re.compile(
-    r"\\begin\s*\{\s*(thm\*?|prop\*?|lem\*?|cor\*?|proof)\s*\}"
-)
-THEOREM_END_RE = re.compile(
-    r"\\end\s*\{\s*(thm\*?|prop\*?|lem\*?|cor\*?|proof)\s*\}"
+THEOREM_ENVIRONMENTS = frozenset(
+    {"thm", "thm*", "prop", "prop*", "lem", "lem*", "cor", "cor*", "proof"}
 )
 INHERIT_RE = re.compile(r"\binherit(?:s|ance|ances)?\b", re.IGNORECASE)
 STATUS_RE = re.compile(r"\bstatus\b", re.IGNORECASE)
@@ -88,56 +87,38 @@ BOUNDARY_RE = re.compile(
 )
 
 
-def strip_unescaped_comment(line: str) -> str:
-    """Remove the first unescaped TeX comment and everything following it."""
-    for index, char in enumerate(line):
-        if char != "%":
-            continue
-        backslashes = 0
-        cursor = index - 1
-        while cursor >= 0 and line[cursor] == "\\":
-            backslashes += 1
-            cursor -= 1
-        if backslashes % 2 == 0:
-            return line[:index]
-    return line
-
-
-def source_inventory() -> tuple[list[tuple[str, int, int, bool]], list[str]]:
-    """Return lexical occurrences with derived activity and uncommented lines."""
+def source_inventory(
+    path: Path = SOURCE,
+) -> tuple[list[tuple[str, int, int, bool]], str]:
+    """Return lexical occurrences with activity and comment-blanked source."""
+    source = path.read_text()
+    active_source = strip_comments(source)
     inventory: list[tuple[str, int, int, bool]] = []
-    active_lines: list[str] = []
-    for line_no, line in enumerate(SOURCE.read_text().splitlines(), 1):
-        active_line = strip_unescaped_comment(line)
-        active_lines.append(active_line)
-        for match in LABEL_RE.finditer(line):
-            inventory.append(
-                (match.group(1), line_no, match.start(), match.start() < len(active_line))
-            )
-    return inventory, active_lines
+    for match in LABEL_RE.finditer(source):
+        line_no = source.count("\n", 0, match.start()) + 1
+        line_start = source.rfind("\n", 0, match.start()) + 1
+        active = active_source[match.start() : match.end()] == match.group(0)
+        inventory.append((match.group(1), line_no, match.start() - line_start, active))
+    return inventory, active_source
 
 
 def theorem_contained_labels(
-    active_lines: list[str], ledger: dict[str, dict[str, str]]
+    active_source: str, ledger: dict[str, dict[str, str]]
 ) -> list[tuple[str, int]]:
     """Find equation and figure label occurrences inside theorems or proofs."""
-    stack: list[str] = []
+    environments = scan_environments(active_source, THEOREM_ENVIRONMENTS)
     result: list[tuple[str, int]] = []
-    for line_no, line in enumerate(active_lines, 1):
-        begin = THEOREM_BEGIN_RE.search(line)
-        if begin:
-            stack.append(begin.group(1))
-        if stack:
-            for label in LABEL_RE.findall(line):
-                row = ledger.get(label)
-                if row and row["classification"] in {"equation", "figure"}:
-                    result.append((label, line_no))
-        end = THEOREM_END_RE.search(line)
-        if end:
-            for index in range(len(stack) - 1, -1, -1):
-                if stack[index] == end.group(1):
-                    stack.pop(index)
-                    break
+    for match in LABEL_RE.finditer(active_source):
+        label = match.group(1)
+        row = ledger.get(label)
+        if not row or row["classification"] not in {"equation", "figure"}:
+            continue
+        if any(
+            environment.start <= match.start() < environment.end
+            for environment in environments
+        ):
+            line_no = active_source.count("\n", 0, match.start()) + 1
+            result.append((label, line_no))
     return result
 
 
@@ -203,30 +184,45 @@ def inheritance_errors(
     return errors
 
 
+def read_tsv_rows(
+    path: Path,
+    expected_fields: list[str],
+    table_name: str,
+    *,
+    require_rows: bool = False,
+) -> list[dict[str, str]]:
+    """Read a labelled TSV with shared schema and row validation."""
+    with path.open(newline="") as handle:
+        reader = csv.DictReader(handle, delimiter="\t")
+        if reader.fieldnames != expected_fields:
+            raise ValueError(f"{table_name} columns must be exactly {expected_fields}")
+        rows = list(reader)
+    if require_rows and not rows:
+        raise ValueError(f"{table_name} must contain at least one row")
+    labels: set[str] = set()
+    for row in rows:
+        if None in row:
+            raise ValueError(f"{table_name} row has surplus fields: {row[None]!r}")
+        label = row["label"]
+        if not label:
+            raise ValueError(f"empty label in {table_name}")
+        if label in labels:
+            raise ValueError(f"duplicate {table_name} row for {label}")
+        labels.add(label)
+    return rows
+
+
 def read_classification_snapshot(
     path: Path = CLASSIFICATION_SNAPSHOT,
 ) -> dict[str, str]:
     """Read the exact expected classification of every lexical label."""
-    with path.open(newline="") as handle:
-        reader = csv.DictReader(handle, delimiter="\t")
-        expected_fields = ["label", "classification"]
-        if reader.fieldnames != expected_fields:
-            raise ValueError(
-                f"classification snapshot columns must be exactly {expected_fields}"
-            )
-        rows = list(reader)
+    rows = read_tsv_rows(
+        path, ["label", "classification"], "classification snapshot"
+    )
     result: dict[str, str] = {}
     for row in rows:
-        if None in row:
-            raise ValueError(
-                f"classification snapshot row has surplus fields: {row[None]!r}"
-            )
         label = row["label"]
         classification = row["classification"]
-        if not label:
-            raise ValueError("empty label in classification snapshot")
-        if label in result:
-            raise ValueError(f"duplicate classification snapshot row for {label}")
         if classification not in ALLOWED_CLASSES:
             raise ValueError(
                 f"invalid snapshot classification for {label}: {classification}"
@@ -279,25 +275,22 @@ def classification_count_errors(
 
 
 def read_ledger(path: Path = LEDGER) -> dict[str, dict[str, str]]:
-    with path.open(newline="") as handle:
-        reader = csv.DictReader(handle, delimiter="\t")
-        expected_fields = [
-            "label", "occurrences", "lines", "activity", "classification", "disposition"
-        ]
-        if reader.fieldnames != expected_fields:
-            raise ValueError(f"ledger columns must be exactly {expected_fields}")
-        rows = list(reader)
-    if not rows:
-        raise ValueError("ledger must contain at least one row")
+    rows = read_tsv_rows(
+        path,
+        [
+            "label",
+            "occurrences",
+            "lines",
+            "activity",
+            "classification",
+            "disposition",
+        ],
+        "ledger",
+        require_rows=True,
+    )
     result: dict[str, dict[str, str]] = {}
     for row in rows:
-        if None in row:
-            raise ValueError(f"ledger row has surplus fields: {row[None]!r}")
         label = row["label"]
-        if not label:
-            raise ValueError("empty label in ledger")
-        if label in result:
-            raise ValueError(f"duplicate ledger row for {label}")
         if row["activity"] not in ALLOWED_ACTIVITY:
             raise ValueError(f"invalid activity for {label}: {row['activity']}")
         if row["classification"] not in ALLOWED_CLASSES:
@@ -313,7 +306,7 @@ def main() -> int:
     parser.add_argument("--list-duplicates", action="store_true")
     args = parser.parse_args()
 
-    inventory, active_lines = source_inventory()
+    inventory, active_source = source_inventory()
     counts = Counter(label for label, _, _, _ in inventory)
     lines: dict[str, list[int]] = defaultdict(list)
     activities: dict[str, list[tuple[int, bool]]] = defaultdict(list)
@@ -374,7 +367,7 @@ def main() -> int:
     if len(active_names) != EXPECTED_ACTIVE_NAMES:
         errors.append(f"active names: expected {EXPECTED_ACTIVE_NAMES}, got {len(active_names)}")
 
-    contained_occurrences = theorem_contained_labels(active_lines, ledger)
+    contained_occurrences = theorem_contained_labels(active_source, ledger)
     contained = {label for label, _ in contained_occurrences}
     errors.extend(inheritance_count_errors(contained_occurrences))
     errors.extend(inheritance_errors(contained_occurrences, ledger))
