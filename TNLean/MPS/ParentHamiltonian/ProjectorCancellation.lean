@@ -21,7 +21,7 @@ The decomposition is reconstructed algebraically from the exact projector
 factorization.  It is not the FNW numerical estimate quoted by Nachtergaele,
 arXiv:cond-mat/9410110, after equation (2.4) and in equation (6.1).
 
-## Main result
+## Main results
 
 * `c3_virtualResidual_eq_centered_sub_gramErrors`
 * `inner_c3_centeredVirtualResidual_eq_gramError`
