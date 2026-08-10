@@ -6,12 +6,12 @@ weight $\mu_j$ be nonzero.  The preceding sections prove the simultaneous
 word-span, one-step intersection, global boundary-closing, and periodic
 chain-space statements at the source length of
 \cite[Theorem~12]{PerezGarcia2007Matrix}.  They yield the exact kernel equality
-under the source normalization
+under the source normalization.  For each block, let $\Lambda_j$ be positive
+definite and satisfy
 \begin{align}
-    \sum_a A_j^a A_j^{a\,\dagger}&=\Id,
+    \sum_a A^j_a A^{j\,\dagger}_a&=\Id,
     &
-    \sum_a A_j^{a\,\dagger}\Lambda_j A_j^a&=\Lambda_j,
-    \qquad \Lambda_j>0.
+    \sum_a A^{j\,\dagger}_a\Lambda_j A^j_a&=\Lambda_j.
     \notag
 \end{align}
 The first theorem below retains the earlier doubly-normalized specialization;
@@ -27,7 +27,7 @@ the second is the source-facing result.
     % Scope restriction documented in
     % docs/paper-gaps/pgvwc07_ti_canonical_form_scope.tex.
     Let $d\ge1$ and $g\ge2$. For $0\le j<g$, let $D_j\ge1$ and
-    let $A_j=(A_j^a)_{a=0}^{d-1}$ be an irreducible left-canonical block with
+    let $A_j=(A^j_a)_{a=0}^{d-1}$ be an irreducible left-canonical block with
     normalized self-overlap. Assume that no two distinct blocks are equivalent
     up to gauge and phase. For every $0\le j<g$, let $\mu_j\ne0$. Suppose
     there is a common $L_0>0$ such that the words of length $L_0$ in each
@@ -35,16 +35,16 @@ the second is the source-facing result.
     assume for every
     $0\le j<g$ that
     \begin{align}
-        \sum_{a=0}^{d-1} A_j^a A_j^{a\,\dagger}&=\Id,
+        \sum_{a=0}^{d-1} A^j_a A^{j\,\dagger}_a&=\Id,
         \notag\\
-        \sum_{a=0}^{d-1} A_j^{a\,\dagger}A_j^a&=\Id.
+        \sum_{a=0}^{d-1} A^{j\,\dagger}_a A^j_a&=\Id.
         \notag
     \end{align}
     The first identity is the normalization used in the source. In the general
     source canonical form, the second identity is replaced by a positive
     definite matrix $\Lambda_j$ satisfying
     \begin{align}
-        \sum_{a=0}^{d-1} A_j^{a\,\dagger}\Lambda_j A_j^a&=\Lambda_j.
+        \sum_{a=0}^{d-1} A^{j\,\dagger}_a\Lambda_j A^j_a&=\Lambda_j.
         \notag
     \end{align}
     Thus this theorem has the explicit specialization $\Lambda_j=\Id$ and is
@@ -90,9 +90,9 @@ the second is the source-facing result.
     $0\le j<g$, assume there is a positive definite matrix $\Lambda_j$ such
     that
     \begin{align}
-        \sum_{a=0}^{d-1} A_j^a A_j^{a\,\dagger}&=\Id,
+        \sum_{a=0}^{d-1} A^j_a A^{j\,\dagger}_a&=\Id,
         \notag\\
-        \sum_{a=0}^{d-1} A_j^{a\,\dagger}\Lambda_j A_j^a&=\Lambda_j.
+        \sum_{a=0}^{d-1} A^{j\,\dagger}_a\Lambda_j A^j_a&=\Lambda_j.
         \notag
     \end{align}
     Then

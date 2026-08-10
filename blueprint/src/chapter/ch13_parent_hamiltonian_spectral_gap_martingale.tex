@@ -457,36 +457,11 @@ norm estimate is derived here.
     anticommutator inequality.
 \end{proof}
 
-\begin{lemma}[Physical Gram convergence]
-    \label{lem:physical_gram_convergence}
-    \notready
-    \discussion{5883}
-    \uses{def:fixed_point_proj, thm:ground_space_gram_eq_gram_reshuffle,
-        thm:gram_reshuffle_norm_sq_le_card_cube_mul_operator_norm_sq}
-    Let $\mathcal E_A$ be trace preserving, let
-    $\mathcal E_A(\rho)=\rho$ with $\tr(\rho)\ne0$, and suppose that the
-    spectral radius of $\mathcal E_A-P_\rho$ is strictly smaller than one.
-    Then the physical Gram operators
-    converge to the reshuffled fixed-point projection:
-    \begin{align}
-        \mathcal K_n
-        &\longrightarrow
-        \mathscr R(P_\rho),
-        &
-        P_\rho(X)&=\frac{\tr(X)}{\tr(\rho)}\rho.
-        \notag
-    \end{align}
-    The quantitative estimate is obtained from geometric decay of the
-    complementary transfer powers and the dimension-explicit reshuffling bound.
-    In the unweighted Frobenius boundary coordinates the limit is generally not
-    the identity.
-\end{lemma}
-
 \begin{lemma}[Limiting Gram metric and inverse-Gram control]
     \label{lem:limiting_gram_inverse_control}
     \notready
     \discussion{5922}
-    \uses{lem:physical_gram_convergence, def:inverse_gram,
+    \uses{thm:ground_space_gram_tendsto_fixed_point, def:inverse_gram,
         thm:inverse_gram_identities, thm:neumann_inverse_norm_bound,
         thm:ground_space_es_projection_inverse_gram}
     Assume in addition that the fixed point $\rho$ is positive definite.  Under
@@ -512,7 +487,8 @@ norm estimate is derived here.
         thm:tail_boundary_map_range_es_transport,
         thm:left_boundary_map_range_es_transport,
         thm:ground_space_map_es_injective_range_projector}
-    For an injective blocked tensor, let $P^{\mathrm{tail}}_{K,l+1}$ and
+    Let $A$ be an injective blocked tensor, and let
+    $P^{\mathrm{tail}}_{K,l+1}$ and
     $P^{\mathrm{left}}_{K+l}$ be the tail and left ground-space projectors in
     their common $(K+l+1)$-site Hilbert space.  There are constants
     $c>0$ and $0<\lambda<1$, independent of $K$, such that, whenever the
@@ -530,14 +506,15 @@ norm estimate is derived here.
     boundary maps and inverse Gram operators before applying transfer mixing.
 \end{lemma}
 
-\begin{lemma}[Nachtergaele condition C3 at a blocked length]
+\begin{lemma}[Uniform open-chain projector-defect threshold]
     \label{lem:nachtergaele_c3_blocked_length}
     \notready
     \discussion{5924}
     \uses{lem:fnw_overlapping_window_contraction,
         thm:nachtergaele_open_chain_projector_defect}
-    There is a positive blocked overlap length $l$ for which the uniform
-    projector defect $\varepsilon_l$ satisfies
+    Nachtergaele's condition C3
+    \cite[Eq.~(2.4)]{Nachtergaele1996Spectral} holds at some positive blocked
+    overlap length $l$: the uniform projector defect $\varepsilon_l$ satisfies
     \begin{align}
         \varepsilon_l&<\frac{1}{\sqrt{l+1}}.
         \notag
@@ -554,24 +531,32 @@ norm estimate is derived here.
     \discussion{5925}
     \uses{lem:nachtergaele_c3_blocked_length,
         thm:friedrichs_ground_space_excitation_anticommutator,
-        lem:cyclic_window_overlap_cardinality,
-        lem:cyclic_window_nonoverlap_positive,
-        lem:parent_hamiltonian_cyclic_overlap_anticommutator_gap}
-    Let $B$ be the injective tensor obtained from $A$ by the chosen blocking,
-    and let $L>1$ be the resulting cyclic interaction range.  The blocked
-    open-chain estimate of
-    Lemma~\ref{lem:nachtergaele_c3_blocked_length} implies, uniformly for
-    $N\ge2L$ and every overlapping off-diagonal pair of cyclic windows, that
+        lem:cyclic_window_overlap_cardinality}
+    Let $A$ be a normal tensor, let $B$ be the injective tensor obtained from
+    $A$ by the chosen blocking, and let $L>1$ be the resulting cyclic interaction
+    range.  Assume, in addition to
+    Lemma~\ref{lem:nachtergaele_c3_blocked_length}, a uniform blocked-to-cyclic
+    comparison: for every $N\ge2L$ and every overlapping off-diagonal pair of
+    cyclic windows, including pairs crossing the periodic cut, the corresponding
+    ground-space projectors $q_i,q_j$ and their common-ground projector $P_{ij}$
+    satisfy
+    \begin{align}
+        \lVert q_iq_j-P_{ij}\rVert
+        &\le
+        \left(1-\frac{1}{4L}\right)\frac{1}{2(L-1)}.
+        \notag
+    \end{align}
+    Then the cyclic excitation projections $h_i=\Id-q_i$ satisfy
     \begin{align}
         h_i h_j+h_jh_i
         &\ge
         -\left(1-\frac{1}{4L}\right)\frac{1}{2(L-1)}(h_i+h_j)
         \notag
     \end{align}
-    in quadratic form.  The comparison includes the windows crossing the
-    periodic cut and keeps the blocking unit explicit.  This is a consequence
-    of the reduced ground-space projector defect; it does not use an all-vector
-    excitation-compression estimate.
+    in quadratic form.  Establishing the displayed projector comparison is the
+    separate transport obligation after condition C3; it is not a pairwise
+    consequence of C3 alone.  No all-vector excitation-compression estimate is
+    used.
 \end{lemma}
 
 \begin{theorem}[Uniform gap for normal MPS parent Hamiltonians]
