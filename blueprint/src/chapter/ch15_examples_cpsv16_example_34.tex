@@ -1,0 +1,108 @@
+\section{Correlation independence without a renormalization fixed point}
+\label{sec:cpsv16_example_34}
+
+The following example is \cite[Example~3.4]{Cirac2016MPDO_arXiv}. It separates
+physical correlation independence from the renormalization fixed-point
+condition. It does not assert local orthogonality or zero correlation length in
+the stronger basis-of-normal-tensors sense.
+
+\begin{definition}[The tensor of CPSV16 Example 3.4]
+    \label{def:cpsv16_example_34_tensor}
+    \lean{MPSTensor.cpsvExample34Tensor}
+    \leanok
+    \uses{def:mps_tensor}
+    Set $d=D=2$ and
+    \begin{align}
+        A^0&=\diag\!\left(1,\frac{1}{\sqrt2}\right),
+        &
+        A^1&=\diag\!\left(0,\frac{1}{\sqrt2}\right).
+        \notag
+    \end{align}
+\end{definition}
+
+\begin{theorem}[Positive-length amplitudes]
+    \label{thm:cpsv16_example_34_mpv}
+    \lean{MPSTensor.cpsvExample34_mpv}
+    \leanok
+    \uses{def:cpsv16_example_34_tensor}
+    For $N>0$ and $\boldsymbol i=(i_1,\ldots,i_N)\in\{0,1\}^N$,
+    \begin{align}
+        \Tr(A^{i_1}\cdots A^{i_N})
+        &=\mathbf 1_{\{\boldsymbol i=(0,\ldots,0)\}}
+          +\left(\frac{1}{\sqrt2}\right)^N.
+        \notag
+    \end{align}
+    Hence the generated MPV is
+    $\ket{0}^{\otimes N}+\ket{+}^{\otimes N}$, where
+    $\ket{+}=(\ket0+\ket1)/\sqrt2$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Both matrices are diagonal. The first diagonal entry contributes $1$ only
+    to the all-zero word, while the second contributes
+    $(1/\sqrt2)^N$ to every word.
+\end{proof}
+
+\begin{theorem}[Physical correlations are independent of distance]
+    \label{thm:cpsv16_example_34_cid}
+    \lean{MPSTensor.cpsvExample34_isPhysicalCID}
+    \leanok
+    \uses{def:cpsv16_example_34_tensor, def:source_physical_cid}
+    The tensor in Definition~\ref{def:cpsv16_example_34_tensor} satisfies
+    physical correlation independence for arbitrary disjoint physical regions,
+    including adjacent regions.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Every word matrix is diagonal. Consequently every observable-inserted
+    transfer operator and the ordinary transfer operator act entrywise on bond
+    matrices, so they commute. The two-region expectation therefore depends on
+    the two complementary gap lengths only through their sum.
+\end{proof}
+
+\begin{theorem}[Failure of the renormalization fixed-point equation]
+    \label{thm:cpsv16_example_34_not_rfp}
+    \lean{MPSTensor.cpsvExample34_not_isTransferIdempotent,
+        MPSTensor.cpsvExample34_not_hasPhysicalBlockingIsometry}
+    \leanok
+    \uses{def:cpsv16_example_34_tensor, def:mps_transfer_idempotence,
+        def:physical_blocking_isometry,
+        thm:physical_blocking_isometry_iff_transfer_idempotence}
+    The transfer map is not idempotent, and the tensor has no physical blocking
+    isometry. Thus it does not satisfy the pure-state renormalization
+    fixed-point equation.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Let $E_{01}=\ketbra0{1}$. The transfer map obeys
+    \begin{align}
+        \E_A(E_{01})&=\frac{1}{\sqrt2}E_{01},
+        &
+        \E_A^2(E_{01})&=\frac12E_{01}.
+        \notag
+    \end{align}
+    Hence $\E_A^2\ne\E_A$. The equivalence between transfer idempotence and a
+    physical blocking isometry gives the second conclusion.
+\end{proof}
+
+\begin{theorem}[Blocked product-state overlap]
+    \label{thm:cpsv16_example_34_blocked_overlap}
+    \lean{MPSTensor.cpsvExample34_blocked_overlap}
+    \leanok
+    \uses{def:cpsv16_example_34_tensor}
+    After blocking $n$ spins, the two product vectors satisfy
+    \begin{align}
+        \left\langle 0^{\otimes n}\middle|+^{\otimes n}\right\rangle
+        &=\left(\frac{1}{\sqrt2}\right)^n=2^{-n/2}.
+        \notag
+    \end{align}
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Only the all-zero configuration contributes, with amplitude
+    $(1/\sqrt2)^n$.
+\end{proof}
