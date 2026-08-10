@@ -18,6 +18,7 @@ import TNLean.MPS.MPU.Simple
 import TNLean.MPS.MPU.SimpleBlocking
 import TNLean.MPS.MPU.SourceCuts
 import TNLean.MPS.MPU.SourceFactors
+import TNLean.MPS.MPU.SourceUBoundary
 import TNLean.MPS.MPU.SourceUContraction
 import TNLean.MPS.MPU.SourceUOpenTail
 import TNLean.MPS.MPU.SourceUV

@@ -1530,7 +1530,8 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
     \label{thm:mpu_source_factor_normalizations}
     \lean{MPOTensor.sourceX₁_weighted_isometry,
         MPOTensor.sourceX₁_weighted_isometry_apply,
-        MPOTensor.sourceX₂_isometry}
+        MPOTensor.sourceX₂_isometry,
+        MPOTensor.sourceX₂_isometry_apply}
     \leanok
     \uses{def:mpu_weighted_source_factors,def:mpu_source_weight}
     The left factors satisfy
@@ -1538,7 +1539,9 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
         X_1^\dagger W_\rho X_1&=\Id_r,
         &X_2^\dagger X_2&=\Id_\ell,\\
         \sum_{x,y}\overline{(X_1)_{x,r}}(W_\rho)_{x,y}(X_1)_{y,r'}
-          &=\delta_{r,r'}.
+          &=\delta_{r,r'},\\
+        \sum_{\beta,i}\overline{(X_2)_{(\beta,i),l}}(X_2)_{(\beta,i),l'}
+          &=\delta_{l,l'}.
     \end{align}
     These are \cite[Section~III]{Cirac2017MPU}.
 \end{theorem}
@@ -1550,7 +1553,8 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
     $X_1^\dagger W_\rho X_1=\Id_r$; evaluating at $(r,r')$ gives the displayed
     weighted sum. Since $X_2=V_2^\dagger$, the
     coisometry identity $V_2V_2^\dagger=\Id_\ell$ gives
-    $X_2^\dagger X_2=\Id_\ell$.
+    $X_2^\dagger X_2=\Id_\ell$; evaluating at $(l,l')$ gives the second
+    displayed entry sum.
 \end{proof}
 
 \begin{theorem}[Recovery of the right source factors]
@@ -1761,14 +1765,80 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
     expansion.
 \end{proof}
 
+\begin{definition}[Normalized open-tail coefficient]
+    \label{def:mpu_source_u_open_tail_coefficient}
+    \lean{MPOTensor.sourceUOpenTailCoefficient}
+    \leanok
+    \uses{thm:mpu_source_u_open_periodic_tail,
+        def:mpu_weighted_source_factors}
+    For
+    \begin{align}
+      A^{\tau,\zeta}_{i,j_2}
+        &=\mathcal U^{ij_2}T_{\tau,\zeta},
+    \end{align}
+    define the coefficient indexed by $l,r,l',r'$ to be
+    \begin{align}
+      C^{(K)}_{lr,l'r'}=d^{-K}
+      \sum_{\substack{\tau,\zeta,j_1,j_2,\alpha,\alpha',\\
+                      \beta,\beta',i,i'}}
+        &(X_1)_{(\alpha,j_1),r}
+        \overline{(X_1)_{(\alpha',j_1),r'}}
+        \overline{(X_2)_{(\beta,i),l}}
+        (X_2)_{(\beta',i'),l'}\\
+        &\mathrel{\phantom{=}}\cdot
+        (A^{\tau,\zeta}_{i,j_2})_{\beta,\alpha}
+        \overline{(A^{\tau,\zeta}_{i',j_2})_{\beta',\alpha'}}.
+    \end{align}
+    This is the coefficient obtained from the two open-tail expansions in the
+    normalized Gram contraction in the proof of the source-tensor isometry
+    lemma in \cite[Section~III]{Cirac2017MPU}.  The external factor $u_{(l,r),q}$ is
+    unstarred, while $u_{(l',r'),p}$ is starred.  Thus the displayed
+    coefficient contains the unique normalization factor $d^{-K}$.
+\end{definition}
+
+\begin{theorem}[Terminal source-factor boundary contraction]
+    \label{thm:mpu_source_u_terminal_boundary}
+    \lean{MPOTensor.sourceU_boundary_sandwich}
+    \leanok
+    \uses{def:mpu_source_u_open_tail_coefficient,
+        thm:mpu_source_factor_normalizations}
+    If the normalized internal tail supplies
+    \begin{align}
+      \rho_{\alpha',\alpha}\,
+      \delta_{\beta,\beta'}\delta_{i,i'},
+    \end{align}
+    then the remaining boundary sum is
+    \begin{align}
+      \sum_{\substack{j,\alpha,\alpha',\beta,i}}
+        &(X_1)_{(\alpha,j),r}
+        \overline{(X_1)_{(\alpha',j),r'}}
+        \overline{(X_2)_{(\beta,i),l}}
+        (X_2)_{(\beta,i),l'}\rho_{\alpha',\alpha}
+        =\delta_{l,l'}\delta_{r,r'}.
+    \end{align}
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpu_source_factor_normalizations}
+    Reorder the scalar factors so that the sum separates into the weighted
+    $X_1$ contraction and the unweighted $X_2$ contraction.  Evaluating
+    \begin{align}
+      X_1^\dagger W_\rho X_1&=\Id_r, &
+      X_2^\dagger X_2&=\Id_\ell
+    \end{align}
+    at $(r',r)$ and $(l,l')$, respectively, gives the two Kronecker deltas.
+    This is precisely the terminal boundary simplification in
+    the proof of the source-tensor isometry lemma in
+    \cite[Section~III]{Cirac2017MPU}.
+\end{proof}
+
 \begin{remark}[Scope of the open-tail algebra]
-    The preceding theorem does not collapse the open virtual tail.  In
-    particular, it proves neither $u^\dagger u=\Id$ nor a rank bound for $u$,
-    and it does not use the false ambient equation $X_2X_2^\dagger=\Id$.
-    The remaining contraction must retain the surrounding $X_1$ and $X_2$
-    factors.  In the eventual Gram contraction the retained pair $q$ is
-    unstarred and the retained pair $p$ is starred, with exactly one factor
-    $d^{-K}$ supplied by the normalized periodic tail.
+    The preceding results do not identify the forward open-tail coefficient
+    with the reflected blocked contraction.  In particular, they prove
+    neither $u^\dagger u=\Id$ nor a rank bound for $u$, and they do not use
+    $X_2X_2^\dagger=\Id$, $M_2M_2^\dagger=\Id$, or
+    $Y_2Y_2^\dagger=\Id$.  The missing step must transport the internal tail
+    only inside the complete $X_1$--$X_2$ sandwich.
 \end{remark}
 
 \begin{theorem}[Right-rank bound]
