@@ -62,9 +62,11 @@ be classified as notation or standalone internal material when that is their
 actual role.  Every equation or figure label inside a theorem statement or
 proof instead explicitly inherits the enclosing result's status and semantic
 boundary.  The validator requires exactly 58 unique labels and 60 occurrences
-of this kind.  Each occurrence is matched to its exact enclosing-result anchor,
-including separate line-specific anchors for the two duplicated contained
-labels.  Thus, for example, the six displayed clauses of Theorem~4.9 inherit
+of this kind.  Each occurrence is matched by an explicit regular expression
+to its exact enclosing-result anchor, including theorem-number boundaries,
+statement-versus-proof distinctions, and separate line-specific anchors for
+the two duplicated contained labels.  Thus, for example, the six displayed
+clauses of Theorem~4.9 inherit
 its partial all-sector Case-II status,
 and the algebra and fusion clauses of Theorem~4.14 retain their different
 coverage boundaries.  This prevents an internal display from being treated as

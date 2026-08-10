@@ -183,6 +183,33 @@ def test_unique_occurrence_result_anchor_swap() -> None:
     )
 
 
+def test_exact_result_anchor_matching() -> None:
+    _, active_source = audit.source_inventory()
+    ledger = audit.read_ledger()
+    contained = audit.theorem_contained_labels(active_source, ledger)
+    anchors = audit.read_contained_result_anchors()
+    assert not audit.inheritance_errors(contained, ledger, anchors)
+
+    wrong_number = {label: dict(row) for label, row in ledger.items()}
+    wrong_number["AA=A"]["disposition"] = wrong_number["AA=A"][
+        "disposition"
+    ].replace("Theorem 3.1", "Theorem 3.11")
+    number_errors = audit.inheritance_errors(contained, wrong_number, anchors)
+    assert any(
+        "AA=A at line 401" in error and "Theorem 3.1" in error
+        for error in number_errors
+    )
+
+    wrong_scope = {label: dict(row) for label, row in ledger.items()}
+    wrong_scope["eq:algebra"]["disposition"] = ledger["Figure9"]["disposition"]
+    scope_errors = audit.inheritance_errors(contained, wrong_scope, anchors)
+    assert any(
+        "eq:algebra at line 978" in error and "Theorem 4.14" in error
+        for error in scope_errors
+    )
+    assert not any("Figure9 at line 1953" in error for error in scope_errors)
+
+
 def test_shared_tsv_schema_and_row_validation() -> None:
     ledger_header = (
         "label\toccurrences\tlines\tactivity\tclassification\tdisposition\n"
@@ -219,6 +246,7 @@ def main() -> int:
     test_eq2_proof_main_classification_regression()
     test_duplicate_occurrence_inheritance()
     test_unique_occurrence_result_anchor_swap()
+    test_exact_result_anchor_matching()
     test_shared_tsv_schema_and_row_validation()
     print("PASS: CPSV16 audit mutations are rejected")
     return 0
