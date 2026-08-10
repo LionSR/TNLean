@@ -193,6 +193,13 @@ variable {D : ℕ} {R : Type*} [Semiring R]
 def countN {n : ℕ} (w : Fin n → Bool) : ℕ :=
   ((Finset.univ : Finset (Fin n)).filter (fun i => w i = true)).card
 
+private lemma countN_le {n : ℕ} (w : Fin n → Bool) : countN w ≤ n := by
+  dsimp [countN]
+  calc
+    ((Finset.univ : Finset (Fin n)).filter (fun i => w i = true)).card ≤
+        (Finset.univ : Finset (Fin n)).card := Finset.card_filter_le _ _
+    _ = n := Finset.card_fin n
+
 @[simp] lemma countN_zero {n : ℕ} : countN (fun _ : Fin n => false) = 0 := by simp [countN]
 
 private lemma countN_snoc_false_aux {n : ℕ} (w : Fin n → Bool) (i : Fin (n+1)) :
@@ -429,18 +436,13 @@ lemma wordProd_seminorm_le (f : Matrix (Fin D) (Fin D) R → ℝ)
   · let w' := Fin.init w; let b := w (Fin.last n)
     have hw_eq : w = Fin.snoc w' b := (Fin.snoc_init_self w).symm
     rw [hw_eq, wordProd_snoc']
-    have h_le : countN w' ≤ n := by
-      dsimp [countN]
-      calc
-        ((Finset.univ : Finset (Fin n)).filter (fun i => w' i = true)).card
-            ≤ (Finset.univ : Finset (Fin n)).card := Finset.card_filter_le _ _
-        _ = n := Finset.card_fin n
     rcases b with (rfl | rfl)
     · have hpos_w' : 1 ≤ countN w' := by
         have h_snoc_eq : countN (Fin.snoc w' false) = countN w' := countN_snoc_false w'
         rw [hw_eq] at hpos; rw [h_snoc_eq] at hpos; exact hpos
       simp
-      have h_exp : (n - countN w') + 1 = (n + 1) - countN w' := by omega
+      have h_exp : (n - countN w') + 1 = (n + 1) - countN w' :=
+        (Nat.sub_add_comm (countN_le w')).symm
       have h_rearrange : ((f Λ) ^ (n - countN w') * (f N) ^ (countN w')) * f Λ
           = (f Λ) ^ ((n - countN w') + 1) * (f N) ^ (countN w') := by ring
       calc
@@ -600,12 +602,7 @@ theorem wolf_eq_105 (f : Matrix (Fin D) (Fin D) R → ℝ)
       ext w; constructor
       · intro hw
         rw [Finset.mem_filter] at hw; rcases hw with ⟨hw_univ, ⟨hk_pos, hk_ltD⟩⟩
-        have hk_val_le_n : countN w ≤ n := by
-          dsimp [countN]
-          calc
-            ((Finset.univ : Finset (Fin n)).filter (fun i => w i = true)).card
-                ≤ (Finset.univ : Finset (Fin n)).card := Finset.card_filter_le _ _
-            _ = n := Finset.card_fin n
+        have hk_val_le_n : countN w ≤ n := countN_le w
         have hk_mem_keys : countN w ∈ keys := by
           rw [Finset.mem_Icc]
           exact ⟨hk_pos, Nat.le_min.mpr ⟨hk_val_le_n, by omega⟩⟩
