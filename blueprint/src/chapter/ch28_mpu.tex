@@ -672,6 +672,24 @@ closing a chain of $N$ copies of $\mathcal U$.
     \end{align}
 \end{definition}
 
+\begin{theorem}[Double layer under physical reindexing]
+    \label{thm:mpu_double_layer_physical_reindexing}
+    \lean{MPOTensor.doubleLayerTensor_reindexPhysical}
+    \leanok
+    \uses{def:mpu_physical_reindexing,def:mpu_double_layer}
+    For every physical-index bijection $e$, taking the double layer commutes
+    with physical reindexing:
+    \begin{align}
+        W(e^*\mathcal U)^{ij}&=W(\mathcal U)^{e(i)e(j)}.
+    \end{align}
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:mpu_physical_reindexing,def:mpu_double_layer}
+    This follows entrywise from the definitions of physical reindexing and the
+    double layer.
+\end{proof}
+
 \begin{theorem}[Bounded blocking to simplicity]
     \label{thm:mpu_bounded_simple_blocking}
     \lean{MPOTensor.IsMPU.exists_blockTensor_isMPUSimple_of_one_lt,
@@ -719,6 +737,68 @@ closing a chain of $N$ copies of $\mathcal U$.
     \end{align}
     The second identity multiplies the sitewise Kronecker deltas.
 \end{proof}
+
+\begin{theorem}[Matching contractions at the direct stabilized block]
+    \label{thm:mpu_matching_direct_block_contractions}
+    \lean{MPOTensor.IsMPU.blockTensor_mul_sq_simple_contractions_of_transfer_power}
+    \leanok
+    Let $\mathcal U$ be an MPU of positive physical and bond dimensions.
+    Suppose that $\rho$ has trace one and that, for some positive integer $J$,
+    the normalized transfer matrix satisfies
+    \begin{align}
+        E^J&=|\rho)(\Id|.
+    \end{align}
+    Put $K=JD^2$. After the standard product reindexing of the physical
+    coordinates, the direct length-$K$ block satisfies the contractions
+    (\ref{eq:mpu_simple1}) and (\ref{eq:mpu_simple2}) with the specific witnesses
+    $\rho$ and $\Id$ from this transfer-power identity.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpu_blocked_double_layer_diagonal,
+        thm:mpu_second_block_simple, thm:mpu_bounded_simple_blocking,
+        lem:mpu_blocking, thm:mpu_double_layer_physical_reindexing}
+    First block $J$ sites.  The normalized diagonal of this block is the
+    reindexed rank-one matrix $|\rho)(\Id|$, and the trace-one condition is
+    exactly $(\Id|\rho)=1$.  The exact second-block contraction theorem then
+    supplies both identities after a further $D^2$ sites.  The canonical
+    equivalence between iterated blocking and direct length-$JD^2$ blocking
+    transports each double-layer coefficient without changing either virtual
+    witness.
+\end{proof}
+
+\begin{theorem}[Normalized output-tail coisometry]
+    \label{thm:mpu_normalized_output_tail_coisometry}
+    \lean{MPOTensor.IsMPU.normalized_mpo_tail_coisometry}
+    \leanok
+    Let $d>0$, let $\mathcal U$ be an MPU, and let $K\geq0$. For
+    $p,q\in\Fin d\times\Fin d$, separate the first two output sites from a
+    tail $\tau\in\Fin K\to\Fin d$. Then
+    \begin{align}
+        d^{-K}\sum_{\tau}\sum_{\eta}
+        U^{(K+2)}_{(q,\tau),\eta}
+        \overline{U^{(K+2)}_{(p,\tau),\eta}}
+        &=\delta_{p,q}.
+    \end{align}
+    The retained matrix entry has the reversed order $(q,p)$, and the global
+    contraction is the output-first equation
+    $U^{(K+2)}(U^{(K+2)})^\dagger=\Id$.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{lem:mpu_mul_adjoint}
+    Apply output-first unitarity before performing any source-factor
+    rearrangement.  For each fixed tail, the inner sum is the corresponding
+    identity-matrix entry, hence it is $\delta_{p,q}$.  There are exactly
+    \begin{align}
+        |\Fin K\to\Fin d|=d^K
+    \end{align}
+    tails, and $d^{-K}d^K=1$ because $d>0$.
+\end{proof}
+
+% Formalization scope: identifying this normalized scalar with
+% $(\texttt{sourceU})^\dagger\texttt{sourceU}$ is treated separately.
+
 
 \begin{theorem}[Simplicity at every later direct blocking]
     \label{thm:mpu_all_later_simple_blockings}
