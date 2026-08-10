@@ -33,7 +33,7 @@ statements of the fundamental theorem itself.
 
 ## Reference
 
-* arXiv:1606.00608, Corollary II.2 (`eq:II_auxcor`, lines 1172--1178)
+* arXiv:1606.00608, Corollary 2.11 (`eq:II_auxcor`, lines 1172--1178)
   and its block-diagonal gauge construction in lines 1189--1192.
 * arXiv:1708.00029, equation `eq:bdnr`, lines 286--305, and the sectorwise
   normalization similarities at lines 313--332.
@@ -98,7 +98,7 @@ noncomputable def blockDiagonalGL (X : (k : Fin r) → GL (Fin (dim k)) ℂ) :
 canonical `Fin (∑ k, dim k)` bond index, naming the global gauge `X = ⊕ₖ X k`
 that arises after the BNT block matching.
 
-Reference: arXiv:1606.00608, Corollary II.2 (`eq:II_auxcor`, lines 1172--1178)
+Reference: arXiv:1606.00608, Corollary 2.11 (`eq:II_auxcor`, lines 1172--1178)
 and the block-diagonal gauge construction in lines 1189--1192. -/
 noncomputable def globalGaugeOfBlocks (X : (k : Fin r) → GL (Fin (dim k)) ℂ) :
     GL (Fin (∑ k : Fin r, dim k)) ℂ :=
@@ -144,7 +144,7 @@ If `B k i = X k * A k i * (X k)⁻¹` for every `k, i`, then for every `i`,
 `toTensorFromBlocks μ B i = (⊕ X) * toTensorFromBlocks μ A i * (⊕ X)⁻¹`,
 where `⊕ X = globalGaugeOfBlocks X` is the reindexed block-diagonal gauge.
 
-Reference: arXiv:1606.00608, Corollary II.2 (`eq:II_auxcor`, lines 1172--1178)
+Reference: arXiv:1606.00608, Corollary 2.11 (`eq:II_auxcor`, lines 1172--1178)
 and the block-diagonal gauge construction in lines 1189--1192. -/
 theorem toTensorFromBlocks_eq_globalGaugeOfBlocks_conj
     (X : (k : Fin r) → GL (Fin (dim k)) ℂ)
