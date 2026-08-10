@@ -209,6 +209,27 @@ def test_exact_result_anchor_matching() -> None:
     )
     assert not any("Figure9 at line 1953" in error for error in scope_errors)
 
+    swapped_boundaries = {label: dict(row) for label, row in ledger.items()}
+    swapped_boundaries["eq:algebra"]["disposition"] = ledger["Ualphabeta"][
+        "disposition"
+    ]
+    swapped_boundaries["Ualphabeta"]["disposition"] = ledger["eq:algebra"][
+        "disposition"
+    ]
+    boundary_errors = audit.inheritance_errors(
+        contained, swapped_boundaries, anchors
+    )
+    assert any(
+        "eq:algebra at line 978" in error
+        and "occurrence-specific semantic boundary" in error
+        for error in boundary_errors
+    )
+    assert any(
+        "Ualphabeta at line 988" in error
+        and "occurrence-specific semantic boundary" in error
+        for error in boundary_errors
+    )
+
     uppercase_scope = {label: dict(row) for label, row in ledger.items()}
     uppercase_scope["eq:algebra"]["disposition"] = ledger["Figure9"][
         "disposition"
