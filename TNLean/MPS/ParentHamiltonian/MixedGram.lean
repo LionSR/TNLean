@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import TNLean.MPS.ParentHamiltonian.LimitingGramMetric
 import TNLean.MPS.ParentHamiltonian.SpectatorBoundaryGram
 
 /-!
@@ -20,6 +21,11 @@ Nachtergaele. The sourced target is the projector defect in Nachtergaele,
 arXiv:cond-mat/9410110, equation (2.4); the rational numerical estimate is quoted
 after that equation and in Section 6, equation (6.1). No numerical estimate is
 asserted here.
+
+## Main results
+
+* `inner_tailBoundaryMapES_adjoint_leftBoundaryMapES`
+* `inner_tailBoundaryMapES_adjoint_leftBoundaryMapES_centered`
 -/
 
 open scoped Matrix
@@ -151,5 +157,48 @@ theorem inner_tailBoundaryMapES_adjoint_leftBoundaryMapES
     rw [hEvalAppend, hTailTrace]
     simp only [List.ofFn_succ, List.ofFn_zero, evalWord_cons, evalWord_nil,
       Matrix.mul_one]
+
+/-- Exact centering of the overlapping mixed Gram at the nonidentity limiting
+Gram metric.
+
+The limiting term acts by right multiplication: on the fiber indexed by
+\((u,j)\), it sends \(Y_jA^u\) to
+\((\operatorname{tr}\rho)^{-1}Y_jA^u\rho\). Hence subtracting this term leaves
+exactly the same mixed pairing with the finite Gram operator minus its limiting
+metric.
+
+This identity is reconstructed algebraically from the mixed-Gram formula and
+the limiting-metric computation. It is not attributed to FNW or Nachtergaele,
+and it asserts no convergence or norm estimate. -/
+theorem inner_tailBoundaryMapES_adjoint_leftBoundaryMapES_centered
+    (A : MPSTensor d D) (K l : ℕ)
+    (ρ : Matrix (Fin D) (Fin D) ℂ) (htr : Matrix.trace ρ ≠ 0)
+    (x : BoundaryFamilySpace (D := D) (Cfg d K))
+    (y : BoundaryFamilySpace (D := D) (Cfg d 1)) :
+    inner ℂ x ((tailBoundaryMapES A K (l + 1)).adjoint
+        (leftBoundaryMapES A (K + l) 1 y)) -
+      ∑ u : Cfg d K, ∑ j : Cfg d 1,
+        inner ℂ
+          (Matrix.frobeniusEquivEuclidean (Fin D) (Fin D)
+            (evalWord A (List.ofFn j) *
+              boundaryFamilyEquiv (D := D) (Cfg d K) x u))
+          (Matrix.frobeniusEquivEuclidean (Fin D) (Fin D)
+            ((Matrix.trace ρ)⁻¹ •
+              ((boundaryFamilyEquiv (D := D) (Cfg d 1) y j *
+                evalWord A (List.ofFn u)) * ρ))) =
+      ∑ u : Cfg d K, ∑ j : Cfg d 1,
+        inner ℂ
+          (Matrix.frobeniusEquivEuclidean (Fin D) (Fin D)
+            (evalWord A (List.ofFn j) *
+              boundaryFamilyEquiv (D := D) (Cfg d K) x u))
+          ((groundSpaceGram A l -
+              Matrix.gramReshuffle (fixedPointProj ρ htr))
+            (Matrix.frobeniusEquivEuclidean (Fin D) (Fin D)
+              (boundaryFamilyEquiv (D := D) (Cfg d 1) y j *
+                evalWord A (List.ofFn u)))) := by
+  rw [inner_tailBoundaryMapES_adjoint_leftBoundaryMapES]
+  simp_rw [sub_apply, inner_sub_right,
+    Matrix.gramReshuffle_fixedPointProj_frobeniusEquivEuclidean_apply,
+    Finset.sum_sub_distrib]
 
 end MPSTensor
