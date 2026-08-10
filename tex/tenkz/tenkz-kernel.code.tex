@@ -7778,6 +7778,7 @@
       {
         \exp_args:Nnc \__tenkz_kernel_eq_extent_record:nN {#1}
           { \tl_use:N \l__tenkz_kernel_hull_box_tl }
+        \__tenkz_kernel_eq_ringpad_record:n {#1}
       }
     \tl_set:Ne \l__tenkz_kernel_hull_shape_tl
       {
@@ -16015,6 +16016,164 @@
       \l__tenkz_kernel_r_row_tl \l__tenkz_kernel_r_col_tl
     \__tenkz_kernel_skin_base:nN {#2} \l__tenkz_kernel_r_skin_base_tl
   }
+% An on-wire capsule's ends are a full stadium: its corner radius
+% (wireglyphcap) is exactly half its fixed height (wireglyph), so the two
+% caps are complete semicircles and the flat middle section is narrower
+% than the outline's own width by up to twice that radius.  TikZ auto-fits
+% a node's text against the outline's plain RECTANGULAR bounding box; it has
+% no notion of the rounded ends, so a name whose own ink reaches high enough
+% (a superscript, most often) can cross the arc even though its width, with
+% the documented xinset clearance, already fits inside the outline (issue
+% #5958).  wireglyphxinset's own registry entry already states the intent
+% -- "an on-wire capsule keeps its label off the rounded end caps" -- so
+% this closes the gap between that stated contract and what the plain
+% width comparison actually enforced.
+%
+% The extra half-width a name whose own half-height (from its natural,
+% unshared box, plus the documented y clearance -- never the class strut,
+% which only repositions a shorter name's baseline and never widens its
+% ink) is #1 needs beyond the plain x clearance, at cap radius #2 (equal to
+% the capsule's own half-height), is #2 - sqrt(#2^2 - #1^2): the classic
+% point-inside-a-circle solve already used for port reach in
+% tenkz-geometry.code.tex's roundrect ray query, specialised to the
+% degenerate case whose disc centre sits at the capsule's own half-height,
+% so only the horizontal reach at height #1 is wanted.  Zero when the name
+% never reaches the cap's own half-height (#1 >= #2 is clamped to the full
+% radius, a safe -- if conservative -- bound for a name that already meets
+% or exceeds the fixed floor).
+\cs_new:Npn \__tenkz_kernel_r_ring_corner_pad:nn #1#2
+  {
+    \fp_eval:n
+      { (#2) - sqrt( max( 0 , (#2)^2 - (#1)^2 ) ) }
+  }
+% The corner-safe glyph width a name box of natural width #1, height #2 and
+% depth #3 needs, into dim #4: never under the size class's shared
+% reference extent, so an unlabelled or short-named ring still reads at the
+% one common floor every inscribed-label skin shares.
+\cs_new_protected:Npn \__tenkz_kernel_r_ring_corner_width_from_box:nnnN
+    #1#2#3#4
+  {
+    \dim_set:Nn #4
+      {
+        \fp_to_dim:n
+          {
+            max(
+              \dim_to_fp:n { \__tenkz_dim:n {glyphref} } ,
+              2 *
+              (
+                \dim_to_fp:n {#1} / 2
+                + \dim_to_fp:n { \__tenkz_dim:n {wireglyphxinset} }
+                + \__tenkz_kernel_r_ring_corner_pad:nn
+                    {
+                      ( \dim_to_fp:n {#2} + \dim_to_fp:n {#3} ) / 2
+                      + \dim_to_fp:n { \__tenkz_dim:n {wireglyphyinset} }
+                    }
+                    { \dim_to_fp:n { \__tenkz_dim:n {wireglyphcap} } }
+              )
+            )
+          }
+      }
+  }
+\dim_new:N \l__tenkz_kernel_r_ringpad_wd_dim
+\dim_new:N \l__tenkz_kernel_r_ringpad_min_dim
+\tl_new:N  \l__tenkz_kernel_r_ringpad_label_tl
+\box_new:N \l__tenkz_kernel_r_ringpad_box
+% The corner-safe glyph width ring atom #1's OWN natural name box needs,
+% into dim #2; zero (a no-op floor) for an atom with no inscribed name, or
+% whose name carries no superscript or subscript.  Only a superscript or
+% subscript pushes part of a name toward its own corner at the same time it
+% reaches for its own edge; an ordinary run of baseline characters is
+% uniformly tall across its whole width, and the stock rectangular xinset
+% already clears it (the ring width measure would otherwise flag every long
+% plain name too, growing names the arc was never going to touch).  This is
+% the atom's own contribution, before any equation's shared measure widens
+% it to a class it does not individually require.
+\cs_new_protected:Npn \__tenkz_kernel_r_ring_corner_own_width:nN #1#2
+  {
+    \dim_zero:N #2
+    \__tenkz_model_get:nnN {#1} {label} \l__tenkz_kernel_r_ringpad_label_tl
+    \quark_if_no_value:NF \l__tenkz_kernel_r_ringpad_label_tl
+      {
+        \regex_match:nVT { \^ | _ } \l__tenkz_kernel_r_ringpad_label_tl
+          {
+            \hbox_set:Nn \l__tenkz_kernel_r_ringpad_box
+              {
+                $ \use:c {tenkz@labelsize}
+                  \tl_use:N \l__tenkz_kernel_r_ringpad_label_tl $
+              }
+            \__tenkz_kernel_r_ring_corner_width_from_box:nnnN
+              { \box_wd:N \l__tenkz_kernel_r_ringpad_box }
+              { \box_ht:N \l__tenkz_kernel_r_ringpad_box }
+              { \box_dp:N \l__tenkz_kernel_r_ringpad_box }
+              #2
+          }
+      }
+  }
+% An equation's shared measure (the "eq_extent" pass above) tracks one
+% width/height/depth per size class so every glyph of one class reads as one
+% extent; a ring's corner-safe width must grow with that SAME class, not
+% just its own name, or two capsules of one class -- one plain, one
+% superscripted -- would visibly read as two different sizes again, the
+% defect the shared measure exists to close.  This mirrors that registry:
+% one corner-safe width per class, gathered during the same measuring run
+% and read back only once every class member has been probed.
+\prop_new:N \g__tenkz_kernel_eq_ringpad_prop
+\tl_new:N \l__tenkz_kernel_eq_ringpad_stored_tl
+% Only the ring skin's ends are a stadium (issue #5958's own corner-safe
+% width, above, is a distance to that skin's rounded cap); a box or pill
+% never has that arc, so a superscripted name on ANY other named skin must
+% never write into this class's registry -- doing so would force every
+% plain ring sharing the class to the stadium width that skin never needed.
+% The base is resolved the same way the glyph dispatch resolves it
+% (\__tenkz_kernel_atom_skin_base:nN), so an alias of skin=ring is caught
+% too.
+\cs_new_protected:Npn \__tenkz_kernel_eq_ringpad_record:n #1
+  {
+    \__tenkz_kernel_atom_skin_base:nN {#1} \l__tenkz_kernel_r_skin_base_tl
+    \str_if_eq:VnT \l__tenkz_kernel_r_skin_base_tl {ring}
+      {
+        \__tenkz_kernel_r_ring_corner_own_width:nN {#1} \l__tenkz_kernel_r_ringpad_min_dim
+        \dim_compare:nNnT { \l__tenkz_kernel_r_ringpad_min_dim } > { 0pt }
+          {
+            \prop_get:NVNTF \g__tenkz_kernel_eq_ringpad_prop
+              \l__tenkz_kernel_eq_extent_key_tl \l__tenkz_kernel_eq_ringpad_stored_tl
+              {
+                \dim_set:Nn \l__tenkz_kernel_r_ringpad_wd_dim
+                  { \l__tenkz_kernel_eq_ringpad_stored_tl }
+                \dim_set:Nn \l__tenkz_kernel_r_ringpad_min_dim
+                  {
+                    \dim_max:nn
+                      { \l__tenkz_kernel_r_ringpad_wd_dim }
+                      { \l__tenkz_kernel_r_ringpad_min_dim }
+                  }
+              }
+              { }
+            \prop_gput:NVx \g__tenkz_kernel_eq_ringpad_prop
+              \l__tenkz_kernel_eq_extent_key_tl
+              { \dim_use:N \l__tenkz_kernel_r_ringpad_min_dim }
+          }
+      }
+  }
+% The corner-safe minimum width for ring atom #1, into dim #2.  Inside an
+% equation's final render (never its measuring run, which has not yet seen
+% every class member), the class's own recorded corner-safe width applies to
+% every ring in the class, named or not; otherwise this is the atom's own.
+\cs_new_protected:Npn \__tenkz_kernel_r_ring_corner_min_width:nN #1#2
+  {
+    \bool_lazy_all:nTF
+      {
+        { \bool_if_p:N \l__tenkz_kernel_ineq_bool }
+        { ! \bool_if_p:N \l__tenkz_kernel_eq_probe_bool }
+      }
+      {
+        \__tenkz_kernel_eq_extent_key:nN {#1} \l__tenkz_kernel_eq_extent_key_tl
+        \prop_get:NVNTF \g__tenkz_kernel_eq_ringpad_prop
+          \l__tenkz_kernel_eq_extent_key_tl \l__tenkz_kernel_eq_ringpad_stored_tl
+          { \dim_set:Nn #2 { \l__tenkz_kernel_eq_ringpad_stored_tl } }
+          { \__tenkz_kernel_r_ring_corner_own_width:nN {#1}#2 }
+      }
+      { \__tenkz_kernel_r_ring_corner_own_width:nN {#1}#2 }
+  }
 \cs_new_protected:Npn \__tenkz_kernel_r_atom_glyph_geometry_append:nN #1#2
   {
     \__tenkz_model_get:nnN {#1} {size} \l__tenkz_kernel_r_x_tl
@@ -16052,15 +16211,34 @@
               }
           }
       }
-    \int_compare:nNnT { \l__tenkz_kernel_r_row_tl } > {1}
+    \dim_zero:N \l__tenkz_kernel_r_ringpad_min_dim
+    \str_if_eq:VnT \l__tenkz_kernel_r_skin_base_tl {ring}
+      { \__tenkz_kernel_r_ring_corner_min_width:nN {#1} \l__tenkz_kernel_r_ringpad_min_dim }
+    \int_compare:nNnTF { \l__tenkz_kernel_r_row_tl } > {1}
       {
         \tl_put_right:Ne #2
           {
-            , minimum~width = \__tenkz_kernel_r_pt:n
+            , minimum~width = \fp_to_dim:n
                 {
-                  \l__tenkz_kernel_r_row_tl - 1
-                  + 2 * \__tenkz_metric_ratio:n {tallover}
+                  max(
+                    \dim_to_fp:n
+                      {
+                        \__tenkz_kernel_r_pt:n
+                          {
+                            \l__tenkz_kernel_r_row_tl - 1
+                            + 2 * \__tenkz_metric_ratio:n {tallover}
+                          }
+                      } ,
+                    \dim_to_fp:n { \l__tenkz_kernel_r_ringpad_min_dim }
+                  )
                 }
+          }
+      }
+      {
+        \dim_compare:nNnT { \l__tenkz_kernel_r_ringpad_min_dim } > { 0pt }
+          {
+            \tl_put_right:Ne #2
+              { , minimum~width = \dim_use:N \l__tenkz_kernel_r_ringpad_min_dim }
           }
       }
     \int_compare:nNnT { \l__tenkz_kernel_r_col_tl } > {1}
@@ -18633,6 +18811,7 @@
     \seq_gclear:N \g__tenkz_kernel_rel_gseq
     \seq_gclear:N \g__tenkz_kernel_rel_pos_gseq
     \prop_gclear:N \g__tenkz_kernel_eq_extent_prop
+    \prop_gclear:N \g__tenkz_kernel_eq_ringpad_prop
     \tl_clear:N \l__tenkz_kernel_eq_size_tl
     \clist_clear:N \l__tenkz_kernel_check_off_clist
     \seq_clear:N \l__tenkz_kernel_check_reason_seq

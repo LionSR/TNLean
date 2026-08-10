@@ -1,0 +1,26 @@
+% Regression (issue #5958): a ring/capsule glyph inscribes a superscripted
+% name without the name crossing the glyph's own stroke.  The on-wire
+% matrix style's ends are a full stadium -- its corner radius is exactly
+% half its fixed height -- so a name whose own ink reaches close to the
+% glyph's top or bottom can cross the rounded cap even though its plain
+% width, with the documented xinset clearance, already fits inside the
+% outline.  X and its inverse are the shared-measure test PR #5827 already
+% uses for skin=box (r_equation_shared_metric.tex); this pins the same
+% contract for skin=ring, where the corner is the failure mode: X sits
+% comfortably inside its glyph on either side of the identity, and X^{-1}
+% -- the wider, taller name that sets the shared class width -- must clear
+% its own capsule's rounded ends by the documented clearance, not merely
+% by the documented clearance measured against a plain rectangle.
+\documentclass{standalone}
+\usepackage{tenkz}
+\begin{document}
+\begin{tenkzeq}[check={signature}]
+  \begin{tenkz}[rows={wire}, cols=1, bonds=none, west=open, east=open]
+    \tn[skin=ring, ports={0:virtual, 180:virtual}]{X}
+  \end{tenkz}
+  =
+  \begin{tenkz}[rows={wire}, cols=1, bonds=none, west=open, east=open]
+    \tn[skin=ring, ports={0:virtual, 180:virtual}]{X^{-1}}
+  \end{tenkz}
+\end{tenkzeq}
+\end{document}
