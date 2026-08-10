@@ -4247,50 +4247,61 @@
 
 % The outward page bearing of a policy face.  The kernel spells a face with
 % its compass letter and every measurement wants the bearing, so the two
-% spellings of one direction meet here and nowhere else.
+% spellings of one direction meet here and nowhere else.  The general
+% eight-point mapper \__tenkz_kernel_r_compass:n answers the same two
+% letters, but it carries an unrecognised word through unchanged, and a
+% policy face is one of two words: keeping the production narrow keeps it
+% total on the policy alphabet, so no non-face word can reach a bearing.
 \cs_new:Npn \__tenkz_kernel_policy_face_bearing:n #1
   { \str_if_eq:nnTF {#1} {n} {90} {270} }
 
-% The faces atom #1's `physical=` policy grows legs on.  Code #2 runs once
-% per face with the face word (n or s) as its #1 -- `##1' inside a
-% definition.  Five stages read this policy: the boundary signature, the
-% port registrar, the wire records, the route classifier, and the ink.  They
-% differ in what they do with a face, never in which faces there are, so the
-% policy alphabet is written out once here.
+% Atom #1's `physical=` policy, read once: the faces it grows legs on and
+% the slot span each face carries, left in \l__tenkz_kernel_policy_span_tl
+% for \__tenkz_kernel_policy_leg_map:nnn and
+% \__tenkz_kernel_policy_slot_bearing:nnnN to walk.  Code #2 runs once per
+% face with the face word (n or s) as its #1 -- `##1' inside a definition.
+% Five stages read this policy: the boundary signature, the port registrar,
+% the wire records, the route classifier, and the ink.  They differ in what
+% they do with a face, never in which faces there are or how wide a face
+% is, so an atom's policy is measured here and once per atom, not once per
+% face of it.  An atom whose policy grows no leg at all has no face to
+% offer and the walk is skipped.
 \tl_new:N \l__tenkz_kernel_policy_faces_tl
 \cs_new_protected:Npn \__tenkz_kernel_policy_faces:nn #1#2
-  {
-    \__tenkz_model_get:nnN {#1} {physical} \l__tenkz_kernel_policy_faces_tl
-    \quark_if_no_value:NF \l__tenkz_kernel_policy_faces_tl
-      {
-        \str_case:Vn \l__tenkz_kernel_policy_faces_tl
-          {
-            {up}     { \clist_map_inline:nn {n}   {#2} }
-            {down}   { \clist_map_inline:nn {s}   {#2} }
-            {updown} { \clist_map_inline:nn {n,s} {#2} }
-          }
-      }
-  }
-
-% Every exposed policy slot on face #2 of atom #1, in slot order.  Code #3
-% runs once per slot with the slot number as its #1, and reads the resolved
-% span from \l__tenkz_kernel_policy_span_tl, which
-% \__tenkz_kernel_policy_slot_bearing:nnnN wants left standing.  A slot is
-% walked exactly when a leg exists there, so the signature that counts the
-% index, the record that names it, the route that classifies it, and the
-% pass that inks it all walk the same slots.
-\cs_new_protected:Npn \__tenkz_kernel_policy_leg_map:nnn #1#2#3
   {
     \__tenkz_kernel_policy_leg_span:nN {#1}
       \l__tenkz_kernel_policy_span_tl
     \quark_if_no_value:NF \l__tenkz_kernel_policy_span_tl
       {
-        \int_step_inline:nn { \l__tenkz_kernel_policy_span_tl }
+        \__tenkz_model_get:nnN {#1} {physical} \l__tenkz_kernel_policy_faces_tl
+        \quark_if_no_value:NF \l__tenkz_kernel_policy_faces_tl
           {
-            \__tenkz_kernel_policy_leg_exposed:nnnT {#1}
-              { \__tenkz_kernel_policy_face_bearing:n {#2} } {##1}
-              {#3}
+            \str_case:Vn \l__tenkz_kernel_policy_faces_tl
+              {
+                {up}     { \clist_map_inline:nn {n}   {#2} }
+                {down}   { \clist_map_inline:nn {s}   {#2} }
+                {updown} { \clist_map_inline:nn {n,s} {#2} }
+              }
           }
+      }
+  }
+
+% Every exposed policy slot on face #2 of atom #1, in slot order.  Code #3
+% runs once per slot with the slot number as its #1.  The caller is inside
+% \__tenkz_kernel_policy_faces:nn, which has resolved the span into
+% \l__tenkz_kernel_policy_span_tl -- the register
+% \__tenkz_kernel_policy_slot_bearing:nnnN wants left standing -- so a face
+% walks its slots without measuring its atom again.  A slot is walked
+% exactly when a leg exists there, so the signature that counts the index,
+% the record that names it, the route that classifies it, and the pass that
+% inks it all walk the same slots.
+\cs_new_protected:Npn \__tenkz_kernel_policy_leg_map:nnn #1#2#3
+  {
+    \int_step_inline:nn { \l__tenkz_kernel_policy_span_tl }
+      {
+        \__tenkz_kernel_policy_leg_exposed:nnnT {#1}
+          { \__tenkz_kernel_policy_face_bearing:n {#2} } {##1}
+          {#3}
       }
   }
 
@@ -4524,22 +4535,18 @@
 
 % The registrar declares an identity for every slot the policy owns, whether
 % or not a leg is finally grown there, so it walks the span itself rather
-% than the exposed slots; the faces are the policy's, read from one place.
+% than the exposed slots; the faces and the span are the policy's, read from
+% one place.
 \cs_new_protected:Npn \__tenkz_kernel_port_policy_register_atom:n #1
   {
-    \__tenkz_kernel_policy_leg_span:nN {#1}
-      \l__tenkz_kernel_policy_span_tl
-    \quark_if_no_value:NF \l__tenkz_kernel_policy_span_tl
+    \__tenkz_kernel_policy_faces:nn {#1}
       {
-        \__tenkz_kernel_policy_faces:nn {#1}
+        \int_step_inline:nn { \l__tenkz_kernel_policy_span_tl }
           {
-            \int_step_inline:nn { \l__tenkz_kernel_policy_span_tl }
-              {
-                \exp_args:Nne \__tenkz_kernel_port_policy_register:nnn
-                  {#1}
-                  { \__tenkz_kernel_policy_face_bearing:n {##1} }
-                  {####1}
-              }
+            \exp_args:Nne \__tenkz_kernel_port_policy_register:nnn
+              {#1}
+              { \__tenkz_kernel_policy_face_bearing:n {##1} }
+              {####1}
           }
       }
   }
