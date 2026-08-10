@@ -705,7 +705,11 @@ and generic prerequisites now include:
     next.
   \item The mixed Gram of the C3 tail map at
     \((K,l+1)\) and left map at \((K+l,1)\) is computed exactly by
-    \leanid{MPSTensor.inner_tailBoundaryMapES_adjoint_leftBoundaryMapES}:
+    \leanid{MPSTensor.inner_tailBoundaryMapES_adjoint_leftBoundaryMapES}.
+    Write \(\Gamma^{\mathrm{tail}}_{K,l+1}\) and
+    \(\Gamma^{\mathrm{left}}_{K+l,1}\) for these two Hilbert-space maps.
+    For boundary-family vectors \(x\) and \(y\), write \(X_u\) and \(Z_j\)
+    for their matrix fibers.  Then
     \begin{align}
       \left\langle x,
         (\Gamma^{\mathrm{tail}}_{K,l+1})^\dagger
@@ -714,9 +718,9 @@ and generic prerequisites now include:
         \left\langle U(A^jX_u),
           \mathcal K_l U(Z_jA^u)\right\rangle.
     \end{align}
-    Here \(X_u\) and \(Z_j\) are the matrix fibers of \(x\) and \(y\).
     This formula is an exact algebraic identity reconstructed from the
-    boundary-map definitions, word factorization, and trace cyclicity.  It is not stated in
+    boundary-map definitions, word factorization, and trace cyclicity.  It is
+    not stated in
     this form by FNW or Nachtergaele and is not attributed to them.  The
     sourced target remains the projector defect in Nachtergaele's equation
     (2.4), while the rational estimate is quoted after that equation and in
