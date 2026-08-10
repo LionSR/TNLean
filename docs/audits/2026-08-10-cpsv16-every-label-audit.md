@@ -109,15 +109,16 @@ Their dispositions are:
 | Source label | Source line | Disposition |
 |---|---:|---|
 | `RFP-gauge` | 2101 | The printed pure-state equivalence is false.  The cube-phase tensor blocks to itself up to swap gauge-phase but has non-idempotent transfer.  The exact source-shaped counterexample is tracked by issue #5920 and Blueprint node `thm:cpsv_rfp_gauge_printed_status`. |
-| `Strong-RFP` | 2110 | The diagram does not yet determine an unambiguous algebraic predicate.  Its broad rank-growth implication is separated from the concrete Fibonacci calculation. |
+| `Strong-RFP` | 2110 | The unnormalized structural predicate is `MPOTensor.IsStrongRFP`, with literal relation $M_2=U(M_1\otimes P)U^\dagger$, $P\geq0$, and physical-closure equivalence recorded in Blueprint nodes `def:mpdo_strong_rfp` and `thm:mpdo_strong_rfp_phys_close`.  Its periodic geometric rank-growth implication remains pending in issue #6047. |
 | `rank-Fibonacci` | 2122 | The Fibonacci rank formula is a genuine omitted target, tracked by issue #5921 and Blueprint node `thm:cpsv_fibonacci_rank_obstruction_status`. |
 | `eq:1` | 2158 | This is the internal diagonalization calculation supporting `rank-Fibonacci`, not an independent theorem. |
 
 The mixed-state question following `RFP-gauge` cannot be treated as an extension
-of a valid pure-state theorem.  For `Strong-RFP`, issue #5921 first asks for the
-concrete rank formula and its non-geometric consequence; the diagrammatic
-predicate remains deferred until its contractions and chain-length convention
-are specified.
+of a valid pure-state theorem.  For `Strong-RFP`, the unnormalized local
+structural predicate and physical-closure equivalence are complete.  The
+periodic geometric rank-growth implication remains separate and is tracked by
+issue #6047; issue #5921 tracks the concrete Fibonacci rank formula and its
+non-geometric consequence.
 
 ## Source-statement status nodes
 
