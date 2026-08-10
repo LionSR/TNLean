@@ -42,7 +42,7 @@ direction of the printed diagram, and its symmetry gives the other.
 **Scope restriction (one-letter MPS lift):** This predicate specializes the physical
 alphabet to one letter. See
 `docs/paper-gaps/cpsv16_rfp_gauge_pure_equivalence_false.tex`. -/
-def IsOneLetterRFPViaTSUpToVirtualGauge (M : MPOTensor 1 D) : Prop :=
+def IsOneLetterRFPViaTSUpToVirtualGauge {D : ℕ} (M : MPOTensor 1 D) : Prop :=
   MPSTensor.GaugeEquiv (blockTwo M).toMPSTensor M.toMPSTensor
 
 end MPOTensor
@@ -54,12 +54,12 @@ namespace MPSTensor
 
 **Scope restriction (one-letter MPS lift):** The physical alphabet has one letter. See
 `docs/paper-gaps/cpsv16_rfp_gauge_pure_equivalence_false.tex`. -/
-def IsPureOneLetterRFPViaTSUpToVirtualGauge (A : MPSTensor 1 D) : Prop :=
+def IsPureOneLetterRFPViaTSUpToVirtualGauge {D : ℕ} (A : MPSTensor 1 D) : Prop :=
   MPOTensor.IsOneLetterRFPViaTSUpToVirtualGauge (doubledTensor A)
 
 /-- The virtual gauge induced on the doubled bond space by $X$: after identifying
 `Fin (D * D)` with `Fin D × Fin D`, its matrix is $X \otimes \overline X$. -/
-noncomputable def doubledVirtualGauge (X : GL (Fin D) ℂ) : GL (Fin (D * D)) ℂ :=
+noncomputable def doubledVirtualGauge {D : ℕ} (X : GL (Fin D) ℂ) : GL (Fin (D * D)) ℂ :=
   Units.mapEquiv
       (Matrix.reindexAlgEquiv ℂ ℂ finProdFinEquiv).toRingEquiv.toMulEquiv
     (Matrix.GeneralLinearGroup.kronecker X
@@ -93,6 +93,122 @@ private lemma primitiveCubeRoot_pow_three : primitiveCubeRoot ^ 3 = 1 :=
 
 private lemma norm_primitiveCubeRoot : ‖primitiveCubeRoot‖ = 1 := by
   simp [primitiveCubeRoot, Complex.norm_exp, Complex.mul_re]
+
+private noncomputable def cubePhaseDoubledWeight (q : Fin 4) : ℂ :=
+  let pair := (finProdFinEquiv :
+    Fin (∑ k : Fin 2, cubePhaseBondDim k) ×
+      Fin (∑ k : Fin 2, cubePhaseBondDim k) ≃ Fin 4).symm q
+  cubePhaseWeight (finSigmaFinEquiv.symm pair.1).1 *
+    star (cubePhaseWeight (finSigmaFinEquiv.symm pair.2).1)
+
+private theorem cubePhaseDoubledTensor_eq_toTensorFromBlocks :
+    (doubledTensor cubePhaseTensor).toMPSTensor =
+      toTensorFromBlocks cubePhaseDoubledWeight (fun _ : Fin 4 => scalarUnitTensor) := by
+  have hflat_symm (q : Fin 4) :
+      (finSigmaFinEquiv : (Σ _q : Fin 4, Fin 1) ≃ Fin 4).symm q = ⟨q, 0⟩ := by
+    fin_cases q <;> rfl
+  have hcoord (k₁ k₂ l₁ l₂ : Fin 2) :
+      finProdFinEquiv
+          (finSigmaFinEquiv ⟨k₁, (0 : Fin (cubePhaseBondDim k₁))⟩,
+            finSigmaFinEquiv ⟨k₂, (0 : Fin (cubePhaseBondDim k₂))⟩) =
+        finProdFinEquiv
+          (finSigmaFinEquiv ⟨l₁, (0 : Fin (cubePhaseBondDim l₁))⟩,
+            finSigmaFinEquiv ⟨l₂, (0 : Fin (cubePhaseBondDim l₂))⟩) ↔
+          k₁ = l₁ ∧ k₂ = l₂ := by
+    constructor
+    · intro h
+      have hp := finProdFinEquiv.injective h
+      exact ⟨congrArg Sigma.fst (finSigmaFinEquiv.injective (congrArg Prod.fst hp)),
+        congrArg Sigma.fst (finSigmaFinEquiv.injective (congrArg Prod.snd hp))⟩
+    · rintro ⟨rfl, rfl⟩
+      rfl
+  ext p a b
+  obtain ⟨⟨a₁, a₂⟩, rfl⟩ := (finProdFinEquiv :
+    Fin (∑ k : Fin 2, cubePhaseBondDim k) ×
+      Fin (∑ k : Fin 2, cubePhaseBondDim k) ≃
+        Fin ((∑ k : Fin 2, cubePhaseBondDim k) *
+          ∑ k : Fin 2, cubePhaseBondDim k)).surjective a
+  obtain ⟨⟨b₁, b₂⟩, rfl⟩ := (finProdFinEquiv :
+    Fin (∑ k : Fin 2, cubePhaseBondDim k) ×
+      Fin (∑ k : Fin 2, cubePhaseBondDim k) ≃
+        Fin ((∑ k : Fin 2, cubePhaseBondDim k) *
+          ∑ k : Fin 2, cubePhaseBondDim k)).surjective b
+  obtain ⟨⟨ka₁, ua₁⟩, rfl⟩ := (finSigmaFinEquiv :
+    (Σ k : Fin 2, Fin (cubePhaseBondDim k)) ≃
+      Fin (∑ k : Fin 2, cubePhaseBondDim k)).surjective a₁
+  obtain ⟨⟨ka₂, ua₂⟩, rfl⟩ := (finSigmaFinEquiv :
+    (Σ k : Fin 2, Fin (cubePhaseBondDim k)) ≃
+      Fin (∑ k : Fin 2, cubePhaseBondDim k)).surjective a₂
+  obtain ⟨⟨kb₁, ub₁⟩, rfl⟩ := (finSigmaFinEquiv :
+    (Σ k : Fin 2, Fin (cubePhaseBondDim k)) ≃
+      Fin (∑ k : Fin 2, cubePhaseBondDim k)).surjective b₁
+  obtain ⟨⟨kb₂, ub₂⟩, rfl⟩ := (finSigmaFinEquiv :
+    (Σ k : Fin 2, Fin (cubePhaseBondDim k)) ≃
+      Fin (∑ k : Fin 2, cubePhaseBondDim k)).surjective b₂
+  fin_cases p
+  fin_cases ka₁ <;> fin_cases ka₂ <;> fin_cases kb₁ <;> fin_cases kb₂ <;>
+    simp only [cubePhaseBondDim] at ua₁ ua₂ ub₁ ub₂ <;>
+    fin_cases ua₁ <;> fin_cases ua₂ <;> fin_cases ub₁ <;> fin_cases ub₂ <;>
+    simp only [MPOTensor.toMPSTensor, doubledTensor, cubePhaseBondDim, cubePhaseTensor,
+      toTensorFromBlocks, cubePhaseWeight, scalarUnitTensor, Matrix.reindex_apply,
+      Nat.reduceAdd, Fin.zero_eta, Fin.isValue, Fin.mk_one, Matrix.submatrix_apply,
+      finProdFinEquiv.symm_apply_apply, Matrix.kroneckerMap_apply,
+      finSigmaFinEquiv.symm_apply_apply, Matrix.blockDiagonal'_apply, zero_ne_one,
+      one_ne_zero, ↓reduceDIte, Matrix.map_apply, cast_eq, Matrix.smul_apply,
+      Matrix.one_apply_eq, smul_eq_mul, map_zero, map_one, mul_zero, zero_mul,
+      mul_one, one_mul, cubePhaseDoubledWeight, finProdFinEquiv_symm_apply,
+      RCLike.star_def, hflat_symm, finProdFinEquiv_divNat, finProdFinEquiv_modNat,
+      dite_eq_ite, right_eq_ite_iff, imp_false] <;>
+    (intro h; have := (hcoord _ _ _ _).mp h; omega)
+
+private theorem norm_cubePhaseDoubledWeight (q : Fin 4) :
+    ‖cubePhaseDoubledWeight q‖ = 1 := by
+  obtain ⟨⟨q₁, q₂⟩, rfl⟩ := (finProdFinEquiv :
+    Fin (∑ k : Fin 2, cubePhaseBondDim k) ×
+      Fin (∑ k : Fin 2, cubePhaseBondDim k) ≃ Fin 4).surjective q
+  obtain ⟨⟨k₁, u₁⟩, rfl⟩ := (finSigmaFinEquiv :
+    (Σ k : Fin 2, Fin (cubePhaseBondDim k)) ≃
+      Fin (∑ k : Fin 2, cubePhaseBondDim k)).surjective q₁
+  obtain ⟨⟨k₂, u₂⟩, rfl⟩ := (finSigmaFinEquiv :
+    (Σ k : Fin 2, Fin (cubePhaseBondDim k)) ≃
+      Fin (∑ k : Fin 2, cubePhaseBondDim k)).surjective q₂
+  fin_cases k₁ <;> fin_cases k₂ <;>
+    simp only [cubePhaseBondDim] at u₁ u₂ <;>
+    fin_cases u₁ <;> fin_cases u₂ <;>
+    simp [cubePhaseDoubledWeight, cubePhaseWeight, norm_primitiveCubeRoot,
+      finProdFinEquiv.symm_apply_apply, finSigmaFinEquiv.symm_apply_apply]
+
+/-- The doubled cube-phase MPO is in the literal CPSV canonical form used for MPDO tensors.
+
+Source: arXiv:1606.00608, Definition `RFPMixedTS`, lines 657--660, and Appendix D,
+lines 2091--2110. -/
+theorem cubePhaseDoubledTensor_isCPSVCanonicalForm :
+    IsCPSVCanonicalForm (doubledTensor cubePhaseTensor).toMPSTensor := by
+  rw [cubePhaseDoubledTensor_eq_toTensorFromBlocks]
+  exact (CPSVCanonicalFormData.ofBlocks (fun _ => by simp) cubePhaseDoubledWeight
+    (fun _ : Fin 4 => scalarUnitTensor)
+    (fun _ => scalarUnitTensor_isNormalTensor)).isCPSVCanonicalForm
+
+/-- The doubled cube-phase MPO admits canonical data satisfying the normalization at
+arXiv:1606.00608, line 246. -/
+theorem cubePhaseDoubledTensor_exists_weightNormalized :
+    ∃ data : CPSVCanonicalFormData (doubledTensor cubePhaseTensor).toMPSTensor,
+      data.IsWeightNormalized := by
+  rw [cubePhaseDoubledTensor_eq_toTensorFromBlocks]
+  refine ⟨CPSVCanonicalFormData.ofBlocks (fun _ : Fin 4 => by simp)
+    cubePhaseDoubledWeight (fun _ : Fin 4 => scalarUnitTensor)
+    (fun _ => scalarUnitTensor_isNormalTensor), ?_⟩
+  refine {
+    weight_norm_le_one := ?_
+    weight_unit_exists := ?_ }
+  · change ∀ q : Fin 4, ‖cubePhaseDoubledWeight q‖ ≤ 1
+    intro q
+    rw [norm_cubePhaseDoubledWeight]
+  · change toTensorFromBlocks cubePhaseDoubledWeight
+      (fun _ : Fin 4 => scalarUnitTensor) ≠ 0 →
+        ∃ q : Fin 4, ‖cubePhaseDoubledWeight q‖ = 1
+    intro _
+    exact ⟨0, norm_cubePhaseDoubledWeight 0⟩
 
 private lemma blockTensor_cubePhaseTensor_two (i : Fin 1) :
     blockTensor cubePhaseTensor 2 i =
@@ -163,7 +279,7 @@ this witness implies the exact doubled-MPDO predicate.
 **Scope restriction (one-letter MPS lift):** This stronger MPS-level definition is
 sufficient but is not itself the source predicate. See
 `docs/paper-gaps/cpsv16_rfp_gauge_pure_equivalence_false.tex`. -/
-def IsBlockedGaugePhaseFixedPoint (A : MPSTensor 1 D) : Prop :=
+def IsBlockedGaugePhaseFixedPoint {D : ℕ} (A : MPSTensor 1 D) : Prop :=
   ∃ (X : GL (Fin D) ℂ) (ζ : ℂ), ‖ζ‖ = 1 ∧ ∀ i : Fin 1,
     A i = ζ • ((X : Matrix (Fin D) (Fin D) ℂ) * blockTensor A 2 i *
       ((X⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ))
@@ -173,7 +289,7 @@ doubled-MPDO virtual-gauge condition from Appendix D, equation `RFP-gauge`, of
 arXiv:1606.00608, lines 2091--2110. The doubled scalar is
 $\zeta\overline{\zeta}=1$. -/
 theorem isPureOneLetterRFPViaTSUpToVirtualGauge_of_isBlockedGaugePhaseFixedPoint
-    (A : MPSTensor 1 D) (h : IsBlockedGaugePhaseFixedPoint A) :
+    {D : ℕ} (A : MPSTensor 1 D) (h : IsBlockedGaugePhaseFixedPoint A) :
     IsPureOneLetterRFPViaTSUpToVirtualGauge A := by
   obtain ⟨X, ζ, hζ, hA⟩ := h
   refine ⟨doubledVirtualGauge X, ?_⟩
@@ -279,7 +395,9 @@ private theorem cubePhaseTensor_isBlockedGaugePhaseFixedPoint :
   exact cube_phase_blocked_gauge_identity
 
 /-- The doubled cube-phase tensor satisfies the literal one-letter specialization of the
-Appendix D `RFP-gauge` diagram. The MPS amplitude phase cancels after doubling. -/
+Appendix D `RFP-gauge` diagram. The MPS amplitude phase cancels after doubling.
+
+Source: arXiv:1606.00608, Appendix D, equation `RFP-gauge`, lines 2091--2110. -/
 theorem cubePhaseTensor_isPureOneLetterRFPViaTSUpToVirtualGauge :
     IsPureOneLetterRFPViaTSUpToVirtualGauge cubePhaseTensor :=
   isPureOneLetterRFPViaTSUpToVirtualGauge_of_isBlockedGaugePhaseFixedPoint
@@ -307,35 +425,38 @@ theorem cubePhaseTensor_not_isTransferIdempotent :
         dsimp
         rw [hIdem.pow_eq (pow_ne_zero n (by norm_num : (2 : ℕ) ≠ 0))])⟩
 
-/-- The cube-phase witness is in normalized CPSV canonical form, satisfies
-the literal one-letter doubled-MPDO blocking-up-to-gauge diagram, and is not
-transfer-idempotent.
+/-- The doubled cube-phase MPO is in normalized CPSV canonical form, satisfies
+the literal one-letter blocking-up-to-gauge diagram, and its underlying pure transfer
+map is not idempotent.
 
-Source: arXiv:1606.00608, canonical-form normalization at lines 238--246 and Appendix D,
-equation `RFP-gauge`, lines 2100--2107. -/
+Source: arXiv:1606.00608, Definition `RFPMixedTS`, lines 657--660, canonical-form
+normalization at lines 238--246, and Appendix D, equation `RFP-gauge`, lines 2100--2107. -/
 theorem cubePhaseTensor_normalized_canonical_gauge_not_rfp :
-    IsCPSVCanonicalForm cubePhaseTensor ∧
-      cubePhaseCanonicalData.IsWeightNormalized ∧
+    IsCPSVCanonicalForm (doubledTensor cubePhaseTensor).toMPSTensor ∧
+      (∃ data : CPSVCanonicalFormData (doubledTensor cubePhaseTensor).toMPSTensor,
+        data.IsWeightNormalized) ∧
       IsPureOneLetterRFPViaTSUpToVirtualGauge cubePhaseTensor ∧
       ¬ IsTransferIdempotent cubePhaseTensor :=
-  ⟨cubePhaseTensor_not_tendsto_dyadic_transferMap.1,
-    cubePhaseCanonicalData_isWeightNormalized,
+  ⟨cubePhaseDoubledTensor_isCPSVCanonicalForm,
+    cubePhaseDoubledTensor_exists_weightNormalized,
     cubePhaseTensor_isPureOneLetterRFPViaTSUpToVirtualGauge,
     cubePhaseTensor_not_isTransferIdempotent⟩
 
 /-- The normalized canonical-form pure-state equivalence asserted after equation
 `RFP-gauge` in arXiv:1606.00608, lines 2100--2107, is false, already for tensors with
-one physical letter. -/
+one physical letter. The canonical-form hypothesis is imposed on the doubled MPO tensor
+$M=A\otimes\overline A$, as in Definition `RFPMixedTS`, lines 657--660. -/
 theorem cpsv16_pure_rfp_gauge_equivalence_false :
-    ¬ ∀ (D : ℕ) (A : MPSTensor 1 D), IsCPSVCanonicalForm A →
-      (∃ data : CPSVCanonicalFormData A, data.IsWeightNormalized) →
+    ¬ ∀ (D : ℕ) (A : MPSTensor 1 D),
+      IsCPSVCanonicalForm (doubledTensor A).toMPSTensor →
+      (∃ data : CPSVCanonicalFormData (doubledTensor A).toMPSTensor,
+        data.IsWeightNormalized) →
       (IsPureOneLetterRFPViaTSUpToVirtualGauge A ↔ IsTransferIdempotent A) := by
   intro hEquiv
   exact cubePhaseTensor_not_isTransferIdempotent
     ((hEquiv _ cubePhaseTensor
       cubePhaseTensor_normalized_canonical_gauge_not_rfp.1
-      ⟨cubePhaseCanonicalData,
-        cubePhaseTensor_normalized_canonical_gauge_not_rfp.2.1⟩).mp
-          cubePhaseTensor_isPureOneLetterRFPViaTSUpToVirtualGauge)
+      cubePhaseTensor_normalized_canonical_gauge_not_rfp.2.1).mp
+      cubePhaseTensor_normalized_canonical_gauge_not_rfp.2.2.1)
 
 end MPSTensor

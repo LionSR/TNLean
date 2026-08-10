@@ -28,6 +28,12 @@ squaring because its nonzero eigenvalues form a nontrivial root-of-unity cycle.
 Similarity of $\mathcal E^2$ and $\mathcal E$ does not imply
 $\mathcal E^2=\mathcal E$.
 
+Definition \texttt{RFPMixedTS}, lines~657--660, imposes canonical form on the
+MPDO tensor $M$.  We use that literal reading of ``in CF'' in the formal
+refutation.  Thus the canonical-form and weight-normalization hypotheses are
+proved for the doubled MPO tensor $M=A\otimes\overline A$, not merely for the
+underlying pure MPS tensor $A$.
+
 \section{A source-shaped counterexample}
 
 Let $\omega=e^{2\pi i/3}$ and consider the pure one-letter tensor
@@ -89,6 +95,8 @@ The formal declarations are
 \leanid{MPSTensor.doubledVirtualGauge},
 \leanid{MPSTensor.isPureOneLetterRFPViaTSUpToVirtualGauge_of_isBlockedGaugePhaseFixedPoint},
 \leanid{MPSTensor.cube_phase_blocked_gauge_identity},
+\leanid{MPSTensor.cubePhaseDoubledTensor_isCPSVCanonicalForm},
+\leanid{MPSTensor.cubePhaseDoubledTensor_exists_weightNormalized},
 \leanid{MPSTensor.cubePhaseTensor_isPureOneLetterRFPViaTSUpToVirtualGauge},
 \leanid{MPSTensor.cubePhaseTensor_not_isTransferIdempotent},
 \leanid{MPSTensor.cubePhaseTensor_normalized_canonical_gauge_not_rfp}, and
@@ -98,8 +106,8 @@ The formal declarations are
 \section{Verdict}
 
 \textbf{Verdict: false as printed.}  The pure-state equivalence following
-equation \texttt{RFP-gauge} fails even for a line-246-normalized canonical
-one-letter tensor. The
+equation \texttt{RFP-gauge} fails even when the one-letter doubled MPO tensor
+is canonical and satisfies the line-246 normalization. The
 ordinary theorem that a virtual gauge preserves an already established
 renormalization fixed point is unaffected: gauge covariance cannot turn the
 blocking-up-to-gauge hypothesis into transfer-map idempotence.
