@@ -190,6 +190,8 @@
 
 \begin{theorem}[The printed pure blocking-up-to-gauge equivalence is false]
     \label{thm:cpsv_pure_rfp_gauge_status}
+    \lean{MPSTensor.primitiveCubeRoot_isPrimitiveRoot}
+    \lean{MPSTensor.scalarUnitTensor_isNormalTensor}
     \lean{MPSTensor.cube_phase_blocked_gauge_identity}
     \lean{MPSTensor.cubePhaseDoubledTensor_isMPDO}
     \lean{MPSTensor.cubePhaseDoubledTensor_isCPSVCanonicalForm}
@@ -230,6 +232,7 @@
     \uses{def:ft_perm_gl, lem:ft_perm_matrix_conj_submatrix, def:mpdo,
         lem:bond_dimension_one_identity_transfer_normal,
         def:cpsv_canonical_form, thm:blocked_gauge_phase_to_doubled_mpdo,
+        thm:pure_doubled_tensor_rfp_via_ts,
         thm:cpsv_canonical_form_flow_phase_obstruction}
     On every nonempty chain, $M=A\otimes\overline A$ generates the rank-one
     operator $\ketbra{V^{(N)}(A)}{V^{(N)}(A)}$, which is positive semidefinite.
