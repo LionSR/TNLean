@@ -1,0 +1,25 @@
+cff-version: "1.2.0"
+message: "If you use tenkz in published work, please cite it as below."
+title: "tenkz: tensor-network diagrams from a description of the network"
+abstract: >-
+  A LaTeX package that draws tensor networks — matrix product states, PEPS
+  sheets, string diagrams, and channel sandwiches — from a statement of the
+  network's structure rather than from placed coordinates, and writes an
+  event stream recording the structure it resolved.
+type: software
+authors:
+  - family-names: "Lu"
+    given-names: "Sirui"
+    email: "sirui.lu@mpq.mpg.de"
+    affiliation: "Max-Planck-Institut für Quantenoptik"
+version: "0.7"
+date-released: "2026-07-22"
+license: "Apache-2.0"
+repository-code: "https://github.com/LionSR/TNLean"
+url: "https://github.com/LionSR/TNLean/tree/main/tex/tenkz"
+keywords:
+  - "LaTeX"
+  - "TikZ"
+  - "tensor networks"
+  - "matrix product states"
+  - "diagrams"
