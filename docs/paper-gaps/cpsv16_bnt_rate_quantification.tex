@@ -7,27 +7,26 @@
 
 \input{command}
 
-\title{Rate-Quantified BNT Cross-Overlap Decay\\
-       on the \leanid{SectorBNT} Sector Surface}
+\title{Historical Note: Rate-Quantified BNT Cross-Overlap Decay\\
+       for a Retired Projection Argument}
 \author{}
 \date{2026-05-13}
 
 \begin{document}
 \maketitle
 
-\section{Current verdict}
+\section{Status}
 
-\textbf{Superseded.}
+\textbf{Historical proof archaeology, not an active gap.}
 The corrected proportional fundamental theorem is
 \leanid{MPSTensor.fundamentalTheorem_proportional_canonicalForm}.  It compares
 active BNT families whose listed copy weights are nonzero and obtains a
 bijection of the basis sectors with gauge-phase equivalences.  The unrestricted
 statement printed in CPSV16 remains false: its weak BNT convention allows an
 unrelated normal representative whose coefficient is identically zero, so the
-claimed equality of BNT cardinalities fails.  Consequently
-no rate-quantified overlap estimate is needed for the current fundamental
-theorem.
-The analysis below is retained as a record of the retired proof attempt.
+claimed equality of BNT cardinalities fails.  No rate-quantified overlap
+estimate is needed for the corrected theorem.  The analysis below records the
+extra hypothesis required by the retired per-block projection attempt.
 
 \section{Notation}
 
@@ -92,8 +91,8 @@ An earlier formal route introduced an explicit rate hypothesis on a
 sector decomposition $P$ and a chosen spectral level
 $\lambda:\mathrm{Fin}\,P.\mathtt{basisCount}\to\mathbb C$.  That route
 has since been retired together with the per-block-projection layer.  The
-mathematical hypothesis it was trying to isolate remains the following:
-there should exist non-negative families $C,\eta$ such that for every
+mathematical hypothesis it tried to isolate was the following: there would have
+to exist non-negative families $C,\eta$ such that for every
 $j\ne k$,
 \begin{align}
     0\le C_{j,k},\quad 0\le\eta_{j,k}<1,
@@ -116,7 +115,7 @@ modulus-free non-vanishing coefficient statement
 \leanid{MPSTensor.IsBNTCanonicalForm.coeff_not_eventually_zero}.  None of
 these declarations supplies the constants in~\eqref{eq:hyp}.
 
-\section{Where such a hypothesis would be needed}
+\section{Where the retired hypothesis was used}
 
 The retired per-block-projection route carried an abstract hypothesis
 excluding asymptotic cancellation of the assembled overlap against a
@@ -134,29 +133,28 @@ is bounded by
 The right-hand side of~\eqref{eq:product} converges to $0$ exactly when
 \eqref{eq:hyp} holds. The qualitative limit~\eqref{eq:qual} alone
 gives $\eta_{j,k_0}<1$ but not the comparison
-$\eta_{j,k_0}\cdot|\lambda_j/\lambda_{k_0}|<1$, which is the
-content of the new hypothesis.
+$\eta_{j,k_0}\cdot|\lambda_j/\lambda_{k_0}|<1$, which was the content of
+the retired hypothesis.
 
 \section{Classification}
 
-\emph{Open gap.}  The rate condition~\eqref{eq:hyp} is a structural input
-beyond what \cite[\S II]{Cirac2016MPDO_arXiv} and
-\cite[Definition~4.2]{Cirac2021Matrix} make explicit. Its rate is
-in principle derivable from the spectral gap of the mixed transfer
-operator that powers
+\emph{Historical analytic obstruction.}  The rate
+condition~\eqref{eq:hyp} is a structural input beyond what
+\cite[\S II]{Cirac2016MPDO_arXiv} and
+\cite[Definition~4.2]{Cirac2021Matrix} make explicit. A geometric rate may
+be derived from the spectral gap of the mixed transfer operator underlying
 \leanid{mpvOverlap_tendsto_zero_of_not_gaugePhaseEquiv_cast_left_of_irreducible_TP},
 but the compatibility inequality
-$\eta_{j,k}\cdot|\lambda_j/\lambda_k|<1$ is not implied by the
-BNT structure and must be either imposed or established analytically.
+$\eta_{j,k}\cdot|\lambda_j/\lambda_k|<1$ is not implied by the BNT
+structure. The retired projection argument would therefore have needed this
+condition as an additional hypothesis or a separate analytic theorem.
 
-The analytic derivation from the transfer matrix spectral gap is the
-subject of \emph{Option~2} in the design memo
-\path{docs/audits/2026-05-13_cpsv16_ft_path_beta_pr2_5_design.md} and is
-not addressed in this note. The current \leanid{SectorBNT} route instead
-keeps the coefficient comparison and the combined-family linear
-independence in \path{TNLean/MPS/FundamentalTheorem/SectorBNT}; any future
-rate-quantified argument should be stated against that surviving surface,
-not against the retired per-block-projection layer.
+The design memo
+\path{docs/audits/2026-05-13_cpsv16_ft_path_beta_pr2_5_design.md} records the
+abandoned spectral-gap proposal.  The corrected \leanid{SectorBNT} theorem uses
+coefficient comparison and combined-family linear independence instead.  This
+note documents why the rate-quantified projection route must not be revived as
+a purported obligation of the proportional fundamental theorem.
 
 \bibliographystyle{alpha}
 \bibliography{references}

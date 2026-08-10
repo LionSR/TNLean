@@ -6,13 +6,24 @@
 
 \input{command}
 
-\title{Two-Layer Sector Refinement of CPSV16 \texttt{eq:II\_ABasicTensors}\\
-on the \leanid{SectorBNT} Sector Surface}
+\title{Historical Note: Two-Layer Sector Refinement of CPSV16\\
+\texttt{eq:II\_ABasicTensors}}
 \author{}
 \date{2026-05-13}
 
 \begin{document}
 \maketitle
+
+\section{Status}
+
+\textbf{Historical proof archaeology, not an active gap.}
+This note records the mismatch between a retired strict-modulus specialization
+and the repeated-copy BNT decomposition in CPSV16.  The current
+\leanid{SectorDecomposition} and \leanid{IsBNTCanonicalForm} surfaces retain the
+raw copy weights, and
+\leanid{MPSTensor.fundamentalTheorem_proportional_canonicalForm} proves the
+corrected proportional theorem on active BNT families.  No adapter from the
+retired specialization is a current task.
 
 \section{The source assertion}
 
@@ -85,17 +96,19 @@ $\mu_{j,q}=\lambda_j\nu_{j,q}$ as part of the BNT predicate.  When such a
 factorization is needed, it should be stated as an additional theorem
 hypothesis rather than hidden in the canonical-form predicate.
 
-\section{Scope restriction}
+\section{Historical scope restriction and its resolution}
 
-The one-copy normal-canonical formulation
-\leanid{IsNormalCanonicalFormBNT} covers only the case $r_j=1$ for all
-$j$.  The full multi-copy BNT form with $r_j>1$ -- and the associated
-Newton--Girard recovery of multiplicities from $\sum_q\mu_{j,q}^N$ -- is a
-separate mathematical gap documented in
+The representative-family predicate \leanid{IsNormalCanonicalFormBNT} covers
+one chosen block per gauge-phase class and therefore does not itself store the
+repeated-copy data $r_j>1$.  The earlier route tried to bridge this restriction
+through a strict-modulus adapter.  That adapter was retired.
+
+The current \leanid{SectorDecomposition} surface directly permits
+$P.\mathtt{copies}(j)>1$, and the SectorBNT comparison recovers repeated weights
+from the power sums $\sum_q\mu_{j,q}^N$.  Thus the old one-copy restriction is
+not an outstanding obligation of the proportional fundamental theorem.  Its
+history is documented in
 \path{docs/paper-gaps/ft_one_copy_scope_restriction.tex}.
-The \leanid{SectorDecomposition} surface is multi-copy-ready
-(\leanid{copies j} may exceed 1), but the current adapter does not
-populate it beyond $r_j = 1$.
 
 \section{Formal declarations}
 
@@ -111,8 +124,9 @@ The relevant surviving formal declarations are:
         \leanid{MPSTensor.IsBNTCanonicalForm.combined_family_eventually_li},
         and \leanid{MPSTensor.IsBNTCanonicalForm.coeff_not_eventually_zero}
         in \doclink{TNLean/MPS/FundamentalTheorem/SectorBNT/Api}.
-  \item A future adapter from \leanid{IsNormalCanonicalFormBNT}, or from
-        explicit separated-block hypotheses, to \leanid{IsBNTCanonicalForm}.
+  \item \leanid{MPSTensor.fundamentalTheorem_proportional_canonicalForm} -
+        the corrected proportional comparison for active BNT families
+        (\doclink{TNLean/MPS/FundamentalTheorem/SectorBNT/FundamentalCoord}).
 \end{itemize}
 See also \ghpr{1657} (branch \path{feat/mps-ft-path-beta-pr1-two-layer})
 and the audit memo
