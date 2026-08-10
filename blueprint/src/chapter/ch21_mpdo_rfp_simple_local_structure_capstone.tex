@@ -946,7 +946,9 @@ This is the calculation in
     \label{thm:cpsv_examples410_412_status}
     \notready
     \uses{def:is_rfp_via_ts, def:is_sal, def:mpdo_source_gsnnch,
-        def:mpo_source_zcl}
+        def:mpo_source_zcl, thm:cpsv_example412_literal_formula,
+        thm:cpsv_example412_literal_sal,
+        thm:cpsv_example412_literal_zcl_rfp_gap}
     The three examples in
     \cite[Examples~4.10--4.12, lines~897--942]{Cirac2016MPDO_arXiv} assert the
     following separations.  Example~4.10 applies correlated on-site bit-flip
@@ -970,7 +972,9 @@ This is the calculation in
     a renormalization fixed point.  The literal printed tensor is unnormalized:
     its physical-trace transfer squares to twice itself, whereas trace-preserving
     refinement would force literal idempotence.  Thus the fixed-point assertion
-    must concern a separate normalized representative, most likely $(1/2)M$.
+    is false for the literal representative.  The tensor $(1/2)M$ is the likely
+    intended correction, but its trace-preserving completely positive maps
+    remain unconstructed.
 \end{theorem}
 
 % CPSV16 Example 4.12, lines 932--939.
@@ -989,6 +993,35 @@ This is the calculation in
     $\sigma_z=|0\rangle\langle0|-|1\rangle\langle1|$.
 \end{definition}
 
+\begin{definition}[One-site Pauli sign]
+    \label{def:cpsv_example412_site_sign}
+    \lean{MPOTensor.CPSVExample412Literal.siteSign}
+    \leanok
+    \uses{def:cpsv_example412_literal_tensor}
+    For a physical letter $a\in\{0,1\}$, define its Pauli sign by
+    \begin{align}
+        z_a=(\sigma_z)_{aa},
+        \qquad z_0=1,
+        \qquad z_1=-1.
+        \notag
+    \end{align}
+\end{definition}
+
+\begin{definition}[Configuration sign]
+    \label{def:cpsv_example412_configuration_sign}
+    \lean{MPOTensor.CPSVExample412Literal.configurationSign}
+    \leanok
+    \uses{def:cpsv_example412_site_sign}
+    For a binary configuration
+    $\boldsymbol\sigma=(\sigma_0,\ldots,\sigma_{N-1})$, define
+    \begin{align}
+        z(\boldsymbol\sigma)=\prod_{k=0}^{N-1}z_{\sigma_k}.
+        \notag
+    \end{align}
+    This is the diagonal entry of $\sigma_z^{\otimes N}$ at
+    $\boldsymbol\sigma$.
+\end{definition}
+
 \begin{theorem}[Exact positive-length operator and positivity]
     \label{thm:cpsv_example412_literal_formula}
     \lean{MPOTensor.CPSVExample412Literal.rho_eq_diagonal,
@@ -996,7 +1029,8 @@ This is the calculation in
         MPOTensor.CPSVExample412Literal.M_isMPDO,
         MPOTensor.CPSVExample412Literal.trace_rho}
     \leanok
-    \uses{def:cpsv_example412_literal_tensor}
+    \uses{def:cpsv_example412_literal_tensor,
+        def:cpsv_example412_configuration_sign}
     For every $N>0$,
     \begin{align}
         \rho^{(N)}(M)=I^{\otimes N}+\sigma_z^{\otimes N},
@@ -1043,7 +1077,7 @@ This is the calculation in
         MPOTensor.CPSVExample412Literal.M_not_isRFPViaTS}
     \leanok
     \uses{def:cpsv_example412_literal_tensor, def:mpo_source_zcl,
-        def:is_rfp_via_ts}
+        def:is_rfp_via_ts, thm:rfp_via_ts_physical_trace_idempotent}
     The physical-trace transfer of the printed tensor is
     \begin{align}
         \mathcal T_M=I+\sigma_z
@@ -1054,8 +1088,8 @@ This is the calculation in
     \end{align}
     Hence the literal representative has source zero correlation length with
     scale $2$, but it cannot satisfy the trace-preserving fixed-representative
-    condition.  The likely normalized representative $(1/2)M$ is a separate
-    object.
+    condition.  The tensor $(1/2)M$ is the likely intended correction, but its
+    trace-preserving completely positive maps remain unconstructed.
 \end{theorem}
 \begin{proof}\leanok
     The transfer calculation is immediate from the two diagonal physical
