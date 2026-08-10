@@ -15237,11 +15237,12 @@
     % Ordinary index wires retain their original first ink pass, now using
     % the crossing-policed saved path.  Gapped legs and strings follow.  A
     % physical closure's `trace` route is the one saved route that carries
-    % its own paper halo rather than a crossing-derived gap (`tenkz-core.
-    % code.tex`, the `trace` style), so it cannot settle for the ordinary
-    % first-pass slot: sieve it out here and hold it for a second pass after
-    % the deferred legs, so the halo remains the top ink at any deferred-leg
-    % crossing instead of being buried under the leg drawn over it.
+    % its own paper halo rather than a crossing-derived gap
+    % (`tenkz-core.code.tex`, the `trace` style), so it cannot settle for
+    % the ordinary first-pass slot: sieve it out here and hold it for a
+    % second pass after the deferred legs, so the halo remains the top ink
+    % at any deferred-leg crossing instead of being buried under the leg
+    % drawn over it.
     \seq_clear:N \l__tenkz_kernel_r_deferred_trace_routes_seq
     \seq_map_inline:Nn \l__tenkz_kernel_r_index_routes_seq
       {
