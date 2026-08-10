@@ -10,8 +10,8 @@ import Mathlib.Algebra.Colimit.DirectLimit
 # The algebraic local algebra of a one-dimensional spin chain
 
 The finite-region local observable algebras form a directed system under the canonical
-identity-tensor inclusions.  This file defines their concrete algebraic direct limit and the
-finite-support API for local observables.  It does not take the norm completion, so the
+identity-tensor inclusions. This file defines their concrete algebraic direct limit and the
+finite-support properties of local observables. It does not take the norm completion, so the
 quasi-local C⋆-algebra is not defined here.
 
 ## Main definitions
@@ -94,9 +94,7 @@ noncomputable def algebraicLocalAlgebraLift
     AlgebraicLocalAlgebra d →⋆ₐ[ℂ] B where
   __ := DirectLimit.Algebra.lift (LocalAlgebra d) (localAlgebraMap d) B
     (fun Λ ↦ (g Λ).toAlgHom) hg
-  map_star' x := by
-    induction x using DirectLimit.induction with
-    | _ Λ A => exact map_star (g Λ) A
+  map_star' := DirectLimit.lift_star g fun i j h A ↦ (hg i j h A).symm
 
 /-- The universal map agrees with the supplied map on every finite-region local algebra. -/
 @[simp]
