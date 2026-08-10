@@ -3,8 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.MPS.MPDO.FigureEightPairwise
-import TNLean.MPS.MPDO.GroupedReferenceCorner
+import TNLean.MPS.MPDO.GroupedSectorGram
 import TNLean.MPS.MPDO.VerticalBNT
 
 /-!
@@ -81,25 +80,12 @@ theorem IsMPDO.grouped_sector_gram_conj_eq
     let G := (X j q : Matrix (Fin (dim ((C).enum j q)))
       (Fin (dim ((C).enum j q))) ℂ)ᴴ * X j q
     G * A v * G⁻¹ = A v := by
-  classical
-  let A := cast (congrArg (MPSTensor (D * D)) (hdim j q))
-    (blocks ((C).repr j))
-  let cq := μ ((C).enum j q) * ζ j q
-  obtain ⟨W, c0, hc0, hCorner0⟩ :=
-    exists_distinguished_grouped_reference_corner blocks μ V hdim X ζ
-      hXDist hCoeffPos hCorner j q
-  have hCornerq : ∀ w,
-      (V ((C).enum j q))ᴴ * verticalTensor M w * V ((C).enum j q) =
-        cq • ((X j q : Matrix (Fin (dim ((C).enum j q)))
-            (Fin (dim ((C).enum j q))) ℂ) * A w *
-          (↑((X j q)⁻¹) : Matrix (Fin (dim ((C).enum j q)))
-            (Fin (dim ((C).enum j q))) ℂ)) := by
-    intro w
-    simpa [cq, A] using (hCorner j q w).symm
-  have hGram := hHorizontal.gramDressing_eq_of_two_grouped_corners
-    M hM A (V ((C).enum j q)) W (X j q) 1 cq c0
-    (hCoeffPos j q) hc0 hCornerq (by intro w; simpa [A] using hCorner0 w)
-  simpa [gramDressing, A] using congrFun hGram v
+  apply grouped_sector_gram_conj_eq_of_dressing blocks
+    (M := M) (μ := μ) (V := V) (hdim := hdim) (X := X) (ζ := ζ)
+      (hXDist := hXDist) (hCoeffPos := hCoeffPos) (hCorner := hCorner)
+  intro n A VX VY X' Y cX cY hcX hcY hcornerX hcornerY
+  exact hHorizontal.gramDressing_eq_of_two_grouped_corners M hM
+    A VX VY X' Y cX cY hcX hcY hcornerX hcornerY
 
 end GroupedSectors
 
