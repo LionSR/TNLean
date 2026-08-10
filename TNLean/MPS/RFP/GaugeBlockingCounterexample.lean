@@ -3,8 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import Mathlib.LinearAlgebra.Matrix.Permutation
-import TNLean.MPS.Core.Blocking
+import TNLean.MPS.FundamentalTheorem.SectorBNT.FundamentalCoord
 import TNLean.MPS.MPDO.PhysicalBlocking
 import TNLean.MPS.MPDO.PureAreaLaw
 import TNLean.MPS.RFP.PhaseOscillation
@@ -71,107 +70,20 @@ private noncomputable def cubeSigmaSwap :
 
 /-- The virtual-coordinate permutation exchanging the $1$ and $\omega$ blocks of
 `cubePhaseTensor`. -/
-noncomputable def cubeCoordinateSwap :
+private noncomputable def cubeCoordinateSwap :
     Equiv.Perm (Fin (∑ k : Fin 2, cubePhaseBondDim k)) :=
   finSigmaFinEquiv.symm.trans (cubeSigmaSwap.trans finSigmaFinEquiv)
 
 /-- The permutation matrix of `cubeCoordinateSwap`, regarded as an invertible virtual gauge. -/
-noncomputable def cubeSwapGauge :
+private noncomputable def cubeSwapGauge :
     GL (Fin (∑ k : Fin 2, cubePhaseBondDim k)) ℂ :=
-  ⟨Equiv.Perm.permMatrix ℂ cubeCoordinateSwap,
-    Equiv.Perm.permMatrix ℂ cubeCoordinateSwap.symm,
-    by
-      rw [← Matrix.permMatrix_mul]
-      change Equiv.Perm.permMatrix ℂ (cubeCoordinateSwap⁻¹ * cubeCoordinateSwap) = 1
-      rw [inv_mul_cancel]
-      exact Matrix.permMatrix_one,
-    by
-      rw [← Matrix.permMatrix_mul]
-      change Equiv.Perm.permMatrix ℂ (cubeCoordinateSwap * cubeCoordinateSwap⁻¹) = 1
-      rw [mul_inv_cancel]
-      exact Matrix.permMatrix_one⟩
+  permGL cubeCoordinateSwap
 
-private lemma permMatrix_apply' {n : Type*} [DecidableEq n] (σ : Equiv.Perm n)
-    (i j : n) :
-    Equiv.Perm.permMatrix ℂ σ i j = if j = σ i then (1 : ℂ) else 0 := by
-  rw [Equiv.Perm.permMatrix]
-  by_cases h : j = σ i
-  · subst h
-    rw [if_pos rfl, PEquiv.toMatrix_apply, Equiv.toPEquiv_apply]
-    simp
-  · rw [if_neg h, PEquiv.toMatrix_apply, Equiv.toPEquiv_apply]
-    simp only [Option.mem_def, Option.some.injEq, ite_eq_right_iff,
-      one_ne_zero, imp_false]
-    exact fun heq => h heq.symm
+private lemma primitiveCubeRoot_pow_three : primitiveCubeRoot ^ 3 = 1 :=
+  primitiveCubeRoot_isPrimitiveRoot.pow_eq_one
 
-private lemma permMatrix_mul_eq_submatrix {n : Type*}
-    [Fintype n] [DecidableEq n] (σ : Equiv.Perm n) (M : Matrix n n ℂ) :
-    Equiv.Perm.permMatrix ℂ σ * M = M.submatrix σ id := by
-  ext i j
-  rw [Matrix.mul_apply, Matrix.submatrix_apply, id]
-  simp_rw [permMatrix_apply', ite_mul, one_mul, zero_mul]
-  rw [Finset.sum_ite_eq' Finset.univ (σ i)]
-  simp
-
-private lemma mul_permMatrix_eq_submatrix {n : Type*}
-    [Fintype n] [DecidableEq n] (σ : Equiv.Perm n) (M : Matrix n n ℂ) :
-    M * Equiv.Perm.permMatrix ℂ σ = M.submatrix id σ.symm := by
-  ext i j
-  rw [Matrix.mul_apply, Matrix.submatrix_apply, id]
-  simp_rw [permMatrix_apply', mul_ite, mul_one, mul_zero]
-  have hcond : ∀ x : n, (j = σ x) ↔ (σ.symm j = x) := by
-    intro x
-    constructor
-    · intro h; rw [h]; exact σ.symm_apply_apply x
-    · intro h; rw [← h]; exact (σ.apply_symm_apply j).symm
-  simp_rw [hcond]
-  rw [Finset.sum_ite_eq Finset.univ (σ.symm j)]
-  simp
-
-private lemma permMatrix_conj_eq_submatrix {n : Type*}
-    [Fintype n] [DecidableEq n] (σ : Equiv.Perm n) (M : Matrix n n ℂ) :
-    Equiv.Perm.permMatrix ℂ σ * M * Equiv.Perm.permMatrix ℂ σ.symm =
-      M.submatrix σ σ := by
-  rw [permMatrix_mul_eq_submatrix, mul_permMatrix_eq_submatrix,
-    Matrix.submatrix_submatrix]
-  simp
-
-private theorem primitiveCubeRoot_isPrimitiveRoot' :
-    IsPrimitiveRoot primitiveCubeRoot 3 := by
-  simpa [primitiveCubeRoot, mul_assoc] using
-    Complex.isPrimitiveRoot_exp 3 (by norm_num)
-
-/-- The chosen primitive cube root has cube equal to one. -/
-lemma primitiveCubeRoot_pow_three : primitiveCubeRoot ^ 3 = 1 :=
-  primitiveCubeRoot_isPrimitiveRoot'.pow_eq_one
-
-/-- The chosen primitive cube root is nonzero. -/
-lemma primitiveCubeRoot_ne_zero : primitiveCubeRoot ≠ 0 :=
-  primitiveCubeRoot_isPrimitiveRoot'.ne_zero (by norm_num)
-
-/-- The chosen primitive cube root is nontrivial. -/
-lemma primitiveCubeRoot_ne_one : primitiveCubeRoot ≠ 1 :=
-  primitiveCubeRoot_isPrimitiveRoot'.ne_one (by norm_num)
-
-/-- The chosen primitive cube root is a unit phase. -/
-lemma norm_primitiveCubeRoot : ‖primitiveCubeRoot‖ = 1 := by
+private lemma norm_primitiveCubeRoot : ‖primitiveCubeRoot‖ = 1 := by
   simp [primitiveCubeRoot, Complex.norm_exp, Complex.mul_re]
-
-/-- The canonical-form data of the cube-phase tensor satisfy the normalization at
-arXiv:1606.00608, line 246. -/
-theorem cubePhaseCanonicalData_isWeightNormalized :
-    cubePhaseCanonicalData.IsWeightNormalized := by
-  refine {
-    weight_norm_le_one := ?_
-    weight_unit_exists := ?_ }
-  · change ∀ k : Fin 2, ‖cubePhaseWeight k‖ ≤ 1
-    intro k
-    fin_cases k
-    · simp [cubePhaseWeight]
-    · simp [cubePhaseWeight, norm_primitiveCubeRoot]
-  · change cubePhaseTensor ≠ 0 → ∃ k : Fin 2, ‖cubePhaseWeight k‖ = 1
-    intro _
-    exact ⟨0, by simp [cubePhaseWeight]⟩
 
 private lemma blockTensor_cubePhaseTensor_two (i : Fin 1) :
     blockTensor cubePhaseTensor 2 i =
@@ -216,10 +128,7 @@ theorem cube_phase_blocked_gauge_identity (i : Fin 1) :
   subst i
   rw [blockTensor_cubePhaseTensor_two]
   ext a b
-  rw [show (cubeSwapGauge : Matrix _ _ ℂ) =
-      Equiv.Perm.permMatrix ℂ cubeCoordinateSwap from rfl,
-    show ((cubeSwapGauge⁻¹ : GL (Fin (∑ k : Fin 2, cubePhaseBondDim k)) ℂ) :
-      Matrix _ _ ℂ) = Equiv.Perm.permMatrix ℂ cubeCoordinateSwap.symm from rfl]
+  rw [cubeSwapGauge, permGL_val, permGL_inv_val]
   rw [permMatrix_conj_eq_submatrix]
   simp only [Matrix.smul_apply, smul_eq_mul, Matrix.submatrix_apply]
   rcases ha : finSigmaFinEquiv.symm a with ⟨ka, aa⟩
@@ -239,7 +148,7 @@ theorem cube_phase_blocked_gauge_identity (i : Fin 1) :
 condition in Appendix D, equation `RFP-gauge`, of arXiv:1606.00608, lines 2091--2110.
 
 The scalar is an MPS amplitude phase. It is not a physical channel in the source diagram:
-after doubling it appears as $\zeta\overline{\zeta}=1$. The bridge below proves that
+after doubling it appears as $\zeta\overline{\zeta}=1$. The theorem below proves that
 this witness implies the exact doubled-MPDO predicate.
 
 **Scope restriction (stronger MPS witness):** This definition is sufficient but is not
@@ -355,7 +264,7 @@ theorem isPureOneLetterRFPViaTSUpToVirtualGauge_of_isBlockedGaugePhaseFixedPoint
 
 /-- The cube-phase tensor satisfies equation `RFP-gauge` in arXiv:1606.00608,
 lines 2100--2107, with a unit MPS amplitude phase. -/
-theorem cubePhaseTensor_isBlockedGaugePhaseFixedPoint :
+private theorem cubePhaseTensor_isBlockedGaugePhaseFixedPoint :
     IsBlockedGaugePhaseFixedPoint cubePhaseTensor := by
   refine ⟨cubeSwapGauge, primitiveCubeRoot, norm_primitiveCubeRoot, ?_⟩
   exact cube_phase_blocked_gauge_identity
