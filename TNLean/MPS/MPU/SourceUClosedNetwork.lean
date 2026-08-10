@@ -3,8 +3,8 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.MPS.MPU.MatchingContractions
-import TNLean.MPS.MPU.SourceUBoundary
+import TNLean.MPS.MPU.Simple
+import TNLean.MPS.MPU.SourceURangeTransport
 
 /-!
 # Closed source-u networks
@@ -28,21 +28,8 @@ namespace MPOTensor
 
 variable {d D : ℕ} (U : MPOTensor d D)
 
-/-- The weighted first-cut projector acts identically on the first source cut. -/
-private theorem sourceX₁_range_weighted_sourceCutM₁
-    (ρ : Matrix (Fin D) (Fin D) ℂ) (hρ : ρ.PosDef) :
-    sourceX₁ U ρ hρ * (sourceX₁ U ρ hρ)ᴴ *
-        sourceWeight (d := d) ρ * sourceCutM₁ U = sourceCutM₁ U := by
-  rw [show sourceX₁ U ρ hρ * (sourceX₁ U ρ hρ)ᴴ *
-      sourceWeight (d := d) ρ * sourceCutM₁ U =
-      sourceX₁ U ρ hρ * ((sourceX₁ U ρ hρ)ᴴ *
-        sourceWeight (d := d) ρ * sourceCutM₁ U) by
-    simp only [Matrix.mul_assoc]]
-  rw [← sourceY₁_eq_sourceX₁_conjTranspose_mul_weight_mul_sourceCutM₁ U ρ hρ]
-  exact (sourceCutM₁_eq_sourceX₁_mul_sourceY₁ U ρ hρ).symm
-
 /-- The weighted cut recovery identifies the Gram of `Y₁` with the weighted raw cut Gram. -/
-private theorem sourceY₁_conjTranspose_mul_self
+private lemma sourceY₁_conjTranspose_mul_self
     (ρ : Matrix (Fin D) (Fin D) ℂ) (hρ : ρ.PosDef) :
     (sourceY₁ U ρ hρ)ᴴ * sourceY₁ U ρ hρ =
       (sourceCutM₁ U)ᴴ * sourceWeight (d := d) ρ * sourceCutM₁ U := by
@@ -53,11 +40,11 @@ private theorem sourceY₁_conjTranspose_mul_self
   have hrange : sourceX₁ U ρ hρ * ((sourceX₁ U ρ hρ)ᴴ *
       (sourceWeight (d := d) ρ * sourceCutM₁ U)) = sourceCutM₁ U := by
     simpa only [Matrix.mul_assoc] using
-      sourceX₁_range_weighted_sourceCutM₁ U ρ hρ
+      sourceX₁_mul_conjTranspose_mul_weight_mul_sourceCutM₁ U ρ hρ
   simp only [Matrix.mul_assoc, hrange]
 
 /-- Exact closed cut-projector formula for the ordinary source-u Gram entry. -/
-private theorem sourceU_gram_eq_closed_cut
+private lemma sourceU_gram_eq_closed_cut
     {d D : ℕ} (U : MPOTensor d D)
     (ρ : Matrix (Fin D) (Fin D) ℂ) (hρ : ρ.PosDef)
     (p q : Fin d × Fin d) :
@@ -156,7 +143,7 @@ theorem sourceU_gram_apply_eq_closed_output_letter
   ring
 
 /-- A normalized diagonal power is the normalized sum of diagonal open words. -/
-private theorem normalizedDiagonal_pow_eq_sum_evalWord
+private lemma normalizedDiagonal_pow_eq_sum_evalWord
     [NeZero d] (W : MPOTensor d D) (K : ℕ) :
     normalizedDiagonal W ^ K =
       ((d : ℂ)⁻¹) ^ K •
