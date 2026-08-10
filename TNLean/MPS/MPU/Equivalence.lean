@@ -71,12 +71,13 @@ is fixed. No heterogeneous raw-bond stabilization is asserted. See
 
 Source: arXiv:1703.09188, Definition `def:equivalent-tensors`, lines 716--724. -/
 def Equivalent (U : MPOTensor da D) (V : MPOTensor db D) : Prop :=
-  ∃ k pa pb : ℕ,
-    0 < k ∧ 0 < pa ∧ 0 < pb ∧ Nat.Coprime pa pb ∧
-      ∃ hphys : pa * da = pb * db,
-        StrictlyEquivalent
-          (blockTensor (tensorPhysicalId U pa) k)
-          (blockTensor (tensorPhysicalId V pb) k)
-          (blockedAncillaPhysicalDim_eq k hphys)
+  IsMPU U ∧ IsMPU V ∧
+    ∃ k pa pb : ℕ,
+      0 < k ∧ 0 < pa ∧ 0 < pb ∧ Nat.Coprime pa pb ∧
+        ∃ hphys : pa * da = pb * db,
+          StrictlyEquivalent
+            (blockTensor (tensorPhysicalId U pa) k)
+            (blockTensor (tensorPhysicalId V pb) k)
+            (blockedAncillaPhysicalDim_eq k hphys)
 
 end MPOTensor

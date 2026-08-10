@@ -3259,9 +3259,10 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
   \label{def:equivalent-tensors}
   \lean{MPOTensor.Equivalent}
   \leanok
-  \uses{def:strictly-equivalent-tensors,lem:mpu_blocking}
-  Fix a virtual bond dimension $D$. Let $\mathcal U$ and $\mathcal V$ have
-  physical dimensions $d_a$ and $d_b$. They are equivalent if there are a
+  \uses{def:mpu,def:strictly-equivalent-tensors,lem:mpu_blocking}
+  Fix a virtual bond dimension $D$. Let $\mathcal U$ and $\mathcal V$ be MPU
+  tensors with physical dimensions $d_a$ and $d_b$. They are equivalent if
+  there are a
   positive blocking length $k$ and coprime positive integers $p_a,p_b$ with
   \begin{align}
     p_a d_a&=p_b d_b
