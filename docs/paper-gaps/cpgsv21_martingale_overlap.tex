@@ -673,6 +673,46 @@ and generic prerequisites now include:
     \leanid{MPSTensor.groundSpaceGram_tendsto_gramReshuffle_fixedPointProj}.
     Their limit is $\mathscr R(P_\rho)$, and the quantitative squared
     estimate has factor $D^3(Cr^n)^2$.
+  \item The reconstructed quantitative inverse infrastructure is
+    \leanid{MPSTensor.IsPrimitiveMPS.groundSpaceGram_geometric_inverse_bounds}
+    and
+    \leanid{MPSTensor.IsPrimitiveMPS.groundSpaceMapES_geometric_inverseGram_bounds}.
+    Assume that the bond dimension is nonzero and that the primitive fixed-point
+    witness $\rho$ is explicitly positive definite.  Set
+    \begin{align}
+      \mathcal K_\infty&=\mathscr R(P_\rho),&
+      \mathcal I_\infty&=\mathcal K_\infty^{-1}.
+    \end{align}
+    Then there are $g,c,r>0$, with $r<1$ and
+    $c=\lVert\mathcal I_\infty\rVert g$, such that for every $n\geq1$,
+    \begin{align}
+      \lVert\mathcal K_n-\mathcal K_\infty\rVert&\leq gr^n.
+    \end{align}
+    If $cr^n<1$, then $\mathcal K_n$ is invertible and
+    \begin{align}
+      \lVert\mathcal K_n^{-1}\rVert
+      &\leq\frac{\lVert\mathcal I_\infty\rVert}{1-cr^n},\\
+      \lVert\mathcal K_n^{-1}-\mathcal I_\infty\rVert
+      &\leq\frac{cr^n}{1-cr^n}\lVert\mathcal I_\infty\rVert.
+    \end{align}
+    At the same lengths the physical boundary map is injective, its inverse
+    Gram is $\mathcal K_n^{-1}$, and it obeys the same two bounds.  The proof
+    retains the available squared estimate
+    $\lVert\mathcal K_n-\mathcal K_\infty\rVert^2
+      \leq D^3(Cr^n)^2$ and takes square roots directly, giving
+    $g=\sqrt{D^3}\,C$ without any additional dimension loss.  The base is the
+    generally nonidentity operator $\mathscr R(P_\rho)$, not the identity.
+  \item The elementary propagation theorem
+    \leanid{MPSTensor.geometric_smallness_at_c3_lengths} shows that
+    $cr^l<1$ implies
+    \begin{align}
+      cr^{l+1}<1,\qquad cr^{K+l}<1,\qquad cr^{K+l+1}<1
+    \end{align}
+    for every $K\in\mathbb N$.  Thus one base-length smallness hypothesis
+    supplies the three inverse conditions appearing in the C3 correction
+    telescope.  This is quantitative inverse infrastructure only: these
+    results do not prove contraction of the full physical projector defect or
+    the coefficient in Nachtergaele's equation~(6.1).
   \item The generic operator-norm--to--entrywise-Frobenius estimate, its
     reshuffled-Choi corollary, and the safe dimension conversion are
     \leanid{Matrix.toEuclideanCLM_norm_sq_le_sum_norm_sq},
@@ -905,19 +945,26 @@ limiting Gram operator:
 \end{align}
 It does not control $\lVert1-\mathcal K_n\rVert$ in these unweighted
 coordinates, because $\mathscr R(P_\rho)$ is generally not the identity.
-Under the additional hypothesis $\rho>0$, the limiting Gram is invertible and
-\leanid{MPSTensor.IsPrimitiveMPS.eventually_groundSpaceGram_isUnit_and_inverse_bound}
-proves eventual finite-volume invertibility with an arbitrary-base Neumann
-estimate.  Furthermore,
+Under the explicit additional hypothesis that $\rho$ is positive definite,
+the limiting Gram is invertible.  The reconstructed pointwise estimates
+\leanid{MPSTensor.IsPrimitiveMPS.groundSpaceGram_geometric_inverse_bounds} and
+\leanid{MPSTensor.IsPrimitiveMPS.groundSpaceMapES_geometric_inverseGram_bounds}
+perturb around the nonidentity operator $\mathscr R(P_\rho)$ and give the
+inverse and inverse-Gram bounds with denominator $1-cr^n$ whenever
+$cr^n<1$.  The theorem
+\leanid{MPSTensor.geometric_smallness_at_c3_lengths} propagates the base
+condition $cr^l<1$ to the three correction lengths $l+1$, $K+l$, and
+$K+l+1$.  The normalization still descends from the squared estimate with
+factor $D^3$, yielding the norm constant $\sqrt{D^3}\,C$ without additional
+dimension loss; it is not replaced by an identity-centered source constant.
+Furthermore,
 \leanid{MPSTensor.IsPrimitiveMPS.groundSpaceGram_ringInverse_tendsto} proves
 \begin{align}
-  \mathcal K_n^{-1}&\longrightarrow\mathscr R(P_\rho)^{-1},
+  \mathcal K_n^{-1}&\longrightarrow\mathscr R(P_\rho)^{-1}.
 \end{align}
-and
-\leanid{MPSTensor.IsPrimitiveMPS.eventually_groundSpaceMapES_injective_and_inverseGram_bound}
-transfers the quantitative estimate to the inverse Gram of the physical
-boundary map.  The remaining gap is the comparison of the two physical range
-projectors on overlapping windows.
+These results are quantitative inverse infrastructure.  They do not prove the
+full overlapping-window projector contraction or Nachtergaele's
+Equation~(6.1); that physical projector comparison remains open.
 
 In particular, the development does not prove the overlapping-window FNW
 contraction
