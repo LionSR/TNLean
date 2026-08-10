@@ -4,7 +4,7 @@
     \label{thm:wolf_upper_triangular_word_bound}
     \lean{Matrix.wolf_eq_105_seminorm}
     \leanok
-    Let $D\ge 1$, let $\Lambda,N\in M_D(\mathbb C)$, assume that $\Lambda$ is
+    Let $D\ge 1$, let $\Lambda,N\in M_D(R)$ for a ring $R$, assume that $\Lambda$ is
     diagonal and that $N$ is strictly upper triangular, and let $\nu$ be an
     arbitrary submultiplicative ring seminorm.  Then, for every
     $n\in\mathbb N$,
@@ -63,9 +63,9 @@
     constant.  If $2(D-1)\le n$, the binomial coefficients are increasing for
     $1\le k\le D-1$, so each is at most $\binom{n}{D-1}$.
 
-    Wolf prints the first estimate for every $n\in\mathbb N$, although the
-    exponent $n-D+1$ is negative when $n<D-1$ and is undefined at
-    $\nu(\Lambda)=0$ without an additional convention.  The estimate above is
-    therefore stated in the range $D-1\le n$, where the displayed
-    natural-power derivation is meaningful.
+% Wolf prints the first estimate for every $n\in\mathbb N$, although the
+% exponent $n-D+1$ is negative when $n<D-1$ and is undefined at
+% $\nu(\Lambda)=0$ without an additional convention.  The estimate above is
+% therefore stated in the range $D-1\le n$, where the displayed
+% natural-power derivation is meaningful.
 \end{proof}
