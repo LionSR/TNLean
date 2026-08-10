@@ -154,7 +154,8 @@ def test_duplicate_occurrence_inheritance() -> None:
     )
     errors = audit.inheritance_errors(contained, mutated)
     assert any(
-        "eq1:proof.IV.12 at line 1838" in error and "line 1838" in error
+        "eq1:proof.IV.12 at line 1838" in error
+        and "occurrence-specific semantic boundary" in error
         for error in errors
     )
 
