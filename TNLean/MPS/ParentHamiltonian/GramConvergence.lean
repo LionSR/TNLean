@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.Algebra.OperatorNormFrobenius
 import TNLean.MPS.ParentHamiltonian.GroundSpaceGram
+import TNLean.MPS.Structure.PrimitivityBridge
 import TNLean.Spectral.TransferOperatorGapCommon
 
 /-!
@@ -17,6 +18,8 @@ reshuffling identity with geometric decay of the complementary transfer map.
 
 - `MPSTensor.groundSpaceGram_sub_fixedPointProj_norm_sq_le_geometric`
 - `MPSTensor.groundSpaceGram_tendsto_gramReshuffle_fixedPointProj`
+- `MPSTensor.IsPrimitiveMPS.groundSpaceGram_sub_fixedPointProj_norm_sq_le_geometric`
+- `MPSTensor.IsPrimitiveMPS.groundSpaceGram_tendsto_gramReshuffle_fixedPointProj`
 -/
 
 open scoped Matrix Matrix.Norms.L2Operator NNReal ENNReal
@@ -109,5 +112,48 @@ theorem groundSpaceGram_tendsto_gramReshuffle_fixedPointProj
     simpa only [Real.sqrt_sq (norm_nonneg _), Real.sqrt_zero] using hsqrt
   rw [← tendsto_sub_nhds_zero_iff, tendsto_zero_iff_norm_tendsto_zero]
   exact hnorm
+
+/-- A primitive MPS tensor satisfies the quantitative geometric bound for convergence of
+its ground-space Gram operators to the reshuffled fixed-point projection. -/
+theorem IsPrimitiveMPS.groundSpaceGram_sub_fixedPointProj_norm_sq_le_geometric
+    [NeZero D] {A : MPSTensor d D} {ρ : Matrix (Fin D) (Fin D) ℂ}
+    (hP : IsPrimitiveMPS A ρ) :
+    ∃ C r : ℝ, 0 < C ∧ 0 < r ∧ r < 1 ∧ ∀ n, 1 ≤ n →
+      ‖groundSpaceGram A n - Matrix.gramReshuffle
+        (fixedPointProj ρ (by
+          intro h
+          exact hP.fixedPoint_ne_zero
+            ((Matrix.PosSemidef.trace_eq_zero_iff hP.fixedPoint_psd).1 h)))‖ ^ 2 ≤
+        (D : ℝ) ^ 3 * (C * r ^ n) ^ 2 := by
+  have htr : trace ρ ≠ 0 := by
+    intro h
+    exact hP.fixedPoint_ne_zero
+      ((Matrix.PosSemidef.trace_eq_zero_iff hP.fixedPoint_psd).1 h)
+  have hTP : IsTracePreservingMap (transferMap A) := by
+    intro X
+    exact trace_transferMap A X hP.norm
+  exact MPSTensor.groundSpaceGram_sub_fixedPointProj_norm_sq_le_geometric
+    A ρ htr hTP hP.fixedPoint_is_fixed hP.complementary_transfer_map_gap
+
+/-- The ground-space Gram operators of a primitive MPS tensor converge to the reshuffled
+fixed-point projection. -/
+theorem IsPrimitiveMPS.groundSpaceGram_tendsto_gramReshuffle_fixedPointProj
+    [NeZero D] {A : MPSTensor d D} {ρ : Matrix (Fin D) (Fin D) ℂ}
+    (hP : IsPrimitiveMPS A ρ) :
+    Filter.Tendsto (fun n => groundSpaceGram A n) Filter.atTop
+      (nhds (Matrix.gramReshuffle
+        (fixedPointProj ρ (by
+          intro h
+          exact hP.fixedPoint_ne_zero
+            ((Matrix.PosSemidef.trace_eq_zero_iff hP.fixedPoint_psd).1 h))))) := by
+  have htr : trace ρ ≠ 0 := by
+    intro h
+    exact hP.fixedPoint_ne_zero
+      ((Matrix.PosSemidef.trace_eq_zero_iff hP.fixedPoint_psd).1 h)
+  have hTP : IsTracePreservingMap (transferMap A) := by
+    intro X
+    exact trace_transferMap A X hP.norm
+  exact MPSTensor.groundSpaceGram_tendsto_gramReshuffle_fixedPointProj
+    A ρ htr hTP hP.fixedPoint_is_fixed hP.complementary_transfer_map_gap
 
 end MPSTensor
