@@ -147,21 +147,6 @@ theorem mpo_finAddTwo_eq_sum_sourceX₁_sourceU_sourceY₂_evalWord
       simp_rw [mul_apply_eq_sum_sourceX₁_mul_sourceU_mul_sourceY₂_pair U ρ hρ]
       simp only [Finset.sum_mul, mul_assoc]
 
-/-- Entrywise reconstruction of $Y_2$ through $X_2^\dagger$ and one raw
-tensor letter.
-
-Source: arXiv:1703.09188, equations `Y1Y1X1X1`--`X1X2b` and
-`eq:sf-svd`, lines 479--526. -/
-theorem sourceY₂_eq_sum_star_sourceX₂_mul_apply
-    (l : Fin ℓ[U]) (j : Fin d) (γ : Fin D) :
-    sourceY₂ U l (j, γ) =
-      ∑ β : Fin D, ∑ i : Fin d, star (sourceX₂ U (β, i) l) * U i j β γ := by
-  have h := congrArg (fun M ↦ M l (j, γ))
-    (sourceY₂_eq_sourceX₂_conjTranspose_mul_sourceCutM₂ U)
-  simp only [Matrix.mul_apply, Matrix.conjTranspose_apply] at h
-  rw [Fintype.sum_prod_type] at h
-  exact h
-
 /-- The fully reconstructed open periodic MPO expansion through $X_1$, $u$,
 $X_2$, and the open $K$-site virtual tail.
 
@@ -182,8 +167,16 @@ theorem mpo_finAddTwo_eq_sum_sourceX₁_sourceU_sourceX₂_openTail
             star (sourceX₂ U (β, i) l) *
               (U i j.2 * evalWord U (List.ofFn τ) (List.ofFn ζ)) β α := by
   classical
+  have sourceY₂_apply (l : Fin ℓ[U]) (j : Fin d) (γ : Fin D) :
+      sourceY₂ U l (j, γ) =
+        ∑ β : Fin D, ∑ i : Fin d, star (sourceX₂ U (β, i) l) * U i j β γ := by
+    have h := congrArg (fun M ↦ M l (j, γ))
+      (sourceY₂_eq_sourceX₂_conjTranspose_mul_sourceCutM₂ U)
+    simp only [Matrix.mul_apply, Matrix.conjTranspose_apply] at h
+    rw [Fintype.sum_prod_type] at h
+    exact h
   rw [mpo_finAddTwo_eq_sum_sourceX₁_sourceU_sourceY₂_evalWord U ρ hρ K q j τ ζ]
-  simp_rw [sourceY₂_eq_sum_star_sourceX₂_mul_apply U]
+  simp_rw [sourceY₂_apply]
   simp only [Finset.mul_sum, Finset.sum_mul, Matrix.mul_apply, mul_assoc]
   apply Finset.sum_congr rfl
   intro α _
