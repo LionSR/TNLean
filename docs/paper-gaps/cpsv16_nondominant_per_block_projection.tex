@@ -85,9 +85,12 @@ fixes any $B$-block $B_{k_0}$ and rules out
 \end{align}
 by Corollary~\texttt{Lem1} \cite[line~1131]{Cirac2016MPDO_arXiv}, which
 gives eventual linear independence of
-$\{V^{(N)}(A_j)\}_j\cup\{V^{(N)}(B_{k_0})\}$ from~\eqref{eq:Hk0} and
-combines it with the proportionality identity at
+$\{V^{(N)}(A_j)\}_j\cup\{V^{(N)}(B_{k_0})\}$ from~\eqref{eq:Hk0}.  The
+source then treats this as contradicting the proportionality identity at
 \cite[eq.~\texttt{eq:II\_ABasicTensors}, line~286]{Cirac2016MPDO_arXiv}.
+This is the fixed-block claim made at line~1182.  The passage does not assume
+all-pairwise cross-family decay and does not establish linear independence of
+the full combined family.
 
 \section{Retired formal target}
 
@@ -152,40 +155,37 @@ sub-dominant moduli. Path~$\beta$ scope adjustment
 \leanid{SectorDecomposition} surface inherits the same decay
 mismatch.
 
-\section{The argument the source uses}
+\section{The fixed-block source claim and the formal repair}
 
-The Step~1 contradiction in the proof of Theorem~\texttt{thm1}
-\cite[line~1182]{Cirac2016MPDO_arXiv}
-does not project onto $V^{(N)}(B_{k_0})$. Isolating $V^{(N)}(B_{k_0})$
-in~\eqref{eq:prop} gives
+The Step~1 passage at
+\cite[line~1182]{Cirac2016MPDO_arXiv} asserts the fixed-block contradiction
+described above.  Isolating $V^{(N)}(B_{k_0})$ in~\eqref{eq:prop} gives
 \begin{align}
     \sum_{j}(\mu^A_j)^N V^{(N)}(A_j)
     -c_N\!\!\!\sum_{k\ne k_0}\!\!(\mu^B_k)^N V^{(N)}(B_k)
-    &=c_N(\mu^B_{k_0})^N V^{(N)}(B_{k_0}),
+    &=c_N(\mu^B_{k_0})^N V^{(N)}(B_{k_0}).
     \label{eq:isolate}
 \end{align}
-whose left-hand side lies in
-$\operatorname{span}(\{V^{(N)}(A_j)\}_j\cup\{V^{(N)}(B_k):k\ne k_0\})$. A
-larger application of \texttt{Lem1} provides eventual linear
-independence of the combined family with full span dimension,
-\begin{align}
-    \dim\operatorname{span}(\{V^{(N)}(A_j)\}_{j=1}^{r_A}
-        \cup\{V^{(N)}(B_k)\}_{k=1}^{r_B})
-    =r_A+r_B
-    \qquad(\forall^{\mathrm{cof}}N),
-    \label{eq:largeLem1}
-\end{align}
-under all-pairwise cross-overlap decay. With~\eqref{eq:largeLem1},
-\eqref{eq:isolate} forces $c_N(\mu^B_{k_0})^N=0$ by coefficient
-identification, contradicting $c_N\ne 0$ and $\mu^B_{k_0}\ne 0$. The
-mechanism uses only the coefficient match forced by linear
-independence; it requires neither side to stay bounded away from~$0$.
+The single-block linear independence of
+$\{V^{(N)}(A_j)\}_j\cup\{V^{(N)}(B_{k_0})\}$ does not control the remaining
+vectors $V^{(N)}(B_k)$ on the left of~\eqref{eq:isolate}.  Thus it does not by
+itself justify coefficient comparison in the full proportionality identity.
+The source passage supplies neither all-pairwise cross-family decay nor a
+full combined-family linear-independence statement.
 
-The current \leanid{SectorBNT} API provides the combined-family
-linear-independence mechanism as
-\leanid{MPSTensor.IsBNTCanonicalForm.combined_family_eventually_li}.  The
-corrected proportional theorem applies coefficient comparison on the active BNT
-families and does not use the retired per-block-projection layer.
+The formal development replaces this step rather than formalizing it literally.
+For a chosen $P$-block it collects the $P$-blocks whose overlaps with every
+$Q$-block decay.  The complementary $P$-blocks already admit scalar relations
+with matched $Q$-blocks.  It then applies
+\leanid{MPSTensor.restricted_combined_family_eventually_li} to the decaying
+$P$-subfamily together with all $Q$-blocks and compares coefficients in that
+restricted family.  The selected coefficient is forced to vanish eventually,
+contradicting
+\leanid{MPSTensor.IsBNTCanonicalForm.coeff_not_eventually_zero}.  The unrestricted
+lemma \leanid{MPSTensor.IsBNTCanonicalForm.combined_family_eventually_li} is the
+full-family special case of the same repair.  This coefficient-comparison
+argument proves the current active-sector matching theorem without using the
+retired per-block projection.
 
 \section{Classification}
 
@@ -196,14 +196,15 @@ arbitrary block fails because both sides of the projected proportionality may
 decay together.  This remains a mathematical warning about the method, not an
 unproved theorem required by the current development.
 
-The source coefficient-comparison mechanism instead uses the combined-family
-\texttt{Lem1} statement~\eqref{eq:largeLem1} and keeps the raw power sums
-$\sum_q\mu_{j,q}^N$ visible through \leanid{SectorDecomposition}.  The
-corrected theorem uses this information together with
-\leanid{MPSTensor.IsBNTCanonicalForm.coeff_not_eventually_zero}.  Collapsing a
-sector to one strictly ordered weight destroys precisely the information needed
-for that argument, so non-dominant per-block projection is a route that must not
-be reintroduced.
+The source line~1182 fixed-block claim and the current formal repair must be
+kept distinct.  The repair uses restricted combined-family linear independence,
+scalar relations for the complementary blocks, and the raw power sums
+$\sum_q\mu_{j,q}^N$ carried by \leanid{SectorDecomposition}.  Together with
+\leanid{MPSTensor.IsBNTCanonicalForm.coeff_not_eventually_zero}, this gives the
+active-sector coefficient comparison proved in the current theorem.  Collapsing
+a sector to one strictly ordered weight destroys precisely the information
+needed for that argument, so non-dominant per-block projection is a route that
+must not be reintroduced.
 
 \bibliographystyle{alpha}
 \bibliography{references}
