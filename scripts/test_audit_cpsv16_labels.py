@@ -210,6 +210,23 @@ def test_exact_result_anchor_matching() -> None:
     assert not any("Figure9 at line 1953" in error for error in scope_errors)
 
 
+def test_normalized_anchor_row_uniqueness_and_count() -> None:
+    lines = audit.CONTAINED_RESULT_ANCHORS.read_text().splitlines()
+    header, *rows = lines
+    aa_row = next(row for row in rows if row.startswith("AA=A\t401\t"))
+    leading_zero_duplicate = aa_row.replace("\t401\t", "\t0401\t", 1)
+    assert_rejected(
+        audit.read_contained_result_anchors,
+        "\n".join([header, *rows, leading_zero_duplicate]) + "\n",
+        "duplicate normalized contained result-anchor row for AA=A at line 401",
+    )
+    assert_rejected(
+        audit.read_contained_result_anchors,
+        "\n".join([header, *rows[:-1]]) + "\n",
+        "must contain exactly 60 physical rows, got 59",
+    )
+
+
 def test_shared_tsv_schema_and_row_validation() -> None:
     ledger_header = (
         "label\toccurrences\tlines\tactivity\tclassification\tdisposition\n"
@@ -247,6 +264,7 @@ def main() -> int:
     test_duplicate_occurrence_inheritance()
     test_unique_occurrence_result_anchor_swap()
     test_exact_result_anchor_matching()
+    test_normalized_anchor_row_uniqueness_and_count()
     test_shared_tsv_schema_and_row_validation()
     print("PASS: CPSV16 audit mutations are rejected")
     return 0

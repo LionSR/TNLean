@@ -718,9 +718,17 @@ the remaining sites unchanged.
     \label{thm:cpsv_fibonacci_rank_obstruction_status}
     \notready
     \uses{def:mpo_family}
-    Let $A$ be the vacuum-sector boundary tensor of the Fibonacci model
-    described in \cite[Appendix~D, lines~2118--2176]{Cirac2016MPDO_arXiv}, and
-    set
+    Let $A$ be the vacuum-sector boundary tensor described in
+    \cite[Appendix~D, lines~2118--2176]{Cirac2016MPDO_arXiv}.  Its bond
+    indices $\alpha,\beta$ and its three physical indices $i,j,k$ lie in
+    $\{0,1\}$, and its components are
+    \begin{align}
+        A^{ijk}_{\alpha,\beta}
+        &=\delta_{i,\alpha}\delta_{k,\beta}N_{ijk},
+        \notag
+    \end{align}
+    where $N_{ijk}=0$ if and only if exactly two of $i,j,k$ are zero, and
+    $N_{ijk}>0$ otherwise.  Set
     \begin{align}
         \tau_\pm&=\frac{1\pm\sqrt5}{2}.
         \notag
