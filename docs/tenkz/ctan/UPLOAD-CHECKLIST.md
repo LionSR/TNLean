@@ -95,6 +95,11 @@ file it opened and requiring that every tenkz file resolved inside the
 unpacked directory — so a runtime file the archive forgot is a failed run
 rather than a silent fall-back to a copy already installed on the machine.
 
+Every finding is a printed line of the report, and the check prints all of
+them: a staged name an unpacking tool would misread does not cut the report
+short. The commands that write stop on those same findings, read from the
+same checks, because a command that writes has nowhere to put one.
+
 It does not judge the manual, the prose, or the mathematics, and it does not
 know whether the release campaign permits a tag. Those are read by the
 gates in `RELEASE-POLICY.md` §2 and by the campaign harness in

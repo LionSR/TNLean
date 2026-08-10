@@ -152,6 +152,15 @@ CANONICAL_MATERIAL = {
     "CHANGES.md": "docs/tenkz/CHANGES.md",
 }
 
+# The tables a staging manifest is made of, and the keys each one is read for.
+# The checks below index them without asking, which is what a manifest that
+# has passed `read_manifest` is for.
+MANIFEST_TABLES = {
+    "runtime": ("files", "requires"),
+    "material": (),
+    "source_tree": ("excluded",),
+}
+
 # The other three are recognized by a phrase each carries and the others do
 # not.
 MATERIAL_MARKS = {
@@ -298,6 +307,29 @@ def read_manifest() -> dict:
             f"{MANIFEST_LABEL} declares package {manifest.get('package')!r}, "
             f"not {PACKAGE!r}"
         )
+    # Every reader below indexes these tables directly, because a manifest
+    # that has been read is a manifest that describes a staging tree. A file
+    # missing one of them is not one, and it says so here rather than as a
+    # key error from whichever check happened to reach it first.
+    for table, keys in MANIFEST_TABLES.items():
+        section = manifest.get(table)
+        if not isinstance(section, dict):
+            raise SystemExit(
+                f"{MANIFEST_LABEL} declares no [{table}] table; a staging "
+                "manifest names the runtime, the material, and what the "
+                "source tree excludes"
+            )
+        for key in keys:
+            if key not in section:
+                raise SystemExit(
+                    f"{MANIFEST_LABEL} declares [{table}] without {key!r}"
+                )
+    requires = manifest["runtime"]["requires"]
+    if not isinstance(requires, dict) or not {"packages", "libraries"} <= set(requires):
+        raise SystemExit(
+            f"{MANIFEST_LABEL} declares [runtime.requires] without its "
+            "packages and libraries"
+        )
     return manifest
 
 
@@ -330,51 +362,62 @@ def staged_content(manifest: dict, closure: Closure) -> dict[str, Path]:
     the order the manifest declares. Archive member order is part of the
     bytes, so it comes from the tree rather than from a directory listing.
 
-    Two manifest mistakes are refused here rather than reported later, because
-    the next thing that happens to this mapping is a write. A material entry
-    named after a runtime file would ship under a name the closure and header
-    checks read from a different file; a name outside the invariant subset —
-    a traversal, most of all — would be joined to the staging directory and
-    resolved before anybody read the report saying so.
+    Two manifest mistakes make this mapping unwritable: a material entry named
+    after a runtime file, which would ship under a name the closure and header
+    checks read from a different file, and a name outside the invariant subset,
+    which would be joined to the staging directory and resolved. Both are
+    findings of the `names` check, which the reporting command prints and
+    `require_writable_names` turns into a refusal before any write.
+
+    A source outside the repository is refused here and on both paths: it is
+    not a mistake in what the archive would be called but in what it would
+    contain, and resolving it is how it is found at all.
     """
 
     content: dict[str, Path] = {}
     for name in closure.files:
         content[name] = inside_repository(name, SOURCE / name)
-    collisions = sorted(set(manifest["material"]) & set(closure.files))
-    if collisions:
-        raise SystemExit(
-            f"{MANIFEST_LABEL} stages material under the runtime "
-            f"name(s) {collisions}; the archive would carry a file the closure "
-            "and header checks never read"
-        )
     for name, relative in manifest["material"].items():
         content[name] = inside_repository(name, ROOT / relative)
-    refused = check_names(content).failures
-    if refused:
-        raise SystemExit(
-            f"{MANIFEST_LABEL} names a staged file that will not be "
-            "written: " + "; ".join(refused)
-        )
     return content
 
 
-def require_complete_material(manifest: dict) -> None:
-    """Refuse to write an upload that is missing material every upload carries.
+def require_writable_names(manifest: dict, closure: Closure,
+                           content: dict[str, Path]) -> None:
+    """The name check, as a refusal rather than a report.
 
-    The reporting command says which entry is absent and keeps going; a
-    command that writes has nowhere to put that finding, so it stops.
+    The reporting command says what is wrong with a staged name and keeps
+    going; a command that writes has nowhere to put a finding, so it stops on
+    any of them. Both readings come from the same check, so they cannot drift
+    apart.
     """
 
-    missing = [name for name in REQUIRED_MATERIAL if name not in manifest["material"]]
-    if missing:
+    findings = check_names(content, manifest, closure).failures
+    if findings:
         raise SystemExit(
-            f"{MANIFEST_LABEL} stages no {missing}; an upload carries "
-            f"{list(REQUIRED_MATERIAL)}"
+            f"{MANIFEST_LABEL} names a staged file that will not be "
+            "written: " + "; ".join(findings)
         )
 
 
-def clear_destination(destination: Path) -> None:
+def require_sound_material(manifest: dict) -> None:
+    """The material check, as a refusal rather than a report.
+
+    The reporting command says what is wrong with the material and keeps
+    going; a command that writes has nowhere to put a finding, so it stops on
+    any of them — a missing entry, an absent file, a staged name pointing at
+    the wrong one. Both readings come from the same check, so they cannot
+    drift apart.
+    """
+
+    findings = check_material(manifest).failures
+    if findings:
+        raise SystemExit(
+            f"{MANIFEST_LABEL} does not describe an upload: " + "; ".join(findings)
+        )
+
+
+def clear_destination(destination: Path, release: Release) -> None:
     """Empty the output directory of this tool's own artifacts, and nothing else.
 
     The output directory is an option, and an option that recursively deleted
@@ -406,27 +449,34 @@ def clear_destination(destination: Path) -> None:
         return
     if not resolved.is_dir():
         raise SystemExit(f"{resolved} is not a directory")
+    # Exactly the three things this run would write, each in the shape it
+    # would write them. A name that merely looks like one of them — a private
+    # `tenkz-notes.zip`, or a plain file called `tenkz` — is somebody else's.
+    expected = {
+        PACKAGE: "directory",
+        f"{release.archive_stem}.zip": "file",
+        f"{release.archive_stem}.zip.sha256": "file",
+    }
     ours = []
     for entry in sorted(resolved.iterdir()):
-        mine = entry.name == PACKAGE or (
-            entry.name.startswith(f"{PACKAGE}-")
-            and (entry.name.endswith(".zip") or entry.name.endswith(".zip.sha256"))
-        )
-        if not mine:
+        shape = expected.get(entry.name)
+        if shape is None or (shape == "directory") != entry.is_dir():
             raise SystemExit(
-                f"{resolved} holds {entry.name}, which this tool did not write; "
-                "point --out at a directory it owns"
+                f"{resolved} holds {entry.name}, which this run did not write; "
+                f"it writes {sorted(expected)} and removes nothing else"
             )
         ours.append(entry)
     for entry in ours:
         shutil.rmtree(entry) if entry.is_dir() else entry.unlink()
 
 
-def stage(destination: Path, epoch: int, content: dict[str, Path]) -> Path:
+def stage(
+    destination: Path, release: Release, epoch: int, content: dict[str, Path]
+) -> Path:
     """Write the staging tree, replacing this tool's earlier output."""
 
     tree = destination / PACKAGE
-    clear_destination(destination)
+    clear_destination(destination, release)
     tree.mkdir(parents=True)
     for name, source in content.items():
         target = tree / name
@@ -486,9 +536,10 @@ def build(destination: Path) -> tuple[Path, Release, str]:
     epoch = chosen_epoch(release)
     closure = walk_closure()
     manifest = read_manifest()
-    require_complete_material(manifest)
+    require_sound_material(manifest)
     content = staged_content(manifest, closure)
-    stage(destination, epoch, content)
+    require_writable_names(manifest, closure, content)
+    stage(destination, release, epoch, content)
     archive = write_archive(destination, release, epoch, content)
     return archive, release, hashlib.sha256(archive.read_bytes()).hexdigest()
 
@@ -670,10 +721,25 @@ def check_encoding(content: dict[str, Path]) -> Report:
     return report
 
 
-def check_names(content: dict[str, Path]) -> Report:
-    """Names an unpacking tool cannot misread, on any file system."""
+def check_names(content: dict[str, Path], manifest: dict | None = None,
+                closure: Closure | None = None) -> Report:
+    """Names an unpacking tool cannot misread, on any file system.
+
+    Given the manifest and the closure, the check also answers whether the
+    material stages a name the runtime already carries: the mapping itself
+    cannot say so, because the second entry has taken the first one's place
+    in it by the time anybody looks.
+    """
 
     report = Report("names")
+    if manifest is not None and closure is not None:
+        collisions = sorted(set(manifest["material"]) & set(closure.files))
+        report.require(
+            not collisions,
+            f"{MANIFEST_LABEL} stages material under the runtime "
+            f"name(s) {collisions}; the archive would carry a file the closure "
+            "and header checks never read",
+        )
     seen: dict[str, str] = {}
     for name in content:
         report.require(
@@ -759,6 +825,19 @@ def _material_text(manifest: dict, name: str) -> str:
     return path.read_bytes().decode("utf-8", errors="replace") if path.is_file() else ""
 
 
+def _live_bibtex(bibliography: str) -> str:
+    """The entries of a BibTeX file, with its prose and its comments removed.
+
+    Everything outside an entry is prose BibTeX never reads, and a `%` line is
+    a comment by every convention this repository writes them under. Both can
+    hold a version, a year, or a month, and neither states one: the record's
+    own fields do, and they are what the version check reads.
+    """
+
+    uncommented = re.sub(r"(?m)^\s*%.*$", "", bibliography)
+    return "\n".join(re.findall(r"@\w+\s*\{.*?\n\}", uncommented, re.DOTALL))
+
+
 def check_version(release: Release, manifest: dict) -> Report:
     """One declaration, and every other record checked against it."""
 
@@ -772,27 +851,35 @@ def check_version(release: Release, manifest: dict) -> Report:
     )
     citation = _material_text(manifest, "CITATION.cff")
     # Anchored to the start of a line: a commented or nested occurrence of the
-    # right string beside a stale live value would otherwise satisfy this.
-    report.require(
-        re.search(rf'^version: "{re.escape(release.version)}"\s*$', citation, re.M),
-        f"the citation record must state version {release.version} as its own field",
-    )
-    report.require(
-        re.search(rf'^date-released: "{re.escape(release.date)}"\s*$', citation, re.M),
-        f"the citation record must state date-released {release.date} as its own field",
-    )
-    bibliography = _material_text(manifest, "tenkz.bib")
+    # right string beside a stale live value would otherwise satisfy this. A
+    # top-level field is stated once, so a second one — the stale line a
+    # release edit left behind — is a finding and not a second chance.
+    for field_name, value in (
+        ("version", release.version),
+        ("date-released", release.date),
+    ):
+        stated = re.findall(rf'^{field_name}: "([^"]*)"\s*$', citation, re.M)
+        report.require(
+            stated == [value],
+            f"the citation record must state {field_name} {value} as its own "
+            f"field, once; it states {stated}",
+        )
+    bibliography = _live_bibtex(_material_text(manifest, "tenkz.bib"))
     year, month, _ = release.date.split("-")
+    # Read from the fields themselves, with the comments taken out first: a
+    # BibTeX comment holding the right year beside a live field holding last
+    # year's is a stale record, and it reads as one here.
     report.require(
-        f"version {release.version}" in bibliography,
-        f"the BibTeX record must state version {release.version}",
+        re.search(rf"note\s*=\s*\{{[^}}]*version\s+{re.escape(release.version)}",
+                  bibliography) is not None,
+        f"the BibTeX record must state version {release.version} in its note field",
     )
     report.require(
-        re.search(rf"year\s*=\s*\{{{year}\}}", bibliography) is not None,
+        re.search(rf"year\s*=\s*\{{\s*{year}\s*\}}", bibliography) is not None,
         f"the BibTeX record must state year {year}",
     )
     report.require(
-        re.search(rf"month\s*=\s*\{{{int(month)}\}}", bibliography) is not None,
+        re.search(rf"month\s*=\s*\{{\s*{int(month)}\s*\}}", bibliography) is not None,
         f"the BibTeX record must state month {int(month)}",
     )
     report.notes.append(f"{release.archive_stem}.zip from v{release.version} of {release.date}")
@@ -989,9 +1076,11 @@ def command_stage(out: Path) -> int:
     release = read_release()
     epoch = chosen_epoch(release)
     manifest = read_manifest()
-    require_complete_material(manifest)
-    content = staged_content(manifest, walk_closure())
-    tree = stage(out, epoch, content)
+    require_sound_material(manifest)
+    closure = walk_closure()
+    content = staged_content(manifest, closure)
+    require_writable_names(manifest, closure, content)
+    tree = stage(out, release, epoch, content)
     print(f"staged {len(content)} files under {tree}")
     return 0
 
@@ -1024,13 +1113,15 @@ def command_check(require_smoke: bool, keep: Path | None) -> int:
     ]
     content = staged_content(manifest, closure)
     encoding = check_encoding(content)
+    names = check_names(content, manifest, closure)
     reports.append(encoding)
-    reports.append(check_names(content))
+    reports.append(names)
     # A build cannot run against material that is absent, undeclared, or
-    # unreadable, and a traceback would replace the report naming it. The
-    # checks that need a built tree report themselves skipped instead; the
-    # material is already a failure of its own.
-    blocked = material.failures + encoding.failures
+    # unreadable, or against a name it would refuse to write, and a traceback
+    # would replace the report naming it. The checks that need a built tree
+    # report themselves skipped instead; the finding is already a failure of
+    # its own.
+    blocked = material.failures + encoding.failures + names.failures
     digest = ""
     if blocked:
         for name in ("permissions", "debris", "determinism", "clean-install"):
