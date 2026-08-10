@@ -1,0 +1,66 @@
+% Regression: a multi-row physical closure's `trace` paper halo (issue
+% #5816) stays the top ink where it crosses a physical leg the picture
+% defers to the string surgery -- issue #5826.  Before the fix,
+% __tenkz_kernel_r_strings: drew every saved index route, closure included,
+% before inking deferred legs, so the leg's plain ink covered the closure's
+% halo and the crossing read as a junction.  The fix sieves `trace`-styled
+% saved routes into a second pass that runs after the deferred legs, so the
+% halo is the top ink at any such crossing.
+%
+% Column 2's own `physleg` cannot reach the closure at column 1's default
+% excursion, so `pairtracereach` is widened past one column pitch here: the
+% closure's east-bulging return then sweeps directly over column 2, and its
+% arc peak lands exactly on column 2 when the excursion is twice the column
+% pitch.  Column 2's own north leg is deferred by a declared crossing
+% against a waypointed string well above the arc, which stretches the leg
+% far enough that its shaft actually crosses the arc instead of stopping
+% short of it.  The hook below pins that the leg really is deferred and
+% really is stretched past the arc's own excursion, so the fixture is not
+% vacuous; the pixel ledger pins which ink reads as the top stroke.
+\documentclass{standalone}
+\usepackage{tenkz}
+\makeatletter
+\ExplSyntaxOn
+\tl_set:Ne \l_tmpa_tl { \fp_eval:n { 2.0 } }
+\prop_gput:NnV \g__tenkz_metric_value_prop {pairtracereach} \l_tmpa_tl
+\int_new:N \g__tenkz_test_tolx_deferred_int
+\int_new:N \g__tenkz_test_tolx_reach_int
+\cs_new_eq:NN \__tenkz_test_tolx_leg_ink:nnn \__tenkz_kernel_r_leg_ink:nnn
+\cs_set_protected:Npn \__tenkz_kernel_r_leg_ink:nnn #1#2#3
+  {
+    \bool_lazy_and:nnT
+      { \str_if_eq_p:ee { \l__tenkz_kernel_leg_name_tl } {leg-n-1-2} }
+      { ! \bool_if_p:N \l__tenkz_kernel_topology_bool }
+      {
+        \tl_if_blank:nTF {#3}
+          { \errmessage{the~column-2~leg~was~not~deferred} }
+          { \int_gincr:N \g__tenkz_test_tolx_deferred_int }
+        % The declared crossing must stretch the leg well past its bare
+        % `physleg` reach -- otherwise its shaft never reaches the closure's
+        % arc and the fixture would be vacuous.
+        \fp_compare:nNnF { \l__tenkz_kernel_r_reach_fp } > { 1 }
+          { \errmessage{the~column-2~leg~was~not~stretched~past~the~arc} }
+        \int_gincr:N \g__tenkz_test_tolx_reach_int
+      }
+    \__tenkz_test_tolx_leg_ink:nnn {#1} {#2} {#3}
+  }
+\AtEndDocument
+  {
+    \int_compare:nNnF { \g__tenkz_test_tolx_deferred_int } = {1}
+      { \errmessage{the~column-2~leg~was~not~inspected~once} }
+    \int_compare:nNnF { \g__tenkz_test_tolx_reach_int } = {1}
+      { \errmessage{the~column-2~leg~reach~was~not~inspected~once} }
+  }
+\ExplSyntaxOff
+\makeatother
+\begin{document}
+\tenkzkernel
+\begin{tenkz}[rows={wire,wire}, cols=2, bonds=none, physical=updown,
+              trace={(physical,1)}]
+  \tn[at=(1,1), name=A, skin=box]{A} & \tn[at=(1,2), name=D, skin=box]{D} \\
+  \tn[at=(2,1), name=C, skin=box]{C} & \tn[at=(2,2), name=E, skin=box]{E}
+  \tnwire[kind=string, name=g, crossing=over, via={2 n of D},
+    cross={over at crossing of g and leg-n-1-2}]
+    {2 n of A}{2 ne of D}
+\end{tenkz}
+\end{document}

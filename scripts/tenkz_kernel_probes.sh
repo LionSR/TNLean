@@ -1762,7 +1762,7 @@ for pixel_fixture in \
     r_mpo_skin_box r_mpo_skin_prelude r_parallel_lanes r_physical_dir \
     r_pill_skin_prelude r_pill_skin_roundrect r_region_diagonal \
     r_region_pinch_staircase r_ring_closure r_trace_return_rows \
-    r_trace_row_closure r_wire_stroke \
+    r_trace_row_closure r_trace_over_deferred_leg r_wire_stroke \
     r_noncell_port_slot r_noncell_port_slot_cell \
     r_wide_policy_legs r_wide_policy_ports \
     r_route_noncell_slots r_route_noncell_slots_cell; do
@@ -1832,6 +1832,7 @@ for path in sys.argv[1:]:
   "$WORK/r_physical_dir.png" "$WORK/r_region_diagonal.png" \
   "$WORK/r_region_pinch_staircase.png" "$WORK/r_ring_closure.png" \
   "$WORK/r_trace_return_rows.png" "$WORK/r_trace_row_closure.png" \
+  "$WORK/r_trace_over_deferred_leg.png" \
   "$WORK/r_wire_stroke.png" \
   >"$PIXEL_CURRENT"
 
