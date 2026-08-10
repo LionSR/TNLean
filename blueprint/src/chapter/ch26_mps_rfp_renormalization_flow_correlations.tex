@@ -227,7 +227,8 @@
 \end{theorem}
 \begin{proof}
     \leanok
-    \uses{def:ft_perm_gl, lem:ft_perm_gl_identities, def:mpdo,
+    \uses{def:ft_perm_gl, lem:ft_perm_gl_identities,
+        lem:ft_perm_matrix_conj_submatrix, def:mpdo,
         lem:mpo_doubled, lem:bond_dimension_one_identity_transfer_normal,
         def:cpsv_canonical_form, thm:blocked_gauge_phase_to_doubled_mpdo,
         thm:cpsv_canonical_form_flow_phase_obstruction}
@@ -243,9 +244,9 @@
     $\operatorname{diag}(\omega^2,1)$; multiplication by $\omega$ gives $A$.
     Writing $M=A\otimes\overline A$, doubling cancels the phase through
     \begin{align}
-        (\omega X A^{[2]}X^{-1})\otimes
-        (\overline\omega\,\overline X\,\overline{A^{[2]}}\,\overline X^{-1})
-        &=(X\otimes\overline X)M^{[2]}(X\otimes\overline X)^{-1},
+        (\omega S A^{[2]}S^{-1})\otimes
+        (\overline\omega\,\overline S\,\overline{A^{[2]}}\,\overline S^{-1})
+        &=(S\otimes\overline S)M^{[2]}(S\otimes\overline S)^{-1},
         \notag
     \end{align}
     since $\omega\overline\omega=1$. If the transfer map were idempotent, all of
