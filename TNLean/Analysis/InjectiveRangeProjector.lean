@@ -87,6 +87,87 @@ theorem norm_inverseGram_le_of_norm_one_sub_adjoint_comp_self_le
       simpa only [sub_sub_cancel] using
         NormedRing.norm_inverse_one_sub_le (1 - T.adjoint.comp T) ha ha_lt_one
 
+/-- The inverse Gram operator is symmetric (and hence self-adjoint).
+This follows from `(T^† T) ∘ V = id` and self-adjointness of `T^† T`. -/
+theorem inverseGram_isSymmetric (T : E →L[𝕜] F) (hT : Function.Injective T) :
+    ((inverseGram T hT : E →L[𝕜] E) : E →ₗ[𝕜] E).IsSymmetric := by
+  have h_gram_adj : (T.adjoint.comp T).adjoint = T.adjoint.comp T := by
+    calc
+      (T.adjoint.comp T).adjoint = (T.adjoint ∘L T).adjoint := rfl
+      _ = T.adjoint ∘L (T.adjoint).adjoint := by rw [adjoint_comp]
+      _ = T.adjoint ∘L T := by rw [adjoint_adjoint]
+      _ = T.adjoint.comp T := rfl
+  have h_right_inv : (T.adjoint.comp T).comp (inverseGram T hT) =
+      ContinuousLinearMap.id 𝕜 E := adjoint_comp_self_comp_inverseGram T hT
+  intro x y
+  calc
+    inner 𝕜 ((inverseGram T hT) x) y =
+        inner 𝕜 ((inverseGram T hT) x)
+          (((T.adjoint.comp T).comp (inverseGram T hT)) y) := by
+      rw [h_right_inv, ContinuousLinearMap.id_apply]
+    _ = inner 𝕜 ((inverseGram T hT) x)
+        ((T.adjoint.comp T) ((inverseGram T hT) y)) := rfl
+    _ = inner 𝕜 ((T.adjoint.comp T).adjoint ((inverseGram T hT) x))
+        ((inverseGram T hT) y) := by rw [adjoint_inner_left]
+    _ = inner 𝕜 ((T.adjoint.comp T) ((inverseGram T hT) x))
+        ((inverseGram T hT) y) := by rw [h_gram_adj]
+    _ = inner 𝕜 x ((inverseGram T hT) y) := by
+      have : (T.adjoint.comp T) ((inverseGram T hT) x) = x := by
+        calc
+          (T.adjoint.comp T) ((inverseGram T hT) x) =
+              ((T.adjoint.comp T).comp (inverseGram T hT)) x := rfl
+          _ = (ContinuousLinearMap.id 𝕜 E) x := by rw [h_right_inv]
+          _ = x := rfl
+      rw [this]
+
+/-- The exact norm identity for the composition `T ∘ (T^†T)⁻¹`.
+For an injective map `T` on a finite-dimensional complex Hilbert space,
+`‖T (T^†T)⁻¹‖ = √‖(T^†T)⁻¹‖`. This is an exact equality, not an inequality.
+The proof uses the C*-identity, self-adjointness of the inverse Gram operator,
+and the defining inverse relations. -/
+theorem norm_T_comp_inverseGram_eq_sqrt (T : E →L[𝕜] F) (hT : Function.Injective T) :
+    ‖T.comp (inverseGram T hT)‖ = Real.sqrt ‖inverseGram T hT‖ := by
+  have h_sa_adj : (inverseGram T hT).adjoint = inverseGram T hT :=
+    (inverseGram_isSymmetric T hT).isSelfAdjoint.adjoint_eq
+  set S := T.comp (inverseGram T hT) with hS
+  have hS_adj : S.adjoint = (inverseGram T hT).adjoint.comp T.adjoint :=
+    adjoint_comp _ _
+  have h_sq : ‖S‖ ^ 2 = ‖inverseGram T hT‖ := by
+    calc
+      ‖S‖ ^ 2 = ‖S‖ * ‖S‖ := by ring
+      _ = ‖S.adjoint.comp S‖ := by rw [norm_adjoint_comp_self S]
+      _ = ‖(((inverseGram T hT).adjoint).comp T.adjoint).comp S‖ := by rw [hS_adj]
+      _ = ‖((inverseGram T hT).comp T.adjoint).comp
+            (T.comp (inverseGram T hT))‖ := by rw [h_sa_adj]
+      _ = ‖(inverseGram T hT).comp
+            ((T.adjoint.comp T).comp (inverseGram T hT))‖ := by
+        simp [ContinuousLinearMap.comp_assoc]
+      _ = ‖(inverseGram T hT).comp (ContinuousLinearMap.id 𝕜 E)‖ := by
+        rw [adjoint_comp_self_comp_inverseGram T hT]
+      _ = ‖inverseGram T hT‖ := by simp
+  have h_nonneg : 0 ≤ ‖S‖ := norm_nonneg _
+  calc
+    ‖S‖ = Real.sqrt (‖S‖ ^ 2) := by rw [Real.sqrt_sq h_nonneg]
+    _ = Real.sqrt ‖inverseGram T hT‖ := by rw [h_sq]
+
+/-- The adjoint version of the norm identity.
+For an injective map `T` on a finite-dimensional complex Hilbert space,
+`‖(T^†T)⁻¹ T^†‖ = √‖(T^†T)⁻¹‖`.
+Derived from the previous theorem via `norm_adjoint`. -/
+theorem norm_inverseGram_comp_adjoint_eq_sqrt (T : E →L[𝕜] F) (hT : Function.Injective T) :
+    ‖(inverseGram T hT).comp T.adjoint‖ = Real.sqrt ‖inverseGram T hT‖ := by
+  have h_sa_adj : (inverseGram T hT).adjoint = inverseGram T hT :=
+    (inverseGram_isSymmetric T hT).isSelfAdjoint.adjoint_eq
+  have h_norm_adj : ‖(T.comp (inverseGram T hT)).adjoint‖ =
+      ‖T.comp (inverseGram T hT)‖ :=
+    LinearIsometryEquiv.norm_map (adjoint (𝕜 := 𝕜) (E := E) (F := F)) _
+  calc
+    ‖(inverseGram T hT).comp T.adjoint‖ =
+        ‖(T.comp (inverseGram T hT)).adjoint‖ := by
+      rw [adjoint_comp, h_sa_adj]
+    _ = ‖T.comp (inverseGram T hT)‖ := by rw [h_norm_adj]
+    _ = Real.sqrt ‖inverseGram T hT‖ := norm_T_comp_inverseGram_eq_sqrt T hT
+
 /-- The continuous range projector written through the inverse Gram operator. -/
 noncomputable def injectiveRangeProjector (T : E →L[𝕜] F)
     (hT : Function.Injective T) : F →L[𝕜] F :=
