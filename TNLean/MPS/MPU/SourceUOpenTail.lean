@@ -15,8 +15,8 @@ This file develops the open-tail source-factor algebra used in the proof of
 periodic MPO through $X_1$, the source tensor $u$, and $X_2$, without closing
 the remaining virtual tail.
 
-The retained output pair is consistently denoted by `q`; the corresponding
-pair in a conjugated expression is denoted by `p`. Thus later contractions
+The retained output pair is consistently denoted by \(q\); the corresponding
+pair in a conjugated expression is denoted by \(p\). Thus later contractions
 have the paper's order: the `q` term is unstarred and the `p` term is starred.
 
 **Scope boundary:** no result here collapses the sandwiched open tail, proves
@@ -104,7 +104,7 @@ theorem mul_apply_eq_sum_sourceX₁_mul_sourceU_mul_sourceY₂
   ring
 
 /-- Pair-index reformulation of the open two-site factorization. The output
-pair is `q`, while `j` is the input pair. The name `p` remains reserved for the
+pair is \(q\), while \(j\) is the input pair. The name \(p\) remains reserved for the
 retained output pair in the conjugated factor of a later Gram contraction.
 
 Source: arXiv:1703.09188, equations `SVDforms2` and `uu`, lines 526--537. -/
@@ -121,7 +121,7 @@ theorem mul_apply_eq_sum_sourceX₁_mul_sourceU_mul_sourceY₂_pair
 /-- An open periodic MPO, reindexed into its first two sites and tail, factors
 through $X_1$, $u$, $Y_2$, and the unevaluated virtual tail.
 
-The retained output pair is `q`; the pair `j` belongs to the input word.
+The retained output pair is \(q\); the pair \(j\) belongs to the input word.
 Source: arXiv:1703.09188, equations `SVDforms2` and `uu`, lines 515--537. -/
 theorem mpo_finAddTwo_eq_sum_sourceX₁_sourceU_sourceY₂_evalWord
     (ρ : Matrix (Fin D) (Fin D) ℂ) (hρ : ρ.PosDef) (K : ℕ)
