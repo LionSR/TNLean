@@ -622,6 +622,30 @@ orthogonal projector is the canonical representative used here.
     Theorem~\ref{thm:gram_reshuffle_norm_sq_le_card_cube_mul_operator_norm_sq}.
 \end{proof}
 
+\begin{theorem}[Primitive-MPS geometric Gram convergence]
+    \label{thm:primitive_ground_space_gram_geometric_fixed_point}
+    \lean{MPSTensor.IsPrimitiveMPS.groundSpaceGram_sub_fixedPointProj_norm_sq_le_geometric}
+    \leanok
+    \uses{def:primitive_mps, thm:ground_space_gram_geometric_fixed_point}
+    Let $A$ be a primitive MPS tensor with fixed-point witness $\rho$. Then there
+    are real constants $C,r$ with $C>0$ and $0<r<1$ such that, for every
+    $n\geq1$,
+    \begin{align}
+      \bigl\lVert\mathcal K_n-\mathscr R(P_\rho)\bigr\rVert^2
+      &\leq D^3\bigl(Cr^n\bigr)^2.
+    \end{align}
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:ground_space_gram_geometric_fixed_point}
+    Positive semidefiniteness and nonvanishing of $\rho$ imply
+    $\tr(\rho)\neq0$. The trace-preserving identity, fixed-point equation, and
+    complementary spectral-radius bound are the remaining fields of the
+    primitive-MPS hypothesis, so
+    Theorem~\ref{thm:ground_space_gram_geometric_fixed_point} applies.
+\end{proof}
+
 \begin{theorem}[Ground-space Gram convergence]
     \label{thm:ground_space_gram_tendsto_fixed_point}
     \lean{MPSTensor.groundSpaceGram_tendsto_gramReshuffle_fixedPointProj}
@@ -646,6 +670,26 @@ orthogonal projector is the canonical representative used here.
     The right-hand side of
     (\ref{eq:ground_space_gram_geometric_fixed_point}) tends to zero because
     $0<r<1$.  Taking square roots gives the asserted norm convergence.
+\end{proof}
+
+\begin{theorem}[Primitive-MPS ground-space Gram convergence]
+    \label{thm:primitive_ground_space_gram_tendsto_fixed_point}
+    \lean{MPSTensor.IsPrimitiveMPS.groundSpaceGram_tendsto_gramReshuffle_fixedPointProj}
+    \leanok
+    \uses{def:primitive_mps, thm:ground_space_gram_tendsto_fixed_point}
+    If $A$ is a primitive MPS tensor with fixed-point witness $\rho$, then
+    \begin{align}
+      \mathcal K_n&\longrightarrow\mathscr R(P_\rho)
+    \end{align}
+    in operator norm as $n\to\infty$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:ground_space_gram_tendsto_fixed_point}
+    The primitive-MPS data supply the nonzero trace, trace preservation,
+    fixed-point equation, and complementary spectral-radius hypothesis of
+    Theorem~\ref{thm:ground_space_gram_tendsto_fixed_point}.
 \end{proof}
 
 The limit in Theorem~\ref{thm:ground_space_gram_tendsto_fixed_point} is the
