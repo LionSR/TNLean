@@ -1,0 +1,61 @@
+label	line	result_anchor
+eq:II_auxcor	358	Corollary 2.11
+AA=A	401	Theorem 3.1
+III_CFI_RFP	546	Theorem 3.11
+eq:III_isometry	551	Theorem 3.11
+K=MM	854	Theorem 4.9
+KxKy=0	866	Theorem 4.9
+UkU=rl	872	Theorem 4.9
+etakhetc	877	Theorem 4.9
+tralktrrk	882	Theorem 4.9
+PsiPhi	887	Theorem 4.9
+UMU	948	Proposition 4.13
+eq:algebra	978	Theorem 4.14
+idempotent	982	Theorem 4.14
+Ualphabeta	988	Theorem 4.14
+scprod	1086	Appendix A's overlap lemma
+rel	1096	Appendix A's overlap lemma
+eq-Appendix:II:A=XAX	1139	Proposition 2.7
+eq:app_aux	1159	Lemma A.5
+eq:II_auxcor	1176	Appendix A restatement
+eq_III_NT_RFP	1277	Appendix B's RFP characterization
+sigma3	1355	Lemma Lsigma3
+Qketc	1421	Lemma propSN
+formK	1436	Lemma propSN
+etarl	1443	Lemma propSN
+StochT	1454	Lemma propSN
+P1KP2	1467	Lemma propSN
+3to5tcpm	1514	Proposition 3to5
+expression	1573	Proposition 3to4
+sigmaNK2	1586	Proposition 3to4
+eq:gibbs-sal	1608	Proposition 4to2
+Pis	1683	Appendix C separating-projector lemma
+PjKiPj	1688	Appendix C separating-projector lemma
+Qks	1700	Appendix C separating-projector lemma
+QkKjs	1705	Appendix C separating-projector lemma
+Qketc2	1724	Appendix C separating-projector lemma
+keyformula	1730	Appendix C separating-projector lemma
+generateMPDO	1748	Proposition prop2to3
+sigmaNKj	1756	Proposition prop2to3
+entropiesj	1768	Proposition prop2to3
+sumstron	1773	Proposition prop2to3
+strongj	1778	Proposition prop2to3
+eq1:proof.IV.12	1838	Lemma C.16
+UMU-appendix	1866	Proposition 4.13
+eq1:proof.IV.12	1882	Proposition 4.13
+eq2:proof.IV.12	1890	Proposition 4.13
+eq3:proof.IV.12	1903	Proposition 4.13
+eq:algebra-appendix	1935	Theorem 4.14
+idempotent-appendix	1939	Theorem 4.14
+Figure9	1953	Appendix C.4 proof of Theorem 4.14
+eq1-proof-main-thm	2016	Appendix C.4 proof of Theorem 4.14
+Figure11	2022	Appendix C.4 proof of Theorem 4.14
+eq2-proof-main-thm	2026	Appendix C.4 proof of Theorem 4.14
+varphiPAXB	2228	Appendix D proposition
+Propproj	2233	Appendix D proposition
+PAXPXB	2245	Appendix D proposition
+PXBAXetc	2255	Appendix D proposition
+PPPAXB	2261	Appendix D proposition
+PAXQAX	2263	Appendix D proposition
+PXBQXB	2265	Appendix D proposition
+arrggg	2281	Appendix D proposition

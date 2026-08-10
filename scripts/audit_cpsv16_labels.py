@@ -23,6 +23,9 @@ ROOT = Path(__file__).resolve().parents[1]
 SOURCE = ROOT / "Papers/1606.00608/MPDO-22-12-17-2.tex"
 LEDGER = ROOT / "docs/audits/data/cpsv16-label-dispositions.tsv"
 CLASSIFICATION_SNAPSHOT = ROOT / "docs/audits/data/cpsv16-label-classifications.tsv"
+CONTAINED_RESULT_ANCHORS = (
+    ROOT / "docs/audits/data/cpsv16-contained-result-anchors.tsv"
+)
 EXPECTED_LEXICAL_OCCURRENCES = 187
 EXPECTED_LEXICAL_NAMES = 183
 EXPECTED_ACTIVE_OCCURRENCES = 186
@@ -144,9 +147,21 @@ def inheritance_count_errors(
 def inheritance_errors(
     contained_occurrences: list[tuple[str, int]],
     ledger: dict[str, dict[str, str]],
+    expected_result_anchors: dict[tuple[str, int], str] | None = None,
 ) -> list[str]:
     """Validate inheritance dispositions for every contained occurrence."""
+    if expected_result_anchors is None:
+        expected_result_anchors = read_contained_result_anchors()
     errors: list[str] = []
+    actual_occurrences = set(contained_occurrences)
+    expected_occurrences = set(expected_result_anchors)
+    if actual_occurrences != expected_occurrences:
+        missing = sorted(expected_occurrences - actual_occurrences)
+        extra = sorted(actual_occurrences - expected_occurrences)
+        errors.append(
+            "theorem/proof-contained result-anchor snapshot mismatch; "
+            f"missing={missing}, extra={extra}"
+        )
     occurrence_counts = Counter(label for label, _ in contained_occurrences)
     duplicate_occurrences = {
         occurrence
@@ -173,6 +188,12 @@ def inheritance_errors(
                 f"{ledger[label]['classification']} disposition must explicitly "
                 "inherit the enclosing result's status and boundary"
             )
+        result_anchor = expected_result_anchors.get((label, line_no))
+        if result_anchor is not None and result_anchor not in disposition:
+            errors.append(
+                f"{label} at line {line_no}: disposition must name enclosing "
+                f"result anchor {result_anchor!r}"
+            )
         for anchor in EXPECTED_DUPLICATE_CONTAINED_ANCHORS.get(
             (label, line_no), ()
         ):
@@ -190,6 +211,7 @@ def read_tsv_rows(
     table_name: str,
     *,
     require_rows: bool = False,
+    key_fields: tuple[str, ...] = ("label",),
 ) -> list[dict[str, str]]:
     """Read a labelled TSV with shared schema and row validation."""
     with path.open(newline="") as handle:
@@ -199,17 +221,56 @@ def read_tsv_rows(
         rows = list(reader)
     if require_rows and not rows:
         raise ValueError(f"{table_name} must contain at least one row")
-    labels: set[str] = set()
+    keys: set[tuple[str, ...]] = set()
     for row in rows:
         if None in row:
             raise ValueError(f"{table_name} row has surplus fields: {row[None]!r}")
         label = row["label"]
         if not label:
             raise ValueError(f"empty label in {table_name}")
-        if label in labels:
-            raise ValueError(f"duplicate {table_name} row for {label}")
-        labels.add(label)
+        key = tuple(row[field] for field in key_fields)
+        if key in keys:
+            if key_fields == ("label",):
+                raise ValueError(f"duplicate {table_name} row for {label}")
+            raise ValueError(
+                f"duplicate {table_name} row for "
+                f"{dict(zip(key_fields, key, strict=True))!r}"
+            )
+        keys.add(key)
     return rows
+
+
+def read_contained_result_anchors(
+    path: Path = CONTAINED_RESULT_ANCHORS,
+) -> dict[tuple[str, int], str]:
+    """Read the enclosing-result anchor for every contained occurrence."""
+    rows = read_tsv_rows(
+        path,
+        ["label", "line", "result_anchor"],
+        "contained result-anchor snapshot",
+        require_rows=True,
+        key_fields=("label", "line"),
+    )
+    result: dict[tuple[str, int], str] = {}
+    for row in rows:
+        label = row["label"]
+        try:
+            line = int(row["line"])
+        except ValueError as error:
+            raise ValueError(
+                f"invalid contained result-anchor line for {label}: {row['line']!r}"
+            ) from error
+        if line <= 0:
+            raise ValueError(
+                f"invalid contained result-anchor line for {label}: {line}"
+            )
+        anchor = row["result_anchor"].strip()
+        if not anchor:
+            raise ValueError(
+                f"empty contained result anchor for {label} at line {line}"
+            )
+        result[(label, line)] = anchor
+    return result
 
 
 def read_classification_snapshot(

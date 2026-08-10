@@ -159,6 +159,30 @@ def test_duplicate_occurrence_inheritance() -> None:
     )
 
 
+def test_unique_occurrence_result_anchor_swap() -> None:
+    _, active_source = audit.source_inventory()
+    ledger = audit.read_ledger()
+    contained = audit.theorem_contained_labels(active_source, ledger)
+    anchors = audit.read_contained_result_anchors()
+    assert len(anchors) == audit.EXPECTED_THEOREM_CONTAINED_OCCURRENCES
+    assert set(contained) == set(anchors)
+
+    mutated = {label: dict(row) for label, row in ledger.items()}
+    mutated["AA=A"]["disposition"], mutated["KxKy=0"]["disposition"] = (
+        mutated["KxKy=0"]["disposition"],
+        mutated["AA=A"]["disposition"],
+    )
+    errors = audit.inheritance_errors(contained, mutated, anchors)
+    assert any(
+        "AA=A at line 401" in error and "Theorem 3.1" in error
+        for error in errors
+    )
+    assert any(
+        "KxKy=0 at line 866" in error and "Theorem 4.9" in error
+        for error in errors
+    )
+
+
 def test_shared_tsv_schema_and_row_validation() -> None:
     ledger_header = (
         "label\toccurrences\tlines\tactivity\tclassification\tdisposition\n"
@@ -194,6 +218,7 @@ def main() -> int:
     test_classification_identity_regression()
     test_eq2_proof_main_classification_regression()
     test_duplicate_occurrence_inheritance()
+    test_unique_occurrence_result_anchor_swap()
     test_shared_tsv_schema_and_row_validation()
     print("PASS: CPSV16 audit mutations are rejected")
     return 0
