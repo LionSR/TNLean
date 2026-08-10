@@ -3146,3 +3146,100 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
       &=\iota_{\Lambda,\Delta}(A).
   \end{align}
 \end{proof}
+
+\begin{definition}[Algebraic local algebra]
+  \label{def:qca_algebraic_local_algebra}
+  \lean{SpinChain.instDirectedSystemLocalAlgebra,
+    SpinChain.AlgebraicLocalAlgebra,SpinChain.localObservable,
+    SpinChain.localObservable_localInclusion}
+  \leanok
+  \uses{def:qca_local_algebra,def:qca_local_inclusion,
+    lem:qca_local_inclusion_refl,lem:qca_local_inclusion_trans}
+  The finite-region local algebras form a directed system under the maps
+  $\iota_{\Lambda,\Gamma}$.  Its algebraic direct limit is the algebraic
+  local algebra
+  \begin{align}
+    \mathcal A_{\mathrm{loc}}
+      &=\varinjlim_{\Lambda\Subset\mathbb Z}\mathcal A_\Lambda.
+  \end{align}
+  For every finite region $\Lambda$, write
+  $\iota_\Lambda\colon\mathcal A_\Lambda\to\mathcal A_{\mathrm{loc}}$
+  for the canonical inclusion.  Whenever $\Lambda\subseteq\Gamma$, these
+  inclusions satisfy
+  \begin{align}
+    \iota_\Gamma\circ\iota_{\Lambda,\Gamma}&=\iota_\Lambda.
+  \end{align}
+  This is the union
+  $\bigcup_{\Lambda\Subset\mathbb Z}\mathcal A_\Lambda$ in the Appendix of
+  \cite{Cirac2017MPU}.  No norm completion is taken.
+\end{definition}
+
+\begin{theorem}[Star-algebra universal property]
+  \label{thm:qca_algebraic_local_algebra_universal}
+  \lean{SpinChain.algebraicLocalAlgebraLift,
+    SpinChain.algebraicLocalAlgebraLift_localObservable,
+    SpinChain.algebraicLocalAlgebra_starAlgHom_ext,
+    SpinChain.algebraicLocalAlgebraLift_unique}
+  \leanok
+  \uses{def:qca_algebraic_local_algebra}
+  Let $B$ be a complex star algebra.  Suppose that for every finite region
+  $\Lambda$ there is a star-algebra homomorphism
+  $g_\Lambda\colon\mathcal A_\Lambda\to B$.  Whenever
+  $\Lambda\subseteq\Gamma$, suppose that
+  \begin{align}
+    g_\Gamma\circ\iota_{\Lambda,\Gamma}&=g_\Lambda.
+  \end{align}
+  Then there is a unique star-algebra homomorphism
+  $g\colon\mathcal A_{\mathrm{loc}}\to B$ satisfying
+  $g\circ\iota_\Lambda=g_\Lambda$ for every finite region $\Lambda$.
+\end{theorem}
+
+\begin{proof}\leanok
+  Define $g$ on a local observable represented by
+  $A\in\mathcal A_\Lambda$ as $g_\Lambda(A)$.  Compatibility makes this
+  independent of the representing region.  Since each $g_\Lambda$ preserves
+  addition, multiplication, the unit, scalar multiplication, and the star
+  operation, so does $g$.  Every element of the direct limit has a
+  finite-region representative, which also proves uniqueness.
+\end{proof}
+
+\begin{definition}[Support of a local observable]
+  \label{def:qca_supported_in}
+  \lean{SpinChain.SupportedIn}
+  \leanok
+  \uses{def:qca_algebraic_local_algebra}
+  A local observable $A\in\mathcal A_{\mathrm{loc}}$ is supported in the
+  finite region $\Lambda$ if it lies in the image of
+  $\iota_\Lambda\colon\mathcal A_\Lambda\to\mathcal A_{\mathrm{loc}}$.
+\end{definition}
+
+\begin{theorem}[Finite supports of local observables]
+  \label{thm:qca_local_observable_finite_support}
+  \lean{SpinChain.localObservable_injective,SpinChain.SupportedIn.mono,
+    SpinChain.SupportedIn.union_left,SpinChain.SupportedIn.union_right,
+    SpinChain.SupportedIn.add,SpinChain.SupportedIn.mul,
+    SpinChain.SupportedIn.star,SpinChain.SupportedIn.zero,
+    SpinChain.SupportedIn.one,SpinChain.exists_supportedIn}
+  \leanok
+  \uses{def:qca_supported_in,lem:qca_local_inclusion_injective}
+  Every local observable is supported in some finite region.  If $A$ is
+  supported in $\Lambda$ and $\Lambda\subseteq\Gamma$, then $A$ is supported
+  in $\Gamma$.  If $A$ and $B$ are supported in $\Lambda$ and $\Gamma$,
+  respectively, then $A+B$ and $AB$ are supported in $\Lambda\cup\Gamma$.
+  The adjoint $A^*$ is supported in $\Lambda$, and both $0$ and $1$ are
+  supported in every finite region.  For positive on-site dimension, each
+  map $\iota_\Lambda$ is injective.
+\end{theorem}
+
+\begin{proof}\leanok
+  \uses{def:qca_algebraic_local_algebra,lem:qca_local_inclusion_injective}
+  Enlarge representatives by tensoring with the identity on the added sites.
+  Two representatives can therefore be moved to the finite union of their
+  regions, where sums and products are formed.  The canonical inclusions are
+  unital star-algebra homomorphisms, so they preserve the adjoint, zero, and
+  the unit.  For $d>0$, every transition map between finite-region algebras is
+  injective; the canonical map from each member of such a directed system to
+  its direct limit is therefore injective.  Finally, every element of an
+  algebraic direct limit has a representative in one member of the directed
+  system.
+\end{proof}
