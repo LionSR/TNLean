@@ -153,6 +153,7 @@ import TNLean.MPS.MPDO.GSNNCHSectorSum
 import TNLean.MPS.MPDO.GroupedFigure8
 import TNLean.MPS.MPDO.GroupedGramNormalization
 import TNLean.MPS.MPDO.GroupedReferenceCorner
+import TNLean.MPS.MPDO.GroupedSectorGram
 import TNLean.MPS.MPDO.HayashiSectorComparison
 import TNLean.MPS.MPDO.HayashiSectorProjector
 import TNLean.MPS.MPDO.HorizontalBNT
@@ -296,6 +297,7 @@ import TNLean.MPS.MPDO.VerticalBlockedOperatorRepresentations
 import TNLean.MPS.MPDO.VerticalBoundaryContraction
 import TNLean.MPS.MPDO.VerticalCF
 import TNLean.MPS.MPDO.VerticalCanonicalForm
+import TNLean.MPS.MPDO.VerticalCanonicalFormAssembly
 import TNLean.MPS.MPDO.VerticalCoisometry
 import TNLean.MPS.MPDO.VerticalMapTransport
 import TNLean.MPS.MPDO.VerticalProductCornerComparison
