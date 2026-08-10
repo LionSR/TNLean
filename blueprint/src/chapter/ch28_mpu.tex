@@ -3253,6 +3253,87 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
   \cite{Cirac2017MPU}.  No norm completion is taken.
 \end{definition}
 
+\begin{definition}[Operator norm on the local algebra]
+  \label{def:qca_algebraic_local_operator_norm}
+  \lean{SpinChain.algebraicLocalOperatorNorm,
+    SpinChain.algebraicLocalOperatorNorm_localObservable,
+    SpinChain.norm_localObservable}
+  \leanok
+  \uses{def:qca_algebraic_local_algebra,lem:qca_local_inclusion_norm}
+  Assume $d>0$.  If a local observable $A\in\mathcal A_{\mathrm{loc}}$
+  is represented by $A_\Lambda\in\mathcal A_\Lambda$ on a finite region
+  $\Lambda$, define its operator norm by
+  \begin{align}
+    \lVert A\rVert&=\lVert A_\Lambda\rVert.
+  \end{align}
+  This does not depend on the finite region or representative.
+\end{definition}
+
+\begin{proof}\leanok
+  If $A_\Lambda$ and $A_\Gamma$ represent the same local observable, then
+  the defining relation for the inductive limit gives a finite region
+  $\Delta\supseteq\Lambda\cup\Gamma$ such that
+  \begin{align}
+    \iota_{\Lambda,\Delta}(A_\Lambda)
+      &=\iota_{\Gamma,\Delta}(A_\Gamma).
+  \end{align}
+  Both inclusions preserve the operator norm, so
+  $\lVert A_\Lambda\rVert=\lVert A_\Gamma\rVert$.
+\end{proof}
+
+\begin{theorem}[Normed star algebra of local observables]
+  \label{thm:qca_algebraic_local_normed_star_algebra}
+  \lean{SpinChain.instNormedAddCommGroupAlgebraicLocalAlgebra,
+    SpinChain.instNormedRingAlgebraicLocalAlgebra,
+    SpinChain.instNormedAlgebraAlgebraicLocalAlgebra,
+    SpinChain.instStarRingAlgebraicLocalAlgebra,
+    SpinChain.instCStarRingAlgebraicLocalAlgebra,
+    SpinChain.norm_star_mul_self}
+  \leanok
+  \uses{def:qca_algebraic_local_operator_norm}
+  For $d>0$, the local algebra with the operator norm is a normed complex
+  star algebra.  For every local observable $A$ it satisfies the C-star
+  identity
+  \begin{align}
+    \lVert A^*A\rVert&=\lVert A\rVert^2.
+  \end{align}
+  No completeness assertion is made.
+\end{theorem}
+
+\begin{proof}\leanok
+  Choose a finite region $\Lambda$ and a representative
+  $A_\Lambda\in\mathcal A_\Lambda$.  Addition, multiplication, scalar
+  multiplication, and adjoints are computed on finite-region
+  representatives.  Their norm inequalities therefore follow from those
+  in $\mathcal A_\Lambda$.  In particular,
+  \begin{align}
+    \lVert A^*A\rVert
+      &=\lVert A_\Lambda^*A_\Lambda\rVert
+       =\lVert A_\Lambda\rVert^2
+       =\lVert A\rVert^2.
+  \end{align}
+\end{proof}
+
+\begin{lemma}[Local observables embed isometrically]
+  \label{lem:qca_local_observable_isometry}
+  \lean{SpinChain.localObservable_isometry}
+  \leanok
+  \uses{def:qca_algebraic_local_operator_norm}
+  For $d>0$ and every finite region $\Lambda$, the canonical map
+  \begin{align}
+    \iota_\Lambda\colon\mathcal A_\Lambda
+      &\longrightarrow\mathcal A_{\mathrm{loc}}
+  \end{align}
+  is an operator-norm isometry.
+\end{lemma}
+
+\begin{proof}\leanok
+  The norm of $\iota_\Lambda(A)$ is defined to be the operator norm of its
+  representative $A\in\mathcal A_\Lambda$.  Hence
+  $\lVert\iota_\Lambda(A)\rVert=\lVert A\rVert$; applying this equality to
+  differences proves preservation of distance.
+\end{proof}
+
 \begin{theorem}[Star-algebra universal property]
   \label{thm:qca_algebraic_local_algebra_universal}
   \lean{SpinChain.algebraicLocalAlgebraLift,
