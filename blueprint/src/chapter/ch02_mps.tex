@@ -463,16 +463,22 @@ boundary conditions (PBC).
 \begin{definition}[Unit gauge-phase equivalence]
     \label{def:unit_gauge_phase_equiv}
     \lean{MPSTensor.UnitGaugePhaseEquiv}
-    \lean{MPSTensor.UnitGaugePhaseEquiv.toGaugePhaseEquiv}
     \leanok
     \uses{def:gauge_phase_equiv}
     Two tensors are unit gauge-phase equivalent when the gauge-phase equation
     holds with $|\zeta|=1$.
 \end{definition}
 
+\begin{lemma}[Unit gauge phase implies gauge phase]
+    \label{lem:unit_gauge_phase_to_gauge_phase}
+    \lean{MPSTensor.UnitGaugePhaseEquiv.toGaugePhaseEquiv}
+    \leanok
+    \uses{def:unit_gauge_phase_equiv}
+    Unit gauge-phase equivalence implies gauge-phase equivalence.
+\end{lemma}
+
 \begin{proof}\leanok
-    Since a unit-modulus scalar is nonzero, unit gauge-phase equivalence implies
-    gauge-phase equivalence.
+    A unit-modulus scalar is nonzero.
 \end{proof}
 
 \begin{lemma}[Gauge-phase equivalence across equal bond dimensions]
