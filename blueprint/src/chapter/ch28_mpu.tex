@@ -2040,6 +2040,31 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
     finite sums gives the displayed eight-index expression.
 \end{proof}
 
+\begin{theorem}[Supplied-witness overlapping reblocking]
+    \label{thm:mpu_supplied_witness_overlapping_reblocking}
+    \lean{MPOTensor.blockTensor_succ_simple2_of_supplied,
+        MPOTensor.IsMPU.simple1_of_simple2_supplied,
+        MPOTensor.IsMPU.blockTensor_add_two_simple_contractions_of_supplied}
+    \leanok
+    \uses{thm:mpu_all_later_simple_blockings,def:mpu_simple}
+    Suppose a direct block of length $K$ satisfies the two-letter simple
+    contraction with specified vectors $(a|$ and $|b)$.  At direct length
+    $K+2$, the suffix of the first blocked word and the prefix of the second
+    blocked word preserve the same insertion $|b)(a|$.  MPU unitarity at
+    lengths two and three then gives, with the same vectors,
+    \begin{align}
+      (a|W^{IJ}|b)&=\delta_{I,J},\\
+      W^{IJ}W^{LM}&=W^{IJ}|b)(a|W^{LM}.
+    \end{align}
+\end{theorem}
+
+\begin{proof}\leanok
+    Extend the supplied two-letter identity twice by overlapping suffix and
+    prefix windows.  For $x=(a|W^{IJ}|b)$, the constant configurations of
+    lengths two and three give $x^2=\delta_{I,J}$ and
+    $x^3=\delta_{I,J}$, which force $x=\delta_{I,J}$.
+\end{proof}
+
 % The equality and range-insertion step remains tracked by issue #5971.
 \begin{remark}[Scope of the closed source-$u$ formulas]
     The first theorem rewrites the ordinary source-$u$ Gram entry, while the

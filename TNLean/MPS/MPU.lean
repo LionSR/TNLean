@@ -26,6 +26,7 @@ import TNLean.MPS.MPU.SourceURangeTransport
 import TNLean.MPS.MPU.SourceUSecondCutMetric
 import TNLean.MPS.MPU.SourceUV
 import TNLean.MPS.MPU.SuppliedFixedWitnesses
+import TNLean.MPS.MPU.SuppliedWitnessReblocking
 import TNLean.MPS.MPU.ThreeFormSpan
 import TNLean.MPS.MPU.TransferMatrix
 import TNLean.MPS.MPU.TransferStabilization
