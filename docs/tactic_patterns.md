@@ -624,6 +624,17 @@ abstracted — record why, so it is not re-proposed).
   below one second in the declaration profiler, and a clean full-source check
   completes in 15.39 seconds.
 
+### Fourfold F-move entry normalization
+- **Pattern:** five fourfold synthesis proofs separately took one matrix entry of
+  `rightTripleSynthesis_mul_printedFMatrix` and ran the same dependent-sum
+  normalization.
+- **Reuse:** the private theorem
+  `rightTripleSynthesis_mul_printedFMatrix_entry` records the normalized scalar
+  identity once; each fourfold proof specializes it to the relevant subtree.
+- **Result:** the declaration profiler's cumulative `simp` time falls from
+  7.47 to 7.14 seconds. Across five forced isolated rebuilds on the same warm
+  dependency cache, median user CPU falls from 14.19 to 13.44 seconds.
+
 ### Positive-congruence similarity evaluation
 - **Pattern:** the spectral-radius proof repeatedly unfolded `similarityMap`
   and asked broad `simp` calls to rediscover the same inverse and Hermitian
