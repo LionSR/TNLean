@@ -1,0 +1,42 @@
+% Regression (issue #5958 follow-up): \__tenkz_kernel_eq_ringpad_record:n
+% must record a corner-safe width only for the ring/capsule (stadium-
+% cornered) skin, identified the same way the glyph dispatch resolves a
+% skin to its primitive (\__tenkz_kernel_atom_skin_base:nN).  Before this
+% fix the ring-corner formula ran for every named glyph containing ^ or _,
+% keyed by size class alone -- a superscripted BOX in the same class as a
+% plain ring forced that plain ring to the stadium width only a ring's own
+% rounded ends ever need.
+%
+% Both equations below place the SAME superscripted name (X^{-1}) beside a
+% plain ring (X), in one row, one size class; only the neighbour's skin
+% differs.  When the neighbour is itself a ring (first equation), X
+% legitimately shares the stadium pad.  When the neighbour is a box (second
+% equation), X must render narrower -- at the plain shared-extent floor,
+% untouched by a pad that skin=box never needed.
+\documentclass{standalone}
+\usepackage{tenkz}
+\begin{document}
+\tenkzkernel
+\begin{tenkzeq}[check={signature}]
+  \begin{tenkz}[rows={wire}, cols=2, bonds=none, west=open, east=open]
+    \tn[skin=ring, ports={180:virtual}]{X^{-1}} &
+    \tn[skin=ring, ports={0:virtual}]{X}
+  \end{tenkz}
+  =
+  \begin{tenkz}[rows={wire}, cols=2, bonds=none, west=open, east=open]
+    \tn[skin=ring, ports={180:virtual}]{X^{-1}} &
+    \tn[skin=ring, ports={0:virtual}]{X}
+  \end{tenkz}
+\end{tenkzeq}
+\begin{tenkzeq}[check={signature}]
+  \begin{tenkz}[rows={wire}, cols=2, bonds=none, west=open, east=open]
+    \tn[skin=box, ports={180:virtual}]{X^{-1}} &
+    \tn[skin=ring, ports={0:virtual}]{X}
+  \end{tenkz}
+  =
+  \begin{tenkz}[rows={wire}, cols=2, bonds=none, west=open, east=open]
+    \tn[skin=box, ports={180:virtual}]{X^{-1}} &
+    \tn[skin=ring, ports={0:virtual}]{X}
+  \end{tenkz}
+\end{tenkzeq}
+\end{document}
