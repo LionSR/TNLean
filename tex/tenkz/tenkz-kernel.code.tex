@@ -15247,8 +15247,8 @@
       {
         \prop_get:NnN \l__tenkz_kernel_r_index_style_prop {##1}
           \l__tenkz_kernel_r_wire_style_tl
-        \regex_match:nnTF { \A trace \s* , }
-          { \tl_use:N \l__tenkz_kernel_r_wire_style_tl }
+        \regex_match:nVTF { \A trace \s* , }
+          \l__tenkz_kernel_r_wire_style_tl
           {
             \seq_put_right:Nn \l__tenkz_kernel_r_deferred_trace_routes_seq
               {##1}
