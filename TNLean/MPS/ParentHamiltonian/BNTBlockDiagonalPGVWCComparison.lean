@@ -99,57 +99,16 @@ theorem blockDiagonal_boundary_crossing_pgvwc_comparison_of_chainGroundSpace
                 (((μ j) ^ N • X j) * evalWord (A j) (List.ofFn β)) *
                   evalWord (A j) (List.ofFn ρ) := by
   classical
-  have hExists :
-      ∀ i : Fin N, ∀ ρ : Fin (N - L) → Fin d,
-        ∃ C : (j : Fin r) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ,
-          N < i.val + L →
-            ∀ j : Fin r, ∀ β : Fin (i.val + L - N) → Fin d,
-              evalWord (A j) (List.ofFn β) * C j =
-                (((μ j) ^ N • X j) * evalWord (A j) (List.ofFn β)) *
-                  evalWord (A j) (List.ofFn ρ) := by
-    intro i ρ
-    by_cases hcross : N < i.val + L
-    · let τ : Fin N → Fin d := fun t =>
-        if htail : i.val + L - N ≤ t.val ∧ t.val < i.val then
-          ρ ⟨t.val - (i.val + L - N), by omega⟩
-        else
-          default
-      have hρ : (List.ofFn fun k : Fin (N - L) =>
-          τ ⟨i.val + L - N + k.val, by omega⟩) = List.ofFn ρ := by
-        apply List.ext_getElem
-        · simp
-        · intro n hn₁ hn₂
-          simp only [List.getElem_ofFn]
-          have hn : n < N - L := by
-            simpa using hn₂
-          have htail :
-              i.val + L ≤ i.val + L - N + n + N ∧
-                (⟨i.val + L - N + n, by omega⟩ : Fin N) < i := by
-            constructor
-            · omega
-            · change i.val + L - N + n < i.val
-              omega
-          simp [τ, htail]
-      have hmem :
-          (∑ j : Fin r,
-              cyclicRestrictₗ hN L i τ
-                (groundSpaceMap (A j) N ((μ j) ^ N • X j))) ∈
-            ⨆ j : Fin r, groundSpace (A j) L :=
-        blockDiagonal_boundary_cyclicRestrict_sum_mem_iSup_groundSpace
-          μ A hμ hN hLN hψ X hψX i τ
-      obtain ⟨C, hC⟩ :=
-        blockDiagonal_boundary_crossing_pgvwc_comparison_of_sum_mem_iSup
-          μ A hN hLN X i τ hcross (hCrossingSpan i hcross) hmem
-      refine ⟨C, ?_⟩
-      intro _ j β
-      simpa [hρ] using hC j β
-    · refine ⟨fun j => 0, ?_⟩
-      intro hi
-      exact False.elim (hcross hi)
-  choose C hC using hExists
-  refine ⟨fun j i ρ => C i ρ j, ?_⟩
+  obtain ⟨C, hTrace⟩ :=
+    blockDiagonal_boundary_crossing_trace_decompositions_of_boundary
+      μ A hμ hN hLN hψ X hψX
+  refine ⟨C, ?_⟩
   intro j i hi ρ β
-  exact hC i ρ hi j β
+  exact
+    pgvwc07_fixed_complementary_word_compatibility_of_trace_decomposition
+      (A := A) (m := N - i.val) (K := i.val + L - N) (M := N - L)
+      (hCrossingSpan i hi) (fun k => (μ k) ^ N • X k) (fun k => C k i ρ) ρ
+      (hTrace i hi ρ) j β
 
 /-- The \(C^j,D^j\) boundary-condition comparison upgrades a block-diagonal
 boundary representation to periodic single-block states.
