@@ -1796,7 +1796,6 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
     coefficient contains the unique normalization factor $d^{-K}$.
 \end{definition}
 
-
 \begin{definition}[Forward source-$u$ kernel]
     \label{def:mpu_source_u_forward_kernel}
     \lean{MPOTensor.sourceUForwardKernel}
@@ -1910,8 +1909,10 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
       =\delta_{p,q},
     \end{align}
     where $\mathcal A_{q;\tau,j,\zeta}$ is the full source-$u$ expansion with
-    the $q$ entry unstarred.  This is the coefficient-weighted metric; it does
-    not identify the ambient coefficient with the identity.
+    the $q$ entry unstarred.  This theorem evaluates the displayed expansion
+    directly.  It neither regroups the sum through
+    $C^{(K)}_{lr,l'r'}$ nor identifies it with the ordinary Gram matrix
+    $u^\dagger u$.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -1959,12 +1960,13 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
 \end{proof}
 
 \begin{remark}[Scope of the open-tail algebra]
-    The preceding results identify the normalized coefficient-weighted metric,
-    but not the ordinary Gram matrix $u^\dagger u$.  The remaining independent
-    equality is between that ordinary Gram matrix and the normalized closed
-    $(K+2)$-site output tail, with both external source-$u$ tensors retained
-    before moving the cut.  No result uses $X_2X_2^\dagger=\Id$,
-    $M_2M_2^\dagger=\Id$, or $Y_2Y_2^\dagger=\Id$.
+    The preceding results evaluate the fully expanded normalized metric, but
+    do not prove that regrouping it through $C^{(K)}_{lr,l'r'}$ gives the
+    ordinary Gram matrix $u^\dagger u$.  The remaining independent equality is
+    between that Gram matrix and the normalized closed $(K+2)$-site output
+    tail, with both external source-$u$ tensors retained before moving the cut.
+    No result uses $X_2X_2^\dagger=\Id$, $M_2M_2^\dagger=\Id$, or
+    $Y_2Y_2^\dagger=\Id$.
 \end{remark}
 
 \begin{theorem}[Right-rank bound]
