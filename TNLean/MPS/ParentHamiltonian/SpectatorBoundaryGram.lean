@@ -24,6 +24,8 @@ and the fiberwise Gram identities. No contraction estimate is asserted.
 
 * `range_tailBoundaryMapES` and `range_leftBoundaryMapES_one` identify the physical ranges.
 * `c3_injectiveRangeProjector_residual_eq` is the exact C3 common-factorization identity.
+* `tailVirtualMapES_adjoint_apply` and `leftVirtualMapES_adjoint_apply` compute the
+  virtual-map adjoints.
 * `norm_boundaryFiberwiseMap_le` bounds a fiberwise map uniformly in its spectator type.
 * `tailBoundaryMapES_adjoint_comp_self_eq_fiberwise_groundSpaceGram` and
   `leftBoundaryMapES_adjoint_comp_self_eq_fiberwise_groundSpaceGram` identify the Grams.
@@ -198,6 +200,61 @@ theorem boundaryFamilyEquiv_leftVirtualMapES_apply
   rw [(boundaryFamilyEquiv (D := D) (Cfg d L)).apply_symm_apply]
   rfl
 
+/-- The adjoint of the tail virtual word map sums right-adjointed word
+multiplication over the spectator fibers. -/
+theorem tailVirtualMapES_adjoint_apply
+    (A : MPSTensor d D) (K : ℕ)
+    (x : BoundaryFamilySpace (D := D) (Cfg d K)) :
+    (tailVirtualMapES A K).adjoint x =
+      Matrix.frobeniusEquivEuclidean (Fin D) (Fin D)
+        (∑ u : Cfg d K,
+          boundaryFamilyEquiv (D := D) (Cfg d K) x u *
+            (evalWord A (List.ofFn u))ᴴ) := by
+  apply ext_inner_left ℂ
+  intro z
+  obtain ⟨Z, rfl⟩ :=
+    (Matrix.frobeniusEquivEuclidean (Fin D) (Fin D)).surjective z
+  rw [ContinuousLinearMap.adjoint_inner_right,
+    Matrix.inner_frobeniusEquivEuclidean, PiLp.inner_apply,
+    Fintype.sum_prod_type]
+  change (∑ u : Cfg d K, inner ℂ
+      (Matrix.frobeniusEquivEuclidean (Fin D) (Fin D)
+        (Z * evalWord A (List.ofFn u)))
+      (Matrix.frobeniusEquivEuclidean (Fin D) (Fin D)
+        (boundaryFamilyEquiv (D := D) (Cfg d K) x u))) = _
+  simp only [Matrix.inner_frobeniusEquivEuclidean,
+    Matrix.conjTranspose_mul, Matrix.mul_sum, Matrix.trace_sum, Matrix.mul_assoc]
+  apply Finset.sum_congr rfl
+  intro u _
+  simpa only [Matrix.mul_assoc] using Matrix.trace_mul_comm
+    (evalWord A (List.ofFn u))ᴴ
+    (Zᴴ * boundaryFamilyEquiv (D := D) (Cfg d K) x u)
+
+/-- The adjoint of the left virtual word map sums left-adjointed word
+multiplication over the spectator fibers. -/
+theorem leftVirtualMapES_adjoint_apply
+    (A : MPSTensor d D) (L : ℕ)
+    (x : BoundaryFamilySpace (D := D) (Cfg d L)) :
+    (leftVirtualMapES A L).adjoint x =
+      Matrix.frobeniusEquivEuclidean (Fin D) (Fin D)
+        (∑ τ : Cfg d L,
+          (evalWord A (List.ofFn τ))ᴴ *
+            boundaryFamilyEquiv (D := D) (Cfg d L) x τ) := by
+  apply ext_inner_left ℂ
+  intro z
+  obtain ⟨Z, rfl⟩ :=
+    (Matrix.frobeniusEquivEuclidean (Fin D) (Fin D)).surjective z
+  rw [ContinuousLinearMap.adjoint_inner_right,
+    Matrix.inner_frobeniusEquivEuclidean, PiLp.inner_apply,
+    Fintype.sum_prod_type]
+  change (∑ τ : Cfg d L, inner ℂ
+      (Matrix.frobeniusEquivEuclidean (Fin D) (Fin D)
+        (evalWord A (List.ofFn τ) * Z))
+      (Matrix.frobeniusEquivEuclidean (Fin D) (Fin D)
+        (boundaryFamilyEquiv (D := D) (Cfg d L) x τ))) = _
+  simp only [Matrix.inner_frobeniusEquivEuclidean,
+    Matrix.conjTranspose_mul, Matrix.mul_sum, Matrix.trace_sum, Matrix.mul_assoc]
+
 /-- The ordinary Euclidean boundary map factors through the tail spectator map. -/
 theorem tailBoundaryMapES_comp_tailVirtualMapES
     (A : MPSTensor d D) (K L : ℕ) :
@@ -347,6 +404,18 @@ noncomputable def boundaryFamilyFiber {S : Type*} [Fintype S]
     EuclideanSpace ℂ (Fin D × Fin D) :=
   WithLp.toLp 2 fun p => x (s, p)
 
+/-- A flattened family fiber is the Frobenius coordinate vector of the
+corresponding matrix in `boundaryFamilyEquiv`. -/
+theorem boundaryFamilyFiber_eq_frobeniusEquivEuclidean
+    {S : Type*} [Fintype S]
+    (x : BoundaryFamilySpace (D := D) S) (s : S) :
+    boundaryFamilyFiber (D := D) x s =
+      Matrix.frobeniusEquivEuclidean (Fin D) (Fin D)
+        (boundaryFamilyEquiv (D := D) S x s) := by
+  rw [boundaryFamilyEquiv_apply_apply,
+    (Matrix.frobeniusEquivEuclidean (Fin D) (Fin D)).apply_symm_apply]
+  rfl
+
 /-- Apply an endomorphism independently to every virtual-matrix fiber. -/
 noncomputable def boundaryFiberwiseMap (S : Type*) [Fintype S]
     (G : EuclideanSpace ℂ (Fin D × Fin D) →L[ℂ]
@@ -385,6 +454,39 @@ theorem boundaryFiberwiseMap_apply_apply (S : Type*) [Fintype S]
     (x : BoundaryFamilySpace (D := D) S) (s : S) (p : Fin D × Fin D) :
     boundaryFiberwiseMap (D := D) S G x (s, p) =
       G (boundaryFamilyFiber (D := D) x s) p := rfl
+
+/-- The fiber of a fiberwise map is the original fiber acted on by the
+virtual endomorphism. -/
+@[simp]
+private theorem boundaryFamilyFiber_boundaryFiberwiseMap
+    (S : Type*) [Fintype S]
+    (G : EuclideanSpace ℂ (Fin D × Fin D) →L[ℂ]
+      EuclideanSpace ℂ (Fin D × Fin D))
+    (x : BoundaryFamilySpace (D := D) S) (s : S) :
+    boundaryFamilyFiber (D := D) (boundaryFiberwiseMap (D := D) S G x) s =
+      G (boundaryFamilyFiber (D := D) x s) := by
+  apply PiLp.ext
+  intro p
+  rfl
+
+/-- In matrix coordinates, a fiberwise map acts on the Frobenius coordinate
+vector of each matrix fiber. -/
+@[simp]
+theorem boundaryFamilyEquiv_boundaryFiberwiseMap_apply
+    (S : Type*) [Fintype S]
+    (G : EuclideanSpace ℂ (Fin D × Fin D) →L[ℂ]
+      EuclideanSpace ℂ (Fin D × Fin D))
+    (x : BoundaryFamilySpace (D := D) S) (s : S) :
+    boundaryFamilyEquiv (D := D) S
+        (boundaryFiberwiseMap (D := D) S G x) s =
+      (Matrix.frobeniusEquivEuclidean (Fin D) (Fin D)).symm
+        (G (Matrix.frobeniusEquivEuclidean (Fin D) (Fin D)
+          (boundaryFamilyEquiv (D := D) S x s))) := by
+  apply (Matrix.frobeniusEquivEuclidean (Fin D) (Fin D)).injective
+  rw [(Matrix.frobeniusEquivEuclidean (Fin D) (Fin D)).apply_symm_apply,
+    ← boundaryFamilyFiber_eq_frobeniusEquivEuclidean,
+    boundaryFamilyFiber_boundaryFiberwiseMap,
+    boundaryFamilyFiber_eq_frobeniusEquivEuclidean]
 
 /-- Fiberwise maps preserve composition. -/
 theorem boundaryFiberwiseMap_comp (S : Type*) [Fintype S]

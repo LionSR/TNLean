@@ -507,16 +507,67 @@ norm estimate is derived here.
     sums and the second argument of the inner product.
 \end{proof}
 
+\begin{theorem}[Limiting metric inverse and virtual-map adjoints]%
+    \label{thm:limiting_metric_inverse_virtual_adjoints}
+    \lean{Matrix.inverse_gramReshuffle_fixedPointProj_frobeniusEquivEuclidean_apply}
+    \lean{MPSTensor.tailVirtualMapES_adjoint_apply}
+    \lean{MPSTensor.leftVirtualMapES_adjoint_apply}
+    \leanok
+    \uses{def:fixed_point_proj,
+        def:gram_reshuffle,
+        def:frobenius_vectorization,
+        thm:spectator_boundary_hilbert_factorization}
+    For arbitrary virtual dimension, the adjoints of the tail and left virtual
+    maps are
+    \begin{align}
+      (J^{\mathrm{tail}}_K)^\dagger(X_u)_u
+        &=U\!\left(\sum_u X_u(A^u)^\dagger\right),&
+      (J^{\mathrm{left}}_L)^\dagger(Z_\tau)_\tau
+        &=U\!\left(\sum_\tau(A^\tau)^\dagger Z_\tau\right).
+    \end{align}
+    If, in addition, $D>0$ and $\rho\in\MN{D}$ is positive definite, set
+    $\mathcal K_\infty=\mathscr R(P_\rho)$ and
+    $S_\infty=\mathcal K_\infty^{-1}$.  Then
+    \begin{align}
+      \mathcal K_\infty U(X)
+        &=U\!\left((\tr\rho)^{-1}X\rho\right),&
+      S_\infty U(X)
+        &=U\!\left((\tr\rho)X\rho^{-1}\right).
+    \end{align}
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:fixed_point_gram_metric_exact,
+        thm:fixed_point_gram_metric_is_unit}
+    For the tail adjoint, test against an arbitrary matrix $Y$ and use the
+    Hilbert--Schmidt trace pairing fiberwise:
+    \begin{align}
+      \sum_u\langle U(YA^u),U(X_u)\rangle
+        =\left\langle U(Y),
+          U\!\left(\sum_uX_u(A^u)^\dagger\right)\right\rangle.
+    \end{align}
+    The left formula follows in the same way from
+    $\langle U(A^\tau Y),U(Z_\tau)\rangle
+      =\langle U(Y),U((A^\tau)^\dagger Z_\tau)\rangle$.
+
+    Under the additional positive-definiteness hypothesis, the forward action
+    of $\mathcal K_\infty$ is the exact limiting-metric formula and the
+    operator is invertible.  Applying the forward formula to
+    $U((\tr\rho)X\rho^{-1})$ cancels both scalar factors and the two right
+    matrix factors, which gives the displayed inverse action.
+\end{proof}
+
 \begin{theorem}[Exact limiting-metric telescope for the C3 residual]%
     \label{thm:c3_projector_gram_error_telescope}
     \lean{MPSTensor.c3_virtualResidual_eq_centered_sub_gramErrors}
+    \lean{MPSTensor.inner_limitingMixedGramIntertwining}
     \lean{MPSTensor.inner_c3_centeredVirtualResidual_eq_gramError}
     \lean{MPSTensor.c3_injectiveRangeProjector_residual_eq_centered_sub_gramErrors}
     \leanok
     \uses{thm:c3_spectator_projector_residual,
-        thm:spectator_boundary_direct_sum_gram,
-        thm:spectator_boundary_mixed_gram_centered,
-        thm:fixed_point_gram_metric_exact}
+        def:ground_space_gram,
+        def:fixed_point_proj,
+        def:gram_reshuffle}
     Let $\rho\in\MN{D}$ be positive definite and set
     $\mathcal K_\infty=\mathscr R(P_\rho)$ and
     $S_\infty=\mathcal K_\infty^{-1}$.  Write $J_{\rm t}$ and $J_{\rm l}$
@@ -547,28 +598,59 @@ norm estimate is derived here.
     the physical projector residual, sandwiched between the tail boundary map,
     the two local fiberwise inverse Grams, and the adjoint left boundary map.
 
-    If the limiting product in the first parenthesis has the explicit limiting
-    mixed pairing from the preceding centered mixed-Gram theorem, then its
-    pairing against boundary families is exactly the same finite sum with
+    The limiting product in the first parenthesis has, without an additional
+    hypothesis, the explicit limiting mixed pairing
+    \begin{align}
+      &\left\langle X,
+        \mathcal K_\infty^{\oplus K}J_{\rm t}S_\infty
+          J_{\rm l}^\dagger\mathcal K_\infty^{\oplus 1}Z
+        \right\rangle \\
+      &\qquad=\sum_{u,j}\left\langle
+        U(A^jX_u),\mathcal K_\infty U(Z_jA^u)\right\rangle .
+    \end{align}
+    Consequently, pairing the first parenthesis against boundary families is
+    exactly the same finite sum with
     $\mathcal K_l-\mathcal K_\infty$ in place of $\mathcal K_l$.
-    This last implication records the exact remaining intertwining hypothesis;
-    it does not assert that hypothesis.
 
     These identities are reconstructed operator algebra.  They assert neither
-    the numerical FNW contraction nor any identification of a physical ground
-    projector with $P_\rho$.
+    the numerical FNW/Nachtergaele contraction nor any identification of a
+    physical ground projector with $P_\rho$.
 \end{theorem}
 \begin{proof}
     \leanok
     \uses{thm:c3_spectator_projector_residual,
         thm:spectator_boundary_direct_sum_gram,
-        thm:spectator_boundary_mixed_gram_centered}
+        thm:spectator_boundary_mixed_gram_centered,
+        thm:fixed_point_gram_metric_exact,
+        thm:limiting_metric_inverse_virtual_adjoints}
     Add and subtract the product in which all three finite Gram factors are
     replaced by their limiting values, and telescope the resulting product
     from left to right.  Substitute the direct-sum Gram and inverse-Gram
-    formulas into the exact projector factorization.  Under the displayed
-    limiting-pairing hypothesis, apply the centered mixed-Gram identity to the
-    leading term.
+    formulas into the exact projector factorization.
+
+    It remains to identify the leading limiting product.  In Frobenius
+    coordinates the limiting metric and its inverse act by
+    \begin{align}
+      \mathcal K_\infty U(X)
+        &=U\!\left((\tr\rho)^{-1}X\rho\right),&
+      S_\infty U(X)
+        &=U\!\left((\tr\rho)X\rho^{-1}\right).
+    \end{align}
+    The adjoint left virtual map sends a family $W=(W_j)_j$ to
+    $U(\sum_j(A^j)^\dagger W_j)$.  For
+    $W_j=(\tr\rho)^{-1}Z_j\rho$, the right multiplication by $\rho$ and
+    the factor $(\tr\rho)^{-1}$ supplied by the left limiting spectator
+    metric cancel exactly through $S_\infty$.  Applying the tail virtual map and the
+    tail limiting spectator metric leaves, in the fiber indexed by $u$,
+    \begin{align}
+      U\!\left((\tr\rho)^{-1}
+        \sum_j (A^j)^\dagger Z_jA^u\rho\right).
+    \end{align}
+    Its inner product with $X_u$, followed by summation over $u$, is the
+    displayed limiting mixed pairing by the Frobenius trace identity.  No
+    transfer fixed-point equation is needed for this zeroth-order
+    cancellation.  The centered mixed-Gram identity then turns the leading
+    term into the pairing with $\mathcal K_l-\mathcal K_\infty$.
 \end{proof}
 
 \subsection{Martingale gap consequences}\label{subsec:spectral_gap_martingale}
