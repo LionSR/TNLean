@@ -710,8 +710,15 @@ and generic prerequisites now include:
     \begin{align}
       T^\dagger L-(T^\dagger T)J_1S_CJ_2^\dagger(L^\dagger L).
     \end{align}
-    This is an algebraic identity only; a source-specific estimate of this
-    mixed-Gram residual is still required.
+    The concrete specialization
+    \leanid{MPSTensor.c3_injectiveRangeProjector_residual_eq} uses the tail map
+    at $(K,L_0+1)$, the left map at $(K+L_0,1)$, the common map
+    $\Gamma_{K+L_0+1}^{\mathrm{ES}}$, and the corresponding virtual maps.  Its
+    three inverse-Gram range projectors have the open-chain tail, open-chain
+    left, and full ground-space ranges by the exact range theorems above.  All
+    three injectivity assumptions are explicit.  This is an algebraic identity
+    only; a source-specific estimate of the mixed-Gram residual is still
+    required.
 \end{itemize}
 Fix \(K,L_0\in\mathbb N\) and let
 \(\mathcal H_{K+L_0+1}\) be the \((K+L_0+1)\)-site Euclidean space
