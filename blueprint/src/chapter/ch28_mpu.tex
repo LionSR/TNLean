@@ -1529,13 +1529,16 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
 \begin{theorem}[Source-factor normalizations]
     \label{thm:mpu_source_factor_normalizations}
     \lean{MPOTensor.sourceX₁_weighted_isometry,
+        MPOTensor.sourceX₁_weighted_isometry_apply,
         MPOTensor.sourceX₂_isometry}
     \leanok
     \uses{def:mpu_weighted_source_factors,def:mpu_source_weight}
     The left factors satisfy
     \begin{align}
         X_1^\dagger W_\rho X_1&=\Id_r,
-        &X_2^\dagger X_2&=\Id_\ell.
+        &X_2^\dagger X_2&=\Id_\ell,\\
+        \sum_{x,y}\overline{(X_1)_{x,r}}(W_\rho)_{x,y}(X_1)_{y,r'}
+          &=\delta_{r,r'}.
     \end{align}
     These are \cite[Section~III]{Cirac2017MPU}.
 \end{theorem}
@@ -1544,7 +1547,8 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
     \leanok
     \uses{def:mpu_weighted_source_factors,def:mpu_source_svd_data}
     The source-factor construction supplies
-    $X_1^\dagger W_\rho X_1=\Id_r$. Since $X_2=V_2^\dagger$, the
+    $X_1^\dagger W_\rho X_1=\Id_r$; evaluating at $(r,r')$ gives the displayed
+    weighted sum. Since $X_2=V_2^\dagger$, the
     coisometry identity $V_2V_2^\dagger=\Id_\ell$ gives
     $X_2^\dagger X_2=\Id_\ell$.
 \end{proof}
@@ -1666,35 +1670,6 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
 \end{proof}
 
 
-\begin{theorem}[Entrywise source-factor reconstructions]
-    \label{thm:mpu_source_open_factor_reconstructions}
-    \lean{MPOTensor.sourceX₁_weighted_isometry_apply,
-        MPOTensor.sourceY₂_eq_sum_star_sourceX₂_mul_apply}
-    \leanok
-    \uses{thm:mpu_source_factor_recovery,
-        thm:mpu_source_factor_normalizations}
-    The weighted normalization of $X_1$ has entries
-    \begin{align}
-        \sum_{x,y}\overline{(X_1)_{x,r}}(W_\rho)_{x,y}(X_1)_{y,r'}
-        &=\delta_{r,r'}.
-    \end{align}
-    Applying the preceding reconstruction of the second right factor gives
-    the entry identity
-    \begin{align}
-        (Y_2)_{l,(j,\gamma)}
-          &=\sum_{\beta,i}\overline{(X_2)_{(\beta,i),l}}
-              \mathcal U^i_{j,\beta,\gamma}.
-    \end{align}
-\end{theorem}
-
-\begin{proof}\leanok
-    \uses{thm:mpu_source_factor_normalizations,
-        thm:mpu_source_factor_recovery}
-    Evaluate $X_1^\dagger W_\rho X_1=\Id_r$ entrywise.  Apply the preceding
-    recovery identity $Y_2=X_2^\dagger M_2$ and evaluate it at
-    $(l,(j,\gamma))$ to obtain the finite sum.
-\end{proof}
-
 \begin{theorem}[Open two-site source factorization]
     \label{thm:mpu_source_u_open_two_site}
     \lean{MPOTensor.sum_sourceX₁_mul_sourceU,
@@ -1730,7 +1705,7 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
         MPOTensor.mpo_finAddTwo_eq_sum_sourceX₁_sourceU_sourceX₂_openTail}
     \leanok
     \uses{def:mpo_family,thm:mpu_source_u_open_two_site,
-        thm:mpu_source_open_factor_reconstructions}
+        thm:mpu_source_factor_recovery}
     Separate the first two physical sites of a length-$(K+2)$ configuration.
     For an output pair $q$, an input pair $j$, and tails $\tau,\zeta$, the
     periodic entry first expands as
@@ -1755,7 +1730,7 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
 
 \begin{proof}\leanok
     \uses{thm:mpu_source_u_open_two_site,
-        thm:mpu_source_open_factor_reconstructions}
+        thm:mpu_source_factor_recovery}
     Reindex each configuration into its first two coordinates and its tail,
     apply the open two-site factorization inside the periodic trace, and leave
     the remaining virtual word unevaluated.  Substitute the entrywise
