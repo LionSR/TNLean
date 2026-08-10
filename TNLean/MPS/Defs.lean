@@ -315,6 +315,21 @@ def GaugePhaseEquiv {d D : ℕ} (A B : MPSTensor d D) : Prop :=
     B i = ζ • ((X : Matrix (Fin D) (Fin D) ℂ) * A i *
       ((X⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ))
 
+/-- Gauge-phase equivalence whose global scalar has unit modulus. -/
+def UnitGaugePhaseEquiv {d D : ℕ} (A B : MPSTensor d D) : Prop :=
+  ∃ (X : GL (Fin D) ℂ) (ζ : ℂ), ζ * star ζ = 1 ∧ ∀ i : Fin d,
+    B i = ζ • ((X : Matrix (Fin D) (Fin D) ℂ) * A i *
+      ((X⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ))
+
+/-- A unit-modulus gauge phase is nonzero and hence gives gauge-phase equivalence. -/
+theorem UnitGaugePhaseEquiv.toGaugePhaseEquiv {A B : MPSTensor d D}
+    (h : UnitGaugePhaseEquiv A B) : GaugePhaseEquiv A B := by
+  rcases h with ⟨X, ζ, hζ, hX⟩
+  refine ⟨X, ζ, ?_, hX⟩
+  intro hzero
+  rw [hzero, zero_mul] at hζ
+  exact zero_ne_one hζ
+
 /-- Gauge equivalence gives gauge-phase equivalence with scalar `1`. -/
 theorem GaugeEquiv.toGaugePhaseEquiv {A B : MPSTensor d D} (h : GaugeEquiv A B) :
     GaugePhaseEquiv A B := by
