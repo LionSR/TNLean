@@ -3284,36 +3284,59 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
   $\lVert A_\Lambda\rVert=\lVert A_\Gamma\rVert$.
 \end{proof}
 
-\begin{theorem}[Normed star algebra of local observables]
-  \label{thm:qca_algebraic_local_normed_star_algebra}
+\begin{definition}[Normed star algebra of local observables]
+  \label{def:qca_algebraic_local_normed_star_algebra}
   \lean{SpinChain.instNormedAddCommGroupAlgebraicLocalAlgebra,
     SpinChain.instNormedRingAlgebraicLocalAlgebra,
-    SpinChain.instNormedAlgebraAlgebraicLocalAlgebra,
-    SpinChain.instCStarRingAlgebraicLocalAlgebra,
-    SpinChain.norm_star_mul_self}
+    SpinChain.instNormedAlgebraAlgebraicLocalAlgebra}
   \leanok
   \uses{def:qca_algebraic_local_operator_norm}
   For $d>0$, the local algebra with the operator norm is a normed complex
-  star algebra.  For every local observable $A$ it satisfies the C-star
-  identity
+  star algebra.  No completeness assertion is made.
+\end{definition}
+
+\begin{proof}\leanok
+  Choose finite-region representatives of the local observables and enlarge
+  their regions to a common finite region.  The norm axioms, the product
+  inequality, and compatibility with complex scalar multiplication then
+  follow from the corresponding properties of the finite-region matrix
+  algebra.
+\end{proof}
+
+\begin{theorem}[C-star identity for local observables]
+  \label{thm:qca_algebraic_local_norm_star_mul_self}
+  \lean{SpinChain.norm_star_mul_self}
+  \leanok
+  \uses{def:qca_algebraic_local_normed_star_algebra}
+  For $d>0$ and every local observable $A$,
   \begin{align}
     \lVert A^*A\rVert&=\lVert A\rVert^2.
   \end{align}
-  No completeness assertion is made.
 \end{theorem}
 
 \begin{proof}\leanok
   Choose a finite region $\Lambda$ and a representative
-  $A_\Lambda\in\mathcal A_\Lambda$.  Addition, multiplication, scalar
-  multiplication, and adjoints are computed on finite-region
-  representatives.  Their norm inequalities therefore follow from those
-  in $\mathcal A_\Lambda$.  In particular,
+  $A_\Lambda\in\mathcal A_\Lambda$.  Then
   \begin{align}
     \lVert A^*A\rVert
       &=\lVert A_\Lambda^*A_\Lambda\rVert
        =\lVert A_\Lambda\rVert^2
        =\lVert A\rVert^2.
   \end{align}
+\end{proof}
+
+\begin{definition}[C-star axiom structure on local observables]
+  \label{def:qca_algebraic_local_cstar_ring}
+  \lean{SpinChain.instCStarRingAlgebraicLocalAlgebra}
+  \leanok
+  \uses{thm:qca_algebraic_local_norm_star_mul_self}
+  The normed star algebra of local observables satisfies the C-star axiom.
+  This structure does not include completeness.
+\end{definition}
+
+\begin{proof}\leanok
+  The C-star identity gives the required norm inequality in the reverse
+  direction; submultiplicativity gives the other direction.
 \end{proof}
 
 \begin{lemma}[Local observables embed isometrically]
@@ -3330,6 +3353,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
 \end{lemma}
 
 \begin{proof}\leanok
+  \uses{def:qca_algebraic_local_operator_norm}
   The norm of $\iota_\Lambda(A)$ is defined to be the operator norm of its
   representative $A\in\mathcal A_\Lambda$.  Hence
   $\lVert\iota_\Lambda(A)\rVert=\lVert A\rVert$; applying this equality to
