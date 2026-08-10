@@ -219,8 +219,8 @@ def IsBlockedGaugePhaseFixedPoint (A : MPSTensor 1 D) : Prop :=
     A i = ζ • ((X : Matrix (Fin D) (Fin D) ℂ) * blockTensor A 2 i *
       ((X⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ))
 
-/-- The cube-phase tensor satisfies the paper's blocked-up-to-virtual-gauge diagram with
-a unit physical phase. -/
+/-- The cube-phase tensor satisfies equation `RFP-gauge` in arXiv:1606.00608,
+lines 2100--2107, with a unit physical phase. -/
 theorem cubePhaseTensor_isBlockedGaugePhaseFixedPoint :
     IsBlockedGaugePhaseFixedPoint cubePhaseTensor := by
   refine ⟨cubeSwapGauge, primitiveCubeRoot, norm_primitiveCubeRoot, ?_⟩
