@@ -596,11 +596,13 @@ hypothesis.
 
 The limiting Gram operator is $\mathscr R(P_\rho)$, generally not the
 identity in the current unweighted Frobenius coordinates.  Its exact action is
-right multiplication,
+right multiplication in the Frobenius vectorization $U$ defined above,
 \begin{align}
-  \mathscr R(P_\rho)\operatorname{vec}(X)
-  &=\operatorname{vec}\!\left(\frac{X\rho}{\operatorname{tr}\rho}\right).
+  \mathscr R(P_\rho)U(X)
+  &=U\!\left(\frac{X\rho}{\operatorname{tr}\rho}\right).
 \end{align}
+This identity is
+\leanid{Matrix.gramReshuffle_fixedPointProj_frobeniusEquivEuclidean_apply}.
 Hence a positive-definite fixed point makes the limiting Gram invertible.  The
 correct perturbation is around $\mathscr R(P_\rho)$, not around the identity.
 

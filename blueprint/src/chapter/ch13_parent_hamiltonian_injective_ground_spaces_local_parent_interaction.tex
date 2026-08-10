@@ -696,7 +696,7 @@ The limit in Theorem~\ref{thm:ground_space_gram_tendsto_fixed_point} is the
 reshuffled fixed-point projection $\mathscr R(P_\rho)$, not the identity in
 unweighted Frobenius coordinates.  The limiting metric is generally nonidentity.  Under a positive-definite
 fixed-point hypothesis, the inverse estimates below perturb around
-$\mathscr R(P_ho)$ rather than around the identity.  They do not yet compare
+$\mathscr R(P_\rho)$ rather than around the identity.  They do not yet compare
 the physical range projectors on overlapping windows.
 
 \begin{definition}[Inverse Gram operator]
@@ -747,8 +747,7 @@ the physical range projectors on overlapping windows.
     \lean{MPSTensor.IsPrimitiveMPS.eventually_groundSpaceGram_isUnit_and_inverse_bound}
     \leanok
     \uses{def:primitive_mps,
-        thm:primitive_ground_space_gram_tendsto_fixed_point,
-        thm:inverse_gram_identities}
+        thm:primitive_ground_space_gram_tendsto_fixed_point}
     Let $A$ be a primitive MPS tensor whose fixed-point witness $\rho$ is
     positive definite, and put
     $\mathcal K_\infty=\mathscr R(P_\rho)$.  For every $0<a<1$, all
