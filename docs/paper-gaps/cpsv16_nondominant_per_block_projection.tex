@@ -7,27 +7,25 @@
 
 \input{command}
 
-\title{Non-Dominant Per-Block Projection in CPSV16 \S II Step~1\\
-       under the One-Copy Normal-Canonical BNT Formulation}
+\title{Historical Note: Non-Dominant Per-Block Projection in CPSV16 \S II Step~1}
 \author{}
 \date{2026-05-13}
 
 \begin{document}
 \maketitle
 
-\section{Current verdict}
+\section{Status}
 
-\textbf{Superseded.}
+\textbf{Historical proof archaeology and a forbidden route, not an active gap.}
 The corrected proportional fundamental theorem is
 \leanid{MPSTensor.fundamentalTheorem_proportional_canonicalForm}.  It compares
 active BNT families whose listed copy weights are nonzero and obtains a
 bijection of the basis sectors with gauge-phase equivalences.  The unrestricted
 statement printed in CPSV16 remains false: its weak BNT convention allows an
 unrelated normal representative whose coefficient is identically zero, so the
-claimed equality of BNT cardinalities fails.  Consequently
-the non-dominant per-block projection estimate is not an open formalization
-target.
-The analysis below is retained as a record of the retired proof attempt.
+claimed equality of BNT cardinalities fails.  The analysis below is retained
+because it explains why non-dominant per-block projection cannot prove the
+proportional theorem and must not be revived.
 
 \section{Notation}
 
@@ -57,25 +55,20 @@ $c_N\ne 0$ cofinally,
 formalized as
 \leanid{EventuallyNonzeroProportionalMPV}\textsubscript{2}.
 
-The surviving one-copy normal-canonical BNT formulation
-\leanid{IsNormalCanonicalFormBNT} carries a single weight $\mu_k$ per
-sector with strict ordering
+The retired one-copy normal-canonical BNT route carried a single weight
+$\mu_k$ per sector with the strict ordering
 \begin{align}
-    |\mu_1|>|\mu_2|>\cdots>|\mu_r|
-    \tag{\leanid{mu_strict_anti}}
+    |\mu_1|>|\mu_2|>\cdots>|\mu_r|.
+    \tag{\texttt{mu\_strict\_anti}}
 \end{align}
-across the entire family.\footnote{%
-    \leanid{MPSTensor.IsNormalCanonicalFormBNT.mu_strict_anti} in
-    \doclink{TNLean/MPS/BNT/Construction}.}
-Together with the dominant normalization $|\mu_1|=1$, every
-sub-dominant block has modulus strictly less than~$1$.
-\cite[Definition~4.2 and lines~1864--1884]{Cirac2021Matrix} states the
-corresponding source structure as a two-layer canonical form: spectral levels
-$\lambda_j$ with $|\lambda_1|>\cdots>|\lambda_g|$ factored from
-within-sector unit-modulus weights $\mu_{j,q}$ ($|\mu_{j,q}|=1$)
-with sector multiplicities $r_j\ge 1$. The
-\leanid{IsNormalCanonicalFormBNT} formulation is the one-copy specialization
-$r_j=1$ of that structure; see
+Together with the dominant normalization $|\mu_1|=1$, every sub-dominant
+block had modulus strictly less than~$1$.  These fields are not part of the
+current \leanid{IsNormalCanonicalFormBNT} predicate, which allows equal-modulus
+blocks.  The discussion below concerns the deleted strict-modulus variant.
+\cite[Definition~4.2 and lines~1864--1884]{Cirac2021Matrix} states the source
+structure using repeated copies and raw weights $\mu_{j,q}$ with sector
+multiplicities $r_j\ge 1$.  The current \leanid{SectorDecomposition} surface
+retains those power-sum coefficients; see
 \path{docs/paper-gaps/ft_one_copy_scope_restriction.tex}.
 
 \section{Cited assertion}
@@ -96,21 +89,19 @@ $\{V^{(N)}(A_j)\}_j\cup\{V^{(N)}(B_{k_0})\}$ from~\eqref{eq:Hk0} and
 combines it with the proportionality identity at
 \cite[eq.~\texttt{eq:II\_ABasicTensors}, line~286]{Cirac2016MPDO_arXiv}.
 
-\section{Formal target}
+\section{Retired formal target}
 
-The mathematical target is, for $k_0:\mathrm{Fin}\,r_B$ arbitrary:
-given the one-copy normal-canonical BNT hypotheses on both $\mu^A,A$ and
-$\mu^B,B$,
+The historical target was, for $k_0:\mathrm{Fin}\,r_B$ arbitrary: given the
+one-copy normal-canonical BNT hypotheses on both $\mu^A,A$ and $\mu^B,B$,
 \leanid{EventuallyNonzeroProportionalMPV}\textsubscript{2} between the
-assembled tensors, an index $k_0:\mathrm{Fin}\,r_B$ and the hypothesis
+assembled tensors, an index $k_0:\mathrm{Fin}\,r_B$, and the hypothesis
 $\forall j,\langle V^{(N)}(A_j),V^{(N)}(B_{k_0})\rangle\to 0$, derive
 $\bot$.
-The old one-copy fixed-block declarations for this target have been
-retired.  The surviving route is the \leanid{SectorBNT} proportional
-matching layer, which keeps the raw coefficients of
-\leanid{SectorDecomposition} visible and uses the API lemmas in
-\doclink{TNLean/MPS/FundamentalTheorem/SectorBNT/Api}.  The universally
-quantified fixed-block cancellation remains a mathematical obligation.
+The old one-copy fixed-block declarations for this target have been retired.
+The corrected \leanid{SectorBNT} proportional matching theorem keeps the raw
+coefficients of \leanid{SectorDecomposition} visible and uses the API lemmas in
+\doclink{TNLean/MPS/FundamentalTheorem/SectorBNT/Api}.  It does not require a
+separate universally quantified fixed-block projection theorem.
 
 \section{Where the per-block projection fails for non-dominant
 \texorpdfstring{$k_0$}{k0}}
@@ -127,7 +118,7 @@ and $\mathrm{RHS}_N:=c_N\langle V^{(N)}(B_{\mathrm{tot}}),V^{(N)}(B_{k_0})\rangl
 \end{align}
 With $|\mu^A_j|\le 1$, every $(\mu^A_j)^N$ is bounded; together with
 \eqref{eq:Hk0} this forces $\mathrm{LHS}_N\to 0$. For $\mathrm{RHS}_N$,
-the current cross-overlap decay statement
+the surviving cross-overlap decay statement
 \leanid{MPSTensor.IsBNTCanonicalForm.cross_overlap_basis_tendsto_zero}
 gives $\langle V^{(N)}(B_k),V^{(N)}(B_{k_0})\rangle\to 0$ for $k\ne k_0$,
 while the diagonal block has a nonzero limiting coefficient, so
@@ -142,7 +133,7 @@ $\bigl|c_N(\mu^B_0/\mu^A_0)^N\bigr|\to 1$.  Therefore
     \bigl|\mu^B_{k_0}/\mu^B_0\bigr|^N.
     \label{eq:decay}
 \end{align}
-Under $|\mu^A_0|=1$ and \leanid{mu_strict_anti}, the second factor
+Under $|\mu^A_0|=1$ and the retired strict ordering, the second factor
 in~\eqref{eq:decay} decays geometrically whenever $k_0\ne 0$, so
 $\mathrm{RHS}_N\to 0$ together with $\mathrm{LHS}_N$. No contradiction
 is available from the per-block projection. The dominant case
@@ -192,41 +183,27 @@ independence; it requires neither side to stay bounded away from~$0$.
 
 The current \leanid{SectorBNT} API provides the combined-family
 linear-independence mechanism as
-\leanid{MPSTensor.IsBNTCanonicalForm.combined_family_eventually_li}.
-The remaining task is to combine that statement with the proportional
-coefficient identity in the fixed-block setting, without appealing to the
-retired per-block-projection layer.
+\leanid{MPSTensor.IsBNTCanonicalForm.combined_family_eventually_li}.  The
+corrected proportional theorem applies coefficient comparison on the active BNT
+families and does not use the retired per-block-projection layer.
 
 \section{Classification}
 
-\emph{Scope restriction combined with an open gap.} The retired dominant
-fixed-block declarations proved the Step~1 conclusion for
-$k_0=\langle 0,\_\rangle$ on the one-copy surface. The universally
-quantified statements stay open because the cited mechanism requires
-either
+\emph{Historical proof archaeology and forbidden-route explanation.}  The
+retired dominant fixed-block declarations handled only the leading block on the
+old one-copy strict-modulus surface.  Extending that projection argument to an
+arbitrary block fails because both sides of the projected proportionality may
+decay together.  This remains a mathematical warning about the method, not an
+unproved theorem required by the current development.
 
-\begin{enumerate}
-    \item the combined-family \texttt{Lem1} statement
-          \eqref{eq:largeLem1} with all-pairwise cross-overlap decay,
-          enabling the coefficient-identification step
-          of~\eqref{eq:isolate}; or
-    \item the two-layer CPSV structure of
-          \cite[Definition~4.2 and lines~1864--1884]{Cirac2021Matrix},
-          separating spectral
-          levels $\lambda_j$ from within-sector unit-modulus weights
-          $\mu_{j,q}$.  On the surviving \leanid{SectorDecomposition}
-          declarations this means keeping the raw coefficients
-          $\sum_q\mu_{j,q}^N$ visible and using
-          \leanid{MPSTensor.IsBNTCanonicalForm.coeff_not_eventually_zero}
-          rather than collapsing the sector to a single weight before the
-          projection argument.  Tracked in \ghissue{1641}.
-\end{enumerate}
-
-The collapse $r_j=1$ enforced by \leanid{mu_strict_anti}
-identifies the two layers into a single weight; once collapsed, the
-non-dominant Step~1 conclusion cannot be reached by per-block
-projection under the one-copy normal-canonical BNT formulation because
-both sides of the projected proportionality decay together.
+The source coefficient-comparison mechanism instead uses the combined-family
+\texttt{Lem1} statement~\eqref{eq:largeLem1} and keeps the raw power sums
+$\sum_q\mu_{j,q}^N$ visible through \leanid{SectorDecomposition}.  The
+corrected theorem uses this information together with
+\leanid{MPSTensor.IsBNTCanonicalForm.coeff_not_eventually_zero}.  Collapsing a
+sector to one strictly ordered weight destroys precisely the information needed
+for that argument, so non-dominant per-block projection is a route that must not
+be reintroduced.
 
 \bibliographystyle{alpha}
 \bibliography{references}

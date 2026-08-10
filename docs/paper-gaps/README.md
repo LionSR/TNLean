@@ -38,9 +38,25 @@ note.
   while CPSV16 line 246 gives only one global unit-weight witness. The current
   SectorBNT matching and global-gauge theorems use only that global witness.
 
-Older notes in this directory record why previous one-copy or projection-based
-formulations were insufficient. They should be read as historical comparisons
-unless they are cited by one of the current blueprint chapters above.
+The following proportional-FT notes are historical proof archaeology, not live
+formalization gaps:
+
+- `cpsv16_fixed_block_cancellation.tex` records the source's fixed-block
+  sentence and the lower-bound obstruction in the abandoned discharge plan.
+- `cpsv16_bnt_rate_quantification.tex` records the extra geometric-rate
+  hypothesis that the retired non-dominant projection argument would have
+  required.
+- `cpsv16_nondominant_per_block_projection.tex` records why projection onto a
+  non-dominant block can send both sides to zero. It is retained as a warning
+  against reviving that proof route.
+- `cpsv16_two_layer_sector_refinement.tex` records the mismatch between the
+  retired strict-modulus specialization and the repeated-copy source
+  decomposition, together with its resolution by the SectorBNT surface.
+
+These notes are discoverable for proof archaeology, but none indexes a current
+obligation. The unreferenced strict-modulus removal record was deleted because
+its useful content is already preserved in the non-dominant projection and
+two-layer refinement notes.
 
 For MPDO renormalization fixed points:
 
@@ -172,8 +188,6 @@ For the non-periodic MPS Fundamental Theorem background:
   sources.
 - `david2006_direct_sum_input.tex` explains the older MPS representation
   paper's direct-sum input behind block-injective canonical form.
-- `cpsv16_fixed_block_cancellation.tex` records the fixed-block cancellation
-  step implicit in CPSV16 Theorem II.1, line 1182.
 - `quantum_wielandt_deviation.tex` records the local proof boundary for the
   quantum Wielandt inequality.
 - `cpsv16_zero_tail_length_zero_decomposition.tex` explains why stating the
