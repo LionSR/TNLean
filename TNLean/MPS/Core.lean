@@ -24,3 +24,4 @@ import TNLean.MPS.Core.TPGauge
 import TNLean.MPS.Core.Transfer
 import TNLean.MPS.Core.TransferChannel
 import TNLean.MPS.Core.TransferMatrix
+import TNLean.MPS.Core.WordFactor
