@@ -743,11 +743,6 @@ theorem IsMPU.simple1 [NeZero d] [NeZero D] {U : MPOTensor d D}
   obtain ⟨Φ, ρ, _, _, _, hsimple1⟩ := hU.exists_normalized_fixed_points_simple1
   exact ⟨Φ, ρ, hsimple1⟩
 
-/-- Reindex both physical legs of an MPO tensor by the same equivalence. -/
-def reindexPhysical {d' : ℕ} (e : Fin d' ≃ Fin d)
-    (U : MPOTensor d D) : MPOTensor d' D :=
-  fun i j ↦ U (e i) (e j)
-
 /-- Simultaneous reindexing of both physical coordinates commutes entrywise with
 formation of the double layer. This is the local coordinate identity used to compare
 iterated and direct physical blockings. -/

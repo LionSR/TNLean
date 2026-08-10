@@ -88,6 +88,11 @@ identifying `Fin d × Fin d` with `Fin (d * d)` via the standard product encodin
 def toMPSTensor (M : MPOTensor d D) : MPSTensor (d * d) D :=
   fun ij => M (ij.divNat) (ij.modNat)
 
+/-- Reindex both physical legs of an MPO tensor by the same equivalence. -/
+def reindexPhysical {d' : ℕ} (e : Fin d' ≃ Fin d)
+    (U : MPOTensor d D) : MPOTensor d' D :=
+  fun i j ↦ U (e i) (e j)
+
 /-- The physical matrix obtained from a fixed pair of virtual indices of an
 MPO tensor.
 
