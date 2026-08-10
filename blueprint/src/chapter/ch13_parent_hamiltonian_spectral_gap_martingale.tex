@@ -412,7 +412,8 @@ norm estimate is derived here.
     \label{thm:spectator_boundary_mixed_gram}
     \lean{MPSTensor.inner_tailBoundaryMapES_adjoint_leftBoundaryMapES}
     \leanok
-    \uses{def:tail_boundary_map,def:left_boundary_map,def:ground_space_gram}
+    \uses{def:tail_boundary_map,def:left_boundary_map,def:ground_space_gram,
+        lem:eval_word_append,thm:ground_space_map_es_frobenius}
     Let $X=(X_u)_{u\in\Fin d^K}$ and
     $Z=(Z_j)_{j\in\Fin d^1}$ be virtual boundary-matrix families.  For the
     tail window of length $l+1$ and the left window of length $K+l$, their
@@ -439,7 +440,7 @@ norm estimate is derived here.
 \begin{proof}
     \leanok
     \uses{def:tail_boundary_map,def:left_boundary_map,def:ground_space_gram,
-        lem:eval_word_append}
+        lem:eval_word_append,thm:ground_space_map_es_frobenius}
     Split a physical configuration into a prefix $u$, an overlap word $\tau$
     of length $l$, and a final-site configuration $j$.  The adjoint relation
     turns the mixed Gram into the physical inner product of the two boundary
