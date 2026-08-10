@@ -25,7 +25,7 @@ open Matrix
 
 namespace MPOTensor
 
-variable {d D : ℕ} (U : MPOTensor d D)
+variable {d D : ℕ}
 
 /-- Output-first MPU coisometry, with a common output tail of length \(K\)
 traced out and normalized by \(d^{-K}\), leaves the identity on the first two output sites.
