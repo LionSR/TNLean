@@ -21,6 +21,7 @@ is right multiplication by the fixed point, divided by its trace.
 * `Matrix.gramReshuffleMatrix_fixedPointProj` identifies the Kronecker-product matrix.
 * `Matrix.gramReshuffle_fixedPointProj_frobeniusEquivEuclidean_apply` computes its action.
 * `Matrix.gramReshuffleMatrix_fixedPointProj_posDef` proves positive definiteness.
+* `Matrix.gramReshuffle_fixedPointProj_isUnit` proves invertibility.
 * `Matrix.gramReshuffle_fixedPointProj_injective` proves injectivity.
 -/
 
@@ -82,21 +83,20 @@ theorem gramReshuffleMatrix_fixedPointProj_posDef [NeZero D]
   rw [gramReshuffleMatrix_fixedPointProj]
   exact (hρ.transpose.kronecker PosDef.one).smul (inv_pos.mpr hρ.trace_pos)
 
+/-- A positive-definite fixed point makes the limiting Gram operator invertible. -/
+theorem gramReshuffle_fixedPointProj_isUnit [NeZero D]
+    {ρ : Matrix (Fin D) (Fin D) ℂ} (hρ : ρ.PosDef) :
+    IsUnit (gramReshuffle (fixedPointProj ρ (ne_of_gt hρ.trace_pos))) := by
+  rw [gramReshuffle]
+  exact (gramReshuffleMatrix_fixedPointProj_posDef hρ).isUnit.map
+    (Matrix.toEuclideanCLM (n := Fin D × Fin D) (𝕜 := ℂ))
+
 /-- A positive-definite fixed point makes the limiting Gram operator injective. -/
 theorem gramReshuffle_fixedPointProj_injective [NeZero D]
     {ρ : Matrix (Fin D) (Fin D) ℂ} (hρ : ρ.PosDef) :
     Function.Injective
       (gramReshuffle (fixedPointProj ρ (ne_of_gt hρ.trace_pos))) := by
-  rw [gramReshuffle]
-  intro x y hxy
-  have hmul :
-      (gramReshuffleMatrix (fixedPointProj ρ (ne_of_gt hρ.trace_pos))).mulVec
-          (WithLp.ofLp x) =
-        (gramReshuffleMatrix (fixedPointProj ρ (ne_of_gt hρ.trace_pos))).mulVec
-          (WithLp.ofLp y) := by
-    simpa only [Matrix.ofLp_toEuclideanCLM] using congrArg WithLp.ofLp hxy
-  have hofLp := Matrix.mulVec_injective_of_isUnit
-    (gramReshuffleMatrix_fixedPointProj_posDef hρ).isUnit hmul
-  simpa using congrArg (WithLp.toLp 2) hofLp
+  exact (ContinuousLinearMap.isUnit_iff_bijective.mp
+    (gramReshuffle_fixedPointProj_isUnit hρ)).1
 
 end Matrix
