@@ -162,11 +162,13 @@
     \lean{MPSTensor.isPureOneLetterRFPViaTSUpToVirtualGauge_of_isBlockedGaugePhaseFixedPoint}
     \leanok
     \uses{def:one_letter_mpdo_virtual_gauge_rfp,
-        def:blocked_gauge_phase_fixed_point, def:doubled_virtual_gauge}
+        def:blocked_gauge_phase_fixed_point}
     Every one-letter MPS blocking witness induces the exact doubled-MPO
     virtual-gauge condition.
 \end{lemma}
-\begin{proof}\leanok
+\begin{proof}
+    \leanok
+    \uses{def:doubled_virtual_gauge}
     Tensor the identity $A=\zeta X A^{[2]}X^{-1}$ with its complex conjugate.
     The virtual matrices combine to $X\otimes\overline X$, while the amplitude
     factor is $\zeta\overline\zeta=|\zeta|^2=1$.
@@ -180,10 +182,8 @@
     \lean{MPSTensor.cubePhaseTensor_normalized_canonical_gauge_not_rfp}
     \lean{MPSTensor.cpsv16_pure_rfp_gauge_equivalence_false}
     \leanok
-    \uses{def:one_letter_mpdo_virtual_gauge_rfp,
-        lem:blocked_gauge_phase_to_doubled_mpdo, def:cpsv_canonical_form,
-        def:mps_transfer_idempotence,
-        thm:cpsv_canonical_form_flow_phase_obstruction}
+    \uses{def:blocked_tensor, def:one_letter_mpdo_virtual_gauge_rfp,
+        def:cpsv_canonical_form, def:mps_transfer_idempotence}
     Let $\omega=e^{2\pi i/3}$, and set
     \begin{align}
         A&=\begin{pmatrix}1&0\\0&\omega\end{pmatrix},
@@ -206,7 +206,10 @@
     continuation in the following source paragraph. This counterexample does
     not decide the mixed-state question.
 \end{theorem}
-\begin{proof}\leanok
+\begin{proof}
+    \leanok
+    \uses{lem:blocked_gauge_phase_to_doubled_mpdo,
+        thm:cpsv_canonical_form_flow_phase_obstruction}
     Swapping the two virtual coordinates changes
     $\operatorname{diag}(1,\omega^2)$ into
     $\operatorname{diag}(\omega^2,1)$; multiplication by $\omega$ gives $A$.
