@@ -111,30 +111,18 @@ theorem mul_mem_cumulativeSpan_add (A : MPSTensor d D) {m n : ℕ}
     {x y : Matrix (Fin D) (Fin D) ℂ}
     (hx : x ∈ cumulativeSpan A m) (hy : y ∈ cumulativeSpan A n) :
     x * y ∈ cumulativeSpan A (m + n) := by
-  -- `cumulativeSpan` is defined as a `span`, so we can use binary span induction.
-  refine Submodule.span_induction₂
-      (s := {M | ∃ w : List (Fin d), w.length ≤ m ∧ M = evalWord A w})
-      (t := {M | ∃ w : List (Fin d), w.length ≤ n ∧ M = evalWord A w})
-      (p := fun x y _ _ => x * y ∈ cumulativeSpan A (m + n))
-      ?_ ?_ ?_ ?_ ?_ ?_ ?_
-      (by simpa [cumulativeSpan] using hx)
-      (by simpa [cumulativeSpan] using hy)
-  · intro x y hx hy
+  -- Matrix multiplication is bilinear, so generator closure extends to both spans.
+  apply LinearMap.BilinMap.apply_apply_mem_of_mem_span
+    (P' := cumulativeSpan A (m + n))
+    (s := {M | ∃ w : List (Fin d), w.length ≤ m ∧ M = evalWord A w})
+    (t := {M | ∃ w : List (Fin d), w.length ≤ n ∧ M = evalWord A w})
+    (B := LinearMap.mul ℂ (Matrix (Fin D) (Fin D) ℂ))
+  · intro x hx y hy
     rcases hx with ⟨w₁, hw₁, rfl⟩
     rcases hy with ⟨w₂, hw₂, rfl⟩
     exact evalWord_mul_evalWord_mem_cumulativeSpan A hw₁ hw₂
-  · intro y _hy
-    simp [zero_mul]
-  · intro x _hx
-    simp [mul_zero]
-  · intro x₁ x₂ y _ _ _ hx₁ hx₂
-    simpa [add_mul] using (cumulativeSpan A (m + n)).add_mem hx₁ hx₂
-  · intro x y₁ y₂ _ _ _ hy₁ hy₂
-    simpa [mul_add] using (cumulativeSpan A (m + n)).add_mem hy₁ hy₂
-  · intro r x y _ _ hxy
-    simpa [smul_mul_assoc] using (cumulativeSpan A (m + n)).smul_mem r hxy
-  · intro r x y _ _ hxy
-    simpa [mul_smul_comm] using (cumulativeSpan A (m + n)).smul_mem r hxy
+  · exact hx
+  · exact hy
 
 /-- Every element of the algebra span lies in some cumulative span.
 
@@ -146,12 +134,12 @@ theorem mem_cumulativeSpan_of_mem_algSpan (A : MPSTensor d D)
   | mem x hxS =>
     rcases hxS with ⟨i, rfl⟩
     refine ⟨1, ?_⟩
-    simpa [evalWord] using
+    simpa only [evalWord, Matrix.mul_one] using
       (mem_cumulativeSpan_generator (A := A) (n := 1) (w := [i]) (by simp))
   | algebraMap r =>
     refine ⟨0, ?_⟩
-    simpa [Algebra.algebraMap_eq_smul_one] using
-      (cumulativeSpan A 0).smul_mem r (one_mem_cumulativeSpan A 0)
+    rw [Algebra.algebraMap_eq_smul_one]
+    exact (cumulativeSpan A 0).smul_mem r (one_mem_cumulativeSpan A 0)
   | add x y _ _ ihx ihy =>
     rcases ihx with ⟨Nx, hNx⟩
     rcases ihy with ⟨Ny, hNy⟩
