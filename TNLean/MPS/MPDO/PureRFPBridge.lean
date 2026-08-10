@@ -10,7 +10,7 @@ import TNLean.MPS.MPDO.RFPViaTS
 import TNLean.MPS.RFP.Defs
 
 /-!
-# Pure-state bridge for the MPDO renormalization fixed-point condition
+# Pure-state equivalence for the MPDO renormalization fixed-point condition
 
 This file identifies Definition 4.1 of arXiv:1606.00608 on the doubled tensor
 of a pure MPS with the pure-state physical blocking condition. The refinement
@@ -27,7 +27,7 @@ dimension zero, the unique zero maps give both channels.
 ## References
 
 * Cirac--Perez-Garcia--Schuch--Verstraete, arXiv:1606.00608, labels
-  `Def-equiv-pure` and `T-and-S-mixed-equiv-pure`, lines 675--687.
+  *Def-equiv-pure* and *T-and-S-mixed-equiv-pure*, lines 675--687.
 -/
 
 open scoped Matrix BigOperators ComplexOrder Kronecker
@@ -219,25 +219,25 @@ private theorem isTransferIdempotent_of_doubledTensor_isRFPViaTS
 fixed-point condition of Definition 4.1 is equivalent to idempotence of the
 pure MPS transfer map.
 
-For the forward construction, let
-`V : Matrix (Fin d × Fin d) (Fin d) ℂ` be the physical blocking isometry.
-The refinement channel has the source orientation
-`T(X) = V * X * Vᴴ`. When `d > 0`, the coarse-graining channel is
-`Y ↦ Vᴴ * Y * V` on the active projection `P = V * Vᴴ`; its action outside
-`P` is completed by measuring the complementary trace and preparing a fixed
-density matrix. Thus it agrees on the tensor-generated closures with the
-source formula `S(Y) = tr₂(Uᴴ Y U)` obtained after extending the isometry to a
-unitary and adjoining a pure ancilla. When `d = 0`, both matrix spaces are
-trivial and the unique zero maps give the two channels.
+Let \(V : \mathbb C^d \to \mathbb C^{d^2}\) be the physical blocking
+isometry. The refinement channel has the source orientation
+\(\mathcal T(X) = V X V^\dagger\). When \(d > 0\), the coarse-graining
+channel is \(Y \mapsto V^\dagger Y V\) on the active projection
+\(P = V V^\dagger\); outside this projection, the complementary trace is
+mapped to a fixed density matrix. On tensor-generated closures this channel
+agrees with the source formula
+\(\mathcal S(Y) = \operatorname{tr}_2(U^\dagger Y U)\), where the isometry is
+extended to a unitary and a pure ancilla is adjoined. When \(d = 0\), both
+matrix spaces are trivial and the unique zero maps give the two channels.
 
-The reverse implication uses only trace preservation of `T`: Definition 4.1
-makes the physical-trace transfer of `doubledTensor A` idempotent, and its
-simultaneous reindexing is the transfer matrix of `transferMap A`. This is not
-an identification with `MPOTensor.IsZCL`, `MPOTensor.IsSourceZCL`, or any
-transfer-retraction predicate.
+For the converse, trace preservation of \(\mathcal T\) makes the
+physical-trace transfer of the tensor `doubledTensor` associated with \(A\)
+idempotent. After simultaneous reindexing, this matrix is the transfer matrix
+of the map `transferMap` associated with \(A\). This
+argument does not concern `MPOTensor.IsZCL` or `MPOTensor.IsSourceZCL`.
 
 Source: arXiv:1606.00608, pure-state specialization at line 668, labels
-`Def-equiv-pure` and `T-and-S-mixed-equiv-pure`, lines 675--687, and the
+*Def-equiv-pure* and *T-and-S-mixed-equiv-pure*, lines 675--687, and the
 trace-preservation argument in Appendix C, lines 1333--1340. -/
 theorem doubledTensor_isRFPViaTS_iff_isTransferIdempotent (A : MPSTensor d D) :
     IsRFPViaTS (doubledTensor A) ↔ IsTransferIdempotent A := by
@@ -251,13 +251,14 @@ theorem doubledTensor_isRFPViaTS_iff_isTransferIdempotent (A : MPSTensor d D) :
 Definition 4.1 exactly when the original MPS tensor has a physical blocking
 isometry.
 
-The isometry is oriented from one physical site to two. It defines
-`T(X) = V * X * Vᴴ`. When `d > 0`, compression by `Vᴴ`, with trace-preserving
-completion on the orthogonal complement, defines `S`; when `d = 0`, the unique
-zero maps define both channels.
+The isometry is oriented from one physical site to two and defines
+\(\mathcal T(X) = V X V^\dagger\). When \(d > 0\), compression by
+\(V^\dagger\), followed by trace-preserving completion on the orthogonal
+complement, defines \(\mathcal S\). When \(d = 0\), the unique zero maps define
+both channels.
 
 Source: arXiv:1606.00608, pure-state specialization at line 668, labels
-`Def-equiv-pure` and `T-and-S-mixed-equiv-pure`, lines 675--687, and the
+*Def-equiv-pure* and *T-and-S-mixed-equiv-pure*, lines 675--687, and the
 trace-preservation argument in Appendix C, lines 1333--1340. -/
 theorem doubledTensor_isRFPViaTS_iff_hasPhysicalBlockingIsometry
     (A : MPSTensor d D) :

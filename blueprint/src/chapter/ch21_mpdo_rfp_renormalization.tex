@@ -674,7 +674,10 @@ the remaining sites unchanged.
 \end{theorem}
 \begin{proof}
     \leanok
-    \uses{thm:physical_blocking_isometry_iff_transfer_idempotence}
+    \uses{thm:physical_blocking_isometry_iff_transfer_idempotence,
+      thm:rfp_via_ts_physical_trace_idempotent,
+      thm:matrix_support_completion_cptp,
+      thm:mpdo_single_kraus_map_cptp}
     The blocking relation
     $A^{i_1}A^{i_2}=\sum_jV_{(i_1,i_2),j}A^j$ implies
     \begin{align}
