@@ -672,11 +672,11 @@ closing a chain of $N$ copies of $\mathcal U$.
     \end{align}
 \end{definition}
 
-\begin{lemma}[Double layer under physical reindexing]
-    \label{lem:mpu_double_layer_physical_reindexing}
+\begin{theorem}[Double layer under physical reindexing]
+    \label{thm:mpu_double_layer_physical_reindexing}
     \lean{MPOTensor.doubleLayerTensor_reindexPhysical}
     \leanok
-    \uses{def:mpu_physical_reindexing}
+    \uses{def:mpu_physical_reindexing,def:mpu_double_layer}
     For every physical-index bijection $e$, taking the double layer commutes
     with physical reindexing:
     \begin{align}
@@ -685,7 +685,9 @@ closing a chain of $N$ copies of $\mathcal U$.
 \end{lemma}
 
 \begin{proof}\leanok
-    This follows entrywise from the definition of physical reindexing.
+    \uses{def:mpu_physical_reindexing,def:mpu_double_layer}
+    This follows entrywise from the definitions of physical reindexing and the
+    double layer.
 \end{proof}
 
 \begin{theorem}[Bounded blocking to simplicity]
@@ -755,7 +757,7 @@ closing a chain of $N$ copies of $\mathcal U$.
 \begin{proof}\leanok
     \uses{thm:mpu_blocked_double_layer_diagonal,
         thm:mpu_second_block_simple, thm:mpu_bounded_simple_blocking,
-        lem:mpu_blocking, lem:mpu_double_layer_physical_reindexing}
+        lem:mpu_blocking, thm:mpu_double_layer_physical_reindexing}
     First block $J$ sites.  The normalized diagonal of this block is the
     reindexed rank-one matrix $|\rho)(\Id|$, and the trace-one condition is
     exactly $(\Id|\rho)=1$.  The exact second-block contraction theorem then
