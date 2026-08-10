@@ -21,6 +21,14 @@ quasi-local C⋆-algebra is not defined here.
 * `SpinChain.SupportedIn` — a local observable represented on a specified finite region.
 * `SpinChain.algebraicLocalAlgebraLift` — the star-preserving universal map from the limit.
 
+## Main results
+
+* `SpinChain.localObservable_injective` — finite-region observables embed faithfully.
+* `SpinChain.algebraicLocalAlgebraLift_unique` — the star-algebra universal property.
+* `SpinChain.exists_supportedIn` — every local observable has finite support.
+* `SpinChain.SupportedIn.add`, `SpinChain.SupportedIn.mul`, `SpinChain.SupportedIn.star` —
+  finite supports are closed under the star-algebra operations.
+
 ## References
 
 * Cirac--Perez-Garcia--Schuch--Verstraete, arXiv:1703.09188, Appendix, lines 2285--2300.
@@ -187,7 +195,7 @@ end SupportedIn
 
 /-- Every element of the algebraic local algebra is a local observable with some finite
 support. -/
-lemma exists_supportedIn (A : AlgebraicLocalAlgebra d) :
+lemma exists_supportedIn {d : ℕ} (A : AlgebraicLocalAlgebra d) :
     ∃ Λ : Finset ℤ, SupportedIn A Λ := by
   obtain ⟨Λ, a, rfl⟩ := DirectLimit.exists_eq_mk (localAlgebraMap d) A
   exact ⟨Λ, a, rfl⟩

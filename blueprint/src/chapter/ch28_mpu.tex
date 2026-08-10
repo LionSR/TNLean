@@ -3150,7 +3150,8 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
 \begin{definition}[Algebraic local algebra]
   \label{def:qca_algebraic_local_algebra}
   \lean{SpinChain.instDirectedSystemLocalAlgebra,
-    SpinChain.AlgebraicLocalAlgebra,SpinChain.localObservable}
+    SpinChain.AlgebraicLocalAlgebra,SpinChain.localObservable,
+    SpinChain.localObservable_localInclusion}
   \leanok
   \uses{def:qca_local_algebra,def:qca_local_inclusion,
     lem:qca_local_inclusion_refl,lem:qca_local_inclusion_trans}
@@ -3163,13 +3164,14 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
   \end{align}
   For every finite region $\Lambda$, write
   $\iota_\Lambda\colon\mathcal A_\Lambda\to\mathcal A_{\mathrm{loc}}$
-  for the canonical inclusion.  These inclusions satisfy
+  for the canonical inclusion.  Whenever $\Lambda\subseteq\Gamma$, these
+  inclusions satisfy
   \begin{align}
-    \iota_\Gamma\circ\iota_{\Lambda,\Gamma}&=\iota_\Lambda
-    &&(\Lambda\subseteq\Gamma).
+    \iota_\Gamma\circ\iota_{\Lambda,\Gamma}&=\iota_\Lambda.
   \end{align}
-  This is the union $\bigcup_\Lambda^\infty\mathcal A_\Lambda$ in the
-  Appendix of \cite{Cirac2017MPU}.  No norm completion is taken.
+  This is the union
+  $\bigcup_{\Lambda\Subset\mathbb Z}\mathcal A_\Lambda$ in the Appendix of
+  \cite{Cirac2017MPU}.  No norm completion is taken.
 \end{definition}
 
 \begin{theorem}[Star-algebra universal property]
@@ -3182,10 +3184,10 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
   \uses{def:qca_algebraic_local_algebra}
   Let $B$ be a complex star algebra.  Suppose that for every finite region
   $\Lambda$ there is a star-algebra homomorphism
-  $g_\Lambda\colon\mathcal A_\Lambda\to B$ and that
+  $g_\Lambda\colon\mathcal A_\Lambda\to B$.  Whenever
+  $\Lambda\subseteq\Gamma$, suppose that
   \begin{align}
-    g_\Gamma\circ\iota_{\Lambda,\Gamma}&=g_\Lambda
-    &&(\Lambda\subseteq\Gamma).
+    g_\Gamma\circ\iota_{\Lambda,\Gamma}&=g_\Lambda.
   \end{align}
   Then there is a unique star-algebra homomorphism
   $g\colon\mathcal A_{\mathrm{loc}}\to B$ satisfying
@@ -3213,8 +3215,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
 
 \begin{theorem}[Finite supports of local observables]
   \label{thm:qca_local_observable_finite_support}
-  \lean{SpinChain.localObservable_localInclusion,
-    SpinChain.localObservable_injective,SpinChain.SupportedIn.mono,
+  \lean{SpinChain.localObservable_injective,SpinChain.SupportedIn.mono,
     SpinChain.SupportedIn.union_left,SpinChain.SupportedIn.union_right,
     SpinChain.SupportedIn.add,SpinChain.SupportedIn.mul,
     SpinChain.SupportedIn.star,SpinChain.SupportedIn.zero,
@@ -3231,10 +3232,14 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
 \end{theorem}
 
 \begin{proof}\leanok
+  \uses{lem:qca_local_inclusion_injective}
   Enlarge representatives by tensoring with the identity on the added sites.
   Two representatives can therefore be moved to the finite union of their
   regions, where sums and products are formed.  The canonical inclusions are
   unital star-algebra homomorphisms, so they preserve the adjoint, zero, and
-  the unit.  Finally, every element of an algebraic direct limit has a
-  representative in one member of the directed system.
+  the unit.  For $d>0$, every transition map between finite-region algebras is
+  injective; the canonical map from each member of such a directed system to
+  its direct limit is therefore injective.  Finally, every element of an
+  algebraic direct limit has a representative in one member of the directed
+  system.
 \end{proof}
