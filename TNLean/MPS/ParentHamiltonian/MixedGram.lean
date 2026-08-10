@@ -32,13 +32,13 @@ open scoped Matrix.Norms.Frobenius
 
 /-- Three consecutive configuration blocks are equivalent to a configuration on
 their concatenated chain. -/
-def cfgAppendThreeEquiv (d K l R : ℕ) :
+private def cfgAppendThreeEquiv (d K l R : ℕ) :
     Cfg d K × (Cfg d l × Cfg d R) ≃ Cfg d (K + (l + R)) :=
-  (Equiv.prodCongr (Equiv.refl (Cfg d K)) (cfgAppendEquiv d l R)).trans
-    (cfgAppendEquiv d K (l + R))
+  (Equiv.prodCongr (Equiv.refl (Cfg d K)) (Fin.appendEquiv l R)).trans
+    (Fin.appendEquiv K (l + R))
 
 @[simp]
-theorem cfgAppendThreeEquiv_apply (d K l R : ℕ)
+private theorem cfgAppendThreeEquiv_apply (d K l R : ℕ)
     (u : Cfg d K) (τ : Cfg d l) (j : Cfg d R) :
     cfgAppendThreeEquiv d K l R (u, (τ, j)) = Fin.append u (Fin.append τ j) := rfl
 
