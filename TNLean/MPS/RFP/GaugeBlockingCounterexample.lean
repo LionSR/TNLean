@@ -247,7 +247,10 @@ theorem cubePhaseTensor_not_isTransferIdempotent :
         rw [hIdem.pow_eq (pow_ne_zero n (by norm_num : (2 : ℕ) ≠ 0))])⟩
 
 /-- The cube-phase witness is in normalized CPSV canonical form, satisfies the
-one-letter blocking-up-to-gauge diagram with a unit phase, and is not transfer-idempotent. -/
+one-letter blocking-up-to-gauge diagram with a unit phase, and is not transfer-idempotent.
+
+Source: arXiv:1606.00608, canonical-form normalization at lines 238--246 and Appendix D,
+equation `RFP-gauge`, lines 2100--2107. -/
 theorem cubePhaseTensor_normalized_canonical_gauge_not_rfp :
     IsCPSVCanonicalForm cubePhaseTensor ∧
       cubePhaseCanonicalData.IsWeightNormalized ∧
