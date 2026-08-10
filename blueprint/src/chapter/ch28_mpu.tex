@@ -1361,6 +1361,83 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
     \end{align}
 \end{definition}
 
+\begin{definition}[Independent tensor product of matrix product operator tensors]
+    \label{def:mpu_independent_tensor_product}
+    \lean{MPOTensor.tensorProduct, MPOTensor.tensorProduct_apply,
+        MPOTensor.tensorProductConfigEquiv, MPOTensor.mpo_tensorProduct,
+        MPOTensor.IsMPU.tensorProduct}
+    \leanok
+    \uses{def:mpu,def:mpo_tensor}
+    Let $\mathcal U$ and $\mathcal V$ have physical dimensions $d,e$ and
+    auxiliary dimensions $D,E$, respectively. Their independent tensor
+    product $\mathcal U\boxtimes\mathcal V$ has dimensions $de$ and $DE$ and
+    entries
+    \begin{align}
+        (\mathcal U\boxtimes\mathcal V)^{(i,k),(j,l)}_{(\alpha,\gamma),(\beta,\delta)}
+        &=\mathcal U^{i,j}_{\alpha,\beta}\mathcal V^{k,l}_{\gamma,\delta}.
+    \end{align}
+    Splitting every product-valued physical configuration into its two
+    components identifies the finite-size operator with
+    \begin{align}
+        (\mathcal U\boxtimes\mathcal V)^{(N)}
+        &\cong \mathcal U^{(N)}\otimes\mathcal V^{(N)}.
+    \end{align}
+    In particular, the independent tensor product of two matrix product
+    unitary tensors is again a matrix product unitary tensor. This is the
+    tensoring operation in the proof of
+    \cite[Theorem~IV.3(ii)]{Cirac2017MPU}.
+\end{definition}
+
+\begin{proof}\leanok
+    At each site, multiply the two local matrix entries and group the two
+    auxiliary indices. Closing the auxiliary chain turns the trace of the
+    Kronecker product into the product of the two traces. The resulting
+    finite-size matrix is the Kronecker product after the sitewise
+    configuration bijection. A Kronecker product of unitary matrices is
+    unitary.
+\end{proof}
+
+\begin{theorem}[Source-cut ranks of an independent tensor product]
+    \label{thm:mpu_tensor_product_source_ranks}
+    \lean{Matrix.rank_kronecker, MPOTensor.tensorProductCutShuffle,
+        MPOTensor.sourceCutM₁_tensorProduct,
+        MPOTensor.sourceCutM₂_tensorProduct,
+        MPOTensor.rightRank_tensorProduct,
+        MPOTensor.leftRank_tensorProduct}
+    \leanok
+    \uses{def:mpu_independent_tensor_product,def:mpu_source_matrix_one,
+        def:mpu_source_matrix_two,def:mpu_right_rank,def:mpu_left_rank}
+    For the independent tensor product, shuffle the row indices by
+    \begin{align}
+        ((\alpha,j),(\alpha',j'))
+        &\longmapsto ((\alpha,\alpha'),(j,j'))
+    \end{align}
+    and use the analogous shuffle on the columns. Then
+    \begin{align}
+        M_1(\mathcal U\boxtimes\mathcal V)
+        &\cong M_1(\mathcal U)\otimes M_1(\mathcal V),\\
+        M_2(\mathcal U\boxtimes\mathcal V)
+        &\cong M_2(\mathcal U)\otimes M_2(\mathcal V).
+    \end{align}
+    Thus the right and left orientations are unchanged, and
+    \begin{align}
+        r(\mathcal U\boxtimes\mathcal V)
+        &=r(\mathcal U)r(\mathcal V),\\
+        \ell(\mathcal U\boxtimes\mathcal V)
+        &=\ell(\mathcal U)\ell(\mathcal V).
+    \end{align}
+    This is the rank-multiplication ingredient for the tensoring case in the
+    proof of \cite[Theorem~IV.3(ii)]{Cirac2017MPU}.
+\end{theorem}
+
+\begin{proof}\leanok
+    Evaluate both source cuts entry by entry after the displayed shuffle.
+    Each entry is the product of the corresponding entries of the two source
+    cuts. Matrix rank is unchanged by row and column bijections and satisfies
+    $\operatorname{rank}(A\otimes B)=\operatorname{rank}(A)
+    \operatorname{rank}(B)$.
+\end{proof}
+
 \begin{theorem}[One-site blocking bounds for the source-cut ranks]
     \label{thm:mpu_source_cut_rank_blocking_succ}
     \lean{MPOTensor.rightRank_blockTensor_succ_le,

@@ -75,7 +75,7 @@ private theorem evalWord_tensorProduct (U : MPOTensor d D) (V : MPOTensor e E)
           evalWord V (is.map Fin.modNat) (js.map Fin.modNat)) := by
   induction is generalizing js with
   | nil =>
-      cases js <;> simp [evalWord, Matrix.one_kronecker_one]
+      cases js <;> simp [evalWord]
   | cons i is ih =>
       cases js with
       | nil => simp [evalWord]
@@ -123,7 +123,10 @@ def tensorProductCutShuffle (a b c f : ℕ) :
     (((finProdFinEquiv.symm x.1).1, (finProdFinEquiv.symm x.2).1),
       ((finProdFinEquiv.symm x.1).2, (finProdFinEquiv.symm x.2).2))
   left_inv x := by simp
-  right_inv x := by simp
+  right_inv x := by
+    apply Prod.ext
+    · exact finProdFinEquiv.apply_symm_apply x.1
+    · exact finProdFinEquiv.apply_symm_apply x.2
 
 /-- The first source cut of an independent tensor product is the reindexed
 Kronecker product of the first source cuts. Its row shuffle is
@@ -136,13 +139,9 @@ theorem sourceCutM₁_tensorProduct (U : MPOTensor d D) (V : MPOTensor e E) :
       Matrix.reindex (tensorProductCutShuffle D d E e)
         (tensorProductCutShuffle d D e E) (sourceCutM₁ U ⊗ₖ sourceCutM₁ V) := by
   ext row col
-  obtain ⟨αγ, jl⟩ := row
-  obtain ⟨ik, βδ⟩ := col
-  obtain ⟨α, γ⟩ := finProdFinEquiv.symm αγ
-  obtain ⟨j, l⟩ := finProdFinEquiv.symm jl
-  obtain ⟨i, k⟩ := finProdFinEquiv.symm ik
-  obtain ⟨β, δ⟩ := finProdFinEquiv.symm βδ
-  simp [tensorProductCutShuffle, Matrix.reindex_apply]
+  rcases row with ⟨αγ, jl⟩
+  rcases col with ⟨ik, βδ⟩
+  simp [sourceCutM₁, tensorProduct, tensorProductCutShuffle, Matrix.reindex_apply]
 
 /-- The second source cut of an independent tensor product is the reindexed
 Kronecker product of the second source cuts. Its row shuffle is
@@ -155,13 +154,9 @@ theorem sourceCutM₂_tensorProduct (U : MPOTensor d D) (V : MPOTensor e E) :
       Matrix.reindex (tensorProductCutShuffle D d E e)
         (tensorProductCutShuffle d D e E) (sourceCutM₂ U ⊗ₖ sourceCutM₂ V) := by
   ext row col
-  obtain ⟨αγ, ik⟩ := row
-  obtain ⟨jl, βδ⟩ := col
-  obtain ⟨α, γ⟩ := finProdFinEquiv.symm αγ
-  obtain ⟨i, k⟩ := finProdFinEquiv.symm ik
-  obtain ⟨j, l⟩ := finProdFinEquiv.symm jl
-  obtain ⟨β, δ⟩ := finProdFinEquiv.symm βδ
-  simp [tensorProductCutShuffle, Matrix.reindex_apply]
+  rcases row with ⟨αγ, ik⟩
+  rcases col with ⟨jl, βδ⟩
+  simp [sourceCutM₂, tensorProduct, tensorProductCutShuffle, Matrix.reindex_apply]
 
 /-- The right source rank is multiplicative under independent tensor products.
 The first source cut retains the paper's right orientation.
