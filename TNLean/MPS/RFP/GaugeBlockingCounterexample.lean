@@ -58,7 +58,9 @@ def IsPureOneLetterRFPViaTSUpToVirtualGauge {D : ℕ} (A : MPSTensor 1 D) : Prop
   MPOTensor.IsOneLetterRFPViaTSUpToVirtualGauge (doubledTensor A)
 
 /-- The virtual gauge induced on the doubled bond space by $X$: after identifying
-`Fin (D * D)` with `Fin D × Fin D`, its matrix is $X \otimes \overline X$. -/
+`Fin (D * D)` with `Fin D × Fin D`, its matrix is $X \otimes \overline X$.
+
+Source: arXiv:1606.00608, Appendix D, equation `RFP-gauge`, lines 2091--2110. -/
 noncomputable def doubledVirtualGauge {D : ℕ} (X : GL (Fin D) ℂ) : GL (Fin (D * D)) ℂ :=
   Units.mapEquiv
       (Matrix.reindexAlgEquiv ℂ ℂ finProdFinEquiv).toRingEquiv.toMulEquiv
