@@ -565,21 +565,21 @@ $\langle E_{ab},\mathcal E_A^L(E_{ce})\rangle_{\mathrm{HS}}$.  Reshuffling commu
 \leanid{Matrix.gramReshuffle_sub}.  Physical Gram convergence in these
 coordinates is now complete under the exact complementary spectral hypothesis.
 Let $\rho\in\mathbb C^{D\times D}$ have nonzero trace, let
-$P_{\mathrm{fix}}(X)=\operatorname{tr}(X)\rho/\operatorname{tr}(\rho)$, and
+$P_\rho(X)=\operatorname{tr}(X)\rho/\operatorname{tr}(\rho)$, and
 suppose that $\mathcal E_A$ is trace-preserving,
 $\mathcal E_A(\rho)=\rho$, and
 \begin{align}
-  \rho_{\mathrm{spec}}(\mathcal E_A-P_{\mathrm{fix}})&<1.
+  \rho_{\mathrm{spec}}(\mathcal E_A-P_\rho)&<1.
 \end{align}
 The generic prerequisite
 \leanid{MPSTensor.geometric_bound_of_spectralRadius_lt_one} gives constants
 $C>0$ and $0<r<1$ with
-$\lVert(\mathcal E_A-P_{\mathrm{fix}})^n\rVert\le Cr^n$ for every $n$.
+$\lVert(\mathcal E_A-P_\rho)^n\rVert\le Cr^n$ for every $n$.
 Combining the transfer-power decomposition, the exact Gram reshuffling identity,
 subtraction compatibility, and the $D^3$ squared norm conversion gives
 \leanid{MPSTensor.groundSpaceGram_sub_fixedPointProj_norm_sq_le_geometric}:
 \begin{align}
-  \bigl\lVert\mathcal K_n-\mathscr R(P_{\mathrm{fix}})\bigr\rVert^2
+  \bigl\lVert\mathcal K_n-\mathscr R(P_\rho)\bigr\rVert^2
   &\le D^3\bigl(Cr^n\bigr)^2,
   \qquad n\ge1.
 \end{align}
@@ -587,14 +587,14 @@ Consequently,
 \leanid{MPSTensor.groundSpaceGram_tendsto_gramReshuffle_fixedPointProj}
 proves
 \begin{align}
-  \mathcal K_n&\longrightarrow\mathscr R(P_{\mathrm{fix}})
+  \mathcal K_n&\longrightarrow\mathscr R(P_\rho)
 \end{align}
 in operator norm.  These theorems require exactly nonzero trace,
 trace preservation, the fixed-point equation, and complementary spectral radius
 strictly below one.  They impose no positivity, injectivity, or uniqueness
 hypothesis.
 
-The limiting Gram operator is $\mathscr R(P_{\mathrm{fix}})$, generally not the
+The limiting Gram operator is $\mathscr R(P_\rho)$, generally not the
 identity in the current unweighted Frobenius coordinates.  Thus this completed
 convergence theorem does not provide a Neumann-series estimate for
 $1-\mathcal K_L$.
@@ -664,7 +664,7 @@ and generic prerequisites now include:
     \leanid{MPSTensor.groundSpaceGram_sub_fixedPointProj_norm_sq_le_geometric}
     and
     \leanid{MPSTensor.groundSpaceGram_tendsto_gramReshuffle_fixedPointProj}.
-    Their limit is $\mathscr R(P_{\mathrm{fix}})$, and the quantitative squared
+    Their limit is $\mathscr R(P_\rho)$, and the quantitative squared
     estimate has factor $D^3(Cr^n)^2$.
   \item The generic operator-norm--to--entrywise-Frobenius estimate, its
     reshuffled-Choi corollary, and the safe dimension conversion are
@@ -727,11 +727,11 @@ The two ranges are transported into this common ambient by
 The present formal development now controls the deviation from the correct
 limiting Gram operator:
 \begin{align}
-  \bigl\lVert\mathcal K_n-\mathscr R(P_{\mathrm{fix}})\bigr\rVert^2
+  \bigl\lVert\mathcal K_n-\mathscr R(P_\rho)\bigr\rVert^2
   &\le D^3\bigl(Cr^n\bigr)^2.
 \end{align}
 It does not control $\lVert1-\mathcal K_n\rVert$ in these unweighted
-coordinates, because $\mathscr R(P_{\mathrm{fix}})$ is generally not the
+coordinates, because $\mathscr R(P_\rho)$ is generally not the
 identity.  Hence it does not yet bound an inverse Gram operator around the
 identity.  It also does not compare the physical range projectors on the two
 overlapping windows.
