@@ -86,14 +86,7 @@ theorem IsPrimitiveMPS.groundSpaceGram_ringInverse_tendsto
   have hKinf : IsUnit Kinf := Matrix.gramReshuffle_fixedPointProj_isUnit hρ
   have hconv : Filter.Tendsto (fun n => groundSpaceGram A n) Filter.atTop (nhds Kinf) := by
     simpa only [Kinf] using hP.groundSpaceGram_tendsto_gramReshuffle_fixedPointProj
-  change Filter.Tendsto (fun n => Ring.inverse (groundSpaceGram A n)) Filter.atTop
-    (nhds (Ring.inverse Kinf))
-  rw [← hKinf.unit_spec, Ring.inverse_unit]
-  have hinv := (NormedRing.inverse_continuousAt hKinf.unit).tendsto.comp hconv
-  change Filter.Tendsto (fun n => Ring.inverse (groundSpaceGram A n)) Filter.atTop
-    (nhds (Ring.inverse (hKinf.unit :
-      EuclideanSpace ℂ (Fin D × Fin D) →L[ℂ] EuclideanSpace ℂ (Fin D × Fin D)))) at hinv
-  simpa only [Ring.inverse_unit] using hinv
+  exact NormedRing.inverse_tendsto_of_tendsto_of_isUnit hKinf hconv
 
 /-- Eventually the Hilbert-space boundary map is injective. For any relative
 tolerance \(a\in(0,1)\), one may choose an injectivity proof so that its

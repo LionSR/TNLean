@@ -15,6 +15,18 @@ under a relatively small perturbation.
 
 namespace NormedRing
 
+variable {R α : Type*} [NormedRing R] [HasSummableGeomSeries R]
+
+/-- Ring inversion preserves convergence at an invertible limit. -/
+theorem inverse_tendsto_of_tendsto_of_isUnit {f : α → R} {l : Filter α} {K₀ : R}
+    (hK₀ : IsUnit K₀) (h : Filter.Tendsto f l (nhds K₀)) :
+    Filter.Tendsto (fun x => Ring.inverse (f x)) l (nhds (Ring.inverse K₀)) := by
+  rw [← hK₀.unit_spec, Ring.inverse_unit]
+  have hinv := (inverse_continuousAt hK₀.unit).tendsto.comp h
+  change Filter.Tendsto (fun x => Ring.inverse (f x)) l
+    (nhds (Ring.inverse (hK₀.unit : R))) at hinv
+  simpa only [Ring.inverse_unit] using hinv
+
 variable {R : Type*} [NormedRing R] [NormOneClass R] [HasSummableGeomSeries R]
 
 /-- Quantitative Neumann bound.  If \(\lVert t\rVert\le a<1\), then

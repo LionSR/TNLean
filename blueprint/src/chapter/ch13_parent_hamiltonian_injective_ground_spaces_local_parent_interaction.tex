@@ -692,12 +692,152 @@ orthogonal projector is the canonical representative used here.
     Theorem~\ref{thm:ground_space_gram_tendsto_fixed_point}.
 \end{proof}
 
-The limit in Theorem~\ref{thm:ground_space_gram_tendsto_fixed_point} is the
-reshuffled fixed-point projection $\mathscr R(P_\rho)$, not the identity in
-unweighted Frobenius coordinates.  The limiting metric is generally nonidentity.  Under a positive-definite
-fixed-point hypothesis, the inverse estimates below perturb around
-$\mathscr R(P_\rho)$ rather than around the identity.  They do not yet compare
-the physical range projectors on overlapping windows.
+The limit in Theorem~\ref{thm:ground_space_gram_tendsto_fixed_point} is
+the reshuffled fixed-point projection $\mathscr R(P_\rho)$, not the
+identity in unweighted Frobenius coordinates.  The limiting metric is
+generally nonidentity.
+Under a positive-definite fixed-point hypothesis, the inverse estimates
+below perturb around $\mathscr R(P_\rho)$ rather than around the identity.
+They do not yet compare the physical range projectors on overlapping
+windows.
+
+\begin{theorem}[Exact limiting Gram metric]
+    \label{thm:fixed_point_gram_metric_exact}
+    \lean{Matrix.gramReshuffleMatrix_fixedPointProj_apply}
+    \lean{Matrix.gramReshuffleMatrix_fixedPointProj}
+    \lean{Matrix.gramReshuffle_fixedPointProj_frobeniusEquivEuclidean_apply}
+    \leanok
+    \uses{def:gram_reshuffle, def:frobenius_vectorization}
+    Let $\rho\in\MN{D}$ have nonzero trace and define
+    $P_\rho(X):=(\tr X/\tr\rho)\rho$.  Then
+    \begin{align}
+      R(P_\rho)
+      &=(\tr\rho)^{-1}(\rho^{\mathsf T}\otimes I_D),
+      \label{eq:fixed_point_gram_metric_matrix}\\
+      \mathscr R(P_\rho)U(X)
+      &=U\!\left((\tr\rho)^{-1}X\rho\right).
+      \label{eq:fixed_point_gram_metric_action}
+    \end{align}
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    For matrix units $E_{ca}$, direct evaluation gives
+    \begin{align}
+      R(P_\rho)_{(b,a),(e,c)}
+      &=(\tr\rho)^{-1}\rho_{eb}\,\delta_{ca}.
+    \end{align}
+    These are exactly the entries in
+    (\ref{eq:fixed_point_gram_metric_matrix}).  Applying that Kronecker product
+    to the column--row vectorization of $X$ gives
+    (\ref{eq:fixed_point_gram_metric_action}).
+\end{proof}
+
+\begin{theorem}[Invertibility of the limiting Gram metric]
+    \label{thm:fixed_point_gram_metric_is_unit}
+    \lean{Matrix.gramReshuffleMatrix_fixedPointProj_posDef}
+    \lean{Matrix.gramReshuffle_fixedPointProj_isUnit}
+    \leanok
+    \uses{def:gram_reshuffle}
+    If $D>0$ and $\rho\in\MN{D}$ is positive definite, then
+    $R(P_\rho)$ is positive definite and $\mathscr R(P_\rho)$ is invertible.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:fixed_point_gram_metric_exact}
+    Positive definiteness gives $\tr\rho>0$.  By
+    (\ref{eq:fixed_point_gram_metric_matrix}),
+    \begin{align}
+      R(P_\rho)
+      &=(\tr\rho)^{-1}(\rho^{\mathsf T}\otimes I_D)>0.
+    \end{align}
+    Hence its associated operator $\mathscr R(P_\rho)$ is invertible.
+\end{proof}
+
+\begin{theorem}[Arbitrary-base Neumann inverse bound]
+    \label{thm:arbitrary_base_neumann_inverse_bound}
+    \lean{NormedRing.isUnit_and_norm_inverse_le_of_norm_inverse_mul_sub_le}
+    \lean{NormedRing.isUnit_and_norm_inverse_le_of_norm_mul_norm_sub_le}
+    \leanok
+    Let $K_0$ be invertible in a normed ring with convergent geometric series
+    and $\lVert I\rVert=1$.  If $a<1$ and
+    \begin{align}
+      \lVert K_0^{-1}(K-K_0)\rVert&\le a,
+      \label{eq:arbitrary_base_relative_perturbation}
+    \end{align}
+    then $K$ is invertible and
+    \begin{align}
+      \lVert K^{-1}\rVert
+      &\le(1-a)^{-1}\lVert K_0^{-1}\rVert.
+      \label{eq:arbitrary_base_inverse_bound}
+    \end{align}
+    The same conclusion follows from
+    $\lVert K_0^{-1}\rVert\,\lVert K-K_0\rVert\le a$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:neumann_inverse_norm_bound}
+    Put $E:=K_0^{-1}(K-K_0)$.  Then
+    $K=K_0(I+E)$ and $\lVert E\rVert<1$, so
+    \begin{align}
+      K^{-1}&=(I+E)^{-1}K_0^{-1},\\
+      \lVert K^{-1}\rVert
+      &\le\lVert(I+E)^{-1}\rVert\,\lVert K_0^{-1}\rVert
+       \le(1-a)^{-1}\lVert K_0^{-1}\rVert.
+    \end{align}
+    Submultiplicativity reduces the product-form hypothesis to
+    (\ref{eq:arbitrary_base_relative_perturbation}).
+\end{proof}
+
+\begin{theorem}[Arbitrary-base inverse-displacement bound]
+    \label{thm:arbitrary_base_neumann_inverse_displacement}
+    \lean{NormedRing.norm_inverse_sub_inverse_le_of_norm_inverse_mul_sub_le}
+    \lean{NormedRing.norm_inverse_sub_inverse_le_of_norm_mul_norm_sub_le}
+    \leanok
+    Let $K_0$ be invertible in a normed ring with convergent geometric series
+    and $\lVert I\rVert=1$.  If $a<1$ and
+    (\ref{eq:arbitrary_base_relative_perturbation}) holds, then
+    \begin{align}
+      \lVert K^{-1}-K_0^{-1}\rVert
+      &\le(1-a)^{-1}a\,\lVert K_0^{-1}\rVert.
+      \label{eq:arbitrary_base_inverse_displacement}
+    \end{align}
+    The same estimate follows from
+    $\lVert K_0^{-1}\rVert\,\lVert K-K_0\rVert\le a$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:neumann_inverse_norm_bound}
+    With $E:=K_0^{-1}(K-K_0)$, the resolvent identity is
+    \begin{align}
+      K^{-1}-K_0^{-1}
+      &=-(I+E)^{-1}E K_0^{-1}.
+    \end{align}
+    Since $\lVert(I+E)^{-1}\rVert\le(1-a)^{-1}$ and
+    $\lVert E\rVert\le a$, taking norms gives
+    (\ref{eq:arbitrary_base_inverse_displacement}).  Submultiplicativity again
+    gives the product-form variant.
+\end{proof}
+
+\begin{theorem}[Continuity of inversion at an invertible limit]
+    \label{thm:inverse_tendsto_at_unit}
+    \lean{NormedRing.inverse_tendsto_of_tendsto_of_isUnit}
+    \leanok
+    Let $K_i$ be a net in a normed ring with convergent geometric series.  If
+    $K_i\to K_0$ and $K_0$ is invertible, then
+    \begin{align}
+      K_i^{-1}&\longrightarrow K_0^{-1}.
+    \end{align}
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Write $K_0$ as the image of a unit.  Continuity of inversion on the unit
+    group, followed by the convergence $K_i\to K_0$, gives the result.
+\end{proof}
 
 \begin{definition}[Inverse Gram operator]
     \label{def:inverse_gram}
@@ -765,7 +905,10 @@ the physical range projectors on overlapping windows.
 
 \begin{proof}
     \leanok
-    \uses{thm:primitive_ground_space_gram_tendsto_fixed_point}
+    \uses{thm:primitive_ground_space_gram_tendsto_fixed_point,
+        thm:fixed_point_gram_metric_is_unit,
+        thm:arbitrary_base_neumann_inverse_bound,
+        thm:arbitrary_base_neumann_inverse_displacement}
     The positive-definite fixed point makes
     $\mathcal K_\infty$ invertible.  Gram convergence implies that eventually
     \begin{align}
@@ -793,7 +936,9 @@ the physical range projectors on overlapping windows.
 
 \begin{proof}
     \leanok
-    \uses{thm:primitive_ground_space_gram_tendsto_fixed_point}
+    \uses{thm:primitive_ground_space_gram_tendsto_fixed_point,
+        thm:fixed_point_gram_metric_is_unit,
+        thm:inverse_tendsto_at_unit}
     Inversion is continuous at the invertible operator
     $\mathcal K_\infty$, so the claim follows from
     $\mathcal K_n\to\mathcal K_\infty$.
