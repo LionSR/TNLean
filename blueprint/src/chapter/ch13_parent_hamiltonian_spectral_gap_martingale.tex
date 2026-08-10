@@ -820,31 +820,56 @@ norm estimate is derived here.
     $\lVert J_K\rVert$.  No FNW or Nachtergaele contraction estimate enters.
 \end{proof}
 
-\begin{theorem}[Centered overlap factorization and geometric bound]
-    \label{thm:c3_centered_overlap_factorization_geometric}
+\begin{definition}[Common overlap factors and centered residual]
+    \label{def:c3_centered_overlap_factors_residual}
     \lean{MPSTensor.c3LeftOverlapFactorES}
     \lean{MPSTensor.c3RightOverlapFactorES}
+    \lean{MPSTensor.c3CenteredVirtualResidualES}
+    \leanok
+    \uses{def:ground_space_gram, def:fixed_point_proj, def:gram_reshuffle,
+        thm:spectator_boundary_hilbert_factorization}
+    Let $A$ be an MPS tensor, let $\Omega_K$ be the set of length-$K$ words
+    in the physical alphabet, and let
+    $\mathcal B_K=\bigoplus_{u\in\Omega_K}\MN{D}$ with its
+    Hilbert--Schmidt direct-sum norm.  Define
+    \begin{align}
+        F_K&:\mathcal B_K\longrightarrow
+          \bigoplus_{(u,j)\in\Omega_K\times\Omega_1}\MN{D}
+    \end{align}
+    by applying the one-site left virtual map independently to each prefix
+    fiber.  Define
+    \begin{align}
+        G_K&:\mathcal B_1\longrightarrow
+          \bigoplus_{(u,j)\in\Omega_K\times\Omega_1}\MN{D}
+    \end{align}
+    by applying the length-$K$ tail virtual map independently to each
+    final-site fiber.  These definitions make sense without any nonemptiness
+    assumption on the virtual dimension or on either configuration set.
+
+    When $D\geq1$ and $\rho\in\MN{D}$ is positive definite, set
+    $\mathcal K_\infty=\mathscr R(P_\rho)$ and define the centered virtual
+    residual by
+    \begin{align}
+      R_{K,l}={}&(\Gamma^{\mathrm{tail}}_{K,l+1})^\dagger
+        \Gamma^{\mathrm{left}}_{K+l,1}
+        -\mathcal K_\infty^{\oplus\Omega_K}J^{\mathrm{tail}}_K
+        \mathcal K_\infty^{-1}(J^{\mathrm{left}}_1)^\dagger
+        \mathcal K_\infty^{\oplus\Omega_1}.
+    \end{align}
+\end{definition}
+
+\begin{theorem}[Centered overlap factorization and geometric bound]
+    \label{thm:c3_centered_overlap_factorization_geometric}
     \lean{MPSTensor.boundaryFamilyEquiv_c3LeftOverlapFactorES_apply}
     \lean{MPSTensor.boundaryFamilyEquiv_c3RightOverlapFactorES_apply}
     \lean{MPSTensor.c3LeftOverlapFactorES_norm_le}
     \lean{MPSTensor.c3RightOverlapFactorES_norm_le}
-    \lean{MPSTensor.c3CenteredVirtualResidualES}
     \lean{MPSTensor.c3_centeredVirtualResidualES_eq_overlapFactors}
     \lean{MPSTensor.c3_centeredVirtualResidualES_norm_le}
     \lean{MPSTensor.IsPrimitiveMPS.c3_centeredVirtualResidualES_norm_sq_le_geometric}
     \leanok
-    \uses{def:primitive_mps, def:ground_space_gram, def:fixed_point_proj,
-        def:gram_reshuffle, thm:spectator_boundary_hilbert_factorization}
-    Let $A$ be an MPS tensor, and let $\Omega_K$ be the set of length-$K$ words in the physical alphabet,
-    and let $\mathcal B_K=\bigoplus_{u\in\Omega_K}\MN{D}$ with its
-    Hilbert--Schmidt direct-sum norm.  For every $K\in\N$ there are maps
-    \begin{align}
-        F_K&:\mathcal B_K\longrightarrow
-          \bigoplus_{(u,j)\in\Omega_K\times\Omega_1}\MN{D},&
-        G_K&:\mathcal B_1\longrightarrow
-          \bigoplus_{(u,j)\in\Omega_K\times\Omega_1}\MN{D}
-    \end{align}
-    with fiber formulas
+    \uses{def:c3_centered_overlap_factors_residual, def:primitive_mps}
+    For every $K\in\N$, the common overlap factors have fiber formulas
     \begin{align}
         (F_KX)_{u,j}&=A^jX_u,&
         (G_KZ)_{u,j}&=Z_jA^u,
@@ -854,22 +879,12 @@ norm estimate is derived here.
         \lVert F_K\rVert&\leq\lVert J^{\mathrm{left}}_1\rVert,&
         \lVert G_K\rVert&\leq\lVert J^{\mathrm{tail}}_K\rVert.
     \end{align}
-    These maps and formulas require no nonemptiness assumption on the virtual
-    dimension or on either configuration set; in particular, they remain valid
-    for empty direct sums.
+    The formulas and bounds remain valid for empty direct sums and incur no
+    factor depending on the number of configurations.
 
-    Assume now that $D\geq1$ and that $\rho\in\MN{D}$ is positive definite.
-    Set $\mathcal K_\infty=\mathscr R(P_\rho)$, and define the centered virtual
-    residual by
-    \begin{align}
-      R_{K,l}={}&(\Gamma^{\mathrm{tail}}_{K,l+1})^\dagger
-        \Gamma^{\mathrm{left}}_{K+l,1}
-        -\mathcal K_\infty^{\oplus\Omega_K}J^{\mathrm{tail}}_K
-        \mathcal K_\infty^{-1}(J^{\mathrm{left}}_1)^\dagger
-        \mathcal K_\infty^{\oplus\Omega_1}.
-    \end{align}
-    Then the residual factors exactly at this generally nonidentity limiting
-    metric as
+    Assume $D\geq1$ and that $\rho\in\MN{D}$ is positive definite.  The
+    centered residual of Definition~\ref{def:c3_centered_overlap_factors_residual}
+    factors exactly at the generally nonidentity limiting metric as
     \begin{align}
       R_{K,l}
       &=F_K^\dagger
@@ -897,15 +912,17 @@ norm estimate is derived here.
 
 \begin{proof}
     \leanok
-    \uses{thm:spectator_boundary_mixed_gram_centered,
+    \uses{thm:c3_projector_gram_error_telescope,
         thm:boundary_fiberwise_map_norm,
         thm:primitive_ground_space_gram_geometric_fixed_point,
         thm:primitive_tail_virtual_map_norm_uniform}
     Evaluate the two factors on each common direct-sum fiber.  The direct-sum
     norm identity gives the two bounds without a factor counting spectator
     configurations.  Substitute these fiber formulas into the centered
-    mixed-Gram identity to obtain the exact factorization.  Submultiplicativity
-    and Theorem~\ref{thm:boundary_fiberwise_map_norm} give the product bound.
+    residual identity from
+    Theorem~\ref{thm:c3_projector_gram_error_telescope} to obtain the exact
+    factorization.  Submultiplicativity and
+    Theorem~\ref{thm:boundary_fiberwise_map_norm} give the product bound.
     Under primitivity, combine the uniform bound for
     $J^{\mathrm{tail}}_K$ with the squared geometric Gram estimate and absorb
     the fixed norm of $J^{\mathrm{left}}_1$ into the constant.

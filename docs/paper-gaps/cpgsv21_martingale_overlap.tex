@@ -771,8 +771,11 @@ and generic prerequisites now include:
     from the \(L^2\) operator norm to entrywise mass.  This is not an FNW or
     Nachtergaele contraction estimate.
   \item Let $A$ be an MPS tensor, let $\Omega_K$ be the set of length-$K$
-    physical words, and let $\mathcal B_K=\bigoplus_{u\in\Omega_K}\MN{D}$.  The two common
-    direct-sum overlap factors
+    physical words, and let $\mathcal B_K=\bigoplus_{u\in\Omega_K}\MN{D}$.
+    Write $J^{\mathrm{left}}_1(X)=(A^jX)_{j\in\Omega_1}$ for the one-site
+    left virtual map and
+    $J^{\mathrm{tail}}_K(X)=(XA^u)_{u\in\Omega_K}$ for the length-$K$ tail
+    virtual map.  The two common direct-sum overlap factors
     \leanid{MPSTensor.c3LeftOverlapFactorES} and
     \leanid{MPSTensor.c3RightOverlapFactorES} have the exact fiber formulas
     \begin{align}
