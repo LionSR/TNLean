@@ -212,8 +212,11 @@ theorem cube_phase_blocked_gauge_identity (i : Fin 1) :
 For one physical letter, both the original and two-site blocked physical spaces are
 singletons. The physical unitary in the pure-state source diagram is therefore a scalar
 of unit norm. This predicate states precisely the resulting MPS identity, with the
-orientation printed in the diagram. It is sufficient for the counterexample below; no
-equivalence with the full doubled-MPDO $T/S$ diagram is claimed. -/
+orientation printed in the diagram. It is sufficient for the counterexample below.
+
+**Scope restriction (one-letter MPS lift):** This definition does not assert equivalence
+with the full doubled-MPDO $T/S$ diagram. This restriction is documented in
+`docs/paper-gaps/cpsv16_rfp_gauge_pure_equivalence_false.tex`. -/
 def IsBlockedGaugePhaseFixedPoint (A : MPSTensor 1 D) : Prop :=
   ∃ (X : GL (Fin D) ℂ) (ζ : ℂ), ‖ζ‖ = 1 ∧ ∀ i : Fin 1,
     A i = ζ • ((X : Matrix (Fin D) (Fin D) ℂ) * blockTensor A 2 i *
@@ -230,7 +233,9 @@ theorem cubePhaseTensor_isBlockedGaugePhaseFixedPoint :
 
 If its transfer map were idempotent, every positive power would equal the transfer map,
 so the dyadic transfer orbit would converge. This contradicts the explicit cube-phase
-oscillation proved in `cubePhaseTensor_not_tendsto_dyadic_transferMap`. -/
+oscillation proved in `cubePhaseTensor_not_tendsto_dyadic_transferMap`.
+
+Source: arXiv:1606.00608, Appendix D, equation `RFP-gauge` and lines 2100--2107. -/
 theorem cubePhaseTensor_not_isTransferIdempotent :
     ¬ IsTransferIdempotent cubePhaseTensor := by
   intro hRFP
