@@ -12,7 +12,7 @@ This file defines even-chain product-pair states and the generic local-projector
 conditions used to prove commutativity of translated two-site parent terms.
 -/
 
-open scoped Matrix BigOperators
+open scoped BigOperators
 
 namespace MPSTensor
 
