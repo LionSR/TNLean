@@ -1762,6 +1762,7 @@ for pixel_fixture in \
     r_mpo_skin_box r_mpo_skin_prelude r_parallel_lanes r_physical_dir \
     r_pill_skin_prelude r_pill_skin_roundrect r_region_diagonal \
     r_region_pinch_staircase r_ring_closure r_ring_corner_inscription \
+    r_ring_corner_pad_clear r_ring_corner_pad_skin \
     r_trace_return_rows \
     r_trace_row_closure r_trace_over_deferred_leg r_wire_stroke \
     r_noncell_port_slot r_noncell_port_slot_cell \
@@ -1833,6 +1834,7 @@ for path in sys.argv[1:]:
   "$WORK/r_physical_dir.png" "$WORK/r_region_diagonal.png" \
   "$WORK/r_region_pinch_staircase.png" "$WORK/r_ring_closure.png" \
   "$WORK/r_ring_corner_inscription.png" \
+  "$WORK/r_ring_corner_pad_clear.png" "$WORK/r_ring_corner_pad_skin.png" \
   "$WORK/r_trace_return_rows.png" "$WORK/r_trace_row_closure.png" \
   "$WORK/r_trace_over_deferred_leg.png" \
   "$WORK/r_wire_stroke.png" \
@@ -3184,6 +3186,79 @@ ring_widths=$(grep -F 'glyph-geometry|' "$WORK/r_ring_corner_inscription.tnlog" 
   echo "FAIL: the superscripted ring did not grow past its pre-fix half-width" >&2
   exit 1
 }
+# The ring corner-pad registry (\g__tenkz_kernel_eq_ringpad_prop) must be
+# cleared at the start of every equation, exactly like the shared-extent
+# registry it mirrors (cursor bugbot, PR #5967).  A pristine plain-ring
+# equation opens and closes this fixture; a superscripted-ring equation sits
+# between them and pads its own class.  The trailing plain-ring equation
+# must come back to the SAME width as the opening one, not inherit the
+# middle equation's padded width.
+python3 - "$WORK/r_ring_corner_pad_clear.tnlog" <<'RINGPAD_CLEAR' || exit 1
+import sys
+
+widths = []
+for line in open(sys.argv[1], encoding="utf-8"):
+    if not line.startswith("glyph-geometry|"):
+        continue
+    attrs = dict(part.split("=", 1) for part in line.strip().split("|")[1:])
+    widths.append(int(attrs["xmax"]) - int(attrs["xmin"]))
+if len(widths) != 6:
+    print("FAIL: the ringpad-clear fixture lost a measured ring", file=sys.stderr)
+    raise SystemExit(1)
+baseline, baseline2, padded, padded2, after, after2 = widths
+if baseline != baseline2 or padded != padded2 or after != after2:
+    print("FAIL: an equal-panel ring pair diverged in the ringpad-clear fixture",
+          file=sys.stderr)
+    raise SystemExit(1)
+if not padded > baseline:
+    print("FAIL: the superscripted ring equation did not pad past baseline",
+          file=sys.stderr)
+    raise SystemExit(1)
+if after != baseline:
+    print("FAIL: a plain ring equation inherited a prior equation's corner "
+          "pad -- the ringpad registry was not cleared", file=sys.stderr)
+    raise SystemExit(1)
+RINGPAD_CLEAR
+# \__tenkz_kernel_eq_ringpad_record:n must record a corner-safe width only
+# for the ring/capsule skin (cursor bugbot, PR #5967): a superscripted BOX
+# beside a plain ring in one size class must never force that ring to the
+# stadium width only a ring's rounded ends need.  The same superscripted
+# name (X^{-1}) sits beside the plain ring X in both equations below; only
+# the neighbour's skin differs.  The ring legitimately shares the pad when
+# its neighbour is itself a ring, and must render narrower when its
+# neighbour is a box.
+python3 - "$WORK/r_ring_corner_pad_skin.tnlog" <<'RINGPAD_SKIN' || exit 1
+import sys
+
+widths = []
+for line in open(sys.argv[1], encoding="utf-8"):
+    if not line.startswith("glyph-geometry|"):
+        continue
+    attrs = dict(part.split("=", 1) for part in line.strip().split("|")[1:])
+    widths.append(int(attrs["xmax"]) - int(attrs["xmin"]))
+if len(widths) != 8:
+    print("FAIL: the ringpad-skin fixture lost a measured glyph", file=sys.stderr)
+    raise SystemExit(1)
+# Record order per equation: LHS neighbour, LHS ring, RHS neighbour, RHS ring.
+if widths[0] != widths[2] or widths[1] != widths[3]:
+    print("FAIL: the ring/ring equal panels diverged in the ringpad-skin fixture",
+          file=sys.stderr)
+    raise SystemExit(1)
+if widths[4] != widths[6] or widths[5] != widths[7]:
+    print("FAIL: the box/ring equal panels diverged in the ringpad-skin fixture",
+          file=sys.stderr)
+    raise SystemExit(1)
+ring_ring_x, box_ring_x = widths[1], widths[5]
+if widths[0] != ring_ring_x:
+    print("FAIL: a ring beside a superscripted ring did not share the class pad",
+          file=sys.stderr)
+    raise SystemExit(1)
+if box_ring_x >= ring_ring_x:
+    print("FAIL: a plain ring beside a superscripted BOX inherited the ring "
+          "corner pad -- the ringpad record was not scoped to skin=ring",
+          file=sys.stderr)
+    raise SystemExit(1)
+RINGPAD_SKIN
 
 regression_count=$(find "$WORK" -maxdepth 1 -name 'r_*.tex' | wc -l | tr -d ' ')
 echo "PASS: $regression_count review regressions hold"

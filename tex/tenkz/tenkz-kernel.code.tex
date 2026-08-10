@@ -16119,27 +16119,39 @@
 % and read back only once every class member has been probed.
 \prop_new:N \g__tenkz_kernel_eq_ringpad_prop
 \tl_new:N \l__tenkz_kernel_eq_ringpad_stored_tl
+% Only the ring skin's ends are a stadium (issue #5958's own corner-safe
+% width, above, is a distance to that skin's rounded cap); a box or pill
+% never has that arc, so a superscripted name on ANY other named skin must
+% never write into this class's registry -- doing so would force every
+% plain ring sharing the class to the stadium width that skin never needed.
+% The base is resolved the same way the glyph dispatch resolves it
+% (\__tenkz_kernel_atom_skin_base:nN), so an alias of skin=ring is caught
+% too.
 \cs_new_protected:Npn \__tenkz_kernel_eq_ringpad_record:n #1
   {
-    \__tenkz_kernel_r_ring_corner_own_width:nN {#1} \l__tenkz_kernel_r_ringpad_min_dim
-    \dim_compare:nNnT { \l__tenkz_kernel_r_ringpad_min_dim } > { 0pt }
+    \__tenkz_kernel_atom_skin_base:nN {#1} \l__tenkz_kernel_r_skin_base_tl
+    \str_if_eq:VnT \l__tenkz_kernel_r_skin_base_tl {ring}
       {
-        \prop_get:NVNTF \g__tenkz_kernel_eq_ringpad_prop
-          \l__tenkz_kernel_eq_extent_key_tl \l__tenkz_kernel_eq_ringpad_stored_tl
+        \__tenkz_kernel_r_ring_corner_own_width:nN {#1} \l__tenkz_kernel_r_ringpad_min_dim
+        \dim_compare:nNnT { \l__tenkz_kernel_r_ringpad_min_dim } > { 0pt }
           {
-            \dim_set:Nn \l__tenkz_kernel_r_ringpad_wd_dim
-              { \l__tenkz_kernel_eq_ringpad_stored_tl }
-            \dim_set:Nn \l__tenkz_kernel_r_ringpad_min_dim
+            \prop_get:NVNTF \g__tenkz_kernel_eq_ringpad_prop
+              \l__tenkz_kernel_eq_extent_key_tl \l__tenkz_kernel_eq_ringpad_stored_tl
               {
-                \dim_max:nn
-                  { \l__tenkz_kernel_r_ringpad_wd_dim }
-                  { \l__tenkz_kernel_r_ringpad_min_dim }
+                \dim_set:Nn \l__tenkz_kernel_r_ringpad_wd_dim
+                  { \l__tenkz_kernel_eq_ringpad_stored_tl }
+                \dim_set:Nn \l__tenkz_kernel_r_ringpad_min_dim
+                  {
+                    \dim_max:nn
+                      { \l__tenkz_kernel_r_ringpad_wd_dim }
+                      { \l__tenkz_kernel_r_ringpad_min_dim }
+                  }
               }
+              { }
+            \prop_gput:NVx \g__tenkz_kernel_eq_ringpad_prop
+              \l__tenkz_kernel_eq_extent_key_tl
+              { \dim_use:N \l__tenkz_kernel_r_ringpad_min_dim }
           }
-          { }
-        \prop_gput:NVx \g__tenkz_kernel_eq_ringpad_prop
-          \l__tenkz_kernel_eq_extent_key_tl
-          { \dim_use:N \l__tenkz_kernel_r_ringpad_min_dim }
       }
   }
 % The corner-safe minimum width for ring atom #1, into dim #2.  Inside an
@@ -18799,6 +18811,7 @@
     \seq_gclear:N \g__tenkz_kernel_rel_gseq
     \seq_gclear:N \g__tenkz_kernel_rel_pos_gseq
     \prop_gclear:N \g__tenkz_kernel_eq_extent_prop
+    \prop_gclear:N \g__tenkz_kernel_eq_ringpad_prop
     \tl_clear:N \l__tenkz_kernel_eq_size_tl
     \clist_clear:N \l__tenkz_kernel_check_off_clist
     \seq_clear:N \l__tenkz_kernel_check_reason_seq
