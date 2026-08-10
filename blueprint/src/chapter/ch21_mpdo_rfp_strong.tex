@@ -11,7 +11,7 @@ change of basis. The matrix is not assumed to have trace one.
     \leanok
     \uses{def:mpo_tensor}
     An MPO tensor $M$ satisfies the strong renormalization fixed-point relation
-    if there are a matrix $P\geq0$ on the physical space and a unitary $U$ on
+    if it admits a matrix $P\geq0$ on the physical space and a unitary $U$ on
     the two-site physical space such that, for all two-site physical indices
     $i=(i_1,i_2)$ and $j=(j_1,j_2)$,
     \begin{align}
@@ -48,6 +48,7 @@ change of basis. The matrix is not assumed to have trace one.
 
 \begin{proof}
     \leanok
+    \uses{thm:trace_nondeg}
     Multiplying (\ref{eq:mpdo_strong_rfp_tensor}) on the right by $X$ and
     taking the virtual trace gives, entrywise,
     \begin{align}
