@@ -11,17 +11,23 @@ import TNLean.MPS.ParentHamiltonian.LimitingGramMetric
 # Convergence of inverse MPS Gram operators
 
 For a primitive MPS tensor with a positive-definite transfer fixed point, the
-finite-volume ground-space Gram operators are eventually invertible. Their
-ring inverses satisfy the arbitrary-base Neumann perturbation estimate and
-converge to the inverse of the nonidentity limiting Gram operator
-`Matrix.gramReshuffle (fixedPointProj ρ _)`.
+finite-volume ground-space Gram operators converge geometrically to the
+nonidentity limiting Gram operator
+`Matrix.gramReshuffle (fixedPointProj ρ _)`. Pointwise Neumann estimates give
+invertibility, inverse-norm control, and inverse displacement whenever the
+geometric relative error is less than one. The same estimates apply uniformly
+at the three C3 correction lengths once they hold at the base length.
 
-The same eventual invertibility makes the Hilbert-space boundary maps
-injective. Consequently, their `ContinuousLinearMap.inverseGram` operators
-agree with the ring inverses and obey the same estimate.
+The corresponding Hilbert-space boundary maps are injective under the same
+pointwise condition. Their `ContinuousLinearMap.inverseGram` operators agree
+with the ring inverses and obey the same bounds. Eventual invertibility and
+convergence of the ring inverses are also recorded.
 
 ## Main results
 
+* `MPSTensor.IsPrimitiveMPS.groundSpaceGram_geometric_inverse_bounds`
+* `MPSTensor.IsPrimitiveMPS.groundSpaceMapES_geometric_inverseGram_bounds`
+* `MPSTensor.geometric_smallness_at_c3_lengths`
 * `MPSTensor.IsPrimitiveMPS.eventually_groundSpaceGram_isUnit_and_inverse_bound`
 * `MPSTensor.IsPrimitiveMPS.groundSpaceGram_ringInverse_tendsto`
 * `MPSTensor.IsPrimitiveMPS.eventually_groundSpaceMapES_injective_and_inverseGram_bound`
@@ -32,6 +38,139 @@ open scoped ComplexOrder Matrix
 namespace MPSTensor
 
 variable {d D : ℕ}
+
+/-- Pointwise geometric control of the finite Gram operators and their ring inverses.
+
+Writing \(K_\infty\) for the reshuffled fixed-point projection and
+\(I_\infty=K_\infty^{-1}\), this theorem produces positive constants
+\(g,c,r\), with \(r<1\) and \(c=\lVert I_\infty\rVert g\), such that
+\(\lVert K_n-K_\infty\rVert\le g r^n\). Whenever \(c r^n<1\), the Gram
+operator is a unit and both its inverse norm and its displacement from
+\(I_\infty\) obey the corresponding Neumann bounds with denominator
+\(1-c r^n\).
+
+The choice of \(g\) preserves the dimension-cubed normalization in the
+available squared Gram estimate; in particular, its transfer-map constant is
+not reused without rescaling. -/
+theorem IsPrimitiveMPS.groundSpaceGram_geometric_inverse_bounds
+    [NeZero D] {A : MPSTensor d D} {ρ : Matrix (Fin D) (Fin D) ℂ}
+    (hP : IsPrimitiveMPS A ρ) (hρ : ρ.PosDef) :
+    let Kinf := Matrix.gramReshuffle (fixedPointProj ρ (ne_of_gt hρ.trace_pos))
+    let Iinf := Ring.inverse Kinf
+    ∃ g c r : ℝ, 0 < g ∧ 0 < c ∧ 0 < r ∧ r < 1 ∧
+      c = ‖Iinf‖ * g ∧ ∀ n : ℕ, 1 ≤ n →
+        ‖groundSpaceGram A n - Kinf‖ ≤ g * r ^ n ∧
+        (c * r ^ n < 1 →
+          IsUnit (groundSpaceGram A n) ∧
+          ‖Ring.inverse (groundSpaceGram A n)‖ ≤
+            (1 - c * r ^ n)⁻¹ * ‖Iinf‖ ∧
+          ‖Ring.inverse (groundSpaceGram A n) - Iinf‖ ≤
+            (1 - c * r ^ n)⁻¹ * (c * r ^ n) * ‖Iinf‖) := by
+  let Kinf := Matrix.gramReshuffle (fixedPointProj ρ (ne_of_gt hρ.trace_pos))
+  let Iinf := Ring.inverse Kinf
+  obtain ⟨C_G, r, hC_G, hr_pos, hr_lt_one, hGramSq⟩ :=
+    hP.groundSpaceGram_sub_fixedPointProj_norm_sq_le_geometric
+  let g := (D : ℝ) ^ 3 * C_G
+  let c := ‖Iinf‖ * g
+  have hD_nat : 1 ≤ D := Nat.one_le_iff_ne_zero.mpr (NeZero.ne D)
+  have hD : 1 ≤ (D : ℝ) ^ 3 := by
+    apply one_le_pow₀
+    exact_mod_cast hD_nat
+  have hg : 0 < g := mul_pos (lt_of_lt_of_le zero_lt_one hD) hC_G
+  have hKinf : IsUnit Kinf := by
+    simpa only [Kinf] using Matrix.gramReshuffle_fixedPointProj_isUnit hρ
+  have hIinf : IsUnit Iinf := by
+    simpa only [Iinf] using hKinf.ringInverse
+  have hIinf_norm : 0 < ‖Iinf‖ := norm_pos_iff.mpr hIinf.ne_zero
+  refine ⟨g, c, r, hg, mul_pos hIinf_norm hg, hr_pos, hr_lt_one, rfl, ?_⟩
+  intro n hn
+  have hGramSq' : ‖groundSpaceGram A n - Kinf‖ ^ 2 ≤
+      (D : ℝ) ^ 3 * (C_G * r ^ n) ^ 2 := by
+    simpa only [Kinf] using hGramSq n hn
+  have hgr_nonneg : 0 ≤ g * r ^ n := by positivity
+  have hGram : ‖groundSpaceGram A n - Kinf‖ ≤ g * r ^ n := by
+    apply (sq_le_sq₀ (norm_nonneg _) hgr_nonneg).1
+    calc
+      ‖groundSpaceGram A n - Kinf‖ ^ 2 ≤
+          (D : ℝ) ^ 3 * (C_G * r ^ n) ^ 2 := hGramSq'
+      _ ≤ ((D : ℝ) ^ 3 * (C_G * r ^ n)) ^ 2 := by
+        nlinarith [sq_nonneg (C_G * r ^ n)]
+      _ = (g * r ^ n) ^ 2 := by simp only [g]; ring
+  refine ⟨hGram, fun hsmall => ?_⟩
+  have hrelative : ‖Iinf‖ * ‖groundSpaceGram A n - Kinf‖ ≤ c * r ^ n := by
+    calc
+      ‖Iinf‖ * ‖groundSpaceGram A n - Kinf‖ ≤ ‖Iinf‖ * (g * r ^ n) :=
+        mul_le_mul_of_nonneg_left hGram (norm_nonneg Iinf)
+      _ = c * r ^ n := by simp only [c]; ring
+  have hunit := NormedRing.isUnit_and_norm_inverse_le_of_norm_mul_norm_sub_le
+    Kinf (groundSpaceGram A n) hKinf (by simpa only [Iinf] using hrelative) hsmall
+  refine ⟨hunit.1, ?_, ?_⟩
+  · simpa only [Iinf] using hunit.2
+  · simpa only [Iinf] using
+      NormedRing.norm_inverse_sub_inverse_le_of_norm_mul_norm_sub_le
+        Kinf (groundSpaceGram A n) hKinf
+          (by simpa only [Iinf] using hrelative) hsmall
+
+/-- Pointwise inverse-Gram bounds for the finite-volume boundary maps.
+
+With \(K_\infty\), \(I_\infty\), \(g\), \(c\), and \(r\) as in
+`groundSpaceGram_geometric_inverse_bounds`, every length \(n\ge 1\) satisfying
+\(c r^n<1\) has an injective boundary map. Its inverse Gram operator equals the
+ring inverse of the finite Gram operator and satisfies the same inverse-norm
+and inverse-displacement estimates. -/
+theorem IsPrimitiveMPS.groundSpaceMapES_geometric_inverseGram_bounds
+    [NeZero D] {A : MPSTensor d D} {ρ : Matrix (Fin D) (Fin D) ℂ}
+    (hP : IsPrimitiveMPS A ρ) (hρ : ρ.PosDef) :
+    let Kinf := Matrix.gramReshuffle (fixedPointProj ρ (ne_of_gt hρ.trace_pos))
+    let Iinf := Ring.inverse Kinf
+    ∃ g c r : ℝ, 0 < g ∧ 0 < c ∧ 0 < r ∧ r < 1 ∧
+      c = ‖Iinf‖ * g ∧ ∀ n : ℕ, 1 ≤ n →
+        ‖groundSpaceGram A n - Kinf‖ ≤ g * r ^ n ∧
+        (c * r ^ n < 1 →
+          ∃ hInj : Function.Injective (groundSpaceMapES A n),
+            ContinuousLinearMap.inverseGram (groundSpaceMapES A n) hInj =
+                Ring.inverse (groundSpaceGram A n) ∧
+            ‖ContinuousLinearMap.inverseGram (groundSpaceMapES A n) hInj‖ ≤
+                (1 - c * r ^ n)⁻¹ * ‖Iinf‖ ∧
+            ‖ContinuousLinearMap.inverseGram (groundSpaceMapES A n) hInj - Iinf‖ ≤
+                (1 - c * r ^ n)⁻¹ * (c * r ^ n) * ‖Iinf‖) := by
+  let Kinf := Matrix.gramReshuffle (fixedPointProj ρ (ne_of_gt hρ.trace_pos))
+  let Iinf := Ring.inverse Kinf
+  obtain ⟨g, c, r, hg, hc, hr_pos, hr_lt_one, hc_def, hbounds⟩ :=
+    hP.groundSpaceGram_geometric_inverse_bounds hρ
+  refine ⟨g, c, r, hg, hc, hr_pos, hr_lt_one, hc_def, ?_⟩
+  intro n hn
+  obtain ⟨hGram, hpointwise⟩ := hbounds n hn
+  refine ⟨hGram, fun hsmall => ?_⟩
+  obtain ⟨hGramUnit, hInvNorm, hInvSub⟩ := hpointwise hsmall
+  have hGramInj : Function.Injective (groundSpaceGram A n) :=
+    (ContinuousLinearMap.isUnit_iff_bijective.mp hGramUnit).1
+  have hInj : Function.Injective (groundSpaceMapES A n) := by
+    apply (groundSpaceMapES A n).adjoint_comp_self_injective_iff.mp
+    intro x y hxy
+    apply hGramInj
+    change (groundSpaceMapES A n).adjoint (groundSpaceMapES A n x) =
+      (groundSpaceMapES A n).adjoint (groundSpaceMapES A n y)
+    exact hxy
+  refine ⟨hInj, ?_, ?_, ?_⟩
+  · simpa only [groundSpaceGram] using
+      ContinuousLinearMap.inverseGram_eq_ringInverse (groundSpaceMapES A n) hInj
+  · rw [ContinuousLinearMap.inverseGram_eq_ringInverse]
+    simpa only [groundSpaceGram] using hInvNorm
+  · rw [ContinuousLinearMap.inverseGram_eq_ringInverse]
+    simpa only [groundSpaceGram] using hInvSub
+
+/-- A geometric smallness condition at length \(l\) propagates uniformly in
+\(K\) to the three C3 correction lengths \(l+1\), \(K+l\), and
+\(K+l+1\). -/
+theorem geometric_smallness_at_c3_lengths {c r : ℝ} (hc : 0 < c) (hr_pos : 0 < r)
+    (hr_lt_one : r < 1) {l : ℕ} (hsmall : c * r ^ l < 1) (K : ℕ) :
+    c * r ^ (l + 1) < 1 ∧ c * r ^ (K + l) < 1 ∧ c * r ^ (K + l + 1) < 1 := by
+  have hpow {m : ℕ} (hlm : l ≤ m) : r ^ m ≤ r ^ l :=
+    pow_le_pow_of_le_one hr_pos.le hr_lt_one.le hlm
+  have hsmall_of_le {m : ℕ} (hlm : l ≤ m) : c * r ^ m < 1 :=
+    (mul_le_mul_of_nonneg_left (hpow hlm) hc.le).trans_lt hsmall
+  exact ⟨hsmall_of_le (by omega), hsmall_of_le (by omega), hsmall_of_le (by omega)⟩
 
 /-- For every relative tolerance \(a\) strictly between zero and one, the
 finite-volume Gram operator of a primitive MPS tensor is eventually a unit.
