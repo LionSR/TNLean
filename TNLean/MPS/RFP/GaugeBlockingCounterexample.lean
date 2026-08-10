@@ -102,6 +102,9 @@ private noncomputable def cubePhaseDoubledWeight (q : Fin 4) : ℂ :=
   cubePhaseWeight (finSigmaFinEquiv.symm pair.1).1 *
     star (cubePhaseWeight (finSigmaFinEquiv.symm pair.2).1)
 
+/-- The doubled cube-phase tensor decomposes into four bond-one normal blocks.
+
+Source: arXiv:1606.00608, equation `II_CF1` and canonical-form data at lines 219--246. -/
 private theorem cubePhaseDoubledTensor_eq_toTensorFromBlocks :
     (doubledTensor cubePhaseTensor).toMPSTensor =
       toTensorFromBlocks cubePhaseDoubledWeight (fun _ : Fin 4 => scalarUnitTensor) := by
@@ -162,6 +165,9 @@ private theorem cubePhaseDoubledTensor_eq_toTensorFromBlocks :
       dite_eq_ite, right_eq_ite_iff, imp_false] <;>
     (intro h; have := (hcoord _ _ _ _).mp h; omega)
 
+/-- Every scalar-block weight in the doubled decomposition has modulus one.
+
+Source: arXiv:1606.00608, canonical-form normalization at line 246. -/
 private theorem norm_cubePhaseDoubledWeight (q : Fin 4) :
     ‖cubePhaseDoubledWeight q‖ = 1 := by
   obtain ⟨⟨q₁, q₂⟩, rfl⟩ := (finProdFinEquiv :
@@ -178,6 +184,16 @@ private theorem norm_cubePhaseDoubledWeight (q : Fin 4) :
     fin_cases u₁ <;> fin_cases u₂ <;>
     simp [cubePhaseDoubledWeight, cubePhaseWeight, norm_primitiveCubeRoot,
       finProdFinEquiv.symm_apply_apply, finSigmaFinEquiv.symm_apply_apply]
+
+/-- The doubled cube-phase tensor generates positive semidefinite operators on every
+nonempty chain and hence satisfies the MPDO standing hypothesis.
+
+Source: arXiv:1606.00608, Definition `RFPMixedTS`, lines 657--660, and the pure-state
+purification identity at equation `MPDO-Puri-1`, line 752. -/
+theorem cubePhaseDoubledTensor_isMPDO :
+    MPOTensor.IsMPDO (doubledTensor cubePhaseTensor) := by
+  intro N _
+  exact doubledTensor_posSemidef cubePhaseTensor N
 
 /-- The doubled cube-phase MPO is in the literal CPSV canonical form used for MPDO tensors.
 
@@ -426,19 +442,21 @@ theorem cubePhaseTensor_not_isTransferIdempotent :
         dsimp
         rw [hIdem.pow_eq (pow_ne_zero n (by norm_num : (2 : ℕ) ≠ 0))])⟩
 
-/-- The doubled cube-phase MPO is in normalized CPSV canonical form, satisfies
-the literal one-letter blocking-up-to-gauge diagram, and its underlying pure transfer
-map is not idempotent.
+/-- The doubled cube-phase tensor is an MPDO in normalized CPSV canonical form,
+satisfies the literal one-letter blocking-up-to-gauge diagram, and its underlying
+transfer map is not idempotent.
 
 Source: arXiv:1606.00608, Definition `RFPMixedTS`, lines 657--660, canonical-form
 normalization at lines 238--246, and Appendix D, equation `RFP-gauge`, lines 2100--2107. -/
 theorem cubePhaseTensor_normalized_canonical_gauge_not_rfp :
-    IsCPSVCanonicalForm (doubledTensor cubePhaseTensor).toMPSTensor ∧
+    MPOTensor.IsMPDO (doubledTensor cubePhaseTensor) ∧
+      IsCPSVCanonicalForm (doubledTensor cubePhaseTensor).toMPSTensor ∧
       (∃ data : CPSVCanonicalFormData (doubledTensor cubePhaseTensor).toMPSTensor,
         data.IsWeightNormalized) ∧
       IsPureOneLetterRFPViaTSUpToVirtualGauge cubePhaseTensor ∧
       ¬ IsTransferIdempotent cubePhaseTensor :=
-  ⟨cubePhaseDoubledTensor_isCPSVCanonicalForm,
+  ⟨cubePhaseDoubledTensor_isMPDO,
+    cubePhaseDoubledTensor_isCPSVCanonicalForm,
     cubePhaseDoubledTensor_exists_weightNormalized,
     cubePhaseTensor_isPureOneLetterRFPViaTSUpToVirtualGauge,
     cubePhaseTensor_not_isTransferIdempotent⟩
@@ -449,6 +467,7 @@ one physical letter. The canonical-form hypothesis is imposed on the doubled MPO
 $M=A\otimes\overline A$, as in Definition `RFPMixedTS`, lines 657--660. -/
 theorem cpsv16_pure_rfp_gauge_equivalence_false :
     ¬ ∀ (D : ℕ) (A : MPSTensor 1 D),
+      MPOTensor.IsMPDO (doubledTensor A) →
       IsCPSVCanonicalForm (doubledTensor A).toMPSTensor →
       (∃ data : CPSVCanonicalFormData (doubledTensor A).toMPSTensor,
         data.IsWeightNormalized) →
@@ -457,7 +476,8 @@ theorem cpsv16_pure_rfp_gauge_equivalence_false :
   exact cubePhaseTensor_not_isTransferIdempotent
     ((hEquiv _ cubePhaseTensor
       cubePhaseTensor_normalized_canonical_gauge_not_rfp.1
-      cubePhaseTensor_normalized_canonical_gauge_not_rfp.2.1).mp
-      cubePhaseTensor_normalized_canonical_gauge_not_rfp.2.2.1)
+      cubePhaseTensor_normalized_canonical_gauge_not_rfp.2.1
+      cubePhaseTensor_normalized_canonical_gauge_not_rfp.2.2.1).mp
+      cubePhaseTensor_normalized_canonical_gauge_not_rfp.2.2.2.1)
 
 end MPSTensor
