@@ -24,6 +24,20 @@ class Construct:
     body_start: int
 
 
+@dataclass(frozen=True)
+class EnvironmentSpan:
+    name: str
+    start: int
+    end: int
+    body_start: int
+    body_end: int
+    line: int
+
+
+class TeXEnvironmentNestingError(ValueError):
+    """Raised when tracked TeX environments are not strictly nested."""
+
+
 def is_control_word_start(source: str, position: int) -> bool:
     """Whether this backslash starts a TeX control word rather than ``\\``."""
     run_length = 1
@@ -151,27 +165,69 @@ def top_level_options(options: str) -> list[tuple[str, str | None]]:
     return result
 
 
-def _find_env_end(
+def scan_environments(
     source: str,
-    name: str,
-    position: int,
+    names: Iterable[str],
     ignored_control_spans: Iterable[tuple[int, int]] = (),
-) -> re.Match[str] | None:
-    """Find the depth-matched closing token for a tenkz environment."""
+) -> list[EnvironmentSpan]:
+    """Return strictly nested tracked environments in source order.
+
+    Comments are blanked while preserving offsets and line numbers.  Every
+    tracked closing token must match the top tracked opening token; unexpected,
+    mismatched, and unclosed environments raise a diagnostic with source lines.
+    """
+    source = strip_comments(source)
+    names = frozenset(names)
+    if not names:
+        return []
     ignored_control_spans = tuple(ignored_control_spans)
-    token_pattern = re.compile(
-        r"\\(begin|end)\s*\{" + re.escape(name) + r"\}"
+    alternatives = "|".join(
+        re.escape(name) for name in sorted(names, key=len, reverse=True)
     )
-    depth = 1
-    for token in token_pattern.finditer(source, position):
+    token_pattern = re.compile(
+        r"\\(begin|end)\s*\{\s*(" + alternatives + r")\s*\}"
+    )
+    stack: list[tuple[str, re.Match[str], int]] = []
+    spans: list[EnvironmentSpan] = []
+    for token in token_pattern.finditer(source):
         if not is_control_word_start(source, token.start()):
             continue
         if any(start <= token.start() < end for start, end in ignored_control_spans):
             continue
-        depth += 1 if token.group(1) == "begin" else -1
-        if depth == 0:
-            return token
-    return None
+        kind = token.group(1)
+        name = token.group(2)
+        line = source.count("\n", 0, token.start()) + 1
+        if kind == "begin":
+            stack.append((name, token, line))
+            continue
+        if not stack:
+            raise TeXEnvironmentNestingError(
+                f"unexpected \\end{{{name}}} at line {line}"
+            )
+        open_name, open_token, open_line = stack[-1]
+        if open_name != name:
+            raise TeXEnvironmentNestingError(
+                f"mismatched \\end{{{name}}} at line {line}; "
+                f"expected \\end{{{open_name}}} for line {open_line}"
+            )
+        stack.pop()
+        spans.append(
+            EnvironmentSpan(
+                name=name,
+                start=open_token.start(),
+                end=token.end(),
+                body_start=open_token.end(),
+                body_end=token.start(),
+                line=open_line,
+            )
+        )
+    if stack:
+        name, _, line = stack[-1]
+        raise TeXEnvironmentNestingError(
+            f"unclosed \\begin{{{name}}} from line {line}"
+        )
+    spans.sort(key=lambda span: span.start)
+    return spans
 
 
 def scan_constructs(
@@ -188,39 +244,21 @@ def scan_constructs(
     source = strip_comments(source)
     ignored_control_spans = tuple(ignored_control_spans)
     constructs: list[Construct] = []
-    environment_pattern = re.compile(
-        r"\\begin\s*\{("
-        + "|".join(
-            re.escape(name)
-            for name in sorted(
-                PICTURE_ENVIRONMENT_NAMES, key=len, reverse=True
-            )
-        )
-        + r")\}"
-    )
-    for match in environment_pattern.finditer(source):
-        if not is_control_word_start(source, match.start()):
-            continue
-        if any(start <= match.start() < end for start, end in ignored_control_spans):
-            continue
-        name = match.group(1)
-        end_match = _find_env_end(
-            source, name, match.end(), ignored_control_spans
-        )
-        end = end_match.end() if end_match else len(source)
-        body_start = match.end()
+    for environment in scan_environments(
+        source, PICTURE_ENVIRONMENT_NAMES, ignored_control_spans
+    ):
+        body_start = environment.body_start
         if source[body_start : body_start + 1] == "[":
             closed = match_group(source, body_start, "[", "]")
             if closed != -1:
                 body_start = closed
-        body_end = end_match.start() if end_match else len(source)
         constructs.append(
             Construct(
-                name,
-                match.start(),
-                end,
-                source[body_start:body_end],
-                source.count("\n", 0, match.start()) + 1,
+                environment.name,
+                environment.start,
+                environment.end,
+                source[body_start : environment.body_end],
+                environment.line,
                 body_start,
             )
         )

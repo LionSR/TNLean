@@ -11,6 +11,7 @@ from typing import Iterable, Mapping
 
 from tenkzlib.texcase import (
     Construct,
+    TeXEnvironmentNestingError,
     is_control_word_start,
     is_static_control_word_letter,
     is_static_control_word_name,
@@ -1272,7 +1273,12 @@ def scan_case_constructs(source: str) -> tuple[Construct, ...]:
     """Return drawing constructs visible in the dimension execution context."""
     owner_source = strip_comments(source)
     context = _execution_context(source, owner_source)
-    return tuple(scan_constructs(source, context.mask_spans))
+    try:
+        return tuple(scan_constructs(source, context.mask_spans))
+    except TeXEnvironmentNestingError as error:
+        raise DimensionOwnershipError(
+            f"malformed TeX environment nesting: {error}"
+        ) from error
 
 
 def scan_case_invocations(source: str) -> tuple[DimensionInvocation, ...]:

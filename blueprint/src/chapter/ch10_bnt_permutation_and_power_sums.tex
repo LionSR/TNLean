@@ -143,6 +143,25 @@ basis tensors are compared: the coefficient $\sum_q \mu_{j,q}^N$ then equals
 $\sum_q (\nu_{j,q} e^{i\phi_j})^N$, and Newton--Girard recovers the weight
 multiset with multiplicity.
 
+% CPSV16 Lemma A.5 (`Lem:app_simple`), lines 1155--1163.
+% Tracking: issue #5917.
+% Gap: docs/paper-gaps/power_sum_alternative_route.tex.
+\begin{lemma}[Printed finite power-sum comparison]
+    \label{lem:cpsv_power_sum_printed_status}
+    \notready
+    \uses{thm:bounded_power_sum_multiset}
+    Suppose two finite lists of complex numbers have equal positive power sums
+    for every exponent up to the larger list length.  According to
+    \cite[Lemma~A.5]{Cirac2016MPDO_arXiv}, the list lengths agree and the two
+    multisets are equal.
+
+    This is false when zero entries are allowed: the lists $(1)$ and $(1,0)$
+    have equal power sums for every positive exponent.  The conclusion becomes
+    valid if every entry is nonzero, if the exponent-zero power sum is also
+    compared, or if zero entries are deleted before comparing the multisets.
+    The nonzero version is Theorem~\ref{thm:bounded_power_sum_multiset}.
+\end{lemma}
+
 \begin{theorem}[Finite-range equal power sums imply equal multisets]
     \label{thm:bounded_power_sum_multiset}
     \lean{Matrix.sum_pow_eq_implies_multiset_eq_of_le_card,
