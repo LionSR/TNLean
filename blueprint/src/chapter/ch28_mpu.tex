@@ -1991,6 +1991,49 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
     trace gives the displayed closed trace.
 \end{proof}
 
+\begin{theorem}[Second-cut metric factorization]
+    \label{thm:mpu_source_u_second_cut_metric}
+    \lean{MPOTensor.sourceX₂_mul_conjTranspose_eq_sourceCutM₂_mul_secondCutMetric}
+    \leanok
+    \uses{thm:mpu_source_factorizations,thm:mpu_source_factor_right_inverses}
+    Define the second-cut metric by $H_2=Z_2Z_2^\dagger$.  Then the range
+    projector of the second source cut factors as
+    \begin{align}
+      X_2X_2^\dagger=M_2H_2M_2^\dagger.
+    \end{align}
+    This is a factorization through the chosen right inverse; it does not
+    assert that $H_2$, $X_2X_2^\dagger$, or $M_2M_2^\dagger$ is the identity.
+\end{theorem}
+
+\begin{proof}\leanok
+    From $M_2=X_2Y_2$ and $Y_2Z_2=1$ one obtains $M_2Z_2=X_2$.
+    Multiply this identity by its adjoint and reassociate the three factors.
+\end{proof}
+
+\begin{theorem}[Source-$u$ Gram entry with the second-cut metric]
+    \label{thm:mpu_source_u_gram_second_cut_metric}
+    \lean{MPOTensor.sourceU_gram_apply_eq_secondCutMetric}
+    \leanok
+    \uses{thm:mpu_source_u_gram_closed_output_letter,
+        thm:mpu_source_u_second_cut_metric}
+    With $H_2=Z_2Z_2^\dagger$, the ordinary source-$u$ Gram entry is
+    \begin{align}
+      \sum_{l,r}u_{(l,r),q}\overline{u_{(l,r),p}}
+      =\sum_{\beta,\delta,\gamma,\alpha,j,a,k,c}
+        &\rho_{\alpha,\gamma}
+        (W_{\mathrm{out}}^{q_1p_1})_{(\gamma,\alpha),(\beta,\delta)}\\
+        &\quad\cdot U^{q_2j}_{\beta,a}
+        (H_2)_{(j,a),(k,c)}\overline{U^{p_2k}_{\delta,c}}.
+    \end{align}
+    The $q$ factors are unstarred and the $p$ factors are starred.
+\end{theorem}
+
+\begin{proof}\leanok
+    Substitute the second-cut metric factorization into the closed
+    output-letter formula and expand both matrix products.  Reordering the
+    finite sums gives the displayed eight-index expression.
+\end{proof}
+
 % The equality and range-insertion step remains tracked by issue #5971.
 \begin{remark}[Scope of the closed source-$u$ formulas]
     The first theorem rewrites the ordinary source-$u$ Gram entry, while the
