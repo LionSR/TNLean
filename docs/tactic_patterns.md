@@ -380,6 +380,25 @@ abstracted — record why, so it is not re-proposed).
   retains its selected eventually nonzero scalar. The two public theorem names and statements
   are unchanged, and the Lean source loses 58 lines net.
 
+### MPS word-factor extension
+- **Pattern:** extend a one-letter identity `Z a * A i = F a * Y` to a nonempty
+  physical word by multiplying the witness by the remaining suffix product.
+- **Reuse:** `MPSTensor.exists_evalWord_factor_of_letter_compatibility` in
+  `TNLean/MPS/Core/WordFactor.lean` handles arbitrary index types and matrix families.
+- **Result:** `ParentHamiltonian/BlockStrip.lean` and
+  `ParentHamiltonian/ExtendRight.lean` use the neutral shared theorem instead of
+  maintaining specialized inductions. The existing public parent-Hamiltonian statements
+  are unchanged, and `ExtendRight.lean` does not import the larger `BlockStrip.lean` cone.
+
+### Boundary-crossing word split
+- **Pattern:** split `List.ofFn σ` at the boundary-crossing index `N - i` into the
+  segment before the cut followed by the wrapped segment after the cut.
+- **Reuse:** `MPSTensor.ofFn_eq_boundary_crossing_tail_append_head` in
+  `TNLean/MPS/ParentHamiltonian/BNTBlockDiagonalCrossing.lean` records the index
+  arithmetic once.
+- **Result:** the crossing-matrix and crossing-trace proofs call the shared list
+  identity. Their theorem statements and the Chapter 13 endpoints are unchanged.
+
 ### MPDO pair-trace separation duality
 - **Pattern:** use Hahn--Banach separation for a proper pair-matrix submodule,
   represent the separating functional as a pair trace, and contradict trace

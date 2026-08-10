@@ -339,6 +339,39 @@ theorem
     blockDiagonal_boundary_last_cyclicRestrict_component_mem_groundSpace_of_sum_mem_iSup
       μ A hLen X τ hSpan hmem j
 
+/-- A local word at a boundary-crossing interval is the segment before the
+cut followed by the segment after the cut. -/
+theorem ofFn_eq_boundary_crossing_tail_append_head {α : Type*} {L N : ℕ}
+    (i : Fin N) (hi : N < i.val + L) (σ : Fin L → α) :
+    List.ofFn σ =
+      List.ofFn (fun k : Fin (N - i.val) => σ ⟨k.val, by omega⟩) ++
+        List.ofFn (fun k : Fin (i.val + L - N) =>
+          σ ⟨N - i.val + k.val, by omega⟩) := by
+  apply List.ext_getElem
+  · simp [List.length_ofFn]
+    omega
+  · intro k hk₁ hk₂
+    have hkL : k < L := by
+      simpa only [List.length_ofFn] using hk₁
+    simp only [List.getElem_ofFn]
+    by_cases hkTail : k < N - i.val
+    · rw [List.getElem_append_left]
+      · have htail :
+            (List.ofFn (fun k : Fin (N - i.val) =>
+              σ ⟨k.val, by omega⟩))[k]'(by
+                simpa [List.length_ofFn] using hkTail) = σ ⟨k, hkL⟩ := by
+            simp only [List.getElem_ofFn]
+        rw [htail]
+      · simpa [List.length_ofFn] using hkTail
+    · rw [List.getElem_append_right]
+      · simp only [List.getElem_ofFn]
+        congr 1
+        ext
+        simp [List.length_ofFn]
+        omega
+      · simpa [List.length_ofFn] using
+          (show N - i.val ≤ k by omega)
+
 /-- Coefficients of a boundary-crossing cyclic restriction.
 
 Let a cyclic interval of length \(L\) begin at \(i\), and suppose it crosses the
@@ -516,35 +549,8 @@ theorem blockDiagonal_boundary_cyclicRestrict_component_mem_groundSpace_of_cross
     σ ⟨k.val, by omega⟩
   let Xj : Matrix (Fin (dim j)) (Fin (dim j)) ℂ := (μ j) ^ N • X j
   have hσ : List.ofFn σ = tailWord ++ headWord := by
-    apply List.ext_getElem
-    · simp [tailWord, headWord, List.length_ofFn]
-      omega
-    · intro k hk₁ hk₂
-      have hkL : k < L := by
-        simpa only [List.length_ofFn] using hk₁
-      simp only [List.getElem_ofFn]
-      by_cases hkTail : k < N - i.val
-      · rw [List.getElem_append_left]
-        · have htail :
-              tailWord[k]'(by simpa [tailWord, List.length_ofFn] using hkTail) =
-                σ ⟨k, hkL⟩ := by
-            simp only [tailWord, List.getElem_ofFn]
-          rw [htail]
-        · simpa [tailWord, List.length_ofFn] using hkTail
-      · rw [List.getElem_append_right]
-        · have hidx : k - tailWord.length < headWord.length := by
-            simp [tailWord, headWord, List.length_ofFn]
-            omega
-          have hhead :
-              headWord[k - tailWord.length]'hidx = σ ⟨k, hkL⟩ := by
-            simp only [headWord, List.getElem_ofFn]
-            congr 1
-            ext
-            simp [tailWord, List.length_ofFn]
-            omega
-          rw [hhead]
-        · simpa [tailWord, List.length_ofFn] using
-            (show tailWord.length ≤ k by simp [tailWord, List.length_ofFn]; omega)
+    simpa [tailWord, headWord] using
+      ofFn_eq_boundary_crossing_tail_append_head i hi σ
   have hIdentityσ :
       (Xj * evalWord (A j) headWord) * evalWord (A j) middleWord =
         evalWord (A j) headWord * E := by

@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import TNLean.MPS.Core.WordFactor
 import TNLean.MPS.ParentHamiltonian.SuffixWindow
 
 /-!
@@ -35,28 +36,6 @@ open scoped Matrix
 namespace MPSTensor
 
 variable {d D : ℕ}
-
-/-- Letter compatibility extends to every nonempty word by multiplying the
-corresponding boundary matrix on the right by the remaining suffix product. -/
-private theorem exists_evalWord_factor_of_letter_compatibility {A : MPSTensor d D}
-    {Z : Fin d → Matrix (Fin D) (Fin D) ℂ}
-    (hCompat : ∀ i : Fin d, ∃ Y : Matrix (Fin D) (Fin D) ℂ,
-      ∀ j : Fin d, Z j * A i = A j * Y)
-    (w : List (Fin d)) (hw : w ≠ []) :
-    ∃ Y : Matrix (Fin D) (Fin D) ℂ,
-      ∀ j : Fin d, Z j * evalWord A w = A j * Y := by
-  cases w with
-  | nil => cases hw rfl
-  | cons i w =>
-      obtain ⟨Y, hY⟩ := hCompat i
-      refine ⟨Y * evalWord A w, ?_⟩
-      intro j
-      calc
-        Z j * evalWord A (i :: w)
-            = Z j * (A i * evalWord A w) := by simp [evalWord]
-        _ = (Z j * A i) * evalWord A w := by rw [Matrix.mul_assoc]
-        _ = (A j * Y) * evalWord A w := by rw [hY j]
-        _ = A j * (Y * evalWord A w) := by rw [Matrix.mul_assoc]
 
 /-- If the compatibility identity is available for every single physical letter,
 then block injectivity yields a common right factor. -/
