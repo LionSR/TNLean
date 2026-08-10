@@ -10,6 +10,7 @@ Authors: TNLean contributors
 
 import TNLean.MPS.RFP.AppendixBChainCommutation
 import TNLean.MPS.RFP.AppendixBCommutation
+import TNLean.MPS.RFP.AppendixBStructuralData
 import TNLean.MPS.RFP.AppendixBSupport
 import TNLean.MPS.RFP.Assembly
 import TNLean.MPS.RFP.BNTDirectSumBasis
