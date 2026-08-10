@@ -11,7 +11,7 @@ import TNLean.MPS.MPDO.GroupedReferenceCorner
 # Gram kernels for grouped vertical sectors
 
 This file isolates the canonical-form-independent part of the grouped Figure 8
-argument. A grouped-corner Gram-dressing interface compares any two positive
+argument. A grouped-corner Gram-dressing hypothesis compares any two positive
 corners of one representative. The distinguished reference corner then makes
 each grouped Gram conjugation trivial, and normality forces the Gram matrix to
 be a positive scalar multiple of the identity.
@@ -68,7 +68,7 @@ variable (blocks : (k : Fin r) → MPSTensor (D * D) (dim k))
 
 local notation "C" => MPSTensor.mpvPhaseClassData blocks
 
-/-- The pairwise Gram-dressing interface and the distinguished identity-gauge
+/-- The pairwise Gram-dressing hypothesis and the distinguished identity-gauge
 corner imply that each grouped Gram conjugation fixes its representative.
 
 The hypotheses after `hDressing` are clauses of

@@ -602,12 +602,12 @@ abstracted — record why, so it is not re-proposed).
   separate public wrappers, each supplying its own Gram theorem without adapting
   one canonical-form hypothesis to the other.
 
-### Vertical canonical-form assembly from grouped sectors
+### Vertical canonical form from grouped sectors
 - **Pattern:** the literal CPSV and horizontal capstones both unpacked the same grouped BNT
   witness, built the vertical BNT, normalized its sector maps, and reindexed the same dependent
   double sum before applying the grouped-sector coisometry theorem.
 - **Reuse:** `MPOTensor.verticalCF_of_grouping_and_gramDressing` in
-  `TNLean/MPS/MPDO/VerticalCanonicalFormAssembly.lean` takes
+  `TNLean/MPS/MPDO/VerticalCanonicalFormConstruction.lean` takes
   `HasVerticalBNTGroupingWithIsometry M` and `HasGroupedCornerGramDressing M`; it does not require
   an unused `IsMPDO M` hypothesis.
 - **Result:** `verticalCF_of_cpsvCanonicalForm` and `verticalCF_of_horizontalCF` are thin,
