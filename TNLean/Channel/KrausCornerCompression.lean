@@ -37,7 +37,6 @@ theorem map_compressed_eq_conj {n : ℕ}
     (V : Matrix (Fin D) (Fin n) ℂ)
     (hC : ∀ i : Fin d, C i = Vᴴ * A i * V) (Z : MatrixAlg n) :
     map C Z = Vᴴ * map A (V * Z * Vᴴ) * V := by
-  classical
   calc
     map C Z = ∑ i : Fin d, C i * Z * (C i)ᴴ := by rw [map_apply]
     _ = ∑ i : Fin d, Vᴴ * (A i * (V * Z * Vᴴ) * (A i)ᴴ) * V := by
