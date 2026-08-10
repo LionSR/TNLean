@@ -9,10 +9,11 @@ import Mathlib.Analysis.CStarAlgebra.Hom
 /-!
 # Finite-region observable algebras for one-dimensional spin chains
 
-For a finite region `Λ : Finset ℤ` and on-site dimension `d`, this file defines the local
-observable C⋆-algebra on `Λ` and its canonical inclusion into the algebra on a larger finite
-region.  The inclusion tensors an observable with the identity on the complementary sites and
-then reindexes product configurations as configurations on the larger region.
+For a finite region \(\Lambda \subset \mathbb Z\) and on-site dimension \(d\), this file
+defines the local observable C⋆-algebra on \(\Lambda\) and its canonical inclusion into the
+algebra on a larger finite region.  The inclusion tensors an observable with the identity on
+complementary sites and then reindexes product configurations as configurations on the larger
+region.
 
 This is only the finite directed system.  No quasi-local completion or quantum cellular
 automaton is defined here.
@@ -41,12 +42,12 @@ open scoped ComplexOrder
 
 namespace SpinChain
 
-/-- Configurations of `d`-level spins on the finite region `Λ`.
+/-- Configurations of \(d\)-level spins on the finite region \(\Lambda\).
 
 Source: arXiv:1703.09188, Appendix, lines 2285--2292. -/
 def Config (d : ℕ) (Λ : Finset ℤ) := Λ → Fin d
 
-/-- The local observable C⋆-algebra on a finite region `Λ`.
+/-- The local observable C⋆-algebra on a finite region \(\Lambda\).
 
 Its norm is the `CStarMatrix` operator norm, rather than a norm inherited from plain matrices.
 Source: arXiv:1703.09188, Appendix, lines 2285--2292. -/
@@ -87,7 +88,8 @@ lemma restrict_trans {d : ℕ} {Λ Γ Δ : Finset ℤ} (hΛΓ : Λ ⊆ Γ) (hΓ�
     (x : Config d Δ) : restrict hΛΓ (restrict hΓΔ x) = restrict (hΛΓ.trans hΓΔ) x := by
   rfl
 
-/-- Split a configuration on `Γ` into its restrictions to `Λ` and `Γ \ Λ`.
+/-- Split a configuration on \(\Gamma\) into its restrictions to \(\Lambda\) and
+\(\Gamma \setminus \Lambda\).
 
 This is the canonical reindexing used after tensoring with the identity on the complement.
 Source: arXiv:1703.09188, Appendix, lines 2285--2292. -/
@@ -119,10 +121,11 @@ section Inclusion
 
 variable {d : ℕ}
 
-/-- The canonical inclusion of local observables for `Λ ⊆ Γ`.
+/-- The canonical inclusion of local observables for \(\Lambda \subseteq \Gamma\).
 
-It sends `A` to `A ⊗ 1` on configurations of `Λ × (Γ \ Λ)`, then reindexes those
-configurations as configurations of `Γ`.  Thus it is a unital star-algebra homomorphism by
+It sends \(A\) to \(A \otimes 1\) on configurations of
+\(\Lambda \times (\Gamma \setminus \Lambda)\), then reindexes those configurations as
+configurations of \(\Gamma\).  Thus it is a unital star-algebra homomorphism by
 construction.
 
 Source: arXiv:1703.09188, Appendix, lines 2285--2292. -/

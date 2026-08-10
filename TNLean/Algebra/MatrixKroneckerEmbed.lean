@@ -10,11 +10,10 @@ import Mathlib.LinearAlgebra.Matrix.Kronecker
 /-!
 # Unital Kronecker homomorphisms of complex matrix algebras
 
-This file bundles the maps $A \mapsto A \otimes \mathbf 1_n$ and
+This file defines the maps $A \mapsto A \otimes \mathbf 1_n$ and
 $B \mapsto \mathbf 1_m \otimes B$ as star-algebra homomorphisms.  The left map is an embedding
-when $n$ is nonempty, and the right map is an embedding when $m$ is nonempty.  These maps form the
-algebraic layer shared by continuous-functional-calculus results and operator-norm `CStarMatrix`
-constructions.
+when $n$ is nonempty, and the right map is an embedding when $m$ is nonempty.  These maps are used
+both for continuous functional calculus and for operator-norm `CStarMatrix` constructions.
 
 ## Main definitions
 
