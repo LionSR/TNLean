@@ -45,7 +45,7 @@ output-layer reflection used in arXiv:1703.09188, Lemma `lemuisometry` (lines 54
 @[simp] theorem physicalAdjointTensor_physicalAdjointTensor (U : MPOTensor d D) :
     physicalAdjointTensor (physicalAdjointTensor U) = U := by
   ext i j α β
-  simp
+  simp only [physicalAdjointTensor_apply, star_star]
 
 /-- Passing to the physical adjoint preserves the MPU property. The proof transposes the
 periodic unitarity equation from arXiv:1703.09188, equation `UisUnitary` (lines 327--335). -/
@@ -84,7 +84,8 @@ theorem sourceY₁_eq_sourceX₁_conjTranspose_mul_weight_mul_sourceCutM₁
       (sourceX₁ U ρ hρ)ᴴ * sourceWeight (d := d) ρ * sourceCutM₁ U := by
   calc
     sourceY₁ U ρ hρ =
-        (1 : Matrix (Fin r[U]) (Fin r[U]) ℂ) * sourceY₁ U ρ hρ := by simp
+        (1 : Matrix (Fin r[U]) (Fin r[U]) ℂ) * sourceY₁ U ρ hρ := by
+      rw [Matrix.one_mul]
     _ = ((sourceX₁ U ρ hρ)ᴴ * sourceWeight (d := d) ρ * sourceX₁ U ρ hρ) *
           sourceY₁ U ρ hρ := by rw [sourceX₁_weighted_isometry]
     _ = (sourceX₁ U ρ hρ)ᴴ * sourceWeight (d := d) ρ *
@@ -98,7 +99,8 @@ theorem sourceY₁_eq_sourceX₁_conjTranspose_mul_weight_mul_sourceCutM₁
 theorem sourceY₂_eq_sourceX₂_conjTranspose_mul_sourceCutM₂ :
     sourceY₂ U = (sourceX₂ U)ᴴ * sourceCutM₂ U := by
   calc
-    sourceY₂ U = (1 : Matrix (Fin ℓ[U]) (Fin ℓ[U]) ℂ) * sourceY₂ U := by simp
+    sourceY₂ U = (1 : Matrix (Fin ℓ[U]) (Fin ℓ[U]) ℂ) * sourceY₂ U := by
+      rw [Matrix.one_mul]
     _ = ((sourceX₂ U)ᴴ * sourceX₂ U) * sourceY₂ U := by
       rw [sourceX₂_isometry]
     _ = (sourceX₂ U)ᴴ * (sourceX₂ U * sourceY₂ U) := by
