@@ -60,3 +60,13 @@ jobs:
 
       - name: Report the activation pins
         run: python3 tests/tenkz/release-harness/supervisor.py pins
+
+      # The upload archive, checked wherever the release payload is checked.
+      # This job installs no TeX, so the check reports its clean-install step
+      # skipped here; pr-ci.yml runs the same command with `--require-smoke`
+      # in the job that already has an engine.
+      - name: Test the CTAN staging contracts
+        run: python3 scripts/test_tenkz_ctan.py
+
+      - name: Check the CTAN staging tree and its archive
+        run: python3 scripts/tenkz_ctan.py check

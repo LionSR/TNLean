@@ -10,6 +10,7 @@ Authors: TNLean contributors
 
 import TNLean.Channel.Peripheral.CesaroRecurrence
 import TNLean.Channel.Peripheral.ClosureFixedPoint
+import TNLean.Channel.Peripheral.ClosureFixedPointKraus
 import TNLean.Channel.Peripheral.Conjugation
 import TNLean.Channel.Peripheral.Cycles
 import TNLean.Channel.Peripheral.CyclicDecomposition
@@ -20,6 +21,7 @@ import TNLean.Channel.Peripheral.CyclicDecomposition.LetterShift
 import TNLean.Channel.Peripheral.CyclicDecomposition.PeripheralUnitary
 import TNLean.Channel.Peripheral.CyclicDecomposition.Primitivity
 import TNLean.Channel.Peripheral.CyclicGroup
+import TNLean.Channel.Peripheral.CyclicGroupKraus
 import TNLean.Channel.Peripheral.GroupStructure
 import TNLean.Channel.Peripheral.IrreducibleChannel
 import TNLean.Channel.Peripheral.JordanBlocks

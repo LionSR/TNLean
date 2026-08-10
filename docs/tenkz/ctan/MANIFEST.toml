@@ -1,0 +1,73 @@
+# What the tenkz upload archive contains, pinned.
+#
+# `scripts/tenkz_ctan.py` walks the load graph from `tex/tenkz/tenkz.sty` and
+# compares the walk against `[runtime]` below. The pin is not the source of
+# the closure — the entry point is — so this file cannot make the archive
+# carry a stage the package does not load, or hide one it does. What the pin
+# buys is a failed check when the load graph moves: a new stage module, a new
+# required package, a new TikZ library, or a deleted one, all stop here until
+# somebody decides whether the upload changes with them.
+#
+# The staged order is the load order for the runtime files and the order below
+# for the rest. Member order is part of the archive's bytes.
+
+schema = 1
+package = "tenkz"
+
+[runtime]
+# Walked from `tenkz.sty`, in load order. The last two are the lockout: the
+# render stage creates the ink primitives, so it loads after every stage that
+# might reference them, and the kernel language loads after render so its
+# records meet the same primitives.
+files = [
+  "tenkz.sty",
+  "tenkz-language.code.tex",
+  "tenkz-language-registry.tex",
+  "tenkz-model.code.tex",
+  "tenkz-core.code.tex",
+  "tenkz-metric.code.tex",
+  "tenkz-geometry.code.tex",
+  "tenkz-string.code.tex",
+  "tenkz-tree.code.tex",
+  "tenkz-render.code.tex",
+  "tenkz-kernel.code.tex",
+]
+
+[runtime.requires]
+# What the archive does not carry and the installation must already have.
+# Three of the libraries come from packages of their own rather than from
+# pgf: `hobby` and `spath3` are separate CTAN packages, and an installation
+# without them fails at load, not at the first curve.
+packages = ["tikz"]
+libraries = [
+  "arrows.meta",
+  "backgrounds",
+  "calc",
+  "decorations.markings",
+  "decorations.pathreplacing",
+  "fit",
+  "hobby",
+  "intersections",
+  "shapes.geometric",
+  "spath3",
+]
+
+[material]
+# Staged name = the file it is copied from, unmodified. The version and date
+# these carry are checked against the `\ProvidesPackage` line; none of them
+# declares a version of its own.
+"README.md" = "docs/tenkz/ctan/README.md"
+"LICENSE" = "LICENSE"
+"CHANGES.md" = "docs/tenkz/CHANGES.md"
+"CITATION.cff" = "docs/tenkz/ctan/CITATION.cff"
+"tenkz.bib" = "docs/tenkz/ctan/tenkz.bib"
+
+[source_tree]
+# Everything in `tex/tenkz/` the upload deliberately leaves out. Anything else
+# found there that the entry point does not load fails the check.
+#
+# `examples/` holds the registry's one-picture-per-command examples. They are
+# compiled by the manual doc-test and are not reader documentation; the
+# documentation an upload carries is the manual, whose reproducible build is
+# the open work of the release.
+excluded = ["examples"]

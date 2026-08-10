@@ -46,16 +46,15 @@ the ambient fixed-point space a zero-block representation.
 
 \begin{proof}
     \leanok
-    \uses{thm:support_proj_fixed, thm:supported_corner_compression_isometry,
+    \uses{thm:support_proj_fixed, thm:supported_kraus_corner_compression,
         thm:compression_on_support_posDef, thm:adjointFixedPoints_block_form}
     Since $\rho$ is a fixed point of $E$, the support projection satisfies
     $(\Id-Q)K_iQ=0$ by Theorem~\ref{thm:support_proj_fixed}, so the
     compressed family $QK_iQ$ is supported on the corner and
-    trace-preserving there. Compress it to the support sector along the
-    isometry $V:\C^r\to\C^D$ of
-    Theorem~\ref{thm:supported_corner_compression_isometry}, which satisfies
-    $V^\dagger V=\Id_r$ and $VV^\dagger=Q$. The compressed family $C$ is
-    trace-preserving on $\C^r$, and
+    trace-preserving there. Theorem~\ref{thm:supported_kraus_corner_compression}
+    gives a support isometry $V:\C^r\to\C^D$ with
+    $V^\dagger V=\Id_r$ and $VV^\dagger=Q$, together with a compressed family
+    $C$ that is trace-preserving on $\C^r$. Moreover,
     $\sigma=V^\dagger\rho V$ is a positive definite fixed point of the
     compressed Schr\"odinger map by
     Theorem~\ref{thm:compression_on_support_posDef}. The block form of the
@@ -138,9 +137,8 @@ restriction disappears
 \begin{proof}
     \leanok
     \uses{thm:weightedFixedPointsStarSubalgebra,
-        thm:supported_corner_compression_isometry,
-        thm:compression_on_support_posDef,
-        thm:support_proj_fixed}
+        thm:supported_kraus_corner_compression,
+        thm:compression_on_support_posDef, thm:support_proj_fixed}
     Closure under addition, scalars, and conjugation is linearity together
     with the stability of fixed points under conjugate transposition. The
     corner unit $Q$ belongs to the set because
@@ -157,10 +155,10 @@ restriction disappears
     For closure under multiplication, compress to the support sector. Since
     $\rho$ is a fixed point of $T$, the support projection satisfies
     $(\Id-Q)K_iQ=0$ by Theorem~\ref{thm:support_proj_fixed}. The compressed
-    family $QK_iQ$ is trace-preserving on the corner, and compression along
-    the isometry $V:\C^r\to\C^D$ of
-    Theorem~\ref{thm:supported_corner_compression_isometry}, with
-    $V^\dagger V=\Id_r$ and $VV^\dagger=Q$, produces a trace-preserving
+    family $QK_iQ$ is trace-preserving on the corner.
+    Theorem~\ref{thm:supported_kraus_corner_compression} gives a support
+    isometry $V:\C^r\to\C^D$ with $V^\dagger V=\Id_r$ and
+    $VV^\dagger=Q$, together with a trace-preserving compressed
     family $C$ on $\C^r$ whose Schr\"odinger map has the positive definite
     fixed point $\sigma=V^\dagger\rho V$ by
     Theorem~\ref{thm:compression_on_support_posDef}. The square root
@@ -235,11 +233,11 @@ points supported on the support of $\rho$.
 
 \begin{proof}
     \leanok
-    \uses{thm:supported_corner_compression_isometry,
-        thm:compression_on_support_posDef,
-        thm:support_proj_fixed}
-    Compress to the support sector as in the proof of
-    Theorem~\ref{thm:weightedCornerFixedPointsStarSubalgebra} and set
+    \uses{thm:supported_kraus_corner_compression,
+        thm:compression_on_support_posDef, thm:support_proj_fixed}
+    Use Theorem~\ref{thm:supported_kraus_corner_compression} to compress to
+    the support sector as in the proof of
+    Theorem~\ref{thm:weightedCornerFixedPointsStarSubalgebra}, and set
     \begin{align}
         Y
          & =V\left(\sqrt{\sigma}^{-1}(V^\dagger XV)

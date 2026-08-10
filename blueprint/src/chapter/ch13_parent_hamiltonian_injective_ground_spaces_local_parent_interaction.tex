@@ -282,6 +282,26 @@ orthogonal projector is the canonical representative used here.
     row--column pair $((c,e),(a,b))$.
 \end{definition}
 
+\begin{theorem}[Gram reshuffling commutes with subtraction]
+    \label{thm:gram_reshuffle_sub}
+    \lean{Matrix.gramReshuffle_sub}
+    \leanok
+    \uses{def:gram_reshuffle}
+    For complex-linear maps
+    $\mathcal L,\mathcal M\colon\MN{D}\to\MN{D}$,
+    \begin{align}
+      \mathscr R(\mathcal L-\mathcal M)
+      &=\mathscr R(\mathcal L)-\mathscr R(\mathcal M).
+      \label{eq:gram_reshuffle_sub}
+    \end{align}
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{def:gram_reshuffle}
+    The defining matrix entries of the Choi reshuffling are linear in the map.
+\end{proof}
+
 \begin{theorem}[Matrix-unit coordinates of Gram reshuffling]
     \label{thm:gram_reshuffle_single}
     \lean{Matrix.inner_single_gramReshuffle_single}
@@ -475,6 +495,27 @@ orthogonal projector is the canonical representative used here.
     matrix norm.
 \end{proof}
 
+\begin{theorem}[Geometric power bound below unit spectral radius]
+    \label{thm:geometric_bound_of_spectral_radius_lt_one}
+    \lean{MPSTensor.geometric_bound_of_spectralRadius_lt_one}
+    \leanok
+    Let $V$ be a complex Banach space and let $T\colon V\to V$ be a bounded
+    linear operator.  If $\rho_{\mathrm{spec}}(T)<1$, then there are real
+    constants $C,r$ with $C>0$ and $0<r<1$ such that
+    \begin{align}
+      \lVert T^n\rVert&\leq C r^n
+      \label{eq:geometric_bound_of_spectral_radius_lt_one}
+    \end{align}
+    for every $n\in\N$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Choose $r$ strictly between the spectral radius and one.  Gelfand's formula
+    gives $\lVert T^n\rVert<r^n$ for all sufficiently large $n$; enlarging the
+    constant $C$ absorbs the finitely many remaining powers.
+\end{proof}
+
 \begin{theorem}[Transfer--Gram Choi reshuffling]
     \label{thm:ground_space_gram_choi_reshuffling}
     \lean{MPSTensor.inner_single_groundSpaceGram_single_eq_rectangularChoi}
@@ -541,6 +582,264 @@ orthogonal projector is the canonical representative used here.
     basis vectors.  Hence they are equal.
 \end{proof}
 
+\begin{theorem}[Geometric convergence of the ground-space Gram operator]
+    \label{thm:ground_space_gram_geometric_fixed_point}
+    \lean{MPSTensor.groundSpaceGram_sub_fixedPointProj_norm_sq_le_geometric}
+    \leanok
+    \uses{def:ground_space_gram, def:gram_reshuffle, def:transfer_map,
+        def:fixed_point_proj, def:trace_preserving}
+    Let $A$ be an MPS tensor of bond dimension $D$, let $\rho\in\MN{D}$ satisfy
+    $\tr(\rho)\neq0$, and let $P_\rho$ be the fixed-point projection
+    \begin{align}
+      P_\rho(X)&=\frac{\tr(X)}{\tr(\rho)}\rho.
+    \end{align}
+    Suppose that $\mathcal E_A$ is trace-preserving,
+    $\mathcal E_A(\rho)=\rho$, and
+    \begin{align}
+      \rho_{\mathrm{spec}}(\mathcal E_A-P_\rho)&<1.
+    \end{align}
+    Then there are real constants $C,r$ with $C>0$ and $0<r<1$ such that,
+    for every $n\geq1$,
+    \begin{align}
+      \bigl\lVert\mathcal K_n-\mathscr R(P_\rho)\bigr\rVert^2
+      &\leq D^3\bigl(Cr^n\bigr)^2.
+      \label{eq:ground_space_gram_geometric_fixed_point}
+    \end{align}
+    No positivity, injectivity, or uniqueness hypothesis is imposed.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:geometric_bound_of_spectral_radius_lt_one, thm:pow_decomp,
+        thm:ground_space_gram_eq_gram_reshuffle, thm:gram_reshuffle_sub,
+        thm:gram_reshuffle_norm_sq_le_card_cube_mul_operator_norm_sq}
+    Write $N=\mathcal E_A-P_\rho$.  The power decomposition gives
+    $\mathcal E_A^n=P_\rho+N^n$ for $n\geq1$, while
+    Theorem~\ref{thm:geometric_bound_of_spectral_radius_lt_one} gives
+    $\lVert N^n\rVert\leq Cr^n$.  Use the exact Gram reshuffling identity and
+    Theorem~\ref{thm:gram_reshuffle_sub} to rewrite the left-hand side as
+    $\lVert\mathscr R(N^n)\rVert^2$, then apply
+    Theorem~\ref{thm:gram_reshuffle_norm_sq_le_card_cube_mul_operator_norm_sq}.
+\end{proof}
+
+\begin{theorem}[Primitive-MPS geometric Gram convergence]
+    \label{thm:primitive_ground_space_gram_geometric_fixed_point}
+    \lean{MPSTensor.IsPrimitiveMPS.groundSpaceGram_sub_fixedPointProj_norm_sq_le_geometric}
+    \leanok
+    \uses{def:primitive_mps, thm:ground_space_gram_geometric_fixed_point}
+    Let $A$ be a primitive MPS tensor with fixed-point witness $\rho$. Then there
+    are real constants $C,r$ with $C>0$ and $0<r<1$ such that, for every
+    $n\geq1$,
+    \begin{align}
+      \bigl\lVert\mathcal K_n-\mathscr R(P_\rho)\bigr\rVert^2
+      &\leq D^3\bigl(Cr^n\bigr)^2.
+    \end{align}
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:ground_space_gram_geometric_fixed_point}
+    Positive semidefiniteness and nonvanishing of $\rho$ imply
+    $\tr(\rho)\neq0$. The trace-preserving identity, fixed-point equation, and
+    complementary spectral-radius bound are the remaining fields of the
+    primitive-MPS hypothesis, so
+    Theorem~\ref{thm:ground_space_gram_geometric_fixed_point} applies.
+\end{proof}
+
+\begin{theorem}[Ground-space Gram convergence]
+    \label{thm:ground_space_gram_tendsto_fixed_point}
+    \lean{MPSTensor.groundSpaceGram_tendsto_gramReshuffle_fixedPointProj}
+    \leanok
+    \uses{def:ground_space_gram, def:gram_reshuffle, def:transfer_map,
+        def:fixed_point_proj, def:trace_preserving}
+    Let $A$ be an MPS tensor of bond dimension $D$, let $\rho\in\MN{D}$ satisfy
+    $\tr(\rho)\neq0$, and let $P_\rho$ be the corresponding fixed-point
+    projection.  If $\mathcal E_A$ is trace-preserving,
+    $\mathcal E_A(\rho)=\rho$, and
+    $\rho_{\mathrm{spec}}(\mathcal E_A-P_\rho)<1$, then
+    \begin{align}
+      \mathcal K_n&\longrightarrow\mathscr R(P_\rho)
+      \label{eq:ground_space_gram_tendsto_fixed_point}
+    \end{align}
+    in operator norm as $n\to\infty$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:ground_space_gram_geometric_fixed_point}
+    The right-hand side of
+    (\ref{eq:ground_space_gram_geometric_fixed_point}) tends to zero because
+    $0<r<1$.  Taking square roots gives the asserted norm convergence.
+\end{proof}
+
+\begin{theorem}[Primitive-MPS ground-space Gram convergence]
+    \label{thm:primitive_ground_space_gram_tendsto_fixed_point}
+    \lean{MPSTensor.IsPrimitiveMPS.groundSpaceGram_tendsto_gramReshuffle_fixedPointProj}
+    \leanok
+    \uses{def:primitive_mps, thm:ground_space_gram_tendsto_fixed_point}
+    If $A$ is a primitive MPS tensor with fixed-point witness $\rho$, then
+    \begin{align}
+      \mathcal K_n&\longrightarrow\mathscr R(P_\rho)
+    \end{align}
+    in operator norm as $n\to\infty$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:ground_space_gram_tendsto_fixed_point}
+    The primitive-MPS data supply the nonzero trace, trace preservation,
+    fixed-point equation, and complementary spectral-radius hypothesis of
+    Theorem~\ref{thm:ground_space_gram_tendsto_fixed_point}.
+\end{proof}
+
+The limit in Theorem~\ref{thm:ground_space_gram_tendsto_fixed_point} is
+the reshuffled fixed-point projection $\mathscr R(P_\rho)$, not the
+identity in unweighted Frobenius coordinates.  The limiting metric is
+generally nonidentity.
+Under a positive-definite fixed-point hypothesis, the inverse estimates
+below perturb around $\mathscr R(P_\rho)$ rather than around the identity.
+They do not yet compare the physical range projectors on overlapping
+windows.
+
+\begin{theorem}[Exact limiting Gram metric]
+    \label{thm:fixed_point_gram_metric_exact}
+    \lean{Matrix.gramReshuffleMatrix_fixedPointProj_apply}
+    \lean{Matrix.gramReshuffleMatrix_fixedPointProj}
+    \lean{Matrix.gramReshuffle_fixedPointProj_frobeniusEquivEuclidean_apply}
+    \leanok
+    \uses{def:fixed_point_proj, def:gram_reshuffle, def:frobenius_vectorization}
+    Let $\rho\in\MN{D}$ have nonzero trace and define
+    $P_\rho(X):=(\tr X/\tr\rho)\rho$.  Then
+    \begin{align}
+      R(P_\rho)
+      &=(\tr\rho)^{-1}(\rho^{\mathsf T}\otimes I_D),
+      \label{eq:fixed_point_gram_metric_matrix}\\
+      \mathscr R(P_\rho)U(X)
+      &=U\!\left((\tr\rho)^{-1}X\rho\right).
+      \label{eq:fixed_point_gram_metric_action}
+    \end{align}
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{def:fixed_point_proj, def:gram_reshuffle, def:frobenius_vectorization}
+    For matrix units $E_{ca}$, direct evaluation gives
+    \begin{align}
+      R(P_\rho)_{(b,a),(e,c)}
+      &=(\tr\rho)^{-1}\rho_{eb}\,\delta_{ca}.
+    \end{align}
+    These are exactly the entries in
+    (\ref{eq:fixed_point_gram_metric_matrix}).  Applying that Kronecker product
+    to the column--row vectorization of $X$ gives
+    (\ref{eq:fixed_point_gram_metric_action}).
+\end{proof}
+
+\begin{theorem}[Invertibility of the limiting Gram metric]
+    \label{thm:fixed_point_gram_metric_is_unit}
+    \lean{Matrix.gramReshuffleMatrix_fixedPointProj_posDef}
+    \lean{Matrix.gramReshuffle_fixedPointProj_isUnit}
+    \leanok
+    \uses{def:fixed_point_proj, def:gram_reshuffle}
+    If $D>0$ and $\rho\in\MN{D}$ is positive definite, then
+    $R(P_\rho)$ is positive definite and $\mathscr R(P_\rho)$ is invertible.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{def:gram_reshuffle, thm:fixed_point_gram_metric_exact}
+    Positive definiteness gives $\tr\rho>0$.  By
+    (\ref{eq:fixed_point_gram_metric_matrix}),
+    \begin{align}
+      R(P_\rho)
+      &=(\tr\rho)^{-1}(\rho^{\mathsf T}\otimes I_D)>0.
+    \end{align}
+    Hence its associated operator $\mathscr R(P_\rho)$ is invertible.
+\end{proof}
+
+\begin{theorem}[Arbitrary-base Neumann inverse bound]
+    \label{thm:arbitrary_base_neumann_inverse_bound}
+    \lean{NormedRing.isUnit_and_norm_inverse_le_of_norm_inverse_mul_sub_le}
+    \lean{NormedRing.isUnit_and_norm_inverse_le_of_norm_mul_norm_sub_le}
+    \leanok
+    Let $K_0$ be invertible in a normed ring with convergent geometric series
+    and $\lVert I\rVert=1$.  If $a<1$ and
+    \begin{align}
+      \lVert K_0^{-1}(K-K_0)\rVert&\le a,
+      \label{eq:arbitrary_base_relative_perturbation}
+    \end{align}
+    then $K$ is invertible and
+    \begin{align}
+      \lVert K^{-1}\rVert
+      &\le(1-a)^{-1}\lVert K_0^{-1}\rVert.
+      \label{eq:arbitrary_base_inverse_bound}
+    \end{align}
+    The same conclusion follows from
+    $\lVert K_0^{-1}\rVert\,\lVert K-K_0\rVert\le a$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:neumann_inverse_norm_bound}
+    Put $E:=K_0^{-1}(K-K_0)$.  Then
+    $K=K_0(I+E)$ and $\lVert E\rVert<1$, so
+    \begin{align}
+      K^{-1}&=(I+E)^{-1}K_0^{-1},\\
+      \lVert K^{-1}\rVert
+      &\le\lVert(I+E)^{-1}\rVert\,\lVert K_0^{-1}\rVert
+       \le(1-a)^{-1}\lVert K_0^{-1}\rVert.
+    \end{align}
+    Submultiplicativity reduces the product-form hypothesis to
+    (\ref{eq:arbitrary_base_relative_perturbation}).
+\end{proof}
+
+\begin{theorem}[Arbitrary-base inverse-displacement bound]
+    \label{thm:arbitrary_base_neumann_inverse_displacement}
+    \lean{NormedRing.norm_inverse_sub_inverse_le_of_norm_inverse_mul_sub_le}
+    \lean{NormedRing.norm_inverse_sub_inverse_le_of_norm_mul_norm_sub_le}
+    \leanok
+    Let $K_0$ be invertible in a normed ring with convergent geometric series
+    and $\lVert I\rVert=1$.  If $a<1$ and
+    (\ref{eq:arbitrary_base_relative_perturbation}) holds, then
+    \begin{align}
+      \lVert K^{-1}-K_0^{-1}\rVert
+      &\le(1-a)^{-1}a\,\lVert K_0^{-1}\rVert.
+      \label{eq:arbitrary_base_inverse_displacement}
+    \end{align}
+    The same estimate follows from
+    $\lVert K_0^{-1}\rVert\,\lVert K-K_0\rVert\le a$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:neumann_inverse_norm_bound}
+    With $E:=K_0^{-1}(K-K_0)$, the resolvent identity is
+    \begin{align}
+      K^{-1}-K_0^{-1}
+      &=-(I+E)^{-1}E K_0^{-1}.
+    \end{align}
+    Since $\lVert(I+E)^{-1}\rVert\le(1-a)^{-1}$ and
+    $\lVert E\rVert\le a$, taking norms gives
+    (\ref{eq:arbitrary_base_inverse_displacement}).  Submultiplicativity again
+    gives the product-form variant.
+\end{proof}
+
+\begin{theorem}[Continuity of inversion at an invertible limit]
+    \label{thm:inverse_tendsto_at_unit}
+    \lean{NormedRing.inverse_tendsto_of_tendsto_of_isUnit}
+    \leanok
+    Let $K_i$ be a net in a normed ring with convergent geometric series.  If
+    $K_i\to K_0$ and $K_0$ is invertible, then
+    \begin{align}
+      K_i^{-1}&\longrightarrow K_0^{-1}.
+    \end{align}
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Write $K_0$ as the image of a unit.  Continuity of inversion on the unit
+    group, followed by the convergence $K_i\to K_0$, gives the result.
+\end{proof}
+
 \begin{definition}[Inverse Gram operator]
     \label{def:inverse_gram}
     \lean{ContinuousLinearMap.inverseGram}
@@ -582,6 +881,96 @@ orthogonal projector is the canonical representative used here.
     (\ref{eq:inverse_gram_right}).  Together these equations characterize the
     canonical inverse of a continuous linear endomorphism, which agrees with
     its inverse in the endomorphism ring.
+\end{proof}
+
+\begin{theorem}[Eventual inverse-Gram control in the limiting metric]
+    \label{thm:primitive_ground_space_gram_eventual_inverse_bound}
+    \lean{MPSTensor.IsPrimitiveMPS.eventually_groundSpaceGram_isUnit_and_inverse_bound}
+    \leanok
+    \uses{def:primitive_mps,
+        thm:primitive_ground_space_gram_tendsto_fixed_point}
+    Let $A$ be a primitive MPS tensor whose fixed-point witness $\rho$ is
+    positive definite, and put
+    $\mathcal K_\infty=\mathscr R(P_\rho)$.  For every $0<a<1$, all
+    sufficiently large $n$ satisfy
+    \begin{align}
+      \mathcal K_n&\in\operatorname{GL},
+      \notag\\
+      \bigl\lVert\mathcal K_n^{-1}-\mathcal K_\infty^{-1}\bigr\rVert
+      &\leq
+      \frac{a}{1-a}\,\bigl\lVert\mathcal K_\infty^{-1}\bigr\rVert.
+      \label{eq:primitive_ground_space_gram_eventual_inverse_bound}
+    \end{align}
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:primitive_ground_space_gram_tendsto_fixed_point,
+        thm:fixed_point_gram_metric_is_unit,
+        thm:arbitrary_base_neumann_inverse_bound,
+        thm:arbitrary_base_neumann_inverse_displacement}
+    The positive-definite fixed point makes
+    $\mathcal K_\infty$ invertible.  Gram convergence implies that eventually
+    \begin{align}
+      \bigl\lVert\mathcal K_\infty^{-1}\bigr\rVert
+      \bigl\lVert\mathcal K_n-\mathcal K_\infty\bigr\rVert&\leq a.
+    \end{align}
+    Factoring $\mathcal K_n$ around the invertible base
+    $\mathcal K_\infty$ and applying the arbitrary-base Neumann estimate gives
+    (\ref{eq:primitive_ground_space_gram_eventual_inverse_bound}).
+\end{proof}
+
+\begin{theorem}[Convergence of finite-volume inverse Gram operators]
+    \label{thm:primitive_ground_space_gram_inverse_tendsto}
+    \lean{MPSTensor.IsPrimitiveMPS.groundSpaceGram_ringInverse_tendsto}
+    \leanok
+    \uses{def:primitive_mps,
+        thm:primitive_ground_space_gram_tendsto_fixed_point}
+    Under the same primitive-MPS and positive-definite fixed-point hypotheses,
+    \begin{align}
+      \mathcal K_n^{-1}&\longrightarrow\mathcal K_\infty^{-1}
+      \label{eq:primitive_ground_space_gram_inverse_tendsto}
+    \end{align}
+    in operator norm.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:primitive_ground_space_gram_tendsto_fixed_point,
+        thm:fixed_point_gram_metric_is_unit,
+        thm:inverse_tendsto_at_unit}
+    Inversion is continuous at the invertible operator
+    $\mathcal K_\infty$, so the claim follows from
+    $\mathcal K_n\to\mathcal K_\infty$.
+\end{proof}
+
+\begin{theorem}[Eventual injectivity and inverse-Gram control]
+    \label{thm:primitive_ground_space_map_eventual_inverse_gram_bound}
+    \lean{MPSTensor.IsPrimitiveMPS.eventually_groundSpaceMapES_injective_and_inverseGram_bound}
+    \leanok
+    \uses{def:ground_space_map_es, def:inverse_gram,
+        thm:primitive_ground_space_gram_eventual_inverse_bound,
+        thm:inverse_gram_identities}
+    Under the same hypotheses, for every $0<a<1$ and all sufficiently large
+    $n$, the physical boundary map $\Gamma_n^{\mathrm{ES}}$ is injective and
+    its inverse Gram operator is $\mathcal K_n^{-1}$.  Moreover,
+    \begin{align}
+      \bigl\lVert S_{\Gamma_n^{\mathrm{ES}}}
+        -\mathcal K_\infty^{-1}\bigr\rVert
+      &\leq
+      \frac{a}{1-a}\,\bigl\lVert\mathcal K_\infty^{-1}\bigr\rVert.
+    \end{align}
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:primitive_ground_space_gram_eventual_inverse_bound,
+        thm:inverse_gram_identities}
+    Eventual invertibility of
+    $(\Gamma_n^{\mathrm{ES}})^\dagger\Gamma_n^{\mathrm{ES}}$ implies eventual
+    injectivity of $\Gamma_n^{\mathrm{ES}}$.  The inverse-Gram identities then
+    identify $S_{\Gamma_n^{\mathrm{ES}}}$ with $\mathcal K_n^{-1}$, and the
+    preceding estimate applies.
 \end{proof}
 
 \begin{definition}[Injective range-projector candidate]

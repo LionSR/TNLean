@@ -159,7 +159,7 @@ The clearest replacements are:
   `LinearMap.trace` composed with `ContinuousLinearMap.coeLM` so that Mathlib's
   finite-dimensional continuity theorem could be applied once.
 - Two RFP/ZCL wrappers were removed: an unused MPDO implication method that
-  repeated `MPOTensor.isRFP_iff_isZCL`, and a one-use cluster-example RFP fact.
+  repeated `MPOTensor.IsZCL`, and a one-use cluster-example RFP fact.
 - Five internal commuting-idempotent `LinearMap` helpers in the RFP decorrelation file
   were removed.  The commuting-parent-Hamiltonian consequences now prove the
   absorption and complement-commutation identities directly from associativity,
@@ -1776,8 +1776,9 @@ pass-throughs:
 - `MPSTensor.traceCLM` and `MPSTensor.traceCLMRect`.  These were one-use
   proof devices for applying `LinearMap.continuous_of_finiteDimensional` to
   `LinearMap.trace` after coercing continuous linear maps to linear maps.
-- `MPOTensor.IsRFP.isZCL`.  This was an unused implication method repeating the
-  blueprint-facing equivalence `MPOTensor.isRFP_iff_isZCL`.
+- An unused implication method from the former duplicate doubled-index predicate
+  to `MPOTensor.IsZCL`. This repeated a definitional equivalence that has since
+  been removed together with the duplicate predicate.
 - `MPSTensor.clusterBlocked_isRFP`.  This was a one-use restatement of the
   blueprint-facing theorem `MPSTensor.clusterBlocked_transferMap_idempotent`.
 - `sum_single_diag_const` in

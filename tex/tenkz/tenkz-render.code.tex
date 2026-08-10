@@ -3,6 +3,8 @@
 % Owned state: none; rendering reads records and draws, remembering nothing.
 % Invariants:  no parsing, no topology, no recovery; label text never rotates.
 % Next stage:  events serialize the same records this stage consumed.
+% SPDX-License-Identifier: Apache-2.0
+% Copyright the TNLean project; see LICENSE for the full terms.
 %
 % RENDER-PRIMITIVE LOCKOUT.  This file is loaded LAST by tenkz.sty, and the
 % ink primitives below are created here with \cs_new.  Load order documents

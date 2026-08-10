@@ -6,7 +6,7 @@ Authors: TNLean contributors
 import Mathlib.Algebra.Module.Submodule.LinearMap
 import TNLean.MPS.Core.BlockingTransfer
 import TNLean.MPS.MPDO.PureRecovery
-import TNLean.MPS.MPDO.RFP
+import TNLean.MPS.MPDO.ZCL
 
 /-!
 # Transfer retracts and fusion coisometries
@@ -36,12 +36,10 @@ recorded by `BNTFusionIsometryFamily`.
   MPS tensor.
 * `TransferRetractData`: retract structure whose characteristic identity is the
   blocked transfer map.
-* `IsRFP_MPDO_via_transferRetract`: existence of such structures for every
-  positive blocked size.
-* `isRFP_MPDO_via_transferRetract_iff_isRFP`: equivalence with doubled-index
-  transfer-map idempotence.
-* `MPSTensor.toMPOTensor_isRFP_MPDO_via_transferRetract_iff_isTransferIdempotent`:
-  pure-state recovery for the diagonal MPO embedding.
+* `transferRetractData_one_iff_isZCL`: the one-site retract criterion for
+  doubled-index transfer-map idempotence.
+* `transferRetractData_of_isZCL`: transfer-retract data at every positive
+  blocked size under doubled-index transfer-map idempotence.
 
 ## References
 
@@ -145,8 +143,8 @@ noncomputable def ofBlockedTransferMapIdempotent
       (fun x => ⟨x, rfl⟩)
 
 /-- A level-`1` transfer retract implies doubled-index transfer-map idempotence. -/
-theorem isRFP (F : TransferRetractData M 1) : IsRFP M := by
-  simpa only [IsRFP, blockedTransferMap_one] using F.blockedTransferMap_idempotent
+theorem isZCL (F : TransferRetractData M 1) : IsZCL M := by
+  simpa only [IsZCL, blockedTransferMap_one] using F.blockedTransferMap_idempotent
 
 end TransferRetractData
 
@@ -159,83 +157,37 @@ idempotent transfer map through its range.  This is a definitional unfolding:
 arXiv:1606.00608, Definition RFPMixedTS, lines 638--660, and Appendix C.4,
 lines 1974--2085 construct physical trace-preserving CP maps, not this
 bond-space retract. -/
-theorem transferRetractData_one_iff_isRFP (M : MPOTensor d D) :
-    Nonempty (TransferRetractData M 1) ↔ IsRFP M := by
+theorem transferRetractData_one_iff_isZCL (M : MPOTensor d D) :
+    Nonempty (TransferRetractData M 1) ↔ IsZCL M := by
   constructor
   · rintro ⟨F⟩
-    exact F.isRFP
+    exact F.isZCL
   · intro hM
     exact ⟨TransferRetractData.ofBlockedTransferMapIdempotent
-      (M := M) (n := 1) (by simpa only [IsRFP, blockedTransferMap_one] using hM)⟩
+      (M := M) (n := 1) (by simpa only [IsZCL, blockedTransferMap_one] using hM)⟩
 
 /-- Under doubled-index transfer-map idempotence, every positive blocked
 transfer map coincides with the original transfer map. -/
-theorem blockedTransferMap_eq_transferMap_of_isRFP {M : MPOTensor d D}
-    (hM : IsRFP M) {n : ℕ} (hn : 0 < n) :
+theorem blockedTransferMap_eq_transferMap_of_isZCL {M : MPOTensor d D}
+    (hM : IsZCL M) {n : ℕ} (hn : 0 < n) :
     blockedTransferMap M n = transferMap M := by
   have hIdem : IsIdempotentElem (transferMap M) := hM
   simpa only [blockedTransferMap_eq_pow] using hIdem.pow_eq (Nat.ne_of_gt hn)
 
 /-- Under doubled-index transfer-map idempotence, every positive blocked
 transfer map is idempotent. -/
-theorem blockedTransferMap_idempotent_of_isRFP {M : MPOTensor d D}
-    (hM : IsRFP M) {n : ℕ} (hn : 0 < n) :
+theorem blockedTransferMap_idempotent_of_isZCL {M : MPOTensor d D}
+    (hM : IsZCL M) {n : ℕ} (hn : 0 < n) :
     blockedTransferMap M n ∘ₗ blockedTransferMap M n = blockedTransferMap M n := by
-  rw [blockedTransferMap_eq_transferMap_of_isRFP hM hn]
+  rw [blockedTransferMap_eq_transferMap_of_isZCL hM hn]
   exact hM
 
-/-- All-positive-blocking transfer-retract predicate.
-
-For every positive blocked size `n`, the blocked transfer map of `M` factors as
-`S_n ∘ T_n` through a subspace `𝒜_n`, with `T_n ∘ S_n = id_{𝒜_n}`. -/
-def IsRFP_MPDO_via_transferRetract (M : MPOTensor d D) : Prop :=
-  ∀ n : ℕ, 0 < n → Nonempty (TransferRetractData M n)
-
-/-- The transfer-retract predicate implies doubled-index transfer-map idempotence. -/
-theorem isRFP_of_isRFP_MPDO_via_transferRetract {M : MPOTensor d D}
-    (hM : IsRFP_MPDO_via_transferRetract M) : IsRFP M := by
-  obtain ⟨F⟩ := hM 1 Nat.one_pos
-  exact F.isRFP
-
-/-- Doubled-index transfer-map idempotence gives transfer retracts at every
+/-- Doubled-index transfer-map idempotence gives transfer-retract data at every
 positive blocking size. -/
-theorem isRFP_MPDO_via_transferRetract_of_isRFP {M : MPOTensor d D}
-    (hM : IsRFP M) : IsRFP_MPDO_via_transferRetract M := by
-  intro n hn
-  exact ⟨TransferRetractData.ofBlockedTransferMapIdempotent
-    (M := M)
-    (n := n)
-    (blockedTransferMap_idempotent_of_isRFP hM hn)⟩
-
-/-- The transfer-retract predicate is equivalent to doubled-index transfer-map
-idempotence. -/
-theorem isRFP_MPDO_via_transferRetract_iff_isRFP (M : MPOTensor d D) :
-    IsRFP_MPDO_via_transferRetract M ↔ IsRFP M := by
-  constructor
-  · exact isRFP_of_isRFP_MPDO_via_transferRetract
-  · exact isRFP_MPDO_via_transferRetract_of_isRFP
-
-/-- The all-blocked transfer-retract formulation is equivalent to a one-site
-transfer-retract datum.
-
-Follows from the equivalence with `IsRFP` and the one-site criterion. -/
-theorem isRFP_MPDO_via_transferRetract_iff_transferRetractData_one (M : MPOTensor d D) :
-    IsRFP_MPDO_via_transferRetract M ↔ Nonempty (TransferRetractData M 1) := by
-  rw [isRFP_MPDO_via_transferRetract_iff_isRFP, transferRetractData_one_iff_isRFP]
+theorem transferRetractData_of_isZCL {M : MPOTensor d D}
+    (hM : IsZCL M) {n : ℕ} (hn : 0 < n) :
+    Nonempty (TransferRetractData M n) :=
+  ⟨TransferRetractData.ofBlockedTransferMapIdempotent
+    (M := M) (n := n) (blockedTransferMap_idempotent_of_isZCL hM hn)⟩
 
 end MPOTensor
-
-namespace MPSTensor
-
-open MPOTensor
-
-variable {d D : ℕ}
-
-/-- For a pure MPS embedded diagonally as an MPO, transfer retracts are
-equivalent to transfer-map idempotence. -/
-theorem toMPOTensor_isRFP_MPDO_via_transferRetract_iff_isTransferIdempotent (A : MPSTensor d D) :
-    MPOTensor.IsRFP_MPDO_via_transferRetract A.toMPOTensor ↔ IsTransferIdempotent A := by
-  rw [MPOTensor.isRFP_MPDO_via_transferRetract_iff_isRFP,
-    toMPOTensor_isRFP_iff_isTransferIdempotent]
-
-end MPSTensor

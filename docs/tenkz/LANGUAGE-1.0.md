@@ -68,7 +68,7 @@ command is warranted only when
 it declares a record class of its own; a key modifies the record being
 declared. The generated reference prints this test beside every row.
 
-### 2.2 Picture and equation keys (13)
+### 2.2 Picture and equation keys (14)
 
 | Key | Type | Values | Default | Scope | Diagnostic family |
 |---|---|---|---|---|---|
@@ -82,6 +82,7 @@ declared. The generated reference prints this test beside every row.
 | `align=` | row | row number or `midline` | `midline` | picture | `TKZ-PIC-*` |
 | `size=` | small-enum | `s` `m` `l` | from math style | picture, equation | `TKZ-SIZE-*` |
 | `metrics=` | small-enum | `compact` | unset — the base metric | picture, equation | `TKZ-METRICS-*` |
+| `check=` | check-spec | `signature`, `modulo=bundles`, `off={<relation>: <reason>}` | `signature` | equation | `TKZ-EQ-*` |
 
 `metrics=` names the picture's metric profile, and it exists because the two
 density decisions have different owners: math style senses the surrounding
@@ -92,6 +93,17 @@ repeated distance is a named ratio of that one base dimension, so the whole
 metric family scales with the pitch while the print-size floors hold; no raw
 length enters the source. A group shares its picture's metric context, so
 the key is picture policy and is refused at group scope.
+
+`size=` names the class of that metric context: the density the picture
+writes at, resolved from the surrounding mathematics whenever it is unstated
+(§7.2). At picture and equation scope the class chooses the size the picture
+sets its inscribed names in; the class an atom carries chooses the extent of
+that atom's own glyph (§2.3). The record stream states the resolved class
+wherever it departs from `m`, the class the glyph geometry is calibrated on.
+`check=` belongs to the equation and is refused at picture scope; it is
+described with the audit it configures (§7.4). Both keys are refused at group
+scope, as `metrics=` is, because a sub-frame shares its picture's metric
+context and stands inside the equation rather than beside it.
 
 With the default single-member basis, every frame contracts adjacent
 compatible cells by default: `bonds=grid` holds in chain and lattice frames
@@ -766,19 +778,45 @@ three classes: **relation**, **sum**, **product**. Only the product list is
 the language's own datum — juxtaposition and the product signs; relation and
 sum are read from the class the mathematics already has.
 
-1. **One metric context.** All panels share the pitch and the size-class
-   table. A glyph's extent is a function of two declared quantities and
-   nothing else: its size class, and the number of port slots on each pair of
-   opposite faces. The horizontal extent is the class reference times the
-   greater of one and the slots on the vertical faces; the vertical extent
-   likewise. A round skin takes the reference as its diameter, a box as its
-   side, a triangle as its circumscribing square, so an operator and its
-   inverse match across skins. This holds in every scope and not only inside
-   an equation, and a label that does not fit is not accommodated by growing
-   the glyph — it goes to the station rule (§6).
-2. **Math-style sensing.** Display, text, and script contexts choose the
-   density profile; there is no manual compact or inline flag. An inline
-   picture inherits the sensing. A page-constrained picture declares its
+1. **One metric context.** All panels share the pitch, the size-class table,
+   and one measure. The pitch is the equation's: a panel that named a metric
+   profile of its own would scale one side of the equality and not the other,
+   so `metrics=` is refused on a panel inside an equation — including a panel
+   spelling the equation's own word, which says nothing the equation has not
+   — and is stated on the equation instead. A glyph's extent is settled by its size class, the number
+   of port slots on each pair of opposite faces, and the equation's measure
+   for that class — by nothing else, and by nothing panel-local. The class
+   reference is the floor on both axes: the horizontal extent is that
+   reference times the greater of one and the slots on the vertical faces,
+   the vertical extent likewise, and a round skin takes the reference as its
+   diameter, a box as its side, a triangle as its circumscribing square.
+   Above the floor the glyph answers the equation rather than its own panel.
+   The equation reads the widest and the deepest name inscribed in any glyph
+   of a class and sets every name of that class on it, so `X` and `X^{-1}`
+   come out one size because the equation says they are one object. A skin's
+   own padding stands outside that measure and is part of its silhouette, so
+   the guarantee is exact between glyphs of one skin and holds between skins
+   only up to the padding each one keeps. The measure only ever grows a
+   glyph, so no name is pushed outside the ink holding it, and an omitted
+   class is the `m` class the registry declares, not a class of its own.
+   Outside an equation there is nothing to share, and a glyph answers its
+   class and its slots alone.
+2. **Math-style sensing.** The surrounding mathematics chooses the density
+   profile; there is no manual compact or inline flag. A picture in a line of
+   running mathematics takes the denser class, because there it shares a line
+   with writing set smaller than a display's. Everything else takes the base
+   class the glyph geometry is calibrated on: a display, anything inside one
+   — a fenced or braced sub-formula, a script, an alignment cell — and
+   running text. The distinction is the one the density turns on and is not
+   a reading of the math style, which the engine will not report: a display
+   and a line of mathematics are entered by different primitives, and a
+   sub-formula of a display inherits the display's answer rather than
+   claiming one of its own. A stated `size=` outranks the sensing, which is
+   how a picture in a line asks for the base measure back. An equation
+   settles the class once for all of its panels: a panel that states none
+   takes the equation's, one that states its own keeps it, and an equation
+   that states a class outranks both, as it does for every other policy it
+   carries. A page-constrained picture declares its
    metric profile with `metrics=` (§2.2), which scales the pitch and leaves
    the density profile to the sensing.
 3. **Axis alignment.** Panels align on the declared wire axis (`align=`).
@@ -801,9 +839,37 @@ sum are read from the class the mathematics already has.
    own. A mismatch is `[TKZ-EQ-SIGNATURE]`, printing both signatures. A
    relation with an undepicted side is legal in a draft and refused under
    strict, which the benchmark sets. The audit rule is derived from the
-   joiner's class and is not the author's to configure; there is no audit
-   key, and so no undocumented off switch either.
-5. **Coefficients and summations need no key.** A scalar coefficient is a
+   joiner's class and is not the author's to configure.
+   **The recorded opt-out.** One thing an author may say, and must say in
+   writing: that a particular relation's two sides are known, unequal, and
+   equal anyway for a reason the diagram does not draw. The coproduct sends a
+   one-site word to a two-site word, and the physical arity changes across
+   the relation it is written with; the bulk-boundary reduction changes which
+   sides carry indices; a source that marks each segment with the arrowhead
+   of the tensor claiming it states its open ends on opposite faces. These
+   are not unknown operands, so the elision does not cover them, and they are
+   not errors, so refusing them would refuse the figure the paper draws.
+   `check={off={<relation>: <reason>}}` names the relation and its reason,
+   and the reason is written to the record stream beside the waiver, never
+   lost. This is the audit's own spelling and the only configuration the
+   author has: `check=` selects the audit (`signature`), states the
+   equivalence the comparison is taken up to (`modulo=bundles`, which reads a
+   bundled index and its members as one boundary entry), and records opt-outs.
+   It cannot switch the audit off silently. An opt-out without a reason is not
+   an opt-out; an opt-out naming a relation the equation does not perform is a
+   mistyped one and is refused before the stream records it; a reason may not
+   carry the record stream's own field separator, which no reader could put
+   back together; one relation carries one waiver and one reason; and a word the audit does not know, or a value on a word
+   that takes none, is refused rather than ignored, because a spelling the
+   audit passes over is a comparison the author believes is running and is
+   not.
+5. **A declaration is setup and stands before the equation.** An equation
+   places pictures around the mathematics between them; a declaration made
+   among its panels is a document-wide act performed in the middle of an
+   assertion, ordered by where it happens to sit and read once for every time
+   the equation is measured. It is refused, and written before the equation,
+   where it says the same thing once.
+6. **Coefficients and summations need no key.** A scalar coefficient is a
    term of empty signature; juxtaposition is a product; concatenating an
    empty signature leaves the panel's boundary as it was. A summation sign is
    likewise mathematics, set west of the panel on the shared axis, its limits
@@ -988,7 +1054,6 @@ is not the fixed two-axis atom contract of §7.
 | `inset=` | nothing: concentric order is doctrine on the hull (§5) |
 | `slot=` | `species=`, which atoms and wires already carry |
 | `up=`, `down=` | `ports=`: the outward physical face is the row's own normal |
-| `check=` | nothing: the audit follows the joiner class (§7) |
 | `conjugate` flag | nothing: duality is the wire's `dir=` (§2.4), and a conjugate overline is label mathematics |
 | `form=cut`, `form=band`, `form=brace-below`, `form=prose`, `\tncut`, `\tnregion`, `\tnprose` | `form=enclosure`, `form=bracket`, or a term of unknown signature (§6, §7) |
 | `frame=vertical`, `frame=rotate=<deg>`, frame matrices | `flat`, `plane`, `circle`; orientation is a consequence of where a record sits (§4) |

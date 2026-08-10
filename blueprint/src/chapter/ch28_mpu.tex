@@ -207,6 +207,57 @@ closing a chain of $N$ copies of $\mathcal U$.
     the chain.
 \end{proof}
 
+\begin{theorem}[Physical-adjoint identities for matrix product unitaries]
+    \label{thm:mpu_physical_adjoint_identities}
+    \lean{MPOTensor.physicalAdjointTensor_physicalAdjointTensor,
+        MPOTensor.IsMPU.physicalAdjointTensor,
+        MPOTensor.mpo_physicalAdjointTensor_eq_conjTranspose}
+    \leanok
+    \uses{def:mpu,def:mpdo_physical_adjoint}
+    The physical adjoint is involutive. If $\mathcal U$ generates matrix
+    product unitaries, then so does $\mathcal U^\sharp$, and for every chain
+    length $N$,
+    \begin{align}
+        (\mathcal U^\sharp)^\sharp&=\mathcal U,
+        &(\mathcal U^\sharp)^{(N)}&=\bigl(\mathcal U^{(N)}\bigr)^\dagger.
+    \end{align}
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:mpu,def:mpdo_physical_adjoint,lem:mpu_mul_adjoint}
+    Applying the physical adjoint twice conjugates every entry twice and
+    exchanges the physical indices twice. Closing a physical-adjoint tensor
+    exchanges the two physical configurations and conjugates the resulting
+    scalar. Hence its periodic operator is the conjugate transpose. The first
+    MPU unitarity equation for $U^{(N)}$ is therefore the second unitarity
+    equation for $(U^\sharp)^{(N)}$.
+\end{proof}
+
+\begin{theorem}[Output-first double-layer entry]
+    \label{thm:mpu_output_first_double_layer_entry}
+    \lean{MPOTensor.doubleLayerTensor_physicalAdjointTensor_apply}
+    \leanok
+    \uses{def:mpu_double_layer,def:mpdo_physical_adjoint}
+    Order the left doubled bond as $(\alpha,\gamma)$ and the right doubled
+    bond as $(\beta,\delta)$. Then the double layer whose lower tensor is
+    $\mathcal U^\sharp$ has entries
+    \begin{align}
+        \mathcal W(\mathcal U^\sharp)^{ik}_{(\alpha,\gamma),(\beta,\delta)}
+        &=\sum_j
+          \mathcal U^{ij}_{\alpha,\beta}\,
+          \overline{\mathcal U^{kj}_{\gamma,\delta}}.
+    \end{align}
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:mpu_double_layer,def:mpdo_physical_adjoint}
+    Expand the double layer and then apply the physical adjoint to its upper
+    factor. The two exchanges of physical indices leave the contracted index
+    $j$ in the second physical position of both factors. The product-index
+    convention keeps $(\alpha,\gamma)$ and $(\beta,\delta)$ in the displayed
+    order.
+\end{proof}
+
 \begin{definition}[Simple matrix product unitary tensor]
     \label{def:mpu_simple}
     \lean{MPOTensor.IsMPUSimple,
@@ -672,6 +723,24 @@ closing a chain of $N$ copies of $\mathcal U$.
     \end{align}
 \end{definition}
 
+\begin{theorem}[Double layer under physical reindexing]
+    \label{thm:mpu_double_layer_physical_reindexing}
+    \lean{MPOTensor.doubleLayerTensor_reindexPhysical}
+    \leanok
+    \uses{def:mpu_physical_reindexing,def:mpu_double_layer}
+    For every physical-index bijection $e$, taking the double layer commutes
+    with physical reindexing:
+    \begin{align}
+        W(e^*\mathcal U)^{ij}&=W(\mathcal U)^{e(i)e(j)}.
+    \end{align}
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:mpu_physical_reindexing,def:mpu_double_layer}
+    This follows entrywise from the definitions of physical reindexing and the
+    double layer.
+\end{proof}
+
 \begin{theorem}[Bounded blocking to simplicity]
     \label{thm:mpu_bounded_simple_blocking}
     \lean{MPOTensor.IsMPU.exists_blockTensor_isMPUSimple_of_one_lt,
@@ -719,6 +788,68 @@ closing a chain of $N$ copies of $\mathcal U$.
     \end{align}
     The second identity multiplies the sitewise Kronecker deltas.
 \end{proof}
+
+\begin{theorem}[Matching contractions at the direct stabilized block]
+    \label{thm:mpu_matching_direct_block_contractions}
+    \lean{MPOTensor.IsMPU.blockTensor_mul_sq_simple_contractions_of_transfer_power}
+    \leanok
+    Let $\mathcal U$ be an MPU of positive physical and bond dimensions.
+    Suppose that $\rho$ has trace one and that, for some positive integer $J$,
+    the normalized transfer matrix satisfies
+    \begin{align}
+        E^J&=|\rho)(\Id|.
+    \end{align}
+    Put $K=JD^2$. After the standard product reindexing of the physical
+    coordinates, the direct length-$K$ block satisfies the contractions
+    (\ref{eq:mpu_simple1}) and (\ref{eq:mpu_simple2}) with the specific witnesses
+    $\rho$ and $\Id$ from this transfer-power identity.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpu_blocked_double_layer_diagonal,
+        thm:mpu_second_block_simple, thm:mpu_bounded_simple_blocking,
+        lem:mpu_blocking, thm:mpu_double_layer_physical_reindexing}
+    First block $J$ sites.  The normalized diagonal of this block is the
+    reindexed rank-one matrix $|\rho)(\Id|$, and the trace-one condition is
+    exactly $(\Id|\rho)=1$.  The exact second-block contraction theorem then
+    supplies both identities after a further $D^2$ sites.  The canonical
+    equivalence between iterated blocking and direct length-$JD^2$ blocking
+    transports each double-layer coefficient without changing either virtual
+    witness.
+\end{proof}
+
+\begin{theorem}[Normalized output-tail coisometry]
+    \label{thm:mpu_normalized_output_tail_coisometry}
+    \lean{MPOTensor.IsMPU.normalized_mpo_tail_coisometry}
+    \leanok
+    Let $d>0$, let $\mathcal U$ be an MPU, and let $K\geq0$. For
+    $p,q\in\Fin d\times\Fin d$, separate the first two output sites from a
+    tail $\tau\in\Fin K\to\Fin d$. Then
+    \begin{align}
+        d^{-K}\sum_{\tau}\sum_{\eta}
+        U^{(K+2)}_{(q,\tau),\eta}
+        \overline{U^{(K+2)}_{(p,\tau),\eta}}
+        &=\delta_{p,q}.
+    \end{align}
+    The retained matrix entry has the reversed order $(q,p)$, and the global
+    contraction is the output-first equation
+    $U^{(K+2)}(U^{(K+2)})^\dagger=\Id$.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{lem:mpu_mul_adjoint}
+    Apply output-first unitarity before performing any source-factor
+    rearrangement.  For each fixed tail, the inner sum is the corresponding
+    identity-matrix entry, hence it is $\delta_{p,q}$.  There are exactly
+    \begin{align}
+        |\Fin K\to\Fin d|=d^K
+    \end{align}
+    tails, and $d^{-K}d^K=1$ because $d>0$.
+\end{proof}
+
+% Formalization scope: identifying this normalized scalar with
+% $(\texttt{sourceU})^\dagger\texttt{sourceU}$ is treated separately.
+
 
 \begin{theorem}[Simplicity at every later direct blocking]
     \label{thm:mpu_all_later_simple_blockings}
@@ -1418,6 +1549,31 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
     $X_2^\dagger X_2=\Id_\ell$.
 \end{proof}
 
+\begin{theorem}[Recovery of the right source factors]
+    \label{thm:mpu_source_factor_recovery}
+    \lean{MPOTensor.sourceY₁_eq_sourceX₁_conjTranspose_mul_weight_mul_sourceCutM₁,
+        MPOTensor.sourceY₂_eq_sourceX₂_conjTranspose_mul_sourceCutM₂}
+    \leanok
+    \uses{def:mpu_source_weight,def:mpu_weighted_source_factors,
+        def:mpu_source_matrix_one,def:mpu_source_matrix_two}
+    The right source factors are recovered from the two source matrices by
+    \begin{align}
+        Y_1&=X_1^\dagger W_\rho M_1,
+        &Y_2&=X_2^\dagger M_2.
+    \end{align}
+    Here $W_\rho=\rho\otimes I_d$ in the product-index order
+    $(\text{left virtual},\text{physical})$.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpu_source_factorizations,
+        thm:mpu_source_factor_normalizations}
+    Multiply $M_1=X_1Y_1$ on the left by $X_1^\dagger W_\rho$ and use
+    $X_1^\dagger W_\rho X_1=I_r$. Similarly, multiply
+    $M_2=X_2Y_2$ on the left by $X_2^\dagger$ and use
+    $X_2^\dagger X_2=I_\ell$.
+\end{proof}
+
 \begin{theorem}[Right inverses of the source factors]
     \label{thm:mpu_source_factor_right_inverses}
     \lean{MPOTensor.sourceY₁_mul_sourceZ₁,
@@ -1441,6 +1597,72 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
         &=D_2U_2U_2^\dagger D_2^{-1}
           =D_2D_2^{-1}=\Id_\ell.
     \end{align}
+\end{proof}
+
+\begin{definition}[Source tensors $u$ and $v$]
+    \label{def:mpu_source_uv}
+    \lean{MPOTensor.sourceU,MPOTensor.sourceV,
+        MPOTensor.sourceU_apply,MPOTensor.sourceV_apply,
+        MPOTensor.sourceU_conjTranspose_apply,
+        MPOTensor.sourceV_conjTranspose_apply}
+    \leanok
+    \uses{def:mpu_weighted_source_factors}
+    For a positive definite source weight $\rho$, define
+    \begin{align}
+        u &: \mathbb C^d\otimes\mathbb C^d
+            \longrightarrow \mathbb C^\ell\otimes\mathbb C^r,\\
+        v &: \mathbb C^r\otimes\mathbb C^\ell
+            \longrightarrow \mathbb C^d\otimes\mathbb C^d
+    \end{align}
+    by
+    \begin{align}
+        u_{(l,r),(i_1,i_2)}
+          &=\sum_\beta (Y_1)_{r,(i_1,\beta)}(X_2)_{(\beta,i_2),l},\\
+        v_{(j_1,j_2),(r,l)}
+          &=\sum_\alpha (X_1)_{(\alpha,j_1),r}(Y_2)_{l,(j_2,\alpha)}.
+    \end{align}
+    The source legs of $u$ have order $\ell\times r$, whereas those of $v$
+    have order $r\times\ell$. These are the two source tensors introduced
+    after the source-cut decompositions in \cite[Section~III]{Cirac2017MPU}.
+    The entry formulas also fix the conjugate-transpose orientation.
+\end{definition}
+
+\begin{theorem}[Exact translated two-site source factorization]
+    \label{thm:mpu_source_uv_two_site_factorization}
+    \lean{MPOTensor.trace_mul_eq_sourceU_mul_sourceV_swap,
+        MPOTensor.mpo_two_pair_entry_eq_sourceU_mul_sourceV_swap,
+        MPOTensor.mpo_two_reindex_eq_sourceU_transpose_mul_sourceV_swap_transpose}
+    \leanok
+    \uses{def:mpu_source_uv,def:mpo_family}
+    Identify a two-site physical configuration with an ordered pair in
+    $\Fin d\times\Fin d$. Then
+    \begin{align}
+        \operatorname{reindex}(U^{(2)})
+          &=u^{\mathsf T}\bigl(\operatorname{swap}_{r,\ell}v\bigr)^{\mathsf T}.
+    \end{align}
+    The transpose records the periodic entry orientation. The map
+    $\operatorname{swap}_{r,\ell}$ is the explicit equivalence
+    $r\times\ell\simeq\ell\times r$; the two product orders are not silently
+    identified. This is the bond swap, or one-site translation, in the
+    source-tensor decomposition of \cite[Section~III]{Cirac2017MPU}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpu_source_factorization_entries}
+    At physical pairs $(i_1,i_2)$ and $(j_1,j_2)$, expand the periodic trace as
+    \begin{align}
+        \sum_{\alpha,\beta}
+          \mathcal U^{i_1}_{j_1,\alpha,\beta}
+          \mathcal U^{i_2}_{j_2,\beta,\alpha}.
+    \end{align}
+    Use the entry forms of $M_1=X_1Y_1$ for the first letter and
+    $M_2=X_2Y_2$ for the second.
+    Reordering the four scalar finite sums gives
+    \begin{align}
+        \sum_{l,r}u_{(l,r),(i_1,i_2)}v_{(j_1,j_2),(r,l)}.
+    \end{align}
+    Reindexing both physical configuration spaces and explicitly swapping
+    $(r,l)$ to $(l,r)$ gives the matrix identity.
 \end{proof}
 
 \begin{theorem}[Right-rank bound]

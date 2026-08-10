@@ -2113,19 +2113,44 @@ def _tenkzeq_declared_offs(source: str, position: int) -> set[int] | None:
     for key, value in top_level_options(check_value):
         if key != "off" or value is None:
             continue
-        match = re.fullmatch(r"\{\s*(\d+)\s*:\s*[^}]*\}", value)
+        # A reason is prose about the mathematics and carries braces of its
+        # own, so the relation is read off the front and the rest is left
+        # alone.  The relation is read as a number, matching the kernel, so
+        # a leading zero names the relation it looks like.
+        # The key list strips one layer of braces from a value, so the
+        # kernel reads `off={1: reason}` and `off=1: reason` as one thing
+        # and so does this.
+        payload = value.strip()
+        if payload.startswith("{") and payload.endswith("}"):
+            payload = payload[1:-1]
+        match = re.match(r"\s*(\d+)\s*:", payload)
         if match is not None:
             declared.add(int(match.group(1)))
     return declared
 
 
 def _tenkzeq_declares_bundles(source: str, position: int) -> bool:
-    """True when one equation's own options ask to compare modulo bundles."""
+    """True when one equation's own options ask to compare modulo bundles.
+
+    The equivalence is read from the options themselves and not from the
+    whole value: an opt-out's reason is prose an author writes about the
+    mathematics, and prose that names an option is still prose.
+    """
     check_value = _tenkzeq_check_value(source, position)
-    return (
-        check_value is not None
-        and re.search(r"modulo\s*=\s*bundles", check_value) is not None
-    )
+    if check_value is None:
+        return False
+    for key, value in top_level_options(check_value):
+        if key != "modulo" or value is None:
+            continue
+        # The key list strips one layer of braces from a value, so
+        # `modulo=bundles` and `modulo={bundles}` are one thing to the kernel
+        # and one thing here.
+        word = value.strip()
+        if word.startswith("{") and word.endswith("}"):
+            word = word[1:-1].strip()
+        if word == "bundles":
+            return True
+    return False
 
 
 _ORIENTATIONS = frozenset({"to", "from"})
