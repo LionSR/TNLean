@@ -1361,6 +1361,85 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
     \end{align}
 \end{definition}
 
+\begin{theorem}[One-site blocking bounds for the source-cut ranks]
+    \label{thm:mpu_source_cut_rank_blocking_succ}
+    \lean{MPOTensor.rightRank_blockTensor_succ_le,
+        MPOTensor.leftRank_blockTensor_succ_le}
+    \leanok
+    \uses{def:mpdo_positive_physical_blocking,def:mpu_source_matrix_one,
+        def:mpu_source_matrix_two,def:mpu_right_rank,def:mpu_left_rank}
+    Let $\mathcal U^{[L]}$ denote the direct blocking of $L$ sites of a tensor
+    $\mathcal U$ with physical dimension $d$, and let $r_L$ and $\ell_L$ be
+    its right and left source-cut ranks. Then
+    \begin{align}
+        r_{L+1}&\leq d\,r_L,\\
+        \ell_{L+1}&\leq d\,\ell_L.
+    \end{align}
+    These are the one-site forms of the two upper bounds in the proof of
+    \cite[Proposition~IV.2]{Cirac2017MPU}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:mpu_source_svd_data}
+    For the first cut, choose a compact factorization of the source matrix of
+    $\mathcal U^{[L]}$ through a space of dimension $r_L$. Split each physical
+    word of length $L+1$ into its first letter and its remaining word of length
+    $L$. For suitable rectangular matrices $A_{1,L}$ and $B_{1,L}$, the
+    successor source matrix factors as
+    \begin{align}
+        M_{1,L+1}&=A_{1,L}B_{1,L}.
+    \end{align}
+    The intermediate space is $\mathbb C^d\otimes\mathbb C^{r_L}$, and hence
+    \begin{align}
+        \operatorname{rank}(M_{1,L+1})
+        &\leq \dim\bigl(\mathbb C^d\otimes\mathbb C^{r_L}\bigr)=d r_L.
+    \end{align}
+    Interchanging the upper and lower physical indices gives matrices
+    $A_{2,L}$ and $B_{2,L}$ with
+    \begin{align}
+        M_{2,L+1}&=A_{2,L}B_{2,L}.
+    \end{align}
+    This factorization passes through
+    $\mathbb C^d\otimes\mathbb C^{\ell_L}$, so
+    \begin{align}
+        \operatorname{rank}(M_{2,L+1})
+        &\leq \dim\bigl(\mathbb C^d\otimes\mathbb C^{\ell_L}\bigr)=d\ell_L.
+    \end{align}
+\end{proof}
+
+\begin{theorem}[Source-cut rank bounds between two blocking lengths]
+    \label{thm:mpu_source_cut_rank_blocking}
+    \lean{MPOTensor.rightRank_blockTensor_le_pow_mul,
+        MPOTensor.leftRank_blockTensor_le_pow_mul}
+    \leanok
+    If $L_0\leq L$, then
+    \begin{align}
+        r_L&\leq d^{L-L_0}r_{L_0},\\
+        \ell_L&\leq d^{L-L_0}\ell_{L_0}.
+    \end{align}
+    These are the two blocking upper bounds used in the proof of
+    \cite[Proposition~IV.2]{Cirac2017MPU}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpu_source_cut_rank_blocking_succ}
+    Induct on $L-L_0$. The case $L=L_0$ is equality. For the right rank, the
+    successor bound and the induction hypothesis give
+    \begin{align}
+        r_{L+1}
+        &\leq d r_L
+        \leq d\bigl(d^{L-L_0}r_{L_0}\bigr)
+        =d^{L+1-L_0}r_{L_0}.
+    \end{align}
+    The same multiplication by $d$ gives
+    \begin{align}
+        \ell_{L+1}
+        &\leq d\ell_L
+        \leq d\bigl(d^{L-L_0}\ell_{L_0}\bigr)
+        =d^{L+1-L_0}\ell_{L_0}.
+    \end{align}
+\end{proof}
+
 \begin{definition}[Product-index source weight]
     \label{def:mpu_source_weight}
     \lean{MPOTensor.sourceWeight}
