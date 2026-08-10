@@ -18,6 +18,13 @@ the factor $d^{k-k_0}$ between any two direct blocking lengths $k_0 \leq k$.
 The orientations follow the paper: the right rank $r$ is the rank of
 $\mathcal M_1$, while the left rank $\ell$ is the rank of $\mathcal M_2$.
 No simplicity or MPU hypothesis is needed for these rank inequalities.
+
+## Main results
+
+* `rightRank_blockTensor_succ_le`: one-site right-rank bound.
+* `leftRank_blockTensor_succ_le`: one-site left-rank bound.
+* `rightRank_blockTensor_le_pow_mul`: iterated right-rank bound.
+* `leftRank_blockTensor_le_pow_mul`: iterated left-rank bound.
 -/
 
 open scoped BigOperators
