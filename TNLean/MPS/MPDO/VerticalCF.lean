@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.Algebra.HermitianHelpers
 import TNLean.MPS.BNT.Basic
-import TNLean.MPS.MPDO.Defs
+import TNLean.MPS.MPDO.PhysicalAdjoint
 import TNLean.MPS.SharedInfra.BlockAssembly
 
 /-!
@@ -376,24 +376,6 @@ the vertical direction, and the vertical canonical form of
 arXiv:1606.00608, Proposition 4.13, is a statement about this tensor. -/
 def verticalTensor (M : MPOTensor d D) : MPSTensor (D * D) d :=
   fun ab i j => M i j ab.divNat ab.modNat
-
-/-- Exchange the two oriented horizontal bond indices of a vertical letter.
-For `ab = (a,b)`, this is `bondPairSwap ab = (b,a)`.
-
-This is the bond-index exchange under adjunction in the first diagram of the
-proof of Proposition 4.13 of arXiv:1606.00608, lines 1909--1913. -/
-def bondPairSwap (ab : Fin (D * D)) : Fin (D * D) :=
-  finProdFinEquiv (ab.modNat, ab.divNat)
-
-@[simp] theorem bondPairSwap_finProdFinEquiv (a b : Fin D) :
-    bondPairSwap (finProdFinEquiv (a, b)) = finProdFinEquiv (b, a) := by
-  simp [bondPairSwap]
-
-@[simp] theorem bondPairSwap_involutive (ab : Fin (D * D)) :
-    bondPairSwap (bondPairSwap ab) = ab := by
-  rw [show ab = finProdFinEquiv (ab.divNat, ab.modNat) by
-    exact (finProdFinEquiv.apply_symm_apply ab).symm]
-  simp
 
 @[simp] lemma verticalTensor_apply (M : MPOTensor d D) (ab : Fin (D * D))
     (i j : Fin d) : verticalTensor M ab i j = M i j ab.divNat ab.modNat :=

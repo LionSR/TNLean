@@ -4,8 +4,8 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.MPU.MatchingContractions
-import TNLean.MPS.MPU.SuppliedWitnessReblocking
 import TNLean.MPS.MPU.SourceUContraction
+import TNLean.MPS.MPU.SuppliedWitnessReblocking
 
 /-!
 # Reflected open-tail contraction for the source tensor u
@@ -26,23 +26,6 @@ open Matrix
 namespace MPOTensor
 
 variable {d D : ℕ}
-
-/-- Swap the two entries of a doubled bond index.
-
-This is the virtual-pair reflection in arXiv:1703.09188, Figure
-`II_uUnitary.png`, lines 536--557. -/
-noncomputable def doubledBondSwap (D : ℕ) : Fin (D * D) ≃ Fin (D * D) :=
-  finProdFinEquiv.symm |>.trans
-    ((Equiv.prodComm (Fin D) (Fin D)).trans finProdFinEquiv)
-
-@[simp] theorem doubledBondSwap_apply (a b : Fin D) :
-    doubledBondSwap D (finProdFinEquiv (a, b)) = finProdFinEquiv (b, a) := by
-  simp [doubledBondSwap]
-
-@[simp] theorem doubledBondSwap_symm : (doubledBondSwap D).symm = doubledBondSwap D := by
-  ext i
-  obtain ⟨⟨a, b⟩, rfl⟩ := finProdFinEquiv.surjective i
-  rfl
 
 /-- Reverse the word encoded by a blocked physical index.
 
@@ -93,14 +76,14 @@ theorem normalizedDiagonal_doubleLayerTensor_physicalAdjointTensor
     (W : MPOTensor d D) :
     normalizedDiagonal (doubleLayerTensor (physicalAdjointTensor W)) =
       (normalizedDiagonal (doubleLayerTensor W)).submatrix
-        (doubledBondSwap D) (doubledBondSwap D) := by
+        (bondPairSwapEquiv D) (bondPairSwapEquiv D) := by
   classical
   ext x y
   obtain ⟨⟨a, c⟩, rfl⟩ := finProdFinEquiv.surjective x
   obtain ⟨⟨b, e⟩, rfl⟩ := finProdFinEquiv.surjective y
   simp only [normalizedDiagonal, contractPhysical, Matrix.one_apply, ite_smul,
     one_smul, zero_smul, Finset.sum_ite_eq', Finset.mem_univ, if_true,
-    Matrix.submatrix_apply, doubledBondSwap_apply, Matrix.smul_apply,
+    Matrix.submatrix_apply, Matrix.smul_apply,
     Matrix.sum_apply, doubleLayerTensor_apply, kroneckerMap_apply,
     physicalAdjointTensor_apply, star_star]
   rw [Finset.sum_comm]
@@ -170,8 +153,8 @@ theorem conjTranspose_normalizedDiagonal_reflected_eq_vecMulVec
   ext x y
   obtain ⟨⟨a, c⟩, rfl⟩ := finProdFinEquiv.surjective x
   obtain ⟨⟨b, e⟩, rfl⟩ := finProdFinEquiv.surjective y
-  simp only [Matrix.conjTranspose_apply, Matrix.submatrix_apply,
-    doubledBondSwap_apply, Matrix.vecMulVec_apply, Matrix.vec,
+  simp only [Matrix.conjTranspose_apply, Matrix.submatrix_apply, Matrix.vecMulVec_apply,
+    Matrix.vec,
     Equiv.symm_apply_apply, Matrix.one_apply, star_mul']
   rw [hρ.isHermitian.apply]
   simp [eq_comm]
@@ -306,10 +289,6 @@ theorem conjTranspose_normalizedDiagonal_reflected_blockTensor_eq_vecMulVec
   exact normalizedDiagonal_blockTensor_mul_sq_eq_vecMulVec_of_transfer_power
     U ρ hρtrace J hpower
 
-end MPOTensor
-
-namespace MPOTensor
-
 /-- The output-first normalized-diagonal power has the transported
 transpose-weight orientation before cyclic trace movement. -/
 theorem outputLayer_normalizedDiagonal_pow_eq_vecMulVec
@@ -346,11 +325,6 @@ theorem outputLayer_normalizedDiagonal_pow_eq_vecMulVec
       Equiv.symm_apply_apply]
     simp
   simpa only [hstarρ, hstarΦ] using h'
-
-end MPOTensor
-
-
-namespace MPOTensor
 
 /-- The exact reflected witnesses persist on the common `(J D² + 2)` block,
 with the same `|1)(ρ|` insertion and conjugate-transposed product order. -/
