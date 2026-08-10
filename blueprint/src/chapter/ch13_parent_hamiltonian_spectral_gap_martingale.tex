@@ -385,6 +385,26 @@ norm estimate is derived here.
     inverse formulas.
 \end{proof}
 
+\begin{lemma}[Norm of a fiberwise boundary operator]%
+    \label{lem:boundary_fiberwise_map_norm}
+    \lean{MPSTensor.norm_boundaryFiberwiseMap_le}
+    \leanok
+    Let $S$ be a finite spectator index set, let $V$ be the Euclidean virtual
+    matrix space, and let $G:V\to V$ be linear.  If $G^{\oplus S}$ acts on a
+    boundary family $x=(x_s)_{s\in S}$ by
+    $(G^{\oplus S}x)_s=Gx_s$, then
+    \begin{align}
+      \lVert G^{\oplus S}\rVert\leq \lVert G\rVert .
+    \end{align}
+    This estimate also holds when $S$ is empty.
+\end{lemma}
+\begin{proof}
+    \leanok
+    Square both sides of the pointwise estimate
+    $\lVert Gx_s\rVert\leq\lVert G\rVert\lVert x_s\rVert$, sum over $s\in S$,
+    and use the Euclidean direct-sum norm identity.
+\end{proof}
+
 \begin{theorem}[Exact C3 projector residual identity]%
     \label{thm:c3_spectator_projector_residual}
     \lean{MPSTensor.c3_injectiveRangeProjector_residual_eq}
@@ -412,8 +432,7 @@ norm estimate is derived here.
     \label{thm:spectator_boundary_mixed_gram}
     \lean{MPSTensor.inner_tailBoundaryMapES_adjoint_leftBoundaryMapES}
     \leanok
-    \uses{def:tail_boundary_map,def:left_boundary_map,def:ground_space_gram,
-        lem:eval_word_append,thm:ground_space_map_es_frobenius}
+    \uses{def:tail_boundary_map,def:left_boundary_map,def:ground_space_gram}
     Let $X=(X_u)_{u\in\Fin d^K}$ and
     $Z=(Z_j)_{j\in\Fin d^1}$ be virtual boundary-matrix families.  For the
     tail window of length $l+1$ and the left window of length $K+l$, their
@@ -454,6 +473,38 @@ norm estimate is derived here.
     exactly the boundary-map Gram pairing
     $\langle U(A^jX_u),\mathcal K_l U(Z_jA^u)\rangle$.  Summing over $u$ and
     $j$ proves the identity.
+\end{proof}
+
+\begin{theorem}[Centered mixed Gram at the limiting metric]%
+    \label{thm:spectator_boundary_mixed_gram_centered}
+    \lean{MPSTensor.inner_tailBoundaryMapES_adjoint_leftBoundaryMapES_centered}
+    \leanok
+    \uses{thm:spectator_boundary_mixed_gram,thm:fixed_point_gram_metric_exact}
+    Let $\rho\in\MN{D}$ have nonzero trace, let
+    $\mathcal K_\infty=\mathscr R(P_\rho)$, and retain the boundary families
+    $X=(X_u)_u$ and $Z=(Z_j)_j$ from the preceding theorem.  Then
+    \begin{align}
+      &\left\langle X,
+        (\Gamma^{\mathrm{tail}}_{K,l+1})^\dagger
+        \Gamma^{\mathrm{left}}_{K+l,1}Z\right\rangle
+        -\sum_{u,j}\left\langle
+          U(A^jX_u),\mathcal K_\infty U(Z_jA^u)\right\rangle \\
+      &\qquad=\sum_{u,j}\left\langle
+          U(A^jX_u),(\mathcal K_l-\mathcal K_\infty)U(Z_jA^u)
+        \right\rangle .
+    \end{align}
+    Here
+    $\mathcal K_\infty U(Z_jA^u)
+      =U((\tr\rho)^{-1}Z_jA^u\rho)$,
+    so the limiting multiplication is on the right and is generally not the
+    identity.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:spectator_boundary_mixed_gram,thm:fixed_point_gram_metric_exact}
+    Substitute the exact mixed-Gram formula and the right-multiplication action
+    of $\mathcal K_\infty$, then distribute subtraction through the two finite
+    sums and the second argument of the inner product.
 \end{proof}
 
 \subsection{Martingale gap consequences}\label{subsec:spectral_gap_martingale}
