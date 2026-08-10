@@ -22,7 +22,7 @@ MANUAL = MANUAL_DIR / "manual2.tex"
 CHAPTERS = ROOT / "docs" / "tenkz" / "chapters2"
 REGISTRY = ROOT / "tex" / "tenkz" / "tenkz-language-registry.tex"
 REFERENCE = CHAPTERS / "generated-language-reference.tex"
-DISPLAY_ENVIRONMENTS = ("tnexample", "tnmultiples", "Verbatim")
+DISPLAY_ENVIRONMENTS = ("tnexample", "tnmultiples", "tnrefusal", "Verbatim")
 TEX_PRIMITIVE_CONDITIONALS = (
     "if", "ifcat", "ifnum", "ifdim", "ifodd", "ifvmode", "ifhmode",
     "ifmmode", "ifinner", "ifvoid", "ifhbox", "ifvbox", "ifx", "ifeof",
@@ -100,6 +100,7 @@ class Example:
     line: int
     document: str
     coverage_marker: str | None = None
+    expected_failure: str | None = None
 
 
 def _is_escaped(text: str, offset: int) -> bool:
@@ -169,6 +170,31 @@ def _read_braced(text: str, offset: int) -> tuple[int, str]:
     if end < 0:
         raise ValueError("unterminated braced group")
     return end, text[offset + 1 : end - 1]
+
+
+def _refusal_diagnostic(options: str | None) -> str:
+    """The bracketed code a tnrefusal block's quoted diagnostic pins."""
+    if options is None:
+        raise ValueError("tnrefusal requires a diagnostic option")
+    for option in _split_top_level(options):
+        key, separator, value = option.partition("=")
+        if not separator or key.strip() != "diagnostic":
+            continue
+        value = value.strip()
+        if value.startswith("{"):
+            braced_value = value
+            end, value = _read_braced(braced_value, 0)
+            if braced_value[end:].strip():
+                raise ValueError(
+                    "unexpected text after tnrefusal diagnostic brace"
+                )
+        code = re.search(r"\[TKZ-[A-Z0-9-]+\]", value)
+        if code is None:
+            raise ValueError(
+                "tnrefusal diagnostic quotes no bracketed [TKZ-*] code"
+            )
+        return code.group(0)
+    raise ValueError("tnrefusal requires a diagnostic option")
 
 
 def _multiple_variants(options: str | None) -> list[tuple[str, str]]:
@@ -694,10 +720,15 @@ def _source_label(path: Path) -> str:
 
 
 def _variant_definitions(variant_style: str) -> list[str]:
-    return [
-        rf"\pgfqkeys{{/tenkz/grid}}{{variant/.style={{{variant_style}}}}}",
-        rf"\pgfqkeys{{/tenkz/cell}}{{variant/.style={{{variant_style}}}}}",
-    ]
+    lines = [r"\ExplSyntaxOn"]
+    for scope in ("tenkz-kernel-picture", "tenkz-kernel-atom"):
+        lines.append(
+            rf"\keys_define:nn {{ {scope} }} {{ variant .code:n = "
+            rf"{{ \keys_set:nn {{ {scope} }} {{ {variant_style} }} }}, "
+            r"variant .default:n = { }, }"
+        )
+    lines.append(r"\ExplSyntaxOff")
+    return lines
 
 
 def _standalone_document(
@@ -770,6 +801,9 @@ def extract_displayed_examples(
         ):
             continue
         line = text.count("\n", 0, match.start()) + 1
+        expected_failure = (
+            _refusal_diagnostic(options) if environment == "tnrefusal" else None
+        )
         variants = (
             _multiple_variants(options)
             if environment == "tnmultiples"
@@ -786,6 +820,7 @@ def extract_displayed_examples(
                     document=_standalone_document(
                         body, path.parent, variant_style
                     ),
+                    expected_failure=expected_failure,
                 )
             )
     return examples
@@ -977,6 +1012,19 @@ def compile_example(example: Example, engine: str, work: Path) -> None:
         stderr=subprocess.STDOUT,
         timeout=120,
     )
+    if example.expected_failure:
+        if run.returncode == 0:
+            raise RuntimeError(
+                f"{example.source}:{example.line}: {example.label} compiled, "
+                "but the manual displays it as a refusal"
+            )
+        if example.expected_failure not in run.stdout:
+            tail = "\n".join(run.stdout.splitlines()[-60:])
+            raise RuntimeError(
+                f"{example.source}:{example.line}: {example.label} failed "
+                f"without the quoted diagnostic {example.expected_failure}\n{tail}"
+            )
+        return
     if run.returncode:
         tail = "\n".join(run.stdout.splitlines()[-60:])
         raise RuntimeError(

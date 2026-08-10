@@ -22,8 +22,18 @@ SPEC.loader.exec_module(DOCTEST)
 def main() -> int:
     manual = DOCTEST.displayed_examples()
     reference = DOCTEST.reference_examples()
-    if len(manual) != 11:
-        raise AssertionError(f"expected 11 displayed TeX examples, found {len(manual)}")
+    if len(manual) != 20:
+        raise AssertionError(f"expected 20 displayed TeX examples, found {len(manual)}")
+    refusals = [example for example in manual if example.expected_failure]
+    if len(refusals) != 1:
+        raise AssertionError(
+            f"expected exactly one refusal block in the tutorial, found {len(refusals)}"
+        )
+    if refusals[0].expected_failure != "[TKZ-EQ-SIGNATURE]":
+        raise AssertionError(
+            "the tutorial's refusal block was not pinned to its diagnostic: "
+            f"found {refusals[0].expected_failure!r}"
+        )
     if len(reference) != 12:
         raise AssertionError(f"expected 12 reference examples, found {len(reference)}")
     if any(r"\begin{document}" not in example.document for example in manual):
@@ -126,7 +136,7 @@ shell command % \tntree{commented}
         r"\begin{tenkz}" not in example.document for example in extracted[:2]
     ):
         raise AssertionError("nested tnmultiple options confused body extraction")
-    if not all("variant/.style" in example.document for example in extracted[:2]):
+    if not all("variant .code:n" in example.document for example in extracted[:2]):
         raise AssertionError("tnmultiples variants were not installed independently")
     if r"\tntree" not in extracted[2].document:
         raise AssertionError("a registry command in Verbatim was not recognized as TeX")
