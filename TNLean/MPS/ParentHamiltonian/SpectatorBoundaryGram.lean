@@ -458,7 +458,7 @@ theorem boundaryFiberwiseMap_apply_apply (S : Type*) [Fintype S]
 /-- The fiber of a fiberwise map is the original fiber acted on by the
 virtual endomorphism. -/
 @[simp]
-theorem boundaryFamilyFiber_boundaryFiberwiseMap
+private theorem boundaryFamilyFiber_boundaryFiberwiseMap
     (S : Type*) [Fintype S]
     (G : EuclideanSpace ℂ (Fin D × Fin D) →L[ℂ]
       EuclideanSpace ℂ (Fin D × Fin D))
