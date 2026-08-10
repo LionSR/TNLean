@@ -1,0 +1,10 @@
+% Negative regression: the audit belongs to the equation, which stands
+% outside the picture, so the audit key is refused at group scope.
+\documentclass{standalone}
+\usepackage{tenkz}
+\begin{document}
+\tenkzkernel
+\begin{tenkz}[rows={wire}, cols=2]
+  \tngroup[check=signature]{\tn{A} & \tn{B}}
+\end{tenkz}
+\end{document}

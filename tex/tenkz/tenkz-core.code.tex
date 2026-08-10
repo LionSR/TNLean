@@ -133,6 +133,23 @@
 % text boxes, and the surrounding equation stays visually dominant.
 \let\tenkz@labelsize\scriptstyle
 
+% Math-style sensing needs one fact TeX will not answer for: whether the
+% mathematics a picture stands in is a line of running mathematics or a
+% display.  No test distinguishes them after the fact -- a fenced or braced
+% sub-formula of a display is inner mathematics exactly as an inline line is
+% -- but the two are entered by different primitives, and each carries a
+% token list TeX inserts on entry.  A display sets the display flag, which is
+% local to the display's own math list and so survives into every sub-formula,
+% fence and alignment cell inside it; a math shift raises the inline flag only
+% where no display has claimed the context.  Reading these two answers the
+% question the density profile turns on, and answers it for exactly the case
+% it is about: a picture in a line of running mathematics.
+\newif\iftenkz@mathinline
+\newif\iftenkz@mathdisplay
+\everymath\expandafter{\the\everymath
+  \iftenkz@mathdisplay\else\tenkz@mathinlinetrue\fi}
+\everydisplay\expandafter{\the\everydisplay \tenkz@mathdisplaytrue}
+
 % ---------- style table (complete Phase-0 subset of the spec table) ----------
 \tikzset{
   tenkz every picture/.style={line cap=round, line join=round},

@@ -1888,6 +1888,36 @@ grep -Fq '[TKZ-LANG-CHOICE]' "$WORK/n_picture_metrics.transcript" || {
   exit 1
 }
 
+# A key that would be silently inert at group scope is a key the author has
+# misplaced: the class belongs to the picture, the audit to the equation, and
+# a reasonless opt-out is not an opt-out at all.
+for scope_case in n_group_size:TKZ-SIZE-SCOPE \
+                  n_group_check:TKZ-EQ-CHECK-SCOPE \
+                  n_check_reason_blank:TKZ-EQ-CHECK-REASON \
+                  n_check_word:TKZ-EQ-CHECK-WORD \
+                  n_check_relation:TKZ-EQ-CHECK-RELATION \
+                  n_check_bar:TKZ-EQ-CHECK-BAR \
+                  n_check_twice:TKZ-EQ-CHECK-TWICE \
+                  n_declare_equation:TKZ-DECLARE-EQUATION \
+                  n_declareatom_equation:TKZ-DECLARE-EQUATION \
+                  n_panel_metrics:TKZ-METRICS-PANEL; do
+  scope_name=${scope_case%%:*}
+  scope_code=${scope_case##*:}
+  if ( cd "$WORK" &&
+       TEXINPUTS="$REPO/tex/tenkz//:" \
+         timeout 120 xelatex -interaction=nonstopmode -halt-on-error \
+         "$KERNEL/negative/$scope_name.tex" \
+         >"$WORK/$scope_name.transcript" 2>&1 ); then
+    echo "FAIL: $scope_name was accepted" >&2
+    exit 1
+  fi
+  grep -Fq "[$scope_code]" "$WORK/$scope_name.transcript" || {
+    echo "FAIL: $scope_name lacked $scope_code" >&2
+    tail -20 "$WORK/$scope_name.transcript" >&2
+    exit 1
+  }
+done
+
 group_metrics_negative="$KERNEL/negative/n_group_metrics.tex"
 if ( cd "$WORK" &&
      TEXINPUTS="$REPO/tex/tenkz//:" \
@@ -2988,6 +3018,46 @@ for label in 'A=B' 'D=E'; do
     exit 1
   }
 done
+# One equation, one measure.  X and its inverse are two names of different
+# widths, and the equation draws the glyphs holding them at one size: both
+# measured silhouettes are the same rectangle, and it is the wider of the two
+# the panels asked for, never the narrower.  The measuring run leaves nothing
+# in the stream, so the equation still records exactly its two panels.
+shared_extents=$(grep '^glyph-geometry|' \
+  "$WORK/r_equation_shared_metric.tnlog" |
+  sed 's/.*|\(xmin=[^|]*|xmax=[^|]*|ymin=[^|]*|ymax=[^|]*\)|.*/\1/' |
+  sort -u | wc -l | tr -d ' ')
+[ "$shared_extents" = "1" ] || {
+  echo "FAIL: an equation drew an operator and its inverse at two sizes" >&2
+  grep '^glyph-geometry|' "$WORK/r_equation_shared_metric.tnlog" >&2
+  exit 1
+}
+grep -Fq '|xmin=-660985|xmax=660985|ymin=-530808|ymax=530808|' \
+  "$WORK/r_equation_shared_metric.tnlog" || {
+  echo "FAIL: the shared measure is not the widest name's own extent" >&2
+  exit 1
+}
+[ "$(grep -c '^picture|' "$WORK/r_equation_shared_metric.tnlog" || true)" \
+  -eq 2 ] || {
+  echo "FAIL: the measuring run left its panels in the event stream" >&2
+  exit 1
+}
+# Math-style sensing.  A picture standing on its own -- in running text or in
+# a display -- keeps the base class and the stream says nothing about it; one
+# sharing a line of mathematics takes the denser class and the stream records
+# it; and a stated class outranks the sensing.
+for picture in k1 k2 k4; do
+  grep -Fqx "picture|id=$picture|lang=kernel" \
+    "$WORK/r_math_style_sensing.tnlog" || {
+    echo "FAIL: picture $picture did not resolve to the base size class" >&2
+    exit 1
+  }
+done
+grep -Fq 'picture|id=k3|lang=kernel|size=s' \
+  "$WORK/r_math_style_sensing.tnlog" || {
+  echo "FAIL: a picture inside a line of mathematics did not sense s" >&2
+  exit 1
+}
 # A math alignment cell holds the body scan hostage to the alignment counter:
 # mathtools' gathered template and amsmath's aligned both leave it at zero,
 # where a raw tab once ended the cell mid-scan.  The chained fixture holds
