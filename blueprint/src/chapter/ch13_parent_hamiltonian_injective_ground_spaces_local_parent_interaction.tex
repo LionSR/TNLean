@@ -885,6 +885,117 @@ windows.
     its inverse in the endomorphism ring.
 \end{proof}
 
+The next three results give quantitative inverse bounds for the nonidentity
+limiting metric $\mathscr R(P_\rho)$.  They require the fixed-point witness
+$\rho$ to be positive definite and preserve the squared-bound normalization of
+Theorem~\ref{thm:primitive_ground_space_gram_geometric_fixed_point}.  They do
+not estimate a contraction between physical projectors on overlapping
+windows.
+
+\begin{theorem}[Pointwise geometric Gram inverse bounds]
+    \label{thm:primitive_ground_space_gram_geometric_inverse_bounds}
+    \lean{MPSTensor.IsPrimitiveMPS.groundSpaceGram_geometric_inverse_bounds}
+    \leanok
+    \uses{def:primitive_mps}
+    Let $A$ be a primitive MPS tensor of nonzero bond dimension whose
+    fixed-point witness $\rho$ is positive definite.  Put
+    \begin{align}
+      \mathcal K_\infty&=\mathscr R(P_\rho),&
+      \mathcal I_\infty&=\mathcal K_\infty^{-1}.
+    \end{align}
+    There are constants $g,c,r>0$ with $r<1$ and
+    $c=\lVert\mathcal I_\infty\rVert g$ such that, for every $n\geq1$,
+    \begin{align}
+      \lVert\mathcal K_n-\mathcal K_\infty\rVert
+      &\leq gr^n.
+      \label{eq:primitive_ground_space_gram_geometric_bound}
+    \end{align}
+    Whenever $cr^n<1$, the operator $\mathcal K_n$ is invertible and
+    \begin{align}
+      \lVert\mathcal K_n^{-1}\rVert
+      &\leq\frac{\lVert\mathcal I_\infty\rVert}{1-cr^n},
+      \label{eq:primitive_ground_space_gram_geometric_inverse_norm}\\
+      \lVert\mathcal K_n^{-1}-\mathcal I_\infty\rVert
+      &\leq\frac{cr^n}{1-cr^n}\,
+        \lVert\mathcal I_\infty\rVert.
+      \label{eq:primitive_ground_space_gram_geometric_inverse_displacement}
+    \end{align}
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:primitive_ground_space_gram_geometric_fixed_point,
+        thm:fixed_point_gram_metric_is_unit,
+        thm:arbitrary_base_neumann_inverse_bound,
+        thm:arbitrary_base_neumann_inverse_displacement}
+    Start from the squared estimate
+    $\lVert\mathcal K_n-\mathcal K_\infty\rVert^2
+      \leq D^3(Cr^n)^2$.
+    Taking square roots gives
+    $g=\sqrt{D^3}\,C$ without any additional dimension loss, and hence
+    (\ref{eq:primitive_ground_space_gram_geometric_bound}).  Positive
+    definiteness makes $\mathcal K_\infty$ invertible.  The relative error is
+    at most $\lVert\mathcal I_\infty\rVert gr^n=cr^n$, so the two
+    arbitrary-base Neumann estimates give
+    (\ref{eq:primitive_ground_space_gram_geometric_inverse_norm}) and
+    (\ref{eq:primitive_ground_space_gram_geometric_inverse_displacement}).
+\end{proof}
+
+\begin{theorem}[Pointwise geometric inverse-Gram bounds]
+    \label{thm:primitive_ground_space_map_geometric_inverse_gram_bounds}
+    \lean{MPSTensor.IsPrimitiveMPS.groundSpaceMapES_geometric_inverseGram_bounds}
+    \leanok
+    \uses{def:ground_space_map_es, def:inverse_gram,
+        thm:primitive_ground_space_gram_geometric_inverse_bounds,
+        thm:inverse_gram_identities}
+    Under the hypotheses of
+    Theorem~\ref{thm:primitive_ground_space_gram_geometric_inverse_bounds},
+    there are constants $g,c,r>0$ with $r<1$ and
+    $c=\lVert\mathcal I_\infty\rVert g$ such that
+    (\ref{eq:primitive_ground_space_gram_geometric_bound}) holds for every
+    $n\geq1$.  If $cr^n<1$, then the physical boundary map
+    $\Gamma_n^{\mathrm{ES}}$ is injective, its inverse Gram operator equals
+    $\mathcal K_n^{-1}$, and
+    \begin{align}
+      \lVert S_{\Gamma_n^{\mathrm{ES}}}\rVert
+      &\leq\frac{\lVert\mathcal I_\infty\rVert}{1-cr^n},\\
+      \lVert S_{\Gamma_n^{\mathrm{ES}}}-\mathcal I_\infty\rVert
+      &\leq\frac{cr^n}{1-cr^n}\,
+        \lVert\mathcal I_\infty\rVert.
+    \end{align}
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:primitive_ground_space_gram_geometric_inverse_bounds,
+        thm:inverse_gram_identities}
+    Invertibility of
+    $(\Gamma_n^{\mathrm{ES}})^\dagger\Gamma_n^{\mathrm{ES}}=\mathcal K_n$
+    implies injectivity of $\Gamma_n^{\mathrm{ES}}$.  The inverse-Gram
+    identities identify $S_{\Gamma_n^{\mathrm{ES}}}$ with
+    $\mathcal K_n^{-1}$, so the preceding pointwise bounds apply unchanged.
+\end{proof}
+
+\begin{theorem}[Geometric smallness at the C3 correction lengths]
+    \label{thm:geometric_smallness_at_c3_lengths}
+    \lean{MPSTensor.geometric_smallness_at_c3_lengths}
+    \leanok
+    Let $c>0$, let $0<r<1$, and let $l,K\in\mathbb N$.  If $cr^l<1$,
+    then
+    \begin{align}
+      cr^{l+1}&<1,\\
+      cr^{K+l}&<1,\\
+      cr^{K+l+1}&<1.
+    \end{align}
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Since $0<r<1$, the sequence $r^m$ is nonincreasing.  Each of
+    $l+1$, $K+l$, and $K+l+1$ is at least $l$, so every displayed inequality
+    follows from $cr^l<1$.
+\end{proof}
+
 \begin{theorem}[Eventual inverse-Gram control in the limiting metric]
     \label{thm:primitive_ground_space_gram_eventual_inverse_bound}
     \lean{MPSTensor.IsPrimitiveMPS.eventually_groundSpaceGram_isUnit_and_inverse_bound}
