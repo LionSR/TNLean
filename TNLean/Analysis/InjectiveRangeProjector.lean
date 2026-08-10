@@ -117,4 +117,56 @@ theorem injectiveRangeProjector_eq_starProjection (T : E →L[𝕜] F)
       rfl
     rw [hGram, sub_self]
 
+/-- Exact residual identity for three injective maps with a common factorization.
+If `C = T ∘ J₁ = L ∘ J₂`, the difference of the range projectors of `T` and `L`,
+after composition, factors through the mixed-Gram residual
+\[
+  T^†L-(T^†T)J₁(C^†C)^{-1}J₂^†(L^†L).
+\]
+This identity is purely algebraic and does not assert a norm bound. -/
+theorem injectiveRangeProjector_comp_sub_of_factorizations
+    {G H : Type*}
+    [NormedAddCommGroup G] [InnerProductSpace 𝕜 G] [FiniteDimensional 𝕜 G]
+      [CompleteSpace G]
+    [NormedAddCommGroup H] [InnerProductSpace 𝕜 H] [FiniteDimensional 𝕜 H]
+      [CompleteSpace H]
+    (T : E →L[𝕜] F) (L : G →L[𝕜] F) (C : H →L[𝕜] F)
+    (J₁ : H →L[𝕜] E) (J₂ : H →L[𝕜] G)
+    (hT : Function.Injective T) (hL : Function.Injective L)
+    (hC : Function.Injective C)
+    (hTC : T.comp J₁ = C) (hLC : L.comp J₂ = C) :
+    (injectiveRangeProjector T hT).comp (injectiveRangeProjector L hL) -
+        injectiveRangeProjector C hC =
+      T.comp ((inverseGram T hT).comp
+        ((T.adjoint.comp L -
+          (T.adjoint.comp T).comp (J₁.comp ((inverseGram C hC).comp
+            (J₂.adjoint.comp (L.adjoint.comp L))))).comp
+          ((inverseGram L hL).comp L.adjoint))) := by
+  have hLCadj : J₂.adjoint.comp L.adjoint = C.adjoint := by
+    rw [← ContinuousLinearMap.adjoint_comp, hLC]
+  have hTGram (x : E) :
+      inverseGram T hT (T.adjoint (T x)) = x := by
+    exact congrArg (fun Q : E →L[𝕜] E => Q x)
+      (inverseGram_comp_adjoint_comp_self T hT)
+  have hLGram (x : G) :
+      L.adjoint (L (inverseGram L hL x)) = x := by
+    exact congrArg (fun Q : G →L[𝕜] G => Q x)
+      (adjoint_comp_self_comp_inverseGram L hL)
+  have hsecond :
+      T.comp ((inverseGram T hT).comp
+        (((T.adjoint.comp T).comp (J₁.comp ((inverseGram C hC).comp
+          (J₂.adjoint.comp (L.adjoint.comp L))))).comp
+            ((inverseGram L hL).comp L.adjoint))) =
+        C.comp ((inverseGram C hC).comp C.adjoint) := by
+    ext x
+    simp only [comp_apply, hTGram, hLGram]
+    rw [show J₂.adjoint (L.adjoint x) = C.adjoint x by
+      exact congrArg (fun Q : F →L[𝕜] H => Q x) hLCadj]
+    exact congrArg (fun Q : H →L[𝕜] F =>
+      Q (inverseGram C hC (C.adjoint x))) hTC
+  rw [injectiveRangeProjector, injectiveRangeProjector, injectiveRangeProjector]
+  simp only [comp_sub, sub_comp]
+  rw [hsecond]
+  simp only [comp_assoc]
+
 end ContinuousLinearMap

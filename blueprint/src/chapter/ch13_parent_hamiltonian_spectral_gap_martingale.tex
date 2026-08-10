@@ -332,6 +332,43 @@ norm estimate is derived here.
     unfolding Definition~\ref{def:open_chain_ground_subspaces_es} gives
     $\mathcal U_K(A)$.
 \end{proof}
+
+\begin{theorem}[Euclidean spectator boundary ranges and factorizations]%
+    \label{thm:spectator_boundary_hilbert_factorization}
+    \lean{MPSTensor.range_tailBoundaryMapES}
+    \lean{MPSTensor.range_leftBoundaryMapES_one}
+    \lean{MPSTensor.tailBoundaryMapES_comp_tailVirtualMapES}
+    \lean{MPSTensor.leftBoundaryMapES_comp_leftVirtualMapES}
+    \leanok
+    \uses{thm:tail_boundary_map_range_es_transport,thm:left_boundary_map_range_es_transport}
+    Equip each virtual matrix fiber with the unweighted Hilbert--Schmidt inner
+    product and flatten the finite family of fibers into a Euclidean space.
+    The resulting continuous tail and left boundary maps have ranges
+    $\mathcal V_{K,L}(A)$ and, at suffix length one, $\mathcal U_K(A)$.
+    Moreover, if $J^{\mathrm{tail}}_K(X)_u=XA^u$ and
+    $J^{\mathrm{left}}_L(X)_\tau=A^\tau X$, then
+    \begin{align}
+      \Gamma^{\mathrm{tail}}_{K,L}J^{\mathrm{tail}}_K&=\Gamma_{K+L},&
+      \Gamma^{\mathrm{left}}_{K,L}J^{\mathrm{left}}_L&=\Gamma_{K+L}.
+    \end{align}
+\end{theorem}
+
+\begin{theorem}[Direct-sum spectator Gram operators]%
+    \label{thm:spectator_boundary_direct_sum_gram}
+    \lean{MPSTensor.tailBoundaryMapES_adjoint_comp_self_eq_fiberwise_groundSpaceGram}
+    \lean{MPSTensor.leftBoundaryMapES_adjoint_comp_self_eq_fiberwise_groundSpaceGram}
+    \lean{MPSTensor.inverseGram_tailBoundaryMapES_eq_fiberwise_inverseGram}
+    \lean{MPSTensor.inverseGram_leftBoundaryMapES_eq_fiberwise_inverseGram}
+    \leanok
+    \uses{thm:spectator_boundary_hilbert_factorization}
+    The tail Gram is the direct sum over prefix configurations of copies of
+    $\Gamma_L^\dagger\Gamma_L$, and the left Gram is the direct sum over suffix
+    configurations of copies of $\Gamma_K^\dagger\Gamma_K$.  Whenever the
+    corresponding local boundary map is injective, the inverse Gram is the
+    direct sum of the local inverse Grams.  These identities include empty
+    spectator index types and assert no norm estimate.
+\end{theorem}
+
 \subsection{Martingale gap consequences}\label{subsec:spectral_gap_martingale}
 
 \begin{theorem}[Martingale criterion for spectral gap]\label{thm:martingale_criterion}
