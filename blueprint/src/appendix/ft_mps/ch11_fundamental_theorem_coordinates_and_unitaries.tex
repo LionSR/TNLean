@@ -134,17 +134,31 @@ equal to $1$. Hence
 Together with Lemma~\ref{lem:ft_perm_gl_identities}, these identities show that
 $G_\rho^\dagger=G_\rho^{-1}$, so the permutation gauge is unitary.
 
+\begin{lemma}[Permutation conjugation reindexes both coordinates]
+    \label{lem:ft_perm_matrix_conj_submatrix}
+    \lean{MPSTensor.permMatrix_conj_eq_submatrix}
+    \leanok
+    For a permutation $\rho$ and a square matrix $M$, conjugation by the
+    permutation matrix reindexes both coordinates by $\rho$:
+    \begin{align}
+        \Pi_\rho M\Pi_{\rho^{-1}}
+        &=\bigl(M_{\rho(i),\rho(j)}\bigr)_{i,j}.
+        \label{eq:app_ft_perm_conjugation}
+    \end{align}
+    Equivalently, the right-hand side is the submatrix of $M$ along
+    $\rho\times\rho$.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Left multiplication by $\Pi_\rho$ selects row $\rho(i)$ in row $i$, and
+    right multiplication by $\Pi_{\rho^{-1}}$ selects column $\rho(j)$ in
+    column $j$. The two selections give the displayed submatrix.
+\end{proof}
+
 The coordinate equivalence of Definition~\ref{def:ft_sector_flat_equiv}
-induces a permutation $\rho$ after the total-dimension identification. With the
-permutation-matrix convention used here, conjugation reindexes both matrix
-coordinates by $\rho$:
-\begin{align}
-    \bigl(G_\rho M G_\rho^{-1}\bigr)_{ij}
-     & =M_{\rho(i),\rho(j)}.
-    \label{eq:app_ft_perm_conjugation}
-\end{align}
-Equivalently, the right-hand side is the submatrix of $M$ along
-$\rho\times\rho$. A convention with inverse indices merely replaces the chosen
+induces the required permutation $\rho$ after the total-dimension
+identification. A convention with inverse indices merely replaces the chosen
 permutation by $\rho^{-1}$; we use the convention in
 (\ref{eq:app_ft_perm_conjugation}) to match the formal coordinate identity.
 Applying that identity to $P_{\mathrm{tot}}^i$ gives the matched-coordinate

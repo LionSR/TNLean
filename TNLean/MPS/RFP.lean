@@ -34,6 +34,7 @@ import TNLean.MPS.RFP.Convergence
 import TNLean.MPS.RFP.Decorrelation
 import TNLean.MPS.RFP.Defs
 import TNLean.MPS.RFP.FlowLimit
+import TNLean.MPS.RFP.GaugeBlockingCounterexample
 import TNLean.MPS.RFP.KroneckerTransport
 import TNLean.MPS.RFP.MainMPSConditional
 import TNLean.MPS.RFP.NNCPHGroundSpace
