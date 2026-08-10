@@ -408,6 +408,54 @@ norm estimate is derived here.
     The preceding range equalities identify the three physical ranges.
 \end{proof}
 
+\begin{theorem}[Mixed Gram of the overlapping spectator boundary maps]%
+    \label{thm:spectator_boundary_mixed_gram}
+    \lean{MPSTensor.inner_tailBoundaryMapES_adjoint_leftBoundaryMapES}
+    \leanok
+    \uses{def:tail_boundary_map,def:left_boundary_map,def:ground_space_gram,
+        lem:eval_word_append,thm:ground_space_map_es_frobenius}
+    Let $X=(X_u)_{u\in\Fin d^K}$ and
+    $Z=(Z_j)_{j\in\Fin d^1}$ be virtual boundary-matrix families.  For the
+    tail window of length $l+1$ and the left window of length $K+l$, their
+    mixed Gram in the common $(K+l+1)$-site Hilbert space is
+    \begin{align}
+      \left\langle X,
+        (\Gamma^{\mathrm{tail}}_{K,l+1})^\dagger
+        \Gamma^{\mathrm{left}}_{K+l,1}Z\right\rangle
+      &=\sum_{u\in\Fin d^K}\sum_{j\in\Fin d^1}
+        \left\langle
+          U(A^jX_u),\,
+          \mathcal K_l\,U(Z_jA^u)
+        \right\rangle,
+    \end{align}
+    where $U$ is Frobenius vectorization and
+    $\mathcal K_l=\Gamma_l^\dagger\Gamma_l$.  The multiplication order is
+    fixed by
+    $\tr(A^{\tau,j}X_u)=\tr(A^\tau(A^jX_u))$ and
+    $\tr(A^{u,\tau}Z_j)=\tr(A^\tau(Z_jA^u))$.
+    This exact identity is obtained from the definitions and trace cyclicity;
+    it is not the numerical FNW contraction quoted in
+    \cite[after Equation~(2.4) and Equation~(6.1)]{Nachtergaele1996Spectral}.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{def:tail_boundary_map,def:left_boundary_map,def:ground_space_gram,
+        lem:eval_word_append,thm:ground_space_map_es_frobenius}
+    Split a physical configuration into a prefix $u$, an overlap word $\tau$
+    of length $l$, and a final-site configuration $j$.  The adjoint relation
+    turns the mixed Gram into the physical inner product of the two boundary
+    vectors.  For each $(u,\tau,j)$, word multiplicativity and trace cyclicity
+    give
+    \begin{align}
+      \tr(A^{\tau,j}X_u)&=\tr(A^\tau(A^jX_u)),&
+      \tr(A^{u,\tau}Z_j)&=\tr(A^\tau(Z_jA^u)).
+    \end{align}
+    For fixed $(u,j)$, summing the resulting inner products over $\tau$ is
+    exactly the boundary-map Gram pairing
+    $\langle U(A^jX_u),\mathcal K_l U(Z_jA^u)\rangle$.  Summing over $u$ and
+    $j$ proves the identity.
+\end{proof}
+
 \subsection{Martingale gap consequences}\label{subsec:spectral_gap_martingale}
 
 \begin{theorem}[Martingale criterion for spectral gap]\label{thm:martingale_criterion}
