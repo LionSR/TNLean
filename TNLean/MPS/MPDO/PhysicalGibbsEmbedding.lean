@@ -177,15 +177,6 @@ private theorem embedLocalOperator_add
   simp only [embedLocalOperator_apply, Matrix.add_apply]
   by_cases h : AgreesOutsideWindow (d := d) L hLN i σ τ <;> simp [h]
 
-/-- Embedding preserves complex scalar multiplication. -/
-private theorem embedLocalOperator_smul
-    (L N : ℕ) (hLN : L ≤ N) (i : Fin N) (c : ℂ)
-    (A : Matrix (Fin L → Fin d) (Fin L → Fin d) ℂ) :
-    embedLocalOperator (d := d) L N hLN i (c • A) =
-      c • embedLocalOperator L N hLN i A := by
-  ext σ τ
-  simp [embedLocalOperator_apply]
-
 /-- Embedding the local identity gives the chain identity. -/
 @[simp]
 private theorem embedLocalOperator_one

@@ -64,15 +64,6 @@ namespace MPOTensor
 
 variable {d dP D D' : ℕ}
 
-/-- Mutual information is congruent under equality of the density matrix. -/
-private theorem mutualInformation_congr
-    {dA dB : ℕ}
-    {rho sigma : Matrix (Fin dA × Fin dB) (Fin dA × Fin dB) ℂ}
-    (h : rho = sigma) (hrho : rho.IsHermitian) (hsigma : sigma.IsHermitian) :
-    Entropy.mutualInformation rho hrho = Entropy.mutualInformation sigma hsigma := by
-  subst sigma
-  rfl
-
 /-- Regroup a block of spin--ancilla indices into its spin configuration and
 its ancillary configuration. -/
 noncomputable def blockSpinAncillaEquiv (d dK L : ℕ) :
@@ -370,7 +361,7 @@ theorem mutualInfoChain_le_of_bipartitioned_channel_image
             (Matrix.tensorMapBoth S T
               (bipartitionedNormalizedMPO
                 (doubledTensor A) N L (N - L) (by omega))) _ := by
-          apply mutualInformation_congr himage
+          apply Entropy.mutualInformation_congr himage
     Entropy.mutualInformation
           (Matrix.tensorMapBoth S T
             (bipartitionedNormalizedMPO (doubledTensor A) N L (N - L) (by omega))) _
