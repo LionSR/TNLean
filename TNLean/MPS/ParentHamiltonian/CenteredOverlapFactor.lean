@@ -8,7 +8,7 @@ import TNLean.MPS.ParentHamiltonian.ProjectorCancellation
 import TNLean.MPS.ParentHamiltonian.TailVirtualGram
 
 /-!
-# Direct-sum factors for the centered overlapping Gram
+# Direct-sum factors for the centered overlap residual
 
 This file packages the two boundary multiplications in the centered overlapping
 Gram as maps into a common direct sum indexed by a prefix and one final site.
@@ -18,14 +18,15 @@ factorization are exact algebraic consequences of the boundary-map formulas.
 
 ## Main results
 
-* `c3LeftOverlapFactorES` and `c3RightOverlapFactorES` are the two common
+* `MPSTensor.c3LeftOverlapFactorES` and `MPSTensor.c3RightOverlapFactorES` are the two common
   direct-sum factors.
-* `c3LeftOverlapFactorES_norm_le` and `c3RightOverlapFactorES_norm_le` give
+* `MPSTensor.c3LeftOverlapFactorES_norm_le` and
+  `MPSTensor.c3RightOverlapFactorES_norm_le` give
   bounds uniform in the spectator configuration type.
-* `c3_centeredVirtualResidualES_eq_overlapFactors` factors the centered
+* `MPSTensor.c3_centeredVirtualResidualES_eq_overlapFactors` factors the centered
   overlapping Gram through its finite Gram error.
-* `c3_centeredVirtualResidualES_norm_le` is the resulting operator-norm bound.
-* `IsPrimitiveMPS.c3_centeredVirtualResidualES_norm_sq_le_geometric` gives the
+* `MPSTensor.c3_centeredVirtualResidualES_norm_le` is the resulting operator-norm bound.
+* `MPSTensor.IsPrimitiveMPS.c3_centeredVirtualResidualES_norm_sq_le_geometric` gives the
   squared geometric estimate, uniformly in the prefix length.
 -/
 
