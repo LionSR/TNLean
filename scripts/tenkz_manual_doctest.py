@@ -182,7 +182,12 @@ def _refusal_diagnostic(options: str | None) -> str:
             continue
         value = value.strip()
         if value.startswith("{"):
-            end, value = _read_braced(value, 0)
+            braced_value = value
+            end, value = _read_braced(braced_value, 0)
+            if braced_value[end:].strip():
+                raise ValueError(
+                    "unexpected text after tnrefusal diagnostic brace"
+                )
         code = re.search(r"\[TKZ-[A-Z0-9-]+\]", value)
         if code is None:
             raise ValueError(

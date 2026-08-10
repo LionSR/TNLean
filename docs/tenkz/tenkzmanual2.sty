@@ -329,16 +329,20 @@
 % The refusal unit: head, printed source, and the coded diagnostic the
 % source raises — no rendered output, because the source does not compile.
 % The doctest compiles the body, requires the failure, and requires the
-% diagnostic's bracketed code in the transcript.
+% diagnostic's bracketed code in the transcript.  Refusals get their own
+% counter, stepped before the header prints (mirroring \mtwo_unit_head:'s
+% \refstepcounter{tnexample}), so label= attaches to the refusal itself
+% rather than to whatever counter was last stepped.
 \cs_new_protected:Npn \mtwo_refusal_render:
   {
     \par \addvspace{\mtwo@unitsep}
     \mtwo@thinrule
     \nobreak \vspace{\mtwo@unitseam}
+    \refstepcounter{tnrefusal}
     \noindent
     {
       \small
-      {\scshape a~deliberate~refusal}
+      {\scshape a~deliberate~refusal~\thetnrefusal}
       \tl_if_empty:NF \l_mtwo_caption_tl
         { ~~\textcolor{mquiet}{$\cdot$}~~ \tl_use:N \l_mtwo_caption_tl }
     }
@@ -446,6 +450,14 @@
   {\end{VerbatimOut}%
    \mtwoExampleRender}
 
+% refusal numbering restarts with each section, mirroring tnexample's
+% counter above; the two counters are independent, so a refusal and an
+% example in the same section can both read "2.1".
+\newcounter{tnrefusal}[section]
+\renewcommand{\thetnrefusal}{\arabic{section}.\arabic{tnrefusal}}
+\providecommand*{\theHtnrefusal}{}
+\renewcommand*{\theHtnrefusal}{\thetnrefusal}
+
 % ----- tnrefusal -----------------------------------------------------------
 % \begin{tnrefusal}[<keys>, diagnostic={<coded message>}]
 %   <tenkz source, verbatim>
@@ -455,8 +467,9 @@
 % beneath it, and nothing renders, because the source does not compile.
 % The diagnostic key quotes the coded message text; the doctest compiles
 % the body standalone, requires the failure, and requires the bracketed
-% code in the transcript, so the quoted message cannot rot.  The caption,
-% index, and label keys apply as in tnexample.
+% code in the transcript, so the quoted message cannot rot.  The caption
+% and index keys apply as in tnexample; label applies as in tnexample too,
+% referenced as Refusal \ref{...} against the refusal's own counter.
 \newenvironment{tnrefusal}[1][]
   {\mtwoUnitSetup{#1}%
    \VerbatimEnvironment
