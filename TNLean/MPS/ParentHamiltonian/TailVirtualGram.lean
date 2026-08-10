@@ -14,8 +14,8 @@ operator norm of the tail virtual map by the squared entrywise mass of that valu
 
 ## Main results
 
-- `MPSTensor.tailVirtualMapES_adjoint_comp_self_apply`
-- `MPSTensor.tailVirtualMapES_norm_four_pow_le_transferMap_pow_one_entry_norm_sq`
+* `MPSTensor.tailVirtualMapES_adjoint_comp_self_apply`
+* `MPSTensor.tailVirtualMapES_norm_four_pow_le_transferMap_pow_one_entry_norm_sq`
 -/
 
 open scoped Matrix
