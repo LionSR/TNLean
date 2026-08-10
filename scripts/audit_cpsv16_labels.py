@@ -148,7 +148,7 @@ def inheritance_errors(
     contained_occurrences: list[tuple[str, int]],
     ledger: dict[str, dict[str, str]],
     expected_result_anchors: dict[
-        tuple[str, int], tuple[str, re.Pattern[str]]
+        tuple[str, int], tuple[str, re.Pattern[str], re.Pattern[str]]
     ] | None = None,
 ) -> list[str]:
     """Validate inheritance dispositions for every contained occurrence."""
@@ -192,11 +192,16 @@ def inheritance_errors(
             )
         result_anchor = expected_result_anchors.get((label, line_no))
         if result_anchor is not None:
-            anchor_name, anchor_pattern = result_anchor
+            anchor_name, anchor_pattern, boundary_pattern = result_anchor
             if anchor_pattern.search(disposition) is None:
                 errors.append(
                     f"{label} at line {line_no}: disposition must exactly match "
                     f"enclosing result anchor {anchor_name!r}"
+                )
+            if boundary_pattern.search(disposition) is None:
+                errors.append(
+                    f"{label} at line {line_no}: disposition must retain its "
+                    "occurrence-specific semantic boundary"
                 )
         for anchor in EXPECTED_DUPLICATE_CONTAINED_ANCHORS.get(
             (label, line_no), ()
@@ -247,16 +252,18 @@ def read_tsv_rows(
 
 def read_contained_result_anchors(
     path: Path = CONTAINED_RESULT_ANCHORS,
-) -> dict[tuple[str, int], tuple[str, re.Pattern[str]]]:
+) -> dict[tuple[str, int], tuple[str, re.Pattern[str], re.Pattern[str]]]:
     """Read exact enclosing-result matchers for every contained occurrence."""
     rows = read_tsv_rows(
         path,
-        ["label", "line", "result_anchor", "anchor_regex"],
+        ["label", "line", "result_anchor", "anchor_regex", "boundary_regex"],
         "contained result-anchor snapshot",
         require_rows=True,
         key_fields=None,
     )
-    result: dict[tuple[str, int], tuple[str, re.Pattern[str]]] = {}
+    result: dict[
+        tuple[str, int], tuple[str, re.Pattern[str], re.Pattern[str]]
+    ] = {}
     for row in rows:
         label = row["label"]
         try:
@@ -285,14 +292,20 @@ def read_contained_result_anchors(
             raise ValueError(
                 f"empty contained result-anchor regex for {label} at line {line}"
             )
+        boundary_regex = row["boundary_regex"].strip()
+        if not boundary_regex:
+            raise ValueError(
+                f"empty contained boundary regex for {label} at line {line}"
+            )
         try:
             anchor_pattern = re.compile(anchor_regex)
+            boundary_pattern = re.compile(boundary_regex, re.IGNORECASE)
         except re.error as error:
             raise ValueError(
                 f"invalid contained result-anchor regex for {label} at line {line}: "
-                f"{anchor_regex!r}"
+                f"{error.pattern!r}"
             ) from error
-        result[key] = (anchor, anchor_pattern)
+        result[key] = (anchor, anchor_pattern, boundary_pattern)
     if len(rows) != EXPECTED_THEOREM_CONTAINED_OCCURRENCES:
         raise ValueError(
             "contained result-anchor snapshot must contain exactly "
