@@ -14,10 +14,10 @@ reduction to the source factors is treated separately.
 
 These are the blocked matching and global coisometry contractions used in
 arXiv:1703.09188, Figure `II_uUnitary.png` and Lemma `lemuisometry` (lines
-536--556).  The output-tail proof keeps the paper's output-first coisometry
-orientation: in the present open-leg conventions the global unitary equation
-is `U Uᴴ = 1`, and the retained physical matrix is transposed relative to the
-graphical display.
+536--556). In the present open-leg conventions, the output-tail proof keeps the
+first two sites and traces the remaining tail using the global unitary equation
+`U Uᴴ = 1`; the figure instead traces the first tail and keeps the final two
+sites in the `Uᴴ U = 1` orientation.
 -/
 
 open scoped Matrix BigOperators ComplexOrder
@@ -29,8 +29,8 @@ variable {d D : ℕ} (U : MPOTensor d D)
 
 /-- Output-first MPU coisometry, with a common output tail of length \(K\)
 traced out and normalized by \(d^{-K}\), leaves the identity on the first two output sites.
-The retained arguments occur in reversed matrix order, as required by the
-transpose in Figure `II_uUnitary.png`.
+The retained arguments occur in reversed matrix order because this convention
+keeps the first two sites and uses the output-first equation `U Uᴴ = 1`.
 
 Source: arXiv:1703.09188, equation `UisUnitary` and Figure
 `II_uUnitary.png`, lines 327--335 and 536--556. -/
