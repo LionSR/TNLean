@@ -17,11 +17,11 @@ is right multiplication by the fixed point, divided by its trace.
 
 ## Main results
 
-* `gramReshuffleMatrix_fixedPointProj_apply` gives the four-index entry formula.
-* `gramReshuffleMatrix_fixedPointProj` identifies the Kronecker-product matrix.
-* `gramReshuffle_fixedPointProj_frobeniusEquivEuclidean_apply` computes its action.
-* `gramReshuffleMatrix_fixedPointProj_posDef` proves positive definiteness.
-* `gramReshuffle_fixedPointProj_injective` proves injectivity.
+* `Matrix.gramReshuffleMatrix_fixedPointProj_apply` gives the four-index entry formula.
+* `Matrix.gramReshuffleMatrix_fixedPointProj` identifies the Kronecker-product matrix.
+* `Matrix.gramReshuffle_fixedPointProj_frobeniusEquivEuclidean_apply` computes its action.
+* `Matrix.gramReshuffleMatrix_fixedPointProj_posDef` proves positive definiteness.
+* `Matrix.gramReshuffle_fixedPointProj_injective` proves injectivity.
 -/
 
 open scoped ComplexOrder Kronecker Matrix
