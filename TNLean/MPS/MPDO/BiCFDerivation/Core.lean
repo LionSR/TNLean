@@ -212,39 +212,6 @@ def HasBiCF
         (∑ k : Fin r, Matrix.trace (Δ k * evalWord (A k) (List.ofFn w))) = 0) →
     ∀ k, Δ k = 0
 
-/-- If simultaneous word evaluations span the product algebra, then a block
-matrix family whose trace pairing vanishes on those word evaluations is zero. -/
-theorem block_matrices_eq_zero_of_wordTupleSpanTop_trace
-    (A : (k : Fin r) → MPSTensor d (dim k))
-    {L : ℕ} (hSpan : WordTupleSpanTop A L)
-    (Δ : (k : Fin r) → Matrix (Fin (dim k)) (Fin (dim k)) ℂ)
-    (hΔ : ∀ w : Fin L → Fin d,
-      (∑ k : Fin r, Matrix.trace (Δ k * evalWord (A k) (List.ofFn w))) = 0) :
-    ∀ k, Δ k = 0 := by
-  have hΔzero : Δ = 0 := by
-    apply piTrace_mul_right_eq_zero
-    intro N
-    have hZeroOnSpan :
-        ∀ M : (k : Fin r) → Matrix (Fin (dim k)) (Fin (dim k)) ℂ,
-          M ∈ Submodule.span ℂ (Set.range (wordTuple A L)) →
-          (∑ k : Fin r, Matrix.trace (Δ k * M k)) = 0 := by
-      intro M hM
-      exact Submodule.span_induction (p := fun x _ =>
-          (∑ k : Fin r, Matrix.trace (Δ k * x k)) = 0)
-        (fun x hx => by
-          rcases hx with ⟨w, rfl⟩
-          simpa [wordTuple] using hΔ w)
-        (by simp)
-        (fun x y hx hy hxzero hyzero => by
-          simp [Matrix.mul_add, Matrix.trace_add, hxzero, hyzero, Finset.sum_add_distrib])
-        (fun a x hx hxzero => by
-          simpa [Pi.smul_apply, Matrix.mul_smul, Matrix.trace_smul, Finset.mul_sum] using
-            congrArg (fun z : ℂ => a * z) hxzero)
-        hM
-    exact hZeroOnSpan N (by rw [hSpan]; exact Submodule.mem_top)
-  intro k
-  simpa using congrArg (fun f => f k) hΔzero
-
 /-- A finite-length spanning hypothesis implies `HasBiCF`. -/
 theorem hasBiCF_of_wordTupleSpanTop
     (A : (k : Fin r) → MPSTensor d (dim k))
