@@ -5,8 +5,8 @@ Authors: TNLean contributors
 -/
 import TNLean.Algebra.KroneckerFactorPositivity
 import TNLean.Algebra.SpinCover.Basic
-import TNLean.MPS.MPDO.RFPViaTS
 import TNLean.MPS.MPDO.AreaLaw
+import TNLean.MPS.MPDO.RFPViaTS
 
 /-!
 # The literal tensor printed in CPSV16 Example 4.12
@@ -41,7 +41,7 @@ open scoped Matrix BigOperators ComplexOrder
 namespace MPOTensor.CPSVExample412Literal
 
 /-- The paper's $\sigma_z=|0\rangle\langle0|-|1\rangle\langle1|$, using the
-public Pauli matrix API.
+public Pauli matrix construction.
 
 Source: CPSV16, arXiv:1606.00608, Example 4.12, lines 935--937. -/
 noncomputable def sigmaZ : Matrix (Fin 2) (Fin 2) ℂ :=
@@ -303,7 +303,7 @@ theorem reducedBlockState_M_eq_scaled_one {N L : ℕ}
 
 /-- The source's one-site-loss statement in its literal normalization:
 a one-site partial trace of $\rho^{(L+1)}(M)$ is proportional to the identity.
-The project's reduced-state API normalizes first, giving exactly $2^{-L}I$.
+The reduced-state construction normalizes first, giving exactly $2^{-L}I$.
 
 Source: CPSV16, arXiv:1606.00608, Example 4.12, line 937. -/
 theorem one_site_trace_loses_sigmaZ (L : ℕ) (hL : 1 ≤ L) :
@@ -358,7 +358,7 @@ private lemma blockEntropy_M_eq {N L : ℕ} (hLpos : 1 ≤ L) (hLN : L < N)
   push_cast
   rw [negMulLog_pow_inv_mul ((2 : ℝ) ^ L) (pow_ne_zero L (by norm_num)), Real.log_pow]
 
-/-- The literal tensor satisfies saturation of the area law: every proper
+/-- The literal tensor satisfies saturation of the area law: every nonempty proper
 reduced block is maximally mixed, so $S_L=L\log 2$ and the mutual information
 is independent of $L$.
 
@@ -408,7 +408,7 @@ $\lambda=2$: $(I+\sigma_z)^2=2(I+\sigma_z)$.
 Source claim: CPSV16, arXiv:1606.00608, Example 4.12, line 937. -/
 theorem physTraceTransfer_M_sq :
     physTraceTransfer M * physTraceTransfer M =
-      (2 : ℝ) • physTraceTransfer M := by
+      (2 : ℂ) • physTraceTransfer M := by
   rw [physTraceTransfer_M]
   ext a b
   fin_cases a <;> fin_cases b <;>
