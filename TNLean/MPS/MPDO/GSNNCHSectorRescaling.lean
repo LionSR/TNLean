@@ -39,14 +39,6 @@ Source: arXiv:1606.00608, Definition 4.8, lines 829--850. -/
 noncomputable def coefficientRoot (multiplicity N : ℕ) (c : ℝ) : ℝ :=
   (c / multiplicity) ^ (N : ℝ)⁻¹
 
-private theorem embedLocalOperator_smul
-    (L N : ℕ) (hLN : L ≤ N) (i : Fin N) (c : ℂ)
-    (A : Matrix (Fin L → Fin d) (Fin L → Fin d) ℂ) :
-    embedLocalOperator (d := d) L N hLN i (c • A) =
-      c • embedLocalOperator L N hLN i A := by
-  ext σ τ
-  simp [embedLocalOperator_apply]
-
 /-- At a fixed chain length, rescale every sector bond so that its
 multiplicity-weighted periodic product acquires a prescribed nonnegative real
 coefficient.

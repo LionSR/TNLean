@@ -90,6 +90,15 @@ noncomputable def embedLocalOperator (L N : ℕ) (hLN : L ≤ N) (i : Fin N)
       else 0 :=
   rfl
 
+/-- Embedding a local operator preserves complex scalar multiplication. -/
+theorem embedLocalOperator_smul
+    (L N : ℕ) (hLN : L ≤ N) (i : Fin N) (c : ℂ)
+    (A : Matrix (Fin L → Fin d) (Fin L → Fin d) ℂ) :
+    embedLocalOperator (d := d) L N hLN i (c • A) =
+      c • embedLocalOperator L N hLN i A := by
+  ext σ τ
+  simp [embedLocalOperator_apply]
+
 /-- Two configurations agree outside a cyclic window exactly when their values
 coincide at every site outside that window. -/
 theorem agreesOutsideWindow_iff (L : ℕ) {N : ℕ} (hLN : L ≤ N)

@@ -91,6 +91,22 @@ abbrev SectorIndex (F : PhysicalSectorFactorization K)
     (k : Fin F.sectorCount) :=
   Fin (F.leftDim k) × Fin (F.rightDim k)
 
+/-- Heterogeneous equality of sector indices preserves their left components. -/
+theorem sectorIndex_fst_heq_of_heq
+    (F : PhysicalSectorFactorization K) {k h : Fin F.sectorCount}
+    (kh : k = h) {x : F.SectorIndex k} {y : F.SectorIndex h}
+    (hxy : x ≍ y) : x.1 ≍ y.1 := by
+  subst h
+  exact heq_of_eq (congrArg Prod.fst (eq_of_heq hxy))
+
+/-- Heterogeneous equality of sector indices preserves their right components. -/
+theorem sectorIndex_snd_heq_of_heq
+    (F : PhysicalSectorFactorization K) {k h : Fin F.sectorCount}
+    (kh : k = h) {x : F.SectorIndex k} {y : F.SectorIndex h}
+    (hxy : x ≍ y) : x.2 ≍ y.2 := by
+  subst h
+  exact heq_of_eq (congrArg Prod.snd (eq_of_heq hxy))
+
 /-- The index space supporting the neighboring operator between sectors `k`
 and `h`. -/
 abbrev NeighborIndex (F : PhysicalSectorFactorization K)
