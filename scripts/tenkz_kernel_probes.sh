@@ -1761,7 +1761,8 @@ for pixel_fixture in \
     r_hull_live r_ink_semantics r_label_turn r_metrics_compact \
     r_mpo_skin_box r_mpo_skin_prelude r_parallel_lanes r_physical_dir \
     r_pill_skin_prelude r_pill_skin_roundrect r_region_diagonal \
-    r_region_pinch_staircase r_ring_closure r_trace_return_rows \
+    r_region_pinch_staircase r_ring_closure r_ring_corner_inscription \
+    r_trace_return_rows \
     r_trace_row_closure r_wire_stroke \
     r_noncell_port_slot r_noncell_port_slot_cell \
     r_wide_policy_legs r_wide_policy_ports \
@@ -1831,6 +1832,7 @@ for path in sys.argv[1:]:
   "$WORK/r_metrics_compact.png" "$WORK/r_parallel_lanes.png" \
   "$WORK/r_physical_dir.png" "$WORK/r_region_diagonal.png" \
   "$WORK/r_region_pinch_staircase.png" "$WORK/r_ring_closure.png" \
+  "$WORK/r_ring_corner_inscription.png" \
   "$WORK/r_trace_return_rows.png" "$WORK/r_trace_row_closure.png" \
   "$WORK/r_wire_stroke.png" \
   >"$PIXEL_CURRENT"
@@ -3161,6 +3163,24 @@ done
 grep -Fxq 'kernel-boundary|signature=phys:e, phys:n' \
     "$WORK/r_circle_wide_policy.tnlog" || {
   echo "FAIL: the circle-frame wide policy signature left its slot bearings" >&2
+  exit 1
+}
+# A ring/capsule must inscribe a superscripted name inside its own stroke
+# (issue #5958): the corner-safe width the fix adds must actually widen the
+# glyph past what the plain rectangular clearance alone gave X^{-1} before
+# the fix (half-width 674092sp at the fixture's default pitch, confirmed
+# against the pre-fix kernel), and the equation's shared measure must still
+# read the plain X and the wider X^{-1} as one class, one extent -- the same
+# width on both panels -- rather than reintroducing the two-sizes defect the
+# shared measure (PR #5827) closed for skin=box.
+ring_widths=$(grep -F 'glyph-geometry|' "$WORK/r_ring_corner_inscription.tnlog" |
+  sed -n 's/.*|xmax=\([0-9]*\)|.*/\1/p')
+[ "$(printf '%s\n' "$ring_widths" | sort -u | wc -l | tr -d ' ')" -eq 1 ] || {
+  echo "FAIL: the plain and superscripted ring panels no longer share one width" >&2
+  exit 1
+}
+[ "$(printf '%s\n' "$ring_widths" | head -1)" -gt 700000 ] || {
+  echo "FAIL: the superscripted ring did not grow past its pre-fix half-width" >&2
   exit 1
 }
 
