@@ -143,7 +143,7 @@ theorem sourceUForwardKernel_eq_outputLayer_mul_normalizedDiagonal_pow
 matrix. This is a range identity on $M_1$, not an ambient coisometry.
 
 Source: arXiv:1703.09188, equations `SVDforms2`, `Y1Y1X1X1`, and `X1X2b`,
-lines 479--526. -/
+lines 479--528. -/
 theorem sourceX₁_mul_conjTranspose_mul_weight_mul_sourceCutM₁
     (ρ : Matrix (Fin D) (Fin D) ℂ) (hρ : ρ.PosDef) :
     sourceX₁ U ρ hρ * (sourceX₁ U ρ hρ)ᴴ * sourceWeight (d := d) ρ *
@@ -161,7 +161,7 @@ is a range identity on $M_2$, not the false ambient equation
 $X_2X_2^\dagger=1$.
 
 Source: arXiv:1703.09188, equations `SVDforms2`, `Y1Y1X1X1`, and `X1X2b`,
-lines 479--526. -/
+lines 479--528. -/
 theorem sourceX₂_mul_conjTranspose_mul_sourceCutM₂ :
     sourceX₂ U * (sourceX₂ U)ᴴ * sourceCutM₂ U = sourceCutM₂ U := by
   rw [Matrix.mul_assoc, ← sourceY₂_eq_sourceX₂_conjTranspose_mul_sourceCutM₂]
