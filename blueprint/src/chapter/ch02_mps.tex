@@ -443,8 +443,6 @@ boundary conditions (PBC).
 
 \begin{definition}[Gauge-phase equivalence]\label{def:gauge_phase_equiv}
     \lean{MPSTensor.GaugePhaseEquiv}
-    \lean{MPSTensor.UnitGaugePhaseEquiv}
-    \lean{MPSTensor.UnitGaugePhaseEquiv.toGaugePhaseEquiv}
     \lean{MPSTensor.GaugeEquiv.toGaugePhaseEquiv}
     \leanok
     \uses{def:mps_tensor}
@@ -462,11 +460,20 @@ boundary conditions (PBC).
     Gauge equivalence is the special case $\zeta = 1$.
 \end{proof}
 
-\begin{remark}\leanok
-    Unit gauge-phase equivalence imposes $|\zeta|=1$. Since such a phase is
-    nonzero, unit gauge-phase equivalence implies gauge-phase equivalence. The
-    general definition retains arbitrary nonzero block-scaling factors.
-\end{remark}
+\begin{definition}[Unit gauge-phase equivalence]
+    \label{def:unit_gauge_phase_equiv}
+    \lean{MPSTensor.UnitGaugePhaseEquiv}
+    \lean{MPSTensor.UnitGaugePhaseEquiv.toGaugePhaseEquiv}
+    \leanok
+    \uses{def:gauge_phase_equiv}
+    Two tensors are unit gauge-phase equivalent when the gauge-phase equation
+    holds with $|\zeta|=1$.
+\end{definition}
+
+\begin{proof}\leanok
+    Since a unit-modulus scalar is nonzero, unit gauge-phase equivalence implies
+    gauge-phase equivalence.
+\end{proof}
 
 \begin{lemma}[Gauge-phase equivalence across equal bond dimensions]
     \label{lem:gauge_phase_equiv_cast_compose}
