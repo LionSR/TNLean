@@ -1,0 +1,21 @@
+% Negative regression: the one-label spelling of a declaration is refused
+% among an equation's panels for the reason the three-argument spelling is.
+% A declaration is setup, and setup does not stand inside a composition
+% form: it is a document-wide act performed in the middle of an assertion,
+% ordered by where it happens to sit, and read once for each time the
+% equation is measured.
+\documentclass{standalone}
+\usepackage{tenkz}
+\begin{document}
+\tenkzkernel
+\begin{tenkzeq}[check={signature}]
+  \begin{tenkz}[rows={wire}, cols=1, bonds=none, west=open]
+    \tndeclareatom{\tnprojector}{skin=box, ports={180:virtual}}
+    \tnprojector{P}
+  \end{tenkz}
+  =
+  \begin{tenkz}[rows={wire}, cols=1, bonds=none, west=open]
+    \tn[skin=box, ports={180:virtual}]{Q}
+  \end{tenkz}
+\end{tenkzeq}
+\end{document}

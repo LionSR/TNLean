@@ -1855,6 +1855,7 @@ for scope_case in n_group_size:TKZ-SIZE-SCOPE \
                   n_check_bar:TKZ-EQ-CHECK-BAR \
                   n_check_twice:TKZ-EQ-CHECK-TWICE \
                   n_declare_equation:TKZ-DECLARE-EQUATION \
+                  n_declareatom_equation:TKZ-DECLARE-EQUATION \
                   n_panel_metrics:TKZ-METRICS-PANEL; do
   scope_name=${scope_case%%:*}
   scope_code=${scope_case##*:}

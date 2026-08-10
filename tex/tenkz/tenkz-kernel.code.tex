@@ -95,9 +95,11 @@
 \msg_new:nnn {tenkz}{kernel-cluster-name}
   { [TKZ-LANG-CLUSTER-NAME]~cluster=#1~requires~name=~
     so~its~sub-atoms~are~addressable~(record~#2). }
+% The audit is the equation's, and the form that misplaced it names itself:
+% a picture and a group are refused in the same words, each about itself.
 \msg_new:nnn {tenkz}{kernel-check-scope}
   { [TKZ-EQ-CHECK-SCOPE]~check=#1~belongs~to~tenkzeq~options,~
-    not~a~picture~(record~picture). }
+    not~a~#2~(record~#2). }
 \msg_new:nnn {tenkz}{kernel-frame-word}
   { [TKZ-FRAME-WORD]~frame~word~'#1'~is~not~flat|plane|circle. }
 \msg_new:nnn {tenkz}{kernel-circle-open-direction}
@@ -2534,8 +2536,8 @@
     \prop_get:NnN \l__tenkz_kernel_stage_prop {check} \l__tenkz_kernel_scratch_tl
     \quark_if_no_value:NF \l__tenkz_kernel_scratch_tl
       {
-        \msg_error:nne {tenkz}{kernel-check-scope}
-          { \tl_use:N \l__tenkz_kernel_scratch_tl }
+        \msg_error:nnee {tenkz}{kernel-check-scope}
+          { \tl_use:N \l__tenkz_kernel_scratch_tl } {group}
         \prop_remove:Nn \l__tenkz_kernel_stage_prop {check}
       }
     \__tenkz_kernel_commit:
@@ -17818,8 +17820,8 @@
       \l__tenkz_kernel_stage_prop {check} \l__tenkz_kernel_scratch_tl
     \quark_if_no_value:NF \l__tenkz_kernel_scratch_tl
       {
-        \msg_error:nne {tenkz}{kernel-check-scope}
-          { \tl_use:N \l__tenkz_kernel_scratch_tl }
+        \msg_error:nnee {tenkz}{kernel-check-scope}
+          { \tl_use:N \l__tenkz_kernel_scratch_tl } {picture}
         \prop_remove:Nn \l__tenkz_kernel_stage_prop {check}
       }
     % One equation, one pitch.  A panel that names a profile of its own would
@@ -18759,7 +18761,8 @@
     % when it runs, and refusing it twice -- once silently, in a run whose
     % diagnostics are held back, and once for the author -- would leave the
     % measuring run drawing panels whose own commands were never minted.
-    \regex_match:nVTF { \c{tndeclare} } \l__tenkz_kernel_eq_body_tl
+    \regex_match:nVTF { \c{tndeclare} | \c{tndeclareatom} }
+      \l__tenkz_kernel_eq_body_tl
       { }
       { \__tenkz_kernel_eq_measure_run: }
   }

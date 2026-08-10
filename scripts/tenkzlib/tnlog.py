@@ -97,6 +97,8 @@ FIELD_VALIDATORS: dict[str, dict[str, Callable[[str], bool]]] = {
     "picture": {
         "id": _is_picture_id,
         "lang": _any,
+        "metrics": _enum("compact"),
+        "size": _enum("s", "m", "l"),
         "scope": _is_positive_int,
     },
     "frame": {

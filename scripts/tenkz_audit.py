@@ -1999,7 +1999,15 @@ def _tenkzeq_declares_bundles(source: str, position: int) -> bool:
     if check_value is None:
         return False
     for key, value in top_level_options(check_value):
-        if key == "modulo" and value is not None and value.strip() == "bundles":
+        if key != "modulo" or value is None:
+            continue
+        # The key list strips one layer of braces from a value, so
+        # `modulo=bundles` and `modulo={bundles}` are one thing to the kernel
+        # and one thing here.
+        word = value.strip()
+        if word.startswith("{") and word.endswith("}"):
+            word = word[1:-1].strip()
+        if word == "bundles":
             return True
     return False
 

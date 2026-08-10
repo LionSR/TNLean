@@ -2961,3 +2961,17 @@ and found equal on the nose. The two lines buy the case its own audit.
 
 No registry row, parser leaf, alias, or overload moves; M1, M2, M3, M5, and
 M6 are unchanged.
+
+### 2026-08-10 — the size class is read from the model, not from the hull
+
+Review of #5827 asked whether `\__tenkz_kernel_eq_extent_named:n` should take
+the skin the caller already holds in `\l__tenkz_kernel_hull_skin_tl` instead
+of reading the model and resolving the base itself. It should not, and the
+reason is its second caller. The hull register holds the atom whose silhouette
+is being measured; the label path calls the same production for an atom whose
+name is being set with no hull walk around it, and there the register belongs
+to whichever atom passed through last. A size class read from a stale register
+would put an ellipsis in a name's class or a name in none.
+
+The classification is one line of model reading and one base resolution, and
+it answers for the atom it is given. It stays where it is.
