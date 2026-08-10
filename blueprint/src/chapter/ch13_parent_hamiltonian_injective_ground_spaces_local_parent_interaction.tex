@@ -707,7 +707,7 @@ windows.
     \lean{Matrix.gramReshuffleMatrix_fixedPointProj}
     \lean{Matrix.gramReshuffle_fixedPointProj_frobeniusEquivEuclidean_apply}
     \leanok
-    \uses{def:gram_reshuffle, def:frobenius_vectorization}
+    \uses{def:fixed_point_proj, def:gram_reshuffle, def:frobenius_vectorization}
     Let $\rho\in\MN{D}$ have nonzero trace and define
     $P_\rho(X):=(\tr X/\tr\rho)\rho$.  Then
     \begin{align}
@@ -722,6 +722,7 @@ windows.
 
 \begin{proof}
     \leanok
+    \uses{def:fixed_point_proj, def:gram_reshuffle, def:frobenius_vectorization}
     For matrix units $E_{ca}$, direct evaluation gives
     \begin{align}
       R(P_\rho)_{(b,a),(e,c)}
@@ -738,14 +739,14 @@ windows.
     \lean{Matrix.gramReshuffleMatrix_fixedPointProj_posDef}
     \lean{Matrix.gramReshuffle_fixedPointProj_isUnit}
     \leanok
-    \uses{def:gram_reshuffle}
+    \uses{def:fixed_point_proj, def:gram_reshuffle}
     If $D>0$ and $\rho\in\MN{D}$ is positive definite, then
     $R(P_\rho)$ is positive definite and $\mathscr R(P_\rho)$ is invertible.
 \end{theorem}
 
 \begin{proof}
     \leanok
-    \uses{thm:fixed_point_gram_metric_exact}
+    \uses{def:gram_reshuffle, thm:fixed_point_gram_metric_exact}
     Positive definiteness gives $\tr\rho>0$.  By
     (\ref{eq:fixed_point_gram_metric_matrix}),
     \begin{align}
