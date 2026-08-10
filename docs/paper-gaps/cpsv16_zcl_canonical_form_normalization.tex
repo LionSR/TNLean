@@ -166,9 +166,9 @@ maximally mixed witness has $\mathcal T_M=1$ and is therefore classified as ZCL
 by the source transfer, whereas the current doubled-index condition wrongly
 excludes it.
 
-\paragraph{The correction is to ZCL, not to the doubled-index RFP predicate.}
+\paragraph{The correction is to ZCL, not to the doubled-index ZCL predicate.}
 The doubled-index transfer map $\mathcal E_M$ remains the object used by the
-current Lean predicate \texttt{MPOTensor.IsRFP} and by the transfer-map formulation of the
+current Lean predicate \texttt{MPOTensor.IsZCL} and by the transfer-map formulation of the
 fusion/algebra statements. It should no longer be identified with the source ZCL
 diagram. Literal idempotence of the physical-trace transfer
 $\mathcal T_M^2=\mathcal T_M$ implies normalized ZCL only together with the
@@ -263,9 +263,9 @@ canonical-normalization bridge; as the witness above shows, it does not hold
 for an arbitrary ZCL and SAL tensor.
 
 Accordingly, any Lean theorem that currently obtains doubled-index idempotence
-(\texttt{MPOTensor.IsRFP}) from a zero-correlation-length hypothesis by definitional
+(\texttt{MPOTensor.IsZCL}) from a zero-correlation-length hypothesis by definitional
 coercion --- the pattern in the simple-MPDO chain that uses an
-\texttt{IsZCL} field directly as \texttt{MPOTensor.IsRFP} --- relies on an intermediate the
+\texttt{IsZCL} field directly as \texttt{MPOTensor.IsZCL} --- relies on an intermediate theorem the
 source does not provide, and is \emph{unfaithful} in the sense of the project's
 faithfulness policy. Under the realignment each such theorem must carry an
 in-source \texttt{**Unfaithful:**} marker pointing to this note and naming

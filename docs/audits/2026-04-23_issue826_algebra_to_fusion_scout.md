@@ -36,7 +36,7 @@ now contributes only the still-useful extra pieces:
 - the stabilized-adjoint-fixed-point sufficient condition
   `MPOTensor.AlgebraStructureData.stationaryOfFaithfulFixedPoint_compatible_of_adjointFixedPoints_eq`;
 - the corresponding wrapper
-  `MPOTensor.isRFP_MPDO_via_algebra_of_adjointFixedPoints_eq_of_isTP_of_posDef_fixed`.
+  `MPOTensor.hasBlockedAdjointFixedPointAlgebraTower_of_adjointFixedPoints_eq_of_isTP_of_posDef_fixed`.
 
 ## Mathematical concern
 
@@ -64,7 +64,7 @@ Then:
    algebra for all positive powers.
 
 A machine-checked counterexample was not completed in this pass. Still, the
-main-branch descent theorem from `IsRFP_MPDO_via_algebra` already shows that the
+main-branch descent theorem from `HasBlockedAdjointFixedPointAlgebraTower` already shows that the
 present predicate sees only equality of adjoint fixed-point spaces across
 positive block lengths; it does not by itself recover the coefficient/BNT data
 used in the paper's converse direction.
@@ -78,7 +78,7 @@ What did land is the strongest clean intermediate result verified on top of the
 non-vacuous algebra layer:
 
 - `MPOTensor.AlgebraStructureData.stationaryOfFaithfulFixedPoint_compatible_of_adjointFixedPoints_eq`
-- `MPOTensor.isRFP_MPDO_via_algebra_of_adjointFixedPoints_eq_of_isTP_of_posDef_fixed`
+- `MPOTensor.hasBlockedAdjointFixedPointAlgebraTower_of_adjointFixedPoints_eq_of_isTP_of_posDef_fixed`
 
 These isolate the exact extra hypothesis that the current formal compatibility
 predicate can genuinely see: stabilization of the adjoint fixed-point algebras
@@ -86,6 +86,6 @@ of the blocked transfer maps.
 
 So the branch now gives an honest forward theorem and updated blueprint text,
 but it does **not** prove the requested converse
-`IsRFP_MPDO_via_algebra → IsRFP_MPDO_via_transferRetract`.
+`HasBlockedAdjointFixedPointAlgebraTower → IsZCL`.
 The remaining gap is still the stronger coefficient/BNT layer from
 Appendix C.3–C.4.

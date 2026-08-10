@@ -23,6 +23,47 @@ maps.
     form, as in (\ref{eq:channel_kraus_representation}).
 \end{definition}
 
+\begin{theorem}[Kraus-map form of the transfer map]
+    \label{thm:kraus_map_eq_transfer_map}
+    \lean{Kraus.mapLM_eq_transferMap}
+    \leanok
+    \uses{def:kraus_map, def:transfer_map}
+    For a finite matrix family $A$, write $\mathcal K_A$ for its Kraus map.
+    Then
+    \begin{align}
+        \mathcal K_A
+         & =\E_A.
+        \notag
+    \end{align}
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    For every $X\in\MN{D}$,
+    \begin{align}
+        \mathcal K_A(X)
+         & =\sum_i A^iX(A^i)^\dagger
+          =\E_A(X).
+        \notag
+    \end{align}
+\end{proof}
+
+\begin{theorem}[Irreducibility in Kraus-map notation]
+    \label{thm:kraus_map_irreducible_of_transfer_map}
+    \lean{Kraus.isIrreducibleMap_mapLM_of_transferMap}
+    \leanok
+    \uses{def:kraus_map, def:transfer_map, def:irreducible_cp}
+    If the transfer map $\E_A$ of a finite matrix family is irreducible, then
+    its Kraus map $\mathcal K_A$ is irreducible.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:kraus_map_eq_transfer_map}
+    The two maps are equal by
+    Theorem~\ref{thm:kraus_map_eq_transfer_map}.
+\end{proof}
+
 \begin{definition}[Adjoint Kraus map]\label{def:kraus_adjoint_map}
     \lean{KadisonSchwarz.krausAdjointMap}
     \leanok

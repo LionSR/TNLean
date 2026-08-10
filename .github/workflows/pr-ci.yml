@@ -73,6 +73,9 @@ on:
       - 'scripts/test_tenkz_kernel_audit.py'
       - 'scripts/test_tnlog.py'
       - 'scripts/test_texcase.py'
+      - 'scripts/tenkz_ctan.py'
+      - 'scripts/test_tenkz_ctan.py'
+      - 'LICENSE'
   pull_request:
     types: [opened, synchronize, reopened]
     paths:
@@ -139,6 +142,9 @@ on:
       - 'scripts/test_tenkz_kernel_audit.py'
       - 'scripts/test_tnlog.py'
       - 'scripts/test_texcase.py'
+      - 'scripts/tenkz_ctan.py'
+      - 'scripts/test_tenkz_ctan.py'
+      - 'LICENSE'
   workflow_dispatch:
 
 concurrency:
@@ -253,6 +259,14 @@ jobs:
               - 'scripts/test_tenkz_dimension_inventory.py'
               - 'scripts/update_tenkz_dimension_inventory.py'
               - 'scripts/test_tenkz_cubic.py'
+              # Everything the CTAN archive stages: the material comes from
+              # outside `tex/tenkz/` and `docs/tenkz/*.tex`, so the staging
+              # check is gated on its sources too.
+              - 'scripts/tenkz_ctan.py'
+              - 'scripts/test_tenkz_ctan.py'
+              - 'docs/tenkz/ctan/**'
+              - 'docs/tenkz/CHANGES.md'
+              - 'LICENSE'
             shrink:
               - 'blueprint/src/chapter/**'
               - 'tex/tenkz/**'
@@ -342,6 +356,13 @@ jobs:
 
       - name: Compile tenkz manual examples standalone
         run: python3 scripts/tenkz_manual_doctest.py
+
+      # The same check tenkz-release-policy.yml runs, here with an engine
+      # present: the archive is unpacked on its own and a picture compiled
+      # against it, so a runtime file the upload forgot fails rather than
+      # falling back to the repository copy.
+      - name: Check the CTAN archive against a clean installation
+        run: python3 scripts/tenkz_ctan.py check --require-smoke
 
       - name: Check tenkz kernel record contracts
         run: scripts/tenkz_kernel_probes.sh

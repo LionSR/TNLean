@@ -32,6 +32,7 @@ import TNLean.Channel.InformationallyCompleteEffects
 import TNLean.Channel.Irreducible
 import TNLean.Channel.KoashiImoto
 import TNLean.Channel.KrausCPTP
+import TNLean.Channel.KrausCornerCompression
 import TNLean.Channel.KrausFreedom
 import TNLean.Channel.KrausMap
 import TNLean.Channel.KrausRank

@@ -1,0 +1,17 @@
+% Negative regression: an opt-out names a relation the equation performs.  An
+% index outside the count waives nothing and leaves the relation the author
+% meant standing audited, which is a mistyped waiver.
+\documentclass{standalone}
+\usepackage{tenkz}
+\begin{document}
+\tenkzkernel
+\begin{tenkzeq}[check={signature, off={9: no such relation}}]
+  \begin{tenkz}[rows={wire}, cols=1, bonds=none, west=open]
+    \tn[ports={180:virtual}]{A}
+  \end{tenkz}
+  =
+  \begin{tenkz}[rows={wire}, cols=1, bonds=none, west=open]
+    \tn[ports={180:virtual}]{B}
+  \end{tenkz}
+\end{tenkzeq}
+\end{document}

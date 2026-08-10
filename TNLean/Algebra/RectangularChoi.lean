@@ -96,6 +96,18 @@ noncomputable def gramReshuffle
     EuclideanSpace ℂ (α × α) →L[ℂ] EuclideanSpace ℂ (α × α) :=
   (Matrix.toEuclideanCLM (n := α × α) (𝕜 := ℂ)) (gramReshuffleMatrix Φ)
 
+/-- Reshuffling commutes with subtraction. -/
+@[simp]
+theorem gramReshuffle_sub
+    (Φ Ψ : Matrix α α ℂ →ₗ[ℂ] Matrix α α ℂ) :
+    gramReshuffle (Φ - Ψ) = gramReshuffle Φ - gramReshuffle Ψ := by
+  have hmatrix :
+      gramReshuffleMatrix (Φ - Ψ) = gramReshuffleMatrix Φ - gramReshuffleMatrix Ψ := by
+    ext ⟨b, a⟩ ⟨e, c⟩
+    simp [gramReshuffleMatrix]
+  ext x ⟨b, a⟩
+  simp [gramReshuffle, hmatrix]
+
 /-- The matrix-unit coefficients of the reshuffled Choi operator are
 \(J(\Phi)_{(c,e),(a,b)}\). -/
 @[simp]

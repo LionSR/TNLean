@@ -10,6 +10,7 @@ Authors: TNLean contributors
 
 import TNLean.Channel.Irreducible.Basic
 import TNLean.Channel.Irreducible.Ergodicity
+import TNLean.Channel.Irreducible.FixedPoint
 import TNLean.Channel.Irreducible.FromSpectral
 import TNLean.Channel.Irreducible.Growth
 import TNLean.Channel.Irreducible.Growth.Exponential

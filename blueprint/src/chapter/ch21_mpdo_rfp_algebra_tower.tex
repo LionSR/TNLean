@@ -20,13 +20,13 @@
     \end{align}
 \end{definition}
 
-\begin{definition}[Algebra-structure RFP predicate]%
-    \label{def:mpdo_rfp_via_algebra}
-    \lean{MPOTensor.IsRFP_MPDO_via_algebra}
+\begin{definition}[Blocked fixed-point-algebra tower]%
+    \label{def:mpdo_blocked_fixed_point_algebra_tower}
+    \lean{MPOTensor.HasBlockedAdjointFixedPointAlgebraTower}
     \leanok
     \uses{def:mpdo_algebra_structure_data, def:mpo_tensor}
-    An MPO tensor $M$ satisfies the \emph{algebra-structure formulation} used
-    here when there exist algebra-structure data such that, for every
+    An MPO tensor $M$ satisfies the \emph{blocked fixed-point-algebra tower} used
+    here when there exist blocked fixed-point-algebra data such that, for every
     positive blocking size $n$,
     \begin{align}
         \mathcal{A}_n &= \Fix(E_n^{\dagger}),
@@ -38,11 +38,11 @@
     includes the coefficient family $c_{\alpha,\beta,\gamma}^{(L)}$.
 \end{definition}
 
-\begin{theorem}[RFP yields a stationary algebra tower under a faithful fixed point]%
-    \label{thm:mpdo_rfp_via_algebra_from_rfp}
-    \lean{MPOTensor.isRFP_MPDO_via_algebra_of_isRFP_of_isTP_of_posDef_fixed}
+\begin{theorem}[Doubled-index ZCL yields a stationary algebra tower under a faithful fixed point]%
+    \label{thm:mpdo_blocked_fixed_point_algebra_tower_from_zcl}
+    \lean{MPOTensor.hasBlockedAdjointFixedPointAlgebraTower_of_isZCL_of_isTP_of_posDef_fixed}
     \leanok
-    \uses{def:is_rfp_mpdo, def:mpdo_rfp_via_algebra}
+    \uses{def:mpo_is_zcl, def:mpdo_blocked_fixed_point_algebra_tower}
     Assume the doubled tensor is trace-preserving and the transfer map admits a
     positive-definite fixed point. If $E_1^2 = E_1$, then there is a stationary
     family of support algebras
@@ -102,33 +102,18 @@ closed by $\tr$; the physical legs remain open. Their spans are the
 fixed-point algebras compared in
 \cite[Appendix~C.4, lines~1974--1980]{Cirac2016MPDO_arXiv}.
 
-\begin{theorem}[A transfer retract yields a stationary algebra tower under a faithful fixed point]%
-    \label{thm:mpdo_rfp_via_algebra_from_fusion}
-    \lean{MPOTensor.isRFP_MPDO_via_algebra_of_isRFP_MPDO_via_transferRetract_of_isTP_of_posDef_fixed}
-    \leanok
-    \uses{thm:mpdo_rfp_of_fusion, thm:mpdo_rfp_via_algebra_from_rfp}
-    Assume the doubled tensor is trace-preserving and the transfer map admits a
-    positive-definite fixed point. If the transfer-retract criterion holds,
-    then the MPO satisfies the algebra-structure formulation of the
-    renormalization fixed-point condition.
-\end{theorem}
-\begin{proof}\leanok
-    Combine Theorem~\ref{thm:mpdo_rfp_of_fusion} with
-    Theorem~\ref{thm:mpdo_rfp_via_algebra_from_rfp}.
-\end{proof}
-
 \begin{theorem}[Stabilized blocked adjoint fixed points yield algebra data]%
     \label{thm:mpdo_algebra_from_stabilized_adjoint_fixedpoints}
-    \lean{MPOTensor.isRFP_MPDO_via_algebra_of_adjointFixedPoints_eq_of_isTP_of_posDef_fixed}
+    \lean{MPOTensor.hasBlockedAdjointFixedPointAlgebraTower_of_adjointFixedPoints_eq_of_isTP_of_posDef_fixed}
     \leanok
-    \uses{def:mpdo_rfp_via_algebra}
+    \uses{def:mpdo_blocked_fixed_point_algebra_tower}
     Assume the doubled tensor is trace-preserving and the transfer map admits a
     positive-definite fixed point. If, for every positive blocked size $n$,
     \begin{align}
         \Fix(E_n^{\dagger}) &= \Fix(E_1^{\dagger}),
         \notag
     \end{align}
-    then the algebra-structure formulation holds.
+    then the blocked fixed-point-algebra tower holds.
 \end{theorem}
 \begin{proof}\leanok
     Take the constant tower $\mathcal{A}_n := \Fix(E_1^{\dagger})$ for
@@ -239,7 +224,7 @@ family, and the corresponding multiplication / inclusion coefficient arrays.
     \label{thm:mpdo_fixedpoint_coefficients_reconstruct}
     \lean{MPOTensor.AlgebraStructureData.reconstructFromBlockedCoefficients_of_fixedPoint}
     \leanok
-    \uses{def:mpdo_rfp_via_algebra, def:mpdo_blocked_coefficients}
+    \uses{def:mpdo_blocked_fixed_point_algebra_tower, def:mpdo_blocked_coefficients}
     If the algebra tower is compatible with an MPO tensor $M$ and
     $E_n^\dagger X = X$ for a positive blocking size $n$, then
     $X \in \mathcal{A}_n$ and, writing $(X_i)_{i \in I_n}$ for its blocked
@@ -253,10 +238,10 @@ family, and the corresponding multiplication / inclusion coefficient arrays.
 
 \begin{theorem}[Adjoint fixed points descend through the algebra tower]%
     \label{thm:mpdo_adjoint_fix_descent}
-    \lean{MPOTensor.adjoint_transferMap_apply_of_isRFP_MPDO_via_algebra}
+    \lean{MPOTensor.adjoint_transferMap_apply_of_hasBlockedAdjointFixedPointAlgebraTower}
     \leanok
-    \uses{def:mpdo_rfp_via_algebra}
-    If an MPO tensor satisfies the algebra-structure formulation, then for
+    \uses{def:mpdo_blocked_fixed_point_algebra_tower}
+    If an MPO tensor satisfies the blocked fixed-point-algebra tower, then for
     every positive blocking size $n$ and every $X$,
     $E_n^{\dagger}X=X$ implies $E_1^{\dagger}X=X$.
 \end{theorem}
@@ -279,7 +264,7 @@ family, and the corresponding multiplication / inclusion coefficient arrays.
 \begin{proof}\leanok
     Induction on $n$ using $E_{n+1} = E_n \circ E_1$ and
     $(A \circ B)^{\dagger} = B^{\dagger} \circ A^{\dagger}$; the base case is
-    $E_0 = \id$. This step does not require the algebra-structure data.
+    $E_0 = \id$. This step does not require the blocked fixed-point-algebra data.
 \end{proof}
 
 \begin{lemma}[Blocked powers of adjoint eigenvectors]%
@@ -304,11 +289,11 @@ family, and the corresponding multiplication / inclusion coefficient arrays.
 
 \begin{theorem}[Finite-order adjoint eigenvalues for algebra towers]%
     \label{thm:mpdo_algebra_root_of_unity_eigenvalue}
-    \lean{MPOTensor.adjoint_transferMap_eigenvalue_eq_one_of_isRFP_MPDO_via_algebra}
+    \lean{MPOTensor.adjoint_transferMap_eigenvalue_eq_one_of_hasBlockedAdjointFixedPointAlgebraTower}
     \leanok
-    \uses{def:mpdo_rfp_via_algebra, thm:mpdo_adjoint_fix_descent,
+    \uses{def:mpdo_blocked_fixed_point_algebra_tower, thm:mpdo_adjoint_fix_descent,
         lem:mpdo_adjoint_blocked_eigenvector}
-    Assume the algebra-structure formulation holds. If $X\ne 0$,
+    Assume the blocked fixed-point-algebra tower holds. If $X\ne 0$,
     $E_1^\dagger X=\lambda X$, and $\lambda^n=1$ for some $n>0$, then
     $\lambda=1$.
 \end{theorem}
@@ -321,11 +306,11 @@ family, and the corresponding multiplication / inclusion coefficient arrays.
 
 \begin{theorem}[Adjoint fixed-point equality for algebra towers]%
     \label{thm:mpdo_adjoint_fix_equality_from_algebra}
-    \lean{MPOTensor.adjoint_blockedTransferMap_apply_iff_of_isRFP_MPDO_via_algebra}
+    \lean{MPOTensor.adjoint_blockedTransferMap_apply_iff_of_hasBlockedAdjointFixedPointAlgebraTower}
     \leanok
-    \uses{def:mpdo_rfp_via_algebra, thm:mpdo_adjoint_fix_descent,
+    \uses{def:mpdo_blocked_fixed_point_algebra_tower, thm:mpdo_adjoint_fix_descent,
         lem:mpdo_adjoint_fix_reverse}
-    If an MPO tensor satisfies the algebra-structure formulation, then
+    If an MPO tensor satisfies the blocked fixed-point-algebra tower, then
     $\Fix(E_n^{\dagger})=\Fix(E_1^{\dagger})$ for every positive blocking
     size $n$.
 \end{theorem}
@@ -336,28 +321,27 @@ family, and the corresponding multiplication / inclusion coefficient arrays.
 
 \begin{theorem}[Algebra data give the stationary fixed-point tower]%
     \label{thm:mpdo_stationary_tower_from_algebra}
-    \lean{MPOTensor.stationaryOfFaithfulFixedPoint_compatible_of_isRFP_MPDO_via_algebra}
+    \lean{MPOTensor.stationaryOfFaithfulFixedPoint_compatible_of_hasBlockedAdjointFixedPointAlgebraTower}
     \leanok
-    \uses{def:mpdo_rfp_via_algebra,
+    \uses{def:mpdo_blocked_fixed_point_algebra_tower,
         thm:mpdo_adjoint_fix_equality_from_algebra}
     Under the trace-preserving normalization and a positive-definite fixed
-    point, if $M$ satisfies the algebra-structure formulation, then the
+    point, if $M$ satisfies the blocked fixed-point-algebra tower, then the
     stationary tower $\mathcal{A}_n = \Fix(E_1^\dagger)$ is
     itself compatible with $M$: for every positive blocking size $n$,
     $\Fix(E_1^\dagger)=\Fix(E_n^\dagger)$.
 \end{theorem}
 
-\begin{theorem}[The support-algebra condition does not imply a transfer retract]%
-    \label{thm:mpdo_algebra_not_imply_fusion}
-    \lean{MPOTensor.exists_isRFP_MPDO_via_algebra_not_isRFP_MPDO_via_transferRetract}
+\begin{theorem}[A blocked fixed-point-algebra tower need not be ZCL]%
+    \label{thm:mpdo_algebra_tower_not_imply_zcl}
+    \lean{MPOTensor.exists_hasBlockedAdjointFixedPointAlgebraTower_not_isZCL}
     \leanok
-    \uses{def:mpdo_rfp_via_algebra, def:mpdo_rfp_via_fusion,
-        thm:mpdo_rfp_of_fusion,
+    \uses{def:mpdo_blocked_fixed_point_algebra_tower, def:mpo_is_zcl,
         thm:mpdo_algebra_from_stabilized_adjoint_fixedpoints}
     There exists an MPO tensor of physical and bond dimension two such that the
     doubled tensor is trace-preserving, the transfer map has a
-    positive-definite fixed point, and the support-algebra condition holds, but
-    the transfer-retract condition does not hold.
+    positive-definite fixed point, and a blocked fixed-point-algebra tower,
+    while the doubled-index transfer map is not idempotent.
 \end{theorem}
 \begin{proof}\leanok
     Take the phase-flip channel with Kraus operators
@@ -374,22 +358,21 @@ family, and the corresponding multiplication / inclusion coefficient arrays.
     Hence, for every $n>0$ and $i\neq j$,
     $E^n(X)_{ij}=(-7/25)^n X_{ij}$. Since $(-7/25)^n\neq 1$ for every $n>0$
     and $E$ is self-adjoint,
-    $\Fix((E^n)^\dagger)=\Fix(E^\dagger)$. Thus the support-algebra condition
-    holds. On the other hand,
+    $\Fix((E^n)^\dagger)=\Fix(E^\dagger)$. Thus the blocked fixed-point-algebra tower exists. On the other hand,
     $E^2(X)_{01}=\frac{49}{625}X_{01}\neq-\frac7{25}X_{01}=E(X)_{01}$.
-    Therefore $E^2\neq E$, so the transfer-retract condition fails.
+    Therefore $E^2\neq E$, so the doubled-index ZCL condition fails.
 \end{proof}
 
-\begin{remark}[Why algebra data do not imply transfer-retract data]%
-    \label{rem:mpdo_algebra_to_fusion_gap}
-    \uses{def:mpdo_rfp_via_algebra, def:mpdo_rfp_via_fusion,
-        thm:mpdo_algebra_not_imply_fusion, thm:newton_girard}
+\begin{remark}[Why the algebra tower does not imply doubled-index ZCL]%
+    \label{rem:mpdo_algebra_tower_to_zcl_gap}
+    \uses{def:mpdo_blocked_fixed_point_algebra_tower, def:mpo_is_zcl,
+        thm:mpdo_algebra_tower_not_imply_zcl, thm:newton_girard}
     Write $E=E_1$ for the one-site transfer map. The present algebra predicate
     gives $\Fix((E^n)^\dagger)=\Fix(E^\dagger)$ for every $n>0$.
     Hence a vector $X$ with $E^\dagger X=\lambda X$ and $\lambda^n=1$ lies in
     $\Fix(E^\dagger)$, so $(\lambda-1)X=0$ and $\lambda=1$ by
     Theorem~\ref{thm:mpdo_algebra_root_of_unity_eigenvalue}. It does not imply
-    $E^2=E$, as Theorem~\ref{thm:mpdo_algebra_not_imply_fusion} shows. More
+    $E^2=E$, as Theorem~\ref{thm:mpdo_algebra_tower_not_imply_zcl} shows. More
     generally, if $\Pi_{\mathrm{diag}}$ is the projection onto diagonal
     matrices and $0<\varepsilon<1$, set
     $E(X)=\varepsilon X+(1-\varepsilon)\Pi_{\mathrm{diag}}(X)$, so that
@@ -463,7 +446,7 @@ family, and the corresponding multiplication / inclusion coefficient arrays.
     BNT-label hypotheses as a separate condition, relate them to the one-site
     and two-site vertical canonical forms, and construct the maps in
     (\ref{eq:mpdo_reconstruction_maps}).
-    Theorem~\ref{thm:mpdo_algebra_not_imply_fusion} shows that the
+    Theorem~\ref{thm:mpdo_algebra_tower_not_imply_zcl} shows that the
     support-algebra condition alone does not imply the BNT-label hypotheses.
     % Source-faithful completion requires the BNT-label hypotheses as a
     % separate condition; the support-algebra condition does not imply them.

@@ -319,12 +319,11 @@ Support isometries first realize the cyclic corners. The remaining results place
         \label{eq:canonical_corner_trace}
     \end{align}
     \begin{proof}\leanok
-        Diagonalize the projection $P$ by a unitary change of basis. The
-        inclusion of the support coordinates gives a rectangular isometry $V$
-        satisfying (\ref{eq:canonical_support_isometry}). Compress the letters
-        of $A$ to this support and let $\varphi$ be the corresponding corner
-        isomorphism. The support relation $PA^iP=A^i$ gives the corner-letter
-        identity. For each word
+        \uses{thm:supported_kraus_corner_compression}
+        Apply Theorem~\ref{thm:supported_kraus_corner_compression} to the
+        family $(A^i)_i$. It gives $C$, $\varphi$, and $V$ satisfying
+        (\ref{eq:canonical_support_isometry}) and $\varphi(C^i)=A^i$. It remains
+        to identify the coefficients of the associated words. For each word
         $\sigma=(\sigma_1,\ldots,\sigma_N)$, cyclicity of the trace and
         $VV^\dagger=P$ give
         \begin{align}

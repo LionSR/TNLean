@@ -41,11 +41,14 @@ import TNLean.MPS.ParentHamiltonian.CyclicWindowIndex
 import TNLean.MPS.ParentHamiltonian.Decorrelation
 import TNLean.MPS.ParentHamiltonian.Defs
 import TNLean.MPS.ParentHamiltonian.ExtendRight
+import TNLean.MPS.ParentHamiltonian.GramConvergence
+import TNLean.MPS.ParentHamiltonian.GramInverseConvergence
 import TNLean.MPS.ParentHamiltonian.GroundSpace
 import TNLean.MPS.ParentHamiltonian.GroundSpaceGram
 import TNLean.MPS.ParentHamiltonian.GroundSpaceSpanning
 import TNLean.MPS.ParentHamiltonian.IntersectionProperty
 import TNLean.MPS.ParentHamiltonian.KernelChainGroundSpace
+import TNLean.MPS.ParentHamiltonian.LimitingGramMetric
 import TNLean.MPS.ParentHamiltonian.LocalSupport
 import TNLean.MPS.ParentHamiltonian.LocalSupportTransport
 import TNLean.MPS.ParentHamiltonian.Martingale

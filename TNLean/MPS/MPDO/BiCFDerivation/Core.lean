@@ -473,6 +473,32 @@ private theorem exists_pair_trace_repr {m n : Type*} [Fintype m] [Fintype n]
           (f.comp (LinearMap.inr ℂ (Matrix m m ℂ) (Matrix n n ℂ))) M.2 = _
       rw [hA M.1, hB M.2]
 
+private theorem pair_matrix_span_top_of_pair_trace_separating {D₁ D₂ : ℕ}
+    (W : Submodule ℂ
+      (Matrix (Fin D₁) (Fin D₁) ℂ × Matrix (Fin D₂) (Fin D₂) ℂ))
+    (hSep : ∀ (ΔA : Matrix (Fin D₁) (Fin D₁) ℂ)
+        (ΔB : Matrix (Fin D₂) (Fin D₂) ℂ),
+      (∀ M ∈ W, Matrix.trace (ΔA * M.1) + Matrix.trace (ΔB * M.2) = 0) →
+        ΔA = 0 ∧ ΔB = 0) :
+    W = ⊤ := by
+  classical
+  by_contra hnot
+  have hlt : W < ⊤ := lt_of_le_of_ne le_top hnot
+  obtain ⟨f, hfne, hfker⟩ := Submodule.exists_le_ker_of_lt_top W hlt
+  obtain ⟨ΔA, ΔB, hf_repr⟩ := exists_pair_trace_repr f
+  have hΔ : ΔA = 0 ∧ ΔB = 0 := by
+    refine hSep ΔA ΔB ?_
+    intro M hM
+    have hf0 : f M = 0 := hfker hM
+    simpa [hf_repr] using hf0
+  have hfzero : f = 0 := by
+    apply LinearMap.ext
+    intro M
+    have hM := hf_repr M
+    rw [hΔ.1, hΔ.2] at hM
+    simpa using hM
+  exact hfne hfzero
+
 private theorem pair_trace_zero_on_span {D₁ D₂ : ℕ}
     {Ω : Set (Matrix (Fin D₁) (Fin D₁) ℂ × Matrix (Fin D₂) (Fin D₂) ℂ)}
     (ΔA : Matrix (Fin D₁) (Fin D₁) ℂ)
@@ -522,27 +548,15 @@ theorem pairWordTupleSpanTop_of_pairTraceSeparatingAt {D₁ D₂ : ℕ}
     PairWordTupleSpanTop A B S := by
   classical
   unfold PairWordTupleSpanTop
-  by_contra hnot
-  let W : Submodule ℂ
-      (Matrix (Fin D₁) (Fin D₁) ℂ × Matrix (Fin D₂) (Fin D₂) ℂ) :=
-    Submodule.span ℂ (Set.range (pairWordTuple A B S))
-  have hlt : W < ⊤ := lt_of_le_of_ne le_top (by simpa [W] using hnot)
-  obtain ⟨f, hfne, hfker⟩ := Submodule.exists_le_ker_of_lt_top W hlt
-  obtain ⟨ΔA, ΔB, hf_repr⟩ := exists_pair_trace_repr f
-  have hΔ : ΔA = 0 ∧ ΔB = 0 := by
-    refine hSep ΔA ΔB ?_
-    intro w
-    have hwmem : pairWordTuple A B S w ∈ W :=
-      Submodule.subset_span ⟨w, rfl⟩
-    have hf0 : f (pairWordTuple A B S w) = 0 := hfker hwmem
-    simpa [pairWordTuple, hf_repr] using hf0
-  have hfzero : f = 0 := by
-    apply LinearMap.ext
-    intro M
-    have hM := hf_repr M
-    rw [hΔ.1, hΔ.2] at hM
-    simpa using hM
-  exact hfne hfzero
+  exact pair_matrix_span_top_of_pair_trace_separating
+    (Submodule.span ℂ (Set.range (pairWordTuple A B S))) (by
+      intro ΔA ΔB hZero
+      refine hSep ΔA ΔB ?_
+      intro w
+      have hwmem : pairWordTuple A B S w ∈
+          Submodule.span ℂ (Set.range (pairWordTuple A B S)) :=
+        Submodule.subset_span ⟨w, rfl⟩
+      simpa [pairWordTuple] using hZero (pairWordTuple A B S w) hwmem)
 
 /-- Homogeneous pair product-span gives homogeneous trace separation. -/
 theorem pairTraceSeparatingAt_of_pairWordTupleSpanTop {D₁ D₂ : ℕ}
@@ -579,27 +593,14 @@ theorem pairCumulativeWordTupleSpanTop_of_pairTraceSeparatingUpTo {D₁ D₂ : �
     PairCumulativeWordTupleSpanTop A B S := by
   classical
   unfold PairCumulativeWordTupleSpanTop
-  by_contra hnot
-  let W : Submodule ℂ
-      (Matrix (Fin D₁) (Fin D₁) ℂ × Matrix (Fin D₂) (Fin D₂) ℂ) :=
-    pairCumulativeSpan A B S
-  have hlt : W < ⊤ := lt_of_le_of_ne le_top (by simpa [W] using hnot)
-  obtain ⟨f, hfne, hfker⟩ := Submodule.exists_le_ker_of_lt_top W hlt
-  obtain ⟨ΔA, ΔB, hf_repr⟩ := exists_pair_trace_repr f
-  have hΔ : ΔA = 0 ∧ ΔB = 0 := by
-    refine hSep ΔA ΔB ?_
-    intro w hw
-    have hwmem : pairEvalWordTuple A B w ∈ W :=
-      pairEvalWordTuple_mem_pairCumulativeSpan A B hw
-    have hf0 : f (pairEvalWordTuple A B w) = 0 := hfker hwmem
-    simpa [pairEvalWordTuple, hf_repr] using hf0
-  have hfzero : f = 0 := by
-    apply LinearMap.ext
-    intro M
-    have hM := hf_repr M
-    rw [hΔ.1, hΔ.2] at hM
-    simpa using hM
-  exact hfne hfzero
+  exact pair_matrix_span_top_of_pair_trace_separating
+    (pairCumulativeSpan A B S) (by
+      intro ΔA ΔB hZero
+      refine hSep ΔA ΔB ?_
+      intro w hw
+      have hwmem : pairEvalWordTuple A B w ∈ pairCumulativeSpan A B S :=
+        pairEvalWordTuple_mem_pairCumulativeSpan A B hw
+      simpa [pairEvalWordTuple] using hZero (pairEvalWordTuple A B w) hwmem)
 
 /-- Cumulative pair product-span gives cumulative trace separation. -/
 theorem pairTraceSeparatingUpTo_of_pairCumulativeWordTupleSpanTop {D₁ D₂ : ℕ}
@@ -664,27 +665,14 @@ theorem pairAllWordsSpanTop_of_pairTraceSeparatingAll {D₁ D₂ : ℕ}
     PairAllWordsSpanTop A B := by
   classical
   unfold PairAllWordsSpanTop
-  by_contra hnot
-  let W : Submodule ℂ
-      (Matrix (Fin D₁) (Fin D₁) ℂ × Matrix (Fin D₂) (Fin D₂) ℂ) :=
-    pairAllWordsSpan A B
-  have hlt : W < ⊤ := lt_of_le_of_ne le_top (by simpa [W] using hnot)
-  obtain ⟨f, hfne, hfker⟩ := Submodule.exists_le_ker_of_lt_top W hlt
-  obtain ⟨ΔA, ΔB, hf_repr⟩ := exists_pair_trace_repr f
-  have hΔ : ΔA = 0 ∧ ΔB = 0 := by
-    refine hSep ΔA ΔB ?_
-    intro w
-    have hwmem : pairEvalWordTuple A B w ∈ W :=
-      Submodule.subset_span ⟨w, rfl⟩
-    have hf0 : f (pairEvalWordTuple A B w) = 0 := hfker hwmem
-    simpa [pairEvalWordTuple, hf_repr] using hf0
-  have hfzero : f = 0 := by
-    apply LinearMap.ext
-    intro M
-    have hM := hf_repr M
-    rw [hΔ.1, hΔ.2] at hM
-    simpa using hM
-  exact hfne hfzero
+  exact pair_matrix_span_top_of_pair_trace_separating
+    (pairAllWordsSpan A B) (by
+      intro ΔA ΔB hZero
+      refine hSep ΔA ΔB ?_
+      intro w
+      have hwmem : pairEvalWordTuple A B w ∈ pairAllWordsSpan A B :=
+        Submodule.subset_span ⟨w, rfl⟩
+      simpa [pairEvalWordTuple] using hZero (pairEvalWordTuple A B w) hwmem)
 
 /-- The span of all finite pair words gives trace separation by all finite pair words. -/
 theorem pairTraceSeparatingAll_of_pairAllWordsSpanTop {D₁ D₂ : ℕ}

@@ -719,7 +719,10 @@ def reindexPhysical {d' : ℕ} (e : Fin d' ≃ Fin d)
     (U : MPOTensor d D) : MPOTensor d' D :=
   fun i j ↦ U (e i) (e j)
 
-private theorem doubleLayerTensor_reindexPhysical {d' : ℕ}
+/-- Simultaneous reindexing of both physical coordinates commutes entrywise with
+formation of the double layer. This is the local coordinate identity used to compare
+iterated and direct physical blockings. -/
+theorem doubleLayerTensor_reindexPhysical {d' : ℕ}
     (e : Fin d' ≃ Fin d) (U : MPOTensor d D) (i j : Fin d') :
     doubleLayerTensor (reindexPhysical e U) i j = doubleLayerTensor U (e i) (e j) := by
   classical

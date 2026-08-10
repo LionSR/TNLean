@@ -402,40 +402,6 @@ Definition~\ref{def:mpo_source_zcl} permits the positive factor $\lambda$.
     Definition~\ref{def:mpo_source_zcl} to be $1$.
 \end{proof}
 
-\begin{theorem}[Transfer-map idempotence iff doubled-index condition]
-    \label{thm:is_rfp_iff_is_zcl}
-    \lean{MPOTensor.isRFP_iff_isZCL}
-    \leanok
-    \uses{def:is_rfp_mpdo, def:mpo_is_zcl}
-    MPO transfer-map idempotence is exactly the doubled-index transfer
-    condition of Definition~\ref{def:mpo_is_zcl}.
-\end{theorem}
-
-\begin{proof}
-    \leanok
-    Both conditions assert $\E_M\circ\E_M=\E_M$; they are definitionally
-    identical.
-\end{proof}
-
-\begin{theorem}[Transfer-map idempotence iff doubled-index MPS RFP]
-    \label{thm:is_rfp_iff_to_mps_rfp}
-    \lean{MPOTensor.isRFP_iff_toMPSTensor_isTransferIdempotent}
-    \leanok
-    \uses{def:is_rfp_mpdo, def:mpo_to_mps, def:mps_transfer_idempotence,
-        def:mpo_is_zcl,
-        thm:mpo_is_zcl_iff_to_mps_rfp}
-    MPO transfer-map idempotence is equivalent to the pure-state RFP condition
-    for the doubled-index MPS tensor.
-\end{theorem}
-
-\begin{proof}
-    \leanok
-    \uses{thm:mpo_is_zcl_iff_to_mps_rfp}
-    Unfold transfer-map idempotence to its definitional equivalent, the
-    doubled-index transfer condition, and apply
-    Theorem~\ref{thm:mpo_is_zcl_iff_to_mps_rfp}.
-\end{proof}
-
 \section{Purification fixed points}
 
 \begin{definition}[Purifying spin--ancilla tensor]

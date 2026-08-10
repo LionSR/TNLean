@@ -70,7 +70,7 @@ separate public-surface occurrence and therefore appears separately.
 | `ch13_parent_hamiltonian_commuting_gap_appendix_b_commutation.tex` | L55 `tenkz` → `P-grid` | — | — |
 | `ch13_parent_hamiltonian_commuting_gap_appendix_b_supports.tex` | L276 `tenkz` → `P-grid` | — | — |
 | `ch13_parent_hamiltonian_injective_ground_spaces_intersection_property.tex` | L101 `tenkz` → `P-grid` | — | — |
-| `ch13_parent_hamiltonian_injective_ground_spaces_local_parent_interaction.tex` | L36, 1085, 1127 `tenkz` → `P-grid` | — | — |
+| `ch13_parent_hamiltonian_injective_ground_spaces_local_parent_interaction.tex` | L36, 1474, 1516 `tenkz` → `P-grid` | — | — |
 | `ch14_correlations.tex` | L68 `tenkz` → `P-grid` | — | — |
 | `ch16_channel_representations_choi_and_kraus.tex` | L691 `tenkz` → `P-grid` | — | — |
 | `ch16_channel_representations_dilations_and_ordered_cp.tex` | L23 `tenkz` → `P-grid` | — | — |
@@ -83,9 +83,9 @@ separate public-surface occurrence and therefore appears separately.
 | `ch21_mpdo_rfp_foundations.tex` | L87, 92 `tenkz` → `P-grid` | — | — |
 | `ch21_mpdo_rfp_fusion_isometries_complete_zipper_coherence.tex` | — | L215, 219, 293, 294, 295, 296, 298 `tntree` → `C-tree` | — |
 | `ch21_mpdo_rfp_fusion_isometries_fixed_final_comparison.tex` | — | L572, 577 `tntree` → `C-tree` | — |
-| `ch21_mpdo_rfp_fusion_isometries_foundations.tex` | L403, 413, 648, 657, 669, 678, 690, 695 `tenkz` → `P-grid` | — | — |
+| `ch21_mpdo_rfp_fusion_isometries_foundations.tex` | L363, 373, 608, 617, 629, 638, 650, 655 `tenkz` → `P-grid` | — | — |
 | `ch21_mpdo_rfp_fusion_isometries_product_laws.tex` | L45, 61, 65, 465 `tenkz` → `P-grid` | L577, 579 `tntree` → `C-tree` | — |
-| `ch21_mpdo_rfp_renormalization.tex` | L632, 635, 638, 641 `tenkz` → `P-grid` | — | — |
+| `ch21_mpdo_rfp_renormalization.tex` | L618, 621, 624, 627 `tenkz` → `P-grid` | — | — |
 | `ch21_mpdo_rfp_simple_local_closed_sector_contractions.tex` | L282, 288 `tenkz` → `P-grid` | — | — |
 | `ch21_mpdo_rfp_simple_local_inverse_map_factorization.tex` | L44, 49, 53, 70, 78, 130, 265, 270, 275, 282, 287, 486, 704, 710, 714 `tenkz` → `P-grid` | — | — |
 | `ch21_mpdo_rfp_simple_local_neighboring_bond_contractions.tex` | L793, 806, 814, 821, 895, 902 `tenkz` → `P-grid` | — | — |

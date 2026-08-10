@@ -10,11 +10,15 @@ import Mathlib.GroupTheory.SpecificGroups.Cyclic
 import Mathlib.Analysis.Matrix.Spectrum
 
 /-!
-# Peripheral eigenvalue group structure (Wolf Theorem 6.6)
+# Peripheral eigenvalue group structure for finite Kraus maps
 
 This file establishes that the peripheral eigenvalues of an irreducible
-quantum channel form a **cyclic group** under multiplication, completing
-the formalization of Wolf Theorem 6.6.
+finite-Kraus channel form a **cyclic group** under multiplication.
+
+**Scope restriction (complete positivity and adjoint fixed point):** Wolf
+Theorem 6.6 assumes an irreducible positive unital Schwarz map. The declarations
+here use a finite Kraus family and a positive-definite fixed point of its adjoint.
+See `docs/paper-gaps/wolf_thm6_6_kraus_scope.tex`.
 
 ## Building blocks (already formalized elsewhere)
 
@@ -303,13 +307,18 @@ The proof strategy uses Mathlib's `rootsOfUnity.isCyclic`:
    `CyclicDecomposition.lean`.
 -/
 
-/-- **The peripheral eigenvalues form a cyclic group** (Wolf Theorem 6.6, without divisibility).
+/-- **The peripheral eigenvalues form a cyclic group** for a finite Kraus map.
 
 The peripheral eigenvalues form a finite subset of `ℂ`, contain `1`, and are
 closed under multiplication and inversion, so they form a finite subgroup of
 `ℂˣ`, which is cyclic. This lemma extracts the cyclic structure without
 requiring `IsTPKraus` (the divisibility `m ∣ D` needs trace-preservation
-separately; see `peripheral_eigenvalues_form_cyclic_group`). -/
+separately; see `peripheral_eigenvalues_form_cyclic_group`).
+
+**Scope restriction (complete positivity and adjoint fixed point):** This is the
+finite-Kraus specialization of the cyclicity conclusion in Wolf Theorem 6.6(1),
+with a positive-definite adjoint fixed point assumed explicitly and without the
+order bound. See `docs/paper-gaps/wolf_thm6_6_kraus_scope.tex`. -/
 theorem peripheral_eigenvalues_cyclic_structure
     {r : ℕ} [NeZero D]
     (K : Fin r → MatrixAlg D)
@@ -442,7 +451,13 @@ theorem peripheral_eigenvalues_cyclic_structure
 
 Combines `peripheral_eigenvalues_cyclic_structure` (cyclic group without
 trace-preservation) with `channel_period_divides_dim` to additionally
-establish `m ∣ D`. -/
+establish `m ∣ D`.
+
+**Scope restriction (complete positivity and adjoint fixed point):** Wolf
+Theorem 6.6 assumes an irreducible positive unital Schwarz map, whereas this
+declaration assumes a finite Kraus family, trace preservation, and a
+positive-definite fixed point of the adjoint. See
+`docs/paper-gaps/wolf_thm6_6_kraus_scope.tex`. -/
 theorem peripheral_eigenvalues_form_cyclic_group
     {r : ℕ} [NeZero D]
     (K : Fin r → MatrixAlg D)
@@ -485,7 +500,12 @@ theorem peripheral_eigenvalues_form_cyclic_group
 Follows from `fixed_eq_scalar_of_irreducible_unital` in
 `CyclicDecomposition.lean`: if `E(X) = X` with `E` irreducible and unital,
 then `X = c · I`. Applied to `E^m` restricted to a cyclic sector, this
-forces one-dimensional eigenspaces. -/
+forces one-dimensional eigenspaces.
+
+**Scope restriction (complete positivity and adjoint fixed point):** Wolf
+Theorem 6.6 assumes an irreducible positive unital Schwarz map, whereas this
+declaration assumes a finite Kraus family and a positive-definite fixed point of
+its adjoint. See `docs/paper-gaps/wolf_thm6_6_kraus_scope.tex`. -/
 theorem peripheral_eigenvalue_multiplicity_one
     {r : ℕ} [NeZero D]
     (K : Fin r → MatrixAlg D)

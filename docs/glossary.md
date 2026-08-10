@@ -493,3 +493,88 @@ model different levels of data and different sources.
 The `CF` spelling in these established MPDO names is retained for compatibility
 and paper-local vocabulary. New public predicates should spell out
 `CanonicalForm` unless a source-faithful established name requires otherwise.
+
+## MPDO renormalization fixed points and zero correlation length
+
+The following notions use different transfer objects and are not interchangeable.
+
+### `MPOTensor.IsRFPViaTS`
+
+- **Declaration:** `MPOTensor.IsRFPViaTS (M : MPOTensor d D) : Prop`.
+- **Defined in:** `TNLean/MPS/MPDO/RFPViaTS.lean`.
+- **Meaning:** there exist trace-preserving completely positive maps
+  $\mathcal S$ and $\mathcal T$ on the physical indices satisfying the one-site
+  and two-site equations $\mathcal S[M_2(X)]=M_1(X)$ and
+  $\mathcal T[M_1(X)]=M_2(X)$ for every virtual insertion $X$.
+- **Source:** CPSV16 Definition 4.1, label `RFPMixedTS`,
+  `Papers/1606.00608/MPDO-22-12-17-2.tex:638-663`.
+- **Caveat:** this is the source MPDO renormalization fixed-point predicate. It
+  is distinct from pure MPS RFP, doubled-index transfer idempotence, and every
+  physical-trace ZCL condition below.
+
+### Literal physical-trace idempotence
+
+- **Expression:**
+  `MPOTensor.physTraceTransfer M * MPOTensor.physTraceTransfer M =
+  MPOTensor.physTraceTransfer M`.
+- **Transfer object:** $\mathcal T_M=\sum_i M^{ii}$, obtained by closing the
+  ket and bra physical indices of one MPO tensor.
+- **Source:** CPSV16 Definition 4.2, label `DefinitionZCL`,
+  `Papers/1606.00608/MPDO-22-12-17-2.tex:735-741`.
+- **Sanctioned bridge:** with $\mathcal T_M\ne0$, this equation implies
+  `MPOTensor.IsSourceZCL M` through
+  `MPOTensor.isSourceZCL_of_physTraceTransfer_sq`.
+- **Caveat:** no dedicated predicate abbreviates this literal equation. It is
+  not `MPOTensor.IsZCL`, which uses the doubled-index completely positive map.
+
+### `MPOTensor.IsSourceZCL`
+
+- **Declaration:** `MPOTensor.IsSourceZCL (M : MPOTensor d D) : Prop`.
+- **Defined in:** `TNLean/MPS/MPDO/ZCL.lean`.
+- **Meaning:** $\mathcal T_M\ne0$ and
+  $\mathcal T_M^2=\lambda\mathcal T_M$ for some real $\lambda>0$.
+- **Source boundary:** this is a scale-invariant version of CPSV16 Definition
+  4.2, whose fixed-tensor diagram has $\lambda=1$. The difference is recorded
+  in `docs/paper-gaps/cpsv16_zcl_canonical_form_normalization.tex`.
+- **Caveat:** it is neither literal physical-trace idempotence nor the
+  doubled-index predicate `MPOTensor.IsZCL`.
+
+### `MPOTensor.IsZCL`
+
+- **Declaration:** `MPOTensor.IsZCL (M : MPOTensor d D) : Prop`.
+- **Defined in:** `TNLean/MPS/MPDO/ZCL.lean`.
+- **Meaning:** the doubled-index transfer map is idempotent,
+  $E_M\circ E_M=E_M$.
+- **Sanctioned bridge:**
+  `MPOTensor.isZCL_iff_toMPSTensor_isTransferIdempotent` identifies this with
+  transfer idempotence of the doubled-index MPS tensor `M.toMPSTensor`.
+- **Caveat:** this is not the physical-trace ZCL diagram of CPSV16 Definition
+  4.2 and not the physical-map RFP predicate `MPOTensor.IsRFPViaTS`.
+
+### `MPOTensor.TransferRetractData`
+
+- **Declaration:** `MPOTensor.TransferRetractData M n`.
+- **Defined in:** `TNLean/MPS/MPDO/FusionIsometries.lean`.
+- **Meaning:** the blocked doubled-index transfer map factors through a
+  subspace $\mathcal A_n$ as $S_nT_n=E_n$ and $T_nS_n=\id_{\mathcal A_n}$.
+- **Sanctioned bridges:** `MPOTensor.transferRetractData_one_iff_isZCL` is the
+  one-site criterion, and `MPOTensor.transferRetractData_of_isZCL` supplies
+  such data at every positive blocked size from doubled-index idempotence.
+- **Caveat:** these are bond-space linear retracts, not the physical
+  trace-preserving completely positive maps in CPSV16 Definition 4.1 and not
+  the tensor-attached BNT data in Theorem 4.14(ii)--(iii).
+
+### `MPOTensor.HasBlockedAdjointFixedPointAlgebraTower`
+
+- **Declaration:**
+  `MPOTensor.HasBlockedAdjointFixedPointAlgebraTower (M : MPOTensor d D) : Prop`.
+- **Defined in:** `TNLean/MPS/MPDO/AlgebraStructure.lean`.
+- **Meaning:** there is a tower of support $*$-algebras $\mathcal A_n$ whose
+  carriers equal $\operatorname{Fix}(E_n^\dagger)$ at every positive blocked
+  size, with multiplication and inclusion induced by ambient matrices.
+- **Caveat:** this is weaker than CPSV16 Theorem 4.14(ii). It does not include
+  the BNT-label product law, the positive diagonal matrices
+  $\chi_{\alpha,\beta,\gamma}$, or the length-one idempotent trace identity.
+  The theorem
+  `MPOTensor.exists_hasBlockedAdjointFixedPointAlgebraTower_not_isZCL` shows
+  that this tower does not imply doubled-index transfer idempotence.

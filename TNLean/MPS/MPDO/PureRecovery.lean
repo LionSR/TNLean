@@ -3,15 +3,15 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.MPS.MPDO.Defs
+import TNLean.MPS.MPDO.ZCL
 import TNLean.MPS.RFP.ZeroCorrelationLength
 
 /-!
 # Pure-state recovery inside the MPO formalism
 
 This file studies the diagonal embedding of a pure MPS tensor into the MPO
-formalism and shows that the MPDO renormalization fixed-point condition
-recovers the usual pure-state `IsTransferIdempotent` and `IsZCL` conditions.
+formalism and compares doubled-index transfer-map idempotence with the usual
+pure-state `IsTransferIdempotent` and `IsZCL` conditions.
 -/
 
 namespace MPSTensor
@@ -42,18 +42,18 @@ original MPS transfer map. -/
   rw [MPOTensor.transferMap_apply, transferMap_apply]
   simp [toMPOTensor]
 
-/-- For a pure MPS viewed as a diagonal MPO, MPDO-RFP is exactly the original
-pure-state RFP condition. -/
-theorem toMPOTensor_isRFP_iff_isTransferIdempotent (A : MPSTensor d D) :
-    MPOTensor.IsRFP A.toMPOTensor ↔ IsTransferIdempotent A := by
-  rw [MPOTensor.IsRFP, IsTransferIdempotent, toMPOTensor_transferMap]
+/-- For a pure MPS viewed as a diagonal MPO, doubled-index transfer-map
+idempotence is exactly the original pure-state transfer-map condition. -/
+theorem toMPOTensor_isZCL_iff_isTransferIdempotent (A : MPSTensor d D) :
+    MPOTensor.IsZCL A.toMPOTensor ↔ IsTransferIdempotent A := by
+  rw [MPOTensor.IsZCL, IsTransferIdempotent, toMPOTensor_transferMap]
 
-/-- For a pure MPS embedded as a diagonal MPO, the MPDO RFP condition reduces
-to the pure-state zero-correlation-length condition via
+/-- For a pure MPS embedded as a diagonal MPO, doubled-index transfer-map
+idempotence reduces to the pure-state zero-correlation-length condition via
 `MPSTensor.zcl_iff_idempotent_transfer`. -/
-theorem toMPOTensor_isRFP_iff_isZCL (A : MPSTensor d D) :
-    MPOTensor.IsRFP A.toMPOTensor ↔ IsZCL A :=
-  (toMPOTensor_isRFP_iff_isTransferIdempotent A).trans
+theorem toMPOTensor_isZCL_iff_mps_isZCL (A : MPSTensor d D) :
+    MPOTensor.IsZCL A.toMPOTensor ↔ MPSTensor.IsZCL A :=
+  (toMPOTensor_isZCL_iff_isTransferIdempotent A).trans
     (zcl_iff_idempotent_transfer A).symm
 
 end MPSTensor

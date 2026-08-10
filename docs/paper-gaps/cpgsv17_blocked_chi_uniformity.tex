@@ -239,7 +239,7 @@ This rules out root-of-unity peripheral eigenvalues of $E^\dagger$, but it does
 not imply the transfer-retract idempotence equation $E^2=E$.
 
 This failure is formalized by
-\leanid{MPOTensor.exists_isRFP_MPDO_via_algebra_not_isRFP_MPDO_via_transferRetract}.
+\leanid{MPOTensor.exists_hasBlockedAdjointFixedPointAlgebraTower_not_isZCL}.
 The counterexample is the phase-flip channel with Kraus operators
 $K_0=\frac35 I$ and $K_1=\frac45 Z$.  It is trace-preserving, fixes the
 positive-definite matrix $I$, and has off-diagonal eigenvalue $-\frac7{25}$.
@@ -309,14 +309,14 @@ to maps on the full physical matrix algebras is described in
 \path{cpgsv17_vertical_isometry_zero_sector.tex}.
 
 The present algebra predicate
-\leanid{MPOTensor.IsRFP_MPDO_via_algebra} does not include these BNT-label
+\leanid{MPOTensor.HasBlockedAdjointFixedPointAlgebraTower} does not include these BNT-label
 coefficients, the positive $\chi_{\alpha,\beta,\gamma}$, or the length-one
 idempotent trace identity.  It proves the fixed-point-space equation above, not
 the displayed BNT coefficient comparison.  Thus a source-faithful construction
 must first obtain the BNT-label theorem witness from the MPDO tensor, use the
 trace identity to construct the retained-sector composites, and complete them
 on the discarded physical complements.  The one-site transfer-retract criterion
-\leanid{MPOTensor.transferRetractData_one_iff_isRFP} concerns the separate
+\leanid{MPOTensor.transferRetractData_one_iff_isZCL} concerns the separate
 transfer-map idempotence predicate and cannot supply these physical maps.
 
 The scalar normalization step is now isolated independently of the still
@@ -936,8 +936,9 @@ equivalence
 active-support correction of Theorem~4.14(iii), not its unrestricted printed
 form.  These results do not identify the positive-diagonal family with a
 complete zipper fusion family and do not supply the stronger categorical
-$F$-matrix data discussed above.  The transfer-retract predicate also remains
-separate: it expresses transfer-map idempotence rather than Definition~4.1.
+$F$-matrix data discussed above.  The one-site criterion for
+\leanid{MPOTensor.TransferRetractData} also remains separate: it is equivalent to doubled-index transfer-map idempotence rather
+than Definition~4.1.
 
 \bibliographystyle{alpha}
 \bibliography{references}

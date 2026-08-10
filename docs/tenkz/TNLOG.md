@@ -12,7 +12,10 @@ is the contract.
 
 ## 1. Format version
 
-The event format is version **1.0**, meaning the surface this page describes.
+The event format is version **1.1**, meaning the surface this page describes.
+The minor moved from 1.0 when the `picture` event gained the optional `size`
+field (§6), which is the addition a minor is for: a reader of 1.0 ignores an
+optional field it does not know and reads every record it did before.
 No stream carries that number in band. There is no header line, no magic
 string, no producer record, and no trailer: the first byte of a `.tnlog` is the
 first event, in practice always a `picture` line.
@@ -73,7 +76,7 @@ drift apart unnoticed.
 
 ```toml tenkz-event-kinds-v1
 schema = 1
-version = "1.0"
+version = "1.1"
 emitted = [
   "atom",
   "bbox",
@@ -145,7 +148,7 @@ first, the rest sorted, no `picture=`.
 
 | Kind | Fields, in emitted order | Meaning |
 |---|---|---|
-| `picture` | `id` (`k<n>`), `lang` (always `kernel`), `metrics` (when a metric profile is declared), `scope` (when inside `tenkzeq`) | opens a picture |
+| `picture` | `id` (`k<n>`), `lang` (always `kernel`), `metrics` (when a metric profile is declared), `size` (when the resolved size class is not `m`, whether the author stated it or the surrounding mathematics did), `scope` (when inside `tenkzeq`) | opens a picture |
 | `kernel-boundary` | `signature` | closes the record block with the picture's exposed-index multiset, comma-space joined, possibly empty |
 | `check` | `scope`, then `relation` or `product`, `result`, `modulo`, and result-specific fields | one equation-level verdict, emitted after every picture of its scope |
 | `warning` | `picture`, `code`, then code-specific fields | one non-fatal geometry or readability diagnostic |

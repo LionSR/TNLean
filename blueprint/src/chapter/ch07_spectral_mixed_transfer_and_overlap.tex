@@ -511,7 +511,7 @@ Perron--Frobenius fixed point.
     \leanok
     \uses{thm:modulus_one_gauge, thm:qpf, thm:right_canonical_gauge,
         thm:ks_peripheral, thm:kraus_commute,
-        thm:left_multiplicative_identity, thm:psd_fp_pd_irred,
+        thm:left_multiplicative_identity, thm:transfer_psd_fp_pd_irred,
         thm:gauged_intertwining_core, thm:gauged_intertwining_gauge_phase,
         thm:skolem_noether}
     Choose a modulus-one eigenvector as in
@@ -520,7 +520,7 @@ Perron--Frobenius fixed point.
     Kadison--Schwarz equality proceed as before. The equality makes the
     relevant positive products of the transported intertwiner nonzero
     positive semidefinite fixed points. Under irreducibility,
-    Theorem~\ref{thm:psd_fp_pd_irred} makes these fixed points positive
+    Theorem~\ref{thm:transfer_psd_fp_pd_irred} makes these fixed points positive
     definite, so the transported intertwiner is invertible.
     Lemma~\ref{thm:gauged_intertwining_core} supplies
     (\ref{eq:spectral_gauged_intertwining}), and
@@ -577,14 +577,14 @@ Perron--Frobenius fixed point.
 
 \begin{proof}
     \leanok
-    \uses{thm:eigenvalue_bound, thm:psd_fp_pd_irred}
+    \uses{thm:eigenvalue_bound, thm:transfer_psd_fp_pd_irred}
     Suppose instead that
     $\rho_{\spec}(F_{AB}^{\mathrm{rect}})=1$, and choose a modulus-one
     eigenvector $X\in M_{D_1\times D_2}(\C)\setminus\{0\}$. Gauge $A$ and
     $B$ separately to unital families $A'$ and $B'$ and transport $X$ to
     $X'\neq0$. The matrix $X'X'^\dagger$ is a nonzero positive semidefinite
     fixed point of the appropriate transfer map on $\MN{D_1}$, so
-    Theorem~\ref{thm:psd_fp_pd_irred} makes it positive definite. Thus $X'$
+    Theorem~\ref{thm:transfer_psd_fp_pd_irred} makes it positive definite. Thus $X'$
     has full row rank and $D_1\leq D_2$. Similarly, $X'^\dagger X'$ is
     positive definite, so $X'$ has full column rank and $D_2\leq D_1$.
     Hence $D_1=D_2$, a contradiction.
