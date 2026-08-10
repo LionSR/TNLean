@@ -41,6 +41,13 @@ on:
       - 'scripts/blueprint_lean_sync.py'
       - 'scripts/test_blueprint_web_render.py'
       - 'scripts/check_reader_facing_prose.py'
+      - 'scripts/audit_cpsv16_labels.py'
+      - 'scripts/test_audit_cpsv16_labels.py'
+      - 'Papers/1606.00608/MPDO-22-12-17-2.tex'
+      - 'docs/audits/2026-05-08-mps-ft-paper-coverage.md'
+      - 'docs/audits/2026-08-10-cpsv16-every-label-audit.md'
+      - 'docs/audits/data/cpsv16-label-classifications.tsv'
+      - 'docs/audits/data/cpsv16-label-dispositions.tsv'
       - 'scripts/tenkz_audit.py'
       - 'scripts/tenkz_blueprint_sweep.py'
       - 'scripts/test_tenkz_blueprint_sweep.py'
@@ -110,6 +117,13 @@ on:
       - 'scripts/blueprint_lean_sync.py'
       - 'scripts/test_blueprint_web_render.py'
       - 'scripts/check_reader_facing_prose.py'
+      - 'scripts/audit_cpsv16_labels.py'
+      - 'scripts/test_audit_cpsv16_labels.py'
+      - 'Papers/1606.00608/MPDO-22-12-17-2.tex'
+      - 'docs/audits/2026-05-08-mps-ft-paper-coverage.md'
+      - 'docs/audits/2026-08-10-cpsv16-every-label-audit.md'
+      - 'docs/audits/data/cpsv16-label-classifications.tsv'
+      - 'docs/audits/data/cpsv16-label-dispositions.tsv'
       - 'scripts/tenkz_audit.py'
       - 'scripts/tenkz_blueprint_sweep.py'
       - 'scripts/test_tenkz_blueprint_sweep.py'
@@ -626,6 +640,11 @@ jobs:
       - uses: actions/checkout@v6
         with:
           fetch-depth: 0
+
+      - name: Validate CPSV16 every-label audit
+        run: |
+          python3 scripts/test_audit_cpsv16_labels.py
+          python3 scripts/audit_cpsv16_labels.py
 
       - name: Check reader-facing prose patterns
         if: github.event_name == 'pull_request'
