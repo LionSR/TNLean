@@ -2541,3 +2541,131 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     and peripheral-spectrum identities provide its remaining normality
     fields. Consequently $\widetilde U$ is a normal tensor.
 \end{proof}
+
+\section{Finite-region observable algebras}
+
+Fix a nonnegative integer $d$.  For a finite region
+$\Lambda\subset\mathbb Z$, let
+\begin{align}
+  \mathcal A_\Lambda
+    &= M_d^{\otimes\Lambda}
+     \cong M_{\{0,\ldots,d-1\}^{\Lambda}}(\mathbb C).
+\end{align}
+This algebra carries its operator norm.  It is the finite-region construction
+used in the QCA appendix of \cite{Cirac2017MPU}; no completion is taken here.
+
+\begin{definition}[Canonical inclusion of finite-region observables]
+  \label{def:qca_local_inclusion}
+  \lean{SpinChain.localInclusion}
+  \leanok
+  If $\Lambda\subseteq\Gamma$ are finite regions, define
+  \begin{align}
+    \iota_{\Lambda,\Gamma}&\colon\mathcal A_\Lambda\longrightarrow
+      \mathcal A_\Gamma, \\
+    \iota_{\Lambda,\Gamma}(A)
+      &= A\otimes \mathbf 1_{\Gamma\setminus\Lambda}.
+  \end{align}
+  Here product configurations are identified with configurations on
+  $\Gamma$.  This is a unital star-algebra homomorphism.
+\end{definition}
+
+\begin{lemma}[Injectivity of the finite-region inclusion]
+  \label{lem:qca_local_inclusion_injective}
+  \lean{SpinChain.localInclusion_injective}
+  \leanok
+  \uses{def:qca_local_inclusion}
+  For $d>0$, the map $\iota_{\Lambda,\Gamma}$ is injective.
+\end{lemma}
+
+\begin{proof}\leanok
+  Since $d>0$, choose a configuration $c$ on
+  $\Gamma\setminus\Lambda$.  For configurations $x,y$ on $\Lambda$,
+  \begin{align}
+    \iota_{\Lambda,\Gamma}(A)((x,c),(y,c))
+      &=A(x,y)\cdot\mathbf 1_{\Gamma\setminus\Lambda}(c,c)
+       =A(x,y).
+  \end{align}
+  Hence $\iota_{\Lambda,\Gamma}(A)=\iota_{\Lambda,\Gamma}(B)$ implies
+  $A=B$.
+\end{proof}
+
+\begin{lemma}[Operator-norm preservation]
+  \label{lem:qca_local_inclusion_norm}
+  \lean{SpinChain.localInclusion_norm}
+  \leanok
+  \uses{def:qca_local_inclusion}
+  If $d>0$, then for every $A\in\mathcal A_\Lambda$,
+  \begin{align}
+    \lVert\iota_{\Lambda,\Gamma}(A)\rVert&=\lVert A\rVert.
+  \end{align}
+\end{lemma}
+
+\begin{proof}\leanok
+  \uses{lem:qca_local_inclusion_injective}
+  An injective star-algebra homomorphism between complex $C^*$-algebras is
+  isometric.
+\end{proof}
+
+\begin{lemma}[Isometry of the finite-region inclusion]
+  \label{lem:qca_local_inclusion_isometry}
+  \lean{SpinChain.localInclusion_isometry}
+  \leanok
+  \uses{def:qca_local_inclusion}
+  For $d>0$, the map $\iota_{\Lambda,\Gamma}$ is an operator-norm isometry.
+\end{lemma}
+
+\begin{proof}\leanok
+  \uses{lem:qca_local_inclusion_injective}
+  Use injectivity and the general theorem that an injective star-algebra
+  homomorphism between complex $C^*$-algebras is an isometry.
+\end{proof}
+
+\begin{lemma}[Identity inclusion]
+  \label{lem:qca_local_inclusion_refl}
+  \lean{SpinChain.localInclusion_refl}
+  \leanok
+  \uses{def:qca_local_inclusion}
+  For every finite region $\Lambda$,
+  $\iota_{\Lambda,\Lambda}$ is the identity on $\mathcal A_\Lambda$.
+\end{lemma}
+
+\begin{proof}\leanok
+  When the two regions agree, their complement is empty.  Hence
+  \begin{align}
+    \iota_{\Lambda,\Lambda}(A)
+      &=A\otimes\mathbf 1_{\varnothing}
+       =A\otimes 1
+       =A.
+  \end{align}
+\end{proof}
+
+\begin{lemma}[Composition of finite-region inclusions]
+  \label{lem:qca_local_inclusion_trans}
+  \lean{SpinChain.localInclusion_trans}
+  \leanok
+  \uses{def:qca_local_inclusion}
+  If $\Lambda\subseteq\Gamma\subseteq\Delta$, then
+  \begin{align}
+    \iota_{\Gamma,\Delta}\circ\iota_{\Lambda,\Gamma}
+      &=\iota_{\Lambda,\Delta}.
+  \end{align}
+\end{lemma}
+
+\begin{proof}\leanok
+  The complement decomposes as the disjoint union
+  \begin{align}
+    \Delta\setminus\Lambda
+      &=(\Gamma\setminus\Lambda)\sqcup(\Delta\setminus\Gamma), \\
+    \mathbf 1_{\Delta\setminus\Lambda}
+      &=\mathbf 1_{\Gamma\setminus\Lambda}
+        \otimes\mathbf 1_{\Delta\setminus\Gamma}.
+  \end{align}
+  Therefore
+  \begin{align}
+    \iota_{\Gamma,\Delta}(\iota_{\Lambda,\Gamma}(A))
+      &=(A\otimes\mathbf 1_{\Gamma\setminus\Lambda})
+        \otimes\mathbf 1_{\Delta\setminus\Gamma} \\
+      &=A\otimes\mathbf 1_{\Delta\setminus\Lambda} \\
+      &=\iota_{\Lambda,\Delta}(A).
+  \end{align}
+\end{proof}

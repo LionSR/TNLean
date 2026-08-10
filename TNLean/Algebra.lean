@@ -43,6 +43,7 @@ import TNLean.Algebra.MatrixAux
 import TNLean.Algebra.MatrixCongruence
 import TNLean.Algebra.MatrixFamilySupport
 import TNLean.Algebra.MatrixGramUnitary
+import TNLean.Algebra.MatrixKroneckerEmbed
 import TNLean.Algebra.MatrixOperatorSpace
 import TNLean.Algebra.MatrixPosDefTransport
 import TNLean.Algebra.MatrixRankBaseChange
