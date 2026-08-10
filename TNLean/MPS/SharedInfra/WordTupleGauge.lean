@@ -20,10 +20,13 @@ back to the source unital gauge carrying its positive dual fixed point.  This tr
 one ingredient of that route; it does not by itself remove the remaining normalization
 hypotheses from the parent-Hamiltonian theorem.
 
-## Main declarations
+## Main definitions
 
 * `wordTuple` — simultaneous length-`L` word evaluation in every block.
 * `WordTupleSpanTop` — the tuples span the full product matrix algebra.
+
+## Main results
+
 * `wordTupleSpanTop_eventually_of_wordTupleSpanTop_period_window` — a finite residue
   window and a positive full-span period give eventual full spans.
 * `block_matrices_eq_zero_of_wordTupleSpanTop_trace` — trace separation from a full
@@ -193,20 +196,20 @@ theorem wordTupleSpanTop_eventually_of_wordTupleSpanTop_period_window
     (A : (k : Fin r) → MPSTensor d (dim k))
     {start period : ℕ} (hperiod_pos : 0 < period)
     (hperiod : WordTupleSpanTop A period)
-    (hwindow : ∀ r : ℕ, r < period → WordTupleSpanTop A (start + r)) :
+    (hwindow : ∀ residue : ℕ, residue < period → WordTupleSpanTop A (start + residue)) :
     ∃ L : ℕ, ∀ n : ℕ, n ≥ L → WordTupleSpanTop A n := by
   refine ⟨start, ?_⟩
   intro n hn
-  let r := (n - start) % period
-  let q := (n - start) / period
-  have hr : r < period := by
+  let residue := (n - start) % period
+  let quotient := (n - start) / period
+  have hresidue : residue < period := by
     exact Nat.mod_lt _ hperiod_pos
-  have hbase : WordTupleSpanTop A (start + r) :=
-    hwindow r hr
-  have hpad : WordTupleSpanTop A (start + r + q * period) :=
-    wordTupleSpanTop_add_mul_of_wordTupleSpanTop A hbase hperiod q
-  have hlen : start + r + q * period = n := by
-    dsimp [r, q]
+  have hbase : WordTupleSpanTop A (start + residue) :=
+    hwindow residue hresidue
+  have hpad : WordTupleSpanTop A (start + residue + quotient * period) :=
+    wordTupleSpanTop_add_mul_of_wordTupleSpanTop A hbase hperiod quotient
+  have hlen : start + residue + quotient * period = n := by
+    dsimp [residue, quotient]
     rw [Nat.add_assoc]
     rw [Nat.mul_comm ((n - start) / period) period]
     rw [Nat.mod_add_div]
