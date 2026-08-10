@@ -6,7 +6,7 @@ Authors: TNLean contributors
 import Mathlib.LinearAlgebra.DFinsupp
 import TNLean.MPS.ParentHamiltonian.IntersectionProperty
 import TNLean.MPS.ParentHamiltonian.BoundaryMatrixIdentities
-import TNLean.MPS.MPDO.BiCFDerivation.Selectors
+import TNLean.MPS.SharedInfra.WordTupleGauge
 
 /-!
 # Block-diagonal intersection identities

@@ -7,7 +7,7 @@ import TNLean.MPS.Defs
 import Mathlib.LinearAlgebra.Finsupp.LinearCombination
 
 /-!
-# Gauge transport for simultaneous MPS word spans
+# Finite simultaneous MPS word spans and gauge transport
 
 This module defines the fixed-length tuple of word evaluations for a block family and proves
 that spanning the product of the block matrix algebras is invariant under an independent
@@ -24,6 +24,10 @@ hypotheses from the parent-Hamiltonian theorem.
 
 * `wordTuple` — simultaneous length-`L` word evaluation in every block.
 * `WordTupleSpanTop` — the tuples span the full product matrix algebra.
+* `wordTupleSpanTop_eventually_of_wordTupleSpanTop_period_window` — a finite residue
+  window and a positive full-span period give eventual full spans.
+* `block_matrices_eq_zero_of_wordTupleSpanTop_trace` — trace separation from a full
+  simultaneous span.
 * `wordTupleSpanTop_iff_of_family_gaugeEquiv` — invariance under blockwise invertible gauges.
 
 ## References
@@ -50,6 +54,205 @@ def WordTupleSpanTop
     (A : (k : Fin r) → MPSTensor d (dim k))
     (L : ℕ) : Prop :=
   Submodule.span ℂ (Set.range (wordTuple A L)) = ⊤
+
+/-- The tuple-valued span of word evaluations is closed under pointwise matrix
+multiplication, at the cost of adding word lengths. -/
+theorem pointwise_mul_mem_span_wordTuple_add
+    (A : (k : Fin r) → MPSTensor d (dim k))
+    {L S : ℕ}
+    {M N : (k : Fin r) → Matrix (Fin (dim k)) (Fin (dim k)) ℂ}
+    (hM : M ∈ Submodule.span ℂ (Set.range (wordTuple A L)))
+    (hN : N ∈ Submodule.span ℂ (Set.range (wordTuple A S))) :
+    (fun k : Fin r => M k * N k) ∈
+      Submodule.span ℂ (Set.range (wordTuple A (L + S))) := by
+  classical
+  let spanLS : Submodule ℂ ((k : Fin r) → Matrix (Fin (dim k)) (Fin (dim k)) ℂ) :=
+    Submodule.span ℂ (Set.range (wordTuple A (L + S)))
+  have hleft_gen : ∀ u : Fin L → Fin d,
+      (fun k : Fin r => wordTuple A L u k * N k) ∈ spanLS := by
+    intro u
+    induction hN using Submodule.span_induction with
+    | mem N hNmem =>
+        rcases hNmem with ⟨v, rfl⟩
+        have hEq : (fun k : Fin r => wordTuple A L u k * wordTuple A S v k) =
+            wordTuple A (L + S) (Fin.append u v) := by
+          funext k
+          simp [wordTuple, List.ofFn_fin_append, evalWord_append]
+        rw [hEq]
+        exact Submodule.subset_span ⟨Fin.append u v, rfl⟩
+    | zero =>
+        have hzero : (fun k : Fin r =>
+            wordTuple A L u k *
+              (0 : (k : Fin r) → Matrix (Fin (dim k)) (Fin (dim k)) ℂ) k) = 0 := by
+          funext k
+          simp
+        rw [hzero]
+        exact Submodule.zero_mem _
+    | add N₁ N₂ _ _ hN₁ hN₂ =>
+        have hEq : (fun k : Fin r => wordTuple A L u k * (N₁ + N₂) k) =
+            (fun k : Fin r => wordTuple A L u k * N₁ k) +
+              (fun k : Fin r => wordTuple A L u k * N₂ k) := by
+          funext k
+          simp [Matrix.mul_add]
+        rw [hEq]
+        exact Submodule.add_mem _ hN₁ hN₂
+    | smul a N _ hN =>
+        have hEq : (fun k : Fin r => wordTuple A L u k * (a • N) k) =
+            a • (fun k : Fin r => wordTuple A L u k * N k) := by
+          funext k
+          simp
+        rw [hEq]
+        exact Submodule.smul_mem _ a hN
+  induction hM using Submodule.span_induction with
+  | mem M hMmem =>
+      rcases hMmem with ⟨u, rfl⟩
+      exact hleft_gen u
+  | zero =>
+      have hzero : (fun k : Fin r =>
+          (0 : (k : Fin r) → Matrix (Fin (dim k)) (Fin (dim k)) ℂ) k * N k) = 0 := by
+        funext k
+        simp
+      rw [hzero]
+      exact Submodule.zero_mem _
+  | add M₁ M₂ _ _ hM₁ hM₂ =>
+      have hEq : (fun k : Fin r => (M₁ + M₂) k * N k) =
+          (fun k : Fin r => M₁ k * N k) +
+            (fun k : Fin r => M₂ k * N k) := by
+        funext k
+        simp [Matrix.add_mul]
+      rw [hEq]
+      exact Submodule.add_mem _ hM₁ hM₂
+  | smul a M _ hM =>
+      have hEq : (fun k : Fin r => (a • M) k * N k) =
+          a • (fun k : Fin r => M k * N k) := by
+        funext k
+        simp
+      rw [hEq]
+      exact Submodule.smul_mem _ a hM
+
+/-- Homogeneous identity padding preserves the full word-tuple span.
+
+If the length-\(L\) simultaneous word tuples span the full product algebra, and
+the simultaneous identity tuple lies in the length-\(S\) word-tuple span, then
+the length-\(L+S\) simultaneous word tuples also span the full product algebra.
+-/
+theorem wordTupleSpanTop_add_of_identity_mem_span_wordTuple
+    (A : (k : Fin r) → MPSTensor d (dim k))
+    {L S : ℕ}
+    (hSpan : WordTupleSpanTop A L)
+    (hId : (fun k : Fin r => (1 : Matrix (Fin (dim k)) (Fin (dim k)) ℂ)) ∈
+      Submodule.span ℂ (Set.range (wordTuple A S))) :
+    WordTupleSpanTop A (L + S) := by
+  classical
+  unfold WordTupleSpanTop at hSpan ⊢
+  apply eq_top_iff.mpr
+  intro M _
+  have hM : M ∈ Submodule.span ℂ (Set.range (wordTuple A L)) := by
+    rw [hSpan]
+    exact Submodule.mem_top
+  have hmul := pointwise_mul_mem_span_wordTuple_add A hM hId
+  have hprod :
+      (fun k : Fin r =>
+        M k * (fun k : Fin r => (1 : Matrix (Fin (dim k)) (Fin (dim k)) ℂ)) k) = M := by
+    funext k
+    simp
+  simpa [hprod] using hmul
+
+/-- Two homogeneous full word-tuple spans compose by concatenating words. -/
+theorem wordTupleSpanTop_add_of_wordTupleSpanTop
+    (A : (k : Fin r) → MPSTensor d (dim k))
+    {L S : ℕ}
+    (hSpanL : WordTupleSpanTop A L)
+    (hSpanS : WordTupleSpanTop A S) :
+    WordTupleSpanTop A (L + S) := by
+  apply wordTupleSpanTop_add_of_identity_mem_span_wordTuple A hSpanL
+  unfold WordTupleSpanTop at hSpanS
+  rw [hSpanS]
+  exact Submodule.mem_top
+
+/-- A full homogeneous word-tuple span at one period extends any full base
+length along the arithmetic progression obtained by adding that period. -/
+theorem wordTupleSpanTop_add_mul_of_wordTupleSpanTop
+    (A : (k : Fin r) → MPSTensor d (dim k))
+    {base period : ℕ}
+    (hbase : WordTupleSpanTop A base)
+    (hperiod : WordTupleSpanTop A period) :
+    ∀ q : ℕ, WordTupleSpanTop A (base + q * period)
+  | 0 => by
+      simpa using hbase
+  | q + 1 => by
+      have hq : WordTupleSpanTop A (base + q * period) :=
+        wordTupleSpanTop_add_mul_of_wordTupleSpanTop A hbase hperiod q
+      have hstep := wordTupleSpanTop_add_of_wordTupleSpanTop A hq hperiod
+      simpa [Nat.succ_mul, Nat.add_assoc] using hstep
+
+/-- A finite residue window of full homogeneous word-tuple spans, together with
+one positive period, gives full homogeneous word-tuple spans at every
+sufficiently large length. -/
+theorem wordTupleSpanTop_eventually_of_wordTupleSpanTop_period_window
+    (A : (k : Fin r) → MPSTensor d (dim k))
+    {start period : ℕ} (hperiod_pos : 0 < period)
+    (hperiod : WordTupleSpanTop A period)
+    (hwindow : ∀ r : ℕ, r < period → WordTupleSpanTop A (start + r)) :
+    ∃ L : ℕ, ∀ n : ℕ, n ≥ L → WordTupleSpanTop A n := by
+  refine ⟨start, ?_⟩
+  intro n hn
+  let r := (n - start) % period
+  let q := (n - start) / period
+  have hr : r < period := by
+    exact Nat.mod_lt _ hperiod_pos
+  have hbase : WordTupleSpanTop A (start + r) :=
+    hwindow r hr
+  have hpad : WordTupleSpanTop A (start + r + q * period) :=
+    wordTupleSpanTop_add_mul_of_wordTupleSpanTop A hbase hperiod q
+  have hlen : start + r + q * period = n := by
+    dsimp [r, q]
+    rw [Nat.add_assoc]
+    rw [Nat.mul_comm ((n - start) / period) period]
+    rw [Nat.mod_add_div]
+    exact Nat.add_sub_of_le hn
+  rw [← hlen]
+  exact hpad
+
+/-- If simultaneous word evaluations span the product algebra, then a block
+matrix family whose trace pairing vanishes on those word evaluations is zero. -/
+theorem block_matrices_eq_zero_of_wordTupleSpanTop_trace
+    (A : (k : Fin r) → MPSTensor d (dim k))
+    {L : ℕ} (hSpan : WordTupleSpanTop A L)
+    (Δ : (k : Fin r) → Matrix (Fin (dim k)) (Fin (dim k)) ℂ)
+    (hΔ : ∀ w : Fin L → Fin d,
+      (∑ k : Fin r, Matrix.trace (Δ k * evalWord (A k) (List.ofFn w))) = 0) :
+    ∀ k, Δ k = 0 := by
+  classical
+  have hZeroOnSpan :
+      ∀ M : (k : Fin r) → Matrix (Fin (dim k)) (Fin (dim k)) ℂ,
+        M ∈ Submodule.span ℂ (Set.range (wordTuple A L)) →
+        (∑ k : Fin r, Matrix.trace (Δ k * M k)) = 0 := by
+    intro M hM
+    exact Submodule.span_induction (p := fun x _ =>
+        (∑ k : Fin r, Matrix.trace (Δ k * x k)) = 0)
+      (fun x hx => by
+        rcases hx with ⟨w, rfl⟩
+        simpa [wordTuple] using hΔ w)
+      (by simp)
+      (fun x y hx hy hxzero hyzero => by
+        simp [Matrix.mul_add, Matrix.trace_add, hxzero, hyzero, Finset.sum_add_distrib])
+      (fun a x hx hxzero => by
+        simpa [Pi.smul_apply, Matrix.mul_smul, Matrix.trace_smul, Finset.mul_sum] using
+          congrArg (fun z : ℂ => a * z) hxzero)
+      hM
+  intro k
+  apply (Matrix.ext_iff_trace_mul_right (A := Δ k) (B := 0)).2
+  intro N
+  have hsum := hZeroOnSpan (Function.update 0 k N) (by
+    rw [hSpan]
+    exact Submodule.mem_top)
+  rw [Finset.sum_eq_single k
+      (fun j _ hj => by
+        rw [Function.update_of_ne hj, Pi.zero_apply, mul_zero, Matrix.trace_zero])
+      (fun hk => absurd (Finset.mem_univ k) hk),
+    Function.update_self] at hsum
+  simpa using hsum
 
 /-- Reindexing the common physical alphabet by an equivalence preserves the
 simultaneous word-tuple span.
