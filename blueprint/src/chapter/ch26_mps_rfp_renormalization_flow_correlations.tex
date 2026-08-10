@@ -191,6 +191,7 @@
 \begin{theorem}[The printed pure blocking-up-to-gauge equivalence is false]
     \label{thm:cpsv_pure_rfp_gauge_status}
     \lean{MPSTensor.cube_phase_blocked_gauge_identity}
+    \lean{MPSTensor.cubePhaseDoubledTensor_isMPDO}
     \lean{MPSTensor.cubePhaseDoubledTensor_isCPSVCanonicalForm}
     \lean{MPSTensor.cubePhaseDoubledTensor_exists_weightNormalized}
     \lean{MPSTensor.cubePhaseTensor_isPureOneLetterRFPViaTSUpToVirtualGauge}
@@ -198,7 +199,7 @@
     \lean{MPSTensor.cubePhaseTensor_normalized_canonical_gauge_not_rfp}
     \lean{MPSTensor.cpsv16_pure_rfp_gauge_equivalence_false}
     \leanok
-    \uses{def:blocked_tensor, def:doubled_tensor,
+    \uses{def:blocked_tensor, def:doubled_tensor, def:mpdo,
         def:one_letter_mpdo_virtual_gauge_rfp, def:cube_phase_swap_gauge,
         def:cpsv_canonical_form, def:mps_transfer_idempotence}
     Let $\omega=e^{2\pi i/3}$, and set
@@ -212,8 +213,9 @@
         A&=\omega S A^2S^{-1}.
         \notag
     \end{align}
-    The doubled MPO tensor is in CPSV canonical form, and its four scalar-block
-    weights satisfy the source normalization convention. It also satisfies the literal
+    The doubled MPO tensor generates positive semidefinite operators on every
+    nonempty chain, is in CPSV canonical form, and has four scalar-block weights
+    satisfying the source normalization convention. It also satisfies the literal
     one-letter virtual-gauge condition in the source diagram, but its transfer
     map is not idempotent. Hence the canonical-restricted pure-state
     equivalence claimed after
@@ -225,10 +227,17 @@
 \end{theorem}
 \begin{proof}
     \leanok
-    \uses{def:ft_perm_gl, lem:ft_perm_gl_identities,
-        lem:bond_dimension_one_identity_transfer_normal,
+    \uses{def:ft_perm_gl, lem:ft_perm_gl_identities, def:mpdo,
+        lem:mpo_doubled, lem:bond_dimension_one_identity_transfer_normal,
         def:cpsv_canonical_form, thm:blocked_gauge_phase_to_doubled_mpdo,
         thm:cpsv_canonical_form_flow_phase_obstruction}
+    On every nonempty chain, $M=A\otimes\overline A$ generates the rank-one
+    operator $\ketbra{V^{(N)}(A)}{V^{(N)}(A)}$, which is positive semidefinite.
+    Moreover, $M$ is the direct sum of four bond-one scalar blocks with weights
+    $\mu_p\overline{\mu_q}$, where $\mu_0=1$ and $\mu_1=\omega$.
+    Each block is normal and every weight has modulus one, proving both the CPSV
+    canonical-form condition and its normalization.
+
     Swapping the two virtual coordinates changes
     $\operatorname{diag}(1,\omega^2)$ into
     $\operatorname{diag}(\omega^2,1)$; multiplication by $\omega$ gives $A$.

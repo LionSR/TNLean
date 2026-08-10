@@ -55,6 +55,9 @@ pure MPDO tensor is the doubled tensor
 \begin{align}
   M&=A\otimes\overline A.
 \end{align}
+On every nonempty chain, $M$ generates the rank-one operator
+$\ketbra{V^{(N)}(A)}{V^{(N)}(A)}$, which is positive semidefinite. Thus $M$
+satisfies the MPDO standing hypothesis in Definition \texttt{RFPMixedTS}.
 For one physical letter, both physical matrix algebras are one-dimensional.
 Every unitary-conjugation channel on either algebra is therefore the identity,
 so the physical maps $T$ and $S$ in the source diagram contribute no phase.
@@ -95,6 +98,7 @@ The formal declarations are
 \leanid{MPSTensor.doubledVirtualGauge},
 \leanid{MPSTensor.isPureOneLetterRFPViaTSUpToVirtualGauge_of_isBlockedGaugePhaseFixedPoint},
 \leanid{MPSTensor.cube_phase_blocked_gauge_identity},
+\leanid{MPSTensor.cubePhaseDoubledTensor_isMPDO},
 \leanid{MPSTensor.cubePhaseDoubledTensor_isCPSVCanonicalForm},
 \leanid{MPSTensor.cubePhaseDoubledTensor_exists_weightNormalized},
 \leanid{MPSTensor.cubePhaseTensor_isPureOneLetterRFPViaTSUpToVirtualGauge},
@@ -107,9 +111,9 @@ The formal declarations are
 
 \textbf{Verdict: false as printed.}  The pure-state equivalence following
 equation \texttt{RFP-gauge} fails even when the one-letter doubled MPO tensor
-is canonical and satisfies the line-246 normalization. The
-ordinary theorem that a virtual gauge preserves an already established
-renormalization fixed point is unaffected: gauge covariance cannot turn the
+generates an MPDO family, is canonical, and satisfies the line-246
+normalization. The ordinary theorem that a virtual gauge preserves an already
+established renormalization fixed point is unaffected: gauge covariance cannot turn the
 blocking-up-to-gauge hypothesis into transfer-map idempotence.
 
 The printed pure spectral argument therefore cannot support the mixed-state
