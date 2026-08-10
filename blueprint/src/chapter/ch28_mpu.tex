@@ -207,6 +207,57 @@ closing a chain of $N$ copies of $\mathcal U$.
     the chain.
 \end{proof}
 
+\begin{theorem}[Physical-adjoint identities for matrix product unitaries]
+    \label{thm:mpu_physical_adjoint_identities}
+    \lean{MPOTensor.physicalAdjointTensor_physicalAdjointTensor,
+        MPOTensor.IsMPU.physicalAdjointTensor,
+        MPOTensor.mpo_physicalAdjointTensor_eq_conjTranspose}
+    \leanok
+    \uses{def:mpu,def:mpdo_physical_adjoint}
+    The physical adjoint is involutive. If $\mathcal U$ generates matrix
+    product unitaries, then so does $\mathcal U^\sharp$, and for every chain
+    length $N$,
+    \begin{align}
+        (\mathcal U^\sharp)^\sharp&=\mathcal U,
+        &(\mathcal U^\sharp)^{(N)}&=\bigl(\mathcal U^{(N)}\bigr)^\dagger.
+    \end{align}
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:mpu,def:mpdo_physical_adjoint,lem:mpu_mul_adjoint}
+    Applying the physical adjoint twice conjugates every entry twice and
+    exchanges the physical indices twice. Closing a physical-adjoint tensor
+    exchanges the two physical configurations and conjugates the resulting
+    scalar. Hence its periodic operator is the conjugate transpose. The first
+    MPU unitarity equation for $U^{(N)}$ is therefore the second unitarity
+    equation for $(U^\sharp)^{(N)}$.
+\end{proof}
+
+\begin{theorem}[Output-first double-layer entry]
+    \label{thm:mpu_output_first_double_layer_entry}
+    \lean{MPOTensor.doubleLayerTensor_physicalAdjointTensor_apply}
+    \leanok
+    \uses{def:mpu_double_layer,def:mpdo_physical_adjoint}
+    Order the left doubled bond as $(\alpha,\gamma)$ and the right doubled
+    bond as $(\beta,\delta)$. Then the double layer whose lower tensor is
+    $\mathcal U^\sharp$ has entries
+    \begin{align}
+        \mathcal W(\mathcal U^\sharp)^{ik}_{(\alpha,\gamma),(\beta,\delta)}
+        &=\sum_j
+          \mathcal U^{ij}_{\alpha,\beta}\,
+          \overline{\mathcal U^{kj}_{\gamma,\delta}}.
+    \end{align}
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:mpu_double_layer,def:mpdo_physical_adjoint}
+    Expand the double layer and then apply the physical adjoint to its upper
+    factor. The two exchanges of physical indices leave the contracted index
+    $j$ in the second physical position of both factors. The product-index
+    convention keeps $(\alpha,\gamma)$ and $(\beta,\delta)$ in the displayed
+    order.
+\end{proof}
+
 \begin{definition}[Simple matrix product unitary tensor]
     \label{def:mpu_simple}
     \lean{MPOTensor.IsMPUSimple,
@@ -1496,6 +1547,31 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
     $X_1^\dagger W_\rho X_1=\Id_r$. Since $X_2=V_2^\dagger$, the
     coisometry identity $V_2V_2^\dagger=\Id_\ell$ gives
     $X_2^\dagger X_2=\Id_\ell$.
+\end{proof}
+
+\begin{theorem}[Recovery of the right source factors]
+    \label{thm:mpu_source_factor_recovery}
+    \lean{MPOTensor.sourceY₁_eq_sourceX₁_conjTranspose_mul_weight_mul_sourceCutM₁,
+        MPOTensor.sourceY₂_eq_sourceX₂_conjTranspose_mul_sourceCutM₂}
+    \leanok
+    \uses{def:mpu_source_weight,def:mpu_weighted_source_factors,
+        def:mpu_source_matrix_one,def:mpu_source_matrix_two}
+    The right source factors are recovered from the two source matrices by
+    \begin{align}
+        Y_1&=X_1^\dagger W_\rho M_1,
+        &Y_2&=X_2^\dagger M_2.
+    \end{align}
+    Here $W_\rho=\rho\otimes I_d$ in the product-index order
+    $(\text{left virtual},\text{physical})$.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpu_source_factorizations,
+        thm:mpu_source_factor_normalizations}
+    Multiply $M_1=X_1Y_1$ on the left by $X_1^\dagger W_\rho$ and use
+    $X_1^\dagger W_\rho X_1=I_r$. Similarly, multiply
+    $M_2=X_2Y_2$ on the left by $X_2^\dagger$ and use
+    $X_2^\dagger X_2=I_\ell$.
 \end{proof}
 
 \begin{theorem}[Right inverses of the source factors]
