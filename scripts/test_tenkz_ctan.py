@@ -178,14 +178,21 @@ def test_the_version_comes_from_one_declaration_or_from_none() -> None:
 
 
 def test_a_manifest_that_would_write_the_wrong_file_is_refused() -> None:
+    """The write path stops on an unwritable name; the report names it and
+    keeps going, and both readings come from the one check."""
+
     closure = tenkz_ctan.walk_closure()
     for material, fragment in (
         ({"tenkz.sty": "LICENSE"}, "runtime name"),
         ({"../outside.md": "LICENSE"}, "will not be written"),
         ({"README.md": "LICENSE", "readme.md": "LICENSE"}, "differ only in case"),
     ):
+        manifest = {"material": material}
+        content = tenkz_ctan.staged_content(manifest, closure)
+        report = tenkz_ctan.check_names(content, manifest, closure)
+        assert report.failures, material
         try:
-            tenkz_ctan.staged_content({"material": material}, closure)
+            tenkz_ctan.require_writable_names(manifest, closure, content)
         except SystemExit as refusal:
             assert fragment in str(refusal), (material, str(refusal))
         else:
@@ -282,13 +289,16 @@ def test_the_archive_is_a_function_of_the_files_it_carries() -> None:
 
 
 def test_staging_ignores_the_builders_file_creation_mask() -> None:
+    release = tenkz_ctan.Release(version="0.7", date="2026-07-22")
     with tempfile.TemporaryDirectory() as directory:
         room = Path(directory)
         subject = room / "tenkz.sty"
         subject.write_text("% one\n", encoding="utf-8")
         previous = os.umask(0o077)
         try:
-            tree = tenkz_ctan.stage(room / "out", 1000000, {"tenkz.sty": subject})
+            tree = tenkz_ctan.stage(
+                room / "out", release, 1000000, {"tenkz.sty": subject}
+            )
         finally:
             os.umask(previous)
         assert (tree / "tenkz.sty").stat().st_mode & 0o777 == 0o644
@@ -409,25 +419,45 @@ def test_the_staged_tree_carries_no_compilation_leftovers() -> None:
 
 
 def test_an_output_directory_loses_only_this_tools_artifacts() -> None:
+    release = tenkz_ctan.read_release()
     with tempfile.TemporaryDirectory() as directory:
         out = Path(directory) / "out"
         out.mkdir()
         (out / PACKAGE_DIR).mkdir()
-        (out / "tenkz-0.7.zip").write_text("old\n", encoding="utf-8")
-        tenkz_ctan.clear_destination(out)
+        (out / f"{release.archive_stem}.zip").write_text("old\n", encoding="utf-8")
+        tenkz_ctan.clear_destination(out, release)
         assert list(out.iterdir()) == []
 
         (out / "somebody-elses-notes.txt").write_text("keep me\n", encoding="utf-8")
         try:
-            tenkz_ctan.clear_destination(out)
+            tenkz_ctan.clear_destination(out, release)
         except SystemExit as refusal:
             assert "somebody-elses-notes.txt" in str(refusal), str(refusal)
         else:
             raise AssertionError("a directory this tool does not own was emptied")
         assert (out / "somebody-elses-notes.txt").is_file()
 
+        # An archive of another release, and a plain file wearing the staged
+        # tree's name: both are somebody else's, whatever they are called.
+        (out / "somebody-elses-notes.txt").unlink()
+        (out / "tenkz-0.1.zip").write_text("an older release\n", encoding="utf-8")
+        try:
+            tenkz_ctan.clear_destination(out, release)
+        except SystemExit as refusal:
+            assert "tenkz-0.1.zip" in str(refusal), str(refusal)
+        else:
+            raise AssertionError("an archive this run does not write was removed")
+        (out / "tenkz-0.1.zip").unlink()
+        (out / PACKAGE_DIR).write_text("not the staged tree\n", encoding="utf-8")
+        try:
+            tenkz_ctan.clear_destination(out, release)
+        except SystemExit as refusal:
+            assert PACKAGE_DIR in str(refusal), str(refusal)
+        else:
+            raise AssertionError("a file wearing the tree's name was removed")
+
     try:
-        tenkz_ctan.clear_destination(ROOT)
+        tenkz_ctan.clear_destination(ROOT, release)
     except SystemExit as refusal:
         assert "is not an output directory" in str(refusal), str(refusal)
     else:
@@ -436,12 +466,94 @@ def test_an_output_directory_loses_only_this_tools_artifacts() -> None:
     # `tex/` holds a directory called `tenkz`, and it is the package's own
     # sources. Recognizing artifacts by name cannot be the only guard.
     try:
-        tenkz_ctan.clear_destination(ROOT / "tex")
+        tenkz_ctan.clear_destination(ROOT / "tex", release)
     except SystemExit as refusal:
         assert "outside build/" in str(refusal), str(refusal)
     else:
         raise AssertionError("the source directory was accepted as an output directory")
     assert (ROOT / "tex/tenkz/tenkz.sty").is_file()
+
+
+def _without_table(manifest: str, table: str) -> str:
+    """The manifest with one table and its sub-tables taken out."""
+
+    kept: list[str] = []
+    dropping = False
+    for line in manifest.splitlines(keepends=True):
+        header = line.strip()
+        if header.startswith("["):
+            dropping = header == f"[{table}]" or header.startswith(f"[{table}.")
+        if not dropping:
+            kept.append(line)
+    return "".join(kept)
+
+
+def test_a_manifest_without_its_tables_is_named_rather_than_raised() -> None:
+    """A parseable manifest that is not a staging manifest says which table it
+    is missing, instead of failing as a key error inside whichever check
+    reached it first."""
+
+    original = (ROOT / "docs/tenkz/ctan/MANIFEST.toml").read_text(encoding="utf-8")
+    for table, fragment in (
+        ("runtime", "no [runtime] table"),
+        ("material", "no [material] table"),
+        ("source_tree", "no [source_tree] table"),
+    ):
+        with tempfile.TemporaryDirectory() as directory:
+            broken = Path(directory) / "MANIFEST.toml"
+            broken.write_text(_without_table(original, table), encoding="utf-8")
+            completed = subprocess.run(
+                [sys.executable, str(ROOT / "scripts/tenkz_ctan.py"), "check"],
+                capture_output=True,
+                text=True,
+                env={**os.environ, "TENKZ_CTAN_MANIFEST": str(broken)},
+            )
+        assert completed.returncode != 0, table
+        assert fragment in completed.stdout + completed.stderr, (
+            table,
+            completed.stdout,
+            completed.stderr,
+        )
+
+
+def test_a_record_stating_its_version_twice_fails() -> None:
+    """A release edit that leaves the previous line standing beside the new one
+    has stated two versions, and a citation record states one."""
+
+    manifest = tenkz_ctan.read_manifest()
+    release = tenkz_ctan.read_release()
+    citation = ROOT / manifest["material"]["CITATION.cff"]
+    original = citation.read_text(encoding="utf-8")
+    stale = original.replace(
+        f'version: "{release.version}"',
+        f'version: "0.1"\nversion: "{release.version}"',
+        1,
+    )
+    try:
+        citation.write_text(stale, encoding="utf-8")
+        failures = tenkz_ctan.check_version(release, manifest).failures
+    finally:
+        citation.write_text(original, encoding="utf-8")
+    assert any("once" in reason for reason in failures), failures
+
+
+def test_a_commented_version_does_not_answer_for_the_record() -> None:
+    """A BibTeX comment holding the right year beside a live field holding the
+    wrong one is a stale record, and it reads as one."""
+
+    manifest = tenkz_ctan.read_manifest()
+    release = tenkz_ctan.read_release()
+    bibliography = ROOT / manifest["material"]["tenkz.bib"]
+    original = bibliography.read_text(encoding="utf-8")
+    year = release.date.split("-")[0]
+    stale = original.replace(f"year         = {{{year}}}", "year         = {1999}")
+    stale = f"% year = {{{year}}}, version {release.version}\n" + stale
+    try:
+        bibliography.write_text(stale, encoding="utf-8")
+        failures = tenkz_ctan.check_version(release, manifest).failures
+    finally:
+        bibliography.write_text(original, encoding="utf-8")
+    assert any(f"year {year}" in reason for reason in failures), failures
 
 
 def test_a_material_name_pointed_at_the_wrong_file_is_reported() -> None:
@@ -494,10 +606,10 @@ def test_material_from_outside_the_repository_is_refused() -> None:
 
 def test_the_write_path_refuses_incomplete_material() -> None:
     manifest = tenkz_ctan.read_manifest()
-    tenkz_ctan.require_complete_material(manifest)
+    tenkz_ctan.require_sound_material(manifest)
     thinned = {"material": {k: v for k, v in manifest["material"].items() if k != "LICENSE"}}
     try:
-        tenkz_ctan.require_complete_material(thinned)
+        tenkz_ctan.require_sound_material(thinned)
     except SystemExit as refusal:
         assert "LICENSE" in str(refusal), str(refusal)
     else:
