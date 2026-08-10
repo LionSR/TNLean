@@ -380,6 +380,19 @@ abstracted — record why, so it is not re-proposed).
   retains its selected eventually nonzero scalar. The two public theorem names and statements
   are unchanged, and the Lean source loses 58 lines net.
 
+### Boundary-crossing trace-family reuse
+- **Pattern:** choose boundary-crossing matrices independently for every interval and
+  complementary word, then separate the trace identity blockwise using the corresponding
+  simultaneous word span.
+- **Reuse:** `MPSTensor.blockDiagonal_boundary_crossing_trace_decompositions_of_boundary`
+  supplies the global family, and
+  `MPSTensor.pgvwc07_fixed_complementary_word_compatibility_of_trace_decomposition`
+  performs the blockwise comparison.
+- **Result:** `blockDiagonal_boundary_crossing_pgvwc_comparison_of_chainGroundSpace`
+  now composes these two existing theorems instead of repeating the interval assignment,
+  local crossing configuration, and choice bookkeeping. Its public statement is unchanged,
+  and the proof body loses 41 lines.
+
 ### MPS word-factor extension
 - **Pattern:** extend a one-letter identity `Z a * A i = F a * Y` to a nonempty
   physical word by multiplying the witness by the remaining suffix product.
