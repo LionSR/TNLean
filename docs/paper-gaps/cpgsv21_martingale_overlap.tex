@@ -755,16 +755,16 @@ and generic prerequisites now include:
     \leanid{ContinuousLinearMap.norm_T_comp_inverseGram_eq_sqrt} and
     \leanid{ContinuousLinearMap.norm_inverseGram_comp_adjoint_eq_sqrt}.
   \item If \(A\) is a primitive MPS tensor with nonzero virtual dimension,
-    then
+    write \(J^{\mathrm{tail}}_K\) for its length-\(K\) tail virtual map.  Then
     \leanid{MPSTensor.IsPrimitiveMPS.tailVirtualMapES_norm_uniform} gives a
     constant \(C>0\), independent of \(K\), such that
     \begin{align}
-      \lVert J_K^{\mathrm{tail}}\rVert&\le C
+      \lVert J^{\mathrm{tail}}_K\rVert&\le C
     \end{align}
     for every \(K\in\mathbb N\).  No positive-definiteness assumption on
     \(\rho\) is used.  The proof preserves the fourth-power intermediate
     normalization, first establishing a uniform bound for
-    \(\lVert J_K^{\mathrm{tail}}\rVert^4\), and then obtains the norm bound.
+    \(\lVert J^{\mathrm{tail}}_K\rVert^4\), and then obtains the norm bound.
     It reconstructs the required norm infrastructure from the exact
     tail adjoint--self estimate, the fixed-point/complementary-power
     decomposition, the geometric power bound, and the dimension conversion

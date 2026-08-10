@@ -785,9 +785,10 @@ norm estimate is derived here.
     \leanok
     \uses{def:primitive_mps, thm:spectator_boundary_hilbert_factorization}
     Let $A$ be a primitive MPS tensor with nonzero virtual dimension, and let
-    $J_K=J^{\mathrm{tail}}_K$ be its length-$K$ tail virtual map.  Then
+    $J_K=J^{\mathrm{tail}}_K$ be its length-$K$ tail virtual map.  Then there is
+    a constant $C>0$ such that, for every $K\in\N$,
     \begin{align}
-        \exists C>0,\quad \forall K\in\N,\quad \lVert J_K\rVert&\leq C.
+        \lVert J_K\rVert&\leq C.
     \end{align}
     No positive-definiteness hypothesis on the fixed point is required.
 \end{theorem}
