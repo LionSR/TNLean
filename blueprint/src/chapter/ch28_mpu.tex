@@ -2060,13 +2060,12 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
       W^{IJ}W^{LM}&=W^{IJ}|b)(a|W^{LM}.
     \end{align}
     No positivity or nonzero-dimension hypothesis is required.  This is the
-    corollary following Proposition~III.3 in
-    \cite[lines~442--446]{Cirac2017MPU}.
+    corollary following \cite[Proposition~III.3]{Cirac2017MPU}.
 \end{theorem}
 
 \begin{proof}\leanok
     \uses{lem:mpu_blocking,thm:mpu_closed_double_layer,
-        thm:mpu_double_layer_blocking,lem:mpu_mul_adjoint}
+        thm:mpu_double_layer_blocking,lem:mpu_adjoint_mul}
     Extend the supplied two-letter identity twice by overlapping suffix and
     prefix windows.  For $x=(a|W^{IJ}|b)$, the constant configurations of
     lengths two and three give $x^2=\delta_{I,J}$ and
