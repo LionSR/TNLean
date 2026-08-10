@@ -10,14 +10,17 @@ import TNLean.MPS.MPU.Basic
 
 This file formalizes the local tensor operation
 $\mathcal U^{(x)} = \mathcal U \otimes I_x$ from arXiv:1703.09188,
-lines 706--724.  It enlarges only the physical alphabet, from `d` to `d * x`;
-the virtual bond dimension remains `D`.
+lines 706--724.  It enlarges only the physical alphabet, from \(d\) to \(d x\);
+the virtual bond dimension remains \(D\).
 
 ## Main definitions
 
 * `MPOTensor.tensorPhysicalId`: attach an identity ancilla at each physical site.
 * `MPOTensor.physicalAncillaConfigEquiv`: split every enlarged physical configuration
   into its original and ancilla configurations.
+
+## Main results
+
 * `MPOTensor.mpo_tensorPhysicalId`: the generated MPO is the reindexed Kronecker
   product of the original MPO and the ancilla identity.
 * `MPOTensor.IsMPU.tensorPhysicalId`: identity-ancilla attachment preserves the MPU
@@ -30,8 +33,8 @@ namespace MPOTensor
 
 variable {d D x : ℕ}
 
-/-- Attach a physical identity ancilla of dimension `x` to an MPO tensor, without
-changing its virtual bond dimension.
+/-- Attach a physical identity ancilla of dimension \(x\) to an MPO tensor, without
+changing its virtual bond dimension \(D\).
 
 In coordinates, the enlarged physical indices are pairs `(i, a)` and `(j, b)`, and
 $\mathcal U^{(x)}_{(i,a),(j,b);\beta,\alpha}
