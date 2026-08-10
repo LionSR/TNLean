@@ -2298,20 +2298,28 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
         MPOTensor.wordOfBlock_blockWordReverseEquiv,
         MPOTensor.blockWordReverseEquiv_involutive}
     \leanok
-    \uses{def:mpu_double_layer,def:mpdo_physical_adjoint}
-    Reflection exchanges the two factors of a doubled virtual bond and
-    reverses the decoded physical word:
+    \uses{def:mpu_double_layer,def:mpdo_positive_physical_blocking}
+    The doubled-bond coordinate reflection exchanges the two virtual factors,
     \begin{align}
-      (a,b)&\longmapsto(b,a),&
+      (a,b)&\longmapsto(b,a).
+    \end{align}
+    Independently, spatial reflection reverses a blocked word of length $K$,
+    \begin{align}
       (i_0,\ldots,i_{K-1})&\longmapsto(i_{K-1},\ldots,i_0).
     \end{align}
-    Both reindexings are involutions.
+    Both reindexings are involutions.  These are support coordinates for the
+    graphical proof of \cite[Lemma~\texttt{lemuisometry}, Figure~
+    \texttt{II\_uUnitary.png}]{Cirac2017MPU}, rather than a separate theorem
+    printed there.  The blocked-word reversal is not used in the transfer
+    transport below; conjugate transposition there reverses only the order of
+    the two blocked letters.
 \end{theorem}
 
 \begin{proof}\leanok
     Decode the doubled bond, apply the product swap, and encode it again.
-    Decode a blocked index as a function on $\Fin K$, precompose with
-    $k\mapsto K-1-k$, and use reversal of the corresponding finite list.
+    Regard a blocked index as a word indexed by the $K$ ordered positions,
+    precompose with $k\mapsto K-1-k$, and reverse the corresponding finite
+    list.
 \end{proof}
 
 \begin{theorem}[Reflected supplied transfer insertion]
@@ -2325,14 +2333,14 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
         MPOTensor.IsMPU.reflected_blockTensor_mul_sq_simple_contractions_of_transfer_power,
         MPOTensor.IsMPU.reflected_blockTensor_mul_sq_add_two_simple_contractions}
     \leanok
-    \uses{thm:mpu_matching_direct_block_contractions,
-        thm:mpu_physical_adjoint_identities,
-        thm:mpu_reflected_blocked_transfer_coordinates,
-        thm:mpu_supplied_witness_overlapping_reblocking}
-    Let $E^J=|\rho)(1|$, where $\rho>0$, $\tr(\rho)=1$, and $J>0$, and set
-    $K=JD^2$.  Reflection and conjugate transposition give the insertion
-    $|1)(\rho|$.  At both lengths $K$ and $K+2$, the same reflected vectors
-    satisfy
+    \uses{def:mpu,def:mpu_double_layer,def:mpdo_physical_adjoint,
+        def:mpdo_positive_physical_blocking,def:mpu_normalized_flattening,
+        def:mpu_transfer_matrix}
+    Let $\mathcal U$ be an MPU with positive physical dimension $d$ and
+    positive bond dimension $D$.  Suppose $E^J=|\rho)(1|$, where $\rho>0$,
+    $\tr(\rho)=1$, and $J>0$, and set $K=JD^2$.  Doubled-bond reflection and
+    conjugate transposition give the insertion $|1)(\rho|$.  At both lengths
+    $K$ and $K+2$, the same reflected vectors satisfy
     \begin{align}
       (\rho|\widehat W^{IJ\dagger}|1)&=\delta_{I,J},\\
       \widehat W^{LM\dagger}\widehat W^{IJ\dagger}
@@ -2343,15 +2351,24 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
 \end{theorem}
 
 \begin{proof}\leanok
+    \uses{thm:mpu_blocked_double_layer_diagonal,
+        thm:mpu_double_layer_blocking,
+        thm:mpu_matching_direct_block_contractions,
+        thm:mpu_physical_adjoint_identities,
+        thm:mpu_reflected_blocked_transfer_coordinates,
+        thm:mpu_supplied_witness_overlapping_reblocking}
     Reindex the normalized reflected diagonal by the doubled-bond swap and
     transport the stabilized power to $\rho^{\mathsf T}$.  Positivity gives
     the Hermitian symmetry that converts its conjugate transpose to
     $|1)(\rho|$.  Conjugate transposition reverses the two blocked letters;
     supplied-witness overlapping reblocking preserves the same insertion at
-    length $K+2$.
+    length $K+2$.  Thus these identities supply coordinates for the graphical
+    proof of \cite[Lemma~\texttt{lemuisometry}, Figure~
+    \texttt{II\_uUnitary.png}]{Cirac2017MPU}; they are not asserted as a
+    separate printed theorem of that paper.
 \end{proof}
 
-% The equality and range-insertion step remains tracked by issue #5971.
+% The equality and range-insertion step remains tracked by parent issue #5982.
 \begin{remark}[Scope of the closed source-$u$ formulas]
     The first theorem rewrites the ordinary source-$u$ Gram entry, while the
     second independently rewrites the normalized closed output tail.  They do

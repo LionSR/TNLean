@@ -10,11 +10,14 @@ import TNLean.MPS.MPU.SourceUContraction
 /-!
 # Reflected open-tail contraction for the source tensor u
 
-This file exposes the index reflections and transports the supplied transfer
-witnesses to the output-layer insertion used by the sandwiched open-tail
-coefficient in arXiv:1703.09188, Figure `II_uUnitary.png` and Lemma
-`lemuisometry` (lines 536--557).  The final sandwiched finite-sum collapse is
-separate from these transport identities.
+This file exposes the doubled-bond reflection and an independent spatial
+reindexing of blocked words, then transports the supplied transfer witnesses
+to the output-layer insertion used by the sandwiched open-tail coefficient in
+arXiv:1703.09188, Figure `II_uUnitary.png` and Lemma `lemuisometry`
+(lines 536--557).  The transfer proof uses the doubled-bond swap; the blocked-word
+reversal records a separate spatial coordinate and is not used in that proof.
+The final sandwiched finite-sum collapse is separate from these transport
+identities.
 -/
 
 open scoped Matrix BigOperators ComplexOrder
@@ -43,9 +46,10 @@ noncomputable def doubledBondSwap (D : ℕ) : Fin (D * D) ≃ Fin (D * D) :=
 
 /-- Reverse the word encoded by a blocked physical index.
 
-This is the block-word reflection needed when matrix transposition reverses
-an ordered virtual product in arXiv:1703.09188, Figure `II_uUnitary.png`,
-lines 536--557. -/
+This is an independent spatial reindexing coordinate for the graphical
+reflection in arXiv:1703.09188, Figure `II_uUnitary.png`, lines 536--557.
+It is distinct from the reversal of two blocked letters caused by conjugate
+transposition in the supplied-contraction transport below. -/
 noncomputable def blockWordReverseEquiv (d K : ℕ) :
     Fin (MPSTensor.blockPhysDim d K) ≃ Fin (MPSTensor.blockPhysDim d K) :=
   (MPSTensor.decodeBlockEquiv d K).trans
@@ -85,7 +89,7 @@ noncomputable def blockWordReverseEquiv (d K : ℕ) :
 
 /-- The normalized reflected double layer is the original normalized
 double layer with the two doubled-bond components exchanged. -/
-theorem normalizedDiagonal_doubleLayerTensor_physicalAdjointTensor [NeZero d]
+theorem normalizedDiagonal_doubleLayerTensor_physicalAdjointTensor
     (W : MPOTensor d D) :
     normalizedDiagonal (doubleLayerTensor (physicalAdjointTensor W)) =
       (normalizedDiagonal (doubleLayerTensor W)).submatrix
@@ -172,13 +176,6 @@ theorem conjTranspose_normalizedDiagonal_reflected_eq_vecMulVec
   rw [hρ.isHermitian.apply]
   simp [eq_comm]
 
-private theorem submatrix_equiv_injective {α β R : Type*} (e : α ≃ β) :
-    Function.Injective (fun A : Matrix β β R ↦ A.submatrix e e) := by
-  intro A B h
-  ext i j
-  simpa only [Matrix.submatrix_apply, Equiv.apply_symm_apply] using
-    congrFun (congrFun h (e.symm i)) (e.symm j)
-
 /-- Reflection transports the supplied transfer power to the transpose of the
 positive fixed matrix. This is the raw orientation whose conjugate transpose
 has boundary order $|1)(\rho|$. -/
@@ -193,7 +190,8 @@ theorem reflected_transfer_power_eq_vecMulVec_transpose [NeZero d]
   letI : NeZero (MPSTensor.blockPhysDim d J) := ⟨by
     simpa only [MPSTensor.blockPhysDim_eq_pow] using
       pow_ne_zero J (NeZero.ne d)⟩
-  apply submatrix_equiv_injective finProdFinEquiv.symm
+  rw [← Equiv.apply_eq_iff_eq
+    (Matrix.reindex finProdFinEquiv finProdFinEquiv)]
   change (transferMatrix
       (MPSTensor.transferMap (physicalAdjointTensor U).normalizedFlattening) ^ J).submatrix
         finProdFinEquiv.symm finProdFinEquiv.symm = _
