@@ -3,7 +3,6 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.MPS.Core.Blocking
 import TNLean.MPS.Overlap.Basic
 import TNLean.MPS.RFP.ZeroCorrelationLength
 
@@ -18,7 +17,7 @@ entrywise multipliers. Its transfer map is not idempotent, so it has no
 physical blocking isometry and is not a renormalization fixed point.
 -/
 
-open scoped Matrix BigOperators InnerProductSpace
+open scoped Matrix BigOperators
 
 namespace MPSTensor
 
@@ -33,13 +32,15 @@ noncomputable def cpsvExample34Tensor : MPSTensor 2 2
   | 0 => !![(1 : ℂ), 0; 0, cpsvExample34InvSqrtTwo]
   | 1 => !![(0 : ℂ), 0; 0, cpsvExample34InvSqrtTwo]
 
-@[simp] theorem cpsvExample34Tensor_zero :
-    cpsvExample34Tensor 0 =
-      !![(1 : ℂ), 0; 0, cpsvExample34InvSqrtTwo] := rfl
+/-- The bond-dimension-one $|0\rangle$ component obtained from the first
+virtual diagonal entry of `cpsvExample34Tensor`. -/
+noncomputable def cpsvExample34ZeroTensor : MPSTensor 2 1 :=
+  fun i _ _ => cpsvExample34Tensor i 0 0
 
-@[simp] theorem cpsvExample34Tensor_one :
-    cpsvExample34Tensor 1 =
-      !![(0 : ℂ), 0; 0, cpsvExample34InvSqrtTwo] := rfl
+/-- The bond-dimension-one $|+\rangle$ component obtained from the second
+virtual diagonal entry of `cpsvExample34Tensor`. -/
+noncomputable def cpsvExample34PlusTensor : MPSTensor 2 1 :=
+  fun i _ _ => cpsvExample34Tensor i 1 1
 
 private noncomputable def cpsvExample34WordDiag (w : List (Fin 2)) : Fin 2 → ℂ
   | 0 => if w.Forall (· = 0) then 1 else 0
@@ -51,7 +52,7 @@ private theorem cpsvExample34_evalWord (w : List (Fin 2)) :
   | nil =>
       ext a b
       fin_cases a <;> fin_cases b <;>
-        simp [cpsvExample34WordDiag, Matrix.diagonal_apply]
+        simp [cpsvExample34WordDiag]
   | cons i w ih =>
       rw [evalWord_cons, ih]
       fin_cases i <;>
@@ -59,23 +60,58 @@ private theorem cpsvExample34_evalWord (w : List (Fin 2)) :
         simp [cpsvExample34Tensor, cpsvExample34WordDiag, Matrix.mul_apply,
           Fin.sum_univ_two, pow_succ']
 
+private theorem cpsvExample34_forall_ofFn_zero_iff {N : ℕ} (σ : Fin N → Fin 2) :
+    (List.ofFn σ).Forall (· = 0) ↔ ∀ k, σ k = 0 := by
+  rw [List.forall_iff_forall_mem, List.forall_mem_iff_get]
+  have hlen : (List.ofFn σ).length = N := List.length_ofFn
+  constructor
+  · intro h k
+    have hk : k.val < (List.ofFn σ).length := hlen.symm ▸ k.isLt
+    simpa using h ⟨k.val, hk⟩
+  · intro h k
+    have hk : k.val < N := by omega
+    simpa using h ⟨k.val, hk⟩
+
+private theorem cpsvExample34_component_evalWord (a : Fin 2) (w : List (Fin 2)) :
+    evalWord (fun i : Fin 2 => fun _ _ : Fin 1 => cpsvExample34Tensor i a a) w =
+      fun _ _ : Fin 1 => cpsvExample34WordDiag w a := by
+  induction w with
+  | nil =>
+      ext x y
+      fin_cases x
+      fin_cases y
+      fin_cases a <;> simp [cpsvExample34WordDiag]
+  | cons i w ih =>
+      rw [evalWord_cons, ih]
+      ext x y
+      fin_cases x
+      fin_cases y
+      fin_cases a <;> fin_cases i <;>
+        simp [cpsvExample34Tensor, cpsvExample34WordDiag, Matrix.mul_apply, pow_succ']
+
+private theorem cpsvExample34ZeroTensor_mpv {N : ℕ} (σ : Fin N → Fin 2) :
+    mpv cpsvExample34ZeroTensor σ = if ∀ k, σ k = 0 then 1 else 0 := by
+  rw [mpv, coeff]
+  change Matrix.trace (evalWord (fun i _ _ => cpsvExample34Tensor i 0 0) (List.ofFn σ)) = _
+  rw [cpsvExample34_component_evalWord]
+  simp [Matrix.trace, cpsvExample34WordDiag, cpsvExample34_forall_ofFn_zero_iff]
+
+private theorem cpsvExample34PlusTensor_mpv {N : ℕ} (σ : Fin N → Fin 2) :
+    mpv cpsvExample34PlusTensor σ = cpsvExample34InvSqrtTwo ^ N := by
+  rw [mpv, coeff]
+  change Matrix.trace (evalWord (fun i _ _ => cpsvExample34Tensor i 1 1) (List.ofFn σ)) = _
+  rw [cpsvExample34_component_evalWord]
+  simp [Matrix.trace, cpsvExample34WordDiag]
+
 /-- The exact positive-length amplitude formula in CPSV16, Example 3.4.
 For a nonempty configuration $\sigma$, the first summand is the amplitude of
 $|0,\ldots,0\rangle$ and the second is the amplitude of
 $|+,\ldots,+\rangle$. -/
-theorem cpsvExample34_mpv {N : ℕ} (hN : 0 < N) (σ : Fin N → Fin 2) :
+theorem cpsvExample34_mpv {N : ℕ} (_hN : 0 < N) (σ : Fin N → Fin 2) :
     mpv cpsvExample34Tensor σ =
       (if ∀ k, σ k = 0 then 1 else 0) + cpsvExample34InvSqrtTwo ^ N := by
   rw [mpv, coeff, cpsvExample34_evalWord]
-  simp only [Matrix.trace, Matrix.diagonal_apply_eq, Fin.sum_univ_two,
-    cpsvExample34WordDiag, List.length_ofFn]
-  congr 2
-  simp only [List.forall_iff_forall_mem, List.mem_ofFn]
-  constructor
-  · intro h k
-    exact h (σ k) ⟨k, rfl⟩
-  · rintro h x ⟨k, rfl⟩
-    exact h k
+  simp [Matrix.trace, cpsvExample34WordDiag, cpsvExample34_forall_ofFn_zero_iff]
 
 private def IsEntrywiseMultiplier
     (F : Matrix (Fin 2) (Fin 2) ℂ →ₗ[ℂ] Matrix (Fin 2) (Fin 2) ℂ) : Prop :=
@@ -93,6 +129,13 @@ private theorem isEntrywiseMultiplier_commute
   simp only [Module.End.mul_apply, hc, he]
   ring
 
+private theorem diagonal_sandwich_apply (u v : Fin 2 → ℂ)
+    (X : Matrix (Fin 2) (Fin 2) ℂ) (a b : Fin 2) :
+    (Matrix.diagonal u * (X * (Matrix.diagonal v)ᴴ)) a b =
+      u a * X a b * star (v b) := by
+  fin_cases a <;> fin_cases b <;>
+    simp [Matrix.mul_apply, Fin.sum_univ_two, mul_assoc]
+
 private theorem cpsvExample34_physicalObservableTransfer_isEntrywiseMultiplier
     (L : ℕ) (O : Matrix (Fin L → Fin 2) (Fin L → Fin 2) ℂ) :
     IsEntrywiseMultiplier (physicalObservableTransfer cpsvExample34Tensor L O) := by
@@ -104,22 +147,38 @@ private theorem cpsvExample34_physicalObservableTransfer_isEntrywiseMultiplier
   intro X a b
   simp only [physicalObservableTransfer, LinearMap.sum_apply, LinearMap.smul_apply,
     LinearMap.comp_apply, LinearMap.mulLeft_apply, LinearMap.mulRight_apply]
-  simp_rw [cpsvExample34_evalWord]
-  simp only [Matrix.conjTranspose_diagonal, Matrix.mul_apply, Matrix.diagonal_apply,
-    Finset.sum_ite_irrel, Finset.ite_sum, Finset.sum_const_zero, Finset.sum_ite_eq',
-    Finset.mem_univ, ↓reduceIte]
-  simp [c, mul_assoc, Finset.sum_mul]
+  simp_rw [Matrix.sum_apply, Matrix.smul_apply, smul_eq_mul]
+  simp_rw [cpsvExample34_evalWord, diagonal_sandwich_apply]
+  dsimp only [c]
+  rw [Finset.sum_mul]
+  apply Finset.sum_congr rfl
+  intro σ _
+  rw [Finset.sum_mul]
+  apply Finset.sum_congr rfl
+  intro τ _
+  ring
+
+private theorem cpsvExample34_letter_diagonal (i : Fin 2) :
+    cpsvExample34Tensor i =
+      Matrix.diagonal (cpsvExample34WordDiag [i]) := by
+  fin_cases i <;> ext a b <;> fin_cases a <;> fin_cases b <;>
+    simp [cpsvExample34Tensor, cpsvExample34WordDiag]
 
 private theorem cpsvExample34_transferMap_isEntrywiseMultiplier :
     IsEntrywiseMultiplier (transferMap cpsvExample34Tensor) := by
-  let O : Matrix (Fin 1 → Fin 2) (Fin 1 → Fin 2) ℂ := 1
-  have hPhys := cpsvExample34_physicalObservableTransfer_isEntrywiseMultiplier 1 O
-  rw [show physicalObservableTransfer cpsvExample34Tensor 1 O =
-      transferMap cpsvExample34Tensor by
-    apply LinearMap.ext
-    intro X
-    simp [physicalObservableTransfer, transferMap_apply, O, evalWord]] at hPhys
-  exact hPhys
+  let c : Matrix (Fin 2) (Fin 2) ℂ := fun a b =>
+    ∑ i : Fin 2, cpsvExample34WordDiag [i] a *
+      star (cpsvExample34WordDiag [i] b)
+  refine ⟨c, ?_⟩
+  intro X a b
+  change (∑ i : Fin 2, (cpsvExample34Tensor i *
+    (X * (cpsvExample34Tensor i)ᴴ)) a b) = c a b * X a b
+  simp_rw [cpsvExample34_letter_diagonal, diagonal_sandwich_apply]
+  dsimp only [c]
+  rw [Finset.sum_mul]
+  apply Finset.sum_congr rfl
+  intro i _
+  ring
 
 private theorem cpsvExample34_transfer_commutes_physicalObservableTransfer
     (L : ℕ) (O : Matrix (Fin L → Fin 2) (Fin L → Fin 2) ℂ) :
@@ -145,14 +204,20 @@ theorem cpsvExample34_isPhysicalCID :
     F₂ * E ^ n₂ * (F₁ * E ^ n₁) = F₂ * F₁ * (E ^ n₂ * E ^ n₁) :=
       (hComm₁.pow_left n₂).mul_mul_mul_comm F₂ (E ^ n₁)
     _ = F₂ * F₁ * E ^ (n₂ + n₁) := by rw [← pow_add]
-    _ = F₂ * F₁ * E ^ (m₂ + m₁) := by rw [Nat.add_comm n₂ n₁, Nat.add_comm m₂ m₁, hsum]
+    _ = F₂ * F₁ * E ^ (m₂ + m₁) := by
+      rw [Nat.add_comm n₂ n₁, Nat.add_comm m₂ m₁, hsum]
     _ = F₂ * F₁ * (E ^ m₂ * E ^ m₁) := by rw [← pow_add]
     _ = F₂ * E ^ m₂ * (F₁ * E ^ m₁) :=
       ((hComm₁.pow_left m₂).mul_mul_mul_comm F₂ (E ^ m₁)).symm
 
 private theorem cpsvExample34_invSqrtTwo_sq :
     cpsvExample34InvSqrtTwo ^ 2 = (1 / 2 : ℂ) := by
-  norm_num [cpsvExample34InvSqrtTwo, div_pow, Real.sq_sqrt]
+  have hsqrt_ne : Real.sqrt 2 ≠ 0 := Real.sqrt_ne_zero'.mpr (by norm_num)
+  have hreal : (1 / Real.sqrt 2) ^ 2 = (1 / 2 : ℝ) := by
+    field_simp [hsqrt_ne]
+    rw [Real.sq_sqrt (by norm_num)]
+  rw [cpsvExample34InvSqrtTwo, ← Complex.ofReal_pow]
+  exact (congrArg (fun x : ℝ => (x : ℂ)) hreal).trans (by norm_num)
 
 private theorem cpsvExample34_invSqrtTwo_ne_half :
     cpsvExample34InvSqrtTwo ≠ (1 / 2 : ℂ) := by
@@ -161,6 +226,10 @@ private theorem cpsvExample34_invSqrtTwo_ne_half :
   rw [h] at hsquare
   norm_num at hsquare
 
+private theorem star_cpsvExample34InvSqrtTwo :
+    star cpsvExample34InvSqrtTwo = cpsvExample34InvSqrtTwo := by
+  simp [cpsvExample34InvSqrtTwo]
+
 private def offDiagonalUnit : Matrix (Fin 2) (Fin 2) ℂ :=
   !![(0 : ℂ), 1; 0, 0]
 
@@ -168,9 +237,12 @@ private theorem cpsvExample34_transferMap_offDiagonalUnit :
     transferMap cpsvExample34Tensor offDiagonalUnit =
       cpsvExample34InvSqrtTwo • offDiagonalUnit := by
   ext a b
+  change (∑ i : Fin 2, (cpsvExample34Tensor i *
+    (offDiagonalUnit * (cpsvExample34Tensor i)ᴴ)) a b) =
+      (cpsvExample34InvSqrtTwo • offDiagonalUnit) a b
+  simp_rw [cpsvExample34_letter_diagonal, diagonal_sandwich_apply]
   fin_cases a <;> fin_cases b <;>
-    simp [transferMap_apply, cpsvExample34Tensor, offDiagonalUnit,
-      Matrix.mul_apply, Fin.sum_univ_two, cpsvExample34InvSqrtTwo]
+    simp [cpsvExample34WordDiag, offDiagonalUnit, star_cpsvExample34InvSqrtTwo]
 
 /-- The transfer map of the tensor in CPSV16, Example 3.4 is not idempotent.
 The off-diagonal matrix unit has transfer eigenvalue $1/\sqrt2$, whose square
@@ -182,24 +254,45 @@ theorem cpsvExample34_not_isTransferIdempotent :
   simp only [LinearMap.comp_apply, cpsvExample34_transferMap_offDiagonalUnit,
     map_smul] at h
   have h01 := congrFun (congrFun h 0) 1
-  simp [offDiagonalUnit, cpsvExample34_invSqrtTwo_sq] at h01
-  exact cpsvExample34_invSqrtTwo_ne_half h01.symm
+  have hscalar : cpsvExample34InvSqrtTwo * cpsvExample34InvSqrtTwo =
+      cpsvExample34InvSqrtTwo := by
+    simpa [offDiagonalUnit] using h01
+  rw [← pow_two, cpsvExample34_invSqrtTwo_sq] at hscalar
+  exact cpsvExample34_invSqrtTwo_ne_half hscalar.symm
 
 /-- The exact tensor in CPSV16, Example 3.4 has no physical blocking isometry,
 so it fails the source equation `AA=A` and is not a pure-state RFP. -/
 theorem cpsvExample34_not_hasPhysicalBlockingIsometry :
     ¬ HasPhysicalBlockingIsometry cpsvExample34Tensor := by
-  rwa [← isTransferIdempotent_iff_hasPhysicalBlockingIsometry]
+  intro hBlocking
+  exact cpsvExample34_not_isTransferIdempotent
+    ((isTransferIdempotent_iff_hasPhysicalBlockingIsometry _).mpr hBlocking)
 
-/-- The product-state overlap after blocking $n$ spins is
-$\langle 0^{\otimes n}|+^{\otimes n}\rangle=2^{-n/2}$, written as
-$(1/\sqrt2)^n$. -/
-theorem cpsvExample34_blocked_overlap (n : ℕ) :
+private theorem cpsvExample34_blocked_overlap_sum (n : ℕ) :
     ∑ σ : Fin n → Fin 2,
       (if ∀ k, σ k = 0 then (1 : ℂ) else 0) * cpsvExample34InvSqrtTwo ^ n =
         cpsvExample34InvSqrtTwo ^ n := by
   classical
-  rw [Finset.sum_ite_irrel]
-  simp
+  let zeroConfig : Fin n → Fin 2 := fun _ => 0
+  rw [Fintype.sum_eq_single zeroConfig]
+  · simp [zeroConfig]
+  · intro σ hσ
+    have hnot : ¬ ∀ k, σ k = 0 := by
+      intro hzero
+      apply hσ
+      funext k
+      exact hzero k
+    simp [hnot]
+
+/-- The formal overlap between the two product-state components of the tensor
+in CPSV16, Example 3.4 is
+$\langle 0^{\otimes n}|+^{\otimes n}\rangle=(1/\sqrt2)^n$. -/
+theorem cpsvExample34_blocked_overlap (n : ℕ) :
+    mpvOverlap cpsvExample34ZeroTensor cpsvExample34PlusTensor n =
+      cpsvExample34InvSqrtTwo ^ n := by
+  rw [mpvOverlap]
+  simp_rw [cpsvExample34ZeroTensor_mpv, cpsvExample34PlusTensor_mpv,
+    star_pow, star_cpsvExample34InvSqrtTwo]
+  exact cpsvExample34_blocked_overlap_sum n
 
 end MPSTensor

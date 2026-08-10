@@ -8,7 +8,9 @@ the stronger basis-of-normal-tensors sense.
 
 \begin{definition}[The tensor of CPSV16 Example 3.4]
     \label{def:cpsv16_example_34_tensor}
-    \lean{MPSTensor.cpsvExample34Tensor}
+    \lean{MPSTensor.cpsvExample34Tensor,
+        MPSTensor.cpsvExample34ZeroTensor,
+        MPSTensor.cpsvExample34PlusTensor}
     \leanok
     \uses{def:mps_tensor}
     Set $d=D=2$ and
@@ -18,6 +20,8 @@ the stronger basis-of-normal-tensors sense.
         A^1&=\diag\!\left(0,\frac{1}{\sqrt2}\right).
         \notag
     \end{align}
+    The first and second virtual diagonal entries define the bond-dimension-one
+    product tensors for $\ket0$ and $\ket+$, respectively.
 \end{definition}
 
 \begin{theorem}[Positive-length amplitudes]
@@ -93,10 +97,12 @@ the stronger basis-of-normal-tensors sense.
     \lean{MPSTensor.cpsvExample34_blocked_overlap}
     \leanok
     \uses{def:cpsv16_example_34_tensor}
-    After blocking $n$ spins, the two product vectors satisfy
+    Let $A_0$ and $A_+$ be the bond-dimension-one product tensors obtained
+    from the first and second virtual diagonal entries of $A$. Their formal MPV
+    overlap at length $n$ is
     \begin{align}
-        \left\langle 0^{\otimes n}\middle|+^{\otimes n}\right\rangle
-        &=\left(\frac{1}{\sqrt2}\right)^n=2^{-n/2}.
+        \operatorname{Overlap}_n(A_0,A_+)
+        &=\left(\frac{1}{\sqrt2}\right)^n.
         \notag
     \end{align}
 \end{theorem}
