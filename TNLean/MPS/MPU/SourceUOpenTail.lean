@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.Algebra.FinTupleEquiv
+import TNLean.MPS.MPU.SourceUContraction
 import TNLean.MPS.MPU.SourceUV
 
 /-!
@@ -102,8 +103,8 @@ theorem mul_apply_eq_sum_sourceX₁_mul_sourceU_mul_sourceY₂
   intro β _
   ring
 
-/-- Pair-index wrapper for the open two-site factorization. The output pair is
-`q`, while `j` is the input pair. The name `p` remains reserved for the
+/-- Pair-index reformulation of the open two-site factorization. The output
+pair is `q`, while `j` is the input pair. The name `p` remains reserved for the
 retained output pair in the conjugated factor of a later Gram contraction.
 
 Source: arXiv:1703.09188, equations `SVDforms2` and `uu`, lines 526--537. -/
@@ -146,26 +147,11 @@ theorem mpo_finAddTwo_eq_sum_sourceX₁_sourceU_sourceY₂_evalWord
       simp_rw [mul_apply_eq_sum_sourceX₁_mul_sourceU_mul_sourceY₂_pair U ρ hρ]
       simp only [Finset.sum_mul, mul_assoc]
 
-/-- The second source-cut factor $Y_2$ is reconstructed from the column
-isometry $X_2$ and the raw source-cut matrix.
-
-Source: arXiv:1703.09188, equations `Y2Y2X2X2` and `eq:sf-svd`, lines
-479--494. -/
-theorem sourceY₂_eq_sourceX₂_conjTranspose_mul_sourceCutM₂ :
-    sourceY₂ U = (sourceX₂ U)ᴴ * sourceCutM₂ U := by
-  calc
-    sourceY₂ U = (1 : Matrix (Fin ℓ[U]) (Fin ℓ[U]) ℂ) * sourceY₂ U := by simp
-    _ = ((sourceX₂ U)ᴴ * sourceX₂ U) * sourceY₂ U := by
-      rw [sourceX₂_isometry U]
-    _ = (sourceX₂ U)ᴴ * (sourceX₂ U * sourceY₂ U) := by
-      simp only [Matrix.mul_assoc]
-    _ = _ := by rw [← sourceCutM₂_eq_sourceX₂_mul_sourceY₂]
-
 /-- Entrywise reconstruction of $Y_2$ through $X_2^\dagger$ and one raw
 tensor letter.
 
-Source: arXiv:1703.09188, equations `Y2Y2X2X2` and `eq:sf-svd`, lines
-479--494. -/
+Source: arXiv:1703.09188, equations `Y1Y1X1X1`--`X1X2b` and
+`eq:sf-svd`, lines 479--526. -/
 theorem sourceY₂_eq_sum_star_sourceX₂_mul_apply
     (l : Fin ℓ[U]) (j : Fin d) (γ : Fin D) :
     sourceY₂ U l (j, γ) =

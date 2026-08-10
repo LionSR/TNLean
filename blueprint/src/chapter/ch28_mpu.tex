@@ -1690,6 +1690,8 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
 \end{theorem}
 
 \begin{proof}\leanok
+    \uses{thm:mpu_source_factor_normalizations,
+        thm:mpu_source_factor_recovery}
     Evaluate $X_1^\dagger W_\rho X_1=\Id_r$ entrywise.  For the second
     identity, insert $X_2^\dagger X_2=\Id_\ell$ to the left of $Y_2$ and use
     $M_2=X_2Y_2$.  Evaluation at $(l,(j,\gamma))$ gives the finite sum.
@@ -1717,6 +1719,7 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
 \end{theorem}
 
 \begin{proof}\leanok
+    \uses{def:mpu_source_uv,thm:mpu_source_factorization_entries}
     Substitute the definition of $u$.  The first source-cut factorization
     contracts $X_1Y_1$ to the first raw tensor letter.  Expanding the second
     raw letter as $X_2Y_2$ then gives the untraced two-site identity, with its
@@ -1753,6 +1756,8 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
 \end{theorem}
 
 \begin{proof}\leanok
+    \uses{thm:mpu_source_u_open_two_site,
+        thm:mpu_source_open_factor_reconstructions}
     Reindex each configuration into its first two coordinates and its tail,
     apply the open two-site factorization inside the periodic trace, and leave
     the remaining virtual word unevaluated.  Substitute the entrywise
