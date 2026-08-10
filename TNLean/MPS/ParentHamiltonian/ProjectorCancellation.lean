@@ -24,11 +24,12 @@ arXiv:cond-mat/9410110, after equation (2.4) and in equation (6.1).
 ## Main results
 
 * `c3_virtualResidual_eq_centered_sub_gramErrors`
+* `inner_limitingMixedGramIntertwining`
 * `inner_c3_centeredVirtualResidual_eq_gramError`
 * `c3_injectiveRangeProjector_residual_eq_centered_sub_gramErrors`
 -/
 
-open scoped ComplexOrder Matrix
+open scoped ComplexOrder Matrix Matrix.Norms.Frobenius
 
 namespace MPSTensor
 
@@ -78,38 +79,88 @@ theorem c3_virtualResidual_eq_centered_sub_gramErrors [NeZero D]
   simp only [ContinuousLinearMap.comp_sub, ContinuousLinearMap.sub_comp]
   abel
 
-/-- Reduction of the leading centered operator to the length-\(l\) Gram
-error.  The hypothesis is the remaining limiting intertwining identity: it says
-that the product of the two limiting spectator Grams, the limiting inverse, and
-the virtual word maps has the explicit limiting pairing computed in
-`inner_tailBoundaryMapES_adjoint_leftBoundaryMapES_centered`.
+/-- Exact limiting mixed-Gram intertwining in the tail-after-left C3
+orientation.  The limiting Gram acts by normalized right multiplication by
+\(ρ\); its inverse cancels that right multiplication after the adjoint of the
+left virtual word map has summed the left-adjointed one-site words.
 
-Separating this hypothesis makes the current dependency boundary explicit.  A
-subsequent result must derive it from the transfer fixed-point equations; it
-must not identify either physical projector with `fixedPointProj`. -/
+No transfer fixed-point equation is needed for this zeroth-order identity: the
+only data used are positive definiteness, which supplies the nonsingular
+right-multiplication metric, and the explicit Frobenius adjoint formulas. -/
+theorem inner_limitingMixedGramIntertwining [NeZero D]
+    (A : MPSTensor d D) (K : ℕ)
+    (ρ : Matrix (Fin D) (Fin D) ℂ) (hρ : ρ.PosDef)
+    (x : BoundaryFamilySpace (D := D) (Cfg d K))
+    (y : BoundaryFamilySpace (D := D) (Cfg d 1)) :
+    let Kinf := Matrix.gramReshuffle
+      (fixedPointProj ρ (ne_of_gt hρ.trace_pos))
+    let Kinftail := boundaryFiberwiseMap (D := D) (Cfg d K) Kinf
+    let Kinfleft := boundaryFiberwiseMap (D := D) (Cfg d 1) Kinf
+    let Iinf := Ring.inverse Kinf
+    inner ℂ x
+        (Kinftail.comp ((tailVirtualMapES A K).comp
+          (Iinf.comp ((leftVirtualMapES A 1).adjoint.comp Kinfleft))) y) =
+      ∑ u : Cfg d K, ∑ j : Cfg d 1,
+        inner ℂ
+          (Matrix.frobeniusEquivEuclidean (Fin D) (Fin D)
+            (evalWord A (List.ofFn j) *
+              boundaryFamilyEquiv (D := D) (Cfg d K) x u))
+          (Matrix.frobeniusEquivEuclidean (Fin D) (Fin D)
+            ((Matrix.trace ρ)⁻¹ •
+              ((boundaryFamilyEquiv (D := D) (Cfg d 1) y j *
+                evalWord A (List.ofFn u)) * ρ))) := by
+  dsimp only
+  simp only [ContinuousLinearMap.comp_apply]
+  have hKfiber (j : Cfg d 1) :
+      boundaryFamilyEquiv (D := D) (Cfg d 1)
+          (boundaryFiberwiseMap (D := D) (Cfg d 1)
+            (Matrix.gramReshuffle
+              (fixedPointProj ρ (ne_of_gt hρ.trace_pos))) y) j =
+        (Matrix.trace ρ)⁻¹ •
+          (boundaryFamilyEquiv (D := D) (Cfg d 1) y j * ρ) := by
+    rw [boundaryFamilyEquiv_boundaryFiberwiseMap_apply,
+      Matrix.gramReshuffle_fixedPointProj_frobeniusEquivEuclidean_apply,
+      (Matrix.frobeniusEquivEuclidean (Fin D) (Fin D)).symm_apply_apply]
+  rw [leftVirtualMapES_adjoint_apply]
+  have hsum :
+      (∑ j : Cfg d 1, (evalWord A (List.ofFn j))ᴴ *
+        boundaryFamilyEquiv (D := D) (Cfg d 1)
+          (boundaryFiberwiseMap (D := D) (Cfg d 1)
+            (Matrix.gramReshuffle
+              (fixedPointProj ρ (ne_of_gt hρ.trace_pos))) y) j) =
+        ∑ j : Cfg d 1, (evalWord A (List.ofFn j))ᴴ *
+          ((Matrix.trace ρ)⁻¹ •
+            (boundaryFamilyEquiv (D := D) (Cfg d 1) y j * ρ)) := by
+    apply Finset.sum_congr rfl
+    intro j _
+    rw [hKfiber j]
+  rw [hsum]
+  rw [Matrix.inverse_gramReshuffle_fixedPointProj_frobeniusEquivEuclidean_apply
+    (hρ := hρ)]
+  simp only [Finset.sum_mul, Finset.smul_sum, Matrix.smul_mul,
+    Matrix.mul_smul, smul_smul, mul_inv_cancel₀ (ne_of_gt hρ.trace_pos),
+    Matrix.mul_assoc,
+    Matrix.mul_nonsing_inv ρ (ρ.isUnit_iff_isUnit_det.mp hρ.isUnit),
+    Matrix.mul_one, one_smul]
+  rw [inner_boundaryFiberwiseMap]
+  simp_rw [boundaryFamilyFiber_eq_frobeniusEquivEuclidean]
+  simp_rw [Matrix.gramReshuffle_fixedPointProj_frobeniusEquivEuclidean_apply]
+  simp_rw [boundaryFamilyEquiv_tailVirtualMapES_apply]
+  simp only [(Matrix.frobeniusEquivEuclidean (Fin D) (Fin D)).symm_apply_apply,
+    Matrix.sum_mul, Matrix.mul_sum, Matrix.mul_smul, Finset.smul_sum,
+    Matrix.trace_sum,
+    Matrix.inner_frobeniusEquivEuclidean, Matrix.conjTranspose_mul,
+    Matrix.mul_assoc]
+
+/-- Reduction of the leading centered operator to the length-\(l\) Gram
+error.  The limiting product is identified by
+`inner_limitingMixedGramIntertwining`; subtracting it from the exact mixed Gram
+therefore leaves precisely the finite length-\(l\) Gram error. -/
 theorem inner_c3_centeredVirtualResidual_eq_gramError [NeZero D]
     (A : MPSTensor d D) (K l : ℕ)
     (ρ : Matrix (Fin D) (Fin D) ℂ) (hρ : ρ.PosDef)
     (x : BoundaryFamilySpace (D := D) (Cfg d K))
-    (y : BoundaryFamilySpace (D := D) (Cfg d 1))
-    (hCenter :
-      let Kinf := Matrix.gramReshuffle
-        (fixedPointProj ρ (ne_of_gt hρ.trace_pos))
-      let Kinftail := boundaryFiberwiseMap (D := D) (Cfg d K) Kinf
-      let Kinfleft := boundaryFiberwiseMap (D := D) (Cfg d 1) Kinf
-      let Iinf := Ring.inverse Kinf
-      inner ℂ x
-          (Kinftail.comp ((tailVirtualMapES A K).comp
-            (Iinf.comp ((leftVirtualMapES A 1).adjoint.comp Kinfleft))) y) =
-        ∑ u : Cfg d K, ∑ j : Cfg d 1,
-          inner ℂ
-            (Matrix.frobeniusEquivEuclidean (Fin D) (Fin D)
-              (evalWord A (List.ofFn j) *
-                boundaryFamilyEquiv (D := D) (Cfg d K) x u))
-            (Matrix.frobeniusEquivEuclidean (Fin D) (Fin D)
-              ((Matrix.trace ρ)⁻¹ •
-                ((boundaryFamilyEquiv (D := D) (Cfg d 1) y j *
-                  evalWord A (List.ofFn u)) * ρ)))) :
+    (y : BoundaryFamilySpace (D := D) (Cfg d 1)) :
     let Kinf := Matrix.gramReshuffle
       (fixedPointProj ρ (ne_of_gt hρ.trace_pos))
     let Kinftail := boundaryFiberwiseMap (D := D) (Cfg d K) Kinf
@@ -129,8 +180,9 @@ theorem inner_c3_centeredVirtualResidual_eq_gramError [NeZero D]
             (Matrix.frobeniusEquivEuclidean (Fin D) (Fin D)
               (boundaryFamilyEquiv (D := D) (Cfg d 1) y j *
                 evalWord A (List.ofFn u)))) := by
-  dsimp only at hCenter ⊢
-  rw [sub_apply, inner_sub_right, hCenter]
+  dsimp only
+  rw [sub_apply, inner_sub_right,
+    inner_limitingMixedGramIntertwining A K ρ hρ x y]
   exact inner_tailBoundaryMapES_adjoint_leftBoundaryMapES_centered
     A K l ρ (ne_of_gt hρ.trace_pos) x y
 
