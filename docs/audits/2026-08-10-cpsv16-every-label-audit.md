@@ -39,8 +39,8 @@ The classification totals are:
 |---|---:|---:|
 | Section | 10 | 10 |
 | Definition | 10 | 10 |
-| Equation | 80 | 80 |
-| Figure | 46 | 45 |
+| Equation | 81 | 81 |
+| Figure | 45 | 44 |
 | Example | 3 | 3 |
 | Theorem-like | 34 | 34 |
 | **Total** | **183** | **182** |
@@ -90,7 +90,7 @@ is unlabelled and is recorded here and in the maintained coverage crosswalk.
 
 | Source result | Source line | Role | Disposition |
 |---|---:|---|---|
-| Example 3.4, `Ex:ZCL` | 453 | CID does not imply a renormalization fixed point | Exact active target of assigned issue #5916; Blueprint node `thm:cpsv_example34_status` |
+| Example 3.4, `Ex:ZCL` | 453 | CID does not imply a renormalization fixed point | **Complete** in Chapter 15: `def:cpsv16_example_34_tensor`, `thm:cpsv16_example_34_mpv`, `thm:cpsv16_example_34_cid`, and `thm:cpsv16_example_34_not_rfp` |
 | Example 4.10, `ExZCLnoSAL` | 898 | ZCL does not imply SAL | Tracked with Examples 4.11--4.12 by active issue #5919; Blueprint node `thm:cpsv_examples410_412_status` |
 | Example 4.11, `ExSALnoZCL` | 908 | SAL does not imply ZCL | Tracked by issue #5919; the printed SAL claim must be checked rather than assumed |
 | Example 4.12, unlabelled | 929 | The toric-code boundary tensor is claimed to be SAL, ZCL, and RFP, but not of the simple GSNNCH form | Tracked by issue #5919; the MPO formula is explicit, while the trace-preserving maps needed for the printed RFP assertion remain to be constructed |
@@ -137,10 +137,18 @@ the printed statement.
 | Lemma A.5 | `lem:cpsv_power_sum_printed_status` | `thm:bounded_power_sum_multiset` |
 | Corollary A.6 | `cor:cpsv_corollary_a6_printed_status` | active nonzero unitary refinements in Chapter 11 |
 | Proposition C.14 | `thm:cpsv_prop_c14_printed_status` | `thm:mpdo_canonical_bnt_proportional_sectors_zcl_sal` |
-| Example 3.4 | `thm:cpsv_example34_status` | active issue #5916 |
 | Examples 4.10--4.12 | `thm:cpsv_examples410_412_status` | active issue #5919 |
 | Appendix D `RFP-gauge` | `thm:cpsv_rfp_gauge_printed_status` | cube-phase obstruction plus active issue #5920 |
 | Appendix D Fibonacci rank obstruction | `thm:cpsv_fibonacci_rank_obstruction_status` | active issue #5921 |
+
+Example 3.4 no longer needs a separate source-status node.  Chapter 15 states
+and proves the exact printed tensor, its positive-length MPV, physical
+correlation independence, and failure of the renormalization fixed-point
+equation.  The corresponding declarations are
+`MPSTensor.cpsvExample34Tensor`, `MPSTensor.cpsvExample34_mpv`,
+`MPSTensor.cpsvExample34_isPhysicalCID`,
+`MPSTensor.cpsvExample34_not_isTransferIdempotent`, and
+`MPSTensor.cpsvExample34_not_hasPhysicalBlockingIsometry`.
 
 Proposition 4.13 is already represented by a theorem with the literal CPSV
 canonical-form hypotheses and the correct rectangular coisometry orientation;
