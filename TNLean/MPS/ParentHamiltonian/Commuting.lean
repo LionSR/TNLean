@@ -6,7 +6,8 @@ Authors: TNLean contributors
 import TNLean.MPS.ParentHamiltonian.Basic
 import TNLean.MPS.BNT.Basic
 import TNLean.MPS.Periodic.Defs
-import TNLean.MPS.RFP.CommutingBridge
+import TNLean.MPS.ParentHamiltonian.ProductPair
+import TNLean.MPS.RFP.AppendixBStructuralData
 import TNLean.MPS.RFP.Defs
 import TNLean.MPS.RFP.StructuralForm
 

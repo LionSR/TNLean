@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.Algebra.FinSum
-import TNLean.MPS.RFP.CommutingBridge
+import TNLean.MPS.RFP.AppendixBStructuralData
 
 /-!
 # Appendix B tensor powers and two-site support
