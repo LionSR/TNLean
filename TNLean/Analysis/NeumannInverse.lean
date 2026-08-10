@@ -30,11 +30,14 @@ theorem norm_inverse_one_sub_le (t : R) {a : ℝ} (ht : ‖t‖ ≤ a) (ha : a <
     _ ≤ (1 - a)⁻¹ := by
       exact (inv_le_inv₀ (sub_pos.mpr ht_one) (sub_pos.mpr ha)).2 (by linarith)
 
+section perturbationSetup
+variable {R : Type*} [NormedRing R] [HasSummableGeomSeries R]
+
 /-- For an invertible \(K_0\) and a perturbation \(K\) with
 \(\lVert K_0^{-1}(K-K_0)\rVert\le a<1\), \(K\) is invertible and its inverse factors
 through the perturbation \(E:=K_0^{-1}(K-K_0)\).  Returns \(E\) and its norm bounds,
 that \(1+E\) is a unit, and the factorization \(K^{-1}=(1+E)^{-1}K_0^{-1}\). -/
-private lemma perturbation_setup (K₀ K : R) (hK₀ : IsUnit K₀)
+private lemma perturbation_setup [NormOneClass R] {a : ℝ} (K₀ K : R) (hK₀ : IsUnit K₀)
     (h : ‖Ring.inverse K₀ * (K - K₀)‖ ≤ a) (ha : a < 1) :
     IsUnit K ∧
     (∃ E : R, ‖E‖ ≤ a ∧ ‖E‖ < 1 ∧ IsUnit (1 - -E) ∧
@@ -54,6 +57,7 @@ private lemma perturbation_setup (K₀ K : R) (hK₀ : IsUnit K₀)
     rw [hfactor]
     exact hK₀.mul hbase
   refine ⟨hK_unit, E, h, hE_lt_one, hbase, hinverse⟩
+end perturbationSetup
 
 /-- If \(K_0\) is a unit and its relative perturbation toward \(K\) has norm at most
 \(a<1\), then \(K\) is a unit and its inverse norm is at most
