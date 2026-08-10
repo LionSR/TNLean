@@ -742,6 +742,34 @@ and generic prerequisites now include:
     three injectivity assumptions are explicit.  This is an algebraic identity
     only; a source-specific estimate of the mixed-Gram residual is still
     required.
+  \item Let
+    \(\mathcal K_\infty=\operatorname{gramReshuffle}(P_\rho)\), with
+    \(\rho\) positive definite, and let \(S_\infty=\mathcal K_\infty^{-1}\).
+    The exact C3 virtual residual is telescoped by
+    \leanid{MPSTensor.c3_virtualResidual_eq_centered_sub_gramErrors} into its
+    limiting-center residual and three corrections containing, in order,
+    \begin{align}
+      \mathcal K_{l+1}-\mathcal K_\infty,\qquad
+      S_{K+l+1}-S_\infty,\qquad
+      \mathcal K_{K+l}-\mathcal K_\infty.
+    \end{align}
+    The spectator occurrences of the first and third differences are
+    fiberwise, so their norms are uniform in the spectator type.  The theorem
+    \leanid{MPSTensor.c3_injectiveRangeProjector_residual_eq_centered_sub_gramErrors}
+    substitutes this telescope into the full tail-after-left projector
+    factorization.  The inverse convergence theorem controls the middle
+    correction eventually.
+
+    The length-\(l\) error is isolated conditionally by
+    \leanid{MPSTensor.inner_c3_centeredVirtualResidual_eq_gramError}.  The
+    remaining exact algebraic dependency is the limiting intertwining identity
+    that equates the product of the two limiting spectator Grams, the limiting
+    inverse, and the two virtual word maps with the explicit limiting pairing
+    in the centered mixed-Gram formula.  This identity must be derived from the
+    transfer fixed-point equations.  It cannot be replaced by identifying a
+    physical ground projector with \(P_\rho\).  These decompositions are
+    reconstructed algebra and assert neither the FNW rational coefficient nor
+    a uniform contraction estimate.
 \end{itemize}
 Fix \(K,L_0\in\mathbb N\) and let
 \(\mathcal H_{K+L_0+1}\) be the \((K+L_0+1)\)-site Euclidean space
