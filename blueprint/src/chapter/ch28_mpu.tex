@@ -1826,7 +1826,7 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:mpu_double_layer_blocking}
+    \uses{thm:mpu_blocked_double_layer_diagonal}
     Expand the normalized diagonal of the blocked output layer, reindex a
     blocked physical index by its decoded word, and evaluate the product
     double layer.  The physical adjoint contributes the conjugated second
@@ -1872,7 +1872,7 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:mpu_source_factor_recovery}
+    \uses{thm:mpu_source_factor_recovery,thm:mpu_source_factorizations}
     Substitute $X_1^\dagger W_\rho M_1=Y_1$ and then use $M_1=X_1Y_1$.
 \end{proof}
 
@@ -1890,7 +1890,7 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:mpu_source_factor_recovery}
+    \uses{thm:mpu_source_factor_recovery,thm:mpu_source_factorizations}
     Substitute $X_2^\dagger M_2=Y_2$ and then use $M_2=X_2Y_2$.
 \end{proof}
 
@@ -1900,8 +1900,9 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
     \leanok
     \uses{thm:mpu_source_u_open_periodic_tail,
         thm:mpu_normalized_output_tail_coisometry}
-    Expanding both $(K+2)$-site periodic entries through $X_1,u,X_2$ and the
-    open tail gives
+    Assume $d>0$, let $\mathcal U$ be an MPU, and let $\rho$ be positive
+    definite.  Expanding both $(K+2)$-site periodic entries through
+    $X_1,u,X_2$ and the open tail gives
     \begin{align}
       d^{-K}\sum_{\tau,j,\zeta}
         \mathcal A_{q;\tau,j,\zeta}
