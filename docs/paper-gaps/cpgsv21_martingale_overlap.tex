@@ -742,6 +742,34 @@ and generic prerequisites now include:
     three injectivity assumptions are explicit.  This is an algebraic identity
     only; a source-specific estimate of the mixed-Gram residual is still
     required.
+  \item For an injective finite-dimensional map \(T\), with
+    \(S_T=(T^\dagger T)^{-1}\), the two pseudoinverse factors in its exact
+    range projector satisfy
+    \begin{align}
+      \lVert TS_T\rVert
+        &=\sqrt{\lVert S_T\rVert},&
+      \lVert S_TT^\dagger\rVert
+        &=\sqrt{\lVert S_T\rVert}.
+    \end{align}
+    These identities are
+    \leanid{ContinuousLinearMap.norm_T_comp_inverseGram_eq_sqrt} and
+    \leanid{ContinuousLinearMap.norm_inverseGram_comp_adjoint_eq_sqrt}.
+  \item If \(A\) is a primitive MPS tensor with nonzero virtual dimension,
+    write \(J^{\mathrm{tail}}_K\) for its length-\(K\) tail virtual map.  Then
+    \leanid{MPSTensor.IsPrimitiveMPS.tailVirtualMapES_norm_uniform} gives a
+    constant \(C>0\), independent of \(K\), such that
+    \begin{align}
+      \lVert J^{\mathrm{tail}}_K\rVert&\le C
+    \end{align}
+    for every \(K\in\mathbb N\).  No positive-definiteness assumption on
+    \(\rho\) is used.  The proof preserves the fourth-power intermediate
+    normalization, first establishing a uniform bound for
+    \(\lVert J^{\mathrm{tail}}_K\rVert^4\), and then obtains the norm bound.
+    It reconstructs the required norm infrastructure from the exact
+    tail adjoint--self estimate, the fixed-point/complementary-power
+    decomposition, the geometric power bound, and the dimension conversion
+    from the \(L^2\) operator norm to entrywise mass.  This is not an FNW or
+    Nachtergaele contraction estimate.
   \item For each length \(n\), let \(\mathcal K_n\) be the ground-space
     Gram, and whenever it is invertible set \(S_n=\mathcal K_n^{-1}\).  Let
     \(\mathcal K_\infty=\mathscr R(P_\rho)\), with \(\rho\) positive
@@ -761,16 +789,17 @@ and generic prerequisites now include:
     factorization.  The inverse convergence theorem controls the middle
     correction eventually.
 
-    The length-\(l\) error is isolated conditionally by
-    \leanid{MPSTensor.inner_c3_centeredVirtualResidual_eq_gramError}.  The
-    remaining exact algebraic dependency is the limiting intertwining identity
-    that equates the product of the two limiting spectator Grams, the limiting
-    inverse, and the two virtual word maps with the explicit limiting pairing
-    in the centered mixed-Gram formula.  This identity must be derived from the
-    transfer fixed-point equations.  It cannot be replaced by identifying a
-    physical ground projector with \(P_\rho\).  These decompositions are
-    reconstructed algebra and assert neither the FNW rational coefficient nor
-    a uniform contraction estimate.
+    Under the explicit hypotheses that the virtual dimension is nonzero and
+    \(\rho\) is positive definite,
+    \leanid{MPSTensor.inner_limitingMixedGramIntertwining} proves the limiting
+    intertwining identity.  Under the same hypotheses,
+    \leanid{MPSTensor.inner_c3_centeredVirtualResidual_eq_gramError}
+    unconditionally identifies the centered residual pairing with the
+    length-\(l\) Gram error.  The zeroth-order cancellation uses the explicit
+    limiting metric, its inverse, and the virtual-map adjoints; no transfer
+    fixed-point equation is needed.  These identities are reconstructed
+    algebra.  The final projector-defect estimate and the FNW--Nachtergaele
+    rational contraction remain open.
 \end{itemize}
 Fix \(K,L_0\in\mathbb N\) and let
 \(\mathcal H_{K+L_0+1}\) be the \((K+L_0+1)\)-site Euclidean space
