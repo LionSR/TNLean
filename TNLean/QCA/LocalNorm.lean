@@ -35,7 +35,6 @@ open scoped ComplexOrder
 
 namespace SpinChain
 
--- These aliases keep finite-region norm synthesis within the project's pending-depth limit.
 noncomputable local instance (d : ℕ) (Λ : Finset ℤ) : Norm (LocalAlgebra d Λ) :=
   CStarMatrix.instNorm
 
@@ -160,8 +159,7 @@ noncomputable instance instNormedAlgebraAlgebraicLocalAlgebra (d : ℕ) [NeZero 
         change ‖c • A‖ ≤ ‖c‖ * ‖A‖
         exact (norm_smul c A).le
 
-/-- The algebraic local algebra is a star ring. This explicit instance keeps synthesis within
-the project's pending-depth limit. -/
+/-- The algebraic local algebra is a star ring. -/
 noncomputable instance instStarRingAlgebraicLocalAlgebra (d : ℕ) :
     StarRing (AlgebraicLocalAlgebra d) where
   star_involutive A := by
