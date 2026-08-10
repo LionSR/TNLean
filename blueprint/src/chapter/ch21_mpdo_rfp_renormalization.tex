@@ -631,6 +631,66 @@ the remaining sites unchanged.
     \hfil\par
 \end{definition}
 
+\begin{theorem}[Pure-state specialization of the physical-map fixed point]
+    \label{thm:pure_doubled_tensor_rfp_via_ts}
+    \lean{MPSTensor.doubledTensor_isRFPViaTS_iff_isTransferIdempotent,
+      MPSTensor.doubledTensor_isRFPViaTS_iff_hasPhysicalBlockingIsometry}
+    \leanok
+    \uses{def:is_rfp_via_ts, def:mps_transfer_idempotence,
+      def:physical_blocking_isometry}
+    Let $A=(A^i)_{i=0}^{d-1}$ be an MPS tensor, and let
+    $M(A)^{ij}=A^i\otimes\overline{A^j}$ be its doubled MPO tensor. Then
+    \begin{align}
+        M(A)\text{ satisfies Definition~\ref{def:is_rfp_via_ts}}
+        &\quad\Longleftrightarrow\quad \E_A^2=\E_A
+        \notag\\
+        &\quad\Longleftrightarrow\quad
+        A\text{ has a physical blocking isometry}.
+        \notag
+    \end{align}
+    More explicitly, if $V\colon\C^d\to\C^{d^2}$ is the blocking isometry,
+    the refinement channel has the orientation
+    \begin{align}
+        \mathcal T(X)&=VXV^\dagger.
+        \notag
+    \end{align}
+    If $d>0$, put $P=VV^\dagger$ and choose a density matrix $\rho_0$ on the
+    one-site space. A trace-preserving coarse-graining channel is
+    \begin{align}
+        \mathcal S(Y)
+        &=V^\dagger YV
+          +\tr\!\bigl((\Id-P)Y(\Id-P)\bigr)\rho_0.
+        \notag
+    \end{align}
+    On the range of $V$, the second term vanishes and this agrees with the
+    source construction
+    $\mathcal S(Y)=\tr_2(U^\dagger YU)$ after extending $V$ to a unitary with
+    a fixed pure ancilla. If $d=0$, both matrix spaces are trivial and the
+    unique zero maps give $\mathcal S$ and $\mathcal T$. This is the
+    pure-state specialization stated at
+    \cite[line~668, labels \texttt{Def-equiv-pure} and
+    \texttt{T-and-S-mixed-equiv-pure}, lines~675--687]
+    {Cirac2016MPDO_arXiv}.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:physical_blocking_isometry_iff_transfer_idempotence}
+    The blocking relation
+    $A^{i_1}A^{i_2}=\sum_jV_{(i_1,i_2),j}A^j$ implies
+    \begin{align}
+        M_2(X)&=V M_1(X)V^\dagger.
+        \notag
+    \end{align}
+    Since $V^\dagger V=\Id$, both displayed channels give the required two
+    closure identities. Conversely, trace preservation of $\mathcal T$ gives
+    idempotence of the physical-trace transfer of $M(A)$, as in
+    \cite[Appendix C, lines~1333--1340]{Cirac2016MPDO_arXiv}. After exchanging
+    the two tensor factors, this matrix is the transfer matrix of $\E_A$.
+    Faithfulness of the transfer-matrix representation therefore gives
+    $\E_A^2=\E_A$. The physical-isometry formulation follows from
+    Theorem~\ref{thm:physical_blocking_isometry_iff_transfer_idempotence}.
+\end{proof}
+
 \begin{definition}[Initial-coordinate regroupings]
     \label{def:finite_tuple_regroupings}
     \lean{finSuccArrowEquiv,
