@@ -45,9 +45,9 @@ theorem cfgAppendThreeEquiv_apply (d K l R : ℕ)
 /-- Exact mixed-Gram identity for the overlapping windows in Nachtergaele's C3
 geometry (arXiv:cond-mat/9410110, equation (2.4)).
 
-For a prefix spectator `u` and a one-site spectator `j`, the tail boundary
-matrix entering the `l`-site overlap is `A^j X_u`, while the left boundary
-matrix is `Z_j A^u`. Thus the mixed Gram is a sum of length-`l` ground-space
+For a prefix spectator \(u\) and a one-site spectator \(j\), the tail boundary
+matrix entering the \(l\)-site overlap is \(A^j X_u\), while the left boundary
+matrix is \(Z_j A^u\). Thus the mixed Gram is a sum of length-\(l\) ground-space
 Gram pairings with exactly this multiplication order.
 
 This is an algebraic identity reconstructed from the definitions, not the FNW
