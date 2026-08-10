@@ -2040,6 +2040,41 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
     finite sums gives the displayed eight-index expression.
 \end{proof}
 
+\begin{theorem}[Supplied-witness overlapping reblocking]
+    \label{thm:mpu_supplied_witness_overlapping_reblocking}
+    \lean{MPOTensor.blockTensor_succ_simple2_of_supplied,
+        MPOTensor.IsMPU.simple1_of_simple2_supplied,
+        MPOTensor.IsMPU.blockTensor_add_two_simple_contractions_of_supplied}
+    \leanok
+    \uses{def:mpu,def:mpu_double_layer,
+        thm:mpdo_closed_chain_physical_blocking}
+    Suppose a direct block of length $K$ satisfies the two-letter contraction
+    with specified vectors $(a|$ and $|b)$.  For an arbitrary MPO tensor, one
+    suffix/prefix extension preserves the same insertion $|b)(a|$ at direct
+    length $K+1$.  For any MPU tensor, specified vectors satisfying this
+    two-letter identity also satisfy the one-letter identity with the same
+    vectors.  Applying that implication after two extensions gives, at direct
+    length $K+2$,
+    \begin{align}
+      (a|W^{IJ}|b)&=\delta_{I,J},\\
+      W^{IJ}W^{LM}&=W^{IJ}|b)(a|W^{LM}.
+    \end{align}
+    No positivity or nonzero-dimension hypothesis is required.  This is the
+    corollary following \cite[Proposition~III.3]{Cirac2017MPU}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{lem:mpu_blocking,thm:mpu_closed_double_layer,
+        thm:mpu_double_layer_blocking,lem:mpu_adjoint_mul}
+    Extend the supplied two-letter identity twice by overlapping suffix and
+    prefix windows.  For $x=(a|W^{IJ}|b)$, the constant configurations of
+    lengths two and three give $x^2=\delta_{I,J}$ and
+    $x^3=\delta_{I,J}$, which force $x=\delta_{I,J}$.  Physical blocking
+    preserves MPU unitarity, so this one-letter identity and the twice-extended
+    two-letter identity hold simultaneously at direct length $K+2$ with the
+    original supplied witnesses.
+\end{proof}
+
 % The equality and range-insertion step remains tracked by issue #5971.
 \begin{remark}[Scope of the closed source-$u$ formulas]
     The first theorem rewrites the ordinary source-$u$ Gram entry, while the

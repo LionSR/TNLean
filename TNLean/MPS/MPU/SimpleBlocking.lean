@@ -370,22 +370,23 @@ private theorem trace_listProd_local {n : Type*} [Fintype n] [DecidableEq n]
       rw [← hprod, sandwich_listProd_local a b P hpair _ (by simp) hrot]
       simp [mul_comm, mul_left_comm]
 
-/-- For an MPU, witnesses satisfying `simple2` automatically satisfy
-`simple1` with the same witnesses.
+/-- For specified witnesses, MPU unitarity and `simple2` recover `simple1`
+without changing either witness.
 
 The two- and three-site constant physical configurations give respectively
 $x^2=\delta_{ij}$ and $x^3=\delta_{ij}$ for
 $x=(a|W^{ij}|b)$.  These identities force $x=\delta_{ij}$.
 
-Source: arXiv:1703.09188, corollary following Proposition III.3,
-lines 442--446. -/
-theorem IsMPU.isMPUSimple_of_simple2 {U : MPOTensor d D} (hU : IsMPU U)
+Source: arXiv:1703.09188, Definition III.2 and the corollary following
+Proposition III.3, lines 363--374 and 442--446. -/
+theorem IsMPU.simple1_of_simple2_supplied {U : MPOTensor d D} (hU : IsMPU U)
     (a b : Fin (D * D) → ℂ)
     (h₂ : ∀ i j k l : Fin d,
       doubleLayerTensor U i j * doubleLayerTensor U k l =
         doubleLayerTensor U i j * Matrix.vecMulVec b a *
           doubleLayerTensor U k l) :
-    IsMPUSimple U := by
+    ∀ i j : Fin d,
+      a ⬝ᵥ (doubleLayerTensor U i j *ᵥ b) = if i = j then 1 else 0 := by
   classical
   let P : Matrix (Fin (D * D)) (Fin (D * D)) ℂ → Prop :=
     fun A ↦ ∃ i j, A = doubleLayerTensor U i j
@@ -419,7 +420,6 @@ theorem IsMPU.isMPUSimple_of_simple2 {U : MPOTensor d D} (hU : IsMPU U)
         subst j
         rfl
     simpa [l, σ, τ, List.map_ofFn, List.prod_ofFn, Matrix.one_apply, hστ] using hentry
-  refine ⟨a, b, ?_, h₂⟩
   intro i j
   let x := a ⬝ᵥ (doubleLayerTensor U i j *ᵥ b)
   have hx2 : x ^ 2 = if i = j then 1 else 0 := hpower 2 (by omega) i j
@@ -431,6 +431,20 @@ theorem IsMPU.isMPUSimple_of_simple2 {U : MPOTensor d D} (hU : IsMPU U)
     exact hx3'
   · rw [if_neg hij] at hx2 hx3 ⊢
     exact sq_eq_zero_iff.mp hx2
+
+/-- For an MPU, witnesses satisfying `simple2` automatically satisfy
+`simple1` with the same witnesses.
+
+Source: arXiv:1703.09188, corollary following Proposition III.3,
+lines 442--446. -/
+theorem IsMPU.isMPUSimple_of_simple2 {U : MPOTensor d D} (hU : IsMPU U)
+    (a b : Fin (D * D) → ℂ)
+    (h₂ : ∀ i j k l : Fin d,
+      doubleLayerTensor U i j * doubleLayerTensor U k l =
+        doubleLayerTensor U i j * Matrix.vecMulVec b a *
+          doubleLayerTensor U k l) :
+    IsMPUSimple U :=
+  ⟨a, b, hU.simple1_of_simple2_supplied a b h₂, h₂⟩
 
 /-- MPU simplicity is preserved by blocking an already simple tensor by any
 positive factor.
@@ -494,21 +508,25 @@ theorem IsMPUSimple.blockTensor {U : MPOTensor d D} (hU : IsMPUSimple U)
       obtain ⟨k, rfl⟩ := hA
       exact ⟨_, _, rfl⟩
 
-/-- If a positive direct block of an MPU is simple, then the direct block one
-site longer is simple with the same witnesses.
+/-- Supplied `simple2` witnesses persist when a direct block is extended by
+one site; the suffix/prefix windows preserve the exact witnesses.
 
-The `simple2` contraction is applied to the suffix of the first blocked word
-and the prefix of the second blocked word, so the original order of all local
-letters is preserved.  MPU unitarity then recovers `simple1` for those same
-witnesses.
-
-Source: arXiv:1703.09188, corollary following Proposition III.3,
-lines 442--446. -/
-theorem IsMPU.blockTensor_succ_isMPUSimple {U : MPOTensor d D} (hU : IsMPU U)
-    {k : ℕ} (hk : 0 < k) (hsimple : IsMPUSimple (MPOTensor.blockTensor U k)) :
-    IsMPUSimple (MPOTensor.blockTensor U (k + 1)) := by
+Source: arXiv:1703.09188, corollary following Proposition III.3, lines
+442--446. -/
+theorem blockTensor_succ_simple2_of_supplied
+    {d D : ℕ} {U : MPOTensor d D} {k : ℕ}
+    (a b : Fin (D * D) → ℂ)
+    (h₂ : ∀ i j m l : Fin (MPSTensor.blockPhysDim d k),
+      doubleLayerTensor (blockTensor U k) i j *
+          doubleLayerTensor (blockTensor U k) m l =
+        doubleLayerTensor (blockTensor U k) i j * Matrix.vecMulVec b a *
+          doubleLayerTensor (blockTensor U k) m l) :
+    ∀ I J K L : Fin (MPSTensor.blockPhysDim d (k + 1)),
+      doubleLayerTensor (blockTensor U (k + 1)) I J *
+          doubleLayerTensor (blockTensor U (k + 1)) K L =
+        doubleLayerTensor (blockTensor U (k + 1)) I J * Matrix.vecMulVec b a *
+          doubleLayerTensor (blockTensor U (k + 1)) K L := by
   classical
-  obtain ⟨a, b, _, h₂⟩ := hsimple
   let W := doubleLayerTensor U
   let suffixIndex (I : Fin (MPSTensor.blockPhysDim d (k + 1))) :
       Fin (MPSTensor.blockPhysDim d k) :=
@@ -556,22 +574,33 @@ theorem IsMPU.blockTensor_succ_isMPUSimple {U : MPOTensor d D} (hU : IsMPU U)
     rw [List.ofFn_succ', List.ofFn_succ', List.concat_eq_append,
       List.concat_eq_append, evalWord_append W _ _ _ _ (by simp)]
     simp
-  have h₂succ (I J K L : Fin (MPSTensor.blockPhysDim d (k + 1))) :
-      doubleLayerTensor (MPOTensor.blockTensor U (k + 1)) I J *
-          doubleLayerTensor (MPOTensor.blockTensor U (k + 1)) K L =
-        doubleLayerTensor (MPOTensor.blockTensor U (k + 1)) I J *
-          Matrix.vecMulVec b a *
-            doubleLayerTensor (MPOTensor.blockTensor U (k + 1)) K L := by
-    simp only [doubleLayerTensor_blockTensor, blockTensor_apply,
-      MPSTensor.wordOfBlock]
-    rw [hfirst I J, hlast K L]
-    have h := congrArg
-      (fun X ↦ W (MPSTensor.decodeBlock d (k + 1) I 0)
-          (MPSTensor.decodeBlock d (k + 1) J 0) * X *
-        W (MPSTensor.decodeBlock d (k + 1) K (Fin.last k))
-          (MPSTensor.decodeBlock d (k + 1) L (Fin.last k)))
-      (hmiddle I J K L)
-    simpa only [Matrix.mul_assoc] using h
+  intro I J K L
+  simp only [doubleLayerTensor_blockTensor, blockTensor_apply,
+    MPSTensor.wordOfBlock]
+  rw [hfirst I J, hlast K L]
+  have h := congrArg
+    (fun X ↦ W (MPSTensor.decodeBlock d (k + 1) I 0)
+        (MPSTensor.decodeBlock d (k + 1) J 0) * X *
+      W (MPSTensor.decodeBlock d (k + 1) K (Fin.last k))
+        (MPSTensor.decodeBlock d (k + 1) L (Fin.last k)))
+    (hmiddle I J K L)
+  simpa only [Matrix.mul_assoc] using h
+
+/-- If a positive direct block of an MPU is simple, then the direct block one
+site longer is simple with the same witnesses.
+
+The `simple2` contraction is applied to the suffix of the first blocked word
+and the prefix of the second blocked word, so the original order of all local
+letters is preserved.  MPU unitarity then recovers `simple1` for those same
+witnesses.
+
+Source: arXiv:1703.09188, corollary following Proposition III.3,
+lines 442--446. -/
+theorem IsMPU.blockTensor_succ_isMPUSimple {U : MPOTensor d D} (hU : IsMPU U)
+    {k : ℕ} (hk : 0 < k) (hsimple : IsMPUSimple (MPOTensor.blockTensor U k)) :
+    IsMPUSimple (MPOTensor.blockTensor U (k + 1)) := by
+  obtain ⟨a, b, _, h₂⟩ := hsimple
+  have h₂succ := blockTensor_succ_simple2_of_supplied (a := a) (b := b) h₂
   exact (hU.blockTensor (k + 1) (by omega)).isMPUSimple_of_simple2 a b h₂succ
 
 /-- Once a positive direct blocking of an MPU is simple, every longer direct
