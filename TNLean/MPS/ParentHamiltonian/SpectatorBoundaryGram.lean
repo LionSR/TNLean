@@ -24,6 +24,7 @@ and the fiberwise Gram identities. No contraction estimate is asserted.
 
 * `range_tailBoundaryMapES` and `range_leftBoundaryMapES_one` identify the physical ranges.
 * `c3_injectiveRangeProjector_residual_eq` is the exact C3 common-factorization identity.
+* `norm_boundaryFiberwiseMap_le` bounds a fiberwise map uniformly in its spectator type.
 * `tailBoundaryMapES_adjoint_comp_self_eq_fiberwise_groundSpaceGram` and
   `leftBoundaryMapES_adjoint_comp_self_eq_fiberwise_groundSpaceGram` identify the Grams.
 * `inverseGram_tailBoundaryMapES_eq_fiberwise_inverseGram` and
@@ -420,6 +421,38 @@ theorem inner_boundaryFiberwiseMap (S : Type*) [Fintype S]
   rw [PiLp.inner_apply]
   simp only [boundaryFiberwiseMap_apply_apply, Fintype.sum_prod_type,
     boundaryFamilyFiber, PiLp.inner_apply]
+
+/-- Applying the same operator independently on each boundary fiber does not
+increase its operator norm. This estimate is uniform in the finite spectator
+type and remains valid when that type is empty. -/
+theorem norm_boundaryFiberwiseMap_le (S : Type*) [Fintype S]
+    (G : EuclideanSpace ℂ (Fin D × Fin D) →L[ℂ]
+      EuclideanSpace ℂ (Fin D × Fin D)) :
+    ‖boundaryFiberwiseMap (D := D) S G‖ ≤ ‖G‖ := by
+  refine ContinuousLinearMap.opNorm_le_bound _ (norm_nonneg G) fun x ↦ ?_
+  rw [← sq_le_sq₀ (norm_nonneg _) (mul_nonneg (norm_nonneg G) (norm_nonneg x)),
+    mul_pow, EuclideanSpace.norm_sq_eq, EuclideanSpace.norm_sq_eq]
+  calc
+    ∑ sp : S × (Fin D × Fin D),
+        ‖boundaryFiberwiseMap (D := D) S G x sp‖ ^ 2 =
+        ∑ s, ∑ p, ‖G (boundaryFamilyFiber (D := D) x s) p‖ ^ 2 := by
+      rw [Fintype.sum_prod_type]
+      rfl
+    _ = ∑ s, ‖G (boundaryFamilyFiber (D := D) x s)‖ ^ 2 := by
+      apply Finset.sum_congr rfl
+      intro s _
+      rw [EuclideanSpace.norm_sq_eq]
+    _ ≤ ∑ s, (‖G‖ * ‖boundaryFamilyFiber (D := D) x s‖) ^ 2 := by
+      apply Finset.sum_le_sum
+      intro s _
+      exact (sq_le_sq₀ (norm_nonneg _)
+        (mul_nonneg (norm_nonneg G) (norm_nonneg _))).mpr (G.le_opNorm _)
+    _ = ‖G‖ ^ 2 * ∑ sp : S × (Fin D × Fin D), ‖x sp‖ ^ 2 := by
+      rw [Fintype.sum_prod_type, Finset.mul_sum]
+      apply Finset.sum_congr rfl
+      intro s _
+      rw [mul_pow, EuclideanSpace.norm_sq_eq]
+      simp only [boundaryFamilyFiber, Finset.mul_sum]
 
 /-- The tail Gram is the direct sum, over prefix spectators, of copies of the
 length-`L` MPS Gram. This bilinear identity remains valid for empty spectator types. -/
