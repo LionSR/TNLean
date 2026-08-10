@@ -419,7 +419,7 @@ private lemma mul_permMatrix_eq_submatrix {n : Type*}
 
 /-- Conjugating a square matrix by a permutation matrix gives a `submatrix` of
 the original by the permutation index map. -/
-private lemma permMatrix_conj_eq_submatrix {n : Type*}
+lemma permMatrix_conj_eq_submatrix {n : Type*}
     [DecidableEq n] [Fintype n] (σ : Equiv.Perm n) (M : Matrix n n ℂ) :
     Equiv.Perm.permMatrix ℂ σ * M * Equiv.Perm.permMatrix ℂ σ.symm =
       M.submatrix σ σ := by

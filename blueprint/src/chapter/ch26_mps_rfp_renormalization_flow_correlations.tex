@@ -111,6 +111,158 @@
     valid pure-state theorem.
 \end{theorem}
 
+% Source-status record for CPSV16 Appendix D, equation `RFP-gauge`,
+% lines 2100--2110. See
+% docs/paper-gaps/cpsv16_rfp_gauge_pure_equivalence_false.tex.
+\begin{definition}[One-letter doubled-MPO virtual-gauge condition]
+    \label{def:one_letter_mpdo_virtual_gauge_rfp}
+    \lean{MPOTensor.IsOneLetterRFPViaTSUpToVirtualGauge}
+    \lean{MPSTensor.IsPureOneLetterRFPViaTSUpToVirtualGauge}
+    \leanok
+    \uses{def:mpdo_two_site_blocking, def:gauge_equiv, def:doubled_tensor}
+    For an MPO tensor $M$ with one physical component, the Appendix~D
+    blocking diagram holds up to virtual gauge if $M^{[2]}$ and $M$ are related
+    by simultaneous similarity on the virtual indices. For a pure tensor $A$,
+    this condition is imposed on the doubled tensor
+    \begin{align}
+        M&=A\otimes\overline A.
+        \notag
+    \end{align}
+    Both physical matrix algebras are one-dimensional, so every physical
+    unitary-conjugation channel in the diagram is the identity. Similarity is
+    symmetric and hence gives both directions of the diagram in
+    \cite[Appendix~D, equation~\texttt{RFP-gauge}]{Cirac2016MPDO_arXiv}.
+\end{definition}
+
+\begin{definition}[One-letter MPS blocking witness]
+    \label{def:blocked_gauge_phase_fixed_point}
+    \lean{MPSTensor.IsBlockedGaugePhaseFixedPoint}
+    \leanok
+    \uses{def:blocked_tensor, def:unit_gauge_phase_equiv}
+    A tensor $A$ with one physical component has a blocking witness if there
+    are an invertible matrix $X$ and a scalar $\zeta$ with $|\zeta|=1$ such
+    that
+    \begin{align}
+        A&=\zeta X A^{[2]}X^{-1}.
+        \notag
+    \end{align}
+    % This MPS-level witness is sufficient but is not the source condition itself.
+\end{definition}
+
+\begin{definition}[Doubled virtual gauge]
+    \label{def:doubled_virtual_gauge}
+    \lean{MPSTensor.doubledVirtualGauge}
+    \leanok
+    Given an invertible virtual matrix $X$, the induced gauge on the doubled
+    bond space is $X\otimes\overline X$.
+\end{definition}
+
+\begin{definition}[Cube-phase swap gauge]
+    \label{def:cube_phase_swap_gauge}
+    \lean{MPSTensor.cubeSwapGauge}
+    \leanok
+    \uses{def:ft_perm_gl}
+    The permutation matrix
+    \begin{align}
+        S&=\begin{pmatrix}0&1\\1&0\end{pmatrix}
+        \notag
+    \end{align}
+    defines an invertible virtual gauge that exchanges the $1$ and $\omega$
+    coordinates of the cube-phase tensor.
+\end{definition}
+
+\begin{theorem}[An MPS blocking witness gives the doubled-MPO condition]
+    \label{thm:blocked_gauge_phase_to_doubled_mpdo}
+    \lean{MPSTensor.isPureOneLetterRFPViaTSUpToVirtualGauge_of_isBlockedGaugePhaseFixedPoint}
+    \leanok
+    \uses{def:one_letter_mpdo_virtual_gauge_rfp,
+        def:blocked_gauge_phase_fixed_point}
+    Every one-letter MPS blocking witness induces the exact doubled-MPO
+    virtual-gauge condition.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{def:doubled_virtual_gauge}
+    Tensor the identity $A=\zeta X A^{[2]}X^{-1}$ with its complex conjugate.
+    The virtual matrices combine to $X\otimes\overline X$, while the amplitude
+    factor is $\zeta\overline\zeta=|\zeta|^2=1$.
+\end{proof}
+
+\begin{theorem}[The printed pure blocking-up-to-gauge equivalence is false]
+    \label{thm:cpsv_pure_rfp_gauge_status}
+    \lean{MPSTensor.primitiveCubeRoot_isPrimitiveRoot}
+    \lean{MPSTensor.scalarUnitTensor_isNormalTensor}
+    \lean{MPSTensor.cube_phase_blocked_gauge_identity}
+    \lean{MPSTensor.cubePhaseDoubledTensor_isMPDO}
+    \lean{MPSTensor.cubePhaseDoubledTensor_isCPSVCanonicalForm}
+    \lean{MPSTensor.cubePhaseDoubledTensor_exists_weightNormalized}
+    \lean{MPSTensor.cubePhaseTensor_isPureOneLetterRFPViaTSUpToVirtualGauge}
+    \lean{MPSTensor.cubePhaseTensor_not_isTransferIdempotent}
+    \lean{MPSTensor.cpsv16_pure_rfp_gauge_equivalence_false}
+    \leanok
+    \uses{def:blocked_tensor, def:doubled_tensor, def:mpdo,
+        def:one_letter_mpdo_virtual_gauge_rfp, def:cube_phase_swap_gauge,
+        def:cpsv_canonical_form, def:mps_transfer_idempotence}
+    Let $\omega=e^{2\pi i/3}$, and set
+    \begin{align}
+        A&=\begin{pmatrix}1&0\\0&\omega\end{pmatrix},
+        &S&=\begin{pmatrix}0&1\\1&0\end{pmatrix}.
+        \notag
+    \end{align}
+    Then $\omega^3=1$, $\omega\ne1$, and
+    \begin{align}
+        A&=\omega S A^2S^{-1}.
+        \notag
+    \end{align}
+    The doubled MPO tensor generates positive semidefinite operators on every
+    nonempty chain, is in CPSV canonical form, and has four scalar-block weights
+    satisfying the source normalization convention. It also satisfies the literal
+    one-letter virtual-gauge condition in the source diagram, but its transfer
+    map is not idempotent. Hence the canonical-restricted pure-state
+    equivalence claimed after
+    \cite[Appendix~D, equation~\texttt{RFP-gauge}]{Cirac2016MPDO_arXiv} is false.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{def:ft_perm_gl, lem:ft_perm_gl_identities,
+        lem:ft_perm_matrix_conj_submatrix, def:cube_phase_swap_gauge, def:mpdo,
+        lem:bond_dimension_one_identity_transfer_normal,
+        def:cpsv_canonical_form, thm:blocked_gauge_phase_to_doubled_mpdo,
+        thm:cpsv_canonical_form_flow_phase_obstruction}
+    On every nonempty chain, $M=A\otimes\overline A$ generates the rank-one
+    operator $\ketbra{V^{(N)}(A)}{V^{(N)}(A)}$, which is positive semidefinite.
+    Moreover, $M$ is the direct sum of four bond-one scalar blocks with weights
+    $\mu_p\overline{\mu_q}$, where $\mu_0=1$ and $\mu_1=\omega$.
+    Each block is normal and every weight has modulus one, proving both the CPSV
+    canonical-form condition and its normalization.
+
+    Swapping the two virtual coordinates changes
+    $\operatorname{diag}(1,\omega^2)$ into
+    $\operatorname{diag}(\omega^2,1)$; multiplication by $\omega$ gives $A$.
+    Writing $M=A\otimes\overline A$, doubling cancels the phase through
+    \begin{align}
+        (\omega S A^{[2]}S^{-1})\otimes
+        (\overline\omega\,\overline S\,\overline{A^{[2]}}\,\overline S^{-1})
+        &=(S\otimes\overline S)M^{[2]}(S\otimes\overline S)^{-1},
+        \notag
+    \end{align}
+    since $\omega\overline\omega=1$. For every $n\geq0$, idempotence would imply
+    \begin{align}
+        \E_A^2=\E_A
+        &\Longrightarrow \E_A^{2^n}=\E_A.
+        \notag
+    \end{align}
+    The dyadic powers would therefore form a constant, hence convergent,
+    sequence. This contradicts the preceding phase-obstruction theorem, which
+    shows that the dyadic orbit of $e_{21}$ alternates between the distinct
+    factors $\omega$ and $\omega^2$.
+\end{proof}
+
+\begin{remark}
+    The counterexample refutes the printed pure equivalence. It does not decide
+    the mixed-state continuation in the following source paragraph.
+\end{remark}
+
 \begin{remark}\label{rem:zero_correlation_length}
     \uses{thm:spectral_radius_le_one, def:correlation_length,
         def:mps_transfer_idempotence}

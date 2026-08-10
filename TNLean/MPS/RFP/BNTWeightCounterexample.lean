@@ -103,20 +103,6 @@ private theorem isPhysicalCID_one {D : ℕ} (A : MPSTensor 1 D) :
   congr 1
   omega
 
-private theorem scalarUnitTensor_transferMap :
-    transferMap scalarUnitTensor = LinearMap.id := by
-  apply LinearMap.ext
-  intro X
-  ext a b
-  fin_cases a
-  fin_cases b
-  simp [transferMap_apply, scalarUnitTensor]
-
-private theorem scalarUnitTensor_isNormalTensor :
-    IsNormalTensor scalarUnitTensor :=
-  isNormalTensor_of_bondDim_one_of_transferMap_eq_id
-    scalarUnitTensor scalarUnitTensor_transferMap
-
 /-- The raw-weight decomposition of `halvedWeightTensor` is a BNT canonical
 form in the line-246 normalization of arXiv:1606.00608. -/
 theorem halvedWeightTensor_isBNTCanonicalForm :
