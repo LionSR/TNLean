@@ -128,7 +128,14 @@
           }
       }
   }
+% A declaration is setup, wherever it is spelled: an equation places pictures
+% around the mathematics between them and is no place to mint a document-wide
+% name (LANGUAGE-1.0 section 7).
 \NewDocumentCommand \tndeclareatom { m m }
-  { \__tenkz_language_declare_atom:Nn #1 {#2} }
+  {
+    \bool_if:NTF \l__tenkz_kernel_ineq_bool
+      { \msg_error:nn {tenkz}{kernel-declare-equation} }
+      { \__tenkz_language_declare_atom:Nn #1 {#2} }
+  }
 \ExplSyntaxOff
 \endinput
