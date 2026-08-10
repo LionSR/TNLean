@@ -1529,13 +1529,16 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
 \begin{theorem}[Source-factor normalizations]
     \label{thm:mpu_source_factor_normalizations}
     \lean{MPOTensor.sourceX₁_weighted_isometry,
+        MPOTensor.sourceX₁_weighted_isometry_apply,
         MPOTensor.sourceX₂_isometry}
     \leanok
     \uses{def:mpu_weighted_source_factors,def:mpu_source_weight}
     The left factors satisfy
     \begin{align}
         X_1^\dagger W_\rho X_1&=\Id_r,
-        &X_2^\dagger X_2&=\Id_\ell.
+        &X_2^\dagger X_2&=\Id_\ell,\\
+        \sum_{x,y}\overline{(X_1)_{x,r}}(W_\rho)_{x,y}(X_1)_{y,r'}
+          &=\delta_{r,r'}.
     \end{align}
     These are \cite[Section~III]{Cirac2017MPU}.
 \end{theorem}
@@ -1544,7 +1547,8 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
     \leanok
     \uses{def:mpu_weighted_source_factors,def:mpu_source_svd_data}
     The source-factor construction supplies
-    $X_1^\dagger W_\rho X_1=\Id_r$. Since $X_2=V_2^\dagger$, the
+    $X_1^\dagger W_\rho X_1=\Id_r$; evaluating at $(r,r')$ gives the displayed
+    weighted sum. Since $X_2=V_2^\dagger$, the
     coisometry identity $V_2V_2^\dagger=\Id_\ell$ gives
     $X_2^\dagger X_2=\Id_\ell$.
 \end{proof}
@@ -1664,6 +1668,108 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
     Reindexing both physical configuration spaces and explicitly swapping
     $(r,l)$ to $(l,r)$ gives the matrix identity.
 \end{proof}
+
+
+\begin{theorem}[Open two-site source factorization]
+    \label{thm:mpu_source_u_open_two_site}
+    \lean{MPOTensor.sum_sourceX₁_mul_sourceU,
+        MPOTensor.mul_apply_eq_sum_sourceX₁_mul_sourceU_mul_sourceY₂,
+        MPOTensor.mul_apply_eq_sum_sourceX₁_mul_sourceU_mul_sourceY₂_pair}
+    \leanok
+    \uses{def:mpu_source_uv,thm:mpu_source_factorization_entries}
+    For $q=(q_1,q_2)$ and $j=(j_1,j_2)$, the untraced two-site product is
+    \begin{align}
+        (\mathcal U^{q_1j_1}\mathcal U^{q_2j_2})_{\alpha,\gamma}
+        =\sum_{r,l}(X_1)_{(\alpha,j_1),r}
+          u_{(l,r),q}(Y_2)_{l,(j_2,\gamma)}.
+    \end{align}
+    The intermediate partial contraction is
+    \begin{align}
+        \sum_r (X_1)_{(\alpha,j_1),r}u_{(l,r),(q_1,q_2)}
+        =\sum_\beta \mathcal U^{q_1}_{j_1,\alpha,\beta}
+          (X_2)_{(\beta,q_2),l}.
+    \end{align}
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:mpu_source_uv,thm:mpu_source_factorization_entries}
+    Use the three identities
+    \begin{align}
+      u_{(l,r),q}
+        &=\sum_\beta (Y_1)_{r,(q_1,\beta)}
+            (X_2)_{(\beta,q_2),l},\\
+      (X_1Y_1)_{(\alpha,j_1),(q_1,\beta)}
+        &=\mathcal U^{q_1}_{j_1,\alpha,\beta},\\
+      (X_2Y_2)_{(\beta,q_2),(j_2,\gamma)}
+        &=\mathcal U^{q_2}_{j_2,\beta,\gamma}.
+    \end{align}
+    Substitution and reordering of the scalar finite sums give the displayed
+    partial contraction and the untraced two-site identity, with the virtual
+    indices $\alpha$ and $\gamma$ left open.
+\end{proof}
+
+\begin{theorem}[Open periodic-tail source expansion]
+    \label{thm:mpu_source_u_open_periodic_tail}
+    \lean{MPOTensor.mpo_finAddTwo_eq_sum_sourceX₁_sourceU_sourceY₂_evalWord,
+        MPOTensor.mpo_finAddTwo_eq_sum_sourceX₁_sourceU_sourceX₂_openTail}
+    \leanok
+    \uses{def:mpo_family,thm:mpu_source_u_open_two_site,
+        thm:mpu_source_factor_recovery}
+    Separate the first two physical sites of a length-$(K+2)$ configuration.
+    For an output pair $q$, an input pair $j$, and tails $\tau,\zeta$, the
+    periodic entry first expands as
+    \begin{align}
+      U^{(K+2)}_{(q,\tau),(j,\zeta)}
+      =\sum_{\alpha,\gamma,r,l}
+        &(X_1)_{(\alpha,j_1),r}u_{(l,r),q}
+        (Y_2)_{l,(j_2,\gamma)}
+        (T_{\tau,\zeta})_{\gamma,\alpha},
+    \end{align}
+    where $T_{\tau,\zeta}$ is the open $K$-site virtual word.  Reconstructing
+    $Y_2$ gives
+    \begin{align}
+      U^{(K+2)}_{(q,\tau),(j,\zeta)}
+      =\sum_{\alpha,r,l,\beta,i}
+        &(X_1)_{(\alpha,j_1),r}u_{(l,r),q}
+        \overline{(X_2)_{(\beta,i),l}}
+        (\mathcal U^{ij_2}T_{\tau,\zeta})_{\beta,\alpha}.
+    \end{align}
+    No power of $d$ occurs in either algebraic expansion.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpu_source_u_open_two_site,
+        thm:mpu_source_factor_recovery}
+    Reindexing each configuration into its first two coordinates and its tail
+    gives
+    \begin{align}
+      U^{(K+2)}_{(q,\tau),(j,\zeta)}
+        &=\tr\!\left[
+          (\mathcal U^{q_1j_1}\mathcal U^{q_2j_2})
+          T_{\tau,\zeta}\right].
+    \end{align}
+    Insert the open two-site factorization from the preceding theorem.  The
+    recovery identity and its entrywise evaluation are
+    \begin{align}
+      Y_2&=X_2^\dagger M_2,\\
+      (Y_2)_{l,(j_2,\gamma)}
+        &=\sum_{\beta,i}\overline{(X_2)_{(\beta,i),l}}
+          \mathcal U^i_{j_2,\beta,\gamma}.
+    \end{align}
+    Substitution combines the last raw tensor letter with
+    $T_{\tau,\zeta}$ by matrix multiplication and gives the second displayed
+    expansion.
+\end{proof}
+
+\begin{remark}[Scope of the open-tail algebra]
+    The preceding theorem does not collapse the open virtual tail.  In
+    particular, it proves neither $u^\dagger u=\Id$ nor a rank bound for $u$,
+    and it does not use the false ambient equation $X_2X_2^\dagger=\Id$.
+    The remaining contraction must retain the surrounding $X_1$ and $X_2$
+    factors.  In the eventual Gram contraction the retained pair $q$ is
+    unstarred and the retained pair $p$ is starred, with exactly one factor
+    $d^{-K}$ supplied by the normalized periodic tail.
+\end{remark}
 
 \begin{theorem}[Right-rank bound]
     \label{thm:mpu_right_rank_bound}
