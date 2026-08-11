@@ -137,7 +137,6 @@ lemma basis_isNormalTensor (s : Fin 2) : MPSTensor.IsNormalTensor (basis s) := b
   · exact MPSTensor.isNormalTensor_of_bondDim_one_of_transferMap_eq_id
       _ secondBasis_transferMap
 
-
 /-- The first representative after the source absorbs its common weight. -/
 noncomputable def firstAbsorbed : MPSTensor (3 * 3) 1 :=
   fun i ↦ invSqrtTwo • basis 0 i
