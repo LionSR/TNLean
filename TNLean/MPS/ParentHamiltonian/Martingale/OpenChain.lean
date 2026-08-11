@@ -16,8 +16,9 @@ implies the generic Friedrichs-angle anticommutator estimate.
 
 **Scope restriction (Nachtergaele C3):** This file formalizes only the open-chain
 projector geometry and the implication from its defect to the Friedrichs and
-anticommutator bounds. The geometric defect estimate and the choice of a blocked
-length satisfying the C3 threshold are proved separately. Transport from this
+anticommutator bounds. The geometric defect estimate and the choice of an overlap
+length, measured in sites of the input tensor, satisfying the C3 threshold are proved
+separately. Transport from this
 open-chain statement to cyclic parent-Hamiltonian windows remains outside this
 file; see `docs/paper-gaps/cpgsv21_martingale_overlap.tex`.
 

@@ -36,8 +36,8 @@ The seven components are:
   Hamiltonian transport, positivity, commutation, and kernel identification;
 * `Martingale.OpenChain` — open-chain ground-space projectors, their intersection,
   and the projector-defect reduction to an anticommutator estimate;
-* `Martingale.C3Threshold` — a uniform blocked length satisfying the open-chain
-  C3 defect threshold and its anticommutator consequence;
+* `Martingale.C3Threshold` — a uniform input-site overlap length satisfying the
+  open-chain C3 defect threshold and its anticommutator consequence;
 * `Martingale.OverlapReduction` — reduction from overlapping-window commutation
   to all-pairs commutation using locality for disjoint windows;
 * `Martingale.Reduction` — martingale quadratic-form reductions from ordered

@@ -151,14 +151,17 @@ separate batched condition C3$'$ involving $E_n^{(p)}$.
 The open-chain numerical step is also complete.  The geometric estimate below
 is uniform in the left length, and
 \leanid{MPSTensor.IsPrimitiveMPS.exists_openChain_groundProjection_defect_lt_c3_threshold}
-chooses one block-injective $l>1$ and one coefficient $\varepsilon_l\geq0$ with
+chooses one block-injective $l>1$, measured in sites of the input tensor, and
+one coefficient $\varepsilon_l\geq0$ with
 \[
   \varepsilon_l<\frac{1}{\sqrt{l+1}}.
 \]
 The companion theorem
 \leanid{MPSTensor.IsPrimitiveMPS.exists_re_inner_openChain_anticommutator_ge_c3_threshold}
-gives the corresponding anticommutator inequality for every left length.  The
-remaining task is the separate blocked-to-cyclic comparison, including windows
+combines Nachtergaele's projector-defect identity with the two-projection
+estimate proved here to give the corresponding anticommutator inequality for
+every left length.  The remaining task is the separate blocked-to-cyclic
+comparison, including windows
 crossing the periodic cut.  No excitation-compression estimate is used.
 
 \section{Finite-row martingale reduction}
@@ -1093,8 +1096,10 @@ and
 \end{align}
 The same $l$ works for every spectator length $K$, and
 \leanid{MPSTensor.IsPrimitiveMPS.exists_re_inner_openChain_anticommutator_ge_c3_threshold}
-then gives the open-chain anticommutator inequality.  One site of the input
-tensor is one blocked-chain filtration step.
+then gives the open-chain anticommutator inequality by the two-projection
+argument.  The length $l$ is measured in sites of the input tensor.  If that
+tensor is already a blocked representative, one such site is one blocked-chain
+filtration step.
 
 The coefficient is not the optimized FNW expression
 \begin{align}
@@ -1111,7 +1116,7 @@ conversion retains its proved $D^{3/2}$ norm factor inside $g$.
 \section{Verdict}
 
 \textbf{Verdict: the open-chain C3 threshold is resolved.}  The
-spectator-uniform projector estimate and a blocked length satisfying
+spectator-uniform projector estimate and an input-site overlap length satisfying
 $\varepsilon_l<1/\sqrt{l+1}$ are proved in the unweighted coordinates.  The
 optimized FNW numerator remains an open source-comparison problem, and the
 blocked-to-cyclic parent-Hamiltonian comparison remains separate.
