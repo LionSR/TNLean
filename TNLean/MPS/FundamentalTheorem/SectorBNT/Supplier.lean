@@ -8,6 +8,7 @@ import TNLean.MPS.CanonicalForm.SectorComparison.CommonSectorTransport
 import TNLean.MPS.Core.PhysicalReindexTransport
 import TNLean.MPS.FundamentalTheorem.Proportional
 import TNLean.MPS.FundamentalTheorem.SectorBNT.Basic
+import TNLean.MPS.SharedInfra.BlockGauge
 import TNLean.MPS.Overlap.PeripheralToTransferMapGap
 
 /-!
@@ -223,6 +224,72 @@ theorem gaugePhaseEquiv_of_MPVBlockPhaseEquiv_of_tp_primitive_irr
   refine ⟨hSymm.choose ^ N, ?_⟩
   intro σ
   exact hSymm.choose_spec.2 N hNpos σ
+
+/-- **Letterwise gauge realization with the phase-class scalar.**
+
+For prepared phase-equivalent blocks, the scalar chosen by `MPVBlockPhaseEquiv` is the same
+scalar that appears in a letterwise gauge-phase relation. The equality of the two possible
+scalars follows by comparing their powers at two consecutive lengths where the representative
+MPV is nonzero.
+
+Source: arXiv:1606.00608, Lemma `equalMPS`, lines 1080--1117, and Proposition
+`prop:char-BNT`, lines 1135--1148. -/
+lemma exists_gauge_choose_MPVBlockPhaseEquiv_of_tp_primitive_irr
+    {DX DY : ℕ} [NeZero DX] [NeZero DY]
+    {X : MPSTensor d DX} {Y : MPSTensor d DY}
+    (hTPX : IsLeftCanonical X)
+    (hTPY : IsLeftCanonical Y)
+    (hPrimX : _root_.IsPrimitive (transferMap (d := d) (D := DX) X))
+    (hPrimY : _root_.IsPrimitive (transferMap (d := d) (D := DY) Y))
+    (hIrrX : IsIrreducibleTensor X)
+    (hIrrY : IsIrreducibleTensor Y)
+    (h : MPVBlockPhaseEquiv X Y) :
+    ∃ e : DX = DY, ∃ G : GL (Fin DY) ℂ, ∀ i,
+      Y i = h.choose • ((G : Matrix _ _ ℂ) *
+        (cast (congr_arg (MPSTensor d) e) X) i *
+        (↑(G⁻¹) : Matrix _ _ ℂ)) := by
+  classical
+  obtain ⟨e, hGauge⟩ := gaugePhaseEquiv_of_MPVBlockPhaseEquiv_of_tp_primitive_irr
+    hTPX hTPY hPrimX hPrimY hIrrX hIrrY h
+  subst DY
+  obtain ⟨G, η, hη, hrel⟩ := hGauge
+  have hXX : Tendsto (fun N => mpvOverlap (d := d) X X N) atTop (𝓝 (1 : ℂ)) :=
+    overlap_tendsto_one_of_peripheralPrimitive_of_irreducible X hIrrX hTPX hPrimX
+  have hEventually : ∀ᶠ N in atTop, mpvOverlap (d := d) X X N ≠ 0 :=
+    hXX.eventually_ne one_ne_zero
+  rw [eventually_atTop] at hEventually
+  obtain ⟨N₀, hN₀⟩ := hEventually
+  let M := max N₀ 1
+  have hM : mpvOverlap (d := d) X X M ≠ 0 :=
+    hN₀ M (le_max_left _ _)
+  have hM1 : mpvOverlap (d := d) X X (M + 1) ≠ 0 :=
+    hN₀ (M + 1) (le_trans (le_max_left _ _) (Nat.le_add_right M 1))
+  have exists_coeff (L : ℕ) (hL : mpvOverlap (d := d) X X L ≠ 0) :
+      ∃ σ : Fin L → Fin d, mpv X σ ≠ 0 := by
+    by_contra hzero
+    push Not at hzero
+    apply hL
+    rw [mpvOverlap]
+    apply Finset.sum_eq_zero
+    intro σ _
+    rw [hzero σ, zero_mul]
+  obtain ⟨σM, hσM⟩ := exists_coeff M hM
+  obtain ⟨σM1, hσM1⟩ := exists_coeff (M + 1) hM1
+  have hpow (L : ℕ) (hL : 0 < L) (σ : Fin L → Fin d) (hσ : mpv X σ ≠ 0) :
+      h.choose ^ L = η ^ L := by
+    have hh := h.choose_spec.2 L hL σ
+    have hg := mpv_eq_pow_mul_of_gaugePhase X Y G η hrel L σ
+    apply mul_right_cancel₀ hσ
+    exact hh.symm.trans hg
+  have hMpos : 0 < M := lt_of_lt_of_le Nat.zero_lt_one (le_max_right N₀ 1)
+  have hpM := hpow M hMpos σM hσM
+  have hpM1 := hpow (M + 1) (Nat.succ_pos M) σM1 hσM1
+  have hphase : h.choose = η := by
+    rw [pow_succ, pow_succ, hpM] at hpM1
+    exact mul_left_cancel₀ (pow_ne_zero M hη) hpM1
+  refine ⟨rfl, G, ?_⟩
+  rw [hphase]
+  exact hrel
 
 /--
 **Prepared phase classes preserve the original bond dimensions.**
