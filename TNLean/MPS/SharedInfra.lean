@@ -10,6 +10,7 @@ Authors: TNLean contributors
 
 import TNLean.MPS.SharedInfra.BlockAssembly
 import TNLean.MPS.SharedInfra.BlockGauge
+import TNLean.MPS.SharedInfra.CoisometryGauge
 import TNLean.MPS.SharedInfra.GaugePhase
 import TNLean.MPS.SharedInfra.KrausAdjointSetup
 import TNLean.MPS.SharedInfra.Scaling
