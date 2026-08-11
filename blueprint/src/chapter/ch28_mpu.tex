@@ -2288,15 +2288,11 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
     original supplied witnesses.
 \end{proof}
 
-\begin{definition}[Reflected blocked-transfer coordinates]
+\begin{definition}[Reflected blocked-transfer coordinate maps]
     \label{def:mpu_reflected_blocked_transfer_coordinates}
-    \lean{MPOTensor.bondPairSwapEquiv,
-        MPOTensor.bondPairSwapEquiv_apply,
-        MPOTensor.bondPairSwapEquiv_symm,
-        MPOTensor.blockWordReverseEquiv,
-        MPOTensor.decodeBlock_blockWordReverseEquiv,
-        MPOTensor.wordOfBlock_blockWordReverseEquiv,
-        MPOTensor.blockWordReverseEquiv_involutive}
+    \lean{MPOTensor.bondPairSwap,
+        MPOTensor.bondPairSwapEquiv,
+        MPOTensor.blockWordReverseEquiv}
     \leanok
     The doubled-bond coordinate reflection exchanges the two virtual factors,
     \begin{align}
@@ -2306,13 +2302,28 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
     \begin{align}
       (i_0,\ldots,i_{K-1})&\longmapsto(i_{K-1},\ldots,i_0).
     \end{align}
-    Both reindexings are involutions.  These are support coordinates for the
-    graphical proof in \cite[Section~III, lines 536--557]{Cirac2017MPU},
-    rather than a separate theorem printed there.  The blocked-word reversal
-    is not used in the transfer
-    transport below; conjugate transposition there reverses only the order of
-    the two blocked letters.
+    These are support coordinates for the proof of
+    \cite[Lemma~III.5 in Section~III.B]{Cirac2017MPU}, rather than separate
+    definitions printed there.  The blocked-word reversal is not used in the
+    transfer transport below; conjugate transposition there reverses only the
+    order of the two blocked letters.
 \end{definition}
+
+\begin{theorem}[Reflected blocked-transfer coordinate identities]
+    \label{thm:mpu_reflected_blocked_transfer_coordinate_identities}
+    \lean{MPOTensor.bondPairSwap_finProdFinEquiv,
+        MPOTensor.bondPairSwap_involutive,
+        MPOTensor.bondPairSwapEquiv_apply,
+        MPOTensor.bondPairSwapEquiv_symm,
+        MPOTensor.decodeBlock_blockWordReverseEquiv,
+        MPOTensor.wordOfBlock_blockWordReverseEquiv,
+        MPOTensor.blockWordReverseEquiv_involutive}
+    \leanok
+    \uses{def:mpu_reflected_blocked_transfer_coordinates}
+    The doubled-bond swap and the blocked-word reversal are involutions.  The
+    latter sends the letter in position $k$ to the letter in position $K-1-k$
+    and reverses the encoded word.
+\end{theorem}
 
 \begin{proof}\leanok
     Decode the doubled bond, apply the product swap, and encode it again.
@@ -2334,12 +2345,13 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
     \end{align}
     This identity requires neither the MPU property nor a positivity or
     positive-dimension hypothesis.  It is a coordinate identity supporting
-    the graphical reflection in \cite[Section~III, lines 536--557]
-    {Cirac2017MPU}, not a separate theorem printed there.
+    the calculation in the proof of
+    \cite[Lemma~III.5 in Section~III.B]{Cirac2017MPU}, not a separate theorem
+    printed there.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{def:mpu_reflected_blocked_transfer_coordinates}
+    \uses{thm:mpu_reflected_blocked_transfer_coordinate_identities}
     Expand the two normalized diagonals.  Physical adjunction exchanges the
     two physical indices, and exchanging the two finite physical sums leaves
     precisely the simultaneous doubled-bond swap on the row and column.
@@ -2443,8 +2455,8 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
     order of the two blocked letters.  Overlapping-window reblocking preserves
     these witnesses through the two additional sites.  These contractions are
     support identities for the graphical proof of
-    \cite[Section~III, lines 536--557]{Cirac2017MPU}; they are not asserted
-    as a separate printed theorem of that paper.
+    \cite[Lemma~III.5 and its proof in Section~III.B]{Cirac2017MPU}; they
+    are not asserted as a separate printed theorem of that paper.
 \end{proof}
 
 % The equality and range-insertion step remains tracked by parent issue #5982.

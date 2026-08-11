@@ -13,9 +13,9 @@ import TNLean.MPS.MPU.SuppliedWitnessReblocking
 This file exposes the doubled-bond reflection and an independent spatial
 reindexing of blocked words, then transports the supplied transfer witnesses
 to the output-layer insertion used by the sandwiched open-tail coefficient in
-arXiv:1703.09188, Section III, lines 536--557.  The transfer proof uses the
-doubled-bond swap; the blocked-word reversal records a separate spatial
-coordinate and is not used in that proof.
+arXiv:1703.09188, Lemma III.5 and its proof in Section III.B
+(lines 536--557).  The transfer proof uses the doubled-bond swap; the blocked-word
+reversal records a separate spatial coordinate and is not used in that proof.
 The final sandwiched finite-sum collapse is separate from these transport
 identities.
 -/
@@ -30,7 +30,8 @@ variable {d D : ℕ}
 /-- Reverse the word encoded by a blocked physical index.
 
 This is an independent spatial reindexing coordinate for the graphical
-reflection in arXiv:1703.09188, Section III, lines 536--557.
+reflection in arXiv:1703.09188, Lemma III.5 and its proof in Section III.B,
+lines 536--557.
 It is distinct from the reversal of two blocked letters caused by conjugate
 transposition in the supplied-contraction transport below. -/
 noncomputable def blockWordReverseEquiv (d K : ℕ) :
@@ -214,12 +215,12 @@ theorem IsMPU.reflected_blockTensor_mul_sq_simple_contractions_of_transfer_power
     let ρ' : Fin (D * D) → ℂ := fun x ↦ ρ.vec (finProdFinEquiv.symm x)
     let Φ' : Fin (D * D) → ℂ := fun x ↦
       (1 : Matrix (Fin D) (Fin D) ℂ).vec (finProdFinEquiv.symm x)
-    (∀ I J₁, ρ' ⬝ᵥ ((doubleLayerTensor W I J₁)ᴴ *ᵥ Φ') =
-      if I = J₁ then 1 else 0) ∧
-    (∀ I J₁ L M,
-      (doubleLayerTensor W L M)ᴴ * (doubleLayerTensor W I J₁)ᴴ =
-        (doubleLayerTensor W L M)ᴴ * Matrix.vecMulVec Φ' ρ' *
-          (doubleLayerTensor W I J₁)ᴴ) := by
+    (∀ I₁ J₁, ρ' ⬝ᵥ ((doubleLayerTensor W I₁ J₁)ᴴ *ᵥ Φ') =
+      if I₁ = J₁ then 1 else 0) ∧
+    (∀ I₁ J₁ L₁ M₁,
+      (doubleLayerTensor W L₁ M₁)ᴴ * (doubleLayerTensor W I₁ J₁)ᴴ =
+        (doubleLayerTensor W L₁ M₁)ᴴ * Matrix.vecMulVec Φ' ρ' *
+          (doubleLayerTensor W I₁ J₁)ᴴ) := by
   classical
   let K := J * (D * D)
   let W := MPOTensor.blockTensor (MPOTensor.physicalAdjointTensor U) K
@@ -339,12 +340,12 @@ theorem IsMPU.reflected_blockTensor_mul_sq_add_two_simple_contractions
     let ρ' : Fin (D * D) → ℂ := fun x ↦ ρ.vec (finProdFinEquiv.symm x)
     let Φ' : Fin (D * D) → ℂ := fun x ↦
       (1 : Matrix (Fin D) (Fin D) ℂ).vec (finProdFinEquiv.symm x)
-    (∀ I J₁, ρ' ⬝ᵥ ((doubleLayerTensor W I J₁)ᴴ *ᵥ Φ') =
-      if I = J₁ then 1 else 0) ∧
-    (∀ I J₁ L M,
-      (doubleLayerTensor W L M)ᴴ * (doubleLayerTensor W I J₁)ᴴ =
-        (doubleLayerTensor W L M)ᴴ * Matrix.vecMulVec Φ' ρ' *
-          (doubleLayerTensor W I J₁)ᴴ) := by
+    (∀ I₁ J₁, ρ' ⬝ᵥ ((doubleLayerTensor W I₁ J₁)ᴴ *ᵥ Φ') =
+      if I₁ = J₁ then 1 else 0) ∧
+    (∀ I₁ J₁ L₁ M₁,
+      (doubleLayerTensor W L₁ M₁)ᴴ * (doubleLayerTensor W I₁ J₁)ᴴ =
+        (doubleLayerTensor W L₁ M₁)ᴴ * Matrix.vecMulVec Φ' ρ' *
+          (doubleLayerTensor W I₁ J₁)ᴴ) := by
   classical
   let K := J * (D * D)
   let ρT : Fin (D * D) → ℂ := fun x ↦
