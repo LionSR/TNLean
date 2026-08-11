@@ -263,6 +263,33 @@ def test_the_whole_check_reports_a_missing_file_rather_than_raising() -> None:
     assert "SKIP clean-install" in finished.stdout, finished.stdout
 
 
+def test_the_whole_check_reports_an_unwritable_name_rather_than_raising() -> None:
+    """The command itself, not one check in isolation: a manifest staging a
+    name an unpacking tool would misread must print its report and exit 1,
+    keeping the other checks' lines rather than replacing them."""
+
+    original = (ROOT / "docs/tenkz/ctan/MANIFEST.toml").read_text(encoding="utf-8")
+    broken = original.replace(
+        '"LICENSE" = "LICENSE"',
+        '"LICENSE" = "LICENSE"\n"license" = "LICENSE"',
+    )
+    assert broken != original
+    with tempfile.TemporaryDirectory() as directory:
+        manifest = Path(directory) / "MANIFEST.toml"
+        manifest.write_text(broken, encoding="utf-8")
+        finished = subprocess.run(
+            [sys.executable, str(SCRIPT), "check"],
+            capture_output=True,
+            text=True,
+            env={**os.environ, "TENKZ_CTAN_MANIFEST": str(manifest)},
+        )
+    assert finished.returncode == 1, finished.stdout + finished.stderr
+    assert "Traceback" not in finished.stderr, finished.stderr
+    assert "FAIL names" in finished.stdout, finished.stdout
+    assert "differ only in case" in finished.stdout, finished.stdout
+    assert "SKIP clean-install" in finished.stdout, finished.stdout
+
+
 def test_the_archive_is_a_function_of_the_files_it_carries() -> None:
     with tempfile.TemporaryDirectory() as directory:
         room = Path(directory)
