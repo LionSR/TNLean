@@ -69,16 +69,33 @@ diagonal positive right fixed point normalized to have trace one. Set
 
 The source factors are defined using this matrix $\rho$. In the first singular
 value decomposition, let $V_1$ denote the coisometry appearing in
-$M_1=V_1^\dagger D_1U_1$. The corresponding first source factor contains
+$M_1=V_1^\dagger D_1U_1$. The source orders the product index as
+$(j,\alpha)$ and uses the normalization matrix
 \begin{align}
-  \left[V_1(\rho\otimes\Id_d)V_1^\dagger\right]^{-1/2}.
+  V_1(\Id_d\otimes\rho)V_1^\dagger.
 \end{align}
-The inverse only requires the compressed matrix
-$V_1(\rho\otimes\Id_d)V_1^\dagger$ to be positive definite; it does not by
-itself force $\rho$ to be positive definite on the ambient bond space. The
-current TNLean source-factor construction assumes ambient positive
-definiteness, and full active support supplies that stronger hypothesis
-\cite[lines~480--505]{Cirac2017MPU}. The same factors define $u$ and $v$ in
+The formal source matrix orders the same index as $(\alpha,j)$. Let
+\begin{align}
+  \chi\colon\mathbb C^D\otimes\mathbb C^d
+    &\longrightarrow\mathbb C^d\otimes\mathbb C^D,&
+  \chi(e_\alpha\otimes e_j)&=e_j\otimes e_\alpha.
+\end{align}
+In the virtual--physical order, the source weight is therefore
+\begin{align}
+  W_\rho
+    &=\chi^\dagger(\Id_d\otimes\rho)\chi
+      =\rho\otimes\Id_d,
+\end{align}
+and the normalization matrix is $V_1W_\rho V_1^\dagger$. The two Kronecker
+orders are related by this product-index equivalence and are not literally the
+same matrix in one fixed ordering.
+
+The inverse only requires the compressed matrix $V_1W_\rho V_1^\dagger$ to be
+positive definite; it does not by itself force $\rho$ to be positive definite
+on the ambient bond space. The current TNLean source-factor construction
+assumes ambient positive definiteness, and full active support supplies that
+stronger hypothesis \cite[lines~480--505]{Cirac2017MPU}. The same factors
+define $u$ and $v$ in
 the source-isometry lemma and Theorem~III.8
 \cite[labels~\texttt{lemuisometry} and~\texttt{ThmFund1},
 lines~532--601]{Cirac2017MPU}. Thus ambient positive definiteness is a
@@ -134,6 +151,32 @@ block of $\mathcal U$. This internal block supplies the direct and reflected
 contractions used to evaluate the closed network for $u^\dagger u$. It is not
 used to replace the source cuts, ranks, or operators of $\mathcal U$, and no
 transport of source data across blocking is asserted.
+
+\section{Downstream standard-form and index scope}
+The Chapter~28 blueprint records the preceding hypotheses as a reduced
+full-support source datum for the same tensor. This is an explicit input, not
+an existence theorem. The planned standard form therefore applies only to a
+simple tensor carrying such a datum. The planned fundamental theorem of MPU
+applies to two tensors carrying their own data.
+
+The index has the same restriction at every blocking length where
+Theorem~III.8 is used. A blocking length is admissible only when the blocked
+tensor is simple and carries its own reduced full-support source datum.
+Well-definedness compares two admissible simple blockings. Tensor-product and
+composition additivity require admissible simple blocks for every tensor whose
+index occurs. The continuity statement requires the associated simple tensors
+to carry such data along the path; the continuous-standard-form corollary also
+requires the data to vary continuously. These hypotheses propagate to the
+index theorem and to every symmetry statement that uses the restricted
+standard form or fundamental theorem.
+
+No current result constructs these data for every simple block, proves their
+preservation under blocking, tensor product, composition, or continuous
+variation, or identifies the source data of a tensor with those of a reduced
+representative. Consequently the Chapter~28 statements are restricted to the
+explicitly admissible tensors and operations just described. They do not give
+the unrestricted same-tensor standard-form and index theorems stated in the
+source.
 
 \section{Verdict}
 \textbf{Verdict: scope restriction with two open gaps.} The paper's

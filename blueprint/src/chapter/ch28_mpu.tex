@@ -1728,12 +1728,21 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
     \lean{MPOTensor.sourceWeight}
     \leanok
     \uses{def:mpu_source_matrix_one}
-    For $\rho\in\MN{D}$, in the row order $(\alpha,j)$ of $M_1$, define
+    For $\rho\in\MN{D}$, let
     \begin{align}
-        W_\rho&=\rho\otimes\Id_d.
+      \chi\colon\mathbb C^D\otimes\mathbb C^d
+        &\longrightarrow\mathbb C^d\otimes\mathbb C^D,&
+      \chi(e_\alpha\otimes e_j)&=e_j\otimes e_\alpha.
     \end{align}
-    This is the matrix denoted $\Id_d\otimes\rho$ in the graphical leg order
-    of \cite[Section~III]{Cirac2017MPU}.
+    In the virtual--physical row order $(\alpha,j)$ of $M_1$, define
+    \begin{align}
+        W_\rho&=\rho\otimes\Id_d
+        =\chi^\dagger(\Id_d\otimes\rho)\chi.
+    \end{align}
+    Thus the source expression $\Id_d\otimes\rho$ is first written in the
+    physical--virtual order $(j,\alpha)$ and then reindexed by $\chi$ to the
+    virtual--physical order $(\alpha,j)$. The two Kronecker products are not
+    identified without this reindexing.
 \end{definition}
 
 \begin{theorem}[Positivity of the product-index source weight]
@@ -3836,6 +3845,29 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
 
 \section{Standard form, index, and symmetry classification}
 
+\begin{definition}[Reduced full-support source datum]
+  \label{def:mpu_reduced_full_support_source_datum}
+  \notready
+  % **Scope restriction (source data for the same tensor):** this datum is an
+  % explicit hypothesis, not a construction of a reduced representative.
+  % Documented in docs/paper-gaps/mpu_canonical_form_full_support.tex.
+  \uses{def:mpu,def:mpu_normalized_flattening,def:cpsv_cfii,
+    def:mpu_full_active_support,
+    thm:mpu_reduced_cfii_transfer_stabilization}
+  A reduced full-support source datum for an MPU tensor $\mathcal U$ of
+  physical dimension $d>0$ and bond dimension $D>1$ consists of chosen
+  canonical-form-II data for the normalized flattening of this same tensor,
+  with its active blocks filling the ambient bond space. It includes the
+  normalized fixed pair $\rho>0$ and $(\Phi\rvert$ supplied by
+  Theorem~\ref{thm:mpu_reduced_cfii_transfer_stabilization}, so that
+  \begin{align}
+    \tr(\rho)&=1,&
+    E^{D^2-1}&=\lvert\rho)(\Phi\rvert.
+  \end{align}
+  This definition does not assert that an arbitrary representative admits
+  such data and does not replace $\mathcal U$ by another tensor.
+\end{definition}
+
 \begin{theorem}[Complete source-$u$ network contraction]
   \label{thm:mpu_source_u_complete_network}
   \notready
@@ -3895,15 +3927,16 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
   \label{thm:mpu_source_v_complete_reduced_contraction}
   \notready
   \discussion{6071}
-  \uses{def:mpu,def:mpu_normalized_flattening,def:cpsv_cfii,
-    def:mpu_full_active_support,def:mpu_simple,def:mpu_source_uv,
-    def:mpu_source_v_dressing,thm:mpu_reduced_cfii_transfer_stabilization,
+  % **Scope restriction (reduced full-support source datum):** the source
+  % equivalence labelled vUnitary is planned only for tensors carrying the
+  % datum in Definition~\ref{def:mpu_reduced_full_support_source_datum}.
+  % Documented in docs/paper-gaps/mpu_canonical_form_full_support.tex.
+  \uses{def:mpu_simple,def:mpu_source_uv,def:mpu_source_v_dressing,
+    def:mpu_reduced_full_support_source_datum,
     thm:mpu_supplied_projector_simple2}
-  Let $\mathcal U$ be an MPU tensor with $d>0$ and $D>1$. Choose
-  canonical-form-II data for its normalized flattening whose active blocks
-  fill the ambient bond space. Let $\rho$ and $(\Phi\rvert$ be the normalized
-  fixed pair supplied by
-  Theorem~\ref{thm:mpu_reduced_cfii_transfer_stabilization}, so that
+  Let $\mathcal U$ be an MPU tensor equipped with a reduced full-support
+  source datum. Let $\rho$ and $(\Phi\rvert$ be its normalized fixed pair, so
+  that
   \begin{align}
     E^{D^2-1}&=\lvert\rho)(\Phi\rvert.
   \end{align}
@@ -3986,14 +4019,11 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
   % source Theorem III.8 is stated under the preceding reduced-representative
   % convention without these displayed hypotheses. Documented in
   % docs/paper-gaps/mpu_canonical_form_full_support.tex.
-  \uses{def:mpu,def:mpu_normalized_flattening,def:cpsv_cfii,
-    def:mpu_full_active_support,def:mpu_simple,def:mpu_source_uv,
-    thm:mpu_reduced_cfii_transfer_stabilization}
-  Let $\mathcal U$ be an MPU tensor with $d>0$ and $D>1$. Choose
-  canonical-form-II data for its normalized flattening whose active blocks
-  fill the ambient bond space. Let $\rho$ and $(\Phi\rvert$ be the normalized
-  fixed pair supplied by
-  Theorem~\ref{thm:mpu_reduced_cfii_transfer_stabilization}. Compute the
+  \uses{def:mpu_simple,def:mpu_source_uv,
+    def:mpu_reduced_full_support_source_datum}
+  Let $\mathcal U$ be an MPU tensor equipped with a reduced full-support
+  source datum, and let $\rho$ and $(\Phi\rvert$ be its normalized fixed pair.
+  Compute the
   source-cut ranks $r$ and $\ell$ and the source operators $u$ and $v$ from
   this same tensor $\mathcal U$ using $\rho$. Then the following conditions
   are equivalent:
@@ -4042,8 +4072,14 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
   \label{SF}
   \notready
   \discussion{6019}
-  \uses{ThmFund1,def:mpu_source_uv}
-  Let $\mathcal U$ be a simple tensor. The standard form of the two-site
+  % **Scope restriction (reduced full-support source datum):** the planned
+  % standard form uses Theorem~\ref{ThmFund1} only for a tensor carrying the
+  % datum in Definition~\ref{def:mpu_reduced_full_support_source_datum}.
+  % Documented in docs/paper-gaps/mpu_canonical_form_full_support.tex.
+  \uses{ThmFund1,def:mpu_source_uv,
+    def:mpu_reduced_full_support_source_datum}
+  Let $\mathcal U$ be a simple tensor equipped with a reduced full-support
+  source datum. The standard form of the two-site
   blocking $\mathcal U_2$ is the depth-two form determined by the source
   unitaries
   \begin{align}
@@ -4062,8 +4098,12 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
   \label{FundamentalMPU}
   \notready
   \discussion{6020}
-  \uses{SF,ThmFund1}
-  Let $\mathcal U$ and $\mathcal V$ be simple tensors in standard form, with
+  % **Scope restriction (reduced full-support source data):** both tensors
+  % carry the data required by Definition~\ref{SF}. Documented in
+  % docs/paper-gaps/mpu_canonical_form_full_support.tex.
+  \uses{SF,ThmFund1,def:mpu_reduced_full_support_source_datum}
+  Let $\mathcal U$ and $\mathcal V$ be simple tensors equipped with reduced
+  full-support source data and written in standard form, with
   source unitaries $(u_{\mathcal U},v_{\mathcal U})$ and
   $(u_{\mathcal V},v_{\mathcal V})$. They generate the same MPU for every
   $N$,
@@ -4101,9 +4141,14 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
   \label{def:index}
   \notready
   \discussion{6014}
+  % **Scope restriction (admissible simple block):** the index is defined only
+  % from a simple block carrying its own reduced full-support source datum.
+  % Documented in docs/paper-gaps/mpu_canonical_form_full_support.tex.
   \uses{ThmFund1,thm:mpu_bounded_simple_blocking,
-    thm:mpu_right_rank_bound,thm:mpu_left_rank_bound}
-  Let $k$ be any blocking length for which $\mathcal U_k$ is simple, and let
+    thm:mpu_right_rank_bound,thm:mpu_left_rank_bound,
+    def:mpu_reduced_full_support_source_datum}
+  Let $k$ be a blocking length for which $\mathcal U_k$ is simple and is
+  equipped with a reduced full-support source datum, and let
   $r$ and $\ell$ be its right and left source-cut ranks. Define
   \begin{align}
     \operatorname{ind}(\mathcal U)
@@ -4121,10 +4166,15 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
   \label{index-well-defined}
   \notready
   \discussion{6014}
+  % **Scope restriction (admissible simple blocks):** independence is proved
+  % only between simple blocks carrying their own reduced full-support source
+  % data. Documented in docs/paper-gaps/mpu_canonical_form_full_support.tex.
   \uses{def:index,ThmFund1,thm:mpu_source_cut_rank_blocking,
-    thm:mpu_all_later_simple_blockings}
-  The index is independent of the chosen simple blocking. More precisely, if
-  $k\geq k_0$ and both $\mathcal U_{k_0}$ and $\mathcal U_k$ are simple, then
+    thm:mpu_all_later_simple_blockings,
+    def:mpu_reduced_full_support_source_datum}
+  The index is independent of the chosen admissible simple blocking. More
+  precisely, if $k\geq k_0$, both $\mathcal U_{k_0}$ and $\mathcal U_k$ are
+  simple, and each is equipped with a reduced full-support source datum, then
   \begin{align}
     r_k&=d^{k-k_0}r_{k_0},&
     \ell_k&=d^{k-k_0}\ell_{k_0}.
@@ -4135,8 +4185,11 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
   \label{lem:mpu_index_tensor}
   \notready
   \discussion{6015}
-  \uses{def:index,index-well-defined,thm:mpu_tensor_product_source_ranks}
-  For MPU tensors $\mathcal U$ and $\mathcal V$,
+  \uses{def:index,index-well-defined,thm:mpu_tensor_product_source_ranks,
+    def:mpu_reduced_full_support_source_datum}
+  Suppose the simple blocks used to define the indices of $\mathcal U$,
+  $\mathcal V$, and $\mathcal U\otimes\mathcal V$ each carry reduced
+  full-support source data. Then
   \begin{align}
     \operatorname{ind}(\mathcal U\otimes\mathcal V)
       &=\operatorname{ind}(\mathcal U)+\operatorname{ind}(\mathcal V).
@@ -4148,9 +4201,12 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
   \notready
   \discussion{6016}
   \uses{SF,def:index,index-well-defined,
-    thm:mpu_source_cut_rank_blocking}
-  If $\mathcal W$ generates the composition of the MPUs generated by
-  $\mathcal U$ and $\mathcal U'$, then
+    thm:mpu_source_cut_rank_blocking,
+    def:mpu_reduced_full_support_source_datum}
+  Suppose the simple blocks used to define the indices of $\mathcal U$,
+  $\mathcal U'$, and their composition tensor $\mathcal W$ each carry
+  reduced full-support source data. If $\mathcal W$ generates the composition
+  of the MPUs generated by $\mathcal U$ and $\mathcal U'$, then
   \begin{align}
     \operatorname{ind}(\mathcal W)
       &=\operatorname{ind}(\mathcal U)+\operatorname{ind}(\mathcal U').
@@ -4232,22 +4288,32 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
   \label{prop:continuity-index}
   \notready
   \discussion{6022}
+  % **Scope restriction (pathwise reduced source data):** every associated
+  % simple tensor must carry the datum required by Theorem~\ref{ThmFund1}.
+  % Documented in docs/paper-gaps/mpu_canonical_form_full_support.tex.
   \uses{ThmFund1,thm:mpu_bounded_simple_blocking,
-    thm:mpu_reduced_cfii_transfer_stabilization}
+    def:mpu_reduced_full_support_source_datum}
   Let $[0,1]\ni x\mapsto\mathcal W(x)$ be a continuous path of tensors
-  generating MPUs, without requiring the path to be in canonical form. The
-  ranks $r(x)$ and $\ell(x)$ of the two source cuts of the associated simple
-  canonical-form tensors are constant on $[0,1]$.
+  generating MPUs, without requiring the path to be in canonical form.
+  Suppose that every associated simple canonical-form tensor is equipped with
+  a reduced full-support source datum. Then the ranks $r(x)$ and $\ell(x)$ of
+  its two source cuts are constant on $[0,1]$.
 \end{proposition}
 
 \begin{theorem}[Index Theorem]
   \label{IndexTh}
   \notready
   \discussion{6023}
+  % **Scope restriction (admissible tensors and operations):** every simple
+  % block and standard form used below carries reduced full-support source
+  % data. Documented in docs/paper-gaps/mpu_canonical_form_full_support.tex.
   \uses{index-well-defined,lem:mpu_index_tensor,
     lem:mpu_index_composition,def:equivalent-tensors,
-    prop:continuity-index,SF,FundamentalMPU}
-  The MPU index has the following properties.
+    prop:continuity-index,SF,FundamentalMPU,
+    def:mpu_reduced_full_support_source_datum}
+  On the class of tensors, blockings, products, compositions, and paths for
+  which the required reduced full-support source data are supplied, the MPU
+  index has the following properties.
   \begin{enumerate}
     \item It does not change under blocking.
     \item It is additive under tensor products and composition.
@@ -4261,9 +4327,16 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
   \label{coruvSF}
   \notready
   \discussion{6024}
-  \uses{prop:continuity-index,IndexTh,SF,ThmFund1}
+  % **Scope restriction (continuous admissible standard forms):** the chosen
+  % simple blocks carry reduced full-support source data varying continuously
+  % along the path. Documented in
+  % docs/paper-gaps/mpu_canonical_form_full_support.tex.
+  \uses{prop:continuity-index,IndexTh,SF,ThmFund1,
+    def:mpu_reduced_full_support_source_datum}
   For every continuous path $\mathcal U(p)$ of MPU tensors, not necessarily
-  in canonical form, there is an integer $k_0\leq D^4$ and continuous paths
+  in canonical form, suppose one can choose a common simple blocking whose
+  reduced full-support source data vary continuously with $p$. Then there is
+  an integer $k_0\leq D^4$ and continuous paths
   of unitaries $u(p)$ and $v(p)$ such that the MPU
   $U^{(2k_0N)}(p)$ has standard form given by $u(p)$ and $v(p)$ for every
   $p\in[0,1]$.
