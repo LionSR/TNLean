@@ -726,6 +726,43 @@ form of Definition~\ref{def:sector_bnt_cf}.
 With the prepared blocks in hand, normalized weights produce a BNT canonical
 form by quotienting gauge-phase-equivalent blocks into sectors.
 
+\begin{theorem}[BNT canonical form of the phase-class quotient]%
+    \label{thm:paperbnt_collapsed_prepared}
+    \lean{MPSTensor.isBNTCanonicalForm_collapsedBntSectorDecomp_of_tp_primitive_irr_blocks}
+    \leanok
+    \uses{def:mpv_phase_class_data, def:sector_bnt_cf,
+        thm:normal_tp_primitive_irred, thm:cpsv_normal_mpv_phase_gauge,
+        lem:sector_bnt_cross_overlap_basis_tendsto_zero}
+    Let $(B_k)_{k=1}^r$ have positive bond dimensions and suppose that every
+    $B_k$ is trace-preserving, primitive, and irreducible. Let the weights
+    satisfy
+    \begin{align}
+        \mu_k&\ne0,
+        &|\mu_k|&\le1,
+        &\exists k_*,\ |\mu_{k_*}|&=1.
+        \notag
+    \end{align}
+    Partition the blocks into matrix-product-vector phase classes, choose one
+    representative from each class, and retain every class member as a copy of
+    its representative with the corresponding phase-adjusted weight. The
+    resulting sector decomposition is in BNT canonical form.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:mpv_phase_class_data, def:sector_bnt_cf,
+        thm:normal_tp_primitive_irred, thm:cpsv_normal_mpv_phase_gauge,
+        lem:sector_bnt_cross_overlap_basis_tendsto_zero}
+    Trace preservation, primitivity, and irreducibility make every block
+    normal. Phase-equivalent blocks consequently have equal bond dimension,
+    and their phase scalar has unit modulus. Thus the phase adjustment preserves
+    the modulus of each weight. Distinct representatives are not
+    gauge-phase equivalent, their self-overlaps converge to $1$, and their
+    cross-overlaps tend to $0$. The resulting representative family is
+    eventually linearly independent, while the assumed weight bounds and the
+    maximizing block give the two normalization conditions in
+    Definition~\ref{def:sector_bnt_cf}.
+\end{proof}
+
 \begin{theorem}[BNT from normal blocks with normalized weights]%
     \label{thm:paperbnt_supplier_prepared}
     \lean{MPSTensor.exists_isBNTCanonicalForm_of_tp_primitive_irr_blocks}
@@ -808,6 +845,77 @@ give $O_{YX}(N)\to 0$, a contradiction.
     Theorem~\ref{thm:not_gauge_phase_eventually_not_proportional} would give a
     positive length $N$ at which the two MPV states are not proportional. This
     contradicts the assumed scalar-power identity at every positive length.
+\end{proof}
+
+\begin{theorem}[Dimension-preserving BNT form of prepared blocks]%
+    \label{thm:paperbnt_supplier_prepared_total_dim}
+    \lean{MPSTensor.exists_isBNTCanonicalForm_of_tp_primitive_irr_blocks_and_totalDim}
+    \leanok
+    \uses{thm:paperbnt_collapsed_prepared,
+        thm:prepared_phase_equiv_gauge, def:sector_weight_data}
+    Under the hypotheses of
+    Theorem~\ref{thm:paperbnt_collapsed_prepared}, there is a BNT canonical-form
+    sector decomposition $P$ such that
+    \begin{align}
+        \mc{V}^+(P)
+        &=\mc{V}^+\!\left(\bigoplus_{k=1}^r\mu_kB_k\right),
+        \notag\\
+        D_{\mathrm{tot}}(P)
+        &=\sum_{k=1}^r D_k.
+        \label{eq:paperbnt_prepared_total_dim}
+    \end{align}
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:paperbnt_collapsed_prepared,
+        thm:prepared_phase_equiv_gauge}
+    Use the phase-class sector decomposition from
+    Theorem~\ref{thm:paperbnt_collapsed_prepared}. Its flattened copies are in
+    bijection with the original blocks, and phase-equivalent blocks have equal
+    bond dimension by Theorem~\ref{thm:prepared_phase_equiv_gauge}. Summing the
+    copy dimensions over this bijection gives
+    (\ref{eq:paperbnt_prepared_total_dim}).
+\end{proof}
+
+\begin{theorem}[Active-sector BNT form of normalized CPSV canonical data]%
+    \label{thm:cpsv_active_sector_bnt}
+    \lean{MPSTensor.CPSVCanonicalFormData.exists_active_isBNTCanonicalForm}
+    \leanok
+    \uses{def:cpsv_canonical_form,
+        thm:cpsv_canonical_form_active_blocks,
+        thm:cpsv_normal_tp_gauge,
+        thm:paperbnt_supplier_prepared_total_dim}
+    Let $A$ have CPSV canonical-form data satisfying the separate normalization
+    condition~(\ref{eq:cpsv_weight_normalization}), and assume $A\ne0$. Put
+    $K_{\mathrm{act}}=\{k:\mu_k\ne0\}$. Then there is a BNT canonical-form
+    sector decomposition $P$ such that
+    \begin{align}
+        \mc{V}^+(A)&=\mc{V}^+(P),
+        \notag\\
+        D_{\mathrm{tot}}(P)
+        &=\sum_{k\in K_{\mathrm{act}}}D_k.
+        \label{eq:cpsv_active_sector_total_dim}
+    \end{align}
+    Thus the dimension is the total dimension of the active blocks, not the
+    ambient bond dimension $D$. No gauge equivalence on the original ambient
+    bond space is asserted; constructing such an ambient gauge is a separate
+    step in the renormalization-fixed-point argument.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:cpsv_canonical_form_active_blocks,
+        thm:cpsv_normal_tp_gauge,
+        thm:paperbnt_supplier_prepared_total_dim}
+    Put every active normal block into a trace-preserving primitive irreducible
+    gauge. Their direct sum has the same positive-length matrix product vectors
+    as the active block sum. The normalization bounds restrict to the active
+    weights. Since $A\ne0$, the separate normalization condition supplies an
+    index $k$ with $|\mu_k|=1$; this weight is nonzero, so $k\in
+    K_{\mathrm{act}}$. Apply
+    Theorem~\ref{thm:paperbnt_supplier_prepared_total_dim} to the gauged active
+    family, compose the positive-length MPV equalities with
+    Theorem~\ref{thm:cpsv_canonical_form_active_blocks}, and reindex the finite
+    dimension sum by the active indices.
 \end{proof}
 
 Combining the after-blocking preparation with the normalized-weight construction
