@@ -518,7 +518,8 @@
     \uses{def:mpdo, def:vertical_tensor_mpdo}
     An MPO tensor $M$ has the \emph{grouped-corner Gram-dressing property} if
     the following holds. Let $A$ be a tensor, let $V_X,V_Y$ be two physical
-    maps, let $X,Y$ be invertible matrices, and let $c_X,c_Y>0$. If
+    maps, let $X,Y$ be invertible matrices, and let $c_X,c_Y>0$. For every
+    vertical letter $v$, if
     \begin{align}
         V_X^\dagger\widetilde M^vV_X
         &=c_X X A^vX^{-1},
@@ -527,13 +528,12 @@
         &=c_Y Y A^vY^{-1}
         \notag
     \end{align}
-    for every vertical letter $v$, then
+    then
     \begin{align}
         (X^\dagger X)A^v(X^\dagger X)^{-1}
-        &=(Y^\dagger Y)A^v(Y^\dagger Y)^{-1}
+        &=(Y^\dagger Y)A^v(Y^\dagger Y)^{-1}.
         \label{eq:grouped_corner_gram_dressing}
     \end{align}
-    for every $v$.
 \end{definition}
 
 \begin{theorem}[Distinguished reference corner of a grouped phase class]
@@ -551,13 +551,12 @@
     and distinguished gauges $X_{\alpha,0}=\Id$. Fix a class $\alpha$ and a
     copy $q$. After identifying the representative bond space with that of
     copy $q$, there are a physical map $W_{\alpha,q}$ and a scalar
-    $c_{\alpha,0}>0$ such that
+    $c_{\alpha,0}>0$ such that, for every vertical letter $v$,
     \begin{align}
         W_{\alpha,q}^\dagger\widetilde M^vW_{\alpha,q}
-        &=c_{\alpha,0}A_{\alpha,q}^v
+        &=c_{\alpha,0}A_{\alpha,q}^v.
         \label{eq:distinguished_grouped_reference_corner}
     \end{align}
-    for every vertical letter $v$.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -592,24 +591,29 @@
         \notag
     \end{align}
     Assume that the distinguished copy in each class has identity gauge and
-    that $M$ has the grouped-corner Gram-dressing property. Then
+    that $M$ has the grouped-corner Gram-dressing property. Then for every
+    class $\alpha$, copy $q$, and vertical letter $v$,
     \begin{align}
         (X_{\alpha,q}^\dagger X_{\alpha,q})A_{\alpha,q}^v
         (X_{\alpha,q}^\dagger X_{\alpha,q})^{-1}
-        &=A_{\alpha,q}^v
+        &=A_{\alpha,q}^v.
         \label{eq:grouped_sector_gram_conj_of_dressing}
     \end{align}
-    for every class $\alpha$, copy $q$, and vertical letter $v$.
 \end{theorem}
 
 \begin{proof}\leanok
     \uses{def:grouped_corner_gram_dressing,
         thm:distinguished_grouped_reference_corner}
     Theorem~\ref{thm:distinguished_grouped_reference_corner} transports the
-    distinguished identity-gauge corner to the bond space of copy $q$.
-    Compare it with the corner indexed by $(\alpha,q)$ using the
-    grouped-corner Gram-dressing property. The distinguished Gram conjugation
-    is the identity, which gives
+    distinguished identity-gauge corner to the bond space of copy $q$. The
+    grouped-corner Gram-dressing property gives
+    \begin{align}
+        (X_{\alpha,0}^\dagger X_{\alpha,0})A_{\alpha,q}^v
+        (X_{\alpha,0}^\dagger X_{\alpha,0})^{-1}
+        &=(X_{\alpha,q}^\dagger X_{\alpha,q})A_{\alpha,q}^v
+          (X_{\alpha,q}^\dagger X_{\alpha,q})^{-1}.
+    \end{align}
+    The left side is $A_{\alpha,q}^v$ because $X_{\alpha,0}=\Id$. This gives
     (\ref{eq:grouped_sector_gram_conj_of_dressing}).
 \end{proof}
 
@@ -623,16 +627,15 @@
     Theorem~\ref{thm:mpdo_vertical_bnt_grouping_with_isometries}. For a
     phase class $\alpha$ and a copy $q$, transport its representative tensor
     to the bond space of that copy. If $X_{\alpha,q}$ is the corresponding
-    gauge, then
+    gauge, then for every vertical letter $v$,
     \begin{align}
         (X_{\alpha,q}^\dagger X_{\alpha,q})
         A_{\alpha,q}^v
         (X_{\alpha,q}^\dagger X_{\alpha,q})^{-1}
-        &=A_{\alpha,q}^v,
+        &=A_{\alpha,q}^v.
         \label{eq:mpdo_grouped_gram_conj}
     \end{align}
-    for every vertical letter $v$. This is Figure~8 for the actual witnesses
-    of the grouped decomposition.
+    This is Figure~8 for the actual witnesses of the grouped decomposition.
 \end{theorem}
 
 \begin{proof}
@@ -655,15 +658,14 @@
     Consider the actual phase-class grouping furnished under literal CPSV
     canonical form.  For a class $\alpha$ and copy $q$, identify its normal
     representative with the bond space of that copy using the equality of
-    dimensions.  Then
+    dimensions. Then for every vertical letter $v$,
     \begin{align}
         (X_{\alpha,q}^\dagger X_{\alpha,q})
         A_{\alpha,q}^v
         (X_{\alpha,q}^\dagger X_{\alpha,q})^{-1}
-        &=A_{\alpha,q}^v
+        &=A_{\alpha,q}^v.
         \label{eq:cpsv_literal_grouped_gram_conj}
     \end{align}
-    for every vertical letter $v$.
 \end{theorem}
 
 \begin{proof}
@@ -948,14 +950,14 @@
     \uses{def:normalized_grouped_sector_map, def:mpv_phase_class_data,
         def:vertical_tensor_mpdo}
     Let a phase-class grouping have gauges $X_{\alpha,q}$, physical maps
-    $V_{\alpha,q}$, and effective coefficients $c_{\alpha,q}$.
-    Suppose $\omega_{\alpha,q}>0$ and
+    $V_{\alpha,q}$, and effective coefficients $c_{\alpha,q}$. Suppose that,
+    for every class $\alpha$ and copy $q$, $\omega_{\alpha,q}>0$ and
     \begin{align}
         X_{\alpha,q}^\dagger X_{\alpha,q}
         &=\omega_{\alpha,q}\Id.
         \notag
     \end{align}
-    for every class and copy. Suppose also that the maps $V_{\alpha,q}$
+    Suppose also that the maps $V_{\alpha,q}$
     are isometries with pairwise orthogonal ranges,
     they intertwine $\widetilde M$ with the corresponding gauged
     representatives, and their grouped corner sum reconstructs every letter
