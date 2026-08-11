@@ -81,7 +81,7 @@ first.
     \label{thm:chain_cyclic_block_average}
     \lean{MPSChainTensor.mpv_cyclicBlockTensor_eq_average}
     \leanok
-    \uses{def:chain_cyclic_block_tensor, def:non_ti_chain}
+    \uses{def:chain_cyclic_block_tensor, def:non_ti_chain, lem:eval_word_smul}
     For every basis configuration $\sigma\in\{0,\ldots,d-1\}^N$, the
     length-$N$ coefficient of the tensor in
     Definition~\ref{def:chain_cyclic_block_tensor} is
@@ -90,13 +90,15 @@ first.
         &=\frac{1}{N}\sum_{k=0}^{N-1}c_{A^{(k)},\sigma}.
         \label{eq:chain_cyclic_block_average}
     \end{align}
-    This is the cyclic block-matrix calculation in the proof of
-    \cite[Theorem~3]{PerezGarcia2007Matrix}; it asserts only the coefficient
-    identity at the fixed length $N$.
+    Reindexing the finite sum and cyclically permuting factors under the trace
+    identifies this with the physical-configuration rotation in
+    \cite[Theorem~3]{PerezGarcia2007Matrix}. This identity concerns only the
+    fixed length $N$.
 \end{theorem}
 
 \begin{proof}
     \leanok
+    \uses{def:chain_cyclic_block_tensor, def:non_ti_chain, lem:eval_word_smul}
     Write $D_i=\operatorname{diag}(A_0^i,\ldots,A_{N-1}^i)$ and omit the
     scalar normalization temporarily. Commuting the cyclic permutation through
     a block diagonal gives
