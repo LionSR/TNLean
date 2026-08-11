@@ -14,8 +14,9 @@
 % Label doctrine: labels never overlap ink by construction.  Every label
 % site (in-glyph, leg tip, bond midpoint, free quadrant of a bead) is a
 % reserved band derived from the metric system; automatic placement picks a
-% free quadrant, and every label accepts `label pos` / `label shift` for
-% manual override.
+% free quadrant (a bead's label takes the first face without ink in the
+% order s, n, e, w, and south when every face carries ink), and every label
+% accepts `label pos` / `label shift` for manual override.
 %
 % Glyph doctrine: an unadorned tensor (\tn{A}) renders as the theme's
 % default skin -- a filled bead with its label placed OUTSIDE in a free

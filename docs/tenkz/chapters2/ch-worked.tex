@@ -29,9 +29,10 @@ same count of open ends and still mean different operations.
     indices; six horizontal stubs keep the window a map.},
   signature={kernel-boundary|signature=open:e, open:e, open:e, open:w, open:w, open:w}]
 % Formula: sum_{s,s'} A^s tensor O^{ss'} tensor conjugate(A^{s'}).
-% Labels: the ket names speak north, away from the physical bonds.
+% Labels: automatic placement stands each name on its atom's free face --
+% north for the ket row, south for the bra row.
 \begin{tenkz}[rows={ket,op,bra}, cols=2, west=open, east=open]
-  \tn[label pos=90]{A} & \tn[label pos=90]{A} \\
+  \tn{A} & \tn{A} \\
   \tn[skin=mpo]{O} & \tn[skin=mpo]{O} \\
   \tn{$\overline{A}$} & \tn{$\overline{A}$}
 \end{tenkz}

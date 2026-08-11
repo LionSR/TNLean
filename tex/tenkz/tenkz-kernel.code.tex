@@ -15649,6 +15649,167 @@
       }
       }
   }
+% ---------- automatic label station ---------------------------------------------------------------
+% The label doctrine (tenkz-core.code.tex) promises the automatic station a
+% free quadrant.  A dot without `label pos=` takes the first face carrying no
+% ink in the fixed order s, n, e, w: south is the historical station, so a
+% dot whose south face is free does not move, and when every face carries
+% ink the station falls back to south.  Occupancy is read from the frozen
+% wire records -- a port endpoint standing on the atom, a policy leg growing
+% from a face, or an authored wire leaving the atom's cell -- so the answer
+% is independent of ink order and identical on every compile.
+\prop_new:N \l__tenkz_kernel_lab_occ_prop
+\tl_new:N \l__tenkz_kernel_lab_row_tl
+\tl_new:N \l__tenkz_kernel_lab_col_tl
+\tl_new:N \l__tenkz_kernel_lab_wide_tl
+\tl_new:N \l__tenkz_kernel_lab_from_tl
+\tl_new:N \l__tenkz_kernel_lab_to_tl
+\tl_new:N \l__tenkz_kernel_lab_host_tl
+\bool_new:N \l__tenkz_kernel_lab_cell_bool
+\cs_new_protected:Npn \__tenkz_kernel_r_label_auto_side:nN #1#2
+  {
+    \prop_clear:N \l__tenkz_kernel_lab_occ_prop
+    \__tenkz_kernel_atom_rc:nNNN {#1}
+      \l__tenkz_kernel_lab_row_tl \l__tenkz_kernel_lab_col_tl
+      \l__tenkz_kernel_lab_cell_bool
+    \__tenkz_model_get:nnN {#1} {wide} \l__tenkz_kernel_lab_wide_tl
+    \quark_if_no_value:NT \l__tenkz_kernel_lab_wide_tl
+      { \tl_set:Nn \l__tenkz_kernel_lab_wide_tl {1} }
+    \__tenkz_model_map_ids:nn {wire}
+      { \__tenkz_kernel_r_label_occupied:nn {#1} {##1} }
+    \tl_set:Nn #2 {s}
+    \clist_map_inline:nn {s,n,e,w}
+      {
+        \prop_if_in:NnF \l__tenkz_kernel_lab_occ_prop {##1}
+          {
+            \tl_set:Nn #2 {##1}
+            \clist_map_break:
+          }
+      }
+  }
+% Which faces of atom #1 does wire #2 stand on?  A policy leg names its host
+% and its face word; every generated bond, stub, cup, and trace endpoint is
+% a port naming its record and its face angle; an authored endpoint may
+% instead be the atom's own cell, whose ink leaves toward the wire's other
+% end (an oblique authored wire leaves through a corner and blocks no face).
+\cs_new_protected:Npn \__tenkz_kernel_r_label_occupied:nn #1#2
+  {
+    \__tenkz_model_get:nnN {#2} {host} \l__tenkz_kernel_lab_host_tl
+    \str_if_eq:VnT \l__tenkz_kernel_lab_host_tl {#1}
+      {
+        \__tenkz_model_get:nnN {#2} {face} \l__tenkz_kernel_lab_from_tl
+        \quark_if_no_value:NF \l__tenkz_kernel_lab_from_tl
+          {
+            \__tenkz_kernel_r_label_occupied_mark:V
+              \l__tenkz_kernel_lab_from_tl
+          }
+      }
+    \__tenkz_model_get:nnN {#2} {from} \l__tenkz_kernel_lab_from_tl
+    \__tenkz_model_get:nnN {#2} {to} \l__tenkz_kernel_lab_to_tl
+    \exp_args:NnVV \__tenkz_kernel_r_label_occupied_end:nnn {#1}
+      \l__tenkz_kernel_lab_from_tl \l__tenkz_kernel_lab_to_tl
+    \exp_args:NnVV \__tenkz_kernel_r_label_occupied_end:nnn {#1}
+      \l__tenkz_kernel_lab_to_tl \l__tenkz_kernel_lab_from_tl
+  }
+\cs_new_protected:Npn \__tenkz_kernel_r_label_occupied_mark:n #1
+  {
+    \__tenkz_kernel_r_face_side:n { \__tenkz_kernel_r_compass:n {#1} }
+    \prop_put:NVn \l__tenkz_kernel_lab_occ_prop
+      \l__tenkz_kernel_r_face_side_tl { }
+  }
+\cs_generate_variant:Nn \__tenkz_kernel_r_label_occupied_mark:n { V, e }
+\cs_new_protected:Npn \__tenkz_kernel_r_label_occupied_end:nnn #1#2#3
+  {
+    \quark_if_no_value:nF {#2}
+      {
+        \str_case:enF { \__tenkz_kernel_node_item:nn {#2} {kind} }
+          {
+            {port}
+              {
+                \__tenkz_kernel_port_node_record:nN {#2}
+                  \l__tenkz_kernel_lab_host_tl
+                \str_if_eq:VnT \l__tenkz_kernel_lab_host_tl {#1}
+                  {
+                    \__tenkz_kernel_r_label_occupied_mark:e
+                      { \__tenkz_kernel_node_item:nn {#2} {face} }
+                  }
+              }
+            {cell} { \__tenkz_kernel_r_label_occupied_cell:nn {#2} {#3} }
+          }
+          { }
+      }
+  }
+% Endpoint #1 is a cell: it stands on the atom exactly when it lies in the
+% atom's spanned row, and the leaving direction is read from the other end's
+% own row and column.
+\cs_new_protected:Npn \__tenkz_kernel_r_label_occupied_cell:nn #1#2
+  {
+    \bool_lazy_all:nT
+      {
+        { \l__tenkz_kernel_lab_cell_bool }
+        { ! \quark_if_no_value_p:n {#2} }
+        {
+          \int_compare_p:nNn
+            { \__tenkz_kernel_node_item:nn {#1} {row} }
+            = { \l__tenkz_kernel_lab_row_tl }
+        }
+        {
+          \int_compare_p:nNn
+            { \__tenkz_kernel_node_item:nn {#1} {col} }
+            > { \l__tenkz_kernel_lab_col_tl - 1 }
+        }
+        {
+          \int_compare_p:nNn
+            { \__tenkz_kernel_node_item:nn {#1} {col} }
+            < { \l__tenkz_kernel_lab_col_tl + \l__tenkz_kernel_lab_wide_tl }
+        }
+      }
+      {
+        \bool_lazy_or:nnT
+          {
+            \str_if_eq_p:ee
+              { \__tenkz_kernel_node_item:nn {#2} {kind} } {cell}
+          }
+          {
+            \str_if_eq_p:ee
+              { \__tenkz_kernel_node_item:nn {#2} {kind} } {member}
+          }
+          {
+            \int_compare:nNnTF
+              { \__tenkz_kernel_node_item:nn {#2} {row} }
+              = { \__tenkz_kernel_node_item:nn {#1} {row} }
+              {
+                \int_compare:nNnT
+                  { \__tenkz_kernel_node_item:nn {#2} {col} }
+                  < { \__tenkz_kernel_node_item:nn {#1} {col} }
+                  { \prop_put:Nnn \l__tenkz_kernel_lab_occ_prop {w} { } }
+                \int_compare:nNnT
+                  { \__tenkz_kernel_node_item:nn {#2} {col} }
+                  > { \__tenkz_kernel_node_item:nn {#1} {col} }
+                  { \prop_put:Nnn \l__tenkz_kernel_lab_occ_prop {e} { } }
+              }
+              {
+                \int_compare:nNnT
+                  { \__tenkz_kernel_node_item:nn {#2} {col} }
+                  = { \__tenkz_kernel_node_item:nn {#1} {col} }
+                  {
+                    \int_compare:nNnTF
+                      { \__tenkz_kernel_node_item:nn {#2} {row} }
+                      < { \__tenkz_kernel_node_item:nn {#1} {row} }
+                      {
+                        \prop_put:Nnn
+                          \l__tenkz_kernel_lab_occ_prop {n} { }
+                      }
+                      {
+                        \prop_put:Nnn
+                          \l__tenkz_kernel_lab_occ_prop {s} { }
+                      }
+                  }
+              }
+          }
+      }
+  }
+
 \cs_new_protected:Npn \__tenkz_kernel_r_atom_ink:n #1
   {
     % A cluster carrier is a group, not a glyph: its spins are the atoms
@@ -15798,12 +15959,16 @@
                   \l__tenkz_kernel_r_hue_tl
               }
             % a dot cannot inscribe text: its label sits in the label band,
-            % on the side label pos names, default south
+            % on the side label pos names; the automatic station is the
+            % first free face in the order s, n, e, w
             \tl_if_empty:NF \l__tenkz_kernel_r_skin_label_tl
               {
                 \__tenkz_model_get:nnN {#1} {label-pos} \l__tenkz_kernel_r_c_tl
                 \quark_if_no_value:NT \l__tenkz_kernel_r_c_tl
-                  { \tl_set:Nn \l__tenkz_kernel_r_c_tl { s } }
+                  {
+                    \__tenkz_kernel_r_label_auto_side:nN {#1}
+                      \l__tenkz_kernel_r_c_tl
+                  }
                 \tl_set:Ne \l__tenkz_kernel_r_c_tl
                   {
                     \__tenkz_kernel_r_compass:n
