@@ -419,6 +419,20 @@ abstracted — record why, so it is not re-proposed).
 
 ## Completed refactors
 
+### Unequal retained vertical-copy evaluation
+- **Pattern:** unfold an assembled vertical tensor at two retained coordinates whose copy
+  indices differ, then reduce the cross-copy matrix entry to zero through the block-diagonal
+  assembly.
+- **Reuse:** `MPOTensor.verticalAssembledTensor_apply_copy_ne` in
+  `TNLean/MPS/MPDO/VerticalSectorCoordinates.lean` owns the shared unequal-copy argument.
+- **Result:** the former private implementations
+  `VerticalCopyBlocks.verticalAssembledTensor_apply_copy_ne` in
+  `TNLean/MPS/MPDO/VerticalCopyBlocks.lean` and
+  `VerticalProductRetainedBlocks.verticalAssembledTensor_apply_copy_ne` in
+  `TNLean/MPS/MPDO/VerticalProductRetainedBlocks.lean` now delegate to the shared owner.
+  Unlike `MPOTensor.verticalAssembledTensor_apply_copy_same`, this theorem handles distinct
+  retained copy indices and proves that the assembled tensor entry vanishes.
+
 ### Block-diagonal boundary assembly
 - **Pattern:** decompose membership in a finite supremum of open-boundary block spaces into
   finitely supported components, choose one boundary matrix per component, rescale by the
