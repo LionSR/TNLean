@@ -1313,6 +1313,10 @@ give $O_{YX}(N)\to 0$, a contradiction.
     canonical forms with different ambient bond dimensions.
 \end{theorem}
 
+The cited sources supply the active canonical-form comparison. The passage back
+from the active tensors to the ambient tensors is the coisometric lifting of
+Theorem~\ref{thm:coisometry_reconstruction_gauge_equiv}.
+
 \begin{proof}\leanok
     \uses{thm:cpsv_active_sector_bnt_exact,
         thm:coisometry_reconstruction_same_mpv_pos,
@@ -1328,14 +1332,19 @@ give $O_{YX}(N)\to 0$, a contradiction.
         B^i&=U_B^\dagger X_BQ^iX_B^{-1}U_B.
         \label{eq:cpsv_equal_ambient_reconstructions}
     \end{align}
-    Coisometric reconstruction and gauge invariance show that $P$ and $Q$
-    generate the same positive-length matrix product vectors. Hence
-    Theorem~\ref{thm:cpgsv_equal_case_source} identifies their retained
-    dimensions and gives a gauge between $P$ and $Q$. Composing this gauge with
-    $X_A^{-1}$ and $X_B$ gives a gauge between the two middle tensors in
-    (\ref{eq:cpsv_equal_ambient_reconstructions}).
-    Theorem~\ref{thm:coisometry_reconstruction_gauge_equiv} aligns the two
-    coisometries inside the common ambient space and yields
+    Theorem~\ref{thm:coisometry_reconstruction_same_mpv_pos}, gauge invariance,
+    and the hypothesis give
+    \begin{align}
+        \mc{V}^+(P)
+        &=\mc{V}^+(A)=\mc{V}^+(B)=\mc{V}^+(Q).
+        \label{eq:cpsv_equal_ambient_active_mpv}
+    \end{align}
+    Theorem~\ref{thm:cpgsv_equal_case_source} therefore identifies the retained
+    dimensions and gives $Y$ such that $Q^i=YP^iY^{-1}$. After identifying the
+    retained spaces, the two middle tensors in
+    (\ref{eq:cpsv_equal_ambient_reconstructions}) are conjugate by
+    $X_BYX_A^{-1}$. Theorem~\ref{thm:coisometry_reconstruction_gauge_equiv}
+    aligns the two coisometries inside the common ambient space and yields
     (\ref{eq:cpsv_equal_ambient_gauge}).
 \end{proof}
 
