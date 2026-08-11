@@ -191,6 +191,7 @@ import TNLean.MPS.MPDO.PerCopyHorizontalCF
 import TNLean.MPS.MPDO.PeriodicExclusion
 import TNLean.MPS.MPDO.PhysicalAdjoint
 import TNLean.MPS.MPDO.PhysicalBlocking
+import TNLean.MPS.MPDO.PhysicalClosure
 import TNLean.MPS.MPDO.PhysicalGibbsEmbedding
 import TNLean.MPS.MPDO.PhysicalSectorActiveBond
 import TNLean.MPS.MPDO.PhysicalSectorActiveFactorSupport
