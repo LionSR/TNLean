@@ -315,15 +315,14 @@ by \cite[Theorem~IV.16]{Cirac2021Matrix}.
 
 \begin{proof}
     \leanok
-    \uses{lem:bnt_block_diagonal_open_boundary_decomposition,
+    \uses{lem:bnt_block_diagonal_periodic_constraints_propagated_sum,
         lem:block_diagonal_boundary_condition_sum}
-    Lemma~\ref{lem:bnt_block_diagonal_open_boundary_decomposition} gives
-    \begin{align}
-        \psi&=\sum_{j=1}^g\phi_j,
-        \notag\\
-        \phi_j&\in G_N(A_j).
-        \notag
-    \end{align}
+    Lemma~\ref{lem:bnt_block_diagonal_periodic_constraints_propagated_sum} gives
+    \[
+        \psi\in\bigvee_{j=1}^gG_N(A_j).
+    \]
+    The block-diagonal boundary construction decomposes this membership as
+    $\psi=\sum_{j=1}^g\phi_j$ with $\phi_j\in G_N(A_j)$.
     Choose $Y_j$ with $\phi_j=\Gamma_N^{A_j}(Y_j)$, and set
     $X_j=\mu_j^{-N}Y_j$. Since $\mu_j\ne0$,
     $\Gamma_N^{A_j}(\mu_j^NX_j)=\phi_j$. The block-diagonal boundary formula
