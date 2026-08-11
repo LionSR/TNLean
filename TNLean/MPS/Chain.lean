@@ -10,6 +10,7 @@ Authors: TNLean contributors
 
 import TNLean.MPS.Chain.AlgebraIsomorphism
 import TNLean.MPS.Chain.BlockedChainFT
+import TNLean.MPS.Chain.CyclicBlockAverage
 import TNLean.MPS.Chain.Defs
 import TNLean.MPS.Chain.FundamentalTheorem
 import TNLean.MPS.Chain.OneSidedInverse
