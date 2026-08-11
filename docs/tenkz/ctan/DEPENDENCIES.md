@@ -11,7 +11,7 @@ without a traced consumer fails `scripts/tenkz_ctan.py check`.
 
 `tikz`, loaded by `tenkz.sty`. Everything else on this page is a TikZ library.
 
-Three of the libraries are not part of pgf and come from packages of their own:
+Two of the libraries are not part of pgf and come from packages of their own.
 `hobby` and `spath3` are separate CTAN packages, and an installation without
 them fails at package load rather than at the first curve. They are the two
 names a distribution build has to be told about.
@@ -26,9 +26,9 @@ rather than how they look.
 
 | Library | Read by | For |
 |---|---|---|
-| `calc` | `tenkz-tree.code.tex` (18 coordinate expressions, from line 40) | The partway modifier that places a fusion tree's vertices and its patch control points along the segment between two known points. |
+| `calc` | `tenkz-tree.code.tex` (18 lines, from line 40) | The partway modifier that places a fusion tree's vertices and its patch control points along the segment between two known points. |
 | `hobby` | `tenkz-string.code.tex` (line 232 asserts the library is present) | The curve through a string's waypoints. A string is given its route as a point sequence, and this is what turns the sequence into one smooth path. |
-| `spath3` | `tenkz-string.code.tex` (76 calls), `tenkz-kernel.code.tex` (lines 14993, 15443, 16648), `tenkz-render.code.tex` (lines 85 and 189) | Saving a string's route as a path and cutting it. Crossing surgery is a split of a saved path at its intersections; the renderer then draws the saved route rather than recomputing it. |
+| `spath3` | `tenkz-string.code.tex` (71 lines), `tenkz-kernel.code.tex` (lines 14993, 15443, 16648), `tenkz-render.code.tex` (lines 85 and 189) | Saving a string's route as a path and cutting it. Crossing surgery is a split of a saved path at its intersections; the renderer then draws the saved route rather than recomputing it. |
 | `intersections` | `tenkz-string.code.tex` (lines 234, 573, 905), `tenkz-kernel.code.tex` (line 9942) | Counting and locating where two routes meet. A declared crossing that produces no intersection is a coded error, and this is the engine that decides. |
 
 ## 3. Host ink
