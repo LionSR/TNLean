@@ -2268,8 +2268,9 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
     \label{thm:mpu_source_v_dressed_entries}
     \lean{MPOTensor.sourceVDressedGram_iff_regrouped_entries}
     \leanok
-    \uses{def:mpu_source_v_dressing}
-    For $x=R^{-1}(p,a)$ and $y=R^{-1}(q,b)$, the dressed Gram equation is
+    \uses{def:mpu_source_v_dressing,def:mpu_source_uv}
+    For every positive definite source weight $\rho$, and for
+    $x=R^{-1}(p,a)$ and $y=R^{-1}(q,b)$, the dressed Gram equation is
     equivalent to
     \begin{align}
         \sum_t\left(\sum_s\overline{Y_{s,x}}
