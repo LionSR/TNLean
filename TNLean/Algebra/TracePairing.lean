@@ -22,6 +22,8 @@ trace pairing on square matrices.
   used in linear-extension proofs
 * `MPSTensor.traceMulRightPi_ker_eq_bot` — injectivity of `traceMulRightPi`
   when `A` is injective
+* `MPSTensor.eq_zero_of_forall_trace_mul_right_eq_zero` — zero detection from
+  trace pairings against an injective tensor
 * `MPSTensor.ker_bot_of_range_le` — auxiliary finrank transfer:
   range inclusion + injectivity ⟹ injectivity
 -/
@@ -150,6 +152,15 @@ theorem traceMulRightPi_ker_eq_bot {A : MPSTensor d D} (hA : IsInjective A) :
   -- Use trace nondegeneracy.
   exact (Matrix.ext_iff_trace_mul_right (A := M) (B := 0)).2 fun N => by
     simpa [Matrix.traceLinearMap_apply] using congrArg (· N) hφ
+
+/-- A matrix whose trace pairing with every one-site matrix of an injective tensor
+vanishes is zero. -/
+theorem eq_zero_of_forall_trace_mul_right_eq_zero {A : MPSTensor d D}
+    (hA : IsInjective A) {M : Matrix (Fin D) (Fin D) ℂ}
+    (hM : ∀ i, Matrix.trace (M * A i) = 0) : M = 0 := by
+  apply (LinearMap.ker_eq_bot'.1 (traceMulRightPi_ker_eq_bot hA))
+  funext i
+  simpa using hM i
 
 /-- If `A` is injective and `A`, `B` generate the same MPV family,
 then $\neg(\forall i,\; B^i = 0)$.
