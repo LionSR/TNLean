@@ -3840,8 +3840,8 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
   \label{thm:mpu_source_u_complete_network}
   \notready
   \discussion{5982}
-  \uses{def:mpu,def:mpu_normalized_flattening,def:mpu_source_uv,
-    def:mpo_family}
+  \uses{def:mpu,def:mpu_normalized_flattening,def:mpu_transfer_matrix,
+    def:mpu_source_uv,def:mpo_family}
   Let $\mathcal U$ be an MPU tensor with physical dimension $d>0$ and bond
   dimension $D>0$. Let $\rho>0$ satisfy $\tr(\rho)=1$, put
   $(\Phi\rvert=\operatorname{vec}(\Id_D)^{\mathsf T}$, and suppose that for
@@ -3860,8 +3860,8 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
   \end{align}
   Here $\tau$ ranges over input words of length $K$, and $\eta$ ranges over
   output words of length $K+2$. This is the supplied-fixed-pair form of the
-  range-insertion equality in
-  \cite[Lemma~III.7, lines~545--557]{Cirac2017MPU}.
+  range-insertion equality in \cite[Lemma~III.7]{Cirac2017MPU}.
+  % Source locator: paper_v2.tex, lines 545--557.
 \end{theorem}
 
 \begin{proof}
@@ -3909,10 +3909,11 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
   \end{align}
   Compute both source cuts, their ranks $r$ and $\ell$, the source operator
   $v$, and the right source factors $Y_1,Y_2$ from this same tensor
-  $\mathcal U$ using $\rho$. Then the supplied contraction
+  $\mathcal U$ using $\rho$. Let $W$ be the double layer of $\mathcal U$.
+  Then the supplied contraction
   \begin{align}
-    U^{ij}U^{k\ell}
-      &=U^{ij}\lvert\rho)(\Phi\rvert U^{k\ell}
+    W^{ij}W^{k\ell}
+      &=W^{ij}\lvert\rho)(\Phi\rvert W^{k\ell}
   \end{align}
   holds if and only if
   \begin{align}
@@ -3922,8 +3923,9 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
   When $\mathcal U$ is simple,
   Theorem~\ref{thm:mpu_supplied_projector_simple2} supplies the displayed
   contraction with this same fixed pair. This is the complete equivalence in
-  \cite[equation~\texttt{vUnitary}, proof of Theorem~III.8,
-  lines~577--600]{Cirac2017MPU}.
+  \cite[equality labelled~\texttt{vUnitary} in the proof of
+  Theorem~III.8]{Cirac2017MPU}.
+  % Source locator: paper_v2.tex, lines 577--600.
 \end{theorem}
 
 \begin{proof}
@@ -3940,7 +3942,12 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
   \label{lemuisometry}
   \notready
   \discussion{5708}
-  \uses{def:mpu,def:mpu_normalized_flattening,def:mpu_source_uv}
+  % **Scope restriction (supplied stabilized fixed pair):** this lemma assumes
+  % the exact rank-one transfer identity explicitly, whereas source Lemma III.7
+  % uses the preceding MPU and canonical-form-II convention. Documented in
+  % docs/paper-gaps/mpu_canonical_form_full_support.tex.
+  \uses{def:mpu,def:mpu_normalized_flattening,def:mpu_transfer_matrix,
+    def:mpu_source_uv}
   Let $\mathcal U$ be an MPU tensor with physical dimension $d>0$ and bond
   dimension $D>0$. Let $\rho>0$ satisfy $\tr(\rho)=1$, put
   $(\Phi\rvert=\operatorname{vec}(\Id_D)^{\mathsf T}$, and suppose that for
@@ -3975,6 +3982,10 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
   \label{ThmFund1}
   \notready
   \discussion{5708}
+  % **Scope restriction (reduced full-support representative and $D>1$):**
+  % source Theorem III.8 is stated under the preceding reduced-representative
+  % convention without these displayed hypotheses. Documented in
+  % docs/paper-gaps/mpu_canonical_form_full_support.tex.
   \uses{def:mpu,def:mpu_normalized_flattening,def:cpsv_cfii,
     def:mpu_full_active_support,def:mpu_simple,def:mpu_source_uv,
     thm:mpu_reduced_cfii_transfer_stabilization}

@@ -136,7 +136,8 @@ used to replace the source cuts, ranks, or operators of $\mathcal U$, and no
 transport of source data across blocking is asserted.
 
 \section{Verdict}
-\textbf{Verdict: scope restriction.} The paper's normal-tensor proposition,
+\textbf{Verdict: scope restriction with two open gaps.} The paper's
+normal-tensor proposition,
 the source-isometry lemma, and Theorem~III.8 concern the intended reduced
 canonical-form-II representative, with zero-weight blocks and the ambient zero
 complement omitted. This reduction is not an explicit hypothesis of the
@@ -146,6 +147,8 @@ Consequently, a source-faithful formalization must construct this reduced
 representative and transport the source constructions, or explicitly assume
 chosen canonical-form-II data with full active support.  The formalization uses
 the latter option.  It does not yet construct the representative reduction.
+The two open gaps are the complete source-$u$ contraction tracked by
+issue~\#5982 and the complete source-$v$ equivalence tracked by issue~\#6071.
 The full-support irreducibility implication is formalized by
 \leanid{MPSTensor.CPSVCanonicalFormData.isIrreducibleTensor_of_card_active_eq_one_of_fullActiveSupport}.
 The spectral-radius and primitivity conclusions are derived from the shifted
