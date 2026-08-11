@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.MPDO.PhysicalSectorFactorization
-import TNLean.MPS.MPDO.RFPViaTS
+import TNLean.MPS.MPDO.PhysicalClosure
 
 /-!
 # Two-site closures in fixed physical sectors

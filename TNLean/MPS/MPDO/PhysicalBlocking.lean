@@ -4,10 +4,11 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.Algebra.FinTupleEquiv
+import TNLean.Channel.KrausCPTP
 import TNLean.MPS.Core.CyclicTrace
 import TNLean.MPS.Core.PhysicalReindexTransport
 import TNLean.MPS.MPDO.OperatorProduct
-import TNLean.MPS.MPDO.RFPViaTS
+import TNLean.MPS.MPDO.PhysicalClosure
 
 /-!
 # Physical blocking of MPO tensors
