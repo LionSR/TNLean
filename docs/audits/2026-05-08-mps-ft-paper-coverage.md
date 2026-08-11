@@ -24,6 +24,10 @@
 
 ## 1. Current proof-integrity status
 
+**Maintained update (2026-08-11):** This section and the PGVWC07 crosswalk
+below report the post-audit repository state; the filename and audit date retain
+the original 2026-05-08 date.
+
 The May 2026 per-file `sorry` table is no longer a current description of the
 repository. On 2026-08-11, an exact search for proof holes and axiom
 declarations in `TNLean/MPS/` finds none. The remaining qualifications in this
@@ -447,7 +451,7 @@ inventory. This section provides an expanded source-paper crosswalk.
 
 | Paper label | Lines | Paper description | Lean location | Status |
 |---|---|---|---|---|
-| **Theorem** (l.828) | 828–831 | If L > i(A), MPS is unique ground state of parent Hamiltonian with spectral gap | PGVWC07 `uniqueGS` / `ParentHamiltonian/UniqueGroundState.lean` | **partial** — the current theorem excludes the minimal endpoint $L_0=1$, $L=N=2$; see §3.2 |
+| **Theorem** (l.828) | 828–831 | If L > i(A), MPS is unique ground state of parent Hamiltonian with spectral gap | PGVWC07 `uniqueGS`; `ParentHamiltonian/UniqueGroundState.lean`; `ParentHamiltonian/Martingale/Gap.lean` (`parentHamiltonian_gapped_of_anticommutator`); Blueprint Theorem `thm:parent_hamiltonian_gapped` | **partial** — uniqueness is proved except at the minimal endpoint $L_0=1$, $L=N=2$; see §3.2. The unconditional spectral-gap conclusion remains incomplete: the current source-matching gap theorem assumes the cyclic-window anticommutator estimate, whose MPS-specific proof remains open in #5455 (broader tracker #460). |
 | **Theorem** (l.850) | 850–858 | Dichotomy for ground states of frustration-free Hamiltonians: D either O(1) or ≥ Ω(N^{1/5}) | **out of scope** | — |
 
 ### 9.7 MPS use of Wielandt infrastructure
