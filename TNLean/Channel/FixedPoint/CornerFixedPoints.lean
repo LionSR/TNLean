@@ -137,21 +137,9 @@ theorem map_cornerCompressionKraus_eq
     (K : Fin d → Mat) {Q : Mat} (hQ : IsOrthogonalProjection Q)
     {Z : Mat} (hZ : Q * Z * Q = Z) :
     map (cornerCompressionKraus K Q) Z = Q * map K Z * Q := by
-  have hQherm : Qᴴ = Q := hQ.1.eq
-  calc
-    map (cornerCompressionKraus K Q) Z
-        = ∑ i : Fin d, (Q * K i * Q) * Z * (Q * K i * Q)ᴴ := by
-          simp only [map, cornerCompressionKraus]
-    _ = ∑ i : Fin d, Q * (K i * (Q * Z * Q) * (K i)ᴴ) * Q := by
-          refine Finset.sum_congr rfl (fun i _ => ?_)
-          simp only [Matrix.conjTranspose_mul, hQherm]
-          simp [Matrix.mul_assoc]
-    _ = ∑ i : Fin d, Q * (K i * Z * (K i)ᴴ) * Q := by
-          refine Finset.sum_congr rfl (fun i _ => ?_)
-          rw [hZ]
-    _ = Q * (∑ i : Fin d, K i * Z * (K i)ᴴ) * Q := by
-          rw [Finset.mul_sum, Finset.sum_mul]
-    _ = Q * map K Z * Q := by rw [map_apply]
+  rw [map_compressed_eq_conj K (cornerCompressionKraus K Q) Q
+      (fun i => by simp only [cornerCompressionKraus, hQ.1.eq]) Z,
+    hQ.1.eq, hZ]
 
 end Hypotheses
 
