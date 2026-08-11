@@ -22,6 +22,36 @@ variable {A B : MPSTensor d D}
 
 namespace CPSVCanonicalFormData
 
+private lemma mpsTensor_cast_apply {n m : ℕ} (h : n = m)
+    (T : MPSTensor d n) (i : Fin d) :
+    (cast (congr_arg (MPSTensor d) h) T) i =
+      cast (congr_arg (fun r => Matrix (Fin r) (Fin r) ℂ) h) (T i) := by
+  subst h
+  rfl
+
+private lemma coisometry_cast_rows {n m : ℕ} (h : n = m)
+    (U : Matrix (Fin n) (Fin D) ℂ) (hU : U * Uᴴ = 1) :
+    let V := cast (congr_arg (fun r => Matrix (Fin r) (Fin D) ℂ) h) U
+    V * Vᴴ = 1 := by
+  subst h
+  exact hU
+
+private lemma reconstruction_cast_rows {n m : ℕ} (h : n = m)
+    (T : MPSTensor d n) (U : Matrix (Fin n) (Fin D) ℂ)
+    (hRec : ∀ i, A i = Uᴴ * T i * U) :
+    let T' := cast (congr_arg (MPSTensor d) h) T
+    let U' := cast (congr_arg (fun r => Matrix (Fin r) (Fin D) ℂ) h) U
+    ∀ i, A i = U'ᴴ * T' i * U' := by
+  subst h
+  exact hRec
+
+private lemma gaugeEquiv_cast_dim {n m : ℕ} (h : n = m)
+    {S T : MPSTensor d n} (hGauge : GaugeEquiv S T) :
+    GaugeEquiv (cast (congr_arg (MPSTensor d) h) S)
+      (cast (congr_arg (MPSTensor d) h) T) := by
+  subst h
+  exact hGauge
+
 /-- **Equal-ambient CPSV fundamental theorem.**
 
 Two normalized nonzero CPSV canonical-form tensors in the same ambient bond dimension that generate
@@ -63,12 +93,38 @@ theorem fundamentalTheorem_equal_ambient_canonicalForm
     hPC.trans (hAC.symm.trans (hEqual.trans (hBE.trans hQE.symm)))
   obtain ⟨hTotal, Y, hGauge⟩ :=
     fundamentalTheorem_equal_canonicalForm hPBNT hQBNT hPQ
-  cases hTotal
-  have hCE : GaugeEquiv C E := by
-    exact (⟨XA, fun _ => rfl⟩ : GaugeEquiv P.toTensor C).symm.trans
-      ((⟨Y, hGauge⟩ : GaugeEquiv P.toTensor Q.toTensor).trans
-        (⟨XB, fun _ => rfl⟩ : GaugeEquiv Q.toTensor E))
-  exact GaugeEquiv.of_coisometry_reconstruction UA UB hUA hUB hRecA hRecB hCE
+  let P' := cast (congr_arg (MPSTensor d) hTotal) P.toTensor
+  let C' := cast (congr_arg (MPSTensor d) hTotal) C
+  let UA' := cast
+    (congr_arg (fun r => Matrix (Fin r) (Fin D) ℂ) hTotal) UA
+  have hP'Q : GaugeEquiv P' Q.toTensor := by
+    refine ⟨Y, fun i => ?_⟩
+    have hPi : P' i =
+        cast (by rw [hTotal] :
+          Matrix (Fin P.totalDim) (Fin P.totalDim) ℂ =
+            Matrix (Fin Q.totalDim) (Fin Q.totalDim) ℂ) (P.toTensor i) := by
+      let hm : Matrix (Fin P.totalDim) (Fin P.totalDim) ℂ =
+          Matrix (Fin Q.totalDim) (Fin Q.totalDim) ℂ := by rw [hTotal]
+      have hp : congr_arg (fun r => Matrix (Fin r) (Fin r) ℂ) hTotal = hm :=
+        Subsingleton.elim _ _
+      calc
+        P' i = cast (congr_arg (fun r => Matrix (Fin r) (Fin r) ℂ) hTotal)
+            (P.toTensor i) := mpsTensor_cast_apply hTotal P.toTensor i
+        _ = cast hm (P.toTensor i) := by rw [hp]
+    rw [hPi]
+    exact hGauge i
+  have hP'C' : GaugeEquiv P' C' := by
+    exact gaugeEquiv_cast_dim hTotal
+      (⟨XA, fun _ => rfl⟩ : GaugeEquiv P.toTensor C)
+  have hCE : GaugeEquiv C' E :=
+    hP'C'.symm.trans (hP'Q.trans
+      (⟨XB, fun _ => rfl⟩ : GaugeEquiv Q.toTensor E))
+  have hUA' : UA' * UA'ᴴ = 1 :=
+    coisometry_cast_rows hTotal UA hUA
+  have hRecA' : ∀ i, A i = UA'ᴴ * C' i * UA' :=
+    reconstruction_cast_rows hTotal C UA hRecA
+  exact GaugeEquiv.of_coisometry_reconstruction
+    UA' UB hUA' hUB hRecA' hRecB hCE
 
 end CPSVCanonicalFormData
 
