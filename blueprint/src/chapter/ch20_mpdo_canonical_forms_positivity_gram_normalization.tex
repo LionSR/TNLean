@@ -515,7 +515,7 @@
     \label{def:grouped_corner_gram_dressing}
     \lean{MPOTensor.HasGroupedCornerGramDressing}
     \leanok
-    \uses{def:mpdo, def:vertical_tensor_mpdo}
+    \uses{def:vertical_tensor_mpdo}
     An MPO tensor $M$ has the \emph{grouped-corner Gram-dressing property} if
     the following holds. Let $A$ be a tensor, let $V_X,V_Y$ be two physical
     maps, let $X,Y$ be invertible matrices, and let $c_X,c_Y>0$. Suppose that,
@@ -878,7 +878,8 @@
     \leanok
     \uses{thm:grouped_sector_gram_scalar_of_dressing,
         thm:mpdo_pairwise_vertical_gram_conjugation,
-        thm:mpdo_vertical_bnt_grouping_with_isometries}
+        thm:mpdo_vertical_bnt_grouping_with_isometries,
+        thm:normal_tensor_gram_rigidity}
     The pairwise Figure~8 theorem supplies the grouped-corner
     Gram-dressing property. Apply
     Theorem~\ref{thm:grouped_sector_gram_scalar_of_dressing} to the grouped
@@ -912,7 +913,8 @@
     \leanok
     \uses{thm:grouped_sector_gram_scalar_of_dressing,
         thm:cpsv_literal_pairwise_vertical_gram_conjugation,
-        thm:cpsv_literal_vertical_bnt_grouping_with_isometries}
+        thm:cpsv_literal_vertical_bnt_grouping_with_isometries,
+        thm:normal_tensor_gram_rigidity}
     The literal pairwise Figure~8 theorem supplies the grouped-corner
     Gram-dressing property. Apply
     Theorem~\ref{thm:grouped_sector_gram_scalar_of_dressing} to the literal
@@ -961,12 +963,12 @@
     are isometries with pairwise orthogonal ranges,
     they intertwine $\widetilde M$ with the corresponding gauged
     representatives, and their grouped corner sum reconstructs every letter
-    of $\widetilde M$. Then there are maps $W_{\alpha,q}$ such that
+    of $\widetilde M$. Then there are maps $W_{\alpha,q}$. For distinct pairs
+    $(\alpha,q)\ne(\beta,p)$, their ranges are orthogonal. These maps satisfy
     \begin{align}
         W_{\alpha,q}^\dagger W_{\alpha,q}&=\Id,
         \notag\\
-        W_{\alpha,q}^\dagger W_{\beta,p}&=0
-        \quad((\alpha,q)\ne(\beta,p)),
+        W_{\alpha,q}^\dagger W_{\beta,p}&=0,
         \notag\\
         \widetilde M_vW_{\alpha,q}
         &=W_{\alpha,q}(c_{\alpha,q}M_\alpha^v),
