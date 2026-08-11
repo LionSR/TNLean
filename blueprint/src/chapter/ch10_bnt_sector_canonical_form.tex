@@ -907,6 +907,115 @@ give $O_{YX}(N)\to 0$, a contradiction.
     dimension sum by the active indices.
 \end{proof}
 
+% Source anchors: RMP arXiv:2011.12127v2, lines 1831--1906;
+% CPSV16 arXiv:1606.00608, lines 354--361 and 1172--1199.
+\begin{theorem}[Equal fundamental theorem for active CPSV canonical forms]%
+    \label{thm:cpsv_active_core_equal_ft}
+    \lean{MPSTensor.CPSVCanonicalFormData.exists_active_fundamentalTheorem_equal_canonicalForm}
+    \leanok
+    \uses{thm:cpsv_active_sector_bnt, thm:cpgsv_equal_case_source,
+        cor:cpsv_active_core_equal_ft_unitary}
+    Let $A$ and $B$ have CPSV canonical-form data with weights
+    $(\mu_k^A)_k$, $(\mu_k^B)_k$ and block dimensions
+    $(D_k^A)_k$, $(D_k^B)_k$. Assume that both data satisfy the separate
+    normalization condition~(\ref{eq:cpsv_weight_normalization}), that
+    $A\ne0$ and $B\ne0$, and that
+    $\mc{V}^+(A)=\mc{V}^+(B)$. Put
+    $K_A=\{k:\mu_k^A\ne0\}$ and $K_B=\{k:\mu_k^B\ne0\}$.
+    Then there are BNT canonical-form sector decompositions $P$ and $Q$ such
+    that
+    \begin{align}
+        \mc{V}^+(A)&=\mc{V}^+(P),
+        \notag\\
+        \mc{V}^+(B)&=\mc{V}^+(Q),
+        \notag\\
+        D_{\mathrm{tot}}(P)&=\sum_{k\in K_A}D_k^A,
+        \notag\\
+        D_{\mathrm{tot}}(Q)&=\sum_{k\in K_B}D_k^B,
+        \notag\\
+        D_{\mathrm{tot}}(P)&=D_{\mathrm{tot}}(Q),
+        \notag\\
+        \sum_{k\in K_A}D_k^A&=\sum_{k\in K_B}D_k^B.
+        \label{eq:cpsv_active_core_equal_dims}
+    \end{align}
+    After identifying the two total bond spaces by their equality, there is
+    an invertible matrix $X$ such that, for every physical index $i$,
+    \begin{align}
+        Q^i&=X P^iX^{-1}.
+        \label{eq:cpsv_active_core_equal_gauge}
+    \end{align}
+    The conclusion concerns the extracted active tensors $P$ and $Q$. It does
+    not assert equality of the ambient bond dimensions $D_A$ and $D_B$, and it
+    does not assert that $A$ and $B$ are gauge equivalent.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{cor:cpsv_active_core_equal_ft_unitary}
+    Apply Corollary~\ref{cor:cpsv_active_core_equal_ft_unitary} and retain its
+    extracted sector decompositions, dimension identities, and conjugating
+    matrix. Forget that the conjugating matrix is unitary.
+\end{proof}
+
+% The RMP unitary note is arXiv:2011.12127v2, lines 1905--1906.
+% The CPSV16 CFII refinement is arXiv:1606.00608, lines 1197--1199.
+\begin{corollary}[Unitary refinement for active CPSV canonical forms]%
+    \label{cor:cpsv_active_core_equal_ft_unitary}
+    \lean{MPSTensor.CPSVCanonicalFormData.exists_active_fundamentalTheorem_equal_canonicalForm_unitary}
+    \leanok
+    \uses{thm:cpsv_active_sector_bnt,
+        cor:sector_bnt_equal_unitary_global_gauge}
+    Let $A$ and $B$ have CPSV canonical-form data with weights
+    $(\mu_k^A)_k$, $(\mu_k^B)_k$ and block dimensions
+    $(D_k^A)_k$, $(D_k^B)_k$. Assume that both data satisfy the separate
+    normalization condition~(\ref{eq:cpsv_weight_normalization}), that
+    $A\ne0$ and $B\ne0$, and that
+    $\mc{V}^+(A)=\mc{V}^+(B)$. Put
+    $K_A=\{k:\mu_k^A\ne0\}$ and $K_B=\{k:\mu_k^B\ne0\}$.
+    Then there are BNT canonical-form sector decompositions $P$ and $Q$ such
+    that
+    \begin{align}
+        \mc{V}^+(A)&=\mc{V}^+(P),
+        \notag\\
+        \mc{V}^+(B)&=\mc{V}^+(Q),
+        \notag\\
+        D_{\mathrm{tot}}(P)&=\sum_{k\in K_A}D_k^A,
+        \notag\\
+        D_{\mathrm{tot}}(Q)&=\sum_{k\in K_B}D_k^B,
+        \notag\\
+        D_{\mathrm{tot}}(P)&=D_{\mathrm{tot}}(Q),
+        \notag\\
+        \sum_{k\in K_A}D_k^A&=\sum_{k\in K_B}D_k^B.
+        \label{eq:cpsv_active_core_unitary_dims}
+    \end{align}
+    After identifying the two total bond spaces, there is a unitary matrix $U$
+    such that, for every physical index $i$,
+    \begin{align}
+        Q^i&=U P^iU^\dagger.
+        \label{eq:cpsv_active_core_unitary_gauge}
+    \end{align}
+    This is the unitary choice noted in
+    \cite[lines~1905--1906]{Cirac2021Matrix} and the canonical-form-II
+    refinement of \cite[Corollary~A.6, lines~1197--1199]{Cirac2016MPDO_arXiv}.
+    Again, there is no claim that $D_A=D_B$, and no gauge equivalence between
+    $A$ and $B$ is asserted.
+\end{corollary}
+
+\begin{proof}\leanok
+    \uses{thm:cpsv_active_sector_bnt,
+        cor:sector_bnt_equal_unitary_global_gauge}
+    Apply Theorem~\ref{thm:cpsv_active_sector_bnt} to $A$ and $B$. This gives
+    $P$ and $Q$, their BNT canonical-form properties, the first four identities
+    in~(\ref{eq:cpsv_active_core_unitary_dims}), and
+    \begin{align}
+        \mc{V}^+(P)&=\mc{V}^+(Q).
+        \notag
+    \end{align}
+    Corollary~\ref{cor:sector_bnt_equal_unitary_global_gauge} gives the fifth
+    identity and supplies $U$. Substituting the two active
+    dimension formulas gives the last equality in
+    (\ref{eq:cpsv_active_core_unitary_dims}).
+\end{proof}
+
 Combining the after-blocking preparation with the normalized-weight construction
 gives the arbitrary-input statement, conditional on the weight normalization.
 
