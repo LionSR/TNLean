@@ -497,8 +497,8 @@ its axes turn from station to station, so a single declared offset would name
 a different page displacement at each of them; there is no repeated cell to
 decompose and no translation to read a decomposition under. A circle carries
 one record per station, and a figure whose site is composite has a repeating
-cell, which is a flat or a plane frame. The refusal is
-`TKZ-FRAME-BASIS-CIRCLE`.
+cell, which is a flat or a plane frame. A basis on a circle is rejected with
+`[TKZ-FRAME-BASIS-CIRCLE]`.
 
 An explicit `basis=` is picture-scoped in the current kernel stage.
 Group-local and atom-local bases are rejected with `TKZ-FRAME-*` diagnostics
