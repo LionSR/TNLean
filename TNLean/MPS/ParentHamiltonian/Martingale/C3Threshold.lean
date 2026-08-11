@@ -10,9 +10,10 @@ import TNLean.Wielandt.Primitivity.StronglyIrreducibleToFullRank
 /-!
 # The open-chain C3 threshold
 
-This file chooses a blocked overlap length at which the spectator-uniform geometric
-projector-defect estimate satisfies Nachtergaele's condition C3. One site of the input
-tensor is one blocked-chain filtration step.
+This file chooses an overlap length, measured in sites of the input tensor, at which the
+spectator-uniform geometric projector-defect estimate satisfies Nachtergaele's condition
+C3. If the input tensor is already a blocked representative, one such site is one
+blocked-chain filtration step.
 
 ## Main results
 
@@ -121,9 +122,9 @@ theorem IsPrimitiveMPS.exists_openChain_groundProjection_defect_lt_c3_threshold
   exact hDefect K l (by omega) hl_small
 
 /-- The C3 threshold yields the uniform open-chain anticommutator estimate for
-the complementary excitation projections. This is the direct corollary of
-Nachtergaele's projector defect identity following condition C3,
-arXiv:cond-mat/9410110, eq. (2.4). -/
+the complementary excitation projections. Nachtergaele's identity following condition
+C3 identifies the projector defect, arXiv:cond-mat/9410110, eq. (2.4); the
+anticommutator estimate is the two-projection consequence proved in this development. -/
 theorem IsPrimitiveMPS.exists_re_inner_openChain_anticommutator_ge_c3_threshold
     [NeZero D] {A : MPSTensor d D} {ρ : Matrix (Fin D) (Fin D) ℂ}
     (hP : IsPrimitiveMPS A ρ) (hρ : ρ.PosDef) :
