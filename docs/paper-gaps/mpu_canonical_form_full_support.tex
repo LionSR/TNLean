@@ -205,6 +205,69 @@ equivalence proof. These open proof nodes do not establish the unrestricted
 source statements.
 % Source lines: paper_v2.tex 824--865.
 
+The same source/scoped separation is carried through the complete continuity
+and symmetry subtree. The continuity labels \texttt{prop:continuity-index} and
+\texttt{coruvSF} have the scoped counterparts
+\texttt{prop:mpu\_admissible\_continuity\_index} and
+\texttt{cor:mpu\_admissible\_continuous\_standard\_form}.
+
+For local symmetry and conjugation classification, the source labels
+\texttt{prop1conj}, \texttt{corconj},
+\texttt{cor:sympl-to-orthogonal}, \texttt{PropChiral}, and
+\texttt{prop:local-char-transposition} have the scoped counterparts
+\texttt{prop:mpu\_admissible\_conjugation\_symmetry},
+\texttt{prop:mpu\_admissible\_conjugation\_standard\_forms},
+\texttt{cor:mpu\_admissible\_symplectic\_to\_orthogonal},
+\texttt{prop:mpu\_admissible\_local\_time\_reversal}, and
+\texttt{prop:mpu\_admissible\_local\_transposition}. The source definitions
+\texttt{def:strictly-equivalent-symmetry} and
+\texttt{def:equivalent-symmetry}, and the source criterion
+\texttt{lem:equivalent-symmetry}, have the scoped labels
+\texttt{def:mpu\_admissible\_strict\_symmetry\_equivalence},
+\texttt{def:mpu\_admissible\_symmetry\_equivalence}, and
+\texttt{lem:mpu\_admissible\_symmetry\_path\_criterion}.
+
+The conjugation phase results \texttt{conjphs},
+\texttt{cor:all-equivalent-under-conjugation},
+\texttt{prop:conjsym-strict-equiv}, and
+\texttt{cor:equiv-under-conjugation} have the scoped labels
+\texttt{thm:mpu\_admissible\_conjugation\_odd\_rank},
+\texttt{cor:mpu\_admissible\_all\_conjugation\_equivalent},
+\texttt{thm:mpu\_admissible\_conjugation\_even\_rank}, and
+\texttt{cor:mpu\_admissible\_equiv\_under\_conjugation}.
+
+For the time-reversal sign, the source labels
+\texttt{eq:sigma-from-trace}, \texttt{lem:mpu\_sigma\_gauge\_invariant},
+\texttt{prop:sigma-well-defined},
+\texttt{prop:sigma1-and-sigma2-equal}, and
+\texttt{cor:sigma-equivalence-necessary} have the scoped labels
+\texttt{lem:mpu\_admissible\_sigma\_trace},
+\texttt{lem:mpu\_admissible\_sigma\_gauge\_invariant},
+\texttt{prop:mpu\_admissible\_sigma\_well\_defined},
+\texttt{prop:mpu\_admissible\_sigma\_blocking\_parity}, and
+\texttt{cor:mpu\_admissible\_sigma\_equivalence\_necessary}. The two MPS
+comparison results
+\texttt{prop:mps-class-eq-mpu-class-for-conjugation} and
+\texttt{prop:dagger-mps-class-and-mpu-class-equal} have scoped labels
+\texttt{prop:mpu\_admissible\_mps\_conjugation\_class} and
+\texttt{prop:mpu\_admissible\_mps\_time\_reversal\_class}.
+
+Finally, the source example and swap labels
+\texttt{ex:all-phases-under-conjugation}, \texttt{example:czx},
+\texttt{ex:dagger-all-but-czx}, \texttt{lemma:sym-trafo-swap},
+\texttt{prop:U2-U3-trivial-conjugation},
+\texttt{prop:U2-U3-trivial-tr-transpose},
+\texttt{prop:eqiv-U1-U2-conjugate}, and
+\texttt{prop:U1-U2-equiv-ancillatrick} have the scoped counterparts
+\texttt{ex:mpu\_admissible\_all\_conjugation\_phases},
+\texttt{ex:mpu\_admissible\_czx},
+\texttt{ex:mpu\_admissible\_time\_reversal\_classes},
+\texttt{lem:mpu\_admissible\_swap\_symmetry\_equivalence},
+\texttt{prop:mpu\_admissible\_u2\_u3\_conjugation},
+\texttt{prop:mpu\_admissible\_u2\_u3\_time\_reversal\_transposition},
+\texttt{prop:mpu\_admissible\_u1\_u2\_conjugation}, and
+\texttt{prop:mpu\_admissible\_u1\_u2\_ancilla}.
+
 Continuity requires more than endpoint data. Chapter~28 therefore introduces
 an admissible equivalence and path datum. It consists of a chosen strict-
 equivalence path, one common positive blocking length $m$, and continuously
@@ -269,10 +332,11 @@ constructs reduced full-support source data for every simple block or proves
 their preservation under blocking, adjoining ancillas, tensor products,
 composition, conjugation, adjoint, transposition, or continuous variation, or
 identifies the source data of a tensor with those of a reduced representative.
-Consequently the Chapter~28 statements are restricted to the explicitly
-admissible tensors, comparison tensors, and chosen paths. They do not give the
-unrestricted same-tensor standard-form, index, continuity, or
-symmetry-classification theorems stated in the source.
+Consequently the admissible Chapter~28 statements are restricted to the
+explicitly supplied tensors, comparison tensors, and chosen paths. The
+parallel source-labelled statements retain the hypotheses of the paper and
+remain unformalized. No restricted statement is presented under a source
+label.
 
 \section{Elimination plan}
 The native source-data scope tracker is issue~\#6136. Its four implementation
@@ -286,15 +350,23 @@ can then be merged into \texttt{SF}.
 
 Issue~\#6138 proves source-data preservation under physical blocking and
 adjoining identity ancillas. It removes the extra hypotheses from the
-admissible index definition, its well-definedness theorem, and the
-ancilla-blocked sign comparisons. Issue~\#6139 treats tensor products,
-composition, and conjugate, adjoint, transposed, and other transformed
-comparison tensors. Issue~\#6140 constructs continuous source data along
-strict-equivalence paths and their symmetry-transformed comparison paths.
-Only after these transport results are available can the admissible index and
-phase-classification nodes be merged into their unrestricted source
-counterparts. Closing issues~\#6137--\#6140 does not replace the independent
-proof obligations in issues~\#5982 and~\#6071.
+admissible index definition, its well-definedness theorem, the blocked local
+symmetry statements, the sign-parity results, and the ancilla-dependent
+examples. Issue~\#6139 treats tensor products, composition, and conjugate,
+adjoint, transposed, and other transformed comparison tensors. It removes the
+extra endpoint and comparison-tensor assumptions from the admissible local
+symmetry and example nodes. Issue~\#6140 constructs continuous source data
+along strict-equivalence paths and their four fixed symmetry-transformed
+comparison paths. It removes the path hypotheses from the admissible
+continuity, symmetry-equivalence, phase-classification, swap, and
+MPS-comparison nodes.
+
+The twenty-nine source/scoped pairs in the continuity and symmetry subtree are
+merged only after the relevant branches above are closed. Until then, every
+source label remains an unrestricted unformalized statement, while every
+reduced-source or path-dependent statement remains under its
+\texttt{mpu\_admissible} label. Closing issues~\#6137--\#6140 does not replace
+the independent proof obligations in issues~\#5982 and~\#6071.
 
 \section{Verdict}
 \textbf{Verdict: scope restriction.} The paper's normal-tensor proposition,
