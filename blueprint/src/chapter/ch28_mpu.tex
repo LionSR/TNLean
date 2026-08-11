@@ -2727,6 +2727,71 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
     \cite[Theorem~III.8, Section~III.B, equations~(31)--(32)]{Cirac2017MPU}.
 \end{definition}
 
+\begin{theorem}[Four-letter source contractions]
+    \label{thm:mpu_source_v_four_u_expansions}
+    \lean{MPOTensor.sourceY₁_gram_eq_weighted_sourceCutM₁_gram,
+        MPOTensor.doubleLayerTensor_mul_apply_four_u,
+        MPOTensor.doubleLayerTensor_rankOne_mul_apply_four_u,
+        MPOTensor.sourceYTensor_gram_eq_four_u_weighted}
+    \leanok
+    \uses{def:mpu_source_v_dressing,def:mpu_double_layer,
+        thm:mpu_source_factorizations,
+        thm:mpu_source_factor_normalizations,
+        thm:mpu_source_y_two_rotated_gram}
+    Let $p=(p_1,p_2)$ be the starred physical pair,
+    $q=(q_1,q_2)$ the unstarred pair, and let $a=(a_1,a_2)$ and
+    $b=(b_1,b_2)$ be virtual paths. The weighted first-cut contraction is
+    \begin{align}
+      \sum_r \overline{(Y_1)_{r,(p_1,a_1)}}(Y_1)_{r,(q_1,b_1)}
+      &=\sum_{\alpha,\alpha',j_1}
+        \overline{U^{p_1j_1}_{\alpha a_1}}
+        \rho_{\alpha\alpha'}U^{q_1j_1}_{\alpha'b_1}.
+    \end{align}
+    The entry of two ordinary double-layer letters from row $(a_1,b_1)$ to
+    column $(a_2,b_2)$ is
+    \begin{align}
+      \sum_{\alpha,\beta,j_1,j_2}
+        \overline{U^{p_1j_1}_{a_1\alpha}}
+        U^{q_1j_1}_{b_1\beta}
+        \overline{U^{p_2j_2}_{\alpha a_2}}
+        U^{q_2j_2}_{\beta b_2}.
+    \end{align}
+    Set
+    \begin{align}
+      \rho'_x&=\operatorname{vec}(\rho)_{\operatorname{flat}^{-1}(x)}, &
+      \Phi'_x&=\operatorname{vec}(\Id_D)_{\operatorname{flat}^{-1}(x)}.
+    \end{align}
+    Inserting $\ket{\rho'}\!\bra{\Phi'}$ between the two letters gives
+    \begin{align}
+      &\bigl(W^{p_1q_1}\ket{\rho'}\!\bra{\Phi'}W^{p_2q_2}\bigr)
+        _{(a_1,b_1),(a_2,b_2)} \\
+      &\quad=\sum_{\alpha,\alpha',\beta,j_1,j_2}
+        \overline{U^{j_1p_1}_{a_1\alpha}}
+        U^{j_1q_1}_{b_1\alpha'}\rho_{\alpha'\alpha}
+        \overline{U^{j_2p_2}_{\beta a_2}}U^{j_2q_2}_{\beta b_2}.
+    \end{align}
+    Finally, the Gram entry of $Y_1\otimes Y_2$ expands as
+    \begin{align}
+      \sum_{\alpha,\alpha',\beta,j_1,j_2}
+        \overline{U^{p_1j_1}_{\alpha a_1}}
+        \rho_{\alpha\alpha'}U^{q_1j_1}_{\alpha'b_1}
+        \overline{U^{j_2p_2}_{\beta a_2}}
+        U^{j_2q_2}_{\beta b_2}.
+    \end{align}
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:mpu_source_factorizations,
+        thm:mpu_source_factor_normalizations,
+        thm:mpu_source_y_two_rotated_gram}
+    Expand the ordinary and rank-one-inserted matrix products entrywise.
+    For the tensorized Gram entry, use
+    $X_1^\dagger(\rho\otimes\Id_d)X_1=\Id_r$ on the first cut and
+    $X_2^\dagger X_2=\Id_\ell$ on the second cut, then reorder the finite
+    sums. No ambient identity $X_2X_2^\dagger=\Id$ is used.
+\end{proof}
+
 \begin{theorem}[Tensorized source right inverse]
     \label{thm:mpu_source_yz_tensor}
     \lean{MPOTensor.sourceYTensor_mul_sourceZTensor}
