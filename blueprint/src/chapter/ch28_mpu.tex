@@ -3836,6 +3836,83 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
 
 \section{Standard form, index, and symmetry classification}
 
+\begin{theorem}[Complete source-$u$ network contraction]
+  \label{thm:mpu_source_u_complete_network}
+  \notready
+  \discussion{5982}
+  \uses{def:mpu,def:mpu_normalized_flattening,def:cpsv_cfii,
+    def:mpu_full_active_support,def:mpu_source_uv,def:mpo_family,
+    thm:mpu_reduced_cfii_transfer_stabilization}
+  Let $\mathcal U$ be an MPU tensor with $d>0$ and $D>1$. Choose
+  canonical-form-II data for its normalized flattening whose active blocks
+  fill the ambient bond space, and let $\rho$ be the normalized positive right
+  fixed point supplied by
+  Theorem~\ref{thm:mpu_reduced_cfii_transfer_stabilization}. Set
+  \begin{align}
+    J&=D^2-1,\\
+    K&=JD^2.
+  \end{align}
+  For retained physical pairs $p,q\in\{0,\ldots,d-1\}^2$, the complete
+  source-$u$ contraction satisfies
+  \begin{align}
+    \sum_{l,r}u_{(l,r),q}\overline{u_{(l,r),p}}
+      &=d^{-K}\sum_{\tau,\eta}
+        U^{(K+2)}_{(q,\tau),\eta}
+        \overline{U^{(K+2)}_{(p,\tau),\eta}}.
+  \end{align}
+  Here $\tau$ ranges over input words of length $K$, and $\eta$ ranges over
+  output words of length $K+2$. This is the range-insertion equality in the
+  proof of \cite[Lemma~III.3]{Cirac2017MPU}.
+\end{theorem}
+
+\begin{proof}
+  \uses{thm:mpu_reduced_cfii_transfer_stabilization,
+    thm:mpu_source_u_gram_second_cut_metric,
+    thm:mpu_supplied_witness_overlapping_reblocking,
+    thm:mpu_source_u_terminal_boundary,
+    thm:mpu_normalized_output_tail_closed_trace}
+  The stabilized transfer power is
+  $E^J=\lvert\rho)(\Phi\rvert$. Blocking a further $D^2$ sites gives the two
+  simple contractions at length $K$. Expand the ordinary Gram entry through
+  the two source cuts, insert their range projections, and apply these
+  contractions to the intervening blocked network. The terminal source-factor
+  contraction removes the remaining boundary indices. The resulting closed
+  network is the normalized $(K+2)$-site contraction displayed above.
+\end{proof}
+
+\begin{theorem}[Complete reduced source-$v$ contraction]
+  \label{thm:mpu_source_v_complete_reduced_contraction}
+  \notready
+  \discussion{6071}
+  \uses{def:mpu,def:mpu_normalized_flattening,def:cpsv_cfii,
+    def:mpu_full_active_support,def:mpu_simple,
+    def:mpu_source_v_dressing,thm:mpu_reduced_cfii_transfer_stabilization}
+  Let $\mathcal U$ be an MPU tensor with $d>0$ and $D>1$. Choose
+  canonical-form-II data for its normalized flattening whose active blocks
+  fill the ambient bond space, and construct the source factors from the
+  normalized positive right fixed point $\rho$ supplied by
+  Theorem~\ref{thm:mpu_reduced_cfii_transfer_stabilization}. Then the second
+  simple-tensor contraction~(\ref{eq:mpu_simple2}) holds if and only if
+  \begin{align}
+    (Y_1\otimes Y_2)^\dagger v^\dagger v(Y_1\otimes Y_2)
+      &=(Y_1\otimes Y_2)^\dagger(Y_1\otimes Y_2).
+  \end{align}
+  This is the complete blocked-network identification in equation~(31) of
+  \cite[Theorem~III.4]{Cirac2017MPU}, with the stabilized transfer power
+  inserted in the internal contraction.
+\end{theorem}
+
+\begin{proof}
+  \uses{thm:mpu_reduced_cfii_transfer_stabilization,
+    thm:mpu_supplied_witness_overlapping_reblocking,
+    thm:mpu_source_v_four_u_expansions,
+    thm:mpu_source_v_dressed_entries}
+  Insert $E^{D^2-1}=\lvert\rho)(\Phi\rvert$ into the complete blocked network.
+  Expand both source cuts and rotate the second cut. The resulting four-letter
+  expression identifies the second simple-tensor contraction with the dressed
+  Gram equation in both directions.
+\end{proof}
+
 \begin{lemma}[The source operator $u$ is an isometry]
   \label{lemuisometry}
   \notready
@@ -3843,12 +3920,12 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
   \uses{def:mpu,def:mpu_normalized_flattening,def:cpsv_cfii,
     def:mpu_full_active_support,def:mpu_source_uv,
     thm:mpu_reduced_cfii_transfer_stabilization}
-  Let $\mathcal U$ be an MPU tensor with $d>0$ and $D>1$.  Choose
+  Let $\mathcal U$ be an MPU tensor with $d>0$ and $D>1$. Choose
   canonical-form-II data for its normalized flattening whose active blocks
-  fill the ambient bond space.  Let $\rho$ be the normalized positive right
+  fill the ambient bond space. Let $\rho$ be the normalized positive right
   fixed point supplied by
   Theorem~\ref{thm:mpu_reduced_cfii_transfer_stabilization}, and use $\rho$ in
-  the source factors associated with the two source cuts.  Then
+  the source factors associated with the two source cuts. Then
   \begin{align}
     u^\dagger u&=\Id.
   \end{align}
@@ -3857,20 +3934,20 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
 
 \begin{proof}
   \uses{thm:mpu_reduced_cfii_transfer_stabilization,
-    thm:mpu_source_u_expanded_metric,
-    thm:mpu_source_u_terminal_boundary,thm:mpu_bounded_simple_blocking}
-  The chosen reduced canonical-form-II data give
+    thm:mpu_source_u_complete_network,
+    thm:mpu_normalized_output_tail_coisometry}
+  Set $J=D^2-1$ and $K=JD^2$. The chosen reduced canonical-form-II data give
   \begin{align}
-    \rho&>0,
-    &\tr(\rho)&=1,
-    &E(\rho)&=\rho,
-    &E^{D^2-1}&=\lvert\rho)(\Phi\rvert,
+    \rho&>0,\\
+    \tr(\rho)&=1,\\
+    E\lvert\rho)&=\lvert\rho),\\
+    (\Phi\rvert E&=(\Phi\rvert,\\
+    E^J&=\lvert\rho)(\Phi\rvert.
   \end{align}
-  with $(\Phi\rvert$ the vectorized identity.  Choose a blocking length at
-  which the tensor is simple.  Expanding the source-$u$ metric through that
-  blocked periodic contraction and applying the terminal boundary identity
-  reduces it to the normalized contraction of
-  $U^{(K+2)\dagger}U^{(K+2)}$, which is the identity.
+  By Theorem~\ref{thm:mpu_source_u_complete_network}, the $(p,q)$ entry of
+  $u^\dagger u$ is the normalized contraction of
+  $U^{(K+2)\dagger}U^{(K+2)}$ with a common length-$K$ input tail. MPU
+  unitarity evaluates this contraction as $\delta_{p,q}$.
 \end{proof}
 
 \begin{theorem}[Simple-tensor equivalence theorem]
@@ -3880,12 +3957,12 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
   \uses{def:mpu,def:mpu_normalized_flattening,def:cpsv_cfii,
     def:mpu_full_active_support,def:mpu_simple,def:mpu_source_uv,
     thm:mpu_reduced_cfii_transfer_stabilization}
-  Let $\mathcal U$ be an MPU tensor with $d>0$ and $D>1$.  Choose
+  Let $\mathcal U$ be an MPU tensor with $d>0$ and $D>1$. Choose
   canonical-form-II data for its normalized flattening whose active blocks
   fill the ambient bond space, and construct the source factors from the
   normalized positive right fixed point $\rho$ supplied by
-  Theorem~\ref{thm:mpu_reduced_cfii_transfer_stabilization}.  Let $r$, $\ell$,
-  $u$, and $v$ be the resulting source-cut ranks and source operators.  Then
+  Theorem~\ref{thm:mpu_reduced_cfii_transfer_stabilization}. Let $r$, $\ell$,
+  $u$, and $v$ be the resulting source-cut ranks and source operators. Then
   the following conditions are equivalent:
   \begin{enumerate}
     \item $\mathcal U$ is simple;
@@ -3896,32 +3973,29 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
 \end{theorem}
 
 \begin{proof}
-  \uses{lemuisometry,thm:mpu_simple1,
-    thm:mpu_reduced_cfii_transfer_stabilization,
+  \uses{thm:mpu_source_u_complete_network,
+    thm:mpu_normalized_output_tail_coisometry,thm:mpu_simple1,
+    thm:mpu_source_v_complete_reduced_contraction,
     thm:mpu_source_uv_two_site_factorization,
-    thm:mpu_source_factor_right_inverses,
-    thm:mpu_source_v_dressed_entries,
     thm:mpu_source_v_dressed_gram_cancel}
-  If $\mathcal U$ is simple, the two simple-tensor contractions give the
-  dressed Gram identity
+  Suppose first that $\mathcal U$ is simple. By
+  Theorem~\ref{thm:mpu_source_v_complete_reduced_contraction},
   \begin{align}
     (Y_1\otimes Y_2)^\dagger v^\dagger v(Y_1\otimes Y_2)
       &=(Y_1\otimes Y_2)^\dagger(Y_1\otimes Y_2).
   \end{align}
-  The right inverses of $Y_1$ and $Y_2$ cancel the dressing, so
-  $v^\dagger v=\Id$.  Hence $r\ell\leq d^2$, while
-  Lemma~\ref{lemuisometry} gives $r\ell\geq d^2$.
-  This proves the first implication.
+  Cancelling the dressing by the right inverses of $Y_1$ and $Y_2$ gives
+  $v^\dagger v=\Id$. Hence $r\ell\leq d^2$. The complete source-$u$
+  contraction and MPU unitarity give $u^\dagger u=\Id$, hence
+  $r\ell\geq d^2$.
 
-  If $r\ell=d^2$, the isometry $u$ is square and therefore unitary.  If $u$
+  If $r\ell=d^2$, the isometry $u$ is square and therefore unitary. If $u$
   is unitary, the exact two-site factorization of $U^{(2)}$ and unitarity of
-  $U^{(2)}$ imply that $v$ is unitary.  Finally, if $v$ is unitary, the fixed
-  point identity gives the first simple-tensor contraction, while the same
-  complete source-cut contraction used above gives the second one.
-
-  % The complete four-way Lean capstone remains downstream of issue #6071.
-  % Its missing step is the combined source-v network contraction; no
-  % representative-transport theorem is asserted here.
+  $U^{(2)}$ imply that $v$ is unitary. Finally, suppose that $v$ is unitary.
+  The fixed-point identity gives the first simple-tensor contraction.
+  Unitarity of $v$ gives the dressed Gram identity, and
+  Theorem~\ref{thm:mpu_source_v_complete_reduced_contraction} gives the second
+  contraction.
 \end{proof}
 
 \begin{definition}[Standard form]
