@@ -3240,7 +3240,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     MPSTensor.MPUCanonicalFormData,
     MPSTensor.IsMPUCanonicalForm}
   \leanok
-  \uses{def:transfer_map}
+  \uses{def:transfer_map,def:block_diagonal_tensor}
   A tensor $A$ of physical dimension $d$ and bond dimension $D$ is in MPU
   canonical form if there are positive block dimensions $D_k$, weights
   $\mu_k\in\mathbb C$, tensors $A_k$ of bond dimension $D_k$, and a
@@ -3248,11 +3248,11 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
   \begin{align}
     C\colon\mathbb C^D&\longrightarrow
       \bigoplus_{k=1}^r\mathbb C^{D_k},&
-    CC^*&=\Id,
+    CC^\dagger&=\Id,
   \end{align}
   such that
   \begin{align}
-    A^i=C^*\left(\bigoplus_{k=1}^r\mu_k A_k^i\right)C.
+    A^i=C^\dagger\left(\bigoplus_{k=1}^r\mu_k A_k^i\right)C.
   \end{align}
   Every $A_k$ is irreducible and the spectral radius of its transfer map is
   one. The blocks may be periodic, so no uniqueness condition is imposed on
