@@ -19,8 +19,10 @@ The extension is
 
 `Uᴴ * X * U + (1 - Uᴴ * U)`.
 
-The construction is the nonsingular gauge used in arXiv:1606.00608,
-Appendix A, lines 1058--1077 and eq. `II_XAX`.
+The single-space canonical-form-II similarity gauge in arXiv:1606.00608,
+Appendix A, lines 1058--1077, motivates the retained-space extension. The
+unitary alignment of two different coisometries is an additional
+project-derived auxiliary result.
 -/
 
 open scoped Matrix BigOperators ComplexOrder
@@ -38,10 +40,13 @@ noncomputable def unitaryGL {n : Type*} [Fintype n] [DecidableEq n]
       rw [← Matrix.star_eq_conjTranspose]
       exact Matrix.UnitaryGroup.star_mul_self U⟩
 
+/-- The matrix underlying `unitaryGL U` is the original unitary matrix. -/
 @[simp] theorem unitaryGL_val {n : Type*} [Fintype n] [DecidableEq n]
     (U : Matrix.unitaryGroup n ℂ) :
     (unitaryGL U : Matrix n n ℂ) = U := rfl
 
+/-- The inverse of `unitaryGL U` is represented by the conjugate transpose
+of `U`. -/
 @[simp] theorem unitaryGL_inv_val {n : Type*} [Fintype n] [DecidableEq n]
     (U : Matrix.unitaryGroup n ℂ) :
     (((unitaryGL U)⁻¹ : GL n ℂ) : Matrix n n ℂ) = (U : Matrix n n ℂ)ᴴ := rfl
@@ -161,7 +166,10 @@ common ambient bond dimension.
 The ambient gauge is the product of a unitary aligning the two coisometric
 inclusions and the extension of the retained-space gauge.
 
-Construction: arXiv:1606.00608, Appendix A, lines 1058--1077. -/
+This is a project-derived auxiliary lemma. The single-space similarity
+gauge in arXiv:1606.00608, Appendix A, lines 1058--1077, motivates the
+retained-space extension; the cross-coisometry unitary alignment is
+additional. -/
 theorem of_coisometry_reconstruction
     {s n D : ℕ}
     {A B : MPSTensor s D}

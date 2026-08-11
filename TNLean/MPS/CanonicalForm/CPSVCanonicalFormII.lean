@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.CanonicalForm.Existence
 import TNLean.MPS.CanonicalForm.NormalTensorGauge
+import TNLean.MPS.SharedInfra.BlockGauge
 import TNLean.MPS.SharedInfra.CoisometryGauge
 
 /-!
