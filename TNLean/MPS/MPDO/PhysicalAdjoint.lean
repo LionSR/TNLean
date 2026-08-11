@@ -12,8 +12,10 @@ This file defines the physical adjoint, which exchanges and conjugates the
 physical indices of an MPO tensor without reversing its virtual chain, and
 proves the corresponding word and periodic-operator identities.
 
-## Main definition
+## Main definitions
 
+* `MPOTensor.bondPairSwap` — exchange of the two entries of a doubled bond index.
+* `MPOTensor.bondPairSwapEquiv` — the doubled-bond exchange as an equivalence.
 * `MPOTensor.physicalAdjointTensor` — physical adjoint without virtual reflection.
 
 ## Main results
@@ -33,8 +35,7 @@ For `ab = (a, b)`, this is `bondPairSwap ab = (b, a)`.
 
 This is the bond-index exchange under adjunction in the first diagram of the
 proof of Proposition 4.13 of arXiv:1606.00608, lines 1909--1913, and the
-virtual-pair reflection in Figure `II_uUnitary.png` of arXiv:1703.09188,
-lines 536--557. -/
+virtual-pair reflection in arXiv:1703.09188, Section III, lines 536--557. -/
 def bondPairSwap (ab : Fin (D * D)) : Fin (D * D) :=
   finProdFinEquiv (ab.modNat, ab.divNat)
 

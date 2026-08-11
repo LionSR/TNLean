@@ -2288,8 +2288,8 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
     original supplied witnesses.
 \end{proof}
 
-\begin{theorem}[Reflected blocked-transfer coordinates]
-    \label{thm:mpu_reflected_blocked_transfer_coordinates}
+\begin{definition}[Reflected blocked-transfer coordinates]
+    \label{def:mpu_reflected_blocked_transfer_coordinates}
     \lean{MPOTensor.bondPairSwapEquiv,
         MPOTensor.bondPairSwapEquiv_apply,
         MPOTensor.bondPairSwapEquiv_symm,
@@ -2298,8 +2298,6 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
         MPOTensor.wordOfBlock_blockWordReverseEquiv,
         MPOTensor.blockWordReverseEquiv_involutive}
     \leanok
-    \uses{lem:vertical_tensor_adjoint_reflection,
-        def:mpu_double_layer,def:mpdo_positive_physical_blocking}
     The doubled-bond coordinate reflection exchanges the two virtual factors,
     \begin{align}
       (a,b)&\longmapsto(b,a).
@@ -2309,12 +2307,12 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
       (i_0,\ldots,i_{K-1})&\longmapsto(i_{K-1},\ldots,i_0).
     \end{align}
     Both reindexings are involutions.  These are support coordinates for the
-    graphical proof of \cite[Lemma~\texttt{lemuisometry}, Figure~
-    \texttt{II\_uUnitary.png}]{Cirac2017MPU}, rather than a separate theorem
-    printed there.  The blocked-word reversal is not used in the transfer
+    graphical proof in \cite[Section~III, lines 536--557]{Cirac2017MPU},
+    rather than a separate theorem printed there.  The blocked-word reversal
+    is not used in the transfer
     transport below; conjugate transposition there reverses only the order of
     the two blocked letters.
-\end{theorem}
+\end{definition}
 
 \begin{proof}\leanok
     Decode the doubled bond, apply the product swap, and encode it again.
@@ -2336,12 +2334,12 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
     \end{align}
     This identity requires neither the MPU property nor a positivity or
     positive-dimension hypothesis.  It is a coordinate identity supporting
-    the graphical reflection in \cite[Figure~\texttt{II\_uUnitary.png}]
+    the graphical reflection in \cite[Section~III, lines 536--557]
     {Cirac2017MPU}, not a separate theorem printed there.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:mpu_reflected_blocked_transfer_coordinates}
+    \uses{def:mpu_reflected_blocked_transfer_coordinates}
     Expand the two normalized diagonals.  Physical adjunction exchanges the
     two physical indices, and exchanging the two finite physical sums leaves
     precisely the simultaneous doubled-bond swap on the row and column.
@@ -2445,9 +2443,8 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
     order of the two blocked letters.  Overlapping-window reblocking preserves
     these witnesses through the two additional sites.  These contractions are
     support identities for the graphical proof of
-    \cite[Lemma~\texttt{lemuisometry}, Figure~
-    \texttt{II\_uUnitary.png}]{Cirac2017MPU}; they are not asserted as a
-    separate printed theorem of that paper.
+    \cite[Section~III, lines 536--557]{Cirac2017MPU}; they are not asserted
+    as a separate printed theorem of that paper.
 \end{proof}
 
 % The equality and range-insertion step remains tracked by parent issue #5982.
