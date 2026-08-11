@@ -195,17 +195,16 @@ it may not be replaced by an equivalent canonical or reduced representative.
 The actual blocked endpoints carry their own data. The same requirement is
 imposed after adjoining ancillas and blocking. This is a hypothesis attached
 to a chosen witness and does not assert that such a witness exists. The datum
-does not automatically include the source bound $m\leq D^4$; any result
-displaying that bound assumes that the supplied common blocking length itself
-satisfies it.
+does not automatically include the source bound $m\leq D^4$. The continuous
+standard-form corollary and the forward standard-form path criterion assume
+that the supplied common blocking length itself satisfies this bound.
 
-For a symmetry-preserving path, admissibility also includes continuously
-varying source data for every transformed comparison tensor to which the
-fundamental theorem is applied. Depending on the argument, these are the
-conjugate, physical-adjoint, transposed, or more general symmetry-image tensors
-of the actual blocked path. Each transformed tensor is itself simple and
-carries its own datum. No symmetry operation is assumed to preserve source
-data automatically.
+For a path preserving a specified symmetry $\mathcal S$, admissibility also
+includes continuously varying source data for the fixed family consisting of
+the conjugate, physical-adjoint, transposed, and $\mathcal S$-image comparison
+tensors of the actual blocked path. Each tensor in this family is simple and
+carries its own datum, independently of which comparisons a later proof uses.
+No symmetry operation is assumed to preserve source data automatically.
 
 With this convention, admissible equivalence implies equality of the index.
 The converse is claimed only when the standard-form interpolation is supplied
@@ -213,6 +212,11 @@ with an admissible path datum. The standard-form path criterion and the phase
 classification use the same restricted relation. In particular, no ordinary
 strict-equivalence or symmetry-equivalence path is silently promoted to an
 admissible one.
+
+For a time-reversal-invariant tensor $\mathcal U$, write $\mathcal U_k$ for
+its actual $k$-site block and $\mathcal U_k^\sharp$ for the physical-adjoint
+comparison tensor of that block. Let $\sigma^{(k)}\in\{\pm1\}$ be the sign in
+the local time-reversal relation for a standard form of $\mathcal U_k$.
 
 The source proofs of the time-reversal and transposition characterizations
 apply the fundamental theorem after blocking two sites. Every such statement

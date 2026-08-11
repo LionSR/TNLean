@@ -3878,9 +3878,13 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
       ambient bond space. Theorem~\ref{thm:mpu_reduced_cfii_transfer_stabilization}
       supplies the fixed pair with $J=D^2-1$.
   \end{enumerate}
-  This definition does not assert that an arbitrary representative with
-  $D>1$ admits the required canonical-form-II data and does not replace
-  $\mathcal U$ by another tensor.
+  For $D>1$, this packages the fixed-pair convention in
+  \cite[equations labelled~\texttt{Erightleft} and~\texttt{II\_UTransfer}, and
+  proof of Proposition~III.2(ii)]{Cirac2017MPU}. The $D=1$ branch is the direct
+  one-dimensional specialization. This definition does not assert that an
+  arbitrary representative with $D>1$ admits the required canonical-form-II
+  data and does not replace $\mathcal U$ by another tensor.
+  % Source lines: paper_v2.tex 269--280 and 397--405.
 \end{definition}
 
 \begin{theorem}[Complete source-$u$ network contraction]
@@ -4330,12 +4334,18 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
   equivalent or reduced representative may replace $\mathcal W(p)_m$. In
   particular, the actual blocked endpoint tensors carry their own source data.
 
-  When the path is used under a symmetry, the datum also includes continuously
-  varying reduced full-support source data for every transformed comparison
-  tensor to which the fundamental theorem is applied. These are the conjugate,
-  physical-adjoint, transposed, or more general symmetry-image tensors required
-  by the argument, blocked at the same length. The transformed blocked tensors
-  themselves are simple; no preservation under the transformation is assumed.
+  When the path is used under a specified symmetry $\mathcal S$, the datum also
+  includes continuously varying reduced full-support source data for the fixed
+  family of comparison paths
+  \begin{align}
+    \overline{\mathcal W(p)_m},\qquad
+    \mathcal W(p)_m^\sharp,\qquad
+    \mathcal W(p)_m^{\mathsf T},\qquad
+    \mathcal S[\mathcal W(p)_m].
+  \end{align}
+  Every tensor in this family is simple. This requirement is part of the datum
+  independently of which comparisons a later proof uses; no preservation under
+  conjugation, physical adjoint, transposition, or $\mathcal S$ is assumed.
 
   Two tensors are admissibly strictly equivalent if their strict equivalence
   is witnessed by such a path. They are admissibly equivalent if the blocked,
@@ -4371,9 +4381,21 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     lem:mpu_index_composition,def:equivalent-tensors,
     def:mpu_admissible_equivalence_datum,prop:continuity-index,SF,
     FundamentalMPU,def:mpu_reduced_full_support_source_datum}
-  On the class of tensors and operations carrying the source data specified in
-  Definition~\ref{def:mpu_admissible_equivalence_datum}, the MPU index has the
-  following properties.
+  Assume the following operation-specific admissibility hypotheses. Every pair
+  of simple blockings compared for blocking independence carries reduced
+  full-support source data. For a tensor product $\mathcal U\otimes\mathcal V$,
+  there is one positive length $k$ such that $\mathcal U_k$, $\mathcal V_k$,
+  and $(\mathcal U\otimes\mathcal V)_k$ are simple and carry their own data.
+  For a composition tensor $\mathcal W$ of $\mathcal U$ and $\mathcal U'$, there
+  is one positive length $k$ such that
+  \begin{align}
+    \mathcal U_k,\quad \mathcal U'_k,\quad \mathcal W_k,\quad
+    \mathcal U_{2k},\quad \mathcal U'_{2k},\quad \mathcal W_{4k}
+  \end{align}
+  are simple and carry their own data. Continuous-deformation and equivalence
+  claims use the path data of
+  Definition~\ref{def:mpu_admissible_equivalence_datum}. Under these
+  hypotheses, the MPU index has the following properties.
   \begin{enumerate}
     \item It does not change under blocking.
     \item It is additive under tensor products and composition.
@@ -4558,9 +4580,9 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
   \end{align}
   for every $p\in[0,1]$ and every chain length $N$ under consideration. The
   path need not be in canonical form. The equivalence is admissible if its
-  witnessing path carries an admissible equivalence datum for both the actual
-  blocked path tensor and every conjugate, physical-adjoint, transposed, or
-  other symmetry-image comparison tensor used along the path.
+  witnessing path carries an admissible equivalence datum for the actual
+  blocked path tensor and the fixed conjugate, physical-adjoint, transposed,
+  and $\mathcal S$-image comparison paths.
 \end{definition}
 
 \begin{definition}[Equivalence under a symmetry]
@@ -4576,8 +4598,8 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
   $(\mathcal V^{(p_b)})_k$ are strictly equivalent under $\mathcal S$. Thus
   the ancillas are attached before the common blocking. The equivalence is
   admissible if this strict-equivalence witness carries an admissible
-  equivalence datum for the actual blocked path and every transformed
-  comparison path tensor used by the symmetry argument.
+  equivalence datum for the actual blocked path and the fixed conjugate,
+  physical-adjoint, transposed, and $\mathcal S$-image comparison paths.
 \end{definition}
 
 \begin{lemma}[Standard-form path criterion]
@@ -4591,13 +4613,14 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
   \uses{def:strictly-equivalent-symmetry,coruvSF,FundamentalMPU,
     def:mpu_admissible_equivalence_datum}
   Two MPUs $U_1^{(N)}$ and $U_2^{(N)}$ described by admissible simple tensors
-  are admissibly strictly equivalent under $\mathcal S$ if and only if there
-  are continuous families of unitaries $\widetilde u(p)$ and
-  $\widetilde v(p)$ whose endpoints generate $U_1^{(N)}$ and $U_2^{(N)}$,
-  whose generated MPU is invariant under $\mathcal S$ for every $p\in[0,1]$,
-  and whose actual blocked tensor path and every transformed comparison path
-  tensor carry the continuously varying source data of an admissible
-  equivalence datum.
+  are admissibly strictly equivalent under $\mathcal S$ through a witness whose
+  common blocking length $m$ satisfies $m\leq D^4$ if and only if there are
+  continuous families of unitaries $\widetilde u(p)$ and $\widetilde v(p)$
+  whose endpoints generate $U_1^{(N)}$ and $U_2^{(N)}$, whose generated MPU is
+  invariant under $\mathcal S$ for every $p\in[0,1]$, and whose actual blocked
+  tensor path and the fixed conjugate, physical-adjoint, transposed, and
+  $\mathcal S$-image comparison paths carry the continuously varying source
+  data of an admissible equivalence datum with the same length $m\leq D^4$.
 \end{lemma}
 
 \begin{theorem}[Conjugation symmetry when one source rank is odd]
