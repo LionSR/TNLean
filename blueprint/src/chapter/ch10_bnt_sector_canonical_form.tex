@@ -1052,8 +1052,24 @@ give $O_{YX}(N)\to 0$, a contradiction.
     dimensions gives (\ref{eq:prepared_exact_total_dim}).
 \end{proof}
 
-\begin{lemma}[Positive-length MPVs under coisometric reconstruction]%
-    \label{lem:coisometry_reconstruction_same_mpv_pos}
+\begin{lemma}[Gauge equivalence of weighted block sums]%
+    \label{lem:sector_bnt_gauge_equiv_from_block_gauge}
+    \lean{MPSTensor.gaugeEquiv_toTensorFromBlocks_of_blockGauge}
+    \leanok
+    \uses{def:block_diagonal_tensor, def:gauge_equiv}
+    Suppose two block families have the same weights and corresponding blocks
+    are gauge equivalent. Then their weighted block-diagonal tensors are gauge
+    equivalent.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{lem:tensor_from_blocks_globalGauge_conj, def:global_gauge_of_blocks}
+    Assemble the block gauges into a block-diagonal invertible matrix and apply
+    it simultaneously to every physical letter.
+\end{proof}
+
+\begin{theorem}[Positive-length MPVs under coisometric reconstruction]%
+    \label{thm:coisometry_reconstruction_same_mpv_pos}
     \lean{MPSTensor.sameMPV₂Pos_of_coisometry_reconstruction}
     \leanok
     \uses{def:same_mpv2_pos}
@@ -1061,7 +1077,7 @@ give $O_{YX}(N)\to 0$, a contradiction.
     Suppose that $U$ satisfies $UU^\dagger=\Id$ and
     $A^i=U^\dagger B^iU$ for every physical index $i$. Then $A$ and $B$
     generate the same matrix product vectors at every positive length.
-\end{lemma}
+\end{theorem}
 
 \begin{proof}\leanok
     \uses{def:mpv}
@@ -1093,11 +1109,11 @@ give $O_{YX}(N)\to 0$, a contradiction.
 
 \begin{proof}\leanok
     \uses{thm:cpsv_active_sector_bnt_exact,
-        lem:coisometry_reconstruction_same_mpv_pos,
+        thm:coisometry_reconstruction_same_mpv_pos,
         thm:gauge_invariance}
     Apply Theorem~\ref{thm:cpsv_active_sector_bnt_exact}. Its reconstruction
     writes $A^i=U^\dagger B^iU$, where $UU^\dagger=\Id$ and
-    $B^i=XP^iX^{-1}$. Lemma~\ref{lem:coisometry_reconstruction_same_mpv_pos}
+    $B^i=XP^iX^{-1}$. Theorem~\ref{thm:coisometry_reconstruction_same_mpv_pos}
     shows that $A$ and $B$ generate the same matrix product vectors at every
     positive length. Theorem~\ref{thm:gauge_invariance} gives the same conclusion
     for $B$ and $P$. Transitivity yields $\mc{V}^+(A)=\mc{V}^+(P)$, while the
@@ -1131,7 +1147,7 @@ give $O_{YX}(N)\to 0$, a contradiction.
 \begin{proof}\leanok
     \uses{thm:cpsv_exact_active_reconstruction,
         thm:cpsv_normal_tp_gauge,
-        lem:gauge_equiv_from_block_gauge,
+        lem:sector_bnt_gauge_equiv_from_block_gauge,
         thm:paperbnt_supplier_prepared_exact}
     By Theorem~\ref{thm:cpsv_exact_active_reconstruction}, the original tensor
     has the exact active reconstruction
