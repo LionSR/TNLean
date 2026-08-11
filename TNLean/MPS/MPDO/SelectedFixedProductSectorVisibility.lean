@@ -163,10 +163,8 @@ theorem changePhysicalBasis_apply_ne_eq_zero_of_mpo_two_eq_smul
     F.changePhysicalBasis_physicalCoordinateMatrix_isInjective hK
   change M (F.sectorFinEquiv.symm ⟨k, x⟩)
     (F.sectorFinEquiv.symm ⟨h, y⟩) = 0
-  apply (LinearMap.ker_eq_bot'.1
-    (MPSTensor.traceMulRightPi_ker_eq_bot hM))
-  funext p
-  rw [MPSTensor.traceMulRightPi_apply, Pi.zero_apply]
+  apply MPSTensor.eq_zero_of_forall_trace_mul_right_eq_zero hM
+  intro p
   set u := p.divNat
   set v := p.modNat
   change Matrix.trace
@@ -209,10 +207,8 @@ theorem changePhysicalBasis_apply_eq_zero_of_not_isCyclicActiveSector
     F.changePhysicalBasis_physicalCoordinateMatrix_isInjective hK
   change M (F.sectorFinEquiv.symm ⟨k, x⟩)
     (F.sectorFinEquiv.symm ⟨k, y⟩) = 0
-  apply (LinearMap.ker_eq_bot'.1
-    (MPSTensor.traceMulRightPi_ker_eq_bot hM))
-  funext p
-  rw [MPSTensor.traceMulRightPi_apply, Pi.zero_apply]
+  apply MPSTensor.eq_zero_of_forall_trace_mul_right_eq_zero hM
+  intro p
   set u := p.divNat
   set v := p.modNat
   change Matrix.trace
@@ -257,10 +253,8 @@ theorem changePhysicalBasis_mul_eq_zero_of_neighboringOperator_eq_zero
   let M := changePhysicalBasis F.physicalCoordinateMatrix K
   have hM : M.IsInjective :=
     F.changePhysicalBasis_physicalCoordinateMatrix_isInjective hK
-  apply (LinearMap.ker_eq_bot'.1
-    (MPSTensor.traceMulRightPi_ker_eq_bot hM))
-  funext p
-  rw [MPSTensor.traceMulRightPi_apply, Pi.zero_apply]
+  apply MPSTensor.eq_zero_of_forall_trace_mul_right_eq_zero hM
+  intro p
   set u := p.divNat
   set v := p.modNat
   change Matrix.trace
