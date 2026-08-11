@@ -4029,7 +4029,9 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
   \begin{align}
     u^\dagger u&=\Id.
   \end{align}
-  Consequently $u$ is an isometry and $r\ell\geq d^2$.
+  Consequently $u$ is an isometry and $r\ell\geq d^2$. This is the
+  reduced-source version of \cite[Lemma~III.7]{Cirac2017MPU}.
+  % Source lines: paper_v2.tex 545--557.
 \end{lemma}
 
 \begin{proof}
@@ -4090,6 +4092,9 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     \item $u$ is unitary;
     \item $v$ is unitary.
   \end{enumerate}
+  This is the reduced-source version of
+  \cite[Theorem~III.8]{Cirac2017MPU}.
+  % Source lines: paper_v2.tex 563--601.
 \end{theorem}
 
 \begin{proof}
@@ -5098,6 +5103,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
   \uses{thm:mpu_admissible_conjugation_odd_rank,
     thm:mpu_admissible_conjugation_even_rank,
     prop:mpu_admissible_conjugation_standard_forms,
+    thm:mpu_source_cut_rank_blocking,
     def:mpu_admissible_symmetry_equivalence,
     def:mpu_admissible_equivalence_datum,
     def:mpu_reduced_full_support_source_datum}
@@ -5116,14 +5122,23 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
   \uses{thm:mpu_admissible_conjugation_odd_rank,
     thm:mpu_admissible_conjugation_even_rank,
     prop:mpu_admissible_conjugation_standard_forms,
+    thm:mpu_source_cut_rank_blocking,
     def:mpu_admissible_symmetry_equivalence}
-  If either $r$ or $\ell$ is odd, only Case I can occur. After one blocking,
-  the endpoint determinants satisfy
+  Suppose first that either $r$ or $\ell$ is odd. Then both original
+  endpoints lie in Case I. After one blocking, write $r^{(2)}$ and
+  $\ell^{(2)}$ for the blocked source ranks. Rank scaling gives
+  \begin{align}
+    r^{(2)}&=dr,
+  \end{align}
+  and
+  \begin{align}
+    \ell^{(2)}&=d\ell.
+  \end{align}
+  For each endpoint,
   \begin{align}
     \det(u_i^{(2)}v_i^{(2)})&=\det(u_iv_i)^{2r\ell}=1.
   \end{align}
-  The odd-rank theorem therefore gives one admissible equivalence class, namely
-  Case I. If $r$ and $\ell$ are both even, one blocking gives
+  Moreover,
   \begin{align}
     \det(u_i^{(2)})&=(\det(u_i)^2\det(v_i))^{r\ell}=1,
   \end{align}
@@ -5131,10 +5146,19 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
   \begin{align}
     \det(v_i^{(2)})&=\det(v_i)^{r\ell}=1.
   \end{align}
-  Blocking preserves Case I and Case II. The even-rank theorem then shows that
-  the blocked endpoints are admissibly strictly equivalent exactly when they
-  belong to the same case. This is precisely admissible equivalence of the
-  original endpoints.
+  Blocking preserves Case I. If either $r^{(2)}$ or $\ell^{(2)}$ is odd, the
+  odd-rank theorem applied to the blocked endpoints gives admissible strict
+  equivalence. If both blocked ranks are even, the even-rank theorem applies
+  instead; the preserved Case I condition and the two separate determinant
+  identities again give admissible strict equivalence. Thus the odd-source-rank
+  branch has a single admissible equivalence class without imposing a parity
+  condition on the blocked ranks.
+
+  If $r$ and $\ell$ are both even, the blocked ranks remain even. The same two
+  separate determinant identities hold, and blocking preserves Case I and
+  Case II. The even-rank theorem therefore shows that the blocked endpoints are
+  admissibly strictly equivalent exactly when they belong to the same case.
+  This is precisely admissible equivalence of the original endpoints.
 \end{proof}
 
 \begin{lemma}[Trace formula for the time-reversal sign]
