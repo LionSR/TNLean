@@ -3,7 +3,8 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.MPS.FundamentalTheorem.SectorBNT.CanonicalFormEqual
+import TNLean.MPS.FundamentalTheorem.SectorBNT.CanonicalFormBridge
+import TNLean.MPS.FundamentalTheorem.SectorBNT.FundamentalCoord
 import TNLean.MPS.SharedInfra.CoisometryGauge
 
 /-!
@@ -61,7 +62,8 @@ retain only the nonzero-weight blocks, while the ambient lifting aligns their po
 coisometric inclusions.
 
 This theorem is explicitly homogeneous in the ambient dimension `D`; it makes no heterogeneous
-ambient-dimension claim.
+ambient-dimension claim. The ambient lifting is a project-derived corollary of the cited active
+fundamental theorem and the coisometry-alignment lemma.
 
 Source: arXiv:2011.12127v2, lines 1831--1906; arXiv:1606.00608, lines 237--301 and
 1135--1199. -/
@@ -81,14 +83,16 @@ theorem fundamentalTheorem_equal_ambient_canonicalForm
     (XA : Matrix _ _ ℂ) * P.toTensor i * (↑(XA⁻¹) : Matrix _ _ ℂ)
   let E : MPSTensor d Q.totalDim := fun i =>
     (XB : Matrix _ _ ℂ) * Q.toTensor i * (↑(XB⁻¹) : Matrix _ _ ℂ)
+  have hGaugePC : GaugeEquiv P.toTensor C := ⟨XA, fun _ => rfl⟩
+  have hGaugeQE : GaugeEquiv Q.toTensor E := ⟨XB, fun _ => rfl⟩
   have hAC : SameMPV₂Pos A C :=
     sameMPV₂Pos_of_coisometry_reconstruction A C UA hUA hRecA
   have hBE : SameMPV₂Pos B E :=
     sameMPV₂Pos_of_coisometry_reconstruction B E UB hUB hRecB
   have hPC : SameMPV₂Pos P.toTensor C :=
-    fun N _hN w => GaugeEquiv.sameMPV ⟨XA, fun _ => rfl⟩ N w
+    fun N _hN w => GaugeEquiv.sameMPV hGaugePC N w
   have hQE : SameMPV₂Pos Q.toTensor E :=
-    fun N _hN w => GaugeEquiv.sameMPV ⟨XB, fun _ => rfl⟩ N w
+    fun N _hN w => GaugeEquiv.sameMPV hGaugeQE N w
   have hPQ : SameMPV₂Pos P.toTensor Q.toTensor :=
     hPC.trans (hAC.symm.trans (hEqual.trans (hBE.trans hQE.symm)))
   obtain ⟨hTotal, Y, hGauge⟩ :=
@@ -113,12 +117,10 @@ theorem fundamentalTheorem_equal_ambient_canonicalForm
         _ = cast hm (P.toTensor i) := by rw [hp]
     rw [hPi]
     exact hGauge i
-  have hP'C' : GaugeEquiv P' C' := by
-    exact gaugeEquiv_cast_dim hTotal
-      (⟨XA, fun _ => rfl⟩ : GaugeEquiv P.toTensor C)
+  have hP'C' : GaugeEquiv P' C' :=
+    gaugeEquiv_cast_dim hTotal hGaugePC
   have hCE : GaugeEquiv C' E :=
-    hP'C'.symm.trans (hP'Q.trans
-      (⟨XB, fun _ => rfl⟩ : GaugeEquiv Q.toTensor E))
+    hP'C'.symm.trans (hP'Q.trans hGaugeQE)
   have hUA' : UA' * UA'ᴴ = 1 :=
     coisometry_cast_rows hTotal UA hUA
   have hRecA' : ∀ i, A i = UA'ᴴ * C' i * UA' :=
