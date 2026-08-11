@@ -78,8 +78,7 @@ theorem sourceYTensor_mul_sourceZTensor
     sourceY₁_mul_sourceZ₁, sourceY₂_mul_sourceZ₂, Matrix.one_kronecker_one]
 
 /-- Regroup the two source-cut output indices into the two physical indices
-and the canonically flattened pair of virtual indices.  No nested product type
-is identified definitionally.
+and the canonically flattened pair of virtual indices.
 
 Source: arXiv:1703.09188, equation `vUnitary`, lines 577--588. -/
 def sourceVRegroupEquiv :
