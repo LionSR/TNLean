@@ -5,10 +5,8 @@ This appendix supports Chapter~\ref{ch:channel_asymptotics}. It proves the
 positivity, trace-preservation, unitality, and trace-adjoint properties of the
 mean-ergodic projections used there, together with the weighted-trace and
 idempotent-retraction results used for fixed-point algebras and Choi--Effros
-absorption. It also records the Gram-matrix unitary-extension criterion used
-in the Stinespring construction of
-Chapter~\ref{ch:channel_representations} and its zero-extension consequence
-for the fixed-point decomposition.
+absorption. It also records the zero-extension consequence of the Gram-matrix
+unitary criterion for the fixed-point decomposition.
 
 \section{Preservation under the mean-ergodic projection}
 
@@ -233,45 +231,12 @@ projected product, and the symmetric identity equates them.
 
 The fixed-point decomposition uses an ambient unitary to identify an isometric
 support inclusion with a standard direct summand. The Gram-matrix criterion
-below supplies this unitary and also serves the Stinespring-unitary construction
-in Chapter~\ref{ch:channel_representations},
+of Lemma~\ref{lem:exists_unitary_mul_eq_of_gram_eq} supplies this unitary and
+also serves the Stinespring-unitary construction in
+Chapter~\ref{ch:channel_representations},
 Theorem~\ref{thm:channel_exists_stinespring_open_system_unitary}. Its
 zero-extension consequence completes the fixed-point decomposition in
 Theorem~\ref{thm:wolf_6_14}.
-
-\begin{lemma}[Rectangular Gram equality gives a unitary]
-    \label{lem:exists_unitary_mul_eq_of_gram_eq}
-    \lean{Matrix.exists_unitary_mul_eq_of_conjTranspose_mul_eq}
-    \leanok
-    \uses{}
-    Let $A,B:\C^n\to\C^m$ be linear maps with
-    $B^\dagger B=A^\dagger A$. Then there is a unitary
-    $U$ on $\C^m$ such that $B=UA$.
-\end{lemma}
-
-\begin{proof}
-    \leanok
-    Let $\mathcal R_A=\operatorname{ran}A$ and
-    $\mathcal R_B=\operatorname{ran}B$. Define
-    $V:\mathcal R_A\to\mathcal R_B$ by $V(Ax)=Bx$. This is well defined:
-    if $Ax=Ay$, then
-    \begin{align}
-        \lVert B(x-y)\rVert^2
-         & =\langle x-y,B^\dagger B(x-y)\rangle
-        =\langle x-y,A^\dagger A(x-y)\rangle
-        =\lVert A(x-y)\rVert^2=0.
-        \notag
-    \end{align}
-    The same calculation, with two vectors and polarization, gives
-    $\langle V(Ax),V(Ay)\rangle=\langle Ax,Ay\rangle$. Thus $V$ is an
-    isometry onto $\mathcal R_B$. In particular,
-    $\dim\mathcal R_A=\dim\mathcal R_B$, so their orthogonal complements
-    in $\C^m$ have equal dimension. Choose a unitary
-    $V^\perp:\mathcal R_A^\perp\to\mathcal R_B^\perp$ and set
-    $U=V\oplus V^\perp$ with respect to the two orthogonal decompositions of
-    $\C^m$. Then $U$ is unitary and $UAx=Bx$ for every $x\in\C^n$; hence
-    $B=UA$.
-\end{proof}
 
 \begin{theorem}[Unitary completion of an isometric inclusion]
     \label{thm:isometric_inclusion_zero_extension}
