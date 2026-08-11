@@ -7,7 +7,7 @@ import TNLean.Algebra.HermitianHelpers
 import TNLean.Algebra.OrthogonalProjection
 import TNLean.Channel.FixedPoint.MaximalSupportBasic
 import TNLean.Channel.FixedPoint.StationaryProjection
-import TNLean.Channel.Spectral.Support
+import TNLean.Analysis.SupportCompression
 
 /-!
 # Restriction to the support of a stationary positive matrix
