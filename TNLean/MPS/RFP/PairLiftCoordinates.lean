@@ -15,8 +15,6 @@ the Kronecker product of the two-site matrix with the identity, and the
 final-pair lift is the identity Kronecker the two-site matrix.
 -/
 
-open scoped Matrix BigOperators Kronecker
-
 namespace MPSTensor
 
 variable {d : ℕ}
