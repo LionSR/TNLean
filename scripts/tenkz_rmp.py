@@ -1854,8 +1854,11 @@ def working_directory() -> Iterator[Path]:
             yield Path(temporary)
         return
     work = Path(raw).resolve()
-    if work.exists() and any(work.iterdir()):
-        fail(f"TENKZ_RMP_WORK_ROOT must name a new or empty directory: {work}")
+    if work.exists():
+        if not work.is_dir():
+            fail(f"TENKZ_RMP_WORK_ROOT must name a directory, not a file: {work}")
+        if any(work.iterdir()):
+            fail(f"TENKZ_RMP_WORK_ROOT must name a new or empty directory: {work}")
     work.mkdir(parents=True, exist_ok=True)
     yield work
 
