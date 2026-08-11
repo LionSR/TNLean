@@ -730,37 +730,26 @@ form by quotienting gauge-phase-equivalent blocks into sectors.
     \label{thm:paperbnt_collapsed_prepared}
     \lean{MPSTensor.isBNTCanonicalForm_collapsedBntSectorDecomp_of_tp_primitive_irr_blocks}
     \leanok
-    \uses{def:mpv_phase_class_data, def:sector_bnt_cf,
-        thm:normal_tp_primitive_irred, thm:cpsv_normal_mpv_phase_gauge,
-        lem:sector_bnt_cross_overlap_basis_tendsto_zero}
+    \uses{def:mpv_phase_class_data, def:sector_bnt_cf}
     Let $(B_k)_{k=1}^r$ have positive bond dimensions and suppose that every
-    $B_k$ is trace-preserving, primitive, and irreducible. Let the weights
-    satisfy
-    \begin{align}
-        \mu_k&\ne0,
-        &|\mu_k|&\le1,
-        &\exists k_*,\ |\mu_{k_*}|&=1.
-        \notag
-    \end{align}
-    Partition the blocks into matrix-product-vector phase classes, choose one
+    $B_k$ is trace-preserving, primitive, and irreducible. Assume
+    $\mu_k\ne0$ and $|\mu_k|\le1$ for every $k$, and
+    $|\mu_{k_*}|=1$ for some $k_*$. Partition the blocks into
+    matrix-product-vector phase classes, choose one
     representative from each class, and retain every class member as a copy of
     its representative with the corresponding phase-adjusted weight. The
     resulting sector decomposition is in BNT canonical form.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{def:mpv_phase_class_data, def:sector_bnt_cf,
-        thm:normal_tp_primitive_irred, thm:cpsv_normal_mpv_phase_gauge,
-        lem:sector_bnt_cross_overlap_basis_tendsto_zero}
-    Trace preservation, primitivity, and irreducibility make every block
-    normal. Phase-equivalent blocks consequently have equal bond dimension,
-    and their phase scalar has unit modulus. Thus the phase adjustment preserves
-    the modulus of each weight. Distinct representatives are not
-    gauge-phase equivalent, their self-overlaps converge to $1$, and their
-    cross-overlaps tend to $0$. The resulting representative family is
-    eventually linearly independent, while the assumed weight bounds and the
-    maximizing block give the two normalization conditions in
-    Definition~\ref{def:sector_bnt_cf}.
+    \uses{def:mpv_phase_class_data, def:sector_bnt_cf}
+    The chosen representatives inherit irreducibility and trace preservation,
+    while primitivity gives normalized self-overlap. Distinct phase classes
+    give gauge-phase-distinct representatives. The collapsed phase-class
+    construction supplies the eventual linear independence and retains every
+    original block as one copy. Its phase multipliers have unit modulus, so the
+    adjusted weights preserve the assumed bounds and unit witness. These are
+    precisely the fields of Definition~\ref{def:sector_bnt_cf}.
 \end{proof}
 
 \begin{theorem}[BNT from normal blocks with normalized weights]%
