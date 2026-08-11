@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import TNLean.MPS.CanonicalForm.ActiveBlocks
 import TNLean.MPS.CanonicalForm.BNTCharacterization
 import TNLean.MPS.SharedInfra.BlockGauge
 
@@ -35,26 +36,6 @@ namespace MPSTensor
 variable {d D : ℕ} {A : MPSTensor d D}
 
 namespace CPSVCanonicalFormData
-
-/-- A finite enumeration of the nonzero-weight displayed blocks. -/
-noncomputable def activeEquiv (data : CPSVCanonicalFormData A) :
-    Fin (Fintype.card data.Active) ≃ data.Active :=
-  (Fintype.equivFin data.Active).symm
-
-/-- Bond dimensions of the enumerated active blocks. -/
-noncomputable def activeDim (data : CPSVCanonicalFormData A) :
-    Fin (Fintype.card data.Active) → ℕ :=
-  fun k => data.dim (data.activeEquiv k)
-
-/-- Weights of the enumerated active blocks. -/
-noncomputable def activeWeight (data : CPSVCanonicalFormData A) :
-    Fin (Fintype.card data.Active) → ℂ :=
-  fun k => data.weights (data.activeEquiv k)
-
-/-- Normal tensors of the enumerated active blocks. -/
-noncomputable def activeBlocks (data : CPSVCanonicalFormData A) :
-    (k : Fin (Fintype.card data.Active)) → MPSTensor d (data.activeDim k) :=
-  fun k => data.blocks (data.activeEquiv k)
 
 /-- MPV phase classes of the active canonical-form blocks. -/
 noncomputable def activePhaseClasses (data : CPSVCanonicalFormData A) :

@@ -385,6 +385,66 @@ the coefficient argument of Chapter~\ref{ch:bnt}.
     Definition~\ref{def:bnt}; it is not part of canonical form itself.
 \end{definition}
 
+\begin{theorem}[Removing zero-weight blocks at positive length]%
+    \label{thm:cpsv_remove_zero_weight_blocks}
+    \lean{MPSTensor.sameMPV₂Pos_toTensorFromBlocks_active}
+    \leanok
+    \uses{def:same_mpv2_pos, def:block_diagonal_tensor,
+        thm:mpv_decomposition}
+    Let $(A_k)_{k=1}^r$ be blocks with weights $(\mu_k)_{k=1}^r$, and put
+    $K_{\mathrm{act}}=\{k:\mu_k\ne0\}$. Then the full weighted direct sum and
+    the direct sum over $K_{\mathrm{act}}$ have the same matrix product vectors
+    at every positive length. Equivalently, for $N>0$ and every configuration
+    $\sigma$,
+    \begin{align}
+        \sum_{k=1}^r \mu_k^N V^{(N)}(A_k)_\sigma
+        &=\sum_{k\in K_{\mathrm{act}}}
+            \mu_k^N V^{(N)}(A_k)_\sigma.
+        \label{eq:cpsv_remove_zero_weight_blocks}
+    \end{align}
+    The restriction to positive lengths is essential: at length zero, a
+    zero-weight block contributes through $\mu_k^0=1$.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpv_decomposition}
+    Expand both matrix product vectors using
+    Theorem~\ref{thm:mpv_decomposition}. If $\mu_k=0$ and $N>0$, then
+    $\mu_k^N=0$. The inactive part of the finite sum therefore vanishes, and
+    reindexing the remaining terms by $K_{\mathrm{act}}$ gives
+    (\ref{eq:cpsv_remove_zero_weight_blocks}).
+\end{proof}
+
+\begin{theorem}[Active part of CPSV canonical form]%
+    \label{thm:cpsv_canonical_form_active_blocks}
+    \lean{MPSTensor.CPSVCanonicalFormData.activeEquiv,
+        MPSTensor.CPSVCanonicalFormData.activeDim,
+        MPSTensor.CPSVCanonicalFormData.activeWeight,
+        MPSTensor.CPSVCanonicalFormData.activeBlocks}
+    \lean{MPSTensor.CPSVCanonicalFormData.sameMPV₂Pos_activeBlocks}
+    \leanok
+    \uses{def:cpsv_canonical_form, thm:cpsv_remove_zero_weight_blocks}
+    Let $A$ have canonical-form data as in~(\ref{eq:cpsv_canonical_form}), and
+    put $K_{\mathrm{act}}=\{k:\mu_k\ne0\}$. Then
+    \begin{align}
+        \mc{V}^+(A)
+        &=\mc{V}^+\!\left(
+            \bigoplus_{k\in K_{\mathrm{act}}}\mu_kA_k\right).
+        \label{eq:cpsv_active_blocks_same_mpv}
+    \end{align}
+    This conclusion uses no weight normalization. The bounds and unit-modulus
+    condition in~(\ref{eq:cpsv_weight_normalization}) remain separate
+    assumptions on the canonical-form data.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:cpsv_canonical_form, thm:cpsv_remove_zero_weight_blocks}
+    The canonical-form reconstruction first identifies the positive-length
+    matrix product vectors of $A$ with those of the full weighted block sum.
+    Theorem~\ref{thm:cpsv_remove_zero_weight_blocks} then removes precisely the
+    zero-weight summands.
+\end{proof}
+
 \begin{theorem}[Physical relabeling preserves CPSV normal and canonical form]
     \label{thm:cpsv_physical_reindexing}
     \lean{MPSTensor.IsNormalTensor.reindexPhysical}

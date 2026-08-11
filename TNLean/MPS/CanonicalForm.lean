@@ -9,6 +9,7 @@ Authors: TNLean contributors
 -- Generated aggregator module: TNLean.MPS.CanonicalForm
 
 import TNLean.MPS.CanonicalForm.ActiveBNTRefinement
+import TNLean.MPS.CanonicalForm.ActiveBlocks
 import TNLean.MPS.CanonicalForm.BNTCharacterization
 import TNLean.MPS.CanonicalForm.BNTExistence
 import TNLean.MPS.CanonicalForm.BNTGrouping

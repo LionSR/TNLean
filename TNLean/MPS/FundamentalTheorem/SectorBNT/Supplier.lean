@@ -290,15 +290,14 @@ theorem collapsedBntSectorDecomp_totalDim_eq_sum_dim_of_tp_primitive_irr
 **Prepared-block SectorBNT constructor.**
 
 Given a finite family of TP, primitive, irreducible blocks with nonzero weights
-satisfying the SectorBNT normalization conditions, produce a
-`SectorDecomposition P` and a proof that `IsBNTCanonicalForm P` and the
-assembled tensor agrees with the original direct sum.
+satisfying the SectorBNT normalization conditions, the phase-class-collapsed
+sector decomposition is in BNT canonical form.
 
 Paper anchor: `Papers/1606.00608/MPDO-22-12-17-2.tex`, lines 271-279 and
 1135-1148 for prop:char-BNT, and lines 283-301 for the two-layer BNT/copy
 expansion.
 -/
-theorem exists_isBNTCanonicalForm_of_tp_primitive_irr_blocks
+theorem isBNTCanonicalForm_collapsedBntSectorDecomp_of_tp_primitive_irr_blocks
     {r : ℕ} {dim : Fin r → ℕ}
     (μ : Fin r → ℂ)
     (blocks : (k : Fin r) → MPSTensor d (dim k))
@@ -309,9 +308,7 @@ theorem exists_isBNTCanonicalForm_of_tp_primitive_irr_blocks
     (hμne : ∀ k, μ k ≠ 0)
     (hμLe : ∀ k, ‖μ k‖ ≤ 1)
     (hμUnit : ∃ k, ‖μ k‖ = 1) :
-    ∃ P : SectorDecomposition d,
-      SameMPV₂Pos P.toTensor (toTensorFromBlocks (d := d) (μ := μ) blocks) ∧
-      IsBNTCanonicalForm P := by
+    IsBNTCanonicalForm (collapsedBntSectorDecomp (d := d) μ blocks hμne) := by
   classical
   -- Promote `0 < dim k` to a `NeZero (dim k)` typeclass instance.
   haveI : ∀ k, NeZero (dim k) := fun k => ⟨(hDim k).ne'⟩
@@ -337,9 +334,6 @@ theorem exists_isBNTCanonicalForm_of_tp_primitive_irr_blocks
         (hPrim (classes.repr j)) (hPrim (classes.enum j q))
         (hIrr (classes.repr j)) (hIrr (classes.enum j q))
         hPE
-  -- Same-MPV with the original direct-sum tensor.
-  have hSame : SameMPV₂Pos P.toTensor (toTensorFromBlocks (d := d) (μ := μ) blocks) :=
-    collapsedBntSectorDecomp_sameMPV₂Pos (d := d) μ blocks hμne
   -- HasBNTSectorData.
   have hBNT : HasBNTSectorData (d := d) P :=
     collapsedBntSectorDecomp_hasBNT (d := d) μ blocks hTP hIrr hPrim hμne
@@ -392,7 +386,6 @@ theorem exists_isBNTCanonicalForm_of_tp_primitive_irr_blocks
     change ‖ζFn j q * μ (classes.enum j q)‖ = 1
     rw [hjq]
     rw [norm_mul, hζ_unit j q, one_mul, hk0]
-  refine ⟨P, hSame, ?_⟩
   exact
     { basis_dim_pos := h_dim_pos
       basis_irreducible := h_irr
@@ -402,6 +395,56 @@ theorem exists_isBNTCanonicalForm_of_tp_primitive_irr_blocks
       basis_distinct := h_distinct
       weight_norm_le_one := h_weight_le
       weight_unit_exists := h_weight_unit }
+
+/-- Prepared TP, primitive, irreducible blocks determine a BNT canonical-form sector
+decomposition with the same positive-length matrix product vectors.
+
+Source: arXiv:1606.00608, lines 237--301 and 1135--1148; arXiv:2011.12127,
+lines 1831--1885. -/
+theorem exists_isBNTCanonicalForm_of_tp_primitive_irr_blocks
+    {r : ℕ} {dim : Fin r → ℕ}
+    (μ : Fin r → ℂ)
+    (blocks : (k : Fin r) → MPSTensor d (dim k))
+    (hDim : ∀ k, 0 < dim k)
+    (hTP : ∀ k, IsLeftCanonical (blocks k))
+    (hPrim : ∀ k, _root_.IsPrimitive (transferMap (blocks k)))
+    (hIrr : ∀ k, IsIrreducibleTensor (blocks k))
+    (hμne : ∀ k, μ k ≠ 0)
+    (hμLe : ∀ k, ‖μ k‖ ≤ 1)
+    (hμUnit : ∃ k, ‖μ k‖ = 1) :
+    ∃ P : SectorDecomposition d,
+      SameMPV₂Pos P.toTensor (toTensorFromBlocks (d := d) (μ := μ) blocks) ∧
+      IsBNTCanonicalForm P := by
+  let P := collapsedBntSectorDecomp (d := d) μ blocks hμne
+  refine ⟨P, collapsedBntSectorDecomp_sameMPV₂Pos (d := d) μ blocks hμne, ?_⟩
+  exact isBNTCanonicalForm_collapsedBntSectorDecomp_of_tp_primitive_irr_blocks
+    μ blocks hDim hTP hPrim hIrr hμne hμLe hμUnit
+
+/-- Prepared TP, primitive, irreducible blocks determine a dimension-preserving BNT
+canonical-form sector decomposition.
+
+Source: arXiv:1606.00608, lines 237--301 and 1135--1148; arXiv:2011.12127,
+lines 1831--1885. -/
+theorem exists_isBNTCanonicalForm_of_tp_primitive_irr_blocks_and_totalDim
+    {r : ℕ} {dim : Fin r → ℕ}
+    (μ : Fin r → ℂ)
+    (blocks : (k : Fin r) → MPSTensor d (dim k))
+    (hDim : ∀ k, 0 < dim k)
+    (hTP : ∀ k, IsLeftCanonical (blocks k))
+    (hPrim : ∀ k, _root_.IsPrimitive (transferMap (blocks k)))
+    (hIrr : ∀ k, IsIrreducibleTensor (blocks k))
+    (hμne : ∀ k, μ k ≠ 0)
+    (hμLe : ∀ k, ‖μ k‖ ≤ 1)
+    (hμUnit : ∃ k, ‖μ k‖ = 1) :
+    ∃ P : SectorDecomposition d,
+      SameMPV₂Pos P.toTensor (toTensorFromBlocks (d := d) (μ := μ) blocks) ∧
+      IsBNTCanonicalForm P ∧ P.totalDim = ∑ k : Fin r, dim k := by
+  let P := collapsedBntSectorDecomp (d := d) μ blocks hμne
+  refine ⟨P, collapsedBntSectorDecomp_sameMPV₂Pos (d := d) μ blocks hμne, ?_, ?_⟩
+  · exact isBNTCanonicalForm_collapsedBntSectorDecomp_of_tp_primitive_irr_blocks
+      μ blocks hDim hTP hPrim hIrr hμne hμLe hμUnit
+  · exact collapsedBntSectorDecomp_totalDim_eq_sum_dim_of_tp_primitive_irr
+      μ blocks hDim hTP hPrim hIrr hμne
 
 /-! ### Arbitrary-input prepared-block supplier
 
