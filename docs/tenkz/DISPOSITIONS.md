@@ -62,7 +62,7 @@ separate public-surface occurrence and therefore appears separately.
 | Source | Preserve | Codemod | Redraw |
 |---|---|---|---|
 | `ch02_mps.tex` | L25, 56, 176, 208, 281, 865, 995 `tenkz` → `P-grid` | — | — |
-| `ch03_single.tex` | L251 `tenkz` → `P-grid` | — | — |
+| `ch03_single.tex` | L252 `tenkz` → `P-grid` | — | — |
 | `ch04_channels_choi_foundations.tex` | L87 `tenkz` → `P-grid` | — | — |
 | `ch11_fundamental_theorem_core.tex` | L42, 46 `tenkz` → `P-grid` | — | — |
 | `ch12_symmetry_string_order.tex` | L41, 80, 362, 367, 398, 404, 449, 455, 488, 493, 531, 537, 842, 847 `tenkz` → `P-grid` | — | — |
