@@ -436,8 +436,9 @@ abstracted — record why, so it is not re-proposed).
   map pointwise, and use `traceMulRightPi_ker_eq_bot` to conclude that the matrix is zero.
 - **Reuse:** `MPSTensor.eq_zero_of_forall_trace_mul_right_eq_zero` in
   `TNLean/Algebra/TracePairing.lean` accepts the pointwise vanishing trace pairings directly.
-- **Result:** the three public selected-sector visibility proofs retain their statements and
-  active-sector hypotheses while invoking the shared consequence of injectivity.
+- **Result:** the three public selected-sector visibility proofs and the injective invariant-
+  projection argument retain their statements while invoking the shared consequence of
+  injectivity.
 
 ### Matched BNT coefficient comparison with an eventual scalar
 - **Pattern:** expand both sector decompositions in MPV state space, substitute a full matched

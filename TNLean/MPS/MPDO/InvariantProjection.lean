@@ -410,11 +410,9 @@ theorem ketLeftMul_eq_braRightMul_of_commute_of_isInjective
       _ = firstSiteMatrix Q 1 * mpo M 2 * firstSiteMatrix Q 1 := by rw [Matrix.mul_assoc]
   funext a b
   show (M.ketLeftMul Q) a b = ((M.ketLeftMul Q).braRightMul Q) a b
-  refine sub_eq_zero.mp
-    ((LinearMap.ker_eq_bot'.1 (MPSTensor.traceMulRightPi_ker_eq_bot hInj))
-      ((M.ketLeftMul Q) a b - ((M.ketLeftMul Q).braRightMul Q) a b) ?_)
-  funext p
-  rw [MPSTensor.traceMulRightPi_apply, Pi.zero_apply]
+  apply sub_eq_zero.mp
+  apply MPSTensor.eq_zero_of_forall_trace_mul_right_eq_zero hInj
+  intro p
   change Matrix.trace
     (((M.ketLeftMul Q) a b - ((M.ketLeftMul Q).braRightMul Q) a b) * M p.divNat p.modNat) = 0
   set c := p.divNat
