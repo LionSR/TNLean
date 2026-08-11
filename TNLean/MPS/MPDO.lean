@@ -101,6 +101,7 @@ import TNLean.MPS.MPDO.CPSVVerticalDecomposition
 import TNLean.MPS.MPDO.CPSVVerticalProductCornerPositivity
 import TNLean.MPS.MPDO.CPSVVerticalProductFusionDecomposition
 import TNLean.MPS.MPDO.CPSVVerticalProductSpectralFamily
+import TNLean.MPS.MPDO.CaseIIAbsorptionCounterexample
 import TNLean.MPS.MPDO.CommonWeightAbsorbedBNTSupport
 import TNLean.MPS.MPDO.CommonWeightAbsorption
 import TNLean.MPS.MPDO.CommutingBondEtaBoundaryTrace

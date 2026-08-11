@@ -6,6 +6,7 @@ Authors: TNLean contributors
 import TNLean.Algebra.ComplexPhasePositivity
 import TNLean.MPS.CanonicalForm.Reduction
 import TNLean.MPS.Periodic.Defs
+import TNLean.Spectral.Radius
 
 /-!
 # Shared scaling lemmas for MPS tensors
@@ -14,7 +15,7 @@ This module collects the tensor-scaling identities that are used both by the
 canonical-form construction and by transfer-normalization arguments.
 -/
 
-open scoped Matrix ComplexOrder BigOperators
+open scoped Matrix ComplexOrder BigOperators Matrix.Norms.Operator
 
 namespace MPSTensor
 
@@ -26,6 +27,38 @@ theorem transferMap_smul (c : ℂ) (A : MPSTensor d D) (X : Matrix (Fin D) (Fin 
   simp only [transferMap_apply, Matrix.conjTranspose_smul]
   simp_rw [smul_mul_assoc, mul_smul_comm, smul_smul, ← Finset.smul_sum]
   rfl
+
+/-- The transfer spectral radius scales by the squared modulus of the tensor scalar. -/
+theorem spectralRadius_transferMap_smul [Nonempty (Fin D)]
+    (c : ℂ) (hc : c ≠ 0) (A : MPSTensor d D) :
+    spectralRadius ℂ
+        ((Module.End.toContinuousLinearMap (Matrix (Fin D) (Fin D) ℂ))
+          (transferMap (fun i => c • A i))) =
+      (ENNReal.ofNNReal ‖c‖₊) ^ 2 *
+        spectralRadius ℂ
+          ((Module.End.toContinuousLinearMap (Matrix (Fin D) (Fin D) ℂ))
+            (transferMap A)) := by
+  let E := (Module.End.toContinuousLinearMap (Matrix (Fin D) (Fin D) ℂ))
+    (transferMap A)
+  have hmap :
+      (Module.End.toContinuousLinearMap (Matrix (Fin D) (Fin D) ℂ))
+          (transferMap (fun i => c • A i)) =
+        (c * starRingEnd ℂ c) • E := by
+    apply ContinuousLinearMap.ext
+    intro X
+    change transferMap (fun i => c • A i) X =
+      (c * starRingEnd ℂ c) • transferMap A X
+    exact transferMap_smul c A X
+  rw [hmap]
+  change spectralRadius ℂ ((c * starRingEnd ℂ c) • E) =
+    (ENNReal.ofNNReal ‖c‖₊) ^ 2 * spectralRadius ℂ E
+  have hrad := spectralRadius_smul E
+    (c := c * starRingEnd ℂ c) (mul_ne_zero hc (star_ne_zero.mpr hc))
+  rw [hrad]
+  rw [nnnorm_mul]
+  have hcstar : ‖starRingEnd ℂ c‖₊ = ‖c‖₊ := by
+    exact nnnorm_star c
+  rw [hcstar, ENNReal.coe_mul, pow_two]
 
 /-- Unit-norm scaling preserves left-canonical normalization. -/
 theorem leftCanonical_smul_of_norm_one (c : ℂ) (hc : ‖c‖ = 1)
