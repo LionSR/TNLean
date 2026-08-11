@@ -24,7 +24,8 @@ letterwise reconstruction, not only equality of closed-chain coefficients.
   tensors.
 * `MPSTensor.CPSVCanonicalFormData.blockTensor`: literal canonical-form data
   block exactly.
-* `MPSTensor.CPSVCanonicalFormIIData.blockTensor`: canonical-form-II data block exactly.
+* `MPSTensor.CPSVCanonicalFormIIData.blockTensor`: blockwise canonical-form-II data block
+  exactly.
 * `MPSTensor.IsCPSVCanonicalForm.blockTensor`: positive blocking preserves
   literal CPSV canonical form.
 
@@ -273,10 +274,11 @@ end CPSVCanonicalFormData
 
 namespace CPSVCanonicalFormIIData
 
-/-- Literal CPSV canonical-form-II data are preserved by positive physical blocking.
+/-- Blockwise CPSV canonical-form-II data are preserved by positive physical blocking.
 
 Each fixed-point matrix remains positive definite and diagonal, and is fixed by the blocked transfer
-map because that map is the corresponding positive power of the original transfer map.
+map because that map is the corresponding positive power of the original transfer map. The same
+matrix is retained, so any separately supplied trace normalization is also unchanged.
 
 Source: arXiv:1703.09188, definition `blocking`, equation `MPUblock`, and line 356. -/
 noncomputable def blockTensor {A : MPSTensor d D}

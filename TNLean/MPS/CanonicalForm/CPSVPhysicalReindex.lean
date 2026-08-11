@@ -77,12 +77,12 @@ end CPSVCanonicalFormData
 
 namespace CPSVCanonicalFormIIData
 
-/-- Relabel the physical alphabet in literal CPSV canonical-form-II data.
+/-- Relabel the physical alphabet in blockwise CPSV canonical-form-II data.
 
 The fixed-point matrices are unchanged because a bijective physical relabeling leaves each block's
-transfer map unchanged.
+transfer map unchanged. In particular, any separately supplied trace normalization is unchanged.
 
-Source: arXiv:1703.09188, definition `blocking` and line 356; CFII is defined at lines 271--281. -/
+Source: arXiv:1703.09188, CFII definition at lines 271--281. -/
 noncomputable def reindexPhysical {A : MPSTensor d₂ D}
     (data : CPSVCanonicalFormIIData A) (e : Fin d₁ ≃ Fin d₂) :
     CPSVCanonicalFormIIData (MPSTensor.reindexPhysical e A) where
