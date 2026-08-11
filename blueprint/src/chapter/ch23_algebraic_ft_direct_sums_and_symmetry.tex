@@ -11,20 +11,6 @@ is obtained from BNT overlap, independence, and coefficient comparison; the
 corresponding global block-diagonal gauge is given by
 Theorem~\ref{thm:sector_bnt_equal_global_gauge}.
 
-\begin{lemma}[Gauge equivalence of direct sums from per-block gauge equivalence]%
-    \label{lem:gauge_equiv_from_block_gauge}
-    \lean{MPSTensor.gaugeEquiv_toTensorFromBlocks_of_blockGauge}\leanok
-    \uses{lem:tensor_from_blocks_globalGauge_conj, def:gauge_equiv}
-    If each pair $(A_k, B_k)$ is gauge equivalent, then the weighted
-    block-diagonal tensors $\bigoplus_k \mu_k A_k$ and
-    $\bigoplus_k \mu_k B_k$ are gauge equivalent.
-\end{lemma}
-
-\begin{proof}\leanok
-    Choose per-block gauge matrices via the hypothesis; then apply
-    Lemma~\ref{lem:tensor_from_blocks_globalGauge_conj}.
-\end{proof}
-
 \begin{lemma}[Gauge equivalence of direct sums with phase-weight absorption]%
     \label{lem:gauge_equiv_block_gauge_phase_weight}
     \lean{MPSTensor.gaugeEquiv_toTensorFromBlocks_of_blockGaugePhase_weight}\leanok

@@ -116,6 +116,28 @@ noncomputable def flatBasis (P : SectorDecomposition d) :
     (s : Fin P.totalCopies) → MPSTensor d (P.flatDim s) :=
   fun s ↦ P.basis (P.flatIndexEquiv.symm s).1
 
+/-- Flattening and then recovering a sector-copy index preserves its bond dimension. -/
+@[simp] theorem flatDim_flatIndexEquiv (P : SectorDecomposition d)
+    (jq : (j : Fin P.basisCount) × Fin (P.copies j)) :
+    P.flatDim (P.flatIndexEquiv jq) = P.basisDim jq.1 := by
+  simp [flatDim]
+
+/-- Flattening and then recovering a sector-copy index preserves its weight. -/
+@[simp] theorem flatWeight_flatIndexEquiv (P : SectorDecomposition d)
+    (jq : (j : Fin P.basisCount) × Fin (P.copies j)) :
+    P.flatWeight (P.flatIndexEquiv jq) = P.weight jq.1 jq.2 := by
+  exact congrArg (fun x => P.weight x.1 x.2)
+    (P.flatIndexEquiv.symm_apply_apply jq)
+
+/-- Flattening and then recovering a sector-copy index preserves its basis tensor,
+with heterogeneous equality recording the definitionally equal bond dimensions. -/
+theorem flatBasis_flatIndexEquiv_heq (P : SectorDecomposition d)
+    (jq : (j : Fin P.basisCount) × Fin (P.copies j)) :
+    P.flatBasis (P.flatIndexEquiv jq) ≍ P.basis jq.1 := by
+  unfold flatBasis
+  exact congr_arg_heq (fun x => P.basis x.1)
+    (P.flatIndexEquiv.symm_apply_apply jq)
+
 /-- Total bond dimension of the flattened block-diagonal tensor.
 
 Marked `@[reducible]` so that `Fin P.totalDim` and `Fin (∑ s, P.flatDim s)`

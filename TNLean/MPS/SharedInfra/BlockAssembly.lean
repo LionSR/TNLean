@@ -153,6 +153,62 @@ theorem toTensorFromBlocks_eq_reindex_blockDiagonal_equiv
   ext a b
   rfl
 
+/-- Coordinate equivalence between heterogeneous direct sums whose block indices and
+block dimensions are matched. -/
+noncomputable def blockDimEquiv {r r' : ℕ} {dim : Fin r → ℕ} {dim' : Fin r' → ℕ}
+    (e : Fin r ≃ Fin r')
+    (hDim : ∀ k, dim k = dim' (e k)) :
+    Fin (∑ k, dim' k) ≃ Fin (∑ k, dim k) :=
+  (finSigmaFinEquiv (m := r') (n := dim')).symm |>.trans
+    ((Equiv.sigmaCongr e (fun k => finCongr (hDim k))).symm.trans
+      (finSigmaFinEquiv (m := r) (n := dim)))
+
+/-- Exact letterwise reindexing of heterogeneous weighted direct sums.
+
+If an equivalence matches the block indices, matched block dimensions agree, and every
+weighted block agrees after the induced matrix reindexing, then the assembled tensors agree
+after the corresponding total-coordinate reindexing. -/
+theorem toTensorFromBlocks_eq_reindex_of_equiv
+    {r r' : ℕ} {dim : Fin r → ℕ} {dim' : Fin r' → ℕ}
+    (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
+    (μ' : Fin r' → ℂ) (B : (k : Fin r') → MPSTensor d (dim' k))
+    (e : Fin r ≃ Fin r') (hDim : ∀ k, dim k = dim' (e k))
+    (h : ∀ k i, μ k • A k i =
+      Matrix.reindex (finCongr (hDim k)).symm (finCongr (hDim k)).symm
+        (μ' (e k) • B (e k) i)) :
+    ∀ i, toTensorFromBlocks μ A i =
+      Matrix.reindex (blockDimEquiv e hDim) (blockDimEquiv e hDim)
+        (toTensorFromBlocks μ' B i) := by
+  classical
+  intro i
+  ext x y
+  simp only [toTensorFromBlocks, Matrix.reindex_apply, Matrix.submatrix_apply]
+  generalize hx : finSigmaFinEquiv.symm x = sx
+  generalize hy : finSigmaFinEquiv.symm y = sy
+  rcases sx with ⟨kx, mx⟩
+  rcases sy with ⟨ky, my⟩
+  have hx' : x = finSigmaFinEquiv ⟨kx, mx⟩ := by
+    rw [← finSigmaFinEquiv.apply_symm_apply x, hx]
+  have hy' : y = finSigmaFinEquiv ⟨ky, my⟩ := by
+    rw [← finSigmaFinEquiv.apply_symm_apply y, hy]
+  rw [hx', hy']
+  dsimp [blockDimEquiv, Equiv.sigmaCongr, Equiv.sigmaCongrLeft,
+    Equiv.sigmaCongrRight]
+  simp_rw [Equiv.symm_apply_apply]
+  have hfin (k : Fin r) (m : Fin (dim k)) :
+      finSigmaFinEquiv.symm (finSigmaFinEquiv ⟨k, m⟩) = ⟨k, m⟩ :=
+    finSigmaFinEquiv.symm_apply_apply ⟨k, m⟩
+  rw [hfin kx mx, hfin ky my]
+  dsimp only
+  by_cases hk : kx = ky
+  · subst ky
+    rw [Matrix.blockDiagonal'_apply_eq, Matrix.blockDiagonal'_apply_eq]
+    have hh := congrFun (congrFun (h kx i) mx) my
+    simpa [Matrix.reindex_apply] using hh
+  · rw [Matrix.blockDiagonal'_apply_ne _ _ _ hk]
+    rw [Matrix.blockDiagonal'_apply_ne]
+    exact fun hs => hk (e.injective hs)
+
 /-- Word evaluation of `toTensorFromBlocks` is the reindexed block diagonal of
 the component word evaluations, with the scalar weight `μ k` contributing the
 factor `(μ k) ^ w.length` on block `k`. -/
