@@ -16,6 +16,9 @@ and adjoint map with the corresponding ambient corner actions.
 
 ## Main results
 
+* `Kraus.map_compressed_eq_conj`: Schrödinger-map intertwining for a compressed family.
+* `Kraus.map_compressed_fixedPoint`: preservation of a supported fixed point under
+  compression.
 * `Kraus.exists_corner_compression_of_supported_projection`: compression of a supported
   finite Kraus family to the support matrix algebra.
 -/
@@ -26,6 +29,47 @@ open Matrix Finset Complex
 namespace Kraus
 
 variable {d D : ℕ}
+
+/-- The Schrödinger map of a Kraus family compressed along `V` is the compression of the
+ambient Schrödinger map after expanding its argument along `V`. -/
+theorem map_compressed_eq_conj {n : ℕ}
+    (A : Fin d → MatrixAlg D) (C : Fin d → MatrixAlg n)
+    (V : Matrix (Fin D) (Fin n) ℂ)
+    (hC : ∀ i : Fin d, C i = Vᴴ * A i * V) (Z : MatrixAlg n) :
+    map C Z = Vᴴ * map A (V * Z * Vᴴ) * V := by
+  calc
+    map C Z = ∑ i : Fin d, C i * Z * (C i)ᴴ := by rw [map_apply]
+    _ = ∑ i : Fin d, Vᴴ * (A i * (V * Z * Vᴴ) * (A i)ᴴ) * V := by
+      refine Finset.sum_congr rfl fun i _ => ?_
+      have hCiH : (C i)ᴴ = Vᴴ * (A i)ᴴ * V := by
+        rw [hC i]
+        simp [Matrix.conjTranspose_mul, Matrix.conjTranspose_conjTranspose,
+          Matrix.mul_assoc]
+      rw [hCiH, hC i]
+      simp [Matrix.mul_assoc]
+    _ = Vᴴ * (∑ i : Fin d, A i * (V * Z * Vᴴ) * (A i)ᴴ) * V := by
+      rw [Matrix.mul_sum, Matrix.sum_mul]
+    _ = Vᴴ * map A (V * Z * Vᴴ) * V := by rw [map_apply]
+
+/-- Compression along `V` preserves a fixed point supported on the range projection
+`V * Vᴴ`. -/
+theorem map_compressed_fixedPoint {n : ℕ}
+    (A : Fin d → MatrixAlg D) (C : Fin d → MatrixAlg n)
+    (V : Matrix (Fin D) (Fin n) ℂ) (P X : MatrixAlg D)
+    (hC : ∀ i : Fin d, C i = Vᴴ * A i * V) (hVVt : V * Vᴴ = P)
+    (hXmem : P * X * P = X) (hXfix : map A X = X) :
+    map C (Vᴴ * X * V) = Vᴴ * X * V := by
+  calc
+    map C (Vᴴ * X * V) = Vᴴ * map A (V * (Vᴴ * X * V) * Vᴴ) * V :=
+      map_compressed_eq_conj A C V hC _
+    _ = Vᴴ * map A X * V := by
+      rw [show V * (Vᴴ * X * V) * Vᴴ = X by
+        calc
+          V * (Vᴴ * X * V) * Vᴴ = (V * Vᴴ) * X * (V * Vᴴ) := by
+            simp [Matrix.mul_assoc]
+          _ = P * X * P := by rw [hVVt]
+          _ = X := hXmem]
+    _ = Vᴴ * X * V := by rw [hXfix]
 
 /-- Compress a finite matrix family supported on an orthogonal projection to the support
 matrix algebra. The result includes the corner equivalence, its support isometry, the

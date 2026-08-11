@@ -237,30 +237,11 @@ theorem cornerFixed_mul
   have hσfix : map C σ = σ := by
     have hmapA : map A ρ = ρ := by
       have heq : map A ρ = Q * map K ρ * Q := by
-        rw [hAdef]; exact map_cornerCompressionKraus_eq K hQproj (Z := ρ) hQρQ
+        rw [hAdef]
+        exact map_cornerCompressionKraus_eq K hQproj (Z := ρ) hQρQ
       rw [heq, hρ_fix, hQρQ]
-    have hterm : ∀ i : Fin d,
-        C i * σ * (C i)ᴴ = Vᴴ * (A i * ρ * (A i)ᴴ) * V := by
-      intro i
-      have hCiH : (C i)ᴴ = Vᴴ * (A i)ᴴ * V := by
-        rw [hCi i]
-        simp [Matrix.conjTranspose_mul, Matrix.conjTranspose_conjTranspose, Matrix.mul_assoc]
-      rw [hCiH, hCi i, hσdef]
-      calc
-        Vᴴ * A i * V * (Vᴴ * ρ * V) * (Vᴴ * (A i)ᴴ * V)
-            = Vᴴ * (A i * (V * Vᴴ) * ρ * (V * Vᴴ) * (A i)ᴴ) * V := by
-              simp [Matrix.mul_assoc]
-        _ = Vᴴ * (A i * Q * ρ * Q * (A i)ᴴ) * V := by rw [hVVt]
-        _ = Vᴴ * (A i * (Q * ρ * Q) * (A i)ᴴ) * V := by simp [Matrix.mul_assoc]
-        _ = Vᴴ * (A i * ρ * (A i)ᴴ) * V := by rw [hQρQ]
-    calc
-      map C σ = ∑ i : Fin d, C i * σ * (C i)ᴴ := by rw [map_apply]
-      _ = ∑ i : Fin d, Vᴴ * (A i * ρ * (A i)ᴴ) * V := by
-          exact Finset.sum_congr rfl (fun i _ => hterm i)
-      _ = Vᴴ * (∑ i : Fin d, A i * ρ * (A i)ᴴ) * V := by
-          rw [Matrix.mul_sum, Matrix.sum_mul]
-      _ = Vᴴ * map A ρ * V := by rw [map_apply]
-      _ = σ := by rw [hmapA, hσdef]
+    rw [hσdef]
+    exact map_compressed_fixedPoint A C V Q ρ hCi hVVt hQρQ hmapA
   -- Membership equivalence between the compressed and ambient fixed-point conditions.
   have hcorr : ∀ X : Matrix (Fin n) (Fin n) ℂ,
       Q * adjointMap K (φ X).1 * Q = (φ X).1 ↔ adjointMap C X = X := by
