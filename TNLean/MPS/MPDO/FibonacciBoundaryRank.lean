@@ -3,9 +3,10 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.MPS.MPDO.PureRecovery
+import TNLean.MPS.Defs
 import Mathlib.NumberTheory.Real.GoldenRatio
 import Mathlib.Tactic.FinCases
+import Mathlib.Tactic.LinearCombination
 
 /-!
 # Fibonacci boundary transition calculation
@@ -26,7 +27,7 @@ In particular, its golden-ratio formula is not an operator-rank theorem.
   Appendix D, lines 2116--2176.
 -/
 
-open scoped Matrix ComplexOrder BigOperators
+open scoped Matrix
 open Matrix Finset
 
 namespace MPSTensor
@@ -44,6 +45,7 @@ Fibonacci fusion rules.
 
 Source: arXiv:1606.00608, Appendix D, lines 2120--2121. -/
 structure FusionWeights where
+  /-- The fusion coefficient assigned to the labels \((i,j,k)\). -/
   N : Fin 2 → Fin 2 → Fin 2 → ℝ
   zero_iff : ∀ i j k, N i j k = 0 ↔ ExactlyTwoZero i j k
   pos_of_not_exactlyTwoZero : ∀ i j k, ¬ExactlyTwoZero i j k → 0 < N i j k
