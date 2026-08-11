@@ -7,7 +7,7 @@ import TNLean.MPS.MPDO.PureRecovery
 import Mathlib.Tactic.FinCases
 
 /-!
-# Fibonacci boundary rank calculation
+# Fibonacci boundary transition calculation
 
 This file formalizes the concrete vacuum-sector calculation in CPSV16 Appendix D.
 The three binary physical labels are written \(i,j,k\), the fusion weights are
@@ -15,10 +15,14 @@ The three binary physical labels are written \(i,j,k\), the fusion weights are
 \(A^{ijk}_{αβ} = δ_{i,α} δ_{k,β} N_{ijk}\).  The structural strong fixed-point
 relation is defined separately in `MPOTensor.IsStrongRFP`.
 
+**Scope restriction (transition-count slice):** This file does not identify the
+transition counts with the open-boundary or periodic operator ranks, and it does
+not prove the golden-ratio formula for the periodic rank.
+
 ## References
 
 * [Cirac--Perez-Garcia--Schuch--Verstraete 2017] arXiv:1606.00608,
-  Appendix D, lines 2116--2176, labels `rank-Fibonacci` and `eq:1`.
+  Appendix D, lines 2116--2176.
 -/
 
 open scoped Matrix ComplexOrder BigOperators
@@ -74,8 +78,8 @@ Source: arXiv:1606.00608, Appendix D, lines 2146--2149. -/
 def B : Matrix (Fin 2) (Fin 2) ℕ := !![1, 1; 1, 2]
 
 /-- The transition counts \(x^n_{αβ}\) satisfying the source open-boundary
-recurrence.  Their equality with the ranks of the concrete open-boundary
-operators remains to be proved.
+recurrence.  This definition records the matrix-power counts only; it makes no
+identification with the ranks of open-boundary operators.
 
 Source: arXiv:1606.00608, Appendix D, lines 2127--2149. -/
 def x (n : ℕ) (α β : Fin 2) : ℕ := (B ^ n) α β
@@ -97,9 +101,9 @@ theorem x_succ (n : ℕ) (α : Fin 2) :
   fin_cases α <;>
     simp [x, pow_succ, B, Matrix.mul_apply, Fin.sum_univ_two] <;> omega
 
-/-- The periodic transition count is obtained by closing the two boundary
-labels, \(a_N=x^N_{00}+x^N_{11}\).  The source identifies this count with
-\(\operatorname{rank}\rho^{(N)}\); that equality remains to be proved.
+/-- The periodic transition count obtained by closing the two boundary labels,
+\(a_N=x^N_{00}+x^N_{11}\).  This definition asserts only the transition count,
+not an operator-rank identity.
 
 Source: arXiv:1606.00608, Appendix D, lines 2157--2176. -/
 def periodicTransitionCount (N : ℕ) : ℕ := x N 0 0 + x N 1 1

@@ -765,10 +765,9 @@ the remaining sites unchanged.
         \label{eq:cpsv_fib_counts}
     \end{align}
     These are the transition counts governed by the recurrence in
-    \cite[Appendix~D, lines~2131--2149]{Cirac2016MPDO_arXiv}.  Their equality
-    with the open-boundary operator ranks in
-    \cite[Appendix~D, lines~2127--2130]{Cirac2016MPDO_arXiv} remains to be
-    proved.
+    \cite[Appendix~D, lines~2131--2149]{Cirac2016MPDO_arXiv}.
+    % Their identification with the open-boundary ranks at lines 2127--2130
+    % remains tracked by issue #5921.
 \end{definition}
 
 \begin{theorem}[Fibonacci boundary transition recurrence]
@@ -804,9 +803,9 @@ the remaining sites unchanged.
         a_N&=x^N_{00}+x^N_{11}=\tr(B^N).
         \notag
     \end{align}
-    The source identifies this number with the periodic operator rank at
-    \cite[Appendix~D, line~2157]{Cirac2016MPDO_arXiv}; that identification is
-    retained separately below.
+    This is the boundary-label closure used in
+    \cite[Appendix~D, line~2157]{Cirac2016MPDO_arXiv}.
+    % The equality with the periodic operator rank remains tracked by issue #5921.
 \end{definition}
 
 \begin{theorem}[First periodic Fibonacci transition counts]
@@ -854,7 +853,7 @@ the remaining sites unchanged.
     For $n>0$ and $\alpha,\beta\in\{0,1\}$, let
     $\rho^{(n)}_{\alpha\beta}(A)$ be the diagonal open-boundary operator whose
     coefficient at a physical word is
-    $(\alpha|A^{i_1j_1k_1}\cdots A^{i_nj_nk_n}|\beta)$.  Prove
+    $(\alpha|A^{i_1j_1k_1}\cdots A^{i_nj_nk_n}|\beta)$.  Then
     \begin{align}
         x^n_{\alpha\beta}
         &=\operatorname{rank}\rho^{(n)}_{\alpha\beta}(A).
@@ -871,7 +870,7 @@ the remaining sites unchanged.
       thm:cpsv_fibonacci_open_boundary_rank_status,
       thm:to_mpo_diagonal_rank}
     Set $\tau_\pm=(1\pm\sqrt5)/2$, as in
-    \cite[Appendix~D, line~2125]{Cirac2016MPDO_arXiv}.  For every $N>0$, prove
+    \cite[Appendix~D, line~2125]{Cirac2016MPDO_arXiv}.  For every $N>0$,
     \begin{align}
         \operatorname{rank}\rho^{(N)}(A)
         &=x^N_{00}+x^N_{11}
