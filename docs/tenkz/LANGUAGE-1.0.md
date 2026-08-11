@@ -149,6 +149,12 @@ turns with it and a label on a station of a circle frame stands radially out
 of it. One rule, one alphabet, and the four compass words are one sugar
 spelling of the four right angles serving faces and placements alike.
 
+`auto` places an atom's label on the first face carrying no ink in the fixed
+order s, n, e, w, read from the frozen wire records: a bond, stub, leg,
+cup, or trace standing on a face reserves it. When every face carries ink
+the station falls back to south, so the station is deterministic and an
+explicit `label pos=` always wins.
+
 A typed-port list is a braced comma-separated list of ports, each written
 
 ```
