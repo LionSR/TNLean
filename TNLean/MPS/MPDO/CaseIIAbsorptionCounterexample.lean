@@ -13,7 +13,7 @@ import TNLean.MPS.SharedInfra.Scaling
 This file gives the two-sector, bond-one example suggested by the normalization
 convention of arXiv:1606.00608, lines 224--246, inside the simple Case-II
 argument at lines 1646--1782.  The two normal representatives have disjoint
-physical support and global weights `(1 / √2, 1)`.  Absorbing the first weight
+physical support and global weights $(1 / √2, 1)$.  Absorbing the first weight
 changes its transfer spectral radius from one to one half.
 
 The example refutes only the printed intermediate inference that every absorbed
@@ -27,22 +27,22 @@ namespace MPOTensor.CaseIIAbsorptionCounterexample
 /-- The coefficient $1/\sqrt 2$, viewed as a complex number. -/
 noncomputable def invSqrtTwo : ℂ := ((Real.sqrt 2)⁻¹ : ℝ)
 
-lemma invSqrtTwo_ne_zero : invSqrtTwo ≠ 0 := by
+private lemma invSqrtTwo_ne_zero : invSqrtTwo ≠ 0 := by
   rw [invSqrtTwo]
   exact_mod_cast inv_ne_zero (ne_of_gt (Real.sqrt_pos.2 (by norm_num : (0 : ℝ) < 2)))
 
-lemma norm_invSqrtTwo : ‖invSqrtTwo‖ = (Real.sqrt 2)⁻¹ := by
+private lemma norm_invSqrtTwo : ‖invSqrtTwo‖ = (Real.sqrt 2)⁻¹ := by
   rw [invSqrtTwo, Complex.norm_real, Real.norm_eq_abs, abs_inv, abs_of_pos]
   exact Real.sqrt_pos.2 (by norm_num)
 
-lemma invSqrtTwo_mul_self : invSqrtTwo * invSqrtTwo = (1 / 2 : ℂ) := by
+private lemma invSqrtTwo_mul_self : invSqrtTwo * invSqrtTwo = (1 / 2 : ℂ) := by
   rw [← pow_two, invSqrtTwo]
   change ((↑((Real.sqrt 2)⁻¹) : ℂ) ^ 2) = 1 / 2
   rw [← Complex.ofReal_pow, inv_pow,
     Real.sq_sqrt (by norm_num : (0 : ℝ) ≤ 2)]
   norm_num
 
-lemma star_invSqrtTwo : starRingEnd ℂ invSqrtTwo = invSqrtTwo := by
+private lemma star_invSqrtTwo : starRingEnd ℂ invSqrtTwo = invSqrtTwo := by
   simp [invSqrtTwo]
 
 /-- The first normal representative, supported on doubled symbols `(0,0)` and `(1,1)`,
@@ -63,7 +63,7 @@ noncomputable def basis (s : Fin 2) : MPSTensor (3 * 3) 1 :=
 noncomputable def weight (s : Fin 2) : ℂ := if s = 0 then invSqrtTwo else 1
 
 /-- The two weights satisfy exactly the global CPSV16 line-246 convention. -/
-lemma weight_globally_normalized :
+private lemma weight_globally_normalized :
     (∀ s : Fin 2, ‖weight s‖ ≤ 1) ∧ ∃ s : Fin 2, ‖weight s‖ = 1 := by
   constructor
   · intro s
@@ -96,6 +96,12 @@ lemma weights_copy_independent :
   fin_cases q
   fin_cases q'
   rfl
+
+/-- The two normal representatives have disjoint doubled-physical support. -/
+lemma basis_disjoint_support :
+    ∀ i, basis 0 i ≠ 0 → basis 1 i = 0 := by
+  intro i
+  fin_cases i <;> simp [basis, firstBasisTensor, secondBasisTensor]
 
 private lemma firstBasis_transferMap :
     MPSTensor.transferMap firstBasisTensor = LinearMap.id := by
@@ -136,7 +142,7 @@ lemma basis_isNormalTensor (s : Fin 2) : MPSTensor.IsNormalTensor (basis s) := b
 noncomputable def firstAbsorbed : MPSTensor (3 * 3) 1 :=
   fun i ↦ invSqrtTwo • basis 0 i
 
-lemma firstAbsorbed_eq :
+private lemma firstAbsorbed_eq :
     firstAbsorbed = fun i ↦ invSqrtTwo • firstBasisTensor i := by
   rfl
 
@@ -208,14 +214,14 @@ $(1/\sqrt2,1)$, both unabsorbed blocks are normal, literal physical-trace ZCL
 holds for their ambient direct sum, but the first absorbed block has transfer
 spectral radius $1/2$ and is not normal.
 
-This theorem does not package the standing Case-II biCF, simplicity, MPDO, or
-SAL predicates; those interfaces are tracked separately in the accompanying
-gap notes.  It therefore refutes the coefficient-absorption proof step, not
-CPSV16 Theorem 4.9. -/
+This statement isolates the scalar-normalization step and does not assert the
+standing Case-II biCF, simplicity, MPDO, or SAL hypotheses. It therefore
+refutes the coefficient-absorption step, not CPSV16 Theorem 4.9. -/
 theorem printed_absorbed_normality_step_is_false :
     weight 0 = invSqrtTwo ∧ weight 1 = 1 ∧
       (∀ s, ‖weight s‖ ≤ 1) ∧ (∃ s, ‖weight s‖ = 1) ∧
       (∀ s, MPSTensor.IsNormalTensor (basis s)) ∧
+      (∀ i, basis 0 i ≠ 0 → basis 1 i = 0) ∧
       (∀ i j, ambient i j = Matrix.diagonal fun s : Fin 2 ↦
         if s = 0 then
           (invSqrtTwo • basis 0 (finProdFinEquiv (i, j))) 0 0
@@ -227,7 +233,8 @@ theorem printed_absorbed_normality_step_is_false :
             (MPSTensor.transferMap firstAbsorbed)) = (2 : ENNReal)⁻¹ ∧
       ¬ MPSTensor.IsNormalTensor firstAbsorbed := by
   exact ⟨rfl, rfl, weight_globally_normalized.1, weight_globally_normalized.2,
-    basis_isNormalTensor, ambient_eq_weighted_basis_blocks,
+    basis_isNormalTensor, basis_disjoint_support,
+    ambient_eq_weighted_basis_blocks,
     ambient_literal_physTrace_ZCL, spectralRadius_transferMap_firstAbsorbed,
     firstAbsorbed_not_isNormalTensor⟩
 

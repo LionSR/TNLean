@@ -904,6 +904,25 @@ $\mathcal K_i=P_i\mathcal K_i=\mathcal K_iP_i$.
 This is the calculation in
 \cite[Appendix~C.2, lines~1745--1751]{Cirac2016MPDO_arXiv}.
 
+% The declaration below isolates the scalar-normalization obstruction. It does
+% not assert all standing hypotheses of Theorem 4.9 and therefore does not
+% refute that theorem.
+\begin{lemma}[Coefficient absorption need not preserve normality]
+    \label{lem:mpdo_caseii_absorption_not_normal}
+    \lean{MPOTensor.CaseIIAbsorptionCounterexample.printed_absorbed_normality_step_is_false}
+    \leanok
+    There are two bond-one normal tensors $A_0,A_1$ with disjoint doubled
+    physical supports and globally normalized weights
+    $(\mu_0,\mu_1)=(1/\sqrt2,1)$ such that their weighted bond-diagonal
+    assembly has literal physical-trace idempotence. Writing
+    $\mathcal E_B$ for the transfer map of a tensor $B$, one has
+    \begin{align}
+        \rho(\mathcal E_{\mu_0A_0})&=\frac12.
+        \notag
+    \end{align}
+    In particular, the absorbed representative $\mu_0A_0$ is not normal.
+\end{lemma}
+
 % CPSV16 Theorem 4.9 (`thm:main-simple`), lines 851--893 and Appendix C.2.
 % Provenance: source-label audit completed in issue #5917.
 % Gap: docs/paper-gaps/cpgsv17_pf_rank_one.tex.
@@ -914,7 +933,8 @@ This is the calculation in
         def:is_rfp_via_ts, def:is_sal,
         def:mpdo_source_gsnnch, def:mpo_source_zcl,
         thm:mpdo_sal_zcl_bnt_sector_structure,
-        thm:mpdo_sal_zcl_blocking_channels}
+        thm:mpdo_sal_zcl_blocking_channels,
+        lem:mpdo_caseii_absorption_not_normal}
     Let $K$ be a simple tensor in block-injective canonical form with a basis
     of normal tensors, and let $M=K^{[2]}$.  According to
     \cite[Theorem~4.9]{Cirac2016MPDO_arXiv},
@@ -930,12 +950,17 @@ This is the calculation in
     length, the blockwise local structure, and the fixed-point condition for
     $M$.
 
-    In Case II, the implication from SAL and zero correlation length to the
-    blockwise local structure requires the normal Case-I factorization for each
-    absorbed BNT representative.  Absorbing a coefficient $\mu_s$ multiplies
-    the transfer spectral radius by $|\mu_s|^2$, while the source normalization
-    does not imply $|\mu_s|=1$ for every sector.  Thus a separate argument is
-    required to establish normality of every absorbed sector.
+    In Case II, the printed implication from SAL and zero correlation length
+    to the blockwise local structure applies the normal Case-I factorization to
+    each absorbed BNT representative. Absorbing a coefficient $\mu_s$
+    multiplies the transfer spectral radius by $|\mu_s|^2$, while the source
+    normalization does not imply $|\mu_s|=1$ for every sector.
+    Lemma~\ref{lem:mpdo_caseii_absorption_not_normal} shows that this
+    absorbed-sector normality route is false under the encoded normalization
+    hypotheses. A proof of the implication therefore requires either
+    strengthened hypotheses or an alternative factorization argument that does
+    not use absorbed-sector normality. This obstruction concerns the printed
+    proof route and does not refute Theorem~4.9 itself.
 \end{theorem}
 
 % CPSV16 Examples 4.10--4.12, lines 897--942.
@@ -1112,7 +1137,8 @@ This is the calculation in
     \uses{def:is_sal, def:mpo_physical_trace_transfer,
         thm:mpdo_sal_bnt_separating_projectors,
         thm:mpdo_absorbed_bnt_sector_caseii_analytic_properties,
-        cor:mpdo_sal_zcl_local_sector_structure}
+        cor:mpdo_sal_zcl_local_sector_structure,
+        lem:mpdo_caseii_absorption_not_normal}
     Let $K$ be a simple tensor in block-injective canonical form (biCF),
     equipped with a basis-of-normal-tensors decomposition. Suppose that $K$
     satisfies the strong area law and literal zero correlation length,
@@ -1143,13 +1169,12 @@ This is the calculation in
     normality. If $\mathcal K_s=\mu_sA_s$, then the transfer spectral radius is
     multiplied by $|\mu_s|^2$. The global canonical-form normalization gives
     only one unit-modulus coefficient and does not imply $|\mu_s|=1$ for every
-    $s$. Indeed, the two-sector bond-one construction recorded in
-    \lean{MPOTensor.CaseIIAbsorptionCounterexample.printed_absorbed_normality_step_is_false}
-    has global weights $(1/\sqrt2,1)$, literal ambient physical-trace
-    idempotence, and a first absorbed transfer radius equal to $1/2$.
-    Therefore the printed assertion that absorption preserves normality is
-    false. This does not refute the theorem's final implication: the exact
-    high-level packaging of the remaining standing hypotheses and an
-    alternative all-sector argument are still absent. Hence the all-sector
-    factorization remains not ready.
+    $s$. Lemma~\ref{lem:mpdo_caseii_absorption_not_normal} gives global
+    weights $(1/\sqrt2,1)$, literal ambient physical-trace idempotence, and a
+    first absorbed transfer radius equal to $1/2$. Therefore the printed
+    assertion that absorption preserves normality is false. The claimed
+    all-sector conclusion would instead require stronger assumptions or a
+    factorization argument that does not pass through absorbed-sector
+    normality. The counterexample isolates this failed intermediate assertion
+    and does not contradict the final implication of Theorem~4.9.
 \end{theorem}
