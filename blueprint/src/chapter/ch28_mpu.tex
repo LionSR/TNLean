@@ -3956,8 +3956,8 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
   algebra.
 \end{proof}
 
-\begin{theorem}[C-star identity for local observables]
-  \label{thm:qca_algebraic_local_norm_star_mul_self}
+\begin{lemma}[C-star identity for local observables]
+  \label{lem:qca_algebraic_local_norm_star_mul_self}
   \lean{SpinChain.norm_star_mul_self}
   \leanok
   \uses{def:qca_algebraic_local_normed_star_algebra}
@@ -3965,7 +3965,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
   \begin{align}
     \lVert A^*A\rVert&=\lVert A\rVert^2.
   \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
   Choose a finite region $\Lambda$ and a representative
@@ -3982,7 +3982,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
   \label{def:qca_algebraic_local_cstar_ring}
   \lean{SpinChain.instCStarRingAlgebraicLocalAlgebra}
   \leanok
-  \uses{thm:qca_algebraic_local_norm_star_mul_self}
+  \uses{lem:qca_algebraic_local_norm_star_mul_self}
   The normed star algebra of local observables satisfies the C-star axiom.
   This structure does not include completeness.
 \end{definition}
