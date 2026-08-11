@@ -37,7 +37,8 @@ variable {A : Type*} [NormedRing A] [StarRing A]
 /-- The involution on the completion is defined by applying the completion functor to the
 original involution. For a normed star group, `coe_star` identifies it with the continuous
 extension of the original involution. -/
-instance instStar : Star (Completion A) where
+@[nolint unusedArguments]
+instance instStar [NormedStarGroup A] : Star (Completion A) where
   star := Completion.map star
 
 section NormedStar
