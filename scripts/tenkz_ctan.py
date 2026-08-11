@@ -294,9 +294,12 @@ OFFLINE_CASES = (
 )
 
 # The document an author writes around a preamble-free case. It names the case
-# by its flat basename, which is what the submission would look like.
+# by its flat basename, which is what the submission would look like. The
+# preamble is the corpus driver's without `mathtools`, which none of the cases
+# below calls: the check is of tenkz, so it asks the environment for nothing
+# beyond what tenkz and the mathematics around it need.
 OFFLINE_WRAPPER = r"""\documentclass[border=8pt,varwidth=270mm]{standalone}
-\usepackage{amsmath,amssymb,mathtools}
+\usepackage{amsmath,amssymb}
 \usepackage{tenkz}
 \begin{document}
 \input{%s}
