@@ -9,5 +9,5 @@ import TNLean.MPS.MPDO.VerticalProductRetainedBlocks
 /-!
 # Vertical product pair blocks
 
-This module re-exports the retained copy-block and product-block results.
+This module provides the retained copy-block and product-block results.
 -/
