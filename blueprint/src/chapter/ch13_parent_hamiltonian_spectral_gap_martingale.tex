@@ -1221,7 +1221,8 @@ norm estimate is derived here.
     \leanok
     \uses{def:c3_centered_physical_sandwich,
         def:c3_correction_sandwiches,
-        def:open_chain_ground_subspaces_es}
+        def:open_chain_ground_subspaces_es,
+        def:ground_space_es}
     Whenever the three finite Grams are invertible, the common-ambient defect is
     \begin{align}
       P^{\mathrm{tail}}_{K,l+1}P^{\mathrm{left}}_{K+l}
@@ -1255,7 +1256,8 @@ norm estimate is derived here.
     \lean{MPSTensor.IsPrimitiveMPS.openChain_groundProjection_defect_le_geometric}
     \leanok
     \discussion{6134}
-    \uses{def:primitive_mps, def:open_chain_ground_subspaces_es}
+    \uses{def:primitive_mps, def:open_chain_ground_subspaces_es,
+        def:ground_space_es}
     Let $A$ be primitive with positive-definite fixed point $\rho$ and nonzero
     bond dimension.  There are constants $C,c,r>0$, with $r<1$, such that for
     every spectator length $K$ and every $l\geq1$ satisfying $cr^l<1$,
@@ -1280,7 +1282,8 @@ norm estimate is derived here.
         thm:c3_centered_physical_assembly,
         thm:c3_correction_bounds,
         thm:spectator_boundary_hilbert_factorization,
-        thm:range_ground_space_map_es}
+        thm:range_ground_space_map_es,
+        thm:injective_range_projector_inverse_gram}
     Put $\mathcal K_\infty=\mathscr R(P_\rho)$ and
     $\mathcal I_\infty=\mathcal K_\infty^{-1}$.  Choose $g,c,r>0$ from
     the geometric Gram and inverse-Gram estimate, so that

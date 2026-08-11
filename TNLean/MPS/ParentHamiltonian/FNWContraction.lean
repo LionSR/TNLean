@@ -14,11 +14,10 @@ This file assembles the exact limiting-metric telescope, the centered overlap
 estimate, and the three finite-Gram corrections into a common-ambient
 open-chain projector bound uniform in the spectator length.
 
-The coefficient proved here is a reconstructed TNLean substitute sufficient
-for Nachtergaele's condition C3. It is not the optimized rational numerator
-quoted from Fannes--Nachtergaele--Werner in Nachtergaele, equation (6.1). The
-proof works around the nonidentity limiting Gram metric and keeps its norm and
-inverse norm visible in the assembled constant.
+**Scope restriction (Nachtergaele C3 coefficient):** The coefficient proved here is a
+reconstructed substitute sufficient for condition C3, not the optimized rational numerator
+quoted from Fannes--Nachtergaele--Werner in Nachtergaele, equation (6.1). See
+`docs/paper-gaps/cpgsv21_martingale_overlap.tex`.
 
 ## Main results
 
@@ -164,9 +163,7 @@ theorem c3CenteredProjectorResidualES_norm_le [NeZero D]
 
 /-- A spectator-uniform geometric-over-denominator estimate for the open-chain
 C3 projector defect. The constants are reconstructed from the limiting Gram
-metric, geometric Gram convergence, and uniform virtual-word bounds. This is a
-TNLean substitute sufficient for Nachtergaele C3, not the optimized FNW
-rational numerator quoted in Nachtergaele, equation (6.1). -/
+metric, geometric Gram convergence, and uniform virtual-word bounds. -/
 theorem IsPrimitiveMPS.openChain_groundProjection_defect_le_geometric
     [NeZero D] {A : MPSTensor d D}
     {ρ : Matrix (Fin D) (Fin D) ℂ}
@@ -181,7 +178,7 @@ theorem IsPrimitiveMPS.openChain_groundProjection_defect_le_geometric
   let Kinf := Matrix.gramReshuffle
     (fixedPointProj ρ (ne_of_gt hρ.trace_pos))
   let Iinf := Ring.inverse Kinf
-  obtain ⟨g, c, r, hg, hc, hr_pos, hr_lt_one, -, hGramInv⟩ :=
+  obtain ⟨g, c, r, hg, hc, hr_pos, hr_lt_one, hc_eq, hGramInv⟩ :=
     hP.groundSpaceMapES_geometric_inverseGram_bounds hρ
   obtain ⟨C_T, hC_T, hTail⟩ := hP.tailVirtualMapES_norm_uniform
   have hKinfUnit : IsUnit Kinf := by
@@ -285,14 +282,14 @@ theorem IsPrimitiveMPS.openChain_groundProjection_defect_le_geometric
   have hM_nonneg : 0 ≤ M := by
     dsimp only [M]
     positivity
-  have hJ_le : J ≤ (J + 1) * (M + 1) := by
-    nlinarith only [hJ_nonneg, hM_nonneg, mul_nonneg hJ_nonneg hM_nonneg]
-  have hOne_le : 1 ≤ (J + 1) * (M + 1) := by
-    nlinarith only [hJ_nonneg, hM_nonneg, mul_nonneg hJ_nonneg hM_nonneg]
-  have hM_le : M ≤ (J + 1) * (M + 1) := by
-    nlinarith only [hJ_nonneg, hM_nonneg, mul_nonneg hJ_nonneg hM_nonneg]
-  have hJM_le : J * M ≤ (J + 1) * (M + 1) := by
-    nlinarith only [hJ_nonneg, hM_nonneg, mul_nonneg hJ_nonneg hM_nonneg]
+  have hFactorBounds :
+      J ≤ (J + 1) * (M + 1) ∧
+      1 ≤ (J + 1) * (M + 1) ∧
+      M ≤ (J + 1) * (M + 1) ∧
+      J * M ≤ (J + 1) * (M + 1) := by
+    refine ⟨?_, ?_, ?_, ?_⟩ <;>
+      nlinarith only [hJ_nonneg, hM_nonneg, mul_nonneg hJ_nonneg hM_nonneg]
+  obtain ⟨hJ_le, hOne_le, hM_le, hJM_le⟩ := hFactorBounds
   have hTerm (x : ℝ) (hx : x ≤ (J + 1) * (M + 1)) :
       q * ((‖Iinf‖ * C_T * g * x) * r ^ l) ≤ q * (base * r ^ l) := by
     apply mul_le_mul_of_nonneg_left _ hq_pos.le
