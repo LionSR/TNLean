@@ -1266,8 +1266,7 @@ norm estimate is derived here.
         thm:primitive_ground_space_map_geometric_inverse_gram_bounds,
         thm:geometric_smallness_at_c3_lengths,
         thm:tail_boundary_map_range_es_transport,
-        thm:left_boundary_map_range_es_transport,
-        thm:ground_space_es_projection_inverse_gram}
+        thm:left_boundary_map_range_es_transport}
     Let $A$ be primitive with positive-definite fixed point $\rho$ and nonzero
     bond dimension.  There are constants $C,c,r>0$, with $r<1$, such that for
     every spectator length $K$ and every $l\geq1$ satisfying $cr^l<1$,
@@ -1284,15 +1283,14 @@ norm estimate is derived here.
 
 \begin{proof}
     \leanok
-    \uses{thm:c3_projector_gram_error_telescope,
+    \uses{thm:c3_centered_physical_assembly,
         thm:primitive_tail_virtual_map_norm_uniform,
         thm:c3_centered_overlap_factorization_geometric,
         thm:c3_correction_bounds,
         thm:primitive_ground_space_map_geometric_inverse_gram_bounds,
         thm:geometric_smallness_at_c3_lengths,
         thm:tail_boundary_map_range_es_transport,
-        thm:left_boundary_map_range_es_transport,
-        thm:ground_space_es_projection_inverse_gram}
+        thm:left_boundary_map_range_es_transport}
     Put $K_\infty=\mathscr R(P_\rho)$ and
     $I_\infty=K_\infty^{-1}$.  Choose $g,c,r>0$ from the geometric Gram and
     inverse-Gram estimate, so that $c=\lVert I_\infty\rVert g$, and choose
