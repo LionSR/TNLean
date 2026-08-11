@@ -711,47 +711,107 @@ the remaining sites unchanged.
     $\E_A^2=\E_A$. The physical-isometry formulation follows from
     Theorem~\ref{thm:physical_blocking_isometry_iff_transfer_idempotence}.
 \end{proof}
-% CPSV16 Appendix D (`Strong-RFP`, `rank-Fibonacci`, and `eq:1`),
-% lines 2109--2176.  The final label names an internal diagonalization step.
-% Tracking: issue #5921.
-\begin{theorem}[Fibonacci rank obstruction cited against strong fixed points]
-    \label{thm:cpsv_fibonacci_rank_obstruction_status}
-    \notready
-    \uses{def:mpo_family}
-    Let $A$ be the vacuum-sector boundary tensor described in
-    \cite[Appendix~D, lines~2118--2176]{Cirac2016MPDO_arXiv}.  Its bond
-    indices $\alpha,\beta$ and its three physical indices $i,j,k$ lie in
-    $\{0,1\}$, and its components are
+% CPSV16 Appendix D, lines 2116--2176.  The paper's label `eq:1` is an
+% internal calculation.  Issue #5921 retains the missing identification of the
+% transition counts with the ranks of the concrete MPO.
+\begin{definition}[Fibonacci vacuum-sector support tensor]
+    \label{def:cpsv_fibonacci_support_tensor}
+    \lean{MPSTensor.FibonacciBoundary.ExactlyTwoZero,
+      MPSTensor.FibonacciBoundary.FusionWeights,
+      MPSTensor.FibonacciBoundary.canonicalFusionWeights,
+      MPSTensor.FibonacciBoundary.physicalTriple,
+      MPSTensor.FibonacciBoundary.tensor,
+      MPSTensor.FibonacciBoundary.canonicalTensor}
+    \leanok
+    \uses{def:mps_tensor}
+    This is the concrete tensor in
+    \cite[Appendix~D, lines~2118--2135]{Cirac2016MPDO_arXiv}.  Its physical
+    labels are triples $i,j,k\in\{0,1\}$ and its virtual labels are
+    $\alpha,\beta\in\{0,1\}$.  Choose weights $N_{ijk}$ satisfying
     \begin{align}
-        A^{ijk}_{\alpha,\beta}
-        &=\delta_{i,\alpha}\delta_{k,\beta}N_{ijk},
+        N_{ijk}=0&\iff
+        (i,j,k)\in\{(0,0,1),(0,1,0),(1,0,0)\},
+        \label{eq:cpsv_fib_support}\\
+        N_{ijk}&>0 &&\text{otherwise}.
         \notag
     \end{align}
-    where $N_{ijk}=0$ if and only if exactly two of $i,j,k$ are zero, and
-    $N_{ijk}>0$ otherwise.  Set
+    Then
     \begin{align}
+        A^{ijk}_{\alpha\beta}
+        &=\delta_{i,\alpha}\delta_{k,\beta}N_{ijk}.
+        \notag
+    \end{align}
+    The canonical support tensor takes every nonzero $N_{ijk}$ to be one.
+\end{definition}
+
+\begin{theorem}[Fibonacci open-boundary transition recurrence]
+    \label{thm:cpsv_fibonacci_boundary_recurrence}
+    \lean{MPSTensor.FibonacciBoundary.B,
+      MPSTensor.FibonacciBoundary.x,
+      MPSTensor.FibonacciBoundary.x_one,
+      MPSTensor.FibonacciBoundary.x_succ}
+    \leanok
+    Let
+    \begin{align}
+        B&=\begin{pmatrix}1&1\\1&2\end{pmatrix},&
+        x^n_{\alpha\beta}&=(B^n)_{\alpha\beta}.
+        \label{eq:cpsv_fib_recurrence}
+    \end{align}
+    Then $x^1=(1,1,1,2)$ in the order $(00,01,10,11)$, and
+    \begin{align}
+        x^{n+1}_{\alpha0}&=x^n_{\alpha0}+x^n_{\alpha1},&
+        x^{n+1}_{\alpha1}&=x^n_{\alpha0}+2x^n_{\alpha1}.
+        \notag
+    \end{align}
+    These are the transition counts appearing in
+    \cite[Appendix~D, lines~2139--2164]{Cirac2016MPDO_arXiv}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Multiply the row indexed by $\alpha$ in $B^n$ by the two columns of $B$.
+\end{proof}
+
+\begin{theorem}[First periodic Fibonacci transition counts are not geometric]
+    \label{thm:cpsv_fibonacci_transition_not_geometric}
+    \lean{MPSTensor.FibonacciBoundary.periodicRank,
+      MPSTensor.FibonacciBoundary.periodicRank_one,
+      MPSTensor.FibonacciBoundary.periodicRank_two,
+      MPSTensor.FibonacciBoundary.periodicRank_not_geometric}
+    \leanok
+    \uses{thm:cpsv_fibonacci_boundary_recurrence}
+    Closing the boundary labels gives
+    $a_N=x^N_{00}+x^N_{11}=\tr(B^N)$.  In particular $a_1=3$ and $a_2=7$,
+    and there are no $r,s\in\N$ such that $a_N=rs^{N-1}$ for every $N>0$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:cpsv_fibonacci_boundary_recurrence}
+    If $a_N=rs^{N-1}$, then $r=a_1=3$ and $7=a_2=3s$, which is impossible
+    in $\N$.
+\end{proof}
+
+\begin{theorem}[Fibonacci MPO rank formula]
+    \label{thm:cpsv_fibonacci_rank_obstruction_status}
+    \notready
+    \uses{def:cpsv_fibonacci_support_tensor,
+      thm:cpsv_fibonacci_boundary_recurrence,
+      thm:cpsv_fibonacci_transition_not_geometric}
+    For the tensor in Definition~\ref{def:cpsv_fibonacci_support_tensor} and
+    every $N>0$, identify the transition count with the operator rank and prove
+    \begin{align}
+        \operatorname{rank}\rho^{(N)}(A)
+        &=x^N_{00}+x^N_{11}
+         =\tau_+^{2N}+\tau_-^{2N},&
         \tau_\pm&=\frac{1\pm\sqrt5}{2}.
         \notag
     \end{align}
-    For every $N>0$,
-    \begin{align}
-        \operatorname{rank}\rho^{(N)}(A)
-        &=\tau_+^{2N}+\tau_-^{2N}.
-        \notag
-    \end{align}
-    This sequence is not geometric: there do not exist natural numbers $r,s$
-    such that
-    \begin{align}
-        \operatorname{rank}\rho^{(N)}(A)&=rs^{N-1}
-        \notag
-    \end{align}
-    for every $N>0$.  The first two ranks are $3$ and $7$, which already
-    exclude such $r$ and $s$.  The structural relation in
-    Definition~\ref{def:mpdo_strong_rfp} gives the algebraic meaning of the
-    diagram labelled ``Strong-RFP''.  This theorem concerns only the Fibonacci
-    rank sequence and makes no assertion about periodic rank growth for a
-    general tensor satisfying Definition~\ref{def:mpdo_strong_rfp}.
-    % Tracked by issue #6047.
+    This is \cite[Appendix~D, lines~2136--2176]{Cirac2016MPDO_arXiv}.
+    The structural relation in Definition~\ref{def:mpdo_strong_rfp} gives the
+    algebraic meaning of the source diagram; this theorem concerns only the
+    concrete Fibonacci rank sequence.
+
 \end{theorem}
 
 \begin{definition}[Initial-coordinate regroupings]
@@ -919,6 +979,32 @@ the remaining sites unchanged.
     \end{align}
     Equivalently, $M^{ii}=A^i$ and $M^{ij}=0$ for $i\ne j$.
 \end{definition}
+
+\begin{theorem}[Operator and rank of the diagonal pure-state embedding]
+    \label{thm:to_mpo_diagonal_rank}
+    \lean{MPSTensor.evalWord_toMPOTensor,
+      MPSTensor.mpo_toMPOTensor,
+      MPSTensor.rank_mpo_toMPOTensor}
+    \leanok
+    \uses{def:to_mpo_tensor, def:mpo_family}
+    For every $N$, the embedded MPO is diagonal with diagonal
+    $V^{(N)}(A)$, and hence
+    \begin{align}
+        \rho^{(N)}(A^{\mathrm{MPO}})
+        &=\operatorname{diag}V^{(N)}(A),&
+        \operatorname{rank}\rho^{(N)}(A^{\mathrm{MPO}})
+        &=\#\{\sigma:V^{(N)}(A)_\sigma\ne0\}.
+        \notag
+    \end{align}
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{def:to_mpo_tensor, def:mpo_family}
+    A ket--bra word evaluation vanishes at the first unequal pair of physical
+    labels.  Equal words recover the original MPS word evaluation.  The rank
+    formula follows by counting the nonzero entries of a diagonal matrix.
+\end{proof}
 
 \begin{theorem}[Transfer map of the diagonal pure-state embedding]%
     \label{thm:to_mpo_transfer_map}
