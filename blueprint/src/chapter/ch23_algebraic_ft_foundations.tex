@@ -55,6 +55,71 @@ first.
     \end{center}
 \end{definition}
 
+\begin{definition}[Cyclic block tensor at fixed length]
+    \label{def:chain_cyclic_block_tensor}
+    \lean{MPSChainTensor.cyclicRotation, MPSChainTensor.cyclicBlockTensor}
+    \leanok
+    \uses{def:non_ti_chain}
+    Let $N\geq 1$ and let $A_0,\ldots,A_{N-1}$ be a periodic chain of
+    $D\times D$ matrices. For $k\in\mathbb Z/N\mathbb Z$, write
+    $(A^{(k)})_j=A_{j+k}$ for the cyclic rotation by $k$ sites. Let $P$ be
+    the permutation matrix on the block coordinate satisfying
+    $P(e_a\otimes e_k)=e_a\otimes e_{k-1}$. For each physical index $i$, set
+    \begin{align}
+        B^i
+        &=N^{-1/N}\operatorname{diag}
+            \left(A_0^i,\ldots,A_{N-1}^i\right)P
+        \in\MN{ND}.
+        \label{eq:chain_cyclic_block_tensor}
+    \end{align}
+    Thus the $(k,k+1)$ block of $B^i$ is $N^{-1/N}A_k^i$, with block
+    indices taken modulo $N$, and every other block vanishes. The tensor $B$
+    depends on the fixed length $N$.
+\end{definition}
+
+\begin{theorem}[Fixed-length cyclic block average]
+    \label{thm:chain_cyclic_block_average}
+    \lean{MPSChainTensor.mpv_cyclicBlockTensor_eq_average}
+    \leanok
+    \uses{def:chain_cyclic_block_tensor, def:non_ti_chain}
+    For every basis configuration $\sigma\in\{0,\ldots,d-1\}^N$, the
+    length-$N$ coefficient of the tensor in
+    Definition~\ref{def:chain_cyclic_block_tensor} is
+    \begin{align}
+        V^{(N)}(B)_\sigma
+        &=\frac{1}{N}\sum_{k=0}^{N-1}c_{A^{(k)},\sigma}.
+        \label{eq:chain_cyclic_block_average}
+    \end{align}
+    This is the cyclic block-matrix calculation in the proof of
+    \cite[Theorem~3]{PerezGarcia2007Matrix}; it asserts only the coefficient
+    identity at the fixed length $N$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Write $D_i=\operatorname{diag}(A_0^i,\ldots,A_{N-1}^i)$ and omit the
+    scalar normalization temporarily. Commuting the cyclic permutation through
+    a block diagonal gives
+    \begin{align}
+        P\operatorname{diag}(M_0,\ldots,M_{N-1})
+        &=\operatorname{diag}(M_1,\ldots,M_0)P.
+        \label{eq:chain_cyclic_block_commute}
+    \end{align}
+    Repeated use of~(\ref{eq:chain_cyclic_block_commute}), followed by
+    $P^N=I$, yields
+    \begin{align}
+        D_{\sigma_0}P\cdots D_{\sigma_{N-1}}P
+        &=\operatorname{diag}\left(
+            \prod_{j=0}^{N-1}A_{j+k}^{\sigma_j}
+          \right)_{k=0}^{N-1}.
+        \label{eq:chain_cyclic_block_product}
+    \end{align}
+    Taking the trace of~(\ref{eq:chain_cyclic_block_product}) sums the traces
+    of its diagonal blocks. Finally,
+    $(N^{-1/N})^N=N^{-1}$ gives
+    (\ref{eq:chain_cyclic_block_average}).
+\end{proof}
+
 \begin{lemma}[Cyclic gauge equivalence is an equivalence relation]
     \label{lem:chain_gauge_equiv_equivalence}
     \lean{MPSChainTensor.GaugeEquiv.refl}
