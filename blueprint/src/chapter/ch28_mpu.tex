@@ -4346,6 +4346,9 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     \operatorname{ind}(\mathcal U\otimes\mathcal V)
       &=\operatorname{ind}(\mathcal U)+\operatorname{ind}(\mathcal V).
   \end{align}
+  This is the common-block reduced-source version of
+  \cite[Theorem~IV.3(ii)]{Cirac2017MPU}.
+  % Source lines: paper_v2.tex 824--833.
 \end{lemma}
 
 \begin{lemma}[Composition additivity]
@@ -4389,6 +4392,9 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     \operatorname{ind}(\mathcal W)
       &=\operatorname{ind}(\mathcal U)+\operatorname{ind}(\mathcal U').
   \end{align}
+  This is the six-block reduced-source version of
+  \cite[Theorem~IV.3(ii)]{Cirac2017MPU}.
+  % Source lines: paper_v2.tex 833--845.
 \end{lemma}
 
 \begin{definition}[MPU canonical form]
@@ -5402,14 +5408,15 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
   % Source lines: paper_v2.tex 1735--1743.
 \end{corollary}
 
-\begin{corollary}[Admissible necessary time-reversal invariants]
+\begin{corollary}[Admissible time-reversal invariants of supplied witnesses]
   \label{cor:mpu_admissible_sigma_equivalence_necessary}
   \notready
   \discussion{5714}
   % **Scope restriction (admissible symmetry equivalence):** the endpoint
   % blockings and symmetry paths carry the data of
-  % Definition~\ref{def:mpu_admissible_equivalence_datum}. Documented in
-  % docs/paper-gaps/mpu_canonical_form_full_support.tex.
+  % Definition~\ref{def:mpu_admissible_equivalence_datum}. The non-strict
+  % conclusion concerns only the supplied ancilla-enlarged blocked endpoints.
+  % Documented in docs/paper-gaps/mpu_canonical_form_full_support.tex.
   \uses{prop:mpu_admissible_sigma_blocking_parity,def:mpu_admissible_strict_symmetry_equivalence,
     def:mpu_admissible_symmetry_equivalence,def:mpu_reduced_full_support_source_datum,
     def:mpu_admissible_equivalence_datum}
@@ -5423,11 +5430,18 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
 
   For admissible equivalence after adjoining ancillas and applying the source
   blocking, let $p\mapsto\mathcal W_{\mathrm{anc}}(p)$ be the actual
-  ancilla-blocked witness path, not a reduced or equivalent representative.
-  Require continuous reduced full-support source data along
+  ancilla-enlarged blocked witness path, not a reduced or equivalent
+  representative. Require continuous reduced full-support source data along
   $\mathcal W_{\mathrm{anc}}(p)$, its actual two- and four-site blocks, and
-  the physical-adjoint comparisons of those two blocks. Then the two
-  endpoints have the same $\sigma^{(2)}$.
+  the physical-adjoint comparisons of those two blocks. The conclusion is
+  only
+  \begin{align}
+    \sigma^{(2)}(\mathcal W_{\mathrm{anc}}(0))
+      &=\sigma^{(2)}(\mathcal W_{\mathrm{anc}}(1)).
+  \end{align}
+  No equality between $\sigma^{(2)}$ of the original two MPUs is asserted.
+  Such a conclusion requires preservation under adjoining identity ancillas,
+  which remains open in issue~\#6138.
 \end{corollary}
 
 \begin{proposition}[Conjugation class and the MPS sign]
