@@ -46,8 +46,9 @@ normalized for the ordinary inner product.
   `MPOTensor.sourceCutM₂_eq_sourceX₂_mul_sourceY₂`: the exact source-cut factorizations.
 * `MPOTensor.sourceX₁_mul_sourceY₁_apply`, `MPOTensor.sourceX₂_mul_sourceY₂_apply`: the
   entry formulas identifying the two graphical source decompositions with the tensor entries.
-* `MPOTensor.sourceX₁_weighted_isometry`, `MPOTensor.sourceX₂_isometry`: the two left-factor
-  normalizations.
+* `MPOTensor.sourceX₁_weighted_isometry`, `MPOTensor.sourceX₂_isometry`,
+  `MPOTensor.sourceX₂_isometry_apply`: the two left-factor normalizations and the entrywise
+  second-cut identity.
 * `MPOTensor.sourceY₁_mul_sourceZ₁`, `MPOTensor.sourceY₂_mul_sourceZ₂`: the two right-inverse
   identities.
 

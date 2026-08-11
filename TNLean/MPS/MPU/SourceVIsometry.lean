@@ -10,7 +10,8 @@ import TNLean.MPS.MPU.SourceUV
 # The dressed source-v Gram equation
 
 This file formalizes the algebraic cancellation surrounding the source tensor
-$v$ in arXiv:1703.09188, equation `vUnitary` (lines 577--600).  The right source
+$v$ in arXiv:1703.09188, Theorem III.8, equations (31)--(32), Section III.B
+(lines 563--601).  The right source
 factors are tensorized in the exact dotted/solid leg order, and their explicit
 right inverse removes the dressing from
 $Y^\dagger(v^\dagger v)Y=Y^\dagger Y$.
@@ -29,8 +30,8 @@ variable {d D : ℕ} (U : MPOTensor d D)
 /-- Rotating the second source cut by $90^\circ$ identifies its physical/virtual
 Gram contraction with the ordinary Gram contraction of $Y_2$.
 
-The physical index `p` and virtual index `a` occur in the starred factor, while
-`q` and `b` occur in the unstarred factor.
+The physical index $p$ and virtual index $a$ occur in the starred factor, while
+$q$ and $b$ occur in the unstarred factor.
 
 Source: arXiv:1703.09188, Theorem III.8, equations (31)--(32), Section III.B
 (lines 563--601). -/
