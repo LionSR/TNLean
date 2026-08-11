@@ -1292,6 +1292,64 @@ give $O_{YX}(N)\to 0$, a contradiction.
     (\ref{eq:cpsv_active_core_unitary_dims}).
 \end{proof}
 
+% Source anchors: RMP arXiv:2011.12127v2, lines 1831--1906;
+% CPSV16 arXiv:1606.00608, lines 237--301 and 1135--1199.
+\begin{theorem}[Equal-ambient gauge equivalence for CPSV canonical forms]%
+    \label{thm:cpsv_equal_ambient_gauge}
+    \lean{MPSTensor.CPSVCanonicalFormData.%
+        fundamentalTheorem_equal_ambient_canonicalForm}
+    \leanok
+    \uses{def:cpsv_canonical_form, def:same_mpv2_pos, def:gauge_equiv}
+    Let $A$ and $B$ have the same ambient bond dimension $D$. Suppose each
+    tensor has CPSV canonical-form data, both data satisfy the separate weight
+    normalization condition~(\ref{eq:cpsv_weight_normalization}), neither tensor
+    is zero, and $\mc{V}^+(A)=\mc{V}^+(B)$. Then $A$ and $B$ are gauge equivalent:
+    there is
+    $G\in\GL_D(\C)$ such that, for every physical index $i$,
+    \begin{align}
+        B^i&=GA^iG^{-1}.
+        \label{eq:cpsv_equal_ambient_gauge}
+    \end{align}
+    Zero-weight listed blocks and unused ambient coordinates are allowed. The
+    conclusion requires the common ambient dimension $D$ and makes no claim for
+    canonical forms with different ambient bond dimensions.
+\end{theorem}
+
+The cited sources supply the active canonical-form comparison. The passage back
+from the active tensors to the ambient tensors is the coisometric lifting of
+Theorem~\ref{thm:coisometry_reconstruction_gauge_equiv}.
+
+\begin{proof}\leanok
+    \uses{thm:cpsv_active_sector_bnt_exact,
+        thm:coisometry_reconstruction_same_mpv_pos,
+        thm:cpgsv_equal_case_source,
+        thm:coisometry_reconstruction_gauge_equiv,
+        thm:gauge_invariance}
+    Apply Theorem~\ref{thm:cpsv_active_sector_bnt_exact} to obtain
+    BNT canonical forms $P,Q$, coisometries $U_A,U_B$, and retained-space
+    gauges $X_A,X_B$ with
+    \begin{align}
+        A^i&=U_A^\dagger X_AP^iX_A^{-1}U_A,
+        \notag\\
+        B^i&=U_B^\dagger X_BQ^iX_B^{-1}U_B.
+        \label{eq:cpsv_equal_ambient_reconstructions}
+    \end{align}
+    Theorem~\ref{thm:coisometry_reconstruction_same_mpv_pos}, gauge invariance,
+    and the hypothesis give
+    \begin{align}
+        \mc{V}^+(P)
+        &=\mc{V}^+(A)=\mc{V}^+(B)=\mc{V}^+(Q).
+        \label{eq:cpsv_equal_ambient_active_mpv}
+    \end{align}
+    Theorem~\ref{thm:cpgsv_equal_case_source} therefore identifies the retained
+    dimensions and gives $Y$ such that $Q^i=YP^iY^{-1}$. After identifying the
+    retained spaces, the two middle tensors in
+    (\ref{eq:cpsv_equal_ambient_reconstructions}) are conjugate by
+    $X_BYX_A^{-1}$. Theorem~\ref{thm:coisometry_reconstruction_gauge_equiv}
+    aligns the two coisometries inside the common ambient space and yields
+    (\ref{eq:cpsv_equal_ambient_gauge}).
+\end{proof}
+
 Combining the after-blocking preparation with the normalized-weight construction
 gives the arbitrary-input statement, conditional on the weight normalization.
 
