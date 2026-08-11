@@ -55,6 +55,82 @@ first.
     \end{center}
 \end{definition}
 
+\begin{definition}[Fixed-length varying-bond open chain]
+    \label{def:varying_bond_obc_chain}
+    \lean{OBCChainTensor, OBCChainTensor.coeff, OBCChainTensor.cyclicTranslateConfig, OBCChainTensor.IsTranslationInvariantState}
+    \leanok
+    Fix a chain length $N$ and dimensions $D_0,\ldots,D_N\leq D$ with
+    $D_0=D_N=1$. A varying-bond open chain consists of matrices
+    $A_k^i\in\mathbb C^{D_k\times D_{k+1}}$ for
+    $k=0,\ldots,N-1$ and $i=0,\ldots,d-1$. Its coefficient at the physical
+    configuration $\sigma$ is the dependent virtual-path contraction
+    \begin{align}
+        c_A(\sigma)
+        &=\sum_{\substack{0\leq\alpha_k<D_k\\0\leq k\leq N}}
+          \prod_{k=0}^{N-1}
+          (A_k^{\sigma_k})_{\alpha_k,\alpha_{k+1}}.
+        \label{eq:varying_bond_obc_coeff}
+    \end{align}
+    This is the open-boundary representation of
+    \cite[Section~II.B]{PerezGarcia2007Matrix}. A cyclic translation acts only
+    on $\sigma$; it does not rotate the dimensions or move the open cut.
+    Translation invariance at this fixed length means that $c_A(\sigma)$ is
+    unchanged by every such translation. Zero intermediate dimensions are
+    permitted and give an empty virtual-path space. For $N=0$, the unique
+    empty path has coefficient $1$.
+\end{definition}
+
+\begin{definition}[Square padding of a varying-bond open chain]
+    \label{def:varying_bond_obc_zero_pad}
+    \lean{OBCChainTensor.zeroPad}
+    \leanok
+    \uses{def:varying_bond_obc_chain, def:non_ti_chain}
+    Embed each rectangular matrix entrywise into the upper-left corner of a
+    $D\times D$ matrix and set all remaining entries to zero. This gives a
+    square site-dependent closed chain. It is an auxiliary algebraic
+    factorization: the proof of
+    \cite[Theorem~3]{PerezGarcia2007Matrix} instead places the rectangular
+    matrices directly into compatible off-diagonal blocks of the final
+    $ND\times ND$ cyclic matrix.
+\end{definition}
+
+\begin{theorem}[Positive-length coefficient preservation]
+    \label{thm:varying_bond_obc_zero_pad_coeff}
+    \lean{OBCChainTensor.coeff_zeroPad,
+      OBCChainTensor.coeff_eq_zero_of_bondDim_eq_zero,
+      OBCChainTensor.coeff_zeroPad_eq_zero_of_bondDim_eq_zero,
+      OBCChainTensor.coeff_zero, OBCChainTensor.coeff_zeroPad_zero,
+      Fintype.sum_piFin_castLE_extend_zero,
+      MPSChainTensor.coeff_eq_sum_cyclic}
+    \leanok
+    \uses{def:varying_bond_obc_chain, def:varying_bond_obc_zero_pad}
+    For every fixed $N\geq1$ and every physical configuration $\sigma$,
+    the trace coefficient of the padded square chain equals the rectangular
+    open-chain contraction:
+    \begin{align}
+        \tr\!\left(\widetilde A_0^{\sigma_0}\cdots
+          \widetilde A_{N-1}^{\sigma_{N-1}}\right)
+        &=c_A(\sigma).
+        \label{eq:varying_bond_obc_zero_pad_coeff}
+    \end{align}
+    If an intermediate dimension is zero, both sides vanish. The restriction
+    $N\geq1$ is necessary: at $N=0$ the open-chain empty-path coefficient is
+    $1$, whereas the square-chain trace of the empty product is $D$. The
+    equality concerns this one fixed length and makes no assertion relating
+    states at different lengths.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{def:varying_bond_obc_chain, def:varying_bond_obc_zero_pad}
+    Expand the square-chain trace as a sum over cyclic virtual paths. Every
+    path with an index outside the corresponding rectangular bond range has a
+    zero factor. The remaining paths are exactly the dependent open-chain
+    paths: the first and last virtual indices both equal the unique element of
+    their one-dimensional endpoint spaces. Their products agree entry by
+    entry, which proves~\eqref{eq:varying_bond_obc_zero_pad_coeff}.
+\end{proof}
+
 \begin{definition}[Cyclic block tensor at fixed length]
     \label{def:chain_cyclic_block_tensor}
     \lean{MPSChainTensor.cyclicRotation, MPSChainTensor.cyclicBlockTensor}
