@@ -12,8 +12,10 @@ This file defines the physical adjoint, which exchanges and conjugates the
 physical indices of an MPO tensor without reversing its virtual chain, and
 proves the corresponding word and periodic-operator identities.
 
-## Main definition
+## Main definitions
 
+* `MPOTensor.bondPairSwap` — exchange of the two doubled virtual-bond indices.
+* `MPOTensor.bondPairSwapEquiv` — the corresponding doubled-bond equivalence.
 * `MPOTensor.physicalAdjointTensor` — physical adjoint without virtual reflection.
 
 ## Main results
@@ -27,6 +29,40 @@ open scoped Matrix
 namespace MPOTensor
 
 variable {d D : ℕ}
+
+/-- Exchange the two oriented bond indices of a doubled virtual index.
+For `ab = (a, b)`, this is `bondPairSwap ab = (b, a)`.
+
+This is the bond-index exchange under adjunction in the first diagram of the
+proof of Proposition 4.13 of arXiv:1606.00608, lines 1909--1913, and the
+virtual-pair reflection used in the proof of Lemma III.7 in Section III.B of
+arXiv:1703.09188, lines 536--557. -/
+def bondPairSwap (ab : Fin (D * D)) : Fin (D * D) :=
+  finProdFinEquiv (ab.modNat, ab.divNat)
+
+@[simp] theorem bondPairSwap_finProdFinEquiv (a b : Fin D) :
+    bondPairSwap (finProdFinEquiv (a, b)) = finProdFinEquiv (b, a) := by
+  simp [bondPairSwap]
+
+@[simp] theorem bondPairSwap_involutive (ab : Fin (D * D)) :
+    bondPairSwap (bondPairSwap ab) = ab := by
+  rw [show ab = finProdFinEquiv (ab.divNat, ab.modNat) by
+    exact (finProdFinEquiv.apply_symm_apply ab).symm]
+  simp
+
+/-- The equivalence exchanging the two entries of a doubled virtual index. -/
+def bondPairSwapEquiv (D : ℕ) : Fin (D * D) ≃ Fin (D * D) where
+  toFun := bondPairSwap
+  invFun := bondPairSwap
+  left_inv := bondPairSwap_involutive
+  right_inv := bondPairSwap_involutive
+
+@[simp] theorem bondPairSwapEquiv_apply (ab : Fin (D * D)) :
+    bondPairSwapEquiv D ab = bondPairSwap ab := rfl
+
+@[simp] theorem bondPairSwapEquiv_symm :
+    (bondPairSwapEquiv D).symm = bondPairSwapEquiv D := by
+  rfl
 
 /-- The physical adjoint of an MPO tensor swaps its ket and bra indices and conjugates each
 virtual matrix entry, without transposing the virtual indices:
