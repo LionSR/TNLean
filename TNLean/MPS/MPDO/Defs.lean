@@ -31,6 +31,9 @@ Verstraete):
 * `MPOTensor.evalWord`: word evaluation for MPO tensors (product of 4-index
   matrices along a pair of ket/bra words).
 * `MPOTensor.mpo`: the MPO operator family for system size `N`.
+* `MPOTensor.reindexPhysical`: relabel both physical indices by an equivalence.
+* `MPOTensor.reindexPhysicalConfigEquiv`: the induced sitewise equivalence on
+  physical configurations.
 * `MPOTensor.normalizedMPO`: the operator family divided by its trace.
 * `MPOTensor.transferMap`: the MPO transfer map
   `E_M(X) = ∑_{i,j} M^{ij} X (M^{ij})†`.
@@ -42,6 +45,13 @@ Verstraete):
 * `MPOTensor.toMPSTensor`: view an MPO tensor as an MPS tensor with doubled
   physical index `Fin (d * d)`.
 * `MPOTensor.physicalSlice`: the physical matrix at fixed virtual indices.
+
+## Main results
+
+* `MPOTensor.evalWord_reindexPhysical`: word evaluation commutes with physical
+  reindexing.
+* `MPOTensor.mpo_reindexPhysical`: finite-size MPOs are related by simultaneous
+  row and column reindexing.
 
 ## References
 

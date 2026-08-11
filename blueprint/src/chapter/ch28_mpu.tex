@@ -755,7 +755,8 @@ closing a chain of $N$ copies of $\mathcal U$.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:mpu_eval_word_physical_reindexing}
+    \uses{def:mpu_physical_reindexing,def:mpo_family,
+        thm:mpu_eval_word_physical_reindexing}
     Apply the word identity to every pair of configurations and take the
     virtual trace. This is simultaneous row and column reindexing by $e_*$.
 \end{proof}
