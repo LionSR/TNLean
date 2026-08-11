@@ -3862,22 +3862,30 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
   \end{align}
   Here $\tau$ ranges over input words of length $K$, and $\eta$ ranges over
   output words of length $K+2$. This is the range-insertion equality in the
-  proof of \cite[Lemma~III.3]{Cirac2017MPU}.
+  proof of \cite[Lemma~III.7, lines~545--557]{Cirac2017MPU}.
 \end{theorem}
 
 \begin{proof}
   \uses{thm:mpu_reduced_cfii_transfer_stabilization,
+    thm:mpu_reflected_transfer_power,
+    thm:mpu_reflected_supplied_contractions,
+    thm:mpu_source_x1_range_projection,
+    thm:mpu_source_x2_range_projection,
     thm:mpu_source_u_gram_second_cut_metric,
-    thm:mpu_supplied_witness_overlapping_reblocking,
     thm:mpu_source_u_terminal_boundary,
     thm:mpu_normalized_output_tail_closed_trace}
   The stabilized transfer power is
-  $E^J=\lvert\rho)(\Phi\rvert$. Blocking a further $D^2$ sites gives the two
-  simple contractions at length $K$. Expand the ordinary Gram entry through
-  the two source cuts, insert their range projections, and apply these
-  contractions to the intervening blocked network. The terminal source-factor
-  contraction removes the remaining boundary indices. The resulting closed
-  network is the normalized $(K+2)$-site contraction displayed above.
+  $E^J=\lvert\rho)(\Phi\rvert$. Its reflected form supplies the aligned
+  one- and two-letter contractions at lengths $K$ and $K+2$. Expand the
+  ordinary Gram entry while retaining both external source-$u$ tensors and
+  the full $\rho$-weighted boundary. Insert the first- and second-cut range
+  projections, but contract them only inside this closed $(K+2)$-site
+  network. The remaining step is a simultaneous use of the reflected
+  one- and two-letter contractions to move the second-cut metric through the
+  overlapping windows. Only after every virtual and source index is closed
+  does the terminal boundary contraction reduce the network to the normalized
+  output-first trace displayed above. No separate identity for the second-cut
+  metric or either ambient range projection is asserted.
 \end{proof}
 
 \begin{theorem}[Complete reduced source-$v$ contraction]
@@ -3885,32 +3893,44 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
   \notready
   \discussion{6071}
   \uses{def:mpu,def:mpu_normalized_flattening,def:cpsv_cfii,
-    def:mpu_full_active_support,def:mpu_simple,
-    def:mpu_source_v_dressing,thm:mpu_reduced_cfii_transfer_stabilization}
+    def:mpu_full_active_support,def:mpu_simple,def:mpu_source_uv,
+    def:mpu_source_v_dressing,thm:mpu_reduced_cfii_transfer_stabilization,
+    thm:mpu_supplied_projector_simple2}
   Let $\mathcal U$ be an MPU tensor with $d>0$ and $D>1$. Choose
   canonical-form-II data for its normalized flattening whose active blocks
-  fill the ambient bond space, and construct the source factors from the
-  normalized positive right fixed point $\rho$ supplied by
-  Theorem~\ref{thm:mpu_reduced_cfii_transfer_stabilization}. Then the second
-  simple-tensor contraction~(\ref{eq:mpu_simple2}) holds if and only if
+  fill the ambient bond space. Let $\rho$ and $(\Phi\rvert$ be the normalized
+  fixed pair supplied by
+  Theorem~\ref{thm:mpu_reduced_cfii_transfer_stabilization}, set
+  $J=D^2-1$ and $K=JD^2$, and put $W=\mathcal U^{[K]}$. Recompute the source
+  factors and $v$ from $W$ using $\rho$. Then the supplied contraction
+  \begin{align}
+    W^{ij}W^{k\ell}
+      &=W^{ij}\lvert\rho)(\Phi\rvert W^{k\ell}
+  \end{align}
+  holds if and only if
   \begin{align}
     (Y_1\otimes Y_2)^\dagger v^\dagger v(Y_1\otimes Y_2)
       &=(Y_1\otimes Y_2)^\dagger(Y_1\otimes Y_2).
   \end{align}
-  This is the complete blocked-network identification in equation~(31) of
-  \cite[Theorem~III.4]{Cirac2017MPU}, with the stabilized transfer power
-  inserted in the internal contraction.
+  When $W$ is simple, Theorem~\ref{thm:mpu_supplied_projector_simple2}
+  supplies the displayed contraction with this same stabilized pair. This is
+  the complete equality labelled \texttt{vUnitary} in
+  \cite[proof of Theorem~III.8, lines~577--588]{Cirac2017MPU}, with the
+  stabilized transfer power retained in the internal contraction.
 \end{theorem}
 
 \begin{proof}
   \uses{thm:mpu_reduced_cfii_transfer_stabilization,
+    thm:mpu_supplied_projector_simple2,
     thm:mpu_supplied_witness_overlapping_reblocking,
     thm:mpu_source_v_four_u_expansions,
     thm:mpu_source_v_dressed_entries}
   Insert $E^{D^2-1}=\lvert\rho)(\Phi\rvert$ into the complete blocked network.
-  Expand both source cuts and rotate the second cut. The resulting four-letter
-  expression identifies the second simple-tensor contraction with the dressed
-  Gram equation in both directions.
+  The supplied-projector theorem fixes the insertion witnesses as
+  $\lvert\rho)(\Phi\rvert$, rather than an arbitrary pair from simplicity.
+  Expand both source cuts and rotate the second cut. Contract the resulting
+  four-letter expression as one closed network to obtain the dressed Gram
+  equation, and reverse the same calculation for the converse.
 \end{proof}
 
 \begin{lemma}[The source operator $u$ is an isometry]
@@ -3946,8 +3966,8 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
   \end{align}
   By Theorem~\ref{thm:mpu_source_u_complete_network}, the $(p,q)$ entry of
   $u^\dagger u$ is the normalized contraction of
-  $U^{(K+2)\dagger}U^{(K+2)}$ with a common length-$K$ input tail. MPU
-  unitarity evaluates this contraction as $\delta_{p,q}$.
+  $U^{(K+2)}U^{(K+2)\dagger}$ with a common length-$K$ input tail. MPU
+  unitarity evaluates this output-first contraction as $\delta_{p,q}$.
 \end{proof}
 
 \begin{theorem}[Simple-tensor equivalence theorem]
@@ -3973,29 +3993,33 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
 \end{theorem}
 
 \begin{proof}
-  \uses{thm:mpu_source_u_complete_network,
-    thm:mpu_normalized_output_tail_coisometry,thm:mpu_simple1,
+  \uses{lemuisometry,thm:mpu_supplied_projector_simple2,thm:mpu_simple1,
     thm:mpu_source_v_complete_reduced_contraction,
     thm:mpu_source_uv_two_site_factorization,
     thm:mpu_source_v_dressed_gram_cancel}
-  Suppose first that $\mathcal U$ is simple. By
+  Lemma~\ref{lemuisometry} gives $u^\dagger u=\Id$ before any of the four
+  conditions is assumed. Thus $u$ is a standing isometry and
+  $r\ell\geq d^2$ throughout the proof.
+
+  Suppose first that $\mathcal U$ is simple. The stabilized transfer power and
+  Theorem~\ref{thm:mpu_supplied_projector_simple2} give the second contraction
+  with the supplied pair $\lvert\rho)(\Phi\rvert$. By
   Theorem~\ref{thm:mpu_source_v_complete_reduced_contraction},
   \begin{align}
     (Y_1\otimes Y_2)^\dagger v^\dagger v(Y_1\otimes Y_2)
       &=(Y_1\otimes Y_2)^\dagger(Y_1\otimes Y_2).
   \end{align}
   Cancelling the dressing by the right inverses of $Y_1$ and $Y_2$ gives
-  $v^\dagger v=\Id$. Hence $r\ell\leq d^2$. The complete source-$u$
-  contraction and MPU unitarity give $u^\dagger u=\Id$, hence
-  $r\ell\geq d^2$.
+  $v^\dagger v=\Id$, hence $r\ell\leq d^2$. Together with the standing
+  source-$u$ isometry, this gives $r\ell=d^2$.
 
-  If $r\ell=d^2$, the isometry $u$ is square and therefore unitary. If $u$
-  is unitary, the exact two-site factorization of $U^{(2)}$ and unitarity of
-  $U^{(2)}$ imply that $v$ is unitary. Finally, suppose that $v$ is unitary.
-  The fixed-point identity gives the first simple-tensor contraction.
-  Unitarity of $v$ gives the dressed Gram identity, and
-  Theorem~\ref{thm:mpu_source_v_complete_reduced_contraction} gives the second
-  contraction.
+  If $r\ell=d^2$, the standing isometry $u$ is square and therefore unitary.
+  If $u$ is unitary, the exact two-site factorization of $U^{(2)}$ and
+  unitarity of $U^{(2)}$ imply that $v$ is unitary. Finally, suppose that $v$
+  is unitary. The fixed-point identity gives the first simple-tensor
+  contraction. Unitarity of $v$ gives the dressed Gram identity, and
+  Theorem~\ref{thm:mpu_source_v_complete_reduced_contraction} gives the
+  supplied second contraction.
 \end{proof}
 
 \begin{definition}[Standard form]
