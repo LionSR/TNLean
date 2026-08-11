@@ -881,22 +881,38 @@ give $O_{YX}(N)\to 0$, a contradiction.
     \uses{def:mpv_block_phase_equiv, def:gauge_phase_equiv,
         def:irreducible_tensor, def:tp_kraus, def:primitive_channel}
     Let $X$ and $Y$ be trace-preserving, primitive, irreducible NTs of positive
-    bond dimensions $D_X$ and $D_Y$. If their MPV families differ by a nonzero
-    scalar power, then $D_X=D_Y$, and after identifying the bond spaces there
-    exist $G\in\GL_{D_Y}(\C)$ and $\zeta\in\C\setminus\{0\}$ such that, for every
-    physical index $i$, $Y^i=\zeta G X^i G^{-1}$.
-    The scalar is not asserted to be positive, and the gauge is not asserted to
-    be unitary.
+    bond dimensions $D_X$ and $D_Y$. Fix $\zeta\in\C\setminus\{0\}$ and suppose
+    that, for every positive length $N$ and every physical word $\sigma$,
+    \begin{align}
+        V^{(N)}(Y)_\sigma
+        &=\zeta^N V^{(N)}(X)_\sigma.
+        \label{eq:prepared_phase_equiv_fixed_scalar}
+    \end{align}
+    Then $D_X=D_Y$, and after identifying the bond spaces there exists
+    $G\in\GL_{D_Y}(\C)$ such that, for every physical index $i$,
+    \begin{align}
+        Y^i&=\zeta G X^i G^{-1}.
+        \label{eq:prepared_phase_equiv_fixed_scalar_gauge}
+    \end{align}
+    The fixed scalar $\zeta$ is not asserted to be positive, and the gauge is
+    not asserted to be unitary.
 \end{theorem}
 
 \begin{proof}\leanok
     \uses{lem:prepared_phase_equiv_dim_eq,
-        thm:not_gauge_phase_eventually_not_proportional}
+        thm:not_gauge_phase_eventually_not_proportional,
+        thm:cpsv_normal_overlap_dichotomy}
     Lemma~\ref{lem:prepared_phase_equiv_dim_eq} identifies the bond dimensions.
-    If no gauge-phase relation existed after this identification,
-    Theorem~\ref{thm:not_gauge_phase_eventually_not_proportional} would give a
-    positive length $N$ at which the two MPV states are not proportional. This
-    contradicts the assumed scalar-power identity at every positive length.
+    The gauge-phase theorem gives an invertible $G$ and a nonzero scalar $\eta$
+    such that $Y^i=\eta G X^iG^{-1}$. Hence
+    $V^{(N)}(Y)_\sigma=\eta^N V^{(N)}(X)_\sigma$ for every $N$ and $\sigma$.
+    The normalized self-overlaps tend to one, so there are consecutive positive
+    lengths $M$ and $M+1$ with words for which the corresponding coefficients of
+    $V^{(M)}(X)$ and $V^{(M+1)}(X)$ are nonzero. Comparing these identities with
+    (\ref{eq:prepared_phase_equiv_fixed_scalar}) gives
+    $\zeta^M=\eta^M$ and $\zeta^{M+1}=\eta^{M+1}$. Cancelling the nonzero
+    $M$-th power yields $\zeta=\eta$, which proves
+    (\ref{eq:prepared_phase_equiv_fixed_scalar_gauge}).
 \end{proof}
 
 \begin{theorem}[Dimension-preserving BNT form of prepared blocks]%
@@ -939,20 +955,21 @@ give $O_{YX}(N)\to 0$, a contradiction.
     \leanok
     \uses{def:block_diagonal_tensor}
     Let $e:\{1,\ldots,r\}\simeq\{1,\ldots,r'\}$ satisfy
-    $D_k=D'_{e(k)}$. If, after this dimension identification,
+    $D_k=D'_{e(k)}$. Let $Q_k$ be the coordinate permutation whose rows are
+    indexed by the primed block and whose columns are indexed by the unprimed
+    block. Suppose that, for every block and physical index,
     \begin{align}
         \mu_kA_k^i
-        &=\Pi_k\left(\mu'_{e(k)}B_{e(k)}^i\right)\Pi_k^{-1}
+        &=Q_k^\dagger\left(\mu'_{e(k)}B_{e(k)}^i\right)Q_k.
         \label{eq:heterogeneous_block_local}
     \end{align}
-    for every block and physical index, where $\Pi_k$ is the corresponding
-    coordinate identification, then the induced equivalence $E$ of flattened
-    dependent block coordinates has a permutation matrix $\Pi_E$. For every
-    physical index $i$,
+    The induced equivalence $E$ of flattened dependent block coordinates has a
+    permutation matrix $Q_E$, with rows indexed by the primed coordinates and
+    columns indexed by the unprimed coordinates. For every physical index $i$,
     \begin{align}
         \bigoplus_{k=1}^{r}\mu_kA_k^i
-        &=\Pi_E\left(\bigoplus_{\ell=1}^{r'}
-          \mu'_{\ell}B_{\ell}^i\right)\Pi_E^{-1}.
+        &=Q_E^\dagger\left(\bigoplus_{\ell=1}^{r'}
+          \mu'_{\ell}B_{\ell}^i\right)Q_E.
         \label{eq:heterogeneous_block_global}
     \end{align}
 \end{theorem}
@@ -974,13 +991,15 @@ give $O_{YX}(N)\to 0$, a contradiction.
     Under the hypotheses of
     Theorem~\ref{thm:paperbnt_collapsed_prepared}, there are a BNT
     canonical-form sector decomposition $P$, an equivalence $E$ of flattened
-    bond coordinates, and $X\in\GL_{D_{\mathrm{tot}}(P)}(\C)$. The first
+    bond coordinates, and $X\in\GL_{D_{\mathrm{tot}}(P)}(\C)$. Write $Q_E$ for
+    the permutation matrix whose rows are indexed by the coordinates of $P$ and
+    whose columns are indexed by the original block coordinates. The first
     identity below holds, and the second holds for every physical index $i$:
     \begin{align}
         D_{\mathrm{tot}}(P)&=\sum_{k=1}^{r}D_k,
         \label{eq:prepared_exact_total_dim}\\
         \bigoplus_{k=1}^{r}\mu_kB_k^i
-        &=\Pi_E\left(XP^iX^{-1}\right)\Pi_E^{-1}.
+        &=Q_E^\dagger\left(XP^iX^{-1}\right)Q_E.
         \label{eq:prepared_exact_reconstruction}
     \end{align}
 \end{theorem}
@@ -1050,6 +1069,7 @@ give $O_{YX}(N)\to 0$, a contradiction.
     dimension sum by the active indices.
 \end{proof}
 
+% Source: CPSV16 lines 214--301 and 1080--1148; CPGSV21 lines 1831--1885.
 \begin{theorem}[Exact active coisometric BNT reconstruction]%
     \label{thm:cpsv_active_sector_bnt_exact}
     \lean{MPSTensor.CPSVCanonicalFormData.exists_active_isBNTCanonicalForm_exact}
