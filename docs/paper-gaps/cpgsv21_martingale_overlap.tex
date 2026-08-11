@@ -1032,26 +1032,60 @@ Furthermore,
 \begin{align}
   \mathcal K_n^{-1}&\longrightarrow\mathscr R(P_\rho)^{-1}.
 \end{align}
-Together with the three raw correction bounds above, these inverse estimates
-control the centered term and all three finite-Gram corrections without
-spectator-cardinality loss.  Their uniform combination and the comparison with
-Nachtergaele's equation~(6.1) remain open.
+The uniform combination is now complete.  Put
+\begin{align}
+  \mathcal K_\infty&=\mathscr R(P_\rho),&
+  \mathcal I_\infty&=\mathcal K_\infty^{-1}.
+\end{align}
+Choose $g,c,r>0$ from
+\leanid{MPSTensor.IsPrimitiveMPS.groundSpaceMapES_geometric_inverseGram_bounds},
+so that $c=\lVert\mathcal I_\infty\rVert g$ and $0<r<1$, and choose $T>0$
+from \leanid{MPSTensor.IsPrimitiveMPS.tailVirtualMapES_norm_uniform}.  Set
+\begin{align}
+  J&=\lVert J_1^{\mathrm{left}}\rVert,&
+  M&=\lVert\mathcal K_\infty\rVert
+       \lVert\mathcal I_\infty\rVert,\\
+  C_*&=4\lVert\mathcal I_\infty\rVert T g(J+1)(M+1).
+\end{align}
+Then
+\leanid{MPSTensor.IsPrimitiveMPS.openChain_groundProjection_defect_le_geometric}
+proves, for every $K$ and every $l\geq1$ with $cr^l<1$,
+\begin{align}
+  \left\|
+    P^{\mathrm{tail}}_{K,l+1}P^{\mathrm{left}}_{K+l}
+      -P_{\mathcal G_{K+l+1}^{\mathrm{ES}}(A)}
+  \right\|
+  &\leq \frac{C_*r^l}{1-cr^l}.
+\end{align}
+The proof depends directly on the exact residual telescope
+\leanid{MPSTensor.c3_injectiveRangeProjector_residual_eq_centered_sub_gramErrors},
+the centered factorization and norm estimate
+\leanid{MPSTensor.c3_centeredVirtualResidualES_eq_overlapFactors} and
+\leanid{MPSTensor.c3_centeredVirtualResidualES_norm_le}, the uniform tail bound,
+the pointwise inverse-Gram bounds and their three-length smallness theorem, and
+the three correction estimates
+\leanid{MPSTensor.c3TailFiniteGramCorrectionES_norm_le},
+\leanid{MPSTensor.c3FullInverseGramCorrectionES_norm_le}, and
+\leanid{MPSTensor.c3LeftFiniteGramCorrectionES_norm_le}.  The exact range
+identities for the tail, left, and full boundary maps give the displayed
+physical projectors.  No physical projector is identified with a transfer
+fixed-point projector.
 
-In particular, the development does not prove the overlapping-window FNW
-contraction
+This coefficient is a reconstructed TNLean substitute sufficient for
+Nachtergaele's condition C3.  It is not the optimized FNW expression
 \begin{align}
   c\lambda^l\frac{1+c\lambda^l}{1-c\lambda^l},
   \qquad c\lambda^l<1,
 \end{align}
-which appears as equation \path{boundAm} in
-\cite[Section~6]{Nachtergaele1996Spectral}, and it does not reconstruct the
-source constants.  It does not identify a physical range projector with the
-transfer fixed-point projector, nor does it establish the final numerical
-overlap or spectral-gap bound.  That overlapping-window estimate remains open;
-both boundary maps are unweighted (Frobenius), so the contraction estimate may
-require a fixed-point metric or weighted boundary coordinates.
+quoted as equation \path{boundAm} in
+\cite[Section~6]{Nachtergaele1996Spectral}.  Recovering that numerator and its
+source constants still requires the weighted Gram estimates of FNW, Lemmas
+5.2, 5.3, and 6.2.  In particular, the reconstructed constant is not set equal
+to $D^2$; the available unweighted Gram conversion retains its proved
+$D^{3/2}$ norm factor inside $g$.
 
-\textbf{Verdict:} open gap.
+\textbf{Verdict:} the spectator-uniform C3-sufficient projector estimate is
+proved; the optimized FNW coefficient remains an open source-comparison gap.
 
 \bibliographystyle{alpha}
 \bibliography{references}
