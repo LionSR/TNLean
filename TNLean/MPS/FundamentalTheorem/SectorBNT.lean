@@ -11,6 +11,7 @@ Authors: TNLean contributors
 import TNLean.MPS.FundamentalTheorem.SectorBNT.Api
 import TNLean.MPS.FundamentalTheorem.SectorBNT.Basic
 import TNLean.MPS.FundamentalTheorem.SectorBNT.Blocking
+import TNLean.MPS.FundamentalTheorem.SectorBNT.CanonicalFormBridge
 import TNLean.MPS.FundamentalTheorem.SectorBNT.CoeffIdentity
 import TNLean.MPS.FundamentalTheorem.SectorBNT.CopyWeightMatching
 import TNLean.MPS.FundamentalTheorem.SectorBNT.EqualModulus
