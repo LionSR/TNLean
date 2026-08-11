@@ -27,6 +27,29 @@ inverse norm visible in the assembled constant.
 
 open scoped ComplexOrder Matrix Matrix.Norms.Frobenius
 
+/-- If two real numbers are bounded by the same nonnegative number, the product of
+their square roots is bounded by that number. -/
+private theorem sqrt_mul_sqrt_le_of_le {a b B : ℝ} (hB : 0 ≤ B)
+    (haB : a ≤ B) (hbB : b ≤ B) :
+    Real.sqrt a * Real.sqrt b ≤ B := by
+  calc
+    Real.sqrt a * Real.sqrt b ≤ Real.sqrt B * Real.sqrt B := by
+      exact mul_le_mul (Real.sqrt_le_sqrt haB) (Real.sqrt_le_sqrt hbB)
+        (Real.sqrt_nonneg _) (Real.sqrt_nonneg _)
+    _ = B := Real.mul_self_sqrt hB
+
+/-- A moving geometric denominator is bounded by the denominator at the base
+length. -/
+private theorem inverse_one_sub_geometric_le_base {c r : ℝ} (hc : 0 < c)
+    (hr_pos : 0 < r) (hr_lt_one : r < 1) {l n : ℕ} (hln : l ≤ n)
+    (hsmall : c * r ^ l < 1) :
+    (1 - c * r ^ n)⁻¹ ≤ (1 - c * r ^ l)⁻¹ := by
+  have hpow : r ^ n ≤ r ^ l :=
+    pow_le_pow_of_le_one hr_pos.le hr_lt_one.le hln
+  have hden : 1 - c * r ^ l ≤ 1 - c * r ^ n := by
+    linarith [mul_le_mul_of_nonneg_left hpow hc.le]
+  exact inv_anti₀ (sub_pos.mpr hsmall) hden
+
 namespace MPSTensor
 
 variable {d D : ℕ}
@@ -82,29 +105,6 @@ theorem c3_injectiveRangeProjector_residual_eq_centered_sub_corrections [NeZero 
     c3LeftFiniteGramCorrectionES, ContinuousLinearMap.comp_sub,
     ContinuousLinearMap.sub_comp, ContinuousLinearMap.comp_apply,
     sub_apply]
-
-/-- If two real numbers are bounded by the same nonnegative number, the product of
-their square roots is bounded by that number. -/
-private theorem sqrt_mul_sqrt_le_of_le {a b B : ℝ} (hB : 0 ≤ B)
-    (haB : a ≤ B) (hbB : b ≤ B) :
-    Real.sqrt a * Real.sqrt b ≤ B := by
-  calc
-    Real.sqrt a * Real.sqrt b ≤ Real.sqrt B * Real.sqrt B := by
-      exact mul_le_mul (Real.sqrt_le_sqrt haB) (Real.sqrt_le_sqrt hbB)
-        (Real.sqrt_nonneg _) (Real.sqrt_nonneg _)
-    _ = B := Real.mul_self_sqrt hB
-
-/-- A moving geometric denominator is bounded by the denominator at the base
-length. -/
-private theorem inverse_one_sub_geometric_le_base {c r : ℝ} (hc : 0 < c)
-    (hr_pos : 0 < r) (hr_lt_one : r < 1) {l n : ℕ} (hln : l ≤ n)
-    (hsmall : c * r ^ l < 1) :
-    (1 - c * r ^ n)⁻¹ ≤ (1 - c * r ^ l)⁻¹ := by
-  have hpow : r ^ n ≤ r ^ l :=
-    pow_le_pow_of_le_one hr_pos.le hr_lt_one.le hln
-  have hden : 1 - c * r ^ l ≤ 1 - c * r ^ n := by
-    linarith [mul_le_mul_of_nonneg_left hpow hc.le]
-  exact inv_anti₀ (sub_pos.mpr hsmall) hden
 
 /-- Norm bound for the centered physical sandwich. -/
 theorem c3CenteredProjectorResidualES_norm_le [NeZero D]
@@ -269,8 +269,12 @@ theorem IsPrimitiveMPS.openChain_groundProjection_defect_le_geometric
         simpa only [Kinf] using c3_centeredVirtualResidualES_norm_le A K l ρ hρ
       _ ≤ J * (g * r ^ l) * C_T := by
         dsimp only [J]
-        gcongr
-        exact hTail K
+        apply mul_le_mul
+        · exact mul_le_mul_of_nonneg_left hGramL (norm_nonneg _)
+        · exact hTail K
+        · exact norm_nonneg _
+        · exact mul_nonneg (norm_nonneg _)
+            (mul_nonneg hg.le (pow_nonneg hr_pos.le _))
   let base := ‖Iinf‖ * C_T * g * (J + 1) * (M + 1)
   have hbase_nonneg : 0 ≤ base := by
     dsimp only [base, J, M]
