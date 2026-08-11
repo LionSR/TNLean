@@ -27,6 +27,7 @@ import TNLean.MPS.MPU.SourceUOpenTail
 import TNLean.MPS.MPU.SourceURangeTransport
 import TNLean.MPS.MPU.SourceUSecondCutMetric
 import TNLean.MPS.MPU.SourceUV
+import TNLean.MPS.MPU.SourceVIsometry
 import TNLean.MPS.MPU.SuppliedFixedWitnesses
 import TNLean.MPS.MPU.SuppliedWitnessReblocking
 import TNLean.MPS.MPU.TensorProduct
