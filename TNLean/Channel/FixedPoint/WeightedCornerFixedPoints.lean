@@ -173,30 +173,11 @@ private theorem exists_weighted_compression
   have hσfix : map C σ = σ := by
     have hmapA : map A ρ = ρ := by
       have heq : map A ρ = Q * map K ρ * Q := by
-        rw [hAdef]; exact map_cornerCompressionKraus_eq K hQproj (Z := ρ) hQρQ
+        rw [hAdef]
+        exact map_cornerCompressionKraus_eq K hQproj (Z := ρ) hQρQ
       rw [heq, hρ_fix, hQρQ]
-    have hterm : ∀ i : Fin d,
-        C i * σ * (C i)ᴴ = Vᴴ * (A i * ρ * (A i)ᴴ) * V := by
-      intro i
-      have hCiH : (C i)ᴴ = Vᴴ * (A i)ᴴ * V := by
-        rw [hCi i]
-        simp [Matrix.conjTranspose_mul, Matrix.conjTranspose_conjTranspose, Matrix.mul_assoc]
-      rw [hCiH, hCi i, hσdef]
-      calc
-        Vᴴ * A i * V * (Vᴴ * ρ * V) * (Vᴴ * (A i)ᴴ * V)
-            = Vᴴ * (A i * (V * Vᴴ) * ρ * (V * Vᴴ) * (A i)ᴴ) * V := by
-              simp [Matrix.mul_assoc]
-        _ = Vᴴ * (A i * Q * ρ * Q * (A i)ᴴ) * V := by rw [hVVt]
-        _ = Vᴴ * (A i * (Q * ρ * Q) * (A i)ᴴ) * V := by simp [Matrix.mul_assoc]
-        _ = Vᴴ * (A i * ρ * (A i)ᴴ) * V := by rw [hQρQ]
-    calc
-      map C σ = ∑ i : Fin d, C i * σ * (C i)ᴴ := by rw [map_apply]
-      _ = ∑ i : Fin d, Vᴴ * (A i * ρ * (A i)ᴴ) * V :=
-          Finset.sum_congr rfl (fun i _ => hterm i)
-      _ = Vᴴ * (∑ i : Fin d, A i * ρ * (A i)ᴴ) * V := by
-          rw [Matrix.mul_sum, Matrix.sum_mul]
-      _ = Vᴴ * map A ρ * V := by rw [map_apply]
-      _ = σ := by rw [hmapA, hσdef]
+    rw [hσdef]
+    exact map_compressed_fixedPoint A C V Q ρ hCi hVVt hQρQ hmapA
   -- The square root compresses along the isometry.
   have hs : CFC.sqrt σ = Vᴴ * CFC.sqrt ρ * V := by
     rw [hσdef]
@@ -250,20 +231,8 @@ private theorem exists_weighted_compression
           Finset.sum_congr rfl fun i _ => (hterm i).symm
       _ = map K W := by rw [map_apply]
   have hmapC : ∀ Z : Matrix (Fin r) (Fin r) ℂ,
-      map C Z = Vᴴ * map A (V * Z * Vᴴ) * V := by
-    intro Z
-    calc map C Z = ∑ i : Fin d, C i * Z * (C i)ᴴ := by rw [map_apply]
-      _ = ∑ i : Fin d, Vᴴ * (A i * (V * Z * Vᴴ) * (A i)ᴴ) * V := by
-          refine Finset.sum_congr rfl fun i _ => ?_
-          have hCiH : (C i)ᴴ = Vᴴ * (A i)ᴴ * V := by
-            rw [hCi i]
-            simp [Matrix.conjTranspose_mul, Matrix.conjTranspose_conjTranspose,
-              Matrix.mul_assoc]
-          rw [hCiH, hCi i]
-          simp [Matrix.mul_assoc]
-      _ = Vᴴ * (∑ i : Fin d, A i * (V * Z * Vᴴ) * (A i)ᴴ) * V := by
-          rw [Matrix.mul_sum, Matrix.sum_mul]
-      _ = Vᴴ * map A (V * Z * Vᴴ) * V := by rw [map_apply]
+      map C Z = Vᴴ * map A (V * Z * Vᴴ) * V :=
+    map_compressed_eq_conj A C V hCi
   have hcorrS : ∀ W : Mat, Q * W * Q = W →
       (map K W = W ↔ map C (Vᴴ * W * V) = Vᴴ * W * V) := by
     intro W hW
