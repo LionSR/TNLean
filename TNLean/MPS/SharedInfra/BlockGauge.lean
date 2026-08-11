@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import TNLean.MPS.SharedInfra.CoisometryGauge
 import TNLean.MPS.SharedInfra.SectorDecomposition
 
 import Mathlib.Algebra.BigOperators.Fin
@@ -67,25 +68,6 @@ noncomputable def matched_block_gauge {Q : SectorDecomposition d}
 section BlockDiagonalGL
 
 variable {r : ℕ} {dim : Fin r → ℕ}
-
-/-- Regard a unitary matrix as an element of the matrix general linear group. -/
-noncomputable def unitaryGL {n : Type*} [Fintype n] [DecidableEq n]
-    (U : Matrix.unitaryGroup n ℂ) : GL n ℂ :=
-  ⟨U, (U : Matrix n n ℂ)ᴴ,
-    by
-      rw [← Matrix.star_eq_conjTranspose]
-      exact Matrix.mem_unitaryGroup_iff.mp U.prop,
-    by
-      rw [← Matrix.star_eq_conjTranspose]
-      exact Matrix.UnitaryGroup.star_mul_self U⟩
-
-@[simp] private theorem unitaryGL_val {n : Type*} [Fintype n] [DecidableEq n]
-    (U : Matrix.unitaryGroup n ℂ) :
-    (unitaryGL U : Matrix n n ℂ) = U := rfl
-
-@[simp] private theorem unitaryGL_inv_val {n : Type*} [Fintype n] [DecidableEq n]
-    (U : Matrix.unitaryGroup n ℂ) :
-    (((unitaryGL U)⁻¹ : GL n ℂ) : Matrix n n ℂ) = (U : Matrix n n ℂ)ᴴ := rfl
 
 /-- Form a block-diagonal element of `GL` from a family of invertible matrices. -/
 noncomputable def blockDiagonalGL (X : (k : Fin r) → GL (Fin (dim k)) ℂ) :
