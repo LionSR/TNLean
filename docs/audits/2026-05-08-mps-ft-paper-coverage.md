@@ -283,9 +283,12 @@ general diagonal multiplicity matrices. This is a statement-scope gap.
 The single-block periodic uniqueness and source-normalized block-diagonal
 kernel theorems are proved in `ParentHamiltonian/UniqueGroundState.lean` and
 `ParentHamiltonian/BNTBlockDiagonalBoundaryClosing.lean`. The qualifications in
-§3.2 are the excluded minimal-ring endpoint for `uniqueGS` and the absence of
-the arbitrary-Hamiltonian implication in `2blocks.1`, not deleted files or
-proof holes.
+§3.2 are the excluded minimal-ring endpoint for `uniqueGS`, the absence of
+the arbitrary-Hamiltonian implication in `2blocks.1`, and the stronger
+block-separation premise in `lem:direct-sum` and `2blocks.2`: the current Lean
+theorems assume gauge-phase inequivalence, whereas the source assumes pairwise
+distinct finite-ring component vectors. These are statement-scope gaps, not
+deleted files or proof holes.
 
 CPSV16 Theorem 3.10 is likewise not an axiom-removal problem on the printed
 statement. The unrestricted RFP–ZCL equivalence inherits the formal raw-weight

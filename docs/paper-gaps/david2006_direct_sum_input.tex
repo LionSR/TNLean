@@ -184,10 +184,18 @@ in \path{TNLean/MPS/MPDO/BiCFDerivation/BNTDirectSum.lean}; and
 \leanid{MPSTensor.hasBlockSelectorWords_of_pairBlockSeparatingWords}
 in \path{TNLean/MPS/MPDO/BiCFDerivation/Selectors.lean}.}
 
+These results assume that distinct equal-dimensional blocks are not equivalent
+up to gauge and phase. PGVWC07 instead assumes that the corresponding
+finite-ring component vectors are pairwise distinct. The missing comparison is
+a theorem deriving the required gauge-phase separation from the source
+hypothesis. To remove the extra premise, one must prove that comparison and use
+it to state the direct-sum and ground-space results with the source hypothesis.
+
 \section{Conclusion}
 
-The arbitrary-$L_0$ direct-sum interpolation needed for the BNT specialization
-is now formalized at the exact source length $3(b-1)(L_0+1)$. The resulting
+Under gauge-phase separation, the arbitrary-$L_0$ direct-sum interpolation
+needed for the BNT specialization is formalized at the exact source length
+$3(b-1)(L_0+1)$. The resulting
 span is homogeneous and positive-length, not cumulative. The length-zero
 identity is only the neutral base of a finite product over no remaining
 selectors. The case $b=1$ is treated separately by ordinary block injectivity.
