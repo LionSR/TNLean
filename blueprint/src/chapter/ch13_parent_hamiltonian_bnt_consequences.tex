@@ -6,7 +6,11 @@ weight $\mu_j$ be nonzero.  The preceding sections prove the simultaneous
 word-span, one-step intersection, global boundary-closing, and periodic
 chain-space statements at the source length of
 \cite[Theorem~12]{PerezGarcia2007Matrix}.  They yield the exact kernel equality
-under the source normalization.  For each block, let $\Lambda_j$ be positive
+under the source normalization and the stronger assumption that distinct
+equal-dimensional blocks are inequivalent up to gauge and phase.  The source
+instead states pairwise distinctness of the finite-ring component vectors; no
+implication from that condition to gauge-phase inequivalence is used here.  For
+each block, let $\Lambda_j$ be positive
 definite and satisfy
 \begin{align}
     \sum_a A^j_a A^{j\,\dagger}_a&=\Id,
@@ -14,8 +18,11 @@ definite and satisfy
     \sum_a A^{j\,\dagger}_a\Lambda_j A^j_a&=\Lambda_j.
     \notag
 \end{align}
-The first theorem below retains the earlier doubly-normalized specialization;
-the second is the source-facing result.
+Setting $\Lambda_j=\Id$ gives the two displayed normalization identities.
+The doubly-normalized theorem below also assumes normalized self-overlap, which
+is not a premise of the general dual-fixed-point theorem.  It is therefore a
+stronger corollary with $\Lambda_j=\Id$, not an exact hypothesis-for-hypothesis
+specialization.
 
 \begin{theorem}[Doubly-normalized PGVWC07 source-length kernel equality]
     \label{thm:gs_eq_bnt_span}
@@ -24,8 +31,9 @@ the second is the source-facing result.
     \uses{def:parent_hamiltonian, def:bnt_span, def:block_diagonal_tensor,
         def:irreducible_tensor, def:left_canonical_tensor,
         def:blocks_not_gauge_phase_equiv, def:l_blk_injective, def:mpv_overlap}
-    % Scope restriction documented in
-    % docs/paper-gaps/pgvwc07_ti_canonical_form_scope.tex.
+    % Scope restrictions documented in
+    % docs/paper-gaps/pgvwc07_ti_canonical_form_scope.tex and
+    % docs/paper-gaps/david2006_direct_sum_input.tex.
     Let $d\ge1$ and $g\ge2$. For $0\le j<g$, let $D_j\ge1$ and
     let $A_j=(A^j_a)_{a=0}^{d-1}$ be an irreducible left-canonical block with
     normalized self-overlap. Assume that no two distinct blocks are equivalent
@@ -47,8 +55,10 @@ the second is the source-facing result.
         \sum_{a=0}^{d-1} A^{j\,\dagger}_a\Lambda_j A^j_a&=\Lambda_j.
         \notag
     \end{align}
-    Thus this theorem has the explicit specialization $\Lambda_j=\Id$ and is
-    retained for compatibility; the unrestricted source result is stated below.
+    The relation $\Lambda_j=\Id$ therefore recovers the displayed
+    dual-fixed-point equation.  This theorem additionally assumes normalized
+    self-overlap, so it is a stronger corollary of the general statement below
+    rather than an exact specialization of its hypotheses.
     If
     \begin{align}
         L&\ge 3(g-1)(L_0+1)+1,
@@ -69,12 +79,14 @@ the second is the source-facing result.
 \begin{proof}
     \leanok
     \uses{thm:gs_eq_bnt_span_source_normalization}
-    % Scope restriction documented in
-    % docs/paper-gaps/pgvwc07_ti_canonical_form_scope.tex.
+    % Scope restrictions documented in
+    % docs/paper-gaps/pgvwc07_ti_canonical_form_scope.tex and
+    % docs/paper-gaps/david2006_direct_sum_input.tex.
     Apply the general-canonical-normalization theorem below with
     $\Lambda_j=\Id$.  Positive definiteness is immediate, and the assumed
     left-canonical identity is exactly the required dual fixed-point equation
-    at $\Lambda_j=\Id$.
+    at $\Lambda_j=\Id$.  The normalized self-overlap premise is retained as
+    an additional hypothesis of this corollary.
 \end{proof}
 
 \begin{theorem}[PGVWC07 source-length kernel equality at general canonical normalization]
