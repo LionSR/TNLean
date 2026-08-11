@@ -100,6 +100,20 @@ mathematical obstruction.
   statement for active phase-class representatives remains open at this stage;
   unused arbitrary-BNT members lie outside that corrected active statement.
 
+### MPU unitarity and simple contractions do not identify the source-v Gram contraction
+
+- Location: `TNLean/MPS/MPU/SourceVCounterexample.lean`
+- Main declaration:
+  `MPOTensor.SourceVCounterexample.sourceYTensor_gram_ne_inserted`
+- Statement refuted: MPU unitarity, a positive-definite source weight, and the
+  exact supplied simple contractions imply that the source-$Y$ Gram
+  contraction equals the rank-one-inserted double-layer contraction.
+- Corrected boundary: the witness has no positive-definite fixed point for its
+  normalized transfer map, so it admits no reduced canonical-form-II
+  presentation with full active support. The example therefore refutes only
+  the unrestricted source-$v$ Gram identification, not a statement under the
+  reduced-CFII and full-active-support hypotheses.
+
 ## Block Separation and Canonical Form
 
 ### Weighted MPV cancellation does not imply per-block SameMPV
