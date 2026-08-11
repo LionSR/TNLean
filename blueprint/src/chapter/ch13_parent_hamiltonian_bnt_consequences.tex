@@ -6,7 +6,11 @@ weight $\mu_j$ be nonzero.  The preceding sections prove the simultaneous
 word-span, one-step intersection, global boundary-closing, and periodic
 chain-space statements at the source length of
 \cite[Theorem~12]{PerezGarcia2007Matrix}.  They yield the exact kernel equality
-under the source normalization.  For each block, let $\Lambda_j$ be positive
+under the source normalization and the stronger assumption that distinct
+equal-dimensional blocks are inequivalent up to gauge and phase.  The source
+instead states pairwise distinctness of the finite-ring component vectors; no
+implication from that condition to gauge-phase inequivalence is used here.  For
+each block, let $\Lambda_j$ be positive
 definite and satisfy
 \begin{align}
     \sum_a A^j_a A^{j\,\dagger}_a&=\Id,
@@ -14,9 +18,11 @@ definite and satisfy
     \sum_a A^{j\,\dagger}_a\Lambda_j A^j_a&=\Lambda_j.
     \notag
 \end{align}
-The doubly-normalized theorem is the specialization $\Lambda_j=\Id$ of the
-general theorem with arbitrary positive-definite dual fixed points
-$\Lambda_j$.
+Setting $\Lambda_j=\Id$ gives the two displayed normalization identities.
+The doubly-normalized theorem below also assumes normalized self-overlap, which
+is not a premise of the general dual-fixed-point theorem.  It is therefore a
+stronger corollary with $\Lambda_j=\Id$, not an exact hypothesis-for-hypothesis
+specialization.
 
 \begin{theorem}[Doubly-normalized PGVWC07 source-length kernel equality]
     \label{thm:gs_eq_bnt_span}
@@ -48,8 +54,10 @@ $\Lambda_j$.
         \sum_{a=0}^{d-1} A^{j\,\dagger}_a\Lambda_j A^j_a&=\Lambda_j.
         \notag
     \end{align}
-    Thus this theorem is the case $\Lambda_j=\Id$ of the general
-    positive-definite dual-fixed-point statement below.
+    The relation $\Lambda_j=\Id$ therefore recovers the displayed
+    dual-fixed-point equation.  This theorem additionally assumes normalized
+    self-overlap, so it is a stronger corollary of the general statement below
+    rather than an exact specialization of its hypotheses.
     If
     \begin{align}
         L&\ge 3(g-1)(L_0+1)+1,
@@ -75,7 +83,8 @@ $\Lambda_j$.
     Apply the general-canonical-normalization theorem below with
     $\Lambda_j=\Id$.  Positive definiteness is immediate, and the assumed
     left-canonical identity is exactly the required dual fixed-point equation
-    at $\Lambda_j=\Id$.
+    at $\Lambda_j=\Id$.  The normalized self-overlap premise is retained as
+    an additional hypothesis of this corollary.
 \end{proof}
 
 \begin{theorem}[PGVWC07 source-length kernel equality at general canonical normalization]
