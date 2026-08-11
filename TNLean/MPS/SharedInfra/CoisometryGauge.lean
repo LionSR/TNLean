@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.Algebra.MatrixGramUnitary
-import TNLean.MPS.SharedInfra.BlockGauge
+import TNLean.MPS.Defs
 
 /-!
 # Gauges for coisometric reconstructions
@@ -26,6 +26,25 @@ Appendix A, lines 1058--1077 and eq. `II_XAX`.
 open scoped Matrix BigOperators ComplexOrder
 
 namespace MPSTensor
+
+/-- Regard a unitary matrix as an element of the matrix general linear group. -/
+noncomputable def unitaryGL {n : Type*} [Fintype n] [DecidableEq n]
+    (U : Matrix.unitaryGroup n ℂ) : GL n ℂ :=
+  ⟨U, (U : Matrix n n ℂ)ᴴ,
+    by
+      rw [← Matrix.star_eq_conjTranspose]
+      exact Matrix.mem_unitaryGroup_iff.mp U.prop,
+    by
+      rw [← Matrix.star_eq_conjTranspose]
+      exact Matrix.UnitaryGroup.star_mul_self U⟩
+
+@[simp] theorem unitaryGL_val {n : Type*} [Fintype n] [DecidableEq n]
+    (U : Matrix.unitaryGroup n ℂ) :
+    (unitaryGL U : Matrix n n ℂ) = U := rfl
+
+@[simp] theorem unitaryGL_inv_val {n : Type*} [Fintype n] [DecidableEq n]
+    (U : Matrix.unitaryGroup n ℂ) :
+    (((unitaryGL U)⁻¹ : GL n ℂ) : Matrix n n ℂ) = (U : Matrix n n ℂ)ᴴ := rfl
 
 /-- Extend an invertible operator on the range of a coisometry by the identity
 on the orthogonal complement of its initial space. -/
