@@ -30,10 +30,12 @@ bond dimensions are bounded by `D`. Intermediate bond dimensions may be zero.
 
 Source: PGVWC07, arXiv:quant-ph/0608197, lines 419--429. -/
 structure OBCChainTensor (d D N : ℕ) where
+  /-- The dimension of each virtual bond space. -/
   bondDim : Fin (N + 1) → ℕ
   bondDim_le : ∀ k, bondDim k ≤ D
   left_dim : bondDim 0 = 1
   right_dim : bondDim (Fin.last N) = 1
+  /-- The rectangular matrix associated with a site and physical index. -/
   tensor : ∀ k : Fin N, Fin d →
     Matrix (Fin (bondDim k.castSucc)) (Fin (bondDim k.succ)) ℂ
 
@@ -72,13 +74,14 @@ def zeroPad (A : OBCChainTensor d D N) : MPSChainTensor d D N :=
       else 0
     else 0
 
+/-- The coefficient of a length-zero open chain is one. -/
 @[simp] theorem coeff_zero (A : OBCChainTensor d D 0) (σ : Fin 0 → Fin d) :
     coeff A σ = 1 := by
   simp [coeff, A.left_dim]
 
 /-- At length zero, the square-chain coefficient is the trace of the `D × D`
 identity matrix. This records the mismatch with `coeff_zero` explicitly. -/
-@[simp] theorem coeff_zeroPad_zero (A : OBCChainTensor d D 0)
+theorem coeff_zeroPad_zero (A : OBCChainTensor d D 0)
     (σ : Fin 0 → Fin d) :
     (zeroPad A).coeff σ = D := by
   simp [MPSChainTensor.coeff, Matrix.trace_one]
