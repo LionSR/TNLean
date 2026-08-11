@@ -11,7 +11,7 @@ import TNLean.Analysis.CoisometricCompression
 import TNLean.Analysis.MatrixSqrt
 import TNLean.Channel.Peripheral.UnitalKraus
 import TNLean.Channel.SingleKraus
-import TNLean.Channel.Spectral.Support
+import TNLean.Analysis.SupportCompression
 
 import Mathlib.Analysis.InnerProductSpace.Adjoint
 import Mathlib.Analysis.InnerProductSpace.Rayleigh
