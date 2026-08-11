@@ -175,6 +175,26 @@
     $\{A^i\}$.
 \end{proof}
 
+\begin{lemma}[Trace adjointness of transfer maps]
+    \label{lem:trace_mul_transfer_map_adjoint}
+    \lean{trace_mul_transferMap_adjoint}
+    \lean{Kraus.trace_mul_transferMap_adjoint}
+    \leanok
+    \uses{def:transfer_map}
+    For matrices $\rho$ and $X$ and a finite family $(K_i)_i$,
+    \begin{align}
+        \tr\!\left(\rho\sum_i K_iXK_i^\dagger\right)
+        &=\tr\!\left(\left(\sum_iK_i^\dagger\rho K_i\right)X\right).
+        \notag
+    \end{align}
+\end{lemma}
+
+\begin{proof}\leanok
+    Cyclicity of the trace gives
+    $\tr(\rho K_iXK_i^\dagger)=\tr(K_i^\dagger\rho K_iX)$ for every~$i$;
+    summing over~$i$ proves the identity.
+\end{proof}
+
 \begin{theorem}[Transfer map is a channel]\label{thm:transfer_channel}
     \lean{MPSTensor.transferMap_isChannel}
     \leanok
