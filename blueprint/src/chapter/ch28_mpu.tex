@@ -4990,20 +4990,25 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
   \label{thm:mpu_admissible_conjugation_odd_rank}
   \notready
   \discussion{5713}
-  % **Scope restriction (admissible symmetry path):** equivalence means
-  % admissible strict equivalence in
+  % **Scope restriction (endpoints and admissible symmetry path):** each
+  % original endpoint and its conjugate comparison carry source data, and
+  % equivalence means admissible strict equivalence in
   % Definition~\ref{def:mpu_admissible_equivalence_datum}. Documented in
   % docs/paper-gaps/mpu_canonical_form_full_support.tex.
   \uses{prop:mpu_admissible_conjugation_standard_forms,lem:mpu_admissible_symmetry_path_criterion,
-    def:mpu_admissible_equivalence_datum}
-  Suppose that either $r$ or $\ell$ is odd and that the standard-form
-  interpolation determined below carries an admissible path datum whose common
-  blocking length $m$ satisfies $m\leq D^4$. Two MPUs
-  $\mathcal U_1$ and $\mathcal U_2$ are admissibly strictly equivalent under
-  conjugation symmetry if and only if
+    def:mpu_admissible_equivalence_datum,
+    def:mpu_reduced_full_support_source_datum}
+  For $i=1,2$, suppose the original one-site endpoint tensor
+  $\mathcal U_i$ and its conjugate comparison tensor are simple and each
+  carries reduced full-support source data. Suppose that either $r$ or $\ell$
+  is odd and that the standard-form interpolation determined below carries an
+  admissible path datum whose common blocking length $m$ satisfies $m\leq D^4$.
+  Then $\mathcal U_1$ and $\mathcal U_2$ are admissibly strictly equivalent
+  under conjugation symmetry if and only if
   \begin{align}
     \det(u_1v_1)&=\det(u_2v_2).
   \end{align}
+  % Source lines: paper_v2.tex 1401--1446.
 \end{theorem}
 
 \begin{corollary}[Equivalence of conjugation-symmetric MPUs after blocking]
@@ -5085,16 +5090,52 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
   \label{cor:mpu_admissible_equiv_under_conjugation}
   \notready
   \discussion{5713}
-  % **Scope restriction (blocking and admissible path):** all blocked endpoints
-  % carry their own source data and the symmetry path is admissible. Documented
-  % in docs/paper-gaps/mpu_canonical_form_full_support.tex.
-  \uses{thm:mpu_admissible_conjugation_even_rank,def:mpu_admissible_symmetry_equivalence,
-    def:mpu_admissible_equivalence_datum}
-  Suppose the comparison blockings carry reduced full-support source data and
-  the resulting standard-form interpolation is admissible. Then two MPU
-  tensors are admissibly equivalent under conjugation symmetry if and only if
-  they belong to the same case of Proposition~\ref{prop:mpu_admissible_conjugation_standard_forms}.
+  % **Scope restriction (endpoints, blocking, and admissible path):** the
+  % original one-site endpoints and their conjugate comparisons carry source
+  % data, all blocked endpoints used below carry their own data, and the
+  % symmetry path is admissible. Documented in
+  % docs/paper-gaps/mpu_canonical_form_full_support.tex.
+  \uses{thm:mpu_admissible_conjugation_odd_rank,
+    thm:mpu_admissible_conjugation_even_rank,
+    prop:mpu_admissible_conjugation_standard_forms,
+    def:mpu_admissible_symmetry_equivalence,
+    def:mpu_admissible_equivalence_datum,
+    def:mpu_reduced_full_support_source_datum}
+  For $i=1,2$, suppose the original one-site endpoint tensor
+  $\mathcal U_i$ and its conjugate comparison tensor are simple and each
+  carries reduced full-support source data. Suppose also that the comparison
+  blockings used below carry reduced full-support source data and that the
+  resulting standard-form interpolation is admissible. Then
+  $\mathcal U_1$ and $\mathcal U_2$ are admissibly equivalent under
+  conjugation symmetry if and only if they belong to the same case of
+  Proposition~\ref{prop:mpu_admissible_conjugation_standard_forms}.
+  % Source lines: paper_v2.tex 1548--1567.
 \end{corollary}
+
+\begin{proof}
+  \uses{thm:mpu_admissible_conjugation_odd_rank,
+    thm:mpu_admissible_conjugation_even_rank,
+    prop:mpu_admissible_conjugation_standard_forms,
+    def:mpu_admissible_symmetry_equivalence}
+  If either $r$ or $\ell$ is odd, only Case I can occur. After one blocking,
+  the endpoint determinants satisfy
+  \begin{align}
+    \det(u_i^{(2)}v_i^{(2)})&=\det(u_iv_i)^{2r\ell}=1.
+  \end{align}
+  The odd-rank theorem therefore gives one admissible equivalence class, namely
+  Case I. If $r$ and $\ell$ are both even, one blocking gives
+  \begin{align}
+    \det(u_i^{(2)})&=(\det(u_i)^2\det(v_i))^{r\ell}=1,
+  \end{align}
+  and
+  \begin{align}
+    \det(v_i^{(2)})&=\det(v_i)^{r\ell}=1.
+  \end{align}
+  Blocking preserves Case I and Case II. The even-rank theorem then shows that
+  the blocked endpoints are admissibly strictly equivalent exactly when they
+  belong to the same case. This is precisely admissible equivalence of the
+  original endpoints.
+\end{proof}
 
 \begin{lemma}[Trace formula for the time-reversal sign]
   \label{eq:sigma-from-trace}
