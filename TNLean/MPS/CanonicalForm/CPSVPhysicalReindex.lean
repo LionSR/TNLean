@@ -16,6 +16,7 @@ preserves normal tensors and the retained-block reconstruction of literal CPSV c
 
 * `MPSTensor.IsNormalTensor.reindexPhysical`: physical relabeling preserves normal tensors.
 * `MPSTensor.CPSVCanonicalFormData.reindexPhysical`: relabel literal canonical-form data.
+* `MPSTensor.CPSVCanonicalFormIIData.reindexPhysical`: relabel canonical-form-II data.
 * `MPSTensor.IsCPSVCanonicalForm.reindexPhysical`: physical relabeling preserves literal
   canonical form.
 
@@ -73,6 +74,30 @@ noncomputable def reindexPhysical {A : MPSTensor d₂ D}
     simpa [MPSTensor.reindexPhysical, toTensorFromBlocks] using data.reconstruct (e i)
 
 end CPSVCanonicalFormData
+
+namespace CPSVCanonicalFormIIData
+
+/-- Relabel the physical alphabet in literal CPSV canonical-form-II data.
+
+The fixed-point matrices are unchanged because a bijective physical relabeling leaves each block's
+transfer map unchanged.
+
+Source: arXiv:1703.09188, definition `blocking` and line 356; CFII is defined at lines 271--281. -/
+noncomputable def reindexPhysical {A : MPSTensor d₂ D}
+    (data : CPSVCanonicalFormIIData A) (e : Fin d₁ ≃ Fin d₂) :
+    CPSVCanonicalFormIIData (MPSTensor.reindexPhysical e A) where
+  toCPSVCanonicalFormData := data.toCPSVCanonicalFormData.reindexPhysical e
+  blocks_left_canonical := fun k ↦
+    (leftCanonical_reindexPhysical_equiv e (data.blocks k)).2 (data.blocks_left_canonical k)
+  blocks_fixed_point := by
+    intro k
+    obtain ⟨Λ, hΛpos, hΛdiag, hΛfix⟩ := data.blocks_fixed_point k
+    exact ⟨Λ, hΛpos, hΛdiag, by
+      change transferMap (MPSTensor.reindexPhysical e (data.blocks k)) Λ = Λ
+      rw [transferMap_reindexPhysical_equiv]
+      exact hΛfix⟩
+
+end CPSVCanonicalFormIIData
 
 namespace IsCPSVCanonicalForm
 
