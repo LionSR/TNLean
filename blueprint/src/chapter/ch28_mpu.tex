@@ -166,7 +166,6 @@ closing a chain of $N$ copies of $\mathcal U$.
     unitary.  Simultaneous reindexing preserves unitarity.
 \end{proof}
 
-
 \section{Simple matrix product unitary tensors}
 
 \begin{definition}[Double layer]
@@ -3492,35 +3491,75 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
   \end{align}
 \end{lemma}
 
+\begin{definition}[MPU canonical form]
+  \label{def:mpu_canonical_form}
+  \lean{MPSTensor.IsMPUCanonicalBlock,
+    MPSTensor.MPUCanonicalFormData,
+    MPSTensor.IsMPUCanonicalForm}
+  \leanok
+  \uses{def:transfer_map,def:block_diagonal_tensor}
+  A tensor $A$ of physical dimension $d$ and bond dimension $D$ is in MPU
+  canonical form if there are positive block dimensions $D_k$, weights
+  $\mu_k\in\mathbb C$, tensors $A_k$ of bond dimension $D_k$, and a
+  coisometry
+  \begin{align}
+    C\colon\mathbb C^D&\longrightarrow
+      \bigoplus_{k=1}^r\mathbb C^{D_k},&
+    CC^\dagger&=\Id,
+  \end{align}
+  such that
+  \begin{align}
+    A^i=C^\dagger\left(\bigoplus_{k=1}^r\mu_k A_k^i\right)C.
+  \end{align}
+  Every $A_k$ is irreducible and the spectral radius of its transfer map is
+  one. The blocks may be periodic, so no uniqueness condition is imposed on
+  their peripheral eigenvalues. This is the canonical form of
+  \cite[lines~259--267]{Cirac2017MPU}; normal tensors form a strictly stronger
+  class.
+\end{definition}
+
 \begin{definition}[Strict equivalence]
   \label{def:strictly-equivalent-tensors}
-  \notready
-  \discussion{6021}
-  \uses{def:mpu,lem:mpu_blocking}
-  Two canonical-form MPU tensors $\mathcal U$ and $\mathcal V$ are strictly
-  equivalent if they have the same physical dimension and there is a
-  continuous path $\mathcal W(p)$, $p\in[0,1]$, such that every
-  $\mathcal W(p)$ generates an MPU and
+  \lean{MPOTensor.StrictlyEquivalent}
+  \leanok
+  \uses{def:mpu,def:mpu_physical_reindexing,def:mpu_canonical_form}
+  Fix a virtual bond dimension $D$. Let $\mathcal U$ and $\mathcal V$ be
+  canonical-form MPU tensors with physical dimensions $d_a$ and $d_b$. Given
+  an equality $h\colon d_a=d_b$, reindex $\mathcal U$ from $d_a$ to $d_b$
+  along $h^{-1}$. The tensors are strictly equivalent with respect to $h$ if
+  there is a continuous path $\mathcal W(p)$, $p\in[0,1]$, in the fixed-bond
+  MPU locus such that
   \begin{align}
-    \mathcal W(0)&=\mathcal U,&
+    \mathcal W(0)&=\operatorname{reind}_{h^{-1}}(\mathcal U),\\
     \mathcal W(1)&=\mathcal V.
   \end{align}
-  Only the requirement of canonical form is relaxed along the path.
+  Only the canonical-form requirement is relaxed along the path. This is the
+  fixed-bond interpretation of
+  \cite[lines~708--714]{Cirac2017MPU}; it does not compare unequal raw bond
+  dimensions.
 \end{definition}
 
 \begin{definition}[Equivalence after blocking and ancillas]
   \label{def:equivalent-tensors}
-  \notready
-  \discussion{6021}
-  \uses{def:strictly-equivalent-tensors,lem:mpu_blocking}
-  Let $\mathcal U$ and $\mathcal V$ have physical dimensions $d_a$ and
-  $d_b$. They are equivalent if there are a positive blocking length $k$ and
-  coprime positive integers $p_a,p_b$ with $p_ad_a=p_bd_b$ such that
-  $(\mathcal U^{(p_a)})_k$ and $(\mathcal V^{(p_b)})_k$ are strictly
-  equivalent, where the ancilla is attached before blocking and
+  \lean{MPOTensor.Equivalent}
+  \leanok
+  \uses{def:mpu,def:strictly-equivalent-tensors,lem:mpu_blocking}
+  Fix a virtual bond dimension $D$. Let $\mathcal U$ and $\mathcal V$ be MPU
+  tensors with physical dimensions $d_a$ and $d_b$. They are equivalent if
+  there are a
+  positive blocking length $k$ and coprime positive integers $p_a,p_b$ with
+  \begin{align}
+    p_a d_a&=p_b d_b
+  \end{align}
+  such that $(\mathcal U^{(p_a)})_k$ and $(\mathcal V^{(p_b)})_k$ are strictly
+  equivalent. Here the positive-dimensional identity ancillas are attached
+  before the common blocking, and
   \begin{align}
     \mathcal U^{(p)}&=\mathcal U\otimes\Id_p.
   \end{align}
+  This is the fixed-bond interpretation of
+  \cite[lines~716--724]{Cirac2017MPU}; it does not introduce a stabilization
+  relation for unequal raw bond dimensions.
 \end{definition}
 
 \begin{proposition}[Constancy of the source ranks]
