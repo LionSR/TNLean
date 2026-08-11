@@ -24,6 +24,22 @@ abstracted — record why, so it is not re-proposed).
 
 ## Promoted
 
+### retained vertical-copy dependent-cast evaluation — promoted
+- **Pattern:** unfold the multiplicity-expanded assembled tensor at two coordinates
+  in the same retained copy, identify the round-tripped dependent copy index, and
+  transport both matrix coordinates across the resulting bond-dimension equality.
+- **Seen:** three 30-line occurrences in
+  `TNLean/MPS/MPDO/VerticalCopyBlocks.lean`,
+  `TNLean/MPS/MPDO/VerticalProductRetainedBlocks.lean`, and
+  `TNLean/MPS/MPDO/BNTAlgebraTensorClausePositivity.lean` before promotion
+  (2026-08-11).
+- **Abstraction:** `MPOTensor.verticalAssembledTensor_apply_copy_same` in
+  `TNLean/MPS/MPDO/VerticalSectorCoordinates.lean`.
+- **Notes:** the shared theorem is generic only in the existing dimension,
+  multiplicity, weight, and tensor families. The structure-specialized caller
+  supplies its fields directly, and all existing public declarations retain
+  their statements. The refactor removes 98 lines and adds 38 Lean source lines.
+
 ### left finite-Gram cancellation in spectator coordinates — promoted
 - **Pattern:** cancel the fiberwise finite Gram against its inverse Gram, then use
   the left-boundary common-map identity to recover the adjoint of the full
