@@ -54,17 +54,6 @@ noncomputable def sourceUOpenTailCoefficient
         (U i j₂ * evalWord U (List.ofFn τ) (List.ofFn ζ)) β α *
         star ((U i' j₂ * evalWord U (List.ofFn τ) (List.ofFn ζ)) β' α')
 
-/-- Entrywise form of the column-isometry identity $X_2^\dagger X_2=1$.
-
-Source: arXiv:1703.09188, equation `Y1Y1X1X1`, lines 479--494. -/
-theorem sourceX₂_isometry_apply (l l' : Fin ℓ[U]) :
-    (∑ β : Fin D, ∑ i : Fin d,
-      star (sourceX₂ U (β, i) l) * sourceX₂ U (β, i) l') =
-      if l = l' then 1 else 0 := by
-  have h := congrArg (fun M ↦ M l l') (sourceX₂_isometry U)
-  simpa only [Matrix.mul_apply, Matrix.one_apply, Matrix.conjTranspose_apply,
-    Fintype.sum_prod_type] using h
-
 /-- If the internal open tail has kernel
 $\rho_{\alpha',\alpha}\delta_{\beta,\beta'}\delta_{i,i'}$, then its weighted
 $X_1$ and unweighted $X_2$ boundary is

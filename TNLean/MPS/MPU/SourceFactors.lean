@@ -455,6 +455,17 @@ theorem sourceX₁_weighted_isometry
 theorem sourceX₂_isometry : (sourceX₂ U).IsIsometry := by
   exact (sourceSVD₂ U).V_coisometry.conjTranspose (sourceSVD₂ U).V
 
+/-- Entrywise form of the column-isometry identity $X_2^\dagger X_2=1$.
+
+Source: arXiv:1703.09188, equation `Y1Y1X1X1`, lines 479--494. -/
+theorem sourceX₂_isometry_apply (l l' : Fin ℓ[U]) :
+    (∑ β : Fin D, ∑ i : Fin d,
+      star (sourceX₂ U (β, i) l) * sourceX₂ U (β, i) l') =
+      if l = l' then 1 else 0 := by
+  have h := congrArg (fun M ↦ M l l') (sourceX₂_isometry U)
+  simpa only [Matrix.mul_apply, Matrix.one_apply, Matrix.conjTranspose_apply,
+    Fintype.sum_prod_type] using h
+
 /-- The weighted right-inverse identity $Y_1Z_1=I$ from arXiv:1703.09188,
 `YZ=1` (lines 503--506). -/
 theorem sourceY₁_mul_sourceZ₁

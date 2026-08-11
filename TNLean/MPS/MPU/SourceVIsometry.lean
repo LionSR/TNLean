@@ -26,6 +26,44 @@ namespace MPOTensor
 
 variable {d D : ℕ} (U : MPOTensor d D)
 
+/-- Rotating the second source cut by $90^\circ$ identifies its physical/virtual
+Gram contraction with the ordinary Gram contraction of $Y_2$.
+
+The physical index `p` and virtual index `a` occur in the starred factor, while
+`q` and `b` occur in the unstarred factor.
+
+Source: arXiv:1703.09188, Theorem III.8, equations (31)--(32), Section III.B
+(lines 563--601). -/
+theorem sourceY₂_gram_eq_rotated_sourceCutM₂_gram
+    (p q : Fin d) (a b : Fin D) :
+    (∑ β : Fin D, ∑ z : Fin d,
+      star (U z p β a) * U z q β b) =
+      ∑ l : Fin ℓ[U],
+        star (sourceY₂ U l (p, a)) * sourceY₂ U l (q, b) := by
+  simp_rw [← sourceX₂_mul_sourceY₂_apply U]
+  simp only [Matrix.mul_apply, star_sum, star_mul, Finset.sum_mul, Finset.mul_sum]
+  -- Move the two source indices outside the physical/virtual contraction.
+  conv_lhs => arg 2; ext β; arg 2; ext z; rw [Finset.sum_comm]
+  conv_lhs => arg 2; ext β; rw [Finset.sum_comm]
+  rw [Finset.sum_comm]
+  conv_lhs => arg 2; ext l; arg 2; ext β; rw [Finset.sum_comm]
+  conv_lhs => arg 2; ext l; rw [Finset.sum_comm]
+  refine Finset.sum_congr rfl fun l _ ↦ ?_
+  calc
+    _ = ∑ l' : Fin ℓ[U],
+        star (sourceY₂ U l (p, a)) *
+          (∑ β : Fin D, ∑ z : Fin d,
+            star (sourceX₂ U (β, z) l) * sourceX₂ U (β, z) l') *
+          sourceY₂ U l' (q, b) := by
+      apply Finset.sum_congr rfl
+      intro l' _
+      simp only [Finset.mul_sum, Finset.sum_mul, mul_assoc]
+    _ = _ := by
+      simp_rw [sourceX₂_isometry_apply U]
+      simp only [sourceY₂_apply, star_sum, star_mul', RCLike.star_def, mul_ite,
+        mul_one, mul_zero, ite_mul, zero_mul, Finset.sum_ite_eq, Finset.mem_univ,
+        reduceIte]
+
 /-- The tensor product $Y_1\otimes Y_2$ in the source-bond order $(r,\ell)$.
 
 Source: arXiv:1703.09188, equation `vUnitary`, lines 577--588. -/
