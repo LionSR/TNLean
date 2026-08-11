@@ -25,11 +25,15 @@ Theorem in arXiv:1703.09188, lines 824--847.
   coordinates.
 * `MPOTensor.tensorProductConfigEquiv`: the sitewise splitting of product physical
   configurations.
+* `MPOTensor.tensorProductBlockEquiv`: the splitting of blocked product letters into
+  the two component blocked letters.
 * `MPOTensor.tensorProductCutShuffle`: the shuffle relating a Kronecker product of
   source cuts to the source cut of a tensor product.
 
 ## Main results
 
+* `MPOTensor.blockTensor_tensorProduct`: blocking commutes with independent tensor
+  products after the canonical physical reindexing.
 * `MPOTensor.mpo_tensorProduct`: the exact finite-size reindexed-Kronecker formula.
 * `MPOTensor.IsMPU.tensorProduct`: independent tensor products preserve the MPU property.
 * `MPOTensor.sourceCutM₁_tensorProduct`, `MPOTensor.sourceCutM₂_tensorProduct`: the two
@@ -67,6 +71,38 @@ def tensorProductConfigEquiv (N d e : ℕ) :
   (Equiv.arrowCongr (Equiv.refl (Fin N)) finProdFinEquiv.symm).trans
     (Equiv.arrowProdEquivProdArrow (Fin N) (fun _ ↦ Fin d) (fun _ ↦ Fin e))
 
+/-- Split every letter of a blocked product alphabet and re-encode the two
+component words as a pair of blocked letters.
+
+Source: arXiv:1703.09188, proof of Theorem `IndexTh` (ii), lines 824--847. -/
+noncomputable def tensorProductBlockEquiv (d e L : ℕ) :
+    Fin (MPSTensor.blockPhysDim (d * e) L) ≃
+      Fin (MPSTensor.blockPhysDim d L * MPSTensor.blockPhysDim e L) :=
+  (MPSTensor.decodeBlockEquiv (d * e) L).trans
+    ((Equiv.arrowCongr (Equiv.refl (Fin L)) finProdFinEquiv.symm).trans
+      (Equiv.arrowProdEquivProdArrow (Fin L) (fun _ ↦ Fin d) (fun _ ↦ Fin e))) |>.trans
+    (Equiv.prodCongr (MPSTensor.decodeBlockEquiv d L).symm
+      (MPSTensor.decodeBlockEquiv e L).symm) |>.trans
+    finProdFinEquiv
+
+/-- Decoding the first blocked component gives the pointwise quotient of the
+blocked product letters. -/
+@[simp] theorem decodeBlock_tensorProductBlockEquiv_divNat (d e L : ℕ)
+    (I : Fin (MPSTensor.blockPhysDim (d * e) L)) (k : Fin L) :
+    MPSTensor.decodeBlock d L ((tensorProductBlockEquiv d e L I).divNat) k =
+      (MPSTensor.decodeBlock (d * e) L I k).divNat := by
+  simp [tensorProductBlockEquiv, Equiv.arrowCongr,
+    MPSTensor.decodeBlockEquiv_apply]
+
+/-- Decoding the second blocked component gives the pointwise remainder of the
+blocked product letters. -/
+@[simp] theorem decodeBlock_tensorProductBlockEquiv_modNat (d e L : ℕ)
+    (I : Fin (MPSTensor.blockPhysDim (d * e) L)) (k : Fin L) :
+    MPSTensor.decodeBlock e L ((tensorProductBlockEquiv d e L I).modNat) k =
+      (MPSTensor.decodeBlock (d * e) L I k).modNat := by
+  simp [tensorProductBlockEquiv, Equiv.arrowCongr,
+    MPSTensor.decodeBlockEquiv_apply]
+
 private theorem evalWord_tensorProduct (U : MPOTensor d D) (V : MPOTensor e E)
     (is js : List (Fin (d * e))) :
     evalWord (tensorProduct U V) is js =
@@ -84,6 +120,34 @@ private theorem evalWord_tensorProduct (U : MPOTensor d D) (V : MPOTensor e E)
           rw [ih]
           rw [← Matrix.coe_reindexRingEquiv ℂ finProdFinEquiv]
           rw [← map_mul, Matrix.mul_kronecker_mul]
+
+/-- Blocking commutes with independent tensor products after splitting each
+blocked product letter into its two component blocked letters.
+
+Source: arXiv:1703.09188, proof of Theorem `IndexTh` (ii), lines 824--847. -/
+theorem blockTensor_tensorProduct (U : MPOTensor d D) (V : MPOTensor e E) (L : ℕ) :
+    blockTensor (tensorProduct U V) L =
+      reindexPhysical (tensorProductBlockEquiv d e L)
+        (tensorProduct (blockTensor U L) (blockTensor V L)) := by
+  funext I J
+  simp only [blockTensor_apply, reindexPhysical, tensorProduct]
+  rw [evalWord_tensorProduct]
+  simp only [MPSTensor.wordOfBlock, List.map_ofFn]
+  congr 2
+  · apply congrArg₂ (evalWord U)
+    · apply congrArg List.ofFn
+      funext k
+      exact (decodeBlock_tensorProductBlockEquiv_divNat d e L I k).symm
+    · apply congrArg List.ofFn
+      funext k
+      exact (decodeBlock_tensorProductBlockEquiv_divNat d e L J k).symm
+  · apply congrArg₂ (evalWord V)
+    · apply congrArg List.ofFn
+      funext k
+      exact (decodeBlock_tensorProductBlockEquiv_modNat d e L I k).symm
+    · apply congrArg List.ofFn
+      funext k
+      exact (decodeBlock_tensorProductBlockEquiv_modNat d e L J k).symm
 
 /-- The closed MPO of an independent tensor product is the Kronecker product of
 the two closed MPOs, in sitewise product coordinates.
