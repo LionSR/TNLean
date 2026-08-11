@@ -113,6 +113,44 @@ theorem liftB_conj_apply (U_B : Matrix (Fin dB) (Fin dB) ℂ)
     rw [liftB_mul_apply, Finset.sum_mul]]
   rw [Finset.sum_comm]
 
+/-- Evaluate the Hayashi state identity at coordinates adapted to the middle-sector
+decomposition. The dependent conditional records the transport of the primed
+coordinates when the two sector labels agree.
+
+Source: Hayashi, *Quantum Information: An Introduction*, Springer 2006,
+Theorem 5.24. -/
+theorem _root_.HayashiMarkovDecomposition.h_state_apply_middle_sector
+    {dA dB dC : ℕ}
+    {ρ_ABC : Matrix (Fin dA × Fin dB × Fin dC)
+      (Fin dA × Fin dB × Fin dC) ℂ}
+    (hη : HayashiMarkovDecomposition ρ_ABC) (a a' : Fin dA) (c c' : Fin dC)
+    (k k' : Fin hη.m) (l : Fin (hη.dL k)) (r : Fin (hη.dR k))
+    (l' : Fin (hη.dL k')) (r' : Fin (hη.dR k')) :
+    (∑ b : Fin dB, ∑ b' : Fin dB,
+      (hη.U_B : Matrix (Fin dB) (Fin dB) ℂ) (hη.decompB.symm ⟨k, (l, r)⟩) b *
+        ρ_ABC (a, b, c) (a', b', c') *
+          star ((hη.U_B : Matrix (Fin dB) (Fin dB) ℂ)
+            (hη.decompB.symm ⟨k', (l', r')⟩) b')) =
+      if h : k = k' then
+        (hη.p k : ℂ) * hη.ρ_left k (a, l) (a', h ▸ l') *
+          hη.ρ_right k (r, c) (h ▸ r', c')
+      else 0 := by
+  classical
+  let b : Fin dB := hη.decompB.symm ⟨k, (l, r)⟩
+  let b' : Fin dB := hη.decompB.symm ⟨k', (l', r')⟩
+  have hs := congrFun (congrFun hη.h_state
+    (a, (⟨k, (l, r)⟩, c))) (a', (⟨k', (l', r')⟩, c'))
+  rw [Matrix.reindex_apply, Matrix.submatrix_apply] at hs
+  have hleft : (HayashiMarkov.abcEquiv hη.decompB).symm
+      (a, (⟨k, (l, r)⟩, c)) = (a, b, c) := by
+    simp [HayashiMarkov.abcEquiv, b]
+  have hright : (HayashiMarkov.abcEquiv hη.decompB).symm
+      (a', (⟨k', (l', r')⟩, c')) = (a', b', c') := by
+    simp [HayashiMarkov.abcEquiv, b']
+  rw [hleft, hright, HayashiMarkov.liftB_conj_apply,
+    HayashiMarkov.blockState_apply] at hs
+  simpa [b, b'] using hs
+
 /-- `liftB U_B` is in the unitary group when `U_B` is. -/
 theorem liftB_mem_unitary (U_B : Matrix.unitaryGroup (Fin dB) ℂ) :
     liftB (dA := dA) (dC := dC) (U_B : Matrix (Fin dB) (Fin dB) ℂ)
