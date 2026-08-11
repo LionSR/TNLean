@@ -911,6 +911,8 @@ This is the calculation in
     \label{thm:mpdo_caseii_absorption_not_normal}
     \lean{MPOTensor.CaseIIAbsorptionCounterexample.printed_absorbed_normality_step_is_false}
     \leanok
+    \uses{def:nt_cpsv, def:mpdo_common_sector_weight_absorption,
+        def:mpo_physical_trace_transfer}
     There are two bond-one normal tensors $A_0,A_1$ with disjoint doubled
     physical supports and globally normalized weights
     $(\mu_0,\mu_1)=(1/\sqrt2,1)$ such that their weighted bond-diagonal
@@ -922,6 +924,40 @@ This is the calculation in
     \end{align}
     In particular, the absorbed representative $\mu_0A_0$ is not normal.
 \end{theorem}
+
+\begin{proof}
+    \leanok
+    Let $A_0$ have scalar entries $1/\sqrt2$ on doubled physical symbols
+    $(0,0)$ and $(1,1)$, and let $A_1$ have scalar entry $1$ only on
+    $(2,2)$.  Their supports are disjoint and, on the one-dimensional virtual
+    space,
+    \begin{align}
+        \mathcal E_{A_0}(x)&=
+            \left(\frac12+\frac12\right)x=x,
+        & \mathcal E_{A_1}(x)&=x.
+        \notag
+    \end{align}
+    Hence both tensors are normal.  Choose
+    $(\mu_0,\mu_1)=(1/\sqrt2,1)$; then $|\mu_s|\leq1$ for both sectors and
+    $|\mu_1|=1$, as required by the global normalization.  The weighted
+    bond-diagonal assembly has nonzero diagonal physical slices
+    \begin{align}
+        K^{00}=K^{11}&=\operatorname{diag}(1/2,0),
+        & K^{22}&=\operatorname{diag}(0,1),
+        \notag
+    \end{align}
+    so its physical-trace transfer is
+    $\mathcal T_K=K^{00}+K^{11}+K^{22}=I$ and therefore
+    $\mathcal T_K^2=\mathcal T_K$.  Absorption nevertheless gives
+    \begin{align}
+        \mathcal E_{\mu_0A_0}
+            &=|\mu_0|^2\mathcal E_{A_0}=\frac12\,\mathrm{id},
+        & \rho(\mathcal E_{\mu_0A_0})&=\frac12.
+        \notag
+    \end{align}
+    A normal tensor has transfer spectral radius one, so $\mu_0A_0$ cannot be
+    normal.
+\end{proof}
 
 % CPSV16 Theorem 4.9 (`thm:main-simple`), lines 851--893 and Appendix C.2.
 % Provenance: source-label audit completed in issue #5917.
