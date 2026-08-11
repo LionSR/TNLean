@@ -25,7 +25,7 @@ unitary alignment of two different coisometries is an additional
 project-derived auxiliary result.
 -/
 
-open scoped Matrix BigOperators ComplexOrder
+open scoped Matrix BigOperators
 
 namespace MPSTensor
 
