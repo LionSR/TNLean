@@ -174,8 +174,7 @@ theorem physCloseN_two_eq_physClose2 (M : MPOTensor d D) :
 /-! ### The three-site physical operator -/
 
 /-- The **three-site physical operator** as a linear map in the virtual operator
-$X$. Its physical indices are right-associated as
-$\operatorname{Fin}(d) \times (\operatorname{Fin}(d) \times \operatorname{Fin}(d))$,
+$X$. Its physical indices are right-associated as `Fin d × (Fin d × Fin d)`,
 and its coefficients are
 \[
   M_3(X)_{(i_0,(i_1,i_2)),(j_0,(j_1,j_2))}
