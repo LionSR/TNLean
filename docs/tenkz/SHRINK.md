@@ -3039,3 +3039,53 @@ flight; it is deleted by whoever lands next in that file. The lint's
 hand while reading the rest from the registry — knowledge the registry should
 hold, and the fix is a tombstone ledger the linter reads, not another
 discard. Trigger: the next registry tombstone.
+
+### 2026-08-12 — the circle frame takes no basis, and stops promising one
+
+`basis=` has been refused on a circle frame since the basis landed, and both
+the refusal and the contract clause behind it were written as a deferral: the
+message read *currently requires flat or plane* and named a tangent-offset
+contract, and §4 deferred circular bases *until those carriers have a declared
+composition or tangent-offset contract*. Nobody asked for that contract. The
+capability was read against the demand corpus the way the gate reads any
+other.
+
+What the corpus holds. Thirty-eight circle-frame picture sites: one benchmark
+case, four blueprint figures, thirty-three kernel fixtures. Every one of them
+carries exactly one record per station; not one places a second site at a
+station, which is the only thing a basis would be for. Sixty-seven `basis=`
+sites, every one of them on a `flat` or a `plane`, except the single site that
+names a circle, which is the negative fixture pinning the refusal. The one
+benchmark circle target, `rmp-ii-triangle-network`, is faithful with an empty
+defect list. No verdict row, wave-2 target, or demand table names a circle
+basis, a tangent offset, or a radial offset. The amendment that introduced the
+basis argues it from Bravais decomposition on flat and plane lattices and names
+five consumers, none of them circular. Two regressions,
+`r_basis_frame_replace` and `r_basis_equation_replace`, depend on a later
+circle frame discarding an earlier basis.
+
+Why the absence is structural and not a backlog. A basis decomposes a
+repeating cell, and the frame's translations are what read the decomposition:
+one offset pair is one page displacement at every cell, the spacing check
+compares member families under each live cell translation, and a declared
+adjacency travels from cell to cell unchanged. A circle repeats nothing. Its
+stations lie on one ring and its axes turn from station to station, so a single
+declared offset would name a different page displacement at each of them.
+There is no repeated cell to decompose and no translation to read a
+decomposition under. A tangent-offset contract would have to invent all three,
+for no figure.
+
+So the refusal stays and the promise goes. §4 now states the restriction as the
+contract rather than as a stage, and the message reads *basis= is defined on
+flat and plane frames; a circle frame repeats no cell and carries one record
+per station*. The error code is unchanged, so the negative fixture and the
+probe pin what they always pinned. The group-local and atom-local refusals keep
+their stage wording, because those carriers are tracked work and this one is
+not.
+
+Trigger for revisiting: a demand-corpus figure that puts two or more records at
+one circle station. Such a figure must first say what a declared offset means
+where the axes turn, and the contract reopens then and not before.
+
+No registry row, parser leaf, key, alias, or overload moves; M1, M2, M3, M5,
+and M6 are unchanged.
