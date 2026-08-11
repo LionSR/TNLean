@@ -135,7 +135,8 @@ theorem reindex_sitewisePhysicalMatrix_two
   congr 1
   exact propext funext_iff.symm
 
-private def braKetFunctionsEquiv {i a b : Type*} :
+/-- Reindex a pair of bra and ket configurations as a configuration of pairs. -/
+def braKetFunctionsEquiv {i a b : Type*} :
     ((i → b) × (i → a)) ≃ (i → a × b) :=
   (Equiv.prodComm _ _).trans
     (Equiv.arrowProdEquivProdArrow i (fun _ ↦ a) (fun _ ↦ b)).symm
