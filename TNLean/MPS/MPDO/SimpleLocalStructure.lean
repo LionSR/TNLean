@@ -499,43 +499,6 @@ abbrev EtaStructure
       (Fin dA × Fin dB × Fin dC) ℂ) : Type :=
   Entropy.QuantumMarkovDecomposition ρ_ABC
 
-/-- Evaluate the Hayashi state identity at coordinates adapted to the middle-sector
-decomposition. The dependent conditional records the transport of the right
-coordinates when the two sector labels agree.
-
-Source: Hayashi, *Quantum Information: An Introduction*, Springer 2006,
-Theorem 5.24. -/
-theorem _root_.HayashiMarkovDecomposition.h_state_apply_middle_sector
-    {ρ_ABC : Matrix (Fin dA × Fin dB × Fin dC)
-      (Fin dA × Fin dB × Fin dC) ℂ}
-    (hη : EtaStructure ρ_ABC) (a a' : Fin dA) (c c' : Fin dC)
-    (k k' : Fin hη.m) (l : Fin (hη.dL k)) (r : Fin (hη.dR k))
-    (l' : Fin (hη.dL k')) (r' : Fin (hη.dR k')) :
-    (∑ b : Fin dB, ∑ b' : Fin dB,
-      (hη.U_B : Matrix (Fin dB) (Fin dB) ℂ) (hη.decompB.symm ⟨k, (l, r)⟩) b *
-        ρ_ABC (a, b, c) (a', b', c') *
-          star ((hη.U_B : Matrix (Fin dB) (Fin dB) ℂ)
-            (hη.decompB.symm ⟨k', (l', r')⟩) b')) =
-      if h : k = k' then
-        (hη.p k : ℂ) * hη.ρ_left k (a, l) (a', h ▸ l') *
-          hη.ρ_right k (r, c) (h ▸ r', c')
-      else 0 := by
-  classical
-  let b : Fin dB := hη.decompB.symm ⟨k, (l, r)⟩
-  let b' : Fin dB := hη.decompB.symm ⟨k', (l', r')⟩
-  have hs := congrFun (congrFun hη.h_state
-    (a, (⟨k, (l, r)⟩, c))) (a', (⟨k', (l', r')⟩, c'))
-  rw [Matrix.reindex_apply, Matrix.submatrix_apply] at hs
-  have hleft : (HayashiMarkov.abcEquiv hη.decompB).symm
-      (a, (⟨k, (l, r)⟩, c)) = (a, b, c) := by
-    simp [HayashiMarkov.abcEquiv, b]
-  have hright : (HayashiMarkov.abcEquiv hη.decompB).symm
-      (a', (⟨k', (l', r')⟩, c')) = (a', b', c') := by
-    simp [HayashiMarkov.abcEquiv, b']
-  rw [hleft, hright, HayashiMarkov.liftB_conj_apply,
-    HayashiMarkov.blockState_apply] at hs
-  simpa [b, b'] using hs
-
 /-- **Lemma C.2, local entropy form**: strong area law implies the local
 `η`-structure.
 

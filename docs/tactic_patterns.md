@@ -33,7 +33,7 @@ abstracted — record why, so it is not re-proposed).
   `BNTMarkovSectorProjectors.lean`, and `InverseMapActiveSectorRecurrence.lean`
   before promotion (2026-08-11).
 - **Abstraction:** `HayashiMarkovDecomposition.h_state_apply_middle_sector` in
-  `TNLean/MPS/MPDO/SimpleLocalStructure.lean`.
+  `TNLean/Analysis/HayashiMarkovStructure.lean`.
 - **Notes:** the theorem retains the dependent conditional for equal versus unequal
   sectors. Diagonal and off-diagonal consumers perform their respective
   specializations locally, while the mixed-sector consumer uses the full formula.
