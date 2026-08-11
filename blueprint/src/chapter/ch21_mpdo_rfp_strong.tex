@@ -66,33 +66,46 @@ change of basis. The matrix is not assumed to have trace one.
 
 \begin{definition}[First-site preparation shuffle]
     \label{def:mpdo_first_site_preparation_shuffle}
-    \lean{MPOTensor.firstSitePreparationEquiv,
-      MPOTensor.tensorMapId_preparationMap_eq_reindex_kronecker}
+    \lean{MPOTensor.firstSitePreparationEquiv}
     \leanok
-    \uses{def:finite_tuple_regroupings,
-      def:mpdo_state_preparation_map}
+    \uses{def:finite_tuple_regroupings}
     After $R_1$ separates the first physical coordinate from the $N$
     spectator coordinates, define
     \begin{align}
       \Sigma_N:\bigl((i,u),p\bigr)&\longmapsto\bigl((i,p),u\bigr),
       \label{eq:mpdo_first_site_preparation_shuffle}
     \end{align}
-    where $i,p\in\{1,\ldots,d\}$ and
-    $u\in\{1,\ldots,d\}^N$. Thus, for a matrix $Z$ indexed by
+    where $i,p\in\{0,\ldots,d-1\}$ and
+    $u\in\{0,\ldots,d-1\}^N$. Thus, for a matrix $Z$ indexed by
     $((i,u),p)$,
     \begin{align}
       \bigl(\Sigma_N[Z]\bigr)_{((i,p),u),((j,q),v)}
         &=Z_{((i,u),p),((j,v),q)}.
       \label{eq:mpdo_first_site_preparation_shuffle_matrix}
     \end{align}
-    In particular, localizing the preparation $Y\mapsto Y\otimes P$ at the
-    first site gives
+\end{definition}
+
+\begin{lemma}[Localized first-site preparation]
+    \label{lem:mpdo_localized_first_site_preparation}
+    \lean{MPOTensor.tensorMapId_preparationMap_eq_reindex_kronecker}
+    \leanok
+    \uses{def:mpdo_first_site_preparation_shuffle,
+      def:mpdo_state_preparation_map}
+    Localizing the preparation $Y\mapsto Y\otimes P$ at the first site gives
     \begin{align}
       (\operatorname{prep}_P\otimes\id)[Y]
         &=\Sigma_N[Y\otimes P].
       \label{eq:mpdo_localized_preparation_shuffle}
     \end{align}
-\end{definition}
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{def:mpdo_first_site_preparation_shuffle,
+      def:mpdo_state_preparation_map}
+    At row $((i,p),u)$ and column $((j,q),v)$, both sides equal
+    $Y_{(i,u),(j,v)}P_{p,q}$.
+\end{proof}
 
 \begin{theorem}[Global operator identity for fixed strong fixed-point witnesses]
     \label{thm:mpdo_strong_rfp_global_operator_identity}
@@ -103,7 +116,9 @@ change of basis. The matrix is not assumed to have trace one.
     \leanok
     \uses{thm:mpdo_strong_rfp_phys_close,
       thm:mpdo_global_renormalization_maps,
+      def:finite_tuple_regroupings,
       def:mpdo_first_site_preparation_shuffle,
+      lem:mpdo_localized_first_site_preparation,
       lem:phys_close_identity}
     Fix witnesses $P$ and $U$ in
     (\ref{eq:mpdo_strong_rfp_closure}). For every $N\geq0$ and every virtual
@@ -112,7 +127,7 @@ change of basis. The matrix is not assumed to have trace one.
     \begin{align}
       R_2[M_{N+2}(X)]
         &=(U\otimes\Id)\,
-          \Sigma_N\!\left[R_1[M_{N+1}(X)]\otimes P\right]
+          \Sigma_N\!\left(R_1[M_{N+1}(X)]\otimes P\right)
           (U^\dagger\otimes\Id).
       \label{eq:mpdo_strong_rfp_global_closure}
     \end{align}
@@ -125,17 +140,17 @@ change of basis. The matrix is not assumed to have trace one.
 \begin{proof}
     \leanok
     \uses{thm:mpdo_global_renormalization_maps,
-      def:mpdo_first_site_preparation_shuffle,
+      def:finite_tuple_regroupings,
+      lem:mpdo_localized_first_site_preparation,
       lem:phys_close_identity}
-    Fix spectator words $u,v$ of length $N$. The $(u,v)$ block of the
-    regrouped $(N+1)$-site closure is a one-site closure, with the spectator
-    word product absorbed into the virtual matrix. The local strong
-    fixed-point identity sends this block to its two-site closure. Equation
-    (\ref{eq:mpdo_localized_preparation_shuffle}) places the new $P$ coordinate
-    beside the first coordinate, and conjugation by $U\otimes\Id$ acts on
-    those two coordinates. This proves the closure formula block by block.
-    The identity closure from Lemma~\ref{lem:phys_close_identity} gives the
-    periodic formula.
+    Apply Theorem~\ref{thm:mpdo_global_renormalization_maps} to the local map
+    $Y\mapsto U(Y\otimes P)U^\dagger$ and the identity
+    (\ref{eq:mpdo_strong_rfp_closure}). This gives the localized closure
+    equality. Expanding the regroupings $R_1$ and $R_2$, localized unitary
+    conjugation is conjugation by $U\otimes\Id$, while
+    Lemma~\ref{lem:mpdo_localized_first_site_preparation} gives the middle
+    factor $\Sigma_N[R_1[M_{N+1}(X)]\otimes P]$. The identity closure from
+    Lemma~\ref{lem:phys_close_identity} gives the periodic formula.
 \end{proof}
 
 \begin{theorem}[Geometric periodic rank growth of a strong fixed point]
@@ -174,7 +189,8 @@ change of basis. The matrix is not assumed to have trace one.
 \begin{proof}
     \leanok
     \uses{thm:mpdo_strong_rfp_phys_close,
-      thm:mpdo_strong_rfp_global_operator_identity}
+      thm:mpdo_strong_rfp_global_operator_identity,
+      lem:mpdo_localized_first_site_preparation}
     Unitary conjugation and relabelling of matrix coordinates preserve rank,
     while rank is multiplicative under Kronecker products. Applying these
     facts to (\ref{eq:mpdo_strong_rfp_global_closure}) gives the recurrence.
