@@ -4118,6 +4118,18 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
   \label{FundamentalMPU}
   \notready
   \discussion{6020}
+  Given two simple tensors $\mathcal U$ and $\mathcal V$ with standard forms,
+  they generate the same MPU for every $N$ if and only if there are unitaries
+  $x$, $y$, and $z$ relating the two standard forms by the local gauge equations
+  of \cite[Eqns.~(SFuu) and (SFvv)]{Cirac2017MPU}. This is the unrestricted
+  statement of the source's Fundamental Theorem of MPU.
+  % Source label: FundamentalMPU. Source lines: paper_v2.tex 624--648.
+\end{theorem}
+
+\begin{theorem}[Admissible Fundamental Theorem of MPU]
+  \label{thm:mpu_admissible_fundamental}
+  \notready
+  \discussion{6020}
   % **Scope restriction (reduced full-support source data):** both tensors
   % carry the data required by Definition~\ref{SF}. Documented in
   % docs/paper-gaps/mpu_canonical_form_full_support.tex.
@@ -4400,7 +4412,8 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
   \uses{index-well-defined,lem:mpu_index_tensor,
     lem:mpu_index_composition,def:equivalent-tensors,
     def:mpu_admissible_equivalence_datum,prop:continuity-index,SF,
-    FundamentalMPU,def:mpu_reduced_full_support_source_datum}
+    thm:mpu_admissible_fundamental,
+    def:mpu_reduced_full_support_source_datum}
   Assume the following operation-specific admissibility hypotheses. Every pair
   of simple blockings compared for blocking independence carries reduced
   full-support source data. For a tensor product $\mathcal U\otimes\mathcal V$,
@@ -4452,10 +4465,12 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
   \notready
   \discussion{5713}
   % **Scope restriction (conjugate comparison tensor):** both standard-form
-  % tensors compared by Theorem~\ref{FundamentalMPU} carry reduced full-support
+  % tensors compared by Theorem~\ref{thm:mpu_admissible_fundamental} carry
+  % reduced full-support
   % source data. Documented in
   % docs/paper-gaps/mpu_canonical_form_full_support.tex.
-  \uses{FundamentalMPU,SF,def:mpu_reduced_full_support_source_datum}
+  \uses{thm:mpu_admissible_fundamental,SF,
+    def:mpu_reduced_full_support_source_datum}
   Let a tensor and its conjugate comparison tensor both be equipped with
   reduced full-support source data and written in standard form. The generated
   MPU is invariant under complex conjugation if and only if there are
@@ -4489,7 +4504,8 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
   % standard-form tensor compared by the fundamental theorem carries its own
   % reduced full-support source datum. Documented in
   % docs/paper-gaps/mpu_canonical_form_full_support.tex.
-  \uses{prop1conj,lemma:conjclass-normalform-continuous,FundamentalMPU,
+  \uses{prop1conj,lemma:conjclass-normalform-continuous,
+    thm:mpu_admissible_fundamental,
     def:mpu_reduced_full_support_source_datum}
   Let an MPU in standard form be invariant under complex conjugation, and
   suppose every standard-form tensor compared below carries reduced
@@ -4542,7 +4558,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
   % fundamental theorem is applied, carry reduced full-support source data.
   % No preservation under blocking is asserted. Documented in
   % docs/paper-gaps/mpu_canonical_form_full_support.tex.
-  \uses{FundamentalMPU,thm:mpu_admissible_index,SF,
+  \uses{thm:mpu_admissible_fundamental,thm:mpu_admissible_index,SF,
     def:mpu_reduced_full_support_source_datum}
   Let an MPU of index zero be in standard form. Suppose its one-site tensor
   $\mathcal U$, its actual two-site block $\mathcal U_2$, and the
@@ -4567,7 +4583,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
   % fundamental theorem is applied, carry reduced full-support source data.
   % No preservation under blocking is asserted. Documented in
   % docs/paper-gaps/mpu_canonical_form_full_support.tex.
-  \uses{FundamentalMPU,def:index,SF,
+  \uses{thm:mpu_admissible_fundamental,def:index,SF,
     def:mpu_reduced_full_support_source_datum}
   Let an MPU of index zero be in standard form. Suppose its one-site tensor
   $\mathcal U$, its actual two-site block $\mathcal U_2$, and the transposed
@@ -4632,7 +4648,8 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
   % witness carries the path datum of
   % Definition~\ref{def:mpu_admissible_equivalence_datum}. Documented in
   % docs/paper-gaps/mpu_canonical_form_full_support.tex.
-  \uses{def:strictly-equivalent-symmetry,coruvSF,FundamentalMPU,
+  \uses{def:strictly-equivalent-symmetry,coruvSF,
+    thm:mpu_admissible_fundamental,
     def:mpu_admissible_equivalence_datum}
   Two MPUs $U_1^{(N)}$ and $U_2^{(N)}$ described by admissible simple tensors
   are admissibly strictly equivalent under $\mathcal S$ through a witness whose
@@ -4745,6 +4762,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
   \notready
   \discussion{5714}
   \uses{eq:sigma-from-trace}
+  % Source proof: paper_v2.tex 1624--1630.
   Under the hypotheses of Lemma~\ref{eq:sigma-from-trace}, let $x$ and $y$ be
   unitaries and change the standard-form gauge by
   \begin{align}
@@ -4757,9 +4775,20 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
 
 \begin{proof}
   \uses{eq:sigma-from-trace}
-  Substitute the gauge transformations into the trace formula. The adjacent
-  unitary factors cancel, and cyclicity of the trace removes the remaining
-  conjugation.
+  Write $x_i$ and $y_i$ for the unitaries acting on site $i$. Then
+  $u'_{12}=x_1y_2u_{12}$, $u'_{34}=x_3y_4u_{34}$, and
+  $v'_{23}=v_{23}y_2^\dagger x_3^\dagger$.
+  Substitution into Lemma~\ref{eq:sigma-from-trace}, cancellation on the
+  middle legs, and
+  $\mathbb S_{12,34}x_1y_4=x_3y_2\mathbb S_{12,34}$ give
+  \begin{align}
+    \tr\!\left[\mathbb S_{12,34}v'_{23}u'_{12}u'_{34}v'_{23}\right]
+      &=\tr\!\left[x_3y_2\mathbb S_{12,34}
+        v_{23}u_{12}u_{34}v_{23}y_2^\dagger x_3^\dagger\right]\\
+      &=\tr\!\left[\mathbb S_{12,34}v_{23}u_{12}u_{34}v_{23}\right].
+  \end{align}
+  The last equality follows from cyclicity of the trace and unitarity of
+  $x$ and $y$.
 \end{proof}
 
 \begin{proposition}[Well-definedness of the time-reversal sign]
@@ -4837,11 +4866,13 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     def:equivalent-symmetry,def:mpu_reduced_full_support_source_datum,
     def:mpu_admissible_equivalence_datum}
   Let two time-reversal-invariant MPUs be compared by an admissible symmetry
-  path. For each endpoint, suppose the tensors $\mathcal U$, $\mathcal U_2$,
-  and $\mathcal U_4$, together with the physical-adjoint comparison tensors
-  $\mathcal U_2^\sharp$ and $\mathcal U_4^\sharp$, are simple and carry their
-  own reduced full-support source data. Then admissible strict equivalence
-  requires equality of both $\sigma^{(1)}$ and $\sigma^{(2)}$.
+  path $p\mapsto\mathcal W(p)$. Suppose that the five path families
+  $\mathcal W(p)$, $\mathcal W(p)_2$, $\mathcal W(p)_4$,
+  $\mathcal W(p)_2^\sharp$, and $\mathcal W(p)_4^\sharp$ are simple and carry
+  continuously varying reduced full-support source data.
+  In particular, each endpoint carries its own datum for all five tensors.
+  Then admissible strict equivalence requires equality of both
+  $\sigma^{(1)}$ and $\sigma^{(2)}$.
   Admissible equivalence after blocking and adding ancillas requires equality
   of $\sigma^{(2)}$ for endpoint and comparison tensors carrying the same
   data after those operations.
@@ -5067,10 +5098,12 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     def:mpu_reduced_full_support_source_datum,
     def:mpu_admissible_equivalence_datum}
   Suppose the one-site and actual two-site endpoint tensors, together with
-  their physical-adjoint and transposed comparison tensors at both blocking
-  lengths, are simple and carry their own reduced full-support source data.
-  Suppose the displayed comparison paths carry these data continuously. Then
-  the MPUs $\widetilde U_2^{(N)}$ and $\widetilde U_3^{(N)}$ are in the same
+  their conjugate, physical-adjoint, and transposed comparison tensors at both
+  blocking lengths, are simple and carry their own reduced full-support source
+  data. Suppose the corresponding fixed conjugate, physical-adjoint,
+  transposed, and symmetry-image comparison paths carry these data
+  continuously. Then the MPUs $\widetilde U_2^{(N)}$ and
+  $\widetilde U_3^{(N)}$ are in the same
   admissible phase under both time reversal and transposition.
 \end{proposition}
 
