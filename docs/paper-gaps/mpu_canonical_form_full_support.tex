@@ -14,15 +14,15 @@ The normal-tensor proposition of
 Cirac--P\'erez-Garc\'ia--Schuch--Verstraete states that the normalized MPU
 transfer matrix has one nonzero eigenvalue, equal to one, and that the
 normalized local tensor is normal
-\cite[proposition labelled~\texttt{prop:normal-tensor},
-lines~344--354]{Cirac2017MPU}.  The proposition itself displays no
-canonical-form or minimality hypothesis.  Its section has already imposed the
+\cite[Proposition~III.1]{Cirac2017MPU}. The proposition itself displays no
+canonical-form or minimality hypothesis. Its section has already imposed the
 standing convention that, without further notice, the local tensor has first
 been replaced by a tensor in canonical form
-\cite[lines~319--326]{Cirac2017MPU}.  The preceding definition makes canonical
-form a direct sum of irreducible positive-dimensional blocks and says that an
-arbitrary representative may be replaced by another representative generating
-the same matrix product vectors \cite[lines~257--265]{Cirac2017MPU}.
+\cite[discussion preceding Proposition~III.1]{Cirac2017MPU}. The preceding
+canonical-form definition makes this tensor a direct sum of irreducible
+positive-dimensional blocks and permits replacement by another representative
+generating the same matrix product vectors.
+% Source lines: paper_v2.tex 257--265, 319--326, and 344--354.
 
 \section{The formal support issue}
 The literal CPSV canonical-form data used in the formalization permits a
@@ -59,8 +59,10 @@ Let $\mathcal U$ be an MPU tensor with physical dimension $d$ and bond
 dimension $D$, and let $E$ be the transfer matrix of the normalized tensor
 $d^{-1/2}\mathcal U$. After the normal-tensor proposition, the source assumes
 without loss of generality that this normalized tensor is in canonical form II
-\cite[lines~350--356]{Cirac2017MPU}. Choose such data with full active
-support. Let $\mathcal A_1$ be its unique active block, let $V$ be the inclusion
+\cite[discussion following Proposition~III.1]{Cirac2017MPU}. Choose such data
+with full active support.
+% Source lines: paper_v2.tex 350--356.
+Let $\mathcal A_1$ be its unique active block, let $V$ be the inclusion
 of that block into the ambient bond space, and let $\Lambda$ be the block's
 diagonal positive right fixed point normalized to have trace one. Set
 \begin{align}
@@ -70,10 +72,11 @@ diagonal positive right fixed point normalized to have trace one. Set
 The source factors are defined using this matrix $\rho$. In the first singular
 value decomposition, let $V_1$ denote the coisometry appearing in
 $M_1=V_1^\dagger D_1U_1$. The source orders the product index as
-$(j,\alpha)$ and uses the normalization matrix
+$(j,\alpha)$ and defines the compressed positive metric
 \begin{align}
-  V_1(\Id_d\otimes\rho)V_1^\dagger.
+  G&=V_1(\Id_d\otimes\rho)V_1^\dagger.
 \end{align}
+The normalization factor appearing in $X_1$ is $G^{-1/2}$, not $G$.
 The formal source matrix orders the same index as $(\alpha,j)$. Let
 \begin{align}
   \chi\colon\mathbb C^D\otimes\mathbb C^d
@@ -86,24 +89,34 @@ In the virtual--physical order, the source weight is therefore
     &=\chi^\dagger(\Id_d\otimes\rho)\chi
       =\rho\otimes\Id_d,
 \end{align}
-and the normalization matrix is $V_1W_\rho V_1^\dagger$. The two Kronecker
-orders are related by this product-index equivalence and are not literally the
+and the compressed positive metric is
+\begin{align}
+  A&=V_1W_\rho V_1^\dagger.
+\end{align}
+The corresponding normalization factor is $A^{-1/2}$. The two Kronecker
+orders are related by the product-index equivalence and are not literally the
 same matrix in one fixed ordering.
 
-The inverse only requires the compressed matrix $V_1W_\rho V_1^\dagger$ to be
-positive definite; it does not by itself force $\rho$ to be positive definite
-on the ambient bond space. The current TNLean source-factor construction
-assumes ambient positive definiteness, and full active support supplies that
-stronger hypothesis \cite[lines~480--505]{Cirac2017MPU}. The same factors
-define $u$ and $v$ in
-the source-isometry lemma and Theorem~III.8
-\cite[labels~\texttt{lemuisometry} and~\texttt{ThmFund1},
-lines~532--601]{Cirac2017MPU}. Thus ambient positive definiteness is a
+The inverse square root only requires the compressed metric
+$V_1W_\rho V_1^\dagger$ to be positive definite; it does not by itself force
+$\rho$ to be positive definite on the ambient bond space. The current TNLean
+source-factor construction assumes ambient positive definiteness, and full
+active support supplies that stronger hypothesis
+\cite[Section~III, source-factor construction]{Cirac2017MPU}. The same factors
+define $u$ and $v$ in Lemma~III.7 and Theorem~III.8.
+% Source lines: paper_v2.tex 479--505 and 532--601.
+Thus ambient positive definiteness is a
 restriction of the current formal construction, not a
 logical consequence of invertibility of the compressed source metric or of
 the bare MPU predicate.
 
-The supported formal route assumes
+The supported formal route has two bond-dimension branches. If $D=1$, the
+theorem \leanid{MPOTensor.IsMPU.normalized_transfer_matrix_eq_one_fin_one}
+supplies
+\begin{align}
+  J&=1,& \rho&=\Id_1,& E^J&=\lvert\rho)(\Phi\rvert.
+\end{align}
+If $D>1$, the route assumes
 \begin{align}
   \mathcal C&\in\operatorname{CFII}(d^{-1/2}\mathcal U),\\
   \sum_{k:\,\mu_k\ne0}D_k&=D.
@@ -119,34 +132,35 @@ and $\rho$, and the identities
   \tr(\rho)&=1,\\
   E\lvert\rho)&=\lvert\rho),\\
   (\Phi\rvert E&=(\Phi\rvert,\\
-  E^{D^2-1}&=\lvert\rho)(\Phi\rvert,
+  E^J&=\lvert\rho)(\Phi\rvert,&J&=D^2-1.
 \end{align}
-where $(\Phi\rvert$ is the vectorized identity bra. This $\rho$, rather than
-an arbitrary positive matrix, is the source weight used to define the factors
-and the operators $u$ and $v$.
+In both branches, $(\Phi\rvert$ is the vectorized identity bra and the
+positive trace-one matrix $\rho$ is the source weight used to define the
+factors and the operators $u$ and $v$.
 
 The explicit reduced-CFII and full-active-support hypotheses resolve the
 ambient-positivity question tracked by issue~\#5855. They do not prove the two
 complete network identities needed for Theorem~III.8. The source-$u$
 range-insertion equality remains tracked by issue~\#5982
-\cite[Lemma~III.7, label~\texttt{lemuisometry},
-lines~545--557]{Cirac2017MPU}. The complete source-$v$ equivalence remains
-tracked by issue~\#6071
-\cite[equation~\texttt{vUnitary}, proof of Theorem~III.8,
-lines~577--600]{Cirac2017MPU}.
+\cite[Lemma~III.7]{Cirac2017MPU}. The complete source-$v$ equivalence remains
+tracked by issue~\#6071 \cite[proof of Theorem~III.8]{Cirac2017MPU}.
+% Source lines: paper_v2.tex 545--557 and 577--600.
+% Source equation labels: uUnitary and vUnitary.
 
-Reduced canonical-form-II data with full active support are assumed for the
-same tensor $\mathcal U$ whose source cuts, ranks, and source operators occur
-in the two planned results. These data supply the positive trace-one matrix
-$\rho$ and the rank-one transfer power
+For $D>1$, reduced canonical-form-II data with full active support are assumed
+for the same tensor $\mathcal U$ whose source cuts, ranks, and source operators
+occur in the two planned results. For $D=1$, the one-dimensional stabilization
+theorem supplies the source pair directly. In either case the datum provides
+$J>0$, a positive trace-one matrix $\rho$, and
 \begin{align}
-  E^{D^2-1}&=\lvert\rho)(\Phi\rvert.
+  E^J&=\lvert\rho)(\Phi\rvert.
 \end{align}
 The source-isometry lemma and Theorem~III.8 both retain the source factors of
 $\mathcal U$.
 
-Blocking appears only inside the proof of the source-isometry lemma. Put
-$J=D^2-1$, $K=JD^2$, and let $\mathcal U^{[K]}$ denote the direct $K$-site
+Blocking appears only inside the proof of the source-isometry lemma. Let $J$
+be the supplied stabilization exponent, put $K=JD^2$, and let
+$\mathcal U^{[K]}$ denote the direct $K$-site
 block of $\mathcal U$. This internal block supplies the direct and reflected
 contractions used to evaluate the closed network for $u^\dagger u$. It is not
 used to replace the source cuts, ranks, or operators of $\mathcal U$, and no
@@ -162,10 +176,12 @@ datum.
 
 The index has the same restriction at every blocking length where
 Theorem~III.8 is used. A blocking length is admissible only when the blocked
-tensor is simple and carries its own reduced full-support source datum.
-Well-definedness compares two admissible simple blockings. Tensor-product and
-composition additivity require admissible simple blocks for every tensor whose
-index occurs.
+tensor is simple and carries its own source datum. Well-definedness compares
+two admissible simple blockings. Tensor-product additivity requires one common
+blocking length at which both factors and their tensor product are simple and
+carry source data. Composition additivity requires one common blocking length
+at which both factors and the resulting composition tensor are simple and
+carry source data. No later-block transport is used.
 
 Continuity requires more than endpoint data. Chapter~28 therefore introduces
 an admissible equivalence and path datum. It consists of a chosen strict-
@@ -174,7 +190,9 @@ reduced full-support source data for the corresponding simple blocked tensor at
 every point of the path. The blocked endpoints carry their own data. The same
 requirement is imposed after adjoining ancillas and blocking, and on paths that
 preserve a symmetry. This is a hypothesis attached to a chosen witness. It does
-not assert that such a witness exists.
+not assert that such a witness exists. The datum does not automatically include
+the source bound $m\leq D^4$; any result displaying that bound assumes that the
+supplied common blocking length itself satisfies it.
 
 With this convention, admissible equivalence implies equality of the index.
 The converse is claimed only when the standard-form interpolation is supplied
@@ -191,8 +209,10 @@ transposed comparison tensor. The blocking-parity statements and all later
 claims after blocking or adjoining ancillas carry the corresponding explicit
 hypotheses. No preservation under these operations is asserted.
 
-No current result constructs reduced full-support source data for every simple
-block, proves their preservation under blocking, adjoining ancillas, tensor
+For bond dimension one, the normalized transfer matrix supplies the source
+pair directly. For bond dimension greater than one, no current result
+constructs reduced full-support source data for every simple block or proves
+their preservation under blocking, adjoining ancillas, tensor
 product, composition, conjugation, adjoint, transposition, or continuous
 variation, or identifies the source data of a tensor with those of a reduced
 representative. Consequently the Chapter~28 statements are restricted to the
@@ -212,7 +232,9 @@ literal canonical-form membership alone.
 Consequently, a source-faithful formalization must construct this reduced
 representative and transport the source constructions, or explicitly assume
 chosen canonical-form-II data with full active support. The formalization uses
-the latter option and does not yet construct the representative reduction.
+the latter option when $D>1$ and the direct one-dimensional stabilization when
+$D=1$. It does not yet construct the representative reduction in the
+higher-dimensional case.
 
 Within Theorem~III.8 itself, the two remaining proof gaps are the complete
 source-$u$ contraction tracked by issue~\#5982 and the complete source-$v$
