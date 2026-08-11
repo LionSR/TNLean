@@ -467,12 +467,67 @@
     formulas.
 \end{proof}
 
+\begin{definition}[Grouped vertical BNT decomposition with physical isometries]
+    \label{def:vertical_bnt_grouping_with_isometry}
+    \lean{MPOTensor.HasVerticalBNTGroupingWithIsometry}
+    \leanok
+    \uses{def:vertical_tensor_mpdo, def:mpv_phase_class_data,
+        def:bnt_cpsv, def:mpdo_sector_projector,
+        def:mpdo_vertical_loops}
+    An MPO tensor $M$ has a \emph{grouped vertical BNT decomposition with
+    physical isometries} if there are positive bond dimensions $d_k$, positive
+    weights $\mu_k$, normal tensors $B_k$, and isometries
+    $V_k\colon\C^{d_k}\to\C^d$ with pairwise orthogonal ranges such that
+    \begin{align}
+        \widetilde M_vV_k&=V_k(\mu_kB_k^v),
+        \notag\\
+        V_k^\dagger\widetilde M_v&=(\mu_kB_k^v)V_k^\dagger,
+        \notag\\
+        \mu_kB_k^v&=V_k^\dagger\widetilde M_vV_k,
+        \notag\\
+        \widetilde M_v&=\sum_kV_k(\mu_kB_k^v)V_k^\dagger.
+        \notag
+    \end{align}
+    Let $k=(\alpha,q)$ be the phase-class enumeration. There are equalities of
+    the representative and copy bond dimensions, invertible gauges
+    $X_{\alpha,q}$, and nonzero phases $\zeta_{\alpha,q}$ of unit modulus,
+    with $X_{\alpha,1}=\Id$ and $\zeta_{\alpha,1}=1$, such that
+    \begin{align}
+        B_{\alpha,q}^v
+        &=\zeta_{\alpha,q}X_{\alpha,q}M_\alpha^vX_{\alpha,q}^{-1}.
+        \notag
+    \end{align}
+    The representatives $M_\alpha$ form a basis of normal tensors for the
+    weighted block tensor and are pairwise inequivalent up to gauge and phase.
+    Every effective coefficient
+    $c_{\alpha,q}=\mu_{\alpha,q}\zeta_{\alpha,q}$ is nonzero and positive.
+
+    For
+    $P_{\alpha,q}=V_{\alpha,q}V_{\alpha,q}^\dagger$, the triple consisting of
+    $P_{\alpha,q}$, $c_{\alpha,q}$, and the representative loop of $M_\alpha$
+    satisfies the sector-projector identity of
+    Definition~\ref{def:mpdo_sector_projector}. Moreover, for every
+    $(\alpha,q)$ there is a finite chain length for which the first-site
+    compression by $P_{\alpha,q}$ is nonzero.
+    Finally, the grouped physical maps remain isometries with pairwise
+    orthogonal ranges, satisfy both grouped intertwining identities and the
+    grouped corner identity, and reconstruct each vertical letter exactly:
+    \begin{align}
+        \widetilde M_v
+        &=\sum_\alpha\sum_q
+          V_{\alpha,q}
+          \bigl(c_{\alpha,q}X_{\alpha,q}M_\alpha^v
+          X_{\alpha,q}^{-1}\bigr)V_{\alpha,q}^\dagger.
+        \label{eq:vertical_bnt_grouping_with_isometry}
+    \end{align}
+\end{definition}
+
 \begin{theorem}[Vertical normal sectors grouped into BNT representatives]
     \label{thm:mpdo_vertical_bnt_grouping_with_isometries}
     \lean{MPOTensor.IsHorizontalCF.exists_verticalBNTGrouping_with_isometry}
     \leanok
-    \uses{def:mpdo, def:horizontal_cf_mpdo, def:vertical_tensor_mpdo,
-        def:bnt_cpsv, def:mpv_phase_class_data}
+    \uses{def:mpdo, def:horizontal_cf_mpdo,
+        def:vertical_bnt_grouping_with_isometry}
     Under the same hypotheses, partition the normalized vertical sectors by
     equality of their matrix product vector families up to a fixed nonzero
     scalar per site. There are normal representatives $M_\alpha$, an enumeration
@@ -538,8 +593,8 @@
     \lean{MPSTensor.IsCPSVCanonicalForm.%
         exists_verticalBNTGrouping_with_isometry}
     \leanok
-    \uses{def:mpdo, def:cpsv_canonical_form, def:vertical_tensor_mpdo,
-        def:bnt_cpsv, def:mpv_phase_class_data}
+    \uses{def:mpdo, def:cpsv_canonical_form,
+        def:vertical_bnt_grouping_with_isometry}
     Under the same hypotheses, partition the normalized vertical sectors by
     equality of their matrix product vector families up to a fixed nonzero
     scalar per site. There are normal representatives $M_\alpha$, an enumeration
@@ -920,24 +975,20 @@
     \label{thm:vertical_cf_of_grouping_and_gram_dressing}
     \lean{MPOTensor.verticalCF_of_grouping_and_gramDressing}
     \leanok
-    \uses{def:grouped_corner_gram_dressing,
-        thm:grouped_sector_gram_scalar_of_dressing,
-        thm:mpdo_vertical_grouped_is_bnt,
-        thm:mpdo_normalized_grouped_sector_maps,
-        thm:vertical_cf_of_grouped_orthogonal_sectors}
-    Suppose the vertical tensor $\widetilde M$ has a phase-class grouping into
-    normal representatives $M_\alpha$, positive effective weights
-    $c_{\alpha,q}$, and pairwise orthogonal physical corners with exact
-    reconstruction. Assume that the representatives form a BNT, that the
-    distinguished gauge in each class is the identity, and that $M$ has the
-    grouped-corner Gram-dressing property. Then $M$ is in vertical canonical
-    form.
+    \uses{def:vertical_bnt_grouping_with_isometry,
+        def:grouped_corner_gram_dressing, def:vertical_cf_mpdo}
+    If $M$ has a grouped vertical BNT decomposition with physical isometries
+    in the sense of
+    Definition~\ref{def:vertical_bnt_grouping_with_isometry}, and $M$ has the
+    grouped-corner Gram-dressing property of
+    Definition~\ref{def:grouped_corner_gram_dressing}, then $M$ is in vertical
+    canonical form.
 \end{theorem}
 
 \begin{proof}\leanok
     \uses{thm:grouped_sector_gram_scalar_of_dressing,
         thm:mpdo_vertical_grouped_is_bnt,
-        thm:mpdo_normalized_grouped_sector_maps,
+        thm:normalized_grouped_sector_maps_of_gram,
         thm:vertical_cf_of_grouped_orthogonal_sectors}
     Theorem~\ref{thm:grouped_sector_gram_scalar_of_dressing} gives
     $X_{\alpha,q}^\dagger X_{\alpha,q}=\omega_{\alpha,q}\Id$ with
@@ -992,72 +1043,22 @@
     \uses{thm:vertical_cf_of_grouping_and_gram_dressing,
         thm:cpsv_literal_vertical_bnt_grouping_with_isometries,
         thm:cpsv_literal_pairwise_vertical_gram_conjugation}
+    % Preserve the established source-facing anchors while the wrapper proof
+    % now follows the three declarations used by Lean.
+    \label{eq:cpsv_prop_4_13_active_bnt}
+    \label{eq:cpsv_prop_4_13_active_reconstruction}
+    \label{eq:cpsv_prop_4_13_original_coisometry}
+    \label{eq:cpsv_prop_4_13_first_site}
+    \label{eq:cpsv_prop_4_13_active_separation}
+    \label{eq:cpsv_prop_4_13_projector_closure}
+    \label{eq:cpsv_prop_4_13_normal_corners}
+    \label{eq:cpsv_prop_4_13_gram_conjugation}
+    \label{eq:cpsv_prop_4_13_gram}
     Theorem~\ref{thm:cpsv_literal_vertical_bnt_grouping_with_isometries}
-    supplies normal representatives $C_\alpha$, positive grouped weights,
-    physical isometries, and invertible gauges. In the grouped coordinates,
-    \begin{align}
-        \bigoplus_\ell\mu_\ell A_\ell^i
-        &=GT_{\mathrm{grp}}^iG^{-1},
-        \label{eq:cpsv_prop_4_13_active_bnt}
-    \end{align}
-    while the original coordinates satisfy
-    \begin{align}
-        A^i&=V^\dagger GT_{\mathrm{grp}}^iG^{-1}V,
-        \label{eq:cpsv_prop_4_13_active_reconstruction}
-    \end{align}
-    and
-    \begin{align}
-        VV^\dagger&=\Id.
-        \label{eq:cpsv_prop_4_13_original_coisometry}
-    \end{align}
-    Let $P$ be an orthogonal projector satisfying
-    $P\widetilde M=P\widetilde MP$, and let $P_1$ act on the first site.
-    Positivity gives
-    \begin{align}
-        P_1H^{(N)}
-        &=P_1H^{(N)}P_1
-          =(P_1H^{(N)}P_1)^\dagger
-          =H^{(N)}P_1.
-        \label{eq:cpsv_prop_4_13_first_site}
-    \end{align}
-    The grouped separation statement is
-    \begin{align}
-        Y_R(P)C_\alpha^i&=Y_C(P)C_\alpha^i,
-        \label{eq:cpsv_prop_4_13_active_separation}
-    \end{align}
-    and hence
-    \begin{align}
-        \widetilde MP&=P\widetilde MP.
-        \label{eq:cpsv_prop_4_13_projector_closure}
-    \end{align}
-    Exclusion of periodic sectors therefore yields normal vertical corners
-    $B_k$ and orthogonal isometries $V_k$ with
-    \begin{align}
-        \widetilde M_vV_k&=V_k(\nu_kB_k^v),
-        \notag\\
-        V_k^\dagger\widetilde M_v&=(\nu_kB_k^v)V_k^\dagger,
-        \notag\\
-        \widetilde M_v&=\sum_kV_k(\nu_kB_k^v)V_k^\dagger.
-        \label{eq:cpsv_prop_4_13_normal_corners}
-    \end{align}
+    supplies the grouped vertical BNT decomposition with physical isometries.
     The literal pairwise Figure~8 theorem supplies the grouped-corner
-    Gram-dressing property. Thus
-    Theorem~\ref{thm:vertical_cf_of_grouping_and_gram_dressing} applies. In
-    particular, its Gram step gives
-    \begin{align}
-        (X_{\alpha,k}^\dagger X_{\alpha,k})M_\alpha^v
-        (X_{\alpha,k}^\dagger X_{\alpha,k})^{-1}
-        &=M_\alpha^v,
-        \label{eq:cpsv_prop_4_13_gram_conjugation}
-    \end{align}
-    and a real number $\omega_{\alpha,k}>0$ such that
-    \begin{align}
-        X_{\alpha,k}^\dagger X_{\alpha,k}
-        &=\omega_{\alpha,k}\Id.
-        \label{eq:cpsv_prop_4_13_gram}
-    \end{align}
-    Normalizing these gauges and assembling the orthogonal grouped sectors
-    gives the three identities in the statement.
+    Gram-dressing property. Apply
+    Theorem~\ref{thm:vertical_cf_of_grouping_and_gram_dressing}.
 \end{proof}
 
 % The literal theorem above and the stronger horizontal theorem below are
