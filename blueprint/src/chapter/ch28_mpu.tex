@@ -2751,10 +2751,10 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
     column $(a_2,b_2)$ is
     \begin{align}
       \sum_{\alpha,\beta,j_1,j_2}
-        \overline{U^{p_1j_1}_{a_1\alpha}}
-        U^{q_1j_1}_{b_1\beta}
-        \overline{U^{p_2j_2}_{\alpha a_2}}
-        U^{q_2j_2}_{\beta b_2}.
+        \overline{U^{j_1p_1}_{a_1\alpha}}
+        U^{j_1q_1}_{b_1\beta}
+        \overline{U^{j_2p_2}_{\alpha a_2}}
+        U^{j_2q_2}_{\beta b_2}.
     \end{align}
     Set
     \begin{align}
@@ -2782,7 +2782,8 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
 
 \begin{proof}
     \leanok
-    \uses{thm:mpu_source_factorizations,
+    \uses{def:mpu_source_v_dressing,def:mpu_double_layer,
+        thm:mpu_source_factorizations,
         thm:mpu_source_factor_normalizations,
         thm:mpu_source_y_two_rotated_gram}
     Expand the ordinary and rank-one-inserted matrix products entrywise.
