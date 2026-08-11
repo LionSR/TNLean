@@ -10,10 +10,12 @@
 \maketitle
 
 \section{Source statement and surrounding convention}
-Proposition~\texttt{prop:normal-tensor} of Cirac--P\'erez-Garc\'ia--Schuch--Verstraete
-states that the normalized MPU transfer matrix has one nonzero eigenvalue, equal
-to one, and that the normalized local tensor is normal
-\cite[lines~344--354]{Cirac2017MPU}.  The proposition itself displays no
+The normal-tensor proposition of
+Cirac--P\'erez-Garc\'ia--Schuch--Verstraete states that the normalized MPU
+transfer matrix has one nonzero eigenvalue, equal to one, and that the
+normalized local tensor is normal
+\cite[proposition labelled~\texttt{prop:normal-tensor},
+lines~344--354]{Cirac2017MPU}.  The proposition itself displays no
 canonical-form or minimality hypothesis.  Its section has already imposed the
 standing convention that, without further notice, the local tensor has first
 been replaced by a tensor in canonical form
@@ -55,9 +57,9 @@ the normal block to the ambient tensor.
 \section{The source factors and Theorem III.8}
 Let $\mathcal U$ be an MPU tensor with physical dimension $d$ and bond
 dimension $D$, and let $E$ be the transfer matrix of the normalized tensor
-$d^{-1/2}\mathcal U$. After Proposition~\texttt{prop:normal-tensor}, the source
-assumes without loss of generality that this normalized tensor is in canonical
-form II \cite[lines~350--356]{Cirac2017MPU}. Choose such data with full active
+$d^{-1/2}\mathcal U$. After the normal-tensor proposition, the source assumes
+without loss of generality that this normalized tensor is in canonical form II
+\cite[lines~350--356]{Cirac2017MPU}. Choose such data with full active
 support. Let $\mathcal A_1$ be its unique active block, let $V$ be the inclusion
 of that block into the ambient bond space, and let $\Lambda$ be the block's
 diagonal positive right fixed point normalized to have trace one. Set
@@ -77,9 +79,10 @@ itself force $\rho$ to be positive definite on the ambient bond space. The
 current TNLean source-factor construction assumes ambient positive
 definiteness, and full active support supplies that stronger hypothesis
 \cite[lines~480--505]{Cirac2017MPU}. The same factors define $u$ and $v$ in
-the source lemma \texttt{lemuisometry} and Theorem~III.8,
-\texttt{ThmFund1} \cite[lines~532--601]{Cirac2017MPU}. Thus ambient positive
-definiteness is a restriction of the current formal construction, not a
+the source-isometry lemma and Theorem~III.8
+\cite[labels~\texttt{lemuisometry} and~\texttt{ThmFund1},
+lines~532--601]{Cirac2017MPU}. Thus ambient positive definiteness is a
+restriction of the current formal construction, not a
 logical consequence of invertibility of the compressed source metric or of
 the bare MPU predicate.
 
@@ -105,38 +108,40 @@ where $(\Phi\rvert$ is the vectorized identity bra. This $\rho$, rather than
 an arbitrary positive matrix, is the source weight used to define the factors
 and the operators $u$ and $v$.
 
-The explicit reduced-CFII and full-active-support hypotheses resolve the scope
-question tracked by issue~\#5855. They do not prove the two complete network
-identities needed for Theorem~III.8. The source-$u$ range-insertion equality in
-Lemma~III.7, labelled \texttt{lemuisometry} in the source, remains tracked by
-issue~\#5982. The complete blocked source-$v$ contraction remains tracked by
-issue~\#6071 \cite[equation~\texttt{vUnitary}, proof of Theorem~III.8,
+The explicit reduced-CFII and full-active-support hypotheses resolve the
+ambient-positivity question tracked by issue~\#5855. They do not prove the two
+complete network identities needed for Theorem~III.8. The source-$u$
+range-insertion equality remains tracked by issue~\#5982
+\cite[Lemma~III.7, label~\texttt{lemuisometry},
+lines~545--557]{Cirac2017MPU}. The complete source-$v$ equivalence remains
+tracked by issue~\#6071
+\cite[equation~\texttt{vUnitary}, proof of Theorem~III.8,
 lines~577--600]{Cirac2017MPU}.
 
-Accordingly, reduced canonical-form-II data with full active support are
-assumed only for $\mathcal U$. They supply the positive trace-one fixed matrix
-$\rho$ and the rank-one transfer power. For the direct block
-$W=\mathcal U^{[(D^2-1)D^2]}$, this becomes the supplied identity
-$E_W=\lvert\rho)(\Phi\rvert$. The planned source-isometry lemma consumes this
-identity and the associated direct and reflected contraction package on $W$;
-it does not assume or construct canonical-form-II data for $W$.
+Reduced canonical-form-II data with full active support are assumed for the
+same tensor $\mathcal U$ whose source cuts, ranks, and source operators occur
+in the two planned results. These data supply the positive trace-one matrix
+$\rho$ and the rank-one transfer power
+\begin{align}
+  E^{D^2-1}&=\lvert\rho)(\Phi\rvert.
+\end{align}
+The source-isometry lemma and Theorem~III.8 both retain the source factors of
+$\mathcal U$.
 
-The planned simple-tensor equivalence theorem is stated only for this block
-$W$. Its ranks and source operators are all recomputed from $W$. The theorem
-compares simplicity of $W$ with the unitarity and dimension conditions for
-those same blocked source operators. It does not identify them with the source
-data of $\mathcal U$. The formalization also does not construct a reduced
-representative or transport the source cuts, the ranks, simplicity, or the
-operators $u$ and $v$ from such a representative back to the original bond
-space.
+Blocking appears only inside the proof of the source-isometry lemma. Put
+$J=D^2-1$, $K=JD^2$, and let $\mathcal U^{[K]}$ denote the direct $K$-site
+block of $\mathcal U$. This internal block supplies the direct and reflected
+contractions used to evaluate the closed network for $u^\dagger u$. It is not
+used to replace the source cuts, ranks, or operators of $\mathcal U$, and no
+transport of source data across blocking is asserted.
 
 \section{Verdict}
 \textbf{Verdict: scope restriction.} The paper's normal-tensor proposition,
 the source-isometry lemma, and Theorem~III.8 concern the intended reduced
 canonical-form-II representative, with zero-weight blocks and the ambient zero
-complement omitted. This reduction is not an explicit hypothesis of
-Proposition~\texttt{prop:normal-tensor}, and it does not follow from literal
-canonical-form membership alone.
+complement omitted. This reduction is not an explicit hypothesis of the
+normal-tensor proposition, and it does not follow from literal canonical-form
+membership alone.
 Consequently, a source-faithful formalization must construct this reduced
 representative and transport the source constructions, or explicitly assume
 chosen canonical-form-II data with full active support.  The formalization uses
