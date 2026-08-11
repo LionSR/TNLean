@@ -511,11 +511,70 @@
     letter.
 \end{proof}
 
+\begin{definition}[Pairwise Gram dressing for grouped corners]
+    \label{def:grouped_corner_gram_dressing}
+    \lean{MPOTensor.HasGroupedCornerGramDressing}
+    \leanok
+    \uses{def:mpdo, def:vertical_tensor_mpdo,
+        thm:mpdo_gram_dressed_reflected_marked_chain}
+    An MPO tensor $M$ has the \emph{grouped-corner Gram-dressing property} if
+    the following holds. Let $A$ be a tensor, let $V_X,V_Y$ be two physical
+    maps, let $X,Y$ be invertible matrices, and let $c_X,c_Y>0$. If
+    \begin{align}
+        V_X^\dagger\widetilde M^vV_X
+        &=c_X X A^vX^{-1},
+        \notag\\
+        V_Y^\dagger\widetilde M^vV_Y
+        &=c_Y Y A^vY^{-1}
+        \notag
+    \end{align}
+    for every vertical letter $v$, then
+    \begin{align}
+        (X^\dagger X)A^v(X^\dagger X)^{-1}
+        &=(Y^\dagger Y)A^v(Y^\dagger Y)^{-1}
+        \label{eq:grouped_corner_gram_dressing}
+    \end{align}
+    for every $v$.
+\end{definition}
+
+\begin{theorem}[Gram conjugation from grouped-corner dressing]
+    \label{thm:grouped_sector_gram_conj_of_dressing}
+    \lean{MPOTensor.grouped_sector_gram_conj_eq_of_dressing}
+    \leanok
+    \uses{def:grouped_corner_gram_dressing, def:mpv_phase_class_data}
+    Suppose a phase-class grouping has positive effective coefficients
+    $c_{\alpha,q}$ and corner identities
+    \begin{align}
+        V_{\alpha,q}^\dagger\widetilde M^vV_{\alpha,q}
+        &=c_{\alpha,q}X_{\alpha,q}A_{\alpha,q}^v
+          X_{\alpha,q}^{-1}.
+        \notag
+    \end{align}
+    Assume that the distinguished copy in each class has identity gauge and
+    that $M$ has the grouped-corner Gram-dressing property. Then
+    \begin{align}
+        (X_{\alpha,q}^\dagger X_{\alpha,q})A_{\alpha,q}^v
+        (X_{\alpha,q}^\dagger X_{\alpha,q})^{-1}
+        &=A_{\alpha,q}^v
+        \label{eq:grouped_sector_gram_conj_of_dressing}
+    \end{align}
+    for every class $\alpha$, copy $q$, and vertical letter $v$.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:grouped_corner_gram_dressing}
+    Compare the corner indexed by $(\alpha,q)$ with the distinguished corner
+    of its phase class. The distinguished gauge is the identity, so its Gram
+    conjugation is trivial. Equation~(\ref{eq:grouped_corner_gram_dressing})
+    gives (\ref{eq:grouped_sector_gram_conj_of_dressing}).
+\end{proof}
+
 \begin{theorem}[Gram conjugation for an actual grouped sector]
     \label{thm:mpdo_grouped_sector_gram_conjugation}
     \lean{MPOTensor.IsMPDO.grouped_sector_gram_conj_eq}
     \leanok
-    \uses{thm:mpdo_pairwise_vertical_gram_conjugation,
+    \uses{thm:grouped_sector_gram_conj_of_dressing,
+        thm:mpdo_pairwise_vertical_gram_conjugation,
         thm:mpdo_vertical_bnt_grouping_with_isometries}
     Consider the grouped vertical decomposition furnished by
     Theorem~\ref{thm:mpdo_vertical_bnt_grouping_with_isometries}. For a
@@ -535,21 +594,21 @@
 
 \begin{proof}
     \leanok
-    \uses{thm:mpdo_pairwise_vertical_gram_conjugation,
+    \uses{thm:grouped_sector_gram_conj_of_dressing,
+        thm:mpdo_pairwise_vertical_gram_conjugation,
         thm:mpdo_vertical_bnt_grouping_with_isometries}
-    Transport the distinguished corner of the phase class along the equality
-    of its bond dimension with that of the copy $q$. Its distinguished gauge
-    is the identity. Apply
-    Theorem~\ref{thm:mpdo_pairwise_vertical_gram_conjugation} to this corner
-    and the corner indexed by $q$. The Gram conjugation belonging to the
-    distinguished corner is the identity, which gives the stated equality.
+    Theorem~\ref{thm:mpdo_pairwise_vertical_gram_conjugation} supplies
+    the grouped-corner Gram-dressing property. Apply
+    Theorem~\ref{thm:grouped_sector_gram_conj_of_dressing} to the grouped
+    vertical decomposition.
 \end{proof}
 
 \begin{theorem}[Literal Gram conjugation for an actual grouped sector]
     \label{thm:cpsv_literal_grouped_sector_gram_conjugation}
     \lean{MPSTensor.IsCPSVCanonicalForm.grouped_sector_gram_conj_eq}
     \leanok
-    \uses{thm:cpsv_literal_pairwise_vertical_gram_conjugation,
+    \uses{thm:grouped_sector_gram_conj_of_dressing,
+        thm:cpsv_literal_pairwise_vertical_gram_conjugation,
         thm:cpsv_literal_vertical_bnt_grouping_with_isometries}
     Consider the actual phase-class grouping furnished under literal CPSV
     canonical form.  For a class $\alpha$ and copy $q$, identify its normal
@@ -567,13 +626,13 @@
 
 \begin{proof}
     \leanok
-    \uses{thm:cpsv_literal_pairwise_vertical_gram_conjugation,
+    \uses{thm:grouped_sector_gram_conj_of_dressing,
+        thm:cpsv_literal_pairwise_vertical_gram_conjugation,
         thm:cpsv_literal_vertical_bnt_grouping_with_isometries}
-    The distinguished copy has identity gauge.  Use the equality of bond
-    dimensions to regard its positive corner equation on the bond space of the
-    copy $q$.  The literal pairwise Figure~8 theorem compares the two
-    corners.  Its distinguished Gram conjugation is the identity, which gives
-    (\ref{eq:cpsv_literal_grouped_gram_conj}).
+    The literal pairwise Figure~8 theorem supplies the grouped-corner
+    Gram-dressing property. Apply
+    Theorem~\ref{thm:grouped_sector_gram_conj_of_dressing} to the literal
+    phase-class grouping.
 \end{proof}
 
 \begin{theorem}[Gram conjugation from the adjoint dressing]
@@ -707,13 +766,40 @@
     $\sqrt{\omega}$ makes it unitary.
 \end{proof}
 
+\begin{theorem}[Positive scalar Gram matrix from grouped-corner dressing]
+    \label{thm:grouped_sector_gram_scalar_of_dressing}
+    \lean{MPOTensor.grouped_sector_gram_eq_pos_smul_one_of_dressing}
+    \leanok
+    \uses{thm:grouped_sector_gram_conj_of_dressing,
+        thm:eq3_of_dressed_adjoint}
+    Under the hypotheses of
+    Theorem~\ref{thm:grouped_sector_gram_conj_of_dressing}, suppose in
+    addition that every representative $A_{\alpha,q}$ is normal and has
+    positive bond dimension. Then for every class $\alpha$ and copy $q$
+    there is a real number $\omega_{\alpha,q}>0$ such that
+    \begin{align}
+        X_{\alpha,q}^\dagger X_{\alpha,q}
+        &=\omega_{\alpha,q}\Id.
+        \label{eq:grouped_sector_gram_scalar_of_dressing}
+    \end{align}
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:grouped_sector_gram_conj_of_dressing,
+        thm:eq3_of_dressed_adjoint}
+    Theorem~\ref{thm:grouped_sector_gram_conj_of_dressing} shows that
+    conjugation by $X_{\alpha,q}^\dagger X_{\alpha,q}$ fixes every letter of
+    the normal representative. Normal Gram rigidity makes this matrix a
+    positive real multiple of the identity.
+\end{proof}
+
 \begin{theorem}[Normalization of the grouped vertical gauges]
     \label{thm:mpdo_grouped_sector_unitary_normalization}
     \lean{MPOTensor.IsMPDO.grouped_sector_gram_eq_pos_smul_one}
     \lean{MPOTensor.IsMPDO.grouped_sector_exists_unitary_normalization}
     \leanok
-    \uses{thm:mpdo_pairwise_vertical_gram_conjugation,
-        thm:eq3_of_dressed_adjoint,
+    \uses{thm:grouped_sector_gram_scalar_of_dressing,
+        thm:mpdo_pairwise_vertical_gram_conjugation,
         thm:mpdo_vertical_bnt_grouping_with_isometries}
     In the grouped vertical decomposition of a matrix-product density
     operator in normalized BNT-refined horizontal form, let $X_{\alpha,k}$ be
@@ -740,16 +826,14 @@
 
 \begin{proof}
     \leanok
-    \uses{thm:mpdo_pairwise_vertical_gram_conjugation,
-        thm:eq3_of_dressed_adjoint,
+    \uses{thm:grouped_sector_gram_scalar_of_dressing,
+        thm:mpdo_pairwise_vertical_gram_conjugation,
         thm:mpdo_vertical_bnt_grouping_with_isometries}
-    Transport the normal representative to the bond space of the chosen
-    copy. Compare its positive corner with the distinguished identity-gauge
-    corner using
-    Theorem~\ref{thm:mpdo_pairwise_vertical_gram_conjugation}. Then apply
-    Theorem~\ref{thm:eq3_of_dressed_adjoint} with the second gauge equal to
-    the identity. The resulting Gram identity has a positive real scalar,
-    and division by its positive square root gives the stated unitary.
+    The pairwise Figure~8 theorem supplies the grouped-corner
+    Gram-dressing property. Apply
+    Theorem~\ref{thm:grouped_sector_gram_scalar_of_dressing} to the grouped
+    vertical decomposition, then divide each gauge by the positive square
+    root of its Gram scalar.
 \end{proof}
 
 \begin{theorem}[Literal normalization of the actual grouped vertical gauges]
@@ -757,8 +841,8 @@
     \lean{MPSTensor.IsCPSVCanonicalForm.grouped_sector_gram_eq_pos_smul_one}
     \lean{MPSTensor.IsCPSVCanonicalForm.grouped_sector_exists_unitary_normalization}
     \leanok
-    \uses{thm:cpsv_literal_pairwise_vertical_gram_conjugation,
-        thm:eq3_of_dressed_adjoint,
+    \uses{thm:grouped_sector_gram_scalar_of_dressing,
+        thm:cpsv_literal_pairwise_vertical_gram_conjugation,
         thm:cpsv_literal_vertical_bnt_grouping_with_isometries}
     In the actual phase-class grouping under literal CPSV canonical form,
     every gauge $X_{\alpha,q}$ has a positive real Gram scalar
@@ -777,17 +861,14 @@
 
 \begin{proof}
     \leanok
-    \uses{thm:cpsv_literal_pairwise_vertical_gram_conjugation,
-        thm:eq3_of_dressed_adjoint,
+    \uses{thm:grouped_sector_gram_scalar_of_dressing,
+        thm:cpsv_literal_pairwise_vertical_gram_conjugation,
         thm:cpsv_literal_vertical_bnt_grouping_with_isometries}
-    The representative on this bond space is normal. Compare its positive
-    corner with the distinguished identity-gauge corner using the literal
-    pairwise Figure~8 theorem. Then apply
-    Theorem~\ref{thm:eq3_of_dressed_adjoint} with the second gauge equal to
-    the identity. This gives
-    (\ref{eq:cpsv_literal_grouped_gram_scalar}) with
-    $\omega_{\alpha,q}>0$. Dividing by its positive square root gives a
-    unitary matrix.
+    The literal pairwise Figure~8 theorem supplies the grouped-corner
+    Gram-dressing property. Apply
+    Theorem~\ref{thm:grouped_sector_gram_scalar_of_dressing} to the literal
+    phase-class grouping, then divide each gauge by the positive square root
+    of its Gram scalar.
 \end{proof}
 
 \begin{theorem}[Normalized physical maps of the grouped vertical sectors]
