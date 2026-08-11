@@ -46,8 +46,9 @@ normalized for the ordinary inner product.
   `MPOTensor.sourceCutM₂_eq_sourceX₂_mul_sourceY₂`: the exact source-cut factorizations.
 * `MPOTensor.sourceX₁_mul_sourceY₁_apply`, `MPOTensor.sourceX₂_mul_sourceY₂_apply`: the
   entry formulas identifying the two graphical source decompositions with the tensor entries.
-* `MPOTensor.sourceX₁_weighted_isometry`, `MPOTensor.sourceX₂_isometry`: the two left-factor
-  normalizations.
+* `MPOTensor.sourceX₁_weighted_isometry`, `MPOTensor.sourceX₂_isometry`,
+  `MPOTensor.sourceX₂_isometry_apply`: the two left-factor normalizations and the entrywise
+  second-cut identity.
 * `MPOTensor.sourceY₁_mul_sourceZ₁`, `MPOTensor.sourceY₂_mul_sourceZ₂`: the two right-inverse
   identities.
 
@@ -454,6 +455,17 @@ theorem sourceX₁_weighted_isometry
 `Y1Y1X1X1` and its graphical form `X1X2b` (lines 487--524). -/
 theorem sourceX₂_isometry : (sourceX₂ U).IsIsometry := by
   exact (sourceSVD₂ U).V_coisometry.conjTranspose (sourceSVD₂ U).V
+
+/-- Entrywise form of the column-isometry identity $X_2^\dagger X_2=1$.
+
+Source: arXiv:1703.09188, equation `Y1Y1X1X1`, lines 479--494. -/
+theorem sourceX₂_isometry_apply (l l' : Fin ℓ[U]) :
+    (∑ β : Fin D, ∑ i : Fin d,
+      star (sourceX₂ U (β, i) l) * sourceX₂ U (β, i) l') =
+      if l = l' then 1 else 0 := by
+  have h := congrArg (fun M ↦ M l l') (sourceX₂_isometry U)
+  simpa only [Matrix.mul_apply, Matrix.one_apply, Matrix.conjTranspose_apply,
+    Fintype.sum_prod_type] using h
 
 /-- The weighted right-inverse identity $Y_1Z_1=I$ from arXiv:1703.09188,
 `YZ=1` (lines 503--506). -/
