@@ -13,6 +13,7 @@ import TNLean.MPS.FundamentalTheorem.SectorBNT.Basic
 import TNLean.MPS.FundamentalTheorem.SectorBNT.Blocking
 import TNLean.MPS.FundamentalTheorem.SectorBNT.CanonicalFormBridge
 import TNLean.MPS.FundamentalTheorem.SectorBNT.CanonicalFormEqual
+import TNLean.MPS.FundamentalTheorem.SectorBNT.CanonicalFormEqualAmbient
 import TNLean.MPS.FundamentalTheorem.SectorBNT.CoeffIdentity
 import TNLean.MPS.FundamentalTheorem.SectorBNT.CopyWeightMatching
 import TNLean.MPS.FundamentalTheorem.SectorBNT.EqualModulus
