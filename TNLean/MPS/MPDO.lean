@@ -140,6 +140,7 @@ import TNLean.MPS.MPDO.Defs
 import TNLean.MPS.MPDO.DiagonalCutRank
 import TNLean.MPS.MPDO.DiagonalFiniteChain
 import TNLean.MPS.MPDO.EtaPreparation
+import TNLean.MPS.MPDO.FibonacciBoundaryRank
 import TNLean.MPS.MPDO.FigureEightPairwise
 import TNLean.MPS.MPDO.FirstSite
 import TNLean.MPS.MPDO.FirstSiteBlocking
