@@ -396,8 +396,8 @@ theorem isBNTCanonicalForm_collapsedBntSectorDecomp_of_tp_primitive_irr_blocks
       weight_norm_le_one := h_weight_le
       weight_unit_exists := h_weight_unit }
 
-/-- Prepared TP, primitive, irreducible blocks admit a BNT canonical-form sector decomposition
-with the same positive-length matrix product vectors.
+/-- Prepared TP, primitive, irreducible blocks determine a BNT canonical-form sector
+decomposition with the same positive-length matrix product vectors.
 
 Source: arXiv:1606.00608, lines 237--301 and 1135--1148; arXiv:2011.12127,
 lines 1831--1885. -/
@@ -420,8 +420,8 @@ theorem exists_isBNTCanonicalForm_of_tp_primitive_irr_blocks
   exact isBNTCanonicalForm_collapsedBntSectorDecomp_of_tp_primitive_irr_blocks
     μ blocks hDim hTP hPrim hIrr hμne hμLe hμUnit
 
-/-- Prepared TP, primitive, irreducible blocks admit a dimension-preserving BNT canonical-form
-sector decomposition.
+/-- Prepared TP, primitive, irreducible blocks determine a dimension-preserving BNT
+canonical-form sector decomposition.
 
 Source: arXiv:1606.00608, lines 237--301 and 1135--1148; arXiv:2011.12127,
 lines 1831--1885. -/
