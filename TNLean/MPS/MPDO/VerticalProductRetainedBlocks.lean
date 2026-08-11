@@ -24,38 +24,6 @@ noncomputable section
 
 namespace MPOTensor
 
-private theorem verticalAssembledTensor_apply_copy_same
-    {g d : ℕ} (dim mult : Fin g → ℕ)
-    (weight : (α : Fin g) → Fin (mult α) → ℂ)
-    (B : (α : Fin g) → MPSTensor d (dim α))
-    (α : Fin g) (q : Fin (mult α)) (v : Fin d) (i j : Fin (dim α)) :
-    verticalAssembledTensor dim mult weight B v
-        (verticalSectorFinEquiv dim mult ⟨α, (q, i)⟩)
-        (verticalSectorFinEquiv dim mult ⟨α, (q, j)⟩) =
-      weight α q * B α v i j := by
-  unfold verticalAssembledTensor MPSTensor.toTensorFromBlocks
-  simp only [Matrix.reindex_apply, Matrix.submatrix_apply,
-    verticalSectorFinEquiv_outer_symm]
-  rw [Matrix.blockDiagonal'_apply_eq]
-  let p := finSigmaFinEquiv.symm (finSigmaFinEquiv ⟨α, q⟩)
-  have hp : p = ⟨α, q⟩ := finSigmaFinEquiv.symm_apply_apply ⟨α, q⟩
-  have hdim : dim p.1 = dim α := congrArg (fun s => dim s.1) hp
-  have hweight : weight p.1 p.2 = weight α q :=
-    congrArg (fun s => weight s.1 s.2) hp
-  let block (s : (α : Fin g) × Fin (mult α)) := B s.1 v
-  let packed (s : (α : Fin g) × Fin (mult α)) :
-      (r : (α : Fin g) × Fin (mult α)) ×
-        Matrix (Fin (dim r.1)) (Fin (dim r.1)) ℂ :=
-    ⟨s, block s⟩
-  have hpacked : packed p = packed ⟨α, q⟩ := congrArg packed hp
-  have hblock : HEq (block p) (block ⟨α, q⟩) :=
-    (Sigma.mk.inj_iff.mp hpacked).2
-  have hentry := (Fin.heq_fun₂_iff hdim.symm hdim.symm).mp hblock.symm i j
-  simp only [verticalCopyWeights, verticalCopyBlocks]
-  change weight p.1 p.2 * block p (Fin.cast _ i) (Fin.cast _ j) = _
-  rw [hweight]
-  exact congrArg (weight α q * ·) hentry.symm
-
 private theorem verticalAssembledTensor_apply_copy_ne
     {g d : ℕ} (dim mult : Fin g → ℕ)
     (weight : (α : Fin g) → Fin (mult α) → ℂ)
