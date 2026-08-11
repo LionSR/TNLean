@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.Channel.FixedPoint.SupportInvariance
 import TNLean.Channel.KoashiImoto.PreservingBlockAction
-import TNLean.Channel.Spectral.Support
+import TNLean.Analysis.SupportCompression
 
 /-!
 # Joint-support compression for invariant state families
