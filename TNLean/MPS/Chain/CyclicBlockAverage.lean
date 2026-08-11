@@ -4,7 +4,6 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.Chain.Defs
-import TNLean.MPS.Core.CyclicTrace
 
 import Mathlib.Analysis.SpecialFunctions.Pow.Complex
 import Mathlib.Data.Matrix.Block
@@ -25,8 +24,6 @@ The tensor constructed here depends on `N`; the result concerns only its
 length-`N` coefficient.
 -/
 
-open scoped Matrix
-
 namespace MPSChainTensor
 
 variable {d D N : ℕ}
@@ -35,6 +32,7 @@ variable {d D N : ℕ}
 def cyclicRotation (A : MPSChainTensor d D N) (k : Fin N) : MPSChainTensor d D N :=
   fun j => A (finCycle k j)
 
+/-- A cyclic rotation evaluates the chain at the shifted site. -/
 @[simp] theorem cyclicRotation_apply (A : MPSChainTensor d D N) (k j : Fin N) :
     cyclicRotation A k j = A (j + k) := rfl
 
@@ -71,7 +69,7 @@ def cyclicBlockMatrix (A : MPSChainTensor d D N) (i : Fin d) :
     Matrix (Fin D × Fin N) (Fin D × Fin N) ℂ :=
   Matrix.blockDiagonal (fun k => A k i) * cyclicBlockPermMatrix
 
-/-- The scalar `N⁻¹/N` whose `N`th power is `N⁻¹`. -/
+/-- The scalar `N ^ (-1 / N)` whose `N`th power is `N⁻¹`. -/
 noncomputable def cyclicBlockNormalization (N : ℕ) : ℂ :=
   ((N : ℂ)⁻¹) ^ ((N : ℂ)⁻¹)
 
@@ -79,7 +77,7 @@ noncomputable def cyclicBlockNormalization (N : ℕ) : ℂ :=
 
 This is the block matrix in PGVWC07, Theorem 3 (arXiv:quant-ph/0608197,
 lines 635--647), reindexed to bond coordinates `Fin (N * D)` and multiplied by
-`N⁻¹/N`. -/
+`N ^ (-1 / N)`. -/
 noncomputable def cyclicBlockTensor (A : MPSChainTensor d D N) : MPSTensor d (N * D) :=
   fun i => cyclicBlockNormalization N •
     Matrix.reindex (cyclicBlockFinEquiv (D := D) (N := N))
