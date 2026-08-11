@@ -148,12 +148,18 @@ using the identity following condition C3 in
 \cite[Equation~(2.4)]{Nachtergaele1996Spectral}. Equation~(2.5) is the
 separate batched condition C3$'$ involving $E_n^{(p)}$.
 
-The remaining source step is numerical, not geometric: one must formalize the
-FNW transfer-mixing estimate that bounds this open-chain defect uniformly in
-$n$ by an exponentially decaying function of $l$ (or formalize the Section~6
-C3$'$ route with its batched difference). No cyclic rotation, interval
-evaluator, excitation compression, or numerical transfer estimate is included
-in these results.
+The open-chain numerical step is also complete.  The geometric estimate below
+is uniform in the left length, and
+\leanid{MPSTensor.IsPrimitiveMPS.exists_openChain_groundProjection_defect_lt_c3_threshold}
+chooses one block-injective $l>1$ and one coefficient $\varepsilon_l\geq0$ with
+\[
+  \varepsilon_l<\frac{1}{\sqrt{l+1}}.
+\]
+The companion theorem
+\leanid{MPSTensor.IsPrimitiveMPS.exists_re_inner_openChain_anticommutator_ge_c3_threshold}
+gives the corresponding anticommutator inequality for every left length.  The
+remaining task is the separate blocked-to-cyclic comparison, including windows
+crossing the periodic cut.  No excitation-compression estimate is used.
 
 \section{Finite-row martingale reduction}
 
@@ -374,8 +380,8 @@ and
 with public reformulations
 \leanid{parentHamiltonianES_gap_bound_of_overlap_operator_norm_constant} and
 \leanid{parentHamiltonian_gapped_of_overlap_operator_norm_constant}. The correct
-remaining route is to prove the blocked MPS reduced ground-space Friedrichs
-estimate tracked in issue~\#5455. The generic theorem
+remaining route is the blocked-to-cyclic ground-projector comparison tracked
+in issue~\#5925. The generic theorem
 \leanid{re_inner_anticommutator_starProjection_orthogonal_ge_neg_of_friedrichs_bound}
 then supplies the excitation-projection anticommutator estimate. This route uses
 the intersection identity $\ker h_i\cap\ker h_j=\ker(h_i+h_j)$ or its restatement
@@ -387,9 +393,9 @@ nonzero vector.
 \section{Relation to the blueprint}
 
 The blueprint item labelled \path{lem:martingale_mps} in
-\path{blueprint/src/chapter/ch13_parent_hamiltonian_spectral_gap.tex}
-separates the finite-row martingale reduction from the still-open quantitative
-estimate.
+\path{blueprint/src/chapter/ch13_parent_hamiltonian_spectral_gap_martingale.tex}
+separates the finite-row martingale reduction from the still-open cyclic
+comparison.
 It does not assert that the displayed all-$L>1$ cyclic-window bound has already
 been obtained from the cited principal-angle estimates. Instead, it records the
 source anticommutator estimate as the hypothesis of
@@ -422,9 +428,9 @@ non-overlap, anticommutator, norm-compression, and spectral-theorem reductions
 are proved, while the MPS-specific anticommutator estimate remains to be proved
 or matched precisely to the cited martingale estimates.
 
-Once the quantitative comparison with the cited martingale estimates is settled,
-the blueprint should say that the cyclic-window anticommutator estimate follows
-from those estimates under the convention used here. The blueprint should
+The open-chain threshold is now settled.  Once the blocked-to-cyclic comparison
+is proved, the blueprint should say that the cyclic-window anticommutator
+estimate follows under the convention used here. The blueprint should
 identify the reduced ground-space
 Friedrichs-to-anticommutator reduction as the source-facing route. The all-vector
 compression bound (N$_\eta$), if separately assumed, is only a stronger
@@ -967,7 +973,8 @@ and generic prerequisites now include:
     while Cirac--Perez-Garcia--Schuch--Verstraete state the martingale
     anticommutator criterion and its principal-angle interpretation.  None of
     those sources gives the three displayed correction formulas.  Their uniform
-    combination and comparison with Nachtergaele's equation~(6.1) remain open.
+    combination is given below; comparison with the optimized coefficient in
+    Nachtergaele's equation~(6.1) remains open.
 \end{itemize}
 Fix \(K,L_0\in\mathbb N\) and let
 \(\mathcal H_{K+L_0+1}\) be the \((K+L_0+1)\)-site Euclidean space
@@ -978,7 +985,7 @@ Fix \(K,L_0\in\mathbb N\) and let
 Nachtergaele C3 left-window convention) identifies its range with the
 open-chain left subspace \(\mathcal U_{K+L_0}(A)\), both in the common ambient
 \(\mathcal H_{K+L_0+1}\).
-The remaining task is to bound the projector defect
+The relevant projector defect is
 \begin{align}
     \bigl\|
         P^{\mathrm{tail}}_{K,L_0+1}(A)\,
@@ -1073,7 +1080,23 @@ physical projectors.  No physical projector is identified with a transfer
 fixed-point projector.
 
 This coefficient is a reconstructed TNLean substitute sufficient for
-Nachtergaele's condition C3.  It is not the optimized FNW expression
+Nachtergaele's condition C3.  Indeed,
+\leanid{MPSTensor.IsPrimitiveMPS.exists_openChain_groundProjection_defect_lt_c3_threshold}
+uses
+\begin{align}
+  \sqrt{n+1}\,r^n&\longrightarrow0
+\end{align}
+to choose $l>1$ above a positive block-injectivity length such that $cr^l<1$
+and
+\begin{align}
+  \frac{C_*r^l}{1-cr^l}&<\frac{1}{\sqrt{l+1}}.
+\end{align}
+The same $l$ works for every spectator length $K$, and
+\leanid{MPSTensor.IsPrimitiveMPS.exists_re_inner_openChain_anticommutator_ge_c3_threshold}
+then gives the open-chain anticommutator inequality.  One site of the input
+tensor is one blocked-chain filtration step.
+
+The coefficient is not the optimized FNW expression
 \begin{align}
   c\lambda^l\frac{1+c\lambda^l}{1-c\lambda^l},
   \qquad c\lambda^l<1,
@@ -1087,10 +1110,11 @@ conversion retains its proved $D^{3/2}$ norm factor inside $g$.
 
 \section{Verdict}
 
-\textbf{Verdict: local correction (resolved), with an open optimized-coefficient
-scope.}  The spectator-uniform projector estimate needed for condition C3 is
-proved in the unweighted coordinates.  The optimized FNW numerator and its
-source constants remain an open source-comparison problem.
+\textbf{Verdict: the open-chain C3 threshold is resolved.}  The
+spectator-uniform projector estimate and a blocked length satisfying
+$\varepsilon_l<1/\sqrt{l+1}$ are proved in the unweighted coordinates.  The
+optimized FNW numerator remains an open source-comparison problem, and the
+blocked-to-cyclic parent-Hamiltonian comparison remains separate.
 
 \bibliographystyle{alpha}
 \bibliography{references}
