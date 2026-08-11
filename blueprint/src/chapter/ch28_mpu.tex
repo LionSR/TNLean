@@ -3895,32 +3895,40 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
   \uses{def:mpu,def:mpu_normalized_flattening,def:cpsv_cfii,
     def:mpu_full_active_support,def:mpu_simple,def:mpu_source_uv,
     def:mpu_source_v_dressing,thm:mpu_reduced_cfii_transfer_stabilization,
+    thm:mpu_matching_direct_block_contractions,
     thm:mpu_supplied_projector_simple2}
   Let $\mathcal U$ be an MPU tensor with $d>0$ and $D>1$. Choose
   canonical-form-II data for its normalized flattening whose active blocks
   fill the ambient bond space. Let $\rho$ and $(\Phi\rvert$ be the normalized
   fixed pair supplied by
   Theorem~\ref{thm:mpu_reduced_cfii_transfer_stabilization}, set
-  $J=D^2-1$ and $K=JD^2$, and put $W=\mathcal U^{[K]}$. Recompute the source
-  factors and $v$ from $W$ using $\rho$. Then the supplied contraction
+  $J=D^2-1$ and $K=JD^2$, and put $W=\mathcal U^{[K]}$. Recompute both
+  source cuts from $W$. Let $r_W$ and $\ell_W$ be their ranks, and let $u_W$
+  and $v_W$ be the source operators constructed from $W$ using $\rho$. Write
+  $Y_{1,W}$ and $Y_{2,W}$ for the corresponding right source factors. Then
+  the supplied contraction
   \begin{align}
     W^{ij}W^{k\ell}
       &=W^{ij}\lvert\rho)(\Phi\rvert W^{k\ell}
   \end{align}
   holds if and only if
   \begin{align}
-    (Y_1\otimes Y_2)^\dagger v^\dagger v(Y_1\otimes Y_2)
-      &=(Y_1\otimes Y_2)^\dagger(Y_1\otimes Y_2).
+    (Y_{1,W}\otimes Y_{2,W})^\dagger v_W^\dagger v_W
+      (Y_{1,W}\otimes Y_{2,W})
+      &=(Y_{1,W}\otimes Y_{2,W})^\dagger(Y_{1,W}\otimes Y_{2,W}).
   \end{align}
-  When $W$ is simple, Theorem~\ref{thm:mpu_supplied_projector_simple2}
-  supplies the displayed contraction with this same stabilized pair. This is
-  the complete equality labelled \texttt{vUnitary} in
-  \cite[proof of Theorem~III.8, lines~577--588]{Cirac2017MPU}, with the
-  stabilized transfer power retained in the internal contraction.
+  Theorem~\ref{thm:mpu_matching_direct_block_contractions} supplies the
+  displayed contraction with this same stabilized pair. When $W$ is simple,
+  Theorem~\ref{thm:mpu_supplied_projector_simple2} gives the same fixed-pair
+  form directly. This is the complete equality in
+  \cite[equation~\texttt{vUnitary}, proof of Theorem~III.8,
+  lines~577--588]{Cirac2017MPU}, with the stabilized transfer power retained
+  in the internal contraction.
 \end{theorem}
 
 \begin{proof}
   \uses{thm:mpu_reduced_cfii_transfer_stabilization,
+    thm:mpu_matching_direct_block_contractions,
     thm:mpu_supplied_projector_simple2,
     thm:mpu_supplied_witness_overlapping_reblocking,
     thm:mpu_source_v_four_u_expansions,
@@ -3976,50 +3984,58 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
   \discussion{5708}
   \uses{def:mpu,def:mpu_normalized_flattening,def:cpsv_cfii,
     def:mpu_full_active_support,def:mpu_simple,def:mpu_source_uv,
-    thm:mpu_reduced_cfii_transfer_stabilization}
+    thm:mpu_reduced_cfii_transfer_stabilization,
+    thm:mpu_matching_direct_block_contractions}
   Let $\mathcal U$ be an MPU tensor with $d>0$ and $D>1$. Choose
   canonical-form-II data for its normalized flattening whose active blocks
-  fill the ambient bond space, and construct the source factors from the
-  normalized positive right fixed point $\rho$ supplied by
-  Theorem~\ref{thm:mpu_reduced_cfii_transfer_stabilization}. Let $r$, $\ell$,
-  $u$, and $v$ be the resulting source-cut ranks and source operators. Then
-  the following conditions are equivalent:
+  fill the ambient bond space. Let $\rho$ and $(\Phi\rvert$ be the normalized
+  fixed pair supplied by
+  Theorem~\ref{thm:mpu_reduced_cfii_transfer_stabilization}, set
+  $J=D^2-1$ and $K=JD^2$, and put $W=\mathcal U^{[K]}$. Recompute both source
+  cuts from $W$. Let $r_W$ and $\ell_W$ be their ranks, and let $u_W$ and
+  $v_W$ be the source operators constructed from $W$ using $\rho$. Then the
+  following conditions are equivalent:
   \begin{enumerate}
-    \item $\mathcal U$ is simple;
-    \item $r\ell=d^2$;
-    \item $u$ is unitary;
-    \item $v$ is unitary.
+    \item $W$ is simple;
+    \item $r_W\ell_W=(d^K)^2$;
+    \item $u_W$ is unitary;
+    \item $v_W$ is unitary.
   \end{enumerate}
 \end{theorem}
 
 \begin{proof}
-  \uses{lemuisometry,thm:mpu_supplied_projector_simple2,thm:mpu_simple1,
+  \uses{lemuisometry,thm:mpu_matching_direct_block_contractions,
+    thm:mpu_supplied_projector_simple2,
     thm:mpu_source_v_complete_reduced_contraction,
     thm:mpu_source_uv_two_site_factorization,
     thm:mpu_source_v_dressed_gram_cancel}
-  Lemma~\ref{lemuisometry} gives $u^\dagger u=\Id$ before any of the four
-  conditions is assumed. Thus $u$ is a standing isometry and
-  $r\ell\geq d^2$ throughout the proof.
+  Apply Lemma~\ref{lemuisometry} to the blocked tensor $W$ and its source
+  factors. This gives $u_W^\dagger u_W=\Id$ before any of the four conditions
+  is assumed. Thus $u_W$ is a standing isometry and
+  $r_W\ell_W\geq(d^K)^2$ throughout the proof.
 
-  Suppose first that $\mathcal U$ is simple. The stabilized transfer power and
-  Theorem~\ref{thm:mpu_supplied_projector_simple2} give the second contraction
-  with the supplied pair $\lvert\rho)(\Phi\rvert$. By
+  Suppose first that $W$ is simple. The direct-block matching contractions
+  obtained from $E^J=\lvert\rho)(\Phi\rvert$, together with
+  Theorem~\ref{thm:mpu_supplied_projector_simple2}, give the second contraction
+  for $W$ with this same fixed pair. By
   Theorem~\ref{thm:mpu_source_v_complete_reduced_contraction},
   \begin{align}
-    (Y_1\otimes Y_2)^\dagger v^\dagger v(Y_1\otimes Y_2)
-      &=(Y_1\otimes Y_2)^\dagger(Y_1\otimes Y_2).
+    (Y_{1,W}\otimes Y_{2,W})^\dagger v_W^\dagger v_W
+      (Y_{1,W}\otimes Y_{2,W})
+      &=(Y_{1,W}\otimes Y_{2,W})^\dagger(Y_{1,W}\otimes Y_{2,W}).
   \end{align}
-  Cancelling the dressing by the right inverses of $Y_1$ and $Y_2$ gives
-  $v^\dagger v=\Id$, hence $r\ell\leq d^2$. Together with the standing
-  source-$u$ isometry, this gives $r\ell=d^2$.
+  Cancelling the dressing by the right inverses of $Y_{1,W}$ and $Y_{2,W}$
+  gives $v_W^\dagger v_W=\Id$, hence $r_W\ell_W\leq(d^K)^2$. Together with
+  the standing source-$u_W$ isometry, this gives $r_W\ell_W=(d^K)^2$.
 
-  If $r\ell=d^2$, the standing isometry $u$ is square and therefore unitary.
-  If $u$ is unitary, the exact two-site factorization of $U^{(2)}$ and
-  unitarity of $U^{(2)}$ imply that $v$ is unitary. Finally, suppose that $v$
-  is unitary. The fixed-point identity gives the first simple-tensor
-  contraction. Unitarity of $v$ gives the dressed Gram identity, and
+  If $r_W\ell_W=(d^K)^2$, the standing isometry $u_W$ is square and therefore
+  unitary. If $u_W$ is unitary, the exact two-site factorization of $W^{(2)}$
+  and unitarity of $W^{(2)}$ imply that $v_W$ is unitary. Finally, suppose that
+  $v_W$ is unitary. Unitarity gives the dressed Gram identity, and
   Theorem~\ref{thm:mpu_source_v_complete_reduced_contraction} gives the
-  supplied second contraction.
+  supplied second contraction for $W$.
+  Theorem~\ref{thm:mpu_matching_direct_block_contractions} supplies the first
+  contraction with the same pair, so $W$ is simple.
 \end{proof}
 
 \begin{definition}[Standard form]

@@ -109,9 +109,15 @@ The explicit reduced-CFII and full-active-support hypotheses resolve the scope
 question tracked by issue~\#5855. They do not prove the two complete network
 identities needed for Theorem~III.8. The source-$u$ range-insertion equality in
 Lemma~III.7, labelled \texttt{lemuisometry} in the source, remains tracked by
-issue~\#5982. The complete blocked source-$v$ contraction corresponding to the
-equality labelled \texttt{vUnitary} in the proof of Theorem~III.8 remains
-tracked by issue~\#6071 \cite[lines~545--600]{Cirac2017MPU}. The formalization
+issue~\#5982. The complete blocked source-$v$ contraction remains tracked by
+issue~\#6071 \cite[equation~\texttt{vUnitary}, proof of Theorem~III.8,
+lines~577--600]{Cirac2017MPU}.
+
+Accordingly, the planned simple-tensor equivalence theorem is stated only for
+the direct block $W=\mathcal U^{[(D^2-1)D^2]}$. Its ranks and source operators
+are all recomputed from $W$. The theorem compares simplicity of $W$ with the
+unitarity and dimension conditions for those same blocked source operators. It
+does not identify them with the source data of $\mathcal U$. The formalization
 also does not construct a reduced representative or transport the source cuts,
 the ranks, simplicity, or the operators $u$ and $v$ from such a representative
 back to the original bond space.
