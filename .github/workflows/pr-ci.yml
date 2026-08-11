@@ -255,6 +255,10 @@ jobs:
               - 'docs/tenkz/**/*.tex'
               - 'docs/tenkz/manual2.tex'
               - 'docs/tenkz/tenkzmanual2.sty'
+              # The RMP benchmark book's own style file: a runtime input of
+              # `tenkz_rmp.py book --all` (the book driver rmp-benchmark.tex
+              # already matches 'docs/tenkz/**/*.tex' above).
+              - 'docs/tenkz/tenkzrmpbenchmark.sty'
               - 'scripts/tenkz_manual_doctest.py'
               - 'scripts/test_tenkz_manual_doctest.py'
               - 'scripts/tenkz_audit.py'
