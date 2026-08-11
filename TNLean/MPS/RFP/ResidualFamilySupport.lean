@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.ParentHamiltonian.BlockSumGroundSpace
-import TNLean.MPS.RFP.AppendixBSupport
+import TNLean.MPS.RFP.AppendixBTwoSiteBasicSupport
 import TNLean.MPS.RFP.ResidualWordSpan
 
 /-!
