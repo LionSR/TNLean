@@ -1394,10 +1394,13 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
 
 \begin{proof}\leanok
     \uses{def:mpu_independent_tensor_product,def:mpo_family}
-    At each site, multiply the two local matrix entries and group the two
-    auxiliary indices. Closing the auxiliary chain turns the trace of the
-    Kronecker product into the product of the two traces. The resulting matrix
-    is the Kronecker product after the sitewise configuration bijection.
+    Grouping the two auxiliary indices makes every closed-word matrix a
+    Kronecker product. The identity
+    \begin{align}
+        \Tr(A\otimes B)&=\Tr(A)\Tr(B)
+    \end{align}
+    then gives the stated finite-size operator after the sitewise
+    configuration bijection.
 \end{proof}
 
 \begin{theorem}[Independent tensor products preserve matrix product unitarity]
@@ -1414,10 +1417,15 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
 \begin{proof}\leanok
     \uses{def:mpu_independent_tensor_product,thm:mpu_finite_tensor_product,
         thm:mpu_reindex_unitary,lem:mpu_mul_adjoint}
-    The finite-size operator is a reindexed Kronecker product. Its product with
-    its adjoint is the Kronecker product of the corresponding two unitarity
-    equations, hence the identity. Simultaneous reindexing preserves
-    unitarity.
+    The multiplication rule $(A\otimes B)(C\otimes D)=AC\otimes BD$ gives
+    \begin{align}
+        &(\mathcal U^{(N)}\otimes\mathcal V^{(N)})
+            (\mathcal U^{(N)}\otimes\mathcal V^{(N)})^\dagger \\
+        &\quad=\mathcal U^{(N)}(\mathcal U^{(N)})^\dagger
+            \otimes\mathcal V^{(N)}(\mathcal V^{(N)})^\dagger
+         =\Id\otimes\Id=\Id.
+    \end{align}
+    Simultaneous reindexing preserves this unitarity equation.
 \end{proof}
 
 \begin{definition}[Source-cut shuffle for an independent tensor product]
