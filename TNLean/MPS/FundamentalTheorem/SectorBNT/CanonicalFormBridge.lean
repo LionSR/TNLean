@@ -129,73 +129,6 @@ private theorem inv_mul_conjTranspose_equivalenceCoisometry_eq
 
 namespace CPSVCanonicalFormData
 
-/-- A normalized nonzero CPSV canonical form has a SectorBNT decomposition whose total bond
-dimension is the sum of its active block dimensions.
-
-The conclusion concerns only the active direct sum. Zero-weight displayed blocks and unused
-ambient coordinates do not contribute to this dimension.
-
-Source: arXiv:2011.12127, lines 1831--1885; arXiv:1606.00608, lines 237--301 and
-1135--1146. -/
-theorem exists_active_isBNTCanonicalForm
-    (data : CPSVCanonicalFormData A)
-    (hNorm : data.IsWeightNormalized)
-    (hA : A ≠ 0) :
-    ∃ P : SectorDecomposition d,
-      IsBNTCanonicalForm P ∧
-      SameMPV₂Pos A P.toTensor ∧
-      P.totalDim = ∑ k : data.Active, data.dim k.1 := by
-  classical
-  haveI : ∀ k, NeZero (data.activeDim k) :=
-    fun k => ⟨(data.dim_pos (data.activeEquiv k)).ne'⟩
-  choose σ hσ hσfix hTP hGauge hPrim hIrr using
-    fun k => (data.blocks_normal (data.activeEquiv k)).exists_tpGauge
-  let prepared := fun k => tpGauge (data.blocks (data.activeEquiv k)) (σ k)
-  have hDim : ∀ k, 0 < data.dim (data.activeEquiv k) := by
-    intro k
-    exact data.dim_pos (data.activeEquiv k)
-  have hPreparedTP : ∀ k, IsLeftCanonical (prepared k) := hTP
-  have hPreparedPrim : ∀ k, _root_.IsPrimitive (transferMap (prepared k)) := hPrim
-  have hPreparedIrr : ∀ k, IsIrreducibleTensor (prepared k) := hIrr
-  have hWeightNe : ∀ k, data.activeWeight k ≠ 0 := by
-    intro k
-    exact (data.activeEquiv k).property
-  have hWeightLe : ∀ k, ‖data.activeWeight k‖ ≤ 1 := by
-    intro k
-    exact hNorm.weight_norm_le_one (data.activeEquiv k)
-  have hWeightUnit : ∃ k, ‖data.activeWeight k‖ = 1 := by
-    obtain ⟨k, hk⟩ := hNorm.weight_unit_exists hA
-    have hkNe : data.weights k ≠ 0 := by
-      intro hkZero
-      simp [hkZero] at hk
-    let ka : data.Active := ⟨k, hkNe⟩
-    let l := data.activeEquiv.symm ka
-    refine ⟨l, ?_⟩
-    change ‖data.weights (data.activeEquiv l)‖ = 1
-    rw [show data.activeEquiv l = ka by simp [l]]
-    exact hk
-  have hDirectGauge :
-      GaugeEquiv
-        (toTensorFromBlocks (d := d) data.activeWeight data.activeBlocks)
-        (toTensorFromBlocks (d := d) data.activeWeight prepared) := by
-    apply gaugeEquiv_toTensorFromBlocks_of_blockGauge
-    intro k
-    simpa only [prepared, activeBlocks, activeDim] using hGauge k
-  have hActivePrepared :
-      SameMPV₂Pos
-        (toTensorFromBlocks (d := d) data.activeWeight data.activeBlocks)
-        (toTensorFromBlocks (d := d) data.activeWeight prepared) :=
-    fun N _hN w => GaugeEquiv.sameMPV hDirectGauge N w
-  obtain ⟨P, hPSame, hBNT, hTotal⟩ :=
-    exists_isBNTCanonicalForm_of_tp_primitive_irr_blocks_and_totalDim
-      data.activeWeight prepared hDim hPreparedTP hPreparedPrim hPreparedIrr
-        hWeightNe hWeightLe hWeightUnit
-  refine ⟨P, hBNT, data.sameMPV₂Pos_activeBlocks.trans <|
-    hActivePrepared.trans hPSame.symm, ?_⟩
-  rw [hTotal]
-  exact data.activeEquiv.sum_comp (fun k : data.Active => data.dim k.1)
-
-
 /-- A normalized nonzero CPSV canonical form has an exact active BNT reconstruction through
 a coisometry.
 
@@ -343,6 +276,33 @@ theorem exists_active_isBNTCanonicalForm_exact
   intro i
   rw [hActive i, hOriginal i]
   simp only [U', Matrix.conjTranspose_mul, Matrix.mul_assoc]
+
+/-- A normalized nonzero CPSV canonical form has a SectorBNT decomposition whose total bond
+dimension is the sum of its active block dimensions.
+
+The conclusion concerns only the active direct sum. Zero-weight displayed blocks and unused
+ambient coordinates do not contribute to this dimension.
+
+Source: arXiv:2011.12127, lines 1831--1885; arXiv:1606.00608, lines 237--301 and
+1135--1146. -/
+theorem exists_active_isBNTCanonicalForm
+    (data : CPSVCanonicalFormData A)
+    (hNorm : data.IsWeightNormalized)
+    (hA : A ≠ 0) :
+    ∃ P : SectorDecomposition d,
+      IsBNTCanonicalForm P ∧
+      SameMPV₂Pos A P.toTensor ∧
+      P.totalDim = ∑ k : data.Active, data.dim k.1 := by
+  obtain ⟨P, hBNT, hTotal, U, hU, X, hReconstruct⟩ :=
+    data.exists_active_isBNTCanonicalForm_exact hNorm hA
+  let B : MPSTensor d P.totalDim := fun i =>
+    (X : Matrix _ _ ℂ) * P.toTensor i * (↑(X⁻¹) : Matrix _ _ ℂ)
+  have hCoisometry : SameMPV₂Pos A B :=
+    sameMPV₂Pos_of_coisometry_reconstruction A B U hU hReconstruct
+  have hGauge : GaugeEquiv P.toTensor B := ⟨X, fun _ => rfl⟩
+  have hGaugeMPV : SameMPV₂Pos P.toTensor B :=
+    fun N _hN w => GaugeEquiv.sameMPV hGauge N w
+  exact ⟨P, hBNT, hCoisometry.trans hGaugeMPV.symm, hTotal⟩
 
 end CPSVCanonicalFormData
 
