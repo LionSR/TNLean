@@ -207,8 +207,8 @@ $$
 Zero-weight displayed blocks and unused ambient coordinates do not contribute to the retained
 bond dimension.
 
-Source: arXiv:2011.12127, lines 1831--1885 and 1896--1900; arXiv:1606.00608,
-lines 214--301, 1080--1117, 1135--1148, and 1172--1192. -/
+Source: arXiv:1606.00608, lines 214--301 and 1080--1148; arXiv:2011.12127,
+lines 1831--1885. -/
 theorem exists_active_isBNTCanonicalForm_exact
     (data : CPSVCanonicalFormData A)
     (hNorm : data.IsWeightNormalized)
