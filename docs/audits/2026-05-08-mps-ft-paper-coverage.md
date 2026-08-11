@@ -22,27 +22,18 @@
 
 ---
 
-## 1. May 2026 sorry/axiom snapshot and current periodic-overlap update
+## 1. Current proof-integrity status
 
-Historical snapshot collected 2026-05-08 with
-`rg -n "\bsorry\b|axiom" TNLean/MPS/ TNLean/PEPS/`:
+**Maintained update (2026-08-11):** This section and the PGVWC07 crosswalk
+below report the post-audit repository state; the filename and audit date retain
+the original 2026-05-08 date.
 
-| File | Lines | Sorry count | Notes |
-|---|---|---|---|
-| `TNLean/MPS/Periodic/Overlap/SectorMatch.lean` | 456 | 6 | Periodic overlap Case 3 |
-| `TNLean/MPS/Periodic/Overlap/Dichotomy.lean` | 90 | 4 | Overlap dichotomy assembly |
-| `TNLean/MPS/Periodic/Overlap/NoSectorMatch.lean` | 394 | 3 | Periodic overlap Case 2 |
-| `TNLean/MPS/Periodic/Overlap/SelfOverlap.lean` | 857 | 2 | Self-overlap convergence |
-| `TNLean/MPS/ParentHamiltonian/UniqueGroundState.lean` | 937 | 3 | Unique ground state |
-| `TNLean/MPS/ParentHamiltonian/DegenerateGS.lean` | 703 | 1 | Degenerate ground space |
-| `TNLean/MPS/ParentHamiltonian/Martingale.lean` | 1569 | 1 | Martingale proof |
-| `TNLean/PEPS/FundamentalTheorem.lean` | 738 | 4 | PEPS FT (out of scope) |
-| **Total MPS** | — | **20** | Excluding PEPS |
-
-As of 2026-06-17, the periodic-overlap cluster has been reduced to one live
-`sorry`, at `TNLean/MPS/Periodic/Overlap/SectorMatch.lean`, for the
-`repeatedBlocks_of_blockedSectorGaugePhase` contraction and phase-assembly
-theorem. This is tracked by issue #873 under the proposition-level tracker #81.
+The May 2026 per-file `sorry` table is no longer a current description of the
+repository. On 2026-08-11, an exact search for proof holes and axiom
+declarations in `TNLean/MPS/` finds none. The remaining qualifications in this
+audit are therefore mathematical scope distinctions: a current theorem may be
+conditional, may prove only part of a source result, or may concern a different
+boundary convention even though every cited Lean declaration is proved.
 
 ---
 
@@ -219,28 +210,28 @@ accidental.
 
 | Paper label | Lines | Paper description | Lean location | Status |
 |---|---|---|---|---|
-| **Theorem `thm:OBC-Vidal`** (l.431) | 431–443 | Completeness and canonical form for OBC (Vidal form) | `TNLean/MPS/Chain/Defs.lean` (OBC chain definition); left-canonical/right-canonical conditions in `Core/` | `leanok` (definitions); **needs verification** (full completeness theorem) |
-| **Theorem `free-OBC`** (l.466) | 466–486 | Freedom in OBC: all representations related by local Y_j, Z_j | `TNLean/MPS/Chain/GaugePhase.lean` (gauge transformations) | `leanok` |
-| Theorem "Site-independent matrices" (l.620) | 620–630 | TI state has site-independent MPS representation (bond dim ≤ ND) | `TNLean/MPS/Chain/Defs.lean` (TI chain definitions) | **needs verification** |
-| **Theorem `Th:TIcanonical`** (l.742) | 742–763 | TI canonical form: block-diagonal with λ_j > 0, each block satisfies left/right canonical + unique fixed point | Constituent reductions in `TNLean/MPS/CanonicalForm/Reduction.lean` and `CanonicalForm/Existence.lean`; scope boundary recorded in `docs/paper-gaps/pgvwc07_ti_canonical_form_scope.tex` | **not formalized** — the formal declarations prove invariant-subspace splitting, TP gauge, and conditional prepared-block reductions, not the full arbitrary-input source theorem with positive weights, unital blocks, diagonal full-rank dual fixed points, identity fixed-point uniqueness, and the bond-dimension bound; tracked by #1857 |
-| **Theorem `Th:periodic`** (l.849) | 849–858 | Periodic decomposition: p eigenvalues of modulus 1 ⇒ superposition of p p-periodic states | `TNLean/MPS/Periodic/Symmetry.lean`, `Periodic/ProjectiveRep.lean` | **partial** — periodic symmetry theory formalized; full theorem statement needs verification |
-| Prop `prop-inj` (l.911) | 911–? | C1 condition ⇒ Γ_L injective for L ≥ L₀ | `TNLean/MPS/Core/CPPrimitive.lean` (`IsInjective`), Wielandt span-growth infrastructure | **needs verification** |
-| Theorem "Interpretation of Λ" (l.987) | 987–993 | Λ eigenvalues converge to half-chain density matrix eigenvalues | **out of scope** | — |
-| **Theorem `thm-uniq`** (l.1002) | 1002–1015 | Uniqueness of TI canonical form (under C1, unique OBC CF, N > 2L₀+D⁴) | `TNLean/MPS/FundamentalTheorem/Basic.lean` (`fundamentalTheorem_singleBlock`, `sameMPV_iff_gaugeEquiv_of_injective` for single-block case); `Chain/FundamentalTheorem.lean` (`fundamentalTheorem_injective_chain`) | **partial** — single-block case fully proved; multi-block TI case with general hypotheses not yet formalized; tracked by #1529 |
-| Lemma `lem-same-matr` (l.1022) | 1022–1040 | Same-matrix lemma for T(Y_k)=S(Y_{k+1}) | **out of scope** (purely linear-algebraic) | — |
-| Lemma `lem-horn` (l.1053) | 1053–1058 | Horn's lemma: solution space of W(C⊗1)=(B⊗1)W is S⊗M_n | **out of scope** | — |
-| Theorem "Obtaining TI canonical form" (l.1154) | 1154–1165 | Solving quadratic equations (S) yields TI D-MPS from unique OBC CF | **out of scope** | — |
+| **Theorem `thm:OBC-Vidal`** (l.431) | 431–443 | Every finite-chain state has a site-dependent OBC canonical MPS representation, with Schmidt-rank bond bound and positive diagonal bond densities | `TNLean/MPS/Chain/Defs.lean` (`MPSChainTensor`, for site-dependent closed chains of one fixed square bond dimension) | **not formalized** — the missing source structure is an open-boundary representation with varying bond dimensions, rectangular local matrices, and endpoint vectors, together with its construction by successive Schmidt decompositions |
+| **Theorem `free-OBC`** (l.466) | 466–486 | Every OBC representation factors through the canonical one by local, generally rectangular matrices $Y_j,Z_j$ with $Y_jZ_j=I$ | `TNLean/MPS/Chain/Defs.lean` (`MPSChainTensor.GaugeEquiv`, the cyclic gauge relation for fixed square bond dimension) | **not formalized** — the cyclic relation uses invertible square gauges around a closed chain; it does not express the source's varying bond dimensions, rectangular local maps, or one-sided inverses $Y_jZ_j=I$ for an open chain |
+| Theorem "Site-independent matrices" (l.620) | 620–630 | Every finite-ring TI state has a site-independent PBC representation, with bond dimension at most $ND$ when starting from an OBC representation of bond dimension $D$ | `TNLean/MPS/Chain/Defs.lean` (`MPSChainTensor`) | **not formalized** — site-dependent fixed-bond closed chains are represented, but no current declaration constructs the cyclic $ND$-dimensional site-independent tensor from a varying-bond OBC representation |
+| **Theorem `Th:TIcanonical`** (l.742) | 742–763 | Arbitrary finite-ring TI representations admit the source block canonical form, with positive weights, unital blocks, positive full-rank dual fixed points, unique identity fixed points, and no increase in bond dimension | `TNLean/MPS/CanonicalForm/NormalReduction/WeightNormalization.lean` (`MPSTensor.exists_pgvwc07_normalized_exact_form_after_rescaling_allow_empty`) | **complete in the positive-length convention** — after a positive global rescaling, an arbitrary tensor has exactly the same MPV coefficients on every nonempty ring as a possibly empty finite family of positive-weight unital blocks with diagonal positive-definite dual fixed points and scalar fixed-point spaces; the total bond dimension is at most the original bond dimension. The family is empty exactly in the branch where every positive-length MPV coefficient vanishes; otherwise it is nonempty and some normalized weight has norm one. |
+| **Theorem `Th:periodic`** (l.849) | 849–858 | For a one-block canonical tensor with $p$ peripheral eigenvalues, if $p\mid N$ the finite-ring state is a superposition of $p$ translated $p$-periodic states, while if $p\nmid N$ the state is zero | `TNLean/MPS/CanonicalForm/SectorComparison/CyclicSectorDecomposition.lean` | **partial**: the peripheral cyclic projections and blocked sector decomposition are formalized, but neither the finite-ring decomposition for $p\mid N$ nor the vanishing theorem for $p\nmid N$ is packaged |
+| Proposition `prop-inj` (l.911) | 911–936 | Condition C1 forces a single canonical block and gives reduced-density rank exactly $D^2$ across every cut with both sides of length at least $L_0$ | `TNLean/Wielandt/SpanGrowth/CumulativeSpan.lean` (`isNBlkInjective_of_le`); `TNLean/MPS/ParentHamiltonian/GroundSpaceGram.lean` (`groundSpaceMapES_injective_of_isNBlkInjective_of_le`) | **partial** — exact-length injectivity is propagated to longer boundary maps, but the single-block conclusion and reduced-density-rank statement are not packaged as the source proposition |
+| Theorem "Interpretation of $\Lambda$" (l.987) | 987–993 | The half-chain reduced-density spectrum converges to the spectrum of $\Lambda\otimes\Lambda$, namely the products $\lambda_\alpha\lambda_\beta$ | **out of scope** | — |
+| **Theorem `thm-uniq`** (l.1002) | 1002–1015 | Fixed-length uniqueness of a TI canonical representation under C1, uniqueness of its OBC canonical form, and $N>2L_0+D^4$, with a unitary conjugacy conclusion | `TNLean/MPS/FundamentalTheorem/Basic.lean`; `TNLean/MPS/FundamentalTheorem/FiniteLength.lean` | **not formalized** — the current single-block theorem assumes equality of the whole MPV family from a threshold onward and concludes general gauge equivalence; it does not derive the source fixed-$N$ unitary conclusion from OBC uniqueness |
+| Lemma `lem-same-matr` (l.1022) | 1022–1040 | Same-matrix lemma for $T(Y_k)=S(Y_{k+1})$ | **out of scope** (purely linear-algebraic) | — |
+| Lemma `lem-horn` (l.1053) | 1053–1058 | Horn's lemma: solution space of $W(C\otimes I)=(B\otimes I)W$ is $S\otimes M_n$ | **out of scope** | — |
+| Theorem "Obtaining TI canonical form" (l.1154) | 1154–1165 | Solving the quadratic equations yields a TI $D$-MPS from a unique OBC canonical form | **out of scope** | — |
 
 ### 3.2 Section 4 — Parent Hamiltonians
 
 | Paper label | Lines | Paper description | Lean location | Status |
 |---|---|---|---|---|
-| Theorem "Uniqueness with OBC" (l.1206) | 1206–1209 | MPS is unique ground state of parent Hamiltonian under C1 (OBC) | `TNLean/MPS/ParentHamiltonian/UniqueGroundState.lean` | **partial** — 3 sorrys remain |
-| **Theorem `uniqueGS`** (l.1272) | 1272–1274 | Uniqueness with TI and PBC under C1 | `TNLean/MPS/ParentHamiltonian/UniqueGroundState.lean` | **partial** |
-| Lemma `lem1` (l.1333) | 1333–? | C1 condition witness lemma | `TNLean/MPS/ParentHamiltonian/` | **needs verification** |
-| Lemma `lem:direct-sum` (l.1346) | 1346–? | Direct sum lemma for block decomposition | `TNLean/MPS/Structure/InvariantSubspaceDecomp.lean` (Theorem 3, lines 769–803); `TNLean/MPS/ParentHamiltonian/` | **needs verification** |
-| Theorem `2blocks.1` (l.1407) | 1407–1415 | Degeneracy of ground space v1 | `TNLean/MPS/ParentHamiltonian/DegenerateGS.lean` | **partial** — 1 sorry |
-| Theorem `2blocks.2` (l.1424) | 1424–1428 | Degeneracy of ground space v2 (construction) | `TNLean/MPS/ParentHamiltonian/DegenerateGS.lean` | **partial** |
+| Theorem "Uniqueness with OBC" (l.1206) | 1206–1209 | After regrouping so that every site-dependent local matrix family satisfies C1, the canonical OBC MPS is the unique ground state of the associated nearest-neighbor open-chain Hamiltonian | not applicable | **not formalized**: the current parent-Hamiltonian development treats site-independent tensors and periodic-chain translated constraints, not this blockwise-C1 OBC Hamiltonian |
+| **Theorem `uniqueGS`** (l.1272) | 1272–1274 | Under C1, the TI parent Hamiltonian has a unique periodic ground state for $N\ge2L_0$ and $L>L_0$ | `TNLean/MPS/ParentHamiltonian/UniqueGroundState.lean` (`chainGroundSpace_eq_mpvSubmodule_normal`, `parentHamiltonian_unique_gs_normal`, `parentHamiltonian_unique_gs_injective`) | **partial** — the ground-space equality with the one-dimensional MPV span is proved for arbitrary $L_0<L\le N$ when $L_0+1<N$, but `HasUniqueGroundState` is packaged only at $L=L_0+1$ and $L=2L_0$; the endpoint $L_0=1$, $L=N=2$ also remains excluded |
+| Lemma `lem1` (l.1333) | 1333–1344 | For $C\ne0$, the matrices $RCS$ span the full matrix algebra | `TNLean/Algebra/MatrixTracePairing.lean` (`Matrix.span_range_mul_nonzero_mul_eq_top`); `TNLean/Algebra/TracePairing.lean` (`MPSTensor.span_range_evalWord_mul_nonzero_mul_evalWord_eq_top`) | **complete** |
+| Lemma `lem:direct-sum` (l.1346) | 1346–1408 | For $L\ge3(b-1)(L_0+1)$, the block spaces $\mathcal G_L^{A^j}$ form a direct sum | `TNLean/MPS/ParentHamiltonian/BNTBlockIntersection.lean` (`MPSTensor.groundSpace_iSupIndep_of_ge_of_bnt_directSum_unital_c1_pgvwc07_of_dualFixedPoint`), using `TNLean/MPS/MPDO/BiCFDerivation/BNTDirectSum.lean` and `Selectors.lean` | **complete under a stronger separation hypothesis**: the exact homogeneous source length is formalized assuming that distinct equal-dimensional blocks are not gauge-phase equivalent. PGVWC07 states only pairwise inequality of the finite-ring component vectors, which does not exclude unequal proportional vectors from gauge-phase-equivalent weighted blocks. Closing the gap requires identifying or proving the projective nonproportionality condition used by the interpolation argument and deriving the formal separation premise from it; if the source is read literally, the extra premise must remain |
+| **Theorem `2blocks.1`** (l.1407) | 1407–1415 | If $N\ge3(b-1)(L_0+1)+L$, every component state of a canonical block sum is a ground state of any TI frustration-free $L$-local Hamiltonian that annihilates their sum | not applicable | **not formalized**: current component-annihilation lemmas assume the individual component ground-state conditions rather than deriving them, under the source chain-length bound, from an arbitrary Hamiltonian annihilating the sum |
+| **Theorem `2blocks.2`** (l.1424) | 1424–1456 | At the source interaction length, the canonical block-sum parent Hamiltonian has ground space exactly the span of the periodic component vectors | `TNLean/MPS/ParentHamiltonian/BNTBlockDiagonalBoundaryClosing.lean` (`MPSTensor.ker_parentHamiltonian_toTensorFromBlocks_eq_bntMPSVectorSpan_of_global_cut_bnt_c1_pgvwc07_of_dualFixedPoint`) | **complete under a stronger separation hypothesis**: the source unital normalization, arbitrary positive-definite dual fixed points, and source chain-length bounds are formalized, but the theorem assumes gauge-phase inequivalence of distinct equal-dimensional blocks. The printed pairwise inequality of finite-ring component vectors is too weak because unequal vectors may be proportional. The projective condition needed by the interpolation argument must be identified and connected to the formal separation premise, or the extra premise must remain explicit |
 
 ### 3.3 Section 5 — Generation of MPS
 
@@ -271,39 +262,54 @@ accidental.
 
 ---
 
-## 4. Sorry / gap crosswalk with tracked issues
+## 4. Scope-gap crosswalk with tracked issues
 
-### 4.1 Periodic overlap dichotomy cluster (issue #81)
+There are no current `sorry` or axiom declarations in the MPS files cited by
+this audit. The remaining entries under the existing trackers record mismatches
+between proved theorem statements and their sources, not unfinished proof
+terms.
 
-| File | Sorrys | Dependency |
-|---|---|---|
-| `Periodic/Overlap/SectorMatch.lean` | 1 | Full-cycle contraction and phase assembly for repeated blocks (#873) |
+### 4.1 Periodic overlap and periodic fundamental theorem (issue #82)
 
-This remaining `sorry` cascades into `Periodic/FundamentalTheorem.lean`
-(Theorem 3.4 of arXiv:1708.00029), whose conditional proof takes the dichotomy
-as a hypothesis.
+`TNLean/MPS/Periodic/FundamentalTheorem.lean` proves conditional block-matching
+and scalar multiplicity results. Its declarations still assume a periodic
+overlap hypothesis, and the equal-case theorem treats one-dimensional
+multiplicity spaces. The source theorem for irreducible forms derives the
+matching from equality of the multiplicity-bearing MPV families and permits
+general diagonal multiplicity matrices. PGVWC07 Theorem `Th:periodic` also has
+unpackaged finite-ring conclusions: the translated periodic decomposition when
+$p\mid N$ and vanishing of the state when $p\nmid N$. These are statement-scope
+gaps.
 
-### 4.2 Parent Hamiltonian cluster (current trackers #190 and #952)
+### 4.2 Parent Hamiltonians (current trackers #190 and #5455)
 
-| File | Sorrys | Dependency |
-|---|---|---|
-| `ParentHamiltonian/UniqueGroundState.lean` | 3 | Uniqueness proof incomplete |
-| `ParentHamiltonian/DegenerateGS.lean` | 1 | Degenerate ground space construction |
-| `ParentHamiltonian/Martingale.lean` | 1 | Martingale convergence argument |
+The single-block periodic uniqueness and source-normalized block-diagonal
+kernel theorems are proved in `ParentHamiltonian/UniqueGroundState.lean` and
+`ParentHamiltonian/BNTBlockDiagonalBoundaryClosing.lean`. The qualifications in
+§3.2 are the excluded minimal-ring endpoint for `uniqueGS`, the absence of
+the arbitrary-Hamiltonian implication under the stated chain-length bound in
+`2blocks.1`, and the stronger block-separation premise in `lem:direct-sum` and
+`2blocks.2`. The current Lean theorems assume gauge-phase inequivalence. The
+source states only pairwise inequality of the finite-ring component vectors,
+which does not exclude unequal proportional vectors. Closing this gap requires
+identifying or proving the projective nonproportionality condition used by the
+interpolation argument and deriving the formal separation premise from it. If
+the source is read literally, the extra premise must remain. These are
+statement-scope gaps, not deleted files or proof holes.
 
-CPSV16 Theorem 3.10 is not an axiom-removal problem on the printed statement.
-The unrestricted RFP–ZCL equivalence inherits the formal raw-weight and
-adjacent-gap counterexamples to Theorem 3.8. The reverse proof at source line
-1250 also fails for a nilpotent Jordan defect at eigenvalue zero. The corrected
-multiplicity-one, unit-weight representative equivalence, including the
-all-chain NNCPH conclusion, is complete; the unrestricted printed theorem is
-therefore retained as not-ready rather than as unfinished formalization work.
+CPSV16 Theorem 3.10 is likewise not an axiom-removal problem on the printed
+statement. The unrestricted RFP–ZCL equivalence inherits the formal raw-weight
+and adjacent-gap counterexamples to Theorem 3.8. The reverse proof at source
+line 1250 also fails for a nilpotent Jordan defect at eigenvalue zero. The
+corrected multiplicity-one, unit-weight representative equivalence, including
+the all-chain NNCPH conclusion, is complete; the unrestricted printed theorem
+is therefore retained as not-ready rather than as unfinished formalization
+work.
 
 ### 4.3 PEPS (out of scope)
 
-| File | Sorrys |
-|---|---|
-| `PEPS/FundamentalTheorem.lean` | 4 |
+PEPS proof status is maintained separately and is not summarized by an MPS
+`sorry` count here.
 
 ---
 
@@ -377,11 +383,11 @@ axiom-free.
 | Not-ready | CPSV16 | Proposition `prop2to3` | Sectorwise injectivity, MPDO positivity, SAL, and literal physical-trace idempotence are complete for every absorbed BNT representative. The explicit bond-one construction refutes preservation of spectral normality under coefficient absorption. No alternative all-sector factorization is yet available, so the proposition remains not ready | `TNLean/MPS/MPDO/CaseIIAbsorptionCounterexample.lean`; `TNLean/MPS/MPDO/SimpleTensor.lean` (`MPOTensor.weighted_basis_physTraceTransfer_sq_of_literal_ZCL`); `BNTSectorAnalyticProperties.lean` (`MPOTensor.commonWeightAbsorbedBasisMPOTensor_physTraceTransfer_sq_of_literal_ZCL`); `BNTSectorAreaLaw.lean` (`MPOTensor.commonWeightAbsorbedBasisMPOTensor_caseII_properties_of_literal_ZCL`) |
 | Partial | CPSV16 | Proposition `prop4to2` | The corrected canonical-BNT theorem is complete under ambient source ZCL, the standing biCF one-letter span, and one-site positivity of each absorbed sector. Positive commuting bonds give every $N\geq2$ positivity, so no full sector-MPDO or normality premise remains. The printed GSNNCH-only statement still omits ambient ZCL, and its unambiguous bond realization begins at $N=2$ | `TNLean/MPS/MPDO/OrthogonalSectorAreaLaw.lean` (`MPOTensor.isSAL_of_commonWeightAbsorbedBasisMPOTensor_of_proportionalSectors_of_isSourceZCL`); `docs/paper-gaps/cpsv16_commuting_form_to_sal.tex` |
 | Not-ready | CPSV16 | Proposition `prop2to5` | The conditional channels and all sectorwise analytic hypotheses are complete. The missing input is the all-sector structural factorization from `prop2to3`, whose printed absorbed-normality bridge is refuted and has not yet been replaced | `TNLean/MPS/MPDO/PhysicalSectorBlockedRFP.lean`; `TNLean/MPS/MPDO/CaseIIAbsorptionCounterexample.lean`; `TNLean/MPS/MPDO/BNTSectorAreaLaw.lean`; `docs/paper-gaps/cpgsv17_pf_rank_one.tex` |
-| Partial | PGVWC07 | Theorem `Th:TIcanonical` | Full arbitrary-input canonical-form theorem not yet formalized | #1857 |
-| Partial | PGVWC07 | Theorem `thm-uniq` | Multi-block TI case with general hypotheses not formalized | #1529 |
-| Partial | PGVWC07 | Theorem `uniqueGS` | Proof incomplete | #1475/#460 |
-| Partial | PGVWC07 | Theorem `Th:periodic` | Full periodic decomposition remains incomplete | #81 |
-| Out of scope | PGVWC07 | Interpretation of $\Lambda$ | Convergence to half-chain density-matrix eigenvalues | — |
+| Complete | PGVWC07 | Theorem `Th:TIcanonical` | The arbitrary-input theorem is formalized in the positive-length convention: after positive global rescaling it gives a possibly empty normalized block family with exact MPV equality on every nonempty ring and total bond dimension at most the original bond dimension; the family is empty exactly when all positive-length MPV coefficients vanish. | `MPSTensor.exists_pgvwc07_normalized_exact_form_after_rescaling_allow_empty` |
+| Not formalized | PGVWC07 | Theorem `thm-uniq` | The source fixed-length theorem assumes C1, uniqueness of the OBC canonical form, and $N>2L_0+D^4$, and concludes unitary conjugacy. The current theorem instead assumes equality of the entire MPV family from a threshold onward and concludes general gauge equivalence | #1529 |
+| Partial | PGVWC07 | Theorem `uniqueGS` | General-$L$ ground-space equality is proved when $L_0+1<N$; `HasUniqueGroundState` is packaged at $L=L_0+1$ and $L=2L_0$, while the endpoint $L_0=1$, $L=N=2$ remains excluded | #181/#190 |
+| Partial | PGVWC07 | Theorem `Th:periodic` | The finite-ring translated decomposition for $p\mid N$ and the vanishing conclusion for $p\nmid N$ remain unformalized | #82 |
+| Out of scope | PGVWC07 | Interpretation of $\Lambda$ | The half-chain reduced-density spectrum converges to the spectrum of $\Lambda\otimes\Lambda$, with eigenvalues $\lambda_\alpha\lambda_\beta$ | — |
 
 ---
 
@@ -455,7 +461,7 @@ inventory. This section provides an expanded source-paper crosswalk.
 
 | Paper label | Lines | Paper description | Lean location | Status |
 |---|---|---|---|---|
-| **Theorem** (l.828) | 828–831 | If L > i(A), MPS is unique ground state of parent Hamiltonian with spectral gap | PGVWC07 `uniqueGS` / `ParentHamiltonian/UniqueGroundState.lean` (partial, 3 sorrys) | **partial** — see §4.2 |
+| **Theorem** (l.828) | 828–831 | If L > i(A), MPS is unique ground state of parent Hamiltonian with spectral gap | PGVWC07 `uniqueGS`; `ParentHamiltonian/UniqueGroundState.lean`; `ParentHamiltonian/Martingale/Gap.lean` (`parentHamiltonian_gapped_of_anticommutator`); Blueprint Theorem `thm:parent_hamiltonian_gapped` | **partial** — uniqueness is proved except at the minimal endpoint $L_0=1$, $L=N=2$; see §3.2. The unconditional spectral-gap conclusion remains incomplete: the current source-matching gap theorem assumes the cyclic-window anticommutator estimate, whose MPS-specific proof remains open in #5455 (broader tracker #460). |
 | **Theorem** (l.850) | 850–858 | Dichotomy for ground states of frustration-free Hamiltonians: D either O(1) or ≥ Ω(N^{1/5}) | **out of scope** | — |
 
 ### 9.7 MPS use of Wielandt infrastructure
