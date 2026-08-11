@@ -8,7 +8,7 @@ import TNLean.MPS.MPU.SourceVIsometry
 import TNLean.MPS.MPU.TransferStabilization
 
 /-!
-# Counterexample to the unrestricted source-v Gram bridge
+# Counterexample to the unrestricted source-v Gram identification
 
 This file shows that MPU unitarity, a positive-definite matrix, and the exact
 fixed-witness `simple1` and `simple2` contractions do not identify the
@@ -21,8 +21,8 @@ Take physical dimension one, bond dimension two, and
   U^{00}=\begin{pmatrix}1&1\\0&0\end{pmatrix},\qquad
   \rho=\tfrac12 I_2.
 \]
-The local matrix is idempotent with trace one, so every periodic MPO is the
-one-dimensional identity. With $b=\operatorname{vec}(\rho)$ and
+The local matrix is idempotent with trace one, so every positive-length periodic
+MPO is the one-dimensional identity. With $b=\operatorname{vec}(\rho)$ and
 $\Phi=\operatorname{vec}(I_2)$, the exact supplied `simple2` identity holds,
 and MPU unitarity recovers `simple1` with the same witnesses. Nevertheless,
 at the all-zero external entry the actual `sourceYTensor` Gram contraction is
@@ -209,7 +209,7 @@ theorem inserted_doubleLayer_zero_eq_one :
     _ = 1 := by
       norm_num [tensor, bondMatrix, weight, Fin.sum_univ_two]
 
-/-- The unrestricted bridge from the `sourceYTensor` Gram contraction to the
+/-- The unrestricted identification of the `sourceYTensor` Gram contraction with the
 rank-one-inserted double-layer contraction is false, even under MPU unitarity,
 positive definiteness, and the exact supplied `simple1` and `simple2`
 identities.
@@ -248,7 +248,7 @@ have full active support. Such data would supply a positive-definite transfer
 fixed point, contradicting `no_posDef_fixed`.
 
 This excludes the counterexample from the reduced-representative hypotheses
-used for arXiv:1703.09188, equation `Erightleft`, lines 269--280 and 397--405. -/
+used for arXiv:1703.09188, equations (6a)--(6b), lines 269--280 and 397--405. -/
 theorem not_hasFullActiveSupport
     (cfii : MPSTensor.CPSVCanonicalFormIIData tensor.normalizedFlattening) :
     ¬ cfii.toCPSVCanonicalFormData.HasFullActiveSupport := by

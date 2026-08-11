@@ -3689,14 +3689,27 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     factorization for the stabilized power.
 \end{proof}
 
-\begin{theorem}[Counterexample to the unrestricted source-$v$ Gram bridge]
-    \label{thm:mpu_source_v_gram_bridge_counterexample}
-    \lean{MPOTensor.SourceVCounterexample.sourceYTensor_gram_ne_inserted,
-        MPOTensor.SourceVCounterexample.bondMatrix,
+\begin{definition}[Source-$v$ Gram counterexample data]
+    \label{def:mpu_source_v_gram_counterexample_data}
+    \lean{MPOTensor.SourceVCounterexample.bondMatrix,
         MPOTensor.SourceVCounterexample.tensor,
         MPOTensor.SourceVCounterexample.weight,
         MPOTensor.SourceVCounterexample.leftWitness,
-        MPOTensor.SourceVCounterexample.rightWitness,
+        MPOTensor.SourceVCounterexample.rightWitness}
+    \leanok
+    \uses{def:mpu}
+    Take $d=1$, $D=2$, and
+    \begin{align}
+        U^{00}&=\begin{pmatrix}1&1\\0&0\end{pmatrix},
+        &\rho&=\tfrac12 \Id_2,\\
+        \lvert b)&=\operatorname{vec}(\rho),
+        &(\Phi\rvert&=\operatorname{vec}(\Id_2)^{\mathsf T}.
+    \end{align}
+\end{definition}
+
+\begin{theorem}[Counterexample to the unrestricted source-$v$ Gram identification]
+    \label{thm:mpu_source_v_gram_identification_counterexample}
+    \lean{MPOTensor.SourceVCounterexample.sourceYTensor_gram_ne_inserted,
         MPOTensor.SourceVCounterexample.tensor_isMPU,
         MPOTensor.SourceVCounterexample.weight_posDef,
         MPOTensor.SourceVCounterexample.tensor_simple2,
@@ -3706,20 +3719,14 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
         MPOTensor.SourceVCounterexample.no_posDef_fixed,
         MPOTensor.SourceVCounterexample.not_hasFullActiveSupport}
     \leanok
-    \uses{def:mpu,def:mpu_simple,def:mpu_source_v_dressing,
-        thm:mpu_source_v_four_u_expansions,
+    \uses{def:mpu_source_v_gram_counterexample_data,def:mpu_simple,
+        def:mpu_source_v_dressing,thm:mpu_source_v_four_u_expansions,
         thm:mpu_reduced_cfii_transfer_stabilization}
     MPU unitarity, positive definiteness of an arbitrary source weight, and
     the exact fixed-witness contractions do not imply the proposed equality
     between the source-$Y$ Gram contraction and the rank-one-inserted double
-    layer. Indeed, take $d=1$, $D=2$, and
-    \begin{align}
-        U^{00}&=\begin{pmatrix}1&1\\0&0\end{pmatrix},
-        &\rho&=\tfrac12 \Id_2,\\
-        \lvert b)&=\operatorname{vec}(\rho),
-        &(\Phi\rvert&=\operatorname{vec}(\Id_2)^{\mathsf T}.
-    \end{align}
-    Writing $W$ for the unique double-layer letter, these witnesses satisfy
+    layer. For the data above, write $W$ for the unique double-layer letter.
+    The witnesses satisfy
     \begin{align}
         (\Phi\rvert W\lvert b)&=1,
         &W^2&=W\lvert b)(\Phi\rvert W.
@@ -3734,16 +3741,18 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     matrix. Hence canonical-form-II data for this tensor cannot have full
     active support. Thus this example is outside the reduced, full-support
     hypotheses that supply the source weight in the source argument. This
-    counterexample establishes only that the unrestricted bridge is false; it
-    does not assert a corrected Gram equality under those hypotheses.
+    counterexample establishes only that the unrestricted identification is
+    false; it does not assert a corrected Gram equality under those hypotheses.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:mpu_source_v_four_u_expansions,
+    \uses{thm:mpu_supplied_witness_overlapping_reblocking,
+        thm:mpu_source_v_four_u_expansions,
         thm:mpu_reduced_cfii_transfer_stabilization}
-    Put $A=U^{00}$. Since $A^2=A$ and $\tr(A)=1$, every periodic MPO is the
-    one-dimensional identity, so $U$ is an MPU. Expanding both sides of the
-    supplied rank-one contraction proves $W^2=W\lvert b)(\Phi\rvert W$;
+    Put $A=U^{00}$. Since $A^2=A$ and $\tr(A)=1$, every periodic MPO of length
+    $N>1$ is the one-dimensional identity, so $U$ is an MPU. Expanding both
+    sides of the supplied rank-one contraction proves
+    $W^2=W\lvert b)(\Phi\rvert W$;
     MPU unitarity then gives the one-letter contraction with the same
     witnesses. The four-letter source contractions evaluate the two displayed
     entries as $1/2$ and $1$, respectively. This evaluation uses the Gram
