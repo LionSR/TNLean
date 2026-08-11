@@ -6,7 +6,7 @@ Authors: TNLean contributors
 import TNLean.MPS.CanonicalForm.ActiveBlocks
 import TNLean.MPS.CanonicalForm.NormalTensorGauge
 import TNLean.MPS.FundamentalTheorem.Multi
-import TNLean.MPS.FundamentalTheorem.SectorBNT.Supplier
+import TNLean.MPS.FundamentalTheorem.SectorBNT.PreparedReconstruction
 
 /-!
 # CPSV canonical forms as SectorBNT decompositions

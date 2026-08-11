@@ -18,6 +18,9 @@ here determine the BNT canonical-form conditions below.
     \label{def:sector_weight_data}
     \lean{MPSTensor.SectorWeightData, MPSTensor.SectorDecomposition}
     \lean{MPSTensor.SectorDecomposition.totalDim}
+    \lean{MPSTensor.SectorDecomposition.flatDim_flatIndexEquiv,
+        MPSTensor.SectorDecomposition.flatWeight_flatIndexEquiv,
+        MPSTensor.SectorDecomposition.flatBasis_flatIndexEquiv_heq}
     \leanok
     A sector-weight tuple over $g$ basis blocks consists of multiplicities
     $r_j > 0$, nonzero weights $\mu_{j,q}$ for
@@ -876,42 +879,66 @@ give $O_{YX}(N)\to 0$, a contradiction.
 \begin{theorem}[Gauge realization of prepared phase-equivalent NTs]%
     \label{thm:prepared_phase_equiv_gauge}
     \lean{MPSTensor.gaugePhaseEquiv_of_MPVBlockPhaseEquiv_of_tp_primitive_irr}
-    \lean{MPSTensor.exists_gauge_choose_MPVBlockPhaseEquiv_of_tp_primitive_irr}
     \leanok
     \uses{def:mpv_block_phase_equiv, def:gauge_phase_equiv,
         def:irreducible_tensor, def:tp_kraus, def:primitive_channel}
     Let $X$ and $Y$ be trace-preserving, primitive, irreducible NTs of positive
-    bond dimensions $D_X$ and $D_Y$. Fix $\zeta\in\C\setminus\{0\}$ and suppose
-    that, for every positive length $N$ and every physical word $\sigma$,
-    \begin{align}
-        V^{(N)}(Y)_\sigma
-        &=\zeta^N V^{(N)}(X)_\sigma.
-        \label{eq:prepared_phase_equiv_fixed_scalar}
-    \end{align}
-    Then $D_X=D_Y$, and after identifying the bond spaces there exists
-    $G\in\GL_{D_Y}(\C)$ such that, for every physical index $i$,
-    \begin{align}
-        Y^i&=\zeta G X^i G^{-1}.
-        \label{eq:prepared_phase_equiv_fixed_scalar_gauge}
-    \end{align}
-    The fixed scalar $\zeta$ is not asserted to be positive, and the gauge is
-    not asserted to be unitary.
+    bond dimensions. If their matrix-product-vector families differ by a
+    nonzero scalar power, then their bond dimensions are equal and, after
+    identifying the bond spaces, $X$ and $Y$ are gauge-phase equivalent.
+    Neither positivity of the scalar nor unitarity of the gauge is asserted.
 \end{theorem}
 
 \begin{proof}\leanok
     \uses{lem:prepared_phase_equiv_dim_eq,
         thm:not_gauge_phase_eventually_not_proportional,
-        thm:cpsv_normal_overlap_dichotomy}
+        thm:peripheral_primitive_irreducible_overlap_one}
     Lemma~\ref{lem:prepared_phase_equiv_dim_eq} identifies the bond dimensions.
-    The gauge-phase theorem gives an invertible $G$ and a nonzero scalar $\eta$
-    such that $Y^i=\eta G X^iG^{-1}$. Hence
-    $V^{(N)}(Y)_\sigma=\eta^N V^{(N)}(X)_\sigma$ for every $N$ and $\sigma$.
-    The normalized self-overlaps tend to one, so there are consecutive positive
-    lengths $M$ and $M+1$ with words for which the corresponding coefficients of
-    $V^{(M)}(X)$ and $V^{(M+1)}(X)$ are nonzero. Comparing these identities with
-    (\ref{eq:prepared_phase_equiv_fixed_scalar}) gives
-    $\zeta^M=\eta^M$ and $\zeta^{M+1}=\eta^{M+1}$. Cancelling the nonzero
-    $M$-th power yields $\zeta=\eta$, which proves
+    If the resulting same-dimensional blocks were not gauge-phase equivalent,
+    Theorem~\ref{thm:not_gauge_phase_eventually_not_proportional} would give a
+    positive length at which their matrix product vectors are not proportional.
+    This contradicts the assumed scalar-power relation. The normalized
+    self-overlaps required there follow from
+    Theorem~\ref{thm:peripheral_primitive_irreducible_overlap_one}.
+\end{proof}
+
+\begin{lemma}[Gauge realization with the fixed phase scalar]%
+    \label{lem:prepared_phase_equiv_fixed_scalar_gauge}
+    \lean{MPSTensor.exists_gauge_choose_MPVBlockPhaseEquiv_of_tp_primitive_irr}
+    \leanok
+    \uses{thm:prepared_phase_equiv_gauge,
+        thm:peripheral_primitive_irreducible_overlap_one,
+        thm:gauge_phase_mpv_scaling}
+    Let $X$ and $Y$ satisfy the hypotheses of
+    Theorem~\ref{thm:prepared_phase_equiv_gauge}. Fix
+    $\zeta\in\C\setminus\{0\}$ and suppose that, for every positive length $N$
+    and every physical word $\sigma$,
+    \begin{align}
+        V^{(N)}(Y)_\sigma
+        &=\zeta^N V^{(N)}(X)_\sigma.
+        \label{eq:prepared_phase_equiv_fixed_scalar}
+    \end{align}
+    Then, after identifying the bond spaces, there exists
+    $G\in\GL_{D_Y}(\C)$ such that, for every physical index $i$,
+    \begin{align}
+        Y^i&=\zeta G X^i G^{-1}.
+        \label{eq:prepared_phase_equiv_fixed_scalar_gauge}
+    \end{align}
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{thm:prepared_phase_equiv_gauge,
+        thm:peripheral_primitive_irreducible_overlap_one,
+        thm:gauge_phase_mpv_scaling}
+    Theorem~\ref{thm:prepared_phase_equiv_gauge} gives an invertible $G$ and a
+    nonzero scalar $\eta$ such that $Y^i=\eta G X^iG^{-1}$. By
+    Theorem~\ref{thm:gauge_phase_mpv_scaling},
+    $V^{(N)}(Y)_\sigma=\eta^N V^{(N)}(X)_\sigma$.
+    Theorem~\ref{thm:peripheral_primitive_irreducible_overlap_one} gives
+    consecutive positive lengths $M$ and $M+1$ with nonzero coefficients of
+    $V^{(M)}(X)$ and $V^{(M+1)}(X)$. Comparing the two scalar-power identities
+    gives $\zeta^M=\eta^M$ and $\zeta^{M+1}=\eta^{M+1}$. Hence
+    $\zeta=\eta$, which proves
     (\ref{eq:prepared_phase_equiv_fixed_scalar_gauge}).
 \end{proof}
 
@@ -949,9 +976,6 @@ give $O_{YX}(N)\to 0$, a contradiction.
     \label{thm:heterogeneous_block_sum_reindex}
     \lean{MPSTensor.blockDimEquiv,
         MPSTensor.toTensorFromBlocks_eq_reindex_of_equiv}
-    \lean{MPSTensor.SectorDecomposition.flatDim_flatIndexEquiv,
-        MPSTensor.SectorDecomposition.flatWeight_flatIndexEquiv,
-        MPSTensor.SectorDecomposition.flatBasis_flatIndexEquiv_heq}
     \leanok
     \uses{def:block_diagonal_tensor}
     Let $e:\{1,\ldots,r\}\simeq\{1,\ldots,r'\}$ satisfy
@@ -1008,7 +1032,7 @@ give $O_{YX}(N)\to 0$, a contradiction.
     \uses{def:mpv_phase_class_data,
         thm:paperbnt_collapsed_prepared,
         lem:prepared_collapsed_bnt_sector_decomp_total_dim,
-        thm:prepared_phase_equiv_gauge,
+        lem:prepared_phase_equiv_fixed_scalar_gauge,
         lem:tensor_from_blocks_globalGauge_conj,
         thm:heterogeneous_block_sum_reindex,
         def:global_gauge_of_blocks}
@@ -1033,10 +1057,7 @@ give $O_{YX}(N)\to 0$, a contradiction.
     \label{thm:cpsv_active_sector_bnt}
     \lean{MPSTensor.CPSVCanonicalFormData.exists_active_isBNTCanonicalForm}
     \leanok
-    \uses{def:cpsv_canonical_form,
-        thm:cpsv_canonical_form_active_blocks,
-        thm:cpsv_normal_tp_gauge,
-        thm:paperbnt_supplier_prepared_total_dim}
+    \uses{thm:cpsv_active_sector_bnt_exact, thm:gauge_invariance}
     Let $A$ have CPSV canonical-form data satisfying the separate normalization
     condition~(\ref{eq:cpsv_weight_normalization}), and assume $A\ne0$. Put
     $K_{\mathrm{act}}=\{k:\mu_k\ne0\}$. Then there is a BNT canonical-form
@@ -1054,19 +1075,14 @@ give $O_{YX}(N)\to 0$, a contradiction.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:cpsv_canonical_form_active_blocks,
-        thm:cpsv_normal_tp_gauge,
-        thm:paperbnt_supplier_prepared_total_dim}
-    Put every active normal block into a trace-preserving primitive irreducible
-    gauge. Their direct sum has the same positive-length matrix product vectors
-    as the active block sum. The normalization bounds restrict to the active
-    weights. Since $A\ne0$, the separate normalization condition supplies an
-    index $k$ with $|\mu_k|=1$; this weight is nonzero, so $k\in
-    K_{\mathrm{act}}$. Apply
-    Theorem~\ref{thm:paperbnt_supplier_prepared_total_dim} to the gauged active
-    family, compose the positive-length MPV equalities with
-    Theorem~\ref{thm:cpsv_canonical_form_active_blocks}, and reindex the finite
-    dimension sum by the active indices.
+    \uses{thm:cpsv_active_sector_bnt_exact, thm:gauge_invariance}
+    Apply Theorem~\ref{thm:cpsv_active_sector_bnt_exact}. Its reconstruction
+    writes $A^i=U^\dagger B^iU$, where $UU^\dagger=\Id$ and
+    $B^i=XP^iX^{-1}$. In every positive-length cyclic contraction, the adjacent
+    factors $UU^\dagger$ cancel, so $A$ and $B$ generate the same matrix product
+    vectors. Theorem~\ref{thm:gauge_invariance} gives the same conclusion for
+    $B$ and $P$. Transitivity yields $\mc{V}^+(A)=\mc{V}^+(P)$, while the
+    dimension identity is already part of the exact reconstruction theorem.
 \end{proof}
 
 % Source: CPSV16 lines 214--301 and 1080--1148; CPGSV21 lines 1831--1885.
