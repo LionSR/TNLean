@@ -1313,30 +1313,54 @@ norm estimate is derived here.
     the displayed reconstruction, not the optimized FNW rational numerator.
 \end{proof}
 
-\begin{lemma}[Uniform open-chain projector-defect threshold]
-    \label{lem:nachtergaele_c3_blocked_length}
-    \notready
-    \discussion{5924}
-    \uses{thm:fnw_overlapping_window_contraction,
-        thm:nachtergaele_open_chain_projector_defect}
-    Nachtergaele's condition C3
-    \cite[Eq.~(2.4)]{Nachtergaele1996Spectral} holds at some positive blocked
-    overlap length $l$: the uniform projector defect $\varepsilon_l$ satisfies
+\begin{theorem}[Uniform open-chain projector-defect threshold]
+    \label{thm:nachtergaele_c3_blocked_length}
+    \lean{MPSTensor.IsPrimitiveMPS.exists_openChain_groundProjection_defect_lt_c3_threshold}
+    \lean{MPSTensor.IsPrimitiveMPS.exists_re_inner_openChain_anticommutator_ge_c3_threshold}
+    \leanok
+    \uses{def:primitive_mps, def:l_blk_injective,
+        def:open_chain_ground_subspaces_es, def:ground_space_es}
+    Let $A$ be a primitive MPS tensor with nonzero bond dimension and a
+    positive-definite fixed point.  There are an overlap length $l>1$, measured
+    in sites of $A$, and a number $\varepsilon_l\geq0$ such that $A$ is
+    $l$-block injective, the projector defect is bounded
+    uniformly in the left length $K$ by $\varepsilon_l$, and
     \begin{align}
         \varepsilon_l&<\frac{1}{\sqrt{l+1}}.
         \notag
     \end{align}
-    Here one blocked site is one step of the martingale filtration.  The choice
-    of $l$ includes the positivity of the FNW denominator and all geometric
-    decay side conditions.  The open-chain projector-defect theorem then gives
-    the required Friedrichs and anticommutator bounds for every left length.
-\end{lemma}
+    Nachtergaele's projector-defect identity following condition C3
+    \cite[Eq.~(2.4)]{Nachtergaele1996Spectral}, together with the two-projection
+    estimate, gives the corresponding anticommutator bound for every $K$.  If
+    $A$ is already a blocked representative, one site of $A$ is one
+    blocked-chain filtration step.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:fnw_overlapping_window_contraction,
+        thm:normal_from_primitive_posdef, thm:wordspan_blk_inj_succ,
+        thm:nachtergaele_open_chain_projector_defect}
+    The geometric projector estimate supplies $C,c,r>0$ with $r<1$.  Since
+    \begin{align}
+        \sqrt{n+1}\,r^n&\longrightarrow0,
+    \end{align}
+    continuity of inversion at $1$ gives
+    \begin{align}
+        \frac{Cr^n}{1-cr^n}\sqrt{n+1}&\longrightarrow0.
+    \end{align}
+    Normality supplies a positive block-injectivity length.  Choose $l$ above
+    that length and above $1$ so that $cr^l<1$ and the last display is less
+    than $1$.  Block injectivity propagates to $l$, and the geometric estimate
+    gives the uniform defect bound with
+    $\varepsilon_l=(1-cr^l)^{-1}Cr^l$.  The open-chain projector-defect theorem
+    gives the anticommutator statement.
+\end{proof}
 
 \begin{lemma}[Blocked-to-cyclic ground-projector comparison]
     \label{lem:blocked_to_cyclic_ground_projector_comparison}
     \notready
     \discussion{5925}
-    \uses{lem:nachtergaele_c3_blocked_length}
+    \uses{thm:nachtergaele_c3_blocked_length}
     Let $A$ be a normal tensor, let $B$ be the injective tensor obtained from
     $A$ by the chosen blocking, and let $L>1$ be the resulting cyclic interaction
     range.  For every $N\ge2L$ and every overlapping off-diagonal pair of cyclic

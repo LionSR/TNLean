@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.ParentHamiltonian.Martingale.AbstractCriterion
+import TNLean.MPS.ParentHamiltonian.Martingale.C3Threshold
 import TNLean.MPS.ParentHamiltonian.Martingale.Gap
 import TNLean.MPS.ParentHamiltonian.Martingale.OpenChain
 import TNLean.MPS.ParentHamiltonian.Martingale.OverlapReduction
@@ -27,7 +28,7 @@ all-vector norm-compression estimates for the excitation projections are also
 recorded as conditional sufficient hypotheses; they are not the source
 principal-angle estimate for the local ground spaces.
 
-The six components are:
+The seven components are:
 
 * `Martingale.AbstractCriterion` — abstract martingale criterion
   `FrustrationFree.spectralGap_of_martingale` (quadratic form implies norm bound);
@@ -35,6 +36,8 @@ The six components are:
   Hamiltonian transport, positivity, commutation, and kernel identification;
 * `Martingale.OpenChain` — open-chain ground-space projectors, their intersection,
   and the projector-defect reduction to an anticommutator estimate;
+* `Martingale.C3Threshold` — a uniform input-site overlap length satisfying the
+  open-chain C3 defect threshold and its anticommutator consequence;
 * `Martingale.OverlapReduction` — reduction from overlapping-window commutation
   to all-pairs commutation using locality for disjoint windows;
 * `Martingale.Reduction` — martingale quadratic-form reductions from ordered
