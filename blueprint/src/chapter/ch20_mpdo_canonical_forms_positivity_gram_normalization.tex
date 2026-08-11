@@ -308,8 +308,8 @@
         thm:mpdo_sector_trace_identity,
         thm:mpdo_sector_compression_trace_pos}
     Let $M$ generate an MPDO, let $Q$ and $P$ be sector projectors for the
-    weights $\mu_{\alpha,1}$ and $\mu_{\alpha,k}$ and a common matrix
-    $E_\alpha$, and suppose $\mu_{\alpha,1}>0$. If the compression of
+    weights $\mu_{\alpha,0}$ and $\mu_{\alpha,k}$ and a common matrix
+    $E_\alpha$, and suppose $\mu_{\alpha,0}>0$. If the compression of
     $H^{(N+1)}$ by $P$ at the first site is nonzero, then
     \begin{align}
         \mu_{\alpha,k}\,d_\alpha^{(N+1)}&>0,
@@ -322,7 +322,7 @@
     Granted such sector projectors, this yields the conclusion of the trace
     argument in the proof of
     \cite[Proposition~4.13]{Cirac2016MPDO_arXiv}: since w.l.o.g.\
-    $\mu_{\alpha,1}>0$, the positive trace forces $d_\alpha>0$ and hence
+    $\mu_{\alpha,0}>0$, the positive trace forces $d_\alpha>0$ and hence
     $\mu_{\alpha,k}>0$.
 \end{theorem}
 
@@ -334,10 +334,10 @@
     Theorem~\ref{thm:mpdo_sector_trace_identity} identifies with
     $\mu_{\alpha,k}d_\alpha^{(N+1)}$. In particular
     $d_\alpha^{(N+1)}\ne 0$, so the trace of the compression by the sector
-    projector of $(\alpha,1)$ at the same length equals
-    $\mu_{\alpha,1}d_\alpha^{(N+1)}\ne 0$; that compression is therefore
+    projector of $(\alpha,0)$ at the same length equals
+    $\mu_{\alpha,0}d_\alpha^{(N+1)}\ne 0$; that compression is therefore
     also nonzero, and its trace is a positive real. Dividing by
-    $\mu_{\alpha,1}>0$ gives $d_\alpha^{(N+1)}>0$, and dividing the first
+    $\mu_{\alpha,0}>0$ gives $d_\alpha^{(N+1)}>0$, and dividing the first
     inequality by $d_\alpha^{(N+1)}$ gives $\mu_{\alpha,k}>0$.
 \end{proof}
 
@@ -358,7 +358,7 @@
     $X_{\alpha,k}^\dagger X_{\alpha,k}=\omega_{\alpha,k}\Id$ of the
     Gram-matrix proportionality in the proof of
     \cite[Proposition~4.13]{Cirac2016MPDO_arXiv}, with
-    $X_{\alpha,1}=\Id$ and
+    $X_{\alpha,0}=\Id$ and
     $U_{\alpha,k}=\omega_{\alpha,k}^{-1/2}X_{\alpha,k}$. Deriving the
     commutation from self-adjointness of the sector compressions is a
     separate step.
@@ -511,6 +511,113 @@
     letter.
 \end{proof}
 
+\begin{definition}[Pairwise Gram dressing for grouped corners]
+    \label{def:grouped_corner_gram_dressing}
+    \lean{MPOTensor.HasGroupedCornerGramDressing}
+    \leanok
+    \uses{def:vertical_tensor_mpdo}
+    An MPO tensor $M$ has the \emph{grouped-corner Gram-dressing property} if
+    the following holds. Let $A$ be a tensor, let $V_X,V_Y$ be two physical
+    maps, let $X,Y$ be invertible matrices, and let $c_X,c_Y>0$. Suppose that,
+    for every vertical letter $v$, the following two corner identities hold:
+    \begin{align}
+        V_X^\dagger\widetilde M^vV_X
+        &=c_X X A^vX^{-1},
+        \notag\\
+        V_Y^\dagger\widetilde M^vV_Y
+        &=c_Y Y A^vY^{-1}
+        \notag
+    \end{align}
+    Then, for every vertical letter $v$,
+    \begin{align}
+        (X^\dagger X)A^v(X^\dagger X)^{-1}
+        &=(Y^\dagger Y)A^v(Y^\dagger Y)^{-1}.
+        \label{eq:grouped_corner_gram_dressing}
+    \end{align}
+\end{definition}
+
+\begin{theorem}[Distinguished reference corner of a grouped phase class]
+    \label{thm:distinguished_grouped_reference_corner}
+    \lean{MPOTensor.exists_distinguished_grouped_reference_corner}
+    \leanok
+    \uses{def:mpv_phase_class_data, def:vertical_tensor_mpdo}
+    Suppose a phase-class grouping has positive effective coefficients
+    $c_{\alpha,q}$, corner identities
+    \begin{align}
+        V_{\alpha,q}^\dagger\widetilde M^vV_{\alpha,q}
+        &=c_{\alpha,q}X_{\alpha,q}A_{\alpha,q}^vX_{\alpha,q}^{-1},
+        \notag
+    \end{align}
+    and distinguished gauges $X_{\alpha,0}=\Id$. Fix a class $\alpha$ and a
+    copy $q$. After identifying the representative bond space with that of
+    copy $q$, there are a physical map $W_{\alpha,q}$ and a scalar
+    $c_{\alpha,0}>0$ such that, for every vertical letter $v$,
+    \begin{align}
+        W_{\alpha,q}^\dagger\widetilde M^vW_{\alpha,q}
+        &=c_{\alpha,0}A_{\alpha,q}^v.
+        \label{eq:distinguished_grouped_reference_corner}
+    \end{align}
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:mpv_phase_class_data}
+    Identify the distinguished bond space with that of copy $q$ and define
+    the transported physical map by
+    \begin{align}
+        W_{\alpha,q}&=V_{\alpha,0}.
+        \notag
+    \end{align}
+    The distinguished gauge is the identity, so its corner equation becomes
+    \begin{align}
+        W_{\alpha,q}^\dagger\widetilde M^vW_{\alpha,q}
+        &=c_{\alpha,0}A_{\alpha,q}^v.
+        \notag
+    \end{align}
+    Positivity of the distinguished effective coefficient gives
+    $c_{\alpha,0}>0$, and the second displayed identity is
+    (\ref{eq:distinguished_grouped_reference_corner}).
+\end{proof}
+
+\begin{theorem}[Gram conjugation from grouped-corner dressing]
+    \label{thm:grouped_sector_gram_conj_of_dressing}
+    \lean{MPOTensor.grouped_sector_gram_conj_eq_of_dressing}
+    \leanok
+    \uses{def:grouped_corner_gram_dressing, def:mpv_phase_class_data}
+    Suppose a phase-class grouping has positive effective coefficients
+    $c_{\alpha,q}$ and corner identities
+    \begin{align}
+        V_{\alpha,q}^\dagger\widetilde M^vV_{\alpha,q}
+        &=c_{\alpha,q}X_{\alpha,q}A_{\alpha,q}^v
+          X_{\alpha,q}^{-1}.
+        \notag
+    \end{align}
+    Assume that the distinguished copy in each class has identity gauge and
+    that $M$ has the grouped-corner Gram-dressing property. Then for every
+    class $\alpha$, copy $q$, and vertical letter $v$,
+    \begin{align}
+        (X_{\alpha,q}^\dagger X_{\alpha,q})A_{\alpha,q}^v
+        (X_{\alpha,q}^\dagger X_{\alpha,q})^{-1}
+        &=A_{\alpha,q}^v.
+        \label{eq:grouped_sector_gram_conj_of_dressing}
+    \end{align}
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:grouped_corner_gram_dressing,
+        thm:distinguished_grouped_reference_corner}
+    Theorem~\ref{thm:distinguished_grouped_reference_corner} transports the
+    distinguished identity-gauge corner to the bond space of copy $q$. The
+    grouped-corner Gram-dressing property gives
+    \begin{align}
+        (X_{\alpha,0}^\dagger X_{\alpha,0})A_{\alpha,q}^v
+        (X_{\alpha,0}^\dagger X_{\alpha,0})^{-1}
+        &=(X_{\alpha,q}^\dagger X_{\alpha,q})A_{\alpha,q}^v
+          (X_{\alpha,q}^\dagger X_{\alpha,q})^{-1}.
+    \end{align}
+    The left side is $A_{\alpha,q}^v$ because $X_{\alpha,0}=\Id$. This gives
+    (\ref{eq:grouped_sector_gram_conj_of_dressing}).
+\end{proof}
+
 \begin{theorem}[Gram conjugation for an actual grouped sector]
     \label{thm:mpdo_grouped_sector_gram_conjugation}
     \lean{MPOTensor.IsMPDO.grouped_sector_gram_conj_eq}
@@ -521,28 +628,26 @@
     Theorem~\ref{thm:mpdo_vertical_bnt_grouping_with_isometries}. For a
     phase class $\alpha$ and a copy $q$, transport its representative tensor
     to the bond space of that copy. If $X_{\alpha,q}$ is the corresponding
-    gauge, then
+    gauge, then for every vertical letter $v$,
     \begin{align}
         (X_{\alpha,q}^\dagger X_{\alpha,q})
         A_{\alpha,q}^v
         (X_{\alpha,q}^\dagger X_{\alpha,q})^{-1}
-        &=A_{\alpha,q}^v,
+        &=A_{\alpha,q}^v.
         \label{eq:mpdo_grouped_gram_conj}
     \end{align}
-    for every vertical letter $v$. This is Figure~8 for the actual witnesses
-    of the grouped decomposition.
+    This is Figure~8 for the actual witnesses of the grouped decomposition.
 \end{theorem}
 
 \begin{proof}
     \leanok
-    \uses{thm:mpdo_pairwise_vertical_gram_conjugation,
+    \uses{thm:grouped_sector_gram_conj_of_dressing,
+        thm:mpdo_pairwise_vertical_gram_conjugation,
         thm:mpdo_vertical_bnt_grouping_with_isometries}
-    Transport the distinguished corner of the phase class along the equality
-    of its bond dimension with that of the copy $q$. Its distinguished gauge
-    is the identity. Apply
-    Theorem~\ref{thm:mpdo_pairwise_vertical_gram_conjugation} to this corner
-    and the corner indexed by $q$. The Gram conjugation belonging to the
-    distinguished corner is the identity, which gives the stated equality.
+    Theorem~\ref{thm:mpdo_pairwise_vertical_gram_conjugation} supplies
+    the grouped-corner Gram-dressing property. Apply
+    Theorem~\ref{thm:grouped_sector_gram_conj_of_dressing} to the grouped
+    vertical decomposition.
 \end{proof}
 
 \begin{theorem}[Literal Gram conjugation for an actual grouped sector]
@@ -554,26 +659,31 @@
     Consider the actual phase-class grouping furnished under literal CPSV
     canonical form.  For a class $\alpha$ and copy $q$, identify its normal
     representative with the bond space of that copy using the equality of
-    dimensions.  Then
+    dimensions. Then for every vertical letter $v$,
     \begin{align}
         (X_{\alpha,q}^\dagger X_{\alpha,q})
         A_{\alpha,q}^v
         (X_{\alpha,q}^\dagger X_{\alpha,q})^{-1}
-        &=A_{\alpha,q}^v
+        &=A_{\alpha,q}^v.
         \label{eq:cpsv_literal_grouped_gram_conj}
     \end{align}
-    for every vertical letter $v$.
 \end{theorem}
 
 \begin{proof}
     \leanok
-    \uses{thm:cpsv_literal_pairwise_vertical_gram_conjugation,
+    \uses{thm:grouped_sector_gram_conj_of_dressing,
+        thm:cpsv_literal_pairwise_vertical_gram_conjugation,
         thm:cpsv_literal_vertical_bnt_grouping_with_isometries}
-    The distinguished copy has identity gauge.  Use the equality of bond
-    dimensions to regard its positive corner equation on the bond space of the
-    copy $q$.  The literal pairwise Figure~8 theorem compares the two
-    corners.  Its distinguished Gram conjugation is the identity, which gives
-    (\ref{eq:cpsv_literal_grouped_gram_conj}).
+    The literal pairwise Figure~8 theorem supplies the grouped-corner
+    Gram-dressing property. Apply
+    Theorem~\ref{thm:grouped_sector_gram_conj_of_dressing} to the literal
+    phase-class grouping. This gives
+    \begin{align}
+        (X_{\alpha,q}^\dagger X_{\alpha,q})A_{\alpha,q}^v
+        (X_{\alpha,q}^\dagger X_{\alpha,q})^{-1}
+        &=A_{\alpha,q}^v.
+        \label{eq:cpsv_prop_4_13_gram_conjugation}
+    \end{align}
 \end{proof}
 
 \begin{theorem}[Gram conjugation from the adjoint dressing]
@@ -651,8 +761,8 @@
     vertical normal tensor:
     $(X_{\alpha,k}^{\dagger}X_{\alpha,k})M_\alpha
     (X_{\alpha,k}^{\dagger}X_{\alpha,k})^{-1}
-    =(X_{\alpha,1}^{\dagger}X_{\alpha,1})M_\alpha
-    (X_{\alpha,1}^{\dagger}X_{\alpha,1})^{-1}$.
+    =(X_{\alpha,0}^{\dagger}X_{\alpha,0})M_\alpha
+    (X_{\alpha,0}^{\dagger}X_{\alpha,0})^{-1}$.
     Theorem~\ref{thm:mpdo_pairwise_vertical_gram_conjugation} gives this
     equality from self-adjointness of the corresponding sector compressions
     and horizontal marked separation. Normality is used only in the
@@ -707,18 +817,45 @@
     $\sqrt{\omega}$ makes it unitary.
 \end{proof}
 
+\begin{theorem}[Positive scalar Gram matrix from grouped-corner dressing]
+    \label{thm:grouped_sector_gram_scalar_of_dressing}
+    \lean{MPOTensor.grouped_sector_gram_eq_pos_smul_one_of_dressing}
+    \leanok
+    \uses{def:normal, thm:grouped_sector_gram_conj_of_dressing}
+    Under the hypotheses of
+    Theorem~\ref{thm:grouped_sector_gram_conj_of_dressing}, suppose in
+    addition that every representative $A_{\alpha,q}$ is normal and has
+    positive bond dimension. Then for every class $\alpha$ and copy $q$
+    there is a real number $\omega_{\alpha,q}>0$ such that
+    \begin{align}
+        X_{\alpha,q}^\dagger X_{\alpha,q}
+        &=\omega_{\alpha,q}\Id.
+        \label{eq:grouped_sector_gram_scalar_of_dressing}
+    \end{align}
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:grouped_sector_gram_conj_of_dressing,
+        thm:eq3_of_dressed_adjoint}
+    Theorem~\ref{thm:grouped_sector_gram_conj_of_dressing} shows that
+    conjugation by $X_{\alpha,q}^\dagger X_{\alpha,q}$ fixes every letter of
+    the normal representative. Apply the identity-gauge specialization of
+    Theorem~\ref{thm:eq3_of_dressed_adjoint}; it gives a real number
+    $\omega_{\alpha,q}>0$ with
+    $X_{\alpha,q}^\dagger X_{\alpha,q}=\omega_{\alpha,q}\Id$.
+\end{proof}
+
 \begin{theorem}[Normalization of the grouped vertical gauges]
     \label{thm:mpdo_grouped_sector_unitary_normalization}
     \lean{MPOTensor.IsMPDO.grouped_sector_gram_eq_pos_smul_one}
     \lean{MPOTensor.IsMPDO.grouped_sector_exists_unitary_normalization}
     \leanok
     \uses{thm:mpdo_pairwise_vertical_gram_conjugation,
-        thm:eq3_of_dressed_adjoint,
         thm:mpdo_vertical_bnt_grouping_with_isometries}
     In the grouped vertical decomposition of a matrix-product density
     operator in normalized BNT-refined horizontal form, let $X_{\alpha,k}$ be
     the gauge of a copy of the normal representative $M_\alpha$. Fix the
-    distinguished gauge to $X_{\alpha,1}=\Id$. Then there is a positive real
+    distinguished gauge to $X_{\alpha,0}=\Id$. Then there is a positive real
     number $\omega_{\alpha,k}$ such that
     \begin{align}
         X_{\alpha,k}^\dagger X_{\alpha,k}
@@ -740,16 +877,15 @@
 
 \begin{proof}
     \leanok
-    \uses{thm:mpdo_pairwise_vertical_gram_conjugation,
-        thm:eq3_of_dressed_adjoint,
-        thm:mpdo_vertical_bnt_grouping_with_isometries}
-    Transport the normal representative to the bond space of the chosen
-    copy. Compare its positive corner with the distinguished identity-gauge
-    corner using
-    Theorem~\ref{thm:mpdo_pairwise_vertical_gram_conjugation}. Then apply
-    Theorem~\ref{thm:eq3_of_dressed_adjoint} with the second gauge equal to
-    the identity. The resulting Gram identity has a positive real scalar,
-    and division by its positive square root gives the stated unitary.
+    \uses{thm:grouped_sector_gram_scalar_of_dressing,
+        thm:mpdo_pairwise_vertical_gram_conjugation,
+        thm:mpdo_vertical_bnt_grouping_with_isometries,
+        thm:normal_tensor_gram_rigidity}
+    The pairwise Figure~8 theorem supplies the grouped-corner
+    Gram-dressing property. Apply
+    Theorem~\ref{thm:grouped_sector_gram_scalar_of_dressing} to the grouped
+    vertical decomposition, then divide each gauge by the positive square
+    root of its Gram scalar.
 \end{proof}
 
 \begin{theorem}[Literal normalization of the actual grouped vertical gauges]
@@ -758,7 +894,6 @@
     \lean{MPSTensor.IsCPSVCanonicalForm.grouped_sector_exists_unitary_normalization}
     \leanok
     \uses{thm:cpsv_literal_pairwise_vertical_gram_conjugation,
-        thm:eq3_of_dressed_adjoint,
         thm:cpsv_literal_vertical_bnt_grouping_with_isometries}
     In the actual phase-class grouping under literal CPSV canonical form,
     every gauge $X_{\alpha,q}$ has a positive real Gram scalar
@@ -777,26 +912,132 @@
 
 \begin{proof}
     \leanok
-    \uses{thm:cpsv_literal_pairwise_vertical_gram_conjugation,
-        thm:eq3_of_dressed_adjoint,
-        thm:cpsv_literal_vertical_bnt_grouping_with_isometries}
-    The representative on this bond space is normal. Compare its positive
-    corner with the distinguished identity-gauge corner using the literal
-    pairwise Figure~8 theorem. Then apply
-    Theorem~\ref{thm:eq3_of_dressed_adjoint} with the second gauge equal to
-    the identity. This gives
-    (\ref{eq:cpsv_literal_grouped_gram_scalar}) with
-    $\omega_{\alpha,q}>0$. Dividing by its positive square root gives a
-    unitary matrix.
+    \uses{thm:grouped_sector_gram_scalar_of_dressing,
+        thm:cpsv_literal_pairwise_vertical_gram_conjugation,
+        thm:cpsv_literal_vertical_bnt_grouping_with_isometries,
+        thm:normal_tensor_gram_rigidity}
+    The literal pairwise Figure~8 theorem supplies the grouped-corner
+    Gram-dressing property. Apply
+    Theorem~\ref{thm:grouped_sector_gram_scalar_of_dressing} to the literal
+    phase-class grouping to obtain
+    \begin{align}
+        X_{\alpha,q}^\dagger X_{\alpha,q}
+        &=\omega_{\alpha,q}\Id.
+        \label{eq:cpsv_prop_4_13_gram}
+    \end{align}
+    Dividing each gauge by the positive square root of its Gram scalar gives
+    the unitary normalization.
 \end{proof}
 
-\begin{theorem}[Normalized physical maps of the grouped vertical sectors]
-    \label{thm:mpdo_normalized_grouped_sector_maps}
+\begin{definition}[Normalized grouped-sector map]
+    \label{def:normalized_grouped_sector_map}
     \lean{MPOTensor.normalizedGroupedSectorMap}
+    \leanok
+    After identifying the bond space of a copy with that of its representative,
+    define its normalized physical map by
+    \begin{align}
+        W_{\alpha,q}
+        &=V_{\alpha,q}\omega_{\alpha,q}^{-1/2}X_{\alpha,q}.
+        \notag
+    \end{align}
+\end{definition}
+
+\begin{theorem}[Normalized grouped-sector maps from Gram scalars]
+    \label{thm:normalized_grouped_sector_maps_of_gram}
     \lean{MPOTensor.normalizedGroupedSectorMap_isometry}
     \lean{MPOTensor.normalizedGroupedSectorMap_orthogonal}
     \lean{MPOTensor.normalizedGroupedSectorMap_intertwining}
     \lean{MPOTensor.normalizedGroupedSectorMap_corner}
+    \lean{MPOTensor.exists_normalized_grouped_sector_maps_of_gram}
+    \leanok
+    \uses{def:normalized_grouped_sector_map, def:mpv_phase_class_data,
+        def:vertical_tensor_mpdo}
+    Let a phase-class grouping have gauges $X_{\alpha,q}$, physical maps
+    $V_{\alpha,q}$, and effective coefficients $c_{\alpha,q}$. Suppose that,
+    for every class $\alpha$ and copy $q$, $\omega_{\alpha,q}>0$ and
+    \begin{align}
+        X_{\alpha,q}^\dagger X_{\alpha,q}
+        &=\omega_{\alpha,q}\Id.
+        \notag
+    \end{align}
+    Suppose also that the maps $V_{\alpha,q}$
+    are isometries with pairwise orthogonal ranges,
+    they intertwine $\widetilde M$ with the corresponding gauged
+    representatives, and their grouped corner sum reconstructs every letter
+    of $\widetilde M$. Then there are maps $W_{\alpha,q}$ such that, for every
+    class $\alpha$ and copy $q$,
+    \begin{align}
+        W_{\alpha,q}^\dagger W_{\alpha,q}&=\Id.
+    \end{align}
+    For distinct pairs $(\alpha,q)\ne(\beta,p)$,
+    \begin{align}
+        W_{\alpha,q}^\dagger W_{\beta,p}&=0.
+    \end{align}
+    For every vertical letter $v$, these maps also satisfy
+    \begin{align}
+        \widetilde M_vW_{\alpha,q}
+        &=W_{\alpha,q}(c_{\alpha,q}M_\alpha^v),
+        \notag\\
+        \widetilde M_v
+        &=\sum_\alpha\sum_q
+          W_{\alpha,q}(c_{\alpha,q}M_\alpha^v)W_{\alpha,q}^\dagger.
+        \label{eq:normalized_grouped_sector_maps_of_gram}
+    \end{align}
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:normalized_grouped_sector_map,
+        thm:normal_tensor_gram_rigidity,
+        thm:mpdo_bnt_conditional_identity_marked_unitary_conjugacy}
+    After identifying the copy bond space with the representative bond space,
+    define
+    \begin{align}
+        Q_{\alpha,q}
+        &=\omega_{\alpha,q}^{-1/2}X_{\alpha,q},
+        \notag\\
+        W_{\alpha,q}
+        &=V_{\alpha,q}Q_{\alpha,q}.
+        \notag
+    \end{align}
+    Since $\omega_{\alpha,q}>0$, the Gram identity implies
+    \begin{align}
+        X_{\alpha,q}^\dagger
+        &=\omega_{\alpha,q}X_{\alpha,q}^{-1},
+        \notag\\
+        Q_{\alpha,q}^\dagger Q_{\alpha,q}
+        &=\Id.
+        \notag
+    \end{align}
+    Hence $W_{\alpha,q}^\dagger W_{\alpha,q}=\Id$, and inserting the two
+    normalized gauges on either side of the original orthogonality equation
+    preserves pairwise orthogonality. The original intertwining identity gives
+    \begin{align}
+        \widetilde M_vW_{\alpha,q}
+        &=W_{\alpha,q}(c_{\alpha,q}M_\alpha^v).
+        \notag
+    \end{align}
+    The same Gram identity and the positive square-root normalization give
+    the corner equality
+    \begin{align}
+        Q_{\alpha,q}(c_{\alpha,q}M_\alpha^v)Q_{\alpha,q}^\dagger
+        &=c_{\alpha,q}X_{\alpha,q}M_\alpha^vX_{\alpha,q}^{-1}.
+        \label{eq:normalized_grouped_sector_corner}
+    \end{align}
+    Multiplying (\ref{eq:normalized_grouped_sector_corner}) on the left by
+    $V_{\alpha,q}$ and on the right by $V_{\alpha,q}^\dagger$ gives
+    \begin{align}
+        W_{\alpha,q}(c_{\alpha,q}M_\alpha^v)W_{\alpha,q}^\dagger
+        &=V_{\alpha,q}
+          (c_{\alpha,q}X_{\alpha,q}M_\alpha^vX_{\alpha,q}^{-1})
+          V_{\alpha,q}^\dagger.
+    \end{align}
+    Summing these physical-space identities over all copies and classes, then
+    applying the original grouped reconstruction, proves
+    (\ref{eq:normalized_grouped_sector_maps_of_gram}).
+\end{proof}
+
+\begin{theorem}[Normalized physical maps of the grouped vertical sectors]
+    \label{thm:mpdo_normalized_grouped_sector_maps}
     \lean{MPOTensor.IsMPDO.exists_normalized_grouped_sector_maps}
     \leanok
     \uses{thm:mpdo_grouped_sector_unitary_normalization,
@@ -842,23 +1083,13 @@
 
 \begin{proof}
     \leanok
-    \uses{thm:mpdo_grouped_sector_unitary_normalization,
+    \uses{thm:normalized_grouped_sector_maps_of_gram,
+        thm:mpdo_grouped_sector_unitary_normalization,
         thm:mpdo_vertical_bnt_grouping_with_isometries}
-    Each $Q_{\alpha,q}$ is unitary, so right multiplication by it preserves
-    the isometry equation and the pairwise orthogonality of the physical
-    sector maps. In the intertwining relation, the scalar normalization
-    commutes with every letter and the adjacent factors
-    $X_{\alpha,q}^{-1}X_{\alpha,q}$ cancel. The Gram identity gives
-    $X_{\alpha,q}^\dagger
-    =\omega_{\alpha,q}X_{\alpha,q}^{-1}$; hence
-    \begin{align}
-        Q_{\alpha,q}M_\alpha^vQ_{\alpha,q}^\dagger
-        &=X_{\alpha,q}M_\alpha^vX_{\alpha,q}^{-1}.
-        \notag
-    \end{align}
-    Substitution into every summand of the grouped reconstruction proves the
-    final identity. Transport along the equality of bond dimensions changes
-    only the coordinate labels.
+    Theorem~\ref{thm:mpdo_grouped_sector_unitary_normalization}
+    supplies the positive Gram scalars. Apply
+    Theorem~\ref{thm:normalized_grouped_sector_maps_of_gram} to the grouped
+    vertical decomposition.
 \end{proof}
 
 
@@ -895,35 +1126,13 @@
 
 \begin{proof}
     \leanok
-    \uses{thm:cpsv_literal_grouped_sector_unitary_normalization,
+    \uses{thm:normalized_grouped_sector_maps_of_gram,
+        thm:cpsv_literal_grouped_sector_unitary_normalization,
         thm:cpsv_literal_vertical_bnt_grouping_with_isometries}
-    For each copy, put
-    $Q_{\alpha,q}=\omega_{\alpha,q}^{-1/2}X_{\alpha,q}$ and
-    $W_{\alpha,q}=V_{\alpha,q}Q_{\alpha,q}$. Unitarity of
-    $Q_{\alpha,q}$ preserves the isometry equation and pairwise
-    orthogonality. Substituting $W_{\alpha,q}=V_{\alpha,q}Q_{\alpha,q}$
-    into the intertwining identity gives
-    \begin{align}
-        \widetilde M_vW_{\alpha,q}
-        &=V_{\alpha,q}\bigl(
-          c_{\alpha,q}\omega_{\alpha,q}^{-1/2}
-          X_{\alpha,q}M_\alpha^v
-          X_{\alpha,q}^{-1}X_{\alpha,q}\bigr)
-        \notag\\
-        &=W_{\alpha,q}(c_{\alpha,q}M_\alpha^v).
-        \notag
-    \end{align}
-    Thus the adjacent factors
-    $X_{\alpha,q}^{-1}X_{\alpha,q}$ cancel and leave the undressed
-    representative $M_\alpha^v$. The Gram identity
-    $X_{\alpha,q}^\dagger X_{\alpha,q}
-    =\omega_{\alpha,q}\Id$ also gives
-    \begin{align}
-        Q_{\alpha,q}(c_{\alpha,q}M_\alpha^v)Q_{\alpha,q}^\dagger
-        &=c_{\alpha,q}X_{\alpha,q}M_\alpha^vX_{\alpha,q}^{-1}.
-        \notag
-    \end{align}
-    Hence conjugation by $W_{\alpha,q}$ reproduces the original grouped
-    corner. Summing these equalities gives
+    Theorem~\ref{thm:cpsv_literal_grouped_sector_unitary_normalization}
+    supplies the positive Gram scalars. Apply
+    Theorem~\ref{thm:normalized_grouped_sector_maps_of_gram} to the literal
+    phase-class grouping. Its corner identity preserves the original grouped
+    reconstruction and gives
     (\ref{eq:cpsv_literal_normalized_reconstruction}).
 \end{proof}
