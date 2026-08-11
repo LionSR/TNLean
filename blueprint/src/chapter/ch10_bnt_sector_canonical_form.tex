@@ -261,9 +261,9 @@ single family.
         \label{eq:cpsv_active_refinement_reconstruction}
     \end{align}
     Thus the class-copy coordinates and the inactive complement are explicit,
-    while every zero-weight listed block remains present. No deletion of the
-    inactive coordinates and no coisometric selector onto the active part is
-    asserted.
+    while every zero-weight listed block remains present. This refinement does
+    not delete the inactive coordinates; the active coisometric restriction is
+    stated separately below.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -299,6 +299,55 @@ single family.
         &=\Id.
         \label{eq:cpsv_prop_4_13_original_coisometry}
     \end{align}
+\end{proof}
+
+\begin{theorem}[Exact coisometric restriction to nonzero-weight blocks]%
+    \label{thm:cpsv_exact_active_reconstruction}
+    \lean{MPSTensor.CPSVCanonicalFormData.activeCoordinateMap,
+        MPSTensor.CPSVCanonicalFormData.activeCoordinateCoisometry,
+        MPSTensor.CPSVCanonicalFormData.activeCoordinateCoisometry_mul_conjTranspose}
+    \lean{MPSTensor.CPSVCanonicalFormData.toTensorFromBlocks_active_eq_submatrix,
+        MPSTensor.CPSVCanonicalFormData.exact_active_reconstruction}
+    \leanok
+    \uses{def:cpsv_canonical_form, def:block_diagonal_tensor}
+    Suppose the literal CPSV canonical-form data are
+    \begin{align}
+        A^i&=V^\dagger\left(\bigoplus_{k=1}^{r}\mu_kA_k^i\right)V,
+        \label{eq:cpsv_active_exact_listed}\\
+        VV^\dagger&=\Id.
+        \label{eq:cpsv_active_exact_listed_coisometry}
+    \end{align}
+    Put $K_{\mathrm{act}}=\{k:\mu_k\ne0\}$ and
+    $D_{\mathrm{act}}=\sum_{k\in K_{\mathrm{act}}}D_k$. There is a matrix
+    $U\in\C^{D_{\mathrm{act}}\times D}$ such that the following identities
+    hold, the second for every physical index $i$:
+    \begin{align}
+        UU^\dagger&=\Id,
+        \label{eq:cpsv_active_exact_coisometry}\\
+        A^i&=U^\dagger
+          \left(\bigoplus_{k\in K_{\mathrm{act}}}\mu_kA_k^i\right)U.
+        \label{eq:cpsv_active_exact_reconstruction}
+    \end{align}
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:cpsv_canonical_form, def:block_diagonal_tensor}
+    Let $S$ select the flattened coordinates belonging to
+    $K_{\mathrm{act}}$. Distinct selected rows are orthonormal, so
+    $SS^\dagger=\Id$. The active weighted sum is the principal submatrix
+    selected by $S$. Every omitted diagonal block is zero because its weight is
+    zero, and therefore
+    \begin{align}
+        \bigoplus_{k=1}^{r}\mu_kA_k^i
+        &=S^\dagger\left(
+          \bigoplus_{k\in K_{\mathrm{act}}}\mu_kA_k^i\right)S.
+        \label{eq:cpsv_active_exact_selector}
+    \end{align}
+    Set $U=SV$. Equations~(\ref{eq:cpsv_active_exact_listed}) and
+    (\ref{eq:cpsv_active_exact_selector}) give
+    (\ref{eq:cpsv_active_exact_reconstruction}), while
+    $UU^\dagger=S(VV^\dagger)S^\dagger=\Id$ gives
+    (\ref{eq:cpsv_active_exact_coisometry}).
 \end{proof}
 
 % Source anchors: CPSV16 lines 265--301, 317--345, and Appendix C.3,
@@ -827,6 +876,7 @@ give $O_{YX}(N)\to 0$, a contradiction.
 \begin{theorem}[Gauge realization of prepared phase-equivalent NTs]%
     \label{thm:prepared_phase_equiv_gauge}
     \lean{MPSTensor.gaugePhaseEquiv_of_MPVBlockPhaseEquiv_of_tp_primitive_irr}
+    \lean{MPSTensor.exists_gauge_choose_MPVBlockPhaseEquiv_of_tp_primitive_irr}
     \leanok
     \uses{def:mpv_block_phase_equiv, def:gauge_phase_equiv,
         def:irreducible_tensor, def:tp_kraus, def:primitive_channel}
@@ -879,6 +929,87 @@ give $O_{YX}(N)\to 0$, a contradiction.
     (\ref{eq:paperbnt_prepared_total_dim}).
 \end{proof}
 
+\begin{theorem}[Exact reindexing of heterogeneous weighted block sums]%
+    \label{thm:heterogeneous_block_sum_reindex}
+    \lean{MPSTensor.blockDimEquiv,
+        MPSTensor.toTensorFromBlocks_eq_reindex_of_equiv}
+    \lean{MPSTensor.SectorDecomposition.flatDim_flatIndexEquiv,
+        MPSTensor.SectorDecomposition.flatWeight_flatIndexEquiv,
+        MPSTensor.SectorDecomposition.flatBasis_flatIndexEquiv_heq}
+    \leanok
+    \uses{def:block_diagonal_tensor}
+    Let $e:\{1,\ldots,r\}\simeq\{1,\ldots,r'\}$ satisfy
+    $D_k=D'_{e(k)}$. If, after this dimension identification,
+    \begin{align}
+        \mu_kA_k^i
+        &=\Pi_k\left(\mu'_{e(k)}B_{e(k)}^i\right)\Pi_k^{-1}
+        \label{eq:heterogeneous_block_local}
+    \end{align}
+    for every block and physical index, where $\Pi_k$ is the corresponding
+    coordinate identification, then the induced equivalence $E$ of flattened
+    dependent block coordinates has a permutation matrix $\Pi_E$. For every
+    physical index $i$,
+    \begin{align}
+        \bigoplus_{k=1}^{r}\mu_kA_k^i
+        &=\Pi_E\left(\bigoplus_{\ell=1}^{r'}
+          \mu'_{\ell}B_{\ell}^i\right)\Pi_E^{-1}.
+        \label{eq:heterogeneous_block_global}
+    \end{align}
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:block_diagonal_tensor}
+    Evaluate both sides on two flattened block coordinates. When their block
+    labels agree, (\ref{eq:heterogeneous_block_local}) gives the matrix entry.
+    When the labels differ, both block-diagonal entries vanish. This proves
+    (\ref{eq:heterogeneous_block_global}).
+\end{proof}
+
+\begin{theorem}[Exact BNT reconstruction of prepared normal blocks]%
+    \label{thm:paperbnt_supplier_prepared_exact}
+    \lean{MPSTensor.exists_isBNTCanonicalForm_exact_of_tp_primitive_irr_blocks}
+    \leanok
+    \uses{thm:paperbnt_collapsed_prepared,
+        def:block_diagonal_tensor, def:sector_weight_data}
+    Under the hypotheses of
+    Theorem~\ref{thm:paperbnt_collapsed_prepared}, there are a BNT
+    canonical-form sector decomposition $P$, an equivalence $E$ of flattened
+    bond coordinates, and $X\in\GL_{D_{\mathrm{tot}}(P)}(\C)$. The first
+    identity below holds, and the second holds for every physical index $i$:
+    \begin{align}
+        D_{\mathrm{tot}}(P)&=\sum_{k=1}^{r}D_k,
+        \label{eq:prepared_exact_total_dim}\\
+        \bigoplus_{k=1}^{r}\mu_kB_k^i
+        &=\Pi_E\left(XP^iX^{-1}\right)\Pi_E^{-1}.
+        \label{eq:prepared_exact_reconstruction}
+    \end{align}
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:mpv_phase_class_data,
+        thm:paperbnt_collapsed_prepared,
+        lem:prepared_collapsed_bnt_sector_decomp_total_dim,
+        thm:prepared_phase_equiv_gauge,
+        lem:tensor_from_blocks_globalGauge_conj,
+        thm:heterogeneous_block_sum_reindex,
+        def:global_gauge_of_blocks}
+    Partition the prepared blocks into matrix-product-vector phase classes. For
+    the copy $q$ in class $j$, retain the precise class scalar $\zeta_{j,q}$
+    chosen in the weight $\zeta_{j,q}\mu_{j,q}$. The normal-tensor phase
+    theorem supplies an invertible $G_{j,q}$ with
+    \begin{align}
+        B_{j,q}^i&=\zeta_{j,q}G_{j,q}C_j^iG_{j,q}^{-1}.
+        \label{eq:prepared_exact_copy_gauge}
+    \end{align}
+    Thus the original weighted block equals the corresponding sector copy after
+    conjugation, since its sector weight is
+    $\zeta_{j,q}\mu_{j,q}$. Assemble the $G_{j,q}$ into a block-diagonal
+    matrix $X$ and apply
+    Theorem~\ref{thm:heterogeneous_block_sum_reindex}. This gives
+    (\ref{eq:prepared_exact_reconstruction}); summing the matched copy
+    dimensions gives (\ref{eq:prepared_exact_total_dim}).
+\end{proof}
+
 \begin{theorem}[Active-sector BNT form of normalized CPSV canonical data]%
     \label{thm:cpsv_active_sector_bnt}
     \lean{MPSTensor.CPSVCanonicalFormData.exists_active_isBNTCanonicalForm}
@@ -899,9 +1030,8 @@ give $O_{YX}(N)\to 0$, a contradiction.
         \label{eq:cpsv_active_sector_total_dim}
     \end{align}
     Thus the dimension is the total dimension of the active blocks, not the
-    ambient bond dimension $D$. No gauge equivalence on the original ambient
-    bond space is asserted; such a gauge requires a separate extension over the
-    zero-weight blocks and unused ambient coordinates.
+    ambient bond dimension $D$. This statement records positive-length MPV
+    equality; the exact coisometric reconstruction is stated next.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -918,6 +1048,67 @@ give $O_{YX}(N)\to 0$, a contradiction.
     family, compose the positive-length MPV equalities with
     Theorem~\ref{thm:cpsv_canonical_form_active_blocks}, and reindex the finite
     dimension sum by the active indices.
+\end{proof}
+
+\begin{theorem}[Exact active coisometric BNT reconstruction]%
+    \label{thm:cpsv_active_sector_bnt_exact}
+    \lean{MPSTensor.CPSVCanonicalFormData.exists_active_isBNTCanonicalForm_exact}
+    \leanok
+    \uses{def:cpsv_canonical_form, def:sector_bnt_cf}
+    Let $A$ have CPSV canonical-form data satisfying the separate normalization
+    condition~(\ref{eq:cpsv_weight_normalization}), assume $A\ne0$, and put
+    $K_{\mathrm{act}}=\{k:\mu_k\ne0\}$. There are a BNT canonical-form sector
+    decomposition $P$, a coisometry
+    $U\in\C^{D_{\mathrm{tot}}(P)\times D}$, and
+    $X\in\GL_{D_{\mathrm{tot}}(P)}(\C)$. The first two identities below hold,
+    and the third holds for every physical index $i$:
+    \begin{align}
+        D_{\mathrm{tot}}(P)
+        &=\sum_{k\in K_{\mathrm{act}}}D_k,
+        \label{eq:cpsv_active_exact_bnt_dim}\\
+        UU^\dagger&=\Id,
+        \label{eq:cpsv_active_exact_bnt_coisometry}\\
+        A^i&=U^\dagger\left(XP^iX^{-1}\right)U.
+        \label{eq:cpsv_active_exact_bnt_reconstruction}
+    \end{align}
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:cpsv_exact_active_reconstruction,
+        thm:cpsv_normal_tp_gauge,
+        lem:gauge_equiv_from_block_gauge,
+        thm:paperbnt_supplier_prepared_exact}
+    By Theorem~\ref{thm:cpsv_exact_active_reconstruction}, the original tensor
+    has the exact active reconstruction
+    \begin{align}
+        A^i&=V^\dagger T_{\mathrm{act}}^iV,
+        \label{eq:cpsv_active_exact_bnt_start}\\
+        VV^\dagger&=\Id.
+        \label{eq:cpsv_active_exact_bnt_start_coisometry}
+    \end{align}
+    Put every active normal block into a trace-preserving primitive irreducible
+    gauge $Y$, and apply
+    Theorem~\ref{thm:paperbnt_supplier_prepared_exact}. Let $Q$ be the
+    permutation matrix of its flattened coordinate equivalence, so
+    $QQ^\dagger=\Id$. Reindexing $Y$ by the same equivalence gives an
+    invertible matrix $W$ on the bond space of $P$ and the identities
+    \begin{align}
+        QY&=WQ,
+        \label{eq:cpsv_active_exact_bnt_intertwining}\\
+        Y^{-1}Q^\dagger&=Q^\dagger W^{-1}.
+        \label{eq:cpsv_active_exact_bnt_intertwining_inv}
+    \end{align}
+    If $X_0$ is the prepared-block gauge, set
+    $X=W^{-1}X_0$ and $U=QV$. Substitution in
+    (\ref{eq:cpsv_active_exact_bnt_start}) gives
+    (\ref{eq:cpsv_active_exact_bnt_reconstruction}), while
+    \begin{align}
+        UU^\dagger
+        &=Q(VV^\dagger)Q^\dagger=\Id.
+        \notag
+    \end{align}
+    This proves (\ref{eq:cpsv_active_exact_bnt_coisometry}). The active
+    enumeration gives (\ref{eq:cpsv_active_exact_bnt_dim}).
 \end{proof}
 
 % Source anchors: RMP arXiv:2011.12127v2, lines 1831--1906;
