@@ -181,7 +181,7 @@ theorem IsPrimitiveMPS.openChain_groundProjection_defect_le_geometric
   let Kinf := Matrix.gramReshuffle
     (fixedPointProj ρ (ne_of_gt hρ.trace_pos))
   let Iinf := Ring.inverse Kinf
-  obtain ⟨g, c, r, hg, hc, hr_pos, hr_lt_one, hc_def, hGramInv⟩ :=
+  obtain ⟨g, c, r, hg, hc, hr_pos, hr_lt_one, -, hGramInv⟩ :=
     hP.groundSpaceMapES_geometric_inverseGram_bounds hρ
   obtain ⟨C_T, hC_T, hTail⟩ := hP.tailVirtualMapES_norm_uniform
   have hKinfUnit : IsUnit Kinf := by
