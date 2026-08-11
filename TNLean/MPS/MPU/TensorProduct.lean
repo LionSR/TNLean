@@ -12,9 +12,9 @@ import TNLean.MPS.MPU.SourceCuts
 # Independent tensor products of matrix product unitaries
 
 This file defines the independent tensor product of two MPO tensors. Both physical
-spaces and both virtual spaces are tensored, so tensors of dimensions `(d, D)` and
-`(e, E)` produce one of dimensions `(d * e, D * E)`. This operation is distinct
-from contraction-based MPO multiplication.
+spaces and both virtual spaces are tensored, so tensors of dimensions \((d, D)\) and
+\((e, E)\) produce one of dimensions \((de, DE)\). This operation is distinct from
+contraction-based MPO multiplication.
 
 The construction is the tensoring operation in the proof of part (ii) of the Index
 Theorem in arXiv:1703.09188, lines 824--847.
