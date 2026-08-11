@@ -6,7 +6,7 @@ Authors: TNLean contributors
 import TNLean.MPS.ParentHamiltonian.LocalSupportTransport
 import TNLean.MPS.ParentHamiltonian.Martingale.OverlapReduction
 import TNLean.MPS.CanonicalForm.NormalTensorGauge
-import TNLean.MPS.RFP.AppendixBCommutation
+import TNLean.MPS.RFP.AppendixBSupportProjectionCommutation
 
 /-!
 # Appendix B commutation on finite periodic chains
