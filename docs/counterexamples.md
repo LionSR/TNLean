@@ -110,7 +110,7 @@ mathematical obstruction.
   contraction equals the rank-one-inserted double-layer contraction.
 - Corrected boundary: the witness has no positive-definite fixed point for its
   normalized transfer map, so it admits no reduced canonical-form-II
-  presentation with full active support. The example therefore refutes only
+  presentation with full-active-support. The example therefore refutes only
   the unrestricted source-$v$ Gram identification, not a statement under the
   reduced-CFII and full-active-support hypotheses.
 
