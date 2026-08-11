@@ -325,28 +325,11 @@ theorem
         ((Matrix.reindex finSigmaFinEquiv finSigmaFinEquiv) (Matrix.blockDiagonal' X)) ∧
       ∀ j : Fin r,
         groundSpaceMap (A j) N ((μ j) ^ N • X j) ∈ groundSpace (A j) N := by
-  classical
-  obtain ⟨φ, hφ, hψφ, _huniq⟩ :=
-    exists_unique_sum_groundSpace_of_chainGroundSpace_toTensorFromBlocks_of_bnt_unital_c1
+  have hOpen : ψ ∈ ⨆ j : Fin r, groundSpace (A j) N :=
+    chainGroundSpace_toTensorFromBlocks_le_iSup_groundSpace_of_ge_of_bnt_directSum_unital_c1
       μ A hμ hIrr hLeft hOverlap hBlocks hBlk hL₀ hUnital hN hL hLN hRange hψ
-  have hφRange : ∀ j : Fin r, φ j ∈ (groundSpaceMap (A j) N).range := by
-    intro j
-    simpa [groundSpace] using hφ j
-  choose Y hY using hφRange
-  let X : (j : Fin r) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ :=
-    fun j => ((μ j) ^ N)⁻¹ • Y j
-  refine ⟨X, ?_, ?_⟩
-  · rw [BlockSumGroundSpace.groundSpaceMap_toTensorFromBlocks_eq_sum_blockDiagonal]
-    calc
-      ψ = ∑ j : Fin r, φ j := hψφ
-      _ = ∑ j : Fin r, groundSpaceMap (A j) N ((μ j) ^ N • X j) := by
-            refine Finset.sum_congr rfl ?_
-            intro j _
-            have hpow : (μ j) ^ N ≠ 0 := pow_ne_zero N (hμ j)
-            simp [X, hY j, hpow]
-  · intro j
-    have hpow : (μ j) ^ N ≠ 0 := pow_ne_zero N (hμ j)
-    simpa [X, hY j, hpow] using hφ j
+  exact BlockSumGroundSpace.exists_blockDiagonal_boundary_of_mem_iSup_groundSpace
+    μ A hμ hOpen
 
 /-- In the PGVWC07 source range, a block-diagonal periodic vector has
 block-diagonal open-boundary matrices.
@@ -387,35 +370,11 @@ theorem
         ((Matrix.reindex finSigmaFinEquiv finSigmaFinEquiv) (Matrix.blockDiagonal' X)) ∧
       ∀ j : Fin r,
         groundSpaceMap (A j) N ((μ j) ^ N • X j) ∈ groundSpace (A j) N := by
-  classical
-  have hLe :
-      chainGroundSpace (toTensorFromBlocks (d := d) (μ := μ) A) L N ≤
-        ⨆ j : Fin r, groundSpace (A j) N :=
+  have hOpen : ψ ∈ ⨆ j : Fin r, groundSpace (A j) N :=
     chainGroundSpace_toTensorFromBlocks_le_iSup_groundSpace_of_ge_of_bnt_directSum_unital_c1_pgvwc07
-      μ A hr hμ hIrr hLeft hOverlap hBlocks hBlk hL₀ hUnital hN hL hLN hRange
-  obtain ⟨φ, hφ, hφsum⟩ :=
-    (Submodule.mem_iSup_iff_exists_finsupp
-      (fun j : Fin r => groundSpace (A j) N) ψ).mp (hLe hψ)
-  have hψφ : ψ = ∑ j : Fin r, φ j := by
-    simpa [Finsupp.sum_fintype] using hφsum.symm
-  have hφRange : ∀ j : Fin r, φ j ∈ (groundSpaceMap (A j) N).range := by
-    intro j
-    simpa [groundSpace] using hφ j
-  choose Y hY using hφRange
-  let X : (j : Fin r) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ :=
-    fun j => ((μ j) ^ N)⁻¹ • Y j
-  refine ⟨X, ?_, ?_⟩
-  · rw [BlockSumGroundSpace.groundSpaceMap_toTensorFromBlocks_eq_sum_blockDiagonal]
-    calc
-      ψ = ∑ j : Fin r, φ j := hψφ
-      _ = ∑ j : Fin r, groundSpaceMap (A j) N ((μ j) ^ N • X j) := by
-            refine Finset.sum_congr rfl ?_
-            intro j _
-            have hpow : (μ j) ^ N ≠ 0 := pow_ne_zero N (hμ j)
-            simp [X, hY j, hpow]
-  · intro j
-    have hpow : (μ j) ^ N ≠ 0 := pow_ne_zero N (hμ j)
-    simpa [X, hY j, hpow] using hφ j
+      μ A hr hμ hIrr hLeft hOverlap hBlocks hBlk hL₀ hUnital hN hL hLN hRange hψ
+  exact BlockSumGroundSpace.exists_blockDiagonal_boundary_of_mem_iSup_groundSpace
+    μ A hμ hOpen
 
 /-- For normalized BNT blocks, the block-diagonal periodic chain space satisfies
 two inclusions.
