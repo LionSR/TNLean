@@ -13,7 +13,8 @@ The quasi-local algebra is the norm completion of the algebraic local observable
 canonical algebraic and finite-region maps preserve the operator norm. The algebraic map has dense
 range, and the union of the ranges of all finite-region maps is dense.
 
-No single finite-region algebra has dense image in the quasi-local algebra.
+The finite-region density result concerns the union of all finite-region images; it makes no
+claim about the image of a fixed region.
 
 ## Main definitions
 
