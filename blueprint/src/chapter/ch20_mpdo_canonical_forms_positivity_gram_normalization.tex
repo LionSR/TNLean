@@ -963,13 +963,19 @@
     are isometries with pairwise orthogonal ranges,
     they intertwine $\widetilde M$ with the corresponding gauged
     representatives, and their grouped corner sum reconstructs every letter
-    of $\widetilde M$. Then there are maps $W_{\alpha,q}$. For distinct pairs
-    $(\alpha,q)\ne(\beta,p)$, their ranges are orthogonal. These maps satisfy
+    of $\widetilde M$. Then there are maps $W_{\alpha,q}$ such that, for every
+    class $\alpha$ and copy $q$,
     \begin{align}
-        W_{\alpha,q}^\dagger W_{\alpha,q}&=\Id,
-        \notag\\
-        W_{\alpha,q}^\dagger W_{\beta,p}&=0,
-        \notag\\
+        W_{\alpha,q}^\dagger W_{\alpha,q}&=\Id.
+        \notag
+    \end{align}
+    For distinct pairs $(\alpha,q)\ne(\beta,p)$,
+    \begin{align}
+        W_{\alpha,q}^\dagger W_{\beta,p}&=0.
+        \notag
+    \end{align}
+    For every vertical letter $v$, these maps also satisfy
+    \begin{align}
         \widetilde M_vW_{\alpha,q}
         &=W_{\alpha,q}(c_{\alpha,q}M_\alpha^v),
         \notag\\
