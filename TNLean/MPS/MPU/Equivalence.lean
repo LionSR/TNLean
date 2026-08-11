@@ -33,7 +33,7 @@ variable {da db D : ℕ}
 after explicitly identifying their physical dimensions, they are joined by a
 continuous path all of whose points generate MPUs.
 
-Canonical form is required only at the endpoints. The bond dimension `D` is
+Canonical form is required only at the endpoints. The bond dimension \(D\) is
 fixed throughout.
 
 **Scope restriction (arXiv:1703.09188, lines 706--724):** the paper does not
@@ -57,16 +57,16 @@ private theorem blockedAncillaPhysicalDim_eq (k : ℕ) {pa pb : ℕ}
   rw [Nat.mul_comm da pa, Nat.mul_comm db pb, hphys]
 
 /-- Two fixed-bond MPU tensors are equivalent when positive coprime ancilla
-sizes `pa` and `pb` make their enlarged physical dimensions equal and, after
-attaching those ancillas, a common positive blocking length makes the resulting
-tensors strictly equivalent.
+sizes \(p_a\) and \(p_b\) make their enlarged physical dimensions equal and,
+after attaching those ancillas, a common positive blocking length makes the
+resulting tensors strictly equivalent.
 
 Ancillas are attached before blocking. The physical-size condition is the source
-equation `pa * da = pb * db`; it supplies the explicit reindexing witness needed
-by `StrictlyEquivalent` after blocking.
+equation \(p_a d_a = p_b d_b\); it supplies the explicit reindexing witness
+needed by `StrictlyEquivalent` after blocking.
 
-**Scope restriction (arXiv:1703.09188, lines 706--724):** the bond dimension `D`
-is fixed. No heterogeneous raw-bond stabilization is asserted. See
+**Scope restriction (arXiv:1703.09188, lines 706--724):** the bond dimension
+\(D\) is fixed. No heterogeneous raw-bond stabilization is asserted. See
 `docs/paper-gaps/mpu_equivalence_fixed_bond.tex`.
 
 Source: arXiv:1703.09188, Definition `def:equivalent-tensors`, lines 716--724. -/
