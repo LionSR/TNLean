@@ -4,7 +4,9 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.Algebra.DependentBlockDiagonal
-import TNLean.MPS.RFP.AppendixBChainCommutation
+import TNLean.MPS.ParentHamiltonian.LocalSupportTransport
+import TNLean.MPS.ParentHamiltonian.Martingale.OverlapReduction
+import TNLean.MPS.RFP.AppendixBSupportProjectionCommutation
 import TNLean.MPS.RFP.ResidualFamilySupport
 
 /-!
