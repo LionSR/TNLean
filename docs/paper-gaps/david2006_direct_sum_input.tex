@@ -185,11 +185,19 @@ in \path{TNLean/MPS/MPDO/BiCFDerivation/BNTDirectSum.lean}; and
 in \path{TNLean/MPS/MPDO/BiCFDerivation/Selectors.lean}.}
 
 These results assume that distinct equal-dimensional blocks are not equivalent
-up to gauge and phase. PGVWC07 instead assumes that the corresponding
-finite-ring component vectors are pairwise distinct. The missing comparison is
-a theorem deriving the required gauge-phase separation from the source
-hypothesis. To remove the extra premise, one must prove that comparison and use
-it to state the direct-sum and ground-space results with the source hypothesis.
+up to gauge and phase. PGVWC07 instead assumes only that the corresponding
+finite-ring component vectors are pairwise unequal. This inequality cannot
+imply gauge-phase separation. Gauge-phase equivalent blocks produce
+proportional finite-ring vectors, and distinct nonzero block weights can make
+them unequal while preserving proportionality. Thus the present formal results
+have a genuine scope restriction.
+
+Eliminating the extra premise requires identifying, or proving from the source
+argument, the projective distinctness or nonproportionality condition actually
+needed by the interpolation step, and then deriving the formal pair-separation
+input from that condition. If the source hypothesis is read literally as mere
+inequality, the gauge-phase or nonproportionality premise must remain explicit.
+The current gap is not closed.
 
 \section{Conclusion}
 
@@ -207,7 +215,9 @@ positive simultaneous-span length at most
 \[
   3(b-1)(D^4+1)\leq3(D-1)(D^4+1)\leq3D^5.
 \]
-This closes the sharp block-separation input cited by the 2016 MPDO source.\footnote{%
+This proves the sharp block-separation input cited by the 2016 MPDO source
+under the additional gauge-phase separation premise. It does not close the
+input at the source's literal pairwise-inequality hypothesis.\footnote{%
 \leanid{MPSTensor.SectorDecomposition.basisCount_le_totalDim};
 \leanid{MPSTensor.IsBNTCanonicalForm.exists_basis_wordTupleSpanTop_le_three_totalDim_pow_five}.}
 
@@ -219,12 +229,14 @@ separate from the direct-sum input proved here.
 \section{Verdict}
 
 \textbf{Verdict: scope restriction.} The exact source length and direct-sum
-span are proved under gauge-phase separation, while PGVWC07 assumes only
-pairwise distinct finite-ring component vectors. Elimination requires proving
-that the source hypothesis implies gauge-phase separation for the canonical
-blocks, then restating the direct-sum and ground-space theorems through that
-comparison. Until this implication is formalized, the sharp source input is
-not fully closed at its printed hypothesis set.
+span are proved under gauge-phase separation, while PGVWC07 states only
+pairwise inequality of the finite-ring component vectors. That literal
+condition cannot imply the formal premise because unequal component vectors
+may still be proportional. Elimination requires identifying or proving the
+projective, nonproportional source condition used by the interpolation argument
+and deriving the formal pair-separation input from it. If the source is read as
+assuming only inequality, the additional separation premise must be retained.
+The sharp source input remains open at its printed hypothesis set.
 
 \bibliographystyle{alpha}
 \bibliography{references}
