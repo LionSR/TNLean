@@ -4548,6 +4548,9 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
       tensors with the same index are admissibly equivalent whenever the
       standard-form interpolation is supplied with an admissible path datum.
   \end{enumerate}
+  These are the conclusions of \cite[Theorem~IV.3]{Cirac2017MPU}, restricted
+  to the explicit admissibility hypotheses above.
+  % Source lines: paper_v2.tex 824--865.
 \end{theorem}
 
 \begin{corollary}[Continuous choice of standard form]
@@ -4758,7 +4761,8 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
   % fundamental theorem is applied, carry reduced full-support source data.
   % No preservation under blocking is asserted. Documented in
   % docs/paper-gaps/mpu_canonical_form_full_support.tex.
-  \uses{thm:mpu_admissible_fundamental,thm:mpu_admissible_index,
+  \uses{thm:mpu_admissible_fundamental,
+    prop:mpu_admissible_index_well_defined,def:mpu_admissible_index,
     def:mpu_admissible_standard_form,
     def:mpu_reduced_full_support_source_datum}
   Let an MPU be in admissible standard form. Suppose its one-site tensor
@@ -4777,24 +4781,24 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
 \end{proposition}
 
 \begin{proof}
-  \uses{thm:mpu_admissible_index,thm:mpu_admissible_fundamental}
+  \uses{thm:mpu_admissible_fundamental,
+    prop:mpu_admissible_index_well_defined,def:mpu_admissible_index}
   Under time reversal, $\mathcal U_2$ and $\mathcal U_2^\sharp$ generate the
-  same MPU. Physical adjunction exchanges the two source cuts, so
-  $r(\mathcal U_2^\sharp)=\ell(\mathcal U_2)$ and
-  $\ell(\mathcal U_2^\sharp)=r(\mathcal U_2)$.
-  Blocking invariance and equality of the admissible indices therefore give
+  same MPU. The admissible fundamental theorem identifies their source spaces,
+  so their corresponding source-cut ranks agree. Physical adjunction exchanges
+  the two cuts. Hence
   \begin{align}
-    \operatorname{ind}(\mathcal U)
-      &=\operatorname{ind}(\mathcal U_2)
-       =\operatorname{ind}(\mathcal U_2^\sharp)
-       =-\operatorname{ind}(\mathcal U_2)
-       =-\operatorname{ind}(\mathcal U).
+    r(\mathcal U_2)
+      &=r(\mathcal U_2^\sharp)
+       =\ell(\mathcal U_2).
   \end{align}
-  Hence $\operatorname{ind}(\mathcal U)=0$. With this obstruction derived,
-  apply the admissible fundamental theorem to the supplied standard forms of
-  $\mathcal U_2$ and $\mathcal U_2^\sharp$ and follow the source proof. The
-  converse follows by contracting the displayed local relation around every
-  even periodic chain.
+  Definition~\ref{def:mpu_admissible_index} therefore gives
+  $\operatorname{ind}(\mathcal U_2)=0$, and blocking independence gives
+  $\operatorname{ind}(\mathcal U)=0$. Apply the admissible fundamental theorem
+  to the supplied standard forms of $\mathcal U_2$ and
+  $\mathcal U_2^\sharp$ and follow the source proof. The converse follows by
+  contracting the displayed local relation around every even periodic chain.
+  % Source lines: paper_v2.tex 1201--1252.
 \end{proof}
 
 \begin{proposition}[Local characterization of transposition]
@@ -4823,7 +4827,8 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
   % fundamental theorem is applied, carry reduced full-support source data.
   % No preservation under blocking is asserted. Documented in
   % docs/paper-gaps/mpu_canonical_form_full_support.tex.
-  \uses{thm:mpu_admissible_fundamental,thm:mpu_admissible_index,
+  \uses{thm:mpu_admissible_fundamental,
+    prop:mpu_admissible_index_well_defined,def:mpu_admissible_index,
     def:mpu_admissible_standard_form,
     def:mpu_reduced_full_support_source_datum}
   Let an MPU be in admissible standard form. Suppose its one-site tensor
@@ -4842,24 +4847,25 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
 \end{proposition}
 
 \begin{proof}
-  \uses{thm:mpu_admissible_index,thm:mpu_admissible_fundamental}
+  \uses{thm:mpu_admissible_fundamental,
+    prop:mpu_admissible_index_well_defined,def:mpu_admissible_index}
   Under transposition, $\mathcal U_2$ and $\mathcal U_2^{\mathsf T}$ generate
-  the same MPU. Transposition exchanges the two source cuts, so
-  $r(\mathcal U_2^{\mathsf T})=\ell(\mathcal U_2)$ and
-  $\ell(\mathcal U_2^{\mathsf T})=r(\mathcal U_2)$.
-  Blocking invariance and equality of the admissible indices give
+  the same MPU. The admissible fundamental theorem identifies their source
+  spaces, so their corresponding source-cut ranks agree. Transposition
+  exchanges the two cuts. Hence
   \begin{align}
-    \operatorname{ind}(\mathcal U)
-      &=\operatorname{ind}(\mathcal U_2)
-       =\operatorname{ind}(\mathcal U_2^{\mathsf T})
-       =-\operatorname{ind}(\mathcal U_2)
-       =-\operatorname{ind}(\mathcal U).
+    r(\mathcal U_2)
+      &=r(\mathcal U_2^{\mathsf T})
+       =\ell(\mathcal U_2).
   \end{align}
-  Thus $\operatorname{ind}(\mathcal U)=0$. Apply the admissible fundamental
-  theorem to the supplied standard forms of $\mathcal U_2$ and
+  Thus $\operatorname{ind}(\mathcal U_2)=0$ by
+  Definition~\ref{def:mpu_admissible_index}, and blocking independence gives
+  $\operatorname{ind}(\mathcal U)=0$. Apply the admissible fundamental theorem
+  to the supplied standard forms of $\mathcal U_2$ and
   $\mathcal U_2^{\mathsf T}$ and repeat the time-reversal argument, retaining
   the unrestricted phase $e^{i\phi}$. The converse follows by contracting the
   local relation around every even periodic chain.
+  % Source lines: paper_v2.tex 1257--1288.
 \end{proof}
 
 \subsection{Equivalence under symmetries}
