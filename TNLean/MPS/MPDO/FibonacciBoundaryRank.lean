@@ -3,8 +3,10 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.MPS.MPDO.PureRecovery
+import TNLean.MPS.Defs
+import Mathlib.NumberTheory.Real.GoldenRatio
 import Mathlib.Tactic.FinCases
+import Mathlib.Tactic.LinearCombination
 
 /-!
 # Fibonacci boundary transition calculation
@@ -15,9 +17,9 @@ The three binary physical labels are written \(i,j,k\), the fusion weights are
 \(A^{ijk}_{αβ} = δ_{i,α} δ_{k,β} N_{ijk}\).  The structural strong fixed-point
 relation is defined separately in `MPOTensor.IsStrongRFP`.
 
-**Scope restriction (transition-count slice):** This file does not identify the
-transition counts with the open-boundary or periodic operator ranks, and it does
-not prove the golden-ratio formula for the periodic rank.
+**Scope restriction (transition-count slice):** This file computes the transition
+counts but does not identify them with the open-boundary or periodic operator ranks.
+In particular, its golden-ratio formula is not an operator-rank theorem.
 
 ## References
 
@@ -25,7 +27,7 @@ not prove the golden-ratio formula for the periodic rank.
   Appendix D, lines 2116--2176.
 -/
 
-open scoped Matrix ComplexOrder BigOperators
+open scoped Matrix
 open Matrix Finset
 
 namespace MPSTensor
@@ -43,6 +45,7 @@ Fibonacci fusion rules.
 
 Source: arXiv:1606.00608, Appendix D, lines 2120--2121. -/
 structure FusionWeights where
+  /-- The fusion coefficient assigned to the labels \((i,j,k)\). -/
   N : Fin 2 → Fin 2 → Fin 2 → ℝ
   zero_iff : ∀ i j k, N i j k = 0 ↔ ExactlyTwoZero i j k
   pos_of_not_exactlyTwoZero : ∀ i j k, ¬ExactlyTwoZero i j k → 0 < N i j k
@@ -116,6 +119,54 @@ def periodicTransitionCount (N : ℕ) : ℕ := x N 0 0 + x N 1 1
 @[simp] theorem periodicTransitionCount_two : periodicTransitionCount 2 = 7 := by
   rw [periodicTransitionCount, (x_succ 1 0).1, (x_succ 1 1).2]
   norm_num [x, B]
+
+/-- The periodic transition counts satisfy the characteristic recurrence of
+\(B=\left(\begin{smallmatrix}1&1\\1&2\end{smallmatrix}\right)\). -/
+theorem periodicTransitionCount_add_two_add (N : ℕ) :
+    periodicTransitionCount (N + 2) + periodicTransitionCount N =
+      3 * periodicTransitionCount (N + 1) := by
+  simp [periodicTransitionCount, x, show N + 2 = N + 1 + 1 by omega, pow_succ, B,
+    Matrix.mul_apply, Fin.sum_univ_two]
+  ring
+
+/-- The exact closed formula for the periodic transition count is the sum of the
+\(2N\)-th powers of the golden ratio and its conjugate. This is only the
+transition-count slice of the calculation and does not identify these counts with
+MPO operator ranks.
+
+Source: CPSV16, arXiv:1606.00608v4, Appendix D, lines 2146--2176. -/
+theorem periodicTransitionCount_eq_goldenRatio (N : ℕ) :
+    (periodicTransitionCount N : ℝ) =
+      Real.goldenRatio ^ (2 * N) + Real.goldenConj ^ (2 * N) := by
+  induction N using Nat.twoStepInduction with
+  | zero => norm_num [periodicTransitionCount, x, B]
+  | one =>
+      norm_num [periodicTransitionCount, x, B]
+      nlinarith [Real.goldenRatio_sq, Real.goldenConj_sq,
+        Real.goldenRatio_add_goldenConj]
+  | more N hN hN1 =>
+      have hCount := congrArg (fun n : ℕ ↦ (n : ℝ)) (periodicTransitionCount_add_two_add N)
+      push_cast at hCount
+      have hRatioQuartic : Real.goldenRatio ^ 4 + 1 = 3 * Real.goldenRatio ^ 2 := by
+        linear_combination
+          (Real.goldenRatio ^ 2 + Real.goldenRatio - 1) * Real.goldenRatio_sq
+      have hRatio :
+          Real.goldenRatio ^ (2 * (N + 2)) + Real.goldenRatio ^ (2 * N) =
+            3 * Real.goldenRatio ^ (2 * (N + 1)) := by
+        rw [show 2 * (N + 2) = 2 * N + 4 by omega,
+          show 2 * (N + 1) = 2 * N + 2 by omega, pow_add, pow_add]
+        linear_combination Real.goldenRatio ^ (2 * N) * hRatioQuartic
+      have hConjQuartic : Real.goldenConj ^ 4 + 1 = 3 * Real.goldenConj ^ 2 := by
+        linear_combination
+          (Real.goldenConj ^ 2 + Real.goldenConj - 1) * Real.goldenConj_sq
+      have hConj :
+          Real.goldenConj ^ (2 * (N + 2)) + Real.goldenConj ^ (2 * N) =
+            3 * Real.goldenConj ^ (2 * (N + 1)) := by
+        rw [show 2 * (N + 2) = 2 * N + 4 by omega,
+          show 2 * (N + 1) = 2 * N + 2 by omega, pow_add, pow_add]
+        linear_combination Real.goldenConj ^ (2 * N) * hConjQuartic
+      rw [hN, hN1] at hCount
+      linarith
 
 /-- The periodic transition counts cannot have geometric growth \(r s^{N-1}\).
 The contradiction is already forced by the values three and seven.
