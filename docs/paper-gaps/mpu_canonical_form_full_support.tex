@@ -175,24 +175,37 @@ applies only when every standard-form tensor being compared carries its own
 datum.
 
 The index has the same restriction at every blocking length where
-Theorem~III.8 is used. A blocking length is admissible only when the blocked
-tensor is simple and carries its own source datum. Well-definedness compares
-two admissible simple blockings. Tensor-product additivity requires one common
-blocking length at which both factors and their tensor product are simple and
-carry source data. Composition additivity requires one common blocking length
-at which both factors and the resulting composition tensor are simple and
-carry source data. No later-block transport is used.
+Theorem~III.8 is used. A blocking length is admissible only when the actual
+blocked tensor is simple and carries its own source datum. Well-definedness
+compares two admissible simple blockings. Tensor-product additivity requires
+one common blocking length at which both factors and their tensor product are
+simple and carry source data. The published composition proof first uses
+$\mathcal U_k$, $\mathcal U'_k$, and $\mathcal W_k$, then writes
+$\mathcal U_{2k}$ and $\mathcal U'_{2k}$ in standard form and computes the
+ranks of $\mathcal W_{4k}$. Chapter~28 therefore requires separate source data
+for all six of these exact blocked tensors. No later-block transport is used.
+% Source lines: paper_v2.tex 837--845.
 
 Continuity requires more than endpoint data. Chapter~28 therefore introduces
 an admissible equivalence and path datum. It consists of a chosen strict-
-equivalence path, one common positive blocking length, and continuously varying
-reduced full-support source data for the corresponding simple blocked tensor at
-every point of the path. The blocked endpoints carry their own data. The same
-requirement is imposed after adjoining ancillas and blocking, and on paths that
-preserve a symmetry. This is a hypothesis attached to a chosen witness. It does
-not assert that such a witness exists. The datum does not automatically include
-the source bound $m\leq D^4$; any result displaying that bound assumes that the
-supplied common blocking length itself satisfies it.
+equivalence path, one common positive blocking length $m$, and continuously
+varying reduced full-support source data for the actual blocked path tensor
+$\mathcal W(p)_m$ at every point. The tensor $\mathcal W(p)_m$ itself is simple;
+it may not be replaced by an equivalent canonical or reduced representative.
+The actual blocked endpoints carry their own data. The same requirement is
+imposed after adjoining ancillas and blocking. This is a hypothesis attached
+to a chosen witness and does not assert that such a witness exists. The datum
+does not automatically include the source bound $m\leq D^4$; any result
+displaying that bound assumes that the supplied common blocking length itself
+satisfies it.
+
+For a symmetry-preserving path, admissibility also includes continuously
+varying source data for every transformed comparison tensor to which the
+fundamental theorem is applied. Depending on the argument, these are the
+conjugate, physical-adjoint, transposed, or more general symmetry-image tensors
+of the actual blocked path. Each transformed tensor is itself simple and
+carries its own datum. No symmetry operation is assumed to preserve source
+data automatically.
 
 With this convention, admissible equivalence implies equality of the index.
 The converse is claimed only when the standard-form interpolation is supplied
@@ -201,29 +214,43 @@ classification use the same restricted relation. In particular, no ordinary
 strict-equivalence or symmetry-equivalence path is silently promoted to an
 admissible one.
 
-Some local symmetry arguments require additional blocked tensors. The source
-proofs of the time-reversal and transposition characterizations block two sites
-before applying the fundamental theorem. Chapter~28 therefore requires reduced
-full-support source data for the two-site blocked tensor and for the adjoint or
-transposed comparison tensor. The blocking-parity statements and all later
-claims after blocking or adjoining ancillas carry the corresponding explicit
-hypotheses. No preservation under these operations is asserted.
+The source proofs of the time-reversal and transposition characterizations
+apply the fundamental theorem after blocking two sites. Every such statement
+therefore supplies source data for the actual one-site endpoint tensor, its
+actual two-site block, and the physical-adjoint or transposed comparison
+tensors used at one and two sites. The blocking-parity statements and all
+later time-reversal descendants and examples repeat these hypotheses for every
+endpoint and comparison tensor after blocking or adjoining ancillas. Along a
+symmetry path these data vary continuously. No preservation under any of these
+operations is asserted.
 
 For bond dimension one, the normalized transfer matrix supplies the source
 pair directly. For bond dimension greater than one, no current result
 constructs reduced full-support source data for every simple block or proves
-their preservation under blocking, adjoining ancillas, tensor
-product, composition, conjugation, adjoint, transposition, or continuous
-variation, or identifies the source data of a tensor with those of a reduced
-representative. Consequently the Chapter~28 statements are restricted to the
-explicitly admissible tensors, comparison tensors, and chosen paths. They do
-not give the unrestricted same-tensor standard-form, index, continuity, or
+their preservation under blocking, adjoining ancillas, tensor products,
+composition, conjugation, adjoint, transposition, or continuous variation, or
+identifies the source data of a tensor with those of a reduced representative.
+Consequently the Chapter~28 statements are restricted to the explicitly
+admissible tensors, comparison tensors, and chosen paths. They do not give the
+unrestricted same-tensor standard-form, index, continuity, or
 symmetry-classification theorems stated in the source.
 
+\section{Elimination plan}
+The native source-data scope tracker is issue~\#6136. Its four implementation
+branches separate the logically distinct transport problems. Issue~\#6137
+constructs a reduced full-support representative and transports the source
+objects back to the tensor used in the theorem. Issue~\#6138 proves source-data
+preservation under physical blocking and adjoining identity ancillas.
+Issue~\#6139 treats tensor products, composition, and conjugate, adjoint,
+transposed, and other transformed comparison tensors. Issue~\#6140 constructs
+continuous source data along strict-equivalence paths and their
+symmetry-transformed comparison paths. Closing these four branches removes the
+downstream admissibility hypotheses; it does not replace the independent
+complete-network obligations in issues~\#5982 and~\#6071.
+
 \section{Verdict}
-\textbf{Verdict: one scope restriction, two Theorem~III.8 network gaps, and
-additional downstream existence and preservation gaps.} The paper's
-normal-tensor proposition, the source-isometry lemma, and Theorem~III.8 concern
+\textbf{Verdict: scope restriction.} The paper's normal-tensor proposition,
+the source-isometry lemma, and Theorem~III.8 concern
 the intended reduced canonical-form-II representative, with zero-weight blocks
 and the ambient zero complement omitted. This reduction is not an explicit
 hypothesis of the normal-tensor proposition, and it does not follow from
