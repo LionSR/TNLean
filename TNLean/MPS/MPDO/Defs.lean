@@ -31,6 +31,9 @@ Verstraete):
 * `MPOTensor.evalWord`: word evaluation for MPO tensors (product of 4-index
   matrices along a pair of ket/bra words).
 * `MPOTensor.mpo`: the MPO operator family for system size `N`.
+* `MPOTensor.reindexPhysical`: relabel both physical indices by an equivalence.
+* `MPOTensor.reindexPhysicalConfigEquiv`: the induced sitewise equivalence on
+  physical configurations.
 * `MPOTensor.normalizedMPO`: the operator family divided by its trace.
 * `MPOTensor.transferMap`: the MPO transfer map
   `E_M(X) = ∑_{i,j} M^{ij} X (M^{ij})†`.
@@ -42,6 +45,13 @@ Verstraete):
 * `MPOTensor.toMPSTensor`: view an MPO tensor as an MPS tensor with doubled
   physical index `Fin (d * d)`.
 * `MPOTensor.physicalSlice`: the physical matrix at fixed virtual indices.
+
+## Main results
+
+* `MPOTensor.evalWord_reindexPhysical`: word evaluation commutes with physical
+  reindexing.
+* `MPOTensor.mpo_reindexPhysical`: finite-size MPOs are related by simultaneous
+  row and column reindexing.
 
 ## References
 
@@ -93,6 +103,13 @@ def reindexPhysical {d' : ℕ} (e : Fin d' ≃ Fin d)
     (U : MPOTensor d D) : MPOTensor d' D :=
   fun i j ↦ U (e i) (e j)
 
+/-- Apply a physical-index equivalence sitewise to a finite configuration.
+
+Source: arXiv:1703.09188, proof of Theorem `IndexTh` (ii), lines 824--847. -/
+def reindexPhysicalConfigEquiv {d' : ℕ} (N : ℕ) (e : Fin d' ≃ Fin d) :
+    (Fin N → Fin d') ≃ (Fin N → Fin d) :=
+  Equiv.arrowCongr (Equiv.refl (Fin N)) e
+
 /-- The physical matrix obtained from a fixed pair of virtual indices of an
 MPO tensor.
 
@@ -117,6 +134,21 @@ noncomputable def evalWord (M : MPOTensor d D) :
 @[simp] lemma evalWord_cons (M : MPOTensor d D)
     (i j : Fin d) (is js : List (Fin d)) :
     evalWord M (i :: is) (j :: js) = M i j * evalWord M is js := rfl
+
+/-- Word evaluation after physical reindexing is word evaluation on the two
+mapped words.
+
+Source: arXiv:1703.09188, proof of Theorem `IndexTh` (ii), lines 824--847. -/
+theorem evalWord_reindexPhysical {d' : ℕ} (e : Fin d' ≃ Fin d)
+    (U : MPOTensor d D) (is js : List (Fin d')) :
+    evalWord (reindexPhysical e U) is js =
+      evalWord U (is.map e) (js.map e) := by
+  induction is generalizing js with
+  | nil => cases js <;> simp [evalWord]
+  | cons i is ih =>
+      cases js with
+      | nil => simp [evalWord]
+      | cons j js => simp [evalWord, reindexPhysical, ih]
 
 /-- Word evaluation on `List.ofFn` equals a non-commutative product:
 `evalWord M (ofFn σ) (ofFn τ) = (ofFn (fun i => M (σ i) (τ i))).prod`. -/
@@ -183,6 +215,19 @@ noncomputable def mpo (M : MPOTensor d D) (N : ℕ) :
 @[simp] lemma mpo_apply (M : MPOTensor d D) (N : ℕ)
     (σ τ : Fin N → Fin d) :
     mpo M N σ τ = mpoMatrixEntry M σ τ := rfl
+
+/-- Physical reindexing of a tensor simultaneously reindexes the row and column
+configurations of every finite-size MPO.
+
+Source: arXiv:1703.09188, proof of Theorem `IndexTh` (ii), lines 824--847. -/
+theorem mpo_reindexPhysical {d' : ℕ} (e : Fin d' ≃ Fin d)
+    (U : MPOTensor d D) (N : ℕ) :
+    mpo (reindexPhysical e U) N =
+      Matrix.reindex (reindexPhysicalConfigEquiv N e).symm
+        (reindexPhysicalConfigEquiv N e).symm (mpo U N) := by
+  ext σ τ
+  simp [mpoMatrixEntry, evalWord_reindexPhysical, reindexPhysicalConfigEquiv,
+    Equiv.arrowCongr, List.map_ofFn, Function.comp_def]
 
 /-- The **normalized density operator** of the MPO for system size `N`:
 

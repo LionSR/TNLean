@@ -53,6 +53,10 @@ definition `defnrl` and lines 697–704 of the paper.
 
 * `rightRank_bound`, `leftRank_bound`: rank bounds
   $r \le \min(Dd, dD) = Dd$ and similarly $\ell \le Dd$.
+* `sourceCutM₁_reindexPhysical`, `sourceCutM₂_reindexPhysical`: physical reindexing
+  formulas for the two cuts.
+* `rightRank_reindexPhysical`, `leftRank_reindexPhysical`: invariance of both ranks
+  under bijective physical reindexing.
 * `sourceCutM₁_apply`, `sourceCutM₂_apply`, `sourceCutM₁Fin_apply`,
   `sourceCutM₂Fin_apply`: `[simp]` entry formulas for both cuts and both index forms.
 
@@ -92,6 +96,32 @@ def sourceCutM₂ : Matrix (Fin D × Fin d) (Fin d × Fin D) ℂ :=
 
 @[simp] lemma sourceCutM₂_apply (α : Fin D) (i : Fin d) (j : Fin d) (β : Fin D) :
     sourceCutM₂ U (α, i) (j, β) = U i j α β := rfl
+
+/-- Physical reindexing acts on the down leg of each row and the up leg of
+each column of the first source cut.
+
+Source: arXiv:1703.09188, proof of Theorem `IndexTh` (ii), lines 824--847. -/
+theorem sourceCutM₁_reindexPhysical {d' : ℕ} (e : Fin d' ≃ Fin d) :
+    sourceCutM₁ (reindexPhysical e U) =
+      Matrix.reindex (Equiv.prodCongr (Equiv.refl (Fin D)) e.symm)
+        (Equiv.prodCongr e.symm (Equiv.refl (Fin D))) (sourceCutM₁ U) := by
+  ext row col
+  rcases row with ⟨α, j⟩
+  rcases col with ⟨i, β⟩
+  simp [sourceCutM₁, reindexPhysical, Matrix.reindex_apply]
+
+/-- Physical reindexing acts on the up leg of each row and the down leg of
+each column of the second source cut.
+
+Source: arXiv:1703.09188, proof of Theorem `IndexTh` (ii), lines 824--847. -/
+theorem sourceCutM₂_reindexPhysical {d' : ℕ} (e : Fin d' ≃ Fin d) :
+    sourceCutM₂ (reindexPhysical e U) =
+      Matrix.reindex (Equiv.prodCongr (Equiv.refl (Fin D)) e.symm)
+        (Equiv.prodCongr e.symm (Equiv.refl (Fin D))) (sourceCutM₂ U) := by
+  ext row col
+  rcases row with ⟨α, i⟩
+  rcases col with ⟨j, β⟩
+  simp [sourceCutM₂, reindexPhysical, Matrix.reindex_apply]
 
 /-! ### Reindexing to `Fin (D * d)` and `Fin (d * D)` (reindexed formulations) -/
 
@@ -161,6 +191,22 @@ noncomputable def leftRank : ℕ := (sourceCutM₂ U).rank
 lemma rightRank_eq : r[U] = (sourceCutM₁ U).rank := rfl
 
 lemma leftRank_eq : ℓ[U] = (sourceCutM₂ U).rank := rfl
+
+/-- Bijective physical reindexing preserves the right source rank.
+
+Source: arXiv:1703.09188, proof of Theorem `IndexTh` (ii), lines 824--847. -/
+theorem rightRank_reindexPhysical {d' : ℕ} (e : Fin d' ≃ Fin d) :
+    r[reindexPhysical e U] = r[U] := by
+  rw [rightRank, sourceCutM₁_reindexPhysical, Matrix.rank_reindex]
+  rfl
+
+/-- Bijective physical reindexing preserves the left source rank.
+
+Source: arXiv:1703.09188, proof of Theorem `IndexTh` (ii), lines 824--847. -/
+theorem leftRank_reindexPhysical {d' : ℕ} (e : Fin d' ≃ Fin d) :
+    ℓ[reindexPhysical e U] = ℓ[U] := by
+  rw [leftRank, sourceCutM₂_reindexPhysical, Matrix.rank_reindex]
+  rfl
 
 /-! ### Rank bounds -/
 

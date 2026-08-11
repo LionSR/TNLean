@@ -713,14 +713,53 @@ closing a chain of $N$ copies of $\mathcal U$.
 
 \begin{definition}[Physical-basis reindexing]
     \label{def:mpu_physical_reindexing}
-    \lean{MPOTensor.reindexPhysical}
+    \lean{MPOTensor.reindexPhysical,
+        MPOTensor.reindexPhysicalConfigEquiv}
     \leanok
     For a bijection $e$ between two physical index sets, the reindexed tensor
-    is defined by
+    and its action on length-$N$ configurations are
     \begin{align}
-        (e^*\mathcal U)^{ij}=\mathcal U^{e(i)e(j)}.
+        (e^*\mathcal U)^{ij}&=\mathcal U^{e(i)e(j)},
+        &(e_*\sigma)(n)&=e(\sigma(n)).
     \end{align}
 \end{definition}
+
+\begin{theorem}[Words under physical reindexing]
+    \label{thm:mpu_eval_word_physical_reindexing}
+    \lean{MPOTensor.evalWord_reindexPhysical}
+    \leanok
+    \uses{def:mpu_physical_reindexing,def:mpo_eval_word}
+    For ket and bra words $i,j$, physical reindexing gives
+    \begin{align}
+        (e^*\mathcal U)[i,j]&=\mathcal U[e_*i,e_*j].
+    \end{align}
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:mpu_physical_reindexing,def:mpo_eval_word}
+    Induct simultaneously along the two words. The empty pair gives the
+    identity matrix, mismatched lengths give zero, and the nonempty case
+    applies the defining equality to the first letters and the induction
+    hypothesis to the tails.
+\end{proof}
+
+\begin{theorem}[Finite-size operators under physical reindexing]
+    \label{thm:mpu_finite_size_physical_reindexing}
+    \lean{MPOTensor.mpo_reindexPhysical}
+    \leanok
+    \uses{def:mpu_physical_reindexing,def:mpo_family}
+    At every length $N$, the sitewise configuration bijection identifies
+    \begin{align}
+        (e^*\mathcal U)^{(N)}&\cong\mathcal U^{(N)}.
+    \end{align}
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:mpu_physical_reindexing,def:mpo_family,
+        thm:mpu_eval_word_physical_reindexing}
+    Apply the word identity to every pair of configurations and take the
+    virtual trace. This is simultaneous row and column reindexing by $e_*$.
+\end{proof}
 
 \begin{theorem}[Double layer under physical reindexing]
     \label{thm:mpu_double_layer_physical_reindexing}
@@ -1360,6 +1399,52 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
     \end{align}
 \end{definition}
 
+\begin{theorem}[Source cuts under physical reindexing]
+    \label{thm:mpu_source_cuts_physical_reindexing}
+    \lean{MPOTensor.sourceCutM₁_reindexPhysical,
+        MPOTensor.sourceCutM₂_reindexPhysical}
+    \leanok
+    \uses{def:mpu_physical_reindexing,def:mpu_source_matrix_one,
+        def:mpu_source_matrix_two}
+    A bijective relabeling of the physical basis simultaneously relabels the
+    physical component of every source-cut row and column. Hence
+    \begin{align}
+        M_1(e^*\mathcal U)&\cong M_1(\mathcal U),
+        &M_2(e^*\mathcal U)&\cong M_2(\mathcal U),
+    \end{align}
+    with the right and left orientations unchanged.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:mpu_physical_reindexing,def:mpu_source_matrix_one,
+        def:mpu_source_matrix_two}
+    Evaluate each cut after relabeling. In $M_1$, the lower physical index lies
+    in the row and the upper physical index lies in the column; in $M_2$ these
+    roles are exchanged. Applying $e$ to both entries gives the two displayed
+    row-and-column equivalences.
+\end{proof}
+
+\begin{theorem}[Source ranks under physical reindexing]
+    \label{thm:mpu_source_ranks_physical_reindexing}
+    \lean{MPOTensor.rightRank_reindexPhysical,
+        MPOTensor.leftRank_reindexPhysical}
+    \leanok
+    \uses{def:mpu_physical_reindexing,def:mpu_right_rank,
+        def:mpu_left_rank}
+    Bijective physical relabeling preserves both source ranks:
+    \begin{align}
+        r(e^*\mathcal U)&=r(\mathcal U),
+        &\ell(e^*\mathcal U)&=\ell(\mathcal U).
+    \end{align}
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpu_source_cuts_physical_reindexing,
+        def:mpu_right_rank,def:mpu_left_rank}
+    Matrix rank is unchanged by bijective row and column relabelings. Apply this
+    fact to the two source-cut identities.
+\end{proof}
+
 \begin{definition}[Independent tensor product of matrix product operator tensors]
     \label{def:mpu_independent_tensor_product}
     \lean{MPOTensor.tensorProduct, MPOTensor.tensorProduct_apply,
@@ -1377,6 +1462,42 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
     A product-valued physical configuration splits sitewise into one
     configuration for $\mathcal U$ and one for $\mathcal V$.
 \end{definition}
+
+\begin{definition}[Blocked product-alphabet equivalence]
+    \label{def:mpu_tensor_product_block_equiv}
+    \lean{MPOTensor.tensorProductBlockEquiv}
+    \leanok
+    \uses{def:mpdo_positive_physical_blocking}
+    A blocked word of $L$ product letters separates canonically into two
+    blocked words:
+    \begin{align}
+        \Fin{(de)^L}&\simeq\Fin{d^L e^L}.
+    \end{align}
+    The map decodes the length-$L$ word, splits every letter into its $d$ and
+    $e$ components, and re-encodes the two resulting words.
+\end{definition}
+
+\begin{theorem}[Decoding the blocked product alphabet]
+    \label{thm:mpu_tensor_product_block_decoding}
+    \lean{MPOTensor.decodeBlock_tensorProductBlockEquiv_divNat,
+        MPOTensor.decodeBlock_tensorProductBlockEquiv_modNat}
+    \leanok
+    \uses{def:mpu_tensor_product_block_equiv}
+    If $q$ denotes the blocked product-alphabet equivalence, then each site
+    $s$ satisfies
+    \begin{align}
+        \operatorname{dec}_d(q(I)_{1},s)
+            &=\operatorname{dec}_{de}(I,s)_{1},\\
+        \operatorname{dec}_e(q(I)_{2},s)
+            &=\operatorname{dec}_{de}(I,s)_{2}.
+    \end{align}
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:mpu_tensor_product_block_equiv}
+    Each equality follows by composing the inverse product encoding at every
+    site with the corresponding projection.
+\end{proof}
 
 \begin{theorem}[Finite-size operator of an independent tensor product]
     \label{thm:mpu_finite_tensor_product}
@@ -1406,8 +1527,7 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
     \label{thm:mpu_tensor_product}
     \lean{MPOTensor.IsMPU.tensorProduct}
     \leanok
-    \uses{def:mpu,def:mpu_independent_tensor_product,
-        thm:mpu_finite_tensor_product}
+    \uses{def:mpu,def:mpu_independent_tensor_product}
     The independent tensor product of two matrix product unitary tensors is a
     matrix product unitary tensor. This is the tensoring operation in the proof
     of \cite[Theorem~IV.3(ii)]{Cirac2017MPU}.
@@ -1425,6 +1545,37 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
          =\Id\otimes\Id=\Id.
     \end{align}
     Simultaneous reindexing preserves this unitarity equation.
+\end{proof}
+
+\begin{theorem}[Blocking an independent tensor product]
+    \label{thm:mpu_block_tensor_product}
+    \lean{MPOTensor.blockTensor_tensorProduct}
+    \leanok
+    \uses{def:mpdo_positive_physical_blocking,
+        def:mpu_physical_reindexing,def:mpu_independent_tensor_product,
+        def:mpu_tensor_product_block_equiv}
+    For every blocking length $L$, separating each blocked product letter by
+    the canonical equivalence $q$ gives the exact identity
+    \begin{align}
+        (\mathcal U\boxtimes\mathcal V)^{[L]}
+        &=q^*\bigl(\mathcal U^{[L]}\boxtimes\mathcal V^{[L]}\bigr).
+    \end{align}
+    The ordering of the two component words agrees with the independent
+    tensor-product convention.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:mpdo_positive_physical_blocking,
+        def:mpu_physical_reindexing,def:mpu_independent_tensor_product,
+        thm:mpu_tensor_product_block_decoding}
+    Evaluate both sides on blocked ket and bra letters. Word multiplication of
+    local Kronecker products gives
+    \begin{align}
+        (\mathcal U\boxtimes\mathcal V)[I,J]
+        &=\mathcal U[I_1,J_1]\otimes\mathcal V[I_2,J_2].
+    \end{align}
+    The two decoding identities identify $I_1,I_2$ and $J_1,J_2$ with the
+    corresponding letters of $q(I)$ and $q(J)$.
 \end{proof}
 
 \begin{definition}[Source-cut shuffle for an independent tensor product]
@@ -1471,9 +1622,8 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
     \lean{MPOTensor.rightRank_tensorProduct,
         MPOTensor.leftRank_tensorProduct}
     \leanok
-    \uses{def:mpu_independent_tensor_product,
-        thm:mpu_tensor_product_source_cuts,def:mpu_right_rank,
-        def:mpu_left_rank,thm:mpu_kronecker_rank}
+    \uses{def:mpu_independent_tensor_product,def:mpu_right_rank,
+        def:mpu_left_rank}
     The right and left source-cut ranks are multiplicative:
     \begin{align}
         r(\mathcal U\boxtimes\mathcal V)
