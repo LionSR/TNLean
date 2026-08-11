@@ -823,6 +823,7 @@ the remaining sites unchanged.
 \begin{proof}
     \leanok
     \uses{def:cpsv_fibonacci_transition_matrix,
+      def:cpsv_fibonacci_boundary_counts,
       def:cpsv_fibonacci_periodic_count}
     Expand $B^{N+2}=B^{N+1}B$ and $B^{N+1}=B^NB$. Substitution of
     $B=\left(\begin{smallmatrix}1&1\\1&2\end{smallmatrix}\right)$ into the
@@ -864,6 +865,7 @@ the remaining sites unchanged.
 \begin{proof}
     \leanok
     \uses{def:cpsv_fibonacci_transition_matrix,
+      def:cpsv_fibonacci_boundary_counts,
       def:cpsv_fibonacci_periodic_count,
       thm:cpsv_fibonacci_periodic_count_recurrence}
     Use two-step induction on $N$. The cases $N=0$ and $N=1$ follow by direct
@@ -926,9 +928,9 @@ the remaining sites unchanged.
          =\tau_+^{2N}+\tau_-^{2N}.
         \notag
     \end{align}
-    Theorem~\ref{thm:cpsv_fibonacci_periodic_count_golden_ratio} proves the
-    final equality for transition counts. The identification of $a_N$ with the
-    periodic operator rank is not yet established. This is
+    Theorem~\ref{thm:cpsv_fibonacci_periodic_count_golden_ratio} gives the
+    final equality for transition counts. Thus the operator-rank formula reduces
+    to the identity $\operatorname{rank}\rho^{(N)}(A)=a_N$. This is
     \cite[Appendix~D, lines~2122--2125 and
     2157--2176]{Cirac2016MPDO_arXiv}.
 \end{theorem}
