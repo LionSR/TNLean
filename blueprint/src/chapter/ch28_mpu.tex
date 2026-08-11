@@ -4749,10 +4749,11 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     def:equivalent-symmetry,def:mpu_reduced_full_support_source_datum,
     def:mpu_admissible_equivalence_datum}
   Let two time-reversal-invariant MPUs be compared by an admissible symmetry
-  path. For each endpoint, suppose the one-site tensor, the two-site tensor,
-  and the physical-adjoint comparisons of both tensors are simple and carry
-  their own reduced full-support source data. Then admissible strict
-  equivalence requires equality of both $\sigma^{(1)}$ and $\sigma^{(2)}$.
+  path. For each endpoint, suppose the tensors $\mathcal U$, $\mathcal U_2$,
+  and $\mathcal U_4$, together with the physical-adjoint comparison tensors
+  $\mathcal U_2^\sharp$ and $\mathcal U_4^\sharp$, are simple and carry their
+  own reduced full-support source data. Then admissible strict equivalence
+  requires equality of both $\sigma^{(1)}$ and $\sigma^{(2)}$.
   Admissible equivalence after blocking and adding ancillas requires equality
   of $\sigma^{(2)}$ for endpoint and comparison tensors carrying the same
   data after those operations.
@@ -4776,18 +4777,18 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
   \label{prop:dagger-mps-class-and-mpu-class-equal}
   \notready
   \discussion{5714}
-  % **Scope restriction (two-site blocked source data):** the two-site blocked
-  % tensor carries the datum required by Proposition~\ref{PropChiral}.
+  % **Scope restriction (one-, two-, and four-site source data):** the tensors
+  % used to define both $\sigma^{(1)}$ and $\sigma^{(2)}$ carry their own data.
   % Documented in docs/paper-gaps/mpu_canonical_form_full_support.tex.
   \uses{PropChiral,prop:sigma1-and-sigma2-equal,
     def:mpu_reduced_full_support_source_datum,
     def:mpu_admissible_equivalence_datum}
   Let an MPU in admissible standard form be invariant under time reversal.
-  Suppose its one-site tensor $\mathcal U$, its actual two-site block
-  $\mathcal U_2$, and the physical-adjoint comparison tensors required at one
-  and two sites are simple and each carries its own reduced full-support source
-  datum. Then the MPS sign $G\overline G=\pm\Id$ equals the sign
-  $\sigma^{(2)}$.
+  Suppose $\mathcal U$, $\mathcal U_2$, and $\mathcal U_4$, together with the
+  physical-adjoint comparison tensors $\mathcal U_2^\sharp$ and
+  $\mathcal U_4^\sharp$, are simple and each carries its own reduced
+  full-support source datum. Then the MPS sign $G\overline G=\pm\Id$ equals
+  the sign $\sigma^{(2)}$.
 \end{proposition}
 
 \subsection{Symmetry examples}
@@ -4824,17 +4825,17 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
   \label{example:czx}
   \notready
   \discussion{5715}
-  % **Scope restriction (blocked CZX data):** the one-site and two-site tensors
-  % used to define the two signs carry reduced full-support source data.
+  % **Scope restriction (blocked CZX data):** the one-, two-, and four-site
+  % tensors used to define the two signs carry reduced full-support source data.
   % Documented in docs/paper-gaps/mpu_canonical_form_full_support.tex.
   \uses{prop:sigma1-and-sigma2-equal,
     prop:dagger-mps-class-and-mpu-class-equal,
     def:mpu_reduced_full_support_source_datum,
     def:mpu_admissible_equivalence_datum}
-  Suppose the one-site CZX tensor, its actual two-site block, and the
-  physical-adjoint comparison tensors required at one and two sites are simple
-  and each carries its own reduced full-support source datum. The CZX MPU is
-  defined by
+  Suppose the CZX tensors $\mathcal U$, $\mathcal U_2$, and $\mathcal U_4$,
+  together with the physical-adjoint comparison tensors
+  $\mathcal U_2^\sharp$ and $\mathcal U_4^\sharp$, are simple and each carries
+  its own reduced full-support source datum. The CZX MPU is defined by
   \begin{align}
     u&=CZ(\sigma_x\otimes\sigma_x),&v&=CZ,\\
     CZ&=\operatorname{diag}(1,1,1,-1).
@@ -4858,9 +4859,10 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
   \uses{example:czx,prop:sigma1-and-sigma2-equal,
     def:mpu_reduced_full_support_source_datum,
     def:mpu_admissible_equivalence_datum}
-  For each displayed example, suppose its one-site tensor, its actual two-site
-  block, and the physical-adjoint comparison tensors required at one and two
-  sites are simple and each carries its own reduced full-support source datum.
+  For each displayed example, suppose the tensors $\mathcal U$,
+  $\mathcal U_2$, and $\mathcal U_4$, together with the physical-adjoint
+  comparison tensors $\mathcal U_2^\sharp$ and $\mathcal U_4^\sharp$, are
+  simple and each carries its own reduced full-support source datum.
   The standard forms
   \begin{align}
     u&=v=\Id,\\

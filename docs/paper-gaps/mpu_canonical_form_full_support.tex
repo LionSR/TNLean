@@ -110,9 +110,10 @@ restriction of the current formal construction, not a
 logical consequence of invertibility of the compressed source metric or of
 the bare MPU predicate.
 
-The supported formal route has two bond-dimension branches. If $D=1$, the
-theorem \leanid{MPOTensor.IsMPU.normalized_transfer_matrix_eq_one_fin_one}
-supplies
+Let $(\Phi\rvert$ denote the vectorized identity bra
+$\operatorname{vec}(\Id_D)^{\mathsf T}$. The supported formal route has two
+bond-dimension branches. If $D=1$, the theorem
+\leanid{MPOTensor.IsMPU.normalized_transfer_matrix_eq_one_fin_one} supplies
 \begin{align}
   J&=1,& \rho&=\Id_1,& E^J&=\lvert\rho)(\Phi\rvert.
 \end{align}
@@ -134,9 +135,8 @@ and $\rho$, and the identities
   (\Phi\rvert E&=(\Phi\rvert,\\
   E^J&=\lvert\rho)(\Phi\rvert,&J&=D^2-1.
 \end{align}
-In both branches, $(\Phi\rvert$ is the vectorized identity bra and the
-positive trace-one matrix $\rho$ is the source weight used to define the
-factors and the operators $u$ and $v$.
+In both branches, the positive trace-one matrix $\rho$ is the source weight
+used to define the factors and the operators $u$ and $v$.
 
 The explicit reduced-CFII and full-active-support hypotheses resolve the
 ambient-positivity question tracked by issue~\#5855. They do not prove the two
@@ -217,12 +217,14 @@ admissible one.
 The source proofs of the time-reversal and transposition characterizations
 apply the fundamental theorem after blocking two sites. Every such statement
 therefore supplies source data for the actual one-site endpoint tensor, its
-actual two-site block, and the physical-adjoint or transposed comparison
-tensors used at one and two sites. The blocking-parity statements and all
-later time-reversal descendants and examples repeat these hypotheses for every
-endpoint and comparison tensor after blocking or adjoining ancillas. Along a
-symmetry path these data vary continuously. No preservation under any of these
-operations is asserted.
+actual two-site block, and the physical-adjoint or transposed comparison tensor
+of that block. Defining both $\sigma^{(1)}$ and $\sigma^{(2)}$ requires source
+data for $\mathcal U$, $\mathcal U_2$, $\mathcal U_2^\sharp$,
+$\mathcal U_4$, and $\mathcal U_4^\sharp$. The blocking-parity statements and
+all later time-reversal descendants and examples repeat these hypotheses for
+every endpoint and comparison tensor after blocking or adjoining ancillas.
+Along a symmetry path these data vary continuously. No preservation under any
+of these operations is asserted.
 
 For bond dimension one, the normalized transfer matrix supplies the source
 pair directly. For bond dimension greater than one, no current result
