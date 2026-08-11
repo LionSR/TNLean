@@ -906,12 +906,11 @@ give $O_{YX}(N)\to 0$, a contradiction.
     \label{lem:prepared_phase_equiv_fixed_scalar_gauge}
     \lean{MPSTensor.exists_gauge_choose_MPVBlockPhaseEquiv_of_tp_primitive_irr}
     \leanok
-    \uses{thm:prepared_phase_equiv_gauge,
-        thm:peripheral_primitive_irreducible_overlap_one,
-        thm:gauge_phase_mpv_scaling}
-    Let $X$ and $Y$ satisfy the hypotheses of
-    Theorem~\ref{thm:prepared_phase_equiv_gauge}. Fix
-    $\zeta\in\C\setminus\{0\}$ and suppose that, for every positive length $N$
+    \uses{def:mpv_block_phase_equiv, def:gauge_phase_equiv,
+        def:irreducible_tensor, def:tp_kraus, def:primitive_channel}
+    Let $X$ and $Y$ be trace-preserving, primitive, irreducible NTs of positive
+    bond dimensions. Fix $\zeta\in\C\setminus\{0\}$ and suppose that, for every
+    positive length $N$
     and every physical word $\sigma$,
     \begin{align}
         V^{(N)}(Y)_\sigma
@@ -1053,11 +1052,29 @@ give $O_{YX}(N)\to 0$, a contradiction.
     dimensions gives (\ref{eq:prepared_exact_total_dim}).
 \end{proof}
 
+\begin{lemma}[Positive-length MPVs under coisometric reconstruction]%
+    \label{lem:coisometry_reconstruction_same_mpv_pos}
+    \lean{MPSTensor.sameMPV₂Pos_of_coisometry_reconstruction}
+    \leanok
+    \uses{def:same_mpv2_pos}
+    Let $A$ and $B$ be MPS tensors, possibly with different bond dimensions.
+    Suppose that $U$ satisfies $UU^\dagger=\Id$ and
+    $A^i=U^\dagger B^iU$ for every physical index $i$. Then $A$ and $B$
+    generate the same matrix product vectors at every positive length.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{def:mpv}
+    Multiply the reconstruction identities around a positive-length cycle.
+    Each adjacent pair $UU^\dagger$ cancels, and cyclicity of the trace removes
+    the remaining outer factors.
+\end{proof}
+
 \begin{theorem}[Active-sector BNT form of normalized CPSV canonical data]%
     \label{thm:cpsv_active_sector_bnt}
     \lean{MPSTensor.CPSVCanonicalFormData.exists_active_isBNTCanonicalForm}
     \leanok
-    \uses{thm:cpsv_active_sector_bnt_exact, thm:gauge_invariance}
+    \uses{def:cpsv_canonical_form, def:sector_bnt_cf, def:same_mpv2_pos}
     Let $A$ have CPSV canonical-form data satisfying the separate normalization
     condition~(\ref{eq:cpsv_weight_normalization}), and assume $A\ne0$. Put
     $K_{\mathrm{act}}=\{k:\mu_k\ne0\}$. Then there is a BNT canonical-form
@@ -1075,13 +1092,15 @@ give $O_{YX}(N)\to 0$, a contradiction.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:cpsv_active_sector_bnt_exact, thm:gauge_invariance}
+    \uses{thm:cpsv_active_sector_bnt_exact,
+        lem:coisometry_reconstruction_same_mpv_pos,
+        thm:gauge_invariance}
     Apply Theorem~\ref{thm:cpsv_active_sector_bnt_exact}. Its reconstruction
     writes $A^i=U^\dagger B^iU$, where $UU^\dagger=\Id$ and
-    $B^i=XP^iX^{-1}$. In every positive-length cyclic contraction, the adjacent
-    factors $UU^\dagger$ cancel, so $A$ and $B$ generate the same matrix product
-    vectors. Theorem~\ref{thm:gauge_invariance} gives the same conclusion for
-    $B$ and $P$. Transitivity yields $\mc{V}^+(A)=\mc{V}^+(P)$, while the
+    $B^i=XP^iX^{-1}$. Lemma~\ref{lem:coisometry_reconstruction_same_mpv_pos}
+    shows that $A$ and $B$ generate the same matrix product vectors at every
+    positive length. Theorem~\ref{thm:gauge_invariance} gives the same conclusion
+    for $B$ and $P$. Transitivity yields $\mc{V}^+(A)=\mc{V}^+(P)$, while the
     dimension identity is already part of the exact reconstruction theorem.
 \end{proof}
 
