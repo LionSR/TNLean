@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.Channel.PerronFrobenius.Existence
+import TNLean.MPS.Core.TransferChannel
 
 /-!
 # Shared Kraus setup for irreducible CP maps
@@ -50,11 +51,8 @@ theorem trace_mul_transferMap_adjoint
     (hE_eq : E = MPSTensor.transferMap (d := n) (D := D) K)
     (ρ X : Matrix (Fin D) (Fin D) ℂ) :
     Matrix.trace (ρ * E X) =
-      Matrix.trace (MPSTensor.transferMap (d := n) (D := D) (fun i => (K i)ᴴ) ρ * X) := by
-  rw [hE_eq]
-  simpa only [Kraus.map, Kraus.adjointMap, MPSTensor.transferMap_apply,
-    Matrix.conjTranspose_conjTranspose] using
-      (Kraus.trace_mul_map_eq_trace_adjointMap_mul (K := K) ρ X)
+      Matrix.trace (MPSTensor.transferMap (d := n) (D := D) (fun i => (K i)ᴴ) ρ * X) :=
+  _root_.trace_mul_transferMap_adjoint K hE_eq ρ X
 
 end Kraus
 
