@@ -1769,6 +1769,36 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
     displayed entry sum.
 \end{proof}
 
+\begin{theorem}[Rotated second source-cut Gram]
+    \label{thm:mpu_source_y_two_rotated_gram}
+    \lean{MPOTensor.sourceY₂_gram_eq_rotated_sourceCutM₂_gram}
+    \leanok
+    \uses{def:mpu_source_matrix_two,def:mpu_weighted_source_factors}
+    For every tensor $\mathcal U$, physical indices $p,q$, and auxiliary
+    indices $a,b$,
+    \begin{align}
+        \sum_{\beta,z}
+          \overline{\mathcal U^z_{p,\beta,a}}\,
+          \mathcal U^z_{q,\beta,b}
+        &=\sum_l \overline{(Y_2)_{l,(p,a)}}(Y_2)_{l,(q,b)}.
+    \end{align}
+    Thus the factor indexed by $(p,a)$ is starred and the factor indexed by
+    $(q,b)$ is unstarred. This is the second-cut rotation used in
+    \cite[Theorem~III.8, Section~III.B, equations~(31)--(32)]{Cirac2017MPU}.
+    The identity requires no Matrix Product Unitary, dimension, positivity, or
+    simple-tensor hypothesis.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:mpu_source_factorization_entries,
+        thm:mpu_source_factor_normalizations}
+    Substitute the entry factorization $M_2=X_2Y_2$ into the left-hand side
+    and reorder the finite sums. The contraction of the two $X_2$ factors is
+    $X_2^\dagger X_2=\Id_\ell$, so the two source indices coincide and the
+    remaining sum is the displayed Gram matrix of $Y_2$.
+\end{proof}
+
 \begin{theorem}[Recovery of the right source factors]
     \label{thm:mpu_source_factor_recovery}
     \lean{MPOTensor.sourceY₁_eq_sourceX₁_conjTranspose_mul_weight_mul_sourceCutM₁,
@@ -2543,7 +2573,7 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
         Y^\dagger(v^\dagger v)Y&=Y^\dagger Y.
     \end{align}
     These are the tensorized factors surrounding $v^\dagger v$ in
-    \cite[Section~III, equation \texttt{vUnitary}]{Cirac2017MPU}.
+    \cite[Theorem~III.8, Section~III.B, equations~(31)--(32)]{Cirac2017MPU}.
 \end{definition}
 
 \begin{theorem}[Tensorized source right inverse]
