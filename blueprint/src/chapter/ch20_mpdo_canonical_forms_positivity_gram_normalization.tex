@@ -818,7 +818,7 @@
     \label{thm:grouped_sector_gram_scalar_of_dressing}
     \lean{MPOTensor.grouped_sector_gram_eq_pos_smul_one_of_dressing}
     \leanok
-    \uses{thm:grouped_sector_gram_conj_of_dressing}
+    \uses{def:normal, thm:grouped_sector_gram_conj_of_dressing}
     Under the hypotheses of
     Theorem~\ref{thm:grouped_sector_gram_conj_of_dressing}, suppose in
     addition that every representative $A_{\alpha,q}$ is normal and has
@@ -928,7 +928,6 @@
     \label{def:normalized_grouped_sector_map}
     \lean{MPOTensor.normalizedGroupedSectorMap}
     \leanok
-    \uses{def:mpv_phase_class_data}
     After identifying the bond space of a copy with that of its representative,
     define its normalized physical map by
     \begin{align}
