@@ -157,11 +157,11 @@
     $U_AU_A^\dagger=U_BU_B^\dagger=\Id_n$ and, for every physical index~$i$,
     \begin{align}
         A^i
-         & =U_A^\dagger C^iU_A,
-        \notag\\
+         & =U_A^\dagger C^iU_A.
+    \end{align}
+    \begin{align}
         B^i
          & =U_B^\dagger E^iU_B.
-        \notag
     \end{align}
     If $C$ and $E$ are gauge equivalent, then $A$ and $B$ are gauge equivalent.
     % Provenance: project-derived cross-coisometry theorem for issue 6127.
@@ -171,27 +171,29 @@
 
 \begin{proof}
     \leanok
-    \uses{def:gauge_equiv}
+    \uses{def:gauge_equiv, lem:exists_unitary_mul_eq_of_gram_eq,
+        def:unitary_gl}
     Choose $X\in\GL(n,\C)$ such that, for every physical index~$i$,
     $E^i=XC^iX^{-1}$. Equality of the
     Gram matrices $U_AU_A^\dagger$ and $U_BU_B^\dagger$ gives a unitary
     $W\in\C^{D\times D}$ with
     \begin{align}
         U_B^\dagger
-         & =WU_A^\dagger,
-        \notag\\
+         & =WU_A^\dagger.
+    \end{align}
+    \begin{align}
         U_B
          & =U_AW^\dagger.
-        \notag
     \end{align}
     Extend the retained gauge through $U_A$ by
     \begin{align}
         G
-         & =U_A^\dagger XU_A+(\Id_D-U_A^\dagger U_A),
-        \notag\\
+         & =U_A^\dagger XU_A+(\Id_D-U_A^\dagger U_A).
+    \end{align}
+    Its inverse is
+    \begin{align}
         G^{-1}
          & =U_A^\dagger X^{-1}U_A+(\Id_D-U_A^\dagger U_A).
-        \notag
     \end{align}
     The coisometry identity gives
     $GU_A^\dagger=U_A^\dagger X$ and
