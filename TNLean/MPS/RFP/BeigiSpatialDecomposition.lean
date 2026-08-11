@@ -6,7 +6,7 @@ Authors: TNLean contributors
 import TNLean.Algebra.CommutingOverlappingDecomp
 import TNLean.MPS.ParentHamiltonian.Commuting
 import TNLean.MPS.ParentHamiltonian.Martingale.Transport
-import TNLean.MPS.RFP.AppendixBCommutation
+import TNLean.MPS.RFP.PairLiftCoordinates
 
 /-!
 # Spatial decomposition of the two-site parent interaction
