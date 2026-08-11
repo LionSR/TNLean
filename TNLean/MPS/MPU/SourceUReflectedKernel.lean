@@ -13,7 +13,7 @@ import TNLean.MPS.MPU.SuppliedWitnessReblocking
 This file exposes the doubled-bond reflection and an independent spatial
 reindexing of blocked words, then transports the supplied transfer witnesses
 to the output-layer insertion used by the sandwiched open-tail coefficient in
-arXiv:1703.09188, Lemma III.5 and its proof in Section III.B
+arXiv:1703.09188, Lemma III.7 and its proof in Section III.B
 (lines 536--557).  The transfer proof uses the doubled-bond swap; the blocked-word
 reversal records a separate spatial coordinate and is not used in that proof.
 The final sandwiched finite-sum collapse is separate from these transport
@@ -30,7 +30,7 @@ variable {d D : ℕ}
 /-- Reverse the word encoded by a blocked physical index.
 
 This is an independent spatial reindexing coordinate for the graphical
-reflection in arXiv:1703.09188, Lemma III.5 and its proof in Section III.B,
+reflection in arXiv:1703.09188, Lemma III.7 and its proof in Section III.B,
 lines 536--557.
 It is distinct from the reversal of two blocked letters caused by conjugate
 transposition in the supplied-contraction transport below. -/

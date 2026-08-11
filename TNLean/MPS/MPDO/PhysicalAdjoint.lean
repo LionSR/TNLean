@@ -35,7 +35,7 @@ For `ab = (a, b)`, this is `bondPairSwap ab = (b, a)`.
 
 This is the bond-index exchange under adjunction in the first diagram of the
 proof of Proposition 4.13 of arXiv:1606.00608, lines 1909--1913, and the
-virtual-pair reflection used in the proof of Lemma III.5 in Section III.B of
+virtual-pair reflection used in the proof of Lemma III.7 in Section III.B of
 arXiv:1703.09188, lines 536--557. -/
 def bondPairSwap (ab : Fin (D * D)) : Fin (D * D) :=
   finProdFinEquiv (ab.modNat, ab.divNat)

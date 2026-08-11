@@ -2290,8 +2290,7 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
 
 \begin{definition}[Reflected blocked-transfer coordinate maps]
     \label{def:mpu_reflected_blocked_transfer_coordinates}
-    \lean{MPOTensor.bondPairSwap,
-        MPOTensor.bondPairSwapEquiv,
+    \lean{MPOTensor.bondPairSwapEquiv,
         MPOTensor.blockWordReverseEquiv}
     \leanok
     The doubled-bond coordinate reflection exchanges the two virtual factors,
@@ -2303,7 +2302,7 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
       (i_0,\ldots,i_{K-1})&\longmapsto(i_{K-1},\ldots,i_0).
     \end{align}
     These are support coordinates for the proof of
-    \cite[Lemma~III.5 in Section~III.B]{Cirac2017MPU}, rather than separate
+    \cite[Lemma~III.7 in Section~III.B]{Cirac2017MPU}, rather than separate
     definitions printed there.  The blocked-word reversal is not used in the
     transfer transport below; conjugate transposition there reverses only the
     order of the two blocked letters.
@@ -2311,18 +2310,16 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
 
 \begin{theorem}[Reflected blocked-transfer coordinate identities]
     \label{thm:mpu_reflected_blocked_transfer_coordinate_identities}
-    \lean{MPOTensor.bondPairSwap_finProdFinEquiv,
-        MPOTensor.bondPairSwap_involutive,
-        MPOTensor.bondPairSwapEquiv_apply,
+    \lean{MPOTensor.bondPairSwapEquiv_apply,
         MPOTensor.bondPairSwapEquiv_symm,
         MPOTensor.decodeBlock_blockWordReverseEquiv,
         MPOTensor.wordOfBlock_blockWordReverseEquiv,
         MPOTensor.blockWordReverseEquiv_involutive}
     \leanok
     \uses{def:mpu_reflected_blocked_transfer_coordinates}
-    The doubled-bond swap and the blocked-word reversal are involutions.  The
-    latter sends the letter in position $k$ to the letter in position $K-1-k$
-    and reverses the encoded word.
+    The doubled-bond equivalence and the blocked-word reversal are
+    involutions.  The latter sends the letter in position $k$ to the letter in
+    position $K-1-k$ and reverses the encoded word.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -2346,7 +2343,7 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
     This identity requires neither the MPU property nor a positivity or
     positive-dimension hypothesis.  It is a coordinate identity supporting
     the calculation in the proof of
-    \cite[Lemma~III.5 in Section~III.B]{Cirac2017MPU}, not a separate theorem
+    \cite[Lemma~III.7 in Section~III.B]{Cirac2017MPU}, not a separate theorem
     printed there.
 \end{theorem}
 
@@ -2455,7 +2452,7 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
     order of the two blocked letters.  Overlapping-window reblocking preserves
     these witnesses through the two additional sites.  These contractions are
     support identities for the graphical proof of
-    \cite[Lemma~III.5 and its proof in Section~III.B]{Cirac2017MPU}; they
+    \cite[Lemma~III.7 and its proof in Section~III.B]{Cirac2017MPU}; they
     are not asserted as a separate printed theorem of that paper.
 \end{proof}
 
