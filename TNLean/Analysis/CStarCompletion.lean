@@ -19,7 +19,8 @@ both are imported together.
 
 ## Main definitions
 
-* `UniformSpace.Completion.toComplAlgHom` — the canonical algebra homomorphism into the completion.
+* `UniformSpace.Completion.toComplAlgHom` — the canonical algebra homomorphism into the
+  completion.
 * `UniformSpace.Completion.toComplStarAlgHom` — its star-preserving version.
 
 ## Main results
@@ -31,12 +32,19 @@ noncomputable section
 
 namespace UniformSpace.Completion
 
-variable {A : Type*} [NormedRing A] [StarRing A] [CStarRing A]
+variable {A : Type*} [NormedRing A] [StarRing A]
 
-/-- The involution on the completion is the uniformly continuous extension of the original
-involution. -/
+/-- The involution on the completion is defined by applying the completion functor to the
+original involution. For a normed star group, `coe_star` identifies it with the continuous
+extension of the original involution. -/
 instance instStar : Star (Completion A) where
   star := Completion.map star
+
+section NormedStar
+
+variable [normedStar : NormedStarGroup A]
+
+include normedStar
 
 /-- The canonical inclusion into the completion preserves the involution. -/
 @[simp, norm_cast]
@@ -62,7 +70,13 @@ instance instStarRing : StarRing (Completion A) where
     | hp => exact isClosed_eq (by fun_prop) (by fun_prop)
     | ih a b => simp only [← coe_add, ← coe_star, star_add]
 
-/-- The C-star inequality passes from a normed star ring to its completion. -/
+end NormedStar
+
+section CStar
+
+variable [CStarRing A]
+
+/-- The C-star inequality passes to the norm completion. -/
 instance instCStarRing : CStarRing (Completion A) where
   norm_mul_self_le x := by
     induction x using Completion.induction_on with
@@ -71,9 +85,13 @@ instance instCStarRing : CStarRing (Completion A) where
         simpa only [← coe_star, ← coe_mul, norm_coe] using
           (CStarRing.norm_mul_self_le (x := a))
 
+end CStar
+
 section Complex
 
-variable [NormedAlgebra ℂ A] [StarModule ℂ A]
+variable [normedStar : NormedStarGroup A] [NormedAlgebra ℂ A] [StarModule ℂ A]
+
+include normedStar
 
 /-- The completed involution is conjugate-linear over the complex numbers. -/
 instance instStarModule : StarModule ℂ (Completion A) where
@@ -84,10 +102,6 @@ instance instStarModule : StarModule ℂ (Completion A) where
           (continuous_star.comp (ContinuousConstSMul.continuous_const_smul c))
           ((ContinuousConstSMul.continuous_const_smul (star c)).comp continuous_star)
     | ih a => simp only [← coe_smul, ← coe_star, star_smul]
-
-/-- The norm completion of a complex normed C-star algebra is a C-star algebra. -/
-instance instCStarAlgebra : CStarAlgebra (Completion A) where
-  norm_smul_le := norm_smul_le
 
 /-- The canonical complex algebra homomorphism into the norm completion. -/
 def toComplAlgHom : A →ₐ[ℂ] Completion A where
@@ -113,5 +127,15 @@ theorem denseRange_toComplStarAlgHom :
   Completion.denseRange_coe
 
 end Complex
+
+section ComplexCStar
+
+variable [CStarRing A] [NormedAlgebra ℂ A] [StarModule ℂ A]
+
+/-- The norm completion of a complex normed C-star algebra is a C-star algebra. -/
+instance instCStarAlgebra : CStarAlgebra (Completion A) where
+  norm_smul_le := norm_smul_le
+
+end ComplexCStar
 
 end UniformSpace.Completion

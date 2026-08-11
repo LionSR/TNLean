@@ -25,7 +25,8 @@ No single finite-region algebra has dense image in the quasi-local algebra.
 
 * `SpinChain.quasiLocalObservable_isometry` — finite-region maps preserve distance.
 * `SpinChain.denseRange_algebraicToQuasiLocal` — algebraic local observables are dense.
-* `SpinChain.dense_iUnion_range_quasiLocalObservable` — the union over all finite regions is dense.
+* `SpinChain.dense_iUnion_range_quasiLocalObservable` — all finite-region images have dense
+  union.
 
 ## References
 
