@@ -5,7 +5,6 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.ParentHamiltonian.ChainGroundSpace
 import TNLean.MPS.ParentHamiltonian.BoundaryClosing
-import TNLean.MPS.ParentHamiltonian.BoundaryClosingStripping
 import TNLean.MPS.ParentHamiltonian.BoundaryClosingAuxiliary
 import TNLean.MPS.ParentHamiltonian.ExtendRight
 import TNLean.MPS.ParentHamiltonian.Nonvanishing
