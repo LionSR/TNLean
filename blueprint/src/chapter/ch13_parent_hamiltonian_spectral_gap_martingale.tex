@@ -1220,14 +1220,12 @@ norm estimate is derived here.
     \lean{MPSTensor.c3CenteredProjectorResidualES_norm_le}
     \leanok
     \uses{def:c3_centered_physical_sandwich,
-        thm:c3_projector_gram_error_telescope,
-        thm:c3_centered_overlap_factorization_geometric,
-        thm:c3_correction_factorizations,
-        thm:tail_spectator_pseudoinverse_bound,
-        thm:left_spectator_pseudoinverse_bound}
+        def:c3_correction_sandwiches,
+        def:open_chain_ground_subspaces_es}
     Whenever the three finite Grams are invertible, the common-ambient defect is
     \begin{align}
-      P^{\mathrm{tail}}_{K,l+1}P^{\mathrm{left}}_{K+l}-P_{G_{K+l+1}(A)}
+      P^{\mathrm{tail}}_{K,l+1}P^{\mathrm{left}}_{K+l}
+        -P_{\mathcal G_{K+l+1}^{\mathrm{ES}}(A)}
       &=\widehat R_{K,l}-Q_1-Q_2-Q_3,
     \end{align}
     and
@@ -1241,8 +1239,7 @@ norm estimate is derived here.
 \begin{proof}
     \leanok
     \uses{thm:c3_projector_gram_error_telescope,
-        thm:c3_centered_overlap_factorization_geometric,
-        thm:c3_correction_factorizations,
+        thm:spectator_boundary_direct_sum_gram,
         thm:tail_spectator_pseudoinverse_bound,
         thm:left_spectator_pseudoinverse_bound}
     Distribute the two exterior pseudoinverse factors across the exact four-term
@@ -1254,26 +1251,18 @@ norm estimate is derived here.
 % This theorem is a TNLean reconstruction sufficient for condition C3.  It
 % does not assert the optimized FNW numerator quoted in Nachtergaele, Eq. (6.1).
 \begin{theorem}[Spectator-uniform geometric C3 projector defect]
-    \label{lem:fnw_overlapping_window_contraction}
+    \label{thm:fnw_overlapping_window_contraction}
     \lean{MPSTensor.IsPrimitiveMPS.openChain_groundProjection_defect_le_geometric}
     \leanok
     \discussion{6134}
-    \uses{def:primitive_mps, def:open_chain_ground_subspaces_es,
-        thm:c3_centered_physical_assembly,
-        thm:primitive_tail_virtual_map_norm_uniform,
-        thm:c3_centered_overlap_factorization_geometric,
-        thm:c3_correction_bounds,
-        thm:primitive_ground_space_map_geometric_inverse_gram_bounds,
-        thm:geometric_smallness_at_c3_lengths,
-        thm:tail_boundary_map_range_es_transport,
-        thm:left_boundary_map_range_es_transport}
+    \uses{def:primitive_mps, def:open_chain_ground_subspaces_es}
     Let $A$ be primitive with positive-definite fixed point $\rho$ and nonzero
     bond dimension.  There are constants $C,c,r>0$, with $r<1$, such that for
     every spectator length $K$ and every $l\geq1$ satisfying $cr^l<1$,
     \begin{align}
         \left\|
         P^{\mathrm{tail}}_{K,l+1}P^{\mathrm{left}}_{K+l}
-        -P_{G_{K+l+1}(A)}
+        -P_{\mathcal G_{K+l+1}^{\mathrm{ES}}(A)}
         \right\|
         &\leq \frac{Cr^l}{1-cr^l}.
         \notag
@@ -1283,29 +1272,33 @@ norm estimate is derived here.
 
 \begin{proof}
     \leanok
-    \uses{thm:c3_centered_physical_assembly,
-        thm:primitive_tail_virtual_map_norm_uniform,
-        thm:c3_centered_overlap_factorization_geometric,
-        thm:c3_correction_bounds,
+    \uses{thm:fixed_point_gram_metric_is_unit,
         thm:primitive_ground_space_map_geometric_inverse_gram_bounds,
+        thm:primitive_tail_virtual_map_norm_uniform,
         thm:geometric_smallness_at_c3_lengths,
-        thm:tail_boundary_map_range_es_transport,
-        thm:left_boundary_map_range_es_transport}
-    Put $K_\infty=\mathscr R(P_\rho)$ and
-    $I_\infty=K_\infty^{-1}$.  Choose $g,c,r>0$ from the geometric Gram and
-    inverse-Gram estimate, so that $c=\lVert I_\infty\rVert g$, and choose
+        thm:c3_centered_overlap_factorization_geometric,
+        thm:c3_centered_physical_assembly,
+        thm:c3_correction_bounds,
+        thm:spectator_boundary_hilbert_factorization,
+        thm:range_ground_space_map_es}
+    Put $\mathcal K_\infty=\mathscr R(P_\rho)$ and
+    $\mathcal I_\infty=\mathcal K_\infty^{-1}$.  Choose $g,c,r>0$ from
+    the geometric Gram and inverse-Gram estimate, so that
+    $c=\lVert\mathcal I_\infty\rVert g$, and choose
     $T>0$ with $\lVert J_K^{\mathrm{tail}}\rVert\leq T$ for every $K$.  With
     \begin{align}
       J&=\lVert J_1^{\mathrm{left}}\rVert,&
-      M&=\lVert K_\infty\rVert\lVert I_\infty\rVert,
+      M&=\lVert\mathcal K_\infty\rVert
+        \lVert\mathcal I_\infty\rVert,
     \end{align}
     take
     \begin{align}
-      C=4\lVert I_\infty\rVert T g(J+1)(M+1).
+      C=4\lVert\mathcal I_\infty\rVert T g(J+1)(M+1).
     \end{align}
     The condition $cr^l<1$ implies the same condition at $l+1$, $K+l$, and
     $K+l+1$.  Hence every inverse Gram in the exact telescope is bounded by
-    $(1-cr^l)^{-1}\lVert I_\infty\rVert$.  Pairing the two square-root
+    $(1-cr^l)^{-1}\lVert\mathcal I_\infty\rVert$.  Pairing the two
+    square-root
     pseudoinverse factors gives this denominator only once.  The centered term
     and each of the three correction terms are then at most
     \begin{align}
@@ -1321,7 +1314,7 @@ norm estimate is derived here.
     \label{lem:nachtergaele_c3_blocked_length}
     \notready
     \discussion{5924}
-    \uses{lem:fnw_overlapping_window_contraction,
+    \uses{thm:fnw_overlapping_window_contraction,
         thm:nachtergaele_open_chain_projector_defect}
     Nachtergaele's condition C3
     \cite[Eq.~(2.4)]{Nachtergaele1996Spectral} holds at some positive blocked

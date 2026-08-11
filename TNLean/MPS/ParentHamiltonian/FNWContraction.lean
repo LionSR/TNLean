@@ -20,7 +20,7 @@ quoted from Fannes--Nachtergaele--Werner in Nachtergaele, equation (6.1). The
 proof works around the nonidentity limiting Gram metric and keeps its norm and
 inverse norm visible in the assembled constant.
 
-## Main result
+## Main results
 
 * `MPSTensor.IsPrimitiveMPS.openChain_groundProjection_defect_le_geometric`
 -/
@@ -83,9 +83,9 @@ theorem c3_injectiveRangeProjector_residual_eq_centered_sub_corrections [NeZero 
     ContinuousLinearMap.sub_comp, ContinuousLinearMap.comp_apply,
     sub_apply]
 
-/-- If two nonnegative numbers are bounded by the same nonnegative number,
-the product of their square roots is bounded by that number. -/
-theorem sqrt_mul_sqrt_le_of_le {a b B : ℝ} (hB : 0 ≤ B)
+/-- If two real numbers are bounded by the same nonnegative number, the product of
+their square roots is bounded by that number. -/
+private theorem sqrt_mul_sqrt_le_of_le {a b B : ℝ} (hB : 0 ≤ B)
     (haB : a ≤ B) (hbB : b ≤ B) :
     Real.sqrt a * Real.sqrt b ≤ B := by
   calc
@@ -96,7 +96,7 @@ theorem sqrt_mul_sqrt_le_of_le {a b B : ℝ} (hB : 0 ≤ B)
 
 /-- A moving geometric denominator is bounded by the denominator at the base
 length. -/
-theorem inverse_one_sub_geometric_le_base {c r : ℝ} (hc : 0 < c)
+private theorem inverse_one_sub_geometric_le_base {c r : ℝ} (hc : 0 < c)
     (hr_pos : 0 < r) (hr_lt_one : r < 1) {l n : ℕ} (hln : l ≤ n)
     (hsmall : c * r ^ l < 1) :
     (1 - c * r ^ n)⁻¹ ≤ (1 - c * r ^ l)⁻¹ := by
