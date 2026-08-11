@@ -24,6 +24,26 @@ multiplied by `rank P`.
 
 open scoped Matrix Kronecker ComplexOrder
 
+namespace Matrix
+
+/-- A unitary single-Kraus conjugation preserves ordinary matrix rank. -/
+theorem rank_singleKrausMap_of_mem_unitaryGroup
+    {n : Type*} [Fintype n] [DecidableEq n]
+    (U A : Matrix n n ℂ) (hU : U ∈ Matrix.unitaryGroup n ℂ) :
+    (singleKrausMap U A).rank = A.rank := by
+  have hUdet : IsUnit U.det := Matrix.UnitaryGroup.det_isUnit ⟨U, hU⟩
+  have hUh : Uᴴ ∈ Matrix.unitaryGroup n ℂ := by
+    exact ⟨by simpa only [Matrix.star_eq_conjTranspose,
+        Matrix.conjTranspose_conjTranspose] using hU.2,
+      by simpa only [Matrix.star_eq_conjTranspose,
+        Matrix.conjTranspose_conjTranspose] using hU.1⟩
+  have hUhdet : IsUnit Uᴴ.det := Matrix.UnitaryGroup.det_isUnit ⟨Uᴴ, hUh⟩
+  rw [singleKrausMap_apply,
+    Matrix.rank_mul_eq_left_of_isUnit_det Uᴴ (U * A) hUhdet,
+    Matrix.rank_mul_eq_right_of_isUnit_det U A hUdet]
+
+end Matrix
+
 namespace MPOTensor
 
 variable {d D : ℕ}
@@ -51,25 +71,9 @@ theorem tensorMapId_preparationMap_eq_reindex_kronecker
   simp [Matrix.tensorMapId_apply, Matrix.preparationMap, Matrix.bipartiteSlice,
     Matrix.reindex_apply, firstSitePreparationEquiv]
 
-/-- A unitary single-Kraus conjugation preserves ordinary matrix rank. -/
-theorem Matrix.rank_singleKrausMap_of_mem_unitaryGroup
-    {n : Type*} [Fintype n] [DecidableEq n]
-    (U A : Matrix n n ℂ) (hU : U ∈ Matrix.unitaryGroup n ℂ) :
-    (singleKrausMap U A).rank = A.rank := by
-  have hUdet : IsUnit U.det := Matrix.UnitaryGroup.det_isUnit ⟨U, hU⟩
-  have hUh : Uᴴ ∈ Matrix.unitaryGroup n ℂ := by
-    exact ⟨by simpa only [Matrix.star_eq_conjTranspose,
-        Matrix.conjTranspose_conjTranspose] using hU.2,
-      by simpa only [Matrix.star_eq_conjTranspose,
-        Matrix.conjTranspose_conjTranspose] using hU.1⟩
-  have hUhdet : IsUnit Uᴴ.det := Matrix.UnitaryGroup.det_isUnit ⟨Uᴴ, hUh⟩
-  rw [singleKrausMap_apply,
-    Matrix.rank_mul_eq_left_of_isUnit_det Uᴴ (U * A) hUhdet,
-    Matrix.rank_mul_eq_right_of_isUnit_det U A hUdet]
-
 /-- Applying a unitary conjugation to the first factor is conjugation by the
 Kronecker product of that unitary with the identity. -/
-theorem tensorMapId_singleKrausMap
+private theorem tensorMapId_singleKrausMap
     {α δ : Type*} [Fintype α] [Fintype δ] [DecidableEq δ]
     (U : Matrix α α ℂ) (X : Matrix (α × δ) (α × δ) ℂ) :
     Matrix.tensorMapId (singleKrausMap U) X =
@@ -85,23 +89,6 @@ theorem tensorMapId_singleKrausMap
   · intro w _ hw
     simp [Ne.symm hw]
   · simp
-
-/-- Tensoring a unitary matrix with the identity gives a unitary matrix. -/
-theorem Matrix.kronecker_one_mem_unitaryGroup
-    {α δ : Type*} [Fintype α] [DecidableEq α] [Fintype δ] [DecidableEq δ]
-    (U : Matrix α α ℂ) (hU : U ∈ Matrix.unitaryGroup α ℂ) :
-    U ⊗ₖ (1 : Matrix δ δ ℂ) ∈ Matrix.unitaryGroup (α × δ) ℂ := by
-  constructor
-  · rw [Matrix.star_eq_conjTranspose, Matrix.conjTranspose_kronecker,
-      Matrix.conjTranspose_one, ← Matrix.mul_kronecker_mul]
-    rw [show Uᴴ * U = 1 by
-      simpa only [Matrix.star_eq_conjTranspose] using hU.1]
-    simp
-  · rw [Matrix.star_eq_conjTranspose, Matrix.conjTranspose_kronecker,
-      Matrix.conjTranspose_one, ← Matrix.mul_kronecker_mul]
-    rw [show U * Uᴴ = 1 by
-      simpa only [Matrix.star_eq_conjTranspose] using hU.2]
-    simp
 
 /-- The fixed Strong-RFP witnesses give the global closure identity. The
 canonical regroupings expose the operation as first adjoining `P`, then
@@ -212,7 +199,7 @@ theorem strongRFP_rank_mpo_add_two
   simp only [LinearMap.comp_apply, Matrix.tensorMapIdLM_apply]
   rw [tensorMapId_singleKrausMap]
   rw [Matrix.rank_singleKrausMap_of_mem_unitaryGroup _ _
-    (Matrix.kronecker_one_mem_unitaryGroup U hU)]
+    (Matrix.kronecker_mem_unitary hU (one_mem _))]
   rw [tensorMapId_preparationMap_eq_reindex_kronecker, Matrix.rank_reindex,
     Matrix.rank_kronecker]
   change (Matrix.reindex _ _ _).rank * P.rank = _

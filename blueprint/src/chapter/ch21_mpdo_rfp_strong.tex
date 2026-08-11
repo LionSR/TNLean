@@ -64,6 +64,36 @@ change of basis. The matrix is not assumed to have trace one.
     difference zero.
 \end{proof}
 
+\begin{definition}[First-site preparation shuffle]
+    \label{def:mpdo_first_site_preparation_shuffle}
+    \lean{MPOTensor.firstSitePreparationEquiv,
+      MPOTensor.tensorMapId_preparationMap_eq_reindex_kronecker}
+    \leanok
+    \uses{def:finite_tuple_regroupings,
+      def:mpdo_state_preparation_map}
+    After $R_1$ separates the first physical coordinate from the $N$
+    spectator coordinates, define
+    \begin{align}
+      \Sigma_N:\bigl((i,u),p\bigr)&\longmapsto\bigl((i,p),u\bigr),
+      \label{eq:mpdo_first_site_preparation_shuffle}
+    \end{align}
+    where $i,p\in\{1,\ldots,d\}$ and
+    $u\in\{1,\ldots,d\}^N$. Thus, for a matrix $Z$ indexed by
+    $((i,u),p)$,
+    \begin{align}
+      \bigl(\Sigma_N[Z]\bigr)_{((i,p),u),((j,q),v)}
+        &=Z_{((i,u),p),((j,v),q)}.
+      \label{eq:mpdo_first_site_preparation_shuffle_matrix}
+    \end{align}
+    In particular, localizing the preparation $Y\mapsto Y\otimes P$ at the
+    first site gives
+    \begin{align}
+      (\operatorname{prep}_P\otimes\id)[Y]
+        &=\Sigma_N[Y\otimes P].
+      \label{eq:mpdo_localized_preparation_shuffle}
+    \end{align}
+\end{definition}
+
 \begin{theorem}[Global operator identity for fixed strong fixed-point witnesses]
     \label{thm:mpdo_strong_rfp_global_operator_identity}
     \lean{MPOTensor.strongRFP_physCloseN_eq_localized_preparation,
@@ -72,65 +102,68 @@ change of basis. The matrix is not assumed to have trace one.
       MPOTensor.strongRFP_mpo_eq_reindex_singleKrausMap_kronecker}
     \leanok
     \uses{thm:mpdo_strong_rfp_phys_close,
-      def:finite_tuple_regroupings, def:mpdo_global_renormalization_maps,
-      def:mpdo_state_preparation_map, def:mpdo_single_kraus_map}
+      thm:mpdo_global_renormalization_maps,
+      def:mpdo_first_site_preparation_shuffle,
+      lem:phys_close_identity}
     Fix witnesses $P$ and $U$ in
     (\ref{eq:mpdo_strong_rfp_closure}). For every $N\geq0$ and every virtual
-    matrix $X$, the $(N+2)$-site closure is obtained from the $(N+1)$-site
-    closure by adjoining $P$ to the first physical coordinate and conjugating
-    the first two physical coordinates by $U$. More explicitly, after the
-    canonical identifications
+    matrix $X$, write $R_1$ and $R_2$ for the initial-coordinate regroupings
+    of lengths $N+1$ and $N+2$. Then
     \begin{align}
-      (\mathbb C^d)^{\otimes(N+1)}
-        &\cong \mathbb C^d\otimes(\mathbb C^d)^{\otimes N},
-        \notag\\
-      (\mathbb C^d)^{\otimes(N+2)}
-        &\cong (\mathbb C^d\otimes\mathbb C^d)
-          \otimes(\mathbb C^d)^{\otimes N},
-        \notag
-    \end{align}
-    one has
-    \begin{align}
-      M_{N+2}(X)
-        &=(U\otimes\Id)\bigl(M_{N+1}(X)\otimes P\bigr)
+      R_2[M_{N+2}(X)]
+        &=(U\otimes\Id)\,
+          \Sigma_N\!\left[R_1[M_{N+1}(X)]\otimes P\right]
           (U^\dagger\otimes\Id).
-        \label{eq:mpdo_strong_rfp_global_closure}
+      \label{eq:mpdo_strong_rfp_global_closure}
     \end{align}
-    The same identity holds for the ordinary periodic operators
-    $\rho^{(N)}(M)$.
+    Equivalently, applying $R_2^{-1}$ to the right-hand side gives the
+    $(N+2)$-site closure in its original physical coordinates. The same
+    formula with $M_k(X)$ replaced by the ordinary periodic operator
+    $\rho^{(k)}(M)$ holds after closing the virtual indices with the identity.
 \end{theorem}
 
 \begin{proof}
     \leanok
-    Localize the one-to-two map
-    $Y\mapsto U(Y\otimes P)U^\dagger$ at the first site and use
-    (\ref{eq:mpdo_strong_rfp_closure}) on each matrix slice. The canonical
-    regroupings identify localized preparation with the Kronecker product by
-    $P$, and localized unitary conjugation with conjugation by
-    $U\otimes\Id$. Closing the virtual indices with the identity gives the
-    periodic-operator statement.
+    \uses{thm:mpdo_global_renormalization_maps,
+      def:mpdo_first_site_preparation_shuffle,
+      lem:phys_close_identity}
+    Fix spectator words $u,v$ of length $N$. The $(u,v)$ block of the
+    regrouped $(N+1)$-site closure is a one-site closure, with the spectator
+    word product absorbed into the virtual matrix. The local strong
+    fixed-point identity sends this block to its two-site closure. Equation
+    (\ref{eq:mpdo_localized_preparation_shuffle}) places the new $P$ coordinate
+    beside the first coordinate, and conjugation by $U\otimes\Id$ acts on
+    those two coordinates. This proves the closure formula block by block.
+    The identity closure from Lemma~\ref{lem:phys_close_identity} gives the
+    periodic formula.
 \end{proof}
 
 \begin{theorem}[Geometric periodic rank growth of a strong fixed point]
     \label{thm:mpdo_strong_rfp_periodic_rank_growth}
-    \lean{MPOTensor.strongRFP_rank_mpo_add_two,
+    \lean{Matrix.rank_singleKrausMap_of_mem_unitaryGroup,
+      MPOTensor.strongRFP_rank_mpo_add_two,
       MPOTensor.strongRFP_rank_mpo_add_one,
       MPOTensor.IsStrongRFP.exists_periodic_rank_factor}
     \leanok
     \uses{def:mpdo_strong_rfp,
+      thm:mpdo_strong_rfp_phys_close,
       thm:mpdo_strong_rfp_global_operator_identity}
-    Fix witnesses $P\geq0$ and $U$ for the strong fixed-point relation. Then
-    the ordinary full periodic MPO matrix ranks satisfy
+    Fix witnesses $P\geq0$ and $U$ for the strong fixed-point relation. For
+    every $N\geq0$, the ordinary full periodic MPO matrix ranks satisfy
     \begin{align}
       \operatorname{rank}\rho^{(N+2)}(M)
         &=\operatorname{rank}\rho^{(N+1)}(M)\,
-          \operatorname{rank}P
-          \qquad(N\geq0),
+          \operatorname{rank}P,
         \label{eq:mpdo_strong_rfp_rank_recurrence}\\
       \operatorname{rank}\rho^{(N+1)}(M)
         &=\operatorname{rank}\rho^{(1)}(M)\,
           (\operatorname{rank}P)^N.
         \label{eq:mpdo_strong_rfp_rank_geometric}
+    \end{align}
+    More generally, if $V$ is unitary, then
+    \begin{align}
+      \operatorname{rank}(VAV^\dagger)&=\operatorname{rank}A.
+      \label{eq:unitary_single_kraus_rank}
     \end{align}
     Consequently every strong fixed point admits a single positive witness
     $P$ whose matrix rank is the factor in both formulas. No normalization of
@@ -140,8 +173,13 @@ change of basis. The matrix is not assumed to have trace one.
 
 \begin{proof}
     \leanok
+    \uses{thm:mpdo_strong_rfp_phys_close,
+      thm:mpdo_strong_rfp_global_operator_identity}
     Unitary conjugation and relabelling of matrix coordinates preserve rank,
     while rank is multiplicative under Kronecker products. Applying these
     facts to (\ref{eq:mpdo_strong_rfp_global_closure}) gives the recurrence.
-    Induction from chain length one gives the geometric formula.
+    Induction from chain length one gives the geometric formula. Finally,
+    Theorem~\ref{thm:mpdo_strong_rfp_phys_close} exposes the same positive
+    witness $P$ for any tensor satisfying the existential strong fixed-point
+    relation.
 \end{proof}
