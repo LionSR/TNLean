@@ -808,6 +808,27 @@ the remaining sites unchanged.
     % The equality with the periodic operator rank remains tracked by issue #5921.
 \end{definition}
 
+\begin{theorem}[Characteristic recurrence for periodic Fibonacci transition counts]
+    \label{thm:cpsv_fibonacci_periodic_count_recurrence}
+    \lean{MPSTensor.FibonacciBoundary.periodicTransitionCount_add_two_add}
+    \leanok
+    \uses{def:cpsv_fibonacci_periodic_count}
+    For every $N\in\N$,
+    \begin{align}
+        a_{N+2}+a_N&=3a_{N+1}.
+        \notag
+    \end{align}
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{def:cpsv_fibonacci_transition_matrix,
+      def:cpsv_fibonacci_periodic_count}
+    Expand $B^{N+2}=B^{N+1}B$ and $B^{N+1}=B^NB$. Substitution of
+    $B=\left(\begin{smallmatrix}1&1\\1&2\end{smallmatrix}\right)$ into the
+    diagonal sums gives $a_{N+2}+a_N=3a_{N+1}$.
+\end{proof}
+
 \begin{theorem}[First periodic Fibonacci transition counts]
     \label{thm:cpsv_fibonacci_periodic_count_values}
     \lean{MPSTensor.FibonacciBoundary.periodicTransitionCount_one,
@@ -823,6 +844,33 @@ the remaining sites unchanged.
     \uses{thm:cpsv_fibonacci_boundary_recurrence}
     Substitute $x^1=(1,1,1,2)$ into the recurrence once and close the two
     diagonal boundary labels.
+\end{proof}
+
+\begin{theorem}[Golden-ratio formula for periodic Fibonacci transition counts]
+    \label{thm:cpsv_fibonacci_periodic_count_golden_ratio}
+    \lean{MPSTensor.FibonacciBoundary.periodicTransitionCount_eq_goldenRatio}
+    \leanok
+    \uses{def:cpsv_fibonacci_periodic_count}
+    Set $\tau_+=(1+\sqrt5)/2$ and $\tau_-=(1-\sqrt5)/2$. For every
+    $N\in\N$,
+    \begin{align}
+        a_N&=\tau_+^{2N}+\tau_-^{2N}.
+        \notag
+    \end{align}
+    This is the transition-count formula in
+    \cite[Appendix~D, lines~2146--2176]{Cirac2016MPDO_arXiv}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{def:cpsv_fibonacci_transition_matrix,
+      def:cpsv_fibonacci_periodic_count,
+      thm:cpsv_fibonacci_periodic_count_recurrence}
+    Use two-step induction on $N$. The cases $N=0$ and $N=1$ follow by direct
+    calculation. Since $\tau_\pm^2=\tau_\pm+1$, each sequence
+    $\tau_\pm^{2N}$ satisfies
+    $\tau_\pm^{2(N+2)}+\tau_\pm^{2N}=3\tau_\pm^{2(N+1)}$. The induction step
+    now follows from the same recurrence for $a_N$.
 \end{proof}
 
 \begin{theorem}[Periodic Fibonacci transition counts are not geometric]
@@ -867,17 +915,21 @@ the remaining sites unchanged.
     \notready
     \uses{def:cpsv_fibonacci_support_tensor,
       def:cpsv_fibonacci_periodic_count,
+      thm:cpsv_fibonacci_periodic_count_golden_ratio,
       thm:cpsv_fibonacci_open_boundary_rank_status,
       thm:to_mpo_diagonal_rank}
     Set $\tau_\pm=(1\pm\sqrt5)/2$, as in
-    \cite[Appendix~D, line~2125]{Cirac2016MPDO_arXiv}.  For every $N>0$,
+    \cite[Appendix~D, line~2125]{Cirac2016MPDO_arXiv}. For every $N>0$,
     \begin{align}
         \operatorname{rank}\rho^{(N)}(A)
-        &=x^N_{00}+x^N_{11}
+        &=a_N=x^N_{00}+x^N_{11}
          =\tau_+^{2N}+\tau_-^{2N}.
         \notag
     \end{align}
-    This is \cite[Appendix~D, lines~2122--2125 and
+    Theorem~\ref{thm:cpsv_fibonacci_periodic_count_golden_ratio} proves the
+    final equality for transition counts. The identification of $a_N$ with the
+    periodic operator rank is not yet established. This is
+    \cite[Appendix~D, lines~2122--2125 and
     2157--2176]{Cirac2016MPDO_arXiv}.
 \end{theorem}
 
