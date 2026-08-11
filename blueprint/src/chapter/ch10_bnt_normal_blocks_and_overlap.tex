@@ -34,15 +34,11 @@ matching between normal blocks.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{lem:trace_mul_transfer_map_adjoint,
+    \uses{thm:pure_perron_tp_gauge,
         lem:perron_gauge_primitive_iff}
-    The irreducible Perron--Frobenius theorem gives positive definite right and
-    left eigenvectors with positive eigenvalues $r$ and $t$. The spectral
-    normalization gives $r=1$. Adjointness with respect to the trace pairing
-    gives $r\,\Tr(\sigma\rho)=t\,\Tr(\sigma\rho)$. Since $\sigma$ and $\rho$
-    are positive definite, their pairing is nonzero, hence $t=1$. Thus the
-    Perron gauge is a pure similarity. Irreducibility and primitivity are
-    invariant under this similarity.
+    Pure Perron normalization gives a trace-preserving gauge by a pure
+    similarity. Irreducibility and primitivity are invariant under this
+    similarity.
 \end{proof}
 
 \begin{theorem}[Spectral normality gives eventual block injectivity]

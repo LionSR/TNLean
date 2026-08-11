@@ -185,14 +185,14 @@
     \begin{align}
         \tr\!\left(\rho\sum_i K_iXK_i^\dagger\right)
         &=\tr\!\left(\left(\sum_iK_i^\dagger\rho K_i\right)X\right).
-        \notag
     \end{align}
 \end{lemma}
 
 \begin{proof}\leanok
-    Cyclicity of the trace gives
-    $\tr(\rho K_iXK_i^\dagger)=\tr(K_i^\dagger\rho K_iX)$ for every~$i$;
-    summing over~$i$ proves the identity.
+    \uses{lem:trace_mul_map_eq_trace_adjointMap_mul}
+    Apply Lemma~\ref{lem:trace_mul_map_eq_trace_adjointMap_mul} to the Kraus
+    map determined by $(K_i)_i$. Identifying this Kraus map and its adjoint
+    with the corresponding transfer maps gives the stated identity.
 \end{proof}
 
 \begin{theorem}[Transfer map is a channel]\label{thm:transfer_channel}
