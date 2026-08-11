@@ -9,6 +9,7 @@ Authors: TNLean contributors
 -- Generated aggregator module: TNLean.Analysis
 
 import TNLean.Analysis.Birkhoff
+import TNLean.Analysis.CStarCompletion
 import TNLean.Analysis.CStarMatrixKronecker
 import TNLean.Analysis.CfcConjugation
 import TNLean.Analysis.CfcKronecker
