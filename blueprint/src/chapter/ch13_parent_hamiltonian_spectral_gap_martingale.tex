@@ -1313,11 +1313,13 @@ norm estimate is derived here.
     the displayed reconstruction, not the optimized FNW rational numerator.
 \end{proof}
 
-\begin{lemma}[Uniform open-chain projector-defect threshold]
-    \label{lem:nachtergaele_c3_blocked_length}
+\begin{theorem}[Uniform open-chain projector-defect threshold]
+    \label{thm:nachtergaele_c3_blocked_length}
     \lean{MPSTensor.IsPrimitiveMPS.exists_openChain_groundProjection_defect_lt_c3_threshold}
     \lean{MPSTensor.IsPrimitiveMPS.exists_re_inner_openChain_anticommutator_ge_c3_threshold}
     \leanok
+    \uses{def:primitive_mps, def:l_blk_injective,
+        def:open_chain_ground_subspaces_es, def:ground_space_es}
     Let $A$ be a primitive MPS tensor with nonzero bond dimension and a
     positive-definite fixed point.  There are an overlap length $l>1$, measured
     in sites of $A$, and a number $\varepsilon_l\geq0$ such that $A$ is
@@ -1332,7 +1334,7 @@ norm estimate is derived here.
     estimate, gives the corresponding anticommutator bound for every $K$.  If
     $A$ is already a blocked representative, one site of $A$ is one
     blocked-chain filtration step.
-\end{lemma}
+\end{theorem}
 \begin{proof}
     \leanok
     \uses{thm:fnw_overlapping_window_contraction,
@@ -1358,7 +1360,7 @@ norm estimate is derived here.
     \label{lem:blocked_to_cyclic_ground_projector_comparison}
     \notready
     \discussion{5925}
-    \uses{lem:nachtergaele_c3_blocked_length}
+    \uses{thm:nachtergaele_c3_blocked_length}
     Let $A$ be a normal tensor, let $B$ be the injective tensor obtained from
     $A$ by the chosen blocking, and let $L>1$ be the resulting cyclic interaction
     range.  For every $N\ge2L$ and every overlapping off-diagonal pair of cyclic
