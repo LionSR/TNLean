@@ -5075,17 +5075,36 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
   \label{cor:mpu_admissible_all_conjugation_equivalent}
   \notready
   \discussion{5713}
-  % **Scope restriction (blocking and admissible path):** the blocked tensors
-  % carry their own source data and the resulting symmetry path is admissible.
-  % No preservation under blocking is asserted. Documented in
+  % **Scope restriction (endpoints, blocking, and admissible path):** the
+  % one-site and two-site endpoints and their conjugate comparisons carry
+  % source data, and the resulting symmetry path is admissible. No
+  % preservation under blocking is asserted. Documented in
   % docs/paper-gaps/mpu_canonical_form_full_support.tex.
-  \uses{thm:mpu_admissible_conjugation_odd_rank,def:mpu_admissible_symmetry_equivalence,
-    def:mpu_admissible_equivalence_datum}
-  All MPU tensors in the odd-source-rank case whose required blocked tensors
-  carry reduced full-support source data, and whose resulting standard-form
-  interpolation is admissible, are admissibly equivalent under conjugation
-  symmetry.
+  \uses{prop:mpu_admissible_conjugation_standard_forms,
+    cor:mpu_admissible_equiv_under_conjugation,
+    def:mpu_admissible_symmetry_equivalence,
+    def:mpu_admissible_equivalence_datum,
+    def:mpu_reduced_full_support_source_datum}
+  For $i=1,2$, suppose the endpoint tensor $\mathcal U_i$, its conjugate
+  comparison $\overline{\mathcal U_i}$, the actual two-site block
+  $\mathcal U_{i,2}$, and its conjugate comparison
+  $\overline{\mathcal U_{i,2}}$ are simple and each carries reduced
+  full-support source data. Suppose that either $r$ or $\ell$ is odd and that
+  the resulting standard-form interpolation is admissible. Then
+  $\mathcal U_1$ and $\mathcal U_2$ are admissibly equivalent under
+  conjugation symmetry.
 \end{corollary}
+
+\begin{proof}
+  \uses{prop:mpu_admissible_conjugation_standard_forms,
+    cor:mpu_admissible_equiv_under_conjugation}
+  If either $r$ or $\ell$ is odd, both endpoints lie in Case I of
+  Proposition~\ref{prop:mpu_admissible_conjugation_standard_forms}. The full
+  admissible classification in
+  Corollary~\ref{cor:mpu_admissible_equiv_under_conjugation} handles both
+  possible parities of the source ranks after blocking and gives the claimed
+  admissible equivalence.
+\end{proof}
 
 \begin{theorem}[Strict conjugation equivalence for even source ranks]
   \label{prop:conjsym-strict-equiv}
@@ -5835,10 +5854,13 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     cor:mpu_admissible_equiv_under_conjugation,
     def:mpu_reduced_full_support_source_datum,
     def:mpu_admissible_equivalence_datum}
-  Suppose the endpoint tensors for $U_1$, $U_2$, $\widetilde U_1$, and
-  $\widetilde U_2$, together with their conjugate comparison tensors, are
-  simple and carry their own reduced full-support source data. For every
-  strict comparison used below, let $p\mapsto\mathcal W(p)$ be the actual
+  For each endpoint tensor $\mathcal A$ among
+  $U_1$, $U_2$, $\widetilde U_1$, and $\widetilde U_2$, suppose that
+  $\mathcal A$, its conjugate comparison $\overline{\mathcal A}$, its actual
+  two-site block $\mathcal A_2$, and the conjugate comparison
+  $\overline{\mathcal A_2}$ are simple and carry their own reduced
+  full-support source data. For every strict comparison used below, let
+  $p\mapsto\mathcal W(p)$ be the actual
   source-constructed interpolation between the corresponding endpoint
   tensors. Suppose it carries an admissible conjugation-symmetry path datum
   with one common positive blocking length $m\leq D^4$: the actual blocked
@@ -5878,21 +5900,26 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
   % Documented in docs/paper-gaps/mpu_canonical_form_full_support.tex.
   \uses{threeMPU2,lem:mpu_admissible_swap_symmetry_equivalence,
     def:mpu_admissible_strict_symmetry_equivalence,
+    def:mpu_admissible_symmetry_equivalence,
     def:mpu_reduced_full_support_source_datum,
     def:mpu_admissible_equivalence_datum}
-  After adding one ancilla of dimension $d$ per site and performing the
-  source blocking, let $p\mapsto\mathcal W_{\mathcal S}(p)$ be the actual
-  source-constructed ancilla-blocked interpolation from $\widetilde U_1$ to
-  $\widetilde U_2$, for either time reversal or transposition. Suppose this
-  interpolation carries an admissible symmetry-path datum with one common
-  positive blocking length $m\leq D^4$. Thus the actual blocked path
-  $\mathcal W_{\mathcal S}(p)_m$ and its fixed conjugate, physical-adjoint,
-  transposed, and $\mathcal S$-image comparison paths are simple and carry
-  continuously varying reduced full-support source data. Suppose also that
-  the one- and two-site ancilla-enlarged endpoint tensors used in the local
-  comparison carry their own data. Then $\widetilde U_1^{(N)}$ and
-  $\widetilde U_2^{(N)}$ are admissibly strictly equivalent under both time
-  reversal and transposition.
+  After adding one ancilla of dimension $d$ per site and performing the source
+  blocking, denote the actual enlarged blocked endpoints by
+  $\widehat{\mathcal U}_1$ and $\widehat{\mathcal U}_2$. For either time
+  reversal or transposition, let $p\mapsto\mathcal W_{\mathcal S}(p)$ be the
+  source-constructed interpolation from $\widehat{\mathcal U}_1$ to
+  $\widehat{\mathcal U}_2$. Suppose this interpolation carries an admissible
+  symmetry-path datum with one common positive blocking length $m\leq D^4$.
+  Thus the actual blocked path $\mathcal W_{\mathcal S}(p)_m$ and its fixed
+  conjugate, physical-adjoint, transposed, and $\mathcal S$-image comparison
+  paths are simple and carry continuously varying reduced full-support source
+  data. Suppose also that the one- and two-site enlarged endpoint tensors used
+  in the local comparison carry their own data. Then
+  $\widehat{\mathcal U}_1$ and $\widehat{\mathcal U}_2$ are admissibly
+  strictly equivalent under both time reversal and transposition.
+  Consequently the original ancilla-free tensors $\widetilde U_1$ and
+  $\widetilde U_2$ are admissibly equivalent, but are not asserted to be
+  admissibly strictly equivalent.
 \end{proposition}
 
 \section{Finite-region observable algebras}
