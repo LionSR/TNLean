@@ -857,6 +857,8 @@ windows.
     \lean{ContinuousLinearMap.adjoint_comp_self_comp_inverseGram}
     \lean{ContinuousLinearMap.inverseGram_eq_inverse}
     \lean{ContinuousLinearMap.inverseGram_eq_ringInverse}
+    \lean{ContinuousLinearMap.norm_T_comp_inverseGram_eq_sqrt}
+    \lean{ContinuousLinearMap.norm_inverseGram_comp_adjoint_eq_sqrt}
     \leanok
     \uses{def:inverse_gram}
     Let $\mathbb K$ be a real or complex scalar field, let $E$ be a
@@ -871,7 +873,11 @@ windows.
       \label{eq:inverse_gram_right}
     \end{align}
     Consequently, $S_T$ is both the canonical inverse and the ring inverse of
-    $T^\dagger T$.
+    $T^\dagger T$.  The two pseudoinverse factors satisfy
+    \begin{align}
+      \lVert TS_T\rVert&=\sqrt{\lVert S_T\rVert},\\
+      \lVert S_TT^\dagger\rVert&=\sqrt{\lVert S_T\rVert}.
+    \end{align}
 \end{theorem}
 
 \begin{proof}
@@ -882,7 +888,9 @@ windows.
     give (\ref{eq:inverse_gram_left}) and
     (\ref{eq:inverse_gram_right}).  Together these equations characterize the
     canonical inverse of a continuous linear endomorphism, which agrees with
-    its inverse in the endomorphism ring.
+    its inverse in the endomorphism ring.  For the norm identities, use the
+    $C^*$-identity and the two inverse equations to compute the squares of
+    $\lVert TS_T\rVert$ and $\lVert S_TT^\dagger\rVert$.
 \end{proof}
 
 The next three results give quantitative inverse bounds for the nonidentity

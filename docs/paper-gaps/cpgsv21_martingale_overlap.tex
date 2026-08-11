@@ -876,30 +876,98 @@ and generic prerequisites now include:
     \leanid{MPSTensor.c3_virtualResidual_eq_centered_sub_gramErrors} into its
     limiting-center residual and three corrections containing, in order,
     \begin{align}
-      \mathcal K_{l+1}-\mathcal K_\infty,\qquad
-      S_{K+l+1}-S_\infty,\qquad
+      \mathcal K_{l+1}-\mathcal K_\infty,\\
+      S_{K+l+1}-S_\infty,\\
       \mathcal K_{K+l}-\mathcal K_\infty.
     \end{align}
-    The spectator occurrences of the first and third differences are
-    fiberwise, so their norms are uniform in the spectator type.  The theorem
+    The theorem
     \leanid{MPSTensor.c3_injectiveRangeProjector_residual_eq_centered_sub_gramErrors}
-    substitutes this telescope into the full tail-after-left projector
-    factorization.  The inverse convergence theorem controls the middle
-    correction eventually.
+    places this identity between the two local pseudoinverse factors in the
+    exact tail-after-left physical projector residual.
 
     Under the explicit hypotheses that the virtual dimension is nonzero and
     \(\rho\) is positive definite,
     \leanid{MPSTensor.inner_limitingMixedGramIntertwining} proves the limiting
     intertwining identity.  Under the same hypotheses,
     \leanid{MPSTensor.inner_c3_centeredVirtualResidual_eq_gramError}
-    unconditionally identifies the centered residual pairing with the
-    length-\(l\) Gram error.  The zeroth-order cancellation uses the explicit
-    limiting metric, its inverse, and the virtual-map adjoints; no transfer
-    fixed-point equation is needed.  These identities are reconstructed
-    algebra.  The remaining norm argument must assemble all three correction
-    terms with the centered bound.  The resulting full projector defect, the
-    denominator $1-c\lambda^l$, and the coefficient in equation~(6.1) remain
-    open.
+    identifies the centered residual pairing with the length-\(l\) Gram
+    error.  The cancellation uses the nonidentity limiting metric, its inverse,
+    and the virtual-map adjoints; no transfer fixed-point equation is needed.
+
+  \item The three physical correction sandwiches are
+    \leanid{MPSTensor.c3TailFiniteGramCorrectionES},
+    \leanid{MPSTensor.c3FullInverseGramCorrectionES}, and
+    \leanid{MPSTensor.c3LeftFiniteGramCorrectionES}.  Write
+    \begin{align}
+      T&=\Gamma^{\mathrm{tail}}_{K,l+1},\\
+      L&=\Gamma^{\mathrm{left}}_{K+l,1},\\
+      C&=\Gamma_{K+l+1}^{\mathrm{ES}}.
+    \end{align}
+    The exact factorizations
+    \leanid{MPSTensor.c3TailFiniteGramCorrectionES_eq_factored},
+    \leanid{MPSTensor.c3FullInverseGramCorrectionES_eq_factored}, and
+    \leanid{MPSTensor.c3LeftFiniteGramCorrectionES_eq_factored} give
+    \begin{align}
+      Q_1={}&T S_{l+1}^{\oplus\Omega_K}
+        (\mathcal K_{l+1}-\mathcal K_\infty)^{\oplus\Omega_K}
+        J_K^{\mathrm{tail}}S_{K+l+1}C^\dagger,\\
+      Q_2={}&T S_{l+1}^{\oplus\Omega_K}
+        \mathcal K_\infty^{\oplus\Omega_K}J_K^{\mathrm{tail}}S_\infty
+        (\mathcal K_\infty-\mathcal K_{K+l+1})
+        S_{K+l+1}C^\dagger,\\
+      Q_3={}&T S_{l+1}^{\oplus\Omega_K}
+        \mathcal K_\infty^{\oplus\Omega_K}J_K^{\mathrm{tail}}S_\infty
+        (J_1^{\mathrm{left}})^\dagger
+        (\mathcal K_{K+l}-\mathcal K_\infty)^{\oplus\Omega_1}
+        S_{K+l}^{\oplus\Omega_1}L^\dagger.
+    \end{align}
+    The middle equality uses the right-oriented identity
+    \leanid{MPSTensor.inverseGram_sub_limitingInverse_eq_resolvent},
+    \begin{align}
+      S_{K+l+1}-S_\infty
+      &=S_\infty(\mathcal K_\infty-\mathcal K_{K+l+1})S_{K+l+1}.
+    \end{align}
+    The fiberwise subtraction identity is
+    \leanid{MPSTensor.boundaryFiberwiseMap_sub}, and invertibility of a finite
+    Gram follows from injectivity by
+    \leanid{MPSTensor.groundSpaceGram_isUnit_of_groundSpaceMapES_injective}.
+
+    The spectator pseudoinverse estimates
+    \leanid{MPSTensor.norm_tailBoundaryMapES_comp_inverseGram_le_sqrt} and
+    \leanid{MPSTensor.norm_inverseGram_comp_leftBoundaryMapES_adjoint_le_sqrt},
+    together with the uniform fiberwise norm bound, yield
+    \leanid{MPSTensor.c3TailFiniteGramCorrectionES_norm_le},
+    \leanid{MPSTensor.c3FullInverseGramCorrectionES_norm_le}, and
+    \leanid{MPSTensor.c3LeftFiniteGramCorrectionES_norm_le}:
+    \begin{align}
+      \lVert Q_1\rVert
+      &\leq \sqrt{\lVert S_{l+1}\rVert}
+        \lVert\mathcal K_{l+1}-\mathcal K_\infty\rVert
+        \lVert J_K^{\mathrm{tail}}\rVert
+        \sqrt{\lVert S_{K+l+1}\rVert},\\
+      \lVert Q_2\rVert
+      &\leq \sqrt{\lVert S_{l+1}\rVert}
+        \lVert\mathcal K_\infty\rVert
+        \lVert J_K^{\mathrm{tail}}\rVert
+        \lVert S_\infty\rVert
+        \lVert\mathcal K_{K+l+1}-\mathcal K_\infty\rVert
+        \sqrt{\lVert S_{K+l+1}\rVert},\\
+      \lVert Q_3\rVert
+      &\leq \sqrt{\lVert S_{l+1}\rVert}
+        \lVert\mathcal K_\infty\rVert
+        \lVert J_K^{\mathrm{tail}}\rVert
+        \lVert S_\infty\rVert
+        \lVert J_1^{\mathrm{left}}\rVert
+        \lVert\mathcal K_{K+l}-\mathcal K_\infty\rVert
+        \sqrt{\lVert S_{K+l}\rVert}.
+    \end{align}
+    No spectator-cardinality factor appears.  These factorizations and bounds
+    are exact consequences of the inverse-Gram formulas for the physical range
+    projectors.  FNW and Nachtergaele state overlapping-projector estimates,
+    while Cirac--Perez-Garcia--Schuch--Verstraete state the martingale
+    anticommutator criterion and its principal-angle interpretation.  None of
+    those sources gives the three displayed correction formulas.  Their uniform
+    combination and comparison with Nachtergaele's equation~(6.1) remain open.
 \end{itemize}
 Fix \(K,L_0\in\mathbb N\) and let
 \(\mathcal H_{K+L_0+1}\) be the \((K+L_0+1)\)-site Euclidean space
@@ -964,9 +1032,10 @@ Furthermore,
 \begin{align}
   \mathcal K_n^{-1}&\longrightarrow\mathscr R(P_\rho)^{-1}.
 \end{align}
-These results are quantitative inverse infrastructure.  They do not prove the
-full overlapping-window projector contraction or Nachtergaele's
-Equation~(6.1); that physical projector comparison remains open.
+Together with the three raw correction bounds above, these inverse estimates
+control the centered term and all three finite-Gram corrections without
+spectator-cardinality loss.  Their uniform combination and the comparison with
+Nachtergaele's equation~(6.1) remain open.
 
 In particular, the development does not prove the overlapping-window FNW
 contraction
