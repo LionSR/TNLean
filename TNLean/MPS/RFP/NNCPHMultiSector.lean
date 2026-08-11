@@ -235,30 +235,13 @@ theorem exists_blockDiagonal_boundary_of_chainGroundSpace_of_wordTupleSpanTop_on
       ψ = groundSpaceMap (toTensorFromBlocks (d := d) (μ := μ) A) N
         ((Matrix.reindex finSigmaFinEquiv finSigmaFinEquiv)
           (Matrix.blockDiagonal' X)) := by
-  classical
   have hOpen : ψ ∈ ⨆ j : Fin r, groundSpace (A j) N :=
     chainGroundSpace_toTensorFromBlocks_le_iSup_groundSpace_of_wordTupleSpanTop_one
       μ A hμ hOne hN hψ
-  obtain ⟨φ, hφ, hφsum⟩ :=
-    (Submodule.mem_iSup_iff_exists_finsupp
-      (fun j : Fin r ↦ groundSpace (A j) N) ψ).mp hOpen
-  have hψφ : ψ = ∑ j : Fin r, φ j := by
-    simpa [Finsupp.sum_fintype] using hφsum.symm
-  have hφRange : ∀ j : Fin r, φ j ∈ (groundSpaceMap (A j) N).range := by
-    intro j
-    simpa [groundSpace] using hφ j
-  choose Y hY using hφRange
-  let X : (j : Fin r) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ :=
-    fun j ↦ ((μ j) ^ N)⁻¹ • Y j
-  refine ⟨X, ?_⟩
-  rw [BlockSumGroundSpace.groundSpaceMap_toTensorFromBlocks_eq_sum_blockDiagonal]
-  calc
-    ψ = ∑ j : Fin r, φ j := hψφ
-    _ = ∑ j : Fin r, groundSpaceMap (A j) N ((μ j) ^ N • X j) := by
-      apply Finset.sum_congr rfl
-      intro j _
-      have hpow : (μ j) ^ N ≠ 0 := pow_ne_zero N (hμ j)
-      simp [X, hY j, hpow]
+  obtain ⟨X, hX, _⟩ :=
+    BlockSumGroundSpace.exists_blockDiagonal_boundary_of_mem_iSup_groundSpace
+      μ A hμ hOpen
+  exact ⟨X, hX⟩
 
 /-- A global one-site change of cut closes the block-diagonal boundary
 matrices of a nearest-neighbor chain vector. This is the boundary-closing step

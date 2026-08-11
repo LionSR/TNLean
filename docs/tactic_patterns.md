@@ -403,6 +403,18 @@ abstracted — record why, so it is not re-proposed).
 
 ## Completed refactors
 
+### Block-diagonal boundary assembly
+- **Pattern:** decompose membership in a finite supremum of open-boundary block spaces into
+  finitely supported components, choose one boundary matrix per component, rescale by the
+  inverse block weight, and reconstruct one block-diagonal boundary matrix.
+- **Reuse:** `BlockSumGroundSpace.exists_blockDiagonal_boundary_of_mem_iSup_groundSpace` in
+  `TNLean/MPS/ParentHamiltonian/BlockSumGroundSpace.lean` performs the construction without
+  any BNT, dual-fixed-point, or simultaneous-word-span hypotheses.
+- **Result:** four public wrappers in `BNTBlockDiagonalChain.lean`,
+  `BNTBlockDiagonalSourceNormalization.lean`, and `RFP/NNCPHMultiSector.lean` retain their
+  statements and specialized interfaces while delegating the shared construction to the
+  neutral theorem. The Lean source loses 36 lines net.
+
 ### Matched BNT coefficient comparison with an eventual scalar
 - **Pattern:** expand both sector decompositions in MPV state space, substitute a full matched
   `Q`-basis into the full `P`-basis, reindex along the basis equivalence, and compare exact

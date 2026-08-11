@@ -117,6 +117,45 @@ theorem groundSpaceMap_toTensorFromBlocks_eq_sum_blockDiagonal
   ext a b
   simp [diagonalBlock, sigmaDiagonalBlock]
 
+/-- A vector in the sum of the open-boundary block spaces has one
+block-diagonal boundary matrix for the weighted direct-sum tensor. The
+component represented by each diagonal block remains in its corresponding
+open-boundary space. -/
+theorem exists_blockDiagonal_boundary_of_mem_iSup_groundSpace
+    {r : ℕ} {dim : Fin r → ℕ}
+    (μ : Fin r → ℂ) (A : (j : Fin r) → MPSTensor d (dim j))
+    (hμ : ∀ j : Fin r, μ j ≠ 0) {L : ℕ} {ψ : NSiteSpace d L}
+    (hψ : ψ ∈ ⨆ j : Fin r, groundSpace (A j) L) :
+    ∃ X : (j : Fin r) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ,
+      ψ = groundSpaceMap (toTensorFromBlocks (d := d) (μ := μ) A) L
+        ((Matrix.reindex finSigmaFinEquiv finSigmaFinEquiv) (Matrix.blockDiagonal' X)) ∧
+      ∀ j : Fin r,
+        groundSpaceMap (A j) L ((μ j) ^ L • X j) ∈ groundSpace (A j) L := by
+  classical
+  obtain ⟨φ, hφ, hφsum⟩ :=
+    (Submodule.mem_iSup_iff_exists_finsupp
+      (fun j : Fin r => groundSpace (A j) L) ψ).mp hψ
+  have hψφ : ψ = ∑ j : Fin r, φ j := by
+    simpa [Finsupp.sum_fintype] using hφsum.symm
+  have hφRange : ∀ j : Fin r, φ j ∈ (groundSpaceMap (A j) L).range := by
+    intro j
+    simpa [groundSpace] using hφ j
+  choose Y hY using hφRange
+  let X : (j : Fin r) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ :=
+    fun j => ((μ j) ^ L)⁻¹ • Y j
+  refine ⟨X, ?_, ?_⟩
+  · rw [groundSpaceMap_toTensorFromBlocks_eq_sum_blockDiagonal]
+    calc
+      ψ = ∑ j : Fin r, φ j := hψφ
+      _ = ∑ j : Fin r, groundSpaceMap (A j) L ((μ j) ^ L • X j) := by
+        refine Finset.sum_congr rfl ?_
+        intro j _
+        have hpow : (μ j) ^ L ≠ 0 := pow_ne_zero L (hμ j)
+        simp [X, hY j, hpow]
+  · intro j
+    have hpow : (μ j) ^ L ≠ 0 := pow_ne_zero L (hμ j)
+    simpa [X, hY j, hpow] using hφ j
+
 end BlockSumGroundSpace
 
 open BlockSumGroundSpace
