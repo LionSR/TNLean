@@ -4082,3 +4082,101 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
   algebraic direct limit has a representative in one member of the directed
   system.
 \end{proof}
+
+\begin{definition}[Quasi-local observable algebra]
+  \label{def:qca_quasi_local_algebra}
+  \lean{SpinChain.QuasiLocalAlgebra,SpinChain.algebraicToQuasiLocal,
+    UniformSpace.Completion.instStar,UniformSpace.Completion.coe_star,
+    UniformSpace.Completion.instContinuousStar,
+    UniformSpace.Completion.instStarRing,
+    UniformSpace.Completion.instCStarRing,
+    UniformSpace.Completion.instStarModule,
+    UniformSpace.Completion.instCStarAlgebra}
+  \leanok
+  \uses{def:qca_algebraic_local_cstar_ring,
+    def:qca_algebraic_local_normed_star_algebra}
+  For $d>0$, the quasi-local observable algebra is the operator-norm
+  completion
+  \begin{align}
+    \mathcal A
+      &=\overline{\mathcal A_{\mathrm{loc}}}^{\lVert\cdot\rVert}.
+  \end{align}
+  The involution on $\mathcal A$ is the unique continuous extension of the
+  involution on $\mathcal A_{\mathrm{loc}}$.  It makes $\mathcal A$ a complex
+  C-star algebra, and the canonical star-algebra homomorphism
+  \begin{align}
+    j\colon\mathcal A_{\mathrm{loc}}&\longrightarrow\mathcal A
+  \end{align}
+  is the completion map.
+\end{definition}
+
+\begin{proof}\leanok
+  The involution is isometric on $\mathcal A_{\mathrm{loc}}$, hence extends
+  continuously to the completion.  The identities
+  $(A+B)^*=A^*+B^*$, $(AB)^*=B^*A^*$, and $(A^*)^*=A$
+  hold on the dense subalgebra $j(\mathcal A_{\mathrm{loc}})$ and therefore
+  on $\mathcal A$.  The same density argument extends
+  \begin{align}
+    \lVert A^*A\rVert&=\lVert A\rVert^2,
+  \end{align}
+  so the completed algebra satisfies the C-star identity.
+\end{proof}
+
+\begin{lemma}[Finite-region observables in the quasi-local algebra]
+  \label{lem:qca_quasi_local_observable}
+  \lean{SpinChain.quasiLocalObservable,
+    SpinChain.norm_algebraicToQuasiLocal,
+    SpinChain.norm_quasiLocalObservable,
+    SpinChain.quasiLocalObservable_isometry,
+    SpinChain.quasiLocalObservable_injective,
+    SpinChain.quasiLocalObservable_localInclusion}
+  \leanok
+  \uses{def:qca_quasi_local_algebra,lem:qca_local_observable_isometry}
+  For every finite region $\Lambda$, the map
+  \begin{align}
+    j_\Lambda\colon\mathcal A_\Lambda&\longrightarrow\mathcal A
+  \end{align}
+  defined by $j_\Lambda=j\circ\iota_\Lambda$ is an injective isometry.  If $\Lambda\subseteq\Gamma$, then
+  \begin{align}
+    j_\Gamma\circ\iota_{\Lambda,\Gamma}&=j_\Lambda.
+  \end{align}
+\end{lemma}
+
+\begin{proof}\leanok
+  The algebraic inclusion $\iota_\Lambda$ and the completion map $j$ both
+  preserve the norm.  Their composite is therefore an isometry and hence
+  injective.  Compatibility follows from
+  $\iota_\Gamma\circ\iota_{\Lambda,\Gamma}=\iota_\Lambda$.
+\end{proof}
+
+\begin{theorem}[Density of finite-region observables]
+  \label{thm:qca_quasi_local_density}
+  \lean{UniformSpace.Completion.toComplAlgHom,
+    UniformSpace.Completion.toComplStarAlgHom,
+    UniformSpace.Completion.coe_toComplStarAlgHom,
+    UniformSpace.Completion.denseRange_toComplStarAlgHom,
+    SpinChain.denseRange_algebraicToQuasiLocal,
+    SpinChain.dense_iUnion_range_quasiLocalObservable}
+  \leanok
+  \uses{def:qca_quasi_local_algebra,lem:qca_quasi_local_observable,
+    thm:qca_local_observable_finite_support}
+  Algebraic local observables are dense in the quasi-local algebra.  Equivalently,
+  \begin{align}
+    \overline{j(\mathcal A_{\mathrm{loc}})}
+      &=\overline{\bigcup_{\Lambda\Subset\mathbb Z}
+        j_\Lambda(\mathcal A_\Lambda)}
+       =\mathcal A.
+  \end{align}
+\end{theorem}
+
+\begin{proof}\leanok
+  Density of $j(\mathcal A_{\mathrm{loc}})$ is the defining density property
+  of the completion.  Every algebraic local observable has a representative
+  in some finite region, so
+  \begin{align}
+    j(\mathcal A_{\mathrm{loc}})
+      &=\bigcup_{\Lambda\Subset\mathbb Z}j_\Lambda(\mathcal A_\Lambda).
+  \end{align}
+  Taking closures proves the second equality.  The union over all finite
+  regions is essential; no single finite-region image is claimed to be dense.
+\end{proof}
