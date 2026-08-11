@@ -262,10 +262,18 @@
     \end{align}
     The matrix coefficients of
     (\ref{eq:cpsv_literal_first_site_commutation}) give agreement of the
-    corresponding first-site actions. The original-coordinate marked
-    Lemma~L gives equality of their inserted tensors on the original bond
-    space. Reading this equality as a vertical one-site action yields
-    (\ref{eq:cpsv_literal_vertical_projector_closure}).
+    corresponding first-site actions. In particular,
+    \begin{align}
+        P_1H^{(N)}&=H^{(N)}P_1.
+        \label{eq:cpsv_prop_4_13_first_site}
+    \end{align}
+    The original-coordinate marked Lemma~L gives equality of their inserted
+    tensors on the original bond space. Reading this equality as a vertical
+    one-site action yields
+    \begin{align}
+        \widetilde M_vP&=P\widetilde M_vP.
+        \label{eq:cpsv_prop_4_13_projector_closure}
+    \end{align}
 \end{proof}
 
 \begin{theorem}[Invariant vertical projections are reducing]
@@ -463,8 +471,13 @@
     its nontrivial periodic vectors. Applying
     Theorem~\ref{thm:projector_closure_canonical_form} then gives normal
     nonzero corners with positive spectral weights and orthogonal isometries,
-    together with the stated intertwining, compression, and reconstruction
-    formulas.
+    together with the stated intertwining and compression formulas. Their
+    reconstruction is
+    \begin{align}
+        \widetilde M_v
+        &=\sum_kV_k(\nu_kB_k^v)V_k^\dagger.
+        \label{eq:cpsv_prop_4_13_normal_corners}
+    \end{align}
 \end{proof}
 
 \begin{definition}[Grouped vertical BNT decomposition with physical isometries]
@@ -1043,17 +1056,6 @@
     \uses{thm:vertical_cf_of_grouping_and_gram_dressing,
         thm:cpsv_literal_vertical_bnt_grouping_with_isometries,
         thm:cpsv_literal_pairwise_vertical_gram_conjugation}
-    % Preserve the established source-facing anchors while the wrapper proof
-    % now follows the three declarations used by Lean.
-    \label{eq:cpsv_prop_4_13_active_bnt}
-    \label{eq:cpsv_prop_4_13_active_reconstruction}
-    \label{eq:cpsv_prop_4_13_original_coisometry}
-    \label{eq:cpsv_prop_4_13_first_site}
-    \label{eq:cpsv_prop_4_13_active_separation}
-    \label{eq:cpsv_prop_4_13_projector_closure}
-    \label{eq:cpsv_prop_4_13_normal_corners}
-    \label{eq:cpsv_prop_4_13_gram_conjugation}
-    \label{eq:cpsv_prop_4_13_gram}
     Theorem~\ref{thm:cpsv_literal_vertical_bnt_grouping_with_isometries}
     supplies the grouped vertical BNT decomposition with physical isometries.
     The literal pairwise Figure~8 theorem supplies the grouped-corner
