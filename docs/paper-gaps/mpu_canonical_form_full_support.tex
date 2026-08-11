@@ -3,9 +3,9 @@
 \usepackage{xurl}
 \usepackage[hidelinks]{hyperref}
 \input{command}
-\title{Full Support in the MPU Normal-Tensor Proposition}
+\title{Full Support in MPU Normality and Theorem III.4}
 \author{}
-\date{2026-08-08}
+\date{2026-08-11}
 \begin{document}
 \maketitle
 
@@ -52,23 +52,72 @@ other retained block exists.  The ambient coisometry is square and hence
 unitary; block assembly and unitary conjugation transport irreducibility from
 the normal block to the ambient tensor.
 
+\section{The source factors and Theorem III.4}
+After Proposition~\texttt{prop:normal-tensor}, the source assumes without loss
+of generality that the normalized tensor is in canonical form II
+\cite[lines~350--356]{Cirac2017MPU}.  The source factors are then defined using
+the normalized positive right fixed point $\rho$.  In particular, the first
+factor contains
+\begin{align}
+  \left[V_1(\Id\otimes\rho)V_1^\dagger\right]^{-1/2},
+\end{align}
+whose inverse requires $\rho>0$ on the ambient bond space
+\cite[lines~480--505]{Cirac2017MPU}.  The same factors define $u$ and $v$ in
+the source lemma \texttt{lemuisometry} and Theorem~III.4,
+\texttt{ThmFund1} \cite[lines~532--601]{Cirac2017MPU}.  Thus the positive
+fixed point is part of the preceding canonical-form-II convention, not a
+consequence of the bare MPU predicate for an arbitrary ambient representative.
+
+The supported formal route chooses
+\begin{align}
+  \mathcal C&\in\operatorname{CFII}(d^{-1/2}\mathcal U),
+  &\sum_{k:\,\mu_k\ne0}D_k&=D.
+\end{align}
+Here $\mathcal C$ is chosen canonical-form-II data for the normalized tensor,
+and the second identity is full active support.  The theorem
+\leanid{MPOTensor.IsMPU.normalized_transfer_power_eq_vecMulVec_of_reduced_cfii}
+then supplies the unique active block, its normalized diagonal fixed point
+$\Lambda$, and the ambient matrix
+\begin{align}
+  \rho&=V\Lambda V^\dagger,
+  &\rho&>0,
+  &\tr(\rho)&=1,\\
+  \mathcal E(\rho)&=\rho,
+  &(\Phi\rvert\mathcal E&=(\Phi\rvert,
+  &\mathcal E^{D^2-1}&=\lvert\rho)(\Phi\rvert,
+\end{align}
+where $(\Phi\rvert$ is the vectorized identity.  This $\rho$, rather than an
+arbitrary positive matrix, is the source weight used to define the factors and
+the operators $u$ and $v$.
+
+The present formalization therefore follows the explicit-hypothesis option for
+\texttt{lemuisometry} and Theorem~III.4: both statements carry chosen
+canonical-form-II data and full active support.  It does not prove that every
+ambient MPU representative has a positive definite fixed point, and it does not
+construct a reduced representative or transport the source cuts, the ranks,
+simplicity, or the operators $u$ and $v$ from such a representative back to the
+original bond space.  The complete four-way Lean theorem remains downstream of
+issue~\#6071, whose missing step is the combined source-$v$ network contraction
+for the blocked tensor built from this fixed-point data.
+
 \section{Verdict}
-\textbf{Verdict: the paper's proposition is correct for the intended reduced
-canonical representative, with zero-weight blocks and the ambient zero
-complement omitted; this reduction is not an explicit hypothesis of
+\textbf{Verdict: the paper's normal-tensor proposition, the source-isometry
+lemma, and Theorem~III.4 are correct for the intended reduced canonical-form-II
+representative, with zero-weight blocks and the ambient zero complement omitted;
+this reduction is not an explicit hypothesis of
 Proposition~\texttt{prop:normal-tensor}, and it does not follow from literal
 canonical-form membership alone.}
 Consequently, a source-faithful formalization must construct this reduced
-representative before applying the proposition or explicitly assume full active
-support for the chosen ambient representative.  The formalization does not yet
-construct the representative reduction.  The latter
-implication is formalized by
+representative and transport the source constructions, or explicitly assume
+chosen canonical-form-II data with full active support.  The formalization uses
+the latter option.  It does not yet construct the representative reduction.
+The full-support irreducibility implication is formalized by
 \leanid{MPSTensor.CPSVCanonicalFormData.isIrreducibleTensor_of_card_active_eq_one_of_fullActiveSupport}.
 The spectral-radius and primitivity conclusions are derived from the shifted
 normalized transfer traces and combined with full active support in
 \leanid{MPOTensor.IsMPU.isNormalTensor_normalizedFlattening_of_cpsv}.
 Bare \leanid{MPOTensor.IsMPU} is deliberately not used to infer ambient
-normality.
+normality or an ambient positive definite fixed point.
 
 \bibliographystyle{alpha}
 \bibliography{references}

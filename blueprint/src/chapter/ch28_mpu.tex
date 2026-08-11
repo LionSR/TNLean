@@ -3840,25 +3840,53 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
   \label{lemuisometry}
   \notready
   \discussion{5708}
-  \uses{def:mpu_source_uv,thm:mpu_source_u_expanded_metric,
-    thm:mpu_source_u_terminal_boundary,thm:mpu_bounded_simple_blocking}
-  For every MPU tensor $\mathcal U$, the operator $u$ associated with the two
-  source cuts satisfies
+  \uses{def:mpu,def:mpu_normalized_flattening,def:cpsv_cfii,
+    def:mpu_full_active_support,def:mpu_source_uv,
+    thm:mpu_reduced_cfii_transfer_stabilization}
+  Let $\mathcal U$ be an MPU tensor with $d>0$ and $D>1$.  Choose
+  canonical-form-II data for its normalized flattening whose active blocks
+  fill the ambient bond space.  Let $\rho$ be the normalized positive right
+  fixed point supplied by
+  Theorem~\ref{thm:mpu_reduced_cfii_transfer_stabilization}, and use $\rho$ in
+  the source factors associated with the two source cuts.  Then
   \begin{align}
     u^\dagger u&=\Id.
   \end{align}
   Consequently $u$ is an isometry and $r\ell\geq d^2$.
 \end{lemma}
 
+\begin{proof}
+  \uses{thm:mpu_reduced_cfii_transfer_stabilization,
+    thm:mpu_source_u_expanded_metric,
+    thm:mpu_source_u_terminal_boundary,thm:mpu_bounded_simple_blocking}
+  The chosen reduced canonical-form-II data give
+  \begin{align}
+    \rho&>0,
+    &\tr(\rho)&=1,
+    &E(\rho)&=\rho,
+    &E^{D^2-1}&=\lvert\rho)(\Phi\rvert,
+  \end{align}
+  with $(\Phi\rvert$ the vectorized identity.  Choose a blocking length at
+  which the tensor is simple.  Expanding the source-$u$ metric through that
+  blocked periodic contraction and applying the terminal boundary identity
+  reduces it to the normalized contraction of
+  $U^{(K+2)\dagger}U^{(K+2)}$, which is the identity.
+\end{proof}
+
 \begin{theorem}[Simple-tensor equivalence theorem]
   \label{ThmFund1}
   \notready
   \discussion{5708}
-  \uses{lemuisometry,def:mpu_simple,thm:mpu_simple1,
-    thm:mpu_source_uv_two_site_factorization,
-    thm:mpu_source_factor_right_inverses}
-  Let $\mathcal U$ be an MPU tensor, and let $r$, $\ell$, $u$, and $v$ be
-  obtained from its two source cuts. The following conditions are equivalent:
+  \uses{def:mpu,def:mpu_normalized_flattening,def:cpsv_cfii,
+    def:mpu_full_active_support,def:mpu_simple,def:mpu_source_uv,
+    thm:mpu_reduced_cfii_transfer_stabilization}
+  Let $\mathcal U$ be an MPU tensor with $d>0$ and $D>1$.  Choose
+  canonical-form-II data for its normalized flattening whose active blocks
+  fill the ambient bond space, and construct the source factors from the
+  normalized positive right fixed point $\rho$ supplied by
+  Theorem~\ref{thm:mpu_reduced_cfii_transfer_stabilization}.  Let $r$, $\ell$,
+  $u$, and $v$ be the resulting source-cut ranks and source operators.  Then
+  the following conditions are equivalent:
   \begin{enumerate}
     \item $\mathcal U$ is simple;
     \item $r\ell=d^2$;
@@ -3866,6 +3894,35 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     \item $v$ is unitary.
   \end{enumerate}
 \end{theorem}
+
+\begin{proof}
+  \uses{lemuisometry,thm:mpu_simple1,
+    thm:mpu_reduced_cfii_transfer_stabilization,
+    thm:mpu_source_uv_two_site_factorization,
+    thm:mpu_source_factor_right_inverses,
+    thm:mpu_source_v_dressed_entries,
+    thm:mpu_source_v_dressed_gram_cancel}
+  If $\mathcal U$ is simple, the two simple-tensor contractions give the
+  dressed Gram identity
+  \begin{align}
+    (Y_1\otimes Y_2)^\dagger v^\dagger v(Y_1\otimes Y_2)
+      &=(Y_1\otimes Y_2)^\dagger(Y_1\otimes Y_2).
+  \end{align}
+  The right inverses of $Y_1$ and $Y_2$ cancel the dressing, so
+  $v^\dagger v=\Id$.  Hence $r\ell\leq d^2$, while
+  Lemma~\ref{lemuisometry} gives $r\ell\geq d^2$.
+  This proves the first implication.
+
+  If $r\ell=d^2$, the isometry $u$ is square and therefore unitary.  If $u$
+  is unitary, the exact two-site factorization of $U^{(2)}$ and unitarity of
+  $U^{(2)}$ imply that $v$ is unitary.  Finally, if $v$ is unitary, the fixed
+  point identity gives the first simple-tensor contraction, while the same
+  complete source-cut contraction used above gives the second one.
+
+  % The complete four-way Lean capstone remains downstream of issue #6071.
+  % Its missing step is the combined source-v network contraction; no
+  % representative-transport theorem is asserted here.
+\end{proof}
 
 \begin{definition}[Standard form]
   \label{SF}
