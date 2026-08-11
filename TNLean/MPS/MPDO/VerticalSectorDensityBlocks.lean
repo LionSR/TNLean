@@ -71,43 +71,6 @@ private theorem densityBlockLinearMap_injective
   have hpartial := congrArg Matrix.partialTraceLeft hk
   simpa only [Matrix.partialTraceLeft_kronecker, hσtrace, one_smul] using hpartial
 
-private theorem unitaryReindexLinearEquiv_one
-    {n H : Type*} [Fintype n] [DecidableEq n]
-    [Fintype H] [DecidableEq H] (e : H ≃ n)
-    (U : Matrix n n ℂ) (hU : U ∈ Matrix.unitaryGroup n ℂ) :
-    Matrix.unitaryReindexLinearEquiv e U hU 1 = 1 := by
-  rw [Matrix.unitaryReindexLinearEquiv_apply]
-  rw [Matrix.mul_one, Matrix.mem_unitaryGroup_iff'.mp hU]
-  exact Matrix.reindexLinearEquiv_one ℂ ℂ e.symm
-
-private theorem unitaryReindexLinearEquiv_mul
-    {n H : Type*} [Fintype n] [DecidableEq n]
-    [Fintype H] [DecidableEq H] (e : H ≃ n)
-    (U : Matrix n n ℂ) (hU : U ∈ Matrix.unitaryGroup n ℂ)
-    (A B : Matrix n n ℂ) :
-    Matrix.unitaryReindexLinearEquiv e U hU (A * B) =
-      Matrix.unitaryReindexLinearEquiv e U hU A *
-        Matrix.unitaryReindexLinearEquiv e U hU B := by
-  rw [Matrix.unitaryReindexLinearEquiv_apply,
-    Matrix.unitaryReindexLinearEquiv_apply,
-    Matrix.unitaryReindexLinearEquiv_apply]
-  have hUright : U * star U = 1 := Matrix.mem_unitaryGroup_iff.mp hU
-  have hconj : star U * (A * B) * U =
-      (star U * A * U) * (star U * B * U) := by
-    calc
-      star U * (A * B) * U = star U * A * (U * star U) * B * U := by
-        rw [hUright]
-        simp only [Matrix.mul_one, Matrix.mul_assoc]
-      _ = (star U * A * U) * (star U * B * U) := by
-        simp only [Matrix.mul_assoc]
-  calc
-    Matrix.reindex e.symm e.symm (star U * (A * B) * U) =
-        Matrix.reindex e.symm e.symm
-          ((star U * A * U) * (star U * B * U)) := congrArg _ hconj
-    _ = Matrix.reindex e.symm e.symm (star U * A * U) *
-        Matrix.reindex e.symm e.symm (star U * B * U) :=
-      (Matrix.reindexLinearEquiv_mul ℂ ℂ e.symm e.symm e.symm _ _).symm
-
 private theorem unitaryReindexLinearEquiv_list_prod
     {n H : Type*} [Fintype n] [DecidableEq n]
     [Fintype H] [DecidableEq H] (e : H ≃ n)
@@ -118,10 +81,10 @@ private theorem unitaryReindexLinearEquiv_list_prod
   induction A with
   | nil =>
       simpa only [List.prod_nil, List.map_nil] using
-        unitaryReindexLinearEquiv_one e U hU
+        Matrix.unitaryReindexLinearEquiv_one e U hU
   | cons A l ih =>
       rw [List.prod_cons, List.map_cons, List.prod_cons,
-        unitaryReindexLinearEquiv_mul, ih]
+        Matrix.unitaryReindexLinearEquiv_mul, ih]
 
 private theorem densityBlockLinearMap_list_prod
     {K L : ℕ} {m d : Fin K → ℕ}
