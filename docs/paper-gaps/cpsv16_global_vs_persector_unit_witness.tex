@@ -168,6 +168,44 @@ only the BNT canonical-form hypotheses and equality of the MPV families. In
 particular, neither a per-sector unit-weight assumption nor any additional
 normalization is introduced.
 
+\section{Coefficient absorption and normality}
+
+The same distinction is load-bearing in the Case-II proof at source
+lines~1646--1782.  If a normal BNT representative is denoted by $A_s$ and its
+common coefficient is absorbed to form
+\[
+  \mathcal K_s=\mu_s A_s.
+\]
+For a tensor $B$, write
+$\mathcal E_B(X)=\sum_i B^iX(B^i)^\dagger$ for its transfer map and
+$\rho(\mathcal E_B)$ for that map's spectral radius. Then
+\[
+  \rho(\mathcal E_{\mathcal K_s})
+    =|\mu_s|^2\rho(\mathcal E_{A_s})=|\mu_s|^2.
+\]
+Thus the global unit witness does not imply that every absorbed representative
+is normal.
+
+This obstruction is kernel-checked by
+\leanid{MPSTensor.spectralRadius_transferMap_smul} and the explicit two-sector,
+bond-one construction in
+\path{TNLean/MPS/MPDO/CaseIIAbsorptionCounterexample.lean}.  Its unabsorbed
+representatives have disjoint doubled-physical support and are normal, its
+weights are $(1/\sqrt2,1)$, and the ambient physical-trace transfer is
+literally the identity.  Nevertheless the first absorbed representative has
+transfer spectral radius $1/2$ and hence is not
+\leanid{MPSTensor.IsNormalTensor}; see
+\leanid{MPOTensor.CaseIIAbsorptionCounterexample.%
+printed_absorbed_normality_step_is_false}.
+
+This proves that the printed absorbed-normality inference is false under the
+global normalization convention.  The present declaration deliberately does
+not package the full high-level biCF, simplicity, MPDO, and SAL predicates
+used by Theorem~4.9.  Packaging those interfaces remains separate work.
+Accordingly this is not a counterexample to the final theorem: the all-sector
+structural implication and the resulting blocking-channel implication remain
+not ready.
+
 \section{Affected declarations}
 
 The following declarations \emph{formerly} carried the additional per-sector
