@@ -24,6 +24,20 @@ abstracted — record why, so it is not re-proposed).
 
 ## Promoted
 
+### Hayashi state evaluation in middle-sector coordinates — promoted
+- **Pattern:** evaluate `EtaStructure.h_state` at decomposed middle-site coordinates,
+  identify both inverse reindexings, expand the lifted unitary conjugation, and
+  simplify the dependent block-state conditional.
+- **Seen:** five occurrences in `HayashiSectorComparison.lean`,
+  `BNTMarkovKeyFormula.lean`, `SectorFactorization.lean`,
+  `BNTMarkovSectorProjectors.lean`, and `InverseMapActiveSectorRecurrence.lean`
+  before promotion (2026-08-11).
+- **Abstraction:** `HayashiMarkovDecomposition.h_state_apply_middle_sector` in
+  `TNLean/Analysis/HayashiMarkovStructure.lean`.
+- **Notes:** the theorem retains the dependent conditional for equal versus unequal
+  sectors. Diagonal and off-diagonal consumers perform their respective
+  specializations locally, while the mixed-sector consumer uses the full formula.
+
 ### retained vertical-copy dependent-cast evaluation — promoted
 - **Pattern:** unfold the multiplicity-expanded assembled tensor at two coordinates
   in the same retained copy, identify the round-tripped dependent copy index, and

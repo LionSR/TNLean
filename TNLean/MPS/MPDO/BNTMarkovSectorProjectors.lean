@@ -162,14 +162,6 @@ theorem exists_bntMarkovBlockNonzero_of_probability_ne_zero
     Matrix.exists_diagonal_ne_zero_of_trace_eq_one
       (hη.ρ_right k) (hη.hρ_right_dm k).2
   let b : Fin d := hη.decompB.symm ⟨k, (l, r)⟩
-  have hs := congrFun (congrFun hη.h_state
-    (i₁, (⟨k, (l, r)⟩, i₃))) (i₁, (⟨k, (l, r)⟩, i₃))
-  rw [Matrix.reindex_apply, Matrix.submatrix_apply] at hs
-  have hindex : (HayashiMarkov.abcEquiv hη.decompB).symm
-      (i₁, (⟨k, (l, r)⟩, i₃)) = (i₁, b, i₃) := by
-    simp [HayashiMarkov.abcEquiv, b]
-  rw [hindex, HayashiMarkov.liftB_conj_apply,
-    HayashiMarkov.blockState_apply] at hs
   have hs' :
       (∑ i₂ : Fin d, ∑ j₂ : Fin d,
         (hη.U_B : Matrix (Fin d) (Fin d) ℂ) b i₂ *
@@ -177,7 +169,8 @@ theorem exists_bntMarkovBlockNonzero_of_probability_ne_zero
             star ((hη.U_B : Matrix (Fin d) (Fin d) ℂ) b j₂)) =
         (hη.p k : ℂ) * hη.ρ_left k (i₁, l) (i₁, l) *
           hη.ρ_right k (r, i₃) (r, i₃) := by
-    simpa using hs
+    simpa [b] using
+      hη.h_state_apply_middle_sector i₁ i₁ i₃ i₃ k k l r l r
   have hsum_ne :
       (∑ s : Fin g, Matrix.trace
         (K s i₁ i₁ * conjugatePhysical (K s) hη.U_B b b *

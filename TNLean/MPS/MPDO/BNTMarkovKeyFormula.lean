@@ -82,19 +82,8 @@ theorem outerInverseContraction_markov_block
           (hη.p k : ℂ) * hη.ρ_left k (i₁, l) (j₁, h ▸ l') *
             hη.ρ_right k (r, i₃) (h ▸ r', j₃)
         else 0 := by
-    have hs := congrFun (congrFun hη.h_state
-      (i₁, (⟨k, (l, r)⟩, i₃))) (j₁, (⟨k', (l', r')⟩, j₃))
-    rw [Matrix.reindex_apply, Matrix.submatrix_apply] at hs
-    have hleft : (HayashiMarkov.abcEquiv hη.decompB).symm
-        (i₁, (⟨k, (l, r)⟩, i₃)) = (i₁, b, i₃) := by
-      simp [HayashiMarkov.abcEquiv, b]
-    have hright : (HayashiMarkov.abcEquiv hη.decompB).symm
-        (j₁, (⟨k', (l', r')⟩, j₃)) = (j₁, b', j₃) := by
-      simp [HayashiMarkov.abcEquiv, b']
-    rw [hleft, hright] at hs
-    rw [HayashiMarkov.liftB_conj_apply] at hs
-    rw [HayashiMarkov.blockState_apply] at hs
-    simpa [b, b', U] using hs
+    simpa [b, b', U] using
+      hη.h_state_apply_middle_sector i₁ j₁ i₃ j₃ k k' l r l' r'
   rw [Matrix.reindex_apply, Matrix.submatrix_apply]
   change (U * outerInverseContraction C ρ x y * Uᴴ) b b' = _
   have hExpand :
