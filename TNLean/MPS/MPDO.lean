@@ -304,12 +304,14 @@ import TNLean.MPS.MPDO.VerticalCF
 import TNLean.MPS.MPDO.VerticalCanonicalForm
 import TNLean.MPS.MPDO.VerticalCanonicalFormConstruction
 import TNLean.MPS.MPDO.VerticalCoisometry
+import TNLean.MPS.MPDO.VerticalCopyBlocks
 import TNLean.MPS.MPDO.VerticalMapTransport
 import TNLean.MPS.MPDO.VerticalProductCornerComparison
 import TNLean.MPS.MPDO.VerticalProductCornerPositivity
 import TNLean.MPS.MPDO.VerticalProductFusionDecomposition
 import TNLean.MPS.MPDO.VerticalProductPairBlocks
 import TNLean.MPS.MPDO.VerticalProductReconstruction
+import TNLean.MPS.MPDO.VerticalProductRetainedBlocks
 import TNLean.MPS.MPDO.VerticalProductSpectralFamily
 import TNLean.MPS.MPDO.VerticalReduction
 import TNLean.MPS.MPDO.VerticalSectorAmbientMaps

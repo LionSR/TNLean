@@ -9,7 +9,7 @@ import TNLean.MPS.MPDO.BNTAlgebraTensorClausePositivity
 import TNLean.MPS.MPDO.BNTFusionTensorClauseFromRFP
 import TNLean.MPS.MPDO.SitewisePhysicalMatrix
 import TNLean.MPS.MPDO.TopologicalProjectorRecursion
-import TNLean.MPS.MPDO.VerticalProductPairBlocks
+import TNLean.MPS.MPDO.VerticalCopyBlocks
 
 /-!
 # Density decomposition by recursive fusion histories

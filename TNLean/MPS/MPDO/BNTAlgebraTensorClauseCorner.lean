@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.MPDO.BNTAlgebraTensorClauseSpectrum
 import TNLean.MPS.MPDO.FigureEightPairwise
-import TNLean.MPS.MPDO.VerticalProductPairBlocks
+import TNLean.MPS.MPDO.VerticalCopyBlocks
 
 /-!
 # Physical corners of the exact two-site sector gauge
