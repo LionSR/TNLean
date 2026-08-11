@@ -548,13 +548,13 @@
         &=c_{\alpha,q}X_{\alpha,q}A_{\alpha,q}^vX_{\alpha,q}^{-1},
         \notag
     \end{align}
-    and distinguished gauges $X_{\alpha,1}=\Id$. Fix a class $\alpha$ and a
+    and distinguished gauges $X_{\alpha,0}=\Id$. Fix a class $\alpha$ and a
     copy $q$. After identifying the representative bond space with that of
     copy $q$, there are a physical map $W_{\alpha,q}$ and a scalar
-    $c_{\alpha,1}>0$ such that
+    $c_{\alpha,0}>0$ such that
     \begin{align}
         W_{\alpha,q}^\dagger\widetilde M^vW_{\alpha,q}
-        &=c_{\alpha,1}A_{\alpha,q}^v
+        &=c_{\alpha,0}A_{\alpha,q}^v
         \label{eq:distinguished_grouped_reference_corner}
     \end{align}
     for every vertical letter $v$.
@@ -564,17 +564,17 @@
     Identify the distinguished bond space with that of copy $q$ and define
     the transported physical map by
     \begin{align}
-        W_{\alpha,q}&=V_{\alpha,1}.
+        W_{\alpha,q}&=V_{\alpha,0}.
         \notag
     \end{align}
     The distinguished gauge is the identity, so its corner equation becomes
     \begin{align}
         W_{\alpha,q}^\dagger\widetilde M^vW_{\alpha,q}
-        &=c_{\alpha,1}A_{\alpha,q}^v.
+        &=c_{\alpha,0}A_{\alpha,q}^v.
         \notag
     \end{align}
     Positivity of the distinguished effective coefficient gives
-    $c_{\alpha,1}>0$, and the second displayed identity is
+    $c_{\alpha,0}>0$, and the second displayed identity is
     (\ref{eq:distinguished_grouped_reference_corner}).
 \end{proof}
 
@@ -617,8 +617,7 @@
     \label{thm:mpdo_grouped_sector_gram_conjugation}
     \lean{MPOTensor.IsMPDO.grouped_sector_gram_conj_eq}
     \leanok
-    \uses{thm:grouped_sector_gram_conj_of_dressing,
-        thm:mpdo_pairwise_vertical_gram_conjugation,
+    \uses{thm:mpdo_pairwise_vertical_gram_conjugation,
         thm:mpdo_vertical_bnt_grouping_with_isometries}
     Consider the grouped vertical decomposition furnished by
     Theorem~\ref{thm:mpdo_vertical_bnt_grouping_with_isometries}. For a
@@ -651,8 +650,7 @@
     \label{thm:cpsv_literal_grouped_sector_gram_conjugation}
     \lean{MPSTensor.IsCPSVCanonicalForm.grouped_sector_gram_conj_eq}
     \leanok
-    \uses{thm:grouped_sector_gram_conj_of_dressing,
-        thm:cpsv_literal_pairwise_vertical_gram_conjugation,
+    \uses{thm:cpsv_literal_pairwise_vertical_gram_conjugation,
         thm:cpsv_literal_vertical_bnt_grouping_with_isometries}
     Consider the actual phase-class grouping furnished under literal CPSV
     canonical form.  For a class $\alpha$ and copy $q$, identify its normal
@@ -849,8 +847,7 @@
     \lean{MPOTensor.IsMPDO.grouped_sector_gram_eq_pos_smul_one}
     \lean{MPOTensor.IsMPDO.grouped_sector_exists_unitary_normalization}
     \leanok
-    \uses{thm:grouped_sector_gram_scalar_of_dressing,
-        thm:mpdo_pairwise_vertical_gram_conjugation,
+    \uses{thm:mpdo_pairwise_vertical_gram_conjugation,
         thm:mpdo_vertical_bnt_grouping_with_isometries}
     In the grouped vertical decomposition of a matrix-product density
     operator in normalized BNT-refined horizontal form, let $X_{\alpha,k}$ be
@@ -892,8 +889,7 @@
     \lean{MPSTensor.IsCPSVCanonicalForm.grouped_sector_gram_eq_pos_smul_one}
     \lean{MPSTensor.IsCPSVCanonicalForm.grouped_sector_exists_unitary_normalization}
     \leanok
-    \uses{thm:grouped_sector_gram_scalar_of_dressing,
-        thm:cpsv_literal_pairwise_vertical_gram_conjugation,
+    \uses{thm:cpsv_literal_pairwise_vertical_gram_conjugation,
         thm:cpsv_literal_vertical_bnt_grouping_with_isometries}
     In the actual phase-class grouping under literal CPSV canonical form,
     every gauge $X_{\alpha,q}$ has a positive real Gram scalar
@@ -928,26 +924,40 @@
     the unitary normalization.
 \end{proof}
 
+\begin{definition}[Normalized grouped-sector map]
+    \label{def:normalized_grouped_sector_map}
+    \lean{MPOTensor.normalizedGroupedSectorMap}
+    \leanok
+    \uses{def:mpv_phase_class_data}
+    After identifying the bond space of a copy with that of its representative,
+    define its normalized physical map by
+    \begin{align}
+        W_{\alpha,q}
+        &=V_{\alpha,q}\omega_{\alpha,q}^{-1/2}X_{\alpha,q}.
+        \notag
+    \end{align}
+\end{definition}
+
 \begin{theorem}[Normalized grouped-sector maps from Gram scalars]
     \label{thm:normalized_grouped_sector_maps_of_gram}
-    \lean{MPOTensor.normalizedGroupedSectorMap}
     \lean{MPOTensor.normalizedGroupedSectorMap_isometry}
     \lean{MPOTensor.normalizedGroupedSectorMap_orthogonal}
     \lean{MPOTensor.normalizedGroupedSectorMap_intertwining}
     \lean{MPOTensor.normalizedGroupedSectorMap_corner}
     \lean{MPOTensor.exists_normalized_grouped_sector_maps_of_gram}
     \leanok
-    \uses{def:mpv_phase_class_data, def:vertical_tensor_mpdo}
+    \uses{def:normalized_grouped_sector_map, def:mpv_phase_class_data,
+        def:vertical_tensor_mpdo}
     Let a phase-class grouping have gauges $X_{\alpha,q}$, physical maps
     $V_{\alpha,q}$, and effective coefficients $c_{\alpha,q}$.
-    Suppose
+    Suppose $\omega_{\alpha,q}>0$ and
     \begin{align}
         X_{\alpha,q}^\dagger X_{\alpha,q}
-        &=\omega_{\alpha,q}\Id,
-        &\omega_{\alpha,q}&>0,
+        &=\omega_{\alpha,q}\Id.
         \notag
     \end{align}
-    the maps $V_{\alpha,q}$ are isometries with pairwise orthogonal ranges,
+    for every class and copy. Suppose also that the maps $V_{\alpha,q}$
+    are isometries with pairwise orthogonal ranges,
     they intertwine $\widetilde M$ with the corresponding gauged
     representatives, and their grouped corner sum reconstructs every letter
     of $\widetilde M$. Then there are maps $W_{\alpha,q}$ such that
@@ -968,6 +978,9 @@
 \end{theorem}
 
 \begin{proof}\leanok
+    \uses{def:normalized_grouped_sector_map,
+        thm:normal_tensor_gram_rigidity,
+        thm:mpdo_bnt_conditional_identity_marked_unitary_conjugacy}
     After identifying the copy bond space with the representative bond space,
     define
     \begin{align}
@@ -1020,8 +1033,7 @@
     \label{thm:mpdo_normalized_grouped_sector_maps}
     \lean{MPOTensor.IsMPDO.exists_normalized_grouped_sector_maps}
     \leanok
-    \uses{thm:normalized_grouped_sector_maps_of_gram,
-        thm:mpdo_grouped_sector_unitary_normalization,
+    \uses{thm:mpdo_grouped_sector_unitary_normalization,
         thm:mpdo_vertical_bnt_grouping_with_isometries}
     In the grouped vertical decomposition, put
     \begin{align}
@@ -1078,8 +1090,7 @@
     \label{thm:cpsv_literal_normalized_grouped_sector_maps}
     \lean{MPSTensor.IsCPSVCanonicalForm.exists_normalized_grouped_sector_maps}
     \leanok
-    \uses{thm:normalized_grouped_sector_maps_of_gram,
-        thm:cpsv_literal_grouped_sector_unitary_normalization,
+    \uses{thm:cpsv_literal_grouped_sector_unitary_normalization,
         thm:cpsv_literal_vertical_bnt_grouping_with_isometries}
     In the phase-class grouping obtained from literal CPSV canonical form, let
     $Q_{\alpha,q}=\omega_{\alpha,q}^{-1/2}X_{\alpha,q}$ and
