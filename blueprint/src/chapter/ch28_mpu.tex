@@ -4636,6 +4636,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
   In the symmetric case, $\widetilde\Lambda$ is real and symmetric. In the
   skew-symmetric case, it is real and skew-symmetric. In both cases,
   $\det(\widetilde\Lambda)=1$.
+  % Source lines: paper_v2.tex 1041--1084.
 \end{lemma}
 
 \begin{proposition}[Orthogonal and symplectic standard forms]
@@ -4735,8 +4736,8 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
   \label{PropChiral}
   \notready
   \discussion{5714}
-  \uses{FundamentalMPU,IndexTh,SF}
-  Let an index-zero MPU be in standard form, with one-site physical space
+  \uses{FundamentalMPU,SF}
+  Let an MPU be in standard form, with one-site physical space
   $\mathbb C^{d_0}\otimes\mathbb C^{d_0}$. It satisfies
   $U^{(N)}=U^{(N)\dagger}$ for every even $N$ if and only if there is a
   unitary $x$ such that
@@ -4779,8 +4780,8 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
   \label{prop:local-char-transposition}
   \notready
   \discussion{5714}
-  \uses{FundamentalMPU,def:index,SF}
-  Let an index-zero MPU be in standard form, with one-site physical space
+  \uses{FundamentalMPU,SF}
+  Let an MPU be in standard form, with one-site physical space
   $\mathbb C^{d_0}\otimes\mathbb C^{d_0}$. It satisfies
   $U^{(N)}=U^{(N)T}$ for every even $N$ if and only if there are a unitary
   $x$ and a phase $e^{i\phi}$ such that
@@ -4961,7 +4962,8 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
   \label{cor:all-equivalent-under-conjugation}
   \notready
   \uses{conjphs,def:equivalent-symmetry,lem:mpu_blocking}
-  All conjugation-invariant MPUs are equivalent under conjugation symmetry.
+  If either $r$ or $\ell$ is odd, all conjugation-invariant MPUs with these
+  source ranks are equivalent under conjugation symmetry.
   % Source lines: paper_v2.tex 1450--1460.
 \end{corollary}
 
@@ -5381,7 +5383,11 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
   \begin{align}
     u&=CZ(\sigma_x\otimes\sigma_x),&v&=CZ,
   \end{align}
-  where $CZ=\operatorname{diag}(1,1,1,-1)$. Its tensor is
+  where $CZ=\operatorname{diag}(1,1,1,-1)$. Let
+  \begin{align}
+    H&=\frac1{\sqrt2}\begin{pmatrix}1&1\\1&-1\end{pmatrix}
+  \end{align}
+  be the Hadamard matrix. The corresponding tensor is
   \begin{align}
     \mathcal U_{\ell r}^{ud}
       &=(\sigma_x)_{ud}\delta_{u,\ell}H_{\ell,r}.
@@ -5490,6 +5496,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
       (\mathbb S\otimes\mathbb S),&
     v_3^{(2)}&=\Id\otimes\mathbb S\otimes\Id.
   \end{align}
+  % Source lines: paper_v2.tex 1980--2042.
 \end{definition}
 
 \begin{definition}[Transformation with swaps]
@@ -5513,6 +5520,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     \widetilde u_2&=\Id\otimes\Id,&
     \widetilde v_2&=\mathbb S.
   \end{align}
+  % Source lines: paper_v2.tex 2045--2099.
 \end{definition}
 
 \begin{lemma}[Transformation with swaps and symmetry equivalence]
