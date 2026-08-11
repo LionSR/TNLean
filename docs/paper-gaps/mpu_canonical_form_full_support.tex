@@ -158,7 +158,8 @@ $J>0$, a positive trace-one matrix $\rho$, and
 The source-isometry lemma and Theorem~III.8 both retain the source factors of
 $\mathcal U$.
 
-Blocking appears only inside the proof of the source-isometry lemma. Let $J$
+Blocking appears only inside the proof of the admissible source-isometry
+lemma. Let $J$
 be the supplied stabilization exponent, put $K=JD^2$, and let
 $\mathcal U^{[K]}$ denote the direct $K$-site
 block of $\mathcal U$. This internal block supplies the direct and reflected
@@ -169,18 +170,26 @@ transport of source data across blocking is asserted.
 \section{Downstream standard-form, index, and symmetry scope}
 The Chapter~28 blueprint records the preceding hypotheses as a reduced
 full-support source datum for the same tensor. This is an explicit input, not
-an existence theorem. The planned standard form therefore applies only to a
-simple tensor carrying such a datum. Chapter~28 retains the unrestricted
-source Fundamental Theorem of MPU under the source label
-\texttt{FundamentalMPU}. A separate Admissible Fundamental Theorem applies
-only when every standard-form tensor being compared carries its own datum.
+an existence theorem. It retains unrestricted, unformalized source entries
+under the original labels \texttt{lemuisometry}, \texttt{ThmFund1},
+\texttt{SF}, \texttt{def:index}, and \texttt{index-well-defined}. The current
+reduced full-support statements have the distinct labels
+\texttt{lem:mpu\_admissible\_source\_u\_isometry},
+\texttt{thm:mpu\_admissible\_simple\_tensor\_equivalence},
+\texttt{def:mpu\_admissible\_standard\_form},
+\texttt{def:mpu\_admissible\_index}, and
+\texttt{prop:mpu\_admissible\_index\_well\_defined}.
 
-Chapter~28 also retains a separate unformalized entry for the unrestricted source
-Index Theorem, labelled \texttt{IndexTh} in
-\cite[Theorem~IV.3]{Cirac2017MPU}. A distinctly named Admissible Index Theorem
-records the result currently justified by the formal interfaces. It has a
-source-data restriction at every blocking
-length where Theorem~III.8 is used. A blocking length is admissible only when
+The unrestricted source Fundamental Theorem of MPU remains under
+\texttt{FundamentalMPU} and depends only on the source standard form
+\texttt{SF}. The separate Admissible Fundamental Theorem depends on the
+admissible standard form and the admissible simple-tensor equivalence theorem.
+Likewise, the unrestricted source Index Theorem remains under
+\texttt{IndexTh} and depends only on the source index, its source
+well-definedness statement, and source equivalence. A distinctly named
+Admissible Index Theorem records the result currently justified by the formal
+interfaces. It has a source-data restriction at every blocking length where
+Theorem~III.8 is used. A blocking length is admissible only when
 the actual blocked tensor is simple and carries its own source datum.
 Well-definedness compares two admissible simple blockings. Tensor-product
 additivity requires one common blocking length at which both factors and their
@@ -189,7 +198,11 @@ proof first uses $\mathcal U_k$, $\mathcal U'_k$, and $\mathcal W_k$, then
 writes $\mathcal U_{2k}$ and $\mathcal U'_{2k}$ in standard form and computes
 the ranks of $\mathcal W_{4k}$. The admissible theorem therefore requires
 separate source data for all six of these exact blocked tensors. No later-block
-transport is used.
+transport is used. The complete source-$u$ contraction in issue~\#5982 is a
+dependency of the admissible source-isometry proof, and the complete source-$v$
+contraction in issue~\#6071 is a dependency of the admissible simple-tensor
+equivalence proof. These open proof nodes do not establish the unrestricted
+source statements.
 % Source lines: paper_v2.tex 824--865.
 
 Continuity requires more than endpoint data. Chapter~28 therefore introduces
@@ -239,11 +252,16 @@ pathwise constancy. To compare both signs along a path $\mathcal W(p)$,
 pathwise constancy is applied separately to the continuously varying families
 $\mathcal W(p)$, $\mathcal W(p)_2$, $\mathcal W(p)_4$,
 $\mathcal W(p)_2^\sharp$, and $\mathcal W(p)_4^\sharp$.
-All later time-reversal descendants and examples repeat the required endpoint
-and comparison data after blocking or adjoining ancillas. Statements using the
-swap transformation also supply the fixed conjugate comparison path,
-independently of whether the selected symmetry is time reversal or
-transposition. No preservation under any of these operations is asserted.
+For equivalence after adjoining ancillas, the same five continuous families
+are required for the actual ancilla-blocked witness path, rather than only at
+its endpoints. All later time-reversal descendants and examples repeat the
+required endpoint and comparison data after blocking or adjoining ancillas.
+The swap transformation and its two dependent phase statements require the
+actual source-constructed interpolation to carry an admissible symmetry-path
+datum with one common blocking length $m\leq D^4$. This datum includes the
+actual blocked path and all four fixed comparison paths: conjugate,
+physical-adjoint, transposed, and symmetry-image. No preservation under any of
+these operations is asserted.
 
 For bond dimension one, the normalized transfer matrix supplies the source
 pair directly. For bond dimension greater than one, no current result
@@ -260,14 +278,23 @@ symmetry-classification theorems stated in the source.
 The native source-data scope tracker is issue~\#6136. Its four implementation
 branches separate the logically distinct transport problems. Issue~\#6137
 constructs a reduced full-support representative and transports the source
-objects back to the tensor used in the theorem. Issue~\#6138 proves source-data
-preservation under physical blocking and adjoining identity ancillas.
-Issue~\#6139 treats tensor products, composition, and conjugate, adjoint,
-transposed, and other transformed comparison tensors. Issue~\#6140 constructs
-continuous source data along strict-equivalence paths and their
-symmetry-transformed comparison paths. Closing these four branches removes the
-downstream admissibility hypotheses; it does not replace the independent
-complete-network obligations in issues~\#5982 and~\#6071.
+objects back to the tensor used in the theorem. Together with the independent
+complete-network issues~\#5982 and~\#6071, this is required before the
+admissible source-isometry and simple-tensor equivalence nodes can be merged
+into \texttt{lemuisometry} and \texttt{ThmFund1}. The admissible standard form
+can then be merged into \texttt{SF}.
+
+Issue~\#6138 proves source-data preservation under physical blocking and
+adjoining identity ancillas. It removes the extra hypotheses from the
+admissible index definition, its well-definedness theorem, and the
+ancilla-blocked sign comparisons. Issue~\#6139 treats tensor products,
+composition, and conjugate, adjoint, transposed, and other transformed
+comparison tensors. Issue~\#6140 constructs continuous source data along
+strict-equivalence paths and their symmetry-transformed comparison paths.
+Only after these transport results are available can the admissible index and
+phase-classification nodes be merged into their unrestricted source
+counterparts. Closing issues~\#6137--\#6140 does not replace the independent
+proof obligations in issues~\#5982 and~\#6071.
 
 \section{Verdict}
 \textbf{Verdict: scope restriction.} The paper's normal-tensor proposition,
@@ -282,7 +309,9 @@ representative and transport the source constructions, or explicitly assume
 chosen canonical-form-II data with full active support. The formalization uses
 the latter option when $D>1$ and the direct one-dimensional stabilization when
 $D=1$. It does not yet construct the representative reduction in the
-higher-dimensional case.
+higher-dimensional case. The original source labels therefore remain
+unrestricted and unformalized; the distinctly named admissible nodes record
+the current reduced full-support route.
 
 Within Theorem~III.8 itself, the two remaining proof gaps are the complete
 source-$u$ contraction tracked by issue~\#5982 and the complete source-$v$
