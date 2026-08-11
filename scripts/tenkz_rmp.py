@@ -11,6 +11,7 @@ from __future__ import annotations
 
 import argparse
 import concurrent.futures
+import contextlib
 import dataclasses
 import hashlib
 import os
@@ -22,7 +23,7 @@ import tempfile
 import tomllib
 from collections import Counter
 from pathlib import Path
-from typing import Any, Iterable, Sequence
+from typing import Any, Iterable, Iterator, Sequence
 
 from tenkzlib.dimension_inventory import (
     DimensionInventoryError,
@@ -1833,6 +1834,32 @@ def compile_comparison(
     return pdf
 
 
+@contextlib.contextmanager
+def working_directory() -> Iterator[Path]:
+    """Yield the scratch tree every compile writes into.
+
+    By default this is a temporary directory removed on exit.  When
+    TENKZ_RMP_WORK_ROOT names a directory, the tree is created there and
+    preserved instead, so a failing run's compile transcripts, event logs,
+    and PDFs survive the process for post-mortem reading; continuous
+    integration points this at a directory outside the checkout (which is
+    on TEXINPUTS recursively) and uploads it as a failure artifact.  The
+    directory must be new or empty: per-target
+    directories are created without overwriting, and artifacts left by a
+    previous run would mix into the audit.
+    """
+    raw = os.environ.get("TENKZ_RMP_WORK_ROOT")
+    if raw is None:
+        with tempfile.TemporaryDirectory(prefix="tenkz-rmp-") as temporary:
+            yield Path(temporary)
+        return
+    work = Path(raw).resolve()
+    if work.exists() and any(work.iterdir()):
+        fail(f"TENKZ_RMP_WORK_ROOT must name a new or empty directory: {work}")
+    work.mkdir(parents=True, exist_ok=True)
+    yield work
+
+
 def positive_jobs() -> int:
     raw = os.environ.get("TENKZ_RMP_JOBS", "4")
     if re.fullmatch(r"[1-9][0-9]*", raw) is None:
@@ -1882,8 +1909,7 @@ def main() -> int:
         validate_verdict_consistency(targets, verdicts)
         if args.command == "compare":
             source_root = args.source_root.resolve()
-        with tempfile.TemporaryDirectory(prefix="tenkz-rmp-") as temporary:
-            work = Path(temporary)
+        with working_directory() as work:
             if args.command == "compare":
                 source_snapshot = work / "author-source"
                 verified = verify_author_source_tree(
