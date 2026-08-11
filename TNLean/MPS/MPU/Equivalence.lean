@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import Mathlib.Topology.Connected.PathConnected
-import TNLean.MPS.CanonicalForm.Definitions
+import TNLean.MPS.MPU.MPUCanonicalForm
 import TNLean.MPS.MPU.PhysicalAncilla
 
 /-!
@@ -45,8 +45,8 @@ Source: arXiv:1703.09188, Definition `def:strictly-equivalent-tensors`,
 lines 708--714. -/
 def StrictlyEquivalent (U : MPOTensor da D) (V : MPOTensor db D)
     (hphys : da = db) : Prop :=
-  MPSTensor.IsCPSVCanonicalForm U.toMPSTensor ∧
-    MPSTensor.IsCPSVCanonicalForm V.toMPSTensor ∧
+  MPSTensor.IsMPUCanonicalForm U.toMPSTensor ∧
+    MPSTensor.IsMPUCanonicalForm V.toMPSTensor ∧
       JoinedIn {W : MPOTensor db D | IsMPU W}
         (reindexPhysical (finCongr hphys).symm U) V
 

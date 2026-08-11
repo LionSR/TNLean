@@ -3234,11 +3234,38 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
   \end{align}
 \end{lemma}
 
+\begin{definition}[MPU canonical form]
+  \label{def:mpu_canonical_form}
+  \lean{MPSTensor.IsMPUCanonicalBlock,
+    MPSTensor.MPUCanonicalFormData,
+    MPSTensor.IsMPUCanonicalForm}
+  \leanok
+  \uses{def:transfer_map}
+  A tensor $A$ of physical dimension $d$ and bond dimension $D$ is in MPU
+  canonical form if there are positive block dimensions $D_k$, weights
+  $\mu_k\in\mathbb C$, tensors $A_k$ of bond dimension $D_k$, and a
+  coisometry
+  \begin{align}
+    C\colon\mathbb C^D&\longrightarrow
+      \bigoplus_{k=1}^r\mathbb C^{D_k},&
+    CC^*&=\Id,
+  \end{align}
+  such that
+  \begin{align}
+    A^i=C^*\left(\bigoplus_{k=1}^r\mu_k A_k^i\right)C.
+  \end{align}
+  Every $A_k$ is irreducible and the spectral radius of its transfer map is
+  one. The blocks may be periodic, so no uniqueness condition is imposed on
+  their peripheral eigenvalues. This is the canonical form of
+  \cite[lines~259--267]{Cirac2017MPU}; normal tensors form a strictly stronger
+  class.
+\end{definition}
+
 \begin{definition}[Strict equivalence]
   \label{def:strictly-equivalent-tensors}
   \lean{MPOTensor.StrictlyEquivalent}
   \leanok
-  \uses{def:mpu,def:mpu_physical_reindexing,def:cpsv_canonical_form}
+  \uses{def:mpu,def:mpu_physical_reindexing,def:mpu_canonical_form}
   Fix a virtual bond dimension $D$. Let $\mathcal U$ and $\mathcal V$ be
   canonical-form MPU tensors with physical dimensions $d_a$ and $d_b$. Given
   an equality $h\colon d_a=d_b$, reindex $\mathcal U$ from $d_a$ to $d_b$

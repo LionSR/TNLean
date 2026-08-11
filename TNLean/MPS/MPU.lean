@@ -14,6 +14,7 @@ import TNLean.MPS.MPU.BlockingRanks
 import TNLean.MPS.MPU.CanonicalForm
 import TNLean.MPS.MPU.DoubleLayerContraction
 import TNLean.MPS.MPU.Equivalence
+import TNLean.MPS.MPU.MPUCanonicalForm
 import TNLean.MPS.MPU.MatchingContractions
 import TNLean.MPS.MPU.PhysicalAncilla
 import TNLean.MPS.MPU.ResidualAlgebra
