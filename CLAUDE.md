@@ -310,4 +310,5 @@ follow-up, not against the temporary `sorry` count.
 | Name | Kind | Use when | Defined in |
 |---|---|---|---|
 | `exists_blockDiagonal_boundary_chainGroundSpace_of_global_cut_of_openBoundary` | helper theorem | Closing block-diagonal boundaries from an open-boundary representation and a simultaneous span across the complementary global cut | `TNLean/MPS/ParentHamiltonian/BNTBlockDiagonalBoundaryClosing.lean` |
+| `BlockSumGroundSpace.exists_blockDiagonal_boundary_of_mem_iSup_groundSpace` | helper theorem | Assembling membership in the sum of open-boundary block spaces into one weighted block-diagonal boundary matrix | `TNLean/MPS/ParentHamiltonian/BlockSumGroundSpace.lean` |
 | `Kraus.map_compressed_fixedPoint` | helper theorem | Preserving a supported fixed point under finite-Kraus compression along an isometry | `TNLean/Channel/KrausCornerCompression.lean` |
