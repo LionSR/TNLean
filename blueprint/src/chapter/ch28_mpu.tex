@@ -4761,13 +4761,13 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
   \uses{thm:mpu_admissible_fundamental,thm:mpu_admissible_index,
     def:mpu_admissible_standard_form,
     def:mpu_reduced_full_support_source_datum}
-  Let an MPU of index zero be in admissible standard form. Suppose its
-  one-site tensor
+  Let an MPU be in admissible standard form. Suppose its one-site tensor
   $\mathcal U$, its actual two-site block $\mathcal U_2$, and the
   physical-adjoint comparison tensor $\mathcal U_2^\sharp$ are simple and each
   carries its own reduced full-support source datum. Write the one-site
-  physical space as $\mathbb C^{d_0}\otimes\mathbb C^{d_0}$. It satisfies
-  $U^{(N)}=U^{(N)\dagger}$ for every even $N$ if and only if there is a
+  physical space as $\mathbb C^{d_0}\otimes\mathbb C^{d_0}$. Time-reversal
+  symmetry then forces $\operatorname{ind}(\mathcal U)=0$. Under these
+  hypotheses, $U^{(N)}=U^{(N)\dagger}$ for every even $N$ if and only if there is a
   unitary $x$ such that
   \begin{align}
     (\Id_1\otimes v_{23}\otimes\Id_4)(u_{12}\otimes u_{34})
@@ -4775,6 +4775,27 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
         (\Id_1\otimes v_{23}^\dagger\otimes\Id_4).
   \end{align}
 \end{proposition}
+
+\begin{proof}
+  \uses{thm:mpu_admissible_index,thm:mpu_admissible_fundamental}
+  Under time reversal, $\mathcal U_2$ and $\mathcal U_2^\sharp$ generate the
+  same MPU. Physical adjunction exchanges the two source cuts, so
+  $r(\mathcal U_2^\sharp)=\ell(\mathcal U_2)$ and
+  $\ell(\mathcal U_2^\sharp)=r(\mathcal U_2)$.
+  Blocking invariance and equality of the admissible indices therefore give
+  \begin{align}
+    \operatorname{ind}(\mathcal U)
+      &=\operatorname{ind}(\mathcal U_2)
+       =\operatorname{ind}(\mathcal U_2^\sharp)
+       =-\operatorname{ind}(\mathcal U_2)
+       =-\operatorname{ind}(\mathcal U).
+  \end{align}
+  Hence $\operatorname{ind}(\mathcal U)=0$. With this obstruction derived,
+  apply the admissible fundamental theorem to the supplied standard forms of
+  $\mathcal U_2$ and $\mathcal U_2^\sharp$ and follow the source proof. The
+  converse follows by contracting the displayed local relation around every
+  even periodic chain.
+\end{proof}
 
 \begin{proposition}[Local characterization of transposition]
   \label{prop:local-char-transposition}
@@ -4802,15 +4823,15 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
   % fundamental theorem is applied, carry reduced full-support source data.
   % No preservation under blocking is asserted. Documented in
   % docs/paper-gaps/mpu_canonical_form_full_support.tex.
-  \uses{thm:mpu_admissible_fundamental,def:mpu_admissible_index,
+  \uses{thm:mpu_admissible_fundamental,thm:mpu_admissible_index,
     def:mpu_admissible_standard_form,
     def:mpu_reduced_full_support_source_datum}
-  Let an MPU of index zero be in admissible standard form. Suppose its
-  one-site tensor
+  Let an MPU be in admissible standard form. Suppose its one-site tensor
   $\mathcal U$, its actual two-site block $\mathcal U_2$, and the transposed
   comparison tensor $\mathcal U_2^{\mathsf T}$ are simple and each carries its
   own reduced full-support source datum. Write the one-site physical space as
-  $\mathbb C^{d_0}\otimes\mathbb C^{d_0}$. It satisfies
+  $\mathbb C^{d_0}\otimes\mathbb C^{d_0}$. Transposition symmetry then forces
+  $\operatorname{ind}(\mathcal U)=0$. Under these hypotheses,
   $U^{(N)}=U^{(N)T}$ for every even $N$ if and only if there are a unitary
   $x$ and a phase $e^{i\phi}$ such that
   \begin{align}
@@ -4819,6 +4840,27 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
         (\Id_1\otimes v_{23}^T\otimes\Id_4).
   \end{align}
 \end{proposition}
+
+\begin{proof}
+  \uses{thm:mpu_admissible_index,thm:mpu_admissible_fundamental}
+  Under transposition, $\mathcal U_2$ and $\mathcal U_2^{\mathsf T}$ generate
+  the same MPU. Transposition exchanges the two source cuts, so
+  $r(\mathcal U_2^{\mathsf T})=\ell(\mathcal U_2)$ and
+  $\ell(\mathcal U_2^{\mathsf T})=r(\mathcal U_2)$.
+  Blocking invariance and equality of the admissible indices give
+  \begin{align}
+    \operatorname{ind}(\mathcal U)
+      &=\operatorname{ind}(\mathcal U_2)
+       =\operatorname{ind}(\mathcal U_2^{\mathsf T})
+       =-\operatorname{ind}(\mathcal U_2)
+       =-\operatorname{ind}(\mathcal U).
+  \end{align}
+  Thus $\operatorname{ind}(\mathcal U)=0$. Apply the admissible fundamental
+  theorem to the supplied standard forms of $\mathcal U_2$ and
+  $\mathcal U_2^{\mathsf T}$ and repeat the time-reversal argument, retaining
+  the unrestricted phase $e^{i\phi}$. The converse follows by contracting the
+  local relation around every even periodic chain.
+\end{proof}
 
 \subsection{Equivalence under symmetries}
 

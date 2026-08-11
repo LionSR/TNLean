@@ -222,7 +222,20 @@ For local symmetry and conjugation classification, the source labels
 \texttt{prop:mpu\_admissible\_local\_transposition}. The unrestricted local
 characterizations reproduce the propositions themselves and therefore do not
 add an index-zero hypothesis; the index obstruction belongs to the surrounding
-source discussion. The source definitions
+source discussion. The admissible counterparts also do not assume index zero.
+For the supplied two-site tensor and its physical-adjoint or transposed
+comparison, the relevant operation exchanges the source-cut ranks and negates
+the index. Symmetry identifies the two generated MPUs, so the Admissible Index
+Theorem gives
+\begin{align}
+  \operatorname{ind}(\mathcal U)
+    &=\operatorname{ind}(\mathcal U_2)
+     =-\operatorname{ind}(\mathcal U_2)
+     =-\operatorname{ind}(\mathcal U),
+\end{align}
+and hence $\operatorname{ind}(\mathcal U)=0$. Thus the obstruction is derived
+from the supplied source and comparison data rather than imposed as an
+external hypothesis. The source definitions
 \texttt{def:strictly-equivalent-symmetry} and
 \texttt{def:equivalent-symmetry}, and the source criterion
 \texttt{lem:equivalent-symmetry}, have the scoped labels
