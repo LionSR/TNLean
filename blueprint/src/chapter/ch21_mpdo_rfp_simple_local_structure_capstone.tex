@@ -946,7 +946,9 @@ This is the calculation in
     \label{thm:cpsv_examples410_412_status}
     \notready
     \uses{def:is_rfp_via_ts, def:is_sal, def:mpdo_source_gsnnch,
-        def:mpo_source_zcl}
+        def:mpo_source_zcl, thm:cpsv_example412_literal_formula,
+        thm:cpsv_example412_literal_sal,
+        thm:cpsv_example412_literal_zcl_rfp_gap}
     The three examples in
     \cite[Examples~4.10--4.12, lines~897--942]{Cirac2016MPDO_arXiv} assert the
     following separations.  Example~4.10 applies correlated on-site bit-flip
@@ -967,10 +969,135 @@ This is the calculation in
     \end{align}
     The source asserts that this tensor has saturation of the area law and zero
     correlation length, is not of the simple commuting form, and is nevertheless
-    a renormalization fixed point.  The displayed density formula alone does not
-    construct the trace-preserving completely positive maps required for the
-    last assertion; those maps must be exhibited separately.
+    a renormalization fixed point.  The literal printed tensor is unnormalized:
+    its physical-trace transfer squares to twice itself, whereas trace-preserving
+    refinement would force literal idempotence.  Thus the fixed-point assertion
+    is false for the literal representative.  The tensor $(1/2)M$ is the likely
+    intended correction, but its trace-preserving completely positive maps
+    remain unconstructed.
 \end{theorem}
+
+% CPSV16 Example 4.12, lines 932--939.
+% Normalization gap: docs/paper-gaps/cpsv16_example_4_12_normalization.tex.
+\begin{definition}[Literal tensor in Example 4.12]
+    \label{def:cpsv_example412_literal_tensor}
+    \lean{MPOTensor.CPSVExample412Literal.M,
+        MPOTensor.CPSVExample412Literal.sigmaZ}
+    \leanok
+    Let $M$ be the tensor with $d=D=2$ whose only nonzero components are
+    \begin{align}
+        1=M_{00}^{00}=M_{00}^{11}=M_{11}^{00}=-M_{11}^{11},
+        \notag
+    \end{align}
+    and let
+    $\sigma_z=|0\rangle\langle0|-|1\rangle\langle1|$.
+\end{definition}
+
+\begin{definition}[One-site Pauli sign]
+    \label{def:cpsv_example412_site_sign}
+    \lean{MPOTensor.CPSVExample412Literal.siteSign}
+    \leanok
+    \uses{def:cpsv_example412_literal_tensor}
+    For a physical letter $a\in\{0,1\}$, define its Pauli sign by
+    \begin{align}
+        z_a=(\sigma_z)_{aa},
+        \qquad z_0=1,
+        \qquad z_1=-1.
+        \notag
+    \end{align}
+\end{definition}
+
+\begin{definition}[Configuration sign]
+    \label{def:cpsv_example412_configuration_sign}
+    \lean{MPOTensor.CPSVExample412Literal.configurationSign}
+    \leanok
+    \uses{def:cpsv_example412_site_sign}
+    For a binary configuration
+    $\boldsymbol\sigma=(\sigma_0,\ldots,\sigma_{N-1})$, define
+    \begin{align}
+        z(\boldsymbol\sigma)=\prod_{k=0}^{N-1}z_{\sigma_k}.
+        \notag
+    \end{align}
+    This is the diagonal entry of $\sigma_z^{\otimes N}$ at
+    $\boldsymbol\sigma$.
+\end{definition}
+
+\begin{theorem}[Exact positive-length operator and positivity]
+    \label{thm:cpsv_example412_literal_formula}
+    \lean{MPOTensor.CPSVExample412Literal.rho_eq_diagonal,
+        MPOTensor.CPSVExample412Literal.rho_eq_finKronecker,
+        MPOTensor.CPSVExample412Literal.M_isMPDO,
+        MPOTensor.CPSVExample412Literal.trace_rho}
+    \leanok
+    \uses{def:cpsv_example412_literal_tensor,
+        def:cpsv_example412_configuration_sign}
+    For every $N>0$,
+    \begin{align}
+        \rho^{(N)}(M)=I^{\otimes N}+\sigma_z^{\otimes N},
+        \qquad
+        \operatorname{tr}\rho^{(N)}(M)=2^N,
+        \notag
+    \end{align}
+    and $\rho^{(N)}(M)$ is positive semidefinite.
+\end{theorem}
+\begin{proof}\leanok
+    Both tensor powers are diagonal.  On a binary configuration their sum has
+    eigenvalue $1+\prod_k z_k$, where each $z_k$ is $1$ or $-1$; hence every
+    eigenvalue is either $0$ or $2$.  Summing the signed term over all binary
+    configurations gives zero when $N>0$, so the trace is $2^N$.
+\end{proof}
+
+\begin{theorem}[One-site loss and saturation]
+    \label{thm:cpsv_example412_literal_sal}
+    \lean{MPOTensor.CPSVExample412Literal.reducedBlockState_M_eq_scaled_one,
+        MPOTensor.CPSVExample412Literal.one_site_trace_loses_sigmaZ,
+        MPOTensor.CPSVExample412Literal.M_isSAL}
+    \leanok
+    \uses{thm:cpsv_example412_literal_formula, def:is_sal}
+    Tracing one site removes the $\sigma_z^{\otimes N}$ term.  More generally,
+    every nonempty proper normalized $L$-site reduced state is
+    $2^{-L}I^{\otimes L}$.
+    Therefore its entropy is $L\log 2$, the mutual information is independent
+    of $L$, and $M$ satisfies saturation of the area law.
+\end{theorem}
+\begin{proof}\leanok
+    The identity term contributes the dimension of the traced complement,
+    while the signed term contains the vanishing one-site sum $1+(-1)$.  The
+    entropy of the resulting maximally mixed state is $L\log 2$; the two block
+    terms in the mutual information then add to $N\log 2$ independently of the
+    cut.
+\end{proof}
+
+\begin{theorem}[Scale-two ZCL and the literal RFP obstruction]
+    \label{thm:cpsv_example412_literal_zcl_rfp_gap}
+    \lean{MPOTensor.CPSVExample412Literal.physTraceTransfer_M,
+        MPOTensor.CPSVExample412Literal.physTraceTransfer_M_sq,
+        MPOTensor.CPSVExample412Literal.M_isSourceZCL,
+        MPOTensor.CPSVExample412Literal.physTraceTransfer_M_not_idempotent,
+        MPOTensor.CPSVExample412Literal.M_not_isRFPViaTS}
+    \leanok
+    \uses{def:cpsv_example412_literal_tensor, def:mpo_source_zcl,
+        def:is_rfp_via_ts, thm:rfp_via_ts_physical_trace_idempotent}
+    The physical-trace transfer of the printed tensor is
+    \begin{align}
+        \mathcal T_M=I+\sigma_z
+        =\begin{pmatrix}2&0\\0&0\end{pmatrix},
+        \qquad
+        \mathcal T_M^2=2\mathcal T_M\ne\mathcal T_M.
+        \notag
+    \end{align}
+    Hence the literal representative has source zero correlation length with
+    scale $2$, but it cannot satisfy the trace-preserving fixed-representative
+    condition.  The tensor $(1/2)M$ is the likely intended correction, but its
+    trace-preserving completely positive maps remain unconstructed.
+\end{theorem}
+\begin{proof}\leanok
+    The transfer calculation is immediate from the two diagonal physical
+    letters.  Trace preservation of a refinement from one site to two sites
+    would force the one-site and two-site traces to agree for every virtual
+    boundary, and therefore force $\mathcal T_M^2=\mathcal T_M$, contradicting
+    the displayed calculation.
+\end{proof}
 
 % **All-sector Case-II boundary:**
 % Analytic inheritance is complete for every absorbed BNT representative.
