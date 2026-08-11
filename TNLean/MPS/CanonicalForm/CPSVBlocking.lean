@@ -24,6 +24,7 @@ letterwise reconstruction, not only equality of closed-chain coefficients.
   tensors.
 * `MPSTensor.CPSVCanonicalFormData.blockTensor`: literal canonical-form data
   block exactly.
+* `MPSTensor.CPSVCanonicalFormIIData.blockTensor`: canonical-form-II data block exactly.
 * `MPSTensor.IsCPSVCanonicalForm.blockTensor`: positive blocking preserves
   literal CPSV canonical form.
 
@@ -269,6 +270,29 @@ noncomputable def blockTensor {A : MPSTensor d D}
             rfl
 
 end CPSVCanonicalFormData
+
+namespace CPSVCanonicalFormIIData
+
+/-- Literal CPSV canonical-form-II data are preserved by positive physical blocking.
+
+Each fixed-point matrix remains positive definite and diagonal, and is fixed by the blocked transfer
+map because that map is the corresponding positive power of the original transfer map.
+
+Source: arXiv:1703.09188, definition `blocking`, equation `MPUblock`, and line 356. -/
+noncomputable def blockTensor {A : MPSTensor d D}
+    (data : CPSVCanonicalFormIIData A) (p : ℕ) (hp : 0 < p) :
+    CPSVCanonicalFormIIData (MPSTensor.blockTensor (d := d) (D := D) A p) where
+  toCPSVCanonicalFormData := data.toCPSVCanonicalFormData.blockTensor p hp
+  blocks_left_canonical := fun k ↦
+    leftCanonical_blockTensor (data.blocks k) p (data.blocks_left_canonical k)
+  blocks_fixed_point := by
+    intro k
+    obtain ⟨Λ, hΛpos, hΛdiag, hΛfix⟩ := data.blocks_fixed_point k
+    exact ⟨Λ, hΛpos, hΛdiag, by
+      change transferMap (MPSTensor.blockTensor (data.blocks k) p) Λ = Λ
+      exact transferMap_blockTensor_fixedPoint (data.blocks k) p Λ hΛfix⟩
+
+end CPSVCanonicalFormIIData
 
 namespace IsCPSVCanonicalForm
 
