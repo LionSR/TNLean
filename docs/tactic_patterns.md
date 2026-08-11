@@ -24,6 +24,18 @@ abstracted — record why, so it is not re-proposed).
 
 ## Promoted
 
+### left finite-Gram cancellation in spectator coordinates — promoted
+- **Pattern:** cancel the fiberwise finite Gram against its inverse Gram, then use
+  the left-boundary common-map identity to recover the adjoint of the full
+  ground-space map.
+- **Seen:** duplicate 28-line arguments in the tail and full inverse-Gram C3
+  correction factorizations before promotion (2026-08-10).
+- **Abstraction:** `MPSTensor.leftFiniteGramCancellation_eq_groundSpaceMapES_adjoint`
+  in `TNLean/MPS/ParentHamiltonian/C3CorrectionBounds.lean`.
+- **Notes:** both factorizations retain their statements and tail-after-left
+  orientation; the shared theorem records only the exact finite-dimensional
+  cancellation and makes no FNW or Nachtergaele numerical claim.
+
 ### single-Kraus Kronecker and isometric multiplication identities — promoted
 - **Pattern:** unfold `singleKrausMap`, reassociate matrix products, and use
   Kronecker multiplication or the identity `Vᴴ * V = 1`.

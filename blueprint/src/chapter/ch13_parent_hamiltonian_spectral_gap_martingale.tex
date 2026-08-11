@@ -929,19 +929,281 @@ norm estimate is derived here.
     the fixed norm of $J^{\mathrm{left}}_1$ into the constant.
 \end{proof}
 
+\begin{theorem}[Fiberwise subtraction]
+    \label{thm:boundary_fiberwise_map_sub}
+    \lean{MPSTensor.boundaryFiberwiseMap_sub}
+    \leanok
+    Let $S$ be a finite set and let $G,H\colon V\to V$ be continuous linear
+    endomorphisms of the virtual Euclidean space.  Then
+    \begin{align}
+      (G-H)^{\oplus S}&=G^{\oplus S}-H^{\oplus S}.
+    \end{align}
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Evaluate both sides on each fiber indexed by $s\in S$.
+\end{proof}
+
+\begin{theorem}[Invertibility of the finite ground-space Gram]
+    \label{thm:ground_space_gram_is_unit_of_injective}
+    \lean{MPSTensor.groundSpaceGram_isUnit_of_groundSpaceMapES_injective}
+    \leanok
+    \uses{def:ground_space_gram}
+    If the ground-space map $\Gamma_n^{\mathrm{ES}}$ is injective, then its Gram
+    endomorphism $\mathcal K_n=(\Gamma_n^{\mathrm{ES}})^\dagger
+    \Gamma_n^{\mathrm{ES}}$ is invertible.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{def:ground_space_gram}
+    The equality
+    $\langle X,\mathcal K_nX\rangle=\lVert\Gamma_n^{\mathrm{ES}}X\rVert^2$
+    shows that $\mathcal K_n$ is injective.  An injective endomorphism of a
+    finite-dimensional space is bijective and hence invertible.
+\end{proof}
+
+\begin{theorem}[Finite-to-limiting inverse resolvent identity]
+    \label{thm:inverse_gram_limiting_resolvent}
+    \lean{MPSTensor.inverseGram_sub_limitingInverse_eq_resolvent}
+    \leanok
+    \uses{def:ground_space_gram, def:inverse_gram, def:fixed_point_proj,
+        def:gram_reshuffle}
+    Assume $D\geq1$ and let $\rho\in\MN{D}$ be positive definite.  Set
+    $\mathcal K_\infty=\mathscr R(P_\rho)$ and
+    $S_\infty=\mathcal K_\infty^{-1}$.  If
+    $\Gamma_n^{\mathrm{ES}}$ is injective and
+    $S_n=\mathcal K_n^{-1}$, then
+    \begin{align}
+      S_n-S_\infty
+      &=S_\infty(\mathcal K_\infty-\mathcal K_n)S_n.
+    \end{align}
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:ground_space_gram_is_unit_of_injective,
+        thm:fixed_point_gram_metric_is_unit, thm:inverse_gram_identities}
+    Both Gram endomorphisms are invertible.  Apply the identity
+    $A^{-1}-B^{-1}=B^{-1}(B-A)A^{-1}$ with
+    $A=\mathcal K_n$ and $B=\mathcal K_\infty$.
+\end{proof}
+
+\begin{theorem}[Left finite-Gram cancellation]
+    \label{thm:left_finite_gram_cancellation}
+    \lean{MPSTensor.leftFiniteGramCancellation_eq_groundSpaceMapES_adjoint}
+    \leanok
+    \uses{def:left_boundary_map, def:ground_space_gram, def:inverse_gram}
+    Suppose that $\Gamma_K^{\mathrm{ES}}$ is injective and write
+    $S_K=\mathcal K_K^{-1}$.  Then
+    \begin{align}
+      (J_L^{\mathrm{left}})^\dagger
+      \mathcal K_K^{\oplus\Omega_L}S_K^{\oplus\Omega_L}
+      (\Gamma_{K,L}^{\mathrm{left}})^\dagger
+      &=(\Gamma_{K+L}^{\mathrm{ES}})^\dagger.
+    \end{align}
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:inverse_gram_identities,
+        thm:spectator_boundary_hilbert_factorization}
+    The direct-sum Gram and inverse Gram cancel fiberwise.  The remaining
+    composition is the adjoint of
+    $\Gamma_{K,L}^{\mathrm{left}}J_L^{\mathrm{left}}
+      =\Gamma_{K+L}^{\mathrm{ES}}$.
+\end{proof}
+
+\begin{theorem}[Tail spectator pseudoinverse bound]
+    \label{thm:tail_spectator_pseudoinverse_bound}
+    \lean{MPSTensor.norm_tailBoundaryMapES_comp_inverseGram_le_sqrt}
+    \leanok
+    \uses{def:tail_boundary_map, def:inverse_gram}
+    If $\Gamma_L^{\mathrm{ES}}$ is injective, then
+    \begin{align}
+      \left\lVert\Gamma_{K,L}^{\mathrm{tail}}
+        S_{\Gamma_{K,L}^{\mathrm{tail}}}\right\rVert
+      &\leq\sqrt{\lVert S_L\rVert}.
+    \end{align}
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:inverse_gram_identities,
+        thm:spectator_boundary_direct_sum_gram,
+        thm:boundary_fiberwise_map_norm}
+    The square-root pseudoinverse identity gives the left-hand side as the
+    square root of the norm of the tail boundary inverse Gram.  This inverse
+    Gram is the fiberwise lift of $S_L$, whose norm is at most
+    $\lVert S_L\rVert$.
+\end{proof}
+
+\begin{theorem}[Left spectator pseudoinverse bound]
+    \label{thm:left_spectator_pseudoinverse_bound}
+    \lean{MPSTensor.norm_inverseGram_comp_leftBoundaryMapES_adjoint_le_sqrt}
+    \leanok
+    \uses{def:left_boundary_map, def:inverse_gram}
+    If $\Gamma_K^{\mathrm{ES}}$ is injective, then
+    \begin{align}
+      \left\lVert S_{\Gamma_{K,L}^{\mathrm{left}}}
+        (\Gamma_{K,L}^{\mathrm{left}})^\dagger\right\rVert
+      &\leq\sqrt{\lVert S_K\rVert}.
+    \end{align}
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:inverse_gram_identities,
+        thm:spectator_boundary_direct_sum_gram,
+        thm:boundary_fiberwise_map_norm}
+    The adjoint-side square-root identity reduces the left-hand side to the
+    norm of the left boundary inverse Gram.  The direct-sum inverse-Gram formula
+    and the fiberwise norm estimate give the result.
+\end{proof}
+
+\begin{definition}[Finite-Gram corrections in the C3 residual]
+    \label{def:c3_correction_sandwiches}
+    \lean{MPSTensor.c3TailFiniteGramCorrectionES}
+    \lean{MPSTensor.c3FullInverseGramCorrectionES}
+    \lean{MPSTensor.c3LeftFiniteGramCorrectionES}
+    \leanok
+    \uses{def:ground_space_gram, def:inverse_gram, def:fixed_point_proj,
+        def:gram_reshuffle, def:tail_boundary_map, def:left_boundary_map,
+        thm:c3_projector_gram_error_telescope}
+    Assume $D\geq1$ and let $\rho\in\MN{D}$ be positive definite.  Set
+    $\mathcal K_\infty=\mathscr R(P_\rho)$ and
+    $S_\infty=\mathcal K_\infty^{-1}$.  Suppose that
+    $\Gamma_{l+1}^{\mathrm{ES}}$, $\Gamma_{K+l}^{\mathrm{ES}}$, and
+    $\Gamma_{K+l+1}^{\mathrm{ES}}$ are injective, and write
+    \begin{align}
+      T&=\Gamma^{\mathrm{tail}}_{K,l+1},\\
+      L&=\Gamma^{\mathrm{left}}_{K+l,1},\\
+      C&=\Gamma_{K+l+1}^{\mathrm{ES}}.
+    \end{align}
+    The three correction sandwiches in
+    Theorem~\ref{thm:c3_projector_gram_error_telescope} are
+    \begin{align}
+      Q_1={}&T S_{l+1}^{\oplus\Omega_K}
+        (\mathcal K_{l+1}-\mathcal K_\infty)^{\oplus\Omega_K}
+        J_K^{\mathrm{tail}}S_{K+l+1}(J_1^{\mathrm{left}})^\dagger
+        \mathcal K_{K+l}^{\oplus\Omega_1}
+        S_{K+l}^{\oplus\Omega_1}L^\dagger,\\
+      Q_2={}&T S_{l+1}^{\oplus\Omega_K}
+        \mathcal K_\infty^{\oplus\Omega_K}J_K^{\mathrm{tail}}
+        (S_{K+l+1}-S_\infty)(J_1^{\mathrm{left}})^\dagger
+        \mathcal K_{K+l}^{\oplus\Omega_1}
+        S_{K+l}^{\oplus\Omega_1}L^\dagger,\\
+      Q_3={}&T S_{l+1}^{\oplus\Omega_K}
+        \mathcal K_\infty^{\oplus\Omega_K}J_K^{\mathrm{tail}}S_\infty
+        (J_1^{\mathrm{left}})^\dagger
+        (\mathcal K_{K+l}-\mathcal K_\infty)^{\oplus\Omega_1}
+        S_{K+l}^{\oplus\Omega_1}L^\dagger.
+    \end{align}
+\end{definition}
+
+\begin{theorem}[Exact factorizations of the C3 corrections]
+    \label{thm:c3_correction_factorizations}
+    \lean{MPSTensor.c3TailFiniteGramCorrectionES_eq_factored}
+    \lean{MPSTensor.c3FullInverseGramCorrectionES_eq_factored}
+    \lean{MPSTensor.c3LeftFiniteGramCorrectionES_eq_factored}
+    \leanok
+    \uses{def:c3_correction_sandwiches}
+    Under the hypotheses of
+    Definition~\ref{def:c3_correction_sandwiches}, the three corrections have
+    the exact factorizations
+    \begin{align}
+      Q_1={}&T S_{l+1}^{\oplus\Omega_K}
+        (\mathcal K_{l+1}-\mathcal K_\infty)^{\oplus\Omega_K}
+        J_K^{\mathrm{tail}}S_{K+l+1}C^\dagger,\\
+      Q_2={}&T S_{l+1}^{\oplus\Omega_K}
+        \mathcal K_\infty^{\oplus\Omega_K}J_K^{\mathrm{tail}}S_\infty
+        (\mathcal K_\infty-\mathcal K_{K+l+1})
+        S_{K+l+1}C^\dagger,\\
+      Q_3={}&T S_{l+1}^{\oplus\Omega_K}
+        \mathcal K_\infty^{\oplus\Omega_K}J_K^{\mathrm{tail}}S_\infty
+        (J_1^{\mathrm{left}})^\dagger
+        (\mathcal K_{K+l}-\mathcal K_\infty)^{\oplus\Omega_1}
+        S_{\Gamma_{K+l,1}^{\mathrm{left}}}L^\dagger.
+    \end{align}
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:boundary_fiberwise_map_sub,
+        thm:inverse_gram_limiting_resolvent,
+        thm:left_finite_gram_cancellation,
+        thm:spectator_boundary_direct_sum_gram}
+    The direct-sum inverse-Gram formula identifies the initial factor with the
+    pseudoinverse factor of $T$.  Theorem~\ref{thm:left_finite_gram_cancellation}
+    replaces the final product in $Q_1$ and $Q_2$ by $C^\dagger$.
+    For $Q_2$, apply the resolvent identity
+    \begin{align}
+      S_{K+l+1}-S_\infty
+      &=S_\infty(\mathcal K_\infty-\mathcal K_{K+l+1})S_{K+l+1}.
+    \end{align}
+    Fiberwise subtraction gives the displayed Gram differences.  The
+    factorization of $Q_3$ leaves the left pseudoinverse adjacent to
+    $L^\dagger$.
+\end{proof}
+
+% These raw bounds are reconstructed from the inverse-Gram projector formulas.
+% They do not assert the rational coefficient in Nachtergaele's equation (6.1).
+\begin{theorem}[Raw norm bounds for the C3 corrections]
+    \label{thm:c3_correction_bounds}
+    \lean{MPSTensor.c3TailFiniteGramCorrectionES_norm_le}
+    \lean{MPSTensor.c3FullInverseGramCorrectionES_norm_le}
+    \lean{MPSTensor.c3LeftFiniteGramCorrectionES_norm_le}
+    \leanok
+    \uses{def:c3_correction_sandwiches}
+    Under the hypotheses of
+    Definition~\ref{def:c3_correction_sandwiches},
+    \begin{align}
+      \lVert Q_1\rVert
+      &\leq \sqrt{\lVert S_{l+1}\rVert}
+        \lVert\mathcal K_{l+1}-\mathcal K_\infty\rVert
+        \lVert J_K^{\mathrm{tail}}\rVert
+        \sqrt{\lVert S_{K+l+1}\rVert},\\
+      \lVert Q_2\rVert
+      &\leq \sqrt{\lVert S_{l+1}\rVert}
+        \lVert\mathcal K_\infty\rVert
+        \lVert J_K^{\mathrm{tail}}\rVert
+        \lVert S_\infty\rVert
+        \lVert\mathcal K_{K+l+1}-\mathcal K_\infty\rVert
+        \sqrt{\lVert S_{K+l+1}\rVert},\\
+      \lVert Q_3\rVert
+      &\leq \sqrt{\lVert S_{l+1}\rVert}
+        \lVert\mathcal K_\infty\rVert
+        \lVert J_K^{\mathrm{tail}}\rVert
+        \lVert S_\infty\rVert
+        \lVert J_1^{\mathrm{left}}\rVert
+        \lVert\mathcal K_{K+l}-\mathcal K_\infty\rVert
+        \sqrt{\lVert S_{K+l}\rVert}.
+    \end{align}
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:c3_correction_factorizations,
+        thm:tail_spectator_pseudoinverse_bound,
+        thm:left_spectator_pseudoinverse_bound,
+        thm:boundary_fiberwise_map_norm,
+        thm:inverse_gram_identities}
+    Apply submultiplicativity to the factorizations in
+    Theorem~\ref{thm:c3_correction_factorizations}.  The two spectator
+    pseudoinverse estimates control the exterior factors, and
+    Theorem~\ref{thm:boundary_fiberwise_map_norm} controls every fiberwise Gram
+    factor without a term depending on $|\Omega_K|$.  The square-root
+    pseudoinverse identity controls $S_{K+l+1}C^\dagger$.
+\end{proof}
+
+% The exact centered and correction estimates are formalized separately.  Their
+% uniform combination and comparison with the coefficient below remain open.
 \begin{lemma}[Uniform FNW overlapping-window contraction]
     \label{lem:fnw_overlapping_window_contraction}
     \notready
     \discussion{5923}
-    \uses{thm:primitive_tail_virtual_map_norm_uniform,
-        thm:c3_centered_overlap_factorization_geometric,
-        thm:fixed_point_gram_metric_exact,
-        thm:fixed_point_gram_metric_is_unit,
-        thm:primitive_ground_space_map_eventual_inverse_gram_bound,
-        thm:ground_space_es_projection_inverse_gram,
-        thm:tail_boundary_map_factorization, thm:left_boundary_map_factorization,
-        thm:tail_boundary_map_range_es_transport,
-        thm:left_boundary_map_range_es_transport}
+    \uses{def:primitive_mps, def:open_chain_ground_subspaces_es}
     Let $A$ be a primitive blocked tensor with a positive-definite fixed point,
     and let $P^{\mathrm{tail}}_{K,l+1}$ and
     $P^{\mathrm{left}}_{K+l}$ be the tail and left ground-space projectors in
@@ -957,17 +1219,34 @@ norm estimate is derived here.
         c\lambda^l\frac{1+c\lambda^l}{1-c\lambda^l}.
         \notag
     \end{align}
-    The displayed coefficient is the commutation bound of
-    \cite[Eq.~(6.1)]{Nachtergaele1996Spectral}, derived there from the
-    Fannes--Nachtergaele--Werner estimates.  The remaining task is to realize
-    that source estimate for the two physical boundary-map projectors above.
-    Theorem~\ref{thm:c3_centered_overlap_factorization_geometric} controls only
-    the centered term in the exact residual telescope.  The three correction
-    terms, their assembly into the full projector defect, the denominator, and
-    the coefficient in equation~(6.1) remain open.  The final argument must use
-    the exact inverse-Gram range-projector formulas in the limiting fixed-point
-    metric before applying transfer mixing.
+    This is the commutation bound of
+    \cite[Eq.~(6.1)]{Nachtergaele1996Spectral}, obtained there from the
+    Fannes--Nachtergaele--Werner estimates.
 \end{lemma}
+
+\begin{proof}
+    \uses{thm:c3_projector_gram_error_telescope,
+        thm:primitive_tail_virtual_map_norm_uniform,
+        thm:c3_centered_overlap_factorization_geometric,
+        thm:c3_correction_bounds,
+        thm:fixed_point_gram_metric_exact,
+        thm:fixed_point_gram_metric_is_unit,
+        thm:primitive_ground_space_map_geometric_inverse_gram_bounds,
+        thm:geometric_smallness_at_c3_lengths,
+        thm:ground_space_es_projection_inverse_gram,
+        thm:tail_boundary_map_factorization, thm:left_boundary_map_factorization,
+        thm:tail_boundary_map_range_es_transport,
+        thm:left_boundary_map_range_es_transport}
+    Insert the limiting-metric telescope into the exact inverse-Gram formulas
+    for the three physical projectors.  Bound the centered summand by
+    Theorem~\ref{thm:c3_centered_overlap_factorization_geometric} and the three
+    finite-Gram summands by Theorem~\ref{thm:c3_correction_bounds}.  The
+    geometric inverse-Gram estimates and the common smallness condition control
+    every inverse at the lengths $l+1$, $K+l$, and $K+l+1$.  The boundary-map
+    factorizations and range identities identify the resulting operator with
+    the overlapping ground-space projector defect.  The FNW finite-volume
+    comparison then gives the stated rational expression.
+\end{proof}
 
 \begin{lemma}[Uniform open-chain projector-defect threshold]
     \label{lem:nachtergaele_c3_blocked_length}
