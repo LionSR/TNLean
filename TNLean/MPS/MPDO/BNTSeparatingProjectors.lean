@@ -131,10 +131,10 @@ theorem completedBntSectorProjection_mul_eq_zero
     completedBntSectorProjection hC hρ hη hR s₀ s *
         completedBntSectorProjection hC hρ hη hR s₀ t = 0 := by
   classical
-  rw [completedBntSectorProjection, completedBntSectorProjection, Finset.sum_mul]
+  rw [completedBntSectorProjection, completedBntSectorProjection,
+    Finset.sum_mul_sum]
   apply Finset.sum_eq_zero
   intro k _
-  rw [Finset.mul_sum]
   apply Finset.sum_eq_zero
   intro l _
   by_cases hk : completedBntSectorLabel hC hρ hη hR s₀ k = s
@@ -190,10 +190,9 @@ theorem completedBntSectorProjection_mul_physicalSlice_mul_eq_zero
           completedBntSectorProjection hC hρ hη hR s₀ t = 0 := by
   classical
   rw [completedBntSectorProjection, completedBntSectorProjection,
-    Finset.sum_mul, Finset.sum_mul]
+    Finset.sum_mul, Finset.sum_mul_sum]
   apply Finset.sum_eq_zero
   intro k _
-  rw [Finset.mul_sum]
   apply Finset.sum_eq_zero
   intro l _
   by_cases hks : completedBntSectorLabel hC hρ hη hR s₀ k = s

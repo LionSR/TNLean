@@ -398,10 +398,9 @@ theorem bntSectorProjection_mul_physicalSlice_mul_eq_zero
         bntSectorProjection hC hρ hη hR t = 0 := by
   classical
   rw [bntSectorProjection, bntSectorProjection, Finset.sum_mul,
-    Finset.sum_mul]
+    Finset.sum_mul_sum]
   apply Finset.sum_eq_zero
   intro k _
-  rw [Finset.mul_sum]
   apply Finset.sum_eq_zero
   intro l _
   by_cases hks : bntSectorLabel hC hρ hη hR k = s

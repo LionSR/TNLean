@@ -431,6 +431,14 @@ abstracted — record why, so it is not re-proposed).
   statements and specialized interfaces while delegating the shared construction to the
   neutral theorem. The Lean source loses 36 lines net.
 
+### Injective one-site trace-pairing zero detection
+- **Pattern:** put a matrix in the kernel of `MPSTensor.traceMulRightPi`, expand the
+  map pointwise, and use `traceMulRightPi_ker_eq_bot` to conclude that the matrix is zero.
+- **Reuse:** `MPSTensor.eq_zero_of_forall_trace_mul_right_eq_zero` in
+  `TNLean/Algebra/TracePairing.lean` accepts the pointwise vanishing trace pairings directly.
+- **Result:** the three public selected-sector visibility proofs retain their statements and
+  active-sector hypotheses while invoking the shared consequence of injectivity.
+
 ### Matched BNT coefficient comparison with an eventual scalar
 - **Pattern:** expand both sector decompositions in MPV state space, substitute a full matched
   `Q`-basis into the full `P`-basis, reindex along the basis equivalence, and compare exact
