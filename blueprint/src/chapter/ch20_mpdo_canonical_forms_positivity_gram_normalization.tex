@@ -1002,9 +1002,18 @@
         &=c_{\alpha,q}X_{\alpha,q}M_\alpha^vX_{\alpha,q}^{-1}.
         \label{eq:normalized_grouped_sector_corner}
     \end{align}
-    Thus conjugation by $W_{\alpha,q}$ reproduces the original grouped corner.
-    Summing (\ref{eq:normalized_grouped_sector_corner}) over all copies and
-    classes proves (\ref{eq:normalized_grouped_sector_maps_of_gram}).
+    Multiplying (\ref{eq:normalized_grouped_sector_corner}) on the left by
+    $V_{\alpha,q}$ and on the right by $V_{\alpha,q}^\dagger$ gives
+    \begin{align}
+        W_{\alpha,q}(c_{\alpha,q}M_\alpha^v)W_{\alpha,q}^\dagger
+        &=V_{\alpha,q}
+          (c_{\alpha,q}X_{\alpha,q}M_\alpha^vX_{\alpha,q}^{-1})
+          V_{\alpha,q}^\dagger.
+        \notag
+    \end{align}
+    Summing these physical-space identities over all copies and classes, then
+    applying the original grouped reconstruction, proves
+    (\ref{eq:normalized_grouped_sector_maps_of_gram}).
 \end{proof}
 
 \begin{theorem}[Normalized physical maps of the grouped vertical sectors]
