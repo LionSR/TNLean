@@ -9,7 +9,7 @@ import TNLean.MPS.MPDO.VerticalCopyBlocks
 # Retained product blocks of a vertical product
 
 This file separates the retained vertical product into its weighted copy-pair
-blocks and develops the retained product-sector inclusion API.
+blocks and establishes the retained product-sector inclusions.
 
 ## References
 
