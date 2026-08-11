@@ -1773,7 +1773,7 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
     \label{thm:mpu_source_y_two_rotated_gram}
     \lean{MPOTensor.sourceY₂_gram_eq_rotated_sourceCutM₂_gram}
     \leanok
-    \uses{def:mpu_source_matrix_two,def:mpu_weighted_source_factors}
+    \uses{def:mpu_weighted_source_factors}
     For every tensor $\mathcal U$, physical indices $p,q$, and auxiliary
     indices $a,b$,
     \begin{align}
@@ -1791,7 +1791,8 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
 
 \begin{proof}
     \leanok
-    \uses{thm:mpu_source_factorization_entries,
+    \uses{def:mpu_weighted_source_factors,
+        thm:mpu_source_factorization_entries,
         thm:mpu_source_factor_normalizations}
     Substitute the entry factorization $M_2=X_2Y_2$ into the left-hand side
     and reorder the finite sums. The contraction of the two $X_2$ factors is
