@@ -327,8 +327,8 @@ theorem outputLayer_normalizedDiagonal_pow_eq_vecMulVec
     simp
   simpa only [hstarρ, hstarΦ] using h'
 
-/-- The exact reflected witnesses persist on the common `(J D² + 2)` block,
-with the same `|1)(ρ|` insertion and conjugate-transposed product order. -/
+/-- The exact reflected witnesses persist on the common $J D^2 + 2$ block,
+with the same $|1)(\rho|$ insertion and conjugate-transposed product order. -/
 theorem IsMPU.reflected_blockTensor_mul_sq_add_two_simple_contractions
     [NeZero d] [NeZero D] {U : MPOTensor d D} (hU : IsMPU U)
     (ρ : Matrix (Fin D) (Fin D) ℂ) (hρ : ρ.PosDef)
