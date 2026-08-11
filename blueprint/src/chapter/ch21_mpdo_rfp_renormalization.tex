@@ -711,9 +711,9 @@ the remaining sites unchanged.
     $\E_A^2=\E_A$. The physical-isometry formulation follows from
     Theorem~\ref{thm:physical_blocking_isometry_iff_transfer_idempotence}.
 \end{proof}
-% CPSV16 Appendix D, lines 2116--2176.  The paper's label `eq:1` is an
-% internal calculation.  Issue #5921 retains the missing identification of the
-% transition counts with the ranks of the concrete MPO.
+% CPSV16 Appendix D, lines 2116--2176.  The labels `rank-Fibonacci` and
+% `eq:1` refer respectively to the rank formula and its internal calculation.
+% Issue #5921 retains the two operator-rank identifications below.
 \begin{definition}[Fibonacci vacuum-sector support tensor]
     \label{def:cpsv_fibonacci_support_tensor}
     \lean{MPSTensor.FibonacciBoundary.ExactlyTwoZero,
@@ -725,17 +725,15 @@ the remaining sites unchanged.
     \leanok
     \uses{def:mps_tensor}
     This is the concrete tensor in
-    \cite[Appendix~D, lines~2118--2135]{Cirac2016MPDO_arXiv}.  Its physical
+    \cite[Appendix~D, lines~2116--2121]{Cirac2016MPDO_arXiv}.  Its physical
     labels are triples $i,j,k\in\{0,1\}$ and its virtual labels are
-    $\alpha,\beta\in\{0,1\}$.  Choose weights $N_{ijk}$ satisfying
+    $\alpha,\beta\in\{0,1\}$.  The fusion weights satisfy
     \begin{align}
-        N_{ijk}=0&\iff
-        (i,j,k)\in\{(0,0,1),(0,1,0),(1,0,0)\},
-        \label{eq:cpsv_fib_support}\\
-        N_{ijk}&>0 &&\text{otherwise}.
-        \notag
+        N_{ijk}=0
+        &\iff (i,j,k)\in\{(0,0,1),(0,1,0),(1,0,0)\}.
+        \label{eq:cpsv_fib_support}
     \end{align}
-    Then
+    Every weight outside this zero set is positive, and
     \begin{align}
         A^{ijk}_{\alpha\beta}
         &=\delta_{i,\alpha}\delta_{k,\beta}N_{ijk}.
@@ -744,74 +742,160 @@ the remaining sites unchanged.
     The canonical support tensor takes every nonzero $N_{ijk}$ to be one.
 \end{definition}
 
-\begin{theorem}[Fibonacci open-boundary transition recurrence]
+\begin{definition}[Fibonacci transition matrix]
+    \label{def:cpsv_fibonacci_transition_matrix}
+    \lean{MPSTensor.FibonacciBoundary.B}
+    \leanok
+    The transition matrix from
+    \cite[Appendix~D, lines~2146--2149]{Cirac2016MPDO_arXiv} is
+    \begin{align}
+        B&=\begin{pmatrix}1&1\\1&2\end{pmatrix}.
+        \notag
+    \end{align}
+\end{definition}
+
+\begin{definition}[Fibonacci boundary transition counts]
+    \label{def:cpsv_fibonacci_boundary_counts}
+    \lean{MPSTensor.FibonacciBoundary.x}
+    \leanok
+    \uses{def:cpsv_fibonacci_transition_matrix}
+    For $n\in\N$ and $\alpha,\beta\in\{0,1\}$, define
+    \begin{align}
+        x^n_{\alpha\beta}&=(B^n)_{\alpha\beta}.
+        \label{eq:cpsv_fib_counts}
+    \end{align}
+    These are the transition counts governed by the recurrence in
+    \cite[Appendix~D, lines~2131--2149]{Cirac2016MPDO_arXiv}.  Their equality
+    with the open-boundary operator ranks in
+    \cite[Appendix~D, lines~2127--2130]{Cirac2016MPDO_arXiv} remains to be
+    proved.
+\end{definition}
+
+\begin{theorem}[Fibonacci boundary transition recurrence]
     \label{thm:cpsv_fibonacci_boundary_recurrence}
-    \lean{MPSTensor.FibonacciBoundary.B,
-      MPSTensor.FibonacciBoundary.x,
-      MPSTensor.FibonacciBoundary.x_one,
+    \lean{MPSTensor.FibonacciBoundary.x_one,
       MPSTensor.FibonacciBoundary.x_succ}
     \leanok
-    Let
-    \begin{align}
-        B&=\begin{pmatrix}1&1\\1&2\end{pmatrix},&
-        x^n_{\alpha\beta}&=(B^n)_{\alpha\beta}.
-        \label{eq:cpsv_fib_recurrence}
-    \end{align}
-    Then $x^1=(1,1,1,2)$ in the order $(00,01,10,11)$, and
+    \uses{def:cpsv_fibonacci_boundary_counts}
+    In the order $(00,01,10,11)$, one has $x^1=(1,1,1,2)$ and
     \begin{align}
         x^{n+1}_{\alpha0}&=x^n_{\alpha0}+x^n_{\alpha1},&
         x^{n+1}_{\alpha1}&=x^n_{\alpha0}+2x^n_{\alpha1}.
         \notag
     \end{align}
-    These are the transition counts appearing in
-    \cite[Appendix~D, lines~2139--2164]{Cirac2016MPDO_arXiv}.
+    This is the recurrence in
+    \cite[Appendix~D, lines~2131--2145]{Cirac2016MPDO_arXiv}.
 \end{theorem}
 
 \begin{proof}
     \leanok
+    \uses{def:cpsv_fibonacci_transition_matrix,
+      def:cpsv_fibonacci_boundary_counts}
     Multiply the row indexed by $\alpha$ in $B^n$ by the two columns of $B$.
 \end{proof}
 
-\begin{theorem}[First periodic Fibonacci transition counts are not geometric]
-    \label{thm:cpsv_fibonacci_transition_not_geometric}
-    \lean{MPSTensor.FibonacciBoundary.periodicRank,
-      MPSTensor.FibonacciBoundary.periodicRank_one,
-      MPSTensor.FibonacciBoundary.periodicRank_two,
-      MPSTensor.FibonacciBoundary.periodicRank_not_geometric}
+\begin{definition}[Periodic Fibonacci transition count]
+    \label{def:cpsv_fibonacci_periodic_count}
+    \lean{MPSTensor.FibonacciBoundary.periodicTransitionCount}
     \leanok
-    \uses{thm:cpsv_fibonacci_boundary_recurrence}
-    Closing the boundary labels gives
-    $a_N=x^N_{00}+x^N_{11}=\tr(B^N)$.  In particular $a_1=3$ and $a_2=7$,
-    and there are no $r,s\in\N$ such that $a_N=rs^{N-1}$ for every $N>0$.
+    \uses{def:cpsv_fibonacci_boundary_counts}
+    Closing the two boundary labels gives the transition count
+    \begin{align}
+        a_N&=x^N_{00}+x^N_{11}=\tr(B^N).
+        \notag
+    \end{align}
+    The source identifies this number with the periodic operator rank at
+    \cite[Appendix~D, line~2157]{Cirac2016MPDO_arXiv}; that identification is
+    retained separately below.
+\end{definition}
+
+\begin{theorem}[First periodic Fibonacci transition counts]
+    \label{thm:cpsv_fibonacci_periodic_count_values}
+    \lean{MPSTensor.FibonacciBoundary.periodicTransitionCount_one,
+      MPSTensor.FibonacciBoundary.periodicTransitionCount_two}
+    \leanok
+    \uses{def:cpsv_fibonacci_periodic_count,
+      thm:cpsv_fibonacci_boundary_recurrence}
+    The first two periodic transition counts are $a_1=3$ and $a_2=7$.
 \end{theorem}
 
 \begin{proof}
     \leanok
     \uses{thm:cpsv_fibonacci_boundary_recurrence}
-    If $a_N=rs^{N-1}$, then $r=a_1=3$ and $7=a_2=3s$, which is impossible
+    Substitute $x^1=(1,1,1,2)$ into the recurrence once and close the two
+    diagonal boundary labels.
+\end{proof}
+
+\begin{theorem}[Periodic Fibonacci transition counts are not geometric]
+    \label{thm:cpsv_fibonacci_transition_not_geometric}
+    \lean{MPSTensor.FibonacciBoundary.periodicTransitionCount_not_geometric}
+    \leanok
+    \uses{def:cpsv_fibonacci_periodic_count,
+      thm:cpsv_fibonacci_periodic_count_values}
+    There are no $r,s\in\N$ such that $a_N=rs^{N-1}$ for every $N>0$.
+    This is the non-geometricity assertion at
+    \cite[Appendix~D, line~2125]{Cirac2016MPDO_arXiv} for the transition-count
+    sequence.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:cpsv_fibonacci_periodic_count_values}
+    Such a formula would give $r=a_1=3$ and $7=a_2=3s$, which is impossible
     in $\N$.
 \end{proof}
 
-\begin{theorem}[Fibonacci MPO rank formula]
+\begin{theorem}[Open-boundary Fibonacci operator ranks]
+    \label{thm:cpsv_fibonacci_open_boundary_rank_status}
+    \notready
+    \uses{def:cpsv_fibonacci_support_tensor,
+      def:cpsv_fibonacci_boundary_counts,
+      thm:to_mpo_diagonal_rank}
+    For $n>0$ and $\alpha,\beta\in\{0,1\}$, let
+    $\rho^{(n)}_{\alpha\beta}(A)$ be the diagonal open-boundary operator whose
+    coefficient at a physical word is
+    $(\alpha|A^{i_1j_1k_1}\cdots A^{i_nj_nk_n}|\beta)$.  Prove
+    \begin{align}
+        x^n_{\alpha\beta}
+        &=\operatorname{rank}\rho^{(n)}_{\alpha\beta}(A).
+        \notag
+    \end{align}
+    This is \cite[Appendix~D, lines~2127--2130]{Cirac2016MPDO_arXiv}.
+\end{theorem}
+
+\begin{theorem}[Fibonacci periodic operator-rank formula]
     \label{thm:cpsv_fibonacci_rank_obstruction_status}
     \notready
     \uses{def:cpsv_fibonacci_support_tensor,
-      thm:cpsv_fibonacci_boundary_recurrence,
-      thm:cpsv_fibonacci_transition_not_geometric}
-    For the tensor in Definition~\ref{def:cpsv_fibonacci_support_tensor} and
-    every $N>0$, identify the transition count with the operator rank and prove
+      def:cpsv_fibonacci_periodic_count,
+      thm:cpsv_fibonacci_open_boundary_rank_status,
+      thm:to_mpo_diagonal_rank}
+    Set $\tau_\pm=(1\pm\sqrt5)/2$, as in
+    \cite[Appendix~D, line~2125]{Cirac2016MPDO_arXiv}.  For every $N>0$, prove
     \begin{align}
         \operatorname{rank}\rho^{(N)}(A)
         &=x^N_{00}+x^N_{11}
-         =\tau_+^{2N}+\tau_-^{2N},&
-        \tau_\pm&=\frac{1\pm\sqrt5}{2}.
+         =\tau_+^{2N}+\tau_-^{2N}.
         \notag
     \end{align}
-    This is \cite[Appendix~D, lines~2136--2176]{Cirac2016MPDO_arXiv}.
-    The structural relation in Definition~\ref{def:mpdo_strong_rfp} gives the
-    algebraic meaning of the source diagram; this theorem concerns only the
-    concrete Fibonacci rank sequence.
+    This is \cite[Appendix~D, lines~2122--2125 and
+    2157--2176]{Cirac2016MPDO_arXiv}.
+\end{theorem}
 
+\begin{theorem}[Fibonacci periodic operator ranks are not geometric]
+    \label{thm:cpsv_fibonacci_operator_rank_not_geometric_status}
+    \notready
+    \uses{thm:cpsv_fibonacci_rank_obstruction_status,
+      thm:cpsv_fibonacci_transition_not_geometric}
+    For the concrete Fibonacci tensor, there are no $r,s\in\N$ such that
+    \begin{align}
+        \operatorname{rank}\rho^{(N)}(A)&=rs^{N-1}
+        \notag
+    \end{align}
+    for every $N>0$.  This is the operator-level conclusion in
+    \cite[Appendix~D, line~2125]{Cirac2016MPDO_arXiv}.  The structural strong
+    fixed-point relation itself is Definition~\ref{def:mpdo_strong_rfp}; its
+    general geometric-rank consequence is a separate statement.
 \end{theorem}
 
 \begin{definition}[Initial-coordinate regroupings]
@@ -986,7 +1070,7 @@ the remaining sites unchanged.
       MPSTensor.mpo_toMPOTensor,
       MPSTensor.rank_mpo_toMPOTensor}
     \leanok
-    \uses{def:to_mpo_tensor, def:mpo_family}
+    \uses{def:to_mpo_tensor, def:mpo_family, def:mpv}
     For every $N$, the embedded MPO is diagonal with diagonal
     $V^{(N)}(A)$, and hence
     \begin{align}
@@ -1000,7 +1084,7 @@ the remaining sites unchanged.
 
 \begin{proof}
     \leanok
-    \uses{def:to_mpo_tensor, def:mpo_family}
+    \uses{def:to_mpo_tensor, def:mpo_family, def:mpv}
     A ket--bra word evaluation vanishes at the first unequal pair of physical
     labels.  Equal words recover the original MPS word evaluation.  The rank
     formula follows by counting the nonzero entries of a diagonal matrix.
