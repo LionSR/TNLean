@@ -34,6 +34,45 @@ def toMPOTensor (A : MPSTensor d D) : MPOTensor d D :=
     A.toMPOTensor i j = 0 := by
   simp [toMPOTensor, hij]
 
+/-- Word evaluation for the diagonal embedding vanishes unless the ket and
+bra words agree, and then recovers the original MPS word evaluation. -/
+theorem evalWord_toMPOTensor (A : MPSTensor d D) : ∀ l k : List (Fin d),
+    MPOTensor.evalWord A.toMPOTensor l k = if l = k then evalWord A l else 0 := by
+  intro l
+  induction l with
+  | nil => intro k; cases k <;> simp [MPOTensor.evalWord, evalWord]
+  | cons i is ih =>
+      intro k
+      cases k with
+      | nil => simp [MPOTensor.evalWord]
+      | cons j js =>
+          by_cases hij : i = j
+          · subst j
+            simp only [MPOTensor.evalWord_cons, toMPOTensor_apply_same, ih]
+            by_cases his : is = js
+            · subst js
+              simp [evalWord]
+            · simp [his]
+          · simp [MPOTensor.evalWord, toMPOTensor, hij]
+
+/-- The MPO of the diagonal pure-state embedding is the diagonal matrix whose
+entries are the periodic MPV coefficients. -/
+theorem mpo_toMPOTensor (A : MPSTensor d D) (N : ℕ) :
+    mpo A.toMPOTensor N = Matrix.diagonal (mpv A) := by
+  classical
+  ext σ τ
+  by_cases h : σ = τ
+  · subst τ
+    simp [mpo, mpoMatrixEntry, mpv, coeff, evalWord_toMPOTensor]
+  · simp [mpo, mpoMatrixEntry, evalWord_toMPOTensor, h]
+
+/-- The rank of a diagonally embedded pure tensor is the number of nonzero MPV
+coefficients. -/
+theorem rank_mpo_toMPOTensor (A : MPSTensor d D) (N : ℕ) :
+    (mpo A.toMPOTensor N).rank = Fintype.card {σ : Fin N → Fin d // mpv A σ ≠ 0} := by
+  classical
+  rw [mpo_toMPOTensor, Matrix.rank_diagonal]
+
 /-- The transfer map of the diagonal pure-state embedding is exactly the
 original MPS transfer map. -/
 @[simp] theorem toMPOTensor_transferMap (A : MPSTensor d D) :
