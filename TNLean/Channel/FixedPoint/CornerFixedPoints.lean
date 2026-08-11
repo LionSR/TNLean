@@ -8,7 +8,7 @@ import TNLean.Channel.FixedPoint.CornerAlgebra
 import TNLean.Channel.FixedPoint.StationaryProjection
 import TNLean.Channel.FixedPoint.SupportInvariance
 import TNLean.Channel.KrausCornerCompression
-import TNLean.Channel.Spectral.Support
+import TNLean.Analysis.SupportCompression
 
 /-!
 # Corner-restricted fixed points for finite Kraus maps
