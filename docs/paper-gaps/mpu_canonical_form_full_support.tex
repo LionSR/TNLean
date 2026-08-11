@@ -174,17 +174,22 @@ simple tensor carrying such a datum. The planned fundamental theorem of MPU
 applies only when every standard-form tensor being compared carries its own
 datum.
 
-The index has the same restriction at every blocking length where
-Theorem~III.8 is used. A blocking length is admissible only when the actual
-blocked tensor is simple and carries its own source datum. Well-definedness
-compares two admissible simple blockings. Tensor-product additivity requires
-one common blocking length at which both factors and their tensor product are
-simple and carry source data. The published composition proof first uses
-$\mathcal U_k$, $\mathcal U'_k$, and $\mathcal W_k$, then writes
-$\mathcal U_{2k}$ and $\mathcal U'_{2k}$ in standard form and computes the
-ranks of $\mathcal W_{4k}$. Chapter~28 therefore requires separate source data
-for all six of these exact blocked tensors. No later-block transport is used.
-% Source lines: paper_v2.tex 837--845.
+Chapter~28 retains a separate unformalized entry for the unrestricted source
+Index Theorem, labelled \texttt{IndexTh} in
+\cite[Theorem~IV.3]{Cirac2017MPU}. A distinctly named Admissible Index Theorem
+records the result currently justified by the formal interfaces. It has a
+source-data restriction at every blocking
+length where Theorem~III.8 is used. A blocking length is admissible only when
+the actual blocked tensor is simple and carries its own source datum.
+Well-definedness compares two admissible simple blockings. Tensor-product
+additivity requires one common blocking length at which both factors and their
+tensor product are simple and carry source data. The published composition
+proof first uses $\mathcal U_k$, $\mathcal U'_k$, and $\mathcal W_k$, then
+writes $\mathcal U_{2k}$ and $\mathcal U'_{2k}$ in standard form and computes
+the ranks of $\mathcal W_{4k}$. The admissible theorem therefore requires
+separate source data for all six of these exact blocked tensors. No later-block
+transport is used.
+% Source lines: paper_v2.tex 824--865.
 
 Continuity requires more than endpoint data. Chapter~28 therefore introduces
 an admissible equivalence and path datum. It consists of a chosen strict-
@@ -196,8 +201,9 @@ The actual blocked endpoints carry their own data. The same requirement is
 imposed after adjoining ancillas and blocking. This is a hypothesis attached
 to a chosen witness and does not assert that such a witness exists. The datum
 does not automatically include the source bound $m\leq D^4$. The continuous
-standard-form corollary and the forward standard-form path criterion assume
-that the supplied common blocking length itself satisfies this bound.
+standard-form corollary assumes this bound. The admissible symmetry relations
+also require it as part of their definition, so every dependent phase statement
+and example uses a witness with common blocking length at most $D^4$.
 
 For a path preserving a specified symmetry $\mathcal S$, admissibility also
 includes continuously varying source data for the fixed family consisting of
@@ -224,11 +230,15 @@ therefore supplies source data for the actual one-site endpoint tensor, its
 actual two-site block, and the physical-adjoint or transposed comparison tensor
 of that block. Defining both $\sigma^{(1)}$ and $\sigma^{(2)}$ requires source
 data for $\mathcal U$, $\mathcal U_2$, $\mathcal U_2^\sharp$,
-$\mathcal U_4$, and $\mathcal U_4^\sharp$. The blocking-parity statements and
-all later time-reversal descendants and examples repeat these hypotheses for
-every endpoint and comparison tensor after blocking or adjoining ancillas.
-Along a symmetry path these data vary continuously. No preservation under any
-of these operations is asserted.
+$\mathcal U_4$, and $\mathcal U_4^\sharp$. Gauge invariance of the sign is
+recorded separately and follows directly from the trace formula, without a
+path hypothesis. The blocking-parity proposition uses this gauge-invariance
+lemma and the explicit unwinding argument of the source; it does not invoke
+pathwise constancy. Pathwise constancy remains a separate result for bounded
+admissible time-reversal paths carrying the fixed comparison family. All later
+time-reversal descendants and examples repeat the required endpoint and
+comparison data after blocking or adjoining ancillas. No preservation under
+any of these operations is asserted.
 
 For bond dimension one, the normalized transfer matrix supplies the source
 pair directly. For bond dimension greater than one, no current result

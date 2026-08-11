@@ -4374,6 +4374,26 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
   \label{IndexTh}
   \notready
   \discussion{6023}
+  \uses{def:equivalent-tensors}
+  For MPU tensors under the source's standing canonical-form convention, take
+  the index defined from any simple blocking, with no reduced source datum or
+  admissibility hypothesis. This index has the following properties.
+  \begin{enumerate}
+    \item It does not change under blocking.
+    \item It is additive under tensor products and composition.
+    \item It is constant under continuous deformations through MPU tensors.
+    \item Two MPU tensors have the same index if and only if they are
+      equivalent.
+  \end{enumerate}
+  This is the unrestricted statement of
+  \cite[Theorem~IV.3]{Cirac2017MPU}.
+  % Source lines: paper_v2.tex 824--865.
+\end{theorem}
+
+\begin{theorem}[Admissible Index Theorem]
+  \label{thm:mpu_admissible_index}
+  \notready
+  \discussion{6023}
   % **Scope restriction (admissible tensors and operations):** every simple
   % block and standard form used below carries reduced full-support source
   % data. Documented in docs/paper-gaps/mpu_canonical_form_full_support.tex.
@@ -4414,7 +4434,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
   % simple blocks carry reduced full-support source data varying continuously
   % along the path. Documented in
   % docs/paper-gaps/mpu_canonical_form_full_support.tex.
-  \uses{prop:continuity-index,IndexTh,SF,ThmFund1,
+  \uses{prop:continuity-index,thm:mpu_admissible_index,SF,ThmFund1,
     def:mpu_reduced_full_support_source_datum,
     def:mpu_admissible_equivalence_datum}
   Let $k_0$ be the common blocking length in an admissible equivalence
@@ -4522,7 +4542,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
   % fundamental theorem is applied, carry reduced full-support source data.
   % No preservation under blocking is asserted. Documented in
   % docs/paper-gaps/mpu_canonical_form_full_support.tex.
-  \uses{FundamentalMPU,IndexTh,SF,
+  \uses{FundamentalMPU,thm:mpu_admissible_index,SF,
     def:mpu_reduced_full_support_source_datum}
   Let an MPU of index zero be in standard form. Suppose its one-site tensor
   $\mathcal U$, its actual two-site block $\mathcal U_2$, and the
@@ -4582,7 +4602,8 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
   path need not be in canonical form. The equivalence is admissible if its
   witnessing path carries an admissible equivalence datum for the actual
   blocked path tensor and the fixed conjugate, physical-adjoint, transposed,
-  and $\mathcal S$-image comparison paths.
+  and $\mathcal S$-image comparison paths, and if the common blocking length
+  $m$ of that datum satisfies $m\leq D^4$.
 \end{definition}
 
 \begin{definition}[Equivalence under a symmetry]
@@ -4599,7 +4620,8 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
   the ancillas are attached before the common blocking. The equivalence is
   admissible if this strict-equivalence witness carries an admissible
   equivalence datum for the actual blocked path and the fixed conjugate,
-  physical-adjoint, transposed, and $\mathcal S$-image comparison paths.
+  physical-adjoint, transposed, and $\mathcal S$-image comparison paths, with
+  common blocking length at most $D^4$.
 \end{definition}
 
 \begin{lemma}[Standard-form path criterion]
@@ -4634,7 +4656,8 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
   \uses{corconj,lem:equivalent-symmetry,
     def:mpu_admissible_equivalence_datum}
   Suppose that either $r$ or $\ell$ is odd and that the standard-form
-  interpolation determined below carries an admissible path datum. Two MPUs
+  interpolation determined below carries an admissible path datum whose common
+  blocking length $m$ satisfies $m\leq D^4$. Two MPUs
   $\mathcal U_1$ and $\mathcal U_2$ are admissibly strictly equivalent under
   conjugation symmetry if and only if
   \begin{align}
@@ -4670,7 +4693,8 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     lemma:conjclass-normalform-continuous,
     def:mpu_admissible_equivalence_datum}
   Suppose that $r$ and $\ell$ are both even and that the standard-form
-  interpolation determined below carries an admissible path datum. Choose
+  interpolation determined below carries an admissible path datum whose common
+  blocking length $m$ satisfies $m\leq D^4$. Choose
   admissible standard forms of two conjugation-invariant MPUs as in
   Proposition~\ref{corconj}. They are admissibly strictly equivalent under
   conjugation symmetry if and only if they belong
@@ -4716,6 +4740,28 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
   where $\mathbb S_{12,34}$ exchanges the pairs of sites $12$ and $34$.
 \end{lemma}
 
+\begin{lemma}[Gauge invariance of the time-reversal sign]
+  \label{lem:mpu_sigma_gauge_invariant}
+  \notready
+  \discussion{5714}
+  \uses{eq:sigma-from-trace}
+  Under the hypotheses of Lemma~\ref{eq:sigma-from-trace}, let $x$ and $y$ be
+  unitaries and change the standard-form gauge by
+  \begin{align}
+    u'&=(x\otimes y)u,&
+    v'&=v(y^\dagger\otimes x^\dagger).
+  \end{align}
+  Then the trace formula has the same value for $(u',v')$ as for $(u,v)$.
+  Consequently the sign $\sigma$ is independent of the standard-form gauge.
+\end{lemma}
+
+\begin{proof}
+  \uses{eq:sigma-from-trace}
+  Substitute the gauge transformations into the trace formula. The adjacent
+  unitary factors cancel, and cyclicity of the trace removes the remaining
+  conjugation.
+\end{proof}
+
 \begin{proposition}[Well-definedness of the time-reversal sign]
   \label{prop:sigma-well-defined}
   \notready
@@ -4723,7 +4769,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
   % **Scope restriction (admissible deformation):** the deformation carries the
   % path datum of Definition~\ref{def:mpu_admissible_equivalence_datum}.
   % Documented in docs/paper-gaps/mpu_canonical_form_full_support.tex.
-  \uses{eq:sigma-from-trace,lem:equivalent-symmetry,
+  \uses{lem:mpu_sigma_gauge_invariant,lem:equivalent-symmetry,
     def:mpu_reduced_full_support_source_datum,
     def:mpu_admissible_equivalence_datum}
   Suppose an admissible time-reversal-preserving path is given such that, at
@@ -4743,14 +4789,13 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
   % reduced full-support source data. No preservation under blocking is
   % asserted. Documented in
   % docs/paper-gaps/mpu_canonical_form_full_support.tex.
-  \uses{prop:sigma-well-defined,PropChiral,lem:mpu_blocking,
-    def:mpu_reduced_full_support_source_datum,
-    def:mpu_admissible_equivalence_datum}
+  \uses{lem:mpu_sigma_gauge_invariant,PropChiral,lem:mpu_blocking,
+    def:mpu_reduced_full_support_source_datum}
   For every blocking length $k$ under consideration, suppose the endpoint
   tensor $\mathcal U_k$, its actual two-site block $\mathcal U_{2k}$, and the
   physical-adjoint comparison tensor $\mathcal U_{2k}^\sharp$ are simple and
   each carries its own reduced full-support source datum. Let $\sigma^{(k)}$
-  be the sign of the resulting admissible standard form. Then
+  be the sign of the resulting standard form. Then
   \begin{align}
     \sigma^{(k)}
       &=\begin{cases}
@@ -4759,6 +4804,26 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
       \end{cases}
   \end{align}
 \end{proposition}
+
+\begin{proof}
+  \uses{lem:mpu_sigma_gauge_invariant,PropChiral,lem:mpu_blocking}
+  Gauge invariance permits the standard blocked representatives used in the
+  source proof. Choose
+  \begin{align}
+    u^{(2)}&=v_{23}u_{12}u_{34},&v^{(2)}&=v_{45},
+  \end{align}
+  and put $\zeta=\sigma^{(2)}/\sigma^{(1)}$. The one- and two-site local
+  time-reversal relations give the elementary unwinding identity relating
+  $(\Id\otimes v\otimes\Id)(u\otimes x)$ to its adjoint with factor $\zeta$.
+  Applying this identity successively through a block of length $k$ gives
+  \begin{align}
+    \sigma^{(k)}
+      &=\sigma^{(1)}\zeta^{k-1}.
+  \end{align}
+  Since each sign is $\pm1$, this equals $\sigma^{(1)}$ for odd $k$ and
+  $\sigma^{(2)}$ for even $k$.
+  % Source lines: paper_v2.tex 1657--1732.
+\end{proof}
 
 \begin{corollary}[Necessary time-reversal invariants]
   \label{cor:sigma-equivalence-necessary}
