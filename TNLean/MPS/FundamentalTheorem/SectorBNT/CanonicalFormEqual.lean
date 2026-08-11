@@ -37,6 +37,11 @@ dimensions, one unitary matrix conjugates the first extracted tensor to the seco
 The common dimension is the sum of the dimensions of the nonzero-weight blocks. No equality of the
 ambient bond dimensions, and no gauge equivalence between the original tensors, is asserted.
 
+**Scope restriction (active canonical-form tensors):** This is the active-only corrected form of the
+cited unitary theorem. It compares the extracted nonzero-weight SectorBNT tensors rather than the
+literal ambient canonical forms. The restricted source interpretation is recorded in
+`docs/paper-gaps/canonical_bnt_ft_theorem_surface.tex`.
+
 Source: arXiv:2011.12127v2, lines 1831--1906, especially Corollary IV.5 and the unitary
 note at lines 1905--1906; arXiv:1606.00608, lines 354--361 and 1172--1199. -/
 theorem exists_active_fundamentalTheorem_equal_canonicalForm_unitary
@@ -91,6 +96,11 @@ gauge. This follows from the unitary active-core theorem by forgetting unitarity
 
 The theorem concerns only the extracted nonzero-weight blocks. It does not identify the ambient bond
 dimensions and does not claim gauge equivalence of the original tensors.
+
+**Scope restriction (active canonical-form tensors):** This is the active-only corrected form of the
+cited equal fundamental theorem. It compares the extracted nonzero-weight SectorBNT tensors rather
+than the literal ambient canonical forms. The restricted source interpretation is recorded in
+`docs/paper-gaps/canonical_bnt_ft_theorem_surface.tex`.
 
 Source: arXiv:2011.12127v2, lines 1831--1900, especially Corollary IV.5;
 arXiv:1606.00608, lines 354--361 and 1172--1192. -/

@@ -913,8 +913,7 @@ give $O_{YX}(N)\to 0$, a contradiction.
     \label{thm:cpsv_active_core_equal_ft}
     \lean{MPSTensor.CPSVCanonicalFormData.exists_active_fundamentalTheorem_equal_canonicalForm}
     \leanok
-    \uses{thm:cpsv_active_sector_bnt, thm:cpgsv_equal_case_source,
-        cor:cpsv_active_core_equal_ft_unitary}
+    \uses{thm:cpsv_active_core_equal_ft_unitary}
     Let $A$ and $B$ have CPSV canonical-form data with weights
     $(\mu_k^A)_k$, $(\mu_k^B)_k$ and block dimensions
     $(D_k^A)_k$, $(D_k^B)_k$. Assume that both data satisfy the separate
@@ -947,19 +946,25 @@ give $O_{YX}(N)\to 0$, a contradiction.
     The conclusion concerns the extracted active tensors $P$ and $Q$. It does
     not assert equality of the ambient bond dimensions $D_A$ and $D_B$, and it
     does not assert that $A$ and $B$ are gauge equivalent.
+
+    \textbf{Scope restriction (active canonical-form tensors).} This is the
+    active-only, source-restricted form of the cited equal fundamental theorem:
+    the conclusion compares the extracted nonzero-weight tensors, not the
+    literal ambient canonical forms. See
+    \path{docs/paper-gaps/canonical_bnt_ft_theorem_surface.tex}.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{cor:cpsv_active_core_equal_ft_unitary}
-    Apply Corollary~\ref{cor:cpsv_active_core_equal_ft_unitary} and retain its
+    \uses{thm:cpsv_active_core_equal_ft_unitary}
+    Apply Theorem~\ref{thm:cpsv_active_core_equal_ft_unitary} and retain its
     extracted sector decompositions, dimension identities, and conjugating
     matrix. Forget that the conjugating matrix is unitary.
 \end{proof}
 
 % The RMP unitary note is arXiv:2011.12127v2, lines 1905--1906.
 % The CPSV16 CFII refinement is arXiv:1606.00608, lines 1197--1199.
-\begin{corollary}[Unitary refinement for active CPSV canonical forms]%
-    \label{cor:cpsv_active_core_equal_ft_unitary}
+\begin{theorem}[Unitary refinement for active CPSV canonical forms]%
+    \label{thm:cpsv_active_core_equal_ft_unitary}
     \lean{MPSTensor.CPSVCanonicalFormData.exists_active_fundamentalTheorem_equal_canonicalForm_unitary}
     \leanok
     \uses{thm:cpsv_active_sector_bnt,
@@ -998,7 +1003,12 @@ give $O_{YX}(N)\to 0$, a contradiction.
     refinement of \cite[Corollary~A.6, lines~1197--1199]{Cirac2016MPDO_arXiv}.
     Again, there is no claim that $D_A=D_B$, and no gauge equivalence between
     $A$ and $B$ is asserted.
-\end{corollary}
+
+    \textbf{Scope restriction (active canonical-form tensors).} This is the
+    active-only, source-restricted unitary form: the conclusion compares the
+    extracted nonzero-weight tensors, not the literal ambient canonical forms.
+    See \path{docs/paper-gaps/canonical_bnt_ft_theorem_surface.tex}.
+\end{theorem}
 
 \begin{proof}\leanok
     \uses{thm:cpsv_active_sector_bnt,
