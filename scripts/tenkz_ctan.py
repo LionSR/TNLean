@@ -36,6 +36,7 @@ Commands:
   stage         write the staging tree under --out (default build/ctan)
   archive       write the tree, the archive, and the archive's digest
   sync          report the version and date state of the release artifacts
+  offline       compile the corpus cases against the archive, unpacked flat
   check         run every acceptance check and report one line each
 
 `check` exits 1 on the first failing check's report, 0 when every check
@@ -183,6 +184,136 @@ SMOKE_DOCUMENT = r"""\documentclass{article}
 \end{tenkz}
 \end{document}
 """
+
+# The ways a loaded TikZ library reaches the package, and the report that has
+# to account for every one of them. `docs/tenkz/ctan/DEPENDENCIES.md` reads the
+# same three words: a library the package's own placement and model code calls,
+# a library only the ink it draws needs, and a library loaded with no consumer
+# anywhere in the source. The third class is not a spare bin. It is the finding
+# a rederivation exists to produce, and it is named so that a library entering
+# or leaving it is a reviewed edit rather than a silence.
+DEPENDENCY_CLASSES = ("placement", "ink", "unconsumed")
+
+# Front ends the package once carried, and the load each of them brought with
+# it. They are checked by absence: the closure walk blanks comments before it
+# reads a load, so the sentence in `tenkz.sty` that says commutative diagrams
+# belong to tikz-cd is prose and not a dependency, and a real load would be the
+# only way any of these names could reach the closure.
+RETIRED_DEPENDENCIES = ("tikz-cd", "tikzcd", "quantikz")
+
+# What arXiv will not do for a source submission, expressed as the file kinds
+# whose presence would mean it has to. A `.dtx` or `.ins` pair is the usual
+# LaTeX-package shape and needs a docstrip run before the runtime exists; a
+# `.fmt` or a `.mf` needs the format or the font built. tenkz stages its
+# runtime as the files the engine reads, so none of these may be staged.
+REGENERATED_SUFFIXES = frozenset({".dtx", ".ins", ".fmt", ".mf", ".drv"})
+
+# The primitives a submission may not need, because arXiv compiles without
+# `\write18`. tenkz draws with TikZ and computes with expl3, so it calls none
+# of them; the check is what keeps that true.
+SHELL_ESCAPE_CALLS = (r"\write18", r"\ShellEscape", r"\immediate\write18")
+
+# An absolute path in a staged source names the machine that wrote it. The
+# pattern catches the two spellings a TeX file can carry: a Unix path opening
+# a load argument, and a Windows drive letter.
+ABSOLUTE_LOAD = re.compile(
+    r"\\(?:input|include|usepackage|RequirePackage|includegraphics)"
+    r"\s*(?:\[[^]]*\]\s*)?\{\s*(?:/|[A-Za-z]:[\\/])"
+)
+
+
+@dataclass(frozen=True)
+class OfflineCase:
+    """One picture class, the corpus case that draws it, and its evidence.
+
+    `declares` is read from the case source and `emits` from the event stream
+    the compiled run wrote, so a case swapped for one of another class fails
+    on both sides rather than passing as "a picture compiled". `absent` is the
+    negative half of the same reading: a flat placement is recognized by the
+    frame record it does not write.
+    """
+
+    name: str
+    picture_class: str
+    source: str
+    document: bool
+    declares: str
+    emits: str
+    absent: str = ""
+
+
+# The six picture classes an upload is judged on, each drawn by a case the
+# corpus already owns and audits: the review benchmark for the classes it
+# covers, and the kernel probes for the self-contained document form, whose
+# preamble is the one an author writes rather than one this tool supplies.
+OFFLINE_CASES = (
+    OfflineCase(
+        "flat", "flat",
+        "tests/tenkz/rmp/section-ii/cases/rmp-ii-mps-marginal.tex",
+        False, r"\begin{tenkz}", r"atom\|", absent=r"(?m)^frame\|",
+    ),
+    OfflineCase(
+        "plane", "plane",
+        "tests/tenkz/rmp/section-ii/cases/rmp-ii-peps-marginal.tex",
+        False, "frame=plane", r"(?m)^frame\|.*map=plane",
+    ),
+    OfflineCase(
+        "circle", "circle",
+        "tests/tenkz/rmp/section-ii/cases/rmp-ii-triangle-network.tex",
+        # A circle frame transports each port along its station's outward
+        # radius, so the boundary signature carries a numeric compass face. A
+        # flat or plane placement writes a named one, so the digit is the
+        # reading that tells the two apart.
+        False, "frame=circle", r"kernel-boundary\|signature=phys:[0-9]",
+    ),
+    OfflineCase(
+        "crossing", "string/crossing",
+        "tests/tenkz/rmp/section-iii-b/cases/rmp-iii-b-braid-two.tex",
+        False, r"\tnwire", r"(?m)^stringcross\|",
+    ),
+    OfflineCase(
+        "enclosure", "enclosure",
+        "tests/tenkz/rmp/section-ii/cases/rmp-ii-peps-projection.tex",
+        False, "form=enclosure", r"(?m)^mark\|.*form=enclosure",
+    ),
+    OfflineCase(
+        "equation", "equation",
+        "tests/tenkz/rmp/section-ii/cases/rmp-ii-mpu-brickwork.tex",
+        False, r"\begin{tenkzeq}", r"(?m)^check\|.*result=equal",
+    ),
+    OfflineCase(
+        "probe-plane", "plane",
+        "tests/tenkz/kernel/k_plane.tex",
+        True, "frame=plane", r"(?m)^frame\|.*map=plane",
+    ),
+    OfflineCase(
+        "probe-crossing", "string/crossing",
+        "tests/tenkz/kernel/k_braid.tex",
+        True, r"\tnwire", r"(?m)^stringcross\|",
+    ),
+)
+
+# The document an author writes around a preamble-free case. It names the case
+# by its flat basename, which is what the submission would look like.
+OFFLINE_WRAPPER = r"""\documentclass[border=8pt,varwidth=270mm]{standalone}
+\usepackage{amsmath,amssymb,mathtools}
+\usepackage{tenkz}
+\begin{document}
+\input{%s}
+\end{document}
+"""
+
+# The tools a run must not reach for. Each is shadowed by a script that records
+# its own call and fails, so "no installation and no fetch happened" is read
+# from whether any of them ran rather than assumed from a run that passed.
+# `tlmgr` would install a missing package; the `mktex` family would build a
+# font or a format on the fly, which is the other way a run can quietly repair
+# an incomplete environment.
+INTERPOSED_TOOLS = (
+    "tlmgr", "curl", "wget", "git", "ftp", "scp", "ssh", "rsync",
+    "mktextfm", "mktexpk", "mktexmf", "mktexlsr", "updmap", "fmtutil",
+)
+TRIPWIRE = "#!/bin/sh\nprintf '%s\\n' \"$0\" >> \"$TENKZ_OFFLINE_TRIPWIRE\"\nexit 127\n"
 
 
 # --------------------------------------------------------------------------
@@ -632,6 +763,82 @@ def check_closure(closure: Closure, manifest: dict) -> Report:
     return report
 
 
+def check_dependencies(closure: Closure, manifest: dict) -> Report:
+    """Every loaded library is accounted for by one consumer class, and the
+    retired front ends' loads are gone.
+
+    The closure says what is loaded. It cannot say why, and a list of ten
+    library names is not a dependency report: an author reading it cannot tell
+    which of them the package needs to place a tensor and which of them only
+    the ink it draws needs. The manifest's classification says which, and this
+    check is what stops the two from drifting: a library that enters or leaves
+    the load list without a class, or that is filed under two, fails here.
+
+    Absence is checked the same way. The retired front ends each brought a load
+    with them, and the walk that reads loads has already blanked the comments,
+    so a name from that list reaching the closure would mean a real load
+    survived the removal rather than a sentence about one.
+    """
+
+    report = Report("dependencies")
+    ownership = manifest["runtime"]["requires"].get("ownership")
+    if not isinstance(ownership, dict):
+        report.failures.append(
+            f"{MANIFEST_LABEL} declares no [runtime.requires.ownership]; the "
+            "loaded libraries are then a list nobody has traced to a consumer"
+        )
+        return report
+    unknown = sorted(set(ownership) - set(DEPENDENCY_CLASSES))
+    report.require(
+        not unknown,
+        f"{MANIFEST_LABEL} files libraries under {unknown}, and a library "
+        f"reaches the package one of {list(DEPENDENCY_CLASSES)} ways",
+    )
+    classified: dict[str, list[str]] = {}
+    for name in DEPENDENCY_CLASSES:
+        members = ownership.get(name, [])
+        if not isinstance(members, list) or any(
+            not isinstance(member, str) for member in members
+        ):
+            report.failures.append(f"[runtime.requires.ownership] {name} is not a list of names")
+            return report
+        classified[name] = members
+    twice = sorted(
+        library
+        for library in closure.libraries
+        if sum(library in members for members in classified.values()) > 1
+    )
+    report.require(
+        not twice,
+        f"{twice} are filed under more than one consumer class; a library is "
+        "read for one reason or the report does not say what that reason is",
+    )
+    filed = sorted({library for members in classified.values() for library in members})
+    report.require(
+        filed == closure.libraries,
+        f"the classification covers {filed}, and {ENTRY.name} loads "
+        f"{closure.libraries}",
+    )
+    loaded = set(closure.packages) | set(closure.libraries)
+    survivors = sorted(name for name in RETIRED_DEPENDENCIES if name in loaded)
+    report.require(
+        not survivors,
+        f"{ENTRY.name} still loads {survivors}, which the retired front ends "
+        "brought and their removal was supposed to take with them",
+    )
+    report.notes.append(
+        "; ".join(
+            f"{name}: {len(classified[name])}" for name in DEPENDENCY_CLASSES
+        )
+        + f"; no load of {', '.join(RETIRED_DEPENDENCIES)}"
+    )
+    if classified["unconsumed"]:
+        report.notes.append(
+            f"loaded with no consumer in the source: {', '.join(classified['unconsumed'])}"
+        )
+    return report
+
+
 def check_source_tree(closure: Closure, manifest: dict, source: Path = SOURCE) -> Report:
     """Nothing in the source directory is unaccounted for, and none of it is debris."""
 
@@ -1029,6 +1236,264 @@ def check_smoke(archive: Path, required: bool) -> Report:
     return report
 
 
+def check_arxiv(tree: Path) -> Report:
+    """The staged tree read as an arXiv source submission.
+
+    An upload to CTAN and a source submission to arXiv are the same files under
+    two sets of rules, and the second set is the stricter one: arXiv unpacks a
+    submission beside the manuscript rather than installing it, runs no
+    docstrip and no font builder, and compiles without shell escape. So the
+    tree has to be flat, has to be the runtime itself rather than the sources a
+    runtime is generated from, has to name no path on the machine that wrote
+    it, and has to call no primitive that would need a shell.
+    """
+
+    report = Report("arxiv")
+    for path in sorted(tree.rglob("*")):
+        report.require(
+            not path.is_dir(),
+            f"{path.name} is a directory, and a submission unpacks beside a "
+            "manuscript rather than into a tree of its own",
+        )
+        if path.is_dir():
+            continue
+        report.require(
+            path.suffix not in REGENERATED_SUFFIXES,
+            f"{path.name} would have to be run before the runtime exists, and "
+            "a submission is compiled rather than built",
+        )
+        if path.suffix not in {".sty", ".tex"}:
+            continue
+        text = path.read_bytes().decode("utf-8", errors="replace")
+        report.require(
+            ABSOLUTE_LOAD.search(strip_comments(text)) is None,
+            f"{path.name} loads a file by absolute path, which names the "
+            "machine it was written on",
+        )
+        for call in SHELL_ESCAPE_CALLS:
+            report.require(
+                call not in strip_comments(text),
+                f"{path.name} calls {call}, and a submission compiles with no shell",
+            )
+    report.notes.append(
+        f"{len(list(tree.iterdir()))} files, one directory deep, no generated "
+        "source and no shell call"
+    )
+    return report
+
+
+def offline_room(archive: Path, room: Path) -> list[str]:
+    """Unpack the archive flat into one directory, as a submission unpacks.
+
+    CTAN receives a `tenkz/` directory and an installation puts it on the
+    search path. A submission has no search path to put it on: the files sit
+    beside the manuscript, so this is where the archive is flattened and where
+    a runtime file that only resolves through a directory would fail.
+    """
+
+    with tempfile.TemporaryDirectory(prefix="tenkz-offline-unpack-") as unpacking:
+        with zipfile.ZipFile(archive) as bundle:
+            bundle.extractall(unpacking)
+        unpacked = Path(unpacking) / PACKAGE
+        staged = sorted(path.name for path in unpacked.iterdir())
+        for path in sorted(unpacked.iterdir()):
+            shutil.copy2(path, room / path.name)
+    return staged
+
+
+def offline_environment(room: Path, shims: Path, tripwire: Path, home: Path) -> dict[str, str]:
+    """The environment a run gets, built rather than inherited.
+
+    Nothing of the caller's environment reaches the engine except the search
+    path it needs to find its own binaries, and the shim directory comes first
+    on it, so an installer or a fetcher the run reached for would be recorded
+    instead of run. `TEXINPUTS` is the current directory and then the
+    installation: the empty last element is what leaves `tikz`, `hobby`, and
+    `spath3` findable, and it is also why the input record, not the exit
+    status, decides where the runtime came from.
+    """
+
+    return {
+        "PATH": os.pathsep.join([str(shims), "/usr/bin", "/bin", os.environ.get("PATH", "")]),
+        "HOME": str(home),
+        "TEXMFHOME": str(home / "texmf"),
+        "TEXMFVAR": str(home / "texmf-var"),
+        "TEXMFCONFIG": str(home / "texmf-config"),
+        "TEXINPUTS": ".:",
+        "TEXMFOUTPUT": str(room),
+        "TENKZ_OFFLINE_TRIPWIRE": str(tripwire),
+        # kpathsea reads these before it runs a generator, so a missing font or
+        # format is a failed run rather than a build nobody asked for.
+        "MKTEXTFM": "0",
+        "MKTEXPK": "0",
+        "MKTEXMF": "0",
+        "MKTEXFMT": "0",
+        # The discard port, for any client that honours a proxy variable: a
+        # fetch that got past the shims still has nowhere to go.
+        "http_proxy": "http://127.0.0.1:9",
+        "https_proxy": "http://127.0.0.1:9",
+        "ftp_proxy": "http://127.0.0.1:9",
+        "all_proxy": "http://127.0.0.1:9",
+    }
+
+
+def write_shims(shims: Path) -> None:
+    """Shadow every tool a run could install or fetch with, and record calls."""
+
+    shims.mkdir(parents=True, exist_ok=True)
+    for tool in INTERPOSED_TOOLS:
+        shim = shims / tool
+        shim.write_text(TRIPWIRE, encoding="utf-8")
+        shim.chmod(0o755)
+
+
+def recorded_inputs(record: Path) -> list[str]:
+    """Every file the engine opened, from its input record."""
+
+    return [
+        line[len("INPUT "):].strip()
+        for line in record.read_text(encoding="utf-8", errors="replace").splitlines()
+        if line.startswith("INPUT ")
+    ]
+
+
+def check_offline(archive: Path, required: bool) -> Report:
+    """Compile one case of every picture class against the unpacked flat.
+
+    The clean-install check proves the archive carries a runtime. This one
+    proves the runtime draws: a case of each class the release is judged on is
+    compiled beside the flattened archive, with no network reachable and no
+    installer on the path, and each result is read as the corpus reads it --
+    the event stream through the audit, and the class's own record through the
+    evidence the case declares. A run that produced a PDF and no tensor network
+    fails here, and so does one whose picture is of another class than the one
+    it was chosen for.
+    """
+
+    report = Report("offline")
+    engine = shutil.which("xelatex")
+    if engine is None:
+        if required:
+            report.failures.append("xelatex is absent and the check was required")
+        else:
+            report.skipped = "xelatex is absent"
+        return report
+    audit = ROOT / "scripts/tenkz_audit.py"
+    if not audit.is_file():
+        report.failures.append(f"{audit.relative_to(ROOT)} is missing; nothing would read the runs")
+        return report
+    with tempfile.TemporaryDirectory(prefix="tenkz-offline-") as directory:
+        base = Path(directory)
+        room = base / "submission"
+        room.mkdir()
+        home = base / "home"
+        (home / "texmf").mkdir(parents=True)
+        tripwire = base / "reached-for.txt"
+        shims = base / "shims"
+        write_shims(shims)
+        staged = offline_room(archive, room)
+        environment = offline_environment(room, shims, tripwire, home)
+        for case in OFFLINE_CASES:
+            _offline_case(case, room, engine, environment, audit, report)
+        if tripwire.exists():
+            report.failures.append(
+                "the runs reached for an installer or a fetcher: "
+                + tripwire.read_text(encoding="utf-8", errors="replace").replace("\n", " ")
+            )
+    if not report.failures:
+        report.notes.append(
+            f"{len(OFFLINE_CASES)} cases over "
+            f"{len({case.picture_class for case in OFFLINE_CASES})} picture classes, "
+            f"compiled and audited against {len(staged)} flat files, with "
+            f"{len(INTERPOSED_TOOLS)} installers and fetchers shadowed and uncalled"
+        )
+    return report
+
+
+def _offline_case(case: OfflineCase, room: Path, engine: str,
+                  environment: dict[str, str], audit: Path, report: Report) -> None:
+    """Compile one case in the flat room and read what it wrote."""
+
+    source = ROOT / case.source
+    if not source.is_file():
+        report.failures.append(f"{case.source} is missing; the {case.picture_class} case has moved")
+        return
+    text = source.read_text(encoding="utf-8")
+    if case.declares not in text:
+        report.failures.append(
+            f"{case.name}: {case.source} no longer spells {case.declares!r}, so it "
+            f"is not the {case.picture_class} case this check reads"
+        )
+        return
+    job = f"tenkz-offline-{case.name}"
+    if case.document:
+        read = f"{job}.tex"
+        (room / read).write_text(text, encoding="utf-8")
+    else:
+        read = f"{job}-case.tex"
+        (room / read).write_text(text, encoding="utf-8")
+        (room / f"{job}.tex").write_text(OFFLINE_WRAPPER % read, encoding="utf-8")
+    try:
+        finished = subprocess.run(
+            [engine, "-no-shell-escape", "-interaction=nonstopmode",
+             "-halt-on-error", "-recorder", f"{job}.tex"],
+            cwd=room, env=environment, capture_output=True, text=True, timeout=300,
+        )
+    except subprocess.TimeoutExpired:
+        report.failures.append(f"{case.name} did not finish compiling within 300 seconds")
+        return
+    if finished.returncode != 0:
+        tail = "\n".join((finished.stdout + finished.stderr).splitlines()[-20:])
+        report.failures.append(
+            f"{case.name} ({case.picture_class}) failed to compile from the flat "
+            f"archive, exit {finished.returncode}:\n{tail}"
+        )
+        return
+    pdf, stream, record = (room / f"{job}.pdf", room / f"{job}.tnlog", room / f"{job}.fls")
+    if not pdf.is_file() or pdf.stat().st_size == 0:
+        report.failures.append(f"{case.name} produced no PDF")
+        return
+    if not stream.is_file() or not stream.read_text(encoding="utf-8").strip():
+        report.failures.append(f"{case.name} produced no event stream, so it drew nothing to read")
+        return
+    if not record.is_file():
+        report.failures.append(f"{case.name} wrote no input record to read")
+        return
+    opened = recorded_inputs(record)
+    strangers = [path for path in opened if (room / path).resolve().is_relative_to(ROOT)]
+    report.require(
+        not strangers,
+        f"{case.name} read {sorted(set(strangers))} from the repository, so the "
+        "flat archive did not answer for the run",
+    )
+    runtime = [path for path in opened if Path(path).name.startswith(PACKAGE)]
+    report.require(runtime, f"{case.name} opened no tenkz file, so it proved nothing")
+    report.require(
+        all((room / path).resolve().is_relative_to(room.resolve()) for path in runtime),
+        f"{case.name} resolved a runtime file outside the flat archive, so an "
+        "installed copy answered for it",
+    )
+    events = stream.read_text(encoding="utf-8")
+    report.require(
+        re.search(case.emits, events) is not None,
+        f"{case.name} compiled but its stream records no {case.picture_class} "
+        f"picture: nothing matches {case.emits!r}",
+    )
+    if case.absent:
+        report.require(
+            re.search(case.absent, events) is None,
+            f"{case.name} records {case.absent!r}, which a {case.picture_class} "
+            "picture does not write",
+        )
+    read_back = subprocess.run(
+        [sys.executable, str(audit), str(stream), str(room / read)],
+        cwd=room, capture_output=True, text=True, timeout=300,
+    )
+    if read_back.returncode != 0:
+        tail = "\n".join((read_back.stdout + read_back.stderr).splitlines()[-15:])
+        report.failures.append(f"{case.name} failed the event audit:\n{tail}")
+
+
 def release_sync(release: Release) -> list[tuple[str, str]]:
     """What each release artifact currently says about its version and date.
 
@@ -1093,6 +1558,23 @@ def command_archive(out: Path) -> int:
     return 0
 
 
+def command_offline(require_engine: bool) -> int:
+    """Build the archive and compile the picture classes against its flat."""
+
+    with tempfile.TemporaryDirectory(prefix="tenkz-ctan-offline-") as directory:
+        archive, _, _ = build(Path(directory) / "out")
+        report = check_offline(archive, require_engine)
+    print(f"  {report.status:4s} {report.name}")
+    for note in report.notes:
+        print(f"         {note}")
+    if report.skipped:
+        print(f"         skipped: {report.skipped}")
+    for failure in report.failures:
+        for line in failure.splitlines():
+            print(f"         {line}")
+    return 1 if report.failures else 0
+
+
 def command_sync() -> int:
     for artifact, state in release_sync(read_release()):
         print(f"  {artifact:28s} {state}")
@@ -1106,6 +1588,7 @@ def command_check(require_smoke: bool, keep: Path | None) -> int:
     material = check_material(manifest)
     reports = [
         check_closure(closure, manifest),
+        check_dependencies(closure, manifest),
         check_source_tree(closure, manifest),
         material,
         check_headers(closure),
@@ -1124,7 +1607,7 @@ def command_check(require_smoke: bool, keep: Path | None) -> int:
     blocked = material.failures + encoding.failures + names.failures
     digest = ""
     if blocked:
-        for name in ("permissions", "debris", "determinism", "clean-install"):
+        for name in ("permissions", "debris", "arxiv", "determinism", "clean-install", "offline"):
             skipped = Report(name)
             skipped.skipped = f"the staged material is not complete ({len(blocked)} finding(s))"
             reports.append(skipped)
@@ -1134,8 +1617,10 @@ def command_check(require_smoke: bool, keep: Path | None) -> int:
             archive, _, digest = build(destination)
             reports.append(check_permissions(destination / PACKAGE))
             reports.append(check_debris(destination / PACKAGE))
+            reports.append(check_arxiv(destination / PACKAGE))
             reports.append(check_determinism(release))
             reports.append(check_smoke(archive, require_smoke))
+            reports.append(check_offline(archive, require_smoke))
     for report in reports:
         print(f"  {report.status:4s} {report.name}")
         for note in report.notes:
@@ -1164,6 +1649,14 @@ def main(argv: list[str]) -> int:
     staging.add_argument("--out", type=Path, default=DEFAULT_OUT)
     packing = commands.add_parser("archive", help="write the tree and the archive")
     packing.add_argument("--out", type=Path, default=DEFAULT_OUT)
+    offline = commands.add_parser(
+        "offline", help="compile the picture classes against the unpacked flat"
+    )
+    offline.add_argument(
+        "--require-engine",
+        action="store_true",
+        help="fail rather than skip when no TeX engine is installed",
+    )
     commands.add_parser("sync", help="report the release artifacts' version state")
     checking = commands.add_parser("check", help="run every acceptance check")
     checking.add_argument(
@@ -1184,6 +1677,8 @@ def main(argv: list[str]) -> int:
         return command_stage(arguments.out)
     if arguments.command == "archive":
         return command_archive(arguments.out)
+    if arguments.command == "offline":
+        return command_offline(arguments.require_engine)
     if arguments.command == "sync":
         return command_sync()
     return command_check(arguments.require_smoke, arguments.out)

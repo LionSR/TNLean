@@ -717,6 +717,186 @@ def test_the_release_report_survives_an_absent_artifact() -> None:
     assert dict(rows)["docs/tenkz/CHANGES.md"] == "absent", rows
 
 
+def _ownership(placement: list[str], ink: list[str], unconsumed: list[str]) -> dict:
+    """A manifest holding one library classification and nothing else."""
+
+    return {
+        "runtime": {
+            "requires": {
+                "packages": ["tikz"],
+                "libraries": sorted(placement + ink + unconsumed),
+                "ownership": {
+                    "placement": placement,
+                    "ink": ink,
+                    "unconsumed": unconsumed,
+                },
+            }
+        }
+    }
+
+
+def test_a_loaded_library_without_a_consumer_class_is_caught() -> None:
+    """A list of library names is not a dependency report. A library that
+    entered or left the load list without being traced to the code that reads
+    it fails here, which is what stops the report from going stale."""
+
+    closure = tenkz_ctan.Closure(libraries=["calc", "hobby"], packages=["tikz"])
+    missing = tenkz_ctan.check_dependencies(
+        closure, _ownership(["calc"], [], [])
+    )
+    assert any("loads" in reason for reason in missing.failures), missing.failures
+    invented = tenkz_ctan.check_dependencies(
+        closure, _ownership(["calc", "hobby"], ["spath3"], [])
+    )
+    assert invented.failures, "a class naming a library nothing loads passed"
+    twice = tenkz_ctan.check_dependencies(
+        closure, _ownership(["calc", "hobby"], ["hobby"], [])
+    )
+    assert any(
+        "more than one consumer class" in reason for reason in twice.failures
+    ), twice.failures
+    sound = tenkz_ctan.check_dependencies(closure, _ownership(["calc"], ["hobby"], []))
+    assert not sound.failures, sound.failures
+
+
+def test_a_manifest_with_no_classification_at_all_is_named() -> None:
+    manifest = {"runtime": {"requires": {"packages": ["tikz"], "libraries": []}}}
+    report = tenkz_ctan.check_dependencies(tenkz_ctan.Closure(), manifest)
+    assert any("ownership" in reason for reason in report.failures), report.failures
+
+
+def test_a_retired_front_end_load_fails_the_dependency_check() -> None:
+    """The removed front ends each brought a load. The walk blanks comments
+    before it reads one, so a retired name in the closure is a surviving load
+    rather than the sentence in `tenkz.sty` that mentions tikz-cd."""
+
+    closure = tenkz_ctan.Closure(packages=["tikz", "tikz-cd"], libraries=[])
+    report = tenkz_ctan.check_dependencies(closure, _ownership([], [], []))
+    assert any("tikz-cd" in reason for reason in report.failures), report.failures
+    walked = tenkz_ctan.walk_closure()
+    loaded = set(walked.packages) | set(walked.libraries)
+    assert not loaded & set(tenkz_ctan.RETIRED_DEPENDENCIES), sorted(loaded)
+
+
+def test_the_real_classification_covers_the_real_load_list() -> None:
+    report = tenkz_ctan.check_dependencies(
+        tenkz_ctan.walk_closure(), tenkz_ctan.read_manifest()
+    )
+    assert not report.failures, report.failures
+
+
+def test_a_tree_arxiv_would_have_to_build_or_shell_out_for_fails() -> None:
+    """The submission reading of the same files: flat, already the runtime,
+    naming no path on the machine that wrote it, calling no shell."""
+
+    with tempfile.TemporaryDirectory() as directory:
+        tree = Path(directory) / PACKAGE_DIR
+        (tree / "nested").mkdir(parents=True)
+        (tree / "tenkz.sty").write_text("% a runtime file\n", encoding="utf-8")
+        (tree / "tenkz.ins").write_text("% a docstrip run\n", encoding="utf-8")
+        (tree / "loud.sty").write_text("\\immediate\\write18{rm -rf /}\n", encoding="utf-8")
+        (tree / "elsewhere.sty").write_text(
+            "\\input{/Users/somebody/tenkz-core.code.tex}\n", encoding="utf-8"
+        )
+        report = tenkz_ctan.check_arxiv(tree)
+    findings = " ".join(report.failures)
+    assert "nested" in findings, report.failures
+    assert "tenkz.ins" in findings, report.failures
+    assert "write18" in findings, report.failures
+    assert "absolute path" in findings, report.failures
+
+
+def test_a_commented_shell_call_is_not_a_shell_call() -> None:
+    """Comments are blanked before the reading, as everywhere else here: a
+    sentence about `\\write18` is prose, and refusing it would be refusing the
+    file that documents why the package does not call it."""
+
+    with tempfile.TemporaryDirectory() as directory:
+        tree = Path(directory) / PACKAGE_DIR
+        tree.mkdir(parents=True)
+        (tree / "tenkz.sty").write_text(
+            "% tenkz never calls \\write18, and never loads {/absolute}.\n",
+            encoding="utf-8",
+        )
+        report = tenkz_ctan.check_arxiv(tree)
+    assert not report.failures, report.failures
+
+
+def test_an_interposed_tool_records_its_own_call_and_fails() -> None:
+    """The offline claim is read from whether an installer ran, so the shims
+    have to record. A shim that silently succeeded would let a run repair an
+    incomplete environment and still report that nothing was fetched."""
+
+    with tempfile.TemporaryDirectory() as directory:
+        room = Path(directory)
+        shims = room / "shims"
+        tenkz_ctan.write_shims(shims)
+        tripwire = room / "reached-for.txt"
+        assert sorted(path.name for path in shims.iterdir()) == sorted(
+            tenkz_ctan.INTERPOSED_TOOLS
+        )
+        called = subprocess.run(
+            [str(shims / "tlmgr"), "install", "tenkz"],
+            capture_output=True,
+            text=True,
+            env={**os.environ, "TENKZ_OFFLINE_TRIPWIRE": str(tripwire)},
+        )
+        assert called.returncode != 0, called.stdout
+        assert tripwire.is_file(), "the shim ran and recorded nothing"
+        assert "tlmgr" in tripwire.read_text(encoding="utf-8")
+
+
+def test_the_offline_environment_inherits_nothing_that_could_answer() -> None:
+    """A user tree, a repository on the search path, or an on-demand font
+    builder would each let a run pass while proving less than it claims."""
+
+    with tempfile.TemporaryDirectory() as directory:
+        room = Path(directory)
+        environment = tenkz_ctan.offline_environment(
+            room / "submission", room / "shims", room / "tripwire", room / "home"
+        )
+    assert environment["TEXINPUTS"] == ".:", environment["TEXINPUTS"]
+    assert str(ROOT) not in environment["TEXINPUTS"]
+    assert environment["PATH"].startswith(str(room / "shims"))
+    for tree in ("TEXMFHOME", "TEXMFVAR", "TEXMFCONFIG", "HOME"):
+        assert environment[tree].startswith(str(room / "home")), tree
+    for generator in ("MKTEXTFM", "MKTEXPK", "MKTEXMF", "MKTEXFMT"):
+        assert environment[generator] == "0", generator
+
+
+def test_the_offline_cases_are_the_picture_classes_and_still_say_so() -> None:
+    """The corpus owns the cases, so this reads them rather than copying
+    them: a case that moved, or that stopped drawing the class it was chosen
+    for, is caught without an engine."""
+
+    classes = {case.picture_class for case in tenkz_ctan.OFFLINE_CASES}
+    assert classes == {
+        "flat", "plane", "circle", "string/crossing", "enclosure", "equation"
+    }, sorted(classes)
+    assert any(
+        case.source.startswith("tests/tenkz/kernel/")
+        for case in tenkz_ctan.OFFLINE_CASES
+    ), "no self-contained kernel probe is compiled"
+    names = [case.name for case in tenkz_ctan.OFFLINE_CASES]
+    assert len(set(names)) == len(names), names
+    for case in tenkz_ctan.OFFLINE_CASES:
+        source = ROOT / case.source
+        assert source.is_file(), case.source
+        assert case.declares in source.read_text(encoding="utf-8"), case.name
+
+
+def test_the_offline_check_says_so_when_there_is_no_engine() -> None:
+    engine = tenkz_ctan.shutil.which
+    try:
+        tenkz_ctan.shutil.which = lambda _name: None
+        skipped = tenkz_ctan.check_offline(Path("unread.zip"), required=False)
+        refused = tenkz_ctan.check_offline(Path("unread.zip"), required=True)
+    finally:
+        tenkz_ctan.shutil.which = engine
+    assert skipped.status == "SKIP", skipped
+    assert refused.failures, refused
+
+
 def test_check_passes_now() -> None:
     subprocess.run([sys.executable, str(SCRIPT), "check"], check=True)
 

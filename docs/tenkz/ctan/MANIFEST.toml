@@ -52,6 +52,32 @@ libraries = [
   "spath3",
 ]
 
+[runtime.requires.ownership]
+# Why each library is loaded, traced to the code that reads it.
+# `docs/tenkz/ctan/DEPENDENCIES.md` is the reading; this is the pin, and the
+# check refuses a library that enters or leaves the load list without one.
+#
+# `placement` is what the package computes and places with: take one away and
+# the model has no answer for where a tensor, a wire, or a crossing goes.
+# `ink` is what the drawing needs: take one away and the network is placed and
+# undrawable, an arrow tip or a brace or a station outline missing. The
+# distinction matters to an author, because the second group is what a host
+# document's own styles reach into and the first is not.
+placement = ["calc", "hobby", "intersections", "spath3"]
+ink = [
+  "arrows.meta",
+  "decorations.markings",
+  "decorations.pathreplacing",
+  "shapes.geometric",
+]
+# Loaded, and read by nothing in the package or the corpus. Both come from pgf
+# rather than from a package of their own, so carrying them costs an
+# installation nothing beyond `tikz`, which is why they are recorded here
+# instead of dropped: removing a load is a change to what a host document
+# inherits at package load, and that is a release decision rather than a
+# staging one.
+unconsumed = ["backgrounds", "fit"]
+
 [material]
 # Staged name = the file it is copied from, unmodified. The version and date
 # these carry are checked against the `\ProvidesPackage` line; none of them
