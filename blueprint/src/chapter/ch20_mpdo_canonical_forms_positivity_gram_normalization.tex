@@ -518,8 +518,8 @@
     \uses{def:mpdo, def:vertical_tensor_mpdo}
     An MPO tensor $M$ has the \emph{grouped-corner Gram-dressing property} if
     the following holds. Let $A$ be a tensor, let $V_X,V_Y$ be two physical
-    maps, let $X,Y$ be invertible matrices, and let $c_X,c_Y>0$. For every
-    vertical letter $v$, if
+    maps, let $X,Y$ be invertible matrices, and let $c_X,c_Y>0$. Suppose that,
+    for every vertical letter $v$, the following two corner identities hold:
     \begin{align}
         V_X^\dagger\widetilde M^vV_X
         &=c_X X A^vX^{-1},
@@ -528,7 +528,7 @@
         &=c_Y Y A^vY^{-1}
         \notag
     \end{align}
-    then
+    Then, for every vertical letter $v$,
     \begin{align}
         (X^\dagger X)A^v(X^\dagger X)^{-1}
         &=(Y^\dagger Y)A^v(Y^\dagger Y)^{-1}.
