@@ -3840,52 +3840,56 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
   \label{thm:mpu_source_u_complete_network}
   \notready
   \discussion{5982}
-  \uses{def:mpu,def:mpu_normalized_flattening,def:cpsv_cfii,
-    def:mpu_full_active_support,def:mpu_source_uv,def:mpo_family,
-    thm:mpu_reduced_cfii_transfer_stabilization}
-  Let $\mathcal U$ be an MPU tensor with $d>0$ and $D>1$. Choose
-  canonical-form-II data for its normalized flattening whose active blocks
-  fill the ambient bond space, and let $\rho$ be the normalized positive right
-  fixed point supplied by
-  Theorem~\ref{thm:mpu_reduced_cfii_transfer_stabilization}. Set
+  \uses{def:mpu,def:mpu_normalized_flattening,def:mpu_source_uv,
+    def:mpo_family,thm:mpu_reflected_transfer_power,
+    thm:mpu_matching_direct_block_contractions,
+    thm:mpu_supplied_witness_overlapping_reblocking,
+    thm:mpu_reflected_supplied_contractions}
+  Let $W$ be an MPU tensor with physical dimension $q>0$ and bond dimension
+  $D>0$. Let $\rho>0$ satisfy $\tr(\rho)=1$, put
+  $(\Phi\rvert=\operatorname{vec}(\Id_D)^{\mathsf T}$, and suppose that the
+  normalized transfer matrix of $W$ satisfies
   \begin{align}
-    J&=D^2-1,\\
-    K&=JD^2.
+    E_W&=\lvert\rho)(\Phi\rvert.
   \end{align}
-  For retained physical pairs $p,q\in\{0,\ldots,d-1\}^2$, the complete
-  source-$u$ contraction satisfies
+  Construct the source factors and $u_W$ from $W$ using $\rho$, and set
+  $L=D^2$. For retained physical pairs
+  $p,q'\in\{0,\ldots,q-1\}^2$, the complete source-$u$ contraction satisfies
   \begin{align}
-    \sum_{l,r}u_{(l,r),q}\overline{u_{(l,r),p}}
-      &=d^{-K}\sum_{\tau,\eta}
-        U^{(K+2)}_{(q,\tau),\eta}
-        \overline{U^{(K+2)}_{(p,\tau),\eta}}.
+    \sum_{l,r}(u_W)_{(l,r),q'}\overline{(u_W)_{(l,r),p}}
+      &=q^{-L}\sum_{\tau,\eta}
+        W^{(L+2)}_{(q',\tau),\eta}
+        \overline{W^{(L+2)}_{(p,\tau),\eta}}.
   \end{align}
-  Here $\tau$ ranges over input words of length $K$, and $\eta$ ranges over
-  output words of length $K+2$. This is the range-insertion equality in the
-  proof of \cite[Lemma~III.7, lines~545--557]{Cirac2017MPU}.
+  Here $\tau$ ranges over input words of length $L$, and $\eta$ ranges over
+  output words of length $L+2$. This is the supplied-fixed-pair form of the
+  range-insertion equality in
+  \cite[Lemma~III.7, lines~545--557]{Cirac2017MPU}.
 \end{theorem}
 
 \begin{proof}
-  \uses{thm:mpu_reduced_cfii_transfer_stabilization,
-    thm:mpu_reflected_transfer_power,
+  \uses{thm:mpu_reflected_transfer_power,
+    thm:mpu_matching_direct_block_contractions,
+    thm:mpu_supplied_witness_overlapping_reblocking,
     thm:mpu_reflected_supplied_contractions,
     thm:mpu_source_x1_range_projection,
     thm:mpu_source_x2_range_projection,
     thm:mpu_source_u_gram_second_cut_metric,
     thm:mpu_source_u_terminal_boundary,
     thm:mpu_normalized_output_tail_closed_trace}
-  The stabilized transfer power is
-  $E^J=\lvert\rho)(\Phi\rvert$. Its reflected form supplies the aligned
-  one- and two-letter contractions at lengths $K$ and $K+2$. Expand the
-  ordinary Gram entry while retaining both external source-$u$ tensors and
-  the full $\rho$-weighted boundary. Insert the first- and second-cut range
-  projections, but contract them only inside this closed $(K+2)$-site
-  network. The remaining step is a simultaneous use of the reflected
-  one- and two-letter contractions to move the second-cut metric through the
-  overlapping windows. Only after every virtual and source index is closed
-  does the terminal boundary contraction reduce the network to the normalized
-  output-first trace displayed above. No separate identity for the second-cut
-  metric or either ambient range projection is asserted.
+  Apply the direct and reflected supplied-contraction theorems to $W$ with
+  exponent one. The identity
+  $E_W=\lvert\rho)(\Phi\rvert$ supplies the aligned one- and two-letter
+  contractions at lengths $L$ and $L+2$, with the same fixed pair at both
+  lengths. Expand the ordinary Gram entry while retaining both external
+  source-$u_W$ tensors and the full $\rho$-weighted boundary. Insert the
+  first- and second-cut range projections, but contract them only inside this
+  closed $(L+2)$-site network. The remaining step is a simultaneous use of
+  the reflected one- and two-letter contractions to move the second-cut
+  metric through the overlapping windows. Only after every virtual and source
+  index is closed does the terminal boundary contraction reduce the network
+  to the normalized output-first trace displayed above. No separate identity
+  for the second-cut metric or either ambient range projection is asserted.
 \end{proof}
 
 \begin{theorem}[Complete reduced source-$v$ contraction]
@@ -3945,37 +3949,36 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
   \label{lemuisometry}
   \notready
   \discussion{5708}
-  \uses{def:mpu,def:mpu_normalized_flattening,def:cpsv_cfii,
-    def:mpu_full_active_support,def:mpu_source_uv,
-    thm:mpu_reduced_cfii_transfer_stabilization}
-  Let $\mathcal U$ be an MPU tensor with $d>0$ and $D>1$. Choose
-  canonical-form-II data for its normalized flattening whose active blocks
-  fill the ambient bond space. Let $\rho$ be the normalized positive right
-  fixed point supplied by
-  Theorem~\ref{thm:mpu_reduced_cfii_transfer_stabilization}, and use $\rho$ in
-  the source factors associated with the two source cuts. Then
+  \uses{def:mpu,def:mpu_normalized_flattening,def:mpu_source_uv,
+    thm:mpu_reflected_transfer_power,
+    thm:mpu_matching_direct_block_contractions,
+    thm:mpu_supplied_witness_overlapping_reblocking,
+    thm:mpu_reflected_supplied_contractions,
+    thm:mpu_source_u_complete_network}
+  Let $W$ be an MPU tensor with physical dimension $q>0$ and bond dimension
+  $D>0$. Let $\rho>0$ satisfy $\tr(\rho)=1$, put
+  $(\Phi\rvert=\operatorname{vec}(\Id_D)^{\mathsf T}$, and suppose that the
+  normalized transfer matrix of $W$ satisfies
   \begin{align}
-    u^\dagger u&=\Id.
+    E_W&=\lvert\rho)(\Phi\rvert.
   \end{align}
-  Consequently $u$ is an isometry and $r\ell\geq d^2$.
+  Let $r_W$ and $\ell_W$ be the two source-cut ranks, and construct the source
+  factors and $u_W$ from $W$ using $\rho$. The direct and reflected
+  supplied-contraction theorems then provide the common fixed-pair package at
+  lengths $D^2$ and $D^2+2$. One has
+  \begin{align}
+    u_W^\dagger u_W&=\Id.
+  \end{align}
+  Consequently $u_W$ is an isometry and $r_W\ell_W\geq q^2$.
 \end{lemma}
 
 \begin{proof}
-  \uses{thm:mpu_reduced_cfii_transfer_stabilization,
-    thm:mpu_source_u_complete_network,
+  \uses{thm:mpu_source_u_complete_network,
     thm:mpu_normalized_output_tail_coisometry}
-  Set $J=D^2-1$ and $K=JD^2$. The chosen reduced canonical-form-II data give
-  \begin{align}
-    \rho&>0,\\
-    \tr(\rho)&=1,\\
-    E\lvert\rho)&=\lvert\rho),\\
-    (\Phi\rvert E&=(\Phi\rvert,\\
-    E^J&=\lvert\rho)(\Phi\rvert.
-  \end{align}
-  By Theorem~\ref{thm:mpu_source_u_complete_network}, the $(p,q)$ entry of
-  $u^\dagger u$ is the normalized contraction of
-  $U^{(K+2)}U^{(K+2)\dagger}$ with a common length-$K$ input tail. MPU
-  unitarity evaluates this output-first contraction as $\delta_{p,q}$.
+  Set $L=D^2$. By Theorem~\ref{thm:mpu_source_u_complete_network}, the
+  $(p,q')$ entry of $u_W^\dagger u_W$ is the normalized contraction of
+  $W^{(L+2)}W^{(L+2)\dagger}$ with a common length-$L$ input tail. MPU
+  unitarity evaluates this output-first contraction as $\delta_{p,q'}$.
 \end{proof}
 
 \begin{theorem}[Simple-tensor equivalence theorem]
@@ -3985,16 +3988,21 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
   \uses{def:mpu,def:mpu_normalized_flattening,def:cpsv_cfii,
     def:mpu_full_active_support,def:mpu_simple,def:mpu_source_uv,
     thm:mpu_reduced_cfii_transfer_stabilization,
+    thm:mpu_reflected_transfer_power,
     thm:mpu_matching_direct_block_contractions}
   Let $\mathcal U$ be an MPU tensor with $d>0$ and $D>1$. Choose
   canonical-form-II data for its normalized flattening whose active blocks
   fill the ambient bond space. Let $\rho$ and $(\Phi\rvert$ be the normalized
   fixed pair supplied by
   Theorem~\ref{thm:mpu_reduced_cfii_transfer_stabilization}, set
-  $J=D^2-1$ and $K=JD^2$, and put $W=\mathcal U^{[K]}$. Recompute both source
-  cuts from $W$. Let $r_W$ and $\ell_W$ be their ranks, and let $u_W$ and
-  $v_W$ be the source operators constructed from $W$ using $\rho$. Then the
-  following conditions are equivalent:
+  $J=D^2-1$ and $K=JD^2$, and put $W=\mathcal U^{[K]}$. The blocked transfer
+  identity is
+  \begin{align}
+    E_W&=\lvert\rho)(\Phi\rvert.
+  \end{align}
+  Recompute both source cuts from $W$. Let $r_W$ and $\ell_W$ be their ranks,
+  and let $u_W$ and $v_W$ be the source operators constructed from $W$ using
+  $\rho$. Then the following conditions are equivalent:
   \begin{enumerate}
     \item $W$ is simple;
     \item $r_W\ell_W=(d^K)^2$;
@@ -4004,14 +4012,18 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
 \end{theorem}
 
 \begin{proof}
-  \uses{lemuisometry,thm:mpu_matching_direct_block_contractions,
+  \uses{lemuisometry,thm:mpu_reflected_transfer_power,
+    thm:mpu_matching_direct_block_contractions,
     thm:mpu_supplied_projector_simple2,
     thm:mpu_source_v_complete_reduced_contraction,
     thm:mpu_source_uv_two_site_factorization,
     thm:mpu_source_v_dressed_gram_cancel}
-  Apply Lemma~\ref{lemuisometry} to the blocked tensor $W$ and its source
-  factors. This gives $u_W^\dagger u_W=\Id$ before any of the four conditions
-  is assumed. Thus $u_W$ is a standing isometry and
+  The reduced full-support data give
+  $E^J=\lvert\rho)(\Phi\rvert$. The blocked transfer-power identity gives
+  $E_W=\lvert\rho)(\Phi\rvert$ with the same positive trace-one matrix.
+  Lemma~\ref{lemuisometry} therefore applies directly to $W$ and its source
+  factors. It gives $u_W^\dagger u_W=\Id$ before any of the four conditions is
+  assumed. Thus $u_W$ is a standing isometry and
   $r_W\ell_W\geq(d^K)^2$ throughout the proof.
 
   Suppose first that $W$ is simple. The direct-block matching contractions
