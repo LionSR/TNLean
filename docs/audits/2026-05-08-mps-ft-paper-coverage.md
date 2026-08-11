@@ -269,7 +269,7 @@ this audit. The remaining entries under the existing trackers record mismatches
 between proved theorem statements and their sources, not unfinished proof
 terms.
 
-### 4.1 Periodic overlap and periodic fundamental theorem (issue #81)
+### 4.1 Periodic overlap and periodic fundamental theorem (issue #82)
 
 `TNLean/MPS/Periodic/FundamentalTheorem.lean` proves conditional block-matching
 and scalar multiplicity results. Its declarations still assume a periodic
@@ -278,7 +278,7 @@ multiplicity spaces. The source theorem for irreducible forms derives the
 matching from equality of the multiplicity-bearing MPV families and permits
 general diagonal multiplicity matrices. This is a statement-scope gap.
 
-### 4.2 Parent Hamiltonians (current trackers #190 and #952)
+### 4.2 Parent Hamiltonians (current trackers #190 and #5455)
 
 The single-block periodic uniqueness and source-normalized block-diagonal
 kernel theorems are proved in `ParentHamiltonian/UniqueGroundState.lean` and
@@ -375,8 +375,8 @@ axiom-free.
 | Not-ready | CPSV16 | Proposition `prop2to5` | The conditional channels and all sectorwise analytic hypotheses are complete. The missing input is the all-sector structural factorization from `prop2to3`, whose printed absorbed-normality bridge is refuted and has not yet been replaced | `TNLean/MPS/MPDO/PhysicalSectorBlockedRFP.lean`; `TNLean/MPS/MPDO/CaseIIAbsorptionCounterexample.lean`; `TNLean/MPS/MPDO/BNTSectorAreaLaw.lean`; `docs/paper-gaps/cpgsv17_pf_rank_one.tex` |
 | Complete | PGVWC07 | Theorem `Th:TIcanonical` | The arbitrary-input theorem is formalized in the positive-length convention: after positive global rescaling it gives a possibly empty normalized block family with exact MPV equality on every nonempty ring and total bond dimension at most the original bond dimension; the family is empty exactly when all positive-length MPV coefficients vanish. | `MPSTensor.exists_pgvwc07_normalized_exact_form_after_rescaling_allow_empty` |
 | Not formalized | PGVWC07 | Theorem `thm-uniq` | The source fixed-length theorem assumes C1, uniqueness of the OBC canonical form, and $N>2L_0+D^4$, and concludes unitary conjugacy. The current theorem instead assumes equality of the entire MPV family from a threshold onward and concludes general gauge equivalence | #1529 |
-| Partial | PGVWC07 | Theorem `uniqueGS` | The source-range uniqueness theorem is proved when $L_0+1<N$; the endpoint $L_0=1$, $L=N=2$ is excluded by the current periodic-window convention | #1475/#460 |
-| Partial | PGVWC07 | Theorem `Th:periodic` | Full periodic decomposition remains incomplete | #81 |
+| Partial | PGVWC07 | Theorem `uniqueGS` | General-$L$ ground-space equality is proved when $L_0+1<N$; `HasUniqueGroundState` is packaged at $L=L_0+1$ and $L=2L_0$, while the endpoint $L_0=1$, $L=N=2$ remains excluded | #181/#190 |
+| Partial | PGVWC07 | Theorem `Th:periodic` | Full periodic decomposition remains incomplete | #82 |
 | Out of scope | PGVWC07 | Interpretation of $\Lambda$ | The half-chain reduced-density spectrum converges to the spectrum of $\Lambda\otimes\Lambda$, with eigenvalues $\lambda_\alpha\lambda_\beta$ | — |
 
 ---
