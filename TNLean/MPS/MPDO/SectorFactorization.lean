@@ -116,19 +116,8 @@ theorem inverseMap_hayashi_sector_offdiagonal
       ∑ i₂ : Fin d, ∑ j₂ : Fin d,
         U b i₂ * ρ (i₁, i₂, i₃) (j₁, j₂, j₃) *
           (starRingEnd ℂ) (U b' j₂) = 0 := by
-    have hs := congrFun (congrFun hη.h_state
-      (i₁, (⟨k, (l, r)⟩, i₃))) (j₁, (⟨k', (l', r')⟩, j₃))
-    rw [Matrix.reindex_apply, Matrix.submatrix_apply] at hs
-    have hleft : (HayashiMarkov.abcEquiv hη.decompB).symm
-        (i₁, (⟨k, (l, r)⟩, i₃)) = (i₁, b, i₃) := by
-      simp [HayashiMarkov.abcEquiv, b]
-    have hright : (HayashiMarkov.abcEquiv hη.decompB).symm
-        (j₁, (⟨k', (l', r')⟩, j₃)) = (j₁, b', j₃) := by
-      simp [HayashiMarkov.abcEquiv, b']
-    rw [hleft, hright] at hs
-    rw [HayashiMarkov.liftB_conj_apply] at hs
-    rw [HayashiMarkov.blockState_apply, dif_neg hkk'] at hs
-    simpa [U] using hs
+    simpa [b, b', U, hkk'] using
+      hη.h_state_apply_middle_sector i₁ j₁ i₃ j₃ k k' l r l' r'
   rw [Matrix.reindex_apply, Matrix.submatrix_apply]
   change R β₃ α₁ * (U * physicalSlice K β₁ α₃ * Uᴴ) b b' = 0
   rw [inverseMap_conj_physicalSlice_expansion K hK R ρ hρ α₁ β₁ α₃ β₃ U b b']
