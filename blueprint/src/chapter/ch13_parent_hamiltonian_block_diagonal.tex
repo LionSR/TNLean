@@ -113,6 +113,51 @@ by \cite[Theorem~IV.16]{Cirac2021Matrix}.
     giving the displayed sum.
 \end{proof}
 
+\begin{lemma}[Boundary matrices for a sum of open-boundary block spaces]
+    \label{lem:block_diagonal_boundary_of_open_boundary_sum}
+    \lean{MPSTensor.BlockSumGroundSpace.exists_blockDiagonal_boundary_of_mem_iSup_groundSpace}
+    \leanok
+    \uses{def:ground_space_parent, lem:block_diagonal_boundary_condition_sum}
+    Let $B=\bigoplus_{j=1}^g\mu_jA_j$, where $\mu_j\ne0$ for every $j$.
+    For every length $L$ and every
+    $\psi\in\bigvee_{j=1}^gG_L(A_j)$, there are boundary matrices $X_j$ such
+    that
+    \begin{align}
+        \psi
+        &=\Gamma_L^B\!\left(\bigoplus_{j=1}^gX_j\right).
+        \notag
+    \end{align}
+    For every $j$, one also has
+    $\Gamma_L^{A_j}(\mu_j^LX_j)\in G_L(A_j)$.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{def:ground_space_parent, lem:block_diagonal_boundary_condition_sum}
+    Choose $\phi_j\in G_L(A_j)$ such that
+    \begin{align}
+        \psi
+        &=\sum_{j=1}^g\phi_j.
+        \notag
+    \end{align}
+    Choose $Y_j$ with $\phi_j=\Gamma_L^{A_j}(Y_j)$, and set
+    $X_j=\mu_j^{-L}Y_j$. Since
+    $\mu_j\ne0$, one has, for every $j$,
+    \begin{align}
+        \Gamma_L^{A_j}(\mu_j^LX_j)
+        &=\phi_j.
+        \notag
+    \end{align}
+    Lemma~\ref{lem:block_diagonal_boundary_condition_sum} now gives
+    \begin{align}
+        \Gamma_L^B\!\left(\bigoplus_{j=1}^gX_j\right)
+        &=\sum_{j=1}^g\Gamma_L^{A_j}(\mu_j^LX_j)
+         =\sum_{j=1}^g\phi_j
+         =\psi.
+        \notag
+    \end{align}
+\end{proof}
+
 \begin{lemma}[One block lies in the local parent space of the direct-sum tensor]
     \label{lem:local_ground_space_block_le_assembled}
     \lean{MPSTensor.groundSpace_block_le_toTensorFromBlocks}
@@ -296,7 +341,8 @@ by \cite[Theorem~IV.16]{Cirac2021Matrix}.
     \label{lem:bnt_block_diagonal_open_boundary_matrices}
     \lean{MPSTensor.exists_blockDiagonal_boundary_of_chainGroundSpace_toTensorFromBlocks_of_bnt_unital_c1}
     \leanok
-    \uses{lem:bnt_block_diagonal_periodic_constraints_propagated_sum}
+    \uses{lem:bnt_block_diagonal_periodic_constraints_propagated_sum,
+        lem:block_diagonal_boundary_of_open_boundary_sum}
     With the hypotheses and notation of
     Lemma~\ref{lem:bnt_block_diagonal_periodic_constraints_propagated_sum},
     every vector
@@ -316,22 +362,20 @@ by \cite[Theorem~IV.16]{Cirac2021Matrix}.
 \begin{proof}
     \leanok
     \uses{lem:bnt_block_diagonal_periodic_constraints_propagated_sum,
+        lem:block_diagonal_boundary_of_open_boundary_sum,
         lem:block_diagonal_boundary_condition_sum}
-    Lemma~\ref{lem:bnt_block_diagonal_periodic_constraints_propagated_sum} gives
-    \[
-        \psi\in\bigvee_{j=1}^gG_N(A_j).
-    \]
-    The block-diagonal boundary construction decomposes this membership as
-    $\psi=\sum_{j=1}^g\phi_j$ with $\phi_j\in G_N(A_j)$.
-    Choose $Y_j$ with $\phi_j=\Gamma_N^{A_j}(Y_j)$, and set
-    $X_j=\mu_j^{-N}Y_j$. Since $\mu_j\ne0$,
-    $\Gamma_N^{A_j}(\mu_j^NX_j)=\phi_j$. The block-diagonal boundary formula
-    then gives
+    Lemma~\ref{lem:bnt_block_diagonal_periodic_constraints_propagated_sum}
+    places $\psi$ in $\bigvee_{j=1}^gG_N(A_j)$. Applying
+    Lemma~\ref{lem:block_diagonal_boundary_of_open_boundary_sum} gives
+    boundary matrices $X_j$ for which, for every $j$,
+    $\Gamma_N^{A_j}(\mu_j^NX_j)\in G_N(A_j)$, and
     \begin{align}
-        \Gamma_N^B\!\left(\bigoplus_{j=1}^gX_j\right)
-        &=\sum_{j=1}^g\Gamma_N^{A_j}(\mu_j^NX_j) =\psi.
+        \psi
+        &=\Gamma_N^B\!\left(\bigoplus_{j=1}^gX_j\right).
         \notag
     \end{align}
+    The equality is the block-diagonal identity of
+    Lemma~\ref{lem:block_diagonal_boundary_condition_sum}.
 \end{proof}
 
 \begin{lemma}[Block-diagonal boundary conditions at the source length]
