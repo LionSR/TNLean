@@ -55,18 +55,23 @@ private lemma gaugeEquiv_cast_dim {n m : ℕ} (h : n = m)
 
 /-- **Equal-ambient CPSV fundamental theorem.**
 
-Two normalized nonzero CPSV canonical-form tensors in the same ambient bond dimension that generate
-the same matrix product vectors at every positive length are gauge equivalent. Inactive
-zero-weight blocks and unused ambient coordinates are allowed: the exact active reconstructions
-retain only the nonzero-weight blocks, while the ambient lifting aligns their possibly different
-coisometric inclusions.
+Two normalized nonzero CPSV canonical-form tensors in the same ambient bond
+dimension that generate the same matrix product vectors at every positive length
+are gauge equivalent. Inactive zero-weight blocks and unused ambient coordinates
+are allowed: the exact active reconstructions retain only the nonzero-weight blocks,
+while the ambient lifting aligns their possibly different coisometric inclusions.
 
-This theorem is explicitly homogeneous in the ambient dimension `D`; it makes no heterogeneous
-ambient-dimension claim. The ambient lifting is a project-derived corollary of the cited active
-fundamental theorem and the coisometry-alignment lemma.
+This theorem is explicitly homogeneous in the ambient dimension \(D\); it makes no
+heterogeneous ambient-dimension claim. The ambient lifting is a project-derived
+corollary of the cited active fundamental theorem and the coisometry-alignment lemma.
 
-Source: arXiv:2011.12127v2, lines 1831--1906; arXiv:1606.00608, lines 237--301 and
-1135--1199. -/
+**Scope restriction (equal ambient dimension and nonzero tensors):** The theorem
+assumes a common ambient bond dimension and excludes zero tensors. It does not prove
+the heterogeneous ambient statement of the cited source corollary. See
+`docs/paper-gaps/canonical_bnt_ft_theorem_surface.tex`.
+
+Source: arXiv:2011.12127v2, lines 1831--1906; arXiv:1606.00608,
+lines 237--301 and 1135--1199. -/
 theorem fundamentalTheorem_equal_ambient_canonicalForm
     (dataA : CPSVCanonicalFormData A)
     (dataB : CPSVCanonicalFormData B)
