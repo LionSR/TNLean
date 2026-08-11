@@ -4088,6 +4088,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
   \lean{SpinChain.QuasiLocalAlgebra,SpinChain.algebraicToQuasiLocal,
     UniformSpace.Completion.toComplAlgHom,
     UniformSpace.Completion.toComplStarAlgHom,
+    UniformSpace.Completion.coe_toComplStarAlgHom,
     UniformSpace.Completion.instStar,UniformSpace.Completion.coe_star,
     UniformSpace.Completion.instContinuousStar,
     UniformSpace.Completion.instStarRing,
@@ -4155,8 +4156,8 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
 \end{lemma}
 
 \begin{proof}\leanok
-  \uses{def:qca_algebraic_local_operator_norm,
-    def:qca_algebraic_local_algebra}
+  \uses{def:qca_quasi_local_observable,
+    def:qca_algebraic_local_operator_norm,def:qca_algebraic_local_algebra}
   The algebraic inclusion $\iota_\Lambda$ and the completion map $j$ both
   preserve the norm.  Their composite is therefore an isometry and hence
   injective.  Compatibility follows from
@@ -4165,13 +4166,12 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
 
 \begin{theorem}[Density of finite-region observables]
   \label{thm:qca_quasi_local_density}
-  \lean{UniformSpace.Completion.coe_toComplStarAlgHom,
-    UniformSpace.Completion.denseRange_toComplStarAlgHom,
+  \lean{UniformSpace.Completion.denseRange_toComplStarAlgHom,
     SpinChain.denseRange_algebraicToQuasiLocal,
     SpinChain.dense_iUnion_range_quasiLocalObservable}
   \leanok
   \uses{def:qca_quasi_local_algebra,def:qca_quasi_local_observable,
-    lem:qca_quasi_local_observable,thm:qca_local_observable_finite_support}
+    thm:qca_local_observable_finite_support}
   Algebraic local observables are dense in the quasi-local algebra.  Equivalently,
   \begin{align}
     \overline{j(\mathcal A_{\mathrm{loc}})}
