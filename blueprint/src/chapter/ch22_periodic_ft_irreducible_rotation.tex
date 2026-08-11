@@ -46,40 +46,6 @@
     every eigenvalue and hence the unit-circle eigenvalue set.
 \end{proof}
 
-\begin{theorem}[Pure Perron normalization at spectral radius one]
-    \label{thm:pure_perron_tp_gauge}
-    \lean{MPSTensor.exists_tpGauge_of_irreducible_spectralRadius_one}
-    \leanok
-    Let $A$ be irreducible and suppose that the spectral radius of $\E_A$ is
-    one.  There is a positive definite matrix $\sigma$ satisfying
-    \begin{align}
-        \sum_i(A^i)^\dagger\sigma A^i&=\sigma.
-        \notag
-    \end{align}
-    The tensor
-    \begin{align}
-        B^i&=\sigma^{1/2}A^i\sigma^{-1/2}
-        \notag
-    \end{align}
-    is left-canonical and irreducible, and $A$ and $B$ are related by a pure
-    invertible similarity.
-\end{theorem}
-\begin{proof}
-    \uses{lem:irreducible_transfer_perron_pair,
-        lem:spectral_radius_one_matrix_dim_pos,
-        thm:posDef_adjoint_eigenvector,
-        thm:spectral_radius_real_pf_irred,
-        thm:tp_gauge_from_adjoint_fixed,
-        lem:tp_gauge_equiv,
-        lem:similarity_irred_iff}
-    \leanok
-    Positive-definite right and left Perron eigenvectors have the same positive
-    eigenvalue by the trace pairing.  The spectral-radius identity makes this
-    eigenvalue equal to one.  Thus the left Perron eigenvector is an adjoint
-    fixed point, so its square-root gauge is trace-preserving.  Similarity
-    preserves irreducibility.
-\end{proof}
-
 \begin{definition}[Left-canonical periodic tensor]
     \label{def:periodic_tensor}
     \lean{MPSTensor.IsPeriodic}
