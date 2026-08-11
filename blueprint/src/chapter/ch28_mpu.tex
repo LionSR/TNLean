@@ -2290,15 +2290,16 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
 
 \begin{theorem}[Reflected blocked-transfer coordinates]
     \label{thm:mpu_reflected_blocked_transfer_coordinates}
-    \lean{MPOTensor.doubledBondSwap,
-        MPOTensor.doubledBondSwap_apply,
-        MPOTensor.doubledBondSwap_symm,
+    \lean{MPOTensor.bondPairSwapEquiv,
+        MPOTensor.bondPairSwapEquiv_apply,
+        MPOTensor.bondPairSwapEquiv_symm,
         MPOTensor.blockWordReverseEquiv,
         MPOTensor.decodeBlock_blockWordReverseEquiv,
         MPOTensor.wordOfBlock_blockWordReverseEquiv,
         MPOTensor.blockWordReverseEquiv_involutive}
     \leanok
-    \uses{def:mpu_double_layer,def:mpdo_positive_physical_blocking}
+    \uses{lem:vertical_tensor_adjoint_reflection,
+        def:mpu_double_layer,def:mpdo_positive_physical_blocking}
     The doubled-bond coordinate reflection exchanges the two virtual factors,
     \begin{align}
       (a,b)&\longmapsto(b,a).
