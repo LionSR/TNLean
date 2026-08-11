@@ -362,8 +362,7 @@ by \cite[Theorem~IV.16]{Cirac2021Matrix}.
 \begin{proof}
     \leanok
     \uses{lem:bnt_block_diagonal_periodic_constraints_propagated_sum,
-        lem:block_diagonal_boundary_of_open_boundary_sum,
-        lem:block_diagonal_boundary_condition_sum}
+        lem:block_diagonal_boundary_of_open_boundary_sum}
     Lemma~\ref{lem:bnt_block_diagonal_periodic_constraints_propagated_sum}
     places $\psi$ in $\bigvee_{j=1}^gG_N(A_j)$. Applying
     Lemma~\ref{lem:block_diagonal_boundary_of_open_boundary_sum} gives
@@ -374,8 +373,6 @@ by \cite[Theorem~IV.16]{Cirac2021Matrix}.
         &=\Gamma_N^B\!\left(\bigoplus_{j=1}^gX_j\right).
         \notag
     \end{align}
-    The equality is the block-diagonal identity of
-    Lemma~\ref{lem:block_diagonal_boundary_condition_sum}.
 \end{proof}
 
 \begin{lemma}[Block-diagonal boundary conditions at the source length]
@@ -422,8 +419,7 @@ by \cite[Theorem~IV.16]{Cirac2021Matrix}.
     \leanok
     \uses{thm:pgvwc_direct_sum_intersection_source_length,
         thm:pgvwc_block_space_independence_source_length,
-        lem:block_diagonal_periodic_constraints_propagated_sum,
-        lem:block_diagonal_boundary_condition_sum}
+        lem:block_diagonal_boundary_of_open_boundary_sum}
     Put $S_M=\sum_jG_M(A_j)$. For every $M$ with $L\le M<N$,
     Theorem~\ref{thm:pgvwc_direct_sum_intersection_source_length} gives
     \begin{align}
@@ -441,11 +437,14 @@ by \cite[Theorem~IV.16]{Cirac2021Matrix}.
     \end{align}
     Since $N\ge L\ge3(g-1)(L_0+1)+1$,
     Theorem~\ref{thm:pgvwc_block_space_independence_source_length} shows that
-    the spaces
-    $G_N(A_j)$ form an internal sum.
-    Decompose the vector into its block components, choose one boundary matrix
-    for each component, and absorb the nonzero factor $\mu_j^N$ into that
-    matrix.
+    the spaces $G_N(A_j)$ form an internal sum. Lemma~\ref{lem:block_diagonal_boundary_of_open_boundary_sum}
+    then supplies matrices $X_j$ such that
+    $\Gamma_N^{A_j}(\mu_j^NX_j)\in G_N(A_j)$ for every $j$ and
+    \begin{align}
+        \psi
+        &=\Gamma_N^{\oplus_j\mu_jA_j}\!\left(\bigoplus_jX_j\right).
+        \notag
+    \end{align}
 \end{proof}
 
 The lemma gives $\Gamma_N^{A_j}(\mu_j^NX_j)\in G_N(A_j)$. This is not enough for
