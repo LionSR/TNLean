@@ -229,19 +229,14 @@ theorem closure_property_boundary_block_window_equation_of_groundSpaceMap_of_isI
   let Z : Matrix (Fin D) (Fin D) ℂ :=
     X * evalWord A (List.ofFn α) * evalWord A (List.ofFn ν) -
       evalWord A (List.ofFn α) * Y ν
-  have hZker : Z ∈ (traceMulRightPi A).ker := by
-    ext j
+  have hZzero : Z = 0 := by
+    apply eq_zero_of_forall_trace_mul_right_eq_zero hA
+    intro j
     have hleft : Matrix.trace (A j * Z) = 0 := by
       dsimp [Z]
       rw [Matrix.mul_sub, Matrix.trace_sub]
       exact sub_eq_zero.mpr (hTraceOne α ν j)
-    calc
-      Matrix.trace (Z * A j) = Matrix.trace (A j * Z) := Matrix.trace_mul_comm Z (A j)
-      _ = 0 := hleft
-  have hZzero : Z = 0 := by
-    have hker := traceMulRightPi_ker_eq_bot (A := A) hA
-    rw [hker] at hZker
-    simpa using hZker
+    exact (Matrix.trace_mul_comm Z (A j)).trans hleft
   exact sub_eq_zero.mp hZzero
 
 /-- Length-\(L_0\) trace form of the boundary block-window equation.
