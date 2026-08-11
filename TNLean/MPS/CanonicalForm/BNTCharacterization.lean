@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.Algebra.FinSum
+import TNLean.MPS.CanonicalForm.ActiveBlocks
 import TNLean.MPS.CanonicalForm.NormalTensorGauge
 import TNLean.MPS.CanonicalForm.PhaseClassSectorData
 import TNLean.MPS.FundamentalTheorem.SectorWeightComparison
@@ -429,25 +429,10 @@ theorem isCPSVBasisOfNormalTensors_iff_canonicalForm_covered_and_minimal
     intro k
     exact (activeEquiv k).property
   have hActiveCF :
-      SameMPV₂Pos A (toTensorFromBlocks (d := d) μActive blocksActive) := by
-    intro N hN σ
-    rw [hCF N hN σ]
-    rw [mpv_toTensorFromBlocks_eq_sum, mpv_toTensorFromBlocks_eq_sum]
-    simp only [smul_eq_mul]
-    let f : Fin r → ℂ := fun k ↦ μ k ^ N * mpv (blocks k) σ
-    have hInactive : ∑ k : {k : Fin r // ¬ μ k ≠ 0}, f k = 0 := by
-      apply Fintype.sum_eq_zero
-      intro k
-      simp [f, not_ne_iff.mp k.property, Nat.ne_of_gt hN]
-    have hSplit :=
-      Fintype.sum_subtype_add_sum_subtype (fun k : Fin r ↦ μ k ≠ 0) f
-    have hActiveSum : (∑ k : Fin r, f k) = ∑ k : Active, f k := by
-      rw [hInactive, add_zero] at hSplit
-      exact hSplit.symm
-    change (∑ k : Fin r, f k) =
-      ∑ k : Fin (Fintype.card Active), f (activeEquiv k)
-    rw [hActiveSum]
-    exact (activeEquiv.sum_comp (fun k : Active ↦ f k)).symm
+      SameMPV₂Pos A (toTensorFromBlocks (d := d) μActive blocksActive) :=
+    hCF.trans <| by
+      simpa only [μActive, blocksActive, dimActive] using
+        sameMPV₂Pos_toTensorFromBlocks_active μ blocks activeEquiv
   have hCharacterization :=
     isCPSVBasisOfNormalTensors_iff_active_blocks_covered_and_minimal
       A μActive blocksActive basis hActiveNormal hμActive hActiveCF
