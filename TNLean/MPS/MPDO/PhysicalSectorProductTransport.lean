@@ -93,10 +93,6 @@ private theorem physicalCoordinateMatrixN_coisometry
   congr 1
   exact propext funext_iff.symm
 
-private def braKetFunctionsEquiv {i a b : Type*} :
-    ((i → b) × (i → a)) ≃ (i → a × b) :=
-  (Equiv.prodComm _ _).trans (Equiv.arrowProdEquivProdArrow i (fun _ ↦ a) (fun _ ↦ b)).symm
-
 /-- The length-`N` MPO transforms by the sitewise physical coordinate
 matrix.
 
@@ -130,7 +126,7 @@ private theorem physicalCoordinateMatrixN_mpo
       (∏ i : Fin N, star (F.physicalCoordinateMatrix (t i) (q i)))
   rw [hexpand]
   have h := Fintype.sum_equiv
-    (braKetFunctionsEquiv (i := Fin N) (a := Fin d) (b := Fin d))
+    (MPOTensor.braKetFunctionsEquiv (i := Fin N) (a := Fin d) (b := Fin d))
     (fun p : (Fin N → Fin d) × (Fin N → Fin d) ↦
       (∏ i : Fin N, F.physicalCoordinateMatrix (s i) (p.2 i)) *
         Matrix.trace (MPOTensor.evalWord K (List.ofFn p.2) (List.ofFn p.1)) *

@@ -114,6 +114,27 @@ theorem verticalAssembledTensor_apply_copy_same
   rw [hweight]
   exact congrArg (weight α q * ·) hentry.symm
 
+/-- Evaluating an assembled vertical tensor between distinct retained copies
+vanishes.
+
+Source: arXiv:1606.00608, Appendix C.4, lines 1955--1971. -/
+theorem verticalAssembledTensor_apply_copy_ne
+    {g d : ℕ} (dim mult : Fin g → ℕ)
+    (weight : (α : Fin g) → Fin (mult α) → ℂ)
+    (B : (α : Fin g) → MPSTensor d (dim α))
+    {α β : Fin g} {q : Fin (mult α)} {r : Fin (mult β)}
+    (h : (⟨α, q⟩ : (α : Fin g) × Fin (mult α)) ≠ ⟨β, r⟩)
+    (v : Fin d) (i : Fin (dim α)) (j : Fin (dim β)) :
+    verticalAssembledTensor dim mult weight B v
+        (verticalSectorFinEquiv dim mult ⟨α, (q, i)⟩)
+        (verticalSectorFinEquiv dim mult ⟨β, (r, j)⟩) = 0 := by
+  have hflat : finSigmaFinEquiv ⟨α, q⟩ ≠ finSigmaFinEquiv ⟨β, r⟩ :=
+    fun hEq => h (finSigmaFinEquiv.injective hEq)
+  simp [verticalAssembledTensor, MPSTensor.toTensorFromBlocks,
+    Matrix.reindex_apply, Matrix.submatrix_apply,
+    verticalSectorFinEquiv_outer_symm, Matrix.blockDiagonal'_apply_ne,
+    hflat]
+
 /-- Matrices on the flattened retained physical space of a vertical canonical
 form. -/
 abbrev RetainedVerticalSectorMatrix {g : ℕ} (dim mult : Fin g → ℕ) :=
