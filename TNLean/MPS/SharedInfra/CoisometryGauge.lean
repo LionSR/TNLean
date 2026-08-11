@@ -159,7 +159,9 @@ namespace GaugeEquiv
 common ambient bond dimension.
 
 The ambient gauge is the product of a unitary aligning the two coisometric
-inclusions and the extension of the retained-space gauge. -/
+inclusions and the extension of the retained-space gauge.
+
+Construction: arXiv:1606.00608, Appendix A, lines 1058--1077. -/
 theorem of_coisometry_reconstruction
     {s n D : ℕ}
     {A B : MPSTensor s D}
