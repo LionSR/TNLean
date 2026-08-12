@@ -637,6 +637,37 @@ def test_kernel_tombstones_are_read_with_their_migrations() -> None:
     }
 
 
+def test_a_commented_out_kernel_branch_is_not_a_refusal() -> None:
+    # A kernel file means one thing to TeX and must mean the same to the
+    # tools: a tombstone branch behind a comment mark does not run, so the
+    # parser accepts the spelling again and the reader may not count it.
+    live = r"""
+\__tenkz_kernel_tombstone:nnnn { tenkz-kernel-mark } { form } { band }
+  { use~form=enclosure~with~tint }
+"""
+    hidden_on_one_line = (
+        "% \\__tenkz_kernel_tombstone:nnnn { tenkz-kernel-mark }"
+        " { form } { ghost } { use~form=enclosure }\n"
+    )
+    # The wrapped shape the kernel actually writes: the comment mark leaves
+    # the head readable but breaks the reader off mid-row when read raw.
+    hidden_wrapped = (
+        "% \\__tenkz_kernel_tombstone:nnnn { tenkz-kernel-mark }"
+        " { form } { wraith }\n"
+        "%   { use~form=enclosure }\n"
+    )
+    # An escaped backslash is a complete control symbol, so the comment mark
+    # after it starts a real comment and the branch does not run.
+    hidden_after_control_symbol = (
+        "\\\\% \\__tenkz_kernel_tombstone:nnnn { tenkz-kernel-mark }"
+        " { form } { shade } { use~form=enclosure }\n"
+    )
+    text = live + hidden_on_one_line + hidden_wrapped + hidden_after_control_symbol
+    assert _kernel_tombstones_from_texts([text]) == {
+        ("kernel-mark", "form=band"): "use form=enclosure with tint"
+    }
+
+
 VOCABULARY = {
     ("kernel-mark", "form"): ("kernel", "enum(bracket|enclosure|label|prose)"),
     ("kernel-mark", "label pos"): ("kernel", "angle"),

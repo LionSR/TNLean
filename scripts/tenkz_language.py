@@ -372,6 +372,10 @@ def _kernel_tombstones_from_texts(texts: Iterable[str]) -> dict[tuple[str, str],
     """Collect the spellings the kernel parser refuses by name and their migrations."""
     tombstones: dict[tuple[str, str], str] = {}
     for text in texts:
+        # A branch the file comments out does not run, so TeX accepts the
+        # spelling again; reading the raw text would keep counting it as a
+        # refusal and report a pairing the parser no longer holds.
+        text = strip_comments(text)
         for match in _KERNEL_TOMBSTONE.finditer(text):
             position = match.end()
             fields: list[str] = []
