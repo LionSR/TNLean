@@ -869,9 +869,21 @@ def test_a_temporary_directory_inside_the_repository_is_not_a_leak() -> None:
         room = Path(directory)
         (room / "tenkz.sty").write_text("% the staged runtime\n", encoding="utf-8")
         assert room.resolve().is_relative_to(ROOT), room
+        # The reading the offline check performs, on a room the repository
+        # contains. Both halves have to survive it: the runtime one, which asks
+        # where a tenkz file resolved, and the repository one, which asks
+        # whether anything at all came from the checkout.
         assert not tenkz_ctan.foreign_runtime_files(
             ["./tenkz.sty", "tenkz.sty"], room, room.resolve()
         )
+        assert not tenkz_ctan.repository_inputs(
+            ["./tenkz.sty", "tenkz.sty"], room, room.resolve()
+        )
+        # A file the repository really did answer is still found, so the room
+        # exclusion narrows the reading rather than emptying it.
+        assert tenkz_ctan.repository_inputs(
+            [str(ROOT / "tex/tenkz/tenkz.sty")], room, room.resolve()
+        ) == [str(ROOT / "tex/tenkz/tenkz.sty")]
 
 
 def test_a_commented_shell_call_is_not_a_shell_call() -> None:
