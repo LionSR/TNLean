@@ -17,9 +17,14 @@
   {\tntree[keys]{word}}{A fusion tree is one structured atom.}
 \__tenkz_language_registry_command:nnnnn {tnset}{setup-extension}{setup}
   {\tnset{setup keys}}{Setup changes document or group policy outside any one picture.}
+% The face vocabulary is the whole of it: west and east carry virtual, up and
+% down carry physical, and the four skins are the ones the door names.  The
+% angle, slot, and label grammar of a port list belongs to the three-argument
+% door (LANGUAGE-1.0 section 8); a numeric angle spelled here is
+% [TKZ-ATOM-INVALID-PORT].
 \__tenkz_language_registry_command:nnnnn {tndeclareatom}{setup-extension}{setup}
-  {\tndeclareatom{\command}{skin=value, ports={face:type}}}
-  {A declaration adds a typed atom spelling to the grammar.}
+  {\tndeclareatom{\command}{skin=dot|box|pill|mpo, ports={west|east:virtual, up|down:physical}}}
+  {A declaration adds a typed atom spelling to the grammar. The four face words are its whole port vocabulary; angles, slots, and port labels belong to the three-argument door.}
 
 % command, standalone example, representative failure
 \__tenkz_language_registry_example:nnn {tn}{tex/tenkz/examples/api/tn.tex}
@@ -224,7 +229,12 @@
 \__tenkz_language_registry_key:nnnnnn {kernel-mark}{tint}{flag}{false}{kernel}{Interior tint under the contour.}
 \__tenkz_language_registry_key:nnnnnn {kernel-setup}{pitch}{length}{em-relative}{kernel}{Base metric.}
 \__tenkz_language_registry_key:nnnnnn {kernel-setup}{sizes}{size-table}{bundled table}{kernel}{Size-class table.}
-\__tenkz_language_registry_key:nnnnnn {kernel-setup}{strict}{flag}{false}{kernel}{Rejects sugar; benchmark and CI set it.}
+% Nothing in the benchmark or in a workflow sets the flag, and the 130
+% benchmark cases spell the sugar it refuses.  Its only sources are the five
+% refusal fixtures tests/tenkz/kernel/negative/n_strict_*.tex.  What holds the
+% sugar contract is the kernel probe instead: eleven sugar spellings pinned
+% byte-identical to their kernel expansions in events and in pixels.
+\__tenkz_language_registry_key:nnnnnn {kernel-setup}{strict}{flag}{false}{kernel}{Rejects sugar; five refusal fixtures set it and nothing else does.}
 \__tenkz_language_registry_key:nnnnnn {kernel-setup}{theme}{identifier}{house}{kernel}{Semantic ink theme.}
 \__tenkz_language_registry_key:nnnnnn {kernel-declare}{hue}{hue-source}{house cycle}{kernel}{Species ink; source:* reproduces a cited palette.}
 \__tenkz_language_registry_key:nnnnnn {kernel-declare}{base}{identifier}{empty}{kernel}{Skin the declaration extends.}
