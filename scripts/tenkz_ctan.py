@@ -212,7 +212,9 @@ RETIRED_DEPENDENCIES = ("tikz-cd", "tikzcd", "quantikz")
 # whose presence would mean it has to. A `.dtx` or `.ins` pair is the usual
 # LaTeX-package shape and needs a docstrip run before the runtime exists; a
 # `.fmt` or a `.mf` needs the format or the font built. tenkz stages its
-# runtime as the files the engine reads, so none of these may be staged.
+# runtime as the files the engine reads, so none of these may be staged. The
+# comparison lowers the suffix first: a file system that preserves case will
+# hand back `tenkz.INS`, and docstrip does not care which way it was typed.
 REGENERATED_SUFFIXES = frozenset({".dtx", ".ins", ".fmt", ".mf", ".drv"})
 
 # The primitives a submission may not need, because arXiv compiles without
@@ -248,14 +250,15 @@ ALLOCATED_STREAM = re.compile(r"\\(?:newwrite|iow_new:N)\s*(\\[A-Za-z@_:]+)")
 # primitive's LaTeX name, and expl3's own shell interface, which a file under
 # `\ExplSyntaxOn` would use in preference to either. The expl3 names are the
 # ones its source defines, `\sys_shell_now:n`, `\sys_shell_shipout:n`,
-# `\sys_get_shell:nnN`, `\ior_shell_open:Nn`, `\iow_shell_open:Nn`, and the
-# primitive alias `\tex_shellescape:D`, read from `l3kernel` rather than
-# recalled, because a name invented here would be a gate that looks closed.
+# `\sys_get_shell:nnN`, `\ior_shell_open:Nn`, and `\iow_shell_open:Nn`, read
+# from `l3kernel` rather than recalled, because a name invented here would be a
+# gate that looks closed. Only executors are named: `\tex_shellescape:D` and
+# `\sys_if_shell:TF` report whether the engine has a shell and run nothing, so
+# reading them as calls would refuse a file for asking a question.
 SHELL_ESCAPE_NAME = re.compile(
     r"\\ShellEscape\b"
     r"|\\sys_(?:shell_(?:now|shipout)|get_shell):[a-zA-Z]*"
     r"|\\(?:ior|iow)_shell_open:[a-zA-Z]*"
-    r"|\\tex_shellescape:D"
 )
 SHELL_ESCAPE_STREAM = 18
 
@@ -303,7 +306,9 @@ def shell_escape_call(text: str) -> str:
 # drive letter opening a braced load argument, with the star a starred form
 # such as `\includegraphics*` puts before its arguments and the space LaTeX's
 # star test skips before it, and the same two opening `\input` unbraced, which
-# is plain TeX's own syntax and reads to the next space. The loader list is
+# is plain TeX's own syntax and reads to the next space. Either spelling may
+# open with a quote, which is how a path holding a space is written. The
+# loader list is
 # every one the LaTeX kernel defines that takes a file name, conditional ones
 # included: a runtime whose behaviour depends on a machine-local file is not
 # submittable even when the file's absence is handled.
@@ -311,7 +316,7 @@ ABSOLUTE_PATH_HEAD = r"(?:/|[A-Za-z]:[\\/])"
 ABSOLUTE_LOAD = re.compile(
     r"\\(?:input|include|usepackage|RequirePackageWithOptions|RequirePackage"
     r"|InputIfFileExists|includegraphics)(?:\s*\*)?"
-    rf"\s*(?:\[[^]]*\]\s*)?\{{\s*{ABSOLUTE_PATH_HEAD}"
+    rf"\s*(?:\[[^]]*\]\s*)?\{{\s*\"?{ABSOLUTE_PATH_HEAD}"
     rf"|\\input\s*\"?{ABSOLUTE_PATH_HEAD}"
 )
 
@@ -1251,6 +1256,16 @@ def check_determinism(release: Release) -> Report:
     return report
 
 
+def recorded_inputs(record: Path) -> list[str]:
+    """Every file the engine opened, from its input record."""
+
+    return [
+        line[len("INPUT "):].strip()
+        for line in record.read_text(encoding="utf-8", errors="replace").splitlines()
+        if line.startswith("INPUT ")
+    ]
+
+
 def resolved_runtime_files(record: Path) -> list[str]:
     """The runtime files the engine actually opened, from its input record.
 
@@ -1263,14 +1278,11 @@ def resolved_runtime_files(record: Path) -> list[str]:
     exit status, says where the runtime came from.
     """
 
-    opened: list[str] = []
-    for line in record.read_text(encoding="utf-8", errors="replace").splitlines():
-        if not line.startswith("INPUT "):
-            continue
-        path = line[len("INPUT "):].strip()
-        if Path(path).name.startswith(PACKAGE):
-            opened.append(path)
-    return opened
+    return [
+        path
+        for path in recorded_inputs(record)
+        if Path(path).name.startswith(PACKAGE)
+    ]
 
 
 def foreign_runtime_files(opened: list[str], room: Path, unpacked: Path) -> list[str]:
@@ -1388,7 +1400,7 @@ def check_arxiv(tree: Path, closure: Closure) -> Report:
         if path.is_dir():
             continue
         report.require(
-            path.suffix not in REGENERATED_SUFFIXES,
+            path.suffix.lower() not in REGENERATED_SUFFIXES,
             f"{path.name} would have to be run before the runtime exists, and "
             "a submission is compiled rather than built",
         )
@@ -1492,16 +1504,6 @@ def write_shims(shims: Path) -> None:
         shim = shims / tool
         shim.write_text(TRIPWIRE, encoding="utf-8")
         shim.chmod(0o755)
-
-
-def recorded_inputs(record: Path) -> list[str]:
-    """Every file the engine opened, from its input record."""
-
-    return [
-        line[len("INPUT "):].strip()
-        for line in record.read_text(encoding="utf-8", errors="replace").splitlines()
-        if line.startswith("INPUT ")
-    ]
 
 
 def carried_runtime() -> set[str]:
