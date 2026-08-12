@@ -380,6 +380,34 @@ closing a chain of $N$ copies of $\mathcal U$.
     Transfer stabilization gives the final rank-one specialization.
 \end{proof}
 
+\begin{theorem}[Normalized diagonal as a diagonal-word sum]
+    \label{thm:mpu_normalized_diagonal_word_expansion}
+    \lean{MPOTensor.normalizedDiagonal_pow_eq_sum_evalWord}
+    \leanok
+    \uses{def:mpo_eval_word}
+    Let $\mathcal W$ be an MPO tensor of positive physical dimension $d$, and
+    let
+    \begin{align}
+        R&=\frac1d\sum_{i=0}^{d-1}W^{ii}
+    \end{align}
+    be its normalized physical diagonal.  For every $K\geq0$,
+    \begin{align}
+        R^K
+        &=d^{-K}\sum_{\tau\in\{0,\ldots,d-1\}^K}
+          W^{\tau_0\tau_0}\cdots W^{\tau_{K-1}\tau_{K-1}}.
+    \end{align}
+    At $K=0$, the word product is the identity matrix.  This is the algebraic
+    diagonal-tail expansion used in the source-factor networks of
+    \cite[Theorem~III.8, Section~III.B, equations~(31)--(32)]{Cirac2017MPU}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:mpo_eval_word}
+    Expand the $K$th power of the finite sum defining $R$.  Distributivity
+    indexes the resulting terms by physical words $\tau$, and each term is
+    the ordered diagonal word displayed above.
+\end{proof}
+
 \begin{theorem}[Identity plus traceless physical decomposition]
     \label{thm:mpu_WIsom}
     \lean{Matrix.exists_identity_traceless_basis,
@@ -885,6 +913,33 @@ closing a chain of $N$ copies of $\mathcal U$.
     tails, and $d^{-K}d^K=1$ because $d>0$.
 \end{proof}
 
+\begin{theorem}[Normalized input-tail isometry]
+    \label{thm:mpu_normalized_input_tail_isometry}
+    \lean{MPOTensor.IsMPU.normalized_mpo_tail_isometry}
+    \leanok
+    \uses{def:mpu,def:mpo_family}
+    Let $d>0$, let $\mathcal U$ be an MPU, and let $K\geq0$.  For
+    $p,q\in\Fin d\times\Fin d$, separate the first two input sites from a
+    common input tail $\tau\in\Fin K\to\Fin d$.  Then
+    \begin{align}
+        d^{-K}\sum_{\tau}\sum_{\eta}
+        \overline{U^{(K+2)}_{\eta,(p,\tau)}}
+        U^{(K+2)}_{\eta,(q,\tau)}
+        &=\delta_{p,q}.
+    \end{align}
+    The global contraction is the input-first equation
+    $(U^{(K+2)})^\dagger U^{(K+2)}=\Id$.  This is the input-oriented tail
+    contraction supporting the network calculation in
+    \cite[Theorem~III.8, Section~III.B, equations~(31)--(32)]{Cirac2017MPU}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{lem:mpu_adjoint_mul}
+    Apply input-first unitarity for each fixed tail.  The inner output sum is
+    $\delta_{p,q}$.  Summing over the $d^K$ tails and multiplying by $d^{-K}$
+    leaves the same Kronecker delta.
+\end{proof}
+
 % Formalization scope: identifying this normalized scalar with
 % $(\texttt{sourceU})^\dagger\texttt{sourceU}$ is treated separately.
 
@@ -970,6 +1025,90 @@ closing a chain of $N$ copies of $\mathcal U$.
     \end{align}
     Substituting the supplied equality $E^J=|\rho)(\Phi|$ proves the claim.
     No uniqueness of rank-one factorizations is used.
+\end{proof}
+
+\begin{theorem}[Fixed boundaries of a normalized rank-one power]
+    \label{thm:mpu_normalized_diagonal_power_fixed_pair}
+    \lean{MPOTensor.normalizedDiagonal_pow_fixed_pair_of_eq_vecMulVec}
+    \leanok
+    Let $R$ be the normalized physical diagonal of the double layer of an MPO
+    tensor.  Suppose
+    \begin{align}
+        (\Phi\rvert\rho)&=1,
+        &R^J&=\lvert\rho)(\Phi\rvert.
+    \end{align}
+    Then the two boundaries of the stabilized diagonal tail are fixed:
+    \begin{align}
+        R^J\lvert\rho)&=\lvert\rho),
+        &(\Phi\rvert R^J&=(\Phi\rvert.
+    \end{align}
+    This is the fixed-pair normalization underlying equation
+    \texttt{Erightleft} and the tail contractions in
+    \cite[Theorem~III.8, Section~III.B, equations~(31)--(32)]{Cirac2017MPU}.
+\end{theorem}
+
+\begin{proof}\leanok
+    Substitute $R^J=\lvert\rho)(\Phi\rvert$ in each expression and use
+    $(\Phi\rvert\rho)=1$.
+\end{proof}
+
+\begin{theorem}[Rank-one insertion as a normalized diagonal tail]
+    \label{thm:mpu_rank_one_insertion_diagonal_tail}
+    \lean{MPOTensor.doubleLayerTensor_rankOne_mul_eq_normalizedDiagonal_tail}
+    \leanok
+    \uses{def:mpu_double_layer,
+        thm:mpu_normalized_diagonal_word_expansion}
+    Let $W$ be the double layer of an MPO tensor of positive physical
+    dimension, and let $R$ be its normalized physical diagonal.  If
+    \begin{align}
+        R^J&=\lvert\rho)(\Phi\rvert,
+    \end{align}
+    then, for all physical indices $i,j,k,\ell$,
+    \begin{align}
+        W^{ij}\lvert\rho)(\Phi\rvert W^{k\ell}
+        =d^{-J}\sum_{\tau\in\{0,\ldots,d-1\}^J}
+          W^{ij}W^{\tau_0\tau_0}\cdots
+          W^{\tau_{J-1}\tau_{J-1}}W^{k\ell}.
+    \end{align}
+    This is the exact diagonal-word tail between the two retained letters in
+    \cite[Theorem~III.8, Section~III.B, equations~(31)--(32)]{Cirac2017MPU}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpu_normalized_diagonal_word_expansion}
+    Replace the rank-one insertion by $R^J$, apply the diagonal-word
+    expansion, and distribute the two retained letters across the normalized
+    finite sum.
+\end{proof}
+
+\begin{theorem}[Simple two-letter product as a normalized diagonal tail]
+    \label{thm:mpu_simple_two_letter_diagonal_tail}
+    \lean{MPOTensor.doubleLayerTensor_mul_eq_normalizedDiagonal_tail_of_simple2}
+    \leanok
+    \uses{def:mpu_double_layer,
+        thm:mpu_rank_one_insertion_diagonal_tail}
+    In the setting of the preceding theorem, suppose in addition that the
+    same fixed pair satisfies the supplied two-letter contraction
+    \begin{align}
+        W^{ij}W^{k\ell}
+          &=W^{ij}\lvert\rho)(\Phi\rvert W^{k\ell}
+    \end{align}
+    for all physical indices.  Then
+    \begin{align}
+        W^{ij}W^{k\ell}
+        =d^{-J}\sum_{\tau\in\{0,\ldots,d-1\}^J}
+          W^{ij}W^{\tau_0\tau_0}\cdots
+          W^{\tau_{J-1}\tau_{J-1}}W^{k\ell}.
+    \end{align}
+    Thus the supplied insertion and its stabilized transfer power occur in
+    one aligned network, as required in the calculation of
+    \cite[Theorem~III.8, Section~III.B, equations~(31)--(32)]{Cirac2017MPU}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpu_rank_one_insertion_diagonal_tail}
+    Apply the supplied two-letter contraction and then replace its rank-one
+    insertion by the normalized diagonal-word tail.
 \end{proof}
 
 \begin{theorem}[The fixed-point simple1 contraction]
@@ -2793,6 +2932,49 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
     sums. No ambient identity $X_2X_2^\dagger=\Id$ is used.
 \end{proof}
 
+% This theorem is support for issue #6071.  The complete simultaneous mixed
+% source-cut contraction remains open there.
+\begin{theorem}[One-sided contraction of the dressed source operator]
+    \label{thm:mpu_source_v_mul_source_y_tensor_entry}
+    \lean{MPOTensor.sourceV_mul_sourceYTensor_apply}
+    \leanok
+    \discussion{6071}
+    \uses{def:mpu_source_v_dressing,def:mpu_source_uv,
+        thm:mpu_source_factorization_entries}
+    Let $\rho>0$.  For output pair $z=(z_1,z_2)$, physical pair
+    $p=(p_1,p_2)$, and virtual pair $a=(a_1,a_2)$, the entry of
+    $v(Y_1\otimes Y_2)$ is
+    \begin{align}
+      \bigl(v(Y_1\otimes Y_2)\bigr)_{z,((p_1,a_1),(p_2,a_2))}
+      =\sum_{\gamma,l}
+        U^{p_1z_1}_{\gamma a_1}
+        (Y_2)_{l,(z_2,\gamma)}(Y_2)_{l,(p_2,a_2)}.
+    \end{align}
+    The first source cut has contracted to one local tensor entry, while the
+    two factors from the second cut remain in the same summand.  No partial
+    second-cut Gram matrix has been formed.  This is a one-sided support
+    identity for the simultaneous source-cut calculation in
+    \cite[Theorem~III.8, Section~III.B, equations~(31)--(32)]{Cirac2017MPU};
+    it does not perform that complete contraction.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:mpu_source_v_dressing,def:mpu_source_uv,
+        thm:mpu_source_factorization_entries}
+    Expand the matrix product and the tensor product, reorder the three finite
+    sums, and contract $X_1Y_1$ by the first source-cut entry factorization.
+    Keep both $Y_2$ factors together throughout.
+\end{proof}
+
+\begin{remark}[Scope of the stabilized source-$v$ support]
+    The normalized input-tail isometry, the diagonal-word tail identities,
+    and the one-sided formula above are separate support calculations.  They
+    do not yet contract both source cuts simultaneously through the same
+    mixed network.  In particular, they do not establish any dressed Gram
+    identity for $v$.  The complete mixed source-cut contraction used in
+    equations~(31)--(32) remains open.
+\end{remark}
+
 \begin{theorem}[Tensorized source right inverse]
     \label{thm:mpu_source_yz_tensor}
     \lean{MPOTensor.sourceYTensor_mul_sourceZTensor}
@@ -3929,7 +4111,11 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
 \end{theorem}
 
 \begin{proof}
-  \uses{thm:mpu_source_v_four_u_expansions,
+  \uses{thm:mpu_normalized_input_tail_isometry,
+    thm:mpu_normalized_diagonal_power_fixed_pair,
+    thm:mpu_simple_two_letter_diagonal_tail,
+    thm:mpu_source_v_four_u_expansions,
+    thm:mpu_source_v_mul_source_y_tensor_entry,
     thm:mpu_source_v_dressed_entries}
   Insert $E^{D^2-1}=\lvert\rho)(\Phi\rvert$ into the complete network while
   retaining the source factors of $\mathcal U$. Expand both source cuts and
