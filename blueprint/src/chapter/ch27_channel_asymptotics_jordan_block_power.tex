@@ -1,10 +1,9 @@
 % Preparatory lemma: nilpotent-shift and binomial expansion
 % Source: Wolf (2012), Chapter 8, lines 1211--1212
 %
-% This is a purely algebraic calculation that provides the algebraic
-% formula for powers of a Jordan block.  It does NOT deliver the
-% two-sided operator-norm bound of Wolf Eq. (8.104); that will require
-% additional $\ell^2$ norm infrastructure and is separate.
+% This is the purely algebraic half: the closed formula for powers of a
+% Jordan block.  The two-sided estimate on the largest singular value,
+% Wolf Eq. (8.104), follows it below.
 \begin{lemma}[Nilpotent shift and Jordan-block binomial expansion]
     \label{lem:jordan_block_power}
     \lean{Matrix.nilpotentShift_pow_apply, Matrix.nilpotentShift_pow_D_eq_zero, Matrix.jordanBlock_pow}
@@ -31,4 +30,38 @@
   observing that $N^{k}=0$ whenever $k\ge D$ truncates the sum at
   $k\le\min\{n,D-1\}$.  The superdiagonal formula $N^{k}_{i,j}=1$ iff $j=i+k$
   is a straightforward induction on $k$ using the definition of $N$.
+\end{proof}
+
+% Source: Wolf (2012), Chapter 8, Equation (8.104), lines 1197--1215
+\begin{lemma}[Two-sided estimate for a Jordan-block power]
+    \label{lem:jordan_block_power_norm}
+    \lean{Matrix.l2_opNorm_jordanBlock_pow_bounds}
+    \leanok
+    \uses{lem:jordan_block_power}
+    This is \cite[Chapter~8, Equation~(8.104)]{Wolf2012Quantum}.
+    Let $D\ge 1$, let $J_{D}(\lambda)=\lambda I+N$ be the Jordan block of
+    Lemma~\ref{lem:jordan_block_power}, and write $\|\cdot\|_{\infty}$ for the
+    largest singular value.  Then, for every $n\in\mathbb N$ and every
+    $k_{0}\le\min\{n,D-1\}$,
+    \begin{align}
+      |\lambda|^{\,n-k_{0}}\binom{n}{k_{0}}
+      \le\bigl\|J_{D}(\lambda)^{n}\bigr\|_{\infty}
+      \le\sum_{k=0}^{\min\{n,D-1\}}|\lambda|^{\,n-k}\binom{n}{k}.
+    \end{align}
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{lem:jordan_block_power}
+    By Lemma~\ref{lem:jordan_block_power} the power $J_{D}(\lambda)^{n}$ is the
+    Toeplitz matrix $\sum_{k}\binom{n}{k}\lambda^{n-k}N^{k}$, whose first row
+    carries the entries $\lambda^{n-k}\binom{n}{k}$.  Since the largest
+    singular value dominates the modulus of every entry, reading the entry in
+    row $0$ and column $k_{0}$ gives the left inequality; the hypothesis
+    $k_{0}\le\min\{n,D-1\}$ is exactly what places that entry inside the
+    matrix and inside the range of summation.  For the right inequality, the
+    triangle inequality distributes the norm over the same expansion, and
+    $\|N^{k}\|_{\infty}\le 1$ for every $k$, because $N^{\dagger}N$ is the
+    diagonal projection $\operatorname{diag}(0,1,\dots,1)$ and the largest
+    singular value is multiplicative under the adjoint pairing.
 \end{proof}
