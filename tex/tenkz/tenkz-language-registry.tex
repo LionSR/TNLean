@@ -98,7 +98,7 @@
 \__tenkz_language_registry_command:nnnnn {tenkzkernel}{setup-extension}{setup}
   {\tenkzkernel}{Rebinds the kernel surface; tenkz.sty calls it at load, so a document's own call is inert. Sunset 1.0.}
 \__tenkz_language_registry_command:nnnnn {tnprose}{regions-annotations}{picture}
-  {\tnprose{text}}{Sugar: recorded prose in place of a diagram.}
+  {\tnprose{text}}{Sugar: prose in place of a diagram. The text enters the record stream and no ink reaches the page.}
 \__tenkz_language_registry_example:nnn {tnwire}{tex/tenkz/examples/api/tnwire.tex}
   {A closed wire with positional ends is a hard error.}
 \__tenkz_language_registry_example:nnn {tnmark}{tex/tenkz/examples/api/tnmark.tex}
@@ -196,7 +196,10 @@
 \__tenkz_language_registry_key:nnnnnn {kernel-wire}{route}{enum(straight|orth|arc)}{straight}{kernel}{Path family.}
 \__tenkz_language_registry_key:nnnnnn {kernel-wire}{via}{address-list}{empty}{kernel}{Waypoints.}
 \__tenkz_language_registry_key:nnnnnn {kernel-wire}{bend}{number}{metric}{kernel}{Arc bend factor.}
-\__tenkz_language_registry_key:nnnnnn {kernel-wire}{weight}{enum(single|double|bundle=n)}{single}{kernel}{Strand multiplicity.}
+% The multiplicity is a claim the boundary-signature audit carries, not a
+% count the rail draws: `double` and `bundle=n` both stroke one rail and
+% expand to their own multiplicity in the exposed entry (LANGUAGE-1.0 2.4).
+\__tenkz_language_registry_key:nnnnnn {kernel-wire}{weight}{enum(single|double|bundle=n)}{single}{kernel}{Strand multiplicity in the boundary signature; every weight strokes one rail.}
 \__tenkz_language_registry_key:nnnnnn {kernel-wire}{species}{declared-name}{empty}{kernel}{Semantic species.}
 \__tenkz_language_registry_key:nnnnnn {kernel-wire}{wind}{pair}{zero}{kernel}{Homotopy class on traced frames.}
 \__tenkz_language_registry_key:nnnnnn {kernel-wire}{around}{address-list}{empty}{kernel}{Silhouette detour targets.}
@@ -217,7 +220,11 @@
 \__tenkz_language_registry_key:nnnnnn {kernel-wire}{stroke}{enum(solid|dashed|dotted)}{solid}{kernel}{Declared stroke pattern of the rail.}
 \__tenkz_language_registry_key:nnnnnn {kernel-wire}{name}{identifier}{generated}{kernel}{Addressable name.}
 \__tenkz_language_registry_key:nnnnnn {kernel-wire}{closed}{flag}{false}{kernel}{A smooth closed cycle; takes no ends.}
-\__tenkz_language_registry_key:nnnnnn {kernel-mark}{form}{enum(bracket|brace-above|brace-below|enclosure|cut|band|label|prose)}{label}{kernel}{Mark form.}
+% The form alphabet closes on the three words that put ink on the page, plus
+% the recording `prose` row the sugar ledger keeps (SHRINK 2026-08-11).  The
+% four spellings struck from it are the tombstone rows at the foot of this
+% file, which are where a dead spelling lives and the only place it lives.
+\__tenkz_language_registry_key:nnnnnn {kernel-mark}{form}{enum(bracket|enclosure|label|prose)}{label}{kernel}{Mark form; the prose form records its text and draws nothing.}
 \__tenkz_language_registry_key:nnnnnn {kernel-mark}{slot}{semantic-slot}{selected}{kernel}{Semantic tint.}
 \__tenkz_language_registry_key:nnnnnn {kernel-mark}{species}{declared-name}{empty}{kernel}{Semantic species.}
 \__tenkz_language_registry_key:nnnnnn {kernel-mark}{inset}{number}{0}{kernel}{Nested-contour step.}
@@ -263,3 +270,43 @@
 % is matched.
 \__tenkz_language_registry_tombstone:nnn {kernel-picture}{periodic}
   {use boundary=periodic}
+%
+% The four mark forms below took a record and drew nothing.  What the sources
+% brace, the benchmark already brackets (rmp-ii-spectrum-transfer); what they
+% cut, it encloses; what they shade, a tinted enclosure carries.  Each row is
+% wrapped where its parser branch wraps, so the two read line for line.
+\__tenkz_language_registry_tombstone:nnn {kernel-mark}{form=brace-above}
+  {use form=bracket with label pos=90; a bracket speaks from the side its
+    label sits on}
+\__tenkz_language_registry_tombstone:nnn {kernel-mark}{form=brace-below}
+  {use form=bracket, which speaks from the south when it names no side}
+\__tenkz_language_registry_tombstone:nnn {kernel-mark}{form=cut}
+  {no successor: the sources' cut is the contour of what it separates,
+    so use form=enclosure over that selection}
+\__tenkz_language_registry_tombstone:nnn {kernel-mark}{form=band}
+  {use form=enclosure with tint, which lays ink over the paper its contour
+    encloses}
+%
+% The commands the sugar surface lost.  None of the eight is defined anywhere
+% in tex/, so an undefined control sequence is what answers a document that
+% still spells one, and the row is what tells its reader where the meaning
+% went.  The migrations are section 10's, which is where these were recorded
+% before the registry could hold them; the disposition audit reads its list of
+% dead commands from these rows.
+\__tenkz_language_registry_tombstone:nnn {command}{\tnput}
+  {use \tn[at=(r,c)], which places the atom at the address the put named}
+\__tenkz_language_registry_tombstone:nnn {command}{\tnsite}
+  {use \tn[at=(r,c)]}
+\__tenkz_language_registry_tombstone:nnn {command}{\tnghost}
+  {no successor: an address references an empty cell directly}
+\__tenkz_language_registry_tombstone:nnn {command}{\tnjoin}
+  {use \tnwire}
+\__tenkz_language_registry_tombstone:nnn {command}{\tnedge}
+  {use \tnwire}
+\__tenkz_language_registry_tombstone:nnn {command}{\tnarrow}
+  {use \tnwire[dir=to]; a directed index is the wire's own direction}
+\__tenkz_language_registry_tombstone:nnn {command}{\tncut}
+  {use \tnmark[form=enclosure] over the selection a cut separates; the cut
+    form is retired with it}
+\__tenkz_language_registry_tombstone:nnn {command}{\tnregion}
+  {use \tnmark[form=enclosure]}

@@ -756,7 +756,14 @@ in the shape of its selection. The lower brace merged with the upper into one
 bracket, because the side a bracket speaks from is the side its label sits on
 and every mark carries a label placement already. The cut has no consumer in
 the benchmark or the blueprint and fails tenure outright, taking its sugar
-row with it.
+row with it. Those three and the upper brace they absorbed now stand as
+tombstone rows of the registry, which is what the parser refuses them from and
+where §10 reads them.
+
+The `form=` key accepts one further word that is not a mark form: `prose`, the
+panel that sets a sentence where a picture would stand (§2.7). It records its
+text and puts no ink on the page, and it is a sugar-ledger row carried to 1.0
+rather than a fourth member of the alphabet above.
 
 `species=` binds the mark's ink to a declared semantic identity; `tint`
 lays that ink over the paper the contour encloses. Nesting needs no key: containment between
@@ -1046,14 +1053,13 @@ at the next shrink session (§11).
 Deleted spellings stay in the registry as tombstones; the linter rejects
 them forever with the migration hint. No deleted spelling is ever reused.
 
-The frozen source corpus still passes through the compatibility renderers
-while its figures migrate. Their executable `object` ledger may therefore
-repair a source-facing deficiency without enlarging the canonical kernel:
-`\tnsite` and `\tnput` accept a local `size=s|m|l`, with `m` as the
-compatibility default, and `\tnput[circle]` supplies a plain inscribed circle.
-These paths do not inherit the canonical picture size. Their inscribed labels
-retain the compatibility renderer's historical content-sized outline; this
-is not the fixed two-axis atom contract of §7.
+The eight retired commands below carry their rows in the registry. The frozen
+corpus they were kept for has since been retired with the renderers that read
+it, and no file under `tex/` defines any of them: `\tnsite` and `\tnput` no
+longer accept the local `size=s|m|l` that the compatibility path once gave
+them, and `\tnput[circle]` no longer supplies its inscribed circle. What a
+document spelling one of them meets is an undefined control sequence, and the
+row is what names where the meaning went.
 
 | Dead spelling | Migration |
 |---|---|
@@ -1087,7 +1093,8 @@ is not the fixed two-axis atom contract of §7.
 | `slot=` | `species=`, which atoms and wires already carry |
 | `up=`, `down=` | `ports=`: the outward physical face is the row's own normal |
 | `conjugate` flag | nothing: duality is the wire's `dir=` (§2.4), and a conjugate overline is label mathematics |
-| `form=cut`, `form=band`, `form=brace-below`, `form=prose`, `\tncut`, `\tnregion`, `\tnprose` | `form=enclosure`, `form=bracket`, or a term of unknown signature (§6, §7) |
+| `form=brace-above`, `form=brace-below`, `form=cut`, `form=band` | `form=bracket`, whose side is its label's, and `form=enclosure`, with `tint` for what a band shaded (§6). These four left the parser in 0.9; each is refused by name, with its migration, from the registry's own tombstone row |
+| `\tncut`, `\tnregion` | `\tnmark[form=cut]` and `\tnmark[form=enclosure]` took their place at the language landing; the cut form has since been retired above, so a cut is an `enclosure` over the selection it separates |
 | `frame=vertical`, `frame=rotate=<deg>`, frame matrices | `flat`, `plane`, `circle`; orientation is a consequence of where a record sits (§4) |
 | `leg <face> of <cell>`, `<compass> outside` | a generated leg is a named record; an open end takes its place from the route (§5) |
 | `(r,c)-(r,c)` cell ranges | `(r,c) .. (r,c)` — a hyphen cannot be told from a generated name |

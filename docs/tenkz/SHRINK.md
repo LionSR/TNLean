@@ -3099,3 +3099,103 @@ contract reopens then and not before.
 
 No registry row, parser leaf, key, alias, or overload moves; M1, M2, M3, M5,
 and M6 are unchanged.
+
+### 2026-08-11 — the mark alphabet loses the four words that drew nothing
+
+The manual coverage audit tried to draw every construct the registry offers
+and could not draw four: `form=brace-above`, `form=brace-below`, `form=cut`
+and `form=band` were accepted by the registry, printed by the generated
+reference, and answered `[TKZ-KERNEL-RENDER-TODO]` with no ink on the page.
+The chapter had to print the refusal where a picture belonged (#6183).
+
+**The demand, per word.** None of the four has a consumer, and the search was
+run three times by different means. A census of `form=` across the benchmark,
+the kernel fixtures and the blueprint reads 39 label, 38 enclosure and 1 bracket
+in the benchmark, 39 enclosure, 26 label, 14 bracket and 1 prose in the
+fixtures, 44 enclosure, 10 label and 8 bracket in the blueprint, and not one
+brace, cut or band anywhere. The second method asked the sources instead of
+the corpus, because a brace and a cut are ordinary notation in a
+tensor-network figure and their absence from our spellings would prove
+nothing about the papers. The sources do draw both, and the corpus already
+draws them with the words that survive. `rmp-ii-spectrum-transfer` reproduces
+a panel whose author draws a dashed red rectangle across the contracted
+columns and a brace naming their count beneath: the case states the first as
+`form=enclosure, slot=selected` and the second as `form=bracket`, and its
+verdict was promoted to faithful on that reading, retiring the last recorded
+substitution. `rmp-ii-boundary-state` retired a brace-for-box note the same
+way. Where a source shades a sheet, the two toric-code appendix verdicts accept a
+contour-only enclosure as faithful and price the shading as house ink. Three
+blueprint chapters write "brace" in the comment above the picture and spell
+`form=bracket` in it. The third check was the history: the enum arrived whole
+in the commit that built the language stage, whose own message ends "Nothing
+here draws", and `bracket`, the one form with demand, had to be added to the
+alphabet later, by the change that gave it a renderer.
+
+**The sentence was already written; this executes it.** The contract closed
+the alphabet on `bracket`, `enclosure`, `label` at 2.5, 2.8 and 6 and gave the
+reasons the corpus confirms: the shaded band never differed from an enclosure
+except in the shape of its selection, the lower brace merged with the upper
+because the side a bracket speaks from is the side its label sits on, and the
+cut failed tenure outright with no successor owed. Session 1 booked the same
+sentence at `flag:consumers:key:kernel-mark:form` and at
+`flag:consumers:key:annotation:brace above`, and the disposition checker has
+treated all four values as dead records since. Only the parser and the
+registry row still carried them, and the ledger status moves with the parser
+row, which is what moves today.
+
+**What a reader meets instead.** A retired word stays installed as a
+tombstone: the parser still recognises the spelling, refuses it, and states
+the migration, because the alphabet error alone reports the words that remain
+and so reads as a typo when the word was in fact removed. `brace-above` names
+`form=bracket` with `label pos=90`, `brace-below` names the same bracket
+speaking from its default south, `band` names `form=enclosure` with `tint`,
+which is where the fill went, and `cut` says there is no successor and points
+at the contour of what a cut separates. A tombstone is a branch of a key that
+is already installed, so it opens no parser path.
+
+**Where a dead spelling lives.** In the registry, and nowhere else. Section
+10 has said since session 0 that deleted spellings stay there so the linter
+can reject them forever with the migration hint, and the first draft of this
+change did the opposite: it struck the four words from the registry and wrote
+them again as parser branches, which is a second copy of the same knowledge
+and the one thing section 10 forbids. The registry now carries a tombstone
+row per dead spelling, giving the scope, the dead spelling and the migration.
+A spelling written `key=value` is a word struck from a live key's alphabet,
+which the parser refuses through a branch of its own; a bare spelling is a
+key that no longer exists, which the unknown-key error answers.
+
+The row is the record and everything that must refuse the spelling reads it.
+Two of those readers are the ledger's own and arrived with the change that
+retired the hand-spelled `periodic`, so neither is written a second time here.
+The first is the check, which compares the four `key=value` rows with the four
+parser branches in both directions, migration text included, and holds each
+command row to the registry's own command list. The second is the source lint,
+which rejects a buried spelling in case source and prints that row's migration
+with the finding, whether the source spells it `form=brace-above`,
+`form = band`, or `form={cut}`, and leaves a `transform=` ending in the same
+word alone. What refuses a dead spelling inside a document is a compile, from
+the parser branch beside its row.
+
+The third reader is this session's, and it is the last written-out list to go.
+The audit that reads the sources now takes its dead commands from the eight
+command rows and its retired alphabet words from the four `key=value` rows, so
+retiring a spelling is one registry edit and no edit anywhere else. The list
+the audit kept until now had called `prose` dead where `prose` is a live word
+of the `form=` alphabet, and `\tnprose` a dead command where it is a live
+registry command that sets a sentence and puts no ink on the page. Reading the
+rows is what settles both, and the check refuses a row for either: a word the
+alphabet still holds and a command the registry still carries are both
+findings.
+
+Two documentation defects the same audit falsified are corrected in the
+registry, which is where the generated reference reads its prose. `\tnprose`
+now says the text enters the record stream and no ink reaches the page, and
+the wire's `weight=` now says the multiplicity is a claim of the boundary
+signature and that every weight strokes one rail. Both were true of the
+implementation before and stated by neither row. The `brace above` migration
+in the change ledger, which pointed at the two spellings retired here, now
+points at `form=bracket`.
+
+| flag | verdict |
+|---|---|
+| flag:consumers:key:kernel-mark:form | tombstoned in part: the four words that took a record and drew nothing leave the parser today, the alphabet standing at `bracket`, `enclosure`, `label` with the recording `prose` row the sugar ledger keeps; the key itself has consumers and stays kernel, so this executes the session-1 verdict rather than deferring it again; permanent |
