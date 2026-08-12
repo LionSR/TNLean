@@ -170,10 +170,12 @@ sub-atoms named after the host.
 \end{tenkz}
 \end{tnexample}
 
-A site that is not there is \tnkey{void=}.  The two words differ in what
-survives: \tnval{open} keeps the site's incident indices and removes the
-tensor, so the hole has a boundary; \tnval{sealed} removes the site and
-its bonds together.
+A site that is not there is \tnkey{void=}.  The two words differ in how
+much they take away.  \tnval{sealed} removes the site, the bonds that
+reached it, and the leg the row's physical policy would have given it.
+\tnval{open} removes the glyph alone: the bonds still meet at the station
+and the leg still leaves it, so the picture loses a tensor's ink and not
+one entry of its boundary.
 
 \begin{tnexample}[
   formula={\lvert\psi\rangle\ \text{with one site removed}},
@@ -184,7 +186,7 @@ its bonds together.
   signature={kernel-boundary|signature=phys:n, phys:n, phys:n, phys:n,
     phys:n, phys:n, phys:n, phys:n}]
 % Ink: void=sealed removes the site and the bonds that reached
-%   it; void=open would keep those indices and drop the tensor.
+%   it; void=open would keep both and drop only the glyph.
 \begin{tenkz}[lattice={3x3}, frame=plane, physical=up]
   \tn{} & \tn{} & \tn{} \\
   \tn{} & \tn[void=sealed]{} & \tn{} \\
@@ -193,8 +195,9 @@ its bonds together.
 \end{tnexample}
 
 \tnexercise{ex:cat-void} The eight physical legs above are the eight
-surviving sites.  What does \tnkey{void=}\tnval{open} write in the
-signature instead?
+surviving sites.  How many entries does the signature carry when the
+centre is written \tnkey{void=}\tnval{open} instead, and which of them
+are virtual?
 
 \subsection{Connections}
 
@@ -323,19 +326,28 @@ shape comes from \tnkey{via=} alone.
 
 The remaining wire keys decorate the rail rather than change its path.
 \tnkey{stroke=} is the rail's pattern, and the corpus draws only three:
-\tnval{solid} for a contraction, \tnval{dashed} for an index drawn but
-not contracted, \tnval{dotted} for a lattice lying under the sheet being
-drawn.  \tnkey{weight=} says how many indices one drawn rail stands for, and
-\tnkey{dir=} marks a directed index against its dual.
+\tnval{solid} for a contraction, \tnval{dashed} for a line the figure
+shows but its contraction does not use, \tnval{dotted} for a lattice
+lying under the sheet being drawn.  Those are readings, and the pattern
+is ink alone: a dashed wire keeps the default
+\tnkey{kind=}\tnval{index}, and what decides whether a drawn line
+contracts is what its two ends are.  A wire between two ports takes them
+both, whatever its stroke; a wire between two atoms named as wholes
+leaves their ports where they were.  That is how the dashed diagonals of
+the benchmark's dual lattice recall an edge without contracting one:
+their ends are junctions with no ports to take.  \tnkey{weight=} says how
+many indices one drawn rail stands for, and \tnkey{dir=} marks a directed
+index against its dual.
 
 \begin{tnexample}[
   wide,
   caption={the three strokes, a bundle, and a direction},
-  index={Left: the three declared rail patterns.  Right: one rail
-    standing for three indices, carrying the direction mark that
-    distinguishes a space from its dual.  The bundle is recorded, not
-    drawn: the event stream reads \tnval{weight=bundle=3} and the page
-    shows one line.},
+  index={Left: the three declared rail patterns.  The four sites declare
+    no ports, so the three rails differ in pattern and in nothing else.
+    Right: one rail standing for three indices, carrying the direction
+    mark that distinguishes a space from its dual.  The bundle is
+    recorded, not drawn: the event stream reads \tnval{weight=bundle=3}
+    and the page shows one line.},
   signature={kernel-boundary|signature=}]
 % Ink: stroke= is the rail's pattern; weight=bundle=n records
 %   that one rail carries n indices; dir= marks the direction.
@@ -378,26 +390,41 @@ draws the three, then shows both of the other answers.
 \end{tenkz}
 \end{tnexample}
 
-Contours nest.  \tnkey{inset=} steps a second enclosure one clearance
-outside the first, which is how a figure draws a boundary operator acting
-on the open indices of a region it also has to show.
+Contours nest by themselves.  A second enclosure over one selection
+stands one clearance outside the first because it was declared second,
+which is how a figure draws a boundary operator acting on the open
+indices of a region it also has to show.
 
 \begin{tnexample}[
   formula={\lvert\psi(X)\rangle},
   caption={a region, and an operator on its boundary},
-  index={The inner contour is the retained block; the outer one, stepped
-    one clearance out, is the operator acting on the indices the block
-    leaves open.},
+  index={The inner contour is the retained block; the outer one, declared
+    second and therefore one clearance further out, is the operator
+    acting on the indices the block leaves open.},
   signature={kernel-boundary|signature=phys:n, phys:n, phys:n, phys:n}]
-% Ink: two contours over one selection; inset=1 steps the outer
-%   one clear of the inner.
+% Ink: two contours over one selection; concentric order steps
+%   the second declared clear of the first.
 \begin{tenkz}[rows={wire}, cols=4, bonds=none, physical=up]
   \tn[at=(1,1), skin=box]{A} & \tn[at=(1,2), skin=box]{A} &
   \tn[at=(1,3), skin=box]{A} & \tn[at=(1,4), skin=box]{A}
   \tnmark[form=enclosure]{(1,1) .. (1,4)}{}
-  \tnmark[form=enclosure, inset=1, label pos=e]{(1,1) .. (1,4)}{$X$}
+  \tnmark[form=enclosure, label pos=e]{(1,1) .. (1,4)}{$X$}
 \end{tenkz}
 \end{tnexample}
+
+Nothing in the source states that order.  Contours are ranked by
+containment, ties going to the earlier declaration, and each rank stands
+one clearance further out than the rank inside it.  A bracket drawn
+inside a region window is ranked the same way and clears it instead of
+sharing its support.
+
+\dbendpar The registry carries an \tnkey{inset=} key for this, named as
+the nested-contour step.  It records a number in the event stream and
+moves no ink: write one, write six, or leave the key out, and the two
+contours above fall in the same places.  The 1.0 inventory lists it among
+the spellings that go with nothing in their place, on exactly that
+ground, so read it in the generated tables as a word on its way out
+rather than as the operation that steps a contour.
 
 \tnkey{slot=} tints a mark from the theme's semantic slots, and
 \tnkey{tint} lays ink over the paper inside a contour rather than only
@@ -577,8 +604,14 @@ once.
 there: \tnkey{pitch=}, the one base metric every named ratio follows;
 \tnkey{sizes=}, its size-class table; \tnkey{theme=}, the semantic ink;
 and \tnkey{strict}, which rejects every sugar spelling in the registry.
-The benchmark and the continuous checks set the last one, which is why the
-canonical cases are written in kernel words.
+No benchmark case sets it.  The canonical cases write sugar freely, and
+\tnkey{physical=} alone stands in fifty-one of the hundred and thirty of
+them; the only sources that turn \tnval{strict} on are the five refusal
+cases that prove it refuses, the one below among them.
+What the checks hold is the sugar itself: eleven sugar spellings compile
+beside their kernel expansions and must emit the same events and the same
+picture, so a sugar word is a shorter way to write a canonical case and
+never a second meaning.
 
 \begin{tnrefusal}[
   caption={strict setup rejects a sugar spelling},
@@ -618,10 +651,11 @@ than accepted and left inert.
 
 \subsection{Answers to the exercises}
 
-\tnanswer{ex:cat-void} It writes the removed site's four virtual indices
-as well.  The word \tnval{open} keeps the incident indices and drops only
-the tensor, so the hole acquires a boundary: the four bonds that reached
-the centre become open ends, and the signature gains four virtual entries
-beside the eight physical legs.  \tnval{sealed} removes site and bonds
-together and adds nothing.  A hole in a lattice is almost always the open
-one, because the indices are what the hole is for.
+\tnanswer{ex:cat-void} Nine entries, none of them virtual, which is the
+signature of the sheet with no hole in it at all.  \tnval{open} takes
+away the glyph and nothing else: the four bonds still meet at the empty
+station, and the centre still carries the leg its row's policy gives it,
+so a reader who wants the eight-leg boundary above must write
+\tnval{sealed}.  Neither word turns a bond into an exposed index.  What
+\tnval{open} buys is the picture: a station where the sheet contracts and
+no tensor is drawn.
