@@ -916,8 +916,8 @@
   }
 % A word struck from a closed alphabet stays installed as a tombstone: the
 % parser still knows the spelling, refuses it, and states the migration.  The
-% alphabet error alone cannot do that -- it reports the words that remain,
-% which reads as a typo when the word was in fact retired.  A tombstone is a
+% alphabet error alone cannot do that: it reports the words that remain, which
+% reads as a typo when the word was in fact retired.  A tombstone is a
 % branch of a key that is already installed, so it opens no parser path of its
 % own and the census does not move.
 \cs_new_protected:Npn \__tenkz_kernel_tombstone:nnnn #1#2#3#4
