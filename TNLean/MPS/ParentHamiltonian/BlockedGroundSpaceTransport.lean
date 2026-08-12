@@ -16,7 +16,10 @@ isometry and proves exact transport identities for the boundary map, its range, 
 orthogonal projector.
 
 The blocked chain length \(N\) and the original physical length \(N p\) remain explicit in every
-statement.  No comparison of parent Hamiltonians is made here.
+statement.  No comparison of parent Hamiltonians is made here.  The transport of the two
+whole-block spectator spaces needed for the three-block C3-prime estimate remains separate:
+the left and tail spaces of the blocked tensor must be identified with their respective
+boundary-map ranges on \(3p\) original sites, rather than with an original one-site spectator.
 
 ## Main definitions
 
@@ -33,8 +36,11 @@ statement.  No comparison of parent Hamiltonians is made here.
 
 ## References
 
-* arXiv:1606.00608, lines 318–344 (physical blocking and the identification of blocked words).
-* arXiv:2011.12127, Section IV.C (parent-Hamiltonian ground spaces after blocking).
+* arXiv:2011.12127, lines 1815–1820 (blocking consecutive physical sites).
+* arXiv:2011.12127, lines 1985–1992 (local parent ground spaces).
+
+The equivalence `blockedConfigEquiv` is the project's explicit realization of the
+configuration-basis identification implicit in this blocking convention.
 -/
 
 open scoped Matrix.Norms.Frobenius
