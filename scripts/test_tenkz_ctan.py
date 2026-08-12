@@ -790,13 +790,14 @@ def test_a_package_load_is_read_in_both_of_its_spellings() -> None:
     with tempfile.TemporaryDirectory() as directory:
         source = Path(directory) / "tex"
         source.mkdir()
-        (source / "tenkz.sty").write_text(
-            STAGE_CONTRACT + "\\usepackage{tikz-cd}\n", encoding="utf-8"
-        )
-        closure = tenkz_ctan.walk_closure(source, "tenkz.sty")
-    assert closure.packages == ["tikz-cd"], closure.packages
-    report = tenkz_ctan.check_dependencies(closure, _ownership([], [], []))
-    assert any("tikz-cd" in reason for reason in report.failures), report.failures
+        for spelling in ("usepackage", "RequirePackage", "RequirePackageWithOptions"):
+            (source / "tenkz.sty").write_text(
+                STAGE_CONTRACT + f"\\{spelling}{{tikz-cd}}\n", encoding="utf-8"
+            )
+            closure = tenkz_ctan.walk_closure(source, "tenkz.sty")
+            assert closure.packages == ["tikz-cd"], (spelling, closure.packages)
+            report = tenkz_ctan.check_dependencies(closure, _ownership([], [], []))
+            assert any("tikz-cd" in r for r in report.failures), (spelling, report.failures)
 
 
 def test_a_retired_front_end_load_fails_the_dependency_check() -> None:
@@ -880,6 +881,12 @@ def test_every_spelling_of_stream_eighteen_is_the_shell_escape_stream() -> None:
         assert not tenkz_ctan.shell_escape_call(name), name
     # The one assembled spelling that is still readable from the text.
     assert tenkz_ctan.shell_escape_call(r"\csname write\endcsname18{x}")
+    # The named ways to reach a shell that are not a write at all. A file
+    # under `\ExplSyntaxOn` would use the expl3 interface in preference to
+    # either primitive.
+    for named in (r"\sys_shell_now:n {ls}", r"\sys_shell_shipout:x {ls}",
+                  r"\sys_shell_open:Nn \x {ls}", r"\sys_get_shell:nnN {x}{y}\z"):
+        assert tenkz_ctan.shell_escape_call(named), named
     # Numbers that are not 18 in the base their prefix names, an odd run of
     # minus signs, and a control sequence that merely starts with the same
     # letters.
@@ -944,12 +951,16 @@ def test_an_unbraced_absolute_input_is_an_absolute_path() -> None:
             "\\input /Users/somebody/tenkz-core.code.tex\n", encoding="utf-8"
         )
         unbraced = tenkz_ctan.check_arxiv(tree, _loaded("tenkz.sty"))
-        # A starred form puts its star between the command and its arguments.
-        (tree / "tenkz.sty").write_text(
-            "\\includegraphics*{/Users/somebody/figure.pdf}\n", encoding="utf-8"
-        )
-        starred = tenkz_ctan.check_arxiv(tree, _loaded("tenkz.sty"))
-        assert any("absolute path" in reason for reason in starred.failures), starred.failures
+        # A starred form puts its star between the command and its arguments,
+        # and LaTeX's star test skips a space before it. A conditional loader
+        # is a loader: a runtime whose behaviour depends on a machine-local
+        # file is not submittable even when the file's absence is handled.
+        for load in (r"\includegraphics*{/Users/somebody/figure.pdf}",
+                     r"\includegraphics *{/Users/somebody/figure.pdf}",
+                     r"\InputIfFileExists{/Users/somebody/local.cfg}{}{}"):
+            (tree / "tenkz.sty").write_text(load + "\n", encoding="utf-8")
+            found = tenkz_ctan.check_arxiv(tree, _loaded("tenkz.sty"))
+            assert any("absolute path" in r for r in found.failures), (load, found.failures)
         (tree / "tenkz.sty").write_text("\\input tenkz-core.code.tex\n", encoding="utf-8")
         relative = tenkz_ctan.check_arxiv(tree, _loaded("tenkz.sty"))
     assert any("absolute path" in reason for reason in unbraced.failures), unbraced.failures

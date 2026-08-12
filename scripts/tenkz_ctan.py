@@ -96,13 +96,15 @@ PAYLOAD = re.compile(
 # load, and a closure that missed it would let the manifest pin a dependency
 # list the package does not have.
 INPUT_CALL = re.compile(r"\\input\s*\{([^}]*)\}", re.DOTALL)
-# Both spellings of a package load. A `.sty` writes `\RequirePackage`, but
-# nothing stops a staged runtime file from writing `\usepackage`, and the two
-# load the same package: a closure that read only the first would let a load
-# reach an upload without reaching the pin, and would report the retired front
-# ends absent while one of them was being loaded.
+# Every spelling of a package load. A `.sty` writes `\RequirePackage`, but
+# nothing stops a staged runtime file from writing `\usepackage` or
+# `\RequirePackageWithOptions`, and they load the same package. A closure that
+# read one spelling would let a load reach an upload without reaching the pin,
+# and would report the retired front ends absent while one was being loaded.
 REQUIRE_CALL = re.compile(
-    r"\\(?:RequirePackage|usepackage)\s*(?:\[[^]]*\]\s*)?\{([^}]*)\}", re.DOTALL
+    r"\\(?:RequirePackageWithOptions|RequirePackage|usepackage)"
+    r"\s*(?:\[[^]]*\]\s*)?\{([^}]*)\}",
+    re.DOTALL,
 )
 LIBRARY_CALL = re.compile(r"\\usetikzlibrary\s*\{([^}]*)\}", re.DOTALL)
 
@@ -242,7 +244,12 @@ WRITE_CALL = re.compile(
     r"|(?P<name>\\[A-Za-z@_:]+))?"
 )
 ALLOCATED_STREAM = re.compile(r"\\(?:newwrite|iow_new:N)\s*(\\[A-Za-z@_:]+)")
-SHELL_ESCAPE_NAME = re.compile(r"\\ShellEscape\b")
+# The named ways to reach a shell that are not a write at all: the TeX
+# primitive's LaTeX name, and expl3's own shell interface, which a file under
+# `\ExplSyntaxOn` would use in preference to either.
+SHELL_ESCAPE_NAME = re.compile(
+    r"\\ShellEscape\b|\\sys_(?:shell_(?:now|shipout|open)|get_shell):[a-zA-Z]*"
+)
 SHELL_ESCAPE_STREAM = 18
 
 
@@ -258,7 +265,7 @@ def shell_escape_call(text: str) -> str:
 
     named = SHELL_ESCAPE_NAME.search(text)
     if named is not None:
-        return f"{named.group(0)}, the shell-escape primitive"
+        return f"{named.group(0)}, which reaches a shell"
     allocated = set(ALLOCATED_STREAM.findall(text))
     for found in WRITE_CALL.finditer(text):
         if found["name"] is not None:
@@ -287,12 +294,16 @@ def shell_escape_call(text: str) -> str:
 # An absolute path in a staged source names the machine that wrote it. The
 # pattern catches the spellings a TeX file can carry: a Unix path or a Windows
 # drive letter opening a braced load argument, with the star a starred form
-# such as `\includegraphics*` puts before its arguments, and the same two
-# opening `\input` unbraced, which is plain TeX's own syntax and reads to the
-# next space.
+# such as `\includegraphics*` puts before its arguments and the space LaTeX's
+# star test skips before it, and the same two opening `\input` unbraced, which
+# is plain TeX's own syntax and reads to the next space. The loader list is
+# every one the LaTeX kernel defines that takes a file name, conditional ones
+# included: a runtime whose behaviour depends on a machine-local file is not
+# submittable even when the file's absence is handled.
 ABSOLUTE_PATH_HEAD = r"(?:/|[A-Za-z]:[\\/])"
 ABSOLUTE_LOAD = re.compile(
-    r"\\(?:input|include|usepackage|RequirePackage|includegraphics)\*?"
+    r"\\(?:input|include|usepackage|RequirePackageWithOptions|RequirePackage"
+    r"|InputIfFileExists|includegraphics)(?:\s*\*)?"
     rf"\s*(?:\[[^]]*\]\s*)?\{{\s*{ABSOLUTE_PATH_HEAD}"
     rf"|\\input\s*\"?{ABSOLUTE_PATH_HEAD}"
 )
