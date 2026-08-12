@@ -102,11 +102,17 @@ SIGNED_KEYS_BY_SCOPE = {
 # registry's tombstone rows are the one record (LANGUAGE-1.0 section 10), so a
 # spelling this file calls dead is dead because the parser refuses it, not
 # because a second list here happens to agree.
-RETIRED_VALUES: dict[str, set[str]] = {}
-for _row in tombstones(load_registry()):
-    if _row["value"]:
-        RETIRED_VALUES.setdefault(_row["key"], set()).add(_row["value"])
-del _row
+def _retired_values() -> dict[str, set[str]]:
+    retired: dict[str, set[str]] = {}
+    for row in tombstones(load_registry()):
+        # a bare spelling buries a whole key, which the unknown-key check
+        # already answers; only a buried word of a live key belongs here
+        if row["value"]:
+            retired.setdefault(row["key"], set()).add(row["value"])
+    return retired
+
+
+RETIRED_VALUES = _retired_values()
 
 COMPATIBILITY_KEYS = {
     "picture": {
