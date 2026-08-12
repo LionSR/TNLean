@@ -32,7 +32,15 @@ def rangeCompression {P Q : E →ₗ[ℂ] E} (hP : P.IsSymmetricProjection) :
     exact ⟨P (Q x), by
       exact LinearMap.IsIdempotentElem.apply_apply hP.isIdempotentElem (Q x)⟩
 
-/-- The compression of a symmetric projection is symmetric on `range P`. -/
+/-- The compression of a symmetric projection is symmetric on `range P`.
+
+This is the compression used in the two-projection argument of
+arXiv:1703.09188, Proposition IV.5 (`prop:continuity-index`),
+`Papers/1703.09188/paper_v2.tex`, lines 756–764.
+
+**Local fix (projector label):** Source line 762 repeats `P` for the second
+projector, where the surrounding argument requires `Q`; see
+`docs/paper-gaps/1703_two_projection_projector_typo.tex`. -/
 theorem rangeCompression_isSymmetric {P Q : E →ₗ[ℂ] E}
     (hP : P.IsSymmetricProjection) (hQ : Q.IsSymmetricProjection) :
     (rangeCompression hP (Q := Q)).IsSymmetric := by
