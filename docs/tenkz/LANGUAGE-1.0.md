@@ -958,7 +958,7 @@ policy for the shared leg; write the ports for the lone one.
 | `sandwich` | `rows={ket,op,bra}` |
 | `physical=up\|down\|updown\|none` | expander: declares each frame-cell atom's outward face physical, one port per face slot — a `wide=k` atom answers with `k` legs, one per spanned cell, exactly as the authored `90@1..@k` port list; geometric overlay atoms are excluded; in a plane this is the independent page-transverse axis, not a numeric in-plane face |
 | `boundary=open\|none` | `west=<w>, east=<w>` |
-| `boundary=periodic`, `periodic` | `west=trace, east=trace` |
+| `boundary=periodic` | `west=trace, east=trace` |
 | `west={cup=$m$}` (any side) | side `cup` + `\tn[skin=ring, at=on <cup wire> 0.5]{m}` |
 | `west={tail=$m$}` (any side) | side `open` + boundary-skin atom on the stub wire |
 | `west label=$m$` etc., `bond label=` | `\tnmark[form=label]{<generated wire>}{m}` |
@@ -1061,6 +1061,7 @@ is not the fixed two-axis atom contract of §7.
 | `(r,c)-(r,c)` cell ranges | `(r,c) .. (r,c)` — a hyphen cannot be told from a generated name |
 | `\tnpic` as a command | the sugar row `\tnpic` over the picture environment (§9) |
 | aliases `chain axis`, `legs at`, `rows`→span, `boundary legs`, `label at` | kernel spellings above |
+| `periodic` as a picture flag | `boundary=periodic`, the value spelling the alphabet keeps |
 
 ## 11. The shrink gate
 

@@ -47,7 +47,13 @@ from dataclasses import dataclass
 from pathlib import Path
 
 from tenkz_audit import ENVIRONMENT_LANGS
-from tenkz_language import Entry, load_registry, parse_status, tombstone_rows
+from tenkz_language import (
+    Entry,
+    load_registry,
+    parse_status,
+    tombstone_rows,
+    tombstone_shape,
+)
 from tenkzlib.texcase import (
     TeXEnvironmentNestingError,
     match_group,
@@ -103,16 +109,22 @@ def tombstone_patterns(entries: list[Entry]) -> list[tuple[re.Pattern[str], str]
     """Source patterns and migrations for the spellings a ledger buries.
 
     A `key=value` row is a word struck from a live alphabet, so the pattern is
-    that spelling.  A row spelled with a leading backslash is a command, whose
-    own backslash is where it starts: a word boundary before it would match
+    that spelling, bounded on both sides: without a left boundary `form=band`
+    would also read `transform=band`.  The value may arrive in a brace group,
+    which is ordinary key-value spelling and reaches the parser as the bare
+    word.  A row spelled with a leading backslash is a command, whose own
+    backslash is where it starts: a word boundary before it would match
     nothing, since neither the backslash nor the space before it is a word
-    character.  A bare row is a key that no longer exists; where its word
-    survives as the value of a live enum, the pattern steps over that live
-    spelling, which is where a reader of the dead one should be.
+    character.  An environment is named where a document names one, in the
+    argument of `\\begin` or `\\end`.  A bare row is a key that no longer
+    exists; where its word survives as the value of a live enum, the pattern
+    steps over that live spelling, which is where a reader of the dead one
+    should be.
 
     Every spelling arrives from `tombstone_rows` with the registry's `~`
     already read as the space a document writes, so a multi-word key is
     matched the way source spells it rather than the way the registry does.
+    A row stating no spelling gets no pattern; the language check reports it.
     """
     enum_owners: dict[str, set[str]] = {}
     for entry in entries:
@@ -124,15 +136,25 @@ def tombstone_patterns(entries: list[Entry]) -> list[tuple[re.Pattern[str], str]
         for word in enum.group(1).split("|"):
             enum_owners.setdefault(word, set()).add(entry.fields[1].replace("~", " "))
     patterns: list[tuple[re.Pattern[str], str]] = []
-    for _scope, spelling, migration in sorted(tombstone_rows(entries)):
+    for scope, spelling, migration in sorted(tombstone_rows(entries)):
         key, _separator, value = spelling.partition("=")
         key, value = key.strip(), value.strip()
-        if spelling.startswith("\\"):
+        shape = tombstone_shape(scope, spelling)
+        if shape == "malformed":
+            continue
+        if shape == "command":
             expression = re.escape(spelling) + r"(?![A-Za-z])"
-        elif value:
+        elif shape == "environment":
             expression = (
-                re.escape(key).replace(r"\ ", r"\s+")
-                + r"\s*=\s*"
+                r"\\(?:begin|end)\s*\{\s*"
+                + re.escape(spelling)
+                + r"\s*\}"
+            )
+        elif shape == "value":
+            expression = (
+                r"(?<![\w-])"
+                + re.escape(key).replace(r"\ ", r"\s+")
+                + r"\s*=\s*\{?\s*"
                 + re.escape(value).replace(r"\ ", r"\s*")
                 + r"(?![\w-])"
             )

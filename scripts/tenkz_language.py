@@ -211,6 +211,12 @@ def _group(text: str, start: int) -> tuple[str, int]:
     raise ValueError(f"unclosed registry group at offset {start}")
 
 
+def _commented_out(text: str, position: int) -> bool:
+    """Whether a comment mark earlier on the line already ended it for TeX."""
+    line_start = text.rfind("\n", 0, position) + 1
+    return re.search(r"(?<!\\)%", text[line_start:position]) is not None
+
+
 def load_registry() -> list[Entry]:
     text = REGISTRY.read_text(encoding="utf-8")
     pattern = re.compile(
@@ -219,6 +225,11 @@ def load_registry() -> list[Entry]:
     )
     entries: list[Entry] = []
     for match in pattern.finditer(text):
+        # A record the file comments out does not run, so the tools may not
+        # read it either; otherwise the registry means one thing to TeX and
+        # another to everything that checks it.
+        if _commented_out(text, match.start()):
+            continue
         kind = match.group(1)
         pos = match.end()
         fields: list[str] = []
@@ -341,6 +352,28 @@ def _sentence(text: str) -> str:
     return " ".join(text.replace("~", " ").split())
 
 
+def tombstone_shape(scope: str, spelling: str) -> str:
+    """Which kind of dead spelling a row states.
+
+    `command` and `environment` are named by the scope they take, since a
+    retired environment's spelling is an ordinary word.  `value` is a word
+    struck from a live key's alphabet and `key` a key that no longer exists.
+    `malformed` is a row that states no spelling at all: an empty one, or a
+    key with an equals sign and nothing after it, which would otherwise pass
+    as a bare key and ban a live word.
+    """
+    if not spelling:
+        return "malformed"
+    if spelling.startswith("\\"):
+        return "command"
+    if scope == "environment":
+        return "environment"
+    key, separator, value = spelling.partition("=")
+    if not key.strip() or (separator and not value.strip()):
+        return "malformed"
+    return "value" if separator else "key"
+
+
 def _kernel_tombstones_from_texts(texts: Iterable[str]) -> dict[tuple[str, str], str]:
     """Collect the spellings the kernel parser refuses by name and their migrations."""
     tombstones: dict[tuple[str, str], str] = {}
@@ -382,7 +415,7 @@ def tombstone_rows(entries: list[Entry]) -> list[tuple[str, str, str]]:
 def tombstone_errors(
     rows: list[tuple[str, str, str]],
     key_vocabulary: dict[tuple[str, str], tuple[str, str]],
-    commands: set[str],
+    surface: dict[str, set[str]],
     kernel: dict[tuple[str, str], str],
 ) -> list[str]:
     """Hold the tombstone ledger, the live vocabulary, and the parser to one list.
@@ -390,10 +423,10 @@ def tombstone_errors(
     A row spelled `key=value` is a word struck from a live alphabet: the key
     must still exist, the word must not, and the parser must refuse the
     spelling with the migration the ledger states.  A bare row is a key that
-    no longer exists and a row spelled with a leading backslash is a command
-    that no longer exists; neither leaves anything for the parser to branch
-    on, so the check is that the spelling really is gone and only the lint
-    reads the row.
+    no longer exists, and a command or an environment row is one of those,
+    checked against `surface`; none of the three leaves anything for the
+    parser to branch on, so the check is that the spelling really is gone and
+    only the lint reads the row.
 
     Rows arrive from `tombstone_rows`, which has already read `~` and any
     wrapping out of them, so every comparison here is against the spelling
@@ -402,27 +435,35 @@ def tombstone_errors(
     errors: list[str] = []
     recorded: dict[tuple[str, str], str] = {}
     scopes = {scope for scope, _name in key_vocabulary}
-    seen: set[tuple[str, str]] = set()
+    # The lint matches a spelling in flat source, where no scope is visible,
+    # so one spelling buried twice would be reported with whichever migration
+    # sorted first.  A ledger the lint can read is one spelling per row.
+    seen: set[str] = set()
     for scope, spelling, migration in rows:
-        # Two rows may differ as written and mean one spelling, which the
-        # rest of this function would silently collapse to whichever came
-        # last.
-        if (scope, spelling) in seen:
+        if spelling in seen:
             errors.append(f"tombstone {scope}:{spelling} is recorded twice")
-        seen.add((scope, spelling))
+        seen.add(spelling)
         if not migration:
             errors.append(f"tombstone {scope}:{spelling} names no migration")
-        if spelling.startswith("\\"):
-            # A dead command has no key scope to sit in, so it says so; the
-            # spelling would otherwise be read as a key and never checked.
-            if scope != "command":
+        shape = tombstone_shape(scope, spelling)
+        if shape == "malformed":
+            errors.append(
+                f"tombstone {scope}:{spelling!r} states no spelling; a row is "
+                "a command, an environment, a key, or key=value"
+            )
+            continue
+        if shape in {"command", "environment"}:
+            # A dead command or environment has no key scope to sit in, so it
+            # says so; the spelling would otherwise be read as a key and the
+            # lint would look for it as a bare word.
+            if scope != shape:
                 errors.append(
-                    f"tombstone {scope}:{spelling} is a command and takes "
-                    "the scope 'command'"
+                    f"tombstone {scope}:{spelling} is a {shape} and takes "
+                    f"the scope '{shape}'"
                 )
-            elif spelling.removeprefix("\\") in commands:
+            elif spelling.removeprefix("\\") in surface.get(shape, set()):
                 errors.append(
-                    f"tombstone {scope}:{spelling} names a command the "
+                    f"tombstone {scope}:{spelling} names a {shape} the "
                     "registry still carries"
                 )
             continue
@@ -433,7 +474,7 @@ def tombstone_errors(
             continue
         key, _separator, value = spelling.partition("=")
         key, value = key.strip(), value.strip()
-        if not value:
+        if shape == "key":
             if (scope, key) in key_vocabulary:
                 errors.append(
                     f"tombstone {scope}:{spelling} names a key the registry "
@@ -649,7 +690,10 @@ def check(entries: list[Entry]) -> list[str]:
         tombstone_errors(
             tombstone_rows(entries),
             key_vocabulary,
-            {row[0] for row in by_kind["command"]},
+            {
+                "command": {row[0] for row in by_kind["command"]},
+                "environment": {row[0] for row in by_kind["environment"]},
+            },
             _kernel_tombstones(),
         )
     )
