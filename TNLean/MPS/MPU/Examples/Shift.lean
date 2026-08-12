@@ -13,13 +13,32 @@ import Mathlib.LinearAlgebra.Matrix.Permutation
 # Shift matrix product unitaries
 
 The examples in arXiv:1703.09188, lines 1980--2001.
+
+## Main definitions
+
+* `rightShiftTensor` and `leftShiftTensor`: bond-$d$ tensors for the right and
+  left cyclic shifts.
+* `identityMPUTensor`: the bond-one identity tensor.
+* `shiftExampleU₁`, `shiftExampleU₂`, and `shiftExampleU₃`: the three operator
+  families $U_1$, $U_2$, and $U_3$ from the source.
+
+## Main results
+
+* `mpo_rightShiftTensor` and `mpo_leftShiftTensor`: exact finite-chain shift
+  formulas.
+* `rightShiftTensor_isMPU` and `leftShiftTensor_isMPU`: the shift tensors are
+  matrix product unitaries.
+* `mpo_shiftExampleU₁`, `mpo_shiftExampleU₂`, and `mpo_shiftExampleU₃`: exact
+  finite-chain formulas for the three examples.
+* `shiftExampleU₁_isMPU`, `shiftExampleU₂_isMPU`, and `shiftExampleU₃_isMPU`:
+  the three examples are matrix product unitaries.
 -/
 
 open scoped Matrix Kronecker
 
 namespace MPOTensor
 
-/-- The bond-`d` tensor whose closed MPO is the right shift. -/
+/-- The bond-$d$ tensor whose closed MPO is the right shift. -/
 def rightShiftTensor (d : ℕ) : MPOTensor d d :=
   fun i j ↦ Matrix.single i j 1
 
@@ -78,7 +97,7 @@ theorem mpo_rightShiftTensor_apply (d N : ℕ) [NeZero N]
       apply Finset.prod_eq_zero (Finset.mem_univ n)
       simp [rightShiftTensor, hn.symm]
 
-/-- The bond-`d` tensor generates the source right shift on every nonempty chain. -/
+/-- The bond-$d$ tensor generates the source right shift on every nonempty chain. -/
 theorem mpo_rightShiftTensor (d N : ℕ) [NeZero N] :
     mpo (rightShiftTensor d) N = Equiv.Perm.permMatrix ℂ (rotateConfig N d) := by
   ext σ τ
@@ -122,25 +141,25 @@ theorem identityMPUTensor_isMPU (d : ℕ) : IsMPU (identityMPUTensor d) := by
   rw [mpo_identityMPUTensor, Matrix.mem_unitaryGroup_iff]
   simp
 
-/-- The paper's `U₁`, the identity on two spins at each site. -/
+/-- The paper's $U_1$, the identity on two spins at each site. -/
 noncomputable def shiftExampleU₁ (d : ℕ) : MPOTensor (d * d) 1 :=
   tensorProduct (identityMPUTensor d) (identityMPUTensor d)
 
-/-- The paper's `U₂ = T† ⊗ T`. -/
+/-- The paper's $U_2=T^\dagger\otimes T$. -/
 def shiftExampleU₂ (d : ℕ) : MPOTensor (d * d) (d * d) :=
   tensorProduct (leftShiftTensor d) (rightShiftTensor d)
 
-/-- The paper's `U₃ = T ⊗ T†`. -/
+/-- The paper's $U_3=T\otimes T^\dagger$. -/
 def shiftExampleU₃ (d : ℕ) : MPOTensor (d * d) (d * d) :=
   tensorProduct (rightShiftTensor d) (leftShiftTensor d)
 
-/-- Exact all-chain formula for `U₁`. -/
+/-- Exact all-chain formula for $U_1$. -/
 theorem mpo_shiftExampleU₁ (d N : ℕ) : mpo (shiftExampleU₁ d) N = 1 := by
   rw [shiftExampleU₁, mpo_tensorProduct, mpo_identityMPUTensor,
     Matrix.one_kronecker_one]
   exact Matrix.submatrix_one_equiv _
 
-/-- Exact all-chain formula for `U₂`. -/
+/-- Exact all-chain formula for $U_2$. -/
 theorem mpo_shiftExampleU₂ (d N : ℕ) [NeZero N] :
     mpo (shiftExampleU₂ d) N =
       Matrix.reindex (tensorProductConfigEquiv N d d).symm
@@ -150,7 +169,7 @@ theorem mpo_shiftExampleU₂ (d N : ℕ) [NeZero N] :
   rw [shiftExampleU₂, mpo_tensorProduct, mpo_leftShiftTensor,
     mpo_rightShiftTensor]
 
-/-- Exact all-chain formula for `U₃`. -/
+/-- Exact all-chain formula for $U_3$. -/
 theorem mpo_shiftExampleU₃ (d N : ℕ) [NeZero N] :
     mpo (shiftExampleU₃ d) N =
       Matrix.reindex (tensorProductConfigEquiv N d d).symm
@@ -160,15 +179,15 @@ theorem mpo_shiftExampleU₃ (d N : ℕ) [NeZero N] :
   rw [shiftExampleU₃, mpo_tensorProduct, mpo_rightShiftTensor,
     mpo_leftShiftTensor]
 
-/-- `U₁` is an MPU. -/
+/-- $U_1$ is an MPU. -/
 theorem shiftExampleU₁_isMPU (d : ℕ) : IsMPU (shiftExampleU₁ d) :=
   (identityMPUTensor_isMPU d).tensorProduct (identityMPUTensor_isMPU d)
 
-/-- `U₂` is an MPU. -/
+/-- $U_2$ is an MPU. -/
 theorem shiftExampleU₂_isMPU (d : ℕ) : IsMPU (shiftExampleU₂ d) :=
   (leftShiftTensor_isMPU d).tensorProduct (rightShiftTensor_isMPU d)
 
-/-- `U₃` is an MPU. -/
+/-- $U_3$ is an MPU. -/
 theorem shiftExampleU₃_isMPU (d : ℕ) : IsMPU (shiftExampleU₃ d) :=
   (rightShiftTensor_isMPU d).tensorProduct (leftShiftTensor_isMPU d)
 

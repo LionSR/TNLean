@@ -6007,17 +6007,16 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
 \end{theorem}
 
 \begin{proof}\leanok
+  \uses{def:eval_word,lem:eval_word_of_fn_prod,
+    thm:trace_eval_word_eq_sum_cyclic,def:mpu,
+    thm:mpu_physical_adjoint_identities}
   Closing the virtual indices of $A^{ij}=\lvert i\rangle\langle j\rvert$
-  leaves one nonzero virtual configuration.  Thus the matrix entry in row
-  $\sigma$ and column $\tau$ is
+  leaves one nonzero virtual configuration.  If
+  $\tau_n=\sigma_{n+1}$ for every $n$ modulo $N$, then
   \begin{align}
-    \langle\sigma\vert T^{(N)}\vert\tau\rangle
-      &=\begin{cases}
-          1,&\tau_n=\sigma_{n+1}\text{ for every }n\pmod N,\\
-          0,&\text{otherwise}.
-        \end{cases}
+    \langle\sigma\vert T^{(N)}\vert\tau\rangle&=1.
   \end{align}
-  Hence the output configuration is
+  Otherwise the same matrix entry is zero.  Hence the output configuration is
   $(\tau_{N-1},\tau_0,\ldots,\tau_{N-2})$, which fixes the permutation-matrix
   convention and gives the right shift.  Its permutation matrix is unitary.
   Physical adjunction gives the conjugate transpose, hence the left shift and
@@ -6061,6 +6060,8 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
 \end{theorem}
 
 \begin{proof}\leanok
+  \uses{def:mpo_stacked_layers,thm:mpu_finite_tensor_product,
+    thm:mpu_shift_tensor_formulas,thm:mpu_tensor_product,def:mpu}
   The bond-one identity tensor generates the identity at every length.  The
   finite-chain operator of an independent tensor product is the Kronecker
   product of the two finite-chain operators, after the sitewise identification
