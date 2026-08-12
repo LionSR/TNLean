@@ -80,9 +80,12 @@ ${#sketch_rows[@]}" >&2
 # count guard above cannot see it because the count is unchanged.  Each row
 # also marks the line of the fence it consumed, and the marks are compared
 # after the loop: the count guard and pairwise-distinct marks together force
-# a bijection between the contract's fences and this table's rows.  A line
-# opening a fence toggles the fence state so a heading-shaped line inside an
-# example neither arms nor stops a scan.
+# a bijection between the contract's fences and this table's rows.  A
+# heading is a hash run followed by a space, so a reference such as #6235
+# at the head of a prose line stops nothing; fences are tracked by their
+# own delimiter — character and length, closing on a run at least as long,
+# as Markdown reads them — so a heading-shaped or backtick line inside any
+# fenced block neither arms nor stops a scan.
 sketch_marks=""
 for sketch_row in "${sketch_rows[@]}"; do
   IFS=: read -r job heading fixture <<SKETCHROW
@@ -90,17 +93,43 @@ $sketch_row
 SKETCHROW
   awk -v heading="$heading" -v mark="$WORK/$job.fenceline" '
     BEGIN { while (substr(heading, level + 1, 1) == "#") level++ }
+    # The run of fence characters opening or closing a fence on this line:
+    # its length, with the character in fc and the trailing text in frest.
+    function fencerun(line,    copy, i) {
+      copy = line
+      sub(/^ {0,3}/, "", copy)
+      fc = substr(copy, 1, 1)
+      if (fc != "`" && fc != "~") return 0
+      i = 0
+      while (substr(copy, i + 1, 1) == fc) i++
+      frest = substr(copy, i + 1)
+      return i
+    }
     {
-      if (!infence && !s && index($0, heading) == 1) { s = 1; next }
-      if (!infence && s && !f && substr($0, 1, 1) == "#") {
+      if (infence) {
+        n = fencerun($0)
+        closed = (n >= flen && fc == fchar)
+        if (closed) { gsub(/[ \t]/, "", frest); closed = (frest == "") }
+        if (f) {
+          if (closed) exit
+          print
+          next
+        }
+        if (closed) infence = 0
+        next
+      }
+      if (!s && index($0, heading) == 1) { s = 1; next }
+      if (s && !f && substr($0, 1, 1) == "#") {
         h = 0
         while (substr($0, h + 1, 1) == "#") h++
-        if (h <= level) exit
+        if (h <= level && substr($0, h + 1, 1) == " ") exit
       }
-      if (s && !f && $0 == "```tex") { f = 1; infence = 1; print NR > mark; next }
-      if (f && $0 == "```") exit
-      if (f) { print; next }
-      if (substr($0, 1, 3) == "```") infence = !infence
+      n = fencerun($0)
+      if (n >= 3) {
+        infence = 1; fchar = fc; flen = n
+        if (s && !f && $0 == "```tex") { f = 1; print NR > mark }
+        next
+      }
     }' "$CONTRACT" | sed -e 's/^\\\[//' -e 's/\\\]$//' >"$WORK/$job.body"
   [ -s "$WORK/$job.body" ] && [ -s "$WORK/$job.fenceline" ] || {
     echo "FAIL: the contract's '$heading' example could not be extracted" >&2
@@ -136,8 +165,8 @@ SKETCHROW
 done
 
 shared_fences="$(printf '%s' "$sketch_marks" | sort -n | awk '
-  $1 == last { print }
-  { last = $1 }')"
+  $1 == last { if (prev != "") { print prev; prev = "" }; print; next }
+  { last = $1; prev = $0 }')"
 [ -z "$shared_fences" ] || {
   echo "FAIL: one printed example answered two rows of the table:" >&2
   echo "$shared_fences" >&2
