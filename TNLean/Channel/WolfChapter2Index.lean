@@ -8,6 +8,7 @@ import TNLean.Channel.MaximallyEntangled
 import TNLean.Channel.TensorMap
 import TNLean.Channel.ChoiJamiolkowski
 import TNLean.Channel.ChoiRectangular
+import TNLean.Channel.CPDecomposition
 import TNLean.Channel.KrausRectangular
 import TNLean.Channel.KrausRank
 import TNLean.Channel.KrausRepresentation
@@ -170,11 +171,19 @@ project import.
 
 ### Section 2.1 Representation corollaries (Propositions 2.2–2.4)
 
-* **Proposition 2.2** (CP decomposition):
+* **Decomposition into completely positive maps** (the unnumbered proposition
+  following Proposition 2.1), in `TNLean/Channel/CPDecomposition.lean`:
+  - `ChoiRectangular.exists_four_isKrausCP_complexCombination` — every linear
+    map `M_d(ℂ) → M_{d'}(ℂ)` is a ℂ-linear combination of four CP maps ✓
+  - `ChoiRectangular.exists_two_isKrausCP_realCombination_of_hermiticityPreserving`
+    — a Hermitian map is an ℝ-linear combination of two CP maps ✓
+
+* **Proposition 2.2** (CP decomposition of sandwich sums, square algebra):
   - `WolfProps.polarization_sandwich` — `4 • (A X Bᴴ) = (A+B) X (A+B)ᴴ
     − (A−B) X (A−B)ᴴ + I•(A+I·B) X (A+I·B)ᴴ − I•(A−I·B) X (A−I·B)ᴴ` ✓
-  - `WolfProps.cp_decomposition_of_sandwich_sum` — every
-    `∑ᵢ Aᵢ X Bᵢᴴ` is a signed ℂ-linear combination of four CP maps ✓
+  - `WolfProps.cp_decomposition_of_sandwich_sum` — every map of `M_D(ℂ)` given
+    in the sandwich-sum form `X ↦ ∑ᵢ Aᵢ X Bᵢᴴ` is a signed ℂ-linear
+    combination of four CP maps ✓
 
 * **Proposition 2.3** (no information without disturbance):
   - `WolfProps.vecMulVec_star_eq_polarization` — rank-one outer products

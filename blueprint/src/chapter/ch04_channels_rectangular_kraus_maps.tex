@@ -338,6 +338,47 @@ the input factor is written $\tr_B$.
     Theorems~\ref{thm:choi_rect_unital} and~\ref{thm:choi_rect_tp}.
 \end{proof}
 
+\begin{theorem}[Decomposition into completely positive maps]
+    \label{thm:choi_rect_cp_decomposition}
+    \lean{ChoiRectangular.exists_four_isKrausCP_complexCombination,
+        ChoiRectangular.exists_two_isKrausCP_realCombination_of_hermiticityPreserving,
+        Matrix.exists_isHermitian_eq_add_smul_I,
+        Matrix.IsHermitian.exists_eq_sub_posSemidef}
+    \leanok
+    \uses{def:is_kraus_cp}
+    Every linear map $T:\MN{d}\to\MN{d'}$ is a complex linear combination of
+    four completely positive maps. If $T$ is Hermitian, that is
+    $T(B^\dagger)=T(B)^\dagger$ for every $B\in\MN{d}$, then $T$ is a real
+    linear combination of two of them. This is the proposition on
+    decomposition into completely positive maps of
+    \cite[Chapter~2]{Wolf2012Quantum}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{def:choi_matrix_rect, thm:choi_rect_mutual_inverse, thm:choi_rect_cp,
+        thm:choi_rect_hermiticity}
+    The assignment $T\leftrightarrow\tau$ is linear and one-to-one, so it
+    suffices to decompose $\tau$. The identity
+    \begin{align}
+        \tau
+          &= \frac{\tau+\tau^\dagger}{2}
+             + i\,\frac{i\tau^\dagger-i\tau}{2}
+        \notag
+    \end{align}
+    presents $\tau$ as a complex linear combination of two Hermitian
+    operators, and the spectral decomposition writes each of them as the
+    difference of its positive and negative parts, both positive
+    semidefinite. Every positive semidefinite operator on
+    $\C^{d'}\otimes\C^{d}$ is the Choi matrix of a completely positive map, so
+    carrying the four positive semidefinite pieces back through the
+    correspondence produces the four completely positive maps, with
+    coefficients $1,-1,i,-i$. If $T$ is Hermitian then $\tau$ is Hermitian by
+    Theorem~\ref{thm:choi_rect_hermiticity}, so the second summand vanishes
+    and the positive and negative parts of $\tau$ alone give two completely
+    positive maps, with coefficients $1$ and $-1$.
+\end{proof}
+
 \section{The Kraus representation theorem for rectangular matrix algebras}
 
 \begin{theorem}[Kraus normalization conditions]
