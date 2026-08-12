@@ -4460,8 +4460,8 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
   \lean{MPOTensor.sourceIndexValue}
   \leanok
   \uses{def:mpu_right_rank,def:mpu_left_rank}
-  For a specified tensor $\mathcal U$ with right and left source-cut ranks
-  $r$ and $\ell$, define
+  For a specified tensor $\mathcal U$ whose right and left source-cut ranks
+  $r$ and $\ell$ are positive, define
   \begin{align}
     \operatorname{ind}_{\mathrm{src}}(\mathcal U)
       &=\frac12(\log_2 r-\log_2\ell).
@@ -4484,13 +4484,13 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     r_{\mathcal V}&=c r_{\mathcal U},&
     \ell_{\mathcal V}&=c\ell_{\mathcal U},
   \end{align}
-  where $c$, $r_{\mathcal U}$, and $\ell_{\mathcal U}$ are nonzero. Then
+  where $c$, $r_{\mathcal U}$, and $\ell_{\mathcal U}$ are positive. Then
   \begin{align}
     \operatorname{ind}_{\mathrm{src}}(\mathcal V)
       &=\operatorname{ind}_{\mathrm{src}}(\mathcal U).
   \end{align}
-  If $d$ is nonzero and a specified tensor has
-  $r_{\mathcal U}\ell_{\mathcal U}=d^2$, then
+  If $d$, $r_{\mathcal U}$, and $\ell_{\mathcal U}$ are positive and a
+  specified tensor has $r_{\mathcal U}\ell_{\mathcal U}=d^2$, then
   \begin{align}
     \operatorname{ind}_{\mathrm{src}}(\mathcal U)
       &=\log_2\frac{r_{\mathcal U}}d
