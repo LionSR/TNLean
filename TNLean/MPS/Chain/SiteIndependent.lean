@@ -67,16 +67,18 @@ site-independent trace-MPS representation of bond dimension \(ND\) at that
 same length.
 
 The tensor is `MPSChainTensor.cyclicBlockTensor A.zeroPad` and depends on
-\(N\). Purity is used upstream in PGVWC07 to supply open-boundary data; the
-finite cyclic-block calculation itself needs only the data and the stated
-translation invariance. -/
+\(N\). Purity is used upstream in PGVWC07 to supply the rectangular open-boundary
+representation; the finite cyclic-block calculation itself needs only the OBC
+chain tensor and the stated translation invariance.
+
+**Scope restriction (supplied OBC representation):** the arbitrary-state OBC
+existence input of PGVWC07 Theorem 3 remains issue #6086. This boundary is
+recorded in `docs/paper-gaps/pgvwc07_site_independent_scope.tex`. -/
 theorem pgvwc07_site_independent_matrices
     (A : OBCChainTensor d D N) [NeZero N]
-    (hTI : A.IsTranslationInvariantState) :
-    ∀ σ : Fin N → Fin d,
-      MPSTensor.mpv (MPSChainTensor.cyclicBlockTensor A.zeroPad) σ =
-        A.coeff σ := by
-  intro σ
+    (hTI : A.IsTranslationInvariantState) (σ : Fin N → Fin d) :
+    MPSTensor.mpv (MPSChainTensor.cyclicBlockTensor A.zeroPad) σ =
+      A.coeff σ := by
   rw [MPSChainTensor.mpv_cyclicBlockTensor_eq_average]
   simp_rw [coeff_cyclicRotation_zeroPad_eq_coeff_cyclicTranslateConfig_neg A]
   have hTI' (k : Fin N) :
