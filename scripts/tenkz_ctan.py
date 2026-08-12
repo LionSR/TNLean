@@ -314,7 +314,13 @@ REDEFINED_NAME = re.compile(
 # The operand a stream primitive takes before its file name: a control
 # sequence or a number, with the equals sign optional, which is TeX's own
 # syntax and not a house spelling.
-STREAM_OPERAND = r"(?:\\[A-Za-z@_:]+|[0-9]+)?\s*=?\s*"
+# The number may be spelled in any of TeX's integer syntaxes: decimal,
+# hexadecimal after a double quote, octal after a single quote, or a
+# character code after a backtick.  A quote left unread here would be
+# taken for the head of a quoted file name and the call would go unread.
+STREAM_OPERAND = (
+    r"(?:\\[A-Za-z@_:]+|\"[0-9A-Fa-f]+|'[0-7]+|`\\?.|[0-9]+)?\s*=?\s*"
+)
 # Only the primitives that open a file are read. `\write` and `\read` take a
 # stream that is already open and a token list that is data, so a token list
 # beginning with a bar is text and refusing it would refuse a valid release.
@@ -322,6 +328,39 @@ PIPE_FILENAME = re.compile(
     r"\\(?:openin|openout|input|include)\s*"
     + STREAM_OPERAND
     + r"(?:\{\s*)?\"?\s*\|"
+)
+# A file a stream primitive opens for reading is a load: the engine resolves
+# it like any other input, so a closure walk that skipped it would certify an
+# archive offline while a run reads an unstaged file from the installation.
+# Only the read side is followed; `\openout` and `\iow_open:Nn` create their
+# file, so there is nothing for the archive to carry. expl3 names the
+# conditional variants through the signature, so the family is read the way
+# the loaders' conditional variants are.
+STREAM_OPEN_CALL = re.compile(
+    r"\\openin(?![A-Za-z@_:])\s*" + STREAM_OPERAND + r"\"([^\"]+)\""
+    r"|\\openin(?![A-Za-z@_:])\s*" + STREAM_OPERAND + r"([^\s{}\\%\"]+)"
+    r"|\\ior_open:[a-zA-Z]+\s*(?:\\[A-Za-z@_:]+\s*)?\{\s*\"?([^}\"]*?)\"?\s*\}",
+    re.DOTALL,
+)
+# The write side is read too, not as a dependency but as a provenance: a
+# file the runtime writes and later reopens is the run's own product, and
+# requiring the archive to carry it would refuse every log-and-reread.
+WRITE_OPEN_CALL = re.compile(
+    r"\\openout(?![A-Za-z@_:])\s*" + STREAM_OPERAND + r"\"([^\"]+)\""
+    r"|\\openout(?![A-Za-z@_:])\s*" + STREAM_OPERAND + r"([^\s{}\\%\"]+)"
+    r"|\\iow_open:[a-zA-Z]+\s*(?:\\[A-Za-z@_:]+\s*)?\{\s*\"?([^}\"]*?)\"?\s*\}",
+    re.DOTALL,
+)
+# A file name the source supplies through a macro is opened by TeX after
+# expansion, which a static walk cannot perform.  The walk fails closed on
+# the read side rather than certifying a closure it could not see.  The
+# operand is required here: with it optional, the stream's own register
+# would be read as the macro and every ordinary `\openin\src=name` would
+# be refused.
+MACRO_STREAM_OPEN = re.compile(
+    r"\\openin(?![A-Za-z@_:])\s*"
+    r"(?:\\[A-Za-z@_:]+|\"[0-9A-Fa-f]+|'[0-7]+|`\\?.|[0-9]+)\s*=?\s*"
+    r"\\[A-Za-z@_:]+"
 )
 # The named ways to reach a shell that are not a write at all: the TeX
 # primitive's LaTeX name, and expl3's own shell interface, which a file under
@@ -631,14 +670,25 @@ def walk_closure(source: Path = SOURCE, entry: str = ENTRY.name) -> Closure:
     closure = Closure()
     packages: list[str] = []
     libraries: list[str] = []
+    # The files the runtime writes before it reads them back: the run's own
+    # products, not archive inputs.  Collected in load order so a product is
+    # known by the time a later open reads it.
+    written: set[str] = set()
+    scanned: set[str] = set()
+
+    def record(name: str) -> None:
+        if name not in closure.files:
+            path = source / name
+            if not path.is_file():
+                raise SystemExit(f"{entry} loads {name}, which is missing")
+            closure.files.append(name)
 
     def visit(name: str) -> None:
-        if name in closure.files:
+        record(name)
+        if name in scanned:
             return
+        scanned.add(name)
         path = source / name
-        if not path.is_file():
-            raise SystemExit(f"{entry} loads {name}, which is missing")
-        closure.files.append(name)
         try:
             # Comments are blanked, and so are the `\\` control symbols: a
             # load spelled inside a macro body as text is not a load, and
@@ -646,12 +696,39 @@ def walk_closure(source: Path = SOURCE, entry: str = ENTRY.name) -> Closure:
             text = uncontrolled(strip_comments(path.read_bytes().decode("utf-8")))
         except UnicodeDecodeError as error:
             raise SystemExit(f"{name} is not UTF-8 and cannot be read: {error}") from None
+        macro_named = MACRO_STREAM_OPEN.search(text)
+        if macro_named is not None:
+            raise SystemExit(
+                f"{name} opens a stream on a macro-supplied file name, which "
+                f"a static walk cannot resolve: {macro_named.group().strip()}"
+            )
         for group in REQUIRE_CALL.findall(text):
             packages.extend(part.strip() for part in group.split(",") if part.strip())
         for group in LIBRARY_CALL.findall(text):
             libraries.extend(part.strip() for part in group.split(",") if part.strip())
-        for braced, quoted, bare in INPUT_CALL.findall(text):
-            visit((braced or quoted or bare).strip())
+        # Every syntax is read in source order: the closure's contract is the
+        # load order, and a stream opened before an input loads first.  A
+        # stream-opened file is recorded but not scanned — the primitive opens
+        # data, not TeX source, so text inside it that looks like a load is
+        # not one.  A name the runtime wrote first is its own product and is
+        # not recorded at all.
+        loads = [
+            *((match, "input") for match in INPUT_CALL.finditer(text)),
+            *((match, "stream") for match in STREAM_OPEN_CALL.finditer(text)),
+            *((match, "write") for match in WRITE_OPEN_CALL.finditer(text)),
+        ]
+        loads.sort(key=lambda load: load[0].start())
+        for match, kind in loads:
+            found = next(
+                group for group in match.groups() if group is not None
+            ).strip()
+            if kind == "write":
+                written.add(found)
+            elif kind == "stream":
+                if found not in written:
+                    record(found)
+            else:
+                visit(found)
 
     visit(entry)
     closure.packages = sorted(set(packages))
