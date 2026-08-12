@@ -16079,48 +16079,35 @@
 % standing in that lane as well: a wire crossing a spanning atom's own row
 % takes the face whose station lands in that row, and one crossing its own
 % column takes the face whose station lands in that column.
+%
+% All of that reads a difference of cell numbers as a direction, which holds
+% while the frame lays its cells out along its own axes.  A circle does not:
+% its columns close into a ring, so the step from the last station to the
+% first runs the short way and not back across the ring, and a chord between
+% two stations further apart leaves each of them at an angle to the tangent
+% that the column numbers say nothing about.  On a circle this reading
+% therefore answers nothing rather than answering wrongly, and the faces
+% that carry an explicit word -- ports, policy legs, transverse hosts, open
+% ends -- go on answering there as everywhere.  Reading the departure as a
+% bearing in the endpoint's own frame is what answers a circle; issue 6195.
 \cs_new_protected:Npn \__tenkz_kernel_r_label_mark_toward:n #1
+  {
+    \str_if_eq:eeF { \__tenkz_kernel_r_frame_word: } {circle}
+      { \__tenkz_kernel_r_label_mark_axis:n {#1} }
+  }
+\cs_new_protected:Npn \__tenkz_kernel_r_label_mark_axis:n #1
   {
     \int_compare:nNnTF
       { \l__tenkz_kernel_lab_far_row_tl } = { \l__tenkz_kernel_lab_row_tl }
       {
-        % On a circle the stations close into a ring, so the step from the
-        % last column to the first runs east and not back across every
-        % column between.  Numeric order reads that seam backwards and would
-        % reserve the face opposite the ink, which is worse than reserving
-        % none, so the seam answers nothing until the station is read in the
-        % endpoint's own frame.
-        \bool_lazy_and:nnF
-          { \str_if_eq_p:ee { \__tenkz_kernel_r_frame_word: } {circle} }
-          {
-            \bool_lazy_or_p:nn
-              {
-                \int_compare_p:nNn
-                  {
-                    \l__tenkz_kernel_lab_far_col_tl
-                    - \l__tenkz_kernel_lab_col_tl
-                  }
-                  = { \__tenkz_kernel_cols: - 1 }
-              }
-              {
-                \int_compare_p:nNn
-                  {
-                    \l__tenkz_kernel_lab_col_tl
-                    - \l__tenkz_kernel_lab_far_col_tl
-                  }
-                  = { \__tenkz_kernel_cols: - 1 }
-              }
-          }
-          {
-            \int_compare:nNnT
-              { \l__tenkz_kernel_lab_far_col_tl }
-              < { \l__tenkz_kernel_lab_col_tl }
-              { \__tenkz_kernel_r_label_mark_side:nn {#1} {w} }
-            \int_compare:nNnT
-              { \l__tenkz_kernel_lab_far_col_tl }
-              > { \l__tenkz_kernel_lab_col_tl }
-              { \__tenkz_kernel_r_label_mark_side:nn {#1} {e} }
-          }
+        \int_compare:nNnT
+          { \l__tenkz_kernel_lab_far_col_tl }
+          < { \l__tenkz_kernel_lab_col_tl }
+          { \__tenkz_kernel_r_label_mark_side:nn {#1} {w} }
+        \int_compare:nNnT
+          { \l__tenkz_kernel_lab_far_col_tl }
+          > { \l__tenkz_kernel_lab_col_tl }
+          { \__tenkz_kernel_r_label_mark_side:nn {#1} {e} }
         \int_compare:nNnF
           { \l__tenkz_kernel_lab_far_col_tl }
           = { \l__tenkz_kernel_lab_col_tl }
