@@ -1871,12 +1871,23 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
     \lean{MPOTensor.sourceWeight}
     \leanok
     \uses{def:mpu_source_matrix_one}
-    For $\rho\in\MN{D}$, in the row order $(\alpha,j)$ of $M_1$, define
+    For $\rho\in\MN{D}$, let
     \begin{align}
-        W_\rho&=\rho\otimes\Id_d.
+      \chi\colon\mathbb C^D\otimes\mathbb C^d
+        &\longrightarrow\mathbb C^d\otimes\mathbb C^D,&
+      \chi(e_\alpha\otimes e_j)&=e_j\otimes e_\alpha.
     \end{align}
-    This is the matrix denoted $\Id_d\otimes\rho$ in the graphical leg order
-    of \cite[Section~III]{Cirac2017MPU}.
+    In the virtual--physical row order $(\alpha,j)$ of $M_1$, define
+    \begin{align}
+        W_\rho&=\rho\otimes\Id_d
+        =\chi^\dagger(\Id_d\otimes\rho)\chi.
+    \end{align}
+    Thus the source expression $\Id_d\otimes\rho$ is first written in the
+    physical--virtual order $(j,\alpha)$ and then reindexed by $\chi$ to the
+    virtual--physical order $(\alpha,j)$. The two Kronecker products are not
+    identified without this reindexing. This is the source weight in
+    \cite[equation labelled~\texttt{Y1Y1X1X1}]{Cirac2017MPU}.
+    % Source lines: paper_v2.tex 479--487.
 \end{definition}
 
 \begin{theorem}[Positivity of the product-index source weight]
@@ -1894,7 +1905,7 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
     $\Id_d$ is positive definite.
 \end{proof}
 
-\begin{definition}[Source singular-value data and normalization matrix]
+\begin{definition}[Source singular-value data and compressed source metric]
     \label{def:mpu_source_svd_data}
     \lean{MPOTensor.SourceCutSVD, MPOTensor.sourceSVD₁,
         MPOTensor.sourceSVD₂, MPOTensor.sourceGram₁}
@@ -1909,13 +1920,17 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
         &U_iU_i^\dagger&=\Id,
     \end{align}
     with intermediate dimensions $r$ and $\ell$, respectively. For
-    $\rho\in\MN{D}$, put
+    $\rho\in\MN{D}$, define the compressed positive metric
     \begin{align}
         A&=V_1W_\rho V_1^\dagger.
     \end{align}
+    The inverse square root $A^{-1/2}$, rather than $A$ itself, is the
+    normalization factor used in the first weighted source factor. This is the
+    source-factor construction of \cite[Section~III]{Cirac2017MPU}.
+    % Source lines: paper_v2.tex 479--500; labels Y1Y1X1X1 and Z1Z2.
 \end{definition}
 
-\begin{theorem}[Positivity of the first source normalization matrix]
+\begin{theorem}[Positivity of the first compressed source metric]
     \label{thm:mpu_source_gram_posdef}
     \lean{MPOTensor.sourceGram₁_posDef}
     \leanok
@@ -3796,6 +3811,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
         E^{D^2-1}=\lvert\rho)(\Phi\rvert.
     \end{align}
     % Source labels: Erightleft and prop:normal-tensor.
+    % Source lines: paper_v2.tex 269--280 and 397--405.
     The diagonal matrix is the block matrix $\Lambda_k$ in the canonical-form-II
     fixed-point equations in
     \cite[equations~(6a)--(6b)]{Cirac2017MPU}; its ambient transport
@@ -4016,6 +4032,43 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
 
 \section{Standard form, index, and symmetry classification}
 
+\begin{definition}[Reduced full-support source datum]
+  \label{def:mpu_reduced_full_support_source_datum}
+  \notready
+  % **Scope restriction (source data for the same tensor):** this datum is an
+  % explicit hypothesis, not a construction of a reduced representative.
+  % Documented in docs/paper-gaps/mpu_canonical_form_full_support.tex.
+  \uses{def:mpu,def:mpu_normalized_flattening,def:mpu_transfer_matrix,
+    def:cpsv_cfii,def:mpu_full_active_support,
+    thm:mpu_reduced_cfii_transfer_stabilization,
+    thm:mpu_normalized_transfer_fin_one}
+  Let $\widetilde{\mathcal U}=d^{-1/2}\mathcal U$ be the normalized
+  flattening, and let $E$ be its transfer matrix. A reduced full-support source
+  datum for $\mathcal U$, with physical dimension $d>0$ and positive bond
+  dimension, consists of an integer $J>0$, a positive definite matrix $\rho$
+  with $\tr(\rho)=1$, and
+  $(\Phi\rvert=\operatorname{vec}(\Id_D)^{\mathsf T}$ such that
+  \begin{align}
+    E^J&=\lvert\rho)(\Phi\rvert.
+  \end{align}
+  These data are supplied in one of two ways.
+  \begin{enumerate}
+    \item If $D=1$, take $J=1$ and $\rho=\Id_1$ using
+      Theorem~\ref{thm:mpu_normalized_transfer_fin_one}.
+    \item If $D>1$, choose canonical-form-II data for the normalized
+      flattening of this same tensor, with its active blocks filling the
+      ambient bond space. Theorem~\ref{thm:mpu_reduced_cfii_transfer_stabilization}
+      supplies the fixed pair with $J=D^2-1$.
+  \end{enumerate}
+  For $D>1$, this states the fixed-pair convention in
+  \cite[equations labelled~\texttt{Erightleft} and~\texttt{II\_UTransfer}, and
+  proof of Proposition~III.2(ii)]{Cirac2017MPU}. The $D=1$ branch is the direct
+  one-dimensional specialization. This definition does not assert that an
+  arbitrary representative with $D>1$ admits the required canonical-form-II
+  data and does not replace $\mathcal U$ by another tensor.
+  % Source lines: paper_v2.tex 269--280 and 397--405.
+\end{definition}
+
 \begin{theorem}[Complete source-$u$ network contraction]
   \label{thm:mpu_source_u_complete_network}
   \notready
@@ -4075,17 +4128,18 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
   \label{thm:mpu_source_v_complete_reduced_contraction}
   \notready
   \discussion{6071}
-  \uses{def:mpu,def:mpu_normalized_flattening,def:cpsv_cfii,
-    def:mpu_full_active_support,def:mpu_simple,def:mpu_source_uv,
-    def:mpu_source_v_dressing,thm:mpu_reduced_cfii_transfer_stabilization,
+  % **Scope restriction (reduced full-support source datum):** the source
+  % equivalence labelled vUnitary is planned only for tensors carrying the
+  % datum in Definition~\ref{def:mpu_reduced_full_support_source_datum}.
+  % Documented in docs/paper-gaps/mpu_canonical_form_full_support.tex.
+  \uses{def:mpu_simple,def:mpu_source_uv,def:mpu_source_v_dressing,
+    def:mpu_reduced_full_support_source_datum,
     thm:mpu_supplied_projector_simple2}
-  Let $\mathcal U$ be an MPU tensor with $d>0$ and $D>1$. Choose
-  canonical-form-II data for its normalized flattening whose active blocks
-  fill the ambient bond space. Let $\rho$ and $(\Phi\rvert$ be the normalized
-  fixed pair supplied by
-  Theorem~\ref{thm:mpu_reduced_cfii_transfer_stabilization}, so that
+  Let $\mathcal U$ be an MPU tensor equipped with a reduced full-support
+  source datum. Let $J$, $\rho$, and $(\Phi\rvert$ be its stabilization
+  exponent and normalized fixed pair, so that
   \begin{align}
-    E^{D^2-1}&=\lvert\rho)(\Phi\rvert.
+    E^J&=\lvert\rho)(\Phi\rvert.
   \end{align}
   Compute both source cuts, their ranks $r$ and $\ell$, the source operator
   $v$, and the right source factors $Y_1,Y_2$ from this same tensor
@@ -4103,9 +4157,8 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
   When $\mathcal U$ is simple,
   Theorem~\ref{thm:mpu_supplied_projector_simple2} supplies the displayed
   contraction with this same fixed pair. This is the complete equivalence in
-  \cite[equality labelled~\texttt{vUnitary} in the proof of
-  Theorem~III.8]{Cirac2017MPU}.
-  % Source locator: paper_v2.tex, lines 577--600.
+  \cite[proof of Theorem~III.8]{Cirac2017MPU}.
+  % Source equation label: vUnitary. Source lines: paper_v2.tex 577--600.
 \end{theorem}
 
 \begin{proof}
@@ -4115,7 +4168,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     thm:mpu_source_v_four_u_expansions,
     thm:mpu_source_v_mul_source_y_tensor_entry,
     thm:mpu_source_v_dressed_entries}
-  Insert $E^{D^2-1}=\lvert\rho)(\Phi\rvert$ into the complete network while
+  Insert $E^J=\lvert\rho)(\Phi\rvert$ into the complete network while
   retaining the source factors of $\mathcal U$. Expand both source cuts and
   rotate the second cut. Contract the resulting four-letter expression as one
   closed network to obtain the dressed Gram equation, and reverse the same
@@ -4124,6 +4177,22 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
 
 \begin{lemma}[The source operator $u$ is an isometry]
   \label{lemuisometry}
+  \notready
+  \discussion{5708}
+  \uses{def:mpu_source_uv}
+  For any MPU tensor $\mathcal U$ under the source's standing
+  canonical-form-II convention, let $r$ and $\ell$ be the two source-cut
+  ranks and let $u$ be the source operator. Then
+  \begin{align}
+    u^\dagger u&=\Id.
+  \end{align}
+  Consequently $u$ is an isometry and $r\ell\geq d^2$. This is the
+  unrestricted statement of \cite[Lemma~III.7]{Cirac2017MPU}.
+  % Source lines: paper_v2.tex 545--557.
+\end{lemma}
+
+\begin{lemma}[Admissible source-$u$ isometry]
+  \label{lem:mpu_admissible_source_u_isometry}
   \notready
   \discussion{5708}
   % **Scope restriction (supplied stabilized fixed pair):** this lemma assumes
@@ -4144,7 +4213,9 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
   \begin{align}
     u^\dagger u&=\Id.
   \end{align}
-  Consequently $u$ is an isometry and $r\ell\geq d^2$.
+  Consequently $u$ is an isometry and $r\ell\geq d^2$. This is the
+  reduced-source version of \cite[Lemma~III.7]{Cirac2017MPU}.
+  % Source lines: paper_v2.tex 545--557.
 \end{lemma}
 
 \begin{proof}
@@ -4166,20 +4237,10 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
   \label{ThmFund1}
   \notready
   \discussion{5708}
-  % **Scope restriction (reduced full-support representative and $D>1$):**
-  % source Theorem III.8 is stated under the preceding reduced-representative
-  % convention without these displayed hypotheses. Documented in
-  % docs/paper-gaps/mpu_canonical_form_full_support.tex.
-  \uses{def:mpu,def:mpu_normalized_flattening,def:cpsv_cfii,
-    def:mpu_full_active_support,def:mpu_simple,def:mpu_source_uv,
-    thm:mpu_reduced_cfii_transfer_stabilization}
-  Let $\mathcal U$ be an MPU tensor with $d>0$ and $D>1$. Choose
-  canonical-form-II data for its normalized flattening whose active blocks
-  fill the ambient bond space. Let $\rho$ and $(\Phi\rvert$ be the normalized
-  fixed pair supplied by
-  Theorem~\ref{thm:mpu_reduced_cfii_transfer_stabilization}. Compute the
-  source-cut ranks $r$ and $\ell$ and the source operators $u$ and $v$ from
-  this same tensor $\mathcal U$ using $\rho$. Then the following conditions
+  \uses{lemuisometry,def:mpu_simple,def:mpu_source_uv}
+  Let $\mathcal U$ be an MPU tensor under the source's standing
+  canonical-form-II convention. Let $r$ and $\ell$ be its source-cut ranks,
+  and let $u$ and $v$ be its source operators. Then the following conditions
   are equivalent:
   \begin{enumerate}
     \item $\mathcal U$ is simple;
@@ -4187,15 +4248,48 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     \item $u$ is unitary;
     \item $v$ is unitary.
   \end{enumerate}
+  This is the unrestricted statement of
+  \cite[Theorem~III.8]{Cirac2017MPU}.
+  % Source lines: paper_v2.tex 563--601.
+\end{theorem}
+
+\begin{theorem}[Admissible simple-tensor equivalence theorem]
+  \label{thm:mpu_admissible_simple_tensor_equivalence}
+  \notready
+  \discussion{5708}
+  % **Scope restriction (all positive bond dimensions):** the $D=1$ branch
+  % uses one-dimensional transfer stabilization; the $D>1$ branch uses chosen
+  % reduced full-support canonical-form-II data.
+  % Source Theorem III.8 is stated under the preceding representative
+  % convention without these displayed hypotheses. Documented in
+  % docs/paper-gaps/mpu_canonical_form_full_support.tex.
+  \uses{def:mpu_simple,def:mpu_source_uv,
+    def:mpu_reduced_full_support_source_datum}
+  Let $\mathcal U$ be an MPU tensor equipped with a reduced full-support
+  source datum, and let $\rho$ and $(\Phi\rvert$ be its normalized fixed pair.
+  Compute the source-cut ranks $r$ and $\ell$ and the source operators $u$ and
+  $v$ from this same tensor $\mathcal U$ using $\rho$. Then the following
+  conditions are equivalent:
+  \begin{enumerate}
+    \item $\mathcal U$ is simple;
+    \item $r\ell=d^2$;
+    \item $u$ is unitary;
+    \item $v$ is unitary.
+  \end{enumerate}
+  This is the reduced-source version of
+  \cite[Theorem~III.8]{Cirac2017MPU}.
+  % Source lines: paper_v2.tex 563--601.
 \end{theorem}
 
 \begin{proof}
-  \uses{lemuisometry,thm:mpu_supplied_projector_simple2,
+  \uses{lem:mpu_admissible_source_u_isometry,
+    thm:mpu_supplied_projector_simple2,
     thm:mpu_supplied_witness_overlapping_reblocking,
     thm:mpu_source_v_complete_reduced_contraction,
     thm:mpu_source_uv_two_site_factorization,
     thm:mpu_source_v_dressed_gram_cancel}
-  Lemma~\ref{lemuisometry} gives $u^\dagger u=\Id$ before any of the four
+  Lemma~\ref{lem:mpu_admissible_source_u_isometry} gives
+  $u^\dagger u=\Id$ before any of the four
   conditions is assumed. Thus $u$ is a standing isometry and
   $r\ell\geq d^2$ throughout the proof.
 
@@ -4227,9 +4321,28 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
   \notready
   \discussion{6019}
   \uses{ThmFund1,def:mpu_source_uv}
-  Let $\mathcal U$ be a simple tensor. The standard form of the two-site
-  blocking $\mathcal U_2$ is the depth-two form determined by the source
-  unitaries
+  Let $\mathcal U$ be a simple tensor under the source's standing
+  canonical-form-II convention. Its standard form is the depth-two form of
+  the two-site block $\mathcal U_2$ determined by the source unitaries $u$ and
+  $v$. This is the unrestricted definition of
+  \cite[Definition~III.9]{Cirac2017MPU}.
+  % Source lines: paper_v2.tex 603--622.
+\end{definition}
+
+\begin{definition}[Admissible standard form]
+  \label{def:mpu_admissible_standard_form}
+  \notready
+  \discussion{6019}
+  % **Scope restriction (reduced full-support source datum):** this standard
+  % form uses Theorem~\ref{thm:mpu_admissible_simple_tensor_equivalence} for a
+  % tensor carrying the datum in
+  % Definition~\ref{def:mpu_reduced_full_support_source_datum}.
+  % Documented in docs/paper-gaps/mpu_canonical_form_full_support.tex.
+  \uses{thm:mpu_admissible_simple_tensor_equivalence,def:mpu_source_uv,
+    def:mpu_reduced_full_support_source_datum}
+  Let $\mathcal U$ be a simple tensor equipped with a reduced full-support
+  source datum. The admissible standard form of the two-site blocking
+  $\mathcal U_2$ is the depth-two form determined by the source unitaries
   \begin{align}
     u&\colon\mathbb C^d\otimes\mathbb C^d
       \longrightarrow\mathbb C^\ell\otimes\mathbb C^r,\\
@@ -4240,21 +4353,43 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
   \begin{align}
     U&=v_{23}v_{41}u_{12}u_{34}.
   \end{align}
+  % Source lines: paper_v2.tex 603--622.
 \end{definition}
 
 \begin{theorem}[Fundamental Theorem of MPU]
   \label{FundamentalMPU}
   \notready
   \discussion{6020}
-  \uses{SF,ThmFund1}
-  Let $\mathcal U$ and $\mathcal V$ be simple tensors in standard form, with
+  \uses{SF}
+  Given two simple tensors $\mathcal U$ and $\mathcal V$ with standard forms,
+  they generate the same MPU for every $N$ if and only if there are unitaries
+  $x$, $y$, and $z$ relating the two standard forms by the local gauge equations
+  of \cite[Eqns.~(SFuu) and (SFvv)]{Cirac2017MPU}. This is the unrestricted
+  statement of the source's Fundamental Theorem of MPU.
+  % Source label: FundamentalMPU. Source lines: paper_v2.tex 624--648.
+\end{theorem}
+
+\begin{theorem}[Admissible Fundamental Theorem of MPU]
+  \label{thm:mpu_admissible_fundamental}
+  \notready
+  \discussion{6020}
+  % **Scope restriction (reduced full-support source data):** both tensors
+  % carry the data required by
+  % Definition~\ref{def:mpu_admissible_standard_form}. Documented in
+  % docs/paper-gaps/mpu_canonical_form_full_support.tex.
+  \uses{def:mpu_admissible_standard_form,
+    thm:mpu_admissible_simple_tensor_equivalence,
+    def:mpu_reduced_full_support_source_datum}
+  Let $\mathcal U$ and $\mathcal V$ be simple tensors equipped with reduced
+  full-support source data and written in admissible standard form, with
   source unitaries $(u_{\mathcal U},v_{\mathcal U})$ and
   $(u_{\mathcal V},v_{\mathcal V})$. They generate the same MPU for every
   $N$,
   \begin{align}
     U^{(N)}&=V^{(N)},
   \end{align}
-  if and only if their standard forms are related by the local unitary gauges
+  if and only if their admissible standard forms are related by the local
+  unitary gauges
   of \cite[Eqns.~(SFuu) and (SFvv)]{Cirac2017MPU}: there are unitaries $x$,
   $y$, and $z$ on the three corresponding source and canonical-form-II legs.
   In particular, the source unitaries obey the local relation
@@ -4285,10 +4420,31 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
   \label{def:index}
   \notready
   \discussion{6014}
-  \uses{ThmFund1,thm:mpu_bounded_simple_blocking,
-    thm:mpu_right_rank_bound,thm:mpu_left_rank_bound}
+  \uses{ThmFund1,thm:mpu_bounded_simple_blocking}
   Let $k$ be any blocking length for which $\mathcal U_k$ is simple, and let
-  $r$ and $\ell$ be its right and left source-cut ranks. Define
+  $r$ and $\ell$ be its right and left source-cut ranks. The source index is
+  \begin{align}
+    \operatorname{ind}(\mathcal U)
+      &=\frac12(\log_2 r-\log_2\ell).
+  \end{align}
+  This is the unrestricted definition of
+  \cite[Definition~IV.1]{Cirac2017MPU}.
+  % Source lines: paper_v2.tex 681--688.
+\end{definition}
+
+\begin{definition}[Admissible index]
+  \label{def:mpu_admissible_index}
+  \notready
+  \discussion{6014}
+  % **Scope restriction (admissible simple block):** the index is defined only
+  % from a simple block carrying its own reduced full-support source datum.
+  % Documented in docs/paper-gaps/mpu_canonical_form_full_support.tex.
+  \uses{thm:mpu_admissible_simple_tensor_equivalence,
+    thm:mpu_bounded_simple_blocking,thm:mpu_right_rank_bound,
+    thm:mpu_left_rank_bound,def:mpu_reduced_full_support_source_datum}
+  Let $k$ be a blocking length for which $\mathcal U_k$ is simple and is
+  equipped with a reduced full-support source datum, and let $r$ and $\ell$
+  be its right and left source-cut ranks. Define
   \begin{align}
     \operatorname{ind}(\mathcal U)
       &=\frac12(\log_2 r-\log_2\ell).
@@ -4299,6 +4455,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
       &=\log_2\frac{r}{d^k}
        =-\log_2\frac{\ell}{d^k}.
   \end{align}
+  % Source lines: paper_v2.tex 681--688.
 \end{definition}
 
 \begin{proposition}[Well-definedness of the index]
@@ -4307,12 +4464,38 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
   \discussion{6014}
   \uses{def:index,ThmFund1,thm:mpu_source_cut_rank_blocking,
     thm:mpu_all_later_simple_blockings}
-  The index is independent of the chosen simple blocking. More precisely, if
-  $k\geq k_0$ and both $\mathcal U_{k_0}$ and $\mathcal U_k$ are simple, then
+  The source index is independent of the chosen simple blocking. More
+  precisely, if $k\geq k_0$ and both $\mathcal U_{k_0}$ and $\mathcal U_k$
+  are simple, then
   \begin{align}
     r_k&=d^{k-k_0}r_{k_0},&
     \ell_k&=d^{k-k_0}\ell_{k_0}.
   \end{align}
+  This is the unrestricted statement of
+  \cite[Proposition~IV.2]{Cirac2017MPU}.
+  % Source lines: paper_v2.tex 690--704.
+\end{proposition}
+
+\begin{proposition}[Well-definedness of the admissible index]
+  \label{prop:mpu_admissible_index_well_defined}
+  \notready
+  \discussion{6014}
+  % **Scope restriction (admissible simple blocks):** independence is proved
+  % only between simple blocks carrying their own reduced full-support source
+  % data. Documented in docs/paper-gaps/mpu_canonical_form_full_support.tex.
+  \uses{def:mpu_admissible_index,
+    thm:mpu_admissible_simple_tensor_equivalence,
+    thm:mpu_source_cut_rank_blocking,thm:mpu_all_later_simple_blockings,
+    def:mpu_reduced_full_support_source_datum}
+  The admissible index is independent of the chosen admissible simple
+  blocking. More precisely, if $k\geq k_0$, both $\mathcal U_{k_0}$ and
+  $\mathcal U_k$ are simple, and each is equipped with a reduced full-support
+  source datum, then
+  \begin{align}
+    r_k&=d^{k-k_0}r_{k_0},&
+    \ell_k&=d^{k-k_0}\ell_{k_0}.
+  \end{align}
+  % Source lines: paper_v2.tex 690--704.
 \end{proposition}
 
 \begin{lemma}[Tensor-product additivity]
@@ -4320,25 +4503,85 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
   \notready
   \discussion{6015}
   \uses{def:index,index-well-defined,thm:mpu_tensor_product_source_ranks}
-  For MPU tensors $\mathcal U$ and $\mathcal V$,
+  For MPU tensors under the source's standing canonical-form convention,
   \begin{align}
     \operatorname{ind}(\mathcal U\otimes\mathcal V)
       &=\operatorname{ind}(\mathcal U)+\operatorname{ind}(\mathcal V).
   \end{align}
+  This is the unrestricted tensor-product statement in
+  \cite[Theorem~IV.3(ii)]{Cirac2017MPU}.
+  % Source lines: paper_v2.tex 824--833.
+\end{lemma}
+
+\begin{lemma}[Admissible tensor-product additivity]
+  \label{lem:mpu_admissible_index_tensor}
+  \notready
+  \discussion{6015}
+  % **Scope restriction (common admissible block):** all three indices are
+  % computed from actual simple blocks carrying their own source data.
+  % Documented in docs/paper-gaps/mpu_canonical_form_full_support.tex.
+  \uses{def:mpu_admissible_index,
+    prop:mpu_admissible_index_well_defined,
+    thm:mpu_tensor_product_source_ranks,
+    def:mpu_reduced_full_support_source_datum}
+  Suppose there is one positive blocking length $k$ such that
+  $\mathcal U_k$, $\mathcal V_k$, and
+  $(\mathcal U\otimes\mathcal V)_k$ are simple and each carries its own
+  reduced full-support source datum. Define all three indices from these
+  blocks. Then
+  \begin{align}
+    \operatorname{ind}(\mathcal U\otimes\mathcal V)
+      &=\operatorname{ind}(\mathcal U)+\operatorname{ind}(\mathcal V).
+  \end{align}
+  This is the common-block reduced-source version of
+  \cite[Theorem~IV.3(ii)]{Cirac2017MPU}.
+  % Source lines: paper_v2.tex 824--833.
 \end{lemma}
 
 \begin{lemma}[Composition additivity]
   \label{lem:mpu_index_composition}
   \notready
   \discussion{6016}
-  \uses{SF,def:index,index-well-defined,
-    thm:mpu_source_cut_rank_blocking}
-  If $\mathcal W$ generates the composition of the MPUs generated by
-  $\mathcal U$ and $\mathcal U'$, then
+  \uses{SF,def:index,index-well-defined}
+  Let $\mathcal W$ generate the composition of the MPUs generated by
+  $\mathcal U$ and $\mathcal U'$. Under the source's standing canonical-form
+  convention,
   \begin{align}
     \operatorname{ind}(\mathcal W)
       &=\operatorname{ind}(\mathcal U)+\operatorname{ind}(\mathcal U').
   \end{align}
+  This is the unrestricted composition statement in
+  \cite[Theorem~IV.3(ii)]{Cirac2017MPU}.
+  % Source lines: paper_v2.tex 833--845.
+\end{lemma}
+
+\begin{lemma}[Admissible composition additivity]
+  \label{lem:mpu_admissible_index_composition}
+  \notready
+  \discussion{6016}
+  % **Scope restriction (six admissible blocks):** every actual block used in
+  % the source rank computation carries its own source datum. Documented in
+  % docs/paper-gaps/mpu_canonical_form_full_support.tex.
+  \uses{def:mpu_admissible_standard_form,def:mpu_admissible_index,
+    prop:mpu_admissible_index_well_defined,thm:mpu_source_cut_rank_blocking,
+    def:mpu_reduced_full_support_source_datum}
+  Suppose there is a positive integer $k$ such that
+  $\mathcal U_k$, $\mathcal U'_k$, and the composition tensor
+  $\mathcal W_k$ are simple and each carries its own reduced full-support
+  source datum. Suppose in addition that $\mathcal U_{2k}$,
+  $\mathcal U'_{2k}$, and $\mathcal W_{4k}$ are simple and each carries its
+  own reduced full-support source datum. Define the three indices initially
+  from $\mathcal U_k$, $\mathcal U'_k$, and $\mathcal W_k$; the supplied data
+  at $2k$ and $4k$ make the later comparison admissible. If $\mathcal W$
+  generates the composition of the MPUs generated by $\mathcal U$ and
+  $\mathcal U'$, then
+  \begin{align}
+    \operatorname{ind}(\mathcal W)
+      &=\operatorname{ind}(\mathcal U)+\operatorname{ind}(\mathcal U').
+  \end{align}
+  This is the six-block reduced-source version of
+  \cite[Theorem~IV.3(ii)]{Cirac2017MPU}.
+  % Source lines: paper_v2.tex 833--845.
 \end{lemma}
 
 \begin{definition}[MPU canonical form]
@@ -4412,26 +4655,92 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
   relation for unequal raw bond dimensions.
 \end{definition}
 
+\begin{definition}[Admissible equivalence and path datum]
+  \label{def:mpu_admissible_equivalence_datum}
+  \notready
+  % **Scope restriction (no existence or preservation theorem):** this datum
+  % records every reduced source hypothesis needed along a chosen path. It does
+  % not assert preservation under blocking, ancillas, products, composition, or
+  % continuous variation. Documented in
+  % docs/paper-gaps/mpu_canonical_form_full_support.tex.
+  \uses{def:strictly-equivalent-tensors,def:equivalent-tensors,
+    def:mpu_reduced_full_support_source_datum}
+  An admissible strict-equivalence datum for a path
+  $[0,1]\ni p\mapsto\mathcal W(p)$ consists of a common positive blocking
+  length $m$ such that the actual blocked path tensor $\mathcal W(p)_m$ is
+  simple and carries a reduced full-support source datum for every $p$. The
+  blocked tensors and their source data vary continuously with $p$, after
+  fixed identifications of the finite-dimensional spaces involved. No
+  equivalent or reduced representative may replace $\mathcal W(p)_m$. In
+  particular, the actual blocked endpoint tensors carry their own source data.
+
+  When the path is used under a specified symmetry $\mathcal S$, the datum also
+  includes continuously varying reduced full-support source data for the fixed
+  family of comparison paths
+  \begin{align}
+    \overline{\mathcal W(p)_m},\qquad
+    \mathcal W(p)_m^\sharp,\qquad
+    \mathcal W(p)_m^{\mathsf T},\qquad
+    \mathcal S[\mathcal W(p)_m].
+  \end{align}
+  Every tensor in this family is simple. This requirement is part of the datum
+  independently of which comparisons a later proof uses; no preservation under
+  conjugation, physical adjoint, transposition, or $\mathcal S$ is assumed.
+
+  Two tensors are admissibly strictly equivalent if their strict equivalence
+  is witnessed by such a path. They are admissibly equivalent if the blocked,
+  ancilla-enlarged endpoints in Definition~\ref{def:equivalent-tensors} are
+  joined by an admissible strict-equivalence path. The source arguments
+  motivating these additional path hypotheses are Proposition~IV.2,
+  Theorem~IV.3 and its following corollary, and the lemma following the
+  symmetry-equivalence definitions in \cite{Cirac2017MPU}; the datum itself is
+  introduced here and has no source-labelled counterpart.
+  % Source lines: paper_v2.tex 733--910 and 1366--1380.
+\end{definition}
+
 \begin{proposition}[Constancy of the source ranks]
   \label{prop:continuity-index}
   \notready
   \discussion{6022}
-  \uses{ThmFund1,thm:mpu_bounded_simple_blocking,
-    thm:mpu_reduced_cfii_transfer_stabilization}
+  \uses{def:mpu_canonical_form,ThmFund1}
   Let $[0,1]\ni x\mapsto\mathcal W(x)$ be a continuous path of tensors
-  generating MPUs, without requiring the path to be in canonical form. The
-  ranks $r(x)$ and $\ell(x)$ of the two source cuts of the associated simple
-  canonical-form tensors are constant on $[0,1]$.
+  generating MPUs, without requiring the path to be in canonical form. For
+  each $x$, take the canonical form and the two source-cut ranks $r(x)$ and
+  $\ell(x)$ of its associated simple tensor. Then $r(x)$ and $\ell(x)$ are
+  constant on $[0,1]$.
+  % Source lines: paper_v2.tex 733--818.
+\end{proposition}
+
+\begin{proposition}[Admissible constancy of the source ranks]
+  \label{prop:mpu_admissible_continuity_index}
+  \notready
+  \discussion{6022}
+  % **Scope restriction (pathwise reduced source data):** every associated
+  % simple tensor must carry the datum required by
+  % Theorem~\ref{thm:mpu_admissible_simple_tensor_equivalence}.
+  % Documented in docs/paper-gaps/mpu_canonical_form_full_support.tex.
+  \uses{thm:mpu_admissible_simple_tensor_equivalence,
+    thm:mpu_bounded_simple_blocking,
+    def:mpu_reduced_full_support_source_datum,
+    def:mpu_admissible_equivalence_datum}
+  Let $[0,1]\ni x\mapsto\mathcal W(x)$ be a continuous path of tensors
+  generating MPUs, without requiring the path to be in canonical form.
+  Suppose that the path carries an admissible equivalence datum with blocking
+  length $m$. Then the ranks $r(x)$ and $\ell(x)$ of the actual blocked path
+  tensors $\mathcal W(x)_m$ are constant on $[0,1]$.
+  % Source lines: paper_v2.tex 733--818.
 \end{proposition}
 
 \begin{theorem}[Index Theorem]
   \label{IndexTh}
   \notready
   \discussion{6023}
-  \uses{index-well-defined,lem:mpu_index_tensor,
-    lem:mpu_index_composition,def:equivalent-tensors,
-    prop:continuity-index,SF,FundamentalMPU}
-  The MPU index has the following properties.
+  \uses{def:index,index-well-defined,lem:mpu_index_tensor,
+    lem:mpu_index_composition,prop:continuity-index,
+    def:equivalent-tensors}
+  For MPU tensors under the source's standing canonical-form convention, take
+  the index defined from any simple blocking. This index has the following
+  properties.
   \begin{enumerate}
     \item It does not change under blocking.
     \item It is additive under tensor products and composition.
@@ -4439,18 +4748,86 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     \item Two MPU tensors have the same index if and only if they are
       equivalent.
   \end{enumerate}
+  This is the unrestricted statement of
+  \cite[Theorem~IV.3]{Cirac2017MPU}.
+  % Source lines: paper_v2.tex 824--865.
+\end{theorem}
+
+\begin{theorem}[Admissible Index Theorem]
+  \label{thm:mpu_admissible_index}
+  \notready
+  \discussion{6023}
+  % **Scope restriction (admissible tensors and operations):** every simple
+  % block and standard form used below carries reduced full-support source
+  % data. Documented in docs/paper-gaps/mpu_canonical_form_full_support.tex.
+  \uses{prop:mpu_admissible_index_well_defined,
+    lem:mpu_admissible_index_tensor,
+    lem:mpu_admissible_index_composition,def:equivalent-tensors,
+    def:mpu_admissible_equivalence_datum,prop:mpu_admissible_continuity_index,
+    def:mpu_admissible_standard_form,
+    thm:mpu_admissible_fundamental,
+    def:mpu_reduced_full_support_source_datum}
+  Assume the following operation-specific admissibility hypotheses. Every pair
+  of simple blockings compared for blocking independence carries reduced
+  full-support source data. For a tensor product $\mathcal U\otimes\mathcal V$,
+  there is one positive length $k$ such that $\mathcal U_k$, $\mathcal V_k$,
+  and $(\mathcal U\otimes\mathcal V)_k$ are simple and carry their own data.
+  For a composition tensor $\mathcal W$ of $\mathcal U$ and $\mathcal U'$, there
+  is one positive length $k$ such that
+  \begin{align}
+    \mathcal U_k,\quad \mathcal U'_k,\quad \mathcal W_k,\quad
+    \mathcal U_{2k},\quad \mathcal U'_{2k},\quad \mathcal W_{4k}
+  \end{align}
+  are simple and carry their own data. Continuous-deformation and equivalence
+  claims use the path data of
+  Definition~\ref{def:mpu_admissible_equivalence_datum}. Under these
+  hypotheses, the MPU index has the following properties.
+  \begin{enumerate}
+    \item It does not change under blocking.
+    \item It is additive under tensor products and composition.
+    \item It is constant under continuous deformations through MPU tensors.
+    \item Admissibly equivalent MPU tensors have the same index. Conversely,
+      tensors with the same index are admissibly equivalent whenever the
+      standard-form interpolation is supplied with an admissible path datum.
+  \end{enumerate}
+  These are the conclusions of \cite[Theorem~IV.3]{Cirac2017MPU}, restricted
+  to the explicit admissibility hypotheses above.
+  % Source lines: paper_v2.tex 824--865.
 \end{theorem}
 
 \begin{corollary}[Continuous choice of standard form]
   \label{coruvSF}
   \notready
   \discussion{6024}
-  \uses{prop:continuity-index,IndexTh,SF,ThmFund1}
-  For every continuous path $\mathcal U(p)$ of MPU tensors, not necessarily
-  in canonical form, there is an integer $k_0\leq D^4$ and continuous paths
-  of unitaries $u(p)$ and $v(p)$ such that the MPU
+  \uses{prop:continuity-index,IndexTh,SF}
+  For every continuous path $p\mapsto\mathcal U(p)$ of MPU tensors, not
+  necessarily in canonical form, there are an integer $k_0\leq D^4$ and
+  continuous paths of unitaries $u(p)$ and $v(p)$ such that
+  $U^{(2k_0N)}(p)$ has standard form given by $u(p)$ and $v(p)$.
+  % Source lines: paper_v2.tex 867--910.
+\end{corollary}
+
+\begin{corollary}[Admissible continuous choice of standard form]
+  \label{cor:mpu_admissible_continuous_standard_form}
+  \notready
+  \discussion{6024}
+  % **Scope restriction (continuous admissible standard forms):** the chosen
+  % simple blocks carry reduced full-support source data varying continuously
+  % along the path. Documented in
+  % docs/paper-gaps/mpu_canonical_form_full_support.tex.
+  \uses{prop:mpu_admissible_continuity_index,thm:mpu_admissible_index,
+    def:mpu_admissible_standard_form,
+    thm:mpu_admissible_simple_tensor_equivalence,
+    def:mpu_reduced_full_support_source_datum,
+    def:mpu_admissible_equivalence_datum}
+  Let $k_0$ be the common blocking length in an admissible equivalence
+  datum for a continuous path $\mathcal U(p)$ of MPU tensors, and suppose that
+  this supplied length satisfies $k_0\leq D^4$. Then there are continuous
+  paths of unitaries $u(p)$ and $v(p)$ such that the MPU
   $U^{(2k_0N)}(p)$ has standard form given by $u(p)$ and $v(p)$ for every
-  $p\in[0,1]$.
+  $p\in[0,1]$. This is the reduced-source version of
+  \cite[Corollary following Theorem~IV.3]{Cirac2017MPU}.
+  % Source lines: paper_v2.tex 867--910.
 \end{corollary}
 
 \subsection{Local characterization of symmetries}
@@ -4460,13 +4837,41 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
   \notready
   \discussion{5713}
   \uses{FundamentalMPU,SF}
-  The MPU generated by a tensor in standard form is invariant under complex
-  conjugation if and only if there are unitaries $x$ and $y$ such that either
+  An MPU in standard form is invariant under complex conjugation if and only
+  if there are unitaries $x$ and $y$ such that either
   $x=x^T$ and $y=y^T$, or $x=-x^T$ and $y=-y^T$, and
   \begin{align}
     \overline u&=(x\otimes y)u,&
     \overline v&=v(y^\dagger\otimes x^\dagger).
   \end{align}
+  % Source lines: paper_v2.tex 1008--1039.
+\end{proposition}
+
+\begin{proposition}[Admissible conjugation symmetry]
+  \label{prop:mpu_admissible_conjugation_symmetry}
+  \notready
+  \discussion{5713}
+  % **Scope restriction (conjugate comparison tensor):** both standard-form
+  % tensors compared by Theorem~\ref{thm:mpu_admissible_fundamental} carry
+  % reduced full-support
+  % source data. Documented in
+  % docs/paper-gaps/mpu_canonical_form_full_support.tex.
+  \uses{thm:mpu_admissible_fundamental,
+    def:mpu_admissible_standard_form,
+    def:mpu_reduced_full_support_source_datum}
+  Let a tensor and its conjugate comparison tensor both be equipped with
+  reduced full-support source data and written in admissible standard form.
+  The generated
+  MPU is invariant under complex conjugation if and only if there are
+  unitaries $x$ and $y$ such that either
+  $x=x^T$ and $y=y^T$, or $x=-x^T$ and $y=-y^T$, and
+  \begin{align}
+    \overline u&=(x\otimes y)u,&
+    \overline v&=v(y^\dagger\otimes x^\dagger).
+  \end{align}
+  This is the reduced-source version of the conjugation characterization in
+  \cite[Proposition~V.1]{Cirac2017MPU}.
+  % Source lines: paper_v2.tex 1008--1039.
 \end{proposition}
 
 \begin{lemma}[Normal form of symmetric and skew-symmetric unitaries]
@@ -4481,6 +4886,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
   In the symmetric case, $\widetilde\Lambda$ is real and symmetric. In the
   skew-symmetric case, it is real and skew-symmetric. In both cases,
   $\det(\widetilde\Lambda)=1$.
+  % Source lines: paper_v2.tex 1041--1084.
 \end{lemma}
 
 \begin{proposition}[Orthogonal and symplectic standard forms]
@@ -4489,6 +4895,37 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
   \discussion{5713}
   \uses{prop1conj,lemma:conjclass-normalform-continuous,FundamentalMPU}
   Let an MPU in standard form be invariant under complex conjugation. Its
+  standard-form unitaries can be chosen in exactly one of the following two
+  cases. In Case I,
+  \begin{align}
+    \overline{u'}&=u',&\overline{v'}&=v',
+  \end{align}
+  uniquely up to local orthogonal transformations. In Case II,
+  \begin{align}
+    \overline{u'}&=(\Sigma_\ell\otimes\Sigma_r)u',&
+    \overline{v'}&=v'(\Sigma_r\otimes\Sigma_\ell),
+  \end{align}
+  uniquely up to local symplectic transformations, where
+  $\Sigma_x=\Id_{x/2}\otimes\left(\begin{smallmatrix}0&1\\-1&0\end{smallmatrix}\right)$.
+  Case II can occur only when $r$ and $\ell$ are even.
+  % Source lines: paper_v2.tex 1094--1163.
+\end{proposition}
+
+\begin{proposition}[Admissible orthogonal and symplectic standard forms]
+  \label{prop:mpu_admissible_conjugation_standard_forms}
+  \notready
+  \discussion{5713}
+  % **Scope restriction (standard-form comparisons):** every alternative
+  % standard-form tensor compared by the fundamental theorem carries its own
+  % reduced full-support source datum. Documented in
+  % docs/paper-gaps/mpu_canonical_form_full_support.tex.
+  \uses{prop:mpu_admissible_conjugation_symmetry,lemma:conjclass-normalform-continuous,
+    thm:mpu_admissible_fundamental,
+    def:mpu_reduced_full_support_source_datum}
+  Let an MPU in admissible standard form be invariant under complex
+  conjugation, and
+  suppose every standard-form tensor compared below carries reduced
+  full-support source data. Its
   standard-form unitaries can be chosen in exactly one of the following two
   cases. In Case I,
   \begin{align}
@@ -4507,6 +4944,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
   The choice is unique up to local transformations $S_x$ satisfying
   $S_x^T\Sigma_xS_x=\Sigma_x$. Case II can occur only when $r$ and $\ell$
   are even.
+  % Source lines: paper_v2.tex 1094--1163.
 \end{proposition}
 
 \begin{corollary}[Reduction of the symplectic case to orthogonal unitaries]
@@ -4523,15 +4961,36 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
   \begin{align}
     R&=\frac{1-i}{2}[\Id_4+i(Y\otimes Y)].
   \end{align}
+  % Source lines: paper_v2.tex 1165--1185.
+\end{corollary}
+
+\begin{corollary}[Admissible reduction of the symplectic case to orthogonal unitaries]
+  \label{cor:mpu_admissible_symplectic_to_orthogonal}
+  \notready
+  \discussion{5713}
+  % **Scope restriction (admissible standard form):** Case II refers to the
+  % source-data-restricted standard form of Proposition~\ref{prop:mpu_admissible_conjugation_standard_forms}.
+  % Documented in docs/paper-gaps/mpu_canonical_form_full_support.tex.
+  \uses{prop:mpu_admissible_conjugation_standard_forms,def:mpu_reduced_full_support_source_datum}
+  In the admissible Case II of Proposition~\ref{prop:mpu_admissible_conjugation_standard_forms}, one can write
+  \begin{align}
+    u'&=(\Id_{r\ell/4}\otimes R)\widetilde u,&
+    v'&=\widetilde v(\Id_{r\ell/4}\otimes R),
+  \end{align}
+  where $\widetilde u$ and $\widetilde v$ are orthogonal and
+  \begin{align}
+    R&=\frac{1-i}{2}[\Id_4+i(Y\otimes Y)].
+  \end{align}
+  % Source lines: paper_v2.tex 1165--1185.
 \end{corollary}
 
 \begin{proposition}[Local characterization of time reversal]
   \label{PropChiral}
   \notready
   \discussion{5714}
-  \uses{FundamentalMPU,IndexTh,SF}
-  Let an MPU of index zero be in standard form, and write its one-site
-  physical space as $\mathbb C^{d_0}\otimes\mathbb C^{d_0}$. It satisfies
+  \uses{FundamentalMPU,SF}
+  Let an MPU be in standard form, with one-site physical space
+  $\mathbb C^{d_0}\otimes\mathbb C^{d_0}$. It satisfies
   $U^{(N)}=U^{(N)\dagger}$ for every even $N$ if and only if there is a
   unitary $x$ such that
   \begin{align}
@@ -4539,15 +4998,66 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
       &=\pm(x_{12}\otimes x_{34}^\dagger)
         (\Id_1\otimes v_{23}^\dagger\otimes\Id_4).
   \end{align}
+  % Source lines: paper_v2.tex 1201--1252.
 \end{proposition}
+
+\begin{proposition}[Admissible local characterization of time reversal]
+  \label{prop:mpu_admissible_local_time_reversal}
+  \notready
+  \discussion{5714}
+  % **Scope restriction (two-site blocked comparison):** the tensor obtained by
+  % blocking two sites, and the adjoint comparison tensor to which the
+  % fundamental theorem is applied, carry reduced full-support source data.
+  % No preservation under blocking is asserted. Documented in
+  % docs/paper-gaps/mpu_canonical_form_full_support.tex.
+  \uses{thm:mpu_admissible_fundamental,
+    prop:mpu_admissible_index_well_defined,def:mpu_admissible_index,
+    def:mpu_admissible_standard_form,
+    def:mpu_reduced_full_support_source_datum}
+  Let an MPU be in admissible standard form. Suppose its one-site tensor
+  $\mathcal U$, its actual two-site block $\mathcal U_2$, and the
+  physical-adjoint comparison tensor $\mathcal U_2^\sharp$ are simple and each
+  carries its own reduced full-support source datum. Write the one-site
+  physical space as $\mathbb C^{d_0}\otimes\mathbb C^{d_0}$. Time-reversal
+  symmetry then forces $\operatorname{ind}(\mathcal U)=0$. Under these
+  hypotheses, $U^{(N)}=U^{(N)\dagger}$ for every even $N$ if and only if there is a
+  unitary $x$ such that
+  \begin{align}
+    (\Id_1\otimes v_{23}\otimes\Id_4)(u_{12}\otimes u_{34})
+      &=\pm(x_{12}\otimes x_{34}^\dagger)
+        (\Id_1\otimes v_{23}^\dagger\otimes\Id_4).
+  \end{align}
+  % Source lines: paper_v2.tex 1201--1252.
+\end{proposition}
+
+\begin{proof}
+  \uses{thm:mpu_admissible_fundamental,
+    prop:mpu_admissible_index_well_defined,def:mpu_admissible_index}
+  Under time reversal, $\mathcal U_2$ and $\mathcal U_2^\sharp$ generate the
+  same MPU. The admissible fundamental theorem identifies their source spaces,
+  so their corresponding source-cut ranks agree. Physical adjunction exchanges
+  the two cuts. Hence
+  \begin{align}
+    r(\mathcal U_2)
+      &=r(\mathcal U_2^\sharp)
+       =\ell(\mathcal U_2).
+  \end{align}
+  Definition~\ref{def:mpu_admissible_index} therefore gives
+  $\operatorname{ind}(\mathcal U_2)=0$, and blocking independence gives
+  $\operatorname{ind}(\mathcal U)=0$. Apply the admissible fundamental theorem
+  to the supplied standard forms of $\mathcal U_2$ and
+  $\mathcal U_2^\sharp$ and follow the source proof. The converse follows by
+  contracting the displayed local relation around every even periodic chain.
+  % Source lines: paper_v2.tex 1201--1252.
+\end{proof}
 
 \begin{proposition}[Local characterization of transposition]
   \label{prop:local-char-transposition}
   \notready
   \discussion{5714}
-  \uses{FundamentalMPU,def:index,SF}
-  Let an MPU of index zero be in standard form, and write its one-site
-  physical space as $\mathbb C^{d_0}\otimes\mathbb C^{d_0}$. It satisfies
+  \uses{FundamentalMPU,SF}
+  Let an MPU be in standard form, with one-site physical space
+  $\mathbb C^{d_0}\otimes\mathbb C^{d_0}$. It satisfies
   $U^{(N)}=U^{(N)T}$ for every even $N$ if and only if there are a unitary
   $x$ and a phase $e^{i\phi}$ such that
   \begin{align}
@@ -4555,7 +5065,59 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
       &=e^{i\phi}(x_{12}\otimes x_{34}^T)
         (\Id_1\otimes v_{23}^T\otimes\Id_4).
   \end{align}
+  % Source lines: paper_v2.tex 1257--1288.
 \end{proposition}
+
+\begin{proposition}[Admissible local characterization of transposition]
+  \label{prop:mpu_admissible_local_transposition}
+  \notready
+  \discussion{5714}
+  % **Scope restriction (two-site blocked comparison):** the tensor obtained by
+  % blocking two sites, and the transposed comparison tensor to which the
+  % fundamental theorem is applied, carry reduced full-support source data.
+  % No preservation under blocking is asserted. Documented in
+  % docs/paper-gaps/mpu_canonical_form_full_support.tex.
+  \uses{thm:mpu_admissible_fundamental,
+    prop:mpu_admissible_index_well_defined,def:mpu_admissible_index,
+    def:mpu_admissible_standard_form,
+    def:mpu_reduced_full_support_source_datum}
+  Let an MPU be in admissible standard form. Suppose its one-site tensor
+  $\mathcal U$, its actual two-site block $\mathcal U_2$, and the transposed
+  comparison tensor $\mathcal U_2^{\mathsf T}$ are simple and each carries its
+  own reduced full-support source datum. Write the one-site physical space as
+  $\mathbb C^{d_0}\otimes\mathbb C^{d_0}$. Transposition symmetry then forces
+  $\operatorname{ind}(\mathcal U)=0$. Under these hypotheses,
+  $U^{(N)}=U^{(N)T}$ for every even $N$ if and only if there are a unitary
+  $x$ and a phase $e^{i\phi}$ such that
+  \begin{align}
+    (\Id_1\otimes v_{23}\otimes\Id_4)(u_{12}\otimes u_{34})
+      &=e^{i\phi}(x_{12}\otimes x_{34}^T)
+        (\Id_1\otimes v_{23}^T\otimes\Id_4).
+  \end{align}
+  % Source lines: paper_v2.tex 1257--1288.
+\end{proposition}
+
+\begin{proof}
+  \uses{thm:mpu_admissible_fundamental,
+    prop:mpu_admissible_index_well_defined,def:mpu_admissible_index}
+  Under transposition, $\mathcal U_2$ and $\mathcal U_2^{\mathsf T}$ generate
+  the same MPU. The admissible fundamental theorem identifies their source
+  spaces, so their corresponding source-cut ranks agree. Transposition
+  exchanges the two cuts. Hence
+  \begin{align}
+    r(\mathcal U_2)
+      &=r(\mathcal U_2^{\mathsf T})
+       =\ell(\mathcal U_2).
+  \end{align}
+  Thus $\operatorname{ind}(\mathcal U_2)=0$ by
+  Definition~\ref{def:mpu_admissible_index}, and blocking independence gives
+  $\operatorname{ind}(\mathcal U)=0$. Apply the admissible fundamental theorem
+  to the supplied standard forms of $\mathcal U_2$ and
+  $\mathcal U_2^{\mathsf T}$ and repeat the time-reversal argument, retaining
+  the unrestricted phase $e^{i\phi}$. The converse follows by contracting the
+  local relation around every even periodic chain.
+  % Source lines: paper_v2.tex 1257--1288.
+\end{proof}
 
 \subsection{Equivalence under symmetries}
 
@@ -4564,6 +5126,26 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
   \notready
   \discussion{6017}
   \uses{def:strictly-equivalent-tensors}
+  % **Local fix:** paper_v2.tex 1345--1353 repeats the symmetry-transformed
+  % operator on the right-hand side. Invariance requires the original MPU.
+  % Documented in docs/paper-gaps/mpu_canonical_form_full_support.tex.
+  Two tensors $\mathcal U$ and $\mathcal V$ are strictly equivalent under a
+  symmetry $\mathcal S$ if they have the same physical dimension and there is
+  a continuous path $\mathcal W(p)$ of MPU tensors from $\mathcal U$ to
+  $\mathcal V$, not necessarily in canonical form, such that
+  \begin{align}
+    \mathcal S[W^{(N)}(p)]&=W^{(N)}(p)
+  \end{align}
+  for every $p\in[0,1]$ and every chain length under consideration.
+  % Source lines: paper_v2.tex 1340--1354.
+\end{definition}
+
+\begin{definition}[Admissible strict equivalence under a symmetry]
+  \label{def:mpu_admissible_strict_symmetry_equivalence}
+  \notready
+  \discussion{6017}
+  \uses{def:strictly-equivalent-tensors,
+    def:mpu_admissible_equivalence_datum}
   Two tensors $\mathcal U$ and $\mathcal V$ are strictly equivalent under a
   symmetry $\mathcal S$ if they have the same physical dimension and there is
   a continuous path $\mathcal W(p)$ of MPU tensors from $\mathcal U$ to
@@ -4572,7 +5154,12 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     \mathcal S[W^{(N)}(p)]&=W^{(N)}(p)
   \end{align}
   for every $p\in[0,1]$ and every chain length $N$ under consideration. The
-  path need not be in canonical form.
+  path need not be in canonical form. The equivalence is admissible if its
+  witnessing path carries an admissible equivalence datum for the actual
+  blocked path tensor and the fixed conjugate, physical-adjoint, transposed,
+  and $\mathcal S$-image comparison paths, and if the common blocking length
+  $m$ of that datum satisfies $m\leq D^4$.
+  % Source lines: paper_v2.tex 1340--1354.
 \end{definition}
 
 \begin{definition}[Equivalence under a symmetry]
@@ -4584,8 +5171,27 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
   $d_b$. They are equivalent under a symmetry $\mathcal S$ if there are a
   positive blocking length $k$ and coprime positive ancilla dimensions
   $p_a,p_b$ with $p_ad_a=p_bd_b$ such that $(\mathcal U^{(p_a)})_k$ and
+  $(\mathcal V^{(p_b)})_k$ are strictly equivalent under $\mathcal S$.
+  % Source lines: paper_v2.tex 1356--1364.
+\end{definition}
+
+\begin{definition}[Admissible equivalence under a symmetry]
+  \label{def:mpu_admissible_symmetry_equivalence}
+  \notready
+  \discussion{6017}
+  \uses{def:mpu_admissible_strict_symmetry_equivalence,def:equivalent-tensors,
+    def:mpu_admissible_equivalence_datum}
+  Let $\mathcal U$ and $\mathcal V$ have physical dimensions $d_a$ and
+  $d_b$. They are equivalent under a symmetry $\mathcal S$ if there are a
+  positive blocking length $k$ and coprime positive ancilla dimensions
+  $p_a,p_b$ with $p_ad_a=p_bd_b$ such that $(\mathcal U^{(p_a)})_k$ and
   $(\mathcal V^{(p_b)})_k$ are strictly equivalent under $\mathcal S$. Thus
-  the ancillas are attached before the common blocking.
+  the ancillas are attached before the common blocking. The equivalence is
+  admissible if this strict-equivalence witness carries an admissible
+  equivalence datum for the actual blocked path and the fixed conjugate,
+  physical-adjoint, transposed, and $\mathcal S$-image comparison paths, with
+  common blocking length at most $D^4$.
+  % Source lines: paper_v2.tex 1356--1364.
 \end{definition}
 
 \begin{lemma}[Standard-form path criterion]
@@ -4593,80 +5199,372 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
   \notready
   \discussion{6017}
   \uses{def:strictly-equivalent-symmetry,coruvSF,FundamentalMPU}
-  Two MPUs $U_1^{(N)}$ and $U_2^{(N)}$ described by simple tensors are
-  strictly equivalent under $\mathcal S$ if and only if there are continuous
-  families of unitaries $\widetilde u(p)$ and $\widetilde v(p)$ whose
-  endpoints generate $U_1^{(N)}$ and $U_2^{(N)}$, respectively, and whose
-  generated MPU is invariant under $\mathcal S$ for every $p\in[0,1]$.
+  Two MPUs described by simple tensors are strictly equivalent under
+  $\mathcal S$ if and only if their standard-form unitaries are joined by
+  continuous families $\widetilde u(p)$ and $\widetilde v(p)$ whose generated
+  MPU is invariant under $\mathcal S$ for every $p\in[0,1]$.
+  % Source lines: paper_v2.tex 1366--1380.
+\end{lemma}
+
+\begin{lemma}[Admissible standard-form path criterion]
+  \label{lem:mpu_admissible_symmetry_path_criterion}
+  \notready
+  \discussion{6017}
+  % **Scope restriction (admissible symmetry path):** the strict-equivalence
+  % witness carries the path datum of
+  % Definition~\ref{def:mpu_admissible_equivalence_datum}. Documented in
+  % docs/paper-gaps/mpu_canonical_form_full_support.tex.
+  \uses{def:mpu_admissible_strict_symmetry_equivalence,cor:mpu_admissible_continuous_standard_form,
+    thm:mpu_admissible_fundamental,
+    def:mpu_admissible_equivalence_datum}
+  Fix a positive integer $m\leq D^4$. The actual $m$-site blocked endpoint
+  MPUs $U_1^{(mN)}$ and $U_2^{(mN)}$ are admissibly strictly equivalent under
+  $\mathcal S$ if and only if there are continuous families of unitaries
+  $\widetilde u(p)$ and $\widetilde v(p)$ whose endpoints generate
+  $U_1^{(mN)}$ and $U_2^{(mN)}$, whose generated MPU is invariant under
+  $\mathcal S$ for every $p\in[0,1]$, and whose tensor path and fixed
+  conjugate, physical-adjoint, transposed, and $\mathcal S$-image comparison
+  paths carry continuously varying reduced full-support source data. These
+  families arise from the actual blocked path $\mathcal W(p)_m$ in an
+  admissible equivalence datum of common length $m$; the blocked path itself is
+  the length-one admissible witness for the displayed endpoint families. When
+  $m>1$, this criterion does not assert strict equivalence of the unblocked
+  families $U_1^{(N)}$ and $U_2^{(N)}$. This is the reduced-source form of
+  \cite[Lemma following the symmetry-equivalence definitions]{Cirac2017MPU}.
+  % Source lines: paper_v2.tex 1366--1380.
 \end{lemma}
 
 \begin{theorem}[Conjugation symmetry when one source rank is odd]
   \label{conjphs}
   \notready
   \discussion{5713}
-  \uses{corconj,lem:equivalent-symmetry}
-  Suppose that either $r$ or $\ell$ is odd. Two MPUs $\mathcal U_1$ and
-  $\mathcal U_2$ are strictly equivalent under conjugation symmetry if and
-  only if
+  \uses{prop1conj,corconj,lem:equivalent-symmetry}
+  Suppose that either $r$ or $\ell$ is odd. Two conjugation-invariant MPUs
+  $\mathcal U_1$ and $\mathcal U_2$ are strictly equivalent under
+  conjugation if and only if
   \begin{align}
     \det(u_1v_1)&=\det(u_2v_2).
   \end{align}
+  % Source lines: paper_v2.tex 1401--1446.
+\end{theorem}
+
+\begin{theorem}[Admissible conjugation symmetry when one source rank is odd]
+  \label{thm:mpu_admissible_conjugation_odd_rank}
+  \notready
+  \discussion{5713}
+  % **Scope restriction (endpoints and admissible symmetry path):** each
+  % original endpoint and its conjugate comparison carry source data, and
+  % equivalence means admissible strict equivalence in
+  % Definition~\ref{def:mpu_admissible_equivalence_datum}. Documented in
+  % docs/paper-gaps/mpu_canonical_form_full_support.tex.
+  \uses{prop:mpu_admissible_conjugation_standard_forms,lem:mpu_admissible_symmetry_path_criterion,
+    def:mpu_admissible_equivalence_datum,
+    def:mpu_reduced_full_support_source_datum}
+  For $i=1,2$, suppose the original one-site endpoint tensor
+  $\mathcal U_i$ and its conjugate comparison tensor are simple and each
+  carries reduced full-support source data. Suppose that either $r$ or $\ell$
+  is odd and that the standard-form interpolation determined below carries an
+  admissible path datum of blocking length one. Then $\mathcal U_1$ and
+  $\mathcal U_2$ are admissibly strictly equivalent
+  under conjugation symmetry if and only if
+  \begin{align}
+    \det(u_1v_1)&=\det(u_2v_2).
+  \end{align}
+  % Source lines: paper_v2.tex 1401--1446.
 \end{theorem}
 
 \begin{corollary}[Equivalence of conjugation-symmetric MPUs after blocking]
   \label{cor:all-equivalent-under-conjugation}
   \notready
-  \discussion{5713}
-  \uses{conjphs,def:equivalent-symmetry}
-  All MPU tensors in the odd-source-rank case are equivalent under conjugation
-  symmetry.
+  \uses{conjphs,def:equivalent-symmetry,lem:mpu_blocking}
+  If either $r$ or $\ell$ is odd, all conjugation-invariant MPUs with these
+  source ranks are equivalent under conjugation symmetry.
+  % Source lines: paper_v2.tex 1450--1460.
 \end{corollary}
+
+\begin{corollary}[Admissible equivalence of conjugation-symmetric MPUs after blocking]
+  \label{cor:mpu_admissible_all_conjugation_equivalent}
+  \notready
+  \discussion{5713}
+  % **Scope restriction (endpoints, blocking, and admissible path):** the
+  % one-site and two-site endpoints and their conjugate comparisons carry
+  % source data, and the resulting symmetry path is admissible. No
+  % preservation under blocking is asserted. Documented in
+  % docs/paper-gaps/mpu_canonical_form_full_support.tex.
+  \uses{prop:mpu_admissible_conjugation_standard_forms,
+    cor:mpu_admissible_equiv_under_conjugation,
+    def:mpu_admissible_symmetry_equivalence,
+    def:mpu_admissible_equivalence_datum,
+    def:mpu_reduced_full_support_source_datum}
+  For $i=1,2$, suppose the endpoint tensor $\mathcal U_i$, its conjugate
+  comparison $\overline{\mathcal U_i}$, the actual two-site block
+  $\mathcal U_{i,2}$, and its conjugate comparison
+  $\overline{\mathcal U_{i,2}}$ are simple and each carries reduced
+  full-support source data. Suppose that either $r$ or $\ell$ is odd and that
+  the resulting standard-form interpolation carries an admissible path datum
+  of blocking length one. Then
+  $\mathcal U_1$ and $\mathcal U_2$ are admissibly equivalent under
+  conjugation symmetry.
+  % Source lines: paper_v2.tex 1450--1460.
+\end{corollary}
+
+\begin{proof}
+  \uses{prop:mpu_admissible_conjugation_standard_forms,
+    cor:mpu_admissible_equiv_under_conjugation}
+  If either $r$ or $\ell$ is odd, both endpoints lie in Case I of
+  Proposition~\ref{prop:mpu_admissible_conjugation_standard_forms}. The full
+  admissible classification in
+  Corollary~\ref{cor:mpu_admissible_equiv_under_conjugation} handles both
+  possible parities of the source ranks after blocking and gives the claimed
+  admissible equivalence.
+\end{proof}
 
 \begin{theorem}[Strict conjugation equivalence for even source ranks]
   \label{prop:conjsym-strict-equiv}
   \notready
   \discussion{5713}
-  \uses{corconj,cor:sympl-to-orthogonal,
+  \uses{prop1conj,corconj,cor:sympl-to-orthogonal,
     lem:equivalent-symmetry,lemma:conjclass-normalform-continuous}
-  Suppose that $r$ and $\ell$ are both even. Choose the standard forms of two
-  conjugation-invariant MPUs as in Proposition~\ref{corconj}. They are
-  strictly equivalent under conjugation symmetry if and only if they belong
-  to the same case of Proposition~\ref{corconj} and
+  Suppose $r$ and $\ell$ are even. Two conjugation-invariant MPUs in the
+  standard forms of Proposition~\ref{corconj} are strictly equivalent under
+  conjugation if and only if they belong to the same case and
   \begin{align}
     \det(u_1)&=\det(u_2),&
     \det(v_1)&=\det(v_2).
   \end{align}
+  % Source lines: paper_v2.tex 1464--1546.
+\end{theorem}
+
+\begin{theorem}[Admissible strict conjugation equivalence for even source ranks]
+  \label{thm:mpu_admissible_conjugation_even_rank}
+  \notready
+  \discussion{5713}
+  % **Scope restriction (admissible symmetry path):** equivalence means
+  % admissible strict equivalence in
+  % Definition~\ref{def:mpu_admissible_equivalence_datum}. Documented in
+  % docs/paper-gaps/mpu_canonical_form_full_support.tex.
+  \uses{prop:mpu_admissible_conjugation_standard_forms,cor:mpu_admissible_symplectic_to_orthogonal,lem:mpu_admissible_symmetry_path_criterion,
+    lemma:conjclass-normalform-continuous,
+    def:mpu_admissible_equivalence_datum}
+  Suppose that $r$ and $\ell$ are both even and that the standard-form
+  interpolation determined below carries an admissible path datum of blocking
+  length one. Choose admissible standard forms of two conjugation-invariant
+  MPUs as in
+  Proposition~\ref{prop:mpu_admissible_conjugation_standard_forms}. They are admissibly strictly equivalent under
+  conjugation symmetry if and only if they belong
+  to the same case of Proposition~\ref{prop:mpu_admissible_conjugation_standard_forms} and
+  \begin{align}
+    \det(u_1)&=\det(u_2),&
+    \det(v_1)&=\det(v_2).
+  \end{align}
+  % Source lines: paper_v2.tex 1464--1546.
 \end{theorem}
 
 \begin{corollary}[Equivalence under conjugation]
   \label{cor:equiv-under-conjugation}
   \notready
   \discussion{5713}
-  \uses{prop:conjsym-strict-equiv,def:equivalent-symmetry}
-  Two MPU tensors are equivalent under conjugation symmetry if and only if
-  they belong to the same case of Proposition~\ref{corconj}.
+  \uses{corconj,prop:conjsym-strict-equiv,def:equivalent-symmetry}
+  Two conjugation-invariant MPUs are equivalent under conjugation symmetry if
+  and only if they belong to the same case of Proposition~\ref{corconj}.
+  % Source lines: paper_v2.tex 1548--1567.
 \end{corollary}
+
+\begin{corollary}[Admissible equivalence under conjugation]
+  \label{cor:mpu_admissible_equiv_under_conjugation}
+  \notready
+  \discussion{5713}
+  % **Scope restriction (endpoints, blocking, and admissible path):** the
+  % original one-site endpoints and their conjugate comparisons carry source
+  % data, all blocked endpoints used below carry their own data, and the
+  % symmetry path is admissible. Documented in
+  % docs/paper-gaps/mpu_canonical_form_full_support.tex.
+  \uses{thm:mpu_admissible_conjugation_odd_rank,
+    thm:mpu_admissible_conjugation_even_rank,
+    prop:mpu_admissible_conjugation_standard_forms,
+    prop:mpu_admissible_index_well_defined,
+    def:mpu_admissible_symmetry_equivalence,
+    def:mpu_admissible_equivalence_datum,
+    def:mpu_reduced_full_support_source_datum}
+  For $i=1,2$, suppose the original one-site endpoint tensor
+  $\mathcal U_i$, its conjugate comparison $\overline{\mathcal U_i}$, the
+  actual two-site block $\mathcal U_{i,2}$, and its conjugate comparison
+  $\overline{\mathcal U_{i,2}}$ are simple and each carries reduced
+  full-support source data. Suppose also that the resulting standard-form
+  interpolation carries an admissible path datum of blocking length one. Then
+  $\mathcal U_1$ and $\mathcal U_2$ are admissibly equivalent under
+  conjugation symmetry if and only if they belong to the same case of
+  Proposition~\ref{prop:mpu_admissible_conjugation_standard_forms}.
+  % Source lines: paper_v2.tex 1548--1567.
+\end{corollary}
+
+\begin{proof}
+  \uses{thm:mpu_admissible_conjugation_odd_rank,
+    thm:mpu_admissible_conjugation_even_rank,
+    prop:mpu_admissible_conjugation_standard_forms,
+    prop:mpu_admissible_index_well_defined,
+    def:mpu_admissible_symmetry_equivalence}
+  Suppose first that either $r$ or $\ell$ is odd. Then both original
+  endpoints lie in Case I. After one blocking, write $r^{(2)}$ and
+  $\ell^{(2)}$ for the blocked source ranks. Admissible blocking independence,
+  applied to the supplied one-site and two-site endpoint data, gives
+  \begin{align}
+    r^{(2)}&=dr,
+  \end{align}
+  and
+  \begin{align}
+    \ell^{(2)}&=d\ell.
+  \end{align}
+  For each endpoint,
+  \begin{align}
+    \det(u_i^{(2)}v_i^{(2)})&=\det(u_iv_i)^{2r\ell}=1.
+  \end{align}
+  Blocking preserves Case I. If either $r^{(2)}$ or $\ell^{(2)}$ is odd, the
+  odd-rank theorem applied to the blocked endpoints gives admissible strict
+  equivalence. If both blocked ranks are even, then $d$ is even because one
+  original source rank is odd. Hence $r\ell=d^2$ is even.
+  % **Local fix:** paper_v2.tex 1554--1559 states the two separate determinant
+  % identities before checking parity. They are used here only when the
+  % blocked source ranks are both even, which forces the required even power.
+  % Documented in docs/paper-gaps/mpu_canonical_form_full_support.tex.
+  Consequently,
+  \begin{align}
+    \det(u_i^{(2)})&=(\det(u_i)^2\det(v_i))^{r\ell}=1,
+  \end{align}
+  and
+  \begin{align}
+    \det(v_i^{(2)})&=\det(v_i)^{r\ell}=1.
+  \end{align}
+  The even-rank theorem now applies to the preserved Case I endpoints. Thus
+  the odd-source-rank branch has a single admissible equivalence class without
+  imposing a parity condition on the blocked ranks.
+
+  If $r$ and $\ell$ are both even, admissible blocking independence shows that
+  the blocked ranks remain even. Since $r\ell$ is even, the same calculations
+  give
+  \begin{align}
+    \det(u_i^{(2)})&=(\det(u_i)^2\det(v_i))^{r\ell}=1,
+  \end{align}
+  and
+  \begin{align}
+    \det(v_i^{(2)})&=\det(v_i)^{r\ell}=1.
+  \end{align}
+  Blocking preserves Case I and Case II. The even-rank theorem therefore shows
+  that the blocked endpoints are admissibly strictly equivalent exactly when
+  they belong to the same case. This is precisely admissible equivalence of
+  the original endpoints.
+\end{proof}
 
 \begin{lemma}[Trace formula for the time-reversal sign]
   \label{eq:sigma-from-trace}
   \notready
   \discussion{5714}
   \uses{PropChiral}
-  For a time-reversal-invariant MPU in standard form, the sign $\sigma$ in
-  Proposition~\ref{PropChiral} is
+  For a time-reversal-invariant MPU in standard form, the sign $\sigma$ is
+  \begin{align}
+    \sigma&=\frac1{d^2}\tr\!\left[\mathbb S_{12,34}
+      v_{23}u_{12}u_{34}v_{23}\right],
+  \end{align}
+  where $\mathbb S_{12,34}$ exchanges the pairs of sites $12$ and $34$.
+  % Source lines: paper_v2.tex 1588--1611.
+\end{lemma}
+
+\begin{lemma}[Admissible trace formula for the time-reversal sign]
+  \label{lem:mpu_admissible_sigma_trace}
+  \notready
+  \discussion{5714}
+  % **Scope restriction (two-site blocked comparison):** the trace formula uses
+  % the blocked source data required by Proposition~\ref{prop:mpu_admissible_local_time_reversal}.
+  % Documented in docs/paper-gaps/mpu_canonical_form_full_support.tex.
+  \uses{prop:mpu_admissible_local_time_reversal,def:mpu_reduced_full_support_source_datum}
+  For a time-reversal-invariant MPU in admissible standard form, suppose its
+  one-site tensor $\mathcal U$, its actual two-site block $\mathcal U_2$, and
+  the physical-adjoint comparison tensor $\mathcal U_2^\sharp$ are simple and
+  each carries its own reduced full-support source datum. Then the sign
+  $\sigma$ in
+  Proposition~\ref{prop:mpu_admissible_local_time_reversal} is
   \begin{align}
     \sigma&=\frac1{d^2}\tr\!\left[\mathbb S_{12,34}v_{23}u_{12}u_{34}v_{23}\right],
   \end{align}
   where $\mathbb S_{12,34}$ exchanges the pairs of sites $12$ and $34$.
+  % Source lines: paper_v2.tex 1588--1611.
 \end{lemma}
+
+\begin{lemma}[Gauge invariance of the time-reversal sign]
+  \label{lem:mpu_sigma_gauge_invariant}
+  \notready
+  \discussion{5714}
+  \uses{eq:sigma-from-trace}
+  Under $u'=(x\otimes y)u$ and
+  $v'=v(y^\dagger\otimes x^\dagger)$, the trace formula in
+  Lemma~\ref{eq:sigma-from-trace} has the same value for $(u',v')$ as for
+  $(u,v)$. Thus $\sigma$ is independent of the standard-form gauge.
+  % Source proof: paper_v2.tex 1624--1630.
+\end{lemma}
+
+\begin{lemma}[Admissible gauge invariance of the time-reversal sign]
+  \label{lem:mpu_admissible_sigma_gauge_invariant}
+  \notready
+  \discussion{5714}
+  \uses{lem:mpu_admissible_sigma_trace}
+  % Source proof: paper_v2.tex 1624--1630.
+  Under the hypotheses of Lemma~\ref{lem:mpu_admissible_sigma_trace}, let $x$ and $y$ be
+  unitaries and change the standard-form gauge by
+  \begin{align}
+    u'&=(x\otimes y)u,&
+    v'&=v(y^\dagger\otimes x^\dagger).
+  \end{align}
+  Then the trace formula has the same value for $(u',v')$ as for $(u,v)$.
+  Consequently the sign $\sigma$ is independent of the standard-form gauge.
+\end{lemma}
+
+\begin{proof}
+  \uses{lem:mpu_admissible_sigma_trace}
+  Write $x_i$ and $y_i$ for the unitaries acting on site $i$. Then
+  $u'_{12}=x_1y_2u_{12}$, $u'_{34}=x_3y_4u_{34}$, and
+  $v'_{23}=v_{23}y_2^\dagger x_3^\dagger$.
+  Substitution into Lemma~\ref{lem:mpu_admissible_sigma_trace}, cancellation on the
+  middle legs, and
+  $\mathbb S_{12,34}x_1y_4=x_3y_2\mathbb S_{12,34}$ give
+  \begin{align}
+    \tr\!\left[\mathbb S_{12,34}v'_{23}u'_{12}u'_{34}v'_{23}\right]
+      &=\tr\!\left[x_3y_2\mathbb S_{12,34}
+        v_{23}u_{12}u_{34}v_{23}y_2^\dagger x_3^\dagger\right]\\
+      &=\tr\!\left[\mathbb S_{12,34}v_{23}u_{12}u_{34}v_{23}\right].
+  \end{align}
+  The last equality follows from cyclicity of the trace and unitarity of
+  $x$ and $y$.
+\end{proof}
 
 \begin{proposition}[Well-definedness of the time-reversal sign]
   \label{prop:sigma-well-defined}
   \notready
   \discussion{5714}
-  \uses{eq:sigma-from-trace,lem:equivalent-symmetry}
-  The sign $\sigma=\pm1$ is independent of the standard-form gauge and is
-  constant under continuous deformations preserving time reversal.
+  \uses{eq:sigma-from-trace,lem:mpu_sigma_gauge_invariant}
+  For a time-reversal-invariant MPU in standard form, the sign
+  $\sigma=\pm1$ is independent of the gauge and is constant under continuous
+  deformations that preserve time-reversal symmetry.
+  % Source lines: paper_v2.tex 1613--1631.
+\end{proposition}
+
+\begin{proposition}[Admissible well-definedness of the time-reversal sign]
+  \label{prop:mpu_admissible_sigma_well_defined}
+  \notready
+  \discussion{5714}
+  % **Scope restriction (admissible deformation):** the deformation carries the
+  % path datum of Definition~\ref{def:mpu_admissible_equivalence_datum}.
+  % Documented in docs/paper-gaps/mpu_canonical_form_full_support.tex.
+  \uses{lem:mpu_admissible_sigma_gauge_invariant,lem:mpu_admissible_symmetry_path_criterion,
+    def:mpu_reduced_full_support_source_datum,
+    def:mpu_admissible_equivalence_datum}
+  Suppose a time-reversal-preserving path carries an admissible equivalence
+  datum of blocking length one. At every path point, require the one-site
+  tensor, its actual two-site block, and the physical-adjoint comparison of
+  that two-site block to be simple and to carry continuously varying reduced
+  full-support source data. Then the sign
+  $\sigma=\pm1$ is independent of the admissible standard-form gauge and is
+  constant along the path.
+  % Source lines: paper_v2.tex 1613--1631.
 \end{proposition}
 
 \begin{proposition}[Blocking parity of the time-reversal sign]
@@ -4674,8 +5572,9 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
   \notready
   \discussion{5714}
   \uses{prop:sigma-well-defined,PropChiral,lem:mpu_blocking}
-  Let $\sigma^{(k)}$ be the sign of the standard form obtained after blocking
-  $k$ sites. Then
+  Let $\mathcal U$ be a time-reversal-invariant MPU in standard form, and let
+  $\sigma^{(k)}$ be the sign obtained from a standard form of its $k$-site
+  block. Then
   \begin{align}
     \sigma^{(k)}
       &=\begin{cases}
@@ -4683,17 +5582,108 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
         \sigma^{(2)},&k\text{ even}.
       \end{cases}
   \end{align}
+  % Source lines: paper_v2.tex 1633--1733.
 \end{proposition}
+
+\begin{proposition}[Admissible blocking parity of the time-reversal sign]
+  \label{prop:mpu_admissible_sigma_blocking_parity}
+  \notready
+  \discussion{5714}
+  % **Scope restriction (blocked source data):** every blocked tensor used to
+  % define $\sigma^{(k)}$, including its two-site comparison tensor, carries
+  % reduced full-support source data. No preservation under blocking is
+  % asserted. Documented in
+  % docs/paper-gaps/mpu_canonical_form_full_support.tex.
+  \uses{lem:mpu_admissible_sigma_gauge_invariant,prop:mpu_admissible_local_time_reversal,lem:mpu_blocking,
+    def:mpu_reduced_full_support_source_datum}
+  For every blocking length $k$ under consideration, suppose the endpoint
+  tensor $\mathcal U_k$, its actual two-site block $\mathcal U_{2k}$, and the
+  physical-adjoint comparison tensor $\mathcal U_{2k}^\sharp$ are simple and
+  each carries its own reduced full-support source datum. Let $\sigma^{(k)}$
+  be the sign of the resulting standard form. Then
+  \begin{align}
+    \sigma^{(k)}
+      &=\begin{cases}
+        \sigma^{(1)},&k\text{ odd},\\
+        \sigma^{(2)},&k\text{ even}.
+      \end{cases}
+  \end{align}
+  % Source lines: paper_v2.tex 1633--1733.
+\end{proposition}
+
+\begin{proof}
+  \uses{lem:mpu_admissible_sigma_gauge_invariant,prop:mpu_admissible_local_time_reversal,lem:mpu_blocking}
+  Gauge invariance permits the standard blocked representatives used in the
+  source proof. Choose
+  \begin{align}
+    u^{(2)}&=v_{23}u_{12}u_{34},&v^{(2)}&=v_{45},
+  \end{align}
+  and put $\zeta=\sigma^{(2)}/\sigma^{(1)}$. The one- and two-site local
+  time-reversal relations give the unwinding identity
+  \begin{align}
+    \zeta\big[(\Id\otimes v\otimes\Id)(u\otimes x)\big]^\dagger
+      &=(\Id\otimes v\otimes\Id)(x^\dagger\otimes u).
+  \end{align}
+  Applying this identity successively through a block of length $k$ gives
+  \begin{align}
+    \sigma^{(k)}
+      &=\sigma^{(1)}\zeta^{k-1}.
+  \end{align}
+  Since each sign is $\pm1$, this equals $\sigma^{(1)}$ for odd $k$ and
+  $\sigma^{(2)}$ for even $k$.
+  % Source lines: paper_v2.tex 1657--1732.
+\end{proof}
 
 \begin{corollary}[Necessary time-reversal invariants]
   \label{cor:sigma-equivalence-necessary}
   \notready
   \discussion{5714}
-  \uses{prop:sigma1-and-sigma2-equal,
-    def:strictly-equivalent-symmetry,def:equivalent-symmetry}
-  Strict equivalence of two time-reversal-invariant MPUs requires equality of
-  both $\sigma^{(1)}$ and $\sigma^{(2)}$. Equivalence after blocking and
-  adding ancillas requires equality of $\sigma^{(2)}$.
+  \uses{prop:sigma1-and-sigma2-equal,def:strictly-equivalent-symmetry,
+    def:equivalent-symmetry}
+  Strictly equivalent time-reversal-invariant MPUs have the same
+  $\sigma^{(1)}$ and $\sigma^{(2)}$. Equivalent time-reversal-invariant MPUs
+  have the same $\sigma^{(2)}$.
+  % Source lines: paper_v2.tex 1735--1743.
+\end{corollary}
+
+\begin{corollary}[Admissible time-reversal invariants of supplied witnesses]
+  \label{cor:mpu_admissible_sigma_equivalence_necessary}
+  \notready
+  \discussion{5714}
+  % **Scope restriction (admissible symmetry equivalence):** the endpoint
+  % blockings and symmetry paths carry the data of
+  % Definition~\ref{def:mpu_admissible_equivalence_datum}. The non-strict
+  % conclusion concerns only the supplied ancilla-enlarged blocked endpoints.
+  % Documented in docs/paper-gaps/mpu_canonical_form_full_support.tex.
+  \uses{prop:mpu_admissible_sigma_blocking_parity,def:mpu_admissible_strict_symmetry_equivalence,
+    def:mpu_admissible_symmetry_equivalence,def:mpu_reduced_full_support_source_datum,
+    def:mpu_admissible_equivalence_datum}
+  Let two time-reversal-invariant MPUs be compared by an admissible symmetry
+  path $p\mapsto\mathcal W(p)$ whose path datum has blocking length one.
+  Suppose that the five path families $\mathcal W(p)$,
+  $\mathcal W(p)_2$, $\mathcal W(p)_4$,
+  $\mathcal W(p)_2^\sharp$, and $\mathcal W(p)_4^\sharp$ are simple and carry
+  continuously varying reduced full-support source data. Then admissible
+  strict equivalence requires equality of both $\sigma^{(1)}$ and
+  $\sigma^{(2)}$.
+
+  For admissible equivalence after adjoining ancillas and applying the source
+  blocking, let $p\mapsto\mathcal W_{\mathrm{anc}}(p)$ be the actual
+  ancilla-enlarged blocked witness path, not a reduced or equivalent
+  representative, and regard it as a length-one admissible path. Require
+  continuous reduced full-support source data along
+  $\mathcal W_{\mathrm{anc}}(p)$, its actual two- and four-site blocks, and
+  the physical-adjoint comparisons of those two blocks. The conclusion is
+  only
+  \begin{align}
+    \sigma^{(2)}(\mathcal W_{\mathrm{anc}}(0))
+      &=\sigma^{(2)}(\mathcal W_{\mathrm{anc}}(1)).
+  \end{align}
+  No equality between $\sigma^{(2)}$ of the original two MPUs is asserted.
+  Such a conclusion requires preservation under adjoining identity ancillas,
+  which is not established here.
+  % Tracked by issue #6138.
+  % Source lines: paper_v2.tex 1735--1743.
 \end{corollary}
 
 \begin{proposition}[Conjugation class and the MPS sign]
@@ -4701,9 +5691,36 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
   \notready
   \discussion{5714}
   \uses{corconj,cor:equiv-under-conjugation}
-  For an MPU invariant under conjugation, the sign
+  For a conjugation-invariant MPU, the MPS sign
+  $G\overline G=\pm\Id$ agrees with Case I and Case II, respectively, of
+  Proposition~\ref{corconj}.
+  % Source lines: paper_v2.tex 1791--1805.
+\end{proposition}
+
+\begin{proposition}[Admissible conjugation class and the MPS sign]
+  \label{prop:mpu_admissible_mps_conjugation_class}
+  \notready
+  \discussion{5714}
+  % **Scope restriction (admissible conjugation class):** the standard forms,
+  % blockings, and comparison paths carry the required source data. Documented
+  % in docs/paper-gaps/mpu_canonical_form_full_support.tex.
+  \uses{prop:mpu_admissible_conjugation_standard_forms,
+    cor:mpu_admissible_equiv_under_conjugation,
+    def:mpu_reduced_full_support_source_datum,
+    def:mpu_admissible_equivalence_datum}
+  Let $\mathcal U$ be conjugation invariant. Suppose $\mathcal U$ and its
+  conjugate comparison tensor are simple and carry their own reduced
+  full-support source data. Let $p\mapsto\mathcal W(p)$ be the actual
+  standard-form interpolation from $\mathcal U$ to its Case I or Case II
+  representative. Suppose this interpolation carries an admissible
+  conjugation-symmetry path datum of blocking length one: the path
+  $\mathcal W(p)$ and its fixed conjugate, physical-adjoint, transposed, and
+  conjugation-image comparison paths are simple and carry continuously varying
+  source data. Then the sign
   $G\overline G=\pm\Id$ in the MPS classification agrees with Case I and
-  Case II, respectively, of Proposition~\ref{corconj}.
+  Case II, respectively, of
+  Proposition~\ref{prop:mpu_admissible_conjugation_standard_forms}.
+  % Source lines: paper_v2.tex 1791--1805.
 \end{proposition}
 
 \begin{proposition}[Time-reversal class and the MPS sign]
@@ -4711,9 +5728,29 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
   \notready
   \discussion{5714}
   \uses{PropChiral,prop:sigma1-and-sigma2-equal}
-  For an MPU in standard form invariant under time reversal, the MPS sign
+  For a time-reversal-invariant MPU in standard form, the MPS sign
   $G\overline G=\pm\Id$ equals the sign $\sigma^{(2)}$ obtained after
   blocking two sites.
+  % Source lines: paper_v2.tex 1807--1829.
+\end{proposition}
+
+\begin{proposition}[Admissible time-reversal class and the MPS sign]
+  \label{prop:mpu_admissible_mps_time_reversal_class}
+  \notready
+  \discussion{5714}
+  % **Scope restriction (one-, two-, and four-site source data):** the tensors
+  % used to define both $\sigma^{(1)}$ and $\sigma^{(2)}$ carry their own data.
+  % Documented in docs/paper-gaps/mpu_canonical_form_full_support.tex.
+  \uses{prop:mpu_admissible_local_time_reversal,prop:mpu_admissible_sigma_blocking_parity,
+    def:mpu_reduced_full_support_source_datum,
+    def:mpu_admissible_equivalence_datum}
+  Let an MPU in admissible standard form be invariant under time reversal.
+  Suppose $\mathcal U$, $\mathcal U_2$, and $\mathcal U_4$, together with the
+  physical-adjoint comparison tensors $\mathcal U_2^\sharp$ and
+  $\mathcal U_4^\sharp$, are simple and each carries its own reduced
+  full-support source datum. Then the MPS sign $G\overline G=\pm\Id$ equals
+  the sign $\sigma^{(2)}$.
+  % Source lines: paper_v2.tex 1807--1829.
 \end{proposition}
 
 \subsection{Symmetry examples}
@@ -4722,22 +5759,44 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
   \label{ex:all-phases-under-conjugation}
   \notready
   \discussion{5715}
-  \uses{conjphs,prop:conjsym-strict-equiv,
-    corconj,cor:sympl-to-orthogonal}
-  Let
+  \uses{conjphs,prop:conjsym-strict-equiv,corconj,
+    cor:sympl-to-orthogonal}
+  Let $u_+=v_+=\Id_{r\ell}$ and
+  $u_-=v_-=\operatorname{diag}(-1,1,\ldots,1)$. If at least one of $r$ and
+  $\ell$ is odd, $(u_+,v_+)$ and $(u_+,v_-)$ realize the two classes of
+  Theorem~\ref{conjphs}. If both are even, the four pairs $(u_\pm,v_\pm)$
+  realize the four Case I classes. Multiplying by the matrix $R$ of
+  Corollary~\ref{cor:sympl-to-orthogonal} realizes the four Case II classes.
+  % Source lines: paper_v2.tex 1845--1876.
+\end{proposition}
+
+\begin{proposition}[Admissible phases under conjugation]
+  \label{ex:mpu_admissible_all_conjugation_phases}
+  \notready
+  \discussion{5715}
+  % **Scope restriction (realization by admissible standard forms):** each
+  % displayed standard-form tensor carries reduced full-support source data.
+  % Documented in docs/paper-gaps/mpu_canonical_form_full_support.tex.
+  \uses{thm:mpu_admissible_conjugation_odd_rank,thm:mpu_admissible_conjugation_even_rank,prop:mpu_admissible_conjugation_standard_forms,
+    cor:mpu_admissible_symplectic_to_orthogonal,def:mpu_reduced_full_support_source_datum,
+    def:mpu_admissible_equivalence_datum}
+  Assume the standard-form tensors displayed below carry reduced full-support
+  source data and that the comparison paths used to classify them carry
+  admissible path data of blocking length one. Let
   \begin{align}
     u_+&=v_+=\Id_{r\ell},&
     u_-&=v_-=\operatorname{diag}(-1,1,\ldots,1).
   \end{align}
   If at least one of $r$ and $\ell$ is odd, the pairs $(u_+,v_+)$ and
-  $(u_+,v_-)$ represent the two classes of Theorem~\ref{conjphs}. If $r$
+  $(u_+,v_-)$ represent the two classes of Theorem~\ref{thm:mpu_admissible_conjugation_odd_rank}. If $r$
   and $\ell$ are both even, the four pairs $(u_\pm,v_\pm)$ represent the
-  four Case I classes of Theorem~\ref{prop:conjsym-strict-equiv}. With
+  four Case I classes of Theorem~\ref{thm:mpu_admissible_conjugation_even_rank}. With
   \begin{align}
     u'_\pm&=(\Id_{r\ell/4}\otimes R)u_\pm,&
     v'_\pm&=v_\pm(\Id_{r\ell/4}\otimes R),
   \end{align}
   the four pairs $(u'_\pm,v'_\pm)$ represent the four Case II classes.
+  % Source lines: paper_v2.tex 1845--1876.
 \end{proposition}
 
 \begin{proposition}[CZX]
@@ -4747,6 +5806,37 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
   \uses{prop:sigma1-and-sigma2-equal,
     prop:dagger-mps-class-and-mpu-class-equal}
   The CZX MPU is defined by
+  \begin{align}
+    u&=CZ(\sigma_x\otimes\sigma_x),&v&=CZ,
+  \end{align}
+  where $CZ=\operatorname{diag}(1,1,1,-1)$. Let
+  \begin{align}
+    H&=\frac1{\sqrt2}\begin{pmatrix}1&1\\1&-1\end{pmatrix}
+  \end{align}
+  be the Hadamard matrix. The corresponding tensor is
+  \begin{align}
+    \mathcal U_{\ell r}^{ud}
+      &=(\sigma_x)_{ud}\delta_{u,\ell}H_{\ell,r}.
+  \end{align}
+  It has $\sigma^{(1)}=\sigma^{(2)}=-1$.
+  % Source lines: paper_v2.tex 1906--1943.
+\end{proposition}
+
+\begin{proposition}[Admissible CZX data]
+  \label{ex:mpu_admissible_czx}
+  \notready
+  \discussion{5715}
+  % **Scope restriction (blocked CZX data):** the one-, two-, and four-site
+  % tensors used to define the two signs carry reduced full-support source data.
+  % Documented in docs/paper-gaps/mpu_canonical_form_full_support.tex.
+  \uses{prop:mpu_admissible_sigma_blocking_parity,
+    prop:mpu_admissible_mps_time_reversal_class,
+    def:mpu_reduced_full_support_source_datum,
+    def:mpu_admissible_equivalence_datum}
+  Suppose the CZX tensors $\mathcal U$, $\mathcal U_2$, and $\mathcal U_4$,
+  together with the physical-adjoint comparison tensors
+  $\mathcal U_2^\sharp$ and $\mathcal U_4^\sharp$, are simple and each carries
+  its own reduced full-support source datum. The CZX MPU is defined by
   \begin{align}
     u&=CZ(\sigma_x\otimes\sigma_x),&v&=CZ,\\
     CZ&=\operatorname{diag}(1,1,1,-1).
@@ -4758,6 +5848,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     H&=\frac1{\sqrt2}\begin{pmatrix}1&1\\1&-1\end{pmatrix}.
   \end{align}
   It has $\sigma^{(1)}=\sigma^{(2)}=-1$.
+  % Source lines: paper_v2.tex 1906--1943.
 \end{proposition}
 
 \begin{proposition}[The other three time-reversal classes]
@@ -4776,6 +5867,35 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     (\sigma^{(1)},\sigma^{(2)})
       &=(1,1),\quad(-1,1),\quad(1,-1).
   \end{align}
+  % Source lines: paper_v2.tex 1945--1962.
+\end{proposition}
+
+\begin{proposition}[Admissible remaining time-reversal classes]
+  \label{ex:mpu_admissible_time_reversal_classes}
+  \notready
+  \discussion{5715}
+  % **Scope restriction (blocked example data):** every standard form and
+  % blocking used to define the signs carries reduced full-support source data.
+  % Documented in docs/paper-gaps/mpu_canonical_form_full_support.tex.
+  \uses{ex:mpu_admissible_czx,prop:mpu_admissible_sigma_blocking_parity,
+    def:mpu_reduced_full_support_source_datum,
+    def:mpu_admissible_equivalence_datum}
+  For each displayed example, suppose the tensors $\mathcal U$,
+  $\mathcal U_2$, and $\mathcal U_4$, together with the physical-adjoint
+  comparison tensors $\mathcal U_2^\sharp$ and $\mathcal U_4^\sharp$, are
+  simple and each carries its own reduced full-support source datum.
+  The standard forms
+  \begin{align}
+    u&=v=\Id,\\
+    u&=i\Id,&v&=\Id,\\
+    u&=i\,CZ(\sigma_x\otimes\sigma_x),&v&=CZ
+  \end{align}
+  realize, respectively,
+  \begin{align}
+    (\sigma^{(1)},\sigma^{(2)})
+      &=(1,1),\quad(-1,1),\quad(1,-1).
+  \end{align}
+  % Source lines: paper_v2.tex 1945--1962.
 \end{proposition}
 
 \begin{definition}[Three topological-insulator-inspired MPUs]
@@ -4804,6 +5924,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
       (\mathbb S\otimes\mathbb S),&
     v_3^{(2)}&=\Id\otimes\mathbb S\otimes\Id.
   \end{align}
+  % Source lines: paper_v2.tex 1980--2042.
 \end{definition}
 
 \begin{definition}[Transformation with swaps]
@@ -4827,6 +5948,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     \widetilde u_2&=\Id\otimes\Id,&
     \widetilde v_2&=\mathbb S.
   \end{align}
+  % Source lines: paper_v2.tex 2045--2099.
 \end{definition}
 
 \begin{lemma}[Transformation with swaps and symmetry equivalence]
@@ -4839,6 +5961,35 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
   local swap, or conjugation if and only if the corresponding
   $\widetilde U_i^{(N)}$ and $\widetilde U_j^{(N)}$ are in the same phase
   under time reversal, transposition, or conjugation, respectively.
+  % Source lines: paper_v2.tex 2045--2085.
+\end{lemma}
+
+\begin{lemma}[Admissible transformation with swaps and symmetry equivalence]
+  \label{lem:mpu_admissible_swap_symmetry_equivalence}
+  \notready
+  \discussion{5715}
+  % **Scope restriction (admissible phase comparison):** every blocked endpoint
+  % and comparison path carries the datum of
+  % Definition~\ref{def:mpu_admissible_equivalence_datum}. Documented in
+  % docs/paper-gaps/mpu_canonical_form_full_support.tex.
+  \uses{threeMPU,threeMPU2,def:mpu_admissible_strict_symmetry_equivalence,
+    def:mpu_admissible_symmetry_equivalence,def:mpu_reduced_full_support_source_datum,
+    def:mpu_admissible_equivalence_datum}
+  Fix one of the three symmetry comparisons and let
+  $p\mapsto\mathcal W(p)$ be the actual source-constructed interpolation used
+  in that comparison. Suppose it carries an admissible symmetry-path datum of
+  blocking length one. Thus the path $\mathcal W(p)$ and the four fixed
+  comparison paths $\overline{\mathcal W(p)}$, $\mathcal W(p)^\sharp$,
+  $\mathcal W(p)^{\mathsf T}$, and $\mathcal S[\mathcal W(p)]$ are simple and
+  carry continuously varying reduced full-support source data. Suppose
+  also that every one- and two-site endpoint tensor used in the local
+  comparison carries its own datum. Then $U_i^{(N)}$ and $U_j^{(N)}$ are in
+  the same admissible phase under time reversal combined with the local swap,
+  transposition combined with the local swap, or conjugation if and only if
+  the corresponding $\widetilde U_i^{(N)}$ and $\widetilde U_j^{(N)}$ are in
+  the same admissible phase under time reversal, transposition, or
+  conjugation, respectively.
+  % Source lines: paper_v2.tex 2045--2085.
 \end{lemma}
 
 \begin{proposition}[Conjugation phases of $U_2$ and $U_3$]
@@ -4848,6 +5999,27 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
   \uses{threeMPU,conjphs,prop:conjsym-strict-equiv}
   After blocking two sites, $U_2^{(N)}$ and $U_3^{(N)}$ are both in the
   trivial phase under conjugation.
+  % Source lines: paper_v2.tex 2110--2134.
+\end{proposition}
+
+\begin{proposition}[Admissible conjugation phases of $U_2$ and $U_3$]
+  \label{prop:mpu_admissible_u2_u3_conjugation}
+  \notready
+  \discussion{5715}
+  % **Scope restriction (two-site blocked data):** both blocked tensors carry
+  % reduced full-support source data. No preservation under blocking is
+  % asserted. Documented in
+  % docs/paper-gaps/mpu_canonical_form_full_support.tex.
+  \uses{threeMPU,thm:mpu_admissible_conjugation_odd_rank,thm:mpu_admissible_conjugation_even_rank,
+    def:mpu_reduced_full_support_source_datum,
+    def:mpu_admissible_equivalence_datum,
+    def:mpu_admissible_symmetry_equivalence}
+  Suppose the two-site blocked tensors carry reduced full-support source data
+  and the standard-form comparison paths carry admissible path data of
+  blocking length one. Then the actual two-site blocked tensors of $U_2$ and
+  $U_3$ are both in the trivial admissible strict phase under conjugation.
+  Consequently $U_2$ and $U_3$ lie in the same admissible equivalence class.
+  % Source lines: paper_v2.tex 2110--2134.
 \end{proposition}
 
 \begin{proposition}[Time-reversal and transposition phases of $U_2$ and $U_3$]
@@ -4858,22 +6030,83 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     def:strictly-equivalent-symmetry}
   The MPUs $\widetilde U_2^{(N)}$ and $\widetilde U_3^{(N)}$ are in the same
   phase under both time reversal and transposition.
+  % Source lines: paper_v2.tex 2136--2155.
+\end{proposition}
+
+\begin{proposition}[Admissible time-reversal and transposition phases of $U_2$ and $U_3$]
+  \label{prop:mpu_admissible_u2_u3_time_reversal_transposition}
+  \notready
+  \discussion{5715}
+  % **Scope restriction (admissible symmetry path):** the comparison path
+  % carries the datum of Definition~\ref{def:mpu_admissible_equivalence_datum}.
+  % Documented in docs/paper-gaps/mpu_canonical_form_full_support.tex.
+  \uses{threeMPU2,lem:mpu_admissible_swap_symmetry_equivalence,
+    def:mpu_admissible_strict_symmetry_equivalence,
+    def:mpu_reduced_full_support_source_datum,
+    def:mpu_admissible_equivalence_datum}
+  For each of time reversal and transposition, let
+  $p\mapsto\mathcal W_{\mathcal S}(p)$ be the actual source-constructed
+  interpolation from $\widetilde U_2$ to $\widetilde U_3$. Suppose it carries
+  an admissible symmetry-path datum of blocking length one. Thus the path
+  $\mathcal W_{\mathcal S}(p)$ and its fixed conjugate, physical-adjoint,
+  transposed, and $\mathcal S$-image comparison paths are simple and carry
+  continuously varying reduced full-support source data. Suppose also that
+  the one- and two-site endpoint tensors used in the local comparison carry
+  their own data. Then $\widetilde U_2^{(N)}$ and
+  $\widetilde U_3^{(N)}$ are in the same admissible phase under both time
+  reversal and transposition.
+  % Source lines: paper_v2.tex 2136--2155.
 \end{proposition}
 
 \begin{proposition}[Conjugation phases of $U_1$ and $U_2$]
   \label{prop:eqiv-U1-U2-conjugate}
   \notready
   \discussion{5715}
-  \uses{threeMPU2,lemma:sym-trafo-swap,
-    conjphs,prop:conjsym-strict-equiv,cor:equiv-under-conjugation}
-  The MPUs $U_1^{(N)}$ and $U_2^{(N)}$ are in different strict phases under
+  \uses{threeMPU2,lemma:sym-trafo-swap,conjphs,
+    prop:conjsym-strict-equiv,cor:equiv-under-conjugation}
+  The MPUs $U_1^{(N)}$ and $U_2^{(N)}$ lie in different strict conjugation
+  phases exactly when $d=4k+2$ for a nonnegative integer $k$. Otherwise they
+  lie in the same strict phase. All these phases are in Case I, so the two
+  MPUs are equivalent after blocking and adjoining ancillas.
+  % Source lines: paper_v2.tex 2158--2200.
+\end{proposition}
+
+\begin{proposition}[Admissible conjugation phases of $U_1$ and $U_2$]
+  \label{prop:mpu_admissible_u1_u2_conjugation}
+  \notready
+  \discussion{5715}
+  % **Scope restriction (admissible blockings and paths):** every standard form,
+  % blocked endpoint, and comparison path carries the required source data.
+  % Documented in docs/paper-gaps/mpu_canonical_form_full_support.tex.
+  \uses{threeMPU2,lem:mpu_admissible_swap_symmetry_equivalence,
+    thm:mpu_admissible_conjugation_odd_rank,
+    thm:mpu_admissible_conjugation_even_rank,
+    cor:mpu_admissible_equiv_under_conjugation,
+    def:mpu_reduced_full_support_source_datum,
+    def:mpu_admissible_equivalence_datum}
+  For each endpoint tensor $\mathcal A$ among
+  $U_1$, $U_2$, $\widetilde U_1$, and $\widetilde U_2$, suppose that
+  $\mathcal A$, its conjugate comparison $\overline{\mathcal A}$, its actual
+  two-site block $\mathcal A_2$, and the conjugate comparison
+  $\overline{\mathcal A_2}$ are simple and carry their own reduced
+  full-support source data. For every strict comparison used below, let
+  $p\mapsto\mathcal W(p)$ be the actual
+  source-constructed interpolation between the corresponding endpoint
+  tensors. Suppose it carries an admissible conjugation-symmetry path datum of
+  blocking length one: the path and its fixed conjugate, physical-adjoint,
+  transposed, and conjugation-image comparison paths are simple and carry
+  continuously varying source data. Require a length-one admissible path datum
+  also for the actual blocked interpolation used in the final equivalence
+  claim. Under these hypotheses,
+  $U_1^{(N)}$ and $U_2^{(N)}$ are in different admissible strict phases under
   conjugation exactly when $k$ is a nonnegative integer and
   \begin{align}
     d&=4k+2.
   \end{align}
-  Otherwise they are in the same strict phase. All these standard forms lie
-  in Case I, so $U_1^{(N)}$ and $U_2^{(N)}$ are equivalent after blocking and
-  adding ancillas.
+  Otherwise they are in the same admissible strict phase. All these standard
+  forms lie in Case I, so $U_1^{(N)}$ and $U_2^{(N)}$ are admissibly equivalent
+  after blocking and adding ancillas.
+  % Source lines: paper_v2.tex 2158--2200.
 \end{proposition}
 
 \begin{proposition}[Ancilla equivalence of $U_1$ and $U_2$]
@@ -4885,6 +6118,40 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
   After adding one ancilla of dimension $d$ per site,
   $\widetilde U_1^{(N)}$ and $\widetilde U_2^{(N)}$ are strictly equivalent
   under both time reversal and transposition.
+  % Source lines: paper_v2.tex 2203--2230.
+\end{proposition}
+
+\begin{proposition}[Admissible ancilla equivalence of $U_1$ and $U_2$]
+  \label{prop:mpu_admissible_u1_u2_ancilla}
+  \notready
+  \discussion{5715}
+  % **Scope restriction (ancilla endpoint and admissible path data):** the
+  % ancilla-enlarged tensors carry source data and the comparison path is
+  % admissible. No preservation under adjoining ancillas is asserted.
+  % Documented in docs/paper-gaps/mpu_canonical_form_full_support.tex.
+  \uses{threeMPU2,lem:mpu_admissible_swap_symmetry_equivalence,
+    def:mpu_admissible_strict_symmetry_equivalence,
+    def:mpu_admissible_symmetry_equivalence,
+    def:mpu_reduced_full_support_source_datum,
+    def:mpu_admissible_equivalence_datum}
+  After adding one ancilla of dimension $d$ per site and performing the source
+  blocking, denote the actual enlarged blocked endpoints by
+  $\widehat{\mathcal U}_1$ and $\widehat{\mathcal U}_2$. For either time
+  reversal or transposition, let $p\mapsto\mathcal W_{\mathcal S}(p)$ be the
+  source-constructed interpolation from $\widehat{\mathcal U}_1$ to
+  $\widehat{\mathcal U}_2$. Suppose this interpolation carries an admissible
+  symmetry-path datum of blocking length one. Thus the path
+  $\mathcal W_{\mathcal S}(p)$ and its fixed conjugate, physical-adjoint,
+  transposed, and $\mathcal S$-image comparison paths are simple and carry
+  continuously varying reduced full-support source data. Suppose also that
+  the one- and two-site enlarged endpoint tensors used in the local comparison
+  carry their own data. Then $\widehat{\mathcal U}_1$ and
+  $\widehat{\mathcal U}_2$ are admissibly strictly equivalent under both time
+  reversal and transposition. No equivalence of the original ancilla-free
+  tensors is asserted, because the equal ancilla dimensions used here need not
+  satisfy the coprimality condition in
+  Definition~\ref{def:mpu_admissible_symmetry_equivalence}.
+  % Source lines: paper_v2.tex 2203--2230.
 \end{proposition}
 
 \section{Finite-region observable algebras}
