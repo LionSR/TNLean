@@ -248,7 +248,8 @@ REGENERATED_SUFFIXES = frozenset({".dtx", ".ins", ".fmt", ".mf", ".drv"})
 # recognizable is matched and the rest is out of scope, stated here rather
 # than implied by silence.
 WRITE_CALL = re.compile(
-    r"(?:\\write|\\csname\s*write\s*\\endcsname)(?![A-Za-z@_:])(?P<signs>[\s+-]*)"
+    r"(?<!\\)(?:\\write|\\csname\s*write\s*\\endcsname)"
+    r"(?![A-Za-z@_:])(?P<signs>[\s+-]*)"
     r"(?:\"(?P<hex>[0-9A-Fa-f]+)|'(?P<oct>[0-7]+)|(?P<dec>[0-9]+)"
     r"|(?P<name>\\[A-Za-z@_:]+))?"
 )
@@ -263,12 +264,16 @@ ALLOCATED_STREAM = re.compile(r"\\(?:newwrite|iow_new:N)\s*(\\[A-Za-z@_:]+)")
 # gate that looks closed. Only executors are named: `\tex_shellescape:D` and
 # `\sys_if_shell:TF` report whether the engine has a shell and run nothing, so
 # reading them as calls would refuse a file for asking a question.
-# The boundary is the one `WRITE_CALL` uses, for the same reason: `@` is a
+# The lookbehind is the other half of reading a control sequence: `\\write18`
+# is the control symbol `\\` followed by ordinary characters, not the
+# primitive, and a gate that read it as one would refuse a package for
+# typesetting the spelling. The boundary after the name is the one `WRITE_CALL`
+# uses, for the same reason: `@` is a
 # letter in a package and `_` and `:` are letters under `\ExplSyntaxOn`, so
 # `\ShellEscape@status` and `\sys_shell_now:n_aux` are control words of their
 # own and refusing them would block a shell-free release over a name.
 SHELL_ESCAPE_NAME = re.compile(
-    r"(?:\\(?:Delayed)?ShellEscape"
+    r"(?<!\\)(?:\\(?:Delayed)?ShellEscape"
     r"|\\sys_(?:shell_(?:now|shipout)|get_shell):[a-zA-Z]*"
     r"|\\(?:ior|iow)_shell_open:[a-zA-Z]*)"
     r"(?![A-Za-z@_:])"
@@ -957,7 +962,15 @@ def check_dependencies(closure: Closure, manifest: dict) -> Report:
         f"the classification covers {filed}, and {ENTRY.name} loads "
         f"{closure.libraries}",
     )
-    loaded = set(closure.packages) | set(closure.libraries)
+    # A retired front end can arrive as a package load, a library load, or a
+    # file the entry point inputs, and a vendored `tikz-cd.sty` reaches the
+    # closure only in the third way. The stem is what the name is compared
+    # against, since a load carries the suffix and a package name does not.
+    loaded = (
+        set(closure.packages)
+        | set(closure.libraries)
+        | {Path(name).stem for name in closure.files}
+    )
     survivors = sorted(name for name in RETIRED_DEPENDENCIES if name in loaded)
     report.require(
         not survivors,

@@ -821,6 +821,24 @@ def test_a_package_load_is_read_in_both_of_its_spellings() -> None:
             assert any("tikz-cd" in r for r in report.failures), (spelling, report.failures)
 
 
+def test_a_retired_front_end_vendored_as_a_file_is_caught() -> None:
+    """A retired front end can arrive as a package load, a library load, or a
+    file the entry point inputs. The third reaches the closure only as a file
+    name, so the reading compares stems as well."""
+
+    with tempfile.TemporaryDirectory() as directory:
+        source = Path(directory) / "tex"
+        source.mkdir()
+        (source / "tenkz.sty").write_text(
+            STAGE_CONTRACT + "\\input{tikz-cd.sty}\n", encoding="utf-8"
+        )
+        (source / "tikz-cd.sty").write_text(STAGE_CONTRACT, encoding="utf-8")
+        closure = tenkz_ctan.walk_closure(source, "tenkz.sty")
+    assert closure.files == ["tenkz.sty", "tikz-cd.sty"], closure.files
+    report = tenkz_ctan.check_dependencies(closure, _ownership([], [], []))
+    assert any("tikz-cd" in reason for reason in report.failures), report.failures
+
+
 def test_a_retired_front_end_load_fails_the_dependency_check() -> None:
     """The removed front ends each brought a load. The walk blanks comments
     before it reads one, so a retired name in the closure is a surviving load
@@ -921,6 +939,12 @@ def test_every_spelling_of_stream_eighteen_is_the_shell_escape_stream() -> None:
     for longer in (r"\ShellEscape@status", r"\ShellEscaped{x}",
                    r"\sys_shell_now:n_aux {x}"):
         assert not tenkz_ctan.shell_escape_call(longer), longer
+    # A backslash preceded by a backslash does not start a control sequence:
+    # `\\write18` is the control symbol and then ordinary characters, and a
+    # gate that read it as the primitive would refuse a package for
+    # typesetting the spelling.
+    for typeset in (r"\\write18{x}", r"\\ShellEscape{x}"):
+        assert not tenkz_ctan.shell_escape_call(typeset), typeset
     # Numbers that are not 18 in the base their prefix names, an odd run of
     # minus signs, and a control sequence that merely starts with the same
     # letters.
