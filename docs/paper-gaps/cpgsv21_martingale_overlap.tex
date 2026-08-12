@@ -164,6 +164,31 @@ every left length.  The remaining task is the separate blocked-to-cyclic
 comparison, including windows
 crossing the periodic cut.  No excitation-compression estimate is used.
 
+\subsection{Three-site to cyclic transport}
+
+The independent locality step is now complete for range-two terms.  If the two
+adjacent terms $h_0,h_1$ on the three-site Hilbert space satisfy
+\[
+  h_0h_1+h_1h_0\geq-c(h_0+h_1)
+\]
+in quadratic form, then
+\leanid{MPSTensor.re_inner_localTermES_adjacent_twoSite_forward_ge_of_threeSite}
+and
+\leanid{MPSTensor.re_inner_localTermES_adjacent_twoSite_backward_ge_of_threeSite}
+transport the same inequality, with the same coefficient $c$, to every forward
+and backward adjacent cyclic pair on every chain of length $N\geq3$.  The proof
+splits the configuration basis into a cyclic three-site window and its ordered
+complement, applies the three-site estimate fiberwise through cyclic
+restriction, and sums over the complement.  Since the window may begin at any
+site, the result includes positions crossing the periodic cut; the backward
+statement begins the forward window at the cyclic predecessor.
+
+This theorem is only transport infrastructure.  It does not supply the
+three-site numerical estimate, does not claim the optimized FNW coefficient,
+and does not use an excitation-compression surrogate.  In particular, the
+open-chain C3 estimate still has to be identified with the two concrete
+three-site range-two local terms before it can feed this transport theorem.
+
 \section{Finite-row martingale reduction}
 
 The current development separates the finite-row martingale algebra from the

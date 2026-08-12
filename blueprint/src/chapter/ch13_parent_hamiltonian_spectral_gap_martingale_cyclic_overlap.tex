@@ -1,3 +1,37 @@
+
+\begin{lemma}[Three-site anticommutator transport to cyclic adjacent pairs]
+    \label{lem:three_site_anticommutator_cyclic_transport}
+    \lean{MPSTensor.re_inner_localTermES_adjacent_twoSite_forward_ge_of_threeSite}
+    \lean{MPSTensor.re_inner_localTermES_adjacent_twoSite_backward_ge_of_threeSite}
+    \leanok
+    \uses{rem:euclidean_local_projector_ingredients}
+    Let $h_0,h_1$ be the two adjacent range-two local terms on three sites.
+    Suppose that, for every three-site vector $w$,
+    \begin{align}
+      -c\bigl(\re\langle h_0w,w\rangle+\re\langle h_1w,w\rangle\bigr)
+      \leq
+      \re\langle h_0w,h_1w\rangle+\re\langle h_1w,h_0w\rangle.
+      \notag
+    \end{align}
+    Then for every $N\geq3$, every site $i\in\Fin{N}$, and every $N$-site
+    vector $v$, the same inequality with the same coefficient $c$ holds for
+    both adjacent cyclic pairs $(h_i,h_{i+1})$ and $(h_i,h_{i-1})$.  All site
+    indices are taken modulo $N$, so this includes pairs and three-site windows
+    crossing the periodic cut.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Split the configuration basis into the cyclic three-site window beginning
+    at $i$ and its ordered complement.  The global quadratic form is the sum,
+    over complementary configurations, of the corresponding three-site
+    quadratic forms.  Cyclic restriction intertwines the two global local terms
+    with the terms at sites $0$ and $1$ on the three-site chain, so the assumed
+    estimate applies in each summand and summation leaves $c$ unchanged.  For
+    the backward pair, begin the forward window at $i-1$; moving one step
+    forward from that site returns $i$, including when $i=0$.
+\end{proof}
+
 \begin{lemma}[Quadratic-form estimate from the martingale condition]
     \label{lem:parent_hamiltonian_ordered_rowsum_quadratic}
     \lean{MPSTensor.parentHamiltonianES_quadratic_form_of_ordered_local_term_bounds}
