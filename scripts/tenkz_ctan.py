@@ -301,12 +301,17 @@ REDEFINED_NAME = re.compile(
 # interface. The bar is only a command in a file name, so the reading is
 # scoped to one: a bare `"|` in a macro body or in typeset documentation is
 # two characters, and refusing it would refuse a source that executes nothing.
+# The operand a stream primitive takes before its file name: a control
+# sequence or a number, with the equals sign optional, which is TeX's own
+# syntax and not a house spelling.
+STREAM_OPERAND = r"(?:\\[A-Za-z@_:]+|[0-9]+)?\s*=?\s*"
+# Only the primitives that open a file are read. `\write` and `\read` take a
+# stream that is already open and a token list that is data, so a token list
+# beginning with a bar is text and refusing it would refuse a valid release.
 PIPE_FILENAME = re.compile(
-    r"\\(?:openin|openout|input|include|read|write)\s*"
-    r"(?:\\[A-Za-z@_:]+\s*)?"
-    r"(?:=\s*)?"
-    r"(?:\{\s*)?"
-    r"\"?\s*\|"
+    r"\\(?:openin|openout|input|include)\s*"
+    + STREAM_OPERAND
+    + r"(?:\{\s*)?\"?\s*\|"
 )
 # The named ways to reach a shell that are not a write at all: the TeX
 # primitive's LaTeX name, and expl3's own shell interface, which a file under
@@ -410,7 +415,7 @@ ABSOLUTE_LOAD = re.compile(
     r"|file_if_exist:nTF)(?:\s*\*)?"
     rf"\s*(?:\[[^]]*\]\s*)?\{{\s*\"?{ABSOLUTE_PATH_HEAD}"
     rf"|\\input\s*\"?{ABSOLUTE_PATH_HEAD}"
-    rf"|\\open(?:in|out)\s*(?:\\[A-Za-z@_:]+)?\s*=\s*\"?{ABSOLUTE_PATH_HEAD}"
+    rf"|\\open(?:in|out)\s*{STREAM_OPERAND}\"?{ABSOLUTE_PATH_HEAD}"
 )
 
 

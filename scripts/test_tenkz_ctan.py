@@ -971,10 +971,17 @@ def test_every_spelling_of_stream_eighteen_is_the_shell_escape_stream() -> None:
     # no API.
     # The bar is a command only in a file name, so the reading is scoped to
     # one: two characters in a macro body or in prose execute nothing.
-    for piped in ('\\openin\\stream="|uname -a"', r"\input{|cmd}", r'\input "|cmd"'):
+    # The stream operand is a control sequence or a number, and the equals
+    # sign is optional: that is TeX's syntax, not a house spelling.
+    for piped in ('\\openin\\stream="|uname -a"', r"\input{|cmd}", r'\input "|cmd"',
+                  '\\openout1="|cmd"', '\\openin1="|cmd"'):
         assert tenkz_ctan.shell_escape_call(piped), piped
+    # Only the primitives that open a file are read: `\\write` and `\\read` take
+    # a stream already open and a token list that is data, so a token list
+    # beginning with a bar is text.
     for plain in ('\\openin\\stream="plain.tex"', r'\def\separator{"|}',
-                  'the sequence "| in prose'):
+                  'the sequence "| in prose',
+                  "\\newwrite\\out\n\\write\\out{|literal}\n"):
         assert not tenkz_ctan.shell_escape_call(plain), plain
     # A name the same file redefines is no longer the stream it was allocated
     # as, so the allocation ground does not carry it.
@@ -1082,6 +1089,8 @@ def test_an_unbraced_absolute_input_is_an_absolute_path() -> None:
                      r"\IfFileExists{/Users/somebody/local.cfg}{}{}",
                      r"\file_input:n { /Users/somebody/local.tex }",
                      r"\openin\src=/Users/somebody/data.tex",
+                     r"\openin1 /Users/somebody/data.tex",
+                     r"\openout\log=/Users/somebody/run.log",
                      # A path holding a space is written quoted, braced or not.
                      '\\input{"/Users/somebody/My Documents/f.tex"}'):
             (tree / "tenkz.sty").write_text(load + "\n", encoding="utf-8")
