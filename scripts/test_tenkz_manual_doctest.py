@@ -4,8 +4,10 @@
 from __future__ import annotations
 
 import importlib.util
+import re
 import sys
 import tempfile
+from collections import Counter
 from types import SimpleNamespace
 from pathlib import Path
 
@@ -47,6 +49,36 @@ def main() -> int:
         raise AssertionError(
             "no refusal block in the manual was pinned to [TKZ-EQ-SIGNATURE]: "
             f"found {sorted(codes)}"
+        )
+    # A refusal block that loses its classification silently becomes an
+    # ordinary example, and the assertions above stay green as long as one
+    # classified refusal survives.  Cross-check structurally: in every source
+    # file, each uncommented \begin{tnrefusal} must surface as exactly one
+    # extracted example carrying expected_failure.  Count-matching per file
+    # names the chapter that lost a refusal without pinning diagnostic codes
+    # or a numeric floor: renaming a diagnostic or retiring a refusal block
+    # removes both sides of the equation.
+    classified = Counter(
+        example.source.resolve() for example in manual if example.expected_failure
+    )
+    begin_refusal = re.compile(r"\\begin\{tnrefusal\}")
+    for source in DOCTEST._manual_sources():
+        declared = len(
+            begin_refusal.findall(
+                DOCTEST._strip_tex_comments(source.read_text(encoding="utf-8"))
+            )
+        )
+        extracted_refusals = classified.pop(source.resolve(), 0)
+        if declared != extracted_refusals:
+            raise AssertionError(
+                f"{source}: {declared} uncommented tnrefusal block(s) in the "
+                f"source, but {extracted_refusals} extracted example(s) carry "
+                "expected_failure"
+            )
+    if classified:
+        raise AssertionError(
+            "expected-failure examples came from files outside the manual "
+            f"source graph: {sorted(str(path) for path in classified)}"
         )
     if len(reference) < REFERENCE_FLOOR:
         raise AssertionError(
