@@ -95,7 +95,14 @@ PAYLOAD = re.compile(
 # its arguments, so the patterns allow it too: `\RequirePackage {tikz}` is a
 # load, and a closure that missed it would let the manifest pin a dependency
 # list the package does not have.
-INPUT_CALL = re.compile(r"\\input\s*\{([^}]*)\}", re.DOTALL)
+# Both of plain TeX's spellings. The braced one is tried first; the unbraced
+# one reads to the next space, as TeX does, and stops at a brace, a comment, or
+# a control sequence rather than guessing past one. A walk that read only the
+# braced form would let a stage module, or a package, reach an upload without
+# reaching the pin.
+INPUT_CALL = re.compile(
+    r"\\input\s*\{([^}]*)\}|\\input\s+([^\s{}\\%]+)", re.DOTALL
+)
 # Every spelling of a package load. A `.sty` writes `\RequirePackage`, but
 # nothing stops a staged runtime file from writing `\usepackage` or
 # `\RequirePackageWithOptions`, and they load the same package. A closure that
@@ -250,15 +257,21 @@ ALLOCATED_STREAM = re.compile(r"\\(?:newwrite|iow_new:N)\s*(\\[A-Za-z@_:]+)")
 # primitive's LaTeX name, and expl3's own shell interface, which a file under
 # `\ExplSyntaxOn` would use in preference to either. The expl3 names are the
 # ones its source defines, `\sys_shell_now:n`, `\sys_shell_shipout:n`,
-# `\sys_get_shell:nnN`, `\ior_shell_open:Nn`, and `\iow_shell_open:Nn`, read
+# `\sys_get_shell:nnN`, `\ior_shell_open:Nn`, and `\iow_shell_open:Nn`, with
+# shellesc's `\DelayedShellEscape` beside its `\ShellEscape`, read
 # from `l3kernel` rather than recalled, because a name invented here would be a
 # gate that looks closed. Only executors are named: `\tex_shellescape:D` and
 # `\sys_if_shell:TF` report whether the engine has a shell and run nothing, so
 # reading them as calls would refuse a file for asking a question.
+# The boundary is the one `WRITE_CALL` uses, for the same reason: `@` is a
+# letter in a package and `_` and `:` are letters under `\ExplSyntaxOn`, so
+# `\ShellEscape@status` and `\sys_shell_now:n_aux` are control words of their
+# own and refusing them would block a shell-free release over a name.
 SHELL_ESCAPE_NAME = re.compile(
-    r"\\ShellEscape\b"
+    r"(?:\\(?:Delayed)?ShellEscape"
     r"|\\sys_(?:shell_(?:now|shipout)|get_shell):[a-zA-Z]*"
-    r"|\\(?:ior|iow)_shell_open:[a-zA-Z]*"
+    r"|\\(?:ior|iow)_shell_open:[a-zA-Z]*)"
+    r"(?![A-Za-z@_:])"
 )
 SHELL_ESCAPE_STREAM = 18
 
@@ -315,7 +328,7 @@ def shell_escape_call(text: str) -> str:
 ABSOLUTE_PATH_HEAD = r"(?:/|[A-Za-z]:[\\/])"
 ABSOLUTE_LOAD = re.compile(
     r"\\(?:input|include|usepackage|RequirePackageWithOptions|RequirePackage"
-    r"|InputIfFileExists|includegraphics)(?:\s*\*)?"
+    r"|InputIfFileExists|IfFileExists|includegraphics)(?:\s*\*)?"
     rf"\s*(?:\[[^]]*\]\s*)?\{{\s*\"?{ABSOLUTE_PATH_HEAD}"
     rf"|\\input\s*\"?{ABSOLUTE_PATH_HEAD}"
 )
@@ -508,8 +521,8 @@ def walk_closure(source: Path = SOURCE, entry: str = ENTRY.name) -> Closure:
             packages.extend(part.strip() for part in group.split(",") if part.strip())
         for group in LIBRARY_CALL.findall(text):
             libraries.extend(part.strip() for part in group.split(",") if part.strip())
-        for target in INPUT_CALL.findall(text):
-            visit(target.strip())
+        for braced, unbraced in INPUT_CALL.findall(text):
+            visit((braced or unbraced).strip())
 
     visit(entry)
     closure.packages = sorted(set(packages))

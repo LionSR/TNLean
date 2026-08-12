@@ -68,6 +68,26 @@ def test_closure_reads_the_load_graph_and_not_the_prose() -> None:
     assert closure.libraries == ["calc", "hobby"], closure.libraries
 
 
+def test_closure_reads_the_unbraced_input() -> None:
+    """Plain TeX's `\\input` takes a file name with no braces, reading to the
+    next space. A walk that read only the braced form would let a stage module
+    reach an upload without reaching the pin, and the load it brought with it
+    would go unread."""
+
+    with tempfile.TemporaryDirectory() as directory:
+        source = Path(directory) / "tex"
+        source.mkdir()
+        (source / "tenkz.sty").write_text(
+            STAGE_CONTRACT + "\\input tenkz-stage.code.tex\n", encoding="utf-8"
+        )
+        (source / "tenkz-stage.code.tex").write_text(
+            STAGE_CONTRACT + "\\usepackage{tikz-cd}\n", encoding="utf-8"
+        )
+        closure = tenkz_ctan.walk_closure(source, "tenkz.sty")
+    assert closure.files == ["tenkz.sty", "tenkz-stage.code.tex"], closure.files
+    assert closure.packages == ["tikz-cd"], closure.packages
+
+
 def test_closure_reads_tex_spacing_before_arguments() -> None:
     with tempfile.TemporaryDirectory() as directory:
         source = Path(directory) / "tex"
@@ -889,13 +909,18 @@ def test_every_spelling_of_stream_eighteen_is_the_shell_escape_stream() -> None:
     # either primitive.
     for named in (r"\sys_shell_now:n {ls}", r"\sys_shell_shipout:x {ls}",
                   r"\sys_get_shell:nnN {x}{y}\z", r"\ior_shell_open:Nn \x {ls}",
-                  r"\iow_shell_open:Nn \x {ls}"):
+                  r"\iow_shell_open:Nn \x {ls}", r"\DelayedShellEscape{ls}"):
         assert tenkz_ctan.shell_escape_call(named), named
     # Asking whether the engine has a shell runs nothing. Reading these as
     # calls would refuse a file for putting the question.
     for asks in (r"\tex_shellescape:D", r"\sys_if_shell:TF {y}{n}",
                  r"\sys_shell_open:Nn \x {ls}"):
         assert not tenkz_ctan.shell_escape_call(asks), asks
+    # A longer control word that merely starts with an executor's letters is a
+    # different macro, on the same boundary rule the write gate uses.
+    for longer in (r"\ShellEscape@status", r"\ShellEscaped{x}",
+                   r"\sys_shell_now:n_aux {x}"):
+        assert not tenkz_ctan.shell_escape_call(longer), longer
     # Numbers that are not 18 in the base their prefix names, an odd run of
     # minus signs, and a control sequence that merely starts with the same
     # letters.
@@ -967,6 +992,7 @@ def test_an_unbraced_absolute_input_is_an_absolute_path() -> None:
         for load in (r"\includegraphics*{/Users/somebody/figure.pdf}",
                      r"\includegraphics *{/Users/somebody/figure.pdf}",
                      r"\InputIfFileExists{/Users/somebody/local.cfg}{}{}",
+                     r"\IfFileExists{/Users/somebody/local.cfg}{}{}",
                      # A path holding a space is written quoted, braced or not.
                      '\\input{"/Users/somebody/My Documents/f.tex"}'):
             (tree / "tenkz.sty").write_text(load + "\n", encoding="utf-8")
