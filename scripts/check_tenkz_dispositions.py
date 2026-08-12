@@ -35,17 +35,45 @@ COMMAND = re.compile(r"\\(tnpic|tntree)\b")
 TENKZEQ_TOKEN = re.compile(r"\\(begin|end)\{tenkzeq\}")
 SETUP_COMMAND = re.compile(r"\\(?:tnset|tndeclare(?:atom)?|tenkzkernel)\b")
 DISPOSITIONS = ("preserve", "codemod", "redraw")
-DEAD_COMMANDS = (
-    "tnput",
-    "tnjoin",
-    "tnedge",
-    "tnarrow",
-    "tnsite",
-    "tnghost",
-    "tncut",
-    "tnregion",
-    "tnprose",
+# The registry's tombstone rows are the one record of every retired spelling
+# (LANGUAGE-1.0 section 10), so this file keeps no list of its own: a spelling
+# it calls dead is dead because the ledger says so and the parser refuses it,
+# not because a second list here happens to agree.
+TOMBSTONES = tombstone_rows(load_registry())
+
+
+def _retired_values(rows: list[tuple[str, str, str]]) -> dict[str, set[str]]:
+    """Retired alphabet words, keyed by the key that used to accept them.
+
+    A bare spelling buries a whole key, which the unknown-key check already
+    answers, and a command row buries a control sequence; only a buried word
+    of a live key belongs here.
+    """
+    retired: dict[str, set[str]] = {}
+    for _scope, spelling, _migration in rows:
+        if spelling.startswith("\\"):
+            continue
+        key, _separator, value = spelling.partition("=")
+        if value.strip():
+            retired.setdefault(key.strip(), set()).add(value.strip())
+    return retired
+
+
+# Commands that no longer exist.  A command row carries the scope `command'
+# and spells the control sequence with its backslash.
+DEAD_COMMANDS = tuple(
+    spelling.removeprefix("\\")
+    for scope, spelling, _migration in TOMBSTONES
+    if scope == "command"
 )
+RETIRED_VALUES = _retired_values(TOMBSTONES)
+# What the ledger cannot supply, and why.  A tombstone row records that a
+# spelling is dead, not how a reader of the old document was written: the
+# option scope each dead command's bracket group was read in lives in
+# `OPTION_SCOPES` below, because a command row takes the scope `command' and
+# has nowhere to carry it.  `DEAD_KEYS` stays written out for now because a
+# bare-key row also arms the source lint, and several of those words are still
+# ordinary English in the corpus that the audit reads.
 DEAD_KEYS = (
     "out",
     "in",
@@ -98,23 +126,6 @@ SIGNED_KEYS_BY_SCOPE = {
     }
     for scope in ("picture", "atom", "wire", "mark", "setup", "declare")
 }
-# Retired alphabet words, keyed by the key that used to accept them.  The
-# registry's tombstone rows are the one record (LANGUAGE-1.0 section 10), so a
-# spelling this file calls dead is dead because the parser refuses it, not
-# because a second list here happens to agree.
-def _retired_values() -> dict[str, set[str]]:
-    retired: dict[str, set[str]] = {}
-    for _scope, spelling, _migration in tombstone_rows(load_registry()):
-        key, _separator, value = spelling.partition("=")
-        # a bare spelling buries a whole key, which the unknown-key check
-        # already answers; only a buried word of a live key belongs here
-        if value.strip():
-            retired.setdefault(key.strip(), set()).add(value.strip())
-    return retired
-
-
-RETIRED_VALUES = _retired_values()
-
 COMPATIBILITY_KEYS = {
     "picture": {
         "inline",
@@ -174,7 +185,6 @@ OPTION_SCOPES = {
     "tnarrow": "wire",
     "tncut": "mark",
     "tnregion": "mark",
-    "tnprose": "mark",
 }
 
 
@@ -371,6 +381,10 @@ def fragment_target_codes(source: str, kernel: bool = False) -> frozenset[str]:
         "tndeclare",
         "tndeclareatom",
         "tenkzkernel",
+        # `\tnprose` sets a sentence where a picture would stand and puts no
+        # ink on the page.  It is a live registry command, so it makes a
+        # fragment public without making its record dead.
+        "tnprose",
         *DEAD_COMMANDS,
         *SUGAR_COMMANDS,
     )

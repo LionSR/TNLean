@@ -726,8 +726,12 @@ def check(entries: list[Entry]) -> list[str]:
 
 
 def _tex(value: str) -> str:
+    # A command tombstone spells its control sequence, and a migration names
+    # the command that replaced it, so the backslash is read out first: left
+    # alone it would reach the manual as an undefined control sequence.
     return (
-        value.replace("_", r"\_")
+        value.replace("\\", r"\textbackslash{}")
+        .replace("_", r"\_")
         .replace("|", r"\textbar{}\allowbreak{}")
         .replace("(", r"(\allowbreak{}")
         .replace(",", r",\allowbreak{}")
