@@ -167,7 +167,7 @@ no glyph and, by the `skin=none` rule it inherits, no label — unless the
 author declares a skin, while every record — the bonds bridging an open
 hole, its boundary entries — stands unchanged.
 
-### 2.4 Wire keys (10)
+### 2.4 Wire keys (11)
 
 | Key | Type | Values | Default | Diagnostic family |
 |---|---|---|---|---|
@@ -178,9 +178,16 @@ hole, its boundary entries — stands unchanged.
 | `wind=` | pair | cycle `{p,q}` | zero | `TKZ-WIND-*` |
 | `around=` | address-list | — | empty | `TKZ-WIRE-*` |
 | `cross=` | crossing-list | — | empty | `TKZ-CROSS-*` |
+| `crossing=` | small-enum | `over` `under` `alternate` `alternate=over` `alternate=under` | empty | `TKZ-CROSS-*` |
 | `dir=` | small-enum | `to` `from` `none` | `none` | `TKZ-WIRE-*` |
 | `stroke=` | small-enum | `solid` `dashed` `dotted` | `solid` | `TKZ-WIRE-*` |
 | `name=` | identifier | — | generated | `TKZ-NAME-*` |
+
+`crossing=` is the string's habit, the order it takes at every crossing it
+makes, stated once instead of once per crossing; `cross=` remains the
+exception that overrules the habit at one named place. A string that meets
+nothing needs neither. The pair is what lets a derived crossing set carry an
+order without a declaration per member (§5).
 
 `dir=` draws the direction mark of a directed index, virtual or physical; it
 changes no topology, and it enters the boundary signature. On a resolved
@@ -1047,7 +1054,7 @@ is not the fixed two-axis atom contract of §7.
 | `weight=string` | `kind=string` |
 | `trace style=racetrack` | closure depth follows the selection the closure clears (§5) |
 | `inline`, `compact` | math-style sensing + `size=`; a page-constrained picture declares `metrics=compact` (§2.2) |
-| `via=` | `route={<side> of <selector>}`: every waypoint in this contract's own sketches was a side of a selection |
+| `via=` | `route={<side> of <selector>}` where the waypoint cleared records (§12.3); nothing where it only bent a line past cells that hold none (§12.1), and nothing on a wound string, whose class is already its path (§5, §12.2) |
 | `bend=` | nothing: an arc leaves and enters along its ends' faces |
 | `weight=` | nothing: the port type decides the stroke, and bundling is a claim the audit already carries |
 | `nudge=` (atom and mark) | a basis member `(r,c,k)`, an ordinary address, or the label station rule (§6) |
@@ -1131,22 +1138,37 @@ twenty-six there rather than here, so the one arrival is counted once.
 
 ```tex
 \[\begin{tenkz}[rows={wire,wire}, cols=4, bonds=none]
-  \tnwire[kind=string, species=left,  name=a, route={s of (2,2)}]{(1,1)}{(2,3)}
-  \tnwire[kind=string, species=right, name=b, route={n of (2,3)},
+  \tnwire[kind=string, species=left,  name=a]{(1,1)}{(2,3)}
+  \tnwire[kind=string, species=right, name=b,
           cross={under at crossing of a and b}]{(1,4)}{(2,2)}
   \tnmark[form=label, label pos=45]{crossing of a and b}{$R$}
 \end{tenkz}\]
 ```
+
+The strands carry no route, and this is where the waypoint list is seen to
+have carried two different things. Its two waypoints here named cells of a
+wire row; a wire row populates no site, so those cells hold no record, and a
+selection is a set of records whose silhouettes a hull is measured from (§3,
+§5). There was nothing to clear, and two straight strands already cross once,
+which is the braid. A waypoint that cleared records becomes the side of their
+selection (§12.3); one that only bent a line goes the way of `bend=`.
 
 ### 12.2 Torus with wound string (`rmp-iii-a-torus-one`)
 
 ```tex
 \[\begin{tenkz}[lattice={3x3},          % sugar: rows={wire,wire,wire}, cols=3
               west=trace, east=trace, north=trace, south=trace]
-  \tnwire[kind=string, species=flux, closed, wind={1,0},
-          route={s of picture}]         % the homotopy class is recorded
+  \tnwire[kind=string, species=flux, closed,
+          wind={1,0}]                   % the homotopy class is recorded
 \end{tenkz}\]
 ```
+
+The wound string takes no route either, for a second reason: its class is its
+path. The rendered curve realizes `{1,0}` or the picture is refused (§5), and
+waypoint routing was already mutually exclusive with winding before the
+waypoint list retired. A route may perfectly well name the whole picture,
+which is a record like any other and answers to `picture` (§3, §12.7); what
+no route can do is stand in for a class the string states itself.
 
 ### 12.3 Pulling-through (`rmp-iii-a-pulling-through`)
 
@@ -1158,17 +1180,23 @@ twenty-six there rather than here, so the one arrival is counted once.
   \end{tenkz}
   =
   \begin{tenkz}[rows={ket}, cols=3, physical=up]   % sugar: physical= adds the up ports
-    \tnwire[kind=string, species=g, name=g,
+    \tnwire[kind=string, species=g, name=g, crossing=over,
             route={n of (1,1) .. (1,3)}]{open}{open}
   \end{tenkz}
 \end{tenkzeq}
 ```
 
-The second panel declares no crossing and needs none: the route crosses
+The second panel names no crossing and needs to name none: the route crosses
 exactly those legs that leave the selection northward, each once, in hull
 order, and each derived crossing enters the model with every field a declared
-one carries. The reach rule lengthens all three legs past the string, so the
-crossings the author claimed all exist — which is the defect this sketch used
+one carries. Order is one of those fields, and it is the one thing derivation
+cannot supply, so the panel states it once as the string's habit rather than
+three times as three declarations. A derived crossing set is still a set of
+crossings, and no crossing may be left ambiguous (§5). The first panel needs
+no habit because its route meets nothing: a string passing south of legs that
+all point north crosses none of them, which is the true answer to the claim it
+makes. The reach rule lengthens all three legs past the string, so the
+crossings the author claimed all exist, which is the defect this sketch used
 to carry, where two of the three legs stopped short and the crossing police
 had nothing to refuse.
 
@@ -1291,3 +1319,22 @@ confirmation at L1 acceptance:
    The default inherits the whole `skin=none` reading: a void's authored
    label is suppressed with its glyph, so a labelled anchor that must stay
    visible declares a skin.
+8. **Three sketches now compile as printed — corrected 2026-08-12.** The
+   waypoint retirement rewrote the sketches of §12.1, §12.2 and §12.3 without
+   compiling the results, and all three were refused. Each is settled against
+   the tables above rather than by widening the language. §12.1's two routes
+   named cells of a wire row, which holds no record for a hull to be measured
+   from, and the strands lose them; the migration hint for `via=` in §10 no
+   longer claims that every waypoint of these sketches was a side of a
+   selection, because two of them cleared nothing. §12.2's route asked the
+   whole picture for a side, and a wound string wants no route at all; the
+   whole-picture selection stands as §3 and §12.7 have it, unchanged. §12.3's
+   derived crossings were left without an order, which the crossing rule
+   refuses whether a crossing is derived or declared, so the second panel now
+   states the string's habit once.
+9. **`crossing=` joins the wire table — corrected 2026-08-12.** The wire keys
+   read ten while the parser carried eleven: the habit key arrived with the
+   route that derives a crossing set, under the extension gate the amendment
+   on crossing order opened, and the table never followed. This books the row
+   that was already live and already used by the wound-cycle figures. The
+   count moves from ten to eleven and no parser row moves with it.
