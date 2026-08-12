@@ -10,7 +10,8 @@
 % is exactly where these labels stood before the station was added: no
 % figure regresses, and none of them improves either.
 %
-% Each picture below is a placement or a frame the reading cannot answer.
+% Each picture below is a placement, a frame, or a kind of ink the reading
+% cannot answer.
 % They are pinned so the reading that answers them -- bearings between
 % resolved points, turned into the atom's own frame, issue 6195 -- has a
 % target to flip, and so a later change cannot move them without saying so.
@@ -74,6 +75,11 @@
           {
             \str_if_eq:VnF #2 {s}
               { \errmessage{circle~carrier~bead~answered:~update~the~pin} }
+          }
+        {X}
+          {
+            \str_if_eq:VnF #2 {n}
+              { \errmessage{a~label~answered~another~label:~update~the~pin} }
           }
       }
       { \errmessage{unexpected~label~in~gap~fixture} }
@@ -139,8 +145,23 @@
   \tnwire[name=CW]{C1}{C3}
   \tn[at=on CW 0.5, skin=dot]{W}
 \end{tenkz}
+% The table reads ink: wires, legs, closures, and the lanes a span stands
+% in.  It does not read other labels, and a label is ink too.  Here the
+% wire takes the dot's south, so its name stations north, and the mark's
+% own name is already standing there: the two land on the same point.
+% Answering this needs the measured box of each label, which does not exist
+% when the table is built -- the boxes are what the ink stage goes on to
+% measure -- and it needs an order in which two labels that each want the
+% same face are settled.  That is a further stage rather than a further
+% record, so it is deferred with the rest against issue 6195.
+\begin{tenkz}[lattice={2x1}, bonds=none]
+  \tn[at=(1,1), name=XA, skin=dot]{X}
+  \tn[at=(2,1), name=XB]{}
+  \tnwire{XA}{XB}
+  \tnmark[form=label, label pos=90]{XA}{$m$}
+\end{tenkz}
 \ExplSyntaxOn
-\int_compare:nNnF { \l__tenkz_test_side_count_int } = {9}
-  { \errmessage{gap~fixture~did~not~station~nine~labels} }
+\int_compare:nNnF { \l__tenkz_test_side_count_int } = {10}
+  { \errmessage{gap~fixture~did~not~station~ten~labels} }
 \ExplSyntaxOff
 \end{document}
