@@ -134,4 +134,70 @@ theorem IsMPUSimple.simple2_of_normalizedDiagonal_pow_eq_vecMulVec
     _ = doubleLayerTensor W i j * Matrix.vecMulVec ρ Φ *
         doubleLayerTensor W k l := by rw [hpower]
 
+/-- A normalized rank-one power with normalized fixed pair fixes its
+right vector and its left covector. These are the two boundaries of the
+stabilized diagonal tail.
+
+Source: arXiv:1703.09188, equation `Erightleft` and Theorem III.8,
+equations (31)--(32), lines 274--280 and 563--600. -/
+theorem normalizedDiagonal_pow_fixed_pair_of_eq_vecMulVec
+    (W : MPOTensor d D) (ρ Φ : Fin (D * D) → ℂ) (J : ℕ)
+    (hpair : Φ ⬝ᵥ ρ = 1)
+    (hpower : normalizedDiagonal (doubleLayerTensor W) ^ J =
+      Matrix.vecMulVec ρ Φ) :
+    normalizedDiagonal (doubleLayerTensor W) ^ J *ᵥ ρ = ρ ∧
+      Matrix.vecMul Φ (normalizedDiagonal (doubleLayerTensor W) ^ J) = Φ := by
+  constructor
+  · rw [hpower, Matrix.vecMulVec_mulVec, hpair]
+    simp
+  · rw [hpower, Matrix.vecMul_vecMulVec, hpair]
+    simp
+
+/-- Replacing an aligned rank-one insertion by its supplied
+normalized-diagonal power gives the exact normalized diagonal-word tail between
+two retained double-layer letters.
+
+Source: arXiv:1703.09188, Theorem III.8, equations (31)--(32), Section III.B
+(lines 563--600). -/
+theorem doubleLayerTensor_rankOne_mul_eq_normalizedDiagonal_tail
+    (W : MPOTensor d D) (ρ Φ : Fin (D * D) → ℂ) (J : ℕ)
+    (hpower : normalizedDiagonal (doubleLayerTensor W) ^ J =
+      Matrix.vecMulVec ρ Φ)
+    (i j k l : Fin d) :
+    doubleLayerTensor W i j * Matrix.vecMulVec ρ Φ *
+        doubleLayerTensor W k l =
+      ((d : ℂ)⁻¹) ^ J •
+        ∑ τ : Fin J → Fin d,
+          doubleLayerTensor W i j *
+            evalWord (doubleLayerTensor W) (List.ofFn τ) (List.ofFn τ) *
+              doubleLayerTensor W k l := by
+  rw [← hpower, normalizedDiagonal_pow_eq_sum_evalWord]
+  simp only [Matrix.mul_smul, Matrix.smul_mul, Matrix.mul_sum, Finset.sum_mul]
+
+/-- Aligned supplied `simple2` and the supplied normalized-diagonal power
+identify the ordinary two-letter double-layer product with the exact normalized
+diagonal-word tail. Both hypotheses are used in the same network: `simple2`
+introduces the rank-one matrix, and the power equation expands it as the tail.
+
+Source: arXiv:1703.09188, Theorem III.8, equations (31)--(32), Section III.B
+(lines 563--600). -/
+theorem doubleLayerTensor_mul_eq_normalizedDiagonal_tail_of_simple2
+    (W : MPOTensor d D) (ρ Φ : Fin (D * D) → ℂ) (J : ℕ)
+    (hpower : normalizedDiagonal (doubleLayerTensor W) ^ J =
+      Matrix.vecMulVec ρ Φ)
+    (hsimple2 : ∀ i j k l : Fin d,
+      doubleLayerTensor W i j * doubleLayerTensor W k l =
+        doubleLayerTensor W i j * Matrix.vecMulVec ρ Φ *
+          doubleLayerTensor W k l)
+    (i j k l : Fin d) :
+    doubleLayerTensor W i j * doubleLayerTensor W k l =
+      ((d : ℂ)⁻¹) ^ J •
+        ∑ τ : Fin J → Fin d,
+          doubleLayerTensor W i j *
+            evalWord (doubleLayerTensor W) (List.ofFn τ) (List.ofFn τ) *
+              doubleLayerTensor W k l := by
+  rw [hsimple2]
+  exact doubleLayerTensor_rankOne_mul_eq_normalizedDiagonal_tail
+    W ρ Φ J hpower i j k l
+
 end MPOTensor

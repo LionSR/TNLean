@@ -36,6 +36,7 @@ Commands:
   stage         write the staging tree under --out (default build/ctan)
   archive       write the tree, the archive, and the archive's digest
   sync          report the version and date state of the release artifacts
+  offline       compile the corpus cases against the archive, unpacked flat
   check         run every acceptance check and report one line each
 
 `check` exits 1 on the first failing check's report, 0 when every check
@@ -94,9 +95,32 @@ PAYLOAD = re.compile(
 # its arguments, so the patterns allow it too: `\RequirePackage {tikz}` is a
 # load, and a closure that missed it would let the manifest pin a dependency
 # list the package does not have.
-INPUT_CALL = re.compile(r"\\input\s*\{([^}]*)\}", re.DOTALL)
+# Every spelling of an input, the conditional loaders and expl3's own among
+# them: a file loaded only when it exists is still a file the upload has to
+# carry, and a walk that skipped it would let an installed copy answer. The braced
+# one is tried first, then Web2C's
+# quoted form, which is how a name holding a space is written and which may
+# follow the control word with no space at all, then the bare one, which reads
+# to the next space as TeX does and stops at a brace, a comment, or a control
+# sequence rather than guessing past one. Quotes are stripped from the name.
+# A walk that read one spelling would let a stage module, or a package, reach
+# an upload without reaching the pin.
+INPUT_CALL = re.compile(
+    r"\\(?:input|InputIfFileExists|file_input:n|file_if_exist_input:[a-zA-Z]+)"
+    r"\s*\{\s*\"?([^}\"]*?)\"?\s*\}"
+    r"|\\input\s*\"([^\"]+)\""
+    r"|\\input\s+([^\s{}\\%\"]+)",
+    re.DOTALL,
+)
+# Every spelling of a package load. A `.sty` writes `\RequirePackage`, but
+# nothing stops a staged runtime file from writing `\usepackage` or
+# `\RequirePackageWithOptions`, and they load the same package. A closure that
+# read one spelling would let a load reach an upload without reaching the pin,
+# and would report the retired front ends absent while one was being loaded.
 REQUIRE_CALL = re.compile(
-    r"\\RequirePackage\s*(?:\[[^]]*\]\s*)?\{([^}]*)\}", re.DOTALL
+    r"\\(?:RequirePackageWithOptions|RequirePackage|usepackage)"
+    r"\s*(?:\[[^]]*\]\s*)?\{([^}]*)\}",
+    re.DOTALL,
 )
 LIBRARY_CALL = re.compile(r"\\usetikzlibrary\s*\{([^}]*)\}", re.DOTALL)
 
@@ -184,6 +208,354 @@ SMOKE_DOCUMENT = r"""\documentclass{article}
 \end{document}
 """
 
+# The ways a loaded TikZ library reaches the package, and the report that has
+# to account for every one of them. `docs/tenkz/ctan/DEPENDENCIES.md` reads the
+# same three words: a library the package's own placement and model code calls,
+# a library only the ink it draws needs, and a library loaded with no consumer
+# anywhere in the source. The third class is not a spare bin. It is the finding
+# a rederivation exists to produce, and it is named so that a library entering
+# or leaving it is a reviewed edit rather than a silence.
+DEPENDENCY_CLASSES = ("placement", "ink", "unconsumed")
+
+# Front ends the package once carried, and the load each of them brought with
+# it. They are checked by absence: the closure walk blanks comments before it
+# reads a load, so the sentence in `tenkz.sty` that says commutative diagrams
+# belong to tikz-cd is prose and not a dependency, and a real load would be the
+# only way any of these names could reach the closure.
+RETIRED_DEPENDENCIES = ("tikz-cd", "tikzcd", "quantikz")
+
+# A TikZ library vendored as a file goes by its conventional file name, and a
+# stem alone would leave `tikzlibrarytikzcd.code` bearing no resemblance to the
+# library it is. The suffixes are stripped in the order a name carries them,
+# so `tenkz-core.code.tex` reduces to `tenkz-core` and not to `tenkz-core.code`.
+TIKZ_LIBRARY_FILE = re.compile(r"^tikzlibrary(?P<library>.+)$")
+LOAD_SUFFIXES = (".code.tex", ".tex", ".sty", ".def", ".cls", ".cfg")
+
+
+def load_names(name: str) -> set[str]:
+    """Every name one loaded file could be known by.
+
+    A load may carry a directory, so the basename is what the suffix and the
+    `tikzlibrary` prefix are stripped from; the name as written stays in the
+    set as well, since that is what a manifest would pin.
+    """
+
+    bare = Path(name).name
+    for suffix in LOAD_SUFFIXES:
+        if bare.endswith(suffix):
+            bare = bare[: -len(suffix)]
+            break
+    names = {name, Path(name).name, bare}
+    library = TIKZ_LIBRARY_FILE.match(bare)
+    if library is not None:
+        names.add(library["library"])
+    return names
+
+# What arXiv will not do for a source submission, expressed as the file kinds
+# whose presence would mean it has to. A `.dtx` or `.ins` pair is the usual
+# LaTeX-package shape and needs a docstrip run before the runtime exists; a
+# `.fmt` or a `.mf` needs the format or the font built. tenkz stages its
+# runtime as the files the engine reads, so none of these may be staged. The
+# comparison lowers the suffix first: a file system that preserves case will
+# hand back `tenkz.INS`, and docstrip does not care which way it was typed.
+REGENERATED_SUFFIXES = frozenset({".dtx", ".ins", ".fmt", ".mf", ".drv"})
+
+# The primitives a submission may not need, because arXiv compiles without
+# `\write18`. tenkz writes its event stream to a file stream it allocates, and
+# calls nothing that reaches a shell; the check is what keeps that true.
+#
+# The gate fails closed, because TeX's integer scanner accepts more spellings
+# of 18 than a pattern can enumerate: space, leading zeros, a run of signs, `"`
+# for hexadecimal and `'` for octal, a backtick character constant, `\numexpr`,
+# a register. So a `\write` is read three ways and refused if it is none of
+# them: a constant, evaluated in the base its prefix names and compared with
+# 18; a stream the same file allocated with `\newwrite` or `\iow_new:N`, which
+# is a file stream by construction and by intent, unless the same file also
+# redefines the name; or anything else, which cannot be shown not to be 18 and
+# is a finding on that ground alone.
+#
+# The boundary after `write` excludes `@` and, for a file under
+# `\ExplSyntaxOn`, `_` and `:`, because those are letters there: `\write@event`
+# and `\write:nn` are control words of their own, and reading them as the
+# primitive would refuse a release over a name.
+#
+# What the reading is for is a mistake in a staged source, not a source
+# written to hide a shell call from it. A primitive assembled at run time
+# cannot be read from the text at all, so the one spelling that is still
+# recognizable is matched and the rest is out of scope, stated here rather
+# than implied by silence.
+WRITE_CALL = re.compile(
+    r"(?:\\write|\\csname\s*write\s*\\endcsname)"
+    r"(?![A-Za-z@_:])(?P<signs>[\s+-]*)"
+    r"(?:\"(?P<hex>[0-9A-Fa-f]+)|'(?P<oct>[0-7]+)|(?P<dec>[0-9]+)"
+    r"|(?P<name>\\[A-Za-z@_:]+))?"
+)
+ALLOCATED_STREAM = re.compile(r"\\(?:newwrite|iow_new:N)\s*(\\[A-Za-z@_:]+)")
+# A control sequence the same file also redefines is no longer the stream it
+# was allocated as: `\newwrite\out \def\out{18} \write\out{...}` reaches the
+# shell through a name the allocation vouched for, and so does `\chardef\out=18`
+# and every other primitive that binds a constant. Only the forms that bind
+# are read: `\cs_if_exist:NTF` and `\cs_show:N` ask about a name and leave it
+# alone, and taking the allocation ground away for a question asked would
+# refuse a release for looking. Reading order is beyond a
+# text scan, so an allocated name that is redefined anywhere in the file loses
+# the allocation ground and is refused with every other unreadable stream.
+REDEFINED_NAME = re.compile(
+    r"\\(?:def|edef|gdef|xdef|let|chardef|mathchardef|countdef|dimendef"
+    r"|toksdef|skipdef|muskipdef"
+    r"|cs_(?:new|set|gset|gnew|undefine)[a-z_]*:N[a-zA-Z]*)"
+    r"\s*(\\[A-Za-z@_:]+)"
+)
+# Web2C reads a file name whose first character is a bar as a command to run,
+# so `\openin\stream="|uname -a"` reaches a shell without naming a stream or an
+# interface. The bar is only a command in a file name, so the reading is
+# scoped to one: a bare `"|` in a macro body or in typeset documentation is
+# two characters, and refusing it would refuse a source that executes nothing.
+# The operand a stream primitive takes before its file name: a control
+# sequence or a number, with the equals sign optional, which is TeX's own
+# syntax and not a house spelling.
+STREAM_OPERAND = r"(?:\\[A-Za-z@_:]+|[0-9]+)?\s*=?\s*"
+# Only the primitives that open a file are read. `\write` and `\read` take a
+# stream that is already open and a token list that is data, so a token list
+# beginning with a bar is text and refusing it would refuse a valid release.
+PIPE_FILENAME = re.compile(
+    r"\\(?:openin|openout|input|include)\s*"
+    + STREAM_OPERAND
+    + r"(?:\{\s*)?\"?\s*\|"
+)
+# The named ways to reach a shell that are not a write at all: the TeX
+# primitive's LaTeX name, and expl3's own shell interface, which a file under
+# `\ExplSyntaxOn` would use in preference to either. The expl3 names are the
+# ones its source defines, `\sys_shell_now:n`, `\sys_shell_shipout:n`,
+# `\sys_get_shell:nnN`, `\ior_shell_open:Nn`, and `\iow_shell_open:Nn`, with
+# shellesc's `\DelayedShellEscape` beside its `\ShellEscape`, read
+# from `l3kernel` rather than recalled, because a name invented here would be a
+# gate that looks closed. Only executors are named: `\tex_shellescape:D` and
+# `\sys_if_shell:TF` report whether the engine has a shell and run nothing, so
+# reading them as calls would refuse a file for asking a question.
+# The boundary after the name is the one `WRITE_CALL` uses, for the same
+# reason: `@` is a
+# letter in a package and `_` and `:` are letters under `\ExplSyntaxOn`, so
+# `\ShellEscape@status` and `\sys_shell_now:n_aux` are control words of their
+# own and refusing them would block a shell-free release over a name.
+SHELL_ESCAPE_NAME = re.compile(
+    r"(?:\\(?:Delayed)?ShellEscape"
+    r"|\\sys_(?:shell_(?:now|shipout)|get_shell):[a-zA-Z]*"
+    r"|\\(?:ior|iow)_shell_open:[a-zA-Z]*)"
+    r"(?![A-Za-z@_:])"
+)
+SHELL_ESCAPE_STREAM = 18
+
+
+def absolute_load(text: str) -> str:
+    """The first load in `text` naming an absolute path, or nothing.
+
+    `\\graphicspath` is read separately because its argument is a list: the
+    pattern that reads a single load would see only the first directory, and
+    an absolute second one names the machine just as loudly.
+    """
+
+    found = ABSOLUTE_LOAD.search(text)
+    if found is not None:
+        return found.group(0)
+    for declaration in GRAPHICS_PATH.finditer(text):
+        for directory in GRAPHICS_DIRECTORY.findall(declaration.group(1)):
+            if re.match(ABSOLUTE_PATH_HEAD, directory.strip().strip('"')):
+                return f"\\graphicspath entry {directory.strip()}"
+    return ""
+
+
+def uncontrolled(text: str) -> str:
+    r"""`text` with every `\\` control symbol blanked out.
+
+    A backslash preceded by an odd number of backslashes starts a control
+    sequence and one preceded by an even number does not, so the pairs are
+    removed before anything is read: `\\write18` is the control symbol and then
+    ordinary characters, while `\\\write18` is that symbol and then the
+    primitive. Blanking keeps the length, so a match's span still indexes the
+    text it came from.
+    """
+
+    return text.replace("\\\\", "\x00\x00")
+
+
+def shell_escape_call(text: str) -> str:
+    r"""What in `text` could reach a shell, named, or nothing.
+
+    A `\write` to a constant stream is read in the base its prefix names, so
+    the verdict does not depend on how the number was written, and only 18 is
+    a finding. A `\write` to a stream the same file allocated is a file stream.
+    A `\write` to anything else is a finding, because it cannot be shown not to
+    be 18.
+    """
+
+    scanned = uncontrolled(text)
+    named = SHELL_ESCAPE_NAME.search(scanned)
+    if named is not None:
+        return f"{text[named.start():named.end()]}, which reaches a shell"
+    piped = PIPE_FILENAME.search(scanned)
+    if piped is not None:
+        return (
+            f'{text[piped.start():piped.end()]}, a file name opening a pipe, '
+            "which the engine runs as a command"
+        )
+    allocated = set(ALLOCATED_STREAM.findall(scanned)) - set(
+        REDEFINED_NAME.findall(scanned)
+    )
+    for found in WRITE_CALL.finditer(scanned):
+        call = text[found.start():found.end()]
+        if found["name"] is not None:
+            if found["name"] in allocated:
+                continue
+            return f"{call.strip()}, a stream this file does not allocate"
+        digits, base = (
+            (found["hex"], 16) if found["hex"]
+            else (found["oct"], 8) if found["oct"]
+            else (found["dec"], 10) if found["dec"]
+            else (None, 10)
+        )
+        if digits is None:
+            return (
+                f"{call.strip()}, whose stream is not a constant this reading "
+                "can evaluate"
+            )
+        sign = -1 if found["signs"].count("-") % 2 else 1
+        if sign * int(digits, base) == SHELL_ESCAPE_STREAM:
+            return f"{call}, the shell-escape stream"
+    return ""
+
+
+# An absolute path in a staged source names the machine that wrote it. The
+# pattern catches the spellings a TeX file can carry: a Unix path or a Windows
+# drive letter opening a braced load argument, with the star a starred form
+# such as `\includegraphics*` puts before its arguments and the space LaTeX's
+# star test skips before it, and the same two opening `\input` unbraced, which
+# is plain TeX's own syntax and reads to the next space. Either spelling may
+# open with a quote, which is how a path holding a space is written. The
+# loader list is
+# every one the LaTeX kernel defines that takes a file name, conditional ones
+# included: a runtime whose behaviour depends on a machine-local file is not
+# submittable even when the file's absence is handled.
+ABSOLUTE_PATH_HEAD = r"(?:/|[A-Za-z]:[\\/])"
+# `\graphicspath` takes a brace group of brace groups and every one of them is
+# a directory a later image load resolves against, so the declaration is read
+# whole rather than through its first entry.
+GRAPHICS_PATH = re.compile(r"\\graphicspath\s*\{((?:\s*\{[^{}]*\}\s*)+)\}")
+GRAPHICS_DIRECTORY = re.compile(r"\{\s*\"?\s*([^{}]*)\}")
+ABSOLUTE_LOAD = re.compile(
+    r"\\(?:input|include|usepackage|RequirePackageWithOptions|RequirePackage"
+    r"|InputIfFileExists|IfFileExists|includegraphics|file_input:n"
+    r"|file_if_exist:nTF|graphicspath)(?:\s*\*)?"
+    rf"\s*(?:\[[^]]*\]\s*)?\{{\s*\{{?\s*\"?{ABSOLUTE_PATH_HEAD}"
+    rf"|\\input\s*\"?{ABSOLUTE_PATH_HEAD}"
+    rf"|\\open(?:in|out)\s*{STREAM_OPERAND}\"?{ABSOLUTE_PATH_HEAD}"
+    r"|\\(?:ior_open|iow_open|file_get|file_get_full_name"
+    r"|file_if_exist_input):[a-zA-Z]+\s*(?:\\[A-Za-z@_:]+\s*)?"
+    rf"\{{\s*\"?{ABSOLUTE_PATH_HEAD}"
+    rf"|\\font\s*{STREAM_OPERAND}\"?{ABSOLUTE_PATH_HEAD}"
+)
+
+
+@dataclass(frozen=True)
+class OfflineCase:
+    """One picture class, the corpus case that draws it, and its evidence.
+
+    `declares` is read from the case source and `emits` from the event stream
+    the compiled run wrote, so a case swapped for one of another class fails
+    on both sides rather than passing as "a picture compiled". `absent` is the
+    negative half of the same reading: a flat placement is recognized by the
+    frame record it does not write.
+    """
+
+    name: str
+    picture_class: str
+    source: str
+    document: bool
+    declares: str
+    emits: str
+    absent: str = ""
+
+
+# The six picture classes an upload is judged on, each drawn by a case the
+# corpus already owns and audits: the review benchmark for the classes it
+# covers, and the kernel probes for the self-contained document form, whose
+# preamble is the one an author writes rather than one this tool supplies.
+OFFLINE_CASES = (
+    OfflineCase(
+        "flat", "flat",
+        "tests/tenkz/rmp/section-ii/cases/rmp-ii-mps-marginal.tex",
+        False, r"\begin{tenkz}", r"atom\|", absent=r"(?m)^frame\|",
+    ),
+    OfflineCase(
+        "plane", "plane",
+        "tests/tenkz/rmp/section-ii/cases/rmp-ii-peps-marginal.tex",
+        False, "frame=plane", r"(?m)^frame\|.*map=plane",
+    ),
+    OfflineCase(
+        "circle", "circle",
+        "tests/tenkz/rmp/section-ii/cases/rmp-ii-triangle-network.tex",
+        # A circle frame transports each port along its station's outward
+        # radius, so the boundary signature carries a numeric compass face. A
+        # flat or plane placement writes a named one, so the digit is the
+        # reading that tells the two apart.
+        False, "frame=circle", r"kernel-boundary\|signature=phys:[0-9]",
+    ),
+    OfflineCase(
+        "crossing", "string/crossing",
+        "tests/tenkz/rmp/section-iii-b/cases/rmp-iii-b-braid-two.tex",
+        # `\tnwire` alone would not tell this case from the flat one, which
+        # draws wires too. A string-kind wire is what a crossing is made of.
+        False, "kind=string", r"(?m)^stringcross\|",
+    ),
+    OfflineCase(
+        "enclosure", "enclosure",
+        "tests/tenkz/rmp/section-ii/cases/rmp-ii-peps-projection.tex",
+        False, "form=enclosure", r"(?m)^mark\|.*form=enclosure",
+    ),
+    OfflineCase(
+        "equation", "equation",
+        "tests/tenkz/rmp/section-ii/cases/rmp-ii-mpu-brickwork.tex",
+        False, r"\begin{tenkzeq}", r"(?m)^check\|.*result=equal",
+    ),
+    OfflineCase(
+        "probe-plane", "plane",
+        "tests/tenkz/kernel/k_plane.tex",
+        True, "frame=plane", r"(?m)^frame\|.*map=plane",
+    ),
+    OfflineCase(
+        "probe-crossing", "string/crossing",
+        "tests/tenkz/kernel/k_braid.tex",
+        True, "cross=", r"(?m)^stringcross\|",
+    ),
+)
+
+# The document an author writes around a preamble-free case. It names the case
+# by its flat basename, which is what the submission would look like. The
+# preamble asks the environment for nothing beyond what the README declares an
+# installation must have. It is `article` rather than the corpus driver's
+# `standalone`, and it drops `mathtools`, which none of the cases below calls:
+# a gate that failed on a minimal installation would be reporting on the
+# installation rather than on the archive.
+OFFLINE_WRAPPER = r"""\documentclass{article}
+\usepackage{amsmath,amssymb}
+\usepackage{tenkz}
+\begin{document}
+\input{%s}
+\end{document}
+"""
+
+# The tools a run must not reach for. Each is shadowed by a script that records
+# its own call and fails, so "no installation and no fetch happened" is read
+# from whether any of them ran rather than assumed from a run that passed.
+# `tlmgr` would install a missing package; the `mktex` family would build a
+# font or a format on the fly, which is the other way a run can quietly repair
+# an incomplete environment.
+INTERPOSED_TOOLS = (
+    "tlmgr", "curl", "wget", "git", "ftp", "scp", "ssh", "rsync",
+    "mktextfm", "mktexpk", "mktexmf", "mktexlsr", "updmap", "fmtutil",
+)
+TRIPWIRE = "#!/bin/sh\nprintf '%s\\n' \"$0\" >> \"$TENKZ_OFFLINE_TRIPWIRE\"\nexit 127\n"
+
 
 # --------------------------------------------------------------------------
 # The declared version, and the closure walked from the entry point
@@ -268,15 +640,18 @@ def walk_closure(source: Path = SOURCE, entry: str = ENTRY.name) -> Closure:
             raise SystemExit(f"{entry} loads {name}, which is missing")
         closure.files.append(name)
         try:
-            text = strip_comments(path.read_bytes().decode("utf-8"))
+            # Comments are blanked, and so are the `\\` control symbols: a
+            # load spelled inside a macro body as text is not a load, and
+            # recording one would refuse a release over a definition.
+            text = uncontrolled(strip_comments(path.read_bytes().decode("utf-8")))
         except UnicodeDecodeError as error:
             raise SystemExit(f"{name} is not UTF-8 and cannot be read: {error}") from None
         for group in REQUIRE_CALL.findall(text):
             packages.extend(part.strip() for part in group.split(",") if part.strip())
         for group in LIBRARY_CALL.findall(text):
             libraries.extend(part.strip() for part in group.split(",") if part.strip())
-        for target in INPUT_CALL.findall(text):
-            visit(target.strip())
+        for braced, quoted, bare in INPUT_CALL.findall(text):
+            visit((braced or quoted or bare).strip())
 
     visit(entry)
     closure.packages = sorted(set(packages))
@@ -632,6 +1007,117 @@ def check_closure(closure: Closure, manifest: dict) -> Report:
     return report
 
 
+def check_dependencies(closure: Closure, manifest: dict) -> Report:
+    """Every loaded library is accounted for by one consumer class, and the
+    retired front ends' loads are gone.
+
+    The closure says what is loaded. It cannot say why, and a list of ten
+    library names is not a dependency report: an author reading it cannot tell
+    which of them the package needs to place a tensor and which of them only
+    the ink it draws needs. The manifest's classification says which, and this
+    check is what stops the two from drifting: a library that enters or leaves
+    the load list without a class, that is filed under two, or that is named
+    twice inside one, fails here, and so does a manifest that leaves a class
+    out rather than declaring it empty.
+
+    What this cannot read is whether a class is the *right* one, and the
+    `unconsumed` class is where that matters: nothing here can tell a library
+    nothing reads from one whose consumer the reader did not find. Searching
+    for the library's name does not settle it either, because a library is
+    reached through the names it defines rather than through its own. The class
+    is established by removing the load and compiling, and
+    `docs/tenkz/ctan/DEPENDENCIES.md` records that reading.
+
+    Absence is checked the same way. The retired front ends each brought a load
+    with them, and the walk that reads loads has already blanked the comments,
+    so a name from that list reaching the closure would mean a real load
+    survived the removal rather than a sentence about one.
+    """
+
+    report = Report("dependencies")
+    ownership = manifest["runtime"]["requires"].get("ownership")
+    if not isinstance(ownership, dict):
+        report.failures.append(
+            f"{MANIFEST_LABEL} declares no [runtime.requires.ownership]; the "
+            "loaded libraries are then a list nobody has traced to a consumer"
+        )
+        return report
+    unknown = sorted(set(ownership) - set(DEPENDENCY_CLASSES))
+    report.require(
+        not unknown,
+        f"{MANIFEST_LABEL} files libraries under {unknown}, and a library "
+        f"reaches the package one of {list(DEPENDENCY_CLASSES)} ways",
+    )
+    classified: dict[str, list[str]] = {}
+    for name in DEPENDENCY_CLASSES:
+        if name not in ownership:
+            report.failures.append(
+                f"{MANIFEST_LABEL} declares no {name!r} class; a class with no "
+                "members is written as an empty list, because leaving it out "
+                "reads as a class nobody considered"
+            )
+            return report
+        members = ownership[name]
+        if not isinstance(members, list) or any(
+            not isinstance(member, str) for member in members
+        ):
+            report.failures.append(f"[runtime.requires.ownership] {name} is not a list of names")
+            return report
+        repeated = sorted({member for member in members if members.count(member) > 1})
+        report.require(
+            not repeated,
+            f"{repeated} are named more than once under {name!r}, which reads "
+            "as more consumers than the report traced",
+        )
+        classified[name] = members
+    twice = sorted(
+        library
+        for library in closure.libraries
+        if sum(library in members for members in classified.values()) > 1
+    )
+    report.require(
+        not twice,
+        f"{twice} are filed under more than one consumer class; a library is "
+        "read for one reason or the report does not say what that reason is",
+    )
+    filed = sorted({library for members in classified.values() for library in members})
+    report.require(
+        filed == closure.libraries,
+        f"the classification covers {filed}, and {ENTRY.name} loads "
+        f"{closure.libraries}",
+    )
+    # A retired front end can arrive as a package load, a library load, or a
+    # file the entry point inputs, and a vendored `tikz-cd.sty` or
+    # `tikzlibrarytikzcd.code.tex` reaches the closure only in the third way.
+    # Each file is compared under every name it could be known by, since a load
+    # carries a suffix and a conventional library file carries a prefix too.
+    loaded = set(closure.packages) | set(closure.libraries)
+    for name in closure.files:
+        loaded |= load_names(name)
+    survivors = sorted(name for name in RETIRED_DEPENDENCIES if name in loaded)
+    report.require(
+        not survivors,
+        f"{ENTRY.name} still loads {survivors}, which the retired front ends "
+        "brought and their removal was supposed to take with them",
+    )
+    # The note states what the check found, so it is written only when the
+    # check held: a line claiming no retired load, printed above the line
+    # reporting one, is worse than no line at all.
+    if not report.failures:
+        report.notes.append(
+            "; ".join(
+                f"{name}: {len(classified[name])}" for name in DEPENDENCY_CLASSES
+            )
+            + f"; no load of {', '.join(RETIRED_DEPENDENCIES)}"
+        )
+    if not report.failures and classified["unconsumed"]:
+        report.notes.append(
+            "loaded and unread, by the ablation recorded in DEPENDENCIES.md: "
+            + ", ".join(classified["unconsumed"])
+        )
+    return report
+
+
 def check_source_tree(closure: Closure, manifest: dict, source: Path = SOURCE) -> Report:
     """Nothing in the source directory is unaccounted for, and none of it is debris."""
 
@@ -923,6 +1409,16 @@ def check_determinism(release: Release) -> Report:
     return report
 
 
+def recorded_inputs(record: Path) -> list[str]:
+    """Every file the engine opened, from its input record."""
+
+    return [
+        line[len("INPUT "):].strip()
+        for line in record.read_text(encoding="utf-8", errors="replace").splitlines()
+        if line.startswith("INPUT ")
+    ]
+
+
 def resolved_runtime_files(record: Path) -> list[str]:
     """The runtime files the engine actually opened, from its input record.
 
@@ -935,14 +1431,11 @@ def resolved_runtime_files(record: Path) -> list[str]:
     exit status, says where the runtime came from.
     """
 
-    opened: list[str] = []
-    for line in record.read_text(encoding="utf-8", errors="replace").splitlines():
-        if not line.startswith("INPUT "):
-            continue
-        path = line[len("INPUT "):].strip()
-        if Path(path).name.startswith(PACKAGE):
-            opened.append(path)
-    return opened
+    return [
+        path
+        for path in recorded_inputs(record)
+        if Path(path).name.startswith(PACKAGE)
+    ]
 
 
 def foreign_runtime_files(opened: list[str], room: Path, unpacked: Path) -> list[str]:
@@ -1029,6 +1522,346 @@ def check_smoke(archive: Path, required: bool) -> Report:
     return report
 
 
+def check_arxiv(tree: Path, closure: Closure) -> Report:
+    """The staged tree read as an arXiv source submission.
+
+    An upload to CTAN and a source submission to arXiv are the same files under
+    two sets of rules, and the second set is the stricter one: arXiv unpacks a
+    submission beside the manuscript rather than installing it, runs no
+    docstrip and no font builder, and compiles without shell escape. So the
+    tree has to be flat, has to be the runtime itself rather than the sources a
+    runtime is generated from, has to name no path on the machine that wrote
+    it, and has to call no primitive that would need a shell.
+
+    The last two are read from the closure rather than from a list of suffixes.
+    Every file the engine opens is on the load graph, whatever it is called, so
+    a runtime file added later as a class, a definition file, or a
+    configuration is scanned because it is loaded and not because somebody
+    remembered to add its suffix here. The reader-facing material is not
+    scanned: arXiv never compiles a change record, and a change record that
+    mentioned a primitive in prose would be a finding about nothing.
+    """
+
+    report = Report("arxiv")
+    loaded = set(closure.files)
+    for path in sorted(tree.rglob("*")):
+        report.require(
+            not path.is_dir(),
+            f"{path.name} is a directory, and a submission unpacks beside a "
+            "manuscript rather than into a tree of its own",
+        )
+        if path.is_dir():
+            continue
+        report.require(
+            path.suffix.lower() not in REGENERATED_SUFFIXES,
+            f"{path.name} would have to be run before the runtime exists, and "
+            "a submission is compiled rather than built",
+        )
+        if path.name not in loaded:
+            continue
+        text = strip_comments(path.read_bytes().decode("utf-8", errors="replace"))
+        report.require(
+            not absolute_load(uncontrolled(text)),
+            f"{path.name} loads a file by absolute path, which names the "
+            "machine it was written on",
+        )
+        called = shell_escape_call(text)
+        report.require(
+            not called,
+            f"{path.name} calls {called}, and a submission compiles with no shell",
+        )
+    if not report.failures:
+        report.notes.append(
+            f"{len(list(tree.iterdir()))} files, one directory deep; "
+            f"{len(loaded)} loaded sources read, no generated source and no shell call"
+        )
+    return report
+
+
+def offline_room(archive: Path, room: Path) -> list[str]:
+    """Unpack the archive flat into one directory, as a submission unpacks.
+
+    CTAN receives a `tenkz/` directory and an installation puts it on the
+    search path. A submission has no search path to put it on: the files sit
+    beside the manuscript, so this is where the archive is flattened and where
+    a runtime file that only resolves through a directory would fail.
+
+    An archive that does not open, or that does not hold the one directory the
+    upload is judged on, is answered with a message rather than a traceback:
+    this tool's contract is that every finding is a printed line of the report,
+    and a caller that raised here would break it.
+    """
+
+    with tempfile.TemporaryDirectory(prefix="tenkz-offline-unpack-") as unpacking:
+        try:
+            with zipfile.ZipFile(archive) as bundle:
+                bundle.extractall(unpacking)
+        except (zipfile.BadZipFile, OSError) as error:
+            raise SystemExit(f"{archive.name} does not open as an archive: {error}") from None
+        unpacked = Path(unpacking) / PACKAGE
+        if not unpacked.is_dir():
+            raise SystemExit(
+                f"{archive.name} does not unpack into a single {PACKAGE}/ directory"
+            )
+        siblings = sorted(
+            path.name for path in Path(unpacking).iterdir() if path.name != PACKAGE
+        )
+        if siblings:
+            raise SystemExit(
+                f"{archive.name} unpacks {PACKAGE}/ beside {siblings}; an upload "
+                "unpacks into one directory and nothing else"
+            )
+        staged = sorted(path.name for path in unpacked.iterdir())
+        for path in sorted(unpacked.iterdir()):
+            if not path.is_file():
+                raise SystemExit(
+                    f"{archive.name} holds {PACKAGE}/{path.name}, which is not a "
+                    "file; an upload unpacks one directory deep"
+                )
+            shutil.copy2(path, room / path.name)
+    return staged
+
+
+def offline_environment(room: Path, shims: Path, tripwire: Path, home: Path) -> dict[str, str]:
+    """The environment a run gets, built rather than inherited.
+
+    Nothing of the caller's environment reaches the engine except the search
+    path it needs to find its own binaries, and the shim directory comes first
+    on it, so an installer or a fetcher the run reached for would be recorded
+    instead of run. `TEXINPUTS` is the current directory and then the
+    installation: the empty last element is what leaves `tikz`, `hobby`, and
+    `spath3` findable, and it is also why the input record, not the exit
+    status, decides where the runtime came from.
+    """
+
+    return {
+        "PATH": os.pathsep.join([str(shims), "/usr/bin", "/bin", os.environ.get("PATH", "")]),
+        "HOME": str(home),
+        "TEXMFHOME": str(home / "texmf"),
+        "TEXMFVAR": str(home / "texmf-var"),
+        "TEXMFCONFIG": str(home / "texmf-config"),
+        "TEXINPUTS": ".:",
+        "TEXMFOUTPUT": str(room),
+        "TENKZ_OFFLINE_TRIPWIRE": str(tripwire),
+        # kpathsea reads these before it runs a generator, so a missing font or
+        # format is a failed run rather than a build nobody asked for.
+        "MKTEXTFM": "0",
+        "MKTEXPK": "0",
+        "MKTEXMF": "0",
+        "MKTEXFMT": "0",
+        # The discard port, for any client that honours a proxy variable: a
+        # fetch that got past the shims still has nowhere to go.
+        "http_proxy": "http://127.0.0.1:9",
+        "https_proxy": "http://127.0.0.1:9",
+        "ftp_proxy": "http://127.0.0.1:9",
+        "all_proxy": "http://127.0.0.1:9",
+    }
+
+
+def write_shims(shims: Path) -> None:
+    """Shadow every tool a run could install or fetch with, and record calls."""
+
+    shims.mkdir(parents=True, exist_ok=True)
+    for tool in INTERPOSED_TOOLS:
+        shim = shims / tool
+        shim.write_text(TRIPWIRE, encoding="utf-8")
+        shim.chmod(0o755)
+
+
+def carried_runtime() -> set[str]:
+    """The runtime file names a record line is read against.
+
+    It comes from the load graph rather than from a `tenkz` prefix, because the
+    documents the offline check writes are named from the package too and a
+    prefix match would count one of them as proof that the package answered.
+
+    It is deliberately not narrowed to what the archive staged. A runtime file
+    the archive forgot has to stay in the reading: an installed copy answering
+    for it resolves outside the room, and dropping the name is what would hide
+    that. The archive's own completeness is the closure check's question, and
+    it is asked there.
+    """
+
+    return set(walk_closure().files)
+
+
+def repository_inputs(opened: list[str], room: Path, flat: Path) -> list[str]:
+    """Those of the opened files that came from the repository, not the flat.
+
+    The room is the base a relative record line resolves against, and it is
+    also the one directory a file may legitimately come from besides the
+    installation. It is subtracted before the repository is read, because a
+    temporary directory is placed wherever `TMPDIR` says, and a runner that
+    put it inside the workspace would otherwise make every file the archive
+    itself answered look like one the repository did.
+    """
+
+    return [
+        path
+        for path in opened
+        if not (room / path).resolve().is_relative_to(flat)
+        and (room / path).resolve().is_relative_to(ROOT)
+    ]
+
+
+def check_offline(archive: Path, required: bool) -> Report:
+    """Compile one case of every picture class against the unpacked flat.
+
+    The clean-install check proves the archive carries a runtime. This one
+    proves the runtime draws: a case of each class the release is judged on is
+    compiled beside the flattened archive, with no network reachable and no
+    installer on the path, and each result is read as the corpus reads it --
+    the event stream through the audit, and the class's own record through the
+    evidence the case declares. A run that produced a PDF and no tensor network
+    fails here, and so does one whose picture is of another class than the one
+    it was chosen for.
+    """
+
+    report = Report("offline")
+    engine = shutil.which("xelatex")
+    if engine is None:
+        if required:
+            report.failures.append("xelatex is absent and the check was required")
+        else:
+            report.skipped = "xelatex is absent"
+        return report
+    audit = ROOT / "scripts/tenkz_audit.py"
+    if not audit.is_file():
+        report.failures.append(f"{audit.relative_to(ROOT)} is missing; nothing would read the runs")
+        return report
+    with tempfile.TemporaryDirectory(prefix="tenkz-offline-") as directory:
+        base = Path(directory)
+        room = base / "submission"
+        room.mkdir()
+        home = base / "home"
+        (home / "texmf").mkdir(parents=True)
+        tripwire = base / "reached-for.txt"
+        shims = base / "shims"
+        write_shims(shims)
+        try:
+            staged = offline_room(archive, room)
+        except SystemExit as refusal:
+            report.failures.append(str(refusal))
+            return report
+        environment = offline_environment(room, shims, tripwire, home)
+        carried = carried_runtime()
+        for case in OFFLINE_CASES:
+            _offline_case(case, room, engine, environment, audit, carried, report)
+        if tripwire.exists():
+            report.failures.append(
+                "the runs reached for an installer or a fetcher: "
+                + tripwire.read_text(encoding="utf-8", errors="replace").replace("\n", " ")
+            )
+    if not report.failures:
+        report.notes.append(
+            f"{len(OFFLINE_CASES)} cases over "
+            f"{len({case.picture_class for case in OFFLINE_CASES})} picture classes, "
+            f"compiled and audited against {len(staged)} flat files, with "
+            f"{len(INTERPOSED_TOOLS)} installers and fetchers shadowed and uncalled"
+        )
+    return report
+
+
+def _offline_case(case: OfflineCase, room: Path, engine: str,
+                  environment: dict[str, str], audit: Path, carried: set[str],
+                  report: Report) -> None:
+    """Compile one case in the flat room and read what it wrote.
+
+    `carried` is the runtime the archive holds, by name, and it is what a
+    record line is read against.
+    """
+
+    source = ROOT / case.source
+    if not source.is_file():
+        report.failures.append(f"{case.source} is missing; the {case.picture_class} case has moved")
+        return
+    text = source.read_text(encoding="utf-8")
+    if case.declares not in text:
+        report.failures.append(
+            f"{case.name}: {case.source} no longer spells {case.declares!r}, so it "
+            f"is not the {case.picture_class} case this check reads"
+        )
+        return
+    job = f"tenkz-offline-{case.name}"
+    if case.document:
+        read = f"{job}.tex"
+        (room / read).write_text(text, encoding="utf-8")
+    else:
+        read = f"{job}-case.tex"
+        (room / read).write_text(text, encoding="utf-8")
+        (room / f"{job}.tex").write_text(OFFLINE_WRAPPER % read, encoding="utf-8")
+    try:
+        finished = subprocess.run(
+            [engine, "-no-shell-escape", "-interaction=nonstopmode",
+             "-halt-on-error", "-recorder", f"{job}.tex"],
+            cwd=room, env=environment, capture_output=True, text=True, timeout=300,
+        )
+    except subprocess.TimeoutExpired:
+        report.failures.append(f"{case.name} did not finish compiling within 300 seconds")
+        return
+    if finished.returncode != 0:
+        tail = "\n".join((finished.stdout + finished.stderr).splitlines()[-20:])
+        report.failures.append(
+            f"{case.name} ({case.picture_class}) failed to compile from the flat "
+            f"archive, exit {finished.returncode}:\n{tail}"
+        )
+        return
+    pdf, stream, record = (room / f"{job}.pdf", room / f"{job}.tnlog", room / f"{job}.fls")
+    if not pdf.is_file() or pdf.stat().st_size == 0:
+        report.failures.append(f"{case.name} produced no PDF")
+        return
+    if not stream.is_file() or not stream.read_text(encoding="utf-8").strip():
+        report.failures.append(f"{case.name} produced no event stream, so it drew nothing to read")
+        return
+    if not record.is_file():
+        report.failures.append(f"{case.name} wrote no input record to read")
+        return
+    opened = recorded_inputs(record)
+    flat = room.resolve()
+    strangers = repository_inputs(opened, room, flat)
+    report.require(
+        not strangers,
+        f"{case.name} read {sorted(set(strangers))} from the repository, so the "
+        "flat archive did not answer for the run",
+    )
+    # That the package answered at all is already established above: the event
+    # stream is written by tenkz and by nothing else, so a run that reached
+    # this line loaded it. What is left to read is where it was loaded from.
+    # There is deliberately no assertion that the list is non-empty; it could
+    # not fail, and an assertion that cannot fail reads as coverage.
+    answered = [path for path in opened if Path(path).name in carried]
+    report.require(
+        not foreign_runtime_files(answered, room, flat),
+        f"{case.name} resolved a runtime file outside the flat archive, so an "
+        "installed copy answered for it",
+    )
+    events = stream.read_text(encoding="utf-8")
+    report.require(
+        re.search(case.emits, events) is not None,
+        f"{case.name} compiled but its stream records no {case.picture_class} "
+        f"picture: nothing matches {case.emits!r}",
+    )
+    if case.absent:
+        report.require(
+            re.search(case.absent, events) is None,
+            f"{case.name} records {case.absent!r}, which a {case.picture_class} "
+            "picture does not write",
+        )
+    try:
+        read_back = subprocess.run(
+            [sys.executable, str(audit), str(stream), str(room / read)],
+            cwd=room, capture_output=True, text=True, timeout=300,
+        )
+    except subprocess.TimeoutExpired:
+        report.failures.append(
+            f"{case.name}: the event audit did not finish within 300 seconds"
+        )
+        return
+    if read_back.returncode != 0:
+        tail = "\n".join((read_back.stdout + read_back.stderr).splitlines()[-15:])
+        report.failures.append(f"{case.name} failed the event audit:\n{tail}")
+
+
 def release_sync(release: Release) -> list[tuple[str, str]]:
     """What each release artifact currently says about its version and date.
 
@@ -1093,6 +1926,23 @@ def command_archive(out: Path) -> int:
     return 0
 
 
+def command_offline(require_engine: bool) -> int:
+    """Build the archive and compile the picture classes against its flat."""
+
+    with tempfile.TemporaryDirectory(prefix="tenkz-ctan-offline-") as directory:
+        archive, _, _ = build(Path(directory) / "out")
+        report = check_offline(archive, require_engine)
+    print(f"  {report.status:4s} {report.name}")
+    for note in report.notes:
+        print(f"         {note}")
+    if report.skipped:
+        print(f"         skipped: {report.skipped}")
+    for failure in report.failures:
+        for line in failure.splitlines():
+            print(f"         {line}")
+    return 1 if report.failures else 0
+
+
 def command_sync() -> int:
     for artifact, state in release_sync(read_release()):
         print(f"  {artifact:28s} {state}")
@@ -1106,6 +1956,7 @@ def command_check(require_smoke: bool, keep: Path | None) -> int:
     material = check_material(manifest)
     reports = [
         check_closure(closure, manifest),
+        check_dependencies(closure, manifest),
         check_source_tree(closure, manifest),
         material,
         check_headers(closure),
@@ -1124,7 +1975,7 @@ def command_check(require_smoke: bool, keep: Path | None) -> int:
     blocked = material.failures + encoding.failures + names.failures
     digest = ""
     if blocked:
-        for name in ("permissions", "debris", "determinism", "clean-install"):
+        for name in ("permissions", "debris", "arxiv", "determinism", "clean-install", "offline"):
             skipped = Report(name)
             skipped.skipped = f"the staged material is not complete ({len(blocked)} finding(s))"
             reports.append(skipped)
@@ -1134,8 +1985,10 @@ def command_check(require_smoke: bool, keep: Path | None) -> int:
             archive, _, digest = build(destination)
             reports.append(check_permissions(destination / PACKAGE))
             reports.append(check_debris(destination / PACKAGE))
+            reports.append(check_arxiv(destination / PACKAGE, closure))
             reports.append(check_determinism(release))
             reports.append(check_smoke(archive, require_smoke))
+            reports.append(check_offline(archive, require_smoke))
     for report in reports:
         print(f"  {report.status:4s} {report.name}")
         for note in report.notes:
@@ -1164,6 +2017,14 @@ def main(argv: list[str]) -> int:
     staging.add_argument("--out", type=Path, default=DEFAULT_OUT)
     packing = commands.add_parser("archive", help="write the tree and the archive")
     packing.add_argument("--out", type=Path, default=DEFAULT_OUT)
+    offline = commands.add_parser(
+        "offline", help="compile the picture classes against the unpacked flat"
+    )
+    offline.add_argument(
+        "--require-engine",
+        action="store_true",
+        help="fail rather than skip when no TeX engine is installed",
+    )
     commands.add_parser("sync", help="report the release artifacts' version state")
     checking = commands.add_parser("check", help="run every acceptance check")
     checking.add_argument(
@@ -1184,6 +2045,8 @@ def main(argv: list[str]) -> int:
         return command_stage(arguments.out)
     if arguments.command == "archive":
         return command_archive(arguments.out)
+    if arguments.command == "offline":
+        return command_offline(arguments.require_engine)
     if arguments.command == "sync":
         return command_sync()
     return command_check(arguments.require_smoke, arguments.out)

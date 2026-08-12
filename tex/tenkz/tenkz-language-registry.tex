@@ -17,9 +17,14 @@
   {\tntree[keys]{word}}{A fusion tree is one structured atom.}
 \__tenkz_language_registry_command:nnnnn {tnset}{setup-extension}{setup}
   {\tnset{setup keys}}{Setup changes document or group policy outside any one picture.}
+% The face vocabulary is the whole of it: west and east carry virtual, up and
+% down carry physical, and the four skins are the ones the door names.  The
+% angle, slot, and label grammar of a port list belongs to the three-argument
+% door (LANGUAGE-1.0 section 8); a numeric angle spelled here is
+% [TKZ-ATOM-INVALID-PORT].
 \__tenkz_language_registry_command:nnnnn {tndeclareatom}{setup-extension}{setup}
-  {\tndeclareatom{\command}{skin=value, ports={face:type}}}
-  {A declaration adds a typed atom spelling to the grammar.}
+  {\tndeclareatom{\command}{skin=dot|box|pill|mpo, ports={west|east:virtual, up|down:physical}}}
+  {A declaration adds a typed atom spelling to the grammar. The four face words are its whole port vocabulary; angles, slots, and port labels belong to the three-argument door.}
 
 % command, standalone example, representative failure
 \__tenkz_language_registry_example:nnn {tn}{tex/tenkz/examples/api/tn.tex}
@@ -173,7 +178,7 @@
 % each placed atom, while pairings= remains reusable skin topology.
 \__tenkz_language_registry_key:nnnnnn {kernel-atom}{pairing~cross}{indexed-crossing-list}{empty}{kernel}{Per-instance crossings of generated skin pairings.}
 \__tenkz_language_registry_key:nnnnnn {kernel-atom}{size}{size-class}{m}{kernel}{Per-atom metric size class.}
-\__tenkz_language_registry_key:nnnnnn {kernel-atom}{label~pos}{angle}{auto}{kernel}{Label quadrant.}
+\__tenkz_language_registry_key:nnnnnn {kernel-atom}{label~pos}{angle}{auto}{kernel}{Label quadrant; auto takes the first free face in the order s, n, e, w, and south when every face carries ink.}
 \__tenkz_language_registry_key:nnnnnn {kernel-atom}{nudge}{pair}{zero}{kernel}{Quarter-pitch displacement.}
 \__tenkz_language_registry_key:nnnnnn {kernel-atom}{void}{void-policy}{unset}{kernel}{Hole or removed site.}
 \__tenkz_language_registry_key:nnnnnn {kernel-atom}{physical}{physical-policy}{unset}{kernel}{Site's own answer to the picture's physical policy.}
@@ -231,7 +236,14 @@
 \__tenkz_language_registry_key:nnnnnn {kernel-mark}{tint}{flag}{false}{kernel}{Interior tint under the contour.}
 \__tenkz_language_registry_key:nnnnnn {kernel-setup}{pitch}{length}{em-relative}{kernel}{Base metric.}
 \__tenkz_language_registry_key:nnnnnn {kernel-setup}{sizes}{size-table}{bundled table}{kernel}{Size-class table.}
-\__tenkz_language_registry_key:nnnnnn {kernel-setup}{strict}{flag}{false}{kernel}{Rejects sugar; benchmark and CI set it.}
+% Nothing in the benchmark or in a workflow turns the flag on, and 51 of the
+% 130 benchmark cases spell physical= alone, which it refuses.  The five
+% refusal fixtures tests/tenkz/kernel/negative/n_strict_*.tex are the only
+% sources that enable it; r_false_flags spells strict=false, which is the
+% default restated.  What holds the sugar contract is the kernel probe
+% instead: eleven sugar spellings pinned byte-identical to their expansions
+% in events and in pixels.
+\__tenkz_language_registry_key:nnnnnn {kernel-setup}{strict}{flag}{false}{kernel}{Rejects sugar; only five refusal fixtures enable it.}
 \__tenkz_language_registry_key:nnnnnn {kernel-setup}{theme}{identifier}{house}{kernel}{Semantic ink theme.}
 \__tenkz_language_registry_key:nnnnnn {kernel-declare}{hue}{hue-source}{house cycle}{kernel}{Species ink; source:* reproduces a cited palette.}
 \__tenkz_language_registry_key:nnnnnn {kernel-declare}{base}{identifier}{empty}{kernel}{Skin the declaration extends.}
@@ -256,18 +268,13 @@
 % space, and wrap a long migration to keep the line short.  Both are read out
 % before anything compares or matches a row, so what a document writes is what
 % is matched.
+\__tenkz_language_registry_tombstone:nnn {kernel-picture}{periodic}
+  {use boundary=periodic}
 %
 % The four mark forms below took a record and drew nothing.  What the sources
 % brace, the benchmark already brackets (rmp-ii-spectrum-transfer); what they
 % cut, it encloses; what they shade, a tinted enclosure carries.  Each row is
 % wrapped where its parser branch wraps, so the two read line for line.
-%
-% Everything above that reads a row is the tombstone ledger's own (issue
-% #6187), and none of it is written a second time here.  Until it lands the
-% rows below are inert: the registrar discards them and no tool parses one,
-% and what refuses a spelling is the parser branch beside its row.  The rows
-% and the ledger have to arrive in that order, the ledger first, or the tree
-% carries two records with nothing holding them together.
 \__tenkz_language_registry_tombstone:nnn {kernel-mark}{form=brace-above}
   {use form=bracket with label pos=90; a bracket speaks from the side its
     label sits on}
@@ -284,8 +291,8 @@
 % in tex/, so an undefined control sequence is what answers a document that
 % still spells one, and the row is what tells its reader where the meaning
 % went.  The migrations are section 10's, which is where these were recorded
-% before the registry could hold them; the disposition audit will read its
-% list of dead commands from here once it can read a row at all.
+% before the registry could hold them; the disposition audit reads its list of
+% dead commands from these rows.
 \__tenkz_language_registry_tombstone:nnn {command}{\tnput}
   {use \tn[at=(r,c)], which places the atom at the address the put named}
 \__tenkz_language_registry_tombstone:nnn {command}{\tnsite}

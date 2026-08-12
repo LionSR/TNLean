@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.Channel.SingleKrausPositivity
+import TNLean.MPS.MPDO.EmbedLocalOperatorTwoSite
 import TNLean.MPS.MPDO.PhysicalSupportBondTransport
 
 /-!
@@ -296,20 +297,7 @@ private theorem reindex_embedLocalOperator_three_zero
         (Matrix.reindex (_root_.finTwoArrowEquiv (Fin e))
           (_root_.finTwoArrowEquiv (Fin e)) B) := by
   ext σ τ
-  have hAgree :
-      AgreesOutsideWindow (d := e) 2 (by decide) (0 : Fin 3)
-          ((_root_.finThreeArrowEquiv (Fin e)).symm σ)
-          ((_root_.finThreeArrowEquiv (Fin e)).symm τ) ↔
-        τ.2.2 = σ.2.2 := by
-    constructor
-    · intro ha
-      have h := congrFun ha (2 : Fin 3)
-      simpa [AgreesOutsideWindow, MPSTensor.replaceWindow,
-        MPSTensor.extractWindow] using h
-    · intro ha
-      funext i
-      fin_cases i <;>
-        simp [MPSTensor.replaceWindow, MPSTensor.extractWindow, ha]
+  have hAgree := agreesOutsideWindow_finThreeArrowEquiv_three_zero σ τ
   have hσ :
       MPSTensor.extractWindow 2 (0 : Fin 3)
           ((_root_.finThreeArrowEquiv (Fin e)).symm σ) =
@@ -356,19 +344,7 @@ private theorem reindex_embedLocalOperator_three_one
         (Matrix.reindex (_root_.finTwoArrowEquiv (Fin e))
           (_root_.finTwoArrowEquiv (Fin e)) B) := by
   ext σ τ
-  have hAgree :
-      AgreesOutsideWindow (d := e) 2 (by decide) (1 : Fin 3)
-          ((_root_.finThreeArrowEquiv (Fin e)).symm σ)
-          ((_root_.finThreeArrowEquiv (Fin e)).symm τ) ↔
-        τ.1 = σ.1 := by
-    constructor
-    · intro ha
-      have h := congrFun ha (0 : Fin 3)
-      simpa [MPSTensor.replaceWindow, MPSTensor.extractWindow] using h
-    · intro ha
-      funext i
-      fin_cases i <;>
-        simp [MPSTensor.replaceWindow, MPSTensor.extractWindow, ha]
+  have hAgree := agreesOutsideWindow_finThreeArrowEquiv_three_one σ τ
   have hσ :
       MPSTensor.extractWindow 2 (1 : Fin 3)
           ((_root_.finThreeArrowEquiv (Fin e)).symm σ) =
@@ -400,49 +376,6 @@ private theorem reindex_embedLocalOperator_three_one
       Matrix.one_apply]
     change 0 = (if σ.1 = τ.1 then 1 else 0) * B _ _
     rw [if_neg (fun hs ↦ h hs.symm), zero_mul]
-
-private theorem reindex_embedLocalOperator_two_zero
-    (B : Matrix (Fin 2 → Fin e) (Fin 2 → Fin e) ℂ) :
-    Matrix.reindex (_root_.finTwoArrowEquiv (Fin e))
-        (_root_.finTwoArrowEquiv (Fin e))
-        (embedLocalOperator (d := e) 2 2 (by decide) (0 : Fin 2) B) =
-      Matrix.reindex (_root_.finTwoArrowEquiv (Fin e))
-        (_root_.finTwoArrowEquiv (Fin e)) B := by
-  ext σ τ
-  have hAgree : AgreesOutsideWindow (d := e) 2 (by decide) (0 : Fin 2)
-      ((_root_.finTwoArrowEquiv (Fin e)).symm σ)
-      ((_root_.finTwoArrowEquiv (Fin e)).symm τ) := by
-    funext i
-    fin_cases i <;>
-      simp [MPSTensor.replaceWindow, MPSTensor.extractWindow,
-        _root_.finTwoArrowEquiv]
-  simp only [Matrix.reindex_apply, Matrix.submatrix_apply,
-    embedLocalOperator_apply]
-  rw [if_pos hAgree]
-  simp only [Fin.isValue, finTwoArrowEquiv_symm_apply]
-  congr 1 <;> funext j <;> fin_cases j <;> rfl
-
-private theorem reindex_embedLocalOperator_two_one
-    (B : Matrix (Fin 2 → Fin e) (Fin 2 → Fin e) ℂ) :
-    Matrix.reindex (_root_.finTwoArrowEquiv (Fin e))
-        (_root_.finTwoArrowEquiv (Fin e))
-        (embedLocalOperator (d := e) 2 2 (by decide) (1 : Fin 2) B) =
-      swapPairMatrix
-        (Matrix.reindex (_root_.finTwoArrowEquiv (Fin e))
-          (_root_.finTwoArrowEquiv (Fin e)) B) := by
-  ext σ τ
-  have hAgree : AgreesOutsideWindow (d := e) 2 (by decide) (1 : Fin 2)
-      ((_root_.finTwoArrowEquiv (Fin e)).symm σ)
-      ((_root_.finTwoArrowEquiv (Fin e)).symm τ) := by
-    funext i
-    fin_cases i <;>
-      simp [MPSTensor.replaceWindow, MPSTensor.extractWindow,
-        _root_.finTwoArrowEquiv]
-  simp only [Matrix.reindex_apply, Matrix.submatrix_apply,
-    embedLocalOperator_apply]
-  rw [if_pos hAgree]
-  simp only [Fin.isValue, finTwoArrowEquiv_symm_apply]
-  congr 1 <;> funext j <;> fin_cases j <;> rfl
 
 /-- On a two-site periodic chain, isometric conjugation carries the product
 of the two oppositely oriented restricted bonds to the product of their
@@ -499,13 +432,16 @@ theorem singleKrausMap_crossedTwoSiteBondProduct
       (_root_.finTwoArrowEquiv (Fin e)) C)
   have hswap' :
       singleKrausMap (V ⊗ₖ V)
-          (swapPairMatrix (Matrix.reindex
-            (_root_.finTwoArrowEquiv (Fin e))
-            (_root_.finTwoArrowEquiv (Fin e)) C)) =
-        swapPairMatrix (singleKrausMap (V ⊗ₖ V)
-          (Matrix.reindex (_root_.finTwoArrowEquiv (Fin e))
-            (_root_.finTwoArrowEquiv (Fin e)) C)) := by
-    simpa only [Matrix.conjTranspose_kronecker,
+          (Matrix.reindex (Equiv.prodComm (Fin e) (Fin e))
+            (Equiv.prodComm (Fin e) (Fin e))
+            (Matrix.reindex (_root_.finTwoArrowEquiv (Fin e))
+              (_root_.finTwoArrowEquiv (Fin e)) C)) =
+        Matrix.reindex (Equiv.prodComm (Fin d) (Fin d))
+          (Equiv.prodComm (Fin d) (Fin d))
+          (singleKrausMap (V ⊗ₖ V)
+            (Matrix.reindex (_root_.finTwoArrowEquiv (Fin e))
+              (_root_.finTwoArrowEquiv (Fin e)) C)) := by
+    simpa only [swapPairMatrix, Matrix.conjTranspose_kronecker,
       Matrix.conjTranspose_conjTranspose] using hswap.symm
   rw [hswap']
 

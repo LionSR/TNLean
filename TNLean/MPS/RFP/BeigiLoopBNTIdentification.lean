@@ -11,7 +11,6 @@ import TNLean.MPS.RFP.BeigiSectorGraphConstruction
 import TNLean.MPS.RFP.BNTDirectSumBasis
 import TNLean.MPS.RFP.ResidualIsometry
 import TNLean.MPS.RFP.StructuralForm
-import TNLean.Wielandt.Primitivity.Equivalence
 
 /-!
 # Identification of Beigi loop sectors with normal tensors

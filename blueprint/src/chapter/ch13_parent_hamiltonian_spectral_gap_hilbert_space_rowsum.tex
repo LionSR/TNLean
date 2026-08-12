@@ -315,7 +315,6 @@
     \label{lem:transported_es_nonoverlap_positive}
     \lean{MPSTensor.CyclicWindowsDisjoint}
     \lean{MPSTensor.CyclicWindowsDisjoint.symm}
-    \lean{MPSTensor.CyclicWindowsDisjoint.of_not_cyclicWindowsOverlap}
     \lean{MPSTensor.localTerm_commute_of_cyclic_windows_disjoint}
     \lean{MPSTensor.localTermES_commute_of_cyclic_windows_disjoint}
     \lean{MPSTensor.localTermES_re_inner_nonneg_of_cyclic_windows_disjoint}
@@ -346,7 +345,7 @@
 
 \begin{lemma}[Quadratic form to norm bound]
     \label{lem:quadratic_form_to_norm_bound}
-    \lean{FrustrationFree.spectralGap_of_martingale}
+    \lean{FrustrationFree.spectralGap_of_martingale_of_finiteDimensional}
     \leanok
     Let $H$ be a positive semidefinite self-adjoint operator on a
     finite-dimensional complex Hilbert space, and suppose that, for all $v$,
