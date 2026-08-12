@@ -67,10 +67,10 @@ def main() -> int:
     # generator emits from the registry as committed.  Without this a registry
     # row could change its prose and the published reference keep the old
     # sentence, which is exactly the drift the one-record rule forbids.
-    if tenkz_language.stale_generated_chapters(registry):
+    drifted = tenkz_language.stale_generated_chapters(registry)
+    if drifted:
         raise SystemExit(
-            "generated chapters drifted from the registry:\n"
-            + "\n".join(tenkz_language.stale_generated_chapters(registry))
+            "generated chapters drifted from the registry:\n" + "\n".join(drifted)
         )
     distinct_skin = tenkz_language.Entry(
         kind="prelude", fields=("skin", "probe", "base=ring")
@@ -159,13 +159,13 @@ def main() -> int:
         raise SystemExit("kernel/sugar event-equivalence probe did not compile")
     if canonical_events != sugared_events:
         raise SystemExit("sandwich and rows={ket,op,bra} emitted different semantic events")
-    # A retired spelling stays installed as a tombstone, and the registry's
-    # tombstone rows are the one record of which spellings those are.  What is
-    # pinned here is that identity: every row the registry carries is refused
-    # by a compile, in the row's own words, so a refusal whose wording drifts
-    # from the record fails.  A row is compiled through a probe for its scope;
-    # a scope with no probe fails rather than being passed over, so the ledger
-    # cannot grow a spelling this test silently stops covering.
+    # Each retired word stays installed as a parser branch that refuses the
+    # spelling and states the migration.  What is pinned here is that the
+    # branch fires and prints its own words: the four are read out of the
+    # kernel source rather than written again, so a migration reworded in one
+    # place and not the other cannot pass.  Holding those branches to the
+    # registry's tombstone rows is the ledger's own check and arrives with it
+    # (issue #6187).
     form_row = next(
         entry.fields
         for entry in registry
@@ -173,60 +173,25 @@ def main() -> int:
     )
     if form_row[2] != "enum(bracket|enclosure|label|prose)":
         raise SystemExit(f"the mark form alphabet is no longer the contract's: {form_row[2]}")
-    graves = tenkz_language.tombstone_rows(registry)
-    if not graves:
-        raise SystemExit("the registry carries no tombstone rows")
-    # One probe per scope: the body that puts a record of that scope on a page
-    # with `<key>=<value>' among its options.  Only scopes the ledger actually
-    # carries are listed, because a probe has to be written against the key it
-    # exercises: a tombstone branch answers a closed alphabet, so a row on a
-    # key that parses its own value needs a different mechanism, and whoever
-    # adds that row should discover it here rather than be waved through by a
-    # probe written on spec.
-    probes = {
-        "kernel-mark": (
-            r"\tn[name=a]{A} & \tn[name=b]{B}"
-            "\n  \\tnmark[%s]{(1,1) .. (1,2)}{$L$}"
-        ),
-    }
-    for scope, spelling, migration in graves:
-        # A command row says the control sequence no longer exists, which is a
-        # claim about the package rather than about a parser branch, so it is
-        # compiled for the error a reader of an old document actually meets.
-        if spelling.startswith("\\"):
-            gone = compile_source(
-                rf"""\documentclass{{standalone}}
-\usepackage{{tenkz}}
-\begin{{document}}
-{spelling}
-\end{{document}}
-"""
-            )
-            if gone.returncode == 0 or "Undefined control sequence" not in gone.stdout:
-                raise SystemExit(
-                    f"{spelling} is recorded as a retired command but the "
-                    "package still defines it"
-                )
-            continue
-        key, _separator, value = spelling.partition("=")
-        key, value = key.strip(), value.strip()
-        # a bare spelling is a key that no longer exists, which the parser
-        # cannot branch on; the unknown-key error answers that one
-        if not value:
-            continue
-        if scope not in probes:
-            raise SystemExit(
-                f"{spelling} is a tombstone of scope {scope}, "
-                "which this test has no probe for; add one rather than leaving "
-                "the row uncompiled"
-            )
-        body = probes[scope] % f"{key}={value}"
+    kernel = (ROOT / "tex/tenkz/tenkz-kernel.code.tex").read_text(encoding="utf-8")
+    branches = re.findall(
+        r"\\__tenkz_kernel_tombstone:nnnn\s*\{\s*tenkz-kernel-mark\s*\}"
+        r"\s*\{\s*form\s*\}\s*\{\s*([a-z-]+)\s*\}\s*\{(.*?)\}\n",
+        kernel,
+        re.DOTALL,
+    )
+    if len(branches) != 4:
+        raise SystemExit(
+            f"expected four retired mark forms in the parser, found {len(branches)}"
+        )
+    for word, migration in branches:
         refused = compile_source(
             rf"""\documentclass{{standalone}}
 \usepackage{{tenkz}}
 \begin{{document}}
 \begin{{tenkz}}[rows={{ket}}, cols=2, bonds=none]
-  {body}
+  \tn[name=a]{{A}} & \tn[name=b]{{B}}
+  \tnmark[form={word}]{{(1,1) .. (1,2)}}{{$L$}}
 \end{{tenkz}}
 \end{{document}}
 """
@@ -239,14 +204,15 @@ def main() -> int:
         transcript = re.sub(
             r"\s+|\(tenkz\)", "", refused.stdout.replace("(tenkz)", " ")
         )
+
         def printed(text: str) -> bool:
-            return re.sub(r"\s+", "", text) in transcript
+            return re.sub(r"\s+|~", "", text) in transcript
 
         if refused.returncode == 0 or not printed("TKZ-LANG-TOMBSTONE"):
-            raise SystemExit(f"{spelling} was not refused as a tombstone")
+            raise SystemExit(f"form={word} was not refused as a tombstone")
         if not printed(migration):
             raise SystemExit(
-                f"{spelling} was refused without the registry's migration"
+                f"form={word} was refused without the parser's own migration"
             )
 
     live = compile_source(r"""\documentclass{standalone}
