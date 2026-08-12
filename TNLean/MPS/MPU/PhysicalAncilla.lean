@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.MPS.MPU.Basic
+import TNLean.MPS.MPU.CanonicalForm
 
 /-!
 # Attaching a physical identity ancilla to a matrix product unitary
@@ -25,6 +25,8 @@ the virtual bond dimension remains \(D\).
   product of the original MPO and the ancilla identity.
 * `MPOTensor.IsMPU.tensorPhysicalId`: identity-ancilla attachment preserves the MPU
   property.
+* `MPOTensor.tensorPhysicalIdCFIIData`: identity-ancilla attachment preserves chosen
+  canonical-form-II data and full active support.
 -/
 
 open scoped Matrix Kronecker
@@ -116,5 +118,148 @@ theorem IsMPU.tensorPhysicalId {U : MPOTensor d D} (hU : IsMPU U)
     Matrix.conjTranspose_one]
   rw [← Matrix.mul_kronecker_mul, hU.mpo_mul_conjTranspose_mpo hN,
     Matrix.one_mul, Matrix.one_kronecker_one]
+
+
+/-! ## Normalized doubled-index tensor -/
+
+/-- Shuffle the doubled enlarged physical index by
+`((i, a), (j, b)) ↦ ((i, j), (a, b))`, with both pairs encoded by
+`finProdFinEquiv`.
+
+This makes the original and ancilla doubled indices explicit and fixes their
+orientation for identity-ancilla attachment.
+
+Source: arXiv:1703.09188, lines 706--724. -/
+private def doubledPhysicalAncillaMiddleShuffle (d x : ℕ) :
+    ((Fin d × Fin x) × (Fin d × Fin x)) ≃
+      ((Fin d × Fin d) × (Fin x × Fin x)) where
+  toFun z := ((z.1.1, z.2.1), (z.1.2, z.2.2))
+  invFun z := ((z.1.1, z.2.1), (z.1.2, z.2.2))
+  left_inv := by rintro ⟨⟨i, a⟩, ⟨j, b⟩⟩; rfl
+  right_inv := by rintro ⟨⟨i, j⟩, ⟨a, b⟩⟩; rfl
+
+@[simp] private theorem doubledPhysicalAncillaMiddleShuffle_apply
+    (i j : Fin d) (a b : Fin x) :
+    doubledPhysicalAncillaMiddleShuffle d x ((i, a), (j, b)) = ((i, j), (a, b)) := rfl
+
+def doubledPhysicalAncillaShuffle (d x : ℕ) :
+    Fin ((d * x) * (d * x)) ≃ Fin ((d * d) * (x * x)) :=
+  finProdFinEquiv.symm |>.trans <|
+    (Equiv.prodCongr finProdFinEquiv.symm finProdFinEquiv.symm).trans <|
+      (doubledPhysicalAncillaMiddleShuffle d x).trans <|
+        (Equiv.prodCongr finProdFinEquiv finProdFinEquiv).trans finProdFinEquiv
+
+/-- Lift a doubled-index MPS tensor by a normalized diagonal ancilla alphabet.
+Only letters `(a, a)` are nonzero, and each is scaled by `1 / sqrt x`.
+
+The physical alphabet is ordered as `((i, j), (a, b))`. -/
+noncomputable def normalizedDiagonalLift (A : MPSTensor (d * d) D) (x : ℕ) :
+    MPSTensor ((d * d) * (x * x)) D := fun k ↦
+  let pq := finProdFinEquiv.symm k
+  let ab := finProdFinEquiv.symm pq.2
+  if ab.1 = ab.2 then ((Real.sqrt x : ℂ)⁻¹) • A pq.1 else 0
+
+/-- Coordinate formula for the normalized diagonal lift. -/
+@[simp] theorem normalizedDiagonalLift_apply (A : MPSTensor (d * d) D) (x : ℕ)
+    (ij : Fin (d * d)) (a b : Fin x) :
+    normalizedDiagonalLift A x (finProdFinEquiv (ij, finProdFinEquiv (a, b))) =
+      if a = b then ((Real.sqrt x : ℂ)⁻¹) • A ij else 0 := by
+  simp [normalizedDiagonalLift]
+
+/-- A nonempty normalized diagonal ancilla leaves the transfer map unchanged. -/
+theorem transferMap_normalizedDiagonalLift (A : MPSTensor (d * d) D)
+    (x : ℕ) (hx : 0 < x) :
+    MPSTensor.transferMap (normalizedDiagonalLift A x) = MPSTensor.transferMap A := by
+  classical
+  apply LinearMap.ext
+  intro X
+  simp only [MPSTensor.transferMap_apply]
+  rw [← Equiv.sum_comp finProdFinEquiv, Fintype.sum_prod_type]
+  apply Finset.sum_congr rfl
+  intro ij _
+  rw [← Equiv.sum_comp finProdFinEquiv, Fintype.sum_prod_type]
+  have hsqrt : (Real.sqrt x : ℂ) ≠ 0 := by
+    exact_mod_cast Real.sqrt_ne_zero'.2 (by exact_mod_cast hx)
+  have hscale : (x : ℂ) * (Real.sqrt x : ℂ)⁻¹ * (Real.sqrt x : ℂ)⁻¹ = 1 := by
+    have hxR : (0 : ℝ) ≤ x := by positivity
+    rw [mul_assoc, ← mul_inv, ← Complex.ofReal_mul, Real.mul_self_sqrt hxR]
+    simp [hx.ne']
+  have hinner (a : Fin x) :
+      (∑ b : Fin x,
+        normalizedDiagonalLift A x (finProdFinEquiv (ij, finProdFinEquiv (a, b))) * X *
+          (normalizedDiagonalLift A x (finProdFinEquiv (ij, finProdFinEquiv (a, b))))ᴴ) =
+        ((Real.sqrt x : ℂ)⁻¹ * (Real.sqrt x : ℂ)⁻¹) • (A ij * X * (A ij)ᴴ) := by
+    rw [Finset.sum_eq_single a]
+    · simp [normalizedDiagonalLift_apply, Matrix.smul_mul, Matrix.mul_smul,
+        Matrix.conjTranspose_smul, RCLike.star_def, map_inv₀, Complex.conj_ofReal,
+        smul_smul, mul_comm]
+    · intro b _ hba
+      have hab : a ≠ b := fun h ↦ hba h.symm
+      simp [normalizedDiagonalLift_apply, hab]
+    · simp
+  rw [Finset.sum_congr rfl (fun a _ ↦ hinner a), Finset.sum_const]
+  rw [Finset.card_univ, Fintype.card_fin]
+  rw [← Nat.cast_smul_eq_nsmul ℂ, smul_smul]
+  have hscale' :
+      (x : ℂ) * ((Real.sqrt x : ℂ)⁻¹ * (Real.sqrt x : ℂ)⁻¹) = 1 := by
+    simpa [mul_assoc] using hscale
+  rw [hscale', one_smul]
+
+/-- The normalized flattening after identity-ancilla attachment is the normalized
+original flattening with a diagonal ancilla, in the explicit doubled-index shuffle.
+
+Source: arXiv:1703.09188, lines 706--724, together with equation `eq:transfer-op`,
+lines 336--340. -/
+theorem normalizedFlattening_tensorPhysicalId (U : MPOTensor d D)
+    (x : ℕ) (hx : 0 < x) :
+    (tensorPhysicalId U x).normalizedFlattening =
+      MPSTensor.reindexPhysical (doubledPhysicalAncillaShuffle d x)
+        (normalizedDiagonalLift U.normalizedFlattening x) := by
+  funext k
+  rcases finProdFinEquiv.surjective k with ⟨⟨ia, jb⟩, rfl⟩
+  rcases finProdFinEquiv.surjective ia with ⟨⟨i, a⟩, rfl⟩
+  rcases finProdFinEquiv.surjective jb with ⟨⟨j, b⟩, rfl⟩
+  simp only [normalizedFlattening, MPSTensor.reindexPhysical,
+    doubledPhysicalAncillaShuffle, doubledPhysicalAncillaMiddleShuffle,
+    Equiv.trans_apply, Equiv.prodCongr_apply, Equiv.symm_apply_apply,
+    MPOTensor.toMPSTensor]
+  simp only [Prod.map]
+  simp only [finProdFinEquiv.symm_apply_apply]
+  change ((Real.sqrt (d * x) : ℂ)⁻¹) •
+      tensorPhysicalId U x
+        (finProdFinEquiv (finProdFinEquiv (i, a), finProdFinEquiv (j, b))).divNat
+        (finProdFinEquiv (finProdFinEquiv (i, a), finProdFinEquiv (j, b))).modNat =
+    normalizedDiagonalLift U.normalizedFlattening x
+      (finProdFinEquiv (finProdFinEquiv (i, j), finProdFinEquiv (a, b)))
+  have houter := finProdFinEquiv.symm_apply_apply
+    (finProdFinEquiv (i, a), finProdFinEquiv (j, b))
+  have hleft := congrArg Prod.fst houter
+  have hright := congrArg Prod.snd houter
+  change (finProdFinEquiv (finProdFinEquiv (i, a), finProdFinEquiv (j, b))).divNat =
+      finProdFinEquiv (i, a) at hleft
+  change (finProdFinEquiv (finProdFinEquiv (i, a), finProdFinEquiv (j, b))).modNat =
+      finProdFinEquiv (j, b) at hright
+  rw [hleft, hright]
+  change ((Real.sqrt (d * x) : ℂ)⁻¹) •
+      tensorPhysicalId U x (finProdFinEquiv (i, a)) (finProdFinEquiv (j, b)) =
+    normalizedDiagonalLift U.normalizedFlattening x
+      (finProdFinEquiv (finProdFinEquiv (i, j), finProdFinEquiv (a, b)))
+  rw [tensorPhysicalId_apply, normalizedDiagonalLift_apply,
+    Real.sqrt_mul (by positivity)]
+  push_cast
+  rw [mul_inv]
+  by_cases hab : a = b <;> simp [hab, smul_smul, mul_comm]
+
+/-- Identity-ancilla attachment leaves the transfer map of the normalized
+flattening unchanged.
+
+Source: arXiv:1703.09188, lines 706--724 and equation `eq:transfer-op`, lines 336--340. -/
+theorem transferMap_normalizedFlattening_tensorPhysicalId (U : MPOTensor d D)
+    (x : ℕ) (hx : 0 < x) :
+    MPSTensor.transferMap (tensorPhysicalId U x).normalizedFlattening =
+      MPSTensor.transferMap U.normalizedFlattening := by
+  rw [normalizedFlattening_tensorPhysicalId U x hx,
+    MPSTensor.transferMap_reindexPhysical_equiv,
+    transferMap_normalizedDiagonalLift U.normalizedFlattening x hx]
 
 end MPOTensor
