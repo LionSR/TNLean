@@ -22,6 +22,7 @@ import TNLean.MPS.MPU.Simple
 import TNLean.MPS.MPU.SimpleBlocking
 import TNLean.MPS.MPU.SourceCuts
 import TNLean.MPS.MPU.SourceFactors
+import TNLean.MPS.MPU.SourceIndexValue
 import TNLean.MPS.MPU.SourceUBoundary
 import TNLean.MPS.MPU.SourceUClosedNetwork
 import TNLean.MPS.MPU.SourceUContraction
