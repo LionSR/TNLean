@@ -11,7 +11,7 @@ import TNLean.MPS.ParentHamiltonian.Martingale.Transport
 
 This file identifies, on the explicit three-site Hilbert space, the two
 complementary open-chain ground projections with the range-two local parent
-Hamiltonian terms based at sites `0` and `1`.
+Hamiltonian terms based at sites \(0\) and \(1\).
 
 The coordinate bridges compare the open-chain `restrictLast` and tail
 `restrictFirst` slices with the cyclic restrictions used to define `localTermES`.
@@ -20,9 +20,9 @@ applied; no injectivity or nonzero bond-dimension assumption is needed.
 
 ## Main results
 
-* `MPSTensor.ker_localTermES_two_three_zero` identifies the site-`0` kernel
+* `MPSTensor.ker_localTermES_two_three_zero` identifies the site-\(0\) kernel
   with the left open-chain ground space.
-* `MPSTensor.ker_localTermES_two_three_one` identifies the site-`1` kernel
+* `MPSTensor.ker_localTermES_two_three_one` identifies the site-\(1\) kernel
   with the tail open-chain ground space.
 * `MPSTensor.openChainLeftGroundSpaceES_orthogonal_starProjection_eq_localTermES`
   and `MPSTensor.openChainTailGroundSpaceES_orthogonal_starProjection_eq_localTermES`
@@ -41,10 +41,10 @@ variable {d D : ℕ}
 
 /-! ### Open-chain and cyclic coordinate bridges -/
 
-/-- At site `0` of an `(L+1)`-site chain, fixing the final site by
+/-- At site \(0\) of an \((L+1)\)-site chain, fixing the final site by
 `restrictLast` is the same coordinate slice as the cyclic restriction.
 
-This is the site-`0` coordinate identification behind the left open-chain
+This is the site-\(0\) coordinate identification behind the left open-chain
 condition in Nachtergaele, arXiv:cond-mat/9410110, eq. (2.4). -/
 theorem restrictLast_eq_cyclicRestrictES_zero {L : ℕ}
     (v : EuclideanSpace ℂ (Cfg d (L + 1))) (τ : Cfg d (L + 1)) :
@@ -65,7 +65,7 @@ theorem restrictLast_eq_cyclicRestrictES_zero {L : ℕ}
 /-- Fixing the sole prefix site of a three-site state by `tailRestrictₗ` is
 exactly `restrictFirst` at that coordinate.
 
-This is the tail/first-coordinate bridge for the site-`1` open-chain condition
+This is the tail/first-coordinate bridge for the site-\(1\) open-chain condition
 in Nachtergaele, arXiv:cond-mat/9410110, eq. (2.4). -/
 theorem tailRestrictₗ_one_eq_restrictFirst (u : Fin 1 → Fin d)
     (ψ : NSiteSpace d (1 + 2)) :
@@ -77,10 +77,10 @@ theorem tailRestrictₗ_one_eq_restrictFirst (u : Fin 1 → Fin d)
   funext k
   exact congrArg (Fin.cons (u 0) σ) (Fin.ext (by simp))
 
-/-- At site `1` of an `(L+1)`-site chain, fixing the first site by
+/-- At site \(1\) of an \((L+1)\)-site chain, fixing the first site by
 `restrictFirst` is the same coordinate slice as the cyclic restriction.
 
-This is the site-`1` coordinate identification behind the tail open-chain
+This is the site-\(1\) coordinate identification behind the tail open-chain
 condition in Nachtergaele, arXiv:cond-mat/9410110, eq. (2.4). -/
 theorem restrictFirst_eq_cyclicRestrictES_one {L : ℕ} (hL : 0 < L)
     (v : EuclideanSpace ℂ (Cfg d (L + 1))) (τ : Cfg d (L + 1)) :
@@ -105,9 +105,9 @@ theorem restrictFirst_eq_cyclicRestrictES_one {L : ℕ} (hL : 0 < L)
 /-! ### Individual three-site kernels -/
 
 /-- On the explicit three-site chain, the kernel of the range-two local term at
-site `0` is the left open-chain ground space.
+site \(0\) is the left open-chain ground space.
 
-Source terminology: this is the ground condition on `Λ_n` inside `Λ_{n+1}` in
+Source terminology: this is the ground condition on \(Λ_n\) inside \(Λ_{n+1}\) in
 Nachtergaele, arXiv:cond-mat/9410110, eq. (2.4). -/
 theorem ker_localTermES_two_three_zero (B : MPSTensor d D) :
     LinearMap.ker (localTermES B 2 (0 : Fin 3)) = openChainLeftGroundSpaceES B 2 := by
@@ -126,10 +126,10 @@ theorem ker_localTermES_two_three_zero (B : MPSTensor d D) :
     exact hv (τ (Fin.last 2))
 
 /-- On the explicit three-site chain, the kernel of the range-two local term at
-site `1` is the one-site-prefix tail open-chain ground space.
+site \(1\) is the one-site-prefix tail open-chain ground space.
 
 Source terminology: this is the tail condition on
-`Λ_{n+1} \ Λ_{n-l}` inside `Λ_{n+1}` in Nachtergaele,
+\(Λ_{n+1} \ Λ_{n-l}\) inside \(Λ_{n+1}\) in Nachtergaele,
 arXiv:cond-mat/9410110, eq. (2.4). -/
 theorem ker_localTermES_two_three_one (B : MPSTensor d D) :
     LinearMap.ker (localTermES B 2 (1 : Fin 3)) = openChainTailGroundSpaceES B 1 2 := by
@@ -159,10 +159,10 @@ private theorem range_eq_orthogonal_ker_of_isSymmetricProjection
   rw [← horth, Submodule.orthogonal_orthogonal]
 
 /-- On the explicit three-site chain, the complementary left open-chain ground
-projection is the range-two local parent-Hamiltonian term at site `0`.
+projection is the range-two local parent-Hamiltonian term at site \(0\).
 
 The proof uses uniqueness of a symmetric projection from its range, after the
-site-`0` kernel has been identified. -/
+site-\(0\) kernel has been identified. -/
 theorem openChainLeftGroundSpaceES_orthogonal_starProjection_eq_localTermES
     (B : MPSTensor d D) :
     (openChainLeftGroundSpaceES B 2)ᗮ.starProjection.toLinearMap =
@@ -175,10 +175,10 @@ theorem openChainLeftGroundSpaceES_orthogonal_starProjection_eq_localTermES
   rw [ker_localTermES_two_three_zero]
 
 /-- On the explicit three-site chain, the complementary tail open-chain ground
-projection is the range-two local parent-Hamiltonian term at site `1`.
+projection is the range-two local parent-Hamiltonian term at site \(1\).
 
 The proof uses uniqueness of a symmetric projection from its range, after the
-site-`1` kernel has been identified. -/
+site-\(1\) kernel has been identified. -/
 theorem openChainTailGroundSpaceES_orthogonal_starProjection_eq_localTermES
     (B : MPSTensor d D) :
     (openChainTailGroundSpaceES B 1 2)ᗮ.starProjection.toLinearMap =
