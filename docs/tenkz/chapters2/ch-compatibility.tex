@@ -8,6 +8,12 @@ four aliases died with the front end that parsed them.  \tncmd{tenkzkernel}
 remains callable and rebinds the surface the package already bound at load,
 so a document that still spells it changes nothing.
 
+The second table below is the other half of the same answer.  An alias is a
+spelling the parser still accepts and reads as its replacement; a retired
+spelling it accepts no longer, and refuses by name.  Both come from the
+executable registry, so the migration printed here is the sentence a compile
+prints when it meets the dead word.
+
 \IfFileExists{chapters2/generated-language-aliases.tex}{%
   \noindent\input{chapters2/generated-language-aliases.tex}%
 }{%
