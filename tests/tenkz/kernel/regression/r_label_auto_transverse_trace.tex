@@ -1,0 +1,47 @@
+% Regression: a plane physical trace keeps its two ends as a host and the
+% axis it leaves that host by, not as endpoint nodes.  A station that reads
+% endpoint nodes alone sees both trace legs as no ink at all and stands the
+% lower name on the closure.
+\documentclass{standalone}
+\usepackage{tenkz}
+\makeatletter
+\ExplSyntaxOn
+\file_input:n { tenkz-kernel.code.tex }
+\int_new:N \l__tenkz_test_side_count_int
+\tl_new:N \l__tenkz_test_side_label_tl
+\cs_new_eq:NN
+  \__tenkz_test_side_auto:nN \__tenkz_kernel_r_label_auto_side:nN
+\cs_set_protected:Npn \__tenkz_kernel_r_label_auto_side:nN #1#2
+  {
+    \__tenkz_test_side_auto:nN {#1} #2
+    \int_gincr:N \l__tenkz_test_side_count_int
+    \__tenkz_model_get:nnN {#1} {label} \l__tenkz_test_side_label_tl
+    \str_case:VnF \l__tenkz_test_side_label_tl
+      {
+        {T}
+          {
+            \str_if_eq:VnF #2 {s}
+              { \errmessage{the~upper~trace~host~gave~up~its~free~south} }
+          }
+        {U}
+          {
+            \str_if_eq:VnF #2 {n}
+              { \errmessage{the~lower~trace~host~left~its~south~free} }
+          }
+      }
+      { \errmessage{unexpected~label~in~transverse-trace~fixture} }
+  }
+\ExplSyntaxOff
+\makeatother
+\begin{document}
+\tenkzkernel
+% The closure leaves the top cell northward and the bottom cell southward.
+\begin{tenkz}[lattice={2x1}, bonds=none, trace=physical, frame=plane]
+  \tn[at=(1,1), skin=dot]{T}
+  \tn[at=(2,1), skin=dot]{U}
+\end{tenkz}
+\ExplSyntaxOn
+\int_compare:nNnF { \l__tenkz_test_side_count_int } = {2}
+  { \errmessage{transverse-trace~fixture~did~not~station~two~labels} }
+\ExplSyntaxOff
+\end{document}
