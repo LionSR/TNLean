@@ -30,12 +30,12 @@ The two ket indices and the two bra indices are grouped into the blocked
 physical indices, as in
 \cite[Theorem~4.9, lines~851--856]{Cirac2016MPDO_arXiv}.
 
-\begin{definition}[Positive-length physical blocking of an MPO tensor]
-    \label{def:mpdo_positive_physical_blocking}
+\begin{definition}[Physical blocking of an MPO tensor]
+    \label{def:mpdo_physical_blocking}
     \lean{MPOTensor.blockTensor}
     \lean{MPOTensor.blockTensor_apply}
     \leanok
-    For a positive integer $L$, group $L$ adjacent physical sites and denote
+    For an integer $L\geq0$, group $L$ adjacent physical sites and denote
     the resulting local tensor by $M^{[L]}$. It has a length-$L$ ket word
     $I=(i_1,\ldots,i_L)$ and a length-$L$ bra word
     $J=(j_1,\ldots,j_L)$ as its physical indices, and
@@ -44,23 +44,25 @@ physical indices, as in
         &=M^{i_1j_1}\cdots M^{i_Lj_L}.
         \notag
     \end{align}
-    Thus the ket and bra words are grouped separately. This is the MPO
-    version of the physical blocking used for the basis of normal tensors in
+    Thus the ket and bra words are grouped separately. For $L=0$, both
+    words are empty and the unique local matrix is the identity. For $L>0$,
+    this is the MPO version of the physical blocking used for the basis of
+    normal tensors in
     \cite[lines~317--345]{Cirac2016MPDO_arXiv}. It is a local tensor, not the
     closed-chain operator $O_L(M)$ of
     \cite[lines~962--967]{Cirac2016MPDO_arXiv}.
 \end{definition}
 
-\begin{theorem}[Doubled-index form of positive MPO blocking]
-    \label{thm:mpdo_positive_blocking_doubled_index}
+\begin{theorem}[Doubled-index form of MPO blocking]
+    \label{thm:mpdo_blocking_doubled_index}
     \lean{MPOTensor.blockedDoubledIndexEquiv}
     \lean{MPOTensor.decodeBlock_blockedDoubledIndexEquiv}
     \lean{MPOTensor.toMPSTensor_blockTensor}
     \lean{MPOTensor.isInjective_toMPSTensor_blockTensor_iff}
     \leanok
-    \uses{def:mpdo_positive_physical_blocking, def:blocked_tensor}
-    Let $L>0$. Pairing the ket and bra letters site by site gives the
-    canonical identification
+    \uses{def:mpdo_physical_blocking, def:blocked_tensor}
+    For every integer $L\geq0$, pairing the ket and bra letters site by site
+    gives the canonical identification
     $\{0,\ldots,d^L-1\}^2\simeq\{0,\ldots,d^2-1\}^L$.
     Under this identification, the doubled-index MPS tensor of $M^{[L]}$
     is the physical reindexing of the $L$-blocked doubled-index MPS tensor
@@ -69,7 +71,8 @@ physical indices, as in
 
 \begin{proof}\leanok
     Decode the blocked ket and bra words, pair their letters at each site,
-    and compare the two ordered matrix products. Physical reindexing by a
+    and compare the two ordered matrix products. For $L=0$, both words are
+    empty and both matrix products are the identity. Physical reindexing by a
     bijection preserves the span of the tensor matrices.
 \end{proof}
 
@@ -77,7 +80,7 @@ physical indices, as in
     \label{thm:mpdo_positive_blocking_product}
     \lean{MPOTensor.blockTensor_mulTensor}
     \leanok
-    \uses{def:mpdo_positive_physical_blocking, def:mpdo_operator_product}
+    \uses{def:mpdo_physical_blocking, def:mpdo_operator_product}
     For $L>0$ and two MPO tensors $M,N$ with the same physical dimension,
     let juxtaposition denote the MPO tensor product obtained by contracting
     the intermediate physical index. Then $(MN)^{[L]}=M^{[L]}N^{[L]}$.
@@ -94,7 +97,7 @@ physical indices, as in
     \lean{MPOTensor.mpo_blockTensor_eq_reindex}
     \lean{MPOTensor.IsMPDO.blockTensor}
     \leanok
-    \uses{def:mpdo_positive_physical_blocking, def:mpo_family, def:mpdo}
+    \uses{def:mpdo_physical_blocking, def:mpo_family, def:mpdo}
     Let $L\in\N$, and let
     \begin{align}
         \Phi_{N,L}\colon
@@ -159,7 +162,7 @@ physical indices, as in
     \lean{MPOTensor.mpo_blockTwo_eq_reindex_blockTensor}
     \lean{MPOTensor.IsMPDO.blockTwo}
     \leanok
-    \uses{def:mpdo_positive_physical_blocking,
+    \uses{def:mpdo_physical_blocking,
         def:mpdo_two_site_blocking, def:mpdo}
     Let $\varphi:\{0,\ldots,d^2-1\}\to
     \{0,\ldots,d-1\}^2$ be the canonical bijection. Then
@@ -184,8 +187,8 @@ physical indices, as in
     \lean{MPOTensor.IsCPSVCanonicalForm_toMPSTensor_blockTensor}
     \lean{MPOTensor.IsCPSVCanonicalForm_toMPSTensor_blockTwo}
     \leanok
-    \uses{def:mpdo_positive_physical_blocking, def:mpdo_two_site_blocking,
-        thm:mpdo_positive_blocking_doubled_index,
+    \uses{def:mpdo_physical_blocking, def:mpdo_two_site_blocking,
+        thm:mpdo_blocking_doubled_index,
         thm:mpdo_block_two_as_positive_blocking,
         thm:cpsv_physical_reindexing,
         thm:cpsv_literal_canonical_form_positive_blocking}
@@ -197,8 +200,8 @@ physical indices, as in
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{def:mpdo_positive_physical_blocking, def:mpdo_two_site_blocking,
-        thm:mpdo_positive_blocking_doubled_index,
+    \uses{def:mpdo_physical_blocking, def:mpdo_two_site_blocking,
+        thm:mpdo_blocking_doubled_index,
         thm:mpdo_block_two_as_positive_blocking,
         thm:cpsv_physical_reindexing,
         thm:cpsv_literal_canonical_form_positive_blocking}
