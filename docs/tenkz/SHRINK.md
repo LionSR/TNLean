@@ -3104,19 +3104,27 @@ A spelling written `key=value` is a word struck from a live key's alphabet,
 which the parser refuses through a branch of its own; a bare spelling is a
 key that no longer exists, which the unknown-key error answers.
 
-The row is the record and the parser's refusal answers to it: the language
-check holds the two to one list in both directions, migration text included,
-so a refusal the ledger does not record fails, a row the parser does not
-refuse fails, and a row whose word is still in its key's alphabet fails. The
-same rows are what the source lint builds its rejection from and what the
-generated reference publishes beside the aliases, which answer the same
-reader holding an older document. The disposition checker had held a fourth
-copy of the four names and now reads them here too, which also corrects it:
-that copy called `prose` dead, and `prose` is live.
+The row is the record and everything that must refuse the spelling reads it:
+the check that holds the rows and the parser's refusals to one list, the
+source lint's rejection, and the generated reference that publishes the rows
+beside the aliases. All three are the ledger's own, landed by the change that
+retired the hand-spelled `periodic`, and none of them is written a second time
+here. This session contributes the rows and the parser branches that answer
+them, and depends on that ledger for everything that reads them.
 
-The row shape and the pairing check are the ledger landed for the linter by
-the change that retired the hand-spelled `periodic`. This session contributes
-the four `form=` rows, whose migrations the parser prints word for word.
+The rows are therefore inert until the ledger lands: the registrar discards
+them, and nothing in this session's tree parses one. What refuses a dead
+spelling here is a compile, from the parser branch beside each row. That is
+the whole reason the ledger must land first. Two rows and no reader holding
+them together is the two-records state section 10 forbids, and it is the state
+this session would create on its own.
+
+The audit that reads the sources still keeps a written-out list of the dead
+spellings, because it cannot read the rows before the ledger arrives. That
+list had called `prose` dead where `prose` is a live word of the `form=`
+alphabet, and had called `\tnprose` a dead command where it is a live registry
+command that sets a sentence and puts no ink on the page. Both are corrected,
+and the list goes when the reader arrives.
 
 Two documentation defects the same audit falsified are corrected in the
 registry, which is where the generated reference reads its prose. `\tnprose`

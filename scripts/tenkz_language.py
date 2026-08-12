@@ -35,7 +35,6 @@ ARITIES = {
     "alias": 4,
     "example": 3,
     "prelude": 3,
-    "tombstone": 3,
 }
 
 BASELINE = ROOT / "tests/tenkz/census-baseline.json"
@@ -215,7 +214,7 @@ def load_registry() -> list[Entry]:
     text = REGISTRY.read_text(encoding="utf-8")
     pattern = re.compile(
         r"\\__tenkz_language_registry_"
-        r"(environment|command|key|alias|example|prelude|tombstone):[n]+"
+        r"(environment|command|key|alias|example|prelude):[n]+"
     )
     entries: list[Entry] = []
     for match in pattern.finditer(text):
@@ -328,160 +327,6 @@ def _kernel_leaf_keys_from_texts(texts) -> set[tuple[str, str]]:
     return leaves
 
 
-# Taken verbatim from the tombstone ledger of issue #6187 (#6193), at that
-# branch's 4dcc794, so that whichever of the two changes lands second drops an
-# identical copy rather than reconciling two readings of the same rule.
-
-# A word struck from a live key's alphabet stays installed as a branch that
-# refuses the spelling and states the migration.  Reading those branches is
-# what lets the language check hold the registry's tombstone ledger and the
-# parser to one list; the lookahead skips the helper's own definition, whose
-# next token is a parameter rather than an argument group.
-_KERNEL_TOMBSTONE = re.compile(r"\\__tenkz_kernel_tombstone:nnnn\s*(?=\{)")
-
-
-def _sentence(text: str) -> str:
-    """Read an expl3 argument as the sentence a reader is shown."""
-    return " ".join(text.replace("~", " ").split())
-
-
-def _kernel_tombstones_from_texts(texts: Iterable[str]) -> dict[tuple[str, str], str]:
-    """Collect the spellings the kernel parser refuses by name and their migrations."""
-    tombstones: dict[tuple[str, str], str] = {}
-    for text in texts:
-        for match in _KERNEL_TOMBSTONE.finditer(text):
-            position = match.end()
-            fields: list[str] = []
-            for _ in range(4):
-                field, position = _group(text, position)
-                fields.append(field)
-            family, key, value, migration = (_sentence(field) for field in fields)
-            scope = family.removeprefix("tenkz-")
-            tombstones[(scope, f"{key}={value}")] = migration
-    return tombstones
-
-
-def _kernel_tombstones() -> dict[tuple[str, str], str]:
-    return _kernel_tombstones_from_texts(
-        path.read_text(encoding="utf-8")
-        for path in (ROOT / "tex/tenkz").glob("*.code.tex")
-    )
-
-
-def tombstone_rows(entries: list[Entry]) -> list[tuple[str, str, str]]:
-    """The ledger's rows as scope, spelling, and migration a reader is shown.
-
-    The registry writes a multi-word key the parser's way, with `~` for the
-    space, and wraps a long migration to keep its line short.  Neither is
-    visible in a document, so both are read out here rather than at each of
-    the three places that consume a row: the check, the lint, and a reader.
-    """
-    return [
-        (entry.fields[0], _sentence(entry.fields[1]), _sentence(entry.fields[2]))
-        for entry in entries
-        if entry.kind == "tombstone"
-    ]
-
-
-def tombstone_errors(
-    rows: list[tuple[str, str, str]],
-    key_vocabulary: dict[tuple[str, str], tuple[str, str]],
-    commands: set[str],
-    kernel: dict[tuple[str, str], str],
-) -> list[str]:
-    """Hold the tombstone ledger, the live vocabulary, and the parser to one list.
-
-    A row spelled `key=value` is a word struck from a live alphabet: the key
-    must still exist, the word must not, and the parser must refuse the
-    spelling with the migration the ledger states.  A bare row is a key that
-    no longer exists and a row spelled with a leading backslash is a command
-    that no longer exists; neither leaves anything for the parser to branch
-    on, so the check is that the spelling really is gone and only the lint
-    reads the row.
-
-    Rows arrive from `tombstone_rows`, which has already read `~` and any
-    wrapping out of them, so every comparison here is against the spelling
-    and the sentence a document and a reader actually carry.
-    """
-    errors: list[str] = []
-    recorded: dict[tuple[str, str], str] = {}
-    scopes = {scope for scope, _name in key_vocabulary}
-    seen: set[tuple[str, str]] = set()
-    for scope, spelling, migration in rows:
-        # Two rows may differ as written and mean one spelling, which the
-        # rest of this function would silently collapse to whichever came
-        # last.
-        if (scope, spelling) in seen:
-            errors.append(f"tombstone {scope}:{spelling} is recorded twice")
-        seen.add((scope, spelling))
-        if not migration:
-            errors.append(f"tombstone {scope}:{spelling} names no migration")
-        if spelling.startswith("\\"):
-            # A dead command has no key scope to sit in, so it says so; the
-            # spelling would otherwise be read as a key and never checked.
-            if scope != "command":
-                errors.append(
-                    f"tombstone {scope}:{spelling} is a command and takes "
-                    "the scope 'command'"
-                )
-            elif spelling.removeprefix("\\") in commands:
-                errors.append(
-                    f"tombstone {scope}:{spelling} names a command the "
-                    "registry still carries"
-                )
-            continue
-        if scope not in scopes:
-            errors.append(
-                f"tombstone {scope}:{spelling} names no registered scope"
-            )
-            continue
-        key, _separator, value = spelling.partition("=")
-        key, value = key.strip(), value.strip()
-        if not value:
-            if (scope, key) in key_vocabulary:
-                errors.append(
-                    f"tombstone {scope}:{spelling} names a key the registry "
-                    "still carries"
-                )
-            continue
-        record = key_vocabulary.get((scope, key))
-        if record is None:
-            errors.append(
-                f"tombstone {scope}:{spelling} names no registered key"
-            )
-            continue
-        enum = re.fullmatch(r"enum\(([^)]*)\)", record[1])
-        if enum is not None and value in enum.group(1).split("|"):
-            errors.append(
-                f"tombstone {scope}:{spelling} is still a word of {record[1]}"
-            )
-        recorded[(scope, f"{key}={value}")] = migration
-    unrecorded = sorted(
-        f"{scope}:{spelling}" for scope, spelling in kernel.keys() - recorded.keys()
-    )
-    if unrecorded:
-        errors.append(
-            "the parser refuses spellings the tombstone ledger does not record: "
-            + ", ".join(unrecorded)
-        )
-    unrefused = sorted(
-        f"{scope}:{spelling}" for scope, spelling in recorded.keys() - kernel.keys()
-    )
-    if unrefused:
-        errors.append(
-            "the tombstone ledger records spellings the parser does not refuse: "
-            + ", ".join(unrefused)
-        )
-    for scope, spelling in sorted(recorded.keys() & kernel.keys()):
-        if recorded[(scope, spelling)] != kernel[(scope, spelling)]:
-            errors.append(
-                f"tombstone {scope}:{spelling} migrates to "
-                f"{recorded[(scope, spelling)]!r} in the ledger and "
-                f"{kernel[(scope, spelling)]!r} in the parser"
-            )
-    return errors
-
-
 def _parser_leaf_keys() -> set[tuple[str, str]]:
     """Collect public leaf-key spellings installed by the TeX parsers.
 
@@ -519,9 +364,7 @@ def check(entries: list[Entry]) -> list[str]:
     }
     for kind, rows in by_kind.items():
         names = [
-            f"{row[0]}:{row[1]}"
-            if kind in {"key", "prelude", "tombstone"}
-            else row[0]
+            f"{row[0]}:{row[1]}" if kind in {"key", "prelude"} else row[0]
             for row in rows
         ]
         duplicates = sorted(name for name in set(names) if names.count(name) > 1)
@@ -649,14 +492,6 @@ def check(entries: list[Entry]) -> list[str]:
             errors.append(
                 f"value alias {scope}:{spelling} {value_error}"
             )
-    errors.extend(
-        tombstone_errors(
-            tombstone_rows(entries),
-            key_vocabulary,
-            {row[0] for row in by_kind["command"]},
-            _kernel_tombstones(),
-        )
-    )
     if BASELINE.is_file():
         baseline = json.loads(BASELINE.read_text(encoding="utf-8"))
         recorded = baseline["m1_census"]["value"]
@@ -726,12 +561,8 @@ def check(entries: list[Entry]) -> list[str]:
 
 
 def _tex(value: str) -> str:
-    # A command tombstone spells its control sequence, and a migration names
-    # the command that replaced it, so the backslash is read out first: left
-    # alone it would reach the manual as an undefined control sequence.
     return (
-        value.replace("\\", r"\textbackslash{}")
-        .replace("_", r"\_")
+        value.replace("_", r"\_")
         .replace("|", r"\textbar{}\allowbreak{}")
         .replace("(", r"(\allowbreak{}")
         .replace(",", r",\allowbreak{}")
@@ -823,23 +654,6 @@ def reference_texts(entries: list[Entry]) -> tuple[str, str]:
             rf"{_tex(scope)} & \texttt{{{_tex(spelling)}}} & "
             rf"use \texttt{{{_tex(replacement)}}}; {_tex(meaning)} \\"
         )
-    # Tombstones ride the compatibility chapter beside the aliases: both
-    # answer the same reader, the one holding a document written against an
-    # older spelling.  An alias still parses and a tombstone no longer does,
-    # which is the whole of the difference and why the columns differ.
-    alias_lines.extend(
-        (
-            r"\bottomrule\end{tabularx}",
-            r"\medskip",
-            r"\begin{tabularx}{\linewidth}{@{}l l X@{}}\toprule "
-            r"Scope & Retired spelling & Migration \\ \midrule",
-        )
-    )
-    for scope, spelling, migration in tombstone_rows(entries):
-        alias_lines.append(
-            rf"{_tex(scope)} & \texttt{{{_tex(spelling)}}} & "
-            rf"{_tex(migration)} \\"
-        )
     alias_lines.extend((r"\bottomrule\end{tabularx}", "}"))
     return "\n".join(lines) + "\n", "\n".join(alias_lines) + "\n"
 
@@ -882,8 +696,11 @@ def main() -> int:
     errors = check(entries)
     # The chapters call themselves generated; this is what holds them to it.
     # `check' is what CI runs, so a committed chapter that drifts from the
-    # registry fails there rather than reaching a reader.
-    errors.extend(stale_generated_chapters(entries))
+    # registry fails there rather than reaching a reader.  The generate action
+    # has just written them from these same entries, so there is nothing there
+    # for the comparison to find and it is skipped.
+    if args.action != "generate-reference":
+        errors.extend(stale_generated_chapters(entries))
     if args.action == "census":
         census = {kind: sum(e.kind == kind for e in entries) for kind in ARITIES}
         census["parser_leaf_keys"] = len(_parser_leaf_keys())
