@@ -142,7 +142,11 @@ def test_closure_reads_the_stream_opened_file() -> None:
         # archive to carry, and a comment is not a load.
         for innocent in ("\\openout\\log=run.log",
                          "\\iow_open:Nn \\g_log_iow {run.log}",
-                         "% \\openin\\src=ghost.cfg"):
+                         "% \\openin\\src=ghost.cfg",
+                         # A control word is read whole: a longer name that
+                         # merely opens with the primitive's letters is not
+                         # the primitive plus a file name.
+                         "\\opening{Dear Reader}"):
             (source / "tenkz.sty").write_text(
                 STAGE_CONTRACT + innocent + "\n", encoding="utf-8"
             )

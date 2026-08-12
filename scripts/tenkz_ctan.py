@@ -331,8 +331,8 @@ PIPE_FILENAME = re.compile(
 # conditional variants through the signature, so the family is read the way
 # the loaders' conditional variants are.
 STREAM_OPEN_CALL = re.compile(
-    r"\\openin\s*" + STREAM_OPERAND + r"\"([^\"]+)\""
-    r"|\\openin\s*" + STREAM_OPERAND + r"([^\s{}\\%\"]+)"
+    r"\\openin(?![a-zA-Z])\s*" + STREAM_OPERAND + r"\"([^\"]+)\""
+    r"|\\openin(?![a-zA-Z])\s*" + STREAM_OPERAND + r"([^\s{}\\%\"]+)"
     r"|\\ior_open:[a-zA-Z]+\s*(?:\\[A-Za-z@_:]+\s*)?\{\s*\"?([^}\"]*?)\"?\s*\}",
     re.DOTALL,
 )
