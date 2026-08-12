@@ -215,6 +215,28 @@ DEPENDENCY_CLASSES = ("placement", "ink", "unconsumed")
 # only way any of these names could reach the closure.
 RETIRED_DEPENDENCIES = ("tikz-cd", "tikzcd", "quantikz")
 
+# A TikZ library vendored as a file goes by its conventional file name, and a
+# stem alone would leave `tikzlibrarytikzcd.code` bearing no resemblance to the
+# library it is. The suffixes are stripped in the order a name carries them,
+# so `tenkz-core.code.tex` reduces to `tenkz-core` and not to `tenkz-core.code`.
+TIKZ_LIBRARY_FILE = re.compile(r"^tikzlibrary(?P<library>.+)$")
+LOAD_SUFFIXES = (".code.tex", ".tex", ".sty", ".def", ".cls", ".cfg")
+
+
+def load_names(name: str) -> set[str]:
+    """Every name one loaded file could be known by."""
+
+    bare = name
+    for suffix in LOAD_SUFFIXES:
+        if bare.endswith(suffix):
+            bare = bare[: -len(suffix)]
+            break
+    names = {name, bare}
+    library = TIKZ_LIBRARY_FILE.match(bare)
+    if library is not None:
+        names.add(library["library"])
+    return names
+
 # What arXiv will not do for a source submission, expressed as the file kinds
 # whose presence would mean it has to. A `.dtx` or `.ins` pair is the usual
 # LaTeX-package shape and needs a docstrip run before the runtime exists; a
@@ -977,14 +999,13 @@ def check_dependencies(closure: Closure, manifest: dict) -> Report:
         f"{closure.libraries}",
     )
     # A retired front end can arrive as a package load, a library load, or a
-    # file the entry point inputs, and a vendored `tikz-cd.sty` reaches the
-    # closure only in the third way. The stem is what the name is compared
-    # against, since a load carries the suffix and a package name does not.
-    loaded = (
-        set(closure.packages)
-        | set(closure.libraries)
-        | {Path(name).stem for name in closure.files}
-    )
+    # file the entry point inputs, and a vendored `tikz-cd.sty` or
+    # `tikzlibrarytikzcd.code.tex` reaches the closure only in the third way.
+    # Each file is compared under every name it could be known by, since a load
+    # carries a suffix and a conventional library file carries a prefix too.
+    loaded = set(closure.packages) | set(closure.libraries)
+    for name in closure.files:
+        loaded |= load_names(name)
     survivors = sorted(name for name in RETIRED_DEPENDENCIES if name in loaded)
     report.require(
         not survivors,
@@ -1452,7 +1473,7 @@ def check_arxiv(tree: Path, closure: Closure) -> Report:
             continue
         text = strip_comments(path.read_bytes().decode("utf-8", errors="replace"))
         report.require(
-            ABSOLUTE_LOAD.search(text) is None,
+            ABSOLUTE_LOAD.search(uncontrolled(text)) is None,
             f"{path.name} loads a file by absolute path, which names the "
             "machine it was written on",
         )
@@ -1493,6 +1514,14 @@ def offline_room(archive: Path, room: Path) -> list[str]:
         if not unpacked.is_dir():
             raise SystemExit(
                 f"{archive.name} does not unpack into a single {PACKAGE}/ directory"
+            )
+        siblings = sorted(
+            path.name for path in Path(unpacking).iterdir() if path.name != PACKAGE
+        )
+        if siblings:
+            raise SystemExit(
+                f"{archive.name} unpacks {PACKAGE}/ beside {siblings}; an upload "
+                "unpacks into one directory and nothing else"
             )
         staged = sorted(path.name for path in unpacked.iterdir())
         for path in sorted(unpacked.iterdir()):
