@@ -168,6 +168,10 @@ For MPDO renormalization fixed points:
   exact normalization boundary between supported and complementary sectors.
 - `cpsv16_zcl_canonical_form_normalization.tex` records the corresponding
   normalization issue for mixed-state ZCL.
+- `cpsv16_exact_arithmetic_scope.tex` records the scope boundary of the
+  certified four-site arithmetic for Examples~4.10 and~4.11: the exact integer
+  comparisons and logarithmic ratios are machine-checked, while the reduced
+  spectra, entropy comparisons, and SAL conclusions remain open.
 
 For the non-periodic MPS Fundamental Theorem background:
 
