@@ -16051,20 +16051,25 @@
   }
 \cs_generate_variant:Nn \__tenkz_kernel_r_label_col_lane:nn { Vn }
 % A wire with one authored end and one open end keeps the open side as a
-% compass word rather than as a node, so no cell says where the ink goes.
-% The word itself does: the stub leaves the authored end by that face.  An
-% open side spelt `route` names no direction of its own and answers nothing.
+% word rather than as a node, so no cell says where the ink goes.  The four
+% compass words say it outright: the stub leaves the authored end by that
+% face.  The field also carries words that name no direction of their own --
+% `route`, which defers to the route, and the physical axis words -- and
+% those answer nothing.
 \cs_new_protected:Npn \__tenkz_kernel_r_label_open_face:nnn #1#2#3
   {
     \str_if_eq:nnTF {#3} {first}
       { \__tenkz_model_get:nnN {#2} {to-open} \l__tenkz_kernel_lab_face_tl }
       { \__tenkz_model_get:nnN {#2} {from-open} \l__tenkz_kernel_lab_face_tl }
-    \bool_lazy_and:nnT
-      { ! \quark_if_no_value_p:N \l__tenkz_kernel_lab_face_tl }
-      { ! \str_if_eq_p:Vn \l__tenkz_kernel_lab_face_tl {route} }
+    \quark_if_no_value:NF \l__tenkz_kernel_lab_face_tl
       {
-        \__tenkz_kernel_r_label_mark:ne {#1}
-          { \tl_use:N \l__tenkz_kernel_lab_face_tl }
+        \str_case:Vn \l__tenkz_kernel_lab_face_tl
+          {
+            {n} { \__tenkz_kernel_r_label_mark_side:nn {#1} {n} }
+            {e} { \__tenkz_kernel_r_label_mark_side:nn {#1} {e} }
+            {s} { \__tenkz_kernel_r_label_mark_side:nn {#1} {s} }
+            {w} { \__tenkz_kernel_r_label_mark_side:nn {#1} {w} }
+          }
       }
   }
 \cs_generate_variant:Nn \__tenkz_kernel_r_label_open_face:nnn { Vnn }
