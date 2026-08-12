@@ -23,6 +23,9 @@ Rules (findings exit 1 unless escaped):
   rmp-*    Canonical RMP case files additionally require the six provenance
            headers, preamble-free source, canonical spellings, public names,
            at most 88 characters per line, and at most 100 lines per case.
+           The buried spellings come from the registry's tombstone rows and
+           are reported with the migration each row states, so a spelling is
+           retired in one place and refused everywhere.
 
 Escape: a comment `% tenkz-lint: allow <rule> <reason>` on the finding's
 line or the line directly above suppresses that rule there (`allow all`
@@ -84,10 +87,6 @@ def registry_alias_patterns() -> list[re.Pattern[str]]:
         for entry in load_registry()
         if entry.kind == "alias"
     }
-    # `rows` is canonical at picture scope and needs command-aware parsing;
-    # periodic has a dedicated boundary-sensitive expression below.
-    aliases.discard("rows")
-    aliases.discard("periodic")
     patterns = [
         re.compile(r"\b" + re.escape(name).replace(r"\ ", r"\s+") + r"(?:\s*=|\b)")
         for name in sorted(aliases)
@@ -99,7 +98,54 @@ def registry_alias_patterns() -> list[re.Pattern[str]]:
     return patterns
 
 
+def registry_tombstone_patterns() -> list[tuple[re.Pattern[str], str]]:
+    """Source patterns and migrations for the spellings the registry buries.
+
+    A `key=value` row is a word struck from a live alphabet, so the pattern is
+    that spelling.  A bare row is a key that no longer exists; where its word
+    survives as the value of a live enum, the pattern steps over that live
+    spelling, which is where a reader of the dead one should be.
+    """
+    entries = load_registry()
+    enum_owners: dict[str, set[str]] = {}
+    for entry in entries:
+        if entry.kind != "key":
+            continue
+        enum = re.fullmatch(r"enum\(([^)]*)\)", entry.fields[2])
+        if enum is None:
+            continue
+        for word in enum.group(1).split("|"):
+            enum_owners.setdefault(word, set()).add(entry.fields[1])
+    patterns: list[tuple[re.Pattern[str], str]] = []
+    for entry in sorted(
+        (entry for entry in entries if entry.kind == "tombstone"),
+        key=lambda entry: entry.fields[:2],
+    ):
+        _scope, spelling, migration = entry.fields
+        key, _separator, value = spelling.partition("=")
+        key, value = key.strip(), value.strip()
+        if value:
+            expression = (
+                re.escape(key).replace(r"\ ", r"\s+")
+                + r"\s*=\s*"
+                + re.escape(value).replace(r"\ ", r"\s*")
+            )
+        else:
+            expression = (
+                "".join(
+                    f"(?<!{re.escape(owner)}=)"
+                    for owner in sorted(enum_owners.get(key, set()))
+                )
+                + r"\b"
+                + re.escape(key).replace(r"\ ", r"\s+")
+                + r"\b"
+            )
+        patterns.append((re.compile(expression), migration))
+    return patterns
+
+
 RMP_REGISTRY_ALIAS_PATTERNS = registry_alias_patterns()
+RMP_REGISTRY_TOMBSTONE_PATTERNS = registry_tombstone_patterns()
 
 
 @dataclass
@@ -109,7 +155,8 @@ class Finding:
     rule: str
     snippet: str
     allowed: bool
-    reason: str = ""
+    # Where a buried spelling's meaning went, reported with the finding.
+    migration: str = ""
 
 
 @dataclass
@@ -181,8 +228,8 @@ def lint_file(path: Path) -> list[Finding]:
     findings: list[Finding] = []
     seen: set[tuple[int, str]] = set()  # one report per (line, rule)
 
-    def scan(text: str, base: int, rules: list[tuple[str, re.Pattern[str]]]) -> None:
-        for rule, pat in rules:
+    def scan(text: str, base: int, rules: list[tuple]) -> None:
+        for rule, pat, *migration in rules:
             for m in pat.finditer(text):
                 offset = base + m.start()
                 lineno = line_of(offset)
@@ -192,7 +239,8 @@ def lint_file(path: Path) -> list[Finding]:
                 seen.add(key)
                 snippet = raw_lines[lineno - 1].strip() if lineno <= len(raw_lines) else ""
                 findings.append(Finding(path, lineno, rule, snippet,
-                                        escaped(lineno, rule)))
+                                        escaped(lineno, rule),
+                                        migration[0] if migration else ""))
 
     try:
         bodies = scan_bodies(src)
@@ -217,10 +265,13 @@ def lint_file(path: Path) -> list[Finding]:
             ("rmp-private", re.compile(r"\\(?:__tenkz|tenkz@|tenkz_[A-Za-z])")),
             ("rmp-macro", re.compile(r"\\(?:newcommand|def|NewDocumentCommand)\b")),
             ("rmp-raw-ink", re.compile(r"\\(?:draw|fill|filldraw|shade|node|path|tikzset)\b")),
-            ("rmp-alias", re.compile(r"(?<!boundary=)\bperiodic\b")),
             ("rmp-metadata", re.compile(r"^%\s*Fixture\s*:", re.MULTILINE)),
         ]
         source_rules.extend(("rmp-alias", pattern) for pattern in RMP_REGISTRY_ALIAS_PATTERNS)
+        source_rules.extend(
+            ("rmp-alias", pattern, migration)
+            for pattern, migration in RMP_REGISTRY_TOMBSTONE_PATTERNS
+        )
         scan(src, 0, source_rules)
         if len(raw_lines) > 100:
             findings.append(Finding(
@@ -395,7 +446,8 @@ def main(argv: list[str]) -> int:
         for f in lint_file(path):
             total += 1
             status = "allowed" if f.allowed else "FINDING"
-            print(f"{f.path}:{f.line}: [{f.rule}] {status}: {f.snippet}")
+            migration = f" ({f.migration})" if f.migration else ""
+            print(f"{f.path}:{f.line}: [{f.rule}] {status}: {f.snippet}{migration}")
             if not f.allowed:
                 failed += 1
     print(f"tenkz-lint: {scanned} file(s) scanned, {total} finding(s), "

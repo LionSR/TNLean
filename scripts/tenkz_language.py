@@ -35,6 +35,7 @@ ARITIES = {
     "alias": 4,
     "example": 3,
     "prelude": 3,
+    "tombstone": 3,
 }
 
 BASELINE = ROOT / "tests/tenkz/census-baseline.json"
@@ -214,7 +215,7 @@ def load_registry() -> list[Entry]:
     text = REGISTRY.read_text(encoding="utf-8")
     pattern = re.compile(
         r"\\__tenkz_language_registry_"
-        r"(environment|command|key|alias|example|prelude):[n]+"
+        r"(environment|command|key|alias|example|prelude|tombstone):[n]+"
     )
     entries: list[Entry] = []
     for match in pattern.finditer(text):
@@ -327,6 +328,107 @@ def _kernel_leaf_keys_from_texts(texts) -> set[tuple[str, str]]:
     return leaves
 
 
+# A word struck from a live key's alphabet stays installed as a branch that
+# refuses the spelling and states the migration.  Reading those branches is
+# what lets the language check hold the registry's tombstone ledger and the
+# parser to one list; the lookahead skips the helper's own definition, whose
+# next token is a parameter rather than an argument group.
+_KERNEL_TOMBSTONE = re.compile(r"\\__tenkz_kernel_tombstone:nnnn\s*(?=\{)")
+
+
+def _sentence(text: str) -> str:
+    """Read an expl3 argument as the sentence a reader is shown."""
+    return " ".join(text.replace("~", " ").split())
+
+
+def _kernel_tombstones_from_texts(texts: Iterable[str]) -> dict[tuple[str, str], str]:
+    """Collect the spellings the kernel parser refuses by name and their migrations."""
+    tombstones: dict[tuple[str, str], str] = {}
+    for text in texts:
+        for match in _KERNEL_TOMBSTONE.finditer(text):
+            position = match.end()
+            fields: list[str] = []
+            for _ in range(4):
+                field, position = _group(text, position)
+                fields.append(field)
+            family, key, value, migration = (_sentence(field) for field in fields)
+            scope = family.removeprefix("tenkz-")
+            tombstones[(scope, f"{key}={value}")] = migration
+    return tombstones
+
+
+def _kernel_tombstones() -> dict[tuple[str, str], str]:
+    return _kernel_tombstones_from_texts(
+        path.read_text(encoding="utf-8")
+        for path in (ROOT / "tex/tenkz").glob("*.code.tex")
+    )
+
+
+def tombstone_errors(
+    rows: list[tuple[str, ...]],
+    key_vocabulary: dict[tuple[str, str], tuple[str, str]],
+    kernel: dict[tuple[str, str], str],
+) -> list[str]:
+    """Hold the tombstone ledger, the live vocabulary, and the parser to one list.
+
+    A `key=value` row is a word struck from a live alphabet: the key must
+    still exist, the word must not, and the parser must refuse the spelling
+    with the migration the ledger states.  A bare row is a key that no longer
+    exists, which the parser cannot branch on, so only the lint reads it and
+    the check is that the key really is gone.
+    """
+    errors: list[str] = []
+    recorded: dict[tuple[str, str], str] = {}
+    for scope, spelling, migration in rows:
+        if not migration.strip():
+            errors.append(f"tombstone {scope}:{spelling} names no migration")
+        key, _separator, value = spelling.partition("=")
+        key, value = key.strip(), value.strip()
+        if not value:
+            if (scope, key) in key_vocabulary:
+                errors.append(
+                    f"tombstone {scope}:{spelling} names a key the registry "
+                    "still carries"
+                )
+            continue
+        record = key_vocabulary.get((scope, key))
+        if record is None:
+            errors.append(
+                f"tombstone {scope}:{spelling} names no registered key"
+            )
+            continue
+        enum = re.fullmatch(r"enum\(([^)]*)\)", record[1])
+        if enum is not None and value in enum.group(1).split("|"):
+            errors.append(
+                f"tombstone {scope}:{spelling} is still a word of {record[1]}"
+            )
+        recorded[(scope, f"{key}={value}")] = migration
+    unrecorded = sorted(
+        f"{scope}:{spelling}" for scope, spelling in kernel.keys() - recorded.keys()
+    )
+    if unrecorded:
+        errors.append(
+            "the parser refuses spellings the tombstone ledger does not record: "
+            + ", ".join(unrecorded)
+        )
+    unrefused = sorted(
+        f"{scope}:{spelling}" for scope, spelling in recorded.keys() - kernel.keys()
+    )
+    if unrefused:
+        errors.append(
+            "the tombstone ledger records spellings the parser does not refuse: "
+            + ", ".join(unrefused)
+        )
+    for scope, spelling in sorted(recorded.keys() & kernel.keys()):
+        if recorded[(scope, spelling)] != kernel[(scope, spelling)]:
+            errors.append(
+                f"tombstone {scope}:{spelling} migrates to "
+                f"{recorded[(scope, spelling)]!r} in the ledger and "
+                f"{kernel[(scope, spelling)]!r} in the parser"
+            )
+    return errors
+
+
 def _parser_leaf_keys() -> set[tuple[str, str]]:
     """Collect public leaf-key spellings installed by the TeX parsers.
 
@@ -364,7 +466,9 @@ def check(entries: list[Entry]) -> list[str]:
     }
     for kind, rows in by_kind.items():
         names = [
-            f"{row[0]}:{row[1]}" if kind in {"key", "prelude"} else row[0]
+            f"{row[0]}:{row[1]}"
+            if kind in {"key", "prelude", "tombstone"}
+            else row[0]
             for row in rows
         ]
         duplicates = sorted(name for name in set(names) if names.count(name) > 1)
@@ -492,6 +596,9 @@ def check(entries: list[Entry]) -> list[str]:
             errors.append(
                 f"value alias {scope}:{spelling} {value_error}"
             )
+    errors.extend(
+        tombstone_errors(by_kind["tombstone"], key_vocabulary, _kernel_tombstones())
+    )
     if BASELINE.is_file():
         baseline = json.loads(BASELINE.read_text(encoding="utf-8"))
         recorded = baseline["m1_census"]["value"]

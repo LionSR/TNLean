@@ -229,3 +229,18 @@
 \__tenkz_language_registry_key:nnnnnn {kernel-declare}{hue}{hue-source}{house cycle}{kernel}{Species ink; source:* reproduces a cited palette.}
 \__tenkz_language_registry_key:nnnnnn {kernel-declare}{base}{identifier}{empty}{kernel}{Skin the declaration extends.}
 \__tenkz_language_registry_key:nnnnnn {kernel-declare}{pairings}{port-pair-list}{empty}{kernel}{Skin-internal wires between own ports.}
+
+% ---- tombstones (LANGUAGE-1.0 section 10) ----
+%
+% scope, dead spelling, migration.  A retired spelling is recorded once, here,
+% and everything that must refuse it reads these rows: the source lint builds
+% its rejection from them, and the language check requires every spelling the
+% parser refuses by name to carry one, with the same migration in both places.
+%
+% A spelling written `key=value' is a word struck from a live key's alphabet.
+% The key survives, so the parser refuses the word through a branch of its own
+% and names the migration there.  A bare spelling is a key that no longer
+% exists: nothing survives to branch on, the unknown-key error answers it, and
+% the row is what tells a reader of an old document where the meaning went.
+\__tenkz_language_registry_tombstone:nnn {kernel-picture}{periodic}
+  {use boundary=periodic}
