@@ -2575,6 +2575,16 @@ do
     echo "FAIL: $strict_negative lacked TKZ-LANG-STRICT" >&2
     exit 1
   }
+  # The strict guard fires before its command mints a record, so the
+  # diagnostic carries no record clause; the sentence ends at "is active."
+  if grep -Fq '(record' "$WORK/$strict_negative.transcript"; then
+    echo "FAIL: $strict_negative strict diagnostic carries a record clause" >&2
+    exit 1
+  fi
+  grep -Fq 'is active.' "$WORK/$strict_negative.transcript" || {
+    echo "FAIL: $strict_negative strict diagnostic lost its tail" >&2
+    exit 1
+  }
 done
 
 for contract_negative in \
