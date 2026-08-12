@@ -28,8 +28,9 @@ construction; they are not attributed to a source theorem.
     \lean{MPSTensor.groundSpaceMap_blockTensor_blockedConfigEquiv}
     \lean{MPSTensor.blockedConfigLinearIsometryEquiv_groundSpaceMapES}
     \leanok
-    \uses{def:blocked_configuration_isometry}
-    For every boundary matrix $X\in\mathcal M_D$, blocking preserves each
+    \uses{def:blocked_configuration_isometry, def:blocked_tensor,
+        def:ground_space_map}
+    For every boundary matrix $X\in\MN{D}$, blocking preserves each
     coefficient of the open-boundary matrix product vector after the canonical
     reindexing. Equivalently,
     \begin{align}
@@ -52,7 +53,7 @@ construction; they are not attributed to a source theorem.
         \label{eq:blocked_boundary_map_transport_coefficients}
     \end{align}
     The Frobenius transport formula then identifies the Euclidean boundary maps
-    coefficientwise, yielding \eqref{eq:blocked_boundary_map_transport}.
+    coefficientwise, yielding (\ref{eq:blocked_boundary_map_transport}).
 \end{proof}
 
 \begin{theorem}[Local ground-space transport under blocking]
@@ -62,7 +63,8 @@ construction; they are not attributed to a source theorem.
     \lean{MPSTensor.starProjection_groundSpaceES_blockTensor_conj}
     \lean{MPSTensor.starProjection_groundSpaceES_three_blockTensor_conj}
     \leanok
-    \uses{def:blocked_configuration_isometry, lem:blocked_boundary_map_transport}
+    \uses{def:blocked_configuration_isometry, def:blocked_tensor,
+        def:ground_space_es, lem:blocked_boundary_map_transport}
     The local space of the blocked tensor is carried exactly to the original
     local space:
     \begin{align}
@@ -88,13 +90,13 @@ construction; they are not attributed to a source theorem.
     \leanok
     \uses{lem:blocked_boundary_map_transport, thm:range_ground_space_map_es}
     The exact range identification for the Euclidean boundary map and
-    \eqref{eq:blocked_boundary_map_transport} give
+    (\ref{eq:blocked_boundary_map_transport}) give
     \begin{align}
         U_{N,p}\operatorname{range}\!\left(\Gamma_N^{A^{[p]}}\right)
         &=\operatorname{range}\!\left(\Gamma_{Np}^{A}\right),
         \label{eq:blocked_boundary_map_range_transport}
     \end{align}
-    which is \eqref{eq:blocked_local_ground_space_transport}. Orthogonal
+    which is (\ref{eq:blocked_local_ground_space_transport}). Orthogonal
     projection onto the image of a subspace under a unitary then gives
-    \eqref{eq:blocked_ground_projector_conjugacy}.
+    (\ref{eq:blocked_ground_projector_conjugacy}).
 \end{proof}
