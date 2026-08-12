@@ -711,7 +711,6 @@ the remaining sites unchanged.
 \end{proof}
 % CPSV16 Appendix D, lines 2116--2176.  The labels `rank-Fibonacci` and
 % `eq:1` refer respectively to the rank formula and its internal calculation.
-% Issue #5921 retains the two operator-rank identifications below.
 \begin{definition}[Fibonacci vacuum-sector support tensor]
     \label{def:cpsv_fibonacci_support_tensor}
     \lean{MPSTensor.FibonacciBoundary.ExactlyTwoZero,
@@ -764,8 +763,6 @@ the remaining sites unchanged.
     \end{align}
     These are the transition counts governed by the recurrence in
     \cite[Appendix~D, lines~2131--2149]{Cirac2016MPDO_arXiv}.
-    % Their identification with the open-boundary ranks at lines 2127--2130
-    % remains tracked by issue #5921.
 \end{definition}
 
 \begin{theorem}[Fibonacci boundary transition recurrence]
@@ -803,7 +800,6 @@ the remaining sites unchanged.
     \end{align}
     This is the boundary-label closure used in
     \cite[Appendix~D, line~2157]{Cirac2016MPDO_arXiv}.
-    % The equality with the periodic operator rank remains tracked by issue #5921.
 \end{definition}
 
 \begin{theorem}[Characteristic recurrence for periodic Fibonacci transition counts]
@@ -938,43 +934,62 @@ the remaining sites unchanged.
 \end{proof}
 
 \begin{theorem}[Fibonacci periodic operator-rank formula]
-    \label{thm:cpsv_fibonacci_rank_obstruction_status}
-    \notready
+    \label{thm:cpsv_fibonacci_periodic_rank}
+    \lean{MPSTensor.FibonacciBoundary.rank_mpo_toMPOTensor_eq_periodicTransitionCount,
+      MPSTensor.FibonacciBoundary.rank_mpo_toMPOTensor_eq_goldenRatio}
+    \leanok
     \uses{def:cpsv_fibonacci_support_tensor,
-      def:cpsv_fibonacci_periodic_count,
-      thm:cpsv_fibonacci_periodic_count_golden_ratio,
-      thm:cpsv_fibonacci_open_boundary_rank_status,
-      thm:to_mpo_diagonal_rank}
+      def:cpsv_fibonacci_periodic_count}
+    Let $A$ be obtained from any positive choice of fusion weights with the
+    support prescribed in Definition~\ref{def:cpsv_fibonacci_support_tensor}.
     Set $\tau_\pm=(1\pm\sqrt5)/2$, as in
     \cite[Appendix~D, line~2125]{Cirac2016MPDO_arXiv}. For every $N>0$,
     \begin{align}
         \operatorname{rank}\rho^{(N)}(A)
         &=a_N=x^N_{00}+x^N_{11}
          =\tau_+^{2N}+\tau_-^{2N}.
-        \notag
+        \label{eq:cpsv_fib_periodic_rank}
     \end{align}
-    Theorem~\ref{thm:cpsv_fibonacci_periodic_count_golden_ratio} gives the
-    final equality for transition counts. Thus the operator-rank formula reduces
-    to the identity $\operatorname{rank}\rho^{(N)}(A)=a_N$. This is
-    \cite[Appendix~D, lines~2122--2125 and
+    This is \cite[Appendix~D, lines~2122--2125 and
     2157--2176]{Cirac2016MPDO_arXiv}.
 \end{theorem}
 
+\begin{proof}
+    \leanok
+    \uses{thm:cpsv_fibonacci_periodic_count_golden_ratio,
+      thm:cpsv_fibonacci_open_boundary_rank_status,
+      thm:to_mpo_diagonal_rank}
+    The diagonal MPO rank counts physical words with nonzero periodic amplitude.
+    For $N>0$, the supports obtained by closing the virtual endpoint at $0$ and
+    at $1$ are disjoint, since the first physical bit determines the initial
+    endpoint. Their cardinalities are $x^N_{00}$ and $x^N_{11}$ by the
+    open-boundary formula. The golden-ratio identity for $a_N$ gives the final
+    equality.
+\end{proof}
+
 \begin{theorem}[Fibonacci periodic operator ranks are not geometric]
-    \label{thm:cpsv_fibonacci_operator_rank_not_geometric_status}
-    \notready
-    \uses{thm:cpsv_fibonacci_rank_obstruction_status,
-      thm:cpsv_fibonacci_transition_not_geometric}
-    For the concrete Fibonacci tensor, there are no $r,s\in\N$ such that
-    \begin{align}
-        \operatorname{rank}\rho^{(N)}(A)&=rs^{N-1}
-        \notag
-    \end{align}
-    for every $N>0$.  This is the operator-level conclusion in
-    \cite[Appendix~D, line~2125]{Cirac2016MPDO_arXiv}.  The structural strong
+    \label{thm:cpsv_fibonacci_operator_rank_not_geometric}
+    \lean{MPSTensor.FibonacciBoundary.rank_mpo_toMPOTensor_not_geometric}
+    \leanok
+    \uses{def:cpsv_fibonacci_support_tensor}
+    Let $A$ be obtained from any positive choice of fusion weights with the
+    support prescribed in Definition~\ref{def:cpsv_fibonacci_support_tensor}.
+    There are no $r,s\in\N$ such that
+    $\operatorname{rank}\rho^{(N)}(A)=rs^{N-1}$ for every $N>0$.
+    This is the operator-level conclusion in
+    \cite[Appendix~D, line~2125]{Cirac2016MPDO_arXiv}. The structural strong
     fixed-point relation itself is Definition~\ref{def:mpdo_strong_rfp}; its
-    general geometric-rank consequence is a separate statement.
+    general geometric-rank consequence remains a separate statement.
 \end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:cpsv_fibonacci_periodic_rank,
+      thm:cpsv_fibonacci_transition_not_geometric}
+    The operator rank equals $a_N$ at every positive length, while
+    $a_1=3$ and $a_2=7$. A geometric formula would therefore give $r=3$ and
+    $7=3s$, which is impossible in $\N$.
+\end{proof}
 
 \begin{definition}[Initial-coordinate regroupings]
     \label{def:finite_tuple_regroupings}
