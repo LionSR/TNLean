@@ -5,7 +5,6 @@ Authors: TNLean contributors
 -/
 import Mathlib.Algebra.Module.Submodule.LinearMap
 import TNLean.MPS.Core.BlockingTransfer
-import TNLean.MPS.MPDO.PureRecovery
 import TNLean.MPS.MPDO.ZCL
 
 /-!

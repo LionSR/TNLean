@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.MPDO.AlgebraStructure
 import TNLean.MPS.MPDO.FusionIsometries
+import TNLean.MPS.MPDO.PureRecovery
 
 /-!
 # Counterexample to the support-algebra converse
