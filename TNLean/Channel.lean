@@ -53,6 +53,7 @@ import TNLean.Channel.MaximallyEntangled
 import TNLean.Channel.MaximallyMixed
 import TNLean.Channel.NPositivityChainStrict
 import TNLean.Channel.NPositivitySpectralCriterion
+import TNLean.Channel.NoInformationWithoutDisturbance
 import TNLean.Channel.NormalForm
 import TNLean.Channel.OpenSystem
 import TNLean.Channel.OperatorSystem
