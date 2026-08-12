@@ -118,8 +118,11 @@ the basis out places the members where the mathematics wants them.
 
 \dbendpar An explicit basis belongs to a picture-level \tnval{flat} or
 \tnval{plane} frame.  A circle frame refuses one, because its members
-would need a tangent-offset contract the language does not state; so do a
-group-local frame and an atom-local one.
+would need a tangent-offset contract the language does not state, and a
+group frame refuses one because a basis is picture-scoped.  An atom has
+no frame of its own at all: neither \tnkey{frame=} nor \tnkey{basis=} is
+an atom key, so a site that writes either is turned away as an unknown
+word rather than accepted and restricted.
 
 \subsection{The atom record}
 
@@ -208,8 +211,9 @@ operator index; \tnval{pairing} is a declared skin's own internal route,
 and is never authored at a call site.
 
 The path a wire takes is \tnkey{route=}.  \tnval{straight} is the default
-and joins the two ends directly.  \tnval{arc} leaves and enters along its
-ends' own faces, which is what closes a chain below itself.
+and joins the two ends directly.  \tnval{arc} is the word for a return
+that joins two perpendicular faces, and it is what the corpus writes to
+close a chain below itself.
 
 \begin{tnexample}[
   wide,
@@ -247,11 +251,18 @@ ends' own faces, which is what closes a chain below itself.
 \end{tenkz}
 \end{tnexample}
 
-The arc is not a decoration chosen for looks.  Each of the two returns
-leaves an east face and enters a north face, and a straight segment
-between those two points would arrive across the face rather than along
-it.  The route states which family the path belongs to; the geometry
-stage decides the curve.
+Each return joins a pair of perpendicular faces, and the two pairs are
+not the same one: the first leaves an east face and enters a north face,
+the second leaves a north face and enters a west face.
+
+\dbendpar The word does not bend the rail.  Of the three path shapes only
+\tnval{orth} reaches the ink; \tnval{arc} and \tnval{straight} both leave
+the two ends joined by the segment between them, so writing either in the
+picture above puts every line in the same place, with one field of one
+record to tell the two sources apart.  Read \tnkey{route=}\tnval{arc} as
+the record of which family a return belongs to rather than as the
+operation that curves it, and reach for \tnval{orth} below when the path
+itself has to change.
 
 The same family draws a closed cycle of tensors laid out as a plaquette,
 and a matrix inserted on one of its edges is an ordinary ring atom
@@ -426,9 +437,12 @@ the spellings that go with nothing in their place, on exactly that
 ground, so read it in the generated tables as a word on its way out
 rather than as the operation that steps a contour.
 
-\tnkey{slot=} tints a mark from the theme's semantic slots, and
-\tnkey{tint} lays ink over the paper inside a contour rather than only
-stroking it; the tutorial's blocked run shows the tinted form.
+\tnkey{slot=} tints the contour of an enclosure or a bracket from the
+theme's semantic slots, and reaches no other form: a label takes its ink
+from \tnkey{species=} alone, so a slot written on a label is accepted,
+recorded, and drawn in the ordinary ink.  \tnkey{tint} lays ink over the
+paper inside a contour rather than only stroking it; the tutorial's
+blocked run shows the tinted form.
 
 The registry's \tnkey{form=} list has four more words, and none of them
 draws.  A source that asks for one is refused, with the code that says so:
@@ -542,7 +556,10 @@ and used as a word:
   caption={two declared skins, each with its own internal routes},
   index={The upper row turns its north input east and its south input
     west; the lower row reverses both.  The pairings belong to the skin,
-    so every site drawn with it carries them.},
+    so every site drawn with it carries them.  The row policy grows a leg
+    on both faces of every site, and the frame's bond between the rows
+    takes the inner one at each, so six legs reach the boundary and not
+    twelve.},
   signature={kernel-boundary|signature=phys:n, phys:n, phys:n, phys:s,
     phys:s, phys:s}]
 % Ink: a declared skin is a base silhouette plus its own
@@ -567,7 +584,7 @@ carries it.  \tnkey{base=} may name another declared skin, so a family of
 related glyphs is written as a chain of small declarations rather than
 one long one.
 
-The atom class has a one-argument spelling, \tncmd{tndeclareatom}, for the
+The atom class has a two-argument spelling, \tncmd{tndeclareatom}, for the
 common case of a new command with a skin and a port list.
 
 \begin{tnexample}[
@@ -606,8 +623,9 @@ there: \tnkey{pitch=}, the one base metric every named ratio follows;
 and \tnkey{strict}, which rejects every sugar spelling in the registry.
 No benchmark case sets it.  The canonical cases write sugar freely, and
 \tnkey{physical=} alone stands in fifty-one of the hundred and thirty of
-them; the only sources that turn \tnval{strict} on are the five refusal
-cases that prove it refuses, the one below among them.
+them; the sources that turn \tnval{strict} on are the five refusal
+fixtures that prove it refuses, together with the refusal below, which is
+a sixth of the same kind.
 What the checks hold is the sugar itself: eleven sugar spellings compile
 beside their kernel expansions and must emit the same events and the same
 picture, so a sugar word is a shorter way to write a canonical case and
