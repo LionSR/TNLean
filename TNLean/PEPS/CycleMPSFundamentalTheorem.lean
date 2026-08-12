@@ -31,24 +31,25 @@ source's alternative proof (line 1623 and Section `normal_alt`, the corollary
 after Lemma 5): `fundamentalTheorem_normalMPS` delegates to the
 overlapping-window corollary `fundamentalTheorem_normalMPS_of_overlap`.
 
-The uniqueness clause `fundamentalTheorem_normalMPS_gauge_unique` still uses
-the `n ≥ 3L` route through the cycle-graph corollary
-(`fundamentalTheorem_normalMPS_cycle`).  There the cycle tensors of `A` and
-`B` generate the same state since their coefficients are the matrix-product
-traces, every arc of `L` consecutive sites is blocked-injective by `L`-block
-injectivity of the matrix tensors, and the graph-level gauge equivalence
-hands back one invertible matrix per edge.  The per-edge matrices convert to
-per-bond gauges through the stored-edge orientation: away from the seam the
+The uniqueness clause `fundamentalTheorem_normalMPS_gauge_unique` carries the
+same system size, as the source's uniqueness carries none of its own: the two
+gauge families are compared directly, without the blocking geometry of the
+Section-`normal` route.  Iterating both relations along the spanning
+length-`L` word products of `A` shows that the transports from a bond `v` to
+the bond `v + L` agree on the full matrix algebra, so the two gauges at every
+bond differ by a nonzero scalar (`gaugeFamily_bond_proportional`), and the
+relation `B = Z_v⁻¹ A Z_{v+1}` pins the ratio of consecutive scalars against
+the nonzero tensor `B`, merging them into one constant.
+
+The graph-level presentation of the same corollary is still reachable from
+here: the per-edge matrices of the cycle-graph gauge equivalence convert to
+per-bond gauges through the stored-edge orientation — away from the seam the
 gauge of the bond entering site `v` is the transpose of the edge matrix,
-while on the seam edge — stored with its endpoints in the opposite order — it
-is the inverse (`cycleGaugeOfEdgeGauge`).  The per-vertex component identity
-of the graph-level gauge equivalence is equivalent to the matrix identity
-`B = Z_v⁻¹ A Z_{v+1}` (`cycleGauge_component_iff_matrix`).  The uniqueness
-clause converts a per-bond family back into a per-edge family
-(`edgeGaugeOfCycleGauge`), invokes the graph-level uniqueness for a constant
-per edge, and merges the constants into one because the relation
-`B = Z_v⁻¹ A Z_{v+1}` pins the ratio of consecutive constants against the
-nonzero tensor `B`.
+while on the seam edge, stored with its endpoints in the opposite order, it
+is the inverse (`cycleGaugeOfEdgeGauge`, inverted by
+`edgeGaugeOfCycleGauge`) — and the per-vertex component identity of the
+graph-level gauge equivalence is equivalent to the matrix identity
+`B = Z_v⁻¹ A Z_{v+1}` (`cycleGauge_component_iff_matrix`).
 
 The matrix-level hypotheses match the source corollary: `0 < L` (implicit in
 blocking `L` consecutive sites), positive bond dimension, `L`-block
@@ -433,24 +434,24 @@ after the theorem labelled `normal`: the gauges `Z_i` are unique up to a
 multiplicative constant).
 
 Two families of per-bond gauges realizing the relation `B = Z_v⁻¹ A Z_{v+1}`
-at every site of the closed chain of `n ≥ 3L` sites are proportional by a
-single constant.  The per-edge constants come from the graph-level uniqueness
-clause; the relation itself pins the ratio of consecutive constants against
-the nonzero tensor `B`, merging them into one.
+at every site of the closed chain of `n ≥ 2L + 1` sites are proportional by
+a single constant.  At each bond the two gauges are proportional
+(`gaugeFamily_bond_proportional`), and the relation itself pins the ratio of
+consecutive constants against the nonzero tensor `B`, merging them into one.
 
-The source's uniqueness clause carries no system-size constraint, while this
-proof keeps the `n ≥ 3L` of the graph-level uniqueness route it invokes; the
-existence clause `fundamentalTheorem_normalMPS` already holds at the optimal
-`n ≥ 2L + 1`.  The size-free single-gauge uniqueness is
-`fundamentalTheorem_normalMPS_translationInvariant_gauge_unique`; lowering
-this per-bond clause to `n ≥ 2L + 1` is tracked as a follow-up to
-`docs/paper-gaps/peps_normal_ft_section3_route.tex`.
+The source's uniqueness clause carries no system-size constraint, and the
+argument here needs none beyond the `n ≥ 2L + 1` of the existence clause
+`fundamentalTheorem_normalMPS`: comparing the two gauge families along the
+spanning length-`L` words leaves the pair of gauges at one bond differing by
+a scalar, with no blocking geometry involved.  The single-gauge form of the
+same clause is
+`fundamentalTheorem_normalMPS_translationInvariant_gauge_unique`.
 
 Source: arXiv:1804.04964, Section 3, first corollary after the theorem
 labelled `normal`, lines 1585--1631 of
 `Papers/1804.04964/paper_normal.tex`. -/
 theorem fundamentalTheorem_normalMPS_gauge_unique {n L d D : ℕ} [NeZero n] (hL : 0 < L)
-    (hn : 3 * L ≤ n) (hD : 0 < D) (A B : MPSTensor d D)
+    (hn : 2 * L + 1 ≤ n) (hD : 0 < D) (A B : MPSTensor d D)
     (hA : MPSTensor.IsNBlkInjective A L)
     (hB : MPSTensor.IsNBlkInjective B L) (Z Z' : Fin n → GL (Fin D) ℂ)
     (hZ : ∀ (v : Fin n) (i : Fin d),
@@ -459,100 +460,9 @@ theorem fundamentalTheorem_normalMPS_gauge_unique {n L d D : ℕ} [NeZero n] (hL
       B i = ((Z' v)⁻¹ : GL (Fin D) ℂ) * A i * (Z' (v + 1) : GL (Fin D) ℂ)) :
     ∃ c : ℂˣ, ∀ v : Fin n, (Z' v : Matrix (Fin D) (Fin D) ℂ) =
       (c : ℂ) • (Z v : Matrix (Fin D) (Fin D) ℂ) := by
-  have hn3 : 3 ≤ n := by omega
-  have hLn : L < n := by omega
-  -- Convert each per-bond family back into a per-edge family.
-  have hXrel : ∀ v : Fin n,
-      ∀ (η : (ie : IncidentEdge (SimpleGraph.cycleGraph n) v) → Fin D) (σ : Fin d),
-      (cycleTensorOfMPS hn3 B).component v η σ =
-        gaugeVertex (cycleTensorOfMPS hn3 A) (edgeGaugeOfCycleGauge Z) v η σ := by
-    intro v
-    refine (cycleGauge_component_iff_matrix hn3 A B (edgeGaugeOfCycleGauge Z) v).mpr ?_
-    intro i
-    rw [cycleGaugeOfEdgeGauge_edgeGaugeOfCycleGauge hn3 Z v,
-      cycleGaugeOfEdgeGauge_edgeGaugeOfCycleGauge hn3 Z (v + 1)]
-    exact hZ v i
-  have hXrel' : ∀ v : Fin n,
-      ∀ (η : (ie : IncidentEdge (SimpleGraph.cycleGraph n) v) → Fin D) (σ : Fin d),
-      (cycleTensorOfMPS hn3 B).component v η σ =
-        gaugeVertex (cycleTensorOfMPS hn3 A) (edgeGaugeOfCycleGauge Z') v η σ := by
-    intro v
-    refine (cycleGauge_component_iff_matrix hn3 A B (edgeGaugeOfCycleGauge Z') v).mpr ?_
-    intro i
-    rw [cycleGaugeOfEdgeGauge_edgeGaugeOfCycleGauge hn3 Z' v,
-      cycleGaugeOfEdgeGauge_edgeGaugeOfCycleGauge hn3 Z' (v + 1)]
-    exact hZ' v i
-  -- The graph-level uniqueness gives a constant on every edge.
-  have hedge : ∀ e : Edge (SimpleGraph.cycleGraph n), ∃ ce : ℂˣ,
-      (edgeGaugeOfCycleGauge Z' e : Matrix (Fin D) (Fin D) ℂ) =
-        (ce : ℂ) • (edgeGaugeOfCycleGauge Z e : Matrix (Fin D) (Fin D) ℂ) :=
-    fun e => fundamentalTheorem_normalMPS_cycle_gauge_unique hL hn
-      (cycleTensorOfMPS hn3 A) (cycleTensorOfMPS hn3 B)
-      (fun s => regionBlockedTensorInjective_cycleTensorOfMPS hn3 hL hLn hD hA s)
-      (fun s => regionBlockedTensorInjective_cycleTensorOfMPS hn3 hL hLn hD hB s)
-      rfl (fun _ => hD) (fun _ => hD)
-      (edgeGaugeOfCycleGauge Z) (edgeGaugeOfCycleGauge Z')
-      (fun v η σ => hXrel v η σ) (fun v η σ => hXrel' v η σ) e
-  -- Per-bond constants: transpose away from the seam, invert at the seam.
-  have hprop : ∀ v : Fin n, ∃ μ : ℂˣ,
-      (Z' v : Matrix (Fin D) (Fin D) ℂ) = (μ : ℂ) • (Z v : Matrix (Fin D) (Fin D) ℂ) := by
-    intro v
-    by_cases hv0 : v = 0
-    · -- The bond entering site `0` is the seam edge, carrying the inverses.
-      obtain ⟨ce, hce⟩ := hedge (cycleSuccEdge hn3 (v - 1))
-      have hcond : ¬ ((cycleSuccEdge hn3 (v - 1)).1.1 + 1 = (cycleSuccEdge hn3 (v - 1)).1.2) := by
-        have hpair := cycleSuccEdge_val_of_eq hn3 (pred_zero_wrap hn3 hv0)
-        rw [hpair]
-        change ¬ (v - 1 + 1) + 1 = v - 1
-        rw [sub_add_cancel]
-        intro h
-        have h1 : ((1 : Fin n) : ℕ) = 1 := val_one_of_two_le (by omega)
-        have hval := congrArg Fin.val h
-        rw [Fin.val_add_eq_ite, h1, val_sub_eq_ite, h1] at hval
-        have := v.isLt
-        split_ifs at hval <;> omega
-      have hZ1 : (cycleSuccEdge hn3 (v - 1)).1.1 = v := by
-        rw [cycleSuccEdge_val_of_eq hn3 (pred_zero_wrap hn3 hv0)]
-        change v - 1 + 1 = v
-        rw [sub_add_cancel]
-      rw [edgeGaugeOfCycleGauge, edgeGaugeOfCycleGauge, if_neg hcond, if_neg hcond, hZ1]
-        at hce
-      -- `hce`: the inverses are proportional; invert the proportionality.
-      refine ⟨ce⁻¹, ?_⟩
-      have hZval : ((Z v : Matrix (Fin D) (Fin D) ℂ)) =
-          (ce : ℂ) • (Z' v : Matrix (Fin D) (Fin D) ℂ) := by
-        calc (Z v : Matrix (Fin D) (Fin D) ℂ)
-            = (Z' v : Matrix (Fin D) (Fin D) ℂ) *
-                (((Z' v)⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ) *
-                (Z v : Matrix (Fin D) (Fin D) ℂ) := by
-              rw [← Units.val_mul, mul_inv_cancel, Units.val_one, Matrix.one_mul]
-          _ = (Z' v : Matrix (Fin D) (Fin D) ℂ) *
-                ((ce : ℂ) • (((Z v)⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ)) *
-                (Z v : Matrix (Fin D) (Fin D) ℂ) := by rw [← hce]
-          _ = (ce : ℂ) • ((Z' v : Matrix (Fin D) (Fin D) ℂ) *
-                ((((Z v)⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ) *
-                  (Z v : Matrix (Fin D) (Fin D) ℂ))) := by
-              rw [Matrix.mul_smul, Matrix.smul_mul, Matrix.mul_assoc]
-          _ = (ce : ℂ) • (Z' v : Matrix (Fin D) (Fin D) ℂ) := by
-              rw [← Units.val_mul, inv_mul_cancel, Units.val_one, Matrix.mul_one]
-      rw [hZval, smul_smul, Units.val_inv_eq_inv_val, inv_mul_cancel₀ (Units.ne_zero ce),
-        one_smul]
-    · -- Away from the seam the bond carries the transposes.
-      obtain ⟨ce, hce⟩ := hedge (cycleSuccEdge hn3 (v - 1))
-      have hpair := cycleSuccEdge_val_of_lt hn3 (pred_val_lt hn3 hv0)
-      have hcond : (cycleSuccEdge hn3 (v - 1)).1.1 + 1 = (cycleSuccEdge hn3 (v - 1)).1.2 := by
-        rw [hpair]
-      rw [edgeGaugeOfCycleGauge, edgeGaugeOfCycleGauge, if_pos hcond, if_pos hcond, hpair]
-        at hce
-      refine ⟨ce, ?_⟩
-      have hce' : (glTranspose (Z' (v - 1 + 1)) : Matrix (Fin D) (Fin D) ℂ) =
-          (ce : ℂ) • (glTranspose (Z (v - 1 + 1)) : Matrix (Fin D) (Fin D) ℂ) := hce
-      rw [glTranspose_coe, glTranspose_coe, sub_add_cancel] at hce'
-      have := congrArg Matrix.transpose hce'
-      rwa [Matrix.transpose_transpose, Matrix.transpose_smul, Matrix.transpose_transpose]
-        at this
   classical
-  choose μ hμ using hprop
+  -- At every bond the two gauges are proportional.
+  choose μ hμ using gaugeFamily_bond_proportional hA hZ hZ'
   -- The relation pins the ratio of consecutive constants against `B ≠ 0`.
   obtain ⟨i₀, hi₀⟩ := MPSTensor.exists_ne_zero_of_isNBlkInjective hL hD hB
   -- The inverse of a proportional gauge is inversely proportional.

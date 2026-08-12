@@ -2526,10 +2526,10 @@ clause now carries the optimal $n \ge 2L + 1$ of the source's alternative
 proof: \path{fundamentalTheorem_normalMPS} delegates to the
 overlapping-window corollary \path{fundamentalTheorem_normalMPS_of_overlap}
 (documented in the section ``The strengthening to $n \ge 2L+1$ via
-overlapping windows'' below).  The uniqueness clause keeps the $n \ge 3L$
-of the graph-level per-edge route it invokes; lowering it to $n \ge 2L + 1$
-is the remaining follow-up for the closed-chain corollary, the source's
-uniqueness needing no system size.  The unpacking
+overlapping windows'' below).  The uniqueness clause carries the same
+$n \ge 2L + 1$: the source's uniqueness needs no system size of its own, and
+the argument that delivers it needs nothing beyond the size that produced
+the two gauge families.  The unpacking
 meets the same seam convention as on the torus: the ordered-edge normal
 form stores the wraparound edge with its endpoints swapped, so the per-bond
 gauge is the transpose of the per-edge matrix away from the seam and its
@@ -2538,8 +2538,13 @@ component identity is equivalent to the conjugation relation through the
 two-bond factorization of the gauge action
 (\path{gaugeVertex_cycleTensorOfMPS},
 \path{cycleGauge_component_iff_matrix}).  The single-constant uniqueness
-goes through the graph-level per-edge clause and a merge: the conjugation
-relation for both families fixes the nonzero tensor $B$ by the scalar
+compares the two families directly and then merges: iterating both
+conjugation relations along the spanning length-$L$ word products of $A$
+makes the transports from a bond to its $L$-th successor agree on the whole
+matrix algebra, so the two gauges at every bond differ by a scalar
+(\path{gaugeFamily_bond_proportional}, blueprint
+\path{lem:gaugeFamily_bond_proportional}), and the conjugation relation for
+both families fixes the nonzero tensor $B$ by the scalar
 $\mu_v^{-1}\mu_{v+1}$, so consecutive per-bond constants agree around the
 cycle.  The matrix and site-dependent closed-chain statements now assume
 positive bond dimension, matching the source's tensor-network setting and
@@ -2805,10 +2810,13 @@ blocking route.  The graph-level closed-chain corollary
 of its three-disjoint-arc cover, which the overlapping-window apparatus
 replaces rather than reuses; the matrix-level existence clauses no longer
 route through it.  The per-bond uniqueness clause
-\leanid{TNLean.PEPS.fundamentalTheorem_normalMPS_gauge_unique} still invokes
-the graph-level per-edge uniqueness and so keeps $n \ge 3L$; lowering it to
-$n \ge 2L + 1$ is the remaining follow-up, the source's uniqueness needing
-no system size.  The translation-invariant single-gauge uniqueness clause of
+\leanid{TNLean.PEPS.fundamentalTheorem_normalMPS_gauge_unique} no longer
+invokes the graph-level per-edge uniqueness: comparing the two gauge
+families along the spanning length-$L$ words proves them proportional at
+every bond (\leanid{TNLean.PEPS.gaugeFamily_bond_proportional}) with no
+condition on the system size, so the clause carries the same $n \ge 2L + 1$
+as the existence clause that produces the families.  The
+translation-invariant single-gauge uniqueness clause of
 the source corollary needs no system size and was already delivered by
 \leanid{TNLean.PEPS.fundamentalTheorem_normalMPS_translationInvariant_gauge_unique}.
 With this, every numbered claim of the source's Section \path{normal_alt}

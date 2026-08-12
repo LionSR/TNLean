@@ -258,14 +258,43 @@ translation-invariant corollary of \cite[Section~4]{Molnar2018NormalPEPS}.
     gauge family directly.
 \end{proof}
 
+\begin{lemma}[Two per-bond gauge families are proportional at every bond]%
+    \label{lem:gaugeFamily_bond_proportional}
+    \lean{TNLean.PEPS.gaugeFamily_bond_proportional}
+    \leanok
+    \uses{def:l_blk_injective, def:eval_word}
+    Let $n$ be positive, let $A$ and $B$ be tensors of $D \times D$ matrices
+    over physical dimension $d$ with $A$ being $L$-block injective, and let
+    $Z_v$ and $Z'_v$ ($v = 1, \ldots, n$, $n + 1 \equiv 1$) be two families of
+    invertible matrices with $B^i = Z_v^{-1} A^i Z_{v+1}$ and
+    $B^i = Z'^{-1}_v A^i Z'_{v+1}$ at every site $v$ and every $i$. Then for
+    every bond $v$ there is a nonzero scalar $c$ with $Z'_v = c\,Z_v$. No
+    condition on the system size is needed.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{def:eval_word}
+    Iterating each relation along a word $x$ of length $L$ from the starting
+    site $v$ gives
+    $B^{x_1} \cdots B^{x_L} = Z_v^{-1} A^{x_1} \cdots A^{x_L} Z_{v+L}$ and
+    the same with $Z'$. Since the word products
+    $A^{x_1} \cdots A^{x_L}$ span the full matrix algebra by $L$-block
+    injectivity, the comparison extends linearly to every matrix $W$:
+    $Z_v^{-1} W Z_{v+L} = Z'^{-1}_v W Z'_{v+L}$. The empty word ($W$ the
+    identity) pins the two bond transports
+    $Z_v^{-1} Z_{v+L} = Z'^{-1}_v Z'_{v+L}$ to the same invertible matrix;
+    cancelling it leaves $Z_v^{-1} W Z_v = Z'^{-1}_v W Z'_v$ for every $W$,
+    so $Z'_v Z_v^{-1}$ commutes with the full matrix algebra, hence is a
+    scalar, nonzero by invertibility.
+\end{proof}
+
 \begin{corollary}[Uniqueness of the per-bond gauges up to one constant,
         matrix form]%
     \label{cor:fundamentalTheorem_normalMPS_gauge_unique}
     \lean{TNLean.PEPS.fundamentalTheorem_normalMPS_gauge_unique}
     \leanok
     \uses{def:l_blk_injective}
-    Let $n$ be positive, let $0 < L$ with $3L \le n$, and let $A$ and $B$ be
-    tensors of $D \times D$ matrices with $D>0$, each $L$-block injective.
+    Let $n$ be positive, let $0 < L$ with $2L + 1 \le n$, and let $A$ and $B$
+    be tensors of $D \times D$ matrices with $D>0$, each $L$-block injective.
     If two
     families $Z$ and $Z'$ of invertible matrices on the bonds of the closed
     chain both satisfy $B^i = Z_v^{-1} A^i Z_{v+1}$ at every site, then they
@@ -276,19 +305,12 @@ translation-invariant corollary of \cite[Section~4]{Molnar2018NormalPEPS}.
     tensor. Equality of the two states is not needed.
 \end{corollary}
 \begin{proof}\leanok
-    \uses{cor:fundamentalTheorem_normalMPS_cycle_gauge_unique,
-        lem:regionBlockedTensorInjective_cycleTensorOfMPS,
-        def:cycleTensorOfMPS, def:gaugeVertex}
-    Each per-bond family converts back into a per-edge family - the
-    transpose of the bond gauge away from the seam, the inverse on the seam
-    edge - realizing the per-site gauge identity between the cycle tensors,
-    so the closed-chain uniqueness clause
-    (Corollary~\ref{cor:fundamentalTheorem_normalMPS_cycle_gauge_unique})
-    gives a constant on every edge; undoing the conversion gives a constant
-    per bond. The relation $B^i = Z_v^{-1} A^i Z_{v+1}$ for both families
-    forces the scalar $\mu_v^{-1}\mu_{v+1}$ to fix the nonzero tensor $B$,
-    so consecutive constants agree, and going around the cycle merges them
-    into one.
+    \uses{lem:gaugeFamily_bond_proportional}
+    At every bond the two gauges differ by a nonzero scalar $\mu_v$
+    (Lemma~\ref{lem:gaugeFamily_bond_proportional}). The relation
+    $B^i = Z_v^{-1} A^i Z_{v+1}$ for both families forces the scalar
+    $\mu_v^{-1}\mu_{v+1}$ to fix the nonzero tensor $B$, so consecutive
+    constants agree, and going around the cycle merges them into one.
 \end{proof}
 
 \begin{lemma}[Consecutive per-bond gauges are proportional]%

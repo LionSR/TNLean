@@ -49,35 +49,6 @@ open scoped Fin.NatCast
 namespace TNLean
 namespace PEPS
 
-/-! ### Iterating the per-bond relation along a word -/
-
-/-- **The per-bond gauge relation iterated along a word.**  If
-`B^i = Z_v⁻¹ A^i Z_{v+1}` at every site of the closed chain, then every word
-product of `B` is the word product of `A` conjugated by the gauges at the
-two ends of the word: `B^{w} = Z_v⁻¹ A^{w} Z_{v+|w|}`, indices on the chain.
-
-Source: arXiv:1804.04964, Section 3 — the step from the per-bond conclusion
-of the first corollary after the theorem labelled `normal` (lines
-1585--1622 of `Papers/1804.04964/paper_normal.tex`) towards its
-translation-invariant form (lines 1624--1661). -/
-theorem evalWord_eq_conj_of_gaugeFamily {n d D : ℕ} [NeZero n] {A B : MPSTensor d D}
-    {Z : Fin n → GL (Fin D) ℂ}
-    (hZ : ∀ (v : Fin n) (i : Fin d),
-      B i = ((Z v)⁻¹ : GL (Fin D) ℂ) * A i * (Z (v + 1) : GL (Fin D) ℂ))
-    (w : List (Fin d)) (v : Fin n) :
-    MPSTensor.evalWord B w =
-      ((Z v)⁻¹ : GL (Fin D) ℂ) * MPSTensor.evalWord A w *
-        (Z (v + (w.length : Fin n)) : GL (Fin D) ℂ) := by
-  induction w generalizing v with
-  | nil =>
-      simp only [MPSTensor.evalWord_nil, List.length_nil, Nat.cast_zero, add_zero,
-        Matrix.mul_one, Units.inv_mul]
-  | cons i w ih =>
-      have hidx : v + ((i :: w).length : Fin n) = v + 1 + (w.length : Fin n) := by
-        rw [List.length_cons, Nat.cast_add, Nat.cast_one, ← add_assoc, add_right_comm]
-      rw [MPSTensor.evalWord_cons, MPSTensor.evalWord_cons, hZ v i, ih (v + 1), hidx]
-      simp only [Matrix.mul_assoc, Units.mul_inv_cancel_left]
-
 /-! ### Collapsing the per-bond family -/
 
 /-- **Consecutive per-bond gauges are proportional.**  For an `L`-block
@@ -112,34 +83,8 @@ theorem gaugeFamily_succ_proportional {n L d D : ℕ} [NeZero n] {A B : MPSTenso
     have h2 := evalWord_eq_conj_of_gaugeFamily hZ (List.ofFn σ) (v + 1)
     rw [List.length_ofFn] at h1 h2
     exact h1.symm.trans h2
-  -- The empty word pins the two bond transports to the same matrix.
-  have hG : (((Z v)⁻¹ * Z (v + (L : Fin n)) : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ) =
-      (((Z (v + 1))⁻¹ * Z (v + 1 + (L : Fin n)) : GL (Fin D) ℂ) :
-        Matrix (Fin D) (Fin D) ℂ) := by
-    have h1 := hE 1
-    rw [Matrix.mul_one, Matrix.mul_one] at h1
-    rw [Units.val_mul, Units.val_mul]
-    exact h1
-  have hGu : ((Z v)⁻¹ * Z (v + (L : Fin n)) : GL (Fin D) ℂ) =
-      (Z (v + 1))⁻¹ * Z (v + 1 + (L : Fin n)) := Units.ext hG
-  -- Cancelling the common bond transport leaves equal conjugations.
-  have hconj : ∀ W : Matrix (Fin D) (Fin D) ℂ,
-      ((Z v)⁻¹ : GL (Fin D) ℂ) * W * (Z v : Matrix (Fin D) (Fin D) ℂ) =
-        ((Z (v + 1))⁻¹ : GL (Fin D) ℂ) * W * (Z (v + 1) : Matrix (Fin D) (Fin D) ℂ) := by
-    intro W
-    have h := hE W
-    have hsplit : (Z (v + (L : Fin n)) : Matrix (Fin D) (Fin D) ℂ) =
-        (Z v : Matrix (Fin D) (Fin D) ℂ) *
-          (((Z v)⁻¹ * Z (v + (L : Fin n)) : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ) := by
-      rw [← Units.val_mul, mul_inv_cancel_left]
-    have hsplit' : (Z (v + 1 + (L : Fin n)) : Matrix (Fin D) (Fin D) ℂ) =
-        (Z (v + 1) : Matrix (Fin D) (Fin D) ℂ) *
-          (((Z v)⁻¹ * Z (v + (L : Fin n)) : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ) := by
-      rw [hGu, ← Units.val_mul, mul_inv_cancel_left]
-    rw [hsplit, hsplit'] at h
-    simp only [← Matrix.mul_assoc] at h
-    exact (Units.isUnit ((Z v)⁻¹ * Z (v + (L : Fin n)))).mul_right_cancel h
-  exact gl_proportional_of_conj_eq (Z v) (Z (v + 1)) hconj
+  exact gl_proportional_of_transport_eq (Z v) (Z (v + (L : Fin n))) (Z (v + 1))
+    (Z (v + 1 + (L : Fin n))) hE
 
 /-! ### The translation-invariant corollary -/
 

@@ -26,9 +26,12 @@ translation-invariant MPS on `n ≥ 2L + 1` sites — two matrix tensors, each
   closed-chain corollary; the named matrix-level corollary
   `fundamentalTheorem_normalMPS` delegates to it for its `n ≥ 2L + 1` bound.
 
-The uniqueness clause of the source corollary — the gauge `Z` is unique up
-to a multiplicative constant — needs no system size and is proved here
-as `fundamentalTheorem_normalMPS_translationInvariant_gauge_unique`.
+The uniqueness clause of the source corollary — the gauges are unique up to
+a multiplicative constant — needs no system size and is proved here in both
+forms: `fundamentalTheorem_normalMPS_translationInvariant_gauge_unique` for
+the single gauge, and `gaugeFamily_bond_proportional` for the per-bond
+family, whose bondwise constants the named corollary
+`fundamentalTheorem_normalMPS_gauge_unique` merges into one.
 
 The route specializes the site-dependent closed-chain capstone
 (`TNLean/PEPS/CycleMPSChainOverlapCapstone.lean`) to a constant (translation-
@@ -548,6 +551,41 @@ theorem gl_proportional_of_conj_eq {D : ℕ} (Z Z' : GL (Fin D) ℂ)
   rw [inv_inv, inv_inv] at hflip
   exact ⟨c⁻¹, hflip⟩
 
+/-- **Proportionality from conjugations sharing a bond transport.**  If
+`X⁻¹ W Y = X'⁻¹ W Y'` for every matrix `W`, then `X` and `X'` differ by a
+nonzero scalar: the identity pins the two transports `X⁻¹ Y` and `X'⁻¹ Y'`
+to the same matrix, and cancelling that common transport on the right
+leaves equal conjugations by `X` and by `X'`. -/
+theorem gl_proportional_of_transport_eq {D : ℕ} (X Y X' Y' : GL (Fin D) ℂ)
+    (h : ∀ W : Matrix (Fin D) (Fin D) ℂ,
+      ((X⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ) * W *
+          (Y : Matrix (Fin D) (Fin D) ℂ) =
+        ((X'⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ) * W *
+          (Y' : Matrix (Fin D) (Fin D) ℂ)) :
+    ∃ c : ℂˣ, (X' : Matrix (Fin D) (Fin D) ℂ) =
+      (c : ℂ) • (X : Matrix (Fin D) (Fin D) ℂ) := by
+  -- The identity pins the two transports to the same matrix.
+  have hG : ((X⁻¹ * Y : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ) =
+      ((X'⁻¹ * Y' : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ) := by
+    have h1 := h 1
+    rw [Matrix.mul_one, Matrix.mul_one] at h1
+    rw [Units.val_mul, Units.val_mul]
+    exact h1
+  have hGu : (X⁻¹ * Y : GL (Fin D) ℂ) = X'⁻¹ * Y' := Units.ext hG
+  refine gl_proportional_of_conj_eq X X' fun W => ?_
+  have hW := h W
+  have hsplit : (Y : Matrix (Fin D) (Fin D) ℂ) =
+      (X : Matrix (Fin D) (Fin D) ℂ) *
+        ((X⁻¹ * Y : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ) := by
+    rw [← Units.val_mul, mul_inv_cancel_left]
+  have hsplit' : (Y' : Matrix (Fin D) (Fin D) ℂ) =
+      (X' : Matrix (Fin D) (Fin D) ℂ) *
+        ((X⁻¹ * Y : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ) := by
+    rw [hGu, ← Units.val_mul, mul_inv_cancel_left]
+  rw [hsplit, hsplit'] at hW
+  simp only [← Matrix.mul_assoc] at hW
+  exact (Units.isUnit (X⁻¹ * Y)).mul_right_cancel hW
+
 /-! ### The single-gauge relation iterated along a word -/
 
 /-- **The single-gauge relation iterated along a word.**  If
@@ -574,6 +612,72 @@ theorem evalWord_eq_smul_conj_of_gauge {d D : ℕ} {A B : MPSTensor d D} {Z : GL
       rw [Matrix.smul_mul, Matrix.mul_smul, smul_smul]
       congr 1
       simp only [Matrix.mul_assoc, Units.mul_inv_cancel_left]
+
+/-! ### The per-bond gauge relation iterated along a word -/
+
+/-- **The per-bond gauge relation iterated along a word.**  If
+`B^i = Z_v⁻¹ A^i Z_{v+1}` at every site of the closed chain, then every word
+product of `B` is the word product of `A` conjugated by the gauges at the
+two ends of the word: `B^{w} = Z_v⁻¹ A^{w} Z_{v+|w|}`, indices on the chain.
+
+Source: arXiv:1804.04964, Section 3 — the step from the per-bond conclusion
+of the first corollary after the theorem labelled `normal` (lines
+1585--1622 of `Papers/1804.04964/paper_normal.tex`) towards its
+translation-invariant form (lines 1624--1661). -/
+theorem evalWord_eq_conj_of_gaugeFamily {n d D : ℕ} [NeZero n] {A B : MPSTensor d D}
+    {Z : Fin n → GL (Fin D) ℂ}
+    (hZ : ∀ (v : Fin n) (i : Fin d),
+      B i = ((Z v)⁻¹ : GL (Fin D) ℂ) * A i * (Z (v + 1) : GL (Fin D) ℂ))
+    (w : List (Fin d)) (v : Fin n) :
+    MPSTensor.evalWord B w =
+      ((Z v)⁻¹ : GL (Fin D) ℂ) * MPSTensor.evalWord A w *
+        (Z (v + (w.length : Fin n)) : GL (Fin D) ℂ) := by
+  induction w generalizing v with
+  | nil =>
+      simp only [MPSTensor.evalWord_nil, List.length_nil, Nat.cast_zero, add_zero,
+        Matrix.mul_one, Units.inv_mul]
+  | cons i w ih =>
+      have hidx : v + ((i :: w).length : Fin n) = v + 1 + (w.length : Fin n) := by
+        rw [List.length_cons, Nat.cast_add, Nat.cast_one, ← add_assoc, add_right_comm]
+      rw [MPSTensor.evalWord_cons, MPSTensor.evalWord_cons, hZ v i, ih (v + 1), hidx]
+      simp only [Matrix.mul_assoc, Units.mul_inv_cancel_left]
+
+/-- **Two per-bond gauge families are proportional at every bond.**  If both
+`Z` and `Z'` realize `B^i = Z_v⁻¹ A^i Z_{v+1}` at every site of the closed
+chain, then at every bond `v` the two gauges differ by a nonzero scalar.
+Iterating the two relations along the spanning length-`L` words from the
+common starting site `v` shows that the two transports from `v` to `v + L`
+agree on the full matrix algebra; the empty word pins the two bond
+transports `Z_v⁻¹ Z_{v+L} = Z'^{-1}_v Z'_{v+L}`, and the centralizer of the
+full matrix algebra is the scalars.  No system size is needed.
+
+Source: arXiv:1804.04964, Section 3, first corollary after the theorem
+labelled `normal`, line 1621 of `Papers/1804.04964/paper_normal.tex`: "the
+gauges `Z_i` are unique up to a multiplicative constant". -/
+theorem gaugeFamily_bond_proportional {n L d D : ℕ} [NeZero n] {A B : MPSTensor d D}
+    (hA : MPSTensor.IsNBlkInjective A L) {Z Z' : Fin n → GL (Fin D) ℂ}
+    (hZ : ∀ (v : Fin n) (i : Fin d),
+      B i = ((Z v)⁻¹ : GL (Fin D) ℂ) * A i * (Z (v + 1) : GL (Fin D) ℂ))
+    (hZ' : ∀ (v : Fin n) (i : Fin d),
+      B i = ((Z' v)⁻¹ : GL (Fin D) ℂ) * A i * (Z' (v + 1) : GL (Fin D) ℂ))
+    (v : Fin n) :
+    ∃ c : ℂˣ, (Z' v : Matrix (Fin D) (Fin D) ℂ) =
+      (c : ℂ) • (Z v : Matrix (Fin D) (Fin D) ℂ) := by
+  have hAspan : Submodule.span ℂ (Set.range fun σ : Fin L → Fin d =>
+      MPSTensor.evalWord A (List.ofFn σ)) = ⊤ := hA
+  -- The two iterated relations agree on the spanning word products, hence
+  -- on every matrix.
+  have hE : ∀ M : Matrix (Fin D) (Fin D) ℂ,
+      ((Z v)⁻¹ : GL (Fin D) ℂ) * M * (Z (v + (L : Fin n)) : GL (Fin D) ℂ) =
+        ((Z' v)⁻¹ : GL (Fin D) ℂ) * M * (Z' (v + (L : Fin n)) : GL (Fin D) ℂ) := by
+    refine conj_eq_conj_of_span hAspan ?_
+    rintro M ⟨σ, rfl⟩
+    have h1 := evalWord_eq_conj_of_gaugeFamily hZ (List.ofFn σ) v
+    have h2 := evalWord_eq_conj_of_gaugeFamily hZ' (List.ofFn σ) v
+    rw [List.length_ofFn] at h1 h2
+    exact h1.symm.trans h2
+  exact gl_proportional_of_transport_eq (Z v) (Z (v + (L : Fin n))) (Z' v)
+    (Z' (v + (L : Fin n))) hE
 
 /-! ### The strengthened closed-chain corollaries -/
 
