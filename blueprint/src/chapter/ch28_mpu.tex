@@ -1044,8 +1044,10 @@ closing a chain of $N$ copies of $\mathcal U$.
         R^J\lvert\rho)&=\lvert\rho),
         &(\Phi\rvert R^J&=(\Phi\rvert.
     \end{align}
-    This is the fixed-pair normalization underlying equation
-    \texttt{Erightleft} and the tail contractions in
+    This is the fixed-pair normalization from the canonical-form-II
+    fixed-point equations in
+    \cite[equations~(6a)--(6b)]{Cirac2017MPU} and underlies the tail
+    contractions in
     \cite[Theorem~III.8, Section~III.B, equations~(31)--(32)]{Cirac2017MPU}.
 \end{theorem}
 
@@ -2968,14 +2970,9 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
     Keep both $Y_2$ factors together throughout.
 \end{proof}
 
-\begin{remark}[Scope of the stabilized source-$v$ support]
-    The normalized input-tail isometry, the diagonal-word tail identities,
-    and the one-sided formula above are separate support calculations.  They
-    do not yet contract both source cuts simultaneously through the same
-    mixed network.  In particular, they do not establish any dressed Gram
-    identity for $v$.  The complete mixed source-cut contraction used in
-    equations~(31)--(32) remains open.
-\end{remark}
+% Formalization scope: the input-tail, diagonal-tail, and one-sided source-$v$
+% identities above do not prove a dressed Gram identity.  The simultaneous
+% mixed source-cut contraction is tracked by the not-ready node under #6071.
 
 \begin{theorem}[Tensorized source right inverse]
     \label{thm:mpu_source_yz_tensor}
