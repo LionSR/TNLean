@@ -12,10 +12,10 @@ import TNLean.MPS.MPDO.StrongRFP
 # Periodic rank growth of a strong renormalization fixed point
 
 CPSV16 Appendix D observes that the local Strong-RFP relation
-`M₂ = U (M₁ ⊗ P) U†` iterates around a periodic chain. Thus adjoining one
-site tensors the periodic operator with the same positive matrix `P`, up to a
+\(M₂ = U (M₁ ⊗ P) U†\) iterates around a periodic chain. Thus adjoining one
+site tensors the periodic operator with the same positive matrix \(P\), up to a
 unitary change of physical coordinates, and its ordinary matrix rank is
-multiplied by `rank P`.
+multiplied by \(\operatorname{rank} P\).
 
 ## References
 
@@ -72,8 +72,8 @@ private theorem tensorMapId_singleKrausMap
   · simp
 
 /-- The fixed Strong-RFP witnesses give the global closure identity. The
-canonical regroupings expose the operation as first adjoining `P`, then
-conjugating the first two coordinates by `U`.
+canonical regroupings expose the operation as first adjoining \(P\), then
+conjugating the first two coordinates by \(U\).
 
 Source: CPSV16, arXiv:1606.00608, Appendix D, lines 2109--2117. -/
 theorem strongRFP_physCloseN_eq_localized_preparation
@@ -93,7 +93,7 @@ theorem strongRFP_physCloseN_eq_localized_preparation
 
 /-- Written with all canonical regroupings visible, the global closure is
 unitarily equivalent to the Kronecker product of the shorter closure with
-`P`. This is the fixed-witness operator identity used for rank growth.
+\(P\). This is the fixed-witness operator identity used for rank growth.
 
 Source: CPSV16, arXiv:1606.00608, Appendix D, lines 2109--2117. -/
 theorem strongRFP_physCloseN_eq_reindex_singleKrausMap_kronecker
@@ -205,7 +205,7 @@ theorem strongRFP_rank_mpo_add_one
       simpa [pow_succ, ih, mul_assoc] using
         strongRFP_rank_mpo_add_two M P U hU hrel N
 
-/-- A Strong-RFP tensor exposes a single positive witness `P` whose rank is
+/-- A Strong-RFP tensor exposes a single positive witness \(P\) whose rank is
 the factor in both the periodic rank recurrence and its geometric solution.
 No trace normalization, virtual gauge, or MPDO hypothesis is used.
 

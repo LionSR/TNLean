@@ -12,7 +12,7 @@ import Mathlib.LinearAlgebra.Matrix.Rank
 This file records algebraic and order properties of conjugation by a rectangular
 isometry.
 
-## Main declarations
+## Main results
 
 * `Matrix.rank_singleKrausMap_of_mem_unitaryGroup`: unitary single-Kraus
   conjugation preserves rank.
