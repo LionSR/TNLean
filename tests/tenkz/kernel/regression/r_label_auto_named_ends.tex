@@ -33,6 +33,11 @@
             \str_if_eq:VnF #2 {s}
               { \errmessage{a~named~wire~end~missed~an~east-west~run} }
           }
+        {E}
+          {
+            \str_if_eq:VnF #2 {n}
+              { \errmessage{an~explicit~auto~did~not~reach~the~chooser} }
+          }
       }
       { \errmessage{unexpected~label~in~named-end~fixture} }
   }
@@ -53,8 +58,15 @@
   \tn[at=(1,2), name=D]{}
   \tnwire{(1,1)}{D}
 \end{tenkz}
+% `auto` is the registry's own default for the key, so an author may write
+% it out; the word names the chooser rather than an angle.
+\begin{tenkz}[lattice={2x1}, bonds=none]
+  \tn[at=(1,1), name=E, skin=dot, label pos=auto]{E}
+  \tn[at=(2,1), name=F]{}
+  \tnwire{E}{F}
+\end{tenkz}
 \ExplSyntaxOn
-\int_compare:nNnF { \l__tenkz_test_side_count_int } = {3}
-  { \errmessage{named-end~fixture~did~not~station~three~labels} }
+\int_compare:nNnF { \l__tenkz_test_side_count_int } = {4}
+  { \errmessage{named-end~fixture~did~not~station~four~labels} }
 \ExplSyntaxOff
 \end{document}
