@@ -428,20 +428,22 @@ norm estimate is derived here.
     The preceding range equalities identify the three physical ranges.
 \end{proof}
 
-\begin{theorem}[Mixed Gram of the overlapping spectator boundary maps]%
+\begin{theorem}[Arbitrary-increment mixed Gram of the overlapping spectator boundary maps]%
     \label{thm:spectator_boundary_mixed_gram}
+    \lean{MPSTensor.inner_tailBoundaryMapES_adjoint_leftBoundaryMapES_q}
     \lean{MPSTensor.inner_tailBoundaryMapES_adjoint_leftBoundaryMapES}
     \leanok
     \uses{def:tail_boundary_map,def:left_boundary_map,def:ground_space_gram}
-    Let $X=(X_u)_{u\in\Fin d^K}$ and
-    $Z=(Z_j)_{j\in\Fin d^1}$ be virtual boundary-matrix families.  For the
-    tail window of length $l+1$ and the left window of length $K+l$, their
-    mixed Gram in the common $(K+l+1)$-site Hilbert space is
+    Let $q\in\mathbb N$, let $X=(X_u)_{u\in\Fin d^K}$, and let
+    $Z=(Z_j)_{j\in\Fin d^q}$ be virtual boundary-matrix families.  After the
+    canonical identification of $K+(l+q)$ with $(K+l)+q$, the mixed Gram for
+    the tail window of length $l+q$ and the left window with a $q$-site
+    increment is
     \begin{align}
       \left\langle X,
-        (\Gamma^{\mathrm{tail}}_{K,l+1})^\dagger
-        \Gamma^{\mathrm{left}}_{K+l,1}Z\right\rangle
-      &=\sum_{u\in\Fin d^K}\sum_{j\in\Fin d^1}
+        (\Gamma^{\mathrm{tail}}_{K,l+q})^\dagger
+        \Gamma^{\mathrm{left}}_{K+l,q}Z\right\rangle
+      &=\sum_{u\in\Fin d^K}\sum_{j\in\Fin d^q}
         \left\langle
           U(A^jX_u),\,
           \mathcal K_l\,U(Z_jA^u)
@@ -452,19 +454,21 @@ norm estimate is derived here.
     fixed by
     $\tr(A^{\tau,j}X_u)=\tr(A^\tau(A^jX_u))$ and
     $\tr(A^{u,\tau}Z_j)=\tr(A^\tau(Z_jA^u))$.
-    This exact identity is obtained from the definitions and trace cyclicity;
-    it is not the numerical FNW contraction quoted in
-    \cite[after Equation~(2.4) and Equation~(6.1)]{Nachtergaele1996Spectral}.
+    The one-site identity is the specialization $q=1$.  This is the exact
+    algebraic whole-increment identity relevant to condition C3$'$ in
+    \cite[Equation~(2.5)]{Nachtergaele1996Spectral}; it does not prove the
+    norm estimate, uniformity in $q$, or any numerical contraction required
+    there.
 \end{theorem}
 \begin{proof}
     \leanok
     \uses{def:tail_boundary_map,def:left_boundary_map,def:ground_space_gram,
         lem:eval_word_append,thm:ground_space_map_es_frobenius}
     Split a physical configuration into a prefix $u$, an overlap word $\tau$
-    of length $l$, and a final-site configuration $j$.  The adjoint relation
-    turns the mixed Gram into the physical inner product of the two boundary
-    vectors.  For each $(u,\tau,j)$, word multiplicativity and trace cyclicity
-    give
+    of length $l$, and an increment configuration $j$ of length $q$.  The
+    adjoint relation turns the mixed Gram into the physical inner product of
+    the two boundary vectors.  For each $(u,\tau,j)$, word multiplicativity
+    and trace cyclicity give
     \begin{align}
       \tr(A^{\tau,j}X_u)&=\tr(A^\tau(A^jX_u)),&
       \tr(A^{u,\tau}Z_j)&=\tr(A^\tau(Z_jA^u)).
@@ -472,7 +476,8 @@ norm estimate is derived here.
     For fixed $(u,j)$, summing the resulting inner products over $\tau$ is
     exactly the boundary-map Gram pairing
     $\langle U(A^jX_u),\mathcal K_l U(Z_jA^u)\rangle$.  Summing over $u$ and
-    $j$ proves the identity.
+    $j$ proves the arbitrary-increment identity; setting $q=1$ gives the
+    original formula.
 \end{proof}
 
 \begin{theorem}[Centered mixed Gram at the limiting metric]%
