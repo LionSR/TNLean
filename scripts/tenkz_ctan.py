@@ -323,6 +323,19 @@ PIPE_FILENAME = re.compile(
     + STREAM_OPERAND
     + r"(?:\{\s*)?\"?\s*\|"
 )
+# A file a stream primitive opens for reading is a load: the engine resolves
+# it like any other input, so a closure walk that skipped it would certify an
+# archive offline while a run reads an unstaged file from the installation.
+# Only the read side is followed; `\openout` and `\iow_open:Nn` create their
+# file, so there is nothing for the archive to carry. expl3 names the
+# conditional variants through the signature, so the family is read the way
+# the loaders' conditional variants are.
+STREAM_OPEN_CALL = re.compile(
+    r"\\openin\s*" + STREAM_OPERAND + r"\"([^\"]+)\""
+    r"|\\openin\s*" + STREAM_OPERAND + r"([^\s{}\\%\"]+)"
+    r"|\\ior_open:[a-zA-Z]+\s*(?:\\[A-Za-z@_:]+\s*)?\{\s*\"?([^}\"]*?)\"?\s*\}",
+    re.DOTALL,
+)
 # The named ways to reach a shell that are not a write at all: the TeX
 # primitive's LaTeX name, and expl3's own shell interface, which a file under
 # `\ExplSyntaxOn` would use in preference to either. The expl3 names are the
@@ -652,6 +665,8 @@ def walk_closure(source: Path = SOURCE, entry: str = ENTRY.name) -> Closure:
             libraries.extend(part.strip() for part in group.split(",") if part.strip())
         for braced, quoted, bare in INPUT_CALL.findall(text):
             visit((braced or quoted or bare).strip())
+        for quoted, bare, braced in STREAM_OPEN_CALL.findall(text):
+            visit((quoted or bare or braced).strip())
 
     visit(entry)
     closure.packages = sorted(set(packages))

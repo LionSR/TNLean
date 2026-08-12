@@ -117,6 +117,51 @@ def test_closure_reads_the_unbraced_input() -> None:
             assert quoted.files == ["tenkz.sty", "tenkz-stage.code.tex"], spelling
 
 
+def test_closure_reads_the_stream_opened_file() -> None:
+    """A file a stream primitive opens for reading is a load. A walk that
+    skipped it would certify an archive offline while a run reads an
+    unstaged file from the installation."""
+
+    with tempfile.TemporaryDirectory() as directory:
+        source = Path(directory) / "tex"
+        source.mkdir()
+        (source / "local.cfg").write_text("data\n", encoding="utf-8")
+        for spelling in ("\\openin\\src=local.cfg",
+                         "\\openin\\src = local.cfg",
+                         "\\openin1 local.cfg",
+                         '\\openin\\src="local.cfg"',
+                         "\\ior_open:Nn \\g_src_ior {local.cfg}",
+                         "\\ior_open:NnF \\g_src_ior {local.cfg} {}",
+                         '\\ior_open:Nn \\g_src_ior {"local.cfg"}'):
+            (source / "tenkz.sty").write_text(
+                STAGE_CONTRACT + spelling + "\n", encoding="utf-8"
+            )
+            closure = tenkz_ctan.walk_closure(source, "tenkz.sty")
+            assert closure.files == ["tenkz.sty", "local.cfg"], spelling
+        # The write side creates its file, so there is nothing for the
+        # archive to carry, and a comment is not a load.
+        for innocent in ("\\openout\\log=run.log",
+                         "\\iow_open:Nn \\g_log_iow {run.log}",
+                         "% \\openin\\src=ghost.cfg"):
+            (source / "tenkz.sty").write_text(
+                STAGE_CONTRACT + innocent + "\n", encoding="utf-8"
+            )
+            closure = tenkz_ctan.walk_closure(source, "tenkz.sty")
+            assert closure.files == ["tenkz.sty"], innocent
+        # A stream-opened file the tree does not hold is a missing load,
+        # not a pass: behaviour depending on a machine-local file is not
+        # submittable even when the file's absence is handled.
+        (source / "tenkz.sty").write_text(
+            STAGE_CONTRACT + "\\openin\\src=absent.cfg\n", encoding="utf-8"
+        )
+        try:
+            tenkz_ctan.walk_closure(source, "tenkz.sty")
+        except SystemExit as refusal:
+            assert "absent.cfg" in str(refusal)
+        else:
+            raise AssertionError("a missing stream-opened file passed the walk")
+
+
 def test_closure_reads_tex_spacing_before_arguments() -> None:
     with tempfile.TemporaryDirectory() as directory:
         source = Path(directory) / "tex"
