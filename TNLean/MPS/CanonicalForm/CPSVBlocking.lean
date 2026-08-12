@@ -18,14 +18,17 @@ normal block is replaced by its physical block tensor and each CPSV weight is
 raised to the blocking length.  The reconstruction is the exact blocked
 letterwise reconstruction, not only equality of closed-chain coefficients.
 
-## Main results
+## Main definitions
 
-* `MPSTensor.IsNormalTensor.blockTensor`: positive blocking preserves normal
-  tensors.
 * `MPSTensor.CPSVCanonicalFormData.blockTensor`: literal canonical-form data
   block exactly.
 * `MPSTensor.CPSVCanonicalFormIIData.blockTensor`: blockwise canonical-form-II data block
   exactly.
+
+## Main results
+
+* `MPSTensor.IsNormalTensor.blockTensor`: positive blocking preserves normal
+  tensors.
 * `MPSTensor.IsCPSVCanonicalForm.blockTensor`: positive blocking preserves
   literal CPSV canonical form.
 
@@ -280,7 +283,7 @@ Each fixed-point matrix remains positive definite and diagonal, and is fixed by 
 map because that map is the corresponding positive power of the original transfer map. The same
 matrix is retained, so any separately supplied trace normalization is also unchanged.
 
-Source: arXiv:1703.09188, definition `blocking`, equation `MPUblock`, and line 356. -/
+Source: arXiv:1703.09188, Section II, lines 297--305, and Section III, line 356. -/
 noncomputable def blockTensor {A : MPSTensor d D}
     (data : CPSVCanonicalFormIIData A) (p : ℕ) (hp : 0 < p) :
     CPSVCanonicalFormIIData (MPSTensor.blockTensor (d := d) (D := D) A p) where

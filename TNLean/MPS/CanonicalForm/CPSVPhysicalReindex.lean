@@ -12,11 +12,14 @@ import TNLean.MPS.Core.PhysicalReindexTransport
 A bijective relabeling of the physical alphabet leaves the transfer map unchanged.  It therefore
 preserves normal tensors and the retained-block reconstruction of literal CPSV canonical form.
 
+## Main definitions
+
+* `MPSTensor.CPSVCanonicalFormData.reindexPhysical`: relabel literal canonical-form data.
+* `MPSTensor.CPSVCanonicalFormIIData.reindexPhysical`: relabel canonical-form-II data.
+
 ## Main results
 
 * `MPSTensor.IsNormalTensor.reindexPhysical`: physical relabeling preserves normal tensors.
-* `MPSTensor.CPSVCanonicalFormData.reindexPhysical`: relabel literal canonical-form data.
-* `MPSTensor.CPSVCanonicalFormIIData.reindexPhysical`: relabel canonical-form-II data.
 * `MPSTensor.IsCPSVCanonicalForm.reindexPhysical`: physical relabeling preserves literal
   canonical form.
 

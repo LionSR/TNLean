@@ -49,7 +49,7 @@ def HasFullActiveSupport (data : CPSVCanonicalFormData A) : Prop :=
 /-- Positive blocking identifies the active retained indices exactly with the original active
 indices.
 
-Source: arXiv:1703.09188, definition `blocking`, equation `MPUblock`, and line 356. The positivity
+Source: arXiv:1703.09188, Section II, lines 297--305, and Section III, line 356. The positivity
 assumption excludes the zero-site block, whose weights are all raised to the zeroth power. -/
 noncomputable def activeEquivBlockTensor (data : CPSVCanonicalFormData A)
     (p : ℕ) (hp : 0 < p) :
@@ -68,7 +68,7 @@ noncomputable def activeEquivBlockTensor (data : CPSVCanonicalFormData A)
 
 This uses the exact active-index equivalence, so it makes no claim for the zero-site block.
 
-Source: arXiv:1703.09188, definition `blocking`, equation `MPUblock`, and line 356. -/
+Source: arXiv:1703.09188, Section II, lines 297--305, and Section III, line 356. -/
 theorem hasFullActiveSupport_blockTensor (data : CPSVCanonicalFormData A)
     (hfull : data.HasFullActiveSupport) (p : ℕ) (hp : 0 < p) :
     (data.blockTensor p hp).HasFullActiveSupport := by
@@ -367,12 +367,12 @@ theorem normalizedFlattening_blockTensor (U : MPOTensor d D) (p : ℕ) :
     exact Complex.ofReal_pow _ _
   rw [hsqrtC, inv_pow]
 
-/-- Package canonical-form-II data for a positively blocked MPO normalized flattening.
+/-- Construct canonical-form-II data for a positively blocked MPO normalized flattening.
 
 The blocked MPS data are relabeled by `blockedDoubledIndexEquiv`, matching the index orientation in
 `normalizedFlattening_blockTensor`.
 
-Source: arXiv:1703.09188, definition `blocking`, equation `MPUblock`, and line 356. -/
+Source: arXiv:1703.09188, Section II, lines 297--305, and Section III, line 356. -/
 noncomputable def blockTensorCFIIData (U : MPOTensor d D)
     (data : MPSTensor.CPSVCanonicalFormIIData U.normalizedFlattening)
     (p : ℕ) (hp : 0 < p) :
