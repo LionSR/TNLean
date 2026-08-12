@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import TNLean.Analysis.IdempotentEndomorphism
 import Mathlib.Analysis.InnerProductSpace.Positive
 
 /-!
@@ -33,9 +34,7 @@ quadratic form. -/
 theorem re_inner_apply_apply_self {P : E →ₗ[𝕜] E} (hP : P.IsSymmetricProjection)
     (v : E) :
     RCLike.re (⟪P v, P v⟫_𝕜) = RCLike.re (⟪P v, v⟫_𝕜) := by
-  have hidem : P (P v) = P v := by
-    simpa [Module.End.mul_apply] using congrArg (fun T : E →ₗ[𝕜] E => T v)
-      hP.isIdempotentElem.eq
+  have hidem : P (P v) = P v := LinearMap.IsIdempotentElem.apply_apply hP.isIdempotentElem v
   rw [show ⟪P v, P v⟫_𝕜 = ⟪P (P v), v⟫_𝕜 from (hP.isSymmetric (P v) v).symm, hidem]
 
 /-- A norm bound on the compressed product of two projections gives the ordered
@@ -57,9 +56,7 @@ theorem re_inner_apply_apply_ge_neg_of_norm_apply_le {P Q : E →ₗ[𝕜] E}
     (hP : P.IsSymmetricProjection) {c : ℝ}
     (hNorm : ∀ v : E, ‖P (Q v)‖ ≤ c * ‖P v‖) (v : E) :
     -c * RCLike.re (⟪P v, v⟫_𝕜) ≤ RCLike.re (⟪P v, Q v⟫_𝕜) := by
-  have hPidem : P (P v) = P v := by
-    simpa [Module.End.mul_apply] using congrArg (fun T : E →ₗ[𝕜] E => T v)
-      hP.isIdempotentElem.eq
+  have hPidem : P (P v) = P v := LinearMap.IsIdempotentElem.apply_apply hP.isIdempotentElem v
   have hcompress : ⟪P v, Q v⟫_𝕜 = ⟪P v, P (Q v)⟫_𝕜 := by
     calc
       ⟪P v, Q v⟫_𝕜 = ⟪P (P v), Q v⟫_𝕜 := by rw [hPidem]
@@ -115,9 +112,7 @@ theorem re_inner_anticommutator_ge_neg_of_norm_apply_le {P Q : E →ₗ[𝕜] E}
     rw [← hQ.re_inner_apply_apply_self v, inner_self_eq_norm_sq]
   have hconj : RCLike.re (⟪Q v, P v⟫_𝕜) = RCLike.re (⟪P v, Q v⟫_𝕜) := by
     rw [← inner_conj_symm (P v) (Q v), RCLike.conj_re]
-  have hPidem : P (P v) = P v := by
-    simpa [Module.End.mul_apply] using congrArg (fun T : E →ₗ[𝕜] E => T v)
-      hP.isIdempotentElem.eq
+  have hPidem : P (P v) = P v := LinearMap.IsIdempotentElem.apply_apply hP.isIdempotentElem v
   have hcompress : ⟪P v, Q v⟫_𝕜 = ⟪P v, P (Q v)⟫_𝕜 := by
     calc
       ⟪P v, Q v⟫_𝕜 = ⟪P (P v), Q v⟫_𝕜 := by rw [hPidem]
@@ -152,9 +147,8 @@ theorem re_inner_apply_apply_nonneg_of_commute {P Q : E →ₗ[𝕜] E}
     (hP : P.IsSymmetricProjection) (hQ : Q.IsSymmetricProjection)
     (hcomm : ∀ v : E, P (Q v) = Q (P v)) (v : E) :
     0 ≤ RCLike.re (⟪P v, Q v⟫_𝕜) := by
-  have hQidem : Q (Q (P v)) = Q (P v) := by
-    simpa [Module.End.mul_apply] using congrArg (fun T : E →ₗ[𝕜] E => T (P v))
-      hQ.isIdempotentElem.eq
+  have hQidem : Q (Q (P v)) = Q (P v) :=
+    LinearMap.IsIdempotentElem.apply_apply hQ.isIdempotentElem (P v)
   have hsym₁ : ⟪P v, Q v⟫_𝕜 = ⟪Q (P v), v⟫_𝕜 := (hQ.isSymmetric (P v) v).symm
   have hsym₂ : ⟪Q (P v), v⟫_𝕜 = ⟪Q (P v), Q v⟫_𝕜 := by
     calc
