@@ -797,7 +797,7 @@ theorem wolf_eq_103_refined (ν : RingSeminorm (Matrix (Fin D) (Fin D) R))
   -- The binomial coefficients increase up to the middle index, so the largest one on
   -- `Finset.Icc 1 (D-1)` sits at `D-1`.
   intro k hk
-  rcases Finset.mem_Icc.mp hk with ⟨hk1, hk2⟩
+  rcases Finset.mem_Icc.mp hk with ⟨_, hk2⟩
   obtain ⟨d, hd⟩ := Nat.exists_eq_add_of_le hk2
   have h_helper : ∀ d', 2 * (k + d') ≤ n → Nat.choose n k ≤ Nat.choose n (k + d') := by
     intro d'
