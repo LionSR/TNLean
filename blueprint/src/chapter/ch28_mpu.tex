@@ -4873,8 +4873,8 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
   % Source lines: paper_v2.tex 733--910 and 1366--1380.
 \end{definition}
 
-\begin{lemma}[Generic two-projection angle block]
-  \label{lem:mpu_two_projection_angle_block}
+\begin{theorem}[Generic two-projection angle block]
+  \label{thm:mpu_two_projection_angle_block}
   \lean{LinearMap.IsSymmetricProjection.rangeCompression_isSymmetric,
     LinearMap.IsSymmetricProjection.angleDefect_block,
     LinearMap.IsSymmetricProjection.exists_orthonormal_angle_block}
@@ -4900,7 +4900,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
   % Source: paper_v2.tex, Proposition IV.5 (prop:continuity-index), lines 756--764.
   % Local correction: line 762 repeats P where Q is intended; see
   % docs/paper-gaps/1703_two_projection_projector_typo.tex.
-\end{lemma}
+\end{theorem}
 
 \begin{proof}\leanok
   Set $d=Qx-\mu x$. Symmetry and idempotence give
@@ -4917,7 +4917,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
   \label{prop:continuity-index}
   \notready
   \discussion{6022}
-  \uses{def:mpu_canonical_form,ThmFund1,lem:mpu_two_projection_angle_block}
+  \uses{def:mpu_canonical_form,ThmFund1,thm:mpu_two_projection_angle_block}
   Let $[0,1]\ni x\mapsto\mathcal W(x)$ be a continuous path of tensors
   generating MPUs, without requiring the path to be in canonical form. For
   each $x$, take the canonical form and the two source-cut ranks $r(x)$ and
