@@ -238,7 +238,7 @@ theorem exists_paper_cyclic_projectors_of_isPeriodic
   let Q : Fin p → MatrixAlg D := fun k => P (-k)
   refine ⟨Q, fun k => hPproj (-k), ?_, ?_⟩
   · change (∑ k, P (-k)) = 1
-    (convert (Equiv.sum_comp (Equiv.neg (Fin p)) P).trans hPsum using 1) <;> rfl
+    (convert (Equiv.sum_comp (Equiv.neg (Fin p)) P).trans hPsum using 1; rfl)
   · intro k i
     exact negReindex_paper_shift A hA.leftCanonical hPproj hCyclic' k i
 
