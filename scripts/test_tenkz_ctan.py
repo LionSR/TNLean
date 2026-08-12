@@ -765,6 +765,22 @@ def test_a_manifest_with_no_classification_at_all_is_named() -> None:
     assert any("ownership" in reason for reason in report.failures), report.failures
 
 
+def test_a_class_left_out_or_stated_twice_is_caught() -> None:
+    """A class omitted reads as one nobody considered, and a library named
+    twice inside one class reads as more consumers than were traced. Neither
+    is caught by the cover comparison, which goes through a set."""
+
+    closure = tenkz_ctan.Closure(libraries=["calc"], packages=["tikz"])
+    dropped = _ownership(["calc"], [], [])
+    del dropped["runtime"]["requires"]["ownership"]["unconsumed"]
+    missing = tenkz_ctan.check_dependencies(closure, dropped)
+    assert any("unconsumed" in reason for reason in missing.failures), missing.failures
+    repeated = tenkz_ctan.check_dependencies(closure, _ownership(["calc", "calc"], [], []))
+    assert any(
+        "more than once" in reason for reason in repeated.failures
+    ), repeated.failures
+
+
 def test_a_retired_front_end_load_fails_the_dependency_check() -> None:
     """The removed front ends each brought a load. The walk blanks comments
     before it reads one, so a retired name in the closure is a surviving load
@@ -804,6 +820,58 @@ def test_a_tree_arxiv_would_have_to_build_or_shell_out_for_fails() -> None:
     assert "tenkz.ins" in findings, report.failures
     assert "write18" in findings, report.failures
     assert "absolute path" in findings, report.failures
+
+
+def test_an_unbraced_absolute_input_is_an_absolute_path() -> None:
+    """Plain TeX's `\\input` takes a filename with no braces, reading to the
+    next space. A gate that only read the braced spelling would pass a staged
+    file that loads from the machine it was written on."""
+
+    with tempfile.TemporaryDirectory() as directory:
+        tree = Path(directory) / PACKAGE_DIR
+        tree.mkdir(parents=True)
+        (tree / "tenkz.sty").write_text(
+            "\\input /Users/somebody/tenkz-core.code.tex\n", encoding="utf-8"
+        )
+        unbraced = tenkz_ctan.check_arxiv(tree)
+        (tree / "tenkz.sty").write_text("\\input tenkz-core.code.tex\n", encoding="utf-8")
+        relative = tenkz_ctan.check_arxiv(tree)
+    assert any("absolute path" in reason for reason in unbraced.failures), unbraced.failures
+    assert not relative.failures, relative.failures
+
+
+def test_an_archive_that_does_not_open_is_a_report_line() -> None:
+    """The tool's contract is that every finding is a printed line. An archive
+    that is not one, or that does not hold the directory an upload is judged
+    on, has to arrive as a failed check rather than as a traceback."""
+
+    with tempfile.TemporaryDirectory() as directory:
+        room = Path(directory)
+        torn = room / "torn.zip"
+        torn.write_bytes(b"not a zip file at all")
+        engine = tenkz_ctan.shutil.which
+        try:
+            tenkz_ctan.shutil.which = lambda _name: "/somewhere/xelatex"
+            report = tenkz_ctan.check_offline(torn, required=True)
+        finally:
+            tenkz_ctan.shutil.which = engine
+    assert report.status == "FAIL", report
+    assert any("does not open" in reason for reason in report.failures), report.failures
+
+
+def test_a_temporary_directory_inside_the_repository_is_not_a_leak() -> None:
+    """`tempfile` puts the room wherever `TMPDIR` says, and a runner that puts
+    it inside the workspace would otherwise make every file the flat archive
+    itself answered look like one the repository answered."""
+
+    (ROOT / "build").mkdir(exist_ok=True)
+    with tempfile.TemporaryDirectory(dir=ROOT / "build") as directory:
+        room = Path(directory)
+        (room / "tenkz.sty").write_text("% the staged runtime\n", encoding="utf-8")
+        assert room.resolve().is_relative_to(ROOT), room
+        assert not tenkz_ctan.foreign_runtime_files(
+            ["./tenkz.sty", "tenkz.sty"], room, room.resolve()
+        )
 
 
 def test_a_commented_shell_call_is_not_a_shell_call() -> None:

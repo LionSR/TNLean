@@ -214,11 +214,14 @@ REGENERATED_SUFFIXES = frozenset({".dtx", ".ins", ".fmt", ".mf", ".drv"})
 SHELL_ESCAPE_CALLS = (r"\write18", r"\ShellEscape", r"\immediate\write18")
 
 # An absolute path in a staged source names the machine that wrote it. The
-# pattern catches the two spellings a TeX file can carry: a Unix path opening
-# a load argument, and a Windows drive letter.
+# pattern catches the spellings a TeX file can carry: a Unix path or a Windows
+# drive letter opening a braced load argument, and the same two opening `\input`
+# unbraced, which is plain TeX's own syntax and reads to the next space.
+ABSOLUTE_PATH_HEAD = r"(?:/|[A-Za-z]:[\\/])"
 ABSOLUTE_LOAD = re.compile(
     r"\\(?:input|include|usepackage|RequirePackage|includegraphics)"
-    r"\s*(?:\[[^]]*\]\s*)?\{\s*(?:/|[A-Za-z]:[\\/])"
+    rf"\s*(?:\[[^]]*\]\s*)?\{{\s*{ABSOLUTE_PATH_HEAD}"
+    rf"|\\input\s*\"?{ABSOLUTE_PATH_HEAD}"
 )
 
 
@@ -775,7 +778,17 @@ def check_dependencies(closure: Closure, manifest: dict) -> Report:
     which of them the package needs to place a tensor and which of them only
     the ink it draws needs. The manifest's classification says which, and this
     check is what stops the two from drifting: a library that enters or leaves
-    the load list without a class, or that is filed under two, fails here.
+    the load list without a class, that is filed under two, or that is named
+    twice inside one, fails here, and so does a manifest that leaves a class
+    out rather than declaring it empty.
+
+    What this cannot read is whether a class is the *right* one, and the
+    `unconsumed` class is where that matters: nothing here can tell a library
+    nothing reads from one whose consumer the reader did not find. Searching
+    for the library's name does not settle it either, because a library is
+    reached through the names it defines rather than through its own. The class
+    is established by removing the load and compiling, and
+    `docs/tenkz/ctan/DEPENDENCIES.md` records that reading.
 
     Absence is checked the same way. The retired front ends each brought a load
     with them, and the walk that reads loads has already blanked the comments,
@@ -799,12 +812,25 @@ def check_dependencies(closure: Closure, manifest: dict) -> Report:
     )
     classified: dict[str, list[str]] = {}
     for name in DEPENDENCY_CLASSES:
-        members = ownership.get(name, [])
+        if name not in ownership:
+            report.failures.append(
+                f"{MANIFEST_LABEL} declares no {name!r} class; a class with no "
+                "members is written as an empty list, because leaving it out "
+                "reads as a class nobody considered"
+            )
+            return report
+        members = ownership[name]
         if not isinstance(members, list) or any(
             not isinstance(member, str) for member in members
         ):
             report.failures.append(f"[runtime.requires.ownership] {name} is not a list of names")
             return report
+        repeated = sorted({member for member in members if members.count(member) > 1})
+        report.require(
+            not repeated,
+            f"{repeated} are named more than once under {name!r}, which reads "
+            "as more consumers than the report traced",
+        )
         classified[name] = members
     twice = sorted(
         library
@@ -837,7 +863,8 @@ def check_dependencies(closure: Closure, manifest: dict) -> Report:
     )
     if classified["unconsumed"]:
         report.notes.append(
-            f"loaded with no consumer in the source: {', '.join(classified['unconsumed'])}"
+            "loaded and unread, by the ablation recorded in DEPENDENCIES.md: "
+            + ", ".join(classified["unconsumed"])
         )
     return report
 
@@ -1292,12 +1319,24 @@ def offline_room(archive: Path, room: Path) -> list[str]:
     search path. A submission has no search path to put it on: the files sit
     beside the manuscript, so this is where the archive is flattened and where
     a runtime file that only resolves through a directory would fail.
+
+    An archive that does not open, or that does not hold the one directory the
+    upload is judged on, is answered with a message rather than a traceback:
+    this tool's contract is that every finding is a printed line of the report,
+    and a caller that raised here would break it.
     """
 
     with tempfile.TemporaryDirectory(prefix="tenkz-offline-unpack-") as unpacking:
-        with zipfile.ZipFile(archive) as bundle:
-            bundle.extractall(unpacking)
+        try:
+            with zipfile.ZipFile(archive) as bundle:
+                bundle.extractall(unpacking)
+        except (zipfile.BadZipFile, OSError) as error:
+            raise SystemExit(f"{archive.name} does not open as an archive: {error}") from None
         unpacked = Path(unpacking) / PACKAGE
+        if not unpacked.is_dir():
+            raise SystemExit(
+                f"{archive.name} does not unpack into a single {PACKAGE}/ directory"
+            )
         staged = sorted(path.name for path in unpacked.iterdir())
         for path in sorted(unpacked.iterdir()):
             shutil.copy2(path, room / path.name)
@@ -1394,7 +1433,11 @@ def check_offline(archive: Path, required: bool) -> Report:
         tripwire = base / "reached-for.txt"
         shims = base / "shims"
         write_shims(shims)
-        staged = offline_room(archive, room)
+        try:
+            staged = offline_room(archive, room)
+        except SystemExit as refusal:
+            report.failures.append(str(refusal))
+            return report
         environment = offline_environment(room, shims, tripwire, home)
         for case in OFFLINE_CASES:
             _offline_case(case, room, engine, environment, audit, report)
@@ -1463,7 +1506,17 @@ def _offline_case(case: OfflineCase, room: Path, engine: str,
         report.failures.append(f"{case.name} wrote no input record to read")
         return
     opened = recorded_inputs(record)
-    strangers = [path for path in opened if (room / path).resolve().is_relative_to(ROOT)]
+    # The room is the base a relative record line resolves against, and it is
+    # also the one directory a file may legitimately come from besides the
+    # installation. It is excluded before the repository is read, because a
+    # temporary directory is placed wherever `TMPDIR` says, and a runner that
+    # puts it inside the workspace would otherwise make every file the archive
+    # itself answered look like one the repository did.
+    flat = room.resolve()
+    elsewhere = [
+        path for path in opened if not (room / path).resolve().is_relative_to(flat)
+    ]
+    strangers = [path for path in elsewhere if (room / path).resolve().is_relative_to(ROOT)]
     report.require(
         not strangers,
         f"{case.name} read {sorted(set(strangers))} from the repository, so the "
@@ -1472,7 +1525,7 @@ def _offline_case(case: OfflineCase, room: Path, engine: str,
     runtime = [path for path in opened if Path(path).name.startswith(PACKAGE)]
     report.require(runtime, f"{case.name} opened no tenkz file, so it proved nothing")
     report.require(
-        all((room / path).resolve().is_relative_to(room.resolve()) for path in runtime),
+        not foreign_runtime_files(runtime, room, flat),
         f"{case.name} resolved a runtime file outside the flat archive, so an "
         "installed copy answered for it",
     )

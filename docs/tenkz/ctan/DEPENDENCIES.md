@@ -41,26 +41,50 @@ this is the group a host document's own TikZ styles reach into.
 | Library | Read by | For |
 |---|---|---|
 | `arrows.meta` | `tenkz-core.code.tex` (lines 372 to 392) | The barb an oriented index carries. |
+| `backgrounds` | `tenkz-tree.code.tex` (lines 472 and 488, in `\tenkz_tree_geometry:n`) | The layer a fusion tree draws its skin on, so the wires or ribbons sit behind the glyphs rather than over them. The layer is named `background` and the library that declares it is `backgrounds`; no file under `tex/tenkz/` declares a layer of its own. |
 | `decorations.markings` | `tenkz-core.code.tex` (lines 370 to 393), `tenkz-string.code.tex` (line 1511) | Placing a direction mark at a stated position along a wire, and placing the coordinate a string's bead is reported at. |
 | `decorations.pathreplacing` | `tenkz-core.code.tex` (lines 396 and 397) | The brace an annotation draws. |
 | `shapes.geometric` | `tenkz-core.code.tex` (lines 231, 1129 to 1157) | The isosceles triangle a library-owned glyph is built on, together with the three anchors the package adds to it. |
 
 ## 4. Loaded and unread
 
-`backgrounds` and `fit` are loaded by `tenkz.sty` and read by nothing: no file
-under `tex/tenkz/` calls either, and no case in `tests/tenkz/` or picture in
-`docs/tenkz/` does. `backgrounds` is named twice in the source, both times in a
-sentence saying the renderer's class order does the work a background layer
-would do elsewhere, which is a statement that the library is not used. `fit`
-does not appear at all.
+`fit` is loaded by `tenkz.sty` and read by nothing.
 
-They are recorded rather than dropped. Both come from pgf, so an installation
-that has `tikz` has them, and carrying them costs nobody anything; removing the
-loads would change what a host document inherits when it loads tenkz, which is
-a release decision about the package's load-time surface rather than a staging
-one. The entries sit in `MANIFEST.toml` under `unconsumed` so that the decision
-stays visible, and so a later consumer moves the entry rather than appearing
-without one.
+### How that is established
+
+Not by searching for the library's name. A library is reached through the names
+it defines rather than through its own, so a search for `backgrounds` finds two
+sentences in the source and misses `\begin{pgfonlayer}{background}` on the next
+page, which is the call that needs it. The reading that settles the question is
+to remove the load and compile: a library nothing reads changes nothing, and a
+library something reads takes its consumer down with it.
+
+Both loads were removed one at a time and the whole corpus compiled against the
+result, 468 fixtures in all: every case under `tests/tenkz/rmp/`, every kernel
+probe including the nested suites, and every string probe.
+
+- Without `backgrounds`, `tests/tenkz/rmp/section-iii-a/cases/rmp-iii-a-fusion-tensor.tex`
+  fails with `Package pgf Error: Sorry, the requested layer 'background' could
+  not be found`. The library is a real dependency and is listed in section 3.
+- Without `fit`, all 334 positive fixtures compile. The 134 that fail are
+  exactly the 134 negative fixtures, each failing with the tenkz coded error it
+  exists to produce, and none of them names pgf, a missing key, or `fit`.
+
+### Why it stays
+
+`fit` is recorded rather than dropped. It comes from pgf, so an installation
+that has `tikz` has it and the upload's requirements are the same either way;
+removing the load would change what a host document inherits when it loads
+tenkz, which is a release decision about the package's load-time surface rather
+than a staging one. The entry sits in `MANIFEST.toml` under `unconsumed` so the
+decision stays visible, and so a later consumer moves the entry rather than
+appearing without one.
+
+The check that reads this file's classification reads it for internal
+consistency only: that every loaded library is filed exactly once, and that no
+class is left out. It cannot tell a library nothing reads from one whose
+consumer nobody found. Only the ablation above can, and it has to be rerun when
+the load list changes.
 
 ## 5. What is gone
 

@@ -15,13 +15,15 @@ named by `RELEASE-POLICY.md` §3 may change it.
 - [ ] `python3 scripts/tenkz_ctan.py check` passes at that head, with a TeX
       installation present so the clean-install check runs rather than being
       skipped. Add `--require-smoke` to make its absence a failure.
-- [ ] `python3 scripts/tenkz_ctan.py offline` passes. It is part of `check`
-      above and repeated here because it is the reading an arXiv submission
-      gets rather than an installation: the archive is unpacked flat, a case
-      of each picture class is compiled beside it with no installer or
-      fetcher reachable, and each result is audited.
-      `docs/tenkz/ctan/DEPENDENCIES.md` states what the isolation is and what
-      it does not prove.
+- [ ] `python3 scripts/tenkz_ctan.py offline --require-engine` passes. It is
+      part of `check` above and repeated here because it is the reading an
+      arXiv submission gets rather than an installation: the archive is
+      unpacked flat, a case of each picture class is compiled beside it with
+      no installer or fetcher reachable, and each result is audited. Without
+      `--require-engine` the command reports itself skipped and exits 0 on a
+      machine with no TeX installation, which would tick this box while
+      proving nothing. `docs/tenkz/ctan/DEPENDENCIES.md` states what the
+      isolation is and what it does not prove.
 - [ ] `python3 scripts/tenkz_ctan.py sync` shows the version and date the
       release artifacts agree on. Disagreement is the release-preparation
       change's work, not the archive builder's.

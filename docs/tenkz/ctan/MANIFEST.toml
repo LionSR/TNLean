@@ -66,17 +66,20 @@ libraries = [
 placement = ["calc", "hobby", "intersections", "spath3"]
 ink = [
   "arrows.meta",
+  "backgrounds",
   "decorations.markings",
   "decorations.pathreplacing",
   "shapes.geometric",
 ]
-# Loaded, and read by nothing in the package or the corpus. Both come from pgf
-# rather than from a package of their own, so carrying them costs an
-# installation nothing beyond `tikz`, which is why they are recorded here
-# instead of dropped: removing a load is a change to what a host document
-# inherits at package load, and that is a release decision rather than a
-# staging one.
-unconsumed = ["backgrounds", "fit"]
+# Loaded, and read by nothing. A library is reached through the names it
+# defines rather than through its own, so this class is not settled by looking
+# for the library's name: it is settled by removing the load and compiling the
+# corpus, which is the reading DEPENDENCIES.md records. `fit` comes from pgf
+# rather than from a package of its own, so carrying it costs an installation
+# nothing beyond `tikz`, which is why it is recorded here instead of dropped:
+# removing a load is a change to what a host document inherits at package load,
+# and that is a release decision rather than a staging one.
+unconsumed = ["fit"]
 
 [material]
 # Staged name = the file it is copied from, unmodified. The version and date
