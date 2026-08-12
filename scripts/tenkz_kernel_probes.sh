@@ -27,15 +27,20 @@ compile() {
 }
 
 # THE PRINTED EXAMPLES ARE THE CONTRACT.  Every fenced example of
-# LANGUAGE-1.0.md is extracted from the document, wrapped in this harness, and
-# compiled here, so an example a reader cannot copy fails the gate.  The
-# extraction drops the display-math delimiters of the printed form and nothing
-# else.  Six of the eight are also a kernel fixture body character for
+# LANGUAGE-1.0.md is extracted from the document, wrapped in this harness,
+# compiled, and audited here, so an example a reader cannot copy fails the
+# gate.  The extraction drops the display-math delimiters of the printed form
+# and nothing else.  Most of them are also a kernel fixture body character for
 # character; those pairs are diffed, which pins the printed example's event
 # stream through the fixture's row of the golden ledger as well.  The two
 # without a twin are the section 9 port-label example, which no fixture
 # carries, and section 12.7, whose fixture states the same target in the
 # compatibility spelling the contract has retired.
+#
+# The table below is the only place any of this is written down.  The counts,
+# the compile set, the diffed pairs and the audit set are all read off it, so
+# an example added here is bound by every one of those checks at once and one
+# added to the contract without a row here fails the fence count.
 CONTRACT="$REPO/docs/tenkz/LANGUAGE-1.0.md"
 # job name : heading the example follows : fixture whose body it must equal
 SKETCHES="
@@ -48,8 +53,31 @@ c_s125:### 12.5:k_czx
 c_s126:### 12.6:k_blocking
 c_s127:### 12.7:
 "
-echo "$SKETCHES" | while IFS=: read -r job heading fixture; do
-  [ -n "$job" ] || continue
+sketch_rows=()
+sketch_twins=0
+while IFS= read -r sketch_row; do
+  [ -n "$sketch_row" ] || continue
+  sketch_rows[${#sketch_rows[@]}]="$sketch_row"
+done <<SKETCHTABLE
+$SKETCHES
+SKETCHTABLE
+[ "${#sketch_rows[@]}" -gt 0 ] || {
+  echo "FAIL: the printed-example table is empty" >&2
+  exit 1
+}
+# The contract may not print an example this table does not bind, and this
+# table may not bind one the contract does not print.
+fenced=$(grep -c '^```tex$' "$CONTRACT")
+[ "$fenced" -eq "${#sketch_rows[@]}" ] || {
+  echo "FAIL: the contract prints $fenced examples and this gate binds \
+${#sketch_rows[@]}" >&2
+  exit 1
+}
+
+for sketch_row in "${sketch_rows[@]}"; do
+  IFS=: read -r job heading fixture <<SKETCHROW
+$sketch_row
+SKETCHROW
   awk -v heading="$heading" '
     index($0, heading) == 1 { s = 1 }
     s && $0 == "```tex" { f = 1; next }
@@ -72,7 +100,11 @@ echo "$SKETCHES" | while IFS=: read -r job heading fixture; do
     cat "$WORK/$job.body"
     printf '%s\n' '\end{document}'
   } >"$WORK/$job.tex"
-  [ -n "$fixture" ] || continue
+  if [ -n "$fixture" ]; then
+    sketch_twins=$((sketch_twins + 1))
+  else
+    continue
+  fi
   awk 'index($0,"\\tenkzkernel")==1{f=1;next}
        index($0,"\\end{document}")==1{f=0} f' \
     "$KERNEL/$fixture.tex" >"$WORK/$job.fixture"
@@ -80,28 +112,21 @@ echo "$SKETCHES" | while IFS=: read -r job heading fixture; do
     echo "FAIL: $fixture.tex is no longer the '$heading' example verbatim" >&2
     exit 1
   fi
-done || exit 1
+done
 
 for tex in "$WORK"/*.tex; do
   compile "$(basename "$tex")"
 done
 
-sketch_jobs=$(echo "$SKETCHES" | cut -d: -f1 | grep -c .)
-[ "$sketch_jobs" -eq 8 ] || {
-  echo "FAIL: the contract carries $sketch_jobs printed examples, expected 8" >&2
-  exit 1
-}
-[ "$(grep -c '^```tex$' "$CONTRACT")" -eq 8 ] || {
-  echo "FAIL: a printed contract example joined or left the document unbound" >&2
-  exit 1
-}
-for job in c_sugar9 c_s121 c_s122 c_s123 c_s124 c_s125 c_s126 c_s127; do
+for sketch_row in "${sketch_rows[@]}"; do
+  job=${sketch_row%%:*}
   python3 "$REPO/scripts/tenkz_audit.py" "$WORK/$job.tnlog" >/dev/null || {
     echo "FAIL: a printed contract example did not audit clean: $job" >&2
     exit 1
   }
 done
-echo "PASS: 8 printed contract examples compile and audit, 6 of them a fixture verbatim"
+echo "PASS: ${#sketch_rows[@]} printed contract examples compile and audit,\
+ $sketch_twins of them a fixture verbatim"
 
 atom_count=$(grep -c '^atom|' "$WORK/r_explicit_at.tnlog" || true)
 [ "$atom_count" -eq 2 ] || {

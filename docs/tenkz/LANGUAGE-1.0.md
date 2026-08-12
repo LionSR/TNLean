@@ -1186,19 +1186,20 @@ no route can do is stand in for a class the string states itself.
 \end{tenkzeq}
 ```
 
-The second panel names no crossing and needs to name none: the route crosses
-exactly those legs that leave the selection northward, each once, in hull
-order, and each derived crossing enters the model with every field a declared
-one carries. Order is one of those fields, and it is the one thing derivation
-cannot supply, so the panel states it once as the string's habit rather than
-three times as three declarations. A derived crossing set is still a set of
-crossings, and no crossing may be left ambiguous (§5). The first panel needs
-no habit because its route meets nothing: a string passing south of legs that
-all point north crosses none of them, which is the true answer to the claim it
-makes. The reach rule lengthens all three legs past the string, so the
-crossings the author claimed all exist, which is the defect this sketch used
-to carry, where two of the three legs stopped short and the crossing police
-had nothing to refuse.
+The second panel carries no `cross=` and needs none: the route crosses exactly
+those legs that leave the selection northward, each once, in hull order, and
+each derived crossing enters the model with every field a declared one
+carries. Order is one of those fields and the one thing derivation cannot
+supply, which is what the `crossing=` habit is for. So the panel names no
+crossing and states the order of all three at once, where three `cross=`
+exceptions would have named each crossing to say the same thing three times. A
+derived crossing set is still a set of crossings, and no crossing may be left
+ambiguous (§5). The first panel states neither, because its route meets
+nothing: a string passing south of legs that all point north crosses none of
+them, which is the true answer to the claim it makes. The reach rule lengthens
+all three legs past the string, so the crossings the author claimed all exist,
+which is the defect this sketch used to carry, where two of the three legs
+stopped short and the crossing police had nothing to refuse.
 
 ### 12.4 Two-shift MPU (`rmp-ii-mpu-two-shift`)
 
