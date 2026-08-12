@@ -289,11 +289,13 @@ WRITE_CALL = re.compile(
 ALLOCATED_STREAM = re.compile(r"\\(?:newwrite|iow_new:N)\s*(\\[A-Za-z@_:]+)")
 # A control sequence the same file also redefines is no longer the stream it
 # was allocated as: `\newwrite\out \def\out{18} \write\out{...}` reaches the
-# shell through a name the allocation vouched for. Reading order is beyond a
+# shell through a name the allocation vouched for, and so does `\chardef\out=18`
+# and every other primitive that binds a constant. Reading order is beyond a
 # text scan, so an allocated name that is redefined anywhere in the file loses
 # the allocation ground and is refused with every other unreadable stream.
 REDEFINED_NAME = re.compile(
-    r"\\(?:def|edef|gdef|xdef|let|cs_set[a-z_]*:Npn|cs_new[a-z_]*:Npn)"
+    r"\\(?:def|edef|gdef|xdef|let|chardef|mathchardef|countdef|dimendef"
+    r"|toksdef|skipdef|muskipdef|cs_set[a-z_]*:Npn|cs_new[a-z_]*:Npn)"
     r"\s*(\\[A-Za-z@_:]+)"
 )
 # Web2C reads a file name whose first character is a bar as a command to run,
@@ -412,8 +414,8 @@ ABSOLUTE_PATH_HEAD = r"(?:/|[A-Za-z]:[\\/])"
 ABSOLUTE_LOAD = re.compile(
     r"\\(?:input|include|usepackage|RequirePackageWithOptions|RequirePackage"
     r"|InputIfFileExists|IfFileExists|includegraphics|file_input:n"
-    r"|file_if_exist:nTF)(?:\s*\*)?"
-    rf"\s*(?:\[[^]]*\]\s*)?\{{\s*\"?{ABSOLUTE_PATH_HEAD}"
+    r"|file_if_exist:nTF|graphicspath)(?:\s*\*)?"
+    rf"\s*(?:\[[^]]*\]\s*)?\{{\s*\{{?\s*\"?{ABSOLUTE_PATH_HEAD}"
     rf"|\\input\s*\"?{ABSOLUTE_PATH_HEAD}"
     rf"|\\open(?:in|out)\s*{STREAM_OPERAND}\"?{ABSOLUTE_PATH_HEAD}"
 )
