@@ -44,6 +44,11 @@ python3 scripts/tenkz_rmp.py compare --all \
   --source-root References/RMP_TIKZ_SOURCE_CODE
 ```
 
+Every command works inside a scratch tree that is removed on exit.  Set
+`TENKZ_RMP_WORK_ROOT` to a new or empty directory to keep the tree instead,
+with each target's compile transcript, event log, and PDF; continuous
+integration does this so a failing run's evidence survives for upload.
+
 Every command first runs the corpus-wide physical-dimension ownership check,
 even when `check --id` selects one target.  Case dimensions are classified as
 metric, projection/frame, route/string, or composition/layout and ratcheted in
