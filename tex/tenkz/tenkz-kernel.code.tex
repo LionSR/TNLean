@@ -15698,6 +15698,9 @@
 \tl_new:N \l__tenkz_kernel_lab_via_tl
 \tl_new:N \l__tenkz_kernel_lab_node_tl
 \tl_new:N \l__tenkz_kernel_lab_t_tl
+\tl_new:N \l__tenkz_kernel_lab_owner_tl
+\tl_new:N \l__tenkz_kernel_lab_leg_row_tl
+\tl_new:N \l__tenkz_kernel_lab_leg_col_tl
 \tl_new:N \l__tenkz_kernel_lab_top_tl
 \tl_new:N \l__tenkz_kernel_lab_left_tl
 \tl_new:N \l__tenkz_kernel_lab_rows_tl
@@ -15754,6 +15757,19 @@
           {
             \__tenkz_kernel_r_label_mark:VV
               \l__tenkz_kernel_lab_host_tl \l__tenkz_kernel_lab_face_tl
+            % the leg leaves one spanned cell of its host and runs the
+            % length of that cell's lane, exactly as a port on the same
+            % face would, so it takes the station standing in the lane too
+            \tl_set_eq:NN \l__tenkz_kernel_lab_face_tl
+              \l__tenkz_kernel_r_face_side_tl
+            \__tenkz_kernel_r_label_station_lanes:V
+              \l__tenkz_kernel_lab_host_tl
+            \__tenkz_model_get:nnN {#1} {row} \l__tenkz_kernel_lab_leg_row_tl
+            \__tenkz_model_get:nnN {#1} {col} \l__tenkz_kernel_lab_leg_col_tl
+            \bool_lazy_and:nnT
+              { ! \quark_if_no_value_p:N \l__tenkz_kernel_lab_leg_row_tl }
+              { ! \quark_if_no_value_p:N \l__tenkz_kernel_lab_leg_col_tl }
+              { \__tenkz_kernel_r_label_leg_lane: }
           }
       }
     % A transverse plane closure keeps its two ends as a host and the axis
@@ -15818,8 +15834,19 @@
                 \__tenkz_kernel_r_label_next_cell:nnn {#1} {#3} {#4}
                 \bool_if:NTF \l__tenkz_kernel_lab_far_bool
                   {
-                    \__tenkz_kernel_r_label_mark_toward:V
+                    % A wire whose far cell belongs to the same atom runs
+                    % under one glyph and leaves it by no face at all.
+                    \__tenkz_kernel_any_cell_claim:eeN
+                      { \tl_use:N \l__tenkz_kernel_lab_far_row_tl }
+                      { \tl_use:N \l__tenkz_kernel_lab_far_col_tl }
+                      \l__tenkz_kernel_lab_owner_tl
+                    \str_if_eq:VVF
+                      \l__tenkz_kernel_lab_owner_tl
                       \l__tenkz_kernel_lab_atom_tl
+                      {
+                        \__tenkz_kernel_r_label_mark_toward:V
+                          \l__tenkz_kernel_lab_atom_tl
+                      }
                   }
                   {
                     \__tenkz_kernel_r_label_open_face:Vnn
@@ -16050,6 +16077,52 @@
       { \__tenkz_kernel_r_label_mark_side:nn {#1} {e} }
   }
 \cs_generate_variant:Nn \__tenkz_kernel_r_label_col_lane:nn { Vn }
+% The same reading for a policy leg, which names the spanned cell it leaves
+% outright instead of naming a slot of one.
+\cs_new_protected:Npn \__tenkz_kernel_r_label_leg_lane:
+  {
+    \str_case:Vn \l__tenkz_kernel_lab_face_tl
+      {
+        {e} { \__tenkz_kernel_r_label_lane_row: }
+        {w} { \__tenkz_kernel_r_label_lane_row: }
+        {n} { \__tenkz_kernel_r_label_lane_col: }
+        {s} { \__tenkz_kernel_r_label_lane_col: }
+      }
+  }
+\cs_new_protected:Npn \__tenkz_kernel_r_label_lane_row:
+  {
+    \int_compare:nNnT
+      { \l__tenkz_kernel_lab_leg_row_tl }
+      = { \l__tenkz_kernel_lab_nlane_tl }
+      {
+        \__tenkz_kernel_r_label_mark_side:Vn
+          \l__tenkz_kernel_lab_host_tl {n}
+      }
+    \int_compare:nNnT
+      { \l__tenkz_kernel_lab_leg_row_tl }
+      = { \l__tenkz_kernel_lab_slane_tl }
+      {
+        \__tenkz_kernel_r_label_mark_side:Vn
+          \l__tenkz_kernel_lab_host_tl {s}
+      }
+  }
+\cs_new_protected:Npn \__tenkz_kernel_r_label_lane_col:
+  {
+    \int_compare:nNnT
+      { \l__tenkz_kernel_lab_leg_col_tl }
+      = { \l__tenkz_kernel_lab_wlane_tl }
+      {
+        \__tenkz_kernel_r_label_mark_side:Vn
+          \l__tenkz_kernel_lab_host_tl {w}
+      }
+    \int_compare:nNnT
+      { \l__tenkz_kernel_lab_leg_col_tl }
+      = { \l__tenkz_kernel_lab_elane_tl }
+      {
+        \__tenkz_kernel_r_label_mark_side:Vn
+          \l__tenkz_kernel_lab_host_tl {e}
+      }
+  }
 % A wire with one authored end and one open end keeps the open side as a
 % word rather than as a node, so no cell says where the ink goes.  The four
 % compass words say it outright: the stub leaves the authored end by that
@@ -16210,7 +16283,14 @@
         \__tenkz_model_get:nnN {#1} {kind} \l__tenkz_kernel_lab_node_tl
         \str_if_eq:VnT \l__tenkz_kernel_lab_node_tl {string}
           { \__tenkz_model_get:nnN {#1} {via} \l__tenkz_kernel_lab_via_tl }
-        \quark_if_no_value:NT \l__tenkz_kernel_lab_via_tl
+        % the cell reading stands down on a circle for a carrier exactly as
+        % it does for an endpoint, and for the same reason
+        \bool_lazy_and:nnT
+          { \quark_if_no_value_p:N \l__tenkz_kernel_lab_via_tl }
+          {
+            ! \str_if_eq_p:ee
+              { \__tenkz_kernel_r_frame_word: } {circle}
+          }
           { \__tenkz_kernel_r_label_carrier_run:nn {#1} {#2} }
       }
       {
@@ -16225,10 +16305,55 @@
           }
       }
   }
+% A carrier with only one model end runs off the picture by the word its
+% open side names, so the bead's two faces are that word and its opposite.
+\cs_new_protected:Npn \__tenkz_kernel_r_label_carrier_open:nnn #1#2#3
+  {
+    \str_if_eq:nnTF {#3} {to}
+      { \__tenkz_model_get:nnN {#1} {to-open} \l__tenkz_kernel_lab_face_tl }
+      { \__tenkz_model_get:nnN {#1} {from-open} \l__tenkz_kernel_lab_face_tl }
+    \quark_if_no_value:NF \l__tenkz_kernel_lab_face_tl
+      {
+        \str_case:Vn \l__tenkz_kernel_lab_face_tl
+          {
+            {n} { \__tenkz_kernel_r_label_carrier_axis:nnn {#2} {#3} {n} }
+            {e} { \__tenkz_kernel_r_label_carrier_axis:nnn {#2} {#3} {e} }
+            {s} { \__tenkz_kernel_r_label_carrier_axis:nnn {#2} {#3} {s} }
+            {w} { \__tenkz_kernel_r_label_carrier_axis:nnn {#2} {#3} {w} }
+          }
+      }
+  }
+% #3 says which end is open, so it says whether the word points along the
+% route or back down it, and #4 is the word.
+\cs_new_protected:Npn \__tenkz_kernel_r_label_carrier_axis:nnn #1#2#3
+  {
+    \str_case:nn {#3}
+      {
+        {n} { \__tenkz_kernel_r_label_carrier_pair:nnnn {#1} {#2} {n} {s} }
+        {s} { \__tenkz_kernel_r_label_carrier_pair:nnnn {#1} {#2} {s} {n} }
+        {e} { \__tenkz_kernel_r_label_carrier_pair:nnnn {#1} {#2} {e} {w} }
+        {w} { \__tenkz_kernel_r_label_carrier_pair:nnnn {#1} {#2} {w} {e} }
+      }
+  }
+\cs_new_protected:Npn \__tenkz_kernel_r_label_carrier_pair:nnnn #1#2#3#4
+  {
+    \str_if_eq:nnTF {#2} {to}
+      { \__tenkz_kernel_r_label_bead_mark:nnn {#1} {#3} {#4} }
+      { \__tenkz_kernel_r_label_bead_mark:nnn {#1} {#4} {#3} }
+  }
 \cs_new_protected:Npn \__tenkz_kernel_r_label_carrier_run:nn #1#2
   {
     \__tenkz_model_get:nnN {#1} {from} \l__tenkz_kernel_lab_from_tl
     \__tenkz_model_get:nnN {#1} {to} \l__tenkz_kernel_lab_to_tl
+    % one model end and one open side: the word says the axis
+    \bool_lazy_and:nnT
+      { ! \quark_if_no_value_p:N \l__tenkz_kernel_lab_from_tl }
+      { \quark_if_no_value_p:N \l__tenkz_kernel_lab_to_tl }
+      { \__tenkz_kernel_r_label_carrier_open:nnn {#1} {#2} {to} }
+    \bool_lazy_and:nnT
+      { \quark_if_no_value_p:N \l__tenkz_kernel_lab_from_tl }
+      { ! \quark_if_no_value_p:N \l__tenkz_kernel_lab_to_tl }
+      { \__tenkz_kernel_r_label_carrier_open:nnn {#1} {#2} {from} }
     \bool_lazy_and:nnT
       { ! \quark_if_no_value_p:N \l__tenkz_kernel_lab_from_tl }
       { ! \quark_if_no_value_p:N \l__tenkz_kernel_lab_to_tl }

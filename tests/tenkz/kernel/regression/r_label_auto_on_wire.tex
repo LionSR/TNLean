@@ -45,6 +45,11 @@
             \str_if_eq:VnF #2 {e}
               { \errmessage{a~leg~carrier~left~the~face~it~grows~from~free} }
           }
+        {J}
+          {
+            \str_if_eq:VnF #2 {e}
+              { \errmessage{a~one-ended~carrier~reserved~no~face~at~all} }
+          }
       }
       { \errmessage{unexpected~label~in~on-wire~fixture} }
   }
@@ -87,8 +92,15 @@
   \tn{} & \tn{}
   \tn[at=on leg-s-1-1 0.5, skin=dot]{H}
 \end{tenkz}
+% A carrier with one authored end and one open side runs off the picture by
+% the word that side names, so the bead's north and south both carry it.
+\begin{tenkz}[lattice={1x1}, bonds=none]
+  \tn[at=(1,1), name=Z]{}
+  \tnwire[name=WZ]{Z}{open s}
+  \tn[at=on WZ 0.5, skin=dot]{J}
+\end{tenkz}
 \ExplSyntaxOn
-\int_compare:nNnF { \l__tenkz_test_side_count_int } = {5}
-  { \errmessage{on-wire~fixture~did~not~station~five~labels} }
+\int_compare:nNnF { \l__tenkz_test_side_count_int } = {6}
+  { \errmessage{on-wire~fixture~did~not~station~six~labels} }
 \ExplSyntaxOff
 \end{document}

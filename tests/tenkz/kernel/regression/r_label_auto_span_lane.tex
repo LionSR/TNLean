@@ -41,6 +41,11 @@
             \str_if_eq:VnF #2 {e}
               { \errmessage{an~odd~width~reserved~a~column~of~its~own~span} }
           }
+        {I}
+          {
+            \str_if_eq:VnF #2 {e}
+              { \errmessage{a~wire~inside~one~atom~reserved~an~outer~face} }
+          }
       }
       { \errmessage{unexpected~label~in~span-lane~fixture} }
   }
@@ -90,8 +95,20 @@
   \tnwire{(2,1)}{(3,1)}
   \tnwire{(2,3)}{(3,3)}
 \end{tenkz}
+% A wire whose two cells belong to the same atom runs under one glyph and
+% leaves it by no face, so east stays free once the legs take north and
+% south.  Reading its cells as a departure would reserve east and west and
+% drive the station back onto the south leg.
+\begin{tenkz}[lattice={3x3}, bonds=none]
+  \tn[at=(2,1), wide=2, skin=dot]{I}
+  \tn[at=(1,1)]{}
+  \tn[at=(3,1)]{}
+  \tnwire{(2,1)}{(1,1)}
+  \tnwire{(2,1)}{(3,1)}
+  \tnwire{(2,1)}{(2,2)}
+\end{tenkz}
 \ExplSyntaxOn
-\int_compare:nNnF { \l__tenkz_test_side_count_int } = {4}
-  { \errmessage{span-lane~fixture~did~not~station~four~labels} }
+\int_compare:nNnF { \l__tenkz_test_side_count_int } = {5}
+  { \errmessage{span-lane~fixture~did~not~station~five~labels} }
 \ExplSyntaxOff
 \end{document}
