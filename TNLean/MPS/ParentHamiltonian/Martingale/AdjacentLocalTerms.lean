@@ -41,27 +41,6 @@ variable {d D : ℕ}
 
 /-! ### Open-chain and cyclic coordinate identifications -/
 
-/-- At site \(0\) of an \((L+1)\)-site chain, fixing the final site by
-`restrictLast` is the same coordinate slice as the cyclic restriction.
-
-This coordinate identity realizes the left open-chain ground projection in
-Nachtergaele, arXiv:cond-mat/9410110, eq. (2.4). -/
-theorem restrictLast_eq_cyclicRestrictES_zero {L : ℕ}
-    (v : EuclideanSpace ℂ (Cfg d (L + 1))) (τ : Cfg d (L + 1)) :
-    restrictLast ((WithLp.linearEquiv 2 ℂ (NSiteSpace d (L + 1))) v) (τ (Fin.last L)) =
-      (WithLp.linearEquiv 2 ℂ (NSiteSpace d L))
-        (cyclicRestrictES (d := d) (Fin.pos (0 : Fin (L + 1))) L (0 : Fin (L + 1))
-          τ v) := by
-  ext σ
-  change v.ofLp (Fin.snoc σ (τ (Fin.last L))) = v.ofLp
-    (cyclicCfg (d := d) (Fin.pos (0 : Fin (L + 1))) L (0 : Fin (L + 1)) σ τ)
-  apply congrArg v.ofLp
-  funext k
-  rcases Fin.eq_castSucc_or_eq_last k with ⟨r, rfl⟩ | rfl
-  · have hmod : r.val % (L + 1) = r.val := Nat.mod_eq_of_lt (by omega)
-    simp [cyclicCfg, hmod]
-  · simp [cyclicCfg]
-
 /-- Fixing the sole prefix site of a three-site state by `tailRestrictₗ` is
 exactly `restrictFirst` at that coordinate.
 
@@ -76,31 +55,6 @@ theorem tailRestrictₗ_one_eq_restrictFirst (u : Fin 1 → Fin d)
   rw [Fin.append_left_eq_cons]
   funext k
   exact congrArg (Fin.cons (u 0) σ) (Fin.ext (by simp))
-
-/-- At site \(1\) of an \((L+1)\)-site chain, fixing the first site by
-`restrictFirst` is the same coordinate slice as the cyclic restriction.
-
-This coordinate identity realizes the tail open-chain ground projection in
-Nachtergaele, arXiv:cond-mat/9410110, eq. (2.4). -/
-theorem restrictFirst_eq_cyclicRestrictES_one {L : ℕ} (hL : 0 < L)
-    (v : EuclideanSpace ℂ (Cfg d (L + 1))) (τ : Cfg d (L + 1)) :
-    restrictFirst ((WithLp.linearEquiv 2 ℂ (NSiteSpace d (L + 1))) v) (τ 0) =
-      (WithLp.linearEquiv 2 ℂ (NSiteSpace d L))
-        (cyclicRestrictES (d := d) (Fin.pos (1 : Fin (L + 1))) L (1 : Fin (L + 1))
-          τ v) := by
-  ext σ
-  change v.ofLp (Fin.cons (τ 0) σ) = v.ofLp
-    (cyclicCfg (d := d) (Fin.pos (1 : Fin (L + 1))) L (1 : Fin (L + 1)) σ τ)
-  apply congrArg v.ofLp
-  funext k
-  have hOneNat : 1 % (L + 1) = 1 := Nat.mod_eq_of_lt (Nat.succ_lt_succ hL)
-  rcases Fin.eq_zero_or_eq_succ k with rfl | ⟨r, rfl⟩
-  · simp [cyclicCfg, hOneNat]
-  · have hmod : (r.val + 1 + L) % (L + 1) = r.val := by
-      rw [show r.val + 1 + L = r.val + (L + 1) by omega]
-      rw [Nat.add_mod_right]
-      exact Nat.mod_eq_of_lt (Nat.lt_succ_of_lt r.isLt)
-    simp [cyclicCfg, hOneNat, hmod]
 
 /-! ### Individual three-site kernels -/
 
