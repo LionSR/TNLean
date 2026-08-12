@@ -1055,7 +1055,7 @@ is not the fixed two-axis atom contract of §7.
 | `slot=` | `species=`, which atoms and wires already carry |
 | `up=`, `down=` | `ports=`: the outward physical face is the row's own normal |
 | `conjugate` flag | nothing: duality is the wire's `dir=` (§2.4), and a conjugate overline is label mathematics |
-| `form=cut`, `form=band`, `form=brace-below`, `form=prose`, `\tncut`, `\tnregion`, `\tnprose` | `form=enclosure`, `form=bracket`, or a term of unknown signature (§6, §7) |
+| `form=cut`, `form=band`, `form=brace-above`, `form=brace-below`, `form=prose`, `\tncut`, `\tnregion`, `\tnprose` | `form=enclosure` (with `tint` for what a band shaded), `form=bracket` (whose side is its label's), or a term of unknown signature (§6, §7). The four mark forms left the parser in 0.9 and are refused by name, with their migration, wherever an old document still spells them |
 | `frame=vertical`, `frame=rotate=<deg>`, frame matrices | `flat`, `plane`, `circle`; orientation is a consequence of where a record sits (§4) |
 | `leg <face> of <cell>`, `<compass> outside` | a generated leg is a named record; an open end takes its place from the route (§5) |
 | `(r,c)-(r,c)` cell ranges | `(r,c) .. (r,c)` — a hyphen cannot be told from a generated name |
