@@ -1,0 +1,200 @@
+\documentclass{article}
+
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+\setlength{\emergencystretch}{2em}
+
+\input{command}
+
+\title{Finite-Ring Entropy Corrections for CPSV16 Examples 4.10 and 4.11}
+\author{}
+\date{2026-08-12}
+
+\begin{document}
+\maketitle
+
+\section{Scope}
+
+Examples~4.10 and~4.11 of Cirac--Perez-Garcia--Schuch--Verstraete
+\cite{Cirac2016MPDO_arXiv} are printed at lines~897--924 of
+\path{Papers/1606.00608/MPDO-22-12-17-2.tex}. This note separates the literal
+source statements from two finite-ring corrections. All entropies below use
+base-two logarithms, as do the numerical values printed in Example~4.10.
+
+For a normalized four-spin state, let $S_L$ be the entropy of $L$ consecutive
+spins and set
+\[
+  I_L=S_L+S_{4-L}-S_4.
+\]
+Thus
+\[
+  I_2-I_1=2S_2-S_1-S_3.
+\]
+
+\section{Example 4.10: the correlated bit flip}
+
+\subsection{Printed channel and intended correction}
+
+Each spin consists of a left and a right qubit. The source prints the
+conjugating operator with the left-qubit label in both tensor factors:
+\[
+  \sigma_x^{(n,l)}\otimes\sigma_x^{(n,l)}.
+\]
+This does not describe an operator acting once on each of the two qubits of
+spin~$n$. The network-consistent correction is
+\[
+  U_n=\sigma_x^{(n,l)}\otimes\sigma_x^{(n,r)},
+  \qquad
+  \mathcal E_n(X)=pU_nXU_n+(1-p)X.
+\]
+This correction is evidence-backed rather than merely typographical: at
+$p=1/4$ it reproduces all four entropy values printed immediately after the
+channel. No alternative corrected channel is stated in the bundled source.
+
+\subsection{Exact four-spin calculation at flip probability one quarter}
+
+Start from a periodic ring of four Bell pairs, one on each bond, and apply the
+corrected channel independently at each spin. The reduced density operators
+for one through four consecutive spins have the following nonzero spectra,
+where $a^{[m]}$ denotes an eigenvalue $a$ of multiplicity $m$:
+\begin{align*}
+  \operatorname{spec}(\rho_1)
+    &=\left\{(1/4)^{[4]}\right\},\\
+  \operatorname{spec}(\rho_2)
+    &=\left\{(5/32)^{[4]},(3/32)^{[4]}\right\},\\
+  \operatorname{spec}(\rho_3)
+    &=\left\{(7/64)^{[4]},(3/64)^{[12]}\right\},\\
+  \operatorname{spec}(\rho_4)
+    &=\left\{(41/128)^{[1]},(15/128)^{[4]},
+        (9/128)^{[3]}\right\}.
+\end{align*}
+Their sums are one. Substitution into
+$S(\rho)=-\sum_\lambda\lambda\log_2\lambda$ gives
+\[
+  S_1=2,
+  \qquad
+  S_2\simeq2.9544,
+  \qquad
+  S_3\simeq3.8802,
+  \qquad
+  S_4\simeq2.7839,
+\]
+which are precisely the printed decimal values.
+
+The strict failure of saturation is exact:
+\[
+  I_2-I_1
+  =\frac{1}{16\ln 2}
+    \ln\!\left(\frac{2^{32}7^7}{3^3 5^{20}}\right).
+\]
+Since $\ln 2>0$, positivity reduces to the integer comparison
+\[
+  2^{32}7^7
+  =3537090251849728
+  >2574920654296875
+  =3^3 5^{20}.
+\]
+Hence $I_2>I_1$ at $p=1/4$.
+
+The source also says that $I_2>I_1$ for every $p\ne0,1/2$. This exception
+list omits $p=1$: at $p=1$ every spin is deterministically flipped, so the
+resulting state is related to the initial Bell-pair ring by an on-site unitary
+and equality returns. The certified correction is therefore the explicit
+$p=1/4$ witness above; the printed universal sentence should not be used as a
+formal hypothesis.
+
+\section{Example 4.11: the literal periodic state}
+
+\subsection{Exact finite-ring distribution}
+
+The source defines diagonal two-qubit bond operators with weight matrix
+\[
+  W=\begin{pmatrix}1&1/2\\1/2&1\end{pmatrix}.
+\]
+For a periodic chain of length $N$, the normalized state is the classical
+probability distribution
+\[
+  \mathbb P_N(k_1,\ldots,k_N)
+  =\frac{\prod_{n=1}^N W_{k_n,k_{n+1}}}{Z_N},
+  \qquad
+  k_{N+1}=k_1,
+\]
+where
+\[
+  Z_N=\operatorname{tr}(W^N)=\frac{3^N+1}{2^N}.
+\]
+For any $L<N$, summing the complementary path gives the exact reduced
+probability
+\[
+  \mathbb P_{N,L}(k_1,\ldots,k_L)
+  =\frac{\left(\prod_{n=1}^{L-1}W_{k_n,k_{n+1}}\right)
+      (W^{N-L+1})_{k_L,k_1}}{\operatorname{tr}(W^N)}.
+\]
+This formula includes the periodic closing correction; it is not the marginal
+of an open stationary Markov chain.
+
+At $N=4$, the nonzero spectra are
+\begin{align*}
+  \operatorname{spec}(\rho_1)
+    &=\left\{(1/2)^{[2]}\right\},\\
+  \operatorname{spec}(\rho_2)
+    &=\left\{(14/41)^{[2]},(13/82)^{[2]}\right\},\\
+  \operatorname{spec}(\rho_3)
+    &=\left\{(10/41)^{[2]},(4/41)^{[4]},
+        (5/82)^{[2]}\right\},\\
+  \operatorname{spec}(\rho_4)
+    &=\left\{(8/41)^{[2]},(2/41)^{[12]},
+        (1/82)^{[2]}\right\}.
+\end{align*}
+They give
+\[
+  I_2-I_1
+  =\frac{1}{82\ln 2}
+    \ln\!\left(\frac{41^{82}5^{50}}{2^{48}13^{52}7^{112}}\right).
+\]
+The exact integer inequality
+\[
+  41^{82}5^{50}>2^{48}13^{52}7^{112}
+\]
+therefore proves $I_2>I_1$. Numerically the difference is approximately
+$0.0069396647$ bits, but the integer comparison is the proof. Thus the literal
+four-site periodic state does not saturate the area law, contrary to the
+printed claim.
+
+\subsection{Normalization and likely source of the discrepancy}
+
+A global normalization cannot repair the claim. Replacing $W$ by $cW$ for
+$c>0$ multiplies every unnormalized length-$N$ configuration weight and $Z_N$
+by the same factor $c^N$. The normalized state, all reduced spectra, and
+$I_2-I_1$ are unchanged. In particular, replacing $W$ by $(2/3)W$ does not
+restore saturation.
+
+There is no statement in the cited source identifying the reason for the
+failed finite-ring claim. A likely explanation is that the periodic state was
+confused with the open or infinite stationary Markov chain having transition
+matrix $(2/3)W$ and uniform stationary distribution. For that different
+process, the entropy of an open block is
+\[
+  H_L=1+(L-1)h_2(1/3),
+\]
+so it is affine in $L$. The periodic closing factor
+$(W^{N-L+1})_{k_L,k_1}$ is absent there. This Markov-chain interpretation is an
+explanation suggested by the calculation, not a fact asserted by the paper.
+
+\section{Formalization boundary}
+
+Example~4.10 supplies an exact corrected witness at $p=1/4$, but the repeated
+left-qubit label and the incomplete universal exception list must not be
+formalized as printed. Example~4.11 supplies an exact counterexample to its
+own printed finite-chain saturation claim. Neither result is marked ready for
+formalization here: the explicit spectral and logarithmic arithmetic remains
+to be encoded and checked independently in the proof assistant.
+
+Example~4.12 is outside the entropy correction in this note. Its statement,
+dependencies, and separate normalization question are unchanged.
+
+\bibliographystyle{plain}
+\bibliography{references}
+
+\end{document}

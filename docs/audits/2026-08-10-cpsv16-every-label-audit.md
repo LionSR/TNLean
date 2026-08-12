@@ -96,8 +96,8 @@ is unlabelled and is recorded here and in the maintained coverage crosswalk.
 | Source result | Source line | Role | Disposition |
 |---|---:|---|---|
 | Example 3.4, `Ex:ZCL` | 453 | CID does not imply a renormalization fixed point | **Complete** in Chapter 15: `def:cpsv16_example_34_tensor`, `thm:cpsv16_example_34_mpv`, `thm:cpsv16_example_34_cid`, and `thm:cpsv16_example_34_not_rfp` |
-| Example 4.10, `ExZCLnoSAL` | 898 | ZCL does not imply SAL | Tracked with Examples 4.11--4.12 by active issue #5919; Blueprint node `thm:cpsv_examples410_412_status` |
-| Example 4.11, `ExSALnoZCL` | 908 | SAL does not imply ZCL | Tracked by issue #5919; the printed SAL claim must be checked rather than assumed |
+| Example 4.10, `ExZCLnoSAL` | 898 | ZCL does not imply SAL | Source reconciled in `docs/paper-gaps/cpsv16_examples_4_10_4_11_entropy.tex`: the left-right flip gives an exact $p=1/4$ witness; formalization remains pending under issue #5919 |
+| Example 4.11, `ExSALnoZCL` | 908 | SAL does not imply ZCL | Printed SAL claim refuted in `docs/paper-gaps/cpsv16_examples_4_10_4_11_entropy.tex` by exact four-site spectra; formalization remains pending under issue #5919 |
 | Example 4.12, unlabelled | 929 | The toric-code boundary tensor is claimed to be SAL, ZCL, and RFP, but not of the simple GSNNCH form | Tracked by issue #5919; the MPO formula is explicit, while the trace-preserving maps needed for the printed RFP assertion remain to be constructed |
 
 ## Appendix D omissions and corrections
