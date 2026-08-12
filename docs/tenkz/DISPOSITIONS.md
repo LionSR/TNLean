@@ -92,7 +92,7 @@ separate public-surface occurrence and therefore appears separately.
 | `ch21_mpdo_rfp_simple_local_primitivity_active_trace_matrix.tex` | L189 `tenkz` → `P-grid` | — | — |
 | `ch21_mpdo_rfp_simple_local_refinement_channels_physical_coordinates.tex` | L326, 332, 338, 352, 363, 369 `tenkz` → `P-grid` | — | — |
 | `ch21_mpdo_rfp_simple_local_structure_capstone.tex` | L363, 882, 886, 892, 897 `tenkz` → `P-grid` | — | — |
-| `ch23_algebraic_ft_foundations.tex` | L48, 52, 455, 459, 660, 664, 677, 681, 724, 728, 732, 741, 745 `tenkz` → `P-grid` | — | — |
+| `ch23_algebraic_ft_foundations.tex` | L48, 52, 494, 498, 699, 703, 716, 720, 763, 767, 771, 780, 784 `tenkz` → `P-grid` | — | — |
 | `ch24_peps_ft.tex` | L27, 57, 93 `tenkz` → `P-grid` | — | — |
 | `ch24_peps_ft_balanced_edge_scalars.tex` | L21 `tenkz` → `P-grid` | — | — |
 | `ch24_peps_ft_edge_kernel_gauges_absorption_scalar_comparison.tex` | L84, 104, 294, 300, 312, 324, 577, 596 `tenkz` → `P-grid` | — | — |

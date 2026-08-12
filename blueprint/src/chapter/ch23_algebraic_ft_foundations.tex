@@ -341,6 +341,45 @@ boundary conventions.
     (\ref{eq:chain_cyclic_block_average}).
 \end{proof}
 
+% Scope restriction (supplied OBC representation): PGVWC07 Theorem 3 also
+% obtains this input from purity via its OBC representation theorem. See
+% docs/paper-gaps/pgvwc07_site_independent_scope.tex.
+\begin{theorem}[Conditional site-independent matrices at fixed length]
+    \label{thm:pgvwc07_site_independent_matrices}
+    \lean{OBCChainTensor.pgvwc07_site_independent_matrices,
+        OBCChainTensor.exists_pgvwc07_site_independent_tensor}
+    \leanok
+    \uses{def:varying_bond_obc_ti, def:varying_bond_obc_zero_pad,
+        def:chain_cyclic_block_tensor}
+    This is the cyclic-block construction in
+    \cite[Theorem~3]{PerezGarcia2007Matrix}, conditional on its open-chain
+    input. Let $N\geq1$. Suppose a translation-invariant state on the $N$-site
+    ring has a varying-bond open-chain representation whose virtual dimensions are
+    at most $D$. Then it has a site-independent trace-MPS representation of
+    bond dimension $ND$ with the same length-$N$ coefficients.
+    The constructed tensor depends on $N$, and the equality is asserted only
+    at this ring length.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:chain_coeff_sum_cyclic, thm:varying_bond_obc_zero_pad_coeff,
+        thm:chain_cyclic_block_average}
+    The cyclic rotation of the padded square chain satisfies
+    \begin{align}
+        c_{(\widetilde A)^{(k)},\sigma}
+        &=c_A(\tau_{-k}\sigma),
+        \label{eq:pgvwc07_zero_pad_rotation}
+    \end{align}
+    where $(\tau_s\sigma)_j=\sigma_{j+s}$. To prove
+    (\ref{eq:pgvwc07_zero_pad_rotation}), expand both square-chain traces as
+    cyclic virtual-path sums and reindex the virtual path by the same rotation.
+    The inverse shift appears when the rotated matrix product is restored to
+    the distinguished open cut. Translation invariance makes every term in
+    the cyclic average equal to $c_A(\sigma)$, so the factor $1/N$ cancels the
+    sum of $N$ identical terms.
+\end{proof}
+
 \begin{lemma}[Cyclic gauge equivalence is an equivalence relation]
     \label{lem:chain_gauge_equiv_equivalence}
     \lean{MPSChainTensor.GaugeEquiv.refl}
