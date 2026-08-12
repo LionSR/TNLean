@@ -154,21 +154,8 @@ private theorem replaceWindow_three_replaceWindow_two_right
       simpa [Nat.mod_eq_of_lt i.isLt] using hk'
     subst k
     have hshift_eq :
-        (i.val + N - (cyclicForwardSite i 1).val) % N = N - 1 := by
-      by_cases hi : i.val + 1 < N
-      · have hval : (cyclicForwardSite i 1).val = i.val + 1 := by
-          simp [cyclicForwardSite, Nat.mod_eq_of_lt hi]
-        rw [hval]
-        have hsub : i.val + N - (i.val + 1) = N - 1 := by omega
-        rw [hsub]
-        exact Nat.mod_eq_of_lt (by omega)
-      · have hiN : i.val + 1 = N := by omega
-        have hval : (cyclicForwardSite i 1).val = 0 := by
-          simp [cyclicForwardSite, hiN]
-        rw [hval]
-        have hsub : i.val + N - 0 = (N - 1) + N := by omega
-        rw [hsub, Nat.add_mod_right]
-        exact Nat.mod_eq_of_lt (by omega)
+        (i.val + N - (cyclicForwardSite i 1).val) % N = N - 1 :=
+      cyclicForwardSite_one_offset i
     have hshift : ¬((i.val + N - (cyclicForwardSite i 1).val) % N < 2) := by
       rw [hshift_eq]
       omega
