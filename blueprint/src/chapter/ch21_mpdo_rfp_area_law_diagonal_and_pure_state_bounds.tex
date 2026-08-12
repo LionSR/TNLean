@@ -413,13 +413,12 @@
     \end{align}
 \end{theorem}
 \begin{proof}\leanok
-    The range of $\mathcal R_\rho$ is the span of the blocks. If
-    $\rho=\sum_{t=1}^{r}A_t\otimes B_t$, every block belongs to
-    $\spn\{B_1,\ldots,B_r\}$, so the range dimension is at most
-    $r$. Conversely, choose a basis $B_1,\ldots,B_s$ of the block span and
-    expand each block as $\rho_{ij}=\sum_t(A_t)_{ij}B_t$. This gives
-    $\rho=\sum_{t=1}^{s}A_t\otimes B_t$, where
-    $s=\dim\range\mathcal R_\rho$.
+    The operator-Schmidt rank is defined as the dimension of the range of
+    $\mathcal R_\rho$. The range of $\mathcal R_\rho$ is the span of the
+    operator blocks $\rho_{ij}$, since $\mathcal R_\rho$ is the linear
+    combination map sending a coefficient matrix $X$ to
+    $\sum_{i,j}X_{ij}\rho_{ij}$. Substituting this range--span identity into
+    the definition gives the displayed chain of equalities.
 \end{proof}
 
 \begin{theorem}[Operator-Schmidt rank under local isometries]
