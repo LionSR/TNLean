@@ -229,32 +229,6 @@ def load_registry() -> list[Entry]:
     return entries
 
 
-def tombstones(entries: list[Entry]) -> list[dict[str, str]]:
-    """The registry's record of every deleted spelling and its migration.
-
-    This is the one list: the parser installs its refusals from the same rows,
-    so a consumer that reads this cannot disagree with what a compile says.
-    """
-    rows: list[dict[str, str]] = []
-    for entry in entries:
-        if entry.kind != "tombstone":
-            continue
-        scope, spelling, migration = entry.fields
-        key, _separator, value = spelling.partition("=")
-        rows.append(
-            {
-                "scope": scope,
-                "spelling": spelling,
-                # a bare spelling is a key that no longer exists, so it leaves
-                # `value' empty and the parser has no branch to refuse it from
-                "key": key.strip(),
-                "value": value.strip(),
-                "migration": migration,
-            }
-        )
-    return rows
-
-
 def _declared_api() -> tuple[set[str], set[str]]:
     commands: set[str] = {"tnset"}
     environments: set[str] = set()
@@ -354,9 +328,10 @@ def _kernel_leaf_keys_from_texts(texts) -> set[tuple[str, str]]:
     return leaves
 
 
-# Taken verbatim from the tombstone ledger landed for issue #6187 (#6193),
-# so that whichever of the two changes lands second drops an identical copy
-# rather than reconciling two readings of the same rule.
+# Taken verbatim from the tombstone ledger of issue #6187 (#6193), at that
+# branch's 4dcc794, so that whichever of the two changes lands second drops an
+# identical copy rather than reconciling two readings of the same rule.
+
 # A word struck from a live key's alphabet stays installed as a branch that
 # refuses the spelling and states the migration.  Reading those branches is
 # what lets the language check hold the registry's tombstone ledger and the
@@ -393,24 +368,73 @@ def _kernel_tombstones() -> dict[tuple[str, str], str]:
     )
 
 
+def tombstone_rows(entries: list[Entry]) -> list[tuple[str, str, str]]:
+    """The ledger's rows as scope, spelling, and migration a reader is shown.
+
+    The registry writes a multi-word key the parser's way, with `~` for the
+    space, and wraps a long migration to keep its line short.  Neither is
+    visible in a document, so both are read out here rather than at each of
+    the three places that consume a row: the check, the lint, and a reader.
+    """
+    return [
+        (entry.fields[0], _sentence(entry.fields[1]), _sentence(entry.fields[2]))
+        for entry in entries
+        if entry.kind == "tombstone"
+    ]
+
+
 def tombstone_errors(
-    rows: list[tuple[str, ...]],
+    rows: list[tuple[str, str, str]],
     key_vocabulary: dict[tuple[str, str], tuple[str, str]],
+    commands: set[str],
     kernel: dict[tuple[str, str], str],
 ) -> list[str]:
     """Hold the tombstone ledger, the live vocabulary, and the parser to one list.
 
-    A `key=value` row is a word struck from a live alphabet: the key must
-    still exist, the word must not, and the parser must refuse the spelling
-    with the migration the ledger states.  A bare row is a key that no longer
-    exists, which the parser cannot branch on, so only the lint reads it and
-    the check is that the key really is gone.
+    A row spelled `key=value` is a word struck from a live alphabet: the key
+    must still exist, the word must not, and the parser must refuse the
+    spelling with the migration the ledger states.  A bare row is a key that
+    no longer exists and a row spelled with a leading backslash is a command
+    that no longer exists; neither leaves anything for the parser to branch
+    on, so the check is that the spelling really is gone and only the lint
+    reads the row.
+
+    Rows arrive from `tombstone_rows`, which has already read `~` and any
+    wrapping out of them, so every comparison here is against the spelling
+    and the sentence a document and a reader actually carry.
     """
     errors: list[str] = []
     recorded: dict[tuple[str, str], str] = {}
+    scopes = {scope for scope, _name in key_vocabulary}
+    seen: set[tuple[str, str]] = set()
     for scope, spelling, migration in rows:
-        if not migration.strip():
+        # Two rows may differ as written and mean one spelling, which the
+        # rest of this function would silently collapse to whichever came
+        # last.
+        if (scope, spelling) in seen:
+            errors.append(f"tombstone {scope}:{spelling} is recorded twice")
+        seen.add((scope, spelling))
+        if not migration:
             errors.append(f"tombstone {scope}:{spelling} names no migration")
+        if spelling.startswith("\\"):
+            # A dead command has no key scope to sit in, so it says so; the
+            # spelling would otherwise be read as a key and never checked.
+            if scope != "command":
+                errors.append(
+                    f"tombstone {scope}:{spelling} is a command and takes "
+                    "the scope 'command'"
+                )
+            elif spelling.removeprefix("\\") in commands:
+                errors.append(
+                    f"tombstone {scope}:{spelling} names a command the "
+                    "registry still carries"
+                )
+            continue
+        if scope not in scopes:
+            errors.append(
+                f"tombstone {scope}:{spelling} names no registered scope"
+            )
+            continue
         key, _separator, value = spelling.partition("=")
         key, value = key.strip(), value.strip()
         if not value:
@@ -597,9 +621,6 @@ def check(entries: list[Entry]) -> list[str]:
                 )
                 if value_error is not None:
                     errors.append(f"alias row {scope}:{name} {value_error}")
-    errors.extend(
-        tombstone_errors(by_kind["tombstone"], key_vocabulary, _kernel_tombstones())
-    )
     for scope, spelling, replacement, meaning in by_kind["alias"]:
         try:
             parse_value_alias_sunset(meaning)
@@ -628,6 +649,14 @@ def check(entries: list[Entry]) -> list[str]:
             errors.append(
                 f"value alias {scope}:{spelling} {value_error}"
             )
+    errors.extend(
+        tombstone_errors(
+            tombstone_rows(entries),
+            key_vocabulary,
+            {row[0] for row in by_kind["command"]},
+            _kernel_tombstones(),
+        )
+    )
     if BASELINE.is_file():
         baseline = json.loads(BASELINE.read_text(encoding="utf-8"))
         recorded = baseline["m1_census"]["value"]
@@ -802,10 +831,10 @@ def reference_texts(entries: list[Entry]) -> tuple[str, str]:
             r"Scope & Retired spelling & Migration \\ \midrule",
         )
     )
-    for row in tombstones(entries):
+    for scope, spelling, migration in tombstone_rows(entries):
         alias_lines.append(
-            rf"{_tex(row['scope'])} & \texttt{{{_tex(row['spelling'])}}} & "
-            rf"{_tex(row['migration'])} \\"
+            rf"{_tex(scope)} & \texttt{{{_tex(spelling)}}} & "
+            rf"{_tex(migration)} \\"
         )
     alias_lines.extend((r"\bottomrule\end{tabularx}", "}"))
     return "\n".join(lines) + "\n", "\n".join(alias_lines) + "\n"

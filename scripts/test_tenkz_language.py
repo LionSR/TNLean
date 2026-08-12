@@ -173,7 +173,7 @@ def main() -> int:
     )
     if form_row[2] != "enum(bracket|enclosure|label|prose)":
         raise SystemExit(f"the mark form alphabet is no longer the contract's: {form_row[2]}")
-    graves = tenkz_language.tombstones(registry)
+    graves = tenkz_language.tombstone_rows(registry)
     if not graves:
         raise SystemExit("the registry carries no tombstone rows")
     # One probe per scope: the body that puts a record of that scope on a page
@@ -189,18 +189,20 @@ def main() -> int:
             "\n  \\tnmark[%s]{(1,1) .. (1,2)}{$L$}"
         ),
     }
-    for row in graves:
+    for scope, spelling, migration in graves:
+        key, _separator, value = spelling.partition("=")
+        key, value = key.strip(), value.strip()
         # a bare spelling is a key that no longer exists, which the parser
         # cannot branch on; the unknown-key error answers that one
-        if not row["value"]:
+        if not value:
             continue
-        if row["scope"] not in probes:
+        if scope not in probes:
             raise SystemExit(
-                f"{row['spelling']} is a tombstone of scope {row['scope']}, "
+                f"{spelling} is a tombstone of scope {scope}, "
                 "which this test has no probe for; add one rather than leaving "
                 "the row uncompiled"
             )
-        body = probes[row["scope"]] % f"{row['key']}={row['value']}"
+        body = probes[scope] % f"{key}={value}"
         refused = compile_source(
             rf"""\documentclass{{standalone}}
 \usepackage{{tenkz}}
@@ -223,10 +225,10 @@ def main() -> int:
             return re.sub(r"\s+", "", text) in transcript
 
         if refused.returncode == 0 or not printed("TKZ-LANG-TOMBSTONE"):
-            raise SystemExit(f"{row['spelling']} was not refused as a tombstone")
-        if not printed(row["migration"]):
+            raise SystemExit(f"{spelling} was not refused as a tombstone")
+        if not printed(migration):
             raise SystemExit(
-                f"{row['spelling']} was refused without the registry's migration"
+                f"{spelling} was refused without the registry's migration"
             )
 
     live = compile_source(r"""\documentclass{standalone}

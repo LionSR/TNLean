@@ -239,23 +239,36 @@
 
 % ---- tombstones (LANGUAGE-1.0 section 10) ----
 %
-% Scope, dead spelling, migration.  A deleted spelling stays here forever so
-% that no deleted spelling is ever reused and one record answers for it: the
-% source lint builds its rejection from these rows and reports the migration
-% with the finding, and the language check holds every spelling the parser
-% refuses by name to the row that states the same migration.  A `key=value'
-% spelling is a word struck from a live key's alphabet, which the parser
-% refuses through a branch of its own; a bare spelling is a key that no longer
-% exists, which the unknown-key error answers.
+% scope, dead spelling, migration.  A retired spelling is recorded once, here,
+% and everything that must refuse it reads these rows: the source lint builds
+% its rejection from them, and the language check requires every spelling the
+% parser refuses by name to carry one, with the same migration in both places.
+%
+% A spelling written `key=value' is a word struck from a live key's alphabet.
+% The key survives, so the parser refuses the word through a branch of its own
+% and names the migration there.  A bare spelling is a key that no longer
+% exists: nothing survives to branch on, the unknown-key error answers it, and
+% the row is what tells a reader of an old document where the meaning went.
+% A spelling beginning with a backslash is a command that no longer exists,
+% and takes the scope `command'.
+%
+% Write a multi-word key the way the rest of the registry does, with ~ for the
+% space, and wrap a long migration to keep the line short.  Both are read out
+% before anything compares or matches a row, so what a document writes is what
+% is matched.
 %
 % The four mark forms below took a record and drew nothing.  What the sources
 % brace, the benchmark already brackets (rmp-ii-spectrum-transfer); what they
-% cut, it encloses; what they shade, a tinted enclosure carries.
+% cut, it encloses; what they shade, a tinted enclosure carries.  Each row is
+% wrapped where its parser branch wraps, so the two read line for line.
 \__tenkz_language_registry_tombstone:nnn {kernel-mark}{form=brace-above}
-  {use form=bracket with label pos=90; a bracket speaks from the side its label sits on}
+  {use form=bracket with label pos=90; a bracket speaks from the side its
+    label sits on}
 \__tenkz_language_registry_tombstone:nnn {kernel-mark}{form=brace-below}
   {use form=bracket, which speaks from the south when it names no side}
 \__tenkz_language_registry_tombstone:nnn {kernel-mark}{form=cut}
-  {no successor: the sources' cut is the contour of what it separates, so use form=enclosure over that selection}
+  {no successor: the sources' cut is the contour of what it separates,
+    so use form=enclosure over that selection}
 \__tenkz_language_registry_tombstone:nnn {kernel-mark}{form=band}
-  {use form=enclosure with tint, which lays ink over the paper its contour encloses}
+  {use form=enclosure with tint, which lays ink over the paper its contour
+    encloses}

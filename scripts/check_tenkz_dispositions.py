@@ -22,7 +22,7 @@ from tenkzlib.texcase import (
     strip_comments,
     top_level_options,
 )
-from tenkz_language import load_registry, tombstones
+from tenkz_language import load_registry, tombstone_rows
 
 
 DOCUMENT = ROOT / "docs/tenkz/DISPOSITIONS.md"
@@ -104,11 +104,12 @@ SIGNED_KEYS_BY_SCOPE = {
 # because a second list here happens to agree.
 def _retired_values() -> dict[str, set[str]]:
     retired: dict[str, set[str]] = {}
-    for row in tombstones(load_registry()):
+    for _scope, spelling, _migration in tombstone_rows(load_registry()):
+        key, _separator, value = spelling.partition("=")
         # a bare spelling buries a whole key, which the unknown-key check
         # already answers; only a buried word of a live key belongs here
-        if row["value"]:
-            retired.setdefault(row["key"], set()).add(row["value"])
+        if value.strip():
+            retired.setdefault(key.strip(), set()).add(value.strip())
     return retired
 
 
