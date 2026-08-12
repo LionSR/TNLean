@@ -12,6 +12,7 @@ import os
 import subprocess
 import sys
 import tempfile
+import zipfile
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -1112,6 +1113,114 @@ def test_the_offline_check_says_so_when_there_is_no_engine() -> None:
         tenkz_ctan.shutil.which = engine
     assert skipped.status == "SKIP", skipped
     assert refused.failures, refused
+
+
+def test_the_offline_check_reports_a_case_that_cannot_be_read() -> None:
+    """The two findings that need no engine: a case source that has moved, and
+    one that no longer spells the construct it was chosen for. Both are seeded
+    here because a guard nobody has watched fail is not a guard."""
+
+    engine = tenkz_ctan.shutil.which
+    saved = tenkz_ctan.OFFLINE_CASES
+    flat = next(case for case in saved if case.name == "flat")
+    moved = tenkz_ctan.OfflineCase(
+        flat.name, flat.picture_class, "tests/tenkz/rmp/gone.tex", False,
+        flat.declares, flat.emits,
+    )
+    renamed = tenkz_ctan.OfflineCase(
+        flat.name, flat.picture_class, flat.source, False,
+        r"\begin{something-else}", flat.emits,
+    )
+    with tempfile.TemporaryDirectory() as directory:
+        archive, _, _ = tenkz_ctan.build(Path(directory) / "out")
+        try:
+            tenkz_ctan.shutil.which = lambda _name: "/somewhere/xelatex"
+            tenkz_ctan.OFFLINE_CASES = (moved,)
+            gone = tenkz_ctan.check_offline(archive, required=True)
+            tenkz_ctan.OFFLINE_CASES = (renamed,)
+            drifted = tenkz_ctan.check_offline(archive, required=True)
+        finally:
+            tenkz_ctan.shutil.which = engine
+            tenkz_ctan.OFFLINE_CASES = saved
+    assert any("gone.tex is missing" in reason for reason in gone.failures), gone.failures
+    assert any("no longer spells" in reason for reason in drifted.failures), drifted.failures
+
+
+def test_the_offline_check_reports_an_archive_it_cannot_read() -> None:
+    """Three shapes an archive can arrive in that are not an upload, each
+    seeded and each required to be a report line rather than a traceback."""
+
+    engine = tenkz_ctan.shutil.which
+    with tempfile.TemporaryDirectory() as directory:
+        room = Path(directory)
+        (room / "torn.zip").write_bytes(b"not a zip file at all")
+        real = ROOT / "docs/tenkz/ctan/MANIFEST.toml"
+        with zipfile.ZipFile(room / "loose.zip", "w") as bundle:
+            bundle.writestr("tenkz.sty", real.read_bytes())
+        with zipfile.ZipFile(room / "nested.zip", "w") as bundle:
+            bundle.writestr(f"{PACKAGE_DIR}/tenkz.sty", real.read_bytes())
+            bundle.writestr(f"{PACKAGE_DIR}/runtime/", b"")
+        try:
+            tenkz_ctan.shutil.which = lambda _name: "/somewhere/xelatex"
+            reports = {
+                name: tenkz_ctan.check_offline(room / f"{name}.zip", required=True)
+                for name in ("torn", "loose", "nested")
+            }
+        finally:
+            tenkz_ctan.shutil.which = engine
+    assert any("does not open" in r for r in reports["torn"].failures), reports["torn"].failures
+    assert any(
+        "does not unpack into a single" in r for r in reports["loose"].failures
+    ), reports["loose"].failures
+    assert any(
+        "is not a file" in r for r in reports["nested"].failures
+    ), reports["nested"].failures
+
+
+def test_an_installer_that_fired_is_read_as_a_finding() -> None:
+    """The shim half is pinned above. This is the reading that turns a shim
+    that fired into a failed check, seeded by leaving the record a shim would
+    have written."""
+
+    engine = tenkz_ctan.shutil.which
+    saved = tenkz_ctan.OFFLINE_CASES
+    original = tenkz_ctan.write_shims
+
+    def firing(shims: Path) -> None:
+        original(shims)
+        (shims.parent / "reached-for.txt").write_text("/shims/tlmgr\n", encoding="utf-8")
+
+    with tempfile.TemporaryDirectory() as directory:
+        archive, _, _ = tenkz_ctan.build(Path(directory) / "out")
+        try:
+            tenkz_ctan.shutil.which = lambda _name: "/somewhere/xelatex"
+            tenkz_ctan.write_shims = firing
+            # No case is compiled: the engine is a fiction here, and the
+            # reading under test runs after the cases either way.
+            tenkz_ctan.OFFLINE_CASES = ()
+            report = tenkz_ctan.check_offline(archive, required=True)
+        finally:
+            tenkz_ctan.shutil.which = engine
+            tenkz_ctan.write_shims = original
+            tenkz_ctan.OFFLINE_CASES = saved
+    assert any(
+        "reached for an installer" in reason for reason in report.failures
+    ), report.failures
+
+
+def test_an_ownership_class_of_the_wrong_shape_is_named() -> None:
+    """The two remaining shapes a classification can arrive in: a class nobody
+    declared, and a class that is not a list of names."""
+
+    closure = tenkz_ctan.Closure(libraries=["calc"], packages=["tikz"])
+    invented = _ownership(["calc"], [], [])
+    invented["runtime"]["requires"]["ownership"]["legacy"] = ["calc"]
+    unknown = tenkz_ctan.check_dependencies(closure, invented)
+    assert any("legacy" in reason for reason in unknown.failures), unknown.failures
+    misshapen = _ownership(["calc"], [], [])
+    misshapen["runtime"]["requires"]["ownership"]["placement"] = "calc"
+    shape = tenkz_ctan.check_dependencies(closure, misshapen)
+    assert any("not a list" in reason for reason in shape.failures), shape.failures
 
 
 def test_check_passes_now() -> None:
