@@ -86,7 +86,9 @@ theorem pgvwc07_site_independent_matrices
     hTI (-k) σ
   simp_rw [hTI']
   rw [Finset.sum_const, Finset.card_univ, Fintype.card_fin]
-  simp [NeZero.ne N]
+  have hN : (N : ℂ) ≠ 0 := by
+    exact_mod_cast NeZero.ne N
+  simp [hN]
 
 /-- Existence form of `pgvwc07_site_independent_matrices`. -/
 theorem exists_pgvwc07_site_independent_tensor
