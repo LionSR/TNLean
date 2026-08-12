@@ -839,12 +839,13 @@ def test_every_spelling_of_stream_eighteen_is_the_shell_escape_stream() -> None:
 
     for call in (r"\write18{x}", r"\write 18{x}", r"\immediate \write 18{x}",
                  r"\write018{x}", '\\write"12{x}', r"\write'22{x}",
-                 r"\ShellEscape{x}"):
+                 r"\write+18{x}", r"\write--18{x}", r"\ShellEscape{x}"):
         assert tenkz_ctan.shell_escape_call(call), call
-    # Numbers that are not 18 in the base their prefix names, and a stream
-    # named by a control sequence, which no constant search can read.
+    # Numbers that are not 18 in the base their prefix names, an odd run of
+    # minus signs, and a stream named by a control sequence, which no constant
+    # search can read.
     for quiet in (r"\write17{x}", r"\write180{x}", '\\write"18{x}',
-                  r"\write \myout{x}"):
+                  r"\write-18{x}", r"\write+-18{x}", r"\write \myout{x}"):
         assert not tenkz_ctan.shell_escape_call(quiet), quiet
 
 
@@ -857,7 +858,9 @@ def test_a_closure_file_the_archive_forgot_stays_in_the_reading() -> None:
     (ROOT / "build").mkdir(exist_ok=True)
     with tempfile.TemporaryDirectory(dir=ROOT / "build") as directory:
         room = Path(directory)
-        carried = set(tenkz_ctan.walk_closure().files)
+        # The production reading, not a local rebuild of it: narrowing this
+        # again is what the test exists to catch.
+        carried = tenkz_ctan.carried_runtime()
         forgotten = "tenkz-string.code.tex"
         assert forgotten in carried, sorted(carried)
         # The engine answered it from an installation instead of the flat.
