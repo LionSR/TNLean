@@ -190,6 +190,24 @@ def main() -> int:
         ),
     }
     for scope, spelling, migration in graves:
+        # A command row says the control sequence no longer exists, which is a
+        # claim about the package rather than about a parser branch, so it is
+        # compiled for the error a reader of an old document actually meets.
+        if spelling.startswith("\\"):
+            gone = compile_source(
+                rf"""\documentclass{{standalone}}
+\usepackage{{tenkz}}
+\begin{{document}}
+{spelling}
+\end{{document}}
+"""
+            )
+            if gone.returncode == 0 or "Undefined control sequence" not in gone.stdout:
+                raise SystemExit(
+                    f"{spelling} is recorded as a retired command but the "
+                    "package still defines it"
+                )
+            continue
         key, _separator, value = spelling.partition("=")
         key, value = key.strip(), value.strip()
         # a bare spelling is a key that no longer exists, which the parser
@@ -244,7 +262,7 @@ def main() -> int:
         raise SystemExit(f"the surviving bracket form did not compile:\n{live.stdout}")
     print(
         "PASS: registry, typed atom diagnostic, sugar event equivalence, "
-        "and the retired mark-form tombstones"
+        "and every tombstone row refused by a compile"
     )
     return 0
 

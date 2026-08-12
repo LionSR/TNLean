@@ -1021,14 +1021,13 @@ at the next shrink session (§11).
 Deleted spellings stay in the registry as tombstones; the linter rejects
 them forever with the migration hint. No deleted spelling is ever reused.
 
-The frozen source corpus still passes through the compatibility renderers
-while its figures migrate. Their executable `object` ledger may therefore
-repair a source-facing deficiency without enlarging the canonical kernel:
-`\tnsite` and `\tnput` accept a local `size=s|m|l`, with `m` as the
-compatibility default, and `\tnput[circle]` supplies a plain inscribed circle.
-These paths do not inherit the canonical picture size. Their inscribed labels
-retain the compatibility renderer's historical content-sized outline; this
-is not the fixed two-axis atom contract of §7.
+The eight retired commands below carry their rows in the registry. The frozen
+corpus they were kept for has since been retired with the renderers that read
+it, and no file under `tex/` defines any of them: `\tnsite` and `\tnput` no
+longer accept the local `size=s|m|l` that the compatibility path once gave
+them, and `\tnput[circle]` no longer supplies its inscribed circle. What a
+document spelling one of them meets is an undefined control sequence, and the
+row is what names where the meaning went.
 
 | Dead spelling | Migration |
 |---|---|

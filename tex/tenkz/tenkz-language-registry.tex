@@ -272,3 +272,27 @@
 \__tenkz_language_registry_tombstone:nnn {kernel-mark}{form=band}
   {use form=enclosure with tint, which lays ink over the paper its contour
     encloses}
+%
+% The commands the sugar surface lost.  None of the eight is defined anywhere
+% in tex/, so an undefined control sequence is what answers a document that
+% still spells one, and the row is what tells its reader where the meaning
+% went.  The migrations are section 10's, which is where these were recorded
+% before the registry could hold them; the disposition audit reads its list of
+% dead commands from here rather than keeping a second one.
+\__tenkz_language_registry_tombstone:nnn {command}{\tnput}
+  {use \tn[at=(r,c)], which places the atom at the address the put named}
+\__tenkz_language_registry_tombstone:nnn {command}{\tnsite}
+  {use \tn[at=(r,c)]}
+\__tenkz_language_registry_tombstone:nnn {command}{\tnghost}
+  {no successor: an address references an empty cell directly}
+\__tenkz_language_registry_tombstone:nnn {command}{\tnjoin}
+  {use \tnwire}
+\__tenkz_language_registry_tombstone:nnn {command}{\tnedge}
+  {use \tnwire}
+\__tenkz_language_registry_tombstone:nnn {command}{\tnarrow}
+  {use \tnwire[dir=to]; a directed index is the wire's own direction}
+\__tenkz_language_registry_tombstone:nnn {command}{\tncut}
+  {use \tnmark[form=enclosure] over the selection a cut separates; the cut
+    form is retired with it}
+\__tenkz_language_registry_tombstone:nnn {command}{\tnregion}
+  {use \tnmark[form=enclosure]}
