@@ -66,14 +66,11 @@ theorem rangeCompressionEigenvalues_mem_unitInterval {P Q : E →ₗ[ℂ] E}
     rangeCompressionEigenvalues hP hQ i ∈ Set.Icc (0 : ℝ) 1 := by
   let x := rangeCompressionEigenbasis hP hQ i
   let μ := rangeCompressionEigenvalues hP hQ i
-  have hxnorm : ‖(x : E)‖ = 1 := by
-    exact (rangeCompressionEigenbasis hP hQ).norm_eq_one i
-  have hxP : P (x : E) = x := by
-    obtain ⟨z, hz⟩ := x.property
-    rw [← hz]
-    exact LinearMap.IsIdempotentElem.apply_apply hP.isIdempotentElem z
-  have hxEig : P (Q (x : E)) = (μ : ℂ) • (x : E) := by
-    exact congr_arg Subtype.val (rangeCompression_apply_eigenbasis hP hQ i)
+  have hxnorm : ‖(x : E)‖ = 1 := (rangeCompressionEigenbasis hP hQ).norm_eq_one i
+  have hxP : P (x : E) = x :=
+    (LinearMap.IsIdempotentElem.mem_range_iff hP.isIdempotentElem).mp x.property
+  have hxEig : P (Q (x : E)) = (μ : ℂ) • (x : E) :=
+    congr_arg Subtype.val (rangeCompression_apply_eigenbasis hP hQ i)
   obtain ⟨_, _, _, _, hnorm⟩ := angleDefect_block hP hQ hxP hxnorm hxEig
   change 0 ≤ μ ∧ μ ≤ 1
   constructor <;> nlinarith [sq_nonneg ‖angleDefect Q μ (x : E)‖]
@@ -101,14 +98,11 @@ theorem rangeCompressionEigenvalues_eq_zero_or_eq_one_or_exists_angle_block
   let x : E := rangeCompressionEigenbasis hP hQ i
   let μ := rangeCompressionEigenvalues hP hQ i
   have hxnorm : ‖x‖ = 1 := (rangeCompressionEigenbasis hP hQ).norm_eq_one i
-  have hxP : P x = x := by
-    let xr : P.range := rangeCompressionEigenbasis hP hQ i
-    obtain ⟨z, hz⟩ := xr.property
-    change P (xr : E) = xr
-    rw [← hz]
-    exact LinearMap.IsIdempotentElem.apply_apply hP.isIdempotentElem z
-  have hxEig : P (Q x) = (μ : ℂ) • x := by
-    exact congr_arg Subtype.val (rangeCompression_apply_eigenbasis hP hQ i)
+  have hxP : P x = x :=
+    (LinearMap.IsIdempotentElem.mem_range_iff hP.isIdempotentElem).mp
+      (rangeCompressionEigenbasis hP hQ i).property
+  have hxEig : P (Q x) = (μ : ℂ) • x :=
+    congr_arg Subtype.val (rangeCompression_apply_eigenbasis hP hQ i)
   have hμ := rangeCompressionEigenvalues_mem_unitInterval hP hQ i
   rcases hμ with ⟨hμ0, hμ1⟩
   rcases eq_or_lt_of_le hμ0 with hμeq | hμpos
