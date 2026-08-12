@@ -24,7 +24,8 @@ and the fiberwise Gram identities. No contraction estimate is asserted.
 ## Main results
 
 * `range_tailBoundaryMapES` and `range_leftBoundaryMapES_one` identify the physical ranges.
-* `c3_injectiveRangeProjector_residual_eq` is the exact C3 common-factorization identity.
+* `whole_increment_injectiveRangeProjector_residual_eq` is the arbitrary-increment exact
+  common-ambient identity; `c3_injectiveRangeProjector_residual_eq` is its one-site form.
 * `tailVirtualMapES_adjoint_apply` and `leftVirtualMapES_adjoint_apply` compute the
   virtual-map adjoints.
 * `norm_boundaryFiberwiseMap_le` bounds a fiberwise map uniformly in its spectator type.
@@ -404,6 +405,96 @@ theorem leftBoundaryMapES_injective_of_groundSpaceMapES_injective
   simpa using congrArg (prefixRestrictₗ τ) hraw
 
 /-! ### C3 overlapping-window projector identity -/
+
+/-- Reassociate the physical configuration coordinates from \(K+(L+Q)\) sites to
+\((K+L)+Q\) sites. -/
+noncomputable def physicalReassocES (K L Q : ℕ) :
+    EuclideanSpace ℂ (Cfg d (K + (L + Q))) ≃L[ℂ]
+      EuclideanSpace ℂ (Cfg d (K + L + Q)) :=
+  (LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ
+    (Equiv.arrowCongr (finCongr (Nat.add_assoc K L Q).symm)
+      (Equiv.refl (Fin d)))).toContinuousLinearEquiv
+
+/-- Reassociation sends the length-\(K+(L+Q)\) ground-space map to the
+length-\((K+L)+Q\) ground-space map in the common physical coordinates. -/
+theorem physicalReassocES_comp_groundSpaceMapES
+    (A : MPSTensor d D) (K L Q : ℕ) :
+    (physicalReassocES (d := d) K L Q).toContinuousLinearMap.comp
+        (groundSpaceMapES A (K + (L + Q))) =
+      groundSpaceMapES A (K + L + Q) := by
+  apply ContinuousLinearMap.coe_injective
+  apply DFunLike.ext _ _
+  intro x
+  apply PiLp.ext
+  intro σ
+  have hword :
+      List.ofFn (((finCongr (Nat.add_assoc K L Q)).arrowCongr
+        (Equiv.refl (Fin d))) σ) = List.ofFn σ := by
+    convert (List.ofFn_congr (m := K + L + Q) (n := K + (L + Q))
+      (Nat.add_assoc K L Q) σ).symm using 1
+    ext i
+    rfl
+  simp [physicalReassocES, groundSpaceMapES, groundSpaceMap_apply,
+    Function.comp_def, hword]
+
+/-- The tail window of length \(L+Q\), reassociated into the
+\((K+L)+Q\)-site ambient Euclidean space. -/
+noncomputable def reassocTailBoundaryMapES (A : MPSTensor d D) (K L Q : ℕ) :
+    BoundaryFamilySpace (D := D) (Cfg d K) →L[ℂ]
+      EuclideanSpace ℂ (Cfg d (K + L + Q)) :=
+  (physicalReassocES (d := d) K L Q).toContinuousLinearMap.comp
+    (tailBoundaryMapES A K (L + Q))
+
+/-- The reassociated tail map has the same whole-window factorization as the
+left window with \(Q\) spectator sites. -/
+theorem reassocTailBoundaryMapES_comp_tailVirtualMapES
+    (A : MPSTensor d D) (K L Q : ℕ) :
+    (reassocTailBoundaryMapES A K L Q).comp (tailVirtualMapES A K) =
+      groundSpaceMapES A (K + L + Q) := by
+  rw [reassocTailBoundaryMapES, ContinuousLinearMap.comp_assoc,
+    tailBoundaryMapES_comp_tailVirtualMapES,
+    physicalReassocES_comp_groundSpaceMapES]
+
+/-- Exact common-ambient residual identity when the overlapping-window filtration
+advances by an arbitrary suffix increment \(Q\). The tail window has length
+\(L+Q\), the left window has length \(K+L\) with \(Q\) spectators, and the full
+window has length \(K+L+Q\). Reassociation places all three maps in that last
+Euclidean ambient space. This identity is algebraic and asserts no norm estimate. -/
+theorem whole_increment_injectiveRangeProjector_residual_eq
+    (A : MPSTensor d D) (K L Q : ℕ)
+    (hTail : Function.Injective (reassocTailBoundaryMapES A K L Q))
+    (hLeft : Function.Injective (leftBoundaryMapES A (K + L) Q))
+    (hFull : Function.Injective (groundSpaceMapES A (K + L + Q))) :
+    (ContinuousLinearMap.injectiveRangeProjector
+        (reassocTailBoundaryMapES A K L Q) hTail).comp
+        (ContinuousLinearMap.injectiveRangeProjector
+          (leftBoundaryMapES A (K + L) Q) hLeft) -
+      ContinuousLinearMap.injectiveRangeProjector
+        (groundSpaceMapES A (K + L + Q)) hFull =
+        (reassocTailBoundaryMapES A K L Q).comp
+          ((ContinuousLinearMap.inverseGram
+            (reassocTailBoundaryMapES A K L Q) hTail).comp
+            (((reassocTailBoundaryMapES A K L Q).adjoint.comp
+                (leftBoundaryMapES A (K + L) Q) -
+              ((reassocTailBoundaryMapES A K L Q).adjoint.comp
+                (reassocTailBoundaryMapES A K L Q)).comp
+                ((tailVirtualMapES A K).comp
+                  ((ContinuousLinearMap.inverseGram
+                    (groundSpaceMapES A (K + L + Q)) hFull).comp
+                    ((leftVirtualMapES A Q).adjoint.comp
+                      ((leftBoundaryMapES A (K + L) Q).adjoint.comp
+                        (leftBoundaryMapES A (K + L) Q)))))).comp
+              ((ContinuousLinearMap.inverseGram
+                (leftBoundaryMapES A (K + L) Q) hLeft).comp
+                (leftBoundaryMapES A (K + L) Q).adjoint))) :=
+  ContinuousLinearMap.injectiveRangeProjector_comp_sub_of_factorizations
+    (T := reassocTailBoundaryMapES A K L Q)
+    (L := leftBoundaryMapES A (K + L) Q)
+    (C := groundSpaceMapES A (K + L + Q))
+    (J₁ := tailVirtualMapES A K) (J₂ := leftVirtualMapES A Q)
+    hTail hLeft hFull
+    (reassocTailBoundaryMapES_comp_tailVirtualMapES A K L Q)
+    (leftBoundaryMapES_comp_leftVirtualMapES A (K + L) Q)
 
 /-- Exact C3-window specialization of the common-factorization projector residual.
 The three ranges are, respectively, the open-chain tail space for \((K,L₀+1)\),
