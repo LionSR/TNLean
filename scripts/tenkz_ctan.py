@@ -1399,6 +1399,25 @@ def recorded_inputs(record: Path) -> list[str]:
     ]
 
 
+def repository_inputs(opened: list[str], room: Path, flat: Path) -> list[str]:
+    """Those of the opened files that came from the repository, not the flat.
+
+    The room is the base a relative record line resolves against, and it is
+    also the one directory a file may legitimately come from besides the
+    installation. It is subtracted before the repository is read, because a
+    temporary directory is placed wherever `TMPDIR` says, and a runner that
+    put it inside the workspace would otherwise make every file the archive
+    itself answered look like one the repository did.
+    """
+
+    return [
+        path
+        for path in opened
+        if not (room / path).resolve().is_relative_to(flat)
+        and (room / path).resolve().is_relative_to(ROOT)
+    ]
+
+
 def check_offline(archive: Path, required: bool) -> Report:
     """Compile one case of every picture class against the unpacked flat.
 
@@ -1506,17 +1525,8 @@ def _offline_case(case: OfflineCase, room: Path, engine: str,
         report.failures.append(f"{case.name} wrote no input record to read")
         return
     opened = recorded_inputs(record)
-    # The room is the base a relative record line resolves against, and it is
-    # also the one directory a file may legitimately come from besides the
-    # installation. It is excluded before the repository is read, because a
-    # temporary directory is placed wherever `TMPDIR` says, and a runner that
-    # puts it inside the workspace would otherwise make every file the archive
-    # itself answered look like one the repository did.
     flat = room.resolve()
-    elsewhere = [
-        path for path in opened if not (room / path).resolve().is_relative_to(flat)
-    ]
-    strangers = [path for path in elsewhere if (room / path).resolve().is_relative_to(ROOT)]
+    strangers = repository_inputs(opened, room, flat)
     report.require(
         not strangers,
         f"{case.name} read {sorted(set(strangers))} from the repository, so the "
