@@ -5,9 +5,13 @@
     For every type $\alpha$, evaluation at the three coordinates gives the
     canonical equivalence
     \begin{align}
-        (\Fin 3\to\alpha)&\simeq\alpha\times(\alpha\times\alpha),
-        &x&\longmapsto\bigl(x(0),(x(1),x(2))\bigr).
-        \notag
+        (\Fin 3\to\alpha)&\simeq\alpha\times(\alpha\times\alpha).
+        \label{eq:ph_three_coordinate_equiv}
+    \end{align}
+    Its forward map is
+    \begin{align}
+        x&\longmapsto\bigl(x(0),(x(1),x(2))\bigr).
+        \label{eq:ph_three_coordinate_forward}
     \end{align}
 \end{definition}
 
@@ -31,8 +35,8 @@
     \lean{MPSTensor.HasOverlappingTwoSiteCommutation.complement}
     \lean{MPSTensor.adjacent_twoSite_cyclicWindowsOverlap}
     \leanok
-    \uses{def:three_coordinate_identification, def:nsite_space_parent,
-        def:cyclic_window_support, def:cyclic_windows_overlap}
+    \uses{def:nsite_space_parent, def:cyclic_window_support,
+        def:cyclic_windows_overlap}
     On a three-site space
     $\mc H_A\otimes\mc H_X\otimes\mc H_B$, let $Q_{AX}$ and $Q_{XB}$ be
     two-site projectors. Their local actions on the three-site space are the

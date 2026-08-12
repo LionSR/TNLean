@@ -50,7 +50,7 @@ for eigenvectors of \(H\) — follows by the spectral theorem. This lemma
 provides the final spectral-theorem step; the remaining MPS-specific
 quadratic-form hypothesis is stated separately in
 `MPSTensor.parentHamiltonianES_gap_bound_of_overlap_norm_bound`. -/
-theorem spectralGap_of_martingale {E : Type*} [NormedAddCommGroup E]
+theorem spectralGap_of_martingale_of_finiteDimensional {E : Type*} [NormedAddCommGroup E]
     [InnerProductSpace ℂ E] [FiniteDimensional ℂ E] {γ : ℝ} (hγ : 0 < γ)
     {H : E →ₗ[ℂ] E} (hH : H.IsPositive)
     (hOpIneq : ∀ v, γ * (⟪H v, v⟫_ℂ).re ≤ (⟪H v, H v⟫_ℂ).re) :
@@ -129,5 +129,12 @@ theorem spectralGap_of_martingale {E : Type*} [NormedAddCommGroup E]
   have h3 : 0 ≤ ‖H v‖ := norm_nonneg _
   have hsqrt := Real.sqrt_le_sqrt h1
   rwa [Real.sqrt_sq h2, Real.sqrt_sq h3] at hsqrt
+
+/-- Coordinate-space specialization of the finite-dimensional martingale criterion. -/
+theorem spectralGap_of_martingale {ι : Type*} [Fintype ι] {γ : ℝ} (hγ : 0 < γ)
+    {H : EuclideanSpace ℂ ι →ₗ[ℂ] EuclideanSpace ℂ ι} (hH : H.IsPositive)
+    (hOpIneq : ∀ v, γ * (⟪H v, v⟫_ℂ).re ≤ (⟪H v, H v⟫_ℂ).re) :
+    ∀ v ∈ (LinearMap.ker H)ᗮ, γ * ‖v‖ ≤ ‖H v‖ :=
+  spectralGap_of_martingale_of_finiteDimensional hγ hH hOpIneq
 
 end FrustrationFree
