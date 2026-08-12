@@ -31,7 +31,7 @@ variable {d D N : ℕ}
 the physical configuration by \(-k\) in the original open-boundary
 coefficient. The inverse is forced by restoring the rotated matrix product to
 the distinguished open cut. -/
-theorem coeff_cyclicRotation_zeroPad_eq_coeff_cyclicTranslateConfig_neg
+private theorem coeff_cyclicRotation_zeroPad_eq_coeff_cyclicTranslateConfig_neg
     (A : OBCChainTensor d D N) [NeZero N]
     (k : Fin N) (σ : Fin N → Fin d) :
     MPSChainTensor.coeff
@@ -60,8 +60,9 @@ theorem coeff_cyclicRotation_zeroPad_eq_coeff_cyclicTranslateConfig_neg
         abel
     _ = ∏ m : Fin N, F m := Equiv.prod_comp (finCycle k) F
 
-/-- **PGVWC07 Theorem 3.** A varying-bond open-boundary representation of a
-translation-invariant state on one positive ring of length \(N\) yields a
+/-- **Conditional PGVWC07 Theorem 3 construction.** A supplied varying-bond
+open-boundary representation of a translation-invariant state on one positive
+ring of length \(N\) yields a
 site-independent trace-MPS representation of bond dimension \(ND\) at that
 same length.
 
@@ -69,7 +70,7 @@ The tensor is `MPSChainTensor.cyclicBlockTensor A.zeroPad` and depends on
 \(N\). Purity is used upstream in PGVWC07 to supply open-boundary data; the
 finite cyclic-block calculation itself needs only the data and the stated
 translation invariance. -/
-theorem pgvwc07_siteIndependentMatrices
+theorem pgvwc07_site_independent_matrices
     (A : OBCChainTensor d D N) [NeZero N]
     (hTI : A.IsTranslationInvariantState) :
     ∀ σ : Fin N → Fin d,
@@ -85,13 +86,13 @@ theorem pgvwc07_siteIndependentMatrices
   rw [Finset.sum_const, Finset.card_univ, Fintype.card_fin]
   simp [NeZero.ne N]
 
-/-- Existence form of `pgvwc07_siteIndependentMatrices`. -/
-theorem exists_pgvwc07_siteIndependentTensor
+/-- Existence form of `pgvwc07_site_independent_matrices`. -/
+theorem exists_pgvwc07_site_independent_tensor
     (A : OBCChainTensor d D N) [NeZero N]
     (hTI : A.IsTranslationInvariantState) :
     ∃ B : MPSTensor d (N * D),
       ∀ σ : Fin N → Fin d, MPSTensor.mpv B σ = A.coeff σ :=
   ⟨MPSChainTensor.cyclicBlockTensor A.zeroPad,
-    pgvwc07_siteIndependentMatrices A hTI⟩
+    pgvwc07_site_independent_matrices A hTI⟩
 
 end OBCChainTensor

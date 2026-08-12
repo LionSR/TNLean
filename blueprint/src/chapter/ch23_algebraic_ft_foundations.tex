@@ -341,15 +341,19 @@ boundary conventions.
     (\ref{eq:chain_cyclic_block_average}).
 \end{proof}
 
-\begin{theorem}[Site-independent matrices at fixed length]
+% Scope restriction (supplied OBC representation): PGVWC07 Theorem 3 also
+% obtains this input from purity via its OBC representation theorem.
+\begin{theorem}[Conditional site-independent matrices at fixed length]
     \label{thm:pgvwc07_site_independent_matrices}
-    \lean{OBCChainTensor.pgvwc07_siteIndependentMatrices,
-        OBCChainTensor.exists_pgvwc07_siteIndependentTensor}
+    \lean{OBCChainTensor.pgvwc07_site_independent_matrices,
+        OBCChainTensor.exists_pgvwc07_site_independent_tensor}
     \leanok
-    \uses{def:varying_bond_obc_ti, thm:varying_bond_obc_zero_pad_coeff,
-        thm:chain_cyclic_block_average}
-    Let $N\geq1$. Suppose a translation-invariant state on the $N$-site ring
-    has a varying-bond open-chain representation whose virtual dimensions are
+    \uses{def:varying_bond_obc_ti, def:varying_bond_obc_zero_pad,
+        def:chain_cyclic_block_tensor}
+    This is the cyclic-block construction in
+    \cite[Theorem~3]{PerezGarcia2007Matrix}, conditional on its open-chain
+    input. Let $N\geq1$. Suppose a translation-invariant state on the $N$-site
+    ring has a varying-bond open-chain representation whose virtual dimensions are
     at most $D$. Then it has a site-independent trace-MPS representation of
     bond dimension $ND$ with the same length-$N$ coefficients.
     The constructed tensor depends on $N$, and the equality is asserted only
