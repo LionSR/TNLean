@@ -1,9 +1,21 @@
+\begin{definition}[Three-coordinate identification]
+    \label{def:three_coordinate_identification}
+    \lean{finThreeArrowEquiv}
+    \leanok
+    For every type $\alpha$, evaluation at the three coordinates gives the
+    canonical equivalence
+    \begin{align}
+        (\Fin 3\to\alpha)&\simeq\alpha\times(\alpha\times\alpha),
+        &x&\longmapsto\bigl(x(0),(x(1),x(2))\bigr).
+        \notag
+    \end{align}
+\end{definition}
+
 \begin{definition}[Overlapping two-site supports]\label{def:overlapping_two_site_supports}
     \lean{MPSTensor.axPairCfg}
     \lean{MPSTensor.xbPairCfg}
     \lean{MPSTensor.replaceAXCfg}
     \lean{MPSTensor.replaceXBCfg}
-    \lean{finThreeArrowEquiv}
     \lean{MPSTensor.leftPairLift}
     \lean{MPSTensor.rightPairLift}
     \lean{MPSTensor.leftPairLift_sub}
@@ -19,8 +31,8 @@
     \lean{MPSTensor.HasOverlappingTwoSiteCommutation.complement}
     \lean{MPSTensor.adjacent_twoSite_cyclicWindowsOverlap}
     \leanok
-    \uses{def:nsite_space_parent, def:cyclic_window_support,
-        def:cyclic_windows_overlap}
+    \uses{def:three_coordinate_identification, def:nsite_space_parent,
+        def:cyclic_window_support, def:cyclic_windows_overlap}
     On a three-site space
     $\mc H_A\otimes\mc H_X\otimes\mc H_B$, let $Q_{AX}$ and $Q_{XB}$ be
     two-site projectors. Their local actions on the three-site space are the
@@ -292,8 +304,7 @@
     \lean{MPSTensor.isNNCPH_of_twoSite_cyclicWindowsOverlap_commute}
     \leanok
     \uses{def:is_commuting_parent_ham, def:is_nncph,
-        def:cyclic_windows_overlap, lem:cyclic_window_nonoverlap_positive,
-        lem:transported_es_nonoverlap_positive}
+        def:cyclic_windows_overlap}
     Let $L\le N$. Suppose that $h_i h_j=h_j h_i$ whenever the length-$L$
     cyclic supports of the two local terms meet. Then the parent Hamiltonian
     has commuting local terms: $h_i h_j=h_j h_i$ for all $i,j$. In the case

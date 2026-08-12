@@ -50,15 +50,15 @@ for eigenvectors of \(H\) — follows by the spectral theorem. This lemma
 provides the final spectral-theorem step; the remaining MPS-specific
 quadratic-form hypothesis is stated separately in
 `MPSTensor.parentHamiltonianES_gap_bound_of_overlap_norm_bound`. -/
-theorem spectralGap_of_martingale {ι : Type*} [Fintype ι] {γ : ℝ} (hγ : 0 < γ)
-    {H : EuclideanSpace ℂ ι →ₗ[ℂ] EuclideanSpace ℂ ι} (hH : H.IsPositive)
+theorem spectralGap_of_martingale {E : Type*} [NormedAddCommGroup E]
+    [InnerProductSpace ℂ E] [FiniteDimensional ℂ E] {γ : ℝ} (hγ : 0 < γ)
+    {H : E →ₗ[ℂ] E} (hH : H.IsPositive)
     (hOpIneq : ∀ v, γ * (⟪H v, v⟫_ℂ).re ≤ (⟪H v, H v⟫_ℂ).re) :
     ∀ v ∈ (LinearMap.ker H)ᗮ, γ * ‖v‖ ≤ ‖H v‖ := by
   classical
   -- Spectral setup: diagonalise the positive symmetric operator.
-  set n := Fintype.card ι with hn_def
-  have hn : Module.finrank ℂ (EuclideanSpace ℂ ι) = n := by
-    simp [hn_def]
+  set n := Module.finrank ℂ E with hn_def
+  have hn : Module.finrank ℂ E = n := hn_def.symm
   have hSym : H.IsSymmetric := hH.isSymmetric
   set b := hSym.eigenvectorBasis hn with hb_def
   set μ : Fin n → ℝ := hSym.eigenvalues hn with hμ_def

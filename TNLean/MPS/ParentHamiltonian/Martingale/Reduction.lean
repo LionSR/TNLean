@@ -69,7 +69,7 @@ theorem parentHamiltonianES_norm_bound_of_quadratic_form
   intro N hLN v hv
   have hvKer : v ∈ (LinearMap.ker (parentHamiltonianES A L N))ᗮ := by
     simpa [parentHamiltonianGroundSpaceES_eq_ker_parentHamiltonianES A L N] using hv
-  exact FrustrationFree.spectralGap_of_martingale (ι := Cfg d N) hγ
+  exact FrustrationFree.spectralGap_of_martingale (E := EuclideanSpace ℂ (Cfg d N)) hγ
     (parentHamiltonianES_isPositive A L N) (hQuad N hLN) v hvKer
 
 /-- The exact explicit gap-bound reduction needed by
@@ -843,6 +843,7 @@ theorem parentHamiltonianES_gap_bound_of_cyclic_window_overlap_operator_norm_of_
   exact parentHamiltonianES_gap_bound_of_cyclic_window_overlap_operator_norm_of_le
     A L hL hγpos hγle hηle hOpNorm
 
+open Classical in
 /-- Combined martingale criterion for a finite family of symmetric projections.
 
 If the anticommutator forms satisfy row- and column-summable bounds with
@@ -852,9 +853,10 @@ both the quadratic-form inequality
 for every \(v\), and the norm lower bound \(γ ‖v‖ ≤ ‖H v‖\) on
 \((\ker H)^\perp\), because \(H\) is positive (a sum of positive maps). -/
 theorem spectralGap_of_martingale_anticommutator_rowCol
-    {ι : Type*} [Fintype ι] [DecidableEq ι] {ι' : Type*} [Fintype ι']
+    {ι E : Type*} [Fintype ι] [NormedAddCommGroup E]
+    [InnerProductSpace ℂ E] [FiniteDimensional ℂ E]
     {γ : ℝ} (hγpos : 0 < γ) (hγle : γ ≤ 1)
-    (P : ι → EuclideanSpace ℂ ι' →ₗ[ℂ] EuclideanSpace ℂ ι')
+    (P : ι → E →ₗ[ℂ] E)
     (hP : ∀ i, (P i).IsSymmetricProjection)
     (c : ι → ι → ℝ)
     (hRow : ∀ i, (∑ j ∈ Finset.univ.erase i, c i j) ≤ 1)
@@ -870,7 +872,7 @@ theorem spectralGap_of_martingale_anticommutator_rowCol
     ProjectionGeometry.quadraticForm_sum_projections_of_anticommutator_rowCol
       hγle P hP c hRow hCol hAnti
   refine ⟨hQuad, fun v hv => ?_⟩
-  exact FrustrationFree.spectralGap_of_martingale (ι := ι') hγpos
+  exact FrustrationFree.spectralGap_of_martingale hγpos
     (LinearMap.isPositive_sum Finset.univ fun i _ => (hP i).isPositive)
     hQuad v hv
 
