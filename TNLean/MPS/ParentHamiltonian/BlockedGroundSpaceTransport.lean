@@ -9,19 +9,22 @@ import TNLean.MPS.ParentHamiltonian.GroundSpaceGram
 /-!
 # Transport of ground spaces under physical blocking
 
-Physical blocking groups `p` consecutive original sites into one blocked site.  A chain of
-`N` blocked sites therefore has the same configuration basis as a chain of `N * p` original
-sites, through `blockedConfigEquiv`.  This file bundles that basis reindexing as a Euclidean
-linear isometry and proves exact transport identities for the boundary map, its range, and its
+Physical blocking groups \(p\) consecutive original sites into one blocked site.  A chain of
+\(N\) blocked sites therefore has the same configuration basis as a chain of \(N p\) original
+sites, through `blockedConfigEquiv`.  This file defines the corresponding Euclidean linear
+isometry and proves exact transport identities for the boundary map, its range, and its
 orthogonal projector.
 
-The blocked chain length `N` and the original physical length `N * p` remain explicit in every
+The blocked chain length \(N\) and the original physical length \(N p\) remain explicit in every
 statement.  No comparison of parent Hamiltonians is made here.
+
+## Main definitions
+
+* `MPSTensor.blockedConfigLinearIsometryEquiv` — the computational-basis reindexing between
+  \(N\) blocked sites and \(N p\) original sites.
 
 ## Main results
 
-* `MPSTensor.blockedConfigLinearIsometryEquiv` — the computational-basis reindexing between
-  `N` blocked sites and `N * p` original sites.
 * `MPSTensor.blockedConfigLinearIsometryEquiv_groundSpaceMapES` — intertwining of the
   Euclidean boundary maps.
 * `MPSTensor.groundSpaceES_blockTensor_map` — exact transport of the local ground space.
@@ -40,8 +43,8 @@ namespace MPSTensor
 
 variable {d D : ℕ}
 
-/-- The Euclidean computational-basis reindexing from a chain of `N` sites blocked in groups
-of `p` to the corresponding chain of `N * p` original sites. -/
+/-- The Euclidean computational-basis reindexing from a chain of \(N\) sites blocked in groups
+of \(p\) to the corresponding chain of \(N p\) original sites. -/
 noncomputable def blockedConfigLinearIsometryEquiv (d N p : ℕ) :
     EuclideanSpace ℂ (Cfg (blockPhysDim d p) N) ≃ₗᵢ[ℂ]
       EuclideanSpace ℂ (Cfg d (N * p)) :=
@@ -75,7 +78,7 @@ theorem groundSpaceMap_blockTensor_blockedConfigEquiv
   simp
 
 /-- The Euclidean boundary map of the blocked tensor intertwines with the canonical
-configuration isometry.  The source has `N` blocked sites and the target has `N * p`
+configuration isometry.  The source has \(N\) blocked sites and the target has \(N p\)
 original sites. -/
 theorem blockedConfigLinearIsometryEquiv_groundSpaceMapES
     (A : MPSTensor d D) (p N : ℕ)
@@ -93,8 +96,8 @@ theorem blockedConfigLinearIsometryEquiv_groundSpaceMapES
   ext σ
   exact groundSpaceMap_blockTensor_blockedConfigEquiv A p N X σ
 
-/-- Physical blocking transports the local ground space on `N` blocked sites exactly to the
-local ground space on `N * p` original sites. -/
+/-- Physical blocking transports the local ground space on \(N\) blocked sites exactly to the
+local ground space on \(N p\) original sites. -/
 theorem groundSpaceES_blockTensor_map (A : MPSTensor d D) (p N : ℕ) :
     (groundSpaceES (blockTensor A p) N).map
         (blockedConfigLinearIsometryEquiv d N p).toLinearEquiv.toLinearMap =
@@ -133,7 +136,7 @@ theorem starProjection_groundSpaceES_blockTensor_conj
   exact starProjection_groundSpaceES_blockTensor_map_apply A p N v
 
 set_option synthInstance.maxHeartbeats 100000 in
-/-- Three blocked sites correspond to `3 * p` original sites, with exact transport of the
+/-- Three blocked sites correspond to \(3p\) original sites, with exact transport of the
 orthogonal ground-space projector.  This is the direct three-block specialization used in
 blocked overlap estimates; it does not replace a one-site spectator by one original site. -/
 theorem starProjection_groundSpaceES_three_blockTensor_conj
