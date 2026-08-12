@@ -4,6 +4,7 @@
 from __future__ import annotations
 
 import os
+import re
 import subprocess
 import tempfile
 from pathlib import Path
@@ -62,6 +63,15 @@ def main() -> int:
     reference = tenkz_language.REFERENCE.read_text(encoding="utf-8")
     if "Prelude class & Name & Declaration" not in reference or "base=box" not in reference:
         raise SystemExit("the generated language reference omitted the stock MPO declaration")
+    # Both chapters say they are generated, so both must equal what the
+    # generator emits from the registry as committed.  Without this a registry
+    # row could change its prose and the published reference keep the old
+    # sentence, which is exactly the drift the one-record rule forbids.
+    if tenkz_language.stale_generated_chapters(registry):
+        raise SystemExit(
+            "generated chapters drifted from the registry:\n"
+            + "\n".join(tenkz_language.stale_generated_chapters(registry))
+        )
     distinct_skin = tenkz_language.Entry(
         kind="prelude", fields=("skin", "probe", "base=ring")
     )
@@ -179,16 +189,24 @@ def main() -> int:
 \end{{document}}
 """
         )
-        # A message longer than one line is wrapped with the package's own
-        # continuation prefix, which stands between the words it broke.
-        transcript = " ".join(refused.stdout.replace("(tenkz)", " ").split())
-        if refused.returncode == 0 or "TKZ-LANG-TOMBSTONE" not in transcript:
+        # l3msg wraps a long diagnostic and prefixes each continuation line
+        # with the package name, which lands between the words it broke.  The
+        # comparison therefore drops that prefix and then every space, so it
+        # asks only which characters were printed and never where the engine
+        # of the day chose to break the line.
+        transcript = re.sub(
+            r"\s+|\(tenkz\)", "", refused.stdout.replace("(tenkz)", " ")
+        )
+        def printed(text: str) -> bool:
+            return re.sub(r"\s+", "", text) in transcript
+
+        if refused.returncode == 0 or not printed("TKZ-LANG-TOMBSTONE"):
             raise SystemExit(f"{row['spelling']} was not refused as a tombstone")
-        if row["migration"] not in transcript:
+        if not printed(row["migration"]):
             raise SystemExit(
                 f"{row['spelling']} was refused without the registry's migration"
             )
-        if row["replacement"] and f"use {row['replacement']}." not in transcript:
+        if row["replacement"] and not printed(f"use {row['replacement']}."):
             raise SystemExit(
                 f"{row['spelling']} was refused without naming {row['replacement']}"
             )
