@@ -161,6 +161,11 @@ def tombstone_patterns(entries: list[Entry]) -> list[tuple[re.Pattern[str], str]
         else:
             # A lookbehind takes no variable width, so a live owner is stepped
             # over as the source spells it with no space around the equals.
+            # A spaced `owner = word` is therefore reported, which over-reports
+            # a live spelling rather than passing a dead one, and is what the
+            # hardcoded expression this replaced did.  Matching only where a
+            # key may appear would trade that for a possible under-report,
+            # which is the failure this ledger exists to prevent.
             expression = (
                 "".join(
                     f"(?<!{re.escape(owner)}=)"

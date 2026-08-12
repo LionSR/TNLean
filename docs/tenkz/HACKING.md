@@ -177,16 +177,23 @@ spelling the parser refuses by name to carry a row stating the same
 migration, and every row for a word struck from a live alphabet to name a
 spelling the parser refuses and the alphabet no longer holds.
 
-Three shapes of row, by what is left of the spelling.  `key=value` is a word
+Four shapes of row, by what is left of the spelling.  `key=value` is a word
 struck from a live key's alphabet, and the parser refuses it through a branch
-of that key.  A bare `key` is a key that no longer exists and a spelling
-beginning with a backslash is a command that no longer exists, taking the
-scope `command`; neither leaves the parser anything to branch on, so the
-unknown-key error or an undefined control sequence answers it, the check is
-that the registry really has dropped the spelling, and the lint is what reads
-the row.  Write a multi-word key with `~` as the rest of the registry does
-and wrap a long migration; both are read out before any row is compared or
-matched, so the spelling a document writes is the spelling that is caught.
+of that key.  The other three no longer exist at all, so the parser has
+nothing to branch on and the unknown-key error or an undefined spelling
+answers them; the check is that the registry really has dropped the spelling,
+and the lint is what reads the row.  A bare `key` is a retired key.  A
+spelling beginning with a backslash is a retired command, takes the scope
+`command`, and is matched from its own backslash.  A row under the scope
+`environment` is a retired environment, such as the dialects LANGUAGE-1.0
+section 10 lists, and is matched where a document names one, in the argument
+of `\begin` or `\end`.
+
+Write a multi-word key with `~` as the rest of the registry does and wrap a
+long migration; both are read out before any row is compared or matched, so
+the spelling a document writes is the spelling that is caught.  A row that
+states no spelling is a finding, and one spelling is buried once across the
+whole ledger, since the lint reads flat source where no scope is visible.
 
 The gate first compares the pinned meters with the base revision.  M1 total or
 kernel growth requires an `Extension-gate: #NNNN` citation, or a
