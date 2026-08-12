@@ -3,14 +3,14 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.Analysis.ProjectionGeometry
+import Mathlib.Analysis.InnerProductSpace.Positive
 
 /-!
 # A generic angle block for two orthogonal projections
 
 This file gives the local two-dimensional block used in the two-projection
-lemma invoked in arXiv:1703.09188, Proposition 1, lines 756–764.  It does not
-assume that the projections commute.
+lemma invoked in arXiv:1703.09188, Proposition IV.5 (`prop:continuity-index`),
+lines 756–764. It does not assume that the projections commute.
 -/
 
 open scoped InnerProductSpace
@@ -53,16 +53,16 @@ def angleDefect (Q : E →ₗ[ℂ] E) (μ : ℝ) (x : E) : E :=
   Q x - (μ : ℂ) • x
 
 /-- One generic two-dimensional angle block associated with an eigenvalue
-`0 < μ < 1` of the compression of `Q` to `range P`.
+\(0 < μ < 1\) of the compression of `Q` to `range P`.
 
-The first vector is a unit compression eigenvector `x`.  The second vector is
-`Q x - μ x`; its squared norm is `μ(1-μ)`, so it is nonzero and can be
-normalized in the subsequent corollary.  The displayed identities are the
+The first vector is a unit compression eigenvector `x`. The second vector is
+\(Qx - μx\); its squared norm is \(μ(1-μ)\), so it is nonzero and can be
+normalized in the subsequent corollary. The displayed identities are the
 exact actions of `P` and `Q` on this block.
 -/
 theorem angleDefect_block {P Q : E →ₗ[ℂ] E}
     (hP : P.IsSymmetricProjection) (hQ : Q.IsSymmetricProjection)
-    {μ : ℝ} (_hμ0 : 0 < μ) (_hμ1 : μ < 1) {x : E}
+    {μ : ℝ} {x : E}
     (hxP : P x = x) (hxnorm : ‖x‖ = 1) (hxEig : P (Q x) = (μ : ℂ) • x) :
     P (angleDefect Q μ x) = 0 ∧
       Q x = (μ : ℂ) • x + angleDefect Q μ x ∧
@@ -121,7 +121,7 @@ theorem angleDefect_block {P Q : E →ₗ[ℂ] E}
 /-- Normalized form of `angleDefect_block`. The vectors `x,w` are orthonormal;
 on their two-dimensional span, `P` acts as the projection onto `x`, while `Q`
 has its standard angle-block action with off-diagonal coefficient
-`sqrt (μ(1-μ))`. -/
+\(\sqrt{μ(1-μ)}\). -/
 theorem exists_orthonormal_angleBlock {P Q : E →ₗ[ℂ] E}
     (hP : P.IsSymmetricProjection) (hQ : Q.IsSymmetricProjection)
     {μ : ℝ} (hμ0 : 0 < μ) (hμ1 : μ < 1) {x : E}
@@ -137,7 +137,7 @@ theorem exists_orthonormal_angleBlock {P Q : E →ₗ[ℂ] E}
   have ha0 : a ≠ 0 := ne_of_gt hapos
   have haSq : a ^ 2 = μ * (1 - μ) := Real.sq_sqrt hdpos.le
   obtain ⟨hdP, hxQ, hQd, hxd, hdNormSq⟩ :=
-    angleDefect_block hP hQ hμ0 hμ1 hxP hxnorm hxEig
+    angleDefect_block hP hQ hxP hxnorm hxEig
   have hdNorm : ‖d‖ = a := by
     have hda : ‖d‖ ^ 2 = a ^ 2 := by simpa [d, haSq] using hdNormSq
     nlinarith [norm_nonneg d]
@@ -161,7 +161,8 @@ theorem exists_orthonormal_angleBlock {P Q : E →ₗ[ℂ] E}
       norm_cast
       calc
         a⁻¹ * (μ * (1 - μ)) = a⁻¹ * a ^ 2 := by rw [haSq]
-        _ = a := by field_simp
-    · ring
+        _ = a⁻¹ * (a * a) := by rw [pow_two]
+        _ = a := by rw [inv_mul_cancel_left₀ ha0]
+    · rw [mul_comm]
 
 end LinearMap.IsSymmetricProjection
