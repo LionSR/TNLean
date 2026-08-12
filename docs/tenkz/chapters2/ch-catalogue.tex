@@ -379,12 +379,13 @@ index against its dual.
 \subsection{Annotations}
 
 A mark speaks over a picture and owns none of it.  Its \tnkey{form=} is
-the shape of the speech.  Of the eight words in the registry's list,
-three put ink on the page: \tnval{label} stands text at a target,
-\tnval{bracket} measures a span from outside it, and \tnval{enclosure}
-strokes the offset hull of a selection.  \tnval{prose} is accepted and
-recorded without ink, and the remaining four are refused.  This section
-draws the three, then shows both of the other answers.
+the shape of the speech, and the alphabet is four words.  Three put ink
+on the page: \tnval{label} stands text at a target, \tnval{bracket}
+measures a span from outside it, and \tnval{enclosure} strokes the offset
+hull of a selection.  The fourth, \tnval{prose}, is accepted and recorded
+without ink.  This section draws the three, shows what a spelling the
+alphabet has lost answers now, and reads \tnval{prose} out of the record
+stream.
 
 \begin{tnexample}[
   caption={a bracket over a span, a label on a site},
@@ -442,33 +443,73 @@ theme's semantic slots, and reaches no other form: a label takes its ink
 from \tnkey{species=} alone, so a slot written on a label is accepted,
 recorded, and drawn in the ordinary ink.  \tnkey{tint} lays ink over the
 paper inside a contour rather than only stroking it; the tutorial's
-blocked run shows the tinted form.
+blocked run shows the tinted form, and so does the band below.
 
-The registry's \tnkey{form=} list has four more words, and none of them
-draws.  A source that asks for one is refused, with the code that says so:
+Four further words stood in the \tnkey{form=} list until the alphabet
+closed on the four above.  Each of them took a record and drew nothing,
+and each is now a retired spelling that names its successor.  A brace is
+a \tnval{bracket}, which speaks from the side its label sits on, so
+\tnval{brace-above} is that bracket named to the north and
+\tnval{brace-below} is the same bracket with no side named, the south
+being where a bracket speaks by default.  A \tnval{band} is an
+\tnval{enclosure} carrying \tnkey{tint}, the paper under the contour
+being the whole of what a band added to one.  A \tnval{cut} has no
+successor of its own: a cut in the sources is the contour of what it
+separates, which is an enclosure over that selection.  The two brace
+spellings and the band are drawn below in the words that replaced them.
+
+\begin{tnexample}[
+  caption={a brace above, a brace below, and a band},
+  index={One bracket named on two sides, and one tinted enclosure.  A
+    bracket's arc follows its name, so \tnkey{label pos=}\tnval{90}
+    carries both to the north and the default carries both to the south.
+    The enclosure's \tnkey{tint} is the paper a band laid under its
+    span.},
+  signature={kernel-boundary|signature=}]
+% Ink: the two brace spellings are one bracket named on two
+%   sides; the band is an enclosure carrying tint.
+\begin{tenkz}[rows={wire}, cols=2]
+  \tn[skin=box]{A} & \tn[skin=box]{A}
+  \tnmark[form=bracket, label pos=90]{(1,1) .. (1,2)}{$N$}
+\end{tenkz}
+\qquad
+\begin{tenkz}[rows={wire}, cols=2]
+  \tn[skin=box]{A} & \tn[skin=box]{A}
+  \tnmark[form=bracket]{(1,1) .. (1,2)}{$N$}
+\end{tenkz}
+\qquad
+\begin{tenkz}[rows={wire}, cols=2]
+  \tn[skin=box]{A} & \tn[skin=box]{A}
+  \tnmark[form=enclosure, tint]{(1,1) .. (1,2)}{}
+\end{tenkz}
+\end{tnexample}
+
+A source that still writes one of the four is refused by the word it
+wrote, and the answer carries the migration rather than the alphabet:
 
 \begin{tnrefusal}[
-  caption={four declared forms that do not draw yet},
-  index={The value parses --- it is in the registry --- and the render
-    stage refuses it rather than omitting the ink silently.  The same
-    answer comes back for \tnval{brace-below}, \tnval{cut}, and
-    \tnval{band}.},
-  diagnostic={[TKZ-KERNEL-RENDER-TODO] 'form=brace-above' does not draw
-    yet.}]
-% Refused: brace-above, brace-below, cut, and band are declared
-% mark forms with no render.  Use bracket for a measured span
-% and enclosure for a region.
+  caption={a retired form, refused with its successor},
+  index={The parser still knows a struck word, so that it can answer
+    for it.  Reporting the alphabet alone would list the words that
+    remain, which reads as a typo when the word was in fact removed.
+    Each of the four answers with its own migration, and \tnval{cut}'s
+    says it has no successor.},
+  diagnostic={[TKZ-LANG-TOMBSTONE] form=brace-above retired from the
+    alphabet: use form=bracket with label pos=90; a bracket speaks from
+    the side its label sits on.}]
+% Refused: brace-above is a retired spelling.  A brace above a
+% span is form=bracket with label pos=90.
 \begin{tenkz}[rows={wire}, cols=3, west=open, east=open]
   \tn{A} & \tn{B} & \tn{C}
   \tnmark[form=brace-above]{(1,1) .. (1,2)}{$P$}
 \end{tenkz}
 \end{tnrefusal}
 
-Read that refusal as the language's own rule, stated in
-Chapter~\ref{ch:trouble}: unsupported requested ink is a coded error, never
-a warning followed by omission.  A form that cannot be drawn is not
-quietly dropped, so no figure ever ships missing a mark its source asked
-for.
+The migration is written once, as a tombstone row of the registry, and
+the parser answers in that row's words, so a reader of an older source
+meets the same sentence wherever it is read.  It is also why a retired
+word is refused rather than accepted and drawn as nothing: a picture
+either carries the mark its source asked for or does not compile.
 
 \tnval{prose} is the one form that is accepted without ink, and it is
 accepted because it asks for none.  \tncmd{tnprose} states, in the
