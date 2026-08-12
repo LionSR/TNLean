@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import TNLean.MPS.MPDO.EmbedLocalOperatorTwoSite
 import TNLean.MPS.MPDO.PhysicalSectorBondTransport
 
 /-!
@@ -233,17 +234,8 @@ theorem reindex_embedLocalOperator_two_zero
     Matrix.reindex (finTwoArrowEquiv (Fin d)) (finTwoArrowEquiv (Fin d))
         (embedLocalOperator (d := d) 2 2 (by decide) (0 : Fin 2) F.physicalBond) =
       F.physicalPairBond := by
-  ext σ τ
-  have hAgree : AgreesOutsideWindow (d := d) 2 (by decide) (0 : Fin 2)
-      ((finTwoArrowEquiv (Fin d)).symm σ)
-      ((finTwoArrowEquiv (Fin d)).symm τ) := by
-    funext i
-    fin_cases i <;>
-      simp [MPSTensor.replaceWindow, MPSTensor.extractWindow, finTwoArrowEquiv]
-  simp only [Matrix.reindex_apply, Matrix.submatrix_apply,
-    embedLocalOperator_apply]
-  rw [if_pos hAgree]
-  simp [physicalBond, MPSTensor.extractWindow, finTwoArrowEquiv]
+  rw [MPOTensor.reindex_embedLocalOperator_two_zero]
+  rfl
 
 /-- On the two-site periodic chain, the translate beginning at site one is
 the pair matrix with its two tensor factors exchanged.
@@ -255,18 +247,7 @@ theorem reindex_embedLocalOperator_two_one
     Matrix.reindex (finTwoArrowEquiv (Fin d)) (finTwoArrowEquiv (Fin d))
         (embedLocalOperator (d := d) 2 2 (by decide) (1 : Fin 2) F.physicalBond) =
       swapPairMatrix F.physicalPairBond := by
-  ext σ τ
-  have hAgree : AgreesOutsideWindow (d := d) 2 (by decide) (1 : Fin 2)
-      ((finTwoArrowEquiv (Fin d)).symm σ)
-      ((finTwoArrowEquiv (Fin d)).symm τ) := by
-    funext i
-    fin_cases i <;>
-      simp [MPSTensor.replaceWindow, MPSTensor.extractWindow, finTwoArrowEquiv]
-  simp only [Matrix.reindex_apply, Matrix.submatrix_apply,
-    embedLocalOperator_apply]
-  rw [if_pos hAgree]
-  simp [swapPairMatrix, physicalBond, MPSTensor.extractWindow,
-    finTwoArrowEquiv]
+  rw [MPOTensor.reindex_embedLocalOperator_two_one]
   rfl
 
 /-- The two oppositely ordered translates of the physical bond commute on the
