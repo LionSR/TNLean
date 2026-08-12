@@ -1374,6 +1374,23 @@ spectral split → block extraction → MPV calculation → strict bounds
   threshold; the surrounding conclusions and final generalized-inverse
   calculation differ.
 
+### general cyclic-forward step offset — candidate
+- **Pattern:** for `i : Fin N` and a step `r`, identify the offset of `i` from
+  its `r`-step cyclic forward successor:
+  ```lean
+  (i.val + N - (cyclicForwardSite i r).val) % N = (N - r % N) % N
+  ```
+- **Seen:** the `r = 1` case occurs in `cyclicRestrictₗ_restrictFirst`,
+  `replaceWindow_three_replaceWindow_two_right`, and `offset_from_finRotate`.
+- **Abstraction (proposed):** a `cyclicForwardSite_step_offset` lemma generalizing
+  `MPSTensor.cyclicForwardSite_one_offset`. This remains below the promotion
+  threshold because no current call site requires `r > 1`.
+- **Notes:** under the offset convention in blueprint remark
+  `rem:cyclic_window_operators`, this is the offset of the old starting site
+  from the new start of an `r`-step-shifted cyclic window:
+  $\delta_{\operatorname{cyclicForwardSite}(i,r)}(i)
+  = (N - (r \bmod N)) \bmod N$.
+
 ---
 
 ## Rejected
