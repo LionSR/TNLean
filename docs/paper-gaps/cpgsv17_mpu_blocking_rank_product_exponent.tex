@@ -1,0 +1,68 @@
+\documentclass{article}
+
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+
+\input{command}
+
+\title{The Endpoint Rank-Product Exponent in MPU Index Well-Definedness}
+\author{}
+\date{2026-08-12}
+
+\begin{document}
+\maketitle
+
+\section{The printed exponent}
+
+In the proof of Proposition~IV.2 of \cite{Cirac2017MPU}, the right and left
+source-cut ranks of the $k$-site blocked tensor are printed as
+\[
+  r_k\ell_k=d^k.
+\]
+The blocked physical dimension is $d^k$.
+
+\section{Consistent rank-product identity}
+
+Theorem~III.8 states that for a simple tensor of physical dimension $q$, the
+corresponding ranks obey
+\[
+  r\ell=q^2.
+\]
+Applying this statement to the $k$-site block, with $q=d^k$, gives
+\[
+  r_k\ell_k=(d^k)^2=d^{2k}.
+\]
+The same square occurs in the index discussion and in the later blocking
+argument. Thus the occurrence of $d^k$ in the proof of Proposition~IV.2 is a
+typographical exponent error; the consistent endpoint identity is $d^{2k}$.
+
+\section{Formal treatment}
+
+The simultaneous saturation theorem
+\leanid{MPOTensor.blockingRanks_eq_pow_mul_of_products} does not prove this
+rank-product identity. It takes the two endpoint identities
+\[
+  r_{k_0}\ell_{k_0}=d^{2k_0},
+  \qquad
+  r_k\ell_k=d^{2k}
+\]
+as explicit hypotheses and combines them with the independently proved
+blocking upper bounds. Its focused accessors are
+\leanid{MPOTensor.rightRank_blockTensor_eq_pow_mul_of_products} and
+\leanid{MPOTensor.leftRank_blockTensor_eq_pow_mul_of_products}. A later
+application may obtain the endpoint identities from the formal counterpart of
+Theorem~III.8 under its own assumptions.
+
+\section{Verdict}
+
+\textbf{Verdict: local correction (resolved).}  The exponent in the proof of
+Proposition~IV.2 is corrected from $d^k$ to $d^{2k}$. This does not add an
+assumption beyond the rank-product identity used by that proof, but the formal
+saturation result keeps that identity explicit rather than claiming it from
+blocking alone.
+
+\bibliographystyle{alpha}
+\bibliography{references}
+
+\end{document}

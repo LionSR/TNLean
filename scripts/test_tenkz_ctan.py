@@ -117,6 +117,108 @@ def test_closure_reads_the_unbraced_input() -> None:
             assert quoted.files == ["tenkz.sty", "tenkz-stage.code.tex"], spelling
 
 
+def test_closure_reads_the_stream_opened_file() -> None:
+    """A file a stream primitive opens for reading is a load. A walk that
+    skipped it would certify an archive offline while a run reads an
+    unstaged file from the installation."""
+
+    with tempfile.TemporaryDirectory() as directory:
+        source = Path(directory) / "tex"
+        source.mkdir()
+        (source / "local.cfg").write_text("data\n", encoding="utf-8")
+        for spelling in ("\\openin\\src=local.cfg",
+                         "\\openin\\src = local.cfg",
+                         "\\openin1 local.cfg",
+                         '\\openin\\src="local.cfg"',
+                         # The stream number in TeX's other integer
+                         # syntaxes: a quote left unread would be taken
+                         # for the head of a quoted file name and the
+                         # call would go unread.
+                         '\\openin"1=local.cfg',
+                         "\\openin'17=local.cfg",
+                         "\\openin`\\s=local.cfg",
+                         '\\openin"A="local.cfg"',
+                         "\\ior_open:Nn \\g_src_ior {local.cfg}",
+                         "\\ior_open:NnF \\g_src_ior {local.cfg} {}",
+                         '\\ior_open:Nn \\g_src_ior {"local.cfg"}'):
+            (source / "tenkz.sty").write_text(
+                STAGE_CONTRACT + spelling + "\n", encoding="utf-8"
+            )
+            closure = tenkz_ctan.walk_closure(source, "tenkz.sty")
+            assert closure.files == ["tenkz.sty", "local.cfg"], spelling
+        # The write side creates its file, so there is nothing for the
+        # archive to carry, and a comment is not a load.
+        for innocent in ("\\openout\\log=run.log",
+                         "\\iow_open:Nn \\g_log_iow {run.log}",
+                         "% \\openin\\src=ghost.cfg",
+                         # A control word is read whole: a longer name that
+                         # merely opens with the primitive's letters is not
+                         # the primitive plus a file name, and expl3 words
+                         # continue through underscores and colons.
+                         "\\opening{Dear Reader}",
+                         "\\openinside{note}",
+                         "\\openin_aux:w stop;"):
+            (source / "tenkz.sty").write_text(
+                STAGE_CONTRACT + innocent + "\n", encoding="utf-8"
+            )
+            closure = tenkz_ctan.walk_closure(source, "tenkz.sty")
+            assert closure.files == ["tenkz.sty"], innocent
+        # Both syntaxes are visited in source order: the closure's contract
+        # is the load order, and a stream opened before an input loads first.
+        (source / "second.tex").write_text("data\n", encoding="utf-8")
+        (source / "tenkz.sty").write_text(
+            STAGE_CONTRACT + "\\openin\\src=local.cfg\n\\input second.tex\n",
+            encoding="utf-8",
+        )
+        ordered = tenkz_ctan.walk_closure(source, "tenkz.sty")
+        assert ordered.files == ["tenkz.sty", "local.cfg", "second.tex"], ordered.files
+        # The stream primitive opens data, not TeX source: text inside the
+        # file that looks like a load is not one.
+        (source / "local.cfg").write_text(
+            "\\input{ghost.tex}\n\\usepackage{ghostpkg}\n", encoding="utf-8"
+        )
+        data = tenkz_ctan.walk_closure(source, "tenkz.sty")
+        assert data.files == ["tenkz.sty", "local.cfg", "second.tex"], data.files
+        assert "ghostpkg" not in data.packages, data.packages
+        (source / "local.cfg").write_text("data\n", encoding="utf-8")
+        # A file the runtime writes and later reopens is the run's own
+        # product, not an archive input.
+        for product in ("\\openout\\log=run.log\n\\openin\\src=run.log\n",
+                        "\\iow_open:Nn \\g_out_iow {scratch.dat}\n"
+                        "\\ior_open:Nn \\g_in_ior {scratch.dat}\n"):
+            (source / "tenkz.sty").write_text(
+                STAGE_CONTRACT + product, encoding="utf-8"
+            )
+            closure = tenkz_ctan.walk_closure(source, "tenkz.sty")
+            assert closure.files == ["tenkz.sty"], product
+        # A macro-supplied file name is opened after expansion, which a
+        # static walk cannot perform: the walk fails closed rather than
+        # certifying a closure it could not see.
+        (source / "tenkz.sty").write_text(
+            STAGE_CONTRACT
+            + "\\def\\filename{local.cfg}\n\\openin\\src\\filename\n",
+            encoding="utf-8",
+        )
+        try:
+            tenkz_ctan.walk_closure(source, "tenkz.sty")
+        except SystemExit as refusal:
+            assert "macro-supplied" in str(refusal), refusal
+        else:
+            raise AssertionError("a macro-supplied stream name passed the walk")
+        # A stream-opened file the tree does not hold is a missing load,
+        # not a pass: behaviour depending on a machine-local file is not
+        # submittable even when the file's absence is handled.
+        (source / "tenkz.sty").write_text(
+            STAGE_CONTRACT + "\\openin\\src=absent.cfg\n", encoding="utf-8"
+        )
+        try:
+            tenkz_ctan.walk_closure(source, "tenkz.sty")
+        except SystemExit as refusal:
+            assert "absent.cfg" in str(refusal)
+        else:
+            raise AssertionError("a missing stream-opened file passed the walk")
+
+
 def test_closure_reads_tex_spacing_before_arguments() -> None:
     with tempfile.TemporaryDirectory() as directory:
         source = Path(directory) / "tex"
