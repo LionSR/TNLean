@@ -18,13 +18,14 @@
     \label{thm:ground_space_map_injective_word_span}
     \lean{MPSTensor.groundSpaceMap_injective_of_wordSpan_eq_top}
     \leanok
-    \uses{def:ground_space_map, def:word_span, thm:trace_nondeg}
+    \uses{def:ground_space_map, def:word_span}
     If the length-$L$ products $\{A^\sigma : |\sigma| = L\}$ span $\MN{D}$, then
     $\Gamma_L$ is injective.
 \end{theorem}
 
 \begin{proof}
     \leanok
+    \uses{thm:trace_nondeg}
     If $\Gamma_L(X) = 0$, then $\tr(A^\sigma X) = 0$ for every word $\sigma$ of
     length $L$. The spanning hypothesis turns this into $\tr(MX) = 0$ for every
     $M \in \MN{D}$, and the trace pairing gives $X = 0$.
@@ -34,14 +35,13 @@
     \label{thm:ground_space_map_injective_blk}
     \lean{MPSTensor.groundSpaceMap_injective_of_isNBlkInjective}
     \leanok
-    \uses{thm:ground_space_map_injective_word_span, def:l_blk_injective,
-        lem:wordspan_blk_inj}
-    If $\operatorname{IsNBlkInjective}(A,L_0)$ holds, then $\Gamma_{L_0}$ is
-    injective.
+    \uses{def:ground_space_map, def:l_blk_injective}
+    If $A$ is $L_0$-block injective, then $\Gamma_{L_0}$ is injective.
 \end{theorem}
 
 \begin{proof}
     \leanok
+    \uses{thm:ground_space_map_injective_word_span, lem:wordspan_blk_inj}
     Lemma~\ref{lem:wordspan_blk_inj} identifies $L_0$-block injectivity with
     the word-span hypothesis of
     Theorem~\ref{thm:ground_space_map_injective_word_span}.

@@ -33,6 +33,10 @@ state of the parent Hamiltonian.
 * `MPSTensor.groundSpace_inLeftGround` — forward direction, left window
 * `MPSTensor.groundSpace_inRightGround` — forward direction, right window
 * `MPSTensor.groundSpaceMap_injective` — injectivity for injective tensors
+* `MPSTensor.groundSpaceMap_injective_of_wordSpan_eq_top` — injectivity from exact
+  word-span fullness
+* `MPSTensor.groundSpaceMap_injective_of_isNBlkInjective` — injectivity at a
+  block-injective length
 * `MPSTensor.groundSpace_finrank_eq` — dimension equals \(D^2\)
 * `MPSTensor.groundSpace_intersection` — the intersection property
 
