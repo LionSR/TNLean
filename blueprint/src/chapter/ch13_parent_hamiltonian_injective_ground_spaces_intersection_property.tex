@@ -476,7 +476,10 @@
 \begin{proof}
     \leanok
     \uses{thm:mem_open_chain_left_ground_space_es,
-        thm:mem_open_chain_tail_ground_space_es}
+        thm:mem_open_chain_tail_ground_space_es,
+        lem:local_term_es_kernel_restrictions,
+        lem:mem_ground_space_es,
+        lem:transported_es_local_projections}
     At site $0$, fixing the final physical coordinate is the cyclic restriction
     defining $h_0$. At site $1$, fixing the one-site prefix is the first-site
     restriction and hence the cyclic restriction defining $h_1$. The kernel
