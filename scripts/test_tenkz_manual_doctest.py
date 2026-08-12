@@ -19,23 +19,40 @@ sys.modules[SPEC.name] = DOCTEST
 SPEC.loader.exec_module(DOCTEST)
 
 
+# The manual is meant to draw more of the language over time, so the counts
+# taken from it are floors rather than equalities: the failure worth catching
+# is an extractor that stops seeing examples, or a chapter that falls out of
+# the manual's input graph, and both of those show up as a shortfall.  An
+# added example is not a test edit.  Raise a floor when the coverage it
+# records has been reviewed and should not be given back.  The counts taken
+# from the synthetic fixture below stay exact: that fixture is fixed, and
+# there each extra or missing example is a defect.
+DISPLAYED_FLOOR = 48
+REFERENCE_FLOOR = 12
+
+
 def main() -> int:
     manual = DOCTEST.displayed_examples()
     reference = DOCTEST.reference_examples()
-    if len(manual) != 28:
-        raise AssertionError(f"expected 28 displayed TeX examples, found {len(manual)}")
-    refusals = [example for example in manual if example.expected_failure]
-    if len(refusals) != 1:
+    if len(manual) < DISPLAYED_FLOOR:
         raise AssertionError(
-            f"expected exactly one refusal block in the tutorial, found {len(refusals)}"
+            f"expected at least {DISPLAYED_FLOOR} displayed TeX examples, "
+            f"found {len(manual)}"
         )
-    if refusals[0].expected_failure != "[TKZ-EQ-SIGNATURE]":
+    refusals = [example for example in manual if example.expected_failure]
+    if not refusals:
+        raise AssertionError("the manual displays no refusal block")
+    codes = {example.expected_failure for example in refusals}
+    if "[TKZ-EQ-SIGNATURE]" not in codes:
         raise AssertionError(
             "the tutorial's refusal block was not pinned to its diagnostic: "
-            f"found {refusals[0].expected_failure!r}"
+            f"found {sorted(codes)}"
         )
-    if len(reference) != 12:
-        raise AssertionError(f"expected 12 reference examples, found {len(reference)}")
+    if len(reference) < REFERENCE_FLOOR:
+        raise AssertionError(
+            f"expected at least {REFERENCE_FLOOR} reference examples, "
+            f"found {len(reference)}"
+        )
     if any(r"\begin{document}" not in example.document for example in manual):
         raise AssertionError("a displayed example was not wrapped as a document")
     if any("tenkz_rmp.py" in example.document for example in manual):
