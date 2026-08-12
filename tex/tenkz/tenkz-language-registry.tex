@@ -242,5 +242,12 @@
 % and names the migration there.  A bare spelling is a key that no longer
 % exists: nothing survives to branch on, the unknown-key error answers it, and
 % the row is what tells a reader of an old document where the meaning went.
+% A spelling beginning with a backslash is a command that no longer exists,
+% and takes the scope `command'.
+%
+% Write a multi-word key the way the rest of the registry does, with ~ for the
+% space, and wrap a long migration to keep the line short.  Both are read out
+% before anything compares or matches a row, so what a document writes is what
+% is matched.
 \__tenkz_language_registry_tombstone:nnn {kernel-picture}{periodic}
   {use boundary=periodic}
