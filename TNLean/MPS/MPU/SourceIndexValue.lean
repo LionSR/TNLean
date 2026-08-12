@@ -62,9 +62,11 @@ theorem sourceIndexValue_eq_of_common_rank_scale
     (hrU : r[U] ≠ 0) (hℓU : ℓ[U] ≠ 0)
     (hr : r[V] = c * r[U]) (hℓ : ℓ[V] = c * ℓ[U]) :
     sourceIndexValue V = sourceIndexValue U := by
-  rw [sourceIndexValue, sourceIndexValue, hr, hℓ]
-  norm_cast at hc hrU hℓU
-  rw [Real.logb_mul hc hrU, Real.logb_mul hc hℓU]
+  rw [sourceIndexValue, sourceIndexValue, hr, hℓ, Nat.cast_mul, Nat.cast_mul]
+  have hcReal : (c : ℝ) ≠ 0 := by exact_mod_cast hc
+  have hrReal : (r[U] : ℝ) ≠ 0 := by exact_mod_cast hrU
+  have hℓReal : (ℓ[U] : ℝ) ≠ 0 := by exact_mod_cast hℓU
+  rw [Real.logb_mul hcReal hrReal, Real.logb_mul hcReal hℓReal]
   ring
 
 /-- If the supplied source ranks satisfy $r\ell=d^2$ and $d$ is nonzero, then
@@ -77,16 +79,20 @@ theorem sourceIndexValue_eq_logb_rightRank_div (U : MPOTensor d D)
     sourceIndexValue U = Real.logb 2 ((r[U] : ℝ) / d) := by
   have hr : r[U] ≠ 0 := by
     intro h
-    simp [h, hd] at hprod
+    rw [h, zero_mul] at hprod
+    exact hd (Nat.pow_eq_zero.mp hprod.symm).1
   have hℓ : ℓ[U] ≠ 0 := by
     intro h
-    simp [h, hd] at hprod
-  norm_cast at hd hr hℓ
+    rw [h, mul_zero] at hprod
+    exact hd (Nat.pow_eq_zero.mp hprod.symm).1
+  have hdReal : (d : ℝ) ≠ 0 := by exact_mod_cast hd
+  have hrReal : (r[U] : ℝ) ≠ 0 := by exact_mod_cast hr
+  have hℓReal : (ℓ[U] : ℝ) ≠ 0 := by exact_mod_cast hℓ
   have hprodReal : (r[U] : ℝ) * (ℓ[U] : ℝ) = (d : ℝ) * d := by
     exact_mod_cast hprod.trans (pow_two d)
   have hlog := congrArg (Real.logb 2) hprodReal
-  rw [Real.logb_mul hr hℓ, Real.logb_mul hd hd] at hlog
-  rw [sourceIndexValue, Real.logb_div hr hd]
+  rw [Real.logb_mul hrReal hℓReal, Real.logb_mul hdReal hdReal] at hlog
+  rw [sourceIndexValue, Real.logb_div hrReal hdReal]
   linarith
 
 /-- If the supplied source ranks satisfy $r\ell=d^2$ and $d$ is nonzero, then
@@ -99,16 +105,20 @@ theorem sourceIndexValue_eq_neg_logb_leftRank_div (U : MPOTensor d D)
     sourceIndexValue U = -Real.logb 2 ((ℓ[U] : ℝ) / d) := by
   have hr : r[U] ≠ 0 := by
     intro h
-    simp [h, hd] at hprod
+    rw [h, zero_mul] at hprod
+    exact hd (Nat.pow_eq_zero.mp hprod.symm).1
   have hℓ : ℓ[U] ≠ 0 := by
     intro h
-    simp [h, hd] at hprod
-  norm_cast at hd hr hℓ
+    rw [h, mul_zero] at hprod
+    exact hd (Nat.pow_eq_zero.mp hprod.symm).1
+  have hdReal : (d : ℝ) ≠ 0 := by exact_mod_cast hd
+  have hrReal : (r[U] : ℝ) ≠ 0 := by exact_mod_cast hr
+  have hℓReal : (ℓ[U] : ℝ) ≠ 0 := by exact_mod_cast hℓ
   have hprodReal : (r[U] : ℝ) * (ℓ[U] : ℝ) = (d : ℝ) * d := by
     exact_mod_cast hprod.trans (pow_two d)
   have hlog := congrArg (Real.logb 2) hprodReal
-  rw [Real.logb_mul hr hℓ, Real.logb_mul hd hd] at hlog
-  rw [sourceIndexValue, Real.logb_div hℓ hd]
+  rw [Real.logb_mul hrReal hℓReal, Real.logb_mul hdReal hdReal] at hlog
+  rw [sourceIndexValue, Real.logb_div hℓReal hdReal]
   linarith
 
 end MPOTensor
