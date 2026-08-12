@@ -3163,8 +3163,10 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
 
 \begin{proof}\leanok
     \uses{def:mpu_full_active_support,
-        def:mpu_active_blocks_blocking_equiv}
-    Reindex the sum of the unchanged active block dimensions by the
+        def:mpu_active_blocks_blocking_equiv,
+        thm:cpsv_literal_canonical_form_positive_blocking}
+    Positive blocking supplies canonical-form data with the same block
+    dimensions. Reindex their active-dimension sum by the
     equivalence in Definition~\ref{def:mpu_active_blocks_blocking_equiv}.
 \end{proof}
 
@@ -3495,6 +3497,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     \uses{def:cpsv_cfii,def:mpu_normalized_flattening,
         thm:cpsv_literal_canonical_form_positive_blocking,
         thm:cpsv_physical_reindexing,
+        lem:blocked_irreducibility_direct_support,
         thm:mpu_left_canonical_blocking_reindexing,
         thm:mpu_normalized_flattening_blocking}
     Let $A$ have canonical-form-II data with retained weights $\mu_k$, blocks
@@ -3516,10 +3519,16 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     and then relabeling by $\vartheta_L$ from
     Theorem~\ref{thm:mpu_normalized_flattening_blocking}.
     Theorem~\ref{thm:mpu_left_canonical_blocking_reindexing} preserves the
-    left-canonical identity under both operations. The blocked transfer map
-    of each retained block is the $L$th power of its original transfer map.
-    Hence it fixes the same $\Lambda_k$, while positivity and diagonality are
-    unchanged. A physical bijection leaves the transfer map unchanged. The
+    left-canonical identity under both operations. For each retained block,
+    Lemma~\ref{lem:blocked_irreducibility_direct_support} gives
+    \begin{align}
+        \E_{A_k^{[L]}}&=\E_{A_k}^{L},
+        &\E_{A_k}^{L}(\Lambda_k)&=\Lambda_k.
+    \end{align}
+    The second identity follows by iterating
+    $\E_{A_k}(\Lambda_k)=\Lambda_k$. Thus the same positive definite diagonal
+    matrix is fixed after blocking. A physical bijection leaves the transfer
+    map unchanged. The
     final construction applies these two operations to
     (\ref{eq:mpu_normalized_flattening_blocking}).
 \end{definition}
