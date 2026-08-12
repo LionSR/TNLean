@@ -170,6 +170,18 @@ private lemma evalWord_apply_ne_zero_iff (W : FusionWeights) (w : List (Fin 8))
         beq_iff_eq]
       tauto
 
+/-- A nonempty physical word cannot contribute to both closed virtual endpoints.
+
+This is the endpoint-support fact needed to split the periodic trace support into
+its two diagonal boundary sectors. -/
+lemma evalWord_closed_endpoint_support_disjoint (W : FusionWeights) (p : Fin 8)
+    (w : List (Fin 8)) :
+    ¬(evalWord (tensor W) (p :: w) 0 0 ≠ 0 ∧ evalWord (tensor W) (p :: w) 1 1 ≠ 0) := by
+  rw [evalWord_apply_ne_zero_iff, evalWord_apply_ne_zero_iff]
+  simp only [isSupportedWord, Bool.and_eq_true, Bool.not_eq_true',
+    decide_eq_false_iff_not, beq_iff_eq]
+  omega
+
 private lemma supportedCount_eq_x (n : ℕ) (α β : Fin 2) :
     supportedCount n α β = x n α β := by
   induction n generalizing α with
