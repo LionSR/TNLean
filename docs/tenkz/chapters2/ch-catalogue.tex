@@ -98,8 +98,6 @@ the tutorial's double layer is one two-member basis under a name; writing
 the basis out places the members where the mathematics wants them.
 
 \begin{tnexample}[
-  formula={C^{\phantom{)}}_{\gamma}=\sum_{\alpha\beta}
-    A_{\alpha}B_{\beta}},
   caption={three basis members in one frame},
   index={One cell, three members.  The offsets are quarter-pitch steps
     from the origin member, and each member's copy of the cell is
@@ -498,7 +496,7 @@ wrote, and the answer carries the migration rather than the alphabet:
     says it has no successor.},
   diagnostic={[TKZ-LANG-TOMBSTONE] form=brace-above retired from the
     alphabet: use form=bracket with label pos=90; a bracket speaks from
-    the side its label sits on.}]
+    the side its label sits on (record mark-4).}]
 % Refused: brace-above is a retired spelling.  A brace above a
 % span is form=bracket with label pos=90.
 \begin{tenkz}[rows={wire}, cols=3, west=open, east=open]
@@ -557,14 +555,18 @@ side the frame bonds to the rows it spans, and it is how a doubled-layer
 object is written as one tensor.
 
 \begin{tnexample}[
-  formula={M^{ij}=\sum_{\alpha}e\,(A^{i}\otimes\overline{A}^{j})\,e^{-1}},
+  formula={M^{ij}=\sum_{k}e\,(A^{(i,k)}\otimes\overline{A}^{(j,k)})
+    \,e^{-1}},
   caption={a fuser, the doubled layer, and its inverse},
   index={The two fusion atoms span both rows and combine the ket and bra
     virtual indices into one; between them the two layers carry the
-    physical indices $i$ and $j$.},
+    physical indices $i$ and $j$.  The frame's bond between the rows is
+    the ancillary index $k$ the sum runs over.},
   signature={kernel-boundary|signature=open:e, open:w, phys:n, phys:s}]
-% Formula: M^{ij} = e (A^i tensor conj(A)^j) e^{-1}; the fusers
-%   combine the ket and bra virtual indices into one.
+% Formula: M^{ij} = sum_k e (A^{(i,k)} tensor
+%   conj(A)^{(j,k)}) e^{-1}; the fusers combine the ket and bra
+%   virtual indices into one, and the bond between the rows is
+%   the ancillary index k.
 \begin{tenkz}[rows={op,op}, cols=3]
   \tnfuse[at=(1,1), name=e, skin=pill]{e}
   \tn[at=(1,2), skin=box, ports={90:physical:$i$}]{A}
