@@ -214,14 +214,16 @@ REGENERATED_SUFFIXES = frozenset({".dtx", ".ins", ".fmt", ".mf", ".drv"})
 #
 # The stream is a number, not a spelling. TeX's integer scanner takes optional
 # space, leading zeros, and a `"` or `'` prefix for hexadecimal and octal, so
-# `\write 18`, `\write018`, `\write"12`, and `\write'22` all open stream 18.
-# The constant is therefore read and evaluated rather than matched against one
-# way of writing it. What this does not read is a stream held in a register or
+# `\write 18`, `\write018`, `\write"12`, and `\write'22` all open stream 18,
+# and so does a run of signs with an even number of minuses: `\write+18` and
+# `\write--18`. The constant is therefore read and evaluated rather than
+# matched against one way of writing it. What this does not read is a stream held in a register or
 # an expl3 stream variable, which no constant search can: a submission that
 # reached the shell that way would need the run to catch it, and the offline
 # compile runs with shell escape off for exactly that reason.
 WRITE_STREAM = re.compile(
-    r"\\write\s*(?:\"(?P<hex>[0-9A-Fa-f]+)|'(?P<oct>[0-7]+)|(?P<dec>[0-9]+))"
+    r"\\write(?P<signs>[\s+-]*)"
+    r"(?:\"(?P<hex>[0-9A-Fa-f]+)|'(?P<oct>[0-7]+)|(?P<dec>[0-9]+))"
 )
 SHELL_ESCAPE_NAME = re.compile(r"\\ShellEscape\b")
 SHELL_ESCAPE_STREAM = 18
@@ -244,7 +246,8 @@ def shell_escape_call(text: str) -> str:
             else (found["oct"], 8) if found["oct"]
             else (found["dec"], 10)
         )
-        if int(digits, base) == SHELL_ESCAPE_STREAM:
+        sign = -1 if found["signs"].count("-") % 2 else 1
+        if sign * int(digits, base) == SHELL_ESCAPE_STREAM:
             return found.group(0)
     return ""
 
@@ -1448,6 +1451,23 @@ def recorded_inputs(record: Path) -> list[str]:
     ]
 
 
+def carried_runtime() -> set[str]:
+    """The runtime file names a record line is read against.
+
+    It comes from the load graph rather than from a `tenkz` prefix, because the
+    documents the offline check writes are named from the package too and a
+    prefix match would count one of them as proof that the package answered.
+
+    It is deliberately not narrowed to what the archive staged. A runtime file
+    the archive forgot has to stay in the reading: an installed copy answering
+    for it resolves outside the room, and dropping the name is what would hide
+    that. The archive's own completeness is the closure check's question, and
+    it is asked there.
+    """
+
+    return set(walk_closure().files)
+
+
 def repository_inputs(opened: list[str], room: Path, flat: Path) -> list[str]:
     """Those of the opened files that came from the repository, not the flat.
 
@@ -1507,14 +1527,7 @@ def check_offline(archive: Path, required: bool) -> Report:
             report.failures.append(str(refusal))
             return report
         environment = offline_environment(room, shims, tripwire, home)
-        # The runtime the entry point loads, by name. It comes from the load
-        # graph rather than from a `tenkz` prefix, because the documents this
-        # check writes are named from the package too and a prefix match would
-        # count one of them as proof that the package answered. It is not
-        # narrowed to what the archive staged either: a file the archive forgot
-        # has to stay in the reading, or an installed copy answering for it
-        # would resolve outside the room and never be looked at.
-        carried = set(walk_closure().files)
+        carried = carried_runtime()
         for case in OFFLINE_CASES:
             _offline_case(case, room, engine, environment, audit, carried, report)
         if tripwire.exists():
