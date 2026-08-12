@@ -72,8 +72,8 @@ representation; the finite cyclic-block calculation itself needs only the OBC
 chain tensor and the stated translation invariance.
 
 **Scope restriction (supplied OBC representation):** the arbitrary-state OBC
-existence input of PGVWC07 Theorem 3 remains issue #6086. This boundary is
-recorded in `docs/paper-gaps/pgvwc07_site_independent_scope.tex`. -/
+existence input of PGVWC07 Theorem 3 is not included. This boundary is recorded
+in `docs/paper-gaps/pgvwc07_site_independent_scope.tex`. -/
 theorem pgvwc07_site_independent_matrices
     (A : OBCChainTensor d D N) [NeZero N]
     (hTI : A.IsTranslationInvariantState) (σ : Fin N → Fin d) :
