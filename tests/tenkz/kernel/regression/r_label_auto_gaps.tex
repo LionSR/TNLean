@@ -5,10 +5,18 @@
 % endpoint resolves to a cell, and the direction its ink leaves by is the
 % sign of the difference between two cell numbers.  A placement the frame
 % does not chart has no cell to difference, and a route that turns where its
-% own waypoints say does not leave along the chord between its ends.  For
-% those the scan reserves nothing and the station falls back to south, which
-% is exactly where these labels stood before the station was added: no
-% figure regresses, and none of them improves either.
+% own waypoints say does not leave along the chord between its ends.
+%
+% Two different things happen there, and only the first is inert.  Where no
+% cell exists at all the scan reserves nothing and the station stays at the
+% south these labels stood on before the station was added.  Where a cell
+% exists but describes the wrong thing -- the turning route -- the scan falls
+% back to the opposite end of the wire and reserves the face the chord points
+% at, which the ink may never use.  On an atom carrying other wires that can
+% carry the station onto the route rather than leave it at south: with north
+% and south taken, a string whose chord runs east while its ink leaves west
+% reserves east and sends the name west, onto the route.  Each picture here
+% pins one atom, so each pins the station and not that interaction.
 %
 % Each picture below is a placement, a frame, or a kind of ink the reading
 % cannot answer.
@@ -97,7 +105,9 @@
   \tnwire{P}{C}
 \end{tenkz}
 % A waypoint spelt as a relative address names a point, not a cell, so the
-% departure bearing is a property of the resolved point.
+% departure bearing is a property of the resolved point.  The scan falls
+% back to the chord between the ends, which here points the way the route
+% leaves, so this atom's station is south either way.
 \begin{tenkz}[lattice={2x3}, bonds=none]
   \tn[at=(1,1), name=Q, skin=dot]{Q}
   \tn[at=(1,3), name=E]{}
