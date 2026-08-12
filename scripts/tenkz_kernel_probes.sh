@@ -74,19 +74,40 @@ ${#sketch_rows[@]}" >&2
   exit 1
 }
 
+# A row's example is the first fence after its heading and before the next
+# heading of the same or a higher level: without that stop, a row whose own
+# fence left the document silently takes the next section's example, and the
+# count guard above cannot see it because the count is unchanged.  Each row
+# also marks the line of the fence it consumed, and the marks are compared
+# after the loop: the count guard and pairwise-distinct marks together force
+# a bijection between the contract's fences and this table's rows.  A line
+# opening a fence toggles the fence state so a heading-shaped line inside an
+# example neither arms nor stops a scan.
+sketch_marks=""
 for sketch_row in "${sketch_rows[@]}"; do
   IFS=: read -r job heading fixture <<SKETCHROW
 $sketch_row
 SKETCHROW
-  awk -v heading="$heading" '
-    index($0, heading) == 1 { s = 1 }
-    s && $0 == "```tex" { f = 1; next }
-    f && $0 == "```" { exit }
-    f' "$CONTRACT" | sed -e 's/^\\\[//' -e 's/\\\]$//' >"$WORK/$job.body"
-  [ -s "$WORK/$job.body" ] || {
+  awk -v heading="$heading" -v mark="$WORK/$job.fenceline" '
+    BEGIN { while (substr(heading, level + 1, 1) == "#") level++ }
+    {
+      if (!infence && !s && index($0, heading) == 1) { s = 1; next }
+      if (!infence && s && !f && substr($0, 1, 1) == "#") {
+        h = 0
+        while (substr($0, h + 1, 1) == "#") h++
+        if (h <= level) exit
+      }
+      if (s && !f && $0 == "```tex") { f = 1; infence = 1; print NR > mark; next }
+      if (f && $0 == "```") exit
+      if (f) { print; next }
+      if (substr($0, 1, 3) == "```") infence = !infence
+    }' "$CONTRACT" | sed -e 's/^\\\[//' -e 's/\\\]$//' >"$WORK/$job.body"
+  [ -s "$WORK/$job.body" ] && [ -s "$WORK/$job.fenceline" ] || {
     echo "FAIL: the contract's '$heading' example could not be extracted" >&2
     exit 1
   }
+  sketch_marks="$sketch_marks$(cat "$WORK/$job.fenceline") $job
+"
   { printf '%s\n' \
       '\documentclass{standalone}' \
       '\usepackage{tenkz}' \
@@ -113,6 +134,15 @@ SKETCHROW
     exit 1
   fi
 done
+
+shared_fences="$(printf '%s' "$sketch_marks" | sort -n | awk '
+  $1 == last { print }
+  { last = $1 }')"
+[ -z "$shared_fences" ] || {
+  echo "FAIL: one printed example answered two rows of the table:" >&2
+  echo "$shared_fences" >&2
+  exit 1
+}
 
 for tex in "$WORK"/*.tex; do
   compile "$(basename "$tex")"
