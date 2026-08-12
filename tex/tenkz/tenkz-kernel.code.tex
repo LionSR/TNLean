@@ -16581,8 +16581,13 @@
             % first free face in the order s, n, e, w
             \tl_if_empty:NF \l__tenkz_kernel_r_skin_label_tl
               {
+                % `auto` is the registry's own default and an author may
+                % write it out; the word names the chooser, not an angle,
+                % so it reaches the chooser as an absent field does.
                 \__tenkz_model_get:nnN {#1} {label-pos} \l__tenkz_kernel_r_c_tl
-                \quark_if_no_value:NT \l__tenkz_kernel_r_c_tl
+                \bool_lazy_or:nnT
+                  { \quark_if_no_value_p:N \l__tenkz_kernel_r_c_tl }
+                  { \str_if_eq_p:Vn \l__tenkz_kernel_r_c_tl {auto} }
                   {
                     \__tenkz_kernel_r_label_auto_side:nN {#1}
                       \l__tenkz_kernel_r_c_tl
