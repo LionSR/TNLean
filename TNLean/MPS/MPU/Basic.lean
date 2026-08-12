@@ -89,7 +89,7 @@ lemma conjTranspose_mpo_mul_mpo {U : MPOTensor d D} (hU : IsMPU U) {N : ℕ} (hN
 /-- Concatenating two matrix product unitary tensors in the order `U * V`
 again gives a matrix product unitary tensor.
 
-The local tensor is `mulTensor U V`, whose periodic operator is
+The local tensor is `MPOTensor.mulTensor U V`, whose periodic operator is
 `mpo U N * mpo V N`; thus the order agrees with the concatenation tensor
 constructed in the source.
 
