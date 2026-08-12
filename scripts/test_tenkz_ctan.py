@@ -872,6 +872,14 @@ def test_every_spelling_of_stream_eighteen_is_the_shell_escape_stream() -> None:
     assert tenkz_ctan.shell_escape_call(
         "\\immediate\\write\\tenkz@log{#1}\n"
     ), "a stream nothing allocated passed"
+    # A control word that merely begins with the primitive's letters is a name,
+    # not the primitive: `@` is a letter in a package and `_` and `:` are
+    # letters under `\ExplSyntaxOn`, so refusing these would block a release
+    # over a spelling.
+    for name in (r"\write@event{x}", r"\write:nn {x}{y}", r"\write_stuff{x}"):
+        assert not tenkz_ctan.shell_escape_call(name), name
+    # The one assembled spelling that is still readable from the text.
+    assert tenkz_ctan.shell_escape_call(r"\csname write\endcsname18{x}")
     # Numbers that are not 18 in the base their prefix names, an odd run of
     # minus signs, and a control sequence that merely starts with the same
     # letters.
@@ -936,6 +944,12 @@ def test_an_unbraced_absolute_input_is_an_absolute_path() -> None:
             "\\input /Users/somebody/tenkz-core.code.tex\n", encoding="utf-8"
         )
         unbraced = tenkz_ctan.check_arxiv(tree, _loaded("tenkz.sty"))
+        # A starred form puts its star between the command and its arguments.
+        (tree / "tenkz.sty").write_text(
+            "\\includegraphics*{/Users/somebody/figure.pdf}\n", encoding="utf-8"
+        )
+        starred = tenkz_ctan.check_arxiv(tree, _loaded("tenkz.sty"))
+        assert any("absolute path" in reason for reason in starred.failures), starred.failures
         (tree / "tenkz.sty").write_text("\\input tenkz-core.code.tex\n", encoding="utf-8")
         relative = tenkz_ctan.check_arxiv(tree, _loaded("tenkz.sty"))
     assert any("absolute path" in reason for reason in unbraced.failures), unbraced.failures
