@@ -920,6 +920,11 @@
 % reads as a typo when the word was in fact retired.  A tombstone is a
 % branch of a key that is already installed, so it opens no parser path of its
 % own and the census does not move.
+%
+% The words come from the registry's tombstone rows and from nowhere else
+% (LANGUAGE-1.0 section 10).  The kernel owns when a refusal is installed; the
+% registry owns which spellings are dead and what each one migrates to, so the
+% parser, the linter and the generated reference read one record.
 \cs_new_protected:Npn \__tenkz_kernel_tombstone:nnnn #1#2#3#4
   {
     \keys_define:nn {#1}
@@ -930,6 +935,27 @@
               { \tl_use:N \l__tenkz_model_last_tl }
           }
       }
+  }
+% One registry row.  A row that names no value retires a whole key or command,
+% which the linter reports and the parser has already stopped installing; only
+% a row naming a value of a live kernel key becomes a refusal here.
+\cs_new_protected:Npn \__tenkz_kernel_tombstone_row:nnnnn #1#2#3#4#5
+  {
+    \tl_if_empty:nF {#3}
+      {
+        \str_if_eq:eeT { \str_range:nnn {#1} {1} {7} } { kernel- }
+          {
+            \tl_if_empty:nTF {#4}
+              { \__tenkz_kernel_tombstone:nnnn { tenkz-#1 } {#2} {#3} {#5} }
+              { \__tenkz_kernel_tombstone:nnnn { tenkz-#1 } {#2} {#3}
+                  { use~#4 . ~ #5 } }
+          }
+      }
+  }
+\cs_new_protected:Npn \__tenkz_kernel_tombstones:
+  {
+    \seq_map_inline:Nn \g__tenkz_language_tombstones_seq
+      { \__tenkz_kernel_tombstone_row:nnnnn ##1 }
   }
 \cs_new_protected:Npn \__tenkz_kernel_value:nnn #1#2#3
   {
@@ -1323,22 +1349,6 @@
 \__tenkz_kernel_choice:nnnn { tenkz-kernel-mark } { form }
   { bracket, enclosure, label, prose }
   { form }
-% The four spellings the alphabet lost.  Each accepted a record and drew
-% nothing, and each has one live word that says the same thing, so the parser
-% keeps the dead spelling long enough to name its successor rather than
-% answering with the alphabet and leaving a reader to guess whether the word
-% was mistyped or removed.
-\__tenkz_kernel_tombstone:nnnn { tenkz-kernel-mark } { form } { brace-above }
-  { use~form=bracket~with~label~pos=90;~a~bracket~speaks~from~the~side~its~
-    label~sits~on }
-\__tenkz_kernel_tombstone:nnnn { tenkz-kernel-mark } { form } { brace-below }
-  { use~form=bracket,~which~speaks~from~the~south~when~it~names~no~side }
-\__tenkz_kernel_tombstone:nnnn { tenkz-kernel-mark } { form } { cut }
-  { no~successor:~the~sources'~cut~is~the~contour~of~what~it~separates,~
-    so~use~form=enclosure~over~that~selection }
-\__tenkz_kernel_tombstone:nnnn { tenkz-kernel-mark } { form } { band }
-  { use~form=enclosure~with~tint,~which~lays~ink~over~the~paper~its~contour~
-    encloses }
 \__tenkz_kernel_choice:nnnn { tenkz-kernel-mark } { slot }
   { selected, secondary, complement, collar, neutral } { slot }
 \__tenkz_kernel_value:nnn   { tenkz-kernel-mark } { species } { species }
@@ -1385,6 +1395,11 @@
   { tenkz-kernel-declare-atom } { ports } { ports }
 \__tenkz_kernel_unknown:nn
   { tenkz-kernel-declare-atom } { atom~declaration }
+
+% Last, so that a tombstone overrides the alphabet's own unknown branch for
+% every key tree above: the registry's dead spellings become refusals that
+% name their migration.
+\__tenkz_kernel_tombstones:
 
 % ---------- record helpers ---------------------------------------------------------
 % Copy every staged field onto the newest record, register a user name when

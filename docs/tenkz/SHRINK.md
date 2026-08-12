@@ -3093,6 +3093,27 @@ which is where the fill went, and `cut` says there is no successor and points
 at the contour of what a cut separates. A tombstone is a branch of a key that
 is already installed, so it opens no parser path.
 
+**Where a dead spelling lives.** In the registry, and nowhere else. Section 10
+has said since session 0 that deleted spellings stay there so the linter can
+reject them forever with the migration hint, and the first draft of this
+change did the opposite: it struck the four words from the registry and wrote
+them again as parser branches, which is a second copy of the same knowledge
+and the one thing section 10 forbids. The registry now carries a tombstone
+row per dead spelling, naming the scope, the key, the value, the replacement
+and the migration sentence, and three readers take that row rather than a
+list of their own. The parser installs the refusal from it, so what a compile
+prints is the row read aloud. The generated reference prints it beside the
+aliases, which answer the same reader holding an older document. The
+disposition checker had held a fourth copy of the four names and now reads
+them here too, which also corrects it: that copy called `prose` dead, and
+`prose` is live.
+
+The registry check refuses a row that would make the record lie. A tombstone
+may not bury a spelling its key still accepts, may not bury a key the
+registry still registers, and may not migrate a reader to vocabulary that is
+not live, so a migration pointing at a second dead spelling fails the gate
+rather than the reader. This is the record `#6187` reads for the linter.
+
 **No meter moves, and that is the finding.** M1 stays at 63 kernel rows and 86
 public elements, M2 at 75 parser paths with an unchanged identity hash, M3 at
 zero, M4 at 26.48, M5 and M6 unchanged. The mark form row survives, four of
