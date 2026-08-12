@@ -1542,6 +1542,43 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
     \end{align}
 \end{definition}
 
+% Auxiliary transformation identity from source cuts (paper lines 450--506)
+% and physical adjunction (paper lines 1196--1252), not the time-reversal classification.
+\begin{theorem}[Source cuts and ranks under physical adjunction]
+    \label{thm:mpu_physical_adjoint_source_ranks}
+    \lean{MPOTensor.sourceCutM₁_physicalAdjointTensor,
+        MPOTensor.sourceCutM₂_physicalAdjointTensor,
+        MPOTensor.rightRank_physicalAdjointTensor,
+        MPOTensor.leftRank_physicalAdjointTensor}
+    \leanok
+    \uses{def:mpdo_physical_adjoint,def:mpu_source_matrix_one,
+        def:mpu_source_matrix_two,def:mpu_right_rank,def:mpu_left_rank}
+    Physical adjunction exchanges the two source cuts and conjugates every
+    entry:
+    \begin{align}
+        M_1(\mathcal U^\sharp)&=\overline{M_2(\mathcal U)}.
+    \end{align}
+    \begin{align}
+        M_2(\mathcal U^\sharp)&=\overline{M_1(\mathcal U)}.
+    \end{align}
+    Consequently, it exchanges the two source ranks:
+    \begin{align}
+        r(\mathcal U^\sharp)&=\ell(\mathcal U).
+    \end{align}
+    \begin{align}
+        \ell(\mathcal U^\sharp)&=r(\mathcal U).
+    \end{align}
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:mpdo_physical_adjoint,def:mpu_source_matrix_one,
+        def:mpu_source_matrix_two,def:mpu_right_rank,def:mpu_left_rank}
+    The physical adjoint exchanges the upper and lower physical indices while
+    leaving both auxiliary indices fixed. Thus the first regrouping becomes
+    the entrywise conjugate of the second, and conversely. Entrywise
+    conjugation preserves matrix rank, so the two rank identities follow.
+\end{proof}
+
 \begin{theorem}[Source cuts under physical reindexing]
     \label{thm:mpu_source_cuts_physical_reindexing}
     \lean{MPOTensor.sourceCutM₁_reindexPhysical,
