@@ -1,4 +1,4 @@
-\subsection{Transport under physical blocking}
+\section{Transport under physical blocking}\label{sec:blocking_transport}
 
 For a tensor $A=(A^i)_{i=0}^{d-1}$ and a block length $p$, write
 $A^{[p]}$ for the tensor whose physical matrices are the consecutive products
@@ -16,7 +16,8 @@ construction; they are not attributed to a source theorem.
     Grouping each consecutive $p$-tuple of physical indices defines a canonical
     computational-basis unitary satisfying
     \begin{align}
-        U_{N,p}&:\mathcal H_N^{(d^p)}\longrightarrow\mathcal H_{Np}^{(d)}.
+        W_{N,p}&:\ell^2\!\left(\Fin{d^p}^{N}\right)
+        \longrightarrow\ell^2\!\left(\Fin{d}^{Np}\right).
         \label{eq:blocked_configuration_isometry}
     \end{align}
     Its forward and inverse coordinate formulas are the corresponding
@@ -29,12 +30,12 @@ construction; they are not attributed to a source theorem.
     \lean{MPSTensor.blockedConfigLinearIsometryEquiv_groundSpaceMapES}
     \leanok
     \uses{def:blocked_configuration_isometry, def:blocked_tensor,
-        def:ground_space_map}
-    For every boundary matrix $X\in\MN{D}$, blocking preserves each
-    coefficient of the open-boundary matrix product vector after the canonical
-    reindexing. Equivalently,
+        def:ground_space_map, def:ground_space_map_es}
+    For every $x\in\ell^2(\Fin{D}\times\Fin{D})$, the Euclidean boundary maps
+    intertwine with the blocked-configuration isometry:
     \begin{align}
-        U_{N,p}\Gamma_N^{A^{[p]}}(X)&=\Gamma_{Np}^{A}(X).
+        W_{N,p}\Gamma_N^{\mathrm{ES},A^{[p]}}(x)
+        &=\Gamma_{Np}^{\mathrm{ES},A}(x).
         \label{eq:blocked_boundary_map_transport}
     \end{align}
 \end{lemma}
@@ -44,16 +45,19 @@ construction; they are not attributed to a source theorem.
     \uses{lem:eval_word_block, lem:ground_space_map_apply,
         thm:ground_space_map_es_frobenius}
     For a blocked configuration $J=(J_1,\ldots,J_N)$ and its flattened word
-    $\sigma$, blocked-word evaluation and the boundary-map evaluation formula
-    give
+    $\sigma$, blocked-word evaluation gives
     \begin{align}
+        (A^{[p]})^{J}
+        &=A^{\sigma_1}\cdots A^{\sigma_{Np}},
+        \label{eq:blocked_word_flattening}\\
         \Gamma_N^{A^{[p]}}(X)(J)
-        &=\tr\!\left(A^{\sigma}X\right)
-         =\Gamma_{Np}^{A}(X)(\sigma).
+        &=\tr\!\left(A^{\sigma_1}\cdots A^{\sigma_{Np}}X\right)
+         =\Gamma_{Np}^{A}(X)(\sigma)
+        \qquad (X\in\MN{D}).
         \label{eq:blocked_boundary_map_transport_coefficients}
     \end{align}
-    The Frobenius transport formula then identifies the Euclidean boundary maps
-    coefficientwise, yielding (\ref{eq:blocked_boundary_map_transport}).
+    Applying the Frobenius transport formula to the coefficient identity yields
+    (\ref{eq:blocked_boundary_map_transport}).
 \end{proof}
 
 \begin{theorem}[Local ground-space transport under blocking]
@@ -65,25 +69,26 @@ construction; they are not attributed to a source theorem.
     \leanok
     \uses{def:blocked_configuration_isometry, def:blocked_tensor,
         def:ground_space_es, lem:blocked_boundary_map_transport}
-    The local space of the blocked tensor is carried exactly to the original
-    local space:
+    The Euclidean local space of the blocked tensor is carried exactly to the
+    original Euclidean local space:
     \begin{align}
-        U_{N,p}G_N(A^{[p]})&=G_{Np}(A).
+        W_{N,p}G_N^{\mathrm{ES}}(A^{[p]})
+        &=G_{Np}^{\mathrm{ES}}(A).
         \label{eq:blocked_local_ground_space_transport}
     \end{align}
     Hence their orthogonal projectors satisfy
     \begin{align}
-        P_{G_{Np}(A)}&=U_{N,p}P_{G_N(A^{[p]})}U_{N,p}^{*}.
+        P_{G_{Np}^{\mathrm{ES}}(A)}
+        &=W_{N,p}P_{G_N^{\mathrm{ES}}(A^{[p]})}W_{N,p}^{*}.
         \label{eq:blocked_ground_projector_conjugacy}
     \end{align}
     These statements include $N=0$ or $p=0$; in those cases the same explicit
     configuration isometry and boundary-map calculation apply. In particular,
     the projector identity holds for three blocked sites and $3p$ original
     sites.
-
-    This theorem does not identify the left or tail open-chain spectator spaces
-    needed by a three-block estimate, and it makes no comparison between the
-    blocked and original parent Hamiltonians.
+    % Scope: this theorem does not identify the left or tail open-chain spectator
+    % spaces needed by a three-block estimate and does not compare the blocked and
+    % original parent Hamiltonians.
 \end{theorem}
 
 \begin{proof}
@@ -92,11 +97,16 @@ construction; they are not attributed to a source theorem.
     The exact range identification for the Euclidean boundary map and
     (\ref{eq:blocked_boundary_map_transport}) give
     \begin{align}
-        U_{N,p}\operatorname{range}\!\left(\Gamma_N^{A^{[p]}}\right)
-        &=\operatorname{range}\!\left(\Gamma_{Np}^{A}\right),
+        W_{N,p}\operatorname{range}\!\left(\Gamma_N^{\mathrm{ES},A^{[p]}}\right)
+        &=\operatorname{range}\!\left(\Gamma_{Np}^{\mathrm{ES},A}\right),
         \label{eq:blocked_boundary_map_range_transport}
     \end{align}
-    which is (\ref{eq:blocked_local_ground_space_transport}). Orthogonal
-    projection onto the image of a subspace under a unitary then gives
+    which is (\ref{eq:blocked_local_ground_space_transport}). For every
+    subspace $K$, orthogonal projection under the unitary $W_{N,p}$ satisfies
+    \begin{align}
+        P_{W_{N,p}(K)}&=W_{N,p}P_KW_{N,p}^{*}.
+        \label{eq:projection_under_blocked_isometry}
+    \end{align}
+    Taking $K=G_N^{\mathrm{ES}}(A^{[p]})$ gives
     (\ref{eq:blocked_ground_projector_conjugacy}).
 \end{proof}
