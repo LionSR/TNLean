@@ -4632,6 +4632,44 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
   dimensions.
 \end{definition}
 
+\begin{theorem}[Normalized transfer data under identity ancillas]
+  \label{thm:mpu_identity_ancilla_reduced_cfii}
+  \lean{MPOTensor.normalizedFlattening_tensorPhysicalId,
+    MPOTensor.transferMap_normalizedFlattening_tensorPhysicalId,
+    MPOTensor.tensorPhysicalIdCFIIData,
+    MPOTensor.hasFullActiveSupport_tensorPhysicalIdCFIIData}
+  \leanok
+  \uses{def:mpu,def:mpu_normalized_flattening,def:cpsv_cfii,
+    def:mpu_full_active_support}
+  Let $x>0$. After adjoining an identity ancilla of dimension $x$, the
+  normalized flattening is the physical reindexing of the original flattening
+  with a normalized diagonal ancilla alphabet. Its transfer map is exactly the
+  original transfer map. Consequently, chosen canonical-form-II data with full
+  active support determine canonical-form-II data with full active support for
+  $\mathcal U^{(x)}=\mathcal U\otimes\Id_x$.
+
+  The product-index equivalence has the orientation
+  \begin{align}
+    ((i,a),(j,b))&\longmapsto((i,j),(a,b)).
+  \end{align}
+  This result preserves the normalized transfer data. It does not identify the
+  old and new source cuts, ranks, or chosen compact-SVD factors.
+  % Source lines: paper_v2.tex 706--724; normalized transfer lines 336--340.
+\end{theorem}
+
+\begin{proof}\leanok
+  \uses{thm:mpu_physical_reindexing}
+  Only the $x$ diagonal ancilla letters are nonzero, each with coefficient
+  $x^{-1/2}$. Hence their total transfer contribution is
+  \begin{align}
+    x\left(x^{-1/2}\right)^2&=1.
+  \end{align}
+  Thus the transfer map and each diagonal positive fixed matrix are unchanged.
+  The block dimensions, weights, and ambient coisometry are unchanged as well,
+  so full active support follows from the same active-index sum. The displayed
+  physical reindexing gives the normalized flattening of the enlarged MPO.
+\end{proof}
+
 \begin{definition}[Equivalence after blocking and ancillas]
   \label{def:equivalent-tensors}
   \lean{MPOTensor.Equivalent}
