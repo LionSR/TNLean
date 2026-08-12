@@ -103,9 +103,11 @@ def test_closure_reads_the_unbraced_input() -> None:
         closure = tenkz_ctan.walk_closure(source, "tenkz.sty")
         assert closure.files == ["tenkz.sty", "tenkz-stage.code.tex"], closure.files
         assert closure.packages == ["tikz-cd"], closure.packages
-        # Web2C's quoted form, which may follow the control word with no space.
+        # Web2C's quoted form, which may follow the control word with no
+        # space, and expl3's own file input.
         for spelling in ('\\input"tenkz-stage.code.tex"',
-                         '\\input {"tenkz-stage.code.tex"}'):
+                         '\\input {"tenkz-stage.code.tex"}',
+                         '\\file_input:n {tenkz-stage.code.tex}'):
             (source / "tenkz.sty").write_text(
                 STAGE_CONTRACT + spelling + "\n", encoding="utf-8"
             )
@@ -989,7 +991,8 @@ def test_every_spelling_of_stream_eighteen_is_the_shell_escape_stream() -> None:
         "\\newwrite\\out\n\\immediate\\write\\out{x}\n"
     )
     for overwritten in ("\\newwrite\\out\n\\def\\out{18}\n\\write\\out{x}\n",
-                        "\\newwrite\\out\n\\chardef\\out=18\n\\write\\out{x}\n"):
+                        "\\newwrite\\out\n\\chardef\\out=18\n\\write\\out{x}\n",
+                        "\\newwrite\\out\n\\cs_gset:Npn \\out {18}\n\\write\\out{x}\n"):
         assert tenkz_ctan.shell_escape_call(overwritten), overwritten
     for named in (r"\sys_shell_now:n {ls}", r"\sys_shell_shipout:x {ls}",
                   r"\sys_get_shell:nnN {x}{y}\z", r"\ior_shell_open:Nn \x {ls}",
@@ -1092,6 +1095,8 @@ def test_an_unbraced_absolute_input_is_an_absolute_path() -> None:
                      r"\openin1 /Users/somebody/data.tex",
                      r"\openout\log=/Users/somebody/run.log",
                      r"\graphicspath{{/Users/somebody/figures/}}",
+                     # Every directory in the list, not only the first.
+                     r"\graphicspath{{figures/}{/Users/somebody/more/}}",
                      # A path holding a space is written quoted, braced or not.
                      '\\input{"/Users/somebody/My Documents/f.tex"}'):
             (tree / "tenkz.sty").write_text(load + "\n", encoding="utf-8")
