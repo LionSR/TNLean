@@ -411,7 +411,7 @@ private theorem cyclicRestrictES_three_localTerm_right
 range-two terms transports to every forward adjacent pair on a periodic chain
 with \(3 \leq N\), with the same coefficient.
 
-The restriction begins at the arbitrary site `i`, so it also covers the two
+The restriction begins at the arbitrary site \(i\), so it also covers the two
 forward pairs whose three-site window crosses the periodic cut.  This is the
 source form \(h_i h_j + h_j h_i \geq -c(h_i+h_j)\) from
 arXiv:2011.12127, Section IV.C, lines 2170--2180. -/
