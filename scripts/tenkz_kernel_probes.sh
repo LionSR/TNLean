@@ -26,27 +26,107 @@ compile() {
   }
 }
 
+# THE PRINTED EXAMPLES ARE THE CONTRACT.  Every fenced example of
+# LANGUAGE-1.0.md is extracted from the document, wrapped in this harness,
+# compiled, and audited here, so an example a reader cannot copy fails the
+# gate.  The extraction drops the display-math delimiters of the printed form
+# and nothing else.  Most of them are also a kernel fixture body character for
+# character; those pairs are diffed, which pins the printed example's event
+# stream through the fixture's row of the golden ledger as well.  The two
+# without a twin are the section 9 port-label example, which no fixture
+# carries, and section 12.7, whose fixture states the same target in the
+# compatibility spelling the contract has retired.
+#
+# The table below is the only place any of this is written down.  The counts,
+# the compile set, the diffed pairs and the audit set are all read off it, so
+# an example added here is bound by every one of those checks at once and one
+# added to the contract without a row here fails the fence count.
+CONTRACT="$REPO/docs/tenkz/LANGUAGE-1.0.md"
+# job name : heading the example follows : fixture whose body it must equal
+SKETCHES="
+c_sugar9:## 9.:
+c_s121:### 12.1:k_braid
+c_s122:### 12.2:k_torus
+c_s123:### 12.3:k_pullthrough
+c_s124:### 12.4:k_twoshift
+c_s125:### 12.5:k_czx
+c_s126:### 12.6:k_blocking
+c_s127:### 12.7:
+"
+sketch_rows=()
+sketch_twins=0
+while IFS= read -r sketch_row; do
+  [ -n "$sketch_row" ] || continue
+  sketch_rows[${#sketch_rows[@]}]="$sketch_row"
+done <<SKETCHTABLE
+$SKETCHES
+SKETCHTABLE
+[ "${#sketch_rows[@]}" -gt 0 ] || {
+  echo "FAIL: the printed-example table is empty" >&2
+  exit 1
+}
+# The contract may not print an example this table does not bind, and this
+# table may not bind one the contract does not print.
+fenced=$(grep -c '^```tex$' "$CONTRACT")
+[ "$fenced" -eq "${#sketch_rows[@]}" ] || {
+  echo "FAIL: the contract prints $fenced examples and this gate binds \
+${#sketch_rows[@]}" >&2
+  exit 1
+}
+
+for sketch_row in "${sketch_rows[@]}"; do
+  IFS=: read -r job heading fixture <<SKETCHROW
+$sketch_row
+SKETCHROW
+  awk -v heading="$heading" '
+    index($0, heading) == 1 { s = 1 }
+    s && $0 == "```tex" { f = 1; next }
+    f && $0 == "```" { exit }
+    f' "$CONTRACT" | sed -e 's/^\\\[//' -e 's/\\\]$//' >"$WORK/$job.body"
+  [ -s "$WORK/$job.body" ] || {
+    echo "FAIL: the contract's '$heading' example could not be extracted" >&2
+    exit 1
+  }
+  { printf '%s\n' \
+      '\documentclass{standalone}' \
+      '\usepackage{tenkz}' \
+      '\makeatletter' \
+      '\ExplSyntaxOn' \
+      '\file_input:n { tenkz-kernel.code.tex }' \
+      '\ExplSyntaxOff' \
+      '\makeatother' \
+      '\begin{document}' \
+      '\tenkzkernel'
+    cat "$WORK/$job.body"
+    printf '%s\n' '\end{document}'
+  } >"$WORK/$job.tex"
+  if [ -n "$fixture" ]; then
+    sketch_twins=$((sketch_twins + 1))
+  else
+    continue
+  fi
+  awk 'index($0,"\\tenkzkernel")==1{f=1;next}
+       index($0,"\\end{document}")==1{f=0} f' \
+    "$KERNEL/$fixture.tex" >"$WORK/$job.fixture"
+  if ! diff -u "$WORK/$job.body" "$WORK/$job.fixture"; then
+    echo "FAIL: $fixture.tex is no longer the '$heading' example verbatim" >&2
+    exit 1
+  fi
+done
+
 for tex in "$WORK"/*.tex; do
   compile "$(basename "$tex")"
 done
 
-# The CZX fixture is the section 12.5 sketch of the contract, so a reader who
-# copies the printed sketch compiles what this suite pins.  The extraction
-# drops the display-math delimiters of the printed form and nothing else.
-CONTRACT="$REPO/docs/tenkz/LANGUAGE-1.0.md"
-awk 'index($0,"### 12.5")==1{s=1} s&&$0=="```tex"{f=1;next} f&&$0=="```"{exit} f' \
-  "$CONTRACT" | sed -e 's/^\\\[//' -e 's/\\\]$//' >"$WORK/czx-contract.tex"
-awk 'index($0,"\\tenkzkernel")==1{f=1;next}
-     index($0,"\\end{document}")==1{f=0} f' \
-  "$KERNEL/k_czx.tex" >"$WORK/czx-fixture.tex"
-[ -s "$WORK/czx-contract.tex" ] || {
-  echo "FAIL: the contract's 12.5 sketch could not be extracted" >&2
-  exit 1
-}
-if ! diff -u "$WORK/czx-contract.tex" "$WORK/czx-fixture.tex"; then
-  echo "FAIL: k_czx.tex is no longer the contract's 12.5 sketch verbatim" >&2
-  exit 1
-fi
+for sketch_row in "${sketch_rows[@]}"; do
+  job=${sketch_row%%:*}
+  python3 "$REPO/scripts/tenkz_audit.py" "$WORK/$job.tnlog" >/dev/null || {
+    echo "FAIL: a printed contract example did not audit clean: $job" >&2
+    exit 1
+  }
+done
+echo "PASS: ${#sketch_rows[@]} printed contract examples compile and audit,\
+ $sketch_twins of them a fixture verbatim"
 
 atom_count=$(grep -c '^atom|' "$WORK/r_explicit_at.tnlog" || true)
 [ "$atom_count" -eq 2 ] || {
@@ -748,14 +828,24 @@ grep -Fq \
   echo "FAIL: generated port reach discarded one of several references" >&2
   exit 1
 }
-grep -Fq 'string|id=horizontal|kind=wind|class=1,0|pts=12' \
+grep -Fq 'string|id=wire-1|kind=wind|class=1,0|pts=12' \
     "$WORK/k_torus.tnlog" || {
+  echo "FAIL: the torus class of the 12.2 sketch did not reach the winding renderer" >&2
+  exit 1
+}
+grep -Fq 'string|id=horizontal|kind=wind|class=1,0|pts=12' \
+    "$WORK/r_wind_two_cycles.tnlog" || {
   echo "FAIL: the horizontal torus class did not reach the winding renderer" >&2
   exit 1
 }
 grep -Fq 'string|id=vertical|kind=wind|class=0,1|pts=12' \
-    "$WORK/k_torus.tnlog" || {
+    "$WORK/r_wind_two_cycles.tnlog" || {
   echo "FAIL: the vertical torus class did not reach the winding renderer" >&2
+  exit 1
+}
+grep -Fq 'stringcross|under=vertical|over=horizontal|hits=1' \
+    "$WORK/r_wind_two_cycles.tnlog" || {
+  echo "FAIL: two wound cycles lost the order they meet in" >&2
   exit 1
 }
 plane_frame=$(grep '^frame|' "$WORK/k_plane.tnlog") || {
