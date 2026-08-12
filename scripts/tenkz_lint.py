@@ -24,8 +24,9 @@ Rules (findings exit 1 unless escaped):
            headers, preamble-free source, canonical spellings, public names,
            at most 88 characters per line, and at most 100 lines per case.
            The buried spellings come from the registry's tombstone rows and
-           are reported with the migration each row states, so a spelling is
-           retired in one place and refused everywhere.
+           are reported with the migration each row states, so retiring a
+           spelling needs no edit here.  These rules read case files alone:
+           a chapter's prose may write a dead word as an English word.
 
 Escape: a comment `% tenkz-lint: allow <rule> <reason>` on the finding's
 line or the line directly above suppresses that rule there (`allow all`
@@ -46,7 +47,7 @@ from dataclasses import dataclass
 from pathlib import Path
 
 from tenkz_audit import ENVIRONMENT_LANGS
-from tenkz_language import load_registry, parse_status
+from tenkz_language import Entry, load_registry, parse_status, tombstone_rows
 from tenkzlib.texcase import (
     TeXEnvironmentNestingError,
     match_group,
@@ -98,15 +99,21 @@ def registry_alias_patterns() -> list[re.Pattern[str]]:
     return patterns
 
 
-def registry_tombstone_patterns() -> list[tuple[re.Pattern[str], str]]:
-    """Source patterns and migrations for the spellings the registry buries.
+def tombstone_patterns(entries: list[Entry]) -> list[tuple[re.Pattern[str], str]]:
+    """Source patterns and migrations for the spellings a ledger buries.
 
     A `key=value` row is a word struck from a live alphabet, so the pattern is
-    that spelling.  A bare row is a key that no longer exists; where its word
+    that spelling.  A row spelled with a leading backslash is a command, whose
+    own backslash is where it starts: a word boundary before it would match
+    nothing, since neither the backslash nor the space before it is a word
+    character.  A bare row is a key that no longer exists; where its word
     survives as the value of a live enum, the pattern steps over that live
     spelling, which is where a reader of the dead one should be.
+
+    Every spelling arrives from `tombstone_rows` with the registry's `~`
+    already read as the space a document writes, so a multi-word key is
+    matched the way source spells it rather than the way the registry does.
     """
-    entries = load_registry()
     enum_owners: dict[str, set[str]] = {}
     for entry in entries:
         if entry.kind != "key":
@@ -115,22 +122,23 @@ def registry_tombstone_patterns() -> list[tuple[re.Pattern[str], str]]:
         if enum is None:
             continue
         for word in enum.group(1).split("|"):
-            enum_owners.setdefault(word, set()).add(entry.fields[1])
+            enum_owners.setdefault(word, set()).add(entry.fields[1].replace("~", " "))
     patterns: list[tuple[re.Pattern[str], str]] = []
-    for entry in sorted(
-        (entry for entry in entries if entry.kind == "tombstone"),
-        key=lambda entry: entry.fields[:2],
-    ):
-        _scope, spelling, migration = entry.fields
+    for _scope, spelling, migration in sorted(tombstone_rows(entries)):
         key, _separator, value = spelling.partition("=")
         key, value = key.strip(), value.strip()
-        if value:
+        if spelling.startswith("\\"):
+            expression = re.escape(spelling) + r"(?![A-Za-z])"
+        elif value:
             expression = (
                 re.escape(key).replace(r"\ ", r"\s+")
                 + r"\s*=\s*"
                 + re.escape(value).replace(r"\ ", r"\s*")
+                + r"(?![\w-])"
             )
         else:
+            # A lookbehind takes no variable width, so a live owner is stepped
+            # over as the source spells it with no space around the equals.
             expression = (
                 "".join(
                     f"(?<!{re.escape(owner)}=)"
@@ -142,6 +150,11 @@ def registry_tombstone_patterns() -> list[tuple[re.Pattern[str], str]]:
             )
         patterns.append((re.compile(expression), migration))
     return patterns
+
+
+def registry_tombstone_patterns() -> list[tuple[re.Pattern[str], str]]:
+    """The buried spellings the registry itself records."""
+    return tombstone_patterns(load_registry())
 
 
 RMP_REGISTRY_ALIAS_PATTERNS = registry_alias_patterns()

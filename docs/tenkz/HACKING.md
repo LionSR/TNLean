@@ -175,10 +175,18 @@ one edit: the source lint builds its rejection from those rows and reports
 the migration with the finding, and `tenkz_language.py check` requires every
 spelling the parser refuses by name to carry a row stating the same
 migration, and every row for a word struck from a live alphabet to name a
-spelling the parser refuses and the alphabet no longer holds.  A row whose
-spelling has no `=` is a key that no longer exists; nothing survives for the
-parser to branch on, so the unknown-key error answers it and only the lint
-reads the row.
+spelling the parser refuses and the alphabet no longer holds.
+
+Three shapes of row, by what is left of the spelling.  `key=value` is a word
+struck from a live key's alphabet, and the parser refuses it through a branch
+of that key.  A bare `key` is a key that no longer exists and a spelling
+beginning with a backslash is a command that no longer exists, taking the
+scope `command`; neither leaves the parser anything to branch on, so the
+unknown-key error or an undefined control sequence answers it, the check is
+that the registry really has dropped the spelling, and the lint is what reads
+the row.  Write a multi-word key with `~` as the rest of the registry does
+and wrap a long migration; both are read out before any row is compared or
+matched, so the spelling a document writes is the spelling that is caught.
 
 The gate first compares the pinned meters with the base revision.  M1 total or
 kernel growth requires an `Extension-gate: #NNNN` citation, or a
