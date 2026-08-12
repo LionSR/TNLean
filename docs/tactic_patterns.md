@@ -24,6 +24,18 @@ abstracted — record why, so it is not re-proposed).
 
 ## Promoted
 
+### pointwise idempotent endomorphism application — promoted
+- **Pattern:** apply an equality `P * P = P` to a vector with `congrArg`, then
+  simplify `Module.End.mul_apply` to obtain `P (P x) = P x`.
+- **Seen:** nine occurrences across
+  `TNLean/Analysis/ProjectionGeometry.lean` and
+  `TNLean/Analysis/TwoProjectionAngleBlock.lean` before promotion (2026-08-12).
+- **Abstraction:** `LinearMap.IsIdempotentElem.apply_apply` in
+  `TNLean/Analysis/IdempotentEndomorphism.lean`.
+- **Notes:** all motivating call sites now use the generic pointwise lemma. The
+  abstraction assumes only a semiring, an additive commutative monoid, and a
+  module; it does not depend on inner-product or projection symmetry.
+
 ### two-site cyclic local-embedding reindexing — promoted
 - **Pattern:** reindex a cyclic two-site embedding by the equivalence between
   two-site configurations and ordered pairs, prove agreement outside the full
@@ -1361,6 +1373,25 @@ spectral split → block extraction → MPV calculation → strict bounds
   both proofs until another independent consumer establishes the promotion
   threshold; the surrounding conclusions and final generalized-inverse
   calculation differ.
+
+### general cyclic-forward step offset — candidate
+- **Pattern:** for `i : Fin N` and a step `r`, identify the offset of `i` from
+  its `r`-step cyclic forward successor:
+  ```lean
+  (i.val + N - (MPSTensor.cyclicForwardSite i r).val) % N = (N - (r % N)) % N
+  ```
+- **Seen:** zero current call sites require `r > 1`; this candidate records a
+  source- and blueprint-motivated generalization, not repeated unabstracted code.
+- **Abstraction (proposed):** a `cyclicForwardSite_step_offset` lemma generalizing
+  `MPSTensor.cyclicForwardSite_one_offset`, explicitly below the promotion threshold.
+- **Notes:** the completed one-step lemma is the precedent already reused by
+  `cyclicRestrictₗ_restrictFirst`, `replaceWindow_three_replaceWindow_two_right`,
+  and `offset_from_finRotate`; these sites do not count toward this candidate's
+  promotion. Under the offset convention in blueprint remark
+  `rem:cyclic_window_operators`, the proposed identity is the offset of the old
+  starting site from the new start of an `r`-step-shifted cyclic window:
+  $\delta_{\mathrm{cyclicForwardSite}\,i\,r}(i)
+  = (N - (r \bmod N)) \bmod N$.
 
 ---
 

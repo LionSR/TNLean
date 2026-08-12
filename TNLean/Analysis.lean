@@ -23,6 +23,7 @@ import TNLean.Analysis.EntropyMarkovForward
 import TNLean.Analysis.EntropyMarkovReverse
 import TNLean.Analysis.EntropyReindex
 import TNLean.Analysis.HayashiMarkovStructure
+import TNLean.Analysis.IdempotentEndomorphism
 import TNLean.Analysis.InjectiveRangeProjector
 import TNLean.Analysis.IsometricCompression
 import TNLean.Analysis.JordanBlockPower
@@ -60,5 +61,6 @@ import TNLean.Analysis.TraceCFC
 import TNLean.Analysis.TraceNormAbs
 import TNLean.Analysis.TraceNormContractivity
 import TNLean.Analysis.TraceNormVariational
+import TNLean.Analysis.TwoProjectionAngleBlock
 import TNLean.Analysis.TwoProjectionCompression
 import TNLean.Analysis.UpperTriangularBound
