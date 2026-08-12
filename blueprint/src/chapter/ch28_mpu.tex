@@ -5156,19 +5156,31 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
   $w=d/\sqrt{\mu(1-\mu)}$ is well defined and has the stated properties.
 \end{proof}
 
+\begin{definition}[Compression spectral data]
+  \label{def:mpu_two_projection_compression_spectral_data}
+  \lean{LinearMap.IsSymmetricProjection.rangeCompressionEigenvalues,
+    LinearMap.IsSymmetricProjection.rangeCompressionEigenbasis}
+  \leanok
+  \uses{thm:mpu_two_projection_angle_block}
+  For orthogonal projections $P$ and $Q$ on a finite-dimensional complex
+  inner-product space, let $(x_i)_i$ be an orthonormal eigenbasis of the
+  compression of $Q$ to $\operatorname{ran}P$, with ordered real eigenvalues
+  $(\mu_i)_i$.
+  % Source lines: paper_v2.tex 759--762.
+\end{definition}
+
 \begin{theorem}[Compression-spectrum endpoint and angle-block trichotomy]
   \label{thm:mpu_two_projection_compression_spectrum}
-  \lean{LinearMap.IsSymmetricProjection.rangeCompressionEigenvalues,
-    LinearMap.IsSymmetricProjection.rangeCompressionEigenbasis,
-    LinearMap.IsSymmetricProjection.rangeCompression_apply_eigenbasis,
+  \lean{LinearMap.IsSymmetricProjection.rangeCompression_apply_eigenbasis,
     LinearMap.IsSymmetricProjection.rangeCompressionEigenvalues_mem_unitInterval,
     LinearMap.IsSymmetricProjection.rangeCompressionEigenvalues_eq_zero_or_eq_one_or_exists_angle_block}
   \leanok
-  \uses{thm:mpu_two_projection_angle_block}
+  \uses{def:mpu_two_projection_compression_spectral_data,
+    thm:mpu_two_projection_angle_block}
   Let $P$ and $Q$ be orthogonal projections on a finite-dimensional complex
-  inner-product space. The compression of $Q$ to $\operatorname{ran}P$ has an
-  orthonormal eigenbasis $(x_i)_i$ with real eigenvalues $\mu_i\in[0,1]$. For
-  every $i$, exactly the following source-relevant alternatives hold:
+  inner-product space, with compression spectral data $(x_i,\mu_i)$. Then
+  $\mu_i\in[0,1]$ for every $i$, and exactly the following source-relevant
+  alternatives hold:
   \begin{enumerate}
     \item $\mu_i=0$ and $Qx_i=0$;
     \item $\mu_i=1$ and $Qx_i=x_i$;
@@ -5182,12 +5194,13 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
 \end{theorem}
 
 \begin{proof}\leanok
+  \uses{thm:mpu_two_projection_angle_block}
   Apply the finite-dimensional spectral theorem to the self-adjoint compression
   of $Q$ to $\operatorname{ran}P$. For a unit compression eigenvector $x$ with
   eigenvalue $\mu$, the angle-defect identity gives
-  \[
-    \lVert Qx-\mu x\rVert^2=\mu(1-\mu),
-  \]
+  \begin{align}
+    \lVert Qx-\mu x\rVert^2&=\mu(1-\mu),
+  \end{align}
   hence $0\leq\mu\leq1$. At $\mu=0$ or $1$ the defect vanishes, giving the two
   common one-dimensional blocks. For $0<\mu<1$, apply
   Theorem~\ref{thm:mpu_two_projection_angle_block}.
