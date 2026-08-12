@@ -257,8 +257,8 @@ period, and peripheral spectrum equal to the \(p\)-th roots of unity.
 Only the fixed-length state-vector equality is asserted.
 
 **Scope restriction (normalized orientation and positive length):** this theorem
-uses `IsPeriodic p A` and assumes \(N>0\), rather than packaging the one-block
-unital canonical hypotheses of the printed theorem directly. This boundary is
+uses `IsPeriodic p A` and assumes \(N>0\), rather than deriving these conditions
+from the one-block unital canonical hypotheses of the printed theorem. This boundary is
 recorded in `docs/paper-gaps/pgvwc07_periodic_decomposition_scope.tex`.
 
 Source: PGVWC07, arXiv:quant-ph/0608197, Theorem 5, lines 849--880. -/
@@ -305,8 +305,8 @@ component has zero coefficient, and therefore the original fixed-length state
 vector is zero.
 
 **Scope restriction (normalized orientation):** this theorem uses
-`IsPeriodic p A` rather than packaging the one-block unital canonical
-hypotheses of the printed theorem directly. This boundary is recorded in
+`IsPeriodic p A` rather than deriving these conditions from the one-block
+unital canonical hypotheses of the printed theorem. This boundary is recorded in
 `docs/paper-gaps/pgvwc07_periodic_decomposition_scope.tex`.
 
 Source: PGVWC07, arXiv:quant-ph/0608197, Theorem 5, lines 849--880. -/
