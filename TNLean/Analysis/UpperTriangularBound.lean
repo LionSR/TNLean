@@ -665,6 +665,89 @@ theorem wolf_eq_105_seminorm (ν : RingSeminorm (Matrix (Fin D) (Fin D) R))
 end RingSeminormCorollary
 
 
+section WolfEq103Sum
+
+variable {D : ℕ} {R : Type*} [Ring R] {Λ N : Matrix (Fin D) (Fin D) R} {n : ℕ}
+
+open RingSeminorm
+
+/-- **Wolf Eq. (8.103)** from a uniform bound on the binomial coefficients.
+
+If \(\binom{n}{k}\le C\) for every \(1\le k\le D-1\), then the word expansion of Eq. (8.105)
+collapses to the constant \((D-1)C\). The coarse constant \(n^{D-1}\) and the refined constant
+\(\binom{n}{D-1}\) are the two instances used below.
+
+**Scope restriction (natural exponent):** the exponent \(n-D+1\) is negative when \(n<D-1\),
+so \(D-1\le n\) is assumed. See docs/paper-gaps/wolf_ch8_eq_8_103_negative_exponent.tex. -/
+private lemma wolf_eq_103_of_choose_le (ν : RingSeminorm (Matrix (Fin D) (Fin D) R))
+    (hΛ_diag : IsDiag Λ) (hN_sut : IsStrictlyUpperTriangular N)
+    (hDpos : D ≠ 0) (hn_ge : D - 1 ≤ n) (hνΛ : ν Λ ≤ 1) (C : ℕ)
+    (hC : ∀ k ∈ Finset.Icc 1 (D - 1), Nat.choose n k ≤ C) :
+    ν ((Λ + N) ^ n) ≤ ν (Λ ^ n) +
+      (((D-1 : ℕ) * C : ℕ) : ℝ) * (ν Λ) ^ (n - (D-1)) *
+      max (ν N) ((ν N) ^ (D-1)) := by
+  have h_nonneg_νΛ : 0 ≤ ν Λ := apply_nonneg ν _
+  have h_nonneg_νN : 0 ≤ ν N := apply_nonneg ν _
+  have h_base := wolf_eq_105_seminorm ν hΛ_diag hN_sut hDpos n
+  have h_min_eq : min n (D - 1) = D - 1 := Nat.min_eq_right hn_ge
+  rw [h_min_eq] at h_base
+  by_cases hIcc_empty : Finset.Icc (1 : ℕ) (D - 1) = ∅
+  · rw [hIcc_empty, Finset.sum_empty] at h_base
+    have h_nonneg_extra : 0 ≤ (((D-1 : ℕ) * C : ℕ) : ℝ)
+        * (ν Λ) ^ (n - (D-1)) *
+      max (ν N) ((ν N) ^ (D-1)) := by positivity
+    nlinarith
+  · have h_Dm1_pos : 1 ≤ D - 1 := by
+      contrapose! hIcc_empty
+      exact Finset.Icc_eq_empty_of_lt (by omega)
+    have h_card : (Finset.Icc 1 (D - 1)).card = D - 1 := by
+      simp
+    have h_cardℝ : ((Finset.Icc 1 (D - 1)).card : ℝ) = (D - 1 : ℝ) := by
+      have hD1' : 1 ≤ D := by omega
+      rw [h_card, Nat.cast_sub hD1', Nat.cast_one]
+    have h_term_bound (k : ℕ) (hk : k ∈ Finset.Icc 1 (D - 1)) :
+        ((Nat.choose n k : ℝ) * (ν N) ^ k * (ν Λ) ^ (n - k)) ≤
+        (C : ℝ) * max (ν N) ((ν N) ^ (D-1)) * (ν Λ) ^ (n - (D-1)) := by
+      rcases Finset.mem_Icc.mp hk with ⟨hk1, hk2⟩
+      have h_choose : (Nat.choose n k : ℝ) ≤ (C : ℝ) := mod_cast hC k hk
+      have h_nuN_pow : (ν N) ^ k ≤ max (ν N) ((ν N) ^ (D-1)) :=
+        pow_le_max_of_one_le h_nonneg_νN hk1 hk2
+      have h_nuΛ_pow : (ν Λ) ^ (n - k) ≤ (ν Λ) ^ (n - (D - 1)) := by
+        have h_exp_le : n - (D - 1) ≤ n - k := by omega
+        exact pow_le_pow_of_le_one h_nonneg_νΛ hνΛ h_exp_le
+      have h_nonneg_choose : 0 ≤ (Nat.choose n k : ℝ) := by exact mod_cast Nat.zero_le _
+      have h_nonneg_C : 0 ≤ (C : ℝ) := by exact mod_cast Nat.zero_le _
+      calc
+        ((Nat.choose n k : ℝ) * (ν N) ^ k) * (ν Λ) ^ (n - k) ≤
+            ((C : ℝ) * max (ν N) ((ν N) ^ (D-1))) * (ν Λ) ^ (n - k) := by
+          gcongr
+        _ ≤ ((C : ℝ) * max (ν N) ((ν N) ^ (D-1))) * (ν Λ) ^ (n - (D-1)) := by
+          gcongr
+    have h_sum_bound : (∑ k ∈ Finset.Icc 1 (D - 1),
+        ((Nat.choose n k : ℝ) * (ν N) ^ k * (ν Λ) ^ (n - k))) ≤
+        (((D-1 : ℕ) * C : ℕ) : ℝ) * (ν Λ) ^ (n - (D-1)) *
+        max (ν N) ((ν N) ^ (D-1)) := by
+      have hD1 : 1 ≤ D := by omega
+      calc
+        (∑ k ∈ Finset.Icc 1 (D - 1),
+            ((Nat.choose n k : ℝ) * (ν N) ^ k * (ν Λ) ^ (n - k))) ≤
+            (∑ _k ∈ Finset.Icc 1 (D - 1),
+              ((C : ℝ) * max (ν N) ((ν N) ^ (D-1)) * (ν Λ) ^ (n - (D-1)))) :=
+          Finset.sum_le_sum (fun k hk => h_term_bound k hk)
+        _ = ((Finset.Icc 1 (D - 1)).card : ℝ) *
+            ((C : ℝ) * max (ν N) ((ν N) ^ (D-1)) * (ν Λ) ^ (n - (D-1))) := by
+          simp
+        _ = (D - 1 : ℝ) * ((C : ℝ) * max (ν N) ((ν N) ^ (D-1))
+              * (ν Λ) ^ (n - (D-1))) := by
+          rw [h_cardℝ]
+        _ = (((D-1 : ℕ) * C : ℕ) : ℝ) * (ν Λ) ^ (n - (D-1))
+              * max (ν N) ((ν N) ^ (D-1)) := by
+          rw [Nat.cast_mul, Nat.cast_sub hD1, Nat.cast_one]
+          ring
+    nlinarith
+
+end WolfEq103Sum
+
 section WolfEq103
 
 variable {D : ℕ} {R : Type*} [Ring R] {Λ N : Matrix (Fin D) (Fin D) R} {n : ℕ}
@@ -682,85 +765,10 @@ theorem wolf_eq_103 (ν : RingSeminorm (Matrix (Fin D) (Fin D) R))
     ν ((Λ + N) ^ n) ≤ ν (Λ ^ n) +
       (((D-1 : ℕ) * n ^ (D-1 : ℕ) : ℕ) : ℝ) * (ν Λ) ^ (n - (D-1)) *
       max (ν N) ((ν N) ^ (D-1)) := by
-  have h_nonneg_νΛ : 0 ≤ ν Λ := apply_nonneg ν _
-  have h_nonneg_νN : 0 ≤ ν N := apply_nonneg ν _
-  have h_base := wolf_eq_105_seminorm ν hΛ_diag hN_sut hDpos n
-  have h_min_eq : min n (D - 1) = D - 1 := Nat.min_eq_right hn_ge
-  rw [h_min_eq] at h_base
-  by_cases hIcc_empty : Finset.Icc (1 : ℕ) (D - 1) = ∅
-  · rw [hIcc_empty, Finset.sum_empty] at h_base
-    have h_nonneg_extra : 0 ≤ (((D-1 : ℕ) * n ^ (D-1 : ℕ) : ℕ) : ℝ)
-        * (ν Λ) ^ (n - (D-1)) *
-      max (ν N) ((ν N) ^ (D-1)) := by positivity
-    nlinarith
-  · have h_Dm1_pos : 1 ≤ D - 1 := by
-      contrapose! hIcc_empty
-      exact Finset.Icc_eq_empty_of_lt (by omega)
-    have h_card : (Finset.Icc 1 (D - 1)).card = D - 1 := by
-      simp
-    have h_cardℝ : ((Finset.Icc 1 (D - 1)).card : ℝ) = (D - 1 : ℝ) := by
-      have hD1' : 1 ≤ D := by omega
-      rw [h_card, Nat.cast_sub hD1', Nat.cast_one]
-    have h_term_bound (k : ℕ) (hk : k ∈ Finset.Icc 1 (D - 1)) :
-        ((Nat.choose n k : ℝ) * (ν N) ^ k * (ν Λ) ^ (n - k)) ≤
-        ((n ^ (D-1 : ℕ) : ℕ) : ℝ) * max (ν N) ((ν N) ^ (D-1)) * (ν Λ) ^ (n - (D-1)) := by
-      rcases Finset.mem_Icc.mp hk with ⟨hk1, hk2⟩
-      have h_choose : (Nat.choose n k : ℝ) ≤ ((n ^ (D-1 : ℕ) : ℕ) : ℝ) := by
-        have h_choose_nat : Nat.choose n k ≤ n ^ k := Nat.choose_le_pow n k
-        have h_pow_mono : n ^ k ≤ n ^ (D-1) := by
-          by_cases hn0 : n = 0
-          · subst hn0
-            have : D = 1 := by omega
-            subst this
-            have : Finset.Icc (1 : ℕ) 0 = ∅ := by decide
-            rw [this] at hk
-            simp at hk
-          · have hnpos : 0 < n := Nat.pos_of_ne_zero hn0
-            exact Nat.pow_le_pow_right hnpos hk2
-        exact mod_cast h_choose_nat.trans h_pow_mono
-      have h_nuN_pow : (ν N) ^ k ≤ max (ν N) ((ν N) ^ (D-1)) :=
-        pow_le_max_of_one_le h_nonneg_νN hk1 hk2
-      have h_nuΛ_pow : (ν Λ) ^ (n - k) ≤ (ν Λ) ^ (n - (D - 1)) := by
-        have h_exp_le : n - (D - 1) ≤ n - k := by omega
-        exact pow_le_pow_of_le_one h_nonneg_νΛ hνΛ h_exp_le
-      have h_nonneg_choose : 0 ≤ (Nat.choose n k : ℝ) := by exact mod_cast Nat.zero_le _
-      have h_nonneg_npow : 0 ≤ ((n ^ (D-1 : ℕ) : ℕ) : ℝ) := by exact mod_cast Nat.zero_le _
-      have h_prod : ((Nat.choose n k : ℝ) * (ν N) ^ k * (ν Λ) ^ (n - k)) ≤
-          (((n ^ (D-1 : ℕ) : ℕ) : ℝ) * max (ν N) ((ν N) ^ (D-1))
-            * (ν Λ) ^ (n - (D-1))) := by
-        calc
-          ((Nat.choose n k : ℝ) * (ν N) ^ k) * (ν Λ) ^ (n - k) ≤
-              (((n ^ (D-1 : ℕ) : ℕ) : ℝ) * max (ν N) ((ν N) ^ (D-1)))
-                * (ν Λ) ^ (n - k) := by
-            gcongr
-          _ ≤ (((n ^ (D-1 : ℕ) : ℕ) : ℝ) * max (ν N) ((ν N) ^ (D-1)))
-              * (ν Λ) ^ (n - (D-1)) := by
-            gcongr
-      exact h_prod
-    have h_sum_bound : (∑ k ∈ Finset.Icc 1 (D - 1),
-        ((Nat.choose n k : ℝ) * (ν N) ^ k * (ν Λ) ^ (n - k))) ≤
-        (((D-1 : ℕ) * n ^ (D-1 : ℕ) : ℕ) : ℝ) * (ν Λ) ^ (n - (D-1)) *
-        max (ν N) ((ν N) ^ (D-1)) := by
-      have hD1 : 1 ≤ D := by omega
-      calc
-        (∑ k ∈ Finset.Icc 1 (D - 1),
-            ((Nat.choose n k : ℝ) * (ν N) ^ k * (ν Λ) ^ (n - k))) ≤
-            (∑ k ∈ Finset.Icc 1 (D - 1),
-              (((n ^ (D-1 : ℕ) : ℕ) : ℝ) * max (ν N) ((ν N) ^ (D-1))
-                * (ν Λ) ^ (n - (D-1)))) :=
-          Finset.sum_le_sum (fun k hk => h_term_bound k hk)
-        _ = ((Finset.Icc 1 (D - 1)).card : ℝ) *
-            (((n ^ (D-1 : ℕ) : ℕ) : ℝ) * max (ν N) ((ν N) ^ (D-1))
-              * (ν Λ) ^ (n - (D-1))) := by
-          simp
-        _ = (D - 1 : ℝ) * (((n ^ (D-1 : ℕ) : ℕ) : ℝ) * max (ν N) ((ν N) ^ (D-1))
-              * (ν Λ) ^ (n - (D-1))) := by
-          rw [h_cardℝ]
-        _ = (((D-1 : ℕ) * n ^ (D-1 : ℕ) : ℕ) : ℝ) * (ν Λ) ^ (n - (D-1))
-              * max (ν N) ((ν N) ^ (D-1)) := by
-          rw [Nat.cast_mul, Nat.cast_sub hD1, Nat.cast_one, Nat.cast_pow]
-          ring
-    nlinarith
+  refine wolf_eq_103_of_choose_le ν hΛ_diag hN_sut hDpos hn_ge hνΛ (n ^ (D-1 : ℕ)) ?_
+  intro k hk
+  rcases Finset.mem_Icc.mp hk with ⟨hk1, hk2⟩
+  exact (Nat.choose_le_pow n k).trans (Nat.pow_le_pow_right (by omega) hk2)
 
 end WolfEq103
 
@@ -781,90 +789,27 @@ theorem wolf_eq_103_refined (ν : RingSeminorm (Matrix (Fin D) (Fin D) R))
     ν ((Λ + N) ^ n) ≤ ν (Λ ^ n) +
       (((D-1 : ℕ) * Nat.choose n (D-1) : ℕ) : ℝ) * (ν Λ) ^ (n - (D-1)) *
       max (ν N) ((ν N) ^ (D-1)) := by
-  have h_nonneg_νΛ : 0 ≤ ν Λ := apply_nonneg ν _
-  have h_nonneg_νN : 0 ≤ ν N := apply_nonneg ν _
-  have h_Dm1_le_n : D - 1 ≤ n := by omega
-  have h_base := wolf_eq_105_seminorm ν hΛ_diag hN_sut hDpos n
-  have h_min_eq : min n (D - 1) = D - 1 := Nat.min_eq_right h_Dm1_le_n
-  rw [h_min_eq] at h_base
-  by_cases hIcc_empty : Finset.Icc (1 : ℕ) (D - 1) = ∅
-  · rw [hIcc_empty, Finset.sum_empty] at h_base
-    have h_nonneg_extra : 0 ≤ (((D-1 : ℕ) * Nat.choose n (D-1) : ℕ) : ℝ)
-        * (ν Λ) ^ (n - (D-1)) *
-      max (ν N) ((ν N) ^ (D-1)) := by positivity
-    nlinarith
-  · have h_Dm1_pos : 1 ≤ D - 1 := by
-      contrapose! hIcc_empty
-      exact Finset.Icc_eq_empty_of_lt (by omega)
-    have h_card : (Finset.Icc 1 (D - 1)).card = D - 1 := by
-      simp
-    have h_cardℝ : ((Finset.Icc 1 (D - 1)).card : ℝ) = (D - 1 : ℝ) := by
-      have hD1' : 1 ≤ D := by omega
-      rw [h_card, Nat.cast_sub hD1', Nat.cast_one]
-    -- Refined bound: Nat.choose n k ≤ Nat.choose n (D-1) for k ≤ D-1
-    -- The binomial coefficients increase up to the middle index.
-    have h_choose_refined (k : ℕ) (hk : k ∈ Finset.Icc 1 (D - 1)) :
-        Nat.choose n k ≤ Nat.choose n (D - 1) := by
-      rcases Finset.mem_Icc.mp hk with ⟨hk1, hk2⟩
-      obtain ⟨d, hd⟩ := Nat.exists_eq_add_of_le hk2
-      have h_helper : ∀ d', 2 * (k + d') ≤ n → Nat.choose n k ≤ Nat.choose n (k + d') := by
-        intro d'
-        induction' d' with d' ih
-        · intro; rfl
-        · intro hbound
-          have hbound' : 2 * (k + d') ≤ n := by omega
-          have hk_d'_lt_half : k + d' < n / 2 := by omega
-          have hstep : Nat.choose n (k + d') ≤ Nat.choose n (k + d' + 1) :=
-            Nat.choose_le_succ_of_lt_half_left hk_d'_lt_half
-          have h_eq : k + d' + 1 = k + (d' + 1) := by omega
-          rw [← h_eq]
-          exact (ih hbound').trans hstep
-      have h_total_bound : 2 * (k + d) ≤ n := by
-        omega
-      simpa [hd] using h_helper d h_total_bound
-    have h_term_bound (k : ℕ) (hk : k ∈ Finset.Icc 1 (D - 1)) :
-        ((Nat.choose n k : ℝ) * (ν N) ^ k * (ν Λ) ^ (n - k)) ≤
-        ((Nat.choose n (D-1) : ℝ) * max (ν N) ((ν N) ^ (D-1)) * (ν Λ) ^ (n - (D-1))) := by
-      rcases Finset.mem_Icc.mp hk with ⟨hk1, hk2⟩
-      have h_choose : (Nat.choose n k : ℝ) ≤ (Nat.choose n (D-1) : ℝ) :=
-        mod_cast h_choose_refined k hk
-      have h_nuN_pow : (ν N) ^ k ≤ max (ν N) ((ν N) ^ (D-1)) :=
-        pow_le_max_of_one_le h_nonneg_νN hk1 hk2
-      have h_nuΛ_pow : (ν Λ) ^ (n - k) ≤ (ν Λ) ^ (n - (D - 1)) := by
-        have h_exp_le : n - (D - 1) ≤ n - k := by omega
-        exact pow_le_pow_of_le_one h_nonneg_νΛ hνΛ h_exp_le
-      have h_prod : ((Nat.choose n k : ℝ) * (ν N) ^ k * (ν Λ) ^ (n - k)) ≤
-          ((Nat.choose n (D-1) : ℝ) * max (ν N) ((ν N) ^ (D-1)) * (ν Λ) ^ (n - (D-1))) := by
-        calc
-          ((Nat.choose n k : ℝ) * (ν N) ^ k) * (ν Λ) ^ (n - k) ≤
-              ((Nat.choose n (D-1) : ℝ) * max (ν N) ((ν N) ^ (D-1))) * (ν Λ) ^ (n - k) := by
-            gcongr
-          _ ≤ ((Nat.choose n (D-1) : ℝ) * max (ν N) ((ν N) ^ (D-1)))
-              * (ν Λ) ^ (n - (D-1)) := by
-            gcongr
-      exact h_prod
-    have h_sum_bound : (∑ k ∈ Finset.Icc 1 (D - 1),
-        ((Nat.choose n k : ℝ) * (ν N) ^ k * (ν Λ) ^ (n - k))) ≤
-        (((D-1 : ℕ) * Nat.choose n (D-1) : ℕ) : ℝ) * (ν Λ) ^ (n - (D-1)) *
-        max (ν N) ((ν N) ^ (D-1)) := by
-      have hD1 : 1 ≤ D := by omega
-      calc
-        (∑ k ∈ Finset.Icc 1 (D - 1),
-            ((Nat.choose n k : ℝ) * (ν N) ^ k * (ν Λ) ^ (n - k))) ≤
-            (∑ k ∈ Finset.Icc 1 (D - 1),
-              ((Nat.choose n (D-1) : ℝ) * max (ν N) ((ν N) ^ (D-1)) * (ν Λ) ^ (n - (D-1)))) :=
-          Finset.sum_le_sum (fun k hk => h_term_bound k hk)
-        _ = ((Finset.Icc 1 (D - 1)).card : ℝ) *
-            ((Nat.choose n (D-1) : ℝ) * max (ν N) ((ν N) ^ (D-1)) * (ν Λ) ^ (n - (D-1))) := by
-          simp
-        _ = (D - 1 : ℝ) * ((Nat.choose n (D-1) : ℝ) * max (ν N) ((ν N) ^ (D-1))
-              * (ν Λ) ^ (n - (D-1))) := by
-          rw [h_cardℝ]
-        _ = (((D-1 : ℕ) * Nat.choose n (D-1) : ℕ) : ℝ) * (ν Λ) ^ (n - (D-1))
-              * max (ν N) ((ν N) ^ (D-1)) := by
-          rw [Nat.cast_mul, Nat.cast_sub hD1, Nat.cast_one]
-          ring
-    nlinarith
+  refine wolf_eq_103_of_choose_le ν hΛ_diag hN_sut hDpos (by omega) hνΛ
+    (Nat.choose n (D-1)) ?_
+  -- The binomial coefficients increase up to the middle index, so the largest one on
+  -- `Finset.Icc 1 (D-1)` sits at `D-1`.
+  intro k hk
+  rcases Finset.mem_Icc.mp hk with ⟨hk1, hk2⟩
+  obtain ⟨d, hd⟩ := Nat.exists_eq_add_of_le hk2
+  have h_helper : ∀ d', 2 * (k + d') ≤ n → Nat.choose n k ≤ Nat.choose n (k + d') := by
+    intro d'
+    induction' d' with d' ih
+    · intro; rfl
+    · intro hbound
+      have hbound' : 2 * (k + d') ≤ n := by omega
+      have hk_d'_lt_half : k + d' < n / 2 := by omega
+      have hstep : Nat.choose n (k + d') ≤ Nat.choose n (k + d' + 1) :=
+        Nat.choose_le_succ_of_lt_half_left hk_d'_lt_half
+      have h_eq : k + d' + 1 = k + (d' + 1) := by omega
+      rw [← h_eq]
+      exact (ih hbound').trans hstep
+  have h_total_bound : 2 * (k + d) ≤ n := by omega
+  simpa [hd] using h_helper d h_total_bound
 
 end WolfEq103Refined
 
