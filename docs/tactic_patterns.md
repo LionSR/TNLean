@@ -989,6 +989,25 @@ abstracted — record why, so it is not re-proposed).
 Seeded from `scripts/tactic_pattern_scan.py` (2026-07-18 scan; re-run for
 current counts and full location lists).
 
+### diagonal normalized-ancilla sum collapse — candidate
+- **Pattern:** collapse the doubled sum for `normalizedDiagonalLift` by using
+  `Finset.sum_eq_single` to retain the diagonal ancilla letter `(a, a)`, then
+  cancel the resulting normalization with
+  `(x : ℂ) * (Real.sqrt x : ℂ)⁻¹ * (Real.sqrt x : ℂ)⁻¹ = 1` for `0 < x`.
+- **Seen:** 2 occurrences in `TNLean/MPS/MPU/PhysicalAncilla.lean`:
+  `MPOTensor.transferMap_normalizedDiagonalLift` (lines 198--220), for
+  `A ij * X * (A ij)ᴴ`, and
+  `MPOTensor.leftCanonical_normalizedDiagonalLift` (lines 262--283), for
+  `(A ij)ᴴ * A ij`.
+- **Abstraction (proposed):** if a third occurrence appears, extract the
+  lowest-sufficient helper lemma shared by both matrix-product orientations;
+  do not introduce a tactic solely for this pattern.
+- **Notes:** Use when a sum over the normalized diagonal ancilla alphabet has
+  off-diagonal terms that simplify to zero, every surviving diagonal term has
+  the same matrix factor, and `0 < x` permits cancellation of the two
+  inverse-square-root scalars against the ancilla cardinality. This is below
+  the rule-of-three promotion threshold.
+
 ### positive-part support-projection trace estimate — candidate
 - **Pattern:** for a positive linear map `T` and Hermitian `H`, decompose
   `T H = T H⁺ - T H⁻`, obtain the support projection `P` of `(T H)⁺`, and
