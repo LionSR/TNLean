@@ -892,23 +892,50 @@ the remaining sites unchanged.
     in $\N$.
 \end{proof}
 
+\begin{definition}[Open-boundary Fibonacci operator]
+    \label{def:cpsv_fibonacci_open_boundary_operator}
+    \lean{MPSTensor.FibonacciBoundary.openBoundaryOperator,
+      MPSTensor.FibonacciBoundary.openBoundaryOperator_apply}
+    \leanok
+    \uses{def:cpsv_fibonacci_support_tensor}
+    For $n>0$ and $\alpha,\beta\in\{0,1\}$, define the matrix
+    $\rho^{(n)}_{\alpha\beta}(A)$, indexed by physical words $\sigma$ and $\tau$, by
+    \begin{align}
+        \bigl(\rho^{(n)}_{\alpha\beta}(A)\bigr)_{\sigma,\tau}
+        &=\begin{cases}
+            (\alpha|A^{\sigma_1}\cdots A^{\sigma_n}|\beta),&\sigma=\tau,\\
+            0,&\sigma\ne\tau.
+          \end{cases}
+    \end{align}
+\end{definition}
+
 \begin{theorem}[Open-boundary Fibonacci operator ranks]
     \label{thm:cpsv_fibonacci_open_boundary_rank_status}
-    \notready
-    \uses{def:cpsv_fibonacci_support_tensor,
-      def:cpsv_fibonacci_boundary_counts,
-      thm:to_mpo_diagonal_rank}
-    For $n>0$ and $\alpha,\beta\in\{0,1\}$, let
-    $\rho^{(n)}_{\alpha\beta}(A)$ be the diagonal open-boundary operator whose
-    coefficient at a physical word is
-    $(\alpha|A^{i_1j_1k_1}\cdots A^{i_nj_nk_n}|\beta)$.  Then
+    \lean{MPSTensor.FibonacciBoundary.rank_openBoundaryOperator_eq_x}
+    \leanok
+    \uses{def:cpsv_fibonacci_open_boundary_operator,
+      def:cpsv_fibonacci_boundary_counts}
+    For $n>0$ and $\alpha,\beta\in\{0,1\}$,
     \begin{align}
-        x^n_{\alpha\beta}
-        &=\operatorname{rank}\rho^{(n)}_{\alpha\beta}(A).
-        \notag
+        \operatorname{rank}\rho^{(n)}_{\alpha\beta}(A)
+        &=x^n_{\alpha\beta}.
     \end{align}
     This is \cite[Appendix~D, lines~2127--2130]{Cirac2016MPDO_arXiv}.
 \end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{def:cpsv_fibonacci_open_boundary_operator,
+      def:cpsv_fibonacci_transition_matrix,
+      def:cpsv_fibonacci_boundary_counts}
+    A diagonal entry is nonzero exactly when its physical labels form an allowed
+    path from $\alpha$ to $\beta$. Splitting a path at its first physical label
+    shows that the numbers of supported words obey the transition rule determined
+    by $B$, with the same length-zero initial values as $x^n_{\alpha\beta}$.
+    Induction therefore identifies the number of nonzero diagonal entries with
+    $x^n_{\alpha\beta}$. The rank of a diagonal matrix is the number of its nonzero
+    diagonal entries.
+\end{proof}
 
 \begin{theorem}[Fibonacci periodic operator-rank formula]
     \label{thm:cpsv_fibonacci_rank_obstruction_status}
