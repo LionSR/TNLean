@@ -64,9 +64,11 @@ physical indices, as in
     For every integer $L\geq0$, pairing the ket and bra letters site by site
     gives the canonical identification
     \begin{align}
-        \Fin{d^L}\times\Fin{d^L}
-        &\simeq (\Fin d\times\Fin d)^{\Fin L}
-         \simeq \Fin{(d^2)^L}.
+        \operatorname{Fin}(d^L)\times\operatorname{Fin}(d^L)
+        &\simeq
+        \bigl(\operatorname{Fin}(d)\times\operatorname{Fin}(d)\bigr)
+          ^{\operatorname{Fin}(L)}
+         \simeq \operatorname{Fin}((d^2)^L).
     \end{align}
     Under this identification, the doubled-index MPS tensor of $M^{[L]}$
     is the physical reindexing of the $L$-blocked doubled-index MPS tensor
@@ -80,20 +82,24 @@ physical indices, as in
     bijection preserves the span of the tensor matrices.
 \end{proof}
 
-\begin{theorem}[Positive blocking commutes with the MPO product]
-    \label{thm:mpdo_positive_blocking_product}
+\begin{theorem}[Blocking commutes with the MPO product]
+    \label{thm:mpdo_blocking_product}
     \lean{MPOTensor.blockTensor_mulTensor}
     \leanok
     \uses{def:mpdo_physical_blocking, def:mpdo_operator_product}
-    For $L>0$ and two MPO tensors $M,N$ with the same physical dimension,
-    let juxtaposition denote the MPO tensor product obtained by contracting
-    the intermediate physical index. Then $(MN)^{[L]}=M^{[L]}N^{[L]}$.
+    For every integer $L\geq0$ and two MPO tensors $M,N$ with the same
+    physical dimension, let juxtaposition denote the MPO tensor product
+    obtained by contracting the intermediate physical index. Then
+    $(MN)^{[L]}=M^{[L]}N^{[L]}$. For $L=0$, each blocked tensor is the unique
+    empty-word local matrix, namely the identity, so the equality reduces to
+    the product of two identity local tensors.
 \end{theorem}
 
 \begin{proof}\leanok
     Expand the product tensor and sum over its length-$L$ intermediate
     physical word. Reindexing this word by one blocked physical index gives
-    the product of the two blocked tensors.
+    the product of the two blocked tensors. When $L=0$, the intermediate word
+    is empty and all three blocked tensors are identities.
 \end{proof}
 
 \begin{theorem}[Closed MPO chains under physical blocking]
