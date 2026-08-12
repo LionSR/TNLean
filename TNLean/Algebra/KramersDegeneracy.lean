@@ -120,8 +120,8 @@ rewrites it; no further hypothesis is imposed.
 Wolf's proof produces a second eigenvector orthogonal to the first, so the eigenspace
 dimension is what the argument bounds.
 
-The proof is Wolf's.  From `H ψ = μ ψ` the vector `φ = Vᴴ ψ̄` satisfies
-`H φ = Vᴴ Hᵀ ψ̄ = μ φ`; it is nonzero because `V` is unitary; and `⟨ψ, φ⟩ = 0` because
+The proof is Wolf's.  From `H ψ = μ ψ` the vector `φ = Vᴴ star ψ` satisfies
+`H φ = Vᴴ Hᵀ star ψ = μ φ`; it is nonzero because `V` is unitary; and `⟨ψ, φ⟩ = 0` because
 the quadratic form of the antisymmetric matrix `Vᴴ` vanishes. -/
 theorem two_le_finrank_eigenspace_of_antisymmetric_unitary {H V : Matrix n n ℂ}
     (hH : H.IsHermitian) (hVunit : Vᴴ * V = 1) (hHV : H * Vᴴ = Vᴴ * Hᵀ) (hVanti : Vᵀ = -V)
