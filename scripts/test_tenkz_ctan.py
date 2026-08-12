@@ -801,6 +801,12 @@ def test_the_real_classification_covers_the_real_load_list() -> None:
     assert not report.failures, report.failures
 
 
+def _loaded(*names: str) -> "tenkz_ctan.Closure":
+    """A closure that loads exactly the named files, for the arXiv reading."""
+
+    return tenkz_ctan.Closure(files=list(names))
+
+
 def test_a_tree_arxiv_would_have_to_build_or_shell_out_for_fails() -> None:
     """The submission reading of the same files: flat, already the runtime,
     naming no path on the machine that wrote it, calling no shell."""
@@ -810,16 +816,39 @@ def test_a_tree_arxiv_would_have_to_build_or_shell_out_for_fails() -> None:
         (tree / "nested").mkdir(parents=True)
         (tree / "tenkz.sty").write_text("% a runtime file\n", encoding="utf-8")
         (tree / "tenkz.ins").write_text("% a docstrip run\n", encoding="utf-8")
-        (tree / "loud.sty").write_text("\\immediate\\write18{rm -rf /}\n", encoding="utf-8")
+        (tree / "loud.sty").write_text("\\immediate \\write 18{rm -rf /}\n", encoding="utf-8")
         (tree / "elsewhere.sty").write_text(
             "\\input{/Users/somebody/tenkz-core.code.tex}\n", encoding="utf-8"
         )
-        report = tenkz_ctan.check_arxiv(tree)
+        report = tenkz_ctan.check_arxiv(
+            tree, _loaded("tenkz.sty", "loud.sty", "elsewhere.sty")
+        )
     findings = " ".join(report.failures)
     assert "nested" in findings, report.failures
     assert "tenkz.ins" in findings, report.failures
-    assert "write18" in findings, report.failures
+    # The spaced spelling opens the same stream as the compact one, and TeX
+    # reads the number either way.
+    assert "write 18" in findings, report.failures
     assert "absolute path" in findings, report.failures
+
+
+def test_a_loaded_source_is_read_whatever_it_is_called() -> None:
+    """The scan follows the load graph rather than a list of suffixes, so a
+    runtime file added later as a class or a configuration is read because it
+    is loaded, and reader-facing material is not read at all."""
+
+    with tempfile.TemporaryDirectory() as directory:
+        tree = Path(directory) / PACKAGE_DIR
+        tree.mkdir(parents=True)
+        (tree / "tenkz.cfg").write_text("\\write18{uname -a}\n", encoding="utf-8")
+        (tree / "CHANGES.md").write_text(
+            "The package calls no \\write18 and loads no /absolute path.\n",
+            encoding="utf-8",
+        )
+        scanned = tenkz_ctan.check_arxiv(tree, _loaded("tenkz.cfg"))
+        unscanned = tenkz_ctan.check_arxiv(tree, _loaded("tenkz.sty"))
+    assert any("write18" in reason for reason in scanned.failures), scanned.failures
+    assert not unscanned.failures, unscanned.failures
 
 
 def test_an_unbraced_absolute_input_is_an_absolute_path() -> None:
@@ -833,9 +862,9 @@ def test_an_unbraced_absolute_input_is_an_absolute_path() -> None:
         (tree / "tenkz.sty").write_text(
             "\\input /Users/somebody/tenkz-core.code.tex\n", encoding="utf-8"
         )
-        unbraced = tenkz_ctan.check_arxiv(tree)
+        unbraced = tenkz_ctan.check_arxiv(tree, _loaded("tenkz.sty"))
         (tree / "tenkz.sty").write_text("\\input tenkz-core.code.tex\n", encoding="utf-8")
-        relative = tenkz_ctan.check_arxiv(tree)
+        relative = tenkz_ctan.check_arxiv(tree, _loaded("tenkz.sty"))
     assert any("absolute path" in reason for reason in unbraced.failures), unbraced.failures
     assert not relative.failures, relative.failures
 
@@ -898,7 +927,7 @@ def test_a_commented_shell_call_is_not_a_shell_call() -> None:
             "% tenkz never calls \\write18, and never loads {/absolute}.\n",
             encoding="utf-8",
         )
-        report = tenkz_ctan.check_arxiv(tree)
+        report = tenkz_ctan.check_arxiv(tree, _loaded("tenkz.sty"))
     assert not report.failures, report.failures
 
 

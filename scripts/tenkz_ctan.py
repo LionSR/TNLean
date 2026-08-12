@@ -210,8 +210,11 @@ REGENERATED_SUFFIXES = frozenset({".dtx", ".ins", ".fmt", ".mf", ".drv"})
 
 # The primitives a submission may not need, because arXiv compiles without
 # `\write18`. tenkz draws with TikZ and computes with expl3, so it calls none
-# of them; the check is what keeps that true.
-SHELL_ESCAPE_CALLS = (r"\write18", r"\ShellEscape", r"\immediate\write18")
+# of them; the check is what keeps that true. TeX reads a stream number as a
+# number, so `\write 18` and `\immediate \write 18` open the same stream as
+# the compact spelling, and the pattern allows the space rather than pinning
+# one way of writing it.
+SHELL_ESCAPE_CALL = re.compile(r"\\write\s*18\b|\\ShellEscape\b")
 
 # An absolute path in a staged source names the machine that wrote it. The
 # pattern catches the spellings a TeX file can carry: a Unix path or a Windows
@@ -1266,7 +1269,7 @@ def check_smoke(archive: Path, required: bool) -> Report:
     return report
 
 
-def check_arxiv(tree: Path) -> Report:
+def check_arxiv(tree: Path, closure: Closure) -> Report:
     """The staged tree read as an arXiv source submission.
 
     An upload to CTAN and a source submission to arXiv are the same files under
@@ -1276,9 +1279,18 @@ def check_arxiv(tree: Path) -> Report:
     tree has to be flat, has to be the runtime itself rather than the sources a
     runtime is generated from, has to name no path on the machine that wrote
     it, and has to call no primitive that would need a shell.
+
+    The last two are read from the closure rather than from a list of suffixes.
+    Every file the engine opens is on the load graph, whatever it is called, so
+    a runtime file added later as a class, a definition file, or a
+    configuration is scanned because it is loaded and not because somebody
+    remembered to add its suffix here. The reader-facing material is not
+    scanned: arXiv never compiles a change record, and a change record that
+    mentioned a primitive in prose would be a finding about nothing.
     """
 
     report = Report("arxiv")
+    loaded = set(closure.files)
     for path in sorted(tree.rglob("*")):
         report.require(
             not path.is_dir(),
@@ -1292,22 +1304,23 @@ def check_arxiv(tree: Path) -> Report:
             f"{path.name} would have to be run before the runtime exists, and "
             "a submission is compiled rather than built",
         )
-        if path.suffix not in {".sty", ".tex"}:
+        if path.name not in loaded:
             continue
-        text = path.read_bytes().decode("utf-8", errors="replace")
+        text = strip_comments(path.read_bytes().decode("utf-8", errors="replace"))
         report.require(
-            ABSOLUTE_LOAD.search(strip_comments(text)) is None,
+            ABSOLUTE_LOAD.search(text) is None,
             f"{path.name} loads a file by absolute path, which names the "
             "machine it was written on",
         )
-        for call in SHELL_ESCAPE_CALLS:
-            report.require(
-                call not in strip_comments(text),
-                f"{path.name} calls {call}, and a submission compiles with no shell",
-            )
+        called = SHELL_ESCAPE_CALL.search(text)
+        report.require(
+            called is None,
+            f"{path.name} calls {called.group(0) if called else ''}, and a "
+            "submission compiles with no shell",
+        )
     report.notes.append(
-        f"{len(list(tree.iterdir()))} files, one directory deep, no generated "
-        "source and no shell call"
+        f"{len(list(tree.iterdir()))} files, one directory deep; "
+        f"{len(loaded)} loaded sources read, no generated source and no shell call"
     )
     return report
 
@@ -1458,8 +1471,13 @@ def check_offline(archive: Path, required: bool) -> Report:
             report.failures.append(str(refusal))
             return report
         environment = offline_environment(room, shims, tripwire, home)
+        # The runtime the archive carries, by name, taken from the load graph
+        # rather than from a `tenkz` prefix: the documents this check writes
+        # are named from the package too, so a prefix match would count a
+        # driver file this function wrote as proof that the package answered.
+        carried = {name for name in walk_closure().files if name in set(staged)}
         for case in OFFLINE_CASES:
-            _offline_case(case, room, engine, environment, audit, report)
+            _offline_case(case, room, engine, environment, audit, carried, report)
         if tripwire.exists():
             report.failures.append(
                 "the runs reached for an installer or a fetcher: "
@@ -1476,8 +1494,13 @@ def check_offline(archive: Path, required: bool) -> Report:
 
 
 def _offline_case(case: OfflineCase, room: Path, engine: str,
-                  environment: dict[str, str], audit: Path, report: Report) -> None:
-    """Compile one case in the flat room and read what it wrote."""
+                  environment: dict[str, str], audit: Path, carried: set[str],
+                  report: Report) -> None:
+    """Compile one case in the flat room and read what it wrote.
+
+    `carried` is the runtime the archive holds, by name, and it is what a
+    record line is read against.
+    """
 
     source = ROOT / case.source
     if not source.is_file():
@@ -1532,8 +1555,12 @@ def _offline_case(case: OfflineCase, room: Path, engine: str,
         f"{case.name} read {sorted(set(strangers))} from the repository, so the "
         "flat archive did not answer for the run",
     )
-    runtime = [path for path in opened if Path(path).name.startswith(PACKAGE)]
-    report.require(runtime, f"{case.name} opened no tenkz file, so it proved nothing")
+    runtime = [path for path in opened if Path(path).name in carried]
+    report.require(
+        runtime,
+        f"{case.name} opened none of the archive's runtime files, so it proved "
+        "nothing about them",
+    )
     report.require(
         not foreign_runtime_files(runtime, room, flat),
         f"{case.name} resolved a runtime file outside the flat archive, so an "
@@ -1551,10 +1578,16 @@ def _offline_case(case: OfflineCase, room: Path, engine: str,
             f"{case.name} records {case.absent!r}, which a {case.picture_class} "
             "picture does not write",
         )
-    read_back = subprocess.run(
-        [sys.executable, str(audit), str(stream), str(room / read)],
-        cwd=room, capture_output=True, text=True, timeout=300,
-    )
+    try:
+        read_back = subprocess.run(
+            [sys.executable, str(audit), str(stream), str(room / read)],
+            cwd=room, capture_output=True, text=True, timeout=300,
+        )
+    except subprocess.TimeoutExpired:
+        report.failures.append(
+            f"{case.name}: the event audit did not finish within 300 seconds"
+        )
+        return
     if read_back.returncode != 0:
         tail = "\n".join((read_back.stdout + read_back.stderr).splitlines()[-15:])
         report.failures.append(f"{case.name} failed the event audit:\n{tail}")
@@ -1683,7 +1716,7 @@ def command_check(require_smoke: bool, keep: Path | None) -> int:
             archive, _, digest = build(destination)
             reports.append(check_permissions(destination / PACKAGE))
             reports.append(check_debris(destination / PACKAGE))
-            reports.append(check_arxiv(destination / PACKAGE))
+            reports.append(check_arxiv(destination / PACKAGE, closure))
             reports.append(check_determinism(release))
             reports.append(check_smoke(archive, require_smoke))
             reports.append(check_offline(archive, require_smoke))
