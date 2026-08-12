@@ -169,6 +169,17 @@ spellings and earn continued use.  The other status words record lifecycle
 debt: `alias(...; sunset=...)` reads old sources until its stated rewrite, and
 `escape` names raw geometry whose uses count in meter M3.
 
+A retired spelling leaves a tombstone row in the same registry, giving its
+scope, the dead spelling, and the migration.  Retiring a word is therefore
+one edit: the source lint builds its rejection from those rows and reports
+the migration with the finding, and `tenkz_language.py check` requires every
+spelling the parser refuses by name to carry a row stating the same
+migration, and every row for a word struck from a live alphabet to name a
+spelling the parser refuses and the alphabet no longer holds.  A row whose
+spelling has no `=` is a key that no longer exists; nothing survives for the
+parser to branch on, so the unknown-key error answers it and only the lint
+reads the row.
+
 The gate first compares the pinned meters with the base revision.  M1 total or
 kernel growth requires an `Extension-gate: #NNNN` citation, or a
 `Census-correction: #NNNN` citation while parser identities are unchanged;

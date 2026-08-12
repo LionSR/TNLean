@@ -69,7 +69,7 @@ separate public-surface occurrence and therefore appears separately.
 | `ch12_symmetry_virtual_and_cohomology.tex` | L181, 196, 330, 459, 473 `tenkz` → `P-grid` | — | — |
 | `ch13_parent_hamiltonian_commuting_gap_appendix_b_commutation.tex` | L55 `tenkz` → `P-grid` | — | — |
 | `ch13_parent_hamiltonian_commuting_gap_appendix_b_supports.tex` | L276 `tenkz` → `P-grid` | — | — |
-| `ch13_parent_hamiltonian_injective_ground_spaces_intersection_property.tex` | L101 `tenkz` → `P-grid` | — | — |
+| `ch13_parent_hamiltonian_injective_ground_spaces_intersection_property.tex` | L100 `tenkz` → `P-grid` | — | — |
 | `ch13_parent_hamiltonian_injective_ground_spaces_local_parent_interaction.tex` | L36, 1595, 1637 `tenkz` → `P-grid` | — | — |
 | `ch14_correlations.tex` | L68 `tenkz` → `P-grid` | — | — |
 | `ch16_channel_representations_choi_and_kraus.tex` | L691 `tenkz` → `P-grid` | — | — |
