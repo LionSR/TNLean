@@ -52,8 +52,9 @@ unital canonical representation and counts the peripheral eigenvalues of the
 associated transfer map. This normalized-orientation restriction remains
 tracked by issue~\#6232.
 
-Let $(Q_u)_{u\in\mathbb Z/p\mathbb Z}$ be the cyclic projections and, for a
-word $\sigma=(i_0,\ldots,i_{N-1})$, let
+Let $A=(A^i)_{i=0}^{d-1}$ be the MPS matrix family. Let
+$(Q_u)_{u\in\mathbb Z/p\mathbb Z}$ be its cyclic projections and, for a word
+$\sigma=(i_0,\ldots,i_{N-1})$, let
 \[
   F_u(\sigma)
   =Q_uA^{i_0}Q_{u+1}A^{i_1}\cdots
@@ -61,19 +62,19 @@ word $\sigma=(i_0,\ldots,i_{N-1})$, let
 \]
 At every length, including $N=0$, the formal decomposition is
 \[
-  \operatorname{tr}(A^{i_0}\cdots A^{i_{N-1}})
-  =\sum_{u\in\mathbb Z/p\mathbb Z}\operatorname{tr}F_u(\sigma).
+  \tr(A^{i_0}\cdots A^{i_{N-1}})
+  =\sum_{u\in\mathbb Z/p\mathbb Z}\tr F_u(\sigma).
 \]
 For positive $N$, \leanid{MPSTensor.projectorComponentChain_coeff_eq_trace_cornerProd}
 identifies each boundary trace with the coefficient of the explicit periodic
 component chain. At $N=0$, the boundary product is $F_u(\varnothing)=Q_u$, so
 the formula reads
 \[
-  \operatorname{tr}(\mathbf 1)=
-  \sum_{u\in\mathbb Z/p\mathbb Z}\operatorname{tr}(Q_u).
+  \tr(\Id)=
+  \sum_{u\in\mathbb Z/p\mathbb Z}\tr(Q_u).
 \]
 This must be distinguished from ordinary empty component-chain coefficients.
-An empty chain evaluates to $\mathbf 1$ independently of $u$ and therefore
+An empty chain evaluates to $\Id$ independently of $u$ and therefore
 does not retain the boundary projector. The boundary-aware theorem closes the
 length-zero part of issue~\#6233 without changing the positive-length explicit
 component-chain statement.

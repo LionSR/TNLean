@@ -155,7 +155,9 @@ private theorem cornerProd_eq_projector_mul_evalWord
     _ = Q u * evalWord A w := htransport.symm
 
 /-- At positive length, the trace of the boundary-aware corner product equals the
-coefficient of the corresponding explicit projector-component chain. -/
+coefficient of the corresponding explicit projector-component chain.
+
+Source: PGVWC07, arXiv:quant-ph/0608197, Theorem 5, lines 860--880. -/
 theorem projectorComponentChain_coeff_eq_trace_cornerProd
     (Q : Fin p → MatrixAlg D) (A : MPSTensor d D)
     (hQproj : ∀ k, IsOrthogonalProjection (Q k))
@@ -165,17 +167,23 @@ theorem projectorComponentChain_coeff_eq_trace_cornerProd
   rw [MPSChainTensor.coeff, projectorComponentChain_eval Q A hQproj]
 
 /-- Inserting the cyclic resolution of the identity gives a boundary-aware
-state-vector decomposition at every length:
+state-vector decomposition at every length. For
+\(\sigma = (i_0, \ldots, i_{N-1})\),
 \[
-  \operatorname{tr}(A^{\sigma_1}\cdots A^{\sigma_N})
-    = \sum_u \operatorname{tr}(F_u^{\boldsymbol\sigma}).
+  \operatorname{tr}(A^{i_0}\cdots A^{i_{N-1}})
+    = \sum_u \operatorname{tr}(F_u(\sigma)).
 \]
 Here `cornerProd Q A u w` is the repeated corner-transition product starting
-with the boundary projector `Q u`. In particular, at length zero the convention
-is `evalWord A [] = 1` and `cornerProd Q A u [] = Q u`, so the formula reads
-`trace 1 = ∑ u, trace (Q u)`. It does not identify the empty
-`projectorComponentChain` coefficient, whose chain evaluation is `1` and hence
-forgets the boundary projector. -/
+with the boundary projector `Q u`. At length zero,
+\(\operatorname{evalWord}(A, []) = 1\) and
+\(\operatorname{cornerProd}(Q, A, u, []) = Q_u\), so the formula reads
+\(\operatorname{tr}(1) = \sum_u \operatorname{tr}(Q_u)\). It does not identify
+the empty `projectorComponentChain` coefficient, whose chain evaluation is
+\(1\) and hence forgets the boundary projector.
+
+Source: PGVWC07, arXiv:quant-ph/0608197, Theorem 5, lines 860--880. The
+empty-word convention is the formal extension of the source's inserted-projector
+calculation. -/
 theorem mpv_eq_sum_trace_cornerProd
     (Q : Fin p → MatrixAlg D) (A : MPSTensor d D)
     (hQproj : ∀ k, IsOrthogonalProjection (Q k))
