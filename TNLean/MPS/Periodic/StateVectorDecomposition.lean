@@ -173,13 +173,12 @@ state-vector decomposition at every length. For
   \operatorname{tr}(A^{i_0}\cdots A^{i_{N-1}})
     = \sum_u \operatorname{tr}(F_u(\sigma)).
 \]
-Here `cornerProd Q A u w` is the repeated corner-transition product starting
-with the boundary projector `Q u`. At length zero,
-\(\operatorname{evalWord}(A, []) = 1\) and
-\(\operatorname{cornerProd}(Q, A, u, []) = Q_u\), so the formula reads
-\(\operatorname{tr}(1) = \sum_u \operatorname{tr}(Q_u)\). It does not identify
-the empty `projectorComponentChain` coefficient, whose chain evaluation is
-\(1\) and hence forgets the boundary projector.
+Here `cornerProd` is the repeated corner-transition product starting with the
+boundary projector `Q u`. At length zero, `evalWord` gives
+\(A^{[]} = 1\), while `cornerProd` gives \(F_u([]) = Q_u\), so the formula
+reads \(\operatorname{tr}(1) = \sum_u \operatorname{tr}(Q_u)\). It does not
+identify the empty `projectorComponentChain` coefficient, whose chain evaluation
+is \(1\) and hence forgets the boundary projector.
 
 Source: PGVWC07, arXiv:quant-ph/0608197, Theorem 5, lines 860--880. The
 empty-word convention is the formal extension of the source's inserted-projector
@@ -287,6 +286,22 @@ theorem exists_paper_cyclic_projectors_of_isPeriodic
   · intro k i
     exact negReindex_paper_shift A hA.leftCanonical hPproj hCyclic' k i
 
+/-- Adding a number of unit shifts divisible by `p` fixes every index in `Fin p`. -/
+private theorem add_nsmul_one_fin_eq_self_of_dvd [NeZero p]
+    {N : ℕ} (hdiv : p ∣ N) (u : Fin p) :
+    u + N • (1 : Fin p) = u := by
+  obtain ⟨k, rfl⟩ := hdiv
+  have hpzero : p • (1 : Fin p) = 0 := by
+    simpa only [Fintype.card_fin] using
+      (card_nsmul_eq_zero (x := (1 : Fin p)))
+  have hcycle : (p * k) • (1 : Fin p) = 0 := by
+    calc
+      (p * k) • (1 : Fin p) = k • (p • (1 : Fin p)) := by
+        rw [mul_comm, mul_nsmul']
+      _ = k • 0 := by rw [hpzero]
+      _ = 0 := nsmul_zero k
+  rw [hcycle, add_zero]
+
 /-- **PGVWC07 Theorem 5, boundary-aware periodic branch.**
 
 If \(p\mid N\), a period-\(p\) tensor supplies cyclic projectors and a
@@ -303,8 +318,10 @@ period, and peripheral spectrum equal to the \(p\)-th roots of unity.
 
 **Scope restriction (normalized orientation):** this theorem uses
 `IsPeriodic p A` rather than deriving these conditions from the one-block
-unital canonical hypotheses of the printed theorem. This boundary is recorded
-in `docs/paper-gaps/pgvwc07_periodic_decomposition_scope.tex`.
+unital canonical hypotheses of the printed theorem. At \(N=0\), its
+boundary-trace identity is a formal empty-word extension of the printed
+positive-chain calculation. Both boundaries are recorded in
+`docs/paper-gaps/pgvwc07_periodic_decomposition_scope.tex`.
 
 Source: PGVWC07, arXiv:quant-ph/0608197, Theorem 5, lines 849--880. -/
 theorem pgvwc07_periodic_stateVector_boundary_decomposition_of_dvd
@@ -327,18 +344,7 @@ theorem pgvwc07_periodic_stateVector_boundary_decomposition_of_dvd
   refine ⟨Q, hQproj, hQsum, hshift, ?_, ?_, ?_⟩
   · intro u j i
     rfl
-  · obtain ⟨k, rfl⟩ := hdiv
-    intro u
-    have hpzero : p • (1 : Fin p) = 0 := by
-      simpa only [Fintype.card_fin] using
-        (card_nsmul_eq_zero (x := (1 : Fin p)))
-    have hcycle : (p * k) • (1 : Fin p) = 0 := by
-      calc
-        (p * k) • (1 : Fin p) = k • (p • (1 : Fin p)) := by
-          rw [mul_comm, mul_nsmul']
-        _ = k • 0 := by rw [hpzero]
-        _ = 0 := nsmul_zero k
-    rw [hcycle, add_zero]
+  · exact add_nsmul_one_fin_eq_self_of_dvd hdiv
   · exact mpv_eq_sum_trace_cornerProd Q A hQproj hQsum hshift
 
 /-- **PGVWC07 Theorem 5, periodic branch.**
@@ -381,18 +387,7 @@ theorem pgvwc07_periodic_stateVector_decomposition_of_dvd
   refine ⟨Q, hQproj, hQsum, hshift, ?_, ?_, ?_⟩
   · intro u j i
     rfl
-  · obtain ⟨k, rfl⟩ := hdiv
-    intro u
-    have hpzero : p • (1 : Fin p) = 0 := by
-      simpa only [Fintype.card_fin] using
-        (card_nsmul_eq_zero (x := (1 : Fin p)))
-    have hcycle : (p * k) • (1 : Fin p) = 0 := by
-      calc
-        (p * k) • (1 : Fin p) = k • (p • (1 : Fin p)) := by
-          rw [mul_comm, mul_nsmul']
-        _ = k • 0 := by rw [hpzero]
-        _ = 0 := nsmul_zero k
-    rw [hcycle, add_zero]
+  · exact add_nsmul_one_fin_eq_self_of_dvd hdiv
   · obtain ⟨n, rfl⟩ := Nat.exists_eq_succ_of_ne_zero (Nat.ne_of_gt hN)
     exact mpv_eq_sum_projectorComponentChain_coeff Q A hQproj hQsum hshift
 
