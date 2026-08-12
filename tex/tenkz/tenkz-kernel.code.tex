@@ -15450,6 +15450,9 @@
 % ---------- atom ink -----------------------------------------------------------------------------
 \cs_new_protected:Npn \__tenkz_kernel_r_atoms:
   {
+    % The automatic label station asks which faces carry ink.  Read that off
+    % the frozen records once, before the first dot asks.
+    \__tenkz_kernel_r_label_occupancy:
     \__tenkz_model_map_ids:nn {atom} { \__tenkz_kernel_r_atom_ink:n {##1} }
   }
 % A plane physical closure reads the two semantic transverse endpoints stored
@@ -15654,156 +15657,357 @@
 % free quadrant.  A dot without `label pos=` takes the first face carrying no
 % ink in the fixed order s, n, e, w: south is the historical station, so a
 % dot whose south face is free does not move, and when every face carries
-% ink the station falls back to south.  Occupancy is read from the frozen
-% wire records -- a port endpoint standing on the atom, a policy leg growing
-% from a face, or an authored wire leaving the atom's cell -- so the answer
-% is independent of ink order and identical on every compile.
-\prop_new:N \l__tenkz_kernel_lab_occ_prop
+% ink the station falls back to south.
+%
+% The faces the wires stand on are read once per picture, from the frozen
+% records, into a table keyed by atom and side; the atom pass then answers
+% each station in one step rather than rereading every wire per dot.  A wire
+% reserves a face wherever it meets an atom:
+%
+%   * a policy leg names its host and the face it grows from;
+%   * a transverse plane closure names its two hosts and the axes it leaves
+%     them by;
+%   * an endpoint port names its record and its face angle;
+%   * every other endpoint -- a cell, a basis member, or a bare record name
+%     -- reaches its atom through the cell it stands at, and its ink leaves
+%     toward the wire's next point: the waypoint on that end's own side of a
+%     string's route, and the opposite end for every wire that draws the
+%     chord between its ends;
+%   * an atom threaded on a wire stands at no cell of its own, and takes the
+%     two faces its carrier runs through at the bead.
+%
+% A departure along neither axis leaves through a corner and blocks no face.
+% The answer is therefore independent of ink order and identical on every
+% compile.
+\__tenkz_prop_new_indexed:N \l__tenkz_kernel_lab_occ_prop % "atom/side" -> ""
+\tl_new:N \l__tenkz_kernel_lab_atom_tl
 \tl_new:N \l__tenkz_kernel_lab_row_tl
 \tl_new:N \l__tenkz_kernel_lab_col_tl
-\tl_new:N \l__tenkz_kernel_lab_wide_tl
+\tl_new:N \l__tenkz_kernel_lab_far_row_tl
+\tl_new:N \l__tenkz_kernel_lab_far_col_tl
 \tl_new:N \l__tenkz_kernel_lab_from_tl
 \tl_new:N \l__tenkz_kernel_lab_to_tl
 \tl_new:N \l__tenkz_kernel_lab_host_tl
+\tl_new:N \l__tenkz_kernel_lab_face_tl
+\tl_new:N \l__tenkz_kernel_lab_via_tl
+\tl_new:N \l__tenkz_kernel_lab_node_tl
+\clist_new:N \l__tenkz_kernel_lab_route_clist
 \bool_new:N \l__tenkz_kernel_lab_cell_bool
-\cs_new_protected:Npn \__tenkz_kernel_r_label_auto_side:nN #1#2
+\bool_new:N \l__tenkz_kernel_lab_far_bool
+% One pass over the frozen records fills the table the atom pass reads.
+\cs_new_protected:Npn \__tenkz_kernel_r_label_occupancy:
   {
     \prop_clear:N \l__tenkz_kernel_lab_occ_prop
-    \__tenkz_kernel_atom_rc:nNNN {#1}
-      \l__tenkz_kernel_lab_row_tl \l__tenkz_kernel_lab_col_tl
-      \l__tenkz_kernel_lab_cell_bool
-    \__tenkz_model_get:nnN {#1} {wide} \l__tenkz_kernel_lab_wide_tl
-    \quark_if_no_value:NT \l__tenkz_kernel_lab_wide_tl
-      { \tl_set:Nn \l__tenkz_kernel_lab_wide_tl {1} }
     \__tenkz_model_map_ids:nn {wire}
-      { \__tenkz_kernel_r_label_occupied:nn {#1} {##1} }
+      { \__tenkz_kernel_r_label_wire_faces:n {##1} }
+    \__tenkz_model_map_ids:nn {atom}
+      { \__tenkz_kernel_r_label_bead_faces:n {##1} }
+  }
+\cs_new_protected:Npn \__tenkz_kernel_r_label_auto_side:nN #1#2
+  {
     \tl_set:Nn #2 {s}
     \clist_map_inline:nn {s,n,e,w}
       {
-        \prop_if_in:NnF \l__tenkz_kernel_lab_occ_prop {##1}
+        \prop_if_in:NeF \l__tenkz_kernel_lab_occ_prop { #1 / ##1 }
           {
             \tl_set:Nn #2 {##1}
             \clist_map_break:
           }
       }
   }
-% Which faces of atom #1 does wire #2 stand on?  A policy leg names its host
-% and its face word; every generated bond, stub, cup, and trace endpoint is
-% a port naming its record and its face angle; an authored endpoint may
-% instead be the atom's own cell, whose ink leaves toward the wire's other
-% end (an oblique authored wire leaves through a corner and blocks no face).
-\cs_new_protected:Npn \__tenkz_kernel_r_label_occupied:nn #1#2
+% Side #2 of atom #1 carries ink.  The angle form converts once here, so a
+% face word and a face angle reach the table by the same road.
+\cs_new_protected:Npn \__tenkz_kernel_r_label_mark_side:nn #1#2
+  { \prop_put:Nen \l__tenkz_kernel_lab_occ_prop { #1 / #2 } { } }
+\cs_generate_variant:Nn \__tenkz_kernel_r_label_mark_side:nn { Vn }
+\cs_new_protected:Npn \__tenkz_kernel_r_label_mark:nn #1#2
   {
-    \__tenkz_model_get:nnN {#2} {host} \l__tenkz_kernel_lab_host_tl
-    \str_if_eq:VnT \l__tenkz_kernel_lab_host_tl {#1}
+    \__tenkz_kernel_r_face_side:n { \__tenkz_kernel_r_compass:n {#2} }
+    \exp_args:NnV \__tenkz_kernel_r_label_mark_side:nn {#1}
+      \l__tenkz_kernel_r_face_side_tl
+  }
+\cs_generate_variant:Nn \__tenkz_kernel_r_label_mark:nn { ne, Ve, VV }
+% Every face wire #1 stands on.
+\cs_new_protected:Npn \__tenkz_kernel_r_label_wire_faces:n #1
+  {
+    \__tenkz_model_get:nnN {#1} {host} \l__tenkz_kernel_lab_host_tl
+    \quark_if_no_value:NF \l__tenkz_kernel_lab_host_tl
       {
-        \__tenkz_model_get:nnN {#2} {face} \l__tenkz_kernel_lab_from_tl
-        \quark_if_no_value:NF \l__tenkz_kernel_lab_from_tl
+        \__tenkz_model_get:nnN {#1} {face} \l__tenkz_kernel_lab_face_tl
+        \quark_if_no_value:NF \l__tenkz_kernel_lab_face_tl
           {
-            \__tenkz_kernel_r_label_occupied_mark:V
-              \l__tenkz_kernel_lab_from_tl
+            \__tenkz_kernel_r_label_mark:VV
+              \l__tenkz_kernel_lab_host_tl \l__tenkz_kernel_lab_face_tl
           }
       }
-    \__tenkz_model_get:nnN {#2} {from} \l__tenkz_kernel_lab_from_tl
-    \__tenkz_model_get:nnN {#2} {to} \l__tenkz_kernel_lab_to_tl
-    \exp_args:NnVV \__tenkz_kernel_r_label_occupied_end:nnn {#1}
-      \l__tenkz_kernel_lab_from_tl \l__tenkz_kernel_lab_to_tl
-    \exp_args:NnVV \__tenkz_kernel_r_label_occupied_end:nnn {#1}
-      \l__tenkz_kernel_lab_to_tl \l__tenkz_kernel_lab_from_tl
+    % A transverse plane closure keeps its two ends as a host and the axis
+    % it leaves that host by, not as endpoint nodes.
+    \clist_map_inline:nn { from , to }
+      {
+        \__tenkz_model_get:nnN {#1} {##1-host} \l__tenkz_kernel_lab_host_tl
+        \quark_if_no_value:NF \l__tenkz_kernel_lab_host_tl
+          {
+            \__tenkz_model_get:nnN {#1} {##1-axis}
+              \l__tenkz_kernel_lab_face_tl
+            \quark_if_no_value:NF \l__tenkz_kernel_lab_face_tl
+              {
+                \__tenkz_kernel_r_label_mark:VV
+                  \l__tenkz_kernel_lab_host_tl \l__tenkz_kernel_lab_face_tl
+              }
+          }
+      }
+    \__tenkz_model_get:nnN {#1} {from} \l__tenkz_kernel_lab_from_tl
+    \__tenkz_model_get:nnN {#1} {to} \l__tenkz_kernel_lab_to_tl
+    \exp_args:NnVV \__tenkz_kernel_r_label_end_faces:nnnn {#1}
+      \l__tenkz_kernel_lab_from_tl \l__tenkz_kernel_lab_to_tl {first}
+    \exp_args:NnVV \__tenkz_kernel_r_label_end_faces:nnnn {#1}
+      \l__tenkz_kernel_lab_to_tl \l__tenkz_kernel_lab_from_tl {last}
   }
-\cs_new_protected:Npn \__tenkz_kernel_r_label_occupied_mark:n #1
-  {
-    \__tenkz_kernel_r_face_side:n { \__tenkz_kernel_r_compass:n {#1} }
-    \prop_put:NVn \l__tenkz_kernel_lab_occ_prop
-      \l__tenkz_kernel_r_face_side_tl { }
-  }
-\cs_generate_variant:Nn \__tenkz_kernel_r_label_occupied_mark:n { V, e }
-\cs_new_protected:Npn \__tenkz_kernel_r_label_occupied_end:nnn #1#2#3
+% Endpoint #2 of wire #1 stands on the atom it names.  A port names its
+% record and the angle its ink leaves at, which is the answer outright.
+% Every other endpoint reaches its atom through the cell it stands at, and
+% leaves toward the next point of the route: waypoint #4 -- `first` or
+% `last` -- when the wire names any, and the opposite endpoint #3 when it
+% names none.
+\cs_new_protected:Npn \__tenkz_kernel_r_label_end_faces:nnnn #1#2#3#4
   {
     \quark_if_no_value:nF {#2}
       {
-        \str_case:enF { \__tenkz_kernel_node_item:nn {#2} {kind} }
+        \str_if_eq:eeTF { \__tenkz_kernel_node_item:nn {#2} {kind} } {port}
           {
-            {port}
+            \__tenkz_kernel_port_node_record:nN {#2}
+              \l__tenkz_kernel_lab_host_tl
+            \quark_if_no_value:NF \l__tenkz_kernel_lab_host_tl
               {
-                \__tenkz_kernel_port_node_record:nN {#2}
+                \__tenkz_kernel_r_label_mark:Ve
                   \l__tenkz_kernel_lab_host_tl
-                \str_if_eq:VnT \l__tenkz_kernel_lab_host_tl {#1}
+                  { \__tenkz_kernel_node_item:nn {#2} {face} }
+              }
+          }
+          {
+            \__tenkz_kernel_r_label_end_atom:nNNNN {#2}
+              \l__tenkz_kernel_lab_atom_tl
+              \l__tenkz_kernel_lab_row_tl \l__tenkz_kernel_lab_col_tl
+              \l__tenkz_kernel_lab_cell_bool
+            \bool_if:NT \l__tenkz_kernel_lab_cell_bool
+              {
+                \__tenkz_kernel_r_label_next_cell:nnn {#1} {#3} {#4}
+                \bool_if:NT \l__tenkz_kernel_lab_far_bool
                   {
-                    \__tenkz_kernel_r_label_occupied_mark:e
-                      { \__tenkz_kernel_node_item:nn {#2} {face} }
+                    \__tenkz_kernel_r_label_mark_toward:V
+                      \l__tenkz_kernel_lab_atom_tl
                   }
               }
-            {cell} { \__tenkz_kernel_r_label_occupied_cell:nn {#2} {#3} }
           }
-          { }
       }
   }
-% Endpoint #1 is a cell: it stands on the atom exactly when it lies in the
-% atom's spanned row, and the leaving direction is read from the other end's
-% own row and column.
-\cs_new_protected:Npn \__tenkz_kernel_r_label_occupied_cell:nn #1#2
+% The atom a wire endpoint stands on, and the cell it stands at.  A cell or
+% basis-member address names the cell outright and the frame answers which
+% atom claimed it, so an end anywhere in a spanning atom's rectangle finds
+% that atom; a bare record name IS the atom and answers its own cell.  Every
+% other production is a geometric construction rather than a station on an
+% atom, and answers false.
+\cs_new_protected:Npn \__tenkz_kernel_r_label_end_atom:nNNNN #1#2#3#4#5
   {
-    \bool_lazy_all:nT
+    \bool_set_false:N #5
+    \str_case:en { \__tenkz_kernel_node_item:nn {#1} {kind} }
       {
-        { \l__tenkz_kernel_lab_cell_bool }
-        { ! \quark_if_no_value_p:n {#2} }
-        {
-          \int_compare_p:nNn
-            { \__tenkz_kernel_node_item:nn {#1} {row} }
-            = { \l__tenkz_kernel_lab_row_tl }
-        }
-        {
-          \int_compare_p:nNn
-            { \__tenkz_kernel_node_item:nn {#1} {col} }
-            > { \l__tenkz_kernel_lab_col_tl - 1 }
-        }
-        {
-          \int_compare_p:nNn
-            { \__tenkz_kernel_node_item:nn {#1} {col} }
-            < { \l__tenkz_kernel_lab_col_tl + \l__tenkz_kernel_lab_wide_tl }
-        }
+        {cell}
+          {
+            \tl_set:Ne #3 { \__tenkz_kernel_node_item:nn {#1} {row} }
+            \tl_set:Ne #4 { \__tenkz_kernel_node_item:nn {#1} {col} }
+            \__tenkz_kernel_any_cell_claim:eeN
+              { \tl_use:N #3 } { \tl_use:N #4 } #2
+            \quark_if_no_value:NF #2 { \bool_set_true:N #5 }
+          }
+        {member}
+          {
+            \tl_set:Ne #3 { \__tenkz_kernel_node_item:nn {#1} {row} }
+            \tl_set:Ne #4 { \__tenkz_kernel_node_item:nn {#1} {col} }
+            \__tenkz_kernel_basis_record_maybe:eeeN
+              { \tl_use:N #3 } { \tl_use:N #4 }
+              { \__tenkz_kernel_node_item:nn {#1} {member} } #2
+            \quark_if_no_value:NF #2 { \bool_set_true:N #5 }
+          }
+        {record}
+          {
+            \prop_get:NeN \l__tenkz_kernel_named_prop
+              { \__tenkz_kernel_node_item:nn {#1} {name} } #2
+            \quark_if_no_value:NF #2
+              { \exp_args:NV \__tenkz_kernel_atom_rc:nNNN #2 #3 #4 #5 }
+          }
+      }
+  }
+% The cell the wire's ink leaves an endpoint toward.  A string route bends
+% at its waypoints, so the departure follows the waypoint on this endpoint's
+% own side of the route and not the far end the chord would suggest; every
+% other wire runs to its opposite endpoint, and reads that end even where a
+% waypoint field is set, because only the string stage draws through one.
+% A waypoint that names no cell falls back to the opposite end rather than
+% losing the face.
+\cs_new_protected:Npn \__tenkz_kernel_r_label_next_cell:nnn #1#2#3
+  {
+    \bool_set_false:N \l__tenkz_kernel_lab_far_bool
+    \tl_set:Nn \l__tenkz_kernel_lab_via_tl { \q_no_value }
+    \__tenkz_model_get:nnN {#1} {kind} \l__tenkz_kernel_lab_node_tl
+    \str_if_eq:VnT \l__tenkz_kernel_lab_node_tl {string}
+      { \__tenkz_model_get:nnN {#1} {via} \l__tenkz_kernel_lab_via_tl }
+    \quark_if_no_value:NF \l__tenkz_kernel_lab_via_tl
+      {
+        % the waypoints arrive as one field, and a waypoint is read as an
+        % address, so the list is parsed before an item is taken from it
+        \clist_set:NV \l__tenkz_kernel_lab_route_clist
+          \l__tenkz_kernel_lab_via_tl
+        \tl_set:Ne \l__tenkz_kernel_lab_node_tl
+          {
+            \clist_item:Nn \l__tenkz_kernel_lab_route_clist
+              { \str_if_eq:nnTF {#3} {first} {1} {-1} }
+          }
+        \tl_if_empty:NF \l__tenkz_kernel_lab_node_tl
+          {
+            \__tenkz_kernel_addr:VN \l__tenkz_kernel_lab_node_tl
+              \l__tenkz_kernel_lab_node_tl
+            \exp_args:NV \__tenkz_kernel_bond_end_cell:nNNN
+              \l__tenkz_kernel_lab_node_tl
+              \l__tenkz_kernel_lab_far_row_tl
+              \l__tenkz_kernel_lab_far_col_tl
+              \l__tenkz_kernel_lab_far_bool
+          }
+      }
+    \bool_if:NF \l__tenkz_kernel_lab_far_bool
+      {
+        \quark_if_no_value:nF {#2}
+          {
+            \__tenkz_kernel_bond_end_cell:nNNN {#2}
+              \l__tenkz_kernel_lab_far_row_tl
+              \l__tenkz_kernel_lab_far_col_tl
+              \l__tenkz_kernel_lab_far_bool
+          }
+      }
+  }
+% The endpoint stands at the near cell and its ink leaves toward the far
+% one: a step along a row or a column takes the face it crosses.
+\cs_new_protected:Npn \__tenkz_kernel_r_label_mark_toward:n #1
+  {
+    \int_compare:nNnTF
+      { \l__tenkz_kernel_lab_far_row_tl } = { \l__tenkz_kernel_lab_row_tl }
+      {
+        \int_compare:nNnT
+          { \l__tenkz_kernel_lab_far_col_tl }
+          < { \l__tenkz_kernel_lab_col_tl }
+          { \__tenkz_kernel_r_label_mark_side:nn {#1} {w} }
+        \int_compare:nNnT
+          { \l__tenkz_kernel_lab_far_col_tl }
+          > { \l__tenkz_kernel_lab_col_tl }
+          { \__tenkz_kernel_r_label_mark_side:nn {#1} {e} }
       }
       {
-        \bool_lazy_or:nnT
-          {
-            \str_if_eq_p:ee
-              { \__tenkz_kernel_node_item:nn {#2} {kind} } {cell}
-          }
-          {
-            \str_if_eq_p:ee
-              { \__tenkz_kernel_node_item:nn {#2} {kind} } {member}
-          }
+        \int_compare:nNnT
+          { \l__tenkz_kernel_lab_far_col_tl }
+          = { \l__tenkz_kernel_lab_col_tl }
           {
             \int_compare:nNnTF
-              { \__tenkz_kernel_node_item:nn {#2} {row} }
-              = { \__tenkz_kernel_node_item:nn {#1} {row} }
+              { \l__tenkz_kernel_lab_far_row_tl }
+              < { \l__tenkz_kernel_lab_row_tl }
+              { \__tenkz_kernel_r_label_mark_side:nn {#1} {n} }
+              { \__tenkz_kernel_r_label_mark_side:nn {#1} {s} }
+          }
+      }
+  }
+\cs_generate_variant:Nn \__tenkz_kernel_r_label_mark_toward:n { V }
+% An atom threaded on a wire has no cell, so no endpoint names it.  Its
+% carrier runs through the bead, and the two faces that run crosses are
+% taken: a policy leg reaches the bead along the face it grows from, and an
+% index wire between two cells of one column runs north and south while one
+% along a row runs east and west.  A bending carrier turns where its own
+% waypoints say, so it leaves the bead through no face this stage can name.
+\cs_new_protected:Npn \__tenkz_kernel_r_label_bead_faces:n #1
+  {
+    \__tenkz_model_get:nnN {#1} {node} \l__tenkz_kernel_lab_node_tl
+    \quark_if_no_value:NF \l__tenkz_kernel_lab_node_tl
+      {
+        \str_if_eq:eeT
+          { \__tenkz_kernel_node_item:Nn \l__tenkz_kernel_lab_node_tl {kind} }
+          {onwire}
+          {
+            \prop_get:NeN \l__tenkz_kernel_named_prop
               {
-                \int_compare:nNnT
-                  { \__tenkz_kernel_node_item:nn {#2} {col} }
-                  < { \__tenkz_kernel_node_item:nn {#1} {col} }
-                  { \prop_put:Nnn \l__tenkz_kernel_lab_occ_prop {w} { } }
-                \int_compare:nNnT
-                  { \__tenkz_kernel_node_item:nn {#2} {col} }
-                  > { \__tenkz_kernel_node_item:nn {#1} {col} }
-                  { \prop_put:Nnn \l__tenkz_kernel_lab_occ_prop {e} { } }
+                \__tenkz_kernel_node_item:Nn
+                  \l__tenkz_kernel_lab_node_tl {wire}
+              }
+              \l__tenkz_kernel_lab_host_tl
+            \quark_if_no_value:NF \l__tenkz_kernel_lab_host_tl
+              {
+                \exp_args:NV \__tenkz_kernel_r_label_carrier_faces:nn
+                  \l__tenkz_kernel_lab_host_tl {#1}
+              }
+          }
+      }
+  }
+\cs_new_protected:Npn \__tenkz_kernel_r_label_carrier_faces:nn #1#2
+  {
+    \tl_set:Nn \l__tenkz_kernel_lab_via_tl { \q_no_value }
+    \__tenkz_model_get:nnN {#1} {kind} \l__tenkz_kernel_lab_node_tl
+    \str_if_eq:VnT \l__tenkz_kernel_lab_node_tl {string}
+      { \__tenkz_model_get:nnN {#1} {via} \l__tenkz_kernel_lab_via_tl }
+    \quark_if_no_value:NT \l__tenkz_kernel_lab_via_tl
+      {
+        \__tenkz_model_get:nnN {#1} {face} \l__tenkz_kernel_lab_face_tl
+        \quark_if_no_value:NTF \l__tenkz_kernel_lab_face_tl
+          { \__tenkz_kernel_r_label_carrier_run:nn {#1} {#2} }
+          {
+            \__tenkz_kernel_r_label_mark:ne {#2}
+              { \tl_use:N \l__tenkz_kernel_lab_face_tl }
+            \__tenkz_kernel_r_label_mark:ne {#2}
+              {
+                \fp_eval:n
+                  {
+                    \__tenkz_kernel_r_compass:n
+                      { \tl_use:N \l__tenkz_kernel_lab_face_tl } + 180
+                  }
+              }
+          }
+      }
+  }
+\cs_new_protected:Npn \__tenkz_kernel_r_label_carrier_run:nn #1#2
+  {
+    \__tenkz_model_get:nnN {#1} {from} \l__tenkz_kernel_lab_from_tl
+    \__tenkz_model_get:nnN {#1} {to} \l__tenkz_kernel_lab_to_tl
+    \bool_lazy_and:nnT
+      { ! \quark_if_no_value_p:N \l__tenkz_kernel_lab_from_tl }
+      { ! \quark_if_no_value_p:N \l__tenkz_kernel_lab_to_tl }
+      {
+        \exp_args:NV \__tenkz_kernel_bond_end_cell:nNNN
+          \l__tenkz_kernel_lab_from_tl
+          \l__tenkz_kernel_lab_row_tl \l__tenkz_kernel_lab_col_tl
+          \l__tenkz_kernel_lab_cell_bool
+        \exp_args:NV \__tenkz_kernel_bond_end_cell:nNNN
+          \l__tenkz_kernel_lab_to_tl
+          \l__tenkz_kernel_lab_far_row_tl \l__tenkz_kernel_lab_far_col_tl
+          \l__tenkz_kernel_lab_far_bool
+        \bool_lazy_and:nnT
+          { \l__tenkz_kernel_lab_cell_bool }
+          { \l__tenkz_kernel_lab_far_bool }
+          {
+            \int_compare:nNnTF
+              { \l__tenkz_kernel_lab_far_col_tl }
+              = { \l__tenkz_kernel_lab_col_tl }
+              {
+                \int_compare:nNnF
+                  { \l__tenkz_kernel_lab_far_row_tl }
+                  = { \l__tenkz_kernel_lab_row_tl }
+                  {
+                    \__tenkz_kernel_r_label_mark_side:nn {#2} {n}
+                    \__tenkz_kernel_r_label_mark_side:nn {#2} {s}
+                  }
               }
               {
                 \int_compare:nNnT
-                  { \__tenkz_kernel_node_item:nn {#2} {col} }
-                  = { \__tenkz_kernel_node_item:nn {#1} {col} }
+                  { \l__tenkz_kernel_lab_far_row_tl }
+                  = { \l__tenkz_kernel_lab_row_tl }
                   {
-                    \int_compare:nNnTF
-                      { \__tenkz_kernel_node_item:nn {#2} {row} }
-                      < { \__tenkz_kernel_node_item:nn {#1} {row} }
-                      {
-                        \prop_put:Nnn
-                          \l__tenkz_kernel_lab_occ_prop {n} { }
-                      }
-                      {
-                        \prop_put:Nnn
-                          \l__tenkz_kernel_lab_occ_prop {s} { }
-                      }
+                    \__tenkz_kernel_r_label_mark_side:nn {#2} {e}
+                    \__tenkz_kernel_r_label_mark_side:nn {#2} {w}
                   }
               }
           }
