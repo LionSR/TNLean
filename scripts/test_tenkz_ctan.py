@@ -837,6 +837,20 @@ def test_a_retired_front_end_vendored_as_a_file_is_caught() -> None:
     assert closure.files == ["tenkz.sty", "tikz-cd.sty"], closure.files
     report = tenkz_ctan.check_dependencies(closure, _ownership([], [], []))
     assert any("tikz-cd" in reason for reason in report.failures), report.failures
+    # A TikZ library vendored as a file goes by its conventional file name, so
+    # the reading strips the prefix and the suffix a load carries.
+    assert tenkz_ctan.load_names("tikzlibrarytikzcd.code.tex") >= {"tikzcd"}
+    assert tenkz_ctan.load_names("tenkz-core.code.tex") >= {"tenkz-core"}
+    with tempfile.TemporaryDirectory() as directory:
+        source = Path(directory) / "tex"
+        source.mkdir()
+        (source / "tenkz.sty").write_text(
+            STAGE_CONTRACT + "\\input{tikzlibrarytikzcd.code.tex}\n", encoding="utf-8"
+        )
+        (source / "tikzlibrarytikzcd.code.tex").write_text(STAGE_CONTRACT, encoding="utf-8")
+        vendored = tenkz_ctan.walk_closure(source, "tenkz.sty")
+    library = tenkz_ctan.check_dependencies(vendored, _ownership([], [], []))
+    assert any("tikzcd" in reason for reason in library.failures), library.failures
 
 
 def test_a_retired_front_end_load_fails_the_dependency_check() -> None:
@@ -1087,8 +1101,11 @@ def test_a_commented_shell_call_is_not_a_shell_call() -> None:
     with tempfile.TemporaryDirectory() as directory:
         tree = Path(directory) / PACKAGE_DIR
         tree.mkdir(parents=True)
+        # A comment, and text that typesets the spellings rather than using
+        # them: `\\\\input` is the control symbol and then ordinary characters.
         (tree / "tenkz.sty").write_text(
-            "% tenkz never calls \\write18, and never loads {/absolute}.\n",
+            "% tenkz never calls \\write18, and never loads {/absolute}.\n"
+            "The spelling \\\\input{/absolute/path} is text, not a load.\n",
             encoding="utf-8",
         )
         report = tenkz_ctan.check_arxiv(tree, _loaded("tenkz.sty"))
@@ -1233,11 +1250,14 @@ def test_the_offline_check_reports_an_archive_it_cannot_read() -> None:
         with zipfile.ZipFile(room / "nested.zip", "w") as bundle:
             bundle.writestr(f"{PACKAGE_DIR}/tenkz.sty", real.read_bytes())
             bundle.writestr(f"{PACKAGE_DIR}/runtime/", b"")
+        with zipfile.ZipFile(room / "extra.zip", "w") as bundle:
+            bundle.writestr(f"{PACKAGE_DIR}/tenkz.sty", real.read_bytes())
+            bundle.writestr("READ-ME-FIRST.txt", b"a stray member\n")
         try:
             tenkz_ctan.shutil.which = lambda _name: "/somewhere/xelatex"
             reports = {
                 name: tenkz_ctan.check_offline(room / f"{name}.zip", required=True)
-                for name in ("torn", "loose", "nested")
+                for name in ("torn", "loose", "nested", "extra")
             }
         finally:
             tenkz_ctan.shutil.which = engine
@@ -1248,6 +1268,9 @@ def test_the_offline_check_reports_an_archive_it_cannot_read() -> None:
     assert any(
         "is not a file" in r for r in reports["nested"].failures
     ), reports["nested"].failures
+    assert any(
+        "beside ['READ-ME-FIRST.txt']" in r for r in reports["extra"].failures
+    ), reports["extra"].failures
 
 
 def test_an_installer_that_fired_is_read_as_a_finding() -> None:
