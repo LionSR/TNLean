@@ -65,7 +65,7 @@
   { [TKZ-WIND-SHAPE]~wind='#1'~must~be~an~integer~pair~\{p,q\}~
     (record~#2). }
 \msg_new:nnn {tenkz}{kernel-strict-sugar}
-  { [TKZ-LANG-STRICT]~'#1'~is~sugar~and~\tnset{strict}~is~active~(record~#2). }
+  { [TKZ-LANG-STRICT]~'#1'~is~sugar~and~\tnset{strict}~is~active. }
 \msg_new:nnn {tenkz}{kernel-declare-class}
   { [TKZ-LANG-DECLARE]~'#1'~is~not~a~declaration~class;~
     expected~atom|skin|species. }
@@ -1428,13 +1428,12 @@
   }
 
 % Sugar guard: under \tnset{strict} a sugar spelling is a coded error.
+% The guard fires before its command mints a record, so the diagnostic
+% carries no record clause.
 \cs_new_protected:Npn \__tenkz_kernel_sugar:n #1
   {
     \bool_if:NT \l__tenkz_kernel_strict_bool
-      {
-        \msg_error:nnee {tenkz}{kernel-strict-sugar} {#1}
-          { \tl_use:N \l__tenkz_model_last_tl }
-      }
+      { \msg_error:nnn {tenkz}{kernel-strict-sugar} {#1} }
   }
 
 % ---------- picture-scope sugar expansions -------------------------------------------
