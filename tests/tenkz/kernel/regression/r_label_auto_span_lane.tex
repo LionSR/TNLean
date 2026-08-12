@@ -1,0 +1,80 @@
+% Regression: a dot sits at the middle of the rectangle its atom claims, and
+% the label band is shorter than one pitch.  Across an EVEN span the dot
+% stands halfway between two lanes, so the two stations facing them land
+% inside those lanes rather than clear of them; across an odd span the dot
+% stands on a lane of its own and every station falls in the daylight
+% between lanes.  A wire running the length of a lane an even span stations
+% in therefore takes that face, and not only the face it leaves by.
+\documentclass{standalone}
+\usepackage{tenkz}
+\makeatletter
+\ExplSyntaxOn
+\file_input:n { tenkz-kernel.code.tex }
+\int_new:N \l__tenkz_test_side_count_int
+\tl_new:N \l__tenkz_test_side_label_tl
+\cs_new_eq:NN
+  \__tenkz_test_side_auto:nN \__tenkz_kernel_r_label_auto_side:nN
+\cs_set_protected:Npn \__tenkz_kernel_r_label_auto_side:nN #1#2
+  {
+    \__tenkz_test_side_auto:nN {#1} #2
+    \int_gincr:N \l__tenkz_test_side_count_int
+    \__tenkz_model_get:nnN {#1} {label} \l__tenkz_test_side_label_tl
+    \str_case:VnF \l__tenkz_test_side_label_tl
+      {
+        {L}
+          {
+            \str_if_eq:VnF #2 {w}
+              { \errmessage{a~two-row~span~stationed~north~in~its~own~row} }
+          }
+        {C}
+          {
+            \str_if_eq:VnF #2 {w}
+              { \errmessage{a~four-column~span~stationed~east~in~its~own~column} }
+          }
+        {O}
+          {
+            \str_if_eq:VnF #2 {n}
+              { \errmessage{an~odd~span~gave~up~a~station~standing~in~daylight} }
+          }
+      }
+      { \errmessage{unexpected~label~in~span-lane~fixture} }
+  }
+\ExplSyntaxOff
+\makeatother
+\begin{document}
+\tenkzkernel
+% Two rows: the north station lands in row 1, where the wire east runs, so
+% only west is left.
+\begin{tenkz}[lattice={3x2}, bonds=none]
+  \tn[at=(1,1), wires=2, skin=dot]{L}
+  \tn[at=(1,2)]{}
+  \tn[at=(3,1)]{}
+  \tnwire{(1,1)}{(1,2)}
+  \tnwire{(2,1)}{(3,1)}
+\end{tenkz}
+% Four columns: the east station lands in column 3, an interior column of
+% the span, where the wire south runs.  The wires on column 1 take north and
+% south without touching a lane.
+\begin{tenkz}[lattice={3x5}, bonds=none]
+  \tn[at=(2,1), wide=4, skin=dot]{C}
+  \tn[at=(1,1)]{}
+  \tn[at=(3,1)]{}
+  \tn[at=(3,3)]{}
+  \tnwire{(2,1)}{(1,1)}
+  \tnwire{(2,1)}{(3,1)}
+  \tnwire{(2,3)}{(3,3)}
+\end{tenkz}
+% Three rows: the dot stands on row 2 and its north station falls between
+% rows, clear of the wire running east along row 1, so north stays free.
+\begin{tenkz}[lattice={4x2}, bonds=none]
+  \tn[at=(1,1), wires=3, skin=dot]{O}
+  \tn[at=(1,2)]{}
+  \tn[at=(4,1)]{}
+  \tnwire{(1,1)}{(1,2)}
+  \tnwire{(3,1)}{(4,1)}
+\end{tenkz}
+\ExplSyntaxOn
+\int_compare:nNnF { \l__tenkz_test_side_count_int } = {3}
+  { \errmessage{span-lane~fixture~did~not~station~three~labels} }
+\ExplSyntaxOff
+\end{document}
