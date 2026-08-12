@@ -456,10 +456,10 @@ abstracted — record why, so it is not re-proposed).
 ### One-step cyclic-forward offset
 - **Identity:** `MPSTensor.cyclicForwardSite_one_offset` states that the old starting site has
   offset `N - 1` from its one-step cyclic successor.
-- **Call sites:** `MPSTensor.replaceWindow_three_replaceWindow_two_right` in
-  `ParentHamiltonian/LocalSupportTransport.lean`, `MPSTensor.cyclicRestrictₗ_restrictFirst` in
-  `ParentHamiltonian/CyclicWindow.lean`, and `offset_from_finRotate` in
-  `MPDO/PhysicalSectorBondTransport.lean` after identifying
+- **Call sites:** `MPSTensor.cyclicRestrictₗ_restrictFirst` in `ParentHamiltonian/CyclicWindow.lean`,
+  `MPSTensor.replaceWindow_three_replaceWindow_two_right` in
+  `ParentHamiltonian/LocalSupportTransport.lean`, and
+  `offset_from_finRotate` in `MPDO/PhysicalSectorBondTransport.lean` after identifying
   `finRotate N i` with `MPSTensor.cyclicForwardSite i 1`.
 
 ### Unequal retained vertical-copy evaluation
