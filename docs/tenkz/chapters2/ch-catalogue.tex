@@ -662,10 +662,12 @@ were given, so the rest of the picture can still address them.
 \end{tenkz}
 \end{tnexample}
 
-A group takes \tnkey{frame=} alone.  It is a sub-frame of its picture and
-shares that picture's metric, size class, and audit, so \tnkey{size=},
-\tnkey{metrics=}, and \tnkey{check=} are refused at group scope rather
-than accepted and left inert.
+A group's options are picture keys, and \tnkey{frame=} is the one the
+specimen writes, a sub-frame being what a group is for.  A group shares
+its picture's metric, size class, and audit, so the three keys that would
+set those over again are refused at group scope rather than accepted and
+left inert: \tnkey{size=}, \tnkey{metrics=}, and \tnkey{check=}.  A
+\tnkey{basis=} inside a group's frame is refused with them.
 
 \subsection{Answers to the exercises}
 
