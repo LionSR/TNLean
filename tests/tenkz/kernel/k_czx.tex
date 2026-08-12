@@ -1,4 +1,7 @@
 %% Kernel fixture: LANGUAGE-1.0.md 12.5 (rmp-app-czx-state).
+%% The picture below is the 12.5 sketch verbatim, with only the display-math
+%% delimiters of the printed form removed; the probe suite re-extracts the
+%% sketch from the contract and refuses any divergence.
 %% Expected: four ordinary basis members per cell, addressed as (r,c,k), and
 %% one enclosure mark over the four inner spins.
 \documentclass{standalone}
@@ -10,10 +13,10 @@
 \makeatother
 \begin{document}
 \tenkzkernel
-\begin{tenkz}[lattice={2x2}, bonds=none,
+\begin{tenkz}[lattice={2x2}, bonds=none,   % sugar: rows={wire,wire}, cols=2
               frame={flat, basis={wire at (-1,1), wire at (1,1),
                                   wire at (-1,-1), wire at (1,-1)}}]
-  \tnmark[form=enclosure, slot=selected]
-    {{(1,1,4), (1,2,3), (2,1,2), (2,2,1)}}{$X$}
+  % four members per cell; a member is the ordinary address (r,c,k)
+  \tnmark[form=enclosure, species=marked]{{(1,1,4), (1,2,3), (2,1,2), (2,2,1)}}{$X$}
 \end{tenkz}
 \end{document}
