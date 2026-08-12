@@ -1012,6 +1012,11 @@ def test_every_spelling_of_stream_eighteen_is_the_shell_escape_stream() -> None:
     # beginning with a bar is text.
     # The loaders take a file name directly, with no stream operand: an
     # operand reading let a page of typeset text count as a pipe.
+    # An expansion that leaves only whitespace is skipped by the filename
+    # scanner, so a pipe behind one still reaches the shell.
+    for piped in (r"\input\space |cmd", r"\input\space|cmd",
+                  r"\include\empty {|cmd}", "\\input\\ |cmd"):
+        assert tenkz_ctan.shell_escape_call(piped), piped
     for plain in ('\\openin\\stream="plain.tex"', r'\def\separator{"|}',
                   'the sequence "| in prose',
                   r"\input 1 {|literal}", r"\include 12 {|literal}",
@@ -1148,6 +1153,7 @@ def test_an_unbraced_absolute_input_is_an_absolute_path() -> None:
                      r"\file_if_exist:nTF {/Users/somebody/data} {} {}",
                      r"\file_if_exist:nT {/Users/somebody/data} {}",
                      r"\file_if_exist:nF {/Users/somebody/data} {}",
+                     r"\file_if_exist:VTF {/Users/somebody/data} {} {}",
                      r"\file_if_exist_p:n {/Users/somebody/data}",
                      '\\font\\tenkzfont="/Users/somebody/foo.otf"',
                      # A path holding a space is written quoted, braced or not.
@@ -1157,12 +1163,14 @@ def test_an_unbraced_absolute_input_is_an_absolute_path() -> None:
             assert any("absolute path" in r for r in found.failures), (load, found.failures)
         for innocent in ("\\input tenkz-core.code.tex\n",
                          "\\file_if_exist:nT {tenkz-stage.code.tex} {}\n",
-                         "\\file_if_exist_p:n {tenkz-stage.code.tex}\n"):
+                         "\\file_if_exist_p:n {tenkz-stage.code.tex}\n",
+                         # A longer name that merely opens with the
+                         # conditional's letters is not the conditional.
+                         "\\file_if_exist:nTFaux {/Users/somebody/data}\n"):
             (tree / "tenkz.sty").write_text(innocent, encoding="utf-8")
             relative = tenkz_ctan.check_arxiv(tree, _loaded("tenkz.sty"))
             assert not relative.failures, (innocent, relative.failures)
     assert any("absolute path" in reason for reason in unbraced.failures), unbraced.failures
-    assert not relative.failures, relative.failures
 
 
 def test_an_archive_that_does_not_open_is_a_report_line() -> None:

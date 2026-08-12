@@ -320,10 +320,14 @@ STREAM_OPERAND = r"(?:\\[A-Za-z@_:]+|[0-9]+)?\s*=?\s*"
 # beginning with a bar is text and refusing it would refuse a valid release.
 # The operand belongs to the stream primitives alone: `\input` and
 # `\include` take the file name directly, so reading an operand there let
-# `\input 1 {|literal}` — a page of typeset text — count as a pipe.
+# `\input 1 {|literal}` — a page of typeset text — count as a pipe.  What
+# the loaders do admit before the name is an expansion that leaves only
+# whitespace, which the filename scanner skips, so `\input\space |cmd`
+# still reaches the shell and is still read.
 PIPE_FILENAME = re.compile(
     r"\\open(?:in|out)\s*" + STREAM_OPERAND + r"(?:\{\s*)?\"?\s*\|"
-    r"|\\(?:input|include)\s*(?:\{\s*)?\"?\s*\|"
+    r"|\\(?:input|include)\s*(?:\\(?:space|empty)(?![a-zA-Z])\s*|\\ \s*)*"
+    r"(?:\{\s*)?\"?\s*\|"
 )
 # The named ways to reach a shell that are not a write at all: the TeX
 # primitive's LaTeX name, and expl3's own shell interface, which a file under
@@ -448,9 +452,11 @@ ABSOLUTE_LOAD = re.compile(
     r"\\(?:input|include|usepackage|RequirePackageWithOptions|RequirePackage"
     # The existence conditional is read as a family: every signature
     # variant asks the same machine-local question, and the predicate form
-    # spells an underscore-p before its colon.
+    # spells an underscore-p before its colon.  The signature is read from
+    # expl3's own specifier alphabet, so a longer name that merely opens
+    # with these letters is not the conditional.
     r"|InputIfFileExists|IfFileExists|includegraphics|file_input:n"
-    r"|file_if_exist(?:_p)?:[a-zA-Z]+|graphicspath)(?:\s*\*)?"
+    r"|file_if_exist(?:_p)?:[NncVvoxefTFpwbD]+|graphicspath)(?:\s*\*)?"
     rf"\s*(?:\[[^]]*\]\s*)?\{{\s*\{{?\s*\"?{ABSOLUTE_PATH_HEAD}"
     rf"|\\input\s*\"?{ABSOLUTE_PATH_HEAD}"
     rf"|\\open(?:in|out)\s*{STREAM_OPERAND}\"?{ABSOLUTE_PATH_HEAD}"
