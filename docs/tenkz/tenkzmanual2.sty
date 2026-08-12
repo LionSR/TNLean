@@ -190,6 +190,8 @@
 \box_new:N \l_mtwo_panel_box
 \box_new:N \l_mtwo_panellab_box
 \dim_new:N \l_mtwo_panel_dim
+\dim_new:N \l_mtwo_paneldepth_dim
+\int_new:N \l_mtwo_panel_int
 \tl_new:N  \l_mtwo_sigbreak_tl
 \tl_new:N  \l_mtwo_formula_tl
 \tl_new:N  \l_mtwo_caption_tl
@@ -368,14 +370,13 @@
     \par \addvspace{\mtwo@unitsep}
   }
 
-% One small-multiples panel: define the `variant' key at picture and atom
-% scope in the kernel's own key families, render the shared body, set the
-% variant keys beneath it.  The panel's reference point is the render's
-% own baseline (the wire axis), so the wires of all panels in a row are
-% collinear.
-\cs_new_protected:Npn \mtwo_variant_panel:nn #1 #2
+% Measure one small-multiples panel: define the `variant' key at picture
+% and atom scope in the kernel's own key families, compile the shared
+% body under this panel's variant keys into a stored box, and fold the
+% content depth into the call-wide maximum.  Each panel compiles here
+% exactly once; the emitting pass reuses the stored box.
+\cs_new_protected:Npn \mtwo_variant_measure:nn #1 #2
   {
-    \mode_leave_vertical:
     \keys_define:nn { tenkz-kernel-picture }
       {
         variant .code:n    = { \keys_set:nn { tenkz-kernel-picture } {#2} },
@@ -386,7 +387,31 @@
         variant .code:n    = { \keys_set:nn { tenkz-kernel-atom } {#2} },
         variant .default:n = { },
       }
-    \hbox_set:Nn \l_mtwo_panel_box { \input{\jobname.exm} \unskip }
+    \int_incr:N \l_mtwo_panel_int
+    \box_if_exist:cF { l_mtwo_panel_ \int_use:N \l_mtwo_panel_int _box }
+      { \box_new:c { l_mtwo_panel_ \int_use:N \l_mtwo_panel_int _box } }
+    \hbox_set:cn { l_mtwo_panel_ \int_use:N \l_mtwo_panel_int _box }
+      { \input{\jobname.exm} \unskip }
+    \dim_set:Nn \l_mtwo_paneldepth_dim
+      {
+        \dim_max:nn { \l_mtwo_paneldepth_dim }
+          { \box_dp:c { l_mtwo_panel_ \int_use:N \l_mtwo_panel_int _box } }
+      }
+  }
+
+% Emit one small-multiples panel from its stored box.  The panel's
+% reference point is the render's own baseline (the wire axis), so the
+% wires of all panels in a row are collinear.  The content box's depth
+% is normalised to the deepest panel of the call, so every variant label
+% hangs from one shared baseline no matter how deep its own panel's ink
+% reaches.
+\cs_new_protected:Npn \mtwo_variant_panel:nn #1 #2
+  {
+    \mode_leave_vertical:
+    \int_incr:N \l_mtwo_panel_int
+    \box_set_eq:Nc \l_mtwo_panel_box
+      { l_mtwo_panel_ \int_use:N \l_mtwo_panel_int _box }
+    \box_set_dp:Nn \l_mtwo_panel_box { \l_mtwo_paneldepth_dim }
     \hbox_set:Nn \l_mtwo_panellab_box { \scriptsize \ttfamily #1 }
     \dim_set:Nn \l_mtwo_panel_dim
       {
@@ -411,6 +436,14 @@
     \clist_set:NV \l_mtwo_variants_clist \l_mtwo_variants_tl
     \mtwo_unit_output:n
       {
+        % first pass: compile every panel and record the deepest content
+        % box, the shared reference below which each caption is set
+        \dim_zero:N \l_mtwo_paneldepth_dim
+        \int_zero:N \l_mtwo_panel_int
+        \clist_map_inline:Nn \l_mtwo_variants_clist
+          { \mtwo_variant_measure:nn ##1 }
+        % second pass: emit the stored panels
+        \int_zero:N \l_mtwo_panel_int
         \bool_set_true:N \l_mtwo_first_bool
         \clist_map_inline:Nn \l_mtwo_variants_clist
           {

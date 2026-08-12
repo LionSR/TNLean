@@ -16,7 +16,6 @@ import TNLean.MPS.CanonicalForm.NormalTensorGauge
 import TNLean.Analysis.MatrixTraceInequalities
 import TNLean.Algebra.PerronFrobenius.Idempotent
 import TNLean.Algebra.PerronFrobenius.PerronVector
-import TNLean.Algebra.PerronFrobenius.PrimitiveAperiodic
 import TNLean.Algebra.PerronFrobenius.RankOne
 import TNLean.Algebra.PerronFrobenius.Substochastic
 import TNLean.Algebra.TraceReindex

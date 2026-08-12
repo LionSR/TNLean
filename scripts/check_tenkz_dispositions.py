@@ -22,7 +22,7 @@ from tenkzlib.texcase import (
     strip_comments,
     top_level_options,
 )
-from tenkz_language import load_registry
+from tenkz_language import load_registry, tombstone_rows, tombstone_shape
 
 
 DOCUMENT = ROOT / "docs/tenkz/DISPOSITIONS.md"
@@ -35,29 +35,40 @@ COMMAND = re.compile(r"\\(tnpic|tntree)\b")
 TENKZEQ_TOKEN = re.compile(r"\\(begin|end)\{tenkzeq\}")
 SETUP_COMMAND = re.compile(r"\\(?:tnset|tndeclare(?:atom)?|tenkzkernel)\b")
 DISPOSITIONS = ("preserve", "codemod", "redraw")
-# Retired spellings, written out here and read from the registry's tombstone
-# rows once the ledger's reader lands (issue #6187).  Every name below has a
-# row in `tenkz-language-registry.tex`; this file cannot yet read them, so the
-# rule is that a name is added here only together with its row.
+# Retired spellings, read from the registry's tombstone rows: a command row
+# names a command that no longer exists, a `key=value` row a word struck from
+# a live key's alphabet.  Retiring a spelling is one registry edit, and this
+# audit follows it rather than keeping a second list of the same knowledge.
 #
-# `\tnprose` is not among them.  It sets a sentence where a picture would
-# stand, puts no ink on the page, and is a live registry command; calling it
-# dead was this file disagreeing with the registry about one spelling.
-DEAD_COMMANDS = (
-    "tnput",
-    "tnjoin",
-    "tnedge",
-    "tnarrow",
-    "tnsite",
-    "tnghost",
-    "tncut",
-    "tnregion",
+# `\tnprose` has no row.  It sets a sentence where a picture would stand, puts
+# no ink on the page, and is a live registry command; calling it dead was this
+# file disagreeing with the registry about one spelling.
+_TOMBSTONE_ROWS = tombstone_rows(load_registry())
+
+
+def _retired_values(
+    rows: list[tuple[str, str, str]],
+) -> dict[str, set[str]]:
+    """Group the alphabet words a ledger buries under the key that held them."""
+    retired: dict[str, set[str]] = {}
+    for scope, spelling, _migration in rows:
+        if tombstone_shape(scope, spelling) != "value":
+            continue
+        key, _separator, value = spelling.partition("=")
+        retired.setdefault(key.strip(), set()).add(value.strip())
+    return retired
+
+
+DEAD_COMMANDS = tuple(
+    sorted(
+        spelling.removeprefix("\\")
+        for scope, spelling, _migration in _TOMBSTONE_ROWS
+        if tombstone_shape(scope, spelling) == "command"
+    )
 )
 # Retired alphabet words, keyed by the key that used to accept them.  `prose`
-# is not among them either: it is a word of the live `form=` alphabet.
-RETIRED_VALUES = {
-    "form": {"brace-above", "brace-below", "cut", "band"},
-}
+# has no row either: it is a word of the live `form=` alphabet.
+RETIRED_VALUES = _retired_values(_TOMBSTONE_ROWS)
 DEAD_KEYS = (
     "out",
     "in",
