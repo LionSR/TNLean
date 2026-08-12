@@ -3889,8 +3889,9 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     \label{thm:mpu_reduced_cfii_forced_block_simple_contractions}
     \lean{MPOTensor.IsMPU.exists_reduced_cfii_forced_block_simple_contractions}
     \leanok
-    \uses{thm:mpu_matching_direct_block_contractions,
-        thm:mpu_reduced_cfii_transfer_stabilization}
+    \uses{def:mpu,def:mpu_normalized_flattening,def:cpsv_cfii,
+        def:mpu_full_active_support,def:mpdo_positive_physical_blocking,
+        def:mpu_double_layer}
     Let $d>0$, $D>1$, and let $\mathcal U$ be an MPU whose normalized
     flattening has chosen canonical-form-II data with full active support. Put
     $J=D^2-1$ and $W=\mathcal U_{JD^2}$. There is a matrix $\rho>0$ with
@@ -3914,6 +3915,8 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
 \end{theorem}
 
 \begin{proof}\leanok
+    \uses{thm:mpu_matching_direct_block_contractions,
+        thm:mpu_reduced_cfii_transfer_stabilization}
     Theorem~\ref{thm:mpu_reduced_cfii_transfer_stabilization} gives the
     positive trace-one fixed matrix and the identity
     $E^J=\lvert\rho)(\Phi\rvert$. Applying
