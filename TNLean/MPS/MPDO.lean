@@ -143,6 +143,7 @@ import TNLean.MPS.MPDO.DiagonalFiniteChain
 import TNLean.MPS.MPDO.EmbedLocalOperatorTwoSite
 import TNLean.MPS.MPDO.EtaPreparation
 import TNLean.MPS.MPDO.FibonacciBoundaryRank
+import TNLean.MPS.MPDO.FibonacciPeriodicRank
 import TNLean.MPS.MPDO.FigureEightPairwise
 import TNLean.MPS.MPDO.FirstSite
 import TNLean.MPS.MPDO.FirstSiteBlocking
