@@ -1,0 +1,66 @@
+\documentclass{article}
+
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+
+\input{command}
+
+\title{The Endpoint Rank-Product Exponent in MPU Index Well-Definedness}
+\author{}
+\date{2026-08-12}
+
+\begin{document}
+\maketitle
+
+\section{The printed exponent}
+
+In the proof of Proposition~IV.2 of \cite{Cirac2017MPU}, line~703 of
+\path{Papers/1703.09188/paper_v2.tex} states that the right and left
+source-cut ranks of the blocked tensor satisfy
+\[
+  r_k\ell_k=d^k.
+\]
+Here the blocking length is $k$, so the blocked physical dimension is $d^k$.
+
+\section{Consistent rank-product identity}
+
+Theorem~IV.1, lines~561--568, states that for a simple tensor of physical
+dimension $q$, the corresponding ranks obey
+\[
+  r\ell=q^2.
+\]
+Applying this statement to the $k$-site block, whose physical dimension is
+$q=d^k$, gives
+\[
+  r_k\ell_k=(d^k)^2=d^{2k}.
+\]
+The same square appears in the one-site discussion at line~688, where
+$r\ell=d^2$, and in the later blocking argument at line~845. Thus the
+occurrence of $d^k$ at line~703 is a typographical exponent error; the
+consistent endpoint identity is $d^{2k}$.
+
+\section{Formal treatment}
+
+The blocking-rank saturation theorem does not prove this rank-product identity.
+It takes the two endpoint identities
+\[
+  r_{k_0}\ell_{k_0}=d^{2k_0},
+  \qquad
+  r_k\ell_k=d^{2k}
+\]
+as explicit hypotheses and combines them with the independently proved
+blocking upper bounds. A later application may obtain the hypotheses from the
+formal counterpart of Theorem~IV.1 under its own assumptions.
+
+\section{Verdict}
+
+This is a local correction of the exponent in one sentence of the proof of
+Proposition~IV.2. It does not add an assumption beyond the rank-product
+identity used by that proof, but the formal saturation result keeps that
+identity explicit rather than claiming it from blocking alone.
+
+\bibliographystyle{alpha}
+\bibliography{references}
+
+\end{document}

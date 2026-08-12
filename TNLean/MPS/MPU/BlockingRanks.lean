@@ -246,7 +246,12 @@ values, then both blocking rank bounds are saturated.
 This is the arithmetic saturation step in the proof of arXiv:1703.09188,
 Proposition IV.2 (`index-well-defined`), line 703. The endpoint product
 identities are supplied explicitly; a later application of the paper's
-fundamental theorem will establish them for simple MPU blocks. -/
+fundamental theorem will establish them for simple MPU blocks.
+
+**Local fix (rank-product exponent):** Source line 703 prints $d^k$; consistently
+with Theorem IV.1 and the blocked physical dimension $d^k$, the endpoint
+product is $d^{2k}$. See
+`docs/paper-gaps/cpgsv17_mpu_blocking_rank_product_exponent.tex`. -/
 theorem blockingRanks_eq_pow_mul_of_products (U : MPOTensor d D) {k₀ k : ℕ}
     (h : k₀ ≤ k) (hd : 0 < d)
     (hprod₀ : r[blockTensor U k₀] * ℓ[blockTensor U k₀] = d ^ (2 * k₀))

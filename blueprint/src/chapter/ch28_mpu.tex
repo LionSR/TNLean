@@ -1871,7 +1871,6 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
     \lean{MPOTensor.rightRank_blockTensor_eq_pow_mul_of_products,
         MPOTensor.leftRank_blockTensor_eq_pow_mul_of_products}
     \leanok
-    \uses{thm:mpu_source_cut_rank_blocking}
     Let $d>0$ and $L_0\leq L$. Suppose the endpoint source-cut ranks satisfy
     the supplied product identities
     \begin{align}
@@ -1887,9 +1886,13 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
     \cite[Proposition~IV.2, line~703]{Cirac2017MPU}. The endpoint product
     identities are hypotheses here; they are not consequences of the blocking
     bounds.
+% **Local fix (rank-product exponent):** Source line 703 prints $d^k$; the
+% consistent blocked identity is $d^{2k}$. See
+% docs/paper-gaps/cpgsv17_mpu_blocking_rank_product_exponent.tex.
 \end{theorem}
 
 \begin{proof}\leanok
+    \uses{thm:mpu_source_cut_rank_blocking}
     The blocking bounds give
     \begin{align}
         r_L&\leq d^{L-L_0}r_{L_0},&
