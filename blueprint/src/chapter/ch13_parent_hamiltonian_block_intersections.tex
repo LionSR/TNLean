@@ -613,6 +613,7 @@ $\bigvee_jG_{n+2}(A^j)$ used for the degenerate parent-Hamiltonian ground space.
 
 \begin{proof}
     \leanok
+    \uses{lem:product_word_span_from_bnt_block_separation}
     For the base of induction over the target blocks, the empty word gives the
     identity tuple on the empty target set. This does not represent a physical
     chain of length zero. The span of word tuples is closed under pointwise
@@ -689,18 +690,15 @@ $\bigvee_jG_{n+2}(A^j)$ used for the degenerate parent-Hamiltonian ground space.
     full product algebra at length $s+r+qp$.
 \end{proof}
 
-\begin{lemma}[Blockwise word span from block-separating equations]
+\begin{lemma}[Blockwise word span from block-selector equations]
     \label{lem:product_word_span_from_bnt_block_separation}
     \lean{MPSTensor.wordTupleSpanTop_of_common_blockInjective_of_blockSelectorWords}
-    \lean{MPSTensor.wordTupleSpanTop_of_common_blockInjective_of_pairBlockSeparatingWords}
     \leanok
-    \uses{def:blockwise_product_word_span,
-        lem:block_separating_equations_from_pairwise_separation,
-        lem:homogeneous_word_tuple_span_padding}
-    Let $J$ be a finite set of $r$ blocks, and let $(A_j)_{j\in J}$ be a
-    finite family of tensors with common block injectivity at length $L$.
-    Suppose there are length-$S$ block-separating equations: for each block
-    $k$,
+    \uses{def:l_blk_injective, def:blockwise_product_word_span}
+    Let $J$ be a finite set of blocks, and let $(A_j)_{j\in J}$ be a family of
+    tensors such that every $A_j$ is $L$-block injective. Suppose that for each
+    block $k$ there are coefficients $c_\omega^{(k)}$, indexed by words of
+    length $S$, such that
     \begin{align}
         \sum_{|\omega|=S} c_\omega^{(k)} A_j^\omega
         &=
@@ -711,30 +709,24 @@ $\bigvee_jG_{n+2}(A^j)$ used for the degenerate parent-Hamiltonian ground space.
         \notag
     \end{align}
     Then the simultaneous length-$(L+S)$ block-word evaluations span
-    $\prod_j \MN{D_j}$. If the block-separating equations are first obtained
-    from pairwise block-separating equations at length $S$, the same conclusion
-    holds at length $L+(r-1)S$.
+    $\prod_{j\in J} \MN{D_j}$.
 \end{lemma}
 
 \begin{proof}
     \leanok
-    \uses{lem:block_separating_equations_from_pairwise_separation}
-    Block injectivity writes each target block matrix as a length-$L$ linear
-    combination of word evaluations. For a target tuple $(M_j)_j$, write $M_k$
-    in this form in block $k$, multiply by the block-separating equation for
-    $k$, and sum over $k$. Thus, if
-    $M_k=\sum_{|u|=L}a_u^{(k)}A_k^u$ and
-    $\sum_{|v|=S}b_v^{(k)}A_j^v=\delta_{j,k}I$, then for every block $j$,
+    \uses{def:blockwise_product_word_span}
+    For a target tuple $(M_j)_{j\in J}$, block injectivity gives coefficients
+    $a_u^{(k)}$ such that
+    $M_k=\sum_{|u|=L}a_u^{(k)}A_k^u$. Multiply this expansion by the selector
+    equation for $k$ and sum over $k$. For every block $j$ this gives
     \begin{align}
         M_j
         &=
         \sum_{k\in J}\sum_{|u|=L}\sum_{|v|=S}
-        a_u^{(k)}b_v^{(k)} A_j^u A_j^v.
+        a_u^{(k)}c_v^{(k)} A_j^u A_j^v.
         \notag
     \end{align}
-    The right side is a linear combination of length-$(L+S)$ word tuples, so
-    these tuples span the full product algebra. If one starts with pairwise
-    separation instead, first use
-    Lemma~\ref{lem:block_separating_equations_from_pairwise_separation} to
-    multiply the pairwise equations into the full equations.
+    Each product $A_j^uA_j^v$ is the evaluation of the concatenated word $uv$,
+    which has length $L+S$. Hence the length-$(L+S)$ word tuples span the full
+    product algebra.
 \end{proof}

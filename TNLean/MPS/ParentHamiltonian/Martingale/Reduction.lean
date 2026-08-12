@@ -843,4 +843,71 @@ theorem parentHamiltonianES_gap_bound_of_cyclic_window_overlap_operator_norm_of_
   exact parentHamiltonianES_gap_bound_of_cyclic_window_overlap_operator_norm_of_le
     A L hL hγpos hγle hηle hOpNorm
 
+open Classical in
+/-- Combined martingale criterion for a finite family of symmetric projections.
+
+If the anticommutator forms satisfy row- and column-summable bounds with
+constant \(γ\), then the sum \(H = \sum_i P_i\) of the projections satisfies
+both the quadratic-form inequality
+\(γ \operatorname{Re}\langle Hv, v\rangle \le \operatorname{Re}\langle Hv, Hv\rangle\)
+for every \(v\), and the norm lower bound \(γ ‖v‖ ≤ ‖H v‖\) on
+\((\ker H)^\perp\), because \(H\) is positive (a sum of positive maps). -/
+theorem spectralGap_of_martingale_anticommutator_rowCol_of_finiteDimensional
+    {ι E : Type*} [Fintype ι] [NormedAddCommGroup E]
+    [InnerProductSpace ℂ E] [FiniteDimensional ℂ E]
+    {γ : ℝ} (hγpos : 0 < γ) (hγle : γ ≤ 1)
+    (P : ι → E →ₗ[ℂ] E)
+    (hP : ∀ i, (P i).IsSymmetricProjection)
+    (c : ι → ι → ℝ)
+    (hRow : ∀ i, (∑ j ∈ Finset.univ.erase i, c i j) ≤ 1)
+    (hCol : ∀ j, (∑ i ∈ Finset.univ.erase j, c i j) ≤ 1)
+    (hAnti : ∀ i j, j ∈ Finset.univ.erase i → ∀ v,
+      -(1 - γ) * c i j *
+          ((⟪P i v, v⟫_ℂ).re + (⟪P j v, v⟫_ℂ).re) ≤
+        (⟪P i v, P j v⟫_ℂ).re + (⟪P j v, P i v⟫_ℂ).re) :
+    (∀ v, γ * (⟪(∑ i, P i) v, v⟫_ℂ).re ≤ (⟪(∑ i, P i) v, (∑ i, P i) v⟫_ℂ).re) ∧
+    ∀ v ∈ (LinearMap.ker (∑ i, P i))ᗮ, γ * ‖v‖ ≤ ‖(∑ i, P i) v‖ := by
+  have hQuad : ∀ v,
+      γ * (⟪(∑ i, P i) v, v⟫_ℂ).re ≤ (⟪(∑ i, P i) v, (∑ i, P i) v⟫_ℂ).re :=
+    ProjectionGeometry.quadraticForm_sum_projections_of_anticommutator_rowCol
+      hγle P hP c hRow hCol hAnti
+  refine ⟨hQuad, fun v hv => ?_⟩
+  exact FrustrationFree.spectralGap_of_martingale_of_finiteDimensional hγpos
+    (LinearMap.isPositive_sum Finset.univ fun i _ => (hP i).isPositive)
+    hQuad v hv
+
+/-- Coordinate-space specialization of the combined martingale criterion. -/
+theorem spectralGap_of_martingale_anticommutator_rowCol
+    {ι : Type*} [Fintype ι] [DecidableEq ι] {ι' : Type*} [Fintype ι']
+    {γ : ℝ} (hγpos : 0 < γ) (hγle : γ ≤ 1)
+    (P : ι → EuclideanSpace ℂ ι' →ₗ[ℂ] EuclideanSpace ℂ ι')
+    (hP : ∀ i, (P i).IsSymmetricProjection)
+    (c : ι → ι → ℝ)
+    (hRow : ∀ i, (∑ j ∈ Finset.univ.erase i, c i j) ≤ 1)
+    (hCol : ∀ j, (∑ i ∈ Finset.univ.erase j, c i j) ≤ 1)
+    (hAnti : ∀ i j, j ∈ Finset.univ.erase i → ∀ v,
+      -(1 - γ) * c i j *
+          ((⟪P i v, v⟫_ℂ).re + (⟪P j v, v⟫_ℂ).re) ≤
+        (⟪P i v, P j v⟫_ℂ).re + (⟪P j v, P i v⟫_ℂ).re) :
+    (∀ v, γ * (⟪(∑ i, P i) v, v⟫_ℂ).re ≤ (⟪(∑ i, P i) v, (∑ i, P i) v⟫_ℂ).re) ∧
+    ∀ v ∈ (LinearMap.ker (∑ i, P i))ᗮ, γ * ‖v‖ ≤ ‖(∑ i, P i) v‖ := by
+  let oldDecEq : DecidableEq ι := inferInstance
+  letI : DecidableEq ι := Classical.decEq ι
+  have erase_eq (i : ι) :
+      @Finset.erase ι oldDecEq Finset.univ i = Finset.univ.erase i := by
+    ext j
+    simp
+  apply spectralGap_of_martingale_anticommutator_rowCol_of_finiteDimensional
+    hγpos hγle P hP c
+  · intro i
+    rw [← erase_eq i]
+    exact hRow i
+  · intro j
+    rw [← erase_eq j]
+    exact hCol j
+  · intro i j hj v
+    apply hAnti i j
+    rw [erase_eq i]
+    exact hj
+
 end MPSTensor

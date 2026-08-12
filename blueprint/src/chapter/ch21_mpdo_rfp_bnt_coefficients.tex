@@ -585,7 +585,6 @@
 
 \begin{theorem}[An RFP with length-dependent BNT coefficients]%
     \label{thm:mpdo_length_dependent_rfp_example}
-    \lean{MPOTensor.BondTwoSingletonBaseModel.normalizedSingletonCoeffs_coeff}
     \lean{MPOTensor.BondTwoSingletonBaseModel.%
         normalizedSingletonCoeffs_coeff_one_ne_coeff_two}
     \lean{MPOTensor.BondTwoSingletonBaseModel.%
@@ -594,6 +593,7 @@
         exists_isRFPViaTS_not_lengthIndependent_bntCoefficients}
     \leanok
     \uses{def:mpdo_bnt_label_length_independent,
+        thm:mpdo_bond_two_singleton_normalized_algebra,
         thm:mpdo_bnt_algebra_tensor_to_rfp}
     There is an MPDO $M$ in literal CPSV canonical form that is a
     renormalization fixed point and has a tensor-attached BNT presentation
@@ -608,6 +608,11 @@
     invariant under every possible presentation of $M$.
 \end{theorem}
 \begin{proof}\leanok
+    \uses{thm:mpdo_bond_two_singleton_ambient_ghz,
+        thm:mpdo_bond_two_singleton_cpsv_form,
+        thm:mpdo_bond_two_singleton_normalized_algebra,
+        thm:mpdo_bond_two_singleton_tensor_clause,
+        thm:mpdo_bnt_algebra_tensor_to_rfp}
     The bond-two singleton tensor is positive on every nonempty chain, is in
     literal canonical form, and carries the displayed one-label BNT algebra
     clause. The reverse implication of Theorem~4.14 supplies the two

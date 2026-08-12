@@ -118,6 +118,28 @@ theorem normalizedDiagonal_blockTensor [NeZero d] (L : ℕ)
   congr 1
   simp [List.ofFn_const]
 
+/-- A normalized physical-diagonal power is the normalized sum of diagonal
+open words.
+
+This is the algebraic expansion of the diagonal tail used in the complete
+source-factor networks.
+
+Source: arXiv:1703.09188, Theorem III.8, equations (31)--(32), Section III.B
+(lines 563--600). -/
+theorem normalizedDiagonal_pow_eq_sum_evalWord
+    (W : MPOTensor d D) (K : ℕ) :
+    normalizedDiagonal W ^ K =
+      ((d : ℂ)⁻¹) ^ K •
+        ∑ τ : Fin K → Fin d, evalWord W (List.ofFn τ) (List.ofFn τ) := by
+  classical
+  simp only [normalizedDiagonal, contractPhysical, Matrix.one_apply, ite_smul,
+    one_smul, zero_smul, Finset.sum_ite_eq', Finset.mem_univ, if_true,
+    evalWord_ofFn]
+  rw [smul_pow]
+  congr 1
+  simpa [List.ofFn_const] using
+    (List.prod_ofFn_sum (fun _ : Fin K ↦ fun i : Fin d ↦ W i i))
+
 /-- The normalized diagonal of the physical-adjoint double layer is the
 normalized transfer matrix, with the row and column pair indices explicitly
 encoded by `finProdFinEquiv`.

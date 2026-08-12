@@ -149,6 +149,15 @@ turns with it and a label on a station of a circle frame stands radially out
 of it. One rule, one alphabet, and the four compass words are one sugar
 spelling of the four right angles serving faces and placements alike.
 
+`auto` places an atom's label on the first face carrying no ink in the fixed
+order s, n, e, w, read from the frozen wire records: any wire endpoint or
+policy leg standing on a face reserves it, and an atom threaded on a wire
+reserves the two faces its carrier runs through. An atom spanning an even
+number of cells stands its dot halfway between two lanes, so the stations
+facing those lanes are reserved by the ink running along them too. When every
+face carries ink the station falls back to south, so the station is
+deterministic and an explicit `label pos=` always wins.
+
 A typed-port list is a braced comma-separated list of ports, each written
 
 ```
@@ -235,7 +244,7 @@ cited paper's palette reaches a contour and the string that ends in it alike.
 |---|---|---|
 | `pitch=` | length | em-relative; the exact ratio is a named row of the metric registry |
 | `sizes=` | size-table | bundled table |
-| `strict` | flag | false; benchmark and CI set it |
+| `strict` | flag | false; only five refusal fixtures enable it |
 | `theme=` | identifier | `house` |
 
 ### 2.7 Value types (24)
@@ -494,10 +503,22 @@ An authored atom at `(r,c,k)` replaces that member. An authored atom at
 cell resolves to the authored record rather than creating coincident
 population underneath it. Member indices are strictly one-based.
 
-In the current kernel stage an explicit `basis=` belongs to a picture-level
-`flat` or `plane` frame. Group-local, atom-local, and circular bases are
-rejected with `TKZ-FRAME-*` diagnostics until those carriers have a declared
-composition or tangent-offset contract.
+`basis=` is defined on the `flat` and `plane` frames, and a circle frame takes
+no basis. A basis is cell-level: what it decomposes is a repeating cell, and
+what reads the decomposition is the frame's translations. One offset pair is
+one page displacement at every cell, the spacing check compares member families
+under each live cell translation, and a declared adjacency travels from cell to
+cell unchanged. A circle frame repeats nothing. Its stations lie on one ring
+and its axes turn from station to station, so a single declared offset would
+name a different page displacement at each of them; there is no repeating cell
+to decompose and no translation to read a decomposition under. A basis on a
+circle is rejected with `[TKZ-FRAME-BASIS-CIRCLE]`. The restriction is about
+the frame's own cell structure and says nothing about what one station may
+carry.
+
+An explicit `basis=` is picture-scoped in the current kernel stage.
+Group-local and atom-local bases are rejected with `TKZ-FRAME-*` diagnostics
+until those carriers have a declared composition contract.
 
 **One clause travels with the circle frame and only with it:** adjacent
 stations are one pitch apart. That fixes a radius the contract otherwise
@@ -515,10 +536,14 @@ never silhouettes.
 
 Consumers, carrier axes: `rmp-iii-a-pulling-through`, `rmp-iii-a-mpo-action`,
 `rmp-iii-a-ghz-tensor`, `rmp-workbench-ii-peps-gauge-old`.
-Consumers, circle pitch: `rmp-ii-triangle-network`, `rmp-iii-a-ground-space-1d`,
-`rmp-ii-idempotent`, `rmp-workbench-iii-eq51`.
-Consumers, basis: `rmp-workbench-iii-cluster-state`, `rmp-app-czx-state`,
-`rmp-iii-a-ghz-state`, `rmp-iii-b-condensation`.
+Consumers, circle pitch: `rmp-ii-triangle-network`, the one benchmark case on
+a circle frame. Outside the benchmark, four blueprint figures and eighteen
+compiled kernel fixtures hold the clause by standing two or more stations on a
+circle; two further compiled fixtures and six refusal fixtures name the frame
+without spacing a pair.
+Consumers, basis: `rmp-app-czx-state`, `rmp-ii-peps-marginal`,
+`rmp-iii-a-ghz-state`, `rmp-iii-b-condensation`,
+`rmp-workbench-iii-ghz-state-workbench`.
 Consumers, transverse pairing: `rmp-ii-peps-marginal`,
 `rmp-iii-b-condensation`.
 
@@ -845,8 +870,8 @@ sum are read from the class the mathematics already has.
    what an elision between two panels asserts, and needs no spelling of its
    own. A mismatch is `[TKZ-EQ-SIGNATURE]`, printing both signatures. A
    relation with an undepicted side is legal in a draft and refused under
-   strict, which the benchmark sets. The audit rule is derived from the
-   joiner's class and is not the author's to configure.
+   strict. The audit rule is derived from the joiner's class and is not the
+   author's to configure.
    **The recorded opt-out.** One thing an author may say, and must say in
    writing: that a particular relation's two sides are known, unequal, and
    equal anyway for a reason the diagram does not draw. The coproduct sends a
@@ -965,7 +990,7 @@ policy for the shared leg; write the ports for the lone one.
 | `sandwich` | `rows={ket,op,bra}` |
 | `physical=up\|down\|updown\|none` | expander: declares each frame-cell atom's outward face physical, one port per face slot — a `wide=k` atom answers with `k` legs, one per spanned cell, exactly as the authored `90@1..@k` port list; geometric overlay atoms are excluded; in a plane this is the independent page-transverse axis, not a numeric in-plane face |
 | `boundary=open\|none` | `west=<w>, east=<w>` |
-| `boundary=periodic`, `periodic` | `west=trace, east=trace` |
+| `boundary=periodic` | `west=trace, east=trace` |
 | `west={cup=$m$}` (any side) | side `cup` + `\tn[skin=ring, at=on <cup wire> 0.5]{m}` |
 | `west={tail=$m$}` (any side) | side `open` + boundary-skin atom on the stub wire |
 | `west label=$m$` etc., `bond label=` | `\tnmark[form=label]{<generated wire>}{m}` |
@@ -1068,6 +1093,7 @@ is not the fixed two-axis atom contract of §7.
 | `(r,c)-(r,c)` cell ranges | `(r,c) .. (r,c)` — a hyphen cannot be told from a generated name |
 | `\tnpic` as a command | the sugar row `\tnpic` over the picture environment (§9) |
 | aliases `chain axis`, `legs at`, `rows`→span, `boundary legs`, `label at` | kernel spellings above |
+| `periodic` as a picture flag | `boundary=periodic`, the value spelling the alphabet keeps |
 
 ## 11. The shrink gate
 
