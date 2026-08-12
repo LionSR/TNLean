@@ -1,0 +1,78 @@
+\subsection{Transport under physical blocking}
+
+For a tensor $A=(A^i)_{i=0}^{d-1}$ and a block length $p$, write
+$A^{[p]}$ for the tensor whose physical matrices are the consecutive products
+$A^{i_1}\cdots A^{i_p}$. This agrees with the consecutive-site blocking
+convention used in \cite[lines~1815--1820]{Cirac2021Matrix}. We keep the number
+$N$ of blocked sites distinct from the number $Np$ of original sites. The exact
+Hilbert-space transport identities below are elementary formal consequences of
+this definition and of the local-space definition in
+\cite[lines~1985--1992]{Cirac2021Matrix}; they are not quoted as theorems from
+that source.
+
+\begin{definition}[Blocked configuration isometry]
+    \label{def:blocked_configuration_isometry}
+    \lean{MPSTensor.blockedConfigLinearIsometryEquiv}
+    \leanok
+    Grouping each consecutive $p$-tuple of physical indices defines a canonical
+    computational-basis unitary
+    \[
+        U_{N,p}:\mathcal H_N^{(d^p)}\longrightarrow\mathcal H_{Np}^{(d)}.
+    \]
+\end{definition}
+
+\begin{lemma}[Boundary-map transport under blocking]
+    \label{lem:blocked_boundary_map_transport}
+    \lean{MPSTensor.groundSpaceMap_blockTensor_blockedConfigEquiv}
+    \lean{MPSTensor.blockedConfigLinearIsometryEquiv_groundSpaceMapES}
+    \leanok
+    \uses{def:blocked_configuration_isometry}
+    For every boundary matrix $X\in\mathcal M_D$, blocking preserves each
+    coefficient of the open-boundary matrix product vector after the canonical
+    reindexing. Equivalently,
+    \[
+        U_{N,p} \Gamma_N^{A^{[p]}}(X)=\Gamma_{Np}^{A}(X).
+    \]
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Expand the blocked tensor matrix as the product of the corresponding $p$
+    original matrices. Concatenating the $N$ resulting words gives the original
+    word of length $Np$, so the two trace coefficients agree. The Euclidean
+    identity follows coefficientwise.
+\end{proof}
+
+\begin{theorem}[Local ground-space transport under blocking]
+    \label{thm:blocked_local_ground_space_transport}
+    \lean{MPSTensor.groundSpaceES_blockTensor_map}
+    \lean{MPSTensor.starProjection_groundSpaceES_blockTensor_map_apply}
+    \lean{MPSTensor.starProjection_groundSpaceES_blockTensor_conj}
+    \lean{MPSTensor.starProjection_groundSpaceES_three_blockTensor_conj}
+    \leanok
+    \uses{def:blocked_configuration_isometry, lem:blocked_boundary_map_transport}
+    The local space of the blocked tensor is carried exactly to the original
+    local space,
+    \[
+        U_{N,p}\,G_N(A^{[p]})=G_{Np}(A).
+    \]
+    Hence their orthogonal projectors satisfy
+    \[
+        P_{G_{Np}(A)}=U_{N,p}P_{G_N(A^{[p]})}U_{N,p}^{*}.
+    \]
+    These statements include $N=0$ or $p=0$; in those cases the same explicit
+    configuration isometry and boundary-map calculation apply. In particular,
+    the projector identity holds for three blocked sites and $3p$ original
+    sites.
+
+    This theorem does not identify the left or tail open-chain spectator spaces
+    needed by a three-block estimate, and it makes no comparison between the
+    blocked and original parent Hamiltonians.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    The boundary-map identity identifies the two ranges. Orthogonal projection
+    onto the image of a subspace under a unitary is conjugation of its
+    orthogonal projector by that unitary.
+\end{proof}
