@@ -154,6 +154,42 @@ private theorem cornerProd_eq_projector_mul_evalWord
       rw [Matrix.mul_assoc, (hQproj _).2]
     _ = Q u * evalWord A w := htransport.symm
 
+/-- At positive length, the trace of the boundary-aware corner product equals the
+coefficient of the corresponding explicit projector-component chain. -/
+theorem projectorComponentChain_coeff_eq_trace_cornerProd
+    (Q : Fin p → MatrixAlg D) (A : MPSTensor d D)
+    (hQproj : ∀ k, IsOrthogonalProjection (Q k))
+    (u : Fin p) (σ : Fin (N + 1) → Fin d) :
+    MPSChainTensor.coeff (projectorComponentChain Q A u (N + 1)) σ =
+      Matrix.trace (cornerProd Q A u (List.ofFn σ)) := by
+  rw [MPSChainTensor.coeff, projectorComponentChain_eval Q A hQproj]
+
+/-- Inserting the cyclic resolution of the identity gives a boundary-aware
+state-vector decomposition at every length:
+\[
+  \operatorname{tr}(A^{\sigma_1}\cdots A^{\sigma_N})
+    = \sum_u \operatorname{tr}(F_u^{\boldsymbol\sigma}).
+\]
+Here `cornerProd Q A u w` is the repeated corner-transition product starting
+with the boundary projector `Q u`. In particular, at length zero the convention
+is `evalWord A [] = 1` and `cornerProd Q A u [] = Q u`, so the formula reads
+`trace 1 = ∑ u, trace (Q u)`. It does not identify the empty
+`projectorComponentChain` coefficient, whose chain evaluation is `1` and hence
+forgets the boundary projector. -/
+theorem mpv_eq_sum_trace_cornerProd
+    (Q : Fin p → MatrixAlg D) (A : MPSTensor d D)
+    (hQproj : ∀ k, IsOrthogonalProjection (Q k))
+    (hQsum : ∑ k, Q k = 1)
+    (hshift : ∀ k i, Q k * A i = A i * Q (k + 1))
+    (σ : Fin N → Fin d) :
+    mpv A σ = ∑ u : Fin p, Matrix.trace (cornerProd Q A u (List.ofFn σ)) := by
+  simp only [mpv, coeff, cornerProd_eq_projector_mul_evalWord Q A hQproj hshift]
+  calc
+    (evalWord A (List.ofFn σ)).trace =
+        ((∑ u : Fin p, Q u) * evalWord A (List.ofFn σ)).trace := by rw [hQsum, one_mul]
+    _ = ∑ u : Fin p, (Q u * evalWord A (List.ofFn σ)).trace := by
+      rw [Finset.sum_mul, Matrix.trace_sum]
+
 /-- At every positive length, inserting the cyclic resolution of the identity
 splits an MPS coefficient into the sum of the explicit projector-component
 chain coefficients. -/
@@ -242,6 +278,60 @@ theorem exists_paper_cyclic_projectors_of_isPeriodic
     (convert (Equiv.sum_comp (Equiv.neg (Fin p)) P).trans hPsum using 1; rfl)
   · intro k i
     exact negReindex_paper_shift A hA.leftCanonical hPproj hCyclic' k i
+
+/-- **PGVWC07 Theorem 5, boundary-aware periodic branch.**
+
+If \(p\mid N\), a period-\(p\) tensor supplies cyclic projectors and a
+fixed-length decomposition into the traces of its repeated corner-transition
+products. This formulation is valid at every length. At \(N=0\), divisibility
+and sector closure are automatic, and the decomposition uses the boundary
+values `cornerProd Q A u [] = Q u`; it does not claim that the coefficients of
+empty `projectorComponentChain`s retain those projectors.
+
+The source phrases the hypothesis as a one-block canonical transfer operator
+with \(p\) peripheral eigenvalues. Here `IsPeriodic p A` is the maintained
+normalized surface: it states irreducibility, left-canonical form, positive
+period, and peripheral spectrum equal to the \(p\)-th roots of unity.
+
+**Scope restriction (normalized orientation):** this theorem uses
+`IsPeriodic p A` rather than deriving these conditions from the one-block
+unital canonical hypotheses of the printed theorem. This boundary is recorded
+in `docs/paper-gaps/pgvwc07_periodic_decomposition_scope.tex`.
+
+Source: PGVWC07, arXiv:quant-ph/0608197, Theorem 5, lines 849--880. -/
+theorem pgvwc07_periodic_stateVector_boundary_decomposition_of_dvd
+    (A : MPSTensor d D) (hA : IsPeriodic p A)
+    {N : ℕ} (hdiv : p ∣ N) :
+    let _ : NeZero p := ⟨Nat.ne_of_gt hA.period_pos⟩
+    ∃ Q : Fin p → MatrixAlg D,
+      (∀ k, IsOrthogonalProjection (Q k)) ∧
+      (∑ k, Q k = 1) ∧
+      (∀ k i, Q k * A i = A i * Q (k + 1)) ∧
+      (∀ (u : Fin p) (j : Fin N) (i : Fin d),
+        projectorComponentChain Q A u N j i =
+          Q (u + j.val • (1 : Fin p)) * A i *
+            Q (u + j.val • (1 : Fin p) + 1)) ∧
+      (∀ u : Fin p, u + N • (1 : Fin p) = u) ∧
+      (∀ σ : Fin N → Fin d,
+        mpv A σ = ∑ u : Fin p, Matrix.trace (cornerProd Q A u (List.ofFn σ))) := by
+  letI : NeZero p := ⟨Nat.ne_of_gt hA.period_pos⟩
+  obtain ⟨Q, hQproj, hQsum, hshift⟩ := exists_paper_cyclic_projectors_of_isPeriodic A hA
+  refine ⟨Q, hQproj, hQsum, hshift, ?_, ?_, ?_⟩
+  · intro u j i
+    rfl
+  · obtain ⟨k, rfl⟩ := hdiv
+    intro u
+    have hpzero : p • (1 : Fin p) = 0 := by
+      simpa only [Fintype.card_fin] using
+        (card_nsmul_eq_zero (x := (1 : Fin p)))
+    have hcycle : (p * k) • (1 : Fin p) = 0 := by
+      calc
+        (p * k) • (1 : Fin p) = k • (p • (1 : Fin p)) := by
+          rw [mul_comm, mul_nsmul']
+        _ = k • 0 := by rw [hpzero]
+        _ = 0 := nsmul_zero k
+    rw [hcycle, add_zero]
+  · exact mpv_eq_sum_trace_cornerProd Q A hQproj hQsum hshift
 
 /-- **PGVWC07 Theorem 5, periodic branch.**
 
