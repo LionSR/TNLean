@@ -1542,6 +1542,51 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
     \end{align}
 \end{definition}
 
+% Auxiliary transformation identities from source cuts (paper lines 450--506)
+% and the existing physical-adjoint tensor, not the time-reversal classification.
+\begin{theorem}[Source cuts under physical adjunction]
+    \label{thm:mpu_physical_adjoint_source_cuts}
+    \lean{MPOTensor.sourceCutM₁_physicalAdjointTensor,
+        MPOTensor.sourceCutM₂_physicalAdjointTensor}
+    \leanok
+    \uses{def:mpdo_physical_adjoint,def:mpu_source_matrix_one,
+        def:mpu_source_matrix_two}
+    Physical adjunction exchanges the two source cuts and conjugates every
+    entry:
+    \begin{align}
+        M_1(\mathcal U^\sharp)&=\overline{M_2(\mathcal U)},\\
+        M_2(\mathcal U^\sharp)&=\overline{M_1(\mathcal U)}.
+    \end{align}
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:mpdo_physical_adjoint,def:mpu_source_matrix_one,
+        def:mpu_source_matrix_two}
+    The physical adjoint exchanges the upper and lower physical indices while
+    leaving both auxiliary indices fixed. Thus the first regrouping becomes
+    the entrywise conjugate of the second, and conversely.
+\end{proof}
+
+\begin{theorem}[Source ranks under physical adjunction]
+    \label{thm:mpu_physical_adjoint_source_ranks}
+    \lean{MPOTensor.rightRank_physicalAdjointTensor,
+        MPOTensor.leftRank_physicalAdjointTensor}
+    \leanok
+    \uses{def:mpdo_physical_adjoint,def:mpu_right_rank,def:mpu_left_rank}
+    Physical adjunction exchanges the two source ranks:
+    \begin{align}
+        r(\mathcal U^\sharp)&=\ell(\mathcal U),\\
+        \ell(\mathcal U^\sharp)&=r(\mathcal U).
+    \end{align}
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpu_physical_adjoint_source_cuts,def:mpu_right_rank,
+        def:mpu_left_rank}
+    Apply Theorem~\ref{thm:mpu_physical_adjoint_source_cuts} and use invariance
+    of matrix rank under entrywise conjugation.
+\end{proof}
+
 \begin{theorem}[Source cuts under physical reindexing]
     \label{thm:mpu_source_cuts_physical_reindexing}
     \lean{MPOTensor.sourceCutM₁_reindexPhysical,
