@@ -42,7 +42,8 @@ links from the printed tensors to the corresponding entropy expressions.
 
 * Cirac--Perez-Garcia--Schuch--Verstraete, arXiv:1606.00608, Examples 4.10 and
   4.11, lines 897--924.
-* TNLean issue #5984.
+* `docs/paper-gaps/cpsv16_exact_arithmetic_scope.tex` for the scope boundary of
+  these scalar statements.
 -/
 
 namespace CPSVExamples410411Arithmetic
@@ -50,7 +51,8 @@ namespace CPSVExamples410411Arithmetic
 /-- The strict integer comparison arising in the exact four-site calculation
 for CPSV16 Example 4.10.
 
-Source: CPSV16, arXiv:1606.00608, Example 4.10, lines 897--905; issue #5984. -/
+Source: CPSV16, arXiv:1606.00608, Example 4.10, lines 897--905; scope in
+`docs/paper-gaps/cpsv16_exact_arithmetic_scope.tex`. -/
 theorem example410_integer_inequality :
     (2 : ℕ) ^ 32 * 7 ^ 7 > 3 ^ 3 * 5 ^ 20 := by
   norm_num
@@ -58,7 +60,8 @@ theorem example410_integer_inequality :
 /-- The strict integer comparison arising in the exact four-site calculation
 for the literal weights printed in CPSV16 Example 4.11.
 
-Source: CPSV16, arXiv:1606.00608, Example 4.11, lines 907--924; issue #5984. -/
+Source: CPSV16, arXiv:1606.00608, Example 4.11, lines 907--924; scope in
+`docs/paper-gaps/cpsv16_exact_arithmetic_scope.tex`. -/
 theorem example411_integer_inequality :
     (41 : ℕ) ^ 82 * 5 ^ 50 > 2 ^ 48 * 13 ^ 52 * 7 ^ 112 := by
   norm_num
@@ -69,7 +72,8 @@ strictly positive.
 This is only a scalar arithmetic statement; it does not identify the ratio with
 an entropy difference.
 
-Source: CPSV16, arXiv:1606.00608, Example 4.10, lines 897--905; issue #5984. -/
+Source: CPSV16, arXiv:1606.00608, Example 4.10, lines 897--905; scope in
+`docs/paper-gaps/cpsv16_exact_arithmetic_scope.tex`. -/
 theorem example410_logRatio_pos :
     0 < Real.log (((2 : ℝ) ^ 32 * 7 ^ 7) / (3 ^ 3 * 5 ^ 20)) := by
   apply Real.log_pos
@@ -81,7 +85,8 @@ CPSV16 Example 4.11 is strictly positive.
 This is only a scalar arithmetic statement; it does not identify the ratio with
 an entropy difference.
 
-Source: CPSV16, arXiv:1606.00608, Example 4.11, lines 907--924; issue #5984. -/
+Source: CPSV16, arXiv:1606.00608, Example 4.11, lines 907--924; scope in
+`docs/paper-gaps/cpsv16_exact_arithmetic_scope.tex`. -/
 theorem example411_logRatio_pos :
     0 < Real.log
       (((41 : ℝ) ^ 82 * 5 ^ 50) / (2 ^ 48 * 13 ^ 52 * 7 ^ 112)) := by

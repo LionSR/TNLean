@@ -1,0 +1,63 @@
+\documentclass{article}
+
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+\setlength{\emergencystretch}{2em}
+
+\input{command}
+
+\title{Exact arithmetic scope for CPSV16 Examples 4.10 and 4.11}
+\author{}
+\date{2026-08-12}
+
+\begin{document}
+\maketitle
+
+\section{Printed comparisons}
+
+Examples~4.10 and~4.11 of Cirac--Perez-Garcia--Schuch--Verstraete
+(\path{Papers/1606.00608/MPDO-22-12-17-2.tex:897--924}) print four-site
+calculations whose entropy comparisons reduce to two strict inequalities of
+natural numbers:
+\[
+  2^{32}7^7>3^3 5^{20}
+\]
+for Example~4.10, and
+\[
+  41^{82}5^{50}>2^{48}13^{52}7^{112}
+\]
+for the bond weights printed in Example~4.11.  Both sides of each comparison
+are positive integers, so each strict inequality is equivalent to positivity
+of the real logarithm of the corresponding ratio.
+
+\section{Certified statements}
+
+The module
+\doclink{TNLean/MPS/MPDO/CPSVExamples410411Arithmetic}
+machine-checks the two integer inequalities,
+\leanid{CPSVExamples410411Arithmetic.example410_integer_inequality} and
+\leanid{CPSVExamples410411Arithmetic.example411_integer_inequality},
+and the positivity of the corresponding logarithmic ratios,
+\leanid{CPSVExamples410411Arithmetic.example410_logRatio_pos} and
+\leanid{CPSVExamples410411Arithmetic.example411_logRatio_pos}.
+
+\section{Scope boundary}
+
+These are scalar arithmetic statements.  They do not identify the
+reduced-state spectra of the printed tensors, do not assert the entropy
+comparisons $I_2>I_1$ discussed in Examples~4.10 and~4.11, and do not
+assert saturation or failure of an area law.  Deriving the entropy
+comparisons requires separate formal links from the printed tensors to the
+corresponding entropy expressions.  Those links, and the resulting
+corrections to or confirmations of the printed zero-correlation-length and
+SAL claims, remain open in \ghissue{5984}.
+
+\section{Verdict}
+
+\textbf{Verdict: the arithmetic endpoints are certified; the entropy
+conclusions are not.}  The exact comparisons on which the four-site
+calculations rest are machine-checked, but nothing here is a formalization
+of the printed entropy or area-law claims themselves.
+
+\end{document}
