@@ -277,10 +277,14 @@ theorem blockingRanks_eq_pow_mul_of_products (U : MPOTensor d D) {k₀ k : ℕ}
     exact le_rfl
 
 /-- The right source-cut rank attains its blocking upper bound when the endpoint
-rank products have their physical-dimension values.
+products satisfy $r_{k_0}\ell_{k_0}=d^{2k_0}$ and $r_k\ell_k=d^{2k}$.
 
 This is the right-rank conclusion of the saturation step in the proof of
-arXiv:1703.09188, Proposition IV.2 (`index-well-defined`), line 703. -/
+arXiv:1703.09188, Proposition IV.2 (`index-well-defined`), line 703.
+
+**Local fix (rank-product exponent):** Source line 703 prints $d^k$; the
+consistent blocked identity is $d^{2k}$. See
+`docs/paper-gaps/cpgsv17_mpu_blocking_rank_product_exponent.tex`. -/
 theorem rightRank_blockTensor_eq_pow_mul_of_products (U : MPOTensor d D) {k₀ k : ℕ}
     (h : k₀ ≤ k) (hd : 0 < d)
     (hprod₀ : r[blockTensor U k₀] * ℓ[blockTensor U k₀] = d ^ (2 * k₀))
@@ -289,10 +293,14 @@ theorem rightRank_blockTensor_eq_pow_mul_of_products (U : MPOTensor d D) {k₀ k
   (blockingRanks_eq_pow_mul_of_products U h hd hprod₀ hprod).1
 
 /-- The left source-cut rank attains its blocking upper bound when the endpoint
-rank products have their physical-dimension values.
+products satisfy $r_{k_0}\ell_{k_0}=d^{2k_0}$ and $r_k\ell_k=d^{2k}$.
 
 This is the left-rank conclusion of the saturation step in the proof of
-arXiv:1703.09188, Proposition IV.2 (`index-well-defined`), line 703. -/
+arXiv:1703.09188, Proposition IV.2 (`index-well-defined`), line 703.
+
+**Local fix (rank-product exponent):** Source line 703 prints $d^k$; the
+consistent blocked identity is $d^{2k}$. See
+`docs/paper-gaps/cpgsv17_mpu_blocking_rank_product_exponent.tex`. -/
 theorem leftRank_blockTensor_eq_pow_mul_of_products (U : MPOTensor d D) {k₀ k : ℕ}
     (h : k₀ ≤ k) (hd : 0 < d)
     (hprod₀ : r[blockTensor U k₀] * ℓ[blockTensor U k₀] = d ^ (2 * k₀))
