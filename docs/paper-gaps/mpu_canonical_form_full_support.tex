@@ -5,7 +5,7 @@
 \input{command}
 \title{Full Support in MPU Normality and Theorem III.8}
 \author{}
-\date{2026-08-11}
+\date{2026-08-12}
 \begin{document}
 \maketitle
 
@@ -218,7 +218,14 @@ The same source/scoped separation is carried through the complete continuity
 and symmetry subtree. The continuity labels \texttt{prop:continuity-index} and
 \texttt{coruvSF} have the scoped counterparts
 \texttt{prop:mpu\_admissible\_continuity\_index} and
-\texttt{cor:mpu\_admissible\_continuous\_standard\_form}.
+\texttt{cor:mpu\_admissible\_continuous\_standard\_form}. The latter is the
+restricted-source form of the continuous standard-form corollary in
+\cite[lines~867--910]{Cirac2017MPU}.
+
+For any tensor $\mathcal A$, write $\mathcal A^\sharp$ for its
+physical-adjoint comparison tensor. If $\mathcal A_k$ is the actual $k$-site
+block, then $\mathcal A_k^\sharp$ denotes the physical adjoint of that blocked
+tensor.
 
 For local symmetry and conjugation classification, the source labels
 \texttt{prop1conj}, \texttt{corconj},
@@ -341,9 +348,13 @@ The actual blocked endpoints carry their own data. The same requirement is
 imposed after adjoining ancillas and blocking. This is a hypothesis attached
 to a chosen witness and does not assert that such a witness exists. The datum
 does not automatically include the source bound $m\leq D^4$. The continuous
-standard-form corollary assumes this bound. The admissible symmetry relations
-also require it as part of their definition, so every dependent phase statement
-and example uses a witness with common blocking length at most $D^4$.
+standard-form corollary assumes this bound. For a datum of length $m$, its
+standard-form families describe the actual blocked endpoint MPUs
+$U_1^{(mN)}$ and $U_2^{(mN)}$. They do not describe the unblocked families
+$U_1^{(N)}$ and $U_2^{(N)}$ unless $m=1$. Accordingly, every admissible strict
+phase theorem about the original endpoint families requires a path datum of
+blocking length one. General admissible equivalence may still be witnessed by
+strict equivalence of supplied blocked endpoints.
 
 For a path preserving a specified symmetry $\mathcal S$, admissibility also
 includes continuously varying source data for the fixed family consisting of
@@ -354,15 +365,17 @@ No symmetry operation is assumed to preserve source data automatically.
 
 With this convention, admissible equivalence implies equality of the index.
 The converse is claimed only when the standard-form interpolation is supplied
-with an admissible path datum. The standard-form path criterion and the phase
-classification use the same restricted relation. In particular, no ordinary
-strict-equivalence or symmetry-equivalence path is silently promoted to an
-admissible one.
+with an admissible path datum. The admissible standard-form path criterion at
+length $m$ concerns the blocked endpoint families $U_1^{(mN)}$ and
+$U_2^{(mN)}$. Its strict-phase descendants concern the original endpoint
+families only under the explicit specialization $m=1$. In particular, no
+ordinary strict-equivalence or symmetry-equivalence path is silently promoted
+to an admissible one, and no blocked standard form is read as a standard form
+of an unblocked endpoint.
 
-For a time-reversal-invariant tensor $\mathcal U$, write $\mathcal U_k$ for
-its actual $k$-site block and $\mathcal U_k^\sharp$ for the physical-adjoint
-comparison tensor of that block. Let $\sigma^{(k)}\in\{\pm1\}$ be the sign in
-the local time-reversal relation for a standard form of $\mathcal U_k$.
+For a time-reversal-invariant tensor $\mathcal U$, let
+$\sigma^{(k)}\in\{\pm1\}$ be the sign in the local time-reversal relation for
+a standard form of its actual $k$-site block $\mathcal U_k$.
 
 The source proofs of the time-reversal and transposition characterizations
 apply the fundamental theorem after blocking two sites. Every such statement
@@ -374,13 +387,14 @@ $\mathcal U_4$, and $\mathcal U_4^\sharp$. Gauge invariance of the sign is
 recorded separately and follows directly from the trace formula, without a
 path hypothesis. The blocking-parity proposition uses this gauge-invariance
 lemma and the explicit unwinding argument of the source; it does not invoke
-pathwise constancy. To compare both signs along a path $\mathcal W(p)$,
+pathwise constancy. To compare both signs along an unblocked path $\mathcal W(p)$,
 pathwise constancy is applied separately to the continuously varying families
 $\mathcal W(p)$, $\mathcal W(p)_2$, $\mathcal W(p)_4$,
-$\mathcal W(p)_2^\sharp$, and $\mathcal W(p)_4^\sharp$.
-For equivalence after adjoining ancillas, the same five continuous families
-are required for the actual ancilla-enlarged blocked witness path, rather than
-only at its endpoints. The resulting non-strict conclusion compares only
+$\mathcal W(p)_2^\sharp$, and $\mathcal W(p)_4^\sharp$. This is a length-one
+admissible path. For equivalence after adjoining ancillas, the same five
+continuous families are required for the actual ancilla-enlarged blocked
+witness path, which is then regarded as a length-one path in its own right,
+rather than only at its endpoints. The resulting non-strict conclusion compares only
 $\sigma^{(2)}$ of the two supplied witness endpoints
 $\mathcal W_{\mathrm{anc}}(0)$ and $\mathcal W_{\mathrm{anc}}(1)$. It does not
 compare $\sigma^{(2)}$ of the original MPU tensors. Promoting this witness-level
@@ -388,17 +402,18 @@ equality to an original-tensor invariant requires preservation under adjoining
 identity ancillas, which remains open in issue~\#6138. All later time-reversal
 descendants and examples repeat the required endpoint and comparison data after
 blocking or adjoining ancillas. The swap transformation and its two dependent
-phase statements require the
-actual source-constructed interpolation to carry an admissible symmetry-path
-datum with one common blocking length $m\leq D^4$. This datum includes the
-actual blocked path and all four fixed comparison paths: conjugate,
+strict-phase statements require the actual source-constructed interpolation to
+carry an admissible symmetry-path datum of blocking length one. This datum
+includes the path itself and all four fixed comparison paths: conjugate,
 physical-adjoint, transposed, and symmetry-image. No preservation under any of
 these operations is asserted. In the admissible $U_1$--$U_2$ ancilla statement,
-the supplied path begins at named ancilla-enlarged blocked endpoints
+the supplied length-one path begins at named ancilla-enlarged blocked endpoints
 $\widehat{\mathcal U}_1$ and $\widehat{\mathcal U}_2$. Only these endpoints are
-claimed to be admissibly strictly equivalent. The original ancilla-free tensors
-$\widetilde U_1$ and $\widetilde U_2$ are claimed to be admissibly equivalent
-in the non-strict sense only.
+claimed to be admissibly strictly equivalent. No equivalence of the original
+ancilla-free tensors $\widetilde U_1$ and $\widetilde U_2$ is asserted. The
+construction adjoins equal ancillas of dimension $d$, which need not satisfy
+the coprimality condition in the blueprint definition of equivalence when
+$d>1$.
 
 For bond dimension one, the normalized transfer matrix supplies the source
 pair directly. For bond dimension greater than one, no current result

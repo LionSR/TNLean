@@ -4632,7 +4632,9 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
   this supplied length satisfies $k_0\leq D^4$. Then there are continuous
   paths of unitaries $u(p)$ and $v(p)$ such that the MPU
   $U^{(2k_0N)}(p)$ has standard form given by $u(p)$ and $v(p)$ for every
-  $p\in[0,1]$.
+  $p\in[0,1]$. This is the reduced-source version of
+  \cite[Corollary following Theorem~IV.3]{Cirac2017MPU}.
+  % Source lines: paper_v2.tex 867--910.
 \end{corollary}
 
 \subsection{Local characterization of symmetries}
@@ -4926,6 +4928,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
   \uses{def:strictly-equivalent-tensors}
   % **Local fix:** paper_v2.tex 1345--1353 repeats the symmetry-transformed
   % operator on the right-hand side. Invariance requires the original MPU.
+  % Documented in docs/paper-gaps/mpu_canonical_form_full_support.tex.
   Two tensors $\mathcal U$ and $\mathcal V$ are strictly equivalent under a
   symmetry $\mathcal S$ if they have the same physical dimension and there is
   a continuous path $\mathcal W(p)$ of MPU tensors from $\mathcal U$ to
@@ -5012,15 +5015,21 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
   \uses{def:mpu_admissible_strict_symmetry_equivalence,cor:mpu_admissible_continuous_standard_form,
     thm:mpu_admissible_fundamental,
     def:mpu_admissible_equivalence_datum}
-  Two MPUs $U_1^{(N)}$ and $U_2^{(N)}$ described by admissible simple tensors
-  are admissibly strictly equivalent under $\mathcal S$ through a witness whose
-  common blocking length $m$ satisfies $m\leq D^4$ if and only if there are
-  continuous families of unitaries $\widetilde u(p)$ and $\widetilde v(p)$
-  whose endpoints generate $U_1^{(N)}$ and $U_2^{(N)}$, whose generated MPU is
-  invariant under $\mathcal S$ for every $p\in[0,1]$, and whose actual blocked
-  tensor path and the fixed conjugate, physical-adjoint, transposed, and
-  $\mathcal S$-image comparison paths carry the continuously varying source
-  data of an admissible equivalence datum with the same length $m\leq D^4$.
+  Fix a positive integer $m\leq D^4$. The actual $m$-site blocked endpoint
+  MPUs $U_1^{(mN)}$ and $U_2^{(mN)}$ are admissibly strictly equivalent under
+  $\mathcal S$ if and only if there are continuous families of unitaries
+  $\widetilde u(p)$ and $\widetilde v(p)$ whose endpoints generate
+  $U_1^{(mN)}$ and $U_2^{(mN)}$, whose generated MPU is invariant under
+  $\mathcal S$ for every $p\in[0,1]$, and whose tensor path and fixed
+  conjugate, physical-adjoint, transposed, and $\mathcal S$-image comparison
+  paths carry continuously varying reduced full-support source data. These
+  families arise from the actual blocked path $\mathcal W(p)_m$ in an
+  admissible equivalence datum of common length $m$; the blocked path itself is
+  the length-one admissible witness for the displayed endpoint families. When
+  $m>1$, this criterion does not assert strict equivalence of the unblocked
+  families $U_1^{(N)}$ and $U_2^{(N)}$. This is the reduced-source form of
+  \cite[Lemma following the symmetry-equivalence definitions]{Cirac2017MPU}.
+  % Source lines: paper_v2.tex 1366--1380.
 \end{lemma}
 
 \begin{theorem}[Conjugation symmetry when one source rank is odd]
@@ -5053,8 +5062,8 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
   $\mathcal U_i$ and its conjugate comparison tensor are simple and each
   carries reduced full-support source data. Suppose that either $r$ or $\ell$
   is odd and that the standard-form interpolation determined below carries an
-  admissible path datum whose common blocking length $m$ satisfies $m\leq D^4$.
-  Then $\mathcal U_1$ and $\mathcal U_2$ are admissibly strictly equivalent
+  admissible path datum of blocking length one. Then $\mathcal U_1$ and
+  $\mathcal U_2$ are admissibly strictly equivalent
   under conjugation symmetry if and only if
   \begin{align}
     \det(u_1v_1)&=\det(u_2v_2).
@@ -5090,7 +5099,8 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
   $\mathcal U_{i,2}$, and its conjugate comparison
   $\overline{\mathcal U_{i,2}}$ are simple and each carries reduced
   full-support source data. Suppose that either $r$ or $\ell$ is odd and that
-  the resulting standard-form interpolation is admissible. Then
+  the resulting standard-form interpolation carries an admissible path datum
+  of blocking length one. Then
   $\mathcal U_1$ and $\mathcal U_2$ are admissibly equivalent under
   conjugation symmetry.
 \end{corollary}
@@ -5134,9 +5144,9 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     lemma:conjclass-normalform-continuous,
     def:mpu_admissible_equivalence_datum}
   Suppose that $r$ and $\ell$ are both even and that the standard-form
-  interpolation determined below carries an admissible path datum whose common
-  blocking length $m$ satisfies $m\leq D^4$. Choose
-  admissible standard forms of two conjugation-invariant MPUs as in
+  interpolation determined below carries an admissible path datum of blocking
+  length one. Choose admissible standard forms of two conjugation-invariant
+  MPUs as in
   Proposition~\ref{prop:mpu_admissible_conjugation_standard_forms}. They are admissibly strictly equivalent under
   conjugation symmetry if and only if they belong
   to the same case of Proposition~\ref{prop:mpu_admissible_conjugation_standard_forms} and
@@ -5177,7 +5187,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
   actual two-site block $\mathcal U_{i,2}$, and its conjugate comparison
   $\overline{\mathcal U_{i,2}}$ are simple and each carries reduced
   full-support source data. Suppose also that the resulting standard-form
-  interpolation is admissible. Then
+  interpolation carries an admissible path datum of blocking length one. Then
   $\mathcal U_1$ and $\mathcal U_2$ are admissibly equivalent under
   conjugation symmetry if and only if they belong to the same case of
   Proposition~\ref{prop:mpu_admissible_conjugation_standard_forms}.
@@ -5341,10 +5351,11 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
   \uses{lem:mpu_admissible_sigma_gauge_invariant,lem:mpu_admissible_symmetry_path_criterion,
     def:mpu_reduced_full_support_source_datum,
     def:mpu_admissible_equivalence_datum}
-  Suppose an admissible time-reversal-preserving path is given such that, at
-  every path point, the one-site tensor, its actual two-site block, and the
-  physical-adjoint comparison of that two-site block are simple and carry
-  continuously varying reduced full-support source data. Then the sign
+  Suppose a time-reversal-preserving path carries an admissible equivalence
+  datum of blocking length one. At every path point, require the one-site
+  tensor, its actual two-site block, and the physical-adjoint comparison of
+  that two-site block to be simple and to carry continuously varying reduced
+  full-support source data. Then the sign
   $\sigma=\pm1$ is independent of the admissible standard-form gauge and is
   constant along the path.
 \end{proposition}
@@ -5440,8 +5451,9 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     def:mpu_admissible_symmetry_equivalence,def:mpu_reduced_full_support_source_datum,
     def:mpu_admissible_equivalence_datum}
   Let two time-reversal-invariant MPUs be compared by an admissible symmetry
-  path $p\mapsto\mathcal W(p)$. Suppose that the five path families
-  $\mathcal W(p)$, $\mathcal W(p)_2$, $\mathcal W(p)_4$,
+  path $p\mapsto\mathcal W(p)$ whose path datum has blocking length one.
+  Suppose that the five path families $\mathcal W(p)$,
+  $\mathcal W(p)_2$, $\mathcal W(p)_4$,
   $\mathcal W(p)_2^\sharp$, and $\mathcal W(p)_4^\sharp$ are simple and carry
   continuously varying reduced full-support source data. Then admissible
   strict equivalence requires equality of both $\sigma^{(1)}$ and
@@ -5450,7 +5462,8 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
   For admissible equivalence after adjoining ancillas and applying the source
   blocking, let $p\mapsto\mathcal W_{\mathrm{anc}}(p)$ be the actual
   ancilla-enlarged blocked witness path, not a reduced or equivalent
-  representative. Require continuous reduced full-support source data along
+  representative, and regard it as a length-one admissible path. Require
+  continuous reduced full-support source data along
   $\mathcal W_{\mathrm{anc}}(p)$, its actual two- and four-site blocks, and
   the physical-adjoint comparisons of those two blocks. The conclusion is
   only
@@ -5491,10 +5504,10 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
   full-support source data. Let $p\mapsto\mathcal W(p)$ be the actual
   standard-form interpolation from $\mathcal U$ to its Case I or Case II
   representative. Suppose this interpolation carries an admissible
-  conjugation-symmetry path datum with one common positive blocking length
-  $m\leq D^4$: the actual path $\mathcal W(p)_m$ and its fixed conjugate,
-  physical-adjoint, transposed, and conjugation-image comparison paths are
-  simple and carry continuously varying source data. Then the sign
+  conjugation-symmetry path datum of blocking length one: the path
+  $\mathcal W(p)$ and its fixed conjugate, physical-adjoint, transposed, and
+  conjugation-image comparison paths are simple and carry continuously varying
+  source data. Then the sign
   $G\overline G=\pm\Id$ in the MPS classification agrees with Case I and
   Case II, respectively, of
   Proposition~\ref{prop:mpu_admissible_conjugation_standard_forms}.
@@ -5557,8 +5570,8 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     cor:mpu_admissible_symplectic_to_orthogonal,def:mpu_reduced_full_support_source_datum,
     def:mpu_admissible_equivalence_datum}
   Assume the standard-form tensors displayed below carry reduced full-support
-  source data and that the comparison paths used to classify them are
-  admissible. Let
+  source data and that the comparison paths used to classify them carry
+  admissible path data of blocking length one. Let
   \begin{align}
     u_+&=v_+=\Id_{r\ell},&
     u_-&=v_-=\operatorname{diag}(-1,1,\ldots,1).
@@ -5750,12 +5763,11 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     def:mpu_admissible_equivalence_datum}
   Fix one of the three symmetry comparisons and let
   $p\mapsto\mathcal W(p)$ be the actual source-constructed interpolation used
-  in that comparison. Suppose it carries an admissible symmetry-path datum
-  with one common positive blocking length $m\leq D^4$. Thus the actual
-  blocked path $\mathcal W(p)_m$ and the four fixed comparison paths
-  $\overline{\mathcal W(p)_m}$, $\mathcal W(p)_m^\sharp$,
-  $\mathcal W(p)_m^{\mathsf T}$, and $\mathcal S[\mathcal W(p)_m]$ are simple
-  and carry continuously varying reduced full-support source data. Suppose
+  in that comparison. Suppose it carries an admissible symmetry-path datum of
+  blocking length one. Thus the path $\mathcal W(p)$ and the four fixed
+  comparison paths $\overline{\mathcal W(p)}$, $\mathcal W(p)^\sharp$,
+  $\mathcal W(p)^{\mathsf T}$, and $\mathcal S[\mathcal W(p)]$ are simple and
+  carry continuously varying reduced full-support source data. Suppose
   also that every one- and two-site endpoint tensor used in the local
   comparison carries its own datum. Then $U_i^{(N)}$ and $U_j^{(N)}$ are in
   the same admissible phase under time reversal combined with the local swap,
@@ -5787,9 +5799,10 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     def:mpu_reduced_full_support_source_datum,
     def:mpu_admissible_equivalence_datum}
   Suppose the two-site blocked tensors carry reduced full-support source data
-  and the standard-form comparison paths are admissible. Then $U_2^{(N)}$ and
-  $U_3^{(N)}$ are both in the
-  trivial phase under conjugation.
+  and the standard-form comparison paths carry admissible path data of
+  blocking length one. Then the actual two-site blocked tensors of $U_2$ and
+  $U_3$ are both in the trivial admissible strict phase under conjugation.
+  Consequently $U_2$ and $U_3$ lie in the same admissible equivalence class.
 \end{proposition}
 
 \begin{proposition}[Time-reversal and transposition phases of $U_2$ and $U_3$]
@@ -5817,9 +5830,8 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
   For each of time reversal and transposition, let
   $p\mapsto\mathcal W_{\mathcal S}(p)$ be the actual source-constructed
   interpolation from $\widetilde U_2$ to $\widetilde U_3$. Suppose it carries
-  an admissible symmetry-path datum with one common positive blocking length
-  $m\leq D^4$. Thus the actual blocked path
-  $\mathcal W_{\mathcal S}(p)_m$ and its fixed conjugate, physical-adjoint,
+  an admissible symmetry-path datum of blocking length one. Thus the path
+  $\mathcal W_{\mathcal S}(p)$ and its fixed conjugate, physical-adjoint,
   transposed, and $\mathcal S$-image comparison paths are simple and carry
   continuously varying reduced full-support source data. Suppose also that
   the one- and two-site endpoint tensors used in the local comparison carry
@@ -5862,12 +5874,12 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
   full-support source data. For every strict comparison used below, let
   $p\mapsto\mathcal W(p)$ be the actual
   source-constructed interpolation between the corresponding endpoint
-  tensors. Suppose it carries an admissible conjugation-symmetry path datum
-  with one common positive blocking length $m\leq D^4$: the actual blocked
-  path and its fixed conjugate, physical-adjoint, transposed, and
-  conjugation-image comparison paths are simple and carry continuously
-  varying source data. Require the same datum for the actual ancilla-blocked
-  interpolation used in the final equivalence claim. Under these hypotheses,
+  tensors. Suppose it carries an admissible conjugation-symmetry path datum of
+  blocking length one: the path and its fixed conjugate, physical-adjoint,
+  transposed, and conjugation-image comparison paths are simple and carry
+  continuously varying source data. Require a length-one admissible path datum
+  also for the actual blocked interpolation used in the final equivalence
+  claim. Under these hypotheses,
   $U_1^{(N)}$ and $U_2^{(N)}$ are in different admissible strict phases under
   conjugation exactly when $k$ is a nonnegative integer and
   \begin{align}
@@ -5909,17 +5921,17 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
   reversal or transposition, let $p\mapsto\mathcal W_{\mathcal S}(p)$ be the
   source-constructed interpolation from $\widehat{\mathcal U}_1$ to
   $\widehat{\mathcal U}_2$. Suppose this interpolation carries an admissible
-  symmetry-path datum with one common positive blocking length $m\leq D^4$.
-  Thus the actual blocked path $\mathcal W_{\mathcal S}(p)_m$ and its fixed
-  conjugate, physical-adjoint, transposed, and $\mathcal S$-image comparison
-  paths are simple and carry continuously varying reduced full-support source
-  data. Suppose also that the one- and two-site enlarged endpoint tensors used
-  in the local comparison carry their own data. Then
-  $\widehat{\mathcal U}_1$ and $\widehat{\mathcal U}_2$ are admissibly
-  strictly equivalent under both time reversal and transposition.
-  Consequently the original ancilla-free tensors $\widetilde U_1$ and
-  $\widetilde U_2$ are admissibly equivalent, but are not asserted to be
-  admissibly strictly equivalent.
+  symmetry-path datum of blocking length one. Thus the path
+  $\mathcal W_{\mathcal S}(p)$ and its fixed conjugate, physical-adjoint,
+  transposed, and $\mathcal S$-image comparison paths are simple and carry
+  continuously varying reduced full-support source data. Suppose also that
+  the one- and two-site enlarged endpoint tensors used in the local comparison
+  carry their own data. Then $\widehat{\mathcal U}_1$ and
+  $\widehat{\mathcal U}_2$ are admissibly strictly equivalent under both time
+  reversal and transposition. No equivalence of the original ancilla-free
+  tensors is asserted, because the equal ancilla dimensions used here need not
+  satisfy the coprimality condition in
+  Definition~\ref{def:mpu_admissible_symmetry_equivalence}.
 \end{proposition}
 
 \section{Finite-region observable algebras}
