@@ -90,18 +90,26 @@ theorem projectorComponentChain_eval
       cornerProd Q A u (List.ofFn σ) := by
   induction N generalizing u with
   | zero =>
-      simp [MPSChainTensor.eval, projectorComponentChain, projectorComponentPattern,
-        MPSChainTensor.repeatPeriodPattern, cornerProd_single]
+      rw [MPSChainTensor.eval_succ]
+      simp [projectorComponentChain, projectorComponentPattern,
+        MPSChainTensor.repeatPeriodPattern, cornerProd, cornerLetter]
   | succ n ih =>
       rw [MPSChainTensor.eval_succ, List.ofFn_succ, cornerProd_cons]
-      change
-        cornerLetter Q A u (σ 0) *
-            MPSChainTensor.eval (projectorComponentChain Q A (u + 1) (n + 1))
-              (σ ∘ Fin.succ) =
-          Q u * A (σ 0) * cornerProd Q A (u + 1) (List.ofFn (σ ∘ Fin.succ))
-      rw [ih (u + 1) (σ ∘ Fin.succ)]
-      simp only [cornerLetter, Matrix.mul_assoc,
-        corner_mul_cornerProd Q A (u + 1) _ (hQproj (u + 1))]
+      have hzero :
+          projectorComponentChain Q A u (n + 1 + 1) 0 =
+            projectorComponentPattern Q A u 0 := by
+        rfl
+      have htail :
+          (fun k : Fin (n + 1) => projectorComponentChain Q A u (n + 1 + 1) k.succ) =
+            projectorComponentChain Q A (u + 1) (n + 1) := by
+        funext k i
+        simp only [projectorComponentChain_apply]
+        congr 1
+        simp only [Fin.val_succ, add_nsmul, one_smul]
+        abel
+      rw [hzero, htail, ih (u + 1) (fun k => σ k.succ)]
+      simp only [projectorComponentPattern, cornerLetter, add_zero, Matrix.mul_assoc]
+      rw [corner_mul_cornerProd Q A (u + 1) _ (hQproj (u + 1))]
 
 /-- The paper-oriented cyclic shift transports an entire word from its starting
 projector to its ending projector. -/
@@ -115,8 +123,17 @@ theorem projector_mul_evalWord_eq_evalWord_mul_projector
   | cons i w ih =>
       simp only [evalWord_cons, List.length_cons, add_smul, one_smul]
       rw [← Matrix.mul_assoc, hshift u i, Matrix.mul_assoc, ih (u + 1)]
-      congr 2
-      abel
+      have hindex :
+          u + 1 + w.length • (1 : Fin p) =
+            u + (w.length + 1) • (1 : Fin p) := by
+        rw [add_nsmul, one_nsmul]
+        abel
+      rw [hindex]
+      have hindex' :
+          u + (w.length + 1) • (1 : Fin p) =
+            u + (w.length • (1 : Fin p) + 1) := by
+        rw [add_nsmul, one_nsmul]
+      rw [Matrix.mul_assoc, hindex']
 
 /-- Under the cyclic shift, the corner product is simply the word product with
 its starting projector inserted on the left. -/
@@ -133,7 +150,7 @@ theorem cornerProd_eq_projector_mul_evalWord
         evalWord A w * Q (u + w.length • (1 : Fin p)) *
           Q (u + w.length • (1 : Fin p)) := by rw [htransport]
     _ = evalWord A w * Q (u + w.length • (1 : Fin p)) := by
-      rw [(hQproj _).2]
+      rw [Matrix.mul_assoc, (hQproj _).2]
     _ = Q u * evalWord A w := htransport.symm
 
 /-- At every positive length, inserting the cyclic resolution of the identity
@@ -173,14 +190,132 @@ theorem projectorComponentChain_coeff_eq_zero_of_not_dvd
   rw [MPSChainTensor.coeff, projectorComponentChain_eval Q A hQproj,
     cornerProd_eq_conj_evalWord Q A hQproj hshift]
   have hstep : ((n + 1) • (1 : Fin p)) ≠ 0 := by
-    simpa only [← Nat.cast_eq_nsmul_one, Fin.natCast_eq_zero] using hN
+    intro hzero
+    apply hN
+    have hnsmul_val : ∀ t : ℕ, ((t • (1 : Fin p)) : Fin p).val = t % p := by
+      intro t
+      induction t with
+      | zero => simp
+      | succ k ih => rw [succ_nsmul, Fin.val_add, ih]; simp
+    apply Nat.dvd_iff_mod_eq_zero.mpr
+    have hval := congrArg Fin.val hzero
+    simpa only [hnsmul_val, Fin.val_zero] using hval
   have hne : u + (n + 1) • (1 : Fin p) ≠ u := by
     intro h
-    exact hstep (add_left_cancel h)
+    exact hstep (add_left_cancel (h.trans (add_zero u).symm))
+  simp only [List.length_ofFn]
   rw [Matrix.trace_mul_cycle]
   rw [orthogonalProjection_mul_eq_zero_of_sum_eq_one Q hQproj hQsum hne, zero_mul,
     Matrix.trace_zero]
 
 end Components
+
+section IsPeriodic
+
+/-- A periodic tensor supplies the inverse-reindexed cyclic projectors in the
+orientation used by PGVWC07, Theorem 5:
+`Q_k A^i = A^i Q_{k+1}`.
+
+The projectors act on the original virtual space `Fin D`; no bond-dimension
+compression occurs. -/
+theorem exists_paper_cyclic_projectors_of_isPeriodic
+    (A : MPSTensor d D) (hA : IsPeriodic p A) :
+    let _ : NeZero p := ⟨Nat.ne_of_gt hA.period_pos⟩
+    ∃ Q : Fin p → MatrixAlg D,
+      (∀ k, IsOrthogonalProjection (Q k)) ∧
+      (∑ k, Q k = 1) ∧
+      (∀ k i, Q k * A i = A i * Q (k + 1)) := by
+  letI : NeZero D := ⟨hA.bondDim_ne_zero⟩
+  letI : NeZero p := ⟨Nat.ne_of_gt hA.period_pos⟩
+  obtain ⟨_dim, _blocks, P, _φ, _V, _hLC, _hMPV, hPproj, hPsum, hCyclic,
+    _hComm, _hTrace, _hIntertwine, _hMul, _hStar, _hNondeg, _hLetter,
+    _hV_iso, _hV_range, _hEmbed⟩ :=
+    exists_cyclic_sector_decomp_with_letter_and_isometry_after_blocking_of_isPeriodic A hA
+  have hCyclic' :
+      ∀ k, transferMap (d := d) (D := D) (fun i => (A i)ᴴ) (P (k + 1)) = P k := by
+    intro k
+    simpa [cyclicNextOfPos, Fin.add_def] using hCyclic k
+  let Q : Fin p → MatrixAlg D := fun k => P (-k)
+  refine ⟨Q, fun k => hPproj (-k), ?_, ?_⟩
+  · change (∑ k, P (-k)) = 1
+    (convert (Equiv.sum_comp (Equiv.neg (Fin p)) P).trans hPsum using 1) <;> rfl
+  · intro k i
+    exact negReindex_paper_shift A hA.leftCanonical hPproj hCyclic' k i
+
+/-- **PGVWC07 Theorem 5, periodic branch.**
+
+If `p ∣ N`, a period-`p` tensor generates at length `N` the sum of `p`
+explicit `p`-periodic component chains.  Component `u` has local matrices
+`Q_{u+j} A^i Q_{u+j+1}`, uses the original bond dimension `D`, and closes its
+virtual sector after `N` sites.
+
+The source phrases the hypothesis as a one-block canonical transfer operator
+with `p` peripheral eigenvalues.  Here `IsPeriodic p A` is the maintained
+normalized equivalent surface: it states irreducibility, left-canonical form,
+positive period, and peripheral spectrum equal to the `p`-th roots of unity.
+Only the fixed-length state-vector equality is asserted.
+
+Source: PGVWC07, arXiv:quant-ph/0608197, Theorem 5, lines 849--880. -/
+theorem pgvwc07_periodic_stateVector_decomposition_of_dvd
+    (A : MPSTensor d D) (hA : IsPeriodic p A)
+    {N : ℕ} (hN : 0 < N) (hdiv : p ∣ N) :
+    let _ : NeZero p := ⟨Nat.ne_of_gt hA.period_pos⟩
+    ∃ Q : Fin p → MatrixAlg D,
+      (∀ k, IsOrthogonalProjection (Q k)) ∧
+      (∑ k, Q k = 1) ∧
+      (∀ k i, Q k * A i = A i * Q (k + 1)) ∧
+      (∀ (u : Fin p) (j : Fin N) (i : Fin d),
+        projectorComponentChain Q A u N j i =
+          Q (u + j.val • (1 : Fin p)) * A i *
+            Q (u + j.val • (1 : Fin p) + 1)) ∧
+      (∀ u : Fin p, u + N • (1 : Fin p) = u) ∧
+      (∀ σ : Fin N → Fin d,
+        mpv A σ = ∑ u : Fin p,
+          MPSChainTensor.coeff (projectorComponentChain Q A u N) σ) := by
+  letI : NeZero p := ⟨Nat.ne_of_gt hA.period_pos⟩
+  obtain ⟨Q, hQproj, hQsum, hshift⟩ := exists_paper_cyclic_projectors_of_isPeriodic A hA
+  refine ⟨Q, hQproj, hQsum, hshift, ?_, ?_, ?_⟩
+  · intro u j i
+    rfl
+  · obtain ⟨k, rfl⟩ := hdiv
+    intro u
+    have hpzero : p • (1 : Fin p) = 0 := by
+      simpa only [Fintype.card_fin] using
+        (card_nsmul_eq_zero (x := (1 : Fin p)))
+    have hcycle : (p * k) • (1 : Fin p) = 0 := by
+      calc
+        (p * k) • (1 : Fin p) = k • (p • (1 : Fin p)) := by
+          rw [mul_comm, mul_nsmul']
+        _ = k • 0 := by rw [hpzero]
+        _ = 0 := nsmul_zero k
+    rw [hcycle, add_zero]
+  · obtain ⟨n, rfl⟩ := Nat.exists_eq_succ_of_ne_zero (Nat.ne_of_gt hN)
+    exact mpv_eq_sum_projectorComponentChain_coeff Q A hQproj hQsum hshift
+
+/-- **PGVWC07 Theorem 5, vanishing branch.**
+
+If the period does not divide the ring length, every explicit cyclic-projector
+component has zero coefficient, and therefore the original fixed-length state
+vector is zero.
+
+Source: PGVWC07, arXiv:quant-ph/0608197, Theorem 5, lines 849--880. -/
+theorem pgvwc07_stateVector_eq_zero_of_not_dvd
+    (A : MPSTensor d D) (hA : IsPeriodic p A)
+    {N : ℕ} (hN : ¬p ∣ N) :
+    ∀ σ : Fin N → Fin d, mpv A σ = 0 := by
+  letI : NeZero p := ⟨Nat.ne_of_gt hA.period_pos⟩
+  obtain ⟨Q, hQproj, hQsum, hshift⟩ := exists_paper_cyclic_projectors_of_isPeriodic A hA
+  have hNpos : 0 < N := by
+    by_contra h
+    have : N = 0 := Nat.eq_zero_of_not_pos h
+    exact hN (this ▸ dvd_zero p)
+  obtain ⟨n, rfl⟩ := Nat.exists_eq_succ_of_ne_zero (Nat.ne_of_gt hNpos)
+  intro σ
+  rw [mpv_eq_sum_projectorComponentChain_coeff Q A hQproj hQsum hshift]
+  exact Finset.sum_eq_zero fun u _ =>
+    projectorComponentChain_coeff_eq_zero_of_not_dvd
+      Q A hQproj hQsum hshift hN u σ
+
+end IsPeriodic
 
 end MPSTensor
