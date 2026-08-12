@@ -21,8 +21,9 @@ A picture's frame is its coordinate system.  \tnkey{frame=}\tnval{flat} is
 the default and the whole tutorial rides it; \tnval{plane} projects a
 sheet.  The third word is \tnval{circle}, which seats the columns of one
 row at equal angles on a ring and turns each glyph by its station's
-tangent.  The object it draws is a network whose contraction pattern is a
-cycle rather than a line.
+tangent.  The object it draws is a network whose stations stand on a
+cycle, and the contraction that closes the cycle is written rather than
+seated.
 
 \begin{tnexample}[
   label={tnex:cat-circle},
@@ -132,8 +133,10 @@ standard prelude declares two more.
   caption={the stock silhouettes, and the two declared by the prelude},
   index={Left to right: dot, box, roundrect, ring, tri, triwest, dots,
     none, and the prelude's pill and mpo.  The eighth cell is empty
-    because \tnval{none} draws neither glyph nor label.  A skin says how
-    a record is drawn and nothing about what it contracts.},
+    because \tnval{none} draws neither glyph nor label.  None of the ten
+    says anything about what a record contracts; that is a declared
+    skin's \tnkey{pairings=}, which takes ports and appears with the
+    declarations at the end of the chapter.},
   signature={kernel-boundary|signature=}]
 % Ink: one atom per skin; bonds=none, so nothing here contracts.
 % The none cell is deliberately blank -- that is what it draws.
@@ -176,7 +179,9 @@ much they take away.  \tnval{sealed} removes the site, the bonds that
 reached it, and the leg the row's physical policy would have given it.
 \tnval{open} removes the glyph alone: the bonds still meet at the station
 and the leg still leaves it, so the picture loses a tensor's ink and not
-one entry of its boundary.
+one entry of its boundary.  The glyph goes because a void site's
+silhouette falls to \tnval{none}, and that is a default rather than an
+override: a site that names its own \tnkey{skin=} draws it.
 
 \begin{tnexample}[
   formula={\lvert\psi\rangle\ \text{with one site removed}},
@@ -335,7 +340,7 @@ shape comes from \tnkey{via=} alone.
 \end{tenkz}
 \end{tnexample}
 
-The remaining wire keys decorate the rail rather than change its path.
+Three further wire keys decorate the rail rather than change its path.
 \tnkey{stroke=} is the rail's pattern, and the corpus draws only three:
 \tnval{solid} for a contraction, \tnval{dashed} for a line the figure
 shows but its contraction does not use, \tnval{dotted} for a lattice
@@ -627,7 +632,10 @@ A pairing is a wire whose two ends are the skin's own ports, so it is
 reusable topology: declare it once and every site drawn with that skin
 carries it.  \tnkey{base=} may name another declared skin, so a family of
 related glyphs is written as a chain of small declarations rather than
-one long one.
+one long one.  What the chain carries down is the silhouette alone: a
+derived skin resolves its base to a primitive and inherits none of its
+base's pairings, so a route the derived glyph wants is written again in
+its own declaration.
 
 The atom class has a two-argument spelling, \tncmd{tndeclareatom}, for the
 common case of a new command with a skin and a port list.
@@ -647,13 +655,16 @@ common case of a new command with a skin and a port list.
 \end{tenkz}
 \end{tnexample}
 
-\dbendpar The two spellings do not accept the same port vocabulary.
-\tncmd{tndeclareatom} takes the four named faces only ---
+\dbendpar The two spellings do not accept the same vocabulary, in ports
+or in skins.  \tncmd{tndeclareatom} takes the four named faces only ---
 \tnval{west}, \tnval{east} typed \tnval{virtual}, and \tnval{up},
 \tnval{down} typed \tnval{physical} --- and answers anything else with
-\tnval{[TKZ-ATOM-INVALID-PORT]}.  The three-argument
-\tncmd{tndeclare}\tnval{\{atom\}} also takes compass letters and numeric
-angles, so a glyph with an off-axis face is declared there.
+\tnval{[TKZ-ATOM-INVALID-PORT]}.  Its \tnkey{skin=} is four words as
+well, \tnval{dot}, \tnval{box}, \tnval{pill} and \tnval{mpo}; a fifth is
+refused as an unknown choice and the declaration falls back to
+\tnval{dot}.  The three-argument \tncmd{tndeclare}\tnval{\{atom\}} also
+takes compass letters, numeric angles, and every silhouette, so a glyph
+with an off-axis face or a \tnval{ring} skin is declared there.
 
 A declaration is setup, and setup happens outside a composition form.
 Writing one among an equation's panels is refused: it would be a

@@ -45,7 +45,7 @@ def main() -> int:
     codes = {example.expected_failure for example in refusals}
     if "[TKZ-EQ-SIGNATURE]" not in codes:
         raise AssertionError(
-            "the tutorial's refusal block was not pinned to its diagnostic: "
+            "no refusal block in the manual was pinned to [TKZ-EQ-SIGNATURE]: "
             f"found {sorted(codes)}"
         )
     if len(reference) < REFERENCE_FLOOR:
