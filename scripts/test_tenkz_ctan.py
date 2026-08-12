@@ -1018,8 +1018,15 @@ def test_every_spelling_of_stream_eighteen_is_the_shell_escape_stream() -> None:
     for piped in (r"\input\space |cmd", r"\input\space|cmd",
                   r"\input\empty {|cmd}", r"\makeatletter\input\@empty |cmd",
                   r"\input\c_space_tl |cmd", r"\input\c_empty_tl |cmd",
-                  "\\input\\ |cmd"):
+                  "\\input\\ |cmd", "\\input\\\t|cmd",
+                  # The scanner expands throughout the name, brace or no
+                  # brace: this shape runs its command (compiled evidence
+                  # on the PR).
+                  r"\input{\space |cmd}"):
         assert tenkz_ctan.shell_escape_call(piped), piped
+    # \relax is not an expansion: it ends the name scan before the bar,
+    # so nothing runs (compiled evidence on the PR).
+    assert not tenkz_ctan.shell_escape_call(r"\input\relax |cmd")
     # \include absorbs its undelimited argument before anything expands:
     # the expansion is the argument, the brace group after it is typeset
     # text, and no file name ever opens with the bar.
@@ -1177,7 +1184,10 @@ def test_an_unbraced_absolute_input_is_an_absolute_path() -> None:
                          # and neither is a different macro whose suffix
                          # reuses them in an order expl3 cannot define.
                          "\\file_if_exist:nTFaux {/Users/somebody/data}\n",
-                         "\\file_if_exist:nTT {/Users/somebody/data}\n"):
+                         "\\file_if_exist:nTT {/Users/somebody/data}\n",
+                         # expl3 names take no star: after one, the brace
+                         # group is a code branch, not a file name.
+                         "\\file_if_exist:nT*{/Users/somebody/data}\n"):
             (tree / "tenkz.sty").write_text(innocent, encoding="utf-8")
             relative = tenkz_ctan.check_arxiv(tree, _loaded("tenkz.sty"))
             assert not relative.failures, (innocent, relative.failures)

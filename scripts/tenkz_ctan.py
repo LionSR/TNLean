@@ -324,16 +324,22 @@ STREAM_OPERAND = r"(?:\\[A-Za-z@_:]+|[0-9]+)?\s*=?\s*"
 # `\input` does admit before the name is an expansion that leaves nothing
 # or only whitespace, both of which the primitive's filename scanner
 # passes over, so `\input\space |cmd` and `\input\empty {|cmd}` still
-# reach the shell and are still read.  `\include` reads none of them: the
-# macro absorbs its undelimited argument before anything expands, so an
-# expansion there is the argument itself and the tokens after it are
-# typeset text, not a file name.
+# reach the shell and are still read.  The scanner expands throughout the
+# name, brace or no brace, so the same set is read again after an opening
+# brace: `\input{\space |cmd}` runs its command (compiled evidence on the
+# PR).  A control space is the escape before any space-class character,
+# tab included.  `\include` reads none of them: the macro absorbs its
+# undelimited argument before anything expands, so an expansion there is
+# the argument itself and the tokens after it are typeset text, not a
+# file name.
+_BLANK_EXPANSIONS = (
+    r"(?:\\(?:space|empty|@empty|c_space_tl|c_empty_tl)(?![A-Za-z@_:])\s*"
+    r"|\\[ \t]\s*)*"
+)
 PIPE_FILENAME = re.compile(
     r"\\open(?:in|out)\s*" + STREAM_OPERAND + r"(?:\{\s*)?\"?\s*\|"
-    r"|\\input\s*"
-    r"(?:\\(?:space|empty|@empty|c_space_tl|c_empty_tl)(?![A-Za-z@_:])\s*"
-    r"|\\ \s*)*"
-    r"(?:\{\s*)?\"?\s*\|"
+    r"|\\input\s*" + _BLANK_EXPANSIONS
+    + r"(?:\{\s*" + _BLANK_EXPANSIONS + r")?\"?\s*\|"
     r"|\\include\s*(?:\{\s*)?\"?\s*\|"
 )
 # The named ways to reach a shell that are not a write at all: the TeX
@@ -457,16 +463,20 @@ GRAPHICS_PATH = re.compile(r"\\graphicspath\s*\{((?:\s*\{[^{}]*\}\s*)+)\}")
 GRAPHICS_DIRECTORY = re.compile(r"\{\s*\"?\s*([^{}]*)\}")
 ABSOLUTE_LOAD = re.compile(
     r"\\(?:input|include|usepackage|RequirePackageWithOptions|RequirePackage"
+    r"|InputIfFileExists|IfFileExists|includegraphics"
+    r"|graphicspath)(?:\s*\*)?"
+    rf"\s*(?:\[[^]]*\]\s*)?\{{\s*\{{?\s*\"?{ABSOLUTE_PATH_HEAD}"
     # The existence conditional is read as a family: every signature
     # variant asks the same machine-local question, and the predicate form
     # spells an underscore-p before its colon.  The variants are the ones
     # expl3 can define — one argument specifier, then the conditional's
     # TF/T/F tail or the bare predicate — so a different macro whose
-    # suffix merely reuses these letters is not the conditional.
-    r"|InputIfFileExists|IfFileExists|includegraphics|file_input:n"
-    r"|file_if_exist(?:_p:[NnVvcoxef]|:[NnVvcoxef](?:TF|T|F))"
-    r"|graphicspath)(?:\s*\*)?"
-    rf"\s*(?:\[[^]]*\]\s*)?\{{\s*\{{?\s*\"?{ABSOLUTE_PATH_HEAD}"
+    # suffix merely reuses these letters is not the conditional.  The
+    # expl3 names take no star and no optional argument, so neither is
+    # read: a star after the signature is the file name TeX scans.
+    r"|\\(?:file_input:n"
+    r"|file_if_exist(?:_p:[NnVvcoxef]|:[NnVvcoxef](?:TF|T|F)))"
+    rf"\s*\{{\s*\"?{ABSOLUTE_PATH_HEAD}"
     rf"|\\input\s*\"?{ABSOLUTE_PATH_HEAD}"
     rf"|\\open(?:in|out)\s*{STREAM_OPERAND}\"?{ABSOLUTE_PATH_HEAD}"
     r"|\\(?:ior_open|iow_open|file_get|file_get_full_name"
