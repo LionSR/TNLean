@@ -4,7 +4,6 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.ParentHamiltonian.IntersectionProperty
-import TNLean.MPS.Chain.BlockedChainFT
 import Mathlib.Data.Fin.Tuple.Basic
 
 /-!
@@ -89,27 +88,6 @@ produces the expected boundary matrix \(X A_i\). -/
           rw [Matrix.mul_assoc]
     _ = Matrix.trace (evalWord A (List.ofFn σ) * (X * A i)) := by
           rw [Matrix.trace_mul_comm]
-
-/-- If the length-\(L\) word span is all of \(M_D\), then `groundSpaceMap A L` is
-injective. -/
-theorem groundSpaceMap_injective_of_wordSpan_eq_top {A : MPSTensor d D} {L : ℕ}
-    (hwordL : wordSpan A L = ⊤) :
-    Function.Injective (groundSpaceMap A L) := by
-  have hBlkInj : IsInjective (blockTensor A L) := by
-    exact (isNBlkInjective_iff_blockTensor_isInjective A L).mp
-      ((wordSpan_eq_top_iff_isNBlkInjective A L).mp hwordL)
-  intro X Y hXY
-  apply groundSpaceMap_injective hBlkInj (show 0 < 1 by omega)
-  ext σ
-  have hXY' := congrArg (fun ψ => ψ (decodeBlock d L (σ 0))) hXY
-  simpa [groundSpaceMap_apply, blockTensor, wordOfBlock, decodeBlock] using hXY'
-
-/-- Block injectivity at length \(L\) implies injectivity of `groundSpaceMap A L`. -/
-theorem groundSpaceMap_injective_of_isNBlkInjective {A : MPSTensor d D} {L : ℕ}
-    (hInj : IsNBlkInjective A L) :
-    Function.Injective (groundSpaceMap A L) :=
-  groundSpaceMap_injective_of_wordSpan_eq_top
-    ((wordSpan_eq_top_iff_isNBlkInjective A L).mpr hInj)
 
 /-- Restricting a ground-space vector to a suffix slice preserves the ground-space
 form, with the prefix word moved to the right boundary matrix by trace cyclicity. -/
