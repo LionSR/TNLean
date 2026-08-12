@@ -1,0 +1,595 @@
+% The output-first catalogue: one drawn specimen per construct family that
+% the tutorial and the recipes do not reach.  Every picture here is modelled
+% on a benchmark case or a blueprint figure, so the reader learns the idiom
+% the corpus actually writes rather than a toy.
+\section{Every construct, drawn}\label{ch:catalogue}
+
+The generated tables in Chapter~\ref{ch:reference} name every environment,
+command, and key.  Naming is not showing.  This chapter draws one specimen
+per family the tutorial and the recipes leave unpictured, in the order a
+source is read: the frame first, then the atoms it places, then the
+connections between them, then the annotations over them, and last the
+setup that extends the alphabet.
+
+Each specimen is modelled on a benchmark case or a blueprint figure, so
+what you read is the spelling the corpus writes.  Where a family has words
+the corpus does not write, the entry says so rather than inventing a use.
+
+\subsection{Frames other than the flat row}
+
+A picture's frame is its coordinate system.  \tnkey{frame=}\tnval{flat} is
+the default and the whole tutorial rides it; \tnval{plane} projects a
+sheet.  The third word is \tnval{circle}, which seats the columns of one
+row at equal angles on a ring and turns each glyph by its station's
+tangent.  The object it draws is a network whose contraction pattern is a
+cycle rather than a line.
+
+\begin{tnexample}[
+  label={tnex:cat-circle},
+  formula={\psi_{ijk}=\sum_{\alpha\beta\gamma}
+    A^{i}_{\gamma\alpha}B^{j}_{\alpha\beta}C^{k}_{\beta\gamma}},
+  caption={three tensors contracted around a cycle},
+  index={Each station carries one physical spoke, and the three virtual
+    bonds close the triangle.  The signature records each spoke at the
+    bearing its station transported it to, not at the face it was
+    declared on.},
+  signature={kernel-boundary|signature=phys:210, phys:330, phys:n}]
+% Formula: psi_ijk = sum A^i_{gamma alpha} B^j_{alpha beta}
+%   C^k_{beta gamma}.
+% Ink: the circle frame seats the three sites and carries each
+%   physical port out along its station's radius.
+\begin{tenkz}[rows={wire}, cols=3, frame=circle, bonds=none]
+  \tn[at=(1,1), name=a,
+      ports={0:virtual, 180:virtual, 90:physical:$i$}]{}
+  \tn[at=(1,2), name=b,
+      ports={0:virtual, 180:virtual, 90:physical:$j$}]{}
+  \tn[at=(1,3), name=c,
+      ports={0:virtual, 180:virtual, 90:physical:$k$}]{}
+  \tnwire[name=al]{a.0}{b.180}
+  \tnwire[name=be]{b.0}{c.180}
+  \tnwire[name=ga]{c.0}{a.180}
+  \tnmark[form=label, label pos=e]{on al 0.5}{$\alpha$}
+  \tnmark[form=label, label pos=s]{on be 0.5}{$\beta$}
+  \tnmark[form=label, label pos=w]{on ga 0.5}{$\gamma$}
+\end{tenkz}
+\end{tnexample}
+
+Three facts of the ring are visible at once.  A station's local faces are
+its own: \tnval{0} is the direction the glyph at that station calls east,
+not the page's east, so the one wire \tnval{a.0} to \tnval{b.180} means
+the same thing at every station and the three bonds are written alike.
+The physical port declared at \tnval{90} leaves along the station's
+outward radius, because the row's north is the ring's outward normal.  And
+the names read level, because a glyph turns and its label does not.
+
+\tnkey{bonds=}\tnval{none} appears here for the reason it appears in
+almost every ring in the corpus: the frame's adjacent-cell contraction
+would join the columns in a line, which on a ring is one bond short of the
+cycle.  Write the cycle's edges and the picture says what it means.
+
+\dbendpar A ring whose closure is the trace itself, with no tensor on the
+return, is common enough to have a word.  \tnkey{ring=}\meta{n} is sugar
+for \tnkey{rows=}\tnval{\{wire\}}, \tnkey{cols=}\meta{n},
+\tnkey{frame=}\tnval{circle}, \tnkey{west=}\tnval{trace},
+\tnkey{east=}\tnval{trace}: the stations of a circle, closed to
+themselves.
+
+\begin{tnexample}[
+  formula={\operatorname{tr}(M_1M_2M_3M_4)},
+  caption={the traced word, drawn as a ring},
+  index={The trace follows the frame's arc rather than the chord between
+    the two stations it joins.  No index survives, so the picture is a
+    scalar.},
+  signature={kernel-boundary|signature=}]
+% Formula: tr(M_1 M_2 M_3 M_4); the ring word is sugar for
+%   rows={wire}, cols=4, frame=circle, west=trace, east=trace.
+\begin{tenkz}[ring=4]
+  \tn{$M_1$} & \tn{$M_2$} & \tn{$M_3$} & \tn{$M_4$}
+\end{tenkz}
+\end{tnexample}
+
+The remaining frame spelling is the explicit one.  \tnkey{basis=} lists
+ordered row-kind members at quarter-pitch offsets from the origin, and
+every cell address then gains a member coordinate: \tnval{(r,c,k)} is the
+$k$-th member's copy of cell \tnval{(r,c)}.  The \tnval{planes} word of
+the tutorial's double layer is one two-member basis under a name; writing
+the basis out places the members where the mathematics wants them.
+
+\begin{tnexample}[
+  formula={C^{\phantom{)}}_{\gamma}=\sum_{\alpha\beta}
+    A_{\alpha}B_{\beta}},
+  caption={three basis members in one frame},
+  index={One cell, three members.  The offsets are quarter-pitch steps
+    from the origin member, and each member's copy of the cell is
+    addressed by its index.},
+  signature={kernel-boundary|signature=}]
+% Ink: an explicit three-member basis; the member index is the
+%   third coordinate of every address.
+\begin{tenkz}[rows={wire}, cols=1, bonds=none,
+  frame={flat, basis={wire at (0,0), wire at (2,0),
+                      wire at (1,2)}}]
+  \tn[at=(1,1,1), skin=box]{A}
+  \tn[at=(1,1,2), skin=box]{B}
+  \tn[at=(1,1,3), skin=box]{C}
+\end{tenkz}
+\end{tnexample}
+
+\dbendpar An explicit basis belongs to a picture-level \tnval{flat} or
+\tnval{plane} frame.  A circle frame refuses one, because its members
+would need a tangent-offset contract the language does not state; so do a
+group-local frame and an atom-local one.
+
+\subsection{The atom record}
+
+An atom's silhouette and its type are separate data.  \tnkey{skin=} names
+the silhouette alone; the stock vocabulary is eight words, and the
+standard prelude declares two more.
+
+\begin{tnexample}[
+  wide,
+  caption={the stock silhouettes, and the two declared by the prelude},
+  index={Left to right: dot, box, roundrect, ring, tri, triwest, dots,
+    none, and the prelude's pill and mpo.  A skin says how a record is
+    drawn and nothing about what it contracts.},
+  signature={kernel-boundary|signature=}]
+% Ink: one atom per skin; bonds=none, so nothing here contracts.
+\begin{tenkz}[rows={wire}, cols=10, bonds=none]
+  \tn[skin=dot]{} & \tn[skin=box]{B} & \tn[skin=roundrect]{R} &
+  \tn[skin=ring]{X} & \tn[skin=tri]{T} & \tn[skin=triwest]{W} &
+  \tn[skin=dots]{} & \tn[skin=none]{N} & \tn[skin=pill]{P} &
+  \tn[skin=mpo]{O}
+\end{tenkz}
+\end{tnexample}
+
+Two of these are structural rather than decorative.  \tnval{dots} is the
+ellipsis cell of a chain whose middle is elided, and its wires pass
+through it; \tnval{none} draws no glyph at all, which is what a corner
+junction wants when the wire must turn at a place that carries no tensor.
+Both appear in the traced word below.
+
+A glyph's extent is \tnkey{size=}, and a record that stands for a block of
+records is \tnkey{cluster=}: an $R\times C$ group of addressable
+sub-atoms named after the host.
+
+\begin{tnexample}[
+  caption={three size classes, and one clustered site},
+  index={The first three are one skin at the three metric classes.  The
+    fourth is a single declaration standing for four addressable
+    sub-atoms, reached as \tnval{q-1-1} through \tnval{q-2-2}.},
+  signature={kernel-boundary|signature=}]
+% Ink: size= chooses a glyph's extent from the metric table;
+%   cluster= expands one declaration into an addressable group.
+\begin{tenkz}[rows={wire}, cols=4, bonds=none]
+  \tn[at=(1,1), skin=dot, size=s]{} &
+  \tn[at=(1,2), skin=dot, size=m]{} &
+  \tn[at=(1,3), skin=dot, size=l]{} &
+  \tn[at=(1,4), name=q, cluster=2x2]{}
+\end{tenkz}
+\end{tnexample}
+
+A site that is not there is \tnkey{void=}.  The two words differ in what
+survives: \tnval{open} keeps the site's incident indices and removes the
+tensor, so the hole has a boundary; \tnval{sealed} removes the site and
+its bonds together.
+
+\begin{tnexample}[
+  formula={\lvert\psi\rangle\ \text{with one site removed}},
+  caption={a sealed site in a sheet},
+  index={The centre site and its four bonds are gone, and the sheet's
+    remaining sites keep their physical legs.  A sealed hole exposes
+    nothing, so the signature loses exactly the removed site's leg.},
+  signature={kernel-boundary|signature=phys:n, phys:n, phys:n, phys:n,
+    phys:n, phys:n, phys:n, phys:n}]
+% Ink: void=sealed removes the site and the bonds that reached
+%   it; void=open would keep those indices and drop the tensor.
+\begin{tenkz}[lattice={3x3}, frame=plane, physical=up]
+  \tn{} & \tn{} & \tn{} \\
+  \tn{} & \tn[void=sealed]{} & \tn{} \\
+  \tn{} & \tn{} & \tn{}
+\end{tenkz}
+\end{tnexample}
+
+\tnexercise{ex:cat-void} The eight physical legs above are the eight
+surviving sites.  What does \tnkey{void=}\tnval{open} write in the
+signature instead?
+
+\subsection{Connections}
+
+Every connection is a \tncmd{tnwire}.  Its \tnkey{kind=} says which kind:
+\tnval{index} is a contraction, the default, and \tncmd{tnbond} is its
+one-word spelling; \tnval{string} travels over the picture carrying an
+operator index; \tnval{pairing} is a declared skin's own internal route,
+and is never authored at a call site.
+
+The path a wire takes is \tnkey{route=}.  \tnval{straight} is the default
+and joins the two ends directly.  \tnval{arc} leaves and enters along its
+ends' own faces, which is what closes a chain below itself.
+
+\begin{tnexample}[
+  wide,
+  label={tnex:cat-arc},
+  formula={\lvert\psi(X)\rangle=\sum_{s_1\ldots s_N}
+    \operatorname{tr}\!\left(XA^{s_1}\cdots A^{s_N}\right)\lvert s\rangle},
+  caption={a traced word returning below the row},
+  index={The two corner junctions carry no tensor, and the elision cell
+    passes its wires through.  Every virtual index closes through $X$;
+    each drawn site keeps its physical leg.},
+  signature={kernel-boundary|signature=phys:n, phys:n, phys:n}]
+% Formula: |psi(X)> = sum tr(X A^{s_1} ... A^{s_N}) |s>.
+% Ink: the word closes below the row through two skin=none
+%   corner junctions, with X inserted on the return.
+\begin{tenkz}[rows={wire,wire}, cols=7, bonds=none]
+  \tn[at=(1,2), skin=box, name=a1,
+      ports={0:virtual, 180:virtual, 90:physical}]{A}
+  \tn[at=(1,3), skin=box, name=a2,
+      ports={0:virtual, 180:virtual, 90:physical}]{A}
+  \tn[at=(1,5), skin=dots, name=d,
+      ports={0:virtual, 180:virtual}]{}
+  \tn[at=(1,6), skin=box, name=a4,
+      ports={0:virtual, 180:virtual, 90:physical}]{A}
+  \tn[at=(2,4), skin=box, name=x,
+      ports={0:virtual, 180:virtual}]{X}
+  \tn[at=(2,1), skin=none, name=jw,
+      ports={0:virtual, 90:virtual}]{}
+  \tn[at=(2,7), skin=none, name=je,
+      ports={90:virtual, 180:virtual}]{}
+  \tnwire{a1.0}{a2.180} \tnwire{a2.0}{d.180}
+  \tnwire{d.0}{a4.180}
+  \tnwire[route=arc]{a4.0}{je.90}
+  \tnwire{je.180}{x.0} \tnwire{x.180}{jw.0}
+  \tnwire[route=arc]{jw.90}{a1.180}
+\end{tenkz}
+\end{tnexample}
+
+The arc is not a decoration chosen for looks.  Each of the two returns
+leaves an east face and enters a north face, and a straight segment
+between those two points would arrive across the face rather than along
+it.  The route states which family the path belongs to; the geometry
+stage decides the curve.
+
+The same family draws a closed cycle of tensors laid out as a plaquette,
+and a matrix inserted on one of its edges is an ordinary ring atom
+addressed by a fraction along the named wire.
+
+\begin{tnexample}[
+  formula={\lambda\ \text{inserted on one edge of the plaquette}},
+  caption={four arcs, and a bead on one of them},
+  index={The four operator-species arcs form the closed ring; the ring
+    atom stands halfway along the named north-west arc.  Each tensor
+    spends two of its four faces on the ring and leaves two open, so
+    eight virtual ends reach the boundary.},
+  signature={kernel-boundary|signature=open:e, open:e, open:n, open:n,
+    open:s, open:s, open:w, open:w}]
+% Ink: four arcs close the plaquette; at=on <wire> <fraction>
+%   stands the inserted matrix halfway along one of them.
+\tndeclare{species}{op}{hue=source:red}
+\begin{tenkz}[rows={wire,wire,wire}, cols=5, bonds=none]
+  \tn[skin=mpo, at=(1,3), name=N,
+      ports={0:virtual, 90:virtual, 180:virtual, 270:virtual}]{}
+  \tn[skin=mpo, at=(2,4), name=E,
+      ports={0:virtual, 90:virtual, 180:virtual, 270:virtual}]{}
+  \tn[skin=mpo, at=(3,3), name=S,
+      ports={0:virtual, 90:virtual, 180:virtual, 270:virtual}]{}
+  \tn[skin=mpo, at=(2,2), name=W,
+      ports={0:virtual, 90:virtual, 180:virtual, 270:virtual}]{}
+  \tnwire[route=arc, species=op, name=lam]{W.90}{N.180}
+  \tnwire[route=arc, species=op]{N.0}{E.90}
+  \tnwire[route=arc, species=op]{E.270}{S.0}
+  \tnwire[route=arc, species=op]{S.180}{W.270}
+  \tn[skin=ring, at=on lam 0.5]{\lambda}
+\end{tenkz}
+\end{tnexample}
+
+The third route word is \tnval{orth}, which turns at right angles.  It is
+the spelling for a string that must reach around the picture rather than
+across it, and it takes its corners from \tnkey{via=}, a list of addresses
+the path passes through.
+
+\begin{tnexample}[
+  caption={a string routed around the picture},
+  index={The waypoint is an ordinary cell address.  The path leaves $A$
+    southward, turns at the named cell, and enters $B$ from the west.},
+  signature={kernel-boundary|signature=}]
+% Ink: route=orth turns at right angles; via= names the cells
+%   the path passes through.
+\tndeclare{species}{gauge}{hue=source:blue}
+\begin{tenkz}[rows={wire,wire,wire}, cols=4, bonds=none]
+  \tn[at=(1,1), name=a, skin=box]{A}
+  \tn[at=(3,4), name=b, skin=box]{B}
+  \tnwire[kind=string, species=gauge, route=orth,
+          via={(3,1)}]{a.270}{b.180}
+\end{tenkz}
+\end{tnexample}
+
+A string that returns to itself is \tnkey{closed}, and a closed wire takes
+no positional ends at all: it is a cycle, so it has none to give.  Its
+shape comes from \tnkey{via=} alone.
+
+\begin{tnexample}[
+  caption={a closed string around a site},
+  index={The loop carries an operator index and contracts nothing.  It
+    exposes no end, so it adds no entry to the signature.},
+  signature={kernel-boundary|signature=}]
+% Ink: a closed string takes no ends; via= gives it its shape.
+\begin{tenkz}[rows={wire}, cols=2, bonds=none]
+  \tn[at=(1,1), name=z, skin=box]{Z}
+  \tnwire[kind=string, closed, via={0.6 n of z, 0.6 e of z,
+    0.6 s of z, 0.6 w of z}]
+\end{tenkz}
+\end{tnexample}
+
+The remaining wire keys decorate the rail rather than change its path.
+\tnkey{stroke=} is the rail's pattern, and the corpus draws only three:
+\tnval{solid} for a contraction, \tnval{dashed} for an index drawn but
+not contracted, \tnval{dotted} for a lattice lying under the sheet being
+drawn.  \tnkey{weight=} is strand multiplicity, and \tnkey{dir=} marks a
+directed index against its dual.
+
+\begin{tnexample}[
+  wide,
+  caption={the three strokes, a bundle, and a direction},
+  index={Left: the three declared rail patterns.  Right: a bundled index
+    drawn as three strands, carrying the direction mark that
+    distinguishes a space from its dual.},
+  signature={kernel-boundary|signature=}]
+% Ink: stroke= is the rail's pattern; weight=bundle=n draws one
+%   index as n strands; dir= marks the direction.
+\begin{tenkz}[rows={wire}, cols=4, bonds=none]
+  \tn[at=(1,1), name=p]{} \tn[at=(1,2), name=q]{}
+  \tn[at=(1,3), name=r]{} \tn[at=(1,4), name=s]{}
+  \tnwire[stroke=solid]{p.0}{q.180}
+  \tnwire[stroke=dashed]{q.0}{r.180}
+  \tnwire[stroke=dotted]{r.0}{s.180}
+\end{tenkz}
+\qquad
+\begin{tenkz}[rows={wire}, cols=2, bonds=none]
+  \tn[at=(1,1), name=u]{U} \tn[at=(1,2), name=v]{V}
+  \tnwire[weight=bundle=3, dir=to]{u.0}{v.180}
+\end{tenkz}
+\end{tnexample}
+
+\subsection{Annotations}
+
+A mark speaks over a picture and owns none of it.  Its \tnkey{form=} is
+the shape of the speech.  Four forms draw: \tnval{label} stands text at a
+target, \tnval{bracket} measures a span from outside it, \tnval{enclosure}
+strokes the offset hull of a selection, and \tnval{prose} records words in
+place of a diagram.
+
+\begin{tnexample}[
+  caption={a bracket over a span, a label on a site},
+  index={The bracket names the range of two cells; the label names one.
+    Neither touches the contraction, and the signature is the row's.},
+  signature={kernel-boundary|signature=open:e, open:w, phys:n, phys:n,
+    phys:n}]
+% Ink: two mark forms over one row; no contraction changes.
+\begin{tenkz}[rows={wire}, cols=3, west=open, east=open,
+              physical=up]
+  \tn{A} & \tn{B} & \tn{C}
+  \tnmark[form=bracket]{(1,1) .. (1,2)}{$P$}
+  \tnmark[form=label, label pos=n]{(1,3)}{$q$}
+\end{tenkz}
+\end{tnexample}
+
+Contours nest.  \tnkey{inset=} steps a second enclosure one clearance
+outside the first, which is how a figure draws a boundary operator acting
+on the open indices of a region it also has to show.
+
+\begin{tnexample}[
+  formula={\lvert\psi(X)\rangle},
+  caption={a region, and an operator on its boundary},
+  index={The inner contour is the retained block; the outer one, stepped
+    one clearance out, is the operator acting on the indices the block
+    leaves open.},
+  signature={kernel-boundary|signature=phys:n, phys:n, phys:n, phys:n}]
+% Ink: two contours over one selection; inset=1 steps the outer
+%   one clear of the inner.
+\begin{tenkz}[rows={wire}, cols=4, bonds=none, physical=up]
+  \tn[at=(1,1), skin=box]{A} & \tn[at=(1,2), skin=box]{A} &
+  \tn[at=(1,3), skin=box]{A} & \tn[at=(1,4), skin=box]{A}
+  \tnmark[form=enclosure]{(1,1) .. (1,4)}{}
+  \tnmark[form=enclosure, inset=1, label pos=e]{(1,1) .. (1,4)}{$X$}
+\end{tenkz}
+\end{tnexample}
+
+\tnkey{slot=} tints a mark from the theme's semantic slots, and
+\tnkey{tint} lays ink over the paper inside a contour rather than only
+stroking it; the tutorial's blocked run shows the tinted form.
+
+The registry's \tnkey{form=} list has four more words, and none of them
+draws.  A source that asks for one is refused, with the code that says so:
+
+\begin{tnrefusal}[
+  caption={four declared forms that do not draw yet},
+  index={The value parses --- it is in the registry --- and the render
+    stage refuses it rather than omitting the ink silently.  The same
+    answer comes back for \tnval{brace-below}, \tnval{cut}, and
+    \tnval{band}.},
+  diagnostic={[TKZ-KERNEL-RENDER-TODO] 'form=brace-above' does not draw
+    yet.}]
+% Refused: brace-above, brace-below, cut, and band are declared
+% mark forms with no render.  Use bracket for a measured span
+% and enclosure for a region.
+\begin{tenkz}[rows={wire}, cols=3, west=open, east=open]
+  \tn{A} & \tn{B} & \tn{C}
+  \tnmark[form=brace-above]{(1,1) .. (1,2)}{$P$}
+\end{tenkz}
+\end{tnrefusal}
+
+Read that refusal as the language's own rule, stated in
+Chapter~\ref{ch:trouble}: unsupported requested ink is a coded error, never
+a warning followed by omission.  A form that cannot be drawn is not
+quietly dropped, so no figure ever ships missing a mark its source asked
+for.
+
+\subsection{Fusion}
+
+Two atoms are structured rather than atomic.  \tncmd{tntree} takes a
+parenthesized fusion word and draws the tree that parses it; the strands
+are drawn as lines by default, and \tnkey{tree style=}\tnval{ribbon}
+draws the same parsed tree as a regular ribbon neighbourhood, one band per
+simple object.
+
+\begin{tnexample}[
+  formula={m_{ab}^{x}\colon a\otimes b\to x},
+  caption={one fusion tree in both strand styles},
+  index={Both pictures are the same chosen fusion morphism.  The wire
+    style meets three lines at one trivalent vertex; the ribbon style
+    gives each simple object a band and joins them at a vertex patch.},
+  signature={}]
+% Ink: one parsed fusion word, drawn in both strand styles.
+\tndeclare{species}{anyon}{}
+$\tntree[tree style=wire, species=anyon]{(a\,b)_x}
+ \qquad
+ \tntree[tree style=ribbon, species=anyon]{(a\,b)_x}$
+\end{tnexample}
+
+A tree is a self-contained box and stands wherever mathematics stands: in
+a display, in an alignment cell, in a \texttt{tikz-cd} cell.  It is the
+one construct here that does not need a picture around it.
+
+\tncmd{tnfuse} is the other.  It is a fusion atom, a triangle whose split
+side the frame bonds to the rows it spans, and it is how a doubled-layer
+object is written as one tensor.
+
+\begin{tnexample}[
+  formula={M^{ij}=\sum_{\alpha}e\,(A^{i}\otimes\overline{A}^{j})\,e^{-1}},
+  caption={a fuser, the doubled layer, and its inverse},
+  index={The two fusion atoms span both rows and combine the ket and bra
+    virtual indices into one; between them the two layers carry the
+    physical indices $i$ and $j$.},
+  signature={kernel-boundary|signature=open:e, open:w, phys:n, phys:s}]
+% Formula: M^{ij} = e (A^i tensor conj(A)^j) e^{-1}; the fusers
+%   combine the ket and bra virtual indices into one.
+\begin{tenkz}[rows={op,op}, cols=3]
+  \tnfuse[at=(1,1), name=e, skin=pill]{e}
+  \tn[at=(1,2), skin=box, ports={90:physical:$i$}]{A}
+  \tn[at=(2,2), skin=box, ports={270:physical:$j$}]{\overline{A}}
+  \tnfuse[at=(1,3), name=ei, skin=pill]{e^{-1}}
+  \tnwire{open w}{e.180} \tnwire{ei.0}{open e}
+\end{tenkz}
+\end{tnexample}
+
+\dbendpar \tncmd{tnfuse} is sugar for
+\tnval{\textbackslash tn[skin=tri, wires=2, \ldots]}, and authored keys
+follow the preset, so the \tnkey{skin=}\tnval{pill} above overrides the
+triangle the preset would have drawn.  Under
+\tncmd{tnset}\tnval{\{strict\}} the sugar is refused and the kernel
+spelling is required.
+
+\subsection{Setup and extension}
+
+\tncmd{tndeclare} is the one extension door, and it has three classes.
+A \emph{species} is a named hue a paper's family of objects keeps across
+figures.  A \emph{skin} is a base silhouette plus \tnkey{pairings=}, its
+own internal routes between its own ports.  An \emph{atom} is a new typed
+spelling in the atom class.
+
+The skin class is the one that changes what a glyph means.  A tensor whose
+two port pairs are joined inside the box is drawn once as a declaration
+and used as a word:
+
+\begin{tnexample}[
+  wide,
+  formula={U=U_{\rightarrow}\,U_{\leftarrow}},
+  caption={two declared skins, each with its own internal routes},
+  index={The upper row turns its north input east and its south input
+    west; the lower row reverses both.  The pairings belong to the skin,
+    so every site drawn with it carries them.},
+  signature={kernel-boundary|signature=phys:n, phys:n, phys:n, phys:s,
+    phys:s, phys:s}]
+% Ink: a declared skin is a base silhouette plus its own
+%   internal port pairings, tinted by declared species.
+\tndeclare{species}{right}{hue=source:blue}
+\tndeclare{species}{left}{hue=source:red}
+\tndeclare{skin}{shift-right}{
+  base=box, pairings={n@1 > e@1 : right, s@1 > w@1 : left}}
+\tndeclare{skin}{shift-left}{
+  base=box, pairings={n@1 > w@1 : left, s@1 > e@1 : right}}
+\begin{tenkz}[rows={wire,wire}, cols=3, physical=updown]
+  \tn[skin=shift-right]{} & \tn[skin=shift-right]{} &
+  \tn[skin=shift-right]{} \\
+  \tn[skin=shift-left]{} & \tn[skin=shift-left]{} &
+  \tn[skin=shift-left]{}
+\end{tenkz}
+\end{tnexample}
+
+A pairing is a wire whose two ends are the skin's own ports, so it is
+reusable topology: declare it once and every site drawn with that skin
+carries it.  \tnkey{base=} may name another declared skin, so a family of
+related glyphs is written as a chain of small declarations rather than
+one long one.
+
+The atom class has a one-argument spelling, \tncmd{tndeclareatom}, for the
+common case of a new command with a skin and a port list.
+
+\begin{tnexample}[
+  caption={a declared atom command},
+  index={The declaration adds one word to the atom class; the picture
+    then spells it like any other atom.  The port list is complete: an
+    anchor without a type is not an extension contract.},
+  signature={kernel-boundary|signature=open:e, open:w, phys:n}]
+% Ink: tndeclareatom names faces west|east:virtual and
+%   up|down:physical; tndeclare{atom} also accepts angles.
+\tndeclareatom{\tnprojector}{skin=box,
+  ports={west:virtual, east:virtual, up:physical}}
+\begin{tenkz}[rows={wire}, cols=3, west=open, east=open]
+  \tn{A} & \tnprojector{P} & \tn{B}
+\end{tenkz}
+\end{tnexample}
+
+\dbendpar The two spellings do not accept the same port vocabulary.
+\tncmd{tndeclareatom} takes the four named faces only ---
+\tnval{west}, \tnval{east} typed \tnval{virtual}, and \tnval{up},
+\tnval{down} typed \tnval{physical} --- and answers anything else with
+\tnval{[TKZ-ATOM-INVALID-PORT]}.  The three-argument
+\tncmd{tndeclare}\tnval{\{atom\}} also takes compass letters and numeric
+angles, so a glyph with an off-axis face is declared there.
+
+A declaration is setup, and setup happens outside a composition form.
+Writing one among an equation's panels is refused: it would be a
+document-wide act performed in the middle of an assertion, ordered by
+where it happens to sit and read once for each time the equation is
+measured.  Write it before the equation, where it says the same thing
+once.
+
+\tncmd{tnset} carries the same policy at document scope.  Four keys live
+there: \tnkey{pitch=}, the one base metric every named ratio follows;
+\tnkey{sizes=}, its size-class table; \tnkey{theme=}, the semantic ink;
+and \tnkey{strict}, which rejects every sugar spelling in the registry.
+The benchmark and the continuous checks set the last one, which is why the
+canonical cases are written in kernel words.
+
+\begin{tnrefusal}[
+  caption={strict setup rejects a sugar spelling},
+  index={\tnkey{sandwich} is sugar for
+    \tnkey{rows=}\tnval{\{ket,op,bra\}}.  Under \tnval{strict} the
+    expansion is not performed; the spelling is refused and named.},
+  diagnostic={[TKZ-LANG-STRICT] 'sandwich' is sugar and
+    \textbackslash tnset\{strict\} is active.}]
+% Refused: strict rejects sugar.  The kernel spelling of this
+% picture is rows={ket,op,bra}.
+\tnset{strict}
+\begin{tenkz}[sandwich, cols=1]
+  \tn{A} \\ \tn[skin=mpo]{O} \\ \tn{$\overline{A}$}
+\end{tenkz}
+\end{tnrefusal}
+
+Two composition words close the alphabet.  \tncmd{tngroup} transforms a
+sub-diagram as one object and takes \tnkey{frame=} alone: a group is a
+sub-frame of its picture and shares its picture's metric, size class, and
+audit, so those keys are refused at group scope rather than accepted and
+left inert.  \tncmd{tnprose} records words where a diagram would stand,
+for the step of an argument that is not drawn; on a checked relation it is
+a hard error without a recorded opt-out, because prose is not a boundary
+signature.
+
+\subsection{Answers to the exercises}
+
+\tnanswer{ex:cat-void} It writes the removed site's four virtual indices.
+\tnval{void=open} keeps the incident indices and drops the tensor, so the
+hole acquires a boundary: the four bonds that reached the centre become
+open ends, and the signature gains four virtual entries beside the eight
+physical legs.  \tnval{sealed} removes site and bonds together and adds
+nothing.  A hole in a lattice is almost always the open one --- the
+indices are what the hole is for.
