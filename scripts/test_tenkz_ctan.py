@@ -834,7 +834,9 @@ def test_a_tree_arxiv_would_have_to_build_or_shell_out_for_fails() -> None:
         tree = Path(directory) / PACKAGE_DIR
         (tree / "nested").mkdir(parents=True)
         (tree / "tenkz.sty").write_text("% a runtime file\n", encoding="utf-8")
-        (tree / "tenkz.ins").write_text("% a docstrip run\n", encoding="utf-8")
+        # Upper case is the same docstrip run: a file system that preserves
+        # case hands the suffix back as it was typed.
+        (tree / "tenkz.INS").write_text("% a docstrip run\n", encoding="utf-8")
         (tree / "loud.sty").write_text("\\immediate \\write 18{rm -rf /}\n", encoding="utf-8")
         (tree / "elsewhere.sty").write_text(
             "\\input{/Users/somebody/tenkz-core.code.tex}\n", encoding="utf-8"
@@ -844,7 +846,7 @@ def test_a_tree_arxiv_would_have_to_build_or_shell_out_for_fails() -> None:
         )
     findings = " ".join(report.failures)
     assert "nested" in findings, report.failures
-    assert "tenkz.ins" in findings, report.failures
+    assert "tenkz.INS" in findings, report.failures
     # The spaced spelling opens the same stream as the compact one, and TeX
     # reads the number either way.
     assert "write 18" in findings, report.failures
@@ -886,8 +888,13 @@ def test_every_spelling_of_stream_eighteen_is_the_shell_escape_stream() -> None:
     # either primitive.
     for named in (r"\sys_shell_now:n {ls}", r"\sys_shell_shipout:x {ls}",
                   r"\sys_get_shell:nnN {x}{y}\z", r"\ior_shell_open:Nn \x {ls}",
-                  r"\iow_shell_open:Nn \x {ls}", r"\tex_shellescape:D"):
+                  r"\iow_shell_open:Nn \x {ls}"):
         assert tenkz_ctan.shell_escape_call(named), named
+    # Asking whether the engine has a shell runs nothing. Reading these as
+    # calls would refuse a file for putting the question.
+    for asks in (r"\tex_shellescape:D", r"\sys_if_shell:TF {y}{n}",
+                 r"\sys_shell_open:Nn \x {ls}"):
+        assert not tenkz_ctan.shell_escape_call(asks), asks
     # Numbers that are not 18 in the base their prefix names, an odd run of
     # minus signs, and a control sequence that merely starts with the same
     # letters.
@@ -958,7 +965,9 @@ def test_an_unbraced_absolute_input_is_an_absolute_path() -> None:
         # file is not submittable even when the file's absence is handled.
         for load in (r"\includegraphics*{/Users/somebody/figure.pdf}",
                      r"\includegraphics *{/Users/somebody/figure.pdf}",
-                     r"\InputIfFileExists{/Users/somebody/local.cfg}{}{}"):
+                     r"\InputIfFileExists{/Users/somebody/local.cfg}{}{}",
+                     # A path holding a space is written quoted, braced or not.
+                     '\\input{"/Users/somebody/My Documents/f.tex"}'):
             (tree / "tenkz.sty").write_text(load + "\n", encoding="utf-8")
             found = tenkz_ctan.check_arxiv(tree, _loaded("tenkz.sty"))
             assert any("absolute path" in r for r in found.failures), (load, found.failures)
