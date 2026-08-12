@@ -1,4 +1,4 @@
-\documentclass[11pt]{article}
+\documentclass{article}
 
 \usepackage{amsmath,amssymb}
 \usepackage{xurl}
@@ -7,8 +7,7 @@
 
 \input{command}
 
-\title{Scope of the Formal Period-Removal Step Relative to PGVWC07 Periodic
-Decomposition}
+\title{Scope of the Formal Periodic Decomposition Relative to PGVWC07}
 \author{}
 \date{2026-06-04}
 
@@ -20,56 +19,60 @@ Decomposition}
 P\'erez-Garc\'ia, Verstraete, Wolf, and Cirac prove the periodic decomposition
 theorem for translation-invariant MPS with periodic boundary conditions
 \cite[Theorem~5, lines~849--858]{PerezGarcia2007MPSReps}.
-The theorem starts with a TI state \(\psi \in (\mathbb C^d)^{\otimes N}\)
-whose canonical TI MPS representation has a single block with \(D\times D\)
-matrices \(A_i\).  Let
+The theorem starts with a TI state $\psi \in (\mathbb C^d)^{\otimes N}$ whose
+canonical TI MPS representation has a single block with $D\times D$ matrices
+$A_i$. Let
 \[
-  \mathcal E(X)=\sum_i A_i X A_i^\dagger .
+  \mathcal E(X)=\sum_i A_i X A_i^\dagger.
 \]
-If \(\mathcal E\) has \(p\) eigenvalues of modulus \(1\), then:
+If $\mathcal E$ has $p$ eigenvalues of modulus $1$, then:
 \begin{enumerate}
-  \item if \(p\) divides \(N\), the state \(\psi\) is a superposition of
-    \(p\) \(p\)-periodic states, each with an MPS representation of bond
-    dimension \(D\);
-  \item if \(p\) does not divide \(N\), then \(\psi=0\).
+  \item if $p$ divides $N$, the state $\psi$ is a superposition of $p$
+    $p$-periodic states, each with an MPS representation of bond dimension $D$;
+  \item if $p$ does not divide $N$, then $\psi=0$.
 \end{enumerate}
 The proof uses the peripheral spectral structure of the CP map from
-Fannes--Nachtergaele--Werner: there are orthogonal projectors \(P_k\) cyclically
-permuted by the matrices \(A_i\), and inserting
-\(\sum_k P_k\) into the trace splits \(\psi\) into the claimed
-\(p\)-periodic summands
+Fannes--Nachtergaele--Werner: there are orthogonal projectors $P_k$ cyclically
+permuted by the matrices $A_i$, and inserting $\sum_k P_k$ into the trace
+splits $\psi$ into the claimed $p$-periodic summands
 \cite[lines~860--880]{PerezGarcia2007MPSReps}.
 
 \section{Formal boundary}
 
-Chapter~8 formalizes only the period-removal-by-blocking consequence needed for
-the canonical-form reduction: after blocking by a common multiple of the periods,
-the relevant cyclic sectors have primitive transfer maps.
+TNLean proves the explicit fixed-length decomposition in
+\leanid{MPSTensor.pgvwc07_periodic_stateVector_decomposition_of_dvd} and the
+vanishing branch in
+\leanid{MPSTensor.pgvwc07_stateVector_eq_zero_of_not_dvd}. Both declarations
+use \leanid{MPSTensor.IsPeriodic}, which assumes left-canonical orientation,
+irreducibility, positive period, and an exact $p$-th-root peripheral spectrum.
+The printed theorem instead starts from its one-block unital canonical
+representation and counts the peripheral eigenvalues of the associated
+transfer map.
 
-This formal theorem is not the explicit PGVWC07 state-vector decomposition.  It
-does not produce \(p\) separate \(p\)-periodic MPS summands for the original
-unblocked ring, nor does it state the dichotomy between \(p\mid N\) and
-\(\psi=0\).  It supplies the primitive blocked sectors used by the later
-canonical-form development.
+The periodic branch is stated for positive ring lengths because the current
+coefficient decomposition is proved for a nonempty chain. The formal results
+therefore give a normalized theorem surface and the complete fixed-positive-
+length calculation, but not yet a literal theorem from the printed
+hypotheses.
 
-\section{Required formalization}
+\section{Elimination plan}
 
-A source-faithful formalization of PGVWC07 Theorem~5 should state the one-block
-TI canonical hypothesis, the peripheral spectrum condition for \(\mathcal E\),
-and the two conclusions above.  The construction should exhibit the
-\(p\)-periodic summands obtained from the cyclic projectors \(P_k\), including
-their bond dimension \(D\), and should prove the vanishing statement when
-\(p\nmid N\).
+Prove a source-facing equivalence from the paper's one-block unital canonical
+hypotheses and peripheral-eigenvalue count to
+\leanid{MPSTensor.IsPeriodic}, accounting for the adjoint normalization
+orientation. Then compose this equivalence with the two fixed-length
+statements above. If length zero is included in the formal source interface,
+add its direct empty-chain calculation separately. No new cyclic-projector or
+positive-length state-vector calculation is required.
 
-Until that theorem exists, Chapter~8 should cite the blocking theorem only as a
-period-removal input for primitive sectors, not as a formalization of the
-explicit periodic decomposition of the state vector.
+\section{Verdict}
 
-\section{Tracked consequence}
-
-The scope remark at the end of Chapter~8 records this boundary.  It is a
-documented scope restriction, not a source-error claim.  The open issue is
-\href{https://github.com/LionSR/TNLean/issues/2278}{issue \#2278}.
+\textbf{Verdict: scope restriction.} The formal declarations prove the
+periodic decomposition and vanishing dichotomy under the maintained
+\leanid{MPSTensor.IsPeriodic} hypotheses, with positive length required in the
+decomposition branch. The wrapper from the printed one-block unital
+hypotheses and peripheral-eigenvalue count remains open, so the current
+statements are normalized specializations of PGVWC07 Theorem~5.
 
 \bibliographystyle{alpha}
 \bibliography{references}
