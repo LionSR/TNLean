@@ -291,12 +291,16 @@ ALLOCATED_STREAM = re.compile(r"\\(?:newwrite|iow_new:N)\s*(\\[A-Za-z@_:]+)")
 # A control sequence the same file also redefines is no longer the stream it
 # was allocated as: `\newwrite\out \def\out{18} \write\out{...}` reaches the
 # shell through a name the allocation vouched for, and so does `\chardef\out=18`
-# and every other primitive that binds a constant. Reading order is beyond a
+# and every other primitive that binds a constant. Only the forms that bind
+# are read: `\cs_if_exist:NTF` and `\cs_show:N` ask about a name and leave it
+# alone, and taking the allocation ground away for a question asked would
+# refuse a release for looking. Reading order is beyond a
 # text scan, so an allocated name that is redefined anywhere in the file loses
 # the allocation ground and is refused with every other unreadable stream.
 REDEFINED_NAME = re.compile(
     r"\\(?:def|edef|gdef|xdef|let|chardef|mathchardef|countdef|dimendef"
-    r"|toksdef|skipdef|muskipdef|cs_[a-z_]*:N[a-zA-Z]*)"
+    r"|toksdef|skipdef|muskipdef"
+    r"|cs_(?:new|set|gset|gnew|undefine)[a-z_]*:N[a-zA-Z]*)"
     r"\s*(\\[A-Za-z@_:]+)"
 )
 # Web2C reads a file name whose first character is a bar as a command to run,
@@ -442,6 +446,9 @@ ABSOLUTE_LOAD = re.compile(
     rf"\s*(?:\[[^]]*\]\s*)?\{{\s*\{{?\s*\"?{ABSOLUTE_PATH_HEAD}"
     rf"|\\input\s*\"?{ABSOLUTE_PATH_HEAD}"
     rf"|\\open(?:in|out)\s*{STREAM_OPERAND}\"?{ABSOLUTE_PATH_HEAD}"
+    r"|\\(?:ior_open:Nn|iow_open:Nn|file_get:nnN|file_get_full_name:nN"
+    r"|file_if_exist_input:n)\s*(?:\\[A-Za-z@_:]+\s*)?"
+    rf"\{{\s*\"?{ABSOLUTE_PATH_HEAD}"
 )
 
 

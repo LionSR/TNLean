@@ -994,6 +994,13 @@ def test_every_spelling_of_stream_eighteen_is_the_shell_escape_stream() -> None:
                         "\\newwrite\\out\n\\chardef\\out=18\n\\write\\out{x}\n",
                         "\\newwrite\\out\n\\cs_gset:Npn \\out {18}\n\\write\\out{x}\n"):
         assert tenkz_ctan.shell_escape_call(overwritten), overwritten
+    # Asking about a name is not rebinding it: taking the allocation ground
+    # away for a question would refuse a release for looking.
+    for asked in (r"\cs_if_exist:NTF \out {y}{n}", r"\cs_show:N \out",
+                  r"\cs_use:N \out"):
+        assert not tenkz_ctan.shell_escape_call(
+            "\\newwrite\\out\n" + asked + "\n\\immediate\\write\\out{x}\n"
+        ), asked
     for named in (r"\sys_shell_now:n {ls}", r"\sys_shell_shipout:x {ls}",
                   r"\sys_get_shell:nnN {x}{y}\z", r"\ior_shell_open:Nn \x {ls}",
                   r"\iow_shell_open:Nn \x {ls}", r"\DelayedShellEscape{ls}"):
@@ -1097,6 +1104,8 @@ def test_an_unbraced_absolute_input_is_an_absolute_path() -> None:
                      r"\graphicspath{{/Users/somebody/figures/}}",
                      # Every directory in the list, not only the first.
                      r"\graphicspath{{figures/}{/Users/somebody/more/}}",
+                     r"\file_get:nnN {/Users/somebody/data} {} \l_tmpa_tl",
+                     r"\ior_open:Nn \stream {/Users/somebody/data}",
                      # A path holding a space is written quoted, braced or not.
                      '\\input{"/Users/somebody/My Documents/f.tex"}'):
             (tree / "tenkz.sty").write_text(load + "\n", encoding="utf-8")
