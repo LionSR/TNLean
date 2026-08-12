@@ -23,6 +23,10 @@ Rules (findings exit 1 unless escaped):
   rmp-*    Canonical RMP case files additionally require the six provenance
            headers, preamble-free source, canonical spellings, public names,
            at most 88 characters per line, and at most 100 lines per case.
+           The buried spellings come from the registry's tombstone rows and
+           are reported with the migration each row states, so retiring a
+           spelling needs no edit here.  These rules read case files alone:
+           a chapter's prose may write a dead word as an English word.
 
 Escape: a comment `% tenkz-lint: allow <rule> <reason>` on the finding's
 line or the line directly above suppresses that rule there (`allow all`
@@ -43,7 +47,13 @@ from dataclasses import dataclass
 from pathlib import Path
 
 from tenkz_audit import ENVIRONMENT_LANGS
-from tenkz_language import load_registry, parse_status
+from tenkz_language import (
+    Entry,
+    load_registry,
+    parse_status,
+    tombstone_rows,
+    tombstone_shape,
+)
 from tenkzlib.texcase import (
     TeXEnvironmentNestingError,
     match_group,
@@ -84,10 +94,6 @@ def registry_alias_patterns() -> list[re.Pattern[str]]:
         for entry in load_registry()
         if entry.kind == "alias"
     }
-    # `rows` is canonical at picture scope and needs command-aware parsing;
-    # periodic has a dedicated boundary-sensitive expression below.
-    aliases.discard("rows")
-    aliases.discard("periodic")
     patterns = [
         re.compile(r"\b" + re.escape(name).replace(r"\ ", r"\s+") + r"(?:\s*=|\b)")
         for name in sorted(aliases)
@@ -99,7 +105,87 @@ def registry_alias_patterns() -> list[re.Pattern[str]]:
     return patterns
 
 
+def tombstone_patterns(entries: list[Entry]) -> list[tuple[re.Pattern[str], str]]:
+    """Source patterns and migrations for the spellings a ledger buries.
+
+    A `key=value` row is a word struck from a live alphabet, so the pattern is
+    that spelling, bounded on both sides: without a left boundary `form=band`
+    would also read `transform=band`.  The value may arrive in a brace group,
+    which is ordinary key-value spelling and reaches the parser as the bare
+    word.  A row spelled with a leading backslash is a command, whose own
+    backslash is where it starts: a word boundary before it would match
+    nothing, since neither the backslash nor the space before it is a word
+    character.  An environment is named where a document names one, in the
+    argument of `\\begin` or `\\end`.  A bare row is a key that no longer
+    exists; where its word survives as the value of a live enum, the pattern
+    steps over that live spelling, which is where a reader of the dead one
+    should be.
+
+    Every spelling arrives from `tombstone_rows` with the registry's `~`
+    already read as the space a document writes, so a multi-word key is
+    matched the way source spells it rather than the way the registry does.
+    A row stating no spelling gets no pattern; the language check reports it.
+    """
+    enum_owners: dict[str, set[str]] = {}
+    for entry in entries:
+        if entry.kind != "key":
+            continue
+        enum = re.fullmatch(r"enum\(([^)]*)\)", entry.fields[2])
+        if enum is None:
+            continue
+        for word in enum.group(1).split("|"):
+            enum_owners.setdefault(word, set()).add(entry.fields[1].replace("~", " "))
+    patterns: list[tuple[re.Pattern[str], str]] = []
+    for scope, spelling, migration in sorted(tombstone_rows(entries)):
+        key, _separator, value = spelling.partition("=")
+        key, value = key.strip(), value.strip()
+        shape = tombstone_shape(scope, spelling)
+        if shape == "malformed":
+            continue
+        if shape == "command":
+            expression = re.escape(spelling) + r"(?![A-Za-z])"
+        elif shape == "environment":
+            expression = (
+                r"\\(?:begin|end)\s*\{\s*"
+                + re.escape(spelling)
+                + r"\s*\}"
+            )
+        elif shape == "value":
+            expression = (
+                r"(?<![\w-])"
+                + re.escape(key).replace(r"\ ", r"\s+")
+                + r"\s*=\s*\{?\s*"
+                + re.escape(value).replace(r"\ ", r"\s*")
+                + r"(?![\w-])"
+            )
+        else:
+            # A lookbehind takes no variable width, so a live owner is stepped
+            # over as the source spells it with no space around the equals.
+            # A spaced `owner = word` is therefore reported, which over-reports
+            # a live spelling rather than passing a dead one, and is what the
+            # hardcoded expression this replaced did.  Matching only where a
+            # key may appear would trade that for a possible under-report,
+            # which is the failure this ledger exists to prevent.
+            expression = (
+                "".join(
+                    f"(?<!{re.escape(owner)}=)"
+                    for owner in sorted(enum_owners.get(key, set()))
+                )
+                + r"\b"
+                + re.escape(key).replace(r"\ ", r"\s+")
+                + r"\b"
+            )
+        patterns.append((re.compile(expression), migration))
+    return patterns
+
+
+def registry_tombstone_patterns() -> list[tuple[re.Pattern[str], str]]:
+    """The buried spellings the registry itself records."""
+    return tombstone_patterns(load_registry())
+
+
 RMP_REGISTRY_ALIAS_PATTERNS = registry_alias_patterns()
+RMP_REGISTRY_TOMBSTONE_PATTERNS = registry_tombstone_patterns()
 
 
 @dataclass
@@ -109,7 +195,8 @@ class Finding:
     rule: str
     snippet: str
     allowed: bool
-    reason: str = ""
+    # Where a buried spelling's meaning went, reported with the finding.
+    migration: str = ""
 
 
 @dataclass
@@ -181,8 +268,10 @@ def lint_file(path: Path) -> list[Finding]:
     findings: list[Finding] = []
     seen: set[tuple[int, str]] = set()  # one report per (line, rule)
 
-    def scan(text: str, base: int, rules: list[tuple[str, re.Pattern[str]]]) -> None:
-        for rule, pat in rules:
+    # A rule is (name, pattern), and a buried spelling adds the migration it
+    # names as a third element.
+    def scan(text: str, base: int, rules: list[tuple]) -> None:
+        for rule, pat, *migration in rules:
             for m in pat.finditer(text):
                 offset = base + m.start()
                 lineno = line_of(offset)
@@ -192,7 +281,8 @@ def lint_file(path: Path) -> list[Finding]:
                 seen.add(key)
                 snippet = raw_lines[lineno - 1].strip() if lineno <= len(raw_lines) else ""
                 findings.append(Finding(path, lineno, rule, snippet,
-                                        escaped(lineno, rule)))
+                                        escaped(lineno, rule),
+                                        migration[0] if migration else ""))
 
     try:
         bodies = scan_bodies(src)
@@ -217,10 +307,13 @@ def lint_file(path: Path) -> list[Finding]:
             ("rmp-private", re.compile(r"\\(?:__tenkz|tenkz@|tenkz_[A-Za-z])")),
             ("rmp-macro", re.compile(r"\\(?:newcommand|def|NewDocumentCommand)\b")),
             ("rmp-raw-ink", re.compile(r"\\(?:draw|fill|filldraw|shade|node|path|tikzset)\b")),
-            ("rmp-alias", re.compile(r"(?<!boundary=)\bperiodic\b")),
             ("rmp-metadata", re.compile(r"^%\s*Fixture\s*:", re.MULTILINE)),
         ]
         source_rules.extend(("rmp-alias", pattern) for pattern in RMP_REGISTRY_ALIAS_PATTERNS)
+        source_rules.extend(
+            ("rmp-alias", pattern, migration)
+            for pattern, migration in RMP_REGISTRY_TOMBSTONE_PATTERNS
+        )
         scan(src, 0, source_rules)
         if len(raw_lines) > 100:
             findings.append(Finding(
@@ -395,7 +488,8 @@ def main(argv: list[str]) -> int:
         for f in lint_file(path):
             total += 1
             status = "allowed" if f.allowed else "FINDING"
-            print(f"{f.path}:{f.line}: [{f.rule}] {status}: {f.snippet}")
+            migration = f" ({f.migration})" if f.migration else ""
+            print(f"{f.path}:{f.line}: [{f.rule}] {status}: {f.snippet}{migration}")
             if not f.allowed:
                 failed += 1
     print(f"tenkz-lint: {scanned} file(s) scanned, {total} finding(s), "
