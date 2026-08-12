@@ -229,12 +229,14 @@
 \__tenkz_language_registry_key:nnnnnn {kernel-mark}{tint}{flag}{false}{kernel}{Interior tint under the contour.}
 \__tenkz_language_registry_key:nnnnnn {kernel-setup}{pitch}{length}{em-relative}{kernel}{Base metric.}
 \__tenkz_language_registry_key:nnnnnn {kernel-setup}{sizes}{size-table}{bundled table}{kernel}{Size-class table.}
-% Nothing in the benchmark or in a workflow sets the flag, and 51 of the 130
-% benchmark cases spell physical= alone, which it refuses.  Its only sources
-% are the five refusal fixtures tests/tenkz/kernel/negative/n_strict_*.tex.
-% What holds the sugar contract is the kernel probe instead: eleven sugar
-% spellings pinned byte-identical to their expansions in events and in pixels.
-\__tenkz_language_registry_key:nnnnnn {kernel-setup}{strict}{flag}{false}{kernel}{Rejects sugar; only five refusal fixtures set it.}
+% Nothing in the benchmark or in a workflow turns the flag on, and 51 of the
+% 130 benchmark cases spell physical= alone, which it refuses.  The five
+% refusal fixtures tests/tenkz/kernel/negative/n_strict_*.tex are the only
+% sources that enable it; r_false_flags spells strict=false, which is the
+% default restated.  What holds the sugar contract is the kernel probe
+% instead: eleven sugar spellings pinned byte-identical to their expansions
+% in events and in pixels.
+\__tenkz_language_registry_key:nnnnnn {kernel-setup}{strict}{flag}{false}{kernel}{Rejects sugar; only five refusal fixtures enable it.}
 \__tenkz_language_registry_key:nnnnnn {kernel-setup}{theme}{identifier}{house}{kernel}{Semantic ink theme.}
 \__tenkz_language_registry_key:nnnnnn {kernel-declare}{hue}{hue-source}{house cycle}{kernel}{Species ink; source:* reproduces a cited palette.}
 \__tenkz_language_registry_key:nnnnnn {kernel-declare}{base}{identifier}{empty}{kernel}{Skin the declaration extends.}

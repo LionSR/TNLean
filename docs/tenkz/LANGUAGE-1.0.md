@@ -228,7 +228,7 @@ cited paper's palette reaches a contour and the string that ends in it alike.
 |---|---|---|
 | `pitch=` | length | em-relative; the exact ratio is a named row of the metric registry |
 | `sizes=` | size-table | bundled table |
-| `strict` | flag | false; only five refusal fixtures set it |
+| `strict` | flag | false; only five refusal fixtures enable it |
 | `theme=` | identifier | `house` |
 
 ### 2.7 Value types (24)
@@ -513,8 +513,9 @@ a circle frame. Outside the benchmark, four blueprint figures and eighteen
 compiled kernel fixtures hold the clause by standing two or more stations on a
 circle; two further compiled fixtures and six refusal fixtures name the frame
 without spacing a pair.
-Consumers, basis: `rmp-app-czx-state`, `rmp-iii-a-ghz-state`,
-`rmp-iii-b-condensation`, `rmp-workbench-iii-ghz-state-workbench`.
+Consumers, basis: `rmp-app-czx-state`, `rmp-ii-peps-marginal`,
+`rmp-iii-a-ghz-state`, `rmp-iii-b-condensation`,
+`rmp-workbench-iii-ghz-state-workbench`.
 Consumers, transverse pairing: `rmp-ii-peps-marginal`,
 `rmp-iii-b-condensation`.
 
