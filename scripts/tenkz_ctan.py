@@ -96,8 +96,13 @@ PAYLOAD = re.compile(
 # load, and a closure that missed it would let the manifest pin a dependency
 # list the package does not have.
 INPUT_CALL = re.compile(r"\\input\s*\{([^}]*)\}", re.DOTALL)
+# Both spellings of a package load. A `.sty` writes `\RequirePackage`, but
+# nothing stops a staged runtime file from writing `\usepackage`, and the two
+# load the same package: a closure that read only the first would let a load
+# reach an upload without reaching the pin, and would report the retired front
+# ends absent while one of them was being loaded.
 REQUIRE_CALL = re.compile(
-    r"\\RequirePackage\s*(?:\[[^]]*\]\s*)?\{([^}]*)\}", re.DOTALL
+    r"\\(?:RequirePackage|usepackage)\s*(?:\[[^]]*\]\s*)?\{([^}]*)\}", re.DOTALL
 )
 LIBRARY_CALL = re.compile(r"\\usetikzlibrary\s*\{([^}]*)\}", re.DOTALL)
 
@@ -209,47 +214,64 @@ RETIRED_DEPENDENCIES = ("tikz-cd", "tikzcd", "quantikz")
 REGENERATED_SUFFIXES = frozenset({".dtx", ".ins", ".fmt", ".mf", ".drv"})
 
 # The primitives a submission may not need, because arXiv compiles without
-# `\write18`. tenkz draws with TikZ and computes with expl3, so it calls none
-# of them; the check is what keeps that true.
+# `\write18`. tenkz writes its event stream to a file stream it allocates, and
+# calls nothing that reaches a shell; the check is what keeps that true.
 #
-# The stream is a number, not a spelling. TeX's integer scanner takes optional
-# space, leading zeros, and a `"` or `'` prefix for hexadecimal and octal, so
-# `\write 18`, `\write018`, `\write"12`, and `\write'22` all open stream 18,
-# and so does a run of signs with an even number of minuses: `\write+18` and
-# `\write--18`. The constant is therefore read and evaluated rather than
-# matched against one way of writing it. What this does not read is a stream held in a register or
-# an expl3 stream variable, which no constant search can: a submission that
-# reached the shell that way would need the run to catch it, and the offline
-# compile runs with shell escape off for exactly that reason.
-WRITE_STREAM = re.compile(
-    r"\\write(?P<signs>[\s+-]*)"
-    r"(?:\"(?P<hex>[0-9A-Fa-f]+)|'(?P<oct>[0-7]+)|(?P<dec>[0-9]+))"
+# The gate fails closed, because TeX's integer scanner accepts more spellings
+# of 18 than a pattern can enumerate: space, leading zeros, a run of signs, `"`
+# for hexadecimal and `'` for octal, a backtick character constant, `\numexpr`,
+# a register. So a `\write` is read three ways and refused if it is none of
+# them: a constant, evaluated in the base its prefix names and compared with
+# 18; a stream the same file allocated with `\newwrite` or `\iow_new:N`, which
+# is a file stream by construction and by intent; or anything else, which
+# cannot be shown not to be 18 and is a finding on that ground alone.
+WRITE_CALL = re.compile(
+    r"\\write(?![A-Za-z])(?P<signs>[\s+-]*)"
+    r"(?:\"(?P<hex>[0-9A-Fa-f]+)|'(?P<oct>[0-7]+)|(?P<dec>[0-9]+)"
+    r"|(?P<name>\\[A-Za-z@_:]+))?"
 )
+ALLOCATED_STREAM = re.compile(r"\\(?:newwrite|iow_new:N)\s*(\\[A-Za-z@_:]+)")
 SHELL_ESCAPE_NAME = re.compile(r"\\ShellEscape\b")
 SHELL_ESCAPE_STREAM = 18
 
 
 def shell_escape_call(text: str) -> str:
-    r"""The first call to the shell-escape stream in `text`, or nothing.
+    r"""What in `text` could reach a shell, named, or nothing.
 
-    Every `\write` constant is evaluated in the base its prefix names and
-    compared with 18, so the reading does not depend on how the number was
-    written.
+    A `\write` to a constant stream is read in the base its prefix names, so
+    the verdict does not depend on how the number was written, and only 18 is
+    a finding. A `\write` to a stream the same file allocated is a file stream.
+    A `\write` to anything else is a finding, because it cannot be shown not to
+    be 18.
     """
 
     named = SHELL_ESCAPE_NAME.search(text)
     if named is not None:
-        return named.group(0)
-    for found in WRITE_STREAM.finditer(text):
+        return f"{named.group(0)}, the shell-escape primitive"
+    allocated = set(ALLOCATED_STREAM.findall(text))
+    for found in WRITE_CALL.finditer(text):
+        if found["name"] is not None:
+            if found["name"] in allocated:
+                continue
+            return (
+                f"{found.group(0).strip()}, a stream this file does not allocate"
+            )
         digits, base = (
             (found["hex"], 16) if found["hex"]
             else (found["oct"], 8) if found["oct"]
-            else (found["dec"], 10)
+            else (found["dec"], 10) if found["dec"]
+            else (None, 10)
         )
+        if digits is None:
+            return (
+                f"{found.group(0).strip()}, whose stream is not a constant this "
+                "reading can evaluate"
+            )
         sign = -1 if found["signs"].count("-") % 2 else 1
         if sign * int(digits, base) == SHELL_ESCAPE_STREAM:
-            return found.group(0)
+            return f"{found.group(0)}, the shell-escape stream"
     return ""
+
 
 # An absolute path in a staged source names the machine that wrote it. The
 # pattern catches the spellings a TeX file can carry: a Unix path or a Windows

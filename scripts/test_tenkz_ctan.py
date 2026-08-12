@@ -781,6 +781,24 @@ def test_a_class_left_out_or_stated_twice_is_caught() -> None:
     ), repeated.failures
 
 
+def test_a_package_load_is_read_in_both_of_its_spellings() -> None:
+    """A `.sty` writes `\\RequirePackage`, but nothing stops a staged runtime
+    file from writing `\\usepackage`, and the two load the same package. A walk
+    that read only the first would report a retired front end absent while it
+    was being loaded."""
+
+    with tempfile.TemporaryDirectory() as directory:
+        source = Path(directory) / "tex"
+        source.mkdir()
+        (source / "tenkz.sty").write_text(
+            STAGE_CONTRACT + "\\usepackage{tikz-cd}\n", encoding="utf-8"
+        )
+        closure = tenkz_ctan.walk_closure(source, "tenkz.sty")
+    assert closure.packages == ["tikz-cd"], closure.packages
+    report = tenkz_ctan.check_dependencies(closure, _ownership([], [], []))
+    assert any("tikz-cd" in reason for reason in report.failures), report.failures
+
+
 def test_a_retired_front_end_load_fails_the_dependency_check() -> None:
     """The removed front ends each brought a load. The walk blanks comments
     before it reads one, so a retired name in the closure is a surviving load
@@ -841,11 +859,25 @@ def test_every_spelling_of_stream_eighteen_is_the_shell_escape_stream() -> None:
                  r"\write018{x}", '\\write"12{x}', r"\write'22{x}",
                  r"\write+18{x}", r"\write--18{x}", r"\ShellEscape{x}"):
         assert tenkz_ctan.shell_escape_call(call), call
+    # The gate fails closed, so a stream the reading cannot evaluate is a
+    # finding on its own: a character constant, an integer expression, a
+    # stream the file never allocated.
+    for unread in (r"\write`^^R{x}", r"\write\numexpr18\relax{x}",
+                   r"\write \myout{x}"):
+        assert tenkz_ctan.shell_escape_call(unread), unread
+    # A stream the same file allocated is a file stream by construction, which
+    # is how the package writes its event stream.
+    allocated = "\\newwrite\\tenkz@log\n\\immediate\\write\\tenkz@log{#1}\n"
+    assert not tenkz_ctan.shell_escape_call(allocated), allocated
+    assert tenkz_ctan.shell_escape_call(
+        "\\immediate\\write\\tenkz@log{#1}\n"
+    ), "a stream nothing allocated passed"
     # Numbers that are not 18 in the base their prefix names, an odd run of
-    # minus signs, and a stream named by a control sequence, which no constant
-    # search can read.
+    # minus signs, and a control sequence that merely starts with the same
+    # letters.
     for quiet in (r"\write17{x}", r"\write180{x}", '\\write"18{x}',
-                  r"\write-18{x}", r"\write+-18{x}", r"\write \myout{x}"):
+                  r"\write-18{x}", r"\write+-18{x}", r"\writer{x}",
+                  r"\iow_now:Nn \g_out {x}"):
         assert not tenkz_ctan.shell_escape_call(quiet), quiet
 
 
