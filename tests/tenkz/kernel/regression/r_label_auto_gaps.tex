@@ -1,0 +1,95 @@
+% Regression: the placements the automatic station cannot read, pinned at
+% the historical south default they had before the station existed.
+%
+% The station reads the frozen wire records in frame coordinates: an
+% endpoint resolves to a cell, and the direction its ink leaves by is the
+% sign of the difference between two cell numbers.  A placement the frame
+% does not chart has no cell to difference, and a route that turns where its
+% own waypoints say does not leave along the chord between its ends.  For
+% those the scan reserves nothing and the station falls back to south, which
+% is exactly where these labels stood before the station was added: no
+% figure regresses, and none of them improves either.
+%
+% Each picture below is a placement the frame reading cannot answer.  They
+% are pinned so the reading that answers them -- bearings between resolved
+% points, turned into the atom's own frame, issue 6195 -- has a target to
+% flip, and so a later change cannot quietly move them without saying so.
+\documentclass{standalone}
+\usepackage{tenkz}
+\makeatletter
+\ExplSyntaxOn
+\file_input:n { tenkz-kernel.code.tex }
+\int_new:N \l__tenkz_test_side_count_int
+\tl_new:N \l__tenkz_test_side_label_tl
+\cs_new_eq:NN
+  \__tenkz_test_side_auto:nN \__tenkz_kernel_r_label_auto_side:nN
+\cs_set_protected:Npn \__tenkz_kernel_r_label_auto_side:nN #1#2
+  {
+    \__tenkz_test_side_auto:nN {#1} #2
+    \int_gincr:N \l__tenkz_test_side_count_int
+    \__tenkz_model_get:nnN {#1} {label} \l__tenkz_test_side_label_tl
+    \str_case:VnF \l__tenkz_test_side_label_tl
+      {
+        {P}
+          {
+            \str_if_eq:VnF #2 {s}
+              { \errmessage{off-cell~named~end~answered:~update~the~pin} }
+          }
+        {Q}
+          {
+            \str_if_eq:VnF #2 {s}
+              { \errmessage{geometric~waypoint~answered:~update~the~pin} }
+          }
+        {R}
+          {
+            \str_if_eq:VnF #2 {s}
+              { \errmessage{interior~waypoint~answered:~update~the~pin} }
+          }
+        {T}
+          {
+            \str_if_eq:VnF #2 {s}
+              { \errmessage{routed~carrier~bead~answered:~update~the~pin} }
+          }
+      }
+      { \errmessage{unexpected~label~in~gap~fixture} }
+  }
+\ExplSyntaxOff
+\makeatother
+\begin{document}
+\tenkzkernel
+% A named endpoint whose atom stands a step off the frame owns no cell, so
+% no difference of cell numbers says which way the wire leaves it.
+\begin{tenkz}[lattice={2x2}, bonds=none]
+  \tn[at=(1,1), name=A]{}
+  \tn[at=1 s of A, name=P, skin=dot]{P}
+  \tn[at=(2,2), name=C]{}
+  \tnwire{P}{C}
+\end{tenkz}
+% A waypoint spelt as a relative address names a point, not a cell, so the
+% departure bearing is a property of the resolved point.
+\begin{tenkz}[lattice={2x3}, bonds=none]
+  \tn[at=(1,1), name=Q, skin=dot]{Q}
+  \tn[at=(1,3), name=E]{}
+  \tnwire[kind=string, via={1 s of Q}]{Q}{E}
+\end{tenkz}
+% An atom named as an interior waypoint is entered and left by the route,
+% and neither of the wire's two ends names it.
+\begin{tenkz}[lattice={3x1}, bonds=none]
+  \tn[at=(1,1), name=F]{}
+  \tn[at=(2,1), name=R, skin=dot]{R}
+  \tn[at=(3,1), name=H]{}
+  \tnwire[kind=string, via={(2,1)}]{F}{H}
+\end{tenkz}
+% A bead on a string that bends through its own waypoints: which faces the
+% carrier crosses at the bead is a property of the route at that arc length.
+\begin{tenkz}[lattice={3x3}, bonds=none]
+  \tn[at=(1,1), name=J]{}
+  \tn[at=(1,3), name=K]{}
+  \tnwire[kind=string, name=RS, via={(3,1),(3,3)}]{J}{K}
+  \tn[at=on RS 0.5, skin=dot]{T}
+\end{tenkz}
+\ExplSyntaxOn
+\int_compare:nNnF { \l__tenkz_test_side_count_int } = {4}
+  { \errmessage{gap~fixture~did~not~station~four~labels} }
+\ExplSyntaxOff
+\end{document}

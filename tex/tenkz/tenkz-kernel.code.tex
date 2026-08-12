@@ -15697,6 +15697,7 @@
 \tl_new:N \l__tenkz_kernel_lab_face_tl
 \tl_new:N \l__tenkz_kernel_lab_via_tl
 \tl_new:N \l__tenkz_kernel_lab_node_tl
+\tl_new:N \l__tenkz_kernel_lab_t_tl
 \tl_new:N \l__tenkz_kernel_lab_top_tl
 \tl_new:N \l__tenkz_kernel_lab_left_tl
 \tl_new:N \l__tenkz_kernel_lab_rows_tl
@@ -15815,10 +15816,14 @@
                 \__tenkz_kernel_r_label_station_lanes:V
                   \l__tenkz_kernel_lab_atom_tl
                 \__tenkz_kernel_r_label_next_cell:nnn {#1} {#3} {#4}
-                \bool_if:NT \l__tenkz_kernel_lab_far_bool
+                \bool_if:NTF \l__tenkz_kernel_lab_far_bool
                   {
                     \__tenkz_kernel_r_label_mark_toward:V
                       \l__tenkz_kernel_lab_atom_tl
+                  }
+                  {
+                    \__tenkz_kernel_r_label_open_face:Vnn
+                      \l__tenkz_kernel_lab_atom_tl {#1} {#4}
                   }
               }
           }
@@ -16045,6 +16050,24 @@
       { \__tenkz_kernel_r_label_mark_side:nn {#1} {e} }
   }
 \cs_generate_variant:Nn \__tenkz_kernel_r_label_col_lane:nn { Vn }
+% A wire with one authored end and one open end keeps the open side as a
+% compass word rather than as a node, so no cell says where the ink goes.
+% The word itself does: the stub leaves the authored end by that face.  An
+% open side spelt `route` names no direction of its own and answers nothing.
+\cs_new_protected:Npn \__tenkz_kernel_r_label_open_face:nnn #1#2#3
+  {
+    \str_if_eq:nnTF {#3} {first}
+      { \__tenkz_model_get:nnN {#2} {to-open} \l__tenkz_kernel_lab_face_tl }
+      { \__tenkz_model_get:nnN {#2} {from-open} \l__tenkz_kernel_lab_face_tl }
+    \bool_lazy_and:nnT
+      { ! \quark_if_no_value_p:N \l__tenkz_kernel_lab_face_tl }
+      { ! \str_if_eq_p:Vn \l__tenkz_kernel_lab_face_tl {route} }
+      {
+        \__tenkz_kernel_r_label_mark:ne {#1}
+          { \tl_use:N \l__tenkz_kernel_lab_face_tl }
+      }
+  }
+\cs_generate_variant:Nn \__tenkz_kernel_r_label_open_face:nnn { Vnn }
 % The endpoint stands at the near cell and its ink leaves toward the far
 % one: a step along a row or a column takes the face it crosses.  The ink
 % also runs the length of the lane it leaves by, so it takes any station
@@ -16056,14 +16079,43 @@
     \int_compare:nNnTF
       { \l__tenkz_kernel_lab_far_row_tl } = { \l__tenkz_kernel_lab_row_tl }
       {
-        \int_compare:nNnT
-          { \l__tenkz_kernel_lab_far_col_tl }
-          < { \l__tenkz_kernel_lab_col_tl }
-          { \__tenkz_kernel_r_label_mark_side:nn {#1} {w} }
-        \int_compare:nNnT
-          { \l__tenkz_kernel_lab_far_col_tl }
-          > { \l__tenkz_kernel_lab_col_tl }
-          { \__tenkz_kernel_r_label_mark_side:nn {#1} {e} }
+        % On a circle the stations close into a ring, so the step from the
+        % last column to the first runs east and not back across every
+        % column between.  Numeric order reads that seam backwards and would
+        % reserve the face opposite the ink, which is worse than reserving
+        % none, so the seam answers nothing until the station is read in the
+        % endpoint's own frame.
+        \bool_lazy_and:nnF
+          { \str_if_eq_p:ee { \__tenkz_kernel_r_frame_word: } {circle} }
+          {
+            \bool_lazy_or_p:nn
+              {
+                \int_compare_p:nNn
+                  {
+                    \l__tenkz_kernel_lab_far_col_tl
+                    - \l__tenkz_kernel_lab_col_tl
+                  }
+                  = { \__tenkz_kernel_cols: - 1 }
+              }
+              {
+                \int_compare_p:nNn
+                  {
+                    \l__tenkz_kernel_lab_col_tl
+                    - \l__tenkz_kernel_lab_far_col_tl
+                  }
+                  = { \__tenkz_kernel_cols: - 1 }
+              }
+          }
+          {
+            \int_compare:nNnT
+              { \l__tenkz_kernel_lab_far_col_tl }
+              < { \l__tenkz_kernel_lab_col_tl }
+              { \__tenkz_kernel_r_label_mark_side:nn {#1} {w} }
+            \int_compare:nNnT
+              { \l__tenkz_kernel_lab_far_col_tl }
+              > { \l__tenkz_kernel_lab_col_tl }
+              { \__tenkz_kernel_r_label_mark_side:nn {#1} {e} }
+          }
         \int_compare:nNnF
           { \l__tenkz_kernel_lab_far_col_tl }
           = { \l__tenkz_kernel_lab_col_tl }
@@ -16101,11 +16153,10 @@
   }
 \cs_generate_variant:Nn \__tenkz_kernel_r_label_mark_toward:n { V }
 % An atom threaded on a wire has no cell, so no endpoint names it.  Its
-% carrier runs through the bead, and the two faces that run crosses are
-% taken: a policy leg reaches the bead along the face it grows from, and an
-% index wire between two cells of one column runs north and south while one
-% along a row runs east and west.  A bending carrier turns where its own
-% waypoints say, so it leaves the bead through no face this stage can name.
+% carrier runs through the bead, and the faces that run crosses are taken.
+% The fraction the bead stands at says how many: at an end of the route the
+% carrier only leaves the bead, and one face carries ink; anywhere between,
+% the carrier arrives and leaves, and two do.
 \cs_new_protected:Npn \__tenkz_kernel_r_label_bead_faces:n #1
   {
     \__tenkz_model_get:nnN {#1} {node} \l__tenkz_kernel_lab_node_tl
@@ -16115,6 +16166,11 @@
           { \__tenkz_kernel_node_item:Nn \l__tenkz_kernel_lab_node_tl {kind} }
           {onwire}
           {
+            \tl_set:Ne \l__tenkz_kernel_lab_t_tl
+              {
+                \__tenkz_kernel_node_item:Nn
+                  \l__tenkz_kernel_lab_node_tl {t}
+              }
             \prop_get:NeN \l__tenkz_kernel_named_prop
               {
                 \__tenkz_kernel_node_item:Nn
@@ -16129,27 +16185,50 @@
           }
       }
   }
+% Face #2 is the one the carrier leaves the bead by on its way to the route's
+% far end, and #3 the one it arrives from.  A bead at the head of the route
+% takes only the first, one at the tail only the second, and one in between
+% takes both.
+\cs_new_protected:Npn \__tenkz_kernel_r_label_bead_mark:nnn #1#2#3
+  {
+    \fp_compare:nNnTF { \l__tenkz_kernel_lab_t_tl } = {0}
+      { \__tenkz_kernel_r_label_mark:ne {#1} {#2} }
+      {
+        \fp_compare:nNnTF { \l__tenkz_kernel_lab_t_tl } = {1}
+          { \__tenkz_kernel_r_label_mark:ne {#1} {#3} }
+          {
+            \__tenkz_kernel_r_label_mark:ne {#1} {#2}
+            \__tenkz_kernel_r_label_mark:ne {#1} {#3}
+          }
+      }
+  }
+% A policy leg grows outward from the face its host names, so it leaves a
+% bead at the host end by that face and arrives at the tip from its
+% opposite.  An index wire between two cells runs along the axis those cells
+% share.  A string bending through its own waypoints turns where the route
+% says and reaches the bead by no face this stage can name; that gap is the
+% frame-cell reading's own limit, and the geometric station named in the
+% pull request answers it.
 \cs_new_protected:Npn \__tenkz_kernel_r_label_carrier_faces:nn #1#2
   {
-    \tl_set:Nn \l__tenkz_kernel_lab_via_tl { \q_no_value }
-    \__tenkz_model_get:nnN {#1} {kind} \l__tenkz_kernel_lab_node_tl
-    \str_if_eq:VnT \l__tenkz_kernel_lab_node_tl {string}
-      { \__tenkz_model_get:nnN {#1} {via} \l__tenkz_kernel_lab_via_tl }
-    \quark_if_no_value:NT \l__tenkz_kernel_lab_via_tl
+    \__tenkz_model_get:nnN {#1} {face} \l__tenkz_kernel_lab_face_tl
+    \quark_if_no_value:NTF \l__tenkz_kernel_lab_face_tl
       {
-        \__tenkz_model_get:nnN {#1} {face} \l__tenkz_kernel_lab_face_tl
-        \quark_if_no_value:NTF \l__tenkz_kernel_lab_face_tl
+        \tl_set:Nn \l__tenkz_kernel_lab_via_tl { \q_no_value }
+        \__tenkz_model_get:nnN {#1} {kind} \l__tenkz_kernel_lab_node_tl
+        \str_if_eq:VnT \l__tenkz_kernel_lab_node_tl {string}
+          { \__tenkz_model_get:nnN {#1} {via} \l__tenkz_kernel_lab_via_tl }
+        \quark_if_no_value:NT \l__tenkz_kernel_lab_via_tl
           { \__tenkz_kernel_r_label_carrier_run:nn {#1} {#2} }
+      }
+      {
+        \__tenkz_kernel_r_label_bead_mark:nnn {#2}
+          { \tl_use:N \l__tenkz_kernel_lab_face_tl }
           {
-            \__tenkz_kernel_r_label_mark:ne {#2}
-              { \tl_use:N \l__tenkz_kernel_lab_face_tl }
-            \__tenkz_kernel_r_label_mark:ne {#2}
+            \fp_eval:n
               {
-                \fp_eval:n
-                  {
-                    \__tenkz_kernel_r_compass:n
-                      { \tl_use:N \l__tenkz_kernel_lab_face_tl } + 180
-                  }
+                \__tenkz_kernel_r_compass:n
+                  { \tl_use:N \l__tenkz_kernel_lab_face_tl } + 180
               }
           }
       }
@@ -16174,16 +16253,21 @@
           { \l__tenkz_kernel_lab_cell_bool }
           { \l__tenkz_kernel_lab_far_bool }
           {
+            % the run leaves the bead toward the `to` cell and arrives
+            % from the `from` cell, and the fraction says which it uses
             \int_compare:nNnTF
               { \l__tenkz_kernel_lab_far_col_tl }
               = { \l__tenkz_kernel_lab_col_tl }
               {
-                \int_compare:nNnF
+                \int_compare:nNnTF
                   { \l__tenkz_kernel_lab_far_row_tl }
-                  = { \l__tenkz_kernel_lab_row_tl }
+                  > { \l__tenkz_kernel_lab_row_tl }
+                  { \__tenkz_kernel_r_label_bead_mark:nnn {#2} {s} {n} }
                   {
-                    \__tenkz_kernel_r_label_mark_side:nn {#2} {n}
-                    \__tenkz_kernel_r_label_mark_side:nn {#2} {s}
+                    \int_compare:nNnT
+                      { \l__tenkz_kernel_lab_far_row_tl }
+                      < { \l__tenkz_kernel_lab_row_tl }
+                      { \__tenkz_kernel_r_label_bead_mark:nnn {#2} {n} {s} }
                   }
               }
               {
@@ -16191,8 +16275,11 @@
                   { \l__tenkz_kernel_lab_far_row_tl }
                   = { \l__tenkz_kernel_lab_row_tl }
                   {
-                    \__tenkz_kernel_r_label_mark_side:nn {#2} {e}
-                    \__tenkz_kernel_r_label_mark_side:nn {#2} {w}
+                    \int_compare:nNnTF
+                      { \l__tenkz_kernel_lab_far_col_tl }
+                      > { \l__tenkz_kernel_lab_col_tl }
+                      { \__tenkz_kernel_r_label_bead_mark:nnn {#2} {e} {w} }
+                      { \__tenkz_kernel_r_label_bead_mark:nnn {#2} {w} {e} }
                   }
               }
           }

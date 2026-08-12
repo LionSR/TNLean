@@ -1,7 +1,9 @@
 % Regression: an atom threaded on a wire stands at no cell, so no endpoint
 % names it and every face looks free.  Its carrier runs through the bead,
-% and the two faces that run crosses are the ones the automatic station has
-% to avoid.
+% and the faces that run crosses are the ones the automatic station has to
+% avoid.  How many it crosses depends on where along the carrier the bead
+% stands: at either end of the route the carrier only leaves the bead and
+% one face carries ink, so reserving both would give up a free face.
 \documentclass{standalone}
 \usepackage{tenkz}
 \makeatletter
@@ -28,6 +30,21 @@
             \str_if_eq:VnF #2 {s}
               { \errmessage{a~bead~on~a~row~wire~lost~its~free~south} }
           }
+        {F}
+          {
+            \str_if_eq:VnF #2 {n}
+              { \errmessage{a~bead~at~the~head~of~a~route~gave~up~north} }
+          }
+        {G}
+          {
+            \str_if_eq:VnF #2 {s}
+              { \errmessage{a~bead~at~the~tail~of~a~route~gave~up~south} }
+          }
+        {H}
+          {
+            \str_if_eq:VnF #2 {e}
+              { \errmessage{a~leg~carrier~left~the~face~it~grows~from~free} }
+          }
       }
       { \errmessage{unexpected~label~in~on-wire~fixture} }
   }
@@ -49,8 +66,29 @@
   \tnwire[name=Y]{R}{S}
   \tn[at=on Y 0.5, skin=dot]{E}
 \end{tenkz}
+% At the head of the route the carrier only runs south out of the bead, so
+% north stays free and the first free face in s, n, e, w is north.
+\begin{tenkz}[lattice={3x1}, bonds=none]
+  \tn[at=(1,1), name=P0]{}
+  \tn[at=(3,1), name=Q0]{}
+  \tnwire[name=W0]{P0}{Q0}
+  \tn[at=on W0 0, skin=dot]{F}
+\end{tenkz}
+% At the tail the carrier only arrives from the north, so south stays free.
+\begin{tenkz}[lattice={3x1}, bonds=none]
+  \tn[at=(1,1), name=P1]{}
+  \tn[at=(3,1), name=Q1]{}
+  \tnwire[name=W1]{P1}{Q1}
+  \tn[at=on W1 1, skin=dot]{G}
+\end{tenkz}
+% A policy leg carries its bead too: the leg grows south out of its host, so
+% the bead's north and south both carry ink and east is the first face free.
+\begin{tenkz}[rows={wire}, cols=2, physical=down]
+  \tn{} & \tn{}
+  \tn[at=on leg-s-1-1 0.5, skin=dot]{H}
+\end{tenkz}
 \ExplSyntaxOn
-\int_compare:nNnF { \l__tenkz_test_side_count_int } = {2}
-  { \errmessage{on-wire~fixture~did~not~station~two~labels} }
+\int_compare:nNnF { \l__tenkz_test_side_count_int } = {5}
+  { \errmessage{on-wire~fixture~did~not~station~five~labels} }
 \ExplSyntaxOff
 \end{document}
