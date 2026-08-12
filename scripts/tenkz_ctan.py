@@ -95,7 +95,8 @@ PAYLOAD = re.compile(
 # its arguments, so the patterns allow it too: `\RequirePackage {tikz}` is a
 # load, and a closure that missed it would let the manifest pin a dependency
 # list the package does not have.
-# Every spelling of an input. The braced one is tried first, then Web2C's
+# Every spelling of an input, expl3's `\file_input:n` among them. The braced
+# one is tried first, then Web2C's
 # quoted form, which is how a name holding a space is written and which may
 # follow the control word with no space at all, then the bare one, which reads
 # to the next space as TeX does and stops at a brace, a comment, or a control
@@ -103,7 +104,7 @@ PAYLOAD = re.compile(
 # A walk that read one spelling would let a stage module, or a package, reach
 # an upload without reaching the pin.
 INPUT_CALL = re.compile(
-    r"\\input\s*\{\s*\"?([^}\"]*?)\"?\s*\}"
+    r"\\(?:input|file_input:n)\s*\{\s*\"?([^}\"]*?)\"?\s*\}"
     r"|\\input\s*\"([^\"]+)\""
     r"|\\input\s+([^\s{}\\%\"]+)",
     re.DOTALL,
@@ -295,7 +296,7 @@ ALLOCATED_STREAM = re.compile(r"\\(?:newwrite|iow_new:N)\s*(\\[A-Za-z@_:]+)")
 # the allocation ground and is refused with every other unreadable stream.
 REDEFINED_NAME = re.compile(
     r"\\(?:def|edef|gdef|xdef|let|chardef|mathchardef|countdef|dimendef"
-    r"|toksdef|skipdef|muskipdef|cs_set[a-z_]*:Npn|cs_new[a-z_]*:Npn)"
+    r"|toksdef|skipdef|muskipdef|cs_[a-z_]*:N[a-zA-Z]*)"
     r"\s*(\\[A-Za-z@_:]+)"
 )
 # Web2C reads a file name whose first character is a bar as a command to run,
@@ -337,6 +338,24 @@ SHELL_ESCAPE_NAME = re.compile(
     r"(?![A-Za-z@_:])"
 )
 SHELL_ESCAPE_STREAM = 18
+
+
+def absolute_load(text: str) -> str:
+    """The first load in `text` naming an absolute path, or nothing.
+
+    `\\graphicspath` is read separately because its argument is a list: the
+    pattern that reads a single load would see only the first directory, and
+    an absolute second one names the machine just as loudly.
+    """
+
+    found = ABSOLUTE_LOAD.search(text)
+    if found is not None:
+        return found.group(0)
+    for declaration in GRAPHICS_PATH.finditer(text):
+        for directory in GRAPHICS_DIRECTORY.findall(declaration.group(1)):
+            if re.match(ABSOLUTE_PATH_HEAD, directory.strip().strip('"')):
+                return f"\\graphicspath entry {directory.strip()}"
+    return ""
 
 
 def uncontrolled(text: str) -> str:
@@ -411,6 +430,11 @@ def shell_escape_call(text: str) -> str:
 # included: a runtime whose behaviour depends on a machine-local file is not
 # submittable even when the file's absence is handled.
 ABSOLUTE_PATH_HEAD = r"(?:/|[A-Za-z]:[\\/])"
+# `\graphicspath` takes a brace group of brace groups and every one of them is
+# a directory a later image load resolves against, so the declaration is read
+# whole rather than through its first entry.
+GRAPHICS_PATH = re.compile(r"\\graphicspath\s*\{((?:\s*\{[^{}]*\}\s*)+)\}")
+GRAPHICS_DIRECTORY = re.compile(r"\{\s*\"?\s*([^{}]*)\}")
 ABSOLUTE_LOAD = re.compile(
     r"\\(?:input|include|usepackage|RequirePackageWithOptions|RequirePackage"
     r"|InputIfFileExists|IfFileExists|includegraphics|file_input:n"
@@ -1526,7 +1550,7 @@ def check_arxiv(tree: Path, closure: Closure) -> Report:
             continue
         text = strip_comments(path.read_bytes().decode("utf-8", errors="replace"))
         report.require(
-            ABSOLUTE_LOAD.search(uncontrolled(text)) is None,
+            not absolute_load(uncontrolled(text)),
             f"{path.name} loads a file by absolute path, which names the "
             "machine it was written on",
         )
