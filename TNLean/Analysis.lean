@@ -60,5 +60,6 @@ import TNLean.Analysis.TraceCFC
 import TNLean.Analysis.TraceNormAbs
 import TNLean.Analysis.TraceNormContractivity
 import TNLean.Analysis.TraceNormVariational
+import TNLean.Analysis.TwoProjectionAngleBlock
 import TNLean.Analysis.TwoProjectionCompression
 import TNLean.Analysis.UpperTriangularBound
