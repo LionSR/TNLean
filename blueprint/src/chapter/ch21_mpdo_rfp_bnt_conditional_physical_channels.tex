@@ -20,8 +20,8 @@
         def:mpdo_state_preparation_map,
         def:mpdo_equiv_reindex_map,
         def:mpdo_right_partial_trace_map,
-        def:mpdo_single_kraus_map}
-    \uses{def:trace_prepare_map}
+        def:mpdo_single_kraus_map,
+        def:trace_prepare_map}
     Let $P\in\MN{m}$ be an orthogonal projection, let
     $\rho\in\MN{n}$ be positive semidefinite with $\tr(\rho)=1$, and let
     $\mathcal E\colon\MN{m}\to\MN{n}$ be completely positive.  Define the
@@ -66,8 +66,8 @@
         lem:is_kraus_cp_comp,
         lem:is_kraus_cptp_comp,
         lem:is_kraus_cp_add,
-        thm:is_kraus_cptp_of_is_kraus_cp_trace_preserving}
-    \uses{def:trace_prepare_map}
+        thm:is_kraus_cptp_of_is_kraus_cp_trace_preserving,
+        def:trace_prepare_map}
     The map $\mathcal D_\rho$ factors as state preparation, interchange of
     the two tensor factors, and partial trace.  The map
     $X\mapsto(I-P)X(I-P)^\dagger$ has a single Kraus operator.  Thus the two
