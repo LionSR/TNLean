@@ -149,7 +149,56 @@ def main() -> int:
         raise SystemExit("kernel/sugar event-equivalence probe did not compile")
     if canonical_events != sugared_events:
         raise SystemExit("sandwich and rows={ket,op,bra} emitted different semantic events")
-    print("PASS: registry, typed atom diagnostic, and sugar event equivalence")
+    # The mark forms retired in 0.9 stay installed as tombstones: each one is
+    # still recognised, still refused, and names the live word that says what
+    # it said.  A reader who meets the word in an old document is told what
+    # replaced it rather than being handed the alphabet that no longer has it.
+    form_row = next(
+        entry.fields
+        for entry in registry
+        if entry.kind == "key" and entry.fields[:2] == ("kernel-mark", "form")
+    )
+    if form_row[2] != "enum(bracket|enclosure|label|prose)":
+        raise SystemExit(f"the mark form alphabet is no longer the contract's: {form_row[2]}")
+    for retired, migration in (
+        ("brace-above", "form=bracket with label pos=90"),
+        ("brace-below", "form=bracket, which speaks from the south"),
+        ("cut", "form=enclosure over that selection"),
+        ("band", "form=enclosure with tint"),
+    ):
+        refused = compile_source(
+            rf"""\documentclass{{standalone}}
+\usepackage{{tenkz}}
+\begin{{document}}
+\begin{{tenkz}}[rows={{ket}}, cols=2]
+  \tn{{A}} & \tn{{A}}
+  \tnmark[form={retired}]{{(1,1) .. (1,2)}}{{$L$}}
+\end{{tenkz}}
+\end{{document}}
+"""
+        )
+        # A message longer than one line is wrapped with the package's own
+        # continuation prefix, which stands between the words it broke.
+        transcript = " ".join(refused.stdout.replace("(tenkz)", " ").split())
+        if refused.returncode == 0 or "TKZ-LANG-TOMBSTONE" not in transcript:
+            raise SystemExit(f"form={retired} was not refused as a tombstone")
+        if migration not in transcript:
+            raise SystemExit(f"form={retired} was refused without naming {migration}")
+    live = compile_source(r"""\documentclass{standalone}
+\usepackage{tenkz}
+\begin{document}
+\begin{tenkz}[rows={ket}, cols=2]
+  \tn{A} & \tn{A}
+  \tnmark[form=bracket]{(1,1) .. (1,2)}{$L$}
+\end{tenkz}
+\end{document}
+""")
+    if live.returncode:
+        raise SystemExit(f"the surviving bracket form did not compile:\n{live.stdout}")
+    print(
+        "PASS: registry, typed atom diagnostic, sugar event equivalence, "
+        "and the retired mark-form tombstones"
+    )
     return 0
 
 

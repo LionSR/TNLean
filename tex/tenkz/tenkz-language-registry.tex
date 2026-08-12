@@ -93,7 +93,7 @@
 \__tenkz_language_registry_command:nnnnn {tenkzkernel}{setup-extension}{setup}
   {\tenkzkernel}{Rebinds the kernel surface; tenkz.sty calls it at load, so a document's own call is inert. Sunset 1.0.}
 \__tenkz_language_registry_command:nnnnn {tnprose}{regions-annotations}{picture}
-  {\tnprose{text}}{Sugar: recorded prose in place of a diagram.}
+  {\tnprose{text}}{Sugar: prose in place of a diagram. The text enters the record stream and no ink reaches the page.}
 \__tenkz_language_registry_example:nnn {tnwire}{tex/tenkz/examples/api/tnwire.tex}
   {A closed wire with positional ends is a hard error.}
 \__tenkz_language_registry_example:nnn {tnmark}{tex/tenkz/examples/api/tnmark.tex}
@@ -191,7 +191,10 @@
 \__tenkz_language_registry_key:nnnnnn {kernel-wire}{route}{enum(straight|orth|arc)}{straight}{kernel}{Path family.}
 \__tenkz_language_registry_key:nnnnnn {kernel-wire}{via}{address-list}{empty}{kernel}{Waypoints.}
 \__tenkz_language_registry_key:nnnnnn {kernel-wire}{bend}{number}{metric}{kernel}{Arc bend factor.}
-\__tenkz_language_registry_key:nnnnnn {kernel-wire}{weight}{enum(single|double|bundle=n)}{single}{kernel}{Strand multiplicity.}
+% The multiplicity is a claim the boundary-signature audit carries, not a
+% count the rail draws: `double` and `bundle=n` both stroke one rail and
+% expand to their own multiplicity in the exposed entry (LANGUAGE-1.0 2.4).
+\__tenkz_language_registry_key:nnnnnn {kernel-wire}{weight}{enum(single|double|bundle=n)}{single}{kernel}{Strand multiplicity in the boundary signature; every weight strokes one rail.}
 \__tenkz_language_registry_key:nnnnnn {kernel-wire}{species}{declared-name}{empty}{kernel}{Semantic species.}
 \__tenkz_language_registry_key:nnnnnn {kernel-wire}{wind}{pair}{zero}{kernel}{Homotopy class on traced frames.}
 \__tenkz_language_registry_key:nnnnnn {kernel-wire}{around}{address-list}{empty}{kernel}{Silhouette detour targets.}
@@ -212,7 +215,15 @@
 \__tenkz_language_registry_key:nnnnnn {kernel-wire}{stroke}{enum(solid|dashed|dotted)}{solid}{kernel}{Declared stroke pattern of the rail.}
 \__tenkz_language_registry_key:nnnnnn {kernel-wire}{name}{identifier}{generated}{kernel}{Addressable name.}
 \__tenkz_language_registry_key:nnnnnn {kernel-wire}{closed}{flag}{false}{kernel}{A smooth closed cycle; takes no ends.}
-\__tenkz_language_registry_key:nnnnnn {kernel-mark}{form}{enum(bracket|brace-above|brace-below|enclosure|cut|band|label|prose)}{label}{kernel}{Mark form.}
+% The form alphabet closes on the three words that put ink on the page, plus
+% the recording `prose` row the sugar ledger keeps (SHRINK 2026-08-11).  The
+% four spellings struck here accepted a record and drew nothing: `brace-above`
+% and `brace-below` are one `bracket`, whose arc speaks from the side its
+% label sits on; `band` never differed from an `enclosure` except in the shape
+% of its selection; `cut` had no consumer in the benchmark or the blueprint.
+% What the sources brace, the benchmark already brackets
+% (rmp-ii-spectrum-transfer); what they cut, it encloses.
+\__tenkz_language_registry_key:nnnnnn {kernel-mark}{form}{enum(bracket|enclosure|label|prose)}{label}{kernel}{Mark form; the prose form records its text and draws nothing.}
 \__tenkz_language_registry_key:nnnnnn {kernel-mark}{slot}{semantic-slot}{selected}{kernel}{Semantic tint.}
 \__tenkz_language_registry_key:nnnnnn {kernel-mark}{species}{declared-name}{empty}{kernel}{Semantic species.}
 \__tenkz_language_registry_key:nnnnnn {kernel-mark}{inset}{number}{0}{kernel}{Nested-contour step.}
