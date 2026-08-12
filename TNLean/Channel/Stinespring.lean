@@ -103,9 +103,14 @@ theorem stinespringV_isometry_iff_kraus_normalized {r : ℕ}
 where `V` is the Stinespring isometry. This matches the Kraus form
 `T*(A) = ∑ⱼ Kⱼ† A Kⱼ`.
 In this file, `T*` is the Heisenberg dual acting on observables, while the
-Schrödinger map uses adjoints in the opposite order. -/
-theorem stinespring_dual_representation {r : ℕ}
-    (K : Fin r → Matrix (Fin D) (Fin D) ℂ) (A : Matrix (Fin D) (Fin D) ℂ) :
+Schrödinger map uses adjoints in the opposite order.
+
+The two index types are unrelated: for Kraus operators `Kⱼ : Matrix β α ℂ` the
+observable `A` lives on the output space `β` and the displayed identity lives on
+the input space `α`. This is Wolf's rectangular shape `T : M_d → M_{d'}`, with
+`α = ℂ^d` and `β = ℂ^{d'}`; the square case is `α = β`. -/
+theorem stinespring_dual_representation {r : ℕ} {α β : Type*} [Fintype β]
+    (K : Fin r → Matrix β α ℂ) (A : Matrix β β ℂ) :
     (stinespringV K)ᴴ *
       -- This is `stinespringPi A` (defined below); kept inline to avoid forward reference.
       (kroneckerMap (· * ·) A (1 : Matrix (Fin r) (Fin r) ℂ)) *
@@ -209,26 +214,30 @@ theorem stinespring_schrodinger_representation {r : ℕ}
 /-! ### `π` as a concrete `*`-representation and existential Stinespring statements -/
 
 /-- The concrete representation `π(A) = A ⊗ 𝟙_r` used in the finite-dimensional
-Stinespring construction. -/
-noncomputable def stinespringPi {r : ℕ}
-    (A : Matrix (Fin D) (Fin D) ℂ) :
-    Matrix (Fin D × Fin r) (Fin D × Fin r) ℂ :=
+Stinespring construction.
+
+The observable index type is arbitrary, so that `π` also covers Wolf's
+rectangular setting, where `A` ranges over the output algebra `M_{d'}` while the
+Stinespring matrix has input space `ℂ^d`. -/
+noncomputable def stinespringPi {r : ℕ} {β : Type*}
+    (A : Matrix β β ℂ) :
+    Matrix (β × Fin r) (β × Fin r) ℂ :=
   kroneckerMap (· * ·) A (1 : Matrix (Fin r) (Fin r) ℂ)
 
 @[simp]
-theorem stinespringPi_apply {r : ℕ}
-    (A : Matrix (Fin D) (Fin D) ℂ) (i j : Fin D) (a b : Fin r) :
+theorem stinespringPi_apply {r : ℕ} {β : Type*}
+    (A : Matrix β β ℂ) (i j : β) (a b : Fin r) :
     stinespringPi (r := r) A (i, a) (j, b) = A i j * (1 : Matrix (Fin r) (Fin r) ℂ) a b := rfl
 
 @[simp]
-theorem stinespringPi_one {r : ℕ} :
-    stinespringPi (D := D) (r := r) (1 : Matrix (Fin D) (Fin D) ℂ) = 1 := by
+theorem stinespringPi_one {r : ℕ} {β : Type*} [DecidableEq β] :
+    stinespringPi (r := r) (1 : Matrix β β ℂ) = 1 := by
   unfold stinespringPi
-  exact Matrix.one_kronecker_one (m := Fin D) (n := Fin r) (α := ℂ)
+  exact Matrix.one_kronecker_one (m := β) (n := Fin r) (α := ℂ)
 
 @[simp]
-theorem stinespringPi_mul {r : ℕ}
-    (A B : Matrix (Fin D) (Fin D) ℂ) :
+theorem stinespringPi_mul {r : ℕ} {β : Type*} [Fintype β]
+    (A B : Matrix β β ℂ) :
     stinespringPi (r := r) (A * B) = stinespringPi (r := r) A * stinespringPi (r := r) B := by
   unfold stinespringPi
   convert Matrix.mul_kronecker_mul (A := A) (B := B)
@@ -236,8 +245,8 @@ theorem stinespringPi_mul {r : ℕ}
   simp
 
 @[simp]
-theorem stinespringPi_conjTranspose {r : ℕ}
-    (A : Matrix (Fin D) (Fin D) ℂ) :
+theorem stinespringPi_conjTranspose {r : ℕ} {β : Type*}
+    (A : Matrix β β ℂ) :
     (stinespringPi (r := r) A)ᴴ = stinespringPi (r := r) Aᴴ := by
   unfold stinespringPi
   convert Matrix.conjTranspose_kronecker (x := A) (y := (1 : Matrix (Fin r) (Fin r) ℂ)) using 1

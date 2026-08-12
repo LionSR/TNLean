@@ -203,6 +203,45 @@ channel:
     the Stinespring isometry condition $V^\dagger V=\Id$.
 \end{proof}
 
+\begin{theorem}[Stinespring representation, rectangular form]
+    \label{thm:stinespring_rectangular}
+    \lean{ChoiRectangular.exists_stinespringV_of_isKrausCP,
+        ChoiRectangular.exists_stinespringV_traceAdjointMap_of_isKrausCP,
+        ChoiRectangular.exists_stinespringV_choiRank_of_isKrausCP}
+    \leanok
+    \uses{def:is_kraus_cp, def:trace_pairing_adjoint, def:kraus_rank_rect,
+        thm:kraus_rect_rank_minimal, thm:kraus_rect_normalization,
+        def:stinespring_v}
+    Let $T:\MN{d}\to\MN{d'}$ be completely positive with Choi matrix $\tau$ and
+    dual $T^*$. Then for every $r\geq\rank(\tau)$ there is a
+    $V:\C^{d}\to\C^{d'}\otimes\C^{r}$ such that
+    \begin{align}
+        T^*(A)&=V^\dagger(A\otimes\Id_r)V
+        \qquad\text{for all }A\in\MN{d'},
+        \label{eq:stinespring_rectangular}
+    \end{align}
+    and $V$ is an isometry, $V^\dagger V=\Id_d$, if and only if $T$ is trace
+    preserving. The smallest admissible dilation dimension is
+    $r=\rank(\tau)$, where the dilation is called minimal. This is
+    \cite[Theorem~2.2]{Wolf2012Quantum}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:kraus_rect_rank_minimal, thm:kraus_rect_normalization,
+        thm:stinespring_dual_representation}
+    By minimality of the Kraus rank, $T$ has a Kraus family of exactly
+    $\rank(\tau)$ operators; padding it with zeros gives a family
+    $\{K_j\}_{j=1}^{r}$ for every $r\geq\rank(\tau)$. Set
+    $V:=\sum_j K_j\otimes\ket{j}$ for an orthonormal basis $\{\ket{j}\}$ of
+    $\C^{r}$. Then $V^\dagger(A\otimes\Id_r)V=\sum_j K_j^\dagger AK_j$, whose
+    trace pairing against every $X$ agrees with that of $T^*(A)$; since the
+    trace pairing is nondegenerate, this gives
+    (\ref{eq:stinespring_rectangular}). Finally
+    $V^\dagger V=\sum_j K_j^\dagger K_j$, and the latter equals $\Id_d$
+    exactly when $T$ is trace preserving.
+\end{proof}
+
 %% =========================================================
 \section{Ordered CP maps, Radon--Nikodym, and open-system representation}
 \label{sec:ordered_cp}
