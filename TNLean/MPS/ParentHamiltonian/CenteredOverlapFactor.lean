@@ -22,6 +22,9 @@ factorization are exact algebraic consequences of the boundary-map formulas.
   direct-sum factors.
 * `MPSTensor.c3CenteredVirtualResidualES` is the centered virtual residual in the
   tail-after-left overlap orientation.
+* `MPSTensor.wholeIncrementLeftOverlapFactorES`,
+  `MPSTensor.wholeIncrementRightOverlapFactorES`, and
+  `MPSTensor.wholeIncrementCenteredResidualES` are their arbitrary-increment forms.
 
 ## Main results
 
@@ -33,6 +36,9 @@ factorization are exact algebraic consequences of the boundary-map formulas.
 * `MPSTensor.c3_centeredVirtualResidualES_norm_le` is the resulting operator-norm bound.
 * `MPSTensor.IsPrimitiveMPS.c3_centeredVirtualResidualES_norm_sq_le_geometric` gives the
   squared geometric estimate, uniformly in the prefix length.
+* `MPSTensor.wholeIncrementCenteredResidualES_eq_overlapFactors` and
+  `MPSTensor.wholeIncrementCenteredResidualES_norm_le_of_leftCanonical` give the exact
+  arbitrary-increment factorization and its left-canonical norm bound.
 -/
 
 open scoped ComplexOrder Matrix Matrix.Norms.Frobenius
@@ -420,8 +426,8 @@ noncomputable def wholeIncrementCenteredResidualES
       ((boundaryFiberwiseMap (D := D) (Cfg d K × Cfg d Q) Kinf).comp
         (wholeIncrementRightOverlapFactorES A K Q))
 
-/-- The whole-increment centered residual factors through
-\(groundSpaceGram A L - Kinf\) in the exact common ambient. -/
+/-- The whole-increment centered residual factors through the length-
+\(L\) Gram error in the exact common ambient. -/
 theorem wholeIncrementCenteredResidualES_eq_overlapFactors
     (A : MPSTensor d D) (K L Q : ℕ)
     (ρ : Matrix (Fin D) (Fin D) ℂ) (htr : Matrix.trace ρ ≠ 0) :

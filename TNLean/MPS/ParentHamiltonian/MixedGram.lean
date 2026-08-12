@@ -26,6 +26,8 @@ asserted here.
 
 * `inner_tailBoundaryMapES_adjoint_leftBoundaryMapES`
 * `inner_tailBoundaryMapES_adjoint_leftBoundaryMapES_centered`
+* `inner_reassocTailBoundaryMapES_adjoint_leftBoundaryMapES`
+* `inner_reassocTailBoundaryMapES_adjoint_leftBoundaryMapES_centered`
 -/
 
 open scoped Matrix
