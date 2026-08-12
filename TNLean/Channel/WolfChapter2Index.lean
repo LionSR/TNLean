@@ -215,7 +215,14 @@ project import.
     necessary direction (HJW converse): equal densities force an
     isometric mixing matrix between the two ensembles ✓
   - `WolfProps.pureEnsembleDensity_eq_iff_exists_isometric_mixing` —
-    both directions stated as an iff ✓
+    both directions stated as an iff, under the cardinality hypothesis
+    `card ι₂ ≤ card ι₁` ✓
+  - `WolfProps.pureEnsembleDensity_eq_iff_exists_unitary_mixing` — Wolf's
+    own statement, in `TNLean.Channel.EnsembleEquivalence`: after padding
+    both ensembles with zero vectors onto `ι₁ ⊕ ι₂`, equal densities are
+    equivalent to unitary mixing, with no cardinality hypothesis ✓
+  - `WolfProps.pureEnsembleDensity_eq_iff_exists_unitary_mixing_fin` —
+    the same statement with `Fin (max m n)` as common index set ✓
 
 ### Section 2.2 Transfer matrix
 
