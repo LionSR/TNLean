@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.Algebra.MatrixRankKronecker
+import TNLean.Channel.SingleKrausPositivity
 import TNLean.MPS.MPDO.RFPViaTSGlobal
 import TNLean.MPS.MPDO.StrongRFP
 
@@ -23,26 +24,6 @@ multiplied by `rank P`.
 -/
 
 open scoped Matrix Kronecker ComplexOrder
-
-namespace Matrix
-
-/-- A unitary single-Kraus conjugation preserves ordinary matrix rank. -/
-theorem rank_singleKrausMap_of_mem_unitaryGroup
-    {n : Type*} [Fintype n] [DecidableEq n]
-    (U A : Matrix n n ℂ) (hU : U ∈ Matrix.unitaryGroup n ℂ) :
-    (singleKrausMap U A).rank = A.rank := by
-  have hUdet : IsUnit U.det := Matrix.UnitaryGroup.det_isUnit ⟨U, hU⟩
-  have hUh : Uᴴ ∈ Matrix.unitaryGroup n ℂ := by
-    exact ⟨by simpa only [Matrix.star_eq_conjTranspose,
-        Matrix.conjTranspose_conjTranspose] using hU.2,
-      by simpa only [Matrix.star_eq_conjTranspose,
-        Matrix.conjTranspose_conjTranspose] using hU.1⟩
-  have hUhdet : IsUnit Uᴴ.det := Matrix.UnitaryGroup.det_isUnit ⟨Uᴴ, hUh⟩
-  rw [singleKrausMap_apply,
-    Matrix.rank_mul_eq_left_of_isUnit_det Uᴴ (U * A) hUhdet,
-    Matrix.rank_mul_eq_right_of_isUnit_det U A hUdet]
-
-end Matrix
 
 namespace MPOTensor
 
