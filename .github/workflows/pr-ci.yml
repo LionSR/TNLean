@@ -255,6 +255,10 @@ jobs:
               - 'docs/tenkz/**/*.tex'
               - 'docs/tenkz/manual2.tex'
               - 'docs/tenkz/tenkzmanual2.sty'
+              # The kernel probes diff the contract's printed sketches
+              # against their fixtures, so contract-side drift must run
+              # the corpus job too ('docs/tenkz/**/*.tex' misses a .md).
+              - 'docs/tenkz/LANGUAGE-1.0.md'
               # The RMP benchmark book's own style file: a runtime input of
               # `tenkz_rmp.py book --all` (the book driver rmp-benchmark.tex
               # already matches 'docs/tenkz/**/*.tex' above).
