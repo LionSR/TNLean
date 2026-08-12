@@ -255,14 +255,16 @@ Each return joins a pair of perpendicular faces, and the two pairs are
 not the same one: the first leaves an east face and enters a north face,
 the second leaves a north face and enters a west face.
 
-\dbendpar The word does not bend the rail.  Of the three path shapes only
-\tnval{orth} reaches the ink; \tnval{arc} and \tnval{straight} both leave
-the two ends joined by the segment between them, so writing either in the
-picture above puts every line in the same place, with one field of one
-record to tell the two sources apart.  Read \tnkey{route=}\tnval{arc} as
-the record of which family a return belongs to rather than as the
-operation that curves it, and reach for \tnval{orth} below when the path
-itself has to change.
+\dbendpar The word does not bend the rail.  \tnval{arc} and
+\tnval{straight} both leave the two ends joined by the segment between
+them, so writing either in the picture above puts every line in the same
+place, with one field of one record to tell the two sources apart.
+\tnval{orth} draws that same segment here as well: the route is read
+only where a string is rendered, so on the index wires above all three
+words give one page.  Read \tnkey{route=}\tnval{arc} as the record of
+which family a return belongs to rather than as the operation that
+curves it, and reach for \tnval{orth} on the string below, which is
+where the path does change.
 
 The same family draws a closed cycle of tensors laid out as a plaquette,
 and a matrix inserted on one of its edges is an ordinary ring atom
