@@ -605,6 +605,10 @@ def test_a_commented_out_record_is_not_a_record() -> None:
     disabled = registry + (
         "% \\__tenkz_language_registry_tombstone:nnn {kernel-mark}{form=ghost}\n"
         "%   {use form=enclosure}\n"
+        # An escaped backslash is a complete control symbol, so the comment
+        # mark after it starts a real comment and the row does not run.
+        "\\\\% \\__tenkz_language_registry_tombstone:nnn {kernel-mark}{form=wraith}\n"
+        "%   {use form=enclosure}\n"
     )
     original = tenkz_language.REGISTRY
     scratch = original.with_name("registry-comment-probe.tex")
@@ -672,6 +676,28 @@ def test_a_buried_spelling_stands_in_both_records_or_neither() -> None:
     assert len(reworded) == 1 and "migrates to" in reworded[0], reworded
     twice = buried_errors(ledger + ledger, parser=parser)
     assert twice == ["tombstone kernel-mark:form=band is recorded twice"], twice
+
+
+def test_a_row_ahead_of_its_parser_branch_reports_one_cause() -> None:
+    # The word is still in the alphabet, which is the whole of what is wrong.
+    # A reader of CI output should not also be told that the parser does not
+    # refuse it, nor that the ledger does not record it: both are true, and
+    # both point at the wrong thing.
+    vocabulary = {
+        **VOCABULARY,
+        ("kernel-mark", "form"): ("kernel", "enum(bracket|band|label)"),
+    }
+    row = [("kernel-mark", "form=band", "use form=enclosure with tint")]
+    only_cause = [
+        "tombstone kernel-mark:form=band is still a word of "
+        "enum(bracket|band|label)"
+    ]
+    assert buried_errors(row, vocabulary=vocabulary) == only_cause
+    assert buried_errors(
+        row,
+        vocabulary=vocabulary,
+        parser={("kernel-mark", "form=band"): "use form=enclosure with tint"},
+    ) == only_cause
 
 
 def test_a_buried_word_may_not_stand_in_its_own_alphabet() -> None:

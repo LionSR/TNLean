@@ -15,6 +15,7 @@ from collections.abc import Iterable
 from dataclasses import dataclass
 from pathlib import Path
 
+from tenkzlib.texcase import strip_comments
 
 ROOT = Path(__file__).resolve().parents[1]
 REGISTRY = ROOT / "tex/tenkz/tenkz-language-registry.tex"
@@ -211,25 +212,18 @@ def _group(text: str, start: int) -> tuple[str, int]:
     raise ValueError(f"unclosed registry group at offset {start}")
 
 
-def _commented_out(text: str, position: int) -> bool:
-    """Whether a comment mark earlier on the line already ended it for TeX."""
-    line_start = text.rfind("\n", 0, position) + 1
-    return re.search(r"(?<!\\)%", text[line_start:position]) is not None
-
-
 def load_registry() -> list[Entry]:
-    text = REGISTRY.read_text(encoding="utf-8")
+    # A record the file comments out does not run, so the tools may not read
+    # it either; otherwise the registry means one thing to TeX and another to
+    # everything that checks it.  The shared reader blanks a comment in place,
+    # so every offset below is the offset in the file.
+    text = strip_comments(REGISTRY.read_text(encoding="utf-8"))
     pattern = re.compile(
         r"\\__tenkz_language_registry_"
         r"(environment|command|key|alias|example|prelude|tombstone):[n]+"
     )
     entries: list[Entry] = []
     for match in pattern.finditer(text):
-        # A record the file comments out does not run, so the tools may not
-        # read it either; otherwise the registry means one thing to TeX and
-        # another to everything that checks it.
-        if _commented_out(text, match.start()):
-            continue
         kind = match.group(1)
         pos = match.end()
         fields: list[str] = []
@@ -434,6 +428,8 @@ def tombstone_errors(
     """
     errors: list[str] = []
     recorded: dict[tuple[str, str], str] = {}
+    # Rows already reported for a word the alphabet still holds.
+    stale: set[tuple[str, str]] = set()
     scopes = {scope for scope, _name in key_vocabulary}
     # The lint matches a spelling in flat source, where no scope is visible,
     # so one spelling buried twice would be reported with whichever migration
@@ -492,6 +488,12 @@ def tombstone_errors(
             errors.append(
                 f"tombstone {scope}:{spelling} is still a word of {record[1]}"
             )
+            # A row landing ahead of its parser branch has one cause, and it
+            # is this one.  The row stays recorded so the parser's own list is
+            # still compared against it, but it is not reported a second time
+            # as a spelling the parser does not refuse, which is true and
+            # points at the wrong thing.
+            stale.add((scope, f"{key}={value}"))
         recorded[(scope, f"{key}={value}")] = migration
     unrecorded = sorted(
         f"{scope}:{spelling}" for scope, spelling in kernel.keys() - recorded.keys()
@@ -502,7 +504,8 @@ def tombstone_errors(
             + ", ".join(unrecorded)
         )
     unrefused = sorted(
-        f"{scope}:{spelling}" for scope, spelling in recorded.keys() - kernel.keys()
+        f"{scope}:{spelling}"
+        for scope, spelling in recorded.keys() - kernel.keys() - stale
     )
     if unrefused:
         errors.append(
