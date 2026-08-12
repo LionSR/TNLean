@@ -114,10 +114,17 @@ that had to be generated before it could be read.
 Eight cases are compiled, covering the six picture classes an upload is judged
 on: a flat placement, a plane frame, a circle frame, a string with crossings,
 an enclosure, and a diagrammatic equation. Six are the review benchmark's
-preamble-free cases, compiled inside the standalone document an author would
-write around them; two are kernel probes, which carry their own preamble and
-are compiled as they stand, so the self-contained document form is covered as
-well as the fragment form.
+preamble-free cases, compiled inside a document the harness writes around them;
+two are kernel probes, which carry their own preamble and are compiled as they
+stand, so the self-contained document form is covered as well as the fragment
+form.
+
+The document the harness writes asks for `article`, `amsmath`, and `amssymb`
+and nothing else, so a machine meeting the requirements in `README.md` can run
+those six. The two kernel probes declare `standalone`, which is a separate CTAN
+package: it is a requirement of the harness, not of tenkz, and a machine
+without it fails those two cases before the package is loaded. Whoever runs the
+release check needs `standalone` installed; nobody who loads tenkz does.
 
 Each run is read rather than counted. The engine writes an input record, and
 every runtime file it opened must have resolved inside the flat directory. The

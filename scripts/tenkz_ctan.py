@@ -95,13 +95,18 @@ PAYLOAD = re.compile(
 # its arguments, so the patterns allow it too: `\RequirePackage {tikz}` is a
 # load, and a closure that missed it would let the manifest pin a dependency
 # list the package does not have.
-# Both of plain TeX's spellings. The braced one is tried first; the unbraced
-# one reads to the next space, as TeX does, and stops at a brace, a comment, or
-# a control sequence rather than guessing past one. A walk that read only the
-# braced form would let a stage module, or a package, reach an upload without
-# reaching the pin.
+# Every spelling of an input. The braced one is tried first, then Web2C's
+# quoted form, which is how a name holding a space is written and which may
+# follow the control word with no space at all, then the bare one, which reads
+# to the next space as TeX does and stops at a brace, a comment, or a control
+# sequence rather than guessing past one. Quotes are stripped from the name.
+# A walk that read one spelling would let a stage module, or a package, reach
+# an upload without reaching the pin.
 INPUT_CALL = re.compile(
-    r"\\input\s*\{([^}]*)\}|\\input\s+([^\s{}\\%]+)", re.DOTALL
+    r"\\input\s*\{\s*\"?([^}\"]*?)\"?\s*\}"
+    r"|\\input\s*\"([^\"]+)\""
+    r"|\\input\s+([^\s{}\\%\"]+)",
+    re.DOTALL,
 )
 # Every spelling of a package load. A `.sty` writes `\RequirePackage`, but
 # nothing stops a staged runtime file from writing `\usepackage` or
@@ -261,8 +266,9 @@ REGENERATED_SUFFIXES = frozenset({".dtx", ".ins", ".fmt", ".mf", ".drv"})
 # a register. So a `\write` is read three ways and refused if it is none of
 # them: a constant, evaluated in the base its prefix names and compared with
 # 18; a stream the same file allocated with `\newwrite` or `\iow_new:N`, which
-# is a file stream by construction and by intent; or anything else, which
-# cannot be shown not to be 18 and is a finding on that ground alone.
+# is a file stream by construction and by intent, unless the same file also
+# redefines the name; or anything else, which cannot be shown not to be 18 and
+# is a finding on that ground alone.
 #
 # The boundary after `write` excludes `@` and, for a file under
 # `\ExplSyntaxOn`, `_` and `:`, because those are letters there: `\write@event`
@@ -281,11 +287,27 @@ WRITE_CALL = re.compile(
     r"|(?P<name>\\[A-Za-z@_:]+))?"
 )
 ALLOCATED_STREAM = re.compile(r"\\(?:newwrite|iow_new:N)\s*(\\[A-Za-z@_:]+)")
-# Web2C reads a file name opening with a pipe as a command to run, so
-# `\openin\stream="|uname -a"` reaches a shell without naming a stream or an
-# API. The quote is what marks it as a file name to the engine, and nothing in
-# a tensor-diagram package has a reason to write one.
-PIPE_FILENAME = re.compile(r"\"\s*\|")
+# A control sequence the same file also redefines is no longer the stream it
+# was allocated as: `\newwrite\out \def\out{18} \write\out{...}` reaches the
+# shell through a name the allocation vouched for. Reading order is beyond a
+# text scan, so an allocated name that is redefined anywhere in the file loses
+# the allocation ground and is refused with every other unreadable stream.
+REDEFINED_NAME = re.compile(
+    r"\\(?:def|edef|gdef|xdef|let|cs_set[a-z_]*:Npn|cs_new[a-z_]*:Npn)"
+    r"\s*(\\[A-Za-z@_:]+)"
+)
+# Web2C reads a file name whose first character is a bar as a command to run,
+# so `\openin\stream="|uname -a"` reaches a shell without naming a stream or an
+# interface. The bar is only a command in a file name, so the reading is
+# scoped to one: a bare `"|` in a macro body or in typeset documentation is
+# two characters, and refusing it would refuse a source that executes nothing.
+PIPE_FILENAME = re.compile(
+    r"\\(?:openin|openout|input|include|read|write)\s*"
+    r"(?:\\[A-Za-z@_:]+\s*)?"
+    r"(?:=\s*)?"
+    r"(?:\{\s*)?"
+    r"\"?\s*\|"
+)
 # The named ways to reach a shell that are not a write at all: the TeX
 # primitive's LaTeX name, and expl3's own shell interface, which a file under
 # `\ExplSyntaxOn` would use in preference to either. The expl3 names are the
@@ -344,7 +366,9 @@ def shell_escape_call(text: str) -> str:
             f'{text[piped.start():piped.end()]}, a file name opening a pipe, '
             "which the engine runs as a command"
         )
-    allocated = set(ALLOCATED_STREAM.findall(scanned))
+    allocated = set(ALLOCATED_STREAM.findall(scanned)) - set(
+        REDEFINED_NAME.findall(scanned)
+    )
     for found in WRITE_CALL.finditer(scanned):
         call = text[found.start():found.end()]
         if found["name"] is not None:
@@ -386,6 +410,7 @@ ABSOLUTE_LOAD = re.compile(
     r"|file_if_exist:nTF)(?:\s*\*)?"
     rf"\s*(?:\[[^]]*\]\s*)?\{{\s*\"?{ABSOLUTE_PATH_HEAD}"
     rf"|\\input\s*\"?{ABSOLUTE_PATH_HEAD}"
+    rf"|\\open(?:in|out)\s*(?:\\[A-Za-z@_:]+)?\s*=\s*\"?{ABSOLUTE_PATH_HEAD}"
 )
 
 
@@ -464,10 +489,12 @@ OFFLINE_CASES = (
 
 # The document an author writes around a preamble-free case. It names the case
 # by its flat basename, which is what the submission would look like. The
-# preamble is the corpus driver's without `mathtools`, which none of the cases
-# below calls: the check is of tenkz, so it asks the environment for nothing
-# beyond what tenkz and the mathematics around it need.
-OFFLINE_WRAPPER = r"""\documentclass[border=8pt,varwidth=270mm]{standalone}
+# preamble asks the environment for nothing beyond what the README declares an
+# installation must have. It is `article` rather than the corpus driver's
+# `standalone`, and it drops `mathtools`, which none of the cases below calls:
+# a gate that failed on a minimal installation would be reporting on the
+# installation rather than on the archive.
+OFFLINE_WRAPPER = r"""\documentclass{article}
 \usepackage{amsmath,amssymb}
 \usepackage{tenkz}
 \begin{document}
@@ -581,8 +608,8 @@ def walk_closure(source: Path = SOURCE, entry: str = ENTRY.name) -> Closure:
             packages.extend(part.strip() for part in group.split(",") if part.strip())
         for group in LIBRARY_CALL.findall(text):
             libraries.extend(part.strip() for part in group.split(",") if part.strip())
-        for braced, unbraced in INPUT_CALL.findall(text):
-            visit((braced or unbraced).strip())
+        for braced, quoted, bare in INPUT_CALL.findall(text):
+            visit((braced or quoted or bare).strip())
 
     visit(entry)
     closure.packages = sorted(set(packages))
