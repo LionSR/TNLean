@@ -25,7 +25,7 @@ Here the blocking length is $k$, so the blocked physical dimension is $d^k$.
 
 \section{Consistent rank-product identity}
 
-Theorem~IV.1, lines~561--568, states that for a simple tensor of physical
+Theorem~III.8, lines~561--568, states that for a simple tensor of physical
 dimension $q$, the corresponding ranks obey
 \[
   r\ell=q^2.
@@ -51,9 +51,16 @@ It takes the two endpoint identities
 \]
 as explicit hypotheses and combines them with the independently proved
 blocking upper bounds. A later application may obtain the hypotheses from the
-formal counterpart of Theorem~IV.1 under its own assumptions.
+formal counterpart of Theorem~III.8 under its own assumptions. The simultaneous
+saturation result is
+\leanid{MPOTensor.blockingRanks_eq_pow_mul_of_products}; its focused right- and
+left-rank accessors are
+\leanid{MPOTensor.rightRank_blockTensor_eq_pow_mul_of_products} and
+\leanid{MPOTensor.leftRank_blockTensor_eq_pow_mul_of_products}.
 
 \section{Verdict}
+
+\textbf{Verdict: local correction (resolved).}
 
 This is a local correction of the exponent in one sentence of the proof of
 Proposition~IV.2. It does not add an assumption beyond the rank-product

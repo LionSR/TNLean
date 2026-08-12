@@ -249,7 +249,7 @@ identities are supplied explicitly; a later application of the paper's
 fundamental theorem will establish them for simple MPU blocks.
 
 **Local fix (rank-product exponent):** Source line 703 prints $d^k$; consistently
-with Theorem IV.1 and the blocked physical dimension $d^k$, the endpoint
+with Theorem III.8 and the blocked physical dimension $d^k$, the endpoint
 product is $d^{2k}$. See
 `docs/paper-gaps/cpgsv17_mpu_blocking_rank_product_exponent.tex`. -/
 theorem blockingRanks_eq_pow_mul_of_products (U : MPOTensor d D) {k₀ k : ℕ}
@@ -277,7 +277,10 @@ theorem blockingRanks_eq_pow_mul_of_products (U : MPOTensor d D) {k₀ k : ℕ}
     exact le_rfl
 
 /-- The right source-cut rank attains its blocking upper bound when the endpoint
-rank products have their physical-dimension values. -/
+rank products have their physical-dimension values.
+
+This is the right-rank conclusion of the saturation step in the proof of
+arXiv:1703.09188, Proposition IV.2 (`index-well-defined`), line 703. -/
 theorem rightRank_blockTensor_eq_pow_mul_of_products (U : MPOTensor d D) {k₀ k : ℕ}
     (h : k₀ ≤ k) (hd : 0 < d)
     (hprod₀ : r[blockTensor U k₀] * ℓ[blockTensor U k₀] = d ^ (2 * k₀))
@@ -286,7 +289,10 @@ theorem rightRank_blockTensor_eq_pow_mul_of_products (U : MPOTensor d D) {k₀ k
   (blockingRanks_eq_pow_mul_of_products U h hd hprod₀ hprod).1
 
 /-- The left source-cut rank attains its blocking upper bound when the endpoint
-rank products have their physical-dimension values. -/
+rank products have their physical-dimension values.
+
+This is the left-rank conclusion of the saturation step in the proof of
+arXiv:1703.09188, Proposition IV.2 (`index-well-defined`), line 703. -/
 theorem leftRank_blockTensor_eq_pow_mul_of_products (U : MPOTensor d D) {k₀ k : ℕ}
     (h : k₀ ≤ k) (hd : 0 < d)
     (hprod₀ : r[blockTensor U k₀] * ℓ[blockTensor U k₀] = d ^ (2 * k₀))

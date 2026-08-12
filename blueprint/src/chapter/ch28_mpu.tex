@@ -1868,7 +1868,8 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
 
 \begin{theorem}[Exact blocking growth from endpoint rank products]
     \label{thm:mpu_source_cut_rank_blocking_saturation}
-    \lean{MPOTensor.rightRank_blockTensor_eq_pow_mul_of_products,
+    \lean{MPOTensor.blockingRanks_eq_pow_mul_of_products,
+        MPOTensor.rightRank_blockTensor_eq_pow_mul_of_products,
         MPOTensor.leftRank_blockTensor_eq_pow_mul_of_products}
     \leanok
     Let $d>0$ and $L_0\leq L$. Suppose the endpoint source-cut ranks satisfy
@@ -1883,7 +1884,7 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
         \ell_L&=d^{L-L_0}\ell_{L_0}.
     \end{align}
     This is the saturation step in the proof of
-    \cite[Proposition~IV.2, line~703]{Cirac2017MPU}. The endpoint product
+    \cite[Proposition~IV.2]{Cirac2017MPU}. The endpoint product
     identities are hypotheses here; they are not consequences of the blocking
     bounds.
 % **Local fix (rank-product exponent):** Source line 703 prints $d^k$; the
