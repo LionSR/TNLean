@@ -147,6 +147,11 @@ private def doubledPhysicalAncillaMiddleShuffle (d x : ℕ) :
     (i j : Fin d) (a b : Fin x) :
     doubledPhysicalAncillaMiddleShuffle d x ((i, a), (j, b)) = ((i, j), (a, b)) := rfl
 
+/-- Separate the original and ancilla doubled physical indices by the shuffle
+\(((i,a),(j,b))\mapsto((i,j),(a,b))\).
+
+This is the physical relabeling used to identify the normalized flattening and
+canonical-form-II data after identity-ancilla attachment. -/
 def doubledPhysicalAncillaShuffle (d x : ℕ) :
     Fin ((d * x) * (d * x)) ≃ Fin ((d * d) * (x * x)) :=
   finProdFinEquiv.symm |>.trans <|
