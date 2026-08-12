@@ -42,7 +42,7 @@ counterpart in Theorem~\ref{thm:cyclic_sector_decomp_after_blocking}.
     \lean{MPSTensor.pgvwc07_periodic_stateVector_decomposition_of_dvd,
         MPSTensor.pgvwc07_stateVector_eq_zero_of_not_dvd}
     \leanok
-    \uses{def:pgvwc07_projector_component_chain, def:periodic_tensor}
+    \uses{def:pgvwc07_projector_component_chain}
     Let $A$ be an irreducible left-canonical tensor whose peripheral transfer
     spectrum is the set of $p$-th roots of unity. For a positive ring length
     $N$, if $p\mid N$, then its state vector is the sum of the $p$ component
@@ -58,7 +58,7 @@ counterpart in Theorem~\ref{thm:cyclic_sector_decomp_after_blocking}.
 
 \begin{proof}
     \leanok
-    \uses{thm:cyclic_sector_decomp_after_blocking}
+    \uses{def:pgvwc07_projector_component_chain}
     Choose orthogonal cyclic projections with
     $\sum_uQ_u=\Id$ and $Q_uA^i=A^iQ_{u+1}$. The component product telescopes to
     \begin{align}
