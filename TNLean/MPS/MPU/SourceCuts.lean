@@ -110,8 +110,9 @@ $$M_1(U^\sharp)=\overline{M_2(U)}.$$
 The row and column indices remain `(left virtual, physical)` and `(physical, right virtual)`;
 only the roles of the upper and lower physical indices are exchanged.
 
-Source: arXiv:1703.09188, source cuts at lines 450–506 and physical adjunction at
-lines 1196–1252. -/
+The source cuts follow arXiv:1703.09188, lines 450–506. The local physical-adjoint
+operation follows arXiv:1606.00608, Appendix C.2, lines 1634–1689; arXiv:1703.09188,
+lines 1201–1207 use the resulting adjoint family to reverse the index. -/
 theorem sourceCutM₁_physicalAdjointTensor :
     sourceCutM₁ (physicalAdjointTensor U) = (sourceCutM₂ U).map (starRingEnd ℂ) := by
   ext row col
@@ -123,8 +124,9 @@ theorem sourceCutM₁_physicalAdjointTensor :
 first source cut:
 $$M_2(U^\sharp)=\overline{M_1(U)}.$$
 
-Source: arXiv:1703.09188, source cuts at lines 450–506 and physical adjunction at
-lines 1196–1252. -/
+The source cuts follow arXiv:1703.09188, lines 450–506. The local physical-adjoint
+operation follows arXiv:1606.00608, Appendix C.2, lines 1634–1689; arXiv:1703.09188,
+lines 1201–1207 use the resulting adjoint family to reverse the index. -/
 theorem sourceCutM₂_physicalAdjointTensor :
     sourceCutM₂ (physicalAdjointTensor U) = (sourceCutM₁ U).map (starRingEnd ℂ) := by
   ext row col
