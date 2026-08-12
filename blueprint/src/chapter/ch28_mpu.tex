@@ -144,6 +144,28 @@ closing a chain of $N$ copies of $\mathcal U$.
     Use the equivalent left-multiplied characterization of a unitary matrix.
 \end{proof}
 
+\begin{theorem}[Composition preserves matrix product unitarity]
+    \label{thm:mpu_composition}
+    \lean{MPOTensor.IsMPU.mulTensor}
+    \leanok
+    \uses{def:mpu,def:mpdo_operator_product,
+        thm:mpdo_operator_product_mpo}
+    Let $\mathcal U$ and $\mathcal V$ be matrix product unitary tensors with the
+    same physical dimension.  Contracting the output index of $\mathcal U$
+    with the input index of $\mathcal V$ gives a matrix product unitary tensor
+    whose periodic operator is $U^{(N)}V^{(N)}$, in that order.  This is the
+    concatenation tensor $\mathcal W$ in the proof of
+    \cite[Theorem~IV.3(ii)]{Cirac2017MPU}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:mpu,thm:mpdo_operator_product_mpo}
+    For every $N>1$, both $U^{(N)}$ and $V^{(N)}$ are unitary.  The defining
+    contraction of the product tensor gives the periodic operator
+    $U^{(N)}V^{(N)}$, which is unitary because the unitary matrices form a
+    group under multiplication.
+\end{proof}
+
 \begin{lemma}[Physical blocking preserves matrix product unitarity]
     \label{lem:mpu_blocking}
     \lean{MPOTensor.IsMPU.blockTensor}

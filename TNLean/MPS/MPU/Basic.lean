@@ -86,6 +86,21 @@ lemma conjTranspose_mpo_mul_mpo {U : MPOTensor d D} (hU : IsMPU U) {N : ℕ} (hN
   rw [Matrix.mem_unitaryGroup_iff'] at hmem
   simpa [Matrix.star_eq_conjTranspose] using hmem
 
+/-- Concatenating two matrix product unitary tensors in the order `U * V`
+again gives a matrix product unitary tensor.
+
+The local tensor is `mulTensor U V`, whose periodic operator is
+`mpo U N * mpo V N`; thus the order agrees with the concatenation tensor
+constructed in the source.
+
+Source: arXiv:1703.09188, proof of Theorem `IndexTh` (ii), lines 837--841. -/
+theorem mulTensor {D₁ D₂ : ℕ} {U : MPOTensor d D₁} {V : MPOTensor d D₂}
+    (hU : IsMPU U) (hV : IsMPU V) : IsMPU (MPOTensor.mulTensor U V) := by
+  intro N hN
+  rw [mpo_mulTensor]
+  exact (Matrix.unitaryGroup (Fin N → Fin d) ℂ).mul_mem
+    (hU.mpo_mem_unitaryGroup hN) (hV.mpo_mem_unitaryGroup hN)
+
 end IsMPU
 
 /-! ### Blocking preservation -/
