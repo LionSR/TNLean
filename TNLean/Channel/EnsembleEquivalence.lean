@@ -11,10 +11,10 @@ import Mathlib.LinearAlgebra.UnitaryGroup
 
 Wolf's *Quantum Channels & Operations: Guided Tour* states the equivalence of
 ensembles (§2, line 277 of `Notes/WolfNoteTexSource/ch02_representations.tex`) as
-follows. Two ensembles of not necessarily normalized vectors `{ψⱼ}` and `{ψ̃_ℓ}`
+follows. Two ensembles of not necessarily normalized vectors `{ψⱼ}` and `{φ_ℓ}`
 satisfy
-`∑ⱼ |ψⱼ⟩⟨ψⱼ| = ∑_ℓ |ψ̃_ℓ⟩⟨ψ̃_ℓ|`
-iff there is a **unitary** `U` with `|ψⱼ⟩ = ∑_ℓ Uⱼ_ℓ |ψ̃_ℓ⟩`, where the smaller
+`∑ⱼ |ψⱼ⟩⟨ψⱼ| = ∑_ℓ |φ_ℓ⟩⟨φ_ℓ|`
+iff there is a **unitary** `U` with `|ψⱼ⟩ = ∑_ℓ Uⱼ_ℓ |φ_ℓ⟩`, where the smaller
 of the two families is padded with zero vectors so that both are indexed alike.
 No relation between the two cardinalities is assumed.
 
