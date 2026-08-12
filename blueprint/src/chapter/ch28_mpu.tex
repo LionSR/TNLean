@@ -4470,22 +4470,6 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
   % Auxiliary to paper_v2.tex lines 681--688; issue 6255.
 \end{definition}
 
-\begin{theorem}[Product and quotient laws for real logarithms]
-  \label{thm:mpu_real_logb_mul_div}
-  \lean{Real.logb_mul,Real.logb_div}
-  \leanok
-  For nonzero real numbers $x$ and $y$ and any base $b$,
-  \begin{align}
-    \log_b(xy)&=\log_bx+\log_by,&
-    \log_b(x/y)&=\log_bx-\log_by.
-  \end{align}
-\end{theorem}
-
-\begin{proof}\leanok
-  Divide the corresponding product and quotient laws for the natural
-  logarithm by $\log b$.
-\end{proof}
-
 \begin{theorem}[Auxiliary source-index identities]
   \label{thm:mpu_specified_source_index_identities}
   \lean{MPOTensor.sourceIndexValue_eq_of_common_rank_scale,
@@ -4516,7 +4500,6 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
 \end{theorem}
 
 \begin{proof}\leanok
-  \uses{thm:mpu_real_logb_mul_div}
   Expand the definition. For common scaling, apply
   $\log_2(cx)=\log_2c+\log_2x$ to both ranks and cancel the two copies of
   $\log_2c$. For the equivalent formulas, apply the same product identity to
