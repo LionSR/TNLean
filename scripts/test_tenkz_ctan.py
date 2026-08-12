@@ -101,8 +101,16 @@ def test_closure_reads_the_unbraced_input() -> None:
             STAGE_CONTRACT + "\\usepackage{tikz-cd}\n", encoding="utf-8"
         )
         closure = tenkz_ctan.walk_closure(source, "tenkz.sty")
-    assert closure.files == ["tenkz.sty", "tenkz-stage.code.tex"], closure.files
-    assert closure.packages == ["tikz-cd"], closure.packages
+        assert closure.files == ["tenkz.sty", "tenkz-stage.code.tex"], closure.files
+        assert closure.packages == ["tikz-cd"], closure.packages
+        # Web2C's quoted form, which may follow the control word with no space.
+        for spelling in ('\\input"tenkz-stage.code.tex"',
+                         '\\input {"tenkz-stage.code.tex"}'):
+            (source / "tenkz.sty").write_text(
+                STAGE_CONTRACT + spelling + "\n", encoding="utf-8"
+            )
+            quoted = tenkz_ctan.walk_closure(source, "tenkz.sty")
+            assert quoted.files == ["tenkz.sty", "tenkz-stage.code.tex"], spelling
 
 
 def test_closure_reads_tex_spacing_before_arguments() -> None:
@@ -961,8 +969,21 @@ def test_every_spelling_of_stream_eighteen_is_the_shell_escape_stream() -> None:
     # either primitive.
     # Web2C runs a file name opening with a pipe, which names no stream and
     # no API.
-    assert tenkz_ctan.shell_escape_call('\\openin\\stream="|uname -a"')
-    assert not tenkz_ctan.shell_escape_call('\\openin\\stream="plain.tex"')
+    # The bar is a command only in a file name, so the reading is scoped to
+    # one: two characters in a macro body or in prose execute nothing.
+    for piped in ('\\openin\\stream="|uname -a"', r"\input{|cmd}", r'\input "|cmd"'):
+        assert tenkz_ctan.shell_escape_call(piped), piped
+    for plain in ('\\openin\\stream="plain.tex"', r'\def\separator{"|}',
+                  'the sequence "| in prose'):
+        assert not tenkz_ctan.shell_escape_call(plain), plain
+    # A name the same file redefines is no longer the stream it was allocated
+    # as, so the allocation ground does not carry it.
+    assert not tenkz_ctan.shell_escape_call(
+        "\\newwrite\\out\n\\immediate\\write\\out{x}\n"
+    )
+    assert tenkz_ctan.shell_escape_call(
+        "\\newwrite\\out\n\\def\\out{18}\n\\write\\out{x}\n"
+    )
     for named in (r"\sys_shell_now:n {ls}", r"\sys_shell_shipout:x {ls}",
                   r"\sys_get_shell:nnN {x}{y}\z", r"\ior_shell_open:Nn \x {ls}",
                   r"\iow_shell_open:Nn \x {ls}", r"\DelayedShellEscape{ls}"):
@@ -1060,6 +1081,7 @@ def test_an_unbraced_absolute_input_is_an_absolute_path() -> None:
                      r"\InputIfFileExists{/Users/somebody/local.cfg}{}{}",
                      r"\IfFileExists{/Users/somebody/local.cfg}{}{}",
                      r"\file_input:n { /Users/somebody/local.tex }",
+                     r"\openin\src=/Users/somebody/data.tex",
                      # A path holding a space is written quoted, braced or not.
                      '\\input{"/Users/somebody/My Documents/f.tex"}'):
             (tree / "tenkz.sty").write_text(load + "\n", encoding="utf-8")
