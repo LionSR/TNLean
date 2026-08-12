@@ -956,7 +956,9 @@ the remaining sites unchanged.
 
 \begin{proof}
     \leanok
-    \uses{thm:cpsv_fibonacci_periodic_count_golden_ratio,
+    \uses{def:cpsv_fibonacci_open_boundary_operator,
+      def:cpsv_fibonacci_periodic_count,
+      thm:cpsv_fibonacci_periodic_count_golden_ratio,
       thm:cpsv_fibonacci_open_boundary_rank_status,
       thm:to_mpo_diagonal_rank}
     The diagonal MPO rank counts physical words with nonzero periodic amplitude.
@@ -1010,9 +1012,9 @@ the remaining sites unchanged.
         \operatorname{rank}\rho^{(N)}(A)
         &=\operatorname{rank}\rho^{(1)}(A)
           \bigl(\operatorname{rank}P\bigr)^{N-1}.
-        \label{eq:cpsv-fibonacci-strong-rfp-rank}
+        \label{eq:cpsv_fib_strong_rfp_rank}
     \end{align}
-    Equation~\eqref{eq:cpsv-fibonacci-strong-rfp-rank} contradicts the
+    (\ref{eq:cpsv_fib_strong_rfp_rank}) contradicts the
     non-geometricity of the Fibonacci periodic ranks.
 \end{proof}
 
