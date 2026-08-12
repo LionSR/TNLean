@@ -847,9 +847,10 @@ theorem parentHamiltonianES_gap_bound_of_cyclic_window_overlap_operator_norm_of_
 
 If the anticommutator forms satisfy row- and column-summable bounds with
 constant \(γ\), then the sum \(H = \sum_i P_i\) of the projections satisfies
-the norm lower bound \(γ ‖v‖ ≤ ‖H v‖\) on \((\ker H)^\perp\), because \(H\) is
-positive (a sum of positive maps) and satisfies the quadratic-form inequality
-\(γ \operatorname{Re}\langle Hv, v\rangle \le \operatorname{Re}\langle Hv, Hv\rangle\). -/
+both the quadratic-form inequality
+\(γ \operatorname{Re}\langle Hv, v\rangle \le \operatorname{Re}\langle Hv, Hv\rangle\)
+for every \(v\), and the norm lower bound \(γ ‖v‖ ≤ ‖H v‖\) on
+\((\ker H)^\perp\), because \(H\) is positive (a sum of positive maps). -/
 theorem spectralGap_of_martingale_anticommutator_rowCol
     {ι : Type*} [Fintype ι] [DecidableEq ι] {ι' : Type*} [Fintype ι']
     {γ : ℝ} (hγpos : 0 < γ) (hγle : γ ≤ 1)
@@ -862,11 +863,15 @@ theorem spectralGap_of_martingale_anticommutator_rowCol
       -(1 - γ) * c i j *
           ((⟪P i v, v⟫_ℂ).re + (⟪P j v, v⟫_ℂ).re) ≤
         (⟪P i v, P j v⟫_ℂ).re + (⟪P j v, P i v⟫_ℂ).re) :
+    (∀ v, γ * (⟪(∑ i, P i) v, v⟫_ℂ).re ≤ (⟪(∑ i, P i) v, (∑ i, P i) v⟫_ℂ).re) ∧
     ∀ v ∈ (LinearMap.ker (∑ i, P i))ᗮ, γ * ‖v‖ ≤ ‖(∑ i, P i) v‖ := by
-  intro v hv
+  have hQuad : ∀ v,
+      γ * (⟪(∑ i, P i) v, v⟫_ℂ).re ≤ (⟪(∑ i, P i) v, (∑ i, P i) v⟫_ℂ).re :=
+    ProjectionGeometry.quadraticForm_sum_projections_of_anticommutator_rowCol
+      hγle P hP c hRow hCol hAnti
+  refine ⟨hQuad, fun v hv => ?_⟩
   exact FrustrationFree.spectralGap_of_martingale (ι := ι') hγpos
     (LinearMap.isPositive_sum Finset.univ fun i _ => (hP i).isPositive)
-    (ProjectionGeometry.quadraticForm_sum_projections_of_anticommutator_rowCol
-      hγle P hP c hRow hCol hAnti) v hv
+    hQuad v hv
 
 end MPSTensor
