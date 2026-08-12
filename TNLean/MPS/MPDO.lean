@@ -86,6 +86,7 @@ import TNLean.MPS.MPDO.CPSVBNTFusionTensorClauseFromRFP
 import TNLean.MPS.MPDO.CPSVBNTTheoremEquivalence
 import TNLean.MPS.MPDO.CPSVBlocking
 import TNLean.MPS.MPDO.CPSVExample412Literal
+import TNLean.MPS.MPDO.CPSVExamples410411Arithmetic
 import TNLean.MPS.MPDO.CPSVFigureEight
 import TNLean.MPS.MPDO.CPSVGroupedFigureEight
 import TNLean.MPS.MPDO.CPSVGroupedGramNormalization
