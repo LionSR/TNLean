@@ -832,6 +832,44 @@ def test_a_tree_arxiv_would_have_to_build_or_shell_out_for_fails() -> None:
     assert "absolute path" in findings, report.failures
 
 
+def test_every_spelling_of_stream_eighteen_is_the_shell_escape_stream() -> None:
+    """TeX scans the stream as an integer, so leading zeros and the `"` and
+    `'` prefixes for hexadecimal and octal all reach stream 18. The constant is
+    evaluated rather than matched against one way of writing it."""
+
+    for call in (r"\write18{x}", r"\write 18{x}", r"\immediate \write 18{x}",
+                 r"\write018{x}", '\\write"12{x}', r"\write'22{x}",
+                 r"\ShellEscape{x}"):
+        assert tenkz_ctan.shell_escape_call(call), call
+    # Numbers that are not 18 in the base their prefix names, and a stream
+    # named by a control sequence, which no constant search can read.
+    for quiet in (r"\write17{x}", r"\write180{x}", '\\write"18{x}',
+                  r"\write \myout{x}"):
+        assert not tenkz_ctan.shell_escape_call(quiet), quiet
+
+
+def test_a_closure_file_the_archive_forgot_stays_in_the_reading() -> None:
+    """`carried` comes from the load graph and is not narrowed to what the
+    archive staged. A file the archive omitted has to stay in the reading, or
+    an installed copy answering for it would resolve outside the room and never
+    be looked at."""
+
+    (ROOT / "build").mkdir(exist_ok=True)
+    with tempfile.TemporaryDirectory(dir=ROOT / "build") as directory:
+        room = Path(directory)
+        carried = set(tenkz_ctan.walk_closure().files)
+        forgotten = "tenkz-string.code.tex"
+        assert forgotten in carried, sorted(carried)
+        # The engine answered it from an installation instead of the flat.
+        installed = "/usr/local/texlive/tex/latex/tenkz/" + forgotten
+        runtime = [path for path in [installed] if Path(path).name in carried]
+        assert runtime == [installed], runtime
+        assert tenkz_ctan.foreign_runtime_files(runtime, room, room.resolve())
+        # The check's own driver files are not on the load graph, so they never
+        # stand in for a runtime file the run never opened.
+        assert "tenkz-offline-flat.tex" not in carried
+
+
 def test_a_loaded_source_is_read_whatever_it_is_called() -> None:
     """The scan follows the load graph rather than a list of suffixes, so a
     runtime file added later as a class or a configuration is read because it
