@@ -15969,6 +15969,16 @@
     % an atom off the frame keeps an origin no lane can match
     \tl_set:Nn \l__tenkz_kernel_lab_top_tl {1}
     \tl_set:Nn \l__tenkz_kernel_lab_left_tl {1}
+    % A lane is a row or a column of the frame read as a straight line the
+    % ink runs along, which a circle's closed ring of stations is not.  The
+    % answer is no lane at all there, and it is given once here rather than
+    % at each caller, so every reader of these registers -- the port, the
+    % policy leg, and the cell axis alike -- stands down together.
+    \str_if_eq:eeF { \__tenkz_kernel_r_frame_word: } {circle}
+      { \__tenkz_kernel_r_label_span_lanes:n {#1} }
+  }
+\cs_new_protected:Npn \__tenkz_kernel_r_label_span_lanes:n #1
+  {
     \__tenkz_kernel_atom_rc:nNNN {#1}
       \l__tenkz_kernel_lab_top_tl \l__tenkz_kernel_lab_left_tl
       \l__tenkz_kernel_lab_span_bool
