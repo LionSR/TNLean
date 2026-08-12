@@ -51,6 +51,8 @@
   { [TKZ-LANG-UNKNOWN-KEY]~'#1'~is~not~a~#2~key~(record~#3). }
 \msg_new:nnn {tenkz}{kernel-choice}
   { [TKZ-LANG-CHOICE]~#1=#2~is~not~in~the~alphabet~#3~(record~#4). }
+\msg_new:nnn {tenkz}{kernel-tombstone}
+  { [TKZ-LANG-TOMBSTONE]~#1=#2~retired~from~the~alphabet:~#3~(record~#4). }
 \msg_new:nnn {tenkz}{kernel-wire-arity}
   { [TKZ-LANG-WIRE-ARITY]~a~closed~wire~takes~no~positional~ends;~
     every~other~wire~takes~exactly~two~(record~#1). }
@@ -912,6 +914,30 @@
           }
       }
   }
+% A word struck from a closed alphabet stays installed as a tombstone: the
+% parser still knows the spelling, refuses it, and states the migration.  The
+% alphabet error alone cannot do that: it reports the words that remain, which
+% reads as a typo when the word was in fact retired.  A tombstone is a
+% branch of a key that is already installed, so it opens no parser path of its
+% own and the census does not move.
+%
+% Each branch below answers a row of the registry's tombstone ledger
+% (LANGUAGE-1.0 section 10), and the language check holds the two to one list
+% in both directions, migration text included: a refusal the ledger does not
+% record fails, and a row the parser does not refuse fails.  The registry is
+% where a reader and the source lint find the spelling; this is where a
+% compile answers for it.
+\cs_new_protected:Npn \__tenkz_kernel_tombstone:nnnn #1#2#3#4
+  {
+    \keys_define:nn {#1}
+      {
+        #2 / #3 .code:n =
+          {
+            \msg_error:nneeee {tenkz}{kernel-tombstone} {#2} {#3} {#4}
+              { \tl_use:N \l__tenkz_model_last_tl }
+          }
+      }
+  }
 \cs_new_protected:Npn \__tenkz_kernel_value:nnn #1#2#3
   {
     \keys_define:nn {#1}
@@ -1302,8 +1328,23 @@
 % ---------- mark keys ------------------------------------------------------------
 
 \__tenkz_kernel_choice:nnnn { tenkz-kernel-mark } { form }
-  { bracket, brace-above, brace-below, enclosure, cut, band, label, prose }
+  { bracket, enclosure, label, prose }
   { form }
+% The four spellings the alphabet lost, each answering a row of the registry's
+% tombstone ledger in that row's own words.  A dead word is kept knowable so
+% the parser can name its successor, rather than answering with the alphabet
+% and leaving a reader to guess whether the word was mistyped or removed.
+\__tenkz_kernel_tombstone:nnnn { tenkz-kernel-mark } { form } { brace-above }
+  { use~form=bracket~with~label~pos=90;~a~bracket~speaks~from~the~side~its~
+    label~sits~on }
+\__tenkz_kernel_tombstone:nnnn { tenkz-kernel-mark } { form } { brace-below }
+  { use~form=bracket,~which~speaks~from~the~south~when~it~names~no~side }
+\__tenkz_kernel_tombstone:nnnn { tenkz-kernel-mark } { form } { cut }
+  { no~successor:~the~sources'~cut~is~the~contour~of~what~it~separates,~
+    so~use~form=enclosure~over~that~selection }
+\__tenkz_kernel_tombstone:nnnn { tenkz-kernel-mark } { form } { band }
+  { use~form=enclosure~with~tint,~which~lays~ink~over~the~paper~its~contour~
+    encloses }
 \__tenkz_kernel_choice:nnnn { tenkz-kernel-mark } { slot }
   { selected, secondary, complement, collar, neutral } { slot }
 \__tenkz_kernel_value:nnn   { tenkz-kernel-mark } { species } { species }
@@ -17804,6 +17845,9 @@
         {label}     { \__tenkz_kernel_r_mark_label:n {#1} }
         {enclosure} { \__tenkz_kernel_r_mark_enclosure:n {#1} }
         {bracket}   { \__tenkz_kernel_r_mark_bracket:n {#1} }
+        % A prose panel is a sentence standing where a picture would, and the
+        % record stream is where it stands: the mark is deliberately inkless,
+        % which the registry row states so a reader of the reference is told.
         {prose}     { }
       }
       {

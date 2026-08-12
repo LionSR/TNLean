@@ -779,7 +779,8 @@ def _tex(value: str) -> str:
     )
 
 
-def generate_reference(entries: list[Entry]) -> None:
+def reference_texts(entries: list[Entry]) -> tuple[str, str]:
+    """Render the two generated chapters; the writer and the checker share this."""
     commands = [e.fields for e in entries if e.kind == "command"]
     examples = {e.fields[0]: e.fields[1:] for e in entries if e.kind == "example"}
     keys = [
@@ -862,9 +863,35 @@ def generate_reference(entries: list[Entry]) -> None:
             rf"use \texttt{{{_tex(replacement)}}}; {_tex(meaning)} \\"
         )
     alias_lines.extend((r"\bottomrule\end{tabularx}", "}"))
+    return "\n".join(lines) + "\n", "\n".join(alias_lines) + "\n"
+
+
+def generate_reference(entries: list[Entry]) -> None:
+    reference, aliases = reference_texts(entries)
     REFERENCE.parent.mkdir(parents=True, exist_ok=True)
-    REFERENCE.write_text("\n".join(lines) + "\n", encoding="utf-8")
-    ALIASES.write_text("\n".join(alias_lines) + "\n", encoding="utf-8")
+    REFERENCE.write_text(reference, encoding="utf-8")
+    ALIASES.write_text(aliases, encoding="utf-8")
+
+
+def stale_generated_chapters(entries: list[Entry]) -> list[str]:
+    """Report a committed chapter that no longer matches the registry.
+
+    The two chapters say they are generated, and until this check existed
+    nothing held them to it: a registry row could change its prose and the
+    reference could keep the old sentence, which is the drift the one-record
+    rule exists to prevent.  Regenerate with `generate-reference'.
+    """
+    errors: list[str] = []
+    for path, expected in zip((REFERENCE, ALIASES), reference_texts(entries)):
+        name = path.relative_to(ROOT)
+        if not path.exists():
+            errors.append(f"generated chapter {name} is missing")
+        elif path.read_text(encoding="utf-8") != expected:
+            errors.append(
+                f"generated chapter {name} does not match the registry; "
+                "run scripts/tenkz_language.py generate-reference"
+            )
+    return errors
 
 
 def main() -> int:
@@ -875,6 +902,13 @@ def main() -> int:
     if args.action == "generate-reference":
         generate_reference(entries)
     errors = check(entries)
+    # The chapters call themselves generated; this is what holds them to it.
+    # `check' is what CI runs, so a committed chapter that drifts from the
+    # registry fails there rather than reaching a reader.  The generate action
+    # has just written them from these same entries, so there is nothing there
+    # for the comparison to find and it is skipped.
+    if args.action != "generate-reference":
+        errors.extend(stale_generated_chapters(entries))
     if args.action == "census":
         census = {kind: sum(e.kind == kind for e in entries) for kind in ARITIES}
         census["parser_leaf_keys"] = len(_parser_leaf_keys())

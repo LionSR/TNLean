@@ -109,17 +109,17 @@ def tombstone_patterns(entries: list[Entry]) -> list[tuple[re.Pattern[str], str]
     """Source patterns and migrations for the spellings a ledger buries.
 
     A `key=value` row is a word struck from a live alphabet, so the pattern is
-    that spelling, bounded on both sides: without a left boundary `form=band`
-    would also read `transform=band`.  The value may arrive in a brace group,
-    which is ordinary key-value spelling and reaches the parser as the bare
-    word.  A row spelled with a leading backslash is a command, whose own
-    backslash is where it starts: a word boundary before it would match
-    nothing, since neither the backslash nor the space before it is a word
-    character.  An environment is named where a document names one, in the
-    argument of `\\begin` or `\\end`.  A bare row is a key that no longer
-    exists; where its word survives as the value of a live enum, the pattern
-    steps over that live spelling, which is where a reader of the dead one
-    should be.
+    that spelling, bounded on both sides: without a left boundary a row on
+    `form=` would be read out of a `transform=` ending in the same word.  The
+    value may arrive in a brace group, which is ordinary key-value spelling
+    and reaches the parser as the bare word.  A row spelled with a leading
+    backslash is a command, whose own backslash is where it starts: a word
+    boundary before it would match nothing, since neither the backslash nor
+    the space before it is a word character.  An environment is named where a
+    document names one, in the argument of `\\begin` or `\\end`.  A bare row
+    is a key that no longer exists; where its word survives as the value of a
+    live enum, the pattern steps over that live spelling, which is where a
+    reader of the dead one should be.
 
     Every spelling arrives from `tombstone_rows` with the registry's `~`
     already read as the space a document writes, so a multi-word key is
