@@ -104,7 +104,6 @@
     \label{thm:mpdo_blocked_vertical_operator_representations}
     \lean{MPOTensor.transportedVerticalSector_exists_blockedOperatorRepresentations}
     \lean{MPOTensor.verticalBNTMPO_verticalTensor_blockTwo}
-    \lean{MPSTensor.sameMPV₂Pos_of_coisometry_reconstruction}
     \lean{MPOTensor.mpo_verticalBNTMPO_verticalAssembledTensor_eq_sum}
     \lean{MPOTensor.mpo_verticalBNTMPO_eq_sum_of_coisometry_reconstruction}
     \lean{MPOTensor.mpo_verticalBNTMPO_eq_pow_smul_of_unitary_reindex}
@@ -145,7 +144,8 @@
 
 \begin{proof}\leanok
     \uses{thm:mpdo_operator_product_mpo, lem:mpv_vertical_assembled,
-      thm:mpdo_transported_vertical_sector_coefficient_comparison}
+      thm:mpdo_transported_vertical_sector_coefficient_comparison,
+      thm:coisometry_reconstruction_same_mpv_pos}
     The two-site vertical canonical form first gives
     $O_L(B)=\sum_\delta\tr(\nu_\delta^L)
     O_L(A^{(2)}_\delta)$.
