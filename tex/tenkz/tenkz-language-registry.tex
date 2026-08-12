@@ -239,31 +239,23 @@
 
 % ---- tombstones (LANGUAGE-1.0 section 10) ----
 %
-% A deleted spelling stays here forever: the registry is the one record of
-% what a word used to mean and what says it now, so the parser, the linter
-% and the reference all refuse it in the same words and no dead spelling is
-% ever reused.  A row installs nothing; it withdraws something.
-%
-% scope, key, value, replacement, migration.  A row whose value is empty
-% retires the key or command named by `key'; a row that carries a value
-% retires that one word of the key's alphabet.  A scope beginning `kernel-'
-% is a live parser tree, and the kernel installs the row as a refusal on
-% that key; any other scope is a record for the linter alone.  An empty
-% replacement means no successor is owed.  These two fields are read by TeX,
-% so their spaces are written `~'.
+% Scope, dead spelling, migration.  A deleted spelling stays here forever so
+% that no deleted spelling is ever reused and one record answers for it: the
+% source lint builds its rejection from these rows and reports the migration
+% with the finding, and the language check holds every spelling the parser
+% refuses by name to the row that states the same migration.  A `key=value'
+% spelling is a word struck from a live key's alphabet, which the parser
+% refuses through a branch of its own; a bare spelling is a key that no longer
+% exists, which the unknown-key error answers.
 %
 % The four mark forms below took a record and drew nothing.  What the sources
 % brace, the benchmark already brackets (rmp-ii-spectrum-transfer); what they
 % cut, it encloses; what they shade, a tinted enclosure carries.
-\__tenkz_language_registry_tombstone:nnnnn {kernel-mark}{form}{brace-above}
-  {form=bracket,~label~pos=90}
-  {A~bracket~speaks~from~the~side~its~label~sits~on,~so~the~side~is~a~label~placement~and~not~a~form~of~its~own.}
-\__tenkz_language_registry_tombstone:nnnnn {kernel-mark}{form}{brace-below}
-  {form=bracket}
-  {A~bracket~that~names~no~side~speaks~from~the~south,~where~the~authors~draw~a~brace~under~a~span.}
-\__tenkz_language_registry_tombstone:nnnnn {kernel-mark}{form}{cut}
-  {}
-  {No~successor~is~owed:~a~cut~is~the~contour~of~what~it~separates,~which~form=enclosure~strokes~over~that~selection.}
-\__tenkz_language_registry_tombstone:nnnnn {kernel-mark}{form}{band}
-  {form=enclosure,~tint}
-  {A~band~never~differed~from~an~enclosure~except~in~the~shape~of~its~selection,~and~tint~lays~its~ink~over~the~paper~the~contour~encloses.}
+\__tenkz_language_registry_tombstone:nnn {kernel-mark}{form=brace-above}
+  {use form=bracket with label pos=90; a bracket speaks from the side its label sits on}
+\__tenkz_language_registry_tombstone:nnn {kernel-mark}{form=brace-below}
+  {use form=bracket, which speaks from the south when it names no side}
+\__tenkz_language_registry_tombstone:nnn {kernel-mark}{form=cut}
+  {no successor: the sources' cut is the contour of what it separates, so use form=enclosure over that selection}
+\__tenkz_language_registry_tombstone:nnn {kernel-mark}{form=band}
+  {use form=enclosure with tint, which lays ink over the paper its contour encloses}

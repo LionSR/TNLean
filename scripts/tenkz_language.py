@@ -35,16 +35,8 @@ ARITIES = {
     "alias": 4,
     "example": 3,
     "prelude": 3,
-    # scope, key, value, replacement, migration.  A deleted spelling lives
-    # here and nowhere else (LANGUAGE-1.0 section 10): the parser installs its
-    # refusal from this row, the linter reports it from this row, and the
-    # reference prints it from this row.  An empty value retires the key or
-    # command itself; an empty replacement means no successor is owed.
-    "tombstone": 5,
+    "tombstone": 3,
 }
-# The two fields the TeX side prints.  Expl3 ignores spaces, so the registry
-# writes them with `~' and every reader outside TeX restores the space.
-_TOMBSTONE_PROSE_FIELDS = (3, 4)
 
 BASELINE = ROOT / "tests/tenkz/census-baseline.json"
 
@@ -233,13 +225,6 @@ def load_registry() -> list[Entry]:
         for _ in range(ARITIES[kind]):
             field, pos = _group(text, pos)
             fields.append(field)
-        if kind == "tombstone":
-            fields = [
-                " ".join(field.replace("~", " ").split())
-                if index in _TOMBSTONE_PROSE_FIELDS
-                else field
-                for index, field in enumerate(fields)
-            ]
         entries.append(Entry(kind, tuple(fields)))
     return entries
 
@@ -250,20 +235,24 @@ def tombstones(entries: list[Entry]) -> list[dict[str, str]]:
     This is the one list: the parser installs its refusals from the same rows,
     so a consumer that reads this cannot disagree with what a compile says.
     """
-    return [
-        {
-            "scope": scope,
-            "key": key,
-            "value": value,
-            "replacement": replacement,
-            "migration": migration,
-            # what an author actually typed, for a reader matching source text
-            "spelling": f"{key}={value}" if value else key,
-        }
-        for entry in entries
-        if entry.kind == "tombstone"
-        for scope, key, value, replacement, migration in (entry.fields,)
-    ]
+    rows: list[dict[str, str]] = []
+    for entry in entries:
+        if entry.kind != "tombstone":
+            continue
+        scope, spelling, migration = entry.fields
+        key, _separator, value = spelling.partition("=")
+        rows.append(
+            {
+                "scope": scope,
+                "spelling": spelling,
+                # a bare spelling is a key that no longer exists, so it leaves
+                # `value' empty and the parser has no branch to refuse it from
+                "key": key.strip(),
+                "value": value.strip(),
+                "migration": migration,
+            }
+        )
+    return rows
 
 
 def _declared_api() -> tuple[set[str], set[str]]:
@@ -402,10 +391,8 @@ def check(entries: list[Entry]) -> list[str]:
     }
     for kind, rows in by_kind.items():
         names = [
-            # a tombstone is identified by the whole spelling it buries, since
-            # one key may bury several of its own words
-            f"{row[0]}:{row[1]}={row[2]}" if kind == "tombstone"
-            else f"{row[0]}:{row[1]}" if kind in {"key", "prelude"}
+            f"{row[0]}:{row[1]}"
+            if kind in {"key", "prelude", "tombstone"}
             else row[0]
             for row in rows
         ]
@@ -506,47 +493,10 @@ def check(entries: list[Entry]) -> list[str]:
                 )
                 if value_error is not None:
                     errors.append(f"alias row {scope}:{name} {value_error}")
-    # A tombstone must contradict nothing: the spelling it buries may not also
-    # be live vocabulary, and the migration it offers must be vocabulary that
-    # is.  Both directions matter.  A dead word still in its key's alphabet
-    # would be accepted and refused at once; a migration naming a word that
-    # does not exist sends a reader from one dead spelling to another.
-    for scope, key, value, replacement, migration in by_kind["tombstone"]:
-        label = f"tombstone {scope}:{key}" + (f"={value}" if value else "")
-        if not all((scope, key, migration)):
-            errors.append(f"incomplete tombstone record: {scope}:{key}")
-            continue
-        target_record = key_vocabulary.get((scope, key.replace("~", " ")))
-        if value:
-            if target_record is None:
-                errors.append(
-                    f"{label} names value of unregistered key {scope}:{key}"
-                )
-                continue
-            enum = re.fullmatch(r"enum\(([^)]*)\)", target_record[1])
-            if enum is not None and value in enum.group(1).split("|"):
-                errors.append(
-                    f"{label} buries a spelling its key still accepts"
-                )
-        elif target_record is not None:
-            errors.append(f"{label} buries a key the registry still registers")
-        if not replacement:
-            continue
-        try:
-            targets = parse_key_expression(replacement)
-        except ValueError as exc:
-            errors.append(f"{label} has an invalid replacement: {exc}")
-            continue
-        for target, target_value in targets:
-            record = key_vocabulary.get((scope, target))
-            if record is None or record[0] not in {"kernel", "sugar"}:
-                errors.append(
-                    f"{label} replacement key {target!r} is not live vocabulary"
-                )
-                continue
-            value_error = _enum_value_error(target, target_value, record)
-            if value_error is not None:
-                errors.append(f"{label} {value_error}")
+    # The ledger's own consistency, and its agreement with the parser's
+    # refusals, are checked by `tombstone_errors' (#6193, issue #6187), which
+    # reads both lists.  This PR contributes the four `form=' rows; whichever
+    # of the two lands second carries them.
     for scope, spelling, replacement, meaning in by_kind["alias"]:
         try:
             parse_value_alias_sunset(meaning)
@@ -750,14 +700,9 @@ def reference_texts(entries: list[Entry]) -> tuple[str, str]:
         )
     )
     for row in tombstones(entries):
-        migration = (
-            rf"use \texttt{{{_tex(row['replacement'])}}}. {_tex(row['migration'])}"
-            if row["replacement"]
-            else _tex(row["migration"])
-        )
         alias_lines.append(
             rf"{_tex(row['scope'])} & \texttt{{{_tex(row['spelling'])}}} & "
-            rf"{migration} \\"
+            rf"{_tex(row['migration'])} \\"
         )
     alias_lines.extend((r"\bottomrule\end{tabularx}", "}"))
     return "\n".join(lines) + "\n", "\n".join(alias_lines) + "\n"

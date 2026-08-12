@@ -3093,38 +3093,30 @@ which is where the fill went, and `cut` says there is no successor and points
 at the contour of what a cut separates. A tombstone is a branch of a key that
 is already installed, so it opens no parser path.
 
-**Where a dead spelling lives.** In the registry, and nowhere else. Section 10
-has said since session 0 that deleted spellings stay there so the linter can
-reject them forever with the migration hint, and the first draft of this
+**Where a dead spelling lives.** In the registry, and nowhere else. Section
+10 has said since session 0 that deleted spellings stay there so the linter
+can reject them forever with the migration hint, and the first draft of this
 change did the opposite: it struck the four words from the registry and wrote
 them again as parser branches, which is a second copy of the same knowledge
 and the one thing section 10 forbids. The registry now carries a tombstone
-row per dead spelling, naming the scope, the key, the value, the replacement
-and the migration sentence, and three readers take that row rather than a
-list of their own. The parser installs the refusal from it, so what a compile
-prints is the row read aloud. The generated reference prints it beside the
-aliases, which answer the same reader holding an older document. The
-disposition checker had held a fourth copy of the four names and now reads
-them here too, which also corrects it: that copy called `prose` dead, and
-`prose` is live.
+row per dead spelling, giving the scope, the dead spelling and the migration.
+A spelling written `key=value` is a word struck from a live key's alphabet,
+which the parser refuses through a branch of its own; a bare spelling is a
+key that no longer exists, which the unknown-key error answers.
 
-The registry check refuses a row that would make the record lie. A tombstone
-may not bury a spelling its key still accepts, may not bury a key the
-registry still registers, and may not migrate a reader to vocabulary that is
-not live, so a migration pointing at a second dead spelling fails the gate
-rather than the reader. This is the record `#6187` reads for the linter.
+The row is the record and the parser's refusal answers to it: the language
+check holds the two to one list in both directions, migration text included,
+so a refusal the ledger does not record fails, a row the parser does not
+refuse fails, and a row whose word is still in its key's alphabet fails. The
+same rows are what the source lint builds its rejection from and what the
+generated reference publishes beside the aliases, which answer the same
+reader holding an older document. The disposition checker had held a fourth
+copy of the four names and now reads them here too, which also corrects it:
+that copy called `prose` dead, and `prose` is live.
 
-**No meter moves, and that is the finding.** M1 stays at 63 kernel rows and 86
-public elements, M2 at 75 parser paths with an unchanged identity hash, M3 at
-zero, M4 at 26.48, M5 and M6 unchanged. The mark form row survives, four of
-its words do not, and no meter counts a word inside a closed alphabet. The
-alphabets are surface on the same terms as the metric registry, which section
-11 already names as the ledger the meters do not count: a word is spelled,
-inherited by every theme, and as expensive to remove after a release as a key.
-The remedy is not a seventh meter. It is that every alphabet in section 2.8
-states its words in the contract, which it does, and that a shrink session
-diffs those tables when it diffs the census. Trigger: the 1.0 close, where the
-alphabet tables and the registry enums are compared once against the parser.
+The row shape and the pairing check are the ledger landed for the linter by
+the change that retired the hand-spelled `periodic`. This session contributes
+the four `form=` rows, whose migrations the parser prints word for word.
 
 Two documentation defects the same audit falsified are corrected in the
 registry, which is where the generated reference reads its prose. `\tnprose`
