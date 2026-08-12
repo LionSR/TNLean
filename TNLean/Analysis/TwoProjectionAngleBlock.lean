@@ -118,9 +118,10 @@ theorem angleDefect_block {P Q : E →ₗ[ℂ] E}
         rw [angleDefect, inner_sub_left, inner_smul_left]
       _ = μ * (1 - μ) := by rw [hQxDefect, hxDefect]; norm_num
 
-/-- Normalized form of `angleDefect_block`.  The vectors `x,w` are orthonormal,
-`P` is the rank-one projection onto `x`, and `Q` has its standard angle-block
-action with off-diagonal coefficient `sqrt (μ(1-μ))`. -/
+/-- Normalized form of `angleDefect_block`. The vectors `x,w` are orthonormal;
+on their two-dimensional span, `P` acts as the projection onto `x`, while `Q`
+has its standard angle-block action with off-diagonal coefficient
+`sqrt (μ(1-μ))`. -/
 theorem exists_orthonormal_angleBlock {P Q : E →ₗ[ℂ] E}
     (hP : P.IsSymmetricProjection) (hQ : Q.IsSymmetricProjection)
     {μ : ℝ} (hμ0 : 0 < μ) (hμ1 : μ < 1) {x : E}
