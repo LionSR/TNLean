@@ -302,10 +302,10 @@
 
 \begin{definition}[Operator-Schmidt rank]
     \label{def:bipartite_operator_schmidt_rank}
-    \lean{Matrix.HasOperatorSchmidtDecomposition,
-      Matrix.operatorSchmidtRank,
-      Matrix.hasOperatorSchmidtDecomposition_operatorSchmidtRank,
-      Matrix.operatorSchmidtRank_minimal}
+    \lean{Matrix.HasOperatorSchmidtDecomposition}
+    \lean{Matrix.operatorSchmidtRank}
+    \lean{Matrix.hasOperatorSchmidtDecomposition_operatorSchmidtRank}
+    \lean{Matrix.operatorSchmidtRank_minimal}
     \leanok
     For a bipartite density operator
     $\rho\in\MN{d_A}\otimes\MN{d_B}$, its
@@ -399,8 +399,7 @@
 \begin{theorem}[Coefficient-space characterization of operator-Schmidt rank]
     \label{thm:operator_schmidt_coefficient_space}
     \lean{Matrix.range_operatorSchmidtMap_eq_operatorBlockSpan,
-      Matrix.operatorSchmidtRank_eq_finrank_operatorBlockSpan,
-      Matrix.operatorSchmidtRank_minimal}
+      Matrix.operatorSchmidtRank_eq_finrank_operatorBlockSpan}
     \leanok
     \uses{def:bipartite_operator_schmidt_rank}
     Write $\rho_{ij}\in\MN{d_B}$ for the blocks determined by a basis
@@ -414,13 +413,16 @@
     \end{align}
 \end{theorem}
 \begin{proof}\leanok
-    The range of $\mathcal R_\rho$ is the span of the blocks. If
-    $\rho=\sum_{t=1}^{r}A_t\otimes B_t$, every block belongs to
-    $\spn\{B_1,\ldots,B_r\}$, so the range dimension is at most
-    $r$. Conversely, choose a basis $B_1,\ldots,B_s$ of the block span and
-    expand each block as $\rho_{ij}=\sum_t(A_t)_{ij}B_t$. This gives
-    $\rho=\sum_{t=1}^{s}A_t\otimes B_t$, where
-    $s=\dim\range\mathcal R_\rho$.
+    \uses{def:bipartite_operator_schmidt_rank}
+    The minimality theorem at the preceding definition proves that the range
+    dimension $\dim\range\mathcal R_\rho$ is the least admissible
+    product-decomposition length: it is itself an admissible length and no
+    shorter length suffices. Since the operator-Schmidt rank is defined as the
+    least such length, uniqueness of the least integer identifies the two, giving
+    the first equality $\operatorname{OSR}(\rho)=\dim\range\mathcal R_\rho$. For
+    the second equality, $\mathcal R_\rho$ is the linear combination map sending
+    a coefficient matrix $X$ to $\sum_{i,j}X_{ij}\rho_{ij}$, so its range is
+    exactly the span of the operator blocks $\rho_{ij}$.
 \end{proof}
 
 \begin{theorem}[Operator-Schmidt rank under local isometries]
