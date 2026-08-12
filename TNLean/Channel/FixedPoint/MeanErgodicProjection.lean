@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.Analysis.MeanErgodic
 import TNLean.Channel.Basic
+import TNLean.Channel.Semigroup.CPClosure
 
 /-!
 # Positive trace-nonincreasing mean-ergodic projections
@@ -13,7 +14,10 @@ A positive trace-nonincreasing endomorphism of a finite-dimensional complex
 matrix algebra has bounded forward orbits.  Its finite-dimensional
 mean-ergodic projection is therefore defined and positive.  For a
 trace-preserving map, the projection is trace-preserving and fixes the identity
-whenever the original map fixes the identity.
+whenever the original map fixes the identity.  A completely positive map has a
+completely positive mean-ergodic projection: each Cesàro average is a
+nonnegative multiple of a finite sum of powers, hence completely positive, and
+the set of completely positive maps is closed in finite dimension.
 
 The bounded-orbit estimate is proved directly.  A positive semidefinite orbit
 remains in a bounded trace section of the positive cone.  Hermitian matrices are
@@ -38,6 +42,10 @@ complex linear combinations of two Hermitian matrices.
   fixed by the mean-ergodic projection.
 * `IsPositiveMap.range_meanErgodicProjection_of_tracePreserving`: the range of
   the resulting projection is exactly the fixed-point space.
+* `IsCPMap.meanErgodicProjection_isCPMap`: the mean-ergodic projection of a
+  completely positive map is completely positive.
+* `IsChannel.meanErgodicProjection`: the mean-ergodic projection of a quantum
+  channel is again a quantum channel.
 
 ## References
 
@@ -331,3 +339,110 @@ theorem IsPositiveMap.meanErgodicProjection_apply_eq_self_iff_of_tracePreserving
       T X = X := by
   exact (hT.hasBoundedOrbits_of_tracePreserving hTP)
     |>.meanErgodicProjection_apply_eq_self_iff X
+
+/-! ### Pointwise convergence implies operator-norm convergence in finite dimension -/
+
+namespace ContinuousLinearMap
+
+variable {E : Type*} [NormedAddCommGroup E] [NormedSpace ℂ E] [FiniteDimensional ℂ E]
+
+/-- In finite dimension, pointwise convergence of continuous linear
+endomorphisms implies convergence in the operator norm: evaluation on a finite
+basis is a linear isomorphism onto a finite product, hence a homeomorphism. -/
+theorem tendsto_of_tendsto_apply_of_finiteDimensional {S : ℕ → E →L[ℂ] E} {P : E →L[ℂ] E}
+    (h : ∀ x : E, Tendsto (fun n : ℕ ↦ S n x) atTop (𝓝 (P x))) :
+    Tendsto S atTop (𝓝 P) := by
+  classical
+  let ι := Fin (Module.finrank ℂ E)
+  let b := Module.finBasis ℂ E
+  -- Evaluation on the basis, as a continuous linear map into a finite product.
+  let Φ : (E →L[ℂ] E) →L[ℂ] (ι → E) :=
+    ContinuousLinearMap.pi fun i ↦ (ContinuousLinearMap.apply ℂ E) (b i)
+  have hΦ : ∀ (f : E →L[ℂ] E) (i : ι), Φ f i = f (b i) := fun f i ↦
+    ContinuousLinearMap.pi_apply _ f i
+  -- `Φ` is bijective: maps are determined by their values on the basis.
+  have hinj : Function.Injective Φ.toLinearMap := by
+    intro f g hfg
+    have hfg' : ∀ i : ι, f (b i) = g (b i) := fun i ↦
+      calc f (b i) = Φ f i := (hΦ f i).symm
+        _ = Φ g i := congrFun hfg i
+        _ = g (b i) := hΦ g i
+    have hlin : f.toLinearMap = g.toLinearMap := b.ext hfg'
+    exact ContinuousLinearMap.ext fun x ↦ LinearMap.congr_fun hlin x
+  have hsurj : Function.Surjective Φ.toLinearMap := by
+    intro w
+    refine ⟨LinearMap.toContinuousLinearMap (b.constr ℂ w), ?_⟩
+    ext i
+    change Φ (LinearMap.toContinuousLinearMap (b.constr ℂ w)) i = w i
+    rw [hΦ]
+    exact b.constr_basis (M' := E) ℂ w i
+  let e := LinearEquiv.ofBijective Φ.toLinearMap ⟨hinj, hsurj⟩
+  -- Both directions are continuous in finite dimension.
+  have hfwd : Continuous e := Φ.toLinearMap.continuous_of_finiteDimensional
+  have hbwd : Continuous e.symm := e.symm.toLinearMap.continuous_of_finiteDimensional
+  -- Convergence of the evaluations, then transport back.
+  have hEval : Tendsto (fun n : ℕ ↦ e (S n)) atTop (𝓝 (e P)) := by
+    rw [tendsto_pi_nhds]
+    intro i
+    have hS : ∀ n : ℕ, e (S n) i = S n (b i) := fun n ↦ hΦ (S n) i
+    have hP : e P i = P (b i) := hΦ P i
+    simp_rw [hS, hP]
+    exact h (b i)
+  have hb := (hbwd.tendsto (e P)).comp hEval
+  have heq : e.symm ∘ (fun n : ℕ ↦ e (S n)) = S := by
+    funext n
+    exact e.symm_apply_apply (S n)
+  rw [heq] at hb
+  simpa only [LinearEquiv.symm_apply_apply] using hb
+
+end ContinuousLinearMap
+
+/-! ### Complete positivity of the mean-ergodic projection -/
+
+/-- The finite-dimensional mean-ergodic projection of a completely positive
+matrix endomorphism is completely positive.
+
+The `N`-th Cesàro average is the nonnegative multiple `N⁻¹` of the finite sum
+`∑_{n < N} T ^ n`, so it is completely positive.  These averages converge
+pointwise, hence in the operator norm, to the mean-ergodic projection, and the
+set of completely positive maps is closed in finite dimension.
+
+Source: Wolf, Proposition 6.3(iii) and Equation (6.14), local source
+`Notes/WolfNoteTexSource/ch06_spectral_properties.tex`, lines 226--238. -/
+theorem IsCPMap.meanErgodicProjection_isCPMap
+    {T : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ}
+    (hT : IsCPMap T) (hbounded : T.HasBoundedOrbits) :
+    IsCPMap (LinearMap.meanErgodicProjection T hbounded) := by
+  classical
+  rcases Nat.eq_zero_or_pos D with rfl | hD
+  · exact isCPMap_finZero _
+  haveI : NeZero D := ⟨hD.ne'⟩
+  set S : ℕ → Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ :=
+    fun N ↦ (((N : ℝ)⁻¹ : ℝ) : ℂ) • ∑ n ∈ Finset.range N, T ^ n with hSdef
+  have hScp : ∀ N, IsCPMap (S N) := fun N ↦
+    (Finset.isCPMap_sum _ _ fun n _ ↦ hT.pow n).smul_nonneg (by positivity)
+  have hSapply : ∀ (N : ℕ) (X : Matrix (Fin D) (Fin D) ℂ),
+      S N X = birkhoffAverage ℂ T _root_.id N X := by
+    intro N X
+    simp only [hSdef, birkhoffAverage, birkhoffSum, LinearMap.smul_apply,
+      LinearMap.coe_sum, Finset.sum_apply, Module.End.pow_apply, id_eq]
+    push_cast
+    rfl
+  refine IsCPMap.of_tendsto_toCLM hScp
+    (ContinuousLinearMap.tendsto_of_tendsto_apply_of_finiteDimensional fun X ↦ ?_)
+  exact (hbounded.tendsto_birkhoffAverage_meanErgodicProjection X).congr fun N ↦
+    (hSapply N X).symm
+
+/-- The mean-ergodic projection `T_∞` of a quantum channel is again a quantum
+channel: this is the assertion of Wolf's Cesàro-means proposition for `T_∞`
+in the completely positive case.
+
+Source: Wolf, Proposition 6.3 and Equation (6.14), local source
+`Notes/WolfNoteTexSource/ch06_spectral_properties.tex`, lines 226--238. -/
+theorem IsChannel.meanErgodicProjection
+    {T : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ}
+    (hT : IsChannel T) :
+    IsChannel (LinearMap.meanErgodicProjection T
+      (hT.cp.isPositiveMap.hasBoundedOrbits_of_tracePreserving hT.tp)) where
+  cp := hT.cp.meanErgodicProjection_isCPMap _
+  tp := hT.tp.meanErgodicProjection_isTracePreservingMap _

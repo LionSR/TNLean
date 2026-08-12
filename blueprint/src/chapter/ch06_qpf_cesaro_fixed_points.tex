@@ -189,6 +189,35 @@
     assertion for $T_\varphi'$.
 \end{proof}
 
+\begin{corollary}[Channel structure of the mean-ergodic projection]
+    \label{cor:mean_ergodic_projection_channel}
+    \lean{IsCPMap.meanErgodicProjection_isCPMap,
+        IsChannel.meanErgodicProjection}
+    \leanok
+    \uses{def:mean_ergodic_projection,
+        thm:mean_ergodic_bounded_orbits,
+        thm:positive_trace_preserving_mean_ergodic_projection}
+    Let $T:\MN{D}\to\MN{D}$ be completely positive and trace-preserving. Then
+    the mean-ergodic projection $T_\infty$ of
+    \cite[Equation~(6.14)]{Wolf2012Quantum} is completely positive, hence a
+    quantum channel. Together with
+    Corollary~\ref{cor:peripheral_projection_channel} this completes the
+    preservation assertion of \cite[Proposition~6.3]{Wolf2012Quantum} for all
+    three maps $T_\infty$, $T_\varphi$, and $T_\varphi'$.
+\end{corollary}
+
+\begin{proof}\leanok
+    \uses{def:mean_ergodic_projection,
+        thm:mean_ergodic_bounded_orbits,
+        thm:positive_trace_preserving_mean_ergodic_projection}
+    The $N$-th Ces\`aro average is the nonnegative multiple $1/N$ of a finite
+    sum of powers of $T$, and powers and sums of completely positive maps are
+    completely positive. These averages converge pointwise to $T_\infty$,
+    hence in operator norm, and in finite dimension the completely positive
+    maps form a closed set. Trace preservation of $T_\infty$ is
+    Theorem~\ref{thm:positive_trace_preserving_mean_ergodic_projection}.
+\end{proof}
+
 \begin{theorem}[Peripheral absorption of the mean-ergodic projection]
     \label{thm:peripheral_mean_ergodic_absorption}
     \lean{IsPositiveMap.peripheralProjection_comp_meanErgodicProjection}
