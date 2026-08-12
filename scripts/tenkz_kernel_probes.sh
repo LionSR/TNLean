@@ -30,6 +30,24 @@ for tex in "$WORK"/*.tex; do
   compile "$(basename "$tex")"
 done
 
+# The CZX fixture is the section 12.5 sketch of the contract, so a reader who
+# copies the printed sketch compiles what this suite pins.  The extraction
+# drops the display-math delimiters of the printed form and nothing else.
+CONTRACT="$REPO/docs/tenkz/LANGUAGE-1.0.md"
+awk 'index($0,"### 12.5")==1{s=1} s&&$0=="```tex"{f=1;next} f&&$0=="```"{exit} f' \
+  "$CONTRACT" | sed -e 's/^\\\[//' -e 's/\\\]$//' >"$WORK/czx-contract.tex"
+awk 'index($0,"\\tenkzkernel")==1{f=1;next}
+     index($0,"\\end{document}")==1{f=0} f' \
+  "$KERNEL/k_czx.tex" >"$WORK/czx-fixture.tex"
+[ -s "$WORK/czx-contract.tex" ] || {
+  echo "FAIL: the contract's 12.5 sketch could not be extracted" >&2
+  exit 1
+}
+if ! diff -u "$WORK/czx-contract.tex" "$WORK/czx-fixture.tex"; then
+  echo "FAIL: k_czx.tex is no longer the contract's 12.5 sketch verbatim" >&2
+  exit 1
+fi
+
 atom_count=$(grep -c '^atom|' "$WORK/r_explicit_at.tnlog" || true)
 [ "$atom_count" -eq 2 ] || {
   echo "FAIL: explicit at= did not suppress population of its claimed cell" >&2
