@@ -9,10 +9,10 @@ import Mathlib.Analysis.InnerProductSpace.Spectrum
 /-!
 # Compression spectrum for the two-projection decomposition
 
-This file starts the global assembly in Jordan's lemma for two orthogonal
-projections.  It diagonalizes the compression of the second projection to the
-range of the first and classifies every compression eigenvector as an endpoint
-block or a genuine two-dimensional angle block.
+This file begins Jordan's lemma for two orthogonal projections: it diagonalizes
+the compression of the second projection to the range of the first and
+classifies every compression eigenvector as a common one-dimensional block
+(compression eigenvalue `0` or `1`) or a genuine two-dimensional angle block.
 
 The construction is the first global step used in arXiv:1703.09188,
 Proposition IV.5 (`prop:continuity-index`), lines 759–762.
@@ -40,8 +40,8 @@ noncomputable def rangeCompressionEigenvalues {P Q : E →ₗ[ℂ] E}
 
 /-- An orthonormal eigenbasis for the compression of `Q` to `range P`.
 
-This is the basis on the `P`-range from which the one- and two-dimensional
-blocks in arXiv:1703.09188, Proposition IV.5, lines 759–762 are assembled. -/
+This is the basis from which the one- and two-dimensional blocks in the
+`P`-range are obtained in arXiv:1703.09188, Proposition IV.5, lines 759–762. -/
 noncomputable def rangeCompressionEigenbasis {P Q : E →ₗ[ℂ] E}
     (hP : P.IsSymmetricProjection) (hQ : Q.IsSymmetricProjection) :
     OrthonormalBasis (Fin (Module.finrank ℂ P.range)) ℂ P.range :=
@@ -82,10 +82,10 @@ theorem rangeCompressionEigenvalues_mem_unitInterval {P Q : E →ₗ[ℂ] E}
 blocks; every other eigenvector gives the normalized two-dimensional angle
 block from `exists_orthonormal_angle_block`.
 
-This is the spectral classification step in the global Jordan decomposition
-invoked in arXiv:1703.09188, Proposition IV.5, lines 759–762. It does not yet
-assemble the orthogonal complement of `range P`, nor define the reduced
-projector used later in that proof. -/
+This is the spectral classification used in the global Jordan decomposition
+of arXiv:1703.09188, Proposition IV.5, lines 759–762. It does not yet include
+the orthogonal complement of `range P` in the ambient orthogonal direct sum or
+define the reduced projector used later in that proof. -/
 theorem rangeCompressionEigenvalues_eq_zero_or_eq_one_or_exists_angle_block
     {P Q : E →ₗ[ℂ] E}
     (hP : P.IsSymmetricProjection) (hQ : Q.IsSymmetricProjection)
