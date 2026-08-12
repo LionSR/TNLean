@@ -6316,21 +6316,108 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
   % Source lines: paper_v2.tex 1945--1962.
 \end{proposition}
 
-\begin{definition}[Three topological-insulator-inspired MPUs]
-  \label{threeMPU}
-  \notready
-  \discussion{5715}
-  Let $T^{(N)}$ be the right shift on $(\mathbb C^d)^{\otimes N}$,
+\begin{definition}[Right- and left-shift tensors]
+  \label{def:mpu_shift_tensors}
+  \lean{MPOTensor.rightShiftTensor}
+  \lean{MPOTensor.leftShiftTensor}
+  \leanok
+  \uses{def:mpdo_physical_adjoint}
+  The right shift on $(\mathbb C^d)^{\otimes N}$ is
   \begin{align}
     T^{(N)}\lvert n_1,\ldots,n_N\rangle
       &=\lvert n_N,n_1,\ldots,n_{N-1}\rangle.
   \end{align}
+  It has bond dimension $d$ and local matrices
+  $A^{ij}=\lvert i\rangle\langle j\rvert$.
+  The physical adjoint of $A$ defines the left-shift tensor.
+  % Source lines: paper_v2.tex 1980--1987.
+\end{definition}
+
+\begin{theorem}[Shift tensor formulas]
+  \label{thm:mpu_shift_tensor_formulas}
+  \lean{MPOTensor.mpo_rightShiftTensor_apply}
+  \lean{MPOTensor.mpo_rightShiftTensor}
+  \lean{MPOTensor.mpo_leftShiftTensor}
+  \lean{MPOTensor.rightShiftTensor_isMPU}
+  \lean{MPOTensor.leftShiftTensor_isMPU}
+  \leanok
+  \uses{def:mpu_shift_tensors,def:mpu,thm:mpu_physical_adjoint_identities}
+  For every $N>0$, the tensors in Definition~\ref{def:mpu_shift_tensors}
+  generate $T^{(N)}$ and $T^{(N)\dagger}$, respectively.  Both tensors are
+  matrix product unitaries.
+\end{theorem}
+
+\begin{proof}\leanok
+  \uses{def:mpo_eval_word,def:mpo_rotate_config,
+    lem:eval_word_of_fn_prod,thm:trace_eval_word_eq_sum_cyclic,def:mpu,
+    thm:mpu_physical_adjoint_identities}
+  Closing the virtual indices of $A^{ij}=\lvert i\rangle\langle j\rvert$
+  leaves one nonzero virtual configuration.  If
+  $\tau_n=\sigma_{n+1}$ for every $n$ modulo $N$, then
+  \begin{align}
+    \langle\sigma\vert T^{(N)}\vert\tau\rangle&=1.
+  \end{align}
+  Otherwise the same matrix entry is zero.  Hence the output configuration is
+  $(\tau_{N-1},\tau_0,\ldots,\tau_{N-2})$, which fixes the permutation-matrix
+  convention and gives the right shift.  Its permutation matrix is unitary.
+  Physical adjunction gives the conjugate transpose, hence the left shift and
+  its unitarity.
+\end{proof}
+
+\begin{definition}[Three topological-insulator shift MPUs]
+  \label{threeMPU}
+  \lean{MPOTensor.identityMPUTensor}
+  \lean{MPOTensor.shiftExampleU₁}
+  \lean{MPOTensor.shiftExampleU₂}
+  \lean{MPOTensor.shiftExampleU₃}
+  \leanok
+  \uses{def:mpu_shift_tensors,def:mpu_independent_tensor_product,
+    def:mpo_stacked_layers}
   On two $d$-dimensional spins per site, define
   \begin{align}
     U_1^{(N)}&=(\Id\otimes\Id)^{\otimes N},\\
     U_2^{(N)}&=T^{(N)\dagger}\otimes T^{(N)},\\
     U_3^{(N)}&=T^{(N)}\otimes T^{(N)\dagger}.
   \end{align}
+  % Source lines: paper_v2.tex 1988--1995.
+\end{definition}
+
+\begin{theorem}[Finite-chain formulas for the three shift MPUs]
+  \label{thm:threeMPU_chain_formulas}
+  \lean{MPOTensor.mpo_identityMPUTensor}
+  \lean{MPOTensor.identityMPUTensor_isMPU}
+  \lean{MPOTensor.mpo_shiftExampleU₁}
+  \lean{MPOTensor.mpo_shiftExampleU₂}
+  \lean{MPOTensor.mpo_shiftExampleU₃}
+  \lean{MPOTensor.shiftExampleU₁_isMPU}
+  \lean{MPOTensor.shiftExampleU₂_isMPU}
+  \lean{MPOTensor.shiftExampleU₃_isMPU}
+  \leanok
+  \uses{threeMPU,thm:mpu_shift_tensor_formulas,thm:mpu_finite_tensor_product,
+    thm:mpu_tensor_product,def:mpu}
+  The three tensors generate the operators displayed in
+  Definition~\ref{threeMPU} on every nonempty chain, and each tensor is a
+  matrix product unitary.
+\end{theorem}
+
+\begin{proof}\leanok
+  \uses{def:mpo_stacked_layers,thm:mpu_finite_tensor_product,
+    thm:mpu_shift_tensor_formulas,thm:mpu_tensor_product,def:mpu}
+  The bond-one identity tensor generates the identity at every length.  The
+  finite-chain operator of an independent tensor product is the Kronecker
+  product of the two finite-chain operators, after the sitewise identification
+  $(\mathbb C^d\otimes\mathbb C^d)^{\otimes N}
+  \cong(\mathbb C^d)^{\otimes N}\otimes(\mathbb C^d)^{\otimes N}$.  Applying
+  this identity to the right and left shifts gives the three displayed
+  formulas.  The identity tensor is unitary, and tensor products preserve
+  unitarity, so all three tensors are matrix product unitaries.
+\end{proof}
+
+\begin{proposition}[Standard forms of the three shift MPUs]
+  \label{prop:threeMPU_standard_forms}
+  \notready
+  \discussion{5715}
+  \uses{threeMPU}
   Their standard-form unitaries satisfy
   \begin{align}
     u_1&=\Id\otimes\Id,&v_1&=\Id\otimes\Id,\\
@@ -6342,8 +6429,8 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
       (\mathbb S\otimes\mathbb S),&
     v_3^{(2)}&=\Id\otimes\mathbb S\otimes\Id.
   \end{align}
-  % Source lines: paper_v2.tex 1980--2042.
-\end{definition}
+  % Source lines: paper_v2.tex 2002--2042.
+\end{proposition}
 
 \begin{definition}[Transformation with swaps]
   \label{threeMPU2}
