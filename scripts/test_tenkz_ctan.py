@@ -988,9 +988,9 @@ def test_every_spelling_of_stream_eighteen_is_the_shell_escape_stream() -> None:
     assert not tenkz_ctan.shell_escape_call(
         "\\newwrite\\out\n\\immediate\\write\\out{x}\n"
     )
-    assert tenkz_ctan.shell_escape_call(
-        "\\newwrite\\out\n\\def\\out{18}\n\\write\\out{x}\n"
-    )
+    for overwritten in ("\\newwrite\\out\n\\def\\out{18}\n\\write\\out{x}\n",
+                        "\\newwrite\\out\n\\chardef\\out=18\n\\write\\out{x}\n"):
+        assert tenkz_ctan.shell_escape_call(overwritten), overwritten
     for named in (r"\sys_shell_now:n {ls}", r"\sys_shell_shipout:x {ls}",
                   r"\sys_get_shell:nnN {x}{y}\z", r"\ior_shell_open:Nn \x {ls}",
                   r"\iow_shell_open:Nn \x {ls}", r"\DelayedShellEscape{ls}"):
@@ -1091,6 +1091,7 @@ def test_an_unbraced_absolute_input_is_an_absolute_path() -> None:
                      r"\openin\src=/Users/somebody/data.tex",
                      r"\openin1 /Users/somebody/data.tex",
                      r"\openout\log=/Users/somebody/run.log",
+                     r"\graphicspath{{/Users/somebody/figures/}}",
                      # A path holding a space is written quoted, braced or not.
                      '\\input{"/Users/somebody/My Documents/f.tex"}'):
             (tree / "tenkz.sty").write_text(load + "\n", encoding="utf-8")
