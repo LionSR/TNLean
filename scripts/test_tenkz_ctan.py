@@ -107,7 +107,9 @@ def test_closure_reads_the_unbraced_input() -> None:
         # space, and expl3's own file input.
         for spelling in ('\\input"tenkz-stage.code.tex"',
                          '\\input {"tenkz-stage.code.tex"}',
-                         '\\file_input:n {tenkz-stage.code.tex}'):
+                         '\\file_input:n {tenkz-stage.code.tex}',
+                         '\\InputIfFileExists{tenkz-stage.code.tex}{}{}',
+                         '\\file_if_exist_input:n {tenkz-stage.code.tex}'):
             (source / "tenkz.sty").write_text(
                 STAGE_CONTRACT + spelling + "\n", encoding="utf-8"
             )
@@ -1106,6 +1108,10 @@ def test_an_unbraced_absolute_input_is_an_absolute_path() -> None:
                      r"\graphicspath{{figures/}{/Users/somebody/more/}}",
                      r"\file_get:nnN {/Users/somebody/data} {} \l_tmpa_tl",
                      r"\ior_open:Nn \stream {/Users/somebody/data}",
+                     # The argument signature is part of an expl3 name, so the
+                     # conditional variants have to be reached too.
+                     r"\file_if_exist_input:nF {/Users/somebody/data}{}",
+                     '\\font\\tenkzfont="/Users/somebody/foo.otf"',
                      # A path holding a space is written quoted, braced or not.
                      '\\input{"/Users/somebody/My Documents/f.tex"}'):
             (tree / "tenkz.sty").write_text(load + "\n", encoding="utf-8")
