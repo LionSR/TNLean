@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.MPDO.FibonacciBoundaryRank
 import TNLean.MPS.MPDO.PureRecovery
+import TNLean.MPS.MPDO.StrongRFPRankGrowth
 
 /-!
 # Periodic operator rank of the Fibonacci boundary tensor
@@ -95,6 +96,20 @@ theorem rank_mpo_toMPOTensor_not_geometric (W : FusionWeights) :
   rintro ⟨r, s, h⟩
   exact periodicTransitionCount_not_geometric ⟨r, s, fun N hN ↦
     (rank_mpo_toMPOTensor_eq_periodicTransitionCount W N hN).symm.trans (h N hN)⟩
+
+/-- The canonical Fibonacci diagonal MPO tensor is not a strong
+renormalization fixed point.
+
+Source: arXiv:1606.00608, Appendix D, lines 2109--2125. -/
+theorem toMPOTensor_not_isStrongRFP (W : FusionWeights) :
+    ¬MPOTensor.IsStrongRFP (tensor W).toMPOTensor := by
+  intro hRFP
+  obtain ⟨P, _, _, hgeom⟩ := hRFP.exists_periodic_rank_factor
+  apply rank_mpo_toMPOTensor_not_geometric W
+  exact ⟨(MPOTensor.mpo (tensor W).toMPOTensor 1).rank, P.rank, fun N hN ↦ by
+    cases N with
+    | zero => omega
+    | succ n => simpa using hgeom n⟩
 
 end FibonacciBoundary
 end MPSTensor
