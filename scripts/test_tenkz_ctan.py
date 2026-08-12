@@ -1010,8 +1010,12 @@ def test_every_spelling_of_stream_eighteen_is_the_shell_escape_stream() -> None:
     # Only the primitives that open a file are read: `\\write` and `\\read` take
     # a stream already open and a token list that is data, so a token list
     # beginning with a bar is text.
+    # The loaders take a file name directly, with no stream operand: an
+    # operand reading let a page of typeset text count as a pipe.
     for plain in ('\\openin\\stream="plain.tex"', r'\def\separator{"|}',
                   'the sequence "| in prose',
+                  r"\input 1 {|literal}", r"\include 12 {|literal}",
+                  "\\input \\pagecount {|literal}\n",
                   "\\newwrite\\out\n\\write\\out{|literal}\n"):
         assert not tenkz_ctan.shell_escape_call(plain), plain
     # A name the same file redefines is no longer the stream it was allocated
@@ -1138,14 +1142,25 @@ def test_an_unbraced_absolute_input_is_an_absolute_path() -> None:
                      # The argument signature is part of an expl3 name, so the
                      # conditional variants have to be reached too.
                      r"\file_if_exist_input:nF {/Users/somebody/data}{}",
+                     # The existence conditional is a family: every signature
+                     # variant asks the same machine-local question, and the
+                     # predicate form spells an underscore-p before its colon.
+                     r"\file_if_exist:nTF {/Users/somebody/data} {} {}",
+                     r"\file_if_exist:nT {/Users/somebody/data} {}",
+                     r"\file_if_exist:nF {/Users/somebody/data} {}",
+                     r"\file_if_exist_p:n {/Users/somebody/data}",
                      '\\font\\tenkzfont="/Users/somebody/foo.otf"',
                      # A path holding a space is written quoted, braced or not.
                      '\\input{"/Users/somebody/My Documents/f.tex"}'):
             (tree / "tenkz.sty").write_text(load + "\n", encoding="utf-8")
             found = tenkz_ctan.check_arxiv(tree, _loaded("tenkz.sty"))
             assert any("absolute path" in r for r in found.failures), (load, found.failures)
-        (tree / "tenkz.sty").write_text("\\input tenkz-core.code.tex\n", encoding="utf-8")
-        relative = tenkz_ctan.check_arxiv(tree, _loaded("tenkz.sty"))
+        for innocent in ("\\input tenkz-core.code.tex\n",
+                         "\\file_if_exist:nT {tenkz-stage.code.tex} {}\n",
+                         "\\file_if_exist_p:n {tenkz-stage.code.tex}\n"):
+            (tree / "tenkz.sty").write_text(innocent, encoding="utf-8")
+            relative = tenkz_ctan.check_arxiv(tree, _loaded("tenkz.sty"))
+            assert not relative.failures, (innocent, relative.failures)
     assert any("absolute path" in reason for reason in unbraced.failures), unbraced.failures
     assert not relative.failures, relative.failures
 
