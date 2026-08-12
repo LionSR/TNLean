@@ -162,9 +162,10 @@ def main() -> int:
     # A retired spelling stays installed as a tombstone, and the registry's
     # tombstone rows are the one record of which spellings those are.  What is
     # pinned here is that identity: every row the registry carries is refused
-    # by a compile, in the row's own words.  A row added to the registry is
-    # therefore covered without touching this test, and a refusal whose wording
-    # drifts from the record fails it.
+    # by a compile, in the row's own words, so a refusal whose wording drifts
+    # from the record fails.  A row is compiled through a probe for its scope;
+    # a scope with no probe fails rather than being passed over, so the ledger
+    # cannot grow a spelling this test silently stops covering.
     form_row = next(
         entry.fields
         for entry in registry
@@ -175,18 +176,37 @@ def main() -> int:
     graves = tenkz_language.tombstones(registry)
     if not graves:
         raise SystemExit("the registry carries no tombstone rows")
+    # One probe per scope: the body that puts a record of that scope on a page
+    # with `<key>=<value>' among its options.  Only scopes the ledger actually
+    # carries are listed, because a probe has to be written against the key it
+    # exercises: a tombstone branch answers a closed alphabet, so a row on a
+    # key that parses its own value needs a different mechanism, and whoever
+    # adds that row should discover it here rather than be waved through by a
+    # probe written on spec.
+    probes = {
+        "kernel-mark": (
+            r"\tn[name=a]{A} & \tn[name=b]{B}"
+            "\n  \\tnmark[%s]{(1,1) .. (1,2)}{$L$}"
+        ),
+    }
     for row in graves:
         # a bare spelling is a key that no longer exists, which the parser
         # cannot branch on; the unknown-key error answers that one
-        if row["scope"] != "kernel-mark" or not row["value"]:
+        if not row["value"]:
             continue
+        if row["scope"] not in probes:
+            raise SystemExit(
+                f"{row['spelling']} is a tombstone of scope {row['scope']}, "
+                "which this test has no probe for; add one rather than leaving "
+                "the row uncompiled"
+            )
+        body = probes[row["scope"]] % f"{row['key']}={row['value']}"
         refused = compile_source(
             rf"""\documentclass{{standalone}}
 \usepackage{{tenkz}}
 \begin{{document}}
-\begin{{tenkz}}[rows={{ket}}, cols=2]
-  \tn{{A}} & \tn{{A}}
-  \tnmark[{row["key"]}={row["value"]}]{{(1,1) .. (1,2)}}{{$L$}}
+\begin{{tenkz}}[rows={{ket}}, cols=2, bonds=none]
+  {body}
 \end{{tenkz}}
 \end{{document}}
 """
