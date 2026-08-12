@@ -4455,6 +4455,75 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
   two images and multiply their dimensions.
 \end{proof}
 
+\begin{definition}[Specified-tensor source-index value]
+  \label{def:mpu_specified_source_index_value}
+  \lean{MPOTensor.sourceIndexValue}
+  \leanok
+  \uses{def:mpu_right_rank,def:mpu_left_rank}
+  For a specified tensor $\mathcal U$ with right and left source-cut ranks
+  $r$ and $\ell$, define
+  \begin{align}
+    \operatorname{ind}_{\mathrm{src}}(\mathcal U)
+      &=\frac12(\log_2 r-\log_2\ell).
+  \end{align}
+  This definition makes no choice of a simple blocking.
+  % Auxiliary to paper_v2.tex lines 681--688; issue 6255.
+\end{definition}
+
+\begin{theorem}[Product and quotient laws for real logarithms]
+  \label{thm:mpu_real_logb_mul_div}
+  \lean{Real.logb_mul,Real.logb_div}
+  \leanok
+  For nonzero real numbers $x$ and $y$ and any base $b$,
+  \begin{align}
+    \log_b(xy)&=\log_bx+\log_by,&
+    \log_b(x/y)&=\log_bx-\log_by.
+  \end{align}
+\end{theorem}
+
+\begin{proof}\leanok
+  Divide the corresponding product and quotient laws for the natural
+  logarithm by $\log b$.
+\end{proof}
+
+\begin{theorem}[Auxiliary source-index identities]
+  \label{thm:mpu_specified_source_index_identities}
+  \lean{MPOTensor.sourceIndexValue_eq_of_common_rank_scale,
+    MPOTensor.sourceIndexValue_eq_logb_rightRank_div,
+    MPOTensor.sourceIndexValue_eq_neg_logb_leftRank_div}
+  \leanok
+  \uses{def:mpu_specified_source_index_value,
+    def:mpu_right_rank,def:mpu_left_rank}
+  Let $\mathcal U$ and $\mathcal V$ be specified tensors. Suppose that their
+  source ranks obey
+  \begin{align}
+    r_{\mathcal V}&=c r_{\mathcal U},&
+    \ell_{\mathcal V}&=c\ell_{\mathcal U},
+  \end{align}
+  where $c$, $r_{\mathcal U}$, and $\ell_{\mathcal U}$ are nonzero. Then
+  \begin{align}
+    \operatorname{ind}_{\mathrm{src}}(\mathcal V)
+      &=\operatorname{ind}_{\mathrm{src}}(\mathcal U).
+  \end{align}
+  If $d$ is nonzero and a specified tensor has
+  $r_{\mathcal U}\ell_{\mathcal U}=d^2$, then
+  \begin{align}
+    \operatorname{ind}_{\mathrm{src}}(\mathcal U)
+      &=\log_2\frac{r_{\mathcal U}}d
+       =-\log_2\frac{\ell_{\mathcal U}}d.
+  \end{align}
+  % Auxiliary to paper_v2.tex lines 681--704; issue 6255.
+\end{theorem}
+
+\begin{proof}\leanok
+  \uses{thm:mpu_real_logb_mul_div}
+  Expand the definition. For common scaling, apply
+  $\log_2(cx)=\log_2c+\log_2x$ to both ranks and cancel the two copies of
+  $\log_2c$. For the equivalent formulas, apply the same product identity to
+  $r_{\mathcal U}\ell_{\mathcal U}=d^2$ and use
+  $\log_2(x/y)=\log_2x-\log_2y$.
+\end{proof}
+
 \begin{definition}[Index]
   \label{def:index}
   \notready
