@@ -88,14 +88,11 @@ private theorem offset_from_finRotate {N : ℕ} (hN : 2 ≤ N) (i k : Fin N) :
       simpa [Nat.mod_eq_of_lt i.isLt] using hk'
     subst k
     rw [if_pos hr]
-    by_cases hi : i.val + 1 < N
-    · rw [hrot, Nat.mod_eq_of_lt hi]
-      have heq : i.val + N - (i.val + 1) = N - 1 := by omega
-      rw [heq, Nat.mod_eq_of_lt (by omega)]
-    · have hiN : i.val + 1 = N := by omega
-      rw [hrot, hiN, Nat.mod_self]
-      simp only [Nat.sub_zero, Nat.add_mod_right, Nat.mod_eq_of_lt i.isLt]
-      omega
+    have hrotate : (finRotate N i).val = (MPSTensor.cyclicForwardSite i 1).val := by
+      rw [hrot]
+      rfl
+    rw [hrotate]
+    exact MPSTensor.cyclicForwardSite_one_offset i
   · rw [if_neg hr]
     change (k.val + N - (finRotate N i).val) % N = r - 1
     have hk : k = ⟨((finRotate N i).val + (r - 1)) % N,

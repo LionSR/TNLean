@@ -588,6 +588,14 @@ abstracted — record why, so it is not re-proposed).
   directly, as does its original `MPSTensor.replaceWindow_extractWindow` caller. The initial
   promotion reduced the Lean sources by 41 lines net (6 insertions and 47 deletions).
 
+### One-step cyclic backward offset
+- **Pattern:** the original site has cyclic offset `N - 1` from its one-step forward neighbour.
+- **Reuse:** `MPSTensor.cyclicForwardSite_one_offset` in
+  `TNLean/MPS/ParentHamiltonian/CyclicWindow.lean` records the arithmetic once.
+- **Result:** three occurrences across `CyclicWindow.lean`, `LocalSupportTransport.lean`, and
+  `PhysicalSectorBondTransport.lean` now use the canonical lemma; the `finRotate` caller bridges
+  by equality of values with `cyclicForwardSite i 1`.
+
 ### Cyclic window index and product decomposition
 - **Pattern:** two physical-product modules privately defined the same cyclic shift,
   window/complement index equivalence, its two evaluation lemmas, and the resulting
@@ -988,6 +996,15 @@ abstracted — record why, so it is not re-proposed).
 
 Seeded from `scripts/tactic_pattern_scan.py` (2026-07-18 scan; re-run for
 current counts and full location lists).
+
+### general cyclic backward offset — candidate
+- **Pattern:** for an arbitrary step `r`, the offset of `i` from `cyclicForwardSite i r` is
+  `(N - r % N) % N`.
+- **Seen:** no current call site requires the general identity; the promoted one-step lemma is
+  the only needed specialization.
+- **Abstraction (proposed):** a general `MPSTensor.cyclicForwardSite_offset` theorem if a caller
+  needs a non-unit step.
+- **Notes:** Record only; do not generalize the canonical theorem without a concrete consumer.
 
 ### diagonal normalized-ancilla sum collapse — candidate
 - **Pattern:** collapse the doubled sum for `normalizedDiagonalLift` by using
