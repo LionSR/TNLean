@@ -37,42 +37,109 @@ counterpart in Theorem~\ref{thm:cyclic_sector_decomp_after_blocking}.
     $D$ as $A$ and repeats with period $p$.
 \end{definition}
 
-% Scope restriction (normalized orientation): this is the IsPeriodic surface,
-% not yet a wrapper from PGVWC07's one-block unital hypotheses.
-\begin{theorem}[Normalized periodic state-vector decomposition]
-    \label{thm:pgvwc07_periodic_state_vector_decomposition}
-    \lean{MPSTensor.pgvwc07_periodic_stateVector_decomposition_of_dvd,
-        MPSTensor.pgvwc07_stateVector_eq_zero_of_not_dvd}
+\begin{theorem}[Boundary traces and component-chain coefficients]
+    \label{thm:pgvwc07_boundary_trace_coefficients}
+    \lean{MPSTensor.projectorComponentChain_coeff_eq_trace_cornerProd,
+        MPSTensor.mpv_eq_sum_trace_cornerProd}
     \leanok
-    \uses{def:pgvwc07_projector_component_chain, def:periodic_tensor}
-    This is a normalized form of the state-vector conclusion in
-    \cite[Theorem~5]{PerezGarcia2007Matrix}. Let $A$ be an irreducible
-    left-canonical tensor whose peripheral transfer
-    spectrum is the set of $p$-th roots of unity. For a positive ring length
-    $N$, if $p\mid N$, then its state vector is the sum of the $p$ component
-    chains in~(\ref{eq:pgvwc07_projector_component_chain}):
+    \uses{def:pgvwc07_projector_component_chain}
+    Suppose that the orthogonal projections satisfy
+    $\sum_uQ_u=\Id$ and $Q_uA^i=A^iQ_{u+1}$. For a word
+    $\sigma=(i_0,\ldots,i_{N-1})$, define the boundary product
     \begin{align}
-        V_N(A)
-        &=\sum_{u\in\mathbb Z/p\mathbb Z}c_{B_u}.
-        \label{eq:pgvwc07_periodic_state_vector_decomposition}
+        F_u(\sigma)
+        &=Q_uA^{i_0}Q_{u+1}A^{i_1}\cdots
+          Q_{u+N-1}A^{i_{N-1}}Q_{u+N}.
+        \label{eq:pgvwc07_boundary_product}
     \end{align}
-    Each summand is represented by a $p$-periodic MPS of bond dimension $D$.
-    If $p\nmid N$, then $V_N(A)=0$.
+    At every length $N\geq 0$,
+    \begin{align}
+        V^{(N)}(A)_\sigma
+        &=\sum_{u\in\mathbb Z/p\mathbb Z}\tr F_u(\sigma).
+        \label{eq:pgvwc07_boundary_coefficient_decomposition}
+    \end{align}
+    If $N>0$, then $\tr F_u(\sigma)$ is the coefficient of the explicit
+    component chain from Definition~\ref{def:pgvwc07_projector_component_chain}.
+    At $N=0$, the boundary product is $F_u(\varnothing)=Q_u$, so
+    \begin{align}
+        \tr(\Id)
+        &=\sum_{u\in\mathbb Z/p\mathbb Z}\tr(Q_u).
+        \label{eq:pgvwc07_empty_boundary_decomposition}
+    \end{align}
+    This is not the sum of the ordinary empty component-chain coefficients:
+    an empty chain evaluates to $\Id$ and does not retain its starting
+    projection.
 \end{theorem}
 
 \begin{proof}
     \leanok
     \uses{def:pgvwc07_projector_component_chain}
-    Choose orthogonal cyclic projections with
-    $\sum_uQ_u=\Id$ and $Q_uA^i=A^iQ_{u+1}$. The component product telescopes to
+    The cyclic relation and orthogonality give
+    $F_u(\sigma)=Q_uA^{i_0}\cdots A^{i_{N-1}}$. Hence
     \begin{align}
-        B_{u,0}^{i_0}\cdots B_{u,N-1}^{i_{N-1}}
-        &=Q_uA^{i_0}\cdots A^{i_{N-1}}Q_{u+N}.
+        \tr(A^{i_0}\cdots A^{i_{N-1}})
+        &=\tr\!\left(\left(\sum_uQ_u\right)
+          A^{i_0}\cdots A^{i_{N-1}}\right)
+          =\sum_u\tr F_u(\sigma).
     \end{align}
-    Summing its trace over $u$ gives the original coefficient. If $p\mid N$,
-    then $Q_{u+N}=Q_u$ and every chain closes with period $p$. If $p\nmid N$,
-    then $Q_{u+N}\ne Q_u$; cyclicity of the trace and orthogonality make every
-    component coefficient zero.
+    For $N>0$, multiplying the local matrices in
+    (\ref{eq:pgvwc07_projector_component_chain}) gives
+    $F_u(\sigma)$, proving the coefficient identity. For $N=0$, the same trace
+    calculation reduces to (\ref{eq:pgvwc07_empty_boundary_decomposition}).
+\end{proof}
+
+% Scope restriction (normalized orientation): this is the IsPeriodic surface,
+% not yet a theorem from PGVWC07's one-block unital hypotheses. Issue #6232.
+\begin{theorem}[Normalized periodic state-vector decomposition]
+    \label{thm:pgvwc07_periodic_state_vector_decomposition}
+    \lean{MPSTensor.pgvwc07_periodic_stateVector_boundary_decomposition_of_dvd,
+        MPSTensor.pgvwc07_periodic_stateVector_decomposition_of_dvd,
+        MPSTensor.pgvwc07_stateVector_eq_zero_of_not_dvd}
+    \leanok
+    \uses{def:pgvwc07_projector_component_chain, def:periodic_tensor}
+    This is a normalized form of the state-vector conclusion in
+    \cite[Theorem~5]{PerezGarcia2007Matrix}. Let $A$ be an irreducible
+    left-canonical tensor whose peripheral transfer spectrum is the set of
+    $p$-th roots of unity. If $p\mid N$, there are orthogonal cyclic
+    projections $(Q_u)_{u\in\mathbb Z/p\mathbb Z}$ such that
+    $\sum_uQ_u=\Id$, $Q_uA^i=A^iQ_{u+1}$, and $Q_{u+N}=Q_u$. For every
+    ring length $N\geq0$, its coefficients satisfy the boundary-aware
+    decomposition
+    \begin{align}
+        V^{(N)}(A)_\sigma
+        &=\sum_{u\in\mathbb Z/p\mathbb Z}\tr F_u(\sigma).
+        \label{eq:pgvwc07_periodic_boundary_decomposition}
+    \end{align}
+    For $N>0$, this becomes the source's decomposition into the $p$ explicit
+    component chains:
+    \begin{align}
+        \ket{V^{(N)}(A)}
+        &=\sum_{u\in\mathbb Z/p\mathbb Z}\ket{V^{(N)}(B_u)}.
+        \label{eq:pgvwc07_periodic_state_vector_decomposition}
+    \end{align}
+    Each $B_u$ is a $p$-periodic MPS of bond dimension $D$ with local matrices
+    given by (\ref{eq:pgvwc07_projector_component_chain}). At $N=0$,
+    (\ref{eq:pgvwc07_periodic_boundary_decomposition}) instead uses the boundary
+    traces $\tr(Q_u)$ from
+    (\ref{eq:pgvwc07_empty_boundary_decomposition}); it does not identify them
+    with ordinary empty-chain coefficients. If $p\nmid N$, then
+    $\ket{V^{(N)}(A)}=0$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{def:pgvwc07_projector_component_chain,
+        thm:pgvwc07_boundary_trace_coefficients}
+    Choose the cyclic projections supplied by periodicity. If $p\mid N$, then
+    $Q_{u+N}=Q_u$, and Theorem~\ref{thm:pgvwc07_boundary_trace_coefficients}
+    gives (\ref{eq:pgvwc07_periodic_boundary_decomposition}) at every length.
+    For $N>0$, the explicit component-chain decomposition follows by inserting
+    $\sum_uQ_u=\Id$ and multiplying the local corner matrices; this proves
+    (\ref{eq:pgvwc07_periodic_state_vector_decomposition}). The separate
+    coefficient identity in Theorem~\ref{thm:pgvwc07_boundary_trace_coefficients}
+    identifies its summands with the boundary traces. If $p\nmid N$, then
+    $Q_{u+N}\ne Q_u$; cyclicity of the trace and orthogonality give
+    $\tr F_u(\sigma)=0$ for every $u$ and $\sigma$.
 \end{proof}
 
 Two normalizations appear. The unital orientation

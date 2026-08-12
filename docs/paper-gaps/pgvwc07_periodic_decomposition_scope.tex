@@ -9,7 +9,7 @@
 
 \title{Scope of the Formal Periodic Decomposition Relative to PGVWC07}
 \author{}
-\date{2026-06-04}
+\date{2026-08-12}
 
 \begin{document}
 \maketitle
@@ -39,40 +39,66 @@ splits $\psi$ into the claimed $p$-periodic summands
 
 \section{Formal boundary}
 
-TNLean proves the explicit fixed-length decomposition in
-\leanid{MPSTensor.pgvwc07_periodic_stateVector_decomposition_of_dvd} and the
+TNLean proves the boundary-aware divisible-length decomposition in
+\leanid{MPSTensor.pgvwc07_periodic_stateVector_boundary_decomposition_of_dvd},
+the positive-length explicit component-chain form in
+\leanid{MPSTensor.pgvwc07_periodic_stateVector_decomposition_of_dvd}, and the
 vanishing branch in
-\leanid{MPSTensor.pgvwc07_stateVector_eq_zero_of_not_dvd}. Both declarations
-use \leanid{MPSTensor.IsPeriodic}, which assumes left-canonical orientation,
-irreducibility, positive period, and an exact $p$-th-root peripheral spectrum.
-The printed theorem instead starts from its one-block unital canonical
-representation and counts the peripheral eigenvalues of the associated
-transfer map.
+\leanid{MPSTensor.pgvwc07_stateVector_eq_zero_of_not_dvd}. All three
+declarations use \leanid{MPSTensor.IsPeriodic}, which assumes left-canonical
+orientation, irreducibility, positive period, and an exact $p$-th-root
+peripheral spectrum. The printed theorem instead starts from its one-block
+unital canonical representation and counts the peripheral eigenvalues of the
+associated transfer map. This normalized-orientation restriction remains
+tracked by issue~\#6232.
 
-The periodic branch is stated for positive ring lengths because the current
-coefficient decomposition is proved for a nonempty chain. The formal results
-therefore give a normalized theorem surface and the complete fixed-positive-
-length calculation, but not yet a literal theorem from the printed
-hypotheses.
+Let $A=(A^i)_{i=0}^{d-1}$ be the MPS matrix family. Let
+$(Q_u)_{u\in\mathbb Z/p\mathbb Z}$ be its cyclic projections and, for a word
+$\sigma=(i_0,\ldots,i_{N-1})$, let
+\[
+  F_u(\sigma)
+  =Q_uA^{i_0}Q_{u+1}A^{i_1}\cdots
+    Q_{u+N-1}A^{i_{N-1}}Q_{u+N}.
+\]
+At every length, including $N=0$, the formal decomposition is
+\[
+  \tr(A^{i_0}\cdots A^{i_{N-1}})
+  =\sum_{u\in\mathbb Z/p\mathbb Z}\tr F_u(\sigma).
+\]
+For positive $N$, \leanid{MPSTensor.projectorComponentChain_coeff_eq_trace_cornerProd}
+identifies each boundary trace with the coefficient of the explicit periodic
+component chain. At $N=0$, the boundary product is $F_u(\varnothing)=Q_u$, so
+the formula reads
+\[
+  \tr(\Id)=
+  \sum_{u\in\mathbb Z/p\mathbb Z}\tr(Q_u).
+\]
+This must be distinguished from ordinary empty component-chain coefficients.
+An empty chain evaluates to $\Id$ independently of $u$ and therefore
+does not retain the boundary projector. The boundary-aware theorem closes the
+length-zero part of issue~\#6233 without changing the positive-length explicit
+component-chain statement.
 
-\section{Elimination plan}
+\section{Remaining scope restriction}
 
-Prove a source-facing equivalence from the paper's one-block unital canonical
-hypotheses and peripheral-eigenvalue count to
-\leanid{MPSTensor.IsPeriodic}, accounting for the adjoint normalization
-orientation. Then compose this equivalence with the two fixed-length
-statements above. If length zero is included in the formal source interface,
-add its direct empty-chain calculation separately. No new cyclic-projector or
-positive-length state-vector calculation is required.
+To obtain a theorem with the printed hypotheses, prove that the paper's
+one-block unital canonical assumptions and peripheral-eigenvalue count imply
+the maintained periodicity hypotheses, after accounting for the adjoint change
+between unital and left-canonical orientations. Composing that result with the
+three declarations above would give the printed periodic decomposition and
+vanishing dichotomy. No further fixed-length coefficient calculation is
+required.
 
 \section{Verdict}
 
-\textbf{Verdict: scope restriction.} The formal declarations prove the
-periodic decomposition and vanishing dichotomy under the maintained
-\leanid{MPSTensor.IsPeriodic} hypotheses, with positive length required in the
-decomposition branch. The wrapper from the printed one-block unital
-hypotheses and peripheral-eigenvalue count remains open, so the current
-statements are normalized specializations of PGVWC07 Theorem~5.
+\textbf{Verdict: scope restriction.} The positive-length restriction from
+issue~\#6233 is closed: the divisible-period branch now has a boundary-aware
+coefficient decomposition for every $N\geq0$, while the explicit periodic
+component-chain theorem remains stated for $N>0$, where its coefficients equal
+the boundary traces. The separate normalized-orientation restriction remains
+open under issue~\#6232, so the formal declarations are still normalized
+specializations of PGVWC07 Theorem~5 rather than a theorem from its literal
+one-block unital hypotheses.
 
 \bibliographystyle{alpha}
 \bibliography{references}
