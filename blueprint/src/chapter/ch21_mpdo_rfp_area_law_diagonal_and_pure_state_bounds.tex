@@ -413,12 +413,13 @@
     \end{align}
 \end{theorem}
 \begin{proof}\leanok
-    The operator-Schmidt rank is defined as the dimension of the range of
-    $\mathcal R_\rho$. The range of $\mathcal R_\rho$ is the span of the
-    operator blocks $\rho_{ij}$, since $\mathcal R_\rho$ is the linear
-    combination map sending a coefficient matrix $X$ to
-    $\sum_{i,j}X_{ij}\rho_{ij}$. Substituting this range--span identity into
-    the definition gives the displayed chain of equalities.
+    \uses{def:bipartite_operator_schmidt_rank}
+    The first equality, $\operatorname{OSR}(\rho)=\dim\range\mathcal R_\rho$,
+    is the minimality result from the preceding definition: the range
+    dimension is the least length of a product decomposition. For the second
+    equality, $\mathcal R_\rho$ is the linear combination map sending a
+    coefficient matrix $X$ to $\sum_{i,j}X_{ij}\rho_{ij}$, so its range is
+    exactly the span of the operator blocks $\rho_{ij}$.
 \end{proof}
 
 \begin{theorem}[Operator-Schmidt rank under local isometries]
