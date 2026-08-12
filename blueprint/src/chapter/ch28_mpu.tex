@@ -6007,8 +6007,8 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
 \end{theorem}
 
 \begin{proof}\leanok
-  \uses{def:eval_word,lem:eval_word_of_fn_prod,
-    thm:trace_eval_word_eq_sum_cyclic,def:mpu,
+  \uses{def:mpo_eval_word,def:mpo_rotate_config,
+    lem:eval_word_of_fn_prod,thm:trace_eval_word_eq_sum_cyclic,def:mpu,
     thm:mpu_physical_adjoint_identities}
   Closing the virtual indices of $A^{ij}=\lvert i\rangle\langle j\rvert$
   leaves one nonzero virtual configuration.  If
