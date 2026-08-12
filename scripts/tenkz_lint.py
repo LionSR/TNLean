@@ -228,6 +228,8 @@ def lint_file(path: Path) -> list[Finding]:
     findings: list[Finding] = []
     seen: set[tuple[int, str]] = set()  # one report per (line, rule)
 
+    # A rule is (name, pattern), and a buried spelling adds the migration it
+    # names as a third element.
     def scan(text: str, base: int, rules: list[tuple]) -> None:
         for rule, pat, *migration in rules:
             for m in pat.finditer(text):
