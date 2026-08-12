@@ -3049,8 +3049,8 @@ reference, and answered `[TKZ-KERNEL-RENDER-TODO]` with no ink on the page.
 The chapter had to print the refusal where a picture belonged (#6183).
 
 **The demand, per word.** None of the four has a consumer, and the search was
-run twice by different means. A census of `form=` across the benchmark, the
-kernel fixtures and the blueprint reads 39 label, 38 enclosure and 1 bracket
+run three times by different means. A census of `form=` across the benchmark,
+the kernel fixtures and the blueprint reads 39 label, 38 enclosure and 1 bracket
 in the benchmark, 39 enclosure, 26 label, 14 bracket and 1 prose in the
 fixtures, 44 enclosure, 10 label and 8 bracket in the blueprint, and not one
 brace, cut or band anywhere. The second method asked the sources instead of
@@ -3063,7 +3063,7 @@ columns and a brace naming their count beneath: the case states the first as
 `form=enclosure, slot=selected` and the second as `form=bracket`, and its
 verdict was promoted to faithful on that reading, retiring the last recorded
 substitution. `rmp-ii-boundary-state` retired a brace-for-box note the same
-way. Where a source shades a sheet, two Section-IV verdicts accept a
+way. Where a source shades a sheet, the two toric-code appendix verdicts accept a
 contour-only enclosure as faithful and price the shading as house ink. Three
 blueprint chapters write "brace" in the comment above the picture and spell
 `form=bracket` in it. The third check was the history: the enum arrived whole
