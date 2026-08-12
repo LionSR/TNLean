@@ -10002,6 +10002,7 @@
           }
       }
   }
+\cs_generate_variant:Nn \__tenkz_kernel_r_face_side:n { e }
 \cs_new_protected:Npn \__tenkz_kernel_r_port_record:nN #1#2
   {
     \prop_get:NeN \l__tenkz_kernel_node_prop {#1/record-id} #2
@@ -16283,14 +16284,7 @@
         \__tenkz_model_get:nnN {#1} {kind} \l__tenkz_kernel_lab_node_tl
         \str_if_eq:VnT \l__tenkz_kernel_lab_node_tl {string}
           { \__tenkz_model_get:nnN {#1} {via} \l__tenkz_kernel_lab_via_tl }
-        % the cell reading stands down on a circle for a carrier exactly as
-        % it does for an endpoint, and for the same reason
-        \bool_lazy_and:nnT
-          { \quark_if_no_value_p:N \l__tenkz_kernel_lab_via_tl }
-          {
-            ! \str_if_eq_p:ee
-              { \__tenkz_kernel_r_frame_word: } {circle}
-          }
+        \quark_if_no_value:NT \l__tenkz_kernel_lab_via_tl
           { \__tenkz_kernel_r_label_carrier_run:nn {#1} {#2} }
       }
       {
@@ -16312,6 +16306,19 @@
     \str_if_eq:nnTF {#3} {to}
       { \__tenkz_model_get:nnN {#1} {to-open} \l__tenkz_kernel_lab_face_tl }
       { \__tenkz_model_get:nnN {#1} {from-open} \l__tenkz_kernel_lab_face_tl }
+    % A materialized open port keeps the direction it opens by as its port
+    % face, an angle, rather than as an open word.
+    \quark_if_no_value:NT \l__tenkz_kernel_lab_face_tl
+      {
+        \__tenkz_model_get:nnN {#1} {port-face} \l__tenkz_kernel_lab_node_tl
+        \quark_if_no_value:NF \l__tenkz_kernel_lab_node_tl
+          {
+            \__tenkz_kernel_r_face_side:e
+              { \tl_use:N \l__tenkz_kernel_lab_node_tl }
+            \tl_set_eq:NN \l__tenkz_kernel_lab_face_tl
+              \l__tenkz_kernel_r_face_side_tl
+          }
+      }
     \quark_if_no_value:NF \l__tenkz_kernel_lab_face_tl
       {
         \str_case:Vn \l__tenkz_kernel_lab_face_tl
@@ -16354,9 +16361,17 @@
       { \quark_if_no_value_p:N \l__tenkz_kernel_lab_from_tl }
       { ! \quark_if_no_value_p:N \l__tenkz_kernel_lab_to_tl }
       { \__tenkz_kernel_r_label_carrier_open:nnn {#1} {#2} {from} }
-    \bool_lazy_and:nnT
-      { ! \quark_if_no_value_p:N \l__tenkz_kernel_lab_from_tl }
-      { ! \quark_if_no_value_p:N \l__tenkz_kernel_lab_to_tl }
+    % Two model ends: the run is read from their cells, and that reading
+    % stands down on a circle exactly as the endpoint one does.  An open
+    % side names its direction outright, so it answers on every frame.
+    \bool_lazy_all:nT
+      {
+        { ! \quark_if_no_value_p:N \l__tenkz_kernel_lab_from_tl }
+        { ! \quark_if_no_value_p:N \l__tenkz_kernel_lab_to_tl }
+        {
+          ! \str_if_eq_p:ee { \__tenkz_kernel_r_frame_word: } {circle}
+        }
+      }
       {
         \exp_args:NV \__tenkz_kernel_bond_end_cell:nNNN
           \l__tenkz_kernel_lab_from_tl
