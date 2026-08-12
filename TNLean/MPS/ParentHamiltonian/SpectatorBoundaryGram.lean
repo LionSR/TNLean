@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import TNLean.MPS.Core.Blocking
 import TNLean.MPS.ParentHamiltonian.GroundSpaceGram
 import TNLean.MPS.ParentHamiltonian.SpectatorBoundary
 
@@ -254,6 +255,55 @@ theorem leftVirtualMapES_adjoint_apply
         (boundaryFamilyEquiv (D := D) (Cfg d L) x τ))) = _
   simp only [Matrix.inner_frobeniusEquivEuclidean,
     Matrix.conjTranspose_mul, Matrix.mul_sum, Matrix.trace_sum, Matrix.mul_assoc]
+
+/-- For a left-canonical tensor, every fixed-length left virtual word map is an
+isometry.  This is the uniform relation needed when the C3 filtration advances
+by a whole block rather than by one input site. -/
+theorem leftVirtualMapES_norm_map_of_leftCanonical
+    (A : MPSTensor d D) (L : ℕ)
+    (hLeft : ∑ i : Fin d, (A i)ᴴ * A i = 1)
+    (x : EuclideanSpace ℂ (Fin D × Fin D)) :
+    ‖leftVirtualMapES A L x‖ = ‖x‖ := by
+  obtain ⟨X, rfl⟩ :=
+    (Matrix.frobeniusEquivEuclidean (Fin D) (Fin D)).surjective x
+  have hinner : inner ℂ
+      (leftVirtualMapES A L
+        (Matrix.frobeniusEquivEuclidean (Fin D) (Fin D) X))
+      (leftVirtualMapES A L
+        (Matrix.frobeniusEquivEuclidean (Fin D) (Fin D) X)) =
+      inner ℂ
+        (Matrix.frobeniusEquivEuclidean (Fin D) (Fin D) X)
+        (Matrix.frobeniusEquivEuclidean (Fin D) (Fin D) X) := by
+    rw [PiLp.inner_apply, Fintype.sum_prod_type]
+    change (∑ τ : Cfg d L, inner ℂ
+      (Matrix.frobeniusEquivEuclidean (Fin D) (Fin D)
+        (evalWord A (List.ofFn τ) * X))
+      (Matrix.frobeniusEquivEuclidean (Fin D) (Fin D)
+        (evalWord A (List.ofFn τ) * X))) = _
+    simp_rw [Matrix.inner_frobeniusEquivEuclidean, Matrix.conjTranspose_mul,
+      Matrix.mul_assoc]
+    rw [← Matrix.trace_sum]
+    congr 1
+    rw [← Matrix.mul_sum]
+    simp_rw [← Matrix.mul_assoc]
+    rw [← Matrix.sum_mul,
+      sum_evalWord_conjTranspose_mul_evalWord A hLeft L]
+    simp
+  have hsquares : ‖leftVirtualMapES A L
+      (Matrix.frobeniusEquivEuclidean (Fin D) (Fin D) X)‖ ^ 2 =
+      ‖Matrix.frobeniusEquivEuclidean (Fin D) (Fin D) X‖ ^ 2 := by
+    rw [inner_self_eq_norm_sq_to_K, inner_self_eq_norm_sq_to_K] at hinner
+    exact_mod_cast hinner
+  exact (sq_eq_sq₀ (norm_nonneg _) (norm_nonneg _)).mp hsquares
+
+/-- The norm of every fixed-length left virtual word map is uniformly at most one
+for a left-canonical tensor. -/
+theorem leftVirtualMapES_norm_le_one_of_leftCanonical
+    (A : MPSTensor d D) (L : ℕ)
+    (hLeft : ∑ i : Fin d, (A i)ᴴ * A i = 1) :
+    ‖leftVirtualMapES A L‖ ≤ 1 := by
+  refine ContinuousLinearMap.opNorm_le_bound _ zero_le_one fun x => ?_
+  rw [one_mul, leftVirtualMapES_norm_map_of_leftCanonical A L hLeft x]
 
 /-- The ordinary Euclidean boundary map factors through the tail spectator map. -/
 theorem tailBoundaryMapES_comp_tailVirtualMapES

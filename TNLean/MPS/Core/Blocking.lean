@@ -296,7 +296,8 @@ private theorem evalWord_pointwise_conjTranspose_reverse (A : MPSTensor d D) :
       simp [evalWord, Matrix.conjTranspose_mul, ih, evalWord_append, List.reverse_cons,
         Matrix.conjTranspose_conjTranspose]
 
-private theorem sum_evalWord_conjTranspose_mul_evalWord
+/-- Left-canonical normalization propagates from one site to words of every fixed length. -/
+theorem sum_evalWord_conjTranspose_mul_evalWord
     (A : MPSTensor d D)
     (hLeft : ∑ i : Fin d, (A i)ᴴ * A i = 1) :
     ∀ L : ℕ,
