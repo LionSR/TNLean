@@ -120,6 +120,29 @@
     {Cirac2016MPDO_arXiv}.
 \end{definition}
 
+\begin{theorem}[Two-site translation identities]
+    \label{thm:mpdo_physical_two_site_translation_identities}
+    \lean{MPOTensor.PhysicalSectorFactorization.reindex_embedLocalOperator_two_zero,
+        MPOTensor.PhysicalSectorFactorization.reindex_embedLocalOperator_two_one}
+    \leanok
+    \uses{def:mpdo_global_sector_closure_coordinates,
+        def:mpdo_physical_two_site_bond}
+    Under the canonical identification of two-site configurations with ordered
+    pairs, the translates beginning at sites zero and one are respectively
+    $B_{01}=B_{\mathrm{physical}}$ and
+    $B_{10}=S B_{\mathrm{physical}}S^{-1}$, where
+    $S(x\otimes y)=y\otimes x$ exchanges the two physical factors.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{def:mpdo_global_sector_closure_coordinates,
+        def:mpdo_physical_two_site_bond}
+    For the translate beginning at zero, extracting the cyclic window preserves
+    the order $(0,1)$. For the translate beginning at one, extraction gives the
+    order $(1,0)$, which conjugates the pair matrix by $S$.
+\end{proof}
+
 \begin{theorem}[Positivity of the physical two-site bond]
     \label{thm:mpdo_physical_two_site_bond_pos}
     \lean{MPOTensor.PhysicalSectorFactorization.physicalPairBond_pos,
@@ -265,6 +288,35 @@ $\eta_{k,l}^{(12)}\eta_{l,h}^{(23)}
     second configuration.
 \end{proof}
 
+\begin{definition}[Cyclic window-complement coordinates]
+    \label{def:mpdo_cyclic_window_complement_coordinates}
+    \lean{MPOTensor.windowComplementEquiv}
+    \leanok
+    A periodic configuration is identified with the ordered pair consisting of
+    its restriction to the cyclic window $W_i^L$ and its restriction to the
+    complementary cyclic interval.
+\end{definition}
+
+\begin{theorem}[Local embeddings in window-complement coordinates]
+    \label{thm:mpdo_cyclic_local_embedding_reindex}
+    \lean{MPOTensor.reindex_embedLocalOperator_windowComplement}
+    \leanok
+    \uses{def:mpdo_cyclic_window_complement_coordinates,
+        thm:mpdo_agreement_outside_cyclic_window}
+    In cyclic window-complement coordinates, every local embedding has the form
+    $E_i^L(B)=B\otimes\Id_{\mathrm{comp}}$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{def:mpdo_cyclic_window_complement_coordinates,
+        thm:mpdo_agreement_outside_cyclic_window}
+    The matrix entry between $(x,u)$ and $(y,v)$ vanishes unless the
+    complementary configurations agree, $u=v$. In that case it equals
+    $B_{x,y}$, which is the corresponding entry of
+    $B\otimes\Id_{\mathrm{comp}}$.
+\end{proof}
+
 \begin{theorem}[Multiplicativity of cyclic local embeddings]
     \label{thm:mpdo_cyclic_local_embedding_mul}
     \lean{MPOTensor.embedLocalOperator_mul}
@@ -275,6 +327,7 @@ $\eta_{k,l}^{(12)}\eta_{l,h}^{(23)}
 \end{theorem}
 
 \begin{proof}\leanok
+    \uses{thm:mpdo_cyclic_local_embedding_reindex}
     Identify a periodic configuration with its restriction to $W_i^L$ and
     its restriction to the cyclic complement. In these coordinates,
     $E_i^L(B)=B\otimes\Id$, so the assertion is the mixed-product identity.
@@ -349,6 +402,7 @@ $\eta_{k,l}^{(12)}\eta_{l,h}^{(23)}
 
 \begin{proof}
     \leanok
+    \uses{thm:mpdo_physical_two_site_translation_identities}
     Fix sectors $(k,h)$ and regroup the two physical sites as
     $(L_k\otimes R_h)\otimes(R_k\otimes L_h)$.
     The translate in the order $(0,1)$ is
