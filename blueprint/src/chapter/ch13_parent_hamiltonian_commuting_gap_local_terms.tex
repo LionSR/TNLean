@@ -292,7 +292,8 @@
     \lean{MPSTensor.isNNCPH_of_twoSite_cyclicWindowsOverlap_commute}
     \leanok
     \uses{def:is_commuting_parent_ham, def:is_nncph,
-        def:cyclic_windows_overlap, lem:transported_es_nonoverlap_positive}
+        def:cyclic_windows_overlap, lem:cyclic_window_nonoverlap_positive,
+        lem:transported_es_nonoverlap_positive}
     Let $L\le N$. Suppose that $h_i h_j=h_j h_i$ whenever the length-$L$
     cyclic supports of the two local terms meet. Then the parent Hamiltonian
     has commuting local terms: $h_i h_j=h_j h_i$ for all $i,j$. In the case
@@ -300,7 +301,8 @@
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{lem:transported_es_nonoverlap_positive}
+    \uses{lem:cyclic_window_nonoverlap_positive,
+        lem:transported_es_nonoverlap_positive}
     If the two cyclic supports meet, the hypothesis gives the commutation
     relation. If they are disjoint, the corresponding local terms commute by
     locality.
