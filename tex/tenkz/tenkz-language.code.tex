@@ -12,6 +12,7 @@
 \seq_new:N \g__tenkz_language_keys_seq
 \seq_new:N \g__tenkz_language_examples_seq
 \seq_new:N \g__tenkz_language_preludes_seq
+\seq_new:N \g__tenkz_language_tombstones_seq
 \tl_new:N \l__tenkz_language_atom_skin_tl
 \tl_new:N \l__tenkz_language_atom_ports_tl
 \tl_new:N \l__tenkz_language_atom_options_tl
@@ -27,6 +28,13 @@
   { \seq_gput_right:Nn \g__tenkz_language_examples_seq {{#1}{#2}{#3}} }
 \cs_new_protected:Npn \__tenkz_language_registry_prelude:nnn #1#2#3
   { \seq_gput_right:Nn \g__tenkz_language_preludes_seq {{#1}{#2}{#3}} }
+% A tombstone row is the one record of a deleted spelling (LANGUAGE-1.0
+% section 10).  Unlike every other registry row it is read at run time and
+% not only by the tooling: the kernel installs the refusals from this
+% sequence, so the words a parser rejects and the migration it prints cannot
+% drift from the words the reference and the linter publish.
+\cs_new_protected:Npn \__tenkz_language_registry_tombstone:nnnnn #1#2#3#4#5
+  { \seq_gput_right:Nn \g__tenkz_language_tombstones_seq {{#1}{#2}{#3}{#4}{#5}} }
 \input{tenkz-language-registry.tex}
 
 \msg_new:nnn {tenkz} {language-value}

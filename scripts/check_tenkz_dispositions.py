@@ -22,7 +22,7 @@ from tenkzlib.texcase import (
     strip_comments,
     top_level_options,
 )
-from tenkz_language import load_registry
+from tenkz_language import load_registry, tombstones
 
 
 DOCUMENT = ROOT / "docs/tenkz/DISPOSITIONS.md"
@@ -98,6 +98,15 @@ SIGNED_KEYS_BY_SCOPE = {
     }
     for scope in ("picture", "atom", "wire", "mark", "setup", "declare")
 }
+# Retired alphabet words, keyed by the key that used to accept them.  The
+# registry's tombstone rows are the one record (LANGUAGE-1.0 section 10), so a
+# spelling this file calls dead is dead because the parser refuses it, not
+# because a second list here happens to agree.
+RETIRED_VALUES: dict[str, set[str]] = {}
+for _row in tombstones(load_registry()):
+    if _row["value"]:
+        RETIRED_VALUES.setdefault(_row["key"], set()).add(_row["value"])
+
 COMPATIBILITY_KEYS = {
     "picture": {
         "inline",
@@ -426,10 +435,12 @@ def fragment_target_codes(source: str, kernel: bool = False) -> frozenset[str]:
         for value in values("frame")
     )
     dead_record |= any(":" in value for value in values("rows"))
-    dead_record |= any(
-        re.match(r"(?:brace-(?:below|above)|cut|band|prose)\b", value)
-        for value in values("form")
-    )
+    for key, retired in RETIRED_VALUES.items():
+        # a value may arrive braced against a comma, and only its first word
+        # names the alphabet entry
+        dead_record |= any(
+            value.strip("{} ").split(" ")[0] in retired for value in values(key)
+        )
     dead_record |= any(
         re.match(r"(?:cluster|enclosure)\b", value) for value in values("skin")
     )

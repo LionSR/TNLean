@@ -149,10 +149,12 @@ def main() -> int:
         raise SystemExit("kernel/sugar event-equivalence probe did not compile")
     if canonical_events != sugared_events:
         raise SystemExit("sandwich and rows={ket,op,bra} emitted different semantic events")
-    # The mark forms retired in 0.9 stay installed as tombstones: each one is
-    # still recognised, still refused, and names the live word that says what
-    # it said.  A reader who meets the word in an old document is told what
-    # replaced it rather than being handed the alphabet that no longer has it.
+    # A retired spelling stays installed as a tombstone, and the registry's
+    # tombstone rows are the one record of which spellings those are.  What is
+    # pinned here is that identity: every row the registry carries is refused
+    # by a compile, in the row's own words.  A row added to the registry is
+    # therefore covered without touching this test, and a refusal whose wording
+    # drifts from the record fails it.
     form_row = next(
         entry.fields
         for entry in registry
@@ -160,19 +162,19 @@ def main() -> int:
     )
     if form_row[2] != "enum(bracket|enclosure|label|prose)":
         raise SystemExit(f"the mark form alphabet is no longer the contract's: {form_row[2]}")
-    for retired, migration in (
-        ("brace-above", "form=bracket with label pos=90"),
-        ("brace-below", "form=bracket, which speaks from the south"),
-        ("cut", "form=enclosure over that selection"),
-        ("band", "form=enclosure with tint"),
-    ):
+    graves = tenkz_language.tombstones(registry)
+    if not graves:
+        raise SystemExit("the registry carries no tombstone rows")
+    for row in graves:
+        if row["scope"] != "kernel-mark" or not row["value"]:
+            continue
         refused = compile_source(
             rf"""\documentclass{{standalone}}
 \usepackage{{tenkz}}
 \begin{{document}}
 \begin{{tenkz}}[rows={{ket}}, cols=2]
   \tn{{A}} & \tn{{A}}
-  \tnmark[form={retired}]{{(1,1) .. (1,2)}}{{$L$}}
+  \tnmark[{row["key"]}={row["value"]}]{{(1,1) .. (1,2)}}{{$L$}}
 \end{{tenkz}}
 \end{{document}}
 """
@@ -181,9 +183,15 @@ def main() -> int:
         # continuation prefix, which stands between the words it broke.
         transcript = " ".join(refused.stdout.replace("(tenkz)", " ").split())
         if refused.returncode == 0 or "TKZ-LANG-TOMBSTONE" not in transcript:
-            raise SystemExit(f"form={retired} was not refused as a tombstone")
-        if migration not in transcript:
-            raise SystemExit(f"form={retired} was refused without naming {migration}")
+            raise SystemExit(f"{row['spelling']} was not refused as a tombstone")
+        if row["migration"] not in transcript:
+            raise SystemExit(
+                f"{row['spelling']} was refused without the registry's migration"
+            )
+        if row["replacement"] and f"use {row['replacement']}." not in transcript:
+            raise SystemExit(
+                f"{row['spelling']} was refused without naming {row['replacement']}"
+            )
     live = compile_source(r"""\documentclass{standalone}
 \usepackage{tenkz}
 \begin{document}

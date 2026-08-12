@@ -217,12 +217,8 @@
 \__tenkz_language_registry_key:nnnnnn {kernel-wire}{closed}{flag}{false}{kernel}{A smooth closed cycle; takes no ends.}
 % The form alphabet closes on the three words that put ink on the page, plus
 % the recording `prose` row the sugar ledger keeps (SHRINK 2026-08-11).  The
-% four spellings struck here accepted a record and drew nothing: `brace-above`
-% and `brace-below` are one `bracket`, whose arc speaks from the side its
-% label sits on; `band` never differed from an `enclosure` except in the shape
-% of its selection; `cut` had no consumer in the benchmark or the blueprint.
-% What the sources brace, the benchmark already brackets
-% (rmp-ii-spectrum-transfer); what they cut, it encloses.
+% four spellings struck from it are the tombstone rows at the foot of this
+% file, which are where a dead spelling lives and the only place it lives.
 \__tenkz_language_registry_key:nnnnnn {kernel-mark}{form}{enum(bracket|enclosure|label|prose)}{label}{kernel}{Mark form; the prose form records its text and draws nothing.}
 \__tenkz_language_registry_key:nnnnnn {kernel-mark}{slot}{semantic-slot}{selected}{kernel}{Semantic tint.}
 \__tenkz_language_registry_key:nnnnnn {kernel-mark}{species}{declared-name}{empty}{kernel}{Semantic species.}
@@ -240,3 +236,34 @@
 \__tenkz_language_registry_key:nnnnnn {kernel-declare}{hue}{hue-source}{house cycle}{kernel}{Species ink; source:* reproduces a cited palette.}
 \__tenkz_language_registry_key:nnnnnn {kernel-declare}{base}{identifier}{empty}{kernel}{Skin the declaration extends.}
 \__tenkz_language_registry_key:nnnnnn {kernel-declare}{pairings}{port-pair-list}{empty}{kernel}{Skin-internal wires between own ports.}
+
+% ---- tombstones (LANGUAGE-1.0 section 10) ----
+%
+% A deleted spelling stays here forever: the registry is the one record of
+% what a word used to mean and what says it now, so the parser, the linter
+% and the reference all refuse it in the same words and no dead spelling is
+% ever reused.  A row installs nothing; it withdraws something.
+%
+% scope, key, value, replacement, migration.  A row whose value is empty
+% retires the key or command named by `key'; a row that carries a value
+% retires that one word of the key's alphabet.  A scope beginning `kernel-'
+% is a live parser tree, and the kernel installs the row as a refusal on
+% that key; any other scope is a record for the linter alone.  An empty
+% replacement means no successor is owed.  These two fields are read by TeX,
+% so their spaces are written `~'.
+%
+% The four mark forms below took a record and drew nothing.  What the sources
+% brace, the benchmark already brackets (rmp-ii-spectrum-transfer); what they
+% cut, it encloses; what they shade, a tinted enclosure carries.
+\__tenkz_language_registry_tombstone:nnnnn {kernel-mark}{form}{brace-above}
+  {form=bracket,~label~pos=90}
+  {A~bracket~speaks~from~the~side~its~label~sits~on,~so~the~side~is~a~label~placement~and~not~a~form~of~its~own.}
+\__tenkz_language_registry_tombstone:nnnnn {kernel-mark}{form}{brace-below}
+  {form=bracket}
+  {A~bracket~that~names~no~side~speaks~from~the~south,~where~the~authors~draw~a~brace~under~a~span.}
+\__tenkz_language_registry_tombstone:nnnnn {kernel-mark}{form}{cut}
+  {}
+  {No~successor~is~owed:~a~cut~is~the~contour~of~what~it~separates,~which~form=enclosure~strokes~over~that~selection.}
+\__tenkz_language_registry_tombstone:nnnnn {kernel-mark}{form}{band}
+  {form=enclosure,~tint}
+  {A~band~never~differed~from~an~enclosure~except~in~the~shape~of~its~selection,~and~tint~lays~its~ink~over~the~paper~the~contour~encloses.}
