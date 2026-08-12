@@ -23,6 +23,7 @@ import TNLean.Algebra.CornerSkolemNoether
 import TNLean.Algebra.DependentBlockDiagonal
 import TNLean.Algebra.DirectedWalkCoboundary
 import TNLean.Algebra.EigenvectorProjection
+import TNLean.Algebra.EqualRangeRightFactor
 import TNLean.Algebra.EventuallyConstantCycleWeights
 import TNLean.Algebra.FinSum
 import TNLean.Algebra.FinTupleEquiv
