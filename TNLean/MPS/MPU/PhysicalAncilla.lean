@@ -18,6 +18,10 @@ the virtual bond dimension remains \(D\).
 * `MPOTensor.tensorPhysicalId`: attach an identity ancilla at each physical site.
 * `MPOTensor.physicalAncillaConfigEquiv`: split every enlarged physical configuration
   into its original and ancilla configurations.
+* `MPOTensor.doubledPhysicalAncillaShuffle`: separate the original and ancilla doubled indices.
+* `MPOTensor.normalizedDiagonalLift`: adjoin the normalized diagonal ancilla alphabet.
+* `MPOTensor.normalizedDiagonalLiftCFIIData`: construct canonical-form-II data for the lift.
+* `MPOTensor.tensorPhysicalIdCFIIData`: construct canonical-form-II data after ancilla attachment.
 
 ## Main results
 
@@ -25,8 +29,9 @@ the virtual bond dimension remains \(D\).
   product of the original MPO and the ancilla identity.
 * `MPOTensor.IsMPU.tensorPhysicalId`: identity-ancilla attachment preserves the MPU
   property.
-* `MPOTensor.tensorPhysicalIdCFIIData`: identity-ancilla attachment preserves chosen
-  canonical-form-II data and full active support.
+* `MPOTensor.transferMap_normalizedFlattening_tensorPhysicalId`: the normalized transfer map is
+  unchanged.
+* `MPOTensor.hasFullActiveSupport_tensorPhysicalIdCFIIData`: full active support is preserved.
 -/
 
 open scoped Matrix Kronecker
@@ -123,7 +128,7 @@ theorem IsMPU.tensorPhysicalId {U : MPOTensor d D} (hU : IsMPU U)
 /-! ## Normalized doubled-index tensor -/
 
 /-- Shuffle the doubled enlarged physical index by
-`((i, a), (j, b)) ↦ ((i, j), (a, b))`, with both pairs encoded by
+\(((i,a),(j,b))\mapsto((i,j),(a,b))\), with both pairs encoded by
 `finProdFinEquiv`.
 
 This makes the original and ancilla doubled indices explicit and fixes their
@@ -157,9 +162,9 @@ def doubledPhysicalAncillaShuffle (d x : ℕ) :
   simp [doubledPhysicalAncillaShuffle]
 
 /-- Lift a doubled-index MPS tensor by a normalized diagonal ancilla alphabet.
-Only letters `(a, a)` are nonzero, and each is scaled by `1 / sqrt x`.
+Only letters \((a,a)\) are nonzero, and each is scaled by \(1/\sqrt{x}\).
 
-The physical alphabet is ordered as `((i, j), (a, b))`. -/
+The physical alphabet is ordered as \(((i,j),(a,b))\). -/
 noncomputable def normalizedDiagonalLift (A : MPSTensor (d * d) D) (x : ℕ) :
     MPSTensor ((d * d) * (x * x)) D := fun k ↦
   let pq := finProdFinEquiv.symm k
@@ -185,8 +190,6 @@ theorem transferMap_normalizedDiagonalLift (A : MPSTensor (d * d) D)
   apply Finset.sum_congr rfl
   intro ij _
   rw [← Equiv.sum_comp finProdFinEquiv, Fintype.sum_prod_type]
-  have hsqrt : (Real.sqrt x : ℂ) ≠ 0 := by
-    exact_mod_cast Real.sqrt_ne_zero'.2 (by exact_mod_cast hx)
   have hscale : (x : ℂ) * (Real.sqrt x : ℂ)⁻¹ * (Real.sqrt x : ℂ)⁻¹ = 1 := by
     have hxR : (0 : ℝ) ≤ x := by positivity
     rw [mul_assoc, ← mul_inv, ← Complex.ofReal_mul, Real.mul_self_sqrt hxR]
@@ -373,7 +376,7 @@ theorem hasFullActiveSupport_normalizedDiagonalLiftCFIIData
 
 /-- Full active support is preserved when canonical-form-II data are transported across a tensor
 identity. -/
-theorem hasFullActiveSupport_castCFIIData
+private theorem hasFullActiveSupport_castCFIIData
     {d D : ℕ} {A B : MPSTensor d D} (h : A = B)
     (data : MPSTensor.CPSVCanonicalFormIIData B)
     (hfull : data.toCPSVCanonicalFormData.HasFullActiveSupport) :
