@@ -488,17 +488,17 @@ cell resolves to the authored record rather than creating coincident
 population underneath it. Member indices are strictly one-based.
 
 `basis=` is defined on the `flat` and `plane` frames, and a circle frame takes
-no basis. What a basis decomposes is a repeating cell, and what reads the
-decomposition is the frame's translations: one offset pair is one page
-displacement at every cell, the spacing check compares member families under
-each live cell translation, and a declared adjacency travels from cell to cell
-unchanged. A circle frame repeats nothing. Its stations lie on one ring and
-its axes turn from station to station, so a single declared offset would name
-a different page displacement at each of them; there is no repeated cell to
-decompose and no translation to read a decomposition under. A circle carries
-one record per station, and a figure whose site is composite has a repeating
-cell, which is a flat or a plane frame. A basis on a circle is rejected with
-`[TKZ-FRAME-BASIS-CIRCLE]`.
+no basis. A basis is cell-level: what it decomposes is a repeating cell, and
+what reads the decomposition is the frame's translations. One offset pair is
+one page displacement at every cell, the spacing check compares member families
+under each live cell translation, and a declared adjacency travels from cell to
+cell unchanged. A circle frame repeats nothing. Its stations lie on one ring
+and its axes turn from station to station, so a single declared offset would
+name a different page displacement at each of them; there is no repeating cell
+to decompose and no translation to read a decomposition under. A basis on a
+circle is rejected with `[TKZ-FRAME-BASIS-CIRCLE]`. The restriction is about
+the frame's own cell structure and says nothing about what one station may
+carry.
 
 An explicit `basis=` is picture-scoped in the current kernel stage.
 Group-local and atom-local bases are rejected with `TKZ-FRAME-*` diagnostics
