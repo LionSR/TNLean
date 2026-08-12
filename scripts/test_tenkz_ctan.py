@@ -1012,11 +1012,18 @@ def test_every_spelling_of_stream_eighteen_is_the_shell_escape_stream() -> None:
     # beginning with a bar is text.
     # The loaders take a file name directly, with no stream operand: an
     # operand reading let a page of typeset text count as a pipe.
-    # An expansion that leaves only whitespace is skipped by the filename
-    # scanner, so a pipe behind one still reaches the shell.
+    # An expansion that leaves nothing or only whitespace is passed over
+    # by the primitive's filename scanner, so a pipe behind one still
+    # reaches the shell.
     for piped in (r"\input\space |cmd", r"\input\space|cmd",
-                  r"\include\empty {|cmd}", "\\input\\ |cmd"):
+                  r"\input\empty {|cmd}", r"\makeatletter\input\@empty |cmd",
+                  r"\input\c_space_tl |cmd", "\\input\\ |cmd"):
         assert tenkz_ctan.shell_escape_call(piped), piped
+    # \include absorbs its undelimited argument before anything expands:
+    # the expansion is the argument, the brace group after it is typeset
+    # text, and no file name ever opens with the bar.
+    for absorbed in (r"\include\empty {|literal}", r"\include\space {|literal}"):
+        assert not tenkz_ctan.shell_escape_call(absorbed), absorbed
     for plain in ('\\openin\\stream="plain.tex"', r'\def\separator{"|}',
                   'the sequence "| in prose',
                   r"\input 1 {|literal}", r"\include 12 {|literal}",
@@ -1165,8 +1172,11 @@ def test_an_unbraced_absolute_input_is_an_absolute_path() -> None:
                          "\\file_if_exist:nT {tenkz-stage.code.tex} {}\n",
                          "\\file_if_exist_p:n {tenkz-stage.code.tex}\n",
                          # A longer name that merely opens with the
-                         # conditional's letters is not the conditional.
-                         "\\file_if_exist:nTFaux {/Users/somebody/data}\n"):
+                         # conditional's letters is not the conditional,
+                         # and neither is a different macro whose suffix
+                         # reuses them in an order expl3 cannot define.
+                         "\\file_if_exist:nTFaux {/Users/somebody/data}\n",
+                         "\\file_if_exist:nTT {/Users/somebody/data}\n"):
             (tree / "tenkz.sty").write_text(innocent, encoding="utf-8")
             relative = tenkz_ctan.check_arxiv(tree, _loaded("tenkz.sty"))
             assert not relative.failures, (innocent, relative.failures)
