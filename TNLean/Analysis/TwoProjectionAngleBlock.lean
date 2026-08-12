@@ -13,7 +13,7 @@ This file gives the local two-dimensional block used in the two-projection
 lemma invoked in arXiv:1703.09188, Proposition IV.5 (`prop:continuity-index`),
 lines 756–764. It does not assume that the projections commute.
 
-**Local fix:** Source line 762 repeats `P` for the second projector, where the
+**Local fix (projector label):** Source line 762 repeats `P` for the second projector, where the
 surrounding argument requires `Q`. This typographical correction is documented
 in `docs/paper-gaps/1703_two_projection_projector_typo.tex`.
 -/
@@ -60,14 +60,15 @@ def angleDefect (Q : E →ₗ[ℂ] E) (μ : ℝ) (x : E) : E :=
 /-- Exact formulas for the possibly degenerate angle block determined by a unit
 compression eigenvector.
 
-**Local fix:** Source line 762 repeats `P` for the second projector; the
+**Local fix (projector label):** Source line 762 repeats `P` for the second projector; the
 surrounding argument requires `Q`. See
 `docs/paper-gaps/1703_two_projection_projector_typo.tex`.
 
-The defect vector \(Qx-μx\) lies in the kernel of `P`, is orthogonal to `x`,
-and has squared norm \(μ(1-μ)\). No strict endpoint bound or nonzero claim is
-made here; `exists_orthonormal_angle_block` adds \(0<μ<1\) before normalizing
-the defect.
+Writing \(d=Qx-μx\), the conclusions include
+\(Pd=0\), \(Qx=μx+d\),
+\(Qd=μ(1-μ)x+(1-μ)d\), \(\langle x,d\rangle=0\), and
+\(\lVert d\rVert^2=μ(1-μ)\). No strict endpoint bound or nonzero claim is made
+here; `exists_orthonormal_angle_block` adds \(0<μ<1\) before normalizing \(d\).
 -/
 theorem angleDefect_block {P Q : E →ₗ[ℂ] E}
     (hP : P.IsSymmetricProjection) (hQ : Q.IsSymmetricProjection)
@@ -124,7 +125,7 @@ theorem angleDefect_block {P Q : E →ₗ[ℂ] E}
 
 /-- Normalized form of `angleDefect_block`.
 
-**Local fix:** The second projector in arXiv:1703.09188, line 762 is `Q`, not
+**Local fix (projector label):** The second projector in arXiv:1703.09188, line 762 is `Q`, not
 the repeated `P`; see `docs/paper-gaps/1703_two_projection_projector_typo.tex`.
 
 The vectors `x,w` are orthonormal; on their two-dimensional span, `P` acts as
