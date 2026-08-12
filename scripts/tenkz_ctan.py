@@ -331,7 +331,8 @@ STREAM_OPERAND = r"(?:\\[A-Za-z@_:]+|[0-9]+)?\s*=?\s*"
 PIPE_FILENAME = re.compile(
     r"\\open(?:in|out)\s*" + STREAM_OPERAND + r"(?:\{\s*)?\"?\s*\|"
     r"|\\input\s*"
-    r"(?:\\(?:space|empty|@empty|c_space_tl)(?![A-Za-z@_:])\s*|\\ \s*)*"
+    r"(?:\\(?:space|empty|@empty|c_space_tl|c_empty_tl)(?![A-Za-z@_:])\s*"
+    r"|\\ \s*)*"
     r"(?:\{\s*)?\"?\s*\|"
     r"|\\include\s*(?:\{\s*)?\"?\s*\|"
 )

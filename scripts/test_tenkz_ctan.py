@@ -1017,7 +1017,8 @@ def test_every_spelling_of_stream_eighteen_is_the_shell_escape_stream() -> None:
     # reaches the shell.
     for piped in (r"\input\space |cmd", r"\input\space|cmd",
                   r"\input\empty {|cmd}", r"\makeatletter\input\@empty |cmd",
-                  r"\input\c_space_tl |cmd", "\\input\\ |cmd"):
+                  r"\input\c_space_tl |cmd", r"\input\c_empty_tl |cmd",
+                  "\\input\\ |cmd"):
         assert tenkz_ctan.shell_escape_call(piped), piped
     # \include absorbs its undelimited argument before anything expands:
     # the expansion is the argument, the brace group after it is typeset
