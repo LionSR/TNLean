@@ -49,6 +49,51 @@ theorem sum_finSigmaFinEquiv {g : ℕ} {mult : Fin g → ℕ} {β : Type*}
   rw [Equiv.sum_comp finSigmaFinEquiv.symm f, ← Finset.univ_sigma_univ,
     Finset.sum_sigma]
 
+/-- A sum over dependent finite coordinates can be rewritten over coordinatewise
+larger finite types by extending the summand by zero outside the original box. -/
+theorem sum_piFin_castLE_extend_zero {ι β : Type*} [Fintype ι] [DecidableEq ι]
+    [AddCommMonoid β] (r s : ι → ℕ) (f : ((i : ι) → Fin (r i)) → β)
+    (h : ∀ i, r i ≤ s i) :
+    ∑ x, f x = ∑ y : (i : ι) → Fin (s i),
+      if hlt : ∀ i, (y i).val < r i then
+        f (fun i => ⟨(y i).val, hlt i⟩)
+      else 0 := by
+  classical
+  let p : ((i : ι) → Fin (s i)) → Prop := fun y => ∀ i, (y i).val < r i
+  let e : ((i : ι) → Fin (r i)) ≃ {y : (i : ι) → Fin (s i) // p y} := {
+    toFun x := ⟨fun i => Fin.castLE (h i) (x i), fun i => (x i).isLt⟩
+    invFun y := fun i => ⟨(y.1 i).val, y.2 i⟩
+    left_inv x := by
+      funext i
+      apply Fin.ext
+      rfl
+    right_inv y := by
+      apply Subtype.ext
+      funext i
+      apply Fin.ext
+      rfl
+  }
+  calc
+    ∑ x, f x = ∑ z : {y : (i : ι) → Fin (s i) // p y}, f (e.symm z) := by
+      exact Fintype.sum_equiv e f (fun z => f (e.symm z)) fun x => by simp
+    _ = ∑ y ∈ (Finset.univ.filter p),
+          if hlt : p y then f (fun i => ⟨(y i).val, hlt i⟩) else 0 := by
+      rw [← Finset.sum_subtype_eq_sum_filter]
+      refine Finset.sum_congr ?_ ?_
+      · ext z
+        simp [p]
+      intro z _
+      rw [dif_pos z.2]
+      congr
+    _ = ∑ y : (i : ι) → Fin (s i),
+          if hlt : ∀ i, (y i).val < r i then
+            f (fun i => ⟨(y i).val, hlt i⟩)
+          else 0 := by
+      rw [Finset.sum_filter]
+      refine Finset.sum_congr rfl ?_
+      intro y _
+      by_cases hlt : p y <;> simp [p, hlt]
+
 end Fintype
 
 namespace Fin
