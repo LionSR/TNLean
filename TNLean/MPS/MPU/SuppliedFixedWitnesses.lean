@@ -160,7 +160,7 @@ two retained double-layer letters.
 Source: arXiv:1703.09188, Theorem III.8, equations (31)--(32), Section III.B
 (lines 563--600). -/
 theorem doubleLayerTensor_rankOne_mul_eq_normalizedDiagonal_tail
-    [NeZero d] (W : MPOTensor d D) (ρ Φ : Fin (D * D) → ℂ) (J : ℕ)
+    (W : MPOTensor d D) (ρ Φ : Fin (D * D) → ℂ) (J : ℕ)
     (hpower : normalizedDiagonal (doubleLayerTensor W) ^ J =
       Matrix.vecMulVec ρ Φ)
     (i j k l : Fin d) :
@@ -182,7 +182,7 @@ introduces the rank-one matrix, and the power equation expands it as the tail.
 Source: arXiv:1703.09188, Theorem III.8, equations (31)--(32), Section III.B
 (lines 563--600). -/
 theorem doubleLayerTensor_mul_eq_normalizedDiagonal_tail_of_simple2
-    [NeZero d] (W : MPOTensor d D) (ρ Φ : Fin (D * D) → ℂ) (J : ℕ)
+    (W : MPOTensor d D) (ρ Φ : Fin (D * D) → ℂ) (J : ℕ)
     (hpower : normalizedDiagonal (doubleLayerTensor W) ^ J =
       Matrix.vecMulVec ρ Φ)
     (hsimple2 : ∀ i j k l : Fin d,

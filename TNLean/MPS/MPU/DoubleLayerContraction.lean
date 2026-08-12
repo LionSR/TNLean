@@ -126,7 +126,7 @@ source-factor networks.
 
 Source: arXiv:1703.09188, Theorem III.8, equations (31)--(32), Section III.B
 (lines 563--600). -/
-theorem normalizedDiagonal_pow_eq_sum_evalWord [NeZero d]
+theorem normalizedDiagonal_pow_eq_sum_evalWord
     (W : MPOTensor d D) (K : ℕ) :
     normalizedDiagonal W ^ K =
       ((d : ℂ)⁻¹) ^ K •
