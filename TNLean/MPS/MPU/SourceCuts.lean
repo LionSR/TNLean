@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.MPS.MPDO.Defs
+import TNLean.MPS.MPDO.PhysicalAdjoint
 import Mathlib.LinearAlgebra.Matrix.Rank
 import Mathlib.Logic.Equiv.Fin.Basic
 
@@ -55,6 +55,10 @@ definition `defnrl` and lines 697–704 of the paper.
   $r \le \min(Dd, dD) = Dd$ and similarly $\ell \le Dd$.
 * `sourceCutM₁_reindexPhysical`, `sourceCutM₂_reindexPhysical`: physical reindexing
   formulas for the two cuts.
+* `sourceCutM₁_physicalAdjointTensor`, `sourceCutM₂_physicalAdjointTensor`:
+  physical adjunction exchanges the two cuts and conjugates their entries.
+* `rightRank_physicalAdjointTensor`, `leftRank_physicalAdjointTensor`:
+  physical adjunction exchanges the two source ranks.
 * `rightRank_reindexPhysical`, `leftRank_reindexPhysical`: invariance of both ranks
   under bijective physical reindexing.
 * `sourceCutM₁_apply`, `sourceCutM₂_apply`, `sourceCutM₁Fin_apply`,
@@ -65,6 +69,8 @@ definition `defnrl` and lines 697–704 of the paper.
 * [Cirac--Perez-Garcia--Schuch--Verstraete 2017] arXiv:1703.09188,
   Section III, definition `defnrl`, lines 450–477 and 697–704.
 -/
+
+open scoped ComplexOrder
 
 namespace MPOTensor
 
@@ -96,6 +102,35 @@ def sourceCutM₂ : Matrix (Fin D × Fin d) (Fin d × Fin D) ℂ :=
 
 @[simp] lemma sourceCutM₂_apply (α : Fin D) (i : Fin d) (j : Fin d) (β : Fin D) :
     sourceCutM₂ U (α, i) (j, β) = U i j α β := rfl
+
+/-- Physical adjunction exchanges the first source cut with the entrywise conjugate of the
+second source cut:
+$$M_1(U^\sharp)=\overline{M_2(U)}.$$
+
+The row and column indices remain `(left virtual, physical)` and `(physical, right virtual)`;
+only the roles of the upper and lower physical indices are exchanged.
+
+Source: arXiv:1703.09188, source cuts at lines 450–506 and physical adjunction at
+lines 1196–1252. -/
+theorem sourceCutM₁_physicalAdjointTensor :
+    sourceCutM₁ (physicalAdjointTensor U) = (sourceCutM₂ U).map (starRingEnd ℂ) := by
+  ext row col
+  rcases row with ⟨α, j⟩
+  rcases col with ⟨i, β⟩
+  rfl
+
+/-- Physical adjunction exchanges the second source cut with the entrywise conjugate of the
+first source cut:
+$$M_2(U^\sharp)=\overline{M_1(U)}.$$
+
+Source: arXiv:1703.09188, source cuts at lines 450–506 and physical adjunction at
+lines 1196–1252. -/
+theorem sourceCutM₂_physicalAdjointTensor :
+    sourceCutM₂ (physicalAdjointTensor U) = (sourceCutM₁ U).map (starRingEnd ℂ) := by
+  ext row col
+  rcases row with ⟨α, i⟩
+  rcases col with ⟨j, β⟩
+  rfl
 
 /-- Physical reindexing acts on the down leg of each row and the up leg of
 each column of the first source cut.
@@ -191,6 +226,29 @@ noncomputable def leftRank : ℕ := (sourceCutM₂ U).rank
 lemma rightRank_eq : r[U] = (sourceCutM₁ U).rank := rfl
 
 lemma leftRank_eq : ℓ[U] = (sourceCutM₂ U).rank := rfl
+
+/-- Physical adjunction exchanges the right source rank with the left source rank:
+$$r[U^\sharp]=\ell[U].$$
+
+This is the raw source-rank identity underlying the sign reversal of the MPU index under
+adjunction; it does not choose or compare standard-form factors.
+
+Source: arXiv:1703.09188, definition `defnrl` and lines 1196–1207. -/
+theorem rightRank_physicalAdjointTensor : r[physicalAdjointTensor U] = ℓ[U] := by
+  rw [rightRank, sourceCutM₁_physicalAdjointTensor]
+  change (Matrix.conjTranspose (Matrix.transpose (sourceCutM₂ U))).rank = _
+  rw [Matrix.rank_conjTranspose, Matrix.rank_transpose]
+  rfl
+
+/-- Physical adjunction exchanges the left source rank with the right source rank:
+$$\ell[U^\sharp]=r[U].$$
+
+Source: arXiv:1703.09188, definition `defnrl` and lines 1196–1207. -/
+theorem leftRank_physicalAdjointTensor : ℓ[physicalAdjointTensor U] = r[U] := by
+  rw [leftRank, sourceCutM₂_physicalAdjointTensor]
+  change (Matrix.conjTranspose (Matrix.transpose (sourceCutM₁ U))).rank = _
+  rw [Matrix.rank_conjTranspose, Matrix.rank_transpose]
+  rfl
 
 /-- Bijective physical reindexing preserves the right source rank.
 
