@@ -3131,6 +3131,51 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
     \end{align}
 \end{definition}
 
+\begin{theorem}[Active blocks and full support under physical blocking]
+    \label{thm:mpu_full_active_support_blocking}
+    \lean{MPSTensor.CPSVCanonicalFormData.activeEquivBlockTensor,
+        MPSTensor.CPSVCanonicalFormData.hasFullActiveSupport_blockTensor}
+    \leanok
+    \uses{def:mpu_full_active_support,
+        thm:cpsv_literal_canonical_form_positive_blocking}
+    Let canonical-form data for $A$ have active block set
+    $K=\{k\mid\mu_k\ne0\}$. For every positive integer $L$, the active
+    blocks of the blocked data are canonically identified with $K$ because
+    \begin{align}
+        \mu_k^L\ne0 &\iff \mu_k\ne0.
+    \end{align}
+    Under this identification their bond dimensions are unchanged. In
+    particular, if
+    \begin{align}
+        \sum_{k\in K}D_k&=D,
+    \end{align}
+    then the positively blocked canonical-form data also have full active
+    support.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:mpu_full_active_support,
+        thm:cpsv_literal_canonical_form_positive_blocking}
+    Positive blocking replaces each weight $\mu_k$ by $\mu_k^L$. Since
+    $L>0$, this preserves precisely the nonzero weights. Reindex the sum of
+    the unchanged active block dimensions by the resulting bijection.
+\end{proof}
+
+\begin{theorem}[Full active support under physical relabeling]
+    \label{thm:mpu_full_active_support_reindexing}
+    \lean{MPSTensor.CPSVCanonicalFormData.hasFullActiveSupport_reindexPhysical}
+    \leanok
+    \uses{def:mpu_full_active_support,thm:cpsv_physical_reindexing}
+    A bijective relabeling of the physical alphabet preserves full active
+    support of canonical-form data.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:mpu_full_active_support,thm:cpsv_physical_reindexing}
+    Physical relabeling leaves the weights, active blocks, and their bond
+    dimensions unchanged, so the full-support sum is unchanged.
+\end{proof}
+
 \begin{theorem}[An ambient-dimensional active block is irreducible]
     \label{thm:mpu_active_block_ambient_irreducible}
     \lean{MPSTensor.CPSVCanonicalFormData.isIrreducibleTensor_of_active_dim_eq}
@@ -3357,6 +3402,81 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     This is the normalization used in the normal-tensor argument of
     \cite[Section~III, equation~(13)]{Cirac2017MPU}.
 \end{definition}
+
+\begin{theorem}[Normalized flattening under blocking]
+    \label{thm:mpu_normalized_flattening_blocking}
+    \lean{MPOTensor.normalizedFlattening_blockTensor}
+    \leanok
+    \uses{def:mpu_normalized_flattening,
+        thm:mpdo_positive_blocking_doubled_index}
+    Let $\mathcal U$ be an MPO tensor of physical dimension $d$, and let
+    $L\geq0$. Pairing the ket and bra letters at each site gives a canonical
+    bijection
+    \begin{align}
+        \vartheta_L:\{0,\ldots,d^L-1\}^2
+          &\longrightarrow \{0,\ldots,d^2-1\}^L.
+    \end{align}
+    If $\widetilde{\mathcal U}=d^{-1/2}\mathcal U$ denotes normalized
+    flattening, then
+    \begin{align}
+        \widetilde{\mathcal U^{[L]}}
+          &=\vartheta_L^*\bigl(\widetilde{\mathcal U}^{[L]}\bigr).
+        \label{eq:mpu_normalized_flattening_blocking}
+    \end{align}
+    Thus normalized flattening commutes with blocking, up to the canonical
+    doubled-index relabeling. This is the normalized form of the blocking
+    operation in \cite[Definition~II.5 and equation~(9)]{Cirac2017MPU}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:mpu_normalized_flattening,
+        thm:mpdo_positive_blocking_doubled_index}
+    A blocked letter is a product of $L$ original letters. The identity
+    \begin{align}
+        \bigl(\sqrt{d^L}\bigr)^{-1}
+          &=\bigl((\sqrt d)^{-1}\bigr)^L
+    \end{align}
+    identifies its normalization with the product of the $L$ one-site
+    normalizations. Theorem~\ref{thm:mpdo_positive_blocking_doubled_index}
+    identifies the two physical indexings.
+\end{proof}
+
+\begin{theorem}[Canonical-form-II data under blocking and relabeling]
+    \label{thm:mpu_cfii_blocking_reindexing}
+    \lean{MPSTensor.CPSVCanonicalFormIIData.blockTensor,
+        MPSTensor.CPSVCanonicalFormIIData.reindexPhysical,
+        MPOTensor.blockTensorCFIIData}
+    \leanok
+    \uses{def:cpsv_cfii,def:mpu_normalized_flattening,
+        thm:cpsv_literal_canonical_form_positive_blocking,
+        thm:cpsv_physical_reindexing,
+        thm:mpu_normalized_flattening_blocking}
+    Let $A$ have canonical-form-II data with retained weights $\mu_k$, blocks
+    $A_k$, and positive definite diagonal fixed matrices $\Lambda_k$. For
+    every positive integer $L$, the blocked tensor $A^{[L]}$ has
+    canonical-form-II data with weights $\mu_k^L$, blocks $A_k^{[L]}$, and
+    the same matrices $\Lambda_k$. A bijective relabeling of the physical
+    alphabet likewise preserves canonical-form-II data and the matrices
+    $\Lambda_k$.
+
+    Consequently, if the normalized flattening $\widetilde{\mathcal U}$ of an
+    MPO tensor has canonical-form-II data, then for every $L>0$ the normalized
+    flattening of $\mathcal U^{[L]}$ has the data obtained by first blocking
+    and then relabeling by $\vartheta_L$ from
+    Theorem~\ref{thm:mpu_normalized_flattening_blocking}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:cpsv_cfii,
+        thm:cpsv_literal_canonical_form_positive_blocking,
+        thm:cpsv_physical_reindexing,
+        thm:mpu_normalized_flattening_blocking}
+    The blocked transfer map of each retained block is the $L$th power of its
+    original transfer map. Hence it fixes the same $\Lambda_k$, while
+    positivity and diagonality are unchanged. A physical bijection leaves the
+    transfer map unchanged. Apply these two constructions to
+    equation~(\ref{eq:mpu_normalized_flattening_blocking}).
+\end{proof}
 
 \begin{theorem}[Self-overlap scaling]
     \label{thm:mpu_self_overlap_scaling}
