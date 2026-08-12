@@ -943,8 +943,12 @@ def test_every_spelling_of_stream_eighteen_is_the_shell_escape_stream() -> None:
     # `\\write18` is the control symbol and then ordinary characters, and a
     # gate that read it as the primitive would refuse a package for
     # typesetting the spelling.
-    for typeset in (r"\\write18{x}", r"\\ShellEscape{x}"):
+    # It is the parity of the run that decides, not whether one backslash
+    # precedes: `\\\write18` is that control symbol and then the primitive.
+    for typeset in (r"\\write18{x}", r"\\ShellEscape{x}", r"\\\\write18{x}"):
         assert not tenkz_ctan.shell_escape_call(typeset), typeset
+    for odd in (r"\\\write18{x}", r"\\\ShellEscape{x}"):
+        assert tenkz_ctan.shell_escape_call(odd), odd
     # Numbers that are not 18 in the base their prefix names, an odd run of
     # minus signs, and a control sequence that merely starts with the same
     # letters.
@@ -1017,6 +1021,7 @@ def test_an_unbraced_absolute_input_is_an_absolute_path() -> None:
                      r"\includegraphics *{/Users/somebody/figure.pdf}",
                      r"\InputIfFileExists{/Users/somebody/local.cfg}{}{}",
                      r"\IfFileExists{/Users/somebody/local.cfg}{}{}",
+                     r"\file_input:n { /Users/somebody/local.tex }",
                      # A path holding a space is written quoted, braced or not.
                      '\\input{"/Users/somebody/My Documents/f.tex"}'):
             (tree / "tenkz.sty").write_text(load + "\n", encoding="utf-8")
@@ -1163,6 +1168,24 @@ def test_the_offline_check_says_so_when_there_is_no_engine() -> None:
         tenkz_ctan.shutil.which = engine
     assert skipped.status == "SKIP", skipped
     assert refused.failures, refused
+
+
+def test_a_note_never_contradicts_the_finding_printed_beside_it() -> None:
+    """A closing note states what the check found, so it is written only when
+    the check held. A line claiming no retired load, printed above the line
+    reporting one, is worse than no line at all."""
+
+    closure = tenkz_ctan.Closure(packages=["tikz", "tikz-cd"], libraries=[])
+    caught = tenkz_ctan.check_dependencies(closure, _ownership([], [], []))
+    assert caught.failures, caught
+    assert not caught.notes, caught.notes
+    with tempfile.TemporaryDirectory() as directory:
+        tree = Path(directory) / PACKAGE_DIR
+        tree.mkdir(parents=True)
+        (tree / "tenkz.sty").write_text("\\write18{uname -a}\n", encoding="utf-8")
+        loud = tenkz_ctan.check_arxiv(tree, _loaded("tenkz.sty"))
+    assert loud.failures, loud
+    assert not loud.notes, loud.notes
 
 
 def test_the_offline_check_reports_a_case_that_cannot_be_read() -> None:

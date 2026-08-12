@@ -248,7 +248,7 @@ REGENERATED_SUFFIXES = frozenset({".dtx", ".ins", ".fmt", ".mf", ".drv"})
 # recognizable is matched and the rest is out of scope, stated here rather
 # than implied by silence.
 WRITE_CALL = re.compile(
-    r"(?<!\\)(?:\\write|\\csname\s*write\s*\\endcsname)"
+    r"(?:\\write|\\csname\s*write\s*\\endcsname)"
     r"(?![A-Za-z@_:])(?P<signs>[\s+-]*)"
     r"(?:\"(?P<hex>[0-9A-Fa-f]+)|'(?P<oct>[0-7]+)|(?P<dec>[0-9]+)"
     r"|(?P<name>\\[A-Za-z@_:]+))?"
@@ -264,21 +264,32 @@ ALLOCATED_STREAM = re.compile(r"\\(?:newwrite|iow_new:N)\s*(\\[A-Za-z@_:]+)")
 # gate that looks closed. Only executors are named: `\tex_shellescape:D` and
 # `\sys_if_shell:TF` report whether the engine has a shell and run nothing, so
 # reading them as calls would refuse a file for asking a question.
-# The lookbehind is the other half of reading a control sequence: `\\write18`
-# is the control symbol `\\` followed by ordinary characters, not the
-# primitive, and a gate that read it as one would refuse a package for
-# typesetting the spelling. The boundary after the name is the one `WRITE_CALL`
-# uses, for the same reason: `@` is a
+# The boundary after the name is the one `WRITE_CALL` uses, for the same
+# reason: `@` is a
 # letter in a package and `_` and `:` are letters under `\ExplSyntaxOn`, so
 # `\ShellEscape@status` and `\sys_shell_now:n_aux` are control words of their
 # own and refusing them would block a shell-free release over a name.
 SHELL_ESCAPE_NAME = re.compile(
-    r"(?<!\\)(?:\\(?:Delayed)?ShellEscape"
+    r"(?:\\(?:Delayed)?ShellEscape"
     r"|\\sys_(?:shell_(?:now|shipout)|get_shell):[a-zA-Z]*"
     r"|\\(?:ior|iow)_shell_open:[a-zA-Z]*)"
     r"(?![A-Za-z@_:])"
 )
 SHELL_ESCAPE_STREAM = 18
+
+
+def uncontrolled(text: str) -> str:
+    r"""`text` with every `\\` control symbol blanked out.
+
+    A backslash preceded by an odd number of backslashes starts a control
+    sequence and one preceded by an even number does not, so the pairs are
+    removed before anything is read: `\\write18` is the control symbol and then
+    ordinary characters, while `\\\write18` is that symbol and then the
+    primitive. Blanking keeps the length, so a match's span still indexes the
+    text it came from.
+    """
+
+    return text.replace("\\\\", "\x00\x00")
 
 
 def shell_escape_call(text: str) -> str:
@@ -291,17 +302,17 @@ def shell_escape_call(text: str) -> str:
     be 18.
     """
 
-    named = SHELL_ESCAPE_NAME.search(text)
+    scanned = uncontrolled(text)
+    named = SHELL_ESCAPE_NAME.search(scanned)
     if named is not None:
-        return f"{named.group(0)}, which reaches a shell"
-    allocated = set(ALLOCATED_STREAM.findall(text))
-    for found in WRITE_CALL.finditer(text):
+        return f"{text[named.start():named.end()]}, which reaches a shell"
+    allocated = set(ALLOCATED_STREAM.findall(scanned))
+    for found in WRITE_CALL.finditer(scanned):
+        call = text[found.start():found.end()]
         if found["name"] is not None:
             if found["name"] in allocated:
                 continue
-            return (
-                f"{found.group(0).strip()}, a stream this file does not allocate"
-            )
+            return f"{call.strip()}, a stream this file does not allocate"
         digits, base = (
             (found["hex"], 16) if found["hex"]
             else (found["oct"], 8) if found["oct"]
@@ -310,12 +321,12 @@ def shell_escape_call(text: str) -> str:
         )
         if digits is None:
             return (
-                f"{found.group(0).strip()}, whose stream is not a constant this "
-                "reading can evaluate"
+                f"{call.strip()}, whose stream is not a constant this reading "
+                "can evaluate"
             )
         sign = -1 if found["signs"].count("-") % 2 else 1
         if sign * int(digits, base) == SHELL_ESCAPE_STREAM:
-            return f"{found.group(0)}, the shell-escape stream"
+            return f"{call}, the shell-escape stream"
     return ""
 
 
@@ -333,7 +344,8 @@ def shell_escape_call(text: str) -> str:
 ABSOLUTE_PATH_HEAD = r"(?:/|[A-Za-z]:[\\/])"
 ABSOLUTE_LOAD = re.compile(
     r"\\(?:input|include|usepackage|RequirePackageWithOptions|RequirePackage"
-    r"|InputIfFileExists|IfFileExists|includegraphics)(?:\s*\*)?"
+    r"|InputIfFileExists|IfFileExists|includegraphics|file_input:n"
+    r"|file_if_exist:nTF)(?:\s*\*)?"
     rf"\s*(?:\[[^]]*\]\s*)?\{{\s*\"?{ABSOLUTE_PATH_HEAD}"
     rf"|\\input\s*\"?{ABSOLUTE_PATH_HEAD}"
 )
@@ -386,7 +398,9 @@ OFFLINE_CASES = (
     OfflineCase(
         "crossing", "string/crossing",
         "tests/tenkz/rmp/section-iii-b/cases/rmp-iii-b-braid-two.tex",
-        False, r"\tnwire", r"(?m)^stringcross\|",
+        # `\tnwire` alone would not tell this case from the flat one, which
+        # draws wires too. A string-kind wire is what a crossing is made of.
+        False, "kind=string", r"(?m)^stringcross\|",
     ),
     OfflineCase(
         "enclosure", "enclosure",
@@ -406,7 +420,7 @@ OFFLINE_CASES = (
     OfflineCase(
         "probe-crossing", "string/crossing",
         "tests/tenkz/kernel/k_braid.tex",
-        True, r"\tnwire", r"(?m)^stringcross\|",
+        True, "cross=", r"(?m)^stringcross\|",
     ),
 )
 
@@ -977,13 +991,17 @@ def check_dependencies(closure: Closure, manifest: dict) -> Report:
         f"{ENTRY.name} still loads {survivors}, which the retired front ends "
         "brought and their removal was supposed to take with them",
     )
-    report.notes.append(
-        "; ".join(
-            f"{name}: {len(classified[name])}" for name in DEPENDENCY_CLASSES
+    # The note states what the check found, so it is written only when the
+    # check held: a line claiming no retired load, printed above the line
+    # reporting one, is worse than no line at all.
+    if not report.failures:
+        report.notes.append(
+            "; ".join(
+                f"{name}: {len(classified[name])}" for name in DEPENDENCY_CLASSES
+            )
+            + f"; no load of {', '.join(RETIRED_DEPENDENCIES)}"
         )
-        + f"; no load of {', '.join(RETIRED_DEPENDENCIES)}"
-    )
-    if classified["unconsumed"]:
+    if not report.failures and classified["unconsumed"]:
         report.notes.append(
             "loaded and unread, by the ablation recorded in DEPENDENCIES.md: "
             + ", ".join(classified["unconsumed"])
@@ -1443,10 +1461,11 @@ def check_arxiv(tree: Path, closure: Closure) -> Report:
             not called,
             f"{path.name} calls {called}, and a submission compiles with no shell",
         )
-    report.notes.append(
-        f"{len(list(tree.iterdir()))} files, one directory deep; "
-        f"{len(loaded)} loaded sources read, no generated source and no shell call"
-    )
+    if not report.failures:
+        report.notes.append(
+            f"{len(list(tree.iterdir()))} files, one directory deep; "
+            f"{len(loaded)} loaded sources read, no generated source and no shell call"
+        )
     return report
 
 
