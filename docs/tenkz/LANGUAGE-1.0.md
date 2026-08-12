@@ -509,8 +509,10 @@ never silhouettes.
 Consumers, carrier axes: `rmp-iii-a-pulling-through`, `rmp-iii-a-mpo-action`,
 `rmp-iii-a-ghz-tensor`, `rmp-workbench-ii-peps-gauge-old`.
 Consumers, circle pitch: `rmp-ii-triangle-network`, the one benchmark case on
-a circle frame; four blueprint figures and twenty-six kernel fixtures hold the
-clause elsewhere.
+a circle frame. Outside the benchmark, four blueprint figures and eighteen
+compiled kernel fixtures hold the clause by standing two or more stations on a
+circle; two further compiled fixtures and six refusal fixtures name the frame
+without spacing a pair.
 Consumers, basis: `rmp-app-czx-state`, `rmp-iii-a-ghz-state`,
 `rmp-iii-b-condensation`, `rmp-workbench-iii-ghz-state-workbench`.
 Consumers, transverse pairing: `rmp-ii-peps-marginal`,
@@ -839,8 +841,8 @@ sum are read from the class the mathematics already has.
    what an elision between two panels asserts, and needs no spelling of its
    own. A mismatch is `[TKZ-EQ-SIGNATURE]`, printing both signatures. A
    relation with an undepicted side is legal in a draft and refused under
-   strict, which the benchmark sets. The audit rule is derived from the
-   joiner's class and is not the author's to configure.
+   strict. The audit rule is derived from the joiner's class and is not the
+   author's to configure.
    **The recorded opt-out.** One thing an author may say, and must say in
    writing: that a particular relation's two sides are known, unequal, and
    equal anyway for a reason the diagram does not draw. The coproduct sends a
