@@ -28,7 +28,7 @@ product of `B` by the gauges at the two ends of the word
 starting sites `v` and `v + 1` over the spanning length-`L` word products of
 `A` shows that the two conjugations agree on the full matrix algebra, so
 consecutive gauges differ by a nonzero scalar
-(`gaugeFamily_succ_proportional`): the empty word pins the two bond
+(`gaugeFamily_succ_proportional`): taking the identity pins the two bond
 transports `Z_v⁻¹ Z_{v+L} = Z_{v+1}⁻¹ Z_{v+1+L}` to the same matrix, and the
 centralizer of the full matrix algebra is the scalars.  The same-state
 relation pins consecutive scalars against the nonzero tensor `B`, so a
@@ -56,8 +56,8 @@ injective tensor `A`, the per-bond relation `B^i = Z_v⁻¹ A^i Z_{v+1}` at
 every site forces consecutive gauges to differ by a nonzero scalar:
 iterating the relation along the spanning length-`L` words from the
 starting sites `v` and `v + 1` shows that conjugation by `Z_v` and by
-`Z_{v+1}` agree on the full matrix algebra — the empty word pins the two
-bond transports `Z_v⁻¹ Z_{v+L} = Z_{v+1}⁻¹ Z_{v+1+L}` to the same matrix —
+`Z_{v+1}` agree on the full matrix algebra — taking the identity pins the
+two bond transports `Z_v⁻¹ Z_{v+L} = Z_{v+1}⁻¹ Z_{v+1+L}` to the same matrix —
 and the centralizer of the full matrix algebra is the scalars.
 
 Source: arXiv:1804.04964, Section 3, the corollary for TI MPS, lines

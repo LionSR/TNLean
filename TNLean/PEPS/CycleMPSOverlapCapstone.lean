@@ -647,8 +647,8 @@ theorem evalWord_eq_conj_of_gaugeFamily {n d D : ℕ} [NeZero n] {A B : MPSTenso
 chain, then at every bond `v` the two gauges differ by a nonzero scalar.
 Iterating the two relations along the spanning length-`L` words from the
 common starting site `v` shows that the two transports from `v` to `v + L`
-agree on the full matrix algebra; the empty word pins the two bond
-transports `Z_v⁻¹ Z_{v+L} = Z'^{-1}_v Z'_{v+L}`, and the centralizer of the
+agree on the full matrix algebra; taking the identity there pins the two
+bond transports `Z_v⁻¹ Z_{v+L} = Z'^{-1}_v Z'_{v+L}`, and the centralizer of the
 full matrix algebra is the scalars.  No system size is needed.
 
 Source: arXiv:1804.04964, Section 3, first corollary after the theorem
@@ -816,8 +816,9 @@ Two single-gauge realizations `B^i = λ · Z⁻¹ A^i Z` and
 `B^i = λ' · Z'⁻¹ A^i Z'` of the same pair of `L`-block injective tensors
 have proportional gauges: there is a nonzero scalar `c` with `Z' = c · Z`.
 Iterating each relation along the spanning length-`L` words shows that the
-two conjugations of the full matrix algebra agree — the empty word pins
-`λ^L = λ'^L`, and `λ ≠ 0` because `B` is nonzero — so the centralizer step
+two conjugations of the full matrix algebra agree — taking the identity
+there pins `λ^L = λ'^L`, and `λ ≠ 0` because `B` is nonzero — so the
+centralizer step
 applies.  No system size and no root-of-unity condition on `λ`, `λ'` are
 needed.
 
@@ -854,7 +855,7 @@ theorem fundamentalTheorem_normalMPS_translationInvariant_gauge_unique {L d D : 
     rw [List.length_ofFn] at h1 h2
     simp only [Matrix.smul_mul]
     exact h1.symm.trans h2
-  -- The empty word pins the two scaling factors to the same value.
+  -- Taking the identity pins the two scaling factors to the same value.
   have hLL : lam ^ L = lam' ^ L := by
     have h1 := hE 1
     simp only [Matrix.mul_one, Matrix.smul_mul] at h1
