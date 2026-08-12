@@ -1,0 +1,40 @@
+\section{Kramers degeneracy}
+
+\begin{theorem}[Kramers' theorem]
+    \label{thm:kramers_degeneracy}
+    \lean{Matrix.IsHermitian.two_le_finrank_eigenspace_of_antisymmetric_unitary}
+    \leanok
+    Let $H\in\MN{D}$ be Hermitian and let $T$ be an anti-unitary operator with
+    $[H,T]=0$ and $T^2=-\Id$. Then every eigenvalue of $H$ is at least two-fold
+    degenerate. Writing $T=\Gamma V$ with $\Gamma$ complex conjugation and $V$
+    unitary, the two hypotheses become $HV^\dagger=V^\dagger H^T$ and $V^T=-V$,
+    and the theorem is proved in that matrix form
+    \cite[Chapter~3, Kramer's theorem]{Wolf2012Quantum}.
+\end{theorem}
+
+\begin{proof}\leanok
+    Let $H\ket{\psi}=\lambda\ket{\psi}$ with $\ket{\psi}\neq 0$, and set
+    $\ket{\varphi}=V^\dagger\ket{\overline{\psi}}$. Hermiticity gives
+    $H^T=\overline{H}$ and $\lambda\in\R$, so
+    \begin{align}
+        H\ket{\varphi}
+         & =HV^\dagger\ket{\overline{\psi}}
+        =V^\dagger H^T\ket{\overline{\psi}}
+        =V^\dagger\overline{H}\ket{\overline{\psi}}
+        =\lambda V^\dagger\ket{\overline{\psi}}
+        =\lambda\ket{\varphi},
+        \notag
+    \end{align}
+    and $\ket{\varphi}\neq 0$ because $V$ is unitary. Antisymmetry of $V$ passes
+    to $V^\dagger$, since $(V^\dagger)^T=\overline{V}=-V^\dagger$, and the
+    quadratic form of an antisymmetric matrix is its own negative, whence
+    \begin{align}
+        \braket{\psi}{\varphi}
+         & =\bra{\psi}V^\dagger\ket{\overline{\psi}}
+        =-\bra{\psi}V^\dagger\ket{\overline{\psi}}
+        =0.
+        \notag
+    \end{align}
+    Thus $\ket{\psi}$ and $\ket{\varphi}$ are orthogonal non-zero vectors in the
+    eigenspace of $\lambda$, which therefore has dimension at least two.
+\end{proof}
