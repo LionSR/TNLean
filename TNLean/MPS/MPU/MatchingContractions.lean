@@ -67,6 +67,51 @@ theorem IsMPU.normalized_mpo_tail_coisometry [NeZero d]
   · rw [if_neg hpq, if_neg (Ne.symm hpq)]
     simp
 
+/-- Input-first MPU isometry, with a common input tail of length \(K\)
+traced out and normalized by \(d^{-K}\), leaves the identity on the first two
+input sites.
+
+This is the input-first counterpart of `IsMPU.normalized_mpo_tail_coisometry`.
+It follows directly from the global equation `Uᴴ U = 1`, without an ambient
+source-factor coisometry.
+
+Source: arXiv:1703.09188, Theorem III.8, equations (31)--(32), Section III.B
+(lines 563--600). -/
+theorem IsMPU.normalized_mpo_tail_isometry [NeZero d]
+    {U : MPOTensor d D} (hU : IsMPU U) (K : ℕ)
+    (p q : Fin d × Fin d) :
+    ((d : ℂ)⁻¹) ^ K *
+        ∑ τ : Fin K → Fin d, ∑ η : Fin (K + 2) → Fin d,
+          star (mpo U (K + 2) η
+            ((finAddTwoArrowEquiv (Fin d) K).symm (p, τ))) *
+          mpo U (K + 2) η
+            ((finAddTwoArrowEquiv (Fin d) K).symm (q, τ)) =
+      if p = q then 1 else 0 := by
+  classical
+  have hiso := hU.conjTranspose_mpo_mul_mpo (N := K + 2) (by omega)
+  have hentry (τ : Fin K → Fin d) :
+      (∑ η : Fin (K + 2) → Fin d,
+        star (mpo U (K + 2) η
+          ((finAddTwoArrowEquiv (Fin d) K).symm (p, τ))) *
+        mpo U (K + 2) η
+          ((finAddTwoArrowEquiv (Fin d) K).symm (q, τ))) =
+        if p = q then 1 else 0 := by
+    have := congrArg (fun M ↦ M
+      ((finAddTwoArrowEquiv (Fin d) K).symm (p, τ))
+      ((finAddTwoArrowEquiv (Fin d) K).symm (q, τ))) hiso
+    simpa only [Matrix.mul_apply, Matrix.conjTranspose_apply, Matrix.one_apply,
+      (finAddTwoArrowEquiv (Fin d) K).symm.injective.eq_iff, Prod.mk.injEq,
+      and_true] using this
+  simp_rw [hentry]
+  by_cases hpq : p = q
+  · subst q
+    simp only [Finset.sum_const, Finset.card_univ, nsmul_eq_mul,
+      Fintype.card_pi_const, Fintype.card_fin, Nat.cast_pow, if_pos]
+    have hd : (d : ℂ) ≠ 0 := Nat.cast_ne_zero.mpr (NeZero.ne d)
+    rw [inv_pow, ← mul_assoc, inv_mul_cancel₀ (pow_ne_zero K hd), one_mul]
+  · rw [if_neg hpq]
+    simp
+
 /-- The stabilized first block followed by the corrected \(D^2\) block has the
 exact simple contractions obtained from the supplied fixed matrix and the
 identity left vector.
