@@ -228,7 +228,7 @@ cited paper's palette reaches a contour and the string that ends in it alike.
 |---|---|---|
 | `pitch=` | length | em-relative; the exact ratio is a named row of the metric registry |
 | `sizes=` | size-table | bundled table |
-| `strict` | flag | false; five refusal fixtures set it and nothing else does |
+| `strict` | flag | false; only five refusal fixtures set it |
 | `theme=` | identifier | `house` |
 
 ### 2.7 Value types (24)
@@ -509,8 +509,8 @@ never silhouettes.
 Consumers, carrier axes: `rmp-iii-a-pulling-through`, `rmp-iii-a-mpo-action`,
 `rmp-iii-a-ghz-tensor`, `rmp-workbench-ii-peps-gauge-old`.
 Consumers, circle pitch: `rmp-ii-triangle-network`, the one benchmark case on
-a circle frame; four blueprint figures and the `k_ring`, `s4`, and
-`r_circle_wide_policy` kernel fixtures hold the clause elsewhere.
+a circle frame; four blueprint figures and twenty-six kernel fixtures hold the
+clause elsewhere.
 Consumers, basis: `rmp-app-czx-state`, `rmp-iii-a-ghz-state`,
 `rmp-iii-b-condensation`, `rmp-workbench-iii-ghz-state-workbench`.
 Consumers, transverse pairing: `rmp-ii-peps-marginal`,
