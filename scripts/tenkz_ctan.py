@@ -225,8 +225,19 @@ REGENERATED_SUFFIXES = frozenset({".dtx", ".ins", ".fmt", ".mf", ".drv"})
 # 18; a stream the same file allocated with `\newwrite` or `\iow_new:N`, which
 # is a file stream by construction and by intent; or anything else, which
 # cannot be shown not to be 18 and is a finding on that ground alone.
+#
+# The boundary after `write` excludes `@` and, for a file under
+# `\ExplSyntaxOn`, `_` and `:`, because those are letters there: `\write@event`
+# and `\write:nn` are control words of their own, and reading them as the
+# primitive would refuse a release over a name.
+#
+# What the reading is for is a mistake in a staged source, not a source
+# written to hide a shell call from it. A primitive assembled at run time
+# cannot be read from the text at all, so the one spelling that is still
+# recognizable is matched and the rest is out of scope, stated here rather
+# than implied by silence.
 WRITE_CALL = re.compile(
-    r"\\write(?![A-Za-z])(?P<signs>[\s+-]*)"
+    r"(?:\\write|\\csname\s*write\s*\\endcsname)(?![A-Za-z@_:])(?P<signs>[\s+-]*)"
     r"(?:\"(?P<hex>[0-9A-Fa-f]+)|'(?P<oct>[0-7]+)|(?P<dec>[0-9]+)"
     r"|(?P<name>\\[A-Za-z@_:]+))?"
 )
@@ -275,11 +286,13 @@ def shell_escape_call(text: str) -> str:
 
 # An absolute path in a staged source names the machine that wrote it. The
 # pattern catches the spellings a TeX file can carry: a Unix path or a Windows
-# drive letter opening a braced load argument, and the same two opening `\input`
-# unbraced, which is plain TeX's own syntax and reads to the next space.
+# drive letter opening a braced load argument, with the star a starred form
+# such as `\includegraphics*` puts before its arguments, and the same two
+# opening `\input` unbraced, which is plain TeX's own syntax and reads to the
+# next space.
 ABSOLUTE_PATH_HEAD = r"(?:/|[A-Za-z]:[\\/])"
 ABSOLUTE_LOAD = re.compile(
-    r"\\(?:input|include|usepackage|RequirePackage|includegraphics)"
+    r"\\(?:input|include|usepackage|RequirePackage|includegraphics)\*?"
     rf"\s*(?:\[[^]]*\]\s*)?\{{\s*{ABSOLUTE_PATH_HEAD}"
     rf"|\\input\s*\"?{ABSOLUTE_PATH_HEAD}"
 )
