@@ -79,12 +79,14 @@ themselves.
   caption={the traced word, drawn as a ring},
   index={The trace follows the frame's arc rather than the chord between
     the two stations it joins.  No index survives, so the picture is a
-    scalar.},
+    scalar.  The names are inscribed: a label outside a glyph on a ring
+    is placed toward the centre, where four of them would meet.},
   signature={kernel-boundary|signature=}]
 % Formula: tr(M_1 M_2 M_3 M_4); the ring word is sugar for
 %   rows={wire}, cols=4, frame=circle, west=trace, east=trace.
 \begin{tenkz}[ring=4]
-  \tn{$M_1$} & \tn{$M_2$} & \tn{$M_3$} & \tn{$M_4$}
+  \tn[skin=box]{M_1} & \tn[skin=box]{M_2} &
+  \tn[skin=box]{M_3} & \tn[skin=box]{M_4}
 \end{tenkz}
 \end{tnexample}
 
@@ -126,17 +128,18 @@ the silhouette alone; the stock vocabulary is eight words, and the
 standard prelude declares two more.
 
 \begin{tnexample}[
-  wide,
   caption={the stock silhouettes, and the two declared by the prelude},
   index={Left to right: dot, box, roundrect, ring, tri, triwest, dots,
-    none, and the prelude's pill and mpo.  A skin says how a record is
-    drawn and nothing about what it contracts.},
+    none, and the prelude's pill and mpo.  The eighth cell is empty
+    because \tnval{none} draws neither glyph nor label.  A skin says how
+    a record is drawn and nothing about what it contracts.},
   signature={kernel-boundary|signature=}]
 % Ink: one atom per skin; bonds=none, so nothing here contracts.
+% The none cell is deliberately blank -- that is what it draws.
 \begin{tenkz}[rows={wire}, cols=10, bonds=none]
   \tn[skin=dot]{} & \tn[skin=box]{B} & \tn[skin=roundrect]{R} &
   \tn[skin=ring]{X} & \tn[skin=tri]{T} & \tn[skin=triwest]{W} &
-  \tn[skin=dots]{} & \tn[skin=none]{N} & \tn[skin=pill]{P} &
+  \tn[skin=dots]{} & \tn[skin=none]{} & \tn[skin=pill]{P} &
   \tn[skin=mpo]{O}
 \end{tenkz}
 \end{tnexample}
@@ -252,7 +255,7 @@ and a matrix inserted on one of its edges is an ordinary ring atom
 addressed by a fraction along the named wire.
 
 \begin{tnexample}[
-  formula={\lambda\ \text{inserted on one edge of the plaquette}},
+  formula={\lambda\ \text{on one edge}},
   caption={four arcs, and a bead on one of them},
   index={The four operator-species arcs form the closed ring; the ring
     atom stands halfway along the named north-west arc.  Each tensor
@@ -322,18 +325,20 @@ The remaining wire keys decorate the rail rather than change its path.
 \tnkey{stroke=} is the rail's pattern, and the corpus draws only three:
 \tnval{solid} for a contraction, \tnval{dashed} for an index drawn but
 not contracted, \tnval{dotted} for a lattice lying under the sheet being
-drawn.  \tnkey{weight=} is strand multiplicity, and \tnkey{dir=} marks a
-directed index against its dual.
+drawn.  \tnkey{weight=} says how many indices one drawn rail stands for, and
+\tnkey{dir=} marks a directed index against its dual.
 
 \begin{tnexample}[
   wide,
   caption={the three strokes, a bundle, and a direction},
-  index={Left: the three declared rail patterns.  Right: a bundled index
-    drawn as three strands, carrying the direction mark that
-    distinguishes a space from its dual.},
+  index={Left: the three declared rail patterns.  Right: one rail
+    standing for three indices, carrying the direction mark that
+    distinguishes a space from its dual.  The bundle is recorded, not
+    drawn: the event stream reads \tnval{weight=bundle=3} and the page
+    shows one line.},
   signature={kernel-boundary|signature=}]
-% Ink: stroke= is the rail's pattern; weight=bundle=n draws one
-%   index as n strands; dir= marks the direction.
+% Ink: stroke= is the rail's pattern; weight=bundle=n records
+%   that one rail carries n indices; dir= marks the direction.
 \begin{tenkz}[rows={wire}, cols=4, bonds=none]
   \tn[at=(1,1), name=p]{} \tn[at=(1,2), name=q]{}
   \tn[at=(1,3), name=r]{} \tn[at=(1,4), name=s]{}
@@ -351,10 +356,12 @@ directed index against its dual.
 \subsection{Annotations}
 
 A mark speaks over a picture and owns none of it.  Its \tnkey{form=} is
-the shape of the speech.  Four forms draw: \tnval{label} stands text at a
-target, \tnval{bracket} measures a span from outside it, \tnval{enclosure}
-strokes the offset hull of a selection, and \tnval{prose} records words in
-place of a diagram.
+the shape of the speech.  Of the eight words in the registry's list,
+three put ink on the page: \tnval{label} stands text at a target,
+\tnval{bracket} measures a span from outside it, and \tnval{enclosure}
+strokes the offset hull of a selection.  \tnval{prose} is accepted and
+recorded without ink, and the remaining four are refused.  This section
+draws the three, then shows both of the other answers.
 
 \begin{tnexample}[
   caption={a bracket over a span, a label on a site},
@@ -421,6 +428,19 @@ Chapter~\ref{ch:trouble}: unsupported requested ink is a coded error, never
 a warning followed by omission.  A form that cannot be drawn is not
 quietly dropped, so no figure ever ships missing a mark its source asked
 for.
+
+\tnval{prose} is the one form that is accepted without ink, and it is
+accepted because it asks for none.  \tncmd{tnprose} states, in the
+picture's own record stream, that a step of an argument was not drawn.
+Nothing appears on the page and one line appears in the event stream:
+
+\begin{center}
+\tnlogline{mark|id=mark-1|form=prose|label=by~isometry|target=panel}
+\end{center}
+
+\noindent On a checked relation that line is a hard error without a
+recorded opt-out, because prose is not a boundary signature and cannot be
+compared with one.
 
 \subsection{Fusion}
 
@@ -575,21 +595,33 @@ canonical cases are written in kernel words.
 \end{tenkz}
 \end{tnrefusal}
 
-Two composition words close the alphabet.  \tncmd{tngroup} transforms a
-sub-diagram as one object and takes \tnkey{frame=} alone: a group is a
-sub-frame of its picture and shares its picture's metric, size class, and
-audit, so those keys are refused at group scope rather than accepted and
-left inert.  \tncmd{tnprose} records words where a diagram would stand,
-for the step of an argument that is not drawn; on a checked relation it is
-a hard error without a recorded opt-out, because prose is not a boundary
-signature.
+One composition word closes the alphabet.  \tncmd{tngroup} transforms a
+sub-diagram as one object, and the records inside it keep the names they
+were given, so the rest of the picture can still address them.
+
+\begin{tnexample}[
+  caption={a grouped sub-diagram},
+  index={The group is one object of its picture.  Its member keeps the
+    name \tnval{g} and is reachable from outside the group by that name.},
+  signature={kernel-boundary|signature=}]
+% Ink: a group is a sub-frame of its picture, and the names
+%   declared inside it stay addressable outside it.
+\begin{tenkz}[rows={ket}, cols=1, bonds=none]
+  \tngroup[frame=flat]{ \tn[skin=box, name=g]{G} }
+\end{tenkz}
+\end{tnexample}
+
+A group takes \tnkey{frame=} alone.  It is a sub-frame of its picture and
+shares that picture's metric, size class, and audit, so \tnkey{size=},
+\tnkey{metrics=}, and \tnkey{check=} are refused at group scope rather
+than accepted and left inert.
 
 \subsection{Answers to the exercises}
 
-\tnanswer{ex:cat-void} It writes the removed site's four virtual indices.
-\tnval{void=open} keeps the incident indices and drops the tensor, so the
-hole acquires a boundary: the four bonds that reached the centre become
-open ends, and the signature gains four virtual entries beside the eight
-physical legs.  \tnval{sealed} removes site and bonds together and adds
-nothing.  A hole in a lattice is almost always the open one --- the
-indices are what the hole is for.
+\tnanswer{ex:cat-void} It writes the removed site's four virtual indices
+as well.  The word \tnval{open} keeps the incident indices and drops only
+the tensor, so the hole acquires a boundary: the four bonds that reached
+the centre become open ends, and the signature gains four virtual entries
+beside the eight physical legs.  \tnval{sealed} removes site and bonds
+together and adds nothing.  A hole in a lattice is almost always the open
+one, because the indices are what the hole is for.
