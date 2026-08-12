@@ -11,17 +11,17 @@ import TNLean.MPS.Periodic.SectorLift
 /-!
 # Fixed-length state-vector decomposition of a periodic MPS
 
-This file formalizes the state-vector conclusion of PGVWC07, Theorem 5.  A
-period-`p` irreducible translation-invariant tensor has cyclic projectors.  Each
-choice of starting projector gives a site-dependent `p`-periodic chain of the
-same bond dimension, and the original fixed-length coefficient is the sum of
-the component coefficients.  If the ring length is not divisible by `p`, all
-component coefficients vanish.
+This file formalizes a normalized form of the state-vector conclusion in
+PGVWC07, Theorem 5. A period-\(p\) irreducible translation-invariant tensor has
+cyclic projectors. Each starting projector gives a site-dependent
+\(p\)-periodic chain of the same bond dimension, and the original fixed-length
+coefficient is the sum of the component coefficients. If the ring length is
+not divisible by \(p\), all component coefficients vanish.
 
-The source counts the `p` peripheral eigenvalues of the one-block canonical
-transfer operator.  The maintained equivalent surface here is `IsPeriodic p A`:
-it records irreducibility, left-canonical normalization, positivity of `p`, and
-that the peripheral spectrum is exactly the `p`-th roots of unity.  The theorem
+The source counts the \(p\) peripheral eigenvalues of the one-block canonical
+transfer operator. The maintained surface here is `IsPeriodic p A`: it records
+irreducibility, left-canonical normalization, positivity of \(p\), and an exact
+\(p\)-th-root peripheral spectrum. The theorem
 claims only equality of fixed-length state vectors and does not identify the
 underlying tensors.
 
@@ -35,10 +35,10 @@ namespace MPSChainTensor
 
 variable {d D p N : ℕ}
 
-/-- Repeat a `p`-site pattern around a chain of length `N`.
+/-- Repeat a \(p\)-site pattern around a chain of length \(N\).
 
-The site `j` uses pattern entry `j mod p`, represented additively as
-`j.val • 1 : Fin p`. -/
+Site \(j\) uses the pattern entry represented additively by
+`j.val • (1 : Fin p)`. -/
 def repeatPeriodPattern [NeZero p] (B : MPSChainTensor d D p) (N : ℕ) :
     MPSChainTensor d D N :=
   fun j => B (j.val • (1 : Fin p))
@@ -59,15 +59,15 @@ section Components
 
 variable [NeZero p]
 
-/-- The `p`-site projector pattern starting in cyclic sector `u`.
+/-- The \(p\)-site projector pattern starting in cyclic sector \(u\).
 
 Its local matrix is the PGVWC07 component
-`Q_{u+k} A^i Q_{u+k+1}` and retains the original bond dimension `D`. -/
+\(Q_{u+k} A^i Q_{u+k+1}\) and retains the original bond dimension \(D\). -/
 def projectorComponentPattern (Q : Fin p → MatrixAlg D) (A : MPSTensor d D)
     (u : Fin p) : MPSChainTensor d D p :=
   fun k i => cornerLetter Q A (u + k) i
 
-/-- Repeat one cyclic-projector component pattern around an `N`-site ring. -/
+/-- Repeat one cyclic-projector component pattern around an \(N\)-site ring. -/
 def projectorComponentChain (Q : Fin p → MatrixAlg D) (A : MPSTensor d D)
     (u : Fin p) (N : ℕ) : MPSChainTensor d D N :=
   MPSChainTensor.repeatPeriodPattern (projectorComponentPattern Q A u) N
@@ -82,7 +82,7 @@ theorem projectorComponentChain_apply
 
 /-- A nonempty projector-component chain evaluates to the corresponding cyclic
 corner product. -/
-theorem projectorComponentChain_eval
+private theorem projectorComponentChain_eval
     (Q : Fin p → MatrixAlg D) (A : MPSTensor d D)
     (hQproj : ∀ k, IsOrthogonalProjection (Q k))
     (u : Fin p) (σ : Fin (N + 1) → Fin d) :
@@ -100,8 +100,9 @@ theorem projectorComponentChain_eval
             projectorComponentPattern Q A u 0 := by
         rfl
       have htail :
-          (fun k : Fin (n + 1) => projectorComponentChain Q A u (n + 1 + 1) k.succ) =
-            projectorComponentChain Q A (u + 1) (n + 1) := by
+          (fun k : Fin (n + 1) =>
+            projectorComponentChain Q A u (n + 1 + 1) k.succ) =
+              projectorComponentChain Q A (u + 1) (n + 1) := by
         funext k i
         simp only [projectorComponentChain_apply]
         congr 1
@@ -113,7 +114,7 @@ theorem projectorComponentChain_eval
 
 /-- The paper-oriented cyclic shift transports an entire word from its starting
 projector to its ending projector. -/
-theorem projector_mul_evalWord_eq_evalWord_mul_projector
+private theorem projector_mul_evalWord_eq_evalWord_mul_projector
     (Q : Fin p → MatrixAlg D) (A : MPSTensor d D)
     (hshift : ∀ k i, Q k * A i = A i * Q (k + 1))
     (u : Fin p) (w : List (Fin d)) :
@@ -137,7 +138,7 @@ theorem projector_mul_evalWord_eq_evalWord_mul_projector
 
 /-- Under the cyclic shift, the corner product is simply the word product with
 its starting projector inserted on the left. -/
-theorem cornerProd_eq_projector_mul_evalWord
+private theorem cornerProd_eq_projector_mul_evalWord
     (Q : Fin p → MatrixAlg D) (A : MPSTensor d D)
     (hQproj : ∀ k, IsOrthogonalProjection (Q k))
     (hshift : ∀ k i, Q k * A i = A i * Q (k + 1))
@@ -216,8 +217,8 @@ section IsPeriodic
 orientation used by PGVWC07, Theorem 5:
 `Q_k A^i = A^i Q_{k+1}`.
 
-The projectors act on the original virtual space `Fin D`; no bond-dimension
-compression occurs. -/
+The projectors act on the original \(D\)-dimensional virtual space; no
+bond-dimension compression occurs. -/
 theorem exists_paper_cyclic_projectors_of_isPeriodic
     (A : MPSTensor d D) (hA : IsPeriodic p A) :
     let _ : NeZero p := ⟨Nat.ne_of_gt hA.period_pos⟩
@@ -244,15 +245,15 @@ theorem exists_paper_cyclic_projectors_of_isPeriodic
 
 /-- **PGVWC07 Theorem 5, periodic branch.**
 
-If `p ∣ N`, a period-`p` tensor generates at length `N` the sum of `p`
-explicit `p`-periodic component chains.  Component `u` has local matrices
-`Q_{u+j} A^i Q_{u+j+1}`, uses the original bond dimension `D`, and closes its
-virtual sector after `N` sites.
+If \(p\mid N\), a period-\(p\) tensor generates at length \(N\) the sum of
+\(p\) explicit \(p\)-periodic component chains. Component \(u\) has local
+matrices \(Q_{u+j} A^i Q_{u+j+1}\), uses the original bond dimension \(D\), and
+closes its virtual sector after \(N\) sites.
 
 The source phrases the hypothesis as a one-block canonical transfer operator
-with `p` peripheral eigenvalues.  Here `IsPeriodic p A` is the maintained
-normalized equivalent surface: it states irreducibility, left-canonical form,
-positive period, and peripheral spectrum equal to the `p`-th roots of unity.
+with \(p\) peripheral eigenvalues. Here `IsPeriodic p A` is the maintained
+normalized surface: it states irreducibility, left-canonical form, positive
+period, and peripheral spectrum equal to the \(p\)-th roots of unity.
 Only the fixed-length state-vector equality is asserted.
 
 Source: PGVWC07, arXiv:quant-ph/0608197, Theorem 5, lines 849--880. -/
