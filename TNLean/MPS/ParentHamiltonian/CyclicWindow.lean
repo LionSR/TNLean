@@ -418,6 +418,30 @@ theorem cyclicForwardSite_forwardSite {N : ℕ} (i : Fin N) (a b : ℕ) :
   congr 1
   omega
 
+/-- The cyclic offset of the site \(i\), measured from its forward neighbour
+`cyclicForwardSite i 1`, is \(N - 1\).
+
+When a cyclic window of length \(L \le N\) is shifted one site forward, the
+former starting site \(i\) wraps to cyclic offset \(N - 1\) relative to the new
+start `cyclicForwardSite i 1`; equivalently, \(i\) lies exactly one
+step behind the new start on the cycle. -/
+theorem cyclicForwardSite_one_offset {N : ℕ} (i : Fin N) :
+    (i.val + N - (cyclicForwardSite i 1).val) % N = N - 1 := by
+  by_cases hi : i.val + 1 < N
+  · have hval : (cyclicForwardSite i 1).val = i.val + 1 := by
+      simp [cyclicForwardSite, Nat.mod_eq_of_lt hi]
+    rw [hval]
+    have hsub : i.val + N - (i.val + 1) = N - 1 := by omega
+    rw [hsub]
+    exact Nat.mod_eq_of_lt (by omega)
+  · have hiN : i.val + 1 = N := by omega
+    have hval : (cyclicForwardSite i 1).val = 0 := by
+      simp [cyclicForwardSite, hiN]
+    rw [hval]
+    have hsub : i.val + N - 0 = (N - 1) + N := by omega
+    rw [hsub, Nat.add_mod_right]
+    exact Nat.mod_eq_of_lt (by omega)
+
 private theorem cyclicForwardSite_eq_mod_eq {N : ℕ} (i : Fin N) {a b : ℕ}
     (h : cyclicForwardSite i a = cyclicForwardSite i b) : a % N = b % N := by
   have hval := congrArg Fin.val h
@@ -632,21 +656,8 @@ theorem cyclicRestrictₗ_restrictFirst {N L : ℕ} (hN : 0 < N) (hLN : L + 1 �
       have hk' := eq_cyclic_site_of_offset_eq (N := N) hN (i := i) (k := k) hzero
       simpa [Nat.mod_eq_of_lt i.isLt] using hk'
     subst k
-    have hshift_eq : (i.val + N - (cyclicForwardSite i 1).val) % N = N - 1 := by
-      by_cases hi : i.val + 1 < N
-      · have hval : (cyclicForwardSite i 1).val = i.val + 1 := by
-          simp [cyclicForwardSite, Nat.mod_eq_of_lt hi]
-        rw [hval]
-        have hsub : i.val + N - (i.val + 1) = N - 1 := by omega
-        rw [hsub]
-        exact Nat.mod_eq_of_lt (by omega)
-      · have hiN : i.val + 1 = N := by omega
-        have hval : (cyclicForwardSite i 1).val = 0 := by
-          simp [cyclicForwardSite, hiN]
-        rw [hval]
-        have hsub : i.val + N - 0 = (N - 1) + N := by omega
-        rw [hsub, Nat.add_mod_right]
-        exact Nat.mod_eq_of_lt (by omega)
+    have hshift_eq : (i.val + N - (cyclicForwardSite i 1).val) % N = N - 1 :=
+      cyclicForwardSite_one_offset i
     have hshift : ¬((i.val + N - (cyclicForwardSite i 1).val) % N < L) := by
       rw [hshift_eq]
       omega
