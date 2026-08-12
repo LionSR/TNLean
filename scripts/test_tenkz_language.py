@@ -164,8 +164,8 @@ def main() -> int:
     # branch fires and prints its own words: the four are read out of the
     # kernel source rather than written again, so a migration reworded in one
     # place and not the other cannot pass.  Holding those branches to the
-    # registry's tombstone rows is the ledger's own check and arrives with it
-    # (issue #6187).
+    # registry's tombstone rows is the ledger's own check, which
+    # `tenkz_language.py check` runs.
     form_row = next(
         entry.fields
         for entry in registry
