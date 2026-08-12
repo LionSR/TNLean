@@ -15676,6 +15676,12 @@
 %   * an atom threaded on a wire stands at no cell of its own, and takes the
 %     two faces its carrier runs through at the bead.
 %
+% A dot stands at the middle of the rectangle its atom claims, so an atom
+% spanning an even number of cells stands half a pitch from the two lanes
+% either side of it and its stations facing them land inside those lanes
+% rather than clear of them.  Such a station is taken by the ink running
+% along its lane as well as by the ink leaving through its face.
+%
 % A departure along neither axis leaves through a corner and blocks no face.
 % The answer is therefore independent of ink order and identical on every
 % compile.
@@ -15691,9 +15697,18 @@
 \tl_new:N \l__tenkz_kernel_lab_face_tl
 \tl_new:N \l__tenkz_kernel_lab_via_tl
 \tl_new:N \l__tenkz_kernel_lab_node_tl
+\tl_new:N \l__tenkz_kernel_lab_top_tl
+\tl_new:N \l__tenkz_kernel_lab_left_tl
+\tl_new:N \l__tenkz_kernel_lab_rows_tl
+\tl_new:N \l__tenkz_kernel_lab_wide_tl
+\tl_new:N \l__tenkz_kernel_lab_nlane_tl
+\tl_new:N \l__tenkz_kernel_lab_slane_tl
+\tl_new:N \l__tenkz_kernel_lab_wlane_tl
+\tl_new:N \l__tenkz_kernel_lab_elane_tl
 \clist_new:N \l__tenkz_kernel_lab_route_clist
 \bool_new:N \l__tenkz_kernel_lab_cell_bool
 \bool_new:N \l__tenkz_kernel_lab_far_bool
+\bool_new:N \l__tenkz_kernel_lab_span_bool
 % One pass over the frozen records fills the table the atom pass reads.
 \cs_new_protected:Npn \__tenkz_kernel_r_label_occupancy:
   {
@@ -15782,6 +15797,12 @@
                 \__tenkz_kernel_r_label_mark:Ve
                   \l__tenkz_kernel_lab_host_tl
                   { \__tenkz_kernel_node_item:nn {#2} {face} }
+                \tl_set_eq:NN \l__tenkz_kernel_lab_face_tl
+                  \l__tenkz_kernel_r_face_side_tl
+                \__tenkz_kernel_r_label_station_lanes:V
+                  \l__tenkz_kernel_lab_host_tl
+                \__tenkz_kernel_r_label_port_lane:e
+                  { \int_eval:n { \__tenkz_kernel_node_item:nn {#2} {slot} } }
               }
           }
           {
@@ -15791,6 +15812,8 @@
               \l__tenkz_kernel_lab_cell_bool
             \bool_if:NT \l__tenkz_kernel_lab_cell_bool
               {
+                \__tenkz_kernel_r_label_station_lanes:V
+                  \l__tenkz_kernel_lab_atom_tl
                 \__tenkz_kernel_r_label_next_cell:nnn {#1} {#3} {#4}
                 \bool_if:NT \l__tenkz_kernel_lab_far_bool
                   {
@@ -15885,8 +15908,149 @@
           }
       }
   }
+% Where the four stations of atom #1 land, expressed as the lane each one
+% stands in.  A dot sits at the middle of the rectangle its atom claims, and
+% the label band is shorter than one pitch: across an odd span the dot stands
+% on a lane of its own and each station falls a fraction of a pitch away, in
+% the daylight between lanes, but across an EVEN span the dot stands halfway
+% between two lanes and the two stations facing them land inside them.  So an
+% even span puts its n and s stations in the lanes half a pitch either side,
+% and an even width does the same for w and e.
+%
+% A station standing in a lane meets the ink running along it only where the
+% two reach each other.  Ink leaves this atom at its own silhouette, and the
+% label stands at the atom's middle, so the two meet across the width of one
+% cell and no more: an atom one cell wide has its east and west ink within
+% reach of a label standing north or south of its dot, and an atom one cell
+% tall has its north and south ink within reach of one standing east or west.
+% A broader atom holds its ink a whole cell away from its own middle, past
+% the end of the band.  Each axis therefore answers a lane only while the
+% other one is single.  Row and column numbers count from one, so 0 names an
+% axis whose stations reach no lane.
+\cs_new_protected:Npn \__tenkz_kernel_r_label_station_lanes:n #1
+  {
+    \tl_set:Nn \l__tenkz_kernel_lab_nlane_tl {0}
+    \tl_set:Nn \l__tenkz_kernel_lab_slane_tl {0}
+    \tl_set:Nn \l__tenkz_kernel_lab_wlane_tl {0}
+    \tl_set:Nn \l__tenkz_kernel_lab_elane_tl {0}
+    % an atom off the frame keeps an origin no lane can match
+    \tl_set:Nn \l__tenkz_kernel_lab_top_tl {1}
+    \tl_set:Nn \l__tenkz_kernel_lab_left_tl {1}
+    \__tenkz_kernel_atom_rc:nNNN {#1}
+      \l__tenkz_kernel_lab_top_tl \l__tenkz_kernel_lab_left_tl
+      \l__tenkz_kernel_lab_span_bool
+    \bool_if:NT \l__tenkz_kernel_lab_span_bool
+      {
+        \__tenkz_kernel_r_span:nNN {#1}
+          \l__tenkz_kernel_lab_wide_tl \l__tenkz_kernel_lab_rows_tl
+        \bool_lazy_and:nnT
+          { \int_if_even_p:n { \l__tenkz_kernel_lab_rows_tl } }
+          { \int_compare_p:nNn { \l__tenkz_kernel_lab_wide_tl } = {1} }
+          {
+            \tl_set:Ne \l__tenkz_kernel_lab_nlane_tl
+              {
+                \int_eval:n
+                  {
+                    \l__tenkz_kernel_lab_top_tl
+                    + \l__tenkz_kernel_lab_rows_tl / 2 - 1
+                  }
+              }
+            \tl_set:Ne \l__tenkz_kernel_lab_slane_tl
+              {
+                \int_eval:n
+                  {
+                    \l__tenkz_kernel_lab_top_tl
+                    + \l__tenkz_kernel_lab_rows_tl / 2
+                  }
+              }
+          }
+        \bool_lazy_and:nnT
+          { \int_if_even_p:n { \l__tenkz_kernel_lab_wide_tl } }
+          { \int_compare_p:nNn { \l__tenkz_kernel_lab_rows_tl } = {1} }
+          {
+            \tl_set:Ne \l__tenkz_kernel_lab_wlane_tl
+              {
+                \int_eval:n
+                  {
+                    \l__tenkz_kernel_lab_left_tl
+                    + \l__tenkz_kernel_lab_wide_tl / 2 - 1
+                  }
+              }
+            \tl_set:Ne \l__tenkz_kernel_lab_elane_tl
+              {
+                \int_eval:n
+                  {
+                    \l__tenkz_kernel_lab_left_tl
+                    + \l__tenkz_kernel_lab_wide_tl / 2
+                  }
+              }
+          }
+      }
+  }
+\cs_generate_variant:Nn \__tenkz_kernel_r_label_station_lanes:n { V }
+% A port stands on one cell of its atom's span: on an east or west face the
+% slot walks the rows, on a north or south face the columns.  The wire the
+% port anchors runs the length of that lane, so it takes the station standing
+% in the lane as well as the face it leaves by.
+% #1 is the port's slot; its host and face side stand in the registers the
+% caller has just read them into.
+\cs_new_protected:Npn \__tenkz_kernel_r_label_port_lane:n #1
+  {
+    \str_case:Vn \l__tenkz_kernel_lab_face_tl
+      {
+        {e}
+          {
+            \__tenkz_kernel_r_label_row_lane:Vn
+              \l__tenkz_kernel_lab_host_tl {#1}
+          }
+        {w}
+          {
+            \__tenkz_kernel_r_label_row_lane:Vn
+              \l__tenkz_kernel_lab_host_tl {#1}
+          }
+        {n}
+          {
+            \__tenkz_kernel_r_label_col_lane:Vn
+              \l__tenkz_kernel_lab_host_tl {#1}
+          }
+        {s}
+          {
+            \__tenkz_kernel_r_label_col_lane:Vn
+              \l__tenkz_kernel_lab_host_tl {#1}
+          }
+      }
+  }
+\cs_generate_variant:Nn \__tenkz_kernel_r_label_port_lane:n { e }
+\cs_new_protected:Npn \__tenkz_kernel_r_label_row_lane:nn #1#2
+  {
+    \int_compare:nNnT
+      { \l__tenkz_kernel_lab_top_tl + #2 - 1 }
+      = { \l__tenkz_kernel_lab_nlane_tl }
+      { \__tenkz_kernel_r_label_mark_side:nn {#1} {n} }
+    \int_compare:nNnT
+      { \l__tenkz_kernel_lab_top_tl + #2 - 1 }
+      = { \l__tenkz_kernel_lab_slane_tl }
+      { \__tenkz_kernel_r_label_mark_side:nn {#1} {s} }
+  }
+\cs_generate_variant:Nn \__tenkz_kernel_r_label_row_lane:nn { Vn }
+\cs_new_protected:Npn \__tenkz_kernel_r_label_col_lane:nn #1#2
+  {
+    \int_compare:nNnT
+      { \l__tenkz_kernel_lab_left_tl + #2 - 1 }
+      = { \l__tenkz_kernel_lab_wlane_tl }
+      { \__tenkz_kernel_r_label_mark_side:nn {#1} {w} }
+    \int_compare:nNnT
+      { \l__tenkz_kernel_lab_left_tl + #2 - 1 }
+      = { \l__tenkz_kernel_lab_elane_tl }
+      { \__tenkz_kernel_r_label_mark_side:nn {#1} {e} }
+  }
+\cs_generate_variant:Nn \__tenkz_kernel_r_label_col_lane:nn { Vn }
 % The endpoint stands at the near cell and its ink leaves toward the far
-% one: a step along a row or a column takes the face it crosses.
+% one: a step along a row or a column takes the face it crosses.  The ink
+% also runs the length of the lane it leaves by, so it takes any station
+% standing in that lane as well: a wire crossing a spanning atom's own row
+% takes the face whose station lands in that row, and one crossing its own
+% column takes the face whose station lands in that column.
 \cs_new_protected:Npn \__tenkz_kernel_r_label_mark_toward:n #1
   {
     \int_compare:nNnTF
@@ -15900,6 +16064,19 @@
           { \l__tenkz_kernel_lab_far_col_tl }
           > { \l__tenkz_kernel_lab_col_tl }
           { \__tenkz_kernel_r_label_mark_side:nn {#1} {e} }
+        \int_compare:nNnF
+          { \l__tenkz_kernel_lab_far_col_tl }
+          = { \l__tenkz_kernel_lab_col_tl }
+          {
+            \int_compare:nNnT
+              { \l__tenkz_kernel_lab_row_tl }
+              = { \l__tenkz_kernel_lab_nlane_tl }
+              { \__tenkz_kernel_r_label_mark_side:nn {#1} {n} }
+            \int_compare:nNnT
+              { \l__tenkz_kernel_lab_row_tl }
+              = { \l__tenkz_kernel_lab_slane_tl }
+              { \__tenkz_kernel_r_label_mark_side:nn {#1} {s} }
+          }
       }
       {
         \int_compare:nNnT
@@ -15911,6 +16088,14 @@
               < { \l__tenkz_kernel_lab_row_tl }
               { \__tenkz_kernel_r_label_mark_side:nn {#1} {n} }
               { \__tenkz_kernel_r_label_mark_side:nn {#1} {s} }
+            \int_compare:nNnT
+              { \l__tenkz_kernel_lab_col_tl }
+              = { \l__tenkz_kernel_lab_wlane_tl }
+              { \__tenkz_kernel_r_label_mark_side:nn {#1} {w} }
+            \int_compare:nNnT
+              { \l__tenkz_kernel_lab_col_tl }
+              = { \l__tenkz_kernel_lab_elane_tl }
+              { \__tenkz_kernel_r_label_mark_side:nn {#1} {e} }
           }
       }
   }
