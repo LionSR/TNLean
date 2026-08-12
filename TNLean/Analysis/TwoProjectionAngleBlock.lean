@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import TNLean.Analysis.IdempotentEndomorphism
 import Mathlib.Analysis.InnerProductSpace.Positive
 
 /-!
@@ -11,6 +12,10 @@ import Mathlib.Analysis.InnerProductSpace.Positive
 This file gives the local two-dimensional block used in the two-projection
 lemma invoked in arXiv:1703.09188, Proposition IV.5 (`prop:continuity-index`),
 lines 756–764. It does not assume that the projections commute.
+
+**Local fix:** Source line 762 repeats `P` for the second projector, where the
+surrounding argument requires `Q`. This typographical correction is documented
+in `docs/paper-gaps/1703_two_projection_projector_typo.tex`.
 -/
 
 open scoped InnerProductSpace
@@ -25,8 +30,7 @@ def rangeCompression {P Q : E →ₗ[ℂ] E} (hP : P.IsSymmetricProjection) :
   (P.comp Q).restrict fun x hx ↦ by
     rw [LinearMap.mem_range]
     exact ⟨P (Q x), by
-      simpa [Module.End.mul_apply] using congrArg (fun T : E →ₗ[ℂ] E ↦ T (Q x))
-        hP.isIdempotentElem.eq⟩
+      exact LinearMap.IsIdempotentElem.apply_apply hP.isIdempotentElem (Q x)⟩
 
 /-- The compression of a symmetric projection is symmetric on `range P`. -/
 theorem rangeCompression_isSymmetric {P Q : E →ₗ[ℂ] E}
@@ -37,28 +41,33 @@ theorem rangeCompression_isSymmetric {P Q : E →ₗ[ℂ] E}
   have hx : P (x : E) = x := by
     obtain ⟨z, hz⟩ := x.property
     rw [← hz]
-    simpa [Module.End.mul_apply] using congrArg (fun T : E →ₗ[ℂ] E ↦ T z)
-      hP.isIdempotentElem.eq
+    exact LinearMap.IsIdempotentElem.apply_apply hP.isIdempotentElem z
   have hy : P (y : E) = y := by
     obtain ⟨z, hz⟩ := y.property
     rw [← hz]
-    simpa [Module.End.mul_apply] using congrArg (fun T : E →ₗ[ℂ] E ↦ T z)
-      hP.isIdempotentElem.eq
+    exact LinearMap.IsIdempotentElem.apply_apply hP.isIdempotentElem z
   rw [hP.isSymmetric, hQ.isSymmetric, hy]
   exact ((hP.isSymmetric x (Q y)).symm.trans (by rw [hx])).symm
 
-/-- The unnormalized vector perpendicular to `range P` paired with an eigenvector
-of the compression `P Q P`. -/
+/-- The defect vector \(Qx-μx\).
+
+When `x` satisfies the compression-eigenvector hypotheses of
+`angleDefect_block`, this vector is orthogonal to `x` and lies in the kernel of
+`P`. -/
 def angleDefect (Q : E →ₗ[ℂ] E) (μ : ℝ) (x : E) : E :=
   Q x - (μ : ℂ) • x
 
-/-- One generic two-dimensional angle block associated with an eigenvalue
-\(0 < μ < 1\) of the compression of `Q` to `range P`.
+/-- Exact formulas for the possibly degenerate angle block determined by a unit
+compression eigenvector.
 
-The first vector is a unit compression eigenvector `x`. The second vector is
-\(Qx - μx\); its squared norm is \(μ(1-μ)\), so it is nonzero and can be
-normalized in the subsequent corollary. The displayed identities are the
-exact actions of `P` and `Q` on this block.
+**Local fix:** Source line 762 repeats `P` for the second projector; the
+surrounding argument requires `Q`. See
+`docs/paper-gaps/1703_two_projection_projector_typo.tex`.
+
+The defect vector \(Qx-μx\) lies in the kernel of `P`, is orthogonal to `x`,
+and has squared norm \(μ(1-μ)\). No strict endpoint bound or nonzero claim is
+made here; `exists_orthonormal_angle_block` adds \(0<μ<1\) before normalizing
+the defect.
 -/
 theorem angleDefect_block {P Q : E →ₗ[ℂ] E}
     (hP : P.IsSymmetricProjection) (hQ : Q.IsSymmetricProjection)
@@ -70,12 +79,7 @@ theorem angleDefect_block {P Q : E →ₗ[ℂ] E}
         ((μ * (1 - μ) : ℝ) : ℂ) • x + ((1 - μ : ℝ) : ℂ) • angleDefect Q μ x ∧
       ⟪x, angleDefect Q μ x⟫_ℂ = 0 ∧
       ‖angleDefect Q μ x‖ ^ 2 = μ * (1 - μ) := by
-  have hPidem : P (P (Q x)) = P (Q x) := by
-    simpa [Module.End.mul_apply] using congrArg (fun T : E →ₗ[ℂ] E ↦ T (Q x))
-      hP.isIdempotentElem.eq
-  have hQidem : Q (Q x) = Q x := by
-    simpa [Module.End.mul_apply] using congrArg (fun T : E →ₗ[ℂ] E ↦ T x)
-      hQ.isIdempotentElem.eq
+  have hQidem : Q (Q x) = Q x := LinearMap.IsIdempotentElem.apply_apply hQ.isIdempotentElem x
   have hxx : ⟪x, x⟫_ℂ = 1 := by
     rw [inner_self_eq_norm_sq_to_K, hxnorm]
     norm_num
@@ -118,11 +122,16 @@ theorem angleDefect_block {P Q : E →ₗ[ℂ] E}
         rw [angleDefect, inner_sub_left, inner_smul_left]
       _ = μ * (1 - μ) := by rw [hQxDefect, hxDefect]; norm_num
 
-/-- Normalized form of `angleDefect_block`. The vectors `x,w` are orthonormal;
-on their two-dimensional span, `P` acts as the projection onto `x`, while `Q`
+/-- Normalized form of `angleDefect_block`.
+
+**Local fix:** The second projector in arXiv:1703.09188, line 762 is `Q`, not
+the repeated `P`; see `docs/paper-gaps/1703_two_projection_projector_typo.tex`.
+
+The vectors `x,w` are orthonormal; on their two-dimensional span, `P` acts as
+the projection onto `x`, while `Q`
 has its standard angle-block action with off-diagonal coefficient
 \(\sqrt{μ(1-μ)}\). -/
-theorem exists_orthonormal_angleBlock {P Q : E →ₗ[ℂ] E}
+theorem exists_orthonormal_angle_block {P Q : E →ₗ[ℂ] E}
     (hP : P.IsSymmetricProjection) (hQ : Q.IsSymmetricProjection)
     {μ : ℝ} (hμ0 : 0 < μ) (hμ1 : μ < 1) {x : E}
     (hxP : P x = x) (hxnorm : ‖x‖ = 1) (hxEig : P (Q x) = (μ : ℂ) • x) :

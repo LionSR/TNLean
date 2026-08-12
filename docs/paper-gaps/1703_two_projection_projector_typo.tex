@@ -1,0 +1,46 @@
+\documentclass{article}
+
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+\setlength{\emergencystretch}{2em}
+
+\input{command}
+
+\title{Two-Projection Decomposition: Repeated-Projector Typo}
+\author{}
+\date{2026-08-12}
+
+\begin{document}
+\maketitle
+
+\section{Source passage}
+
+In the proof of Proposition~IV.5 of \cite{Cirac2017MPU}, the two-projection
+lemma is used to decompose two projectors on $\mathbb C^D$. The source writes
+\begin{align}
+  P&=\bigoplus_i |0\rangle\langle 0|_i\oplus R,
+  &P&=\bigoplus_i |v_i\rangle\langle v_i|_i\oplus S
+\end{align}
+at lines 760--763 of the local source file. The second projector must be $Q$,
+not $P$. This follows from the preceding sentence, which introduces projectors
+$P$ and $Q$, and from the subsequent identities involving $PQ$ and $QP$.
+
+\section{Formalized interpretation}
+
+The generic angle-block declarations
+\leanid{LinearMap.IsSymmetricProjection.angleDefect_block} and
+\leanid{LinearMap.IsSymmetricProjection.exists_orthonormal_angle_block}
+therefore use symmetric projections $P$ and $Q$. They prove the exact local
+action of both operators on a generic two-dimensional block. This is a local
+correction of a typographical error and does not add a hypothesis or alter the
+mathematical claim.
+
+The global orthogonal direct-sum assembly of all generic and endpoint blocks,
+and the reduced projector used later in Proposition~IV.5, remain to be
+formalized.
+
+\bibliographystyle{alpha}
+\bibliography{references}
+
+\end{document}

@@ -4873,11 +4873,50 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
   % Source lines: paper_v2.tex 733--910 and 1366--1380.
 \end{definition}
 
+\begin{lemma}[Generic two-projection angle block]
+  \label{lem:mpu_two_projection_angle_block}
+  \lean{LinearMap.IsSymmetricProjection.rangeCompression_isSymmetric,
+    LinearMap.IsSymmetricProjection.angleDefect_block,
+    LinearMap.IsSymmetricProjection.exists_orthonormal_angle_block}
+  \leanok
+  \uses{}
+  Let $P$ and $Q$ be orthogonal projections on a complex inner-product space.
+  The compression of $Q$ to $\operatorname{ran}P$ is self-adjoint. If a unit
+  vector $x\in\operatorname{ran}P$ satisfies
+  \begin{align}
+    PQx&=\mu x,&0&<\mu<1,
+  \end{align}
+  then there is a unit vector $w\perp x$ such that
+  \begin{align}
+    Px&=x,&Pw&=0,\\
+    Qx&=\mu x+\sqrt{\mu(1-\mu)}\,w,&
+    Qw&=\sqrt{\mu(1-\mu)}\,x+(1-\mu)w.
+  \end{align}
+  Thus $\operatorname{span}\{x,w\}$ is the generic two-dimensional angle
+  block. The orthogonal direct-sum assembly with the endpoint eigenspaces
+  $\mu=0,1$, and hence the global two-projection lemma used below, remains not
+  ready.
+  % Source: paper_v2.tex, Proposition IV.5 (prop:continuity-index), lines 756--764.
+  % Local correction: line 762 repeats P where Q is intended; see
+  % docs/paper-gaps/1703_two_projection_projector_typo.tex.
+\end{lemma}
+
+\begin{proof}\leanok
+  Set $d=Qx-\mu x$. Symmetry and idempotence give
+  \begin{align}
+    Pd&=0,&\langle x,d\rangle&=0,&
+    \lVert d\rVert^2&=\mu(1-\mu),\\
+    Qd&=\mu(1-\mu)x+(1-\mu)d.
+  \end{align}
+  Since $0<\mu<1$, the vector
+  $w=d/\sqrt{\mu(1-\mu)}$ is well defined and has the stated properties.
+\end{proof}
+
 \begin{proposition}[Constancy of the source ranks]
   \label{prop:continuity-index}
   \notready
   \discussion{6022}
-  \uses{def:mpu_canonical_form,ThmFund1}
+  \uses{def:mpu_canonical_form,ThmFund1,lem:mpu_two_projection_angle_block}
   Let $[0,1]\ni x\mapsto\mathcal W(x)$ be a continuous path of tensors
   generating MPUs, without requiring the path to be in canonical form. For
   each $x$, take the canonical form and the two source-cut ranks $r(x)$ and

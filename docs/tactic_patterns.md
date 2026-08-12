@@ -24,6 +24,18 @@ abstracted — record why, so it is not re-proposed).
 
 ## Promoted
 
+### pointwise idempotent endomorphism application — promoted
+- **Pattern:** apply an equality `P * P = P` to a vector with `congrArg`, then
+  simplify `Module.End.mul_apply` to obtain `P (P x) = P x`.
+- **Seen:** nine occurrences across
+  `TNLean/Analysis/ProjectionGeometry.lean` and
+  `TNLean/Analysis/TwoProjectionAngleBlock.lean` before promotion (2026-08-12).
+- **Abstraction:** `LinearMap.IsIdempotentElem.apply_apply` in
+  `TNLean/Analysis/IdempotentEndomorphism.lean`.
+- **Notes:** all motivating call sites now use the generic pointwise lemma. The
+  abstraction assumes only a semiring, an additive commutative monoid, and a
+  module; it does not depend on inner-product or projection symmetry.
+
 ### two-site cyclic local-embedding reindexing — promoted
 - **Pattern:** reindex a cyclic two-site embedding by the equivalence between
   two-site configurations and ordered pairs, prove agreement outside the full
