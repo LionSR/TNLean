@@ -34,6 +34,7 @@ were formerly documented inline in `TNLean.lean`:
 | 2b | `Channel.Schwarz` and related analysis | Schwarz inequalities, operator convexity and monotonicity, and relative-entropy results. |
 | 2c | `Channel.FixedPoint`, `Channel.Irreducible`, `Channel.Peripheral`, `Channel.Semigroup`, `Channel.KoashiImoto`, `QPF`, `Spectral` | Fixed points, quantum Perron--Frobenius theory, peripheral spectrum, spectral gaps, semigroups, and the common invariant algebra of jointly invariant states. |
 | 3 | `MPS.Chain`, `MPS.Core`, `MPS.Overlap` | Matrix-product tensor definitions, words, blocking, transfer matrices, and overlaps. |
+| 3a | `MPS.ParentHamiltonian` | Local and chain ground spaces, physical-blocking transport, parent interactions, and martingale estimates. |
 | 3b | `MPS.MPDO` | MPO, MPDO, and LPDO foundations. |
 | 4 | `MPS.FundamentalTheorem`, `MPS.Symmetry` | The single-block fundamental theorem and symmetry consequences. |
 | 5 | `MPS.BNT`, `MPS.CanonicalForm`, `MPS.Irreducible`, `MPS.Periodic`, `MPS.Structure` | Multi-block canonical forms, periodicity, and structural assembly. |
