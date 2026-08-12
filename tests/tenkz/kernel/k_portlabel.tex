@@ -1,0 +1,20 @@
+% Kernel fixture: LANGUAGE-1.0.md section 9 (the port-label sugar row),
+% verbatim.  The picture below is the contract's printed sketch character for
+% character; the kernel probe extracts the sketch and diffs it against this
+% body, so neither side may drift.
+% Expected records: one atom A on a single wire-row cell, its authored
+% north descriptor minting the typed port-open leg carrying port-label i
+% and suppressing the policy leg the physical=up sugar would grow.
+\documentclass{standalone}
+\usepackage{tenkz}
+\makeatletter
+\ExplSyntaxOn
+\file_input:n { tenkz-kernel.code.tex }
+\ExplSyntaxOff
+\makeatother
+\begin{document}
+\tenkzkernel
+\begin{tenkz}[rows={wire}, cols=1, bonds=none, physical=up]
+  \tn[name=A, ports={90:physical:$i$}]{A}
+\end{tenkz}
+\end{document}

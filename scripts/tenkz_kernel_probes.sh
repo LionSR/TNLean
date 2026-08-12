@@ -32,10 +32,10 @@ compile() {
 # gate.  The extraction drops the display-math delimiters of the printed form
 # and nothing else.  Most of them are also a kernel fixture body character for
 # character; those pairs are diffed, which pins the printed example's event
-# stream through the fixture's row of the golden ledger as well.  The two
-# without a twin are the section 9 port-label example, which no fixture
-# carries, and section 12.7, whose fixture states the same target in the
-# compatibility spelling the contract has retired.
+# stream through the fixture's row of the golden ledger as well.  The one
+# without a twin is section 12.7, whose fixture k_roperator.tex states the
+# same target in the compatibility spelling the contract has retired;
+# rebinding that pair rides the via= census move, item 1 of tracker 4709.
 #
 # The table below is the only place any of this is written down.  The counts,
 # the compile set, the diffed pairs and the audit set are all read off it, so
@@ -44,7 +44,7 @@ compile() {
 CONTRACT="$REPO/docs/tenkz/LANGUAGE-1.0.md"
 # job name : heading the example follows : fixture whose body it must equal
 SKETCHES="
-c_sugar9:## 9.:
+c_sugar9:## 9.:k_portlabel
 c_s121:### 12.1:k_braid
 c_s122:### 12.2:k_torus
 c_s123:### 12.3:k_pullthrough
