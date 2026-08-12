@@ -4,7 +4,6 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import Mathlib.Analysis.InnerProductSpace.Positive
-import TNLean.MPS.ParentHamiltonian.Martingale.AbstractCriterion
 
 /-!
 # Projection-geometry lemmas for martingale estimates
@@ -725,30 +724,5 @@ theorem quadraticForm_sum_projections_of_finite_overlap_norm_bound_of_lt
     P hP overlaps hm hCard hDisjoint hηle hOverlapNorm
 
 end OffDiagonal
-
-/-- Combined martingale criterion for a finite family of symmetric projections.
-
-If the anticommutator forms satisfy row- and column-summable bounds with
-constant \(γ\), then the sum \(H = \sum_i P_i\) of the projections satisfies
-the norm lower bound \(γ ‖v‖ ≤ ‖H v‖\) on \((\ker H)^\perp\), because \(H\) is
-positive (a sum of positive maps) and satisfies the quadratic-form inequality
-\(γ \operatorname{Re}\langle Hv, v\rangle \le \operatorname{Re}\langle Hv, Hv\rangle\). -/
-theorem spectralGap_of_martingale_anticommutator_rowCol
-    {ι : Type*} [Fintype ι] [DecidableEq ι] {ι' : Type*} [Fintype ι']
-    {γ : ℝ} (hγpos : 0 < γ) (hγle : γ ≤ 1)
-    (P : ι → EuclideanSpace ℂ ι' →ₗ[ℂ] EuclideanSpace ℂ ι')
-    (hP : ∀ i, (P i).IsSymmetricProjection)
-    (c : ι → ι → ℝ)
-    (hRow : ∀ i, (∑ j ∈ Finset.univ.erase i, c i j) ≤ 1)
-    (hCol : ∀ j, (∑ i ∈ Finset.univ.erase j, c i j) ≤ 1)
-    (hAnti : ∀ i j, j ∈ Finset.univ.erase i → ∀ v,
-      -(1 - γ) * c i j *
-          ((⟪P i v, v⟫_ℂ).re + (⟪P j v, v⟫_ℂ).re) ≤
-        (⟪P i v, P j v⟫_ℂ).re + (⟪P j v, P i v⟫_ℂ).re) :
-    ∀ v ∈ (LinearMap.ker (∑ i, P i))ᗮ, γ * ‖v‖ ≤ ‖(∑ i, P i) v‖ := by
-  intro v hv
-  exact FrustrationFree.spectralGap_of_martingale (ι := ι') hγpos
-    (LinearMap.isPositive_sum Finset.univ fun i _ => (hP i).isPositive)
-    (quadraticForm_sum_projections_of_anticommutator_rowCol hγle P hP c hRow hCol hAnti) v hv
 
 end ProjectionGeometry
