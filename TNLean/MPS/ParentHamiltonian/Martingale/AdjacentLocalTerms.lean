@@ -13,7 +13,7 @@ This file identifies, on the explicit three-site Hilbert space, the two
 complementary open-chain ground projections with the range-two local parent
 Hamiltonian terms based at sites \(0\) and \(1\).
 
-The coordinate bridges compare the open-chain `restrictLast` and tail
+The coordinate identifications compare the open-chain `restrictLast` and tail
 `restrictFirst` slices with the cyclic restrictions used to define `localTermES`.
 They yield the individual kernel identities before projection uniqueness is
 applied; no injectivity or nonzero bond-dimension assumption is needed.
@@ -39,13 +39,13 @@ namespace MPSTensor
 
 variable {d D : ℕ}
 
-/-! ### Open-chain and cyclic coordinate bridges -/
+/-! ### Open-chain and cyclic coordinate identifications -/
 
 /-- At site \(0\) of an \((L+1)\)-site chain, fixing the final site by
 `restrictLast` is the same coordinate slice as the cyclic restriction.
 
-This is the site-\(0\) coordinate identification behind the left open-chain
-condition in Nachtergaele, arXiv:cond-mat/9410110, eq. (2.4). -/
+This coordinate identity realizes the left open-chain ground projection in
+Nachtergaele, arXiv:cond-mat/9410110, eq. (2.4). -/
 theorem restrictLast_eq_cyclicRestrictES_zero {L : ℕ}
     (v : EuclideanSpace ℂ (Cfg d (L + 1))) (τ : Cfg d (L + 1)) :
     restrictLast ((WithLp.linearEquiv 2 ℂ (NSiteSpace d (L + 1))) v) (τ (Fin.last L)) =
@@ -65,8 +65,8 @@ theorem restrictLast_eq_cyclicRestrictES_zero {L : ℕ}
 /-- Fixing the sole prefix site of a three-site state by `tailRestrictₗ` is
 exactly `restrictFirst` at that coordinate.
 
-This is the tail/first-coordinate bridge for the site-\(1\) open-chain condition
-in Nachtergaele, arXiv:cond-mat/9410110, eq. (2.4). -/
+This coordinate identity is used to realize the tail open-chain ground
+projection in Nachtergaele, arXiv:cond-mat/9410110, eq. (2.4). -/
 theorem tailRestrictₗ_one_eq_restrictFirst (u : Fin 1 → Fin d)
     (ψ : NSiteSpace d (1 + 2)) :
     tailRestrictₗ u ψ = restrictFirst ψ (u 0) := by
@@ -80,8 +80,8 @@ theorem tailRestrictₗ_one_eq_restrictFirst (u : Fin 1 → Fin d)
 /-- At site \(1\) of an \((L+1)\)-site chain, fixing the first site by
 `restrictFirst` is the same coordinate slice as the cyclic restriction.
 
-This is the site-\(1\) coordinate identification behind the tail open-chain
-condition in Nachtergaele, arXiv:cond-mat/9410110, eq. (2.4). -/
+This coordinate identity realizes the tail open-chain ground projection in
+Nachtergaele, arXiv:cond-mat/9410110, eq. (2.4). -/
 theorem restrictFirst_eq_cyclicRestrictES_one {L : ℕ} (hL : 0 < L)
     (v : EuclideanSpace ℂ (Cfg d (L + 1))) (τ : Cfg d (L + 1)) :
     restrictFirst ((WithLp.linearEquiv 2 ℂ (NSiteSpace d (L + 1))) v) (τ 0) =
@@ -93,13 +93,13 @@ theorem restrictFirst_eq_cyclicRestrictES_one {L : ℕ} (hL : 0 < L)
     (cyclicCfg (d := d) (Fin.pos (1 : Fin (L + 1))) L (1 : Fin (L + 1)) σ τ)
   apply congrArg v.ofLp
   funext k
-  have hOneNat : 1 % (L + 1) = 1 := Nat.mod_eq_of_lt (by omega)
+  have hOneNat : 1 % (L + 1) = 1 := Nat.mod_eq_of_lt (Nat.succ_lt_succ hL)
   rcases Fin.eq_zero_or_eq_succ k with rfl | ⟨r, rfl⟩
   · simp [cyclicCfg, hOneNat]
   · have hmod : (r.val + 1 + L) % (L + 1) = r.val := by
       rw [show r.val + 1 + L = r.val + (L + 1) by omega]
       rw [Nat.add_mod_right]
-      exact Nat.mod_eq_of_lt (by omega)
+      exact Nat.mod_eq_of_lt (Nat.lt_succ_of_lt r.isLt)
     simp [cyclicCfg, hOneNat, hmod]
 
 /-! ### Individual three-site kernels -/

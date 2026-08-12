@@ -450,6 +450,42 @@
     restriction condition.
 \end{proof}
 
+\begin{theorem}[Adjacent three-site kernels and excitation projections]
+    \label{thm:adjacent_two_site_local_terms_open_chain}
+    \lean{MPSTensor.ker_localTermES_two_three_zero,
+        MPSTensor.ker_localTermES_two_three_one,
+        MPSTensor.openChainLeftGroundSpaceES_orthogonal_starProjection_eq_localTermES,
+        MPSTensor.openChainTailGroundSpaceES_orthogonal_starProjection_eq_localTermES}
+    \leanok
+    \uses{def:open_chain_ground_subspaces_es, def:local_term_parent}
+    For a tensor $B$, let $h_0$ and $h_1$ be the two translated length-two parent
+    interactions on the three-site Hilbert space. Then
+    \begin{align}
+        \ker h_0&=\mathcal U_2(B),&
+        \ker h_1&=\mathcal V_{1,2}(B).
+    \end{align}
+    Consequently, the orthogonal projectors onto the complementary excitation
+    subspaces satisfy
+    \begin{align}
+        P_{\mathcal U_2(B)^\perp}&=h_0,&
+        P_{\mathcal V_{1,2}(B)^\perp}&=h_1.
+    \end{align}
+    These identities require neither injectivity nor a nonzero bond dimension.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:mem_open_chain_left_ground_space_es,
+        thm:mem_open_chain_tail_ground_space_es}
+    At site $0$, fixing the final physical coordinate is the cyclic restriction
+    defining $h_0$. At site $1$, fixing the one-site prefix is the first-site
+    restriction and hence the cyclic restriction defining $h_1$. The kernel
+    characterization of a translated local parent interaction therefore gives
+    the two displayed kernel identities. Each $h_i$ is an orthogonal projector,
+    so its range is the orthogonal complement of its kernel. Uniqueness of the
+    orthogonal projector with a prescribed range gives the final two identities.
+\end{proof}
+
 \begin{theorem}[Open-chain left--tail ground-space intersection]
     \label{thm:open_chain_left_tail_ground_intersection}
     \lean{MPSTensor.openChainLeft_inf_tailGroundSpaceES}
