@@ -6006,6 +6006,24 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
   matrix product unitaries.
 \end{theorem}
 
+\begin{proof}\leanok
+  Closing the virtual indices of $A^{ij}=\lvert i\rangle\langle j\rvert$
+  leaves one nonzero virtual configuration.  Thus the matrix entry in row
+  $\sigma$ and column $\tau$ is
+  \begin{align}
+    \langle\sigma\vert T^{(N)}\vert\tau\rangle
+      &=\begin{cases}
+          1,&\tau_n=\sigma_{n+1}\text{ for every }n\pmod N,\\
+          0,&\text{otherwise}.
+        \end{cases}
+  \end{align}
+  Hence the output configuration is
+  $(\tau_{N-1},\tau_0,\ldots,\tau_{N-2})$, which fixes the permutation-matrix
+  convention and gives the right shift.  Its permutation matrix is unitary.
+  Physical adjunction gives the conjugate transpose, hence the left shift and
+  its unitarity.
+\end{proof}
+
 \begin{definition}[Three topological-insulator shift MPUs]
   \label{threeMPU}
   \lean{MPOTensor.identityMPUTensor}
@@ -6041,6 +6059,17 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
   Definition~\ref{threeMPU} on every nonempty chain, and each tensor is a
   matrix product unitary.
 \end{theorem}
+
+\begin{proof}\leanok
+  The bond-one identity tensor generates the identity at every length.  The
+  finite-chain operator of an independent tensor product is the Kronecker
+  product of the two finite-chain operators, after the sitewise identification
+  $(\mathbb C^d\otimes\mathbb C^d)^{\otimes N}
+  \cong(\mathbb C^d)^{\otimes N}\otimes(\mathbb C^d)^{\otimes N}$.  Applying
+  this identity to the right and left shifts gives the three displayed
+  formulas.  The identity tensor is unitary, and tensor products preserve
+  unitarity, so all three tensors are matrix product unitaries.
+\end{proof}
 
 \begin{proposition}[Standard forms of the three shift MPUs]
   \label{prop:threeMPU_standard_forms}
