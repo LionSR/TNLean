@@ -846,5 +846,276 @@ noncomputable def wholeIncrementCenteredProjectorResidualES [NeZero D]
           (leftBoundaryMapES A (K + L) Q).adjoint)))
 
 
+/-- Exact assembly of the arbitrary-suffix projector defect into the centered
+physical sandwich and the three finite-Gram correction sandwiches. -/
+theorem wholeIncrement_injectiveRangeProjector_residual_eq_centered_sub_corrections
+    [NeZero D]
+    (A : MPSTensor d D) (K L Q : ℕ)
+    (ρ : Matrix (Fin D) (Fin D) ℂ) (hρ : ρ.PosDef)
+    (hLocalTail : Function.Injective (groundSpaceMapES A (L + Q)))
+    (hLocalLeft : Function.Injective (groundSpaceMapES A (K + L)))
+    (hFull : Function.Injective (groundSpaceMapES A (K + L + Q))) :
+    let hTail := (physicalReassocES (d := d) K L Q).injective.comp
+      (tailBoundaryMapES_injective_of_groundSpaceMapES_injective
+        A K (L + Q) hLocalTail)
+    let hLeft := leftBoundaryMapES_injective_of_groundSpaceMapES_injective
+      A (K + L) Q hLocalLeft
+    (ContinuousLinearMap.injectiveRangeProjector
+        (reassocTailBoundaryMapES A K L Q) hTail).comp
+        (ContinuousLinearMap.injectiveRangeProjector
+          (leftBoundaryMapES A (K + L) Q) hLeft) -
+      ContinuousLinearMap.injectiveRangeProjector
+        (groundSpaceMapES A (K + L + Q)) hFull =
+      wholeIncrementCenteredProjectorResidualES A K L Q ρ hρ
+          hLocalTail hLocalLeft -
+        wholeIncrementTailFiniteGramCorrectionES A K L Q ρ hρ
+          hLocalTail hFull -
+        wholeIncrementFullInverseGramCorrectionES A K L Q ρ hρ
+          hLocalTail hFull -
+        wholeIncrementLeftFiniteGramCorrectionES A K L Q ρ hρ
+          hLocalTail hLocalLeft := by
+  dsimp only
+  rw [whole_increment_injectiveRangeProjector_residual_eq]
+  rw [inverseGram_reassocTailBoundaryMapES_eq_fiberwise_inverseGram
+      A K L Q hLocalTail,
+    inverseGram_leftBoundaryMapES_eq_fiberwise_inverseGram
+      A (K + L) Q hLocalLeft,
+    reassocTailBoundaryMapES_adjoint_comp_self_eq_fiberwise_groundSpaceGram,
+    leftBoundaryMapES_adjoint_comp_self_eq_fiberwise_groundSpaceGram,
+    wholeIncrement_virtualResidual_eq_centered_sub_gramErrors
+      A K L Q ρ hρ hFull]
+  ext x
+  have hcancel := congrArg (fun f => f x)
+    (wholeIncrementLeftFiniteGramCancellation_eq_groundSpaceMapES_adjoint
+      A K L Q hLocalLeft)
+  simp only [ContinuousLinearMap.comp_apply] at hcancel
+  have hinv := congrArg (fun f =>
+      f ((leftBoundaryMapES A (K + L) Q).adjoint x))
+    (inverseGram_leftBoundaryMapES_eq_fiberwise_inverseGram
+      A (K + L) Q hLocalLeft)
+  simp only [wholeIncrementCenteredProjectorResidualES,
+    wholeIncrementTailFiniteGramCorrectionES,
+    wholeIncrementFullInverseGramCorrectionES,
+    wholeIncrementLeftFiniteGramCorrectionES, boundaryFiberwiseMap_sub,
+    ContinuousLinearMap.comp_sub, ContinuousLinearMap.sub_comp,
+    ContinuousLinearMap.comp_apply, sub_apply, hcancel, hinv]
+
+/-- Raw operator-norm bound for the arbitrary-suffix tail finite-Gram correction. -/
+theorem wholeIncrementTailFiniteGramCorrectionES_norm_le [NeZero D]
+    (A : MPSTensor d D) (K L Q : ℕ)
+    (ρ : Matrix (Fin D) (Fin D) ℂ) (hρ : ρ.PosDef)
+    (hLocalTail : Function.Injective (groundSpaceMapES A (L + Q)))
+    (hFull : Function.Injective (groundSpaceMapES A (K + L + Q))) :
+    let Kinf := Matrix.gramReshuffle
+      (fixedPointProj ρ (ne_of_gt hρ.trace_pos))
+    let Itail := ContinuousLinearMap.inverseGram
+      (groundSpaceMapES A (L + Q)) hLocalTail
+    let Ifull := ContinuousLinearMap.inverseGram
+      (groundSpaceMapES A (K + L + Q)) hFull
+    ‖wholeIncrementTailFiniteGramCorrectionES A K L Q ρ hρ
+      hLocalTail hFull‖ ≤
+      Real.sqrt ‖Itail‖ * ‖groundSpaceGram A (L + Q) - Kinf‖ *
+        ‖tailVirtualMapES A K‖ * Real.sqrt ‖Ifull‖ := by
+  dsimp only
+  let Ptail := (reassocTailBoundaryMapES A K L Q).comp
+    (ContinuousLinearMap.inverseGram (reassocTailBoundaryMapES A K L Q)
+      ((physicalReassocES (d := d) K L Q).injective.comp
+        (tailBoundaryMapES_injective_of_groundSpaceMapES_injective
+          A K (L + Q) hLocalTail)))
+  let E := boundaryFiberwiseMap (D := D) (Cfg d K)
+    (groundSpaceGram A (L + Q) - Matrix.gramReshuffle
+      (fixedPointProj ρ (ne_of_gt hρ.trace_pos)))
+  let J := tailVirtualMapES A K
+  let Pfull := (ContinuousLinearMap.inverseGram
+    (groundSpaceMapES A (K + L + Q)) hFull).comp
+      (groundSpaceMapES A (K + L + Q)).adjoint
+  simp only [wholeIncrementTailFiniteGramCorrectionES]
+  rw [← inverseGram_reassocTailBoundaryMapES_eq_fiberwise_inverseGram
+    A K L Q hLocalTail]
+  change ‖Ptail.comp (E.comp (J.comp Pfull))‖ ≤ _
+  calc
+    _ ≤ ‖Ptail‖ * ‖E.comp (J.comp Pfull)‖ :=
+      ContinuousLinearMap.opNorm_comp_le _ _
+    _ ≤ ‖Ptail‖ * (‖E‖ * ‖J.comp Pfull‖) := by
+      gcongr
+      exact ContinuousLinearMap.opNorm_comp_le _ _
+    _ ≤ ‖Ptail‖ * (‖E‖ * (‖J‖ * ‖Pfull‖)) := by
+      gcongr
+      exact ContinuousLinearMap.opNorm_comp_le _ _
+    _ = ‖Ptail‖ * ‖E‖ * ‖J‖ * ‖Pfull‖ := by ring
+    _ ≤ Real.sqrt ‖ContinuousLinearMap.inverseGram
+          (groundSpaceMapES A (L + Q)) hLocalTail‖ *
+        ‖groundSpaceGram A (L + Q) - Matrix.gramReshuffle
+          (fixedPointProj ρ (ne_of_gt hρ.trace_pos))‖ *
+        ‖tailVirtualMapES A K‖ *
+        Real.sqrt ‖ContinuousLinearMap.inverseGram
+          (groundSpaceMapES A (K + L + Q)) hFull‖ := by
+      dsimp only [Ptail, E, J, Pfull]
+      rw [ContinuousLinearMap.norm_inverseGram_comp_adjoint_eq_sqrt]
+      gcongr
+      · exact norm_reassocTailBoundaryMapES_comp_inverseGram_le_sqrt
+          A K L Q hLocalTail
+      · exact norm_boundaryFiberwiseMap_le _ _
+    _ = _ := by ring
+
+/-- Raw operator-norm bound for the arbitrary-suffix full inverse-Gram correction. -/
+theorem wholeIncrementFullInverseGramCorrectionES_norm_le [NeZero D]
+    (A : MPSTensor d D) (K L Q : ℕ)
+    (ρ : Matrix (Fin D) (Fin D) ℂ) (hρ : ρ.PosDef)
+    (hLocalTail : Function.Injective (groundSpaceMapES A (L + Q)))
+    (hFull : Function.Injective (groundSpaceMapES A (K + L + Q))) :
+    let Kinf := Matrix.gramReshuffle
+      (fixedPointProj ρ (ne_of_gt hρ.trace_pos))
+    let Iinf := Ring.inverse Kinf
+    let Itail := ContinuousLinearMap.inverseGram
+      (groundSpaceMapES A (L + Q)) hLocalTail
+    let Ifull := ContinuousLinearMap.inverseGram
+      (groundSpaceMapES A (K + L + Q)) hFull
+    ‖wholeIncrementFullInverseGramCorrectionES A K L Q ρ hρ
+      hLocalTail hFull‖ ≤
+      Real.sqrt ‖Itail‖ * ‖Kinf‖ * ‖tailVirtualMapES A K‖ * ‖Iinf‖ *
+        ‖groundSpaceGram A (K + L + Q) - Kinf‖ * Real.sqrt ‖Ifull‖ := by
+  dsimp only
+  let Ptail := (reassocTailBoundaryMapES A K L Q).comp
+    (ContinuousLinearMap.inverseGram (reassocTailBoundaryMapES A K L Q)
+      ((physicalReassocES (d := d) K L Q).injective.comp
+        (tailBoundaryMapES_injective_of_groundSpaceMapES_injective
+          A K (L + Q) hLocalTail)))
+  let Kinf := Matrix.gramReshuffle
+    (fixedPointProj ρ (ne_of_gt hρ.trace_pos))
+  let Ktail := boundaryFiberwiseMap (D := D) (Cfg d K) Kinf
+  let J := tailVirtualMapES A K
+  let Iinf := Ring.inverse Kinf
+  let Efull := Kinf - groundSpaceGram A (K + L + Q)
+  let Pfull := (ContinuousLinearMap.inverseGram
+    (groundSpaceMapES A (K + L + Q)) hFull).comp
+      (groundSpaceMapES A (K + L + Q)).adjoint
+  simp only [wholeIncrementFullInverseGramCorrectionES]
+  rw [← inverseGram_reassocTailBoundaryMapES_eq_fiberwise_inverseGram
+    A K L Q hLocalTail]
+  rw [inverseGram_sub_limitingInverse_eq_resolvent
+    A (K + L + Q) ρ hρ hFull]
+  change ‖Ptail.comp (Ktail.comp (J.comp (Iinf.comp
+    (Efull.comp Pfull))))‖ ≤ _
+  calc
+    _ ≤ ‖Ptail‖ * ‖Ktail.comp (J.comp (Iinf.comp
+          (Efull.comp Pfull)))‖ := ContinuousLinearMap.opNorm_comp_le _ _
+    _ ≤ ‖Ptail‖ * (‖Ktail‖ * ‖J.comp (Iinf.comp
+          (Efull.comp Pfull))‖) := by
+      gcongr
+      exact ContinuousLinearMap.opNorm_comp_le _ _
+    _ ≤ ‖Ptail‖ * (‖Ktail‖ * (‖J‖ * ‖Iinf.comp
+          (Efull.comp Pfull)‖)) := by
+      gcongr
+      exact ContinuousLinearMap.opNorm_comp_le _ _
+    _ ≤ ‖Ptail‖ * (‖Ktail‖ * (‖J‖ * (‖Iinf‖ *
+          ‖Efull.comp Pfull‖))) := by
+      gcongr
+      exact ContinuousLinearMap.opNorm_comp_le _ _
+    _ ≤ ‖Ptail‖ * (‖Ktail‖ * (‖J‖ * (‖Iinf‖ *
+          (‖Efull‖ * ‖Pfull‖)))) := by
+      gcongr
+      exact ContinuousLinearMap.opNorm_comp_le _ _
+    _ = ‖Ptail‖ * ‖Ktail‖ * ‖J‖ * ‖Iinf‖ * ‖Efull‖ * ‖Pfull‖ := by ring
+    _ ≤ Real.sqrt ‖ContinuousLinearMap.inverseGram
+          (groundSpaceMapES A (L + Q)) hLocalTail‖ * ‖Kinf‖ *
+        ‖tailVirtualMapES A K‖ * ‖Ring.inverse Kinf‖ *
+        ‖groundSpaceGram A (K + L + Q) - Kinf‖ *
+        Real.sqrt ‖ContinuousLinearMap.inverseGram
+          (groundSpaceMapES A (K + L + Q)) hFull‖ := by
+      dsimp only [Ptail, Ktail, J, Iinf, Efull, Pfull]
+      rw [norm_sub_rev, ContinuousLinearMap.norm_inverseGram_comp_adjoint_eq_sqrt]
+      gcongr
+      · exact norm_reassocTailBoundaryMapES_comp_inverseGram_le_sqrt
+          A K L Q hLocalTail
+      · exact norm_boundaryFiberwiseMap_le _ _
+    _ = _ := by ring
+
+/-- Raw operator-norm bound for the arbitrary-suffix left finite-Gram correction. -/
+theorem wholeIncrementLeftFiniteGramCorrectionES_norm_le [NeZero D]
+    (A : MPSTensor d D) (K L Q : ℕ)
+    (ρ : Matrix (Fin D) (Fin D) ℂ) (hρ : ρ.PosDef)
+    (hLocalTail : Function.Injective (groundSpaceMapES A (L + Q)))
+    (hLocalLeft : Function.Injective (groundSpaceMapES A (K + L))) :
+    let Kinf := Matrix.gramReshuffle
+      (fixedPointProj ρ (ne_of_gt hρ.trace_pos))
+    let Iinf := Ring.inverse Kinf
+    let Itail := ContinuousLinearMap.inverseGram
+      (groundSpaceMapES A (L + Q)) hLocalTail
+    let Ileft := ContinuousLinearMap.inverseGram
+      (groundSpaceMapES A (K + L)) hLocalLeft
+    ‖wholeIncrementLeftFiniteGramCorrectionES A K L Q ρ hρ
+      hLocalTail hLocalLeft‖ ≤
+      Real.sqrt ‖Itail‖ * ‖Kinf‖ * ‖tailVirtualMapES A K‖ * ‖Iinf‖ *
+        ‖leftVirtualMapES A Q‖ * ‖groundSpaceGram A (K + L) - Kinf‖ *
+          Real.sqrt ‖Ileft‖ := by
+  dsimp only
+  let Ptail := (reassocTailBoundaryMapES A K L Q).comp
+    (ContinuousLinearMap.inverseGram (reassocTailBoundaryMapES A K L Q)
+      ((physicalReassocES (d := d) K L Q).injective.comp
+        (tailBoundaryMapES_injective_of_groundSpaceMapES_injective
+          A K (L + Q) hLocalTail)))
+  let Kinf := Matrix.gramReshuffle
+    (fixedPointProj ρ (ne_of_gt hρ.trace_pos))
+  let Ktail := boundaryFiberwiseMap (D := D) (Cfg d K) Kinf
+  let Jtail := tailVirtualMapES A K
+  let Iinf := Ring.inverse Kinf
+  let JleftAdj := (leftVirtualMapES A Q).adjoint
+  let Eleft := boundaryFiberwiseMap (D := D) (Cfg d Q)
+    (groundSpaceGram A (K + L) - Kinf)
+  let Pleft := (ContinuousLinearMap.inverseGram
+    (leftBoundaryMapES A (K + L) Q)
+      (leftBoundaryMapES_injective_of_groundSpaceMapES_injective
+        A (K + L) Q hLocalLeft)).comp
+          (leftBoundaryMapES A (K + L) Q).adjoint
+  simp only [wholeIncrementLeftFiniteGramCorrectionES]
+  rw [← inverseGram_reassocTailBoundaryMapES_eq_fiberwise_inverseGram
+    A K L Q hLocalTail]
+  change ‖Ptail.comp (Ktail.comp (Jtail.comp (Iinf.comp
+    (JleftAdj.comp (Eleft.comp Pleft)))))‖ ≤ _
+  calc
+    _ ≤ ‖Ptail‖ * ‖Ktail.comp (Jtail.comp (Iinf.comp
+          (JleftAdj.comp (Eleft.comp Pleft))))‖ :=
+      ContinuousLinearMap.opNorm_comp_le _ _
+    _ ≤ ‖Ptail‖ * (‖Ktail‖ * ‖Jtail.comp (Iinf.comp
+          (JleftAdj.comp (Eleft.comp Pleft)))‖) := by
+      gcongr
+      exact ContinuousLinearMap.opNorm_comp_le _ _
+    _ ≤ ‖Ptail‖ * (‖Ktail‖ * (‖Jtail‖ * ‖Iinf.comp
+          (JleftAdj.comp (Eleft.comp Pleft))‖)) := by
+      gcongr
+      exact ContinuousLinearMap.opNorm_comp_le _ _
+    _ ≤ ‖Ptail‖ * (‖Ktail‖ * (‖Jtail‖ * (‖Iinf‖ *
+          ‖JleftAdj.comp (Eleft.comp Pleft)‖))) := by
+      gcongr
+      exact ContinuousLinearMap.opNorm_comp_le _ _
+    _ ≤ ‖Ptail‖ * (‖Ktail‖ * (‖Jtail‖ * (‖Iinf‖ *
+          (‖JleftAdj‖ * ‖Eleft.comp Pleft‖)))) := by
+      gcongr
+      exact ContinuousLinearMap.opNorm_comp_le _ _
+    _ ≤ ‖Ptail‖ * (‖Ktail‖ * (‖Jtail‖ * (‖Iinf‖ *
+          (‖JleftAdj‖ * (‖Eleft‖ * ‖Pleft‖))))) := by
+      gcongr
+      exact ContinuousLinearMap.opNorm_comp_le _ _
+    _ = ‖Ptail‖ * ‖Ktail‖ * ‖Jtail‖ * ‖Iinf‖ * ‖JleftAdj‖ *
+        ‖Eleft‖ * ‖Pleft‖ := by ring
+    _ ≤ Real.sqrt ‖ContinuousLinearMap.inverseGram
+          (groundSpaceMapES A (L + Q)) hLocalTail‖ * ‖Kinf‖ *
+        ‖tailVirtualMapES A K‖ * ‖Ring.inverse Kinf‖ *
+        ‖leftVirtualMapES A Q‖ * ‖groundSpaceGram A (K + L) - Kinf‖ *
+        Real.sqrt ‖ContinuousLinearMap.inverseGram
+          (groundSpaceMapES A (K + L)) hLocalLeft‖ := by
+      dsimp only [Ptail, Ktail, Jtail, Iinf, JleftAdj, Eleft, Pleft]
+      rw [LinearIsometryEquiv.norm_map
+        (ContinuousLinearMap.adjoint (𝕜 := ℂ))]
+      gcongr
+      · exact norm_reassocTailBoundaryMapES_comp_inverseGram_le_sqrt
+          A K L Q hLocalTail
+      · exact norm_boundaryFiberwiseMap_le _ _
+      · exact norm_boundaryFiberwiseMap_le _ _
+      · exact norm_inverseGram_comp_leftBoundaryMapES_adjoint_le_sqrt
+          A (K + L) Q hLocalLeft
+    _ = _ := by ring
+
 
 end MPSTensor
