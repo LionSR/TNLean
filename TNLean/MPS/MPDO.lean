@@ -287,6 +287,7 @@ import TNLean.MPS.MPDO.SourceBNTBlocking
 import TNLean.MPS.MPDO.SourceZCLMarginal
 import TNLean.MPS.MPDO.StackedLayers
 import TNLean.MPS.MPDO.StrongRFP
+import TNLean.MPS.MPDO.StrongRFPRankGrowth
 import TNLean.MPS.MPDO.ThermodynamicLimitCounterexample
 import TNLean.MPS.MPDO.TopologicalDensityDecomposition
 import TNLean.MPS.MPDO.TopologicalGibbsHamiltonian

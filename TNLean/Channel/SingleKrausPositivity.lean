@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.Channel.KrausCPTP
+import Mathlib.LinearAlgebra.Matrix.Rank
 
 /-!
 # Positivity under single-Kraus isometries
@@ -11,8 +12,10 @@ import TNLean.Channel.KrausCPTP
 This file records algebraic and order properties of conjugation by a rectangular
 isometry.
 
-## Main declarations
+## Main results
 
+* `Matrix.rank_singleKrausMap_of_mem_unitaryGroup`: unitary single-Kraus
+  conjugation preserves rank.
 * `Matrix.singleKrausMap_kronecker`: single-Kraus conjugation distributes over
   Kronecker products.
 * `Matrix.singleKrausMap_mul_of_isometry`: isometric single-Kraus conjugation
@@ -22,6 +25,22 @@ isometry.
 -/
 
 open scoped Matrix ComplexOrder Kronecker
+
+/-- A unitary single-Kraus conjugation preserves ordinary matrix rank. -/
+theorem Matrix.rank_singleKrausMap_of_mem_unitaryGroup
+    {n : Type*} [Fintype n] [DecidableEq n]
+    (U A : Matrix n n ℂ) (hU : U ∈ Matrix.unitaryGroup n ℂ) :
+    (singleKrausMap U A).rank = A.rank := by
+  have hUdet : IsUnit U.det := Matrix.UnitaryGroup.det_isUnit ⟨U, hU⟩
+  have hUh : Uᴴ ∈ Matrix.unitaryGroup n ℂ := by
+    exact ⟨by simpa only [Matrix.star_eq_conjTranspose,
+        Matrix.conjTranspose_conjTranspose] using hU.2,
+      by simpa only [Matrix.star_eq_conjTranspose,
+        Matrix.conjTranspose_conjTranspose] using hU.1⟩
+  have hUhdet : IsUnit Uᴴ.det := Matrix.UnitaryGroup.det_isUnit ⟨Uᴴ, hUh⟩
+  rw [singleKrausMap_apply,
+    Matrix.rank_mul_eq_left_of_isUnit_det Uᴴ (U * A) hUhdet,
+    Matrix.rank_mul_eq_right_of_isUnit_det U A hUdet]
 
 /-- Single-Kraus conjugation distributes over Kronecker products. -/
 theorem Matrix.singleKrausMap_kronecker
