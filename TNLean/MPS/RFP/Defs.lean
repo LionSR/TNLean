@@ -5,7 +5,6 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.Defs
 import TNLean.MPS.Core.Transfer
-import TNLean.Channel.Stinespring
 import TNLean.Channel.KrausFreedom
 
 /-!
