@@ -68,6 +68,23 @@ def test_closure_reads_the_load_graph_and_not_the_prose() -> None:
     assert closure.libraries == ["calc", "hobby"], closure.libraries
 
 
+def test_a_load_spelled_as_text_is_not_a_load() -> None:
+    """`\\\\usepackage` in a macro body is the control symbol and then
+    ordinary characters. Recording it would refuse a release over a
+    definition, so the closure blanks the pairs as the arXiv readings do."""
+
+    with tempfile.TemporaryDirectory() as directory:
+        source = Path(directory) / "tex"
+        source.mkdir()
+        (source / "tenkz.sty").write_text(
+            STAGE_CONTRACT + "\\def\\showload{\\\\usepackage{tikz-cd}}\n",
+            encoding="utf-8",
+        )
+        closure = tenkz_ctan.walk_closure(source, "tenkz.sty")
+    assert closure.packages == [], closure.packages
+    assert not tenkz_ctan.check_dependencies(closure, _ownership([], [], [])).failures
+
+
 def test_closure_reads_the_unbraced_input() -> None:
     """Plain TeX's `\\input` takes a file name with no braces, reading to the
     next space. A walk that read only the braced form would let a stage module
@@ -841,6 +858,9 @@ def test_a_retired_front_end_vendored_as_a_file_is_caught() -> None:
     # the reading strips the prefix and the suffix a load carries.
     assert tenkz_ctan.load_names("tikzlibrarytikzcd.code.tex") >= {"tikzcd"}
     assert tenkz_ctan.load_names("tenkz-core.code.tex") >= {"tenkz-core"}
+    # A load may carry a directory, and the basename is what the prefix and
+    # the suffix are stripped from.
+    assert tenkz_ctan.load_names("vendor/tikzlibrarytikzcd.code.tex") >= {"tikzcd"}
     with tempfile.TemporaryDirectory() as directory:
         source = Path(directory) / "tex"
         source.mkdir()
@@ -939,6 +959,10 @@ def test_every_spelling_of_stream_eighteen_is_the_shell_escape_stream() -> None:
     # The named ways to reach a shell that are not a write at all. A file
     # under `\ExplSyntaxOn` would use the expl3 interface in preference to
     # either primitive.
+    # Web2C runs a file name opening with a pipe, which names no stream and
+    # no API.
+    assert tenkz_ctan.shell_escape_call('\\openin\\stream="|uname -a"')
+    assert not tenkz_ctan.shell_escape_call('\\openin\\stream="plain.tex"')
     for named in (r"\sys_shell_now:n {ls}", r"\sys_shell_shipout:x {ls}",
                   r"\sys_get_shell:nnN {x}{y}\z", r"\ior_shell_open:Nn \x {ls}",
                   r"\iow_shell_open:Nn \x {ls}", r"\DelayedShellEscape{ls}"):

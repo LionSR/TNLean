@@ -224,14 +224,19 @@ LOAD_SUFFIXES = (".code.tex", ".tex", ".sty", ".def", ".cls", ".cfg")
 
 
 def load_names(name: str) -> set[str]:
-    """Every name one loaded file could be known by."""
+    """Every name one loaded file could be known by.
 
-    bare = name
+    A load may carry a directory, so the basename is what the suffix and the
+    `tikzlibrary` prefix are stripped from; the name as written stays in the
+    set as well, since that is what a manifest would pin.
+    """
+
+    bare = Path(name).name
     for suffix in LOAD_SUFFIXES:
         if bare.endswith(suffix):
             bare = bare[: -len(suffix)]
             break
-    names = {name, bare}
+    names = {name, Path(name).name, bare}
     library = TIKZ_LIBRARY_FILE.match(bare)
     if library is not None:
         names.add(library["library"])
@@ -276,6 +281,11 @@ WRITE_CALL = re.compile(
     r"|(?P<name>\\[A-Za-z@_:]+))?"
 )
 ALLOCATED_STREAM = re.compile(r"\\(?:newwrite|iow_new:N)\s*(\\[A-Za-z@_:]+)")
+# Web2C reads a file name opening with a pipe as a command to run, so
+# `\openin\stream="|uname -a"` reaches a shell without naming a stream or an
+# API. The quote is what marks it as a file name to the engine, and nothing in
+# a tensor-diagram package has a reason to write one.
+PIPE_FILENAME = re.compile(r"\"\s*\|")
 # The named ways to reach a shell that are not a write at all: the TeX
 # primitive's LaTeX name, and expl3's own shell interface, which a file under
 # `\ExplSyntaxOn` would use in preference to either. The expl3 names are the
@@ -328,6 +338,12 @@ def shell_escape_call(text: str) -> str:
     named = SHELL_ESCAPE_NAME.search(scanned)
     if named is not None:
         return f"{text[named.start():named.end()]}, which reaches a shell"
+    piped = PIPE_FILENAME.search(scanned)
+    if piped is not None:
+        return (
+            f'{text[piped.start():piped.end()]}, a file name opening a pipe, '
+            "which the engine runs as a command"
+        )
     allocated = set(ALLOCATED_STREAM.findall(scanned))
     for found in WRITE_CALL.finditer(scanned):
         call = text[found.start():found.end()]
@@ -555,7 +571,10 @@ def walk_closure(source: Path = SOURCE, entry: str = ENTRY.name) -> Closure:
             raise SystemExit(f"{entry} loads {name}, which is missing")
         closure.files.append(name)
         try:
-            text = strip_comments(path.read_bytes().decode("utf-8"))
+            # Comments are blanked, and so are the `\\` control symbols: a
+            # load spelled inside a macro body as text is not a load, and
+            # recording one would refuse a release over a definition.
+            text = uncontrolled(strip_comments(path.read_bytes().decode("utf-8")))
         except UnicodeDecodeError as error:
             raise SystemExit(f"{name} is not UTF-8 and cannot be read: {error}") from None
         for group in REQUIRE_CALL.findall(text):
