@@ -185,7 +185,7 @@ theorem inner_tailBoundaryMapES_adjoint_leftBoundaryMapES
 
 /-- Exact mixed-Gram identity when the filtration advances by an arbitrary
 suffix increment `Q`. Reassociation places the tail window in the same
-`K + L + Q`-site ambient space as the left window. -/
+\(K + L + Q\)-site ambient space as the left window. -/
 theorem inner_reassocTailBoundaryMapES_adjoint_leftBoundaryMapES
     (A : MPSTensor d D) (K L Q : ℕ)
     (x : BoundaryFamilySpace (D := D) (Cfg d K))

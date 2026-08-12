@@ -421,7 +421,7 @@ noncomputable def wholeIncrementCenteredResidualES
         (wholeIncrementRightOverlapFactorES A K Q))
 
 /-- The whole-increment centered residual factors through
-`groundSpaceGram A L - Kinf` in the exact common ambient. -/
+\(groundSpaceGram A L - Kinf\) in the exact common ambient. -/
 theorem wholeIncrementCenteredResidualES_eq_overlapFactors
     (A : MPSTensor d D) (K L Q : ℕ)
     (ρ : Matrix (Fin D) (Fin D) ℂ) (htr : Matrix.trace ρ ≠ 0) :
