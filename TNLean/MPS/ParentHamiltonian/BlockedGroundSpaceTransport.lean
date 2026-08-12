@@ -141,6 +141,7 @@ theorem starProjection_groundSpaceES_blockTensor_conj
   intro v
   exact starProjection_groundSpaceES_blockTensor_map_apply A p N v
 
+-- The expanded finite-dimensional projector-conjugacy equality requires extra synthesis budget.
 set_option synthInstance.maxHeartbeats 100000 in
 /-- Three blocked sites correspond to \(3p\) original sites, with exact transport of the
 orthogonal ground-space projector.  This is the direct three-block specialization used in
