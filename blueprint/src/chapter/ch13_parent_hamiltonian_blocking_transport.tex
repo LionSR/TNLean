@@ -44,16 +44,15 @@ construction; they are not attributed to a source theorem.
     \leanok
     \uses{lem:eval_word_block, lem:ground_space_map_apply,
         thm:ground_space_map_es_frobenius}
-    For a blocked configuration $J=(J_1,\ldots,J_N)$ and its flattened word
-    $\sigma$, blocked-word evaluation gives
+    For a blocked configuration $J=(J_1,\ldots,J_N)$, its flattened word
+    $\sigma$, and a boundary matrix $X\in\MN{D}$, blocked-word evaluation gives
     \begin{align}
         (A^{[p]})^{J}
         &=A^{\sigma_1}\cdots A^{\sigma_{Np}},
         \label{eq:blocked_word_flattening}\\
         \Gamma_N^{A^{[p]}}(X)(J)
         &=\tr\!\left(A^{\sigma_1}\cdots A^{\sigma_{Np}}X\right)
-         =\Gamma_{Np}^{A}(X)(\sigma)
-        \qquad (X\in\MN{D}).
+         =\Gamma_{Np}^{A}(X)(\sigma).
         \label{eq:blocked_boundary_map_transport_coefficients}
     \end{align}
     Applying the Frobenius transport formula to the coefficient identity yields
@@ -85,7 +84,8 @@ construction; they are not attributed to a source theorem.
     These statements include $N=0$ or $p=0$; in those cases the same explicit
     configuration isometry and boundary-map calculation apply. In particular,
     the projector identity holds for three blocked sites and $3p$ original
-    sites.
+    sites. These identities concern the full local ground spaces and their
+    orthogonal projectors under blocking.
     % Scope: this theorem does not identify the left or tail open-chain spectator
     % spaces needed by a three-block estimate and does not compare the blocked and
     % original parent Hamiltonians.
