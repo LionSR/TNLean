@@ -1,0 +1,47 @@
+\section{Cyclic local-embedding coordinates}
+
+\begin{definition}[Cyclic window-complement coordinates]
+    \label{def:mpdo_cyclic_window_complement_coordinates}
+    \lean{MPOTensor.windowComplementEquiv}
+    \leanok
+    A periodic configuration is identified with the ordered pair consisting of
+    its restriction to the cyclic window $W_i^L$ and its restriction to the
+    complementary cyclic interval.
+\end{definition}
+
+\begin{theorem}[Local embeddings in window-complement coordinates]
+    \label{thm:mpdo_cyclic_local_embedding_reindex}
+    \lean{MPOTensor.reindex_embedLocalOperator_windowComplement}
+    \leanok
+    \uses{def:mpdo_cyclic_window_complement_coordinates}
+    In cyclic window-complement coordinates, every local embedding has the form
+    $E_i^L(B)=B\otimes\Id_{\mathrm{comp}}$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{def:mpdo_cyclic_window_complement_coordinates}
+    The matrix entry between $(x,u)$ and $(y,v)$ vanishes unless the
+    complementary configurations agree, $u=v$. In that case it equals
+    $B_{x,y}$, which is the corresponding entry of
+    $B\otimes\Id_{\mathrm{comp}}$.
+\end{proof}
+
+\begin{theorem}[Two-site local embeddings in pair coordinates]
+    \label{thm:mpdo_generic_two_site_translation_identities}
+    \lean{MPOTensor.reindex_embedLocalOperator_two_zero,
+        MPOTensor.reindex_embedLocalOperator_two_one}
+    \leanok
+    Under the canonical identification of two-site configurations with ordered
+    pairs, embedding an arbitrary two-site operator $B$ beginning at site zero
+    gives $B$, while embedding it beginning at site one gives
+    $SBS^{-1}$, where $S(x\otimes y)=y\otimes x$ exchanges the two factors.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    The cyclic windows beginning at sites zero and one read the physical sites
+    in the orders $(0,1)$ and $(1,0)$, respectively. Reindexing by ordered pairs
+    therefore preserves $B$ in the first case and conjugates it by $S$ in the
+    second.
+\end{proof}
