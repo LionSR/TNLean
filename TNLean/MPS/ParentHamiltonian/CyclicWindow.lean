@@ -419,11 +419,11 @@ theorem cyclicForwardSite_forwardSite {N : ℕ} (i : Fin N) (a b : ℕ) :
   omega
 
 /-- The cyclic offset of the site \(i\), measured from its forward neighbour
-\(\mathrm{cyclicForwardSite}\,i\,1\), is \(N - 1\).
+`cyclicForwardSite i 1`, is \(N - 1\).
 
 When a cyclic window of length \(L \le N\) is shifted one site forward, the
 former starting site \(i\) wraps to cyclic offset \(N - 1\) relative to the new
-start \(\mathrm{cyclicForwardSite}\,i\,1\); equivalently, \(i\) lies exactly one
+start `cyclicForwardSite i 1`; equivalently, \(i\) lies exactly one
 step behind the new start on the cycle. -/
 theorem cyclicForwardSite_one_offset {N : ℕ} (i : Fin N) :
     (i.val + N - (cyclicForwardSite i 1).val) % N = N - 1 := by
