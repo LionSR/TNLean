@@ -24,7 +24,7 @@ counterpart in Theorem~\ref{thm:cyclic_sector_decomp_after_blocking}.
         MPSTensor.projectorComponentPattern,
         MPSTensor.projectorComponentChain}
     \leanok
-    Let $A=(A^i)_{i=1}^d$ have bond dimension $D$, let
+    Let $A=(A^i)_{i=0}^{d-1}$ have bond dimension $D$, let
     $(Q_u)_{u\in\mathbb Z/p\mathbb Z}$ be cyclic projections, and fix a starting
     sector $u$. For each $0\le j<N$, the corresponding chain of length $N$
     has local matrices
@@ -44,7 +44,7 @@ counterpart in Theorem~\ref{thm:cyclic_sector_decomp_after_blocking}.
     \lean{MPSTensor.pgvwc07_periodic_stateVector_decomposition_of_dvd,
         MPSTensor.pgvwc07_stateVector_eq_zero_of_not_dvd}
     \leanok
-    \uses{def:pgvwc07_projector_component_chain}
+    \uses{def:pgvwc07_projector_component_chain, def:periodic_tensor}
     This is a normalized form of the state-vector conclusion in
     \cite[Theorem~5]{PerezGarcia2007Matrix}. Let $A$ be an irreducible
     left-canonical tensor whose peripheral transfer

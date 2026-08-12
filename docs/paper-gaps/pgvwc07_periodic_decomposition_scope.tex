@@ -42,15 +42,14 @@ permuted by the matrices \(A_i\), and inserting
 
 \section{Formal boundary}
 
-Chapter~8 formalizes only the period-removal-by-blocking consequence needed for
-the canonical-form reduction: after blocking by a common multiple of the periods,
-the relevant cyclic sectors have primitive transfer maps.
-
-This formal theorem is not the explicit PGVWC07 state-vector decomposition.  It
-does not produce \(p\) separate \(p\)-periodic MPS summands for the original
-unblocked ring, nor does it state the dichotomy between \(p\mid N\) and
-\(\psi=0\).  It supplies the primitive blocked sectors used by the later
-canonical-form development.
+TNLean now proves the explicit fixed-length decomposition and divisibility
+dichotomy on the maintained predicate \texttt{IsPeriodic p A}. This predicate
+uses the left-canonical orientation, irreducibility, positive period, and an
+exact \(p\)-th-root peripheral spectrum. The printed theorem instead starts
+from its one-block unital canonical representation and counts the peripheral
+eigenvalues of the associated transfer map. The current result is therefore a
+normalized theorem surface, not yet a literal wrapper from the printed
+hypotheses. Its periodic branch is stated for positive ring lengths.
 
 \section{Required formalization}
 
@@ -61,15 +60,17 @@ and the two conclusions above.  The construction should exhibit the
 their bond dimension \(D\), and should prove the vanishing statement when
 \(p\nmid N\).
 
-Until that theorem exists, Chapter~8 should cite the blocking theorem only as a
-period-removal input for primitive sectors, not as a formalization of the
-explicit periodic decomposition of the state vector.
+The remaining task is a source-facing equivalence wrapper from the paper's
+one-block unital canonical hypotheses and peripheral-eigenvalue count to
+\texttt{IsPeriodic p A}, together with the trivial length-zero convention if it
+is desired. No new projector or state-vector calculation is required.
 
 \section{Tracked consequence}
 
-The scope remark at the end of Chapter~8 records this boundary.  It is a
-documented scope restriction, not a source-error claim.  The open issue is
-\href{https://github.com/LionSR/TNLean/issues/2278}{issue \#2278}.
+The scope marker in the Lean docstrings and the theorem node in Chapter~9
+record this boundary. It is a documented scope restriction, not a source-error
+claim. Issue \href{https://github.com/LionSR/TNLean/issues/2278}{\#2278}
+tracks the state-vector decomposition and its remaining source-facing wrapper.
 
 \bibliographystyle{alpha}
 \bibliography{references}

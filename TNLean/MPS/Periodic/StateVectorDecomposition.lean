@@ -256,6 +256,11 @@ normalized surface: it states irreducibility, left-canonical form, positive
 period, and peripheral spectrum equal to the \(p\)-th roots of unity.
 Only the fixed-length state-vector equality is asserted.
 
+**Scope restriction (normalized orientation and positive length):** this theorem
+uses `IsPeriodic p A` and assumes \(N>0\), rather than packaging the one-block
+unital canonical hypotheses of the printed theorem directly. This boundary is
+recorded in `docs/paper-gaps/pgvwc07_periodic_decomposition_scope.tex`.
+
 Source: PGVWC07, arXiv:quant-ph/0608197, Theorem 5, lines 849--880. -/
 theorem pgvwc07_periodic_stateVector_decomposition_of_dvd
     (A : MPSTensor d D) (hA : IsPeriodic p A)
@@ -298,6 +303,11 @@ theorem pgvwc07_periodic_stateVector_decomposition_of_dvd
 If the period does not divide the ring length, every explicit cyclic-projector
 component has zero coefficient, and therefore the original fixed-length state
 vector is zero.
+
+**Scope restriction (normalized orientation):** this theorem uses
+`IsPeriodic p A` rather than packaging the one-block unital canonical
+hypotheses of the printed theorem directly. This boundary is recorded in
+`docs/paper-gaps/pgvwc07_periodic_decomposition_scope.tex`.
 
 Source: PGVWC07, arXiv:quant-ph/0608197, Theorem 5, lines 849--880. -/
 theorem pgvwc07_stateVector_eq_zero_of_not_dvd
