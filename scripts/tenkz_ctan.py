@@ -210,11 +210,43 @@ REGENERATED_SUFFIXES = frozenset({".dtx", ".ins", ".fmt", ".mf", ".drv"})
 
 # The primitives a submission may not need, because arXiv compiles without
 # `\write18`. tenkz draws with TikZ and computes with expl3, so it calls none
-# of them; the check is what keeps that true. TeX reads a stream number as a
-# number, so `\write 18` and `\immediate \write 18` open the same stream as
-# the compact spelling, and the pattern allows the space rather than pinning
-# one way of writing it.
-SHELL_ESCAPE_CALL = re.compile(r"\\write\s*18\b|\\ShellEscape\b")
+# of them; the check is what keeps that true.
+#
+# The stream is a number, not a spelling. TeX's integer scanner takes optional
+# space, leading zeros, and a `"` or `'` prefix for hexadecimal and octal, so
+# `\write 18`, `\write018`, `\write"12`, and `\write'22` all open stream 18.
+# The constant is therefore read and evaluated rather than matched against one
+# way of writing it. What this does not read is a stream held in a register or
+# an expl3 stream variable, which no constant search can: a submission that
+# reached the shell that way would need the run to catch it, and the offline
+# compile runs with shell escape off for exactly that reason.
+WRITE_STREAM = re.compile(
+    r"\\write\s*(?:\"(?P<hex>[0-9A-Fa-f]+)|'(?P<oct>[0-7]+)|(?P<dec>[0-9]+))"
+)
+SHELL_ESCAPE_NAME = re.compile(r"\\ShellEscape\b")
+SHELL_ESCAPE_STREAM = 18
+
+
+def shell_escape_call(text: str) -> str:
+    r"""The first call to the shell-escape stream in `text`, or nothing.
+
+    Every `\write` constant is evaluated in the base its prefix names and
+    compared with 18, so the reading does not depend on how the number was
+    written.
+    """
+
+    named = SHELL_ESCAPE_NAME.search(text)
+    if named is not None:
+        return named.group(0)
+    for found in WRITE_STREAM.finditer(text):
+        digits, base = (
+            (found["hex"], 16) if found["hex"]
+            else (found["oct"], 8) if found["oct"]
+            else (found["dec"], 10)
+        )
+        if int(digits, base) == SHELL_ESCAPE_STREAM:
+            return found.group(0)
+    return ""
 
 # An absolute path in a staged source names the machine that wrote it. The
 # pattern catches the spellings a TeX file can carry: a Unix path or a Windows
@@ -1312,11 +1344,10 @@ def check_arxiv(tree: Path, closure: Closure) -> Report:
             f"{path.name} loads a file by absolute path, which names the "
             "machine it was written on",
         )
-        called = SHELL_ESCAPE_CALL.search(text)
+        called = shell_escape_call(text)
         report.require(
-            called is None,
-            f"{path.name} calls {called.group(0) if called else ''}, and a "
-            "submission compiles with no shell",
+            not called,
+            f"{path.name} calls {called}, and a submission compiles with no shell",
         )
     report.notes.append(
         f"{len(list(tree.iterdir()))} files, one directory deep; "
@@ -1352,6 +1383,11 @@ def offline_room(archive: Path, room: Path) -> list[str]:
             )
         staged = sorted(path.name for path in unpacked.iterdir())
         for path in sorted(unpacked.iterdir()):
+            if not path.is_file():
+                raise SystemExit(
+                    f"{archive.name} holds {PACKAGE}/{path.name}, which is not a "
+                    "file; an upload unpacks one directory deep"
+                )
             shutil.copy2(path, room / path.name)
     return staged
 
@@ -1471,11 +1507,14 @@ def check_offline(archive: Path, required: bool) -> Report:
             report.failures.append(str(refusal))
             return report
         environment = offline_environment(room, shims, tripwire, home)
-        # The runtime the archive carries, by name, taken from the load graph
-        # rather than from a `tenkz` prefix: the documents this check writes
-        # are named from the package too, so a prefix match would count a
-        # driver file this function wrote as proof that the package answered.
-        carried = {name for name in walk_closure().files if name in set(staged)}
+        # The runtime the entry point loads, by name. It comes from the load
+        # graph rather than from a `tenkz` prefix, because the documents this
+        # check writes are named from the package too and a prefix match would
+        # count one of them as proof that the package answered. It is not
+        # narrowed to what the archive staged either: a file the archive forgot
+        # has to stay in the reading, or an installed copy answering for it
+        # would resolve outside the room and never be looked at.
+        carried = set(walk_closure().files)
         for case in OFFLINE_CASES:
             _offline_case(case, room, engine, environment, audit, carried, report)
         if tripwire.exists():
