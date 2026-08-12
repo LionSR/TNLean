@@ -5980,6 +5980,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
   \lean{MPOTensor.rightShiftTensor}
   \lean{MPOTensor.leftShiftTensor}
   \leanok
+  \uses{def:mpdo_physical_adjoint}
   The right shift on $(\mathbb C^d)^{\otimes N}$ is
   \begin{align}
     T^{(N)}\lvert n_1,\ldots,n_N\rangle
@@ -5999,20 +6000,21 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
   \lean{MPOTensor.rightShiftTensor_isMPU}
   \lean{MPOTensor.leftShiftTensor_isMPU}
   \leanok
-  \uses{def:mpu_shift_tensors}
+  \uses{def:mpu_shift_tensors,def:mpu,thm:mpu_physical_adjoint_identities}
   For every $N>0$, the tensors in Definition~\ref{def:mpu_shift_tensors}
   generate $T^{(N)}$ and $T^{(N)\dagger}$, respectively.  Both tensors are
   matrix product unitaries.
 \end{theorem}
 
-\begin{definition}[Three shift MPUs]
+\begin{definition}[Three topological-insulator shift MPUs]
   \label{threeMPU}
   \lean{MPOTensor.identityMPUTensor}
   \lean{MPOTensor.shiftExampleU₁}
   \lean{MPOTensor.shiftExampleU₂}
   \lean{MPOTensor.shiftExampleU₃}
   \leanok
-  \uses{def:mpu_shift_tensors}
+  \uses{def:mpu_shift_tensors,def:mpu_independent_tensor_product,
+    def:mpo_stacked_layers}
   On two $d$-dimensional spins per site, define
   \begin{align}
     U_1^{(N)}&=(\Id\otimes\Id)^{\otimes N},\\
@@ -6033,7 +6035,8 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
   \lean{MPOTensor.shiftExampleU₂_isMPU}
   \lean{MPOTensor.shiftExampleU₃_isMPU}
   \leanok
-  \uses{threeMPU,thm:mpu_shift_tensor_formulas}
+  \uses{threeMPU,thm:mpu_shift_tensor_formulas,thm:mpu_finite_tensor_product,
+    thm:mpu_tensor_product,def:mpu}
   The three tensors generate the operators displayed in
   Definition~\ref{threeMPU} on every nonempty chain, and each tensor is a
   matrix product unitary.
