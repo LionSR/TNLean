@@ -1,0 +1,48 @@
+% Regression: a wire whose end is a basis-member address reserves the face
+% it leaves that member by, so the automatic label station steps off it.  A
+% member address answers a cell of its own frame, and a station chosen
+% without reading it stands the upper name on the wire.
+\documentclass{standalone}
+\usepackage{tenkz}
+\makeatletter
+\ExplSyntaxOn
+\file_input:n { tenkz-kernel.code.tex }
+\int_new:N \l__tenkz_test_side_count_int
+\tl_new:N \l__tenkz_test_side_label_tl
+\cs_new_eq:NN
+  \__tenkz_test_side_auto:nN \__tenkz_kernel_r_label_auto_side:nN
+\cs_set_protected:Npn \__tenkz_kernel_r_label_auto_side:nN #1#2
+  {
+    \__tenkz_test_side_auto:nN {#1} #2
+    \int_gincr:N \l__tenkz_test_side_count_int
+    \__tenkz_model_get:nnN {#1} {label} \l__tenkz_test_side_label_tl
+    \str_case:VnF \l__tenkz_test_side_label_tl
+      {
+        {M}
+          {
+            \str_if_eq:VnF #2 {n}
+              { \errmessage{a~member~wire~end~left~its~south~free} }
+          }
+        {N}
+          {
+            \str_if_eq:VnF #2 {s}
+              { \errmessage{a~member~wire~end~took~a~face~it~does~not~use} }
+          }
+      }
+      { \errmessage{unexpected~label~in~member-end~fixture} }
+  }
+\ExplSyntaxOff
+\makeatother
+\begin{document}
+\tenkzkernel
+\begin{tenkz}[lattice={2x1}, bonds=none,
+    frame={plane, basis={wire at (0,0), wire at (2,0)}}]
+  \tn[at=(1,1,1), skin=dot]{M}
+  \tn[at=(2,1,1), skin=dot]{N}
+  \tnwire{(1,1,1)}{(2,1,1)}
+\end{tenkz}
+\ExplSyntaxOn
+\int_compare:nNnF { \l__tenkz_test_side_count_int } = {2}
+  { \errmessage{member-end~fixture~did~not~station~two~labels} }
+\ExplSyntaxOff
+\end{document}
