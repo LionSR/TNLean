@@ -297,20 +297,7 @@ private theorem reindex_embedLocalOperator_three_zero
         (Matrix.reindex (_root_.finTwoArrowEquiv (Fin e))
           (_root_.finTwoArrowEquiv (Fin e)) B) := by
   ext σ τ
-  have hAgree :
-      AgreesOutsideWindow (d := e) 2 (by decide) (0 : Fin 3)
-          ((_root_.finThreeArrowEquiv (Fin e)).symm σ)
-          ((_root_.finThreeArrowEquiv (Fin e)).symm τ) ↔
-        τ.2.2 = σ.2.2 := by
-    constructor
-    · intro ha
-      have h := congrFun ha (2 : Fin 3)
-      simpa [AgreesOutsideWindow, MPSTensor.replaceWindow,
-        MPSTensor.extractWindow] using h
-    · intro ha
-      funext i
-      fin_cases i <;>
-        simp [MPSTensor.replaceWindow, MPSTensor.extractWindow, ha]
+  have hAgree := agreesOutsideWindow_finThreeArrowEquiv_three_zero σ τ
   have hσ :
       MPSTensor.extractWindow 2 (0 : Fin 3)
           ((_root_.finThreeArrowEquiv (Fin e)).symm σ) =
@@ -357,19 +344,7 @@ private theorem reindex_embedLocalOperator_three_one
         (Matrix.reindex (_root_.finTwoArrowEquiv (Fin e))
           (_root_.finTwoArrowEquiv (Fin e)) B) := by
   ext σ τ
-  have hAgree :
-      AgreesOutsideWindow (d := e) 2 (by decide) (1 : Fin 3)
-          ((_root_.finThreeArrowEquiv (Fin e)).symm σ)
-          ((_root_.finThreeArrowEquiv (Fin e)).symm τ) ↔
-        τ.1 = σ.1 := by
-    constructor
-    · intro ha
-      have h := congrFun ha (0 : Fin 3)
-      simpa [MPSTensor.replaceWindow, MPSTensor.extractWindow] using h
-    · intro ha
-      funext i
-      fin_cases i <;>
-        simp [MPSTensor.replaceWindow, MPSTensor.extractWindow, ha]
+  have hAgree := agreesOutsideWindow_finThreeArrowEquiv_three_one σ τ
   have hσ :
       MPSTensor.extractWindow 2 (1 : Fin 3)
           ((_root_.finThreeArrowEquiv (Fin e)).symm σ) =
