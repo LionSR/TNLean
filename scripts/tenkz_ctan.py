@@ -246,9 +246,16 @@ WRITE_CALL = re.compile(
 ALLOCATED_STREAM = re.compile(r"\\(?:newwrite|iow_new:N)\s*(\\[A-Za-z@_:]+)")
 # The named ways to reach a shell that are not a write at all: the TeX
 # primitive's LaTeX name, and expl3's own shell interface, which a file under
-# `\ExplSyntaxOn` would use in preference to either.
+# `\ExplSyntaxOn` would use in preference to either. The expl3 names are the
+# ones its source defines, `\sys_shell_now:n`, `\sys_shell_shipout:n`,
+# `\sys_get_shell:nnN`, `\ior_shell_open:Nn`, `\iow_shell_open:Nn`, and the
+# primitive alias `\tex_shellescape:D`, read from `l3kernel` rather than
+# recalled, because a name invented here would be a gate that looks closed.
 SHELL_ESCAPE_NAME = re.compile(
-    r"\\ShellEscape\b|\\sys_(?:shell_(?:now|shipout|open)|get_shell):[a-zA-Z]*"
+    r"\\ShellEscape\b"
+    r"|\\sys_(?:shell_(?:now|shipout)|get_shell):[a-zA-Z]*"
+    r"|\\(?:ior|iow)_shell_open:[a-zA-Z]*"
+    r"|\\tex_shellescape:D"
 )
 SHELL_ESCAPE_STREAM = 18
 

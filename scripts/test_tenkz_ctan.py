@@ -885,7 +885,8 @@ def test_every_spelling_of_stream_eighteen_is_the_shell_escape_stream() -> None:
     # under `\ExplSyntaxOn` would use the expl3 interface in preference to
     # either primitive.
     for named in (r"\sys_shell_now:n {ls}", r"\sys_shell_shipout:x {ls}",
-                  r"\sys_shell_open:Nn \x {ls}", r"\sys_get_shell:nnN {x}{y}\z"):
+                  r"\sys_get_shell:nnN {x}{y}\z", r"\ior_shell_open:Nn \x {ls}",
+                  r"\iow_shell_open:Nn \x {ls}", r"\tex_shellescape:D"):
         assert tenkz_ctan.shell_escape_call(named), named
     # Numbers that are not 18 in the base their prefix names, an odd run of
     # minus signs, and a control sequence that merely starts with the same
