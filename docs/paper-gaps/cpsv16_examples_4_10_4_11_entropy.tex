@@ -187,9 +187,24 @@ explanation suggested by the calculation, not a fact asserted by the paper.
 Example~4.10 supplies an exact corrected witness at $p=1/4$, but the repeated
 left-qubit label and the incomplete universal exception list must not be
 formalized as printed. Example~4.11 supplies an exact counterexample to its
-own printed finite-chain saturation claim. Neither result is marked ready for
-formalization here: the explicit spectral and logarithmic arithmetic remains
-to be encoded and checked independently in the proof assistant.
+own printed finite-chain saturation claim.
+
+The scalar endpoints are now certified in
+\doclink{TNLean/MPS/MPDO/CPSVExamples410411Arithmetic}.  The declarations
+\leanid{CPSVExamples410411Arithmetic.example410_integer_inequality} and
+\leanid{CPSVExamples410411Arithmetic.example411_integer_inequality} prove the
+two exact natural-number comparisons.  The declarations
+\leanid{CPSVExamples410411Arithmetic.example410_logRatio_pos} and
+\leanid{CPSVExamples410411Arithmetic.example411_logRatio_pos} prove positivity
+of the corresponding logarithmic ratios.  These results entered the project in
+commit \texttt{b222d6a2d8a5704901ebdb3cb4daddaa378eb58f}.
+
+This arithmetic certification does not identify the reduced-state spectra, prove
+the entropy identities, or connect either ratio to the tensor defined by the
+source.  Those spectral, entropy, tensor, and final area-law links remain open in
+\ghissue{6301} for Example~4.10 and \ghissue{6302} for Example~4.11.  The
+Blueprint status node therefore remains not ready and is not marked as
+formalized.
 
 Example~4.12 is outside the entropy correction in this note. Its statement,
 dependencies, and separate normalization question are unchanged.
