@@ -3131,34 +3131,41 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
     \end{align}
 \end{definition}
 
-\begin{theorem}[Active blocks and full support under physical blocking]
+\begin{definition}[Active-block equivalence under physical blocking]
+    \label{def:mpu_active_blocks_blocking_equiv}
+    \lean{MPSTensor.CPSVCanonicalFormData.activeEquivBlockTensor}
+    \leanok
+    \uses{thm:cpsv_literal_canonical_form_positive_blocking}
+    Let canonical-form data for $A$ have active block set
+    $K=\{k\mid\mu_k\ne0\}$. For every positive integer $L$, positive
+    blocking gives the canonical identification
+    \begin{align}
+        \{k\mid\mu_k^L\ne0\}&\simeq K,
+    \end{align}
+    induced by $\mu_k^L\ne0\iff\mu_k\ne0$. Under this identification, every
+    active block retains its bond dimension.
+\end{definition}
+
+\begin{theorem}[Full active support under physical blocking]
     \label{thm:mpu_full_active_support_blocking}
-    \lean{MPSTensor.CPSVCanonicalFormData.activeEquivBlockTensor,
-        MPSTensor.CPSVCanonicalFormData.hasFullActiveSupport_blockTensor}
+    \lean{MPSTensor.CPSVCanonicalFormData.hasFullActiveSupport_blockTensor}
     \leanok
     \uses{def:mpu_full_active_support,
-        thm:cpsv_literal_canonical_form_positive_blocking}
-    Let canonical-form data for $A$ have active block set
-    $K=\{k\mid\mu_k\ne0\}$. For every positive integer $L$, the active
-    blocks of the blocked data are canonically identified with $K$ because
+        def:mpu_active_blocks_blocking_equiv}
+    Suppose that canonical-form data have active block set $K$ and full active
+    support:
     \begin{align}
-        \mu_k^L\ne0 &\iff \mu_k\ne0.
+        \sum_{k\in K}D_k&=D.
     \end{align}
-    Under this identification their bond dimensions are unchanged. In
-    particular, if
-    \begin{align}
-        \sum_{k\in K}D_k&=D,
-    \end{align}
-    then the positively blocked canonical-form data also have full active
+    Then every positive physical blocking of these data also has full active
     support.
 \end{theorem}
 
 \begin{proof}\leanok
     \uses{def:mpu_full_active_support,
-        thm:cpsv_literal_canonical_form_positive_blocking}
-    Positive blocking replaces each weight $\mu_k$ by $\mu_k^L$. Since
-    $L>0$, this preserves precisely the nonzero weights. Reindex the sum of
-    the unchanged active block dimensions by the resulting bijection.
+        def:mpu_active_blocks_blocking_equiv}
+    Reindex the sum of the unchanged active block dimensions by the
+    equivalence in Definition~\ref{def:mpu_active_blocks_blocking_equiv}.
 \end{proof}
 
 \begin{theorem}[Full active support under physical relabeling]
