@@ -106,6 +106,7 @@ RETIRED_VALUES: dict[str, set[str]] = {}
 for _row in tombstones(load_registry()):
     if _row["value"]:
         RETIRED_VALUES.setdefault(_row["key"], set()).add(_row["value"])
+del _row
 
 COMPATIBILITY_KEYS = {
     "picture": {
