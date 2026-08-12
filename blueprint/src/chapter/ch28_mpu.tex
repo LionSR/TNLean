@@ -4169,6 +4169,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
   \begin{align}
     U&=v_{23}v_{41}u_{12}u_{34}.
   \end{align}
+  % Source lines: paper_v2.tex 603--622.
 \end{definition}
 
 \begin{theorem}[Fundamental Theorem of MPU]
@@ -4270,6 +4271,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
       &=\log_2\frac{r}{d^k}
        =-\log_2\frac{\ell}{d^k}.
   \end{align}
+  % Source lines: paper_v2.tex 681--688.
 \end{definition}
 
 \begin{proposition}[Well-definedness of the index]
@@ -4309,6 +4311,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     r_k&=d^{k-k_0}r_{k_0},&
     \ell_k&=d^{k-k_0}\ell_{k_0}.
   \end{align}
+  % Source lines: paper_v2.tex 690--704.
 \end{proposition}
 
 \begin{lemma}[Tensor-product additivity]
@@ -4503,7 +4506,10 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
   Two tensors are admissibly strictly equivalent if their strict equivalence
   is witnessed by such a path. They are admissibly equivalent if the blocked,
   ancilla-enlarged endpoints in Definition~\ref{def:equivalent-tensors} are
-  joined by an admissible strict-equivalence path.
+  joined by an admissible strict-equivalence path. The source arguments
+  motivating these additional path hypotheses are
+  \cite[lines~733--910 and 1366--1380]{Cirac2017MPU}; the datum itself is
+  introduced here and has no source-labelled counterpart.
 \end{definition}
 
 \begin{proposition}[Constancy of the source ranks]
@@ -4536,6 +4542,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
   Suppose that the path carries an admissible equivalence datum with blocking
   length $m$. Then the ranks $r(x)$ and $\ell(x)$ of the actual blocked path
   tensors $\mathcal W(x)_m$ are constant on $[0,1]$.
+  % Source lines: paper_v2.tex 733--818.
 \end{proposition}
 
 \begin{theorem}[Index Theorem]
@@ -4751,6 +4758,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
   The choice is unique up to local transformations $S_x$ satisfying
   $S_x^T\Sigma_xS_x=\Sigma_x$. Case II can occur only when $r$ and $\ell$
   are even.
+  % Source lines: paper_v2.tex 1094--1163.
 \end{proposition}
 
 \begin{corollary}[Reduction of the symplectic case to orthogonal unitaries]
@@ -4787,6 +4795,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
   \begin{align}
     R&=\frac{1-i}{2}[\Id_4+i(Y\otimes Y)].
   \end{align}
+  % Source lines: paper_v2.tex 1165--1185.
 \end{corollary}
 
 \begin{proposition}[Local characterization of time reversal]
@@ -4832,6 +4841,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
       &=\pm(x_{12}\otimes x_{34}^\dagger)
         (\Id_1\otimes v_{23}^\dagger\otimes\Id_4).
   \end{align}
+  % Source lines: paper_v2.tex 1201--1252.
 \end{proposition}
 
 \begin{proof}
@@ -4898,6 +4908,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
       &=e^{i\phi}(x_{12}\otimes x_{34}^T)
         (\Id_1\otimes v_{23}^T\otimes\Id_4).
   \end{align}
+  % Source lines: paper_v2.tex 1257--1288.
 \end{proposition}
 
 \begin{proof}
@@ -4962,6 +4973,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
   blocked path tensor and the fixed conjugate, physical-adjoint, transposed,
   and $\mathcal S$-image comparison paths, and if the common blocking length
   $m$ of that datum satisfies $m\leq D^4$.
+  % Source lines: paper_v2.tex 1340--1354.
 \end{definition}
 
 \begin{definition}[Equivalence under a symmetry]
@@ -4993,6 +5005,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
   equivalence datum for the actual blocked path and the fixed conjugate,
   physical-adjoint, transposed, and $\mathcal S$-image comparison paths, with
   common blocking length at most $D^4$.
+  % Source lines: paper_v2.tex 1356--1364.
 \end{definition}
 
 \begin{lemma}[Standard-form path criterion]
@@ -5106,6 +5119,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
   of blocking length one. Then
   $\mathcal U_1$ and $\mathcal U_2$ are admissibly equivalent under
   conjugation symmetry.
+  % Source lines: paper_v2.tex 1450--1460.
 \end{corollary}
 
 \begin{proof}
@@ -5157,6 +5171,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     \det(u_1)&=\det(u_2),&
     \det(v_1)&=\det(v_2).
   \end{align}
+  % Source lines: paper_v2.tex 1464--1546.
 \end{theorem}
 
 \begin{corollary}[Equivalence under conjugation]
@@ -5225,6 +5240,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
   % **Local fix:** paper_v2.tex 1554--1559 states the two separate determinant
   % identities before checking parity. They are used here only when the
   % blocked source ranks are both even, which forces the required even power.
+  % Documented in docs/paper-gaps/mpu_canonical_form_full_support.tex.
   Consequently,
   \begin{align}
     \det(u_i^{(2)})&=(\det(u_i)^2\det(v_i))^{r\ell}=1,
@@ -5285,6 +5301,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     \sigma&=\frac1{d^2}\tr\!\left[\mathbb S_{12,34}v_{23}u_{12}u_{34}v_{23}\right],
   \end{align}
   where $\mathbb S_{12,34}$ exchanges the pairs of sites $12$ and $34$.
+  % Source lines: paper_v2.tex 1588--1611.
 \end{lemma}
 
 \begin{lemma}[Gauge invariance of the time-reversal sign]
@@ -5361,6 +5378,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
   full-support source data. Then the sign
   $\sigma=\pm1$ is independent of the admissible standard-form gauge and is
   constant along the path.
+  % Source lines: paper_v2.tex 1613--1631.
 \end{proposition}
 
 \begin{proposition}[Blocking parity of the time-reversal sign]
@@ -5404,6 +5422,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
         \sigma^{(2)},&k\text{ even}.
       \end{cases}
   \end{align}
+  % Source lines: paper_v2.tex 1633--1733.
 \end{proposition}
 
 \begin{proof}
@@ -5478,6 +5497,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
   Such a conclusion requires preservation under adjoining identity ancillas,
   which is not established here.
   % Tracked by issue #6138.
+  % Source lines: paper_v2.tex 1735--1743.
 \end{corollary}
 
 \begin{proposition}[Conjugation class and the MPS sign]
@@ -5514,6 +5534,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
   $G\overline G=\pm\Id$ in the MPS classification agrees with Case I and
   Case II, respectively, of
   Proposition~\ref{prop:mpu_admissible_conjugation_standard_forms}.
+  % Source lines: paper_v2.tex 1791--1805.
 \end{proposition}
 
 \begin{proposition}[Time-reversal class and the MPS sign]
@@ -5543,6 +5564,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
   $\mathcal U_4^\sharp$, are simple and each carries its own reduced
   full-support source datum. Then the MPS sign $G\overline G=\pm\Id$ equals
   the sign $\sigma^{(2)}$.
+  % Source lines: paper_v2.tex 1807--1829.
 \end{proposition}
 
 \subsection{Symmetry examples}
@@ -5588,6 +5610,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     v'_\pm&=v_\pm(\Id_{r\ell/4}\otimes R),
   \end{align}
   the four pairs $(u'_\pm,v'_\pm)$ represent the four Case II classes.
+  % Source lines: paper_v2.tex 1845--1876.
 \end{proposition}
 
 \begin{proposition}[CZX]
@@ -5639,6 +5662,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     H&=\frac1{\sqrt2}\begin{pmatrix}1&1\\1&-1\end{pmatrix}.
   \end{align}
   It has $\sigma^{(1)}=\sigma^{(2)}=-1$.
+  % Source lines: paper_v2.tex 1906--1943.
 \end{proposition}
 
 \begin{proposition}[The other three time-reversal classes]
@@ -5685,6 +5709,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     (\sigma^{(1)},\sigma^{(2)})
       &=(1,1),\quad(-1,1),\quad(1,-1).
   \end{align}
+  % Source lines: paper_v2.tex 1945--1962.
 \end{proposition}
 
 \begin{definition}[Three topological-insulator-inspired MPUs]
@@ -5778,6 +5803,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
   the corresponding $\widetilde U_i^{(N)}$ and $\widetilde U_j^{(N)}$ are in
   the same admissible phase under time reversal, transposition, or
   conjugation, respectively.
+  % Source lines: paper_v2.tex 2045--2085.
 \end{lemma}
 
 \begin{proposition}[Conjugation phases of $U_2$ and $U_3$]
@@ -5807,6 +5833,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
   blocking length one. Then the actual two-site blocked tensors of $U_2$ and
   $U_3$ are both in the trivial admissible strict phase under conjugation.
   Consequently $U_2$ and $U_3$ lie in the same admissible equivalence class.
+  % Source lines: paper_v2.tex 2110--2134.
 \end{proposition}
 
 \begin{proposition}[Time-reversal and transposition phases of $U_2$ and $U_3$]
@@ -5842,6 +5869,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
   their own data. Then $\widetilde U_2^{(N)}$ and
   $\widetilde U_3^{(N)}$ are in the same admissible phase under both time
   reversal and transposition.
+  % Source lines: paper_v2.tex 2136--2155.
 \end{proposition}
 
 \begin{proposition}[Conjugation phases of $U_1$ and $U_2$]
@@ -5892,6 +5920,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
   Otherwise they are in the same admissible strict phase. All these standard
   forms lie in Case I, so $U_1^{(N)}$ and $U_2^{(N)}$ are admissibly equivalent
   after blocking and adding ancillas.
+  % Source lines: paper_v2.tex 2158--2200.
 \end{proposition}
 
 \begin{proposition}[Ancilla equivalence of $U_1$ and $U_2$]
@@ -5936,6 +5965,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
   tensors is asserted, because the equal ancilla dimensions used here need not
   satisfy the coprimality condition in
   Definition~\ref{def:mpu_admissible_symmetry_equivalence}.
+  % Source lines: paper_v2.tex 2203--2230.
 \end{proposition}
 
 \section{Finite-region observable algebras}
