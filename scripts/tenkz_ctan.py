@@ -95,7 +95,9 @@ PAYLOAD = re.compile(
 # its arguments, so the patterns allow it too: `\RequirePackage {tikz}` is a
 # load, and a closure that missed it would let the manifest pin a dependency
 # list the package does not have.
-# Every spelling of an input, expl3's `\file_input:n` among them. The braced
+# Every spelling of an input, the conditional loaders and expl3's own among
+# them: a file loaded only when it exists is still a file the upload has to
+# carry, and a walk that skipped it would let an installed copy answer. The braced
 # one is tried first, then Web2C's
 # quoted form, which is how a name holding a space is written and which may
 # follow the control word with no space at all, then the bare one, which reads
@@ -104,7 +106,8 @@ PAYLOAD = re.compile(
 # A walk that read one spelling would let a stage module, or a package, reach
 # an upload without reaching the pin.
 INPUT_CALL = re.compile(
-    r"\\(?:input|file_input:n)\s*\{\s*\"?([^}\"]*?)\"?\s*\}"
+    r"\\(?:input|InputIfFileExists|file_input:n|file_if_exist_input:[a-zA-Z]+)"
+    r"\s*\{\s*\"?([^}\"]*?)\"?\s*\}"
     r"|\\input\s*\"([^\"]+)\""
     r"|\\input\s+([^\s{}\\%\"]+)",
     re.DOTALL,
@@ -446,9 +449,10 @@ ABSOLUTE_LOAD = re.compile(
     rf"\s*(?:\[[^]]*\]\s*)?\{{\s*\{{?\s*\"?{ABSOLUTE_PATH_HEAD}"
     rf"|\\input\s*\"?{ABSOLUTE_PATH_HEAD}"
     rf"|\\open(?:in|out)\s*{STREAM_OPERAND}\"?{ABSOLUTE_PATH_HEAD}"
-    r"|\\(?:ior_open:Nn|iow_open:Nn|file_get:nnN|file_get_full_name:nN"
-    r"|file_if_exist_input:n)\s*(?:\\[A-Za-z@_:]+\s*)?"
+    r"|\\(?:ior_open|iow_open|file_get|file_get_full_name"
+    r"|file_if_exist_input):[a-zA-Z]+\s*(?:\\[A-Za-z@_:]+\s*)?"
     rf"\{{\s*\"?{ABSOLUTE_PATH_HEAD}"
+    rf"|\\font\s*{STREAM_OPERAND}\"?{ABSOLUTE_PATH_HEAD}"
 )
 
 
