@@ -33,10 +33,12 @@ overlapping-window corollary `fundamentalTheorem_normalMPS_of_overlap`.
 
 The uniqueness clause `fundamentalTheorem_normalMPS_gauge_unique` carries the
 same system size, as the source's uniqueness carries none of its own: the two
-gauge families are compared directly, without the blocking geometry of the
-Section-`normal` route.  Iterating both relations along the spanning
-length-`L` word products of `A` shows that the transports from a bond `v` to
-the bond `v + L` agree on the full matrix algebra, so the two gauges at every
+gauge families are compared directly, without cutting the chain into the
+three injective arcs that the Section-`normal` route blocks it into.
+Iterating both relations along a word `x` of length `L` gives
+`B^x = Z_v⁻¹ A^x Z_{v+L}` and the same with `Z'`; since the products `A^x`
+span the full matrix algebra, the comparison extends to every matrix `W`,
+`Z_v⁻¹ W Z_{v+L} = Z'⁻¹_v W Z'_{v+L}`, so the two gauges at every
 bond differ by a nonzero scalar (`gaugeFamily_bond_proportional`), and the
 relation `B = Z_v⁻¹ A Z_{v+1}` pins the ratio of consecutive scalars against
 the nonzero tensor `B`, merging them into one constant.
@@ -442,9 +444,10 @@ consecutive constants against the nonzero tensor `B`, merging them into one.
 The source's uniqueness clause carries no system-size constraint, and the
 argument here needs none beyond the `n ≥ 2L + 1` of the existence clause
 `fundamentalTheorem_normalMPS`: comparing the two gauge families along the
-spanning length-`L` words leaves the pair of gauges at one bond differing by
-a scalar, with no blocking geometry involved.  The single-gauge form of the
-same clause is
+spanning length-`L` words gives `Z_v⁻¹ W Z_{v+L} = Z'⁻¹_v W Z'_{v+L}` for
+every matrix `W`, hence `Z'_v = c_v Z_v` at one bond.  The chain is never cut
+into the injective arcs that the existence clause blocks it into.  The
+single-gauge form of the same clause is
 `fundamentalTheorem_normalMPS_translationInvariant_gauge_unique`.
 
 Source: arXiv:1804.04964, Section 3, first corollary after the theorem
