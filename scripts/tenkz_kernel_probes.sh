@@ -74,19 +74,69 @@ ${#sketch_rows[@]}" >&2
   exit 1
 }
 
+# A row's example is the first fence after its heading and before the next
+# heading of the same or a higher level: without that stop, a row whose own
+# fence left the document silently takes the next section's example, and the
+# count guard above cannot see it because the count is unchanged.  Each row
+# also marks the line of the fence it consumed, and the marks are compared
+# after the loop: the count guard and pairwise-distinct marks together force
+# a bijection between the contract's fences and this table's rows.  A
+# heading is a hash run followed by a space, so a reference such as #6235
+# at the head of a prose line stops nothing; fences are tracked by their
+# own delimiter — character and length, closing on a run at least as long,
+# as Markdown reads them — so a heading-shaped or backtick line inside any
+# fenced block neither arms nor stops a scan.
+sketch_marks=""
 for sketch_row in "${sketch_rows[@]}"; do
   IFS=: read -r job heading fixture <<SKETCHROW
 $sketch_row
 SKETCHROW
-  awk -v heading="$heading" '
-    index($0, heading) == 1 { s = 1 }
-    s && $0 == "```tex" { f = 1; next }
-    f && $0 == "```" { exit }
-    f' "$CONTRACT" | sed -e 's/^\\\[//' -e 's/\\\]$//' >"$WORK/$job.body"
-  [ -s "$WORK/$job.body" ] || {
+  awk -v heading="$heading" -v mark="$WORK/$job.fenceline" '
+    BEGIN { while (substr(heading, level + 1, 1) == "#") level++ }
+    # The run of fence characters opening or closing a fence on this line:
+    # its length, with the character in fc and the trailing text in frest.
+    function fencerun(line,    copy, i) {
+      copy = line
+      sub(/^ {0,3}/, "", copy)
+      fc = substr(copy, 1, 1)
+      if (fc != "`" && fc != "~") return 0
+      i = 0
+      while (substr(copy, i + 1, 1) == fc) i++
+      frest = substr(copy, i + 1)
+      return i
+    }
+    {
+      if (infence) {
+        n = fencerun($0)
+        closed = (n >= flen && fc == fchar)
+        if (closed) { gsub(/[ \t]/, "", frest); closed = (frest == "") }
+        if (f) {
+          if (closed) exit
+          print
+          next
+        }
+        if (closed) infence = 0
+        next
+      }
+      if (!s && index($0, heading) == 1) { s = 1; next }
+      if (s && !f && substr($0, 1, 1) == "#") {
+        h = 0
+        while (substr($0, h + 1, 1) == "#") h++
+        if (h <= level && substr($0, h + 1, 1) == " ") exit
+      }
+      n = fencerun($0)
+      if (n >= 3) {
+        infence = 1; fchar = fc; flen = n
+        if (s && !f && $0 == "```tex") { f = 1; print NR > mark }
+        next
+      }
+    }' "$CONTRACT" | sed -e 's/^\\\[//' -e 's/\\\]$//' >"$WORK/$job.body"
+  [ -s "$WORK/$job.body" ] && [ -s "$WORK/$job.fenceline" ] || {
     echo "FAIL: the contract's '$heading' example could not be extracted" >&2
     exit 1
   }
+  sketch_marks="$sketch_marks$(cat "$WORK/$job.fenceline") $job
+"
   { printf '%s\n' \
       '\documentclass{standalone}' \
       '\usepackage{tenkz}' \
@@ -113,6 +163,15 @@ SKETCHROW
     exit 1
   fi
 done
+
+shared_fences="$(printf '%s' "$sketch_marks" | sort -n | awk '
+  $1 == last { if (prev != "") { print prev; prev = "" }; print; next }
+  { last = $1; prev = $0 }')"
+[ -z "$shared_fences" ] || {
+  echo "FAIL: one printed example answered two rows of the table:" >&2
+  echo "$shared_fences" >&2
+  exit 1
+}
 
 for tex in "$WORK"/*.tex; do
   compile "$(basename "$tex")"
