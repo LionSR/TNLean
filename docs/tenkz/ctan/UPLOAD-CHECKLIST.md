@@ -15,6 +15,15 @@ named by `RELEASE-POLICY.md` §3 may change it.
 - [ ] `python3 scripts/tenkz_ctan.py check` passes at that head, with a TeX
       installation present so the clean-install check runs rather than being
       skipped. Add `--require-smoke` to make its absence a failure.
+- [ ] `python3 scripts/tenkz_ctan.py offline --require-engine` passes. It is
+      part of `check` above and repeated here because it is the reading an
+      arXiv submission gets rather than an installation: the archive is
+      unpacked flat, a case of each picture class is compiled beside it with
+      no installer or fetcher reachable, and each result is audited. Without
+      `--require-engine` the command reports itself skipped and exits 0 on a
+      machine with no TeX installation, which would tick this box while
+      proving nothing. `docs/tenkz/ctan/DEPENDENCIES.md` states what the
+      isolation is and what it does not prove.
 - [ ] `python3 scripts/tenkz_ctan.py sync` shows the version and date the
       release artifacts agree on. Disagreement is the release-preparation
       change's work, not the archive builder's.
@@ -78,7 +87,9 @@ is hard to correct later.
       commit are filled in.
 - [ ] The package appears in TeX Live's next update, and the `hobby` and
       `spath3` dependencies are recorded so a distribution build does not
-      drop them.
+      drop them. They are the two libraries that come from packages of their
+      own rather than from pgf; `docs/tenkz/ctan/DEPENDENCIES.md` traces every
+      load to the code that reads it.
 
 ## What the check proves, and what it does not
 
@@ -94,6 +105,17 @@ its own and compiles a picture against it, asking the engine to record every
 file it opened and requiring that every tenkz file resolved inside the
 unpacked directory — so a runtime file the archive forgot is a failed run
 rather than a silent fall-back to a copy already installed on the machine.
+
+It then reads the same tree as an arXiv source submission and compiles against
+it. The submission reading is stricter than the installation one: the tree has
+to be flat, has to be the runtime rather than the sources a runtime is
+generated from, has to name no path on the machine that built it, and has to
+call no primitive that would need a shell. Against the flattened archive it
+compiles a case of each picture class the release is judged on, with the user
+TeX trees emptied, every installer and fetcher shadowed by a script that
+records its own call and fails, and font and format generation refused. Each
+result goes through the event audit and has to show its own class in the
+stream, so a run that produced a PDF and no tensor network fails.
 
 Every finding is a printed line of the report, and the check prints all of
 them: a staged name an unpacking tool would misread does not cut the report

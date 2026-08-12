@@ -1,0 +1,53 @@
+% Regression: a wire with one authored end and one open end keeps the open
+% side as a compass word rather than as a node, so no second cell says where
+% the ink goes.  The word itself does, and a station read from cells alone
+% leaves the authored end's face looking free and stands the name on the
+% stub.
+\documentclass{standalone}
+\usepackage{tenkz}
+\makeatletter
+\ExplSyntaxOn
+\file_input:n { tenkz-kernel.code.tex }
+\int_new:N \l__tenkz_test_side_count_int
+\tl_new:N \l__tenkz_test_side_label_tl
+\cs_new_eq:NN
+  \__tenkz_test_side_auto:nN \__tenkz_kernel_r_label_auto_side:nN
+\cs_set_protected:Npn \__tenkz_kernel_r_label_auto_side:nN #1#2
+  {
+    \__tenkz_test_side_auto:nN {#1} #2
+    \int_gincr:N \l__tenkz_test_side_count_int
+    \__tenkz_model_get:nnN {#1} {label} \l__tenkz_test_side_label_tl
+    \str_case:VnF \l__tenkz_test_side_label_tl
+      {
+        {A}
+          {
+            \str_if_eq:VnF #2 {n}
+              { \errmessage{an~open~south~end~left~its~host's~south~free} }
+          }
+        {B}
+          {
+            \str_if_eq:VnF #2 {s}
+              { \errmessage{an~open~east~end~gave~up~a~free~south} }
+          }
+      }
+      { \errmessage{unexpected~label~in~open-end~fixture} }
+  }
+\ExplSyntaxOff
+\makeatother
+\begin{document}
+\tenkzkernel
+% The stub runs south out of A, so A stations north.
+\begin{tenkz}[lattice={1x1}, bonds=none]
+  \tn[at=(1,1), name=A, skin=dot]{A}
+  \tnwire{A}{open s}
+\end{tenkz}
+% The stub runs east out of B, which leaves B's south where it was.
+\begin{tenkz}[lattice={1x1}, bonds=none]
+  \tn[at=(1,1), name=B, skin=dot]{B}
+  \tnwire{B}{open e}
+\end{tenkz}
+\ExplSyntaxOn
+\int_compare:nNnF { \l__tenkz_test_side_count_int } = {2}
+  { \errmessage{open-end~fixture~did~not~station~two~labels} }
+\ExplSyntaxOff
+\end{document}

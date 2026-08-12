@@ -142,21 +142,6 @@ theorem sourceU_gram_apply_eq_closed_output_letter
   intro j _
   ring
 
-/-- A normalized diagonal power is the normalized sum of diagonal open words. -/
-private lemma normalizedDiagonal_pow_eq_sum_evalWord
-    [NeZero d] (W : MPOTensor d D) (K : ℕ) :
-    normalizedDiagonal W ^ K =
-      ((d : ℂ)⁻¹) ^ K •
-        ∑ τ : Fin K → Fin d, evalWord W (List.ofFn τ) (List.ofFn τ) := by
-  classical
-  simp only [normalizedDiagonal, contractPhysical, Matrix.one_apply, ite_smul,
-    one_smul, zero_smul, Finset.sum_ite_eq', Finset.mem_univ, if_true,
-    evalWord_ofFn]
-  rw [smul_pow]
-  congr 1
-  simpa [List.ofFn_const] using
-    (List.prod_ofFn_sum (fun _ : Fin K ↦ fun i : Fin d ↦ W i i))
-
 /-- The normalized output-tail contraction is a fully closed output-first
 double-layer trace, with retained letters in $(q,p)$ order.
 
