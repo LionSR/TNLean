@@ -1677,7 +1677,7 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
     \label{def:mpu_tensor_product_block_equiv}
     \lean{MPOTensor.tensorProductBlockEquiv}
     \leanok
-    \uses{def:mpdo_positive_physical_blocking}
+    \uses{def:mpdo_physical_blocking}
     A blocked word of $L$ product letters separates canonically into two
     blocked words:
     \begin{align}
@@ -1761,7 +1761,7 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
     \label{thm:mpu_block_tensor_product}
     \lean{MPOTensor.blockTensor_tensorProduct}
     \leanok
-    \uses{def:mpdo_positive_physical_blocking,
+    \uses{def:mpdo_physical_blocking,
         def:mpu_physical_reindexing,def:mpu_independent_tensor_product,
         def:mpu_tensor_product_block_equiv}
     For every blocking length $L$, separating each blocked product letter by
@@ -1775,7 +1775,7 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{def:mpdo_positive_physical_blocking,
+    \uses{def:mpdo_physical_blocking,
         def:mpu_physical_reindexing,def:mpu_independent_tensor_product,
         thm:mpu_tensor_product_block_decoding}
     Evaluate both sides on blocked ket and bra letters. Word multiplication of
@@ -1859,7 +1859,7 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
     \lean{MPOTensor.rightRank_blockTensor_succ_le,
         MPOTensor.leftRank_blockTensor_succ_le}
     \leanok
-    \uses{def:mpdo_positive_physical_blocking,def:mpu_source_matrix_one,
+    \uses{def:mpdo_physical_blocking,def:mpu_source_matrix_one,
         def:mpu_source_matrix_two,def:mpu_right_rank,def:mpu_left_rank}
     Let $\mathcal U^{[L]}$ denote the direct blocking of $L$ sites of a tensor
     $\mathcal U$ with physical dimension $d$, and let $r_L$ and $\ell_L$ be
@@ -1931,6 +1931,50 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
         \leq d\bigl(d^{L-L_0}\ell_{L_0}\bigr)
         =d^{L+1-L_0}\ell_{L_0}.
     \end{align}
+\end{proof}
+
+\begin{theorem}[Exact blocking growth from endpoint rank products]
+    \label{thm:mpu_source_cut_rank_blocking_saturation}
+    \lean{MPOTensor.blockingRanks_eq_pow_mul_of_products,
+        MPOTensor.rightRank_blockTensor_eq_pow_mul_of_products,
+        MPOTensor.leftRank_blockTensor_eq_pow_mul_of_products}
+    \leanok
+    Let $d>0$ and $L_0\leq L$. Suppose the endpoint source-cut ranks satisfy
+    the supplied product identities
+    \begin{align}
+        r_{L_0}\ell_{L_0}&=d^{2L_0},&
+        r_L\ell_L&=d^{2L}.
+    \end{align}
+    Then the blocking bounds are exact:
+    \begin{align}
+        r_L&=d^{L-L_0}r_{L_0},&
+        \ell_L&=d^{L-L_0}\ell_{L_0}.
+    \end{align}
+    This is the saturation step in the proof of
+    \cite[Proposition~IV.2]{Cirac2017MPU}.
+% The endpoint product identities are hypotheses here; they are not consequences
+% of the blocking bounds.
+% **Local fix (rank-product exponent):** Source line 703 prints $d^k$; the
+% consistent blocked identity is $d^{2k}$. See
+% docs/paper-gaps/cpgsv17_mpu_blocking_rank_product_exponent.tex.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpu_source_cut_rank_blocking}
+    The blocking bounds give
+    \begin{align}
+        r_L&\leq d^{L-L_0}r_{L_0},&
+        \ell_L&\leq d^{L-L_0}\ell_{L_0}.
+    \end{align}
+    Their upper bounds have product
+    \begin{align}
+      \bigl(d^{L-L_0}r_{L_0}\bigr)
+      \bigl(d^{L-L_0}\ell_{L_0}\bigr)
+      &=d^{2(L-L_0)}d^{2L_0}=d^{2L}=r_L\ell_L.
+    \end{align}
+    Since $d>0$, the latter product is positive, so both $r_L$ and $\ell_L$
+    are positive. Hence neither upper bound can be strict, and both equalities
+    follow.
 \end{proof}
 
 \begin{definition}[Product-index source weight]
@@ -2770,7 +2814,7 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
         MPOTensor.outputLayer_normalizedDiagonal_pow_eq_vecMulVec}
     \leanok
     \uses{def:mpu_double_layer,def:mpdo_physical_adjoint,
-        def:mpdo_positive_physical_blocking,def:mpu_normalized_flattening,
+        def:mpdo_physical_blocking,def:mpu_normalized_flattening,
         def:mpu_transfer_matrix}
     Let $\mathcal U$ be an MPO tensor.  Write $E$ for the transfer matrix of
     its normalized flattening, $E^\sharp$ for that of $\mathcal U^\sharp$,
@@ -2828,7 +2872,7 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
         MPOTensor.IsMPU.reflected_blockTensor_mul_sq_add_two_simple_contractions}
     \leanok
     \uses{def:mpu,def:mpu_double_layer,def:mpdo_physical_adjoint,
-        def:mpdo_positive_physical_blocking,def:mpu_normalized_flattening,
+        def:mpdo_physical_blocking,def:mpu_normalized_flattening,
         def:mpu_transfer_matrix}
     Let $\mathcal U$ be an MPU with $d,D>0$.  Let $E$ be the transfer matrix
     of its normalized flattening, and suppose
@@ -3198,6 +3242,61 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
     \end{align}
 \end{definition}
 
+\begin{definition}[Active-block equivalence under physical blocking]
+    \label{def:mpu_active_blocks_blocking_equiv}
+    \lean{MPSTensor.CPSVCanonicalFormData.activeEquivBlockTensor}
+    \leanok
+    \uses{thm:cpsv_literal_canonical_form_positive_blocking}
+    Let canonical-form data for $A$ have active block set
+    $K=\{k\mid\mu_k\ne0\}$. For every positive integer $L$, positive
+    blocking gives the canonical identification
+    \begin{align}
+        \{k\mid\mu_k^L\ne0\}&\simeq K,
+    \end{align}
+    induced by $\mu_k^L\ne0\iff\mu_k\ne0$. Under this identification, every
+    active block retains its bond dimension.
+\end{definition}
+
+\begin{theorem}[Full active support under physical blocking]
+    \label{thm:mpu_full_active_support_blocking}
+    \lean{MPSTensor.CPSVCanonicalFormData.hasFullActiveSupport_blockTensor}
+    \leanok
+    \uses{def:mpu_full_active_support,
+        def:mpu_active_blocks_blocking_equiv,
+        thm:cpsv_literal_canonical_form_positive_blocking}
+    Suppose that canonical-form data have active block set $K$ and full active
+    support:
+    \begin{align}
+        \sum_{k\in K}D_k&=D.
+    \end{align}
+    Then every positive physical blocking of these data also has full active
+    support.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:mpu_full_active_support,
+        def:mpu_active_blocks_blocking_equiv,
+        thm:cpsv_literal_canonical_form_positive_blocking}
+    Positive blocking supplies canonical-form data with the same block
+    dimensions. Reindex their active-dimension sum by the
+    equivalence in Definition~\ref{def:mpu_active_blocks_blocking_equiv}.
+\end{proof}
+
+\begin{theorem}[Full active support under physical relabeling]
+    \label{thm:mpu_full_active_support_reindexing}
+    \lean{MPSTensor.CPSVCanonicalFormData.hasFullActiveSupport_reindexPhysical}
+    \leanok
+    \uses{def:mpu_full_active_support,thm:cpsv_physical_reindexing}
+    A bijective relabeling of the physical alphabet preserves full active
+    support of canonical-form data.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:mpu_full_active_support,thm:cpsv_physical_reindexing}
+    Physical relabeling leaves the weights, active blocks, and their bond
+    dimensions unchanged, so the full-support sum is unchanged.
+\end{proof}
+
 \begin{theorem}[An ambient-dimensional active block is irreducible]
     \label{thm:mpu_active_block_ambient_irreducible}
     \lean{MPSTensor.CPSVCanonicalFormData.isIrreducibleTensor_of_active_dim_eq}
@@ -3423,6 +3522,127 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     \end{align}
     This is the normalization used in the normal-tensor argument of
     \cite[Section~III, equation~(13)]{Cirac2017MPU}.
+\end{definition}
+
+\begin{theorem}[Normalized flattening under blocking]
+    \label{thm:mpu_normalized_flattening_blocking}
+    \lean{MPOTensor.normalizedFlattening_blockTensor}
+    \leanok
+    \uses{def:mpu_normalized_flattening,
+        thm:mpdo_blocking_doubled_index}
+    Let $\mathcal U$ be an MPO tensor of physical dimension $d$, and let
+    $L\geq0$. For the normalized-tensor interpretation assume $d>0$, as in
+    Definition~\ref{def:mpu_normalized_flattening}; with the convention
+    $0^{-1}=0$, the algebraic identity below also holds for $d=0$. Pairing
+    the ket and bra letters at each site gives a canonical bijection
+    \begin{align}
+        \vartheta_L:\operatorname{Fin}(d^L)^2
+          &\longrightarrow \operatorname{Fin}(d^2)^L.
+    \end{align}
+    If $\widetilde{\mathcal U}=d^{-1/2}\mathcal U$ denotes normalized
+    flattening, then
+    \begin{align}
+        \widetilde{\mathcal U^{[L]}}
+          &=\vartheta_L^*\bigl(\widetilde{\mathcal U}^{[L]}\bigr).
+        \label{eq:mpu_normalized_flattening_blocking}
+    \end{align}
+    Thus normalized flattening commutes with blocking, up to the canonical
+    doubled-index relabeling. This is the normalized form of the blocking
+    operation in \cite[Definition~II.5 and equation~(9)]{Cirac2017MPU}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:mpu_normalized_flattening,
+        thm:mpdo_blocking_doubled_index}
+    A blocked letter is a product of $L$ original letters. The identity
+    \begin{align}
+        \bigl(\sqrt{d^L}\bigr)^{-1}
+          &=\bigl((\sqrt d)^{-1}\bigr)^L
+    \end{align}
+    identifies its normalization with the product of the $L$ one-site
+    normalizations. Theorem~\ref{thm:mpdo_blocking_doubled_index}
+    identifies the two physical indexings for every $L\geq0$; at $L=0$ both
+    blocked words are empty and both local matrix products are the identity.
+\end{proof}
+
+\begin{theorem}[Left-canonical normalization under blocking and relabeling]
+    \label{thm:mpu_left_canonical_blocking_reindexing}
+    \lean{MPSTensor.leftCanonical_blockTensor,
+        MPSTensor.leftCanonical_reindexPhysical_equiv}
+    \leanok
+    \uses{def:blocked_tensor,def:left_canonical_tensor}
+    Suppose that an MPS tensor $A$ is left-canonical:
+    \begin{align}
+        \sum_i (A^i)^\dagger A^i&=\Id.
+    \end{align}
+    Then for every $L\geq0$ its blocked tensor is left-canonical:
+    \begin{align}
+        \sum_I \bigl((A^{[L]})^I\bigr)^\dagger(A^{[L]})^I&=\Id.
+        \label{eq:mpu_left_canonical_blocking}
+    \end{align}
+    If $e$ is a bijection of physical alphabets, then $e^*A$ is
+    left-canonical if and only if $A$ is:
+    \begin{align}
+        \sum_j \bigl((e^*A)^j\bigr)^\dagger(e^*A)^j=\Id
+        \quad\Longleftrightarrow\quad
+        \sum_i(A^i)^\dagger A^i=\Id.
+        \label{eq:mpu_left_canonical_reindexing}
+    \end{align}
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:blocked_tensor,def:left_canonical_tensor}
+    Expand~(\ref{eq:mpu_left_canonical_blocking}) as a sum over
+    length-$L$ words and sum one letter at a time, repeatedly applying the
+    one-site left-canonical identity. For $L=0$, the unique empty word
+    evaluates to the identity. The equivalence
+    (\ref{eq:mpu_left_canonical_reindexing}) follows by reindexing the finite
+    sum along $e$.
+\end{proof}
+
+\begin{definition}[Canonical-form-II data under blocking and relabeling]
+    \label{def:mpu_cfii_blocking_reindexing}
+    \lean{MPSTensor.CPSVCanonicalFormIIData.blockTensor,
+        MPSTensor.CPSVCanonicalFormIIData.reindexPhysical,
+        MPOTensor.blockTensorCFIIData}
+    \leanok
+    \uses{def:cpsv_cfii,def:mpu_normalized_flattening,
+        thm:cpsv_literal_canonical_form_positive_blocking,
+        thm:cpsv_physical_reindexing,
+        lem:blocked_irreducibility_direct_support,
+        thm:mpu_left_canonical_blocking_reindexing,
+        thm:mpu_normalized_flattening_blocking}
+    Let $A$ have canonical-form-II data with retained weights $\mu_k$, blocks
+    $A_k$, and positive definite diagonal fixed matrices $\Lambda_k$. For
+    every positive integer $L$, the blocked tensor $A^{[L]}$ has
+    canonical-form-II data with weights $\mu_k^L$, blocks $A_k^{[L]}$, and
+    the same matrices $\Lambda_k$. The retained blocks remain
+    left-canonical:
+    \begin{align}
+        \sum_I \bigl((A_k^{[L]})^I\bigr)^\dagger(A_k^{[L]})^I&=\Id.
+    \end{align}
+    A bijective relabeling of the physical alphabet likewise preserves
+    canonical-form-II data, including both the matrices $\Lambda_k$ and the
+    left-canonical identities.
+
+    Consequently, if the normalized flattening $\widetilde{\mathcal U}$ of an
+    MPO tensor has canonical-form-II data, then for every $L>0$ the normalized
+    flattening of $\mathcal U^{[L]}$ has the data obtained by first blocking
+    and then relabeling by $\vartheta_L$ from
+    Theorem~\ref{thm:mpu_normalized_flattening_blocking}.
+    Theorem~\ref{thm:mpu_left_canonical_blocking_reindexing} preserves the
+    left-canonical identity under both operations. For each retained block,
+    Lemma~\ref{lem:blocked_irreducibility_direct_support} gives
+    \begin{align}
+        \E_{A_k^{[L]}}&=\E_{A_k}^{L},
+        &\E_{A_k}^{L}(\Lambda_k)&=\Lambda_k.
+    \end{align}
+    The second identity follows by iterating
+    $\E_{A_k}(\Lambda_k)=\Lambda_k$. Thus the same positive definite diagonal
+    matrix is fixed after blocking. A physical bijection leaves the transfer
+    map unchanged. The
+    final construction applies these two operations to
+    (\ref{eq:mpu_normalized_flattening_blocking}).
 \end{definition}
 
 \begin{theorem}[Self-overlap scaling]
@@ -3957,7 +4177,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     \lean{MPOTensor.IsMPU.exists_reduced_cfii_forced_block_simple_contractions}
     \leanok
     \uses{def:mpu,def:mpu_normalized_flattening,def:cpsv_cfii,
-        def:mpu_full_active_support,def:mpdo_positive_physical_blocking,
+        def:mpu_full_active_support,def:mpdo_physical_blocking,
         def:mpu_double_layer}
     Let $d>0$, $D>1$, and let $\mathcal U$ be an MPU whose normalized
     flattening has chosen canonical-form-II data with full active support. Put
@@ -4622,6 +4842,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
   \notready
   \discussion{6014}
   \uses{def:index,ThmFund1,thm:mpu_source_cut_rank_blocking,
+    thm:mpu_source_cut_rank_blocking_saturation,
     thm:mpu_all_later_simple_blockings}
   The source index is independent of the chosen simple blocking. More
   precisely, if $k\geq k_0$ and both $\mathcal U_{k_0}$ and $\mathcal U_k$
@@ -4895,11 +5116,51 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
   % Source lines: paper_v2.tex 733--910 and 1366--1380.
 \end{definition}
 
+\begin{theorem}[Generic two-projection angle block]
+  \label{thm:mpu_two_projection_angle_block}
+  \lean{LinearMap.IsSymmetricProjection.rangeCompression_isSymmetric,
+    LinearMap.IsSymmetricProjection.angleDefect_block,
+    LinearMap.IsSymmetricProjection.exists_orthonormal_angle_block}
+  \leanok
+  \uses{}
+  Let $P$ and $Q$ be orthogonal projections on a complex inner-product space.
+  The compression of $Q$ to $\operatorname{ran}P$ is self-adjoint. If a unit
+  vector $x\in\operatorname{ran}P$ satisfies
+  \begin{align}
+    PQx&=\mu x,&0&<\mu<1,
+  \end{align}
+  then there is a unit vector $w\perp x$ such that
+  \begin{align}
+    Px&=x,&Pw&=0,\\
+    Qx&=\mu x+\sqrt{\mu(1-\mu)}\,w,&
+    Qw&=\sqrt{\mu(1-\mu)}\,x+(1-\mu)w.
+  \end{align}
+  Thus $\operatorname{span}\{x,w\}$ is the generic two-dimensional angle
+  block. This lemma concerns one eigenvalue in $(0,1)$; it does not include the
+  endpoint eigenspaces or an orthogonal direct-sum decomposition of the ambient
+  space.
+  % Formalization status: endpoint spaces and global Jordan assembly remain not ready.
+  % Source: paper_v2.tex, Proposition IV.5 (prop:continuity-index), lines 756--764.
+  % Local correction: line 762 repeats P where Q is intended; see
+  % docs/paper-gaps/1703_two_projection_projector_typo.tex.
+\end{theorem}
+
+\begin{proof}\leanok
+  Set $d=Qx-\mu x$. Symmetry and idempotence give
+  \begin{align}
+    Pd&=0,&\langle x,d\rangle&=0,&
+    \lVert d\rVert^2&=\mu(1-\mu),\\
+    Qd&=\mu(1-\mu)x+(1-\mu)d.
+  \end{align}
+  Since $0<\mu<1$, the vector
+  $w=d/\sqrt{\mu(1-\mu)}$ is well defined and has the stated properties.
+\end{proof}
+
 \begin{proposition}[Constancy of the source ranks]
   \label{prop:continuity-index}
   \notready
   \discussion{6022}
-  \uses{def:mpu_canonical_form,ThmFund1}
+  \uses{def:mpu_canonical_form,ThmFund1,thm:mpu_two_projection_angle_block}
   Let $[0,1]\ni x\mapsto\mathcal W(x)$ be a continuous path of tensors
   generating MPUs, without requiring the path to be in canonical form. For
   each $x$, take the canonical form and the two source-cut ranks $r(x)$ and
@@ -6095,21 +6356,108 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
   % Source lines: paper_v2.tex 1945--1962.
 \end{proposition}
 
-\begin{definition}[Three topological-insulator-inspired MPUs]
-  \label{threeMPU}
-  \notready
-  \discussion{5715}
-  Let $T^{(N)}$ be the right shift on $(\mathbb C^d)^{\otimes N}$,
+\begin{definition}[Right- and left-shift tensors]
+  \label{def:mpu_shift_tensors}
+  \lean{MPOTensor.rightShiftTensor}
+  \lean{MPOTensor.leftShiftTensor}
+  \leanok
+  \uses{def:mpdo_physical_adjoint}
+  The right shift on $(\mathbb C^d)^{\otimes N}$ is
   \begin{align}
     T^{(N)}\lvert n_1,\ldots,n_N\rangle
       &=\lvert n_N,n_1,\ldots,n_{N-1}\rangle.
   \end{align}
+  It has bond dimension $d$ and local matrices
+  $A^{ij}=\lvert i\rangle\langle j\rvert$.
+  The physical adjoint of $A$ defines the left-shift tensor.
+  % Source lines: paper_v2.tex 1980--1987.
+\end{definition}
+
+\begin{theorem}[Shift tensor formulas]
+  \label{thm:mpu_shift_tensor_formulas}
+  \lean{MPOTensor.mpo_rightShiftTensor_apply}
+  \lean{MPOTensor.mpo_rightShiftTensor}
+  \lean{MPOTensor.mpo_leftShiftTensor}
+  \lean{MPOTensor.rightShiftTensor_isMPU}
+  \lean{MPOTensor.leftShiftTensor_isMPU}
+  \leanok
+  \uses{def:mpu_shift_tensors,def:mpu,thm:mpu_physical_adjoint_identities}
+  For every $N>0$, the tensors in Definition~\ref{def:mpu_shift_tensors}
+  generate $T^{(N)}$ and $T^{(N)\dagger}$, respectively.  Both tensors are
+  matrix product unitaries.
+\end{theorem}
+
+\begin{proof}\leanok
+  \uses{def:mpo_eval_word,def:mpo_rotate_config,
+    lem:eval_word_of_fn_prod,thm:trace_eval_word_eq_sum_cyclic,def:mpu,
+    thm:mpu_physical_adjoint_identities}
+  Closing the virtual indices of $A^{ij}=\lvert i\rangle\langle j\rvert$
+  leaves one nonzero virtual configuration.  If
+  $\tau_n=\sigma_{n+1}$ for every $n$ modulo $N$, then
+  \begin{align}
+    \langle\sigma\vert T^{(N)}\vert\tau\rangle&=1.
+  \end{align}
+  Otherwise the same matrix entry is zero.  Hence the output configuration is
+  $(\tau_{N-1},\tau_0,\ldots,\tau_{N-2})$, which fixes the permutation-matrix
+  convention and gives the right shift.  Its permutation matrix is unitary.
+  Physical adjunction gives the conjugate transpose, hence the left shift and
+  its unitarity.
+\end{proof}
+
+\begin{definition}[Three topological-insulator shift MPUs]
+  \label{threeMPU}
+  \lean{MPOTensor.identityMPUTensor}
+  \lean{MPOTensor.shiftExampleU₁}
+  \lean{MPOTensor.shiftExampleU₂}
+  \lean{MPOTensor.shiftExampleU₃}
+  \leanok
+  \uses{def:mpu_shift_tensors,def:mpu_independent_tensor_product,
+    def:mpo_stacked_layers}
   On two $d$-dimensional spins per site, define
   \begin{align}
     U_1^{(N)}&=(\Id\otimes\Id)^{\otimes N},\\
     U_2^{(N)}&=T^{(N)\dagger}\otimes T^{(N)},\\
     U_3^{(N)}&=T^{(N)}\otimes T^{(N)\dagger}.
   \end{align}
+  % Source lines: paper_v2.tex 1988--1995.
+\end{definition}
+
+\begin{theorem}[Finite-chain formulas for the three shift MPUs]
+  \label{thm:threeMPU_chain_formulas}
+  \lean{MPOTensor.mpo_identityMPUTensor}
+  \lean{MPOTensor.identityMPUTensor_isMPU}
+  \lean{MPOTensor.mpo_shiftExampleU₁}
+  \lean{MPOTensor.mpo_shiftExampleU₂}
+  \lean{MPOTensor.mpo_shiftExampleU₃}
+  \lean{MPOTensor.shiftExampleU₁_isMPU}
+  \lean{MPOTensor.shiftExampleU₂_isMPU}
+  \lean{MPOTensor.shiftExampleU₃_isMPU}
+  \leanok
+  \uses{threeMPU,thm:mpu_shift_tensor_formulas,thm:mpu_finite_tensor_product,
+    thm:mpu_tensor_product,def:mpu}
+  The three tensors generate the operators displayed in
+  Definition~\ref{threeMPU} on every nonempty chain, and each tensor is a
+  matrix product unitary.
+\end{theorem}
+
+\begin{proof}\leanok
+  \uses{def:mpo_stacked_layers,thm:mpu_finite_tensor_product,
+    thm:mpu_shift_tensor_formulas,thm:mpu_tensor_product,def:mpu}
+  The bond-one identity tensor generates the identity at every length.  The
+  finite-chain operator of an independent tensor product is the Kronecker
+  product of the two finite-chain operators, after the sitewise identification
+  $(\mathbb C^d\otimes\mathbb C^d)^{\otimes N}
+  \cong(\mathbb C^d)^{\otimes N}\otimes(\mathbb C^d)^{\otimes N}$.  Applying
+  this identity to the right and left shifts gives the three displayed
+  formulas.  The identity tensor is unitary, and tensor products preserve
+  unitarity, so all three tensors are matrix product unitaries.
+\end{proof}
+
+\begin{proposition}[Standard forms of the three shift MPUs]
+  \label{prop:threeMPU_standard_forms}
+  \notready
+  \discussion{5715}
+  \uses{threeMPU}
   Their standard-form unitaries satisfy
   \begin{align}
     u_1&=\Id\otimes\Id,&v_1&=\Id\otimes\Id,\\
@@ -6121,8 +6469,8 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
       (\mathbb S\otimes\mathbb S),&
     v_3^{(2)}&=\Id\otimes\mathbb S\otimes\Id.
   \end{align}
-  % Source lines: paper_v2.tex 1980--2042.
-\end{definition}
+  % Source lines: paper_v2.tex 2002--2042.
+\end{proposition}
 
 \begin{definition}[Transformation with swaps]
   \label{threeMPU2}
