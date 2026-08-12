@@ -183,11 +183,11 @@ All fixed-point data and both contractions refer to the same original tensor
 and its direct block; no source-cut factorization or source-v isometry is
 asserted.
 
-Source: arXiv:1703.09188, equations `Erightleft`, `simple1`, and `simple2`,
-lines 397--427; the resulting simple tensor is the input used in Theorem
-`ThmFund1`, lines 563--601.
+Source: arXiv:1703.09188, Section III.A, lines 397--427. The forced simple
+block is subsequently used in Lemma III.7, lines 550--556; Theorem III.8 uses
+that lemma at lines 589 and 592.
 
-**Scope restriction (full active support):** This packages the chosen reduced
+**Scope restriction (full active support):** This uses the chosen reduced
 representative supplied by
 `IsMPU.normalized_transfer_power_eq_vecMulVec_of_reduced_cfii`. See
 `docs/paper-gaps/mpu_canonical_form_full_support.tex`.

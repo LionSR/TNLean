@@ -3885,6 +3885,42 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     factorization for the stabilized power.
 \end{proof}
 
+\begin{theorem}[Reduced-CFII data for the forced simple block]
+    \label{thm:mpu_reduced_cfii_forced_block_simple_contractions}
+    \lean{MPOTensor.IsMPU.exists_reduced_cfii_forced_block_simple_contractions}
+    \leanok
+    \uses{thm:mpu_matching_direct_block_contractions,
+        thm:mpu_reduced_cfii_transfer_stabilization}
+    Let $d>0$, $D>1$, and let $\mathcal U$ be an MPU whose normalized
+    flattening has chosen canonical-form-II data with full active support. Put
+    $J=D^2-1$ and $W=\mathcal U_{JD^2}$. There is a matrix $\rho>0$ with
+    $\tr(\rho)=1$ such that
+    \begin{align}
+        E\lvert\rho)&=\lvert\rho),
+        &(\Phi\rvert E&=(\Phi\rvert,
+        &E^J&=\lvert\rho)(\Phi\rvert.
+    \end{align}
+    With the corresponding vectorized pair $\rho',\Phi'$, the same blocked
+    tensor $W$ satisfies the two aligned simple contractions
+    \begin{align}
+        \Phi'\mathbin{\boldsymbol\cdot}W^{ij}\rho'
+          &=\delta_{ij},\\
+        W^{ij}W^{k\ell}
+          &=W^{ij}\lvert\rho')(\Phi'\rvert W^{k\ell}.
+    \end{align}
+    This theorem supplies only the fixed pair and the two simple contractions.
+    It does not assert a source-cut factorization or source-$v$ isometry.
+    % Source lines: paper_v2.tex 397--427, 550--556, 589, and 592.
+\end{theorem}
+
+\begin{proof}\leanok
+    Theorem~\ref{thm:mpu_reduced_cfii_transfer_stabilization} gives the
+    positive trace-one fixed matrix and the identity
+    $E^J=\lvert\rho)(\Phi\rvert$. Applying
+    Theorem~\ref{thm:mpu_matching_direct_block_contractions} with this pair
+    gives both contractions on the direct block $W=\mathcal U_{JD^2}$.
+\end{proof}
+
 \begin{definition}[Source-$v$ Gram counterexample data]
     \label{def:mpu_source_v_gram_counterexample_data}
     \lean{MPOTensor.SourceVCounterexample.bondMatrix,
