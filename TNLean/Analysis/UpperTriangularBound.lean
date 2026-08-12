@@ -31,8 +31,9 @@ together with the coarse and refined power bounds (Wolf Eq. 8.103).
 * `Matrix.wolf_eq_105_seminorm` — the word-expansion bound for all `n`
 * `Matrix.wolf_eq_103` — the coarse constant `(D-1)n^{D-1}` under `D-1 ≤ n`
 * `Matrix.wolf_eq_103_refined` — the binomial-coefficient constant under `2(D-1) ≤ n`
-* `Matrix.wolf_eq_103_of_choose_le` (private) — the shared summation bound behind both
-  (8.103) constants, parametrized by a uniform bound on the binomial coefficients
+
+Both (8.103) constants descend from a single summation bound, parametrized by a uniform
+bound on the binomial coefficients, which stays private to this file.
 
 ## References
 
