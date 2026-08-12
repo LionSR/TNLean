@@ -1866,6 +1866,46 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
     \end{align}
 \end{proof}
 
+\begin{theorem}[Exact blocking growth from endpoint rank products]
+    \label{thm:mpu_source_cut_rank_blocking_saturation}
+    \lean{MPOTensor.rightRank_blockTensor_eq_pow_mul_of_products,
+        MPOTensor.leftRank_blockTensor_eq_pow_mul_of_products}
+    \leanok
+    \uses{thm:mpu_source_cut_rank_blocking}
+    Let $d>0$ and $L_0\leq L$. Suppose the endpoint source-cut ranks satisfy
+    the supplied product identities
+    \begin{align}
+        r_{L_0}\ell_{L_0}&=d^{2L_0},&
+        r_L\ell_L&=d^{2L}.
+    \end{align}
+    Then the blocking bounds are exact:
+    \begin{align}
+        r_L&=d^{L-L_0}r_{L_0},&
+        \ell_L&=d^{L-L_0}\ell_{L_0}.
+    \end{align}
+    This is the saturation step in the proof of
+    \cite[Proposition~IV.2, line~703]{Cirac2017MPU}. The endpoint product
+    identities are hypotheses here; they are not consequences of the blocking
+    bounds.
+\end{theorem}
+
+\begin{proof}\leanok
+    The blocking bounds give
+    \begin{align}
+        r_L&\leq d^{L-L_0}r_{L_0},&
+        \ell_L&\leq d^{L-L_0}\ell_{L_0}.
+    \end{align}
+    Their upper bounds have product
+    \begin{align}
+      \bigl(d^{L-L_0}r_{L_0}\bigr)
+      \bigl(d^{L-L_0}\ell_{L_0}\bigr)
+      &=d^{2(L-L_0)}d^{2L_0}=d^{2L}=r_L\ell_L.
+    \end{align}
+    Since $d>0$, the latter product is positive, so both $r_L$ and $\ell_L$
+    are positive. Hence neither upper bound can be strict, and both equalities
+    follow.
+\end{proof}
+
 \begin{definition}[Product-index source weight]
     \label{def:mpu_source_weight}
     \lean{MPOTensor.sourceWeight}

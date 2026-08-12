@@ -25,6 +25,9 @@ No simplicity or MPU hypothesis is needed for these rank inequalities.
 * `leftRank_blockTensor_succ_le`: one-site left-rank bound.
 * `rightRank_blockTensor_le_pow_mul`: iterated right-rank bound.
 * `leftRank_blockTensor_le_pow_mul`: iterated left-rank bound.
+* `blockingRanks_eq_pow_mul_of_products`: simultaneous exact rank growth.
+* `rightRank_blockTensor_eq_pow_mul_of_products`: exact right-rank growth.
+* `leftRank_blockTensor_eq_pow_mul_of_products`: exact left-rank growth.
 -/
 
 open scoped BigOperators
@@ -236,5 +239,54 @@ theorem leftRank_blockTensor_le_pow_mul (U : MPOTensor d D) {k₀ k : ℕ}
         _ = d ^ (k + 1 - k₀) * ℓ[blockTensor U k₀] := by
           rw [Nat.succ_sub (by omega), pow_succ]
           simp [Nat.mul_assoc, Nat.mul_comm]
+
+/-- If the endpoint right--left rank products have their physical-dimension
+values, then both blocking rank bounds are saturated.
+
+This is the arithmetic saturation step in the proof of arXiv:1703.09188,
+Proposition IV.2 (`index-well-defined`), line 703. The endpoint product
+identities are supplied explicitly; a later application of the paper's
+fundamental theorem will establish them for simple MPU blocks. -/
+theorem blockingRanks_eq_pow_mul_of_products (U : MPOTensor d D) {k₀ k : ℕ}
+    (h : k₀ ≤ k) (hd : 0 < d)
+    (hprod₀ : r[blockTensor U k₀] * ℓ[blockTensor U k₀] = d ^ (2 * k₀))
+    (hprod : r[blockTensor U k] * ℓ[blockTensor U k] = d ^ (2 * k)) :
+    r[blockTensor U k] = d ^ (k - k₀) * r[blockTensor U k₀] ∧
+      ℓ[blockTensor U k] = d ^ (k - k₀) * ℓ[blockTensor U k₀] := by
+  apply eq_and_eq_of_pos_of_le_of_mul_le_mul
+  · exact Nat.pos_of_mul_pos_right (hprod.symm ▸ Nat.pow_pos hd)
+  · exact Nat.pos_of_mul_pos_left (hprod.symm ▸ Nat.pow_pos hd)
+  · exact rightRank_blockTensor_le_pow_mul U h
+  · exact leftRank_blockTensor_le_pow_mul U h
+  · rw [hprod]
+    calc
+      d ^ (k - k₀) * r[blockTensor U k₀] *
+          (d ^ (k - k₀) * ℓ[blockTensor U k₀]) =
+          d ^ (2 * (k - k₀)) *
+            (r[blockTensor U k₀] * ℓ[blockTensor U k₀]) := by ring
+      _ = d ^ (2 * (k - k₀)) * d ^ (2 * k₀) := by rw [hprod₀]
+      _ = d ^ (2 * k) := by
+        rw [← pow_add]
+        congr 1
+        omega
+    exact le_rfl
+
+/-- The right source-cut rank attains its blocking upper bound when the endpoint
+rank products have their physical-dimension values. -/
+theorem rightRank_blockTensor_eq_pow_mul_of_products (U : MPOTensor d D) {k₀ k : ℕ}
+    (h : k₀ ≤ k) (hd : 0 < d)
+    (hprod₀ : r[blockTensor U k₀] * ℓ[blockTensor U k₀] = d ^ (2 * k₀))
+    (hprod : r[blockTensor U k] * ℓ[blockTensor U k] = d ^ (2 * k)) :
+    r[blockTensor U k] = d ^ (k - k₀) * r[blockTensor U k₀] :=
+  (blockingRanks_eq_pow_mul_of_products U h hd hprod₀ hprod).1
+
+/-- The left source-cut rank attains its blocking upper bound when the endpoint
+rank products have their physical-dimension values. -/
+theorem leftRank_blockTensor_eq_pow_mul_of_products (U : MPOTensor d D) {k₀ k : ℕ}
+    (h : k₀ ≤ k) (hd : 0 < d)
+    (hprod₀ : r[blockTensor U k₀] * ℓ[blockTensor U k₀] = d ^ (2 * k₀))
+    (hprod : r[blockTensor U k] * ℓ[blockTensor U k] = d ^ (2 * k)) :
+    ℓ[blockTensor U k] = d ^ (k - k₀) * ℓ[blockTensor U k₀] :=
+  (blockingRanks_eq_pow_mul_of_products U h hd hprod₀ hprod).2
 
 end MPOTensor
