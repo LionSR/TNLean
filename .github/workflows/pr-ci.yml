@@ -255,6 +255,10 @@ jobs:
               - 'docs/tenkz/**/*.tex'
               - 'docs/tenkz/manual2.tex'
               - 'docs/tenkz/tenkzmanual2.sty'
+              # The RMP benchmark book's own style file: a runtime input of
+              # `tenkz_rmp.py book --all` (the book driver rmp-benchmark.tex
+              # already matches 'docs/tenkz/**/*.tex' above).
+              - 'docs/tenkz/tenkzrmpbenchmark.sty'
               - 'scripts/tenkz_manual_doctest.py'
               - 'scripts/test_tenkz_manual_doctest.py'
               - 'scripts/tenkz_audit.py'
@@ -390,19 +394,23 @@ jobs:
       - name: Check string-engine event and pixel probes
         run: scripts/tenkz_string_probes.sh
 
-  # Compiles and audits the 130-target RMP benchmark: tenkz's own reproduction
-  # of the diagrams in the tensor-network review paper it is modeled on. This
-  # is the book the library was actually built against, and it is where every
-  # visual defect in the campaign was found — including one regression that
-  # every other job in this file missed (issue #5824). "check" compiles each
-  # target standalone and audits its render event log; a measured full run
-  # took about four to five minutes on a ten-core development machine at full
-  # harness parallelism, so it runs on every pull request that can move RMP
-  # ink, gated by the same `corpus` path filter already used above. The
-  # slower step -- typesetting the full illustrated book and rendering every
-  # page to an image -- runs weekly and on demand instead, in
-  # tenkz-rmp-book.yml, because that step is about producing the reviewable
-  # book, not about catching a regression quickly.
+  # Compiles, audits, and typesets the 130-target RMP benchmark: tenkz's own
+  # reproduction of the diagrams in the tensor-network review paper it is
+  # modeled on. This is the book the library was actually built against, and
+  # it is where every visual defect in the campaign was found — including one
+  # regression that every other job in this file missed (issue #5824).
+  # "book" does everything "check" does (each target compiled standalone,
+  # its render event log audited) and then typesets the full book, so a break
+  # in the book's own preamble or page layout also fails here instead of
+  # waiting up to a week for tenkz-rmp-book.yml (issue #5828). The typeset
+  # adds under a minute on a ten-core development machine; the 130 target
+  # compiles that dominate either command measured six to eight minutes on
+  # GitHub's runner. Every target always runs — there is no changed-target
+  # subset, because a reachability heuristic that silently missed a target
+  # would be worse than a full corpus that costs single-digit minutes. The
+  # genuinely slower step, rasterizing every page to an image, runs weekly
+  # and on demand instead, in tenkz-rmp-book.yml, because that step is about
+  # producing the reviewable book, not about catching a regression quickly.
   tenkz-rmp:
     name: Check tenkz RMP benchmark corpus
     needs: changes
@@ -426,8 +434,36 @@ jobs:
       # the harness. GitHub's hosted runner has four shared cores, and four
       # parallel compiles left no slack: one run timed out a target under
       # ordinary load. Two parallel compiles leave that headroom back.
-      - name: Compile and audit the tenkz RMP benchmark
-        run: TENKZ_RMP_JOBS=2 python3 scripts/tenkz_rmp.py check --all
+      # The work tree is kept outside the checkout (the harness puts the
+      # whole repository on TEXINPUTS recursively) and preserved past the
+      # run, so a failing target's transcript, event log, and render can be
+      # uploaded below.
+      - name: Compile, audit, and typeset the tenkz RMP benchmark
+        env:
+          TENKZ_RMP_JOBS: "2"
+          TENKZ_RMP_WORK_ROOT: ${{ runner.temp }}/rmp-work
+        run: python3 scripts/tenkz_rmp.py book --all
+
+      # On a red run the job log carries only the tail of the failing
+      # compile; the offending render and its event log never reach the
+      # console at all. Upload the preserved work tree so the failure is
+      # diagnosable from the Actions page. Green runs upload nothing, so
+      # the common path stores no artifacts.
+      - name: Upload failure transcripts, event logs, and renders
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: tenkz-rmp-failure
+          path: |
+            ${{ runner.temp }}/rmp-work/targets/**/*.txt
+            ${{ runner.temp }}/rmp-work/targets/**/*.log
+            ${{ runner.temp }}/rmp-work/targets/**/*.tnlog
+            ${{ runner.temp }}/rmp-work/targets/**/*.pdf
+            ${{ runner.temp }}/rmp-work/*.txt
+            ${{ runner.temp }}/rmp-work/*.log
+            ${{ runner.temp }}/rmp-work/*.pdf
+          retention-days: 7
+          if-no-files-found: warn
 
   build:
     needs: changes

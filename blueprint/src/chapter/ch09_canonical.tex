@@ -13,12 +13,67 @@ trace-preserving block, it then powers the transfer map, extracts the
 adjoint-fixed cyclic projections, compresses to their corners, and proves that
 each corner is primitive and tensor-irreducible. The blocks are returned in a
 fixed gauge. The periodic decomposition theorem
-of~\cite[Theorem~5]{PerezGarcia2007Matrix} also gives $p$ translated
-$p$-periodic state summands when $p\mid N$. That state-vector decomposition
-belongs to the periodic fundamental-theorem chapter; here we use only its
-blocked cyclic-sector consequence
-(Theorem~\ref{thm:cyclic_sector_decomp_after_blocking}).
-% Scope boundary documented in docs/paper-gaps/pgvwc07_periodic_decomposition_scope.tex.
+of~\cite[Theorem~5]{PerezGarcia2007Matrix} gives $p$ translated
+$p$-periodic state summands when $p\mid N$ and a zero state otherwise. We state
+this fixed-length decomposition below before using its blocked cyclic-sector
+counterpart in Theorem~\ref{thm:cyclic_sector_decomp_after_blocking}.
+
+\begin{definition}[Periodic projector-component chain]
+    \label{def:pgvwc07_projector_component_chain}
+    \lean{MPSChainTensor.repeatPeriodPattern,
+        MPSTensor.projectorComponentPattern,
+        MPSTensor.projectorComponentChain}
+    \leanok
+    Let $A=(A^i)_{i=0}^{d-1}$ have bond dimension $D$, let
+    $(Q_u)_{u\in\mathbb Z/p\mathbb Z}$ be cyclic projections, and fix a starting
+    sector $u$. For each $0\le j<N$, the corresponding chain of length $N$
+    has local matrices
+    \begin{align}
+        B_{u,j}^i
+        &=Q_{u+j}A^iQ_{u+j+1},
+        \label{eq:pgvwc07_projector_component_chain}
+    \end{align}
+    where sector indices are read modulo $p$. It has the same bond dimension
+    $D$ as $A$ and repeats with period $p$.
+\end{definition}
+
+% Scope restriction (normalized orientation): this is the IsPeriodic surface,
+% not yet a wrapper from PGVWC07's one-block unital hypotheses.
+\begin{theorem}[Normalized periodic state-vector decomposition]
+    \label{thm:pgvwc07_periodic_state_vector_decomposition}
+    \lean{MPSTensor.pgvwc07_periodic_stateVector_decomposition_of_dvd,
+        MPSTensor.pgvwc07_stateVector_eq_zero_of_not_dvd}
+    \leanok
+    \uses{def:pgvwc07_projector_component_chain, def:periodic_tensor}
+    This is a normalized form of the state-vector conclusion in
+    \cite[Theorem~5]{PerezGarcia2007Matrix}. Let $A$ be an irreducible
+    left-canonical tensor whose peripheral transfer
+    spectrum is the set of $p$-th roots of unity. For a positive ring length
+    $N$, if $p\mid N$, then its state vector is the sum of the $p$ component
+    chains in~(\ref{eq:pgvwc07_projector_component_chain}):
+    \begin{align}
+        V_N(A)
+        &=\sum_{u\in\mathbb Z/p\mathbb Z}c_{B_u}.
+        \label{eq:pgvwc07_periodic_state_vector_decomposition}
+    \end{align}
+    Each summand is represented by a $p$-periodic MPS of bond dimension $D$.
+    If $p\nmid N$, then $V_N(A)=0$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{def:pgvwc07_projector_component_chain}
+    Choose orthogonal cyclic projections with
+    $\sum_uQ_u=\Id$ and $Q_uA^i=A^iQ_{u+1}$. The component product telescopes to
+    \begin{align}
+        B_{u,0}^{i_0}\cdots B_{u,N-1}^{i_{N-1}}
+        &=Q_uA^{i_0}\cdots A^{i_{N-1}}Q_{u+N}.
+    \end{align}
+    Summing its trace over $u$ gives the original coefficient. If $p\mid N$,
+    then $Q_{u+N}=Q_u$ and every chain closes with period $p$. If $p\nmid N$,
+    then $Q_{u+N}\ne Q_u$; cyclicity of the trace and orthogonality make every
+    component coefficient zero.
+\end{proof}
 
 Two normalizations appear. The unital orientation
 $\sum_i A_k^i(A_k^i)^\dagger=\Id$ is used in

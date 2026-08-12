@@ -120,6 +120,29 @@
     {Cirac2016MPDO_arXiv}.
 \end{definition}
 
+\begin{theorem}[Two-site translation identities]
+    \label{thm:mpdo_physical_two_site_translation_identities}
+    \lean{MPOTensor.PhysicalSectorFactorization.reindex_embedLocalOperator_two_zero,
+        MPOTensor.PhysicalSectorFactorization.reindex_embedLocalOperator_two_one}
+    \leanok
+    \uses{def:mpdo_physical_two_site_bond}
+    Under the canonical identification of two-site configurations with ordered
+    pairs, the translates beginning at sites zero and one are respectively
+    $B_{01}=B_{\mathrm{physical}}$ and
+    $B_{10}=S B_{\mathrm{physical}}S^{-1}$, where
+    $S(x\otimes y)=y\otimes x$ exchanges the two physical factors.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{def:mpdo_physical_two_site_bond,
+        thm:mpdo_generic_two_site_translation_identities}
+    Apply Theorem~\ref{thm:mpdo_generic_two_site_translation_identities} to
+    $B_{\mathrm{physical}}$. Its pair-coordinate matrix is the operator in
+    Definition~\ref{def:mpdo_physical_two_site_bond}, so the two generic
+    identities give the stated formulas.
+\end{proof}
+
 \begin{theorem}[Positivity of the physical two-site bond]
     \label{thm:mpdo_physical_two_site_bond_pos}
     \lean{MPOTensor.PhysicalSectorFactorization.physicalPairBond_pos,
@@ -275,6 +298,7 @@ $\eta_{k,l}^{(12)}\eta_{l,h}^{(23)}
 \end{theorem}
 
 \begin{proof}\leanok
+    \uses{thm:mpdo_cyclic_local_embedding_reindex}
     Identify a periodic configuration with its restriction to $W_i^L$ and
     its restriction to the cyclic complement. In these coordinates,
     $E_i^L(B)=B\otimes\Id$, so the assertion is the mixed-product identity.
@@ -349,6 +373,7 @@ $\eta_{k,l}^{(12)}\eta_{l,h}^{(23)}
 
 \begin{proof}
     \leanok
+    \uses{thm:mpdo_physical_two_site_translation_identities}
     Fix sectors $(k,h)$ and regroup the two physical sites as
     $(L_k\otimes R_h)\otimes(R_k\otimes L_h)$.
     The translate in the order $(0,1)$ is

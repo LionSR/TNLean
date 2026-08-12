@@ -4,6 +4,7 @@
 from __future__ import annotations
 
 import os
+import re
 import subprocess
 import tempfile
 from pathlib import Path
@@ -62,6 +63,15 @@ def main() -> int:
     reference = tenkz_language.REFERENCE.read_text(encoding="utf-8")
     if "Prelude class & Name & Declaration" not in reference or "base=box" not in reference:
         raise SystemExit("the generated language reference omitted the stock MPO declaration")
+    # Both chapters say they are generated, so both must equal what the
+    # generator emits from the registry as committed.  Without this a registry
+    # row could change its prose and the published reference keep the old
+    # sentence, which is exactly the drift the one-record rule forbids.
+    drifted = tenkz_language.stale_generated_chapters(registry)
+    if drifted:
+        raise SystemExit(
+            "generated chapters drifted from the registry:\n" + "\n".join(drifted)
+        )
     distinct_skin = tenkz_language.Entry(
         kind="prelude", fields=("skin", "probe", "base=ring")
     )
@@ -149,7 +159,77 @@ def main() -> int:
         raise SystemExit("kernel/sugar event-equivalence probe did not compile")
     if canonical_events != sugared_events:
         raise SystemExit("sandwich and rows={ket,op,bra} emitted different semantic events")
-    print("PASS: registry, typed atom diagnostic, and sugar event equivalence")
+    # Each retired word stays installed as a parser branch that refuses the
+    # spelling and states the migration.  What is pinned here is that the
+    # branch fires and prints its own words: the four are read out of the
+    # kernel source rather than written again, so a migration reworded in one
+    # place and not the other cannot pass.  Holding those branches to the
+    # registry's tombstone rows is the ledger's own check, which
+    # `tenkz_language.py check` runs.
+    form_row = next(
+        entry.fields
+        for entry in registry
+        if entry.kind == "key" and entry.fields[:2] == ("kernel-mark", "form")
+    )
+    if form_row[2] != "enum(bracket|enclosure|label|prose)":
+        raise SystemExit(f"the mark form alphabet is no longer the contract's: {form_row[2]}")
+    kernel = (ROOT / "tex/tenkz/tenkz-kernel.code.tex").read_text(encoding="utf-8")
+    branches = re.findall(
+        r"\\__tenkz_kernel_tombstone:nnnn\s*\{\s*tenkz-kernel-mark\s*\}"
+        r"\s*\{\s*form\s*\}\s*\{\s*([a-z-]+)\s*\}\s*\{(.*?)\}\n",
+        kernel,
+        re.DOTALL,
+    )
+    if len(branches) != 4:
+        raise SystemExit(
+            f"expected four retired mark forms in the parser, found {len(branches)}"
+        )
+    for word, migration in branches:
+        refused = compile_source(
+            rf"""\documentclass{{standalone}}
+\usepackage{{tenkz}}
+\begin{{document}}
+\begin{{tenkz}}[rows={{ket}}, cols=2, bonds=none]
+  \tn[name=a]{{A}} & \tn[name=b]{{B}}
+  \tnmark[form={word}]{{(1,1) .. (1,2)}}{{$L$}}
+\end{{tenkz}}
+\end{{document}}
+"""
+        )
+        # l3msg wraps a long diagnostic and prefixes each continuation line
+        # with the package name, which lands between the words it broke.  The
+        # comparison therefore drops that prefix and then every space, so it
+        # asks only which characters were printed and never where the engine
+        # of the day chose to break the line.
+        transcript = re.sub(
+            r"\s+|\(tenkz\)", "", refused.stdout.replace("(tenkz)", " ")
+        )
+
+        def printed(text: str) -> bool:
+            return re.sub(r"\s+|~", "", text) in transcript
+
+        if refused.returncode == 0 or not printed("TKZ-LANG-TOMBSTONE"):
+            raise SystemExit(f"form={word} was not refused as a tombstone")
+        if not printed(migration):
+            raise SystemExit(
+                f"form={word} was refused without the parser's own migration"
+            )
+
+    live = compile_source(r"""\documentclass{standalone}
+\usepackage{tenkz}
+\begin{document}
+\begin{tenkz}[rows={ket}, cols=2]
+  \tn{A} & \tn{A}
+  \tnmark[form=bracket]{(1,1) .. (1,2)}{$L$}
+\end{tenkz}
+\end{document}
+""")
+    if live.returncode:
+        raise SystemExit(f"the surviving bracket form did not compile:\n{live.stdout}")
+    print(
+        "PASS: registry, typed atom diagnostic, sugar event equivalence, "
+        "and the four retired mark forms refused by a compile"
+    )
     return 0
 
 

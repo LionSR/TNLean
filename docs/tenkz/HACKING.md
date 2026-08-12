@@ -44,6 +44,11 @@ python3 scripts/tenkz_rmp.py compare --all \
   --source-root References/RMP_TIKZ_SOURCE_CODE
 ```
 
+Every command works inside a scratch tree that is removed on exit.  Set
+`TENKZ_RMP_WORK_ROOT` to a new or empty directory to keep the tree instead,
+with each target's compile transcript, event log, and PDF; continuous
+integration does this so a failing run's evidence survives for upload.
+
 Every command first runs the corpus-wide physical-dimension ownership check,
 even when `check --id` selects one target.  Case dimensions are classified as
 metric, projection/frame, route/string, or composition/layout and ratcheted in
@@ -168,6 +173,32 @@ rows are one-in-one-out vocabulary, while sugar rows must expand into kernel
 spellings and earn continued use.  The other status words record lifecycle
 debt: `alias(...; sunset=...)` reads old sources until its stated rewrite, and
 `escape` names raw geometry whose uses count in meter M3.
+
+A retired spelling leaves a tombstone row in the same registry, giving its
+scope, the dead spelling, and the migration.  Retiring a word is therefore
+one edit: the source lint builds its rejection from those rows and reports
+the migration with the finding, and `tenkz_language.py check` requires every
+spelling the parser refuses by name to carry a row stating the same
+migration, and every row for a word struck from a live alphabet to name a
+spelling the parser refuses and the alphabet no longer holds.
+
+Four shapes of row, by what is left of the spelling.  `key=value` is a word
+struck from a live key's alphabet, and the parser refuses it through a branch
+of that key.  The other three no longer exist at all, so the parser has
+nothing to branch on and the unknown-key error or an undefined spelling
+answers them; the check is that the registry really has dropped the spelling,
+and the lint is what reads the row.  A bare `key` is a retired key.  A
+spelling beginning with a backslash is a retired command, takes the scope
+`command`, and is matched from its own backslash.  A row under the scope
+`environment` is a retired environment, such as the dialects LANGUAGE-1.0
+section 10 lists, and is matched where a document names one, in the argument
+of `\begin` or `\end`.
+
+Write a multi-word key with `~` as the rest of the registry does and wrap a
+long migration; both are read out before any row is compared or matched, so
+the spelling a document writes is the spelling that is caught.  A row that
+states no spelling is a finding, and one spelling is buried once across the
+whole ledger, since the lint reads flat source where no scope is visible.
 
 The gate first compares the pinned meters with the base revision.  M1 total or
 kernel growth requires an `Extension-gate: #NNNN` citation, or a

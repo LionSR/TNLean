@@ -4,8 +4,10 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.Channel.Peripheral.TransferMatrix
-import TNLean.MPS.CanonicalForm.Definitions
+import TNLean.MPS.CanonicalForm.CPSVBlocking
+import TNLean.MPS.CanonicalForm.CPSVPhysicalReindex
 import TNLean.MPS.CanonicalForm.Reduction
+import TNLean.MPS.MPDO.PhysicalBlocking
 import TNLean.MPS.MPU.ActiveTransferMultiplicity
 import TNLean.MPS.MPU.TransferMatrix
 
@@ -43,6 +45,49 @@ canonical-form definition. See
 `docs/paper-gaps/mpu_canonical_form_full_support.tex`. -/
 def HasFullActiveSupport (data : CPSVCanonicalFormData A) : Prop :=
   ∑ k : data.Active, data.dim k.1 = D
+
+/-- Positive blocking identifies the active retained indices exactly with the original active
+indices.
+
+Source: arXiv:1703.09188, Section II, lines 297--305, and Section III, line 356. The positivity
+assumption excludes the zero-site block, whose weights are all raised to the zeroth power. -/
+noncomputable def activeEquivBlockTensor (data : CPSVCanonicalFormData A)
+    (p : ℕ) (hp : 0 < p) :
+    (data.blockTensor p hp).Active ≃ data.Active where
+  toFun k := ⟨k.1, by
+    have hk := k.property
+    change data.weights k.1 ^ p ≠ 0 at hk
+    exact (pow_ne_zero_iff hp.ne').mp hk⟩
+  invFun k := ⟨k.1, by
+    change data.weights k.1 ^ p ≠ 0
+    exact pow_ne_zero p k.property⟩
+  left_inv k := Subtype.ext rfl
+  right_inv k := Subtype.ext rfl
+
+/-- Full active support is preserved by blocking a positive number of sites.
+
+This uses the exact active-index equivalence, so it makes no claim for the zero-site block.
+
+Source: arXiv:1703.09188, Section II, lines 297--305, and Section III, line 356. -/
+theorem hasFullActiveSupport_blockTensor (data : CPSVCanonicalFormData A)
+    (hfull : data.HasFullActiveSupport) (p : ℕ) (hp : 0 < p) :
+    (data.blockTensor p hp).HasFullActiveSupport := by
+  classical
+  change (∑ k : (data.blockTensor p hp).Active, (data.blockTensor p hp).dim k.1) = D
+  calc
+    (∑ k : (data.blockTensor p hp).Active, (data.blockTensor p hp).dim k.1) =
+        ∑ k : (data.blockTensor p hp).Active, data.dim ((data.activeEquivBlockTensor p hp) k).1 :=
+      rfl
+    _ = ∑ k : data.Active, data.dim k.1 :=
+      (data.activeEquivBlockTensor p hp).sum_comp (fun k : data.Active ↦ data.dim k.1)
+    _ = D := hfull
+
+/-- Full active support is unchanged by a bijective relabeling of the physical alphabet. -/
+theorem hasFullActiveSupport_reindexPhysical {d' : ℕ} (data : CPSVCanonicalFormData A)
+    (hfull : data.HasFullActiveSupport) (e : Fin d' ≃ Fin d) :
+    (data.reindexPhysical e).HasFullActiveSupport := by
+  change ∑ k : data.Active, data.dim k.1 = D
+  exact hfull
 
 /-- Tensor irreducibility is invariant under simultaneous bond-index reindexing. -/
 private theorem isIrreducibleTensor_reindexBond
@@ -287,6 +332,53 @@ end MPSTensor
 namespace MPOTensor
 
 variable {d D : ℕ}
+
+private theorem sqrt_blockPhysDim (d p : ℕ) :
+    Real.sqrt (MPSTensor.blockPhysDim d p) = Real.sqrt d ^ p := by
+  suffices Real.sqrt ((d ^ p : ℕ) : ℝ) = Real.sqrt d ^ p by
+    simpa [MPSTensor.blockPhysDim] using this
+  induction p with
+  | zero => simp
+  | succ p ih =>
+      rw [pow_succ, Nat.cast_mul, Real.sqrt_mul (by positivity), ih]
+      simp [pow_succ]
+
+/-- Normalized MPO flattening commutes with physical blocking, up to the canonical equivalence
+between a doubled blocked index and a block of doubled indices.
+
+The identity holds for every blocking length; positivity is required only when it is used to
+preserve the active support and normal blocks.
+
+Source: arXiv:1703.09188, definition `blocking`, equation `MPUblock`, equation
+`eq:transfer-op`, and line 356. -/
+theorem normalizedFlattening_blockTensor (U : MPOTensor d D) (p : ℕ) :
+    (MPOTensor.blockTensor U p).normalizedFlattening =
+      MPSTensor.reindexPhysical (blockedDoubledIndexEquiv d p)
+        (MPSTensor.blockTensor U.normalizedFlattening p) := by
+  funext ij
+  rw [normalizedFlattening, toMPSTensor_blockTensor]
+  simp only [MPSTensor.reindexPhysical, MPSTensor.blockTensor]
+  change _ = MPSTensor.evalWord
+    (fun i => ((Real.sqrt d : ℂ)⁻¹) • U.toMPSTensor i) _
+  rw [MPSTensor.evalWord_smul, MPSTensor.length_wordOfBlock]
+  have hsqrtC : (Real.sqrt (MPSTensor.blockPhysDim d p) : ℂ) =
+      (Real.sqrt d : ℂ) ^ p := by
+    rw [sqrt_blockPhysDim]
+    exact Complex.ofReal_pow _ _
+  rw [hsqrtC, inv_pow]
+
+/-- Construct canonical-form-II data for a positively blocked MPO normalized flattening.
+
+The blocked MPS data are relabeled by `blockedDoubledIndexEquiv`, matching the index orientation in
+`normalizedFlattening_blockTensor`.
+
+Source: arXiv:1703.09188, Section II, lines 297--305, and Section III, line 356. -/
+noncomputable def blockTensorCFIIData (U : MPOTensor d D)
+    (data : MPSTensor.CPSVCanonicalFormIIData U.normalizedFlattening)
+    (p : ℕ) (hp : 0 < p) :
+    MPSTensor.CPSVCanonicalFormIIData (MPOTensor.blockTensor U p).normalizedFlattening := by
+  rw [normalizedFlattening_blockTensor]
+  exact (data.blockTensor p hp).reindexPhysical (blockedDoubledIndexEquiv d p)
 
 /-- The normalized flattening of an MPU is normal when the chosen CPSV canonical-form
 representative has full active support.

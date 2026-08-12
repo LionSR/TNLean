@@ -1,4 +1,8 @@
-% Kernel fixture: LANGUAGE-1.0.md section 12.6 (rmp-ii-blocking family).
+% Kernel fixture: LANGUAGE-1.0.md section 12.6 (rmp-ii-blocking family),
+% verbatim.  The picture below is the contract's printed sketch character for
+% character, with only the display-math delimiters removed; the kernel probe
+% extracts the sketch and diffs it against this body, so neither side may
+% drift.
 % Expected records: four atoms on row 1 (cols 1-4, physical=up), one
 % enclosure mark over (1,1)-(1,4).  Ink awaits the S4 render integration.
 \documentclass{standalone}
@@ -10,11 +14,9 @@
 \makeatother
 \begin{document}
 \tenkzkernel
-\begin{tenkz}[rows={ket}, cols=4, physical=up]
-  \tn[ports={90:physical:$i_1$}]{A} &
-  \tn[ports={90:physical:$i_2$}]{A} &
-  \tn[skin=dots]{} &
-  \tn[ports={90:physical:$i_L$}]{A}
-  \tnmark[form=enclosure, label pos=w]{(1,1) .. (1,4)}{$A^{[L]}$}
+\begin{tenkz}[rows={ket}, cols=4, physical=up]   % sugar: physical= adds the up ports
+  \tn[ports={90:physical:$i_1$}]{A} & \tn[ports={90:physical:$i_2$}]{A}
+  & \tn[skin=dots]{} & \tn[ports={90:physical:$i_L$}]{A}
+  \tnmark[form=enclosure, label pos=180]{(1,1) .. (1,4)}{$A^{[L]}$}
 \end{tenkz}
 \end{document}

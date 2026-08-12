@@ -14,14 +14,21 @@ ROOT = Path(__file__).resolve().parents[1]
 SCRIPT = ROOT / "scripts/tenkz_shrink.py"
 
 sys.path.insert(0, str(ROOT / "scripts"))
+import tenkz_language  # noqa: E402
 from tenkz_language import (  # noqa: E402
     Entry,
     _kernel_leaf_keys_from_texts,
+    _kernel_tombstones_from_texts,
     check,
     parse_alias_payload,
     parse_status,
 )
-from tenkz_lint import ink_token_count, registry_alias_patterns  # noqa: E402
+from tenkz_lint import (  # noqa: E402
+    ink_token_count,
+    registry_alias_patterns,
+    registry_tombstone_patterns,
+    tombstone_patterns,
+)
 import tenkz_shrink  # noqa: E402
 
 
@@ -490,6 +497,298 @@ def test_rmp_alias_patterns_use_only_alias_ledgers() -> None:
     canonical = "dot, route=arc, label=x"
     assert not any(pattern.search(canonical) for pattern in patterns)
     assert not patterns
+
+
+def test_rmp_buried_patterns_come_from_the_tombstone_ledger() -> None:
+    patterns = registry_tombstone_patterns()
+    assert patterns
+    # The live word stands where the alphabet still holds it, and the dead
+    # bare key is caught wherever a document still writes it.
+    assert not any(pattern.search("boundary=periodic") for pattern, _ in patterns)
+    caught = [
+        migration
+        for pattern, migration in patterns
+        if pattern.search(r"\begin{tenkz}[cols=3, periodic]")
+    ]
+    assert caught == ["use boundary=periodic"], caught
+
+
+def test_a_buried_value_is_bounded_on_both_sides_of_its_key() -> None:
+    # Without a left boundary `form=band` reads `transform=band` too, and an
+    # RMP case that never used the retired key is rejected.
+    entries = [
+        Entry(
+            "key",
+            ("kernel-mark", "form", "enum(bracket|label)", "label", "kernel", "Form."),
+        ),
+        Entry(
+            "tombstone",
+            ("kernel-mark", "form=band", "use form=enclosure with tint"),
+        ),
+    ]
+    (pattern, _migration), = tombstone_patterns(entries)
+    assert pattern.search(r"\tnmark[form=band]{(1,1)}{$m$}")
+    assert pattern.search(r"\tnmark[form = band]{(1,1)}{$m$}")
+    # A brace group is ordinary key-value spelling and reaches the parser as
+    # the bare word, so the lint reads it as the parser does.
+    assert pattern.search(r"\tnmark[form={band}]{(1,1)}{$m$}")
+    for innocent in (
+        r"\tnmark[transform=band]{(1,1)}{$m$}",
+        r"\tnmark[platform=band]{(1,1)}{$m$}",
+        r"\tnmark[some-form=band]{(1,1)}{$m$}",
+        r"\tnmark[form=bandwidth]{(1,1)}{$m$}",
+        r"\tnmark[form=band-two]{(1,1)}{$m$}",
+    ):
+        assert not pattern.search(innocent), innocent
+
+
+def test_a_buried_environment_is_matched_where_a_document_names_one() -> None:
+    (pattern, _migration), = tombstone_patterns(
+        [Entry("tombstone", ("environment", "tenkzfree", "use tenkz with lattice="))]
+    )
+    assert pattern.search(r"\begin{tenkzfree}")
+    assert pattern.search(r"\end{ tenkzfree }")
+    assert not pattern.search("the tenkzfree dialect is gone")
+
+
+def test_the_lint_spells_no_buried_word_of_its_own() -> None:
+    # The debt this replaces: a retired spelling written into the script and
+    # hand-discarded from the registry read beside it.
+    source = (ROOT / "scripts/tenkz_lint.py").read_text(encoding="utf-8")
+    buried = tenkz_language.tombstone_rows(tenkz_shrink.load_registry())
+    assert buried
+    for _scope, spelling, _migration in buried:
+        assert spelling not in source, spelling
+
+
+def test_buried_patterns_match_the_spelling_a_document_writes() -> None:
+    # The registry writes a multi-word key with `~` and wraps a long
+    # migration; a document writes an ordinary space and one line.  A pattern
+    # built from the registry's own spelling would ask source for a `~` and
+    # so could never fire.
+    entries = [
+        Entry(
+            "key",
+            ("kernel-mark", "label~pos", "angle", "auto", "kernel", "Quadrant."),
+        ),
+        Entry(
+            "tombstone",
+            ("kernel-mark", "label~pos=outside", "use label pos=270,\n    the south"),
+        ),
+        Entry("tombstone", ("kernel-picture", "chain~axis", "use frame=")),
+        Entry("tombstone", ("picture", r"\tnput", r"use \tn[at=<address>]")),
+    ]
+    assert tenkz_language.tombstone_rows(entries) == [
+        ("kernel-mark", "label pos=outside", "use label pos=270, the south"),
+        ("kernel-picture", "chain axis", "use frame="),
+        ("picture", r"\tnput", r"use \tn[at=<address>]"),
+    ]
+    patterns = {
+        migration: pattern
+        for pattern, migration in tombstone_patterns(entries)
+    }
+    outside = patterns["use label pos=270, the south"]
+    assert outside.search(r"\tnmark[label pos = outside]{(1,1)}{$m$}")
+    assert not outside.search(r"\tnmark[label~pos=outside]{(1,1)}{$m$}")
+    assert patterns["use frame="].search(r"\begin{tenkz}[chain axis=east]")
+    command = patterns[r"use \tn[at=<address>]"]
+    assert command.search(r"  \tnput{(1,1)}{A}")
+    assert not command.search(r"  \tnputmore{(1,1)}{A}")
+
+
+def test_a_commented_out_record_is_not_a_record() -> None:
+    # The registry means one thing to TeX and must mean the same to the tools:
+    # a row behind a comment mark does not run, so it is not read.
+    registry = tenkz_language.REGISTRY.read_text(encoding="utf-8")
+    live = len(tenkz_shrink.load_registry())
+    assert live == len(tenkz_language.load_registry())
+    disabled = registry + (
+        "% \\__tenkz_language_registry_tombstone:nnn {kernel-mark}{form=ghost}\n"
+        "%   {use form=enclosure}\n"
+        # An escaped backslash is a complete control symbol, so the comment
+        # mark after it starts a real comment and the row does not run.
+        "\\\\% \\__tenkz_language_registry_tombstone:nnn {kernel-mark}{form=wraith}\n"
+        "%   {use form=enclosure}\n"
+    )
+    original = tenkz_language.REGISTRY
+    scratch = original.with_name("registry-comment-probe.tex")
+    scratch.write_text(disabled, encoding="utf-8")
+    try:
+        tenkz_language.REGISTRY = scratch
+        assert len(tenkz_language.load_registry()) == live
+    finally:
+        tenkz_language.REGISTRY = original
+        scratch.unlink()
+
+
+def test_kernel_tombstones_are_read_with_their_migrations() -> None:
+    source = r"""
+\cs_new_protected:Npn \__tenkz_kernel_tombstone:nnnn #1#2#3#4
+  { \keys_define:nn {#1} { #2 / #3 .code:n = { } } }
+\__tenkz_kernel_tombstone:nnnn { tenkz-kernel-mark } { form } { band }
+  { use~form=enclosure~with~tint,~which~lays~ink~over~the~paper~its~
+    contour~encloses }
+"""
+    assert _kernel_tombstones_from_texts([source]) == {
+        ("kernel-mark", "form=band"): (
+            "use form=enclosure with tint, which lays ink over the paper its "
+            "contour encloses"
+        )
+    }
+
+
+VOCABULARY = {
+    ("kernel-mark", "form"): ("kernel", "enum(bracket|enclosure|label|prose)"),
+    ("kernel-mark", "label pos"): ("kernel", "angle"),
+    ("kernel-picture", "boundary"): ("sugar", "enum(open|none|periodic)"),
+}
+
+
+SURFACE = {"command": {"tn", "tnmark"}, "environment": {"tenkz", "tenkzeq"}}
+
+
+def buried_errors(rows, vocabulary=None, surface=None, parser=None):
+    return tenkz_language.tombstone_errors(
+        rows,
+        VOCABULARY if vocabulary is None else vocabulary,
+        SURFACE if surface is None else surface,
+        {} if parser is None else parser,
+    )
+
+
+def test_a_buried_spelling_stands_in_both_records_or_neither() -> None:
+    ledger = [("kernel-mark", "form=band", "use form=enclosure with tint")]
+    parser = {("kernel-mark", "form=band"): "use form=enclosure with tint"}
+    assert buried_errors(ledger, parser=parser) == []
+    only_parser = buried_errors([], parser=parser)
+    assert only_parser == [
+        "the parser refuses spellings the tombstone ledger does not record: "
+        "kernel-mark:form=band"
+    ], only_parser
+    only_ledger = buried_errors(ledger)
+    assert only_ledger == [
+        "the tombstone ledger records spellings the parser does not refuse: "
+        "kernel-mark:form=band"
+    ], only_ledger
+    reworded = buried_errors(
+        ledger, parser={("kernel-mark", "form=band"): "use form=enclosure"}
+    )
+    assert len(reworded) == 1 and "migrates to" in reworded[0], reworded
+    twice = buried_errors(ledger + ledger, parser=parser)
+    assert twice == ["tombstone kernel-mark:form=band is recorded twice"], twice
+
+
+def test_a_row_ahead_of_its_parser_branch_reports_one_cause() -> None:
+    # The word is still in the alphabet, which is the whole of what is wrong.
+    # A reader of CI output should not also be told that the parser does not
+    # refuse it, nor that the ledger does not record it: both are true, and
+    # both point at the wrong thing.
+    vocabulary = {
+        **VOCABULARY,
+        ("kernel-mark", "form"): ("kernel", "enum(bracket|band|label)"),
+    }
+    row = [("kernel-mark", "form=band", "use form=enclosure with tint")]
+    only_cause = [
+        "tombstone kernel-mark:form=band is still a word of "
+        "enum(bracket|band|label)"
+    ]
+    assert buried_errors(row, vocabulary=vocabulary) == only_cause
+    assert buried_errors(
+        row,
+        vocabulary=vocabulary,
+        parser={("kernel-mark", "form=band"): "use form=enclosure with tint"},
+    ) == only_cause
+
+
+def test_a_buried_word_may_not_stand_in_its_own_alphabet() -> None:
+    vocabulary = {
+        **VOCABULARY,
+        ("kernel-mark", "form"): ("kernel", "enum(bracket|band|label)"),
+    }
+    errors = buried_errors(
+        [("kernel-mark", "form=band", "use form=enclosure with tint")],
+        vocabulary=vocabulary,
+        parser={("kernel-mark", "form=band"): "use form=enclosure with tint"},
+    )
+    assert errors == [
+        "tombstone kernel-mark:form=band is still a word of "
+        "enum(bracket|band|label)"
+    ], errors
+    # A bare row is a key that no longer exists, so a live key refutes it and
+    # a migration is mandatory either way.
+    assert buried_errors([("kernel-picture", "boundary", "")]) == [
+        "tombstone kernel-picture:boundary names no migration",
+        "tombstone kernel-picture:boundary names a key the registry still carries",
+    ]
+    assert buried_errors(
+        [("kernel-mark", "shape=round", "use form=enclosure")]
+    ) == ["tombstone kernel-mark:shape=round names no registered key"]
+    assert buried_errors(
+        [("kernel-marks", "form=band", "use form=enclosure")]
+    ) == ["tombstone kernel-marks:form=band names no registered scope"]
+
+
+def test_a_buried_command_or_environment_is_checked_against_the_live_surface() -> None:
+    # Neither leaves the parser anything to branch on: the control sequence is
+    # undefined and the environment is gone, so the check is that the registry
+    # no longer carries the spelling and the lint is what reads the row.
+    assert buried_errors([("command", r"\tnput", r"use \tn[at=<address>]")]) == []
+    assert buried_errors([("command", r"\tnmark", "use nothing")]) == [
+        "tombstone command:\\tnmark names a command the registry still carries"
+    ]
+    assert buried_errors([("kernel-mark", r"\tnput", "use nothing")]) == [
+        "tombstone kernel-mark:\\tnput is a command and takes the scope 'command'"
+    ]
+    assert buried_errors(
+        [("environment", "tenkzfree", "use tenkz with lattice=")]
+    ) == []
+    assert buried_errors([("environment", "tenkzeq", "use nothing")]) == [
+        "tombstone environment:tenkzeq names a environment the registry still carries"
+    ]
+
+
+def test_a_row_stating_no_spelling_is_not_read_as_a_bare_key() -> None:
+    # An empty spelling or a trailing equals would otherwise pass as a bare
+    # key: the first compiles to a pattern matching every line, the second
+    # bans a live key's own name.
+    for spelling in ("", "retired=", "=value", "  "):
+        errors = buried_errors([("kernel-mark", spelling, "use something")])
+        assert errors == [
+            f"tombstone kernel-mark:{spelling!r} states no spelling; a row is "
+            "a command, an environment, a key, or key=value"
+        ], (spelling, errors)
+    assert not tombstone_patterns(
+        [Entry("tombstone", ("kernel-mark", "retired=", "use something"))]
+    )
+
+
+def test_one_spelling_is_buried_once_across_the_whole_ledger() -> None:
+    # The lint matches flat source where no scope is visible, so two scopes
+    # burying one spelling would report whichever migration sorted first.
+    rows = [
+        ("kernel-mark", "species=old", "use species=new"),
+        ("kernel-wire", "species=old", "use species=other"),
+    ]
+    vocabulary = {
+        **VOCABULARY,
+        ("kernel-mark", "species"): ("kernel", "declared-name"),
+        ("kernel-wire", "species"): ("kernel", "declared-name"),
+    }
+    errors = buried_errors(rows, vocabulary=vocabulary)
+    assert "tombstone kernel-wire:species=old is recorded twice" in errors, errors
+
+
+def test_a_multi_word_buried_key_is_read_as_a_document_writes_it() -> None:
+    # The registry spells `label~pos`; the check reads its vocabulary with
+    # ordinary spaces, so a row spelled the registry's own way must not be
+    # reported as naming no registered key.
+    rows = tenkz_language.tombstone_rows(
+        [Entry("tombstone", ("kernel-mark", "label~pos=outside", "use label pos=270"))]
+    )
+    assert rows == [("kernel-mark", "label pos=outside", "use label pos=270")]
+    assert buried_errors(
+        rows, parser={("kernel-mark", "label pos=outside"): "use label pos=270"}
+    ) == []
 
 
 def test_baseline_matches_actuals() -> None:

@@ -5,7 +5,7 @@
 \input{command}
 \title{Full Support in MPU Normality and Theorem III.8}
 \author{}
-\date{2026-08-11}
+\date{2026-08-12}
 \begin{document}
 \maketitle
 
@@ -14,15 +14,15 @@ The normal-tensor proposition of
 Cirac--P\'erez-Garc\'ia--Schuch--Verstraete states that the normalized MPU
 transfer matrix has one nonzero eigenvalue, equal to one, and that the
 normalized local tensor is normal
-\cite[proposition labelled~\texttt{prop:normal-tensor},
-lines~344--354]{Cirac2017MPU}.  The proposition itself displays no
-canonical-form or minimality hypothesis.  Its section has already imposed the
+\cite[Proposition~III.1]{Cirac2017MPU}. The proposition itself displays no
+canonical-form or minimality hypothesis. Its section has already imposed the
 standing convention that, without further notice, the local tensor has first
 been replaced by a tensor in canonical form
-\cite[lines~319--326]{Cirac2017MPU}.  The preceding definition makes canonical
-form a direct sum of irreducible positive-dimensional blocks and says that an
-arbitrary representative may be replaced by another representative generating
-the same matrix product vectors \cite[lines~257--265]{Cirac2017MPU}.
+\cite[discussion preceding Proposition~III.1]{Cirac2017MPU}. The preceding
+canonical-form definition makes this tensor a direct sum of irreducible
+positive-dimensional blocks and permits replacement by another representative
+generating the same matrix product vectors.
+% Source lines: paper_v2.tex 257--265, 319--326, and 344--354.
 
 \section{The formal support issue}
 The literal CPSV canonical-form data used in the formalization permits a
@@ -59,8 +59,10 @@ Let $\mathcal U$ be an MPU tensor with physical dimension $d$ and bond
 dimension $D$, and let $E$ be the transfer matrix of the normalized tensor
 $d^{-1/2}\mathcal U$. After the normal-tensor proposition, the source assumes
 without loss of generality that this normalized tensor is in canonical form II
-\cite[lines~350--356]{Cirac2017MPU}. Choose such data with full active
-support. Let $\mathcal A_1$ be its unique active block, let $V$ be the inclusion
+\cite[discussion following Proposition~III.1]{Cirac2017MPU}. Choose such data
+with full active support.
+% Source lines: paper_v2.tex 350--356.
+Let $\mathcal A_1$ be its unique active block, let $V$ be the inclusion
 of that block into the ambient bond space, and let $\Lambda$ be the block's
 diagonal positive right fixed point normalized to have trace one. Set
 \begin{align}
@@ -69,24 +71,53 @@ diagonal positive right fixed point normalized to have trace one. Set
 
 The source factors are defined using this matrix $\rho$. In the first singular
 value decomposition, let $V_1$ denote the coisometry appearing in
-$M_1=V_1^\dagger D_1U_1$. The corresponding first source factor contains
+$M_1=V_1^\dagger D_1U_1$. The source orders the product index as
+$(j,\alpha)$ and defines the compressed positive metric
 \begin{align}
-  \left[V_1(\rho\otimes\Id_d)V_1^\dagger\right]^{-1/2}.
+  G&=V_1(\Id_d\otimes\rho)V_1^\dagger.
 \end{align}
-The inverse only requires the compressed matrix
-$V_1(\rho\otimes\Id_d)V_1^\dagger$ to be positive definite; it does not by
-itself force $\rho$ to be positive definite on the ambient bond space. The
-current TNLean source-factor construction assumes ambient positive
-definiteness, and full active support supplies that stronger hypothesis
-\cite[lines~480--505]{Cirac2017MPU}. The same factors define $u$ and $v$ in
-the source-isometry lemma and Theorem~III.8
-\cite[labels~\texttt{lemuisometry} and~\texttt{ThmFund1},
-lines~532--601]{Cirac2017MPU}. Thus ambient positive definiteness is a
+The normalization factor appearing in $X_1$ is $G^{-1/2}$, not $G$.
+The formal source matrix orders the same index as $(\alpha,j)$. Let
+\begin{align}
+  \chi\colon\mathbb C^D\otimes\mathbb C^d
+    &\longrightarrow\mathbb C^d\otimes\mathbb C^D,&
+  \chi(e_\alpha\otimes e_j)&=e_j\otimes e_\alpha.
+\end{align}
+In the virtual--physical order, the source weight is therefore
+\begin{align}
+  W_\rho
+    &=\chi^\dagger(\Id_d\otimes\rho)\chi
+      =\rho\otimes\Id_d,
+\end{align}
+and the compressed positive metric is
+\begin{align}
+  A&=V_1W_\rho V_1^\dagger.
+\end{align}
+The corresponding normalization factor is $A^{-1/2}$. The two Kronecker
+orders are related by the product-index equivalence and are not literally the
+same matrix in one fixed ordering.
+
+The inverse square root only requires the compressed metric
+$V_1W_\rho V_1^\dagger$ to be positive definite; it does not by itself force
+$\rho$ to be positive definite on the ambient bond space. The current TNLean
+source-factor construction assumes ambient positive definiteness, and full
+active support supplies that stronger hypothesis
+\cite[Section~III, source-factor construction]{Cirac2017MPU}. The same factors
+define $u$ and $v$ in Lemma~III.7 and Theorem~III.8.
+% Source lines: paper_v2.tex 479--505 and 532--601.
+Thus ambient positive definiteness is a
 restriction of the current formal construction, not a
 logical consequence of invertibility of the compressed source metric or of
 the bare MPU predicate.
 
-The supported formal route assumes
+Let $(\Phi\rvert$ denote the vectorized identity bra
+$\operatorname{vec}(\Id_D)^{\mathsf T}$. The supported formal route has two
+bond-dimension branches. If $D=1$, the theorem
+\leanid{MPOTensor.IsMPU.normalized_transfer_matrix_eq_one_fin_one} supplies
+\begin{align}
+  J&=1,& \rho&=\Id_1,& E^J&=\lvert\rho)(\Phi\rvert.
+\end{align}
+If $D>1$, the route assumes
 \begin{align}
   \mathcal C&\in\operatorname{CFII}(d^{-1/2}\mathcal U),\\
   \sum_{k:\,\mu_k\ne0}D_k&=D.
@@ -102,53 +133,363 @@ and $\rho$, and the identities
   \tr(\rho)&=1,\\
   E\lvert\rho)&=\lvert\rho),\\
   (\Phi\rvert E&=(\Phi\rvert,\\
-  E^{D^2-1}&=\lvert\rho)(\Phi\rvert,
+  E^J&=\lvert\rho)(\Phi\rvert,&J&=D^2-1.
 \end{align}
-where $(\Phi\rvert$ is the vectorized identity bra. This $\rho$, rather than
-an arbitrary positive matrix, is the source weight used to define the factors
-and the operators $u$ and $v$.
+In both branches, the positive trace-one matrix $\rho$ is the source weight
+used to define the factors and the operators $u$ and $v$.
 
 The explicit reduced-CFII and full-active-support hypotheses resolve the
 ambient-positivity question tracked by issue~\#5855. They do not prove the two
 complete network identities needed for Theorem~III.8. The source-$u$
 range-insertion equality remains tracked by issue~\#5982
-\cite[Lemma~III.7, label~\texttt{lemuisometry},
-lines~545--557]{Cirac2017MPU}. The complete source-$v$ equivalence remains
-tracked by issue~\#6071
-\cite[equation~\texttt{vUnitary}, proof of Theorem~III.8,
-lines~577--600]{Cirac2017MPU}.
+\cite[Lemma~III.7]{Cirac2017MPU}. The complete source-$v$ equivalence remains
+tracked by issue~\#6071 \cite[proof of Theorem~III.8]{Cirac2017MPU}.
+% Source lines: paper_v2.tex 545--557 and 577--600.
+% Source equation labels: uUnitary and vUnitary.
 
-Reduced canonical-form-II data with full active support are assumed for the
-same tensor $\mathcal U$ whose source cuts, ranks, and source operators occur
-in the two planned results. These data supply the positive trace-one matrix
-$\rho$ and the rank-one transfer power
+For $D>1$, reduced canonical-form-II data with full active support are assumed
+for the same tensor $\mathcal U$ whose source cuts, ranks, and source operators
+occur in the two planned results. For $D=1$, the one-dimensional stabilization
+theorem supplies the source pair directly. In either case the datum provides
+$J>0$, a positive trace-one matrix $\rho$, and
 \begin{align}
-  E^{D^2-1}&=\lvert\rho)(\Phi\rvert.
+  E^J&=\lvert\rho)(\Phi\rvert.
 \end{align}
-The source-isometry lemma and Theorem~III.8 both retain the source factors of
+The admissible source-isometry and simple-tensor equivalence nodes cite
+Lemma~III.7 and Theorem~III.8 directly. Both retain the source factors of
 $\mathcal U$.
+% Source lines: paper_v2.tex 545--601.
 
-Blocking appears only inside the proof of the source-isometry lemma. Put
-$J=D^2-1$, $K=JD^2$, and let $\mathcal U^{[K]}$ denote the direct $K$-site
+Blocking appears only inside the proof of the admissible source-isometry
+lemma. Let $J$
+be the supplied stabilization exponent, put $K=JD^2$, and let
+$\mathcal U^{[K]}$ denote the direct $K$-site
 block of $\mathcal U$. This internal block supplies the direct and reflected
 contractions used to evaluate the closed network for $u^\dagger u$. It is not
 used to replace the source cuts, ranks, or operators of $\mathcal U$, and no
 transport of source data across blocking is asserted.
 
+\section{Downstream standard-form, index, and symmetry scope}
+The Chapter~28 blueprint records the preceding hypotheses as a reduced
+full-support source datum for the same tensor. This is an explicit input, not
+an existence theorem. It retains unrestricted, unformalized source entries
+under the original labels \texttt{lemuisometry}, \texttt{ThmFund1},
+\texttt{SF}, \texttt{def:index}, \texttt{index-well-defined},
+\texttt{lem:mpu\_index\_tensor}, and
+\texttt{lem:mpu\_index\_composition}. The current reduced full-support
+statements have the distinct labels
+\texttt{lem:mpu\_admissible\_source\_u\_isometry},
+\texttt{thm:mpu\_admissible\_simple\_tensor\_equivalence},
+\texttt{def:mpu\_admissible\_standard\_form},
+\texttt{def:mpu\_admissible\_index},
+\texttt{prop:mpu\_admissible\_index\_well\_defined},
+\texttt{lem:mpu\_admissible\_index\_tensor}, and
+\texttt{lem:mpu\_admissible\_index\_composition}.
+
+Chapter~28 contains thirty-nine labelled \texttt{mpu\_admissible} entries.
+Thirty-eight are restricted forms of results or definitions in
+\cite{Cirac2017MPU}; each carries its own direct citation or exact source-line
+locator. The remaining entry,
+\texttt{def:mpu\_admissible\_equivalence\_datum}, is an auxiliary hypothesis
+introduced here. It cites the source path arguments that motivate its
+conditions without attributing the datum itself to the paper.
+
+The unrestricted source Fundamental Theorem of MPU remains under
+\texttt{FundamentalMPU} and depends only on the source standard form
+\texttt{SF}. The separate Admissible Fundamental Theorem depends on the
+admissible standard form and the admissible simple-tensor equivalence theorem.
+Likewise, the unrestricted source Index Theorem remains under
+\texttt{IndexTh} and depends on the source index, source well-definedness,
+unrestricted tensor-product and composition additivity, source continuity,
+and source equivalence. The common-block reduced-data versions of the two
+additivity statements have distinct admissible labels and feed only the
+Admissible Index Theorem. That theorem records the result currently justified
+by the formal interfaces. It has a source-data restriction at every blocking
+length where
+Theorem~III.8 is used. A blocking length is admissible only when
+the actual blocked tensor is simple and carries its own source datum.
+Well-definedness compares two admissible simple blockings. Tensor-product
+additivity requires one common blocking length at which both factors and their
+tensor product are simple and carry source data. The published composition
+proof first uses $\mathcal U_k$, $\mathcal U'_k$, and $\mathcal W_k$, then
+writes $\mathcal U_{2k}$ and $\mathcal U'_{2k}$ in standard form and computes
+the ranks of $\mathcal W_{4k}$. The admissible theorem therefore requires
+separate source data for all six of these exact blocked tensors. No later-block
+transport is used. The complete source-$u$ contraction in issue~\#5982 is a
+dependency of the admissible source-isometry proof, and the complete source-$v$
+contraction in issue~\#6071 is a dependency of the admissible simple-tensor
+equivalence proof. These open proof nodes do not establish the unrestricted
+source statements.
+% Source lines: paper_v2.tex 824--865.
+
+The same source/scoped separation is carried through the complete continuity
+and symmetry subtree. The continuity labels \texttt{prop:continuity-index} and
+\texttt{coruvSF} have the scoped counterparts
+\texttt{prop:mpu\_admissible\_continuity\_index} and
+\texttt{cor:mpu\_admissible\_continuous\_standard\_form}. The latter is the
+restricted-source form of the continuous standard-form corollary in
+\cite[lines~867--910]{Cirac2017MPU}.
+
+For any tensor $\mathcal A$, write $\mathcal A^\sharp$ for its
+physical-adjoint comparison tensor. If $\mathcal A_k$ is the actual $k$-site
+block, then $\mathcal A_k^\sharp$ denotes the physical adjoint of that blocked
+tensor.
+
+For local symmetry and conjugation classification, the source labels
+\texttt{prop1conj}, \texttt{corconj},
+\texttt{cor:sympl-to-orthogonal}, \texttt{PropChiral}, and
+\texttt{prop:local-char-transposition} have the scoped counterparts
+\texttt{prop:mpu\_admissible\_conjugation\_symmetry},
+\texttt{prop:mpu\_admissible\_conjugation\_standard\_forms},
+\texttt{cor:mpu\_admissible\_symplectic\_to\_orthogonal},
+\texttt{prop:mpu\_admissible\_local\_time\_reversal}, and
+\texttt{prop:mpu\_admissible\_local\_transposition}. The unrestricted local
+characterizations reproduce the propositions themselves and therefore do not
+add an index-zero hypothesis; the index obstruction belongs to the surrounding
+source discussion. The admissible counterparts also do not assume index zero.
+For the supplied two-site tensor and its physical-adjoint or transposed
+comparison, symmetry identifies the two generated MPUs. The Admissible
+Fundamental Theorem therefore identifies the corresponding source spaces. The
+relevant operation exchanges the two source cuts, and hence
+\begin{align}
+  r(\mathcal U_2)
+    &=r(\mathcal U_2^\sharp)=\ell(\mathcal U_2),
+\end{align}
+with the same equations for the transposed comparison tensor. Thus
+$\operatorname{ind}(\mathcal U_2)=0$ directly from the source ranks, and
+admissible blocking independence gives $\operatorname{ind}(\mathcal U)=0$.
+The obstruction is therefore derived from the supplied source and comparison
+data rather than imposed as an external hypothesis. This follows the source
+arguments preceding Propositions~IV.5 and~IV.6.
+% Source lines: paper_v2.tex 1201--1209 and 1257--1261.
+The source definitions
+\texttt{def:strictly-equivalent-symmetry} and
+\texttt{def:equivalent-symmetry}, and the source criterion
+\texttt{lem:equivalent-symmetry}, have the scoped labels
+\texttt{def:mpu\_admissible\_strict\_symmetry\_equivalence},
+\texttt{def:mpu\_admissible\_symmetry\_equivalence}, and
+\texttt{lem:mpu\_admissible\_symmetry\_path\_criterion}. The source equation
+at paper lines~1345--1353 repeats the symmetry-transformed operator on both
+sides. The blueprint retains the intended invariance equation
+$\mathcal S[W^{(N)}(p)]=W^{(N)}(p)$.
+% **Local fix:** corrected the repeated right-hand side in the source display.
+
+The conjugation phase results \texttt{conjphs},
+\texttt{cor:all-equivalent-under-conjugation},
+\texttt{prop:conjsym-strict-equiv}, and
+\texttt{cor:equiv-under-conjugation} have the scoped labels
+\texttt{thm:mpu\_admissible\_conjugation\_odd\_rank},
+\texttt{cor:mpu\_admissible\_all\_conjugation\_equivalent},
+\texttt{thm:mpu\_admissible\_conjugation\_even\_rank}, and
+\texttt{cor:mpu\_admissible\_equiv\_under\_conjugation}. The unrestricted
+all-equivalent corollary retains its source context that either $r$ or $\ell$
+is odd. The admissible odd-rank determinant criterion explicitly assumes
+reduced full-support source data for each original one-site endpoint and its
+conjugate comparison, in addition to the blocked path datum; these hypotheses
+are what define the endpoint standard-form unitaries $u_i$ and $v_i$. The final
+admissible equivalence corollary retains both source branches. If one original
+source rank is odd, only Case I occurs, but no parity is inferred for the source
+ranks after blocking. The rank identities $r^{(2)}=dr$ and
+$\ell^{(2)}=d\ell$ use admissible blocking independence and therefore require
+simple one-site and two-site endpoints carrying their own source data. Both
+conjugate two-site endpoint tensors carry source data as well. When a blocked
+rank is odd, only the blocked product determinant is needed and the odd-rank
+criterion applies. When both blocked ranks are even, including the case in
+which an even physical dimension multiplies an odd source rank, blocking
+preserves Case I and parity makes the two separate blocked determinants equal
+to one, so the even-rank criterion applies instead. If both original ranks are
+even, the blocked ranks remain even and the even-rank criterion distinguishes
+Case I from Case II. The admissible odd-original-rank all-equivalent corollary
+uses this full classification rather than applying the odd-rank theorem after
+blocking unconditionally. Its hypotheses explicitly supply source data for the
+one-site and two-site endpoints and both conjugate comparisons. The admissible
+$U_1$--$U_2$ conjugation classification repeats these four data requirements
+for each of $U_1$, $U_2$, $\widetilde U_1$, and $\widetilde U_2$; an arbitrary
+path datum at a separate length $m$ does not replace the endpoint data.
+% **Local fix:** paper_v2.tex 1554--1559 writes the two separate determinant
+% identities before the parity distinction. The admissible proof uses them
+% only in the both-blocked-even branch, where the exponent is even.
+% Source lines: paper_v2.tex 1385--1460 and 1548--1567.
+
+For the time-reversal sign, the source labels
+\texttt{eq:sigma-from-trace}, \texttt{lem:mpu\_sigma\_gauge\_invariant},
+\texttt{prop:sigma-well-defined},
+\texttt{prop:sigma1-and-sigma2-equal}, and
+\texttt{cor:sigma-equivalence-necessary} have the scoped labels
+\texttt{lem:mpu\_admissible\_sigma\_trace},
+\texttt{lem:mpu\_admissible\_sigma\_gauge\_invariant},
+\texttt{prop:mpu\_admissible\_sigma\_well\_defined},
+\texttt{prop:mpu\_admissible\_sigma\_blocking\_parity}, and
+\texttt{cor:mpu\_admissible\_sigma\_equivalence\_necessary}. The two MPS
+comparison results
+\texttt{prop:mps-class-eq-mpu-class-for-conjugation} and
+\texttt{prop:dagger-mps-class-and-mpu-class-equal} have scoped labels
+\texttt{prop:mpu\_admissible\_mps\_conjugation\_class} and
+\texttt{prop:mpu\_admissible\_mps\_time\_reversal\_class}.
+
+Finally, the source example and swap labels
+\texttt{ex:all-phases-under-conjugation}, \texttt{example:czx},
+\texttt{ex:dagger-all-but-czx}, \texttt{lemma:sym-trafo-swap},
+\texttt{prop:U2-U3-trivial-conjugation},
+\texttt{prop:U2-U3-trivial-tr-transpose},
+\texttt{prop:eqiv-U1-U2-conjugate}, and
+\texttt{prop:U1-U2-equiv-ancillatrick} have the scoped counterparts
+\texttt{ex:mpu\_admissible\_all\_conjugation\_phases},
+\texttt{ex:mpu\_admissible\_czx},
+\texttt{ex:mpu\_admissible\_time\_reversal\_classes},
+\texttt{lem:mpu\_admissible\_swap\_symmetry\_equivalence},
+\texttt{prop:mpu\_admissible\_u2\_u3\_conjugation},
+\texttt{prop:mpu\_admissible\_u2\_u3\_time\_reversal\_transposition},
+\texttt{prop:mpu\_admissible\_u1\_u2\_conjugation}, and
+\texttt{prop:mpu\_admissible\_u1\_u2\_ancilla}. The unrestricted CZX entry
+defines the Hadamard matrix appearing in its tensor formula. Comment-only
+source locators identify the exact passages for the unitary normal-form lemma,
+the three topological-insulator-inspired MPUs, and their swap transformation.
+
+Continuity requires more than endpoint data. Chapter~28 therefore introduces
+an admissible equivalence and path datum. It consists of a chosen strict-
+equivalence path, one common positive blocking length $m$, and continuously
+varying reduced full-support source data for the actual blocked path tensor
+$\mathcal W(p)_m$ at every point. The tensor $\mathcal W(p)_m$ itself is simple;
+it may not be replaced by an equivalent canonical or reduced representative.
+The actual blocked endpoints carry their own data. The same requirement is
+imposed after adjoining ancillas and blocking. This is a hypothesis attached
+to a chosen witness and does not assert that such a witness exists. The datum
+does not automatically include the source bound $m\leq D^4$. The continuous
+standard-form corollary assumes this bound. For a datum of length $m$, its
+standard-form families describe the actual blocked endpoint MPUs
+$U_1^{(mN)}$ and $U_2^{(mN)}$. They do not describe the unblocked families
+$U_1^{(N)}$ and $U_2^{(N)}$ unless $m=1$. Accordingly, every admissible strict
+phase theorem about the original endpoint families requires a path datum of
+blocking length one. General admissible equivalence may still be witnessed by
+strict equivalence of supplied blocked endpoints.
+
+For a path preserving a specified symmetry $\mathcal S$, admissibility also
+includes continuously varying source data for the fixed family consisting of
+the conjugate, physical-adjoint, transposed, and $\mathcal S$-image comparison
+tensors of the actual blocked path. Each tensor in this family is simple and
+carries its own datum, independently of which comparisons a later proof uses.
+No symmetry operation is assumed to preserve source data automatically.
+
+With this convention, admissible equivalence implies equality of the index.
+The converse is claimed only when the standard-form interpolation is supplied
+with an admissible path datum. The admissible standard-form path criterion at
+length $m$ concerns the blocked endpoint families $U_1^{(mN)}$ and
+$U_2^{(mN)}$. Its strict-phase descendants concern the original endpoint
+families only under the explicit specialization $m=1$. In particular, no
+ordinary strict-equivalence or symmetry-equivalence path is silently promoted
+to an admissible one, and no blocked standard form is read as a standard form
+of an unblocked endpoint.
+
+For a time-reversal-invariant tensor $\mathcal U$, let
+$\sigma^{(k)}\in\{\pm1\}$ be the sign in the local time-reversal relation for
+a standard form of its actual $k$-site block $\mathcal U_k$.
+
+The source proofs of the time-reversal and transposition characterizations
+apply the fundamental theorem after blocking two sites. Every such statement
+therefore supplies source data for the actual one-site endpoint tensor, its
+actual two-site block, and the physical-adjoint or transposed comparison tensor
+of that block. Defining both $\sigma^{(1)}$ and $\sigma^{(2)}$ requires source
+data for $\mathcal U$, $\mathcal U_2$, $\mathcal U_2^\sharp$,
+$\mathcal U_4$, and $\mathcal U_4^\sharp$. Gauge invariance of the sign is
+recorded separately and follows directly from the trace formula, without a
+path hypothesis. The blocking-parity proposition uses this gauge-invariance
+lemma and the explicit unwinding argument of the source; it does not invoke
+pathwise constancy. To compare both signs along an unblocked path $\mathcal W(p)$,
+pathwise constancy is applied separately to the continuously varying families
+$\mathcal W(p)$, $\mathcal W(p)_2$, $\mathcal W(p)_4$,
+$\mathcal W(p)_2^\sharp$, and $\mathcal W(p)_4^\sharp$. This is a length-one
+admissible path. For equivalence after adjoining ancillas, the same five
+continuous families are required for the actual ancilla-enlarged blocked
+witness path, which is then regarded as a length-one path in its own right,
+rather than only at its endpoints. The resulting non-strict conclusion compares only
+$\sigma^{(2)}$ of the two supplied witness endpoints
+$\mathcal W_{\mathrm{anc}}(0)$ and $\mathcal W_{\mathrm{anc}}(1)$. It does not
+compare $\sigma^{(2)}$ of the original MPU tensors. Promoting this witness-level
+equality to an original-tensor invariant requires preservation under adjoining
+identity ancillas, which remains open in issue~\#6138. All later time-reversal
+descendants and examples repeat the required endpoint and comparison data after
+blocking or adjoining ancillas. The swap transformation and its two dependent
+strict-phase statements require the actual source-constructed interpolation to
+carry an admissible symmetry-path datum of blocking length one. This datum
+includes the path itself and all four fixed comparison paths: conjugate,
+physical-adjoint, transposed, and symmetry-image. No preservation under any of
+these operations is asserted. In the admissible $U_1$--$U_2$ ancilla statement,
+the supplied length-one path begins at named ancilla-enlarged blocked endpoints
+$\widehat{\mathcal U}_1$ and $\widehat{\mathcal U}_2$. Only these endpoints are
+claimed to be admissibly strictly equivalent. No equivalence of the original
+ancilla-free tensors $\widetilde U_1$ and $\widetilde U_2$ is asserted. The
+construction adjoins equal ancillas of dimension $d$, which need not satisfy
+the coprimality condition in the blueprint definition of equivalence when
+$d>1$.
+
+For bond dimension one, the normalized transfer matrix supplies the source
+pair directly. For bond dimension greater than one, no current result
+constructs reduced full-support source data for every simple block or proves
+their preservation under blocking, adjoining ancillas, tensor products,
+composition, conjugation, adjoint, transposition, or continuous variation, or
+identifies the source data of a tensor with those of a reduced representative.
+Consequently the admissible Chapter~28 statements are restricted to the
+explicitly supplied tensors, comparison tensors, and chosen paths. The
+parallel source-labelled statements retain the hypotheses of the paper and
+remain unformalized. No restricted statement is presented under a source
+label.
+
+\section{Elimination plan}
+The native source-data scope tracker is issue~\#6136. Its four implementation
+branches separate the logically distinct transport problems. Issue~\#6137
+constructs a reduced full-support representative and transports the source
+objects back to the tensor used in the theorem. Together with the independent
+complete-network issues~\#5982 and~\#6071, this is required before the
+admissible source-isometry and simple-tensor equivalence nodes can be merged
+into \texttt{lemuisometry} and \texttt{ThmFund1}. The admissible standard form
+can then be merged into \texttt{SF}.
+
+Issue~\#6138 proves source-data preservation under physical blocking and
+adjoining identity ancillas. It removes the extra hypotheses from the
+admissible index definition, its well-definedness theorem, the blocked local
+symmetry statements, the sign-parity results, and the ancilla-dependent
+examples. Issue~\#6139 treats tensor products, composition, and conjugate,
+adjoint, transposed, and other transformed comparison tensors. It removes the
+extra endpoint and comparison-tensor assumptions from the admissible local
+symmetry and example nodes. Issue~\#6140 constructs continuous source data
+along strict-equivalence paths and their four fixed symmetry-transformed
+comparison paths. It removes the path hypotheses from the admissible
+continuity, symmetry-equivalence, phase-classification, swap, and
+MPS-comparison nodes.
+
+The twenty-nine source/scoped pairs in the continuity and symmetry subtree are
+merged only after the relevant branches above are closed. Until then, every
+source label remains an unrestricted unformalized statement, while every
+reduced-source or path-dependent statement remains under its
+\texttt{mpu\_admissible} label. Closing issues~\#6137--\#6140 does not replace
+the independent proof obligations in issues~\#5982 and~\#6071.
+
 \section{Verdict}
-\textbf{Verdict: scope restriction with two open gaps.} The paper's
-normal-tensor proposition,
-the source-isometry lemma, and Theorem~III.8 concern the intended reduced
-canonical-form-II representative, with zero-weight blocks and the ambient zero
-complement omitted. This reduction is not an explicit hypothesis of the
-normal-tensor proposition, and it does not follow from literal canonical-form
-membership alone.
+\textbf{Verdict: scope restriction.} The paper's normal-tensor proposition,
+the source-isometry lemma, and Theorem~III.8 concern
+the intended reduced canonical-form-II representative, with zero-weight blocks
+and the ambient zero complement omitted. This reduction is not an explicit
+hypothesis of the normal-tensor proposition, and it does not follow from
+literal canonical-form membership alone.
+
 Consequently, a source-faithful formalization must construct this reduced
 representative and transport the source constructions, or explicitly assume
-chosen canonical-form-II data with full active support.  The formalization uses
-the latter option.  It does not yet construct the representative reduction.
-The two open gaps are the complete source-$u$ contraction tracked by
-issue~\#5982 and the complete source-$v$ equivalence tracked by issue~\#6071.
+chosen canonical-form-II data with full active support. The formalization uses
+the latter option when $D>1$ and the direct one-dimensional stabilization when
+$D=1$. It does not yet construct the representative reduction in the
+higher-dimensional case. The original source labels therefore remain
+unrestricted and unformalized; the distinctly named admissible nodes record
+the current reduced full-support route.
+
+Within Theorem~III.8 itself, the two remaining proof gaps are the complete
+source-$u$ contraction tracked by issue~\#5982 and the complete source-$v$
+equivalence tracked by issue~\#6071. Separately, the downstream standard-form,
+index, continuity, and symmetry results lack existence or preservation theorems
+for reduced source data under representative reduction, blocking, adjoining
+ancillas, tensor products, composition, transformed comparison tensors, and
+continuous paths. Chapter~28 treats all of these as explicit admissibility
+hypotheses rather than consequences of the MPU predicate.
 The full-support irreducibility implication is formalized by
 \leanid{MPSTensor.CPSVCanonicalFormData.isIrreducibleTensor_of_card_active_eq_one_of_fullActiveSupport}.
 The spectral-radius and primitivity conclusions are derived from the shifted

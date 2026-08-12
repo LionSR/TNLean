@@ -1,7 +1,11 @@
-%% Kernel fixture: LANGUAGE-1.0.md 12.2 (rmp-iii-a-torus-one).
+%% Kernel fixture: LANGUAGE-1.0.md 12.2 (rmp-iii-a-torus-one), verbatim.
+%% The picture below is the contract's printed sketch character for character,
+%% with only the display-math delimiters removed; the kernel probe extracts the
+%% sketch and diffs it against this body, so neither side may drift.
 %% Expected: lattice sugar -> rows wire,wire,wire cols 3; four trace sides ->
-%% wrap wires; two closed strings whose basis winding classes reach the native
-%% torus projection.
+%% wrap wires; one closed string whose basis winding class reaches the native
+%% torus projection.  Two wound cycles crossing each other are
+%% regression/r_wind_two_cycles.tex.
 \documentclass{standalone}
 \usepackage{tenkz}
 \makeatletter
@@ -11,11 +15,9 @@
 \makeatother
 \begin{document}
 \tenkzkernel
-\begin{tenkz}[lattice={3x3},
+\begin{tenkz}[lattice={3x3},          % sugar: rows={wire,wire,wire}, cols=3
               west=trace, east=trace, north=trace, south=trace]
-  \tnwire[kind=string, species=flux, name=horizontal, closed, wind={1,0}]
-  \tnwire[kind=string, species=flux, name=vertical, closed, wind={0,1},
-          crossing=under,
-          cross={under at crossing of vertical and horizontal}]
+  \tnwire[kind=string, species=flux, closed,
+          wind={1,0}]                   % the homotopy class is recorded
 \end{tenkz}
 \end{document}

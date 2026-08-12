@@ -14,6 +14,8 @@ import TNLean.MPS.Chain.CyclicBlockAverage
 import TNLean.MPS.Chain.Defs
 import TNLean.MPS.Chain.FundamentalTheorem
 import TNLean.MPS.Chain.OneSidedInverse
+import TNLean.MPS.Chain.SiteIndependent
 import TNLean.MPS.Chain.TensorEquality
 import TNLean.MPS.Chain.TranslationInvariance
+import TNLean.MPS.Chain.VaryingBondOBC
 import TNLean.MPS.Chain.VirtualInsertion
