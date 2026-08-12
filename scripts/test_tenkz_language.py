@@ -228,7 +228,7 @@ def main() -> int:
         raise SystemExit(f"the surviving bracket form did not compile:\n{live.stdout}")
     print(
         "PASS: registry, typed atom diagnostic, sugar event equivalence, "
-        "and every tombstone row refused by a compile"
+        "and the four retired mark forms refused by a compile"
     )
     return 0
 
