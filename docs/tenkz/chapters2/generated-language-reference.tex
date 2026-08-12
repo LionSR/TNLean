@@ -14,8 +14,8 @@
 \texttt{\textbackslash tnset} & setup-\allowbreak{}extension & Setup \allowbreak{}changes \allowbreak{}document \allowbreak{}or \allowbreak{}group \allowbreak{}policy \allowbreak{}outside \allowbreak{}any \allowbreak{}one \allowbreak{}picture. \\
 \multicolumn{3}{@{}p{106mm}@{}}{\footnotesize\texttt{\detokenize{\tnset{setup keys}}}} \\[2pt]
 \multicolumn{3}{@{}p{106mm}@{}}{Example: \texttt{\detokenize{tex/tenkz/examples/api/tnset.tex}}. Representative failure: An \allowbreak{}unknown \allowbreak{}setup \allowbreak{}key \allowbreak{}or \allowbreak{}enum \allowbreak{}value \allowbreak{}is \allowbreak{}a \allowbreak{}hard \allowbreak{}error.} \\[3pt]
-\texttt{\textbackslash tndeclareatom} & setup-\allowbreak{}extension & A \allowbreak{}declaration \allowbreak{}adds \allowbreak{}a \allowbreak{}typed \allowbreak{}atom \allowbreak{}spelling \allowbreak{}to \allowbreak{}the \allowbreak{}grammar. \\
-\multicolumn{3}{@{}p{106mm}@{}}{\footnotesize\texttt{\detokenize{\tndeclareatom{\command}{skin=value, ports={face:type}}}}} \\[2pt]
+\texttt{\textbackslash tndeclareatom} & setup-\allowbreak{}extension & A \allowbreak{}declaration \allowbreak{}adds \allowbreak{}a \allowbreak{}typed \allowbreak{}atom \allowbreak{}spelling \allowbreak{}to \allowbreak{}the \allowbreak{}grammar. \allowbreak{}The \allowbreak{}four \allowbreak{}face \allowbreak{}words \allowbreak{}are \allowbreak{}its \allowbreak{}whole \allowbreak{}port \allowbreak{}vocabulary; \allowbreak{}angles,\allowbreak{} \allowbreak{}slots,\allowbreak{} \allowbreak{}and \allowbreak{}port \allowbreak{}labels \allowbreak{}belong \allowbreak{}to \allowbreak{}the \allowbreak{}three-\allowbreak{}argument \allowbreak{}door. \\
+\multicolumn{3}{@{}p{106mm}@{}}{\footnotesize\texttt{\detokenize{\tndeclareatom{\command}{skin=dot|box|pill|mpo, ports={west|east:virtual, up|down:physical}}}}} \\[2pt]
 \multicolumn{3}{@{}p{106mm}@{}}{Example: \texttt{\detokenize{tex/tenkz/examples/api/tndeclareatom.tex}}. Representative failure: An \allowbreak{}unknown \allowbreak{}face,\allowbreak{} \allowbreak{}type,\allowbreak{} \allowbreak{}skin,\allowbreak{} \allowbreak{}or \allowbreak{}duplicate \allowbreak{}command \allowbreak{}is \allowbreak{}a \allowbreak{}hard \allowbreak{}error.} \\[3pt]
 \texttt{\textbackslash tnwire} & connections-\allowbreak{}closures & A \allowbreak{}wire \allowbreak{}is \allowbreak{}one \allowbreak{}typed \allowbreak{}index \allowbreak{}line; \allowbreak{}bonds \allowbreak{}and \allowbreak{}strings \allowbreak{}are \allowbreak{}its \allowbreak{}kinds. \\
 \multicolumn{3}{@{}p{106mm}@{}}{\footnotesize\texttt{\detokenize{\tnwire[wire keys]{end}{end}}}} \\[2pt]
@@ -35,7 +35,7 @@
 \texttt{\textbackslash tenkzkernel} & setup-\allowbreak{}extension & Rebinds \allowbreak{}the \allowbreak{}kernel \allowbreak{}surface; \allowbreak{}tenkz.sty \allowbreak{}calls \allowbreak{}it \allowbreak{}at \allowbreak{}load,\allowbreak{} \allowbreak{}so \allowbreak{}a \allowbreak{}document's \allowbreak{}own \allowbreak{}call \allowbreak{}is \allowbreak{}inert. \allowbreak{}Sunset \allowbreak{}1.0. \\
 \multicolumn{3}{@{}p{106mm}@{}}{\footnotesize\texttt{\detokenize{\tenkzkernel}}} \\[2pt]
 \multicolumn{3}{@{}p{106mm}@{}}{Example: \texttt{\detokenize{tex/tenkz/examples/api/tenkzkernel.tex}}. Representative failure: The \allowbreak{}package \allowbreak{}binds \allowbreak{}the \allowbreak{}kernel \allowbreak{}surface \allowbreak{}at \allowbreak{}load; \allowbreak{}a \allowbreak{}document's \allowbreak{}own \allowbreak{}call \allowbreak{}rebinds \allowbreak{}the \allowbreak{}same \allowbreak{}meanings.} \\[3pt]
-\texttt{\textbackslash tnprose} & regions-\allowbreak{}annotations & Sugar: \allowbreak{}recorded \allowbreak{}prose \allowbreak{}in \allowbreak{}place \allowbreak{}of \allowbreak{}a \allowbreak{}diagram. \\
+\texttt{\textbackslash tnprose} & regions-\allowbreak{}annotations & Sugar: \allowbreak{}prose \allowbreak{}in \allowbreak{}place \allowbreak{}of \allowbreak{}a \allowbreak{}diagram. \allowbreak{}The \allowbreak{}text \allowbreak{}enters \allowbreak{}the \allowbreak{}record \allowbreak{}stream \allowbreak{}and \allowbreak{}no \allowbreak{}ink \allowbreak{}reaches \allowbreak{}the \allowbreak{}page. \\
 \multicolumn{3}{@{}p{106mm}@{}}{\footnotesize\texttt{\detokenize{\tnprose{text}}}} \\[2pt]
 \multicolumn{3}{@{}p{106mm}@{}}{Example: \texttt{\detokenize{tex/tenkz/examples/api/tnprose.tex}}. Representative failure: Prose \allowbreak{}on \allowbreak{}a \allowbreak{}checked \allowbreak{}relation \allowbreak{}without \allowbreak{}an \allowbreak{}opt-\allowbreak{}out \allowbreak{}is \allowbreak{}a \allowbreak{}hard \allowbreak{}error.} \\[3pt]
 \bottomrule\end{longtable}
@@ -78,7 +78,7 @@ kernel-\allowbreak{}atom & \texttt{ports} & typed-\allowbreak{}port-\allowbreak{
 kernel-\allowbreak{}atom & \texttt{species} & declared-\allowbreak{}name & empty & Semantic \allowbreak{}species. \\
 kernel-\allowbreak{}atom & \texttt{pairing~cross} & indexed-\allowbreak{}crossing-\allowbreak{}list & empty & Per-\allowbreak{}instance \allowbreak{}crossings \allowbreak{}of \allowbreak{}generated \allowbreak{}skin \allowbreak{}pairings. \\
 kernel-\allowbreak{}atom & \texttt{size} & size-\allowbreak{}class & m & Per-\allowbreak{}atom \allowbreak{}metric \allowbreak{}size \allowbreak{}class. \\
-kernel-\allowbreak{}atom & \texttt{label~pos} & angle & auto & Label \allowbreak{}quadrant. \\
+kernel-\allowbreak{}atom & \texttt{label~pos} & angle & auto & Label \allowbreak{}quadrant; \allowbreak{}auto \allowbreak{}takes \allowbreak{}the \allowbreak{}first \allowbreak{}free \allowbreak{}face \allowbreak{}in \allowbreak{}the \allowbreak{}order \allowbreak{}s,\allowbreak{} \allowbreak{}n,\allowbreak{} \allowbreak{}e,\allowbreak{} \allowbreak{}w,\allowbreak{} \allowbreak{}and \allowbreak{}south \allowbreak{}when \allowbreak{}every \allowbreak{}face \allowbreak{}carries \allowbreak{}ink. \\
 kernel-\allowbreak{}atom & \texttt{nudge} & pair & zero & Quarter-\allowbreak{}pitch \allowbreak{}displacement. \\
 kernel-\allowbreak{}atom & \texttt{void} & void-\allowbreak{}policy & unset & Hole \allowbreak{}or \allowbreak{}removed \allowbreak{}site. \\
 kernel-\allowbreak{}atom & \texttt{physical} & physical-\allowbreak{}policy & unset & Site's \allowbreak{}own \allowbreak{}answer \allowbreak{}to \allowbreak{}the \allowbreak{}picture's \allowbreak{}physical \allowbreak{}policy. \\
@@ -89,7 +89,7 @@ kernel-\allowbreak{}wire & \texttt{kind} & enum(\allowbreak{}index\textbar{}\all
 kernel-\allowbreak{}wire & \texttt{route} & enum(\allowbreak{}straight\textbar{}\allowbreak{}orth\textbar{}\allowbreak{}arc) & straight & Path \allowbreak{}family. \\
 kernel-\allowbreak{}wire & \texttt{via} & address-\allowbreak{}list & empty & Waypoints. \\
 kernel-\allowbreak{}wire & \texttt{bend} & number & metric & Arc \allowbreak{}bend \allowbreak{}factor. \\
-kernel-\allowbreak{}wire & \texttt{weight} & enum(\allowbreak{}single\textbar{}\allowbreak{}double\textbar{}\allowbreak{}bundle=n) & single & Strand \allowbreak{}multiplicity. \\
+kernel-\allowbreak{}wire & \texttt{weight} & enum(\allowbreak{}single\textbar{}\allowbreak{}double\textbar{}\allowbreak{}bundle=n) & single & Strand \allowbreak{}multiplicity \allowbreak{}in \allowbreak{}the \allowbreak{}boundary \allowbreak{}signature; \allowbreak{}every \allowbreak{}weight \allowbreak{}strokes \allowbreak{}one \allowbreak{}rail. \\
 kernel-\allowbreak{}wire & \texttt{species} & declared-\allowbreak{}name & empty & Semantic \allowbreak{}species. \\
 kernel-\allowbreak{}wire & \texttt{wind} & pair & zero & Homotopy \allowbreak{}class \allowbreak{}on \allowbreak{}traced \allowbreak{}frames. \\
 kernel-\allowbreak{}wire & \texttt{around} & address-\allowbreak{}list & empty & Silhouette \allowbreak{}detour \allowbreak{}targets. \\
@@ -99,7 +99,7 @@ kernel-\allowbreak{}wire & \texttt{dir} & direction-\allowbreak{}policy & none &
 kernel-\allowbreak{}wire & \texttt{stroke} & enum(\allowbreak{}solid\textbar{}\allowbreak{}dashed\textbar{}\allowbreak{}dotted) & solid & Declared \allowbreak{}stroke \allowbreak{}pattern \allowbreak{}of \allowbreak{}the \allowbreak{}rail. \\
 kernel-\allowbreak{}wire & \texttt{name} & identifier & generated & Addressable \allowbreak{}name. \\
 kernel-\allowbreak{}wire & \texttt{closed} & flag & false & A \allowbreak{}smooth \allowbreak{}closed \allowbreak{}cycle; \allowbreak{}takes \allowbreak{}no \allowbreak{}ends. \\
-kernel-\allowbreak{}mark & \texttt{form} & enum(\allowbreak{}bracket\textbar{}\allowbreak{}brace-\allowbreak{}above\textbar{}\allowbreak{}brace-\allowbreak{}below\textbar{}\allowbreak{}enclosure\textbar{}\allowbreak{}cut\textbar{}\allowbreak{}band\textbar{}\allowbreak{}label\textbar{}\allowbreak{}prose) & label & Mark \allowbreak{}form. \\
+kernel-\allowbreak{}mark & \texttt{form} & enum(\allowbreak{}bracket\textbar{}\allowbreak{}enclosure\textbar{}\allowbreak{}label\textbar{}\allowbreak{}prose) & label & Mark \allowbreak{}form; \allowbreak{}the \allowbreak{}prose \allowbreak{}form \allowbreak{}records \allowbreak{}its \allowbreak{}text \allowbreak{}and \allowbreak{}draws \allowbreak{}nothing. \\
 kernel-\allowbreak{}mark & \texttt{slot} & semantic-\allowbreak{}slot & selected & Semantic \allowbreak{}tint. \\
 kernel-\allowbreak{}mark & \texttt{species} & declared-\allowbreak{}name & empty & Semantic \allowbreak{}species. \\
 kernel-\allowbreak{}mark & \texttt{inset} & number & 0 & Nested-\allowbreak{}contour \allowbreak{}step. \\
@@ -109,7 +109,7 @@ kernel-\allowbreak{}mark & \texttt{name} & identifier & generated & Addressable 
 kernel-\allowbreak{}mark & \texttt{tint} & flag & false & Interior \allowbreak{}tint \allowbreak{}under \allowbreak{}the \allowbreak{}contour. \\
 kernel-\allowbreak{}setup & \texttt{pitch} & length & em-\allowbreak{}relative & Base \allowbreak{}metric. \\
 kernel-\allowbreak{}setup & \texttt{sizes} & size-\allowbreak{}table & bundled \allowbreak{}table & Size-\allowbreak{}class \allowbreak{}table. \\
-kernel-\allowbreak{}setup & \texttt{strict} & flag & false & Rejects \allowbreak{}sugar; \allowbreak{}benchmark \allowbreak{}and \allowbreak{}CI \allowbreak{}set \allowbreak{}it. \\
+kernel-\allowbreak{}setup & \texttt{strict} & flag & false & Rejects \allowbreak{}sugar; \allowbreak{}only \allowbreak{}five \allowbreak{}refusal \allowbreak{}fixtures \allowbreak{}enable \allowbreak{}it. \\
 kernel-\allowbreak{}setup & \texttt{theme} & identifier & house & Semantic \allowbreak{}ink \allowbreak{}theme. \\
 kernel-\allowbreak{}declare & \texttt{hue} & hue-\allowbreak{}source & house \allowbreak{}cycle & Species \allowbreak{}ink; \allowbreak{}source:* \allowbreak{}reproduces \allowbreak{}a \allowbreak{}cited \allowbreak{}palette. \\
 kernel-\allowbreak{}declare & \texttt{base} & identifier & empty & Skin \allowbreak{}the \allowbreak{}declaration \allowbreak{}extends. \\

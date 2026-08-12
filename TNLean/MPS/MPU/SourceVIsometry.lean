@@ -251,6 +251,52 @@ theorem sourceYTensor_gram_eq_four_u_weighted
       simp_rw [Finset.sum_mul, Finset.mul_sum]
       conv_lhs => arg 2; ext α; arg 2; ext α'; rw [Finset.sum_comm]
 
+/-- Entry expansion of the product \(v(Y_1\otimes Y_2)\) after
+regrouping the two source-cut output indices. The first source cut contracts to
+one local tensor entry, while the two second-cut factors remain coupled.
+
+The source-bond order is `Fin r[U] × Fin ℓ[U]`; no partial second-cut Gram is
+formed.
+
+Source: arXiv:1703.09188, Theorem III.8, equations (31)--(32), Section III.B
+(lines 563--600). -/
+theorem sourceV_mul_sourceYTensor_apply
+    (ρ : Matrix (Fin D) (Fin D) ℂ) (hρ : ρ.PosDef)
+    (z p : Fin d × Fin d) (a : Fin D × Fin D) :
+    (sourceV U ρ hρ * sourceYTensor U ρ hρ) z
+        (((p.1, a.1), (p.2, a.2))) =
+      ∑ γ : Fin D, ∑ l : Fin ℓ[U],
+        U p.1 z.1 γ a.1 *
+          (sourceY₂ U l (z.2, γ) * sourceY₂ U l (p.2, a.2)) := by
+  classical
+  simp only [Matrix.mul_apply, sourceV, sourceYTensor_apply,
+    Fintype.sum_prod_type, Finset.sum_mul]
+  let f := fun (r : Fin r[U]) (l : Fin ℓ[U]) (γ : Fin D) ↦
+    sourceX₁ U ρ hρ (γ, z.1) r * sourceY₂ U l (z.2, γ) *
+      (sourceY₁ U ρ hρ r (p.1, a.1) * sourceY₂ U l (p.2, a.2))
+  change (∑ r, ∑ l, ∑ γ, f r l γ) = _
+  calc
+    _ = ∑ l, ∑ r, ∑ γ, f r l γ := Finset.sum_comm
+    _ = ∑ l, ∑ γ, ∑ r, f r l γ := by
+      exact Finset.sum_congr rfl fun l _ ↦ Finset.sum_comm
+    _ = ∑ γ, ∑ l, ∑ r, f r l γ := Finset.sum_comm
+    _ = ∑ γ, ∑ l,
+        (∑ r, sourceX₁ U ρ hρ (γ, z.1) r *
+          sourceY₁ U ρ hρ r (p.1, a.1)) *
+            (sourceY₂ U l (z.2, γ) * sourceY₂ U l (p.2, a.2)) := by
+      refine Finset.sum_congr rfl fun γ _ ↦ ?_
+      refine Finset.sum_congr rfl fun l _ ↦ ?_
+      simp_rw [Finset.sum_mul]
+      refine Finset.sum_congr rfl fun r _ ↦ ?_
+      simp only [f]
+      ring
+    _ = _ := by
+      refine Finset.sum_congr rfl fun γ _ ↦ ?_
+      refine Finset.sum_congr rfl fun l _ ↦ ?_
+      change ((sourceX₁ U ρ hρ * sourceY₁ U ρ hρ)
+        (γ, z.1) (p.1, a.1)) * _ = _
+      rw [sourceX₁_mul_sourceY₁_apply]
+
 /-- Entry formula for $Z_1\otimes Z_2$ in dotted/solid source-bond order.
 
 Source: arXiv:1703.09188, equations `YZ=1` and `vUnitary`, lines 495--506 and

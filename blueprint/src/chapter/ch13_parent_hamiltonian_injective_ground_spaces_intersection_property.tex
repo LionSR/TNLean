@@ -18,13 +18,14 @@
     \label{thm:ground_space_map_injective_word_span}
     \lean{MPSTensor.groundSpaceMap_injective_of_wordSpan_eq_top}
     \leanok
-    \uses{def:ground_space_map}
+    \uses{def:ground_space_map, def:word_span}
     If the length-$L$ products $\{A^\sigma : |\sigma| = L\}$ span $\MN{D}$, then
     $\Gamma_L$ is injective.
 \end{theorem}
 
 \begin{proof}
     \leanok
+    \uses{thm:trace_nondeg}
     If $\Gamma_L(X) = 0$, then $\tr(A^\sigma X) = 0$ for every word $\sigma$ of
     length $L$. The spanning hypothesis turns this into $\tr(MX) = 0$ for every
     $M \in \MN{D}$, and the trace pairing gives $X = 0$.
@@ -34,15 +35,15 @@
     \label{thm:ground_space_map_injective_blk}
     \lean{MPSTensor.groundSpaceMap_injective_of_isNBlkInjective}
     \leanok
-    \uses{thm:ground_space_map_injective_word_span, def:l_blk_injective}
-    If the length-$L_0$ products span the full matrix algebra,
-    $\spn\{A^\omega : |\omega| = L_0\} = \MN{D}$, then $\Gamma_{L_0}$ is
-    injective.
+    \uses{def:ground_space_map, def:l_blk_injective}
+    If $A$ is $L_0$-block injective, then $\Gamma_{L_0}$ is injective.
 \end{theorem}
 
 \begin{proof}
     \leanok
-    The hypothesis is precisely the fixed-length spanning condition needed by
+    \uses{thm:ground_space_map_injective_word_span, lem:wordspan_blk_inj}
+    Lemma~\ref{lem:wordspan_blk_inj} identifies $L_0$-block injectivity with
+    the word-span hypothesis of
     Theorem~\ref{thm:ground_space_map_injective_word_span}.
 \end{proof}
 
@@ -94,16 +95,15 @@
         % Semantic boundary signature: (virtual-west=0 | virtual-east=0 |
         % physical-up=L+1 | physical-down=0).  This finite schematic emits
         % (virtual-west=0 | virtual-east=0 | physical-up=3 | physical-down=0).
-        % The traced sides draw the periodic return; the site-count brace does
-        % not draw in the kernel yet (#5482), so its mathematics stays as the
-        % south label under the return.
+        % The traced sides draw the periodic return, and the bracket beneath
+        % it counts the sites the way the source braces them.
         \tenkzkernel
         \begin{tenkz}[rows={wire}, cols=5, boundary=periodic]
             \tn[skin=ring]{X'} &
             \tn[label pos=s, ports={90:physical:$\sigma_1$}]{A} &
             \tn[label pos=s, ports={90:physical}]{A} & \tn[skin=dots]{} &
             \tn[label pos=s, ports={90:physical:$\sigma_{L+1}$}]{A}
-            \tnmark[form=label, label pos=s]{s outside}{$L+1\text{ sites}$}
+            \tnmark[form=bracket]{(1,2) .. (1,5)}{$L+1\text{ sites}$}
         \end{tenkz}
     \end{center}
     \begin{enumerate}

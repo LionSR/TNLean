@@ -1,0 +1,72 @@
+% Regression: a wire written with bare atom names reserves the faces it
+% leaves through, so the automatic label station steps off it.  The endpoint
+% nodes of `\tnwire{A}{B}` are record names rather than cells or ports, and
+% a station chosen without reading them stands the upper name on the wire.
+\documentclass{standalone}
+\usepackage{tenkz}
+\makeatletter
+\ExplSyntaxOn
+\file_input:n { tenkz-kernel.code.tex }
+\int_new:N \l__tenkz_test_side_count_int
+\tl_new:N \l__tenkz_test_side_label_tl
+\cs_new_eq:NN
+  \__tenkz_test_side_auto:nN \__tenkz_kernel_r_label_auto_side:nN
+\cs_set_protected:Npn \__tenkz_kernel_r_label_auto_side:nN #1#2
+  {
+    \__tenkz_test_side_auto:nN {#1} #2
+    \int_gincr:N \l__tenkz_test_side_count_int
+    \__tenkz_model_get:nnN {#1} {label} \l__tenkz_test_side_label_tl
+    \str_case:VnF \l__tenkz_test_side_label_tl
+      {
+        {A}
+          {
+            \str_if_eq:VnF #2 {n}
+              { \errmessage{a~named~wire~end~left~its~host's~south~free} }
+          }
+        {B}
+          {
+            \str_if_eq:VnF #2 {s}
+              { \errmessage{a~named~wire~end~took~a~face~it~does~not~use} }
+          }
+        {C}
+          {
+            \str_if_eq:VnF #2 {s}
+              { \errmessage{a~named~wire~end~missed~an~east-west~run} }
+          }
+        {E}
+          {
+            \str_if_eq:VnF #2 {n}
+              { \errmessage{an~explicit~auto~did~not~reach~the~chooser} }
+          }
+      }
+      { \errmessage{unexpected~label~in~named-end~fixture} }
+  }
+\ExplSyntaxOff
+\makeatother
+\begin{document}
+\tenkzkernel
+% A runs down into B: A's south and B's north carry the wire.
+\begin{tenkz}[lattice={2x1}, bonds=none]
+  \tn[at=(1,1), name=A, skin=dot]{A}
+  \tn[at=(2,1), name=B, skin=dot]{B}
+  \tnwire{A}{B}
+\end{tenkz}
+% A cell end meeting a named end: C's east carries the wire, its south does
+% not, and the station stays where it has always been.
+\begin{tenkz}[lattice={1x2}, bonds=none]
+  \tn[at=(1,1), name=C, skin=dot]{C}
+  \tn[at=(1,2), name=D]{}
+  \tnwire{(1,1)}{D}
+\end{tenkz}
+% `auto` is the registry's own default for the key, so an author may write
+% it out; the word names the chooser rather than an angle.
+\begin{tenkz}[lattice={2x1}, bonds=none]
+  \tn[at=(1,1), name=E, skin=dot, label pos=auto]{E}
+  \tn[at=(2,1), name=F]{}
+  \tnwire{E}{F}
+\end{tenkz}
+\ExplSyntaxOn
+\int_compare:nNnF { \l__tenkz_test_side_count_int } = {4}
+  { \errmessage{named-end~fixture~did~not~station~four~labels} }
+\ExplSyntaxOff
+\end{document}

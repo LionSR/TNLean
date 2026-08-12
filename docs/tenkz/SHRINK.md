@@ -3039,3 +3039,163 @@ flight; it is deleted by whoever lands next in that file. The lint's
 hand while reading the rest from the registry — knowledge the registry should
 hold, and the fix is a tombstone ledger the linter reads, not another
 discard. Trigger: the next registry tombstone.
+
+### 2026-08-12 — the circle frame takes no basis, and stops promising one
+
+`basis=` has been refused on a circle frame since the basis landed, and both
+the refusal and the contract clause behind it were written as a deferral: the
+message read *currently requires flat or plane* and named a tangent-offset
+contract, and §4 deferred circular bases *until those carriers have a declared
+composition or tangent-offset contract*. Nobody asked for that contract. The
+capability was read against the demand corpus the way the gate reads any
+other.
+
+What the corpus holds. Thirty-eight circle-frame picture sites: one benchmark
+case, four blueprint figures, thirty-three kernel fixtures. Not one of them
+repeats a site structure across its stations, which is what a cell-level basis
+would state; every station carries a single record, and no circle picture in
+the package clusters one. Sixty-seven `basis=`
+sites, every one of them on a `flat` or a `plane`, except the single site that
+names a circle, which is the negative fixture pinning the refusal. The one
+benchmark circle target, `rmp-ii-triangle-network`, is faithful with an empty
+defect list. No verdict row, wave-2 target, or demand table names a circle
+basis, a tangent offset, or a radial offset. The amendment that introduced the
+basis argues it from Bravais decomposition on flat and plane lattices and names
+five consumers, none of them circular. Two regressions,
+`r_basis_frame_replace` and `r_basis_equation_replace`, depend on a later
+circle frame discarding an earlier basis.
+
+Why the absence is structural and not a backlog. A basis is cell-level: what it
+decomposes is a repeating cell, and the frame's translations are what read the
+decomposition. One offset pair is one page displacement at every cell, the
+spacing check compares member families under each live cell translation, and a
+declared adjacency travels from cell to cell unchanged. A circle repeats
+nothing. Its stations lie on one ring and its axes turn from station to
+station, so a single declared offset would name a different page displacement
+at each of them. There is no repeating cell to decompose and no translation to
+read a decomposition under. A tangent-offset contract would have to invent all
+three, for no figure.
+
+The restriction reaches the frame and stops there. A station is free to carry a
+composite site by other means: the atom-scoped `cluster=` expands on a circle
+station exactly as it does on a flat one, into addressable children on a
+quarter-scale subframe carried by the station. What the circle lacks is not
+composition at a site but a cell to repeat one across, so the refusal must not
+be written as a claim about how many records a station holds.
+
+So the refusal stays and the promise goes. §4 now states the restriction as the
+contract rather than as a stage, and the message reads *basis= is cell-level
+and is defined on flat and plane frames; a circle frame has no repeating cell
+to decompose*. The error code is unchanged, so the negative fixture and the
+probe pin what they always pinned. The group-local and atom-local refusals keep
+their stage wording, because those carriers are tracked work and this one is
+not.
+
+Trigger for revisiting: a demand-corpus figure that repeats one composite site
+across the stations of a circle, which is what a cell-level basis would state
+and what `cluster=` at each station would only restate by hand. Such a figure
+must first say what a declared offset means where the axes turn, and the
+contract reopens then and not before.
+
+No registry row, parser leaf, key, alias, or overload moves; M1, M2, M3, M5,
+and M6 are unchanged.
+
+### 2026-08-11 — the mark alphabet loses the four words that drew nothing
+
+The manual coverage audit tried to draw every construct the registry offers
+and could not draw four: `form=brace-above`, `form=brace-below`, `form=cut`
+and `form=band` were accepted by the registry, printed by the generated
+reference, and answered `[TKZ-KERNEL-RENDER-TODO]` with no ink on the page.
+The chapter had to print the refusal where a picture belonged (#6183).
+
+**The demand, per word.** None of the four has a consumer, and the search was
+run three times by different means. A census of `form=` across the benchmark,
+the kernel fixtures and the blueprint reads 39 label, 38 enclosure and 1 bracket
+in the benchmark, 39 enclosure, 26 label, 14 bracket and 1 prose in the
+fixtures, 44 enclosure, 10 label and 8 bracket in the blueprint, and not one
+brace, cut or band anywhere. The second method asked the sources instead of
+the corpus, because a brace and a cut are ordinary notation in a
+tensor-network figure and their absence from our spellings would prove
+nothing about the papers. The sources do draw both, and the corpus already
+draws them with the words that survive. `rmp-ii-spectrum-transfer` reproduces
+a panel whose author draws a dashed red rectangle across the contracted
+columns and a brace naming their count beneath: the case states the first as
+`form=enclosure, slot=selected` and the second as `form=bracket`, and its
+verdict was promoted to faithful on that reading, retiring the last recorded
+substitution. `rmp-ii-boundary-state` retired a brace-for-box note the same
+way. Where a source shades a sheet, the two toric-code appendix verdicts accept a
+contour-only enclosure as faithful and price the shading as house ink. Three
+blueprint chapters write "brace" in the comment above the picture and spell
+`form=bracket` in it. The third check was the history: the enum arrived whole
+in the commit that built the language stage, whose own message ends "Nothing
+here draws", and `bracket`, the one form with demand, had to be added to the
+alphabet later, by the change that gave it a renderer.
+
+**The sentence was already written; this executes it.** The contract closed
+the alphabet on `bracket`, `enclosure`, `label` at 2.5, 2.8 and 6 and gave the
+reasons the corpus confirms: the shaded band never differed from an enclosure
+except in the shape of its selection, the lower brace merged with the upper
+because the side a bracket speaks from is the side its label sits on, and the
+cut failed tenure outright with no successor owed. Session 1 booked the same
+sentence at `flag:consumers:key:kernel-mark:form` and at
+`flag:consumers:key:annotation:brace above`, and the disposition checker has
+treated all four values as dead records since. Only the parser and the
+registry row still carried them, and the ledger status moves with the parser
+row, which is what moves today.
+
+**What a reader meets instead.** A retired word stays installed as a
+tombstone: the parser still recognises the spelling, refuses it, and states
+the migration, because the alphabet error alone reports the words that remain
+and so reads as a typo when the word was in fact removed. `brace-above` names
+`form=bracket` with `label pos=90`, `brace-below` names the same bracket
+speaking from its default south, `band` names `form=enclosure` with `tint`,
+which is where the fill went, and `cut` says there is no successor and points
+at the contour of what a cut separates. A tombstone is a branch of a key that
+is already installed, so it opens no parser path.
+
+**Where a dead spelling lives.** In the registry, and nowhere else. Section
+10 has said since session 0 that deleted spellings stay there so the linter
+can reject them forever with the migration hint, and the first draft of this
+change did the opposite: it struck the four words from the registry and wrote
+them again as parser branches, which is a second copy of the same knowledge
+and the one thing section 10 forbids. The registry now carries a tombstone
+row per dead spelling, giving the scope, the dead spelling and the migration.
+A spelling written `key=value` is a word struck from a live key's alphabet,
+which the parser refuses through a branch of its own; a bare spelling is a
+key that no longer exists, which the unknown-key error answers.
+
+The row is the record and everything that must refuse the spelling reads it.
+Two of those readers are the ledger's own and arrived with the change that
+retired the hand-spelled `periodic`, so neither is written a second time here.
+The first is the check, which compares the four `key=value` rows with the four
+parser branches in both directions, migration text included, and holds each
+command row to the registry's own command list. The second is the source lint,
+which rejects a buried spelling in case source and prints that row's migration
+with the finding, whether the source spells it `form=brace-above`,
+`form = band`, or `form={cut}`, and leaves a `transform=` ending in the same
+word alone. What refuses a dead spelling inside a document is a compile, from
+the parser branch beside its row.
+
+The third reader is this session's, and it is the last written-out list to go.
+The audit that reads the sources now takes its dead commands from the eight
+command rows and its retired alphabet words from the four `key=value` rows, so
+retiring a spelling is one registry edit and no edit anywhere else. The list
+the audit kept until now had called `prose` dead where `prose` is a live word
+of the `form=` alphabet, and `\tnprose` a dead command where it is a live
+registry command that sets a sentence and puts no ink on the page. Reading the
+rows is what settles both, and the check refuses a row for either: a word the
+alphabet still holds and a command the registry still carries are both
+findings.
+
+Two documentation defects the same audit falsified are corrected in the
+registry, which is where the generated reference reads its prose. `\tnprose`
+now says the text enters the record stream and no ink reaches the page, and
+the wire's `weight=` now says the multiplicity is a claim of the boundary
+signature and that every weight strokes one rail. Both were true of the
+implementation before and stated by neither row. The `brace above` migration
+in the change ledger, which pointed at the two spellings retired here, now
+points at `form=bracket`.
+
+| flag | verdict |
+|---|---|
+| flag:consumers:key:kernel-mark:form | tombstoned in part: the four words that took a record and drew nothing leave the parser today, the alphabet standing at `bracket`, `enclosure`, `label` with the recording `prose` row the sugar ledger keeps; the key itself has consumers and stays kernel, so this executes the session-1 verdict rather than deferring it again; permanent |

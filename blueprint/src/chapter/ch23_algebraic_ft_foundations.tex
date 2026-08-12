@@ -1,13 +1,13 @@
 %% ---------------------------------------------------------
-\section{Non-translation-invariant periodic chains}
+\section{Site-dependent chains at fixed length}
 \label{sec:non_ti_setup}
 %% ---------------------------------------------------------
 
-The algebraic proof of~\cite{Molnar2018NormalPEPS} keeps a fixed periodic
-chain length and lets the local tensors vary from site to site. The
-necessary objects---the coefficient of a configuration, the same-state
-relation, sitewise injectivity, and cyclic gauge equivalence---are recorded
-first.
+The algebraic proof of~\cite{Molnar2018NormalPEPS} uses periodic square chains
+whose tensors vary from site to site. The proof of
+\cite[Theorem~3]{PerezGarcia2007Matrix} starts instead from a varying-bond
+open chain. We record both fixed-length constructions and distinguish their
+boundary conventions.
 
 \begin{definition}[Periodic non-TI chain data]\label{def:non_ti_chain}
     \lean{MPSChainTensor, MPSChainTensor.coeff, MPSChainTensor.SameState, MPSChainTensor.IsInjective, MPSChainTensor.GaugeEquiv}
@@ -55,6 +55,225 @@ first.
     \end{center}
 \end{definition}
 
+\begin{definition}[Varying-bond open chain]
+    \label{def:varying_bond_obc_chain}
+    \lean{OBCChainTensor}
+    \leanok
+    Fix a chain length $N$ and dimensions $D_0,\ldots,D_N\leq D$ with
+    $D_0=D_N=1$. A varying-bond open chain consists of matrices
+    $A_k^i\in\mathbb C^{D_k\times D_{k+1}}$ for
+    $k=0,\ldots,N-1$ and $i=0,\ldots,d-1$. Intermediate dimensions may
+    vanish. The number $D$ is a common upper bound and need not be the least
+    such bound.
+
+    This is the open-boundary representation of
+    \cite[Section~II.B]{PerezGarcia2007Matrix}. The source takes
+    $D=\max_k D_k$; allowing an arbitrary common upper bound does not change
+    the rectangular chain.
+\end{definition}
+
+\begin{definition}[Open-chain coefficient]
+    \label{def:varying_bond_obc_coeff}
+    \lean{OBCChainTensor.coeff}
+    \leanok
+    \uses{def:varying_bond_obc_chain}
+    For a physical configuration
+    $\sigma=(\sigma_0,\ldots,\sigma_{N-1})$, define
+    \begin{align}
+        c_A(\sigma)
+        &:=\sum_{\alpha_0=0}^{D_0-1}\cdots
+          \sum_{\alpha_N=0}^{D_N-1}
+          \prod_{k=0}^{N-1}
+          (A_k^{\sigma_k})_{\alpha_k,\alpha_{k+1}}.
+        \label{eq:varying_bond_obc_coeff}
+    \end{align}
+    Since $D_0=D_N=1$, this is the scalar matrix product in
+    \cite[Section~II.B]{PerezGarcia2007Matrix}. If an intermediate dimension
+    vanishes, the virtual-path set is empty. For $N=0$, there is one empty
+    path and its empty product is $1$.
+\end{definition}
+
+\begin{definition}[Cyclic translation of an open-chain configuration]
+    \label{def:varying_bond_obc_translation}
+    \lean{OBCChainTensor.cyclicTranslateConfig}
+    \leanok
+    Let $N\geq1$. For $s\in\mathbb Z/N\mathbb Z$, the cyclic translation of
+    a physical configuration is
+    \begin{align}
+        (T_s\sigma)_k&=\sigma_{k+s}.
+        \label{eq:varying_bond_obc_translation}
+    \end{align}
+    Only the physical configuration is translated. The dimensions
+    $D_0,\ldots,D_N$, the site matrices, and the distinguished open cut remain
+    fixed. At $N=0$, there is no translation parameter.
+\end{definition}
+
+\begin{definition}[Translation invariance at fixed length]
+    \label{def:varying_bond_obc_ti}
+    \lean{OBCChainTensor.IsTranslationInvariantState}
+    \leanok
+    \uses{def:varying_bond_obc_coeff, def:varying_bond_obc_translation}
+    For $N\geq1$, a varying-bond open chain represents a
+    translation-invariant state at length $N$ if, for every
+    $s\in\mathbb Z/N\mathbb Z$ and every physical configuration $\sigma$,
+    \begin{align}
+        c_A(T_s\sigma)&=c_A(\sigma).
+        \label{eq:varying_bond_obc_ti}
+    \end{align}
+    This condition compares coefficients at one fixed length. It does not
+    rotate the bond dimensions or identify open cuts. At $N=0$, the condition
+    is vacuous.
+\end{definition}
+
+\begin{theorem}[Empty open-chain coefficient]
+    \label{thm:varying_bond_obc_coeff_zero}
+    \lean{OBCChainTensor.coeff_zero}
+    \leanok
+    \uses{def:varying_bond_obc_coeff}
+    At $N=0$, the open-chain coefficient is $1$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{def:varying_bond_obc_coeff}
+    The left endpoint space is one-dimensional, so there is one virtual path.
+    Its product contains no factors and therefore equals $1$.
+\end{proof}
+
+\begin{theorem}[Vanishing from a zero virtual dimension]
+    \label{thm:varying_bond_obc_zero_bond}
+    \lean{OBCChainTensor.coeff_eq_zero_of_bondDim_eq_zero}
+    \leanok
+    \uses{def:varying_bond_obc_coeff}
+    If $D_k=0$ for some $k\in\{0,\ldots,N\}$, then
+    $c_A(\sigma)=0$ for every physical configuration $\sigma$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{def:varying_bond_obc_coeff}
+    No virtual path can have a coordinate in the empty $k$th bond space, so
+    the sum in~(\ref{eq:varying_bond_obc_coeff}) is empty.
+\end{proof}
+
+\begin{definition}[Square padding of a varying-bond open chain]
+    \label{def:varying_bond_obc_zero_pad}
+    \lean{OBCChainTensor.zeroPad}
+    \leanok
+    \uses{def:varying_bond_obc_chain, def:non_ti_chain}
+    For each site $k$, embed $A_k^i$ into the upper-left
+    $D_k\times D_{k+1}$ corner of a $D\times D$ matrix
+    $\widetilde A_k^i$ and set every other entry to zero. The matrices
+    $\widetilde A_k^i$ form a square site-dependent closed chain.
+
+    This square padding is an auxiliary algebraic factorization.
+    The proof of \cite[Theorem~3]{PerezGarcia2007Matrix} does not first replace
+    the rectangular open chain by this square chain. It places the original
+    rectangular matrices directly into the compatible off-diagonal blocks of
+    one $ND\times ND$ cyclic matrix.
+\end{definition}
+
+\begin{theorem}[Empty padded-chain coefficient]
+    \label{thm:varying_bond_obc_zero_pad_zero}
+    \lean{OBCChainTensor.coeff_zeroPad_zero}
+    \leanok
+    \uses{def:varying_bond_obc_zero_pad, def:non_ti_chain}
+    At $N=0$, the coefficient of the padded square chain is $D$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{def:varying_bond_obc_zero_pad, def:non_ti_chain}
+    The empty matrix product is the $D\times D$ identity, whose trace is $D$.
+\end{proof}
+
+\begin{theorem}[Zero-extension of a dependent finite sum]
+    \label{thm:pi_fin_sum_zero_extension}
+    \lean{Fintype.sum_piFin_castLE_extend_zero}
+    \leanok
+    Let $I$ be finite, let $r_i\leq s_i$ be nonnegative integers for
+    $i\in I$, and let $f$ take values in an additive commutative monoid. Then
+    the sum of $f$ over $\prod_{i\in I}\{0,\ldots,r_i-1\}$ equals its sum over
+    $\prod_{i\in I}\{0,\ldots,s_i-1\}$ after extending $f$ by zero outside
+    the smaller Cartesian product.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    The coordinatewise inclusions identify the smaller Cartesian product with
+    the subset of the larger product on which every coordinate is below its
+    original bound. Split the larger sum into this subset and its complement.
+\end{proof}
+
+\begin{theorem}[Cyclic path expansion for a square chain]
+    \label{thm:chain_coeff_sum_cyclic}
+    \lean{MPSChainTensor.coeff_eq_sum_cyclic}
+    \leanok
+    \uses{def:non_ti_chain}
+    Let $N\geq1$ and let $B_0,\ldots,B_{N-1}$ be a square site-dependent
+    chain of bond dimension $D$. For every physical configuration $\sigma$,
+    \begin{align}
+        c_{B,\sigma}
+        &=\sum_{g\colon\mathbb Z/N\mathbb Z\to\{0,\ldots,D-1\}}
+          \prod_{k\in\mathbb Z/N\mathbb Z}
+          (B_k^{\sigma_k})_{g(k),g(k+1)}.
+        \label{eq:chain_coeff_sum_cyclic}
+    \end{align}
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{lem:eval_word_of_fn_prod, thm:trace_eval_word_eq_sum_cyclic}
+    Encode the site and physical indices as one enlarged physical index and
+    apply the cyclic trace expansion for a closed matrix product.
+\end{proof}
+
+\begin{theorem}[Positive-length coefficient preservation]
+    \label{thm:varying_bond_obc_zero_pad_coeff}
+    \lean{OBCChainTensor.coeff_zeroPad}
+    \leanok
+    \uses{def:varying_bond_obc_coeff, def:varying_bond_obc_zero_pad}
+    Let $N\geq1$. For every physical configuration $\sigma$,
+    \begin{align}
+        \tr\!\left(\widetilde A_0^{\sigma_0}\cdots
+          \widetilde A_{N-1}^{\sigma_{N-1}}\right)
+        &=c_A(\sigma).
+        \label{eq:varying_bond_obc_zero_pad_coeff}
+    \end{align}
+    No positivity assumption is imposed on the intermediate dimensions. The
+    endpoint conditions already imply $D\geq1$ whenever such a chain exists.
+    The equality concerns only this fixed length.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:chain_coeff_sum_cyclic, thm:pi_fin_sum_zero_extension,
+        def:varying_bond_obc_coeff, def:varying_bond_obc_zero_pad}
+    Expand the left-hand side by~(\ref{eq:chain_coeff_sum_cyclic}). Extend the
+    dependent sum in~(\ref{eq:varying_bond_obc_coeff}) to the common dimension
+    $D$ by Theorem~\ref{thm:pi_fin_sum_zero_extension}. Every extended path
+    outside the rectangular bond ranges has a zero matrix entry. For the
+    remaining paths, the one-dimensional endpoint spaces identify the last
+    virtual coordinate with the first, and the products agree term by term.
+\end{proof}
+
+\begin{theorem}[Padded coefficient with a zero virtual dimension]
+    \label{thm:varying_bond_obc_zero_pad_zero_bond}
+    \lean{OBCChainTensor.coeff_zeroPad_eq_zero_of_bondDim_eq_zero}
+    \leanok
+    \uses{def:non_ti_chain, def:varying_bond_obc_zero_pad}
+    Let $N\geq1$. If $D_k=0$ for some
+    $k\in\{0,\ldots,N\}$, then the padded square-chain coefficient vanishes
+    for every physical configuration.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:varying_bond_obc_zero_pad_coeff,
+        thm:varying_bond_obc_zero_bond}
+    Apply positive-length coefficient preservation and then the vanishing of
+    the open-chain contraction.
+\end{proof}
 \begin{definition}[Cyclic block tensor at fixed length]
     \label{def:chain_cyclic_block_tensor}
     \lean{MPSChainTensor.cyclicRotation, MPSChainTensor.cyclicBlockTensor}
@@ -120,6 +339,45 @@ first.
     of its diagonal blocks. Finally,
     $(N^{-1/N})^N=N^{-1}$ gives
     (\ref{eq:chain_cyclic_block_average}).
+\end{proof}
+
+% Scope restriction (supplied OBC representation): PGVWC07 Theorem 3 also
+% obtains this input from purity via its OBC representation theorem. See
+% docs/paper-gaps/pgvwc07_site_independent_scope.tex.
+\begin{theorem}[Conditional site-independent matrices at fixed length]
+    \label{thm:pgvwc07_site_independent_matrices}
+    \lean{OBCChainTensor.pgvwc07_site_independent_matrices,
+        OBCChainTensor.exists_pgvwc07_site_independent_tensor}
+    \leanok
+    \uses{def:varying_bond_obc_ti, def:varying_bond_obc_zero_pad,
+        def:chain_cyclic_block_tensor}
+    This is the cyclic-block construction in
+    \cite[Theorem~3]{PerezGarcia2007Matrix}, conditional on its open-chain
+    input. Let $N\geq1$. Suppose a translation-invariant state on the $N$-site
+    ring has a varying-bond open-chain representation whose virtual dimensions are
+    at most $D$. Then it has a site-independent trace-MPS representation of
+    bond dimension $ND$ with the same length-$N$ coefficients.
+    The constructed tensor depends on $N$, and the equality is asserted only
+    at this ring length.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:chain_coeff_sum_cyclic, thm:varying_bond_obc_zero_pad_coeff,
+        thm:chain_cyclic_block_average}
+    The cyclic rotation of the padded square chain satisfies
+    \begin{align}
+        c_{(\widetilde A)^{(k)},\sigma}
+        &=c_A(\tau_{-k}\sigma),
+        \label{eq:pgvwc07_zero_pad_rotation}
+    \end{align}
+    where $(\tau_s\sigma)_j=\sigma_{j+s}$. To prove
+    (\ref{eq:pgvwc07_zero_pad_rotation}), expand both square-chain traces as
+    cyclic virtual-path sums and reindex the virtual path by the same rotation.
+    The inverse shift appears when the rotated matrix product is restored to
+    the distinguished open cut. Translation invariance makes every term in
+    the cyclic average equal to $c_A(\sigma)$, so the factor $1/N$ cancels the
+    sum of $N$ identical terms.
 \end{proof}
 
 \begin{lemma}[Cyclic gauge equivalence is an equivalence relation]

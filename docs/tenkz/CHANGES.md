@@ -109,7 +109,7 @@ Grid front end:
 | `bond label={$D$ at 1-2}` | `\tnmark[form=label]{<wire>}{$D$}` |
 | `label shift=` | `label pos=` |
 | `box` | `\tnmark[form=enclosure]` |
-| `brace above` | `\tnmark[form=brace-above]`, `form=brace-below` |
+| `brace above` | `\tnmark[form=bracket]`; the side a bracket speaks from is the side its label sits on, so `label pos=` names it and the south is the default |
 | `label pos` (annotation) | `label pos=` on the mark record |
 | `layer sep=` | the metric size classes |
 | `trace style=racetrack` | — |

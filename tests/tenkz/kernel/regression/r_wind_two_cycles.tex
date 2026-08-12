@@ -1,0 +1,21 @@
+% Regression: two wound cycles on one traced lattice meet, and the order of
+% the meeting is stated by a habit and by a declaration at once.  This is the
+% shape of rmp-iii-a-torus-one, kept here because k_torus.tex is now the
+% contract's 12.2 sketch verbatim and that sketch carries one cycle.
+\documentclass{standalone}
+\usepackage{tenkz}
+\makeatletter
+\ExplSyntaxOn
+\file_input:n { tenkz-kernel.code.tex }
+\ExplSyntaxOff
+\makeatother
+\begin{document}
+\tenkzkernel
+\begin{tenkz}[lattice={3x3},
+              west=trace, east=trace, north=trace, south=trace]
+  \tnwire[kind=string, species=flux, name=horizontal, closed, wind={1,0}]
+  \tnwire[kind=string, species=flux, name=vertical, closed, wind={0,1},
+          crossing=under,
+          cross={under at crossing of vertical and horizontal}]
+\end{tenkz}
+\end{document}

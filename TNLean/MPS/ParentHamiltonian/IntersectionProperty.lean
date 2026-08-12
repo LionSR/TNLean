@@ -33,6 +33,10 @@ state of the parent Hamiltonian.
 * `MPSTensor.groundSpace_inLeftGround` — forward direction, left window
 * `MPSTensor.groundSpace_inRightGround` — forward direction, right window
 * `MPSTensor.groundSpaceMap_injective` — injectivity for injective tensors
+* `MPSTensor.groundSpaceMap_injective_of_wordSpan_eq_top` — injectivity from exact
+  word-span fullness
+* `MPSTensor.groundSpaceMap_injective_of_isNBlkInjective` — injectivity at a
+  block-injective length
 * `MPSTensor.groundSpace_finrank_eq` — dimension equals \(D^2\)
 * `MPSTensor.groundSpace_intersection` — the intersection property
 
@@ -260,6 +264,38 @@ theorem groundSpaceMap_injective {A : MPSTensor d D} (hA : IsInjective A)
         _ = 0 := hNX
         _ = Matrix.trace (0 * N) := by simp
   exact LinearMap.ker_eq_bot.mp hker
+
+/-- If words of length \(L\) span the full matrix algebra, then `groundSpaceMap A L`
+has trivial kernel. -/
+theorem groundSpaceMap_injective_of_wordSpan_eq_top {A : MPSTensor d D}
+    {L : ℕ} (hWord : wordSpan A L = ⊤) :
+    Function.Injective (groundSpaceMap A L) := by
+  have hker : (groundSpaceMap A L).ker = ⊥ := by
+    apply (LinearMap.ker_eq_bot').2
+    intro X hX
+    have hφ :
+        (Matrix.traceLinearMap (Fin D) ℂ ℂ).comp (LinearMap.mulRight ℂ X) = 0 := by
+      apply LinearMap.ext_on_range
+        (v := fun σ : Fin L → Fin d => evalWord A (List.ofFn σ))
+      · simpa [wordSpan] using hWord
+      · intro σ
+        simpa [groundSpaceMap_apply, Matrix.traceLinearMap_apply] using
+          congrArg (fun ψ => ψ σ) hX
+    exact (Matrix.ext_iff_trace_mul_right (A := X) (B := 0)).2 fun N => by
+      have hNX : Matrix.trace (N * X) = 0 := by
+        simpa [Matrix.traceLinearMap_apply] using congrArg (fun f => f N) hφ
+      calc
+        Matrix.trace (X * N) = Matrix.trace (N * X) := Matrix.trace_mul_comm X N
+        _ = 0 := hNX
+        _ = Matrix.trace (0 * N) := by simp
+  exact LinearMap.ker_eq_bot.mp hker
+
+/-- Block injectivity at length \(L₀\) makes the map \(Γ_{L₀}\) injective. -/
+theorem groundSpaceMap_injective_of_isNBlkInjective {A : MPSTensor d D}
+    {L₀ : ℕ} (hInj : IsNBlkInjective A L₀) :
+    Function.Injective (groundSpaceMap A L₀) := by
+  apply groundSpaceMap_injective_of_wordSpan_eq_top
+  exact (wordSpan_eq_top_iff_isNBlkInjective A L₀).mpr hInj
 
 /-- For an injective tensor, the ground space has dimension exactly \(D^2\) for
 \(L \geq 1\).

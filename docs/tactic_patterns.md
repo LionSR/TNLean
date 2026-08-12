@@ -24,6 +24,24 @@ abstracted — record why, so it is not re-proposed).
 
 ## Promoted
 
+### two-site cyclic local-embedding reindexing — promoted
+- **Pattern:** reindex a cyclic two-site embedding by the equivalence between
+  two-site configurations and ordered pairs, prove agreement outside the full
+  window by finite index cases, and identify the extracted coordinates.
+- **Seen:** the sector-specific public proof in
+  `TNLean/MPS/MPDO/PhysicalSectorBondTwoSite.lean` and the private generic proof
+  in `TNLean/MPS/MPDO/IsometricAdjacentBondTransport.lean` before promotion
+  (2026-08-12).
+- **Abstraction:** `MPOTensor.reindex_embedLocalOperator_two_zero` and
+  `MPOTensor.reindex_embedLocalOperator_two_one` in
+  `TNLean/MPS/MPDO/EmbedLocalOperatorTwoSite.lean`.
+- **Notes:** the promoted theorems apply to arbitrary two-site matrices. The
+  site-one conclusion states the factor exchange directly with
+  `Matrix.reindex (Equiv.prodComm ...)`. The two
+  `PhysicalSectorFactorization.reindex_embedLocalOperator_two_*` declarations
+  remain public sector-specific specializations, while the isometric
+  calculation uses the generic identities directly.
+
 ### Hayashi state evaluation in middle-sector coordinates — promoted
 - **Pattern:** evaluate `EtaStructure.h_state` at decomposed middle-site coordinates,
   identify both inverse reindexings, apply the lifted-conjugation entry formula, and
