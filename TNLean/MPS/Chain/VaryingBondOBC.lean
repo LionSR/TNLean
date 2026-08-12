@@ -26,7 +26,7 @@ open scoped BigOperators Matrix
 
 /-- A fixed-length open-boundary MPS chain whose virtual dimensions may vary
 from bond to bond. The first and last bond spaces are one-dimensional, and all
-bond dimensions are bounded by `D`. Intermediate bond dimensions may be zero.
+bond dimensions are bounded by \(D\). Intermediate bond dimensions may be zero.
 
 Source: PGVWC07, arXiv:quant-ph/0608197, lines 419--429. -/
 structure OBCChainTensor (d D N : ℕ) where
@@ -63,7 +63,7 @@ def IsTranslationInvariantState (A : OBCChainTensor d D N) : Prop :=
   ∀ s : Fin N, ∀ σ : Fin N → Fin d,
     coeff A (cyclicTranslateConfig s σ) = coeff A σ
 
-/-- Entrywise zero-padding of every rectangular site matrix into a `D × D`
+/-- Entrywise zero-padding of every rectangular site matrix into a \(D \times D\)
 matrix. The result is a closed square site-dependent chain, not itself the
 source open-boundary representation. -/
 def zeroPad (A : OBCChainTensor d D N) : MPSChainTensor d D N :=
@@ -79,7 +79,7 @@ def zeroPad (A : OBCChainTensor d D N) : MPSChainTensor d D N :=
     coeff A σ = 1 := by
   simp [coeff, A.left_dim]
 
-/-- At length zero, the square-chain coefficient is the trace of the `D × D`
+/-- At length zero, the square-chain coefficient is the trace of the \(D \times D\)
 identity matrix. This records the mismatch with `coeff_zero` explicitly. -/
 theorem coeff_zeroPad_zero (A : OBCChainTensor d D 0)
     (σ : Fin 0 → Fin d) :
@@ -147,8 +147,8 @@ private theorem coeff_eq_sum_init (A : OBCChainTensor d D N)
 coefficient. Zero intermediate bond dimensions are allowed: then the dependent
 path space is empty and the padded cyclic sum also vanishes.
 
-The positive-length hypothesis is necessary. At `N = 0`, `coeff A σ = 1`,
-whereas the coefficient of the empty square chain is `D`.
+The positive-length hypothesis is necessary. At \(N = 0\), the open-chain
+coefficient is one, whereas the coefficient of the empty square chain is \(D\).
 
 The rectangular data are from PGVWC07, arXiv:quant-ph/0608197, lines 419--429;
 the zero-padding identity is TNLean's algebraic factorization. -/

@@ -223,7 +223,7 @@ boundary conventions.
 
 \begin{proof}
     \leanok
-    \uses{thm:trace_eval_word_eq_sum_cyclic}
+    \uses{lem:eval_word_of_fn_prod, thm:trace_eval_word_eq_sum_cyclic}
     Encode the site and physical indices as one enlarged physical index and
     apply the cyclic trace expansion for a closed matrix product.
 \end{proof}
@@ -261,7 +261,7 @@ boundary conventions.
     \label{thm:varying_bond_obc_zero_pad_zero_bond}
     \lean{OBCChainTensor.coeff_zeroPad_eq_zero_of_bondDim_eq_zero}
     \leanok
-    \uses{def:varying_bond_obc_zero_pad}
+    \uses{def:non_ti_chain, def:varying_bond_obc_zero_pad}
     Let $N\geq1$. If $D_k=0$ for some
     $k\in\{0,\ldots,N\}$, then the padded square-chain coefficient vanishes
     for every physical configuration.
