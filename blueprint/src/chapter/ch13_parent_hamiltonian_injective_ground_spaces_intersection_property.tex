@@ -450,14 +450,14 @@
     restriction condition.
 \end{proof}
 
-\begin{lemma}[End-site and cyclic coordinate identifications]
-    \label{lem:adjacent_local_term_coordinate_identifications}
+\begin{theorem}[End-site and cyclic coordinate identifications]
+    \label{thm:adjacent_local_term_coordinate_identifications}
     \lean{MPSTensor.restrictLast_eq_cyclicRestrictES_zero,
         MPSTensor.tailRestrictₗ_one_eq_restrictFirst,
         MPSTensor.restrictFirst_eq_cyclicRestrictES_one}
     \leanok
     \uses{def:restrict_last, def:restrict_first, def:tail_restrict_parent,
-        rem:cyclic_window_operators}
+        rem:euclidean_local_projector_ingredients}
     Let $\iota_L$ denote the canonical identification of the $L$-site state
     space with its Hilbert-space realization, and let
     $R^{\mathrm{cyc}}_{i,\tau}$ denote cyclic restriction to the length-$L$
@@ -479,10 +479,12 @@
         &=\iota_L^{-1}R^{\mathrm{cyc}}_{1,\tau}v.
     \end{align}
     No hypothesis on the physical or virtual dimension is required.
-\end{lemma}
+\end{theorem}
 
 \begin{proof}
     \leanok
+    \uses{def:restrict_last, def:restrict_first, def:tail_restrict_parent,
+        rem:euclidean_local_projector_ingredients}
     Expand the restriction maps on a configuration. At site $0$, cyclic order
     is ordinary order and fixing the complement fixes the final coordinate.
     A one-site prefix is its unique coordinate, which gives the middle identity.
@@ -520,7 +522,7 @@
         lem:local_term_es_kernel_restrictions,
         lem:mem_ground_space_es,
         lem:transported_es_local_projections,
-        lem:adjacent_local_term_coordinate_identifications}
+        thm:adjacent_local_term_coordinate_identifications}
     At site $0$, fixing the final physical coordinate is the cyclic restriction
     defining $h_0$. At site $1$, fixing the one-site prefix is the first-site
     restriction and hence the cyclic restriction defining $h_1$. The kernel
