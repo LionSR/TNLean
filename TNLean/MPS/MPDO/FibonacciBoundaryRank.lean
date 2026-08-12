@@ -225,7 +225,9 @@ def periodicTransitionCount (N : ℕ) : ℕ := x N 0 0 + x N 1 1
   norm_num [x, B]
 
 /-- The periodic transition counts satisfy the characteristic recurrence of
-\(B=\left(\begin{smallmatrix}1&1\\1&2\end{smallmatrix}\right)\). -/
+\(B=\left(\begin{smallmatrix}1&1\\1&2\end{smallmatrix}\right)\).
+
+Source: arXiv:1606.00608, Appendix D, lines 2146--2149. -/
 theorem periodicTransitionCount_add_two_add (N : ℕ) :
     periodicTransitionCount (N + 2) + periodicTransitionCount N =
       3 * periodicTransitionCount (N + 1) := by
@@ -251,24 +253,15 @@ theorem periodicTransitionCount_eq_goldenRatio (N : ℕ) :
   | more N hN hN1 =>
       have hCount := congrArg (fun n : ℕ ↦ (n : ℝ)) (periodicTransitionCount_add_two_add N)
       push_cast at hCount
-      have hRatioQuartic : Real.goldenRatio ^ 4 + 1 = 3 * Real.goldenRatio ^ 2 := by
-        linear_combination
-          (Real.goldenRatio ^ 2 + Real.goldenRatio - 1) * Real.goldenRatio_sq
-      have hRatio :
-          Real.goldenRatio ^ (2 * (N + 2)) + Real.goldenRatio ^ (2 * N) =
-            3 * Real.goldenRatio ^ (2 * (N + 1)) := by
+      have hRootPowers (z : ℝ) (hz : z ^ 2 = z + 1) :
+          z ^ (2 * (N + 2)) + z ^ (2 * N) = 3 * z ^ (2 * (N + 1)) := by
+        have hQuartic : z ^ 4 + 1 = 3 * z ^ 2 := by
+          linear_combination (z ^ 2 + z - 1) * hz
         rw [show 2 * (N + 2) = 2 * N + 4 by omega,
           show 2 * (N + 1) = 2 * N + 2 by omega, pow_add, pow_add]
-        linear_combination Real.goldenRatio ^ (2 * N) * hRatioQuartic
-      have hConjQuartic : Real.goldenConj ^ 4 + 1 = 3 * Real.goldenConj ^ 2 := by
-        linear_combination
-          (Real.goldenConj ^ 2 + Real.goldenConj - 1) * Real.goldenConj_sq
-      have hConj :
-          Real.goldenConj ^ (2 * (N + 2)) + Real.goldenConj ^ (2 * N) =
-            3 * Real.goldenConj ^ (2 * (N + 1)) := by
-        rw [show 2 * (N + 2) = 2 * N + 4 by omega,
-          show 2 * (N + 1) = 2 * N + 2 by omega, pow_add, pow_add]
-        linear_combination Real.goldenConj ^ (2 * N) * hConjQuartic
+        linear_combination z ^ (2 * N) * hQuartic
+      have hRatio := hRootPowers Real.goldenRatio Real.goldenRatio_sq
+      have hConj := hRootPowers Real.goldenConj Real.goldenConj_sq
       rw [hN, hN1] at hCount
       linarith
 
