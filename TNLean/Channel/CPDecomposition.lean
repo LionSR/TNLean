@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import TNLean.Algebra.HermitianHelpers
 import TNLean.Channel.ChoiRectangular
 
 /-!
@@ -11,9 +12,8 @@ import TNLean.Channel.ChoiRectangular
 Every linear map `T : M_d(ℂ) → M_{d'}(ℂ)` is a complex linear combination of
 four completely positive maps, and a Hermitian map — one satisfying
 `T(B†) = T(B)†` for every `B` — is a real linear combination of two of them.
-This is the proposition "Decomposition into completely positive maps" of
-Wolf Chapter 2, `Notes/WolfNoteTexSource/ch02_representations.tex`,
-lines 130–149.
+This is Wolf Chapter 2, Proposition 2.2 (decomposition into completely positive
+maps), `Notes/WolfNoteTexSource/ch02_representations.tex`, lines 130–149.
 
 The proof is Wolf's. Because the correspondence `T ↔ τ` of Proposition 2.1 is
 one-to-one and linear, it suffices to decompose the Choi matrix. Wolf's display
@@ -29,10 +29,6 @@ correspondence produces the four completely positive maps.
 
 ## Main results
 
-* `Matrix.IsHermitian.exists_eq_sub_posSemidef` — the Jordan decomposition of a
-  Hermitian matrix into a difference of two positive semidefinite matrices.
-* `Matrix.exists_isHermitian_eq_add_smul_I` — Wolf's display: every square
-  matrix is `H₁ + i H₂` with `H₁` and `H₂` Hermitian.
 * `ChoiRectangular.exists_four_isKrausCP_complexCombination` — every linear map
   `M_d(ℂ) → M_{d'}(ℂ)` is a complex linear combination of four completely
   positive maps.
@@ -48,69 +44,27 @@ Wolf Theorem 2.1. No hypothesis is placed on the dimensions: for `d = 0` the
 input algebra has a single element, every linear map out of it vanishes, and
 the empty combination already witnesses the statement.
 
-The square sandwich polarization `WolfProps.cp_decomposition_of_sandwich_sum`
-proves a different statement: it decomposes a map already presented in the
-form `X ↦ ∑ᵢ Aᵢ X Bᵢ†` on a single matrix algebra.
+The two matrix ingredients carry no channel hypotheses and live in
+`TNLean/Algebra/HermitianHelpers.lean`: `Matrix.exists_isHermitian_eq_add_smul_I`
+for Wolf's display and `Matrix.IsHermitian.exists_eq_sub_posSemidef` for the
+spectral step.
+
+`WolfProps.cp_decomposition_of_sandwich_sum` proves a different statement: it
+decomposes a map already presented in the form `X ↦ ∑ᵢ Aᵢ X Bᵢ†` on a single
+matrix algebra.
 
 ## References
 
 * [M. Wolf, *Quantum Channels & Operations: Guided Tour*, Chapter 2,
-  Proposition "Decomposition into completely positive maps"][Wolf2012QChannels]
+  Proposition 2.2 "Decomposition into completely positive maps"][Wolf2012QChannels]
 -/
 
 open scoped Matrix ComplexOrder MatrixOrder
 open Matrix Finset
 
-namespace Matrix
-
-variable {n : Type*}
-
-/-- **Jordan decomposition**: a Hermitian matrix is the difference of two
-positive semidefinite matrices, namely its positive and negative parts. This is
-the spectral decomposition step of Wolf Chapter 2, proposition "Decomposition
-into completely positive maps"; `Notes/WolfNoteTexSource/ch02_representations.tex`,
-lines 146–148. -/
-theorem IsHermitian.exists_eq_sub_posSemidef [Finite n] {H : Matrix n n ℂ}
-    (hH : H.IsHermitian) :
-    ∃ P N : Matrix n n ℂ, P.PosSemidef ∧ N.PosSemidef ∧ H = P - N := by
-  classical
-  cases nonempty_fintype n
-  exact ⟨H⁺, H⁻, Matrix.nonneg_iff_posSemidef.mp (CFC.posPart_nonneg H),
-    Matrix.nonneg_iff_posSemidef.mp (CFC.negPart_nonneg H),
-    (CFC.posPart_sub_negPart H (isSelfAdjoint_iff.mpr hH)).symm⟩
-
-/-- **Hermitian and anti-Hermitian parts**: every square complex matrix is
-`H₁ + i H₂` with `H₁` and `H₂` Hermitian. The witnesses are Wolf's,
-`H₁ = (τ + τ†)/2` and `H₂ = (i τ† - i τ)/2`;
-`Notes/WolfNoteTexSource/ch02_representations.tex`, line 144. -/
-theorem exists_isHermitian_eq_add_smul_I (τ : Matrix n n ℂ) :
-    ∃ H₁ H₂ : Matrix n n ℂ, H₁.IsHermitian ∧ H₂.IsHermitian ∧
-      τ = H₁ + Complex.I • H₂ := by
-  refine ⟨(2 : ℂ)⁻¹ • (τ + τᴴ), (2 : ℂ)⁻¹ • (Complex.I • τᴴ - Complex.I • τ),
-    ?_, ?_, ?_⟩
-  · change ((2 : ℂ)⁻¹ • (τ + τᴴ))ᴴ = _
-    rw [← star_eq_conjTranspose, ← star_eq_conjTranspose]
-    simp [star_smul, add_comm]
-  · change ((2 : ℂ)⁻¹ • (Complex.I • τᴴ - Complex.I • τ))ᴴ = _
-    simp only [← star_eq_conjTranspose, star_smul, star_sub, star_star, RCLike.star_def,
-      Complex.conj_I, map_inv₀, map_ofNat]
-    module
-  · have hI : Complex.I * Complex.I = -1 := Complex.I_mul_I
-    match_scalars
-    · linear_combination ((1 : ℂ) / 2) * hI
-    · linear_combination (-(1 : ℂ) / 2) * hI
-
-end Matrix
-
 namespace ChoiRectangular
 
 variable {d d' : ℕ}
-
-/-- The Choi assignment commutes with finite sums of maps. -/
-theorem choiMatrix_sum {ι : Type*} (s : Finset ι)
-    (T : ι → (Matrix (Fin d) (Fin d) ℂ →ₗ[ℂ] Matrix (Fin d') (Fin d') ℂ)) :
-    choiMatrix (∑ i ∈ s, T i) = ∑ i ∈ s, choiMatrix (T i) :=
-  map_sum (choiMatrixLinearMap (d := d) (d' := d')) T s
 
 /-- The zero map is completely positive: the empty Kraus family represents it. -/
 private theorem isKrausCP_zero :
@@ -124,13 +78,12 @@ private theorem eq_zero_of_isEmpty
   have hB : B = 0 := by ext i; exact i.elim0
   rw [hB, map_zero, LinearMap.zero_apply]
 
-/-- **Decomposition into completely positive maps** (Wolf, Chapter 2). Every
-linear map `T : M_d(ℂ) → M_{d'}(ℂ)` is a complex linear combination of four
-completely positive maps.
+/-- **Decomposition into completely positive maps** (Wolf, Proposition 2.2).
+Every linear map `T : M_d(ℂ) → M_{d'}(ℂ)` is a complex linear combination of
+four completely positive maps.
 
-Wolf, Chapter 2, proposition "Decomposition into completely positive maps",
-first sentence; `Notes/WolfNoteTexSource/ch02_representations.tex`,
-lines 130–135. -/
+Wolf, Chapter 2, Proposition 2.2, first sentence;
+`Notes/WolfNoteTexSource/ch02_representations.tex`, lines 130–135. -/
 theorem exists_four_isKrausCP_complexCombination
     (T : Matrix (Fin d) (Fin d) ℂ →ₗ[ℂ] Matrix (Fin d') (Fin d') ℂ) :
     ∃ (c : Fin 4 → ℂ)
@@ -160,13 +113,12 @@ theorem exists_four_isKrausCP_complexCombination
     module
 
 /-- **Decomposition into completely positive maps**, Hermitian case (Wolf,
-Chapter 2). A linear map `T : M_d(ℂ) → M_{d'}(ℂ)` that is Hermitian, that is,
-`T(B†) = T(B)†` for every `B ∈ M_d(ℂ)`, is a real linear combination of two
+Proposition 2.2). A linear map `T : M_d(ℂ) → M_{d'}(ℂ)` that is Hermitian, that
+is, `T(B†) = T(B)†` for every `B ∈ M_d(ℂ)`, is a real linear combination of two
 completely positive maps.
 
-Wolf, Chapter 2, proposition "Decomposition into completely positive maps",
-second sentence; `Notes/WolfNoteTexSource/ch02_representations.tex`,
-lines 132–134. -/
+Wolf, Chapter 2, Proposition 2.2, second sentence;
+`Notes/WolfNoteTexSource/ch02_representations.tex`, lines 132–134. -/
 theorem exists_two_isKrausCP_realCombination_of_hermiticityPreserving
     (T : Matrix (Fin d) (Fin d) ℂ →ₗ[ℂ] Matrix (Fin d') (Fin d') ℂ)
     (hT : ∀ B : Matrix (Fin d) (Fin d) ℂ, T (Bᴴ) = (T B)ᴴ) :

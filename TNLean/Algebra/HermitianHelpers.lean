@@ -11,13 +11,14 @@ import TNLean.Algebra.MatrixAux
 # Hermitian matrix extremal eigenvalues
 
 This file provides lemmas for Hermitian complex matrices over an arbitrary finite
-index type: decomposition into Hermitian components, rank-one positive
+index type: decomposition into Hermitian components, the Jordan decomposition of
+a Hermitian matrix into positive and negative parts, rank-one positive
 semidefinite criteria, extremal eigenvalues, scalar-shift spectral formulae, and
 commutation transport from a power of a positive semidefinite matrix to the
 matrix itself.
 -/
 
-open scoped Matrix ComplexOrder InnerProductSpace
+open scoped Matrix ComplexOrder InnerProductSpace MatrixOrder
 
 variable {n : Type*} [Fintype n] [DecidableEq n]
 
@@ -51,6 +52,38 @@ theorem exists_isHermitian_decomposition (X : Matrix n n ℂ) :
       rw [mul_assoc, Complex.I_mul_I]
       ring]
   module
+
+omit [Fintype n] [DecidableEq n] in
+/-- **Hermitian and anti-Hermitian parts**: every square complex matrix is
+`H₁ + i H₂` with `H₁` and `H₂` Hermitian. This is `exists_isHermitian_decomposition`
+rescaled so that the witnesses are Wolf's, `H₁ = (τ + τ†)/2` and
+`H₂ = (i τ† - i τ)/2`; `Notes/WolfNoteTexSource/ch02_representations.tex`,
+line 144. -/
+theorem exists_isHermitian_eq_add_smul_I (τ : Matrix n n ℂ) :
+    ∃ H₁ H₂ : Matrix n n ℂ, H₁.IsHermitian ∧ H₂.IsHermitian ∧
+      τ = H₁ + Complex.I • H₂ := by
+  obtain ⟨H₁, H₂, -, -, hH₁, hH₂, hτ⟩ := exists_isHermitian_decomposition τ
+  have hhalf : IsSelfAdjoint ((2⁻¹ : ℂ)) := by
+    rw [isSelfAdjoint_iff]
+    norm_num
+  refine ⟨(2⁻¹ : ℂ) • H₁, (-2⁻¹ : ℂ) • H₂, hH₁.smul hhalf, hH₂.smul hhalf.neg, ?_⟩
+  rw [hτ]
+  module
+
+omit [Fintype n] [DecidableEq n] in
+/-- **Jordan decomposition**: a Hermitian matrix is the difference of two
+positive semidefinite matrices, namely its positive and negative parts. This is
+the spectral decomposition step of Wolf Chapter 2, Proposition 2.2 (decomposition
+into completely positive maps);
+`Notes/WolfNoteTexSource/ch02_representations.tex`, lines 146–148. -/
+theorem IsHermitian.exists_eq_sub_posSemidef [Finite n] {H : Matrix n n ℂ}
+    (hH : H.IsHermitian) :
+    ∃ P N : Matrix n n ℂ, P.PosSemidef ∧ N.PosSemidef ∧ H = P - N := by
+  classical
+  cases nonempty_fintype n
+  exact ⟨H⁺, H⁻, Matrix.nonneg_iff_posSemidef.mp (CFC.posPart_nonneg H),
+    Matrix.nonneg_iff_posSemidef.mp (CFC.negPart_nonneg H),
+    (CFC.posPart_sub_negPart H (isSelfAdjoint_iff.mpr hH)).symm⟩
 
 /-! ## Rank-one diagonal positivity criteria -/
 
