@@ -255,14 +255,21 @@ theorem rayleigh_eigenvector_re (hτ : τ.IsHermitian) (j : N) :
   · intro h; exact absurd (Finset.mem_univ j) h
 
 /-- **Wolf's Chapter 3, Proposition 3.2, equation (3.7) at the top Schmidt-rank
-index n = D.**  At the top index the Schmidt-rank constraint is vacuous (every
-vector on the bipartite space has Schmidt rank at most D) and the Ky-Fan D-norm
+index n = D'.**  At the top index the Schmidt-rank constraint is vacuous (every
+vector on the bipartite space has Schmidt rank at most D') and the Ky-Fan
+D'-norm
 of each reduced density collapses to its trace, which is one.  The lower
 bound (3.7) therefore degenerates to the Rayleigh characterization of the least
 eigenvalue: every normalized vector ψ satisfies λ_min ≤ ⟨ψ|τ|ψ⟩, with no
 Schmidt-rank restriction.  This is the completely-positive endpoint of the
 positivity chain.  Together with `exists_spectral_lower_bound_top` it gives
-min_ψ ⟨ψ|τ|ψ⟩ = λ_min. -/
+min_ψ ⟨ψ|τ|ψ⟩ = λ_min.
+
+Wolf's positivity index runs over 1 ≤ n ≤ D with D the dimension of the second
+tensor factor (Prop. 3.1), so these indices belong to the source's range when
+D' ≤ D and extend past it when D' > D.  The statement itself needs no relation
+between the two dimensions.
+-/
 theorem spectral_lower_bound_top [Nonempty N] (hτ : τ.IsHermitian)
     {ψ : N → ℂ} (hψ : star ψ ⬝ᵥ ψ = 1) :
     Finset.univ.inf' Finset.univ_nonempty hτ.eigenvalues ≤ (star ψ ⬝ᵥ (τ *ᵥ ψ)).re := by
@@ -278,12 +285,18 @@ theorem spectral_lower_bound_top [Nonempty N] (hτ : τ.IsHermitian)
           mul_le_mul_of_nonneg_right (Finset.inf'_le _ (Finset.mem_univ i)) (sq_nonneg _)
 
 /-- **Wolf's Chapter 3, Proposition 3.2, equation (3.8) at the top Schmidt-rank
-index n = D.**  Equation (3.8) bounds the infimum of ⟨ψ|τ|ψ⟩ from above by
+index n = D'.**  Equation (3.8) bounds the infimum of ⟨ψ|τ|ψ⟩ from above by
 exhibiting a low-expectation vector.  At the top index the Schmidt-rank
 constraint is vacuous and the bound becomes λ_min: the eigenvector at an index
 realizing the least eigenvalue is normalized and makes ⟨ψ|τ|ψ⟩ equal to λ_min,
 so inf_ψ ⟨ψ|τ|ψ⟩ ≤ λ_min.  Together with `spectral_lower_bound_top` this gives
-min_ψ ⟨ψ|τ|ψ⟩ = λ_min, the source's top-index statement. -/
+min_ψ ⟨ψ|τ|ψ⟩ = λ_min, the source's top-index statement.
+
+Wolf's positivity index runs over 1 ≤ n ≤ D with D the dimension of the second
+tensor factor (Prop. 3.1), so these indices belong to the source's range when
+D' ≤ D and extend past it when D' > D.  The statement itself needs no relation
+between the two dimensions.
+-/
 theorem exists_spectral_lower_bound_top [Nonempty N] (hτ : τ.IsHermitian) :
     ∃ ψ : N → ℂ, star ψ ⬝ᵥ ψ = 1 ∧
       (star ψ ⬝ᵥ (τ *ᵥ ψ)).re = Finset.univ.inf' Finset.univ_nonempty hτ.eigenvalues := by
@@ -580,7 +593,13 @@ the least eigenvalue: inf_ψ ⟨ψ|τ|ψ⟩ = ν_min.
 Equation (3.7) at the top index is a separate statement: its right-hand side
 reads ν₀ + Σ_{i:νᵢ≤0} (νᵢ − ν₀), which for eigenvalues (−2, −1, 3) is −6 while
 ν_min is −2.  The inequality ν₀ + Σ_{i:νᵢ≤0} (νᵢ − ν₀) ≤ ν_min is
-`Matrix.IsHermitian.le_sInf_schmidtRankLEExpectations_top`. -/
+`Matrix.IsHermitian.le_sInf_schmidtRankLEExpectations_top`.
+
+Wolf's positivity index runs over 1 ≤ n ≤ D with D the dimension of the second
+tensor factor (Prop. 3.1), so these indices belong to the source's range when
+D' ≤ D and extend past it when D' > D.  The statement itself needs no relation
+between the two dimensions.
+-/
 theorem IsHermitian.sInf_schmidtRankLEExpectations_top [Nonempty m] [Nonempty n]
     {τ : Matrix (m × n) (m × n) ℂ} (hτ : τ.IsHermitian) {k : ℕ}
     (hk : Fintype.card m ≤ k) :
@@ -603,7 +622,13 @@ Ky-Fan norm ‖ρᵢ‖₍ₙ₎ equals tr ρᵢ = 1, so the right-hand side of 
 summand at a minimizing index already lowers ν₀ to ν_min, and the remaining
 summands are nonpositive.  With
 `Matrix.IsHermitian.sInf_schmidtRankLEExpectations_top` this gives (3.7) at the
-top index. -/
+top index.
+
+Wolf's positivity index runs over 1 ≤ n ≤ D with D the dimension of the second
+tensor factor (Prop. 3.1), so these indices belong to the source's range when
+D' ≤ D and extend past it when D' > D.  The statement itself needs no relation
+between the two dimensions.
+-/
 theorem IsHermitian.le_sInf_schmidtRankLEExpectations_top [Nonempty m] [Nonempty n]
     {τ : Matrix (m × n) (m × n) ℂ} (hτ : τ.IsHermitian) {ν₀ : ℝ} {k : ℕ}
     (hk : Fintype.card m ≤ k) (hν0 : 0 ≤ ν₀)
