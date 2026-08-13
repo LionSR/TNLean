@@ -38,11 +38,9 @@ theorem rangeCompressionEigenbasis_inner_angleDefect_eq_zero {P Q : E →ₗ[ℂ
         (rangeCompressionEigenbasis hP hQ j : E)⟫_ℂ = 0 := by
   let x := fun k => (rangeCompressionEigenbasis hP hQ k : E)
   let μ := rangeCompressionEigenvalues hP hQ
-  have hxiP : P (x i) = x i :=
-    (LinearMap.IsIdempotentElem.mem_range_iff hP.isIdempotentElem).mp
-      (rangeCompressionEigenbasis hP hQ i).property
+  have hxiP : P (x i) = x i := rangeCompressionEigenbasis_apply_self hP hQ i
   have hxjEig : P (Q (x j)) = (μ j : ℂ) • x j :=
-    congr_arg Subtype.val (rangeCompression_apply_eigenbasis hP hQ j)
+    rangeCompressionEigenbasis_apply_compression hP hQ j
   rw [angleDefect, inner_sub_right, inner_smul_right]
   calc
     ⟪x i, Q (x j)⟫_ℂ - (μ j : ℂ) * ⟪x i, x j⟫_ℂ =
@@ -77,12 +75,10 @@ theorem angleDefect_inner_angleDefect {P Q : E →ₗ[ℂ] E}
   let μ := rangeCompressionEigenvalues hP hQ
   have hxd : ⟪x i, angleDefect Q (μ j) (x j)⟫_ℂ = 0 :=
     rangeCompressionEigenbasis_inner_angleDefect_eq_zero hP hQ i j
-  have hxjP : P (x j) = x j :=
-    (LinearMap.IsIdempotentElem.mem_range_iff hP.isIdempotentElem).mp
-      (rangeCompressionEigenbasis hP hQ j).property
+  have hxjP : P (x j) = x j := rangeCompressionEigenbasis_apply_self hP hQ j
   have hxjnorm : ‖x j‖ = 1 := (rangeCompressionEigenbasis hP hQ).norm_eq_one j
   have hxjEig : P (Q (x j)) = (μ j : ℂ) • x j :=
-    congr_arg Subtype.val (rangeCompression_apply_eigenbasis hP hQ j)
+    rangeCompressionEigenbasis_apply_compression hP hQ j
   have hQdj := (angleDefect_block hP hQ hxjP hxjnorm hxjEig).2.2.1
   change ⟪Q (x i) - (μ i : ℂ) • x i, angleDefect Q (μ j) (x j)⟫_ℂ = _
   rw [inner_sub_left, inner_smul_left, hxd, mul_zero, sub_zero]
@@ -135,12 +131,10 @@ theorem map_angleDefectBlock_le_first_projection {P Q : E →ₗ[ℂ] E}
     Submodule.map P (angleDefectBlock hP hQ i) ≤ angleDefectBlock hP hQ i := by
   let x := (rangeCompressionEigenbasis hP hQ i : E)
   let μ := rangeCompressionEigenvalues hP hQ i
-  have hxP : P x = x :=
-    (LinearMap.IsIdempotentElem.mem_range_iff hP.isIdempotentElem).mp
-      (rangeCompressionEigenbasis hP hQ i).property
+  have hxP : P x = x := rangeCompressionEigenbasis_apply_self hP hQ i
   have hxnorm : ‖x‖ = 1 := (rangeCompressionEigenbasis hP hQ).norm_eq_one i
   have hxEig : P (Q x) = (μ : ℂ) • x :=
-    congr_arg Subtype.val (rangeCompression_apply_eigenbasis hP hQ i)
+    rangeCompressionEigenbasis_apply_compression hP hQ i
   have hdP := (angleDefect_block hP hQ hxP hxnorm hxEig).1
   rw [angleDefectBlock, LinearMap.map_span_le]
   rintro y (rfl | rfl)
@@ -157,12 +151,10 @@ theorem map_angleDefectBlock_le_second_projection {P Q : E →ₗ[ℂ] E}
   let x := (rangeCompressionEigenbasis hP hQ i : E)
   let μ := rangeCompressionEigenvalues hP hQ i
   let d := angleDefect Q μ x
-  have hxP : P x = x :=
-    (LinearMap.IsIdempotentElem.mem_range_iff hP.isIdempotentElem).mp
-      (rangeCompressionEigenbasis hP hQ i).property
+  have hxP : P x = x := rangeCompressionEigenbasis_apply_self hP hQ i
   have hxnorm : ‖x‖ = 1 := (rangeCompressionEigenbasis hP hQ).norm_eq_one i
   have hxEig : P (Q x) = (μ : ℂ) • x :=
-    congr_arg Subtype.val (rangeCompression_apply_eigenbasis hP hQ i)
+    rangeCompressionEigenbasis_apply_compression hP hQ i
   obtain ⟨_, hxQ, hQd, _, _⟩ := angleDefect_block hP hQ hxP hxnorm hxEig
   rw [angleDefectBlock, LinearMap.map_span_le]
   rintro y (rfl | rfl)

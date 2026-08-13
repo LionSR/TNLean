@@ -5285,6 +5285,8 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
 \begin{theorem}[Compression-spectrum endpoint and angle-block trichotomy]
   \label{thm:mpu_two_projection_compression_spectrum}
   \lean{LinearMap.IsSymmetricProjection.rangeCompression_apply_eigenbasis,
+    LinearMap.IsSymmetricProjection.rangeCompressionEigenbasis_apply_self,
+    LinearMap.IsSymmetricProjection.rangeCompressionEigenbasis_apply_compression,
     LinearMap.IsSymmetricProjection.rangeCompressionEigenvalues_mem_unitInterval,
     LinearMap.IsSymmetricProjection.rangeCompressionEigenvalues_eq_zero_or_eq_one_or_exists_angle_block}
   \leanok
@@ -5322,7 +5324,8 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
 
 \begin{definition}[Compression defect block]
   \label{def:mpu_two_projection_angle_defect_block}
-  \lean{LinearMap.IsSymmetricProjection.angleDefectBlock}
+  \lean{LinearMap.IsSymmetricProjection.angleDefect,
+    LinearMap.IsSymmetricProjection.angleDefectBlock}
   \leanok
   \uses{def:mpu_two_projection_compression_spectral_data,
     thm:mpu_two_projection_angle_block}
@@ -5377,11 +5380,32 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
        =\langle x_i,PQx_j\rangle
        =\mu_j\langle x_i,x_j\rangle=0.
   \end{align}
-  This proves both eigenvector--defect identities. Symmetry of $Q$ and the
-  local formula $Qd_j=\mu_j(1-\mu_j)x_j+(1-\mu_j)d_j$ give the exact
-  defect pairing. Orthogonality of the generated spans follows by linearity.
-  The local action formulas also show that both projections preserve each
-  two-generator span, while its dimension bound follows from its generators.
+  This proves both eigenvector--defect identities. For the exact defect
+  pairing, symmetry of $Q$ and the local action formula give
+  \begin{align}
+    Qd_j&=\mu_j(1-\mu_j)x_j+(1-\mu_j)d_j,\\
+    \langle d_i,d_j\rangle
+      &=\langle Qx_i,d_j\rangle-\mu_i\langle x_i,d_j\rangle,\\
+    \langle Qx_i,d_j\rangle-\mu_i\langle x_i,d_j\rangle
+      &=\langle x_i,Qd_j\rangle,\\
+    \langle x_i,Qd_j\rangle
+      &=\mu_j(1-\mu_j)\langle x_i,x_j\rangle
+        +(1-\mu_j)\langle x_i,d_j\rangle,\\
+    \langle d_i,d_j\rangle
+      &=\mu_j(1-\mu_j)\langle x_i,x_j\rangle.
+  \end{align}
+  Orthogonality of the generated spans follows by linearity. The action formulas
+  \begin{align}
+    Px_i&=x_i,\\
+    Pd_i&=0,\\
+    Qx_i&=\mu_i x_i+d_i,\\
+    Qd_i&=\mu_i(1-\mu_i)x_i+(1-\mu_i)d_i
+  \end{align}
+  show that both projections preserve
+  $B_i=\operatorname{span}\{x_i,d_i\}$. Its dimension bound follows from
+  its two generators.
+\end{proof}
+
 \begin{definition}[Reduced projection]
   \label{def:mpu_two_projection_reduced_projection}
   \lean{LinearMap.IsSymmetricProjection.reducedProjection}
@@ -5466,6 +5490,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
   \end{align}
   and the equal-ranges right-factor theorem give an invertible $Y$ satisfying
   $\widetilde P QY=\widetilde P$.
+\end{proof}
 \end{proof}
 
 \begin{proposition}[Constancy of the source ranks]
