@@ -2275,12 +2275,41 @@ norm estimate is derived here.
     $1-2(7/16)=1/8$.
 \end{proof}
 
+\begin{theorem}[Original-site gap on block-divisible periodic chains]
+    \label{thm:martingale_mps_original_site_multiples}
+    \lean{MPSTensor.IsPrimitiveMPS.exists_parentHamiltonianES_gap_eighth_mul}
+    \leanok
+    \uses{thm:martingale_mps}
+    Under the hypotheses of Theorem~\ref{thm:martingale_mps}, one can choose
+    the same $p>0$ so that the original tensor has interaction range $2p$ and,
+    for every $N\ge4$ and every
+    $v\in(\ker H_{Np,2p}(A))^\perp$,
+    \begin{align}
+        \frac18\lVert v\rVert
+        &\leq \lVert H_{Np,2p}(A)v\rVert.
+    \end{align}
+    This statement concerns only periodic chain lengths divisible by $p$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:martingale_mps}
+    The canonical configuration isometry identifies each blocked range-two
+    term with the original range-$2p$ term beginning at the corresponding
+    block boundary.  Thus the conjugated blocked Hamiltonian is the sum over
+    block-aligned starts.  The remaining original local terms are positive, so
+    the full Hamiltonian dominates this sparse sum as a quadratic form.  Block
+    injectivity identifies both kernels with the same periodic MPS line under
+    the isometry.  The positive-operator comparison therefore transfers the
+    constant $1/8$ without loss.
+\end{proof}
+
 \begin{theorem}[Uniform gap for normal MPS parent Hamiltonians]
     \label{thm:normal_mps_parent_hamiltonian_gap}
     \notready
     \discussion{5926}
-    \uses{thm:martingale_mps, thm:anticommutator_gap_bound,
-        thm:parent_hamiltonian_gapped}
+    \uses{thm:martingale_mps_original_site_multiples,
+        thm:anticommutator_gap_bound, thm:parent_hamiltonian_gapped}
     Let $A$ be a normal tensor.  There exist an interaction range $L>1$ and
     a constant $\gamma>0$ such that, for every $N\ge2L$ and every
     $v\in(\ker H_{N,L}(A))^\perp$,
@@ -2289,22 +2318,21 @@ norm estimate is derived here.
         &\le \lVert H_{N,L}(A)v\rVert.
         \notag
     \end{align}
-    Theorem~\ref{thm:martingale_mps} proves this estimate only for the
-    range-two Hamiltonian of $B=\operatorname{block}_p(A)$ on $N$ blocked sites.
-    It does not identify that operator, its kernel, or its energy scale with
-    the range-$L$ Hamiltonian of $A$ on the original-site chain.  The remaining
-    step is precisely this blocked-to-original interaction comparison.
+    Theorem~\ref{thm:martingale_mps_original_site_multiples} proves the estimate
+    with $L=2p$ when the periodic chain length is divisible by $p$.  The
+    unrestricted statement still requires a remainder-length comparison for
+    the finitely many congruence classes modulo $p$.
 \end{theorem}
 
 \begin{proof}
     \notready
     \discussion{5926}
-    \uses{thm:martingale_mps, thm:anticommutator_gap_bound,
-        thm:parent_hamiltonian_gapped}
-    Apply Theorem~\ref{thm:martingale_mps} to the blocked tensor.  Then compare
-    its range-two local projections and ground-space complement with a fixed-range
-    parent interaction for $A$ in original-site units, retaining a uniform positive
-    lower bound under that comparison.
+    \uses{thm:martingale_mps_original_site_multiples,
+        thm:anticommutator_gap_bound, thm:parent_hamiltonian_gapped}
+    The divisible-length case is
+    Theorem~\ref{thm:martingale_mps_original_site_multiples}.  It remains to
+    control chains of length $Np+r$, $0<r<p$, by a boundary/remainder argument
+    that preserves the ground-space complement and a uniform positive constant.
 \end{proof}
 
 \begin{theorem}[Gap bound from cyclic overlap compression]

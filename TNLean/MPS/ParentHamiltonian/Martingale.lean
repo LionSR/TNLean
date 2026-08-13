@@ -6,6 +6,8 @@ Authors: TNLean contributors
 import TNLean.MPS.ParentHamiltonian.Martingale.AbstractCriterion
 import TNLean.MPS.ParentHamiltonian.Martingale.AdjacentLocalTerms
 import TNLean.MPS.ParentHamiltonian.Martingale.BlockedGap
+import TNLean.MPS.ParentHamiltonian.Martingale.BlockedOriginalComparison
+import TNLean.MPS.ParentHamiltonian.Martingale.BlockedOriginalGap
 import TNLean.MPS.ParentHamiltonian.Martingale.C3Threshold
 import TNLean.MPS.ParentHamiltonian.Martingale.Gap
 import TNLean.MPS.ParentHamiltonian.Martingale.OpenChain
@@ -45,6 +47,10 @@ The nine components are:
   open-chain C3 defect threshold and its anticommutator consequence;
 * `Martingale.BlockedGap` — transport of that threshold to three blocked sites
   and the explicit range-two blocked parent-Hamiltonian gap;
+* `Martingale.BlockedOriginalComparison` — exact aligned local-term conjugacy
+  and quadratic-form domination by the original range-$2p$ Hamiltonian;
+* `Martingale.BlockedOriginalGap` — transfer of the gap constant $1/8$ to
+  original-site periodic chains of length divisible by the block length;
 * `Martingale.OverlapReduction` — reduction from overlapping-window commutation
   to all-pairs commutation using locality for disjoint windows;
 * `Martingale.Reduction` — martingale quadratic-form reductions from ordered

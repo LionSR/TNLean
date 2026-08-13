@@ -60,6 +60,8 @@ import TNLean.MPS.ParentHamiltonian.Martingale
 import TNLean.MPS.ParentHamiltonian.Martingale.AbstractCriterion
 import TNLean.MPS.ParentHamiltonian.Martingale.AdjacentLocalTerms
 import TNLean.MPS.ParentHamiltonian.Martingale.BlockedGap
+import TNLean.MPS.ParentHamiltonian.Martingale.BlockedOriginalComparison
+import TNLean.MPS.ParentHamiltonian.Martingale.BlockedOriginalGap
 import TNLean.MPS.ParentHamiltonian.Martingale.C3Threshold
 import TNLean.MPS.ParentHamiltonian.Martingale.Gap
 import TNLean.MPS.ParentHamiltonian.Martingale.OpenChain
