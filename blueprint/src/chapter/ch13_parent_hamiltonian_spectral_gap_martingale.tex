@@ -2246,11 +2246,12 @@ norm estimate is derived here.
 
 \begin{theorem}[Uniform gap for a blocked primitive MPS parent Hamiltonian]
     \label{lem:martingale_mps}
-    \lean{MPSTensor.IsPrimitiveMPS.exists_blockTensor_parentHamiltonianES_gap_eighth}
+    \lean{MPSTensor.IsPrimitiveMPS.exists_blockTensor_parentHamiltonianES_gap_eighth,
+        MPSTensor.IsPrimitiveMPS.exists_blockTensor_parentHamiltonianES_gapped}
     \leanok
     \uses{lem:blocked_to_cyclic_ground_projector_comparison,
         lem:cyclic_window_overlap_cardinality,
-        thm:anticommutator_gap_bound}
+        thm:anticommutator_gap_bound, thm:parent_hamiltonian_gapped}
     Let $A$ be a primitive MPS tensor with nonzero physical and bond dimensions,
     and suppose that its fixed point is positive definite.  There is a blocking
     length $p>0$ such that $A$ is $p$-block injective and, with
@@ -2266,7 +2267,7 @@ norm estimate is derived here.
     \leanok
     \uses{lem:blocked_to_cyclic_ground_projector_comparison,
         lem:cyclic_window_overlap_cardinality,
-        thm:anticommutator_gap_bound}
+        thm:anticommutator_gap_bound, thm:parent_hamiltonian_gapped}
     Choose $p$ so that the three-block projector defect is at most $7/16$.
     Lemma~\ref{lem:blocked_to_cyclic_ground_projector_comparison} gives the same
     coefficient for every overlapping cyclic pair.  For range two each row has
