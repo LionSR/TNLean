@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import TNLean.Algebra.MatrixCyclicTracePower
 import TNLean.MPS.MPDO.RescalingStableChiAttachment
 
 /-!
@@ -107,30 +108,15 @@ theorem hadamard2_mul_oneLabelChiMatrix2_eq_wMat_mul_hadamard2 :
     show (2 : ℂ) * (1 / 2 : ℂ) = 1 by norm_num, one_smul] at step
   exact step.symm
 
-/-- The intertwining relation lifts to every power:
-`hadamard2 * χ^L = wMat^L * hadamard2`. -/
-theorem hadamard2_mul_oneLabelChiMatrix2_pow_eq_wMat_pow_mul_hadamard2 (L : ℕ) :
-    hadamard2 * oneLabelChiMatrix2 ^ L = wMat ^ L * hadamard2 := by
-  induction L with
-  | zero => simp
-  | succ n ih =>
-      rw [pow_succ, pow_succ, ← Matrix.mul_assoc, ih, Matrix.mul_assoc,
-        hadamard2_mul_oneLabelChiMatrix2_eq_wMat_mul_hadamard2, ← Matrix.mul_assoc]
-
 /-- **`R`'s local factor and `χ` have the same trace powers at every length.**
 The intertwining relation, conjugated back through the Hadamard change of
 basis and its half-inverse, shows `tr(wMat^L) = tr(χ^L)` for every `L`
 (including `L = 0`). -/
 theorem wMat_pow_trace_eq_oneLabelChiMatrix2_pow_trace (L : ℕ) :
     (wMat ^ L).trace = (oneLabelChiMatrix2 ^ L).trace := by
-  have h := hadamard2_mul_oneLabelChiMatrix2_pow_eq_wMat_pow_mul_hadamard2 L
-  have hχ : oneLabelChiMatrix2 ^ L =
-      ((1 / 2 : ℂ) • hadamard2) * wMat ^ L * hadamard2 := by
-    have h2 : ((1 / 2 : ℂ) • hadamard2) * (hadamard2 * oneLabelChiMatrix2 ^ L) =
-        ((1 / 2 : ℂ) • hadamard2) * (wMat ^ L * hadamard2) := by rw [h]
-    simp only [← Matrix.mul_assoc] at h2
-    rwa [half_hadamard2_mul_hadamard2, one_mul] at h2
-  rw [hχ, Matrix.trace_mul_cycle, hadamard2_mul_half_hadamard2, one_mul]
+  apply Matrix.trace_pow_eq_of_intertwining
+    hadamard2_mul_oneLabelChiMatrix2_eq_wMat_mul_hadamard2
+    hadamard2_mul_half_hadamard2 half_hadamard2_mul_hadamard2
 
 /-- **`R`'s local factor and `oneLabelChi` have the same trace powers at
 every length.** Restatement of

@@ -17,6 +17,8 @@ This module introduces no new definitions.
 
 ## Main results
 
+* `Matrix.trace_pow_eq_of_intertwining`: intertwining matrices have equal trace powers when
+  the intertwiner has a specified two-sided inverse.
 * `pow_apply_eq_sum_path_indicator`: expands a matrix-power entry as a path sum.
 * `trace_pow_eq_sum_cyclic_product`: expands a positive trace power as a cyclic sum.
 -/
@@ -28,6 +30,19 @@ section cyclicTrace
 /-! These lemmas are generic `CommSemiring`-valued matrix combinatorics. -/
 
 variable {n : Type*} [Fintype n] [DecidableEq n] {R : Type*} [CommSemiring R]
+
+/-- If `P * B = A * P` and `Q` is a two-sided inverse of `P`, then `A` and `B` have
+identical traces at every natural-number power. -/
+theorem Matrix.trace_pow_eq_of_intertwining {P Q A B : Matrix n n R}
+    (h : P * B = A * P) (hPQ : P * Q = 1) (hQP : Q * P = 1) (k : ℕ) :
+    Matrix.trace (A ^ k) = Matrix.trace (B ^ k) := by
+  calc
+    Matrix.trace (A ^ k) = Matrix.trace (A ^ k * P * Q) := by
+      rw [Matrix.mul_assoc, hPQ, Matrix.mul_one]
+    _ = Matrix.trace (P * B ^ k * Q) := by
+      rw [(show SemiconjBy P B A from h).pow_right k]
+    _ = Matrix.trace (Q * P * B ^ k) := Matrix.trace_mul_cycle _ _ _
+    _ = Matrix.trace (B ^ k) := by rw [hQP, Matrix.one_mul]
 
 /-- **Indicator-path expansion of a matrix power.** The `(a, b)` entry of `S ^ N` is the sum,
 over length-`N` walks `v : Fin (N + 1) → n` from `a` to `b`, of the product of the matrix
