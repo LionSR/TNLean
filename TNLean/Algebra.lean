@@ -37,6 +37,7 @@ import TNLean.Algebra.HermitianSpectrumPreserver
 import TNLean.Algebra.HermitianTracePower
 import TNLean.Algebra.HermitianUnitaryConjugacy
 import TNLean.Algebra.IrreducibleTensorAction
+import TNLean.Algebra.KramersDegeneracy
 import TNLean.Algebra.KroneckerFactorPositivity
 import TNLean.Algebra.ListProduct
 import TNLean.Algebra.MatrixAlgEquiv
