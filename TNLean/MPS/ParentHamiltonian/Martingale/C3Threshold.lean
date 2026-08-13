@@ -17,6 +17,12 @@ blocked-chain filtration step.
 
 ## Main results
 
+* `MPSTensor.IsPrimitiveMPS.
+    exists_uniform_wholeIncrement_defect_le_seven_sixteenths`
+  chooses one original-site scale uniformly for every prefix length.
+* `MPSTensor.IsPrimitiveMPS.
+    exists_threeBlock_wholeIncrement_defect_le_seven_sixteenths`
+  specializes the uniform estimate to three equal original-site blocks.
 * `MPSTensor.IsPrimitiveMPS.exists_openChain_groundProjection_defect_lt_c3_threshold`
   chooses a block-injective overlap length and one uniform C3 defect coefficient.
 * `MPSTensor.IsPrimitiveMPS.exists_re_inner_openChain_anticommutator_ge_c3_threshold`
@@ -70,13 +76,77 @@ private theorem tendsto_geometric_c3_coefficient_mul_sqrt
   simpa only [mul_assoc, mul_left_comm, mul_comm, one_mul, zero_mul, mul_zero] using
     hinv.mul hscaled
 
+private theorem tendsto_geometric_coefficient
+    {C c r : ℝ} (hr : 0 ≤ r) (hr_lt_one : r < 1) :
+    Tendsto (fun n : ℕ => (1 - c * r ^ n)⁻¹ * (C * r ^ n))
+      atTop (𝓝 0) := by
+  have hr_pow : Tendsto (fun n : ℕ => r ^ n) atTop (𝓝 0) :=
+    tendsto_pow_atTop_nhds_zero_of_lt_one hr hr_lt_one
+  have hden : Tendsto (fun n : ℕ => 1 - c * r ^ n) atTop (𝓝 1) := by
+    simpa using tendsto_const_nhds.sub (tendsto_const_nhds.mul hr_pow)
+  have hinv : Tendsto (fun n : ℕ => (1 - c * r ^ n)⁻¹) atTop (𝓝 1) := by
+    simpa using hden.inv₀ one_ne_zero
+  have hscaled : Tendsto (fun n : ℕ => C * r ^ n) atTop (𝓝 0) := by
+    simpa using tendsto_const_nhds.mul hr_pow
+  simpa using hinv.mul hscaled
+
+/-- There is a positive block-injective length \(p\), measured in sites of the
+input tensor, such that the whole-increment projector defect with overlap and
+suffix lengths \(L=Q=p\) is at most \(7/16\) for every prefix length \(K\). -/
+theorem IsPrimitiveMPS.exists_uniform_wholeIncrement_defect_le_seven_sixteenths
+    [NeZero D] {A : MPSTensor d D} {ρ : Matrix (Fin D) (Fin D) ℂ}
+    (hP : IsPrimitiveMPS A ρ) (hρ : ρ.PosDef) :
+    ∃ p : ℕ,
+      0 < p ∧ IsNBlkInjective A p ∧
+        ∀ K : ℕ,
+          ‖(reassocTailBoundaryMapES A K p p).range.starProjection ∘L
+                (leftBoundaryMapES A (K + p) p).range.starProjection -
+              (groundSpaceES A (K + p + p)).starProjection‖ ≤ 7 / 16 := by
+  obtain ⟨C, c, r, hC, hc, hr, hr_lt_one, hDefect⟩ :=
+    hP.wholeIncrement_groundProjection_defect_le_geometric hρ
+  obtain ⟨L, hLpos, hLinj⟩ := isNormal_of_isPrimitiveMPS_with_posDef hP hρ
+  have hr_pow : Tendsto (fun n : ℕ => r ^ n) atTop (𝓝 0) :=
+    tendsto_pow_atTop_nhds_zero_of_lt_one hr.le hr_lt_one
+  have hsmall_lim : Tendsto (fun n : ℕ => c * r ^ n) atTop (𝓝 0) := by
+    simpa using tendsto_const_nhds.mul hr_pow
+  have hcoefficient_lim :=
+    tendsto_geometric_coefficient (C := C) (c := c) hr.le hr_lt_one
+  have hsmall : ∀ᶠ n : ℕ in atTop, c * r ^ n < 1 :=
+    (tendsto_order.1 hsmall_lim).2 1 zero_lt_one
+  have hcoefficient : ∀ᶠ n : ℕ in atTop,
+      (1 - c * r ^ n)⁻¹ * (C * r ^ n) < 7 / 16 :=
+    (tendsto_order.1 hcoefficient_lim).2 (7 / 16) (by norm_num)
+  have hlarge : ∀ᶠ n : ℕ in atTop, max 1 L ≤ n := eventually_ge_atTop _
+  obtain ⟨p, hp_large, hp_small, hp_coefficient⟩ :=
+    (hlarge.and (hsmall.and hcoefficient)).exists
+  have hp : 0 < p := lt_of_lt_of_le (by omega) hp_large
+  have hLle : L ≤ p := le_trans (le_max_right 1 L) hp_large
+  have hInj : IsNBlkInjective A p := isNBlkInjective_of_le hLpos hLinj hLle
+  refine ⟨p, hp, hInj, fun K ↦ ?_⟩
+  exact (hDefect K p p (by omega) hp_small).trans hp_coefficient.le
+
+/-- At the length \(p\) chosen uniformly above, taking the prefix length
+\(K=p\) gives three consecutive blocks of \(p\) original sites and projector
+defect at most \(7/16\). -/
+theorem IsPrimitiveMPS.exists_threeBlock_wholeIncrement_defect_le_seven_sixteenths
+    [NeZero D] {A : MPSTensor d D} {ρ : Matrix (Fin D) (Fin D) ℂ}
+    (hP : IsPrimitiveMPS A ρ) (hρ : ρ.PosDef) :
+    ∃ p : ℕ,
+      0 < p ∧ IsNBlkInjective A p ∧
+        ‖(reassocTailBoundaryMapES A p p p).range.starProjection ∘L
+              (leftBoundaryMapES A (p + p) p).range.starProjection -
+            (groundSpaceES A (p + p + p)).starProjection‖ ≤ 7 / 16 := by
+  obtain ⟨p, hp, hInj, hDefect⟩ :=
+    hP.exists_uniform_wholeIncrement_defect_le_seven_sixteenths hρ
+  exact ⟨p, hp, hInj, hDefect p⟩
+
 /-- A primitive MPS with faithful fixed point has a block-injective overlap length
 at which the uniform open-chain ground-projector defect satisfies Nachtergaele's
 condition C3, arXiv:cond-mat/9410110, eq. (2.4).
 
 The coefficient is the geometric-over-denominator bound reconstructed in
 `openChain_groundProjection_defect_le_geometric`. It is sufficient for C3; this
-statement does not assert the optimized FNW numerator from Nachtergaele, Section 6. -/
+statement does not assert the optimized numerator quoted in Nachtergaele, Section 6. -/
 theorem IsPrimitiveMPS.exists_openChain_groundProjection_defect_lt_c3_threshold
     [NeZero D] {A : MPSTensor d D} {ρ : Matrix (Fin D) (Fin D) ℂ}
     (hP : IsPrimitiveMPS A ρ) (hρ : ρ.PosDef) :
