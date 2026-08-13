@@ -19,8 +19,10 @@
 Examples~4.10 and~4.11 of Cirac--Perez-Garcia--Schuch--Verstraete
 \cite{Cirac2016MPDO_arXiv} are printed at lines~897--924 of
 \path{Papers/1606.00608/MPDO-22-12-17-2.tex}. This note separates the literal
-source statements from two finite-ring corrections. All entropies below use
-base-two logarithms, as do the numerical values printed in Example~4.10.
+source statements from two finite-ring corrections. The explanatory
+calculations below use base-two logarithms, as do the numerical values printed
+in Example~4.10. The formal entropy definition uses natural logarithms; conversion
+to bits divides every entropy and mutual information by $\ln 2$.
 
 For a normalized four-spin state, let $S_L$ be the entropy of $L$ consecutive
 spins and set
@@ -266,14 +268,33 @@ multiplicities $2$, $12$, $56$, and $240$, respectively.
 These spectral formulas are finite-periodic project derivations, not statements
 attributed to CPSV16.
 
-\paragraph{Scope restriction (entropy consequences).}
-The ambient operator congruence, trace equality, and exact $N=4$ reduced-state
-spectra for Example~4.11 are complete.  This does not yet prove the entropy
-identities or connect the certified logarithmic ratio to saturation of the area
-law or zero correlation length.  Those entropy, SAL, and ZCL links remain open
-in \ghissue{6302}.  Example~4.10's tensor and final entropy links remain open in
-\ghissue{6301}.  The corresponding source-level status therefore remains not
-ready.
+\paragraph{Project derivation (entropy and saturation obstruction).}
+The module \doclink{TNLean/MPS/MPDO/CPSVExample411Entropy} first proves that the
+effective binary tensor is an MPDO: every positive-length periodic operator is
+diagonal with non-negative cycle weights.  It then evaluates the four block
+entropies directly from the established root multisets.  These formal entropies
+use natural logarithms.  In particular,
+\[
+  I_2-I_1
+  =\frac{1}{82}
+    \ln\!\left(\frac{41^{82}5^{50}}{2^{48}13^{52}7^{112}}\right)>0.
+\]
+The bit-valued formula earlier in this note is obtained by dividing by $\ln 2$.
+The strict inequality reuses
+\leanid{CPSVExamples410411Arithmetic.example411_log_ratio_pos}; neither the
+spectra nor the integer inequality is recomputed.  Therefore the effective
+binary tensor does not satisfy SAL.  Contraposition of SAL descent through the
+physical isometry gives the same conclusion for the ambient tensor
+\leanid{MPOTensor.CPSVExample411Ambient.ambientM}.
+
+\paragraph{Scope restriction (remaining consequences).}
+The ambient operator congruence, trace equality, exact $N=4$ reduced-state
+spectra, entropy identities, and finite-ring SAL obstruction for Example~4.11
+are complete.  No zero-correlation-length or thermodynamic-limit conclusion is
+made.  Those remaining links stay open in \ghissue{6302}.  Example~4.10's tensor
+and final entropy links remain open in \ghissue{6301}.  The printed Example~4.11
+SAL claim remains false for the literal finite periodic family; the certified
+result is a project-derived counterexample, not a theorem attributed to CPSV16.
 
 Example~4.12 is outside the entropy correction in this note. Its statement,
 dependencies, and separate normalization question are unchanged.
