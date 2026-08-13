@@ -1268,17 +1268,16 @@ This is the calculation in
 % See docs/paper-gaps/cpsv16_examples_4_10_4_11_entropy.tex.
 \begin{theorem}[Exact length-four effective spectra]
     \label{thm:cpsv_example411_length_four_effective_spectra}
-    \lean{MPOTensor.CPSVExample411Spectrum.effectiveReducedBlockState_four_eq_diagonal,
-        MPOTensor.CPSVExample411Spectrum.transitionCounts_one,
-        MPOTensor.CPSVExample411Spectrum.transitionCounts_two,
-        MPOTensor.CPSVExample411Spectrum.transitionCounts_three,
-        MPOTensor.CPSVExample411Spectrum.transitionCounts_four,
+    \lean{MPOTensor.CPSVExample411Spectrum.effective_reducedBlockState_four_eq_diagonal,
+        MPOTensor.CPSVExample411Spectrum.transition_counts_one,
+        MPOTensor.CPSVExample411Spectrum.transition_counts_two,
+        MPOTensor.CPSVExample411Spectrum.transition_counts_three,
+        MPOTensor.CPSVExample411Spectrum.transition_counts_four,
         MPOTensor.CPSVExample411Spectrum.effective_charpoly_roots_one,
         MPOTensor.CPSVExample411Spectrum.effective_charpoly_roots_two,
         MPOTensor.CPSVExample411Spectrum.effective_charpoly_roots_three,
         MPOTensor.CPSVExample411Spectrum.effective_charpoly_roots_four}
     \leanok
-    \uses{thm:cpsv_example411_binary_block_probability}
     On the periodic ring of length four, the effective-binary reduced states
     have the following characteristic-polynomial root multisets:
     \begin{align}
@@ -1325,7 +1324,7 @@ This is the calculation in
 
 \begin{proof}
     \leanok
-    \uses{thm:mpdo_sal_physical_isometry_transport,
+    \uses{thm:mpdo_reduced_state_physical_isometry_transport,
         thm:cpsv_example411_length_four_effective_spectra}
     The reduced ambient state is the isometric congruence
     $V^{\otimes L}\rho_L(V^{\otimes L})^*$.  Rectangular characteristic-polynomial

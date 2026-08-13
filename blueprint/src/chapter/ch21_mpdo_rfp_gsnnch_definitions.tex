@@ -227,6 +227,28 @@ Definition~\ref{def:mpdo_source_gsnnch}; the converse comparison is not used.
     injective. The two isometry identities give the exact reconstruction.
 \end{proof}
 
+\begin{theorem}[Reduced states under an isometric physical inclusion]
+    \label{thm:mpdo_reduced_state_physical_isometry_transport}
+    \lean{MPOTensor.reducedBlockState_changePhysicalBasis_of_isometry}
+    \leanok
+    \uses{lem:mpdo_sitewise_physical_coordinate_congruence}
+    Let $V:\C^d\to\C^e$ be an isometry, and let $K^V$ be obtained from an MPO
+    tensor $K$ by conjugating each physical matrix by $V$.  For every
+    $0\leq L\leq N$, the contiguous reduced states satisfy
+    \begin{align}
+      \rho_L(K^V)=V^{\otimes L}\rho_L(K)(V^{\otimes L})^*.
+      \notag
+    \end{align}
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{lem:mpdo_sitewise_physical_coordinate_congruence}
+    The normalized periodic operators are related by the sitewise isometric
+    congruence.  After splitting the chain into the retained interval and its
+    complement, the isometry on the traced-out factor disappears under the
+    partial trace, leaving the displayed congruence on the retained factor.
+\end{proof}
+
 \begin{theorem}[SAL descends through an isometric physical inclusion]
     \label{thm:mpdo_sal_physical_isometry_transport}
     \lean{MPOTensor.isMPDO_of_changePhysicalBasis_isMPDO_of_isometry}
