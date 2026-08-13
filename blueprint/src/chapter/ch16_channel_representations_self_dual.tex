@@ -2,11 +2,13 @@
 \label{sec:self_dual_channels}
 %% =========================================================
 
-Wolf's transfer matrix $\widehat T_{\alpha\beta}=\tr(F_\alpha^\dagger T(G_\beta))$
-is built from two orthonormal families. Taking one and the same family on both
-sides turns the Hermiticity of $\widehat T$ into a statement about $T$ alone, and
-that statement is self-duality. Orthonormality is always meant for the
-Hilbert--Schmidt pairing.
+The transfer matrix $\widehat T_{\alpha\beta}=\tr(F_\alpha^\dagger T(G_\beta))$
+of \cite[Section~2.2, equation~(2.20)]{Wolf2012Quantum} is built from two
+orthonormal families. Taking one and the same family on both sides turns the
+Hermiticity of $\widehat T$ into a statement about $T$ alone, and that statement
+is self-duality. Orthonormality is always meant for the Hilbert--Schmidt
+pairing, $\tr(G_\beta^\dagger G_{\beta'})=\delta_{\beta\beta'}$
+\cite[Section~2.2]{Wolf2012Quantum}; the families are not assumed Hermitian.
 
 \begin{definition}[Hilbert--Schmidt orthonormal family]
     \label{def:hilbert_schmidt_orthonormal}
@@ -25,7 +27,6 @@ Hilbert--Schmidt pairing.
     \label{def:transfer_matrix_of_basis}
     \lean{transferMatrixOfBasis}
     \leanok
-    \uses{def:hilbert_schmidt_orthonormal}
     For a linear map $T:\MN{d}\to\MN{d}$ and a family $(\sigma_\alpha)$ in
     $\MN{d}$ used on both sides, the \emph{transfer matrix of $T$ in
     $(\sigma_\alpha)$} is
@@ -110,7 +111,6 @@ Hilbert--Schmidt pairing.
     \label{lem:hermitian_kraus_of_self_dual}
     \lean{exists_hermitian_kraus_of_self_dual}
     \leanok
-    \uses{lem:trace_adjoint_of_kraus, thm:kraus_same_map_of_unitary_combination}
     Suppose $T(X)=\sum_j K_j X K_j^\dagger$ and also
     $T(X)=\sum_j K_j^\dagger X K_j$. Then $T$ has a family of Hermitian Kraus
     operators, namely $\tfrac12(K_j+K_j^\dagger)$ and
@@ -131,15 +131,82 @@ Hilbert--Schmidt pairing.
     $\tfrac{i}{2}(K_j-K_j^\dagger)$, both of which are Hermitian.
 \end{proof}
 
+\begin{lemma}[The transfer matrix determines the map]
+    \label{lem:transfer_matrix_of_basis_injective}
+    \lean{transferMatrixOfBasis_injective}
+    \leanok
+    \uses{def:transfer_matrix_of_basis, def:hilbert_schmidt_orthonormal}
+    Let $(\sigma_\alpha)$ be a Hilbert--Schmidt orthonormal basis of $\MN{d}$.
+    For linear maps $S,T:\MN{d}\to\MN{d}$,
+    \begin{align}
+        \widehat T=\widehat S
+        &\implies T=S.
+        \notag
+    \end{align}
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{lem:hilbert_schmidt_orthonormal_coordinates}
+    Equality of the transfer matrices reads
+    $\tr\bigl(\sigma_\alpha^\dagger(T-S)(\sigma_\beta)\bigr)=0$ for all
+    $\alpha,\beta$. For fixed $\beta$ this makes every coordinate of
+    $(T-S)(\sigma_\beta)$ vanish, so $(T-S)(\sigma_\beta)=0$; a linear map
+    vanishing on a basis is zero.
+\end{proof}
+
+\begin{lemma}[Self-duality against Hermiticity of the transfer matrix]
+    \label{lem:transfer_matrix_of_basis_hermitian_iff}
+    \lean{transferMatrixOfBasis_isHermitian_iff}
+    \leanok
+    \uses{def:transfer_matrix_of_basis, def:hilbert_schmidt_orthonormal,
+        def:trace_pairing_adjoint}
+    Let $T:\MN{d}\to\MN{d}$ satisfy $T(X^\dagger)=T(X)^\dagger$ and let
+    $(\sigma_\alpha)$ be a Hilbert--Schmidt orthonormal basis of $\MN{d}$ used on
+    both sides. Then
+    \begin{align}
+        \widehat T=\widehat T^\dagger
+        &\iff T=T^*.
+        \notag
+    \end{align}
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{lem:transfer_matrix_of_basis_dual,
+        lem:transfer_matrix_of_basis_injective}
+    By Lemma~\ref{lem:transfer_matrix_of_basis_dual},
+    $\widehat T^\dagger=\widehat{T^*}$. So
+    $\widehat T=\widehat T^\dagger$ reads $\widehat{T^*}=\widehat T$, which by
+    Lemma~\ref{lem:transfer_matrix_of_basis_injective} is $T^*=T$; the converse
+    substitutes $T^*=T$ into the same identity.
+\end{proof}
+
+\begin{lemma}[The same equivalence in the matrix units]
+    \label{lem:transfer_matrix_units_hermitian_iff}
+    \lean{transferMatrix_isHermitian_iff_traceAdjointMap_eq_self}
+    \leanok
+    \uses{def:cp_map, def:trace_pairing_adjoint, def:mpu_transfer_matrix}
+    Let $T:\MN{d}\to\MN{d}$ be completely positive and let $\widehat T$ be its
+    transfer matrix in the matrix units. Then
+    \begin{align}
+        \widehat T=\widehat T^\dagger
+        &\iff T=T^*.
+        \notag
+    \end{align}
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{lem:transfer_matrix_of_basis_dual, lem:trace_adjoint_of_kraus}
+    Complete positivity gives $T(X^\dagger)=T(X)^\dagger$, so
+    $\widehat T^\dagger=\widehat{T^*}$ for the matrix-unit transfer matrix as
+    well, and that transfer matrix determines the map.
+\end{proof}
+
 \begin{proposition}[Self-dual channels]
     \label{prop:self_dual_channels}
-    \lean{selfDual_tfae, transferMatrix_isHermitian_iff_traceAdjointMap_eq_self,
-        transferMatrixOfBasis_isHermitian_iff}
+    \lean{self_dual_tfae}
     \leanok
     \uses{def:cp_map, def:trace_pairing_adjoint, def:transfer_matrix_of_basis,
-        lem:transfer_matrix_of_basis_dual, lem:trace_adjoint_of_kraus,
-        lem:hermitian_kraus_of_self_dual,
-        lem:hilbert_schmidt_orthonormal_coordinates}
+        def:hilbert_schmidt_orthonormal}
     Let $T:\MN{d}\to\MN{d}$ be completely positive and let $(\sigma_\alpha)$ be a
     Hilbert--Schmidt orthonormal basis of $\MN{d}$. The following are equivalent.
     \begin{enumerate}
@@ -148,18 +215,33 @@ Hilbert--Schmidt pairing.
             the family $(\sigma_\alpha)$ on both sides.
         \item $T$ admits a family of Hermitian Kraus operators.
     \end{enumerate}
+    This is the proposition ``Self-dual channels'' of
+    \cite[Section~2.2]{Wolf2012Quantum}.
 \end{proposition}
 
 \begin{proof}\leanok
-    \uses{lem:transfer_matrix_of_basis_dual, lem:trace_adjoint_of_kraus,
-        lem:hermitian_kraus_of_self_dual,
-        lem:hilbert_schmidt_orthonormal_coordinates}
-    A completely positive map preserves Hermiticity, so
-    $\widehat T^\dagger=\widehat{T^*}$; since a map is determined by its transfer
-    matrix in a basis, conditions~1 and~2 are the same statement. Condition~3
-    implies condition~1 because the Kraus operators of $T$ and $T^*$ differ by
-    Hermitian conjugation, and a family of Hermitian operators is fixed by that
-    exchange. Condition~1 gives $T$ the two Kraus representations
-    $\sum_j K_jXK_j^\dagger$ and $\sum_j K_j^\dagger XK_j$, and the Hermitian
-    recombination of the symmetrized family yields condition~3.
+    \uses{lem:transfer_matrix_of_basis_hermitian_iff, lem:trace_adjoint_of_kraus,
+        lem:hermitian_kraus_of_self_dual}
+    Conditions~1 and~2 are equivalent by
+    Lemma~\ref{lem:transfer_matrix_of_basis_hermitian_iff}, complete positivity
+    supplying the Hermiticity preservation it requires. For $3\Rightarrow1$, a
+    family of Hermitian Kraus operators is fixed by the exchange
+    $K_j\mapsto K_j^\dagger$ that carries $T$ to $T^*$:
+    \begin{align}
+        T^*(X)
+        &= \sum_j K_j^\dagger XK_j
+        = \sum_j K_jXK_j^\dagger
+        = T(X).
+        \notag
+    \end{align}
+    For $1\Rightarrow3$, condition~1 turns any Kraus representation
+    $T(X)=\sum_jK_jXK_j^\dagger$ into a second one,
+    \begin{align}
+        T(X)
+        &= T^*(X)
+        = \sum_j K_j^\dagger XK_j,
+        \notag
+    \end{align}
+    and the Hermitian recombination of the symmetrized family
+    (Lemma~\ref{lem:hermitian_kraus_of_self_dual}) yields condition~3.
 \end{proof}

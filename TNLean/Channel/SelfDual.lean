@@ -9,33 +9,35 @@ import TNLean.Channel.TransferMatrix
 /-!
 # Self-dual channels (Wolf Section 2.2)
 
-Let `T : M_d(ℂ) → M_d(ℂ)` be completely positive and let `T*` be its dual,
-characterized by `tr[A T*(B)] = tr[T(A) B]`. Wolf §2, line 578 states that
+Let T : M_d(ℂ) → M_d(ℂ) be completely positive and let T* be its dual,
+characterized by tr[A T*(B)] = tr[T(A) B]. Wolf §2, line 578 states that
 
-1. `T = T*`,
-2. the transfer matrix `tr[σ_α† T(σ_β)]` is Hermitian,
-3. `T(X) = ∑_j K_j X K_j†` for a family of Hermitian `K_j`
+1. T = T*,
+2. the transfer matrix tr[σ_α† T(σ_β)] is Hermitian,
+3. T(X) = ∑_j K_j X K_j† for a family of Hermitian K_j
 
 are equivalent.
 
 ## Basis convention
 
-Wolf's transfer matrix `tr[F_α† T(G_β)]` (Eq. (2.20)) is built from two orthonormal
-families; condition 2 is the special case `F_α = G_α = σ_α`. Orthonormality is with
-respect to the Hilbert-Schmidt inner product, `tr[σ_α† σ_β] = δ_{αβ}` (Eq. (2.18)
-with `P = 𝟙`), and this is the convention carried by `HilbertSchmidtOrthonormal`.
+Wolf's transfer matrix tr[F_α† T(G_β)] (Eq. (2.20)) is built from two orthonormal
+families; condition 2 is the special case F_α = G_α = σ_α. Orthonormality is with
+respect to the Hilbert-Schmidt inner product, tr[σ_α† σ_β] = δ_{αβ} (Eq. (2.18)
+with P = 𝟙), and this is the convention carried by `HilbertSchmidtOrthonormal`.
 Hermiticity of the family plays no role in the equivalence; a Hermitian
 Hilbert-Schmidt orthonormal basis is precisely a `TracePairingSelfDualBasis`, since
-for `σ_α† = σ_α` the two pairings `tr[σ_α† X]` and `tr[σ_α X]` coincide.
+for σ_α† = σ_α the two pairings tr[σ_α† X] and tr[σ_α X] coincide.
 
 ## Main definitions
 
-* `HilbertSchmidtOrthonormal` — `tr[σ_α† σ_β] = δ_{αβ}` (Wolf Eq. (2.18) with `P = 𝟙`)
-* `transferMatrixOfBasis` — Wolf Eq. (2.20) for identical families `F_α = G_α`
+* `HilbertSchmidtOrthonormal` — tr[σ_α† σ_β] = δ_{αβ} (Wolf Eq. (2.18) with P = 𝟙)
+* `transferMatrixOfBasis` — Wolf Eq. (2.20) for identical families F_α = G_α
 
 ## Main results
 
-* `selfDual_tfae` — Wolf §2, line 578: the three-way equivalence
+* `self_dual_tfae` — Wolf §2, line 578: the three-way equivalence
+* `transferMatrixOfBasis_injective` — a map is determined by its transfer matrix in a
+  Hilbert-Schmidt orthonormal basis
 * `transferMatrixOfBasis_isHermitian_iff` — condition 1 versus condition 2
 * `transferMatrix_isHermitian_iff_traceAdjointMap_eq_self` — condition 2 for the
   matrix-unit transfer matrix of `TNLean.Channel.TransferMatrix`
@@ -48,14 +50,13 @@ for `σ_α† = σ_α` the two pairings `tr[σ_α† X]` and `tr[σ_α X]` coinc
 -/
 
 open scoped Matrix BigOperators Kronecker
-open Matrix Finset
 
 variable {D : ℕ}
 
 /-! ### Hilbert-Schmidt orthonormal families -/
 
 /-- A family of matrices is **Hilbert-Schmidt orthonormal** when
-`tr[σ_α† σ_β] = δ_{αβ}` (Wolf §2, Eq. (2.18) with `P = 𝟙`). -/
+tr[σ_α† σ_β] = δ_{αβ} (Wolf §2, Eq. (2.18) with P = 𝟙). -/
 def HilbertSchmidtOrthonormal {ι : Type*} [DecidableEq ι]
     (σ : ι → Matrix (Fin D) (Fin D) ℂ) : Prop :=
   ∀ α β, Matrix.trace ((σ α)ᴴ * σ β) = if α = β then 1 else 0
@@ -65,8 +66,8 @@ namespace HilbertSchmidtOrthonormal
 variable {ι : Type*} [Fintype ι] [DecidableEq ι]
 variable {σ : Module.Basis ι ℂ (Matrix (Fin D) (Fin D) ℂ)}
 
-/-- In a Hilbert-Schmidt orthonormal basis the coordinates of `X` are the pairings
-`tr[σ_α† X]`. -/
+/-- In a Hilbert-Schmidt orthonormal basis the coordinates of X are the pairings
+tr[σ_α† X]. -/
 theorem repr_apply (hσ : HilbertSchmidtOrthonormal (σ ·))
     (X : Matrix (Fin D) (Fin D) ℂ) (α : ι) :
     σ.repr X α = Matrix.trace ((σ α)ᴴ * X) := by
@@ -77,7 +78,7 @@ theorem repr_apply (hσ : HilbertSchmidtOrthonormal (σ ·))
   simp
 
 /-- A Hermitian Hilbert-Schmidt orthonormal basis is trace-self-dual: for
-`σ_α† = σ_α` the coordinate functionals are `X ↦ tr[σ_α X]`. -/
+σ_α† = σ_α the coordinate functionals are X ↦ tr[σ_α X]. -/
 theorem tracePairingSelfDualBasis (hσ : HilbertSchmidtOrthonormal (σ ·))
     (hherm : ∀ α, (σ α)ᴴ = σ α) : TracePairingSelfDualBasis σ := by
   intro α X
@@ -96,8 +97,8 @@ end HilbertSchmidtOrthonormal
 
 /-! ### The transfer matrix in a single orthonormal family -/
 
-/-- The **transfer matrix** of `T` in the family `σ` used on both sides,
-`tr[σ_α† T(σ_β)]`. This is Wolf Eq. (2.20) with `F_α = G_α = σ_α`. -/
+/-- The **transfer matrix** of T in the family σ used on both sides,
+tr[σ_α† T(σ_β)]. This is Wolf Eq. (2.20) with F_α = G_α = σ_α. -/
 noncomputable def transferMatrixOfBasis {ι : Type*}
     (σ : ι → Matrix (Fin D) (Fin D) ℂ)
     (T : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ) :
@@ -109,15 +110,6 @@ theorem transferMatrixOfBasis_apply {ι : Type*}
     (σ : ι → Matrix (Fin D) (Fin D) ℂ)
     (T : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ) (α β : ι) :
     transferMatrixOfBasis σ T α β = Matrix.trace ((σ α)ᴴ * T (σ β)) := rfl
-
-/-- Entries of the trace-pairing adjoint: `T*(ρ)_{ij} = tr[ρ T(E_{ji})]`. -/
-theorem traceAdjointMap_apply_apply
-    (T : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ)
-    (ρ : Matrix (Fin D) (Fin D) ℂ) (i j : Fin D) :
-    Matrix.traceAdjointMap T ρ i j = Matrix.trace (ρ * T (Matrix.single j i 1)) := by
-  have hsingle := Matrix.trace_mul_single (Matrix.traceAdjointMap T ρ) j i (1 : ℂ)
-  rw [Matrix.trace_traceAdjointMap_mul] at hsingle
-  simpa using hsingle.symm
 
 /-- **Wolf §2, line 573**: for a Hermiticity-preserving map the dual map is
 represented by the Hermitian conjugate transfer matrix. -/
@@ -134,7 +126,11 @@ theorem transferMatrixOfBasis_conjTranspose {ι : Type*}
     Matrix.trace_mul_comm, Matrix.trace_mul_comm ((σ α)ᴴ)]
   exact (Matrix.trace_traceAdjointMap_mul T (σ β) ((σ α)ᴴ)).symm
 
-/-- The transfer matrix in a basis determines the map. -/
+/-- **The transfer matrix in a Hilbert-Schmidt orthonormal basis determines the
+map**: equal transfer matrices force equal maps.  Pairing the difference against
+every basis element gives tr[σ_α† (T − S)(σ_β)] = 0 for all α, and
+nondegeneracy of the Hilbert-Schmidt pairing forces (T − S)(σ_β) = 0 on a
+basis. -/
 theorem transferMatrixOfBasis_injective {ι : Type*} [Fintype ι] [DecidableEq ι]
     {σ : Module.Basis ι ℂ (Matrix (Fin D) (Fin D) ℂ)}
     (hσ : HilbertSchmidtOrthonormal (σ ·)) :
@@ -161,8 +157,8 @@ theorem transferMatrixOfBasis_isHermitian_iff {ι : Type*} [Fintype ι] [Decidab
 
 /-! ### Kraus families and the dual map -/
 
-/-- The dual map of `T(X) = ∑ᵢ Kᵢ X Kᵢ†` is `T*(X) = ∑ᵢ Kᵢ† X Kᵢ`: the Kraus
-operators of `T` and `T*` differ by Hermitian conjugation (Wolf §2, line 308). -/
+/-- The dual map of T(X) = ∑ᵢ Kᵢ X Kᵢ† is T*(X) = ∑ᵢ Kᵢ† X Kᵢ: the Kraus
+operators of T and T* differ by Hermitian conjugation (Wolf §2, line 308). -/
 theorem traceAdjointMap_of_kraus {r : ℕ} (K : Fin r → Matrix (Fin D) (Fin D) ℂ)
     (T : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ)
     (hK : ∀ X, T X = ∑ i : Fin r, K i * X * (K i)ᴴ)
@@ -194,10 +190,10 @@ theorem IsCPMap.map_conjTranspose
   exact map_conjTranspose_of_kraus K T hK X
 
 /-- **Wolf §2, line 578, direction 1 → 3**: a map with the two Kraus
-representations `T(X) = ∑ⱼ Kⱼ X Kⱼ†` and `T(X) = ∑ⱼ Kⱼ† X Kⱼ` is written as
-`T(X) = ½ ∑ⱼ (Kⱼ X Kⱼ† + Kⱼ† X Kⱼ)`, and the unitary recombination
-`(a, b) ↦ ((a + b)/√2, i(a - b)/√2)` turns every pair `(Kⱼ, Kⱼ†)/√2` into the
-Hermitian pair `(Kⱼ + Kⱼ†)/2`, `i(Kⱼ - Kⱼ†)/2`. -/
+representations T(X) = ∑ⱼ Kⱼ X Kⱼ† and T(X) = ∑ⱼ Kⱼ† X Kⱼ is written as
+T(X) = ½ ∑ⱼ (Kⱼ X Kⱼ† + Kⱼ† X Kⱼ), and the unitary recombination
+(a, b) ↦ ((a + b)/√2, i(a - b)/√2) turns every pair (Kⱼ, Kⱼ†)/√2 into the
+Hermitian pair (Kⱼ + Kⱼ†)/2, i(Kⱼ - Kⱼ†)/2. -/
 theorem exists_hermitian_kraus_of_self_dual {r : ℕ}
     (K : Fin r → Matrix (Fin D) (Fin D) ℂ)
     (T : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ)
@@ -304,13 +300,13 @@ theorem exists_hermitian_kraus_of_self_dual {r : ℕ}
 /-! ### The self-dual channel proposition -/
 
 /-- **Wolf §2, line 578 (self-dual channels)**: for a completely positive map
-`T : M_d(ℂ) → M_d(ℂ)` the following are equivalent.
+T : M_d(ℂ) → M_d(ℂ) the following are equivalent.
 
-1. `T` equals its dual `T*`, characterized by `tr[A T*(B)] = tr[T(A) B]`.
-2. The transfer matrix `tr[σ_α† T(σ_β)]` in one Hilbert-Schmidt orthonormal basis
-   `σ` used on both sides is Hermitian.
-3. `T` admits a family of Hermitian Kraus operators. -/
-theorem selfDual_tfae {ι : Type*} [Fintype ι] [DecidableEq ι]
+1. T equals its dual T*, characterized by tr[A T*(B)] = tr[T(A) B].
+2. The transfer matrix tr[σ_α† T(σ_β)] in one Hilbert-Schmidt orthonormal basis σ
+   used on both sides is Hermitian.
+3. T admits a family of Hermitian Kraus operators. -/
+theorem self_dual_tfae {ι : Type*} [Fintype ι] [DecidableEq ι]
     {T : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ}
     (hT : IsCPMap T)
     {σ : Module.Basis ι ℂ (Matrix (Fin D) (Fin D) ℂ)}
@@ -348,7 +344,7 @@ theorem transferMatrix_conjTranspose_eq_traceAdjointMap
     (transferMatrix T)ᴴ = transferMatrix (Matrix.traceAdjointMap T) := by
   ext ⟨j, i⟩ ⟨l, k⟩
   rw [Matrix.conjTranspose_apply, transferMatrix_apply, transferMatrix_apply,
-    traceAdjointMap_apply_apply, Matrix.trace_single_mul]
+    Matrix.traceAdjointMap_apply_apply, Matrix.trace_single_mul]
   have hswap := hHP (Matrix.single i j (1 : ℂ))
   rw [Matrix.conjTranspose_single, star_one] at hswap
   rw [hswap]
