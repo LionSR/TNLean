@@ -10,13 +10,13 @@ import TNLean.MPS.ParentHamiltonian.Martingale.Transport
 # Blocked and original parent interactions
 
 This file records the exact local conjugacy underlying comparison of a blocked
-range-two parent Hamiltonian with the range-`2 * p` parent Hamiltonian in
+range-two parent Hamiltonian with the range-\(2p\) parent Hamiltonian in
 original-site coordinates.
 
 ## Main results
 
 * `MPSTensor.parentInteractionES_blockTensor_conj` identifies the parent
-  interaction on `N` blocked sites with the original interaction on `N * p`
+  interaction on \(N\) blocked sites with the original interaction on \(Np\)
   sites under the canonical blocked-configuration isometry.
 
 ## References
@@ -186,7 +186,7 @@ private theorem replaceWindow_blockedConfigEquiv_aligned
     rw [hidx]
   · rw [dif_neg hqwin, dif_neg (not_congr hwindow |>.mpr hqwin)]
 
-/-- Restricting an original-site state to a whole aligned `2 * p` window and
+/-- Restricting an original-site state to a whole aligned \(2p\) window and
 then regrouping it into two blocks agrees with first regrouping the full chain
 and then restricting to the corresponding blocked two-site window. -/
 private theorem cyclicRestrictES_blockedConfigLinearIsometryEquiv_aligned
@@ -226,8 +226,8 @@ private theorem cyclicRestrictES_blockedConfigLinearIsometryEquiv_aligned
   simpa using replaceWindow_blockedConfigEquiv_aligned d p hp hN i
     ((blockedConfigEquiv d N p).symm ω) τ
 
-/-- The blocked range-two local term at site `i` is exactly conjugate to the
-original range-`2 * p` local term at the aligned start `p * i`. -/
+/-- The blocked range-two local term at site \(i\) is exactly conjugate to the
+original range-\(2p\) local term at the aligned start \(pi\). -/
 theorem localTermES_blockTensor_conj_aligned
     (A : MPSTensor d D) (p : ℕ) (hp : 0 < p) {N : ℕ} (hN : 2 ≤ N)
     (i : Fin N) :
@@ -273,7 +273,7 @@ theorem localTermES_blockTensor_conj_aligned
   apply (blockedConfigEquiv d 2 p).injective
   simpa using hextract
 
-/-- The range-`2 * p` original parent Hamiltonian dominates, as a quadratic
+/-- The range-\(2p\) original parent Hamiltonian dominates, as a quadratic
 form, the conjugated blocked range-two Hamiltonian obtained by retaining only
 block-aligned starts. This finite cyclic sparse-sum comparison is a TNLean
 reconstruction; Nachtergaele's rescaling argument is stated for compatible open

@@ -2275,11 +2275,37 @@ norm estimate is derived here.
     $1-2(7/16)=1/8$.
 \end{proof}
 
+\begin{lemma}[Positive gap transfer under Loewner domination]
+    \label{lem:positive_gap_transfer_loewner}
+    \lean{LinearMap.IsPositive.re_inner_ge_of_norm_gap,
+        LinearMap.IsPositive.norm_gap_of_le_of_ker_eq}
+    \leanok
+    Let $P$ and $Q$ be finite-dimensional complex endomorphisms.  If $P$ is
+    positive, $P\leq Q$, and $\ker P=\ker Q$, then every norm-gap lower bound
+    for $P$ on $(\ker P)^\perp$ is also a norm-gap lower bound for $Q$ on
+    $(\ker Q)^\perp$.
+\end{lemma}
+
+\begin{lemma}[Blocked local terms and the aligned sparse sum]
+    \label{lem:blocked_original_aligned_sparse_sum}
+    \lean{MPSTensor.localTermES_apply,
+        MPSTensor.parentInteractionES_blockTensor_conj,
+        MPSTensor.localTermES_blockTensor_conj_aligned,
+        MPSTensor.blockTensor_parentHamiltonianES_conj_le}
+    \leanok
+    Under the canonical configuration isometry, the range-two local term of
+    $\operatorname{block}_p(A)$ at blocked site $i$ is the range-$2p$ local
+    term of $A$ at original start $pi$.  Consequently the conjugated blocked
+    Hamiltonian is the aligned sparse sum and is bounded above, in Loewner
+    order, by the full range-$2p$ parent Hamiltonian of $A$.
+\end{lemma}
+
 \begin{theorem}[Original-site gap on block-divisible periodic chains]
     \label{thm:martingale_mps_original_site_multiples}
     \lean{MPSTensor.IsPrimitiveMPS.exists_parentHamiltonianES_gap_eighth_mul}
     \leanok
-    \uses{thm:martingale_mps}
+    \uses{thm:martingale_mps, lem:positive_gap_transfer_loewner,
+        lem:blocked_original_aligned_sparse_sum}
     Under the hypotheses of Theorem~\ref{thm:martingale_mps}, one can choose
     the same $p>0$ so that the original tensor has interaction range $2p$ and,
     for every $N\ge4$ and every
@@ -2293,7 +2319,8 @@ norm estimate is derived here.
 
 \begin{proof}
     \leanok
-    \uses{thm:martingale_mps}
+    \uses{thm:martingale_mps, lem:positive_gap_transfer_loewner,
+        lem:blocked_original_aligned_sparse_sum}
     The canonical configuration isometry identifies each blocked range-two
     term with the original range-$2p$ term beginning at the corresponding
     block boundary.  Thus the conjugated blocked Hamiltonian is the sum over

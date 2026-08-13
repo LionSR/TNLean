@@ -92,10 +92,10 @@ theorem re_inner_ge_of_norm_gap {P : E →ₗ[ℂ] E} (hP : P.IsPositive)
     simp [hcoeff]
   · exact mul_le_mul_of_nonneg_right hbound (sq_nonneg _)
 
-/-- A positive operator `Q` inherits the norm gap of a positive operator `P`
-when `P ≤ Q` in Loewner order and their kernels agree. -/
+/-- An operator \(Q\) inherits the norm gap of a positive operator \(P\)
+when \(P \leq Q\) in Loewner order and their kernels agree. -/
 theorem norm_gap_of_le_of_ker_eq {P Q : E →ₗ[ℂ] E}
-    (hP : P.IsPositive) (_hQ : Q.IsPositive) {γ : ℝ} (hγ : 0 ≤ γ)
+    (hP : P.IsPositive) {γ : ℝ} (hγ : 0 ≤ γ)
     (hPQ : P ≤ Q) (hker : LinearMap.ker P = LinearMap.ker Q)
     (hGap : ∀ v ∈ (LinearMap.ker P)ᗮ, γ * ‖v‖ ≤ ‖P v‖) :
     ∀ v ∈ (LinearMap.ker Q)ᗮ, γ * ‖v‖ ≤ ‖Q v‖ := by

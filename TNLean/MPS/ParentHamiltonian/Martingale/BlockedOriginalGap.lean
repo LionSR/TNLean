@@ -13,8 +13,8 @@ import TNLean.MPS.ParentHamiltonian.UniqueGroundState
 # Spectral gap in original-site units after blocking
 
 This file transfers the proved range-two gap of a blocked primitive MPS tensor
-to the canonical range-`2 * p` parent Hamiltonian of the original tensor on
-periodic chains whose lengths are multiples of `p`.
+to the canonical range-\(2p\) parent Hamiltonian of the original tensor on
+periodic chains whose lengths are multiples of \(p\).
 
 The finite cyclic sparse-sum comparison is a TNLean reconstruction. The cited
 Nachtergaele source uses a rescaled sequence of compatible open intervals; it
@@ -23,8 +23,8 @@ does not state the finite periodic comparison below.
 ## Main result
 
 * `MPSTensor.IsPrimitiveMPS.exists_parentHamiltonianES_gap_eighth_mul`
-  gives the original-site interaction range `2 * p` and gap `1 / 8` on lengths
-  `N * p`, for `N ≥ 4`.
+  gives the original-site interaction range \(2p\) and gap \(1/8\) on lengths
+  \(Np\), for \(N \geq 4\).
 
 ## References
 
@@ -109,8 +109,8 @@ private theorem parentHamiltonianES_blockTensor_conj_ker_eq
       simp only [map_smul]
       rw [hmpv]
 
-/-- A primitive tensor has an original-site range-`2 * p` parent Hamiltonian
-with gap `1 / 8` on every periodic chain of length `N * p`, `N ≥ 4`.
+/-- A primitive tensor has an original-site range-\(2p\) parent Hamiltonian
+with gap \(1/8\) on every periodic chain of length \(Np\), \(N \geq 4\).
 
 **Scope restriction (divisible periodic lengths):** the conclusion is only for
 chain lengths divisible by the selected block length. The remainder-length
@@ -150,7 +150,6 @@ theorem IsPrimitiveMPS.exists_parentHamiltonianES_gap_eighth_mul
       change 0 ≤ (⟪U (parentHamiltonianES (blockTensor A p) 2 N (U.symm x)), x⟫_ℂ).re
       rw [hinner]
       exact (parentHamiltonianES_isPositive (blockTensor A p) 2 N).re_inner_nonneg_left _
-  have hQpos : Q.IsPositive := parentHamiltonianES_isPositive A (2 * p) (N * p)
   have hPQ : P ≤ Q := blockTensor_parentHamiltonianES_conj_le A p hp (by omega)
   have hker : LinearMap.ker P = LinearMap.ker Q :=
     parentHamiltonianES_blockTensor_conj_ker_eq A p hp hInj hN
@@ -173,6 +172,6 @@ theorem IsPrimitiveMPS.exists_parentHamiltonianES_gap_eighth_mul
     simpa [P, z] using hGap N hN z hz
   have hvker : v ∈ (LinearMap.ker Q)ᗮ := by
     simpa [Q, parentHamiltonianGroundSpaceES_eq_ker_parentHamiltonianES] using hv
-  exact hPpos.norm_gap_of_le_of_ker_eq hQpos (by norm_num) hPQ hker hGapP v hvker
+  exact hPpos.norm_gap_of_le_of_ker_eq (by norm_num) hPQ hker hGapP v hvker
 
 end MPSTensor
