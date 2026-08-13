@@ -2278,17 +2278,20 @@ norm estimate is derived here.
     \leanok
     Let $P$ and $Q$ be finite-dimensional complex endomorphisms, and let
     $\gamma\geq0$.  Suppose that $P$ is positive and
-    \[
-        \gamma\lVert v\rVert\leq\lVert Pv\rVert
-    \]
+    \begin{align}
+        \gamma\lVert v\rVert
+        &\leq\lVert Pv\rVert
+    \end{align}
     for every $v\in(\ker P)^\perp$.  Then
-    \[
-        \gamma\lVert v\rVert^2\leq\operatorname{Re}\langle Pv,v\rangle
-    \]
+    \begin{align}
+        \gamma\lVert v\rVert^2
+        &\leq\operatorname{Re}\langle Pv,v\rangle
+    \end{align}
     on $(\ker P)^\perp$.  If also $P\leq Q$ and $\ker P=\ker Q$, then
-    \[
-        \gamma\lVert v\rVert\leq\lVert Qv\rVert
-    \]
+    \begin{align}
+        \gamma\lVert v\rVert
+        &\leq\lVert Qv\rVert
+    \end{align}
     for every $v\in(\ker Q)^\perp$.
 \end{lemma}
 
@@ -2299,21 +2302,25 @@ norm estimate is derived here.
         MPSTensor.localTermES_blockTensor_conj_aligned,
         MPSTensor.blockTensor_parentHamiltonianES_conj_le}
     \leanok
-    Let $B=\operatorname{block}_p(A)$, and let $U$ be the canonical
+    Write $h^{A,L}_j$ for the range-$L$ local term of a tensor $A$ at site
+    $j$.  Let $B=\operatorname{block}_p(A)$, and let $U$ be the canonical
     configuration isometry from the blocked chain of length $N$ to the original
     chain of length $Np$.  For every blocked site $i$,
-    \[
-        U h^{B,2}_i U^{-1}=h^{A,2p}_{pi}.
-    \]
+    \begin{align}
+        U h^{B,2}_i U^{-1}
+        &=h^{A,2p}_{pi}.
+    \end{align}
     Hence the conjugated blocked Hamiltonian is the aligned sparse sum
-    \[
+    \begin{align}
         U H_{N,2}(B)U^{-1}
-        =\sum_{i=0}^{N-1}h^{A,2p}_{pi},
-    \]
+        &=\sum_{i=0}^{N-1}h^{A,2p}_{pi},
+    \end{align}
     and
-    \[
-        U H_{N,2}(B)U^{-1}\leq H_{Np,2p}(A)
-    \]
+    \begin{align}
+        U H_{N,2}(B)U^{-1}
+        &\leq H_{Np,2p}(A)
+        \label{eq:blocked-original-loewner}
+    \end{align}
     in Loewner order.
 \end{lemma}
 
@@ -2341,25 +2348,27 @@ norm estimate is derived here.
     Let $B=\operatorname{block}_p(A)$, and let $U$ be the canonical
     configuration isometry.  Lemma~\ref{lem:blocked_original_aligned_sparse_sum}
     gives, for every blocked site $i$,
-    \[
-        U h^{B,2}_i U^{-1}=h^{A,2p}_{pi},
-    \]
+    \begin{align}
+        U h^{B,2}_i U^{-1}
+        &=h^{A,2p}_{pi},
+    \end{align}
     and therefore
-    \[
+    \begin{align}
         U H_{N,2}(B)U^{-1}
-        =\sum_{i=0}^{N-1}h^{A,2p}_{pi}
+        &=\sum_{i=0}^{N-1}h^{A,2p}_{pi}
         \leq\sum_{j=0}^{Np-1}h^{A,2p}_j
         =H_{Np,2p}(A).
-    \]
+    \end{align}
     Block injectivity identifies the two ground-state lines under $U$, hence
-    \[
+    \begin{align}
         \ker\!\left(U H_{N,2}(B)U^{-1}\right)
-        =\ker H_{Np,2p}(A).
-    \]
+        &=\ker H_{Np,2p}(A).
+    \end{align}
     Theorem~\ref{thm:martingale_mps} gives the norm gap $1/8$ for
     $H_{N,2}(B)$.  Since $U$ is isometric, the same bound holds for its
     conjugate.  Lemma~\ref{lem:positive_gap_transfer_loewner} then transfers
-    this bound through the displayed Loewner domination and kernel equality.
+    this bound through the Loewner domination~(\ref{eq:blocked-original-loewner})
+    and the kernel equality above.
 \end{proof}
 
 \begin{theorem}[Uniform gap for normal MPS parent Hamiltonians]
