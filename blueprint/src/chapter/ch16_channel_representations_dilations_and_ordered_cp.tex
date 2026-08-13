@@ -241,11 +241,13 @@ channel:
     $V:=\sum_j K_j\otimes\ket{j}$ for an orthonormal basis $\{\ket{j}\}$ of
     $\C^{r}$, so that $V^\dagger(A\otimes\Id_r)V=\sum_j K_j^\dagger AK_j$. The
     trace pairing gives
-    \[
-        \tr\bigl[T^*(A)X\bigr]=\tr\bigl[A\,T(X)\bigr]
-        =\tr\Bigl[A\sum_j K_jXK_j^\dagger\Bigr]
-        =\tr\Bigl[\sum_j K_j^\dagger AK_j\,X\Bigr]
-    \]
+    \begin{align}
+        \tr\bigl[T^*(A)X\bigr]
+        &=\tr\bigl[A\,T(X)\bigr]
+          =\tr\Bigl[A\sum_j K_jXK_j^\dagger\Bigr]
+          =\tr\Bigl[\sum_j K_j^\dagger AK_j\,X\Bigr]
+        \label{eq:stinespring_rectangular_pairing}
+    \end{align}
     for every $X\in\MN{d}$, and nondegeneracy of the trace pairing yields
     (\ref{eq:stinespring_rectangular}). Finally
     $V^\dagger V=\sum_j K_j^\dagger K_j$, and the latter equals $\Id_d$
