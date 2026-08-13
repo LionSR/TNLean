@@ -10,7 +10,7 @@ import TNLean.MPS.MPDO.RescalingStableLengthDependentRFPViaTS
 # Length-dependent BNT coefficients for a renormalization fixed point
 
 This file assembles the established properties of the dimer tensor `R` into
-an explicit positive answer to the question after Theorem 4.14 of CPSV16.
+a normalization-free variant of the question after Theorem 4.14 of CPSV16.
 
 ## Main result
 
@@ -34,16 +34,17 @@ namespace MPOTensor.RescalingStableLengthDependentRFP
 canonical form, and its explicit one-label tensor-attached BNT presentation has
 coefficients that depend on the positive chain length.
 
-This answers the existential question in arXiv:1606.00608, lines 995--997, for
-the displayed vertical presentation. It does not assert presentation
-independence. The source's standing unit-weight convention is not part of this
-statement. -/
+This proves a normalization-free variant of the question in
+arXiv:1606.00608, lines 995--997, for the displayed vertical presentation. It
+does not assert presentation independence. The source additionally assumes
+that every canonical weight has modulus at most one and at least one has
+modulus one; that normalization is not part of this statement. -/
 theorem exists_isRFPViaTS_not_lengthIndependent_bntCoefficients_R :
     ∃ (M : MPOTensor 4 4) (H : BNTAlgebraTensorClause M),
       MPSTensor.IsCPSVCanonicalForm M.toMPSTensor ∧
         IsMPDO M ∧ IsRFPViaTS M ∧ ¬ H.coeffs.LengthIndependent := by
-  refine ⟨R, R_oneLabelBNTAlgebraTensorClause,
-    R_toMPSTensor_isCPSVCanonicalForm, R_isMPDO, isRFPViaTS_R, ?_⟩
-  simpa using oneLabelCoeffs_not_lengthIndependent
+  exact ⟨R, R_oneLabelBNTAlgebraTensorClause,
+    R_toMPSTensor_isCPSVCanonicalForm, R_isMPDO, isRFPViaTS_R,
+    oneLabelCoeffs_not_lengthIndependent⟩
 
 end MPOTensor.RescalingStableLengthDependentRFP
