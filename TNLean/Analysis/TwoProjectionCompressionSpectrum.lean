@@ -56,6 +56,24 @@ theorem rangeCompression_apply_eigenbasis {P Q : E →ₗ[ℂ] E}
         rangeCompressionEigenbasis hP hQ i := by
   exact (rangeCompression_isSymmetric hP hQ).apply_eigenvectorBasis rfl i
 
+/-- The ambient first projection fixes every vector in the compression eigenbasis. -/
+theorem rangeCompressionEigenbasis_apply_self {P Q : E →ₗ[ℂ] E}
+    (hP : P.IsSymmetricProjection) (hQ : Q.IsSymmetricProjection)
+    (i : Fin (Module.finrank ℂ P.range)) :
+    P (rangeCompressionEigenbasis hP hQ i : E) =
+      (rangeCompressionEigenbasis hP hQ i : E) := by
+  exact (LinearMap.IsIdempotentElem.mem_range_iff hP.isIdempotentElem).mp
+    (rangeCompressionEigenbasis hP hQ i).property
+
+/-- The ambient compression equation for a vector in `rangeCompressionEigenbasis`. -/
+theorem rangeCompressionEigenbasis_apply_compression {P Q : E →ₗ[ℂ] E}
+    (hP : P.IsSymmetricProjection) (hQ : Q.IsSymmetricProjection)
+    (i : Fin (Module.finrank ℂ P.range)) :
+    P (Q (rangeCompressionEigenbasis hP hQ i : E)) =
+      (rangeCompressionEigenvalues hP hQ i : ℂ) •
+        (rangeCompressionEigenbasis hP hQ i : E) := by
+  exact congr_arg Subtype.val (rangeCompression_apply_eigenbasis hP hQ i)
+
 /-- Every eigenvalue of the compressed projection belongs to `[0,1]`.
 
 These endpoint bounds separate the commuting one-dimensional summands from the
@@ -67,10 +85,9 @@ theorem rangeCompressionEigenvalues_mem_unitInterval {P Q : E →ₗ[ℂ] E}
   let x := rangeCompressionEigenbasis hP hQ i
   let μ := rangeCompressionEigenvalues hP hQ i
   have hxnorm : ‖(x : E)‖ = 1 := (rangeCompressionEigenbasis hP hQ).norm_eq_one i
-  have hxP : P (x : E) = x :=
-    (LinearMap.IsIdempotentElem.mem_range_iff hP.isIdempotentElem).mp x.property
+  have hxP : P (x : E) = x := rangeCompressionEigenbasis_apply_self hP hQ i
   have hxEig : P (Q (x : E)) = (μ : ℂ) • (x : E) :=
-    congr_arg Subtype.val (rangeCompression_apply_eigenbasis hP hQ i)
+    rangeCompressionEigenbasis_apply_compression hP hQ i
   obtain ⟨_, _, _, _, hnorm⟩ := angleDefect_block hP hQ hxP hxnorm hxEig
   change 0 ≤ μ ∧ μ ≤ 1
   constructor <;> nlinarith [sq_nonneg ‖angleDefect Q μ (x : E)‖]
@@ -98,11 +115,9 @@ theorem rangeCompressionEigenvalues_eq_zero_or_eq_one_or_exists_angle_block
   let x : E := rangeCompressionEigenbasis hP hQ i
   let μ := rangeCompressionEigenvalues hP hQ i
   have hxnorm : ‖x‖ = 1 := (rangeCompressionEigenbasis hP hQ).norm_eq_one i
-  have hxP : P x = x :=
-    (LinearMap.IsIdempotentElem.mem_range_iff hP.isIdempotentElem).mp
-      (rangeCompressionEigenbasis hP hQ i).property
+  have hxP : P x = x := rangeCompressionEigenbasis_apply_self hP hQ i
   have hxEig : P (Q x) = (μ : ℂ) • x :=
-    congr_arg Subtype.val (rangeCompression_apply_eigenbasis hP hQ i)
+    rangeCompressionEigenbasis_apply_compression hP hQ i
   have hμ := rangeCompressionEigenvalues_mem_unitInterval hP hQ i
   rcases hμ with ⟨hμ0, hμ1⟩
   rcases eq_or_lt_of_le hμ0 with hμeq | hμpos
