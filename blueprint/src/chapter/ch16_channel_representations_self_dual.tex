@@ -65,7 +65,8 @@ pairing, $\tr(G_\beta^\dagger G_{\beta'})=\delta_{\beta\beta'}$
     \lean{transferMatrixOfBasis_conjTranspose,
         transferMatrix_conjTranspose_eq_traceAdjointMap}
     \leanok
-    \uses{def:transfer_matrix_of_basis, def:trace_pairing_adjoint}
+    \uses{def:transfer_matrix_of_basis, def:trace_pairing_adjoint,
+        def:mpu_transfer_matrix}
     Let $T:\MN{d}\to\MN{d}$ satisfy $T(X^\dagger)=T(X)^\dagger$. Then in any
     family $(\sigma_\alpha)$ used on both sides,
     \begin{align}
@@ -77,7 +78,7 @@ pairing, $\tr(G_\beta^\dagger G_{\beta'})=\delta_{\beta\beta'}$
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{def:trace_pairing_adjoint}
+    \uses{def:trace_pairing_adjoint, def:mpu_transfer_matrix}
     The $(\alpha,\beta)$ entry of $(\widehat T)^\dagger$ is
     $\overline{\tr(\sigma_\beta^\dagger T(\sigma_\alpha))}
     =\tr\bigl(T(\sigma_\alpha)^\dagger\sigma_\beta\bigr)$. Hermiticity
@@ -85,6 +86,14 @@ pairing, $\tr(G_\beta^\dagger G_{\beta'})=\delta_{\beta\beta'}$
     $T(\sigma_\alpha^\dagger)$, and the defining identity
     $\tr(AT^*(B))=\tr(T(A)B)$ of the dual map turns the result into
     $\tr(\sigma_\alpha^\dagger T^*(\sigma_\beta))$.
+
+    In the matrix units the same two steps appear entrywise. There the
+    $\bigl((j,i),(\ell,k)\bigr)$ entry of $\widehat T$ is
+    $\bigl(T(E_{k\ell})\bigr)_{ij}$, and the entry of
+    $\widehat{T^*}$ is $\tr\bigl(E_{k\ell}\,T(E_{ji})\bigr)$ by the entrywise
+    form of the dual map; conjugating the first and using
+    $E_{k\ell}^\dagger=E_{\ell k}$ together with Hermiticity preservation
+    identifies the two.
 \end{proof}
 
 \begin{lemma}[Dual map of a Kraus family]
