@@ -263,8 +263,8 @@ completely-positive endpoint of the positivity chain, and together with
 
 This is not equation (3.7) at that index.  There the Ky-Fan norms collapse to
 ‖ρᵢ‖₍D'₎ = tr ρᵢ = 1 and the right-hand side of (3.7) reads
-ν₀ + Σ_{i:νᵢ≤0} (νᵢ − ν₀), which for the spectrum (−2, −1, 3) is −6 while
-λ_min is −2.  The top-index instance of (3.7) is
+ν₀ + Σ_{i:νᵢ≤0} (νᵢ − ν₀), which for the spectrum (−2, −1, 3) with ν₀ = 3
+is −6 while λ_min is −2.  The top-index instance of (3.7) is
 `Matrix.IsHermitian.le_sInf_schmidtRankLEExpectations_top`, which uses the
 present bound.
 
@@ -594,8 +594,8 @@ the right-hand side of (3.8) reads ν + (ν₋ − ν) = ν₋ = ν_min, and the
 the least eigenvalue: inf_ψ ⟨ψ|τ|ψ⟩ = ν_min.
 
 Equation (3.7) at the top index is a separate statement: its right-hand side
-reads ν₀ + Σ_{i:νᵢ≤0} (νᵢ − ν₀), which for eigenvalues (−2, −1, 3) is −6 while
-ν_min is −2.  The inequality ν₀ + Σ_{i:νᵢ≤0} (νᵢ − ν₀) ≤ ν_min is
+reads ν₀ + Σ_{i:νᵢ≤0} (νᵢ − ν₀), which for eigenvalues (−2, −1, 3) with ν₀ = 3
+is −6 while ν_min is −2.  The inequality ν₀ + Σ_{i:νᵢ≤0} (νᵢ − ν₀) ≤ ν_min is
 `Matrix.IsHermitian.le_sInf_schmidtRankLEExpectations_top`.
 
 Wolf's positivity index runs over 1 ≤ n ≤ D with D the dimension of the second
