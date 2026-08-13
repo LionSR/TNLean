@@ -54,6 +54,7 @@ import TNLean.Analysis.RpowConvexity
 import TNLean.Analysis.SandwichedRenyi
 import TNLean.Analysis.SandwichedRenyiTwo
 import TNLean.Analysis.SchattenNorm
+import TNLean.Analysis.SpectralGapOrder
 import TNLean.Analysis.SpectralQuadraticForm
 import TNLean.Analysis.SuperoperatorResolvent
 import TNLean.Analysis.SupportCompressedEntropy
