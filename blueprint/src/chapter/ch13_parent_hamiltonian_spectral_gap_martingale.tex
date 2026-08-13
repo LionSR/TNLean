@@ -1202,9 +1202,9 @@ norm estimate is derived here.
     \leanok
     \uses{def:primitive_mps,
         thm:whole_increment_centered_residual_bound_left_canonical}
-    Every primitive MPS tensor satisfies the left-canonical centered residual
-    estimate of
-    Theorem~\ref{thm:whole_increment_centered_residual_bound_left_canonical}.
+    Let $A$ be a primitive MPS tensor with positive-definite fixed point
+    $\rho$.  Then $A$ satisfies the left-canonical centered residual estimate
+    of Theorem~\ref{thm:whole_increment_centered_residual_bound_left_canonical}.
 \end{theorem}
 
 \begin{proof}
@@ -1212,7 +1212,7 @@ norm estimate is derived here.
     \uses{def:primitive_mps,
         thm:whole_increment_centered_residual_bound_left_canonical}
     Use the left-canonical normalization contained in the primitive-MPS
-    hypotheses.
+    hypotheses together with positive definiteness of $\rho$.
 \end{proof}
 
 \begin{theorem}[Limiting overlap product]
@@ -1224,7 +1224,7 @@ norm estimate is derived here.
         thm:whole_increment_left_overlap_factor_apply,
         thm:whole_increment_right_overlap_factor_apply,
         thm:limiting_metric_inverse_virtual_adjoints}
-    For a positive-definite fixed point, the product
+    For a positive-definite matrix $\rho$, the product
     $F_{K,Q}^\dagger\mathcal K_\infty^{\oplus}G_{K,Q}$ equals the corresponding
     virtual-word expression formed from $J_K^{\mathrm{tail}}$,
     $(J_Q^{\mathrm{left}})^\dagger$, $\mathcal K_\infty$, and
@@ -1438,9 +1438,11 @@ norm estimate is derived here.
         def:whole_increment_full_inverse_gram_correction,
         def:whole_increment_left_gram_correction,
         def:whole_increment_centered_projector_sandwich}
-    The whole-increment projector defect is the centered physical sandwich minus
-    the tail Gram correction, the full inverse-Gram correction, and the left
-    Gram correction.
+    Assume $D>0$, let $\rho$ be positive definite, and suppose that
+    $\Gamma_{L+Q}^{\mathrm{ES}}$, $\Gamma_{K+L}^{\mathrm{ES}}$, and
+    $\Gamma_{K+L+Q}^{\mathrm{ES}}$ are injective.  Then the whole-increment
+    projector defect is the centered physical sandwich minus the tail Gram
+    correction, the full inverse-Gram correction, and the left Gram correction.
 \end{theorem}
 
 \begin{proof}
