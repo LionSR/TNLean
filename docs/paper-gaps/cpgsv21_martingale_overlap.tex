@@ -493,7 +493,7 @@ explicit than the review paragraph: the exact constants and the cyclic-window
 blocking convention still have to be compared with the FNW, Nachtergaele, and
 Kastoryano--Lucia estimates.
 
-\section{Inverse-Gram reduction and the remaining FNW contraction}
+\section{Inverse-Gram reduction and the remaining optimized FNW comparison}
 
 For $n\ge1$, write $[n]:=\{0,\ldots,n-1\}$.  Fix an MPS tensor
 $A=\{A^s\}_{s\in[d]}$ with $A^s\in\mathbb C^{D\times D}$.  For
@@ -779,8 +779,9 @@ and generic prerequisites now include:
     These are exact unweighted identities, including empty spectator types;
     they assert no direct-sum norm estimate.  The C3 specializations are stated
     next.
-  \item The C3$^\prime$ whole-increment algebra is now separated from its
-    still-missing numerical estimate.  For a suffix increment $Q$, define the
+  \item The C3$^\prime$ whole-increment algebra and a quantitative
+    prefix-uniform estimate are now complete.  For a suffix increment $Q$,
+    define the
     left virtual map by
     \begin{align}
       J_Q^{\mathrm{left}}X
@@ -846,16 +847,50 @@ and generic prerequisites now include:
     \leanid{MPSTensor.wholeIncrementCenteredProjectorResidualES}.  The
     reassociated tail pseudoinverse bound is
     \leanid{MPSTensor.norm_reassocTailBoundaryMapES_comp_inverseGram_le_sqrt}.
+    The centered physical sandwich is controlled by
+    \leanid{MPSTensor.wholeIncrementCenteredProjectorResidualES_norm_le}.
     The three correction bounds are
     \leanid{MPSTensor.wholeIncrementTailFiniteGramCorrectionES_norm_le},
     \leanid{MPSTensor.wholeIncrementFullInverseGramCorrectionES_norm_le}, and
     \leanid{MPSTensor.wholeIncrementLeftFiniteGramCorrectionES_norm_le}.
 
-    This completed slice is exact algebra only.  It removes growth from the
-    length-$Q$ left virtual factor, factors the centered mixed term, and exposes
-    every finite-Gram correction.  It does not yet prove uniform smallness of
-    the assembled whole-increment projector defect, establish Nachtergaele's
-    C3$^\prime$ bound, or imply the three-block coefficient $7/16$.
+    The assembled quantitative estimate is
+    \leanid{MPSTensor.IsPrimitiveMPS.wholeIncrement_groundProjection_defect_le_geometric}.
+    For a primitive tensor with positive-definite fixed point and nonzero bond
+    dimension, it gives constants $C,c,r>0$, with $r<1$, such that for every
+    prefix length $K$, overlap length $L\geq1$, and suffix length $Q$ satisfying
+    $cr^L<1$.  Write
+    \begin{align}
+      P^{\mathrm{tail}}_{K;L,Q}
+      &:=P_{\operatorname{ran}(\widetilde\Gamma^{\mathrm{tail}}_{K;L,Q})},
+      &
+      P^{\mathrm{left}}_{K+L,Q}
+      &:=P_{\operatorname{ran}(\Gamma^{\mathrm{left}}_{K+L,Q})}.
+    \end{align}
+    These are the orthogonal projectors onto the ranges of the reassociated tail and
+    left boundary maps.  Then
+    \begin{align}
+      \left\lVert
+        P^{\mathrm{tail}}_{K;L,Q}P^{\mathrm{left}}_{K+L,Q}
+        -P_{\mathcal G_{K+L+Q}^{\mathrm{ES}}(A)}
+      \right\rVert
+      &\leq \frac{Cr^L}{1-cr^L}.
+    \end{align}
+    The constants are independent of both $K$ and $Q$.  This estimate is
+    reconstructed from the exact inverse-Gram telescope and is not attributed
+    to FNW.  It supplies the quantitative C3$^\prime$-type estimate needed here,
+    but it does not claim the optimized numerator in Nachtergaele's
+    equation~(6.1).
+
+    The theorem
+    \leanid{MPSTensor.IsPrimitiveMPS.exists_uniform_wholeIncrement_defect_le_seven_sixteenths}
+    then chooses one integer $p>0$, measured in sites of the input tensor, such
+    that $A$ is $p$-block injective and the preceding defect with $L=Q=p$ is at
+    most $7/16$ for every prefix length $K$.  Its specialization
+    \leanid{MPSTensor.IsPrimitiveMPS.exists_threeBlock_wholeIncrement_defect_le_seven_sixteenths}
+    takes $K=p$ and gives the same bound for three consecutive blocks of $p$
+    original sites.  Thus prefix-uniform quantitative smallness and the
+    three-block coefficient $7/16$ are resolved in original-site units.
   \item The mixed Gram of the C3 tail map at
     \((K,l+1)\) and left map at \((K+l,1)\) is computed exactly by
     \leanid{MPSTensor.inner_tailBoundaryMapES_adjoint_leftBoundaryMapES}.
@@ -1217,14 +1252,14 @@ conversion retains its proved $D^{3/2}$ norm factor inside $g$.
 
 \section{Verdict}
 
-\textbf{Verdict: open gap, with a resolved local correction.}  The exact
-whole-increment algebra, including reassociation, the mixed Gram, the centered
-factorization, and the three finite-Gram corrections, is resolved.  The
-quantitative C3$^\prime$ estimate uniform in the filtration prefix and the
-three-block coefficient $7/16$ remain formalization gaps.  Separately, the
-open-chain C3 threshold is proved in unweighted coordinates, while the optimized
-FNW numerator and the blocked-to-cyclic parent-Hamiltonian comparison remain
-open source-comparison problems.
+\textbf{Verdict: scope restriction.}  The exact
+whole-increment algebra, the reconstructed prefix-uniform geometric
+C3$^\prime$-type estimate, and the three-block coefficient $7/16$ are proved.
+All lengths are measured in sites of the input tensor.  These bounds come from
+the formal inverse-Gram reconstruction and are not attributed to FNW.  The
+optimized FNW numerator and its source constants remain open, as does the
+blocked-to-cyclic ground-projector comparison needed for the periodic
+parent-Hamiltonian gap theorem.
 
 \bibliographystyle{alpha}
 \bibliography{references}
