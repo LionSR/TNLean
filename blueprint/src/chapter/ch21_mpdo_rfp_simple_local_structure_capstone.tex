@@ -1178,6 +1178,8 @@ This is the calculation in
 
 \begin{proof}
     \leanok
+    \uses{lem:mpdo_sitewise_physical_coordinate_congruence,
+        thm:cpsv_example411_binary_support_normalization}
     The rectangular delta matrix collapses each local coordinate sum to the
     unique supported binary label.  Applying the same inclusion independently
     at every site gives the displayed congruence, and the supported entry
@@ -1204,6 +1206,8 @@ This is the calculation in
 
 \begin{proof}
     \leanok
+    \uses{thm:mpdo_sal_physical_isometry_transport,
+        thm:cpsv_example411_binary_support_normalization}
     Cyclicity of the trace and $V^*V=I_2$ preserve the trace under the
     sitewise congruence.  The binary partition-function identity and its closed
     form then give the result.

@@ -208,10 +208,14 @@ For Example~4.11, the effective binary one-site space is included in the
 source-facing two-qubit site by $k\mapsto |k,k\rangle$; it is not identified
 with the four-dimensional site by an equivalence.  The module
 \doclink{TNLean/MPS/MPDO/CPSVExample411Ambient} proves the exact supported
-one-site slice, vanishing whenever either local physical leg is unsupported,
-the sitewise periodic-operator congruence, the supported positive-length
-entries, and equality of the ambient trace with
-$Z_N=(3^N+1)/2^N$.
+one-site slice and vanishing whenever either local physical leg is unsupported.
+The declarations
+\leanid{MPOTensor.CPSVExample411Ambient.mpo_ambientM_eq_singleKrausMap} and
+\leanid{MPOTensor.CPSVExample411Ambient.mpo_ambientM_supported_apply} give the
+sitewise periodic-operator congruence and supported positive-length entries.
+The declaration
+\leanid{MPOTensor.CPSVExample411Ambient.trace_mpo_ambientM_closed_form} gives
+the ambient trace $Z_N=(3^N+1)/2^N$.
 
 \paragraph{Scope restriction (spectral and entropy consequences).}
 The ambient operator and trace bridge for Example~4.11 is complete.  This does

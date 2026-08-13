@@ -35,7 +35,7 @@ SAL, ZCL, or unsupported full-MPO entry theorem is asserted here.
 
 ## Main results
 
-* `ambientM_supported`: the exact one-site supported-slice bridge.
+* `ambientM_supported`: the exact one-site supported-slice equality.
 * `ambientM_left_unsupported` and `ambientM_right_unsupported`: unsupported
   one-site physical legs vanish.
 * `mpo_ambientM_eq_singleKrausMap`: the operator-level sitewise congruence.
@@ -109,7 +109,7 @@ theorem inclusion_isometry : inclusionᴴ * inclusion = 1 := by
 /-- The source-facing ambient tensor, obtained by isometrically including the
 binary support model in the two-qubit one-site space.
 
-**Local fix:** this is a support inclusion, not an equivalence between the
+**Local fix (support embedding):** this is a support inclusion, not an equivalence between the
 physical dimensions $2$ and $4$.
 
 Source for the local $\eta_{k,h}$ family: arXiv:1606.00608, Example 4.11,
@@ -118,7 +118,7 @@ lines 907--924. The embedding is the project derivation documented in
 def ambientM : MPOTensor 4 4 :=
   changePhysicalBasis inclusion CPSVExample411BinarySupport.M
 
-/-- Exact one-site bridge on the supported physical slice. -/
+/-- Exact equality on the supported one-site physical slice. -/
 theorem ambientM_supported (k h : Fin 2) :
     ambientM (siteEmbedding k) (siteEmbedding h) =
       CPSVExample411BinarySupport.M k h := by
@@ -159,14 +159,6 @@ configurations. -/
   rw [Fintype.prod_boole]
   congr 1
   exact propext funext_iff.symm
-
-/-- The same sitewise delta identity with the embedded configuration on the
-column leg. -/
-@[simp] theorem sitewisePhysicalMatrix_inclusion_embedConfig_right {N : ℕ}
-    (σ τ : Fin N → Fin 2) :
-    sitewisePhysicalMatrix inclusion N (embedConfig τ) σ =
-      if τ = σ then 1 else 0 :=
-  sitewisePhysicalMatrix_inclusion_embedConfig τ σ
 
 /-- The ambient periodic MPO is the sitewise single-Kraus congruence of the
 binary periodic MPO. -/
