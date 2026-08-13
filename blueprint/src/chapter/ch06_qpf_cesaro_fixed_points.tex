@@ -189,6 +189,47 @@
     assertion for $T_\varphi'$.
 \end{proof}
 
+\begin{lemma}[Pointwise limits of endomorphisms in finite dimension]
+    \label{lem:tendsto_clm_of_tendsto_apply}
+    \lean{ContinuousLinearMap.tendsto_of_tendsto_apply_of_finiteDimensional}
+    \leanok
+    Let $E$ be a finite-dimensional complex normed space and let $S_N$ and $P$
+    be continuous linear endomorphisms of $E$. If $S_N(x)\to P(x)$ for every
+    $x\in E$, then $S_N\to P$ in the operator norm.
+\end{lemma}
+
+\begin{proof}\leanok
+    Fix a basis $e_1,\dots,e_m$ of $E$. Evaluation on the basis,
+    \begin{align}
+        \Phi(S)=(S(e_1),\dots,S(e_m)),
+    \end{align}
+    is a linear bijection from the endomorphisms of $E$ onto $E^m$, since an
+    endomorphism is determined by, and may be prescribed arbitrarily on, a
+    basis. In finite dimension every linear map is continuous, so both $\Phi$
+    and $\Phi^{-1}$ are continuous. The hypothesis says $\Phi(S_N)\to\Phi(P)$
+    coordinatewise, hence $S_N=\Phi^{-1}(\Phi(S_N))\to\Phi^{-1}(\Phi(P))=P$.
+\end{proof}
+
+\begin{lemma}[Closedness of the completely positive maps]
+    \label{lem:cp_maps_closed}
+    \lean{isClosed_setOf_isCPMap, IsCPMap.of_tendsto_toCLM}
+    \leanok
+    \uses{def:cp_map}
+    Let $D>0$. The completely positive maps form a closed subset of the
+    endomorphisms of $\MN{D}$ in the operator norm. In particular, if every
+    $S_N:\MN{D}\to\MN{D}$ is completely positive and $S_N\to P$ in the
+    operator norm, then $P$ is completely positive.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{def:cp_map}
+    A map is completely positive precisely when its Choi matrix is positive
+    semidefinite. The Choi matrix depends linearly, hence continuously, on the
+    map, and the positive semidefinite matrices are closed. The set of
+    completely positive maps is therefore the preimage of a closed set under a
+    continuous map.
+\end{proof}
+
 \begin{corollary}[Channel structure of the mean-ergodic projection]
     \label{cor:mean_ergodic_projection_channel}
     \lean{IsCPMap.meanErgodicProjection_isCPMap,
@@ -199,8 +240,8 @@
         thm:positive_trace_preserving_mean_ergodic_projection}
     Let $T:\MN{D}\to\MN{D}$ be completely positive and trace-preserving. Then
     the mean-ergodic projection $T_\infty$ of
-    \cite[Equation~(6.14)]{Wolf2012Quantum} is completely positive, hence a
-    quantum channel. Together with
+    \cite[Equation~(6.14)]{Wolf2012Quantum} is completely positive and
+    trace-preserving, hence a quantum channel. Together with
     Corollary~\ref{cor:peripheral_projection_channel} this completes the
     preservation assertion of \cite[Proposition~6.3]{Wolf2012Quantum} for all
     three maps $T_\infty$, $T_\varphi$, and $T_\varphi'$.
@@ -209,12 +250,29 @@
 \begin{proof}\leanok
     \uses{def:mean_ergodic_projection,
         thm:mean_ergodic_bounded_orbits,
-        thm:positive_trace_preserving_mean_ergodic_projection}
-    The $N$-th Ces\`aro average is the nonnegative multiple $1/N$ of a finite
-    sum of powers of $T$, and powers and sums of completely positive maps are
-    completely positive. These averages converge pointwise to $T_\infty$,
-    hence in operator norm, and in finite dimension the completely positive
-    maps form a closed set. Trace preservation of $T_\infty$ is
+        thm:positive_trace_preserving_mean_ergodic_projection,
+        thm:trace_preserving_mean_ergodic_projection,
+        lem:tendsto_clm_of_tendsto_apply,
+        lem:cp_maps_closed}
+    Write
+    \begin{align}
+        S_N=\frac{1}{N}\sum_{n=0}^{N-1}T^n
+    \end{align}
+    for the $N$-th Ces\`aro average. Powers of a completely positive map are
+    completely positive, and so are finite sums and nonnegative multiples of
+    completely positive maps, so every $S_N$ is completely positive. By
+    (\ref{eq:channel_mean_ergodic_limit}),
+    \begin{align}
+        S_N(X)\longrightarrow T_\infty(X)\quad\text{for every }X\in\MN{D},
+    \end{align}
+    and Lemma~\ref{lem:tendsto_clm_of_tendsto_apply} upgrades this to
+    \begin{align}
+        S_N\longrightarrow T_\infty
+    \end{align}
+    in the operator norm. Lemma~\ref{lem:cp_maps_closed} then makes $T_\infty$
+    completely positive. Trace preservation of $T_\infty$ is
+    Theorem~\ref{thm:trace_preserving_mean_ergodic_projection}, and the
+    bounded orbits it requires come from
     Theorem~\ref{thm:positive_trace_preserving_mean_ergodic_projection}.
 \end{proof}
 

@@ -7,6 +7,7 @@ import TNLean.Channel.Peripheral.SpectralProjection
 import TNLean.Channel.FixedPoint.MeanErgodicProjection
 import TNLean.Channel.Semigroup.CPClosure
 import TNLean.Analysis.Dirichlet
+import TNLean.Analysis.OperatorNormConvergence
 import Mathlib.Data.Nat.Choose.Bounds
 import Mathlib.Data.Nat.Choose.Sum
 import Mathlib.Analysis.SpecificLimits.Normed
