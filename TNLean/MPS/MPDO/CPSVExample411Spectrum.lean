@@ -21,8 +21,11 @@ length. See `docs/paper-gaps/cpsv16_examples_4_10_4_11_entropy.tex`.
 ## Main results
 
 * `effective_reducedBlockState_four_eq_diagonal`: the effective reduced state is diagonal.
+* `transition_counts_one` through `transition_counts_four`: the finite transition-count
+  enumerations.
 * `effective_charpoly_roots_one` through `effective_charpoly_roots_four`: the four effective root
   multisets.
+* `ambient_charpoly_eq_X_pow_mul_effective`: the characteristic-polynomial zero-padding identity.
 * `ambient_charpoly_roots_eq_zero_add_effective`: generic isometric zero-padding at ring length
   four.
 * `ambient_charpoly_roots_one` through `ambient_charpoly_roots_four`: the four full ambient root
