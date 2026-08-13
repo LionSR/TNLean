@@ -183,6 +183,8 @@ private theorem cyclicCfg_eq_replaceWindow {N : ℕ} (hN : 0 < N) (L : ℕ)
     cyclicCfg hN L i σ τ = replaceWindow L hLN i τ σ := by
   rfl
 
+/-- Evaluating a Euclidean cyclic restriction reads the input vector on the configuration
+obtained by inserting the window values into the fixed outside configuration. -/
 @[simp] theorem cyclicRestrictES_apply {N : ℕ} (hN : 0 < N) (L : ℕ)
     (i : Fin N) (τ : Cfg d N) (v : EuclideanSpace ℂ (Cfg d N)) (ω : Cfg d L) :
     cyclicRestrictES (d := d) hN L i τ v ω = v (cyclicCfg hN L i ω τ) := rfl
@@ -378,6 +380,8 @@ private theorem cyclicRestrictES_adjoint_apply {N : ℕ} (hN : 0 < N) {L : ℕ}
       _ = if SameOutsideWindow (L := L) i σ τ then v (extractWindow L i σ) else 0 := by
             simp [hστ]
 
+/-- Pointwise evaluation of a Euclidean local term: restrict to the cyclic window, apply the
+local parent interaction, and read the result at the extracted window configuration. -/
 @[simp] theorem localTermES_apply {N : ℕ} (A : MPSTensor d D) (L : ℕ) (i : Fin N)
     (hLN : L ≤ N) (v : EuclideanSpace ℂ (Cfg d N)) (σ : Cfg d N) :
     localTermES A L i v σ =

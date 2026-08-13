@@ -117,8 +117,7 @@ construction; they are not attributed to a source theorem.
     \lean{MPSTensor.transportedBlockedParentHamiltonianES_eq_alignedParentHamiltonianES}
     \lean{MPSTensor.transportedBlockedParentHamiltonianES_nonneg_le_parentHamiltonianES}
     \leanok
-    \uses{def:blocked_configuration_isometry,
-        thm:blocked_local_ground_space_transport}
+    \uses{def:blocked_configuration_isometry}
     Let $p>0$ and $N\ge2$. For $i\in\Fin{N}$, write $pi$ for the corresponding
     block-aligned site in the original chain. The blocked range-two interaction
     satisfies
@@ -144,6 +143,7 @@ construction; they are not attributed to a source theorem.
 
 \begin{proof}
     \leanok
+    \uses{thm:blocked_local_ground_space_transport}
     The blocking isometry sends the two-block cyclic window beginning at $i$ to
     the $2p$-site cyclic window beginning at $pi$. The local ground-space
     projector identity therefore gives

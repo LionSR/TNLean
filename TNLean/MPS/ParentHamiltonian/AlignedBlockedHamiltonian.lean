@@ -9,8 +9,8 @@ import TNLean.MPS.ParentHamiltonian.Martingale.Transport
 /-!
 # Block-aligned parent Hamiltonians
 
-Physical blocking by `p` sends the range-two interaction of the blocked tensor to the
-range-`2 * p` interaction of the original tensor at starts divisible by `p`.  This file
+Physical blocking by \(p\) sends the range-two interaction of the blocked tensor to the
+range-\(2p\) interaction of the original tensor at starts divisible by \(p\). This file
 records that local conjugacy, identifies the transported blocked Hamiltonian with the sparse
 sum over those starts, and compares that sum with the full original parent Hamiltonian.
 
@@ -26,12 +26,13 @@ namespace MPSTensor
 
 variable {d D : ℕ}
 
-/-- The original-chain site at the beginning of blocked site `i`. -/
+/-- The original-chain site at the beginning of blocked site \(i\). -/
 def alignedOriginalSite {N p : ℕ} (hp : 0 < p) (i : Fin N) : Fin (N * p) :=
   ⟨i.val * p, by
     have hi := i.isLt
     exact Nat.mul_lt_mul_of_pos_right hi hp⟩
 
+/-- The aligned original-site start has natural-number value \(ip\). -/
 @[simp] theorem alignedOriginalSite_val {N p : ℕ} (hp : 0 < p) (i : Fin N) :
     (alignedOriginalSite hp i).val = i.val * p :=
   rfl
@@ -90,6 +91,8 @@ private theorem block_site_offset_mod {N p : ℕ} (hp : 0 < p)
   rw [hadd] at hoff
   exact hoff
 
+/-- Flattening a blocked configuration commutes with extracting the two-block window at an
+aligned start. -/
 theorem blockedConfigEquiv_extractWindow_aligned
     {N p : ℕ} (hp : 0 < p) (hN : 2 ≤ N)
     (i : Fin N) (σ : Cfg (blockPhysDim d p) N) :
@@ -119,6 +122,8 @@ theorem blockedConfigEquiv_extractWindow_aligned
   simp only [blockedConfigEquiv_apply_finProd]
   congr 2
 
+/-- Flattening a blocked configuration commutes with replacing the two-block window at an
+aligned start. -/
 theorem blockedConfigEquiv_replaceWindow_aligned
     {N p : ℕ} (hp : 0 < p) (hN : 2 ≤ N)
     (i : Fin N) (σ : Cfg (blockPhysDim d p) N)
@@ -159,7 +164,7 @@ theorem blockedConfigEquiv_replaceWindow_aligned
       omega
     rw [dif_neg hq, dif_neg hoff_ge]
 
-/-- A blocked range-two term is the original range-`2 * p` term at the aligned start. -/
+/-- A blocked range-two term is the original range-\(2p\) term at the aligned start. -/
 theorem localTermES_blockTensor_two_conj (A : MPSTensor d D) {N p : ℕ}
     (hp : 0 < p) (hN : 2 ≤ N) (i : Fin N) :
     localTermES A (2 * p) (alignedOriginalSite hp i) =
@@ -178,15 +183,14 @@ theorem localTermES_blockTensor_two_conj (A : MPSTensor d D) {N p : ℕ}
       ((blockedConfigLinearIsometryEquiv d N p).symm v)
       ((blockedConfigEquiv d N p).symm σ)
   rw [localTermES_apply (blockTensor A p) 2 i hN]
-  have hinteraction := congrArg (fun f => f)
-    (show parentInteractionES A (2 * p) =
+  have hinteraction : parentInteractionES A (2 * p) =
       (blockedConfigLinearIsometryEquiv d 2 p).toLinearEquiv.toLinearMap.comp
         ((parentInteractionES (blockTensor A p) 2).comp
-          (blockedConfigLinearIsometryEquiv d 2 p).symm.toLinearEquiv.toLinearMap) by
-      simp only [parentInteractionES, Submodule.starProjection_orthogonal']
-      rw [starProjection_groundSpaceES_blockTensor_conj A p 2]
-      ext w
-      simp)
+          (blockedConfigLinearIsometryEquiv d 2 p).symm.toLinearEquiv.toLinearMap) := by
+    simp only [parentInteractionES, Submodule.starProjection_orthogonal']
+    rw [starProjection_groundSpaceES_blockTensor_conj A p 2]
+    ext w
+    simp
   have hextract := blockedConfigEquiv_extractWindow_aligned
     (d := d) hp hN i ((blockedConfigEquiv d N p).symm σ)
   simp only [Equiv.apply_symm_apply] at hextract
@@ -228,8 +232,6 @@ theorem localTermES_blockTensor_two_conj (A : MPSTensor d D) {N p : ℕ}
       (replaceWindow 2 hN i ((blockedConfigEquiv d N p).symm σ) τ))
   rw [← hreplace τ]
 
-
-
 /-- The blocked range-two parent Hamiltonian transported to the original chain. -/
 noncomputable def transportedBlockedParentHamiltonianES (A : MPSTensor d D)
     (N p : ℕ) :
@@ -238,7 +240,7 @@ noncomputable def transportedBlockedParentHamiltonianES (A : MPSTensor d D)
     ((parentHamiltonianES (blockTensor A p) 2 N).comp
       (blockedConfigLinearIsometryEquiv d N p).symm.toLinearEquiv.toLinearMap)
 
-/-- The sparse original-site sum over starts divisible by `p`. -/
+/-- The sparse original-site sum over starts divisible by \(p\). -/
 noncomputable def alignedParentHamiltonianES (A : MPSTensor d D)
     (N p : ℕ) (hp : 0 < p) :
     EuclideanSpace ℂ (Cfg d (N * p)) →ₗ[ℂ] EuclideanSpace ℂ (Cfg d (N * p)) :=
