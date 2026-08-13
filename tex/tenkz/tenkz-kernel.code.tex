@@ -11048,8 +11048,26 @@
 \tl_new:N \l__tenkz_kernel_ink_move_tl
 \tl_new:N \l__tenkz_kernel_ink_last_tl
 \tl_new:N \l__tenkz_kernel_ink_origin_tl
+\tl_new:N \l__tenkz_kernel_ink_stroke_tl
+\tl_new:N \g__tenkz_kernel_ink_width_tl
 \int_new:N \l__tenkz_kernel_ink_drawn_int
 \seq_new:N \l__tenkz_kernel_ink_seq
+\prop_new:N \l__tenkz_kernel_ink_origin_prop % route sid -> origin word
+% The stroke the record carries is the width the renderer resolves, not the
+% base metric: a document may restyle a wire class, and the audit must hold
+% the label band against the ink actually laid.  The style is played in a
+% throwaway group and the resolved line width read back.
+\cs_new_protected:Npn \__tenkz_kernel_r_wire_ink_width:n #1
+  {
+    \group_begin:
+      \tikzset {#1}
+      \tl_gset:Ne \g__tenkz_kernel_ink_width_tl
+        { \dim_to_decimal_in_sp:n { \pgflinewidth / 2 } }
+    \group_end:
+    \tl_set_eq:NN \l__tenkz_kernel_ink_stroke_tl
+      \g__tenkz_kernel_ink_width_tl
+  }
+\cs_generate_variant:Nn \__tenkz_kernel_r_wire_ink_width:n { V }
 \cs_new_protected:Npn \__tenkz_kernel_r_wire_ink_flush:nn #1#2
   {
     \int_compare:nNnT { \l__tenkz_kernel_ink_drawn_int } > { 0 }
@@ -11058,7 +11076,7 @@
           {
             wire-ink|picture=k\int_use:N \g__tenkz_kernel_picture_int
             |name=#1|origin=#2
-            |stroke=\dim_to_decimal_in_sp:n { \__tenkz_dim:n {wirewidth} / 2 }
+            |stroke=\tl_use:N \l__tenkz_kernel_ink_stroke_tl
             |points=\tl_use:N \l__tenkz_kernel_ink_pts_tl
           }
       }
@@ -11119,6 +11137,23 @@
         % a bare move ends here; its point stands as the open start
       }
   }
+% An after-atom physical trace strokes its return directly, without joining
+% the queued index class.  The path is still saved first -- unregistered,
+% purely as the measured object -- and the stroke replays that saved path,
+% so the auditor and the renderer read one resolved route here too.
+\cs_new_protected:Npn \__tenkz_kernel_r_trace_stroke:nn #1#2
+  {
+    \__tenkz_kernel_r_sid:nN {#1} \l__tenkz_kernel_r_sid_tl
+    \__tenkz_kernel_r_wire_ink_width:n { trace }
+    \exp_args:NV \__tenkz_kernel_r_trace_stroke_aux:nn
+      \l__tenkz_kernel_r_sid_tl {#2}
+  }
+\cs_new_protected:Npn \__tenkz_kernel_r_trace_stroke_aux:nn #1#2
+  {
+    \path [ spath/save = {#1} ] #2 ;
+    \__tenkz_kernel_r_wire_ink_event:nn {#1} { trace }
+    \__tenkz_render_stroke:nn { trace , spath/use = {#1} } { }
+  }
 \cs_new_protected:Npn \__tenkz_kernel_r_wire_ink_event:nn #1#2
   {
     \tl_set_eq:Nc \l__tenkz_kernel_ink_route_tl
@@ -11142,7 +11177,9 @@
       \l__tenkz_kernel_r_sid_tl {#2}
     % The origin names the reach doctrine that put the ink down.  A caller
     % that knows better -- the open-port leg -- states its origin before
-    % the stroke; every other route reads it off its own style word.
+    % the stroke; every other route reads it off its own style word.  The
+    % record itself is written later, at the stroke pass, from the saved
+    % path as crossing surgery leaves it; only the origin is minuted here.
     \tl_if_empty:NT \l__tenkz_kernel_ink_origin_tl
       {
         \tl_set:Ne \l__tenkz_kernel_ink_origin_tl
@@ -11155,7 +11192,7 @@
               { bond }
           }
       }
-    \exp_args:NVV \__tenkz_kernel_r_wire_ink_event:nn
+    \prop_put:NVV \l__tenkz_kernel_ink_origin_prop
       \l__tenkz_kernel_r_sid_tl \l__tenkz_kernel_ink_origin_tl
     \tl_clear:N \l__tenkz_kernel_ink_origin_tl
     \prop_put:NVV \l__tenkz_kernel_r_sid_record_prop
@@ -13836,6 +13873,7 @@
         % never named as a crossing operand has always stood.
         \__tenkz_string_save_route:VV \l__tenkz_kernel_leg_name_tl
           \l__tenkz_kernel_r_leg_path_tl
+        \__tenkz_kernel_r_wire_ink_width:n { bond }
         \exp_args:NV \__tenkz_kernel_r_wire_ink_event:nn
           \l__tenkz_kernel_leg_name_tl { leg }
         \exp_args:NV \__tenkz_string_touch_all:nn
@@ -15382,7 +15420,16 @@
           { \__tenkz_kernel_r_index_route:n {##1} }
       }
     \prop_map_inline:Nn \l__tenkz_kernel_r_legdrawn_prop
-      { \__tenkz_render_string:nn {##1} { draw = tenkzInk } }
+      {
+        % A crossing-deferred leg is renderer-owned ink like any other leg,
+        % so it writes its wire-ink record where it is stroked, from the
+        % crossing-policed engine path, at the fixed width the string
+        % renderer strokes it with.
+        \tl_set:Ne \l__tenkz_kernel_ink_stroke_tl
+          { \dim_to_decimal_in_sp:n { \__tenkz_dim:n {wirewidth} / 2 } }
+        \__tenkz_kernel_r_wire_ink_event:nn {##1} { leg }
+        \__tenkz_render_string:nn {##1} { draw = tenkzInk }
+      }
     \seq_map_inline:Nn \l__tenkz_kernel_r_deferred_trace_routes_seq
       { \__tenkz_kernel_r_index_route:n {##1} }
     \seq_map_inline:Nn \l__tenkz_kernel_r_strings_seq
@@ -15618,6 +15665,19 @@
     \__tenkz_kernel_r_sid:nN {#1} \l__tenkz_kernel_r_sid_tl
     \prop_get:NnN \l__tenkz_kernel_r_index_style_prop {#1}
       \l__tenkz_kernel_r_wire_style_tl
+    % The wire-ink record is written here, where the route is stroked: the
+    % saved path now carries whatever gaps crossing surgery cut into it, so
+    % the auditor reads exactly the ink the reader sees, at the width the
+    % route's own resolved style strokes it with.
+    \exp_args:NV \__tenkz_kernel_r_wire_ink_width:n
+      \l__tenkz_kernel_r_wire_style_tl
+    \prop_get:NVN \l__tenkz_kernel_ink_origin_prop
+      \l__tenkz_kernel_r_sid_tl \l__tenkz_kernel_ink_origin_tl
+    \quark_if_no_value:NT \l__tenkz_kernel_ink_origin_tl
+      { \tl_set:Nn \l__tenkz_kernel_ink_origin_tl { bond } }
+    \exp_args:NVV \__tenkz_kernel_r_wire_ink_event:nn
+      \l__tenkz_kernel_r_sid_tl \l__tenkz_kernel_ink_origin_tl
+    \tl_clear:N \l__tenkz_kernel_ink_origin_tl
     \tl_set:Ne \l__tenkz_kernel_r_wire_style_tl
       {
         spath/use = { \tl_use:N \l__tenkz_kernel_r_sid_tl } ,
@@ -15741,7 +15801,7 @@
           \l__tenkz_kernel_phtrace_to_tip_x_fp )
         + \l__tenkz_kernel_phtrace_reach_fp
       }
-    \__tenkz_render_stroke:nn { trace }
+    \__tenkz_kernel_r_trace_stroke:nn {#1}
       {
         \__tenkz_kernel_r_pair:nn
           { \l__tenkz_kernel_phtrace_from_x_fp }
@@ -15814,7 +15874,7 @@
               { \pgfpointanchor{\tl_use:N \l__tenkz_kernel_r_tl}{east} }
             \dim_add:Nn \l__tenkz_kernel_r_east_x_dim
               { \__tenkz_dim:n {phtracereach} }
-            \__tenkz_render_stroke:nn { trace }
+            \__tenkz_kernel_r_trace_stroke:nn {#1}
               {
                 ( \l__tenkz_kernel_r_north_x_dim ,
                   \l__tenkz_kernel_r_north_y_dim )
@@ -19169,8 +19229,9 @@
     \prop_clear:N \l__tenkz_kernel_r_port_host_routes_prop
     % The blind ledger is fed by the wire and leg passes as well as by the
     % occupancy scan, so it resets here, once per picture, before any of
-    % its writers run.
+    % its writers run.  The origin minutes reset with it.
     \prop_gclear:N \g__tenkz_kernel_lab_blind_prop
+    \prop_clear:N \l__tenkz_kernel_ink_origin_prop
     \__tenkz_model_map_ids:nn {wire}
       { \__tenkz_kernel_r_wire_queue:n {##1} }
     % Panels meet on the axis their wires run along, not on the middle of
