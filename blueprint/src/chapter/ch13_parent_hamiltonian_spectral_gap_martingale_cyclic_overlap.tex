@@ -1,34 +1,60 @@
+\begin{lemma}[Cyclic window and complement factorization]
+    \label{lem:cyclic_window_complement_factorization}
+    \lean{MPSTensor.cyclicWindowIndexEquiv}
+    \lean{MPSTensor.cyclicWindowIndexEquiv_inl}
+    \lean{MPSTensor.cyclicWindowIndexEquiv_inr}
+    \lean{MPSTensor.prod_cyclicWindow_complement}
+    \leanok
+    If $L\leq N$ and $i\in\Fin{N}$, the sites of the periodic chain are in
+    bijection with the disjoint union of the cyclic window
+    $i,i+1,\ldots,i+L-1$ and its ordered complement
+    $i+L,i+L+1,\ldots,i+N-1$, with all indices taken modulo $N$.
+    Consequently, every product over the chain factors as the product over the
+    cyclic window times the product over its ordered complement.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Rotate the chain so that $i$ is the initial site, then split the resulting
+    ordered set after its first $L$ elements. Reindexing a finite product by
+    this bijection gives the factorization.
+\end{proof}
+
 \begin{theorem}[Three-site anticommutator transport to cyclic adjacent pairs]
     \label{thm:three_site_anticommutator_cyclic_transport}
     \lean{MPSTensor.re_inner_localTermES_adjacent_twoSite_forward_ge_of_threeSite}
     \lean{MPSTensor.re_inner_localTermES_adjacent_twoSite_backward_ge_of_threeSite}
     \leanok
     \uses{rem:euclidean_local_projector_ingredients,
-        rem:cyclic_window_operators}
-    Assume that the physical dimension satisfies $d>0$, and fix a coefficient
-    $c\in\mathbb R$. Let $h_0,h_1$ be the two adjacent range-two local terms on
-    three sites. Suppose that, for every three-site vector $w$,
+        rem:cyclic_window_operators,
+        lem:cyclic_window_complement_factorization}
+    Fix a tensor $A$ with physical dimension $d>0$ and a coefficient
+    $c\in\mathbb R$. For every chain length $N$ and site $i\in\Fin{N}$, set
+    $h_i^{(N)}:=h_{i,\mathrm{ES}}^{(N,2)}(A)$, the Euclidean range-two parent
+    term of this same tensor $A$ at $i$. Suppose that, for
+    every three-site vector $w$,
     \begin{align}
-      -c(\re\langle h_0w,w\rangle+\re\langle h_1w,w\rangle)
+      -c(\re\langle h_0^{(3)}w,w\rangle+\re\langle h_1^{(3)}w,w\rangle)
       &\leq
-      \re\langle h_0w,h_1w\rangle+\re\langle h_1w,h_0w\rangle.
+      \re\langle h_0^{(3)}w,h_1^{(3)}w\rangle
+      +\re\langle h_1^{(3)}w,h_0^{(3)}w\rangle.
       \label{eq:three_site_anticommutator_transport_hypothesis}
     \end{align}
     Then, for every $N\geq3$, every site $i\in\Fin{N}$, and every $N$-site
     vector $v$, the forward pair satisfies
     \begin{align}
-      -c\bigl(\re\langle h_iv,v\rangle
-          +\re\langle h_{i+1}v,v\rangle\bigr)
-      &\leq \re\langle h_iv,h_{i+1}v\rangle
-          +\re\langle h_{i+1}v,h_iv\rangle,
+      -c\bigl(\re\langle h_i^{(N)}v,v\rangle
+          +\re\langle h_{i+1}^{(N)}v,v\rangle\bigr)
+      &\leq \re\langle h_i^{(N)}v,h_{i+1}^{(N)}v\rangle
+          +\re\langle h_{i+1}^{(N)}v,h_i^{(N)}v\rangle,
       \label{eq:three_site_anticommutator_transport_forward}
     \end{align}
     and the backward pair satisfies
     \begin{align}
-      -c\bigl(\re\langle h_iv,v\rangle
-          +\re\langle h_{i-1}v,v\rangle\bigr)
-      &\leq \re\langle h_iv,h_{i-1}v\rangle
-          +\re\langle h_{i-1}v,h_iv\rangle.
+      -c\bigl(\re\langle h_i^{(N)}v,v\rangle
+          +\re\langle h_{i-1}^{(N)}v,v\rangle\bigr)
+      &\leq \re\langle h_i^{(N)}v,h_{i-1}^{(N)}v\rangle
+          +\re\langle h_{i-1}^{(N)}v,h_i^{(N)}v\rangle.
       \label{eq:three_site_anticommutator_transport_backward}
     \end{align}
     All site indices are taken modulo $N$, so these conclusions include pairs
@@ -38,12 +64,15 @@
 \begin{proof}
     \leanok
     \uses{rem:cyclic_window_operators,
+        lem:cyclic_window_complement_factorization,
         thm:three_site_commutator_chain_transport}
     For a cyclic three-site window beginning at $i$, write
     $\mathcal C_{N-3}$ for its ordered complementary configurations and
-    $R_{i,\tau}^{(3)}$ for restriction with complement $\tau$ fixed. The cyclic
-    window operators of Remark~\ref{rem:cyclic_window_operators} give the fiber
-    decomposition
+    $R_{i,\tau}^{(3)}$ for restriction with complement $\tau$ fixed.
+    Lemma~\ref{lem:cyclic_window_complement_factorization} identifies every
+    chain configuration uniquely with its window and complement, while the
+    cyclic restriction operators of Remark~\ref{rem:cyclic_window_operators}
+    give the fiber decomposition
     \begin{align}
       \re\langle u,v\rangle
       &=\sum_{\tau\in\mathcal C_{N-3}}
@@ -55,11 +84,11 @@
     Theorem~\ref{thm:three_site_commutator_chain_transport} intertwine the two
     adjacent terms:
     \begin{align}
-      R_{i,\tau}^{(3)}h_i
-      &=h_0R_{i,\tau}^{(3)},
+      R_{i,\tau}^{(3)}h_i^{(N)}
+      &=h_0^{(3)}R_{i,\tau}^{(3)},
       &
-      R_{i,\tau}^{(3)}h_{i+1}
-      &=h_1R_{i,\tau}^{(3)}.
+      R_{i,\tau}^{(3)}h_{i+1}^{(N)}
+      &=h_1^{(3)}R_{i,\tau}^{(3)}.
       \label{eq:three_site_anticommutator_restriction_intertwining}
     \end{align}
     Applying
@@ -67,12 +96,12 @@
     $w_\tau=R_{i,\tau}^{(3)}v$ and summing over the complement gives
     \begin{align}
       \sum_{\tau\in\mathcal C_{N-3}}
-        -c\bigl(\re\langle h_0w_\tau,w_\tau\rangle
-          +\re\langle h_1w_\tau,w_\tau\rangle\bigr)
+        -c\bigl(\re\langle h_0^{(3)}w_\tau,w_\tau\rangle
+          +\re\langle h_1^{(3)}w_\tau,w_\tau\rangle\bigr)
       &\leq
       \sum_{\tau\in\mathcal C_{N-3}}
-        \bigl(\re\langle h_0w_\tau,h_1w_\tau\rangle
-          +\re\langle h_1w_\tau,h_0w_\tau\rangle\bigr),
+        \bigl(\re\langle h_0^{(3)}w_\tau,h_1^{(3)}w_\tau\rangle
+          +\re\langle h_1^{(3)}w_\tau,h_0^{(3)}w_\tau\rangle\bigr),
       \label{eq:three_site_anticommutator_fiber_sum}
     \end{align}
     By the fiber decomposition
