@@ -20,8 +20,8 @@ tensor. No comparison with an interaction on the original unblocked chain is mad
 
 * `MPSTensor.IsPrimitiveMPS.exists_blockTensor_parentHamiltonianES_gap_eighth` chooses a
   physical block length and proves the explicit gap constant \(1/8\) for the blocked tensor.
-* `MPSTensor.IsPrimitiveMPS.exists_blockTensor_parentHamiltonianES_gapped` packages the
-  corresponding uniform positive gap through the public anticommutator consumer.
+* `MPSTensor.IsPrimitiveMPS.exists_blockTensor_parentHamiltonianES_gapped` proves a
+  uniform positive gap for the same blocked range-two parent Hamiltonians.
 
 ## References
 
