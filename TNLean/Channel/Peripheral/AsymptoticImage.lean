@@ -4,8 +4,8 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.Algebra.EigenspaceMap
-import TNLean.Channel.Peripheral.CesaroRecurrence
 import TNLean.Channel.FixedPoint.StationarySpan
+import TNLean.Channel.Peripheral.CesaroRecurrence
 
 /-!
 # The asymptotic image — Wolf's proposition on `X_T`

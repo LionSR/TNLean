@@ -324,14 +324,14 @@
     let
     \begin{align}
         \mathcal X_T
-        =\operatorname{span}\{X\in\MN{D}\mid
+        =\spn\{X\in\MN{D}\mid
         \exists\varphi\in\R:\ T(X)=e^{i\varphi}X\}
     \end{align}
     be the span of its peripheral eigenvectors. Then
     \begin{enumerate}
         \item $T_\varphi(\MN{D})=\mathcal X_T$,
         \item there are positive semidefinite matrices $\rho_i$ with
-              $\mathcal X_T=\operatorname{span}\{\rho_i\}$,
+              $\mathcal X_T=\spn\{\rho_i\}$,
         \item $T(\mathcal X_T)=\mathcal X_T$.
     \end{enumerate}
     This is \cite[Proposition~6.12 (Asymptotic image)]{Wolf2012Quantum}.
@@ -343,24 +343,36 @@
         thm:peripheral_jordan_trivial,
         cor:peripheral_projection_channel,
         cor:stationary_density_span}
-    A matrix is fixed by the projection $T_\varphi$ exactly when it lies in the
-    peripheral subspace, and the image of a projection is its set of fixed
-    points; since the peripheral Jordan blocks of a positive trace-preserving
-    map are trivial, the peripheral subspace is the span of the peripheral
-    eigenspaces. This gives the first claim.
+    Write $V_\mu=\ker(T-\mu)$ for the eigenspace of a peripheral eigenvalue
+    $\mu$, so that $\mathcal X_T=\sum_{|\mu|=1}V_\mu$ once the peripheral
+    Jordan blocks are known to be trivial.
+
+    The image of the projection $T_\varphi$ is its set of fixed points, and a
+    matrix is fixed by $T_\varphi$ exactly when it lies in the peripheral
+    subspace:
+    \begin{align}
+        T_\varphi(\MN{D})=\{X\in\MN{D}\mid T_\varphi(X)=X\}
+        =\sum_{|\mu|=1}V_\mu=\mathcal X_T,
+    \end{align}
+    the third equality by triviality of the peripheral Jordan blocks. This is
+    the first claim.
 
     The projection $T_\varphi$ is itself positive and trace-preserving, so its
-    fixed-point space is spanned by its stationary density matrices; with the
-    first claim this gives the second.
-
-    For the third claim, expand an element of $\mathcal X_T$ in peripheral
-    eigenvectors. On the eigenspace for a peripheral eigenvalue $\mu$ the map
-    $T$ acts as multiplication by $\mu$, and $|\mu|=1$ forces $\mu\neq0$, so
+    fixed-point space is spanned by its stationary density matrices:
     \begin{align}
-        T\bigl(\ker(T-\mu)\bigr)=\ker(T-\mu).
+        \mathcal X_T=\{X\in\MN{D}\mid T_\varphi(X)=X\}
+        =\spn\{\rho\mid \rho\ \text{a stationary density matrix of }T_\varphi\}.
     \end{align}
-    Summing over the peripheral eigenvalues gives
-    $T(\mathcal X_T)=\mathcal X_T$.
+    Every such $\rho$ is positive semidefinite, which is the second claim.
+
+    On $V_\mu$ the map $T$ acts as multiplication by $\mu$, and $|\mu|=1$
+    forces $\mu\neq0$, so multiplication by $\mu$ carries $V_\mu$ onto itself
+    and $T(V_\mu)=\mu V_\mu=V_\mu$. Summing over the peripheral eigenvalues,
+    \begin{align}
+        T(\mathcal X_T)=T\Bigl(\sum_{|\mu|=1}V_\mu\Bigr)
+        =\sum_{|\mu|=1}T(V_\mu)=\sum_{|\mu|=1}V_\mu=\mathcal X_T,
+    \end{align}
+    which is the third claim.
 \end{proof}
 
 \begin{theorem}[Ces\`aro fixed-point theorem]\label{thm:cesaro_fixedpoint}
