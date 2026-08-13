@@ -1003,7 +1003,8 @@ This is the calculation in
 % Tracking: issues #5984, #6301, and #6302; Example 4.12 remains under #5919.
 % Entropy corrections: docs/paper-gaps/cpsv16_examples_4_10_4_11_entropy.tex.
 % Commit a79bfc933 certifies the scalar integer and logarithm inequalities only.
-% The spectra, entropy identities, tensor links, and Example 4.12 RFP maps remain open.
+% Example 4.11's N=4 spectra are proved below; entropy identities, remaining tensor links,
+% and Example 4.12 RFP maps remain open.
 \begin{theorem}[Printed mixed-state separation examples]
     \label{thm:cpsv_examples410_412_status}
     \notready
@@ -1261,6 +1262,106 @@ This is the calculation in
     Cyclicity of the trace and $V^*V=I_2$ preserve the trace under the
     sitewise congruence.  The binary partition-function identity and its closed
     form then give the result.
+\end{proof}
+
+% Project-derived finite-ring consequence of CPSV16 Example 4.11.
+% See docs/paper-gaps/cpsv16_examples_4_10_4_11_entropy.tex.
+\begin{theorem}[Exact length-four effective spectra]
+    \label{thm:cpsv_example411_length_four_effective_spectra}
+    \lean{MPOTensor.CPSVExample411Spectrum.effective_reducedBlockState_four_eq_diagonal,
+        MPOTensor.CPSVExample411Spectrum.transition_counts_one,
+        MPOTensor.CPSVExample411Spectrum.transition_counts_two,
+        MPOTensor.CPSVExample411Spectrum.transition_counts_three,
+        MPOTensor.CPSVExample411Spectrum.transition_counts_four,
+        MPOTensor.CPSVExample411Spectrum.effective_charpoly_roots_one,
+        MPOTensor.CPSVExample411Spectrum.effective_charpoly_roots_two,
+        MPOTensor.CPSVExample411Spectrum.effective_charpoly_roots_three,
+        MPOTensor.CPSVExample411Spectrum.effective_charpoly_roots_four}
+    \leanok
+    \uses{def:block_entropy, def:cpsv_example411_binary_support_model}
+    On the periodic ring of length four, let
+    $\rho_L:=\rho_L^{(4)}(M)$ be the effective-binary reduced state, and let
+    $\chi_A$ denote the characteristic polynomial of a matrix $A$.  Then
+    \begin{align}
+      \operatorname{roots}(\chi_{\rho_1})
+        &=\{(1/2)^{[2]}\},\\
+      \operatorname{roots}(\chi_{\rho_2})
+        &=\{(14/41)^{[2]},(13/82)^{[2]}\},\\
+      \operatorname{roots}(\chi_{\rho_3})
+        &=\{(10/41)^{[2]},(4/41)^{[4]},(5/82)^{[2]}\},\\
+      \operatorname{roots}(\chi_{\rho_4})
+        &=\{(8/41)^{[2]},(2/41)^{[12]},(1/82)^{[2]}\}.
+      \notag
+    \end{align}
+    Here $a^{[m]}$ denotes a root $a$ of multiplicity $m$.  These are the
+    effective nonzero spectra, not the full ambient root multisets.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{def:cpsv_example411_binary_internal_transition_count,
+        thm:cpsv_example411_binary_block_probability}
+    The reduced-state formula is diagonal.  For a binary word with $t$ internal
+    transitions, its diagonal probability is
+    \begin{align}
+      p_{L,t}
+      &=\frac{2^L\bigl(3^{5-L}+(-1)^t\bigr)}{2^{t+2}\cdot82}.
+      \notag
+    \end{align}
+    For example, at $L=2$ and $t=0$,
+    \begin{align}
+      p_{2,0}
+      &=\frac{2^2(3^3+1)}{2^2\cdot82}
+        =\frac{112}{328}=\frac{14}{41}.
+      \notag
+    \end{align}
+    Enumerating words of lengths one through four gives transition-count
+    multiplicities $(2)$, $(2,2)$, $(2,4,2)$, and $(2,6,6,2)$, respectively.
+    The same substitution for every transition count gives the displayed roots
+    and multiplicities.
+\end{proof}
+
+\begin{theorem}[Exact length-four ambient spectra]
+    \label{thm:cpsv_example411_length_four_ambient_spectra}
+    \lean{MPOTensor.CPSVExample411Spectrum.ambient_charpoly_eq_X_pow_mul_effective,
+        MPOTensor.CPSVExample411Spectrum.ambient_charpoly_roots_eq_zero_add_effective,
+        MPOTensor.CPSVExample411Spectrum.ambient_charpoly_roots_one,
+        MPOTensor.CPSVExample411Spectrum.ambient_charpoly_roots_two,
+        MPOTensor.CPSVExample411Spectrum.ambient_charpoly_roots_three,
+        MPOTensor.CPSVExample411Spectrum.ambient_charpoly_roots_four}
+    \leanok
+    \uses{def:cpsv_example411_ambient_support_inclusion,
+        thm:cpsv_example411_length_four_effective_spectra}
+    For every $L\leq4$, let $\rho_L:=\rho_L^{(4)}(M)$ be the effective reduced
+    state and $\widetilde\rho_L:=\rho_L^{(4)}(\widetilde M)$ the ambient reduced
+    state.  Let $\chi_A$ denote the characteristic polynomial of $A$.  Then
+    \begin{align}
+      \chi_{\widetilde\rho_L}(X)
+      &=X^{4^L-2^L}\chi_{\rho_L}(X).
+      \notag
+    \end{align}
+    For the positive block lengths $L=1$, $2$, $3$, and $4$, the full ambient
+    root multiset is the effective multiset together with zero of multiplicity
+    $2$, $12$, $56$, and $240$, respectively.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:mpdo_reduced_state_physical_isometry_transport,
+        thm:cpsv_example411_length_four_effective_spectra}
+    The reduced ambient state is
+    $\widetilde\rho_L=V^{\otimes L}\rho_L(V^{\otimes L})^*$.  Applying
+    characteristic-polynomial cyclicity to the rectangular factors gives
+    \begin{align}
+      \chi_{V^{\otimes L}\rho_L(V^{\otimes L})^*}(X)
+      &=X^{4^L-2^L}
+        \chi_{\rho_L(V^{\otimes L})^*V^{\otimes L}}(X)\\
+      &=X^{4^L-2^L}\chi_{\rho_L}(X),
+      \notag
+    \end{align}
+    where $(V^{\otimes L})^*V^{\otimes L}=I$.  The ambient and effective
+    dimensions are $4^L$ and $2^L$, so their difference gives the stated zero
+    multiplicity.
 \end{proof}
 
 % CPSV16 Example 4.12, lines 932--939.
