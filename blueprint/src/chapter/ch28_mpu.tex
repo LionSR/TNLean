@@ -5207,11 +5207,99 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
   Theorem~\ref{thm:mpu_two_projection_angle_block}.
 \end{proof}
 
+\begin{definition}[Reduced projection]
+  \label{def:mpu_two_projection_reduced_projection}
+  \lean{LinearMap.IsSymmetricProjection.reducedProjection}
+  \leanok
+  \uses{}
+  Let $P$ and $Q$ be orthogonal projections on a finite-dimensional complex
+  inner-product space. Define $\widetilde P$ as the orthogonal projection onto
+  $\operatorname{ran}(PQ)$.
+  % The source defines Ptilde blockwise; issue #6294 owns the identification
+  % of that projector with this canonical construction.
+  % Source lines: paper_v2.tex 764--770.
+\end{definition}
+
+\begin{theorem}[Reduced-projection identities]
+  \label{thm:mpu_two_projection_reduced_projection}
+  \lean{LinearMap.IsSymmetricProjection.reducedProjection_isSymmetric,
+    LinearMap.IsSymmetricProjection.range_reducedProjection,
+    LinearMap.IsSymmetricProjection.reducedProjection_range_triple,
+    LinearMap.IsSymmetricProjection.comp_reducedProjection,
+    LinearMap.IsSymmetricProjection.reducedProjection_comp,
+    LinearMap.IsSymmetricProjection.comp_reducedProjection_left,
+    LinearMap.IsSymmetricProjection.range_reducedProjection_comp}
+  \leanok
+  \uses{def:mpu_two_projection_reduced_projection}
+  The reduced projection satisfies
+  \begin{align}
+    \operatorname{ran}(\widetilde P)&=\operatorname{ran}(PQ),\\
+    \operatorname{ran}(PQP)&=\operatorname{ran}(PQ),\\
+    P\widetilde P&=\widetilde P,\\
+    \widetilde P Q&=PQ,\\
+    Q\widetilde P&=QP,\\
+    \operatorname{ran}(\widetilde P Q)&=\operatorname{ran}(\widetilde P).
+  \end{align}
+  The first two identities describe the canonical construction, while the next
+  three establish the properties in source lines 767--769. The final range
+  equality is the derived input to the right-factor theorem, not item~(iv) of
+  the source.
+  % Identifying the canonical construction with the source's blockwise
+  % projector remains in issue #6294.
+  % Source lines: paper_v2.tex 764--769.
+\end{theorem}
+
+\begin{proof}\leanok
+  Set $A=QP$. The standard range identity for $A^\dagger A$ gives
+  \begin{align}
+    \operatorname{ran}(PQP)
+      &=\operatorname{ran}(A^\dagger A)
+       =\operatorname{ran}(A^\dagger)
+       =\operatorname{ran}(PQ).
+  \end{align}
+  By definition, $\operatorname{ran}(\widetilde P)=\operatorname{ran}(PQ)$,
+  which also gives $P\widetilde P=\widetilde P$. For all $x$ and $z$,
+  \begin{align}
+    \left\langle Qx-PQx,\,PQz\right\rangle&=0.
+  \end{align}
+  Hence $Qx-PQx\in\operatorname{ran}(PQ)^\perp$, so orthogonal projection
+  onto this range yields $\widetilde P Q=PQ$. Taking adjoints gives
+  $Q\widetilde P=QP$. Finally,
+  \begin{align}
+    \operatorname{ran}(\widetilde P Q)
+      &=\operatorname{ran}(PQ)
+       =\operatorname{ran}(\widetilde P).
+  \end{align}
+\end{proof}
+
+\begin{theorem}[Invertible right factor for the reduced projection]
+  \label{thm:mpu_two_projection_reduced_projection_right_factor}
+  \lean{LinearMap.IsSymmetricProjection.exists_reducedProjection_rightFactor}
+  \leanok
+  \uses{thm:mpu_two_projection_reduced_projection}
+  There is an invertible linear map $Y$ such that
+  \begin{align}
+    \widetilde P QY=\widetilde P.
+  \end{align}
+  % Source line: paper_v2.tex 770.
+\end{theorem}
+
+\begin{proof}\leanok
+  The equality
+  \begin{align}
+    \operatorname{ran}(\widetilde P Q)&=\operatorname{ran}(\widetilde P)
+  \end{align}
+  and the equal-ranges right-factor theorem give an invertible $Y$ satisfying
+  $\widetilde P QY=\widetilde P$.
+\end{proof}
+
 \begin{proposition}[Constancy of the source ranks]
   \label{prop:continuity-index}
   \notready
   \discussion{6022}
-  \uses{def:mpu_canonical_form,ThmFund1,thm:mpu_two_projection_angle_block}
+  \uses{def:mpu_canonical_form,ThmFund1,thm:mpu_two_projection_angle_block,
+    thm:mpu_two_projection_reduced_projection,
+    thm:mpu_two_projection_reduced_projection_right_factor}
   Let $[0,1]\ni x\mapsto\mathcal W(x)$ be a continuous path of tensors
   generating MPUs, without requiring the path to be in canonical form. For
   each $x$, take the canonical form and the two source-cut ranks $r(x)$ and
