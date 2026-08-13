@@ -31,6 +31,14 @@ Hard errors (exit 1):
                       promised a free face and put the name on ink.  The same
                       intersection under an explicit `label pos=`, or on a
                       label site no chooser has claimed, is an advisory.
+                      `wire-ink` is an envelope, not a silhouette: a dashed
+                      or dotted route is read as its continuous centreline,
+                      so a label inside a dash gap still reads as ink and a
+                      collision there still stands (over-report, never
+                      under-report; TNLOG.md section 3).  A `trace` route's
+                      recorded stroke is the paper halo the preaction
+                      paints, not just the colour band beneath it, for the
+                      same reason.
   closure-detached    A traced row's closure does not start and finish on the
                       two virtual ends it names, so the picture records a
                       periodic contraction and draws an open chain.
@@ -475,8 +483,18 @@ class CubicSubdivisionExhausted(Exception):
 # norm: the taxicab length |dx| + |dy| does, exactly and in integers, where
 # the coordinate-wise maximum alone would understate a diagonal bow by up
 # to sqrt(2) and let a genuine intersection certify as a miss.  The bound
-# is exact rational arithmetic on the control points, and halving the curve
-# quarters it, so the walk below terminates for every finite input.
+# is exact rational arithmetic on the control points, and de Casteljau
+# subdivision at least halves it every level -- not quarters it: the worst
+# case is a zero-sum control pair (P0 = P3 = (0, 0), P1 = (100, 0),
+# P2 = (-100, 0) gives M = 300, M_left = 150 = M/2 exactly, since the left
+# half's components are zero-sum affine combinations of the parent's), so
+# halving is the guaranteed rate, not quartering.  The walk below still
+# terminates well inside its cap: a TeX-valid coordinate is bounded by
+# 2^30 sp (the dimen limit), so a control vector such as 3*C1 - 2*P0 - P3
+# has each component bounded by 6*2^30 sp, its taxicab norm by 12*2^30 sp,
+# and the initial bound (that norm divided by 4) by 3*2^30 sp -- under
+# 2^32.  Halving needs at most 32 levels to bring that under 1 sp, eight
+# levels inside the 40-level cap.
 _CUBIC_SUBDIVISION_LIMIT = 40
 
 RationalPoint = tuple  # (x, y) as int or Fraction, always exact

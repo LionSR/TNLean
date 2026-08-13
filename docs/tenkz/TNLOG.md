@@ -163,7 +163,7 @@ first, the rest sorted, no `picture=`.
 | `label-use` | `picture` | a label node claimed no ink owner |
 | `bbox` | `picture`, `class=label`, `id`, `owner`, `xmin`, `xmax`, `ymin`, `ymax`, `shape`, `radius`, then optionally `station` (`s`, `n`, `e`, `w`) and `provenance` (`auto`, `explicit`) | one measured label box, in integer scaled points.  `provenance=auto` with `station=` is the dot chooser's verified promise of an ink-free face; `provenance=explicit` (no station) records the author's own `label pos=`.  Both fields are absent on every label site the chooser has not claimed — every non-dot label, and a dot whose ink the occupancy reading could not chart (its blind ledger; issue 6195) |
 | `glyph-geometry` | `picture`, `owner`, `shape`, `xmin`, `xmax`, `ymin`, `ymax`, `radius`, `stroke`, `x1`, `y1`, `x2`, `y2`, `x3`, `y3` | one measured glyph silhouette, in integer scaled points |
-| `wire-ink` | `picture`, `name`, `origin` (`bond`, `physical-leg`, `port`, `trace`, `leg`), `stroke`, `points` | one drawn route, read back from the saved soft path the renderer strokes: `points=` opens on the route's first point, a bare `x,y` extends a polyline, and a `c:`-prefixed sextuple `c:x1,y1,x2,y2,x3,y3` is a cubic to `x3,y3` with the two control pairs before it; `stroke=` is half the stroke width the route's resolved style draws it with, so a restyled wire class widens the recorded band with the ink; the record is written at the stroke pass, after crossing surgery, so an under-strand's crossing gap splits it into one record per drawn component; every coordinate is an integer scaled point.  Caller-declared strings emit no record |
+| `wire-ink` | `picture`, `name`, `origin` (`bond`, `physical-leg`, `port`, `trace`, `leg`, `mark`), `stroke`, `points` | one drawn route, read back from the saved soft path the renderer strokes: `points=` opens on the route's first point, a bare `x,y` extends a polyline, and a `c:`-prefixed sextuple `c:x1,y1,x2,y2,x3,y3` is a cubic to `x3,y3` with the two control pairs before it; `stroke=` is half the stroke width the route's resolved style draws it with, so a restyled wire class widens the recorded band with the ink; the record is written at the stroke pass, after crossing surgery, so an under-strand's crossing gap splits it into one record per drawn component; every coordinate is an integer scaled point.  A `dir=to`/`dir=from` route additionally writes one `origin=mark` record, a short segment at the direction barb's arc-length station whose stroke covers the barb's own configured reach: the Straight Barb postaction is not reproduced stroke-for-stroke, only over-covered, the same doctrine as the dash rule below.  Caller-declared strings emit no record |
 | `closure-rail` | `picture`, `name`, `row`, `side`, `west`, `east`, `stroke`, `clear`, `points` | one traced row's closure: the two virtual ends it joins, or `none` where the row has no site on that side, the half stroke it is drawn with, the standoff the rows it passes demand of it — signed by the side the return runs, measured from its own row line, and `arc` for a frame sector, which stands off no row line — and the semicolon-separated polyline it lays, all in integer scaled points |
 | `tree` | `picture`, `id`, `style`, `leaves`, `vertices`, `topology`, `role`, `species` | one fusion tree |
 | `geomprobe` | `id`, then a caller-supplied payload | one geometry probe, for fixtures |
@@ -176,6 +176,26 @@ Each fixes further required fields: `equal` needs `relation` and `signature`,
 
 `x` and `y` on `stringbead` carry a `pt` suffix. Every other coordinate in the
 stream is an integer count of scaled points with no unit.
+
+`wire-ink`'s doctrine is envelope, not silhouette: it records the ink a route
+*could* touch under its resolved stroke, never less, and sometimes visibly
+more. A `stroke=dashed` or `stroke=dotted` wire is recorded as its continuous
+centreline, not its dash pattern -- the reader treats every off-dash gap as
+ink too, so `label-on-ink` can flag a label sitting wholly inside a dash gap.
+That is an over-report, not a miss: a genuine collision is never hidden this
+way, only a legal placement is occasionally taxed as advisory or hard when
+the drawn dashes would in fact have cleared it. The same doctrine covers the
+`origin=mark` record above and the trace halo below -- every one of them
+would rather over-claim ink than leave a real collision unrecorded.
+
+A `trace` route's own `stroke` field carries the *halo's* half-width, not
+the colour band alone: `trace/.style` (`tex/tenkz/tenkz-core.code.tex`,
+the `trace` style) paints a `preaction` paper halo of line width
+`wirewidth + crossgap` under the visible band, and a label sitting in that
+annulus is erased just as surely as one sitting on the band itself. Recording
+only the band's half-width would leave that annulus unflagged, so the
+`origin=trace` record's `stroke` is `(wirewidth + crossgap) / 2` and the
+audit's label-on-ink test never sees the narrower, wrong number.
 
 ## 4. Order
 

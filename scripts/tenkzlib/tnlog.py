@@ -278,7 +278,7 @@ FIELD_VALIDATORS: dict[str, dict[str, Callable[[str], bool]]] = {
     "wire-ink": {
         "picture": _is_picture_id,
         "name": _any,
-        "origin": _enum("bond", "physical-leg", "port", "trace", "leg"),
+        "origin": _enum("bond", "physical-leg", "port", "trace", "leg", "mark"),
         "stroke": _is_positive_int,
         "points": _is_ink_points,
     },
