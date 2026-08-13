@@ -124,15 +124,23 @@ where
 \[
   Z_N=\operatorname{tr}(W^N)=\frac{3^N+1}{2^N}.
 \]
-For any $L<N$, summing the complementary path gives the exact reduced
+For $1\leq L\leq N$, summing the complementary path gives the exact reduced
 probability
 \[
-  \mathbb P_{N,L}(k_1,\ldots,k_L)
+  \mu_{N,L}(k_1,\ldots,k_L)
   =\frac{\left(\prod_{n=1}^{L-1}W_{k_n,k_{n+1}}\right)
       (W^{N-L+1})_{k_L,k_1}}{\operatorname{tr}(W^N)}.
 \]
-This formula includes the periodic closing correction; it is not the marginal
-of an open stationary Markov chain.
+This formula includes the endpoint cases $L=1$ and $L=N$ and the periodic
+closing correction; it is not the marginal of an open stationary Markov chain.
+If $t(k)$ counts the transitions among the $L-1$ internal edges, then this
+project-derived finite-ring consequence is
+\[
+  \mu_{N,L}(k)
+  =\frac{2^{L-t(k)-2}\bigl(3^{N-L+1}+(-1)^{t(k)}\bigr)}{3^N+1}.
+\]
+The formal statement uses an equivalent quotient with only nonnegative
+exponents.  Neither block formula is printed in CPSV16.
 
 At $N=4$, the nonzero spectra are
 \begin{align*}
@@ -202,6 +210,22 @@ two exact natural-number comparisons.  The declarations
 \leanid{CPSVExamples410411Arithmetic.example411_log_ratio_pos} prove positivity
 of the corresponding logarithmic ratios.  These results entered the project in
 commit \texttt{a79bfc93314f3f721abecdbc184065497672d7e5}.
+
+\paragraph{Project derivation (effective-binary finite-ring blocks).}
+The module \doclink{TNLean/MPS/MPDO/CPSVExample411BinarySupport} now proves the
+exact internal edge product in
+\leanid{MPOTensor.CPSVExample411BinarySupport.internalEdgeProduct_eq}, every
+entry of $W^m$ in
+\leanid{MPOTensor.CPSVExample411BinarySupport.weightMatrix_pow_apply}, and the
+complementary path-sum identity in
+\leanid{MPOTensor.CPSVExample411BinarySupport.sum_complementPathWeight_eq_weightMatrix_pow}.
+The declaration
+\leanid{MPOTensor.CPSVExample411BinarySupport.reducedBlockState_apply_eq_internal_mul_pow}
+identifies the canonical reduced state with the normalized path formula, and
+\leanid{MPOTensor.CPSVExample411BinarySupport.reducedBlockState_apply} gives the
+closed diagonal block formula for $1\leq L\leq N$.  These are finite-ring
+consequences of the printed neighboring operators, not claims attributed to
+CPSV16.  The result remains entirely in the effective binary model.
 
 \paragraph{Local fix (ambient support inclusion).}
 For Example~4.11, the effective binary one-site space is included in the

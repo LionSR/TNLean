@@ -1125,6 +1125,56 @@ This is the calculation in
     $\operatorname{tr}(W^N)=(3/2)^N+(1/2)^N=(3^N+1)/2^N$.
 \end{proof}
 
+% Project-derived finite-ring consequence of CPSV16 Example 4.11.
+% See docs/paper-gaps/cpsv16_examples_4_10_4_11_entropy.tex.
+\begin{definition}[Internal transition count]
+    \label{def:cpsv_example411_binary_internal_transition_count}
+    \lean{MPOTensor.CPSVExample411BinarySupport.internalTransitionCount}
+    \leanok
+    For a binary word $x=(x_1,\ldots,x_L)$, let $t(x)$ be the number of
+    indices $n\in\{1,\ldots,L-1\}$ for which $x_n\ne x_{n+1}$.
+\end{definition}
+
+\begin{theorem}[Exact effective-binary finite-ring block probabilities]
+    \label{thm:cpsv_example411_binary_block_probability}
+    \lean{MPOTensor.CPSVExample411BinarySupport.internalEdgeProduct_eq,
+        MPOTensor.CPSVExample411BinarySupport.weightMatrix_pow_apply,
+        MPOTensor.CPSVExample411BinarySupport.sum_complementPathWeight_eq_weightMatrix_pow,
+        MPOTensor.CPSVExample411BinarySupport.sum_cycleWeight_append_eq_internalEdgeProduct_mul_pow,
+        MPOTensor.CPSVExample411BinarySupport.reducedBlockState_apply_eq_internal_mul_pow,
+        MPOTensor.CPSVExample411BinarySupport.reducedBlockState_apply}
+    \leanok
+    \uses{def:block_entropy,
+        def:cpsv_example411_binary_internal_transition_count,
+        def:cpsv_example411_binary_support_model}
+    Let $1\leq L\leq N$ and let $x\in\{0,1\}^L$.  The effective-binary block
+    state is diagonal, and its entry at $x$ is
+    \begin{align}
+      \mu_{N,L}(x)
+      &=\frac{2^L\bigl(3^{N-L+1}+(-1)^{t(x)}\bigr)}
+        {2^{t(x)+2}(3^N+1)}.
+      \notag
+    \end{align}
+    This includes $L=1$ and $L=N$.  It is a project-derived consequence of the
+    finite periodic model, not a formula stated in CPSV16.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{def:block_entropy,
+        def:cpsv_example411_binary_internal_transition_count,
+        def:cpsv_example411_binary_support_model,
+        thm:cpsv_example411_binary_support_normalization}
+    Expanding the canonical reduced state as a sum over the complementary
+    labels leaves only equal retained words.  The cycle product then factors
+    into the internal edges and an endpoint-fixed complementary path.  Each
+    internal transition contributes $1/2$, and induction on the path length
+    identifies the complementary path sum with the corresponding entry of
+    $W^{N-L+1}$.  Diagonalizing $W$ gives that entry in terms of its endpoint
+    labels, while the parity of $t(x)$ records whether those endpoints agree.
+    Division by $Z_N$ yields the displayed formula.
+\end{proof}
+
 % CPSV16 Example 4.11, lines 907--924.
 % Local fix (support embedding): Fin 2 is included in Fin 4 by k |-> (k,k),
 % rather than identified with it by an equivalence.
