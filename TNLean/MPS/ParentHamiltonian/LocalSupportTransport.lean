@@ -288,6 +288,10 @@ private theorem cyclicRestrictₗ_three_extractWindow
 
 /-! ### Transport of three-site quadratic forms -/
 
+/-- Split an \(N\)-site configuration into the cyclic three-site window
+starting at \(i\) and its ordered complement.  The first coordinates occur at
+cyclic offsets \(0,1,2\) from \(i\); the complementary coordinates then occur
+at offsets \(3,4,\ldots,N-1\), in that order. -/
 private def cyclicWindowCfgEquiv {N : ℕ} (hN : 3 ≤ N) (i : Fin N) :
     Cfg d 3 × Cfg d (N - 3) ≃ Cfg d N :=
   (Equiv.sumArrowEquivProdArrow (Fin 3) (Fin (N - 3)) (Fin d)).symm.trans
