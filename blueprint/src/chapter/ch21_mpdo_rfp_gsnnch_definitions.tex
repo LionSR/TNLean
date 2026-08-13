@@ -229,12 +229,13 @@ Definition~\ref{def:mpdo_source_gsnnch}; the converse comparison is not used.
 
 \begin{theorem}[Normalized operators under an isometric physical inclusion]
     \label{thm:mpdo_normalized_state_physical_isometry_transport}
-    \lean{MPOTensor.trace_mpo_changePhysicalBasis_of_isometry,
-        MPOTensor.normalizedMPO_changePhysicalBasis_of_isometry}
+    \lean{MPOTensor.normalizedMPO_changePhysicalBasis_of_isometry}
     \leanok
     \uses{def:block_entropy, def:mpdo_single_kraus_map,
         def:mpdo_sitewise_physical_matrix}
-    With the same notation, the normalized periodic operators satisfy
+    Let $V:\C^d\to\C^e$ satisfy $V^*V=I$, and let $K^V$ be obtained from an MPO
+    tensor $K$ by conjugating each physical matrix by $V$.  The normalized
+    periodic operators satisfy
     \begin{align}
       \sigma^{(N)}(K^V)
       &=V^{\otimes N}\sigma^{(N)}(K)(V^{\otimes N})^*.
@@ -243,9 +244,23 @@ Definition~\ref{def:mpdo_source_gsnnch}; the converse comparison is not used.
 \end{theorem}
 
 \begin{proof}\leanok
+    \lean{MPOTensor.trace_mpo_changePhysicalBasis_of_isometry}
     \uses{lem:mpdo_sitewise_physical_coordinate_congruence}
-    The sitewise congruence preserves the trace because $V^{\otimes N}$ is an
-    isometry.  It therefore commutes with the scalar normalization.
+    Since $(V^{\otimes N})^*V^{\otimes N}=I$, cyclicity of the trace gives
+    \begin{align}
+      \tr\!\left[
+        V^{\otimes N}\rho^{(N)}(K)(V^{\otimes N})^*\right]
+      &=\tr\!\left[\rho^{(N)}(K)\right].
+      \notag
+    \end{align}
+    Therefore the scalar normalization commutes with the congruence:
+    \begin{align}
+      \sigma^{(N)}(K^V)
+      &=\frac{V^{\otimes N}\rho^{(N)}(K)(V^{\otimes N})^*}
+        {\tr[\rho^{(N)}(K)]}
+       =V^{\otimes N}\sigma^{(N)}(K)(V^{\otimes N})^*.
+      \notag
+    \end{align}
 \end{proof}
 
 \begin{theorem}[Prefix marginal of a sitewise isometric image]
@@ -254,8 +269,9 @@ Definition~\ref{def:mpdo_source_gsnnch}; the converse comparison is not used.
     \leanok
     \uses{def:block_entropy, def:mpdo_single_kraus_map,
         def:mpdo_sitewise_physical_matrix}
-    If a state on $L+K$ sites is conjugated by $V^{\otimes(L+K)}$, then its
-    first-$L$-site marginal is conjugated by $V^{\otimes L}$.
+    Let $V:\C^d\to\C^e$ satisfy $V^*V=I$.  If an operator on $L+K$ sites is
+    conjugated by $V^{\otimes(L+K)}$, then its first-$L$-site marginal is
+    conjugated by $V^{\otimes L}$.
 \end{theorem}
 
 \begin{proof}\leanok
