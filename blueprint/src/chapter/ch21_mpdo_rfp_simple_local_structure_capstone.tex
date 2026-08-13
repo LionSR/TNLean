@@ -1053,6 +1053,62 @@ This is the calculation in
     remain unconstructed.
 \end{theorem}
 
+% CPSV16 Example 4.11, lines 907--924.
+% Scope restriction: this is the supported binary encoding, not yet the ambient
+% two-qubit-per-site tensor. See
+% docs/paper-gaps/cpsv16_examples_4_10_4_11_entropy.tex and issue #6302.
+\begin{definition}[Effective binary-support model for Example 4.11]
+    \label{def:cpsv_example411_binary_support_model}
+    \lean{MPOTensor.CPSVExample411BinarySupport.weightMatrix,
+        MPOTensor.CPSVExample411BinarySupport.edgeWeight,
+        MPOTensor.CPSVExample411BinarySupport.M,
+        MPOTensor.CPSVExample411BinarySupport.cycleWeight,
+        MPOTensor.CPSVExample411BinarySupport.partitionFunction}
+    \leanok
+    The coefficient matrix extracted from the four diagonal neighboring
+    operators printed in
+    \cite[Example~4.11, lines~907--924]{Cirac2016MPDO_arXiv} is
+    \begin{align}
+        W&=\begin{pmatrix}1&1/2\\1/2&1\end{pmatrix}.
+        \notag
+    \end{align}
+    In the effective binary encoding, the supported label $k\in\{0,1\}$
+    selects the ambient two-qubit basis vector $|k,k\rangle$.  Let $M$ be the
+    cyclic-edge tensor for the ket--bra diagonal edge coefficient induced by
+    $W$.  For a positive cycle length $N$, define
+    \begin{align}
+        c_N(\sigma)&=\prod_{n\in\mathbb Z/N\mathbb Z}
+            W_{\sigma_n,\sigma_{n+1}},
+        &Z_N&=\sum_{\sigma}c_N(\sigma).
+        \notag
+    \end{align}
+    This is a physical-dimension-$2$ support model.  The source's ambient site
+    has physical dimension $4$, and identifying the model with its literal
+    tensor requires a later support embedding.
+\end{definition}
+
+\begin{theorem}[Diagonal formula and normalization of the binary-support model]
+    \label{thm:cpsv_example411_binary_support_normalization}
+    \lean{MPOTensor.CPSVExample411BinarySupport.mpo_M_apply,
+        MPOTensor.CPSVExample411BinarySupport.mpo_M_eq_diagonal,
+        MPOTensor.CPSVExample411BinarySupport.partitionFunction_eq_trace_pow,
+        MPOTensor.CPSVExample411BinarySupport.trace_weightMatrix_pow,
+        MPOTensor.CPSVExample411BinarySupport.partitionFunction_closed_form}
+    \leanok
+    \uses{def:cpsv_example411_binary_support_model,
+        thm:mpdo_trace_pow_cyclic_product}
+    For every positive $N$ and binary words $\sigma,\tau$,
+    \begin{align}
+        \operatorname{mpo}(M,N)_{\sigma,\tau}
+        &=\delta_{\sigma,\tau}c_N(\sigma),
+        &Z_N&=\operatorname{tr}(W^N)=\frac{3^N+1}{2^N}.
+        \notag
+    \end{align}
+    These identities concern only the effective binary support model.  They do
+    not assert spectra, entropy, saturation of the area law, zero correlation
+    length, or equivalence with the ambient physical-dimension-$4$ tensor.
+\end{theorem}
+
 % CPSV16 Example 4.12, lines 932--939.
 % Normalization gap: docs/paper-gaps/cpsv16_example_4_12_normalization.tex.
 \begin{definition}[Literal tensor in Example 4.12]

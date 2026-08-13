@@ -11,10 +11,14 @@ import Mathlib.LinearAlgebra.Matrix.Trace
 Generic finite-matrix identities expressing entries of powers as path sums and
 traces of positive powers as cyclic products.
 
-## Main declarations
+## Main definitions
 
-* `pow_apply_eq_sum_path_indicator`
-* `trace_pow_eq_sum_cyclic_product`
+This module introduces no new definitions.
+
+## Main results
+
+* `pow_apply_eq_sum_path_indicator`: expands a matrix-power entry as a path sum.
+* `trace_pow_eq_sum_cyclic_product`: expands a positive trace power as a cyclic sum.
 -/
 
 open scoped BigOperators Matrix
