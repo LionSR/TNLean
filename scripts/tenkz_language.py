@@ -449,6 +449,7 @@ def _live_word_owners_from_texts(
 
 
 def live_word_owners() -> dict[str, set[tuple[str, str]]]:
+    """Parser-held words and the live frames that carry them, read from the kernel source."""
     return _live_word_owners_from_texts(
         path.read_text(encoding="utf-8")
         for path in (ROOT / "tex/tenkz").glob("*.code.tex")
