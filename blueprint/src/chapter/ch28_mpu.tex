@@ -1594,9 +1594,7 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
     \lean{MPOTensor.physicalPairSwapEquiv,
         MPOTensor.physicalPairSwapEquiv_finProdFinEquiv}
     \leanok
-    \uses{def:mpdo_physical_adjoint,def:mpu_normalized_flattening}
-    On the flattened physical alphabet, physical adjunction uses the
-    involution
+    On the flattened physical alphabet, define the involution
     \begin{align}
         s(i,j)&=(j,i).
     \end{align}
@@ -1610,8 +1608,7 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
     \leanok
     \uses{def:mpdo_physical_adjoint,def:mpu_normalized_flattening,
         def:mpu_physical_pair_swap}
-    The normalized flattening of the physical adjoint is obtained by
-    entrywise conjugation followed by the physical-pair swap:
+    The normalized flattening of the physical adjoint satisfies
     \begin{align}
       \widetilde{\mathcal U^\sharp}^{\,(i,j)}
         &=\overline{\widetilde{\mathcal U}^{\,(j,i)}}.
@@ -1619,41 +1616,70 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
 \end{theorem}
 
 \begin{proof}\leanok
+    \uses{def:mpdo_physical_adjoint,def:mpu_normalized_flattening,
+        def:mpu_physical_pair_swap}
     Expand the normalized flattening. Its factor $d^{-1/2}$ is real, while
     physical adjunction exchanges the ket and bra coordinates and conjugates
     every virtual matrix entry.
 \end{proof}
 
-\begin{theorem}[Reduced canonical-form-II data under physical adjunction]
-    \label{thm:mpu_physical_adjoint_reduced_cfii}
-    \lean{MPSTensor.CPSVCanonicalFormIIData.physicalAdjointNormalizedFlattening,
-        MPSTensor.CPSVCanonicalFormIIData.hasFullActiveSupport_physicalAdjointNormalizedFlattening,
-        MPSTensor.IsCPSVCanonicalFormII.physicalAdjointNormalizedFlattening}
+\begin{definition}[Canonical-form-II data under physical adjunction]
+    \label{def:mpu_physical_adjoint_cfii_data}
+    \lean{MPSTensor.CPSVCanonicalFormIIData.physicalAdjointNormalizedFlattening}
     \leanok
-    \uses{def:cpsv_cfii,def:mpu_full_active_support,
-        thm:mpu_physical_adjoint_normalized_flattening}
-    Suppose the normalized flattening has canonical-form-II data with full
-    active support. Physical adjunction preserves the block count and block
-    dimensions, conjugates every weight, conjugates every block before the
-    physical-pair swap, and conjugates the ambient coisometry. The resulting
-    data again have full active support and canonical form II.
+    \uses{def:cpsv_cfii,def:mpu_physical_pair_swap,
+        thm:mpu_physical_adjoint_normalized_flattening,
+        thm:is_normal_tensor_of_is_normal_left_canonical,
+        thm:cpsv_physical_reindexing}
+    Given canonical-form-II data for $\widetilde{\mathcal U}$, keep the block
+    count and dimensions, replace $\mu_k$ by $\overline{\mu_k}$, replace
+    $A_k$ by $s^*\overline{A_k}$, and replace the ambient coisometry $V$ by
+    $\overline V$.  The resulting data reconstruct
+    $\widetilde{\mathcal U^\sharp}$.
+\end{definition}
 
-    Each diagonal positive fixed matrix $\Lambda_k$ is unchanged. Indeed,
-    positivity and diagonality imply that its entries are real, and
-    conjugating its fixed-point equation gives the transformed equation.
-    This statement concerns canonical-form data only and does not identify
-    any selected singular-value decomposition or source factor.
+\begin{theorem}[Canonical form II under physical adjunction]
+    \label{thm:mpu_physical_adjoint_cfii}
+    \lean{MPSTensor.IsCPSVCanonicalFormII.physicalAdjointNormalizedFlattening}
+    \leanok
+    \uses{def:cpsv_cfii,def:mpu_physical_adjoint_cfii_data}
+    If $\widetilde{\mathcal U}$ is in canonical form II, then
+    $\widetilde{\mathcal U^\sharp}$ is in canonical form II.
 \end{theorem}
 
 \begin{proof}\leanok
-    Conjugation preserves positive-length block injectivity and
-    left-canonical normalization, hence normality. It also preserves the
-    coisometry equation and the direct-sum reconstruction. Nonzero weights
-    remain nonzero under conjugation, so the active indices and their block
-    dimensions are unchanged. The later reflected transfer calculation has
-    the separately fixed orientation $\rho^{\mathsf T}$ in
-    Theorem~\ref{thm:mpu_reflected_transfer_power}.
+    \uses{def:mpu_physical_adjoint_cfii_data}
+    Entrywise conjugation preserves positive-length block injectivity and
+    left-canonical normalization, hence normality.  Physical relabeling also
+    preserves normality and left-canonical normalization.  Conjugating
+    $VV^*=\Id$ gives $\overline V(\overline V)^*=\Id$, and conjugating the
+    direct-sum reconstruction gives the required reconstruction.  A diagonal
+    positive fixed matrix $\Lambda_k$ is real, so conjugating
+    $\E_{A_k}(\Lambda_k)=\Lambda_k$ gives the transformed fixed-point equation.
 \end{proof}
+
+\begin{theorem}[Full active support under physical adjunction]
+    \label{thm:mpu_physical_adjoint_full_active_support}
+    \lean{MPSTensor.CPSVCanonicalFormIIData.hasFullActiveSupport_physicalAdjointNormalizedFlattening}
+    \leanok
+    \uses{def:mpu_full_active_support,def:mpu_physical_adjoint_cfii_data}
+    If canonical-form-II data for $\widetilde{\mathcal U}$ have full active
+    support, then the data from
+    Definition~\ref{def:mpu_physical_adjoint_cfii_data} also have full active
+    support.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:mpu_full_active_support,def:mpu_physical_adjoint_cfii_data}
+    Complex conjugation preserves nonzero weights.  Hence the active indices
+    and their block dimensions are unchanged, so their dimension sum remains
+    equal to the ambient bond dimension.
+\end{proof}
+
+% Scope: the preceding three entries concern literal CFII data only. They do not
+% identify a selected compact SVD, source factor, sourceU, or sourceV witness.
+% Downstream orientation: the reflected transfer theorem separately fixes the
+% right-hand density as rho.transpose; no such orientation is asserted here.
 
 \begin{theorem}[Source ranks under physical adjunction]
     \label{thm:mpu_physical_adjoint_source_ranks}
