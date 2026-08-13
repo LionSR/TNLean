@@ -358,8 +358,9 @@ def _find_environment_end(text: str, environment: str, offset: int) -> re.Match[
     return pattern.search(text, offset)
 
 
-def _mask_display_environments(text: str) -> str:
-    masked = list(text)
+def _display_environment_spans(text: str) -> list[tuple[str, int, int]]:
+    """Displayed-environment spans in the order the example walk visits them."""
+    spans: list[tuple[str, int, int]] = []
     pattern = re.compile(
         r"^[ \t]*\\begin\{(" + "|".join(DISPLAY_ENVIRONMENTS) + r")\}",
         re.MULTILINE,
@@ -369,10 +370,15 @@ def _mask_display_environments(text: str) -> str:
         end = _find_environment_end(text, match.group(1), match.end())
         if end is None:
             break
-        for index in range(match.start(), end.end()):
-            if masked[index] != "\n":
-                masked[index] = " "
+        spans.append((match.group(1), match.start(), end.end()))
         offset = end.end()
+    return spans
+
+
+def _mask_display_environments(text: str) -> str:
+    masked = list(text)
+    for _, start, end in _display_environment_spans(text):
+        _blank_range(masked, start, end)
     return "".join(masked)
 
 
