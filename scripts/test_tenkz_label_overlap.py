@@ -18,6 +18,14 @@ from tenkz_audit import Audit
 ROOT = Path(__file__).resolve().parents[1]
 
 
+def parse_two_point_ink(points: str) -> tuple[int, int, int, int]:
+    """The `x1,y1;x2,y2` a two-point `wire-ink` `points=` field carries."""
+    first, second = points.split(";")
+    x1, y1 = (int(v) for v in first.split(","))
+    x2, y2 = (int(v) for v in second.split(","))
+    return x1, y1, x2, y2
+
+
 def finding_picture_id(message: str) -> int:
     """Return the exact leading picture identifier from an audit finding."""
     match = re.match(r"^picture (-?\d+)\b", message)
@@ -516,6 +524,20 @@ NESTED_CLAIM_SOURCE = r"""
 \begin{document}
 \begin{tenkz}[rows={wire}, cols=2]
   \tn[skin=dot]{P} & \tn[skin=dot]{}
+\end{tenkz}
+\end{document}
+"""
+
+# One directed open leg: the barb rides mid-daylight on `dir=to`, and its
+# cover is the seed below reads back from the kernel's own record (#6330
+# review, direction-mark ink).
+DIR_MARK_SOURCE = r"""
+\documentclass{standalone}
+\usepackage{tenkz}
+\begin{document}
+\begin{tenkz}[rows={wire}, cols=1, bonds=none]
+  \tn[at=(1,1), name=X, skin=dot, ports={0:physical}]{}
+  \tnwire[dir=to, name=east]{X.0}{open e}
 \end{tenkz}
 \end{document}
 """
@@ -2161,6 +2183,133 @@ def main() -> int:
         if trace_status != 0 or not trace_inks:
             raise AssertionError(
                 "an after-atom physical trace emitted no wire-ink record")
+
+        # The trace's own preaction paints a paper halo of line width
+        # wirewidth + crossgap, wider than the coloured band its own draw
+        # options would report (#6330 review, trace halo).  18023 sp is the
+        # plain wirewidth/2 half stroke every bond and physical leg in this
+        # file records (see `flat_ink` above); a trace's recorded stroke
+        # must clear it by the halo, not merely equal it.
+        if any(int(event.attrs["stroke"]) <= 18023 for event in trace_inks):
+            raise AssertionError(
+                "a trace route's recorded stroke did not widen past the "
+                "coloured band's own half stroke: "
+                + "; ".join(event.raw for event in trace_inks))
+        # Picture k1's closure has the flat run from (2513, 892806) to
+        # (1228198, 892806); a label sitting just past wirewidth/2
+        # (18023 sp) above that line, but still short of the recorded halo
+        # stroke, sits in the annulus the halo paints and the coloured band
+        # alone would have missed.
+        halo_trace = next(
+            event for event in trace_inks
+            if event.attrs.get("picture") == "k1"
+            and event.attrs["points"].startswith(
+                "2513,318485;2513,892806;1228198,892806;"))
+        halo_picture = halo_trace.attrs["picture"]
+        halo_stroke = int(halo_trace.attrs["stroke"])
+        halo_band_lo = 892806 + 18024
+        halo_band_hi = 892806 + halo_stroke - 1
+        if halo_band_lo >= halo_band_hi:
+            raise AssertionError(
+                "the trace halo does not clear wirewidth/2 widely enough "
+                "for this seed's label")
+        halo_log = trace_audit.log_path.read_text(encoding="utf-8")
+        halo_log += (
+            f"label-use|picture={halo_picture}\n"
+            f"bbox|picture={halo_picture}|class=label|id=99|owner=0|"
+            "xmin=590000|xmax=610000|"
+            f"ymin={halo_band_lo}|ymax={halo_band_lo + 3000}|"
+            "shape=rect|radius=0|station=n|provenance=auto\n"
+        )
+        halo_seeded = work / "trace-halo-seeded.tnlog"
+        halo_seeded.write_text(halo_log, encoding="utf-8")
+        halo_status, halo_audit = audit_status(halo_seeded)
+        halo_found = [
+            finding for finding in halo_audit.findings
+            if finding.rule == "label-on-ink" and "trace route" in finding.msg]
+        if halo_status != 1 or len(halo_found) != 1:
+            raise AssertionError(
+                "a label in the trace's paper-halo annulus, clear of the "
+                "coloured band's old half stroke, was not flagged: "
+                + "; ".join(f.msg for f in halo_audit.findings))
+
+        # A directed wire's Straight Barb postaction paints ink the
+        # centreline walk cannot see (#6330 review, direction-mark ink).
+        # Compile a single `dir=to` leg, read back the kernel's own
+        # `origin=mark` cover, and confirm a label placed strictly inside
+        # its stroke band -- clear of the thin centreline band underneath
+        # -- reads as ink.  No pre-fix source can produce this record at
+        # all: before this cover existed, nothing but the thin centreline
+        # was ever checked here, so the miss this proves against is total.
+        mark_status, mark_audit = audit_status(
+            compile_tex("dir-mark.tex", DIR_MARK_SOURCE))
+        mark_events = [event for event in mark_audit.events("k1")
+                       if event.kind == "wire-ink"
+                       and event.attrs.get("name") == "east"]
+        mark_ink = next(
+            (event for event in mark_events
+             if event.attrs.get("origin") == "mark"), None)
+        leg_ink = next(
+            (event for event in mark_events
+             if event.attrs.get("origin") == "physical-leg"), None)
+        if mark_status != 0 or mark_ink is None or leg_ink is None:
+            raise AssertionError(
+                "a dir=to leg did not emit both its centreline and its "
+                "barb cover")
+        mx1, my1, mx2, my2 = parse_two_point_ink(mark_ink.attrs["points"])
+        mark_stroke = int(mark_ink.attrs["stroke"])
+        leg_stroke = int(leg_ink.attrs["stroke"])
+        if my1 != my2 or mark_stroke <= leg_stroke:
+            raise AssertionError(
+                "the barb cover geometry is not the flat, wider band this "
+                "seed assumes: "
+                f"points={mark_ink.attrs['points']} stroke={mark_stroke} "
+                f"leg-stroke={leg_stroke}")
+        mark_band_lo = my1 + leg_stroke + 1
+        mark_band_hi = my1 + mark_stroke - 1
+        if mark_band_lo >= mark_band_hi:
+            raise AssertionError(
+                "the barb cover does not clear the centreline band widely "
+                "enough for this seed's label")
+        mark_cx = (min(mx1, mx2) + max(mx1, mx2)) // 2
+        mark_picture = mark_ink.attrs["picture"]
+        mark_log = mark_audit.log_path.read_text(encoding="utf-8")
+        mark_log += (
+            f"label-use|picture={mark_picture}\n"
+            f"bbox|picture={mark_picture}|class=label|id=99|owner=0|"
+            f"xmin={mark_cx - 1000}|xmax={mark_cx + 1000}|"
+            f"ymin={mark_band_lo}|ymax={mark_band_hi}|shape=rect|radius=0|"
+            "station=e|provenance=auto\n"
+        )
+        mark_seeded = work / "dir-mark-seeded.tnlog"
+        mark_seeded.write_text(mark_log, encoding="utf-8")
+        mark_seeded_status, mark_seeded_audit = audit_status(mark_seeded)
+        mark_found = [
+            finding for finding in mark_seeded_audit.findings
+            if finding.rule == "label-on-ink" and "mark route" in finding.msg]
+        if mark_seeded_status != 1 or len(mark_found) != 1:
+            raise AssertionError(
+                "a label inside the barb cover's stroke band, clear of the "
+                "centreline, was not flagged: "
+                + "; ".join(f.msg for f in mark_seeded_audit.findings))
+
+        # Coverage: at least one compiled fixture's `wire-ink` record must
+        # actually carry a `c:`-prefixed cubic sextuple, not only the
+        # synthetic cubic streams above -- a regression that silently drops
+        # curve segments from the emitter would move only golden digests,
+        # never trip a HARD finding (#6330 review, cubic coverage).
+        torus_source = ROOT / "tests/tenkz/kernel/k_torus.tex"
+        torus_status, torus_audit = audit_status(compile_tex(
+            "k_torus.tex", torus_source.read_text(encoding="utf-8")))
+        torus_cubics = [
+            event for event in torus_audit.events()
+            if event.kind == "wire-ink"
+            and ";c:" in event.attrs.get("points", "")
+        ]
+        if torus_status != 0 or not torus_cubics:
+            raise AssertionError(
+                "k_torus emitted no wire-ink record with a c: cubic "
+                "sextuple")
 
         core_source = (ROOT / "tex/tenkz/tenkz-core.code.tex").read_text(
             encoding="utf-8")
