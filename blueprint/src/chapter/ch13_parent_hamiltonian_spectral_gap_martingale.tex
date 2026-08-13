@@ -835,8 +835,7 @@ norm estimate is derived here.
     \begin{align}
         \sum_{j\in\Omega_Q}(A^j)^\dagger A^j&=\mathbf 1,
     \end{align}
-    where $\Omega_Q=\{0,\ldots,d-1\}^Q$ is the set of physical words of
-    length $Q$.
+    where $\Omega_Q=\Fin(d^Q)$ is the set of physical words of length $Q$.
 \end{theorem}
 
 \begin{proof}
@@ -970,8 +969,9 @@ norm estimate is derived here.
     \lean{MPSTensor.inner_tailBoundaryMapES_adjoint_leftBoundaryMapES_q}
     \leanok
     \uses{def:tail_boundary_map, def:left_boundary_map,
+        def:whole_increment_physical_reassociation,
         def:ground_space_gram, def:eval_word}
-    Let $\Omega_n=\{0,\ldots,d-1\}^n$.  For boundary families
+    Let $\Omega_n=\Fin(d^n)$.  For boundary families
     $X=(X_u)_{u\in\Omega_K}$ and $Z=(Z_j)_{j\in\Omega_Q}$, the canonical
     coordinate identification from $(K+L)+Q$ to $K+(L+Q)$ gives
     \begin{align}
@@ -990,6 +990,7 @@ norm estimate is derived here.
 \begin{proof}
     \leanok
     \uses{def:tail_boundary_map, def:left_boundary_map,
+        def:whole_increment_physical_reassociation,
         def:ground_space_gram, def:eval_word}
     Split each physical word into blocks of lengths $K$, $L$, and $Q$.
     Word multiplicativity and trace cyclicity leave the length-$L$ Gram pairing
@@ -1306,9 +1307,23 @@ norm estimate is derived here.
     \uses{thm:left_finite_gram_cancellation,
         thm:reassociated_tail_boundary_factorization,
         thm:inverse_gram_identities}
-    The left finite Gram cancels its inverse to give
-    $(\Gamma_{K+L+Q}^{\mathrm{ES}})^\dagger$.  The reassociated tail finite
-    Gram satisfies the analogous cancellation.
+    If $\Gamma_{K+L}^{\mathrm{ES}}$ and
+    $\Gamma_{L+Q}^{\mathrm{ES}}$ are injective, respectively, then
+    \begin{align}
+      (J_Q^{\mathrm{left}})^\dagger
+        \mathcal K_{K+L}^{\oplus\Omega_Q}
+        (\mathcal K_{K+L}^{-1})^{\oplus\Omega_Q}
+        (\Gamma_{K+L,Q}^{\mathrm{left}})^\dagger
+      &=(\Gamma_{K+L+Q}^{\mathrm{ES}})^\dagger.
+    \end{align}
+    Moreover,
+    \begin{align}
+      (J_K^{\mathrm{tail}})^\dagger
+        \mathcal K_{L+Q}^{\oplus\Omega_K}
+        (\mathcal K_{L+Q}^{-1})^{\oplus\Omega_K}
+        (\widetilde\Gamma_{K;L,Q}^{\mathrm{tail}})^\dagger
+      &=(\Gamma_{K+L+Q}^{\mathrm{ES}})^\dagger.
+    \end{align}
 \end{theorem}
 
 \begin{proof}
@@ -1325,7 +1340,9 @@ norm estimate is derived here.
     \label{def:whole_increment_tail_gram_correction}
     \lean{MPSTensor.wholeIncrementTailFiniteGramCorrectionES}
     \leanok
-    The tail correction is the physical sandwich containing
+    Assume $D>0$, let $\rho$ be positive definite, and assume that
+    $\Gamma_{L+Q}^{\mathrm{ES}}$ and $\Gamma_{K+L+Q}^{\mathrm{ES}}$ are
+    injective.  The tail correction is the physical sandwich containing
     $\mathcal K_{L+Q}-\mathcal K_\infty$ between the reassociated tail
     pseudoinverse, $J_K^{\mathrm{tail}}$, and the full boundary pseudoinverse.
 \end{definition}
@@ -1334,7 +1351,9 @@ norm estimate is derived here.
     \label{def:whole_increment_full_inverse_gram_correction}
     \lean{MPSTensor.wholeIncrementFullInverseGramCorrectionES}
     \leanok
-    The full correction is the physical sandwich containing
+    Assume $D>0$, let $\rho$ be positive definite, and assume that
+    $\Gamma_{L+Q}^{\mathrm{ES}}$ and $\Gamma_{K+L+Q}^{\mathrm{ES}}$ are
+    injective.  The full correction is the physical sandwich containing
     $(\mathcal K_{K+L+Q})^{-1}-\mathcal K_\infty^{-1}$.
 \end{definition}
 
@@ -1342,7 +1361,9 @@ norm estimate is derived here.
     \label{def:whole_increment_left_gram_correction}
     \lean{MPSTensor.wholeIncrementLeftFiniteGramCorrectionES}
     \leanok
-    The left correction is the physical sandwich containing
+    Assume $D>0$, let $\rho$ be positive definite, and assume that
+    $\Gamma_{L+Q}^{\mathrm{ES}}$ and $\Gamma_{K+L}^{\mathrm{ES}}$ are
+    injective.  The left correction is the physical sandwich containing
     $\mathcal K_{K+L}-\mathcal K_\infty$ and the left boundary
     pseudoinverse.
 \end{definition}
@@ -1376,14 +1397,28 @@ norm estimate is derived here.
     \leanok
     \uses{def:whole_increment_centered_residual,
         thm:whole_increment_limiting_overlap_product}
-    The exact virtual residual equals $R_{K,L,Q}$ minus the three terms obtained
-    by replacing, one at a time,
+    Assume $D>0$, let $\rho$ be positive definite, and assume that
+    $\Gamma_{K+L+Q}^{\mathrm{ES}}$ is injective.  Write
+    $K_t=\mathcal K_{L+Q}^{\oplus\Omega_K}$,
+    $K_t^\infty=\mathcal K_\infty^{\oplus\Omega_K}$,
+    $K_\ell=\mathcal K_{K+L}^{\oplus\Omega_Q}$,
+    $K_\ell^\infty=\mathcal K_\infty^{\oplus\Omega_Q}$,
+    $I_f=\mathcal K_{K+L+Q}^{-1}$,
+    $I_\infty=\mathcal K_\infty^{-1}$,
+    $J_t=J_K^{\mathrm{tail}}$, and
+    $J_\ell^\dagger=(J_Q^{\mathrm{left}})^\dagger$.  Then the exact virtual
+    residual satisfies
     \begin{align}
-      \mathcal K_{L+Q},\qquad
-      (\mathcal K_{K+L+Q})^{-1},\qquad
-      \mathcal K_{K+L}
+      &(\widetilde\Gamma_{K;L,Q}^{\mathrm{tail}})^\dagger
+          \Gamma_{K+L,Q}^{\mathrm{left}}
+        -K_tJ_tI_fJ_\ell^\dagger K_\ell\\
+      &\quad=R_{K,L,Q}
+        -(K_t-K_t^\infty)J_tI_fJ_\ell^\dagger K_\ell
+        -K_t^\infty J_t(I_f-I_\infty)J_\ell^\dagger K_\ell\\
+      &\qquad\phantom{=R_{K,L,Q}}
+        -K_t^\infty J_tI_\infty J_\ell^\dagger
+          (K_\ell-K_\ell^\infty).
     \end{align}
-    by their limiting values.
 \end{theorem}
 
 \begin{proof}
@@ -1399,8 +1434,11 @@ norm estimate is derived here.
     \lean{MPSTensor.wholeIncrementCenteredProjectorResidualES}
     \leanok
     \uses{def:whole_increment_centered_residual}
-    The centered physical sandwich is obtained by placing $R_{K,L,Q}$ between
-    the reassociated tail pseudoinverse and the left boundary pseudoinverse.
+    Assume $D>0$, let $\rho$ be positive definite, and assume that
+    $\Gamma_{L+Q}^{\mathrm{ES}}$ and $\Gamma_{K+L}^{\mathrm{ES}}$ are
+    injective.  The centered physical sandwich is obtained by placing
+    $R_{K,L,Q}$ between the reassociated tail pseudoinverse and the left
+    boundary pseudoinverse.
 \end{definition}
 
 \begin{theorem}[Whole-increment physical correction telescope]
@@ -1450,14 +1488,46 @@ norm estimate is derived here.
         def:whole_increment_full_inverse_gram_correction,
         def:whole_increment_left_gram_correction,
         thm:reassociated_tail_pseudoinverse_bound,
+        thm:reassociated_tail_inverse_gram,
+        thm:inverse_gram_identities,
         thm:boundary_fiberwise_map_norm,
         thm:inverse_gram_limiting_resolvent,
         thm:left_spectator_pseudoinverse_bound}
-    Each correction is bounded by the product of its Gram error, the adjacent
-    virtual-map norms, and the square roots of the neighboring inverse-Gram
-    norms.  The full correction additionally contains
-    $\lVert\mathcal K_\infty\rVert$ and
-    $\lVert\mathcal K_\infty^{-1}\rVert$.
+    Assume $D>0$ and let $\rho$ be positive definite.  Put
+    $I_t=\mathcal K_{L+Q}^{-1}$,
+    $I_f=\mathcal K_{K+L+Q}^{-1}$,
+    $I_\ell=\mathcal K_{K+L}^{-1}$, and
+    $I_\infty=\mathcal K_\infty^{-1}$.  Under the injectivity assumptions
+    required to define the indicated inverse Grams, the tail, full, and left
+    corrections $C_t,C_f,C_\ell$ satisfy
+    \begin{align}
+      \lVert C_t\rVert
+      &\leq \sqrt{\lVert I_t\rVert}
+        \lVert\mathcal K_{L+Q}-\mathcal K_\infty\rVert
+        \lVert J_K^{\mathrm{tail}}\rVert
+        \sqrt{\lVert I_f\rVert}.
+    \end{align}
+    The full correction satisfies
+    \begin{align}
+      \lVert C_f\rVert
+      &\leq \sqrt{\lVert I_t\rVert}
+        \lVert\mathcal K_\infty\rVert
+        \lVert J_K^{\mathrm{tail}}\rVert
+        \lVert I_\infty\rVert
+        \lVert\mathcal K_{K+L+Q}-\mathcal K_\infty\rVert
+        \sqrt{\lVert I_f\rVert}.
+    \end{align}
+    The left correction satisfies
+    \begin{align}
+      \lVert C_\ell\rVert
+      &\leq \sqrt{\lVert I_t\rVert}
+        \lVert\mathcal K_\infty\rVert
+        \lVert J_K^{\mathrm{tail}}\rVert
+        \lVert I_\infty\rVert
+        \lVert J_Q^{\mathrm{left}}\rVert
+        \lVert\mathcal K_{K+L}-\mathcal K_\infty\rVert
+        \sqrt{\lVert I_\ell\rVert}.
+    \end{align}
 \end{theorem}
 
 \begin{proof}
@@ -1466,6 +1536,8 @@ norm estimate is derived here.
         def:whole_increment_full_inverse_gram_correction,
         def:whole_increment_left_gram_correction,
         thm:reassociated_tail_pseudoinverse_bound,
+        thm:reassociated_tail_inverse_gram,
+        thm:inverse_gram_identities,
         thm:boundary_fiberwise_map_norm,
         thm:inverse_gram_limiting_resolvent,
         thm:left_spectator_pseudoinverse_bound}
