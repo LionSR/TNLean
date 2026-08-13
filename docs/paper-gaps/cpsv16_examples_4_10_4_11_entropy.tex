@@ -203,12 +203,24 @@ two exact natural-number comparisons.  The declarations
 of the corresponding logarithmic ratios.  These results entered the project in
 commit \texttt{a79bfc93314f3f721abecdbc184065497672d7e5}.
 
-This arithmetic certification does not identify the reduced-state spectra, prove
-the entropy identities, or connect either ratio to the tensor defined by the
-source.  Those spectral, entropy, tensor, and final area-law links remain open in
-\ghissue{6301} for Example~4.10 and \ghissue{6302} for Example~4.11.  The
-Blueprint status node therefore remains not ready and is not marked as
-formalized.
+\paragraph{Local fix (ambient support inclusion).}
+For Example~4.11, the effective binary one-site space is included in the
+source-facing two-qubit site by $k\mapsto |k,k\rangle$; it is not identified
+with the four-dimensional site by an equivalence.  The module
+\doclink{TNLean/MPS/MPDO/CPSVExample411Ambient} proves the exact supported
+one-site slice, vanishing whenever either local physical leg is unsupported,
+the sitewise periodic-operator congruence, the supported positive-length
+entries, and equality of the ambient trace with
+$Z_N=(3^N+1)/2^N$.
+
+\paragraph{Scope restriction (spectral and entropy consequences).}
+The ambient operator and trace bridge for Example~4.11 is complete.  This does
+not yet identify the reduced-state spectra, prove the entropy identities, or
+connect the certified logarithmic ratio to saturation of the area law or zero
+correlation length.  Those spectral, entropy, SAL, and ZCL links remain open in
+\ghissue{6302}.  Example~4.10's tensor and final entropy links remain open in
+\ghissue{6301}.  The corresponding source-level status therefore remains not
+ready.
 
 Example~4.12 is outside the entropy correction in this note. Its statement,
 dependencies, and separate normalization question are unchanged.

@@ -1054,9 +1054,9 @@ This is the calculation in
 \end{theorem}
 
 % CPSV16 Example 4.11, lines 907--924.
-% Scope restriction: this is the supported binary encoding, not yet the ambient
-% two-qubit-per-site tensor. See
-% docs/paper-gaps/cpsv16_examples_4_10_4_11_entropy.tex and issue #6302.
+% Scope restriction: this is the effective supported model; the ambient
+% two-qubit-per-site realization is the isometric support inclusion below.
+% See docs/paper-gaps/cpsv16_examples_4_10_4_11_entropy.tex.
 \begin{definition}[Effective binary-support model for Example 4.11]
     \label{def:cpsv_example411_binary_support_model}
     \lean{MPOTensor.CPSVExample411BinarySupport.weightMatrix,
@@ -1083,9 +1083,10 @@ This is the calculation in
         &Z_N&=\sum_{\sigma}c_N(\sigma).
         \notag
     \end{align}
-    This is a physical-dimension-$2$ support model.  The source's ambient site
-    has physical dimension $4$, and identifying the model with its literal
-    tensor requires a later support embedding.
+    This is a physical-dimension-$2$ support model.  The ambient
+    physical-dimension-$4$ realization is obtained by the support inclusion
+    defined below; the two physical spaces are not identified by an
+    equivalence.
 \end{definition}
 
 \begin{theorem}[Diagonal formula and normalization of the binary-support model]
@@ -1104,9 +1105,10 @@ This is the calculation in
         &Z_N&=\operatorname{tr}(W^N)=\frac{3^N+1}{2^N}.
         \notag
     \end{align}
-    These identities concern only the effective binary support model.  They do
-    not assert spectra, entropy, saturation of the area law, zero correlation
-    length, or equivalence with the ambient physical-dimension-$4$ tensor.
+    These identities first concern the effective binary support model.  The
+    ambient definition below transports the operator and trace identities, but
+    no spectrum, entropy, saturation of the area law, or zero correlation
+    length assertion is made here.
 \end{theorem}
 
 \begin{proof}
@@ -1121,6 +1123,90 @@ This is the calculation in
     Hadamard basis diagonalizes $W$ with eigenvalues $3/2$ and $1/2$, so
     cyclicity of the trace gives
     $\operatorname{tr}(W^N)=(3/2)^N+(1/2)^N=(3^N+1)/2^N$.
+\end{proof}
+
+% CPSV16 Example 4.11, lines 907--924.
+% Local fix (support embedding): Fin 2 is included in Fin 4 by k |-> (k,k),
+% rather than identified with it by an equivalence.
+% Scope restriction: the source is cited for eta and the site interpretation;
+% the embedding consequences are project derivations documented in
+% docs/paper-gaps/cpsv16_examples_4_10_4_11_entropy.tex.
+\begin{definition}[Ambient two-qubit-site support inclusion]
+    \label{def:cpsv_example411_ambient_support_inclusion}
+    \lean{MPOTensor.CPSVExample411Ambient.siteEmbedding,
+        MPOTensor.CPSVExample411Ambient.siteEmbedding_injective,
+        MPOTensor.CPSVExample411Ambient.inclusion,
+        MPOTensor.CPSVExample411Ambient.inclusion_isometry,
+        MPOTensor.CPSVExample411Ambient.ambientM,
+        MPOTensor.CPSVExample411Ambient.embedConfig}
+    \leanok
+    \uses{def:cpsv_example411_binary_support_model}
+    Identify the ambient one-site basis with
+    $\{|a,b\rangle:a,b\in\{0,1\}\}$.  Define
+    \begin{align}
+        \iota(k)&=|k,k\rangle,
+        &V_{i,k}&=\delta_{i,\iota(k)},
+        &\widetilde M&=V M V^*.
+        \notag
+    \end{align}
+    Then $\iota$ is injective and $V^*V=I_2$.  For a binary configuration
+    $\sigma$, write $\iota\sigma$ for its sitewise image in the ambient basis.
+\end{definition}
+
+\begin{theorem}[Exact ambient support and periodic-operator bridge]
+    \label{thm:cpsv_example411_ambient_support_bridge}
+    \lean{MPOTensor.CPSVExample411Ambient.ambientM_supported,
+        MPOTensor.CPSVExample411Ambient.ambientM_left_unsupported,
+        MPOTensor.CPSVExample411Ambient.ambientM_right_unsupported,
+        MPOTensor.CPSVExample411Ambient.mpo_ambientM_eq_singleKrausMap,
+        MPOTensor.CPSVExample411Ambient.mpo_ambientM_supported_apply}
+    \leanok
+    \uses{def:cpsv_example411_ambient_support_inclusion,
+        thm:cpsv_example411_binary_support_normalization}
+    The supported one-site slices satisfy
+    $\widetilde M^{\iota(k),\iota(h)}=M^{k,h}$, while a one-site slice vanishes
+    if either physical leg lies outside the image of $\iota$.  For every
+    positive $N$,
+    \begin{align}
+        \operatorname{mpo}(\widetilde M,N)
+        &=V^{\otimes N}\operatorname{mpo}(M,N)(V^{\otimes N})^*,
+        &\operatorname{mpo}(\widetilde M,N)_{\iota\sigma,\iota\tau}
+        &=\delta_{\sigma,\tau}c_N(\sigma).
+        \notag
+    \end{align}
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    The rectangular delta matrix collapses each local coordinate sum to the
+    unique supported binary label.  Applying the same inclusion independently
+    at every site gives the displayed congruence, and the supported entry
+    formula follows from the binary diagonal formula.
+\end{proof}
+
+\begin{theorem}[Ambient trace and closed normalization]
+    \label{thm:cpsv_example411_ambient_normalization}
+    \lean{MPOTensor.CPSVExample411Ambient.trace_mpo_ambientM,
+        MPOTensor.CPSVExample411Ambient.trace_mpo_ambientM_eq_partitionFunction,
+        MPOTensor.CPSVExample411Ambient.trace_mpo_ambientM_closed_form}
+    \leanok
+    \uses{def:cpsv_example411_ambient_support_inclusion,
+        thm:cpsv_example411_binary_support_normalization}
+    For every positive $N$, the ambient trace equals the binary partition
+    function:
+    \begin{align}
+        \operatorname{tr}(\operatorname{mpo}(\widetilde M,N))
+        &=\operatorname{tr}(\operatorname{mpo}(M,N))
+         =Z_N=\frac{3^N+1}{2^N}.
+        \notag
+    \end{align}
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Cyclicity of the trace and $V^*V=I_2$ preserve the trace under the
+    sitewise congruence.  The binary partition-function identity and its closed
+    form then give the result.
 \end{proof}
 
 % CPSV16 Example 4.12, lines 932--939.
