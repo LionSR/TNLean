@@ -19,7 +19,7 @@ tensor. No comparison with an interaction on the original unblocked chain is mad
 ## Main results
 
 * `MPSTensor.IsPrimitiveMPS.exists_blockTensor_parentHamiltonianES_gap_eighth` chooses a
-  physical block length and proves the explicit gap constant `1 / 8` for the blocked tensor.
+  physical block length and proves the explicit gap constant \(1/8\) for the blocked tensor.
 
 ## References
 
@@ -238,7 +238,7 @@ theorem openChainLeftGroundSpaceES_blockTensor_map
 three-site open-chain projector defect of the blocked tensor.
 
 Both sides act on the explicit blocked Hilbert space. The right side is conjugated
-from the `3 * p`-site original Hilbert space by `blockedConfigLinearIsometryEquiv`.
+from the \(3p\)-site original Hilbert space by `blockedConfigLinearIsometryEquiv`.
 This statement transports only the two whole-block spectator spaces and the full
 three-block ground space. -/
 theorem blockTensor_threeSite_openChain_defect_norm_eq
@@ -403,9 +403,9 @@ private theorem IsPrimitiveMPS.exists_blockTensor_anticommutator
   exact ⟨p, hp, hInj, hAnti⟩
 
 /-- A primitive MPS tensor with a positive-definite fixed point admits
-physical blocking whose range-two blocked parent Hamiltonian has gap constant `1 / 8`.
+physical blocking whose range-two blocked parent Hamiltonian has gap constant \(1/8\).
 
-The coefficient `7 / 16` is first obtained for the whole-increment C3-prime
+The coefficient \(7/16\) is first obtained for the whole-increment C3-prime
 projector defect on three original blocks. Explicit blocked Hilbert-space transport
 turns it into the adjacent three-site anticommutator estimate. The forward and
 backward cyclic transports then cover every overlapping off-diagonal pair, and the
