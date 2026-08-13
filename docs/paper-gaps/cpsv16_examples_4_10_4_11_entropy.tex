@@ -200,8 +200,10 @@ explanation suggested by the calculation, not a fact asserted by the paper.
 
 Example~4.10 supplies an exact corrected witness at $p=1/4$, but the repeated
 left-qubit label and the incomplete universal exception list must not be
-formalized as printed. Example~4.11 supplies an exact counterexample to its
-own printed finite-chain saturation claim.
+formalized as printed.  For Example~4.11, the printed saturation clause is
+false for the literal finite periodic family, while the independent claim that
+the family does not have zero correlation length is verified by an exact
+finite-marginal obstruction.
 
 The scalar endpoints are now certified in
 \doclink{TNLean/MPS/MPDO/CPSVExamples410411Arithmetic}.  The declarations
@@ -242,6 +244,28 @@ sitewise periodic-operator congruence and supported positive-length entries.
 The declaration
 \leanid{MPOTensor.CPSVExample411Ambient.trace_mpo_ambientM_closed_form} gives
 the ambient trace $Z_N=(3^N+1)/2^N$.
+
+\paragraph{Project derivation (source zero-correlation-length obstruction).}
+The module \doclink{TNLean/MPS/MPDO/CPSVExample411SourceZCL} records the exact
+two-site constant-zero entries
+\[
+  \rho^{(4)}_2(00,00)=\frac{14}{41},
+  \qquad
+  \rho^{(3)}_2(00,00)=\frac{5}{14}
+\]
+for the effective binary model.  The declaration
+\leanid{MPOTensor.CPSVExample411Ambient.reducedBlockState_supported_apply}
+transports these values to the corresponding supported entries of the ambient
+two-qubit-site marginals.  The source-facing zero-correlation relation implies
+that the normalized two-site marginal obtained from a ring of length four must
+equal that obtained from a ring of length three.  Since $14/41\ne5/14$, the
+effective and ambient tensors both fail that relation.  This argument does not
+use the saturation obstruction, entropy, or spectral calculations.
+
+Here ``source-facing'' refers to the nonzero up-to-positive-scalar relation for
+the physical-trace transfer.  It is distinct from the legacy doubled-index
+transfer-map idempotence convention.  No conclusion about that legacy
+convention is made.
 
 \paragraph{Project derivation (exact length-four spectra).}
 The module \doclink{TNLean/MPS/MPDO/CPSVExample411Spectrum} specializes the
@@ -289,12 +313,13 @@ physical isometry gives the same conclusion for the ambient tensor
 
 \paragraph{Scope restriction (remaining consequences).}
 The ambient operator congruence, trace equality, exact $N=4$ reduced-state
-spectra, entropy identities, and finite-ring SAL obstruction for Example~4.11
-are complete.  No zero-correlation-length or thermodynamic-limit conclusion is
-made.  Those remaining links stay open in \ghissue{6302}.  Example~4.10's tensor
-and final entropy links remain open in \ghissue{6301}.  The printed Example~4.11
-SAL claim remains false for the literal finite periodic family; the certified
-result is a project-derived counterexample, not a theorem attributed to CPSV16.
+spectra, entropy identities, finite-ring saturation obstruction, and
+source-facing zero-correlation-length obstruction for Example~4.11 are
+complete.  The printed independent non-zero-correlation-length clause is thus
+verified for the literal finite periodic family, while its saturation clause
+remains false.  No conclusion is made about the legacy doubled-index
+zero-correlation convention or about thermodynamic behavior.  Example~4.10's
+tensor and final entropy links remain open in \ghissue{6301}.
 
 Example~4.12 is outside the entropy correction in this note. Its statement,
 dependencies, and separate normalization question are unchanged.
@@ -306,10 +331,13 @@ The repeated left-qubit label is replaced by the left--right correlated flip.
 The corrected $p=1/4$ calculation gives the claimed separation, while the
 printed universal exception list must also exclude $p=1$.
 
-\textbf{Verdict for Example~4.11: false as printed for the literal periodic
-state.}  The four-site calculation gives $I_2>I_1$, so the printed finite-chain
-saturation claim fails.  Global normalization cannot repair it.  The suggested
-open or infinite Markov-chain explanation is not part of the source statement.
+\textbf{Verdict for Example~4.11: the printed separation is only half
+correct for the literal periodic state.}  The exact finite-marginal mismatch
+verifies the independent claim that the state does not have source-facing zero
+correlation length.  The four-site calculation gives $I_2>I_1$, so the printed
+saturation claim fails.  Global normalization cannot repair that failure.  The
+suggested open or infinite Markov-chain explanation is not part of the source
+statement.
 
 \bibliographystyle{alpha}
 \bibliography{references}
