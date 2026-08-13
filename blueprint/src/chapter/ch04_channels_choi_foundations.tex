@@ -127,6 +127,24 @@ matrix $\tau=(T\otimes\id)\ketbra{\Omega}{\Omega}$ on the doubled space:
     Apply the identity map in the definition of the Choi matrix.
 \end{proof}
 
+\begin{lemma}[The Choi correspondence is one-to-one]\label{lem:choi_matrix_injective}
+    \lean{ChoiJamiolkowski.choiMatrix_injective,
+        ChoiJamiolkowski.eq_of_choiMatrix_eq}
+    \leanok
+    \uses{def:choi_matrix}
+    Let $D\geq1$. Two linear maps $T,S:\MN{D}\to\MN{D}$ with the same Choi
+    matrix are equal.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{def:choi_matrix}
+    The $(i_2,j_2)$ slice of $\ketbra{\Omega}{\Omega}$ is $D^{-1}E_{i_2j_2}$,
+    so equality of the Choi matrices gives
+    $D^{-1}T(E_{ij})=D^{-1}S(E_{ij})$ entrywise for every matrix unit
+    $E_{ij}$. Cancel the nonzero factor $D^{-1}$ and extend from the matrix
+    units to all of $\MN{D}$ by linearity.
+\end{proof}
+
 \begin{theorem}[Choi matrix of transposition]\label{thm:choi_transpose_flip}
     \lean{ChoiJamiolkowski.choiMatrix_transposeLinearMapComplex_eq_swap}
     \leanok
