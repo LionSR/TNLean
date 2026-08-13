@@ -31,10 +31,11 @@ These scalar results do not identify reduced-state spectra and do not assert
 saturation or failure of an area law. Such conclusions require separate formal
 links from the printed tensors to the corresponding entropy expressions.
 
-**Scope restriction (scalar arithmetic only):**
-`docs/paper-gaps/cpsv16_exact_arithmetic_scope.tex` records this boundary and
-distinguishes the printed Example 4.10 calculation from the independently
-derived four-site specialization of Example 4.11.
+**Scope restriction (scalar arithmetic only):** this module certifies only the
+arithmetic endpoints. See `docs/paper-gaps/cpsv16_exact_arithmetic_scope.tex`
+for the boundary and the distinction between the printed Example 4.10
+calculation and the independently derived four-site specialization of
+Example 4.11.
 
 ## Main results
 
