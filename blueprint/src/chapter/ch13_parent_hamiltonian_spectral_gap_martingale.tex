@@ -363,6 +363,22 @@ norm estimate is derived here.
     tail or left factorization.
 \end{proof}
 
+\begin{theorem}[Injectivity of the left spectator boundary map]
+    \label{thm:left_boundary_map_es_injective}
+    \lean{MPSTensor.leftBoundaryMapES_injective_of_groundSpaceMapES_injective}
+    \leanok
+    \uses{def:left_boundary_map}
+    If the length-$K$ ground-space map is injective, then the left boundary map
+    with any spectator length $L$ is injective.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{def:left_boundary_map}
+    Recover every spectator fiber by restricting to its fixed suffix and use
+    injectivity of the length-$K$ ground-space map.
+\end{proof}
+
 \begin{theorem}[Direct-sum spectator Gram operators]%
     \label{thm:spectator_boundary_direct_sum_gram}
     \lean{MPSTensor.tailBoundaryMapES_adjoint_comp_self_eq_fiberwise_groundSpaceGram}
@@ -964,47 +980,14 @@ norm estimate is derived here.
     estimate is used.
 \end{proof}
 
-\begin{theorem}[Whole-increment mixed Gram in unreassociated coordinates]
-    \label{thm:whole_increment_mixed_gram_coordinates}
-    \lean{MPSTensor.inner_tailBoundaryMapES_adjoint_leftBoundaryMapES_q}
-    \leanok
-    \uses{def:tail_boundary_map, def:left_boundary_map,
-        def:whole_increment_physical_reassociation,
-        def:ground_space_gram, def:eval_word}
-    Let $\Omega_n=\Fin(d^n)$.  For boundary families
-    $X=(X_u)_{u\in\Omega_K}$ and $Z=(Z_j)_{j\in\Omega_Q}$, the canonical
-    coordinate identification from $(K+L)+Q$ to $K+(L+Q)$ gives
-    \begin{align}
-      \left\langle X,
-        (\Gamma^{\mathrm{tail}}_{K,L+Q})^\dagger
-        \mathscr A_{K,L,Q}^{-1}
-        \Gamma^{\mathrm{left}}_{K+L,Q}Z\right\rangle
-      &=\sum_{u\in\Omega_K}\sum_{j\in\Omega_Q}
-        \left\langle U(A^jX_u),\mathcal K_LU(Z_jA^u)\right\rangle,
-    \end{align}
-    where $U$ is Frobenius vectorization and
-    $\mathcal K_L=(\Gamma_L^{\mathrm{ES}})^\dagger
-    \Gamma_L^{\mathrm{ES}}$.
-\end{theorem}
-
-\begin{proof}
-    \leanok
-    \uses{def:tail_boundary_map, def:left_boundary_map,
-        def:whole_increment_physical_reassociation,
-        def:ground_space_gram, def:eval_word}
-    Split each physical word into blocks of lengths $K$, $L$, and $Q$.
-    Word multiplicativity and trace cyclicity leave the length-$L$ Gram pairing
-    with boundary matrices $A^jX_u$ and $Z_jA^u$.
-\end{proof}
-
 \begin{theorem}[Whole-increment mixed Gram after reassociation]
     \label{thm:whole_increment_mixed_gram}
     \lean{MPSTensor.inner_reassocTailBoundaryMapES_adjoint_leftBoundaryMapES}
     \leanok
     \uses{def:reassociated_tail_boundary_map,
-        thm:whole_increment_mixed_gram_coordinates}
+        thm:spectator_boundary_mixed_gram}
     With the notation of
-    Theorem~\ref{thm:whole_increment_mixed_gram_coordinates},
+    Theorem~\ref{thm:spectator_boundary_mixed_gram},
     \begin{align}
       \left\langle X,
         (\widetilde\Gamma^{\mathrm{tail}}_{K;L,Q})^\dagger
@@ -1018,7 +1001,7 @@ norm estimate is derived here.
     \leanok
     \uses{def:reassociated_tail_boundary_map,
         def:whole_increment_physical_reassociation,
-        thm:whole_increment_mixed_gram_coordinates}
+        thm:spectator_boundary_mixed_gram}
     Expand the reassociated tail map.  Its adjoint introduces
     $\mathscr A_{K,L,Q}^{-1}$, so the preceding coordinate formula applies.
 \end{proof}
