@@ -3216,15 +3216,17 @@ two refusal fixtures `n_atom_up_key.tex` and `n_atom_down_key.tex` pin the
 unknown-key answer as before.
 
 The rows are the ledger's first bare keys whose surviving words live in
-alphabets only the parser states: `up` and `down` remain choice words of
-the `physical=` policy and end words of the `open` wire-end grammar,
-neither spelled by a registry `enum(...)` the way `boundary=` carries the
-word `periodic`. The lint's buried-spelling patterns now read
-those owners from the parser source and step over the live spellings,
-exactly as they step over a live `enum(...)` word, so `physical=up` and
-`open up` stand in case source while a document's `up=$i$` is refused with
-the row's migration. Retiring or admitting a word remains one kernel edit
-and no edit in the lint.
+alphabets only the parsers state: `up` and `down` remain choice words of
+the `physical=` policy, end words of the `open` wire-end grammar, and
+compass faces of the declaration door (`up:physical`), none spelled by a
+registry `enum(...)` the way `boundary=` carries the word `periodic`. The
+lint's buried-spelling patterns now read those owners from the parser
+source and step over the live spellings, exactly as they step over a live
+`enum(...)` word — an owner is a frame, the text standing before or after
+the word — so `physical=up`, `open up`, and `up:physical` stand in case
+source while a document's `up=$i$` is refused with the row's migration.
+Retiring or admitting a word remains one parser edit and no edit in the
+lint.
 
 The announcement draft's gauge figure, the one live spelling of the dead
 keys outside `history/` and the refusal fixtures, is respelled onto typed
