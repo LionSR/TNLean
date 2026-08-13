@@ -324,10 +324,36 @@ STREAM_OPERAND = (
 # Only the primitives that open a file are read. `\write` and `\read` take a
 # stream that is already open and a token list that is data, so a token list
 # beginning with a bar is text and refusing it would refuse a valid release.
+# The operand belongs to the stream primitives alone: `\input` and
+# `\include` take the file name directly, so reading an operand there let
+# `\input 1 {|literal}` — a page of typeset text — count as a pipe.  What
+# `\input` does admit before the name is an expansion that leaves nothing
+# or only whitespace, both of which the filename scanner passes over.
+# The boundary here is a compiled matrix, not a reading of the sources:
+# the finding and innocent shapes in the tests ran under xelatex with
+# -shell-escape (bare, \relax, and engine-shared rows under pdflatex and
+# lualatex too), with a space-free command so an argument-stripped run
+# could not pass for inertness.  The matrix shows `\input` runs a pipe
+# bare, braced, or quoted, with the scan passing over spaces, `\relax`,
+# and every expansion that leaves nothing or whitespace on its way to
+# the name.  That set of expansions is open — any macro may expand
+# blank — so the pre-name position is not enumerated: a pipe behind any
+# run of control words fails closed, the reading the closure walk
+# already gives a macro-supplied stream name.  The shapes that stay
+# innocent are the ones a static reader can trust: a digit starts a
+# real file name, a control space ends the scan, and `\include`
+# absorbs one undelimited argument, so only its braced spelling
+# reaches a pipe.  Inside a braced name the compiled boundary is kept
+# instead: the expandable blanks run, `\relax` ends the name.
+_BLANK_EXPANSIONS = (
+    r"(?:\\(?:space|empty|@empty|c_space_tl|c_empty_tl)(?![A-Za-z@_:])\s*)*"
+)
+_NAME_SCAN_SKIPS = r"(?:\\[A-Za-z@_:]+\s*)*"
 PIPE_FILENAME = re.compile(
-    r"\\(?:openin|openout|input|include)\s*"
-    + STREAM_OPERAND
-    + r"(?:\{\s*)?\"?\s*\|"
+    r"\\open(?:in|out)\s*" + STREAM_OPERAND + r"(?:\{\s*)?\"?\s*\|"
+    r"|\\input\s*" + _NAME_SCAN_SKIPS
+    + r"(?:\{\s*" + _BLANK_EXPANSIONS + r")?\"?\s*\|"
+    r"|\\include\s*\{\s*\"?\s*\|"
 )
 # A file a stream primitive opens for reading is a load: the engine resolves
 # it like any other input, so a closure walk that skipped it would certify an
@@ -483,9 +509,25 @@ GRAPHICS_PATH = re.compile(r"\\graphicspath\s*\{((?:\s*\{[^{}]*\}\s*)+)\}")
 GRAPHICS_DIRECTORY = re.compile(r"\{\s*\"?\s*([^{}]*)\}")
 ABSOLUTE_LOAD = re.compile(
     r"\\(?:input|include|usepackage|RequirePackageWithOptions|RequirePackage"
-    r"|InputIfFileExists|IfFileExists|includegraphics|file_input:n"
-    r"|file_if_exist:nTF|graphicspath)(?:\s*\*)?"
+    r"|InputIfFileExists|IfFileExists|includegraphics"
+    r"|graphicspath)(?:\s*\*)?"
     rf"\s*(?:\[[^]]*\]\s*)?\{{\s*\{{?\s*\"?{ABSOLUTE_PATH_HEAD}"
+    # The existence conditional is read as a family: every signature
+    # variant asks the same machine-local question, and the predicate form
+    # spells an underscore-p before its colon.  The variants are the ones
+    # expl3 can define — one argument specifier, then the conditional's
+    # TF/T/F tail or the bare predicate — so a different macro whose
+    # suffix merely reuses these letters is not the conditional.  The
+    # expl3 names take no star and no optional argument, so neither is
+    # read: a star after the signature is the file name TeX scans.  Only
+    # the specifiers that pass their braced text through as the name are
+    # read against a literal path: v and c name a variable or a command
+    # whose value is the real argument, so a literal there is a name,
+    # not a path.  N passes its braced text through unexpanded, and a
+    # doubled brace group reaches the file test as the inner group.
+    r"|\\(?:file_input:n"
+    r"|file_if_exist(?:_p:[Nnoxef]|:[Nnoxef](?:TF|T|F)))"
+    rf"\s*\{{\s*\{{?\s*\"?{ABSOLUTE_PATH_HEAD}"
     rf"|\\input\s*\"?{ABSOLUTE_PATH_HEAD}"
     rf"|\\open(?:in|out)\s*{STREAM_OPERAND}\"?{ABSOLUTE_PATH_HEAD}"
     r"|\\(?:ior_open|iow_open|file_get|file_get_full_name"
