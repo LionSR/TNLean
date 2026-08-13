@@ -3199,3 +3199,38 @@ points at `form=bracket`.
 | flag | verdict |
 |---|---|
 | flag:consumers:key:kernel-mark:form | tombstoned in part: the four words that took a record and drew nothing leave the parser today, the alphabet standing at `bracket`, `enclosure`, `label` with the recording `prose` row the sugar ledger keeps; the key itself has consumers and stays kernel, so this executes the session-1 verdict rather than deferring it again; permanent |
+
+### 2026-08-13 — the dead face keys get their tombstone rows
+
+The typed-port landing (2026-08-03, #5191) removed the atom keys `up=` and
+`down=` from the parser and moved the census, but wrote no tombstone rows.
+A reader of an old document met a bare unknown-key error with no migration,
+and the ledger's own rule — a retired spelling is recorded once, in the
+registry, and everything that must refuse it reads the row — held for every
+retirement except this one. The registry now carries the two bare rows,
+saying what the contract's section 10 has said since the landing: the
+outward physical face is the row's own normal, spelled `ports=` with
+`90:physical` for `up=` and `270:physical` for `down=`, the label riding
+the port; the `physical=` policy grows the unlabelled port per cell. The
+two refusal fixtures `n_atom_up_key.tex` and `n_atom_down_key.tex` pin the
+unknown-key answer as before.
+
+The rows are the ledger's first bare keys whose surviving words live in
+alphabets only the parsers state: `up` and `down` remain choice words of
+the `physical=` policy, end words of the `open` wire-end grammar, and
+compass faces of the declaration door (`up:physical`), none spelled by a
+registry `enum(...)` the way `boundary=` carries the word `periodic`. The
+lint's buried-spelling patterns now read those owners from the parser
+source and step over the live spellings, exactly as they step over a live
+`enum(...)` word — an owner is a frame, the text standing before or after
+the word — so `physical=up`, `open up`, and `up:physical` stand in case
+source while a document's `up=$i$` is refused with the row's migration.
+Retiring or admitting a word remains one parser edit and no edit in the
+lint.
+
+The announcement draft's gauge figure, the one live spelling of the dead
+keys outside `history/` and the refusal fixtures, is respelled onto typed
+ports in the blueprint's own form; the respelled panels compile and both
+expose the boundary signature the surrounding prose asserts.
+
+Meters unchanged: the census counts key rows, and these are tombstones.
