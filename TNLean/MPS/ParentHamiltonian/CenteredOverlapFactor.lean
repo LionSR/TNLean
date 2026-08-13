@@ -431,8 +431,8 @@ noncomputable def wholeIncrementCenteredResidualES
       ((boundaryFiberwiseMap (D := D) (Cfg d K × Cfg d Q) Kinf).comp
         (wholeIncrementRightOverlapFactorES A K Q))
 
-/-- The whole-increment centered residual factors through the finite Gram error
-`groundSpaceGram A L - Kinf` in the exact common ambient. -/
+/-- The whole-increment centered residual factors through the finite Gram difference
+\(\mathcal K_L-\mathcal K_\infty\) in the exact common ambient. -/
 theorem wholeIncrementCenteredResidualES_eq_overlapFactors
     (A : MPSTensor d D) (K L Q : ℕ)
     (ρ : Matrix (Fin D) (Fin D) ℂ) (htr : Matrix.trace ρ ≠ 0) :
