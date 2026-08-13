@@ -33,6 +33,10 @@ boundary-map ranges on \(3p\) original sites, rather than with an original one-s
 * `MPSTensor.groundSpaceES_blockTensor_map` — exact transport of the local ground space.
 * `MPSTensor.starProjection_groundSpaceES_blockTensor_map_apply` — pointwise conjugacy of
   the orthogonal ground-space projectors.
+* `MPSTensor.starProjection_groundSpaceES_blockTensor_conj` — operator-level projector
+  conjugacy for an arbitrary number of blocked sites.
+* `MPSTensor.starProjection_groundSpaceES_three_blockTensor_conj` — operator-level projector
+  conjugacy for three blocked sites.
 
 ## References
 
