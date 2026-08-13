@@ -14,15 +14,24 @@
 \begin{document}
 \maketitle
 
-\section{Printed comparisons}
+\section{Source statements and derived comparisons}
 
 Example~4.10 of Cirac--Perez-Garcia--Schuch--Verstraete
-(\path{Papers/1606.00608/MPDO-22-12-17-2.tex:897--905}) prints a four-site
-calculation whose entropy comparison reduces to the strict inequality
+(\path{Papers/1606.00608/MPDO-22-12-17-2.tex:897--905}) prints a channel with
+a repeated left-qubit label, four decimal entropy values, and the claim that
+the mutual information does not saturate except at the stated exceptional
+probabilities.  It prints no exact ratio or integer comparison.  Replacing the
+repeated label by the network-consistent left-right correlated flip and setting
+$p=1/4$ reproduces the decimal entropies and gives the independently derived
+comparison
 \[
   2^{32}7^7>3^3 5^{20}.
 \]
-Lines~907--924 print instead an arbitrary-length family for Example~4.11, its
+The corrected channel, reduced spectra, and logarithmic reduction are recorded
+in \path{docs/paper-gaps/cpsv16_examples_4_10_4_11_entropy.tex}, not in the
+source paper.
+
+Lines~907--924 print an arbitrary-length family for Example~4.11, its
 diagonal bond weights, and the claim that it satisfies saturation of the area
 law but not zero correlation length.  They contain no four-site specialization,
 reduced spectra, entropy values, or exact integer comparison.

@@ -9,9 +9,8 @@ import Mathlib.Tactic.NormNum
 /-!
 # Exact arithmetic for CPSV16 Examples 4.10 and 4.11
 
-The printed four-site calculation in CPSV16 Example 4.10 and the independently
-derived four-site specialization of the family in Example 4.11 lead to the
-strict integer comparisons
+Independent exact four-site derivations associated with CPSV16 Examples 4.10
+and 4.11 lead to the strict integer comparisons
 \[
   2^{32}7^7>3^3 5^{20}
 \]
@@ -31,15 +30,14 @@ These scalar results do not identify reduced-state spectra and do not assert
 saturation or failure of an area law. Such conclusions require separate formal
 links from the printed tensors to the corresponding entropy expressions.
 
-**Scope restriction:** See `docs/paper-gaps/cpsv16_exact_arithmetic_scope.tex`;
-this module certifies only scalar arithmetic endpoints, not entropy
-statements, and records the boundary between the printed Example 4.10
-calculation and the derived four-site specialization of Example 4.11.
+**Scope restriction (scalar, not entropy):** See docs/paper-gaps/cpsv16_exact_arithmetic_scope.tex.
+
+**Local fix (channel):** Left-right flip. See docs/paper-gaps/cpsv16_examples_4_10_4_11_entropy.tex.
 
 ## Main results
 
-* `example410_integer_inequality`: the exact integer comparison associated with
-  the four-site calculation for Example 4.10.
+* `example410_integer_inequality`: the exact integer comparison derived from the
+  corrected four-site calculation for Example 4.10 at flip probability one quarter.
 * `example411_integer_inequality`: the exact integer comparison associated with
   the derived four-site specialization of Example 4.11.
 * `example410_log_ratio_pos`: positivity of the first logarithmic ratio.
@@ -48,17 +46,22 @@ calculation and the derived four-site specialization of Example 4.11.
 ## References
 
 * Cirac--Perez-Garcia--Schuch--Verstraete, arXiv:1606.00608, Example 4.10,
-  lines 897--905, and the arbitrary-length family of Example 4.11, lines 907--924.
-* `docs/paper-gaps/cpsv16_examples_4_10_4_11_entropy.tex`, for the independent
-  four-site specialization and entropy calculation for Example 4.11.
+  lines 897--905, for the repeated-label channel, decimal entropies, and printed
+  claim; and Example 4.11, lines 907--924, for its arbitrary-length family.
+* `docs/paper-gaps/cpsv16_examples_4_10_4_11_entropy.tex`, for both independent
+  exact four-site derivations.
 -/
 
 namespace CPSVExamples410411Arithmetic
 
-/-- The strict integer comparison arising in the exact four-site calculation
-for CPSV16 Example 4.10.
+/-- The strict integer comparison arising from the exact four-site calculation
+for the corrected left-right channel in CPSV16 Example 4.10 at flip probability
+one quarter.
 
-Source: CPSV16, arXiv:1606.00608, Example 4.10, lines 897--905. -/
+Source: the independent derivation recorded in
+`docs/paper-gaps/cpsv16_examples_4_10_4_11_entropy.tex`. The source paper,
+arXiv:1606.00608, Example 4.10, lines 897--905, prints only the repeated-label
+channel, decimal entropies, and its qualitative claim. -/
 theorem example410_integer_inequality :
     (2 : ℕ) ^ 32 * 7 ^ 7 > 3 ^ 3 * 5 ^ 20 := by
   norm_num
@@ -74,13 +77,17 @@ theorem example411_integer_inequality :
     (41 : ℕ) ^ 82 * 5 ^ 50 > 2 ^ 48 * 13 ^ 52 * 7 ^ 112 := by
   norm_num
 
-/-- The logarithm of the exact ratio associated with CPSV16 Example 4.10 is
-strictly positive.
+/-- The logarithm of the exact ratio derived from the corrected left-right
+channel in CPSV16 Example 4.10 at flip probability one quarter is strictly
+positive.
 
 This is only a scalar arithmetic statement; it does not identify the ratio with
 an entropy difference.
 
-Source: CPSV16, arXiv:1606.00608, Example 4.10, lines 897--905. -/
+Source: the independent derivation recorded in
+`docs/paper-gaps/cpsv16_examples_4_10_4_11_entropy.tex`. The source paper,
+arXiv:1606.00608, Example 4.10, lines 897--905, prints only the repeated-label
+channel, decimal entropies, and its qualitative claim. -/
 theorem example410_log_ratio_pos :
     0 < Real.log (((2 : ℝ) ^ 32 * 7 ^ 7) / (3 ^ 3 * 5 ^ 20)) := by
   apply Real.log_pos
