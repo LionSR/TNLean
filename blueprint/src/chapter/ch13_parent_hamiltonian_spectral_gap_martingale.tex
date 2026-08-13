@@ -353,7 +353,8 @@ norm estimate is derived here.
     \lean{MPSTensor.tailBoundaryMapES_comp_tailVirtualMapES}
     \lean{MPSTensor.leftBoundaryMapES_comp_leftVirtualMapES}
     \leanok
-    \uses{thm:tail_boundary_map_range_es_transport,thm:left_boundary_map_range_es_transport,
+    \uses{def:spectator_boundary_maps_es,
+      thm:tail_boundary_map_range_es_transport,thm:left_boundary_map_range_es_transport,
       thm:tail_boundary_map_factorization,thm:left_boundary_map_factorization}
     Equip each virtual matrix fiber with the unweighted Hilbert--Schmidt inner
     product and flatten the finite family of fibers into a Euclidean space.
@@ -368,7 +369,8 @@ norm estimate is derived here.
 \end{theorem}
 \begin{proof}
     \leanok
-    \uses{thm:tail_boundary_map_range_es_transport,thm:left_boundary_map_range_es_transport,
+    \uses{def:spectator_boundary_maps_es,
+      thm:tail_boundary_map_range_es_transport,thm:left_boundary_map_range_es_transport,
       thm:tail_boundary_map_factorization,thm:left_boundary_map_factorization}
     Transport the algebraic range descriptions through the Euclidean
     identification.  The two factorization identities follow by evaluating a
