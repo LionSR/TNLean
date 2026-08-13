@@ -166,7 +166,9 @@ private lemma trace_weightMatrix_pow_eq_trace_eigenvalueMatrix_pow (N : ℕ) :
 printed diagonal neighboring operators has the closed form
 `(3^N + 1) / 2^N`.
 
-Source: arXiv:1606.00608, Example 4.11, lines 907--924. -/
+Project derivation from the neighboring operators printed in arXiv:1606.00608,
+Example 4.11, lines 907--924; see
+`docs/paper-gaps/cpsv16_examples_4_10_4_11_entropy.tex`. -/
 theorem trace_weightMatrix_pow (N : ℕ) :
     Matrix.trace (weightMatrix ^ N) = ((3 : ℂ) ^ N + 1) / (2 : ℂ) ^ N := by
   rw [trace_weightMatrix_pow_eq_trace_eigenvalueMatrix_pow,
@@ -180,7 +182,9 @@ theorem trace_weightMatrix_pow (N : ℕ) :
 
 /-- The exact positive-length normalization of the effective binary model.
 
-Source: arXiv:1606.00608, Example 4.11, lines 907--924. -/
+Project derivation from the neighboring operators printed in arXiv:1606.00608,
+Example 4.11, lines 907--924; see
+`docs/paper-gaps/cpsv16_examples_4_10_4_11_entropy.tex`. -/
 theorem partitionFunction_closed_form {N : ℕ} [NeZero N] :
     partitionFunction N = ((3 : ℂ) ^ N + 1) / (2 : ℂ) ^ N := by
   rw [partitionFunction_eq_trace_pow, trace_weightMatrix_pow]

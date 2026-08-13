@@ -1096,9 +1096,7 @@ This is the calculation in
         MPOTensor.CPSVExample411BinarySupport.trace_weightMatrix_pow,
         MPOTensor.CPSVExample411BinarySupport.partitionFunction_closed_form}
     \leanok
-    \uses{def:cpsv_example411_binary_support_model,
-        thm:mpdo_cyclic_edge_weight_tensor,
-        thm:mpdo_trace_pow_cyclic_product}
+    \uses{def:cpsv_example411_binary_support_model}
     For every positive $N$ and binary words $\sigma,\tau$,
     \begin{align}
         \operatorname{mpo}(M,N)_{\sigma,\tau}
@@ -1110,6 +1108,20 @@ This is the calculation in
     not assert spectra, entropy, saturation of the area law, zero correlation
     length, or equivalence with the ambient physical-dimension-$4$ tensor.
 \end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:mpdo_cyclic_edge_weight_tensor,
+        thm:mpdo_trace_pow_cyclic_product}
+    The closed cyclic-edge identity reduces each matrix entry to a product of
+    local edge coefficients.  Ket--bra diagonality makes the product vanish
+    unless $\sigma=\tau$, and in the diagonal case the product is
+    $c_N(\sigma)$.  Summing these cycle weights and applying the cyclic
+    trace-power identity gives $Z_N=\operatorname{tr}(W^N)$.  Finally, the
+    Hadamard basis diagonalizes $W$ with eigenvalues $3/2$ and $1/2$, so
+    cyclicity of the trace gives
+    $\operatorname{tr}(W^N)=(3/2)^N+(1/2)^N=(3^N+1)/2^N$.
+\end{proof}
 
 % CPSV16 Example 4.12, lines 932--939.
 % Normalization gap: docs/paper-gaps/cpsv16_example_4_12_normalization.tex.
