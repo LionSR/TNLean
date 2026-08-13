@@ -333,6 +333,19 @@ norm estimate is derived here.
     $\mathcal U_K(A)$.
 \end{proof}
 
+\begin{definition}[Euclidean spectator boundary maps]
+    \label{def:spectator_boundary_maps_es}
+    \lean{MPSTensor.tailBoundaryMapES, MPSTensor.leftBoundaryMapES}
+    \leanok
+    \uses{def:tail_boundary_map, def:left_boundary_map,
+        def:frobenius_vectorization}
+    Transport the tail and left boundary maps through the canonical Euclidean
+    identifications on their virtual matrix families and physical coefficient
+    spaces.  Denote the resulting continuous maps by
+    $\Gamma^{\mathrm{tail}}_{K,L}$ and
+    $\Gamma^{\mathrm{left}}_{K,L}$.
+\end{definition}
+
 \begin{theorem}[Euclidean spectator boundary ranges and factorizations]%
     \label{thm:spectator_boundary_hilbert_factorization}
     \lean{MPSTensor.range_tailBoundaryMapES}
@@ -367,14 +380,15 @@ norm estimate is derived here.
     \label{thm:left_boundary_map_es_injective}
     \lean{MPSTensor.leftBoundaryMapES_injective_of_groundSpaceMapES_injective}
     \leanok
-    \uses{def:left_boundary_map}
+    \uses{def:ground_space_map_es, def:spectator_boundary_maps_es}
     If the length-$K$ ground-space map is injective, then the left boundary map
     with any spectator length $L$ is injective.
 \end{theorem}
 
 \begin{proof}
     \leanok
-    \uses{def:left_boundary_map}
+    \uses{def:ground_space_map_es, def:spectator_boundary_maps_es,
+        thm:ground_space_map_es_frobenius, def:prefix_restrict}
     Recover every spectator fiber by restricting to its fixed suffix and use
     injectivity of the length-$K$ ground-space map.
 \end{proof}
