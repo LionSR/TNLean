@@ -13,12 +13,12 @@ import Mathlib.LinearAlgebra.Matrix.DotProduct
 # Kramers degeneracy
 
 Wolf, *Quantum Channels & Operations*, Chapter 3, states Kramers' theorem for a
-Hermitian `H` commuting with an antiunitary `T` of square `-1`: every eigenvalue of
-`H` is at least two-fold degenerate.  Wolf reduces the statement to matrices in the
-same breath: writing `T = Γ V` with `Γ` complex conjugation and `V` unitary, the
-commutation `[H, T] = 0` becomes `H Vᴴ = Vᴴ Hᵀ` and the condition `T² = -1` becomes
-antisymmetry `Vᵀ = -V`.  This file formalizes Wolf's reduced matrix form, which is
-what his printed proof actually manipulates.
+Hermitian $H$ commuting with an antiunitary $T$ of square $-1$: every eigenvalue of
+$H$ is at least two-fold degenerate.  Wolf reduces the statement to matrices in the
+same breath: writing $T = \Gamma V$ with $\Gamma$ complex conjugation and $V$ unitary,
+the commutation $[H, T] = 0$ becomes $H V^\dagger = V^\dagger H^T$ and the condition
+$T^2 = -1$ becomes antisymmetry $V^T = -V$.  This file formalizes Wolf's reduced
+matrix form, which is what his printed proof actually manipulates.
 
 Degeneracy is expressed as `2 ≤ Module.finrank ℂ (Module.End.eigenspace H.toLin' μ)`.
 Wolf's proof exhibits two orthogonal eigenvectors for the same eigenvalue, so the
@@ -26,7 +26,7 @@ dimension of the eigenspace is the invariant his argument bounds; the geometric
 multiplicity of a Hermitian matrix also agrees with the algebraic one, so nothing is
 lost against the phrase "two-fold degenerate".
 
-## Main declarations
+## Main results
 
 * `Matrix.dotProduct_mulVec_self_eq_zero_of_transpose_eq_neg`: the quadratic form of an
   antisymmetric complex matrix vanishes identically.
@@ -62,7 +62,7 @@ theorem dotProduct_mulVec_self_eq_zero_of_transpose_eq_neg {M : Matrix n n ℂ}
   simpa using htwo
 
 /-- Two nonzero orthogonal vectors are linearly independent. -/
-theorem linearIndependent_pair_of_dotProduct_star_eq_zero {u v : n → ℂ} (hu : u ≠ 0)
+private theorem linearIndependent_pair_of_dotProduct_star_eq_zero {u v : n → ℂ} (hu : u ≠ 0)
     (hv : v ≠ 0) (huv : star u ⬝ᵥ v = 0) : LinearIndependent ℂ ![u, v] := by
   rw [LinearIndependent.pair_iff' hu]
   intro a hav
@@ -109,20 +109,23 @@ private theorem conj_eq_self_of_hasEigenvalue {H : Matrix n n ℂ} (hH : H.IsHer
 /-- **Kramers' theorem** (Wolf, *Quantum Channels & Operations*, §3, line 503), in Wolf's own
 matrix reduction of the antiunitary statement.
 
-Wolf states the theorem for a Hermitian `H` and an antiunitary `T` with `[H, T] = 0` and
-`T² = -1`, and immediately rewrites both hypotheses in matrix terms: with `T = Γ V` for `Γ`
-complex conjugation and `V` unitary, commutation is `H Vᴴ = Vᴴ Hᵀ` and `T² = -1` is
-antisymmetry `Vᵀ = -V`.  Those two matrix identities, together with `Vᴴ V = 1`, are the
-hypotheses below, so the statement is Wolf's with the antiunitary rewritten exactly as he
-rewrites it; no further hypothesis is imposed.
+Wolf states the theorem for a Hermitian $H$ and an antiunitary $T$ with $[H, T] = 0$ and
+$T^2 = -1$, and immediately rewrites both hypotheses in matrix terms: with $T = \Gamma V$
+for $\Gamma$ complex conjugation and $V$ unitary, commutation is
+$H V^\dagger = V^\dagger H^T$ and $T^2 = -1$ is antisymmetry $V^T = -V$.  Those two matrix
+identities, together with $V^\dagger V = 1$, are the hypotheses below, so the statement is
+Wolf's with the antiunitary rewritten exactly as he rewrites it; no further hypothesis is
+imposed.
 
 "At least two-fold degenerate" is `2 ≤ Module.finrank ℂ (Module.End.eigenspace H.toLin' μ)`:
 Wolf's proof produces a second eigenvector orthogonal to the first, so the eigenspace
 dimension is what the argument bounds.
 
-The proof is Wolf's.  From `H ψ = μ ψ` the vector `φ = Vᴴ star ψ` satisfies
-`H φ = Vᴴ Hᵀ star ψ = μ φ`; it is nonzero because `V` is unitary; and `⟨ψ, φ⟩ = 0` because
-the quadratic form of the antisymmetric matrix `Vᴴ` vanishes. -/
+The proof is Wolf's.  From $H \psi = \mu \psi$ the vector
+$\varphi = V^\dagger \overline{\psi}$ satisfies
+$H \varphi = V^\dagger H^T \overline{\psi} = \mu \varphi$; it is nonzero because $V$ is
+unitary; and $\langle \psi, \varphi \rangle = 0$ because the quadratic form of the
+antisymmetric matrix $V^\dagger$ vanishes. -/
 theorem two_le_finrank_eigenspace_of_antisymmetric_unitary {H V : Matrix n n ℂ}
     (hH : H.IsHermitian) (hVunit : Vᴴ * V = 1) (hHV : H * Vᴴ = Vᴴ * Hᵀ) (hVanti : Vᵀ = -V)
     {μ : ℂ} (hμ : Module.End.HasEigenvalue (Matrix.toLin' H) μ) :
