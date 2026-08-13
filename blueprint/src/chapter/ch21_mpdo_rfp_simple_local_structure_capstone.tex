@@ -1390,7 +1390,9 @@ This is the calculation in
 
 \begin{proof}
     \leanok
-    \uses{thm:cpsv_example411_length_four_effective_spectra}
+    \uses{thm:cpsv_example411_binary_support_normalization,
+        thm:cpsv_example411_length_four_effective_spectra,
+        lem:entropy_charpoly_roots}
     Every positive-length periodic operator is diagonal, and each diagonal
     entry is a product of entries of
     $W=\left(\begin{smallmatrix}1&1/2\\1/2&1\end{smallmatrix}\right)$, hence is
@@ -1398,6 +1400,27 @@ This is the calculation in
     multiplicities in
     Theorem~\ref{thm:cpsv_example411_length_four_effective_spectra} gives the
     displayed entropy.
+\end{proof}
+
+% Project-derived scalar certificate for CPSV16 Example 4.11.
+% See docs/paper-gaps/cpsv16_examples_4_10_4_11_entropy.tex.
+\begin{theorem}[Positivity of the Example 4.11 logarithmic ratio]
+    \label{thm:cpsv_example411_log_ratio_pos}
+    \lean{CPSVExamples410411Arithmetic.example411_log_ratio_pos}
+    \leanok
+    The exact scalar ratio from the four-site calculation satisfies
+    \[
+      \log\!\left(
+        \frac{41^{82}5^{50}}{2^{48}13^{52}7^{112}}
+      \right)>0.
+    \]
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    The numerator is strictly larger than the denominator, as follows by an
+    exact integer calculation, so the ratio is greater than one and its
+    logarithm is strictly positive.
 \end{proof}
 
 \begin{theorem}[Exact length-four mutual-information obstruction]
@@ -1421,7 +1444,8 @@ This is the calculation in
 
 \begin{proof}
     \leanok
-    \uses{thm:cpsv_example411_length_four_effective_entropies}
+    \uses{thm:cpsv_example411_length_four_effective_entropies,
+        thm:cpsv_example411_log_ratio_pos}
     Since $I_2-I_1=2S_2-S_1-S_3$, expanding
     $h(x)=-x\log x$ and using the logarithm rules gives the displayed identity.
     The certified comparison
@@ -1429,8 +1453,8 @@ This is the calculation in
     Saturation would instead require $I_1=I_2$ on the four-site ring.
 \end{proof}
 
-\begin{corollary}[Ambient length-four saturation obstruction]
-    \label{cor:cpsv_example411_ambient_not_sal}
+\begin{theorem}[Ambient length-four saturation obstruction]
+    \label{thm:cpsv_example411_ambient_not_sal}
     \lean{MPOTensor.CPSVExample411Entropy.ambientM_not_isSAL}
     \leanok
     \uses{def:cpsv_example411_ambient_support_inclusion,
@@ -1438,7 +1462,7 @@ This is the calculation in
         thm:mpdo_sal_physical_isometry_transport}
     The isometric inclusion of the effective binary tensor into the
     two-qubit one-site space does not satisfy saturation of the area law.
-\end{corollary}
+\end{theorem}
 
 \begin{proof}
     \leanok
