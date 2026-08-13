@@ -64,7 +64,8 @@ theorem reducedProjection_range_triple {P Q : E →ₗ[ℂ] E}
   rw [hcomp, hAadj] at h
   exact h
 
-/-- The first source identity: `P.comp (reducedProjection P Q) = reducedProjection P Q`. -/
+/-- Property (i) of arXiv:1703.09188, Proposition IV.5, line 767:
+`P.comp (reducedProjection P Q) = reducedProjection P Q`. -/
 theorem comp_reducedProjection {P Q : E →ₗ[ℂ] E}
     (hP : P.IsSymmetricProjection) :
     P.comp (reducedProjection P Q) = reducedProjection P Q := by
@@ -74,7 +75,8 @@ theorem comp_reducedProjection {P Q : E →ₗ[ℂ] E}
   rw [range_reducedProjection] at hx
   exact LinearMap.range_comp_le_range Q P hx
 
-/-- The second source identity: `(reducedProjection P Q).comp Q = P.comp Q`. -/
+/-- Property (ii) of arXiv:1703.09188, Proposition IV.5, line 768:
+`(reducedProjection P Q).comp Q = P.comp Q`. -/
 theorem reducedProjection_comp {P Q : E →ₗ[ℂ] E}
     (hP : P.IsSymmetricProjection) :
     (reducedProjection P Q).comp Q = P.comp Q := by
@@ -91,7 +93,8 @@ theorem reducedProjection_comp {P Q : E →ₗ[ℂ] E}
     rw [show P (P (Q x)) = P (Q x) by simpa [Module.End.mul_apply] using hPx,
       sub_self, inner_zero_left]
 
-/-- The third source identity: `Q.comp P = Q.comp (reducedProjection P Q)`. -/
+/-- Property (iii) of arXiv:1703.09188, Proposition IV.5, line 769:
+`Q.comp P = Q.comp (reducedProjection P Q)`. -/
 theorem comp_reducedProjection_left {P Q : E →ₗ[ℂ] E}
     (hP : P.IsSymmetricProjection) (hQ : Q.IsSymmetricProjection) :
     Q.comp P = Q.comp (reducedProjection P Q) := by
