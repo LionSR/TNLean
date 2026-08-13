@@ -39,7 +39,6 @@ type, which is what a matrix whose rows are labelled by pairs requires.
 -/
 
 open scoped BigOperators Matrix ComplexOrder
-open Matrix Finset
 
 /-- **Arithmetic–geometric mean inequality in product/sum form** over an
 arbitrary finite index type `n`: for a nonnegative family `f : n → ℝ`,
@@ -48,7 +47,7 @@ lemma pow_card_mul_prod_le_sum_pow' {n : Type*} [Fintype n] (f : n → ℝ)
     (hf : ∀ i, 0 ≤ f i) :
     (Fintype.card n : ℝ) ^ Fintype.card n * ∏ i, f i ≤ (∑ i, f i) ^ Fintype.card n := by
   classical
-  set e : Fin (Fintype.card n) ≃ n := (Fintype.equivFin n).symm with he
+  set e : Fin (Fintype.card n) ≃ n := (Fintype.equivFin n).symm
   have hprod : ∏ i, f i = ∏ j : Fin (Fintype.card n), f (e j) := (e.prod_comp f).symm
   have hsum : ∑ i, f i = ∑ j : Fin (Fintype.card n), f (e j) := (e.sum_comp f).symm
   rw [hprod, hsum]

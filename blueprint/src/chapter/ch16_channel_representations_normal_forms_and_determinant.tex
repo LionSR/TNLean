@@ -334,14 +334,16 @@ This section states the existence theorems from
     Matrix.PosSemidef.pow_card_mul_det_re_le_trace_re_pow'}
     \leanok
     \uses{lem:amgm_prod_sum}
-    For a positive-semidefinite matrix $M$ whose rows and columns are indexed
-    by a finite set with $D$ elements,
+    For a positive-semidefinite $D \times D$ matrix $M$,
     \begin{align}
         D^{D}\det M
         &\leq(\tr M)^{D},
         \label{eq:representations_trace_det_amgm}
     \end{align}
-    and equality holds if and only if $M=(\tr M/D)\Id$.
+    and equality holds if and only if $M=(\tr M/D)\Id$. The inequality holds
+    for a positive-semidefinite matrix whose rows and columns are indexed by
+    any finite set with $D$ elements; the equality characterization is stated
+    only for $D \times D$ matrices.
 \end{lemma}
 
 \begin{proof}\leanok
@@ -349,8 +351,10 @@ This section states the existence theorems from
     $\tr M=\sum_{i}\lambda_{i}$ are expressed through the non-negative
     eigenvalues $\lambda_i$ of $M$. The bound is the
     arithmetic--geometric-mean inequality with uniform weights $1/D$, raised
-    to the $D$-th power; equality holds exactly when all eigenvalues coincide,
-    that is, when $M$ is a scalar matrix.
+    to the $D$-th power; for a $D \times D$ matrix, equality holds exactly
+    when all eigenvalues coincide, that is, when $M$ is a scalar matrix.
+    Relabelling the index set along a bijection to $\{0,\ldots,D-1\}$ carries
+    the inequality to an arbitrary finite index set.
 \end{proof}
 
 % Lean: Wolf.exists_normal_form_generic
