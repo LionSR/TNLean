@@ -297,12 +297,14 @@ This section states the existence theorems from
     so the minimiser on the compact set is a global minimiser.
 \end{proof}
 
-% Lean: pow_card_mul_prod_le_sum_pow
+% Lean: pow_card_mul_prod_le_sum_pow, pow_card_mul_prod_le_sum_pow'
 \begin{lemma}[Arithmetic--geometric-mean inequality, product/sum form]
 \label{lem:amgm_prod_sum}
-    \lean{pow_card_mul_prod_le_sum_pow}
+    \lean{pow_card_mul_prod_le_sum_pow, pow_card_mul_prod_le_sum_pow'}
     \leanok
-    For a non-negative family $f_{0},\ldots,f_{D-1}$ of real numbers,
+    For a non-negative family $f_{0},\ldots,f_{D-1}$ of real numbers, or more
+    generally for a non-negative family indexed by a finite set with $D$
+    elements,
     \begin{align}
         D^{D}\prod_{i}f_{i}
         &\leq\left(\sum_{i}f_{i}\right)^{D}.
@@ -323,11 +325,13 @@ This section states the existence theorems from
 \end{proof}
 
 % Lean: Matrix.PosSemidef.pow_card_mul_det_re_le_trace_re_pow,
-% Matrix.PosSemidef.pow_card_mul_det_re_eq_trace_re_pow_iff
+% Matrix.PosSemidef.pow_card_mul_det_re_eq_trace_re_pow_iff,
+% Matrix.PosSemidef.pow_card_mul_det_re_le_trace_re_pow'
 \begin{lemma}[Trace--determinant AM--GM for positive-semidefinite matrices]
 \label{lem:trace_det_amgm}
     \lean{Matrix.PosSemidef.pow_card_mul_det_re_le_trace_re_pow,
-    Matrix.PosSemidef.pow_card_mul_det_re_eq_trace_re_pow_iff}
+    Matrix.PosSemidef.pow_card_mul_det_re_eq_trace_re_pow_iff,
+    Matrix.PosSemidef.pow_card_mul_det_re_le_trace_re_pow'}
     \leanok
     \uses{lem:amgm_prod_sum}
     For a positive-semidefinite $D \times D$ matrix $M$,
@@ -336,7 +340,10 @@ This section states the existence theorems from
         &\leq(\tr M)^{D},
         \label{eq:representations_trace_det_amgm}
     \end{align}
-    and equality holds if and only if $M=(\tr M/D)\Id$.
+    and equality holds if and only if $M=(\tr M/D)\Id$. The inequality holds
+    for a positive-semidefinite matrix whose rows and columns are indexed by
+    any finite set with $D$ elements; the equality characterization is stated
+    only for $D \times D$ matrices.
 \end{lemma}
 
 \begin{proof}\leanok
@@ -344,8 +351,10 @@ This section states the existence theorems from
     $\tr M=\sum_{i}\lambda_{i}$ are expressed through the non-negative
     eigenvalues $\lambda_i$ of $M$. The bound is the
     arithmetic--geometric-mean inequality with uniform weights $1/D$, raised
-    to the $D$-th power; equality holds exactly when all eigenvalues coincide,
-    that is, when $M$ is a scalar matrix.
+    to the $D$-th power; for a $D \times D$ matrix, equality holds exactly
+    when all eigenvalues coincide, that is, when $M$ is a scalar matrix.
+    Relabelling along a bijection with the index set of a $D \times D$ matrix
+    carries the inequality to an arbitrary finite index set of $D$ elements.
 \end{proof}
 
 % Lean: Wolf.exists_normal_form_generic
