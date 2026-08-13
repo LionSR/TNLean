@@ -38,6 +38,22 @@ private theorem sqrt_mul_sqrt_le_of_le {a b B : ℝ} (hB : 0 ≤ B)
         (Real.sqrt_nonneg _) (Real.sqrt_nonneg _)
     _ = B := Real.mul_self_sqrt hB
 
+/-- The norm of four successively subtracted terms is bounded by four times a
+common bound. -/
+private theorem norm_sub_sub_sub_le_four_mul
+    {E : Type*} [SeminormedAddGroup E] {a b c d : E} {B : ℝ}
+    (ha : ‖a‖ ≤ B) (hb : ‖b‖ ≤ B) (hc : ‖c‖ ≤ B) (hd : ‖d‖ ≤ B) :
+    ‖a - b - c - d‖ ≤ 4 * B := by
+  calc
+    ‖a - b - c - d‖ ≤ ‖a‖ + ‖b‖ + ‖c‖ + ‖d‖ := by
+      calc
+        _ ≤ ‖a - b - c‖ + ‖d‖ := norm_sub_le _ _
+        _ ≤ (‖a - b‖ + ‖c‖) + ‖d‖ := by gcongr; exact norm_sub_le _ _
+        _ ≤ ((‖a‖ + ‖b‖) + ‖c‖) + ‖d‖ := by gcongr; exact norm_sub_le _ _
+        _ = _ := by ring
+    _ ≤ B + B + B + B := by gcongr
+    _ = 4 * B := by ring
+
 /-- A moving geometric denominator is bounded by the denominator at the base
 length. -/
 private theorem inverse_one_sub_geometric_le_base {c r : ℝ} (hc : 0 < c)
@@ -503,46 +519,8 @@ theorem IsPrimitiveMPS.wholeIncrement_groundProjection_defect_le_geometric
     rw [wholeIncrement_injectiveRangeProjector_residual_eq_centered_sub_corrections
       A K L Q ρ hρ hLocalTail hLocalLeft hFull]
     calc
-      _ ≤ ‖wholeIncrementCenteredProjectorResidualES A K L Q ρ hρ
-              hLocalTail hLocalLeft‖ +
-          ‖wholeIncrementTailFiniteGramCorrectionES A K L Q ρ hρ
-            hLocalTail hFull‖ +
-          ‖wholeIncrementFullInverseGramCorrectionES A K L Q ρ hρ
-            hLocalTail hFull‖ +
-          ‖wholeIncrementLeftFiniteGramCorrectionES A K L Q ρ hρ
-            hLocalTail hLocalLeft‖ := by
-        calc
-          _ ≤ ‖wholeIncrementCenteredProjectorResidualES A K L Q ρ hρ
-                hLocalTail hLocalLeft -
-              wholeIncrementTailFiniteGramCorrectionES A K L Q ρ hρ
-                hLocalTail hFull -
-              wholeIncrementFullInverseGramCorrectionES A K L Q ρ hρ
-                hLocalTail hFull‖ +
-              ‖wholeIncrementLeftFiniteGramCorrectionES A K L Q ρ hρ
-                hLocalTail hLocalLeft‖ := norm_sub_le _ _
-          _ ≤ (‖wholeIncrementCenteredProjectorResidualES A K L Q ρ hρ
-                hLocalTail hLocalLeft -
-              wholeIncrementTailFiniteGramCorrectionES A K L Q ρ hρ
-                hLocalTail hFull‖ +
-              ‖wholeIncrementFullInverseGramCorrectionES A K L Q ρ hρ
-                hLocalTail hFull‖) +
-              ‖wholeIncrementLeftFiniteGramCorrectionES A K L Q ρ hρ
-                hLocalTail hLocalLeft‖ := by
-            gcongr
-            exact norm_sub_le _ _
-          _ ≤ ((‖wholeIncrementCenteredProjectorResidualES A K L Q ρ hρ
-                hLocalTail hLocalLeft‖ +
-              ‖wholeIncrementTailFiniteGramCorrectionES A K L Q ρ hρ
-                hLocalTail hFull‖) +
-              ‖wholeIncrementFullInverseGramCorrectionES A K L Q ρ hρ
-                hLocalTail hFull‖) +
-              ‖wholeIncrementLeftFiniteGramCorrectionES A K L Q ρ hρ
-                hLocalTail hLocalLeft‖ := by
-            gcongr
-            exact norm_sub_le _ _
-          _ = _ := by ring
-      _ ≤ q * (base * r ^ L) + q * (base * r ^ L) +
-          q * (base * r ^ L) + q * (base * r ^ L) := by gcongr
+      _ ≤ 4 * (q * (base * r ^ L)) :=
+        norm_sub_sub_sub_le_four_mul hCenter hQTail hQFull hQLeft
       _ = q * (C * r ^ L) := by
         dsimp only [C, base]
         ring
