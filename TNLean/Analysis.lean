@@ -68,5 +68,6 @@ import TNLean.Analysis.TwoProjectionAngleBlock
 import TNLean.Analysis.TwoProjectionAngleOrthogonality
 import TNLean.Analysis.TwoProjectionCompression
 import TNLean.Analysis.TwoProjectionCompressionSpectrum
+import TNLean.Analysis.TwoProjectionDefectBlockSum
 import TNLean.Analysis.TwoProjectionReducedProjection
 import TNLean.Analysis.UpperTriangularBound
