@@ -15,10 +15,14 @@ import Mathlib.Algebra.BigOperators.Ring.Finset
 This file formalises the remaining Chapter 2 representation corollaries from
 Wolf's *Quantum Channels & Operations: Guided Tour*:
 
-* **Proposition 2.2** — every sesquilinear sandwich `A * X * Bᴴ` decomposes as a
-  signed complex combination of four single-Kraus terms (polarization
-  identity). Any linear map expressible as `∑ᵢ Aᵢ * X * Bᵢᴴ` is therefore
-  a complex linear combination of CP maps.
+* **Proposition 2.2, sandwich-sum specialization** — every sesquilinear sandwich
+  `A * X * Bᴴ` decomposes as a signed complex combination of four single-Kraus
+  terms, by the polarization identity of Wolf Chapter 1
+  (`Notes/WolfNoteTexSource/ch01_deconstructing_quantum.tex`, lines 586–591).
+  Any linear map expressible as `∑ᵢ Aᵢ * X * Bᵢᴴ` is therefore a complex linear
+  combination of CP maps. Proposition 2.2 for an arbitrary linear map between
+  matrix algebras of possibly different dimensions is proved in
+  `TNLean/Channel/CPDecomposition.lean`.
 * **Proposition 2.3** — no information without disturbance: any linear map fixing
   every rank-one self-outer-product is the identity. In particular, a
   quantum channel that leaves every pure state invariant is the identity.
@@ -28,9 +32,10 @@ Wolf's *Quantum Channels & Operations: Guided Tour*:
 
 ## Main results
 
-* `WolfProps.polarization_sandwich` — Proposition 2.2 as a polarization identity.
-* `WolfProps.cp_decomposition_of_sandwich_sum` — Proposition 2.2 corollary: every
-  `∑ᵢ Aᵢ * X * Bᵢᴴ` is a signed ℂ-linear combination of CP maps.
+* `WolfProps.polarization_sandwich` — the Chapter 1 polarization identity in
+  sandwich form.
+* `WolfProps.cp_decomposition_of_sandwich_sum` — Proposition 2.2 for sandwich
+  sums: every `∑ᵢ Aᵢ * X * Bᵢᴴ` is a signed ℂ-linear combination of CP maps.
 * `WolfProps.vecMulVec_star_eq_polarization` — polarization of rank-one
   outer products into rank-one self-outer-products.
 * `WolfProps.exists_eq_smul_id_of_maps_rankOne_to_span` — a linear map preserving
@@ -51,7 +56,7 @@ Wolf's *Quantum Channels & Operations: Guided Tour*:
 
 ## Design notes
 
-The Proposition 2.2 polarization is proved at the entry level by reducing to a
+The sandwich polarization is proved at the entry level by reducing to a
 scalar polarization identity in `ℂ` (which is closed by
 `linear_combination`). The Proposition 2.3 reduction chain exploits the fact that
 rank-one outer products span `M_D(ℂ)` over `ℂ`, obtained by specializing
@@ -80,7 +85,7 @@ namespace WolfProps
 /-! ### Scalar polarization -/
 
 /-- Scalar polarization identity used entry-wise to prove the sandwich
-polarization (Proposition 2.2). For any four complex numbers `α β γ δ`,
+polarization. For any four complex numbers `α β γ δ`,
 
   `4 · α · (star δ) = (α+β)(star γ + star δ) - (α-β)(star γ - star δ)
      + I · (α + I·β)(star γ - I·star δ) - I · (α - I·β)(star γ + I·star δ).`
@@ -97,11 +102,12 @@ private theorem scalar_polarization (α β γ δ : ℂ) :
   have hI : Complex.I * Complex.I = -1 := Complex.I_mul_I
   linear_combination (2 * α * star δ - 2 * β * star γ) * hI
 
-/-! ### Sandwich polarization (Proposition 2.2 core identity) -/
+/-! ### Sandwich polarization -/
 
-/-- **Proposition 2.2 (Wolf), polarization form**. The sesquilinear sandwich
-`A * X * Bᴴ` decomposes as a signed ℂ-linear combination of four
-single-Kraus terms `K X Kᴴ`:
+/-- **Polarization identity in sandwich form** (Wolf, Chapter 1,
+`Notes/WolfNoteTexSource/ch01_deconstructing_quantum.tex`, lines 586–591). The
+sesquilinear sandwich `A * X * Bᴴ` decomposes as a signed ℂ-linear combination
+of four single-Kraus terms `K X Kᴴ`:
 
   `4 • (A X Bᴴ) = (A+B) X (A+B)ᴴ - (A-B) X (A-B)ᴴ
       + I • (A + I•B) X (A + I•B)ᴴ - I • (A - I•B) X (A - I•B)ᴴ`.
@@ -143,7 +149,7 @@ theorem polarization_sandwich (A B X : Matrix (Fin D) (Fin D) ℂ) :
           Finset.sum_congr rfl fun _ _ => pw _ _
     _ = _ := by simp only [Finset.sum_sub_distrib, Finset.sum_add_distrib]
 
-/-- **Proposition 2.2 (Wolf), CP-decomposition form**. Every map expressible as
+/-- **Proposition 2.2 (Wolf), sandwich-sum specialization**. Every map expressible as
 `T(X) = ∑ᵢ Aᵢ * X * Bᵢᴴ` has the explicit ℂ-linear CP-decomposition
 
   `4 • T(X) = ∑ᵢ (Aᵢ+Bᵢ) X (Aᵢ+Bᵢ)ᴴ - ∑ᵢ (Aᵢ-Bᵢ) X (Aᵢ-Bᵢ)ᴴ
