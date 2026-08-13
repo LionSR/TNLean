@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import TNLean.Algebra.MatrixAux
 import TNLean.Analysis.DeterminantTraceBound
 import TNLean.Channel.ChoiJamiolkowski
 import TNLean.Channel.Determinant.Basic
@@ -64,12 +65,12 @@ namespace ChannelDeterminant
 namespace Internal
 
 /-- The matrix-unit basis of `M_d(ℂ)`: `matrixSpaceBasis d (i, j, ()) = E_{ij}`. -/
-theorem matrixSpaceBasis_apply_single (i j : Fin d) :
+private theorem matrixSpaceBasis_apply_single (i j : Fin d) :
     matrixSpaceBasis d (i, j, ()) = Matrix.single i j (1 : ℂ) := by
   simp [matrixSpaceBasis, Module.Basis.matrix_apply, Module.Basis.singleton_apply]
 
 /-- The coordinates of `M` in the matrix-unit basis are the entries of `M`. -/
-theorem matrixSpaceBasis_repr_apply (M : MatrixAlg d) (i j : Fin d) :
+private theorem matrixSpaceBasis_repr_apply (M : MatrixAlg d) (i j : Fin d) :
     (matrixSpaceBasis d).repr M (i, j, ()) = M i j := by
   classical
   have hsum : M = ∑ x : Fin d, ∑ y : Fin d, M x y • matrixSpaceBasis d (x, y, ()) := by
@@ -133,7 +134,7 @@ noncomputable def choiPurity (T : MatrixEnd d) : ℝ :=
   ((ChoiJamiolkowski.choiMatrix T)ᴴ * ChoiJamiolkowski.choiMatrix T).trace.re
 
 theorem choiPurity_nonneg (T : MatrixEnd d) : 0 ≤ choiPurity T := by
-  rw [choiPurity, Matrix.trace_conjTranspose_mul_self_re]
+  rw [choiPurity, Matrix.trace_conjTranspose_mul_self_re_eq_sum_norm_sq]
   positivity
 
 /-- The purity is the sum of the squared moduli of the entries of `τ`. -/
@@ -141,14 +142,14 @@ theorem choiPurity_eq_sum (T : MatrixEnd d) :
     choiPurity T =
       ∑ i₁ : Fin d, ∑ j₁ : Fin d, ∑ i₂ : Fin d, ∑ j₂ : Fin d,
         ‖ChoiJamiolkowski.choiMatrix T (i₁, j₁) (i₂, j₂)‖ ^ 2 := by
-  rw [choiPurity, Matrix.trace_conjTranspose_mul_self_re]
+  rw [choiPurity, Matrix.trace_conjTranspose_mul_self_re_eq_sum_norm_sq, Finset.sum_comm]
   simp [Fintype.sum_prod_type]
 
 /-- **Wolf Eq. (6.28).** The matrix representation and the Choi–Jamiolkowski
 operator have proportional Hilbert–Schmidt norms: `tr[A† A] = d² tr[τ† τ]`. -/
 theorem trace_conjTranspose_mul_self_channelMatrix (T : MatrixEnd d) :
     ((channelMatrix T)ᴴ * channelMatrix T).trace.re = (d : ℝ) ^ 2 * choiPurity T := by
-  rw [Matrix.trace_conjTranspose_mul_self_re, choiPurity_eq_sum]
+  rw [Matrix.trace_conjTranspose_mul_self_re_eq_sum_norm_sq, Finset.sum_comm, choiPurity_eq_sum]
   simp only [Fintype.sum_prod_type, Finset.univ_unique, Finset.sum_singleton,
     channelMatrix_apply_eq_choiMatrix, norm_mul, mul_pow, Complex.norm_natCast,
     ← Finset.mul_sum]

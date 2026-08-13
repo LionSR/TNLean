@@ -30,8 +30,6 @@ type, which is what a matrix whose rows are labelled by pairs requires.
 * `Matrix.PosSemidef.pow_card_mul_det_re_le_trace_re_pow'` — the
   trace–determinant form `D ^ D · det M ≤ (tr M) ^ D` for a positive
   semidefinite `M` over an arbitrary finite index type.
-* `Matrix.trace_conjTranspose_mul_self_re` — `tr[Aᴴ A]` is the sum of the
-  squared moduli of the entries of `A`.
 * `Matrix.pow_card_mul_norm_det_sq_le_trace_conjTranspose_mul_self_pow` — the
   determinant bound `D ^ D · |det A| ^ 2 ≤ tr[Aᴴ A] ^ D`.
 
@@ -76,19 +74,6 @@ theorem PosSemidef.pow_card_mul_det_re_le_trace_re_pow' {M : Matrix n n ℂ}
     exact RCLike.ofReal_re (K := ℂ) _
   rw [hdet, htr]
   exact pow_card_mul_prod_le_sum_pow' hM.1.eigenvalues fun i => hM.eigenvalues_nonneg i
-
-/-- `tr[Aᴴ A] = ∑_{i,j} |A_{ij}| ^ 2`: the trace of `Aᴴ A` collects the squared
-moduli of all entries of `A`. -/
-theorem trace_conjTranspose_mul_self_re {m p : Type*} [Fintype m] [Fintype p]
-    (A : Matrix m p ℂ) :
-    (Aᴴ * A).trace.re = ∑ i, ∑ j, ‖A i j‖ ^ 2 := by
-  have hcomplex : (Aᴴ * A).trace = ((∑ i, ∑ j, ‖A i j‖ ^ 2 : ℝ) : ℂ) := by
-    simp only [Matrix.trace, Matrix.diag_apply, Matrix.mul_apply, Matrix.conjTranspose_apply,
-      Complex.ofReal_sum, Complex.ofReal_pow]
-    rw [Finset.sum_comm]
-    refine Finset.sum_congr rfl fun i _ => Finset.sum_congr rfl fun j _ => ?_
-    simpa using RCLike.conj_mul (K := ℂ) (A i j)
-  rw [hcomplex, Complex.ofReal_re]
 
 /-- **Determinant bound by the trace of `Aᴴ A`.** For a square complex matrix
 `A` whose index type has cardinality `D`,
