@@ -245,9 +245,18 @@ Definition~\ref{def:mpdo_source_gsnnch}; the converse comparison is not used.
 \begin{proof}\leanok
     \uses{lem:mpdo_sitewise_physical_coordinate_congruence}
     The normalized periodic operators are related by the sitewise isometric
-    congruence.  After splitting the chain into the retained interval and its
-    complement, the isometry on the traced-out factor disappears under the
-    partial trace, leaving the displayed congruence on the retained factor.
+    congruence.  Splitting the chain into the retained interval and its
+    complement gives
+    \begin{align}
+      &\tr_{N-L}\!\left[
+        \bigl(V^{\otimes L}\otimes V^{\otimes(N-L)}\bigr)
+        \sigma^{(N)}(K)
+        \bigl(V^{\otimes L}\otimes V^{\otimes(N-L)}\bigr)^*\right]\\
+      &\qquad=V^{\otimes L}\rho_L^{(N)}(K)(V^{\otimes L})^*.
+      \notag
+    \end{align}
+    Here $(V^{\otimes(N-L)})^*V^{\otimes(N-L)}=I$, so the isometry on the
+    traced factor disappears under the partial trace.
 \end{proof}
 
 \begin{theorem}[SAL descends through an isometric physical inclusion]
