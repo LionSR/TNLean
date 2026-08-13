@@ -225,8 +225,8 @@ theorem wholeIncrementCenteredProjectorResidualES_norm_le [NeZero D]
 set_option maxHeartbeats 800000 in
 -- The four-term operator-norm assembly requires extra elaboration budget.
 /-- A geometric-over-denominator estimate for a whole suffix increment.
-The decay is controlled by the overlap length `L`; the constants are uniform in
-both the prefix length `K` and suffix increment `Q`. -/
+The decay is controlled by the overlap length \(L\); the constants are uniform in
+both the prefix length \(K\) and suffix increment \(Q\). -/
 theorem IsPrimitiveMPS.wholeIncrement_groundProjection_defect_le_geometric
     [NeZero D] {A : MPSTensor d D}
     {ρ : Matrix (Fin D) (Fin D) ℂ}
