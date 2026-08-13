@@ -21,6 +21,7 @@ import TNLean.MPS.CanonicalForm.CPSVBlocking
 import TNLean.MPS.CanonicalForm.CPSVCanonicalFormII
 import TNLean.MPS.CanonicalForm.CPSVPhysicalReindex
 import TNLean.MPS.CanonicalForm.CommonPeriodCyclicSectors
+import TNLean.MPS.CanonicalForm.Conjugation
 import TNLean.MPS.CanonicalForm.CyclicSectors
 import TNLean.MPS.CanonicalForm.CyclicSectors.Basic
 import TNLean.MPS.CanonicalForm.CyclicSectors.CommutingProj

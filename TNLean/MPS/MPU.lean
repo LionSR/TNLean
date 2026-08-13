@@ -17,6 +17,7 @@ import TNLean.MPS.MPU.Equivalence
 import TNLean.MPS.MPU.Examples
 import TNLean.MPS.MPU.MPUCanonicalForm
 import TNLean.MPS.MPU.MatchingContractions
+import TNLean.MPS.MPU.PhysicalAdjointCanonicalForm
 import TNLean.MPS.MPU.PhysicalAncilla
 import TNLean.MPS.MPU.ResidualAlgebra
 import TNLean.MPS.MPU.Simple
