@@ -26,7 +26,7 @@ is asserted here.
 
 * `inner_tailBoundaryMapES_adjoint_leftBoundaryMapES_q`
 * `inner_tailBoundaryMapES_adjoint_leftBoundaryMapES`
-* `inner_tailBoundaryMapES_adjoint_leftBoundaryMapES_centered
+* `inner_tailBoundaryMapES_adjoint_leftBoundaryMapES_centered`
 -/
 
 open scoped Matrix
@@ -167,6 +167,10 @@ theorem inner_tailBoundaryMapES_adjoint_leftBoundaryMapES_q
     simp only [boundaryFamilyEquiv_apply_apply] at hTailTrace hLeftTrace
     rw [hLeftTrace]
     rw [hTailTrace]
+
+-- A formulation that first reassociates the tail map into the left-associated
+-- ambient space should derive from this theorem by adjoint composition with the
+-- same unitary coordinate reassociation, rather than repeat the coordinate proof.
 
 /-- Exact mixed-Gram identity for the overlapping windows in Nachtergaele's C3
 geometry (arXiv:cond-mat/9410110, equation (2.4)).
