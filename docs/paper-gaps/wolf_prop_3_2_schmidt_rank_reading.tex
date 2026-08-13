@@ -108,9 +108,12 @@ Schmidt rank exactly $n$ for every $n\le\min(D',D)$, which makes the infimum ove
 $S_{=n}$ meaningful, and the perturbation
 $\psi_\varepsilon=(1-\varepsilon^2)^{1/2}\psi+\varepsilon\,u\otimes v$ with
 $u,v$ orthogonal to the Schmidt vectors of $\psi$, which raises the Schmidt rank
-by one at a cost $O(\varepsilon^2)$ in the expectation. Iterating the
-perturbation and letting $\varepsilon\to0$ gives the missing inequality
-$\inf_{S_{=n}}\le\inf_{S_{\le n}}$.
+by one. The expectation changes by
+$2\varepsilon\sqrt{1-\varepsilon^2}\,\Re\bra{\psi}\tau\ket{u\otimes v}
++O(\varepsilon^2)$, hence by $O(\varepsilon)$ in general: the cross term
+vanishes only under an orthogonality condition on $\tau$ that the argument does
+not need. Iterating the perturbation and letting $\varepsilon\to0$ gives the
+missing inequality $\inf_{S_{=n}}\le\inf_{S_{\le n}}$.
 
 \section{Verdict}
 
