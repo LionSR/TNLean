@@ -343,6 +343,33 @@ the coefficient argument of Chapter~\ref{ch:bnt}.
     Definition~\ref{def:nt_cpsv} hold for $A$ itself.
 \end{proof}
 
+\begin{theorem}[Canonical normalization under entrywise conjugation]
+    \label{thm:cpsv_map_star_preservation}
+    \lean{MPSTensor.IsLeftCanonical.mapStar}
+    \lean{MPSTensor.IsNormalTensor.mapStar}
+    \leanok
+    \uses{def:left_canonical_tensor,def:nt_cpsv,
+        thm:is_normal_tensor_of_is_normal_left_canonical}
+    Let $\overline A$ denote entrywise conjugation of every matrix $A^i$. If
+    $A$ is left-canonical, then $\overline A$ is left-canonical. If, in
+    addition, $A$ is a CPSV normal tensor, then $\overline A$ is a CPSV normal
+    tensor.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:left_canonical_tensor,
+        thm:is_normal_tensor_of_is_normal_left_canonical}
+    Conjugating the left-canonical identity gives
+    \begin{align}
+        \sum_i(\overline{A^i})^\dagger\overline{A^i}
+        &=\overline{\sum_i(A^i)^\dagger A^i}
+         =\overline{\Id}=\Id.
+    \end{align}
+    Entrywise conjugation also preserves positive-length block injectivity.
+    Theorem~\ref{thm:is_normal_tensor_of_is_normal_left_canonical} applied to
+    $\overline A$ now gives the CPSV normal-tensor conclusion.
+\end{proof}
+
 \begin{definition}[CPSV canonical form]
     \label{def:cpsv_canonical_form}
     \lean{MPSTensor.CPSVCanonicalFormData}
@@ -448,6 +475,8 @@ the coefficient argument of Chapter~\ref{ch:bnt}.
 \begin{theorem}[Physical relabeling preserves CPSV normal and canonical form]
     \label{thm:cpsv_physical_reindexing}
     \lean{MPSTensor.IsNormalTensor.reindexPhysical}
+    \lean{MPSTensor.leftCanonical_reindexPhysical_equiv}
+    \lean{MPSTensor.transferMap_reindexPhysical_equiv}
     \lean{MPSTensor.CPSVCanonicalFormData.reindexPhysical}
     \lean{MPSTensor.IsCPSVCanonicalForm.reindexPhysical}
     \leanok
@@ -458,7 +487,8 @@ the coefficient argument of Chapter~\ref{ch:bnt}.
         &= A^{e(j)}.
         \label{eq:cpsv_physical_reindexing_tensor}
     \end{align}
-    If $A$ is a CPSV normal tensor, then $e^*A$ is a CPSV normal tensor. If
+    The transfer maps of $A$ and $e^*A$ agree. In particular, physical
+    relabeling preserves left-canonical normalization and CPSV normality. If
     $A$ has canonical-form data
     \begin{align}
         A^i
