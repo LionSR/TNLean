@@ -276,9 +276,15 @@ Definition~\ref{def:mpdo_source_gsnnch}; the converse comparison is not used.
 
 \begin{proof}\leanok
     Reindex the chain into its first $L$ and final $K$ sites.  The sitewise
-    matrix becomes $V^{\otimes L}\otimes V^{\otimes K}$, and
-    $(V^{\otimes K})^*V^{\otimes K}=I$ removes the second factor under the
-    partial trace.
+    matrix becomes $V^{\otimes L}\otimes V^{\otimes K}$.  Since
+    $(V^{\otimes K})^*V^{\otimes K}=I$, the partial trace satisfies
+    \begin{align}
+      &\tr_K\!\left[
+        \bigl(V^{\otimes L}\otimes V^{\otimes K}\bigr)X
+        \bigl(V^{\otimes L}\otimes V^{\otimes K}\bigr)^*\right]\\
+      &\qquad=V^{\otimes L}\tr_K[X](V^{\otimes L})^*.
+      \notag
+    \end{align}
 \end{proof}
 
 \begin{theorem}[Reduced states under an isometric physical inclusion]
