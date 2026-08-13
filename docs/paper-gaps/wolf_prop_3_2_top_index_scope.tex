@@ -51,6 +51,16 @@ establish these bounds in the per-vector form: every normalized vector $\psi$ of
 Schmidt rank at most $n$ satisfies the lower bound~(3.7), and some such $\psi$
 realizes the upper bound~(3.8).
 
+The source's infimum form of the same two bounds is stated for the infimum of
+the expectations $\bra{\psi}\tau\ket{\psi}$ over the normalized vectors of
+Schmidt rank at most $n$.\footnote{Formal declarations:
+    \leanid{Matrix.IsHermitian.le_sInf_schmidtRankLEExpectations}~(3.7),
+    \leanid{Matrix.IsHermitian.sInf_schmidtRankLEExpectations_le}~(3.8), and
+    \leanid{Matrix.IsHermitian.sInf_schmidtRankLEExpectations_top} for the top
+    index, in \doclink{TNLean/Channel/NPositivitySpectralCriterion}.} The
+reading of the source's phrase ``vectors of Schmidt rank $n$'' is discussed in
+\path{docs/paper-gaps/wolf_prop_3_2_schmidt_rank_reading.tex}.
+
 \section{Status}
 
 The top index $n=D'$ is resolved by a route that bypasses the $n<D'$ restriction
@@ -88,6 +98,7 @@ their top-index endpoints
 \leanid{Matrix.IsHermitian.spectral_lower_bound_top}~(3.7) and
 \leanid{Matrix.IsHermitian.exists_spectral_lower_bound_top}~(3.8) for the
 completely-positive endpoint $n=D'$, by the route detailed in the Status above.
+The infimum form of the source's statement is available over the same range.
 No hypothesis foreign to the source is used.
 
 \bibliographystyle{alpha}

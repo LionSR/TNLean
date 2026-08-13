@@ -1,0 +1,141 @@
+\subsection{The criterion as bounds on an infimum}
+
+\cite[Chapter~3, Proposition~3.2]{Wolf2012Quantum} states the spectral
+criterion for $n$-positivity as two inequalities for
+$\inf_\psi\bra{\psi}\tau\ket{\psi}$, the infimum being taken over the
+normalized vectors of Schmidt rank $n$. Those vectors are the ones obtained by
+embedding $\C^n$ in the second factor $\C^{D}$, so they are the vectors of
+Schmidt rank at most $n$: this is the set on which $n$-positivity of a
+Hermitian map is tested, and the set whose expectations are collected below.
+
+\begin{definition}[Expectations at bounded Schmidt rank]
+    \label{def:schmidt_rank_le_expectations}
+    \lean{Matrix.schmidtRankLEExpectations}
+    \leanok
+    \uses{def:schmidt_rank}
+    For a matrix $\tau$ on $\C^{D'}\otimes\C^{D}$ and a bound $n$, the set
+    \begin{align}
+        E_n(\tau)
+         & =\{\bra{\psi}\tau\ket{\psi}:\|\psi\|=1,\ \SR(\psi)\le n\}
+        \subseteq\R
+        \label{eq:channel_schmidt_rank_le_expectations}
+    \end{align}
+    collects the expectations of $\tau$ in the normalized vectors of Schmidt
+    rank at most $n$.
+\end{definition}
+
+\begin{lemma}[The expectation set has an infimum]
+    \label{lem:schmidt_rank_le_expectations_inf_exists}
+    \lean{Matrix.schmidtRankLEExpectations_nonempty,
+        Matrix.IsHermitian.schmidtRankLEExpectations_bddBelow}
+    \leanok
+    \uses{def:schmidt_rank_le_expectations, thm:spectral_bound_schmidt_rank_top}
+    For $n\ge1$ the set $E_n(\tau)$ is nonempty, and for Hermitian $\tau$ it is
+    bounded below by the least eigenvalue $\nu_{\min}$ of $\tau$. Hence
+    $\inf E_n(\tau)$ exists.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{thm:schmidt_rank_basic_bounds, thm:spectral_bound_schmidt_rank_top}
+    A normalized product vector has Schmidt rank one, hence Schmidt rank at
+    most $n$, so $E_n(\tau)$ is nonempty. For the lower bound,
+    Theorem~\ref{thm:spectral_bound_schmidt_rank_top} gives
+    $\nu_{\min}\le\bra{\psi}\tau\ket{\psi}$ for every normalized $\psi$,
+    without any Schmidt-rank restriction.
+\end{proof}
+
+\begin{theorem}[Lower bound on the Schmidt-rank infimum]
+    \label{thm:spectral_infimum_lower_bound}
+    \lean{Matrix.IsHermitian.le_sInf_schmidtRankLEExpectations}
+    \leanok
+    \uses{def:schmidt_rank_le_expectations,
+        lem:schmidt_rank_le_expectations_inf_exists,
+        thm:spectral_lower_bound_schmidt_rank}
+    Let $\tau$ be a Hermitian operator on $\C^{D'}\otimes\C^{D}$ with
+    eigenvalues $\nu_i$, normalized eigenvectors $\phi_i$ and reduced densities
+    $\rho_i=\tr_2\ketbra{\phi_i}{\phi_i}$. Let $1\le n<D'$ and let
+    $\nu_0\ge0$ be a lower bound for the positive eigenvalues, the smallest
+    positive eigenvalue in \cite[Chapter~3]{Wolf2012Quantum}. Then
+    \begin{align}
+        \nu_0+\sum_{i:\nu_i\le0}(\nu_i-\nu_0)\|\rho_i\|_{(n)}
+         & \le\inf E_n(\tau).
+        \label{eq:channel_spectral_infimum_lower}
+    \end{align}
+    This is \cite[Chapter~3, equation~(3.7)]{Wolf2012Quantum}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:spectral_lower_bound_schmidt_rank,
+        lem:schmidt_rank_le_expectations_inf_exists}
+    Theorem~\ref{thm:spectral_lower_bound_schmidt_rank} bounds
+    $\bra{\psi}\tau\ket{\psi}$ below by the left-hand side at every normalized
+    $\psi$ of Schmidt rank at most $n$, that is, at every element of
+    $E_n(\tau)$. A lower bound for every element of a nonempty set is a lower
+    bound for its infimum.
+\end{proof}
+
+\begin{theorem}[Upper bound on the Schmidt-rank infimum]
+    \label{thm:spectral_infimum_upper_bound}
+    \lean{Matrix.IsHermitian.sInf_schmidtRankLEExpectations_le}
+    \leanok
+    \uses{def:schmidt_rank_le_expectations,
+        lem:schmidt_rank_le_expectations_inf_exists,
+        thm:spectral_upper_bound_schmidt_rank}
+    With $\tau$, $\phi_i$ and $\rho_i$ as above, let $1\le n<D'$ and suppose
+    every eigenvalue of $\tau$ is at most $\nu$. Then, for every eigenvector
+    index $j$,
+    \begin{align}
+        \inf E_n(\tau)
+         & \le\nu+(\nu_j-\nu)\|\rho_j\|_{(n)}.
+        \label{eq:channel_spectral_infimum_upper}
+    \end{align}
+    Taking $\nu$ to be the largest positive eigenvalue and $j$ the index of the
+    unique non-positive eigenvalue $\nu_-$, which is the situation in which all
+    other eigenvalues are strictly positive, gives
+    $\inf E_n(\tau)\le\nu+(\nu_--\nu)\|\rho_-\|_{(n)}$, that is,
+    \cite[Chapter~3, equation~(3.8)]{Wolf2012Quantum}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:spectral_upper_bound_schmidt_rank,
+        lem:schmidt_rank_le_expectations_inf_exists}
+    Theorem~\ref{thm:spectral_upper_bound_schmidt_rank} supplies a normalized
+    $\psi$ of Schmidt rank at most $n$ whose expectation is at most the
+    right-hand side. Its expectation lies in $E_n(\tau)$, so the infimum of
+    $E_n(\tau)$ is at most that expectation, hence at most the right-hand side.
+\end{proof}
+
+\begin{theorem}[The Schmidt-rank infimum at the top index]
+    \label{thm:spectral_infimum_top}
+    \lean{Matrix.IsHermitian.sInf_schmidtRankLEExpectations_top}
+    \leanok
+    \uses{def:schmidt_rank_le_expectations,
+        thm:spectral_bound_schmidt_rank_top}
+    Once the Schmidt-rank bound reaches the dimension $D'$ of the first tensor
+    factor the constraint is vacuous and each Ky-Fan norm collapses to
+    $\|\rho_i\|_{(D')}=\tr\rho_i=1$, so both bounds read $\nu_{\min}$ and
+    \begin{align}
+        \inf E_n(\tau)
+         & =\nu_{\min}
+        \qquad (n\ge D').
+        \label{eq:channel_spectral_infimum_top}
+    \end{align}
+    With Theorems~\ref{thm:spectral_infimum_lower_bound}
+    and~\ref{thm:spectral_infimum_upper_bound} this covers the full range
+    $1\le n\le D'$ of \cite[Chapter~3, Proposition~3.2]{Wolf2012Quantum} in the
+    infimum form of the source.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:spectral_bound_schmidt_rank_top,
+        thm:schmidt_rank_basic_bounds}
+    Every vector has Schmidt rank at most $D'$, so for $n\ge D'$ the set
+    $E_n(\tau)$ is the set of expectations in all normalized vectors. By
+    Theorem~\ref{thm:spectral_bound_schmidt_rank_top} that set is bounded below
+    by $\nu_{\min}$ and contains $\nu_{\min}$, attained at an eigenvector for
+    the least eigenvalue.
+\end{proof}
