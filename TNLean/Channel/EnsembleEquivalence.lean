@@ -24,6 +24,11 @@ This file supplies that statement. The existing
 hypothesis and the tallness, because on a common index set an isometry is
 square, hence unitary.
 
+## Main definitions
+
+* `WolfProps.padZero` — padding a family indexed by `Fin m` to one indexed by
+  `Fin n` with zero vectors.
+
 ## Main results
 
 * `WolfProps.pureEnsembleDensity_of_extendZero` — extending a family by zero
@@ -32,9 +37,10 @@ square, hence unitary.
 * `WolfProps.pureEnsembleDensity_sumElim_zero`,
   `WolfProps.pureEnsembleDensity_zero_sumElim` — the two zero paddings onto the
   disjoint union of the index sets.
-* `WolfProps.padZero` — padding a family indexed by `Fin m` to one indexed by
-  `Fin n` with zero vectors, and `WolfProps.pureEnsembleDensity_padZero` for its
-  invariance.
+* `WolfProps.padZero_castLE` — the padded family agrees with the original on
+  the retained indices.
+* `WolfProps.pureEnsembleDensity_padZero` — padding to a longer family leaves
+  the ensemble density unchanged.
 * `WolfProps.pureEnsembleDensity_eq_iff_exists_unitary_mixing_of_pad` — the
   equivalence relative to an arbitrary pair of zero paddings onto a common index
   set.
@@ -53,8 +59,8 @@ square isometry over a finite index set is unitary.
 
 ## References
 
-* [M. Wolf, *Quantum Channels & Operations: Guided Tour*, §2, Proposition
-  "Equivalence of ensembles" (Eq. (2.10))][Wolf2012QChannels]
+* [M. Wolf, *Quantum Channels & Operations: Guided Tour*, §2, Proposition 2.4
+  ("Equivalence of ensembles", Eq. (2.10))][Wolf2012QChannels]
 -/
 
 open scoped Matrix

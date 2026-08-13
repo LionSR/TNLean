@@ -23,6 +23,7 @@ import TNLean.Channel.POVM.Uniqueness
 import TNLean.Channel.TransferMatrix
 import TNLean.Channel.WolfProps
 import TNLean.Channel.NoInformationWithoutDisturbance
+import TNLean.Channel.EnsembleEquivalence
 import TNLean.Channel.NormalForm
 import TNLean.Channel.LorentzNormalForm
 
