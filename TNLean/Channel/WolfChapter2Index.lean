@@ -21,6 +21,7 @@ import TNLean.Channel.POVM.RankOneNaimark
 import TNLean.Channel.POVM.Uniqueness
 import TNLean.Channel.TransferMatrix
 import TNLean.Channel.WolfProps
+import TNLean.Channel.NoInformationWithoutDisturbance
 import TNLean.Channel.NormalForm
 import TNLean.Channel.LorentzNormalForm
 
@@ -183,6 +184,15 @@ project import.
     every `vecMulVec v (star v)` is the identity ✓
   - `WolfProps.channel_eq_id_of_fixes_pureStates` — a channel fixing
     every pure-state projector is the identity channel ✓
+  - `Channel.exists_nonneg_smul_id_of_isCPMap_of_sum_eq_id` — the
+    source-faithful statement: a finite family of CP maps with
+    `∑ α, T α = id` has `T α = c α • id` with `c α ≥ 0` ✓
+  - `Channel.exists_nonneg_weights_of_isCPMap_of_sum_eq_id` — the weights
+    satisfy `∑ α, c α = 1` ✓
+  - `Channel.exists_nonneg_forall_trace_map_eq_of_isCPMap_of_sum_eq_id` —
+    `tr[T α ρ] = c α` for every `ρ` of unit trace ✓
+  - `Instrument.exists_nonneg_forall_probability_eq_of_total_eq_id` — the
+    same conclusion for the `Instrument` structure ✓
 
 * **Proposition 2.4** (equivalence of ensembles, Hughston–Jozsa–Wootters):
   - `WolfProps.pureEnsembleDensity` — density operator of a pure-state

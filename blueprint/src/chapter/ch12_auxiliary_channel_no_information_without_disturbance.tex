@@ -15,7 +15,7 @@ $\rho$. This is the proposition ``No information without disturbance'' of
     \label{lem:le_omega_proj_eq_nonneg_smul}
     \lean{Channel.exists_nonneg_smul_omegaProj_of_le_omegaProj}
     \leanok
-    \uses{def:maximally_entangled, lem:posSemidef_rankone_domination}
+    \uses{def:maximally_entangled}
     Let $A$ on $\C^d\otimes\C^d$ be positive semidefinite with
     $A\leq\ketbra{\Omega}{\Omega}$. Then $A=a\ketbra{\Omega}{\Omega}$ for a
     non-negative scalar $a$.
@@ -27,38 +27,30 @@ $\rho$. This is the proposition ``No information without disturbance'' of
     The projector $\ketbra{\Omega}{\Omega}$ is the rank-one matrix built
     from the vector $\ket{\Omega}$, so this is
     Lemma~\ref{lem:posSemidef_rankone_domination} with $c=1$ and
-    $\psi=\Omega$, read after relabelling the index set
-    $\{0,\ldots,d-1\}^2$ of the bipartite space by
-    $\{0,\ldots,d^2-1\}$.
+    $\psi=\Omega$, read after transporting along a bijection between the
+    pair index set of the bipartite space $\C^d\otimes\C^d$ and a single
+    index set of the same cardinality $d^2$.
 \end{proof}
 
 \begin{theorem}[No information without disturbance]
     \label{thm:no_information_without_disturbance}
     \lean{Channel.exists_nonneg_smul_id_of_isCPMap_of_sum_eq_id}
     \leanok
-    \uses{def:cp_map, def:choi_matrix, def:maximally_entangled,
-        thm:cp_iff_choi_posSemidef, thm:choi_matrix_id,
-        lem:le_omega_proj_eq_nonneg_smul}
+    \uses{def:cp_map}
     Let $d\geq1$ and let $\{T_\alpha:\MN{d}\to\MN{d}\}$ be a finite family of
     completely positive maps with $\sum_\alpha T_\alpha=\id$. Then for every
     $\alpha$ there is a constant $c_\alpha\geq0$ with
-    \begin{align}
-        T_\alpha&=c_\alpha\id.
-        \notag
-    \end{align}
+    $T_\alpha=c_\alpha\id$.
 \end{theorem}
 
 \begin{proof}
     \leanok
-    \uses{thm:cp_iff_choi_posSemidef, thm:choi_matrix_id,
-        lem:le_omega_proj_eq_nonneg_smul}
+    \uses{def:choi_matrix, def:maximally_entangled,
+        thm:cp_iff_choi_posSemidef, thm:choi_matrix_id,
+        lem:choi_matrix_injective, lem:le_omega_proj_eq_nonneg_smul}
     Pass to Choi matrices. The Choi matrix of $\id$ is
     $\ketbra{\Omega}{\Omega}$ and the Choi correspondence is linear, so the
-    hypothesis reads
-    \begin{align}
-        \ketbra{\Omega}{\Omega}&=\sum_\alpha\tau_\alpha,
-        \notag
-    \end{align}
+    hypothesis reads $\ketbra{\Omega}{\Omega}=\sum_\alpha\tau_\alpha$,
     where $\tau_\alpha$ is the Choi matrix of $T_\alpha$. Each $\tau_\alpha$
     is positive semidefinite because $T_\alpha$ is completely positive, so
     every summand is dominated by the whole sum:
@@ -66,8 +58,8 @@ $\rho$. This is the proposition ``No information without disturbance'' of
     is pure, hence admits no non-trivial decomposition, and
     Lemma~\ref{lem:le_omega_proj_eq_nonneg_smul} gives
     $\tau_\alpha=c_\alpha\ketbra{\Omega}{\Omega}$ with $c_\alpha\geq0$. The
-    right-hand side is the Choi matrix of $c_\alpha\id$, and the Choi
-    correspondence is one-to-one, so $T_\alpha=c_\alpha\id$.
+    right-hand side is the Choi matrix of $c_\alpha\id$, so
+    Lemma~\ref{lem:choi_matrix_injective} gives $T_\alpha=c_\alpha\id$.
 \end{proof}
 
 \begin{theorem}[Normalization of the outcome weights]
@@ -112,8 +104,7 @@ $\rho$. This is the proposition ``No information without disturbance'' of
     \label{cor:no_information_instrument}
     \lean{Instrument.exists_nonneg_forall_probability_eq_of_total_eq_id}
     \leanok
-    \uses{def:instrument, def:instrument_operations,
-        thm:no_information_probability}
+    \uses{def:instrument, def:instrument_operations}
     Let $\{\Phi_i\}$ be a quantum instrument on $\MN{d}$ with $d\geq1$ whose
     total channel is the identity. Then for every outcome $i$ the probability
     $p_i(\rho)$ is a non-negative constant, the same for every $\rho$ of unit

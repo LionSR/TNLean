@@ -17,8 +17,8 @@ This file formalizes the proposition *No information without disturbance* of
 An instrument is a family of completely positive maps `{T α : M_d → M_d}`. If the
 instrument causes no disturbance on average, that is if `∑ α, T α = id`, then every
 component is a nonnegative multiple `T α = c α · id` of the identity, and hence the
-probability `tr[T α ρ]` of the outcome `α` equals `c α` for every state `ρ`: the outcome
-statistics carry no information about the input.
+probability `tr[T α ρ]` of the outcome `α` equals `c α` for every `ρ` of unit trace: the
+outcome statistics carry no information about the input.
 
 The proof is Wolf's. Under the Choi–Jamiolkowski correspondence the hypothesis reads
 `|Ω⟩⟨Ω| = ∑ α, τ α`, where `τ α` is the Choi matrix of `T α`. Complete positivity makes
@@ -126,15 +126,14 @@ theorem exists_nonneg_weights_of_isCPMap_of_sum_eq_id [NeZero D]
   have htrace : (∑ α, (c α : ℂ)) * (D : ℂ) = (D : ℂ) := by
     have := congrArg Matrix.trace happ
     simpa [hcid, Matrix.trace_sum, Matrix.trace_smul, Finset.sum_mul] using this
-  have hone : (∑ α, (c α : ℂ)) = 1 := by
-    field_simp at htrace
-    exact htrace
+  have hone : (∑ α, (c α : ℂ)) = 1 :=
+    mul_right_cancel₀ hDne (by rw [one_mul]; exact htrace)
   exact_mod_cast hone
 
 /-- **No information without disturbance** (Wolf, Chapter 2, line 154), probability form.
 
 For a no-disturbance instrument the probability `tr[T α ρ]` of the outcome `α` is a
-nonnegative constant, the same for every normalized state `ρ`: the outcome carries no
+nonnegative constant, the same for every `ρ` of unit trace: the outcome carries no
 information about the input. -/
 theorem exists_nonneg_forall_trace_map_eq_of_isCPMap_of_sum_eq_id [NeZero D]
     {T : ι → Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ}
@@ -151,7 +150,7 @@ end Channel
 /-- **No information without disturbance** for an instrument (Wolf, Chapter 2, line 154).
 
 If the average map of an instrument is the identity, then each outcome probability is a
-nonnegative constant, the same for every normalized state: the measurement returns no
+nonnegative constant, the same for every input of unit trace: the measurement returns no
 information about the input. -/
 theorem Instrument.exists_nonneg_forall_probability_eq_of_total_eq_id
     {D n : ℕ} [NeZero D] (I : Instrument D n) (hI : I.total = LinearMap.id) (i : Fin n) :
