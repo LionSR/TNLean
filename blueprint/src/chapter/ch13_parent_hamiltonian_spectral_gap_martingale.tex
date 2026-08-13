@@ -2217,12 +2217,11 @@ norm estimate is derived here.
 
 \begin{lemma}[Blocked three-site projector and adjacent-pair transport]
     \label{lem:blocked_to_cyclic_ground_projector_comparison}
-    \lean{MPSTensor.blockTensor_threeSite_openChain_defect_norm_eq,
-        MPSTensor.re_inner_localTermES_adjacent_twoSite_forward_ge_of_threeSite,
-        MPSTensor.re_inner_localTermES_adjacent_twoSite_backward_ge_of_threeSite}
+    \lean{MPSTensor.blockTensor_threeSite_openChain_defect_norm_eq}
     \leanok
     \uses{thm:three_block_whole_increment_defect_seven_sixteenths,
-        thm:friedrichs_ground_space_excitation_anticommutator}
+        thm:friedrichs_ground_space_excitation_anticommutator,
+        thm:three_site_anticommutator_cyclic_transport}
     Let $A$ be a primitive MPS tensor and let $p>0$ be a blocking length.
     For $B=\operatorname{block}_p(A)$, the defect of the two open-chain
     ground-space projectors on three sites of $B$ is exactly the defect of the
@@ -2249,9 +2248,6 @@ norm estimate is derived here.
     \lean{MPSTensor.IsPrimitiveMPS.exists_blockTensor_parentHamiltonianES_gap_eighth,
         MPSTensor.IsPrimitiveMPS.exists_blockTensor_parentHamiltonianES_gapped}
     \leanok
-    \uses{lem:blocked_to_cyclic_ground_projector_comparison,
-        lem:cyclic_window_overlap_cardinality,
-        thm:anticommutator_gap_bound, thm:parent_hamiltonian_gapped}
     Let $A$ be a primitive MPS tensor with nonzero physical and bond dimensions,
     and suppose that its fixed point is positive definite.  There is a blocking
     length $p>0$ such that $A$ is $p$-block injective and, with
@@ -2266,8 +2262,8 @@ norm estimate is derived here.
 \begin{proof}
     \leanok
     \uses{lem:blocked_to_cyclic_ground_projector_comparison,
-        lem:cyclic_window_overlap_cardinality,
-        thm:anticommutator_gap_bound, thm:parent_hamiltonian_gapped}
+        lem:parent_hamiltonian_cyclic_overlap_anticommutator_gap,
+        thm:parent_hamiltonian_gapped}
     Choose $p$ so that the three-block projector defect is at most $7/16$.
     Lemma~\ref{lem:blocked_to_cyclic_ground_projector_comparison} gives the same
     coefficient for every overlapping cyclic pair.  For range two each row has
