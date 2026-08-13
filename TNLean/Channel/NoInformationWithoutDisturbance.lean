@@ -14,11 +14,13 @@ This file formalizes the proposition *No information without disturbance* of
 [M. Wolf, *Quantum Channels & Operations: Guided Tour*, Chapter 2][Wolf2012QChannels],
 `Notes/WolfNoteTexSource/ch02_representations.tex`, line 154.
 
-An instrument is a family of completely positive maps `{T α : M_d → M_d}`. If the
-instrument causes no disturbance on average, that is if `∑ α, T α = id`, then every
-component is a nonnegative multiple `T α = c α · id` of the identity, and hence the
-probability `tr[T α ρ]` of the outcome `α` equals `c α` for every `ρ` of unit trace: the
-outcome statistics carry no information about the input.
+An instrument is a family of completely positive maps `{T α : M_d → M_d}` whose sum is
+trace preserving. If the instrument causes no disturbance on average, that is if
+`∑ α, T α = id`, then every component is a nonnegative multiple `T α = c α · id` of the
+identity, and hence the probability `tr[T α ρ]` of the outcome `α` equals `c α` for every
+`ρ` of unit trace: the outcome statistics carry no information about the input. The
+theorems below assume complete positivity of the components and `∑ α, T α = id`, which is
+Wolf's hypothesis, and nothing more.
 
 The proof is Wolf's. Under the Choi–Jamiolkowski correspondence the hypothesis reads
 `|Ω⟩⟨Ω| = ∑ α, τ α`, where `τ α` is the Choi matrix of `T α`. Complete positivity makes
@@ -45,7 +47,6 @@ the Choi correspondence transports the conclusion back to the maps.
 -/
 
 open scoped Matrix ComplexOrder MatrixOrder
-open Matrix Finset
 
 namespace Channel
 
