@@ -1233,3 +1233,39 @@
     Substitute the trace-power form of the coefficients into the
     associativity constraint.
 \end{proof}
+
+\begin{theorem}[The dimer RFP has length-dependent displayed BNT coefficients]%
+    \label{thm:mpdo_bnt_label_rescaling_stable_rfp_capstone}
+    \lean{MPOTensor.RescalingStableLengthDependentRFP.%
+        exists_isRFPViaTS_not_lengthIndependent_bntCoefficients_R}
+    \leanok
+    \uses{def:mpdo_bnt_algebra_tensor_clause,
+        def:mpdo_bnt_label_length_independent,
+        thm:mpdo_bnt_label_rescaling_stable_cf,
+        thm:mpdo_bnt_label_rescaling_stable_is_rfp_via_ts,
+        thm:mpdo_bnt_label_rescaling_stable_bnt_algebra_clause}
+    There is an MPDO $M$ in literal CPSV canonical form that is a
+    renormalization fixed point and has a tensor-attached BNT presentation
+    whose structure coefficients depend on the positive chain length.  One
+    may take $M=R$ and the one-label presentation above, for which
+    \begin{align}
+        c^{(L)}_{0,0,0}&=1+\left(\frac{7}{25}\right)^L.
+        \notag
+    \end{align}
+    Thus the question after Theorem~4.14 has an affirmative answer for this
+    displayed vertical presentation.  The statement neither asserts that
+    length dependence is invariant under a change of presentation nor
+    includes the source's standing unit-weight convention.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpdo_bnt_label_rescaling_stable_length_dependence,
+        thm:mpdo_bnt_label_rescaling_stable_cf,
+        thm:mpdo_bnt_label_rescaling_stable_is_rfp_via_ts,
+        thm:mpdo_bnt_label_rescaling_stable_bnt_algebra_clause}
+    The preceding results show that $R$ is an MPDO in literal CPSV canonical
+    form, construct its fixed-point maps and its tensor-attached one-label
+    BNT clause, and identify the clause's coefficients with the displayed
+    trace-power family.  Its values at lengths one and two differ, so that
+    family is not length independent.
+\end{proof}
