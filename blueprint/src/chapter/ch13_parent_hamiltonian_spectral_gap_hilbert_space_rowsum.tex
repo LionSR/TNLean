@@ -458,6 +458,41 @@
     \end{align}
 \end{proof}
 
+\begin{lemma}[Gap monotonicity under operator order]
+    \label{lem:spectral_gap_loewner_monotonicity}
+    \lean{LinearMap.IsPositive.norm_gap_mono_of_le_of_ker_eq}
+    \leanok
+    Let $K$ and $H$ be positive self-adjoint operators on a finite-dimensional
+    complex Hilbert space. Suppose that $K\le H$ and $\ker K=\ker H$. If
+    \begin{align}
+        \gamma\|v\|\le\|Kv\| \notag
+    \end{align}
+    for every $v\in(\ker K)^\perp$, then
+    \begin{align}
+        \gamma\|v\|\le\|Hv\| \notag
+    \end{align}
+    for every $v\in(\ker H)^\perp$.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Diagonalise $K$. Its nonzero eigenvalues are at least $\gamma$, so every
+    $v\in(\ker K)^\perp$ satisfies
+    \begin{align}
+        \gamma\|v\|^2\le \re\langle Kv,v\rangle. \notag
+    \end{align}
+    Operator order and Cauchy--Schwarz give
+    \begin{align}
+        \gamma\|v\|^2
+        \le \re\langle Kv,v\rangle
+        \le \re\langle Hv,v\rangle
+        \le \|Hv\|\,\|v\|. \notag
+    \end{align}
+    The equality of kernels identifies the two orthogonal complements. For
+    $v\ne0$, cancellation of $\|v\|$ proves the claim; the zero vector is
+    immediate.
+\end{proof}
+
 \subsection{Martingale condition for a finite family of projections}
 \label{subsec:spectral_gap_rowsum}
 
