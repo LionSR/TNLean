@@ -213,9 +213,7 @@ channel:
         ChoiRectangular.exists_stinespringV_choiRank_of_isKrausCP,
         ChoiRectangular.exists_stinespringV_traceAdjointMap_choiRank_of_isKrausCP}
     \leanok
-    \uses{def:is_kraus_cp, def:trace_pairing_adjoint, def:kraus_rank_rect,
-        thm:kraus_rect_rank_minimal, thm:kraus_rect_normalization,
-        def:stinespring_v}
+    \uses{def:is_kraus_cp, def:trace_pairing_adjoint, def:kraus_rank_rect}
     Let $T:\MN{d}\to\MN{d'}$ be completely positive with Choi matrix $\tau$ and
     dual $T^*$. Then for every $r\geq\rank(\tau)$ there is a
     $V:\C^{d}\to\C^{d'}\otimes\C^{r}$ such that, for all $A\in\MN{d'}$,
@@ -231,7 +229,7 @@ channel:
 
 \begin{proof}
     \leanok
-    \uses{def:kraus_rank_rect, thm:kraus_rect_rank_minimal,
+    \uses{def:kraus_rank_rect, def:stinespring_v, thm:kraus_rect_rank_minimal,
         thm:kraus_rect_normalization, thm:stinespring_dual_representation,
         thm:stinespring_v_conjTranspose_mul,
         thm:trace_pairing_adjoint_identity, thm:trace_nondeg}
