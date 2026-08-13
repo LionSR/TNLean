@@ -110,3 +110,46 @@ construction; they are not attributed to a source theorem.
     Taking $K=G_N^{\mathrm{ES}}(A^{[p]})$ gives
     (\ref{eq:blocked_ground_projector_conjugacy}).
 \end{proof}
+
+\begin{theorem}[Blocked parent Hamiltonian as an aligned subsum]
+    \label{thm:blocked_parent_hamiltonian_aligned_subsum}
+    \lean{MPSTensor.localTermES_blockTensor_two_conj}
+    \lean{MPSTensor.transportedBlockedParentHamiltonianES_eq_alignedParentHamiltonianES}
+    \lean{MPSTensor.transportedBlockedParentHamiltonianES_nonneg_le_parentHamiltonianES}
+    \leanok
+    \uses{def:blocked_configuration_isometry,
+        thm:blocked_local_ground_space_transport}
+    Let $p>0$ and $N\ge2$. For $i\in\Fin{N}$, write $pi$ for the corresponding
+    block-aligned site in the original chain. The blocked range-two interaction
+    satisfies
+    \begin{align}
+        W_{N,p}\,h_i^{A^{[p]},2}\,W_{N,p}^{*}
+        &=h_{pi}^{A,2p}.
+        \label{eq:blocked_local_term_aligned_transport}
+    \end{align}
+    Consequently, the transported blocked parent Hamiltonian is the sparse sum
+    \begin{align}
+        K_{N,p}
+        :=W_{N,p}H_N^{A^{[p]},2}W_{N,p}^{*}
+        &=\sum_{i=0}^{N-1}h_{pi}^{A,2p}.
+        \label{eq:blocked_parent_hamiltonian_aligned_sum}
+    \end{align}
+    This sum contains only block-aligned starts. It is positive and is bounded by
+    the full original-site parent Hamiltonian:
+    \begin{align}
+        0\le K_{N,p}\le H_{Np}^{A,2p}.
+        \label{eq:blocked_parent_hamiltonian_aligned_order}
+    \end{align}
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    The blocking isometry sends the two-block cyclic window beginning at $i$ to
+    the $2p$-site cyclic window beginning at $pi$. The local ground-space
+    projector identity therefore gives
+    (\ref{eq:blocked_local_term_aligned_transport}). Summing over blocked starts
+    gives (\ref{eq:blocked_parent_hamiltonian_aligned_sum}). Every local term is
+    positive, so the aligned subsum is positive. Adding the remaining,
+    non-aligned positive local terms gives the upper bound in
+    (\ref{eq:blocked_parent_hamiltonian_aligned_order}).
+\end{proof}

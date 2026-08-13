@@ -8,6 +8,7 @@ Authors: TNLean contributors
 -- Import architecture: docs/import_structure.md.
 -- Generated aggregator module: TNLean.MPS.ParentHamiltonian
 
+import TNLean.MPS.ParentHamiltonian.AlignedBlockedHamiltonian
 import TNLean.MPS.ParentHamiltonian.BNTBlockDiagonalBoundaryClosing
 import TNLean.MPS.ParentHamiltonian.BNTBlockDiagonalChain
 import TNLean.MPS.ParentHamiltonian.BNTBlockDiagonalChainBoundary
