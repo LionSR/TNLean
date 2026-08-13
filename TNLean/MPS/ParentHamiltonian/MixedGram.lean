@@ -209,7 +209,7 @@ theorem inner_tailBoundaryMapES_adjoint_leftBoundaryMapES
 /-- The canonical arbitrary-increment mixed Gram expressed through the named
 reassociated tail boundary map.  This is the same operator as
 `inner_tailBoundaryMapES_adjoint_leftBoundaryMapES_q`; the only difference is that
-`reassocTailBoundaryMapES` packages the canonical physical reassociation. -/
+`reassocTailBoundaryMapES` carries out the canonical physical reassociation. -/
 theorem inner_reassocTailBoundaryMapES_adjoint_leftBoundaryMapES
     (A : MPSTensor d D) (K L Q : ℕ)
     (x : BoundaryFamilySpace (D := D) (Cfg d K))

@@ -780,8 +780,19 @@ and generic prerequisites now include:
     they assert no direct-sum norm estimate.  The C3 specializations are stated
     next.
   \item The C3$^\prime$ whole-increment algebra is now separated from its
-    still-missing numerical estimate.  For a suffix increment $Q$, the
-    declarations
+    still-missing numerical estimate.  For a suffix increment $Q$, define the
+    left virtual map by
+    \begin{align}
+      J_Q^{\mathrm{left}}U(X)
+      &=\bigl(U(A^jX)\bigr)_{j\in\Fin d^Q},
+    \end{align}
+    where $U$ is Frobenius vectorization.  Also set
+    \begin{align}
+      \mathcal K_n&=(\Gamma_n^{\mathrm{ES}})^\dagger
+        \Gamma_n^{\mathrm{ES}},&
+      \mathcal K_\infty&=\mathscr R(P_\rho),
+    \end{align}
+    where $P_\rho(X)=(\tr X/\tr\rho)\rho$.  The declarations
     \leanid{MPSTensor.leftVirtualMapES_norm_map_of_leftCanonical} and
     \leanid{MPSTensor.leftVirtualMapES_norm_le_one_of_leftCanonical} prove
     \begin{align}
@@ -831,10 +842,13 @@ and generic prerequisites now include:
     and
     \leanid{MPSTensor.wholeIncrement_injectiveRangeProjector_residual_eq_centered_sub_corrections};
     the latter uses
-    \leanid{MPSTensor.wholeIncrementCenteredProjectorResidualES}.  Raw norm
-    bounds for all three corrections and the reassociated tail pseudoinverse
-    are recorded by the corresponding declarations ending in
-    \texttt{norm\_le}.
+    \leanid{MPSTensor.wholeIncrementCenteredProjectorResidualES}.  The
+    reassociated tail pseudoinverse bound is
+    \leanid{MPSTensor.norm_reassocTailBoundaryMapES_comp_inverseGram_le_sqrt}.
+    The three correction bounds are
+    \leanid{MPSTensor.wholeIncrementTailFiniteGramCorrectionES_norm_le},
+    \leanid{MPSTensor.wholeIncrementFullInverseGramCorrectionES_norm_le}, and
+    \leanid{MPSTensor.wholeIncrementLeftFiniteGramCorrectionES_norm_le}.
 
     This completed slice is exact algebra only.  It removes growth from the
     length-$Q$ left virtual factor, factors the centered mixed term, and exposes
@@ -1202,12 +1216,14 @@ conversion retains its proved $D^{3/2}$ norm factor inside $g$.
 
 \section{Verdict}
 
-\textbf{Verdict: local correction (resolved), with an open optimized-coefficient
-scope.}  The spectator-uniform projector estimate and an input-site overlap
-length satisfying $\varepsilon_l<1/\sqrt{l+1}$ are proved in the unweighted
-coordinates, so the open-chain C3 threshold is resolved.  The optimized FNW
-numerator remains an open source-comparison problem, and the blocked-to-cyclic
-parent-Hamiltonian comparison remains separate.
+\textbf{Verdict: open gap, with a resolved local correction.}  The exact
+whole-increment algebra, including reassociation, the mixed Gram, the centered
+factorization, and the three finite-Gram corrections, is resolved.  The
+quantitative C3$^\prime$ estimate uniform in the filtration prefix and the
+three-block coefficient $7/16$ remain formalization gaps.  Separately, the
+open-chain C3 threshold is proved in unweighted coordinates, while the optimized
+FNW numerator and the blocked-to-cyclic parent-Hamiltonian comparison remain
+open source-comparison problems.
 
 \bibliographystyle{alpha}
 \bibliography{references}
