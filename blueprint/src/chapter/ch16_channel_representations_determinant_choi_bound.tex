@@ -1,0 +1,99 @@
+%% =========================================================
+\section{Determinant and Choi--Jamio\l{}kowski operator}
+\label{sec:channel_determinant_choi_bound}
+%% =========================================================
+
+%% Source: \cite[Section~6.1, Eq.~(6.27)]{Wolf2012Quantum};
+%% Notes/WolfNoteTexSource/ch06_spectral_properties.tex, lines 520--545.
+
+\begin{definition}[Purity of the Choi--Jamio\l{}kowski operator]
+    \label{def:choi_purity}
+    \lean{choiPurity}\leanok
+    \uses{def:choi_matrix}
+    For a linear map $T : \MN{D} \to \MN{D}$ with Choi--Jamio\l{}kowski
+    operator $\tau$, the \emph{purity} of $\tau$ is
+    $\tr[\tau^\dagger\tau]$.
+\end{definition}
+
+\begin{lemma}[Reshuffling]\label{lem:channel_matrix_eq_reshuffled_choi}
+    \lean{channelMatrix_apply_eq_choiMatrix}\leanok
+    \uses{def:channel_det, def:choi_matrix}
+    Let $T : \MN{D} \to \MN{D}$ be a linear map, $\widehat{T}$ its matrix with
+    respect to the matrix-unit basis and $\tau$ its Choi--Jamio\l{}kowski
+    operator. Then
+    \begin{align}
+        \widehat{T}_{(i_1,i_2),(j_1,j_2)}
+        &= D\,\tau_{(i_1,j_1),(i_2,j_2)}.
+        \label{eq:representations_reshuffling}
+    \end{align}
+    Equivalently $\widehat{T}=D\,\tau^{\Gamma}$, where the involution
+    $\tau\mapsto\tau^{\Gamma}$ is defined by
+    $\bra{m,n}\tau^{\Gamma}\ket{k,\ell}=\bra{m,k}\tau\ket{n,\ell}$.
+    This is \cite[Eq.~(2.22)]{Wolf2012Quantum}.
+\end{lemma}
+
+\begin{proof}\leanok
+    Both sides are computed on matrix units. The matrix of $T$ has entries
+    $\widehat{T}_{(i_1,i_2),(j_1,j_2)}=(T(E_{j_1j_2}))_{i_1i_2}$, while the
+    Choi--Jamio\l{}kowski operator has entries
+    $\tau_{(i_1,i_2),(j_1,j_2)}=\frac1D(T(E_{i_2j_2}))_{i_1j_1}$. Substituting
+    $(i_1,j_1)$ for the row pair and $(i_2,j_2)$ for the column pair in the
+    second formula gives $\frac1D(T(E_{j_1j_2}))_{i_1i_2}$.
+\end{proof}
+
+\begin{lemma}[Purity and the matrix representation]
+    \label{lem:choi_purity_eq_hilbert_schmidt}
+    \lean{trace_conjTranspose_mul_self_channelMatrix}\leanok
+    \uses{def:choi_purity, lem:channel_matrix_eq_reshuffled_choi}
+    With the notation of Lemma~\ref{lem:channel_matrix_eq_reshuffled_choi},
+    \begin{align}
+        \tr[\tau^\dagger\tau]
+        &= \frac{1}{D^2}\,\tr[\widehat{T}^\dagger\widehat{T}]
+        = \frac{1}{D^2}\sum_{i=1}^{D^2}s_i^2,
+        \label{eq:representations_purity_singular_values}
+    \end{align}
+    where the $s_i$ are the singular values of $\widehat{T}$. This is
+    \cite[Eq.~(6.28)]{Wolf2012Quantum}.
+\end{lemma}
+
+\begin{proof}\leanok
+    The trace $\tr[A^\dagger A]$ is the sum of the squared moduli of the
+    entries of $A$. Reshuffling permutes the index quadruples
+    $(i_1,i_2,j_1,j_2)$ without repetition, so it leaves that sum unchanged;
+    by Lemma~\ref{lem:channel_matrix_eq_reshuffled_choi} the entries of
+    $\widehat{T}$ exceed the corresponding entries of $\tau$ by the factor $D$,
+    whence the factor $D^2$. The second equality is the description of
+    $\tr[\widehat{T}^\dagger\widehat{T}]$ through the eigenvalues of
+    $\widehat{T}^\dagger\widehat{T}$, which are the squared singular values.
+\end{proof}
+
+\begin{theorem}[Determinant and Choi--Jamio\l{}kowski operator]
+    \label{thm:channelDet_le_choi_purity}
+    \lean{norm_channelDet_le_choiPurity_rpow,
+        norm_channelDet_sq_le_choiPurity_pow}\leanok
+    \uses{def:channel_det, def:choi_purity}
+    Let $T:\MN{D}\to\MN{D}$ be a linear map and $\tau$ the corresponding
+    Choi--Jamio\l{}kowski operator. Then
+    \begin{align}
+        |\det T| &\le \tr[\tau^\dagger\tau]^{D^2/2}.
+        \label{eq:representations_det_choi_bound}
+    \end{align}
+    No positivity, trace preservation or unitality is assumed. This is
+    \cite[Eq.~(6.27)]{Wolf2012Quantum}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{lem:choi_purity_eq_hilbert_schmidt}
+    Write $s_1,\dots,s_{D^2}$ for the singular values of $\widehat{T}$, so that
+    $|\det T|=\prod_i s_i$ and, by
+    Lemma~\ref{lem:choi_purity_eq_hilbert_schmidt},
+    $\sum_i s_i^2=D^2\tr[\tau^\dagger\tau]$. The geometric--arithmetic mean
+    inequality for the $D^2$ nonnegative numbers $s_i^2$ reads
+    \begin{align*}
+        (D^2)^{D^2}\prod_{i} s_i^2
+        &\le \Bigl(\sum_i s_i^2\Bigr)^{D^2}
+        = (D^2)^{D^2}\,\tr[\tau^\dagger\tau]^{D^2}.
+    \end{align*}
+    Cancelling $(D^2)^{D^2}$ gives $|\det T|^2\le\tr[\tau^\dagger\tau]^{D^2}$,
+    and taking square roots gives the stated bound.
+\end{proof}

@@ -21,6 +21,7 @@ import TNLean.Channel.DensityRetract
 import TNLean.Channel.Determinant
 import TNLean.Channel.Determinant.Basic
 import TNLean.Channel.Determinant.Bound
+import TNLean.Channel.Determinant.ChoiBound
 import TNLean.Channel.Determinant.HeisenbergDual
 import TNLean.Channel.Determinant.HilbertSchmidt
 import TNLean.Channel.Determinant.UnitaryCharacterization
