@@ -247,7 +247,6 @@ private lemma exists_perm_of_multiset_map_univ_eq {α : Type*} :
         Option.map_some, finSuccEquiv'_symm_some]
       exact hRec
 
-set_option linter.unusedVariables false in
 /-- **Matched-sector weight-permutation extractor.**
 
 Refines `matched_sector_weight_multiset_eq` into an explicit permutation
@@ -262,7 +261,7 @@ theorem matched_sector_weight_equiv
     (ζ : ℂ) (hζ : ζ ≠ 0)
     {N₀ : ℕ}
     (hCoeff : ∀ N > N₀, P.coeff N j₀ = ζ ^ N * Q.coeff N k₀') :
-    ∃ (hCopies : P.copies j₀ = Q.copies k₀')
+    ∃ (_hCopies : P.copies j₀ = Q.copies k₀')
       (τ : Fin (P.copies j₀) ≃ Fin (Q.copies k₀')),
       ∀ q : Fin (P.copies j₀),
         Q.weight k₀' (τ q) = ζ⁻¹ * P.weight j₀ q := by

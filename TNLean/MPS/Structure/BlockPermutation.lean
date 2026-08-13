@@ -36,9 +36,6 @@ Technical note on the two-level algebraic structure:
 * `algEquiv_pi_matrix_decomposition` — the main decomposition theorem
 -/
 
-set_option linter.unusedFintypeInType false
-set_option linter.style.show false
-
 open scoped Matrix
 
 namespace MPSTensor
@@ -61,7 +58,7 @@ end BlockIdealMembership
 /-! ### T maps Pi.single i 1 to Pi.single (σ i) 1 -/
 section PiSingleOne
 
-variable {ι : Type*} [Fintype ι] [DecidableEq ι]
+variable {ι : Type*} [Finite ι] [DecidableEq ι]
 variable {R : ι → Type*} [∀ i, Ring (R i)] [∀ i, IsSimpleRing (R i)]
 
 /-- A ring automorphism maps `Pi.single i 1` to `Pi.single (σ i) 1`. -/
@@ -69,6 +66,7 @@ theorem ringEquiv_single_one_eq
     (T : (∀ j, R j) ≃+* (∀ j, R j)) (σ : ι ≃ ι)
     (hσ : ∀ i, T.mapTwoSidedIdeal (blockIdeal R i) = blockIdeal R (σ i)) (i : ι) :
     T (Pi.single i (1 : R i)) = Pi.single (σ i) (1 : R (σ i)) := by
+  cases nonempty_fintype ι
   have h_support : ∀ j, j ≠ σ i → T (Pi.single i (1 : R i)) j = 0 :=
     fun j hj => ringEquiv_maps_single_support T σ hσ 1 j hj
   have h_eq_single : T (Pi.single i (1 : R i)) =
@@ -92,7 +90,7 @@ end PiSingleOne
 /-! ### Component map -/
 section ComponentMap
 
-variable {ι : Type*} [Fintype ι] [DecidableEq ι]
+variable {ι : Type*} [Finite ι] [DecidableEq ι]
 variable {D : ι → ℕ} [∀ i, NeZero (D i)]
 
 noncomputable instance instSimple (i : ι) :
@@ -110,20 +108,20 @@ noncomputable def componentMap
     Matrix (Fin (D (σ i))) (Fin (D (σ i))) ℂ :=
   blockComponentMap T σ i M
 
-omit [Fintype ι] [∀ i, NeZero (D i)] in
+omit [Finite ι] [∀ i, NeZero (D i)] in
 private theorem componentMap_map_zero
     {T : (∀ j, Matrix (Fin (D j)) (Fin (D j)) ℂ) ≃+* _} {σ : ι ≃ ι} {i : ι} :
     componentMap T σ i 0 = 0 := by
   simp [componentMap, blockComponentMap, Pi.single_zero, map_zero]
 
-omit [Fintype ι] [∀ i, NeZero (D i)] in
+omit [Finite ι] [∀ i, NeZero (D i)] in
 private theorem componentMap_map_add
     {T : (∀ j, Matrix (Fin (D j)) (Fin (D j)) ℂ) ≃+* _} {σ : ι ≃ ι} {i : ι}
     (M N : Matrix (Fin (D i)) (Fin (D i)) ℂ) :
     componentMap T σ i (M + N) = componentMap T σ i M + componentMap T σ i N := by
   simp [componentMap, blockComponentMap, Pi.single_add, map_add, Pi.add_apply]
 
-omit [Fintype ι] [∀ i, NeZero (D i)] in
+omit [Finite ι] [∀ i, NeZero (D i)] in
 theorem componentMap_map_mul
     {T : (∀ j, Matrix (Fin (D j)) (Fin (D j)) ℂ) ≃+* _} {σ : ι ≃ ι} {i : ι}
     (M N : Matrix (Fin (D i)) (Fin (D i)) ℂ) :
@@ -140,13 +138,13 @@ theorem componentMap_map_one
   simp only [componentMap, blockComponentMap, ringEquiv_single_one_eq T σ hσ i,
     Pi.single_eq_same]
 
-omit [Fintype ι] [∀ i, NeZero (D i)] in
+omit [Finite ι] [∀ i, NeZero (D i)] in
 /-- The component map commutes with ℂ-scalar multiplication when T is a ℂ-algebra map. -/
 theorem componentMap_map_smul_of_algEquiv
     {T : (∀ j, Matrix (Fin (D j)) (Fin (D j)) ℂ) ≃ₐ[ℂ] _} {σ : ι ≃ ι} {i : ι}
     (c : ℂ) (M : Matrix (Fin (D i)) (Fin (D i)) ℂ) :
     componentMap T.toRingEquiv σ i (c • M) = c • componentMap T.toRingEquiv σ i M := by
-  show T (Pi.single i (c • M)) (σ i) = c • T (Pi.single i M) (σ i)
+  change T (Pi.single i (c • M)) (σ i) = c • T (Pi.single i M) (σ i)
   rw [Pi.single_smul, map_smul, Pi.smul_apply]
 
 private noncomputable def componentMapRingHom
@@ -190,7 +188,7 @@ end ComponentMap
 /-! ### Dimension preservation -/
 section DimPreservation
 
-variable {ι : Type*} [Fintype ι] [DecidableEq ι]
+variable {ι : Type*} [Finite ι] [DecidableEq ι]
 variable {D : ι → ℕ} [∀ i, NeZero (D i)]
 
 /-- The permutation preserves block dimensions. -/
@@ -214,7 +212,7 @@ end DimPreservation
 /-! ### Main decomposition -/
 section MainDecomposition
 
-variable {ι : Type*} [Fintype ι] [DecidableEq ι]
+variable {ι : Type*} [Finite ι] [DecidableEq ι]
 variable {D : ι → ℕ} [∀ i, NeZero (D i)]
 
 /-- **Main theorem**: Any ℂ-algebra automorphism of `∏_i M_{D_i}(ℂ)` decomposes as a block
