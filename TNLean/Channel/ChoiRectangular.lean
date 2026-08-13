@@ -126,6 +126,12 @@ noncomputable def choiMatrixLinearMap :
     choiMatrix (c • T) = c • choiMatrix T :=
   (choiMatrixLinearMap (d := d) (d' := d')).map_smul c T
 
+/-- The Choi assignment commutes with finite sums of maps. -/
+theorem choiMatrix_sum {ι : Type*} (s : Finset ι)
+    (T : ι → (Matrix (Fin d) (Fin d) ℂ →ₗ[ℂ] Matrix (Fin d') (Fin d') ℂ)) :
+    choiMatrix (∑ i ∈ s, T i) = ∑ i ∈ s, choiMatrix (T i) :=
+  map_sum (choiMatrixLinearMap (d := d) (d' := d')) T s
+
 /-- The **inverse Choi assignment**: for an operator `τ` on `ℂ^{d'} ⊗ ℂ^d`,
 the linear map `T : M_d(ℂ) → M_{d'}(ℂ)` with entries
 
