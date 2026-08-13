@@ -21,7 +21,6 @@ quoted from Fannes--Nachtergaele--Werner in Nachtergaele, equation (6.1). See
 
 ## Main results
 
-* `MPSTensor.IsPrimitiveMPS.wholeIncrement_groundProjection_defect_le_geometric`
 * `MPSTensor.IsPrimitiveMPS.openChain_groundProjection_defect_le_geometric`
 -/
 
