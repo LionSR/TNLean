@@ -6,8 +6,11 @@ from __future__ import annotations
 import importlib.util
 import sys
 import tempfile
+from collections import Counter
 from types import SimpleNamespace
 from pathlib import Path
+
+from tenkzlib.texcase import scan_environments
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -31,6 +34,33 @@ DISPLAYED_FLOOR = 49
 REFERENCE_FLOOR = 12
 
 
+def _declared_refusals(
+    text: str, source_dir: Path, inherited_conditionals: tuple[str, ...] = ()
+) -> int:
+    """Count the tnrefusal blocks TeX would execute in a chapter.
+
+    The count reads the chapter through the extractor's own preprocessing:
+    inert TeX is masked first, and displayed-environment bodies are excluded
+    by the same span walk the extractor uses, so a refusal quoted inside a
+    Verbatim block or parked in a dead conditional never enters the count.
+    A second pass with the shared environment scanner then charges refusal
+    begins the extractor cannot see — a spaced \\begin {tnrefusal} is
+    executable TeX — so an extractor blind spot fails the gate instead of
+    hiding inside it.
+    """
+    scan_text = DOCTEST._mask_inert_tex(text, source_dir, inherited_conditionals)
+    spans = DOCTEST._display_environment_spans(scan_text)
+    visible = sum(1 for name, _, _ in spans if name == "tnrefusal")
+    blind = len(
+        scan_environments(
+            DOCTEST._mask_nonexecuted_tokens(scan_text),
+            ("tnrefusal",),
+            ignored_control_spans=[(start, end) for _, start, end in spans],
+        )
+    )
+    return visible + blind
+
+
 def main() -> int:
     manual = DOCTEST.displayed_examples()
     reference = DOCTEST.reference_examples()
@@ -47,6 +77,60 @@ def main() -> int:
         raise AssertionError(
             "no refusal block in the manual was pinned to [TKZ-EQ-SIGNATURE]: "
             f"found {sorted(codes)}"
+        )
+    # A refusal block that loses its classification silently becomes an
+    # ordinary example, and the assertions above stay green as long as one
+    # classified refusal survives.  Cross-check structurally: in every source
+    # file, each executable tnrefusal block must surface as exactly one
+    # extracted example carrying expected_failure.  Count-matching per file
+    # names the chapter that lost a refusal without pinning diagnostic codes
+    # or a numeric floor: renaming a diagnostic or retiring a refusal block
+    # removes both sides of the equation.  The equality also holds in the
+    # reverse direction: a classification conjured from inert text leaves
+    # the declared side behind and fails the same check.
+    classified = Counter(
+        example.source.resolve() for example in manual if example.expected_failure
+    )
+    for source, inherited_conditionals in DOCTEST._manual_source_contexts():
+        declared = _declared_refusals(
+            source.read_text(encoding="utf-8"), source.parent, inherited_conditionals
+        )
+        extracted_refusals = classified.pop(source.resolve(), 0)
+        if declared != extracted_refusals:
+            raise AssertionError(
+                f"{source}: {declared} executable tnrefusal block(s) in the "
+                f"source, but {extracted_refusals} extracted example(s) carry "
+                "expected_failure"
+            )
+    if classified:
+        raise AssertionError(
+            "expected-failure examples came from files outside the manual "
+            f"source graph: {sorted(str(path) for path in classified)}"
+        )
+    # The declared count answers to TeX, not to the extractor: a spaced
+    # begin is executable and counts, while a refusal quoted in a Verbatim
+    # body or parked in a dead conditional does not.
+    refusal_shapes = r"""
+\begin {tnrefusal}[diagnostic={[TKZ-SPACED] a spaced begin is executable}]
+spaced
+\end{tnrefusal}
+\begin{Verbatim}
+\begin{tnrefusal}[diagnostic={[TKZ-QUOTED] displayed, never executed}]
+\end{tnrefusal}
+\end{Verbatim}
+\iffalse
+\begin{tnrefusal}[diagnostic={[TKZ-DEAD] unreachable branch}]
+\end{tnrefusal}
+\fi
+\newcommand{\storedrefusal}{\begin{tnrefusal}}
+\begin{tnrefusal}[diagnostic={[TKZ-LIVE] the block the extractor sees}]
+live
+\end{tnrefusal}
+"""
+    if _declared_refusals(refusal_shapes, Path.cwd()) != 2:
+        raise AssertionError(
+            "the declared refusal count does not follow TeX execution: "
+            "expected the spaced and live blocks only"
         )
     if len(reference) < REFERENCE_FLOOR:
         raise AssertionError(
