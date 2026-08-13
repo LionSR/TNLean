@@ -476,6 +476,24 @@
 \tenkz@bboxcapturetrue
 \let\tenkz@labelgeometrykey\relax
 \let\tenkz@auditinstallowner\relax
+% Station provenance rides the label whose placement the kernel chose.  The
+% claim is set immediately before the one node it describes and released
+% immediately after it, so every other label site stays unclaimed rather
+% than mislabeled: an absent field is the stream's word for a placement the
+% model has not classified.  The station is the chooser's face word, before
+% compass conversion; an explicit placement claims no station.
+\let\tenkz@labelstation\relax
+\let\tenkz@labelprovenance\relax
+\def\tenkz@labelclaim#1#2{%
+  \def\tenkz@labelprovenance{#1}%
+  \if\relax\detokenize{#2}\relax
+    \let\tenkz@labelstation\relax
+  \else
+    \def\tenkz@labelstation{#2}%
+  \fi}
+\def\tenkz@labelrelease{%
+  \let\tenkz@labelstation\relax
+  \let\tenkz@labelprovenance\relax}
 % Mirror the actual backend graphic state without changing any PGF arguments.
 % Assignments remain local to the same TeX groups as the driver mutations, so
 % inherited scopes and final node options are observed at the real path use.
@@ -540,7 +558,9 @@
     id=\the\tenkz@bboxuid|owner=\the\tenkz@inkowner|%
     xmin=\number\tenkz@bboxxmin|xmax=\number\tenkz@bboxxmax|%
     ymin=\number\tenkz@bboxymin|ymax=\number\tenkz@bboxymax|%
-    shape=\tenkz@labelshape|radius=\number\tenkz@labelradius}}
+    shape=\tenkz@labelshape|radius=\number\tenkz@labelradius%
+    \ifx\tenkz@labelstation\relax\else|station=\tenkz@labelstation\fi%
+    \ifx\tenkz@labelprovenance\relax\else|provenance=\tenkz@labelprovenance\fi}}
 \def\tenkz@checklinear#1#2#3#4#5#6{%
   \tenkz@identitylineartrue
   \pgf@xa=#1pt\relax
@@ -589,6 +609,14 @@
       \endcsname{\the\tenkz@labelradius}%
     \expandafter\xdef\csname tenkz@labelopaque@\tenkz@labelgeometrykey
       \endcsname{\tenkz@labelopaque}%
+    \ifx\tenkz@labelstation\relax\else
+      \expandafter\xdef\csname tenkz@labelstation@\tenkz@labelgeometrykey
+        \endcsname{\tenkz@labelstation}%
+    \fi
+    \ifx\tenkz@labelprovenance\relax\else
+      \expandafter\xdef\csname tenkz@labelprovenance@\tenkz@labelgeometrykey
+        \endcsname{\tenkz@labelprovenance}%
+    \fi
   \fi}
 \def\tenkz@cleanupstoredlabelgeometry#1{%
   \global\expandafter\let\csname tenkz@labelxmin@#1\endcsname\relax
@@ -597,7 +625,9 @@
   \global\expandafter\let\csname tenkz@labelymax@#1\endcsname\relax
   \global\expandafter\let\csname tenkz@labelshape@#1\endcsname\relax
   \global\expandafter\let\csname tenkz@labelradius@#1\endcsname\relax
-  \global\expandafter\let\csname tenkz@labelopaque@#1\endcsname\relax}
+  \global\expandafter\let\csname tenkz@labelopaque@#1\endcsname\relax
+  \global\expandafter\let\csname tenkz@labelstation@#1\endcsname\relax
+  \global\expandafter\let\csname tenkz@labelprovenance@#1\endcsname\relax}
 \def\tenkz@emitstoredlabelbbox#1#2{%
   \begingroup
   \tenkz@requireidentitylinear{#1}{label}%
@@ -616,6 +646,10 @@
     \advance\tenkz@bboxymax by \tenkz@bboxya
     \edef\tenkz@labelshape{\csname tenkz@labelshape@#2\endcsname}%
     \tenkz@labelradius=\csname tenkz@labelradius@#2\endcsname\relax
+    \expandafter\let\expandafter\tenkz@labelstation
+      \csname tenkz@labelstation@#2\endcsname
+    \expandafter\let\expandafter\tenkz@labelprovenance
+      \csname tenkz@labelprovenance@#2\endcsname
     \tenkz@writelabelbbox
   \fi
   \fi
