@@ -395,6 +395,49 @@ def _kernel_tombstones() -> dict[tuple[str, str], str]:
     )
 
 
+# A bare tombstone row bans its word from case source, and the word may
+# outlive the key that died inside alphabets the registry types opaquely.
+# The kernel parser states those alphabets -- the choice tables, and the
+# wire-end grammar whose open words follow the word `open' -- so the live
+# owners are read from the parser source, exactly as the refused spellings
+# above are: adding or retiring a word is one kernel edit and no edit here.
+_KERNEL_CHOICE = re.compile(r"\\__tenkz_kernel_choice:nnnn\s*(?=\{)")
+_KERNEL_OPEN_WORDS = re.compile(r"\\A\s+open\s+\\s\+\s+\(([a-z|]+)\)\s+\\Z")
+
+
+def _live_word_owners_from_texts(texts: Iterable[str]) -> dict[str, set[str]]:
+    """Collect each parser-held word with the live spellings that carry it.
+
+    The value is a set of source prefixes: a choice word is carried as
+    `<key>=<word>`, an open end word as `open <word>`.  A pattern built for
+    a dead bare key steps over these, so a live spelling of the surviving
+    word is never reported as the dead key.
+    """
+    owners: dict[str, set[str]] = {}
+    for text in texts:
+        text = strip_comments(text)
+        for match in _KERNEL_CHOICE.finditer(text):
+            position = match.end()
+            fields: list[str] = []
+            for _ in range(3):
+                field, position = _group(text, position)
+                fields.append(field)
+            _family, key, words = (_sentence(field) for field in fields)
+            for word in words.split(","):
+                owners.setdefault(word.strip(), set()).add(f"{key}=")
+        for match in _KERNEL_OPEN_WORDS.finditer(text):
+            for word in match.group(1).split("|"):
+                owners.setdefault(word.strip(), set()).add("open ")
+    return owners
+
+
+def live_word_owners() -> dict[str, set[str]]:
+    return _live_word_owners_from_texts(
+        path.read_text(encoding="utf-8")
+        for path in (ROOT / "tex/tenkz").glob("*.code.tex")
+    )
+
+
 def tombstone_rows(entries: list[Entry]) -> list[tuple[str, str, str]]:
     """The ledger's rows as scope, spelling, and migration a reader is shown.
 
