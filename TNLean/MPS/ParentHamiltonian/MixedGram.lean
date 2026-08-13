@@ -175,8 +175,8 @@ theorem inner_tailBoundaryMapES_adjoint_leftBoundaryMapES_q
 -- map there is \(U\circ T\), and
 -- \((U\circ T)^\dagger L=T^\dagger(U^\dagger L)\). Hence its reassociated
 -- mixed-Gram theorem is this identity transported by \(U\), with the same
--- right-hand side; it is a wrapper around this theorem, not a second coordinate
--- proof.
+-- right-hand side; it is an equivalent formulation of this theorem, not a
+-- second coordinate proof.
 
 /-- Exact mixed-Gram identity for the overlapping windows in Nachtergaele's C3
 geometry (arXiv:cond-mat/9410110, equation (2.4)).
