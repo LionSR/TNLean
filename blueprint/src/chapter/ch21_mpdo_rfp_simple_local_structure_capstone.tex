@@ -1364,6 +1364,116 @@ This is the calculation in
     multiplicity.
 \end{proof}
 
+% Project-derived finite-ring consequence of CPSV16 Example 4.11.
+% See docs/paper-gaps/cpsv16_examples_4_10_4_11_entropy.tex.
+\begin{theorem}[Exact length-four effective entropies]
+    \label{thm:cpsv_example411_length_four_effective_entropies}
+    \lean{MPOTensor.CPSVExample411Entropy.M_isMPDO,
+        MPOTensor.CPSVExample411Entropy.blockEntropy_one,
+        MPOTensor.CPSVExample411Entropy.blockEntropy_two,
+        MPOTensor.CPSVExample411Entropy.blockEntropy_three,
+        MPOTensor.CPSVExample411Entropy.blockEntropy_four}
+    \leanok
+    \uses{def:block_entropy,
+        thm:cpsv_example411_length_four_effective_spectra}
+    The effective binary tensor generates positive semidefinite periodic
+    operators.  On the ring of length four, write $S_L=S(\rho_L)$.  With
+    $h(x)=-x\log x$, where $\log$ is the natural logarithm,
+    \begin{align}
+      S_1&=\log 2,\notag\\
+      S_2&=2h(14/41)+2h(13/82),\notag\\
+      S_3&=2h(10/41)+4h(4/41)+2h(5/82),\notag\\
+      S_4&=2h(8/41)+12h(2/41)+2h(1/82).
+      \notag
+    \end{align}
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:cpsv_example411_binary_support_normalization,
+        thm:cpsv_example411_length_four_effective_spectra,
+        lem:entropy_charpoly_roots}
+    Every positive-length periodic operator is diagonal, and each diagonal
+    entry is a product of entries of
+    $W=\left(\begin{smallmatrix}1&1/2\\1/2&1\end{smallmatrix}\right)$, hence is
+    non-negative.  For each $L$, summing $h(\lambda)$ over the roots and their
+    multiplicities in
+    Theorem~\ref{thm:cpsv_example411_length_four_effective_spectra} gives the
+    displayed entropy.
+\end{proof}
+
+% Project-derived scalar certificate for CPSV16 Example 4.11.
+% See docs/paper-gaps/cpsv16_examples_4_10_4_11_entropy.tex.
+\begin{theorem}[Positivity of the Example 4.11 logarithmic ratio]
+    \label{thm:cpsv_example411_log_ratio_pos}
+    \lean{CPSVExamples410411Arithmetic.example411_log_ratio_pos}
+    \leanok
+    The exact scalar ratio from the four-site calculation satisfies
+    \[
+      \log\!\left(
+        \frac{41^{82}5^{50}}{2^{48}13^{52}7^{112}}
+      \right)>0.
+    \]
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    The numerator is strictly larger than the denominator, as follows by an
+    exact integer calculation, so the ratio is greater than one and its
+    logarithm is strictly positive.
+\end{proof}
+
+\begin{theorem}[Exact length-four mutual-information obstruction]
+    \label{thm:cpsv_example411_length_four_mutual_information_obstruction}
+    \lean{MPOTensor.CPSVExample411Entropy.mutualInfo_two_sub_one,
+        MPOTensor.CPSVExample411Entropy.mutualInfo_two_sub_one_pos,
+        MPOTensor.CPSVExample411Entropy.M_not_isSAL}
+    \leanok
+    \uses{def:is_sal,
+        thm:cpsv_example411_length_four_effective_entropies}
+    For $I_L=S_L+S_{4-L}-S_4$,
+    \begin{align}
+      I_2-I_1
+      &=\frac1{82}\log\!\left(
+        \frac{41^{82}5^{50}}{2^{48}13^{52}7^{112}}\right)>0.
+      \notag
+    \end{align}
+    Consequently, the effective binary tensor does not satisfy saturation of
+    the area law.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{lem:sal_const,
+        thm:cpsv_example411_length_four_effective_entropies,
+        thm:cpsv_example411_log_ratio_pos}
+    Since $I_2-I_1=2S_2-S_1-S_3$, expanding
+    $h(x)=-x\log x$ and using the logarithm rules gives the displayed identity.
+    The certified comparison
+    $41^{82}5^{50}>2^{48}13^{52}7^{112}$ makes its logarithm strictly positive.
+    Saturation would instead require $I_1=I_2$ on the four-site ring.
+\end{proof}
+
+\begin{theorem}[Ambient length-four saturation obstruction]
+    \label{thm:cpsv_example411_ambient_not_sal}
+    \lean{MPOTensor.CPSVExample411Entropy.ambientM_not_isSAL}
+    \leanok
+    \uses{def:cpsv_example411_ambient_support_inclusion,
+        thm:cpsv_example411_length_four_mutual_information_obstruction,
+        thm:mpdo_sal_physical_isometry_transport}
+    The isometric inclusion of the effective binary tensor into the
+    two-qubit one-site space does not satisfy saturation of the area law.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:mpdo_sal_physical_isometry_transport,
+        thm:cpsv_example411_length_four_mutual_information_obstruction}
+    If the ambient tensor satisfied saturation, descent through the physical
+    isometry would imply saturation for the effective binary tensor, contrary
+    to the preceding theorem.
+\end{proof}
+
 % CPSV16 Example 4.12, lines 932--939.
 % Normalization gap: docs/paper-gaps/cpsv16_example_4_12_normalization.tex.
 \begin{definition}[Literal tensor in Example 4.12]
