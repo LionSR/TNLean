@@ -1,3 +1,127 @@
+\begin{definition}[Cyclic window and complement indexing]
+    \label{def:cyclic_window_complement_indexing}
+    \lean{MPSTensor.cyclicWindowIndexEquiv}
+    \lean{MPSTensor.cyclicWindowIndexEquiv_inl}
+    \lean{MPSTensor.cyclicWindowIndexEquiv_inr}
+    \leanok
+    If $L\leq N$ and $i\in\Fin{N}$, identify the sites of the periodic chain
+    with the disjoint union of the cyclic window
+    $i,i+1,\ldots,i+L-1$ and its ordered complement
+    $i+L,i+L+1,\ldots,i+N-1$, with all indices taken modulo $N$.
+\end{definition}
+
+\begin{theorem}[Cyclic product factorization]
+    \label{thm:cyclic_window_complement_product_factorization}
+    \lean{MPSTensor.prod_cyclicWindow_complement}
+    \leanok
+    \uses{def:cyclic_window_complement_indexing}
+    Let $M$ be a commutative monoid. If $L\leq N$, $i\in\Fin{N}$, and
+    $f\colon\Fin{N}\to M$, then the product of $f$ over the chain equals the
+    product over the cyclic window beginning at $i$ times the product over its
+    ordered complement.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{def:cyclic_window_complement_indexing}
+    Reindex the product by the cyclic window and complement identification of
+    Definition~\ref{def:cyclic_window_complement_indexing}, then split the
+    product over the resulting disjoint union.
+\end{proof}
+
+\begin{theorem}[Three-site anticommutator transport to cyclic adjacent pairs]
+    \label{thm:three_site_anticommutator_cyclic_transport}
+    \lean{MPSTensor.re_inner_localTermES_adjacent_twoSite_forward_ge_of_threeSite}
+    \lean{MPSTensor.re_inner_localTermES_adjacent_twoSite_backward_ge_of_threeSite}
+    \leanok
+    \uses{rem:euclidean_local_projector_ingredients,
+        rem:cyclic_window_operators}
+    Fix a tensor $A$ with physical dimension $d>0$ and a coefficient
+    $c\in\mathbb R$. For every chain length $N$ and site $i\in\Fin{N}$, set
+    $h_i^{(N)}:=h_{i,\mathrm{ES}}^{(N,2)}(A)$, the Euclidean range-two parent
+    term of this same tensor $A$ at $i$. Suppose that, for
+    every three-site vector $w$,
+    \begin{align}
+      -c(\re\langle h_0^{(3)}w,w\rangle+\re\langle h_1^{(3)}w,w\rangle)
+      &\leq
+      \re\langle h_0^{(3)}w,h_1^{(3)}w\rangle
+      +\re\langle h_1^{(3)}w,h_0^{(3)}w\rangle.
+      \label{eq:three_site_anticommutator_transport_hypothesis}
+    \end{align}
+    Then, for every $N\geq3$, every site $i\in\Fin{N}$, and every $N$-site
+    vector $v$, the forward pair satisfies
+    \begin{align}
+      -c\bigl(\re\langle h_i^{(N)}v,v\rangle
+          +\re\langle h_{i+1}^{(N)}v,v\rangle\bigr)
+      &\leq \re\langle h_i^{(N)}v,h_{i+1}^{(N)}v\rangle
+          +\re\langle h_{i+1}^{(N)}v,h_i^{(N)}v\rangle,
+      \label{eq:three_site_anticommutator_transport_forward}
+    \end{align}
+    and the backward pair satisfies
+    \begin{align}
+      -c\bigl(\re\langle h_i^{(N)}v,v\rangle
+          +\re\langle h_{i-1}^{(N)}v,v\rangle\bigr)
+      &\leq \re\langle h_i^{(N)}v,h_{i-1}^{(N)}v\rangle
+          +\re\langle h_{i-1}^{(N)}v,h_i^{(N)}v\rangle.
+      \label{eq:three_site_anticommutator_transport_backward}
+    \end{align}
+    All site indices are taken modulo $N$, so these conclusions include pairs
+    and three-site windows crossing the periodic cut.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{rem:cyclic_window_operators,
+        def:cyclic_window_complement_indexing,
+        thm:three_site_commutator_chain_transport}
+    For a cyclic three-site window beginning at $i$, write
+    $\mathcal C_{N-3}$ for its ordered complementary configurations and
+    $R_{i,\tau}^{(3)}$ for restriction with complement $\tau$ fixed.
+    Definition~\ref{def:cyclic_window_complement_indexing} identifies every
+    chain configuration uniquely with its window and complement, while the
+    cyclic restriction operators of Remark~\ref{rem:cyclic_window_operators}
+    give the fiber decomposition
+    \begin{align}
+      \re\langle u,v\rangle
+      &=\sum_{\tau\in\mathcal C_{N-3}}
+        \re\left\langle R_{i,\tau}^{(3)}u,
+          R_{i,\tau}^{(3)}v\right\rangle.
+      \label{eq:three_site_anticommutator_fiber_decomposition}
+    \end{align}
+    The restriction identities in
+    Theorem~\ref{thm:three_site_commutator_chain_transport} intertwine the two
+    adjacent terms:
+    \begin{align}
+      R_{i,\tau}^{(3)}h_i^{(N)}
+      &=h_0^{(3)}R_{i,\tau}^{(3)},
+      &
+      R_{i,\tau}^{(3)}h_{i+1}^{(N)}
+      &=h_1^{(3)}R_{i,\tau}^{(3)}.
+      \label{eq:three_site_anticommutator_restriction_intertwining}
+    \end{align}
+    Applying
+    (\ref{eq:three_site_anticommutator_transport_hypothesis}) to
+    $w_\tau=R_{i,\tau}^{(3)}v$ and summing over the complement gives
+    \begin{align}
+      \sum_{\tau\in\mathcal C_{N-3}}
+        -c\bigl(\re\langle h_0^{(3)}w_\tau,w_\tau\rangle
+          +\re\langle h_1^{(3)}w_\tau,w_\tau\rangle\bigr)
+      &\leq
+      \sum_{\tau\in\mathcal C_{N-3}}
+        \bigl(\re\langle h_0^{(3)}w_\tau,h_1^{(3)}w_\tau\rangle
+          +\re\langle h_1^{(3)}w_\tau,h_0^{(3)}w_\tau\rangle\bigr),
+      \label{eq:three_site_anticommutator_fiber_sum}
+    \end{align}
+    By the fiber decomposition
+    (\ref{eq:three_site_anticommutator_fiber_decomposition}) and restriction
+    intertwining (\ref{eq:three_site_anticommutator_restriction_intertwining}),
+    this is (\ref{eq:three_site_anticommutator_transport_forward}); in
+    particular, summation leaves $c$ unchanged. For the backward
+    pair, begin the forward window at $i-1$. Moving one step forward from that
+    site returns $i$, including when $i=0$, and yields
+    (\ref{eq:three_site_anticommutator_transport_backward}).
+\end{proof}
+
 \begin{lemma}[Quadratic-form estimate from the martingale condition]
     \label{lem:parent_hamiltonian_ordered_rowsum_quadratic}
     \lean{MPSTensor.parentHamiltonianES_quadratic_form_of_ordered_local_term_bounds}
