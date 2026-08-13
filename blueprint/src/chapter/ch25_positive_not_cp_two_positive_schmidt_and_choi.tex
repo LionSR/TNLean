@@ -445,23 +445,24 @@ Section~\ref{sec:app_positive_not_cp_ky_fan}.
     \leanok
     \uses{lem:eigenbasis_rayleigh, lem:eigenbasis_parseval}
     At the top index $n=D'$, the Schmidt-rank constraint is vacuous and each
-    Ky-Fan $D'$-norm reduces to $\|\rho_i\|_{(D')}=\tr\rho_i=1$. Thus the
-    lower and upper bounds of
-    \cite[Chapter~3, Proposition~3.2]{Wolf2012Quantum} reduce to the Rayleigh
-    characterization of the least eigenvalue: the lower bound becomes
-    $\nu_{\min}\le\bra{\psi}\tau\ket{\psi}$ for every normalized $\psi$, and
-    the upper bound on the infimum becomes the existence of a normalized
-    eigenvector with
+    Ky-Fan $D'$-norm reduces to $\|\rho_i\|_{(D')}=\tr\rho_i=1$. The Rayleigh
+    characterization of the least eigenvalue then applies: every normalized
+    $\psi$ satisfies $\nu_{\min}\le\bra{\psi}\tau\ket{\psi}$, and a
+    least-eigenvalue eigenvector attains
     $\bra{\psi}\tau\ket{\psi}=\nu_{\min}$. Together they give
     \begin{align}
         \inf_{\|\psi\|=1}\bra{\psi}\tau\ket{\psi}
          & =\nu_{\min}.
         \label{eq:schwarz_spectral_schmidt_top}
     \end{align}
-    There is no Schmidt-rank restriction. Together with
+    There is no Schmidt-rank restriction. This is the upper bound of
+    \cite[Chapter~3, Proposition~3.2]{Wolf2012Quantum} at $n=D'$, where
+    $\nu+(\nu_--\nu)\|\rho_-\|_{(D')}=\nu_-=\nu_{\min}$; the lower bound there
+    reads $\nu_0+\sum_{i:\nu_i\le0}(\nu_i-\nu_0)$, which is at most
+    $\nu_{\min}$, so it follows as well. Together with
     Theorems~\ref{thm:spectral_lower_bound_schmidt_rank}
-    and~\ref{thm:spectral_upper_bound_schmidt_rank}, this covers the full
-    range $1\le n\le D'$ of
+    and~\ref{thm:spectral_upper_bound_schmidt_rank}, this covers every $n\ge1$,
+    hence the range of
     \cite[Chapter~3, Proposition~3.2]{Wolf2012Quantum}.
 \end{theorem}
 

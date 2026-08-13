@@ -37,9 +37,10 @@ and, when a single eigenvalue $\nu_-$ is non-positive,
   \tag{3.8}
 \end{align}
 Each $\rho_i$ acts on the first factor $\mathbb{C}^{D'}$, so its Ky-Fan
-$n$-norm $\|\rho_i\|_{(n)}$ is meaningful for $1\le n\le D'$. The Schmidt rank
-$n$ ranges over $1\le n\le D'$, so the top value $n=D'$ is within the source's
-scope.
+$n$-norm $\|\rho_i\|_{(n)}$ is meaningful for $1\le n\le D'$. Proposition~3.1 of
+the same chapter restricts the positivity index to $1\le n\le D$, the dimension
+of the second factor (same file, lines 90--92), so the top value $n=D'$ of the
+Ky-Fan norm is within the source's scope whichever of $D$ and $D'$ is larger.
 
 \section{Formalized statement}
 
@@ -69,12 +70,18 @@ constraint is vacuous: every normalized vector qualifies and
 $\|\rho_i\|_{(D')}=\tr\rho_i=1$. Both bounds therefore constrain the same quantity,
 the infimum of $\langle\psi|\tau|\psi\rangle$ over all normalized vectors:
 \begin{itemize}
-  \item The lower bound~(3.7) becomes $\nu_{\min}\le\langle\psi|\tau|\psi\rangle$
+  \item The Rayleigh estimate gives $\nu_{\min}\le\langle\psi|\tau|\psi\rangle$
   for every normalized $\psi$, so $\inf_\psi\langle\psi|\tau|\psi\rangle\ge
-  \nu_{\min}$.
+  \nu_{\min}$. The right-hand side of~(3.7) reads
+  $\nu_0+\sum_{i:\nu_i\le0}(\nu_i-\nu_0)$ there, which is at most $\nu_{\min}$
+  and in general strictly below it: for the spectrum $(-2,-1,3)$ it is $-6$
+  while $\nu_{\min}=-2$. So~(3.7) at the top index follows from the Rayleigh
+  estimate, but is not the same inequality.
   \item The upper bound~(3.8) on the infimum becomes the existence of a normalized
   vector with $\langle\psi|\tau|\psi\rangle=\nu_{\min}$, namely a least-eigenvalue
-  eigenvector, so $\inf_\psi\langle\psi|\tau|\psi\rangle\le\nu_{\min}$.
+  eigenvector, so $\inf_\psi\langle\psi|\tau|\psi\rangle\le\nu_{\min}$; and under
+  the hypothesis of~(3.8) that $\nu_-$ is the only non-positive eigenvalue, the
+  right-hand side $\nu+(\nu_--\nu)\|\rho_-\|_{(D')}$ is exactly $\nu_-=\nu_{\min}$.
 \end{itemize}
 Together they give $\inf_\psi\langle\psi|\tau|\psi\rangle=\nu_{\min}$. Both facts
 follow directly from the Rayleigh expansion $\langle\psi|\tau|\psi\rangle=\sum_i
@@ -84,22 +91,27 @@ evaluating at the least-eigenvalue eigenvector; the Ky-Fan machinery of the $n<D
 proof is not invoked.
 
 The top-index endpoint is recorded as
-\leanid{Matrix.IsHermitian.spectral_lower_bound_top} for~(3.7) and
-\leanid{Matrix.IsHermitian.exists_spectral_lower_bound_top} for~(3.8), which
-together state $\min_\psi\langle\psi|\tau|\psi\rangle=\nu_{\min}$.
+\leanid{Matrix.IsHermitian.spectral_lower_bound_top} and
+\leanid{Matrix.IsHermitian.exists_spectral_lower_bound_top}, which together
+state $\min_\psi\langle\psi|\tau|\psi\rangle=\nu_{\min}$. Inequality~(3.7)
+itself at the top index, in the infimum form, is
+\leanid{Matrix.IsHermitian.le_sInf_schmidtRankLEExpectations_top}, and~(3.8) is
+the corresponding half of
+\leanid{Matrix.IsHermitian.sInf_schmidtRankLEExpectations_top}.
 
 \section{Classification}
 
-\emph{Resolved.} The full source range $1\le n\le D'$ of bounds~(3.7) and~(3.8)
-is now formalized: the per-vector bounds
+\emph{Resolved.} Bounds~(3.7) and~(3.8) are now formalized at every index
+$n\ge1$, hence over the source's range $1\le n\le D$: the per-vector bounds
 \leanid{Matrix.IsHermitian.spectral_lower_bound} and
 \leanid{Matrix.IsHermitian.exists_le_spectral_upper_bound} for $1\le n<D'$, and
-their top-index endpoints
-\leanid{Matrix.IsHermitian.spectral_lower_bound_top}~(3.7) and
-\leanid{Matrix.IsHermitian.exists_spectral_lower_bound_top}~(3.8) for the
-completely-positive endpoint $n=D'$, by the route detailed in the Status above.
-The infimum form of the source's statement is available over the same range.
-No hypothesis foreign to the source is used.
+their endpoints
+\leanid{Matrix.IsHermitian.spectral_lower_bound_top} and
+\leanid{Matrix.IsHermitian.exists_spectral_lower_bound_top} for $n\ge D'$, by
+the route detailed in the Status above. The infimum form of the source's
+statement is available over the same range,
+\leanid{Matrix.IsHermitian.le_sInf_schmidtRankLEExpectations_top} carrying~(3.7)
+at the top indices. No hypothesis foreign to the source is used.
 
 \bibliographystyle{alpha}
 \bibliography{references}

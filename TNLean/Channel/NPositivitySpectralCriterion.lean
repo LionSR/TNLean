@@ -15,10 +15,12 @@ a bipartite space — for instance the Choi-Jamiolkowski operator of a Hermitian
 map — with eigenvalues νᵢ and normalized eigenvectors φᵢ, write ρᵢ for the
 reduced density operator of φᵢ on the first factor.  Denoting by ν₀ the smallest
 positive eigenvalue and by ν the largest one, the expectation of τ in a vector
-ψ of Schmidt rank n is controlled by the Ky-Fan n-norms of the ρᵢ:
-the infimum over normalized Schmidt-rank-n vectors lies above
+ψ of Schmidt rank at most n is controlled by the Ky-Fan n-norms of the ρᵢ:
+the infimum over the normalized vectors of Schmidt rank at most n lies above
 ν₀ + Σ_{i:νᵢ≤0} (νᵢ − ν₀) ‖ρᵢ‖₍ₙ₎, and — when a single non-positive
-eigenvalue is present — below ν + (ν₋ − ν) ‖ρ₋‖₍ₙ₎.
+eigenvalue is present — below ν + (ν₋ − ν) ‖ρ₋‖₍ₙ₎.  The source writes
+"Schmidt rank n" for the bounded-rank set; the reading is recorded in
+`docs/paper-gaps/wolf_prop_3_2_schmidt_rank_reading.tex`.
 
 The argument separates the positive and non-positive parts of the spectral
 decomposition.  The Rayleigh expansion ⟨ψ|τ|ψ⟩ = Σᵢ νᵢ |⟨φᵢ|ψ⟩|² together with
@@ -36,9 +38,10 @@ overlap vector.
   plain vectors.
 * `Matrix.IsHermitian.reducedEigDensity` -- the reduced density operator of an
   eigenvector projector on the first tensor factor.
-* `Matrix.schmidtRankLEExpectations` -- the expectations ⟨ψ|τ|ψ⟩ realized by the
+* `Matrix.schmidtRankLEExpectations` -- the real parts Re ⟨ψ|τ|ψ⟩ realized by the
   normalized vectors of Schmidt rank at most n, the set whose infimum the source
-  bounds.
+  bounds.  For Hermitian τ, the setting of every result here, the quadratic form
+  is real and the real part is the expectation itself.
 
 ## Main results
 
@@ -47,21 +50,23 @@ overlap vector.
 * `Matrix.IsHermitian.sum_normSq_eigenvector_overlap` and its real form -- Parseval's
   identity for the eigenbasis overlaps.
 * `Matrix.IsHermitian.spectral_lower_bound` -- Wolf's Chapter 3, Proposition 3.2,
-  equation (3.7): the lower bound on the expectation in a Schmidt-rank-n vector.
+  equation (3.7): the lower bound on the expectation in a vector of Schmidt rank
+  at most n.
 * `Matrix.IsHermitian.exists_le_spectral_upper_bound` -- Wolf's Chapter 3,
-  Proposition 3.2, equation (3.8): a Schmidt-rank-n vector realizing the matching
-  upper bound on the infimum.
+  Proposition 3.2, equation (3.8): a vector of Schmidt rank at most n realizing
+  the matching upper bound on the infimum.
 * `Matrix.IsHermitian.spectral_lower_bound_top` and
-  `Matrix.IsHermitian.exists_spectral_lower_bound_top` -- the top-index n = D case
-  of equations (3.7) and (3.8), where the Schmidt-rank constraint is vacuous and
-  the bounds reduce to the Rayleigh characterization of the least eigenvalue
-  min_ψ ⟨ψ|τ|ψ⟩ = λ_min.
+  `Matrix.IsHermitian.exists_spectral_lower_bound_top` -- the top-index n = D'
+  case, where the Schmidt-rank constraint is vacuous and the Rayleigh
+  characterization of the least eigenvalue gives min_ψ ⟨ψ|τ|ψ⟩ = λ_min.
 * `Matrix.IsHermitian.le_sInf_schmidtRankLEExpectations` and
   `Matrix.IsHermitian.sInf_schmidtRankLEExpectations_le` -- equations (3.7)
   and (3.8) in the source's form, as the two bounds on
-  inf_ψ ⟨ψ|τ|ψ⟩ over the normalized vectors of Schmidt rank n.
-* `Matrix.IsHermitian.sInf_schmidtRankLEExpectations_top` -- the same infimum at
-  the top index n = D', where it equals the least eigenvalue.
+  inf_ψ ⟨ψ|τ|ψ⟩ over the normalized vectors of Schmidt rank at most n.
+* `Matrix.IsHermitian.sInf_schmidtRankLEExpectations_top` and
+  `Matrix.IsHermitian.le_sInf_schmidtRankLEExpectations_top` -- the same infimum
+  at an index n ≥ D', where it equals the least eigenvalue, and equation (3.7)
+  there.
 
 ## References
 
@@ -313,6 +318,29 @@ theorem IsHermitian.reducedEigDensity_posSemidef {τ : Matrix (m × n) (m × n) 
   rw [hτ.reducedEigDensity_eq]
   exact posSemidef_self_mul_conjTranspose _
 
+/-- The reduced density operator of an eigenvector has unit trace. -/
+theorem IsHermitian.trace_reducedEigDensity {τ : Matrix (m × n) (m × n) ℂ}
+    (hτ : τ.IsHermitian) (i : m × n) :
+    (hτ.reducedEigDensity i).trace = 1 := by
+  rw [IsHermitian.reducedEigDensity, trace_partialTraceRight, trace_vecMulVec,
+    dotProduct_comm]
+  exact hτ.star_eigenvector_dotProduct_self i
+
+/-- Once the index reaches the dimension of the first tensor factor, the Ky-Fan
+norm of a reduced eigenvector density is its trace: ‖ρᵢ‖₍ₖ₎ = tr ρᵢ = 1 for
+k ≥ D'.  Indices past the dimension contribute a zero eigenvalue. -/
+theorem IsHermitian.kyFanNorm_reducedEigDensity_eq_one {τ : Matrix (m × n) (m × n) ℂ}
+    (hτ : τ.IsHermitian) (i : m × n) {k : ℕ} (hk : Fintype.card m ≤ k) :
+    (hτ.reducedEigDensity_posSemidef i).isHermitian.kyFanNorm k = 1 := by
+  have hstab : (hτ.reducedEigDensity_posSemidef i).isHermitian.kyFanNorm k
+      = (hτ.reducedEigDensity_posSemidef i).isHermitian.kyFanNorm (Fintype.card m) := by
+    simp only [Matrix.IsHermitian.kyFanNorm, Matrix.IsHermitian.descEigenvalue]
+    refine (Finset.sum_subset (Finset.range_subset_range.2 hk) fun x _ hx => ?_).symm
+    rw [Finset.mem_range] at hx
+    exact dif_neg hx
+  rw [hstab, Matrix.IsHermitian.kyFanNorm_card_eq_trace_re, hτ.trace_reducedEigDensity i,
+    Complex.one_re]
+
 /-- The squared overlap of a normalized vector of Schmidt rank at most k with an
 eigenvector is bounded by the Ky-Fan k-norm of that eigenvector's reduced
 density operator.  This is the maximal-overlap lemma (Wolf Lemma 3.1) specialized
@@ -380,11 +408,12 @@ normalized vector ψ of Schmidt rank at most k satisfies
 ν₀ + Σ_{i:νᵢ≤0} (νᵢ − ν₀) ‖ρᵢ‖₍ₖ₎ ≤ ⟨ψ|τ|ψ⟩, hence the same bound holds for the
 infimum over such vectors.
 
-This version covers Schmidt rank 1 ≤ k < D, where D is the dimension of the
-first tensor factor.  The top index k = D, where the Schmidt-rank constraint is
-vacuous and the bound degenerates to the Rayleigh estimate λ_min ≤ ⟨ψ|τ|ψ⟩, is
-`Matrix.IsHermitian.spectral_lower_bound_top`; the two together cover the full
-source range 1 ≤ k ≤ D.  See
+This version covers Schmidt rank 1 ≤ k < D', where D' is the dimension of the
+first tensor factor.  From k = D' on, the Schmidt-rank constraint is vacuous and
+the Rayleigh estimate λ_min ≤ ⟨ψ|τ|ψ⟩ of
+`Matrix.IsHermitian.spectral_lower_bound_top` applies, itself dominating the
+bound above; the two together cover every k ≥ 1, hence the source's range
+1 ≤ k ≤ D with D the dimension of the second factor.  See
 `docs/paper-gaps/wolf_prop_3_2_top_index_scope.tex`. -/
 theorem IsHermitian.spectral_lower_bound {τ : Matrix (m × n) (m × n) ℂ}
     (hτ : τ.IsHermitian) {ν₀ : ℝ} {k : ℕ} (hk1 : 1 ≤ k) (hk : k < Fintype.card m)
@@ -410,9 +439,9 @@ value.  In the source ν is the largest positive eigenvalue and j indexes the
 unique non-positive eigenvalue ν₋, in which case the bound reads
 ν + (ν₋ − ν) ‖ρ₋‖₍ₖ₎.
 
-This version covers 1 ≤ k < D.  At the top index k = D, where the Schmidt
-constraint is vacuous and j is taken at the minimizing index, the bound becomes
-the existence of a vector with ⟨ψ|τ|ψ⟩ = λ_min, i.e.
+This version covers 1 ≤ k < D'.  From k = D' on, where the Schmidt constraint is
+vacuous and j is taken at the minimizing index, the bound becomes the existence
+of a vector with ⟨ψ|τ|ψ⟩ = λ_min, i.e.
 inf_ψ ⟨ψ|τ|ψ⟩ ≤ λ_min; that endpoint is
 `Matrix.IsHermitian.exists_spectral_lower_bound_top`.  See
 `docs/paper-gaps/wolf_prop_3_2_top_index_scope.tex`. -/
@@ -441,8 +470,10 @@ is the set over which n-positivity quantifies.  The reading is recorded in
 `docs/paper-gaps/wolf_prop_3_2_schmidt_rank_reading.tex`.
 -/
 
-/-- The expectations ⟨ψ|τ|ψ⟩ realized by the normalized vectors ψ of Schmidt
-rank at most k. -/
+/-- The real parts Re ⟨ψ|τ|ψ⟩ realized by the normalized vectors ψ of Schmidt
+rank at most k.  For Hermitian τ the quadratic form is real, so this is the set
+of expectations of τ in those vectors; for a general τ it is the set of their
+real parts. -/
 def schmidtRankLEExpectations (τ : Matrix (m × n) (m × n) ℂ) (k : ℕ) : Set ℝ :=
   {r : ℝ | ∃ ψ : m × n → ℂ, star ψ ⬝ᵥ ψ = 1 ∧ HasSchmidtRankLE k ψ ∧
     (star ψ ⬝ᵥ (τ *ᵥ ψ)).re = r}
@@ -485,14 +516,16 @@ bipartite space with eigenvalues νᵢ, normalized eigenvectors φᵢ and reduce
 densities ρᵢ = tr₂ |φᵢ⟩⟨φᵢ|, and for ν₀ ≥ 0 a lower bound for the positive
 eigenvalues (the smallest positive eigenvalue in the source),
 inf_ψ ⟨ψ|τ|ψ⟩ ≥ ν₀ + Σ_{i:νᵢ≤0} (νᵢ − ν₀) ‖ρᵢ‖₍ₙ₎, the infimum being taken
-over the normalized vectors of Schmidt rank n.
+over the normalized vectors of Schmidt rank at most n.
 
 The bound holds pointwise at every normalized vector of Schmidt rank at most n,
 hence in particular at those of Schmidt rank exactly n.
 
 The Schmidt-rank range is 1 ≤ n < D', with D' the dimension of the first
-tensor factor; the top index n = D' is
-`Matrix.IsHermitian.sInf_schmidtRankLEExpectations_top`. -/
+tensor factor; the indices n ≥ D' are
+`Matrix.IsHermitian.le_sInf_schmidtRankLEExpectations_top`.  The two together
+cover every n ≥ 1, hence the source's range 1 ≤ n ≤ D with D the dimension of
+the second factor. -/
 theorem IsHermitian.le_sInf_schmidtRankLEExpectations [Nonempty m] [Nonempty n]
     {τ : Matrix (m × n) (m × n) ℂ} (hτ : τ.IsHermitian) {ν₀ : ℝ} {k : ℕ}
     (hk1 : 1 ≤ k) (hk : k < Fintype.card m) (hν0 : 0 ≤ ν₀)
@@ -508,7 +541,7 @@ theorem IsHermitian.le_sInf_schmidtRankLEExpectations [Nonempty m] [Nonempty n]
 /-- **Wolf §3, line 153, Eq. (3.8).**  If every eigenvalue of τ is at most ν
 then, for any eigenvector index j,
 inf_ψ ⟨ψ|τ|ψ⟩ ≤ ν + (νⱼ − ν) ‖ρⱼ‖₍ₙ₎, the infimum being taken over the
-normalized vectors of Schmidt rank n.  In the source ν is the largest positive
+normalized vectors of Schmidt rank at most n.  In the source ν is the largest positive
 eigenvalue and j indexes the unique non-positive eigenvalue ν₋, all other
 eigenvalues being strictly positive, so that the bound reads
 ν + (ν₋ − ν) ‖ρ₋‖₍ₙ₎.
@@ -521,8 +554,10 @@ maximal-overlap vector has Schmidt rank min(n, rank ρ₋), so a limiting argume
 replaces the witness.  Documented in
 `docs/paper-gaps/wolf_prop_3_2_schmidt_rank_reading.tex`.
 
-The Schmidt-rank range is 1 ≤ n < D'; the top index n = D' is
-`Matrix.IsHermitian.sInf_schmidtRankLEExpectations_top`. -/
+The Schmidt-rank range is 1 ≤ n < D'; the indices n ≥ D', where the bound reads
+ν₋ = ν_min, are `Matrix.IsHermitian.sInf_schmidtRankLEExpectations_top`.  The two
+together cover every n ≥ 1, hence the source's range 1 ≤ n ≤ D with D the
+dimension of the second factor. -/
 theorem IsHermitian.sInf_schmidtRankLEExpectations_le [Nonempty m] [Nonempty n]
     {τ : Matrix (m × n) (m × n) ℂ} (hτ : τ.IsHermitian) {νsup : ℝ} {k : ℕ} (j : m × n)
     (hk1 : 1 ≤ k) (hk : k < Fintype.card m) (hmax : ∀ i, hτ.eigenvalues i ≤ νsup) :
@@ -533,11 +568,16 @@ theorem IsHermitian.sInf_schmidtRankLEExpectations_le [Nonempty m] [Nonempty n]
   exact (csInf_le (hτ.schmidtRankLEExpectations_bddBelow k)
     (mem_schmidtRankLEExpectations hψ hrank)).trans hle
 
-/-- **Wolf §3, line 153, Eqs. (3.7) and (3.8) at the top index n = D'.**  Once
-the Schmidt-rank bound reaches the dimension D' of the first tensor factor the
-constraint is vacuous and each Ky-Fan norm collapses to ‖ρᵢ‖₍D'₎ = tr ρᵢ = 1,
-so both bounds read ν_min and the infimum is the least eigenvalue:
-inf_ψ ⟨ψ|τ|ψ⟩ = ν_min. -/
+/-- **Wolf §3, line 153, Eq. (3.8) at the top index n = D'.**  Once the
+Schmidt-rank bound reaches the dimension D' of the first tensor factor the
+constraint is vacuous and each Ky-Fan norm collapses to ‖ρᵢ‖₍D'₎ = tr ρᵢ = 1, so
+the right-hand side of (3.8) reads ν + (ν₋ − ν) = ν₋ = ν_min, and the infimum is
+the least eigenvalue: inf_ψ ⟨ψ|τ|ψ⟩ = ν_min.
+
+Equation (3.7) at the top index is a separate statement: its right-hand side
+reads ν₀ + Σ_{i:νᵢ≤0} (νᵢ − ν₀), which for eigenvalues (−2, −1, 3) is −6 while
+ν_min is −2.  The inequality ν₀ + Σ_{i:νᵢ≤0} (νᵢ − ν₀) ≤ ν_min is
+`Matrix.IsHermitian.le_sInf_schmidtRankLEExpectations_top`. -/
 theorem IsHermitian.sInf_schmidtRankLEExpectations_top [Nonempty m] [Nonempty n]
     {τ : Matrix (m × n) (m × n) ℂ} (hτ : τ.IsHermitian) {k : ℕ}
     (hk : Fintype.card m ≤ k) :
@@ -553,5 +593,45 @@ theorem IsHermitian.sInf_schmidtRankLEExpectations_top [Nonempty m] [Nonempty n]
       ((schmidtRank_le_left _).trans hk)⟩ ?_
     rintro r ⟨ψ, hψ, -, rfl⟩
     exact hτ.spectral_lower_bound_top hψ
+
+/-- **Wolf §3, line 153, Eq. (3.7) at the top index n = D'.**  For n ≥ D' every
+Ky-Fan norm ‖ρᵢ‖₍ₙ₎ equals tr ρᵢ = 1, so the right-hand side of (3.7) reads
+ν₀ + Σ_{i:νᵢ≤0} (νᵢ − ν₀).  That value is at most the least eigenvalue: the
+summand at a minimizing index already lowers ν₀ to ν_min, and the remaining
+summands are nonpositive.  With
+`Matrix.IsHermitian.sInf_schmidtRankLEExpectations_top` this gives (3.7) at the
+top index. -/
+theorem IsHermitian.le_sInf_schmidtRankLEExpectations_top [Nonempty m] [Nonempty n]
+    {τ : Matrix (m × n) (m × n) ℂ} (hτ : τ.IsHermitian) {ν₀ : ℝ} {k : ℕ}
+    (hk : Fintype.card m ≤ k) (hν0 : 0 ≤ ν₀)
+    (hmin : ∀ i, 0 < hτ.eigenvalues i → ν₀ ≤ hτ.eigenvalues i) :
+    ν₀ + ∑ i ∈ Finset.univ.filter (fun i => hτ.eigenvalues i ≤ 0),
+        (hτ.eigenvalues i - ν₀) * (hτ.reducedEigDensity_posSemidef i).isHermitian.kyFanNorm k
+      ≤ sInf (schmidtRankLEExpectations τ k) := by
+  classical
+  rw [hτ.sInf_schmidtRankLEExpectations_top hk]
+  have hone : ∀ i : m × n,
+      (hτ.reducedEigDensity_posSemidef i).isHermitian.kyFanNorm k = 1 :=
+    fun i => hτ.kyFanNorm_reducedEigDensity_eq_one i hk
+  simp only [hone, mul_one]
+  obtain ⟨j, -, hj⟩ := Finset.exists_mem_eq_inf' Finset.univ_nonempty hτ.eigenvalues
+  rw [hj]
+  rcases le_or_gt (hτ.eigenvalues j) 0 with hjle | hjle
+  · have hjmem : j ∈ Finset.univ.filter (fun i => hτ.eigenvalues i ≤ 0) :=
+      Finset.mem_filter.2 ⟨Finset.mem_univ j, hjle⟩
+    have hsplit := Finset.add_sum_erase _ (fun i => hτ.eigenvalues i - ν₀) hjmem
+    have hrest : ∑ i ∈ (Finset.univ.filter (fun i => hτ.eigenvalues i ≤ 0)).erase j,
+        (hτ.eigenvalues i - ν₀) ≤ 0 := by
+      refine Finset.sum_nonpos fun i hi => ?_
+      have hi0 := (Finset.mem_filter.1 (Finset.mem_of_mem_erase hi)).2
+      linarith
+    linarith
+  · have hempty : Finset.univ.filter (fun i => hτ.eigenvalues i ≤ 0) = ∅ := by
+      refine Finset.filter_eq_empty_iff.2 fun {i} _ => ?_
+      have hji : hτ.eigenvalues j ≤ hτ.eigenvalues i := by
+        rw [← hj]; exact Finset.inf'_le _ (Finset.mem_univ i)
+      exact not_le.2 (lt_of_lt_of_le hjle hji)
+    rw [hempty, Finset.sum_empty, add_zero]
+    exact hmin j hjle
 
 end Matrix

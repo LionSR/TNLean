@@ -22,7 +22,10 @@ Wolf's criterion for $n$-positivity\footnote{%
 bounds an infimum. For a Hermitian $\tau\in\mathcal M_{D'}\otimes\mathcal M_{D}$
 with spectral decomposition $\tau=\sum_i\nu_i\ketbra{\phi_i}{\phi_i}$, reduced
 densities $\rho_i=\tr_2\ketbra{\phi_i}{\phi_i}$, smallest positive eigenvalue
-$\nu_0$ and largest eigenvalue $\nu$,
+$\nu_0$ and largest eigenvalue $\nu$, write $\|\cdot\|_{(n)}$ for the Ky-Fan
+$n$-norm, the sum of the $n$ largest eigenvalues of a positive semidefinite
+matrix. When exactly one eigenvalue $\nu_-$ of $\tau$ is non-positive, write
+$\rho_-$ for the reduced density of its eigenvector. Then
 \begin{align}
   \inf_\psi\bra{\psi}\tau\ket{\psi}
    & \ge \nu_0+\sum_{i:\nu_i\le0}(\nu_i-\nu_0)\|\rho_i\|_{(n)},
@@ -109,14 +112,21 @@ by one at a cost $O(\varepsilon^2)$ in the expectation. Iterating the
 perturbation and letting $\varepsilon\to0$ gives the missing inequality
 $\inf_{S_{=n}}\le\inf_{S_{\le n}}$.
 
-\section{Conclusion}
+\section{Verdict}
 
+\textbf{Classification: resolved reading, with a scope restriction on (3.8).}
 The source's ``vectors of Schmidt rank $n$'' are the vectors of Schmidt rank at
 most $n$, as its own proof of Prop.~3.1 shows, and the formalized inequalities
-are (3.7) and (3.8) over that set. Under the exact-rank reading the same two
-inequalities hold, with (3.7) an immediate consequence of the bounded-rank
-statement and (3.8) requiring the limiting argument sketched above in place of a
-witness.
+are (3.7) and (3.8) over that set. No hypothesis foreign to the source enters.
+
+The scope restriction concerns (3.8) alone. Under the exact-rank reading the
+same two inequalities hold, with (3.7) an immediate consequence of the
+bounded-rank statement and (3.8) requiring the limiting argument sketched above
+in place of a witness. That limiting argument, equivalently the identity
+$\inf_{S_{\le n}}=\inf_{S_{=n}}$, is not formalized; it is not needed for either
+bound as stated. The Lean statement of (3.8) carries a
+\textbf{Scope restriction (Schmidt rank at most $n$)} marker pointing at this
+note.
 
 \bibliographystyle{alpha}
 \bibliography{references}

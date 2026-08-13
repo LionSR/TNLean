@@ -16,12 +16,14 @@ Hermitian map is tested, and the set whose expectations are collected below.
     For a matrix $\tau$ on $\C^{D'}\otimes\C^{D}$ and a bound $n$, the set
     \begin{align}
         E_n(\tau)
-         & =\{\bra{\psi}\tau\ket{\psi}:\|\psi\|=1,\ \SR(\psi)\le n\}
+         & =\{\Re\bra{\psi}\tau\ket{\psi}:\|\psi\|=1,\ \SR(\psi)\le n\}
         \subseteq\R
         \label{eq:channel_schmidt_rank_le_expectations}
     \end{align}
-    collects the expectations of $\tau$ in the normalized vectors of Schmidt
-    rank at most $n$.
+    collects the real parts of the quadratic forms of $\tau$ in the normalized
+    vectors of Schmidt rank at most $n$. For Hermitian $\tau$, the setting of
+    every statement below, the quadratic form is real and $E_n(\tau)$ is the
+    set of expectations of $\tau$ in those vectors.
 \end{definition}
 
 \begin{lemma}[The expectation set has an infimum]
@@ -29,7 +31,7 @@ Hermitian map is tested, and the set whose expectations are collected below.
     \lean{Matrix.schmidtRankLEExpectations_nonempty,
         Matrix.IsHermitian.schmidtRankLEExpectations_bddBelow}
     \leanok
-    \uses{def:schmidt_rank_le_expectations, thm:spectral_bound_schmidt_rank_top}
+    \uses{def:schmidt_rank_le_expectations}
     For $n\ge1$ the set $E_n(\tau)$ is nonempty, and for Hermitian $\tau$ it is
     bounded below by the least eigenvalue $\nu_{\min}$ of $\tau$. Hence
     $\inf E_n(\tau)$ exists.
@@ -49,9 +51,8 @@ Hermitian map is tested, and the set whose expectations are collected below.
     \label{thm:spectral_infimum_lower_bound}
     \lean{Matrix.IsHermitian.le_sInf_schmidtRankLEExpectations}
     \leanok
-    \uses{def:schmidt_rank_le_expectations,
-        lem:schmidt_rank_le_expectations_inf_exists,
-        thm:spectral_lower_bound_schmidt_rank}
+    \uses{def:schmidt_rank_le_expectations, def:ky_fan_norm,
+        def:reduced_eig_density}
     Let $\tau$ be a Hermitian operator on $\C^{D'}\otimes\C^{D}$ with
     eigenvalues $\nu_i$, normalized eigenvectors $\phi_i$ and reduced densities
     $\rho_i=\tr_2\ketbra{\phi_i}{\phi_i}$. Let $1\le n<D'$ and let
@@ -80,9 +81,8 @@ Hermitian map is tested, and the set whose expectations are collected below.
     \label{thm:spectral_infimum_upper_bound}
     \lean{Matrix.IsHermitian.sInf_schmidtRankLEExpectations_le}
     \leanok
-    \uses{def:schmidt_rank_le_expectations,
-        lem:schmidt_rank_le_expectations_inf_exists,
-        thm:spectral_upper_bound_schmidt_rank}
+    \uses{def:schmidt_rank_le_expectations, def:ky_fan_norm,
+        def:reduced_eig_density}
     With $\tau$, $\phi_i$ and $\rho_i$ as above, let $1\le n<D'$ and suppose
     every eigenvalue of $\tau$ is at most $\nu$. Then, for every eigenvector
     index $j$,
@@ -110,32 +110,52 @@ Hermitian map is tested, and the set whose expectations are collected below.
 
 \begin{theorem}[The Schmidt-rank infimum at the top index]
     \label{thm:spectral_infimum_top}
-    \lean{Matrix.IsHermitian.sInf_schmidtRankLEExpectations_top}
+    \lean{Matrix.IsHermitian.sInf_schmidtRankLEExpectations_top,
+        Matrix.IsHermitian.le_sInf_schmidtRankLEExpectations_top}
     \leanok
-    \uses{def:schmidt_rank_le_expectations,
-        thm:spectral_bound_schmidt_rank_top}
+    \uses{def:schmidt_rank_le_expectations, def:ky_fan_norm,
+        def:reduced_eig_density}
     Once the Schmidt-rank bound reaches the dimension $D'$ of the first tensor
-    factor the constraint is vacuous and each Ky-Fan norm collapses to
-    $\|\rho_i\|_{(D')}=\tr\rho_i=1$, so both bounds read $\nu_{\min}$ and
+    factor the constraint is vacuous, and each Ky-Fan norm collapses to
+    $\|\rho_i\|_{(n)}=\tr\rho_i=1$. For $n\ge D'$,
     \begin{align}
         \inf E_n(\tau)
-         & =\nu_{\min}
-        \qquad (n\ge D').
+         & =\nu_{\min},
         \label{eq:channel_spectral_infimum_top}
     \end{align}
-    With Theorems~\ref{thm:spectral_infimum_lower_bound}
-    and~\ref{thm:spectral_infimum_upper_bound} this covers the full range
-    $1\le n\le D'$ of \cite[Chapter~3, Proposition~3.2]{Wolf2012Quantum} in the
-    infimum form of the source.
+    which is the right-hand side of~(3.8) there, since
+    $\nu+(\nu_--\nu)\|\rho_-\|_{(n)}=\nu_-=\nu_{\min}$ when $\nu_-$ is the only
+    non-positive eigenvalue. The right-hand side of~(3.7) reads
+    $\nu_0+\sum_{i:\nu_i\le0}(\nu_i-\nu_0)$, which is a strictly weaker bound as
+    soon as $\tau$ has two non-positive eigenvalues: for the spectrum
+    $(-2,-1,3)$ it is $-6$ while $\nu_{\min}=-2$. It is still a lower bound, so
+    for those same $n$
+    \begin{align}
+        \nu_0+\sum_{i:\nu_i\le0}(\nu_i-\nu_0)\|\rho_i\|_{(n)}
+         & \le\inf E_n(\tau),
+        \label{eq:channel_spectral_infimum_top_lower}
+    \end{align}
+    and~(3.7) holds at those indices as well. With
+    Theorems~\ref{thm:spectral_infimum_lower_bound}
+    and~\ref{thm:spectral_infimum_upper_bound} this covers every $n\ge1$, hence
+    the range $1\le n\le D$ of
+    \cite[Chapter~3, Proposition~3.1]{Wolf2012Quantum}, where $D$ is the
+    dimension of the second tensor factor.
 \end{theorem}
 
 \begin{proof}
     \leanok
     \uses{thm:spectral_bound_schmidt_rank_top,
-        thm:schmidt_rank_basic_bounds}
+        thm:schmidt_rank_basic_bounds,
+        lem:schmidt_rank_le_expectations_inf_exists}
     Every vector has Schmidt rank at most $D'$, so for $n\ge D'$ the set
     $E_n(\tau)$ is the set of expectations in all normalized vectors. By
     Theorem~\ref{thm:spectral_bound_schmidt_rank_top} that set is bounded below
     by $\nu_{\min}$ and contains $\nu_{\min}$, attained at an eigenvector for
-    the least eigenvalue.
+    the least eigenvalue. This gives~(\ref{eq:channel_spectral_infimum_top}).
+    For~(\ref{eq:channel_spectral_infimum_top_lower}), the summand at a
+    minimizing index $j$ contributes $\nu_j-\nu_0=\nu_{\min}-\nu_0$ whenever
+    $\nu_{\min}\le0$, and every other summand is nonpositive, so the left-hand
+    side is at most $\nu_{\min}$; if instead every eigenvalue is positive the
+    sum is empty and the left-hand side is $\nu_0\le\nu_{\min}$.
 \end{proof}
