@@ -1,23 +1,32 @@
-\begin{lemma}[Cyclic window and complement factorization]
-    \label{lem:cyclic_window_complement_factorization}
+\begin{definition}[Cyclic window and complement indexing]
+    \label{def:cyclic_window_complement_indexing}
     \lean{MPSTensor.cyclicWindowIndexEquiv}
     \lean{MPSTensor.cyclicWindowIndexEquiv_inl}
     \lean{MPSTensor.cyclicWindowIndexEquiv_inr}
-    \lean{MPSTensor.prod_cyclicWindow_complement}
     \leanok
-    If $L\leq N$ and $i\in\Fin{N}$, the sites of the periodic chain are in
-    bijection with the disjoint union of the cyclic window
+    If $L\leq N$ and $i\in\Fin{N}$, identify the sites of the periodic chain
+    with the disjoint union of the cyclic window
     $i,i+1,\ldots,i+L-1$ and its ordered complement
     $i+L,i+L+1,\ldots,i+N-1$, with all indices taken modulo $N$.
-    Consequently, every product over the chain factors as the product over the
-    cyclic window times the product over its ordered complement.
-\end{lemma}
+\end{definition}
+
+\begin{theorem}[Cyclic product factorization]
+    \label{thm:cyclic_window_complement_product_factorization}
+    \lean{MPSTensor.prod_cyclicWindow_complement}
+    \leanok
+    \uses{def:cyclic_window_complement_indexing}
+    Let $M$ be a commutative monoid. If $L\leq N$, $i\in\Fin{N}$, and
+    $f\colon\Fin{N}\to M$, then the product of $f$ over the chain equals the
+    product over the cyclic window beginning at $i$ times the product over its
+    ordered complement.
+\end{theorem}
 
 \begin{proof}
     \leanok
-    Rotate the chain so that $i$ is the initial site, then split the resulting
-    ordered set after its first $L$ elements. Reindexing a finite product by
-    this bijection gives the factorization.
+    \uses{def:cyclic_window_complement_indexing}
+    Reindex the product by the cyclic window and complement identification of
+    Definition~\ref{def:cyclic_window_complement_indexing}, then split the
+    product over the resulting disjoint union.
 \end{proof}
 
 \begin{theorem}[Three-site anticommutator transport to cyclic adjacent pairs]
@@ -26,8 +35,7 @@
     \lean{MPSTensor.re_inner_localTermES_adjacent_twoSite_backward_ge_of_threeSite}
     \leanok
     \uses{rem:euclidean_local_projector_ingredients,
-        rem:cyclic_window_operators,
-        lem:cyclic_window_complement_factorization}
+        rem:cyclic_window_operators}
     Fix a tensor $A$ with physical dimension $d>0$ and a coefficient
     $c\in\mathbb R$. For every chain length $N$ and site $i\in\Fin{N}$, set
     $h_i^{(N)}:=h_{i,\mathrm{ES}}^{(N,2)}(A)$, the Euclidean range-two parent
@@ -64,12 +72,12 @@
 \begin{proof}
     \leanok
     \uses{rem:cyclic_window_operators,
-        lem:cyclic_window_complement_factorization,
+        def:cyclic_window_complement_indexing,
         thm:three_site_commutator_chain_transport}
     For a cyclic three-site window beginning at $i$, write
     $\mathcal C_{N-3}$ for its ordered complementary configurations and
     $R_{i,\tau}^{(3)}$ for restriction with complement $\tau$ fixed.
-    Lemma~\ref{lem:cyclic_window_complement_factorization} identifies every
+    Definition~\ref{def:cyclic_window_complement_indexing} identifies every
     chain configuration uniquely with its window and complement, while the
     cyclic restriction operators of Remark~\ref{rem:cyclic_window_operators}
     give the fiber decomposition
