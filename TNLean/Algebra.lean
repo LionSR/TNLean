@@ -43,6 +43,7 @@ import TNLean.Algebra.ListProduct
 import TNLean.Algebra.MatrixAlgEquiv
 import TNLean.Algebra.MatrixAux
 import TNLean.Algebra.MatrixCongruence
+import TNLean.Algebra.MatrixCyclicTracePower
 import TNLean.Algebra.MatrixFamilySupport
 import TNLean.Algebra.MatrixGramUnitary
 import TNLean.Algebra.MatrixKroneckerEmbed
