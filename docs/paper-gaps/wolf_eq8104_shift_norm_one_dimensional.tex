@@ -16,12 +16,16 @@
 
 \section{Source passage}
 
-Chapter~8 of \cite{Wolf2012Quantum} derives the two-sided estimate
+Fix an integer $D\ge 1$, let $N\in\MN{D}$ be the strict upper shift
+$N_{i,j}=1$ if $j=i+1$ and $N_{i,j}=0$ otherwise, let
+$J_{D}(\lambda)=\lambda\Id+N$ be the Jordan block with eigenvalue
+$\lambda\in\C$, and write $\|\cdot\|_{\infty}$ for the largest singular value.
+Chapter~8 of \cite{Wolf2012Quantum} derives, for every $n\in\mathbb N$ and
+every natural number $k_{0}\le\min\{n,D-1\}$, the two-sided estimate
 \begin{align}
   |\lambda|^{\,n-k_{0}}\binom{n}{k_{0}}
     \le \bigl\|J_{D}(\lambda)^{n}\bigr\|_{\infty}
-    \le \sum_{k=0}^{\min\{n,D-1\}}|\lambda|^{\,n-k}\binom{n}{k},
-  \qquad k_{0}\le\min\{n,D-1\},
+    \le \sum_{k=0}^{\min\{n,D-1\}}|\lambda|^{\,n-k}\binom{n}{k}
 \end{align}
 of Equation~(8.104), at lines 1197--1215 of the local source file. The upper
 bound is obtained from the binomial expansion
@@ -47,7 +51,9 @@ shift factors from the expansion. The formalization therefore states
 \leanid{Matrix.l2_opNorm_nilpotentShift_le_one} as the inequality
 $\|N\|_{\infty}\le 1$, valid for every $D$, and derives
 \leanid{Matrix.l2_opNorm_nilpotentShift_pow_le_one} from it. The proof is the
-one Wolf indicates: $N^{\dagger}N=\operatorname{diag}(0,1,\dots,1)$, whose
+one Wolf indicates: the Gram identity
+$N^{\dagger}N=\operatorname{diag}(0,1,\dots,1)$, which is
+\leanid{Matrix.conjTranspose_nilpotentShift_mul_self}, gives a matrix whose
 largest singular value is at most $1$, and the C*-identity
 $\|N\|_{\infty}^{2}=\|N^{\dagger}N\|_{\infty}$ transfers the bound.
 
