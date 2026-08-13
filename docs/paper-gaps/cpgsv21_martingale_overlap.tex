@@ -1257,9 +1257,27 @@ for a suitable blocked tensor are proved.  All lengths before blocking are
 measured in sites of the input tensor, while the final chain length counts
 blocked sites.  These bounds come from the formal inverse-Gram reconstruction
 and are not attributed to FNW.  The optimized FNW numerator and its source
-constants remain open.  Issue~\#5926 concerns the separate comparison between
-this blocked range-two Hamiltonian and an interaction for the original tensor;
-no additional public existential theorem is asserted here.
+constants remain open.
+
+The blocked-to-original comparison is now proved on periodic lengths divisible
+by the chosen block length.  Under the canonical configuration isometry, every
+blocked range-two term is exactly the original range-$2p$ term beginning at a
+block boundary.  The conjugated blocked Hamiltonian is therefore the sparse sum
+over aligned starts, and the omitted original local projections give a positive
+quadratic-form remainder.  Block injectivity identifies the blocked and
+original kernels with the same periodic MPS line under this isometry.  Hence
+\leanid{MPSTensor.IsPrimitiveMPS.exists_parentHamiltonianES_gap_eighth_mul}
+retains the gap constant $1/8$ for $H_{Np,2p}(A)$, $N\ge4$.
+
+This finite cyclic sparse-sum argument is a TNLean reconstruction.  Nachtergaele,
+\cite[equations~(3.12)--(3.16)]{Nachtergaele1996Spectral}, formulates compatible
+open intervals and the proof of Theorem~2.1(ii) uses the rescaled sequence
+$\widetilde\Lambda_n=\Lambda_{ln}$; the source does not state the finite periodic
+operator comparison above.  The precise remaining leaf for the unrestricted
+normal-MPS theorem is the remainder-length case: chains $Np+r$ with
+$0<r<p$.  It requires a boundary/remainder comparison preserving the common
+ground-space complement and a uniform positive constant.  No all-length claim
+is made here.
 
 \bibliographystyle{alpha}
 \bibliography{references}
