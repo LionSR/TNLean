@@ -36,14 +36,28 @@ action of both operators on a generic two-dimensional block. This is a local
 correction of a typographical error and does not add a hypothesis or alter the
 mathematical claim.
 
+The declaration
+\leanid{LinearMap.IsSymmetricProjection.reducedProjection} defines the reduced
+projector as the orthogonal projector onto $\operatorname{ran}(PQ)$. The source
+defines its projector blockwise; identifying that projector with the canonical
+construction remains part of issue~\#6294. The associated theorems prove the
+three absorption identities in lines 767--769, the range identities
+\begin{align}
+  \operatorname{ran}(\widetilde P)&=\operatorname{ran}(PQ),\\
+  \operatorname{ran}(PQP)&=\operatorname{ran}(PQ),\\
+  \operatorname{ran}(\widetilde P Q)&=\operatorname{ran}(\widetilde P).
+\end{align}
+The final range identity is the derived input to the equal-range right-factor
+theorem, which gives the invertible map from line 770.
+
 \section{Verdict}
 
-\textbf{Verdict: resolved local fix (projector label).} The formalized angle
-block uses $Q$ as the second projector, which resolves the source's repeated
-$P$ label without changing the mathematical statement. The distinct global
-problem of assembling the generic and endpoint blocks into an orthogonal
-direct sum, and constructing the reduced projector used later in
-Proposition~IV.5, remains open.
+\textbf{Verdict: resolved local fix (projector label and reduced projector).}
+The formalized angle block uses $Q$ as the second projector, which resolves the
+source's repeated $P$ label without changing the mathematical statement. The
+reduced projector and its identities from lines 764--770 are also formalized.
+The distinct global problem of assembling the generic and endpoint blocks into
+an orthogonal direct sum remains open.
 
 \bibliographystyle{alpha}
 \bibliography{references}
