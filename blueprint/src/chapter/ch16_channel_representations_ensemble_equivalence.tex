@@ -28,10 +28,15 @@ tall isometry; this section removes both restrictions.
 \begin{proof}
     \leanok
     \uses{def:pureEnsembleDensity}
-    The terms indexed outside the image of $e$ vanish, since
-    $\ketbra{0}{0} = 0$. The remaining sum runs over the image of $e$, and
-    injectivity of $e$ reindexes it as a sum over $\iota_1$, where
-    $\Psi_{e(i)} = \psi_i$ identifies each term.
+    \begin{align}
+        \sum_{k \in \iota} \ketbra{\Psi_k}{\Psi_k}
+        = \sum_{k \in e(\iota_1)} \ketbra{\Psi_k}{\Psi_k}
+        = \sum_{i \in \iota_1} \ketbra{\Psi_{e(i)}}{\Psi_{e(i)}}
+        = \sum_{i \in \iota_1} \ketbra{\psi_i}{\psi_i}.
+    \end{align}
+    The first equality drops the terms outside the image of $e$, which vanish
+    because $\ketbra{0}{0} = 0$; the second reindexes along $e$, which is
+    injective; the third substitutes $\Psi_{e(i)} = \psi_i$.
 \end{proof}
 
 Two instances of Lemma~\ref{lem:pureEnsembleDensity_of_extendZero} supply the

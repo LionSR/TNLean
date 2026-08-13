@@ -64,7 +64,6 @@ square isometry over a finite index set is unitary.
 -/
 
 open scoped Matrix
-open Matrix Finset
 
 variable {D : ℕ}
 
