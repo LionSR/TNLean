@@ -102,6 +102,28 @@ def _is_sp_polyline(value: str) -> bool:
     return len(parts) >= 2 and all(_is_sp_point(part) for part in parts)
 
 
+def _is_ink_points(value: str) -> bool:
+    """A drawn route: an opening point, then line and cubic segments.
+
+    A bare `x,y` extends a polyline from the previous point; a `c:`-prefixed
+    sextuple is a cubic to its last pair with the two control pairs before
+    it.  At least one drawn segment follows the opening point, and every
+    coordinate is an integer count of scaled points."""
+    parts = value.split(";")
+    if len(parts) < 2 or not _is_sp_point(parts[0]):
+        return False
+    for part in parts[1:]:
+        if part.startswith("c:"):
+            coordinates = part[2:].split(",")
+            if len(coordinates) != 6 or any(
+                    INT_RE.fullmatch(coordinate) is None
+                    for coordinate in coordinates):
+                return False
+        elif not _is_sp_point(part):
+            return False
+    return True
+
+
 # kind -> {field: validator}; fields absent here are accepted as opaque.
 # Numeric slots are validated strictly: they are cell/row coordinates, and
 # a coordinate that is not an integer addresses nothing.
@@ -203,6 +225,10 @@ FIELD_VALIDATORS: dict[str, dict[str, Callable[[str], bool]]] = {
         "ymax": _is_int,
         "shape": _enum("rect", "roundrect"),
         "radius": _is_nonnegative_int,
+        # Optional station provenance: present exactly when the kernel's
+        # label chooser placed the label, absent on every unclaimed site.
+        "station": _enum("s", "n", "e", "w"),
+        "provenance": _enum("auto", "explicit"),
     },
     "glyph-geometry": {
         "picture": _is_picture_id,
@@ -249,6 +275,13 @@ FIELD_VALIDATORS: dict[str, dict[str, Callable[[str], bool]]] = {
         "clear": _is_sp_standoff,
         "points": _is_sp_polyline,
     },
+    "wire-ink": {
+        "picture": _is_picture_id,
+        "name": _any,
+        "origin": _enum("bond", "physical-leg", "port", "trace", "leg"),
+        "stroke": _is_positive_int,
+        "points": _is_ink_points,
+    },
     "tree": {
         "picture": _is_picture_id,
         "id": _is_positive_int,
@@ -273,6 +306,7 @@ REQUIRED_FIELDS: dict[str, frozenset[str]] = {
     # the kernel record gate reads that back off the streams it pins.
     "closure-rail": frozenset(
         {"name", "row", "side", "west", "east", "stroke", "points"}),
+    "wire-ink": frozenset({"name", "origin", "stroke", "points"}),
 }
 
 REQUIRED_CHECK_FIELDS_BY_RESULT: dict[str, frozenset[str]] = {
@@ -324,6 +358,7 @@ class Picture:
             "ink-use",
             "glyph-geometry",
             "wire-geometry",
+            "wire-ink",
             "closure-rail",
             "frame",
             "kernel-boundary",
