@@ -1012,24 +1012,31 @@ def test_every_spelling_of_stream_eighteen_is_the_shell_escape_stream() -> None:
     # beginning with a bar is text.
     # The loaders take a file name directly, with no stream operand: an
     # operand reading let a page of typeset text count as a pipe.
-    # The loaders run a pipe only through the braced or quoted spelling,
-    # with the blank expansions read before the name and inside the
-    # braces.  Every shape in this table was compiled under xelatex,
-    # pdflatex, and lualatex with -shell-escape and ran its command.
-    for piped in (r"\input{\space |cmd}", r"\input\empty {|cmd}",
+    # Every row of this matrix was compiled under xelatex with
+    # -shell-escape and a space-free command, so an argument-stripped
+    # run could not pass for inertness; the bare, \relax, and
+    # engine-shared rows ran under pdflatex and lualatex too.  The scan
+    # passes over spaces, \relax, and the expandable blanks on its way
+    # to the name, and a pipe fires bare, braced, or quoted.
+    for piped in (r"\input |cmd", r"\input\space |cmd", r"\input\space|cmd",
+                  r"\input\relax |cmd", r"\input\relax {|cmd}",
+                  '\\input\\relax "|cmd"', r"\input|" + '"cmd"',
+                  r"\input{|cmd}", '\\input "|cmd"',
+                  r"\input{\space |cmd}", r"\input\empty {|cmd}",
                   '\\input\\empty "|cmd"', r"\input\space {|cmd}",
                   r"\makeatletter\input\@empty{|cmd}",
                   r"\input\c_space_tl{|cmd}", '\\input\\c_empty_tl "|cmd"',
-                  r"\include{|cmd}"):
+                  r"\include{|cmd}", r"\openin1=|cmd", r"\openin\src=|cmd"):
         assert tenkz_ctan.shell_escape_call(piped), piped
-    # The bare-name spellings error at the bar and run nothing, in all
-    # three engines: a bare pipe after a loader is typeset text, and
-    # refusing it would refuse a valid release.  A control space,
-    # \c_space_token, and \relax are unexpandable and end the name scan,
-    # compiled inert in every spelling.
-    for inert in (r"\input |cmd", r"\input\space |cmd", r"\input\space|cmd",
-                  r"\input\relax |cmd", r"\input\c_space_token{|cmd}",
+    # The inert rows: a digit starts a real file name; a control space
+    # and \c_space_token are implicit space tokens that end the scan;
+    # \relax inside a braced name ends the name; \include absorbs one
+    # undelimited argument, so a quote or an expansion there is the
+    # argument itself and its pipe never opens a name.
+    for inert in (r"\input 1 {|literal}", r"\input{\relax |cmd}",
+                  r"\input\c_space_token{|cmd}",
                   "\\input\\ {|cmd}", "\\input\\ |cmd",
+                  '\\include "|cmd"',
                   r"\include\empty {|literal}", r"\include\space {|literal}"):
         assert not tenkz_ctan.shell_escape_call(inert), inert
     for plain in ('\\openin\\stream="plain.tex"', r'\def\separator{"|}',
