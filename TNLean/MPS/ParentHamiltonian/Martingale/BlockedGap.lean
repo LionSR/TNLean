@@ -251,9 +251,6 @@ theorem blockTensor_threeSite_openChain_defect_norm_eq
       ‖(reassocTailBoundaryMapES A p p p).range.starProjection ∘L
             (leftBoundaryMapES A (p + p) p).range.starProjection -
           (groundSpaceES A (p + p + p)).starProjection‖ := by
-  letI : NeZero (blockPhysDim d p) := ⟨by
-    rw [blockPhysDim_eq_pow]
-    exact pow_ne_zero p (NeZero.ne d)⟩
   let U := blockedThreeConfigLinearIsometryEquiv d p
   let T := openChainTailGroundSpaceES (blockTensor A p) 1 2
   let L := openChainLeftGroundSpaceES (blockTensor A p) 2
@@ -335,9 +332,6 @@ private theorem IsPrimitiveMPS.exists_blockTensor_anticommutator
   obtain ⟨p, hp, hInj, hDefect⟩ :=
     hP.exists_threeBlock_wholeIncrement_defect_le_seven_sixteenths hρ
   let B := blockTensor A p
-  letI : NeZero (blockPhysDim d p) := ⟨by
-    rw [blockPhysDim_eq_pow]
-    exact pow_ne_zero p (NeZero.ne d)⟩
   have hBInj : IsInjective B :=
     (isNBlkInjective_iff_blockTensor_isInjective A p).mp hInj
   have hBlockedDefect :
@@ -427,9 +421,6 @@ theorem IsPrimitiveMPS.exists_blockTensor_parentHamiltonianES_gap_eighth
               ‖parentHamiltonianES (blockTensor A p) 2 N v‖ := by
   obtain ⟨p, hp, hInj, hAnti⟩ := hP.exists_blockTensor_anticommutator hρ
   let B := blockTensor A p
-  letI : NeZero (blockPhysDim d p) := ⟨by
-    rw [blockPhysDim_eq_pow]
-    exact pow_ne_zero p (NeZero.ne d)⟩
   obtain ⟨_, hGap⟩ :=
     parentHamiltonianES_gap_bound_of_cyclic_window_overlap_anticommutator
       B 2 (by omega) hAnti
@@ -453,11 +444,8 @@ theorem IsPrimitiveMPS.exists_blockTensor_parentHamiltonianES_gapped
           (v : EuclideanSpace ℂ (Cfg (blockPhysDim d p) N)),
           v ∈ (parentHamiltonianGroundSpaceES (blockTensor A p) 2 N)ᗮ →
             γ * ‖v‖ ≤ ‖parentHamiltonianES (blockTensor A p) 2 N v‖ := by
-  obtain ⟨p, hp, hInj, hAnti⟩ := hP.exists_blockTensor_anticommutator hρ
-  letI : NeZero (blockPhysDim d p) := ⟨by
-    rw [blockPhysDim_eq_pow]
-    exact pow_ne_zero p (NeZero.ne d)⟩
-  exact ⟨p, hp, hInj,
-    parentHamiltonian_gapped_of_anticommutator (blockTensor A p) 2 (by omega) hAnti⟩
+  obtain ⟨p, hp, hInj, hGap⟩ :=
+    hP.exists_blockTensor_parentHamiltonianES_gap_eighth hρ
+  exact ⟨p, hp, hInj, 1 / 8, by norm_num, hGap⟩
 
 end MPSTensor
