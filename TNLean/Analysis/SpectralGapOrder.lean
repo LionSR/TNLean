@@ -4,14 +4,14 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import Mathlib.Analysis.InnerProductSpace.Positive
-import Mathlib.Analysis.InnerProductSpace.Spectrum
 
 /-!
 # Spectral-gap monotonicity under Loewner order
 
-This file transfers a norm-form spectral gap between positive operators with the
-same kernel. If `K ≤ H`, then every Rayleigh quotient of `H` is at least the
-corresponding Rayleigh quotient of `K`. The spectral theorem converts a norm
+This file transfers a norm-form spectral gap from a positive operator `K` to an
+operator `H` above it in Loewner order, provided their kernels agree. If `K ≤ H`,
+then every Rayleigh quotient of `H` is at least the corresponding Rayleigh
+quotient of `K`. The spectral theorem converts a norm
 lower bound for `K` on its kernel complement into the required Rayleigh lower
 bound, which then transfers to `H`.
 
@@ -26,15 +26,15 @@ namespace LinearMap.IsPositive
 variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℂ E]
   [FiniteDimensional ℂ E]
 
-/-- A norm-form spectral gap is monotone under Loewner order among positive
-operators with the same kernel.
+/-- A norm-form spectral gap of a positive operator is monotone under Loewner
+order when the kernels agree.
 
 This is the finite-dimensional comparison principle underlying Nachtergaele,
 arXiv:cond-mat/9410110, equation (3.14). The proof diagonalizes `K`, obtains the
 Rayleigh bound `γ ‖v‖² ≤ re ⟪K v, v⟫` on `(ker K)ᗮ`, transfers it through
 `K ≤ H`, and applies Cauchy--Schwarz. -/
 theorem norm_gap_mono_of_le_of_ker_eq {K H : E →ₗ[ℂ] E} {γ : ℝ}
-    (hK : K.IsPositive) (_hH : H.IsPositive) (hKH : K ≤ H)
+    (hK : K.IsPositive) (hKH : K ≤ H)
     (hker : LinearMap.ker K = LinearMap.ker H)
     (hgap : ∀ v ∈ (LinearMap.ker K)ᗮ, γ * ‖v‖ ≤ ‖K v‖) :
     ∀ v ∈ (LinearMap.ker H)ᗮ, γ * ‖v‖ ≤ ‖H v‖ := by
