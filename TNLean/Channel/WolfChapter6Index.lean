@@ -664,7 +664,7 @@ machinery (Proposition 3).
 
 ## Section 6.5 Cycles and recurrences
 
-### Wolf Proposition (Asymptotic image) — FORMALIZED
+### Wolf Proposition 6.12 (Asymptotic image) — FORMALIZED
 
 For a positive trace-preserving `T` on `M_D(ℂ)`, write `X_T` for the span of
 the peripheral eigenvectors and `T_φ` for the peripheral spectral projection.

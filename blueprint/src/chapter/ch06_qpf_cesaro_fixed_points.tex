@@ -319,10 +319,7 @@
         IsPositiveMap.map_peripheralSubspace,
         IsPositiveMap.asymptotic_image}
     \leanok
-    \uses{def:peripheral_spectral_projections,
-        thm:peripheral_jordan_trivial,
-        cor:peripheral_projection_channel,
-        cor:stationary_density_span}
+    \uses{def:peripheral_spectral_projections}
     Let $T:\MN{D}\to\MN{D}$ be positive and trace-preserving, with $D>0$, and
     let
     \begin{align}
@@ -337,12 +334,12 @@
               $\mathcal X_T=\operatorname{span}\{\rho_i\}$,
         \item $T(\mathcal X_T)=\mathcal X_T$.
     \end{enumerate}
-    This is the proposition on the asymptotic image in
-    \cite[Chapter~6]{Wolf2012Quantum}.
+    This is \cite[Proposition~6.12 (Asymptotic image)]{Wolf2012Quantum}.
 \end{theorem}
 
 \begin{proof}\leanok
     \uses{def:peripheral_spectral_projections,
+        thm:peripheral_spectral_projection_properties,
         thm:peripheral_jordan_trivial,
         cor:peripheral_projection_channel,
         cor:stationary_density_span}
@@ -359,8 +356,11 @@
     For the third claim, expand an element of $\mathcal X_T$ in peripheral
     eigenvectors. On the eigenspace for a peripheral eigenvalue $\mu$ the map
     $T$ acts as multiplication by $\mu$, and $|\mu|=1$ forces $\mu\neq0$, so
-    that eigenspace is carried onto itself. Summing over the peripheral
-    eigenvalues gives $T(\mathcal X_T)=\mathcal X_T$.
+    \begin{align}
+        T\bigl(\ker(T-\mu)\bigr)=\ker(T-\mu).
+    \end{align}
+    Summing over the peripheral eigenvalues gives
+    $T(\mathcal X_T)=\mathcal X_T$.
 \end{proof}
 
 \begin{theorem}[Ces\`aro fixed-point theorem]\label{thm:cesaro_fixedpoint}

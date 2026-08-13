@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import TNLean.Algebra.EigenspaceMap
 import TNLean.Channel.Peripheral.CesaroRecurrence
 import TNLean.Channel.FixedPoint.StationarySpan
 
@@ -23,16 +24,16 @@ spectral projection `T_φ` of Wolf Equation (6.12):
 
 The proof follows Wolf.  Clause 1 records that `X_T` is exactly the set of
 fixed points of `T_φ`, which for a projection is its image.  Clause 2 applies
-Wolf Corollary 6.8 (`IsPositiveMap.fixedPointsSubmodule_spanned_by_stationaryDensities`)
-to `T_φ`, which is itself positive and trace-preserving.  Clause 3 expands an
+Wolf Corollary 6.5, Linearly independent stationary states
+(`IsPositiveMap.fixedPointsSubmodule_spanned_by_stationaryDensities`), to
+`T_φ`, which is itself positive and trace-preserving; this is the corollary
+Wolf's own proof of the proposition invokes at this step.  Clause 3 expands an
 element of `X_T` in peripheral eigenvectors: on the `μ`-eigenspace `T` acts as
 multiplication by the unit phase `μ`, and a nonzero scalar maps an eigenspace
-onto itself.
+onto itself (`Module.End.map_eigenspace_of_ne_zero`).
 
 ## Main statements
 
-* `Module.End.map_eigenspace_of_ne_zero`: an eigenspace for a nonzero
-  eigenvalue is mapped onto itself.
 * `IsPositiveMap.fixedPointsSubmodule_peripheralProjection`: `X_T` is the
   fixed-point space of `T_φ`.
 * `IsPositiveMap.range_peripheralProjection_eq_iSup_eigenspace`: clause 1.
@@ -43,36 +44,15 @@ onto itself.
 
 ## References
 
-* M. Wolf, *Quantum Channels & Operations: Guided Tour*, Proposition
+* M. Wolf, *Quantum Channels & Operations: Guided Tour*, Proposition 6.12
   (Asymptotic image) and Equation (6.65); local source
   `Notes/WolfNoteTexSource/ch06_spectral_properties.tex`, lines 1568--1590.
+* M. Wolf, *Quantum Channels & Operations: Guided Tour*, Corollary 6.5
+  (Linearly independent stationary states); local source, lines 1204--1212.
 -/
 
 open scoped ComplexOrder
 open Matrix
-
-namespace Module.End
-
-variable {V : Type*} [AddCommGroup V] [Module ℂ V]
-
-/-- An eigenspace for a **nonzero** eigenvalue is mapped *onto* itself: on the
-`μ`-eigenspace the endomorphism acts as multiplication by `μ`, which is
-invertible when `μ ≠ 0`.
-
-This is the one-eigenvalue case of the third clause of Wolf's proposition on
-the asymptotic image; local source
-`Notes/WolfNoteTexSource/ch06_spectral_properties.tex`, lines 1568--1590. -/
-theorem map_eigenspace_of_ne_zero (f : Module.End ℂ V) {μ : ℂ} (hμ : μ ≠ 0) :
-    Submodule.map f (f.eigenspace μ) = f.eigenspace μ := by
-  refine le_antisymm ?_ fun y hy ↦ ?_
-  · rintro _ ⟨x, hx, rfl⟩
-    rw [Module.End.mem_eigenspace_iff.mp hx]
-    exact (f.eigenspace μ).smul_mem μ hx
-  · refine ⟨μ⁻¹ • y, (f.eigenspace μ).smul_mem _ hy, ?_⟩
-    rw [map_smul, Module.End.mem_eigenspace_iff.mp hy, smul_smul, inv_mul_cancel₀ hμ,
-      one_smul]
-
-end Module.End
 
 namespace IsPositiveMap
 
@@ -97,7 +77,7 @@ peripheral spectral subspace; for a positive trace-preserving map the
 peripheral Jordan blocks are trivial (Wolf Proposition 6.2), so that subspace
 is the span of the peripheral eigenspaces.
 
-Source: Wolf §6, lines 1568--1590; local source
+Source: Wolf Proposition 6.12, lines 1568--1590; local source
 `Notes/WolfNoteTexSource/ch06_spectral_properties.tex`. -/
 theorem range_peripheralProjection_eq_iSup_eigenspace
     (hPos : IsPositiveMap T) (hTP : IsTracePreservingMap T) :
@@ -108,12 +88,13 @@ theorem range_peripheralProjection_eq_iSup_eigenspace
 /-- **Wolf, asymptotic image, clause 2**, spanning form: `X_T` is spanned by
 the stationary density matrices of `T_φ`.
 
-Wolf derives this from clause 1 together with Corollary 6.8: the peripheral
+Wolf derives this from clause 1 together with Corollary 6.5: the peripheral
 projection of a positive trace-preserving map is again positive and
-trace-preserving, and Corollary 6.8 spans the fixed-point space of such a map
+trace-preserving, and Corollary 6.5 spans the fixed-point space of such a map
 by stationary density matrices.
 
-Source: Wolf §6, lines 1568--1590; local source
+Source: Wolf Proposition 6.12, lines 1568--1590, and Corollary 6.5, lines
+1204--1212; local source
 `Notes/WolfNoteTexSource/ch06_spectral_properties.tex`. -/
 theorem span_stationaryDensity_peripheralProjection_eq_peripheralSubspace
     (hPos : IsPositiveMap T) (hTP : IsTracePreservingMap T) :
@@ -127,7 +108,7 @@ theorem span_stationaryDensity_peripheralProjection_eq_peripheralSubspace
 /-- **Wolf, asymptotic image, clause 2**: there exist positive semidefinite
 matrices whose span is `X_T`.
 
-Source: Wolf §6, lines 1568--1590; local source
+Source: Wolf Proposition 6.12, lines 1568--1590; local source
 `Notes/WolfNoteTexSource/ch06_spectral_properties.tex`. -/
 theorem exists_posSemidef_span_eq_iSup_eigenspace
     (hPos : IsPositiveMap T) (hTP : IsTracePreservingMap T) :
@@ -144,7 +125,7 @@ Expanding an element of `X_T` in peripheral eigenvectors reduces the claim to
 one eigenspace at a time, and there `T` acts as multiplication by a unit
 phase, which is invertible.
 
-Source: Wolf §6, lines 1568--1590; local source
+Source: Wolf Proposition 6.12, lines 1568--1590; local source
 `Notes/WolfNoteTexSource/ch06_spectral_properties.tex`. -/
 theorem map_peripheralSubspace
     (hPos : IsPositiveMap T) (hTP : IsTracePreservingMap T) :
@@ -155,7 +136,7 @@ theorem map_peripheralSubspace
   exact iSup_congr fun hμ ↦
     T.map_eigenspace_of_ne_zero (norm_ne_zero_iff.mp (by rw [hμ.2]; exact one_ne_zero))
 
-/-- **Wolf, Proposition (Asymptotic image).**  For a positive trace-preserving
+/-- **Wolf Proposition 6.12 (Asymptotic image).**  For a positive trace-preserving
 linear map `T` on `M_d(ℂ)`, write `X_T` for the span of the peripheral
 eigenvectors of Wolf Equation (6.65).  Then
 
@@ -163,7 +144,7 @@ eigenvectors of Wolf Equation (6.65).  Then
 2. there are positive semidefinite matrices whose span is `X_T`,
 3. `T (X_T) = X_T`.
 
-Source: Wolf §6, lines 1568--1590; local source
+Source: Wolf Proposition 6.12, lines 1568--1590; local source
 `Notes/WolfNoteTexSource/ch06_spectral_properties.tex`. -/
 theorem asymptotic_image (hPos : IsPositiveMap T) (hTP : IsTracePreservingMap T) :
     (LinearMap.range T.peripheralProjection =
