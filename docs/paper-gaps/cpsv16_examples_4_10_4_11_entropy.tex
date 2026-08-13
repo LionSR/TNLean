@@ -241,13 +241,30 @@ The declaration
 \leanid{MPOTensor.CPSVExample411Ambient.trace_mpo_ambientM_closed_form} gives
 the ambient trace $Z_N=(3^N+1)/2^N$.
 
-\paragraph{Scope restriction (spectral and entropy consequences).}
-The ambient operator congruence and trace equality for Example~4.11 are
-complete.  This does not yet identify the reduced-state spectra, prove the
-entropy identities, or
-connect the certified logarithmic ratio to saturation of the area law or zero
-correlation length.  Those spectral, entropy, SAL, and ZCL links remain open in
-\ghissue{6302}.  Example~4.10's tensor and final entropy links remain open in
+\paragraph{Project derivation (exact length-four spectra).}
+The module \doclink{TNLean/MPS/MPDO/CPSVExample411Spectrum} specializes the
+canonical block formula to $N=4$.  It proves the effective nonzero root
+multisets
+\[
+ \{(1/2)^{[2]}\},\quad
+ \{(14/41)^{[2]},(13/82)^{[2]}\},\quad
+ \{(10/41)^{[2]},(4/41)^{[4]},(5/82)^{[2]}\},\quad
+ \{(8/41)^{[2]},(2/41)^{[12]},(1/82)^{[2]}\}
+\]
+for block lengths one through four.  Here $a^{[m]}$ denotes multiplicity $m$.
+The generic isometric characteristic-polynomial identity
+\leanid{MPOTensor.CPSVExample411Spectrum.ambient_charpoly_eq_X_pow_mul_effective}
+then adds zero with multiplicity $4^L-2^L$.  Hence the full ambient root
+multisets have zero multiplicities $2$, $12$, $56$, and $240$, respectively.
+These spectral formulas are finite-periodic project derivations, not statements
+attributed to CPSV16.
+
+\paragraph{Scope restriction (entropy consequences).}
+The ambient operator congruence, trace equality, and exact $N=4$ reduced-state
+spectra for Example~4.11 are complete.  This does not yet prove the entropy
+identities or connect the certified logarithmic ratio to saturation of the area
+law or zero correlation length.  Those entropy, SAL, and ZCL links remain open
+in \ghissue{6302}.  Example~4.10's tensor and final entropy links remain open in
 \ghissue{6301}.  The corresponding source-level status therefore remains not
 ready.
 
