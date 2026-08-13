@@ -51,13 +51,15 @@ private def fourBlockProbability {L : ℕ} (x : Fin L → Fin 2) : ℝ :=
 matrix of the exact length-four finite-ring probabilities. -/
 theorem effective_reducedBlockState_four_eq_diagonal {L : ℕ} (hL : 1 ≤ L) (hL4 : L ≤ 4) :
     reducedBlockState CPSVExample411BinarySupport.M 4 L hL4 =
-      Matrix.diagonal (fun x ↦ (fourBlockProbability x : ℂ)) := by
+      Matrix.diagonal (fun x ↦
+        ((2 : ℂ) ^ L * ((3 : ℂ) ^ (5 - L) +
+          (-1 : ℂ) ^ CPSVExample411BinarySupport.internalTransitionCount x) /
+            ((2 : ℂ) ^ (CPSVExample411BinarySupport.internalTransitionCount x + 2) * 82))) := by
   ext x y
   rw [CPSVExample411BinarySupport.reducedBlockState_apply hL hL4,
     Matrix.diagonal_apply]
   split_ifs with hxy
   · subst y
-    simp only [fourBlockProbability, fourBlockProbabilityOfCount]
     rw [show 4 - L + 1 = 5 - L by omega]
     norm_num
   · rfl
@@ -93,8 +95,12 @@ private theorem effective_roots {L : ℕ} (hL : 1 ≤ L) (hL4 : L ≤ 4) :
     (reducedBlockState CPSVExample411BinarySupport.M 4 L hL4).charpoly.roots =
       (Finset.univ.val.map (fourBlockProbability : (Fin L → Fin 2) → ℝ)).map
         (fun r : ℝ ↦ (r : ℂ)) := by
-  rw [effective_reducedBlockState_four_eq_diagonal hL hL4,
-    Matrix.charpoly_roots_diagonal_ofReal]
+  rw [effective_reducedBlockState_four_eq_diagonal hL hL4]
+  convert Matrix.charpoly_roots_diagonal_ofReal
+    (fourBlockProbability : (Fin L → Fin 2) → ℝ) using 1
+  ext x
+  simp only [fourBlockProbability, fourBlockProbabilityOfCount]
+  norm_num
 
 /-- The effective one-site reduced state has root $1/2$ with multiplicity two. -/
 theorem effective_charpoly_roots_one :
