@@ -8,15 +8,24 @@
 
 \begin{definition}[Purity of the Choi--Jamio\l{}kowski operator]
     \label{def:choi_purity}
-    \lean{choiPurity}\leanok
+    \lean{choiPurity, choiPurity_nonneg, choiPurity_eq_sum}\leanok
     \uses{def:choi_matrix}
     For a linear map $T : \MN{D} \to \MN{D}$ with Choi--Jamio\l{}kowski
-    operator $\tau$, the \emph{purity} of $\tau$ is
-    $\tr[\tau^\dagger\tau]$.
+    operator $\tau$, the \emph{purity} of $\tau$ is $\tr[\tau^\dagger\tau]$,
+    the sum
+    \begin{align}
+        \tr[\tau^\dagger\tau]
+        &= \sum_{i_1,j_1,i_2,j_2}
+            \bigl|\tau_{(i_1,j_1),(i_2,j_2)}\bigr|^2
+        \label{eq:representations_purity_entries}
+    \end{align}
+    of the squared moduli of the entries of $\tau$; in particular it is
+    non-negative.
 \end{definition}
 
 \begin{lemma}[Reshuffling]\label{lem:channel_matrix_eq_reshuffled_choi}
-    \lean{channelMatrix_apply_eq_choiMatrix}\leanok
+    \lean{channelMatrix_apply_eq_choiMatrix, channelMatrix_apply,
+        choiMatrix_apply_single}\leanok
     \uses{def:channel_det, def:choi_matrix}
     Let $T : \MN{D} \to \MN{D}$ be a linear map, $\widehat{T}$ its matrix with
     respect to the matrix-unit basis and $\tau$ its Choi--Jamio\l{}kowski
@@ -33,38 +42,73 @@
 \end{lemma}
 
 \begin{proof}\leanok
-    Both sides are computed on matrix units. The matrix of $T$ has entries
-    $\widehat{T}_{(i_1,i_2),(j_1,j_2)}=(T(E_{j_1j_2}))_{i_1i_2}$, while the
-    Choi--Jamio\l{}kowski operator has entries
-    $\tau_{(i_1,i_2),(j_1,j_2)}=\frac1D(T(E_{i_2j_2}))_{i_1j_1}$. Substituting
-    $(i_1,j_1)$ for the row pair and $(i_2,j_2)$ for the column pair in the
-    second formula gives $\frac1D(T(E_{j_1j_2}))_{i_1i_2}$.
+    Both sides are computed on the matrix units $E_{ij}$:
+    \begin{align}
+        \widehat{T}_{(i_1,i_2),(j_1,j_2)}
+        &= \bigl(T(E_{j_1j_2})\bigr)_{i_1i_2},
+        \label{eq:representations_channel_matrix_entries}\\
+        \tau_{(i_1,i_2),(j_1,j_2)}
+        &= \frac1D\bigl(T(E_{i_2j_2})\bigr)_{i_1j_1}.
+        \label{eq:representations_choi_entries}
+    \end{align}
+    Substituting $(i_1,j_1)$ for the row pair and $(i_2,j_2)$ for the column
+    pair in (\ref{eq:representations_choi_entries}) gives
+    $\frac1D\bigl(T(E_{j_1j_2})\bigr)_{i_1i_2}$, which by
+    (\ref{eq:representations_channel_matrix_entries}) is
+    $\frac1D\widehat{T}_{(i_1,i_2),(j_1,j_2)}$.
 \end{proof}
 
 \begin{lemma}[Purity and the matrix representation]
     \label{lem:choi_purity_eq_hilbert_schmidt}
     \lean{trace_conjTranspose_mul_self_channelMatrix}\leanok
-    \uses{def:choi_purity, lem:channel_matrix_eq_reshuffled_choi}
+    \uses{def:channel_det, def:choi_purity}
     With the notation of Lemma~\ref{lem:channel_matrix_eq_reshuffled_choi},
     \begin{align}
-        \tr[\tau^\dagger\tau]
-        &= \frac{1}{D^2}\,\tr[\widehat{T}^\dagger\widehat{T}]
-        = \frac{1}{D^2}\sum_{i=1}^{D^2}s_i^2,
-        \label{eq:representations_purity_singular_values}
+        \tr[\widehat{T}^\dagger\widehat{T}]
+        &= D^2\,\tr[\tau^\dagger\tau].
+        \label{eq:representations_purity_factor}
     \end{align}
-    where the $s_i$ are the singular values of $\widehat{T}$. This is
-    \cite[Eq.~(6.28)]{Wolf2012Quantum}.
+    For $D\geq1$ this is \cite[Eq.~(6.28)]{Wolf2012Quantum}, which states it in
+    the divided form $\tr[\tau^\dagger\tau]=D^{-2}\tr[\widehat{T}^\dagger
+    \widehat{T}]$.
 \end{lemma}
 
 \begin{proof}\leanok
+    \uses{lem:channel_matrix_eq_reshuffled_choi}
     The trace $\tr[A^\dagger A]$ is the sum of the squared moduli of the
-    entries of $A$. Reshuffling permutes the index quadruples
-    $(i_1,i_2,j_1,j_2)$ without repetition, so it leaves that sum unchanged;
-    by Lemma~\ref{lem:channel_matrix_eq_reshuffled_choi} the entries of
-    $\widehat{T}$ exceed the corresponding entries of $\tau$ by the factor $D$,
-    whence the factor $D^2$. The second equality is the description of
-    $\tr[\widehat{T}^\dagger\widehat{T}]$ through the eigenvalues of
-    $\widehat{T}^\dagger\widehat{T}$, which are the squared singular values.
+    entries of $A$, so (\ref{eq:representations_reshuffling}) gives
+    \begin{align}
+        \tr[\widehat{T}^\dagger\widehat{T}]
+        &= \sum_{i_1,i_2,j_1,j_2}
+            \bigl|\widehat{T}_{(i_1,i_2),(j_1,j_2)}\bigr|^2
+         = D^2\sum_{i_1,i_2,j_1,j_2}
+            \bigl|\tau_{(i_1,j_1),(i_2,j_2)}\bigr|^2.
+        \label{eq:representations_purity_entry_sum}
+    \end{align}
+    Reshuffling permutes the index quadruples $(i_1,i_2,j_1,j_2)$ without
+    repetition, so the remaining sum is $\tr[\tau^\dagger\tau]$ by
+    (\ref{eq:representations_purity_entries}).
+\end{proof}
+
+\begin{lemma}[Determinant bound by the Hilbert--Schmidt norm]
+    \label{lem:det_sq_le_hilbert_schmidt_pow}
+    \lean{Matrix.pow_card_mul_norm_det_sq_le_trace_conjTranspose_mul_self_pow}
+    \leanok
+    \uses{lem:trace_det_amgm}
+    For a square complex matrix $A$ whose index set has $n$ elements,
+    \begin{align}
+        n^{n}\,|\det A|^2 &\leq \tr[A^\dagger A]^{n}.
+        \label{eq:representations_det_sq_hs_bound}
+    \end{align}
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{lem:trace_det_amgm}
+    The matrix $A^\dagger A$ is positive semidefinite and
+    $\det(A^\dagger A)=|\det A|^2$, so
+    (\ref{eq:representations_trace_det_amgm}) applied to $M=A^\dagger A$ is the
+    asserted bound. In the singular values $s_1,\dots,s_n$ of $A$ it reads
+    $n^n\prod_i s_i^2\leq\bigl(\sum_i s_i^2\bigr)^n$.
 \end{proof}
 
 \begin{theorem}[Determinant and Choi--Jamio\l{}kowski operator]
@@ -83,18 +127,17 @@
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{lem:choi_purity_eq_hilbert_schmidt}
-    Write $s_1,\dots,s_{D^2}$ for the singular values of $\widehat{T}$, so that
-    $|\det T|=\prod_i s_i$ and, by
-    Lemma~\ref{lem:choi_purity_eq_hilbert_schmidt},
-    $\sum_i s_i^2=D^2\tr[\tau^\dagger\tau]$. The geometric--arithmetic mean
-    inequality for the $D^2$ nonnegative numbers $s_i^2$ reads
+    \uses{lem:choi_purity_eq_hilbert_schmidt, lem:det_sq_le_hilbert_schmidt_pow}
+    The matrix $\widehat{T}$ is indexed by the $D^2$ matrix units and
+    $\det T=\det\widehat{T}$, so (\ref{eq:representations_det_sq_hs_bound}) with
+    $n=D^2$, followed by (\ref{eq:representations_purity_factor}), gives
     \begin{align}
-        (D^2)^{D^2}\prod_{i} s_i^2
-        &\le \Bigl(\sum_i s_i^2\Bigr)^{D^2}
+        (D^2)^{D^2}\,|\det T|^2
+        &\le \tr[\widehat{T}^\dagger\widehat{T}]^{D^2}
         = (D^2)^{D^2}\,\tr[\tau^\dagger\tau]^{D^2}.
         \notag
     \end{align}
-    Cancelling $(D^2)^{D^2}$ gives $|\det T|^2\le\tr[\tau^\dagger\tau]^{D^2}$,
-    and taking square roots gives the stated bound.
+    Cancelling the positive factor $(D^2)^{D^2}$ gives
+    $|\det T|^2\le\tr[\tau^\dagger\tau]^{D^2}$, and taking square roots gives
+    the stated bound.
 \end{proof}
