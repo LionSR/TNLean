@@ -12,9 +12,9 @@ import Mathlib.Analysis.InnerProductSpace.Projection.Basic
 
 For symmetric projections `P` and `Q` on a finite-dimensional complex inner-product
 space, this file defines the reduced projection canonically as the orthogonal projection
-onto `range (P.comp Q)`. It proves the absorption and range identities used in
-arXiv:1703.09188, Proposition IV.5 (`prop:continuity-index`), lines 764–770, and obtains
-the invertible right factor from equality of ranges.
+onto `range (P.comp Q)`. It proves properties (i)–(iii) of arXiv:1703.09188,
+Proposition IV.5, lines 764–769, together with the required range equality, and obtains
+the invertible right factor in property (iv) from equality of ranges.
 -/
 
 open scoped InnerProductSpace

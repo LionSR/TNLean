@@ -5248,6 +5248,29 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
   % Source lines: paper_v2.tex 764--769.
 \end{theorem}
 
+\begin{proof}\leanok
+  Set $A=QP$. The standard range identity for $A^\dagger A$ gives
+  \begin{align}
+    \operatorname{ran}(PQP)
+      &=\operatorname{ran}(A^\dagger A)
+       =\operatorname{ran}(A^\dagger)
+       =\operatorname{ran}(PQ).
+  \end{align}
+  By definition, $\operatorname{ran}(\widetilde P)=\operatorname{ran}(PQ)$,
+  which also gives $P\widetilde P=\widetilde P$. For all $x$ and $z$,
+  \begin{align}
+    \left\langle Qx-PQx,\,PQz\right\rangle&=0.
+  \end{align}
+  Hence $Qx-PQx\in\operatorname{ran}(PQ)^\perp$, so orthogonal projection
+  onto this range yields $\widetilde P Q=PQ$. Taking adjoints gives
+  $Q\widetilde P=QP$. Finally,
+  \begin{align}
+    \operatorname{ran}(\widetilde P Q)
+      &=\operatorname{ran}(PQ)
+       =\operatorname{ran}(\widetilde P).
+  \end{align}
+\end{proof}
+
 \begin{theorem}[Invertible right factor for the reduced projection]
   \label{thm:mpu_two_projection_reduced_projection_right_factor}
   \lean{LinearMap.IsSymmetricProjection.exists_reducedProjection_rightFactor}
@@ -5259,6 +5282,15 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
   \end{align}
   % Source line: paper_v2.tex 770.
 \end{theorem}
+
+\begin{proof}\leanok
+  The equality
+  \begin{align}
+    \operatorname{ran}(\widetilde P Q)&=\operatorname{ran}(\widetilde P)
+  \end{align}
+  and the equal-ranges right-factor theorem give an invertible $Y$ satisfying
+  $\widetilde P QY=\widetilde P$.
+\end{proof}
 
 \begin{proposition}[Constancy of the source ranks]
   \label{prop:continuity-index}
