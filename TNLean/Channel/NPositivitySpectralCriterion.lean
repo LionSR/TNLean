@@ -254,16 +254,19 @@ theorem rayleigh_eigenvector_re (hτ : τ.IsHermitian) (j : N) :
     rw [hτ.star_eigenvector_dotProduct_eigenvector i j, if_neg hij]; simp
   · intro h; exact absurd (Finset.mem_univ j) h
 
-/-- **Wolf's Chapter 3, Proposition 3.2, equation (3.7) at the top Schmidt-rank
-index n = D'.**  At the top index the Schmidt-rank constraint is vacuous (every
-vector on the bipartite space has Schmidt rank at most D') and the Ky-Fan
-D'-norm
-of each reduced density collapses to its trace, which is one.  The lower
-bound (3.7) therefore degenerates to the Rayleigh characterization of the least
-eigenvalue: every normalized vector ψ satisfies λ_min ≤ ⟨ψ|τ|ψ⟩, with no
-Schmidt-rank restriction.  This is the completely-positive endpoint of the
-positivity chain.  Together with `exists_spectral_lower_bound_top` it gives
-min_ψ ⟨ψ|τ|ψ⟩ = λ_min.
+/-- **Rayleigh lower bound at the top Schmidt-rank index n = D'.**  At the top
+index the Schmidt-rank constraint is vacuous: every vector on the bipartite
+space has Schmidt rank at most D', so every normalized vector ψ satisfies
+λ_min ≤ ⟨ψ|τ|ψ⟩ with no Schmidt-rank restriction.  This is the
+completely-positive endpoint of the positivity chain, and together with
+`exists_spectral_lower_bound_top` it gives min_ψ ⟨ψ|τ|ψ⟩ = λ_min.
+
+This is not equation (3.7) at that index.  There the Ky-Fan norms collapse to
+‖ρᵢ‖₍D'₎ = tr ρᵢ = 1 and the right-hand side of (3.7) reads
+ν₀ + Σ_{i:νᵢ≤0} (νᵢ − ν₀), which for the spectrum (−2, −1, 3) is −6 while
+λ_min is −2.  The top-index instance of (3.7) is
+`Matrix.IsHermitian.le_sInf_schmidtRankLEExpectations_top`, which uses the
+present bound.
 
 Wolf's positivity index runs over 1 ≤ n ≤ D with D the dimension of the second
 tensor factor (Prop. 3.1), so these indices belong to the source's range when
