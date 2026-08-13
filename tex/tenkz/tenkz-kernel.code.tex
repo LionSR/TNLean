@@ -5216,6 +5216,10 @@
 \prop_new:N \l__tenkz_kernel_r_sid_record_prop
 \prop_new:N \l__tenkz_kernel_r_index_style_prop
 \prop_new:N \l__tenkz_kernel_r_index_sid_prop
+% wire id -> direction-mark station fraction (fp decimal text), stashed
+% where the style is composed so the ink pass can cover the barb without
+% replaying that style a second time.
+\prop_new:N \l__tenkz_kernel_r_dir_mark_prop
 \prop_new:N \l__tenkz_kernel_r_skin_over_wire_prop
 \prop_new:N \l__tenkz_kernel_r_port_box_prop
 \prop_new:N \l__tenkz_kernel_r_port_host_routes_prop
@@ -11031,6 +11035,424 @@
   }
 
 % ---------- index-wire ink ---------------------------------------------------------------------
+% Every ordinary route is saved page-resolved before it is stroked, and the
+% auditor must read the same resolved object the renderer inks.  The record
+% therefore walks the just-saved soft path back segment by segment: the
+% points list opens on the path's first point, a bare x,y pair extends a
+% polyline, and a c:-prefixed sextuple is a cubic to its last pair with the
+% two control pairs before it.  Coordinates are integer scaled points, the
+% stream's one coordinate system, and the stroke is the closure-rail
+% half-width.  One record covers one drawn component; a route is a single
+% chain today, so that is one record per route.  Caller-declared strings
+% keep their own ink pass and emit no wire-ink record.
+%
+% The record is a centreline envelope, not the exact painted silhouette: a
+% dashed or dotted style still walks the continuous path, so the audit reads
+% every off-dash gap as ink too (over-report, never under-report -- TNLOG.md
+% section 3).  The same doctrine covers the direction-mark cover emitted
+% below and the trace halo's widened stroke: none of them reproduce the
+% decorated ink stroke-for-stroke, all of them are honest not to understate
+% it.
+\tl_new:N \l__tenkz_kernel_ink_route_tl
+\tl_new:N \l__tenkz_kernel_ink_final_tl
+\tl_new:N \l__tenkz_kernel_ink_seg_tl
+\tl_new:N \l__tenkz_kernel_ink_pts_tl
+\tl_new:N \l__tenkz_kernel_ink_move_tl
+\tl_new:N \l__tenkz_kernel_ink_last_tl
+\tl_new:N \l__tenkz_kernel_ink_origin_tl
+\tl_new:N \l__tenkz_kernel_ink_stroke_tl
+\tl_new:N \g__tenkz_kernel_ink_width_tl
+\int_new:N \l__tenkz_kernel_ink_drawn_int
+\seq_new:N \l__tenkz_kernel_ink_seq
+\prop_new:N \l__tenkz_kernel_ink_origin_prop % route sid -> origin word
+% The stroke the record carries is the width the renderer resolves, not the
+% base metric: a document may restyle a wire class, and the audit must hold
+% the label band against the ink actually laid.  Reading that back used to
+% replay the public style a second time in a throwaway group, so a restyle
+% built on a stateful hook -- `bond/.append style={/utils/exec={...}}` --
+% ran its action once for measurement and once more for the real stroke.
+% This key instead rides the SAME option list the real path draws with, as
+% its last token: TikZ resolves every earlier key first, so `\pgflinewidth`
+% is the width that path actually strokes with, read exactly once, as part
+% of the one real execution (#6330 review).
+\tikzset
+  {
+    tenkz~ink~capture~width/.code=
+      {
+        \tl_gset:Ne \g__tenkz_kernel_ink_width_tl
+          { \dim_to_decimal_in_sp:n { \pgflinewidth / 2 } }
+      }
+  }
+\cs_new_protected:Npn \__tenkz_kernel_r_wire_ink_flush:nn #1#2
+  {
+    \int_compare:nNnT { \l__tenkz_kernel_ink_drawn_int } > { 0 }
+      {
+        \__tenkz_kernel_event:n
+          {
+            wire-ink|picture=k\int_use:N \g__tenkz_kernel_picture_int
+            |name=#1|origin=#2
+            |stroke=\tl_use:N \l__tenkz_kernel_ink_stroke_tl
+            |points=\tl_use:N \l__tenkz_kernel_ink_pts_tl
+          }
+      }
+    \tl_clear:N \l__tenkz_kernel_ink_pts_tl
+    \int_zero:N \l__tenkz_kernel_ink_drawn_int
+  }
+% One segment of the walk: the pinned spath3 exposes each segment as its
+% starting move plus one action.  A move that does not repeat the previous
+% end opens a new component, which closes the record of the one before it.
+\cs_new_protected:Npn \__tenkz_kernel_r_wire_ink_segment:nnn #1#2#3
+  {
+    \tl_set:Nn \l__tenkz_kernel_ink_seg_tl {#1}
+    \tl_set:Ne \l__tenkz_kernel_ink_move_tl
+      {
+        \dim_to_decimal_in_sp:n { \tl_item:nn {#1} {2} } ,
+        \dim_to_decimal_in_sp:n { \tl_item:nn {#1} {3} }
+      }
+    \tl_if_eq:NNF \l__tenkz_kernel_ink_move_tl \l__tenkz_kernel_ink_last_tl
+      {
+        \__tenkz_kernel_r_wire_ink_flush:nn {#2} {#3}
+        \tl_set_eq:NN \l__tenkz_kernel_ink_pts_tl
+          \l__tenkz_kernel_ink_move_tl
+        \tl_set_eq:NN \l__tenkz_kernel_ink_last_tl
+          \l__tenkz_kernel_ink_move_tl
+      }
+    \spath_finalaction:NV \l__tenkz_kernel_ink_final_tl
+      \l__tenkz_kernel_ink_seg_tl
+    \tl_if_eq:NNTF \l__tenkz_kernel_ink_final_tl \c_spath_lineto_tl
+      {
+        \tl_set:Ne \l__tenkz_kernel_ink_last_tl
+          {
+            \dim_to_decimal_in_sp:n { \tl_item:nn {#1} {5} } ,
+            \dim_to_decimal_in_sp:n { \tl_item:nn {#1} {6} }
+          }
+        \tl_put_right:Ne \l__tenkz_kernel_ink_pts_tl
+          { ; \tl_use:N \l__tenkz_kernel_ink_last_tl }
+        \int_incr:N \l__tenkz_kernel_ink_drawn_int
+      }
+      {
+        \tl_if_eq:NNT \l__tenkz_kernel_ink_final_tl \c_spath_curveto_tl
+          {
+            \tl_set:Ne \l__tenkz_kernel_ink_last_tl
+              {
+                \dim_to_decimal_in_sp:n { \tl_item:nn {#1} {11} } ,
+                \dim_to_decimal_in_sp:n { \tl_item:nn {#1} {12} }
+              }
+            \tl_put_right:Ne \l__tenkz_kernel_ink_pts_tl
+              {
+                ;c:
+                \dim_to_decimal_in_sp:n { \tl_item:nn {#1} {5} } ,
+                \dim_to_decimal_in_sp:n { \tl_item:nn {#1} {6} } ,
+                \dim_to_decimal_in_sp:n { \tl_item:nn {#1} {8} } ,
+                \dim_to_decimal_in_sp:n { \tl_item:nn {#1} {9} } ,
+                \tl_use:N \l__tenkz_kernel_ink_last_tl
+              }
+            \int_incr:N \l__tenkz_kernel_ink_drawn_int
+          }
+        % a bare move ends here; its point stands as the open start
+      }
+  }
+% An after-atom physical trace strokes its return directly, without joining
+% the queued index class.  The path is still saved first -- unregistered,
+% purely as the measured object -- and the stroke replays that saved path,
+% so the auditor and the renderer read one resolved route here too.
+\cs_new_protected:Npn \__tenkz_kernel_r_trace_stroke:nn #1#2
+  {
+    \__tenkz_kernel_r_sid:nN {#1} \l__tenkz_kernel_r_sid_tl
+    \exp_args:NV \__tenkz_kernel_r_trace_stroke_aux:nn
+      \l__tenkz_kernel_r_sid_tl {#2}
+  }
+\cs_new_protected:Npn \__tenkz_kernel_r_trace_stroke_aux:nn #1#2
+  {
+    \path [ spath/save = {#1} ] #2 ;
+    % The `trace` style's preaction paints a paper halo of line width
+    % wirewidth + crossgap (tenkz-core.code.tex, the `trace` style), a fixed
+    % sum the style hard-codes rather than deriving from the resolved
+    % colour-band width, so the record matches that same fixed sum exactly:
+    % recording only the band's half-width would leave the halo's own
+    % annulus -- crossgap/2 beyond the band -- invisible to the audit, and a
+    % label sitting there is erased with no finding (#6330 review).
+    \tl_set:Ne \l__tenkz_kernel_ink_stroke_tl
+      {
+        \dim_to_decimal_in_sp:n
+          { ( \__tenkz_dim:n {wirewidth} + \__tenkz_dim:n {crossgap} ) / 2 }
+      }
+    \__tenkz_kernel_r_wire_ink_event:nn {#1} { trace }
+    \__tenkz_render_stroke:nn { trace , spath/use = {#1} } { }
+  }
+\cs_new_protected:Npn \__tenkz_kernel_r_wire_ink_event:nn #1#2
+  {
+    \tl_set_eq:Nc \l__tenkz_kernel_ink_route_tl
+      { \l__tikzspath_prefix_tl #1 }
+    \spath_segments_to_seq:NV \l__tenkz_kernel_ink_seq
+      \l__tenkz_kernel_ink_route_tl
+    \tl_clear:N \l__tenkz_kernel_ink_pts_tl
+    \tl_clear:N \l__tenkz_kernel_ink_last_tl
+    \int_zero:N \l__tenkz_kernel_ink_drawn_int
+    \seq_map_inline:Nn \l__tenkz_kernel_ink_seq
+      { \__tenkz_kernel_r_wire_ink_segment:nnn {##1} {#1} {#2} }
+    \__tenkz_kernel_r_wire_ink_flush:nn {#1} {#2}
+  }
+
+% ---------- direction-mark ink -------------------------------------------------------------------
+% `dir marks`/`dir marks reversed` draws a Straight Barb as a postaction the
+% walk above never sees, since it records the underlying centreline, not
+% the decoration painted over it -- a label can sit squarely on the visible
+% arrowhead with no ink beneath it in the record (#6330 review).  The
+% barb's exact silhouette is not reproduced here: that would mean replaying
+% the decorated path a second time, the very duplication the style-replay
+% thread of the same review forbids.  Instead this covers it honestly, on
+% the same envelope doctrine as a dashed wire's gap: a short segment,
+% centred on the mark's own arc-length station, along the route's local
+% chord there, stroked to the barb's own configured reach.  The station is
+% arc length along the route's resolved geometry -- its straight segments
+% exactly, a cubic segment by its chord, an underestimate that can only
+% shift the found station toward the route's own drawn middle, never off
+% the route -- read off the SAME points sequence the centreline walk above
+% just built, so no path is re-saved and no style is re-executed.
+\fp_new:N \l__tenkz_kernel_ink_mark_total_fp
+\fp_new:N \l__tenkz_kernel_ink_mark_target_fp
+\fp_new:N \l__tenkz_kernel_ink_mark_run_fp
+\fp_new:N \l__tenkz_kernel_ink_mark_len_fp
+\fp_new:N \l__tenkz_kernel_ink_mark_step_fp
+\fp_new:N \l__tenkz_kernel_ink_mark_px_fp
+\fp_new:N \l__tenkz_kernel_ink_mark_py_fp
+\fp_new:N \l__tenkz_kernel_ink_mark_qx_fp
+\fp_new:N \l__tenkz_kernel_ink_mark_qy_fp
+\fp_new:N \l__tenkz_kernel_ink_mark_mx_fp
+\fp_new:N \l__tenkz_kernel_ink_mark_my_fp
+\fp_new:N \l__tenkz_kernel_ink_mark_ux_fp
+\fp_new:N \l__tenkz_kernel_ink_mark_uy_fp
+\fp_new:N \l__tenkz_kernel_ink_mark_frac_fp
+\fp_new:N \l__tenkz_kernel_ink_mark_barb_fp
+\tl_new:N \l__tenkz_kernel_ink_mark_frac_tl
+\bool_new:N \l__tenkz_kernel_ink_mark_found_bool
+\bool_new:N \l__tenkz_kernel_ink_mark_drawn_bool
+
+% Convert a value already carried in an fp register to the stream's own
+% integer-scaled-point spelling, exactly as every other coordinate here is
+% written.
+\cs_new:Npn \__tenkz_kernel_r_fp_to_sp:N #1
+  { \dim_to_decimal_in_sp:n { \fp_to_decimal:N #1 pt } }
+
+% One segment's start/end, exactly as spath3 hands it back: `#1` is one
+% element of the already-populated `\l__tenkz_kernel_ink_seq`.  A bare move
+% (no action) sets the drawn flag false and contributes nothing.
+\cs_new_protected:Npn \__tenkz_kernel_r_wire_ink_mark_bounds:n #1
+  {
+    \tl_set:Nn \l__tenkz_kernel_ink_seg_tl {#1}
+    \spath_finalaction:NV \l__tenkz_kernel_ink_final_tl
+      \l__tenkz_kernel_ink_seg_tl
+    \tl_if_eq:NNTF \l__tenkz_kernel_ink_final_tl \c_spath_lineto_tl
+      {
+        \fp_set:Nn \l__tenkz_kernel_ink_mark_px_fp
+          { \dim_to_fp:n { \tl_item:nn {#1} {2} } }
+        \fp_set:Nn \l__tenkz_kernel_ink_mark_py_fp
+          { \dim_to_fp:n { \tl_item:nn {#1} {3} } }
+        \fp_set:Nn \l__tenkz_kernel_ink_mark_qx_fp
+          { \dim_to_fp:n { \tl_item:nn {#1} {5} } }
+        \fp_set:Nn \l__tenkz_kernel_ink_mark_qy_fp
+          { \dim_to_fp:n { \tl_item:nn {#1} {6} } }
+        \bool_set_true:N \l__tenkz_kernel_ink_mark_drawn_bool
+      }
+      {
+        \tl_if_eq:NNTF \l__tenkz_kernel_ink_final_tl \c_spath_curveto_tl
+          {
+            \fp_set:Nn \l__tenkz_kernel_ink_mark_px_fp
+              { \dim_to_fp:n { \tl_item:nn {#1} {2} } }
+            \fp_set:Nn \l__tenkz_kernel_ink_mark_py_fp
+              { \dim_to_fp:n { \tl_item:nn {#1} {3} } }
+            \fp_set:Nn \l__tenkz_kernel_ink_mark_qx_fp
+              { \dim_to_fp:n { \tl_item:nn {#1} {11} } }
+            \fp_set:Nn \l__tenkz_kernel_ink_mark_qy_fp
+              { \dim_to_fp:n { \tl_item:nn {#1} {12} } }
+            \bool_set_true:N \l__tenkz_kernel_ink_mark_drawn_bool
+          }
+          { \bool_set_false:N \l__tenkz_kernel_ink_mark_drawn_bool }
+      }
+  }
+% The unit direction of the segment just bounded, reused by both branches
+% of the settling step below.
+\cs_new_protected:Npn \__tenkz_kernel_r_wire_ink_mark_unit:
+  {
+    \fp_set:Nn \l__tenkz_kernel_ink_mark_ux_fp
+      {
+        \l__tenkz_kernel_ink_mark_len_fp > 0
+          ?
+          ( \l__tenkz_kernel_ink_mark_qx_fp
+            - \l__tenkz_kernel_ink_mark_px_fp )
+          / \l__tenkz_kernel_ink_mark_len_fp
+          : 1
+      }
+    \fp_set:Nn \l__tenkz_kernel_ink_mark_uy_fp
+      {
+        \l__tenkz_kernel_ink_mark_len_fp > 0
+          ?
+          ( \l__tenkz_kernel_ink_mark_qy_fp
+            - \l__tenkz_kernel_ink_mark_py_fp )
+          / \l__tenkz_kernel_ink_mark_len_fp
+          : 0
+      }
+  }
+% One segment of the settling pass: extend the running length by this
+% segment, or, once the target arc length falls inside it, interpolate the
+% station point and stop moving past it.  Every segment before the target
+% settles also leaves its own end as a fallback station, so a target that
+% lands past the last segment by rounding still resolves to the route's own
+% end rather than to nothing.
+\cs_new_protected:Npn \__tenkz_kernel_r_wire_ink_mark_settle:
+  {
+    \fp_set:Nn \l__tenkz_kernel_ink_mark_len_fp
+      {
+        sqrt(
+          ( \l__tenkz_kernel_ink_mark_qx_fp
+            - \l__tenkz_kernel_ink_mark_px_fp ) ^ 2
+          + ( \l__tenkz_kernel_ink_mark_qy_fp
+              - \l__tenkz_kernel_ink_mark_py_fp ) ^ 2 )
+      }
+    \fp_compare:nNnTF
+      {
+        \l__tenkz_kernel_ink_mark_run_fp
+        + \l__tenkz_kernel_ink_mark_len_fp
+      } < { \l__tenkz_kernel_ink_mark_target_fp }
+      {
+        \fp_add:Nn \l__tenkz_kernel_ink_mark_run_fp
+          { \l__tenkz_kernel_ink_mark_len_fp }
+        \fp_set_eq:NN \l__tenkz_kernel_ink_mark_mx_fp
+          \l__tenkz_kernel_ink_mark_qx_fp
+        \fp_set_eq:NN \l__tenkz_kernel_ink_mark_my_fp
+          \l__tenkz_kernel_ink_mark_qy_fp
+        \__tenkz_kernel_r_wire_ink_mark_unit:
+      }
+      {
+        \fp_set:Nn \l__tenkz_kernel_ink_mark_step_fp
+          {
+            \l__tenkz_kernel_ink_mark_len_fp > 0
+              ?
+              ( \l__tenkz_kernel_ink_mark_target_fp
+                - \l__tenkz_kernel_ink_mark_run_fp )
+              / \l__tenkz_kernel_ink_mark_len_fp
+              : 0
+          }
+        \fp_set:Nn \l__tenkz_kernel_ink_mark_mx_fp
+          {
+            \l__tenkz_kernel_ink_mark_px_fp
+            + \l__tenkz_kernel_ink_mark_step_fp
+              * ( \l__tenkz_kernel_ink_mark_qx_fp
+                  - \l__tenkz_kernel_ink_mark_px_fp )
+          }
+        \fp_set:Nn \l__tenkz_kernel_ink_mark_my_fp
+          {
+            \l__tenkz_kernel_ink_mark_py_fp
+            + \l__tenkz_kernel_ink_mark_step_fp
+              * ( \l__tenkz_kernel_ink_mark_qy_fp
+                  - \l__tenkz_kernel_ink_mark_py_fp )
+          }
+        \__tenkz_kernel_r_wire_ink_mark_unit:
+        \bool_set_true:N \l__tenkz_kernel_ink_mark_found_bool
+      }
+  }
+% Write the barb's own cover: a segment of the barb's configured length,
+% centred on the found station along its local direction, stroked to that
+% same length -- generous enough to clear a Straight Barb's lateral spread
+% on any bearing, honest in the same direction a dash gap's over-report is.
+\cs_new_protected:Npn \__tenkz_kernel_r_wire_ink_mark_emit:
+  {
+    \fp_set:Nn \l__tenkz_kernel_ink_mark_barb_fp
+      { \dim_to_fp:n { \__tenkz_dim:n {barblen} } }
+    \fp_set:Nn \l__tenkz_kernel_ink_mark_px_fp
+      {
+        \l__tenkz_kernel_ink_mark_mx_fp
+        - \l__tenkz_kernel_ink_mark_barb_fp / 2
+          * \l__tenkz_kernel_ink_mark_ux_fp
+      }
+    \fp_set:Nn \l__tenkz_kernel_ink_mark_py_fp
+      {
+        \l__tenkz_kernel_ink_mark_my_fp
+        - \l__tenkz_kernel_ink_mark_barb_fp / 2
+          * \l__tenkz_kernel_ink_mark_uy_fp
+      }
+    \fp_set:Nn \l__tenkz_kernel_ink_mark_qx_fp
+      {
+        \l__tenkz_kernel_ink_mark_mx_fp
+        + \l__tenkz_kernel_ink_mark_barb_fp / 2
+          * \l__tenkz_kernel_ink_mark_ux_fp
+      }
+    \fp_set:Nn \l__tenkz_kernel_ink_mark_qy_fp
+      {
+        \l__tenkz_kernel_ink_mark_my_fp
+        + \l__tenkz_kernel_ink_mark_barb_fp / 2
+          * \l__tenkz_kernel_ink_mark_uy_fp
+      }
+    \__tenkz_kernel_event:n
+      {
+        wire-ink|picture=k\int_use:N \g__tenkz_kernel_picture_int
+        |name=\tl_use:N \l__tenkz_kernel_r_sid_tl
+        |origin=mark
+        |stroke=\__tenkz_kernel_r_fp_to_sp:N
+          \l__tenkz_kernel_ink_mark_barb_fp
+        |points=\__tenkz_kernel_r_fp_to_sp:N \l__tenkz_kernel_ink_mark_px_fp
+          ,\__tenkz_kernel_r_fp_to_sp:N \l__tenkz_kernel_ink_mark_py_fp
+          ;\__tenkz_kernel_r_fp_to_sp:N \l__tenkz_kernel_ink_mark_qx_fp
+          ,\__tenkz_kernel_r_fp_to_sp:N \l__tenkz_kernel_ink_mark_qy_fp
+      }
+  }
+% The two-pass walk: total the route's arc length, then find the point at
+% the wire's stashed station fraction of that total.  A degenerate route
+% (zero drawn length) writes nothing -- there is no barb to cover.
+\cs_new_protected:Npn \__tenkz_kernel_r_wire_ink_mark_walk:
+  {
+    \fp_zero:N \l__tenkz_kernel_ink_mark_total_fp
+    \seq_map_inline:Nn \l__tenkz_kernel_ink_seq
+      {
+        \__tenkz_kernel_r_wire_ink_mark_bounds:n {##1}
+        \bool_if:NT \l__tenkz_kernel_ink_mark_drawn_bool
+          {
+            \fp_add:Nn \l__tenkz_kernel_ink_mark_total_fp
+              {
+                sqrt(
+                  ( \l__tenkz_kernel_ink_mark_qx_fp
+                    - \l__tenkz_kernel_ink_mark_px_fp ) ^ 2
+                  + ( \l__tenkz_kernel_ink_mark_qy_fp
+                      - \l__tenkz_kernel_ink_mark_py_fp ) ^ 2 )
+              }
+          }
+      }
+    \fp_compare:nNnT { \l__tenkz_kernel_ink_mark_total_fp } > { 0 }
+      {
+        \fp_set:Nn \l__tenkz_kernel_ink_mark_target_fp
+          {
+            \l__tenkz_kernel_ink_mark_frac_fp
+            * \l__tenkz_kernel_ink_mark_total_fp
+          }
+        \fp_zero:N \l__tenkz_kernel_ink_mark_run_fp
+        \bool_set_false:N \l__tenkz_kernel_ink_mark_found_bool
+        \seq_map_inline:Nn \l__tenkz_kernel_ink_seq
+          {
+            \bool_if:NF \l__tenkz_kernel_ink_mark_found_bool
+              {
+                \__tenkz_kernel_r_wire_ink_mark_bounds:n {##1}
+                \bool_if:NT \l__tenkz_kernel_ink_mark_drawn_bool
+                  { \__tenkz_kernel_r_wire_ink_mark_settle: }
+              }
+          }
+        \__tenkz_kernel_r_wire_ink_mark_emit:
+      }
+  }
+% Entry point: a wire with no stashed station drew no direction mark, and
+% writes nothing.
+\cs_new_protected:Npn \__tenkz_kernel_r_wire_ink_mark:n #1
+  {
+    \prop_get:NnNTF \l__tenkz_kernel_r_dir_mark_prop {#1}
+      \l__tenkz_kernel_ink_mark_frac_tl
+      {
+        \fp_set:Nn \l__tenkz_kernel_ink_mark_frac_fp
+          { \l__tenkz_kernel_ink_mark_frac_tl }
+        \__tenkz_kernel_r_wire_ink_mark_walk:
+      }
+      { }
+  }
+
 \cs_new_protected:Npn \__tenkz_kernel_r_wire_stroke:nn #1#2
   {
     \tl_set:Ne \l__tenkz_kernel_r_wire_style_tl
@@ -11039,6 +11461,26 @@
       \l__tenkz_kernel_r_wire_record_tl \l__tenkz_kernel_r_sid_tl
     \exp_args:NV \__tenkz_string_save_route:nn
       \l__tenkz_kernel_r_sid_tl {#2}
+    % The origin names the reach doctrine that put the ink down.  A caller
+    % that knows better -- the open-port leg -- states its origin before
+    % the stroke; every other route reads it off its own style word.  The
+    % record itself is written later, at the stroke pass, from the saved
+    % path as crossing surgery leaves it; only the origin is minuted here.
+    \tl_if_empty:NT \l__tenkz_kernel_ink_origin_tl
+      {
+        \tl_set:Ne \l__tenkz_kernel_ink_origin_tl
+          {
+            \str_case:nnF {#1}
+              {
+                { physical~leg } { physical-leg }
+                { trace } { trace }
+              }
+              { bond }
+          }
+      }
+    \prop_put:NVV \l__tenkz_kernel_ink_origin_prop
+      \l__tenkz_kernel_r_sid_tl \l__tenkz_kernel_ink_origin_tl
+    \tl_clear:N \l__tenkz_kernel_ink_origin_tl
     \prop_put:NVV \l__tenkz_kernel_r_sid_record_prop
       \l__tenkz_kernel_r_sid_tl \l__tenkz_kernel_r_wire_record_tl
     \prop_put:NVV \l__tenkz_kernel_r_index_sid_prop
@@ -11155,6 +11597,23 @@
   {
     \__tenkz_kernel_r_port_open_geometry:n {#1}
     \__tenkz_kernel_r_port_box_register:n {#1}
+    % An unconsumed declared port grows a stub the occupancy table never
+    % charted: neither the host's own station promise nor that of the
+    % neighbor the stub grows toward can stand.
+    \__tenkz_kernel_r_label_blind:V \l__tenkz_kernel_port_record_tl
+    \exp_args:NV \__tenkz_kernel_atom_rc:nNNN
+      \l__tenkz_kernel_port_record_tl
+      \l__tenkz_kernel_lab_row_tl \l__tenkz_kernel_lab_col_tl
+      \l__tenkz_kernel_lab_cell_bool
+    \bool_if:NT \l__tenkz_kernel_lab_cell_bool
+      {
+        \__tenkz_kernel_r_face_side:n
+          { \tl_use:N \l__tenkz_kernel_port_face_tl }
+        \__tenkz_kernel_r_label_blind_neighbor:eee
+          { \tl_use:N \l__tenkz_kernel_lab_row_tl }
+          { \tl_use:N \l__tenkz_kernel_lab_col_tl }
+          { \tl_use:N \l__tenkz_kernel_r_face_side_tl }
+      }
     \fp_set_eq:NN \l__tenkz_kernel_r_x_fp
       \l__tenkz_kernel_r_port_x_fp
     \fp_set_eq:NN \l__tenkz_kernel_r_y_fp
@@ -11178,6 +11637,7 @@
         \str_if_eq:VnTF \l__tenkz_kernel_port_type_tl {physical}
           { physical~leg } { bond }
       }
+    \tl_set:Nn \l__tenkz_kernel_ink_origin_tl { port }
     \exp_args:NVV \__tenkz_kernel_r_wire_stroke:nn
       \l__tenkz_kernel_r_tl \l__tenkz_kernel_r_pts_tl
     \seq_put_right:Nn \l__tenkz_kernel_r_port_label_routes_seq {#1}
@@ -13702,8 +14162,17 @@
         \exp_args:NV \__tenkz_string_touch_all:nn
           \l__tenkz_kernel_leg_name_tl {leg}
         \__tenkz_kernel_r_leg_skin_touch:n {#1}
-        \exp_args:NnV \__tenkz_render_stroke:nn { bond }
+        % The capture key rides the same option list the real path strokes
+        % with, as its last token, so the resolved width is read once, as
+        % part of the one real stroke (#6330 review; see the key's own
+        % comment above).
+        \exp_args:NnV \__tenkz_render_stroke:nn
+          { bond , tenkz~ink~capture~width }
           \l__tenkz_kernel_r_leg_path_tl
+        \tl_set_eq:NN \l__tenkz_kernel_ink_stroke_tl
+          \g__tenkz_kernel_ink_width_tl
+        \exp_args:NV \__tenkz_kernel_r_wire_ink_event:nn
+          \l__tenkz_kernel_leg_name_tl { leg }
       }
       {
         \tl_set:Ne \l__tenkz_kernel_r_c_tl
@@ -14189,6 +14658,7 @@
                     , dir~marks
                     \tl_use:N \l__tenkz_kernel_r_dir_station_tl
                   }
+                \__tenkz_kernel_r_wire_ink_dir_stash:n {#1}
               }
             {from}
               {
@@ -14198,9 +14668,30 @@
                     , dir~marks~reversed
                     \tl_use:N \l__tenkz_kernel_r_dir_station_tl
                   }
+                \__tenkz_kernel_r_wire_ink_dir_stash:n {#1}
               }
             {none} { }
           }
+      }
+  }
+% The station fraction just computed for the `dir marks` style word is the
+% SAME fraction the barb postaction places its mark at; stash it under the
+% wire's own id so the ink pass can find where to cover the barb without
+% re-deriving it from the resolved style text and without re-running any
+% live style key (#6330 review).  Empty `l__tenkz_kernel_r_dir_station_tl`
+% means the style keeps its bare `.default`, the registry's own station
+% ratio; a non-empty one was just set, together with its own fp register,
+% by `\__tenkz_kernel_r_dir_station_set:n` above.
+\cs_new_protected:Npn \__tenkz_kernel_r_wire_ink_dir_stash:n #1
+  {
+    \tl_if_empty:NTF \l__tenkz_kernel_r_dir_station_tl
+      {
+        \prop_put:Nne \l__tenkz_kernel_r_dir_mark_prop {#1}
+          { \__tenkz_metric_ratio:n {dirmarkstation} }
+      }
+      {
+        \prop_put:Nne \l__tenkz_kernel_r_dir_mark_prop {#1}
+          { \fp_to_decimal:N \l__tenkz_kernel_r_dir_station_fp }
       }
   }
 
@@ -15243,7 +15734,16 @@
           { \__tenkz_kernel_r_index_route:n {##1} }
       }
     \prop_map_inline:Nn \l__tenkz_kernel_r_legdrawn_prop
-      { \__tenkz_render_string:nn {##1} { draw = tenkzInk } }
+      {
+        % A crossing-deferred leg is renderer-owned ink like any other leg,
+        % so it writes its wire-ink record where it is stroked, from the
+        % crossing-policed engine path, at the fixed width the string
+        % renderer strokes it with.
+        \tl_set:Ne \l__tenkz_kernel_ink_stroke_tl
+          { \dim_to_decimal_in_sp:n { \__tenkz_dim:n {wirewidth} / 2 } }
+        \__tenkz_kernel_r_wire_ink_event:nn {##1} { leg }
+        \__tenkz_render_string:nn {##1} { draw = tenkzInk }
+      }
     \seq_map_inline:Nn \l__tenkz_kernel_r_deferred_trace_routes_seq
       { \__tenkz_kernel_r_index_route:n {##1} }
     \seq_map_inline:Nn \l__tenkz_kernel_r_strings_seq
@@ -15479,13 +15979,35 @@
     \__tenkz_kernel_r_sid:nN {#1} \l__tenkz_kernel_r_sid_tl
     \prop_get:NnN \l__tenkz_kernel_r_index_style_prop {#1}
       \l__tenkz_kernel_r_wire_style_tl
+    \prop_get:NVN \l__tenkz_kernel_ink_origin_prop
+      \l__tenkz_kernel_r_sid_tl \l__tenkz_kernel_ink_origin_tl
+    \quark_if_no_value:NT \l__tenkz_kernel_ink_origin_tl
+      { \tl_set:Nn \l__tenkz_kernel_ink_origin_tl { bond } }
+    % The capture key rides the SAME option list the real path strokes
+    % with, as the last token, so the resolved width is read once, as part
+    % of the one real stroke, instead of replaying the resolved style a
+    % second time in a throwaway group (#6330 review).  The wire-ink
+    % record is then written after that stroke: the saved path carries
+    % whatever gaps crossing surgery cut into it, so the auditor reads
+    % exactly the ink the reader sees, at the width that stroke actually
+    % painted with.
     \tl_set:Ne \l__tenkz_kernel_r_wire_style_tl
       {
         spath/use = { \tl_use:N \l__tenkz_kernel_r_sid_tl } ,
-        \tl_use:N \l__tenkz_kernel_r_wire_style_tl
+        \tl_use:N \l__tenkz_kernel_r_wire_style_tl ,
+        tenkz~ink~capture~width
       }
     \exp_args:NV \__tenkz_render_stroke:nn
       \l__tenkz_kernel_r_wire_style_tl { }
+    \tl_set_eq:NN \l__tenkz_kernel_ink_stroke_tl
+      \g__tenkz_kernel_ink_width_tl
+    \exp_args:NVV \__tenkz_kernel_r_wire_ink_event:nn
+      \l__tenkz_kernel_r_sid_tl \l__tenkz_kernel_ink_origin_tl
+    \tl_clear:N \l__tenkz_kernel_ink_origin_tl
+    % A directed route's Straight Barb postaction painted ink in that same
+    % stroke that the centreline walk above never sees; cover it (#6330
+    % review).
+    \__tenkz_kernel_r_wire_ink_mark:n {#1}
   }
 
 % ---------- atom ink -----------------------------------------------------------------------------
@@ -15602,7 +16124,7 @@
           \l__tenkz_kernel_phtrace_to_tip_x_fp )
         + \l__tenkz_kernel_phtrace_reach_fp
       }
-    \__tenkz_render_stroke:nn { trace }
+    \__tenkz_kernel_r_trace_stroke:nn {#1}
       {
         \__tenkz_kernel_r_pair:nn
           { \l__tenkz_kernel_phtrace_from_x_fp }
@@ -15675,7 +16197,7 @@
               { \pgfpointanchor{\tl_use:N \l__tenkz_kernel_r_tl}{east} }
             \dim_add:Nn \l__tenkz_kernel_r_east_x_dim
               { \__tenkz_dim:n {phtracereach} }
-            \__tenkz_render_stroke:nn { trace }
+            \__tenkz_kernel_r_trace_stroke:nn {#1}
               {
                 ( \l__tenkz_kernel_r_north_x_dim ,
                   \l__tenkz_kernel_r_north_y_dim )
@@ -15727,6 +16249,14 @@
 % The answer is therefore independent of ink order and identical on every
 % compile.
 \__tenkz_prop_new_indexed:N \l__tenkz_kernel_lab_occ_prop % "atom/side" -> ""
+% Atoms whose ink the reading could not chart.  Every place the occupancy
+% pass stands down -- the circle guards, an endpoint atom with no cell, a
+% bead on a route that bends through its own waypoints -- records the atom
+% here, so the chooser knows a face it found free of charted ink is not a
+% face it verified free of all ink.  Such a station is left unclaimed in
+% the event stream rather than mislabeled as a kernel promise; the bearing
+% reading of issue 6195 is what empties this ledger.
+\__tenkz_prop_new_indexed:N \g__tenkz_kernel_lab_blind_prop % "atom" -> ""
 \tl_new:N \l__tenkz_kernel_lab_atom_tl
 \tl_new:N \l__tenkz_kernel_lab_row_tl
 \tl_new:N \l__tenkz_kernel_lab_col_tl
@@ -15775,6 +16305,29 @@
           }
       }
   }
+\cs_new_protected:Npn \__tenkz_kernel_r_label_blind:n #1
+  { \prop_gput:Nen \g__tenkz_kernel_lab_blind_prop {#1} { } }
+\cs_generate_variant:Nn \__tenkz_kernel_r_label_blind:n { V }
+% The atom, if any, standing one cell past face #3 of cell (#1,#2).  A stub
+% or policy leg grows the length of its reach into that cell, and no table
+% charts its ink on the atom standing there, so that atom's own promise
+% cannot stand either.
+\cs_new_protected:Npn \__tenkz_kernel_r_label_blind_neighbor:nnn #1#2#3
+  {
+    \__tenkz_kernel_any_cell_claim:eeN
+      {
+        \int_eval:n
+          { #1 \str_case:nnF {#3} { {n} { - 1 } {s} { + 1 } } { + 0 } }
+      }
+      {
+        \int_eval:n
+          { #2 \str_case:nnF {#3} { {w} { - 1 } {e} { + 1 } } { + 0 } }
+      }
+      \l__tenkz_kernel_lab_owner_tl
+    \quark_if_no_value:NF \l__tenkz_kernel_lab_owner_tl
+      { \__tenkz_kernel_r_label_blind:V \l__tenkz_kernel_lab_owner_tl }
+  }
+\cs_generate_variant:Nn \__tenkz_kernel_r_label_blind_neighbor:nnn { eee }
 % Side #2 of atom #1 carries ink.  The angle form converts once here, so a
 % face word and a face angle reach the table by the same road.
 \cs_new_protected:Npn \__tenkz_kernel_r_label_mark_side:nn #1#2
@@ -15810,7 +16363,15 @@
             \bool_lazy_and:nnT
               { ! \quark_if_no_value_p:N \l__tenkz_kernel_lab_leg_row_tl }
               { ! \quark_if_no_value_p:N \l__tenkz_kernel_lab_leg_col_tl }
-              { \__tenkz_kernel_r_label_leg_lane: }
+              {
+                \__tenkz_kernel_r_label_leg_lane:
+                % the leg's reach also enters the neighboring cell, whose
+                % atom's table never hears of it
+                \__tenkz_kernel_r_label_blind_neighbor:eee
+                  { \tl_use:N \l__tenkz_kernel_lab_leg_row_tl }
+                  { \tl_use:N \l__tenkz_kernel_lab_leg_col_tl }
+                  { \tl_use:N \l__tenkz_kernel_lab_face_tl }
+              }
           }
       }
     % A transverse plane closure keeps its two ends as a host and the axis
@@ -15868,6 +16429,16 @@
               \l__tenkz_kernel_lab_atom_tl
               \l__tenkz_kernel_lab_row_tl \l__tenkz_kernel_lab_col_tl
               \l__tenkz_kernel_lab_cell_bool
+            \bool_if:NF \l__tenkz_kernel_lab_cell_bool
+              {
+                % an endpoint atom with no cell carries this wire's ink,
+                % and no difference of cell numbers says which way it goes
+                \quark_if_no_value:NF \l__tenkz_kernel_lab_atom_tl
+                  {
+                    \__tenkz_kernel_r_label_blind:V
+                      \l__tenkz_kernel_lab_atom_tl
+                  }
+              }
             \bool_if:NT \l__tenkz_kernel_lab_cell_bool
               {
                 \__tenkz_kernel_r_label_station_lanes:V
@@ -15876,14 +16447,21 @@
                 \bool_if:NTF \l__tenkz_kernel_lab_far_bool
                   {
                     % A wire whose far cell belongs to the same atom runs
-                    % under one glyph and leaves it by no face at all.
+                    % under one glyph and leaves it by no face at all.  A
+                    % covering glyph hides that run, but a dot does not,
+                    % so the atom's ink stays uncharted and its station is
+                    % no promise.
                     \__tenkz_kernel_any_cell_claim:eeN
                       { \tl_use:N \l__tenkz_kernel_lab_far_row_tl }
                       { \tl_use:N \l__tenkz_kernel_lab_far_col_tl }
                       \l__tenkz_kernel_lab_owner_tl
-                    \str_if_eq:VVF
+                    \str_if_eq:VVTF
                       \l__tenkz_kernel_lab_owner_tl
                       \l__tenkz_kernel_lab_atom_tl
+                      {
+                        \__tenkz_kernel_r_label_blind:V
+                          \l__tenkz_kernel_lab_atom_tl
+                      }
                       {
                         \__tenkz_kernel_r_label_mark_toward:V
                           \l__tenkz_kernel_lab_atom_tl
@@ -15906,6 +16484,7 @@
 \cs_new_protected:Npn \__tenkz_kernel_r_label_end_atom:nNNNN #1#2#3#4#5
   {
     \bool_set_false:N #5
+    \tl_set:Nn #2 { \q_no_value }
     \str_case:en { \__tenkz_kernel_node_item:nn {#1} {kind} }
       {
         {cell}
@@ -16216,7 +16795,8 @@
 % bearing in the endpoint's own frame is what answers a circle; issue 6195.
 \cs_new_protected:Npn \__tenkz_kernel_r_label_mark_toward:n #1
   {
-    \str_if_eq:eeF { \__tenkz_kernel_r_frame_word: } {circle}
+    \str_if_eq:eeTF { \__tenkz_kernel_r_frame_word: } {circle}
+      { \__tenkz_kernel_r_label_blind:n {#1} }
       { \__tenkz_kernel_r_label_mark_axis:n {#1} }
   }
 \cs_new_protected:Npn \__tenkz_kernel_r_label_mark_axis:n #1
@@ -16232,9 +16812,15 @@
           { \l__tenkz_kernel_lab_far_col_tl }
           > { \l__tenkz_kernel_lab_col_tl }
           { \__tenkz_kernel_r_label_mark_side:nn {#1} {e} }
-        \int_compare:nNnF
+        \int_compare:nNnTF
           { \l__tenkz_kernel_lab_far_col_tl }
           = { \l__tenkz_kernel_lab_col_tl }
+          {
+            % two basis members of one outer cell share its row and
+            % column: the difference is zero and no direction comes out
+            % of it, so the ink between them stays uncharted
+            \__tenkz_kernel_r_label_blind:n {#1}
+          }
           {
             \int_compare:nNnT
               { \l__tenkz_kernel_lab_row_tl }
@@ -16334,8 +16920,13 @@
         \__tenkz_model_get:nnN {#1} {kind} \l__tenkz_kernel_lab_node_tl
         \str_if_eq:VnT \l__tenkz_kernel_lab_node_tl {string}
           { \__tenkz_model_get:nnN {#1} {via} \l__tenkz_kernel_lab_via_tl }
-        \quark_if_no_value:NT \l__tenkz_kernel_lab_via_tl
+        \quark_if_no_value:NTF \l__tenkz_kernel_lab_via_tl
           { \__tenkz_kernel_r_label_carrier_run:nn {#1} {#2} }
+          {
+            % a route that bends through its own waypoints reaches the
+            % bead by no face this stage can name
+            \__tenkz_kernel_r_label_blind:n {#2}
+          }
       }
       {
         \__tenkz_kernel_r_label_bead_mark:nnn {#2}
@@ -16414,6 +17005,15 @@
     % Two model ends: the run is read from their cells, and that reading
     % stands down on a circle exactly as the endpoint one does.  An open
     % side names its direction outright, so it answers on every frame.
+    % Either stand-down leaves the bead's ink uncharted, so the bead joins
+    % the blind ledger rather than passing for a verified station.
+    \bool_lazy_and:nnT
+      { ! \quark_if_no_value_p:N \l__tenkz_kernel_lab_from_tl }
+      { ! \quark_if_no_value_p:N \l__tenkz_kernel_lab_to_tl }
+      {
+        \str_if_eq:eeT { \__tenkz_kernel_r_frame_word: } {circle}
+          { \__tenkz_kernel_r_label_blind:n {#2} }
+      }
     \bool_lazy_all:nT
       {
         { ! \quark_if_no_value_p:N \l__tenkz_kernel_lab_from_tl }
@@ -16431,6 +17031,10 @@
           \l__tenkz_kernel_lab_to_tl
           \l__tenkz_kernel_lab_far_row_tl \l__tenkz_kernel_lab_far_col_tl
           \l__tenkz_kernel_lab_far_bool
+        \bool_lazy_and:nnF
+          { \l__tenkz_kernel_lab_cell_bool }
+          { \l__tenkz_kernel_lab_far_bool }
+          { \__tenkz_kernel_r_label_blind:n {#2} }
         \bool_lazy_and:nnT
           { \l__tenkz_kernel_lab_cell_bool }
           { \l__tenkz_kernel_lab_far_bool }
@@ -16625,13 +17229,37 @@
                 % write it out; the word names the chooser, not an angle,
                 % so it reaches the chooser as an absent field does.
                 \__tenkz_model_get:nnN {#1} {label-pos} \l__tenkz_kernel_r_c_tl
-                \bool_lazy_or:nnT
+                % The claim states who chose the station: the chooser's face
+                % word rides the bbox as station=, and provenance= says
+                % whether the kernel promised that face free or the author
+                % named it.  The claim covers exactly this label's node and
+                % is released after it.  An atom on the blind ledger got a
+                % default, not a promise: its station stays unclaimed.  A
+                % circle frame stands down whole: its occupancy reading is
+                % built on lanes, and a circle's closed ring of stations is
+                % no lane, so no station on it is a verified promise until
+                % the bearing reading of issue 6195 lands.
+                \bool_lazy_or:nnTF
                   { \quark_if_no_value_p:N \l__tenkz_kernel_r_c_tl }
                   { \str_if_eq_p:Vn \l__tenkz_kernel_r_c_tl {auto} }
                   {
                     \__tenkz_kernel_r_label_auto_side:nN {#1}
                       \l__tenkz_kernel_r_c_tl
+                    \bool_lazy_or:nnF
+                      { \prop_if_in_p:Nn \g__tenkz_kernel_lab_blind_prop {#1} }
+                      {
+                        \str_if_eq_p:ee
+                          { \__tenkz_kernel_r_frame_word: } {circle}
+                      }
+                      {
+                        \use:e
+                          {
+                            \exp_not:c { tenkz@labelclaim } { auto }
+                              { \tl_use:N \l__tenkz_kernel_r_c_tl }
+                          }
+                      }
                   }
+                  { \use:c { tenkz@labelclaim } { explicit } { } }
                 \tl_set:Ne \l__tenkz_kernel_r_c_tl
                   {
                     \__tenkz_kernel_r_compass:n
@@ -16709,6 +17337,7 @@
                     $ \use:c {tenkz@labelsize}
                       \tl_use:N \l__tenkz_kernel_r_skin_label_tl $
                   }
+                \use:c { tenkz@labelrelease }
               }
           }
       }
@@ -18878,6 +19507,7 @@
     \prop_clear:N \l__tenkz_kernel_r_sid_record_prop
     \prop_clear:N \l__tenkz_kernel_r_index_style_prop
     \prop_clear:N \l__tenkz_kernel_r_index_sid_prop
+    \prop_clear:N \l__tenkz_kernel_r_dir_mark_prop
     \seq_clear:N \l__tenkz_kernel_r_index_routes_seq
     \seq_clear:N \l__tenkz_kernel_r_port_label_routes_seq
     \seq_clear:N \l__tenkz_kernel_r_strings_seq
@@ -18921,6 +19551,11 @@
     % later join pass.
     \prop_clear:N \l__tenkz_kernel_r_port_box_prop
     \prop_clear:N \l__tenkz_kernel_r_port_host_routes_prop
+    % The blind ledger is fed by the wire and leg passes as well as by the
+    % occupancy scan, so it resets here, once per picture, before any of
+    % its writers run.  The origin minutes reset with it.
+    \prop_gclear:N \g__tenkz_kernel_lab_blind_prop
+    \prop_clear:N \l__tenkz_kernel_ink_origin_prop
     \__tenkz_model_map_ids:nn {wire}
       { \__tenkz_kernel_r_wire_queue:n {##1} }
     % Panels meet on the axis their wires run along, not on the middle of

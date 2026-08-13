@@ -49,6 +49,7 @@ from pathlib import Path
 from tenkz_audit import ENVIRONMENT_LANGS
 from tenkz_language import (
     Entry,
+    live_word_owners,
     load_registry,
     parse_status,
     tombstone_rows,
@@ -105,7 +106,10 @@ def registry_alias_patterns() -> list[re.Pattern[str]]:
     return patterns
 
 
-def tombstone_patterns(entries: list[Entry]) -> list[tuple[re.Pattern[str], str]]:
+def tombstone_patterns(
+    entries: list[Entry],
+    word_owners: dict[str, set[tuple[str, str]]] | None = None,
+) -> list[tuple[re.Pattern[str], str]]:
     """Source patterns and migrations for the spellings a ledger buries.
 
     A `key=value` row is a word struck from a live alphabet, so the pattern is
@@ -117,16 +121,23 @@ def tombstone_patterns(entries: list[Entry]) -> list[tuple[re.Pattern[str], str]
     boundary before it would match nothing, since neither the backslash nor
     the space before it is a word character.  An environment is named where a
     document names one, in the argument of `\\begin` or `\\end`.  A bare row
-    is a key that no longer exists; where its word survives as the value of a
-    live enum, the pattern steps over that live spelling, which is where a
-    reader of the dead one should be.
+    is a key that no longer exists; where its word survives -- as the value
+    of a live enum, or in an alphabet only the parser states, such as a
+    policy's choice words, the wire-end grammar's open words, or the
+    declaration door's face words -- the pattern steps over that live
+    spelling, which is where a reader of the dead one should be.  An owner
+    is a frame, the text standing before and after the word, so a word
+    carried by what follows it (a face word before its `:type`) is stepped
+    over exactly as one carried by what precedes it (a choice word after
+    its `key=`).  The parser-held owners arrive from `live_word_owners`
+    unless the caller supplies its own map.
 
     Every spelling arrives from `tombstone_rows` with the registry's `~`
     already read as the space a document writes, so a multi-word key is
     matched the way source spells it rather than the way the registry does.
     A row stating no spelling gets no pattern; the language check reports it.
     """
-    enum_owners: dict[str, set[str]] = {}
+    owners: dict[str, set[tuple[str, str]]] = {}
     for entry in entries:
         if entry.kind != "key":
             continue
@@ -134,7 +145,13 @@ def tombstone_patterns(entries: list[Entry]) -> list[tuple[re.Pattern[str], str]
         if enum is None:
             continue
         for word in enum.group(1).split("|"):
-            enum_owners.setdefault(word, set()).add(entry.fields[1].replace("~", " "))
+            owners.setdefault(word, set()).add(
+                (entry.fields[1].replace("~", " ") + "=", "")
+            )
+    if word_owners is None:
+        word_owners = live_word_owners()
+    for word, frames in word_owners.items():
+        owners.setdefault(word, set()).update(frames)
     patterns: list[tuple[re.Pattern[str], str]] = []
     for scope, spelling, migration in sorted(tombstone_rows(entries)):
         key, _separator, value = spelling.partition("=")
@@ -160,20 +177,28 @@ def tombstone_patterns(entries: list[Entry]) -> list[tuple[re.Pattern[str], str]
             )
         else:
             # A lookbehind takes no variable width, so a live owner is stepped
-            # over as the source spells it with no space around the equals.
-            # A spaced `owner = word` is therefore reported, which over-reports
+            # over as the source spells it: no space around a choice's equals,
+            # one space after the open word, none around a face's colon.  A
+            # spaced `owner = word` is therefore reported, which over-reports
             # a live spelling rather than passing a dead one, and is what the
             # hardcoded expression this replaced did.  Matching only where a
             # key may appear would trade that for a possible under-report,
             # which is the failure this ledger exists to prevent.
+            frames = sorted(owners.get(key, set()))
             expression = (
                 "".join(
-                    f"(?<!{re.escape(owner)}=)"
-                    for owner in sorted(enum_owners.get(key, set()))
+                    f"(?<!{re.escape(before)})"
+                    for before, _after in frames
+                    if before
                 )
                 + r"\b"
                 + re.escape(key).replace(r"\ ", r"\s+")
                 + r"\b"
+                + "".join(
+                    f"(?!{re.escape(after)})"
+                    for _before, after in frames
+                    if after
+                )
             )
         patterns.append((re.compile(expression), migration))
     return patterns

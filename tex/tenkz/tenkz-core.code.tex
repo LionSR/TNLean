@@ -476,6 +476,34 @@
 \tenkz@bboxcapturetrue
 \let\tenkz@labelgeometrykey\relax
 \let\tenkz@auditinstallowner\relax
+% Station provenance rides the label whose placement the kernel chose.  The
+% claim is ARMED immediately before the one node it describes and consumed
+% by that node's own audit installation: the install binds the armed claim
+% to the node's snapshot token and disarms it, and the capture reads the
+% claim back off the token it is capturing.  The first audited label to
+% install therefore owns the claim, and every label installing after it --
+% in particular a nested label created by an execute-at-end-node hook
+% during the audited node's own construction -- starts unclaimed.  Every
+% other label site stays unclaimed rather than mislabeled: an absent field
+% is the stream's word for a placement the model has not classified.  The
+% station is the chooser's face word, before compass conversion; an
+% explicit placement claims no station.
+\let\tenkz@labelstation\relax
+\let\tenkz@labelprovenance\relax
+\let\tenkz@armedlabelstation\relax
+\let\tenkz@armedlabelprovenance\relax
+\def\tenkz@labelclaim#1#2{%
+  \def\tenkz@armedlabelprovenance{#1}%
+  \if\relax\detokenize{#2}\relax
+    \let\tenkz@armedlabelstation\relax
+  \else
+    \def\tenkz@armedlabelstation{#2}%
+  \fi}
+\def\tenkz@labelrelease{%
+  \let\tenkz@labelstation\relax
+  \let\tenkz@labelprovenance\relax
+  \let\tenkz@armedlabelstation\relax
+  \let\tenkz@armedlabelprovenance\relax}
 % Mirror the actual backend graphic state without changing any PGF arguments.
 % Assignments remain local to the same TeX groups as the driver mutations, so
 % inherited scopes and final node options are observed at the real path use.
@@ -540,7 +568,9 @@
     id=\the\tenkz@bboxuid|owner=\the\tenkz@inkowner|%
     xmin=\number\tenkz@bboxxmin|xmax=\number\tenkz@bboxxmax|%
     ymin=\number\tenkz@bboxymin|ymax=\number\tenkz@bboxymax|%
-    shape=\tenkz@labelshape|radius=\number\tenkz@labelradius}}
+    shape=\tenkz@labelshape|radius=\number\tenkz@labelradius%
+    \ifx\tenkz@labelstation\relax\else|station=\tenkz@labelstation\fi%
+    \ifx\tenkz@labelprovenance\relax\else|provenance=\tenkz@labelprovenance\fi}}
 \def\tenkz@checklinear#1#2#3#4#5#6{%
   \tenkz@identitylineartrue
   \pgf@xa=#1pt\relax
@@ -589,6 +619,14 @@
       \endcsname{\the\tenkz@labelradius}%
     \expandafter\xdef\csname tenkz@labelopaque@\tenkz@labelgeometrykey
       \endcsname{\tenkz@labelopaque}%
+    \ifx\tenkz@labelstation\relax\else
+      \expandafter\xdef\csname tenkz@labelstation@\tenkz@labelgeometrykey
+        \endcsname{\tenkz@labelstation}%
+    \fi
+    \ifx\tenkz@labelprovenance\relax\else
+      \expandafter\xdef\csname tenkz@labelprovenance@\tenkz@labelgeometrykey
+        \endcsname{\tenkz@labelprovenance}%
+    \fi
   \fi}
 \def\tenkz@cleanupstoredlabelgeometry#1{%
   \global\expandafter\let\csname tenkz@labelxmin@#1\endcsname\relax
@@ -597,7 +635,9 @@
   \global\expandafter\let\csname tenkz@labelymax@#1\endcsname\relax
   \global\expandafter\let\csname tenkz@labelshape@#1\endcsname\relax
   \global\expandafter\let\csname tenkz@labelradius@#1\endcsname\relax
-  \global\expandafter\let\csname tenkz@labelopaque@#1\endcsname\relax}
+  \global\expandafter\let\csname tenkz@labelopaque@#1\endcsname\relax
+  \global\expandafter\let\csname tenkz@labelstation@#1\endcsname\relax
+  \global\expandafter\let\csname tenkz@labelprovenance@#1\endcsname\relax}
 \def\tenkz@emitstoredlabelbbox#1#2{%
   \begingroup
   \tenkz@requireidentitylinear{#1}{label}%
@@ -616,6 +656,10 @@
     \advance\tenkz@bboxymax by \tenkz@bboxya
     \edef\tenkz@labelshape{\csname tenkz@labelshape@#2\endcsname}%
     \tenkz@labelradius=\csname tenkz@labelradius@#2\endcsname\relax
+    \expandafter\let\expandafter\tenkz@labelstation
+      \csname tenkz@labelstation@#2\endcsname
+    \expandafter\let\expandafter\tenkz@labelprovenance
+      \csname tenkz@labelprovenance@#2\endcsname
     \tenkz@writelabelbbox
   \fi
   \fi
@@ -967,6 +1011,12 @@
   \ifnum\tenkz@visibleinvalid=0\relax
     \iftenkz@auditpicture
       \begingroup
+      % The claim, if this node's install consumed one, rides the same
+      % token as the rest of its snapshot state.
+      \expandafter\let\expandafter\tenkz@labelprovenance
+        \csname tenkz@labelclaimprov@#1\endcsname
+      \expandafter\let\expandafter\tenkz@labelstation
+        \csname tenkz@labelclaimstat@#1\endcsname
       \tenkz@requireidentitylinear{\tikzlastnode}{label}%
       \tenkz@requirelabelrectangle{\tikzlastnode}%
       \iftenkz@identitylinear
@@ -1199,6 +1249,8 @@
   \global\expandafter\let\csname tenkz@glypharc@#1\endcsname\relax
   \global\expandafter\let\csname tenkz@frameglyph@#1\endcsname\relax
   \global\expandafter\let\csname tenkz@labelowner@#1\endcsname\relax
+  \global\expandafter\let\csname tenkz@labelclaimprov@#1\endcsname\relax
+  \global\expandafter\let\csname tenkz@labelclaimstat@#1\endcsname\relax
   \tenkz@cleanupvisiblesnapshot{#1}}
 \def\tenkz@captureglyphgeometrynode#1#2#3#4{%
   \expandafter\ifx\csname tenkz@invalid@#4\endcsname\relax
@@ -1408,6 +1460,16 @@
     \global\advance\tenkz@glyphsnapuid by 1\relax
     \edef\tenkz@glyphsnaptoken{\the\tenkz@glyphsnapuid}%
     \edef\tenkz@auditinstallowner{\tenkz@glyphsnaptoken}%
+    \ifx\tenkz@armedlabelprovenance\relax\else
+      \global\expandafter\let
+        \csname tenkz@labelclaimprov@\tenkz@glyphsnaptoken\endcsname
+        \tenkz@armedlabelprovenance
+      \global\expandafter\let
+        \csname tenkz@labelclaimstat@\tenkz@glyphsnaptoken\endcsname
+        \tenkz@armedlabelstation
+      \global\let\tenkz@armedlabelprovenance\relax
+      \global\let\tenkz@armedlabelstation\relax
+    \fi
     \edef\tenkz@installlabelsnapshot{%
       \noexpand\tikzset{%
         execute at end node={%

@@ -25,6 +25,20 @@ Hard errors (exit 1):
                        diagrams" class.
   label-overlap       A measured `tn label` visible support strictly intersects
                       a sibling glyph node or explicit visible wire node.
+  label-on-ink        A measured label band strictly intersects a drawn wire,
+                      leg, cup, or trace route whose station the kernel chose
+                      (the label bbox carries `provenance=auto`): the kernel
+                      promised a free face and put the name on ink.  The same
+                      intersection under an explicit `label pos=`, or on a
+                      label site no chooser has claimed, is an advisory.
+                      `wire-ink` is an envelope, not a silhouette: a dashed
+                      or dotted route is read as its continuous centreline,
+                      so a label inside a dash gap still reads as ink and a
+                      collision there still stands (over-report, never
+                      under-report; TNLOG.md section 3).  A `trace` route's
+                      recorded stroke is the paper halo the preaction
+                      paints, not just the colour band beneath it, for the
+                      same reason.
   closure-detached    A traced row's closure does not start and finish on the
                       two virtual ends it names, so the picture records a
                       periodic contraction and draws an open chain.
@@ -82,6 +96,10 @@ Advisories (never affect the exit code):
   unknown-event/lang   Forward-compatibility notes.
   stale-log            The source declares picture constructs but the log
                        has none (failed or interrupted compile).
+  label-on-ink         The advisory half of the rule above: the intersection
+                       stands, but the author chose the station or no chooser
+                       claimed the label site, so the stream records a choice
+                       rather than a broken promise.
 
 The equation group is the `tenkzeq` scope and nothing else.  Every panel of
 one scope carries that scope's number in its `picture` record and the scope
@@ -452,6 +470,115 @@ def _segment_intersects_label(
         )
         for center, diameter in circles
     )
+
+
+class CubicSubdivisionExhausted(Exception):
+    """The certified cubic walk hit its depth cap without settling."""
+
+
+# Writing the gap between a cubic and its chord as B(t) - L(t) =
+# t(1-t) [ (1-t)(3P1 - 2P0 - P3) + t(3P2 - P0 - 2P3) ] bounds its Euclidean
+# length by max(|3P1 - 2P0 - P3|, |3P2 - P0 - 2P3|) / 4.  The stroke test
+# inflates by a Euclidean reach, so the bound must dominate the Euclidean
+# norm: the taxicab length |dx| + |dy| does, exactly and in integers, where
+# the coordinate-wise maximum alone would understate a diagonal bow by up
+# to sqrt(2) and let a genuine intersection certify as a miss.  The bound
+# is exact rational arithmetic on the control points, and de Casteljau
+# subdivision at least halves it every level -- not quarters it: the worst
+# case is a zero-sum control pair (P0 = P3 = (0, 0), P1 = (100, 0),
+# P2 = (-100, 0) gives M = 300, M_left = 150 = M/2 exactly, since the left
+# half's components are zero-sum affine combinations of the parent's), so
+# halving is the guaranteed rate, not quartering.  The walk below still
+# terminates well inside its cap: a TeX-valid coordinate is bounded by
+# 2^30 sp (the dimen limit), so a control vector such as 3*C1 - 2*P0 - P3
+# has each component bounded by 6*2^30 sp, its taxicab norm by 12*2^30 sp,
+# and the initial bound (that norm divided by 4) by 3*2^30 sp -- under
+# 2^32.  Halving needs at most 32 levels to bring that under 1 sp, eight
+# levels inside the 40-level cap.
+_CUBIC_SUBDIVISION_LIMIT = 40
+
+RationalPoint = tuple  # (x, y) as int or Fraction, always exact
+
+
+def _cubic_chord_bound(
+        p0: RationalPoint, c1: RationalPoint,
+        c2: RationalPoint, p3: RationalPoint) -> Fraction:
+    return Fraction(max(
+        abs(3 * c1[0] - 2 * p0[0] - p3[0]) + abs(3 * c1[1] - 2 * p0[1] - p3[1]),
+        abs(3 * c2[0] - p0[0] - 2 * p3[0]) + abs(3 * c2[1] - p0[1] - 2 * p3[1]),
+    )) / 4
+
+
+def _cubic_halves(
+        p0: RationalPoint, c1: RationalPoint,
+        c2: RationalPoint, p3: RationalPoint) -> tuple[tuple, tuple]:
+    """De Casteljau subdivision at t = 1/2: dyadic, therefore exact."""
+    def mid(left: RationalPoint, right: RationalPoint) -> RationalPoint:
+        return (Fraction(left[0] + right[0]) / 2,
+                Fraction(left[1] + right[1]) / 2)
+
+    m01, m12, m23 = mid(p0, c1), mid(c1, c2), mid(c2, p3)
+    m012, m123 = mid(m01, m12), mid(m12, m23)
+    m = mid(m012, m123)
+    return (p0, m01, m012, m), (m, m123, m23, p3)
+
+
+def _cubic_intersects_label(
+        p0: RationalPoint, c1: RationalPoint,
+        c2: RationalPoint, p3: RationalPoint,
+        stroke: int, shape: str, bounds: Rect, radius: int,
+        depth: int = 0) -> bool:
+    """Certified test of a drawn cubic's stroke band against a label shape.
+
+    The curve stays within the chord-deviation bound of its chord, so a
+    chord test with the stroke inflated by that bound never misses a true
+    intersection.  A miss at that inflation is a certified miss; a hit is
+    settled by subdividing until the bound falls below one scaled point,
+    the stream's own resolution, where the residual inflation can at most
+    convert a sub-sp tangency into a hit -- and tangency is legal at that
+    resolution.  No false negatives by construction."""
+    bound = _cubic_chord_bound(p0, c1, c2, p3)
+    if not _segment_intersects_label(
+            p0, p3, stroke + bound, shape, bounds, radius):
+        return False
+    if bound < 1:
+        return True
+    if depth >= _CUBIC_SUBDIVISION_LIMIT:
+        raise CubicSubdivisionExhausted
+    left, right = _cubic_halves(p0, c1, c2, p3)
+    return (_cubic_intersects_label(
+                *left, stroke, shape, bounds, radius, depth + 1)
+            or _cubic_intersects_label(
+                *right, stroke, shape, bounds, radius, depth + 1))
+
+
+def _parse_ink_points(value: str) -> Optional[list[tuple]]:
+    """Segments of a `wire-ink` route, or None when the grammar fails.
+
+    A segment is `("line", start, end)` or `("cubic", start, c1, c2, end)`,
+    every coordinate an integer scaled point."""
+    parts = value.split(";")
+    if len(parts) < 2:
+        return None
+    try:
+        current = parse_sp_point(parts[0])
+        segments: list[tuple] = []
+        for part in parts[1:]:
+            if part.startswith("c:"):
+                coordinates = [int(item) for item in part[2:].split(",")]
+                if len(coordinates) != 6:
+                    return None
+                end = (coordinates[4], coordinates[5])
+                segments.append(("cubic", current,
+                                 (coordinates[0], coordinates[1]),
+                                 (coordinates[2], coordinates[3]), end))
+            else:
+                end = parse_sp_point(part)
+                segments.append(("line", current, end))
+            current = end
+    except ValueError:
+        return None
+    return segments
 
 
 def _label_inscribed_in_glyph(
@@ -882,6 +1009,29 @@ class Audit:
             rails.append((event, points, int(event.attrs["stroke"])))
         return rails
 
+    def wire_inks(
+            self, pic: Picture
+    ) -> list[tuple[Event, list[tuple], int]]:
+        """Return every well-formed drawn route measured in `pic`.
+
+        A route is its segment list -- lines and cubics -- and the half
+        stroke it is drawn with, exactly as the kernel saved it before
+        stroking."""
+        inks: list[tuple[Event, list[tuple], int]] = []
+        required = {"name", "origin", "stroke", "points"}
+        for event in pic.events:
+            if event.kind != "wire-ink":
+                continue
+            if not self.require_fields(event, required, "wire-ink"):
+                continue
+            if not _is_positive_int(event.attrs["stroke"]):
+                continue  # FIELD_VALIDATORS already reported the bad value.
+            segments = _parse_ink_points(event.attrs["points"])
+            if segments is None:
+                continue  # FIELD_VALIDATORS already reported the bad value.
+            inks.append((event, segments, int(event.attrs["stroke"])))
+        return inks
+
     def check_closure_rails(self) -> None:
         """A traced row's closure must reach the row it closes.
 
@@ -1228,6 +1378,7 @@ class Audit:
                                   event.attrs["cut-shape"], cut, radius,
                                   int(event.attrs["cut-id"])))
             rails = self.closure_rails(pic)
+            inks = self.wire_inks(pic)
             labels = [rect for rect in rectangles if rect[1] == "label"]
             wire_boxes = [rect for rect in rectangles if rect[1] == "wire"]
             labels_by_id: dict[int, tuple[Event, str, Rect, str, int]] = {}
@@ -1382,6 +1533,55 @@ class Audit:
                             "intersects the closure "
                             f"{rail_event.attrs['name']} of row "
                             f"{rail_event.attrs['row']}",
+                        )
+                # A label is a name and a name must be legible.  The band a
+                # name occupies is held against every drawn route of its
+                # picture: a station the kernel chose and put on ink anyway
+                # is a broken promise and hard; a station the author named,
+                # or a label site no chooser has claimed, records a choice
+                # and is advisory.  The same inscribed-name exemption as the
+                # rails applies: a name painted over by its own glyph lies
+                # under the glyph, not on the wire.
+                provenance = label[0].attrs.get("provenance")
+                report = self.hard if provenance == "auto" else self.adv
+                if provenance == "auto":
+                    station = label[0].attrs.get("station", "?")
+                    placement = (
+                        f" on the station the kernel chose ({station})")
+                elif provenance == "explicit":
+                    placement = " on the author's chosen station"
+                else:
+                    placement = " (unclaimed label site)"
+                for ink_event, ink_segments, ink_stroke in (
+                        [] if inscribed else inks):
+                    try:
+                        touched = any(
+                            _segment_intersects_label(
+                                segment[1], segment[2], ink_stroke,
+                                label_shape, label_rect, label_radius)
+                            if segment[0] == "line" else
+                            _cubic_intersects_label(
+                                segment[1], segment[2], segment[3],
+                                segment[4], ink_stroke,
+                                label_shape, label_rect, label_radius)
+                            for segment in ink_segments
+                        )
+                    except CubicSubdivisionExhausted:
+                        self.hard(
+                            "malformed-event",
+                            f"{self.log_path.name}:{ink_event.line}",
+                            f"picture {pic.ident} wire-ink "
+                            f"{ink_event.attrs['name']} cubic did not settle "
+                            "within the subdivision cap",
+                        )
+                        continue
+                    if touched:
+                        report(
+                            "label-on-ink",
+                            f"{self.log_path.name}:{label[0].line}",
+                            f"picture {pic.ident} label bbox id={label_id} "
+                            f"intersects the {ink_event.attrs['origin']} "
+                            f"route {ink_event.attrs['name']}" + placement,
                         )
                 for event, shape, bounds, radius, stroke, points in glyphs:
                     glyph_owner = int(event.attrs["owner"])

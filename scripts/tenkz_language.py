@@ -395,6 +395,67 @@ def _kernel_tombstones() -> dict[tuple[str, str], str]:
     )
 
 
+# A bare tombstone row bans its word from case source, and the word may
+# outlive the key that died inside alphabets the registry types opaquely.
+# The parsers state those alphabets -- the kernel's choice tables, the
+# wire-end grammar whose open words follow the word `open', and the
+# declaration door's compass faces spelled `<word>:<type>' -- so the live
+# owners are read from the parser source, exactly as the refused spellings
+# above are: adding or retiring a word is one parser edit and no edit here.
+_KERNEL_CHOICE = re.compile(r"\\__tenkz_kernel_choice:nnnn\s*(?=\{)")
+_KERNEL_OPEN_WORDS = re.compile(r"\\A\s+open\s+\\s\+\s+\(([a-z|]+)\)\s+\\Z")
+_DECLAREATOM_FACES = re.compile(
+    r"\\A\s+\\s\*\s+\(([a-z|]+)\)\s+:\s+\(([a-z|]+)\)\s+\\s\*\s+\\Z"
+)
+
+
+def _live_word_owners_from_texts(
+    texts: Iterable[str],
+) -> dict[str, set[tuple[str, str]]]:
+    """Collect each parser-held word with the live spellings that carry it.
+
+    The value is a set of frames, the text standing before and after the
+    word in source: a choice word is carried as `<key>=<word>`, an open end
+    word as `open <word>`, a declaration face word as `<word>:<type>`.  A
+    pattern built for a dead bare key steps over these, so a live spelling
+    of the surviving word is never reported as the dead key.  The face
+    frames take every word-type pair the extraction admits, including the
+    pairs validation then refuses; a refused pair never stands in a
+    compiling document, so stepping over it passes nothing a compile would
+    not already answer.
+    """
+    owners: dict[str, set[tuple[str, str]]] = {}
+    for text in texts:
+        text = strip_comments(text)
+        for match in _KERNEL_CHOICE.finditer(text):
+            position = match.end()
+            fields: list[str] = []
+            for _ in range(3):
+                field, position = _group(text, position)
+                fields.append(field)
+            _family, key, words = (_sentence(field) for field in fields)
+            for word in words.split(","):
+                owners.setdefault(word.strip(), set()).add((f"{key}=", ""))
+        for match in _KERNEL_OPEN_WORDS.finditer(text):
+            for word in match.group(1).split("|"):
+                owners.setdefault(word.strip(), set()).add(("open ", ""))
+        for match in _DECLAREATOM_FACES.finditer(text):
+            for word in match.group(1).split("|"):
+                for port_type in match.group(2).split("|"):
+                    owners.setdefault(word.strip(), set()).add(
+                        ("", f":{port_type.strip()}")
+                    )
+    return owners
+
+
+def live_word_owners() -> dict[str, set[tuple[str, str]]]:
+    """Parser-held words and the live frames that carry them, read from the kernel source."""
+    return _live_word_owners_from_texts(
+        path.read_text(encoding="utf-8")
+        for path in (ROOT / "tex/tenkz").glob("*.code.tex")
+    )
+
+
 def tombstone_rows(entries: list[Entry]) -> list[tuple[str, str, str]]:
     """The ledger's rows as scope, spelling, and migration a reader is shown.
 
