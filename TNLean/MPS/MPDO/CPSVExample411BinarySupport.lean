@@ -140,28 +140,6 @@ private lemma hadamard_mul_eigenvalueMatrix_eq_weightMatrix_mul_hadamard :
     simp [hadamard, eigenvalueMatrix, weightMatrix, Matrix.mul_apply,
       Fin.sum_univ_two] <;> norm_num
 
-private lemma hadamard_mul_eigenvalueMatrix_pow_eq_weightMatrix_pow_mul_hadamard
-    (N : ℕ) :
-    hadamard * eigenvalueMatrix ^ N = weightMatrix ^ N * hadamard := by
-  induction N with
-  | zero => simp
-  | succ N ih =>
-      rw [pow_succ, pow_succ, ← Matrix.mul_assoc, ih, Matrix.mul_assoc,
-        hadamard_mul_eigenvalueMatrix_eq_weightMatrix_mul_hadamard,
-        ← Matrix.mul_assoc]
-
-private lemma trace_weightMatrix_pow_eq_trace_eigenvalueMatrix_pow (N : ℕ) :
-    Matrix.trace (weightMatrix ^ N) = Matrix.trace (eigenvalueMatrix ^ N) := by
-  have h := hadamard_mul_eigenvalueMatrix_pow_eq_weightMatrix_pow_mul_hadamard N
-  have hdiag : eigenvalueMatrix ^ N =
-      ((1 / 2 : ℂ) • hadamard) * weightMatrix ^ N * hadamard := by
-    have h' : ((1 / 2 : ℂ) • hadamard) * (hadamard * eigenvalueMatrix ^ N) =
-        ((1 / 2 : ℂ) • hadamard) * (weightMatrix ^ N * hadamard) := by
-      rw [h]
-    simp only [← Matrix.mul_assoc] at h'
-    rwa [half_hadamard_mul_hadamard, one_mul] at h'
-  rw [hdiag, Matrix.trace_mul_cycle, hadamard_mul_half_hadamard, one_mul]
-
 /-- The trace of every power of the coefficient matrix extracted from the four
 printed diagonal neighboring operators has the closed form
 `(3^N + 1) / 2^N`.
@@ -171,7 +149,9 @@ Example 4.11, lines 907--924; see
 `docs/paper-gaps/cpsv16_examples_4_10_4_11_entropy.tex`. -/
 theorem trace_weightMatrix_pow (N : ℕ) :
     Matrix.trace (weightMatrix ^ N) = ((3 : ℂ) ^ N + 1) / (2 : ℂ) ^ N := by
-  rw [trace_weightMatrix_pow_eq_trace_eigenvalueMatrix_pow,
+  rw [Matrix.trace_pow_eq_of_intertwining
+    hadamard_mul_eigenvalueMatrix_eq_weightMatrix_mul_hadamard
+    hadamard_mul_half_hadamard half_hadamard_mul_hadamard,
     eigenvalueMatrix, Matrix.diagonal_pow, Matrix.trace_diagonal]
   simp only [Fin.sum_univ_two, Pi.pow_apply, Matrix.vecEmpty, Matrix.vecCons]
   change ((3 : ℂ) / 2) ^ N + ((1 : ℂ) / 2) ^ N =
