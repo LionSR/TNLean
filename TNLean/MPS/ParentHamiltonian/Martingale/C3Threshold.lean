@@ -17,11 +17,9 @@ blocked-chain filtration step.
 
 ## Main results
 
-* `MPSTensor.IsPrimitiveMPS.
-    exists_uniform_wholeIncrement_defect_le_seven_sixteenths`
+* `MPSTensor.IsPrimitiveMPS.exists_uniform_wholeIncrement_defect_le_seven_sixteenths`
   chooses one original-site scale uniformly for every prefix length.
-* `MPSTensor.IsPrimitiveMPS.
-    exists_threeBlock_wholeIncrement_defect_le_seven_sixteenths`
+* `MPSTensor.IsPrimitiveMPS.exists_threeBlock_wholeIncrement_defect_le_seven_sixteenths`
   specializes the uniform estimate to three equal original-site blocks.
 * `MPSTensor.IsPrimitiveMPS.exists_openChain_groundProjection_defect_lt_c3_threshold`
   chooses a block-injective overlap length and one uniform C3 defect coefficient.
