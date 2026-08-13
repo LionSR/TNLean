@@ -1589,6 +1589,72 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
     the entrywise conjugate of the second, and conversely.
 \end{proof}
 
+\begin{definition}[Physical-pair swap]
+    \label{def:mpu_physical_pair_swap}
+    \lean{MPOTensor.physicalPairSwapEquiv,
+        MPOTensor.physicalPairSwapEquiv_finProdFinEquiv}
+    \leanok
+    \uses{def:mpdo_physical_adjoint,def:mpu_normalized_flattening}
+    On the flattened physical alphabet, physical adjunction uses the
+    involution
+    \begin{align}
+        s(i,j)&=(j,i).
+    \end{align}
+    This acts on physical coordinates and is distinct from the doubled-bond
+    exchange used in reflected transfer calculations.
+\end{definition}
+
+\begin{theorem}[Normalized flattening under physical adjunction]
+    \label{thm:mpu_physical_adjoint_normalized_flattening}
+    \lean{MPOTensor.normalizedFlattening_physicalAdjointTensor}
+    \leanok
+    \uses{def:mpdo_physical_adjoint,def:mpu_normalized_flattening,
+        def:mpu_physical_pair_swap}
+    The normalized flattening of the physical adjoint is obtained by
+    entrywise conjugation followed by the physical-pair swap:
+    \begin{align}
+      \widetilde{\mathcal U^\sharp}^{\,(i,j)}
+        &=\overline{\widetilde{\mathcal U}^{\,(j,i)}}.
+    \end{align}
+\end{theorem}
+
+\begin{proof}\leanok
+    Expand the normalized flattening. Its factor $d^{-1/2}$ is real, while
+    physical adjunction exchanges the ket and bra coordinates and conjugates
+    every virtual matrix entry.
+\end{proof}
+
+\begin{theorem}[Reduced canonical-form-II data under physical adjunction]
+    \label{thm:mpu_physical_adjoint_reduced_cfii}
+    \lean{MPSTensor.CPSVCanonicalFormIIData.physicalAdjointNormalizedFlattening,
+        MPSTensor.CPSVCanonicalFormIIData.hasFullActiveSupport_physicalAdjointNormalizedFlattening,
+        MPSTensor.IsCPSVCanonicalFormII.physicalAdjointNormalizedFlattening}
+    \leanok
+    \uses{def:cpsv_cfii,def:mpu_full_active_support,
+        thm:mpu_physical_adjoint_normalized_flattening}
+    Suppose the normalized flattening has canonical-form-II data with full
+    active support. Physical adjunction preserves the block count and block
+    dimensions, conjugates every weight, conjugates every block before the
+    physical-pair swap, and conjugates the ambient coisometry. The resulting
+    data again have full active support and canonical form II.
+
+    Each diagonal positive fixed matrix $\Lambda_k$ is unchanged. Indeed,
+    positivity and diagonality imply that its entries are real, and
+    conjugating its fixed-point equation gives the transformed equation.
+    This statement concerns canonical-form data only and does not identify
+    any selected singular-value decomposition or source factor.
+\end{theorem}
+
+\begin{proof}\leanok
+    Conjugation preserves positive-length block injectivity and
+    left-canonical normalization, hence normality. It also preserves the
+    coisometry equation and the direct-sum reconstruction. Nonzero weights
+    remain nonzero under conjugation, so the active indices and their block
+    dimensions are unchanged. The later reflected transfer calculation has
+    the separately fixed orientation $\rho^{\mathsf T}$ in
+    Theorem~\ref{thm:mpu_reflected_transfer_power}.
+\end{proof}
+
 \begin{theorem}[Source ranks under physical adjunction]
     \label{thm:mpu_physical_adjoint_source_ranks}
     \lean{MPOTensor.rightRank_physicalAdjointTensor,
