@@ -135,11 +135,12 @@ theorem pureEnsembleDensity_padZero {m n : ℕ} (h : m ≤ n) (ψ : Fin m → (F
 /-! ### Wolf's equivalence of ensembles -/
 
 /-- **Equivalence of ensembles** (Wolf §2, line 277 of
-`Notes/WolfNoteTexSource/ch02_representations.tex`), relative to a choice of
-zero paddings `Ψ`, `Φ` of the two ensembles onto a common index set `ι`.
+`Notes/WolfNoteTexSource/ch02_representations.tex`), relative to families `Ψ`,
+`Φ` on a common index set `ι` whose densities agree with those of `ψ` and `φ`.
+The canonical such families are the zero paddings of the two ensembles.
 
 Two ensembles of not necessarily normalized vectors induce the same density
-operator iff their padded families are related by a unitary mixing matrix
+operator iff those families are related by a unitary mixing matrix
 `Ψ i = ∑_ℓ U i ℓ • Φ ℓ`. No relation between the cardinalities of the original
 index sets is assumed. -/
 theorem pureEnsembleDensity_eq_iff_exists_unitary_mixing_of_pad
