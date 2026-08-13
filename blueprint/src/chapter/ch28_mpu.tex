@@ -5214,9 +5214,9 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
   \uses{}
   Let $P$ and $Q$ be orthogonal projections on a finite-dimensional complex
   inner-product space. Define $\widetilde P$ as the orthogonal projection onto
-  $\operatorname{ran}(PQ)$. Since
-  $\operatorname{ran}(PQP)=\operatorname{ran}(PQ)$, this is also the
-  orthogonal projection onto the triple-product range used in the source.
+  $\operatorname{ran}(PQ)$. The source defines $\widetilde P$ blockwise;
+  identifying its projector with this canonical construction belongs to
+  issue~\#6294.
   % Source lines: paper_v2.tex 764--770.
 \end{definition}
 
@@ -5233,18 +5233,24 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
   \uses{def:mpu_two_projection_reduced_projection}
   The reduced projection satisfies
   \begin{align}
-    P\widetilde P&=\widetilde P,&
-    \widetilde P Q&=PQ,&
-    Q\widetilde P&=QP,&
-    \operatorname{ran}(\widetilde P Q)&=\operatorname{ran}\widetilde P.
+    \operatorname{ran}(\widetilde P)&=\operatorname{ran}(PQ),\\
+    \operatorname{ran}(PQP)&=\operatorname{ran}(PQ),\\
+    P\widetilde P&=\widetilde P,\\
+    \widetilde P Q&=PQ,\\
+    Q\widetilde P&=QP,\\
+    \operatorname{ran}(\widetilde P Q)&=\operatorname{ran}(\widetilde P).
   \end{align}
+  The first two identities describe the canonical construction, while the next
+  three establish the properties in source lines 767--769. Identifying this
+  construction with the source's blockwise projector remains in issue~\#6294.
+  The final range equality is a derived input to the right-factor theorem, not
+  item~(iv) of the source.
   % Source lines: paper_v2.tex 764--769.
 \end{theorem}
 
 \begin{theorem}[Invertible right factor for the reduced projection]
   \label{thm:mpu_two_projection_reduced_projection_right_factor}
-  \lean{LinearMap.IsSymmetricProjection.exists_reducedProjection_rightFactor,
-    LinearMap.IsSymmetricProjection.exists_isUnit_reducedProjection_rightFactor}
+  \lean{LinearMap.IsSymmetricProjection.exists_reducedProjection_rightFactor}
   \leanok
   \uses{thm:mpu_two_projection_reduced_projection}
   There is an invertible linear map $Y$ such that
@@ -5259,6 +5265,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
   \notready
   \discussion{6022}
   \uses{def:mpu_canonical_form,ThmFund1,thm:mpu_two_projection_angle_block,
+    thm:mpu_two_projection_reduced_projection,
     thm:mpu_two_projection_reduced_projection_right_factor}
   Let $[0,1]\ni x\mapsto\mathcal W(x)$ be a continuous path of tensors
   generating MPUs, without requiring the path to be in canonical form. For

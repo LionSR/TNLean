@@ -26,10 +26,9 @@ variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℂ E]
 
 /-- The reduced projection associated to two symmetric projections `P` and `Q`.
 
-It is the orthogonal projection onto `range (P.comp Q)`. By
-`reducedProjection_range_triple`, this is also the orthogonal projection onto
-`range (P.comp (Q.comp P))`, the coordinate-free form of the blockwise projector
-from arXiv:1703.09188, Proposition IV.5, lines 764–770. -/
+It is the orthogonal projection onto `range (P.comp Q)`. The source instead defines
+its projector blockwise in arXiv:1703.09188, Proposition IV.5, line 764. Identifying
+that blockwise projector with this canonical construction belongs to issue #6294. -/
 noncomputable def reducedProjection (P Q : E →ₗ[ℂ] E) : E →ₗ[ℂ] E :=
   (LinearMap.range (P.comp Q)).starProjection
 
@@ -45,8 +44,9 @@ theorem range_reducedProjection (P Q : E →ₗ[ℂ] E) :
 
 /-- For symmetric projections, `range (P.comp Q)` equals `range (P.comp Q.comp P)`.
 
-Thus `reducedProjection P Q` is exactly the projector onto the triple-product range
-specified in arXiv:1703.09188, Proposition IV.5, lines 764–770. -/
+This range identity is a coordinate-free consequence of the projection hypotheses. The
+source defines its reduced projector blockwise; issue #6294 owns the identification of
+that blockwise projector with `reducedProjection P Q`. -/
 theorem reducedProjection_range_triple {P Q : E →ₗ[ℂ] E}
     (hP : P.IsSymmetricProjection) (hQ : Q.IsSymmetricProjection) :
     LinearMap.range (P.comp (Q.comp P)) = LinearMap.range (P.comp Q) := by
@@ -99,7 +99,10 @@ theorem comp_reducedProjection_left {P Q : E →ₗ[ℂ] E}
   simpa [LinearMap.adjoint_comp, hP.isSymmetric.adjoint_eq, hQ.isSymmetric.adjoint_eq,
     (reducedProjection_isSymmetric P Q).isSymmetric.adjoint_eq] using h.symm
 
-/-- The reduced product and the reduced projection have the same range. -/
+/-- The reduced product and the reduced projection have the same range.
+
+This derived range equality is the input to the equal-range right-factor theorem; it is
+not a separately stated item of arXiv:1703.09188, Proposition IV.5. -/
 theorem range_reducedProjection_comp {P Q : E →ₗ[ℂ] E}
     (hP : P.IsSymmetricProjection) :
     LinearMap.range ((reducedProjection P Q).comp Q) =
@@ -113,15 +116,5 @@ theorem exists_reducedProjection_rightFactor {P Q : E →ₗ[ℂ] E}
       ((reducedProjection P Q).comp Q).comp Y.toLinearMap = reducedProjection P Q := by
   exact LinearMap.exists_linearEquiv_comp_eq_of_range_eq _ _
     (range_reducedProjection_comp hP)
-
-/-- The paper's right factor, expressed as a unit in the endomorphism ring. -/
-theorem exists_isUnit_reducedProjection_rightFactor {P Q : E →ₗ[ℂ] E}
-    (hP : P.IsSymmetricProjection) :
-    ∃ Y : Module.End ℂ E, IsUnit Y ∧
-      ((reducedProjection P Q).comp Q).comp Y = reducedProjection P Q := by
-  obtain ⟨Y, hY⟩ := exists_reducedProjection_rightFactor (P := P) (Q := Q) hP
-  refine ⟨Y.toLinearMap, ?_, hY⟩
-  rw [Module.End.isUnit_iff]
-  exact Y.bijective
 
 end LinearMap.IsSymmetricProjection
