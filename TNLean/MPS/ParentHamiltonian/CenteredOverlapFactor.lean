@@ -52,189 +52,6 @@ namespace MPSTensor
 
 variable {d D : ℕ}
 
-/-- The left direct-sum factor in the centered overlapping Gram.  On the
-fiber indexed by a prefix \(u\) and final-site configuration \(j\), it sends the
-input matrix \(X_u\) to \(A^j X_u\). -/
-noncomputable def c3LeftOverlapFactorES (A : MPSTensor d D) (K : ℕ) :
-    BoundaryFamilySpace (D := D) (Cfg d K) →L[ℂ]
-      BoundaryFamilySpace (D := D) (Cfg d K × Cfg d 1) :=
-  LinearMap.toContinuousLinearMap
-    { toFun := fun x => WithLp.toLp 2 fun sp =>
-        leftVirtualMapES A 1 (boundaryFamilyFiber (D := D) x sp.1.1) (sp.1.2, sp.2)
-      map_add' := by
-        intro x y
-        apply PiLp.ext
-        rintro ⟨⟨u, j⟩, p⟩
-        change leftVirtualMapES A 1
-          (boundaryFamilyFiber (D := D) (x + y) u) (j, p) = _
-        rw [show boundaryFamilyFiber (D := D) (x + y) u =
-            boundaryFamilyFiber (D := D) x u + boundaryFamilyFiber (D := D) y u by
-          apply PiLp.ext
-          intro q
-          rfl, map_add]
-        rfl
-      map_smul' := by
-        intro c x
-        apply PiLp.ext
-        rintro ⟨⟨u, j⟩, p⟩
-        change leftVirtualMapES A 1
-          (boundaryFamilyFiber (D := D) (c • x) u) (j, p) = _
-        rw [show boundaryFamilyFiber (D := D) (c • x) u =
-            c • boundaryFamilyFiber (D := D) x u by
-          apply PiLp.ext
-          intro q
-          rfl, map_smul]
-        rfl }
-
-/-- The right direct-sum factor in the centered overlapping Gram.  On the
-fiber indexed by a prefix \(u\) and final-site configuration \(j\), it sends the
-input matrix \(Z_j\) to \(Z_j A^u\). -/
-noncomputable def c3RightOverlapFactorES (A : MPSTensor d D) (K : ℕ) :
-    BoundaryFamilySpace (D := D) (Cfg d 1) →L[ℂ]
-      BoundaryFamilySpace (D := D) (Cfg d K × Cfg d 1) :=
-  LinearMap.toContinuousLinearMap
-    { toFun := fun y => WithLp.toLp 2 fun sp =>
-        tailVirtualMapES A K (boundaryFamilyFiber (D := D) y sp.1.2) (sp.1.1, sp.2)
-      map_add' := by
-        intro x y
-        apply PiLp.ext
-        rintro ⟨⟨u, j⟩, p⟩
-        change tailVirtualMapES A K
-          (boundaryFamilyFiber (D := D) (x + y) j) (u, p) = _
-        rw [show boundaryFamilyFiber (D := D) (x + y) j =
-            boundaryFamilyFiber (D := D) x j + boundaryFamilyFiber (D := D) y j by
-          apply PiLp.ext
-          intro q
-          rfl, map_add]
-        rfl
-      map_smul' := by
-        intro c x
-        apply PiLp.ext
-        rintro ⟨⟨u, j⟩, p⟩
-        change tailVirtualMapES A K
-          (boundaryFamilyFiber (D := D) (c • x) j) (u, p) = _
-        rw [show boundaryFamilyFiber (D := D) (c • x) j =
-            c • boundaryFamilyFiber (D := D) x j by
-          apply PiLp.ext
-          intro q
-          rfl, map_smul]
-        rfl }
-
-/-- Fiber formula for the left overlap factor. -/
-@[simp]
-theorem boundaryFamilyEquiv_c3LeftOverlapFactorES_apply
-    (A : MPSTensor d D) (K : ℕ)
-    (x : BoundaryFamilySpace (D := D) (Cfg d K))
-    (u : Cfg d K) (j : Cfg d 1) :
-    boundaryFamilyEquiv (D := D) (Cfg d K × Cfg d 1)
-        (c3LeftOverlapFactorES A K x) (u, j) =
-      evalWord A (List.ofFn j) *
-        boundaryFamilyEquiv (D := D) (Cfg d K) x u := by
-  apply (Matrix.frobeniusEquivEuclidean (Fin D) (Fin D)).injective
-  rw [← boundaryFamilyFiber_eq_frobeniusEquivEuclidean]
-  calc
-    boundaryFamilyFiber (D := D) (c3LeftOverlapFactorES A K x) (u, j) =
-        boundaryFamilyFiber (D := D)
-          (leftVirtualMapES A 1 (boundaryFamilyFiber (D := D) x u)) j := by
-      apply PiLp.ext
-      intro p
-      rfl
-    _ = Matrix.frobeniusEquivEuclidean (Fin D) (Fin D)
-        (boundaryFamilyEquiv (D := D) (Cfg d 1)
-          (leftVirtualMapES A 1 (boundaryFamilyFiber (D := D) x u)) j) :=
-      boundaryFamilyFiber_eq_frobeniusEquivEuclidean _ _
-    _ = _ := by
-      rw [boundaryFamilyEquiv_leftVirtualMapES_apply,
-        boundaryFamilyFiber_eq_frobeniusEquivEuclidean,
-        (Matrix.frobeniusEquivEuclidean (Fin D) (Fin D)).symm_apply_apply]
-
-/-- Fiber formula for the right overlap factor. -/
-@[simp]
-theorem boundaryFamilyEquiv_c3RightOverlapFactorES_apply
-    (A : MPSTensor d D) (K : ℕ)
-    (y : BoundaryFamilySpace (D := D) (Cfg d 1))
-    (u : Cfg d K) (j : Cfg d 1) :
-    boundaryFamilyEquiv (D := D) (Cfg d K × Cfg d 1)
-        (c3RightOverlapFactorES A K y) (u, j) =
-      boundaryFamilyEquiv (D := D) (Cfg d 1) y j *
-        evalWord A (List.ofFn u) := by
-  apply (Matrix.frobeniusEquivEuclidean (Fin D) (Fin D)).injective
-  rw [← boundaryFamilyFiber_eq_frobeniusEquivEuclidean]
-  calc
-    boundaryFamilyFiber (D := D) (c3RightOverlapFactorES A K y) (u, j) =
-        boundaryFamilyFiber (D := D)
-          (tailVirtualMapES A K (boundaryFamilyFiber (D := D) y j)) u := by
-      apply PiLp.ext
-      intro p
-      rfl
-    _ = Matrix.frobeniusEquivEuclidean (Fin D) (Fin D)
-        (boundaryFamilyEquiv (D := D) (Cfg d K)
-          (tailVirtualMapES A K (boundaryFamilyFiber (D := D) y j)) u) :=
-      boundaryFamilyFiber_eq_frobeniusEquivEuclidean _ _
-    _ = _ := by
-      rw [boundaryFamilyEquiv_tailVirtualMapES_apply,
-        boundaryFamilyFiber_eq_frobeniusEquivEuclidean,
-        (Matrix.frobeniusEquivEuclidean (Fin D) (Fin D)).symm_apply_apply]
-
-/-- The left direct-sum factor has no spectator-cardinality loss. -/
-theorem c3LeftOverlapFactorES_norm_le (A : MPSTensor d D) (K : ℕ) :
-    ‖c3LeftOverlapFactorES A K‖ ≤ ‖leftVirtualMapES A 1‖ := by
-  refine ContinuousLinearMap.opNorm_le_bound _ (norm_nonneg _) fun x => ?_
-  rw [← sq_le_sq₀ (norm_nonneg _)
-    (mul_nonneg (norm_nonneg _) (norm_nonneg _)), mul_pow,
-    EuclideanSpace.norm_sq_eq, EuclideanSpace.norm_sq_eq]
-  calc
-    ∑ sp : (Cfg d K × Cfg d 1) × (Fin D × Fin D),
-        ‖c3LeftOverlapFactorES A K x sp‖ ^ 2 =
-        ∑ u : Cfg d K, ‖leftVirtualMapES A 1
-          (boundaryFamilyFiber (D := D) x u)‖ ^ 2 := by
-      simp only [Fintype.sum_prod_type, EuclideanSpace.norm_sq_eq]
-      rfl
-    _ ≤ ∑ u : Cfg d K,
-        (‖leftVirtualMapES A 1‖ * ‖boundaryFamilyFiber (D := D) x u‖) ^ 2 := by
-      apply Finset.sum_le_sum
-      intro u _
-      exact (sq_le_sq₀ (norm_nonneg _)
-        (mul_nonneg (norm_nonneg _) (norm_nonneg _))).mpr
-          (ContinuousLinearMap.le_opNorm _ _)
-    _ = ‖leftVirtualMapES A 1‖ ^ 2 *
-        ∑ sp : Cfg d K × (Fin D × Fin D), ‖x sp‖ ^ 2 := by
-      rw [Fintype.sum_prod_type, Finset.mul_sum]
-      apply Finset.sum_congr rfl
-      intro u _
-      rw [mul_pow, EuclideanSpace.norm_sq_eq]
-      simp only [boundaryFamilyFiber, Finset.mul_sum]
-
-/-- The right direct-sum factor has no spectator-cardinality loss. -/
-theorem c3RightOverlapFactorES_norm_le (A : MPSTensor d D) (K : ℕ) :
-    ‖c3RightOverlapFactorES A K‖ ≤ ‖tailVirtualMapES A K‖ := by
-  refine ContinuousLinearMap.opNorm_le_bound _ (norm_nonneg _) fun y => ?_
-  rw [← sq_le_sq₀ (norm_nonneg _)
-    (mul_nonneg (norm_nonneg _) (norm_nonneg _)), mul_pow,
-    EuclideanSpace.norm_sq_eq, EuclideanSpace.norm_sq_eq]
-  calc
-    ∑ sp : (Cfg d K × Cfg d 1) × (Fin D × Fin D),
-        ‖c3RightOverlapFactorES A K y sp‖ ^ 2 =
-        ∑ j : Cfg d 1, ‖tailVirtualMapES A K
-          (boundaryFamilyFiber (D := D) y j)‖ ^ 2 := by
-      simp only [Fintype.sum_prod_type, EuclideanSpace.norm_sq_eq]
-      rw [Finset.sum_comm]
-      rfl
-    _ ≤ ∑ j : Cfg d 1,
-        (‖tailVirtualMapES A K‖ * ‖boundaryFamilyFiber (D := D) y j‖) ^ 2 := by
-      apply Finset.sum_le_sum
-      intro j _
-      exact (sq_le_sq₀ (norm_nonneg _)
-        (mul_nonneg (norm_nonneg _) (norm_nonneg _))).mpr
-          (ContinuousLinearMap.le_opNorm _ _)
-    _ = ‖tailVirtualMapES A K‖ ^ 2 *
-        ∑ sp : Cfg d 1 × (Fin D × Fin D), ‖y sp‖ ^ 2 := by
-      rw [Fintype.sum_prod_type, Finset.mul_sum]
-      apply Finset.sum_congr rfl
-      intro j _
-      rw [mul_pow, EuclideanSpace.norm_sq_eq]
-      simp only [boundaryFamilyFiber, Finset.mul_sum]
-
 /-! ### Whole-increment centered overlap -/
 
 /-- The left direct-sum factor for a suffix increment of length \(Q\). -/
@@ -417,6 +234,58 @@ theorem wholeIncrementRightOverlapFactorES_norm_le
       intro j _
       rw [mul_pow, EuclideanSpace.norm_sq_eq]
       simp only [boundaryFamilyFiber, Finset.mul_sum]
+
+/-- The left direct-sum factor in the centered overlapping Gram. This is the one-site
+specialization of `wholeIncrementLeftOverlapFactorES`. -/
+noncomputable def c3LeftOverlapFactorES (A : MPSTensor d D) (K : ℕ) :
+    BoundaryFamilySpace (D := D) (Cfg d K) →L[ℂ]
+      BoundaryFamilySpace (D := D) (Cfg d K × Cfg d 1) :=
+  wholeIncrementLeftOverlapFactorES A K 1
+
+/-- The right direct-sum factor in the centered overlapping Gram. This is the one-site
+specialization of `wholeIncrementRightOverlapFactorES`. -/
+noncomputable def c3RightOverlapFactorES (A : MPSTensor d D) (K : ℕ) :
+    BoundaryFamilySpace (D := D) (Cfg d 1) →L[ℂ]
+      BoundaryFamilySpace (D := D) (Cfg d K × Cfg d 1) :=
+  wholeIncrementRightOverlapFactorES A K 1
+
+/-- Fiber formula for the left overlap factor. -/
+@[simp]
+theorem boundaryFamilyEquiv_c3LeftOverlapFactorES_apply
+    (A : MPSTensor d D) (K : ℕ)
+    (x : BoundaryFamilySpace (D := D) (Cfg d K))
+    (u : Cfg d K) (j : Cfg d 1) :
+    boundaryFamilyEquiv (D := D) (Cfg d K × Cfg d 1)
+        (c3LeftOverlapFactorES A K x) (u, j) =
+      evalWord A (List.ofFn j) *
+        boundaryFamilyEquiv (D := D) (Cfg d K) x u := by
+  simpa only [c3LeftOverlapFactorES] using
+    boundaryFamilyEquiv_wholeIncrementLeftOverlapFactorES_apply A K 1 x u j
+
+/-- Fiber formula for the right overlap factor. -/
+@[simp]
+theorem boundaryFamilyEquiv_c3RightOverlapFactorES_apply
+    (A : MPSTensor d D) (K : ℕ)
+    (y : BoundaryFamilySpace (D := D) (Cfg d 1))
+    (u : Cfg d K) (j : Cfg d 1) :
+    boundaryFamilyEquiv (D := D) (Cfg d K × Cfg d 1)
+        (c3RightOverlapFactorES A K y) (u, j) =
+      boundaryFamilyEquiv (D := D) (Cfg d 1) y j *
+        evalWord A (List.ofFn u) := by
+  simpa only [c3RightOverlapFactorES] using
+    boundaryFamilyEquiv_wholeIncrementRightOverlapFactorES_apply A K 1 y u j
+
+/-- The left direct-sum factor has no spectator-cardinality loss. -/
+theorem c3LeftOverlapFactorES_norm_le (A : MPSTensor d D) (K : ℕ) :
+    ‖c3LeftOverlapFactorES A K‖ ≤ ‖leftVirtualMapES A 1‖ := by
+  simpa only [c3LeftOverlapFactorES] using
+    wholeIncrementLeftOverlapFactorES_norm_le A K 1
+
+/-- The right direct-sum factor has no spectator-cardinality loss. -/
+theorem c3RightOverlapFactorES_norm_le (A : MPSTensor d D) (K : ℕ) :
+    ‖c3RightOverlapFactorES A K‖ ≤ ‖tailVirtualMapES A K‖ := by
+  simpa only [c3RightOverlapFactorES] using
+    wholeIncrementRightOverlapFactorES_norm_le A K 1
 
 /-- The centered mixed residual for a whole suffix increment. -/
 noncomputable def wholeIncrementCenteredResidualES
