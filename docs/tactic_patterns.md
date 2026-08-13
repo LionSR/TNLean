@@ -1010,6 +1010,21 @@ abstracted — record why, so it is not re-proposed).
 Seeded from `scripts/tactic_pattern_scan.py` (2026-07-18 scan; re-run for
 current counts and full location lists).
 
+### flattened-pair reconstruction from quotient and remainder — candidate
+- **Pattern:** rewrite `ij : Fin (d * d)` as
+  `finProdFinEquiv (ij.divNat, ij.modNat)` using
+  `(finProdFinEquiv.apply_symm_apply ij).symm` before simplifying a flattened
+  pair operation.
+- **Seen:** 3 occurrences across `TNLean/MPS/MPDO/PhysicalAdjoint.lean` and
+  `TNLean/MPS/MPU/PhysicalAdjointCanonicalForm.lean` after the physical-pair
+  equivalence deduplication (2026-08-13); the latter contributes one occurrence.
+- **Abstraction (proposed):** add a low-level simp lemma such as
+  `finProdFinEquiv_divNat_modNat` near the shared flattened-index definitions,
+  then replace all occurrences together.
+- **Notes:** Promotion would require editing established MPDO code outside the
+  narrow CFII review-fix scope. Record the repeated goal now and refactor the
+  complete set in one low-level follow-up rather than adding a leaf-local helper.
+
 ### diagonal normalized-ancilla sum collapse — candidate
 - **Pattern:** collapse the doubled sum for `normalizedDiagonalLift` by using
   `Finset.sum_eq_single` to retain the diagonal ancilla letter `(a, a)`, then

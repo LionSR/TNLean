@@ -1629,13 +1629,17 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
     \leanok
     \uses{def:cpsv_cfii,def:mpu_physical_pair_swap,
         thm:mpu_physical_adjoint_normalized_flattening,
-        thm:is_normal_tensor_of_is_normal_left_canonical,
-        thm:cpsv_physical_reindexing}
-    Given canonical-form-II data for $\widetilde{\mathcal U}$, keep the block
-    count and dimensions, replace $\mu_k$ by $\overline{\mu_k}$, replace
-    $A_k$ by $s^*\overline{A_k}$, and replace the ambient coisometry $V$ by
-    $\overline V$.  The resulting data reconstruct
-    $\widetilde{\mathcal U^\sharp}$.
+        thm:cpsv_map_star_preservation,thm:cpsv_physical_reindexing}
+    Given canonical-form-II data for $\widetilde{\mathcal U}$, define the
+    transformed tuple by
+    \begin{align}
+        r'&=r,\\
+        D'_k&=D_k,\\
+        \mu'_k&=\overline{\mu_k},\\
+        (A'_k)^{(i,j)}&=\overline{A_k^{(j,i)}},\\
+        V'&=\overline V.
+    \end{align}
+    These data reconstruct $\widetilde{\mathcal U^\sharp}$.
 \end{definition}
 
 \begin{theorem}[Canonical form II under physical adjunction]
@@ -1648,14 +1652,31 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{def:mpu_physical_adjoint_cfii_data}
-    Entrywise conjugation preserves positive-length block injectivity and
-    left-canonical normalization, hence normality.  Physical relabeling also
-    preserves normality and left-canonical normalization.  Conjugating
-    $VV^*=\Id$ gives $\overline V(\overline V)^*=\Id$, and conjugating the
-    direct-sum reconstruction gives the required reconstruction.  A diagonal
-    positive fixed matrix $\Lambda_k$ is real, so conjugating
-    $\E_{A_k}(\Lambda_k)=\Lambda_k$ gives the transformed fixed-point equation.
+    \uses{def:mpu_physical_adjoint_cfii_data,
+        thm:cpsv_map_star_preservation,thm:cpsv_physical_reindexing}
+    Theorem~\ref{thm:cpsv_map_star_preservation} gives normality and
+    left-canonical normalization after entrywise conjugation, and
+    Theorem~\ref{thm:cpsv_physical_reindexing} preserves these properties under
+    the physical-pair swap.  Conjugating the coisometry equation gives
+    \begin{align}
+        V'V'^\dagger
+        &=\overline{VV^\dagger}=\Id.
+    \end{align}
+    Conjugating the reconstruction at the swapped physical index gives
+    \begin{align}
+        \widetilde{\mathcal U^\sharp}^{\,(i,j)}
+        &=(V')^\dagger
+          \left(\bigoplus_k\mu'_k(A'_k)^{(i,j)}\right)V'.
+    \end{align}
+    Finally, each diagonal positive matrix $\Lambda_k$ is real, and therefore
+    \begin{align}
+        \E_{\overline{A_k}}(\Lambda_k)
+        &=\overline{\E_{A_k}(\Lambda_k)}
+         =\overline{\Lambda_k}
+         =\Lambda_k.
+    \end{align}
+    Physical relabeling leaves this transfer map unchanged, which proves the
+    transformed fixed-point equation.
 \end{proof}
 
 \begin{theorem}[Full active support under physical adjunction]

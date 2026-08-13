@@ -113,7 +113,7 @@ theorem IsLeftCanonical.mapStar {A : MPSTensor d D} (hA : IsLeftCanonical A) :
       rfl
     _ = 1 := by rw [hA]; simp
 
-/-- A spectrally normalized normal tensor remains normal after entrywise conjugation. -/
+/-- If a normal tensor is left-canonical, then its entrywise conjugate is a normal tensor. -/
 theorem IsNormalTensor.mapStar {A : MPSTensor d D} (hA : IsNormalTensor A)
     (hLeft : IsLeftCanonical A) : IsNormalTensor (mapStar A) := by
   letI : NeZero D := ⟨hA.bondDim_ne_zero⟩
@@ -145,6 +145,5 @@ theorem transferMap_mapStar (A : MPSTensor d D)
   rw [Matrix.map_mul, Matrix.map_mul,
     Matrix.conjTranspose_map (starRingEnd ℂ) (by simp [Function.Semiconj])]
   rfl
-
 
 end MPSTensor
