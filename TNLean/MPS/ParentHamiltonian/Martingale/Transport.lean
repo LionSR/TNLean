@@ -183,7 +183,7 @@ private theorem cyclicCfg_eq_replaceWindow {N : ℕ} (hN : 0 < N) (L : ℕ)
     cyclicCfg hN L i σ τ = replaceWindow L hLN i τ σ := by
   rfl
 
-@[simp] private theorem cyclicRestrictES_apply {N : ℕ} (hN : 0 < N) (L : ℕ)
+@[simp] theorem cyclicRestrictES_apply {N : ℕ} (hN : 0 < N) (L : ℕ)
     (i : Fin N) (τ : Cfg d N) (v : EuclideanSpace ℂ (Cfg d N)) (ω : Cfg d L) :
     cyclicRestrictES (d := d) hN L i τ v ω = v (cyclicCfg hN L i ω τ) := rfl
 
@@ -378,7 +378,7 @@ private theorem cyclicRestrictES_adjoint_apply {N : ℕ} (hN : 0 < N) {L : ℕ}
       _ = if SameOutsideWindow (L := L) i σ τ then v (extractWindow L i σ) else 0 := by
             simp [hστ]
 
-@[simp] private theorem localTermES_apply {N : ℕ} (A : MPSTensor d D) (L : ℕ) (i : Fin N)
+@[simp] theorem localTermES_apply {N : ℕ} (A : MPSTensor d D) (L : ℕ) (i : Fin N)
     (hLN : L ≤ N) (v : EuclideanSpace ℂ (Cfg d N)) (σ : Cfg d N) :
     localTermES A L i v σ =
       parentInteractionES A L ((cyclicRestrictES (d := d) (Fin.pos i) L i σ) v)
