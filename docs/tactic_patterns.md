@@ -859,6 +859,18 @@ abstracted — record why, so it is not re-proposed).
 - **Result:** both theorem statements are unchanged, and their previously profiled
   multi-second declarations fall below the one-second profiler threshold.
 
+### Blocked physical-dimension nonzeroness and explicit-gap specialization
+- **Pattern:** `Martingale/BlockedGap.lean` repeated the same three-line construction
+  of `NeZero (blockPhysDim d p)` four times, and the qualitative blocked-gap theorem
+  repeated the anticommutator route already used by the preceding explicit-gap theorem.
+- **Reuse:** `TNLean/MPS/Core/Blocking.lean` now provides the canonical instance
+  `MPSTensor.instNeZeroBlockPhysDim`. The four local calculations are removed.
+  `IsPrimitiveMPS.exists_blockTensor_parentHamiltonianES_gapped` is now a thin
+  corollary of `IsPrimitiveMPS.exists_blockTensor_parentHamiltonianES_gap_eighth`,
+  using `1 / 8` as the positive gap witness.
+- **Result:** The public theorem signatures and order in
+  `TNLean/MPS/ParentHamiltonian/Martingale/BlockedGap.lean` are unchanged.
+
 ### Non-decaying-overlap dimension and gauge-phase dichotomy
 - **Pattern:** The `hDim`/`hGPE` tails of
   `exists_state_scalar_of_nondecaying_overlap` (`MatchAux.lean`) and

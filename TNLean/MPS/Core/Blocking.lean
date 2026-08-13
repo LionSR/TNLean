@@ -54,6 +54,11 @@ lemma blockPhysDim_eq_pow (d L : ℕ) : blockPhysDim d L = d ^ L := by
   -- `Fintype.card_fun` gives `card (α → β) = card β ^ card α`.
   simp [Fintype.card_fin]
 
+/-- Blocking a nonempty physical alphabet preserves nonemptiness of its physical dimension. -/
+instance instNeZeroBlockPhysDim [NeZero d] : NeZero (blockPhysDim d L) := ⟨by
+  rw [blockPhysDim_eq_pow]
+  exact pow_ne_zero L (NeZero.ne d)⟩
+
 /-- The physical alphabet after blocking one site is equivalent to the original alphabet. -/
 noncomputable def singleBlockEquiv (d : ℕ) : Fin (blockPhysDim d 1) ≃ Fin d :=
   ((finCongr (blockPhysDim_eq_pow d 1)).trans finFunctionFinEquiv.symm).trans
