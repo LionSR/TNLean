@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.Channel.Determinant.Basic
 import TNLean.Channel.Determinant.Bound
+import TNLean.Channel.Determinant.ChoiBound
 import TNLean.Channel.Determinant.HilbertSchmidt
 import TNLean.Channel.Determinant.HeisenbergDual
 import TNLean.Channel.Determinant.UnitaryCharacterization
@@ -13,7 +14,7 @@ import TNLean.Channel.Determinant.UnitaryCharacterization
 # Determinants of quantum channels
 
 Thin module assembling the determinant development for quantum channels from
-five focused sub-modules.
+six focused sub-modules.
 
 The division follows the same organization as the earlier `Full/` and
 `Growth/` developments:
@@ -22,6 +23,9 @@ The division follows the same organization as the earlier `Full/` and
   channels.
 * `TNLean.Channel.Determinant.Bound` — Wolf Theorem 6.1(1), the determinant
   bound for positive trace-preserving maps.
+* `TNLean.Channel.Determinant.ChoiBound` — Wolf Eq. (6.27), the determinant
+  of an arbitrary linear map bounded by the purity of its Choi--Jamiolkowski
+  operator.
 * `TNLean.Channel.Determinant.HilbertSchmidt` — spectral and Hilbert--Schmidt
   auxiliary lemmas for the rigidity argument.
 * `TNLean.Channel.Determinant.HeisenbergDual` — Heisenberg-dual
@@ -41,6 +45,8 @@ The division follows the same organization as the earlier `Full/` and
 * `channelDet_norm_le_one_of_positive_tracePreserving` — Wolf Theorem 6.1(1).
 * `channelDet_norm_eq_one_iff_exists_unitaryChannel` — Wolf Theorem 6.1(2)
   for CPTP maps.
+* `norm_channelDet_le_choiPurity_rpow` — Wolf Eq. (6.27), the Choi bound
+  `|det T| ≤ tr[τ† τ]^{d²/2}` for an arbitrary linear map.
 
 ## References
 
