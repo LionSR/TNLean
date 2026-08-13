@@ -72,13 +72,23 @@ theorem blockedThreeConfigLinearIsometryEquiv_tailBoundaryMapES
   congr 1
   congr 1
   · omega
-  simp [blockedConfigEquiv, Equiv.arrowCongr, Equiv.curry,
-    decodeBlockEquiv_apply, Function.comp_def, finProdFinEquiv]
+  have hindex (k : Fin (2 * p)) :
+      k.val % p + p * (1 + k.val / p) = p + k.val := by
+    rw [Nat.mul_add, Nat.mul_one]
+    calc
+      k.val % p + (p + p * (k.val / p)) = p + (k.val % p + p * (k.val / p)) := by
+        ac_rfl
+      _ = p + k.val := congrArg (p + ·) (Nat.mod_add_div k.val p)
+  suffices (fun k : Fin (2 * p) => σ ⟨k.val % p + p * (1 + k.val / p), by
+      rw [hindex]
+      omega⟩) ≍ fun k : Fin (p + p) => σ (k.addNat p) by
+    simpa [blockedConfigEquiv, Equiv.arrowCongr, Equiv.curry,
+      decodeBlockEquiv_apply, Function.comp_def, finProdFinEquiv]
   apply (Fin.heq_fun_iff (by omega)).2
   intro k
   congr 1
   apply Fin.ext
-  simp
+  simp only [Fin.addNat_mk]
   rw [Nat.mul_add]
   have hk := Nat.mod_add_div k.val p
   omega
@@ -98,23 +108,34 @@ theorem blockedThreeConfigLinearIsometryEquiv_leftBoundaryMapES
   change Matrix.trace (MPSTensor.evalWord (blockTensor A p) (List.ofFn _) * _) =
     Matrix.trace (MPSTensor.evalWord A (List.ofFn _) * _)
   congr 2
-  rw [evalWord_blockTensor, ← ofFn_blockedConfigEquiv d 2 p]
-  congr 1
-  congr 1
-  · omega
-  simp [blockedConfigEquiv, Equiv.arrowCongr, Equiv.curry,
-    decodeBlockEquiv_apply, Function.comp_def, finProdFinEquiv]
-  apply (Fin.heq_fun_iff (by omega)).2
-  intro k
-  congr 1
-  apply Fin.ext
-  simp
-  have hk := Nat.mod_add_div k.val p
-  omega
+  · rw [evalWord_blockTensor, ← ofFn_blockedConfigEquiv d 2 p]
+    congr 1
+    congr 1
+    · omega
+    suffices (fun k : Fin (2 * p) => σ ⟨k.val % p + p * (k.val / p), by
+        rw [Nat.mod_add_div]
+        omega⟩) ≍ fun k : Fin (p + p) => σ (Fin.castAdd p k) by
+      simpa [blockedConfigEquiv, Equiv.arrowCongr, Equiv.curry,
+        decodeBlockEquiv_apply, Function.comp_def, finProdFinEquiv]
+    apply (Fin.heq_fun_iff (by omega)).2
+    intro k
+    congr 1
+    apply Fin.ext
+    simp
+    have hk := Nat.mod_add_div k.val p
+    omega
   ext a b
-  simp [blockSpectatorLinearIsometryEquiv, boundaryFamilyEquiv_apply_apply,
-    blockedConfigEquiv, Equiv.arrowCongr, Equiv.curry, Function.comp_def,
-    finProdFinEquiv]
+  suffices x.ofLp
+        (fun k => (decodeBlockEquiv d p).symm
+          (Function.curry (fun ij : Fin 3 × Fin p =>
+            σ ((finCongr (by omega : 3 * p = p + p + p)) (finProdFinEquiv ij)))
+            (Fin.natAdd 2 k)), b, a) =
+      x.ofLp
+        (fun k => (decodeBlockEquiv d p).symm
+          (Function.curry (fun ij => σ (Fin.natAdd (p + p) ij.2)) k), b, a) by
+    simpa [blockSpectatorLinearIsometryEquiv, boundaryFamilyEquiv_apply_apply,
+      blockedConfigEquiv, Equiv.arrowCongr, Equiv.curry, Function.comp_def,
+      finProdFinEquiv]
   apply congrArg x.1
   congr 1
   funext k
@@ -293,40 +314,22 @@ theorem blockTensor_threeSite_openChain_defect_norm_eq
     rw [U.symm.norm_toContinuousLinearMap] at h
     simpa using h
 
-private theorem cyclicBackwardSite_forwardSite_one {N : ℕ} (hN : 2 ≤ N) (i : Fin N) :
-    cyclicBackwardSite (cyclicForwardSite i 1) 1 = i := by
-  apply Fin.ext
-  simp only [cyclicForwardSite, cyclicBackwardSite, Fin.val_mk]
-  rw [Nat.mod_eq_of_lt (by omega : 1 < N)]
-  by_cases hi : i.val + 1 < N
-  · rw [Nat.mod_eq_of_lt hi]
-    have hsum : i.val + 1 + N - 1 = i.val + N := by omega
-    rw [hsum, Nat.add_mod_right, Nat.mod_eq_of_lt i.isLt]
-  · have hi_last : i.val + 1 = N := by omega
-    have hi_val : N - 1 = i.val := by omega
-    rw [hi_last, Nat.mod_self, Nat.zero_add, Nat.mod_eq_of_lt (by omega), hi_val]
-
-/-- A primitive MPS tensor with a positive-definite fixed point admits a physical
-blocking whose range-two blocked parent Hamiltonian has gap constant `1 / 8`.
-
-The coefficient `7 / 16` is first obtained for the whole-increment C3-prime
-projector defect on three original blocks. Explicit blocked Hilbert-space transport
-turns it into the adjacent three-site anticommutator estimate. The forward and
-backward cyclic transports then cover every overlapping off-diagonal pair, and the
-finite-overlap martingale reduction gives the displayed bound.
-
-The conclusion concerns only `blockTensor A p`; it makes no comparison with an
-original-site parent interaction. -/
-theorem IsPrimitiveMPS.exists_blockTensor_parentHamiltonianES_gap_eighth
+private theorem IsPrimitiveMPS.exists_blockTensor_anticommutator
     [NeZero d] [NeZero D] {A : MPSTensor d D} {ρ : Matrix (Fin D) (Fin D) ℂ}
     (hP : IsPrimitiveMPS A ρ) (hρ : Matrix.PosDef ρ) :
     ∃ p : ℕ,
       0 < p ∧ IsNBlkInjective A p ∧
-        ∀ (N : ℕ) (_hN : 4 ≤ N)
-          (v : EuclideanSpace ℂ (Cfg (blockPhysDim d p) N)),
-          v ∈ (parentHamiltonianGroundSpaceES (blockTensor A p) 2 N)ᗮ →
-            (1 / 8 : ℝ) * ‖v‖ ≤
-              ‖parentHamiltonianES (blockTensor A p) 2 N v‖ := by
+        ∀ (N : ℕ) (_hN : 2 * 2 ≤ N) (i j : Fin N),
+          j ∈ Finset.univ.erase i → cyclicWindowsOverlap N 2 i j →
+            ∀ v : EuclideanSpace ℂ (Cfg (blockPhysDim d p) N),
+              - (1 - ((1 : ℝ) / (4 * (2 : ℝ)))) *
+                  (((2 * (2 - 1) : ℕ) : ℝ)⁻¹) *
+                  ((⟪localTermES (blockTensor A p) 2 i v, v⟫_ℂ).re +
+                    (⟪localTermES (blockTensor A p) 2 j v, v⟫_ℂ).re) ≤
+                (⟪localTermES (blockTensor A p) 2 i v,
+                    localTermES (blockTensor A p) 2 j v⟫_ℂ).re +
+                  (⟪localTermES (blockTensor A p) 2 j v,
+                    localTermES (blockTensor A p) 2 i v⟫_ℂ).re := by
   obtain ⟨p, hp, hInj, hDefect⟩ :=
     hP.exists_threeBlock_wholeIncrement_defect_le_seven_sixteenths hρ
   let B := blockTensor A p
@@ -394,15 +397,65 @@ theorem IsPrimitiveMPS.exists_blockTensor_parentHamiltonianES_gap_eighth
       exact re_inner_localTermES_adjacent_twoSite_forward_ge_of_threeSite
         hThree (by omega) i v
     · subst i
-      have hBack := re_inner_localTermES_adjacent_twoSite_backward_ge_of_threeSite
-        hThree (by omega) (cyclicForwardSite j 1) v
-      rw [cyclicBackwardSite_forwardSite_one (by omega) j] at hBack
-      simpa only [add_comm] using hBack
+      simpa only [add_comm] using
+        re_inner_localTermES_adjacent_twoSite_forward_ge_of_threeSite
+          hThree (by omega) j v
+  exact ⟨p, hp, hInj, hAnti⟩
+
+/-- A primitive MPS tensor with a positive-definite fixed point admits
+physical blocking whose range-two blocked parent Hamiltonian has gap constant `1 / 8`.
+
+The coefficient `7 / 16` is first obtained for the whole-increment C3-prime
+projector defect on three original blocks. Explicit blocked Hilbert-space transport
+turns it into the adjacent three-site anticommutator estimate. The forward and
+backward cyclic transports then cover every overlapping off-diagonal pair, and the
+finite-overlap martingale reduction gives the displayed bound.
+
+The conclusion concerns only `blockTensor A p`; it makes no comparison with an
+original-site parent interaction. -/
+theorem IsPrimitiveMPS.exists_blockTensor_parentHamiltonianES_gap_eighth
+    [NeZero d] [NeZero D] {A : MPSTensor d D} {ρ : Matrix (Fin D) (Fin D) ℂ}
+    (hP : IsPrimitiveMPS A ρ) (hρ : Matrix.PosDef ρ) :
+    ∃ p : ℕ,
+      0 < p ∧ IsNBlkInjective A p ∧
+        ∀ (N : ℕ) (_hN : 4 ≤ N)
+          (v : EuclideanSpace ℂ (Cfg (blockPhysDim d p) N)),
+          v ∈ (parentHamiltonianGroundSpaceES (blockTensor A p) 2 N)ᗮ →
+            (1 / 8 : ℝ) * ‖v‖ ≤
+              ‖parentHamiltonianES (blockTensor A p) 2 N v‖ := by
+  obtain ⟨p, hp, hInj, hAnti⟩ := hP.exists_blockTensor_anticommutator hρ
+  let B := blockTensor A p
+  letI : NeZero (blockPhysDim d p) := ⟨by
+    rw [blockPhysDim_eq_pow]
+    exact pow_ne_zero p (NeZero.ne d)⟩
   obtain ⟨_, hGap⟩ :=
     parentHamiltonianES_gap_bound_of_cyclic_window_overlap_anticommutator
       B 2 (by omega) hAnti
   refine ⟨p, hp, hInj, ?_⟩
   intro N hN v hv
-  convert hGap N hN v hv using 1 <;> norm_num
+  have hγ : (1 / 8 : ℝ) = 1 / (4 * (2 : ℝ)) := by norm_num
+  rw [hγ]
+  exact hGap N hN v hv
+
+/-- A primitive MPS tensor with a positive-definite fixed point admits
+physical blocking whose range-two blocked parent Hamiltonian has a uniform positive gap.
+
+The conclusion concerns only `blockTensor A p`; it makes no comparison with an
+original-site parent interaction. -/
+theorem IsPrimitiveMPS.exists_blockTensor_parentHamiltonianES_gapped
+    [NeZero d] [NeZero D] {A : MPSTensor d D} {ρ : Matrix (Fin D) (Fin D) ℂ}
+    (hP : IsPrimitiveMPS A ρ) (hρ : Matrix.PosDef ρ) :
+    ∃ p : ℕ,
+      0 < p ∧ IsNBlkInjective A p ∧
+        ∃ γ > 0, ∀ (N : ℕ) (_hN : 4 ≤ N)
+          (v : EuclideanSpace ℂ (Cfg (blockPhysDim d p) N)),
+          v ∈ (parentHamiltonianGroundSpaceES (blockTensor A p) 2 N)ᗮ →
+            γ * ‖v‖ ≤ ‖parentHamiltonianES (blockTensor A p) 2 N v‖ := by
+  obtain ⟨p, hp, hInj, hAnti⟩ := hP.exists_blockTensor_anticommutator hρ
+  letI : NeZero (blockPhysDim d p) := ⟨by
+    rw [blockPhysDim_eq_pow]
+    exact pow_ne_zero p (NeZero.ne d)⟩
+  exact ⟨p, hp, hInj,
+    parentHamiltonian_gapped_of_anticommutator (blockTensor A p) 2 (by omega) hAnti⟩
 
 end MPSTensor
