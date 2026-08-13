@@ -333,6 +333,19 @@ norm estimate is derived here.
     $\mathcal U_K(A)$.
 \end{proof}
 
+\begin{definition}[Euclidean spectator boundary maps]
+    \label{def:spectator_boundary_maps_es}
+    \lean{MPSTensor.tailBoundaryMapES, MPSTensor.leftBoundaryMapES}
+    \leanok
+    \uses{def:tail_boundary_map, def:left_boundary_map,
+        def:frobenius_vectorization}
+    Transport the tail and left boundary maps through the canonical Euclidean
+    identifications on their virtual matrix families and physical coefficient
+    spaces.  Denote the resulting continuous maps by
+    $\Gamma^{\mathrm{tail}}_{K,L}$ and
+    $\Gamma^{\mathrm{left}}_{K,L}$.
+\end{definition}
+
 \begin{theorem}[Euclidean spectator boundary ranges and factorizations]%
     \label{thm:spectator_boundary_hilbert_factorization}
     \lean{MPSTensor.range_tailBoundaryMapES}
@@ -340,7 +353,8 @@ norm estimate is derived here.
     \lean{MPSTensor.tailBoundaryMapES_comp_tailVirtualMapES}
     \lean{MPSTensor.leftBoundaryMapES_comp_leftVirtualMapES}
     \leanok
-    \uses{thm:tail_boundary_map_range_es_transport,thm:left_boundary_map_range_es_transport,
+    \uses{def:spectator_boundary_maps_es,
+      thm:tail_boundary_map_range_es_transport,thm:left_boundary_map_range_es_transport,
       thm:tail_boundary_map_factorization,thm:left_boundary_map_factorization}
     Equip each virtual matrix fiber with the unweighted Hilbert--Schmidt inner
     product and flatten the finite family of fibers into a Euclidean space.
@@ -355,12 +369,30 @@ norm estimate is derived here.
 \end{theorem}
 \begin{proof}
     \leanok
-    \uses{thm:tail_boundary_map_range_es_transport,thm:left_boundary_map_range_es_transport,
+    \uses{def:spectator_boundary_maps_es,
+      thm:tail_boundary_map_range_es_transport,thm:left_boundary_map_range_es_transport,
       thm:tail_boundary_map_factorization,thm:left_boundary_map_factorization}
     Transport the algebraic range descriptions through the Euclidean
     identification.  The two factorization identities follow by evaluating a
     virtual matrix \(X\) fiberwise and applying the corresponding algebraic
     tail or left factorization.
+\end{proof}
+
+\begin{theorem}[Injectivity of the left spectator boundary map]
+    \label{thm:left_boundary_map_es_injective}
+    \lean{MPSTensor.leftBoundaryMapES_injective_of_groundSpaceMapES_injective}
+    \leanok
+    \uses{def:ground_space_map_es, def:spectator_boundary_maps_es}
+    If the length-$K$ ground-space map is injective, then the left boundary map
+    with any spectator length $L$ is injective.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{def:ground_space_map_es, def:spectator_boundary_maps_es,
+        thm:ground_space_map_es_frobenius, def:prefix_restrict}
+    Recover every spectator fiber by restricting to its fixed suffix and use
+    injectivity of the length-$K$ ground-space map.
 \end{proof}
 
 \begin{theorem}[Direct-sum spectator Gram operators]%
@@ -824,6 +856,697 @@ norm estimate is derived here.
     The case $K=0$ is bounded directly.  This first gives a uniform bound for
     $\lVert J_K\rVert^4$ and hence a strictly positive uniform bound for
     $\lVert J_K\rVert$.  No FNW or Nachtergaele contraction estimate enters.
+\end{proof}
+
+\begin{theorem}[Left-canonical normalization of fixed-length words]
+    \label{thm:word_left_canonical_normalization}
+    \lean{MPSTensor.sum_evalWord_conjTranspose_mul_evalWord}
+    \leanok
+    \uses{def:eval_word}
+    If $A$ is left-canonical, then for every $Q\in\N$,
+    \begin{align}
+        \sum_{j\in\Omega_Q}(A^j)^\dagger A^j&=\mathbf 1,
+    \end{align}
+    where $\Omega_Q=\Fin(d^Q)$ is the set of physical words of length $Q$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{def:eval_word}
+    Induct on $Q$.  Split a word of length $Q+1$ into its first letter and
+    its remaining suffix, apply the induction hypothesis to the suffix sum,
+    and then use left-canonicity for the outer one-site sum.
+\end{proof}
+
+\begin{theorem}[Whole-increment left virtual norm]
+    \label{thm:whole_increment_left_virtual_norm}
+    \lean{MPSTensor.leftVirtualMapES_norm_map_of_leftCanonical}
+    \lean{MPSTensor.leftVirtualMapES_norm_le_one_of_leftCanonical}
+    \leanok
+    \uses{thm:word_left_canonical_normalization}
+    If $A$ is left-canonical, then the length-$Q$ left virtual map
+    $J_Q^{\mathrm{left}}$ preserves the Hilbert--Schmidt norm.  In particular,
+    \begin{align}
+        \lVert J_Q^{\mathrm{left}}X\rVert&=\lVert X\rVert,\\
+        \lVert J_Q^{\mathrm{left}}\rVert&\leq1.
+    \end{align}
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:word_left_canonical_normalization}
+    Expand the squared norm as a sum over $j\in\Omega_Q$.  The identity from
+    Theorem~\ref{thm:word_left_canonical_normalization} reduces the sum to the
+    Hilbert--Schmidt norm of $X$.  The operator-norm bound follows immediately.
+\end{proof}
+
+\begin{definition}[Physical reassociation]
+    \label{def:whole_increment_physical_reassociation}
+    \lean{MPSTensor.physicalReassocES}
+    \leanok
+    For $K,L,Q\in\N$, let
+    \begin{align}
+        \mathscr A_{K,L,Q}\colon
+        \ell^2(\Omega_{K+(L+Q)})&\longrightarrow
+        \ell^2(\Omega_{(K+L)+Q})
+    \end{align}
+    be the unitary coordinate map induced by associativity of addition.
+\end{definition}
+
+\begin{theorem}[Reassociation of the ground-space boundary map]
+    \label{thm:whole_increment_ground_space_reassociation}
+    \lean{MPSTensor.physicalReassocES_comp_groundSpaceMapES}
+    \leanok
+    \uses{def:whole_increment_physical_reassociation,
+        def:ground_space_map_es}
+    For every $K,L,Q\in\N$,
+    \begin{align}
+        \mathscr A_{K,L,Q}\Gamma_{K+(L+Q)}^{\mathrm{ES}}
+        &=\Gamma_{K+L+Q}^{\mathrm{ES}}.
+    \end{align}
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{def:whole_increment_physical_reassociation,
+        def:ground_space_map_es}
+    Evaluate both sides at a physical word.  Reassociation changes only the
+    parenthesization of its coordinate set, so both coefficients are the trace
+    pairing with the same word product.
+\end{proof}
+
+\begin{definition}[Reassociated tail boundary map]
+    \label{def:reassociated_tail_boundary_map}
+    \lean{MPSTensor.reassocTailBoundaryMapES}
+    \leanok
+    \uses{def:whole_increment_physical_reassociation}
+    Define the tail boundary map in the common $(K+L+Q)$-site coordinates by
+    \begin{align}
+        \widetilde\Gamma^{\mathrm{tail}}_{K;L,Q}
+        &:=\mathscr A_{K,L,Q}\Gamma^{\mathrm{tail}}_{K,L+Q}.
+    \end{align}
+\end{definition}
+
+\begin{theorem}[Factorization of the reassociated tail map]
+    \label{thm:reassociated_tail_boundary_factorization}
+    \lean{MPSTensor.reassocTailBoundaryMapES_comp_tailVirtualMapES}
+    \leanok
+    \uses{def:reassociated_tail_boundary_map,
+        thm:spectator_boundary_hilbert_factorization,
+        thm:whole_increment_ground_space_reassociation}
+    The reassociated tail map satisfies
+    \begin{align}
+        \widetilde\Gamma^{\mathrm{tail}}_{K;L,Q}
+          J_K^{\mathrm{tail}}
+        &=\Gamma_{K+L+Q}^{\mathrm{ES}}.
+    \end{align}
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{def:reassociated_tail_boundary_map,
+        thm:spectator_boundary_hilbert_factorization,
+        thm:whole_increment_ground_space_reassociation}
+    Substitute the definition of the reassociated tail map, use the ordinary
+    tail factorization, and then reassociate the full boundary map.
+\end{proof}
+
+\begin{theorem}[Whole-increment inverse-Gram projector residual]
+    \label{thm:whole_increment_projector_residual}
+    \lean{MPSTensor.whole_increment_injectiveRangeProjector_residual_eq}
+    \leanok
+    \uses{def:reassociated_tail_boundary_map,
+        thm:reassociated_tail_boundary_factorization,
+        thm:spectator_boundary_hilbert_factorization}
+    Let $T=\widetilde\Gamma^{\mathrm{tail}}_{K;L,Q}$,
+    $S=\Gamma^{\mathrm{left}}_{K+L,Q}$, and
+    $C=\Gamma_{K+L+Q}^{\mathrm{ES}}$.  Assume separately that $T$, $S$, and
+    $C$ are injective.  Since
+    $TJ_K^{\mathrm{tail}}=C=SJ_Q^{\mathrm{left}}$, the difference
+    $P_TP_S-P_C$ equals the exact inverse-Gram residual obtained from these two
+    factorizations.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:reassociated_tail_boundary_factorization,
+        thm:spectator_boundary_hilbert_factorization}
+    Apply the common-factorization range-projector identity to $T$, $S$, and
+    $C$, using the two displayed factorizations.  No canonicality or norm
+    estimate is used.
+\end{proof}
+
+\begin{theorem}[Whole-increment mixed Gram after reassociation]
+    \label{thm:whole_increment_mixed_gram}
+    \lean{MPSTensor.inner_reassocTailBoundaryMapES_adjoint_leftBoundaryMapES}
+    \leanok
+    \uses{def:reassociated_tail_boundary_map,
+        thm:spectator_boundary_mixed_gram}
+    With the notation of
+    Theorem~\ref{thm:spectator_boundary_mixed_gram},
+    \begin{align}
+      \left\langle X,
+        (\widetilde\Gamma^{\mathrm{tail}}_{K;L,Q})^\dagger
+        \Gamma^{\mathrm{left}}_{K+L,Q}Z\right\rangle
+      &=\sum_{u\in\Omega_K}\sum_{j\in\Omega_Q}
+        \left\langle U(A^jX_u),\mathcal K_LU(Z_jA^u)\right\rangle.
+    \end{align}
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{def:reassociated_tail_boundary_map,
+        def:whole_increment_physical_reassociation,
+        thm:spectator_boundary_mixed_gram}
+    Expand the reassociated tail map.  Its adjoint introduces
+    $\mathscr A_{K,L,Q}^{-1}$, so the preceding coordinate formula applies.
+\end{proof}
+
+\begin{theorem}[Centered whole-increment mixed Gram]
+    \label{thm:whole_increment_mixed_gram_centered}
+    \lean{MPSTensor.inner_reassocTailBoundaryMapES_adjoint_leftBoundaryMapES_centered}
+    \leanok
+    \uses{thm:whole_increment_mixed_gram,
+        thm:fixed_point_gram_metric_exact}
+    Let $\rho\in\MN{D}$ have nonzero trace and set
+    $\mathcal K_\infty=\mathscr R(P_\rho)$.  Then
+    \begin{align}
+      &\left\langle X,
+        (\widetilde\Gamma^{\mathrm{tail}}_{K;L,Q})^\dagger
+        \Gamma^{\mathrm{left}}_{K+L,Q}Z\right\rangle
+        -\sum_{u,j}\left\langle U(A^jX_u),
+          \mathcal K_\infty U(Z_jA^u)\right\rangle\\
+      &\qquad=
+        \sum_{u,j}\left\langle U(A^jX_u),
+          (\mathcal K_L-\mathcal K_\infty)U(Z_jA^u)\right\rangle.
+    \end{align}
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:whole_increment_mixed_gram,
+        thm:fixed_point_gram_metric_exact}
+    Substitute the reassociated mixed-Gram formula and the action of the
+    limiting metric, then distribute subtraction over the finite sums.
+\end{proof}
+
+\begin{definition}[Whole-increment left overlap factor]
+    \label{def:whole_increment_left_overlap_factor}
+    \lean{MPSTensor.wholeIncrementLeftOverlapFactorES}
+    \leanok
+    For $X=(X_u)_{u\in\Omega_K}$, define
+    \begin{align}
+        (F_{K,Q}X)_{u,j}&:=A^jX_u.
+    \end{align}
+\end{definition}
+
+\begin{definition}[Whole-increment right overlap factor]
+    \label{def:whole_increment_right_overlap_factor}
+    \lean{MPSTensor.wholeIncrementRightOverlapFactorES}
+    \leanok
+    For $Z=(Z_j)_{j\in\Omega_Q}$, define
+    \begin{align}
+        (G_{K,Q}Z)_{u,j}&:=Z_jA^u.
+    \end{align}
+\end{definition}
+
+\begin{theorem}[Fiber formula for the whole-increment left factor]
+    \label{thm:whole_increment_left_overlap_factor_apply}
+    \lean{MPSTensor.boundaryFamilyEquiv_wholeIncrementLeftOverlapFactorES_apply}
+    \leanok
+    \uses{def:whole_increment_left_overlap_factor}
+    The matrix fiber of $F_{K,Q}X$ at $(u,j)$ is $A^jX_u$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{def:whole_increment_left_overlap_factor}
+    Unfold the direct-sum factor and the Frobenius coordinate identification.
+\end{proof}
+
+\begin{theorem}[Fiber formula for the whole-increment right factor]
+    \label{thm:whole_increment_right_overlap_factor_apply}
+    \lean{MPSTensor.boundaryFamilyEquiv_wholeIncrementRightOverlapFactorES_apply}
+    \leanok
+    \uses{def:whole_increment_right_overlap_factor}
+    The matrix fiber of $G_{K,Q}Z$ at $(u,j)$ is $Z_jA^u$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{def:whole_increment_right_overlap_factor}
+    Unfold the direct-sum factor and the Frobenius coordinate identification.
+\end{proof}
+
+\begin{theorem}[Norm bounds for the whole-increment overlap factors]
+    \label{thm:whole_increment_overlap_factor_norms}
+    \lean{MPSTensor.wholeIncrementLeftOverlapFactorES_norm_le}
+    \lean{MPSTensor.wholeIncrementRightOverlapFactorES_norm_le}
+    \leanok
+    \uses{def:whole_increment_left_overlap_factor,
+        def:whole_increment_right_overlap_factor}
+    The overlap factors satisfy
+    \begin{align}
+      \lVert F_{K,Q}\rVert&\leq\lVert J_Q^{\mathrm{left}}\rVert,\\
+      \lVert G_{K,Q}\rVert&\leq\lVert J_K^{\mathrm{tail}}\rVert.
+    \end{align}
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{def:whole_increment_left_overlap_factor,
+        def:whole_increment_right_overlap_factor}
+    Expand the squared direct-sum norms fiberwise and apply the operator-norm
+    bound to each fiber.  Summing gives the two inequalities without a factor
+    depending on the number of spectator words.
+\end{proof}
+
+\begin{definition}[Whole-increment centered residual]
+    \label{def:whole_increment_centered_residual}
+    \lean{MPSTensor.wholeIncrementCenteredResidualES}
+    \leanok
+    \uses{def:reassociated_tail_boundary_map,
+        def:whole_increment_left_overlap_factor,
+        def:whole_increment_right_overlap_factor}
+    Assume $\operatorname{tr}(\rho)\neq 0$ and let
+    $\mathcal K_\infty=\mathscr R(P_\rho)$.  Define
+    \begin{align}
+      R_{K,L,Q}
+      &:=(\widetilde\Gamma^{\mathrm{tail}}_{K;L,Q})^\dagger
+          \Gamma^{\mathrm{left}}_{K+L,Q}
+        -F_{K,Q}^\dagger
+          \mathcal K_\infty^{\oplus(\Omega_K\times\Omega_Q)}G_{K,Q}.
+    \end{align}
+\end{definition}
+
+\begin{theorem}[Whole-increment centered factorization]
+    \label{thm:whole_increment_centered_factorization}
+    \lean{MPSTensor.wholeIncrementCenteredResidualES_eq_overlapFactors}
+    \leanok
+    \uses{def:whole_increment_centered_residual,
+        thm:whole_increment_left_overlap_factor_apply,
+        thm:whole_increment_right_overlap_factor_apply,
+        thm:whole_increment_mixed_gram_centered}
+    The centered residual factors as
+    \begin{align}
+      R_{K,L,Q}
+      &=F_{K,Q}^\dagger
+        (\mathcal K_L-\mathcal K_\infty)^{\oplus
+          (\Omega_K\times\Omega_Q)}G_{K,Q}.
+    \end{align}
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{def:whole_increment_centered_residual,
+        thm:whole_increment_left_overlap_factor_apply,
+        thm:whole_increment_right_overlap_factor_apply,
+        thm:whole_increment_mixed_gram_centered}
+    Test both sides against arbitrary boundary families, use the two fiber
+    formulas, and apply the centered mixed-Gram identity.
+\end{proof}
+
+\begin{theorem}[Whole-increment centered residual bound]
+    \label{thm:whole_increment_centered_residual_bound}
+    \lean{MPSTensor.wholeIncrementCenteredResidualES_norm_le}
+    \leanok
+    \uses{thm:whole_increment_centered_factorization,
+        thm:whole_increment_overlap_factor_norms,
+        thm:boundary_fiberwise_map_norm}
+    The factorization gives
+    \begin{align}
+      \lVert R_{K,L,Q}\rVert
+      &\leq\lVert J_Q^{\mathrm{left}}\rVert
+        \lVert\mathcal K_L-\mathcal K_\infty\rVert
+        \lVert J_K^{\mathrm{tail}}\rVert.
+    \end{align}
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:whole_increment_centered_factorization,
+        thm:whole_increment_overlap_factor_norms,
+        thm:boundary_fiberwise_map_norm}
+    Apply submultiplicativity to the three factors and use the operator norm of
+    a fiberwise direct sum.
+\end{proof}
+
+\begin{theorem}[Left-canonical whole-increment centered residual bound]
+    \label{thm:whole_increment_centered_residual_bound_left_canonical}
+    \lean{MPSTensor.wholeIncrementCenteredResidualES_norm_le_of_leftCanonical}
+    \leanok
+    \uses{thm:whole_increment_centered_residual_bound,
+        thm:whole_increment_left_virtual_norm}
+    If $A$ is left-canonical, then
+    \begin{align}
+      \lVert R_{K,L,Q}\rVert
+      &\leq\lVert\mathcal K_L-\mathcal K_\infty\rVert
+        \lVert J_K^{\mathrm{tail}}\rVert.
+    \end{align}
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:whole_increment_centered_residual_bound,
+        thm:whole_increment_left_virtual_norm}
+    Substitute $\lVert J_Q^{\mathrm{left}}\rVert\leq1$ into the preceding
+    estimate.
+\end{proof}
+
+\begin{theorem}[Primitive whole-increment centered residual bound]
+    \label{thm:primitive_whole_increment_centered_residual_bound}
+    \lean{MPSTensor.IsPrimitiveMPS.wholeIncrementCenteredResidualES_norm_le}
+    \leanok
+    \uses{def:primitive_mps,
+        thm:whole_increment_centered_residual_bound_left_canonical}
+    Let $A$ be a primitive MPS tensor with positive-definite fixed point
+    $\rho$.  Then $A$ satisfies the left-canonical centered residual estimate
+    of Theorem~\ref{thm:whole_increment_centered_residual_bound_left_canonical}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{def:primitive_mps,
+        thm:whole_increment_centered_residual_bound_left_canonical}
+    Use the left-canonical normalization contained in the primitive-MPS
+    hypotheses together with positive definiteness of $\rho$.
+\end{proof}
+
+\begin{theorem}[Limiting overlap product]
+    \label{thm:whole_increment_limiting_overlap_product}
+    \lean{MPSTensor.wholeIncrement_limitingOverlapProduct_eq}
+    \leanok
+    \uses{def:whole_increment_left_overlap_factor,
+        def:whole_increment_right_overlap_factor,
+        thm:whole_increment_left_overlap_factor_apply,
+        thm:whole_increment_right_overlap_factor_apply,
+        thm:limiting_metric_inverse_virtual_adjoints}
+    Assume $D>0$.  For a positive-definite matrix $\rho$, the product
+    $F_{K,Q}^\dagger\mathcal K_\infty^{\oplus}G_{K,Q}$ equals the corresponding
+    virtual-word expression formed from $J_K^{\mathrm{tail}}$,
+    $(J_Q^{\mathrm{left}})^\dagger$, $\mathcal K_\infty$, and
+    $\mathcal K_\infty^{-1}$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:whole_increment_left_overlap_factor_apply,
+        thm:whole_increment_right_overlap_factor_apply,
+        thm:limiting_metric_inverse_virtual_adjoints}
+    Compare matrix fibers, use the explicit limiting-metric action and its
+    inverse, and evaluate the two virtual adjoints.
+\end{proof}
+
+\begin{theorem}[Gram of the reassociated tail map]
+    \label{thm:reassociated_tail_boundary_gram}
+    \lean{MPSTensor.reassocTailBoundaryMapES_adjoint_comp_self_eq_fiberwise_groundSpaceGram}
+    \leanok
+    \uses{def:reassociated_tail_boundary_map,
+        thm:spectator_boundary_direct_sum_gram}
+    Reassociation preserves the tail Gram:
+    \begin{align}
+      (\widetilde\Gamma^{\mathrm{tail}}_{K;L,Q})^\dagger
+        \widetilde\Gamma^{\mathrm{tail}}_{K;L,Q}
+      &=\mathcal K_{L+Q}^{\oplus\Omega_K}.
+    \end{align}
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{def:reassociated_tail_boundary_map,
+        thm:spectator_boundary_direct_sum_gram}
+    The reassociation is unitary, so its adjoint cancels it.  The ordinary tail
+    Gram is the fiberwise direct sum of $\mathcal K_{L+Q}$.
+\end{proof}
+
+\begin{theorem}[Inverse Gram of the reassociated tail map]
+    \label{thm:reassociated_tail_inverse_gram}
+    \lean{MPSTensor.inverseGram_reassocTailBoundaryMapES_eq_fiberwise_inverseGram}
+    \leanok
+    \uses{thm:reassociated_tail_boundary_gram,
+        thm:inverse_gram_identities}
+    If $\Gamma_{L+Q}^{\mathrm{ES}}$ is injective, then the inverse Gram of the
+    reassociated tail map is the fiberwise direct sum of
+    $(\mathcal K_{L+Q})^{-1}$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:reassociated_tail_boundary_gram,
+        thm:inverse_gram_identities}
+    Multiply the proposed fiberwise inverse on both sides by the Gram from
+    Theorem~\ref{thm:reassociated_tail_boundary_gram} and use the inverse-Gram
+    identities.
+\end{proof}
+
+\begin{theorem}[Whole-increment finite-Gram cancellations]
+    \label{thm:whole_increment_finite_gram_cancellations}
+    \lean{MPSTensor.wholeIncrementLeftFiniteGramCancellation_eq_groundSpaceMapES_adjoint}
+    \lean{MPSTensor.wholeIncrementTailFiniteGramCancellation_eq_groundSpaceMapES_adjoint}
+    \leanok
+    \uses{thm:left_finite_gram_cancellation,
+        thm:reassociated_tail_boundary_factorization,
+        thm:inverse_gram_identities}
+    If $\Gamma_{K+L}^{\mathrm{ES}}$ and
+    $\Gamma_{L+Q}^{\mathrm{ES}}$ are injective, respectively, then
+    \begin{align}
+      (J_Q^{\mathrm{left}})^\dagger
+        \mathcal K_{K+L}^{\oplus\Omega_Q}
+        (\mathcal K_{K+L}^{-1})^{\oplus\Omega_Q}
+        (\Gamma_{K+L,Q}^{\mathrm{left}})^\dagger
+      &=(\Gamma_{K+L+Q}^{\mathrm{ES}})^\dagger.
+    \end{align}
+    Moreover,
+    \begin{align}
+      (J_K^{\mathrm{tail}})^\dagger
+        \mathcal K_{L+Q}^{\oplus\Omega_K}
+        (\mathcal K_{L+Q}^{-1})^{\oplus\Omega_K}
+        (\widetilde\Gamma_{K;L,Q}^{\mathrm{tail}})^\dagger
+      &=(\Gamma_{K+L+Q}^{\mathrm{ES}})^\dagger.
+    \end{align}
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:left_finite_gram_cancellation,
+        thm:reassociated_tail_boundary_factorization,
+        thm:inverse_gram_identities}
+    The left identity is the preceding finite-Gram cancellation at length
+    $K+L$.  For the tail identity, cancel the fiberwise Gram with its inverse
+    and take the adjoint of the reassociated tail factorization.
+\end{proof}
+
+\begin{definition}[Whole-increment tail finite-Gram correction]
+    \label{def:whole_increment_tail_gram_correction}
+    \lean{MPSTensor.wholeIncrementTailFiniteGramCorrectionES}
+    \leanok
+    Assume $D>0$, let $\rho$ be positive definite, and assume that
+    $\Gamma_{L+Q}^{\mathrm{ES}}$ and $\Gamma_{K+L+Q}^{\mathrm{ES}}$ are
+    injective.  The tail correction is the physical sandwich containing
+    $\mathcal K_{L+Q}-\mathcal K_\infty$ between the reassociated tail
+    pseudoinverse, $J_K^{\mathrm{tail}}$, and the full boundary pseudoinverse.
+\end{definition}
+
+\begin{definition}[Whole-increment full inverse-Gram correction]
+    \label{def:whole_increment_full_inverse_gram_correction}
+    \lean{MPSTensor.wholeIncrementFullInverseGramCorrectionES}
+    \leanok
+    Assume $D>0$, let $\rho$ be positive definite, and assume that
+    $\Gamma_{L+Q}^{\mathrm{ES}}$ and $\Gamma_{K+L+Q}^{\mathrm{ES}}$ are
+    injective.  The full correction is the physical sandwich containing
+    $(\mathcal K_{K+L+Q})^{-1}-\mathcal K_\infty^{-1}$.
+\end{definition}
+
+\begin{definition}[Whole-increment left finite-Gram correction]
+    \label{def:whole_increment_left_gram_correction}
+    \lean{MPSTensor.wholeIncrementLeftFiniteGramCorrectionES}
+    \leanok
+    Assume $D>0$, let $\rho$ be positive definite, and assume that
+    $\Gamma_{L+Q}^{\mathrm{ES}}$ and $\Gamma_{K+L}^{\mathrm{ES}}$ are
+    injective.  The left correction is the physical sandwich containing
+    $\mathcal K_{K+L}-\mathcal K_\infty$ and the left boundary
+    pseudoinverse.
+\end{definition}
+
+\begin{theorem}[Reassociated tail pseudoinverse bound]
+    \label{thm:reassociated_tail_pseudoinverse_bound}
+    \lean{MPSTensor.norm_reassocTailBoundaryMapES_comp_inverseGram_le_sqrt}
+    \leanok
+    \uses{thm:reassociated_tail_inverse_gram,
+        thm:boundary_fiberwise_map_norm}
+    If $\Gamma_{L+Q}^{\mathrm{ES}}$ is injective, then
+    \begin{align}
+      \left\lVert\widetilde\Gamma^{\mathrm{tail}}_{K;L,Q}
+        \bigl((\widetilde\Gamma^{\mathrm{tail}}_{K;L,Q})^\dagger
+          \widetilde\Gamma^{\mathrm{tail}}_{K;L,Q}\bigr)^{-1}\right\rVert
+      &\leq\sqrt{\lVert\mathcal K_{L+Q}^{-1}\rVert}.
+    \end{align}
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:reassociated_tail_inverse_gram,
+        thm:boundary_fiberwise_map_norm}
+    Use the square-root pseudoinverse identity, substitute the fiberwise inverse
+    Gram, and bound the norm of the fiberwise map.
+\end{proof}
+
+\begin{theorem}[Whole-increment virtual correction telescope]
+    \label{thm:whole_increment_virtual_correction_telescope}
+    \lean{MPSTensor.wholeIncrement_virtualResidual_eq_centered_sub_gramErrors}
+    \leanok
+    \uses{def:whole_increment_centered_residual,
+        thm:whole_increment_limiting_overlap_product}
+    Assume $D>0$, let $\rho$ be positive definite, and assume that
+    $\Gamma_{K+L+Q}^{\mathrm{ES}}$ is injective.  Write
+    $K_t=\mathcal K_{L+Q}^{\oplus\Omega_K}$,
+    $K_t^\infty=\mathcal K_\infty^{\oplus\Omega_K}$,
+    $K_\ell=\mathcal K_{K+L}^{\oplus\Omega_Q}$,
+    $K_\ell^\infty=\mathcal K_\infty^{\oplus\Omega_Q}$,
+    $I_f=\mathcal K_{K+L+Q}^{-1}$,
+    $I_\infty=\mathcal K_\infty^{-1}$,
+    $J_t=J_K^{\mathrm{tail}}$, and
+    $J_\ell^\dagger=(J_Q^{\mathrm{left}})^\dagger$.  Then the exact virtual
+    residual satisfies
+    \begin{align}
+      &(\widetilde\Gamma_{K;L,Q}^{\mathrm{tail}})^\dagger
+          \Gamma_{K+L,Q}^{\mathrm{left}}
+        -K_tJ_tI_fJ_\ell^\dagger K_\ell\\
+      &\quad=R_{K,L,Q}
+        -(K_t-K_t^\infty)J_tI_fJ_\ell^\dagger K_\ell
+        -K_t^\infty J_t(I_f-I_\infty)J_\ell^\dagger K_\ell\\
+      &\qquad\phantom{=R_{K,L,Q}}
+        -K_t^\infty J_tI_\infty J_\ell^\dagger
+          (K_\ell-K_\ell^\infty).
+    \end{align}
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{def:whole_increment_centered_residual,
+        thm:whole_increment_limiting_overlap_product}
+    Substitute the centered residual and the limiting overlap product, distribute
+    composition over subtraction, and telescope the product algebraically.
+\end{proof}
+
+\begin{definition}[Whole-increment centered projector sandwich]
+    \label{def:whole_increment_centered_projector_sandwich}
+    \lean{MPSTensor.wholeIncrementCenteredProjectorResidualES}
+    \leanok
+    \uses{def:whole_increment_centered_residual}
+    Assume $D>0$, let $\rho$ be positive definite, and assume that
+    $\Gamma_{L+Q}^{\mathrm{ES}}$ and $\Gamma_{K+L}^{\mathrm{ES}}$ are
+    injective.  The centered physical sandwich is obtained by placing
+    $R_{K,L,Q}$ between the reassociated tail pseudoinverse and the left
+    boundary pseudoinverse.
+\end{definition}
+
+\begin{theorem}[Whole-increment physical correction telescope]
+    \label{thm:whole_increment_finite_gram_corrections}
+    \lean{MPSTensor.wholeIncrement_injectiveRangeProjector_residual_eq_centered_sub_corrections}
+    \leanok
+    \uses{thm:whole_increment_projector_residual,
+        thm:reassociated_tail_inverse_gram,
+        thm:reassociated_tail_boundary_gram,
+        thm:spectator_boundary_direct_sum_gram,
+        thm:whole_increment_virtual_correction_telescope,
+        thm:whole_increment_finite_gram_cancellations,
+        def:whole_increment_tail_gram_correction,
+        def:whole_increment_full_inverse_gram_correction,
+        def:whole_increment_left_gram_correction,
+        def:whole_increment_centered_projector_sandwich}
+    Assume $D>0$, let $\rho$ be positive definite, and suppose that
+    $\Gamma_{L+Q}^{\mathrm{ES}}$, $\Gamma_{K+L}^{\mathrm{ES}}$, and
+    $\Gamma_{K+L+Q}^{\mathrm{ES}}$ are injective.  Then the whole-increment
+    projector defect is the centered physical sandwich minus the tail Gram
+    correction, the full inverse-Gram correction, and the left Gram correction.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:whole_increment_projector_residual,
+        thm:reassociated_tail_inverse_gram,
+        thm:reassociated_tail_boundary_gram,
+        thm:spectator_boundary_direct_sum_gram,
+        thm:whole_increment_virtual_correction_telescope,
+        thm:whole_increment_finite_gram_cancellations,
+        def:whole_increment_tail_gram_correction,
+        def:whole_increment_full_inverse_gram_correction,
+        def:whole_increment_left_gram_correction,
+        def:whole_increment_centered_projector_sandwich}
+    Substitute the common-factorization residual, the two fiberwise Gram
+    identities and inverse-Gram identities, and the virtual telescope.  The
+    left finite Gram then cancels its inverse, leaving the four physical
+    sandwiches in the statement.
+\end{proof}
+
+\begin{theorem}[Whole-increment correction bounds]
+    \label{thm:whole_increment_correction_bounds}
+    \lean{MPSTensor.wholeIncrementTailFiniteGramCorrectionES_norm_le}
+    \lean{MPSTensor.wholeIncrementFullInverseGramCorrectionES_norm_le}
+    \lean{MPSTensor.wholeIncrementLeftFiniteGramCorrectionES_norm_le}
+    \leanok
+    \uses{def:whole_increment_tail_gram_correction,
+        def:whole_increment_full_inverse_gram_correction,
+        def:whole_increment_left_gram_correction,
+        thm:reassociated_tail_pseudoinverse_bound,
+        thm:reassociated_tail_inverse_gram,
+        thm:inverse_gram_identities,
+        thm:boundary_fiberwise_map_norm,
+        thm:inverse_gram_limiting_resolvent,
+        thm:left_spectator_pseudoinverse_bound}
+    Assume $D>0$ and let $\rho$ be positive definite.  Put
+    $I_t=\mathcal K_{L+Q}^{-1}$,
+    $I_f=\mathcal K_{K+L+Q}^{-1}$,
+    $I_\ell=\mathcal K_{K+L}^{-1}$, and
+    $I_\infty=\mathcal K_\infty^{-1}$.  Under the injectivity assumptions
+    required to define the indicated inverse Grams, the tail, full, and left
+    corrections $C_t,C_f,C_\ell$ satisfy
+    \begin{align}
+      \lVert C_t\rVert
+      &\leq \sqrt{\lVert I_t\rVert}
+        \lVert\mathcal K_{L+Q}-\mathcal K_\infty\rVert
+        \lVert J_K^{\mathrm{tail}}\rVert
+        \sqrt{\lVert I_f\rVert}.
+    \end{align}
+    The full correction satisfies
+    \begin{align}
+      \lVert C_f\rVert
+      &\leq \sqrt{\lVert I_t\rVert}
+        \lVert\mathcal K_\infty\rVert
+        \lVert J_K^{\mathrm{tail}}\rVert
+        \lVert I_\infty\rVert
+        \lVert\mathcal K_{K+L+Q}-\mathcal K_\infty\rVert
+        \sqrt{\lVert I_f\rVert}.
+    \end{align}
+    The left correction satisfies
+    \begin{align}
+      \lVert C_\ell\rVert
+      &\leq \sqrt{\lVert I_t\rVert}
+        \lVert\mathcal K_\infty\rVert
+        \lVert J_K^{\mathrm{tail}}\rVert
+        \lVert I_\infty\rVert
+        \lVert J_Q^{\mathrm{left}}\rVert
+        \lVert\mathcal K_{K+L}-\mathcal K_\infty\rVert
+        \sqrt{\lVert I_\ell\rVert}.
+    \end{align}
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{def:whole_increment_tail_gram_correction,
+        def:whole_increment_full_inverse_gram_correction,
+        def:whole_increment_left_gram_correction,
+        thm:reassociated_tail_pseudoinverse_bound,
+        thm:reassociated_tail_inverse_gram,
+        thm:inverse_gram_identities,
+        thm:boundary_fiberwise_map_norm,
+        thm:inverse_gram_limiting_resolvent,
+        thm:left_spectator_pseudoinverse_bound}
+    Unfold each correction and apply submultiplicativity.  Use the reassociated
+    tail pseudoinverse estimate and the fiberwise-map norm bound in all three
+    cases.  For the full correction, insert the inverse resolvent identity; for
+    the left correction, use the left boundary pseudoinverse estimate.
 \end{proof}
 
 \begin{definition}[Common overlap factors and centered residual]

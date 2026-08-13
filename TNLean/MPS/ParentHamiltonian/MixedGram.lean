@@ -27,6 +27,8 @@ is asserted here.
 * `inner_tailBoundaryMapES_adjoint_leftBoundaryMapES_q`
 * `inner_tailBoundaryMapES_adjoint_leftBoundaryMapES`
 * `inner_tailBoundaryMapES_adjoint_leftBoundaryMapES_centered`
+* `inner_reassocTailBoundaryMapES_adjoint_leftBoundaryMapES`
+* `inner_reassocTailBoundaryMapES_adjoint_leftBoundaryMapES_centered`
 -/
 
 open scoped Matrix
@@ -168,15 +170,9 @@ theorem inner_tailBoundaryMapES_adjoint_leftBoundaryMapES_q
     rw [hLeftTrace]
     rw [hTailTrace]
 
--- Reuse relation for GitHub pull request 6299: the `piLpCongrLeft` map in this
--- theorem transports the left-window codomain from \(Cfg\ d\ ((K+l)+q)\) to
--- \(Cfg\ d\ (K+(l+q))\). If \(U\) denotes its inverse unitary and
--- \(T=\mathtt{tailBoundaryMapES}\ A\ K\ (l+q)\), then the left-associated tail
--- map there is \(U\circ T\), and
--- \((U\circ T)^\dagger L=T^\dagger(U^\dagger L)\). Hence its reassociated
--- mixed-Gram theorem is this identity transported by \(U\), with the same
--- right-hand side; it is an equivalent formulation of this theorem, not a
--- second coordinate proof.
+-- A formulation that first reassociates the tail map into the left-associated
+-- ambient space should derive from this theorem by adjoint composition with the
+-- same unitary coordinate reassociation, rather than repeat the coordinate proof.
 
 /-- Exact mixed-Gram identity for the overlapping windows in Nachtergaele's C3
 geometry (arXiv:cond-mat/9410110, equation (2.4)).
@@ -209,6 +205,65 @@ theorem inner_tailBoundaryMapES_adjoint_leftBoundaryMapES
   apply PiLp.ext
   intro σ
   rfl
+
+/-- The canonical arbitrary-increment mixed Gram expressed through the named
+reassociated tail boundary map.  This is the same operator as
+`inner_tailBoundaryMapES_adjoint_leftBoundaryMapES_q`; the only difference is that
+`reassocTailBoundaryMapES` carries out the canonical physical reassociation. -/
+theorem inner_reassocTailBoundaryMapES_adjoint_leftBoundaryMapES
+    (A : MPSTensor d D) (K L Q : ℕ)
+    (x : BoundaryFamilySpace (D := D) (Cfg d K))
+    (y : BoundaryFamilySpace (D := D) (Cfg d Q)) :
+    inner ℂ x ((reassocTailBoundaryMapES A K L Q).adjoint
+      (leftBoundaryMapES A (K + L) Q y)) =
+      ∑ u : Cfg d K, ∑ j : Cfg d Q,
+        inner ℂ
+          (Matrix.frobeniusEquivEuclidean (Fin D) (Fin D)
+            (evalWord A (List.ofFn j) *
+              boundaryFamilyEquiv (D := D) (Cfg d K) x u))
+          (groundSpaceGram A L
+            (Matrix.frobeniusEquivEuclidean (Fin D) (Fin D)
+              (boundaryFamilyEquiv (D := D) (Cfg d Q) y j *
+                evalWord A (List.ofFn u)))) := by
+  rw [reassocTailBoundaryMapES, ContinuousLinearMap.adjoint_comp,
+    ContinuousLinearMap.comp_apply]
+  rw [show (physicalReassocES (d := d) K L Q).toContinuousLinearMap.adjoint =
+      (physicalReassocES (d := d) K L Q).symm.toContinuousLinearMap from
+    LinearIsometryEquiv.adjoint_eq_symm _]
+  exact inner_tailBoundaryMapES_adjoint_leftBoundaryMapES_q A K L Q x y
+
+/-- Centered form of the arbitrary-increment mixed Gram, written with the named
+reassociated tail boundary map. -/
+theorem inner_reassocTailBoundaryMapES_adjoint_leftBoundaryMapES_centered
+    (A : MPSTensor d D) (K L Q : ℕ)
+    (ρ : Matrix (Fin D) (Fin D) ℂ) (htr : Matrix.trace ρ ≠ 0)
+    (x : BoundaryFamilySpace (D := D) (Cfg d K))
+    (y : BoundaryFamilySpace (D := D) (Cfg d Q)) :
+    inner ℂ x ((reassocTailBoundaryMapES A K L Q).adjoint
+        (leftBoundaryMapES A (K + L) Q y)) -
+      ∑ u : Cfg d K, ∑ j : Cfg d Q,
+        inner ℂ
+          (Matrix.frobeniusEquivEuclidean (Fin D) (Fin D)
+            (evalWord A (List.ofFn j) *
+              boundaryFamilyEquiv (D := D) (Cfg d K) x u))
+          (Matrix.frobeniusEquivEuclidean (Fin D) (Fin D)
+            ((Matrix.trace ρ)⁻¹ •
+              ((boundaryFamilyEquiv (D := D) (Cfg d Q) y j *
+                evalWord A (List.ofFn u)) * ρ))) =
+      ∑ u : Cfg d K, ∑ j : Cfg d Q,
+        inner ℂ
+          (Matrix.frobeniusEquivEuclidean (Fin D) (Fin D)
+            (evalWord A (List.ofFn j) *
+              boundaryFamilyEquiv (D := D) (Cfg d K) x u))
+          ((groundSpaceGram A L -
+              Matrix.gramReshuffle (fixedPointProj ρ htr))
+            (Matrix.frobeniusEquivEuclidean (Fin D) (Fin D)
+              (boundaryFamilyEquiv (D := D) (Cfg d Q) y j *
+                evalWord A (List.ofFn u)))) := by
+  rw [inner_reassocTailBoundaryMapES_adjoint_leftBoundaryMapES]
+  simp_rw [sub_apply, inner_sub_right,
+    Matrix.gramReshuffle_fixedPointProj_frobeniusEquivEuclidean_apply,
+    Finset.sum_sub_distrib]
 
 /-- Exact centering of the overlapping mixed Gram at the nonidentity limiting
 Gram metric.
