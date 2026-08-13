@@ -57,31 +57,34 @@ theorem angleDefectBlock_isInternal {P Q : E →ₗ[ℂ] E}
   simpa only [angleDefectSum, iSup_true] using
     DirectSum.isInternal_biSup_submodule_of_iSupIndep
       (A := fun i : CompressionIndex (P := P) => angleDefectBlock hP hQ i) Set.univ
-      (angleDefectBlock_orthogonalFamily hP hQ).independent
+      ((angleDefectBlock_orthogonalFamily hP hQ).independent.comp Subtype.coe_injective)
 
 /-- The defect-block sum and its orthogonal complement give the ambient orthogonal
  decomposition. -/
 theorem angleDefectSum_isCompl_angleDefectComplement {P Q : E →ₗ[ℂ] E}
     (hP : P.IsSymmetricProjection) (hQ : Q.IsSymmetricProjection) :
     IsCompl (angleDefectSum hP hQ) (angleDefectComplement hP hQ) := by
-  rw [angleDefectComplement]
-  exact Submodule.isCompl_orthogonal
+  exact Submodule.isCompl_orthogonal (K := angleDefectSum hP hQ)
 
 /-- The range of the first projection lies in the sum of the compression defect blocks. -/
 theorem range_le_angleDefectSum {P Q : E →ₗ[ℂ] E}
     (hP : P.IsSymmetricProjection) (hQ : Q.IsSymmetricProjection) :
     P.range ≤ angleDefectSum hP hQ := by
-  rw [← (rangeCompressionEigenbasis hP hQ).toBasis.span_eq, Submodule.span_le]
-  rintro x ⟨i, rfl⟩
-  exact le_iSup (fun j => angleDefectBlock hP hQ j) i <|
-    Submodule.subset_span (by left; rfl)
+  rintro x ⟨y, rfl⟩
+  rw [← (rangeCompressionEigenbasis hP hQ).toBasis.span_eq] at y
+  refine Submodule.span_induction y ?_ (Submodule.zero_mem _) ?_ ?_
+  · rintro _ ⟨i, rfl⟩
+    exact le_iSup (fun j => angleDefectBlock hP hQ j) i <|
+      Submodule.subset_span (by left; rfl)
+  · exact fun _ _ => Submodule.add_mem _
+  · exact fun c _ => Submodule.smul_mem _ c
 
 /-- The defect-block sum is invariant under the first projection. -/
 theorem map_angleDefectSum_le_first_projection {P Q : E →ₗ[ℂ] E}
     (hP : P.IsSymmetricProjection) (hQ : Q.IsSymmetricProjection) :
     Submodule.map P (angleDefectSum hP hQ) ≤ angleDefectSum hP hQ := by
   rw [angleDefectSum, Submodule.map_iSup]
-  exact iSup_mono fun i => (map_angleDefectBlock_le_first_projection hP hQ i).trans
+  exact iSup_le fun i => (map_angleDefectBlock_le_first_projection hP hQ i).trans
     (le_iSup (fun j => angleDefectBlock hP hQ j) i)
 
 /-- The defect-block sum is invariant under the second projection. -/
@@ -89,31 +92,32 @@ theorem map_angleDefectSum_le_second_projection {P Q : E →ₗ[ℂ] E}
     (hP : P.IsSymmetricProjection) (hQ : Q.IsSymmetricProjection) :
     Submodule.map Q (angleDefectSum hP hQ) ≤ angleDefectSum hP hQ := by
   rw [angleDefectSum, Submodule.map_iSup]
-  exact iSup_mono fun i => (map_angleDefectBlock_le_second_projection hP hQ i).trans
+  exact iSup_le fun i => (map_angleDefectBlock_le_second_projection hP hQ i).trans
     (le_iSup (fun j => angleDefectBlock hP hQ j) i)
 
 /-- The orthogonal complement of the defect-block sum is invariant under the first projection. -/
 theorem map_angleDefectComplement_le_first_projection {P Q : E →ₗ[ℂ] E}
     (hP : P.IsSymmetricProjection) (hQ : Q.IsSymmetricProjection) :
     Submodule.map P (angleDefectComplement hP hQ) ≤ angleDefectComplement hP hQ := by
-  rw [Module.End.mem_invtSubmodule_iff_map_le]
-  exact hP.isSymmetric.orthogonalComplement_mem_invtSubmodule
-    (Module.End.mem_invtSubmodule_iff_map_le.mpr
-      (map_angleDefectSum_le_first_projection hP hQ))
+  exact Module.End.mem_invtSubmodule_iff_map_le.mp <|
+    hP.isSymmetric.orthogonalComplement_mem_invtSubmodule
+      (Module.End.mem_invtSubmodule_iff_map_le.mpr
+        (map_angleDefectSum_le_first_projection hP hQ))
 
 /-- The orthogonal complement of the defect-block sum is invariant under the second projection. -/
 theorem map_angleDefectComplement_le_second_projection {P Q : E →ₗ[ℂ] E}
     (hP : P.IsSymmetricProjection) (hQ : Q.IsSymmetricProjection) :
     Submodule.map Q (angleDefectComplement hP hQ) ≤ angleDefectComplement hP hQ := by
-  rw [Module.End.mem_invtSubmodule_iff_map_le]
-  exact hQ.isSymmetric.orthogonalComplement_mem_invtSubmodule
-    (Module.End.mem_invtSubmodule_iff_map_le.mpr
-      (map_angleDefectSum_le_second_projection hP hQ))
+  exact Module.End.mem_invtSubmodule_iff_map_le.mp <|
+    hQ.isSymmetric.orthogonalComplement_mem_invtSubmodule
+      (Module.End.mem_invtSubmodule_iff_map_le.mpr
+        (map_angleDefectSum_le_second_projection hP hQ))
 
 /-- The first projection vanishes on the complement of the defect-block sum. -/
 theorem first_projection_apply_eq_zero_of_mem_angleDefectComplement {P Q : E →ₗ[ℂ] E}
     (hP : P.IsSymmetricProjection) (hQ : Q.IsSymmetricProjection) {z : E}
     (hz : z ∈ angleDefectComplement hP hQ) : P z = 0 := by
+  apply LinearMap.mem_ker.mp
   rw [← hP.isSymmetric.orthogonal_range]
   exact Submodule.orthogonal_le (range_le_angleDefectSum hP hQ) hz
 
@@ -143,7 +147,6 @@ theorem firstProjectionOnAngleDefectComplement_eq_zero {P Q : E →ₗ[ℂ] E}
     (hP : P.IsSymmetricProjection) (hQ : Q.IsSymmetricProjection) :
     firstProjectionOnAngleDefectComplement hP hQ = 0 := by
   ext z
-  apply Subtype.ext
   exact first_projection_apply_eq_zero_of_mem_angleDefectComplement hP hQ z.property
 
 /-- The first restricted projection remains a symmetric projection. -/
@@ -151,7 +154,7 @@ theorem firstProjectionOnAngleDefectComplement_isSymmetricProjection {P Q : E �
     (hP : P.IsSymmetricProjection) (hQ : Q.IsSymmetricProjection) :
     (firstProjectionOnAngleDefectComplement hP hQ).IsSymmetricProjection := by
   rw [firstProjectionOnAngleDefectComplement_eq_zero hP hQ]
-  exact ⟨isIdempotentElem_zero, LinearMap.isSymmetric_zero⟩
+  exact ⟨.zero, LinearMap.IsSymmetric.zero⟩
 
 /-- The second restricted projection remains a symmetric projection. -/
 theorem secondProjectionOnAngleDefectComplement_isSymmetricProjection {P Q : E →ₗ[ℂ] E}
@@ -161,7 +164,7 @@ theorem secondProjectionOnAngleDefectComplement_isSymmetricProjection {P Q : E �
     fun z hz => (map_angleDefectComplement_le_second_projection hP hQ) ⟨z, hz, rfl⟩
   constructor
   · apply DFunLike.ext _ _ fun z => Subtype.ext ?_
-    exact hQ.isIdempotentElem.apply_apply z
+    exact LinearMap.IsIdempotentElem.apply_apply hQ.isIdempotentElem z
   · exact hQ.isSymmetric.restrict_invariant hQinv
 
 /-- The restricted projections commute on the complementary summand. This conclusion does not
