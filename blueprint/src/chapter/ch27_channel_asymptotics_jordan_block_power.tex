@@ -33,9 +33,18 @@
 \end{proof}
 
 % Source: Wolf (2012), Chapter 8, Equation (8.104), lines 1197--1215
-\begin{lemma}[Two-sided estimate for a Jordan-block power]
-    \label{lem:jordan_block_power_norm}
-    \lean{Matrix.l2_opNorm_jordanBlock_pow_bounds}
+%
+% The source asserts \|N\|_\infty = 1 at line 1215.  That equality fails at
+% D = 1, where the shift is the zero matrix; the proof below uses only
+% \|N\|_\infty \le 1, and only that is formalized.  See
+% docs/paper-gaps/wolf_eq8104_shift_norm_one_dimensional.tex.
+\begin{theorem}[Two-sided estimate for a Jordan-block power]
+    \label{thm:jordan_block_power_norm}
+    \lean{Matrix.l2_opNorm_jordanBlock_pow_bounds,
+      Matrix.le_l2_opNorm_jordanBlock_pow, Matrix.l2_opNorm_jordanBlock_pow_le,
+      Matrix.norm_apply_le_l2_opNorm, Matrix.conjTranspose_nilpotentShift_mul_self,
+      Matrix.l2_opNorm_nilpotentShift_le_one,
+      Matrix.l2_opNorm_nilpotentShift_pow_le_one}
     \leanok
     \uses{lem:jordan_block_power}
     This is \cite[Chapter~8, Equation~(8.104)]{Wolf2012Quantum}.
@@ -48,20 +57,24 @@
       \le\bigl\|J_{D}(\lambda)^{n}\bigr\|_{\infty}
       \le\sum_{k=0}^{\min\{n,D-1\}}|\lambda|^{\,n-k}\binom{n}{k}.
     \end{align}
-\end{lemma}
+\end{theorem}
 
 \begin{proof}
     \leanok
     \uses{lem:jordan_block_power}
     By Lemma~\ref{lem:jordan_block_power} the power $J_{D}(\lambda)^{n}$ is the
     Toeplitz matrix $\sum_{k}\binom{n}{k}\lambda^{n-k}N^{k}$, whose first row
-    carries the entries $\lambda^{n-k}\binom{n}{k}$.  Since the largest
-    singular value dominates the modulus of every entry, reading the entry in
-    row $0$ and column $k_{0}$ gives the left inequality; the hypothesis
-    $k_{0}\le\min\{n,D-1\}$ is exactly what places that entry inside the
-    matrix and inside the range of summation.  For the right inequality, the
-    triangle inequality distributes the norm over the same expansion, and
-    $\|N^{k}\|_{\infty}\le 1$ for every $k$, because $N^{\dagger}N$ is the
-    diagonal projection $\operatorname{diag}(0,1,\dots,1)$ and the largest
-    singular value is multiplicative under the adjoint pairing.
+    carries the entries $\lambda^{n-k}\binom{n}{k}$.  Since
+    $|A_{i,j}|\le\|A\|_{\infty}$ for every matrix $A$ and every pair of
+    indices, reading the entry in row $0$ and column $k_{0}$, whose value is
+    $\lambda^{\,n-k_{0}}\binom{n}{k_{0}}$, gives the left inequality; the
+    hypothesis $k_{0}\le\min\{n,D-1\}$ is exactly what places that entry
+    inside the matrix and inside the range of summation.  For the right
+    inequality, the triangle inequality distributes the norm over the same
+    expansion, and $\|N^{k}\|_{\infty}\le 1$ for every $k$: the Gram matrix
+    $N^{\dagger}N$ is the diagonal projection
+    $\operatorname{diag}(0,1,\dots,1)$, so the C*-identity gives
+    $\|N\|_{\infty}^{2}=\|N^{\dagger}N\|_{\infty}\le 1$, and induction on $k$
+    with $\|N^{k+1}\|_{\infty}\le\|N^{k}\|_{\infty}\|N\|_{\infty}$ carries the
+    bound to every power.
 \end{proof}

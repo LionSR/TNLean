@@ -1,0 +1,73 @@
+\documentclass{article}
+
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+\setlength{\emergencystretch}{2em}
+
+\input{command}
+
+\title{Jordan-Block Norm Estimate: the Shift Norm in One Dimension}
+\author{}
+\date{2026-08-13}
+
+\begin{document}
+\maketitle
+
+\section{Source passage}
+
+Chapter~8 of \cite{Wolf2012Quantum} derives the two-sided estimate
+\begin{align}
+  |\lambda|^{\,n-k_{0}}\binom{n}{k_{0}}
+    \le \bigl\|J_{D}(\lambda)^{n}\bigr\|_{\infty}
+    \le \sum_{k=0}^{\min\{n,D-1\}}|\lambda|^{\,n-k}\binom{n}{k},
+  \qquad k_{0}\le\min\{n,D-1\},
+\end{align}
+of Equation~(8.104), at lines 1197--1215 of the local source file. The upper
+bound is obtained from the binomial expansion
+$J_{D}(\lambda)^{n}=\sum_{k}\binom{n}{k}\lambda^{n-k}N^{k}$ by the triangle
+inequality, using the assertion $\|N\|_{\infty}=1$ for the strict upper shift
+$N$ at line~1215.
+
+\section{The deviation}
+
+The equality $\|N\|_{\infty}=1$ holds for $D\ge 2$ but fails at $D=1$: the
+strict upper shift on a one-dimensional space is the zero matrix, so
+$\|N\|_{\infty}=0$. Wolf states the equality without a dimension restriction.
+The Jordan block itself is defined for every $D\ge 1$, and Equation~(8.104) is
+asserted for every such $D$, so the intermediate assertion is one degenerate
+case wider than its proof supports.
+
+\section{Formalized interpretation}
+
+Only the direction $\|N\|_{\infty}\le 1$ enters the derivation: the triangle
+inequality is followed by
+$\|N^{k}\|_{\infty}\le\|N\|_{\infty}^{k}\le 1$, which is what discards the
+shift factors from the expansion. The formalization therefore states
+\leanid{Matrix.l2_opNorm_nilpotentShift_le_one} as the inequality
+$\|N\|_{\infty}\le 1$, valid for every $D$, and derives
+\leanid{Matrix.l2_opNorm_nilpotentShift_pow_le_one} from it. The proof is the
+one Wolf indicates: $N^{\dagger}N=\operatorname{diag}(0,1,\dots,1)$, whose
+largest singular value is at most $1$, and the C*-identity
+$\|N\|_{\infty}^{2}=\|N^{\dagger}N\|_{\infty}$ transfers the bound.
+
+At $D=1$ the two sides of Equation~(8.104) coincide: the hypothesis
+$k_{0}\le\min\{n,D-1\}$ forces $k_{0}=0$, and both bounds read
+$|\lambda|^{n}\le\|\lambda^{n}\|_{\infty}\le|\lambda|^{n}$. The theorems
+\leanid{Matrix.le_l2_opNorm_jordanBlock_pow},
+\leanid{Matrix.l2_opNorm_jordanBlock_pow_le} and
+\leanid{Matrix.l2_opNorm_jordanBlock_pow_bounds} therefore carry Wolf's
+hypothesis set unchanged, with no dimension restriction beyond $D\ge 1$, which
+the Jordan block presupposes.
+
+\section{Verdict}
+
+\textbf{Verdict: resolved local fix (shift norm at $D=1$).} Replacing the
+source's intermediate equality $\|N\|_{\infty}=1$ by the inequality
+$\|N\|_{\infty}\le 1$ removes a false degenerate case without weakening
+Equation~(8.104), which is formalized with the source's own hypotheses.
+
+\bibliographystyle{alpha}
+\bibliography{references}
+
+\end{document}

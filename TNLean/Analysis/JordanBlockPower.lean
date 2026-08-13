@@ -48,7 +48,9 @@ Source: Wolf (2012), Chapter 8, Eq. (8.104), lines 1197--1215.
 * `jordanBlock` -- the Jordan block $J_D(\lambda) = \lambda I + N$.
 * `jordanBlock_pow` -- truncated binomial expansion of $J_D(\lambda)^n$.
 * `norm_apply_le_l2_opNorm` -- the largest singular value dominates every entry.
+* `conjTranspose_nilpotentShift_mul_self` -- $N^{\dagger}N=\operatorname{diag}(0,1,\dots,1)$.
 * `l2_opNorm_nilpotentShift_le_one` -- $\|N\|_\infty \le 1$.
+* `l2_opNorm_nilpotentShift_pow_le_one` -- $\|N^k\|_\infty \le 1$.
 * `le_l2_opNorm_jordanBlock_pow` -- left inequality of Wolf Eq. (8.104).
 * `l2_opNorm_jordanBlock_pow_le` -- right inequality of Wolf Eq. (8.104).
 * `l2_opNorm_jordanBlock_pow_bounds` -- Wolf Eq. (8.104).
@@ -349,6 +351,8 @@ lemma conjTranspose_nilpotentShift_mul_self (D : ℕ) :
       omega
     · rw [if_pos rfl, if_neg hi]
       have hlt : (i : ℕ) - 1 < D := lt_of_le_of_lt (Nat.sub_le _ _) i.is_lt
+      -- `hval` is never named below, but it puts the value of the witness coordinate in
+      -- context, which is what lets the `omega` calls in this branch see it.
       have hval : ((⟨(i : ℕ) - 1, hlt⟩ : Fin D) : ℕ) = (i : ℕ) - 1 := rfl
       rw [Finset.sum_eq_single (⟨(i : ℕ) - 1, hlt⟩ : Fin D)]
       · have hi' : (i : ℕ) = ((⟨(i : ℕ) - 1, hlt⟩ : Fin D) : ℕ) + 1 := by omega
@@ -366,7 +370,13 @@ lemma conjTranspose_nilpotentShift_mul_self (D : ℕ) :
     exact hij (Fin.ext (by omega))
 
 /-- Wolf's $\|N\|_\infty = 1$, stated as an inequality because the shift on a
-one-dimensional space is zero.  Source: Wolf (2012), Chapter 8, line 1215. -/
+one-dimensional space is zero.  Source: Wolf (2012), Chapter 8, line 1215.
+
+**Local fix (Wolf (2012), Chapter 8, line 1215, $D = 1$):** the source's equality
+$\|N\|_\infty = 1$ fails at $D = 1$, where $N = 0$, so the bound is stated as
+$\|N\|_\infty \le 1$, which holds for every $D$ and is the direction the upper
+bound of Eq. (8.104) consumes.  The correction is documented in
+`docs/paper-gaps/wolf_eq8104_shift_norm_one_dimensional.tex`. -/
 lemma l2_opNorm_nilpotentShift_le_one (D : ℕ) : ‖nilpotentShift D‖ ≤ 1 := by
   have hsq : ‖nilpotentShift D‖ * ‖nilpotentShift D‖ ≤ 1 := by
     rw [← l2_opNorm_conjTranspose_mul_self, conjTranspose_nilpotentShift_mul_self,
