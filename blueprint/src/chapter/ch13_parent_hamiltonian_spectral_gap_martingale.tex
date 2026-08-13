@@ -1441,6 +1441,41 @@ norm estimate is derived here.
     boundary pseudoinverse.
 \end{definition}
 
+\begin{theorem}[Norm bound for the whole-increment centered projector sandwich]
+    \label{thm:whole_increment_centered_projector_sandwich_bound}
+    \lean{MPSTensor.wholeIncrementCenteredProjectorResidualES_norm_le}
+    \leanok
+    \uses{def:whole_increment_centered_projector_sandwich,
+        def:whole_increment_centered_residual, def:inverse_gram,
+        def:ground_space_map_es}
+    Assume $D>0$, let $\rho$ be positive definite, and suppose that
+    $\Gamma_{L+Q}^{\mathrm{ES}}$ and $\Gamma_{K+L}^{\mathrm{ES}}$ are
+    injective.  Put
+    \begin{align}
+      I_t&=\mathcal K_{L+Q}^{-1},&
+      I_\ell&=\mathcal K_{K+L}^{-1}.
+    \end{align}
+    Then the centered physical sandwich $\widehat R_{K,L,Q}$ satisfies
+    \begin{align}
+      \lVert\widehat R_{K,L,Q}\rVert
+      &\leq \sqrt{\lVert I_t\rVert}\,
+        \lVert R_{K,L,Q}\rVert\,
+        \sqrt{\lVert I_\ell\rVert}.
+    \end{align}
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{def:whole_increment_centered_projector_sandwich,
+        thm:reassociated_tail_inverse_gram,
+        thm:spectator_boundary_direct_sum_gram,
+        thm:reassociated_tail_pseudoinverse_bound,
+        thm:left_spectator_pseudoinverse_bound}
+    Apply submultiplicativity to the centered residual between the two
+    pseudoinverse factors.  Bound the exterior factors by the square roots of
+    the corresponding inverse-Gram norms.
+\end{proof}
+
 \begin{theorem}[Whole-increment physical correction telescope]
     \label{thm:whole_increment_finite_gram_corrections}
     \lean{MPSTensor.wholeIncrement_injectiveRangeProjector_residual_eq_centered_sub_corrections}
@@ -2040,6 +2075,101 @@ norm estimate is derived here.
     range identities replace the three inverse-Gram range projectors by the
     tail, left, and full physical ground-space projectors.  The coefficient is
     the displayed reconstruction, not the optimized FNW rational numerator.
+\end{proof}
+
+% The following estimate is reconstructed from the exact inverse-Gram
+% factorization.  It is not attributed to FNW and does not claim the optimized
+% numerator in Nachtergaele's equation (6.1).
+\begin{theorem}[Prefix-uniform geometric whole-increment projector defect]
+    \label{thm:whole_increment_ground_projection_defect_geometric}
+    \lean{MPSTensor.IsPrimitiveMPS.wholeIncrement_groundProjection_defect_le_geometric}
+    \leanok
+    \uses{def:primitive_mps, def:reassociated_tail_boundary_map,
+        def:spectator_boundary_maps_es, def:ground_space_es}
+    Let $A$ be primitive with positive-definite fixed point $\rho$ and nonzero
+    bond dimension.  There are constants $C,c,r>0$, with $r<1$, such that for
+    all $K,L,Q\in\mathbb N$ with $L\geq1$ and $cr^L<1$,
+    \begin{align}
+      &\left\lVert
+        P^{\mathrm{tail}}_{K;L,Q}P^{\mathrm{left}}_{K+L,Q}
+        -P_{\mathcal G_{K+L+Q}^{\mathrm{ES}}(A)}
+      \right\rVert
+      \leq \frac{Cr^L}{1-cr^L}.
+    \end{align}
+    Here $P^{\mathrm{tail}}_{K;L,Q}$ is the range projector of the
+    reassociated tail boundary map and $P^{\mathrm{left}}_{K+L,Q}$ is the
+    range projector of the left boundary map.  The constants are independent
+    of both the prefix length $K$ and the suffix length $Q$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:primitive_ground_space_map_geometric_inverse_gram_bounds,
+        thm:primitive_tail_virtual_map_norm_uniform,
+        thm:fixed_point_gram_metric_is_unit,
+        thm:primitive_whole_increment_centered_residual_bound,
+        thm:whole_increment_left_virtual_norm,
+        thm:whole_increment_centered_projector_sandwich_bound,
+        thm:whole_increment_correction_bounds,
+        thm:whole_increment_finite_gram_corrections,
+        thm:injective_range_projector_inverse_gram,
+        thm:range_ground_space_map_es}
+    Bound the centered sandwich and the three finite-Gram corrections in the
+    exact projector telescope.  Geometric convergence of the finite Grams and
+    the uniform tail-map bound make each term at most a fixed multiple of
+    $r^L/(1-cr^L)$, uniformly in $K$ and $Q$.  Sum the four estimates and
+    absorb their constants into $C$.
+\end{proof}
+
+\begin{theorem}[Uniform whole-increment defect at the coefficient $7/16$]
+    \label{thm:uniform_whole_increment_defect_seven_sixteenths}
+    \lean{MPSTensor.IsPrimitiveMPS.exists_uniform_wholeIncrement_defect_le_seven_sixteenths}
+    \leanok
+    \uses{thm:whole_increment_ground_projection_defect_geometric,
+        thm:normal_from_primitive_posdef, thm:wordspan_blk_inj_succ}
+    Let $A$ be primitive with positive-definite fixed point $\rho$ and nonzero
+    bond dimension.  There is an integer $p>0$, measured in sites of $A$, such
+    that $A$ is $p$-block injective and, for every $K\in\mathbb N$,
+    \begin{align}
+      \left\lVert
+        P^{\mathrm{tail}}_{K;p,p}P^{\mathrm{left}}_{K+p,p}
+        -P_{\mathcal G_{K+2p}^{\mathrm{ES}}(A)}
+      \right\rVert
+      &\leq \frac{7}{16}.
+    \end{align}
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:whole_increment_ground_projection_defect_geometric,
+        thm:normal_from_primitive_posdef, thm:wordspan_blk_inj_succ}
+    Choose $p$ above a positive block-injectivity length and sufficiently large
+    that $cr^p<1$ and $Cr^p/(1-cr^p)<7/16$.  Block injectivity propagates to
+    $p$, and the geometric whole-increment estimate applies with $L=Q=p$ for
+    every prefix length $K$.
+\end{proof}
+
+\begin{theorem}[Three-block whole-increment defect at the coefficient $7/16$]
+    \label{thm:three_block_whole_increment_defect_seven_sixteenths}
+    \lean{MPSTensor.IsPrimitiveMPS.exists_threeBlock_wholeIncrement_defect_le_seven_sixteenths}
+    \leanok
+    \uses{thm:uniform_whole_increment_defect_seven_sixteenths}
+    Under the same hypotheses, there is an integer $p>0$, measured in sites of
+    $A$, such that $A$ is $p$-block injective and
+    \begin{align}
+      \left\lVert
+        P^{\mathrm{tail}}_{p;p,p}P^{\mathrm{left}}_{2p,p}
+        -P_{\mathcal G_{3p}^{\mathrm{ES}}(A)}
+      \right\rVert
+      &\leq \frac{7}{16}.
+    \end{align}
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:uniform_whole_increment_defect_seven_sixteenths}
+    Apply the prefix-uniform theorem at $K=p$.  The three consecutive regions
+    then each contain exactly $p$ sites of the input tensor.
 \end{proof}
 
 \begin{theorem}[Uniform open-chain projector-defect threshold]
