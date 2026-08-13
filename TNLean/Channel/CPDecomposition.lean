@@ -41,8 +41,9 @@ correspondence produces the four completely positive maps.
 Complete positivity is the rectangular Kraus predicate `IsKrausCP`, the notion
 used in the complete-positivity clause of Wolf Proposition 2.1 and in
 Wolf Theorem 2.1. No hypothesis is placed on the dimensions: for `d = 0` the
-input algebra has a single element, every linear map out of it vanishes, and
-the empty combination already witnesses the statement.
+input algebra has a single element and every linear map out of it vanishes, so
+the four (respectively two) zero maps with zero coefficients already witness
+the statement.
 
 The two matrix ingredients carry no channel hypotheses and live in
 `TNLean/Algebra/HermitianHelpers.lean`: `Matrix.exists_isHermitian_eq_add_smul_I`

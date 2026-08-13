@@ -156,7 +156,8 @@ the input factor is written $\tr_B$.
 
 \begin{definition}[Choi matrix of a map between matrix algebras]
     \label{def:choi_matrix_rect}
-    \lean{ChoiRectangular.choiMatrix, ChoiRectangular.mapOfChoiMatrix}
+    \lean{ChoiRectangular.choiMatrix, ChoiRectangular.choiMatrixLinearMap,
+        ChoiRectangular.mapOfChoiMatrix}
     \leanok
     \uses{def:maximally_entangled, def:tensor_map_id}
     The \emph{Choi matrix} of a linear map $T:\MN{d}\to\MN{d'}$ is
@@ -171,22 +172,30 @@ the input factor is written $\tr_B$.
 
 \begin{lemma}[Linearity of the Choi assignment]
     \label{lem:choi_rect_linear}
-    \lean{ChoiRectangular.choiMatrixLinearMap, ChoiRectangular.choiMatrix_add,
-        ChoiRectangular.choiMatrix_smul, ChoiRectangular.choiMatrix_sum}
+    \lean{ChoiRectangular.choiMatrix_add, ChoiRectangular.choiMatrix_smul,
+        ChoiRectangular.choiMatrix_sum}
     \leanok
     \uses{def:choi_matrix_rect}
-    The assignment $T\mapsto\tau$ is complex linear: it carries sums to sums,
-    scalar multiples to scalar multiples, and hence finite sums
-    $\sum_{i\in s}T_i$ to $\sum_{i\in s}\tau_i$.
+    Write $\tau_T$ for the Choi matrix of $T$. For all linear maps
+    $T,S:\MN{d}\to\MN{d'}$, all $c\in\C$, all finite index sets $s$ and all
+    families $(T_i)_{i\in s}$,
+    \begin{align}
+        \tau_{T+S} &= \tau_T + \tau_S,
+        \label{eq:choi_rect_linear_add}\\
+        \tau_{cT} &= c\,\tau_T,
+        \label{eq:choi_rect_linear_smul}\\
+        \tau_{\sum_{i\in s}T_i} &= \sum_{i\in s}\tau_{T_i}.
+        \label{eq:choi_rect_linear_sum}
+    \end{align}
 \end{lemma}
 
 \begin{proof}
     \leanok
-    The Choi matrix is the image of $T$ under $T\mapsto(T\otimes
-    \operatorname{id}_d)$ evaluated at the fixed operator
-    $\ketbra{\Omega_d}{\Omega_d}$, and each entry of $\tau$ is a value of $T$
-    at a fixed matrix. Linearity in $T$ is therefore entrywise, and the
-    finite-sum form follows by induction on the index set.
+    Each entry $\tau_{(i_1,i_2),(j_1,j_2)}$ is the value of $T$ at a fixed
+    matrix, read off at a fixed pair of indices, so
+    (\ref{eq:choi_rect_linear_add}) and (\ref{eq:choi_rect_linear_smul}) hold
+    entrywise. They make $T\mapsto\tau_T$ a complex linear map, and
+    (\ref{eq:choi_rect_linear_sum}) is the image of a finite sum under it.
 \end{proof}
 
 \begin{theorem}[Mutual inverses of the Choi correspondence]
