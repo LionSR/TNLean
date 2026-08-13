@@ -59,9 +59,8 @@ square isometry over a finite index set is unitary.
 
 ## References
 
-* [M. Wolf, *Quantum Channels & Operations: Guided Tour*, §2, the proposition
-  "Equivalence of ensembles", Eq. (2.10), at line 277 of
-  `Notes/WolfNoteTexSource/ch02_representations.tex`][Wolf2012QChannels]
+* [M. Wolf, *Quantum Channels & Operations: Guided Tour*, §2, Proposition 2.4
+  ("Equivalence of ensembles", Eq. (2.10))][Wolf2012QChannels]
 -/
 
 open scoped Matrix
