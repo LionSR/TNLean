@@ -2245,7 +2245,7 @@ norm estimate is derived here.
 \end{lemma}
 
 \begin{theorem}[Uniform gap for a blocked primitive MPS parent Hamiltonian]
-    \label{lem:martingale_mps}
+    \label{thm:martingale_mps}
     \lean{MPSTensor.IsPrimitiveMPS.exists_blockTensor_parentHamiltonianES_gap_eighth,
         MPSTensor.IsPrimitiveMPS.exists_blockTensor_parentHamiltonianES_gapped}
     \leanok
@@ -2279,7 +2279,7 @@ norm estimate is derived here.
     \label{thm:normal_mps_parent_hamiltonian_gap}
     \notready
     \discussion{5926}
-    \uses{lem:martingale_mps, thm:anticommutator_gap_bound,
+    \uses{thm:martingale_mps, thm:anticommutator_gap_bound,
         thm:parent_hamiltonian_gapped}
     Let $A$ be a normal tensor.  There exist an interaction range $L>1$ and
     a constant $\gamma>0$ such that, for every $N\ge2L$ and every
@@ -2289,7 +2289,7 @@ norm estimate is derived here.
         &\le \lVert H_{N,L}(A)v\rVert.
         \notag
     \end{align}
-    Theorem~\ref{lem:martingale_mps} proves this estimate only for the
+    Theorem~\ref{thm:martingale_mps} proves this estimate only for the
     range-two Hamiltonian of $B=\operatorname{block}_p(A)$ on $N$ blocked sites.
     It does not identify that operator, its kernel, or its energy scale with
     the range-$L$ Hamiltonian of $A$ on the original-site chain.  The remaining
@@ -2299,9 +2299,9 @@ norm estimate is derived here.
 \begin{proof}
     \notready
     \discussion{5926}
-    \uses{lem:martingale_mps, thm:anticommutator_gap_bound,
+    \uses{thm:martingale_mps, thm:anticommutator_gap_bound,
         thm:parent_hamiltonian_gapped}
-    Apply Theorem~\ref{lem:martingale_mps} to the blocked tensor.  Then compare
+    Apply Theorem~\ref{thm:martingale_mps} to the blocked tensor.  Then compare
     its range-two local projections and ground-space complement with a fixed-range
     parent interaction for $A$ in original-site units, retaining a uniform positive
     lower bound under that comparison.

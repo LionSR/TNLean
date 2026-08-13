@@ -20,6 +20,8 @@ tensor. No comparison with an interaction on the original unblocked chain is mad
 
 * `MPSTensor.IsPrimitiveMPS.exists_blockTensor_parentHamiltonianES_gap_eighth` chooses a
   physical block length and proves the explicit gap constant \(1/8\) for the blocked tensor.
+* `MPSTensor.IsPrimitiveMPS.exists_blockTensor_parentHamiltonianES_gapped` packages the
+  corresponding uniform positive gap through the public anticommutator consumer.
 
 ## References
 
@@ -35,7 +37,7 @@ variable {d D : ℕ}
 
 /-- The common physical-coordinate isometry from three blocked sites to three
 consecutive original blocks. -/
-noncomputable def blockedThreeConfigLinearIsometryEquiv (d p : ℕ) :
+private noncomputable def blockedThreeConfigLinearIsometryEquiv (d p : ℕ) :
     EuclideanSpace ℂ (Cfg (blockPhysDim d p) 3) ≃ₗᵢ[ℂ]
       EuclideanSpace ℂ (Cfg d (p + p + p)) :=
   (blockedConfigLinearIsometryEquiv d 3 p).trans
@@ -45,7 +47,7 @@ noncomputable def blockedThreeConfigLinearIsometryEquiv (d p : ℕ) :
 
 /-- Reindex a one-block spectator configuration as a length-`p` original-site
 spectator configuration, retaining the virtual matrix coordinates. -/
-noncomputable def blockSpectatorLinearIsometryEquiv (d D p : ℕ) :
+private noncomputable def blockSpectatorLinearIsometryEquiv (d D p : ℕ) :
     BoundaryFamilySpace (D := D) (Cfg (blockPhysDim d p) 1) ≃ₗᵢ[ℂ]
       BoundaryFamilySpace (D := D) (Cfg d p) :=
   LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ
@@ -55,7 +57,7 @@ noncomputable def blockSpectatorLinearIsometryEquiv (d D p : ℕ) :
 
 /-- The blocked tail spectator map intertwines with the original whole-block
 tail spectator map in the common three-block coordinates. -/
-theorem blockedThreeConfigLinearIsometryEquiv_tailBoundaryMapES
+private theorem blockedThreeConfigLinearIsometryEquiv_tailBoundaryMapES
     (A : MPSTensor d D) (p : ℕ)
     (x : BoundaryFamilySpace (D := D) (Cfg (blockPhysDim d p) 1)) :
     blockedThreeConfigLinearIsometryEquiv d p
@@ -95,7 +97,7 @@ theorem blockedThreeConfigLinearIsometryEquiv_tailBoundaryMapES
 
 /-- The blocked left spectator map intertwines with the original whole-block
 left spectator map in the common three-block coordinates. -/
-theorem blockedThreeConfigLinearIsometryEquiv_leftBoundaryMapES
+private theorem blockedThreeConfigLinearIsometryEquiv_leftBoundaryMapES
     (A : MPSTensor d D) (p : ℕ)
     (x : BoundaryFamilySpace (D := D) (Cfg (blockPhysDim d p) 1)) :
     blockedThreeConfigLinearIsometryEquiv d p
@@ -149,7 +151,7 @@ theorem blockedThreeConfigLinearIsometryEquiv_leftBoundaryMapES
 
 /-- The three-block Euclidean boundary map intertwines with the common
 reassociated physical-coordinate isometry. -/
-theorem blockedThreeConfigLinearIsometryEquiv_groundSpaceMapES
+private theorem blockedThreeConfigLinearIsometryEquiv_groundSpaceMapES
     (A : MPSTensor d D) (p : ℕ)
     (x : EuclideanSpace ℂ (Fin D × Fin D)) :
     blockedThreeConfigLinearIsometryEquiv d p
@@ -178,7 +180,7 @@ theorem blockedThreeConfigLinearIsometryEquiv_groundSpaceMapES
 
 /-- The full three-block ground space maps exactly to the original-site ground
 space in the common coordinates. -/
-theorem groundSpaceES_three_blockTensor_map
+private theorem groundSpaceES_three_blockTensor_map
     (A : MPSTensor d D) (p : ℕ) :
     (groundSpaceES (blockTensor A p) 3).map
         (blockedThreeConfigLinearIsometryEquiv d p).toLinearEquiv.toLinearMap =
@@ -194,7 +196,7 @@ theorem groundSpaceES_three_blockTensor_map
 
 /-- The blocked one-site-prefix tail space maps exactly to the original whole-block
 tail spectator range. -/
-theorem openChainTailGroundSpaceES_blockTensor_map
+private theorem openChainTailGroundSpaceES_blockTensor_map
     (A : MPSTensor d D) (p : ℕ) :
     (openChainTailGroundSpaceES (blockTensor A p) 1 2).map
         (blockedThreeConfigLinearIsometryEquiv d p).toLinearEquiv.toLinearMap =
@@ -215,7 +217,7 @@ theorem openChainTailGroundSpaceES_blockTensor_map
 
 /-- The blocked one-site-suffix left space maps exactly to the original
 whole-block left spectator range. -/
-theorem openChainLeftGroundSpaceES_blockTensor_map
+private theorem openChainLeftGroundSpaceES_blockTensor_map
     (A : MPSTensor d D) (p : ℕ) :
     (openChainLeftGroundSpaceES (blockTensor A p) 2).map
         (blockedThreeConfigLinearIsometryEquiv d p).toLinearEquiv.toLinearMap =
