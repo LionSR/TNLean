@@ -271,6 +271,16 @@
 \__tenkz_language_registry_tombstone:nnn {kernel-picture}{periodic}
   {use boundary=periodic}
 %
+% The two atom face-label keys retired with the typed-port landing
+% (2026-08-03): each hung a physical label on a page direction.  The face
+% belongs to ports= now and the label rides the port; the physical= policy
+% grows the unlabelled port per cell.
+\__tenkz_language_registry_tombstone:nnn {kernel-atom}{up}
+  {use ports={90:physical:<label>}; the outward physical face is the row's
+    own normal}
+\__tenkz_language_registry_tombstone:nnn {kernel-atom}{down}
+  {use ports={270:physical:<label>}, exactly as up above}
+%
 % The four mark forms below took a record and drew nothing.  What the sources
 % brace, the benchmark already brackets (rmp-ii-spectrum-transfer); what they
 % cut, it encloses; what they shade, a tinted enclosure carries.  Each row is
