@@ -20,7 +20,7 @@ length. See `docs/paper-gaps/cpsv16_examples_4_10_4_11_entropy.tex`.
 
 ## Main results
 
-* `effectiveReducedBlockState_four_eq_diagonal`: the effective reduced state is diagonal.
+* `effective_reducedBlockState_four_eq_diagonal`: the effective reduced state is diagonal.
 * `effective_charpoly_roots_one` through `effective_charpoly_roots_four`: the four effective root
   multisets.
 * `ambient_charpoly_roots_eq_zero_add_effective`: generic isometric zero-padding at ring length
@@ -39,17 +39,17 @@ open Polynomial
 
 /-- The length-four block probability determined by a block length and an internal transition
 count. -/
-def fourBlockProbabilityOfCount (L t : ℕ) : ℝ :=
+private def fourBlockProbabilityOfCount (L t : ℕ) : ℝ :=
   (2 : ℝ) ^ L * ((3 : ℝ) ^ (5 - L) + (-1 : ℝ) ^ t) /
     ((2 : ℝ) ^ (t + 2) * 82)
 
 /-- The real diagonal probability of a binary word retained from the length-four ring. -/
-def fourBlockProbability {L : ℕ} (x : Fin L → Fin 2) : ℝ :=
+private def fourBlockProbability {L : ℕ} (x : Fin L → Fin 2) : ℝ :=
   fourBlockProbabilityOfCount L (CPSVExample411BinarySupport.internalTransitionCount x)
 
 /-- At every nonempty block length at most four, the effective reduced state is the diagonal
 matrix of the exact length-four finite-ring probabilities. -/
-theorem effectiveReducedBlockState_four_eq_diagonal {L : ℕ} (hL : 1 ≤ L) (hL4 : L ≤ 4) :
+theorem effective_reducedBlockState_four_eq_diagonal {L : ℕ} (hL : 1 ≤ L) (hL4 : L ≤ 4) :
     reducedBlockState CPSVExample411BinarySupport.M 4 L hL4 =
       Matrix.diagonal (fun x ↦ (fourBlockProbability x : ℂ)) := by
   ext x y
@@ -63,27 +63,27 @@ theorem effectiveReducedBlockState_four_eq_diagonal {L : ℕ} (hL : 1 ≤ L) (hL
   · rfl
 
 /-- Binary words of length one have no internal transitions. -/
-theorem transitionCounts_one :
+theorem transition_counts_one :
     Finset.univ.val.map (CPSVExample411BinarySupport.internalTransitionCount :
       (Fin 1 → Fin 2) → ℕ) = {0, 0} := by
   decide
 
 /-- Binary words of length two have transition-count multiset $\{0,0,1,1\}$. -/
-theorem transitionCounts_two :
+theorem transition_counts_two :
     Finset.univ.val.map (CPSVExample411BinarySupport.internalTransitionCount :
       (Fin 2 → Fin 2) → ℕ) = {0, 0, 1, 1} := by
   decide
 
 /-- Binary words of length three have transition-count multiset
 $\{0,0,1,1,1,1,2,2\}$. -/
-theorem transitionCounts_three :
+theorem transition_counts_three :
     Finset.univ.val.map (CPSVExample411BinarySupport.internalTransitionCount :
       (Fin 3 → Fin 2) → ℕ) = {0, 0, 1, 1, 1, 1, 2, 2} := by
   decide
 
 /-- Binary words of length four have two words with zero transitions, six with one, six with two,
 and two with three. -/
-theorem transitionCounts_four :
+theorem transition_counts_four :
     Finset.univ.val.map (CPSVExample411BinarySupport.internalTransitionCount :
       (Fin 4 → Fin 2) → ℕ) =
       {0, 0, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 3, 3} := by
@@ -93,7 +93,7 @@ private theorem effective_roots {L : ℕ} (hL : 1 ≤ L) (hL4 : L ≤ 4) :
     (reducedBlockState CPSVExample411BinarySupport.M 4 L hL4).charpoly.roots =
       (Finset.univ.val.map (fourBlockProbability : (Fin L → Fin 2) → ℝ)).map
         (fun r : ℝ ↦ (r : ℂ)) := by
-  rw [effectiveReducedBlockState_four_eq_diagonal hL hL4,
+  rw [effective_reducedBlockState_four_eq_diagonal hL hL4,
     Matrix.charpoly_roots_diagonal_ofReal]
 
 /-- The effective one-site reduced state has root $1/2$ with multiplicity two. -/
@@ -103,7 +103,7 @@ theorem effective_charpoly_roots_one :
   rw [effective_roots (by omega) (by omega),
     show fourBlockProbability = fourBlockProbabilityOfCount 1 ∘
       CPSVExample411BinarySupport.internalTransitionCount from rfl,
-    ← Multiset.map_map, transitionCounts_one]
+    ← Multiset.map_map, transition_counts_one]
   norm_num [fourBlockProbabilityOfCount]
   rfl
 
@@ -115,7 +115,7 @@ theorem effective_charpoly_roots_two :
   rw [effective_roots (by omega) (by omega),
     show fourBlockProbability = fourBlockProbabilityOfCount 2 ∘
       CPSVExample411BinarySupport.internalTransitionCount from rfl,
-    ← Multiset.map_map, transitionCounts_two]
+    ← Multiset.map_map, transition_counts_two]
   norm_num [fourBlockProbabilityOfCount]
   rfl
 
@@ -127,7 +127,7 @@ theorem effective_charpoly_roots_three :
   rw [effective_roots (by omega) (by omega),
     show fourBlockProbability = fourBlockProbabilityOfCount 3 ∘
       CPSVExample411BinarySupport.internalTransitionCount from rfl,
-    ← Multiset.map_map, transitionCounts_three]
+    ← Multiset.map_map, transition_counts_three]
   norm_num [fourBlockProbabilityOfCount]
   rfl
 
@@ -139,7 +139,7 @@ theorem effective_charpoly_roots_four :
   rw [effective_roots (by omega) (by omega),
     show fourBlockProbability = fourBlockProbabilityOfCount 4 ∘
       CPSVExample411BinarySupport.internalTransitionCount from rfl,
-    ← Multiset.map_map, transitionCounts_four]
+    ← Multiset.map_map, transition_counts_four]
   norm_num [fourBlockProbabilityOfCount]
   rfl
 
