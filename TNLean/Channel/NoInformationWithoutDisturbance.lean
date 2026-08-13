@@ -36,7 +36,7 @@ the Choi correspondence transports the conclusion back to the maps.
 * `Channel.exists_nonneg_weights_of_isCPMap_of_sum_eq_id` — the multipliers are
   nonnegative and sum to one.
 * `Channel.exists_nonneg_forall_trace_map_eq_of_isCPMap_of_sum_eq_id` — the outcome
-  probability `tr[T α ρ]` is a constant independent of the state `ρ`.
+  probability `tr[T α ρ]` is a constant, the same for every `ρ` of unit trace.
 * `Instrument.exists_nonneg_forall_probability_eq_of_total_eq_id` — the same conclusion
   for the instrument structure of `TNLean.Channel.POVM`.
 
