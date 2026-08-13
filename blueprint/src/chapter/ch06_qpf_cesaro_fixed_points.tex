@@ -214,7 +214,7 @@
     \label{lem:cp_maps_closed}
     \lean{isClosed_setOf_isCPMap, IsCPMap.of_tendsto_toCLM}
     \leanok
-    \uses{def:cp_map}
+    \uses{def:cp_map, thm:cp_iff_choi_posSemidef}
     Let $D>0$. The completely positive maps form a closed subset of the
     endomorphisms of $\MN{D}$ in the operator norm. In particular, if every
     $S_N:\MN{D}\to\MN{D}$ is completely positive and $S_N\to P$ in the
@@ -222,12 +222,12 @@
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{def:cp_map}
-    A map is completely positive precisely when its Choi matrix is positive
-    semidefinite. The Choi matrix depends linearly, hence continuously, on the
-    map, and the positive semidefinite matrices are closed. The set of
-    completely positive maps is therefore the preimage of a closed set under a
-    continuous map.
+    \uses{def:cp_map, def:choi_matrix, thm:cp_iff_choi_posSemidef}
+    By Theorem~\ref{thm:cp_iff_choi_posSemidef} a map is completely positive
+    precisely when its Choi matrix is positive semidefinite. The Choi matrix
+    depends linearly, hence continuously, on the map, and the positive
+    semidefinite matrices are closed. The set of completely positive maps is
+    therefore the preimage of a closed set under a continuous map.
 \end{proof}
 
 \begin{corollary}[Channel structure of the mean-ergodic projection]
@@ -235,13 +235,17 @@
     \lean{IsCPMap.meanErgodicProjection_isCPMap,
         IsChannel.meanErgodicProjection}
     \leanok
-    \uses{def:mean_ergodic_projection,
+    \uses{def:cp_map,
+        def:has_bounded_orbits,
+        def:mean_ergodic_projection,
         thm:mean_ergodic_bounded_orbits,
         thm:positive_trace_preserving_mean_ergodic_projection}
-    Let $T:\MN{D}\to\MN{D}$ be completely positive and trace-preserving. Then
+    Let $T:\MN{D}\to\MN{D}$ be completely positive with bounded orbits. Then
     the mean-ergodic projection $T_\infty$ of
-    \cite[Equation~(6.14)]{Wolf2012Quantum} is completely positive and
-    trace-preserving, hence a quantum channel. Together with
+    \cite[Equation~(6.14)]{Wolf2012Quantum} is completely positive. If $T$ is
+    completely positive and trace-preserving, the bounded orbits are automatic
+    and $T_\infty$ is completely positive and trace-preserving, hence a
+    quantum channel. Together with
     Corollary~\ref{cor:peripheral_projection_channel} this completes the
     preservation assertion of \cite[Proposition~6.3]{Wolf2012Quantum} for all
     three maps $T_\infty$, $T_\varphi$, and $T_\varphi'$.
@@ -254,16 +258,17 @@
         thm:trace_preserving_mean_ergodic_projection,
         lem:tendsto_clm_of_tendsto_apply,
         lem:cp_maps_closed}
-    Write
+    For $D=0$ the algebra is trivial and every linear map is completely
+    positive, so assume $D>0$. Write
     \begin{align}
         S_N=\frac{1}{N}\sum_{n=0}^{N-1}T^n
     \end{align}
     for the $N$-th Ces\`aro average. Powers of a completely positive map are
     completely positive, and so are finite sums and nonnegative multiples of
-    completely positive maps, so every $S_N$ is completely positive. By
-    (\ref{eq:channel_mean_ergodic_limit}),
+    completely positive maps, so every $S_N$ is completely positive. For every
+    $X\in\MN{D}$, (\ref{eq:channel_mean_ergodic_limit}) gives
     \begin{align}
-        S_N(X)\longrightarrow T_\infty(X)\quad\text{for every }X\in\MN{D},
+        S_N(X)\longrightarrow T_\infty(X),
     \end{align}
     and Lemma~\ref{lem:tendsto_clm_of_tendsto_apply} upgrades this to
     \begin{align}
