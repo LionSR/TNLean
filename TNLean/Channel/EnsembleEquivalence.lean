@@ -42,8 +42,8 @@ square, hence unitary.
 * `WolfProps.pureEnsembleDensity_padZero` — padding to a longer family leaves
   the ensemble density unchanged.
 * `WolfProps.pureEnsembleDensity_eq_iff_exists_unitary_mixing_of_pad` — the
-  equivalence relative to an arbitrary pair of zero paddings onto a common index
-  set.
+  equivalence relative to families on a common index set whose densities agree
+  with the two ensembles, canonically the zero paddings.
 * `WolfProps.pureEnsembleDensity_eq_iff_exists_unitary_mixing` — Wolf's
   statement with the disjoint union `ι₁ ⊕ ι₂` as common index set.
 * `WolfProps.pureEnsembleDensity_eq_iff_exists_unitary_mixing_fin` — Wolf's
