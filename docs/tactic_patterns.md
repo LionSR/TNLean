@@ -24,6 +24,21 @@ abstracted — record why, so it is not re-proposed).
 
 ## Promoted
 
+### ambient compression eigenbasis equations — promoted
+- **Pattern:** derive that a compression eigenbasis vector is fixed by the first
+  projection from subtype range membership, and recover its ambient compression
+  eigenvalue equation by applying `Subtype.val` to the compressed equation.
+- **Seen:** six paired occurrences across
+  `TNLean/Analysis/TwoProjectionCompressionSpectrum.lean` and
+  `TNLean/Analysis/TwoProjectionAngleOrthogonality.lean` before promotion
+  (2026-08-13).
+- **Abstraction:** `LinearMap.IsSymmetricProjection.rangeCompressionEigenbasis_apply_self`
+  and `LinearMap.IsSymmetricProjection.rangeCompressionEigenbasis_apply_compression`
+  in `TNLean/Analysis/TwoProjectionCompressionSpectrum.lean`.
+- **Notes:** all six motivating call sites now use the public ambient equations;
+  later two-projection block assembly can use the same facts without repeating
+  subtype coercion arguments.
+
 ### pointwise idempotent endomorphism application — promoted
 - **Pattern:** apply an equality `P * P = P` to a vector with `congrArg`, then
   simplify `Module.End.mul_apply` to obtain `P (P x) = P x`.

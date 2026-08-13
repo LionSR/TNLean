@@ -5285,6 +5285,8 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
 \begin{theorem}[Compression-spectrum endpoint and angle-block trichotomy]
   \label{thm:mpu_two_projection_compression_spectrum}
   \lean{LinearMap.IsSymmetricProjection.rangeCompression_apply_eigenbasis,
+    LinearMap.IsSymmetricProjection.rangeCompressionEigenbasis_apply_self,
+    LinearMap.IsSymmetricProjection.rangeCompressionEigenbasis_apply_compression,
     LinearMap.IsSymmetricProjection.rangeCompressionEigenvalues_mem_unitInterval,
     LinearMap.IsSymmetricProjection.rangeCompressionEigenvalues_eq_zero_or_eq_one_or_exists_angle_block}
   \leanok
@@ -5318,6 +5320,83 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
   hence $0\leq\mu\leq1$. At $\mu=0$ or $1$ the defect vanishes, giving the two
   common one-dimensional blocks. For $0<\mu<1$, apply
   Theorem~\ref{thm:mpu_two_projection_angle_block}.
+\end{proof}
+
+\begin{definition}[Compression defect block]
+  \label{def:mpu_two_projection_angle_defect_block}
+  \lean{LinearMap.IsSymmetricProjection.angleDefect,
+    LinearMap.IsSymmetricProjection.angleDefectBlock}
+  \leanok
+  \uses{def:mpu_two_projection_compression_spectral_data}
+  For compression spectral data $(x_i,\mu_i)$, define
+  \begin{align}
+    d_i&=Qx_i-\mu_i x_i,\\
+    B_i&=\operatorname{span}\{x_i,d_i\}.
+  \end{align}
+\end{definition}
+
+\begin{theorem}[Orthogonality of compression angle blocks]
+  \label{thm:mpu_two_projection_angle_block_orthogonality}
+  \lean{LinearMap.IsSymmetricProjection.rangeCompressionEigenbasis_inner_angleDefect_eq_zero,
+    LinearMap.IsSymmetricProjection.angleDefect_inner_rangeCompressionEigenbasis_eq_zero,
+    LinearMap.IsSymmetricProjection.angleDefect_inner_angleDefect,
+    LinearMap.IsSymmetricProjection.angleDefect_inner_angleDefect_eq_zero,
+    LinearMap.IsSymmetricProjection.finrank_angleDefectBlock_le_two,
+    LinearMap.IsSymmetricProjection.map_angleDefectBlock_le_first_projection,
+    LinearMap.IsSymmetricProjection.map_angleDefectBlock_le_second_projection,
+    LinearMap.IsSymmetricProjection.angleDefectBlock_isOrtho}
+  \leanok
+  \uses{def:mpu_two_projection_angle_defect_block}
+  For all indices $i,j$,
+  \begin{align}
+    \langle x_i,d_j\rangle&=0,\\
+    \langle d_i,x_j\rangle&=0,\\
+    \langle d_i,d_j\rangle
+      &=\mu_j(1-\mu_j)\langle x_i,x_j\rangle.
+  \end{align}
+  In particular, $\langle d_i,d_j\rangle=0$ when $i\ne j$, including when
+  $\mu_i=\mu_j$. The block $B_i$ has dimension at most two, is invariant under
+  both $P$ and $Q$, and satisfies $B_i\perp B_j$ for distinct indices.
+  % This does not assert an ambient direct sum or any property of the remaining
+  % orthogonal complement.
+  % Source lines: paper_v2.tex 759--762.
+\end{theorem}
+
+\begin{proof}\leanok
+  \uses{def:mpu_two_projection_angle_defect_block,
+    thm:mpu_two_projection_compression_spectrum,
+    thm:mpu_two_projection_angle_block}
+  Since $Px_i=x_i$, symmetry of $P$ and the compression eigenvalue equation give
+  \begin{align}
+    \langle x_i,d_j\rangle
+      &=\langle x_i,Qx_j\rangle-\mu_j\langle x_i,x_j\rangle\\
+      &=\langle Px_i,Qx_j\rangle-\mu_j\langle x_i,x_j\rangle\\
+      &=\langle x_i,PQx_j\rangle-\mu_j\langle x_i,x_j\rangle=0.
+  \end{align}
+  Conjugate symmetry gives $\langle d_i,x_j\rangle=0$. For the exact defect
+  pairing, symmetry of $Q$ and the local action formula give
+  \begin{align}
+    Qd_j&=\mu_j(1-\mu_j)x_j+(1-\mu_j)d_j,\\
+    \langle d_i,d_j\rangle
+      &=\langle Qx_i,d_j\rangle-\mu_i\langle x_i,d_j\rangle,\\
+    \langle Qx_i,d_j\rangle-\mu_i\langle x_i,d_j\rangle
+      &=\langle x_i,Qd_j\rangle,\\
+    \langle x_i,Qd_j\rangle
+      &=\mu_j(1-\mu_j)\langle x_i,x_j\rangle
+        +(1-\mu_j)\langle x_i,d_j\rangle,\\
+    \langle d_i,d_j\rangle
+      &=\mu_j(1-\mu_j)\langle x_i,x_j\rangle.
+  \end{align}
+  Orthogonality of the generated spans follows by linearity. The action formulas
+  \begin{align}
+    Px_i&=x_i,\\
+    Pd_i&=0,\\
+    Qx_i&=\mu_i x_i+d_i,\\
+    Qd_i&=\mu_i(1-\mu_i)x_i+(1-\mu_i)d_i
+  \end{align}
+  show that both projections preserve
+  $B_i=\operatorname{span}\{x_i,d_i\}$. Its dimension bound follows from
+  its two generators.
 \end{proof}
 
 \begin{definition}[Reduced projection]
@@ -5404,6 +5483,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
   \end{align}
   and the equal-ranges right-factor theorem give an invertible $Y$ satisfying
   $\widetilde P QY=\widetilde P$.
+\end{proof}
 \end{proof}
 
 \begin{proposition}[Constancy of the source ranks]
