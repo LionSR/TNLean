@@ -9,9 +9,8 @@ import Mathlib.Analysis.InnerProductSpace.Spectrum
 /-!
 # Transfer of gaps through positive-operator comparison
 
-This file packages the finite-dimensional spectral argument used to transfer a
-known gap from a positive operator to a larger positive operator with the same
-kernel.
+A finite-dimensional spectral argument transfers a known gap from a positive
+operator to a larger positive operator with the same kernel.
 
 ## Main results
 

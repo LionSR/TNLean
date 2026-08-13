@@ -2276,10 +2276,20 @@ norm estimate is derived here.
     \lean{LinearMap.IsPositive.re_inner_ge_of_norm_gap,
         LinearMap.IsPositive.norm_gap_of_le_of_ker_eq}
     \leanok
-    Let $P$ and $Q$ be finite-dimensional complex endomorphisms.  If $P$ is
-    positive, $P\leq Q$, and $\ker P=\ker Q$, then every norm-gap lower bound
-    for $P$ on $(\ker P)^\perp$ is also a norm-gap lower bound for $Q$ on
-    $(\ker Q)^\perp$.
+    Let $P$ and $Q$ be finite-dimensional complex endomorphisms, and let
+    $\gamma\geq0$.  Suppose that $P$ is positive and
+    \[
+        \gamma\lVert v\rVert\leq\lVert Pv\rVert
+    \]
+    for every $v\in(\ker P)^\perp$.  Then
+    \[
+        \gamma\lVert v\rVert^2\leq\operatorname{Re}\langle Pv,v\rangle
+    \]
+    on $(\ker P)^\perp$.  If also $P\leq Q$ and $\ker P=\ker Q$, then
+    \[
+        \gamma\lVert v\rVert\leq\lVert Qv\rVert
+    \]
+    for every $v\in(\ker Q)^\perp$.
 \end{lemma}
 
 \begin{lemma}[Blocked local terms and the aligned sparse sum]
@@ -2289,11 +2299,22 @@ norm estimate is derived here.
         MPSTensor.localTermES_blockTensor_conj_aligned,
         MPSTensor.blockTensor_parentHamiltonianES_conj_le}
     \leanok
-    Under the canonical configuration isometry, the range-two local term of
-    $\operatorname{block}_p(A)$ at blocked site $i$ is the range-$2p$ local
-    term of $A$ at original start $pi$.  Consequently the conjugated blocked
-    Hamiltonian is the aligned sparse sum and is bounded above, in Loewner
-    order, by the full range-$2p$ parent Hamiltonian of $A$.
+    Let $B=\operatorname{block}_p(A)$, and let $U$ be the canonical
+    configuration isometry from the blocked chain of length $N$ to the original
+    chain of length $Np$.  For every blocked site $i$,
+    \[
+        U h^{B,2}_i U^{-1}=h^{A,2p}_{pi}.
+    \]
+    Hence the conjugated blocked Hamiltonian is the aligned sparse sum
+    \[
+        U H_{N,2}(B)U^{-1}
+        =\sum_{i=0}^{N-1}h^{A,2p}_{pi},
+    \]
+    and
+    \[
+        U H_{N,2}(B)U^{-1}\leq H_{Np,2p}(A)
+    \]
+    in Loewner order.
 \end{lemma}
 
 \begin{theorem}[Original-site gap on block-divisible periodic chains]
@@ -2310,21 +2331,35 @@ norm estimate is derived here.
         \frac18\lVert v\rVert
         &\leq \lVert H_{Np,2p}(A)v\rVert.
     \end{align}
-    This statement concerns only periodic chain lengths divisible by $p$.
+    % The quantified length $Np$ records the restriction to block-divisible chains.
 \end{theorem}
 
 \begin{proof}
     \leanok
     \uses{thm:martingale_mps, lem:positive_gap_transfer_loewner,
         lem:blocked_original_aligned_sparse_sum}
-    The canonical configuration isometry identifies each blocked range-two
-    term with the original range-$2p$ term beginning at the corresponding
-    block boundary.  Thus the conjugated blocked Hamiltonian is the sum over
-    block-aligned starts.  The remaining original local terms are positive, so
-    the full Hamiltonian dominates this sparse sum as a quadratic form.  Block
-    injectivity identifies both kernels with the same periodic MPS line under
-    the isometry.  The positive-operator comparison therefore transfers the
-    constant $1/8$ without loss.
+    Let $B=\operatorname{block}_p(A)$, and let $U$ be the canonical
+    configuration isometry.  Lemma~\ref{lem:blocked_original_aligned_sparse_sum}
+    gives, for every blocked site $i$,
+    \[
+        U h^{B,2}_i U^{-1}=h^{A,2p}_{pi},
+    \]
+    and therefore
+    \[
+        U H_{N,2}(B)U^{-1}
+        =\sum_{i=0}^{N-1}h^{A,2p}_{pi}
+        \leq\sum_{j=0}^{Np-1}h^{A,2p}_j
+        =H_{Np,2p}(A).
+    \]
+    Block injectivity identifies the two ground-state lines under $U$, hence
+    \[
+        \ker\!\left(U H_{N,2}(B)U^{-1}\right)
+        =\ker H_{Np,2p}(A).
+    \]
+    Theorem~\ref{thm:martingale_mps} gives the norm gap $1/8$ for
+    $H_{N,2}(B)$.  Since $U$ is isometric, the same bound holds for its
+    conjugate.  Lemma~\ref{lem:positive_gap_transfer_loewner} then transfers
+    this bound through the displayed Loewner domination and kernel equality.
 \end{proof}
 
 \begin{theorem}[Uniform gap for normal MPS parent Hamiltonians]
