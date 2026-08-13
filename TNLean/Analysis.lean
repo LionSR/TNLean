@@ -41,6 +41,7 @@ import TNLean.Analysis.MatrixTraceInequalities
 import TNLean.Analysis.MeanErgodic
 import TNLean.Analysis.NeumannInverse
 import TNLean.Analysis.OperatorConvexity
+import TNLean.Analysis.OperatorNormConvergence
 import TNLean.Analysis.PosSemidefCommute
 import TNLean.Analysis.ProbabilityEntropy
 import TNLean.Analysis.ProjectionGeometry

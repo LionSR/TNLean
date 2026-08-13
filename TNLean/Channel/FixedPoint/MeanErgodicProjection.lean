@@ -4,7 +4,9 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.Analysis.MeanErgodic
+import TNLean.Analysis.OperatorNormConvergence
 import TNLean.Channel.Basic
+import TNLean.Channel.Semigroup.CPClosure
 
 /-!
 # Positive trace-nonincreasing mean-ergodic projections
@@ -13,7 +15,13 @@ A positive trace-nonincreasing endomorphism of a finite-dimensional complex
 matrix algebra has bounded forward orbits.  Its finite-dimensional
 mean-ergodic projection is therefore defined and positive.  For a
 trace-preserving map, the projection is trace-preserving and fixes the identity
-whenever the original map fixes the identity.
+whenever the original map fixes the identity.  A completely positive map with
+bounded forward orbits has a completely positive mean-ergodic projection: each
+Cesàro average is a nonnegative multiple of a finite sum of powers, hence
+completely positive, and the set of completely positive maps is closed in finite
+dimension.  For a completely positive trace-preserving map the bounded-orbit
+hypothesis is automatic, so the mean-ergodic projection of a quantum channel is
+again a quantum channel.
 
 The bounded-orbit estimate is proved directly.  A positive semidefinite orbit
 remains in a bounded trace section of the positive cone.  Hermitian matrices are
@@ -38,6 +46,10 @@ complex linear combinations of two Hermitian matrices.
   fixed by the mean-ergodic projection.
 * `IsPositiveMap.range_meanErgodicProjection_of_tracePreserving`: the range of
   the resulting projection is exactly the fixed-point space.
+* `IsCPMap.meanErgodicProjection_isCPMap`: the mean-ergodic projection of a
+  completely positive map with bounded forward orbits is completely positive.
+* `IsChannel.meanErgodicProjection`: the mean-ergodic projection of a quantum
+  channel is again a quantum channel.
 
 ## References
 
@@ -331,3 +343,57 @@ theorem IsPositiveMap.meanErgodicProjection_apply_eq_self_iff_of_tracePreserving
       T X = X := by
   exact (hT.hasBoundedOrbits_of_tracePreserving hTP)
     |>.meanErgodicProjection_apply_eq_self_iff X
+
+/-! ### Complete positivity of the mean-ergodic projection -/
+
+/-- The finite-dimensional mean-ergodic projection of a completely positive
+matrix endomorphism with bounded forward orbits is completely positive.
+
+The $N$-th Cesàro average is
+$$
+  S_N = \frac{1}{N}\sum_{n=0}^{N-1} T^n,
+$$
+a nonnegative multiple of a finite sum of completely positive powers, hence
+completely positive.  These averages converge pointwise, hence in the operator
+norm, to $T_\infty$, and the set of completely positive maps is closed in finite
+dimension.
+
+Source: Wolf, Proposition 6.3 and Equation (6.14), local source
+`Notes/WolfNoteTexSource/ch06_spectral_properties.tex`, lines 226--238. -/
+theorem IsCPMap.meanErgodicProjection_isCPMap
+    {T : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ}
+    (hT : IsCPMap T) (hbounded : T.HasBoundedOrbits) :
+    IsCPMap (LinearMap.meanErgodicProjection T hbounded) := by
+  classical
+  rcases Nat.eq_zero_or_pos D with rfl | hD
+  · exact isCPMap_finZero _
+  haveI : NeZero D := ⟨hD.ne'⟩
+  set S : ℕ → Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ :=
+    fun N ↦ (((N : ℝ)⁻¹ : ℝ) : ℂ) • ∑ n ∈ Finset.range N, T ^ n with hSdef
+  have hScp : ∀ N, IsCPMap (S N) := fun N ↦
+    (Finset.isCPMap_sum _ _ fun n _ ↦ hT.pow n).smul_nonneg (by positivity)
+  have hSapply : ∀ (N : ℕ) (X : Matrix (Fin D) (Fin D) ℂ),
+      S N X = birkhoffAverage ℂ T _root_.id N X := by
+    intro N X
+    simp only [hSdef, birkhoffAverage, birkhoffSum, LinearMap.smul_apply,
+      LinearMap.coe_sum, Finset.sum_apply, Module.End.pow_apply, id_eq]
+    push_cast
+    rfl
+  refine IsCPMap.of_tendsto_toCLM hScp
+    (ContinuousLinearMap.tendsto_of_tendsto_apply_of_finiteDimensional fun X ↦ ?_)
+  exact (hbounded.tendsto_birkhoffAverage_meanErgodicProjection X).congr fun N ↦
+    (hSapply N X).symm
+
+/-- The mean-ergodic projection $T_\infty$ of a quantum channel is again a
+quantum channel: this is the assertion of Wolf's Cesàro-means proposition for
+$T_\infty$ in the completely positive case.
+
+Source: Wolf, Proposition 6.3 and Equation (6.14), local source
+`Notes/WolfNoteTexSource/ch06_spectral_properties.tex`, lines 226--238. -/
+theorem IsChannel.meanErgodicProjection
+    {T : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ}
+    (hT : IsChannel T) :
+    IsChannel (LinearMap.meanErgodicProjection T
+      (hT.cp.isPositiveMap.hasBoundedOrbits_of_tracePreserving hT.tp)) where
+  cp := hT.cp.meanErgodicProjection_isCPMap _
+  tp := hT.tp.meanErgodicProjection_isTracePreservingMap _
