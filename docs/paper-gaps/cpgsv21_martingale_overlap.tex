@@ -859,7 +859,16 @@ and generic prerequisites now include:
     For a primitive tensor with positive-definite fixed point and nonzero bond
     dimension, it gives constants $C,c,r>0$, with $r<1$, such that for every
     prefix length $K$, overlap length $L\geq1$, and suffix length $Q$ satisfying
-    $cr^L<1$,
+    $cr^L<1$.  Write
+    \begin{align}
+      P^{\mathrm{tail}}_{K;L,Q}
+      &:=P_{\operatorname{ran}(\widetilde\Gamma^{\mathrm{tail}}_{K;L,Q})},
+      &
+      P^{\mathrm{left}}_{K+L,Q}
+      &:=P_{\operatorname{ran}(\Gamma^{\mathrm{left}}_{K+L,Q})}.
+    \end{align}
+    These are the orthogonal projectors onto the ranges of the reassociated tail and
+    left boundary maps.  Then
     \begin{align}
       \left\lVert
         P^{\mathrm{tail}}_{K;L,Q}P^{\mathrm{left}}_{K+L,Q}
@@ -1243,8 +1252,7 @@ conversion retains its proved $D^{3/2}$ norm factor inside $g$.
 
 \section{Verdict}
 
-\textbf{Verdict: the open-chain quantitative estimates are resolved, while
-source optimization and cyclic transport remain open.}  The exact
+\textbf{Verdict: scope restriction.}  The exact
 whole-increment algebra, the reconstructed prefix-uniform geometric
 C3$^\prime$-type estimate, and the three-block coefficient $7/16$ are proved.
 All lengths are measured in sites of the input tensor.  These bounds come from

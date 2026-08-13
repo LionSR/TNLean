@@ -1446,8 +1446,8 @@ norm estimate is derived here.
     \lean{MPSTensor.wholeIncrementCenteredProjectorResidualES_norm_le}
     \leanok
     \uses{def:whole_increment_centered_projector_sandwich,
-        thm:reassociated_tail_pseudoinverse_bound,
-        thm:left_spectator_pseudoinverse_bound}
+        def:whole_increment_centered_residual, def:inverse_gram,
+        def:ground_space_map_es}
     Assume $D>0$, let $\rho$ be positive definite, and suppose that
     $\Gamma_{L+Q}^{\mathrm{ES}}$ and $\Gamma_{K+L}^{\mathrm{ES}}$ are
     injective.  Put
@@ -1467,6 +1467,8 @@ norm estimate is derived here.
 \begin{proof}
     \leanok
     \uses{def:whole_increment_centered_projector_sandwich,
+        thm:reassociated_tail_inverse_gram,
+        thm:spectator_boundary_direct_sum_gram,
         thm:reassociated_tail_pseudoinverse_bound,
         thm:left_spectator_pseudoinverse_bound}
     Apply submultiplicativity to the centered residual between the two
@@ -2082,12 +2084,8 @@ norm estimate is derived here.
     \label{thm:whole_increment_ground_projection_defect_geometric}
     \lean{MPSTensor.IsPrimitiveMPS.wholeIncrement_groundProjection_defect_le_geometric}
     \leanok
-    \uses{thm:whole_increment_centered_projector_sandwich_bound,
-        thm:whole_increment_finite_gram_corrections,
-        thm:whole_increment_correction_bounds,
-        thm:primitive_whole_increment_centered_residual_bound,
-        thm:primitive_ground_space_map_geometric_inverse_gram_bounds,
-        thm:primitive_tail_virtual_map_norm_uniform}
+    \uses{def:primitive_mps, def:reassociated_tail_boundary_map,
+        def:spectator_boundary_maps_es, def:ground_space_es}
     Let $A$ be primitive with positive-definite fixed point $\rho$ and nonzero
     bond dimension.  There are constants $C,c,r>0$, with $r<1$, such that for
     all $K,L,Q\in\mathbb N$ with $L\geq1$ and $cr^L<1$,
@@ -2106,12 +2104,16 @@ norm estimate is derived here.
 
 \begin{proof}
     \leanok
-    \uses{thm:whole_increment_centered_projector_sandwich_bound,
-        thm:whole_increment_finite_gram_corrections,
-        thm:whole_increment_correction_bounds,
+    \uses{thm:primitive_ground_space_map_geometric_inverse_gram_bounds,
+        thm:primitive_tail_virtual_map_norm_uniform,
+        thm:fixed_point_gram_metric_is_unit,
         thm:primitive_whole_increment_centered_residual_bound,
-        thm:primitive_ground_space_map_geometric_inverse_gram_bounds,
-        thm:primitive_tail_virtual_map_norm_uniform}
+        thm:whole_increment_left_virtual_norm,
+        thm:whole_increment_centered_projector_sandwich_bound,
+        thm:whole_increment_correction_bounds,
+        thm:whole_increment_finite_gram_corrections,
+        thm:injective_range_projector_inverse_gram,
+        thm:range_ground_space_map_es}
     Bound the centered sandwich and the three finite-Gram corrections in the
     exact projector telescope.  Geometric convergence of the finite Grams and
     the uniform tail-map bound make each term at most a fixed multiple of
