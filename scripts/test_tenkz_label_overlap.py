@@ -484,6 +484,17 @@ NESTED_END_HOOK = r"""
 """
 
 
+ONINK_SOURCE = r"""
+\documentclass{standalone}
+\usepackage{tenkz}
+\begin{document}
+\begin{tenkz}[rows={wire}, cols=2]
+  \tn[skin=dot, label pos=e]{P} & \tn[skin=dot]{}
+\end{tenkz}
+\end{document}
+"""
+
+
 def customized_glyph(options: str, preamble: str = "") -> str:
     return r"""
 \documentclass{article}
@@ -1751,6 +1762,239 @@ def main() -> int:
                 and "class=glyph" in finding.msg
                 for finding in glyph_bbox_audit.findings):
             raise AssertionError("audit accepted obsolete glyph bbox geometry")
+
+        # ---- label bands against wire ink (#6169) ----
+        # A label is a name and a name must be legible: the band a name
+        # occupies is held against every drawn route of its picture.  The
+        # seeds below exercise the polyline band, the certified cubic walk,
+        # the severity split on the bbox's provenance, and the grammar
+        # rejections.  The wire band below is a horizontal route of half
+        # stroke 18023 sp, so its ink spans y strictly inside (-18023,
+        # 18023); the label straddles x = 400000..800000 of its run.
+        def ink_log(name: str, ink: str, labels: str = "") -> Path:
+            path = work / name
+            path.write_text(
+                "picture|id=1|lang=kernel\n"
+                "atom|picture=1|cell=1-1|kind=dot\n"
+                "kernel-boundary|picture=1|signature=\n"
+                + ink + labels,
+                encoding="utf-8",
+            )
+            return path
+
+        flat_ink = (
+            "wire-ink|picture=1|name=bond-1|origin=bond|stroke=18023|"
+            "points=0,0;2000000,0\n"
+        )
+
+        def ink_label(ymin: int, ymax: int, claim: str = "") -> str:
+            return (
+                "label-use|picture=1\n"
+                "bbox|picture=1|class=label|id=1|owner=0|"
+                f"xmin=400000|xmax=800000|ymin={ymin}|ymax={ymax}|"
+                f"shape=rect|radius=0{claim}\n"
+            )
+
+        # A wire-ink record alone is derived geometry: it must not disturb
+        # the dialect, empty-picture, or coverage readings.
+        quiet_status, quiet_audit = audit_status(
+            ink_log("ink-quiet.tnlog", flat_ink))
+        if quiet_status != 0 or quiet_audit.findings:
+            raise AssertionError(
+                "a wire-ink record disturbed an unrelated reading: "
+                + "; ".join(f.msg for f in quiet_audit.findings))
+
+        # Strict hit one scaled point inside the band; exact tangency and a
+        # one-point step past it are legal on either side of the stroke.
+        for name, ymin, ymax, expected in (
+                ("ink-hit-above.tnlog", 18022, 100000, True),
+                ("ink-tangent-above.tnlog", 18023, 100000, False),
+                ("ink-clear-above.tnlog", 18024, 100000, False),
+                ("ink-hit-below.tnlog", -100000, -18022, True),
+                ("ink-tangent-below.tnlog", -100000, -18023, False),
+        ):
+            status, audit = audit_status(
+                ink_log(name, flat_ink, ink_label(ymin, ymax)))
+            found = [f for f in audit.findings if f.rule == "label-on-ink"]
+            if expected and (len(found) != 1 or found[0].severity != "ADV"
+                             or status != 0):
+                raise AssertionError(f"{name}: expected one advisory hit")
+            if not expected and (found or status != 0):
+                raise AssertionError(f"{name}: tangency or daylight reported")
+
+        # The severity split: identical geometry, three claims.  A station
+        # the kernel chose is a broken promise and hard; the author's own
+        # station and an unclaimed site are advisory.
+        for name, claim, severity, code in (
+                ("ink-auto.tnlog", "|station=s|provenance=auto", "HARD", 1),
+                ("ink-explicit.tnlog", "|provenance=explicit", "ADV", 0),
+                ("ink-unclaimed.tnlog", "", "ADV", 0),
+        ):
+            status, audit = audit_status(
+                ink_log(name, flat_ink, ink_label(-100000, -18022, claim)))
+            found = [f for f in audit.findings if f.rule == "label-on-ink"]
+            if (status != code or len(found) != 1
+                    or found[0].severity != severity):
+                raise AssertionError(
+                    f"{name}: expected one {severity} finding and exit {code}")
+
+        # The historical k_roperator collision, reconstructed as events: the
+        # B name at its pre-fix south station stood on the B.s->R.n bond.
+        # Post-fix source cannot produce this stream, so the kernel-promise
+        # violation is seeded synthetically.
+        roperator = ink_log(
+            "ink-roperator-history.tnlog",
+            "wire-ink|picture=1|name=wire-4|origin=bond|stroke=18023|"
+            "points=2051147,0;2051147,-2051147\n",
+            "label-use|picture=1\n"
+            "bbox|picture=1|class=label|id=1|owner=0|"
+            "xmin=1841989|xmax=2260305|ymin=-1188059|ymax=-874578|"
+            "shape=rect|radius=0|station=s|provenance=auto\n",
+        )
+        roperator_status, roperator_audit = audit_status(roperator)
+        if roperator_status != 1 or not any(
+                finding.rule == "label-on-ink"
+                and finding.severity == "HARD"
+                and "station the kernel chose (s)" in finding.msg
+                for finding in roperator_audit.findings):
+            raise AssertionError(
+                "the reconstructed k_roperator collision was not a hard "
+                "kernel-promise violation")
+
+        # Cubic ink.  The route below rises to y = 300000 at its middle, so
+        # its band tops out at 318023; its control hull reaches 400000.
+        arch_ink = (
+            "wire-ink|picture=1|name=cup-1|origin=bond|stroke=18023|"
+            "points=0,0;c:0,400000,2000000,400000,2000000,0\n"
+        )
+
+        def arch_label(ymin: int, ymax: int) -> str:
+            return (
+                "label-use|picture=1\n"
+                "bbox|picture=1|class=label|id=1|owner=0|"
+                f"xmin=900000|xmax=1100000|ymin={ymin}|ymax={ymax}|"
+                "shape=rect|radius=0|station=s|provenance=auto\n"
+            )
+
+        for name, ymin, ymax, expected in (
+                # through the interior of the band
+                ("ink-cubic-hit.tnlog", 250000, 350000, True),
+                # inside the control hull but strictly above the curve's
+                # band: the subdivision must exonerate it
+                ("ink-cubic-hull-miss.tnlog", 350000, 430000, False),
+                # tangent at the stream's one-point resolution
+                ("ink-cubic-tangent.tnlog", 318024, 430000, False),
+        ):
+            status, audit = audit_status(
+                ink_log(name, arch_ink, arch_label(ymin, ymax)))
+            found = [f for f in audit.findings if f.rule == "label-on-ink"]
+            if expected and (len(found) != 1 or status != 1):
+                raise AssertionError(f"{name}: expected one hard cubic hit")
+            if not expected and (found or status != 0):
+                raise AssertionError(
+                    f"{name}: the certified walk convicted clear geometry")
+
+        # Grammar rejections: malformed points, a zero stroke, and a missing
+        # stroke are each a malformed event, exactly as the label-geometry
+        # path reads them.
+        for name, ink in (
+                ("ink-bad-points.tnlog",
+                 "wire-ink|picture=1|name=b|origin=bond|stroke=18023|"
+                 "points=0,0;x\n"),
+                ("ink-lone-point.tnlog",
+                 "wire-ink|picture=1|name=b|origin=bond|stroke=18023|"
+                 "points=0,0\n"),
+                ("ink-short-cubic.tnlog",
+                 "wire-ink|picture=1|name=b|origin=bond|stroke=18023|"
+                 "points=0,0;c:1,2,3,4\n"),
+                ("ink-zero-stroke.tnlog",
+                 "wire-ink|picture=1|name=b|origin=bond|stroke=0|"
+                 "points=0,0;2000000,0\n"),
+                ("ink-missing-stroke.tnlog",
+                 "wire-ink|picture=1|name=b|origin=bond|"
+                 "points=0,0;2000000,0\n"),
+        ):
+            status, audit = audit_status(ink_log(name, ink))
+            if status != 1 or not any(
+                    finding.rule == "malformed-event"
+                    for finding in audit.findings):
+                raise AssertionError(f"{name}: malformed ink was accepted")
+
+        # The issue's named regression, compiled: `label pos=` forces a
+        # dot's name onto the face its bond occupies.  The author chose the
+        # station, so the finding is one advisory and the audit still exits
+        # clean.
+        onink_tex = work / "label-on-wire-ink.tex"
+        onink_tex.write_text(ONINK_SOURCE, encoding="utf-8")
+        try:
+            run = subprocess.run(
+                [engine, "-interaction=nonstopmode", "-halt-on-error",
+                 onink_tex.name],
+                cwd=work, env=env, text=True,
+                stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
+                timeout=120,
+            )
+        except subprocess.TimeoutExpired as exc:
+            print(exc.stdout or "")
+            print("FAIL: label-on-wire-ink fixture timed out")
+            return 1
+        if run.returncode:
+            print(run.stdout)
+            print("FAIL: label-on-wire-ink fixture did not compile")
+            return 1
+        onink_status, onink_audit = audit_status(
+            work / "label-on-wire-ink.tnlog")
+        onink_found = [finding for finding in onink_audit.findings
+                       if finding.rule == "label-on-ink"]
+        if (onink_status != 0 or len(onink_found) != 1
+                or onink_found[0].severity != "ADV"
+                or "picture k1 label bbox id=1" not in onink_found[0].msg
+                or "author's chosen station" not in onink_found[0].msg):
+            raise AssertionError(
+                "the forced label pos= regression did not produce exactly "
+                "one attributed advisory: "
+                + "; ".join(f.msg for f in onink_audit.findings))
+        onink_labels = [event for event in onink_audit.events("k1")
+                        if event.kind == "bbox"
+                        and event.attrs.get("class") == "label"]
+        if (len(onink_labels) != 1
+                or onink_labels[0].attrs.get("provenance") != "explicit"
+                or "station" in onink_labels[0].attrs):
+            raise AssertionError(
+                "an explicit label pos= did not claim provenance=explicit "
+                "with no station")
+
+        # The two fixtures the issue names audit clean at their fixed label
+        # positions: the collision class is historical there.
+        for fixture in ("p3_probe_opop.tex", "kernel/k_roperator.tex"):
+            source = ROOT / "tests/tenkz" / fixture
+            target = work / source.name
+            target.write_text(source.read_text(encoding="utf-8"),
+                              encoding="utf-8")
+            try:
+                run = subprocess.run(
+                    [engine, "-interaction=nonstopmode", "-halt-on-error",
+                     target.name],
+                    cwd=work, env=env, text=True,
+                    stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
+                    timeout=120,
+                )
+            except subprocess.TimeoutExpired as exc:
+                print(exc.stdout or "")
+                print(f"FAIL: {fixture} timed out")
+                return 1
+            if run.returncode:
+                print(run.stdout)
+                print(f"FAIL: {fixture} did not compile")
+                return 1
+            fixture_status, fixture_audit = audit_status(
+                work / (target.stem + ".tnlog"))
+            if fixture_status != 0 or any(
+                    finding.rule == "label-on-ink"
+                    for finding in fixture_audit.findings):
+                raise AssertionError(
+                    f"{fixture} reported label-on-ink at its fixed labels: "
+                    + "; ".join(f.msg for f in fixture_audit.findings))
 
         core_source = (ROOT / "tex/tenkz/tenkz-core.code.tex").read_text(
             encoding="utf-8")
