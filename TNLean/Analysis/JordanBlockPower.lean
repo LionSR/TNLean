@@ -3,13 +3,14 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import Mathlib.Analysis.CStarAlgebra.Matrix
 import Mathlib.Data.Complex.Basic
 import Mathlib.Data.Matrix.Basic
 import Mathlib.Data.Nat.Choose.Sum
 import Lean.Elab.Tactic.Omega
 
 /-!
-# Jordan block: definition, nilpotent shift, and binomial expansion
+# Jordan block: powers, nilpotent shift, and the two-sided norm estimate
 
 Let $D \ge 1$ be a positive integer.  Define the $D \times D$ **nilpotent upper
 shift** $N$ by $N_{i,j}=1$ when $j=i+1$, $0$ otherwise, and the **Jordan
@@ -26,9 +27,18 @@ $$
 where terms with $k \ge D$ vanish because $N^D=0$.  Each $N^k$ is the $k$-th
 superdiagonal matrix: $(N^k)_{i,j}=1$ iff $j=i+k$.
 
-These are purely algebraic calculations; they do not involve any norm bounds.
-The two-sided operator-norm estimate of Wolf Eq. (8.104) requires additional
-$\ell^2$ operator-norm infrastructure and is not yet formalized.
+Measuring $J_D(\lambda)^n$ in the largest singular value $\|\cdot\|_\infty$,
+that is in the $\ell^2$ operator norm, the expansion yields Wolf's two-sided
+estimate: for every $k_0 \le \min\{n,\,D-1\}$,
+$$
+|\lambda|^{\,n-k_0}\binom{n}{k_0}
+  \le \bigl\|J_D(\lambda)^n\bigr\|_\infty
+  \le \sum_{k=0}^{\min\{n,\,D-1\}} |\lambda|^{\,n-k}\binom{n}{k}.
+$$
+The left inequality reads off the $(0,k_0)$ entry of the expansion and uses
+that the largest singular value dominates every entry.  The right inequality
+is the triangle inequality together with $\|N\|_\infty \le 1$.
+Source: Wolf (2012), Chapter 8, Eq. (8.104), lines 1197--1215.
 
 ## Main declarations
 
@@ -37,6 +47,13 @@ $\ell^2$ operator-norm infrastructure and is not yet formalized.
 * `nilpotentShift_pow_D_eq_zero` -- $N^D=0$.
 * `jordanBlock` -- the Jordan block $J_D(\lambda) = \lambda I + N$.
 * `jordanBlock_pow` -- truncated binomial expansion of $J_D(\lambda)^n$.
+* `norm_apply_le_l2_opNorm` -- the largest singular value dominates every entry.
+* `conjTranspose_nilpotentShift_mul_self` -- $N^{\dagger}N=\operatorname{diag}(0,1,\dots,1)$.
+* `l2_opNorm_nilpotentShift_le_one` -- $\|N\|_\infty \le 1$.
+* `l2_opNorm_nilpotentShift_pow_le_one` -- $\|N^k\|_\infty \le 1$.
+* `le_l2_opNorm_jordanBlock_pow` -- left inequality of Wolf Eq. (8.104).
+* `l2_opNorm_jordanBlock_pow_le` -- right inequality of Wolf Eq. (8.104).
+* `l2_opNorm_jordanBlock_pow_bounds` -- Wolf Eq. (8.104).
 -/
 
 namespace Matrix
@@ -293,5 +310,153 @@ lemma jordanBlock_pow (a : ℂ) (n : ℕ) [NeZero D] :
   rw [h_trunc]
 
 end JordanBlock
+
+section OperatorNorm
+
+open scoped Matrix.Norms.L2Operator
+
+/-- The largest singular value dominates every entry: $|A_{i,j}| \le \|A\|_\infty$.
+Evaluating the associated Euclidean operator on the $j$-th standard basis vector
+returns the $j$-th column of $A$, whose $i$-th coordinate is $A_{i,j}$.
+Source: Wolf (2012), Chapter 8, lines 1213--1214. -/
+lemma norm_apply_le_l2_opNorm {n : Type*} [Fintype n] [DecidableEq n]
+    (A : Matrix n n ℂ) (i j : n) : ‖A i j‖ ≤ ‖A‖ := by
+  set x : EuclideanSpace ℂ n := PiLp.single 2 j (1 : ℂ) with hxdef
+  have hx : ‖x‖ = 1 := by simp [hxdef]
+  have hcol : ‖toEuclideanCLM (n := n) (𝕜 := ℂ) A x‖ ≤ ‖A‖ := by
+    have h := (toEuclideanCLM (n := n) (𝕜 := ℂ) A).le_opNorm x
+    rwa [hx, mul_one, l2_opNorm_toEuclideanCLM] at h
+  refine le_trans (le_of_eq ?_) ((PiLp.norm_apply_le _ i).trans hcol)
+  simp [hxdef, PiLp.ofLp_single]
+
+/-- The Gram matrix of the nilpotent shift is the diagonal projection that kills
+the first coordinate: $N^{\dagger}N = \operatorname{diag}(0,1,\dots,1)$. -/
+lemma conjTranspose_nilpotentShift_mul_self (D : ℕ) :
+    (nilpotentShift D)ᴴ * nilpotentShift D =
+      diagonal (fun i : Fin D => if (i : ℕ) = 0 then (0 : ℂ) else 1) := by
+  ext i j
+  rw [Matrix.mul_apply, Matrix.diagonal_apply]
+  have hterm : ∀ k : Fin D, (nilpotentShift D)ᴴ i k * nilpotentShift D k j =
+      if (i : ℕ) = (k : ℕ) + 1 ∧ (j : ℕ) = (k : ℕ) + 1 then (1 : ℂ) else 0 := by
+    intro k
+    simp only [conjTranspose_apply, nilpotentShift_apply]
+    split_ifs with h₁ h₂ h₃ <;> simp_all
+  simp only [hterm]
+  by_cases hij : i = j
+  · subst hij
+    by_cases hi : (i : ℕ) = 0
+    · rw [if_pos rfl, if_pos hi]
+      refine Finset.sum_eq_zero fun k _ => ?_
+      rw [if_neg]
+      omega
+    · rw [if_pos rfl, if_neg hi]
+      have hlt : (i : ℕ) - 1 < D := lt_of_le_of_lt (Nat.sub_le _ _) i.is_lt
+      -- `hval` is never named below, but it puts the value of the witness coordinate in
+      -- context, which is what lets the `omega` calls in this branch see it.
+      have hval : ((⟨(i : ℕ) - 1, hlt⟩ : Fin D) : ℕ) = (i : ℕ) - 1 := rfl
+      rw [Finset.sum_eq_single (⟨(i : ℕ) - 1, hlt⟩ : Fin D)]
+      · have hi' : (i : ℕ) = ((⟨(i : ℕ) - 1, hlt⟩ : Fin D) : ℕ) + 1 := by omega
+        rw [if_pos ⟨hi', hi'⟩]
+      · intro k _ hk
+        rw [if_neg]
+        rintro ⟨h₁, h₂⟩
+        exact hk (Fin.ext (by omega))
+      · intro hmem
+        exact absurd (Finset.mem_univ _) hmem
+  · rw [if_neg hij]
+    refine Finset.sum_eq_zero fun k _ => ?_
+    rw [if_neg]
+    rintro ⟨h₁, h₂⟩
+    exact hij (Fin.ext (by omega))
+
+/-- Wolf's $\|N\|_\infty = 1$, stated as an inequality because the shift on a
+one-dimensional space is zero.  Source: Wolf (2012), Chapter 8, line 1215.
+
+**Local fix (Wolf (2012), Chapter 8, line 1215, $D = 1$):** the source's equality
+$\|N\|_\infty = 1$ fails at $D = 1$, where $N = 0$, so the bound is stated as
+$\|N\|_\infty \le 1$, which holds for every $D$ and is the direction the upper
+bound of Eq. (8.104) consumes.  The correction is documented in
+`docs/paper-gaps/wolf_eq8104_shift_norm_one_dimensional.tex`. -/
+lemma l2_opNorm_nilpotentShift_le_one (D : ℕ) : ‖nilpotentShift D‖ ≤ 1 := by
+  have hsq : ‖nilpotentShift D‖ * ‖nilpotentShift D‖ ≤ 1 := by
+    rw [← l2_opNorm_conjTranspose_mul_self, conjTranspose_nilpotentShift_mul_self,
+      l2_opNorm_diagonal]
+    refine (pi_norm_le_iff_of_nonneg zero_le_one).mpr fun i => ?_
+    by_cases hi : (i : ℕ) = 0 <;> simp [hi]
+  nlinarith [norm_nonneg (nilpotentShift D)]
+
+/-- Every power of the nilpotent shift is a contraction. -/
+lemma l2_opNorm_nilpotentShift_pow_le_one (D : ℕ) (k : ℕ) :
+    ‖nilpotentShift D ^ k‖ ≤ 1 := by
+  induction k with
+  | zero =>
+    rw [pow_zero, ← Matrix.diagonal_one, l2_opNorm_diagonal]
+    exact (pi_norm_le_iff_of_nonneg zero_le_one).mpr fun i => by simp
+  | succ k ih =>
+    refine (pow_succ (nilpotentShift D) k ▸ l2_opNorm_mul _ _).trans ?_
+    nlinarith [norm_nonneg (nilpotentShift D ^ k), norm_nonneg (nilpotentShift D),
+      l2_opNorm_nilpotentShift_le_one D]
+
+/-- Right inequality of Wolf Eq. (8.104):
+$\|J_D(\lambda)^n\|_\infty \le \sum_{k=0}^{\min\{n,D-1\}}|\lambda|^{n-k}\binom{n}{k}$.
+Source: Wolf (2012), Chapter 8, Eq. (8.104), lines 1197--1215. -/
+theorem l2_opNorm_jordanBlock_pow_le (D : ℕ) [NeZero D] (a : ℂ) (n : ℕ) :
+    ‖jordanBlock D a ^ n‖ ≤
+      ∑ k ∈ Finset.range (min n (D - 1) + 1), ‖a‖ ^ (n - k) * (n.choose k : ℝ) := by
+  rw [jordanBlock_pow]
+  refine (norm_sum_le _ _).trans (Finset.sum_le_sum fun k _ => ?_)
+  have hnorm : ‖((n.choose k : ℂ) * a ^ (n - k)) • (nilpotentShift D ^ k)‖ =
+      ‖a‖ ^ (n - k) * (n.choose k : ℝ) * ‖nilpotentShift D ^ k‖ := by
+    rw [norm_smul, norm_mul, norm_pow, Complex.norm_natCast]
+    ring
+  calc ‖((n.choose k : ℂ) * a ^ (n - k)) • (nilpotentShift D ^ k)‖
+      = ‖a‖ ^ (n - k) * (n.choose k : ℝ) * ‖nilpotentShift D ^ k‖ := hnorm
+    _ ≤ ‖a‖ ^ (n - k) * (n.choose k : ℝ) * 1 :=
+        mul_le_mul_of_nonneg_left (l2_opNorm_nilpotentShift_pow_le_one D k) (by positivity)
+    _ = ‖a‖ ^ (n - k) * (n.choose k : ℝ) := mul_one _
+
+/-- Left inequality of Wolf Eq. (8.104):
+$|\lambda|^{n-k_0}\binom{n}{k_0} \le \|J_D(\lambda)^n\|_\infty$ for every
+$k_0 \le \min\{n,D-1\}$.  The bound reads off the entry of $J_D(\lambda)^n$ in
+row $0$ and column $k_0$, which is $\lambda^{n-k_0}\binom{n}{k_0}$.
+Source: Wolf (2012), Chapter 8, Eq. (8.104), lines 1197--1215. -/
+theorem le_l2_opNorm_jordanBlock_pow (D : ℕ) [NeZero D] (a : ℂ) (n k₀ : ℕ)
+    (hk₀ : k₀ ≤ min n (D - 1)) :
+    ‖a‖ ^ (n - k₀) * (n.choose k₀ : ℝ) ≤ ‖jordanBlock D a ^ n‖ := by
+  have hD : 0 < D := Nat.pos_of_ne_zero (NeZero.ne D)
+  have hk₀D : k₀ < D := lt_of_le_of_lt (le_trans hk₀ (min_le_right _ _)) (by omega)
+  have hmem : k₀ ∈ Finset.range (min n (D - 1) + 1) := Finset.mem_range.mpr (by omega)
+  have hentry : (jordanBlock D a ^ n) ⟨0, hD⟩ ⟨k₀, hk₀D⟩ =
+      (n.choose k₀ : ℂ) * a ^ (n - k₀) := by
+    rw [jordanBlock_pow]
+    simp only [Matrix.sum_apply, Matrix.smul_apply, smul_eq_mul, nilpotentShift_pow_apply]
+    rw [Finset.sum_eq_single k₀]
+    · simp
+    · intro k _ hk
+      rw [if_neg (by simpa using fun h => hk (by omega)), mul_zero]
+    · intro hcon
+      exact absurd hmem hcon
+  calc ‖a‖ ^ (n - k₀) * (n.choose k₀ : ℝ)
+      = ‖(jordanBlock D a ^ n) ⟨0, hD⟩ ⟨k₀, hk₀D⟩‖ := by
+        rw [hentry, norm_mul, norm_pow, Complex.norm_natCast]
+        ring
+    _ ≤ ‖jordanBlock D a ^ n‖ := norm_apply_le_l2_opNorm _ _ _
+
+/-- Wolf Eq. (8.104): the two-sided estimate on the largest singular value of a
+Jordan-block power.  For every $k_0 \le \min\{n, D-1\}$,
+$$
+|\lambda|^{\,n-k_0}\binom{n}{k_0}
+  \le \bigl\|J_D(\lambda)^n\bigr\|_\infty
+  \le \sum_{k=0}^{\min\{n,\,D-1\}} |\lambda|^{\,n-k}\binom{n}{k}.
+$$
+Source: Wolf (2012), Chapter 8, Eq. (8.104), lines 1197--1215. -/
+theorem l2_opNorm_jordanBlock_pow_bounds (D : ℕ) [NeZero D] (a : ℂ) (n k₀ : ℕ)
+    (hk₀ : k₀ ≤ min n (D - 1)) :
+    ‖a‖ ^ (n - k₀) * (n.choose k₀ : ℝ) ≤ ‖jordanBlock D a ^ n‖ ∧
+      ‖jordanBlock D a ^ n‖ ≤
+        ∑ k ∈ Finset.range (min n (D - 1) + 1), ‖a‖ ^ (n - k) * (n.choose k : ℝ) :=
+  ⟨le_l2_opNorm_jordanBlock_pow D a n k₀ hk₀, l2_opNorm_jordanBlock_pow_le D a n⟩
+
+end OperatorNorm
 
 end Matrix
