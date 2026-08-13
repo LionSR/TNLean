@@ -513,6 +513,45 @@ def test_rmp_buried_patterns_come_from_the_tombstone_ledger() -> None:
     assert caught == ["use boundary=periodic"], caught
 
 
+def test_a_buried_key_steps_over_the_live_words_the_parser_holds() -> None:
+    # The dead atom face keys are the case in point: each word outlives its
+    # key as a choice of the live physical= policy, as the transverse word
+    # of an open wire end, and as a compass face of the declaration door.
+    # The pattern steps over all three live spellings and catches the dead
+    # key wherever a document still writes it.
+    entries = [
+        Entry("tombstone", ("kernel-atom", "up", "use ports=")),
+        Entry("tombstone", ("kernel-atom", "down", "use ports=")),
+    ]
+    frames = {("physical=", ""), ("open ", ""), ("", ":physical")}
+    patterns = tombstone_patterns(
+        entries, word_owners={"up": frames, "down": frames}
+    )
+    for live in (
+        r"\begin{tenkz}[rows={wire}, cols=1, physical=up]",
+        r"\tn[conjugate, physical=down]{}",
+        r"\tnwire{(1,1,1)}{open up}",
+        r"\tnwire{(1,1,2)}{open down}",
+        r"\tndeclareatom{\tnseed}{skin=box, ports={west:virtual, up:physical}}",
+        r"\tndeclareatom{\tnseed}{skin=box, ports={down:physical}}",
+        "physical=updown",
+    ):
+        assert not any(pattern.search(live) for pattern, _ in patterns), live
+    for dead in (r"\tn[up=$i$]{B}", r"\tn[down=$j$]{}", r"\tn[at=(1,1), up]{}"):
+        assert any(pattern.search(dead) for pattern, _ in patterns), dead
+
+
+def test_the_live_word_owners_are_read_from_the_parser() -> None:
+    # The owners come from the parser source, not from a list kept here:
+    # the atom physical= choice table, the wire-end open grammar, and the
+    # declaration door's face extraction all carry the words the dead face
+    # keys left behind.
+    owners = tenkz_language.live_word_owners()
+    expected = {("physical=", ""), ("open ", ""), ("", ":physical")}
+    assert expected <= owners["up"]
+    assert expected <= owners["down"]
+
+
 def test_a_buried_value_is_bounded_on_both_sides_of_its_key() -> None:
     # Without a left boundary `form=band` reads `transform=band` too, and an
     # RMP case that never used the retired key is rejected.
@@ -553,12 +592,15 @@ def test_a_buried_environment_is_matched_where_a_document_names_one() -> None:
 
 def test_the_lint_spells_no_buried_word_of_its_own() -> None:
     # The debt this replaces: a retired spelling written into the script and
-    # hand-discarded from the registry read beside it.
+    # hand-discarded from the registry read beside it.  A spelling is a word,
+    # not a run of letters: a short row like the dead atom face key sits
+    # inside ordinary English (`groups`, `suppresses`) without being spelled.
     source = (ROOT / "scripts/tenkz_lint.py").read_text(encoding="utf-8")
     buried = tenkz_language.tombstone_rows(tenkz_shrink.load_registry())
     assert buried
     for _scope, spelling, _migration in buried:
-        assert spelling not in source, spelling
+        pattern = rf"(?<![\w\\]){re.escape(spelling)}(?![\w])"
+        assert not re.search(pattern, source), spelling
 
 
 def test_buried_patterns_match_the_spelling_a_document_writes() -> None:

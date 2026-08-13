@@ -53,20 +53,21 @@ product states:
 
 ```latex
 \[
-  \begin{tenkz}[physical=up]
-    \tn[up=$i$]{B}
+  \begin{tenkz}[cols=1, boundary=open]
+    \tn[ports={90:physical:$i$}]{B}
   \end{tenkz}
   \;=\;
-  \begin{tenkz}[physical=up]
-    \tnX{X} & \tn[up=$i$]{A} & \tnX{X^{-1}}
+  \begin{tenkz}[boundary=open]
+    \tn[skin=ring]{X} & \tn[ports={90:physical:$i$}]{A} & \tn[skin=ring]{X^{-1}}
   \end{tenkz}
 \]
 ```
 
-No coordinates, no lengths: `physical=up` declares each atom's outward leg,
-`&` chains atoms along the row, and the protruding stubs on both sides are
-the same boundary signature — two open virtual indices and one physical
-index — which the equation check verifies.
+No coordinates, no lengths: the typed port `90:physical` declares each
+tensor's outward leg along its row's own normal, `&` chains atoms along the
+row, and the protruding stubs on both sides are the same boundary signature
+— two open virtual indices and one physical index — which the equation
+check verifies.
 
 ### The compatibility promise
 

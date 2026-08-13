@@ -1,0 +1,169 @@
+%% =========================================================
+\section{Equivalence of ensembles by zero-padded unitary mixing}
+\label{sec:ensemble_equivalence_unitary}
+%% =========================================================
+
+\cite[Proposition~2.4, Equation~(2.10)]{Wolf2012Quantum} states the equivalence
+of ensembles without any relation between the two cardinalities: two ensembles
+of not necessarily normalized vectors $\{\psi_j\}$ and
+$\{\widetilde\psi_\ell\}$ satisfy $\sum_j \ketbra{\psi_j}{\psi_j} = \sum_\ell
+\ketbra{\widetilde\psi_\ell}{\widetilde\psi_\ell}$ iff there is a
+\emph{unitary} $U$ with $\psi_j = \sum_\ell U_{j\ell}\widetilde\psi_\ell$,
+where the smaller family is padded with zero vectors so that both are indexed
+by one common set. Theorem~\ref{thm:pureEnsembleDensity_eq_iff_exists_isometric_mixing}
+carries the cardinality hypothesis $|\iota_2| \le |\iota_1|$ and delivers a
+tall isometry; this section removes both restrictions.
+
+\begin{lemma}[Zero padding preserves the ensemble density]
+    \label{lem:pureEnsembleDensity_of_extendZero}
+    \lean{WolfProps.pureEnsembleDensity_of_extendZero}
+    \leanok
+    \uses{def:pureEnsembleDensity}
+    Let $e \colon \iota_1 \to \iota$ be injective and let
+    $\{\Psi_k\}_{k \in \iota}$ satisfy $\Psi_{e(i)} = \psi_i$ for all
+    $i \in \iota_1$ and $\Psi_k = 0$ for every $k$ outside the image of $e$.
+    Then $\sum_{k} \ketbra{\Psi_k}{\Psi_k} = \sum_i \ketbra{\psi_i}{\psi_i}$.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{def:pureEnsembleDensity}
+    \begin{align}
+        \sum_{k \in \iota} \ketbra{\Psi_k}{\Psi_k}
+        = \sum_{k \in e(\iota_1)} \ketbra{\Psi_k}{\Psi_k}
+        = \sum_{i \in \iota_1} \ketbra{\Psi_{e(i)}}{\Psi_{e(i)}}
+        = \sum_{i \in \iota_1} \ketbra{\psi_i}{\psi_i}.
+    \end{align}
+    The first equality drops the terms outside the image of $e$, which vanish
+    because $\ketbra{0}{0} = 0$; the second reindexes along $e$, which is
+    injective; the third substitutes $\Psi_{e(i)} = \psi_i$.
+\end{proof}
+
+Two instances of Lemma~\ref{lem:pureEnsembleDensity_of_extendZero} supply the
+paddings used below: extension by zero along the two inclusions of
+$\iota_1$ and $\iota_2$ into the disjoint union $\iota_1 \sqcup \iota_2$, and
+extension by zero of a family of $m$ vectors to a family of $\max(m,n)$
+vectors.
+
+\begin{lemma}[Padding onto a disjoint union preserves the density]
+    \label{lem:pureEnsembleDensity_sumElim_zero}
+    \lean{WolfProps.pureEnsembleDensity_sumElim_zero,
+        WolfProps.pureEnsembleDensity_zero_sumElim}
+    \leanok
+    \uses{def:pureEnsembleDensity}
+    Let $\{\psi_i\}_{i \in \iota_1}$ and $\{\phi_j\}_{j \in \iota_2}$ be
+    ensembles. Extend $\psi$ by the zero vector on the second summand of
+    $\iota_1 \sqcup \iota_2$, and extend $\phi$ by the zero vector on the first
+    summand. Both extended families have the same density operator as the
+    family they extend.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{lem:pureEnsembleDensity_of_extendZero}
+    Apply Lemma~\ref{lem:pureEnsembleDensity_of_extendZero} to the two
+    inclusions $\iota_1 \hookrightarrow \iota_1 \sqcup \iota_2$ and
+    $\iota_2 \hookrightarrow \iota_1 \sqcup \iota_2$, which are injective and
+    have complementary images.
+\end{proof}
+
+\begin{definition}[Zero padding along an enumerated index set]
+    \label{def:padZero}
+    \lean{WolfProps.padZero, WolfProps.padZero_castLE}
+    \leanok
+    Let $\{\psi_k\}_{k < m}$ be an ensemble and let $n$ be a natural number.
+    The padded ensemble $\{\psi_k^{\mathrm{pad}}\}_{k < n}$ is $\psi_k$ for
+    $k < m$ and the zero vector for $m \le k < n$. For $m \le n$ the padded
+    family agrees with $\psi$ on every index $k < m$ and retains the whole
+    ensemble; for $n < m$ only the first $n$ vectors survive. The intended use
+    is $m \le n$.
+\end{definition}
+
+\begin{lemma}[Padding to a longer family preserves the density]
+    \label{lem:pureEnsembleDensity_padZero}
+    \lean{WolfProps.pureEnsembleDensity_padZero}
+    \leanok
+    \uses{def:pureEnsembleDensity, def:padZero}
+    For $m \le n$ the padded ensemble of Definition~\ref{def:padZero} has the
+    same density operator as the original ensemble.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{lem:pureEnsembleDensity_of_extendZero, def:padZero}
+    Apply Lemma~\ref{lem:pureEnsembleDensity_of_extendZero} to the inclusion
+    $\{k : k < m\} \hookrightarrow \{k : k < n\}$.
+\end{proof}
+
+\begin{theorem}[Equivalence of ensembles, relative to a padding]
+    \label{thm:pureEnsembleDensity_eq_iff_exists_unitary_mixing_of_pad}
+    \lean{WolfProps.pureEnsembleDensity_eq_iff_exists_unitary_mixing_of_pad}
+    \leanok
+    \uses{def:pureEnsembleDensity}
+    Let $\{\Psi_k\}_{k \in \iota}$ and $\{\Phi_k\}_{k \in \iota}$ be ensembles
+    on one common finite index set whose density operators agree with those of
+    $\{\psi_i\}_{i \in \iota_1}$ and $\{\phi_j\}_{j \in \iota_2}$ respectively.
+    Then
+    \begin{align}
+        \sum_i \ketbra{\psi_i}{\psi_i} = \sum_j \ketbra{\phi_j}{\phi_j}
+    \end{align}
+    iff there is a unitary $U \in \C^{\iota \times \iota}$ with
+    $\Psi_k = \sum_\ell U_{k\ell}\Phi_\ell$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:exists_isometric_mixing_of_pureEnsembleDensity_eq,
+        thm:pureEnsembleDensity_eq_of_isometric_mixing}
+    Suppose the two density operators agree. The hypotheses on $\Psi$ and
+    $\Phi$ then give $\sum_k \ketbra{\Psi_k}{\Psi_k} = \sum_k
+    \ketbra{\Phi_k}{\Phi_k}$, and both families are indexed by the same finite
+    set, so the cardinality hypothesis of
+    Theorem~\ref{thm:exists_isometric_mixing_of_pureEnsembleDensity_eq} holds
+    with equality. That theorem supplies $U \in \C^{\iota\times\iota}$ with
+    $U^\dagger U = \Id$ and $\Psi_k = \sum_\ell U_{k\ell}\Phi_\ell$. A square
+    matrix over a finite index set with $U^\dagger U = \Id$ also satisfies
+    $U U^\dagger = \Id$, so $U$ is unitary.
+
+    Conversely, a unitary $U$ satisfies $U^\dagger U = \Id$, so
+    Theorem~\ref{thm:pureEnsembleDensity_eq_of_isometric_mixing} gives
+    $\sum_k \ketbra{\Psi_k}{\Psi_k} = \sum_k \ketbra{\Phi_k}{\Phi_k}$. Together
+    with the two density agreements this reads
+    \begin{align}
+        \sum_i \ketbra{\psi_i}{\psi_i}
+        = \sum_k \ketbra{\Psi_k}{\Psi_k}
+        = \sum_k \ketbra{\Phi_k}{\Phi_k}
+        = \sum_j \ketbra{\phi_j}{\phi_j}.
+    \end{align}
+\end{proof}
+
+\begin{theorem}[Equivalence of ensembles]
+    \label{thm:pureEnsembleDensity_eq_iff_exists_unitary_mixing}
+    \lean{WolfProps.pureEnsembleDensity_eq_iff_exists_unitary_mixing,
+        WolfProps.pureEnsembleDensity_eq_iff_exists_unitary_mixing_fin}
+    \leanok
+    \uses{def:pureEnsembleDensity, def:padZero}
+    Two ensembles $\{\psi_j\}$ and $\{\widetilde\psi_\ell\}$ of not necessarily
+    normalized vectors satisfy
+    \begin{align}
+        \sum_j \ketbra{\psi_j}{\psi_j}
+        = \sum_\ell \ketbra{\widetilde\psi_\ell}{\widetilde\psi_\ell}
+    \end{align}
+    iff there is a unitary $U$ with
+    $\psi_j = \sum_\ell U_{j\ell}\widetilde\psi_\ell$, where both families are
+    first padded with zero vectors onto one common index set. No relation
+    between the two cardinalities is assumed. Two paddings are recorded: onto
+    the disjoint union $\iota_1 \sqcup \iota_2$ of the two index sets, and, for
+    ensembles of $m$ and $n$ vectors, onto $\{k : k < \max(m,n)\}$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{lem:pureEnsembleDensity_sumElim_zero,
+        lem:pureEnsembleDensity_padZero,
+        thm:pureEnsembleDensity_eq_iff_exists_unitary_mixing_of_pad}
+    Lemmas~\ref{lem:pureEnsembleDensity_sumElim_zero}
+    and~\ref{lem:pureEnsembleDensity_padZero} show that either padding leaves
+    both density operators unchanged, which is exactly the hypothesis of
+    Theorem~\ref{thm:pureEnsembleDensity_eq_iff_exists_unitary_mixing_of_pad}.
+\end{proof}
