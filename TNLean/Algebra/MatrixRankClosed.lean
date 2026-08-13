@@ -65,20 +65,15 @@ theorem exists_injective_linearIndependent_cols_of_lt_rank
   -- The selected columns are a sub-family of a linearly independent family.
   exact ha_li.comp e e.injective
 
--- The `Fintype`/`DecidableEq` instances on the index types are carried explicitly to
--- match the interface expected at the downstream Schmidt-number compactness use site,
--- even though the statement type only consumes them through classical instances.
-set_option linter.unusedDecidableInType false in
-set_option linter.unusedFintypeInType false in
 /-- **Rank–minor characterization.** A matrix has rank greater than `k` if and only if
 some `(k+1) × (k+1)` submatrix, selected by injective row and column index maps, is
 invertible. -/
 theorem lt_rank_iff_exists_isUnit_submatrix
-    {K : Type*} [Fintype m] [Field K] [DecidableEq m] [DecidableEq n]
-    (A : Matrix m n K) (k : ℕ) :
+    {K : Type*} [Field K] (A : Matrix m n K) (k : ℕ) :
     k < A.rank ↔ ∃ (f : Fin (k + 1) → m) (g : Fin (k + 1) → n),
       Function.Injective f ∧ Function.Injective g ∧ IsUnit (A.submatrix f g) := by
   classical
+  cases nonempty_fintype m
   constructor
   · intro hk
     -- Stage A: extract `k+1` independent columns at distinct indices.
@@ -113,14 +108,10 @@ theorem lt_rank_iff_exists_isUnit_submatrix
     have hle : (A.submatrix f g).rank ≤ A.rank := rank_submatrix_le A f g
     omega
 
--- The `Fintype`/`DecidableEq` instances are carried explicitly to match the interface
--- expected at the downstream Schmidt-number compactness use site.
-set_option linter.unusedDecidableInType false in
-set_option linter.unusedFintypeInType false in
 /-- **Lower semicontinuity of rank.** The set of complex matrices of rank at most `k`
 is closed in the topology of entrywise convergence. Equivalently, having rank greater
 than `k` is an open condition. -/
-theorem isClosed_setOf_rank_le [Fintype m] [DecidableEq m] [DecidableEq n] (k : ℕ) :
+theorem isClosed_setOf_rank_le (k : ℕ) :
     IsClosed {A : Matrix m n ℂ | A.rank ≤ k} := by
   classical
   rw [← isOpen_compl_iff]

@@ -485,10 +485,7 @@ theorem fullContraction_eq
 
 /-! ### Operator-Schmidt uniqueness: the bond gauge -/
 
--- The shared-bond `Fintype` instances are used in the proof (to sum over
--- `SharedBondConfig bondDim`) but not reflected in the statement, so the
--- `unusedFintypeInType` linter cannot see them.
-set_option linter.unusedFintypeInType false in
+omit [Fintype Bond] [(b : Bond) → Fintype (bondDim b)] in
 open scoped Classical in
 /-- Config-indexed linear independence from joint injectivity.
 
@@ -503,12 +500,15 @@ operator-Schmidt uniqueness argument of arXiv:1804.04964, Section 3, Lemma
 inj_equal_tensors_2 (lines 1157--1204 of `Papers/1804.04964/paper_normal.tex`),
 where the two contracted tensors are compared as bipartite operators. -/
 theorem IsTwoBlockInjective.config_linearIndependent
+    [Finite Bond] [∀ b, Finite (bondDim b)]
     {External Physical : Type*} [Nonempty External]
     {A : TwoBlockTensor bondDim External Physical}
     (hA : IsTwoBlockInjective A) :
     LinearIndependent ℂ
       (fun μ : SharedBondConfig bondDim => fun p : External × Physical => A p.1 μ p.2) := by
   classical
+  letI := Fintype.ofFinite Bond
+  letI (b : Bond) := Fintype.ofFinite (bondDim b)
   rw [Fintype.linearIndependent_iff]
   intro c hc μ₀
   let η₀ : External := Classical.arbitrary External

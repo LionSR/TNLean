@@ -201,11 +201,6 @@ odd-length product is supported on `oddSet` (so its `(2,2)` entry vanishes) and
 every even-length product is supported on `evenSet` (so its `(1,0)` entry
 vanishes).  Either way the length-`N` span misses a basic matrix unit. -/
 
--- Each subgoal expands the entry of `Aⁱ * evalWord w` over both physical indices
--- `i` with a single uniform `simp` carrying every vanishing entry of the tail; for
--- any one index only the subset that survives the sparse row of `Aⁱ` is used, so
--- `linter.unusedSimpArgs` is disabled rather than splitting into per-index fact lists.
-set_option linter.unusedSimpArgs false in
 /-- The `(2,2)` entry of any odd-length Majumdar-Ghosh product and the `(1,0)`
 entry of any even-length product both vanish.  Proved by induction on the word,
 using that left multiplication by a generator exchanges the two complementary
@@ -238,41 +233,32 @@ private lemma majumdarGhosh_evalWord_grading :
       fun h => ?_, fun h => ?_, fun h => ?_, fun h => ?_⟩
     · have hw := hodd_tail h
       rw [evalWord_cons]; fin_cases i <;>
-        simp [majumdarGhoshTensor, Matrix.mul_apply, Fin.sum_univ_three,
-          he01 hw, he02 hw, he10 hw, he20 hw]
+        simp [majumdarGhoshTensor, Matrix.mul_apply, Fin.sum_univ_three, he02 hw]
     · have hw := hodd_tail h
       rw [evalWord_cons]; fin_cases i <;>
-        simp [majumdarGhoshTensor, Matrix.mul_apply, Fin.sum_univ_three,
-          he01 hw, he02 hw, he10 hw, he20 hw]
+        simp [majumdarGhoshTensor, Matrix.mul_apply, Fin.sum_univ_three, he01 hw]
     · have hw := hodd_tail h
       rw [evalWord_cons]; fin_cases i <;>
-        simp [majumdarGhoshTensor, Matrix.mul_apply, Fin.sum_univ_three,
-          he01 hw, he02 hw, he10 hw, he20 hw]
+        simp [majumdarGhoshTensor, Matrix.mul_apply, Fin.sum_univ_three, he02 hw]
     · have hw := hodd_tail h
       rw [evalWord_cons]; fin_cases i <;>
-        simp [majumdarGhoshTensor, Matrix.mul_apply, Fin.sum_univ_three,
-          he01 hw, he02 hw, he10 hw, he20 hw]
+        simp [majumdarGhoshTensor, Matrix.mul_apply, Fin.sum_univ_three, he01 hw]
     · have hw := hodd_tail h
       rw [evalWord_cons]; fin_cases i <;>
-        simp [majumdarGhoshTensor, Matrix.mul_apply, Fin.sum_univ_three,
-          he01 hw, he02 hw, he10 hw, he20 hw]
+        simp [majumdarGhoshTensor, Matrix.mul_apply, Fin.sum_univ_three, he10 hw, he20 hw]
     -- Even-length targets use the odd-support vanishing entries of the tail.
     · have hw := heven_tail h
       rw [evalWord_cons]; fin_cases i <;>
-        simp [majumdarGhoshTensor, Matrix.mul_apply, Fin.sum_univ_three,
-          ho22 hw, ho11 hw, ho12 hw, ho21 hw, ho00 hw]
+        simp [majumdarGhoshTensor, Matrix.mul_apply, Fin.sum_univ_three, ho11 hw, ho21 hw]
     · have hw := heven_tail h
       rw [evalWord_cons]; fin_cases i <;>
-        simp [majumdarGhoshTensor, Matrix.mul_apply, Fin.sum_univ_three,
-          ho22 hw, ho11 hw, ho12 hw, ho21 hw, ho00 hw]
+        simp [majumdarGhoshTensor, Matrix.mul_apply, Fin.sum_univ_three, ho22 hw, ho12 hw]
     · have hw := heven_tail h
       rw [evalWord_cons]; fin_cases i <;>
-        simp [majumdarGhoshTensor, Matrix.mul_apply, Fin.sum_univ_three,
-          ho22 hw, ho11 hw, ho12 hw, ho21 hw, ho00 hw]
+        simp [majumdarGhoshTensor, Matrix.mul_apply, Fin.sum_univ_three, ho00 hw]
     · have hw := heven_tail h
       rw [evalWord_cons]; fin_cases i <;>
-        simp [majumdarGhoshTensor, Matrix.mul_apply, Fin.sum_univ_three,
-          ho22 hw, ho11 hw, ho12 hw, ho21 hw, ho00 hw]
+        simp [majumdarGhoshTensor, Matrix.mul_apply, Fin.sum_univ_three, ho00 hw]
 
 /-- For odd-length words the `(2,2)` entry of the Majumdar-Ghosh product vanishes. -/
 private lemma majumdarGhosh_evalWord_22_of_odd {w : List (Fin 2)} (hw : Odd w.length) :

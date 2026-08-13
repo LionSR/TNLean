@@ -147,6 +147,9 @@ theorem PosSemidef.rpow_transpose {A : Matrix n n ℂ} (hA : A.PosSemidef) (r : 
   rw [CFC.rpow_eq_cfc_real hA.transpose.nonneg, CFC.rpow_eq_cfc_real hA.nonneg]
   exact (cfc_transpose hA.isHermitian (fun x : ℝ ↦ x ^ r)).symm
 
+-- `DecidableEq n` is needed for the matrix continuous functional calculus that `CFC.sqrt`
+-- elaborates against; it occurs in the statement only inside a proof term of that instance,
+-- so it cannot be dropped and the linter cannot see the use.
 set_option linter.unusedDecidableInType false in
 /-- The positive square root of a positive-semidefinite matrix commutes with transpose. -/
 theorem PosSemidef.sqrt_transpose {A : Matrix n n ℂ} (hA : A.PosSemidef) :

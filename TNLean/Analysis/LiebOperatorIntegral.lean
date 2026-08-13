@@ -82,12 +82,9 @@ lemma rpow_diagonal {g : n → ℝ} (hg : ∀ i, 0 < g i) (s : ℝ) :
     (ContinuousOn.rpow_const continuousOn_id fun x hx => Or.inl <| by
       rcases hx with ⟨i, rfl⟩; exact (hg i).ne')
 
-set_option linter.unusedDecidableInType false in
-/-- The Bochner integral of a matrix-valued function is computed entrywise. The
-`DecidableEq` instances are used only by the normed-space structure on rectangular
-matrices, not in the statement. -/
+/-- The Bochner integral of a matrix-valued function is computed entrywise. -/
 lemma integral_entry {X : Type*} [MeasurableSpace X] {μ : MeasureTheory.Measure X}
-    {m k : Type*} [Fintype m] [Fintype k] [DecidableEq m] [DecidableEq k]
+    {m k : Type*} [Fintype m] [Fintype k] [DecidableEq k]
     {F : X → Matrix m k ℂ} (hF : MeasureTheory.Integrable F μ) (i : m) (j : k) :
     (∫ x, F x ∂μ) i j = ∫ x, F x i j ∂μ := by
   have hcle : Continuous (Matrix.entryLinearMap ℂ ℂ i j) :=
