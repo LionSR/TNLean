@@ -1233,3 +1233,42 @@
     Substitute the trace-power form of the coefficients into the
     associativity constraint.
 \end{proof}
+
+\begin{theorem}[The dimer RFP has length-dependent displayed BNT coefficients]%
+    \label{thm:mpdo_bnt_label_rescaling_stable_rfp_capstone}
+    \lean{MPOTensor.RescalingStableLengthDependentRFP.%
+        exists_isRFPViaTS_not_lengthIndependent_bntCoefficients_R}
+    \leanok
+    \uses{def:cpsv_canonical_form,
+        def:mpdo,
+        def:is_rfp_via_ts,
+        def:mpdo_bnt_algebra_tensor_clause,
+        def:mpdo_bnt_label_length_independent}
+    There is an MPDO $M$ in literal CPSV canonical form that is a
+    renormalization fixed point and has a tensor-attached BNT presentation
+    whose structure coefficients depend on the positive chain length.  One
+    may take $M=R$ and the one-label presentation above, for which
+    \begin{align}
+        c^{(L)}_{0,0,0}&=1+\left(\frac{7}{25}\right)^L.
+        \notag
+    \end{align}
+    This gives a normalization-free variant of the question after
+    Theorem~4.14 for the displayed vertical presentation.  The statement does
+    not assert that length dependence is invariant under a change of
+    presentation.  It also does not supply the source's additional canonical
+    normalization: every weight has modulus at most one and at least one has
+    modulus one.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpdo_bnt_label_rescaling_stable_length_dependence,
+        thm:mpdo_bnt_label_rescaling_stable_cf,
+        thm:mpdo_bnt_label_rescaling_stable_ismpdo,
+        thm:mpdo_bnt_label_rescaling_stable_is_rfp_via_ts,
+        thm:mpdo_bnt_label_rescaling_stable_bnt_algebra_clause}
+    The preceding results show that $R$ is an MPDO in literal CPSV canonical
+    form, construct its fixed-point maps and its tensor-attached one-label
+    BNT clause, and identify the clause's coefficients with the displayed
+    trace-power family.  Its values at lengths one and two differ, so that
+    family is not length independent.
+\end{proof}
