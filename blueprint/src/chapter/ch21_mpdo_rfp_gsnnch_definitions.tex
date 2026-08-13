@@ -227,6 +227,44 @@ Definition~\ref{def:mpdo_source_gsnnch}; the converse comparison is not used.
     injective. The two isometry identities give the exact reconstruction.
 \end{proof}
 
+\begin{theorem}[Normalized operators under an isometric physical inclusion]
+    \label{thm:mpdo_normalized_state_physical_isometry_transport}
+    \lean{MPOTensor.trace_mpo_changePhysicalBasis_of_isometry,
+        MPOTensor.normalizedMPO_changePhysicalBasis_of_isometry}
+    \leanok
+    \uses{def:block_entropy, def:mpdo_single_kraus_map,
+        def:mpdo_sitewise_physical_matrix}
+    With the same notation, the normalized periodic operators satisfy
+    \begin{align}
+      \sigma^{(N)}(K^V)
+      &=V^{\otimes N}\sigma^{(N)}(K)(V^{\otimes N})^*.
+      \notag
+    \end{align}
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{lem:mpdo_sitewise_physical_coordinate_congruence}
+    The sitewise congruence preserves the trace because $V^{\otimes N}$ is an
+    isometry.  It therefore commutes with the scalar normalization.
+\end{proof}
+
+\begin{theorem}[Prefix marginal of a sitewise isometric image]
+    \label{thm:mpdo_block_reduced_state_single_kraus_sitewise}
+    \lean{MPOTensor.blockReducedState_singleKraus_sitewise}
+    \leanok
+    \uses{def:block_entropy, def:mpdo_single_kraus_map,
+        def:mpdo_sitewise_physical_matrix}
+    If a state on $L+K$ sites is conjugated by $V^{\otimes(L+K)}$, then its
+    first-$L$-site marginal is conjugated by $V^{\otimes L}$.
+\end{theorem}
+
+\begin{proof}\leanok
+    Reindex the chain into its first $L$ and final $K$ sites.  The sitewise
+    matrix becomes $V^{\otimes L}\otimes V^{\otimes K}$, and
+    $(V^{\otimes K})^*V^{\otimes K}=I$ removes the second factor under the
+    partial trace.
+\end{proof}
+
 \begin{theorem}[Reduced states under an isometric physical inclusion]
     \label{thm:mpdo_reduced_state_physical_isometry_transport}
     \lean{MPOTensor.reducedBlockState_changePhysicalBasis_of_isometry}
@@ -243,7 +281,8 @@ Definition~\ref{def:mpdo_source_gsnnch}; the converse comparison is not used.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{lem:mpdo_sitewise_physical_coordinate_congruence}
+    \uses{thm:mpdo_normalized_state_physical_isometry_transport,
+        thm:mpdo_block_reduced_state_single_kraus_sitewise}
     The normalized periodic operators are related by the sitewise isometric
     congruence.  Splitting the chain into the retained interval and its
     complement gives

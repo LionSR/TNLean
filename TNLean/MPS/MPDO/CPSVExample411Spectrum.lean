@@ -105,14 +105,24 @@ private theorem effective_roots {L : ℕ} (hL : 1 ≤ L) (hL4 : L ≤ 4) :
   simp only [fourBlockProbability, fourBlockProbabilityOfCount]
   norm_num
 
+private theorem effective_charpoly_roots_of_counts {L : ℕ} (hL : 1 ≤ L) (hL4 : L ≤ 4)
+    (counts : Multiset ℕ)
+    (hcounts : Finset.univ.val.map (CPSVExample411BinarySupport.internalTransitionCount :
+      (Fin L → Fin 2) → ℕ) = counts) :
+    (reducedBlockState CPSVExample411BinarySupport.M 4 L hL4).charpoly.roots =
+      counts.map (fun t ↦ (fourBlockProbabilityOfCount L t : ℂ)) := by
+  rw [effective_roots hL hL4,
+    show fourBlockProbability = fourBlockProbabilityOfCount L ∘
+      CPSVExample411BinarySupport.internalTransitionCount from rfl,
+    ← Multiset.map_map, hcounts, Multiset.map_map]
+  rfl
+
 /-- The effective one-site reduced state has root $1/2$ with multiplicity two. -/
 theorem effective_charpoly_roots_one :
     (reducedBlockState CPSVExample411BinarySupport.M 4 1 (by omega)).charpoly.roots =
       2 • {(1 / 2 : ℂ)} := by
-  rw [effective_roots (by omega) (by omega),
-    show fourBlockProbability = fourBlockProbabilityOfCount 1 ∘
-      CPSVExample411BinarySupport.internalTransitionCount from rfl,
-    ← Multiset.map_map, transition_counts_one]
+  rw [effective_charpoly_roots_of_counts (by omega) (by omega) {0, 0}
+    transition_counts_one]
   norm_num [fourBlockProbabilityOfCount]
   rfl
 
@@ -121,10 +131,8 @@ theorem effective_charpoly_roots_one :
 theorem effective_charpoly_roots_two :
     (reducedBlockState CPSVExample411BinarySupport.M 4 2 (by omega)).charpoly.roots =
       2 • {(14 / 41 : ℂ)} + 2 • {(13 / 82 : ℂ)} := by
-  rw [effective_roots (by omega) (by omega),
-    show fourBlockProbability = fourBlockProbabilityOfCount 2 ∘
-      CPSVExample411BinarySupport.internalTransitionCount from rfl,
-    ← Multiset.map_map, transition_counts_two]
+  rw [effective_charpoly_roots_of_counts (by omega) (by omega) {0, 0, 1, 1}
+    transition_counts_two]
   norm_num [fourBlockProbabilityOfCount]
   rfl
 
@@ -133,10 +141,8 @@ multiplicities two, four, and two, respectively. -/
 theorem effective_charpoly_roots_three :
     (reducedBlockState CPSVExample411BinarySupport.M 4 3 (by omega)).charpoly.roots =
       2 • {(10 / 41 : ℂ)} + 4 • {(4 / 41 : ℂ)} + 2 • {(5 / 82 : ℂ)} := by
-  rw [effective_roots (by omega) (by omega),
-    show fourBlockProbability = fourBlockProbabilityOfCount 3 ∘
-      CPSVExample411BinarySupport.internalTransitionCount from rfl,
-    ← Multiset.map_map, transition_counts_three]
+  rw [effective_charpoly_roots_of_counts (by omega) (by omega)
+    {0, 0, 1, 1, 1, 1, 2, 2} transition_counts_three]
   norm_num [fourBlockProbabilityOfCount]
   rfl
 
@@ -145,10 +151,8 @@ twelve, and two, respectively. -/
 theorem effective_charpoly_roots_four :
     (reducedBlockState CPSVExample411BinarySupport.M 4 4 (by omega)).charpoly.roots =
       2 • {(8 / 41 : ℂ)} + 12 • {(2 / 41 : ℂ)} + 2 • {(1 / 82 : ℂ)} := by
-  rw [effective_roots (by omega) (by omega),
-    show fourBlockProbability = fourBlockProbabilityOfCount 4 ∘
-      CPSVExample411BinarySupport.internalTransitionCount from rfl,
-    ← Multiset.map_map, transition_counts_four]
+  rw [effective_charpoly_roots_of_counts (by omega) (by omega)
+    {0, 0, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 3, 3} transition_counts_four]
   norm_num [fourBlockProbabilityOfCount]
   rfl
 
