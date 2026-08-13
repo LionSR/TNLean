@@ -1,0 +1,137 @@
+\documentclass[11pt]{article}
+
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[colorlinks=true,linkcolor=blue,citecolor=blue,urlcolor=blue]{hyperref}
+
+\input{command}
+
+\title{The Schmidt-rank set in the spectral $n$-positivity criterion
+  (Wolf Prop.~3.2)}
+\author{}
+\date{2026-08-13}
+
+\begin{document}
+\maketitle
+
+\section{The assertion}
+
+Wolf's criterion for $n$-positivity\footnote{%
+  \path{Notes/WolfNoteTexSource/ch03_positive_not_completely.tex}, line 153,
+  equations (3.7) and (3.8).}
+bounds an infimum. For a Hermitian $\tau\in\mathcal M_{D'}\otimes\mathcal M_{D}$
+with spectral decomposition $\tau=\sum_i\nu_i\ketbra{\phi_i}{\phi_i}$, reduced
+densities $\rho_i=\tr_2\ketbra{\phi_i}{\phi_i}$, smallest positive eigenvalue
+$\nu_0$ and largest eigenvalue $\nu$, write $\|\cdot\|_{(n)}$ for the Ky-Fan
+$n$-norm, the sum of the $n$ largest eigenvalues of a positive semidefinite
+matrix. When exactly one eigenvalue $\nu_-$ of $\tau$ is non-positive, write
+$\rho_-$ for the reduced density of its eigenvector. Then
+\begin{align}
+  \inf_\psi\bra{\psi}\tau\ket{\psi}
+   & \ge \nu_0+\sum_{i:\nu_i\le0}(\nu_i-\nu_0)\|\rho_i\|_{(n)},
+  \tag{3.7}                                                       \\
+  \inf_\psi\bra{\psi}\tau\ket{\psi}
+   & \le \nu+(\nu_--\nu)\|\rho_-\|_{(n)},
+  \tag{3.8}
+\end{align}
+the second under the hypothesis that all eigenvalues but $\nu_-$ are strictly
+positive. In both displays ``the infimum is taken over all normalized vectors of
+Schmidt rank $n$''.
+
+\section{The point at issue}
+
+The phrase ``Schmidt rank $n$'' admits two readings: the vectors whose Schmidt
+rank equals $n$, and the vectors whose Schmidt rank is at most $n$. The two sets
+differ, and the infimum is taken over whichever one is meant.
+
+The source fixes the reading in the proof of the preceding
+proposition.\footnote{Same file, Prop.~3.1 and its proof.} There $n$-positivity
+of $T$ is expressed as
+$(T\otimes\mathrm{id}_n)(\ketbra{\phi}{\phi})\ge0$ for all
+$\phi\in\C^{D}\otimes\C^{n}$, and the embedding $\C^{n}\subseteq\C^{D}$ turns
+this into a condition on the vectors of $\C^{D}\otimes\C^{D}$ that the source
+calls ``of Schmidt rank $n$''. That image is the set of vectors of Schmidt rank
+\emph{at most} $n$: a vector $\phi\in\C^{D}\otimes\C^{n}$ of Schmidt rank $r<n$
+is not excluded from the quantifier. The same identification is made once more
+at the end of the proof, where $\ket{\psi}=(\one\otimes X)^\dagger\ket{\tilde
+\psi}$ with $\operatorname{rank}X=n$ is called a vector of Schmidt rank $n$, although its
+Schmidt rank is only bounded by $n$.
+
+The bounded-rank reading is also the one carrying the operational content:
+$n$-positivity of a Hermitian map is equivalent to nonnegativity of
+$\bra{\psi}\tau\ket{\psi}$ on the vectors of Schmidt rank at most $n$, and it is
+this set that the criterion is applied to.
+
+\section{The two readings compared}
+
+Write $S_{\le n}$ for the normalized vectors of Schmidt rank at most $n$ and
+$S_{=n}$ for those of Schmidt rank exactly $n$, so $S_{=n}\subseteq S_{\le n}$.
+
+Inequality (3.7) is proved pointwise: every $\psi\in S_{\le n}$ satisfies
+$\bra{\psi}\tau\ket{\psi}\ge\nu_0+\sum_{i:\nu_i\le0}(\nu_i-\nu_0)\|\rho_i\|_{(n)}$,
+using $|\braket{\phi_i}{\psi}|^2\le\|\rho_i\|_{(n)}$. The bound therefore holds
+at every vector of $S_{=n}$ as well, and the bounded-rank statement of (3.7) is
+the stronger of the two.
+
+Inequality (3.8) is the reverse comparison, and there the two readings part. The
+vector realizing $|\braket{\phi_-}{\psi}|^2=\|\rho_-\|_{(n)}$ is built from the
+$n$ largest eigenvalues of $\rho_-$, so its Schmidt rank is
+$\min(n,\operatorname{rank}\rho_-)$. When $\operatorname{rank}\rho_-<n$ the
+witness lies in $S_{\le n}$ but not in $S_{=n}$, and the value $\nu+(\nu_--\nu)\|\rho_-\|_{(n)}=\nu_-$ is not
+attained on $S_{=n}$: a vector of $S_{=n}$ attaining it would lie in the
+$\nu_-$ eigenspace, which is spanned by $\phi_-$ and contains no vector of
+Schmidt rank $n$. The infimum over $S_{=n}$ still equals $\nu_-$, because
+$\phi_-$ is a limit of vectors of Schmidt rank exactly $n$ whenever
+$n\le\min(D',D)$ and the quadratic form is continuous, but it is a limit and not
+a witness.
+
+Consequently $\inf_{S_{\le n}}=\inf_{S_{=n}}$ for $1\le n\le\min(D',D)$, the two
+readings give the same two inequalities, and the difference is only which of
+them is proved by exhibiting a vector.
+
+\section{The formalized statement}
+
+The formalization takes the set named by the source, the normalized vectors of
+Schmidt rank at most $n$, and states both inequalities for the infimum of the
+expectations over that set.\footnote{Formal declarations:
+  \leanid{Matrix.schmidtRankLEExpectations},
+  \leanid{Matrix.IsHermitian.le_sInf_schmidtRankLEExpectations} for (3.7),
+  \leanid{Matrix.IsHermitian.sInf_schmidtRankLEExpectations_le} for (3.8), and
+  \leanid{Matrix.IsHermitian.sInf_schmidtRankLEExpectations_top} for the top
+  index, all in
+  \doclink{TNLean/Channel/NPositivitySpectralCriterion}.} No hypothesis absent
+from the source is used.
+
+What is not formalized is the identity $\inf_{S_{\le n}}=\inf_{S_{=n}}$ of the
+previous section. Formalizing it needs two ingredients: a normalized vector of
+Schmidt rank exactly $n$ for every $n\le\min(D',D)$, which makes the infimum over
+$S_{=n}$ meaningful, and the perturbation
+$\psi_\varepsilon=(1-\varepsilon^2)^{1/2}\psi+\varepsilon\,u\otimes v$ with
+$u,v$ orthogonal to the Schmidt vectors of $\psi$, which raises the Schmidt rank
+by one. The expectation changes by
+$2\varepsilon\sqrt{1-\varepsilon^2}\,\Re\bra{\psi}\tau\ket{u\otimes v}
++O(\varepsilon^2)$, hence by $O(\varepsilon)$ in general: the cross term
+vanishes only under an orthogonality condition on $\tau$ that the argument does
+not need. Iterating the perturbation and letting $\varepsilon\to0$ gives the
+missing inequality $\inf_{S_{=n}}\le\inf_{S_{\le n}}$.
+
+\section{Verdict}
+
+\textbf{Classification: resolved reading, with a scope restriction on (3.8).}
+The source's ``vectors of Schmidt rank $n$'' are the vectors of Schmidt rank at
+most $n$, as its own proof of Prop.~3.1 shows, and the formalized inequalities
+are (3.7) and (3.8) over that set. No hypothesis foreign to the source enters.
+
+The scope restriction concerns (3.8) alone. Under the exact-rank reading the
+same two inequalities hold, with (3.7) an immediate consequence of the
+bounded-rank statement and (3.8) requiring the limiting argument sketched above
+in place of a witness. That limiting argument, equivalently the identity
+$\inf_{S_{\le n}}=\inf_{S_{=n}}$, is not formalized; it is not needed for either
+bound as stated. The Lean statement of (3.8) carries a
+\textbf{Scope restriction (Schmidt rank at most $n$)} marker pointing at this
+note.
+
+\bibliographystyle{alpha}
+\bibliography{references}
+
+\end{document}
