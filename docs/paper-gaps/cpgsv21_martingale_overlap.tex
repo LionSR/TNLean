@@ -111,9 +111,9 @@ $\eta_l<1/\sqrt{2}$, and Theorem~3 gives the corresponding gap lower bounds
 \cite[Equations~(2.4)--(2.5) and Theorem~3]{Nachtergaele1996Spectral}. In
 Section~6, Nachtergaele proves the GVBS/MPS gap by verifying C3$'$ using the
 projection estimates inherited from Fannes--Nachtergaele--Werner
-\cite[Section~6]{Nachtergaele1996Spectral}. The remaining formal task is to
-convert one of these source estimates to the cyclic-window inequality used
-below, with constants in the same blocking convention.
+\cite[Section~6]{Nachtergaele1996Spectral}. The formal development instead
+obtains a sufficient range-two estimate after physical blocking.  The optimized
+FNW numerator and the identification of its source constants remain open.
 
 \subsection{Open-chain projector geometry}
 
@@ -160,9 +160,9 @@ The companion theorem
 \leanid{MPSTensor.IsPrimitiveMPS.exists_re_inner_openChain_anticommutator_ge_c3_threshold}
 combines Nachtergaele's projector-defect identity with the two-projection
 estimate proved here to give the corresponding anticommutator inequality for
-every left length.  The remaining task is the separate blocked-to-cyclic
-comparison, including windows
-crossing the periodic cut.  No excitation-compression estimate is used.
+every left length.  For the final range-two argument, exact blocked three-site
+identities now connect the three-block defect to the local terms of the blocked
+tensor.  No excitation-compression estimate is used.
 
 \subsection{Three-site to cyclic transport}
 
@@ -183,16 +183,21 @@ restriction, and sums over the complement.  Since the window may begin at any
 site, the result includes positions crossing the periodic cut; the backward
 statement begins the forward window at the cyclic predecessor.
 
-This theorem is only transport infrastructure.  It does not supply the
-three-site numerical estimate, does not claim the optimized FNW coefficient,
-and does not use an excitation-compression surrogate.  In particular, the
-open-chain C3 estimate still has to be identified with the two concrete
-three-site range-two local terms before it can feed this transport theorem.
+The exact identification is
+\leanid{MPSTensor.blockTensor_threeSite_openChain_defect_norm_eq}.  It equates
+the three-site open-chain projector defect of $B=\operatorname{block}_p(A)$
+with the whole-block defect on three consecutive $p$-site regions of $A$.
+Together with
+\leanid{MPSTensor.IsPrimitiveMPS.exists_threeBlock_wholeIncrement_defect_le_seven_sixteenths},
+it supplies the coefficient $7/16$ for the adjacent three-site terms of $B$.
+The two transport theorems above then cover every overlapping off-diagonal
+cyclic pair, including the periodic cut.  This argument does not claim the
+optimized FNW coefficient and does not use an excitation-compression surrogate.
 
 \section{Finite-row martingale reduction}
 
-The current development separates the finite-row martingale algebra from the
-remaining MPS-specific principal-angle estimate. Fix an interaction range
+The current development separates the general finite-row martingale algebra from
+the completed range-two blocked MPS specialization. Fix an interaction range
 $L>1$ and an $N$-site periodic chain with $N\ge 2L$. Let $p_i$ denote the
 Hilbert-space representative of the length-$L$ local parent-Hamiltonian
 projection at the cyclic window starting at $i$. Write $i\sim_L j$ when the two
@@ -331,19 +336,19 @@ existential MPS gap theorem, but it would not immediately be the displayed
 all-$L$ estimate with constant $1/(4L)$ unless the constants are converted to
 the same blocking convention.
 
-Consequently the remaining comparison is neither the row-sum algebra nor the
-generic two-projection geometry; both parts have been isolated and formalized.
-In particular,
+The general source comparison remains open at the level of the optimized FNW
+coefficient and its source constants.  It is no longer needed for the proved
+range-two blocked theorem: the exact three-site identification gives coefficient
+$7/16$, and cyclic transport gives every overlapping pair.  In particular,
 \leanid{re_inner_anticommutator_starProjection_orthogonal_ge_neg_of_friedrichs_bound}
 shows that a Friedrichs bound $\eta$ for the two ground-space ranges, after
 removing their common intersection, gives
 \[
   h_i h_j+h_jh_i\ge -\eta(h_i+h_j)
 \]
-for the complementary excitation projections. The remaining comparison is
-whether the cited FNW--Nachtergaele--Kastoryano estimates supply the required
-uniform ground-space Friedrichs bound, with constants independent of the chain
-length, after the same blocking convention has been fixed.
+for the complementary excitation projections. What remains open is whether the
+cited FNW--Nachtergaele--Kastoryano estimates recover their optimized numerator
+and source constants in the present Gram and blocking conventions.
 The qualitative fact that two finite-dimensional subspaces have a well-defined
 principal-angle decomposition is not enough: the martingale reduction needs a
 uniform numerical bound after the same blocking convention has been fixed.
@@ -407,9 +412,10 @@ and
 \leanid{parentHamiltonianES_gap_bound_of_cyclic_window_overlap_operator_norm_of_lt},
 with public reformulations
 \leanid{parentHamiltonianES_gap_bound_of_overlap_operator_norm_constant} and
-\leanid{parentHamiltonian_gapped_of_overlap_operator_norm_constant}. The correct
-remaining route is the blocked-to-cyclic ground-projector comparison tracked
-in issue~\#5925. The generic theorem
+\leanid{parentHamiltonian_gapped_of_overlap_operator_norm_constant}. For the
+blocked range-two theorem, the exact three-site projector identity and the
+forward and backward adjacent-pair transports replace this conditional route.
+The generic theorem
 \leanid{re_inner_anticommutator_starProjection_orthogonal_ge_neg_of_friedrichs_bound}
 then supplies the excitation-projection anticommutator estimate. This route uses
 the intersection identity $\ker h_i\cap\ker h_j=\ker(h_i+h_j)$ or its restatement
@@ -420,15 +426,14 @@ nonzero vector.
 
 \section{Relation to the blueprint}
 
-The blueprint item labelled \path{lem:martingale_mps} in
+The blueprint item labelled \path{thm:martingale_mps} in
 \path{blueprint/src/chapter/ch13_parent_hamiltonian_spectral_gap_martingale.tex}
-separates the finite-row martingale reduction from the still-open cyclic
-comparison.
-It does not assert that the displayed all-$L>1$ cyclic-window bound has already
-been obtained from the cited principal-angle estimates. Instead, it records the
-source anticommutator estimate as the hypothesis of
-Theorem \path{thm:anticommutator_gap_bound}, and records norm-compression
-estimates as sufficient stronger hypotheses.
+records the completed blocked range-two theorem.  For a primitive tensor with a
+positive-definite fixed point it chooses $p>0$, sets
+$B=\operatorname{block}_p(A)$, and proves a gap lower bound $1/8$ for
+$H_{N,2}(B)$ for every $N\ge4$.  Its preceding item records the exact
+three-site projector identification and the transport of the $7/16$ adjacent
+anticommutator estimate to every cyclic overlap.
 
 The source-matching theorem entry
 \path{thm:anticommutator_gap_bound} points to
@@ -453,27 +458,21 @@ The two norm-compression theorem entries are therefore conditional on the same
 stronger input, specialized either to this displayed coefficient or to an
 arbitrary coefficient satisfying (E). Thus all finite-row, cyclic-window,
 non-overlap, anticommutator, norm-compression, and spectral-theorem reductions
-are proved, while the MPS-specific anticommutator estimate remains to be proved
-or matched precisely to the cited martingale estimates.
-
-The open-chain threshold is now settled.  Once the blocked-to-cyclic comparison
-is proved, the blueprint should say that the cyclic-window anticommutator
-estimate follows under the convention used here. The blueprint should
-identify the reduced ground-space
-Friedrichs-to-anticommutator reduction as the source-facing route. The all-vector
-compression bound (N$_\eta$), if separately assumed, is only a stronger
-conditional estimate implying a gap.
+are proved, and the blocked
+range-two MPS specialization is complete.  The all-vector compression bound
+(N$_\eta$), if separately assumed, remains only a stronger conditional estimate.
+The separate open problem is to compare the blocked Hamiltonian with a parent
+interaction for the original tensor in original-site units, as recorded under
+issue~\#5926.
 
 \section{Conclusion}
 
-The conclusion is a difference between the review paragraph and the formal
-quantitative statement, with one mathematical comparison still to be made. The
-source states the martingale condition in terms of general row-sum coefficients
-and invokes principal-angle estimates to obtain a positive MPS parent-Hamiltonian
-gap. The formal proof contains the direct finite-overlap anticommutator
-reduction for cyclic windows, specializes the row coefficients to
-$c_{ij}=1/(2(L-1))$ on overlapping pairs, and leaves the remaining MPS-specific
-work as the source anticommutator estimate. It also records the stronger
+The source states the martingale condition in terms of general row-sum
+coefficients and invokes principal-angle estimates to obtain a positive MPS
+parent-Hamiltonian gap. The formal proof contains the direct finite-overlap
+anticommutator reduction for cyclic windows and specializes it to the blocked
+range-two tensor with adjacent-pair coefficient $7/16$, giving gap $1/8$. It
+also records the stronger
 norm-compression route
 \[
     \|p_i p_j v\|\le \eta\|p_i v\|,
@@ -488,10 +487,9 @@ is a sufficient special case for this stronger route, not the only possible way
 to use the formal martingale reduction.
 
 The Cirac--Perez-Garcia--Schuch--Verstraete 2021 statement is not being
-challenged. The comparison records that the available formal argument is more
-explicit than the review paragraph: the exact constants and the cyclic-window
-blocking convention still have to be compared with the FNW, Nachtergaele, and
-Kastoryano--Lucia estimates.
+challenged.  The formal result gives a sufficient explicit constant for the
+range-two parent Hamiltonian after blocking.  Recovering the optimized FNW
+numerator and its source constants remains a separate comparison.
 
 \section{Inverse-Gram reduction and the remaining optimized FNW comparison}
 
@@ -1252,14 +1250,16 @@ conversion retains its proved $D^{3/2}$ norm factor inside $g$.
 
 \section{Verdict}
 
-\textbf{Verdict: scope restriction.}  The exact
-whole-increment algebra, the reconstructed prefix-uniform geometric
-C3$^\prime$-type estimate, and the three-block coefficient $7/16$ are proved.
-All lengths are measured in sites of the input tensor.  These bounds come from
-the formal inverse-Gram reconstruction and are not attributed to FNW.  The
-optimized FNW numerator and its source constants remain open, as does the
-blocked-to-cyclic ground-projector comparison needed for the periodic
-parent-Hamiltonian gap theorem.
+\textbf{Verdict: scope restriction.}  The exact whole-increment algebra, the
+reconstructed prefix-uniform geometric C3$^\prime$-type estimate, the
+three-block coefficient $7/16$, and the resulting cyclic range-two gap $1/8$
+for a suitable blocked tensor are proved.  All lengths before blocking are
+measured in sites of the input tensor, while the final chain length counts
+blocked sites.  These bounds come from the formal inverse-Gram reconstruction
+and are not attributed to FNW.  The optimized FNW numerator and its source
+constants remain open.  Issue~\#5926 concerns the separate comparison between
+this blocked range-two Hamiltonian and an interaction for the original tensor;
+no additional public existential theorem is asserted here.
 
 \bibliographystyle{alpha}
 \bibliography{references}
