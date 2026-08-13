@@ -106,9 +106,10 @@ In this file, `T*` is the Heisenberg dual acting on observables, while the
 Schrödinger map uses adjoints in the opposite order.
 
 The two index types are unrelated: for Kraus operators `Kⱼ : Matrix β α ℂ` the
-observable `A` lives on the output space `β` and the displayed identity lives on
-the input space `α`. This is Wolf's rectangular shape `T : M_d → M_{d'}`, with
-`α = ℂ^d` and `β = ℂ^{d'}`; the square case is `α = β`. -/
+observable `A` lives on the output space `ℂ^β` and the displayed identity lives
+on the input space `ℂ^α`. This is Wolf's rectangular shape `T : M_d → M_{d'}`,
+with input space `ℂ^α = ℂ^d` and output space `ℂ^β = ℂ^{d'}`; the square case
+is `α = β`. -/
 theorem stinespring_dual_representation {r : ℕ} {α β : Type*} [Fintype β]
     (K : Fin r → Matrix β α ℂ) (A : Matrix β β ℂ) :
     (stinespringV K)ᴴ *

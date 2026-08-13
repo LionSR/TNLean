@@ -126,8 +126,10 @@ project import.
     — for a completely positive `T : M_d → M_{d'}` and every `r ≥ rank(τ)`
     there is a `V : ℂ^d → ℂ^{d'} ⊗ ℂ^r` with `T*(A) = V†(A ⊗ 𝟙_r)V`, an
     isometry exactly when `T` is trace preserving ✓
-    `exists_stinespringV_choiRank_of_isKrausCP`
-    — the minimal dilation `r = rank(τ)` ✓
+    `exists_stinespringV_choiRank_of_isKrausCP` /
+    `exists_stinespringV_traceAdjointMap_choiRank_of_isKrausCP`
+    — the dilation at the Choi-rank ancilla dimension `r = rank(τ)`, called a
+    minimal dilation ✓
 
 * **Theorem 2.3** (ordered CP-maps):
   - `CPDominates` — CP partial order: `S - T` is completely positive ✓

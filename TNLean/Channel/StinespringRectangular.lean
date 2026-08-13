@@ -31,8 +31,9 @@ the trace pairing `tr[T*(A)X] = tr[A T(X)]` (Wolf, Equation (2.3)).
 * `ChoiRectangular.exists_stinespringV_traceAdjointMap_of_isKrausCP` — the same
   statement with `T*` the trace-pairing adjoint `Matrix.traceAdjointMap T`, so
   that nothing at all is assumed about `T*`.
-* `ChoiRectangular.exists_stinespringV_choiRank_of_isKrausCP` — the minimal
-  dilation `r = rank(τ)`.
+* `ChoiRectangular.exists_stinespringV_choiRank_of_isKrausCP` and
+  `ChoiRectangular.exists_stinespringV_traceAdjointMap_choiRank_of_isKrausCP` —
+  the dilation at the Choi-rank ancilla dimension `r = rank(τ)`.
 
 ## Design notes
 
@@ -42,11 +43,11 @@ Wolf's `T*` and not an additional assumption on `T`.
 
 The dilation matrix is `V = Σⱼ Kⱼ ⊗ |j⟩` built by `stinespringV` from a Kraus
 family of `T` with exactly `r` operators, obtained by zero-padding a minimal
-family of `rank(τ)` operators. The square existential statements
+family of `rank(τ)` operators. The square statements
 `exists_stinespring_dilation` and `exists_stinespring_isometry_of_cptp` in
-`TNLean/Channel/Stinespring.lean` remain as separate, weaker packagings: they
-expose the Kraus family and leave the ancilla dimension existentially
-quantified.
+`TNLean/Channel/Stinespring.lean` remain separate and are weaker: their ancilla
+dimension is existentially quantified, whereas the theorems here hold for an
+arbitrary `r` at least the Choi rank.
 
 ## References
 
@@ -120,9 +121,14 @@ theorem exists_stinespringV_traceAdjointMap_of_isKrausCP
       (Vᴴ * V = 1 ↔ ∀ X : Matrix (Fin d) (Fin d) ℂ, (T X).trace = X.trace) :=
   exists_stinespringV_of_isKrausCP hT (Matrix.trace_traceAdjointMap_mul T) hr
 
-/-- **Minimal Stinespring dilation** (Wolf, Chapter 2, Theorem 2.2): the
-smallest admissible ancilla dimension is the Choi rank `r = rank(τ)`, and the
-dilation there is called minimal. -/
+/-- **Stinespring dilation at the Choi-rank ancilla dimension** (Wolf,
+Chapter 2, Theorem 2.2): the case `r = rank(τ)` of
+`exists_stinespringV_of_isKrausCP`. A dilation with this ancilla dimension is
+called minimal.
+
+That no ancilla dimension below `rank(τ)` admits a dilation is not asserted
+here: it would need a Kraus family of `r` operators extracted from an arbitrary
+`V`, and Wolf's Theorem 2.2 states only the existence for `r ≥ rank(τ)`. -/
 theorem exists_stinespringV_choiRank_of_isKrausCP
     {T : Matrix (Fin d) (Fin d) ℂ →ₗ[ℂ] Matrix (Fin d') (Fin d') ℂ}
     {Tstar : Matrix (Fin d') (Fin d') ℂ →ₗ[ℂ] Matrix (Fin d) (Fin d) ℂ}
@@ -134,5 +140,18 @@ theorem exists_stinespringV_choiRank_of_isKrausCP
         Tstar A = Vᴴ * stinespringPi (r := Channel.choiRank T) A * V) ∧
       (Vᴴ * V = 1 ↔ ∀ X : Matrix (Fin d) (Fin d) ℂ, (T X).trace = X.trace) :=
   exists_stinespringV_of_isKrausCP hT hTstar le_rfl
+
+/-- **Stinespring dilation at the Choi-rank ancilla dimension, trace-pairing
+adjoint form** (Wolf, Chapter 2, Theorem 2.2): the case `r = rank(τ)` of
+`exists_stinespringV_traceAdjointMap_of_isKrausCP`, so that complete positivity
+of `T` is the only hypothesis. -/
+theorem exists_stinespringV_traceAdjointMap_choiRank_of_isKrausCP
+    {T : Matrix (Fin d) (Fin d) ℂ →ₗ[ℂ] Matrix (Fin d') (Fin d') ℂ}
+    (hT : IsKrausCP T) :
+    ∃ V : Matrix (Fin d' × Fin (Channel.choiRank T)) (Fin d) ℂ,
+      (∀ A : Matrix (Fin d') (Fin d') ℂ,
+        Matrix.traceAdjointMap T A = Vᴴ * stinespringPi (r := Channel.choiRank T) A * V) ∧
+      (Vᴴ * V = 1 ↔ ∀ X : Matrix (Fin d) (Fin d) ℂ, (T X).trace = X.trace) :=
+  exists_stinespringV_traceAdjointMap_of_isKrausCP hT le_rfl
 
 end ChoiRectangular

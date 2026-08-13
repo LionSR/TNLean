@@ -109,15 +109,18 @@ channel:
     \lean{stinespring_dual_representation}
     \leanok
     \uses{def:stinespring_v, def:cp_map, thm:stinespring_v_conjTranspose_mul}
-    For Kraus operators $\{K_j\}$ and $A\in\MN{D}$,
+    Let $K_j:\C^{d}\to\C^{d'}$ be Kraus operators of $T:\MN{d}\to\MN{d'}$ and
+    let $V=\sum_j K_j\otimes\ket{j}$. Then, for every observable $A\in\MN{d'}$
+    on the output space,
     \begin{align}
         V^\dagger(A\otimes\Id_r)V
         &=\sum_j K_j^\dagger A K_j
           =T^*(A).
         \label{eq:representations_stinespring_dual}
     \end{align}
-    This is the Stinespring representation of the \emph{dual} (Heisenberg
-    picture) map $T^*$.
+    Both sides lie in $\MN{d}$, on the input space. This is the Stinespring
+    representation of the \emph{dual} (Heisenberg picture) map $T^*$; the
+    square case is $d=d'$.
 \end{theorem}
 
 \begin{proof}
@@ -207,36 +210,43 @@ channel:
     \label{thm:stinespring_rectangular}
     \lean{ChoiRectangular.exists_stinespringV_of_isKrausCP,
         ChoiRectangular.exists_stinespringV_traceAdjointMap_of_isKrausCP,
-        ChoiRectangular.exists_stinespringV_choiRank_of_isKrausCP}
+        ChoiRectangular.exists_stinespringV_choiRank_of_isKrausCP,
+        ChoiRectangular.exists_stinespringV_traceAdjointMap_choiRank_of_isKrausCP}
     \leanok
     \uses{def:is_kraus_cp, def:trace_pairing_adjoint, def:kraus_rank_rect,
         thm:kraus_rect_rank_minimal, thm:kraus_rect_normalization,
         def:stinespring_v}
     Let $T:\MN{d}\to\MN{d'}$ be completely positive with Choi matrix $\tau$ and
     dual $T^*$. Then for every $r\geq\rank(\tau)$ there is a
-    $V:\C^{d}\to\C^{d'}\otimes\C^{r}$ such that
+    $V:\C^{d}\to\C^{d'}\otimes\C^{r}$ such that, for all $A\in\MN{d'}$,
     \begin{align}
-        T^*(A)&=V^\dagger(A\otimes\Id_r)V
-        \qquad\text{for all }A\in\MN{d'},
+        T^*(A)&=V^\dagger(A\otimes\Id_r)V,
         \label{eq:stinespring_rectangular}
     \end{align}
     and $V$ is an isometry, $V^\dagger V=\Id_d$, if and only if $T$ is trace
-    preserving. The smallest admissible dilation dimension is
-    $r=\rank(\tau)$, where the dilation is called minimal. This is
-    \cite[Theorem~2.2]{Wolf2012Quantum}.
+    preserving. In particular $r=\rank(\tau)$ is an admissible ancilla
+    dimension, and a dilation with that ancilla dimension is called minimal.
+    This is \cite[Theorem~2.2]{Wolf2012Quantum}.
 \end{theorem}
 
 \begin{proof}
     \leanok
-    \uses{thm:kraus_rect_rank_minimal, thm:kraus_rect_normalization,
-        thm:stinespring_dual_representation}
+    \uses{def:kraus_rank_rect, thm:kraus_rect_rank_minimal,
+        thm:kraus_rect_normalization, thm:stinespring_dual_representation,
+        thm:stinespring_v_conjTranspose_mul,
+        thm:trace_pairing_adjoint_identity, thm:trace_nondeg}
     By minimality of the Kraus rank, $T$ has a Kraus family of exactly
     $\rank(\tau)$ operators; padding it with zeros gives a family
-    $\{K_j\}_{j=1}^{r}$ for every $r\geq\rank(\tau)$. Set
+    $\{K_j\}_{j=0}^{r-1}$ for every $r\geq\rank(\tau)$. Set
     $V:=\sum_j K_j\otimes\ket{j}$ for an orthonormal basis $\{\ket{j}\}$ of
-    $\C^{r}$. Then $V^\dagger(A\otimes\Id_r)V=\sum_j K_j^\dagger AK_j$, whose
-    trace pairing against every $X$ agrees with that of $T^*(A)$; since the
-    trace pairing is nondegenerate, this gives
+    $\C^{r}$, so that $V^\dagger(A\otimes\Id_r)V=\sum_j K_j^\dagger AK_j$. The
+    trace pairing gives
+    \[
+        \tr\bigl[T^*(A)X\bigr]=\tr\bigl[A\,T(X)\bigr]
+        =\tr\Bigl[A\sum_j K_jXK_j^\dagger\Bigr]
+        =\tr\Bigl[\sum_j K_j^\dagger AK_j\,X\Bigr]
+    \]
+    for every $X\in\MN{d}$, and nondegeneracy of the trace pairing yields
     (\ref{eq:stinespring_rectangular}). Finally
     $V^\dagger V=\sum_j K_j^\dagger K_j$, and the latter equals $\Id_d$
     exactly when $T$ is trace preserving.
