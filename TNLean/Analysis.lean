@@ -44,6 +44,7 @@ import TNLean.Analysis.NeumannInverse
 import TNLean.Analysis.OperatorConvexity
 import TNLean.Analysis.OperatorNormConvergence
 import TNLean.Analysis.PosSemidefCommute
+import TNLean.Analysis.PositiveGapTransfer
 import TNLean.Analysis.ProbabilityEntropy
 import TNLean.Analysis.ProjectionGeometry
 import TNLean.Analysis.RelativeEntropyResolventIntegral

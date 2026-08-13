@@ -378,7 +378,8 @@ private theorem cyclicRestrictES_adjoint_apply {N : ℕ} (hN : 0 < N) {L : ℕ}
       _ = if SameOutsideWindow (L := L) i σ τ then v (extractWindow L i σ) else 0 := by
             simp [hστ]
 
-@[simp] private theorem localTermES_apply {N : ℕ} (A : MPSTensor d D) (L : ℕ) (i : Fin N)
+/-- Evaluate a transported local term through the cyclic restriction to its window. -/
+@[simp] theorem localTermES_apply {N : ℕ} (A : MPSTensor d D) (L : ℕ) (i : Fin N)
     (hLN : L ≤ N) (v : EuclideanSpace ℂ (Cfg d N)) (σ : Cfg d N) :
     localTermES A L i v σ =
       parentInteractionES A L ((cyclicRestrictES (d := d) (Fin.pos i) L i σ) v)
