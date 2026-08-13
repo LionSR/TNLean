@@ -28,7 +28,8 @@ variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℂ E]
 
 It is the orthogonal projection onto `range (P.comp Q)`. The source instead defines
 its projector blockwise in arXiv:1703.09188, Proposition IV.5, line 764. Identifying
-that blockwise projector with this canonical construction belongs to issue #6294. -/
+that blockwise projector with this canonical construction is recorded in
+`docs/paper-gaps/1703_two_projection_projector_typo.tex`. -/
 noncomputable def reducedProjection (P Q : E →ₗ[ℂ] E) : E →ₗ[ℂ] E :=
   (LinearMap.range (P.comp Q)).starProjection
 
@@ -45,8 +46,9 @@ theorem range_reducedProjection (P Q : E →ₗ[ℂ] E) :
 /-- For symmetric projections, `range (P.comp Q)` equals `range (P.comp Q.comp P)`.
 
 This range identity is a coordinate-free consequence of the projection hypotheses. The
-source defines its reduced projector blockwise; issue #6294 owns the identification of
-that blockwise projector with `reducedProjection P Q`. -/
+source defines its reduced projector blockwise; the identification of that blockwise
+projector with `reducedProjection P Q` is recorded in
+`docs/paper-gaps/1703_two_projection_projector_typo.tex`. -/
 theorem reducedProjection_range_triple {P Q : E →ₗ[ℂ] E}
     (hP : P.IsSymmetricProjection) (hQ : Q.IsSymmetricProjection) :
     LinearMap.range (P.comp (Q.comp P)) = LinearMap.range (P.comp Q) := by
