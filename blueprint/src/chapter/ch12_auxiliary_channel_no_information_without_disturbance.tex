@@ -2,10 +2,11 @@
 \label{sec:no_information_without_disturbance}
 %% =========================================================
 
-An \emph{instrument} on $\MN{d}$ is a finite family
-$\{T_\alpha:\MN{d}\to\MN{d}\}$ of completely positive maps, the outcome
-$\alpha$ occurring with probability $\tr[T_\alpha(\rho)]$ on the input
-$\rho$. The instrument leaves the input undisturbed on average when
+An \emph{instrument} on $\MN{d}$ (Definition~\ref{def:instrument}) is a finite
+family $\{T_\alpha:\MN{d}\to\MN{d}\}$ of completely positive maps whose sum is
+trace-preserving; the outcome $\alpha$ occurs with probability
+$\tr[T_\alpha(\rho)]$ on the input $\rho$. The instrument leaves the input
+undisturbed on average when
 $\sum_\alpha T_\alpha=\id$. In that case the outcome distribution is the
 same for every input, so the measurement returns no information about
 $\rho$. This is the proposition ``No information without disturbance'' of
@@ -54,8 +55,7 @@ $\rho$. This is the proposition ``No information without disturbance'' of
     where $\tau_\alpha$ is the Choi matrix of $T_\alpha$. Each $\tau_\alpha$
     is positive semidefinite because $T_\alpha$ is completely positive, so
     every summand is dominated by the whole sum:
-    $\tau_\alpha\leq\ketbra{\Omega}{\Omega}$. The maximally entangled state
-    is pure, hence admits no non-trivial decomposition, and
+    $\tau_\alpha\leq\ketbra{\Omega}{\Omega}$. Then
     Lemma~\ref{lem:le_omega_proj_eq_nonneg_smul} gives
     $\tau_\alpha=c_\alpha\ketbra{\Omega}{\Omega}$ with $c_\alpha\geq0$. The
     right-hand side is the Choi matrix of $c_\alpha\id$, so
