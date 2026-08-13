@@ -148,6 +148,25 @@ using the identity following condition C3 in
 \cite[Equation~(2.4)]{Nachtergaele1996Spectral}. Equation~(2.5) is the
 separate batched condition C3$'$ involving $E_n^{(p)}$.
 
+For the adjacent range-two conditions in the three-site Hilbert space, the
+individual identifications are now explicit. The coordinate equalities between
+last-site restriction and the cyclic window at site $0$, and between the
+one-site-prefix tail restriction, first-site restriction, and the cyclic window
+at site $1$, give
+\[
+  \ker h_0=\mathcal U_2(B),\qquad
+  \ker h_1=\mathcal V_{1,2}(B).
+\]
+These are formalized as \leanid{ker_localTermES_two_three_zero} and
+\leanid{ker_localTermES_two_three_one}. Since each $h_i$ is a symmetric
+projection, uniqueness from its range then gives
+\[
+  P_{\mathcal U_2(B)^\perp}=h_0,\qquad
+  P_{\mathcal V_{1,2}(B)^\perp}=h_1.
+\]
+No injectivity or nonzero bond-dimension assumption enters these individual
+kernel and projector identities.
+
 The open-chain numerical step is also complete.  The geometric estimate below
 is uniform in the left length, and
 \leanid{MPSTensor.IsPrimitiveMPS.exists_openChain_groundProjection_defect_lt_c3_threshold}
