@@ -22,15 +22,15 @@ binary entry, not from a statement about entropy or the area law.
 
 ## Main results
 
-* `CPSVExample411BinarySupport.reducedBlockState_four_two_zero`: the exact
+* `MPOTensor.CPSVExample411BinarySupport.reducedBlockState_four_two_zero`: the exact
   length-four supported entry $14/41$.
-* `CPSVExample411BinarySupport.reducedBlockState_three_two_zero`: the exact
+* `MPOTensor.CPSVExample411BinarySupport.reducedBlockState_three_two_zero`: the exact
   length-three supported entry $5/14$.
-* `CPSVExample411BinarySupport.M_not_isSourceZCL`: the effective tensor does
+* `MPOTensor.CPSVExample411BinarySupport.M_not_isSourceZCL`: the effective tensor does
   not satisfy the source-facing physical-trace ZCL relation.
-* `CPSVExample411Ambient.reducedBlockState_supported_apply`: ambient supported
+* `MPOTensor.CPSVExample411Ambient.reducedBlockState_supported_apply`: ambient supported
   marginal entries agree with the effective binary entries.
-* `CPSVExample411Ambient.ambientM_not_isSourceZCL`: the ambient tensor does not
+* `MPOTensor.CPSVExample411Ambient.ambientM_not_isSourceZCL`: the ambient tensor does not
   satisfy the source-facing physical-trace ZCL relation.
 
 ## Reference
