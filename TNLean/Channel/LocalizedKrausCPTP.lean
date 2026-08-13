@@ -65,17 +65,15 @@ theorem tensorMapIdLM_isKrausCP
   exact ⟨r, fun i => Matrix.kroneckerMap (· * ·) (A i) 1,
     tensorMapId_krausForm A hAform⟩
 
--- The finite and decidable instances construct the product indices in `tensorMapIdLM_isKrausCP`
--- and `PosSemidef`; the unused-instance linters do not detect these uses through those definitions.
-set_option linter.unusedFintypeInType false in
-set_option linter.unusedDecidableInType false in
 /-- Tensoring a Kraus completely positive map with the identity on a finite matrix factor
 preserves positive semidefiniteness. -/
 theorem tensorMapId_posSemidef_of_isKrausCP {α β δ : Type*} [Fintype α] [DecidableEq α]
-    [Fintype β] [DecidableEq β] [Fintype δ] [DecidableEq δ]
+    [Fintype β] [DecidableEq β] [Finite δ]
     {S : Matrix α α ℂ →ₗ[ℂ] Matrix β β ℂ} (hS : IsKrausCP S)
     {X : Matrix (α × δ) (α × δ) ℂ} (hX : X.PosSemidef) :
     (Matrix.tensorMapId S X).PosSemidef := by
+  classical
+  letI := Fintype.ofFinite δ
   have hkraus := (tensorMapIdLM_isKrausCP (δ := δ) hS).map_posSemidef hX
   rwa [Matrix.tensorMapIdLM_apply] at hkraus
 
