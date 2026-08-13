@@ -61,7 +61,7 @@ overlap vector.
   characterization of the least eigenvalue gives min_ψ ⟨ψ|τ|ψ⟩ = λ_min.
 * `Matrix.IsHermitian.le_sInf_schmidtRankLEExpectations` and
   `Matrix.IsHermitian.sInf_schmidtRankLEExpectations_le` -- equations (3.7)
-  and (3.8) in the source's form, as the two bounds on
+  and (3.8) for n < D' in the source's form, as the two bounds on
   inf_ψ ⟨ψ|τ|ψ⟩ over the normalized vectors of Schmidt rank at most n.
 * `Matrix.IsHermitian.sInf_schmidtRankLEExpectations_top` and
   `Matrix.IsHermitian.le_sInf_schmidtRankLEExpectations_top` -- the same infimum
@@ -399,8 +399,8 @@ theorem IsHermitian.exists_overlap_eq_kyFanNorm {τ : Matrix (m × n) (m × n) �
     congr 1
   rw [hkfn]
 
-/-- **Wolf's Chapter 3, Proposition 3.2, equation (3.7): spectral lower bound.**
-For a Hermitian operator τ on the bipartite space — for instance the
+/-- **Wolf's Chapter 3, Proposition 3.2, equation (3.7) for k < D': spectral
+lower bound.**  For a Hermitian operator τ on the bipartite space — for instance the
 Choi-Jamiolkowski operator of a Hermitian map — with eigenvalues νᵢ and reduced
 eigenvector densities ρᵢ, let ν₀ be a nonnegative lower bound for the positive
 eigenvalues (the smallest positive eigenvalue in the source).  Then every
@@ -434,8 +434,8 @@ theorem IsHermitian.spectral_lower_bound {τ : Matrix (m × n) (m × n) ℂ}
   · rw [hτ.sum_normSq_eigenvector_overlap_re ψ, hψ, Complex.one_re]
   · exact hτ.normSq_overlap_le_kyFanNorm i hk1 hk hψ hrank
 
-/-- **Wolf's Chapter 3, Proposition 3.2, equation (3.8): spectral upper bound.**
-When every eigenvalue of τ is at most ν, there is a normalized vector ψ of
+/-- **Wolf's Chapter 3, Proposition 3.2, equation (3.8) for k < D': spectral
+upper bound.**  When every eigenvalue of τ is at most ν, there is a normalized vector ψ of
 Schmidt rank at most k for which ⟨ψ|τ|ψ⟩ ≤ ν + (νⱼ − ν) ‖ρⱼ‖₍ₖ₎, for any
 chosen eigenvector index j; hence the infimum over such vectors lies below that
 value.  In the source ν is the largest positive eigenvalue and j indexes the
@@ -514,8 +514,8 @@ theorem IsHermitian.schmidtRankLEExpectations_bddBelow [Nonempty m] [Nonempty n]
   rintro r ⟨ψ, hψ, -, rfl⟩
   exact hτ.spectral_lower_bound_top hψ
 
-/-- **Wolf §3, line 153, Eq. (3.7).**  For a Hermitian operator τ on the
-bipartite space with eigenvalues νᵢ, normalized eigenvectors φᵢ and reduced
+/-- **Wolf §3, line 153, Eq. (3.7) for n < D'.**  For a Hermitian operator τ on
+the bipartite space with eigenvalues νᵢ, normalized eigenvectors φᵢ and reduced
 densities ρᵢ = tr₂ |φᵢ⟩⟨φᵢ|, and for ν₀ ≥ 0 a lower bound for the positive
 eigenvalues (the smallest positive eigenvalue in the source),
 inf_ψ ⟨ψ|τ|ψ⟩ ≥ ν₀ + Σ_{i:νᵢ≤0} (νᵢ − ν₀) ‖ρᵢ‖₍ₙ₎, the infimum being taken
@@ -541,8 +541,8 @@ theorem IsHermitian.le_sInf_schmidtRankLEExpectations [Nonempty m] [Nonempty n]
   rintro r ⟨ψ, hψ, hrank, rfl⟩
   exact hτ.spectral_lower_bound hk1 hk hν0 hmin hψ hrank
 
-/-- **Wolf §3, line 153, Eq. (3.8).**  If every eigenvalue of τ is at most ν
-then, for any eigenvector index j,
+/-- **Wolf §3, line 153, Eq. (3.8) for n < D'.**  If every eigenvalue of τ is at
+most ν then, for any eigenvector index j,
 inf_ψ ⟨ψ|τ|ψ⟩ ≤ ν + (νⱼ − ν) ‖ρⱼ‖₍ₙ₎, the infimum being taken over the
 normalized vectors of Schmidt rank at most n.  In the source ν is the largest positive
 eigenvalue and j indexes the unique non-positive eigenvalue ν₋, all other
