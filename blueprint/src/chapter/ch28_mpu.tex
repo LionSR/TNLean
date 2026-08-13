@@ -5327,8 +5327,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
   \lean{LinearMap.IsSymmetricProjection.angleDefect,
     LinearMap.IsSymmetricProjection.angleDefectBlock}
   \leanok
-  \uses{def:mpu_two_projection_compression_spectral_data,
-    thm:mpu_two_projection_angle_block}
+  \uses{def:mpu_two_projection_compression_spectral_data}
   For compression spectral data $(x_i,\mu_i)$, define
   \begin{align}
     d_i&=Qx_i-\mu_i x_i,\\
@@ -5347,23 +5346,17 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     LinearMap.IsSymmetricProjection.map_angleDefectBlock_le_second_projection,
     LinearMap.IsSymmetricProjection.angleDefectBlock_isOrtho}
   \leanok
-  \uses{def:mpu_two_projection_angle_defect_block,
-    thm:mpu_two_projection_compression_spectrum,
-    thm:mpu_two_projection_angle_block}
-  For distinct indices $i\ne j$,
+  \uses{def:mpu_two_projection_angle_defect_block}
+  For all indices $i,j$,
   \begin{align}
     \langle x_i,d_j\rangle&=0,\\
     \langle d_i,x_j\rangle&=0,\\
-    \langle d_i,d_j\rangle&=0.
-  \end{align}
-  More generally,
-  \begin{align}
     \langle d_i,d_j\rangle
       &=\mu_j(1-\mu_j)\langle x_i,x_j\rangle.
   \end{align}
-  Hence these identities also hold when $\mu_i=\mu_j$ but $i\ne j$. The
-  block $B_i$ has dimension at most two, is invariant under both $P$ and $Q$,
-  and satisfies $B_i\perp B_j$ for distinct indices.
+  In particular, $\langle d_i,d_j\rangle=0$ when $i\ne j$, including when
+  $\mu_i=\mu_j$. The block $B_i$ has dimension at most two, is invariant under
+  both $P$ and $Q$, and satisfies $B_i\perp B_j$ for distinct indices.
   % This does not assert an ambient direct sum or any property of the remaining
   % orthogonal complement.
   % Source lines: paper_v2.tex 759--762.
@@ -5375,12 +5368,12 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     thm:mpu_two_projection_angle_block}
   Since $Px_i=x_i$, symmetry of $P$ and the compression eigenvalue equation give
   \begin{align}
-    \langle x_i,Qx_j\rangle
-      &=\langle Px_i,Qx_j\rangle
-       =\langle x_i,PQx_j\rangle
-       =\mu_j\langle x_i,x_j\rangle=0.
+    \langle x_i,d_j\rangle
+      &=\langle x_i,Qx_j\rangle-\mu_j\langle x_i,x_j\rangle\\
+      &=\langle Px_i,Qx_j\rangle-\mu_j\langle x_i,x_j\rangle\\
+      &=\langle x_i,PQx_j\rangle-\mu_j\langle x_i,x_j\rangle=0.
   \end{align}
-  This proves both eigenvector--defect identities. For the exact defect
+  Conjugate symmetry gives $\langle d_i,x_j\rangle=0$. For the exact defect
   pairing, symmetry of $Q$ and the local action formula give
   \begin{align}
     Qd_j&=\mu_j(1-\mu_j)x_j+(1-\mu_j)d_j,\\
