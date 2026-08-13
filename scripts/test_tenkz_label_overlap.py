@@ -494,6 +494,32 @@ ONINK_SOURCE = r"""
 \end{document}
 """
 
+STYLED_SOURCE = r"""
+\documentclass{standalone}
+\usepackage{tenkz}
+\tikzset{bond/.append style={line width=4pt}}
+\begin{document}
+\begin{tenkz}[rows={wire}, cols=2]
+  \tn[skin=dot]{P} & \tn[skin=dot]{}
+\end{tenkz}
+\end{document}
+"""
+
+NESTED_CLAIM_SOURCE = r"""
+\documentclass{standalone}
+\usepackage{tenkz}
+\newif\ifinhook
+\tikzset{tenkz audited label/.append style={execute at end node={%
+  \ifinhook\else\global\inhooktrue
+  \tikz[baseline] \node[tn label] (nested) {x};%
+  \global\inhookfalse\fi}}}
+\begin{document}
+\begin{tenkz}[rows={wire}, cols=2]
+  \tn[skin=dot]{P} & \tn[skin=dot]{}
+\end{tenkz}
+\end{document}
+"""
+
 
 def customized_glyph(options: str, preamble: str = "") -> str:
     return r"""
@@ -1894,6 +1920,61 @@ def main() -> int:
                 raise AssertionError(
                     f"{name}: the certified walk convicted clear geometry")
 
+        # A diagonal bow: the chord runs corner to corner and the curve bows
+        # a quarter of the picture away from it.  A coordinate-wise bound
+        # understates that Euclidean distance by up to sqrt(2), so this seed
+        # holds the walk to its no-false-negative guarantee: the label sits
+        # on the curve at t = 1/2 and must be found.
+        diagonal_status, diagonal_audit = audit_status(ink_log(
+            "ink-cubic-diagonal.tnlog",
+            "wire-ink|picture=1|name=diag|origin=bond|stroke=1|"
+            "points=0,0;c:0,1000,0,1000,1000,1000\n",
+            "label-use|picture=1\n"
+            "bbox|picture=1|class=label|id=1|owner=0|"
+            "xmin=124|xmax=126|ymin=874|ymax=876|shape=rect|radius=0\n",
+        ))
+        if diagonal_status != 0 or [
+                finding.rule for finding in diagonal_audit.findings
+        ] != ["label-on-ink"]:
+            raise AssertionError(
+                "the certified walk missed a label on a diagonal bow: "
+                + "; ".join(f.msg for f in diagonal_audit.findings))
+
+        # Station provenance is a coupled claim.  Every inconsistent
+        # combination is a malformed event, and the label it rode drops out
+        # of the intersection reading instead of being misclassified: the
+        # first seed's geometry is a genuine hit, and it must surface as
+        # malformed rather than as any label-on-ink severity.
+        for name, claim in (
+                ("ink-auto-no-station.tnlog", "|provenance=auto"),
+                ("ink-explicit-station.tnlog",
+                 "|station=s|provenance=explicit"),
+                ("ink-station-alone.tnlog", "|station=s"),
+        ):
+            status, audit = audit_status(
+                ink_log(name, flat_ink, ink_label(-100000, -18022, claim)))
+            if status != 1 or any(
+                    finding.rule == "label-on-ink"
+                    for finding in audit.findings) or not any(
+                    finding.rule == "malformed-event"
+                    for finding in audit.findings):
+                raise AssertionError(
+                    f"{name}: an inconsistent claim was not read as "
+                    "malformed: "
+                    + "; ".join(f.msg for f in audit.findings))
+        wire_claim = ink_log(
+            "ink-wire-class-claim.tnlog",
+            "bbox|picture=1|class=wire|id=1|owner=1|"
+            "xmin=0|xmax=1|ymin=0|ymax=1|station=s|provenance=auto\n",
+        )
+        wire_claim_status, wire_claim_audit = audit_status(wire_claim)
+        if wire_claim_status != 1 or not any(
+                finding.rule == "malformed-event"
+                and "ride only label boxes" in finding.msg
+                for finding in wire_claim_audit.findings):
+            raise AssertionError(
+                "a station claim on a wire box was not read as malformed")
+
         # Grammar rejections: malformed points, a zero stroke, and a missing
         # stroke are each a malformed event, exactly as the label-geometry
         # path reads them.
@@ -1995,6 +2076,91 @@ def main() -> int:
                 raise AssertionError(
                     f"{fixture} reported label-on-ink at its fixed labels: "
                     + "; ".join(f.msg for f in fixture_audit.findings))
+
+        def compile_tex(name: str, text: str) -> Path:
+            target = work / name
+            target.write_text(text, encoding="utf-8")
+            run = subprocess.run(
+                [engine, "-interaction=nonstopmode", "-halt-on-error",
+                 target.name],
+                cwd=work, env=env, text=True,
+                stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
+                timeout=120,
+            )
+            if run.returncode:
+                print(run.stdout)
+                raise AssertionError(f"{name} did not compile")
+            return work / (target.stem + ".tnlog")
+
+        # The recorded stroke is the width the renderer resolves, so a
+        # document that restyles the bond class widens the audited band with
+        # the ink: 4pt of line width is a half stroke of 131072 scaled
+        # points.
+        styled_status, styled_audit = audit_status(
+            compile_tex("styled-bond.tex", STYLED_SOURCE))
+        styled_inks = [event for event in styled_audit.events("k1")
+                       if event.kind == "wire-ink"]
+        if (styled_status != 0 or len(styled_inks) != 1
+                or styled_inks[0].attrs.get("stroke") != "131072"):
+            raise AssertionError(
+                "a restyled bond did not record its resolved half stroke: "
+                + "; ".join(event.raw for event in styled_inks))
+
+        # The claim is consumed by the audited node's own reset hook, so a
+        # nested label created by an execute-at-end-node hook during that
+        # node's construction starts unclaimed: the outer dot's name keeps
+        # its auto claim and the nested label carries neither field.
+        _nested_status, nested_audit = audit_status(
+            compile_tex("nested-claim.tex", NESTED_CLAIM_SOURCE))
+        nested_boxes = [event for event in nested_audit.events("k1")
+                        if event.kind == "bbox"
+                        and event.attrs.get("class") == "label"]
+        claimed = [event for event in nested_boxes
+                   if "provenance" in event.attrs]
+        unclaimed = [event for event in nested_boxes
+                     if "provenance" not in event.attrs
+                     and "station" not in event.attrs]
+        if (len(nested_boxes) != 2 or len(claimed) != 1
+                or claimed[0].attrs.get("provenance") != "auto"
+                or len(unclaimed) != 1):
+            raise AssertionError(
+                "the station claim leaked into a nested end-hook label: "
+                + "; ".join(event.raw for event in nested_boxes))
+
+        # Renderer-owned ink the wire pass does not stroke itself: a
+        # crossing-deferred policy leg emits from the crossing-policed
+        # engine path, and an under-strand route emits its post-surgery
+        # components -- the crossing gap splits its record in two.
+        leg_source = (ROOT / "tests/tenkz/kernel/regression/"
+                      "r_onwire_policy_leg.tex")
+        leg_status, leg_audit = audit_status(compile_tex(
+            "r_onwire_policy_leg.tex",
+            leg_source.read_text(encoding="utf-8")))
+        deferred_legs = [event for event in leg_audit.events("k1")
+                         if event.kind == "wire-ink"
+                         and event.attrs.get("origin") == "leg"
+                         and event.attrs.get("name") == "leg-s-1-2"]
+        split_ports = [event for event in leg_audit.events("k2")
+                       if event.kind == "wire-ink"
+                       and event.attrs.get("name") == "port-open-1"]
+        if leg_status != 0 or len(deferred_legs) != 1 or len(split_ports) != 2:
+            raise AssertionError(
+                "a deferred leg or gapped under-strand lost its ink record: "
+                f"legs={len(deferred_legs)}, ports={len(split_ports)}")
+
+        # An after-atom physical trace strokes outside the queued index
+        # class and still writes its record.
+        trace_source = (ROOT / "tests/tenkz/kernel/regression/"
+                        "r_affine_physical_trace.tex")
+        trace_status, trace_audit = audit_status(compile_tex(
+            "r_affine_physical_trace.tex",
+            trace_source.read_text(encoding="utf-8")))
+        trace_inks = [event for event in trace_audit.events()
+                      if event.kind == "wire-ink"
+                      and event.attrs.get("origin") == "trace"]
+        if trace_status != 0 or not trace_inks:
+            raise AssertionError(
+                "an after-atom physical trace emitted no wire-ink record")
 
         core_source = (ROOT / "tex/tenkz/tenkz-core.code.tex").read_text(
             encoding="utf-8")
