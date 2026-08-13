@@ -129,7 +129,7 @@ theorem finrank_angleDefectBlock_le_two {P Q : E →ₗ[ℂ] E}
   exact (finrank_span_finset_le_card s).trans (Finset.card_insert_le _ _ |>.trans (by simp))
 
 /-- Each defect block is invariant under the first projection. -/
-theorem map_angleDefectBlock_le_P {P Q : E →ₗ[ℂ] E}
+theorem map_angleDefectBlock_le_first_projection {P Q : E →ₗ[ℂ] E}
     (hP : P.IsSymmetricProjection) (hQ : Q.IsSymmetricProjection)
     (i : CompressionIndex (P := P)) :
     Submodule.map P (angleDefectBlock hP hQ i) ≤ angleDefectBlock hP hQ i := by
@@ -150,7 +150,7 @@ theorem map_angleDefectBlock_le_P {P Q : E →ₗ[ℂ] E}
     exact Submodule.zero_mem _
 
 /-- Each defect block is invariant under the second projection. -/
-theorem map_angleDefectBlock_le_Q {P Q : E →ₗ[ℂ] E}
+theorem map_angleDefectBlock_le_second_projection {P Q : E →ₗ[ℂ] E}
     (hP : P.IsSymmetricProjection) (hQ : Q.IsSymmetricProjection)
     (i : CompressionIndex (P := P)) :
     Submodule.map Q (angleDefectBlock hP hQ i) ≤ angleDefectBlock hP hQ i := by

@@ -5320,28 +5320,37 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
   Theorem~\ref{thm:mpu_two_projection_angle_block}.
 \end{proof}
 
+\begin{definition}[Compression defect block]
+  \label{def:mpu_two_projection_angle_defect_block}
+  \lean{LinearMap.IsSymmetricProjection.angleDefectBlock}
+  \leanok
+  \uses{def:mpu_two_projection_compression_spectral_data,
+    thm:mpu_two_projection_angle_block}
+  For compression spectral data $(x_i,\mu_i)$, define
+  \begin{align}
+    d_i&=Qx_i-\mu_i x_i,\\
+    B_i&=\operatorname{span}\{x_i,d_i\}.
+  \end{align}
+\end{definition}
+
 \begin{theorem}[Orthogonality of compression angle blocks]
   \label{thm:mpu_two_projection_angle_block_orthogonality}
   \lean{LinearMap.IsSymmetricProjection.rangeCompressionEigenbasis_inner_angleDefect_eq_zero,
     LinearMap.IsSymmetricProjection.angleDefect_inner_rangeCompressionEigenbasis_eq_zero,
     LinearMap.IsSymmetricProjection.angleDefect_inner_angleDefect,
     LinearMap.IsSymmetricProjection.angleDefect_inner_angleDefect_eq_zero,
-    LinearMap.IsSymmetricProjection.angleDefectBlock,
     LinearMap.IsSymmetricProjection.finrank_angleDefectBlock_le_two,
-    LinearMap.IsSymmetricProjection.map_angleDefectBlock_le_P,
-    LinearMap.IsSymmetricProjection.map_angleDefectBlock_le_Q,
+    LinearMap.IsSymmetricProjection.map_angleDefectBlock_le_first_projection,
+    LinearMap.IsSymmetricProjection.map_angleDefectBlock_le_second_projection,
     LinearMap.IsSymmetricProjection.angleDefectBlock_isOrtho}
   \leanok
-  \uses{def:mpu_two_projection_compression_spectral_data,
-    thm:mpu_two_projection_compression_spectrum}
-  For distinct indices $i\ne j$, put
+  \uses{def:mpu_two_projection_angle_defect_block,
+    thm:mpu_two_projection_compression_spectrum,
+    thm:mpu_two_projection_angle_block}
+  For distinct indices $i\ne j$,
   \begin{align}
-    d_i&=Qx_i-\mu_i x_i.
-  \end{align}
-  Then
-  \begin{align}
-    \langle x_i,d_j\rangle&=0,&
-    \langle d_i,x_j\rangle&=0,&
+    \langle x_i,d_j\rangle&=0,\\
+    \langle d_i,x_j\rangle&=0,\\
     \langle d_i,d_j\rangle&=0.
   \end{align}
   More generally,
@@ -5350,15 +5359,17 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
       &=\mu_j(1-\mu_j)\langle x_i,x_j\rangle.
   \end{align}
   Hence these identities also hold when $\mu_i=\mu_j$ but $i\ne j$. The
-  defect block $B_i=\operatorname{span}\{x_i,d_i\}$ has dimension at most two,
-  is invariant under both $P$ and $Q$, and satisfies $B_i\perp B_j$ for
-  distinct indices. This does not assert an ambient direct sum or any property
-  of the remaining orthogonal complement.
+  block $B_i$ has dimension at most two, is invariant under both $P$ and $Q$,
+  and satisfies $B_i\perp B_j$ for distinct indices.
+  % This does not assert an ambient direct sum or any property of the remaining
+  % orthogonal complement.
   % Source lines: paper_v2.tex 759--762.
 \end{theorem}
 
 \begin{proof}\leanok
-  \uses{def:mpu_two_projection_compression_spectral_data}
+  \uses{def:mpu_two_projection_angle_defect_block,
+    thm:mpu_two_projection_compression_spectrum,
+    thm:mpu_two_projection_angle_block}
   Since $Px_i=x_i$, symmetry of $P$ and the compression eigenvalue equation give
   \begin{align}
     \langle x_i,Qx_j\rangle
