@@ -22,9 +22,10 @@ factorization are exact algebraic consequences of the boundary-map formulas.
   direct-sum factors.
 * `MPSTensor.c3CenteredVirtualResidualES` is the centered virtual residual in the
   tail-after-left overlap orientation.
-* `MPSTensor.wholeIncrementLeftOverlapFactorES`,
-  `MPSTensor.wholeIncrementRightOverlapFactorES`, and
-  `MPSTensor.wholeIncrementCenteredResidualES` are their arbitrary-increment forms.
+* `MPSTensor.wholeIncrementLeftOverlapFactorES` and
+  `MPSTensor.wholeIncrementRightOverlapFactorES` are the corresponding factors for a
+  whole suffix increment.
+* `MPSTensor.wholeIncrementCenteredResidualES` is the whole-increment centered residual.
 
 ## Main results
 
@@ -36,9 +37,13 @@ factorization are exact algebraic consequences of the boundary-map formulas.
 * `MPSTensor.c3_centeredVirtualResidualES_norm_le` is the resulting operator-norm bound.
 * `MPSTensor.IsPrimitiveMPS.c3_centeredVirtualResidualES_norm_sq_le_geometric` gives the
   squared geometric estimate, uniformly in the prefix length.
-* `MPSTensor.wholeIncrementCenteredResidualES_eq_overlapFactors` and
-  `MPSTensor.wholeIncrementCenteredResidualES_norm_le_of_leftCanonical` give the exact
-  arbitrary-increment factorization and its left-canonical norm bound.
+* `MPSTensor.wholeIncrementCenteredResidualES_eq_overlapFactors` gives the exact
+  whole-increment centered factorization.
+* `MPSTensor.wholeIncrementLeftOverlapFactorES_norm_le` and
+  `MPSTensor.wholeIncrementRightOverlapFactorES_norm_le` bound its two factors.
+* `MPSTensor.wholeIncrementCenteredResidualES_norm_le_of_leftCanonical` and
+  `MPSTensor.IsPrimitiveMPS.wholeIncrementCenteredResidualES_norm_le` remove the
+  whole-increment left prefactor under left-canonical normalization.
 -/
 
 open scoped ComplexOrder Matrix Matrix.Norms.Frobenius
@@ -232,7 +237,7 @@ theorem c3RightOverlapFactorES_norm_le (A : MPSTensor d D) (K : ℕ) :
 
 /-! ### Whole-increment centered overlap -/
 
-/-- The left direct-sum factor for a suffix increment of length `Q`. -/
+/-- The left direct-sum factor for a suffix increment of length \(Q\). -/
 noncomputable def wholeIncrementLeftOverlapFactorES
     (A : MPSTensor d D) (K Q : ℕ) :
     BoundaryFamilySpace (D := D) (Cfg d K) →L[ℂ]
@@ -265,7 +270,7 @@ noncomputable def wholeIncrementLeftOverlapFactorES
           rfl, map_smul]
         rfl }
 
-/-- The right direct-sum factor for a suffix increment of length `Q`. -/
+/-- The right direct-sum factor for a suffix increment of length \(Q\). -/
 noncomputable def wholeIncrementRightOverlapFactorES
     (A : MPSTensor d D) (K Q : ℕ) :
     BoundaryFamilySpace (D := D) (Cfg d Q) →L[ℂ]
@@ -426,8 +431,8 @@ noncomputable def wholeIncrementCenteredResidualES
       ((boundaryFiberwiseMap (D := D) (Cfg d K × Cfg d Q) Kinf).comp
         (wholeIncrementRightOverlapFactorES A K Q))
 
-/-- The whole-increment centered residual factors through the length-
-\(L\) Gram error in the exact common ambient. -/
+/-- The whole-increment centered residual factors through the finite Gram error
+`groundSpaceGram A L - Kinf` in the exact common ambient. -/
 theorem wholeIncrementCenteredResidualES_eq_overlapFactors
     (A : MPSTensor d D) (K L Q : ℕ)
     (ρ : Matrix (Fin D) (Fin D) ℂ) (htr : Matrix.trace ρ ≠ 0) :

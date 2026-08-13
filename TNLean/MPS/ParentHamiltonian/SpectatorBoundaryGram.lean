@@ -20,10 +20,19 @@ and the fiberwise Gram identities. No contraction estimate is asserted.
 * `tailBoundaryMapES` and `leftBoundaryMapES` are the Euclidean spectator maps.
 * `tailVirtualMapES` and `leftVirtualMapES` are their virtual common-factorization maps.
 * `boundaryFiberwiseMap` applies a virtual endomorphism independently on every fiber.
+* `physicalReassocES` identifies the two parenthesizations of a three-block physical chain.
+* `reassocTailBoundaryMapES` places a whole-increment tail map in the left-associated ambient
+  chain.
 
 ## Main results
 
 * `range_tailBoundaryMapES` and `range_leftBoundaryMapES_one` identify the physical ranges.
+* `leftVirtualMapES_norm_map_of_leftCanonical` and
+  `leftVirtualMapES_norm_le_one_of_leftCanonical` show that every whole-increment left virtual
+  map is norm-preserving, hence has operator norm at most one.
+* `physicalReassocES_comp_groundSpaceMapES` and
+  `reassocTailBoundaryMapES_comp_tailVirtualMapES` give the reassociated full-map and tail-map
+  factorizations.
 * `whole_increment_injectiveRangeProjector_residual_eq` is the arbitrary-increment exact
   common-ambient identity; `c3_injectiveRangeProjector_residual_eq` is its one-site form.
 * `tailVirtualMapES_adjoint_apply` and `leftVirtualMapES_adjoint_apply` compute the

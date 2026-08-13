@@ -21,6 +21,19 @@ with flattening of physical words and proves basic consequences such as
 preservation of left-canonical normalization and `SameMPV`. It also defines the
 Kronecker-power lift `blockKron` of a physical-index operator through blocking,
 together with its algebraic properties.
+
+## Main definitions
+
+* `blockPhysDim`, `wordOfBlock`, and `blockTensor` define physical blocking.
+* `blockKron` lifts a physical-index operator through blocking.
+
+## Main results
+
+* `evalWord_blockTensor` identifies blocked word evaluation with flattened words.
+* `sum_evalWord_conjTranspose_mul_evalWord` propagates left-canonical normalization to every
+  fixed word length.
+* `leftCanonical_blockTensor` shows that physical blocking preserves left-canonicality.
+* `sameMPV_blockTensor` transports equality of matrix product vectors through blocking.
 -/
 
 open scoped Matrix

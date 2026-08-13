@@ -826,6 +826,183 @@ norm estimate is derived here.
     $\lVert J_K\rVert$.  No FNW or Nachtergaele contraction estimate enters.
 \end{proof}
 
+\begin{theorem}[Whole-increment left virtual isometry and reassociation]
+    \label{thm:whole_increment_left_virtual_isometry_reassociation}
+    \lean{MPSTensor.leftVirtualMapES_norm_map_of_leftCanonical}
+    \lean{MPSTensor.leftVirtualMapES_norm_le_one_of_leftCanonical}
+    \lean{MPSTensor.physicalReassocES}
+    \lean{MPSTensor.physicalReassocES_comp_groundSpaceMapES}
+    \lean{MPSTensor.reassocTailBoundaryMapES}
+    \lean{MPSTensor.reassocTailBoundaryMapES_comp_tailVirtualMapES}
+    \lean{MPSTensor.whole_increment_injectiveRangeProjector_residual_eq}
+    \leanok
+    \uses{thm:spectator_boundary_hilbert_factorization,
+        thm:c3_spectator_projector_residual}
+    Let $A$ be left-canonical and let $Q\in\N$.  The length-$Q$ left virtual
+    map preserves the Hilbert--Schmidt norm, and its operator norm is at most
+    one.  Reassociation identifies the physical chains on $K+(L+Q)$ and
+    $(K+L)+Q$ sites and transports both the full boundary map and the tail
+    factorization to the latter common ambient space.  Consequently, the
+    inverse-Gram range-projector residual identity holds with tail length
+    $L+Q$, left length $K+L$ with $Q$ spectator sites, and full length
+    $K+L+Q$.
+
+    These are exact whole-increment identities.  They assert no numerical
+    bound on the physical projector defect.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:spectator_boundary_hilbert_factorization,
+        thm:c3_spectator_projector_residual}
+    The fixed-length word normalization
+    $\sum_{\sigma\in\Omega_Q}(A^\sigma)^\dagger A^\sigma=\mathbf 1$
+    proves norm preservation of the left virtual map.  The canonical
+    equivalence induced by associativity of addition reassociates the physical
+    configurations.  Applying the generic common-factorization projector
+    identity to the reassociated tail map, the $Q$-spectator left map, and the
+    full boundary map gives the residual formula.
+\end{proof}
+
+\begin{theorem}[Whole-increment mixed Gram]
+    \label{thm:whole_increment_mixed_gram}
+    \lean{MPSTensor.inner_tailBoundaryMapES_adjoint_leftBoundaryMapES_q}
+    \lean{MPSTensor.inner_reassocTailBoundaryMapES_adjoint_leftBoundaryMapES}
+    \lean{MPSTensor.inner_reassocTailBoundaryMapES_adjoint_leftBoundaryMapES_centered}
+    \leanok
+    \uses{thm:spectator_boundary_mixed_gram_centered,
+        thm:whole_increment_left_virtual_isometry_reassociation}
+    For boundary families $X=(X_u)_{u\in\Omega_K}$ and
+    $Z=(Z_j)_{j\in\Omega_Q}$, the reassociated whole-increment mixed Gram is
+    \begin{align}
+      \left\langle X,
+        (\Gamma^{\mathrm{tail}}_{K,L+Q})^\dagger
+        \Gamma^{\mathrm{left}}_{K+L,Q}Z\right\rangle
+      &=\sum_{u\in\Omega_K}\sum_{j\in\Omega_Q}
+        \left\langle U(A^jX_u),\mathcal K_LU(Z_jA^u)\right\rangle.
+    \end{align}
+    Subtracting the same expression with $\mathcal K_\infty$ gives the exact
+    centered formula with $\mathcal K_L-\mathcal K_\infty$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:spectator_boundary_mixed_gram_centered,
+        thm:whole_increment_left_virtual_isometry_reassociation}
+    Split each physical configuration into words of lengths $K$, $L$, and
+    $Q$, use word multiplicativity and trace cyclicity, and sum the overlap
+    word to obtain the length-$L$ Gram.  The centered identity follows by
+    subtracting the limiting Gram pairing term by term.
+\end{proof}
+
+\begin{theorem}[Whole-increment centered factorization]
+    \label{thm:whole_increment_centered_factorization}
+    \lean{MPSTensor.wholeIncrementLeftOverlapFactorES}
+    \lean{MPSTensor.wholeIncrementRightOverlapFactorES}
+    \lean{MPSTensor.boundaryFamilyEquiv_wholeIncrementLeftOverlapFactorES_apply}
+    \lean{MPSTensor.boundaryFamilyEquiv_wholeIncrementRightOverlapFactorES_apply}
+    \lean{MPSTensor.wholeIncrementLeftOverlapFactorES_norm_le}
+    \lean{MPSTensor.wholeIncrementRightOverlapFactorES_norm_le}
+    \lean{MPSTensor.wholeIncrementCenteredResidualES}
+    \lean{MPSTensor.wholeIncrementCenteredResidualES_eq_overlapFactors}
+    \lean{MPSTensor.wholeIncrementCenteredResidualES_norm_le}
+    \lean{MPSTensor.wholeIncrementCenteredResidualES_norm_le_of_leftCanonical}
+    \lean{MPSTensor.IsPrimitiveMPS.wholeIncrementCenteredResidualES_norm_le}
+    \leanok
+    \uses{thm:whole_increment_mixed_gram,
+        thm:whole_increment_left_virtual_isometry_reassociation,
+        thm:primitive_tail_virtual_map_norm_uniform}
+    Define whole-increment factors by
+    $(F_{K,Q}X)_{u,j}=A^jX_u$ and
+    $(G_{K,Q}Z)_{u,j}=Z_jA^u$.  Their norms satisfy
+    \begin{align}
+      \lVert F_{K,Q}\rVert&\leq\lVert J_Q^{\mathrm{left}}\rVert,&
+      \lVert G_{K,Q}\rVert&\leq\lVert J_K^{\mathrm{tail}}\rVert.
+    \end{align}
+    The centered mixed residual factors exactly as
+    \begin{align}
+      R_{K,L,Q}
+      &=F_{K,Q}^\dagger
+        (\mathcal K_L-\mathcal K_\infty)^{\oplus
+          (\Omega_K\times\Omega_Q)}G_{K,Q}.
+    \end{align}
+    Thus left-canonicality removes the whole-increment left prefactor:
+    \begin{align}
+      \lVert R_{K,L,Q}\rVert
+      &\leq\lVert\mathcal K_L-\mathcal K_\infty\rVert
+        \lVert J_K^{\mathrm{tail}}\rVert.
+    \end{align}
+    This controls only the centered mixed term.  It does not bound the finite
+    Gram corrections, prove C3$^\prime$, or produce the coefficient $7/16$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:whole_increment_mixed_gram,
+        thm:whole_increment_left_virtual_isometry_reassociation,
+        thm:primitive_tail_virtual_map_norm_uniform}
+    The direct-sum norm identity gives the two factor bounds without a
+    spectator-cardinality loss.  The whole-increment mixed-Gram formula gives
+    the exact factorization through
+    $\mathcal K_L-\mathcal K_\infty$.  Submultiplicativity and the
+    left-canonical norm preservation of $J_Q^{\mathrm{left}}$ give the final
+    estimate.
+\end{proof}
+
+\begin{theorem}[Whole-increment finite-Gram correction telescope]
+    \label{thm:whole_increment_finite_gram_corrections}
+    \lean{MPSTensor.wholeIncrement_limitingOverlapProduct_eq}
+    \lean{MPSTensor.reassocTailBoundaryMapES_adjoint_comp_self_eq_fiberwise_groundSpaceGram}
+    \lean{MPSTensor.inverseGram_reassocTailBoundaryMapES_eq_fiberwise_inverseGram}
+    \lean{MPSTensor.wholeIncrementLeftFiniteGramCancellation_eq_groundSpaceMapES_adjoint}
+    \lean{MPSTensor.wholeIncrementTailFiniteGramCancellation_eq_groundSpaceMapES_adjoint}
+    \lean{MPSTensor.wholeIncrementTailFiniteGramCorrectionES}
+    \lean{MPSTensor.wholeIncrementFullInverseGramCorrectionES}
+    \lean{MPSTensor.wholeIncrementLeftFiniteGramCorrectionES}
+    \lean{MPSTensor.norm_reassocTailBoundaryMapES_comp_inverseGram_le_sqrt}
+    \lean{MPSTensor.wholeIncrement_virtualResidual_eq_centered_sub_gramErrors}
+    \lean{MPSTensor.wholeIncrementCenteredProjectorResidualES}
+    \lean{MPSTensor.wholeIncrement_injectiveRangeProjector_residual_eq_centered_sub_corrections}
+    \lean{MPSTensor.wholeIncrementTailFiniteGramCorrectionES_norm_le}
+    \lean{MPSTensor.wholeIncrementFullInverseGramCorrectionES_norm_le}
+    \lean{MPSTensor.wholeIncrementLeftFiniteGramCorrectionES_norm_le}
+    \leanok
+    \uses{thm:whole_increment_centered_factorization,
+        thm:whole_increment_left_virtual_isometry_reassociation,
+        thm:c3_projector_gram_error_telescope}
+    Let $S_n=\mathcal K_n^{-1}$ whenever the length-$n$ Gram is invertible.
+    The exact whole-increment virtual residual is the centered residual minus
+    three corrections containing
+    \begin{align}
+      \mathcal K_{L+Q}-\mathcal K_\infty,\qquad
+      S_{K+L+Q}-S_\infty,\qquad
+      \mathcal K_{K+L}-\mathcal K_\infty.
+    \end{align}
+    The same telescope holds for the physical inverse-Gram projector residual
+    after sandwiching by the reassociated tail and left boundary maps.  The
+    three correction maps have exact factorizations and raw operator-norm
+    bounds in terms of the corresponding Gram errors, inverse Grams, and
+    boundary pseudoinverse factors.
+
+    These identities package all algebraic whole-increment correction terms,
+    but do not make them small uniformly in $K$ and $Q$.  In particular they
+    prove neither Nachtergaele's C3$^\prime$ estimate nor the coefficient
+    $7/16$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:whole_increment_centered_factorization,
+        thm:whole_increment_left_virtual_isometry_reassociation,
+        thm:c3_projector_gram_error_telescope}
+    Reassociation preserves the tail Gram and its fiberwise inverse.  The
+    finite Grams cancel against their adjacent inverses, leaving the full
+    ground-space-map adjoint.  Add and subtract the limiting Gram and inverse
+    Gram in the exact residual, telescope the product, and apply
+    submultiplicativity together with the pseudoinverse square-root estimate
+    to each correction sandwich.
+\end{proof}
+
 \begin{definition}[Common overlap factors and centered residual]
     \label{def:c3_centered_overlap_factors_residual}
     \lean{MPSTensor.c3LeftOverlapFactorES}
