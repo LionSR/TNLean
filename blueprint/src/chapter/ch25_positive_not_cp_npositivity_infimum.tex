@@ -29,12 +29,14 @@ Hermitian map is tested, and the set whose expectations are collected below.
 \begin{lemma}[The expectation set has an infimum]
     \label{lem:schmidt_rank_le_expectations_inf_exists}
     \lean{Matrix.schmidtRankLEExpectations_nonempty,
-        Matrix.IsHermitian.schmidtRankLEExpectations_bddBelow}
+        Matrix.IsHermitian.schmidtRankLEExpectations_bddBelow,
+        Matrix.mem_schmidtRankLEExpectations}
     \leanok
     \uses{def:schmidt_rank_le_expectations}
-    For $n\ge1$ the set $E_n(\tau)$ is nonempty, and for Hermitian $\tau$ it is
-    bounded below by the least eigenvalue $\nu_{\min}$ of $\tau$. Hence
-    $\inf E_n(\tau)$ exists.
+    Assume $D',D\ge1$. For $n\ge1$ the set $E_n(\tau)$ is nonempty, and for
+    Hermitian $\tau$ it is bounded below by the least eigenvalue $\nu_{\min}$ of
+    $\tau$; the expectation of $\tau$ in any normalized vector of Schmidt rank at
+    most $n$ is one of its elements. Hence $\inf E_n(\tau)$ exists.
 \end{lemma}
 
 \begin{proof}
@@ -55,8 +57,8 @@ Hermitian map is tested, and the set whose expectations are collected below.
         def:reduced_eig_density}
     Let $\tau$ be a Hermitian operator on $\C^{D'}\otimes\C^{D}$ with
     eigenvalues $\nu_i$, normalized eigenvectors $\phi_i$ and reduced densities
-    $\rho_i=\tr_2\ketbra{\phi_i}{\phi_i}$. Let $1\le n<D'$ and let
-    $\nu_0\ge0$ be a lower bound for the positive eigenvalues, the smallest
+    $\rho_i=\tr_2\ketbra{\phi_i}{\phi_i}$. Assume $D',D\ge1$, let $1\le n<D'$
+    and let $\nu_0\ge0$ be a lower bound for the positive eigenvalues, the smallest
     positive eigenvalue in \cite[Chapter~3]{Wolf2012Quantum}. Then
     \begin{align}
         \nu_0+\sum_{i:\nu_i\le0}(\nu_i-\nu_0)\|\rho_i\|_{(n)}
@@ -83,9 +85,9 @@ Hermitian map is tested, and the set whose expectations are collected below.
     \leanok
     \uses{def:schmidt_rank_le_expectations, def:ky_fan_norm,
         def:reduced_eig_density}
-    With $\tau$, $\phi_i$ and $\rho_i$ as above, let $1\le n<D'$ and suppose
-    every eigenvalue of $\tau$ is at most $\nu$. Then, for every eigenvector
-    index $j$,
+    With $\tau$, $\phi_i$ and $\rho_i$ as above and $D',D\ge1$, let
+    $1\le n<D'$ and suppose every eigenvalue of $\tau$ is at most $\nu$. Then,
+    for every eigenvector index $j$,
     \begin{align}
         \inf E_n(\tau)
          & \le\nu+(\nu_j-\nu)\|\rho_j\|_{(n)}.
@@ -108,6 +110,32 @@ Hermitian map is tested, and the set whose expectations are collected below.
     $E_n(\tau)$ is at most that expectation, hence at most the right-hand side.
 \end{proof}
 
+\begin{lemma}[The Ky-Fan norm of a reduced eigenvector density at full index]
+    \label{lem:reduced_eig_density_ky_fan_top}
+    \lean{Matrix.IsHermitian.trace_reducedEigDensity,
+        Matrix.IsHermitian.kyFanNorm_reducedEigDensity_eq_one}
+    \leanok
+    \uses{def:ky_fan_norm, def:reduced_eig_density}
+    Each reduced eigenvector density has unit trace, and for $n\ge D'$ its
+    Ky-Fan $n$-norm is that trace:
+    \begin{align}
+        \tr\rho_i &= 1,
+        &
+        \|\rho_i\|_{(n)} &= 1
+        .
+        \notag
+    \end{align}
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    The partial trace preserves the trace, so
+    $\tr\rho_i=\tr\ketbra{\phi_i}{\phi_i}=\braket{\phi_i}{\phi_i}=1$. The Ky-Fan
+    norm sums the $n$ largest eigenvalues in descending order, and an index past
+    the dimension $D'$ contributes zero, so the sum stops growing at $n=D'$,
+    where it is the sum of all eigenvalues of $\rho_i$, that is $\tr\rho_i$.
+\end{proof}
+
 \begin{theorem}[The Schmidt-rank infimum at the top index]
     \label{thm:spectral_infimum_top}
     \lean{Matrix.IsHermitian.sInf_schmidtRankLEExpectations_top,
@@ -115,8 +143,9 @@ Hermitian map is tested, and the set whose expectations are collected below.
     \leanok
     \uses{def:schmidt_rank_le_expectations, def:ky_fan_norm,
         def:reduced_eig_density}
-    Once the Schmidt-rank bound reaches the dimension $D'$ of the first tensor
-    factor the constraint is vacuous, and each Ky-Fan norm collapses to
+    Assume $D',D\ge1$. Once the Schmidt-rank bound reaches the dimension $D'$ of
+    the first tensor factor the constraint is vacuous, and each Ky-Fan norm
+    collapses to
     $\|\rho_i\|_{(n)}=\tr\rho_i=1$. For $n\ge D'$,
     \begin{align}
         \inf E_n(\tau)
@@ -147,15 +176,22 @@ Hermitian map is tested, and the set whose expectations are collected below.
     \leanok
     \uses{thm:spectral_bound_schmidt_rank_top,
         thm:schmidt_rank_basic_bounds,
-        lem:schmidt_rank_le_expectations_inf_exists}
+        lem:schmidt_rank_le_expectations_inf_exists,
+        lem:reduced_eig_density_ky_fan_top}
     Every vector has Schmidt rank at most $D'$, so for $n\ge D'$ the set
     $E_n(\tau)$ is the set of expectations in all normalized vectors. By
     Theorem~\ref{thm:spectral_bound_schmidt_rank_top} that set is bounded below
     by $\nu_{\min}$ and contains $\nu_{\min}$, attained at an eigenvector for
     the least eigenvalue. This gives~(\ref{eq:channel_spectral_infimum_top}).
-    For~(\ref{eq:channel_spectral_infimum_top_lower}), the summand at a
-    minimizing index $j$ contributes $\nu_j-\nu_0=\nu_{\min}-\nu_0$ whenever
-    $\nu_{\min}\le0$, and every other summand is nonpositive, so the left-hand
-    side is at most $\nu_{\min}$; if instead every eigenvalue is positive the
-    sum is empty and the left-hand side is $\nu_0\le\nu_{\min}$.
+    For~(\ref{eq:channel_spectral_infimum_top_lower}), let $j$ be a minimizing
+    index. If $\nu_{\min}\le0$ then $j$ belongs to the summation range and
+    \begin{align}
+        \nu_0+\sum_{i:\nu_i\le0}(\nu_i-\nu_0)
+        &= \nu_{\min}+\sum_{i:\nu_i\le0,\ i\ne j}(\nu_i-\nu_0)
+        \le \nu_{\min},
+        \notag
+    \end{align}
+    every remaining summand being nonpositive. If instead every eigenvalue is
+    positive the summation range is empty and the left-hand side is
+    $\nu_0\le\nu_{\min}$.
 \end{proof}

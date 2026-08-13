@@ -39,8 +39,12 @@ and, when a single eigenvalue $\nu_-$ is non-positive,
 Each $\rho_i$ acts on the first factor $\mathbb{C}^{D'}$, so its Ky-Fan
 $n$-norm $\|\rho_i\|_{(n)}$ is meaningful for $1\le n\le D'$. Proposition~3.1 of
 the same chapter restricts the positivity index to $1\le n\le D$, the dimension
-of the second factor (same file, lines 90--92), so the top value $n=D'$ of the
-Ky-Fan norm is within the source's scope whichever of $D$ and $D'$ is larger.
+of the second factor (same file, lines 90--92), and that is the range the source
+asserts. The value $n=D'$ therefore lies inside the source's range exactly when
+$D'\le D$; when $D'>D$ it lies beyond, and the formal endpoint below is an
+extension of the source rather than an instance of it. What matters for coverage
+is that the formal statements together hold at every $n\ge1$, hence at every $n$
+the source speaks about.
 
 \section{Formalized statement}
 
@@ -102,7 +106,8 @@ the corresponding half of
 \section{Classification}
 
 \emph{Resolved.} Bounds~(3.7) and~(3.8) are now formalized at every index
-$n\ge1$, hence over the source's range $1\le n\le D$: the per-vector bounds
+$n\ge1$, hence over the source's range $1\le n\le D$ whatever the two dimensions
+are, and beyond it when $D'>D$: the per-vector bounds
 \leanid{Matrix.IsHermitian.spectral_lower_bound} and
 \leanid{Matrix.IsHermitian.exists_le_spectral_upper_bound} for $1\le n<D'$, and
 their endpoints

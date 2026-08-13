@@ -409,11 +409,14 @@ normalized vector ψ of Schmidt rank at most k satisfies
 infimum over such vectors.
 
 This version covers Schmidt rank 1 ≤ k < D', where D' is the dimension of the
-first tensor factor.  From k = D' on, the Schmidt-rank constraint is vacuous and
-the Rayleigh estimate λ_min ≤ ⟨ψ|τ|ψ⟩ of
-`Matrix.IsHermitian.spectral_lower_bound_top` applies, itself dominating the
-bound above; the two together cover every k ≥ 1, hence the source's range
-1 ≤ k ≤ D with D the dimension of the second factor.  See
+first tensor factor.  From k = D' on, the Schmidt-rank constraint is vacuous, the
+Rayleigh estimate λ_min ≤ ⟨ψ|τ|ψ⟩ of
+`Matrix.IsHermitian.spectral_lower_bound_top` applies, and every ‖ρᵢ‖₍ₖ₎ = 1, so
+at a minimizing index j the bound above reads
+ν₀ + Σ_{i:νᵢ≤0} (νᵢ − ν₀) = λ_min + Σ_{i:νᵢ≤0, i≠j} (νᵢ − ν₀) ≤ λ_min
+when λ_min ≤ 0, and ν₀ ≤ λ_min when every eigenvalue is positive.  The two
+together cover every k ≥ 1, hence the source's range 1 ≤ k ≤ D with D the
+dimension of the second factor.  See
 `docs/paper-gaps/wolf_prop_3_2_top_index_scope.tex`. -/
 theorem IsHermitian.spectral_lower_bound {τ : Matrix (m × n) (m × n) ℂ}
     (hτ : τ.IsHermitian) {ν₀ : ℝ} {k : ℕ} (hk1 : 1 ≤ k) (hk : k < Fintype.card m)
