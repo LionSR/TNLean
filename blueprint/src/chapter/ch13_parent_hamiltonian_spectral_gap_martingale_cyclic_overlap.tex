@@ -4,7 +4,7 @@
     \lean{MPSTensor.re_inner_localTermES_adjacent_twoSite_backward_ge_of_threeSite}
     \leanok
     \uses{rem:euclidean_local_projector_ingredients,
-        rem:cyclic_window_operators, thm:three_site_commutator_chain_transport}
+        rem:cyclic_window_operators}
     Assume that the physical dimension satisfies $d>0$, and fix a coefficient
     $c\in\mathbb R$. Let $h_0,h_1$ be the two adjacent range-two local terms on
     three sites. Suppose that, for every three-site vector $w$,
@@ -75,9 +75,11 @@
           +\re\langle h_1w_\tau,h_0w_\tau\rangle\bigr),
       \label{eq:three_site_anticommutator_fiber_sum}
     \end{align}
-    which becomes
-    (\ref{eq:three_site_anticommutator_transport_forward}) by the preceding two
-    identities; in particular, summation leaves $c$ unchanged. For the backward
+    By the fiber decomposition
+    (\ref{eq:three_site_anticommutator_fiber_decomposition}) and restriction
+    intertwining (\ref{eq:three_site_anticommutator_restriction_intertwining}),
+    this is (\ref{eq:three_site_anticommutator_transport_forward}); in
+    particular, summation leaves $c$ unchanged. For the backward
     pair, begin the forward window at $i-1$. Moving one step forward from that
     site returns $i$, including when $i=0$, and yields
     (\ref{eq:three_site_anticommutator_transport_backward}).
