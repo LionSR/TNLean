@@ -1012,26 +1012,26 @@ def test_every_spelling_of_stream_eighteen_is_the_shell_escape_stream() -> None:
     # beginning with a bar is text.
     # The loaders take a file name directly, with no stream operand: an
     # operand reading let a page of typeset text count as a pipe.
-    # An expansion that leaves nothing or only whitespace is passed over
-    # by the primitive's filename scanner, so a pipe behind one still
-    # reaches the shell.
-    for piped in (r"\input\space |cmd", r"\input\space|cmd",
-                  r"\input\empty {|cmd}", r"\makeatletter\input\@empty |cmd",
-                  r"\input\c_space_tl |cmd", r"\input\c_empty_tl |cmd",
-                  "\\input\\ |cmd", "\\input\\\t|cmd",
-                  # The scanner expands throughout the name, brace or no
-                  # brace: this shape runs its command (compiled evidence
-                  # on the PR).
-                  r"\input{\space |cmd}"):
+    # The loaders run a pipe only through the braced or quoted spelling,
+    # with the blank expansions read before the name and inside the
+    # braces.  Every shape in this table was compiled under xelatex,
+    # pdflatex, and lualatex with -shell-escape and ran its command.
+    for piped in (r"\input{\space |cmd}", r"\input\empty {|cmd}",
+                  '\\input\\empty "|cmd"', r"\input\space {|cmd}",
+                  r"\makeatletter\input\@empty{|cmd}",
+                  r"\input\c_space_tl{|cmd}", '\\input\\c_empty_tl "|cmd"',
+                  r"\include{|cmd}"):
         assert tenkz_ctan.shell_escape_call(piped), piped
-    # \relax is not an expansion: it ends the name scan before the bar,
-    # so nothing runs (compiled evidence on the PR).
-    assert not tenkz_ctan.shell_escape_call(r"\input\relax |cmd")
-    # \include absorbs its undelimited argument before anything expands:
-    # the expansion is the argument, the brace group after it is typeset
-    # text, and no file name ever opens with the bar.
-    for absorbed in (r"\include\empty {|literal}", r"\include\space {|literal}"):
-        assert not tenkz_ctan.shell_escape_call(absorbed), absorbed
+    # The bare-name spellings error at the bar and run nothing, in all
+    # three engines: a bare pipe after a loader is typeset text, and
+    # refusing it would refuse a valid release.  A control space,
+    # \c_space_token, and \relax are unexpandable and end the name scan,
+    # compiled inert in every spelling.
+    for inert in (r"\input |cmd", r"\input\space |cmd", r"\input\space|cmd",
+                  r"\input\relax |cmd", r"\input\c_space_token{|cmd}",
+                  "\\input\\ {|cmd}", "\\input\\ |cmd",
+                  r"\include\empty {|literal}", r"\include\space {|literal}"):
+        assert not tenkz_ctan.shell_escape_call(inert), inert
     for plain in ('\\openin\\stream="plain.tex"', r'\def\separator{"|}',
                   'the sequence "| in prose',
                   r"\input 1 {|literal}", r"\include 12 {|literal}",
@@ -1168,7 +1168,7 @@ def test_an_unbraced_absolute_input_is_an_absolute_path() -> None:
                      r"\file_if_exist:nTF {/Users/somebody/data} {} {}",
                      r"\file_if_exist:nT {/Users/somebody/data} {}",
                      r"\file_if_exist:nF {/Users/somebody/data} {}",
-                     r"\file_if_exist:VTF {/Users/somebody/data} {} {}",
+                     r"\file_if_exist:oTF {/Users/somebody/data} {} {}",
                      r"\file_if_exist_p:n {/Users/somebody/data}",
                      '\\font\\tenkzfont="/Users/somebody/foo.otf"',
                      # A path holding a space is written quoted, braced or not.
@@ -1187,7 +1187,11 @@ def test_an_unbraced_absolute_input_is_an_absolute_path() -> None:
                          "\\file_if_exist:nTT {/Users/somebody/data}\n",
                          # expl3 names take no star: after one, the brace
                          # group is a code branch, not a file name.
-                         "\\file_if_exist:nT*{/Users/somebody/data}\n"):
+                         "\\file_if_exist:nT*{/Users/somebody/data}\n",
+                         # An indirect specifier names a variable whose
+                         # value is the real argument: a literal there is
+                         # a name, not a path.
+                         "\\file_if_exist:vTF {/Users/somebody/data} {} {}\n"):
             (tree / "tenkz.sty").write_text(innocent, encoding="utf-8")
             relative = tenkz_ctan.check_arxiv(tree, _loaded("tenkz.sty"))
             assert not relative.failures, (innocent, relative.failures)

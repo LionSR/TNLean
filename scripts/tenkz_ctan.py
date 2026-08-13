@@ -322,25 +322,28 @@ STREAM_OPERAND = r"(?:\\[A-Za-z@_:]+|[0-9]+)?\s*=?\s*"
 # `\include` take the file name directly, so reading an operand there let
 # `\input 1 {|literal}` — a page of typeset text — count as a pipe.  What
 # `\input` does admit before the name is an expansion that leaves nothing
-# or only whitespace, both of which the primitive's filename scanner
-# passes over, so `\input\space |cmd` and `\input\empty {|cmd}` still
-# reach the shell and are still read.  The scanner expands throughout the
-# name, brace or no brace, so the same set is read again after an opening
-# brace: `\input{\space |cmd}` runs its command (compiled evidence on the
-# PR).  A control space is the escape before any space-class character,
-# tab included.  `\include` reads none of them: the macro absorbs its
-# undelimited argument before anything expands, so an expansion there is
-# the argument itself and the tokens after it are typeset text, not a
-# file name.
+# or only whitespace, both of which the filename scanner passes over.
+# The loaders run a pipe only through the braced or quoted spelling:
+# compiled under xelatex, pdflatex, and lualatex with -shell-escape,
+# `\input{|cmd}`, `\input "|cmd"`, `\input{\space |cmd}`,
+# `\input\empty {|cmd}`, `\input\empty "|cmd"`, and `\include{|cmd}` all
+# run their command, while every bare-name spelling — `\input |cmd`,
+# `\input\space |cmd` — errors at the bar and runs nothing, so a bare
+# pipe after a loader is not read and refusing it would refuse typeset
+# text.  The blank expansions are read before the name and again inside
+# the braces.  The set is the *expandable* blanks only: a control space
+# and `\c_space_token` are unexpandable, end the name scan like `\relax`,
+# and were compiled inert in every spelling.  `\include` reads no
+# expansions: the macro absorbs its undelimited argument before anything
+# expands, so an expansion there is the argument itself.
 _BLANK_EXPANSIONS = (
-    r"(?:\\(?:space|empty|@empty|c_space_tl|c_empty_tl)(?![A-Za-z@_:])\s*"
-    r"|\\[ \t]\s*)*"
+    r"(?:\\(?:space|empty|@empty|c_space_tl|c_empty_tl)(?![A-Za-z@_:])\s*)*"
 )
 PIPE_FILENAME = re.compile(
     r"\\open(?:in|out)\s*" + STREAM_OPERAND + r"(?:\{\s*)?\"?\s*\|"
     r"|\\input\s*" + _BLANK_EXPANSIONS
-    + r"(?:\{\s*" + _BLANK_EXPANSIONS + r")?\"?\s*\|"
-    r"|\\include\s*(?:\{\s*)?\"?\s*\|"
+    + r"(?:\{\s*" + _BLANK_EXPANSIONS + r"\"?|\")\s*\|"
+    r"|\\include\s*(?:\{\s*\"?|\")\s*\|"
 )
 # The named ways to reach a shell that are not a write at all: the TeX
 # primitive's LaTeX name, and expl3's own shell interface, which a file under
@@ -473,9 +476,13 @@ ABSOLUTE_LOAD = re.compile(
     # TF/T/F tail or the bare predicate — so a different macro whose
     # suffix merely reuses these letters is not the conditional.  The
     # expl3 names take no star and no optional argument, so neither is
-    # read: a star after the signature is the file name TeX scans.
+    # read: a star after the signature is the file name TeX scans.  Only
+    # the specifiers that pass their braced text through as the name are
+    # read against a literal path: v and c name a variable or a command
+    # whose value is the real argument, so a literal there is a name,
+    # not a path.
     r"|\\(?:file_input:n"
-    r"|file_if_exist(?:_p:[NnVvcoxef]|:[NnVvcoxef](?:TF|T|F)))"
+    r"|file_if_exist(?:_p:[noxef]|:[noxef](?:TF|T|F)))"
     rf"\s*\{{\s*\"?{ABSOLUTE_PATH_HEAD}"
     rf"|\\input\s*\"?{ABSOLUTE_PATH_HEAD}"
     rf"|\\open(?:in|out)\s*{STREAM_OPERAND}\"?{ABSOLUTE_PATH_HEAD}"
