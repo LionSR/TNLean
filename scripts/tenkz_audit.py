@@ -469,8 +469,12 @@ class CubicSubdivisionExhausted(Exception):
 
 
 # Writing the gap between a cubic and its chord as B(t) - L(t) =
-# t(1-t) [ (1-t)(3P1 - 2P0 - P3) + t(3P2 - P0 - 2P3) ] bounds it, coordinate
-# by coordinate, by max(|3P1 - 2P0 - P3|, |3P2 - P0 - 2P3|) / 4.  The bound
+# t(1-t) [ (1-t)(3P1 - 2P0 - P3) + t(3P2 - P0 - 2P3) ] bounds its Euclidean
+# length by max(|3P1 - 2P0 - P3|, |3P2 - P0 - 2P3|) / 4.  The stroke test
+# inflates by a Euclidean reach, so the bound must dominate the Euclidean
+# norm: the taxicab length |dx| + |dy| does, exactly and in integers, where
+# the coordinate-wise maximum alone would understate a diagonal bow by up
+# to sqrt(2) and let a genuine intersection certify as a miss.  The bound
 # is exact rational arithmetic on the control points, and halving the curve
 # quarters it, so the walk below terminates for every finite input.
 _CUBIC_SUBDIVISION_LIMIT = 40
@@ -482,10 +486,8 @@ def _cubic_chord_bound(
         p0: RationalPoint, c1: RationalPoint,
         c2: RationalPoint, p3: RationalPoint) -> Fraction:
     return Fraction(max(
-        abs(3 * c1[0] - 2 * p0[0] - p3[0]),
-        abs(3 * c1[1] - 2 * p0[1] - p3[1]),
-        abs(3 * c2[0] - p0[0] - 2 * p3[0]),
-        abs(3 * c2[1] - p0[1] - 2 * p3[1]),
+        abs(3 * c1[0] - 2 * p0[0] - p3[0]) + abs(3 * c1[1] - 2 * p0[1] - p3[1]),
+        abs(3 * c2[0] - p0[0] - 2 * p3[0]) + abs(3 * c2[1] - p0[1] - 2 * p3[1]),
     )) / 4
 
 

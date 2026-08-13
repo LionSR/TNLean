@@ -491,6 +491,27 @@ def parse_log(
                     f"{', '.join(exclusive)}: {line}",
                 )
                 valid = False
+            if kind == "bbox":
+                # Station provenance is a coupled claim, not two fields: an
+                # auto claim names the chosen face, an explicit claim names
+                # none, and an unclaimed label carries neither.  Any other
+                # combination asserts a claim the writer never made, and the
+                # audit's severity would ride on it.
+                station = attrs.get("station")
+                provenance = attrs.get("provenance")
+                problem = None
+                if (station is not None or provenance is not None) and (
+                        attrs.get("class") != "label"):
+                    problem = "station provenance ride only label boxes"
+                elif provenance == "auto" and station is None:
+                    problem = "provenance=auto names no station"
+                elif provenance == "explicit" and station is not None:
+                    problem = "provenance=explicit carries a station"
+                elif provenance is None and station is not None:
+                    problem = "station carries no provenance"
+                if problem is not None:
+                    hard("malformed-event", where, f"{problem}: {line}")
+                    valid = False
             event.valid = valid
             if kind == "check":
                 # A scope-owned equation check is emitted outside every panel

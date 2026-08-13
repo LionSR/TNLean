@@ -163,7 +163,7 @@ first, the rest sorted, no `picture=`.
 | `label-use` | `picture` | a label node claimed no ink owner |
 | `bbox` | `picture`, `class=label`, `id`, `owner`, `xmin`, `xmax`, `ymin`, `ymax`, `shape`, `radius`, then optionally `station` (`s`, `n`, `e`, `w`) and `provenance` (`auto`, `explicit`) | one measured label box, in integer scaled points.  `provenance=auto` with `station=` is the dot chooser's verified promise of an ink-free face; `provenance=explicit` (no station) records the author's own `label pos=`.  Both fields are absent on every label site the chooser has not claimed — every non-dot label, and a dot whose ink the occupancy reading could not chart (its blind ledger; issue 6195) |
 | `glyph-geometry` | `picture`, `owner`, `shape`, `xmin`, `xmax`, `ymin`, `ymax`, `radius`, `stroke`, `x1`, `y1`, `x2`, `y2`, `x3`, `y3` | one measured glyph silhouette, in integer scaled points |
-| `wire-ink` | `picture`, `name`, `origin` (`bond`, `physical-leg`, `port`, `trace`, `leg`), `stroke`, `points` | one drawn route, read back from the saved soft path the renderer strokes: `points=` opens on the route's first point, a bare `x,y` extends a polyline, and a `c:`-prefixed sextuple `c:x1,y1,x2,y2,x3,y3` is a cubic to `x3,y3` with the two control pairs before it; `stroke=` is the half wire width, and every coordinate is an integer scaled point.  Caller-declared strings emit no record |
+| `wire-ink` | `picture`, `name`, `origin` (`bond`, `physical-leg`, `port`, `trace`, `leg`), `stroke`, `points` | one drawn route, read back from the saved soft path the renderer strokes: `points=` opens on the route's first point, a bare `x,y` extends a polyline, and a `c:`-prefixed sextuple `c:x1,y1,x2,y2,x3,y3` is a cubic to `x3,y3` with the two control pairs before it; `stroke=` is half the stroke width the route's resolved style draws it with, so a restyled wire class widens the recorded band with the ink; the record is written at the stroke pass, after crossing surgery, so an under-strand's crossing gap splits it into one record per drawn component; every coordinate is an integer scaled point.  Caller-declared strings emit no record |
 | `closure-rail` | `picture`, `name`, `row`, `side`, `west`, `east`, `stroke`, `clear`, `points` | one traced row's closure: the two virtual ends it joins, or `none` where the row has no site on that side, the half stroke it is drawn with, the standoff the rows it passes demand of it — signed by the side the return runs, measured from its own row line, and `arc` for a frame sector, which stands off no row line — and the semicolon-separated polyline it lays, all in integer scaled points |
 | `tree` | `picture`, `id`, `style`, `leaves`, `vertices`, `topology`, `role`, `species` | one fusion tree |
 | `geomprobe` | `id`, then a caller-supplied payload | one geometry probe, for fixtures |
@@ -213,6 +213,9 @@ Hard:
 - a `check` carrying `picture=`;
 - a tabled kind other than `picture` with no `picture=`, unless it is a kernel
   record inside an open kernel picture;
+- a `bbox` whose `station`/`provenance` fields break their coupled grammar:
+  the pair rides only label boxes, `provenance=auto` requires a `station`,
+  `provenance=explicit` forbids one, and a `station` never stands alone;
 - a `picture` with a malformed or repeated `id`;
 - a reference to an undeclared picture.
 
