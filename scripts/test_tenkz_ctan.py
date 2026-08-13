@@ -1025,16 +1025,19 @@ def test_every_spelling_of_stream_eighteen_is_the_shell_escape_stream() -> None:
                   r"\input{\space |cmd}", r"\input\empty {|cmd}",
                   '\\input\\empty "|cmd"', r"\input\space {|cmd}",
                   r"\makeatletter\input\@empty{|cmd}",
+                  r"\makeatletter\input\@spaces|cmd",
                   r"\input\c_space_tl{|cmd}", '\\input\\c_empty_tl "|cmd"',
                   r"\include{|cmd}", r"\openin1=|cmd", r"\openin\src=|cmd"):
         assert tenkz_ctan.shell_escape_call(piped), piped
+    # The set of blank expansions is open, so a pipe behind any run of
+    # control words fails closed: \c_space_token compiled inert, and the
+    # finding is the closed direction's accepted cost.
+    assert tenkz_ctan.shell_escape_call(r"\input\c_space_token{|cmd}")
     # The inert rows: a digit starts a real file name; a control space
-    # and \c_space_token are implicit space tokens that end the scan;
-    # \relax inside a braced name ends the name; \include absorbs one
-    # undelimited argument, so a quote or an expansion there is the
-    # argument itself and its pipe never opens a name.
+    # ends the scan; \relax inside a braced name ends the name; \include
+    # absorbs one undelimited argument, so a quote or an expansion there
+    # is the argument itself and its pipe never opens a name.
     for inert in (r"\input 1 {|literal}", r"\input{\relax |cmd}",
-                  r"\input\c_space_token{|cmd}",
                   "\\input\\ {|cmd}", "\\input\\ |cmd",
                   '\\include "|cmd"',
                   r"\include\empty {|literal}", r"\include\space {|literal}"):
@@ -1042,7 +1045,6 @@ def test_every_spelling_of_stream_eighteen_is_the_shell_escape_stream() -> None:
     for plain in ('\\openin\\stream="plain.tex"', r'\def\separator{"|}',
                   'the sequence "| in prose',
                   r"\input 1 {|literal}", r"\include 12 {|literal}",
-                  "\\input \\pagecount {|literal}\n",
                   "\\newwrite\\out\n\\write\\out{|literal}\n"):
         assert not tenkz_ctan.shell_escape_call(plain), plain
     # A name the same file redefines is no longer the stream it was allocated

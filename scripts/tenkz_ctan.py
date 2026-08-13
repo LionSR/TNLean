@@ -324,24 +324,25 @@ STREAM_OPERAND = r"(?:\\[A-Za-z@_:]+|[0-9]+)?\s*=?\s*"
 # `\input` does admit before the name is an expansion that leaves nothing
 # or only whitespace, both of which the filename scanner passes over.
 # The boundary here is a compiled matrix, not a reading of the sources:
-# every finding and every innocent shape in the tests ran under xelatex
-# with -shell-escape (bare, \relax, and engine-shared rows under
-# pdflatex and lualatex too), with a space-free command so an
-# argument-stripped run could not pass for inertness.  What the matrix
-# shows: `\input` runs a pipe bare, braced, or quoted, with the scan
-# passing over spaces, `\relax`, and the expandable blanks on its way to
-# the name — but a control space or `\c_space_token` (implicit space
-# tokens, not expansions) ends the scan, a digit starts a real file
-# name, and `\relax` inside a braced name ends it.  `\include` absorbs
-# one undelimited argument, so only its braced spelling reaches a pipe;
-# a quote or an expansion there is the argument itself.
+# the finding and innocent shapes in the tests ran under xelatex with
+# -shell-escape (bare, \relax, and engine-shared rows under pdflatex and
+# lualatex too), with a space-free command so an argument-stripped run
+# could not pass for inertness.  The matrix shows `\input` runs a pipe
+# bare, braced, or quoted, with the scan passing over spaces, `\relax`,
+# and every expansion that leaves nothing or whitespace on its way to
+# the name.  That set of expansions is open — any macro may expand
+# blank — so the pre-name position is not enumerated: a pipe behind any
+# run of control words fails closed, the reading the closure walk
+# already gives a macro-supplied stream name.  The shapes that stay
+# innocent are the ones a static reader can trust: a digit starts a
+# real file name, a control space ends the scan, and `\include`
+# absorbs one undelimited argument, so only its braced spelling
+# reaches a pipe.  Inside a braced name the compiled boundary is kept
+# instead: the expandable blanks run, `\relax` ends the name.
 _BLANK_EXPANSIONS = (
     r"(?:\\(?:space|empty|@empty|c_space_tl|c_empty_tl)(?![A-Za-z@_:])\s*)*"
 )
-_NAME_SCAN_SKIPS = (
-    r"(?:\\(?:space|empty|@empty|c_space_tl|c_empty_tl|relax)"
-    r"(?![A-Za-z@_:])\s*)*"
-)
+_NAME_SCAN_SKIPS = r"(?:\\[A-Za-z@_:]+\s*)*"
 PIPE_FILENAME = re.compile(
     r"\\open(?:in|out)\s*" + STREAM_OPERAND + r"(?:\{\s*)?\"?\s*\|"
     r"|\\input\s*" + _NAME_SCAN_SKIPS
