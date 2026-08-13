@@ -485,9 +485,11 @@ norm estimate is derived here.
     \lean{MPSTensor.inner_tailBoundaryMapES_adjoint_leftBoundaryMapES_centered}
     \leanok
     \uses{thm:spectator_boundary_mixed_gram,thm:fixed_point_gram_metric_exact}
-    Let $\rho\in\MN{D}$ have nonzero trace, let
-    $\mathcal K_\infty=\mathscr R(P_\rho)$, and retain the boundary families
-    $X=(X_u)_u$ and $Z=(Z_j)_j$ from the preceding theorem.  Then
+    Specialize the preceding theorem to $q=1$.  Let
+    $X=(X_u)_{u\in\Fin d^K}$ and
+    $Z=(Z_j)_{j\in\Fin d^1}$ be the resulting boundary families.  If
+    $\rho\in\MN{D}$ has nonzero trace and
+    $\mathcal K_\infty=\mathscr R(P_\rho)$, then
     \begin{align}
       &\left\langle X,
         (\Gamma^{\mathrm{tail}}_{K,l+1})^\dagger

@@ -168,9 +168,15 @@ theorem inner_tailBoundaryMapES_adjoint_leftBoundaryMapES_q
     rw [hLeftTrace]
     rw [hTailTrace]
 
--- A formulation that first reassociates the tail map into the left-associated
--- ambient space should derive from this theorem by adjoint composition with the
--- same unitary coordinate reassociation, rather than repeat the coordinate proof.
+-- Reuse relation for GitHub pull request 6299: the `piLpCongrLeft` map in this
+-- theorem transports the left-window codomain from \(Cfg\ d\ ((K+l)+q)\) to
+-- \(Cfg\ d\ (K+(l+q))\). If \(U\) denotes its inverse unitary and
+-- \(T=\mathtt{tailBoundaryMapES}\ A\ K\ (l+q)\), then the left-associated tail
+-- map there is \(U\circ T\), and
+-- \((U\circ T)^\dagger L=T^\dagger(U^\dagger L)\). Hence its reassociated
+-- mixed-Gram theorem is this identity transported by \(U\), with the same
+-- right-hand side; it is a wrapper around this theorem, not a second coordinate
+-- proof.
 
 /-- Exact mixed-Gram identity for the overlapping windows in Nachtergaele's C3
 geometry (arXiv:cond-mat/9410110, equation (2.4)).
