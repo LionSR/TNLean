@@ -87,6 +87,7 @@ import TNLean.MPS.MPDO.CPSVBNTTheoremEquivalence
 import TNLean.MPS.MPDO.CPSVBlocking
 import TNLean.MPS.MPDO.CPSVExample411Ambient
 import TNLean.MPS.MPDO.CPSVExample411BinarySupport
+import TNLean.MPS.MPDO.CPSVExample411Spectrum
 import TNLean.MPS.MPDO.CPSVExample412Literal
 import TNLean.MPS.MPDO.CPSVExamples410411Arithmetic
 import TNLean.MPS.MPDO.CPSVFigureEight

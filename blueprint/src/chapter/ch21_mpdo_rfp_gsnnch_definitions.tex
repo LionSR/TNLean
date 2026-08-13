@@ -227,6 +227,93 @@ Definition~\ref{def:mpdo_source_gsnnch}; the converse comparison is not used.
     injective. The two isometry identities give the exact reconstruction.
 \end{proof}
 
+\begin{theorem}[Normalized operators under an isometric physical inclusion]
+    \label{thm:mpdo_normalized_state_physical_isometry_transport}
+    \lean{MPOTensor.normalizedMPO_changePhysicalBasis_of_isometry}
+    \leanok
+    \uses{def:block_entropy, def:mpdo_single_kraus_map,
+        def:mpdo_sitewise_physical_matrix}
+    Let $V:\C^d\to\C^e$ satisfy $V^*V=I$, and let $K^V$ be obtained from an MPO
+    tensor $K$ by conjugating each physical matrix by $V$.  The normalized
+    periodic operators satisfy
+    \begin{align}
+      \sigma^{(N)}(K^V)
+      &=V^{\otimes N}\sigma^{(N)}(K)(V^{\otimes N})^*.
+      \notag
+    \end{align}
+\end{theorem}
+
+\begin{proof}\leanok
+    \lean{MPOTensor.trace_mpo_changePhysicalBasis_of_isometry}
+    \uses{lem:mpdo_sitewise_physical_coordinate_congruence}
+    Since $(V^{\otimes N})^*V^{\otimes N}=I$, cyclicity of the trace gives
+    \begin{align}
+      \tr\!\left[
+        V^{\otimes N}\rho^{(N)}(K)(V^{\otimes N})^*\right]
+      &=\tr\!\left[\rho^{(N)}(K)\right].
+      \notag
+    \end{align}
+    Therefore the scalar normalization commutes with the congruence:
+    \begin{align}
+      \sigma^{(N)}(K^V)
+      &=\frac{V^{\otimes N}\rho^{(N)}(K)(V^{\otimes N})^*}
+        {\tr[\rho^{(N)}(K)]}
+       =V^{\otimes N}\sigma^{(N)}(K)(V^{\otimes N})^*.
+      \notag
+    \end{align}
+\end{proof}
+
+\begin{theorem}[Prefix marginal of a sitewise isometric image]
+    \label{thm:mpdo_block_reduced_state_single_kraus_sitewise}
+    \lean{MPOTensor.blockReducedState_singleKraus_sitewise}
+    \leanok
+    \uses{def:block_entropy, def:mpdo_single_kraus_map,
+        def:mpdo_sitewise_physical_matrix}
+    Let $V:\C^d\to\C^e$ satisfy $V^*V=I$.  If an operator on $L+K$ sites is
+    conjugated by $V^{\otimes(L+K)}$, then its first-$L$-site marginal is
+    conjugated by $V^{\otimes L}$.
+\end{theorem}
+
+\begin{proof}\leanok
+    Reindex the chain into its first $L$ and final $K$ sites.  The sitewise
+    matrix becomes $V^{\otimes L}\otimes V^{\otimes K}$, and
+    $(V^{\otimes K})^*V^{\otimes K}=I$ removes the second factor under the
+    partial trace.
+\end{proof}
+
+\begin{theorem}[Reduced states under an isometric physical inclusion]
+    \label{thm:mpdo_reduced_state_physical_isometry_transport}
+    \lean{MPOTensor.reducedBlockState_changePhysicalBasis_of_isometry}
+    \leanok
+    \uses{def:block_entropy, def:mpdo_single_kraus_map,
+        def:mpdo_sitewise_physical_matrix}
+    Let $V:\C^d\to\C^e$ be an isometry, and let $K^V$ be obtained from an MPO
+    tensor $K$ by conjugating each physical matrix by $V$.  For every
+    $0\leq L\leq N$, the contiguous reduced states satisfy
+    \begin{align}
+      \rho_L^{(N)}(K^V)=V^{\otimes L}\rho_L^{(N)}(K)(V^{\otimes L})^*.
+      \notag
+    \end{align}
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpdo_normalized_state_physical_isometry_transport,
+        thm:mpdo_block_reduced_state_single_kraus_sitewise}
+    The normalized periodic operators are related by the sitewise isometric
+    congruence.  Splitting the chain into the retained interval and its
+    complement gives
+    \begin{align}
+      &\tr_{N\setminus L}\!\left[
+        \bigl(V^{\otimes L}\otimes V^{\otimes(N-L)}\bigr)
+        \sigma^{(N)}(K)
+        \bigl(V^{\otimes L}\otimes V^{\otimes(N-L)}\bigr)^*\right]\\
+      &\qquad=V^{\otimes L}\rho_L^{(N)}(K)(V^{\otimes L})^*.
+      \notag
+    \end{align}
+    Here $(V^{\otimes(N-L)})^*V^{\otimes(N-L)}=I$, so the isometry on the
+    traced factor disappears under the partial trace.
+\end{proof}
+
 \begin{theorem}[SAL descends through an isometric physical inclusion]
     \label{thm:mpdo_sal_physical_isometry_transport}
     \lean{MPOTensor.isMPDO_of_changePhysicalBasis_isMPDO_of_isometry}
