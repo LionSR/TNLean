@@ -231,11 +231,13 @@ Definition~\ref{def:mpdo_source_gsnnch}; the converse comparison is not used.
     \label{thm:mpdo_reduced_state_physical_isometry_transport}
     \lean{MPOTensor.reducedBlockState_changePhysicalBasis_of_isometry}
     \leanok
+    \uses{def:block_entropy, def:mpdo_single_kraus_map,
+        def:mpdo_sitewise_physical_matrix}
     Let $V:\C^d\to\C^e$ be an isometry, and let $K^V$ be obtained from an MPO
     tensor $K$ by conjugating each physical matrix by $V$.  For every
     $0\leq L\leq N$, the contiguous reduced states satisfy
     \begin{align}
-      \rho_L(K^V)=V^{\otimes L}\rho_L(K)(V^{\otimes L})^*.
+      \rho_L^{(N)}(K^V)=V^{\otimes L}\rho_L^{(N)}(K)(V^{\otimes L})^*.
       \notag
     \end{align}
 \end{theorem}
