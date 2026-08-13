@@ -1112,8 +1112,41 @@ def test_every_spelling_of_stream_eighteen_is_the_shell_escape_stream() -> None:
     # Only the primitives that open a file are read: `\\write` and `\\read` take
     # a stream already open and a token list that is data, so a token list
     # beginning with a bar is text.
+    # The loaders take a file name directly, with no stream operand: an
+    # operand reading let a page of typeset text count as a pipe.
+    # Every row of this matrix was compiled under xelatex with
+    # -shell-escape and a space-free command, so an argument-stripped
+    # run could not pass for inertness; the bare, \relax, and
+    # engine-shared rows ran under pdflatex and lualatex too.  The scan
+    # passes over spaces, \relax, and the expandable blanks on its way
+    # to the name, and a pipe fires bare, braced, or quoted.
+    for piped in (r"\input |cmd", r"\input\space |cmd", r"\input\space|cmd",
+                  r"\input\relax |cmd", r"\input\relax {|cmd}",
+                  '\\input\\relax "|cmd"', r"\input|" + '"cmd"',
+                  r"\input{|cmd}", '\\input "|cmd"',
+                  r"\input{\space |cmd}", r"\input\empty {|cmd}",
+                  '\\input\\empty "|cmd"', r"\input\space {|cmd}",
+                  r"\makeatletter\input\@empty{|cmd}",
+                  r"\makeatletter\input\@spaces|cmd",
+                  r"\input\c_space_tl{|cmd}", '\\input\\c_empty_tl "|cmd"',
+                  r"\include{|cmd}", r"\openin1=|cmd", r"\openin\src=|cmd"):
+        assert tenkz_ctan.shell_escape_call(piped), piped
+    # The set of blank expansions is open, so a pipe behind any run of
+    # control words fails closed: \c_space_token compiled inert, and the
+    # finding is the closed direction's accepted cost.
+    assert tenkz_ctan.shell_escape_call(r"\input\c_space_token{|cmd}")
+    # The inert rows: a digit starts a real file name; a control space
+    # ends the scan; \relax inside a braced name ends the name; \include
+    # absorbs one undelimited argument, so a quote or an expansion there
+    # is the argument itself and its pipe never opens a name.
+    for inert in (r"\input 1 {|literal}", r"\input{\relax |cmd}",
+                  "\\input\\ {|cmd}", "\\input\\ |cmd",
+                  '\\include "|cmd"',
+                  r"\include\empty {|literal}", r"\include\space {|literal}"):
+        assert not tenkz_ctan.shell_escape_call(inert), inert
     for plain in ('\\openin\\stream="plain.tex"', r'\def\separator{"|}',
                   'the sequence "| in prose',
+                  r"\input 1 {|literal}", r"\include 12 {|literal}",
                   "\\newwrite\\out\n\\write\\out{|literal}\n"):
         assert not tenkz_ctan.shell_escape_call(plain), plain
     # A name the same file redefines is no longer the stream it was allocated
@@ -1240,16 +1273,40 @@ def test_an_unbraced_absolute_input_is_an_absolute_path() -> None:
                      # The argument signature is part of an expl3 name, so the
                      # conditional variants have to be reached too.
                      r"\file_if_exist_input:nF {/Users/somebody/data}{}",
+                     # The existence conditional is a family: every signature
+                     # variant asks the same machine-local question, and the
+                     # predicate form spells an underscore-p before its colon.
+                     r"\file_if_exist:nTF {/Users/somebody/data} {} {}",
+                     r"\file_if_exist:nT {/Users/somebody/data} {}",
+                     r"\file_if_exist:nF {/Users/somebody/data} {}",
+                     r"\file_if_exist:oTF {/Users/somebody/data} {} {}",
+                     r"\file_if_exist_p:n {/Users/somebody/data}",
                      '\\font\\tenkzfont="/Users/somebody/foo.otf"',
                      # A path holding a space is written quoted, braced or not.
                      '\\input{"/Users/somebody/My Documents/f.tex"}'):
             (tree / "tenkz.sty").write_text(load + "\n", encoding="utf-8")
             found = tenkz_ctan.check_arxiv(tree, _loaded("tenkz.sty"))
             assert any("absolute path" in r for r in found.failures), (load, found.failures)
-        (tree / "tenkz.sty").write_text("\\input tenkz-core.code.tex\n", encoding="utf-8")
-        relative = tenkz_ctan.check_arxiv(tree, _loaded("tenkz.sty"))
+        for innocent in ("\\input tenkz-core.code.tex\n",
+                         "\\file_if_exist:nT {tenkz-stage.code.tex} {}\n",
+                         "\\file_if_exist_p:n {tenkz-stage.code.tex}\n",
+                         # A longer name that merely opens with the
+                         # conditional's letters is not the conditional,
+                         # and neither is a different macro whose suffix
+                         # reuses them in an order expl3 cannot define.
+                         "\\file_if_exist:nTFaux {/Users/somebody/data}\n",
+                         "\\file_if_exist:nTT {/Users/somebody/data}\n",
+                         # expl3 names take no star: after one, the brace
+                         # group is a code branch, not a file name.
+                         "\\file_if_exist:nT*{/Users/somebody/data}\n",
+                         # An indirect specifier names a variable whose
+                         # value is the real argument: a literal there is
+                         # a name, not a path.
+                         "\\file_if_exist:vTF {/Users/somebody/data} {} {}\n"):
+            (tree / "tenkz.sty").write_text(innocent, encoding="utf-8")
+            relative = tenkz_ctan.check_arxiv(tree, _loaded("tenkz.sty"))
+            assert not relative.failures, (innocent, relative.failures)
     assert any("absolute path" in reason for reason in unbraced.failures), unbraced.failures
-    assert not relative.failures, relative.failures
 
 
 def test_an_archive_that_does_not_open_is_a_report_line() -> None:
