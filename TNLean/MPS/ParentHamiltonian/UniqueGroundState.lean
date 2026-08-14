@@ -184,7 +184,7 @@ theorem chainGroundSpace_le_groundSpace_of_isNBlkInjective
     (show (⟨s, by omega⟩ : Fin N).val + (L₀ + 1) ≤ N from hs)]
   exact hψred ⟨s, by omega⟩ τ
 
-/-- A change of cut by `L₀` sites on a ring of length `L₀ + 1`
+/-- A change of cut by \(L₀\) sites on a ring of length \(L₀+1\)
 intertwines the two open-boundary matrices with every one-site tensor matrix. -/
 theorem full_ring_boundary_intertwines_of_cyclicTranslate_groundSpaceMap_eq
     {A : MPSTensor d D} {L₀ : ℕ} (hInj : IsNBlkInjective A L₀)
@@ -223,9 +223,9 @@ theorem full_ring_boundary_intertwines_of_cyclicTranslate_groundSpaceMap_eq
 /-- On the full minimal ring, every chain-ground-space vector has a scalar
 open-boundary matrix.
 
-Choose an open-boundary matrix at every cyclic cut. Moving a cut by `L₀` sites
-moves one letter through the boundary. Iterating this relation around all
-`L₀ + 1` cuts shows that the initial matrix commutes with every word of full
+Choose an open-boundary matrix at every cyclic cut. Moving a cut by \(L₀\) sites
+moves one letter through the boundary. Iterating this relation around all \(L₀+1\) cuts shows that the initial
+matrix commutes with every word of full
 ring length. Block injectivity propagates to that length, so the matrix is
 scalar. -/
 theorem full_ring_boundary_intertwines_of_chainGroundSpace
@@ -851,7 +851,7 @@ theorem wrapped_mirror_witness_agree_of_chainGroundSpace
   exact closure_property_boundary_right_products_eq_of_chainGroundSpace
     (A := A) hInj hL₀ (by omega : L₀ < M) hψred hψX YAt hYAt η μ j
 
-/-- At the source-minimal length `N = L₀ + 1`, the full-ring cyclic
+/-- At the source-minimal length \(N=L₀+1\), the full-ring cyclic
 change-of-cut argument identifies the chain ground space with the MPS line. -/
 theorem chainGroundSpace_le_mpvSubmodule_of_isNBlkInjective_full_ring
     {A : MPSTensor d D} [NeZero D] {L₀ : ℕ}
