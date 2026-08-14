@@ -203,7 +203,9 @@ left-qubit label and the incomplete universal exception list must not be
 formalized as printed.  For Example~4.11, the printed saturation clause is
 false for the literal finite periodic family, while the independent claim that
 the family does not have zero correlation length is verified both for the
-literal Definition~4.2 diagram and for its scale-invariant repair.
+literal diagram in
+\cite[Definition~4.2, lines~735--739]{Cirac2016MPDO_arXiv} and for its
+scale-invariant repair.
 
 The scalar endpoints are now certified in
 \doclink{TNLean/MPS/MPDO/CPSVExamples410411Arithmetic}.  The declarations
@@ -259,7 +261,13 @@ transports these values to the corresponding supported entries of the ambient
 two-qubit-site marginals.  The source-facing zero-correlation relation implies
 that the normalized two-site marginal obtained from a ring of length four must
 equal that obtained from a ring of length three.  Since $14/41\ne5/14$, the
-effective and ambient tensors both fail that relation.  The declarations
+effective and ambient tensors both fail that relation.  Write
+\[
+  \mathcal T_M:=\sum_i M^{ii},
+  \qquad
+  \mathcal T_{\widetilde M}:=\sum_i \widetilde M^{ii}
+\]
+for their respective physical-trace transfers.  The declarations
 \leanid{MPOTensor.CPSVExample411BinarySupport.physTraceTransfer_M_ne_zero} and
 \leanid{MPOTensor.CPSVExample411Ambient.physTraceTransfer_ambientM_ne_zero}
 use the exact one-site traces
@@ -278,7 +286,8 @@ then prove
   \mathcal T_{\widetilde M}^2\ne\mathcal T_{\widetilde M}.
 \]
 Thus the fixed effective and ambient tensors themselves fail the literal
-diagram in Definition~4.2, lines 735--739.  The argument does not use the
+diagram in \cite[Definition~4.2, lines~735--739]{Cirac2016MPDO_arXiv}.
+The argument does not use the
 saturation obstruction, entropy, or spectral calculations.
 
 The scale-invariant statement uses the nonzero up-to-positive-scalar relation

@@ -109,7 +109,7 @@ theorem M_not_isSourceZCL : ¬ M.IsSourceZCL := by
   norm_num at hentry
 
 /-- The effective binary tensor fails the literal physical-trace idempotence
-diagram in CPSV16 Definition 4.2, lines 735--739.
+diagram in arXiv:1606.00608, Definition 4.2, lines 735--739.
 
 This is the fixed-tensor identity $\mathcal T_M^2=\mathcal T_M$, not the legacy
 idempotence condition on the doubled-index transfer map. -/
@@ -192,9 +192,10 @@ theorem ambientM_not_isSourceZCL : ¬ ambientM.IsSourceZCL := by
   norm_num at hentry
 
 /-- The ambient two-qubit-site tensor fails the literal physical-trace
-idempotence diagram in CPSV16 Definition 4.2, lines 735--739.
+idempotence diagram in arXiv:1606.00608, Definition 4.2, lines 735--739.
 
-This is the fixed-tensor identity $\mathcal T_M^2=\mathcal T_M$, not the legacy
+This is the fixed-tensor identity
+$\mathcal T_{\widetilde M}^2=\mathcal T_{\widetilde M}$, not the legacy
 idempotence condition on the doubled-index transfer map. -/
 theorem physTraceTransfer_ambientM_not_idempotent :
     ¬ physTraceTransfer ambientM * physTraceTransfer ambientM =
