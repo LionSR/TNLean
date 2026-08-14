@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import TNLean.Algebra.MatrixUnitaryBetween
 import TNLean.Channel.KrausCPTP
 import Mathlib.LinearAlgebra.Matrix.Rank
 
@@ -20,6 +21,10 @@ isometry.
   Kronecker products.
 * `Matrix.singleKrausMap_mul_of_isometry`: isometric single-Kraus conjugation
   preserves multiplication.
+* `Matrix.singleKrausMap_charpoly_eq_X_pow_mul_of_isometry`: isometric conjugation pads the
+  characteristic polynomial by zero roots.
+* `Matrix.singleKrausMap_charpoly_roots_eq_zero_add_of_isometry`: the corresponding root-multiset
+  identity.
 * `Matrix.posSemidef_of_singleKraus_isometry`: positivity can be read back
   through an isometric single-Kraus conjugation.
 -/
@@ -62,6 +67,28 @@ theorem Matrix.singleKrausMap_mul_of_isometry
   simp only [singleKrausMap_apply, Matrix.mul_assoc]
   rw [← Matrix.mul_assoc Vᴴ V, hV]
   simp
+
+/-- Isometric single-Kraus conjugation pads the characteristic polynomial by zero roots whose
+multiplicity is the codimension of the isometric inclusion. -/
+theorem Matrix.singleKrausMap_charpoly_eq_X_pow_mul_of_isometry
+    {α β : Type*} [Fintype α] [DecidableEq α] [Fintype β] [DecidableEq β]
+    (V : Matrix β α ℂ) (hV : Vᴴ * V = 1) (A : Matrix α α ℂ) :
+    (singleKrausMap V A).charpoly =
+      Polynomial.X ^ (Fintype.card β - Fintype.card α) * A.charpoly := by
+  rw [singleKrausMap_apply, Matrix.mul_assoc,
+    Matrix.charpoly_mul_comm_of_le V (A * Vᴴ) (Matrix.IsIsometry.card_le V hV),
+    Matrix.mul_assoc, hV, Matrix.mul_one]
+
+/-- The roots after isometric single-Kraus conjugation are the original roots together with one
+zero for every dimension added by the isometric inclusion. -/
+theorem Matrix.singleKrausMap_charpoly_roots_eq_zero_add_of_isometry
+    {α β : Type*} [Fintype α] [DecidableEq α] [Fintype β] [DecidableEq β]
+    (V : Matrix β α ℂ) (hV : Vᴴ * V = 1) (A : Matrix α α ℂ) :
+    (singleKrausMap V A).charpoly.roots =
+      (Fintype.card β - Fintype.card α) • {(0 : ℂ)} + A.charpoly.roots := by
+  rw [Matrix.singleKrausMap_charpoly_eq_X_pow_mul_of_isometry V hV A,
+    Polynomial.roots_mul, Polynomial.roots_X_pow]
+  exact mul_ne_zero (pow_ne_zero _ Polynomial.X_ne_zero) (Matrix.charpoly_monic A).ne_zero
 
 /-- Positivity can be read back through an isometric single-Kraus
 conjugation. -/
