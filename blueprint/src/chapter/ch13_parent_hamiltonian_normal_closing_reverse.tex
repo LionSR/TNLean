@@ -466,8 +466,7 @@ left-multiplied boundary comparison.
     \label{thm:full_ring_boundary_intertwines}
     \lean{MPSTensor.full_ring_boundary_intertwines_of_chainGroundSpace}
     \leanok
-    \uses{thm:cyclic_normal_open_chain_range_reduction,
-        def:l_blk_injective}
+    \uses{def:l_blk_injective}
     Let $A$ be $L_0$-block-injective with $L_0>0$, and let
     $\psi\in\mathcal G_{L_0+1,L_0+1}(A)$ satisfy
     $\psi=\Gamma_{L_0+1}(X)$. Then $XA^j=A^jX$ for every physical letter $j$.
@@ -475,6 +474,7 @@ left-multiplied boundary comparison.
 
 \begin{proof}
     \leanok
+    \uses{thm:cyclic_normal_open_chain_range_reduction}
     Move the cut by $L_0$ sites and write the translated state as
     $\Gamma_{L_0+1}(Y)$. Splitting each full-ring word into an $L_0$-site word
     $\beta$ and one letter $j$ gives
@@ -538,8 +538,7 @@ change-of-cut theorem replaces the complementary-word comparison.
         def:l_blk_injective, thm:cyclic_normal_open_chain_range_reduction,
         thm:reduced_wrapped_boundary_compatibilities,
         thm:wrapped_mirror_witness_agree_chain_ground_space,
-        thm:conditional_normal_range_reduction_witness_comparison,
-        thm:full_ring_ground_space_containment}
+        thm:conditional_normal_range_reduction_witness_comparison}
     If $A$ is normal, $D \ge 1$, and injective after blocking $L_0>0$ sites,
     with $N \ge 2$, $L_0+1\le N$, and $L_0 < L \le N$, then
     $\mathcal G_{N,L}(A) \subseteq \spn\bigl\{V^{(N)}(A)\bigr\}$.
@@ -549,7 +548,8 @@ change-of-cut theorem replaces the complementary-word comparison.
     \leanok
     \uses{thm:reduced_wrapped_boundary_compatibilities,
         thm:conditional_normal_range_reduction_witness_comparison,
-        lem:padded_complement_annihilation}
+        lem:padded_complement_annihilation,
+        thm:full_ring_ground_space_containment}
     If $N=L_0+1$, Theorem~\ref{thm:full_ring_ground_space_containment}
     gives the claim. If $N>L_0+1$, the open-chain containment gives
     $\psi=\Gamma_N(X)$. The two boundary-crossing cyclic-window constraints give

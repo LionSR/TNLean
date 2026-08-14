@@ -185,7 +185,10 @@ theorem chainGroundSpace_le_groundSpace_of_isNBlkInjective
   exact hψred ⟨s, by omega⟩ τ
 
 /-- A change of cut by \(L₀\) sites on a ring of length \(L₀+1\)
-intertwines the two open-boundary matrices with every one-site tensor matrix. -/
+intertwines the two open-boundary matrices with every one-site tensor matrix.
+
+This is the full-ring closure-property comparison in arXiv:2011.12127,
+Section IV.C, lines 2078--2079. -/
 theorem full_ring_boundary_intertwines_of_cyclicTranslate_groundSpaceMap_eq
     {A : MPSTensor d D} {L₀ : ℕ} (hInj : IsNBlkInjective A L₀)
     (_hL₀ : 0 < L₀) (X Y : Matrix (Fin D) (Fin D) ℂ)
@@ -226,7 +229,9 @@ open-boundary matrix.
 Choose an open-boundary matrix at every cyclic cut. Moving a cut by \(L₀\)
 sites moves one letter through the boundary. Iterating this relation around all
 \(L₀+1\) cuts shows that the initial matrix commutes with every full-ring
-word. Block injectivity propagates to that length, so the matrix is scalar. -/
+word. Block injectivity propagates to that length, so the matrix is scalar.
+This implements the full-ring closure-property alternative in arXiv:2011.12127,
+Section IV.C, lines 2078--2079. -/
 theorem full_ring_boundary_intertwines_of_chainGroundSpace
     {A : MPSTensor d D} [NeZero D] {L₀ : ℕ}
     (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀)
@@ -851,7 +856,10 @@ theorem wrapped_mirror_witness_agree_of_chainGroundSpace
     (A := A) hInj hL₀ (by omega : L₀ < M) hψred hψX YAt hYAt η μ j
 
 /-- At the source-minimal length \(N=L₀+1\), the full-ring cyclic
-change-of-cut argument identifies the chain ground space with the MPS line. -/
+change-of-cut argument identifies the chain ground space with the MPS line.
+
+This is the closure-property endpoint used for the uniqueness theorem in
+arXiv:2011.12127, Section IV.C, lines 2078--2094. -/
 theorem chainGroundSpace_le_mpvSubmodule_of_isNBlkInjective_full_ring
     {A : MPSTensor d D} [NeZero D] {L₀ : ℕ}
     (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀) :
@@ -944,7 +952,8 @@ theorem groundSpace_unique_periodic {A : MPSTensor d D} [NeZero D] (hA : IsInjec
   exact finrank_span_singleton (K := ℂ) hmpv
 
 /-- Unique ground state for tensors injective after blocking at range \(2L₀\).
-This includes the endpoint \(L₀=1,N=2\). -/
+This includes the endpoint \(L₀=1,N=2\). This is the one-dimensional
+specialization of arXiv:2011.12127, Section IV.C, lines 2041--2048. -/
 theorem parentHamiltonian_unique_gs_injective {A : MPSTensor d D} [NeZero D]
     {L₀ : ℕ} (hA : IsNBlkInjective A L₀) (hL₀ : 0 < L₀)
     {N : ℕ} (hN : 2 * L₀ ≤ N) :
@@ -959,7 +968,8 @@ theorem parentHamiltonian_unique_gs_injective {A : MPSTensor d D} [NeZero D]
   exact finrank_span_singleton (K := ℂ) hmpv
 
 /-- Unique ground state for normal tensors at range \(L₀+1\) on every ring
-with \(L₀+1\le N\): \(\dim \mathcal G_{N,L₀+1}(A)=1\). -/
+with \(L₀+1\le N\): \(\dim \mathcal G_{N,L₀+1}(A)=1\). This is
+arXiv:2011.12127, Section IV.C, lines 2086--2094. -/
 theorem parentHamiltonian_unique_gs_normal {A : MPSTensor d D} [NeZero D]
     {L₀ : ℕ} (hA : IsNormal A) (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀)
     {N : ℕ} (hN : L₀ + 1 ≤ N) :
