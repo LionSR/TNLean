@@ -116,8 +116,8 @@ line-246 global unit-weight convention through
 `MPSTensor.IsBNTCanonicalForm.weight_unit_exists`.
 Thus this predicate is evaluated on the displayed tensor `M`, not modulo a
 nonzero scalar rescaling. The mathematical nilpotency clause is scale invariant,
-but the packaged canonical-form normalization need not be compatible with the
-scale fixed by Definition 4.1. See
+but the unit-weight normalization included in the canonical-form witness need
+not be compatible with the scale fixed by Definition 4.1. See
 `docs/paper-gaps/cpsv16_unit_weight_rfp_scale_tension.tex`. -/
 def IsSimpleCanonicalForm (M : MPOTensor d D) : Prop :=
   IsMPDO M ∧
