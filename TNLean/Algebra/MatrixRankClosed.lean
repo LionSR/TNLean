@@ -165,14 +165,15 @@ theorem lowerSemicontinuous_rank :
   change IsClosed {A : Matrix m n ℂ | A.rank ≤ k}
   exact isClosed_setOf_rank_le (m := m) (n := n) k
 
+end Matrix
+
 /-- The rank along a continuous path of finite complex matrices is lower semicontinuous. -/
-theorem _root_.Continuous.lowerSemicontinuous_matrix_rank
-    {X : Type*} [TopologicalSpace X] {A : X → Matrix m n ℂ} (hA : Continuous A) :
+theorem Continuous.lowerSemicontinuous_matrix_rank
+    {X m n : Type*} [TopologicalSpace X] [Finite m] [Fintype n]
+    {A : X → Matrix m n ℂ} (hA : Continuous A) :
     LowerSemicontinuous fun x => (A x).rank := by
   simpa only [Function.comp_def] using
-    (lowerSemicontinuous_rank (m := m) (n := n)).comp hA
-
-end Matrix
+    (Matrix.lowerSemicontinuous_rank (m := m) (n := n)).comp hA
 
 section FixedPositiveProduct
 
