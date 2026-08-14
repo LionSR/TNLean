@@ -5430,8 +5430,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     LinearMap.IsSymmetricProjection.secondProjectionOnAngleDefectComplement_isSymmetricProjection,
     LinearMap.IsSymmetricProjection.firstProjectionOnAngleDefectComplement_commute_secondProjection}
   \leanok
-  \uses{def:mpu_two_projection_angle_defect_sum,
-    thm:mpu_two_projection_angle_block_orthogonality}
+  \uses{def:mpu_two_projection_angle_defect_sum}
   The blocks $(B_i)_i$ form an orthogonal internal direct sum in $B$, and
   \begin{align}
     E&=B\mathbin{\perp\!\oplus}K.
@@ -5449,6 +5448,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
 \end{theorem}
 
 \begin{proof}\leanok
+  \uses{thm:mpu_two_projection_angle_block_orthogonality}
   Pairwise orthogonality of the blocks implies independence, while their
   supremum is $B$ by definition. Hence they form an internal direct sum in
   $B$. The standard orthogonal-complement decomposition gives
