@@ -289,6 +289,56 @@ Definition~\ref{def:mpdo_source_gsnnch}; the converse comparison is not used.
     \end{align}
 \end{proof}
 
+\begin{lemma}[Rectangular characteristic-polynomial cyclicity]
+    \label{lem:matrix_rectangular_charpoly_cyclicity}
+    \mathlibok % Mathlib: Matrix.charpoly_mul_comm_of_le.
+    Let $A$ be an $e\times d$ matrix and $B$ a $d\times e$ matrix, with
+    $d\leq e$. Then
+    \begin{align}
+      \chi_{AB}(X)&=X^{e-d}\chi_{BA}(X).
+      \notag
+    \end{align}
+\end{lemma}
+
+\begin{theorem}[Characteristic polynomial under an isometric inclusion]
+    \label{thm:matrix_single_kraus_isometry_charpoly}
+    \lean{Matrix.IsIsometry.card_le,
+        Matrix.singleKrausMap_charpoly_eq_X_pow_mul_of_isometry,
+        Matrix.singleKrausMap_charpoly_roots_eq_zero_add_of_isometry}
+    \leanok
+    \uses{def:mpdo_single_kraus_map,
+        lem:matrix_rectangular_charpoly_cyclicity}
+    Let $V:\C^d\to\C^e$ satisfy $V^*V=I_d$, and let $A$ be a $d\times d$
+    matrix. Then $d\leq e$ and
+    \begin{align}
+      \chi_{VAV^*}(X)&=X^{e-d}\chi_A(X).
+      \notag
+    \end{align}
+    Equivalently, the roots of $\chi_{VAV^*}$ are the roots of $\chi_A$
+    together with zero of multiplicity $e-d$.
+\end{theorem}
+
+\begin{proof}\leanok
+    Write $VAV^*=V(AV^*)$. Characteristic-polynomial cyclicity for rectangular
+    factors gives
+    \begin{align}
+      \chi_{V(AV^*)}(X)
+      &=X^{e-d}\chi_{(AV^*)V}(X)
+       =X^{e-d}\chi_A(X),
+      \notag
+    \end{align}
+    where the last equality uses $V^*V=I_d$. Taking roots of the product gives
+    \begin{align}
+      \operatorname{roots}(\chi_{VAV^*})
+      &=\operatorname{roots}(X^{e-d}\chi_A)\\
+      &=\operatorname{roots}(X^{e-d})+\operatorname{roots}(\chi_A)\\
+      &=(e-d)\cdot\{0\}+\operatorname{roots}(\chi_A).
+      \notag
+    \end{align}
+    The middle equality applies because $X^{e-d}$ is nonzero and the monic
+    polynomial $\chi_A$ is nonzero.
+\end{proof}
+
 \begin{theorem}[Reduced states under an isometric physical inclusion]
     \label{thm:mpdo_reduced_state_physical_isometry_transport}
     \lean{MPOTensor.reducedBlockState_changePhysicalBasis_of_isometry}
