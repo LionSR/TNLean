@@ -462,18 +462,20 @@ left-multiplied boundary comparison.
     desired equality of boundary matrices.
 \end{proof}
 
-\begin{lemma}[One-step full-ring boundary comparison]
-    \label{lem:full_ring_boundary_intertwines_step}
+\begin{theorem}[One-step full-ring boundary comparison]
+    \label{thm:full_ring_boundary_intertwines_step}
     \lean{MPSTensor.full_ring_boundary_intertwines_of_cyclicTranslate_groundSpaceMap_eq}
     \leanok
     \uses{def:l_blk_injective, def:ground_space_map,
         def:parent_cyclic_translate_state}
     Let $A$ be $L_0$-block-injective with $L_0>0$. If
-    \[
-        T_{L_0}\!\left(\Gamma_{L_0+1}(X)\right)=\Gamma_{L_0+1}(Y),
-    \]
+    \begin{align}
+        T_{L_0}\!\left(\Gamma_{L_0+1}(X)\right)
+        &=\Gamma_{L_0+1}(Y),
+        \notag
+    \end{align}
     then $XA^j=A^jY$ for every physical letter $j$.
-\end{lemma}
+\end{theorem}
 
 \begin{proof}
     \leanok
@@ -482,9 +484,11 @@ left-multiplied boundary comparison.
     Evaluate the translated equality on a word $\beta j$, where $|\beta|=L_0$.
     Cyclic translation exchanges the two parts of the word, and cyclicity of the
     trace gives
-    \[
-        \Gamma_{L_0}(XA^j)(\beta)=\Gamma_{L_0}(A^jY)(\beta).
-    \]
+    \begin{align}
+        \Gamma_{L_0}(XA^j)(\beta)
+        &=\Gamma_{L_0}(A^jY)(\beta).
+        \notag
+    \end{align}
     Injectivity of $\Gamma_{L_0}$ gives $XA^j=A^jY$.
 \end{proof}
 
@@ -502,19 +506,21 @@ left-multiplied boundary comparison.
     \leanok
     \uses{lem:parent_cyclic_translate_preserves_chain_space,
         thm:cyclic_normal_open_chain_range_reduction,
-        lem:full_ring_boundary_intertwines_step,
-        lem:parent_cyclic_translate_add,
+        thm:full_ring_boundary_intertwines_step,
+        thm:parent_cyclic_translate_add,
         thm:ground_space_map_injective_blk,
         lem:isNBlkInjective_of_le,
         lem:boundary_matrix_commutes_long_words}
     Write $s$ for the cut shift by $L_0$ and $Y_i$ for the boundary matrix of
     the translated state at cut $i$. Translation invariance of the chain space,
     the cyclic open-chain reduction, and the composition law supply compatible
-    matrices at successive cuts. Lemma~\ref{lem:full_ring_boundary_intertwines_step}
+    matrices at successive cuts. Theorem~\ref{thm:full_ring_boundary_intertwines_step}
     gives the single-letter comparison, and induction on the word $w$ gives
-    \[
-        Y_i A^w=A^wY_{|w|s+i}.
-    \]
+    \begin{align}
+        Y_i A^w
+        &=A^wY_{|w|s+i}.
+        \notag
+    \end{align}
     Injectivity of the propagated length-$(L_0+1)$ boundary map gives $Y_0=X$.
     Since $(L_0+1)s=0$, every full-ring word $\omega$ satisfies
     $XA^\omega=A^\omega X$. Lemma~\ref{lem:boundary_matrix_commutes_long_words}
@@ -527,10 +533,11 @@ left-multiplied boundary comparison.
     \leanok
     \uses{def:l_blk_injective, def:mpv_submodule}
     If $A$ is $L_0$-block-injective with $L_0>0$ and $D\ge1$, then
-    \[
+    \begin{align}
         \mathcal G_{L_0+1,L_0+1}(A)
-        \subseteq \spn\{V^{(L_0+1)}(A)\}.
-    \]
+        &\subseteq \spn\{V^{(L_0+1)}(A)\}.
+        \notag
+    \end{align}
 \end{theorem}
 
 \begin{proof}
@@ -599,9 +606,11 @@ change-of-cut theorem replaces the complementary-word comparison.
         lem:padded_complement_annihilation,
         thm:full_ring_ground_space_containment}
     If $N=L_0+1$, range antitonicity gives
-    \[
-        \mathcal G_{N,L}(A)\subseteq\mathcal G_{N,L_0+1}(A),
-    \]
+    \begin{align}
+        \mathcal G_{N,L}(A)
+        &\subseteq\mathcal G_{N,L_0+1}(A),
+        \notag
+    \end{align}
     and Theorem~\ref{thm:full_ring_ground_space_containment} applies to the
     minimal ring. If $N>L_0+1$, the open-chain containment gives
     $\psi=\Gamma_N(X)$. The two boundary-crossing cyclic-window constraints give
