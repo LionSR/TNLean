@@ -5761,6 +5761,84 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
   Theorem~\ref{thm:mpu_virtual_sandwich_source_cuts}.
 \end{proof}
 
+\begin{definition}[Ambient support-inverse extension]
+  \label{def:mpu_ambient_support_inverse_extension}
+  \lean{Matrix.PosSemidef.supportInvExtension,
+    Matrix.PosSemidef.supportInvExtensionInverse}
+  \leanok
+  \uses{def:support_proj,def:support_inverse_square_root}
+  Let $A\succeq0$ have support projection $P$, and let $A^+$ denote its
+  inverse on the support. Define
+  \begin{align}
+    X_A&=A^++(\Id-P).
+  \end{align}
+  Define also
+  \begin{align}
+    Z_A&=A+(\Id-P).
+  \end{align}
+  This construction gives explicit witnesses for the invertible matrices
+  required in Proposition~IV.5 of \cite{Cirac2017MPU}; the paper requires
+  those matrices but does not state these formulas.
+  % Source requirement: paper_v2.tex, Proposition IV.5, lines 786--797.
+  % The displayed construction is a formal witness, not a formula from the paper.
+\end{definition}
+
+\begin{theorem}[Invertibility and support identities]
+  \label{thm:mpu_ambient_support_inverse_extension}
+  \lean{Matrix.PosSemidef.supportInvExtension_mul_self,
+    Matrix.PosSemidef.self_mul_supportInvExtension,
+    Matrix.PosSemidef.supportInvExtension_mul_inverse,
+    Matrix.PosSemidef.supportInvExtension_inverse_mul,
+    Matrix.PosSemidef.supportInvExtensionUnit,
+    Matrix.PosSemidef.isUnit_supportInvExtension,
+    Matrix.PosSemidef.isUnit_det_supportInvExtension}
+  \leanok
+  \uses{def:mpu_ambient_support_inverse_extension}
+  The matrices $X_A$ and $Z_A$ are mutually inverse, and
+  \begin{align}
+    X_AA=AX_A&=P.
+  \end{align}
+  In particular, for positive semidefinite outer factors $L$ and $R$ with
+  support projections $P$ and $Q$, respectively, the invertible choices
+  $X=X_L$ and $Z=X_R$ satisfy
+  \begin{align}
+    XL&=P.
+  \end{align}
+  Similarly,
+  \begin{align}
+    RZ&=Q.
+  \end{align}
+  % This proves the existence step used in paper_v2.tex, lines 786--797.
+\end{theorem}
+
+\begin{proof}\leanok
+  \uses{lem:support_inverse_square_root_generalized_inverse}
+  The support identities give
+  \begin{align}
+    A^+A=AA^+&=P.
+  \end{align}
+  Their complementary forms are
+  \begin{align}
+    A^+(\Id-P)=(\Id-P)A^+&=0,
+  \end{align}
+  \begin{align}
+    A(\Id-P)=(\Id-P)A&=0,
+  \end{align}
+  and idempotence of $P$ gives
+  \begin{align}
+    (\Id-P)^2&=\Id-P.
+  \end{align}
+  Therefore
+  \begin{align}
+    X_AZ_A&=P+(\Id-P)=\Id.
+  \end{align}
+  Likewise,
+  \begin{align}
+    Z_AX_A&=P+(\Id-P)=\Id,
+  \end{align}
+  while multiplication by $A$ gives $X_AA=AX_A=P$.
+\end{proof}
+
 \begin{proposition}[Constancy of the source ranks]
   \label{prop:continuity-index}
   \notready
@@ -5772,7 +5850,8 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     thm:mpu_two_projection_reduced_projection_right_factor,
     thm:mpu_rank_lower_semicontinuous,
     thm:mpu_fixed_product_preconnected,
-    thm:mpu_virtual_sandwich_source_ranks}
+    thm:mpu_virtual_sandwich_source_ranks,
+    thm:mpu_ambient_support_inverse_extension}
   Let $[0,1]\ni x\mapsto\mathcal W(x)$ be a continuous path of tensors
   generating MPUs, without requiring the path to be in canonical form. For
   each $x$, take the canonical form and the two source-cut ranks $r(x)$ and
