@@ -870,6 +870,56 @@
     trivial (identity) coisometry.
 \end{proof}
 
+\begin{theorem}[Non-nilpotency of the retained horizontal block]%
+    \label{thm:mpdo_bnt_label_rescaling_stable_non_nilpotent}
+    \lean{MPOTensor.RescalingStableLengthDependentRFP.%
+        physTraceTransfer_R_not_isNilpotent}
+    \lean{MPOTensor.RescalingStableLengthDependentRFP.%
+        doubledPhysTraceTransfer_retainedBlock}
+    \lean{MPOTensor.RescalingStableLengthDependentRFP.%
+        doubledPhysTraceTransfer_retainedBlock_not_isNilpotent}
+    \leanok
+    \uses{def:mpdo_doubled_phys_trace_transfer, def:mpdo_simple_tensor,
+        thm:mpdo_bnt_label_rescaling_stable_length_dependence,
+        thm:mpdo_bnt_label_rescaling_stable_cf}
+    Let $\widehat R=\mu^{-1}R^{\bullet\bullet}$ be the single retained normal
+    block in the displayed canonical form, where
+    $\mu=\sqrt{337/512}$. Then
+    \begin{align}
+        \mathcal T_{\widehat R}&=\mu^{-1}\mathcal T_R, &
+        \mathcal T_R^2&=\mathcal T_R, &
+        (\mathcal T_R)_{00}&=\frac12.
+        \notag
+    \end{align}
+    Consequently neither $\mathcal T_R$ nor
+    $\mathcal T_{\widehat R}$ is nilpotent. Thus the retained basis element
+    satisfies the non-nilpotency clause in the definition of a simple tensor.
+
+    This conclusion concerns only that clause for the displayed one-block
+    presentation; it does not assert that $R$ satisfies the project's full
+    simple-tensor predicate. In particular, that predicate requires a
+    unit-weight BNT canonical-form witness, whereas the displayed retained
+    decomposition has the non-unit weight $\mu=\sqrt{337/512}$.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{def:mpdo_doubled_phys_trace_transfer,
+        thm:mpdo_bnt_label_rescaling_stable_length_dependence,
+        thm:mpdo_bnt_label_rescaling_stable_cf}
+    A nilpotent idempotent is zero, but the $(0,0)$ entry of
+    $\mathcal T_R$ is
+    \begin{align}
+        \frac{25}{32}\tr(A^0)^2
+            =\frac{25}{32}\left(\frac45\right)^2
+            =\frac12,
+        \notag
+    \end{align}
+    so $\mathcal T_R$ is not nilpotent. The diagonal physical contraction is
+    linear in the tensor, which gives
+    $\mathcal T_{\widehat R}=\mu^{-1}\mathcal T_R$. Since $\mu>0$, a
+    nilpotent $\mathcal T_{\widehat R}$ would remain nilpotent after
+    multiplication by $\mu$, forcing $\mathcal T_R$ to be nilpotent.
+\end{proof}
+
 \begin{theorem}[The rescaling-stable tensor is a renormalization fixed
     point]%
     \label{thm:mpdo_bnt_label_rescaling_stable_is_rfp_via_ts}
