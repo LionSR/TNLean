@@ -109,7 +109,16 @@ the separate biCF hypothesis imposed there, since the copy-independence
 argument at lines 1646--1658 does not use the inverse tensor. It retains the
 assumption that `M` generates MPDOs; its canonical-form witness has the shape
 of `MPOTensor.IsHorizontalCF`, with the additional requirement that no basis
-element have nilpotent physical-trace transfer. -/
+element have nilpotent physical-trace transfer.
+
+**Scope restriction (fixed representative):** The BNT witness includes the
+line-246 global unit-weight convention through
+`MPSTensor.IsBNTCanonicalForm.weight_unit_exists`.
+Thus this predicate is evaluated on the displayed tensor `M`, not modulo a
+nonzero scalar rescaling. The mathematical nilpotency clause is scale invariant,
+but the unit-weight normalization included in the canonical-form witness need
+not be compatible with the scale fixed by Definition 4.1. See
+`docs/paper-gaps/cpsv16_unit_weight_rfp_scale_tension.tex`. -/
 def IsSimpleCanonicalForm (M : MPOTensor d D) : Prop :=
   IsMPDO M ∧
     ∃ S : MPSTensor.SectorDecomposition (d * d),
@@ -132,7 +141,13 @@ def IsSimpleCanonicalForm (M : MPOTensor d D) : Prop :=
 /-- **Simple MPO tensor** (arXiv:1606.00608, lines 815--822). Before choosing
 the BNT, the source blocks a positive number of physical sites (line 815).
 A tensor is simple when one such blocked tensor is a simple canonical-form
-tensor in the sense above. -/
+tensor in the sense above.
+
+**Scope restriction (fixed representative):** This permits a positive physical
+blocking but does not quotient the blocked tensor by nonzero scalar rescaling or
+assert presentation independence. Its canonical-form witness therefore retains
+the line-246 unit-weight convention at the scale of `blockTensor M L`. See
+`docs/paper-gaps/cpsv16_unit_weight_rfp_scale_tension.tex`. -/
 def IsSimple (M : MPOTensor d D) : Prop :=
   IsMPDO M ∧ ∃ L : ℕ, 0 < L ∧ IsSimpleCanonicalForm (blockTensor M L)
 

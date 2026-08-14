@@ -154,7 +154,9 @@ structure IsBNTCanonicalForm (P : SectorDecomposition d) where
   `c_N^{(j)} = ∑_q μ_{j,q}^N` is not eventually zero in `N`, not that some
   specific copy `q` of sector `j` has `‖μ_{j,q}‖ = 1`.  See
   `docs/paper-gaps/cpsv16_global_vs_persector_unit_witness.tex` for the closed
-  global-versus-per-sector audit. -/
+  global-versus-per-sector audit. For the separate interaction between this
+  source convention and the scale fixed by MPDO renormalization, see
+  `docs/paper-gaps/cpsv16_unit_weight_rfp_scale_tension.tex`. -/
   weight_unit_exists : ∃ (j : Fin P.basisCount) (q : Fin (P.copies j)),
     ‖P.weight j q‖ = 1
 

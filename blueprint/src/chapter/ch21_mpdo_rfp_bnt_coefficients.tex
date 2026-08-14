@@ -896,10 +896,28 @@
     satisfies the non-nilpotency clause in the definition of a simple tensor.
 
     This conclusion concerns only that clause for the displayed one-block
-    presentation; it does not assert that $R$ satisfies the project's full
-    simple-tensor predicate. In particular, that predicate requires a
-    unit-weight BNT canonical-form witness, whereas the displayed retained
-    decomposition has the non-unit weight $\mu=\sqrt{337/512}$.
+    presentation. The retained decomposition has the non-unit weight
+    $\mu=\sqrt{337/512}$, whereas
+    Definition~\ref{def:mpdo_simple_tensor} also retains the global
+    unit-weight convention of \cite[line~246]{Cirac2016MPDO_arXiv}.
+    For every scalar $c$, the physical-trace transfer scales as
+    \begin{align}
+        \mathcal T_{cM}&=c\mathcal T_M.
+        \notag
+    \end{align}
+    Hence literal idempotence at two nonzero representatives pins the scale:
+    \begin{align}
+        \mathcal T_M^2=\mathcal T_M\ne0,
+        \quad
+        \mathcal T_{cM}^2=\mathcal T_{cM}\ne0
+        \quad&\Longrightarrow\quad c=1.
+        \notag
+    \end{align}
+    Replacing $R$ by the normalized block uses the nontrivial scale
+    $c=\mu^{-1}$ and therefore changes the representative on which the
+    renormalization fixed-point condition is evaluated. Consequently this
+    result neither proves nor refutes simplicity of $R$, and it makes no
+    claim about other presentations or blockings.
 \end{theorem}
 \begin{proof}\leanok
     \uses{def:mpdo_doubled_phys_trace_transfer,
