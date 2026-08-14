@@ -682,8 +682,9 @@ theorem PosSemidef.supportInv_mul_supportProj {ρ : Matrix n n ℂ} (hρ : ρ.Po
 of the support. For a positive-semidefinite matrix `ρ` with support projection
 `P`, this is `ρ⁺ + (1 - P)`.
 
-This is the ambient invertible matrix used in arXiv:1703.09188v2,
-Proposition IV.5, lines 786--797. -/
+This construction gives an explicit witness for the ambient invertible matrix
+required in arXiv:1703.09188v2, Proposition IV.5, lines 786--797. The paper
+requires such a matrix but does not state this formula. -/
 noncomputable def PosSemidef.supportInvExtension
     {ρ : Matrix n n ℂ} (hρ : ρ.PosSemidef) : Matrix n n ℂ :=
   hρ.supportInv + (1 - hρ.supportProj)
@@ -772,13 +773,19 @@ noncomputable def PosSemidef.supportInvExtensionUnit
   Units.mk hρ.supportInvExtension hρ.supportInvExtensionInverse
     hρ.supportInvExtension_mul_inverse hρ.supportInvExtension_inverse_mul
 
+/-- The ambient support-inverse extension is a unit. -/
+theorem PosSemidef.isUnit_supportInvExtension
+    {ρ : Matrix n n ℂ} (hρ : ρ.PosSemidef) :
+    IsUnit hρ.supportInvExtension :=
+  hρ.supportInvExtensionUnit.isUnit
+
 /-- The determinant of the ambient support-inverse extension is a unit. This
 form feeds directly into the matrix rank invariance lemmas. -/
 theorem PosSemidef.isUnit_det_supportInvExtension
     {ρ : Matrix n n ℂ} (hρ : ρ.PosSemidef) :
     IsUnit hρ.supportInvExtension.det :=
   Matrix.isUnit_iff_isUnit_det hρ.supportInvExtension |>.mp
-    hρ.supportInvExtensionUnit.isUnit
+    hρ.isUnit_supportInvExtension
 
 /-- On a positive-definite matrix, the generalized inverse on the support is
 the ordinary inverse. -/

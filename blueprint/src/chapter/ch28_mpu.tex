@@ -5761,28 +5761,40 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
   Theorem~\ref{thm:mpu_virtual_sandwich_source_cuts}.
 \end{proof}
 
-\begin{theorem}[Ambient support-inverse extension]
-  \label{thm:mpu_ambient_support_inverse_extension}
+\begin{definition}[Ambient support-inverse extension]
+  \label{def:mpu_ambient_support_inverse_extension}
   \lean{Matrix.PosSemidef.supportInvExtension,
-    Matrix.PosSemidef.supportInvExtensionInverse,
-    Matrix.PosSemidef.supportInvExtension_mul_self,
+    Matrix.PosSemidef.supportInvExtensionInverse}
+  \leanok
+  \uses{def:support_proj,def:support_inverse_square_root}
+  Let $A\succeq0$ have support projection $P$, and let $A^+$ denote its
+  inverse on the support. Define
+  \begin{align}
+    X_A&=A^++(\Id-P).
+  \end{align}
+  Define also
+  \begin{align}
+    Z_A&=A+(\Id-P).
+  \end{align}
+  This construction gives explicit witnesses for the invertible matrices
+  required in Proposition~IV.5 of \cite{Cirac2017MPU}; the paper requires
+  those matrices but does not state these formulas.
+  % Source requirement: paper_v2.tex, Proposition IV.5, lines 786--797.
+  % The displayed construction is a formal witness, not a formula from the paper.
+\end{definition}
+
+\begin{theorem}[Invertibility and support identities]
+  \label{thm:mpu_ambient_support_inverse_extension}
+  \lean{Matrix.PosSemidef.supportInvExtension_mul_self,
     Matrix.PosSemidef.self_mul_supportInvExtension,
     Matrix.PosSemidef.supportInvExtension_mul_inverse,
     Matrix.PosSemidef.supportInvExtension_inverse_mul,
     Matrix.PosSemidef.supportInvExtensionUnit,
+    Matrix.PosSemidef.isUnit_supportInvExtension,
     Matrix.PosSemidef.isUnit_det_supportInvExtension}
   \leanok
-  \uses{def:support_proj,def:support_inverse_square_root}
-  Let $A\succeq0$ have support projection $P$, and let $A^+$ denote its
-  inverse on the support. Set
-  \begin{align}
-    X_A&=A^++(\Id-P).
-  \end{align}
-  Its inverse is
-  \begin{align}
-    X_A^{-1}&=A+(\Id-P),
-  \end{align}
-  and multiplication by $A$ gives
+  \uses{def:mpu_ambient_support_inverse_extension}
+  The matrices $X_A$ and $Z_A$ are mutually inverse, and
   \begin{align}
     X_AA=AX_A&=P.
   \end{align}
@@ -5796,7 +5808,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
   \begin{align}
     RZ&=Q.
   \end{align}
-  % Source: paper_v2.tex, Proposition IV.5, lines 786--797.
+  % This proves the existence step used in paper_v2.tex, lines 786--797.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -5818,11 +5830,11 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
   \end{align}
   Therefore
   \begin{align}
-    X_AX_A^{-1}&=P+(\Id-P)=\Id.
+    X_AZ_A&=P+(\Id-P)=\Id.
   \end{align}
   Likewise,
   \begin{align}
-    X_A^{-1}X_A&=P+(\Id-P)=\Id,
+    Z_AX_A&=P+(\Id-P)=\Id,
   \end{align}
   while multiplication by $A$ gives $X_AA=AX_A=P$.
 \end{proof}
