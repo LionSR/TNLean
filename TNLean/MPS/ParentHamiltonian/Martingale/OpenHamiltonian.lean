@@ -14,7 +14,7 @@ only over starts whose length-`L` windows stay inside the linear interval.  Thus
 no local term crosses the cut between the last and first sites.
 
 The kernel is the open MPS boundary-condition space `groundSpaceES A N` once the
-tensor is block-injective at length `L - 1`.  This is the finite-volume
+tensor is block-injective at length \(L - 1\).  This is the finite-volume
 ground-space input for Nachtergaele's C1--C3 martingale theorem.
 
 ## References
@@ -39,7 +39,7 @@ abbrev NonwrappingStart (L N : ℕ) :=
 /-- The open-chain parent Hamiltonian, obtained by summing the canonical local
 terms over all nonwrapping length-`L` windows.
 
-For `L = l + 1`, its starts are `0, ..., N - l - 1`, as in Nachtergaele,
+For \(L = l + 1\), its starts are \(0, \ldots, N - l - 1\), as in Nachtergaele,
 arXiv:cond-mat/9410110, equation (3.12). -/
 noncomputable def openParentHamiltonianES (A : MPSTensor d D) (L N : ℕ) :
     EuclideanSpace ℂ (Cfg d N) →ₗ[ℂ] EuclideanSpace ℂ (Cfg d N) :=
@@ -171,7 +171,7 @@ theorem groundSpaceES_le_ker_openParentHamiltonianES
 /-- Under block injectivity, the kernel of the open-chain parent Hamiltonian is
 contained in the open MPS boundary-condition space.
 
-The zero-energy condition supplies every nonwrapping length-`L₀ + 1` local
+The zero-energy condition supplies every nonwrapping length-\(L₀ + 1\) local
 constraint.  The open-chain intersection theorem then grows these constraints
 to the full interval.  This is the ground-space step in the C1--C3 argument of
 Nachtergaele, arXiv:cond-mat/9410110, equations (3.12)--(3.16). -/
