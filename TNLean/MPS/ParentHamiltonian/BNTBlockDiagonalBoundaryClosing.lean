@@ -589,7 +589,7 @@ theorem
           hRange hNlarge
     intro j
     exact le_of_eq (chainGroundSpace_eq_mpvSubmodule_normal
-      ⟨L₀, hL₀, hBlk j⟩ (hBlk j) hL₀ hNtwo hL hLN hNstrict)
+      ⟨L₀, hL₀, hBlk j⟩ (hBlk j) hL₀ hNtwo hL hLN (le_of_lt hNstrict))
   · exact bntMPSVectorSpan_le_ker_parentHamiltonian_toTensorFromBlocks
       μ A hμ hN hLN
 

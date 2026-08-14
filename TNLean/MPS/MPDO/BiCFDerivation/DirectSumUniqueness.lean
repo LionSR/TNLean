@@ -120,10 +120,10 @@ theorem not_bondDim_eq_and_groundSpace_succ_eq_of_mpvSubmodule_ne
     chainGroundSpace_eq_of_groundSpace_eq hG
   have hAeq : chainGroundSpace A (L₀ + 1) N = mpvSubmodule A N :=
     chainGroundSpace_eq_mpvSubmodule_normal ⟨L₀, hL₀, hA⟩ hA hL₀ hN (by omega)
-      (le_of_lt hNlarge) hNlarge
+      (le_of_lt hNlarge) (le_of_lt hNlarge)
   have hBeq : chainGroundSpace B (L₀ + 1) N = mpvSubmodule B N :=
     chainGroundSpace_eq_mpvSubmodule_normal ⟨L₀, hL₀, hB⟩ hB hL₀ hN (by omega)
-      (le_of_lt hNlarge) hNlarge
+      (le_of_lt hNlarge) (le_of_lt hNlarge)
   apply hDistinct
   calc
     mpvSubmodule A N = chainGroundSpace A (L₀ + 1) N := hAeq.symm
