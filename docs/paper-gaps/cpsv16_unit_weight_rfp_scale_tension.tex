@@ -3,6 +3,7 @@
 \usepackage{amsmath,amssymb}
 \usepackage{xurl}
 \usepackage[colorlinks=true,linkcolor=blue,citecolor=blue,urlcolor=blue]{hyperref}
+\setlength{\emergencystretch}{3em}
 
 \input{./command}
 
@@ -48,15 +49,35 @@ where $\mathcal T_M=\sum_i M^{ii}$ is the physical-trace transfer; this is the
 calculation at lines~1333--1340. The formal statement is
 \leanid{MPOTensor.physTraceTransfer_sq_of_isRFPViaTS}.
 
-These requirements concern different uses of scale. Equation
-\eqref{eq:unit-weight} chooses normalized BNT representatives and places the
-overall scale in their coefficients. Equation \eqref{eq:physical-idempotent}
-constrains the scale of the displayed tensor itself.
+These requirements concern two transfer objects with different scaling laws.
+For the doubled-index MPS transfer map
+\begin{align}
+    \mathcal E_M(X)
+    &=\sum_i M^iX(M^i)^\dagger,
+\end{align}
+one has
+\begin{align}
+    \mathcal E_{cM}
+    &=|c|^2\mathcal E_M.
+    \label{eq:mps-transfer-scaling}
+\end{align}
+For the physical-trace transfer, linearity gives
+\begin{align}
+    \mathcal T_{cM}
+    &=c\mathcal T_M.
+    \label{eq:physical-transfer-scaling}
+\end{align}
+Equation \eqref{eq:unit-weight} normalizes the first object by choosing normal
+BNT representatives and placing the overall scale in their coefficients.
+Equation \eqref{eq:physical-idempotent} constrains the second object at the
+scale of the displayed tensor. The related up-to-scalar treatment of source
+zero correlation length is recorded in
+\path{docs/paper-gaps/cpsv16_zcl_canonical_form_normalization.tex}.
 
 \section{Fixed-representative scale pinning}
 
-The physical-trace transfer is linear in the tensor. Replacing $M$ by $cM$
-replaces $\mathcal T_M$ by $c\mathcal T_M$. If
+By \eqref{eq:physical-transfer-scaling}, replacing $M$ by $cM$ replaces
+$\mathcal T_M$ by $c\mathcal T_M$. If
 $\mathcal T_M^2=\mathcal T_M\ne0$ and the nonzero rescaling $cM$ also satisfies
 the same literal idempotence equation, then
 \begin{align}
@@ -69,10 +90,10 @@ rescaling of a fixed representative.
 
 By contrast, the simplicity definition at lines~815--823 is phrased through
 the normalized elements of a BNT: the tensor is simple when none of those
-elements has nilpotent ket-against-bra contraction. Multiplying a BNT element by a nonzero scalar does not change
-nilpotency. The mathematical simplicity
-content is therefore insensitive to that rescaling, even though a formal
-predicate that includes the line-246 canonical-form normalization is evaluated
+elements has nilpotent ket-against-bra contraction. Multiplying a BNT
+element by a nonzero scalar does not change nilpotency. The mathematical
+simplicity content is therefore insensitive to that rescaling, even though a
+formal predicate that includes the line-246 canonical-form normalization is evaluated
 on a particular representative.
 
 The declarations \leanid{MPOTensor.IsSimpleCanonicalForm} and
@@ -113,12 +134,12 @@ equation as $R$.
 
 This establishes only a mismatch between the displayed one-block canonical
 normalization and the RFP-pinned representative. It does not prove that
-\leanid{MPOTensor.IsSimple R} is false, does not rule out every alternative
-canonical presentation or blocking, and does not make the displayed BNT
-coefficients presentation-independent. The theorem
-\leanid{MPOTensor.RescalingStableLengthDependentRFP.%
- doubledPhysTraceTransfer_retainedBlock_not_isNilpotent}
-records exactly the non-nilpotency of the retained block and no stronger
+\leanid{MPOTensor.IsSimple} applied to $R$ is false, does not rule out every
+alternative canonical presentation or blocking, and does not make the displayed
+BNT coefficients presentation-independent. In the namespace
+\leanid{MPOTensor.RescalingStableLengthDependentRFP}, the theorem
+\leanid{doubledPhysTraceTransfer_retainedBlock_not_isNilpotent} records
+exactly the non-nilpotency of the retained block and no stronger
 simplicity conclusion.
 
 \section{The vertical one-label identity}
@@ -154,7 +175,7 @@ This note adds no such predicate and proves no generic scale-pinning lemma. It
 only records why the existing simplicity predicates must be read as
 fixed-representative statements, and why non-nilpotency of the displayed dimer
 block does not by itself establish or refute the full predicate
-\leanid{MPOTensor.IsSimple R}.
+\leanid{MPOTensor.IsSimple} applied to $R$.
 
 \bibliographystyle{alpha}
 \bibliography{references}

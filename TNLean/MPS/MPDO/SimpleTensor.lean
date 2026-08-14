@@ -111,8 +111,9 @@ assumption that `M` generates MPDOs; its canonical-form witness has the shape
 of `MPOTensor.IsHorizontalCF`, with the additional requirement that no basis
 element have nilpotent physical-trace transfer.
 
-**Fixed-representative scope:** The BNT witness includes the line-246 global
-unit-weight convention through `MPSTensor.IsBNTCanonicalForm.weight_unit_exists`.
+**Scope restriction (fixed representative):** The BNT witness includes the
+line-246 global unit-weight convention through
+`MPSTensor.IsBNTCanonicalForm.weight_unit_exists`.
 Thus this predicate is evaluated on the displayed tensor `M`, not modulo a
 nonzero scalar rescaling. The mathematical nilpotency clause is scale invariant,
 but the packaged canonical-form normalization need not be compatible with the
@@ -142,10 +143,10 @@ the BNT, the source blocks a positive number of physical sites (line 815).
 A tensor is simple when one such blocked tensor is a simple canonical-form
 tensor in the sense above.
 
-**Fixed-representative scope:** This permits a positive physical blocking but
-does not quotient the blocked tensor by nonzero scalar rescaling or assert
-presentation independence. Its canonical-form witness therefore retains the
-line-246 unit-weight convention at the scale of `blockTensor M L`. See
+**Scope restriction (fixed representative):** This permits a positive physical
+blocking but does not quotient the blocked tensor by nonzero scalar rescaling or
+assert presentation independence. Its canonical-form witness therefore retains
+the line-246 unit-weight convention at the scale of `blockTensor M L`. See
 `docs/paper-gaps/cpsv16_unit_weight_rfp_scale_tension.tex`. -/
 def IsSimple (M : MPOTensor d D) : Prop :=
   IsMPDO M ∧ ∃ L : ℕ, 0 < L ∧ IsSimpleCanonicalForm (blockTensor M L)
