@@ -77,8 +77,9 @@ theorem reducedBlockState_three_two_zero :
 
 /-- The physical-trace transfer of the effective binary tensor is nonzero.
 
-At one site its periodic MPO has trace $2$, by the exact partition function for
-CPSV16 Example 4.11, lines 907--924. The cyclic trace identity then rules out a
+The tensor is extracted from the neighboring operators printed in CPSV16
+Example 4.11, lines 907--924. The project-derived exact partition function gives
+its one-site periodic MPO trace as $2$, so the cyclic trace identity rules out a
 zero physical-trace transfer. -/
 theorem physTraceTransfer_M_ne_zero : physTraceTransfer M ≠ 0 := by
   intro hzero
@@ -160,9 +161,10 @@ theorem reducedBlockState_three_two_zero :
 
 /-- The physical-trace transfer of the ambient two-qubit-site tensor is nonzero.
 
-At one site its periodic MPO has trace $2$, by the exact ambient normalization
-for CPSV16 Example 4.11, lines 907--924. The cyclic trace identity then rules
-out a zero physical-trace transfer. -/
+The tensor embeds the neighboring operators printed in CPSV16 Example 4.11,
+lines 907--924. The project-derived exact ambient normalization gives its
+one-site periodic MPO trace as $2$, so the cyclic trace identity rules out a
+zero physical-trace transfer. -/
 theorem physTraceTransfer_ambientM_ne_zero : physTraceTransfer ambientM ≠ 0 := by
   intro hzero
   have htrace := trace_mpo_eq_trace_verticalLoop_pow ambientM 1
