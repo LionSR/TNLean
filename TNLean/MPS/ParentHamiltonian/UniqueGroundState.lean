@@ -224,10 +224,8 @@ theorem full_ring_boundary_intertwines_of_cyclicTranslate_groundSpaceMap_eq
 open-boundary matrix.
 
 Choose an open-boundary matrix at every cyclic cut. Moving a cut by \(L₀\)
-sites
-moves one letter through the boundary. Iterating this relation around all \(L₀+1\) cuts shows that the initial
-matrix commutes with every word of full
-ring length. Block injectivity propagates to that length, so the matrix is
+sites moves one letter through the boundary. Iterating this relation around all
+\(L₀+1\) cuts shows that the initial matrix commutes with every full-ring word. Block injectivity propagates to that length, so the matrix is
 scalar. -/
 theorem full_ring_boundary_intertwines_of_chainGroundSpace
     {A : MPSTensor d D} [NeZero D] {L₀ : ℕ}
