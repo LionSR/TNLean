@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.ParentHamiltonian.ChainGroundSpace
+import TNLean.MPS.ParentHamiltonian.CyclicTranslation
 import TNLean.MPS.ParentHamiltonian.BoundaryClosing
 import TNLean.MPS.ParentHamiltonian.BoundaryClosingAuxiliary
 import TNLean.MPS.ParentHamiltonian.ExtendRight
@@ -182,6 +183,135 @@ theorem chainGroundSpace_le_groundSpace_of_isNBlkInjective
   rw [← cyclicRestrictₗ_eq_contiguousRestrictₗ hN hL₀N
     (show (⟨s, by omega⟩ : Fin N).val + (L₀ + 1) ≤ N from hs)]
   exact hψred ⟨s, by omega⟩ τ
+
+/-- A change of cut by `L₀` sites on a ring of length `L₀ + 1`
+intertwines the two open-boundary matrices with every one-site tensor matrix. -/
+theorem full_ring_boundary_intertwines_of_cyclicTranslate_groundSpaceMap_eq
+    {A : MPSTensor d D} {L₀ : ℕ} (hInj : IsNBlkInjective A L₀)
+    (_hL₀ : 0 < L₀) (X Y : Matrix (Fin D) (Fin D) ℂ)
+    (hEq : cyclicTranslateState (⟨L₀, by omega⟩ : Fin (L₀ + 1))
+        (groundSpaceMap A (L₀ + 1) X) = groundSpaceMap A (L₀ + 1) Y) :
+    ∀ a : Fin d, X * A a = A a * Y := by
+  intro a
+  apply groundSpaceMap_injective_of_isNBlkInjective hInj
+  ext β
+  simp only [groundSpaceMap_apply]
+  let α : Fin 1 → Fin d := fun _ ↦ a
+  have hcoeff := congrFun hEq (Fin.append β α)
+  change
+    groundSpaceMap A (L₀ + 1) X
+        (cyclicTranslateCfg (⟨L₀, by omega⟩ : Fin (L₀ + 1)) (Fin.append β α)) =
+      groundSpaceMap A (L₀ + 1) Y (Fin.append β α) at hcoeff
+  rw [cyclicTranslateCfg_fin_append (K := L₀) (S := 1) (by omega) β α]
+    at hcoeff
+  simp only [groundSpaceMap_apply] at hcoeff
+  have hswap :
+      List.ofFn ((Fin.append α β) ∘ Fin.cast (Nat.add_comm L₀ 1)) =
+        List.ofFn α ++ List.ofFn β := by
+    rw [← List.ofFn_fin_append]
+    exact (List.ofFn_congr (Nat.add_comm 1 L₀) (Fin.append α β)).symm
+  rw [hswap, List.ofFn_fin_append] at hcoeff
+  simp_rw [evalWord_append] at hcoeff
+  calc
+    Matrix.trace (evalWord A (List.ofFn β) * (X * A a)) =
+        Matrix.trace (A a * (evalWord A (List.ofFn β) * X)) := by
+      rw [← Matrix.mul_assoc]
+      exact Matrix.trace_mul_comm _ _
+    _ = Matrix.trace (evalWord A (List.ofFn β) * (A a * Y)) := by
+      simpa [α, Matrix.mul_assoc] using hcoeff
+
+/-- On the full minimal ring, every chain-ground-space vector has a scalar
+open-boundary matrix.
+
+Choose an open-boundary matrix at every cyclic cut. Moving a cut by `L₀` sites
+moves one letter through the boundary. Iterating this relation around all
+`L₀ + 1` cuts shows that the initial matrix commutes with every word of full
+ring length. Block injectivity propagates to that length, so the matrix is
+scalar. -/
+theorem full_ring_boundary_intertwines_of_chainGroundSpace
+    {A : MPSTensor d D} [NeZero D] {L₀ : ℕ}
+    (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀)
+    {ψ : NSiteSpace d (L₀ + 1)} {X : Matrix (Fin D) (Fin D) ℂ}
+    (hψ : ψ ∈ chainGroundSpace A (L₀ + 1) (L₀ + 1))
+    (hψX : ψ = groundSpaceMap A (L₀ + 1) X) :
+    ∀ a : Fin d, X * A a = A a * X := by
+  let s : Fin (L₀ + 1) := ⟨L₀, by omega⟩
+  have hTranslated : ∀ i : Fin (L₀ + 1),
+      cyclicTranslateState i ψ ∈ chainGroundSpace A (L₀ + 1) (L₀ + 1) :=
+    fun i ↦ cyclicTranslateState_mem_chainGroundSpace A (by omega) (le_refl _) i hψ
+  have hTranslatedGS : ∀ i : Fin (L₀ + 1),
+      cyclicTranslateState i ψ ∈ groundSpace A (L₀ + 1) := fun i ↦
+    chainGroundSpace_le_groundSpace_of_isNBlkInjective
+      hInj hL₀ (by omega) (by omega) (le_refl _) (hTranslated i)
+  have hBoundary : ∀ i : Fin (L₀ + 1),
+      ∃ Y : Matrix (Fin D) (Fin D) ℂ,
+        cyclicTranslateState i ψ = groundSpaceMap A (L₀ + 1) Y := by
+    intro i
+    obtain ⟨Y, hY⟩ := hTranslatedGS i
+    exact ⟨Y, hY.symm⟩
+  choose Y hY using hBoundary
+  have hStep : ∀ (i : Fin (L₀ + 1)) (a : Fin d),
+      Y i * A a = A a * Y (s + i) := by
+    intro i a
+    apply full_ring_boundary_intertwines_of_cyclicTranslate_groundSpaceMap_eq
+      hInj hL₀
+    rw [← hY i, ← hY (s + i), cyclicTranslateState_add]
+  have hPath : ∀ (w : List (Fin d)) (i : Fin (L₀ + 1)),
+      Y i * evalWord A w =
+        evalWord A w * Y (w.length • s + i) := by
+    intro w
+    induction w with
+    | nil => intro i; simp [evalWord_nil]
+    | cons a w ih =>
+        intro i
+        calc
+          Y i * evalWord A (a :: w) = (Y i * A a) * evalWord A w := by
+            rw [evalWord_cons, Matrix.mul_assoc]
+          _ = (A a * Y (s + i)) * evalWord A w := by rw [hStep i a]
+          _ = A a * (Y (s + i) * evalWord A w) := by rw [Matrix.mul_assoc]
+          _ = A a * (evalWord A w * Y (w.length • s + (s + i))) := by
+            rw [ih]
+          _ = evalWord A (a :: w) * Y ((a :: w).length • s + i) := by
+            rw [evalWord_cons]
+            have hindex : w.length • s + (s + i) = (a :: w).length • s + i := by
+              rw [List.length_cons, add_nsmul, one_nsmul]
+              abel
+            rw [hindex, Matrix.mul_assoc]
+  have hYzero : Y 0 = X := by
+    apply groundSpaceMap_injective_of_isNBlkInjective
+      (isNBlkInjective_of_le hL₀ hInj (by omega : L₀ ≤ L₀ + 1))
+    rw [← hY 0, ← hψX]
+    ext σ
+    change ψ (cyclicTranslateCfg 0 σ) = ψ σ
+    congr 1
+    funext k
+    simp [cyclicTranslateCfg]
+  have hCommFull : ∀ ω : Fin (L₀ + 1) → Fin d,
+      X * evalWord A (List.ofFn ω) = evalWord A (List.ofFn ω) * X := by
+    intro ω
+    rw [← hYzero]
+    let one : Fin (L₀ + 1) := ⟨1, by omega⟩
+    have hsneg : s = -one := by
+      apply Fin.ext
+      simp only [s, one, Fin.neg_def]
+      rw [Nat.add_sub_cancel, Nat.mod_eq_of_lt (by omega : L₀ < L₀ + 1)]
+    have honeval : ∀ k : ℕ, (k • one).val = k % (L₀ + 1) := by
+      intro k
+      induction k with
+      | zero => simp
+      | succ k ih =>
+          rw [succ_nsmul, Fin.val_add, ih]
+          simp [one, Nat.add_mod]
+    have honecycle : (L₀ + 1) • one = 0 := by
+      apply Fin.ext
+      rw [honeval, Nat.mod_self]
+      rfl
+    have hcycle : (L₀ + 1) • s = 0 := by
+      rw [hsneg, neg_nsmul, honecycle, neg_zero]
+    simpa [hcycle] using hPath (List.ofFn ω) 0
+  intro a
+  exact boundary_matrix_commutes_of_isNBlkInjective_of_long_word_commutes
+    hInj hL₀ (by omega) hCommFull a
 
 /-! ### Vanishing on all word products implies zero -/
 
@@ -721,6 +851,26 @@ theorem wrapped_mirror_witness_agree_of_chainGroundSpace
   exact closure_property_boundary_right_products_eq_of_chainGroundSpace
     (A := A) hInj hL₀ (by omega : L₀ < M) hψred hψX YAt hYAt η μ j
 
+/-- At the source-minimal length `N = L₀ + 1`, the full-ring cyclic
+change-of-cut argument identifies the chain ground space with the MPS line. -/
+theorem chainGroundSpace_le_mpvSubmodule_of_isNBlkInjective_full_ring
+    {A : MPSTensor d D} [NeZero D] {L₀ : ℕ}
+    (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀) :
+    chainGroundSpace A (L₀ + 1) (L₀ + 1) ≤ mpvSubmodule A (L₀ + 1) := by
+  intro ψ hψ
+  have hψGS : ψ ∈ groundSpace A (L₀ + 1) :=
+    chainGroundSpace_le_groundSpace_of_isNBlkInjective
+      hInj hL₀ (by omega) (by omega) (le_refl _) hψ
+  obtain ⟨X, hX⟩ := hψGS
+  have hLetters : ∀ a : Fin d, X * A a = A a * X :=
+    full_ring_boundary_intertwines_of_chainGroundSpace hInj hL₀ hψ hX.symm
+  have hWords : ∀ ω : Fin L₀ → Fin d,
+      X * evalWord A (List.ofFn ω) = evalWord A (List.ofFn ω) * X := fun ω ↦
+    commutes_evalWord_of_commutes_letters X A hLetters (List.ofFn ω)
+  rw [← hX]
+  exact groundSpaceMap_mem_mpvSubmodule_of_isNBlkInjective_of_long_word_commutes
+    hInj hL₀ (le_refl _) hWords
+
 /-- Closure-property containment
 \(\mathcal G_{N,L}(A) \subseteq \mathbb C\,V^{(N)}(A)\) for \(L>L₀\) and
 \(L₀+1<N\), following arXiv:2011.12127, Section IV.C, lines 2078--2090.
@@ -730,8 +880,15 @@ theorem chainGroundSpace_le_mpvSubmodule_of_normal_range_reduction
     {A : MPSTensor d D} [NeZero D]
     (_hA : IsNormal A) {L₀ : ℕ} (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀)
     {L N : ℕ} (hN : 2 ≤ N) (hL : L₀ < L) (hLN : L ≤ N)
-    (hNlarge : L₀ + 1 < N) :
+    (hNlarge : L₀ + 1 ≤ N) :
     chainGroundSpace A L N ≤ mpvSubmodule A N := by
+  rcases hNlarge.eq_or_lt with rfl | hNstrict
+  · have hLe : chainGroundSpace A L (L₀ + 1) ≤
+        chainGroundSpace A (L₀ + 1) (L₀ + 1) :=
+      chainGroundSpace_le_chainGroundSpace_of_le
+        (A := A) (by omega) (by omega) hLN
+    exact hLe.trans
+      (chainGroundSpace_le_mpvSubmodule_of_isNBlkInjective_full_ring hInj hL₀)
   have hNpos : 0 < N := by omega
   intro ψ hψ
   have hψGS : ψ ∈ groundSpace A N :=
@@ -748,7 +905,7 @@ theorem chainGroundSpace_le_mpvSubmodule_of_normal_range_reduction
         Ymirror (mirrorMiddleBackground L₀ N η μ) := by
     intro μ
     exact wrapped_mirror_witness_agree_of_chainGroundSpace
-      (A := A) hInj hL₀ hN hL hLN hNlarge hψ hX.symm Ywrap Ymirror hWrap
+      (A := A) hInj hL₀ hN hL hLN hNstrict hψ hX.symm Ywrap Ymirror hWrap
       hMirror η μ
   rw [← hX]
   exact groundSpaceMap_mem_mpvSubmodule_of_isNBlkInjective_of_wrapped_witness_comparison
@@ -761,7 +918,7 @@ see `docs/paper-gaps/cpgsv21_normal_range_reduction.tex`. -/
 theorem chainGroundSpace_eq_mpvSubmodule_normal {A : MPSTensor d D} [NeZero D]
     (hA : IsNormal A) {L₀ : ℕ} (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀)
     {L N : ℕ} (hN : 2 ≤ N) (hL : L₀ < L) (hLN : L ≤ N)
-    (hNlarge : L₀ + 1 < N) :
+    (hNlarge : L₀ + 1 ≤ N) :
     chainGroundSpace A L N = mpvSubmodule A N := by
   apply le_antisymm
   · exact chainGroundSpace_le_mpvSubmodule_of_normal_range_reduction
@@ -796,13 +953,13 @@ excludes \(L₀=1,N=2\); see
 `docs/paper-gaps/cpgsv21_normal_range_reduction.tex`. -/
 theorem parentHamiltonian_unique_gs_injective {A : MPSTensor d D} [NeZero D]
     {L₀ : ℕ} (hA : IsNBlkInjective A L₀) (hL₀ : 0 < L₀)
-    {N : ℕ} (hN : 2 * L₀ ≤ N) (hNlarge : L₀ + 1 < N) :
+    {N : ℕ} (hN : 2 * L₀ ≤ N) :
     HasUniqueGroundState (chainGroundSpace A (2 * L₀) N) := by
   have hNormal : IsNormal A := ⟨L₀, hL₀, hA⟩
-  have hN' : L₀ + 1 ≤ N := le_of_lt hNlarge
+  have hN' : L₀ + 1 ≤ N := by omega
   rw [HasUniqueGroundState,
     chainGroundSpace_eq_mpvSubmodule_normal hNormal hA hL₀ (by omega) (by omega) hN
-      hNlarge]
+      hN']
   have hmpv := mpv_ne_zero_of_isNBlkInjective hA hL₀ hN'
   change Module.finrank ℂ (ℂ ∙ (mpv A : NSiteSpace d N)) = 1
   exact finrank_span_singleton (K := ℂ) hmpv
@@ -813,12 +970,12 @@ theorem parentHamiltonian_unique_gs_injective {A : MPSTensor d D} [NeZero D]
 see `docs/paper-gaps/cpgsv21_normal_range_reduction.tex`. -/
 theorem parentHamiltonian_unique_gs_normal {A : MPSTensor d D} [NeZero D]
     {L₀ : ℕ} (hA : IsNormal A) (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀)
-    {N : ℕ} (hN : L₀ + 1 < N) :
+    {N : ℕ} (hN : L₀ + 1 ≤ N) :
     HasUniqueGroundState (chainGroundSpace A (L₀ + 1) N) := by
   rw [HasUniqueGroundState,
     chainGroundSpace_eq_mpvSubmodule_normal hA hInj hL₀ (by omega) (by omega)
-      (le_of_lt hN) hN]
-  have hmpv := mpv_ne_zero_of_isNBlkInjective hInj hL₀ (le_of_lt hN)
+      hN hN]
+  have hmpv := mpv_ne_zero_of_isNBlkInjective hInj hL₀ hN
   change Module.finrank ℂ (ℂ ∙ (mpv A : NSiteSpace d N)) = 1
   exact finrank_span_singleton (K := ℂ) hmpv
 end MPSTensor
