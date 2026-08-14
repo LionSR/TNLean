@@ -92,7 +92,7 @@ are named \path{IsNormal A} and \path{IsNBlkInjective A L0}, together with
 \path{L0 < L <= N}.}
 
 The blueprint records the corresponding closure-property step in
-\path{blueprint/src/chapter/ch13_parent_hamiltonian_normal_closing.tex}, labelled
+\path{blueprint/src/chapter/ch13_parent_hamiltonian_normal_closing_reverse.tex}, labelled
 \path{thm:normal_range_reduction_containment}. Its proof sketch separates the
 open-chain intersection iteration from the comparison at the periodic boundary,
 matching the source distinction between the intersection property and the
@@ -345,9 +345,10 @@ word \(\nu\). The trace-separation lemma then gives the matrix identity
 \]
 for every \(\alpha,\nu\). The block-injective commutation lemma then gives
 \(XA^k=A^kX\) for every physical letter \(k\), and the verified boundary-restriction equality
-lemma supplies the periodic-boundary comparison. The remaining restriction
-recorded here is the minimal ring case \(N=L_0+1\), where the complement word is
-empty and the present boundary-crossing comparison does not apply.
+lemma supplies the periodic-boundary comparison. At the minimal ring
+\(N=L_0+1\), the separate full-ring cyclic change-of-cut argument shows that the
+boundary matrix is scalar and proves the same ground-space conclusion. Thus the
+formal theorem covers the full source range \(L_0+1\le N\).
 
 \bibliographystyle{alpha}
 \bibliography{references}
