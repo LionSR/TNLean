@@ -786,10 +786,11 @@ Nachtergaele~\cite[Equation~(3.12)]{Nachtergaele1996Spectral}, whose
 zero-energy space is identified in Equation~(3.13). Equations~(3.14)--(3.16)
 continue with comparison of compatible interactions, approximate commutation
 of ground-state projectors, and a uniform gap. Theorem~2.1(i) of the same
-source obtains a gap from its three stated hypotheses. In addition to the
-compatible Hamiltonian and its zero-energy space, the statements below verify
-only the unit norm lower bound at the full-window volume $N=L$. They give no
-gap estimate for $N>L$ and no periodic coercivity.
+source obtains a gap from its three stated hypotheses. Every compatible
+Hamiltonian below is positive because it is a sum of orthogonal projections.
+In addition to the compatible Hamiltonian and its zero-energy space, the
+statements below verify only the unit norm lower bound at the full-window volume
+$N=L$. They give no gap estimate for $N>L$ and no periodic coercivity.
 
 \begin{definition}[Compatible open-chain parent Hamiltonian]
     \label{def:open_parent_hamiltonian_es}
@@ -819,19 +820,37 @@ gap estimate for $N>L$ and no periodic coercivity.
     \leanok
     \uses{def:open_parent_hamiltonian_es,
         rem:euclidean_local_projector_ingredients}
-    If $L>0$, then $I_{L,L}=\{0\}$ and
+    If $L>0$, then
     \begin{align}
         H^{\mathrm{open}}_{L,L}(A)
-        &=h_{0,\mathrm{ES}}(A,L)=P_L^{\mathrm{ES}}(A).
+        &=P_L^{\mathrm{ES}}(A).
         \label{eq:open_parent_hamiltonian_full_window}
     \end{align}
 \end{theorem}
 
 \begin{proof}
     \leanok
-    The inequality $i+L\leq L$ forces $i=0$. For this sole window, restriction
-    to the full chain and extraction of the window are both the identity, so
-    the local term is $P_L^{\mathrm{ES}}(A)$.
+    \uses{def:open_parent_hamiltonian_es, rem:cyclic_window_operators,
+        def:extract_window, lem:blocked_original_aligned_sparse_sum}
+    The interaction has one window:
+    \begin{align}
+        I_{L,L}&=\{0\}.
+    \end{align}
+    On that window, restriction and extraction are identities:
+    \begin{align}
+        \Res^\tau_{0,L}v&=v.
+    \end{align}
+    Likewise,
+    \begin{align}
+        \sigma_{[0,L-1]}&=\sigma.
+    \end{align}
+    Therefore
+    \begin{align}
+        H^{\mathrm{open}}_{L,L}(A)
+        &=\sum_{i\in I_{L,L}}h_{i,\mathrm{ES}}(A,L)
+          =h_{0,\mathrm{ES}}(A,L)
+          =P_L^{\mathrm{ES}}(A).
+    \end{align}
 \end{proof}
 
 \begin{theorem}[Unit gap at the full-window volume]
@@ -844,9 +863,11 @@ gap estimate for $N>L$ and no periodic coercivity.
     $v\in(\ker H^{\mathrm{open}}_{L,L}(A))^\perp$, then
     \begin{align}
         \lVert H^{\mathrm{open}}_{L,L}(A)v\rVert
-        &=\lVert v\rVert,
+        &=\lVert v\rVert.
         \label{eq:open_parent_hamiltonian_full_window_norm}
-        \\
+    \end{align}
+    In particular,
+    \begin{align}
         \lVert v\rVert
         &\leq\lVert H^{\mathrm{open}}_{L,L}(A)v\rVert.
     \end{align}
@@ -857,11 +878,25 @@ gap estimate for $N>L$ and no periodic coercivity.
 
 \begin{proof}
     \leanok
-    \uses{thm:open_parent_hamiltonian_full_window}
-    By~(\ref{eq:open_parent_hamiltonian_full_window}), the Hamiltonian is the
-    orthogonal projector onto $(G_L^{\mathrm{ES}}(A))^\perp$. Its kernel is
-    $G_L^{\mathrm{ES}}(A)$, and an orthogonal projector preserves the norm of
-    every vector in its range. The inequality is the resulting equality.
+    \uses{thm:open_parent_hamiltonian_full_window,
+        lem:parent_interaction_es_kernel}
+    The full-window identity and the local kernel formula give
+    \begin{align}
+        \ker H^{\mathrm{open}}_{L,L}(A)
+        &=\ker P_L^{\mathrm{ES}}(A)=G_L^{\mathrm{ES}}(A).
+    \end{align}
+    Hence $v$ belongs to $(G_L^{\mathrm{ES}}(A))^\perp$, where the orthogonal
+    projector $P_L^{\mathrm{ES}}(A)$ acts as the identity. Thus
+    \begin{align}
+        \left\lVert H^{\mathrm{open}}_{L,L}(A)v\right\rVert
+        &=\left\lVert P_L^{\mathrm{ES}}(A)v\right\rVert
+          =\lVert v\rVert.
+    \end{align}
+    Consequently,
+    \begin{align}
+        \lVert v\rVert
+        &\leq\left\lVert H^{\mathrm{open}}_{L,L}(A)v\right\rVert.
+    \end{align}
 \end{proof}
 
 \begin{lemma}[Positivity of the compatible open-chain Hamiltonian]
@@ -904,6 +939,46 @@ gap estimate for $N>L$ and no periodic coercivity.
     projection. Hence every local term annihilates $v$.
 \end{proof}
 
+\begin{theorem}[Restriction of an open-boundary MPS vector]
+    \label{thm:contiguous_restriction_ground_space_map}
+    \lean{MPSTensor.contiguousRestrictₗ_groundSpaceMap_mem_groundSpace}
+    \leanok
+    \uses{def:ground_space_parent, rem:contiguous_window_operators}
+    Assume $s+L\leq N$. For every boundary matrix $X$ and complementary
+    configuration $\tau$,
+    \begin{align}
+        \Res^\tau_{s,L}\Gamma_N^A(X)&\in G_L(A).
+    \end{align}
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{lem:ground_space_map_apply, lem:eval_word_append}
+    For the fixed words
+    \begin{align}
+        w_L&=(\tau_0,\ldots,\tau_{s-1}),
+    \end{align}
+    and
+    \begin{align}
+        w_R&=(\tau_{s+L},\ldots,\tau_{N-1}),
+    \end{align}
+    the word of a configuration obtained by inserting the window word $\omega$
+    is
+    \begin{align}
+        A^{w_L\omega w_R}&=A^{w_L}A^\omega A^{w_R}.
+    \end{align}
+    Cyclicity of the trace gives
+    \begin{align}
+        \operatorname{tr}\!\left(A^{w_L}A^\omega A^{w_R}X\right)
+        &=\operatorname{tr}\!\left(A^\omega A^{w_R}XA^{w_L}\right),
+    \end{align}
+    and hence
+    \begin{align}
+        \Res^\tau_{s,L}\Gamma_N^A(X)
+        &=\Gamma_L^A\!\left(A^{w_R}XA^{w_L}\right)\in G_L(A).
+    \end{align}
+\end{proof}
+
 \begin{theorem}[Open-boundary vectors have zero compatible energy]
     \label{thm:open_ground_space_le_hamiltonian_kernel}
     \lean{MPSTensor.groundSpaceES_le_ker_openParentHamiltonianES}
@@ -918,17 +993,18 @@ gap estimate for $N>L$ and no periodic coercivity.
 
 \begin{proof}
     \leanok
-    \uses{lem:mem_ground_space_es, rem:contiguous_window_operators,
+    \uses{lem:mem_ground_space_es,
+        thm:contiguous_restriction_ground_space_map,
         rem:cyclic_window_operators, lem:local_term_es_kernel_restrictions}
-    Let $v=\Gamma_N(X)\in G_N^{\mathrm{ES}}(A)$. For a non-wrapping window
-    $[s,s+L-1]$ and a complementary configuration $\tau$, the restriction is
+    Let $v=\Gamma_N(X)\in G_N^{\mathrm{ES}}(A)$. For every non-wrapping
+    window $[s,s+L-1]$ and complementary configuration $\tau$,
+    Theorem~\ref{thm:contiguous_restriction_ground_space_map} gives
     \begin{align}
-        \Res^\tau_{s,L}\Gamma_N(X)
-        &=\Gamma_L\!\left(
-            A^{\tau_{s+L}\cdots\tau_{N-1}}X
-            A^{\tau_0\cdots\tau_{s-1}}
-          \right)
-        \in G_L^{\mathrm{ES}}(A).
+        \Res^\tau_{s,L}\Gamma_N(X)&\in G_L(A).
+    \end{align}
+    Lemma~\ref{lem:mem_ground_space_es} identifies this condition with
+    \begin{align}
+        \Res^\tau_{s,L}\Gamma_N(X)&\in G_L^{\mathrm{ES}}(A).
     \end{align}
     The local kernel criterion therefore shows that every compatible local term
     annihilates $v$.
