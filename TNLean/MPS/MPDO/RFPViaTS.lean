@@ -90,7 +90,9 @@ def IsRFPViaTS (M : MPOTensor d D) : Prop :=
 This is the zero-correlation-length part of arXiv:1606.00608, lines 1333--1340:
 trace preservation of the map from one site to
 two sites identifies the traces of the one-site and two-site physical closures
-for every virtual boundary matrix. -/
+for every virtual boundary matrix. For its interaction with the line-246
+unit-weight convention on a fixed tensor representative, see
+`docs/paper-gaps/cpsv16_unit_weight_rfp_scale_tension.tex`. -/
 theorem physTraceTransfer_sq_of_isRFPViaTS (M : MPOTensor d D) (h : IsRFPViaTS M) :
     physTraceTransfer M * physTraceTransfer M = physTraceTransfer M := by
   obtain ⟨_, T, _, hT, _, hT_close⟩ := h
