@@ -1,0 +1,162 @@
+\documentclass{article}
+
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[colorlinks=true,linkcolor=blue,citecolor=blue,urlcolor=blue]{hyperref}
+
+\input{./command}
+
+\title{The CPSV16 Unit-Weight Convention and Renormalization-Fixed-Point Scale}
+\author{}
+\date{2026-08-14}
+
+\begin{document}
+\maketitle
+
+\section{Two scale conventions in the source}
+
+The canonical-form construction of
+Cirac--P\'erez-Garc\'ia--Schuch--Verstraete first writes a tensor as
+\begin{align}
+    A^i
+    &=\bigoplus_k \mu_k A_k^i,
+\end{align}
+where every $A_k$ is normal and its transfer map has spectral radius one
+\cite[lines~214--246]{Cirac2016MPDO_arXiv}. Since the states are not normalized
+there, line~246 adopts the standing convention
+\begin{align}
+    |\mu_k|&\leq 1 &&\text{for every $k$},
+    & |\mu_{k_0}|&=1 &&\text{for some $k_0$}.
+    \label{eq:unit-weight}
+\end{align}
+The formal BNT predicate records the second clause through
+\leanid{MPSTensor.IsBNTCanonicalForm.weight_unit_exists}. This is one global
+unit-weight witness, not one witness in every sector; the latter distinction is
+discussed separately in
+\path{docs/paper-gaps/cpsv16_global_vs_persector_unit_witness.tex}.
+
+Definition~4.1 fixes the scale of the tensor in a different way. For a tensor
+$M$ already in canonical form and generating MPDOs, it requires
+trace-preserving completely positive maps relating the one-site and two-site
+physical closures \cite[lines~645--660]{Cirac2016MPDO_arXiv}. Trace preservation
+gives
+\begin{align}
+    \mathcal T_M^2&=\mathcal T_M,
+    \label{eq:physical-idempotent}
+\end{align}
+where $\mathcal T_M=\sum_i M^{ii}$ is the physical-trace transfer; this is the
+calculation at lines~1333--1340. The formal statement is
+\leanid{MPOTensor.physTraceTransfer_sq_of_isRFPViaTS}.
+
+These requirements concern different uses of scale. Equation
+\eqref{eq:unit-weight} chooses normalized BNT representatives and places the
+overall scale in their coefficients. Equation \eqref{eq:physical-idempotent}
+constrains the scale of the displayed tensor itself.
+
+\section{Fixed-representative scale pinning}
+
+The physical-trace transfer is linear in the tensor. Replacing $M$ by $cM$
+replaces $\mathcal T_M$ by $c\mathcal T_M$. If
+$\mathcal T_M^2=\mathcal T_M\ne0$ and the nonzero rescaling $cM$ also satisfies
+the same literal idempotence equation, then
+\begin{align}
+    c^2\mathcal T_M
+    &=(c\mathcal T_M)^2
+      =c\mathcal T_M,
+\end{align}
+so $c=1$. Thus Definition~4.1 is not invariant under an arbitrary nonzero
+rescaling of a fixed representative.
+
+By contrast, the simplicity definition at lines~815--823 is phrased through
+the normalized elements of a BNT: the tensor is simple when none of those
+elements has nilpotent ket-against-bra contraction. Multiplying a BNT element by a nonzero scalar does not change
+nilpotency. The mathematical simplicity
+content is therefore insensitive to that rescaling, even though a formal
+predicate that includes the line-246 canonical-form normalization is evaluated
+on a particular representative.
+
+The declarations \leanid{MPOTensor.IsSimpleCanonicalForm} and
+\leanid{MPOTensor.IsSimple} retain the source's BNT normalization. The first is
+a predicate on one displayed canonical-form representative. The second permits
+positive physical blocking, but still asks the resulting blocked tensor itself
+to admit such a normalized witness. Neither declaration is a quotient by
+nonzero scalar rescaling, and neither asserts invariance under changing the
+canonical presentation.
+
+\section{The displayed dimer representative}
+
+The project tensor $R$ gives a concrete instance of this tension. Its
+doubled-index MPS transfer map satisfies
+\begin{align}
+    \mathcal E_R^2
+    &=\frac{337}{512}\mathcal E_R.
+\end{align}
+Consequently the displayed one-block CPSV canonical form is
+\begin{align}
+    R^{\bullet\bullet}
+    &=\mu\widehat R,
+    & \mu&=\sqrt{\frac{337}{512}},
+\end{align}
+where the transfer map of the retained block $\widehat R$ is idempotent and
+hence has spectral radius one. This presentation has $0<\mu<1$, so it does not
+itself supply the global unit-weight witness in \eqref{eq:unit-weight}.
+
+On the other hand, the physical-trace transfer of the displayed tensor $R$ is
+a nonzero idempotent: its $(0,0)$ entry is $1/2$. The retained block has
+\begin{align}
+    \mathcal T_{\widehat R}
+    &=\mu^{-1}\mathcal T_R.
+\end{align}
+Since $\mu\ne1$, the scale-pinning calculation above shows that this normalized
+representative does not satisfy the same literal physical-trace idempotence
+equation as $R$.
+
+This establishes only a mismatch between the displayed one-block canonical
+normalization and the RFP-pinned representative. It does not prove that
+\leanid{MPOTensor.IsSimple R} is false, does not rule out every alternative
+canonical presentation or blocking, and does not make the displayed BNT
+coefficients presentation-independent. The theorem
+\leanid{MPOTensor.RescalingStableLengthDependentRFP.%
+ doubledPhysTraceTransfer_retainedBlock_not_isNilpotent}
+records exactly the non-nilpotency of the retained block and no stronger
+simplicity conclusion.
+
+\section{The vertical one-label identity}
+
+The same scale bookkeeping is visible in the algebraic form of
+Theorem~4.14. Its length-one condition is
+\begin{align}
+    m_\gamma
+    &=\sum_{\alpha,\beta}
+      c^{(1)}_{\alpha,\beta,\gamma}m_\alpha m_\beta,
+\end{align}
+where $m_\alpha=\tr(\mu_\alpha)$
+\cite[lines~972--993]{Cirac2016MPDO_arXiv}. In the displayed one-label dimer
+presentation,
+\begin{align}
+    c^{(1)}_{0,0,0}&=\frac{32}{25},
+    &m_0&=\frac{25}{32},
+\end{align}
+so the nonzero solution is fixed by $(c^{(1)}_{0,0,0})^{-1}$ rather than by a
+unit-weight convention. This is a statement about that explicit presentation,
+not an invariance theorem for coefficients under changes of presentation.
+
+\section{Formalization boundary}
+
+The current declarations are mathematically correct at their stated scope.
+The line-246 field should not be deleted: it is the source's standing
+canonical-form convention. The appropriate future interface is instead a
+scale-invariant simplicity surface, formulated either on a normalized
+representative or without packaging the unit-weight convention into the
+simplicity predicate.
+
+This note adds no such predicate and proves no generic scale-pinning lemma. It
+only records why the existing simplicity predicates must be read as
+fixed-representative statements, and why non-nilpotency of the displayed dimer
+block does not by itself establish or refute the full predicate
+\leanid{MPOTensor.IsSimple R}.
+
+\bibliographystyle{alpha}
+\bibliography{references}
+
+\end{document}
