@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import Mathlib.Topology.Instances.Matrix
 import TNLean.Algebra.FinTupleEquiv
 import TNLean.Channel.KrausCPTP
 import TNLean.MPS.Core.CyclicTrace
@@ -22,6 +23,8 @@ arXiv:1606.00608.
 
 * `MPOTensor.blockTensor`: the tensor obtained by blocking an arbitrary number
   of adjacent sites.
+* `MPOTensor.continuous_blockTensor` and `Continuous.blockTensor`: fixed-length
+  blocking is continuous, including along continuous tensor families.
 * `MPOTensor.mpo_blockTensor_eq_reindex`: closing a blocked chain gives the
   corresponding longer unblocked chain.
 * `MPOTensor.IsMPDO.blockTensor`: physical blocking preserves the MPDO property.
@@ -66,6 +69,45 @@ lemma blockTensor_apply (M : MPOTensor d D) (L : ℕ)
     blockTensor M L i j =
       evalWord M (MPSTensor.wordOfBlock d L i) (MPSTensor.wordOfBlock d L j) :=
   rfl
+
+/-- Word evaluation at fixed ket and bra words depends continuously on the MPO tensor.
+
+The recursive proof follows the ordered product in `evalWord`: the head matrix
+multiplies the continuously evaluated tail on the left. -/
+theorem continuous_evalWord (is js : List (Fin d)) :
+    Continuous (fun M : MPOTensor d D ↦ evalWord M is js) := by
+  induction is generalizing js with
+  | nil =>
+      cases js <;> exact continuous_const
+  | cons i is ih =>
+      cases js with
+      | nil => exact continuous_const
+      | cons j js =>
+          have hhead : Continuous (fun M : MPOTensor d D ↦ M i j) :=
+            (continuous_apply j).comp (continuous_apply i)
+          exact hhead.matrix_mul (ih js)
+
+/-- Physical blocking by a fixed length is continuous in the entries of the MPO tensor.
+
+Source: arXiv:1703.09188, proof of Proposition `prop:continuity-index`,
+lines 747--752. -/
+theorem continuous_blockTensor (L : ℕ) :
+    Continuous (fun M : MPOTensor d D ↦ blockTensor M L) := by
+  refine continuous_pi fun i ↦ continuous_pi fun j ↦ ?_
+  exact continuous_evalWord (MPSTensor.wordOfBlock d L i) (MPSTensor.wordOfBlock d L j)
+
+end MPOTensor
+
+/-- A continuous family of MPO tensors remains continuous after any fixed physical blocking.
+
+Source: arXiv:1703.09188, proof of Proposition `prop:continuity-index`,
+lines 747--752. -/
+theorem Continuous.blockTensor {X : Type*} [TopologicalSpace X] {d D : ℕ}
+    {M : X → MPOTensor d D} (hM : Continuous M) (L : ℕ) :
+    Continuous (fun x ↦ MPOTensor.blockTensor (M x) L) :=
+  (MPOTensor.continuous_blockTensor L).comp hM
+
+namespace MPOTensor
 
 /-- Canonical identification between the doubled physical index of an
 `L`-site MPO block and the `L`-site block of the doubled MPS index.
