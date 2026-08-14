@@ -792,6 +792,7 @@ neither the C1--C3 estimate nor periodic coercivity.
 
 \begin{definition}[Compatible open-chain parent Hamiltonian]
     \label{def:open_parent_hamiltonian_es}
+    \lean{MPSTensor.NonwrappingStart}
     \lean{MPSTensor.openParentHamiltonianES}
     \leanok
     \uses{rem:euclidean_local_projector_ingredients}
@@ -826,14 +827,81 @@ neither the C1--C3 estimate nor periodic coercivity.
     positive. Positivity is preserved by finite sums.
 \end{proof}
 
+\begin{theorem}[Zero energy forces every compatible local constraint]
+    \label{thm:open_parent_hamiltonian_zero_local_terms}
+    \lean{MPSTensor.localTermES_eq_zero_of_openParentHamiltonianES_eq_zero}
+    \leanok
+    \uses{def:open_parent_hamiltonian_es}
+    If $H^{\mathrm{open}}_{N,L}(A)v=0$, then, for every $i\in I_{L,N}$,
+    \begin{align}
+        h_{i,\mathrm{ES}}(A,L)v&=0.
+    \end{align}
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{rem:projection_geometry_rowsum_identities,
+        lem:transported_es_local_projections}
+    Take the inner product of the sum with $v$. Each summand is an orthogonal
+    projection, so every summand has zero quadratic form and therefore
+    annihilates $v$.
+\end{proof}
+
+\begin{theorem}[Open-boundary vectors have zero compatible energy]
+    \label{thm:open_ground_space_le_hamiltonian_kernel}
+    \lean{MPSTensor.groundSpaceES_le_ker_openParentHamiltonianES}
+    \leanok
+    \uses{def:open_parent_hamiltonian_es, def:ground_space_es}
+    For every $A$, $L$, and $N$,
+    \begin{align}
+        G_N^{\mathrm{ES}}(A)
+        &\subseteq \ker H^{\mathrm{open}}_{N,L}(A).
+    \end{align}
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{lem:mem_ground_space_es, rem:contiguous_window_operators,
+        lem:local_term_es_kernel_restrictions}
+    Every non-wrapping restriction of a vector in $G_N^{\mathrm{ES}}(A)$ lies
+    in $G_L^{\mathrm{ES}}(A)$ after absorbing the matrices outside the interval
+    into its boundary matrix. Hence every compatible local term annihilates the
+    vector.
+\end{proof}
+
+\begin{theorem}[Compatible zero energy has open-boundary form]
+    \label{thm:open_hamiltonian_kernel_le_ground_space}
+    \lean{MPSTensor.ker_openParentHamiltonianES_le_groundSpaceES_of_isNBlkInjective}
+    \leanok
+    \uses{def:open_parent_hamiltonian_es, def:ground_space_es,
+        def:l_blk_injective}
+    Assume $D\geq1$, $L_0>0$, and $N\geq L_0+1$. If $A$ is
+    $L_0$-block-injective, then
+    \begin{align}
+        \ker H^{\mathrm{open}}_{N,L_0+1}(A)
+        &\subseteq G_N^{\mathrm{ES}}(A).
+    \end{align}
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:open_parent_hamiltonian_zero_local_terms,
+        lem:mem_ground_space_es, rem:contiguous_window_operators,
+        lem:local_term_es_kernel_restrictions,
+        thm:normal_open_chain_range_reduction}
+    The zero-energy condition gives every non-wrapping length-$L_0+1$ local
+    constraint. The local kernel criterion identifies each corresponding
+    restriction with a vector in $G_{L_0+1}^{\mathrm{ES}}(A)$, and the
+    open-chain intersection theorem extends these constraints to the full
+    interval.
+\end{proof}
+
 \begin{theorem}[Ground-state property of the compatible open chain]
     \label{thm:open_parent_hamiltonian_kernel_ground_space}
     \lean{MPSTensor.ker_openParentHamiltonianES_eq_groundSpaceES_of_isNBlkInjective}
     \leanok
     \uses{def:open_parent_hamiltonian_es, def:ground_space_es,
-        def:l_blk_injective, lem:open_parent_hamiltonian_es_positive,
-        lem:local_term_es_kernel_restrictions,
-        thm:normal_open_chain_range_reduction}
+        def:l_blk_injective}
     Assume $D\geq1$, $L_0>0$, and $N\geq L_0+1$. If $A$ is
     $L_0$-block-injective, then
     \begin{align}
@@ -848,19 +916,10 @@ neither the C1--C3 estimate nor periodic coercivity.
 
 \begin{proof}
     \leanok
-    \uses{lem:open_parent_hamiltonian_es_positive,
-        lem:local_term_es_kernel_restrictions,
-        thm:normal_open_chain_range_reduction}
-    Every non-wrapping restriction of a vector in $G_N^{\mathrm{ES}}(A)$ lies
-    in $G_{L_0+1}^{\mathrm{ES}}(A)$: the matrices outside the interval are
-    absorbed into the boundary matrix. Hence every summand in
-    (\ref{eq:open_parent_hamiltonian_es}) annihilates the vector.
-
-    Conversely, if the sum annihilates a vector, positivity of its projection
-    summands forces every non-wrapping local term to annihilate that vector.
-    The local kernel criterion places each fixed-complement restriction in
-    $G_{L_0+1}^{\mathrm{ES}}(A)$. The open-chain iteration of the intersection
-    property then places the original vector in $G_N^{\mathrm{ES}}(A)$.
+    \uses{thm:open_ground_space_le_hamiltonian_kernel,
+        thm:open_hamiltonian_kernel_le_ground_space}
+    The two preceding inclusions identify each space as a subspace of the
+    other, so antisymmetry gives the equality.
 \end{proof}
 
 \begin{theorem}[Nachtergaele open-chain projector defect]
