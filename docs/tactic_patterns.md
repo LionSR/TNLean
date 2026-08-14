@@ -24,6 +24,21 @@ abstracted — record why, so it is not re-proposed).
 
 ## Promoted
 
+### contiguous restriction of open-boundary MPS vectors — promoted
+- **Pattern:** split a full-chain configuration into the words left of, inside,
+  and right of a nonwrapping window; absorb both outside words into the boundary
+  matrix; then use trace cyclicity to identify the restricted vector.
+- **Seen:** duplicate private proofs in
+  `TNLean/MPS/ParentHamiltonian/Martingale/OpenHamiltonian.lean` and
+  `TNLean/MPS/ParentHamiltonian/BNTBlockDiagonalChain.lean` before promotion
+  (2026-08-14).
+- **Abstraction:** `MPSTensor.contiguousRestrictₗ_groundSpaceMap_mem_groundSpace`
+  in `TNLean/MPS/ParentHamiltonian/CyclicWindow.lean`.
+- **Notes:** the candidate met the ledger's long-pattern two-file promotion
+  criterion: both copies exceeded 70 lines and the nonwrapping restriction is
+  shared ParentHamiltonian infrastructure. Both callers now use the public
+  theorem, removing 70 Lean source lines net without changing their statements.
+
 ### ambient compression eigenbasis equations — promoted
 - **Pattern:** derive that a compression eigenbasis vector is fixed by the first
   projection from subtype range membership, and recover its ambient compression

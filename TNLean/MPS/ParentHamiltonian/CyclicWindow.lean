@@ -16,6 +16,8 @@ bound that each length-L cyclic window overlaps at most \(2(L-1)\) others when
 
 ## Main results
 
+* `MPSTensor.contiguousRestrictₗ_groundSpaceMap_mem_groundSpace` — contiguous
+  restrictions preserve open-boundary MPS vectors.
 * `MPSTensor.contiguous_mem_groundSpace` — iterated intersection:
   non-wrapping window conditions imply membership in the open-chain ground space.
 * `MPSTensor.cyclicWindowSupport` and `MPSTensor.cyclicWindowsOverlap` — the
@@ -54,6 +56,86 @@ def contiguousRestrictₗ {N : ℕ} (s M : ℕ) (_hsM : s + M ≤ N)
 theorem contiguousRestrictₗ_apply {N : ℕ} (s M : ℕ) (hsM : s + M ≤ N)
     (τ : Fin N → Fin d) (ψ : NSiteSpace d N) (σ : Fin M → Fin d) :
     contiguousRestrictₗ s M hsM τ ψ σ = ψ (contiguousCfg s M σ τ) := rfl
+
+/-- Restricting an open-boundary MPS vector to a contiguous window gives an
+open-boundary MPS vector on that window.
+
+The matrices outside the window are absorbed into its boundary matrix. This is
+the nonwrapping restriction in Nachtergaele, arXiv:cond-mat/9410110, equation
+(3.12). -/
+theorem contiguousRestrictₗ_groundSpaceMap_mem_groundSpace
+    {A : MPSTensor d D} {s L N : ℕ} (hsL : s + L ≤ N)
+    (τ : Fin N → Fin d) (X : Matrix (Fin D) (Fin D) ℂ) :
+    contiguousRestrictₗ s L hsL τ (groundSpaceMap A N X) ∈ groundSpace A L := by
+  rw [groundSpace, LinearMap.mem_range]
+  let leftWord : List (Fin d) := List.ofFn fun k : Fin s => τ ⟨k.val, by omega⟩
+  let rightWord : List (Fin d) := List.ofFn fun k : Fin (N - (s + L)) =>
+    τ ⟨s + L + k.val, by omega⟩
+  refine ⟨evalWord A rightWord * X * evalWord A leftWord, ?_⟩
+  ext σ
+  simp only [contiguousRestrictₗ_apply, groundSpaceMap_apply]
+  have hlist :
+      List.ofFn (contiguousCfg s L σ τ) = leftWord ++ List.ofFn σ ++ rightWord := by
+    apply List.ext_getElem
+    · simp [leftWord, rightWord, List.length_ofFn]
+      omega
+    · intro k hk₁ hk₂
+      have hkN : k < N := by
+        simpa [List.length_ofFn] using hk₁
+      simp only [List.getElem_ofFn]
+      by_cases hkLeft : k < s
+      · have hkNotWin : ¬(s ≤ k ∧ k < s + L) := by omega
+        rw [contiguousCfg, dif_neg hkNotWin]
+        rw [List.getElem_append_left]
+        · rw [List.getElem_append_left]
+          · have hkLeftWord : k < leftWord.length := by
+              simpa only [leftWord, List.length_ofFn] using hkLeft
+            rw [show leftWord[k]'hkLeftWord = τ ⟨k, by omega⟩ from by
+              simp only [leftWord, List.getElem_ofFn]]
+          · simpa only [leftWord, List.length_ofFn] using hkLeft
+        · simpa only [leftWord, List.length_append, List.length_ofFn] using
+            (show k < s + L by omega)
+      · by_cases hkWin : k < s + L
+        · have hwin : s ≤ k ∧ k < s + L := by omega
+          rw [contiguousCfg, dif_pos hwin]
+          rw [List.getElem_append_left]
+          · rw [List.getElem_append_right]
+            · rw [List.getElem_ofFn]
+              congr 1
+              ext
+              simp [leftWord]
+            · simpa only [leftWord, List.length_ofFn] using
+                (show s ≤ k by omega)
+          · simpa only [leftWord, List.length_append, List.length_ofFn] using hkWin
+        · have hkRight : s + L ≤ k := by omega
+          have hkNotWin : ¬(s ≤ k ∧ k < s + L) := by omega
+          rw [contiguousCfg, dif_neg hkNotWin]
+          rw [List.getElem_append_right]
+          · have hRightIndex :
+                k - (leftWord ++ List.ofFn σ).length < rightWord.length := by
+              simp only [rightWord, leftWord, List.length_append, List.length_ofFn]
+              omega
+            rw [show rightWord[k - (leftWord ++ List.ofFn σ).length]'hRightIndex =
+                τ ⟨k, by omega⟩ from by
+              simp only [rightWord, List.getElem_ofFn]
+              congr 1
+              ext
+              simp only [leftWord, List.length_append, List.length_ofFn]
+              omega]
+          · simpa only [leftWord, List.length_append, List.length_ofFn] using hkRight
+  rw [hlist, evalWord_append, evalWord_append]
+  calc
+    Matrix.trace (evalWord A (List.ofFn σ) *
+        (evalWord A rightWord * X * evalWord A leftWord)) =
+        Matrix.trace ((evalWord A (List.ofFn σ) * (evalWord A rightWord * X)) *
+          evalWord A leftWord) := by
+      rw [← Matrix.mul_assoc]
+    _ = Matrix.trace (evalWord A leftWord *
+        (evalWord A (List.ofFn σ) * (evalWord A rightWord * X))) :=
+      Matrix.trace_mul_comm _ _
+    _ = Matrix.trace ((evalWord A leftWord * evalWord A (List.ofFn σ) *
+        evalWord A rightWord) * X) := by
+      rw [Matrix.mul_assoc, Matrix.mul_assoc]
 
 /-- The contiguous config at position 0 with M = N covers all sites. -/
 theorem contiguousCfg_zero_full {N : ℕ} (σ : Fin N → Fin d) (τ : Fin N → Fin d) :
