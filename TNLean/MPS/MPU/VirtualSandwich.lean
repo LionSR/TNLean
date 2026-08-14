@@ -19,7 +19,7 @@ $A$ and $B$ preserve both source-cut ranks.
 
 This is the rank-preservation step in
 [Cirac--Perez-Garcia--Schuch--Verstraete 2017, arXiv:1703.09188],
-Proposition IV.5, lines 786--804.
+Proposition IV.5, lines 786--812.
 -/
 
 open scoped Matrix Kronecker
@@ -44,7 +44,7 @@ def virtualSandwich (A : Matrix (Fin D) (Fin D) ℂ) (U : MPOTensor d D)
 /-- Continuous families of virtual matrices and MPO tensors give a continuous
 family after virtual sandwiching.
 
-Source: arXiv:1703.09188, Proposition IV.5, lines 786--804. -/
+Source: arXiv:1703.09188, Proposition IV.5, lines 807--812. -/
 theorem continuous_virtualSandwich {X : Type*} [TopologicalSpace X]
     {A : X → Matrix (Fin D) (Fin D) ℂ} {U : X → MPOTensor d D}
     {B : X → Matrix (Fin D) (Fin D) ℂ} (hA : Continuous A)

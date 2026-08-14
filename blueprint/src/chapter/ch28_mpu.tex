@@ -5678,8 +5678,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
   \label{def:mpu_virtual_sandwich}
   \lean{MPOTensor.virtualSandwich,MPOTensor.virtualSandwich_apply}
   \leanok
-  \uses{}
-  For an MPO tensor $\mathcal U=(U^{ij})_{i,j=1}^d$ of bond dimension $D$
+  For an MPO tensor $\mathcal U=(U^{ij})_{0\leq i,j<d}$ of bond dimension $D$
   and matrices $A,B\in\mathbb C^{D\times D}$, define
   \begin{align}
     \widehat{\mathcal U}^{ij}&=A U^{ij}B.
@@ -5698,7 +5697,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     x\longmapsto A(x)\mathcal U(x)B(x)
   \end{align}
   is continuous.
-  % Source lines: paper_v2.tex 786--804.
+  % Source lines: paper_v2.tex 807--812.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -5772,7 +5771,8 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     thm:mpu_two_projection_reduced_projection,
     thm:mpu_two_projection_reduced_projection_right_factor,
     thm:mpu_rank_lower_semicontinuous,
-    thm:mpu_fixed_product_preconnected}
+    thm:mpu_fixed_product_preconnected,
+    thm:mpu_virtual_sandwich_source_ranks}
   Let $[0,1]\ni x\mapsto\mathcal W(x)$ be a continuous path of tensors
   generating MPUs, without requiring the path to be in canonical form. For
   each $x$, take the canonical form and the two source-cut ranks $r(x)$ and
