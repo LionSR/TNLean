@@ -23,6 +23,8 @@ arXiv:1606.00608.
 
 * `MPOTensor.blockTensor`: the tensor obtained by blocking an arbitrary number
   of adjacent sites.
+* `MPOTensor.continuous_blockTensor` and `Continuous.blockTensor`: fixed-length
+  blocking is continuous, including along continuous tensor families.
 * `MPOTensor.mpo_blockTensor_eq_reindex`: closing a blocked chain gives the
   corresponding longer unblocked chain.
 * `MPOTensor.IsMPDO.blockTensor`: physical blocking preserves the MPDO property.

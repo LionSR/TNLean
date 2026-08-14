@@ -1020,8 +1020,7 @@ closing a chain of $N$ copies of $\mathcal U$.
         MPOTensor.continuous_blockTensor,
         Continuous.blockTensor}
     \leanok
-    \uses{def:mpdo_physical_blocking,thm:mpu_bounded_simple_blocking,
-        thm:mpu_all_later_simple_blockings}
+    \uses{def:mpu,def:mpu_simple,def:mpdo_physical_blocking}
     Let $d,D>0$.  Every bond-$D$ MPU tensor becomes simple after blocking
     exactly $D^4$ sites.  For each fixed $L$, the map
     \begin{align}
@@ -1037,6 +1036,8 @@ closing a chain of $N$ copies of $\mathcal U$.
 \end{theorem}
 
 \begin{proof}\leanok
+    \uses{thm:mpu_bounded_simple_blocking,
+        thm:mpu_all_later_simple_blockings}
     Choose for each tensor a positive simple blocking length $k\leq D^4$.
     Simplicity persists at every later direct blocking, hence at $D^4$.
     For fixed blocked ket and bra words, every matrix entry of the blocked
