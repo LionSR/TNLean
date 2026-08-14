@@ -26,12 +26,20 @@ binary entry, not from a statement about entropy or the area law.
   length-four supported entry $14/41$.
 * `MPOTensor.CPSVExample411BinarySupport.reducedBlockState_three_two_zero`: the exact
   length-three supported entry $5/14$.
+* `MPOTensor.CPSVExample411BinarySupport.physTraceTransfer_M_ne_zero`: the effective
+  physical-trace transfer is nonzero.
 * `MPOTensor.CPSVExample411BinarySupport.M_not_isSourceZCL`: the effective tensor does
   not satisfy the source-facing physical-trace ZCL relation.
+* `MPOTensor.CPSVExample411BinarySupport.physTraceTransfer_M_not_idempotent`: the
+  effective tensor fails the literal Definition 4.2 diagram.
 * `MPOTensor.CPSVExample411Ambient.reducedBlockState_supported_apply`: ambient supported
   marginal entries agree with the effective binary entries.
+* `MPOTensor.CPSVExample411Ambient.physTraceTransfer_ambientM_ne_zero`: the ambient
+  physical-trace transfer is nonzero.
 * `MPOTensor.CPSVExample411Ambient.ambientM_not_isSourceZCL`: the ambient tensor does not
   satisfy the source-facing physical-trace ZCL relation.
+* `MPOTensor.CPSVExample411Ambient.physTraceTransfer_ambientM_not_idempotent`: the
+  ambient tensor fails the literal Definition 4.2 diagram.
 
 ## Reference
 
@@ -67,6 +75,23 @@ theorem reducedBlockState_three_two_zero :
   rw [reducedBlockState_apply (by omega) (by omega)]
   norm_num [internalTransitionCount]
 
+/-- The physical-trace transfer of the effective binary tensor is nonzero.
+
+At one site its periodic MPO has trace $2$, by the exact partition function for
+CPSV16 Example 4.11, lines 907--924. The cyclic trace identity then rules out a
+zero physical-trace transfer. -/
+theorem physTraceTransfer_M_ne_zero : physTraceTransfer M ≠ 0 := by
+  intro hzero
+  have htrace := trace_mpo_eq_trace_verticalLoop_pow M 1
+  rw [verticalLoop_eq_physTraceTransfer, hzero] at htrace
+  have hclosed : Matrix.trace (mpo M 1) = 2 := by
+    rw [mpo_M_eq_diagonal, Matrix.trace_diagonal]
+    change partitionFunction 1 = 2
+    rw [partitionFunction_closed_form]
+    norm_num
+  rw [hclosed] at htrace
+  norm_num at htrace
+
 /-- The effective binary tensor for CPSV16 Example 4.11 does not satisfy the
 source-facing physical-trace zero-correlation-length relation
 `MPOTensor.IsSourceZCL`.
@@ -81,6 +106,17 @@ theorem M_not_isSourceZCL : ¬ M.IsSourceZCL := by
     (fun _ ↦ (0 : Fin 2))
   rw [reducedBlockState_four_two_zero, reducedBlockState_three_two_zero] at hentry
   norm_num at hentry
+
+/-- The effective binary tensor fails the literal physical-trace idempotence
+diagram in CPSV16 Definition 4.2, lines 735--739.
+
+This is the fixed-tensor identity $\mathcal T_M^2=\mathcal T_M$, not the legacy
+idempotence condition on the doubled-index transfer map. -/
+theorem physTraceTransfer_M_not_idempotent :
+    ¬ physTraceTransfer M * physTraceTransfer M = physTraceTransfer M := by
+  intro hidem
+  exact M_not_isSourceZCL
+    (isSourceZCL_of_physTraceTransfer_sq M physTraceTransfer_M_ne_zero hidem)
 
 end MPOTensor.CPSVExample411BinarySupport
 
@@ -122,6 +158,21 @@ theorem reducedBlockState_three_two_zero :
   rw [reducedBlockState_supported_apply,
     CPSVExample411BinarySupport.reducedBlockState_three_two_zero]
 
+/-- The physical-trace transfer of the ambient two-qubit-site tensor is nonzero.
+
+At one site its periodic MPO has trace $2$, by the exact ambient normalization
+for CPSV16 Example 4.11, lines 907--924. The cyclic trace identity then rules
+out a zero physical-trace transfer. -/
+theorem physTraceTransfer_ambientM_ne_zero : physTraceTransfer ambientM ≠ 0 := by
+  intro hzero
+  have htrace := trace_mpo_eq_trace_verticalLoop_pow ambientM 1
+  rw [verticalLoop_eq_physTraceTransfer, hzero] at htrace
+  have hclosed : Matrix.trace (mpo ambientM 1) = 2 := by
+    rw [trace_mpo_ambientM_closed_form]
+    norm_num
+  rw [hclosed] at htrace
+  norm_num at htrace
+
 /-- The ambient two-qubit-site tensor for CPSV16 Example 4.11 does not satisfy
 the source-facing physical-trace zero-correlation-length relation
 `MPOTensor.IsSourceZCL`.
@@ -137,5 +188,17 @@ theorem ambientM_not_isSourceZCL : ¬ ambientM.IsSourceZCL := by
     (embedConfig (fun _ ↦ (0 : Fin 2)))
   rw [reducedBlockState_four_two_zero, reducedBlockState_three_two_zero] at hentry
   norm_num at hentry
+
+/-- The ambient two-qubit-site tensor fails the literal physical-trace
+idempotence diagram in CPSV16 Definition 4.2, lines 735--739.
+
+This is the fixed-tensor identity $\mathcal T_M^2=\mathcal T_M$, not the legacy
+idempotence condition on the doubled-index transfer map. -/
+theorem physTraceTransfer_ambientM_not_idempotent :
+    ¬ physTraceTransfer ambientM * physTraceTransfer ambientM =
+      physTraceTransfer ambientM := by
+  intro hidem
+  exact ambientM_not_isSourceZCL
+    (isSourceZCL_of_physTraceTransfer_sq ambientM physTraceTransfer_ambientM_ne_zero hidem)
 
 end MPOTensor.CPSVExample411Ambient
