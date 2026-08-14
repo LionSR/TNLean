@@ -307,17 +307,18 @@
     $(T_s\psi)(\sigma)=\psi(T_s\sigma)$.
 \end{definition}
 
-\begin{lemma}[Cyclic translations compose]
-    \label{lem:parent_cyclic_translate_add}
+\begin{theorem}[Cyclic translations compose]
+    \label{thm:parent_cyclic_translate_add}
     \lean{MPSTensor.cyclicTranslateState_add}
     \leanok
     \uses{def:parent_cyclic_translate_state}
     For offsets $s,t\in\mathbb Z/N\mathbb Z$ and a state $\psi$ on the
     periodic chain,
-    \[
-        T_s(T_t\psi)=T_{s+t}\psi.
-    \]
-\end{lemma}
+    \begin{align}
+        T_s(T_t\psi)&=T_{s+t}\psi.
+        \notag
+    \end{align}
+\end{theorem}
 
 \begin{proof}
     \leanok
