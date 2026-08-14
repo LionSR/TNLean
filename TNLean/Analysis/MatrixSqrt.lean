@@ -726,11 +726,7 @@ theorem PosSemidef.supportInvExtension_mul_inverse
     rw [Matrix.sub_mul, Matrix.one_mul, hρ.supportProj_mul_self, sub_self]
   have hcompidem : (1 - hρ.supportProj) * (1 - hρ.supportProj) =
       1 - hρ.supportProj := by
-    calc
-      (1 - hρ.supportProj) * (1 - hρ.supportProj) =
-          1 - hρ.supportProj - hρ.supportProj + hρ.supportProj * hρ.supportProj := by
-        noncomm_ring
-      _ = 1 - hρ.supportProj := by rw [hρ.supportProj_idem]; abel
+    simpa only [PosSemidef.supportProj] using hρ.isHermitian.one_sub_supportProj_idem
   rw [PosSemidef.supportInvExtension, PosSemidef.supportInvExtensionInverse]
   calc
     (hρ.supportInv + (1 - hρ.supportProj)) * (ρ + (1 - hρ.supportProj)) =
@@ -750,11 +746,7 @@ theorem PosSemidef.supportInvExtension_inverse_mul
     simpa only [PosSemidef.supportProj] using hρ.self_mul_supportInv
   have hcompidem : (1 - hρ.supportProj) * (1 - hρ.supportProj) =
       1 - hρ.supportProj := by
-    calc
-      (1 - hρ.supportProj) * (1 - hρ.supportProj) =
-          1 - hρ.supportProj - hρ.supportProj + hρ.supportProj * hρ.supportProj := by
-        noncomm_ring
-      _ = 1 - hρ.supportProj := by rw [hρ.supportProj_idem]; abel
+    simpa only [PosSemidef.supportProj] using hρ.isHermitian.one_sub_supportProj_idem
   rw [PosSemidef.supportInvExtension, PosSemidef.supportInvExtensionInverse]
   calc
     (ρ + (1 - hρ.supportProj)) * (hρ.supportInv + (1 - hρ.supportProj)) =
