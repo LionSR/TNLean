@@ -289,13 +289,25 @@ Definition~\ref{def:mpdo_source_gsnnch}; the converse comparison is not used.
     \end{align}
 \end{proof}
 
+\begin{lemma}[Rectangular characteristic-polynomial cyclicity]
+    \label{lem:matrix_rectangular_charpoly_cyclicity}
+    \mathlibok % Mathlib: Matrix.charpoly_mul_comm_of_le.
+    Let $A$ be an $e\times d$ matrix and $B$ a $d\times e$ matrix, with
+    $d\leq e$. Then
+    \begin{align}
+      \chi_{AB}(X)&=X^{e-d}\chi_{BA}(X).
+      \notag
+    \end{align}
+\end{lemma}
+
 \begin{theorem}[Characteristic polynomial under an isometric inclusion]
     \label{thm:matrix_single_kraus_isometry_charpoly}
     \lean{Matrix.IsIsometry.card_le,
         Matrix.singleKrausMap_charpoly_eq_X_pow_mul_of_isometry,
         Matrix.singleKrausMap_charpoly_roots_eq_zero_add_of_isometry}
     \leanok
-    \uses{def:mpdo_single_kraus_map}
+    \uses{def:mpdo_single_kraus_map,
+        lem:matrix_rectangular_charpoly_cyclicity}
     Let $V:\C^d\to\C^e$ satisfy $V^*V=I_d$, and let $A$ be a $d\times d$
     matrix. Then $d\leq e$ and
     \begin{align}
@@ -315,8 +327,16 @@ Definition~\ref{def:mpdo_source_gsnnch}; the converse comparison is not used.
        =X^{e-d}\chi_A(X),
       \notag
     \end{align}
-    where the last equality uses $V^*V=I_d$. The root statement follows by
-    taking the roots of the product.
+    where the last equality uses $V^*V=I_d$. Taking roots of the product gives
+    \begin{align}
+      \operatorname{roots}(\chi_{VAV^*})
+      &=\operatorname{roots}(X^{e-d}\chi_A)\\
+      &=\operatorname{roots}(X^{e-d})+\operatorname{roots}(\chi_A)\\
+      &=(e-d)\cdot\{0\}+\operatorname{roots}(\chi_A).
+      \notag
+    \end{align}
+    The middle equality applies because $X^{e-d}$ is nonzero and the monic
+    polynomial $\chi_A$ is nonzero.
 \end{proof}
 
 \begin{theorem}[Reduced states under an isometric physical inclusion]
