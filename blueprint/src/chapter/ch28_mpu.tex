@@ -1635,7 +1635,8 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
     \leanok
     \uses{def:cpsv_cfii,def:mpu_physical_pair_swap,
         thm:mpu_physical_adjoint_normalized_flattening,
-        thm:cpsv_map_star_preservation,thm:cpsv_physical_reindexing}
+        thm:cpsv_map_star_preservation,thm:cpsv_physical_reindexing,
+        thm:cpsv_map_star_transfer_fixed_point}
     Given canonical-form-II data for $\widetilde{\mathcal U}$, define the
     transformed tuple by
     \begin{align}
@@ -1652,15 +1653,15 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
     \label{thm:mpu_physical_adjoint_cfii}
     \lean{MPSTensor.IsCPSVCanonicalFormII.physicalAdjointNormalizedFlattening}
     \leanok
-    \uses{def:cpsv_cfii}
+    \uses{def:cpsv_cfii,def:mpdo_physical_adjoint,
+        def:mpu_normalized_flattening}
     If $\widetilde{\mathcal U}$ is in canonical form II, then
     $\widetilde{\mathcal U^\sharp}$ is in canonical form II.
 \end{theorem}
 
 \begin{proof}\leanok
     \uses{def:mpu_physical_adjoint_cfii_data,
-        thm:cpsv_map_star_preservation,thm:cpsv_physical_reindexing,
-        thm:cpsv_map_star_transfer_fixed_point}
+        thm:cpsv_map_star_preservation,thm:cpsv_physical_reindexing}
     Theorem~\ref{thm:cpsv_map_star_preservation} gives normality and
     left-canonical normalization after entrywise conjugation, and
     Theorem~\ref{thm:cpsv_physical_reindexing} preserves these properties under
