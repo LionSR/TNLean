@@ -43,6 +43,8 @@ theory development.
 * `Matrix.PosSemidef.supportInvSqrt`: the inverse square root on the support.
 * `Matrix.PosSemidef.supportInvFourthRoot`: the negative quarter power on the support.
 * `Matrix.PosSemidef.supportInv`: the generalized inverse on the support.
+* `Matrix.PosSemidef.supportInvExtension`: the ambient invertible extension of
+  the generalized inverse by the identity on the orthogonal complement.
 * `Matrix.PosDef.supportInvSqrt_eq_inv_sqrt`: agreement with the ordinary
   inverse square root for positive-definite matrices.
 * `Matrix.PosSemidef.supportInvSqrt_smul`: compatibility with positive scaling.
@@ -675,6 +677,108 @@ theorem PosSemidef.supportProj_mul_supportInv {ρ : Matrix n n ℂ} (hρ : ρ.Po
 theorem PosSemidef.supportInv_mul_supportProj {ρ : Matrix n n ℂ} (hρ : ρ.PosSemidef) :
     hρ.supportInv * hρ.supportProj = hρ.supportInv := by
   rw [PosSemidef.supportInv, Matrix.mul_assoc, hρ.supportInvSqrt_mul_supportProj]
+
+/-- The generalized inverse extended by the identity on the orthogonal complement
+of the support. For a positive-semidefinite matrix `ρ` with support projection
+`P`, this is `ρ⁺ + (1 - P)`.
+
+This is the ambient invertible matrix used in arXiv:1703.09188v2,
+Proposition IV.5, lines 786--797. -/
+noncomputable def PosSemidef.supportInvExtension
+    {ρ : Matrix n n ℂ} (hρ : ρ.PosSemidef) : Matrix n n ℂ :=
+  hρ.supportInv + (1 - hρ.supportProj)
+
+/-- The explicit inverse of `supportInvExtension`: the original matrix extended
+by the identity on the orthogonal complement of its support. -/
+noncomputable def PosSemidef.supportInvExtensionInverse
+    {ρ : Matrix n n ℂ} (hρ : ρ.PosSemidef) : Matrix n n ℂ :=
+  ρ + (1 - hρ.supportProj)
+
+/-- The ambient support-inverse extension left-multiplied by the original
+matrix gives the support projection: `X ρ = P`. -/
+theorem PosSemidef.supportInvExtension_mul_self
+    {ρ : Matrix n n ℂ} (hρ : ρ.PosSemidef) :
+    hρ.supportInvExtension * ρ = hρ.supportProj := by
+  have hcomp : (1 - hρ.supportProj) * ρ = 0 := by
+    rw [Matrix.sub_mul, Matrix.one_mul, hρ.supportProj_mul_self, sub_self]
+  rw [PosSemidef.supportInvExtension, Matrix.add_mul, hcomp, add_zero]
+  simpa only [PosSemidef.supportProj] using hρ.supportInv_mul_self
+
+/-- The original matrix right-multiplied by its ambient support-inverse
+extension gives the support projection: `ρ X = P`. -/
+theorem PosSemidef.self_mul_supportInvExtension
+    {ρ : Matrix n n ℂ} (hρ : ρ.PosSemidef) :
+    ρ * hρ.supportInvExtension = hρ.supportProj := by
+  rw [PosSemidef.supportInvExtension, Matrix.mul_add]
+  have hleft : ρ * hρ.supportInv = hρ.supportProj := by
+    simpa only [PosSemidef.supportProj] using hρ.self_mul_supportInv
+  rw [hleft, Matrix.mul_sub, Matrix.mul_one, hρ.mul_supportProj_self, sub_self, add_zero]
+
+/-- The ambient support-inverse extension multiplied by its explicit inverse is
+the identity. -/
+theorem PosSemidef.supportInvExtension_mul_inverse
+    {ρ : Matrix n n ℂ} (hρ : ρ.PosSemidef) :
+    hρ.supportInvExtension * hρ.supportInvExtensionInverse = 1 := by
+  have hinvρ : hρ.supportInv * ρ = hρ.supportProj := by
+    simpa only [PosSemidef.supportProj] using hρ.supportInv_mul_self
+  have hcompρ : (1 - hρ.supportProj) * ρ = 0 := by
+    rw [Matrix.sub_mul, Matrix.one_mul, hρ.supportProj_mul_self, sub_self]
+  have hcompidem : (1 - hρ.supportProj) * (1 - hρ.supportProj) =
+      1 - hρ.supportProj := by
+    calc
+      (1 - hρ.supportProj) * (1 - hρ.supportProj) =
+          1 - hρ.supportProj - hρ.supportProj + hρ.supportProj * hρ.supportProj := by
+        noncomm_ring
+      _ = 1 - hρ.supportProj := by rw [hρ.supportProj_idem]; abel
+  rw [PosSemidef.supportInvExtension, PosSemidef.supportInvExtensionInverse]
+  calc
+    (hρ.supportInv + (1 - hρ.supportProj)) * (ρ + (1 - hρ.supportProj)) =
+        hρ.supportProj + (1 - hρ.supportProj) := by
+      rw [Matrix.add_mul, Matrix.mul_add, Matrix.mul_add, hinvρ,
+        Matrix.mul_sub, Matrix.mul_one, hρ.supportInv_mul_supportProj, sub_self,
+        hcompρ, hcompidem]
+      simp
+    _ = 1 := by abel
+
+/-- The explicit inverse multiplied by the ambient support-inverse extension is
+the identity. -/
+theorem PosSemidef.supportInvExtension_inverse_mul
+    {ρ : Matrix n n ℂ} (hρ : ρ.PosSemidef) :
+    hρ.supportInvExtensionInverse * hρ.supportInvExtension = 1 := by
+  have hρinv : ρ * hρ.supportInv = hρ.supportProj := by
+    simpa only [PosSemidef.supportProj] using hρ.self_mul_supportInv
+  have hcompidem : (1 - hρ.supportProj) * (1 - hρ.supportProj) =
+      1 - hρ.supportProj := by
+    calc
+      (1 - hρ.supportProj) * (1 - hρ.supportProj) =
+          1 - hρ.supportProj - hρ.supportProj + hρ.supportProj * hρ.supportProj := by
+        noncomm_ring
+      _ = 1 - hρ.supportProj := by rw [hρ.supportProj_idem]; abel
+  rw [PosSemidef.supportInvExtension, PosSemidef.supportInvExtensionInverse]
+  calc
+    (ρ + (1 - hρ.supportProj)) * (hρ.supportInv + (1 - hρ.supportProj)) =
+        hρ.supportProj + (1 - hρ.supportProj) := by
+      rw [Matrix.add_mul, Matrix.mul_add, Matrix.mul_add, hρinv,
+        Matrix.mul_sub, Matrix.mul_one, hρ.mul_supportProj_self, sub_self,
+        Matrix.sub_mul, Matrix.one_mul, hρ.supportProj_mul_supportInv, sub_self,
+        hcompidem]
+      simp
+    _ = 1 := by abel
+
+/-- The ambient support-inverse extension packaged as a unit, with inverse
+`ρ + (1 - P)`. -/
+noncomputable def PosSemidef.supportInvExtensionUnit
+    {ρ : Matrix n n ℂ} (hρ : ρ.PosSemidef) : (Matrix n n ℂ)ˣ :=
+  Units.mk hρ.supportInvExtension hρ.supportInvExtensionInverse
+    hρ.supportInvExtension_mul_inverse hρ.supportInvExtension_inverse_mul
+
+/-- The determinant of the ambient support-inverse extension is a unit. This
+form feeds directly into the matrix rank invariance lemmas. -/
+theorem PosSemidef.isUnit_det_supportInvExtension
+    {ρ : Matrix n n ℂ} (hρ : ρ.PosSemidef) :
+    IsUnit hρ.supportInvExtension.det :=
+  Matrix.isUnit_iff_isUnit_det hρ.supportInvExtension |>.mp
+    hρ.supportInvExtensionUnit.isUnit
 
 /-- On a positive-definite matrix, the generalized inverse on the support is
 the ordinary inverse. -/
