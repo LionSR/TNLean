@@ -39,6 +39,17 @@ abstracted — record why, so it is not re-proposed).
   later two-projection block assembly can use the same facts without repeating
   subtype coercion arguments.
 
+### fixed point from idempotent range membership — promoted
+- **Pattern:** derive `P x = x` from `x ∈ LinearMap.range P` when `P` is
+  idempotent.
+- **Seen:** the two range-subtype arguments in
+  `TNLean/Analysis/TwoProjectionAngleBlock.lean` and the compression-eigenbasis
+  argument in `TNLean/Analysis/TwoProjectionCompressionSpectrum.lean` before
+  cleanup (2026-08-14).
+- **Abstraction:** `LinearMap.IsIdempotentElem.mem_range_iff` in Mathlib.
+- **Notes:** use the forward implication directly rather than unpacking a range
+  witness and applying idempotency by hand.
+
 ### pointwise idempotent endomorphism application — promoted
 - **Pattern:** apply an equality `P * P = P` to a vector with `congrArg`, then
   simplify `Module.End.mul_apply` to obtain `P (P x) = P x`.
