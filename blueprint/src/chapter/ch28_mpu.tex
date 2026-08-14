@@ -5674,6 +5674,93 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
   on $S$. The unit interval is connected, hence preconnected.
 \end{proof}
 
+\begin{definition}[Virtual sandwich]
+  \label{def:mpu_virtual_sandwich}
+  \lean{MPOTensor.virtualSandwich,MPOTensor.virtualSandwich_apply}
+  \leanok
+  For an MPO tensor $\mathcal U=(U^{ij})_{0\leq i,j<d}$ of bond dimension $D$
+  and matrices $A,B\in\mathbb C^{D\times D}$, define
+  \begin{align}
+    \widehat{\mathcal U}^{ij}&=A U^{ij}B.
+  \end{align}
+  % Source lines: paper_v2.tex 786--804.
+\end{definition}
+
+\begin{theorem}[Continuity of the virtual sandwich]
+  \label{thm:mpu_virtual_sandwich_continuous}
+  \lean{MPOTensor.continuous_virtualSandwich}
+  \leanok
+  \uses{def:mpu_virtual_sandwich}
+  If $x\mapsto A(x)$, $x\mapsto\mathcal U(x)$, and $x\mapsto B(x)$ are
+  continuous families, then
+  \begin{align}
+    x\longmapsto A(x)\mathcal U(x)B(x)
+  \end{align}
+  is continuous.
+  % Source lines: paper_v2.tex 807--812.
+\end{theorem}
+
+\begin{proof}\leanok
+  \uses{def:mpu_virtual_sandwich}
+  Every matrix entry is a finite sum of products of entries of $A(x)$,
+  $\mathcal U(x)$, and $B(x)$, hence is continuous.
+\end{proof}
+
+\begin{theorem}[Source cuts of a virtual sandwich]
+  \label{thm:mpu_virtual_sandwich_source_cuts}
+  \lean{MPOTensor.sourceCutM₁_virtualSandwich,
+    MPOTensor.sourceCutM₂_virtualSandwich}
+  \leanok
+  \uses{def:mpu_virtual_sandwich,def:mpu_source_matrix_one,
+    def:mpu_source_matrix_two}
+  The two raw source cuts satisfy the literal formulas
+  \begin{align}
+    M_1(\widehat{\mathcal U})
+      &=(A\otimes I_d)M_1(\mathcal U)(I_d\otimes B),\\
+    M_2(\widehat{\mathcal U})
+      &=(A\otimes I_d)M_2(\mathcal U)(I_d\otimes B).
+  \end{align}
+  No transpose or conjugation occurs in either identity.
+  % Source lines: paper_v2.tex 786--804.
+\end{theorem}
+
+\begin{proof}\leanok
+  \uses{def:mpu_virtual_sandwich,def:mpu_source_matrix_one,
+    def:mpu_source_matrix_two}
+  For $a=1,2$, expand an entry of the right-hand side. The identity factors
+  collapse the two physical sums, leaving
+  \begin{align}
+    \sum_{\gamma,\delta}
+      A_{\alpha\gamma}U^{ij}_{\gamma\delta}B_{\delta\beta}
+      &=(A U^{ij}B)_{\alpha\beta},
+  \end{align}
+  which is the corresponding entry of $M_a(\widehat{\mathcal U})$.
+\end{proof}
+
+\begin{theorem}[Source ranks of a virtual sandwich]
+  \label{thm:mpu_virtual_sandwich_source_ranks}
+  \lean{MPOTensor.rightRank_virtualSandwich,
+    MPOTensor.leftRank_virtualSandwich}
+  \leanok
+  \uses{def:mpu_virtual_sandwich,def:mpu_right_rank,def:mpu_left_rank}
+  If $A$ and $B$ are invertible, then
+  \begin{align}
+    r[\widehat{\mathcal U}]&=r[\mathcal U],&
+    \ell[\widehat{\mathcal U}]&=\ell[\mathcal U].
+  \end{align}
+  This assertion concerns the raw source ranks only.
+  % Source lines: paper_v2.tex 786--804.
+\end{theorem}
+
+\begin{proof}\leanok
+  \uses{thm:mpu_virtual_sandwich_source_cuts}
+  The determinant identities for Kronecker products show that
+  $A\otimes I_d$ and $I_d\otimes B$ are invertible. Left and right
+  multiplication by these matrices preserves rank. Apply this observation to
+  each source-cut formula in
+  Theorem~\ref{thm:mpu_virtual_sandwich_source_cuts}.
+\end{proof}
+
 \begin{proposition}[Constancy of the source ranks]
   \label{prop:continuity-index}
   \notready
@@ -5684,7 +5771,8 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     thm:mpu_two_projection_reduced_projection,
     thm:mpu_two_projection_reduced_projection_right_factor,
     thm:mpu_rank_lower_semicontinuous,
-    thm:mpu_fixed_product_preconnected}
+    thm:mpu_fixed_product_preconnected,
+    thm:mpu_virtual_sandwich_source_ranks}
   Let $[0,1]\ni x\mapsto\mathcal W(x)$ be a continuous path of tensors
   generating MPUs, without requiring the path to be in canonical form. For
   each $x$, take the canonical form and the two source-cut ranks $r(x)$ and
