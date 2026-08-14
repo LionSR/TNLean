@@ -304,7 +304,8 @@ so multiplying a hypothetical nilpotent by `weight` would make
 `physTraceTransfer R` nilpotent.
 
 This is the basis-element non-nilpotency condition of arXiv:1606.00608,
-lines 815--822, for the single retained block of this project example.
+Definition 4.7, lines 815--822, for the single retained block of this project
+example.
 
 **Scope restriction (fixed representative):** This is only the nilpotency
 clause for the displayed one-block presentation. The weight `√(337/512)` is
