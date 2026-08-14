@@ -46,14 +46,10 @@ theorem rangeCompression_isSymmetric {P Q : E →ₗ[ℂ] E}
     (rangeCompression hP (Q := Q)).IsSymmetric := by
   intro x y
   change ⟪(P (Q x) : E), (y : E)⟫_ℂ = ⟪(x : E), (P (Q y) : E)⟫_ℂ
-  have hx : P (x : E) = x := by
-    obtain ⟨z, hz⟩ := x.property
-    rw [← hz]
-    exact LinearMap.IsIdempotentElem.apply_apply hP.isIdempotentElem z
-  have hy : P (y : E) = y := by
-    obtain ⟨z, hz⟩ := y.property
-    rw [← hz]
-    exact LinearMap.IsIdempotentElem.apply_apply hP.isIdempotentElem z
+  have hx : P (x : E) = x :=
+    (LinearMap.IsIdempotentElem.mem_range_iff hP.isIdempotentElem).mp x.property
+  have hy : P (y : E) = y :=
+    (LinearMap.IsIdempotentElem.mem_range_iff hP.isIdempotentElem).mp y.property
   rw [hP.isSymmetric, hQ.isSymmetric, hy]
   exact ((hP.isSymmetric x (Q y)).symm.trans (by rw [hx])).symm
 
