@@ -5398,7 +5398,70 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
   $B_i=\operatorname{span}\{x_i,d_i\}$. Its dimension bound follows from
   its two generators.
 \end{proof}
+\begin{definition}[Defect-block sum and complementary summand]
+  \label{def:mpu_two_projection_angle_defect_sum}
+  \lean{LinearMap.IsSymmetricProjection.angleDefectSum,
+    LinearMap.IsSymmetricProjection.angleDefectComplement}
+  \leanok
+  \uses{def:mpu_two_projection_angle_defect_block}
+  For the compression defect blocks $(B_i)_i$, define
+  \begin{align}
+    B&=\bigvee_i B_i,&K&=B^\perp.
+  \end{align}
+  The index $i$ ranges over every vector in the chosen compression eigenbasis,
+  including repeated eigenvalues and the endpoint eigenvalues $0$ and $1$.
+  % Source lines: paper_v2.tex 759--762.
+\end{definition}
 
+\begin{theorem}[Orthogonal defect-block sum and commuting remainder]
+  \label{thm:mpu_two_projection_angle_defect_sum}
+  \lean{LinearMap.IsSymmetricProjection.angleDefectBlock_orthogonalFamily,
+    LinearMap.IsSymmetricProjection.angleDefectBlock_isInternal,
+    LinearMap.IsSymmetricProjection.angleDefectSum_isCompl_angleDefectComplement,
+    LinearMap.IsSymmetricProjection.range_le_angleDefectSum,
+    LinearMap.IsSymmetricProjection.map_angleDefectSum_le_first_projection,
+    LinearMap.IsSymmetricProjection.map_angleDefectSum_le_second_projection,
+    LinearMap.IsSymmetricProjection.map_angleDefectComplement_le_first_projection,
+    LinearMap.IsSymmetricProjection.map_angleDefectComplement_le_second_projection,
+    LinearMap.IsSymmetricProjection.projections_comp_apply_eq_zero_of_mem_angleDefectComplement,
+    LinearMap.IsSymmetricProjection.firstProjectionOnAngleDefectComplement,
+    LinearMap.IsSymmetricProjection.secondProjectionOnAngleDefectComplement,
+    LinearMap.IsSymmetricProjection.firstProjectionOnAngleDefectComplement_isSymmetricProjection,
+    LinearMap.IsSymmetricProjection.secondProjectionOnAngleDefectComplement_isSymmetricProjection,
+    LinearMap.IsSymmetricProjection.firstProjectionOnAngleDefectComplement_commute_secondProjection}
+  \leanok
+  \uses{def:mpu_two_projection_angle_defect_sum}
+  The blocks $(B_i)_i$ form an orthogonal internal direct sum in $B$, and
+  \begin{align}
+    E&=B\mathbin{\perp\!\oplus}K.
+  \end{align}
+  Both $B$ and $K$ are invariant under $P$ and $Q$. Moreover,
+  $\operatorname{ran}P\subseteq B$, so for every $z\in K$,
+  \begin{align}
+    Pz&=0,&P(Qz)&=0,&Q(Pz)&=0.
+  \end{align}
+  Consequently the restrictions $P|_K$ and $Q|_K$ are orthogonal projections
+  and commute. No commutation of $P$ and $Q$ on the ambient space is assumed.
+  % Source lines: paper_v2.tex 759--762.
+  % Local correction: line 762 repeats P where Q is intended; see
+  % docs/paper-gaps/1703_two_projection_projector_typo.tex.
+\end{theorem}
+
+\begin{proof}\leanok
+  \uses{thm:mpu_two_projection_angle_block_orthogonality}
+  Pairwise orthogonality of the blocks implies independence, while their
+  supremum is $B$ by definition. Hence they form an internal direct sum in
+  $B$. The standard orthogonal-complement decomposition gives
+  $E=B\mathbin{\perp\!\oplus}B^\perp$.
+
+  The local action formulas show that each $B_i$ is invariant under both
+  projections, hence so is $B$. Symmetry of each projection then makes
+  $K=B^\perp$ invariant. The compression eigenvectors form a basis of
+  $\operatorname{ran}P$, and each lies in its block $B_i$; therefore
+  $\operatorname{ran}P\subseteq B$. Thus $P$ vanishes on $K$. Since $Qz\in K$
+  whenever $z\in K$, both $P(Qz)$ and $Q(Pz)$ vanish. The two restricted
+  projections therefore commute.
+\end{proof}
 \begin{definition}[Reduced projection]
   \label{def:mpu_two_projection_reduced_projection}
   \lean{LinearMap.IsSymmetricProjection.reducedProjection}
@@ -5490,7 +5553,8 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
   \label{prop:continuity-index}
   \notready
   \discussion{6022}
-  \uses{def:mpu_canonical_form,ThmFund1,thm:mpu_two_projection_angle_block,
+  \uses{def:mpu_canonical_form,ThmFund1,
+    thm:mpu_two_projection_angle_defect_sum,
     thm:mpu_two_projection_reduced_projection,
     thm:mpu_two_projection_reduced_projection_right_factor}
   Let $[0,1]\ni x\mapsto\mathcal W(x)$ be a continuous path of tensors

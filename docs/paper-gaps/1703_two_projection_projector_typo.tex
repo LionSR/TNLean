@@ -32,9 +32,13 @@ The generic angle-block declarations
 \leanid{LinearMap.IsSymmetricProjection.angleDefect_block} and
 \leanid{LinearMap.IsSymmetricProjection.exists_orthonormal_angle_block}
 therefore use symmetric projections $P$ and $Q$. They prove the exact local
-action of both operators on a generic two-dimensional block. This is a local
-correction of a typographical error and does not add a hypothesis or alter the
-mathematical claim.
+action of both operators on a generic two-dimensional block. The declarations
+\leanid{LinearMap.IsSymmetricProjection.angleDefectSum} and
+\leanid{LinearMap.IsSymmetricProjection.angleDefectComplement} assemble the
+compression-indexed blocks into an orthogonal internal sum and its invariant
+orthogonal complement. On that complement, the restricted projections commute.
+This is a local correction of a typographical error and does not add a
+hypothesis or alter the mathematical claim.
 
 The declaration
 \leanid{LinearMap.IsSymmetricProjection.reducedProjection} defines the reduced
@@ -52,12 +56,15 @@ theorem, which gives the invertible map from line 770.
 
 \section{Verdict}
 
-\textbf{Verdict: resolved local fix (projector label and reduced projector).}
+\textbf{Verdict: resolved local fix.}
 The formalized angle block uses $Q$ as the second projector, which resolves the
 source's repeated $P$ label without changing the mathematical statement. The
+compression-indexed blocks, including endpoint coordinates, are assembled into
+an orthogonal internal sum with a commuting complementary remainder. The
 reduced projector and its identities from lines 764--770 are also formalized.
-The distinct global problem of assembling the generic and endpoint blocks into
-an orthogonal direct sum remains open.
+The coordinate-free reduced projector has not been identified with the source's
+particular blockwise projector; no such identification is needed for its proved
+absorption and range identities.
 
 \bibliographystyle{alpha}
 \bibliography{references}
