@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.Algebra.EqualRangeRightFactor
+import TNLean.Algebra.OrthogonalProjection
 import Mathlib.Analysis.InnerProductSpace.Adjoint
 import Mathlib.Analysis.InnerProductSpace.Projection.Basic
 
@@ -104,6 +105,29 @@ theorem comp_reducedProjection_left {P Q : E →ₗ[ℂ] E}
   simpa [LinearMap.adjoint_comp, hP.isSymmetric.adjoint_eq, hQ.isSymmetric.adjoint_eq,
     (reducedProjection_isSymmetric P Q).isSymmetric.adjoint_eq] using h.symm
 
+/-- The kernel of the second projection is transverse to the range of the reduced
+projection.
+
+This is the injectivity property needed to restrict a positive semidefinite matrix with
+support projection `Q` to the reduced range. Although the reduced range need not be
+contained in `range Q`, no nonzero vector in it is annihilated by `Q`.
+
+Source: arXiv:1703.09188, Proposition IV.5, lines 764–781. -/
+theorem disjoint_ker_range_reducedProjection {P Q : E →ₗ[ℂ] E}
+    (hP : P.IsSymmetricProjection) (hQ : Q.IsSymmetricProjection) :
+    Disjoint (LinearMap.ker Q) (LinearMap.range (reducedProjection P Q)) := by
+  rw [Submodule.disjoint_def]
+  intro x hxQ hxT
+  rw [range_reducedProjection] at hxT
+  obtain ⟨y, rfl⟩ := hxT
+  apply (inner_self_eq_zero (𝕜 := ℂ)).mp
+  change ⟪P (Q y), P (Q y)⟫_ℂ = 0
+  rw [hP.isSymmetric (Q y) (P (Q y))]
+  have hPQy := congrArg (fun A : Module.End ℂ E ↦ A (Q y)) hP.isIdempotentElem.eq
+  rw [show P (P (Q y)) = P (Q y) by simpa [Module.End.mul_apply] using hPQy]
+  rw [hQ.isSymmetric y (P (Q y)),
+    show Q (P (Q y)) = 0 from LinearMap.mem_ker.mp hxQ, inner_zero_right]
+
 /-- The reduced product and the reduced projection have the same range.
 
 This derived range equality is the input to the equal-range right-factor theorem; it is
@@ -123,3 +147,119 @@ theorem exists_reducedProjection_rightFactor {P Q : E →ₗ[ℂ] E}
     (range_reducedProjection_comp hP)
 
 end LinearMap.IsSymmetricProjection
+
+namespace Matrix
+
+variable {D : ℕ}
+
+private theorem toEuclideanLin_mul (A B : Matrix (Fin D) (Fin D) ℂ) :
+    Matrix.toEuclideanLin (A * B) =
+      (Matrix.toEuclideanLin A).comp (Matrix.toEuclideanLin B) := by
+  change Matrix.toLin (EuclideanSpace.basisFun (Fin D) ℂ).toBasis
+      (EuclideanSpace.basisFun (Fin D) ℂ).toBasis (A * B) = _
+  exact Matrix.toLin_mul (EuclideanSpace.basisFun (Fin D) ℂ).toBasis
+    (EuclideanSpace.basisFun (Fin D) ℂ).toBasis
+    (EuclideanSpace.basisFun (Fin D) ℂ).toBasis A B
+
+/-- A matrix orthogonal projection acts as a symmetric projection on Euclidean space. -/
+theorem isSymmetricProjection_toEuclideanLin
+    {P : Matrix (Fin D) (Fin D) ℂ} (hP : IsOrthogonalProjection P) :
+    (Matrix.toEuclideanLin P).IsSymmetricProjection := by
+  constructor
+  · change Matrix.toEuclideanLin P * Matrix.toEuclideanLin P = Matrix.toEuclideanLin P
+    rw [Module.End.mul_eq_comp, ← toEuclideanLin_mul, hP.2]
+  · exact (Matrix.isSymmetric_toEuclideanLin_iff (A := P)).mpr hP.1
+
+/-- The matrix of the coordinate-free reduced projection in the standard Euclidean basis. -/
+noncomputable def reducedProjection (P Q : Matrix (Fin D) (Fin D) ℂ) :
+    Matrix (Fin D) (Fin D) ℂ :=
+  Matrix.toEuclideanLin.symm
+    (LinearMap.IsSymmetricProjection.reducedProjection
+      (Matrix.toEuclideanLin P) (Matrix.toEuclideanLin Q))
+
+@[simp] theorem toEuclideanLin_reducedProjection
+    (P Q : Matrix (Fin D) (Fin D) ℂ) :
+    Matrix.toEuclideanLin (reducedProjection P Q) =
+      LinearMap.IsSymmetricProjection.reducedProjection
+        (Matrix.toEuclideanLin P) (Matrix.toEuclideanLin Q) := by
+  exact LinearEquiv.apply_symm_apply Matrix.toEuclideanLin _
+
+/-- The matrix reduced projection is an orthogonal projection. -/
+theorem reducedProjection_isOrthogonalProjection
+    (P Q : Matrix (Fin D) (Fin D) ℂ) :
+    IsOrthogonalProjection (reducedProjection P Q) := by
+  have hT := LinearMap.IsSymmetricProjection.reducedProjection_isSymmetric
+    (Matrix.toEuclideanLin P) (Matrix.toEuclideanLin Q)
+  constructor
+  · exact (Matrix.isSymmetric_toEuclideanLin_iff
+      (A := reducedProjection P Q)).mp (by simpa using hT.isSymmetric)
+  · apply Matrix.toEuclideanLin.injective
+    rw [toEuclideanLin_mul]
+    simpa [Module.End.mul_eq_comp] using hT.isIdempotentElem.eq
+
+/-- Matrix form of property (i): `P * reducedProjection P Q = reducedProjection P Q`. -/
+theorem mul_reducedProjection {P Q : Matrix (Fin D) (Fin D) ℂ}
+    (hP : IsOrthogonalProjection P) :
+    P * reducedProjection P Q = reducedProjection P Q := by
+  apply Matrix.toEuclideanLin.injective
+  rw [toEuclideanLin_mul]
+  simpa using LinearMap.IsSymmetricProjection.comp_reducedProjection
+    (isSymmetricProjection_toEuclideanLin hP)
+
+/-- The reduced projection is also absorbed by `P` on the right. -/
+theorem reducedProjection_mul {P Q : Matrix (Fin D) (Fin D) ℂ}
+    (hP : IsOrthogonalProjection P) :
+    reducedProjection P Q * P = reducedProjection P Q := by
+  have hT := reducedProjection_isOrthogonalProjection P Q
+  have h := congrArg Matrix.conjTranspose (mul_reducedProjection (Q := Q) hP)
+  simpa [hP.1.eq, hT.1.eq] using h
+
+/-- Matrix form of property (ii): `reducedProjection P Q * Q = P * Q`. -/
+theorem reducedProjection_mul_second {P Q : Matrix (Fin D) (Fin D) ℂ}
+    (hP : IsOrthogonalProjection P) :
+    reducedProjection P Q * Q = P * Q := by
+  apply Matrix.toEuclideanLin.injective
+  rw [toEuclideanLin_mul, toEuclideanLin_mul]
+  simpa using LinearMap.IsSymmetricProjection.reducedProjection_comp
+    (isSymmetricProjection_toEuclideanLin hP)
+
+/-- Matrix form of property (iii): `Q * P = Q * reducedProjection P Q`. -/
+theorem second_mul_reducedProjection {P Q : Matrix (Fin D) (Fin D) ℂ}
+    (hP : IsOrthogonalProjection P) (hQ : IsOrthogonalProjection Q) :
+    Q * P = Q * reducedProjection P Q := by
+  apply Matrix.toEuclideanLin.injective
+  rw [toEuclideanLin_mul, toEuclideanLin_mul]
+  simpa using LinearMap.IsSymmetricProjection.comp_reducedProjection_left
+    (isSymmetricProjection_toEuclideanLin hP) (isSymmetricProjection_toEuclideanLin hQ)
+
+/-- Matrix form of the reduced-range transversality statement. -/
+theorem disjoint_ker_range_reducedProjection {P Q : Matrix (Fin D) (Fin D) ℂ}
+    (hP : IsOrthogonalProjection P) (hQ : IsOrthogonalProjection Q) :
+    Disjoint (LinearMap.ker (Matrix.toEuclideanLin Q))
+      (LinearMap.range (Matrix.toEuclideanLin (reducedProjection P Q))) := by
+  simpa using LinearMap.IsSymmetricProjection.disjoint_ker_range_reducedProjection
+    (isSymmetricProjection_toEuclideanLin hP) (isSymmetricProjection_toEuclideanLin hQ)
+
+/-- Matrix form of the invertible right factor:
+`reducedProjection P Q * Q * Y = reducedProjection P Q`. -/
+theorem exists_reducedProjection_rightFactor
+    {P Q : Matrix (Fin D) (Fin D) ℂ} (hP : IsOrthogonalProjection P) :
+    ∃ Y : Matrix (Fin D) (Fin D) ℂ, IsUnit Y ∧
+      reducedProjection P Q * Q * Y = reducedProjection P Q := by
+  let T := reducedProjection P Q
+  obtain ⟨e, he⟩ :=
+    LinearMap.IsSymmetricProjection.exists_reducedProjection_rightFactor
+      (P := Matrix.toEuclideanLin P) (Q := Matrix.toEuclideanLin Q)
+      (isSymmetricProjection_toEuclideanLin hP)
+  let Y : Matrix (Fin D) (Fin D) ℂ := Matrix.toEuclideanLin.symm e.toLinearMap
+  let Z : Matrix (Fin D) (Fin D) ℂ := Matrix.toEuclideanLin.symm e.symm.toLinearMap
+  refine ⟨Y, ?_, ?_⟩
+  · rw [isUnit_iff_exists_inv]
+    refine ⟨Z, Matrix.toEuclideanLin.injective ?_⟩
+    rw [toEuclideanLin_mul]
+    simp [Y, Z]
+  · apply Matrix.toEuclideanLin.injective
+    rw [toEuclideanLin_mul, toEuclideanLin_mul]
+    simpa [T, Y] using he
+
+end Matrix
