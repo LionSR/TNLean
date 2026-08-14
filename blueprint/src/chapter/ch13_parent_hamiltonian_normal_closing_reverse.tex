@@ -462,41 +462,88 @@ left-multiplied boundary comparison.
     desired equality of boundary matrices.
 \end{proof}
 
+\begin{lemma}[One-step full-ring boundary comparison]
+    \label{lem:full_ring_boundary_intertwines_step}
+    \lean{MPSTensor.full_ring_boundary_intertwines_of_cyclicTranslate_groundSpaceMap_eq}
+    \leanok
+    \uses{def:l_blk_injective, def:ground_space_map,
+        def:parent_cyclic_translate_state}
+    Let $A$ be $L_0$-block-injective with $L_0>0$. If
+    \[
+        T_{L_0}\!\left(\Gamma_{L_0+1}(X)\right)=\Gamma_{L_0+1}(Y),
+    \]
+    then $XA^j=A^jY$ for every physical letter $j$.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{lem:parent_cyclic_translate_append,
+        thm:ground_space_map_injective_blk}
+    Evaluate the translated equality on a word $\beta j$, where $|\beta|=L_0$.
+    Cyclic translation exchanges the two parts of the word, and cyclicity of the
+    trace gives
+    \[
+        \Gamma_{L_0}(XA^j)(\beta)=\Gamma_{L_0}(A^jY)(\beta).
+    \]
+    Injectivity of $\Gamma_{L_0}$ gives $XA^j=A^jY$.
+\end{proof}
+
 \begin{theorem}[Full-ring boundary comparison]
     \label{thm:full_ring_boundary_intertwines}
     \lean{MPSTensor.full_ring_boundary_intertwines_of_chainGroundSpace}
     \leanok
     \uses{def:l_blk_injective}
-    Let $A$ be $L_0$-block-injective with $L_0>0$, and let
+    Let $A$ be $L_0$-block-injective with $L_0>0$ and $D\ge1$, and let
     $\psi\in\mathcal G_{L_0+1,L_0+1}(A)$ satisfy
     $\psi=\Gamma_{L_0+1}(X)$. Then $XA^j=A^jX$ for every physical letter $j$.
 \end{theorem}
 
 \begin{proof}
     \leanok
-    \uses{thm:cyclic_normal_open_chain_range_reduction}
-    Move the cut by $L_0$ sites and write the translated state as
-    $\Gamma_{L_0+1}(Y)$. Splitting each full-ring word into an $L_0$-site word
-    $\beta$ and one letter $j$ gives
+    \uses{lem:parent_cyclic_translate_preserves_chain_space,
+        thm:cyclic_normal_open_chain_range_reduction,
+        lem:full_ring_boundary_intertwines_step,
+        lem:parent_cyclic_translate_add,
+        thm:ground_space_map_injective_blk,
+        lem:isNBlkInjective_of_le,
+        lem:boundary_matrix_commutes_long_words}
+    Write $s$ for the cut shift by $L_0$ and $Y_i$ for the boundary matrix of
+    the translated state at cut $i$. Translation invariance of the chain space,
+    the cyclic open-chain reduction, and the composition law supply compatible
+    matrices at successive cuts. Lemma~\ref{lem:full_ring_boundary_intertwines_step}
+    gives the single-letter comparison, and induction on the word $w$ gives
     \[
-        XA^j=A^jY.
+        Y_i A^w=A^wY_{|w|s+i}.
     \]
-    Repeating this comparison at all $L_0+1$ cuts moves every full-ring word
-    around the trace and returns to the original cut. Hence $X$ commutes with
-    every word of length $L_0+1$, and block injectivity makes $X$ scalar.
+    Injectivity of the propagated length-$(L_0+1)$ boundary map gives $Y_0=X$.
+    Since $(L_0+1)s=0$, every full-ring word $\omega$ satisfies
+    $XA^\omega=A^\omega X$. Lemma~\ref{lem:boundary_matrix_commutes_long_words}
+    then gives $XA^j=A^jX$ for every letter $j$.
 \end{proof}
 
 \begin{theorem}[Minimal-ring ground-space containment]
     \label{thm:full_ring_ground_space_containment}
     \lean{MPSTensor.chainGroundSpace_le_mpvSubmodule_of_isNBlkInjective_full_ring}
     \leanok
-    \uses{thm:full_ring_boundary_intertwines, def:mpv_submodule}
-    If $A$ is $L_0$-block-injective with $L_0>0$, then
+    \uses{def:l_blk_injective, def:mpv_submodule}
+    If $A$ is $L_0$-block-injective with $L_0>0$ and $D\ge1$, then
     \[
         \mathcal G_{L_0+1,L_0+1}(A)
         \subseteq \spn\{V^{(L_0+1)}(A)\}.
     \]
 \end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:cyclic_normal_open_chain_range_reduction,
+        thm:full_ring_boundary_intertwines,
+        thm:ground_space_map_mpv_of_long_word_commutes}
+    Let $\psi\in\mathcal G_{L_0+1,L_0+1}(A)$. The cyclic open-chain reduction
+    gives $\psi=\Gamma_{L_0+1}(X)$. Theorem~\ref{thm:full_ring_boundary_intertwines}
+    shows that $X$ commutes with every letter, and hence with every word of
+    length $L_0$. The long-word commutation theorem then places $\psi$ in
+    $\spn\{V^{(L_0+1)}(A)\}$.
+\end{proof}
 
 \subsection{Normal unique-ground-state consequences}\label{subsec:normal_unique_ground_state}
 
@@ -546,12 +593,17 @@ change-of-cut theorem replaces the complementary-word comparison.
 
 \begin{proof}
     \leanok
-    \uses{thm:reduced_wrapped_boundary_compatibilities,
+    \uses{lem:cyclic_window_range_antitonicity,
+        thm:reduced_wrapped_boundary_compatibilities,
         thm:conditional_normal_range_reduction_witness_comparison,
         lem:padded_complement_annihilation,
         thm:full_ring_ground_space_containment}
-    If $N=L_0+1$, Theorem~\ref{thm:full_ring_ground_space_containment}
-    gives the claim. If $N>L_0+1$, the open-chain containment gives
+    If $N=L_0+1$, range antitonicity gives
+    \[
+        \mathcal G_{N,L}(A)\subseteq\mathcal G_{N,L_0+1}(A),
+    \]
+    and Theorem~\ref{thm:full_ring_ground_space_containment} applies to the
+    minimal ring. If $N>L_0+1$, the open-chain containment gives
     $\psi=\Gamma_N(X)$. The two boundary-crossing cyclic-window constraints give
     \begin{align}
         A^\mu A^j X
