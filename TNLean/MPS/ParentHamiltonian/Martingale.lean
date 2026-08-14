@@ -11,6 +11,7 @@ import TNLean.MPS.ParentHamiltonian.Martingale.BlockedOriginalGap
 import TNLean.MPS.ParentHamiltonian.Martingale.C3Threshold
 import TNLean.MPS.ParentHamiltonian.Martingale.Gap
 import TNLean.MPS.ParentHamiltonian.Martingale.OpenChain
+import TNLean.MPS.ParentHamiltonian.Martingale.OpenHamiltonian
 import TNLean.MPS.ParentHamiltonian.Martingale.OverlapReduction
 import TNLean.MPS.ParentHamiltonian.Martingale.Reduction
 import TNLean.MPS.ParentHamiltonian.Martingale.Transport
@@ -32,7 +33,7 @@ all-vector norm-compression estimates for the excitation projections are also
 recorded as conditional sufficient hypotheses; they are not the source
 principal-angle estimate for the local ground spaces.
 
-The eleven components are:
+The twelve components are:
 
 * `Martingale.AbstractCriterion` — abstract martingale criterion
   `FrustrationFree.spectralGap_of_martingale` (quadratic form implies norm bound);
@@ -43,6 +44,8 @@ The eleven components are:
   range-two local terms;
 * `Martingale.OpenChain` — open-chain ground-space projectors, their intersection,
   and the projector-defect reduction to an anticommutator estimate;
+* `Martingale.OpenHamiltonian` — the nonwrapping finite-volume Hamiltonian and its
+  kernel identification with the open MPS boundary-condition space;
 * `Martingale.C3Threshold` — a uniform input-site overlap length satisfying the
   open-chain C3 defect threshold and its anticommutator consequence;
 * `Martingale.BlockedGap` — transport of that threshold to three blocked sites

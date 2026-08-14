@@ -777,6 +777,92 @@ norm estimate is derived here.
     of the two diagonal excitation forms.
 \end{proof}
 
+\subsection{The compatible open-chain Hamiltonian}%
+\label{subsec:compatible_open_chain_hamiltonian}
+
+For an interval, the finite-volume Hamiltonian contains only translates whose
+supports remain inside the interval. This is the compatible open chain of
+Nachtergaele~\cite[Equation~(3.12)]{Nachtergaele1996Spectral}, whose
+zero-energy space is identified in Equation~(3.13). Equations~(3.14)--(3.16)
+continue with comparison of compatible interactions, approximate commutation
+of ground-state projectors, and a uniform gap. Theorem~2.1(i) of the same
+source obtains a gap from conditions C1--C3. The statements below give only the
+compatible Hamiltonian, its positivity, and its zero-energy space; they assert
+neither the C1--C3 estimate nor periodic coercivity.
+
+\begin{definition}[Compatible open-chain parent Hamiltonian]
+    \label{def:open_parent_hamiltonian_es}
+    \lean{MPSTensor.openParentHamiltonianES}
+    \leanok
+    \uses{rem:euclidean_local_projector_ingredients}
+    For $L,N\in\N$, let
+    \begin{align}
+        I_{L,N}&=\{i\in\{0,\ldots,N-1\}\mid i+L\leq N\}.
+    \end{align}
+    The compatible length-$N$ open-chain parent Hamiltonian of interaction
+    length $L$ is
+    \begin{align}
+        H^{\mathrm{open}}_{N,L}(A)
+        &=\sum_{i\in I_{L,N}}h_{i,\mathrm{ES}}(A,L).
+        \label{eq:open_parent_hamiltonian_es}
+    \end{align}
+    Thus no summand crosses the two endpoints of the interval. For
+    $L=l+1$, the starting sites are $0,\ldots,N-l-1$, in agreement with
+    \cite[Equation~(3.12)]{Nachtergaele1996Spectral}.
+\end{definition}
+
+\begin{lemma}[Positivity of the compatible open-chain Hamiltonian]
+    \label{lem:open_parent_hamiltonian_es_positive}
+    \lean{MPSTensor.openParentHamiltonianES_isPositive}
+    \leanok
+    \uses{def:open_parent_hamiltonian_es, lem:transported_es_positive}
+    For every $A$, $L$, and $N$, the operator
+    $H^{\mathrm{open}}_{N,L}(A)$ is positive.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Each $h_{i,\mathrm{ES}}(A,L)$ is an orthogonal projection and hence is
+    positive. Positivity is preserved by finite sums.
+\end{proof}
+
+\begin{theorem}[Ground-state property of the compatible open chain]
+    \label{thm:open_parent_hamiltonian_kernel_ground_space}
+    \lean{MPSTensor.ker_openParentHamiltonianES_eq_groundSpaceES_of_isNBlkInjective}
+    \leanok
+    \uses{def:open_parent_hamiltonian_es, def:ground_space_es,
+        def:l_blk_injective, lem:open_parent_hamiltonian_es_positive,
+        lem:local_term_es_kernel_restrictions,
+        thm:normal_open_chain_range_reduction}
+    Assume $D\geq1$, $L_0>0$, and $N\geq L_0+1$. If $A$ is
+    $L_0$-block-injective, then
+    \begin{align}
+        \ker H^{\mathrm{open}}_{N,L_0+1}(A)
+        &=G_N^{\mathrm{ES}}(A).
+        \label{eq:open_parent_hamiltonian_kernel_ground_space}
+    \end{align}
+    This is the canonical MPS instance of the ground-state property in
+    \cite[Equation~(3.13)]{Nachtergaele1996Spectral}. The right-hand side is
+    the open boundary-condition space and may therefore be degenerate.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{lem:open_parent_hamiltonian_es_positive,
+        lem:local_term_es_kernel_restrictions,
+        thm:normal_open_chain_range_reduction}
+    Every non-wrapping restriction of a vector in $G_N^{\mathrm{ES}}(A)$ lies
+    in $G_{L_0+1}^{\mathrm{ES}}(A)$: the matrices outside the interval are
+    absorbed into the boundary matrix. Hence every summand in
+    (\ref{eq:open_parent_hamiltonian_es}) annihilates the vector.
+
+    Conversely, if the sum annihilates a vector, positivity of its projection
+    summands forces every non-wrapping local term to annihilate that vector.
+    The local kernel criterion places each fixed-complement restriction in
+    $G_{L_0+1}^{\mathrm{ES}}(A)$. The open-chain iteration of the intersection
+    property then places the original vector in $G_N^{\mathrm{ES}}(A)$.
+\end{proof}
+
 \begin{theorem}[Nachtergaele open-chain projector defect]
     \label{thm:nachtergaele_open_chain_projector_defect}
     \lean{MPSTensor.re_inner_openChain_anticommutator_ge_neg_of_groundProjection_defect}
