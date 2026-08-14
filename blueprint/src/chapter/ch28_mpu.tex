@@ -5798,16 +5798,24 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
   \begin{align}
     X_AA=AX_A&=P.
   \end{align}
-  In particular, for positive semidefinite outer factors $L$ and $R$ with
-  support projections $P$ and $Q$, respectively, the invertible choices
-  $X=X_L$ and $Z=X_R$ satisfy
+  Consequently, $X_A$ is a unit in the matrix algebra, with inverse $Z_A$,
+  and $\det(X_A)$ is a unit in $\mathbb C$.
+
+  In the notation of Proposition~IV.5 of \cite{Cirac2017MPU}, let $L$ and
+  $R$ be the positive semidefinite outer factors with support projections
+  $P$ and $Q$, respectively. The required witnesses are
   \begin{align}
-    XL&=P.
+    X&=X_L=L^++(\Id-P),\\
+    Z&=X_R=R^++(\Id-Q).
   \end{align}
-  Similarly,
+  Thus
   \begin{align}
-    RZ&=Q.
+    X_L L&=P,\\
+    R X_R&=Q,
   \end{align}
+  or equivalently $XL=P$ and $RZ=Q$. Here the paper's matrix $Z$ is $X_R$,
+  not the inverse-extension matrix $Z_R$ from
+  Definition~\ref{def:mpu_ambient_support_inverse_extension}.
   % This proves the existence step used in paper_v2.tex, lines 786--797.
 \end{theorem}
 
