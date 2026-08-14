@@ -2230,12 +2230,19 @@ norm estimate is derived here.
     \uses{thm:three_block_whole_increment_defect_seven_sixteenths,
         thm:friedrichs_ground_space_excitation_anticommutator,
         thm:three_site_anticommutator_cyclic_transport}
-    Let $A$ be an MPS tensor with nonzero physical dimension, and let $p$ be
-    any blocking length.  For $B=\operatorname{block}_p(A)$, the defect of the
-    two open-chain
-    ground-space projectors on three sites of $B$ is exactly the defect of the
-    corresponding three consecutive $p$-site regions of $A$.  If $B$ is
-    injective, then the bound
+    Let $A$ be an MPS tensor with nonzero physical dimension, let $p$ be any
+    blocking length, and set $B=\operatorname{block}_p(A)$.  Then
+    \begin{align}
+        \left\lVert
+          P^{\mathrm{tail}}_{1,2}(B)P^{\mathrm{left}}_2(B)
+          -P_{\mathcal G_3^{\mathrm{ES}}(B)}
+        \right\rVert
+        &=\left\lVert
+          P^{\mathrm{tail}}_{p;p,p}P^{\mathrm{left}}_{2p,p}
+          -P_{\mathcal G_{3p}^{\mathrm{ES}}(A)}
+        \right\rVert.
+    \end{align}
+    If $B$ is injective, then the bound on either side
     \begin{align}
         \left\lVert
           P^{\mathrm{tail}}_{1,2}(B)P^{\mathrm{left}}_2(B)
