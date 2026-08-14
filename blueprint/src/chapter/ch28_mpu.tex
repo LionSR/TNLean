@@ -5562,6 +5562,84 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
   $\widetilde P QY=\widetilde P$.
 \end{proof}
 
+\begin{theorem}[Lower semicontinuity of finite matrix rank]
+  \label{thm:mpu_rank_lower_semicontinuous}
+  \lean{Matrix.lowerSemicontinuous_rank,
+    Continuous.lowerSemicontinuous_matrix_rank}
+  \leanok
+  For finite index sets $M,N$, matrix rank defines a lower-semicontinuous map
+  \begin{align}
+    \operatorname{rank}\colon
+      \operatorname{Mat}_{M\times N}(\mathbb C)&\longrightarrow\mathbb N.
+  \end{align}
+  Consequently, if $A\colon X\to\operatorname{Mat}_{M\times N}(\mathbb C)$
+  is continuous, then $x\mapsto\operatorname{rank}A(x)$ is lower
+  semicontinuous.
+  % Source lines: paper_v2.tex 813--814.
+\end{theorem}
+
+\begin{proof}\leanok
+  For every $k\in\mathbb N$, the sublevel set is the closed determinantal set
+  \begin{align}
+    \{A:\operatorname{rank}A\leq k\}.
+  \end{align}
+  These closed sublevel sets characterize lower semicontinuity. Composition
+  with a continuous map preserves lower semicontinuity.
+\end{proof}
+
+\begin{theorem}[Fixed positive product gives local constancy]
+  \label{thm:mpu_fixed_product_locally_constant}
+  \lean{isLocallyConstant_pair_of_lowerSemicontinuous_nat_mul_eq}
+  \leanok
+  Let $r,\ell\colon X\to\mathbb N$ be lower semicontinuous. Suppose that
+  $c>0$ and
+  \begin{align}
+    r(x)\ell(x)&=c
+  \end{align}
+  for every $x\in X$. Then both $r$ and $\ell$ are locally constant.
+\end{theorem}
+
+\begin{proof}\leanok
+  Fix $x\in X$. Since $c>0$, both $r(x)$ and $\ell(x)$ are positive. Lower
+  semicontinuity gives a neighborhood $U$ of $x$ on which
+  \begin{align}
+    r(y)&\geq r(x),& \ell(y)&\geq\ell(x).
+  \end{align}
+  For $y\in U$, monotonicity of multiplication and the fixed-product identity
+  give
+  \begin{align}
+    r(x)\ell(x)
+      &\leq r(y)\ell(x)
+      \leq r(y)\ell(y)
+      =r(x)\ell(x).
+  \end{align}
+  Positivity permits cancellation, first of $\ell(x)$ and then of $r(x)$, so
+  $r(y)=r(x)$ and $\ell(y)=\ell(x)$.
+\end{proof}
+
+\begin{theorem}[Fixed positive product on a preconnected set]
+  \label{thm:mpu_fixed_product_preconnected}
+  \lean{eq_of_lowerSemicontinuous_nat_mul_eq_of_isPreconnected,
+    eq_of_lowerSemicontinuous_nat_mul_eq,
+    unitInterval_eq_of_lowerSemicontinuous_nat_mul_eq}
+  \leanok
+  Under the hypotheses of
+  Theorem~\ref{thm:mpu_fixed_product_locally_constant}, if $S\subseteq X$ is
+  preconnected, then for all $x,y\in S$,
+  \begin{align}
+    r(x)&=r(y),& \ell(x)&=\ell(y).
+  \end{align}
+  In particular, both functions are constant when $X$ is preconnected and
+  when $X=[0,1]$.
+\end{theorem}
+
+\begin{proof}\leanok
+  \uses{thm:mpu_fixed_product_locally_constant}
+  A locally constant function has open fibers. A preconnected set cannot meet
+  two disjoint nonempty open fibers, so each of $r$ and $\ell$ has one value
+  on $S$. The unit interval is connected, hence preconnected.
+\end{proof}
+
 \begin{proposition}[Constancy of the source ranks]
   \label{prop:continuity-index}
   \notready
@@ -5569,7 +5647,9 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
   \uses{def:mpu_canonical_form,ThmFund1,
     thm:mpu_two_projection_angle_defect_sum,
     thm:mpu_two_projection_reduced_projection,
-    thm:mpu_two_projection_reduced_projection_right_factor}
+    thm:mpu_two_projection_reduced_projection_right_factor,
+    thm:mpu_rank_lower_semicontinuous,
+    thm:mpu_fixed_product_preconnected}
   Let $[0,1]\ni x\mapsto\mathcal W(x)$ be a continuous path of tensors
   generating MPUs, without requiring the path to be in canonical form. For
   each $x$, take the canonical form and the two source-cut ranks $r(x)$ and
