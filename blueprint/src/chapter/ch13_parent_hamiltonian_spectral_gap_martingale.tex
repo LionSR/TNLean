@@ -786,9 +786,10 @@ Nachtergaele~\cite[Equation~(3.12)]{Nachtergaele1996Spectral}, whose
 zero-energy space is identified in Equation~(3.13). Equations~(3.14)--(3.16)
 continue with comparison of compatible interactions, approximate commutation
 of ground-state projectors, and a uniform gap. Theorem~2.1(i) of the same
-source obtains a gap from conditions C1--C3. The statements below give only the
-compatible Hamiltonian, its positivity, and its zero-energy space; they assert
-neither the C1--C3 estimate nor periodic coercivity.
+source obtains a gap from its three stated hypotheses. In addition to the
+compatible Hamiltonian and its zero-energy space, the statements below verify
+only the unit norm lower bound at the full-window volume $N=L$. They give no
+gap estimate for $N>L$ and no periodic coercivity.
 
 \begin{definition}[Compatible open-chain parent Hamiltonian]
     \label{def:open_parent_hamiltonian_es}
@@ -810,6 +811,57 @@ neither the C1--C3 estimate nor periodic coercivity.
     $L=l+1$, the starting sites are $0,\ldots,N-l-1$, in agreement with
     \cite[Equation~(3.12)]{Nachtergaele1996Spectral}.
 \end{definition}
+
+\begin{theorem}[Full-window compatible interaction]
+    \label{thm:open_parent_hamiltonian_full_window}
+    \lean{MPSTensor.openParentHamiltonianES_self_eq_parentInteractionES}
+    \leanok
+    \uses{def:open_parent_hamiltonian_es,
+        rem:euclidean_local_projector_ingredients}
+    If $L>0$, then $I_{L,L}=\{0\}$ and
+    \begin{align}
+        H^{\mathrm{open}}_{L,L}(A)
+        &=h_{0,\mathrm{ES}}(A,L)=P_L^{\mathrm{ES}}(A).
+        \label{eq:open_parent_hamiltonian_full_window}
+    \end{align}
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    The inequality $i+L\leq L$ forces $i=0$. For this sole window, restriction
+    to the full chain and extraction of the window are both the identity, so
+    the local term is $P_L^{\mathrm{ES}}(A)$.
+\end{proof}
+
+\begin{theorem}[Unit gap at the full-window volume]
+    \label{thm:open_parent_hamiltonian_full_window_unit_gap}
+    \lean{MPSTensor.openParentHamiltonianES_self_norm_eq_of_mem_orthogonal_ker,
+        MPSTensor.openParentHamiltonianES_self_unit_gap}
+    \leanok
+    \uses{thm:open_parent_hamiltonian_full_window}
+    If $L>0$ and
+    $v\in(\ker H^{\mathrm{open}}_{L,L}(A))^\perp$, then
+    \begin{align}
+        \lVert H^{\mathrm{open}}_{L,L}(A)v\rVert
+        &=\lVert v\rVert,
+        \label{eq:open_parent_hamiltonian_full_window_norm}
+        \\
+        \lVert v\rVert
+        &\leq\lVert H^{\mathrm{open}}_{L,L}(A)v\rVert.
+    \end{align}
+    Thus $\gamma_{l+1}=1$ at the full-window volume $N=L=l+1$ in
+    \cite[Theorem~2.1(i)]{Nachtergaele1996Spectral}. This neither asserts that
+    the excited subspace is nonzero nor supplies a gap for any $N>L$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:open_parent_hamiltonian_full_window}
+    By~(\ref{eq:open_parent_hamiltonian_full_window}), the Hamiltonian is the
+    orthogonal projector onto $(G_L^{\mathrm{ES}}(A))^\perp$. Its kernel is
+    $G_L^{\mathrm{ES}}(A)$, and an orthogonal projector preserves the norm of
+    every vector in its range. The inequality is the resulting equality.
+\end{proof}
 
 \begin{lemma}[Positivity of the compatible open-chain Hamiltonian]
     \label{lem:open_parent_hamiltonian_es_positive}

@@ -46,6 +46,63 @@ noncomputable def openParentHamiltonianES (A : MPSTensor d D) (L N : ℕ) :
     EuclideanSpace ℂ (Cfg d N) →ₗ[ℂ] EuclideanSpace ℂ (Cfg d N) :=
   ∑ i : NonwrappingStart L N, localTermES A L i.1
 
+/-- At volume \(N = L > 0\), the compatible open parent Hamiltonian is the
+canonical local projector on the full chain.
+
+This is the fixed-window operator underlying \(γ_{l+1} = 1\) in Nachtergaele,
+arXiv:cond-mat/9410110, Theorem 2.1(i). -/
+theorem openParentHamiltonianES_self_eq_parentInteractionES (A : MPSTensor d D)
+    {L : ℕ} (hL : 0 < L) :
+    openParentHamiltonianES A L L = parentInteractionES A L := by
+  let i : NonwrappingStart L L := ⟨⟨0, hL⟩, by simp⟩
+  letI : Subsingleton (NonwrappingStart L L) :=
+    ⟨fun j k => by
+      apply Subtype.ext
+      apply Fin.ext
+      have hj := j.2
+      have hk := k.2
+      omega⟩
+  rw [openParentHamiltonianES, Fintype.sum_subsingleton _ i]
+  ext v σ
+  rw [localTermES_apply A L i.1 (le_refl L) v σ]
+  have hrestrict : cyclicRestrictES (d := d) hL L i.1 σ v = v := by
+    ext ω
+    change v (cyclicCfg hL L (⟨0, hL⟩ : Fin L) ω σ) = v ω
+    rw [show cyclicCfg hL L (⟨0, hL⟩ : Fin L) ω σ = ω by
+      funext k
+      simp [cyclicCfg, Nat.mod_eq_of_lt k.isLt]]
+  rw [hrestrict]
+  rw [show extractWindow L i.1 σ = σ by
+    funext k
+    simp [i, extractWindow, Nat.mod_eq_of_lt k.isLt]]
+
+/-- The full-window compatible open parent Hamiltonian preserves the norm on
+the orthogonal complement of its kernel. -/
+theorem openParentHamiltonianES_self_norm_eq_of_mem_orthogonal_ker
+    (A : MPSTensor d D) {L : ℕ} (hL : 0 < L)
+    (v : EuclideanSpace ℂ (Cfg d L))
+    (hv : v ∈ (LinearMap.ker (openParentHamiltonianES A L L))ᗮ) :
+    ‖openParentHamiltonianES A L L v‖ = ‖v‖ := by
+  rw [openParentHamiltonianES_self_eq_parentInteractionES A hL] at hv ⊢
+  change ‖(groundSpaceES A L)ᗮ.starProjection v‖ = ‖v‖
+  apply Submodule.norm_starProjection_apply
+  have hker : LinearMap.ker (parentInteractionES A L) = groundSpaceES A L := by
+    ext w
+    rw [LinearMap.mem_ker, parentInteractionES_apply_eq_zero_iff]
+  rwa [hker] at hv
+
+/-- The compatible open parent Hamiltonian has unit norm gap at the first
+full-window volume.
+
+This is \(γ_{l+1} = 1\) in Nachtergaele, arXiv:cond-mat/9410110,
+Theorem 2.1(i), for \(L = l + 1\). -/
+theorem openParentHamiltonianES_self_unit_gap (A : MPSTensor d D)
+    {L : ℕ} (hL : 0 < L) (v : EuclideanSpace ℂ (Cfg d L))
+    (hv : v ∈ (LinearMap.ker (openParentHamiltonianES A L L))ᗮ) :
+    (1 : ℝ) * ‖v‖ ≤ ‖openParentHamiltonianES A L L v‖ := by
+  simpa only [one_mul] using
+    (openParentHamiltonianES_self_norm_eq_of_mem_orthogonal_ker A hL v hv).symm.le
+
 /-- The open-chain parent Hamiltonian is positive because every summand is an
 orthogonal projection. -/
 theorem openParentHamiltonianES_isPositive (A : MPSTensor d D) (L N : ℕ) :
