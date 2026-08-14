@@ -223,13 +223,13 @@ theorem full_ring_boundary_intertwines_of_cyclicTranslate_groundSpaceMap_eq
     _ = Matrix.trace (evalWord A (List.ofFn β) * (A a * Y)) := by
       simpa [α, Matrix.mul_assoc] using hcoeff
 
-/-- On the full minimal ring, every chain-ground-space vector has a scalar
-open-boundary matrix.
+/-- On the full minimal ring, the open-boundary matrix of every
+chain-ground-space vector commutes with every one-site tensor.
 
 Choose an open-boundary matrix at every cyclic cut. Moving a cut by \(L₀\)
 sites moves one letter through the boundary. Iterating this relation around all
 \(L₀+1\) cuts shows that the initial matrix commutes with every full-ring
-word. Block injectivity propagates to that length, so the matrix is scalar.
+word. Block injectivity then forces commutation with every generator \(A^a\).
 This implements the full-ring closure-property alternative in arXiv:2011.12127,
 Section IV.C, lines 2078--2079. -/
 theorem full_ring_boundary_intertwines_of_chainGroundSpace
