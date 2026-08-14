@@ -13,8 +13,9 @@ For a chain of length `N`, this file sums the canonical local parent interaction
 only over starts whose length-`L` windows stay inside the linear interval.  Thus
 no local term crosses the cut between the last and first sites.
 
-The kernel is the open MPS boundary-condition space `groundSpaceES A N` once the
-tensor is block-injective at length \(L - 1\).  This is the finite-volume
+When the tensor is block-injective at length \(L₀\), with \(0 < L₀\) and
+\(L₀ + 1 \le N\), the kernel of the length-\(L₀ + 1\) open Hamiltonian is the
+open MPS boundary-condition space `groundSpaceES A N`.  This is the finite-volume
 ground-space input for Nachtergaele's C1--C3 martingale theorem.
 
 ## References
