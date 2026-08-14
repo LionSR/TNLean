@@ -45,10 +45,8 @@ noncomputable def openParentHamiltonianES (A : MPSTensor d D) (L N : ℕ) :
     EuclideanSpace ℂ (Cfg d N) →ₗ[ℂ] EuclideanSpace ℂ (Cfg d N) :=
   ∑ i : NonwrappingStart L N, localTermES A L i.1
 
-/-- The open-chain parent Hamiltonian is positive.
-
-This is condition C2 for the canonical parent interaction: every summand is an
-orthogonal projection, hence positive. -/
+/-- The open-chain parent Hamiltonian is positive because every summand is an
+orthogonal projection. -/
 theorem openParentHamiltonianES_isPositive (A : MPSTensor d D) (L N : ℕ) :
     (openParentHamiltonianES A L N).IsPositive := by
   rw [openParentHamiltonianES]
