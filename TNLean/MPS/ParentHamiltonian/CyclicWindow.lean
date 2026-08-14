@@ -60,9 +60,15 @@ theorem contiguousRestrictₗ_apply {N : ℕ} (s M : ℕ) (hsM : s + M ≤ N)
 /-- Restricting an open-boundary MPS vector to a contiguous window gives an
 open-boundary MPS vector on that window.
 
-The matrices outside the window are absorbed into its boundary matrix. This is
-the nonwrapping restriction in Nachtergaele, arXiv:cond-mat/9410110, equation
-(3.12). -/
+Let \(w_L=(τ_0,\ldots,τ_{s-1})\) and
+\(w_R=(τ_{s+L},\ldots,τ_{N-1})\) be the fixed words to the left and right of
+the window. The concrete boundary-matrix identity is
+\[
+  \operatorname{Res}_{s,L}^{τ}\Gamma_N(X)
+    = \Gamma_L\!\left(A^{w_R} X A^{w_L}\right).
+\]
+This is the nonwrapping restriction in Nachtergaele,
+arXiv:cond-mat/9410110, equation (3.12). -/
 theorem contiguousRestrictₗ_groundSpaceMap_mem_groundSpace
     {A : MPSTensor d D} {s L N : ℕ} (hsL : s + L ≤ N)
     (τ : Fin N → Fin d) (X : Matrix (Fin D) (Fin D) ℂ) :
