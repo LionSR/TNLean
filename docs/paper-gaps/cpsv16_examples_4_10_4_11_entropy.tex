@@ -202,8 +202,8 @@ Example~4.10 supplies an exact corrected witness at $p=1/4$, but the repeated
 left-qubit label and the incomplete universal exception list must not be
 formalized as printed.  For Example~4.11, the printed saturation clause is
 false for the literal finite periodic family, while the independent claim that
-the family does not have zero correlation length is verified by an exact
-finite-marginal obstruction.
+the family does not have zero correlation length is verified both for the
+literal Definition~4.2 diagram and for its scale-invariant repair.
 
 The scalar endpoints are now certified in
 \doclink{TNLean/MPS/MPDO/CPSVExamples410411Arithmetic}.  The declarations
@@ -259,13 +259,32 @@ transports these values to the corresponding supported entries of the ambient
 two-qubit-site marginals.  The source-facing zero-correlation relation implies
 that the normalized two-site marginal obtained from a ring of length four must
 equal that obtained from a ring of length three.  Since $14/41\ne5/14$, the
-effective and ambient tensors both fail that relation.  This argument does not
-use the saturation obstruction, entropy, or spectral calculations.
+effective and ambient tensors both fail that relation.  The declarations
+\leanid{MPOTensor.CPSVExample411BinarySupport.physTraceTransfer_M_ne_zero} and
+\leanid{MPOTensor.CPSVExample411Ambient.physTraceTransfer_ambientM_ne_zero}
+use the exact one-site traces
+\[
+  \operatorname{tr}(\operatorname{mpo}(M,1))
+  =\operatorname{tr}(\operatorname{mpo}(\widetilde M,1))=2
+\]
+to show that both physical-trace transfers are nonzero.  The declarations
+\leanid{MPOTensor.CPSVExample411BinarySupport.physTraceTransfer_M_not_idempotent}
+and
+\leanid{MPOTensor.CPSVExample411Ambient.physTraceTransfer_ambientM_not_idempotent}
+then prove
+\[
+  \mathcal T_M^2\ne\mathcal T_M,
+  \qquad
+  \mathcal T_{\widetilde M}^2\ne\mathcal T_{\widetilde M}.
+\]
+Thus the fixed effective and ambient tensors themselves fail the literal
+diagram in Definition~4.2, lines 735--739.  The argument does not use the
+saturation obstruction, entropy, or spectral calculations.
 
-Here ``source-facing'' refers to the nonzero up-to-positive-scalar relation for
-the physical-trace transfer.  It is distinct from the legacy doubled-index
-transfer-map idempotence convention.  No conclusion about that legacy
-convention is made.
+The scale-invariant statement uses the nonzero up-to-positive-scalar relation
+for the physical-trace transfer, while the literal source diagram fixes the
+scalar to one.  Both are distinct from the legacy doubled-index transfer-map
+idempotence convention.  No conclusion about that legacy convention is made.
 
 \paragraph{Project derivation (exact length-four spectra).}
 The module \doclink{TNLean/MPS/MPDO/CPSVExample411Spectrum} specializes the

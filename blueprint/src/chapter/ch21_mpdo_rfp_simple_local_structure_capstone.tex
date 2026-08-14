@@ -1274,11 +1274,15 @@ This is the calculation in
     \label{thm:cpsv_example411_not_source_zcl}
     \lean{MPOTensor.CPSVExample411BinarySupport.reducedBlockState_four_two_zero,
         MPOTensor.CPSVExample411BinarySupport.reducedBlockState_three_two_zero,
+        MPOTensor.CPSVExample411BinarySupport.physTraceTransfer_M_ne_zero,
         MPOTensor.CPSVExample411BinarySupport.M_not_isSourceZCL,
+        MPOTensor.CPSVExample411BinarySupport.physTraceTransfer_M_not_idempotent,
         MPOTensor.CPSVExample411Ambient.reducedBlockState_supported_apply,
         MPOTensor.CPSVExample411Ambient.reducedBlockState_four_two_zero,
         MPOTensor.CPSVExample411Ambient.reducedBlockState_three_two_zero,
-        MPOTensor.CPSVExample411Ambient.ambientM_not_isSourceZCL}
+        MPOTensor.CPSVExample411Ambient.physTraceTransfer_ambientM_ne_zero,
+        MPOTensor.CPSVExample411Ambient.ambientM_not_isSourceZCL,
+        MPOTensor.CPSVExample411Ambient.physTraceTransfer_ambientM_not_idempotent}
     \leanok
     \uses{def:mpo_source_zcl,
         def:cpsv_example411_ambient_support_inclusion,
@@ -1295,12 +1299,22 @@ This is the calculation in
     \end{align}
     The same values occur at the corresponding supported entries of the
     ambient two-qubit-site marginals.  Hence neither the effective tensor nor
-    its ambient realization has source zero correlation length.
+    its ambient realization has source zero correlation length.  Moreover,
+    their one-site traces give
+    \begin{align}
+        \mathcal T_M&\ne0,
+        &\mathcal T_M^2&\ne\mathcal T_M,
+        &\mathcal T_{\widetilde M}&\ne0,
+        &\mathcal T_{\widetilde M}^2&\ne\mathcal T_{\widetilde M}.
+        \notag
+    \end{align}
+    Thus both displayed tensors fail the literal diagram of Definition~4.2
+    at source lines 735--739.
 
-    This conclusion concerns the nonzero up-to-scalar physical-trace relation
-    used for the source-facing notion of zero correlation length.  It makes no
-    assertion about the distinct legacy convention based on idempotence of the
-    doubled-index transfer map.
+    The first obstruction uses the nonzero up-to-scalar physical-trace
+    relation.  The final inequalities concern its literal scalar-one
+    specialization, not the distinct legacy convention based on idempotence
+    of the doubled-index transfer map.
 \end{theorem}
 
 \begin{proof}
@@ -1314,6 +1328,11 @@ This is the calculation in
     two-site marginal obtained from length four with that obtained from length
     three, contradicting $14/41\ne5/14$.  Isometric support inclusion preserves
     these entries, so the same obstruction holds in the ambient realization.
+    At length one, the exact partition function gives
+    $\operatorname{tr}(\operatorname{mpo}(M,1))=
+    \operatorname{tr}(\operatorname{mpo}(\widetilde M,1))=2$, so both
+    physical-trace transfers are nonzero.  Literal idempotence would therefore
+    imply the already-refuted up-to-scalar relation with scalar one.
 \end{proof}
 
 % Project-derived finite-ring consequence of CPSV16 Example 4.11.
