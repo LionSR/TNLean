@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.MPDO.RescalingStableLengthDependentRFP
+import TNLean.MPS.MPDO.SimpleTensor
 import TNLean.MPS.RFP.BeigiLoopBNTIdentification
 
 /-!
@@ -59,6 +60,8 @@ full ambient bond dimension `4` and a trivial (identity) coisometry
   matrix algebra.
 * `retainedBlock_isNormalTensor` : the weight-normalized retained tensor is a CPSV
   normal tensor.
+* `doubledPhysTraceTransfer_retainedBlock_not_isNilpotent` : the retained block's
+  ket-against-bra contraction is not nilpotent.
 * `R_toMPSTensor_isCPSVCanonicalForm` : `R.toMPSTensor` is in literal CPSV canonical
   form.
 
@@ -284,6 +287,35 @@ lemma weight_sq_C : (weight : ℂ) ^ 2 = 337/512 := by
 single retained block of the literal CPSV canonical form
 (`R_toMPSTensor_isCPSVCanonicalForm`). -/
 def retainedBlock : MPSTensor 16 4 := fun i => (weight⁻¹ : ℂ) • R.toMPSTensor i
+
+/-- The retained block's doubled physical-trace transfer is the inverse-weight
+rescaling of the physical-trace transfer of `R`. -/
+lemma doubledPhysTraceTransfer_retainedBlock :
+    MPOTensor.doubledPhysTraceTransfer 4 retainedBlock =
+      (weight⁻¹ : ℂ) • MPOTensor.physTraceTransfer R := by
+  rw [MPOTensor.doubledPhysTraceTransfer]
+  change (∑ i : Fin 4, (weight⁻¹ : ℂ) • R.toMPSTensor (finProdFinEquiv (i, i))) = _
+  rw [← Finset.smul_sum]
+  congr 1
+
+/-- The ket-against-bra contraction of the retained horizontal block is not
+nilpotent.  It is the nonzero scalar multiple `weight⁻¹ • physTraceTransfer R`,
+so multiplying a hypothetical nilpotent by `weight` would make
+`physTraceTransfer R` nilpotent.
+
+This is the basis-element non-nilpotency condition of arXiv:1606.00608,
+Definition 4.7, lines 815--822, for the single retained block of this project
+example.  It does not assert `MPOTensor.IsSimple R`, whose definition also
+includes canonical-form normalization requirements. -/
+theorem doubledPhysTraceTransfer_retainedBlock_not_isNilpotent :
+    ¬ IsNilpotent (MPOTensor.doubledPhysTraceTransfer 4 retainedBlock) := by
+  rw [doubledPhysTraceTransfer_retainedBlock]
+  intro hnil
+  have hscaled := hnil.smul (weight : ℂ)
+  rw [smul_smul] at hscaled
+  have hw : (weight : ℂ) ≠ 0 := by exact_mod_cast weight_ne
+  rw [mul_inv_cancel₀ hw, one_smul] at hscaled
+  exact physTraceTransfer_R_not_isNilpotent hscaled
 
 /-- `transferMap retainedBlock` is `(weight : ℂ)⁻¹ ^ 2` times `transferMap R.toMPSTensor`,
 since the transfer map is quadratic in the tensor and `weight⁻¹` is real. -/

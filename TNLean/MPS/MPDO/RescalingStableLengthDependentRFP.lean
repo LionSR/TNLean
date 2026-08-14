@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.MPDO.LengthIndependentCoefficients
 import Mathlib.Analysis.Matrix.Order
+import Mathlib.RingTheory.Nilpotent.Basic
 
 /-!
 # A rescaling-stable length-dependent coefficient family
@@ -15,6 +16,7 @@ of the project example motivated by arXiv:1606.00608, Theorem 4.14 and lines
 
 * `physTraceTransfer_R_idempotent` — the physical-trace transfer of `R` is
   idempotent (rank‑1 projector $(25/32)\,|t\rangle\langle t|$ with $t_a = \operatorname{tr}(A^a)$);
+* `physTraceTransfer_R_not_isNilpotent` — this nonzero idempotent is not nilpotent;
 * `oneLabelCoeffs_not_lengthIndependent` — the one-label BNT coefficient
   family `c^{(L)} = 1 + (7/25)^L` (on `χ = diag(1, 7/25)`) is not
   length-independent;
@@ -194,6 +196,22 @@ theorem physTraceTransfer_R_idempotent :
       simp [Finset.mul_sum]
     _ = ((25/32 : ℂ) ^ 2) * Matrix.trace (A a) * Matrix.trace (A b) * (32/25 : ℂ) := by rw [hsum]
     _ = (25/32 : ℂ) * Matrix.trace (A a) * Matrix.trace (A b) := by ring
+
+/-- The physical-trace transfer of `R` is not nilpotent.  It is a nonzero
+idempotent: its `(0, 0)` entry is `1/2`, so nilpotency would contradict
+`physTraceTransfer_R_idempotent`.
+
+This is the non-nilpotency condition of arXiv:1606.00608, Definition 4.7,
+lines 815--822, for the unnormalized horizontal tensor of this project example.
+It does not assert `MPOTensor.IsSimple R`, whose canonical-form normalization
+has additional requirements. -/
+theorem physTraceTransfer_R_not_isNilpotent :
+    ¬ IsNilpotent (physTraceTransfer R) := by
+  intro hnil
+  have hidem : IsIdempotentElem (physTraceTransfer R) := physTraceTransfer_R_idempotent
+  have hzero := hidem.eq_zero_of_isNilpotent hnil
+  have hentry := congrFun (congrFun hzero (0 : Fin 4)) (0 : Fin 4)
+  simp [physTraceTransfer_R_entry, A_trace] at hentry
 
 /-! ### The tensor and its transfer -/
 
