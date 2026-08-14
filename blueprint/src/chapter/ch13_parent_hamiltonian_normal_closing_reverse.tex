@@ -640,6 +640,29 @@ change-of-cut theorem replaces the complementary-word comparison.
     $\mathcal G_{N,L}(A) = \spn\bigl\{V^{(N)}(A)\bigr\}$.
 \end{theorem}
 
+\begin{theorem}[Unique ground state throughout the block-injective interaction range]%
+    \label{thm:parent_hamiltonian_unique_gs}
+    \lean{MPSTensor.parentHamiltonian_unique_gs}
+    \leanok
+    \uses{def:chain_ground_space, def:l_blk_injective,
+        def:has_unique_ground_state}
+    If $D \ge 1$, $A$ is injective after blocking $L_0>0$ sites, and
+    $L_0 < L \le N$, then the parent Hamiltonian of interaction range $L$ has
+    a unique periodic ground state. These inequalities already imply $N\ge2$
+    and $N\ge L_0+1$. Thus this strengthens the finite-size range $N\ge 2L_0$
+    printed in PGVWC07, Theorem~\texttt{uniqueGS}~\cite{PerezGarcia2007Matrix}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{def:normal, thm:chain_ground_space_eq_mpv_normal,
+        thm:mpv_ne_zero_blk_injective}
+    Block injectivity at the positive length $L_0$ makes $A$ normal. Hence
+    Theorem~\ref{thm:chain_ground_space_eq_mpv_normal} identifies the ground
+    space with $\spn\{V^{(N)}(A)\}$. The MPV is nonzero by
+    Theorem~\ref{thm:mpv_ne_zero_blk_injective}, so this span has dimension one.
+\end{proof}
+
 \begin{theorem}[Unique ground state on the periodic chain]%
     \label{thm:ground_space_unique_periodic}
     \lean{MPSTensor.groundSpace_unique_periodic}

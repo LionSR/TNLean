@@ -933,6 +933,22 @@ theorem chainGroundSpace_eq_mpvSubmodule_normal {A : MPSTensor d D} [NeZero D]
     obtain ⟨c, rfl⟩ := hψ
     exact Submodule.smul_mem _ c (mpv_mem_chainGroundSpace A L N (by omega) hLN)
 
+/-- Unique periodic ground state for a block-injective tensor throughout the interaction
+range \(L₀<L\le N\). This strengthens the finite-size assumption \(N\ge 2L₀\) printed in
+[PGVWC07], Theorem `uniqueGS`, to \(N\ge L₀+1\), together with \(N\ge2\). -/
+theorem parentHamiltonian_unique_gs {A : MPSTensor d D} [NeZero D]
+    {L₀ : ℕ} (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀)
+    {L N : ℕ} (hL : L₀ < L) (hLN : L ≤ N) :
+    HasUniqueGroundState (chainGroundSpace A L N) := by
+  have hNormal : IsNormal A := ⟨L₀, hL₀, hInj⟩
+  have hN : 2 ≤ N := by omega
+  have hNlarge : L₀ + 1 ≤ N := by omega
+  rw [HasUniqueGroundState,
+    chainGroundSpace_eq_mpvSubmodule_normal hNormal hInj hL₀ hN hL hLN hNlarge]
+  have hmpv := mpv_ne_zero_of_isNBlkInjective hInj hL₀ hNlarge
+  change Module.finrank ℂ (ℂ ∙ (mpv A : NSiteSpace d N)) = 1
+  exact finrank_span_singleton (K := ℂ) hmpv
+
 /-- Unique periodic ground state for an injective tensor:
 \(\mathcal G_{N,L}(A)=\mathbb C\,V^{(N)}(A)\). -/
 theorem groundSpace_unique_periodic {A : MPSTensor d D} [NeZero D] (hA : IsInjective A)
