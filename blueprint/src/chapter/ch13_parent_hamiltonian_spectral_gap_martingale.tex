@@ -831,18 +831,19 @@ $N=L$. They give no gap estimate for $N>L$ and no periodic coercivity.
 \begin{proof}
     \leanok
     \uses{def:open_parent_hamiltonian_es, rem:cyclic_window_operators,
-        def:extract_window, lem:blocked_original_aligned_sparse_sum}
+        def:extract_window, rem:euclidean_local_projector_ingredients}
     The interaction has one window:
     \begin{align}
         I_{L,L}&=\{0\}.
     \end{align}
-    On that window, restriction and extraction are identities:
+    The outside region is empty, so it has a unique configuration $\tau$.
+    Cyclic restriction to the sole window is the identity:
     \begin{align}
-        \Res^\tau_{0,L}v&=v.
+        R_{0,\tau}v&=v.
     \end{align}
     Likewise,
     \begin{align}
-        \sigma_{[0,L-1]}&=\sigma.
+        \sigma|_{[0,L-1]}&=\sigma.
     \end{align}
     Therefore
     \begin{align}
@@ -996,18 +997,24 @@ $N=L$. They give no gap estimate for $N>L$ and no periodic coercivity.
     \uses{lem:mem_ground_space_es,
         thm:contiguous_restriction_ground_space_map,
         rem:cyclic_window_operators, lem:local_term_es_kernel_restrictions}
-    Let $v=\Gamma_N(X)\in G_N^{\mathrm{ES}}(A)$. For every non-wrapping
-    window $[s,s+L-1]$ and complementary configuration $\tau$,
+    Let $v=\iota_N(\Gamma_N^A(X))\in G_N^{\mathrm{ES}}(A)$. For every
+    non-wrapping window $[s,s+L-1]$ and complementary configuration $\tau$,
     Theorem~\ref{thm:contiguous_restriction_ground_space_map} gives
     \begin{align}
-        \Res^\tau_{s,L}\Gamma_N(X)&\in G_L(A).
+        \Res^\tau_{s,L}\Gamma_N^A(X)&\in G_L(A).
     \end{align}
-    Lemma~\ref{lem:mem_ground_space_es} identifies this condition with
+    The non-wrapping identification and
+    Lemma~\ref{lem:mem_ground_space_es} then give
     \begin{align}
-        \Res^\tau_{s,L}\Gamma_N(X)&\in G_L^{\mathrm{ES}}(A).
+        R_{s,\tau}v
+        &=\iota_L\!\left(\Res^\tau_{s,L}\Gamma_N^A(X)\right)
+          \in G_L^{\mathrm{ES}}(A).
     \end{align}
-    The local kernel criterion therefore shows that every compatible local term
-    annihilates $v$.
+    The local kernel criterion therefore gives
+    \begin{align}
+        h_{s,\mathrm{ES}}(A,L)v&=0.
+    \end{align}
+    Thus every compatible local term annihilates $v$.
 \end{proof}
 
 \begin{theorem}[Compatible zero energy has open-boundary form]
@@ -2609,8 +2616,7 @@ $N=L$. They give no gap estimate for $N>L$ and no periodic coercivity.
 
 \begin{lemma}[Blocked local terms and the aligned sparse sum]
     \label{lem:blocked_original_aligned_sparse_sum}
-    \lean{MPSTensor.localTermES_apply,
-        MPSTensor.parentInteractionES_blockTensor_conj,
+    \lean{MPSTensor.parentInteractionES_blockTensor_conj,
         MPSTensor.localTermES_blockTensor_conj_aligned,
         MPSTensor.blockTensor_parentHamiltonianES_conj_le}
     \leanok
