@@ -996,7 +996,8 @@ $N=L$. They give no gap estimate for $N>L$ and no periodic coercivity.
     \leanok
     \uses{lem:mem_ground_space_es,
         thm:contiguous_restriction_ground_space_map,
-        rem:cyclic_window_operators, lem:local_term_es_kernel_restrictions}
+        rem:cyclic_window_operators, rem:euclidean_local_projector_ingredients,
+        lem:local_term_es_kernel_restrictions}
     Let $v=\iota_N(\Gamma_N^A(X))\in G_N^{\mathrm{ES}}(A)$. For every
     non-wrapping window $[s,s+L-1]$ and complementary configuration $\tau$,
     Theorem~\ref{thm:contiguous_restriction_ground_space_map} gives
@@ -2620,8 +2621,8 @@ $N=L$. They give no gap estimate for $N>L$ and no periodic coercivity.
         MPSTensor.localTermES_blockTensor_conj_aligned,
         MPSTensor.blockTensor_parentHamiltonianES_conj_le}
     \leanok
-    Write $h^{A,L}_j$ for the range-$L$ local term of a tensor $A$ at site
-    $j$.  Let $B=\operatorname{block}_p(A)$, and let $U$ be the canonical
+    Assume $p>0$ and $N\geq2$. Write $h^{A,L}_j$ for the range-$L$ local term
+    of a tensor $A$ at site $j$. Let $B=\operatorname{block}_p(A)$, and let $U$ be the canonical
     configuration isometry from the blocked chain of length $N$ to the original
     chain of length $Np$.  For every blocked site $i$,
     \begin{align}
