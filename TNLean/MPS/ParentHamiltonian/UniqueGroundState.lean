@@ -873,9 +873,8 @@ theorem chainGroundSpace_le_mpvSubmodule_of_isNBlkInjective_full_ring
 
 /-- Closure-property containment
 \(\mathcal G_{N,L}(A) \subseteq \mathbb C\,V^{(N)}(A)\) for \(L>L₀\) and
-\(L₀+1<N\), following arXiv:2011.12127, Section IV.C, lines 2078--2090.
-**Scope restriction:** \(L₀+1<N\) excludes the minimal ring \(N=L₀+1\);
-see `docs/paper-gaps/cpgsv21_normal_range_reduction.tex`. -/
+\(L₀+1\le N\), following arXiv:2011.12127, Section IV.C, lines 2078--2090.
+The equality case uses the full-ring cyclic change-of-cut argument above. -/
 theorem chainGroundSpace_le_mpvSubmodule_of_normal_range_reduction
     {A : MPSTensor d D} [NeZero D]
     (_hA : IsNormal A) {L₀ : ℕ} (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀)
@@ -912,9 +911,8 @@ theorem chainGroundSpace_le_mpvSubmodule_of_normal_range_reduction
     (A := A) (L₀ := L₀) (N := N) hInj hL₀ η Ywrap Ymirror hWrap hMirror hCompare
 
 /-- On a periodic chain, \(\mathcal G_{N,L}(A)=\mathbb C\,V^{(N)}(A)\) for
-\(L>L₀\) and \(L₀+1<N\), by arXiv:2011.12127, Section IV.C, lines 2078--2090.
-**Scope restriction:** \(L₀+1<N\) excludes the minimal ring \(N=L₀+1\);
-see `docs/paper-gaps/cpgsv21_normal_range_reduction.tex`. -/
+\(L>L₀\) and \(L₀+1\le N\), by arXiv:2011.12127, Section IV.C,
+lines 2078--2090. -/
 theorem chainGroundSpace_eq_mpvSubmodule_normal {A : MPSTensor d D} [NeZero D]
     (hA : IsNormal A) {L₀ : ℕ} (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀)
     {L N : ℕ} (hN : 2 ≤ N) (hL : L₀ < L) (hLN : L ≤ N)
@@ -946,11 +944,8 @@ theorem groundSpace_unique_periodic {A : MPSTensor d D} [NeZero D] (hA : IsInjec
   change Module.finrank ℂ (ℂ ∙ (mpv A : NSiteSpace d N)) = 1
   exact finrank_span_singleton (K := ℂ) hmpv
 
-/-- Unique ground state for tensors injective after blocking at range \(2L₀\),
-with \(L₀+1<N\).
-**Scope restriction (two-site case):** The strict inequality \(L₀+1<N\)
-excludes \(L₀=1,N=2\); see
-`docs/paper-gaps/cpgsv21_normal_range_reduction.tex`. -/
+/-- Unique ground state for tensors injective after blocking at range \(2L₀\).
+This includes the endpoint \(L₀=1,N=2\). -/
 theorem parentHamiltonian_unique_gs_injective {A : MPSTensor d D} [NeZero D]
     {L₀ : ℕ} (hA : IsNBlkInjective A L₀) (hL₀ : 0 < L₀)
     {N : ℕ} (hN : 2 * L₀ ≤ N) :
@@ -964,10 +959,8 @@ theorem parentHamiltonian_unique_gs_injective {A : MPSTensor d D} [NeZero D]
   change Module.finrank ℂ (ℂ ∙ (mpv A : NSiteSpace d N)) = 1
   exact finrank_span_singleton (K := ℂ) hmpv
 
-/-- Unique ground state for normal tensors at range \(L₀+1\), with \(L₀+1<N\):
-\(\dim \mathcal G_{N,L₀+1}(A)=1\).
-**Scope restriction:** \(L₀+1<N\) excludes the minimal ring \(N=L₀+1\);
-see `docs/paper-gaps/cpgsv21_normal_range_reduction.tex`. -/
+/-- Unique ground state for normal tensors at range \(L₀+1\) on every ring
+with \(L₀+1\le N\): \(\dim \mathcal G_{N,L₀+1}(A)=1\). -/
 theorem parentHamiltonian_unique_gs_normal {A : MPSTensor d D} [NeZero D]
     {L₀ : ℕ} (hA : IsNormal A) (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀)
     {N : ℕ} (hN : L₀ + 1 ≤ N) :
