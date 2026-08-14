@@ -118,10 +118,10 @@ FNW numerator and the identification of its source constants remain open.
 \subsection{Unit bound at the full-window volume}
 
 Fix an MPS tensor $A$ and an interaction length $L>0$. If
-$P_{G_L^{\mathrm{ES}}(A)}$ denotes the orthogonal projector onto the
+$P_{\mathcal G_L^{\mathrm{ES}}(A)}$ denotes the orthogonal projector onto the
 length-$L$ MPS ground space, define the excitation projector by
 \[
-  P_L^{\mathrm{ES}}(A):=\Id-P_{G_L^{\mathrm{ES}}(A)}.
+  P_L^{\mathrm{ES}}(A):=\Id-P_{\mathcal G_L^{\mathrm{ES}}(A)}.
 \]
 For a chain of length $N$ and a start $i$ with $i+L\leq N$, let
 $h_{i,\mathrm{ES}}(A,L)$ be the copy of this excitation projector on the
@@ -136,7 +136,8 @@ and define the compatible open Hamiltonian by
 \]
 At the full-window volume $N=L$, the compatible open Hamiltonian consists of
 one orthogonal projection.\footnote{This is the Blueprint theorem
-  ``Full-window compatible interaction''; the formal declaration is
+  ``Full-window compatible interaction,'' labelled
+  \path{thm:open_parent_hamiltonian_full_window}; the formal declaration is
   \leanid{MPSTensor.openParentHamiltonianES_self_eq_parentInteractionES}.}
 Thus
 \[
