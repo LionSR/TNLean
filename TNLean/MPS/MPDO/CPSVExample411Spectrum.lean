@@ -165,28 +165,25 @@ theorem ambient_charpoly_eq_X_pow_mul_effective {L : ℕ} (hL4 : L ≤ 4) :
   rw [CPSVExample411Ambient.ambientM,
     reducedBlockState_changePhysicalBasis_of_isometry CPSVExample411Ambient.inclusion
       CPSVExample411Ambient.inclusion_isometry,
-    singleKrausMap_apply, Matrix.mul_assoc]
-  rw [Matrix.charpoly_mul_comm_of_le
-    (sitewisePhysicalMatrix CPSVExample411Ambient.inclusion L)
-    (reducedBlockState CPSVExample411BinarySupport.M 4 L hL4 *
-      (sitewisePhysicalMatrix CPSVExample411Ambient.inclusion L)ᴴ)]
-  · simp only [Fintype.card_fun, Fintype.card_fin]
-    rw [Matrix.mul_assoc,
-      sitewisePhysicalMatrix_isometry CPSVExample411Ambient.inclusion
-        CPSVExample411Ambient.inclusion_isometry,
-      Matrix.mul_one]
-  · simp only [Fintype.card_fun, Fintype.card_fin]
-    exact Nat.pow_le_pow_left (by omega) L
+    Matrix.singleKrausMap_charpoly_eq_X_pow_mul_of_isometry
+      (sitewisePhysicalMatrix CPSVExample411Ambient.inclusion L)
+      (sitewisePhysicalMatrix_isometry CPSVExample411Ambient.inclusion
+        CPSVExample411Ambient.inclusion_isometry L)]
+  simp only [Fintype.card_fun, Fintype.card_fin]
 
 /-- The full ambient root multiset consists of $4^L-2^L$ zeros followed by the effective roots. -/
 theorem ambient_charpoly_roots_eq_zero_add_effective {L : ℕ} (hL4 : L ≤ 4) :
     (reducedBlockState CPSVExample411Ambient.ambientM 4 L hL4).charpoly.roots =
       (4 ^ L - 2 ^ L) • {(0 : ℂ)} +
         (reducedBlockState CPSVExample411BinarySupport.M 4 L hL4).charpoly.roots := by
-  rw [ambient_charpoly_eq_X_pow_mul_effective hL4, Polynomial.roots_mul,
-    Polynomial.roots_X_pow]
-  exact mul_ne_zero (pow_ne_zero _ Polynomial.X_ne_zero)
-    (Matrix.charpoly_monic _).ne_zero
+  rw [CPSVExample411Ambient.ambientM,
+    reducedBlockState_changePhysicalBasis_of_isometry CPSVExample411Ambient.inclusion
+      CPSVExample411Ambient.inclusion_isometry,
+    Matrix.singleKrausMap_charpoly_roots_eq_zero_add_of_isometry
+      (sitewisePhysicalMatrix CPSVExample411Ambient.inclusion L)
+      (sitewisePhysicalMatrix_isometry CPSVExample411Ambient.inclusion
+        CPSVExample411Ambient.inclusion_isometry L)]
+  simp only [Fintype.card_fun, Fintype.card_fin]
 
 /-- The ambient one-site state has two zero roots and two roots equal to $1/2$. -/
 theorem ambient_charpoly_roots_one :
