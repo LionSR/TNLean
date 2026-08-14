@@ -307,6 +307,26 @@
     $(T_s\psi)(\sigma)=\psi(T_s\sigma)$.
 \end{definition}
 
+\begin{theorem}[Cyclic translations compose]
+    \label{thm:parent_cyclic_translate_add}
+    \lean{MPSTensor.cyclicTranslateState_add}
+    \leanok
+    \uses{def:parent_cyclic_translate_state}
+    For offsets $s,t\in\mathbb Z/N\mathbb Z$ and a state $\psi$ on the
+    periodic chain,
+    \begin{align}
+        T_s(T_t\psi)&=T_{s+t}\psi.
+        \notag
+    \end{align}
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{def:parent_cyclic_translate_configuration}
+    For every configuration $\sigma$, the two sides evaluate $\psi$ on the
+    same configuration because $T_t(T_s\sigma)=T_{s+t}\sigma$.
+\end{proof}
+
 \begin{lemma}[Cyclic translation preserves the periodic chain space]
     \label{lem:parent_cyclic_translate_preserves_chain_space}
     \lean{MPSTensor.cyclicTranslateState_mem_chainGroundSpace}
