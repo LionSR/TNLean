@@ -5706,6 +5706,90 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
   $\mathcal U(x)$, and $B(x)$, hence is continuous.
 \end{proof}
 
+\begin{definition}[Doubled-virtual contraction and factor-free sandwich]
+  \label{def:mpu_factor_free_sandwich}
+  \lean{MPOTensor.doubledVirtualContraction,
+    MPOTensor.doubledVirtualContraction_apply,
+    MPOTensor.factorFreeSandwich,
+    MPOTensor.factorFreeSandwich_apply}
+  \leanok
+  \uses{def:mpu_double_layer}
+  Let $q:\Fin D\times\Fin D\to\Fin{D^2}$ be the standard enumeration of a
+  pair. For an MPO tensor $\mathcal W$ and a doubled-virtual matrix
+  $E\in\mathbb C^{D^2\times D^2}$, define
+  \begin{align}
+    C(\mathcal W,E)^{ij}_{ab}
+      &=\sum_{c,e=0}^{D-1}E_{q(b,e),q(c,a)}W^{ij}_{ce}.
+      \label{eq:mpu_factor_free_contraction}
+  \end{align}
+  If $E(\mathcal W)$ denotes the normalized physical diagonal of the
+  physical-adjoint double layer of $\mathcal W$, define
+  \begin{align}
+    \widehat{\mathcal W}_{\mathrm{ff}}
+      &=C\bigl(\mathcal W,E(\mathcal W)\bigr).
+      \label{eq:mpu_factor_free_sandwich}
+  \end{align}
+  This is the contraction shown in Figure~\texttt{IV\_index4.png} of
+  \cite[Proposition~IV.5]{Cirac2017MPU}.
+  % Source lines: paper_v2.tex 807--812.
+\end{definition}
+
+\begin{theorem}[Rank-one identity and continuity of the factor-free sandwich]
+  \label{thm:mpu_factor_free_sandwich_continuous}
+  \lean{MPOTensor.doubledVirtualContraction_vecMulVec,
+    MPOTensor.doubledVirtualContraction_vecMulVec_vec,
+    MPOTensor.continuous_doubledVirtualContraction,
+    MPOTensor.continuous_doubleLayerTensor,
+    MPOTensor.continuous_normalizedDiagonal,
+    MPOTensor.continuous_normalizedDiagonal_doubleLayerTensor,
+    MPOTensor.continuous_factorFreeSandwich,
+    Continuous.factorFreeSandwich}
+  \leanok
+  \uses{def:mpu_factor_free_sandwich,def:mpu_virtual_sandwich}
+  Let $L,R\in\mathbb C^{D\times D}$ and let $\operatorname{vec}$ stack
+  matrix columns, so
+  \begin{align}
+    \operatorname{vec}(L)_{q(c,a)}&=L_{ac},\\
+    \operatorname{vec}(R)_{q(b,e)}&=R_{eb}.
+  \end{align}
+  Then the rank-one doubled-virtual matrix satisfies
+  \begin{align}
+    C\!\left(\mathcal W,
+      \lvert\operatorname{vec}(R))(\operatorname{vec}(L)\rvert\right)^{ij}
+      &=L W^{ij}R.
+      \label{eq:mpu_factor_free_rank_one}
+  \end{align}
+  No transpose, adjoint, or normalization factor occurs. The binary map
+  $(\mathcal W,E)\mapsto C(\mathcal W,E)$, the map
+  $\mathcal W\mapsto E(\mathcal W)$, and consequently the map
+  $\mathcal W\mapsto\widehat{\mathcal W}_{\mathrm{ff}}$ are continuous.
+  These assertions neither choose $L$ and $R$ continuously nor infer their
+  positivity. They make no claim about reduced representatives or constancy
+  of ranks.
+  % Source lines: paper_v2.tex 807--812.
+\end{theorem}
+
+\begin{proof}\leanok
+  \uses{def:mpu_factor_free_sandwich}
+  Expanding the left-hand side of
+  (\ref{eq:mpu_factor_free_rank_one}) and using column stacking gives
+  \begin{align}
+    C\!\left(\mathcal W,
+      \lvert\operatorname{vec}(R))(\operatorname{vec}(L)\rvert\right)^{ij}_{ab}
+      &=\sum_{c,e}R_{eb}L_{ac}W^{ij}_{ce}\\
+      &=\sum_{c,e}L_{ac}W^{ij}_{ce}R_{eb}
+       =(L W^{ij}R)_{ab}.
+  \end{align}
+  This proves (\ref{eq:mpu_factor_free_rank_one}). Each entry in
+  (\ref{eq:mpu_factor_free_contraction}) is a finite sum of products, so the
+  binary contraction is continuous. The double-layer entries are finite sums
+  of products of entries of $\mathcal W$ and their complex conjugates, and the
+  normalized physical diagonal is another finite sum. Hence
+  $\mathcal W\mapsto E(\mathcal W)$ is continuous. Substitution into
+  (\ref{eq:mpu_factor_free_sandwich}) proves continuity of the factor-free
+  sandwich.
+\end{proof}
+
 \begin{theorem}[Source cuts of a virtual sandwich]
   \label{thm:mpu_virtual_sandwich_source_cuts}
   \lean{MPOTensor.sourceCutM₁_virtualSandwich,
@@ -5858,6 +5942,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     thm:mpu_two_projection_reduced_projection_right_factor,
     thm:mpu_rank_lower_semicontinuous,
     thm:mpu_fixed_product_preconnected,
+    thm:mpu_factor_free_sandwich_continuous,
     thm:mpu_virtual_sandwich_source_ranks,
     thm:mpu_ambient_support_inverse_extension}
   Let $[0,1]\ni x\mapsto\mathcal W(x)$ be a continuous path of tensors
