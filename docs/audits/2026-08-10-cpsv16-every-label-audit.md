@@ -97,7 +97,7 @@ is unlabelled and is recorded here and in the maintained coverage crosswalk.
 |---|---:|---|---|
 | Example 3.4, `Ex:ZCL` | 453 | CID does not imply a renormalization fixed point | **Complete** in Chapter 15: `def:cpsv16_example_34_tensor`, `thm:cpsv16_example_34_mpv`, `thm:cpsv16_example_34_cid`, and `thm:cpsv16_example_34_not_rfp` |
 | Example 4.10, `ExZCLnoSAL` | 898 | ZCL does not imply SAL | Source reconciled in `docs/paper-gaps/cpsv16_examples_4_10_4_11_entropy.tex`; the integer comparison and log-ratio positivity are certified in `CPSVExamples410411Arithmetic`, while spectra and tensor links remain under issue #6301 |
-| Example 4.11, `ExSALnoZCL` | 908 | SAL does not imply ZCL | Printed SAL claim refuted mathematically in `docs/paper-gaps/cpsv16_examples_4_10_4_11_entropy.tex`; the scalar endpoints are certified in `CPSVExamples410411Arithmetic`, while spectra and the non-SAL tensor theorem remain under issue #6302 |
+| Example 4.11, `ExSALnoZCL` | 908 | SAL does not imply ZCL | Printed SAL claim refuted for the literal finite periodic family; exact spectra, entropy, and effective/ambient non-SAL are formalized, while `CPSVExample411SourceZCL` verifies the independent source-facing non-ZCL clause by finite-marginal instability |
 | Example 4.12, unlabelled | 929 | The toric-code boundary tensor is claimed to be SAL, ZCL, and RFP, but not of the simple GSNNCH form | Tracked by issue #5919; the MPO formula is explicit, while the trace-preserving maps needed for the printed RFP assertion remain to be constructed |
 
 ## Appendix D omissions and corrections
