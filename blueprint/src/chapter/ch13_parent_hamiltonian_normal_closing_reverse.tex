@@ -658,9 +658,20 @@ change-of-cut theorem replaces the complementary-word comparison.
     \uses{def:normal, thm:chain_ground_space_eq_mpv_normal,
         thm:mpv_ne_zero_blk_injective}
     Block injectivity at the positive length $L_0$ makes $A$ normal. Hence
-    Theorem~\ref{thm:chain_ground_space_eq_mpv_normal} identifies the ground
-    space with $\spn\{V^{(N)}(A)\}$. The MPV is nonzero by
-    Theorem~\ref{thm:mpv_ne_zero_blk_injective}, so this span has dimension one.
+    Theorem~\ref{thm:chain_ground_space_eq_mpv_normal} gives
+    \begin{align}
+        \mathcal G_{N,L}(A)
+        &=\spn\bigl\{V^{(N)}(A)\bigr\}.
+    \end{align}
+    The block-injectivity nonvanishing theorem gives
+    \begin{align}
+        V^{(N)}(A)&\neq0.
+    \end{align}
+    Therefore
+    \begin{align}
+        \dim\mathcal G_{N,L}(A)
+        &=\dim\spn\bigl\{V^{(N)}(A)\bigr\}=1.
+    \end{align}
 \end{proof}
 
 \begin{theorem}[Unique ground state on the periodic chain]%
@@ -690,19 +701,35 @@ change-of-cut theorem replaces the complementary-word comparison.
     \label{thm:unique_gs_injective}
     \lean{MPSTensor.parentHamiltonian_unique_gs_injective}
     \leanok
-    \uses{thm:chain_ground_space_eq_mpv_normal}
+    \uses{def:chain_ground_space, def:l_blk_injective,
+        def:has_unique_ground_state}
     If $A$ becomes injective after blocking $L_0 > 0$ sites and $D \ge 1$,
     the parent Hamiltonian with interaction range $2L_0$ has a unique ground
     state on every periodic chain with $N \ge 2L_0$. In particular, this
     includes $L_0=1$ and $N=2$.
 \end{theorem}
 
+\begin{proof}
+    \leanok
+    \uses{thm:parent_hamiltonian_unique_gs}
+    Since $L_0>0$, one has $L_0<2L_0$. The result is therefore the case
+    $L=2L_0$ of Theorem~\ref{thm:parent_hamiltonian_unique_gs}.
+\end{proof}
+
 \begin{theorem}[Unique ground state for normal tensors at range $L_0+1$]%
     \label{thm:unique_gs_normal}
     \lean{MPSTensor.parentHamiltonian_unique_gs_normal}
     \leanok
-    \uses{thm:unique_gs_injective}
+    \uses{def:chain_ground_space, def:normal, def:l_blk_injective,
+        def:has_unique_ground_state}
     If $A$ is normal, becomes injective after blocking $L_0 > 0$ sites, and
     $D \ge 1$, then the parent Hamiltonian with interaction range $L_0 + 1$
     has a unique ground state on every periodic chain with $L_0+1\le N$.
 \end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:parent_hamiltonian_unique_gs}
+    The inequalities $L_0<L_0+1\leq N$ put this statement in the range of
+    Theorem~\ref{thm:parent_hamiltonian_unique_gs}.
+\end{proof}

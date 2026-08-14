@@ -13,10 +13,11 @@ For a chain of length `N`, this file sums the canonical local parent interaction
 only over starts whose length-`L` windows stay inside the linear interval.  Thus
 no local term crosses the cut between the last and first sites.
 
-When the tensor is block-injective at length \(L₀\), with \(0 < L₀\) and
-\(L₀ + 1 \le N\), the kernel of the length-\(L₀ + 1\) open Hamiltonian is the
-open MPS boundary-condition space `groundSpaceES A N`.  This is the finite-volume
-ground-space input for Nachtergaele's C1--C3 martingale theorem.
+When the tensor has virtual dimension \(D \ge 1\) and is block-injective at
+length \(L₀\), with \(0 < L₀\) and \(L₀ + 1 \le N\), the kernel of the
+length-\(L₀ + 1\) open Hamiltonian is the open MPS boundary-condition space
+`groundSpaceES A N`. This is the finite-volume ground-space input for
+Nachtergaele's C1--C3 martingale theorem.
 
 ## References
 
@@ -95,7 +96,11 @@ theorem openParentHamiltonianES_self_norm_eq_of_mem_orthogonal_ker
 full-window volume.
 
 This is \(γ_{l+1} = 1\) in Nachtergaele, arXiv:cond-mat/9410110,
-Theorem 2.1(i), for \(L = l + 1\). -/
+Theorem 2.1(i), for \(L = l + 1\).
+
+**Scope restriction (single-window volume):** This proves only the volume
+\(N=L\). It does not establish the general-volume C1--C3 martingale gap; see
+`docs/paper-gaps/cpgsv21_martingale_overlap.tex`. -/
 theorem openParentHamiltonianES_self_unit_gap (A : MPSTensor d D)
     {L : ℕ} (hL : 0 < L) (v : EuclideanSpace ℂ (Cfg d L))
     (hv : v ∈ (LinearMap.ker (openParentHamiltonianES A L L))ᗮ) :
