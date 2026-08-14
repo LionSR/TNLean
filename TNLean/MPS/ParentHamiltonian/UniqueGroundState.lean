@@ -223,7 +223,8 @@ theorem full_ring_boundary_intertwines_of_cyclicTranslate_groundSpaceMap_eq
 /-- On the full minimal ring, every chain-ground-space vector has a scalar
 open-boundary matrix.
 
-Choose an open-boundary matrix at every cyclic cut. Moving a cut by \(L₀\) sites
+Choose an open-boundary matrix at every cyclic cut. Moving a cut by \(L₀\)
+sites
 moves one letter through the boundary. Iterating this relation around all \(L₀+1\) cuts shows that the initial
 matrix commutes with every word of full
 ring length. Block injectivity propagates to that length, so the matrix is
