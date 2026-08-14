@@ -73,6 +73,18 @@ private theorem cyclicRestrictₗ_cyclicTranslateState {N L : ℕ} (hN : 0 < N)
   change ψ (cyclicTranslateCfg s (cyclicCfg hN L i ω τ)) = _
   rw [cyclicTranslateCfg_cyclicCfg]
 
+/-- Successive cyclic translations add their offsets. -/
+theorem cyclicTranslateState_add {N : ℕ} (s t : Fin N) (ψ : NSiteSpace d N) :
+    cyclicTranslateState s (cyclicTranslateState t ψ) =
+      cyclicTranslateState (s + t) ψ := by
+  ext σ
+  change ψ (cyclicTranslateCfg t (cyclicTranslateCfg s σ)) =
+    ψ (cyclicTranslateCfg (s + t) σ)
+  congr 1
+  funext k
+  simp only [cyclicTranslateCfg]
+  rw [add_assoc, add_comm t s]
+
 /-- The periodic chain ground space is invariant under cyclic translation of
 the physical sites. -/
 theorem cyclicTranslateState_mem_chainGroundSpace (A : MPSTensor d D)

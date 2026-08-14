@@ -67,13 +67,10 @@ periodic-boundary closure-property sentence, and
 
 \section{The formal statement}
 
-The corresponding formal statement keeps the intended hypotheses, with one
-additional range restriction, $L_0+1<N$, recorded as a scope
-restriction in Section~\ref{sec:scope-minimal-ring}. In
-mathematical terms, it assumes that $A$ is normal, that $A$ is injective
-after blocking a positive number $L_0$ of sites, and that the ring has length
-$N\ge 2$ with an interaction range $L$ satisfying $L_0<L\le N$, together with the
-strict bound $L_0+1<N$. The desired
+The corresponding formal statement now keeps the source endpoint
+$L_0+1\le N$. It assumes that $A$ is normal, that $A$ is injective after
+blocking a positive number $L_0$ of sites, and that the ring has length
+$N\ge 2$ with an interaction range $L$ satisfying $L_0<L\le N$. The desired
 conclusion is that the periodic-boundary ground space is the line spanned by
 the periodic MPS vector
 $\Omega_N(A)$:
@@ -82,20 +79,20 @@ $\Omega_N(A)$:
 \]
 In the formal statement this is the equality between the periodic-boundary ground
 space and the subspace \(\mathbb C\,\Omega_N(A)\). The hard inclusion into
-\(\mathbb C\,\Omega_N(A)\) is the range-reduction lemma for the non-minimal
-ring case \(L_0+1<N\).
+\(\mathbb C\,\Omega_N(A)\) combines the complementary-word proof for
+$L_0+1<N$ with a full-ring cyclic change of cut for $N=L_0+1$.
 \footnote{Formal locations:
-\path{TNLean/MPS/ParentHamiltonian/UniqueGroundState.lean}:902 for
+\path{TNLean/MPS/ParentHamiltonian/UniqueGroundState.lean}:885 for
 \path{MPSTensor.chainGroundSpace_le_mpvSubmodule_of_normal_range_reduction},
 and
-\path{TNLean/MPS/ParentHamiltonian/UniqueGroundState.lean}:936 for
+\path{TNLean/MPS/ParentHamiltonian/UniqueGroundState.lean}:923 for
 \path{MPSTensor.chainGroundSpace_eq_mpvSubmodule_normal}. The formal hypotheses
 are named \path{IsNormal A} and \path{IsNBlkInjective A L0}, together with
-\path{0 < L0}, \path{2 <= N}, \path{L0 + 1 < N}, and
+\path{0 < L0}, \path{2 <= N}, \path{L0 + 1 <= N}, and
 \path{L0 < L <= N}.}
 
 The blueprint records the corresponding closure-property step in
-\path{blueprint/src/chapter/ch13_parent_hamiltonian_normal_closing.tex}, labelled
+\path{blueprint/src/chapter/ch13_parent_hamiltonian_normal_closing_reverse.tex}, labelled
 \path{thm:normal_range_reduction_containment}. Its proof sketch separates the
 open-chain intersection iteration from the comparison at the periodic boundary,
 matching the source distinction between the intersection property and the
@@ -290,42 +287,37 @@ The direct comparison of these two restrictions, and the left-multiplied
 coordinate comparison obtained after taking first-letter restrictions, are
 consequences of the one-site commutation identity \(XA^k=A^kX\).
 
-\section{Scope restriction: the minimal ring}
+\section{Resolved endpoint: the minimal ring}
 \label{sec:scope-minimal-ring}
 
-The source theorem \path{thm:4:unique-gs-L0_plus_1}
-(\path{Papers/2011.12127/TN-Review-main.tex}:2087--2090) asserts a unique ground
-state for the range-$(L_0+1)$ parent Hamiltonian on a normal MPS, placing no
-lower bound on the ring length $N$ beyond the $N\ge L_0+1$ needed to define a
-range-$(L_0+1)$ term. The minimal case $N=L_0+1$, in which the single
-length-$(L_0+1)$ window already wraps the whole ring, is therefore covered by the
-source statement.
+The source theorem includes the minimal ring $N=L_0+1$. This endpoint is now
+proved separately from the nonempty-complement argument. Write a vector in
+$\mathcal G_{L_0+1,L_0+1}(A)$ as $\Gamma_{L_0+1}(X)$. Moving the cut by $L_0$
+sites and writing the translated state as $\Gamma_{L_0+1}(Y)$ gives
+\[
+  XA^j=A^jY
+\]
+for every letter $j$. Repeating this comparison around all $L_0+1$ cuts shows
+that $X$ commutes with every full-ring word. Since block injectivity persists at
+length $L_0+1$, these words span the full matrix algebra, so $X$ is scalar.
+Thus
+\[
+  \mathcal G_{L_0+1,L_0+1}(A)
+  =\mathbb C\,\Omega_{L_0+1}(A).
+\]
+The same theorem also removes the extra strict bound from the range-$2L_0$
+corollary. In particular, $L_0=1$ and $N=2$ is covered explicitly rather than
+being inferred from a nonempty complementary word.
 
-The formal statements add the strict hypothesis $L_0+1<N$, so they cover only
-$N\ge L_0+2$ and exclude that minimal ring. The restriction is forced by the
-periodic-boundary closure-property argument: the comparison ranges over a
-complement word $\mu\colon \mathrm{Fin}\,(N-(L_0+1))\to\mathrm{Fin}\,d$, which is
-the empty function exactly when $N=L_0+1$, so the two boundary-crossing windows
-coincide and the comparison carries no information. This is a genuine narrowing
-of the source theorem rather than a typo: the conclusion at $N=L_0+1$ is true
-(it is the source's minimal case), but the present proof does not reach it.
-
-Elimination plan: prove the empty-complement case of the periodic-boundary
-argument. When $N=L_0+1$, the complement word has length zero and the two
-boundary-crossing words coincide; one must still use the cyclic local constraints
-to identify the periodic ground space with the MPS line. Thus the missing step is
-not a single-window kernel computation, but a separate cyclic-boundary argument
-in the degenerate complement case. Alternatively, extend the witness-comparison
-lemma to include the empty complement word. Either route removes $L_0+1<N$ from
-\path{MPSTensor.wrapped_mirror_witness_agree_of_chainGroundSpace},
+The formal proof is
+\path{MPSTensor.full_ring_boundary_intertwines_of_chainGroundSpace} followed by
+\path{MPSTensor.chainGroundSpace_le_mpvSubmodule_of_isNBlkInjective_full_ring}.
+The public theorems
 \path{MPSTensor.chainGroundSpace_le_mpvSubmodule_of_normal_range_reduction},
 \path{MPSTensor.chainGroundSpace_eq_mpvSubmodule_normal},
-\path{MPSTensor.parentHamiltonian_unique_gs_normal}, and, through this
-range-reduction theorem, the range-$2L_0$ corollary
-\path{MPSTensor.parentHamiltonian_unique_gs_injective}. In the latter corollary,
-the bound $L_0+1<N$ is automatic from $2L_0\le N$ for $1<L_0$ and only excludes
-the two-site case $L_0=1$, $N=2$. The narrowing is recorded in these declarations
-with a \texttt{Scope restriction} docstring marker.
+\path{MPSTensor.parentHamiltonian_unique_gs_normal}, and
+\path{MPSTensor.parentHamiltonian_unique_gs_injective} now use the non-strict
+source bound.
 
 \section{Conclusion}
 
@@ -353,9 +345,10 @@ word \(\nu\). The trace-separation lemma then gives the matrix identity
 \]
 for every \(\alpha,\nu\). The block-injective commutation lemma then gives
 \(XA^k=A^kX\) for every physical letter \(k\), and the verified boundary-restriction equality
-lemma supplies the periodic-boundary comparison. The remaining restriction
-recorded here is the minimal ring case \(N=L_0+1\), where the complement word is
-empty and the present boundary-crossing comparison does not apply.
+lemma supplies the periodic-boundary comparison. At the minimal ring
+\(N=L_0+1\), the separate full-ring cyclic change-of-cut argument shows that the
+boundary matrix is scalar and proves the same ground-space conclusion. Thus the
+formal theorem covers the full source range \(L_0+1\le N\).
 
 \bibliographystyle{alpha}
 \bibliography{references}

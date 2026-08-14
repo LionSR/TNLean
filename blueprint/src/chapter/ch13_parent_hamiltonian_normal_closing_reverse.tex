@@ -462,13 +462,104 @@ left-multiplied boundary comparison.
     desired equality of boundary matrices.
 \end{proof}
 
+\begin{theorem}[One-step full-ring boundary comparison]
+    \label{thm:full_ring_boundary_intertwines_step}
+    \lean{MPSTensor.full_ring_boundary_intertwines_of_cyclicTranslate_groundSpaceMap_eq}
+    \leanok
+    \uses{def:l_blk_injective, def:ground_space_map,
+        def:parent_cyclic_translate_state}
+    Let $A$ be $L_0$-block-injective with $L_0>0$. If
+    \begin{align}
+        T_{L_0}\!\left(\Gamma_{L_0+1}(X)\right)
+        &=\Gamma_{L_0+1}(Y),
+        \notag
+    \end{align}
+    then $XA^j=A^jY$ for every physical letter $j$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{lem:parent_cyclic_translate_append,
+        thm:ground_space_map_injective_blk}
+    Evaluate the translated equality on a word $\beta j$, where $|\beta|=L_0$.
+    Cyclic translation exchanges the two parts of the word, and cyclicity of the
+    trace gives
+    \begin{align}
+        \Gamma_{L_0}(XA^j)(\beta)
+        &=\Gamma_{L_0}(A^jY)(\beta).
+        \notag
+    \end{align}
+    Injectivity of $\Gamma_{L_0}$ gives $XA^j=A^jY$.
+\end{proof}
+
+\begin{theorem}[Full-ring boundary comparison]
+    \label{thm:full_ring_boundary_intertwines}
+    \lean{MPSTensor.full_ring_boundary_intertwines_of_chainGroundSpace}
+    \leanok
+    \uses{def:l_blk_injective}
+    Let $A$ be $L_0$-block-injective with $L_0>0$ and $D\ge1$, and let
+    $\psi\in\mathcal G_{L_0+1,L_0+1}(A)$ satisfy
+    $\psi=\Gamma_{L_0+1}(X)$. Then $XA^j=A^jX$ for every physical letter $j$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{lem:parent_cyclic_translate_preserves_chain_space,
+        thm:cyclic_normal_open_chain_range_reduction,
+        thm:full_ring_boundary_intertwines_step,
+        thm:parent_cyclic_translate_add,
+        thm:ground_space_map_injective_blk,
+        thm:wordspan_blk_inj_succ,
+        lem:boundary_matrix_commutes_long_words}
+    Write $s$ for the cut shift by $L_0$ and $Y_i$ for the boundary matrix of
+    the translated state at cut $i$. Translation invariance of the chain space,
+    the cyclic open-chain reduction, and the composition law supply compatible
+    matrices at successive cuts. Theorem~\ref{thm:full_ring_boundary_intertwines_step}
+    gives the single-letter comparison, and induction on the word $w$ gives
+    \begin{align}
+        Y_i A^w
+        &=A^wY_{|w|s+i}.
+        \notag
+    \end{align}
+    Injectivity of the propagated length-$(L_0+1)$ boundary map gives $Y_0=X$.
+    Since $(L_0+1)s=0$, every full-ring word $\omega$ satisfies
+    $XA^\omega=A^\omega X$. Lemma~\ref{lem:boundary_matrix_commutes_long_words}
+    then gives $XA^j=A^jX$ for every letter $j$.
+\end{proof}
+
+\begin{theorem}[Minimal-ring ground-space containment]
+    \label{thm:full_ring_ground_space_containment}
+    \lean{MPSTensor.chainGroundSpace_le_mpvSubmodule_of_isNBlkInjective_full_ring}
+    \leanok
+    \uses{def:l_blk_injective, def:mpv_submodule}
+    If $A$ is $L_0$-block-injective with $L_0>0$ and $D\ge1$, then
+    \begin{align}
+        \mathcal G_{L_0+1,L_0+1}(A)
+        &\subseteq \spn\{V^{(L_0+1)}(A)\}.
+        \notag
+    \end{align}
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:cyclic_normal_open_chain_range_reduction,
+        thm:full_ring_boundary_intertwines,
+        thm:ground_space_map_mpv_of_long_word_commutes}
+    Let $\psi\in\mathcal G_{L_0+1,L_0+1}(A)$. The cyclic open-chain reduction
+    gives $\psi=\Gamma_{L_0+1}(X)$. Theorem~\ref{thm:full_ring_boundary_intertwines}
+    shows that $X$ commutes with every letter, and hence with every word of
+    length $L_0$. The long-word commutation theorem then places $\psi$ in
+    $\spn\{V^{(L_0+1)}(A)\}$.
+\end{proof}
+
 \subsection{Normal unique-ground-state consequences}\label{subsec:normal_unique_ground_state}
 
 In the injective case, for $N\ge2$ and $1<L\le N$, the chain ground space equals
 $\spn\{V^{(N)}(A)\}$, so the parent Hamiltonian has a unique ground state in
 that length range. In the normal case the same conclusion is the payoff of the
 section, given the boundary-crossing comparison and the length hypotheses
-$N\ge2$, $L_0+1<N$, and $L_0<L\le N$.
+$N\ge2$, $L_0+1\le N$, and $L_0<L\le N$. At equality, the full-ring
+change-of-cut theorem replaces the complementary-word comparison.
 
 \begin{theorem}[Chain ground space is spanned by the MPS vector in the injective case]%
     \label{thm:chain_ground_space_eq_mpv_blk}
@@ -503,16 +594,25 @@ $N\ge2$, $L_0+1<N$, and $L_0<L\le N$.
         thm:wrapped_mirror_witness_agree_chain_ground_space,
         thm:conditional_normal_range_reduction_witness_comparison}
     If $A$ is normal, $D \ge 1$, and injective after blocking $L_0>0$ sites,
-    with $N \ge 2$, $L_0+1<N$, and $L_0 < L \le N$, then
+    with $N \ge 2$, $L_0+1\le N$, and $L_0 < L \le N$, then
     $\mathcal G_{N,L}(A) \subseteq \spn\bigl\{V^{(N)}(A)\bigr\}$.
 \end{theorem}
 
 \begin{proof}
     \leanok
-    \uses{thm:reduced_wrapped_boundary_compatibilities,
+    \uses{lem:cyclic_window_range_antitonicity,
+        thm:reduced_wrapped_boundary_compatibilities,
         thm:conditional_normal_range_reduction_witness_comparison,
-        lem:padded_complement_annihilation}
-    For a chain ground state, the open-chain containment gives
+        lem:padded_complement_annihilation,
+        thm:full_ring_ground_space_containment}
+    If $N=L_0+1$, range antitonicity gives
+    \begin{align}
+        \mathcal G_{N,L}(A)
+        &\subseteq\mathcal G_{N,L_0+1}(A),
+        \notag
+    \end{align}
+    and Theorem~\ref{thm:full_ring_ground_space_containment} applies to the
+    minimal ring. If $N>L_0+1$, the open-chain containment gives
     $\psi=\Gamma_N(X)$. The two boundary-crossing cyclic-window constraints give
     \begin{align}
         A^\mu A^j X
@@ -536,7 +636,7 @@ $N\ge2$, $L_0+1<N$, and $L_0<L\le N$.
     \uses{thm:normal_range_reduction_containment, lem:mpv_mem_chain_ground_space,
         def:normal, def:l_blk_injective}
     If $A$ is normal, $D \ge 1$, and injective after blocking $L_0>0$ sites,
-    with $N \ge 2$, $L_0+1<N$, and $L_0 < L \le N$, then
+    with $N \ge 2$, $L_0+1\le N$, and $L_0 < L \le N$, then
     $\mathcal G_{N,L}(A) = \spn\bigl\{V^{(N)}(A)\bigr\}$.
 \end{theorem}
 
@@ -563,11 +663,6 @@ $N\ge2$, $L_0+1<N$, and $L_0<L\le N$.
     contradiction. Therefore the spanning line is one-dimensional.
 \end{proof}
 
-% Scope restriction (minimal ring): this restriction is recorded in
-% docs/paper-gaps/cpgsv21_normal_range_reduction.tex.  The additional
-% inequality $L_0+1<N$ excludes the minimal ring $N=L_0+1$ in the CPGSV21
-% range-$(L_0+1)$ theorem; after specialization to the blocked range $2L_0$,
-% it also excludes the two-site case $L_0=1$, $N=2$.
 \begin{theorem}[Unique ground state after blocking]%
     \label{thm:unique_gs_injective}
     \lean{MPSTensor.parentHamiltonian_unique_gs_injective}
@@ -575,7 +670,8 @@ $N\ge2$, $L_0+1<N$, and $L_0<L\le N$.
     \uses{thm:chain_ground_space_eq_mpv_normal}
     If $A$ becomes injective after blocking $L_0 > 0$ sites and $D \ge 1$,
     the parent Hamiltonian with interaction range $2L_0$ has a unique ground
-    state on every periodic chain with $N \ge 2L_0$ and $L_0+1<N$.
+    state on every periodic chain with $N \ge 2L_0$. In particular, this
+    includes $L_0=1$ and $N=2$.
 \end{theorem}
 
 \begin{theorem}[Unique ground state for normal tensors at range $L_0+1$]%
@@ -585,5 +681,5 @@ $N\ge2$, $L_0+1<N$, and $L_0<L\le N$.
     \uses{thm:unique_gs_injective}
     If $A$ is normal, becomes injective after blocking $L_0 > 0$ sites, and
     $D \ge 1$, then the parent Hamiltonian with interaction range $L_0 + 1$
-    has a unique ground state on every periodic chain with $L_0+1<N$.
+    has a unique ground state on every periodic chain with $L_0+1\le N$.
 \end{theorem}
