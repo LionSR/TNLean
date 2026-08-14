@@ -844,9 +844,9 @@ neither the C1--C3 estimate nor periodic coercivity.
         lem:transported_es_local_projections}
     Taking the inner product of the sum with $v$ gives
     \begin{align}
-        \sum_{i\in I_{L,N}}\operatorname{re}
+        \sum_{i\in I_{L,N}}\re
         \langle h_{i,\mathrm{ES}}(A,L)v,v\rangle
-        &=\langle H^{\mathrm{open}}_{N,L}(A)v,v\rangle=0.
+        &=\re\langle H^{\mathrm{open}}_{N,L}(A)v,v\rangle=0.
     \end{align}
     Each summand is the squared norm of the image of $v$ under an orthogonal
     projection. Hence every local term annihilates $v$.
@@ -902,13 +902,16 @@ neither the C1--C3 estimate nor periodic coercivity.
         lem:mem_ground_space_es, rem:contiguous_window_operators,
         rem:cyclic_window_operators, lem:local_term_es_kernel_restrictions,
         thm:normal_open_chain_range_reduction}
-    For every start $s$ with $s+L_0+1\leq N$ and every complementary
-    configuration $\tau$, the three ingredients give
+    In the following display, $s$ ranges over all starts satisfying
+    $s+L_0+1\leq N$, and $\tau$ ranges over all complementary configurations.
+    The three ingredients give
     \begin{align}
         H^{\mathrm{open}}_{N,L_0+1}(A)v=0
-        &\Longrightarrow h_{s,\mathrm{ES}}(A,L_0+1)v=0
-        \Longrightarrow \Res^\tau_{s,L_0+1}v
-            \in G_{L_0+1}^{\mathrm{ES}}(A)
+        &\Longrightarrow
+          \bigl(\forall s,\ h_{s,\mathrm{ES}}(A,L_0+1)v=0\bigr)
+        \Longrightarrow
+          \bigl(\forall s,\tau,\
+            \Res^\tau_{s,L_0+1}v\in G_{L_0+1}^{\mathrm{ES}}(A)\bigr)
         \Longrightarrow v\in G_N^{\mathrm{ES}}(A).
     \end{align}
     The middle implication is the local kernel criterion, and the last is the
