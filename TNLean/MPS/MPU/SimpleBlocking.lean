@@ -891,6 +891,17 @@ theorem IsMPU.exists_blockTensor_isMPUSimple
     obtain ⟨k, hk, hklt, hsimple⟩ := hU.exists_blockTensor_isMPUSimple_of_one_lt hDgt
     exact ⟨k, hk, hklt.le, hsimple⟩
 
+/-- Every MPU of positive physical and bond dimensions is MPU-simple after
+blocking exactly \(D^4\) sites.
+
+Source: arXiv:1703.09188, proof of Proposition `prop:continuity-index`,
+lines 747--752. -/
+theorem IsMPU.blockTensor_pow_four_isMPUSimple
+    [NeZero d] [NeZero D] {U : MPOTensor d D} (hU : IsMPU U) :
+    IsMPUSimple (MPOTensor.blockTensor U (D ^ 4)) := by
+  obtain ⟨k, hk, hkD, hsimple⟩ := hU.exists_blockTensor_isMPUSimple
+  exact hU.blockTensor_isMPUSimple_of_le hk hkD hsimple
+
 end BlockingConstruction
 
 end MPOTensor

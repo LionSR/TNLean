@@ -1013,6 +1013,39 @@ closing a chain of $N$ copies of $\mathcal U$.
     on $k'-k$ proves the claim.
 \end{proof}
 
+\begin{theorem}[Common simple blocking along a continuous MPU path]
+    \label{thm:mpu_common_pow_four_simple_blocking}
+    \lean{MPOTensor.IsMPU.blockTensor_pow_four_isMPUSimple,
+        MPOTensor.continuous_evalWord,
+        MPOTensor.continuous_blockTensor,
+        Continuous.blockTensor}
+    \leanok
+    \uses{def:mpdo_physical_blocking,thm:mpu_bounded_simple_blocking,
+        thm:mpu_all_later_simple_blockings}
+    Let $d,D>0$.  Every bond-$D$ MPU tensor becomes simple after blocking
+    exactly $D^4$ sites.  For each fixed $L$, the map
+    \begin{align}
+        \mathcal U&\longmapsto \mathcal U_L
+    \end{align}
+    is continuous.  Consequently, if $x\mapsto\mathcal W(x)$ is a continuous
+    family of bond-$D$ MPU tensors, then
+    $x\mapsto\mathcal W(x)_{D^4}$ is a continuous family of simple tensors.
+    This is only the common-blocking step in the proof of
+    Proposition~\ref{prop:continuity-index}; it does not choose reduced
+    representatives or assert constancy of their source ranks.
+    % Source lines: paper_v2.tex 747--752.
+\end{theorem}
+
+\begin{proof}\leanok
+    Choose for each tensor a positive simple blocking length $k\leq D^4$.
+    Simplicity persists at every later direct blocking, hence at $D^4$.
+    For fixed blocked ket and bra words, every matrix entry of the blocked
+    tensor is a finite sum of products of entries of the original tensor.
+    These entries are continuous, and the finite product and sum operations
+    preserve continuity.  Applying this fixed blocking map to the original
+    path proves the path statement.
+\end{proof}
+
 \begin{theorem}[Supplied-projector simple2 contraction]
     \label{thm:mpu_supplied_projector_simple2}
     \lean{MPOTensor.IsMPUSimple.simple2_of_normalizedDiagonal_pow_eq_vecMulVec}
@@ -5567,6 +5600,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
   \notready
   \discussion{6022}
   \uses{def:mpu_canonical_form,ThmFund1,
+    thm:mpu_common_pow_four_simple_blocking,
     thm:mpu_two_projection_angle_defect_sum,
     thm:mpu_two_projection_reduced_projection,
     thm:mpu_two_projection_reduced_projection_right_factor}
