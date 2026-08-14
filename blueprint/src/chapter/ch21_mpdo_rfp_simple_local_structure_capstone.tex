@@ -1002,14 +1002,15 @@ This is the calculation in
 % CPSV16 Examples 4.10--4.12, lines 897--942.
 % Tracking: issues #5984, #6301, and #6302; Example 4.12 remains under #5919.
 % Entropy corrections: docs/paper-gaps/cpsv16_examples_4_10_4_11_entropy.tex.
-% Commit a79bfc933 certifies the scalar integer and logarithm inequalities only.
-% Example 4.11's N=4 spectra are proved below; entropy identities, remaining tensor links,
-% and Example 4.12 RFP maps remain open.
+% Example 4.11's literal finite periodic family is now proved to fail both SAL
+% and source-facing ZCL. Example 4.12 RFP maps remain open.
 \begin{theorem}[Printed mixed-state separation examples]
     \label{thm:cpsv_examples410_412_status}
     \notready
     \uses{def:is_rfp_via_ts, def:is_sal, def:mpdo_source_gsnnch,
-        def:mpo_source_zcl, thm:cpsv_example412_literal_formula,
+        def:mpo_source_zcl, thm:cpsv_example411_not_source_zcl,
+        thm:cpsv_example411_ambient_not_sal,
+        thm:cpsv_example412_literal_formula,
         thm:cpsv_example412_literal_sal,
         thm:cpsv_example412_literal_zcl_rfp_gap}
     The three examples in
@@ -1031,13 +1032,18 @@ This is the calculation in
         \notag
     \end{align}
     and claims saturation without zero correlation length.  For the literal
-    four-site periodic state, the exact calculation recorded in the
-    accompanying paper-gap note instead gives $I_2>I_1$ for the displayed
-    reduced spectra.  This calculation alone does not identify those density
-    operators as reductions of the printed tensor.  Global normalization does
-    not change the resulting finite-ring probability distribution.  An open or
-    infinite stationary Markov-chain interpretation may explain the source
-    claim, but the source does not state that interpretation.
+    finite periodic family, both clauses are now decided.  On the four-site
+    ring, the exact entropy calculation gives $I_2>I_1$, so saturation fails.
+    Independently, the constant-zero two-site marginal has value $14/41$ when
+    computed in the four-site state and $5/14$ when computed in the three-site
+    state.  Source zero correlation length would make these entries equal, so
+    the printed non-zero-correlation-length clause holds for both the effective
+    binary model and its ambient two-qubit realization.  This conclusion uses
+    the physical-trace relation associated with the source definition; it is
+    distinct from the legacy doubled-index transfer-map convention.  Global
+    normalization does not change the finite-ring probability distribution.
+    An open or infinite stationary Markov-chain interpretation may explain the
+    failed saturation claim, but the source does not state that interpretation.
 
     Example~4.12 uses a two-dimensional tensor generating
     \begin{align}
@@ -1262,6 +1268,52 @@ This is the calculation in
     Cyclicity of the trace and $V^*V=I_2$ preserve the trace under the
     sitewise congruence.  The binary partition-function identity and its closed
     form then give the result.
+\end{proof}
+
+\begin{theorem}[Finite-marginal obstruction to source zero correlation length]
+    \label{thm:cpsv_example411_not_source_zcl}
+    \lean{MPOTensor.CPSVExample411BinarySupport.reducedBlockState_four_two_zero,
+        MPOTensor.CPSVExample411BinarySupport.reducedBlockState_three_two_zero,
+        MPOTensor.CPSVExample411BinarySupport.M_not_isSourceZCL,
+        MPOTensor.CPSVExample411Ambient.reducedBlockState_supported_apply,
+        MPOTensor.CPSVExample411Ambient.reducedBlockState_four_two_zero,
+        MPOTensor.CPSVExample411Ambient.reducedBlockState_three_two_zero,
+        MPOTensor.CPSVExample411Ambient.ambientM_not_isSourceZCL}
+    \leanok
+    \uses{def:mpo_source_zcl,
+        def:cpsv_example411_ambient_support_inclusion,
+        thm:cpsv_example411_binary_block_probability,
+        thm:mpdo_reduced_state_physical_isometry_transport,
+        lem:mpdo_source_zcl_marginal_stability}
+    Let $\rho^{(N)}_2$ denote the normalized two-site marginal of the
+    effective binary model on the periodic ring of length $N$.  For the
+    constant-zero word,
+    \begin{align}
+        \rho^{(4)}_2(00,00)&=\frac{14}{41},
+        &\rho^{(3)}_2(00,00)&=\frac{5}{14}.
+        \notag
+    \end{align}
+    The same values occur at the corresponding supported entries of the
+    ambient two-qubit-site marginals.  Hence neither the effective tensor nor
+    its ambient realization has source zero correlation length.
+
+    This conclusion concerns the nonzero up-to-scalar physical-trace relation
+    used for the source-facing notion of zero correlation length.  It makes no
+    assertion about the distinct legacy convention based on idempotence of the
+    doubled-index transfer map.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{def:cpsv_example411_ambient_support_inclusion,
+        thm:cpsv_example411_binary_block_probability,
+        thm:mpdo_reduced_state_physical_isometry_transport,
+        lem:mpdo_source_zcl_marginal_stability}
+    Substitution in the exact finite-ring block formula gives the two displayed
+    values.  Source zero correlation length would identify the normalized
+    two-site marginal obtained from length four with that obtained from length
+    three, contradicting $14/41\ne5/14$.  Isometric support inclusion preserves
+    these entries, so the same obstruction holds in the ambient realization.
 \end{proof}
 
 % Project-derived finite-ring consequence of CPSV16 Example 4.11.
