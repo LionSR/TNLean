@@ -2,7 +2,8 @@
 
 \begin{definition}[Physical-trace transfer]
     \label{def:mpo_physical_trace_transfer}
-    \lean{MPOTensor.physTraceTransfer}
+    \lean{MPOTensor.physTraceTransfer,
+        MPOTensor.verticalLoop_eq_physTraceTransfer}
     \leanok
     \uses{def:mpo_tensor}
     The physical-trace transfer of an MPO tensor $M$ is the virtual matrix
@@ -14,7 +15,7 @@
     \end{align}
     % Gap documented in docs/paper-gaps/cpsv16_zcl_canonical_form_normalization.tex.
     This is the transfer object appearing in the zero-correlation-length
-    condition of \cite[Definition~4.2, lines~736--741]{Cirac2016MPDO_arXiv}.
+    condition of \cite[Definition~4.2, lines~735--739]{Cirac2016MPDO_arXiv}.
 \end{definition}
 
 \begin{definition}[Nonzero up-to-scalar physical-trace relation]
@@ -95,7 +96,7 @@
     \end{tenkz}
 \end{center}
 This is the literal identity in
-\cite[Definition~4.2, lines~736--741]{Cirac2016MPDO_arXiv};
+\cite[Definition~4.2, lines~735--739]{Cirac2016MPDO_arXiv};
 Definition~\ref{def:mpo_source_zcl} permits the positive factor $\lambda$.
 
 \begin{lemma}[Physical-trace normalization gives an idempotent transfer]

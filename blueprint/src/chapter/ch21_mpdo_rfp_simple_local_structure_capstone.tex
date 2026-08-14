@@ -1308,8 +1308,8 @@ This is the calculation in
         &\mathcal T_{\widetilde M}^2&\ne\mathcal T_{\widetilde M}.
         \notag
     \end{align}
-    Thus both displayed tensors fail the literal diagram of Definition~4.2
-    at source lines 735--739.
+    Thus both displayed tensors fail the literal diagram in
+    \cite[Definition~4.2, lines~735--739]{Cirac2016MPDO_arXiv}.
 
     The first obstruction uses the nonzero up-to-scalar physical-trace
     relation.  The final inequalities concern its literal scalar-one
@@ -1319,7 +1319,8 @@ This is the calculation in
 
 \begin{proof}
     \leanok
-    \uses{def:cpsv_example411_ambient_support_inclusion,
+    \uses{def:mpo_physical_trace_transfer,
+        def:cpsv_example411_ambient_support_inclusion,
         thm:cpsv_example411_binary_block_probability,
         thm:mpdo_reduced_state_physical_isometry_transport,
         lem:mpdo_source_zcl_marginal_stability,
@@ -1332,11 +1333,28 @@ This is the calculation in
     two-site marginal obtained from length four with that obtained from length
     three, contradicting $14/41\ne5/14$.  Isometric support inclusion preserves
     these entries, so the same obstruction holds in the ambient realization.
-    At length one, the exact partition function gives
-    $\operatorname{tr}(\operatorname{mpo}(M,1))=
-    \operatorname{tr}(\operatorname{mpo}(\widetilde M,1))=2$, so both
-    physical-trace transfers are nonzero.  Literal idempotence would therefore
-    imply the already-refuted up-to-scalar relation with scalar one.
+    At length one, the trace-loop identity and the exact effective and
+    ambient partition functions give
+    \begin{align}
+        \operatorname{tr}(\operatorname{mpo}(M,1))
+        &=\operatorname{tr}(\mathcal T_M^1)
+         =\operatorname{tr}(\mathcal T_M)=2,
+        \notag\\
+        \operatorname{tr}(\operatorname{mpo}(\widetilde M,1))
+        &=\operatorname{tr}(\mathcal T_{\widetilde M}^1)
+         =\operatorname{tr}(\mathcal T_{\widetilde M})=2.
+        \notag
+    \end{align}
+    Hence both physical-trace transfers are nonzero.  For either
+    $X\in\{M,\widetilde M\}$, literal idempotence would give
+    \begin{align}
+        \mathcal T_X\ne0,\quad \mathcal T_X^2=\mathcal T_X
+        &\Longrightarrow
+        \mathcal T_X^2=\lambda\,\mathcal T_X
+        \quad\text{with }\lambda=1>0,
+        \notag
+    \end{align}
+    which the marginal instability $14/41\ne5/14$ already refutes.
 \end{proof}
 
 % Project-derived finite-ring consequence of CPSV16 Example 4.11.
