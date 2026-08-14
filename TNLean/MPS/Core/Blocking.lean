@@ -54,7 +54,7 @@ lemma blockPhysDim_eq_pow (d L : ℕ) : blockPhysDim d L = d ^ L := by
   -- `Fintype.card_fun` gives `card (α → β) = card β ^ card α`.
   simp [Fintype.card_fin]
 
-/-- Blocking a nonempty physical alphabet preserves nonemptiness of its physical dimension. -/
+/-- Blocking preserves nonzero physical dimensions. -/
 instance instNeZeroBlockPhysDim [NeZero d] : NeZero (blockPhysDim d L) := ⟨by
   rw [blockPhysDim_eq_pow]
   exact pow_ne_zero L (NeZero.ne d)⟩

@@ -875,11 +875,12 @@ abstracted — record why, so it is not re-proposed).
   multi-second declarations fall below the one-second profiler threshold.
 
 ### Blocked physical-dimension nonzeroness and explicit-gap specialization
-- **Pattern:** `Martingale/BlockedGap.lean` repeated the same three-line construction
-  of `NeZero (blockPhysDim d p)` four times, and the qualitative blocked-gap theorem
-  repeated the anticommutator route already used by the preceding explicit-gap theorem.
-- **Reuse:** `TNLean/MPS/Core/Blocking.lean` now provides the canonical instance
-  `MPSTensor.instNeZeroBlockPhysDim`. The four local calculations are removed.
+- **Pattern:** four local calculations in `Martingale/BlockedGap.lean` repeated the same
+  three-line construction of `NeZero (blockPhysDim d p)`, and the qualitative blocked-gap
+  theorem repeated the anticommutator route already used by the preceding explicit-gap theorem.
+- **Reuse:** `TNLean/MPS/Core/Blocking.lean` now provides the instance
+  `MPSTensor.instNeZeroBlockPhysDim`, replacing exactly those four local calculations in
+  `Martingale/BlockedGap.lean`.
   `IsPrimitiveMPS.exists_blockTensor_parentHamiltonianES_gapped` is now a thin
   corollary of `IsPrimitiveMPS.exists_blockTensor_parentHamiltonianES_gap_eighth`,
   using `1 / 8` as the positive gap witness.
