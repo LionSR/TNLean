@@ -496,10 +496,10 @@ model different levels of data and different sources.
   `docs/paper-gaps/cpsv16_unit_weight_rfp_scale_tension.tex`.
 - `MPOTensor.IsSourceSimple` in `TNLean/MPS/MPDO/SourceSimpleTensor.lean`
   is the separate normalization-free source-facing predicate from
-  arXiv:1606.00608, lines 815--822. It requires a nonzero tensor satisfying the
-  MPDO condition and existentially chooses a positive physical blocking whose
-  doubled-index tensor has a coefficient-form basis of normal tensors with
-  nonnilpotent physical-trace transfers. No equivalence with the normalized
+  arXiv:1606.00608, lines 815--822. It requires a nonzero generated MPO at
+  every positive chain length and existentially chooses a positive physical
+  blocking whose doubled-index tensor has a coefficient-form basis of normal
+  tensors with nonnilpotent physical-trace transfers. No equivalence with the normalized
   predicates is asserted.
 
 The `CF` spelling in these established MPDO names is retained for compatibility
