@@ -7642,6 +7642,37 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
   $\Lambda\subseteq\Gamma$, then $\Lambda+a\subseteq\Gamma+a$.
 \end{definition}
 
+\begin{definition}[Sumset of finite regions]
+  \label{def:qca_region_sumset}
+  \lean{SpinChain.regionSumset,SpinChain.mem_regionSumset,
+    SpinChain.regionSumset_singleton_right,SpinChain.regionSumset_mono,
+    SpinChain.regionSumset_mono_left,SpinChain.regionSumset_mono_right,
+    SpinChain.regionSumset_empty_left,SpinChain.regionSumset_empty_right,
+    SpinChain.regionSumset_zero_left,SpinChain.regionSumset_zero_right,
+    SpinChain.regionSumset_translateRegion_left,
+    SpinChain.regionSumset_translateRegion_right,
+    SpinChain.regionSumset_assoc}
+  \leanok
+  \uses{def:qca_translate_region}
+  For finite regions $\Lambda,\mathcal N\subset\mathbb Z$, define their
+  sumset by
+  \begin{align}
+    \Lambda+\mathcal N
+      &=\{i+a\mid i\in\Lambda,\ a\in\mathcal N\}.
+  \end{align}
+  Hence $j\in\Lambda+\mathcal N$ exactly when $j=i+a$ for some
+  $i\in\Lambda$ and $a\in\mathcal N$. The sumset is monotone in both
+  arguments, either empty argument gives the empty region, and the singleton
+  $\{0\}$ is an identity. A singleton displacement recovers translation,
+  \begin{align}
+    \Lambda+\{a\}&=\Lambda+a.
+  \end{align}
+  Translating either argument by $a$ translates the resulting sumset by $a$.
+  Sumsets are associative, as needed to compose propagation bounds. This is
+  the finite region $\Lambda+\mathcal N$ in the propagation condition
+  of the QCA appendix of \cite{Cirac2017MPU}.
+\end{definition}
+
 \begin{definition}[Translation of sites and configurations]
   \label{def:qca_finite_configuration_translation}
   \lean{SpinChain.siteTranslation,SpinChain.siteTranslation_apply_val,
