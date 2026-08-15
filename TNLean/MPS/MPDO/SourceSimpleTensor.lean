@@ -20,8 +20,8 @@ unit-weight normalization.
 ## Main result
 
 * `MPOTensor.IsSourceSimple`: normalization-free Definition 4.7 simplicity.
-* `MPOTensor.IsSimple.isSourceSimple`: the normalized-to-source bridge under
-  positive-length nonvanishing.
+* `MPOTensor.IsSimple.isSourceSimple`: normalized simplicity implies source
+  simplicity under positive-length nonvanishing.
 
 ## References
 
