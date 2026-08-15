@@ -260,7 +260,6 @@
     \label{rem:word_tuple_span_top}
     \lean{MPSTensor.BlockEntryIndex}
     \lean{MPSTensor.wordEntryFamily}
-    \lean{MPSTensor.duplicateScalarBlocks_counterexample}
     \lean{MPSTensor.wordTupleSpanTop_of_wordEntryFamily_linearIndependent}
     \lean{MPSTensor.hasBlockSelectorWords_of_wordTupleSpanTop}
     \lean{MPSTensor.hasBlockSelectorWords_of_wordEntryFamily_linearIndependent}
@@ -342,6 +341,16 @@
     produces the spanning condition at length $L+S$, hence the separation
     property and the older per-copy trace-separation hypotheses.
 \end{remark}
+
+\begin{theorem}[Duplicate scalar blocks obstruct finite separation]%
+    \label{thm:duplicate_scalar_blocks_counterexample}
+    \lean{MPSTensor.duplicateScalarBlocks_counterexample}
+    \leanok
+    \uses{rem:word_tuple_span_top}
+    There is a two-copy scalar-block family whose blocks are injective and left
+    canonical and whose weights are nonzero, but which has neither block-injective
+    canonical form nor a length with linearly independent word-entry family.
+\end{theorem}
 
 The inverse tensor of a block-injective canonical form satisfies
 \begin{align}

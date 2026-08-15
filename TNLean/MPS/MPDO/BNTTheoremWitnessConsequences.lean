@@ -35,8 +35,8 @@ the diagonal \(\chi_{\alpha,\beta,\gamma}\)-entries.
 
 This only unpacks the existential witness; it does not construct that witness
 from an MPDO tensor.
-Source: arXiv:1606.00608, Theorem IV.13(ii), lines 972--985, and
-Appendix C.3--C.4, lines 1830--1942 of
+Source: arXiv:1606.00608, Theorem IV.13(ii), lines 972--985, Appendix C.3,
+lines 1830--1922, and Appendix C.4, lines 2020--2042 of
 `Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
 @[deprecated "Unpack the witness and use its source predicates directly."
   (since := "2026-08-15")]
@@ -125,9 +125,9 @@ blocked-basis \(\chi\)-family is the pullback of the BNT-label
 \(\chi_{\alpha,\beta,\gamma}\)-family along the blocked-basis comparison maps.
 
 This only unpacks the existential witness; constructing such a witness from an
-MPDO tensor remains the Appendix C.3--C.4 obligation.
-Source: arXiv:1606.00608, Theorem IV.13(ii), lines 972--985, and
-Appendix C.3--C.4, lines 1830--1942 of
+MPDO tensor remains the Appendix C.4 obligation.
+Source: arXiv:1606.00608, Theorem IV.13(ii), lines 972--985, and the
+\(\chi\)-construction in Appendix C.4, lines 2020--2042 of
 `Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
 @[deprecated "Unpack the witness and use `positiveBlockedChi_toDiagonal_of_pos`."
   (since := "2026-08-15")]
@@ -151,10 +151,11 @@ blocked-basis multiplication coefficients and the BNT-label coefficients:
   c^{(n)}_{\sigma_n(i),\sigma_n(j),\tau_n(k)}.
 \]
 It only unpacks the existential witness; constructing such a witness from an
-MPDO tensor remains the Appendix C.3--C.4 obligation.
+MPDO tensor remains the Appendix C.3--C.4 obligation. Appendix C.3, lines
+1830--1922 supplies the vertical canonical-form comparison; it does not extract
+\(\chi\), whose construction occurs in Appendix C.4, lines 2020--2042.
 Source: arXiv:1606.00608, Theorem IV.13(ii), lines 972--985, and
-Appendix C.3, lines 1830--1922 of
-`Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
+`Papers/1606.00608/MPDO-22-12-17-2.tex`, lines 1830--1922 and 2020--2042. -/
 @[deprecated "Unpack the witness and use `blocked_coeff_eq`."
   (since := "2026-08-15")]
 theorem exists_blocked_coefficient_comparison {data : AlgebraStructureData d D}
@@ -177,10 +178,11 @@ same \(\chi_{\alpha,\beta,\gamma}\)-matrices.
 
 This only rephrases the positive-length coefficient identity carried by the
 witness; constructing such a witness from an MPDO tensor remains the Appendix
-C.3--C.4 obligation.
+C.3--C.4 obligation. Appendix C.3, lines 1830--1922 supplies the vertical
+canonical-form comparison; the \(\chi\)-construction occurs in Appendix C.4,
+lines 2020--2042.
 Source: arXiv:1606.00608, Theorem IV.13(ii), lines 972--985, and
-Appendix C.3--C.4, lines 1830--1942 of
-`Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
+`Papers/1606.00608/MPDO-22-12-17-2.tex`, lines 1830--1922 and 2020--2042. -/
 @[deprecated "Unpack the witness and use `blocked_coeff_eq_ofChi`."
   (since := "2026-08-15")]
 theorem exists_blocked_coefficient_comparison_ofChi {data : AlgebraStructureData d D}
@@ -212,8 +214,8 @@ for positive \(L\), together with the idempotent equation
 \]
 It only unpacks the existential witness; constructing such a witness from an
 MPDO tensor remains the Appendix C.3--C.4 obligation.
-Source: arXiv:1606.00608, Theorem IV.13(ii), lines 972--985, and
-Appendix C.3--C.4, lines 1830--1942 of
+Source: arXiv:1606.00608, Theorem IV.13(ii), lines 972--985, Appendix C.3,
+lines 1830--1922, and Appendix C.4, lines 2020--2042 of
 `Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
 @[deprecated "Unpack the witness and use the source coefficient equations directly."
   (since := "2026-08-15")]
