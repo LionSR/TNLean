@@ -40,7 +40,10 @@ namespace MPOTensor
 
 variable {d D : ℕ}
 
-/-- Scaling every MPO tensor letter by `c` scales a word by `c` to its length. -/
+/-- Scaling every MPO tensor letter by `c` scales a word by `c` to its length.
+
+Project-derived from the closed-word definition underlying the MPDO formula in
+arXiv:1606.00608, lines 623--630. -/
 theorem evalWord_smul (c : ℂ) (M : MPOTensor d D) (is js : List (Fin d))
     (hlen : js.length = is.length) :
     evalWord (c • M) is js = c ^ is.length • evalWord M is js := by
@@ -58,7 +61,10 @@ theorem evalWord_smul (c : ℂ) (M : MPOTensor d D) (is js : List (Fin d))
             Matrix.smul_mul, smul_smul]
           simp [pow_succ', mul_comm]
 
-/-- Exact scalar law for closed MPOs: `mpo (c • M) N = c ^ N • mpo M N`. -/
+/-- Exact scalar law for closed MPOs: `mpo (c • M) N = c ^ N • mpo M N`.
+
+Project-derived from the periodic MPDO formula in arXiv:1606.00608,
+lines 623--630. -/
 theorem mpo_smul (c : ℂ) (M : MPOTensor d D) (N : ℕ) :
     mpo (c • M) N = c ^ N • mpo M N := by
   ext σ τ
@@ -66,7 +72,10 @@ theorem mpo_smul (c : ℂ) (M : MPOTensor d D) (N : ℕ) :
   rw [evalWord_smul c M (List.ofFn σ) (List.ofFn τ) (by simp), Matrix.trace_smul]
   simp
 
-/-- Exact scalar law for physical blocking: an `L`-site block carries `c ^ L`. -/
+/-- Exact scalar law for physical blocking: an `L`-site block carries `c ^ L`.
+
+Project-derived from the positive physical blocking at arXiv:1606.00608,
+line 815, using the project's explicit block-word encoding. -/
 theorem blockTensor_smul (c : ℂ) (M : MPOTensor d D) (L : ℕ) :
     blockTensor (c • M) L = c ^ L • blockTensor M L := by
   funext i j
@@ -74,7 +83,10 @@ theorem blockTensor_smul (c : ℂ) (M : MPOTensor d D) (L : ℕ) :
   rw [evalWord_smul c M (MPSTensor.wordOfBlock d L i)
     (MPSTensor.wordOfBlock d L j) (by simp), MPSTensor.length_wordOfBlock]
 
-/-- Nonnegative real rescaling preserves the MPDO property, including the zero scalar. -/
+/-- Nonnegative real rescaling preserves the MPDO property, including the zero scalar.
+
+Project-derived from the MPDO positivity condition in arXiv:1606.00608,
+lines 623--630, and the exact closed-MPO scaling law above. -/
 theorem IsMPDO.smul_ofReal {M : MPOTensor d D} (hM : IsMPDO M) {r : ℝ}
     (hr : 0 ≤ r) :
     IsMPDO ((r : ℂ) • M) := by
@@ -82,7 +94,10 @@ theorem IsMPDO.smul_ofReal {M : MPOTensor d D} (hM : IsMPDO M) {r : ℝ}
   rw [mpo_smul]
   exact (hM N hN).smul (by positivity : (0 : ℂ) ≤ (r : ℂ) ^ N)
 
-/-- MPDO is invariant under multiplication by a strictly positive real scalar. -/
+/-- MPDO is invariant under multiplication by a strictly positive real scalar.
+
+Project-derived from the MPDO positivity condition in arXiv:1606.00608,
+lines 623--630, by applying nonnegative rescaling in both directions. -/
 theorem isMPDO_smul_ofReal_iff (M : MPOTensor d D) {r : ℝ} (hr : 0 < r) :
     IsMPDO ((r : ℂ) • M) ↔ IsMPDO M := by
   constructor
@@ -105,7 +120,9 @@ variable {d D : ℕ}
 
 The basis blocks, their normality, and their eventual linear independence are
 unchanged. Only the length-`N` spanning coefficients are multiplied by `c ^ N`.
--/
+
+Project-derived from the CPSV basis-of-normal-tensors definition in
+arXiv:1606.00608, lines 271--274. -/
 theorem IsCPSVBasisOfNormalTensors.smul_left
     {g : ℕ} {A : MPSTensor d D}
     {blocks : (j : Fin g) → Σ D' : ℕ, MPSTensor d D'}
@@ -130,7 +147,9 @@ variable {d D : ℕ}
 The blocking length and normal-basis blocks are unchanged. The represented
 blocked tensor is multiplied by `(r ^ L : ℝ)`, so its length-`N` spanning
 coefficients are multiplied by `(r : ℂ) ^ (L * N)`.
--/
+
+Project-derived from source simplicity in arXiv:1606.00608, Definition 4.7,
+lines 815--822. -/
 theorem IsSourceSimple.smul_ofReal {M : MPOTensor d D} (hM : IsSourceSimple M)
     {r : ℝ} (hr : 0 < r) :
     IsSourceSimple ((r : ℂ) • M) := by
@@ -144,7 +163,10 @@ theorem IsSourceSimple.smul_ofReal {M : MPOTensor d D} (hM : IsSourceSimple M)
       (((r : ℂ) ^ L) • (blockTensor M L).toMPSTensor) blocks
     exact hBNT.smul_left ((r : ℂ) ^ L)
 
-/-- Source simplicity is invariant under multiplication by a strictly positive real scalar. -/
+/-- Source simplicity is invariant under multiplication by a strictly positive real scalar.
+
+Project-derived from source simplicity in arXiv:1606.00608, Definition 4.7,
+lines 815--822, by applying positive rescaling in both directions. -/
 theorem isSourceSimple_smul_ofReal_iff (M : MPOTensor d D) {r : ℝ} (hr : 0 < r) :
     IsSourceSimple ((r : ℂ) • M) ↔ IsSourceSimple M := by
   constructor
