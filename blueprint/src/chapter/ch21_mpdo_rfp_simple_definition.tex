@@ -149,9 +149,21 @@
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{lem:mpdo_eval_word_scalar_scaling}
+    \uses{def:mpo_family, lem:mpdo_eval_word_scalar_scaling}
     Apply Lemma~\ref{lem:mpdo_eval_word_scalar_scaling} to the two length-$N$
-    physical words, then use linearity of the virtual trace.
+    physical words, unfold the closed MPO family, and use linearity of the
+    virtual trace.
+\end{proof}
+
+\begin{lemma}[Length of an encoded physical-block word]
+    \label{lem:mpdo_length_word_of_block}
+    \lean{MPSTensor.length_wordOfBlock}
+    \leanok
+    The word encoded by an $L$-site physical-block index has length $L$.
+\end{lemma}
+
+\begin{proof}\leanok
+    This follows from the fixed-length block-word encoding.
 \end{proof}
 
 \begin{theorem}[Scaling law for physically blocked MPO tensors]
@@ -168,9 +180,12 @@
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{lem:mpdo_eval_word_scalar_scaling}
-    Apply Lemma~\ref{lem:mpdo_eval_word_scalar_scaling} to the two length-$L$
-    words encoded by the physical block.
+    \uses{def:mpdo_physical_blocking,
+        lem:mpdo_eval_word_scalar_scaling,
+        lem:mpdo_length_word_of_block}
+    Unfold physical blocking and apply
+    Lemma~\ref{lem:mpdo_eval_word_scalar_scaling} to the two encoded words;
+    Lemma~\ref{lem:mpdo_length_word_of_block} gives their length $L$.
 \end{proof}
 
 \begin{theorem}[Nonnegative rescaling preserves the MPDO condition]

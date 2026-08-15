@@ -499,8 +499,8 @@ model different levels of data and different sources.
   arXiv:1606.00608, lines 815--822. It requires a nonzero generated MPO at
   every positive chain length and existentially chooses a positive physical
   blocking whose doubled-index tensor has a coefficient-form basis of normal
-  tensors with nonnilpotent physical-trace transfers. The sanctioned bridge
-  `MPOTensor.IsSimple.isSourceSimple` is one-way and requires the explicit
+  tensors with nonnilpotent physical-trace transfers. The one-way implication
+  `MPOTensor.IsSimple.isSourceSimple` requires the explicit
   hypothesis that every positive-length generated MPO is nonzero; it is not an
   equivalence with either normalized predicate.
 - Scalar rescaling of a closed length-$N$ MPO obeys
