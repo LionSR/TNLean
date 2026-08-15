@@ -7960,6 +7960,183 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
   system.
 \end{proof}
 
+\begin{definition}[Algebraic-local translation homomorphism]
+  \label{def:qca_algebraic_local_translation_hom}
+  \lean{SpinChain.algebraicLocalTranslationHom,
+    SpinChain.algebraicLocalTranslationHom_localObservable}
+  \leanok
+  \uses{def:qca_finite_local_translation,
+    def:qca_algebraic_local_algebra}
+  For $a\in\mathbb Z$, finite-region translations induce a star-algebra
+  homomorphism
+  \begin{align}
+    \tau_a\colon\mathcal A_{\mathrm{loc}}&\longrightarrow
+      \mathcal A_{\mathrm{loc}}
+  \end{align}
+  determined on every finite-region representative by
+  \begin{align}
+    \tau_a(\iota_\Lambda(A))
+      &=\iota_{\Lambda+a}(\tau_{a,\Lambda}(A)).
+  \end{align}
+\end{definition}
+
+\begin{proof}\leanok
+  \uses{def:qca_translate_region,def:qca_algebraic_local_algebra,
+    lem:qca_finite_local_translation_naturality,
+    thm:qca_algebraic_local_algebra_universal}
+  Naturality gives, for $\Lambda\subseteq\Gamma$,
+  \begin{align}
+    \iota_{\Gamma+a}\!\left(\tau_{a,\Gamma}(\iota_{\Lambda,\Gamma}(A))\right)
+      &=\iota_{\Gamma+a}\!\left(\iota_{\Lambda+a,\Gamma+a}(\tau_{a,\Lambda}(A))\right) \\
+      &=\iota_{\Lambda+a}(\tau_{a,\Lambda}(A)).
+  \end{align}
+  Hence the finite-region maps form a compatible family and induce the stated
+  homomorphism on the algebraic direct limit.
+\end{proof}
+
+\begin{lemma}[Action laws for algebraic-local translation homomorphisms]
+  \label{lem:qca_algebraic_local_translation_hom_action}
+  \lean{SpinChain.algebraicLocalTranslationHom_zero,
+    SpinChain.algebraicLocalTranslationHom_add}
+  \leanok
+  \uses{def:qca_algebraic_local_translation_hom}
+  The homomorphisms satisfy
+  \begin{align}
+    \tau_0&=\operatorname{id}, \\
+    \tau_b\circ\tau_a&=\tau_{a+b}.
+  \end{align}
+\end{lemma}
+
+\begin{proof}\leanok
+  \uses{def:qca_translate_region,def:qca_algebraic_local_algebra,
+    lem:qca_finite_translation_action,
+    thm:qca_algebraic_local_algebra_universal}
+  On a representative $A\in\mathcal A_\Lambda$, the two sides of the
+  composition law are represented on the equal finite regions
+  $(\Lambda+a)+b$ and $\Lambda+(a+b)$. The finite-region action identity
+  therefore gives
+  \begin{align}
+    \tau_b(\tau_a(\iota_\Lambda(A)))
+      &=\iota_{\Lambda+(a+b)}
+        (\tau_{a+b,\Lambda}(A))
+       =\tau_{a+b}(\iota_\Lambda(A)).
+  \end{align}
+  The zero law is proved in the same way. Equality on all finite-region
+  representatives determines equality on the algebraic direct limit.
+\end{proof}
+
+\begin{definition}[Translation of algebraic-local observables]
+  \label{def:qca_algebraic_local_translation}
+  \lean{SpinChain.algebraicLocalTranslation,
+    SpinChain.algebraicLocalTranslation_apply,
+    SpinChain.algebraicLocalTranslation_localObservable}
+  \leanok
+  \uses{def:qca_algebraic_local_translation_hom}
+  For every $a\in\mathbb Z$, the homomorphism $\tau_a$ is a star-algebra
+  automorphism of $\mathcal A_{\mathrm{loc}}$, and on finite-region
+  representatives
+  \begin{align}
+    \tau_a(\iota_\Lambda(A))
+      &=\iota_{\Lambda+a}(\tau_{a,\Lambda}(A)).
+  \end{align}
+\end{definition}
+
+\begin{proof}\leanok
+  \uses{def:qca_algebraic_local_translation_hom,
+    lem:qca_algebraic_local_translation_hom_action}
+  The homomorphism action laws give
+  \begin{align}
+    \tau_{-a}\circ\tau_a&=\tau_0=\operatorname{id}, \\
+    \tau_a\circ\tau_{-a}&=\tau_0=\operatorname{id}.
+  \end{align}
+  Thus $\tau_a$ is bijective with inverse $\tau_{-a}$. The formula on
+  finite-region representatives is the defining formula for the homomorphism.
+\end{proof}
+
+\begin{lemma}[Algebraic-local translation action laws]
+  \label{lem:qca_algebraic_local_translation_action}
+  \lean{SpinChain.algebraicLocalTranslation_zero,
+    SpinChain.algebraicLocalTranslation_add,
+    SpinChain.algebraicLocalTranslation_symm}
+  \leanok
+  \uses{def:qca_algebraic_local_translation}
+  The automorphisms form an additive action of $\mathbb Z$:
+  \begin{align}
+    \tau_0&=\operatorname{id}, \\
+    \tau_b\circ\tau_a&=\tau_{a+b}, \\
+    \tau_a^{-1}&=\tau_{-a}.
+  \end{align}
+\end{lemma}
+
+\begin{proof}\leanok
+  \uses{def:qca_algebraic_local_translation,
+    lem:qca_algebraic_local_translation_hom_action}
+  The first two identities are the homomorphism action laws expressed as
+  identities of star-algebra automorphisms. Taking $b=-a$ in the composition
+  law gives
+  \begin{align}
+    \tau_{-a}\circ\tau_a&=\tau_0=\operatorname{id}, \\
+    \tau_a\circ\tau_{-a}&=\tau_0=\operatorname{id},
+  \end{align}
+  which is the inverse identity.
+\end{proof}
+
+\begin{lemma}[Exact translation of algebraic-local supports]
+  \label{lem:qca_algebraic_local_translation_support}
+  \lean{SpinChain.algebraicLocalTranslation_supportedIn,
+    SpinChain.algebraicLocalTranslation_supportedIn_iff}
+  \leanok
+  \uses{def:qca_supported_in,def:qca_algebraic_local_translation}
+  A local observable $A$ is supported in a finite region $\Lambda$ if and only
+  if $\tau_a(A)$ is supported in $\Lambda+a$.
+\end{lemma}
+
+\begin{proof}\leanok
+  \uses{def:qca_translate_region,
+    def:qca_algebraic_local_translation,
+    lem:qca_algebraic_local_translation_hom_action}
+  If $A=\iota_\Lambda(A_\Lambda)$, then
+  \begin{align}
+    \tau_a(A)
+      &=\iota_{\Lambda+a}(\tau_{a,\Lambda}(A_\Lambda)),
+  \end{align}
+  which proves the forward implication. Apply the same argument to
+  $\tau_a(A)$ with displacement $-a$, and use
+  $\tau_{-a}\tau_a=\operatorname{id}$ and
+  $(\Lambda+a)-a=\Lambda$, for the reverse implication.
+\end{proof}
+
+\begin{lemma}[Norm isometry of algebraic-local translation]
+  \label{lem:qca_algebraic_local_translation_isometry}
+  \lean{SpinChain.norm_algebraicLocalTranslation,
+    SpinChain.algebraicLocalTranslation_isometry}
+  \leanok
+  \uses{def:qca_algebraic_local_operator_norm,
+    def:qca_algebraic_local_translation}
+  If $d>0$, then every translation preserves the operator norm and distance:
+  \begin{align}
+    \lVert\tau_a(A)\rVert&=\lVert A\rVert, \\
+    \lVert\tau_a(A)-\tau_a(B)\rVert&=\lVert A-B\rVert.
+  \end{align}
+\end{lemma}
+
+\begin{proof}\leanok
+  \uses{def:qca_algebraic_local_operator_norm,
+    def:qca_finite_local_translation,
+    def:qca_algebraic_local_translation,
+    thm:qca_local_observable_finite_support}
+  Choose $A_\Lambda\in\mathcal A_\Lambda$ with
+  $A=\iota_\Lambda(A_\Lambda)$. Finite-region translation is a star-algebra
+  equivalence of matrix algebras, hence preserves the operator norm. Therefore
+  \begin{align}
+    \lVert\tau_a(A)\rVert
+      &=\lVert\tau_{a,\Lambda}(A_\Lambda)\rVert
+       =\lVert A_\Lambda\rVert
+       =\lVert A\rVert.
+  \end{align}
+  Applying this equality to $A-B$ gives distance preservation.
+\end{proof}
+
 \begin{definition}[Quasi-local observable algebra]
   \label{def:qca_quasi_local_algebra}
   \lean{SpinChain.QuasiLocalAlgebra,SpinChain.algebraicToQuasiLocal,
