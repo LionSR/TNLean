@@ -10,7 +10,6 @@ declarations remain public.
 
 | Removed declaration | Replacement |
 |---|---|
-| `MPSTensor.transferMap_blockTensor_hasEigenvalue` | Rewrite with `MPSTensor.transferMap_blockTensor`, then apply `Module.End.HasEigenvalue.pow`. |
 | `MPOTensor.BNTLabelTheoremWitness.hasBNTLabelTheoremWitness` | Use `⟨W⟩`; `HasBNTLabelTheoremWitness data` is `Nonempty (BNTLabelTheoremWitness data)`. |
 | `MPOTensor.BNTLabelTheoremWitness.ofChi_hasBNTLabelTheoremWitness` | Use `⟨BNTLabelTheoremWitness.ofChi ...⟩`. |
 | `MPOTensor.HasBNTLabelTheoremWitness.exists_source_predicates` | Unpack the witness and use `same_length_product_form`, `idempotent_coefficient_form`, `positive_chi_trace_power`, and `positive_chi_pos_entries`. |
@@ -22,10 +21,8 @@ declarations remain public.
 | `MPOTensor.HasBNTLabelTheoremWitness.exists_blocked_coefficient_comparison_ofChi` | Unpack the witness and use `blocked_coeff_eq_ofChi`. |
 | `MPOTensor.HasBNTLabelTheoremWitness.exists_source_coefficient_equations` | Unpack the witness and use `same_length_product_eq_sum` and `idempotent_eq_sum`. |
 | `MPSTensor.duplicateScalarBlocks_counterexample` | Use `duplicateScalarBlocks_isInjective`, `duplicateScalarBlocks_leftCanonical`, `duplicateScalarWeights_ne_zero`, `duplicateScalarBlocks_not_hasBiCF`, and `duplicateScalarBlocks_not_exists_linearIndependent_wordEntryFamily`. |
-| `MPOTensor.BondTwoSingletonBaseModel.baseMPO_hasBNTAlgebraTensorClause` | Use `⟨baseMPOBNTAlgebraTensorClause⟩`. |
 | `MPOTensor.RescalingStableLengthDependentRFP.oneLabelChi_matrix_eq_oneLabelChiMatrix2` | The equality is `rfl` from `oneLabelChiMatrix2`. |
 | `MPOTensor.RescalingStableLengthDependentRFP.R_hasBNTAlgebraTensorClause` | Use `⟨R_oneLabelBNTAlgebraTensorClause⟩`. |
-| `MPOTensor.RescalingStableLengthDependentRFP.wMat_mulVec_eigVecs` | Split the `Fin 2` index and use `wMat_mulVec_ones` or `wMat_mulVec_alt`. |
 | `MPOTensor.RescalingStableLengthDependentRFP.R_isSourceSimple_and_not_isSimple` | Use `R_isSourceSimple` and `R_not_isSimple`. |
 | `MPOTensor.RescalingStableLengthDependentRFP.oneSiteDoubledEquiv_diagonal` | Simplify directly with `oneSiteDoubledEquiv`. |
 | `MPOTensor.RescalingStableLengthDependentRFP.doubledPhysTraceTransfer_reindexPhysical_oneSiteDoubledEquiv` | The proof is now the local `hTransfer` step inside `R_isSourceSimple`. |
