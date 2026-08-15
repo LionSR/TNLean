@@ -156,7 +156,8 @@ lemma quasiLocalTranslation_symm (d : ℕ) [NeZero d] (a : ℤ) :
 /-- Quasi-local translation preserves the operator norm.
 
 Source context: the appendix invokes translation as an automorphism of the quasi-local algebra at
-line 2298; norm preservation is a standard C-star algebra consequence, not a separate claim there. -/
+line 2298; norm preservation is a standard C-star algebra consequence, not a separate claim
+there. -/
 @[simp]
 lemma norm_quasiLocalTranslation (d : ℕ) [NeZero d] (a : ℤ)
     (A : QuasiLocalAlgebra d) :

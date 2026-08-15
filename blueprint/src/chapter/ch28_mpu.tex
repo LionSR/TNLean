@@ -8324,7 +8324,6 @@ as separate results in the appendix.
     UniformSpace.Completion.mapStarAlgEquiv_apply,
     UniformSpace.Completion.mapStarAlgEquiv_coe}
   \leanok
-  \uses{def:qca_quasi_local_algebra}
   Let $A$ and $B$ be complex normed star algebras, and let
   $f\colon A\to B$ be a star-algebra equivalence.  If $f$ and $f^{-1}$ are
   continuous, then $f$ extends to a star-algebra equivalence
@@ -8340,7 +8339,6 @@ as separate results in the appendix.
 \end{definition}
 
 \begin{proof}\leanok
-  \uses{def:qca_quasi_local_algebra}
   Apply the completion functor to $f$ and $f^{-1}$.  On the dense canonical
   images their composites satisfy
   \begin{align}
@@ -8383,6 +8381,7 @@ as separate results in the appendix.
     def:qca_algebraic_local_translation,
     def:qca_quasi_local_algebra,
     def:qca_quasi_local_observable,
+    lem:qca_algebraic_local_translation_action,
     lem:qca_algebraic_local_translation_isometry}
   Algebraic-local translation and its inverse translation by $-a$ are
   operator-norm isometries, hence continuous.  Extend this equivalence to the
