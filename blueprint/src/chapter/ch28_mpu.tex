@@ -8671,3 +8671,38 @@ $\omega^{-1}$.
   choose a finite propagation neighborhood $\mathcal K$ and take
   $\mathcal M=\mathcal K\cup\mathcal N$.
 \end{proof}
+
+\begin{lemma}[Composition of forward propagation bounds]
+  \label{lem:qca_forward_propagation_comp}
+  \lean{SpinChain.PropagatesWithin.trans,
+    SpinChain.HasFinitePropagation.trans}
+  \leanok
+  \uses{def:qca_region_sumset,def:qca_propagates_within,
+    def:qca_finite_propagation}
+  Let $d>0$, let $\omega,\eta\colon\mathcal A\to\mathcal A$ be star-algebra
+  automorphisms, and let $\mathcal N,\mathcal M\subset\mathbb Z$ be finite.
+  Suppose that $\omega$ propagates within $\mathcal N$ and $\eta$ propagates
+  within $\mathcal M$.  The composite $\eta\circ\omega$ first applies
+  $\omega$ and then $\eta$, so
+  \begin{align}
+    (\eta\circ\omega)(x)&=\eta(\omega(x)), \\
+    x\text{ supported in }\Lambda
+      &\implies \omega(x)\text{ supported in }\Lambda+\mathcal N \\
+      &\implies \eta(\omega(x))\text{ supported in }
+        (\Lambda+\mathcal N)+\mathcal M
+        =\Lambda+(\mathcal N+\mathcal M).
+  \end{align}
+  Hence $\eta\circ\omega$ propagates within $\mathcal N+\mathcal M$.
+  In particular, if $\omega$ and $\eta$ have finite forward propagation, then
+  $\eta\circ\omega$ has finite forward propagation.  This is the composition
+  closure of the finite-neighborhood condition in Appendix line~2298 of
+  \cite{Cirac2017MPU}.
+\end{lemma}
+
+\begin{proof}\leanok
+  \uses{def:qca_region_sumset,def:qca_propagates_within,
+    def:qca_finite_propagation}
+  Apply the two propagation bounds successively and use associativity of finite
+  region sumsets.  For the existential assertion, choose one finite propagation
+  neighborhood for each automorphism and use their sumset.
+\end{proof}
