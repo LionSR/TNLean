@@ -642,4 +642,26 @@ lemma blocked_coeff_eq_positiveBlockedChi_trace_pow
 
 end BNTLabelTheoremWitness
 
+namespace HasBNTLabelTheoremWitness
+
+/-- A proposition-level witness gives the two source equations with coefficients
+written as traces of the corresponding positive diagonal chi powers. -/
+theorem exists_source_chi_trace_equations {data : AlgebraStructureData d D}
+    (h : HasBNTLabelTheoremWitness data) :
+    ∃ W : BNTLabelTheoremWitness data,
+      (∀ L : ℕ, 0 < L → ∀ α β : W.Label,
+        W.operators.operator L α * W.operators.operator L β =
+          ∑ γ : W.Label, (W.positiveChi.chi.matrix α β γ ^ L).trace •
+            W.operators.operator L γ) ∧
+      (∀ γ : W.Label,
+        W.traceScalars.traceScalar γ =
+          ∑ α : W.Label, ∑ β : W.Label,
+            (W.positiveChi.chi.matrix α β γ).trace *
+              (W.traceScalars.traceScalar α * W.traceScalars.traceScalar β)) := by
+  obtain ⟨W⟩ := h
+  exact ⟨W, W.same_length_product_eq_sum_chi_trace_pow,
+    W.idempotent_eq_sum_chi_trace⟩
+
+end HasBNTLabelTheoremWitness
+
 end MPOTensor

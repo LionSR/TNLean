@@ -56,6 +56,20 @@ noncomputable def neighboringSupportInclusion
     Matrix (NeighborIndex F k h) (SupportedNeighborIndex F A k h) ℂ :=
   (A.sector k).rightInclusion ⊗ₖ (A.sector h).leftInclusion
 
+/-- The neighboring inclusion is an isometry. -/
+@[deprecated "Use `neighboringSupportInclusion` with the component inclusion isometries."
+  (since := "2026-08-15")]
+theorem neighboringSupportInclusion_isometry
+    (F : PhysicalSectorFactorization K) (A : ActiveFactorSupportData F)
+    (k h : Fin F.sectorCount) :
+    (F.neighboringSupportInclusion A k h)ᴴ *
+        F.neighboringSupportInclusion A k h = 1 := by
+  rw [neighboringSupportInclusion, Matrix.conjTranspose_kronecker,
+    ← Matrix.mul_kronecker_mul,
+    (A.sector k).rightInclusion_isometry,
+    (A.sector h).leftInclusion_isometry]
+  exact Matrix.one_kronecker_one
+
 /-- The neighboring operator formed from the compressed source-right and
 target-left factors.
 

@@ -88,6 +88,15 @@ noncomputable def sectors : MPSTensor.SectorDecomposition (3 * 3) where
         intro s q
         fin_cases s <;> simp [weight, invSqrtTwo_ne_zero] }
 
+/-- Copy independence is automatic because every representative has one copy. -/
+lemma weights_copy_independent :
+    ∀ (s : Fin sectors.basisCount) (q q' : Fin (sectors.copies s)),
+      sectors.weight s q = sectors.weight s q' := by
+  intro s q q'
+  fin_cases q
+  fin_cases q'
+  rfl
+
 /-- The two normal representatives have disjoint doubled-physical support. -/
 lemma basis_disjoint_support :
     ∀ i, basis 0 i ≠ 0 → basis 1 i = 0 := by
