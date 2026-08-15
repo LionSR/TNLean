@@ -1,0 +1,84 @@
+/-
+Copyright (c) 2026 TNLean contributors. All rights reserved.
+Released under Apache 2.0 license as described in the file LICENSE.
+Authors: TNLean contributors
+-/
+import TNLean.QCA.QuasiLocalTranslation
+
+/-!
+# Translation covariance of quasi-local automorphisms
+
+A star-algebra automorphism of the quasi-local observable algebra is translation covariant when it
+commutes with every lattice translation. This file records the equivalent pointwise formulation and
+shows that translation covariance is preserved by the identity and forward composition.
+
+## Main definitions
+
+* `SpinChain.TranslationCovariant` — commutation with every quasi-local translation.
+
+## Main results
+
+* `SpinChain.translationCovariant_iff` — the exact pointwise commutation criterion.
+* `SpinChain.translationCovariant_refl` — the identity automorphism is translation covariant.
+* `SpinChain.TranslationCovariant.trans` — forward composition preserves translation covariance.
+
+## References
+
+* Cirac--Perez-Garcia--Schuch--Verstraete, arXiv:1703.09188, Appendix, line 2298.
+-/
+
+namespace SpinChain
+
+/-- A quasi-local star-automorphism is **translation covariant** when it commutes with every
+quasi-local lattice translation.
+
+Source: arXiv:1703.09188, Appendix, line 2298, where a one-dimensional QCA is required to commute
+with the translation operator. -/
+def TranslationCovariant {d : ℕ} [NeZero d]
+    (ω : QuasiLocalAlgebra d ≃⋆ₐ[ℂ] QuasiLocalAlgebra d) : Prop :=
+  ∀ a : ℤ, Commute ω (quasiLocalTranslation d a)
+
+/-- Translation covariance is equivalent to pointwise commutation with every lattice translation.
+
+The multiplication on star-automorphisms satisfies `(ω * τ) A = ω (τ A)`, so the displayed
+identity has the same orientation as `Commute ω τ`.
+
+Source: arXiv:1703.09188, Appendix, line 2298. -/
+theorem translationCovariant_iff (d : ℕ) [NeZero d]
+    (ω : QuasiLocalAlgebra d ≃⋆ₐ[ℂ] QuasiLocalAlgebra d) :
+    TranslationCovariant ω ↔
+      ∀ (a : ℤ) (A : QuasiLocalAlgebra d),
+        ω (quasiLocalTranslation d a A) = quasiLocalTranslation d a (ω A) := by
+  constructor
+  · intro h a A
+    simpa only [StarAlgEquiv.mul_apply] using DFunLike.congr_fun (h a).eq A
+  · intro h a
+    change ω * quasiLocalTranslation d a = quasiLocalTranslation d a * ω
+    ext A
+    simpa only [StarAlgEquiv.mul_apply] using h a A
+
+/-- The identity star-automorphism of the quasi-local algebra is translation covariant.
+
+Source: arXiv:1703.09188, Appendix, line 2298. -/
+theorem translationCovariant_refl (d : ℕ) [NeZero d] :
+    TranslationCovariant (StarAlgEquiv.refl ℂ (QuasiLocalAlgebra d)) := by
+  intro a
+  rw [← StarAlgEquiv.aut_one]
+  exact Commute.one_left _
+
+/-- Forward composition of translation-covariant star-automorphisms is translation covariant.
+
+Here `ω.trans η` first applies `ω` and then `η`. Under the star-automorphism group
+multiplication, this is `η * ω`; both factors commute with every translation.
+
+Source: arXiv:1703.09188, Appendix, line 2298. -/
+theorem TranslationCovariant.trans
+    {d : ℕ} [NeZero d]
+    {ω η : QuasiLocalAlgebra d ≃⋆ₐ[ℂ] QuasiLocalAlgebra d}
+    (hω : TranslationCovariant ω) (hη : TranslationCovariant η) :
+    TranslationCovariant (ω.trans η) := by
+  intro a
+  rw [← StarAlgEquiv.aut_mul]
+  exact (hη a).mul_left (hω a)
+
+end SpinChain
