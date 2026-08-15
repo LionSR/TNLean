@@ -141,20 +141,29 @@
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:mixed_transfer_quasi_idempotent_of_direct_sum}
+    \uses{thm:mixed_transfer_quasi_idempotent_of_direct_sum,
+        lem:transfer_map_smul, lem:trace_transfer_map_left_canonical}
     By the normalization at \cite[line~246]{Cirac2016MPDO_arXiv}, some copy has
     weight $\mu$ with $|\mu|=1$.
     Theorem~\ref{thm:mixed_transfer_quasi_idempotent_of_direct_sum} restricts the
     transfer equation of the assembled tensor to this copy's diagonal corner.
-    There
+    By Lemma~\ref{lem:transfer_map_smul},
     \begin{align}
         \E_{\mu A}&=\mu\overline\mu\,\E_A=\E_A.
         \notag
     \end{align}
     Hence the restricted equation is $\E_A^2=c\E_A$. The normal representative
-    is left canonical, so its transfer map is trace preserving. Apply the
-    equation to the identity and take the trace. This gives $D=cD$. Since the
-    bond dimension $D$ is positive, $c=1$.
+    is left canonical, so Lemma~\ref{lem:trace_transfer_map_left_canonical}
+    gives trace preservation. Applying the equation to the identity and taking
+    the trace gives
+    \begin{align}
+        D
+        &=\tr(\E_A(\E_A(\Id)))
+         =c\tr(\E_A(\Id))
+         =cD.
+        \notag
+    \end{align}
+    Since $D>0$, it follows that $c=1$.
 \end{proof}
 
 \begin{theorem}[Unit-weight obstruction in horizontal canonical form]
