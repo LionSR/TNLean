@@ -7,6 +7,8 @@ import TNLean.Algebra.ComplexPhasePositivity
 import TNLean.Algebra.FinSum
 import TNLean.MPS.RFP.ZeroCorrelationLength
 import TNLean.MPS.Core.MultiBlock
+import TNLean.MPS.FundamentalTheorem.SectorBNT.Basic
+import TNLean.MPS.SharedInfra.Scaling
 import TNLean.Spectral.TransferOperatorGapNT
 
 /-!
@@ -32,6 +34,8 @@ The diagonal `j = j'` case is `IsIsometryCanonicalForm`
 * `isTransferIdempotent_directSumTensor_iff_pairwise_mixedTransferMap₂_isIdempotentElem`
   — exact reduction of whole-tensor transfer idempotence to every mixed block
   pair.
+* `IsBNTCanonicalForm.eq_one_of_transferMap_comp_self_eq_smul` — the BNT
+  unit-weight convention forces the scalar in transfer quasi-idempotence to be one.
 
 ## Route
 
@@ -444,6 +448,83 @@ theorem phases_eq_of_isTransferIdempotent_directSum_scaled_self
     _ = μ q' := one_mul (μ q')
 
 end BlockDecomposition
+
+/-! ## Unit-weight obstruction to nontrivial transfer scaling -/
+
+namespace IsBNTCanonicalForm
+
+/-- The unit-weight convention in a normalized BNT presentation forces any
+transfer quasi-idempotence scalar to equal one.
+
+Choose the unit-modulus copy supplied by the BNT normalization. Restrict the
+whole direct-sum transfer equation to that diagonal corner. Unit modulus removes
+the copy weight, so the representative transfer map satisfies
+$\mathcal E^2=c\mathcal E$. Left canonicity makes $\mathcal E$ trace preserving;
+taking the trace at the identity therefore gives $D=cD$, and the positive bond
+dimension gives $c=1$.
+
+Source: arXiv:1606.00608, line 246 (unit-weight normalization) and lines
+543--555 (restriction of the transfer equation to a canonical-form block). -/
+theorem eq_one_of_transferMap_comp_self_eq_smul
+    (P : SectorDecomposition d) (hCF : IsBNTCanonicalForm P) (c : ℂ)
+    (h : transferMap P.toTensor ∘ₗ transferMap P.toTensor =
+      c • transferMap P.toTensor) :
+    c = 1 := by
+  classical
+  let B : (s : Fin P.totalCopies) → MPSTensor d (P.flatDim s) :=
+    fun s i ↦ P.flatWeight s • P.flatBasis s i
+  have hTensor : P.toTensor = directSumTensor B := by
+    ext i a b
+    simp [SectorDecomposition.toTensor, toTensorFromBlocks, directSumTensor, B]
+  rw [hTensor] at h
+  have hB : ∀ X,
+      transferMap (directSumTensor B) (transferMap (directSumTensor B) X) =
+        c • transferMap (directSumTensor B) X :=
+    fun X ↦ LinearMap.congr_fun h X
+  obtain ⟨j, q, hq⟩ := hCF.weight_unit_exists
+  let s : Fin P.totalCopies := P.flatIndexEquiv ⟨j, q⟩
+  haveI : NeZero (P.flatDim s) := by
+    refine ⟨?_⟩
+    simpa [s] using (hCF.basis_dim_pos j).ne'
+  have hcorner :=
+    mixedTransferMap₂_comp_self_eq_smul_of_transferMap_comp_self_eq_smul
+      B c hB s s
+  rw [mixedTransferMap₂_self] at hcorner
+  have hs : P.flatIndexEquiv.symm s = ⟨j, q⟩ :=
+    P.flatIndexEquiv.symm_apply_apply ⟨j, q⟩
+  have hnorm : ‖P.flatWeight s‖ = 1 := by
+    change ‖P.weight (P.flatIndexEquiv.symm s).1
+      (P.flatIndexEquiv.symm s).2‖ = 1
+    rw [hs]
+    exact hq
+  have hscaled : transferMap (B s) = transferMap (P.flatBasis s) := by
+    apply LinearMap.ext
+    intro X
+    rw [show B s = (fun i ↦ P.flatWeight s • P.flatBasis s i) from rfl,
+      transferMap_smul]
+    have hphase : P.flatWeight s * starRingEnd ℂ (P.flatWeight s) = 1 := by
+      simpa [Complex.normSq_eq_norm_sq, hnorm] using
+        Complex.mul_conj (P.flatWeight s)
+    rw [hphase, one_smul]
+  rw [hscaled] at hcorner
+  have happ := LinearMap.congr_fun hcorner
+    (1 : Matrix (Fin (P.flatDim s)) (Fin (P.flatDim s)) ℂ)
+  have htr := congrArg Matrix.trace happ
+  have hleft : IsLeftCanonical (P.flatBasis s) := by
+    change IsLeftCanonical (P.basis (P.flatIndexEquiv.symm s).1)
+    rw [hs]
+    exact hCF.basis_left_canonical j
+  rw [Module.End.mul_apply, LinearMap.smul_apply,
+    trace_transferMap (P.flatBasis s) _ hleft, Matrix.trace_smul,
+    trace_transferMap (P.flatBasis s) _ hleft] at htr
+  have ht : Matrix.trace
+      (1 : Matrix (Fin (P.flatDim s)) (Fin (P.flatDim s)) ℂ) ≠ 0 := by
+    simpa [Matrix.trace_one] using
+      (Nat.cast_ne_zero.mpr (NeZero.ne (P.flatDim s)) : ((P.flatDim s : ℂ) ≠ 0))
+  apply mul_right_cancel₀ ht
+  simpa using htr.symm
+
+end IsBNTCanonicalForm
 
 /-! ## Spectral gap forces the off-diagonal operator to vanish -/
 
