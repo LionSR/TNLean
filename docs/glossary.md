@@ -499,8 +499,17 @@ model different levels of data and different sources.
   arXiv:1606.00608, lines 815--822. It requires a nonzero generated MPO at
   every positive chain length and existentially chooses a positive physical
   blocking whose doubled-index tensor has a coefficient-form basis of normal
-  tensors with nonnilpotent physical-trace transfers. No equivalence with the normalized
-  predicates is asserted.
+  tensors with nonnilpotent physical-trace transfers. The one-way implication
+  `MPOTensor.IsSimple.isSourceSimple` requires the explicit
+  hypothesis that every positive-length generated MPO is nonzero; it is not an
+  equivalence with either normalized predicate.
+- Scalar rescaling of a closed length-$N$ MPO obeys
+  $\rho_N(cM)=c^N\rho_N(M)$ by `MPOTensor.mpo_smul`, not a
+  $|c|^{2N}$ law. Accordingly, `MPOTensor.isMPDO_smul_ofReal_iff` and
+  `MPOTensor.isSourceSimple_smul_ofReal_iff` give invariance only under
+  strictly positive real rescaling. They do not give arbitrary complex
+  invariance, an `IsSimple` equivalence, or preservation of the same
+  fixed-scale RFP equations after rescaling.
 
 The `CF` spelling in these established MPDO names is retained for compatibility
 and paper-local vocabulary. New public predicates should spell out
