@@ -120,8 +120,8 @@ first is a predicate on one displayed canonical-form representative. The second
 permits positive physical blocking, but still asks the resulting blocked tensor
 itself to admit such a normalized witness. Neither declaration is a quotient by
 nonzero scalar rescaling, and no equivalence with
-\leanid{MPOTensor.IsSourceSimple} is asserted. There is, however, a sanctioned
-one-way bridge: \leanid{MPOTensor.IsSimple.isSourceSimple} derives source
+\leanid{MPOTensor.IsSourceSimple} is asserted. The one-way implication
+\leanid{MPOTensor.IsSimple.isSourceSimple} derives source
 simplicity from normalized simplicity under the explicit hypothesis
 \begin{align}
     \rho_N(M)&\ne0 &&\text{for every }N>0.
@@ -242,7 +242,7 @@ the one-site source-simplicity witness does not assert that every positive
 blocking is source-simple, that arbitrary complex rescaling preserves the MPDO
 condition, that positive rescaling preserves the same fixed-scale RFP equations,
 or that the two simplicity interfaces are equivalent. The valid comparison is
-the conditional bridge \eqref{eq:positive-length-nonzero}, together with
+the conditional implication \eqref{eq:positive-length-nonzero}, together with
 strictly positive real rescaling invariance of the MPDO and source-simple
 predicates.
 
