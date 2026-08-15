@@ -274,8 +274,8 @@ import TNLean.MPS.MPDO.RescalingStableLengthDependentRFP
 import TNLean.MPS.MPDO.RescalingStableLengthDependentRFPBNTClause
 import TNLean.MPS.MPDO.RescalingStableLengthDependentRFPCanonicalForm
 import TNLean.MPS.MPDO.RescalingStableLengthDependentRFPCapstone
-import TNLean.MPS.MPDO.RescalingStableNotSimple
 import TNLean.MPS.MPDO.RescalingStableLengthDependentRFPViaTS
+import TNLean.MPS.MPDO.RescalingStableNotSimple
 import TNLean.MPS.MPDO.RetainedClass
 import TNLean.MPS.MPDO.SALArbitraryCut
 import TNLean.MPS.MPDO.SALPhysicalSectorCyclicPositivity
