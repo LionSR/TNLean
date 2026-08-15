@@ -9,6 +9,7 @@ Authors: TNLean contributors
 -- Generated aggregator module: TNLean.QCA
 
 import TNLean.QCA.AlgebraicTranslation
+import TNLean.QCA.FinitePropagation
 import TNLean.QCA.LocalAlgebra
 import TNLean.QCA.LocalLimit
 import TNLean.QCA.LocalNorm
