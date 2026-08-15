@@ -763,8 +763,17 @@
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{lem:mpdo_horizontal_cf_quasi_idempotent_scalar,
+    \uses{thm:transfer_map_block_tensor_quasi_idempotent,
+        lem:mpdo_horizontal_cf_quasi_idempotent_scalar,
         lem:mpdo_simple_tensor_horizontal_cf}
+    The one-site transfer map satisfies
+    $\E_R^2=\frac{337}{512}\E_R$. Applying
+    Theorem~\ref{thm:transfer_map_block_tensor_quasi_idempotent} gives
+    \begin{align}
+        \E_{R^{[L]}}^2
+        &=\left(\frac{337}{512}\right)^L\E_{R^{[L]}}.
+        \notag
+    \end{align}
     Suppose that the $L$-site blocking has a normalized horizontal canonical
     form, where $L>0$. By
     Lemma~\ref{lem:mpdo_horizontal_cf_quasi_idempotent_scalar}, its
