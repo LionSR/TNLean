@@ -349,24 +349,24 @@ sum to at most one term.  Positivity is `R_isMPDO`. -/
 
 /-- The first bit of a bond label `k : Fin 4` under the Kronecker
 identification `bondEquiv : Fin 2 × Fin 2 ≃ Fin 4`:
-`bit1 k = (bondEquiv.symm k).1` (`bit1_eq_bondEquiv_symm_fst`).
-Together with `bit2` it reads a bond
+`bondBit1 k = (bondEquiv.symm k).1` (`bondBit1_eq_bondEquiv_symm_fst`).
+Together with `bondBit2` it reads a bond
 label as the pair of bits indexing the two tensor factors of the vertical
 (Kronecker) reading `B^{ab} = A^a ⊗ conj(A^b)`.
 
 Project example; not from CPSV16. -/
-def bit1 : Fin 4 → Fin 2
+def bondBit1 : Fin 4 → Fin 2
   | 0 => 0
   | 1 => 0
   | 2 => 1
   | 3 => 1
 
 /-- The second bit of a bond label `k : Fin 4` under `bondEquiv`:
-`bit2 k = (bondEquiv.symm k).2` (`bit2_eq_bondEquiv_symm_snd`).
-See `bit1`.
+`bondBit2 k = (bondEquiv.symm k).2` (`bondBit2_eq_bondEquiv_symm_snd`).
+See `bondBit1`.
 
 Project example; not from CPSV16. -/
-def bit2 : Fin 4 → Fin 2
+def bondBit2 : Fin 4 → Fin 2
   | 0 => 0
   | 1 => 1
   | 2 => 0
@@ -374,14 +374,14 @@ def bit2 : Fin 4 → Fin 2
 
 /-- The first bit of a bond label is the first component of its preimage
 under `bondEquiv`. -/
-@[simp] lemma bit1_eq_bondEquiv_symm_fst (k : Fin 4) :
-    bit1 k = (bondEquiv.symm k).1 := by
+@[simp] lemma bondBit1_eq_bondEquiv_symm_fst (k : Fin 4) :
+    bondBit1 k = (bondEquiv.symm k).1 := by
   fin_cases k <;> rfl
 
 /-- The second bit of a bond label is the second component of its preimage
 under `bondEquiv`. -/
-@[simp] lemma bit2_eq_bondEquiv_symm_snd (k : Fin 4) :
-    bit2 k = (bondEquiv.symm k).2 := by
+@[simp] lemma bondBit2_eq_bondEquiv_symm_snd (k : Fin 4) :
+    bondBit2 k = (bondEquiv.symm k).2 := by
   fin_cases k <;> rfl
 
 /-- The entrywise positive square root of `wMat` (`coeff_sq_eq_wMat`).  The
@@ -408,19 +408,19 @@ lemma A_entry_eq_coeff' {a : Fin 4} {r c : Fin 2} (h : A a r c ≠ 0) :
 
 /-- The cyclic bond-matching condition on a physical-index string
 `p : Fin N → Fin 4`: the second bit of each letter equals the first bit of
-the next letter around the ring (`bit2 (p n) = bit1 (p (n + 1))`, with the
+the next letter around the ring (`bondBit2 (p n) = bondBit1 (p (n + 1))`, with the
 successor given by `finRotate N`).  This closed-chain constraint
 collapses the bond sum in the entrywise formula for `mpo R N` to at most
 one term.
 
 Project example; not from CPSV16. -/
 def ChainOK (N : ℕ) (p : Fin N → Fin 4) : Prop :=
-  ∀ n : Fin N, bit2 (p n) = bit1 (p (finRotate N n))
+  ∀ n : Fin N, bondBit2 (p n) = bondBit1 (p (finRotate N n))
 
 /-- `ChainOK N p` is decidable: it is a `Fin N`-indexed universal
 quantification of equalities between `Fin 2` values. -/
 instance decidableChainOK (N : ℕ) (p : Fin N → Fin 4) : Decidable (ChainOK N p) :=
-  inferInstanceAs (Decidable (∀ n : Fin N, bit2 (p n) = bit1 (p (finRotate N n))))
+  inferInstanceAs (Decidable (∀ n : Fin N, bondBit2 (p n) = bondBit1 (p (finRotate N n))))
 
 /-- The indicator matrix of the cyclic bond-matching condition:
 `(chainIndicator N) p q = 1` if both `p` and `q` satisfy `ChainOK N`, and
@@ -617,12 +617,12 @@ lemma wN_posSemidef (N : ℕ) : (wN N).PosSemidef := by
       exact Matrix.PosSemidef.submatrix (Matrix.PosSemidef.kronecker ih wMat_posSemidef) e
 
 /-- The pullback map extracting the first-bit string of a physical-index
-string: `(φ N p) n = bit1 (p n)`.  In the planned factorization it pulls
+string: `(φ N p) n = bondBit1 (p n)`.  In the planned factorization it pulls
 `wN N` back to the `(Fin N → Fin 4)`-indexed space as
 `Matrix.of fun p q => (wN N) (φ N p) (φ N q)`.
 
 Project example; not from CPSV16. -/
-def φ (N : ℕ) (p : Fin N → Fin 4) : Fin N → Fin 2 := fun n => bit1 (p n)
+def φ (N : ℕ) (p : Fin N → Fin 4) : Fin N → Fin 2 := fun n => bondBit1 (p n)
 
 /-- `wMat` is the entrywise square of `coeff'`: the local factor's entries
 are the squared magnitudes of the letter-matrix entries. -/
@@ -638,18 +638,18 @@ lemma A_star_eq (b : Fin 4) (i j : Fin 2) : star (A b i j) = A b i j := by
   simpa [Matrix.map_apply] using h
 
 /-- The bond matrix `R p q` is the rank-one outer product of the letter-column
-vectors `u_{pq} a = A a (bit1 p) (bit1 q)` and `v_{pq} b = A b (bit2 p) (bit2 q)`,
+vectors `u_{pq} a = A a (bondBit1 p) (bondBit1 q)` and `v_{pq} b = A b (bondBit2 p) (bondBit2 q)`,
 scaled by `25/32`.  This is the rank-one structure underlying the closed-chain
 trace factorization of `mpo R N`.
 
 Project example; not from CPSV16. -/
 lemma R_eq_vecMulVec (p q : Fin 4) :
-    R p q = (25/32 : ℂ) • Matrix.vecMulVec (fun a => A a (bit1 p) (bit1 q))
-      (fun b => A b (bit2 p) (bit2 q)) := by
+    R p q = (25/32 : ℂ) • Matrix.vecMulVec (fun a => A a (bondBit1 p) (bondBit1 q))
+      (fun b => A b (bondBit2 p) (bondBit2 q)) := by
   ext a b
   simp only [Matrix.smul_apply, Matrix.vecMulVec_apply, smul_eq_mul, R_apply,
     Matrix.kroneckerMap_apply, Matrix.map_apply, starRingEnd_apply,
-    ← bit1_eq_bondEquiv_symm_fst, ← bit2_eq_bondEquiv_symm_snd]
+    ← bondBit1_eq_bondEquiv_symm_fst, ← bondBit2_eq_bondEquiv_symm_snd]
   rw [A_star_eq]
 
 /-- The dot product of two `A`-letter column vectors collapses: it equals
@@ -707,10 +707,11 @@ when both steps of the bond chain match, and vanishes otherwise.
 
 Project example; not from CPSV16. -/
 lemma dotProduct_A_col_step {N : ℕ} (p q : Fin N → Fin 4) (n : Fin N) :
-    (fun b : Fin 4 => A b (bit2 (p n)) (bit2 (q n))) ⬝ᵥ
-        (fun b : Fin 4 => A b (bit1 (p (finRotate N n))) (bit1 (q (finRotate N n)))) =
-      if bit2 (p n) = bit1 (p (finRotate N n)) ∧ bit2 (q n) = bit1 (q (finRotate N n))
-        then wMat (bit2 (p n)) (bit2 (q n)) else 0 :=
+    (fun b : Fin 4 => A b (bondBit2 (p n)) (bondBit2 (q n))) ⬝ᵥ
+        (fun b : Fin 4 => A b (bondBit1 (p (finRotate N n))) (bondBit1 (q (finRotate N n)))) =
+      if bondBit2 (p n) = bondBit1 (p (finRotate N n)) ∧
+          bondBit2 (q n) = bondBit1 (q (finRotate N n))
+        then wMat (bondBit2 (p n)) (bondBit2 (q n)) else 0 :=
   dotProduct_A_col _ _ _ _
 
 /-- The one-step rotation `finRotate (N + 1)` sends the embedding `i.castSucc`
@@ -740,67 +741,71 @@ theorem mpo_R_entry_formula {N : ℕ} (hN : 0 < N) (p q : Fin N → Fin 4) :
   obtain ⟨n, rfl⟩ := Nat.exists_eq_succ_of_ne_zero hN.ne'
   simp only [mpo_apply, mpoMatrixEntry, evalWord_ofFn]
   have hRstep : ∀ i : Fin (n + 1), R (p i) (q i) =
-      (25/32 : ℂ) • Matrix.vecMulVec (fun a => A a (bit1 (p i)) (bit1 (q i)))
-        (fun b => A b (bit2 (p i)) (bit2 (q i))) := fun i => R_eq_vecMulVec (p i) (q i)
+      (25/32 : ℂ) • Matrix.vecMulVec (fun a => A a (bondBit1 (p i)) (bondBit1 (q i)))
+        (fun b => A b (bondBit2 (p i)) (bondBit2 (q i))) := fun i => R_eq_vecMulVec (p i) (q i)
   simp only [hRstep]
   rw [prod_smul_vecMulVec_ofFn (25/32 : ℂ) n
-    (fun i => fun a => A a (bit1 (p i)) (bit1 (q i)))
-    (fun i => fun b => A b (bit2 (p i)) (bit2 (q i)))]
+    (fun i => fun a => A a (bondBit1 (p i)) (bondBit1 (q i)))
+    (fun i => fun b => A b (bondBit2 (p i)) (bondBit2 (q i)))]
   rw [Matrix.trace_smul, Matrix.trace_smul, Matrix.trace_vecMulVec]
   simp only [smul_eq_mul]
   have hlast :
-      (fun a : Fin 4 => A a (bit1 (p 0)) (bit1 (q 0))) ⬝ᵥ
-          (fun b : Fin 4 => A b (bit2 (p (Fin.last n))) (bit2 (q (Fin.last n)))) =
-        (fun b : Fin 4 => A b (bit2 (p (Fin.last n))) (bit2 (q (Fin.last n)))) ⬝ᵥ
-          (fun a : Fin 4 => A a (bit1 (p 0)) (bit1 (q 0))) :=
+      (fun a : Fin 4 => A a (bondBit1 (p 0)) (bondBit1 (q 0))) ⬝ᵥ
+          (fun b : Fin 4 => A b (bondBit2 (p (Fin.last n))) (bondBit2 (q (Fin.last n)))) =
+        (fun b : Fin 4 => A b (bondBit2 (p (Fin.last n))) (bondBit2 (q (Fin.last n)))) ⬝ᵥ
+          (fun a : Fin 4 => A a (bondBit1 (p 0)) (bondBit1 (q 0))) :=
     dotProduct_comm _ _
   rw [hlast]
   -- combine the open-chain pairing product with the wraparound term into a
   -- single cyclic product indexed by `Fin (n + 1)`, driven by `finRotate`.
   set g : Fin (n + 1) → ℂ := fun i =>
-      (fun b : Fin 4 => A b (bit2 (p i)) (bit2 (q i))) ⬝ᵥ
-        (fun a : Fin 4 => A a (bit1 (p (finRotate (n + 1) i))) (bit1 (q (finRotate (n + 1) i))))
+      (fun b : Fin 4 => A b (bondBit2 (p i)) (bondBit2 (q i))) ⬝ᵥ
+        (fun a : Fin 4 =>
+          A a (bondBit1 (p (finRotate (n + 1) i)))
+            (bondBit1 (q (finRotate (n + 1) i))))
     with hg
   have hgterm : ∀ i : Fin (n + 1), g i =
-      if bit2 (p i) = bit1 (p (finRotate (n + 1) i)) ∧ bit2 (q i) = bit1 (q (finRotate (n + 1) i))
-        then wMat (bit2 (p i)) (bit2 (q i)) else 0 :=
+      if bondBit2 (p i) = bondBit1 (p (finRotate (n + 1) i)) ∧
+          bondBit2 (q i) = bondBit1 (q (finRotate (n + 1) i))
+        then wMat (bondBit2 (p i)) (bondBit2 (q i)) else 0 :=
     fun i => dotProduct_A_col_step p q i
   have hstep : ∀ i : Fin n,
-      (fun b : Fin 4 => A b (bit2 (p i.castSucc)) (bit2 (q i.castSucc))) ⬝ᵥ
-          (fun a : Fin 4 => A a (bit1 (p i.succ)) (bit1 (q i.succ))) = g i.castSucc := by
+      (fun b : Fin 4 => A b (bondBit2 (p i.castSucc)) (bondBit2 (q i.castSucc))) ⬝ᵥ
+          (fun a : Fin 4 => A a (bondBit1 (p i.succ)) (bondBit1 (q i.succ))) = g i.castSucc := by
     intro i
     simp only [hg, finRotate_succ_castSucc]
   have hlaststep :
-      (fun b : Fin 4 => A b (bit2 (p (Fin.last n))) (bit2 (q (Fin.last n)))) ⬝ᵥ
-          (fun a : Fin 4 => A a (bit1 (p 0)) (bit1 (q 0))) = g (Fin.last n) := by
+      (fun b : Fin 4 => A b (bondBit2 (p (Fin.last n))) (bondBit2 (q (Fin.last n)))) ⬝ᵥ
+          (fun a : Fin 4 => A a (bondBit1 (p 0)) (bondBit1 (q 0))) = g (Fin.last n) := by
     simp only [hg, finRotate_last]
   have hcombine :
-      (∏ i : Fin n, (fun b : Fin 4 => A b (bit2 (p i.castSucc)) (bit2 (q i.castSucc))) ⬝ᵥ
-          (fun a : Fin 4 => A a (bit1 (p i.succ)) (bit1 (q i.succ)))) *
-        ((fun b : Fin 4 => A b (bit2 (p (Fin.last n))) (bit2 (q (Fin.last n)))) ⬝ᵥ
-          (fun a : Fin 4 => A a (bit1 (p 0)) (bit1 (q 0)))) = ∏ i : Fin (n + 1), g i := by
+      (∏ i : Fin n,
+        (fun b : Fin 4 => A b (bondBit2 (p i.castSucc)) (bondBit2 (q i.castSucc))) ⬝ᵥ
+          (fun a : Fin 4 => A a (bondBit1 (p i.succ)) (bondBit1 (q i.succ)))) *
+        ((fun b : Fin 4 => A b (bondBit2 (p (Fin.last n))) (bondBit2 (q (Fin.last n)))) ⬝ᵥ
+          (fun a : Fin 4 => A a (bondBit1 (p 0)) (bondBit1 (q 0)))) = ∏ i : Fin (n + 1), g i := by
     rw [Fin.prod_univ_castSucc]
     exact congrArg₂ (· * ·) (Finset.prod_congr rfl fun i _ => hstep i) hlaststep
   rw [hcombine]
   have hmain : (∏ i : Fin (n + 1), g i) =
       chainIndicator (n + 1) p q * wN (n + 1) (φ (n + 1) p) (φ (n + 1) q) := by
     by_cases hChain : ChainOK (n + 1) p ∧ ChainOK (n + 1) q
-    · have hall : ∀ i : Fin (n + 1), g i = wMat (bit2 (p i)) (bit2 (q i)) := fun i => by
+    · have hall : ∀ i : Fin (n + 1), g i = wMat (bondBit2 (p i)) (bondBit2 (q i)) := fun i => by
         rw [hgterm, if_pos ⟨hChain.1 i, hChain.2 i⟩]
       have hprodeq : (∏ i : Fin (n + 1), g i) =
-          ∏ i : Fin (n + 1), wMat (bit2 (p i)) (bit2 (q i)) :=
+          ∏ i : Fin (n + 1), wMat (bondBit2 (p i)) (bondBit2 (q i)) :=
         Finset.prod_congr rfl fun i _ => hall i
-      have hrotate : (∏ i : Fin (n + 1), wMat (bit2 (p i)) (bit2 (q i))) =
+      have hrotate : (∏ i : Fin (n + 1), wMat (bondBit2 (p i)) (bondBit2 (q i))) =
           ∏ i : Fin (n + 1),
-            wMat (bit1 (p (finRotate (n + 1) i))) (bit1 (q (finRotate (n + 1) i))) :=
+            wMat (bondBit1 (p (finRotate (n + 1) i))) (bondBit1 (q (finRotate (n + 1) i))) :=
         Finset.prod_congr rfl fun i _ => by rw [hChain.1 i, hChain.2 i]
       have hreindex :
           (∏ i : Fin (n + 1),
-              wMat (bit1 (p (finRotate (n + 1) i))) (bit1 (q (finRotate (n + 1) i)))) =
-            ∏ j : Fin (n + 1), wMat (bit1 (p j)) (bit1 (q j)) :=
-        Equiv.prod_comp (finRotate (n + 1)) (fun j => wMat (bit1 (p j)) (bit1 (q j)))
+              wMat (bondBit1 (p (finRotate (n + 1) i))) (bondBit1 (q (finRotate (n + 1) i)))) =
+            ∏ j : Fin (n + 1), wMat (bondBit1 (p j)) (bondBit1 (q j)) :=
+        Equiv.prod_comp (finRotate (n + 1)) (fun j => wMat (bondBit1 (p j)) (bondBit1 (q j)))
       have hwNeq : wN (n + 1) (φ (n + 1) p) (φ (n + 1) q) =
-          ∏ j : Fin (n + 1), wMat (bit1 (p j)) (bit1 (q j)) := by
+          ∏ j : Fin (n + 1), wMat (bondBit1 (p j)) (bondBit1 (q j)) := by
         simp [wN, φ, Matrix.of_apply]
       have hchainInd : chainIndicator (n + 1) p q = 1 := by
         simp [chainIndicator, hChain.1, hChain.2]
