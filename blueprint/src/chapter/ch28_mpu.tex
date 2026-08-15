@@ -8480,7 +8480,7 @@ as separate results in the appendix.
   \label{lem:qca_quasi_local_support_mono}
   \lean{SpinChain.QuasiLocalSupportedIn.mono}
   \leanok
-  \uses{def:qca_quasi_local_supported_in,def:qca_local_inclusion}
+  \uses{def:qca_quasi_local_supported_in}
   Let $d>0$.  If $x\in\mathcal A$ is supported in $\Lambda$ and
   $\Lambda\subseteq\Gamma$, then $x$ is supported in $\Gamma$.
 \end{lemma}
@@ -8532,8 +8532,8 @@ $\omega^{-1}$.
   propagates within $\mathcal N$.
 \end{definition}
 
-\begin{theorem}[Equivalent formulations of forward propagation]
-  \label{thm:qca_propagates_within_iff}
+\begin{lemma}[Equivalent formulations of forward propagation]
+  \label{lem:qca_propagates_within_iff}
   \lean{SpinChain.propagatesWithin_iff_quasiLocalObservable,
     SpinChain.propagatesWithin_iff_range_subset,
     SpinChain.propagatesWithin_iff_exists_local}
@@ -8545,24 +8545,21 @@ $\omega^{-1}$.
   conditions are equivalent:
   \begin{align}
     &\omega\text{ propagates within }\mathcal N; \tag{a}\\
-    &\omega(j_\Lambda(A))\text{ is supported in }
-      \Lambda+\mathcal N
-      \quad\text{for all finite }\Lambda
-      \text{ and }A\in\mathcal A_\Lambda; \tag{b}\\
-    &\omega\bigl(j_\Lambda(\mathcal A_\Lambda)\bigr)
+    &\forall\Lambda\Subset\mathbb Z,\ \forall A\in\mathcal A_\Lambda,
+      \quad \omega(j_\Lambda(A))\text{ is supported in }
+      \Lambda+\mathcal N; \tag{b}\\
+    &\forall\Lambda\Subset\mathbb Z,\quad
+      \omega\bigl(j_\Lambda(\mathcal A_\Lambda)\bigr)
       \subseteq j_{\Lambda+\mathcal N}
-        (\mathcal A_{\Lambda+\mathcal N})
-      \quad\text{for every finite }\Lambda; \tag{c}\\
-    &\text{for every finite }\Lambda\text{ and }A\in\mathcal A_\Lambda,
-      \text{ there exists }B\in\mathcal A_{\Lambda+\mathcal N}
-      \text{ such that} \notag\\
-    &\hspace{8em}
+        (\mathcal A_{\Lambda+\mathcal N}); \tag{c}\\
+    &\forall\Lambda\Subset\mathbb Z,\ \forall A\in\mathcal A_\Lambda,
+      \ \exists B\in\mathcal A_{\Lambda+\mathcal N},\quad
       \omega(j_\Lambda(A))=j_{\Lambda+\mathcal N}(B). \tag{d}
   \end{align}
   Thus condition~\textup{(c)} is precisely the range-inclusion formula from
   line~2298 of \cite{Cirac2017MPU}, expressed inside the quasi-local algebra,
   and condition~\textup{(d)} is its finite-region witness form.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
   \uses{def:qca_quasi_local_supported_in,def:qca_propagates_within,
