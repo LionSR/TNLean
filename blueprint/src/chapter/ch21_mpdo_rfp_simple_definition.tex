@@ -125,10 +125,37 @@
     non-nilpotency are not needed for this conclusion.
 \end{proof}
 
-\begin{lemma}[Unit-weight obstruction to nontrivial quasi-idempotence]
-    \label{lem:mpdo_horizontal_cf_quasi_idempotent_scalar}
+\begin{theorem}[Unit-weight obstruction for a BNT sector decomposition]
+    \label{thm:bnt_unit_weight_quasi_idempotent_scalar}
     \lean{MPSTensor.IsBNTCanonicalForm.%
         eq_one_of_transferMap_comp_self_eq_smul}
+    \leanok
+    \uses{def:sector_bnt_cf}
+    Let $P$ be a sector decomposition in normalized BNT canonical form, and let
+    $T_P$ be its assembled block-diagonal tensor. If
+    \begin{align}
+        \mathcal E_{T_P}^2&=c\mathcal E_{T_P},
+        \notag
+    \end{align}
+    then $c=1$.
+\end{theorem}
+
+\begin{proof}\leanok
+    By the normalization at \cite[line~246]{Cirac2016MPDO_arXiv}, some copy has
+    weight $\mu$ with $|\mu|=1$. Restrict the transfer equation of the assembled
+    tensor to this copy's diagonal corner. There
+    \begin{align}
+        \E_{\mu A}&=\mu\overline\mu\,\E_A=\E_A.
+        \notag
+    \end{align}
+    Hence the restricted equation is $\E_A^2=c\E_A$. The normal representative
+    is left canonical, so its transfer map is trace preserving. Apply the
+    equation to the identity and take the trace. This gives $D=cD$. Since the
+    bond dimension $D$ is positive, $c=1$.
+\end{proof}
+
+\begin{theorem}[Unit-weight obstruction in horizontal canonical form]
+    \label{lem:mpdo_horizontal_cf_quasi_idempotent_scalar}
     \lean{MPOTensor.IsHorizontalCF.%
         eq_one_of_transferMap_comp_self_eq_smul}
     \leanok
@@ -140,19 +167,14 @@
         \notag
     \end{align}
     then $c=1$.
-\end{lemma}
+\end{theorem}
 
 \begin{proof}\leanok
-    Transport the transfer equation through the block-diagonal gauge to the
-    normalized BNT witness. By the normalization at
-    \cite[line~246]{Cirac2016MPDO_arXiv}, some copy has weight $\mu$ with
-    $|\mu|=1$. On its diagonal corner,
-    \begin{align}
-        \E_{\mu A}&=\mu\overline\mu\,\E_A=\E_A.
-        \notag
-    \end{align}
-    Hence the restricted equation is $\E_A^2=c\E_A$. The normal representative
-    is left canonical, so its transfer map is trace preserving. Apply the
-    equation to the identity and take the trace. This gives $D=cD$. Since the
-    bond dimension $D$ is positive, $c=1$.
+    \uses{thm:bnt_unit_weight_quasi_idempotent_scalar,
+        thm:cpsv_gauge_transfer_quasi_idempotence}
+    The horizontal canonical-form witness gives a normalized BNT sector
+    decomposition whose assembled tensor is gauge equivalent to $M$. Transport
+    the transfer equation across this gauge by
+    Theorem~\ref{thm:cpsv_gauge_transfer_quasi_idempotence}, then apply
+    Theorem~\ref{thm:bnt_unit_weight_quasi_idempotent_scalar}.
 \end{proof}
