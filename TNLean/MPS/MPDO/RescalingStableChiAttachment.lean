@@ -72,7 +72,7 @@ two-sided inverse `chainEmbed N` of `φ N` on chain-OK strings.  This is the
 Project example; not from CPSV16. -/
 
 /-- A bond label is `bondEquiv` applied to its own pair of bits. -/
-lemma bondEquiv_bit1_bit2 (k : Fin 4) : bondEquiv (bit1 k, bit2 k) = k := by
+lemma bondEquiv_bondBit1_bondBit2 (k : Fin 4) : bondEquiv (bondBit1 k, bondBit2 k) = k := by
   fin_cases k <;> rfl
 
 /-- The boundary embedding reconstructing a physical-index string from a
@@ -103,7 +103,7 @@ lemma chainEmbed_φ_of_chainOK {N : ℕ} {p : Fin N → Fin 4} (hp : ChainOK N p
   funext n
   simp only [chainEmbed, φ]
   rw [← hp n]
-  exact bondEquiv_bit1_bit2 (p n)
+  exact bondEquiv_bondBit1_bondBit2 (p n)
 
 /-- `chainEmbed N` is injective: it has `φ N` as a left inverse. -/
 lemma chainEmbed_injective (N : ℕ) : Function.Injective (chainEmbed N) := by

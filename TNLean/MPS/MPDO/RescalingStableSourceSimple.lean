@@ -92,7 +92,7 @@ theorem R_isSourceSimple : MPOTensor.IsSourceSimple R := by
     intro N hN hzero
     have hentry := congrFun (congrFun hzero (fun _ => 0)) (fun _ => 0)
     rw [mpo_R_entry_formula hN] at hentry
-    simp [chainIndicator, ChainOK, φ, wN, wMat, bit1, bit2] at hentry
+    simp [chainIndicator, ChainOK, φ, wN, wMat, bondBit1, bondBit2] at hentry
   refine ⟨R_isMPDO, hRne, 1, by norm_num, ?_⟩
   let data := canonicalFormData.reindexPhysical oneSiteDoubledEquiv
   let ref := data.activeBNTRefinement
