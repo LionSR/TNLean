@@ -15,7 +15,7 @@ neighborhood when it sends every observable supported in \(\Lambda\) to one supp
 \(\Lambda + \mathcal N\), uniformly over finite regions \(\Lambda\).
 
 This file records equivalent support, range-inclusion, and finite-region witness formulations of
-that condition. Neighborhood monotonicity and composition are treated separately.
+that condition, together with neighborhood monotonicity. Composition is treated separately.
 
 ## Main definitions
 
@@ -31,6 +31,8 @@ that condition. Neighborhood monotonicity and composition are treated separately
 * `SpinChain.propagatesWithin_iff_quasiLocalObservable` — the universal pointwise formulation.
 * `SpinChain.propagatesWithin_iff_range_subset` — the range-inclusion formulation.
 * `SpinChain.propagatesWithin_iff_exists_local` — the finite-region witness formulation.
+* `SpinChain.PropagatesWithin.mono` — propagation is monotone under neighborhood enlargement.
+* `SpinChain.HasFinitePropagation.exists_superset` — valid neighborhoods can contain any finite set.
 
 ## References
 
@@ -98,7 +100,32 @@ def HasFinitePropagation {d : ℕ} [NeZero d]
   ∃ 𝓝 : Finset ℤ, PropagatesWithin ω 𝓝
 
 variable {d : ℕ} [NeZero d]
-  {ω : QuasiLocalAlgebra d ≃⋆ₐ[ℂ] QuasiLocalAlgebra d} {𝓝 : Finset ℤ}
+  {ω : QuasiLocalAlgebra d ≃⋆ₐ[ℂ] QuasiLocalAlgebra d} {𝓝 𝓜 : Finset ℤ}
+
+namespace PropagatesWithin
+
+/-- Propagation is preserved when the finite neighborhood is enlarged.
+
+Source: arXiv:1703.09188, Appendix, line 2298. -/
+lemma mono (hω : PropagatesWithin ω 𝓝) (h𝓝𝓜 : 𝓝 ⊆ 𝓜) :
+    PropagatesWithin ω 𝓜 := by
+  intro Λ x hx
+  exact (hω Λ x hx).mono (regionSumset_mono_right Λ h𝓝𝓜)
+
+end PropagatesWithin
+
+namespace HasFinitePropagation
+
+/-- Any finite region is contained in some propagation neighborhood of an automorphism with
+finite forward propagation.
+
+Source: arXiv:1703.09188, Appendix, line 2298. -/
+lemma exists_superset (hω : HasFinitePropagation ω) (𝓝 : Finset ℤ) :
+    ∃ 𝓜 : Finset ℤ, 𝓝 ⊆ 𝓜 ∧ PropagatesWithin ω 𝓜 := by
+  obtain ⟨𝓜, h𝓜⟩ := hω
+  exact ⟨𝓜 ∪ 𝓝, Finset.subset_union_right, h𝓜.mono Finset.subset_union_left⟩
+
+end HasFinitePropagation
 
 /-- Propagation within \(\mathcal N\) can be checked pointwise on the canonical image of each
 finite-region observable algebra.
