@@ -205,41 +205,6 @@ noncomputable def ofChi (data : AlgebraStructureData d D)
     BNTLabelTheoremData.ofChi (data := data) χ hχ operators traceScalars
       sameLengthProduct idempotent blockedComparison
 
-/-- A concrete BNT-label theorem witness gives the proposition-level existence
-statement for Theorem IV.13(ii).
-
-Source: arXiv:1606.00608, Theorem IV.13(ii), lines 972--985, and
-Appendix C.3--C.4, lines 1830--1942 of
-`Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
-theorem hasBNTLabelTheoremWitness {data : AlgebraStructureData d D}
-    (W : BNTLabelTheoremWitness data) : HasBNTLabelTheoremWitness data :=
-  ⟨W⟩
-
-/-- The canonical \(\chi\)-based construction gives the proposition-level
-existence statement for Theorem IV.13(ii), once the product law, idempotent
-law, and blocked-basis comparison have been supplied for the canonical
-coefficient family.
-
-Source: arXiv:1606.00608, Theorem IV.13(ii), lines 972--985, and
-Appendix C.4, lines 2015--2037 of
-`Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
-theorem ofChi_hasBNTLabelTheoremWitness (data : AlgebraStructureData d D)
-    (Λ : Type) (O : ℕ → Type) [Fintype Λ]
-    [∀ L : ℕ, AddCommMonoid (O L)] [∀ L : ℕ, Module ℂ (O L)]
-    [∀ L : ℕ, Mul (O L)]
-    (χ : DiagonalChiFamily Λ) (hχ : χ.PosEntries)
-    (operators : BNTLabelOperatorFamily Λ O)
-    (traceScalars : BNTLabelTraceScalarFamily Λ)
-    (sameLengthProduct :
-      operators.HasSameLengthProductForm (BNTLabelCoefficientFamily.ofChi χ))
-    (idempotent :
-      traceScalars.HasIdempotentCoefficientForm (BNTLabelCoefficientFamily.ofChi χ))
-    (blockedComparison :
-      BNTBlockedBasisCoefficientComparison data (BNTLabelCoefficientFamily.ofChi χ)) :
-    HasBNTLabelTheoremWitness data :=
-  ⟨ofChi data Λ O χ hχ operators traceScalars sameLengthProduct idempotent
-    blockedComparison⟩
-
 variable {data : AlgebraStructureData d D} (W : BNTLabelTheoremWitness data)
 
 private instance instLabelFintype : Fintype W.Label :=
