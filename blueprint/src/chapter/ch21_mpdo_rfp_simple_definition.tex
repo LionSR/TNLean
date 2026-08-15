@@ -102,39 +102,84 @@
     virtual trace is linear.
 \end{proof}
 
+\begin{theorem}[Scaling law for physically blocked MPO tensors]
+    \label{thm:mpdo_block_tensor_scalar_scaling}
+    \lean{MPOTensor.blockTensor_smul}
+    \leanok
+    \uses{def:mpdo_physical_blocking}
+    Let $M$ be an MPO tensor and let $c\in\mathbb C$. For every blocking length
+    $L$, one has
+    \begin{align}
+        (cM)^{[L]}&=c^L M^{[L]}.
+        \notag
+    \end{align}
+\end{theorem}
+
+\begin{proof}\leanok
+    Each of the $L$ tensor letters in a physical block contributes one factor
+    of $c$.
+\end{proof}
+
+\begin{theorem}[Nonnegative rescaling preserves the MPDO condition]
+    \label{thm:mpdo_nonnegative_rescaling}
+    \lean{MPOTensor.IsMPDO.smul_ofReal}
+    \leanok
+    \uses{def:mpdo}
+    Let $M$ generate positive semidefinite closed operators at every positive
+    length, and let $r\geq0$ be real. Then $rM$ has the same property.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpdo_mpo_scalar_scaling}
+    The length-$N$ operator is multiplied by the nonnegative scalar $r^N$.
+\end{proof}
+
 \begin{theorem}[Positive rescaling invariance of the MPDO condition]
     \label{thm:mpdo_positive_rescaling_iff}
     \lean{MPOTensor.isMPDO_smul_ofReal_iff}
     \leanok
-    \uses{def:mpdo, thm:mpdo_mpo_scalar_scaling}
+    \uses{def:mpdo}
     Let $M$ be an MPO tensor and let $r>0$ be real. Then $rM$ generates
     positive semidefinite closed operators at every positive chain length if
     and only if $M$ does.
 \end{theorem}
 
 \begin{proof}\leanok
-    By Theorem~\ref{thm:mpdo_mpo_scalar_scaling}, the length-$N$ operator is
-    multiplied by the positive scalar $r^N$. Apply the same argument to
-    $r^{-1}$ for the converse.
+    \uses{thm:mpdo_nonnegative_rescaling}
+    Apply Theorem~\ref{thm:mpdo_nonnegative_rescaling} first with $r$ and then
+    with $r^{-1}$.
+\end{proof}
+
+\begin{theorem}[Positive rescaling preserves source simplicity]
+    \label{thm:mpdo_source_simple_positive_rescaling}
+    \lean{MPOTensor.IsSourceSimple.smul_ofReal}
+    \leanok
+    \uses{def:mpdo_source_simple_tensor}
+    Let $M$ be source-simple and let $r>0$ be real. Then $rM$ is source-simple.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpdo_nonnegative_rescaling,
+        thm:mpdo_mpo_scalar_scaling,
+        thm:mpdo_block_tensor_scalar_scaling}
+    Positive rescaling preserves the MPDO condition and positive-length
+    nonvanishing. For a blocking length $L$, it multiplies the blocked tensor
+    by $r^L$; the same normal basis spans the rescaled tensor after multiplying
+    its length-$N$ coefficients by $r^{LN}$.
 \end{proof}
 
 \begin{theorem}[Positive rescaling invariance of source simplicity]
     \label{thm:mpdo_source_simple_positive_rescaling_iff}
     \lean{MPOTensor.isSourceSimple_smul_ofReal_iff}
     \leanok
-    \uses{def:mpdo_source_simple_tensor,
-        thm:mpdo_positive_rescaling_iff,
-        thm:mpdo_mpo_scalar_scaling}
+    \uses{def:mpdo_source_simple_tensor}
     Let $M$ be an MPO tensor and let $r>0$ be real. Then $rM$ is source-simple
     if and only if $M$ is source-simple.
 \end{theorem}
 
 \begin{proof}\leanok
-    Positive rescaling preserves the MPDO condition and positive-length
-    nonvanishing. For a blocking length $L$, it multiplies the blocked tensor
-    by $r^L$; the same normal basis spans the rescaled tensor after multiplying
-    its length-$N$ coefficients by $r^{LN}$. Apply the construction to
-    $r^{-1}$ for the converse.
+    \uses{thm:mpdo_source_simple_positive_rescaling}
+    Apply the preceding implication first with $r$ and then with $r^{-1}$.
 \end{proof}
 
 \begin{definition}[Normalized fixed-representative simplicity]
@@ -157,7 +202,7 @@
     asserted.
 \end{definition}
 
-\begin{theorem}[Conditional bridge from normalized to source simplicity]
+\begin{theorem}[Normalized simplicity implies source simplicity under nonvanishing]
     \label{thm:mpdo_simple_implies_source_simple_of_nonzero}
     \lean{MPOTensor.IsSimple.isSourceSimple}
     \leanok
