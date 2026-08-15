@@ -43,13 +43,6 @@ def oneSiteDoubledEquiv :
     (Equiv.prodCongr (MPSTensor.singleBlockEquiv 4) (MPSTensor.singleBlockEquiv 4)) |>.trans
       finProdFinEquiv
 
-@[simp]
-lemma oneSiteDoubledEquiv_diagonal (i : Fin (MPSTensor.blockPhysDim 4 1)) :
-    oneSiteDoubledEquiv (finProdFinEquiv (i, i)) =
-      finProdFinEquiv
-        (MPSTensor.singleBlockEquiv 4 i, MPSTensor.singleBlockEquiv 4 i) := by
-  simp [oneSiteDoubledEquiv]
-
 /-- One-site physical blocking of the dimer gives the canonical physical
 relabeling of its doubled-index tensor. -/
 theorem toMPSTensor_blockTensor_R_one :
@@ -60,20 +53,6 @@ theorem toMPSTensor_blockTensor_R_one :
     MPOTensor.blockTensor_apply, MPSTensor.wordOfBlock_one,
     MPOTensor.evalWord, oneSiteDoubledEquiv]
   rw [MPSTensor.finProdFinEquiv_divNat, MPSTensor.finProdFinEquiv_modNat]
-
-/-- The ket-against-bra contraction of `retainedBlock` is unchanged by the
-one-site doubled physical relabeling. -/
-lemma doubledPhysTraceTransfer_reindexPhysical_oneSiteDoubledEquiv :
-    MPOTensor.doubledPhysTraceTransfer 4
-        (MPSTensor.reindexPhysical oneSiteDoubledEquiv retainedBlock) =
-      MPOTensor.doubledPhysTraceTransfer 4 retainedBlock := by
-  rw [MPOTensor.doubledPhysTraceTransfer, MPOTensor.doubledPhysTraceTransfer]
-  change (∑ i : Fin (MPSTensor.blockPhysDim 4 1),
-      retainedBlock (finProdFinEquiv
-        (MPSTensor.singleBlockEquiv 4 i, MPSTensor.singleBlockEquiv 4 i))) =
-    ∑ i : Fin 4, retainedBlock (finProdFinEquiv (i, i))
-  exact (MPSTensor.singleBlockEquiv 4).sum_comp
-    (fun i : Fin 4 => retainedBlock (finProdFinEquiv (i, i)))
 
 /-- The rescaling-stable dimer tensor is simple in the normalization-free,
 source-facing sense of Definition 4.7.
@@ -104,7 +83,17 @@ theorem R_isSourceSimple : MPOTensor.IsSourceSimple R := by
   · intro j
     change ¬ IsNilpotent (MPOTensor.doubledPhysTraceTransfer 4
       (MPSTensor.reindexPhysical oneSiteDoubledEquiv retainedBlock))
-    rw [doubledPhysTraceTransfer_reindexPhysical_oneSiteDoubledEquiv]
+    have hTransfer : MPOTensor.doubledPhysTraceTransfer 4
+        (MPSTensor.reindexPhysical oneSiteDoubledEquiv retainedBlock) =
+        MPOTensor.doubledPhysTraceTransfer 4 retainedBlock := by
+      rw [MPOTensor.doubledPhysTraceTransfer, MPOTensor.doubledPhysTraceTransfer]
+      change (∑ i : Fin (MPSTensor.blockPhysDim 4 1),
+          retainedBlock (finProdFinEquiv
+            (MPSTensor.singleBlockEquiv 4 i, MPSTensor.singleBlockEquiv 4 i))) =
+        ∑ i : Fin 4, retainedBlock (finProdFinEquiv (i, i))
+      exact (MPSTensor.singleBlockEquiv 4).sum_comp
+        (fun i : Fin 4 => retainedBlock (finProdFinEquiv (i, i)))
+    rw [hTransfer]
     exact doubledPhysTraceTransfer_retainedBlock_not_isNilpotent
 
 end MPOTensor.RescalingStableLengthDependentRFP
