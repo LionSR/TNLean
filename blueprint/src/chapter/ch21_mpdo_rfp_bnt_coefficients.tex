@@ -765,15 +765,15 @@
         thm:mpdo_bnt_label_rescaling_stable_length_dependence}
     Let $R$ be the dimer tensor of
     Theorem~\ref{thm:mpdo_bnt_label_rescaling_stable_length_dependence}. For
-    every positive integer $L$, the transfer map of its $L$-site blocking
-    satisfies
+    every integer $L\geq0$, the transfer map of its $L$-site blocking satisfies
     \begin{align}
         \mathcal E_{R^{[L]}}^2
         &=\left(\frac{337}{512}\right)^L\mathcal E_{R^{[L]}}.
         \notag
     \end{align}
-    No positive blocking of $R$ admits a normalized horizontal canonical form.
-    Consequently $R$ is not simple in the fixed-representative sense of
+    For every positive integer $L$, the blocking $R^{[L]}$ admits no normalized
+    horizontal canonical form. Consequently $R$ is not simple in the
+    fixed-representative sense of
     Definition~\ref{def:mpdo_simple_tensor}.
 
     % Maintainer scope: the conclusion quantifies over every normalized BNT
@@ -791,14 +791,15 @@
     Theorem~\ref{thm:mpdo_bnt_label_rescaling_stable_transfer_quasi_idempotent},
     the one-site transfer map satisfies
     $\E_R^2=\frac{337}{512}\E_R$. Applying
-    Theorem~\ref{thm:transfer_map_block_tensor_quasi_idempotent} gives
+    Theorem~\ref{thm:transfer_map_block_tensor_quasi_idempotent} gives, for every
+    integer $L\geq0$,
     \begin{align}
         \E_{R^{[L]}}^2
         &=\left(\frac{337}{512}\right)^L\E_{R^{[L]}}.
         \notag
     \end{align}
-    Suppose that the $L$-site blocking has a normalized horizontal canonical
-    form, where $L>0$. By
+    Now fix $L>0$ and suppose that the $L$-site blocking has a normalized
+    horizontal canonical form. By
     Theorem~\ref{thm:mpdo_horizontal_cf_quasi_idempotent_scalar}, its
     quasi-idempotence scalar must be one. On the other hand,
     \begin{align}
