@@ -383,16 +383,26 @@ under `bondEquiv`. -/
     bondBit2 k = (bondEquiv.symm k).2 := by
   fin_cases k <;> rfl
 
-/-- The entrywise positive square root of `wMat`, using the scaling factors
-already encoded in the letter matrices `A`. -/
+/-- The entrywise positive square root of `wMat` (`coeff_sq_eq_wMat`).  The
+values `4/5` and `3/5` are the scaling factors already encoded in the
+letter matrices `A`: `coeff' i j` is the unique nonzero entry of the
+letter supported on the matrix unit `E_{ij}`, namely `4/5` for the
+diagonal letters `A 0`, `A 1` and `3/5` for the off-diagonal letters
+`A 2`, `A 3`; the consistency check `A_entry_eq_coeff'` ties these values
+back to `A`.
+
+Project example; not from CPSV16. -/
 def coeff' : Fin 2 → Fin 2 → ℂ
   | 0, 0 => 4/5
   | 0, 1 => 3/5
   | 1, 0 => 3/5
   | 1, 1 => 4/5
 
-/-- Every nonzero entry of a letter matrix `A a` equals the corresponding
-entry of `coeff'`. -/
+/-- Consistency of the explicit values in `coeff'` with the letter
+matrices `A`: every nonzero entry of every letter `A a` at position
+`(r, c)` equals `coeff' r c`.
+
+Project example; not from CPSV16. -/
 lemma A_entry_eq_coeff' {a : Fin 4} {r c : Fin 2} (h : A a r c ≠ 0) :
     A a r c = coeff' r c := by
   fin_cases a <;> fin_cases r <;> fin_cases c <;> simp_all [A, coeff']
