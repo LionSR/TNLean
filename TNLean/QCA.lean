@@ -17,3 +17,4 @@ import TNLean.QCA.QuasiLocal
 import TNLean.QCA.QuasiLocalTranslation
 import TNLean.QCA.RegionSumset
 import TNLean.QCA.Translation
+import TNLean.QCA.TranslationCovariance
