@@ -96,11 +96,19 @@
 \begin{proof}\leanok
     \uses{thm:block_transfer_sum_quasi_idempotent_of_direct_sum,
         lem:block_diagonal_transfer_sum_to_block}
-    Realize an arbitrary rectangular matrix as the $(j,j')$ block of a matrix
-    on the total bond space. Theorem~\ref{thm:block_transfer_sum_quasi_idempotent_of_direct_sum}
-    gives $\mathcal S_B^2=c\mathcal S_B$. Restricting this identity to the
-    $(j,j')$ block twice and applying
-    Lemma~\ref{lem:block_diagonal_transfer_sum_to_block} gives the result.
+    Let $Z$ be an arbitrary rectangular matrix and realize it as the $(j,j')$
+    block of a matrix $Y$ on the total bond space. By
+    Lemma~\ref{lem:block_diagonal_transfer_sum_to_block},
+    $[\mathcal S_B(Y)]_{j,j'}=\E_{j,j'}(Z)$.
+    Theorem~\ref{thm:block_transfer_sum_quasi_idempotent_of_direct_sum} gives
+    $\mathcal S_B^2=c\mathcal S_B$, and hence
+    \begin{align}
+        \E_{j,j'}(\E_{j,j'}(Z))
+        &=[\mathcal S_B(\mathcal S_B(Y))]_{j,j'}
+         =[c\mathcal S_B(Y)]_{j,j'}
+         =c\E_{j,j'}(Z).
+        \notag
+    \end{align}
 \end{proof}
 
 \begin{lemma}[Pairwise idempotence of the block transfer sum]%
