@@ -69,8 +69,16 @@ through its own period agrees with the directly $p$-blocked block.
 \end{theorem}
 
 \begin{proof}\leanok
-    The transfer map of $A^{[L]}$ is $\E_A^L$. Induction on $L$ using
-    $\E_A^2=c\E_A$ gives the stated identity.
+    \uses{lem:blocked_irreducibility_direct_support}
+    The transfer map of $A^{[L]}$ is $\E_A^L$. Therefore
+    \begin{align}
+        (\E_A^L)^2
+        &=(\E_A^2)^L
+         =(c\E_A)^L
+         =c^L\E_A^L,
+        \notag
+    \end{align}
+    which is the required identity.
 \end{proof}
 
 \begin{lemma}[Adjoint primitivity equivalence]%

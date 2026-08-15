@@ -120,6 +120,10 @@ theorem blockTensor_R_not_isHorizontalCF (L : ℕ) (hL : 0 < L) :
 /-- The rescaling-stable dimer tensor `R` is not simple, for every canonical-form
 presentation and every positive blocking length.
 
+**Scope restriction (fixed representative):** This theorem concerns the current
+normalized-witness predicate `MPOTensor.IsSimple`, not a scale-invariant notion
+of simplicity. See `docs/paper-gaps/cpsv16_unit_weight_rfp_scale_tension.tex`.
+
 Source: arXiv:1606.00608, definition of simplicity at lines 815--822. -/
 theorem R_not_isSimple : ¬ MPOTensor.IsSimple R := by
   intro hSimple

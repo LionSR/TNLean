@@ -77,7 +77,8 @@ theorem transferMap_blockTensor_quasi_idempotent
           (transferMap (d := d) (D := D) A) ^ L =
         ((transferMap (d := d) (D := D) A) ^ L) ^ 2 := by rw [pow_two]
     _ = ((transferMap (d := d) (D := D) A) ^ 2) ^ L := by
-      rw [← pow_mul, ← pow_mul, Nat.mul_comm L 2]
+      simpa only [pow_mul] using congrArg
+        (fun n : ℕ => (transferMap (d := d) (D := D) A) ^ n) (Nat.mul_comm L 2)
     _ = (c • transferMap (d := d) (D := D) A) ^ L := by rw [pow_two, h]
     _ = c ^ L • (transferMap (d := d) (D := D) A) ^ L := by rw [smul_pow]
 
