@@ -83,6 +83,11 @@ For MPDO renormalization fixed points:
   simple-tensor predicate. The source copy-weight lemma is formalized on the
   chosen blocked canonical form; independence of the choices is not presently
   needed.
+- `cpsv16_unit_weight_rfp_scale_tension.tex` records the tension between the
+  source's line-246 unit-weight convention and the scale fixed by Definition
+  4.1. In particular, `MPOTensor.IsSimpleCanonicalForm` and
+  `MPOTensor.IsSimple` are normalized fixed-representative predicates, not
+  quotients by nonzero scalar rescaling.
 - `cpsv16_gsnnch_sector_decomposition.tex` records that
   `MPOTensor.GSNNCHData` retains the source orthogonal sectors and natural
   multiplicities. Positive commuting products on supplied orthogonal sectors
