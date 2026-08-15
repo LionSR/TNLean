@@ -485,16 +485,22 @@ model different levels of data and different sources.
   Reconstruction still permits an omitted all-zero complement because `Uᴴ * U`
   is the retained-support projection; see
   `docs/paper-gaps/cpgsv17_vertical_isometry_zero_sector.tex`.
-- `MPOTensor.IsSimpleCanonicalForm` in `TNLean/MPS/MPDO/SimpleTensor.lean` is
-  horizontal canonical form plus the MPDO and nonnilpotent-sector conditions of
-  arXiv:1606.00608, lines 815--822. The sanctioned one-way bridge is
-  `MPOTensor.IsSimpleCanonicalForm.isHorizontalCF`.
-- `MPOTensor.IsSimpleCanonicalForm` and `MPOTensor.IsSimple` are normalized
-  fixed-representative predicates. The latter permits positive physical
-  blocking, but still requires the blocked tensor itself to admit the source's
+- `MPOTensor.IsSimpleCanonicalForm` and `MPOTensor.IsSimple` in
+  `TNLean/MPS/MPDO/SimpleTensor.lean` are normalized fixed-representative
+  predicates. The former adds the MPDO and nonnilpotent-sector conditions to
+  horizontal canonical form; its sanctioned one-way bridge is
+  `MPOTensor.IsSimpleCanonicalForm.isHorizontalCF`. The latter permits positive
+  physical blocking, but still requires the blocked tensor itself to admit the
   line-246 unit-weight witness. Neither predicate is a quotient by nonzero
   scalar rescaling; see
   `docs/paper-gaps/cpsv16_unit_weight_rfp_scale_tension.tex`.
+- `MPOTensor.IsSourceSimple` in `TNLean/MPS/MPDO/SourceSimpleTensor.lean`
+  is the separate normalization-free source-facing predicate from
+  arXiv:1606.00608, lines 815--822. It requires a nonzero tensor satisfying the
+  MPDO condition and existentially chooses a positive physical blocking whose
+  doubled-index tensor has a coefficient-form basis of normal tensors with
+  nonnilpotent physical-trace transfers. No equivalence with the normalized
+  predicates is asserted.
 
 The `CF` spelling in these established MPDO names is retained for compatibility
 and paper-local vocabulary. New public predicates should spell out

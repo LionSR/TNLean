@@ -822,7 +822,7 @@
     \end{align}
 \end{proof}
 
-\begin{theorem}[The rescaling-stable dimer tensor is not simple]
+\begin{theorem}[The rescaling-stable dimer fails normalized simplicity]
     \label{thm:mpdo_bnt_label_rescaling_stable_not_simple}
     \lean{MPOTensor.RescalingStableLengthDependentRFP.%
         transferMap_blockTensor_R_toMPSTensor_quasi_idempotent}
@@ -841,8 +841,8 @@
         \notag
     \end{align}
     For every positive integer $L$, the blocking $R^{[L]}$ admits no normalized
-    horizontal canonical form. Consequently $R$ is not simple in the
-    fixed-representative sense of
+    horizontal canonical form. Consequently $R$ fails normalized
+    fixed-representative simplicity in the sense of
     Definition~\ref{def:mpdo_simple_tensor}.
 
     % Maintainer scope: the conclusion quantifies over every normalized BNT
@@ -880,9 +880,9 @@
         0<\left(\frac{337}{512}\right)^L<1,
         \notag
     \end{align}
-    a contradiction. Simplicity would provide such a normalized horizontal
-    canonical form after some positive blocking by
-    \cite[lines~815--822]{Cirac2016MPDO_arXiv}; hence $R$ is not simple.
+    a contradiction. Normalized fixed-representative simplicity would provide
+    such a horizontal canonical form after some positive blocking. Hence
+    $R$ fails Definition~\ref{def:mpdo_simple_tensor}.
 \end{proof}
 
 \begin{theorem}[Positivity of the rescaling-stable coefficient family]%
@@ -1031,7 +1031,8 @@
     \lean{MPOTensor.RescalingStableLengthDependentRFP.%
         doubledPhysTraceTransfer_retainedBlock_not_isNilpotent}
     \leanok
-    \uses{def:mpdo_doubled_phys_trace_transfer, def:mpdo_simple_tensor,
+    \uses{def:mpdo_doubled_phys_trace_transfer,
+        def:mpdo_source_simple_tensor,
         thm:mpdo_bnt_label_rescaling_stable_length_dependence,
         thm:mpdo_bnt_label_rescaling_stable_cf}
     Let $\widehat R=\mu^{-1}R^{\bullet\bullet}$ be the single retained normal
@@ -1045,7 +1046,7 @@
     \end{align}
     Consequently neither $\mathcal T_R$ nor
     $\mathcal T_{\widehat R}$ is nilpotent. Thus the retained basis element
-    satisfies the non-nilpotency clause in the definition of a simple tensor.
+    satisfies the non-nilpotency clause in source simplicity.
 
     This conclusion concerns only that clause for the displayed one-block
     presentation. The retained decomposition has the non-unit weight
@@ -1068,7 +1069,7 @@
     Replacing $R$ by the normalized block uses the nontrivial scale
     $c=\mu^{-1}$ and therefore changes the representative on which the
     renormalization fixed-point condition is evaluated. Consequently this
-    result neither proves nor refutes simplicity of $R$, and it makes no
+    result by itself does not establish source simplicity, and it makes no
     claim about other presentations or blockings.
 \end{theorem}
 \begin{proof}\leanok
@@ -1088,6 +1089,56 @@
     $\mathcal T_{\widehat R}=\mu^{-1}\mathcal T_R$. Since $\mu>0$, a
     nilpotent $\mathcal T_{\widehat R}$ would remain nilpotent after
     multiplication by $\mu$, forcing $\mathcal T_R$ to be nilpotent.
+\end{proof}
+
+\begin{theorem}[Source simplicity of the rescaling-stable dimer]
+    \label{thm:mpdo_bnt_label_rescaling_stable_source_simple}
+    \lean{MPOTensor.RescalingStableLengthDependentRFP.oneSiteDoubledEquiv}
+    \lean{MPOTensor.RescalingStableLengthDependentRFP.%
+        toMPSTensor_blockTensor_R_one}
+    \lean{MPOTensor.RescalingStableLengthDependentRFP.%
+        doubledPhysTraceTransfer_reindexPhysical_oneSiteDoubledEquiv}
+    \lean{MPOTensor.RescalingStableLengthDependentRFP.R_isSourceSimple}
+    \leanok
+    \uses{def:mpdo_source_simple_tensor,
+        thm:mpdo_bnt_label_rescaling_stable_ismpdo,
+        thm:mpdo_bnt_label_rescaling_stable_cf,
+        thm:mpdo_bnt_label_rescaling_stable_non_nilpotent}
+    The dimer tensor $R$ is source-simple. The positive blocking length is
+    $L=1$. After the canonical relabeling of the doubled physical alphabet,
+    the active basis of normal tensors has one member, namely the retained
+    block $\widehat R$, and its physical-trace transfer is non-nilpotent.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpdo_bnt_label_rescaling_stable_ismpdo,
+        thm:mpdo_bnt_label_rescaling_stable_cf,
+        thm:mpdo_bnt_label_rescaling_stable_non_nilpotent}
+    Theorem~\ref{thm:mpdo_bnt_label_rescaling_stable_ismpdo} gives the MPDO
+    condition. The nonnilpotent physical-trace transfer below also shows that
+    $R$ is nonzero. Choose the one-site blocking. Its doubled-index tensor is the
+    canonical physical relabeling of $R^{\bullet\bullet}$. Refine the canonical
+    form from Theorem~\ref{thm:mpdo_bnt_label_rescaling_stable_cf} to its active
+    basis of normal tensors. The only retained member is $\widehat R$, whose
+    physical-trace transfer is non-nilpotent by
+    Theorem~\ref{thm:mpdo_bnt_label_rescaling_stable_non_nilpotent}.
+\end{proof}
+
+\begin{corollary}[The two simplicity interfaces give opposite verdicts]
+    \label{cor:mpdo_bnt_label_rescaling_stable_simplicity_verdicts}
+    \lean{MPOTensor.RescalingStableLengthDependentRFP.%
+        R_isSourceSimple_and_not_isSimple}
+    \leanok
+    \uses{thm:mpdo_bnt_label_rescaling_stable_source_simple,
+        thm:mpdo_bnt_label_rescaling_stable_not_simple}
+    The dimer tensor $R$ is source-simple, witnessed by the one-site blocking,
+    but it does not satisfy normalized fixed-representative simplicity.
+\end{corollary}
+
+\begin{proof}\leanok
+    Combine
+    Theorem~\ref{thm:mpdo_bnt_label_rescaling_stable_source_simple} with
+    Theorem~\ref{thm:mpdo_bnt_label_rescaling_stable_not_simple}.
 \end{proof}
 
 \begin{theorem}[The rescaling-stable tensor is a renormalization fixed

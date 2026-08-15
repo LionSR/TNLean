@@ -64,58 +64,78 @@
     \end{align}
 \end{proof}
 
-\begin{definition}[Simple tensor]
+\begin{definition}[Source-simple tensor]
+    \label{def:mpdo_source_simple_tensor}
+    \lean{MPOTensor.IsSourceSimple}
+    \leanok
+    \uses{def:mpdo, def:mpdo_physical_blocking, def:bnt_cpsv,
+        def:mpdo_doubled_phys_trace_transfer}
+    A nonzero tensor generating MPDOs is \emph{source-simple} if there is a
+    positive physical blocking length $L$ such that the doubled-index tensor
+    of the $L$-site blocking has a finite basis of normal tensors
+    $B_1,\ldots,B_g$ and every physical-trace transfer $\mathcal T_{B_j}$ is
+    non-nilpotent. This is the simplicity condition
+    of~\cite[lines~815--822]{Cirac2016MPDO_arXiv}.
+
+    The quantifier over the blocking length is existential. The definition
+    imposes neither the global unit-weight normalization
+    of~\cite[line~246]{Cirac2016MPDO_arXiv} nor a normalized horizontal
+    canonical-form witness.
+\end{definition}
+
+\begin{definition}[Normalized fixed-representative simplicity]
     \label{def:mpdo_simple_tensor}
     \lean{MPOTensor.IsSimple}
     \leanok
     \uses{def:mpdo, def:mpdo_physical_blocking,
         def:mpdo_simple_cf_tensor}
-    First block a positive number of physical sites and write the blocked
-    doubled-index tensor in canonical form over a basis of normal tensors, as
-    prescribed at line~815 of \cite{Cirac2016MPDO_arXiv}. A tensor generating
-    MPDOs is \emph{simple} if one such canonical form has no nilpotent basis
-    element \cite[line~822]{Cirac2016MPDO_arXiv}. A basis element is
-    nilpotent when tracing $R\le D$ sites annihilates its density operators
-    for all large chain lengths \cite[line~819]{Cirac2016MPDO_arXiv}; this is
-    nilpotency of its physical-trace transfer matrix.
+    A tensor generating MPDOs satisfies \emph{normalized
+    fixed-representative simplicity} if there is a positive physical blocking
+    length for which the blocked tensor admits the normalized canonical-form
+    witness of Definition~\ref{def:mpdo_simple_cf_tensor}.
 
-    Here simplicity is tested on the blocked tensor itself. The chosen BNT
-    retains the global unit-weight convention of
-    \cite[line~246]{Cirac2016MPDO_arXiv}; it does not identify nonzero scalar
-    multiples or assert independence of the chosen canonical presentation.
+    This project interface includes the global unit-weight convention
+    of~\cite[line~246]{Cirac2016MPDO_arXiv} at the scale of the blocked
+    tensor.
+    It is therefore distinct from source simplicity in
+    Definition~\ref{def:mpdo_source_simple_tensor}: it does not identify
+    nonzero scalar multiples, and no equivalence between the two predicates is
+    asserted.
 \end{definition}
 
-\begin{definition}[Simple tensor in blocked canonical form]
+\begin{definition}[Normalized simplicity in blocked canonical form]
     \label{def:mpdo_simple_cf_tensor}
     \lean{MPOTensor.IsSimpleCanonicalForm}
     \leanok
     \uses{def:mpdo, def:horizontal_cf_mpdo,
         def:mpdo_doubled_phys_trace_transfer}
-    A tensor generating MPDOs is in \emph{simple canonical form} if it has a
-    basis-of-normal-tensors decomposition whose basis elements all have
-    non-nilpotent physical-trace transfer. This records the simple
-    horizontal-canonical-form data of the already-blocked tensor $K$ fixed in
-    \cite[Appendix~C.2, line~1628]{Cirac2016MPDO_arXiv}.
+    A tensor generating MPDOs satisfies this predicate if it has a normalized
+    horizontal basis-of-normal-tensors decomposition whose basis elements all
+    have non-nilpotent physical-trace transfer. This records the
+    horizontal-canonical-form data of the already-blocked tensor $K$ fixed
+    in~\cite[Appendix~C.2, line~1628]{Cirac2016MPDO_arXiv}.
 
-    The definition concerns this fixed representative. Its canonical-form
-    witness includes the global unit-weight convention of
-    \cite[line~246]{Cirac2016MPDO_arXiv}, whereas
-    the non-nilpotency condition itself is unchanged by nonzero scalar
-    rescaling. No invariance under rescaling or replacement of the canonical
-    presentation is asserted.
+    The definition concerns this fixed representative. Its witness includes
+    the global unit-weight convention
+    of~\cite[line~246]{Cirac2016MPDO_arXiv}, whereas the non-nilpotency
+    condition
+    itself is unchanged by nonzero scalar rescaling. It is an ingredient of
+    Definition~\ref{def:mpdo_simple_tensor}, not the normalization-free source
+    predicate of Definition~\ref{def:mpdo_source_simple_tensor}. No invariance
+    under rescaling or replacement of the canonical presentation is asserted.
 \end{definition}
 % Note for maintainers: this predicate does not include the biCF
 % (bidirectional canonical form) hypothesis imposed on K at line 1628.  That
 % condition is not used by the copy-independence argument and is introduced
 % separately when the inverse tensor is needed.
 
-\begin{lemma}[Simple canonical-form tensors are horizontal canonical]
+\begin{lemma}[Normalized simple canonical forms are horizontal canonical]
     \label{lem:mpdo_simple_tensor_horizontal_cf}
     \lean{MPOTensor.IsSimpleCanonicalForm.isHorizontalCF}
     \leanok
     \uses{def:mpdo_simple_cf_tensor, def:horizontal_cf_mpdo}
-    A simple tensor already in the chosen blocked canonical-form setting is
-    in horizontal canonical form.
+    A tensor satisfying normalized simplicity in the chosen blocked
+    canonical-form setting is in horizontal canonical form.
 \end{lemma}
 
 \begin{proof}\leanok
