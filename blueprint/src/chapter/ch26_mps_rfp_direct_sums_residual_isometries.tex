@@ -43,9 +43,20 @@
 \end{theorem}
 
 \begin{proof}\leanok
-    Expand the direct-sum transfer map. Reindexing converts each block-diagonal
-    matrix product into the corresponding block-labelled product, and summing
-    over the physical index gives $\mathcal S_B$.
+    Since $\Phi$ preserves products and adjoints, expanding the transfer map
+    gives
+    \begin{align}
+        \E_{\oplus_k B_k}(\Phi(Y))
+        &=\sum_i\Phi\!\left(\bigoplus_k B_k^i\right)\Phi(Y)
+            \Phi\!\left(\bigoplus_k B_k^i\right)^\dagger
+        \notag\\
+        &=\Phi\!\left(\sum_i
+            \left(\bigoplus_k B_k^i\right)Y
+            \left(\bigoplus_k B_k^i\right)^\dagger\right)
+        \notag\\
+        &=\Phi(\mathcal S_B(Y)).
+        \notag
+    \end{align}
 \end{proof}
 
 \begin{theorem}[Direct-sum quasi-idempotence on the block transfer sum]%
