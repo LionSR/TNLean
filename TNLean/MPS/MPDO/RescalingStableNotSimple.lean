@@ -71,7 +71,8 @@ namespace MPOTensor.RescalingStableLengthDependentRFP
 /-- The transfer map of the $L$-site blocked dimer tensor is quasi-idempotent
 with scalar $(337/512)^L$.
 
-Project example; the blocking convention is arXiv:1606.00608, lines 815--822. -/
+Project example; the physical blocking convention is arXiv:1606.00608,
+lines 227--231. -/
 theorem transferMap_blockTensor_R_toMPSTensor_quasi_idempotent (L : ℕ) :
     MPSTensor.transferMap (MPOTensor.blockTensor R L).toMPSTensor *
         MPSTensor.transferMap (MPOTensor.blockTensor R L).toMPSTensor =

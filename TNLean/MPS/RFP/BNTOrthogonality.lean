@@ -432,12 +432,12 @@ namespace IsBNTCanonicalForm
 /-- The unit-weight convention in a normalized BNT presentation forces any
 transfer quasi-idempotence scalar to equal one.
 
-Choose the unit-modulus copy supplied by the BNT normalization. Restrict the
-whole direct-sum transfer equation to that diagonal corner. Unit modulus removes
-the copy weight, so the representative transfer map satisfies
-$\mathcal E^2=c\mathcal E$. Left canonicity makes $\mathcal E$ trace preserving;
-taking the trace at the identity therefore gives $D=cD$, and the positive bond
-dimension gives $c=1$.
+Choose the unit-modulus copy supplied by the BNT normalization, with weight
+$w$. Then $w\,\overline w=1$, so $\mathcal E_{wA}=\mathcal E_A$. Restricting the
+whole direct-sum transfer equation to that diagonal corner therefore gives
+$\mathcal E_A^2=c\mathcal E_A$. Left canonicity makes $\mathcal E_A$ trace
+preserving; taking the trace at the identity gives $D=cD$, and the positive
+bond dimension gives $c=1$.
 
 Source convention: arXiv:1606.00608, line 246 (unit-weight normalization).
 The conclusion is a formal consequence of that convention and trace preservation. -/
