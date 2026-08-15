@@ -213,19 +213,23 @@ lemma transferMap_R_toMPSTensor_eq (X : Matrix (Fin 4) (Fin 4) ℂ) :
   have hterm : ∀ p q : Fin 4,
       R.toMPSTensor (finProdFinEquiv (p, q)) * X * (R.toMPSTensor (finProdFinEquiv (p, q)))ᴴ =
       (25/32 : ℂ) ^ 2 •
-        ((fun b => A b (bit2 p) (bit2 q)) ⬝ᵥ
-          (X.mulVec (fun b => A b (bit2 p) (bit2 q)))) •
-        Matrix.vecMulVec (fun a => A a (bit1 p) (bit1 q)) (fun a => A a (bit1 p) (bit1 q)) := by
+        ((fun b => A b (bondBit2 p) (bondBit2 q)) ⬝ᵥ
+          (X.mulVec (fun b => A b (bondBit2 p) (bondBit2 q)))) •
+        Matrix.vecMulVec (fun a => A a (bondBit1 p) (bondBit1 q))
+          (fun a => A a (bondBit1 p) (bondBit1 q)) := by
     intro p q
     rw [toMPSTensor_R_apply, R_eq_vecMulVec p q, Matrix.conjTranspose_smul]
     simp only [smul_mul_assoc, mul_smul_comm, smul_smul]
-    rw [vecMulVec_conj (Fin 4) (fun a => A a (bit1 p) (bit1 q)) (fun b => A b (bit2 p) (bit2 q)) X]
-    have hstarv : star (fun b => A b (bit2 p) (bit2 q)) = fun b => A b (bit2 p) (bit2 q) := by
+    rw [vecMulVec_conj (Fin 4) (fun a => A a (bondBit1 p) (bondBit1 q))
+      (fun b => A b (bondBit2 p) (bondBit2 q)) X]
+    have hstarv : star (fun b => A b (bondBit2 p) (bondBit2 q)) =
+        fun b => A b (bondBit2 p) (bondBit2 q) := by
       funext b
-      exact A_star_eq b (bit2 p) (bit2 q)
-    have hstaru : star (fun a => A a (bit1 p) (bit1 q)) = fun a => A a (bit1 p) (bit1 q) := by
+      exact A_star_eq b (bondBit2 p) (bondBit2 q)
+    have hstaru : star (fun a => A a (bondBit1 p) (bondBit1 q)) =
+        fun a => A a (bondBit1 p) (bondBit1 q) := by
       funext a
-      exact A_star_eq a (bit1 p) (bit1 q)
+      exact A_star_eq a (bondBit1 p) (bondBit1 q)
     rw [hstarv, hstaru, smul_smul]
     congr 1
     have hstar25 : star (25/32 : ℂ) = 25/32 := by
@@ -236,7 +240,7 @@ lemma transferMap_R_toMPSTensor_eq (X : Matrix (Fin 4) (Fin 4) ℂ) :
   simp_rw [hterm]
   ext a a'
   simp only [Fin.sum_univ_four, Matrix.sum_apply, Matrix.smul_apply, smul_eq_mul,
-    dotProduct, Matrix.mulVec, bit1, bit2, fixedDiag, Matrix.diagonal_apply,
+    dotProduct, Matrix.mulVec, bondBit1, bondBit2, fixedDiag, Matrix.diagonal_apply,
     A, sVal, Matrix.single_apply, Matrix.vecMulVec]
   fin_cases a <;> fin_cases a' <;> norm_num <;> ring
 
