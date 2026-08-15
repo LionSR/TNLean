@@ -20,6 +20,7 @@ and the transfer-map fixed-point equations used in canonical forms.
 * `MPSTensor.IsInjective.mapStar`: conjugation preserves injectivity.
 * `MPSTensor.IsNormal.mapStar`: conjugation preserves normality.
 * `MPSTensor.IsLeftCanonical.mapStar`: conjugation preserves left-canonical normalization.
+* `MPSTensor.GaugeEquiv.mapStar`: conjugation preserves gauge equivalence.
 * `MPSTensor.IsNormalTensor.mapStar`: conjugation preserves normalized normal tensors.
 -/
 
@@ -113,11 +114,37 @@ theorem IsLeftCanonical.mapStar {A : MPSTensor d D} (hA : IsLeftCanonical A) :
       rfl
     _ = 1 := by rw [hA]; simp
 
-/-- If a normal tensor is left-canonical, then its entrywise conjugate is a normal tensor. -/
-theorem IsNormalTensor.mapStar {A : MPSTensor d D} (hA : IsNormalTensor A)
-    (hLeft : IsLeftCanonical A) : IsNormalTensor (mapStar A) := by
+/-- Gauge equivalence is preserved by entrywise complex conjugation.
+
+This conjugates the invertible gauge in the relation of arXiv:1606.00608,
+lines 264--268. -/
+theorem GaugeEquiv.mapStar {A B : MPSTensor d D} (h : GaugeEquiv A B) :
+    GaugeEquiv (mapStar A) (mapStar B) := by
+  obtain ⟨X, hX⟩ := h
+  let f : Matrix (Fin D) (Fin D) ℂ →+* Matrix (Fin D) (Fin D) ℂ :=
+    (starRingEnd ℂ).mapMatrix
+  let Xbar : GL (Fin D) ℂ := (Units.map f.toMonoidHom) X
+  refine ⟨Xbar, fun i ↦ ?_⟩
+  rw [mapStar_apply, mapStar_apply, hX i, Matrix.map_mul, Matrix.map_mul]
+  rfl
+
+/-- Entrywise complex conjugation preserves CPSV normal tensors.
+
+The proof uses the pure trace-preserving Perron gauge associated with the
+normal tensor, conjugates that gauge, and transports normality back. Entrywise
+conjugation transports the spectral-radius-one normalization of
+arXiv:1606.00608, lines 224--235, together with the gauge relation at lines
+264--268. -/
+theorem IsNormalTensor.mapStar {A : MPSTensor d D} (hA : IsNormalTensor A) :
+    IsNormalTensor (mapStar A) := by
   letI : NeZero D := ⟨hA.bondDim_ne_zero⟩
-  exact isNormalTensor_of_isNormal_leftCanonical _ hA.isNormal.mapStar hLeft.mapStar
+  obtain ⟨σ, _hσ, _hσfix, hLeft, hGauge, _hPrim, _hIrr⟩ := hA.exists_tpGauge
+  have hGaugeNormal : IsNormalTensor (tpGauge (d := d) (D := D) A σ) :=
+    hA.of_gaugeEquiv hGauge.symm
+  have hGaugeStarNormal :
+      IsNormalTensor (MPSTensor.mapStar (tpGauge (d := d) (D := D) A σ)) :=
+    isNormalTensor_of_isNormal_leftCanonical _ hGaugeNormal.isNormal.mapStar hLeft.mapStar
+  exact hGaugeStarNormal.of_gaugeEquiv hGauge.mapStar
 
 /-- A diagonal positive-definite complex matrix is fixed by entrywise conjugation. -/
 theorem map_star_eq_self_of_posDef_isDiag

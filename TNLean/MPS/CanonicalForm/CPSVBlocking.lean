@@ -3,7 +3,6 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.Channel.Irreducible.SpectralRadius
 import TNLean.MPS.CanonicalForm.NormalTensorGauge
 import TNLean.MPS.CanonicalForm.SectorComparison.PrimitiveBlocks
 
@@ -58,96 +57,9 @@ theorem blockTensor {A B : MPSTensor d D} (h : GaugeEquiv A B) (p : ℕ) :
   simpa [MPSTensor.blockTensor, Matrix.GeneralLinearGroup.coe_inv] using
     evalWord_gauge (A := A) (B := B) X hX (wordOfBlock d p i)
 
-/-- The transfer maps of gauge-equivalent tensors are related by the standard
-congruence similarity of completely positive maps.
-
-Source: arXiv:1606.00608, lines 219--223 define the transfer map and lines
-264--268 give the invertible gauge relation. -/
-theorem transferMap_eq_similarityMap {A B : MPSTensor d D} (h : GaugeEquiv A B) :
-    ∃ C : Matrix (Fin D) (Fin D) ℂ, C.det ≠ 0 ∧
-      transferMap (d := d) (D := D) B =
-        similarityMap (D := D) C (transferMap (d := d) (D := D) A) := by
-  obtain ⟨X, hX⟩ := h
-  refine ⟨((X⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ), ?_, ?_⟩
-  · exact Matrix.GeneralLinearGroup.det_ne_zero (X⁻¹ : GL (Fin D) ℂ)
-  · apply LinearMap.ext
-    intro Y
-    have hXdet : IsUnit ((X : Matrix (Fin D) (Fin D) ℂ).det) :=
-      Ne.isUnit (Matrix.GeneralLinearGroup.det_ne_zero X)
-    have hX_inv_inv :
-        ((X : Matrix (Fin D) (Fin D) ℂ)⁻¹)⁻¹ =
-          (X : Matrix (Fin D) (Fin D) ℂ) :=
-      Matrix.nonsing_inv_nonsing_inv (X : Matrix (Fin D) (Fin D) ℂ) hXdet
-    have hXstar_det : IsUnit (((X : Matrix (Fin D) (Fin D) ℂ)ᴴ).det) := by
-      simpa [Matrix.det_conjTranspose] using IsUnit.star hXdet
-    have hXstar_inv_inv :
-        (((X : Matrix (Fin D) (Fin D) ℂ)ᴴ)⁻¹)⁻¹ =
-          (X : Matrix (Fin D) (Fin D) ℂ)ᴴ :=
-      Matrix.nonsing_inv_nonsing_inv
-        ((X : Matrix (Fin D) (Fin D) ℂ)ᴴ) hXstar_det
-    calc
-      transferMap (d := d) (D := D) B Y =
-          ∑ x : Fin d,
-            ((X : Matrix (Fin D) (Fin D) ℂ) * A x *
-              (X : Matrix (Fin D) (Fin D) ℂ)⁻¹) * Y *
-              (((X : Matrix (Fin D) (Fin D) ℂ) * A x *
-                (X : Matrix (Fin D) (Fin D) ℂ)⁻¹)ᴴ) := by
-            simp [transferMap_apply, hX]
-      _ = ∑ x : Fin d,
-            (X : Matrix (Fin D) (Fin D) ℂ) *
-              (A x * ((X : Matrix (Fin D) (Fin D) ℂ)⁻¹ * Y *
-                ((X : Matrix (Fin D) (Fin D) ℂ)ᴴ)⁻¹) * (A x)ᴴ) *
-              (X : Matrix (Fin D) (Fin D) ℂ)ᴴ := by
-            refine Finset.sum_congr rfl ?_
-            intro x _
-            simp [Matrix.conjTranspose_mul, Matrix.conjTranspose_nonsing_inv,
-              Matrix.mul_assoc]
-      _ = (X : Matrix (Fin D) (Fin D) ℂ) *
-            (∑ x : Fin d,
-              A x * ((X : Matrix (Fin D) (Fin D) ℂ)⁻¹ * Y *
-                ((X : Matrix (Fin D) (Fin D) ℂ)ᴴ)⁻¹) * (A x)ᴴ) *
-            (X : Matrix (Fin D) (Fin D) ℂ)ᴴ := by
-            simp [Finset.mul_sum, Finset.sum_mul, Matrix.mul_assoc]
-      _ = similarityMap (D := D)
-            ((X⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ)
-            (transferMap (d := d) (D := D) A) Y := by
-            simp [similarityMap, transferMap_apply, Matrix.conjTranspose_nonsing_inv,
-              hX_inv_inv, hXstar_inv_inv, Matrix.mul_assoc]
-
 end GaugeEquiv
 
 namespace IsNormalTensor
-
-/-- Transport normal-tensor status backward along a gauge equivalence.
-
-The transfer maps are similar, hence have the same spectral radius and
-peripheral spectrum; irreducibility is transported through the corresponding
-irreducible-map similarity.
-
-Source: arXiv:1606.00608, lines 233--235 define normal tensors and lines
-264--268 give the invertible gauge relation between normal representatives. -/
-theorem of_gaugeEquiv {A B : MPSTensor d D} (hB : IsNormalTensor B)
-    (hGauge : GaugeEquiv A B) :
-    IsNormalTensor A := by
-  obtain ⟨C, hC, hMap⟩ := hGauge.transferMap_eq_similarityMap
-  refine ⟨?_, ?_, ?_⟩
-  · have hIrrB : IsIrreducibleMap (transferMap (d := d) (D := D) B) :=
-      isIrreducibleCP_transferMap_of_isIrreducibleTensor B hB.no_invariant_proj
-    have hIrrA : IsIrreducibleMap (transferMap (d := d) (D := D) A) := by
-      have hIrrSim : IsIrreducibleMap
-          (similarityMap (D := D) C (transferMap (d := d) (D := D) A)) := by
-        simpa [hMap] using hIrrB
-      exact (isIrreducibleMap_similarity_iff (D := D) hC).1 hIrrSim
-    exact isIrreducibleTensor_of_isIrreducibleMap A hIrrA
-  · have hsr := hB.spectral_radius_one
-    rw [hMap] at hsr
-    rw [spectralRadius_similarityMap_eq (D := D) C hC
-      (transferMap (d := d) (D := D) A)] at hsr
-    exact hsr
-  · have hPrim := hB.primitive_transfer
-    rw [hMap] at hPrim
-    exact (IsPrimitive.similarityMap_iff (D := D) C hC
-      (transferMap (d := d) (D := D) A)).1 hPrim
 
 /-- Positive physical blocking preserves CPSV normal tensors.
 
