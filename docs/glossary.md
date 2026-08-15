@@ -489,6 +489,12 @@ model different levels of data and different sources.
   horizontal canonical form plus the MPDO and nonnilpotent-sector conditions of
   arXiv:1606.00608, lines 815--822. The sanctioned one-way bridge is
   `MPOTensor.IsSimpleCanonicalForm.isHorizontalCF`.
+- `MPOTensor.IsSimpleCanonicalForm` and `MPOTensor.IsSimple` are normalized
+  fixed-representative predicates. The latter permits positive physical
+  blocking, but still requires the blocked tensor itself to admit the source's
+  line-246 unit-weight witness. Neither predicate is a quotient by nonzero
+  scalar rescaling; see
+  `docs/paper-gaps/cpsv16_unit_weight_rfp_scale_tension.tex`.
 
 The `CF` spelling in these established MPDO names is retained for compatibility
 and paper-local vocabulary. New public predicates should spell out
