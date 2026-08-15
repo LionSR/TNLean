@@ -2,8 +2,10 @@
 
 This audit records the public declarations removed by PR #6494 under the
 repository-local exact-pass-through exception in
-`docs/MATHLIB_style.md` §Deprecation. Every removed declaration had no
-non-Archive Lean consumer. Each merely forwards to an existing theorem or
+`docs/MATHLIB_style.md` §Deprecation. Every removed declaration has no
+remaining non-Archive Lean consumer. The transfer-reindexing proof had one local
+consumer, where it is now inlined as `hTransfer`; the other declarations had no
+consumer before deletion. Each merely forwards to an existing theorem or
 definition, exposes bundled witness data, or names a proof step now written
 directly at its only use site.
 The substantive component declarations remain public.
