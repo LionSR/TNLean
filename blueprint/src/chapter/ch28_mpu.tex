@@ -8438,8 +8438,8 @@ as separate results in the appendix.
   definition of a one-dimensional QCA \cite[line~2298]{Cirac2017MPU}.
 \end{definition}
 
-\begin{lemma}[Pointwise characterization of translation covariance]
-  \label{lem:qca_translation_covariant_iff}
+\begin{theorem}[Pointwise characterization of translation covariance]
+  \label{thm:qca_translation_covariant_iff}
   \lean{SpinChain.translationCovariant_iff}
   \leanok
   \uses{def:qca_translation_covariant}
@@ -8449,7 +8449,7 @@ as separate results in the appendix.
     \omega\bigl(\tau_a(A)\bigr)=\tau_a\bigl(\omega(A)\bigr)
   \end{align}
   for every $a\in\mathbb Z$ and every $A\in\mathcal A$.
-\end{lemma}
+\end{theorem}
 
 \begin{proof}\leanok
   \uses{def:qca_translation_covariant}
@@ -8457,8 +8457,8 @@ as separate results in the appendix.
   Apply this observation to the two composites in the definition.
 \end{proof}
 
-\begin{lemma}[Identity and composition of translation-covariant automorphisms]
-  \label{lem:qca_translation_covariant_identity_composition}
+\begin{theorem}[Identity and composition of translation-covariant automorphisms]
+  \label{thm:qca_translation_covariant_identity_composition}
   \lean{SpinChain.translationCovariant_refl,
     SpinChain.TranslationCovariant.trans}
   \leanok
@@ -8470,7 +8470,7 @@ as separate results in the appendix.
     A\longmapsto\eta\bigl(\omega(A)\bigr),
   \end{align}
   which first applies $\omega$ and then $\eta$.
-\end{lemma}
+\end{theorem}
 
 \begin{proof}\leanok
   \uses{def:qca_translation_covariant}
