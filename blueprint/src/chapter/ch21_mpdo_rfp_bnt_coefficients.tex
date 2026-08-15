@@ -733,6 +733,51 @@
     $\lambda(1-\lambda)^2=0$. This fails at $\lambda=\frac{7}{25}$.
 \end{proof}
 
+\begin{theorem}[The rescaling-stable dimer tensor is not simple]
+    \label{thm:mpdo_bnt_label_rescaling_stable_not_simple}
+    \lean{MPOTensor.RescalingStableLengthDependentRFP.%
+        transferMap_blockTensor_R_toMPSTensor_quasi_idempotent}
+    \lean{MPOTensor.RescalingStableLengthDependentRFP.%
+        blockTensor_R_not_isHorizontalCF}
+    \lean{MPOTensor.RescalingStableLengthDependentRFP.R_not_isSimple}
+    \leanok
+    \uses{def:mpdo_simple_tensor, def:horizontal_cf_mpdo,
+        thm:mpdo_bnt_label_rescaling_stable_length_dependence}
+    Let $R$ be the dimer tensor of
+    Theorem~\ref{thm:mpdo_bnt_label_rescaling_stable_length_dependence}. For
+    every positive integer $L$, the transfer map of its $L$-site blocking
+    satisfies
+    \begin{align}
+        \mathcal E_{R^{[L]}}^2
+        &=\left(\frac{337}{512}\right)^L\mathcal E_{R^{[L]}}.
+        \notag
+    \end{align}
+    No positive blocking of $R$ admits a normalized horizontal canonical form.
+    Consequently $R$ is not simple in the fixed-representative sense of
+    Definition~\ref{def:mpdo_simple_tensor}.
+
+    % Maintainer scope: the conclusion quantifies over every normalized BNT
+    % witness admitted by the fixed-representative simplicity definition. It
+    % does not assert that a BNT element is nilpotent, use the vertical
+    % coefficient family, or concern a scale-invariant notion of simplicity.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{lem:mpdo_horizontal_cf_quasi_idempotent_scalar,
+        lem:mpdo_simple_tensor_horizontal_cf}
+    Suppose that the $L$-site blocking has a normalized horizontal canonical
+    form, where $L>0$. By
+    Lemma~\ref{lem:mpdo_horizontal_cf_quasi_idempotent_scalar}, its
+    quasi-idempotence scalar must be one. On the other hand,
+    \begin{align}
+        0<\left(\frac{337}{512}\right)^L<1,
+        \notag
+    \end{align}
+    a contradiction. Simplicity would provide such a normalized horizontal
+    canonical form after some positive blocking by
+    \cite[lines~815--822]{Cirac2016MPDO_arXiv}; hence $R$ is not simple.
+\end{proof}
+
 \begin{theorem}[Positivity of the rescaling-stable coefficient family]%
     \label{thm:mpdo_bnt_label_rescaling_stable_ismpdo}
     \lean{MPOTensor.RescalingStableLengthDependentRFP.mpo_R_entry_formula}
