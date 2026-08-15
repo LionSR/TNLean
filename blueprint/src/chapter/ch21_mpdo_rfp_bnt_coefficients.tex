@@ -733,6 +733,36 @@
     $\lambda(1-\lambda)^2=0$. This fails at $\lambda=\frac{7}{25}$.
 \end{proof}
 
+\begin{lemma}[Rank-one form of the dimer transfer map]
+    \label{lem:mpdo_bnt_label_rescaling_stable_transfer_rank_one}
+    \lean{MPOTensor.RescalingStableLengthDependentRFP.%
+        transferMap_R_toMPSTensor_eq}
+    \lean{MPOTensor.RescalingStableLengthDependentRFP.cFun_fixedDiag}
+    \leanok
+    \uses{thm:mpdo_bnt_label_rescaling_stable_length_dependence}
+    Set
+    \begin{align}
+        s&=\left(\frac45,\frac45,\frac35,\frac35\right), &
+        F&=\diag(s_0^2,s_1^2,s_2^2,s_3^2),
+        \notag\\
+        \lambda(X)&=\left(\frac{25}{32}\right)^2
+            \sum_{b=0}^3s_b^2X_{bb}.
+        \notag
+    \end{align}
+    Then the transfer map of $R$ has rank-one form
+    \begin{align}
+        \E_R(X)&=\lambda(X)F,
+        &\lambda(F)&=\frac{337}{512}.
+        \notag
+    \end{align}
+\end{lemma}
+
+\begin{proof}\leanok
+    Expand the sixteen matrix-unit letters of $R$. Every term is proportional
+    to $F$, and collecting their diagonal coefficients gives $\lambda(X)$.
+    Substituting $X=F$ and evaluating the four entries gives $337/512$.
+\end{proof}
+
 \begin{lemma}[One-site transfer quasi-idempotence of the dimer tensor]
     \label{lem:mpdo_bnt_label_rescaling_stable_transfer_quasi_idempotent}
     \lean{MPOTensor.RescalingStableLengthDependentRFP.%
@@ -747,10 +777,14 @@
 \end{lemma}
 
 \begin{proof}\leanok
-    The image of $\E_R$ is spanned by a fixed diagonal matrix. Applying the
-    scalar functional defining this rank-one map to that matrix gives
-    $337/512$, so a second application of $\E_R$ multiplies the first by this
-    scalar.
+    \uses{lem:mpdo_bnt_label_rescaling_stable_transfer_rank_one}
+    By Lemma~\ref{lem:mpdo_bnt_label_rescaling_stable_transfer_rank_one},
+    \begin{align}
+        \E_R(\E_R(X))
+        &=\lambda(X)\lambda(F)F
+         =\frac{337}{512}\E_R(X).
+        \notag
+    \end{align}
 \end{proof}
 
 \begin{theorem}[The rescaling-stable dimer tensor is not simple]
@@ -784,13 +818,18 @@
 
 \begin{proof}\leanok
     \uses{lem:mpdo_bnt_label_rescaling_stable_transfer_quasi_idempotent,
+        thm:mpdo_blocking_doubled_index, thm:cpsv_physical_reindexing,
         thm:transfer_map_block_tensor_quasi_idempotent,
         thm:mpdo_horizontal_cf_quasi_idempotent_scalar,
         lem:mpdo_simple_tensor_horizontal_cf}
     By
     Lemma~\ref{lem:mpdo_bnt_label_rescaling_stable_transfer_quasi_idempotent},
     the one-site transfer map satisfies
-    $\E_R^2=\frac{337}{512}\E_R$. Applying
+    $\E_R^2=\frac{337}{512}\E_R$.
+    Theorems~\ref{thm:mpdo_blocking_doubled_index} and
+    \ref{thm:cpsv_physical_reindexing} identify the doubled-index MPS tensor of
+    the MPO blocking $R^{[L]}$ with the physical relabeling of the $L$-site MPS
+    blocking, without changing its transfer map. After this transport,
     Theorem~\ref{thm:transfer_map_block_tensor_quasi_idempotent} gives, for every
     integer $L\geq0$,
     \begin{align}
