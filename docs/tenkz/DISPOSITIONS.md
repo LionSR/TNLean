@@ -75,7 +75,7 @@ separate public-surface occurrence and therefore appears separately.
 | `ch16_channel_representations_choi_and_kraus.tex` | L694 `tenkz` → `P-grid` | — | — |
 | `ch16_channel_representations_dilations_and_ordered_cp.tex` | L23 `tenkz` → `P-grid` | — | — |
 | `ch20_mpdo_canonical_forms_first_site_contractions.tex` | L154, 161, 181, 186, 234, 240, 339, 433 `tenkz` → `P-grid` | — | — |
-| `ch20_mpdo_canonical_forms_intro_finite_separation.tex` | L105, 109, 221, 229, 372, 385, 436 `tenkz` → `P-grid` | — | — |
+| `ch20_mpdo_canonical_forms_intro_finite_separation.tex` | L105, 109, 221, 229, 377, 390, 441 `tenkz` → `P-grid` | — | — |
 | `ch20_mpdo_canonical_forms_positivity_gram_normalization.tex` | L748, 754 `tenkz` → `P-grid` | — | — |
 | `ch20_mpdo_foundations.tex` | L17, 126, 373, 377 `tenkz` → `P-grid` | — | — |
 | `ch21_mpdo_rfp_algebra_tower.tex` | L79, 95 `tenkz` → `P-grid` | — | — |
