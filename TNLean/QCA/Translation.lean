@@ -1,0 +1,307 @@
+/-
+Copyright (c) 2026 TNLean contributors. All rights reserved.
+Released under Apache 2.0 license as described in the file LICENSE.
+Authors: TNLean contributors
+-/
+import TNLean.QCA.LocalAlgebra
+
+/-!
+# Finite-region translations for one-dimensional spin chains
+
+For a finite region \(\Lambda \subset \mathbb Z\) and a lattice displacement \(a\), this file
+defines the translated region \(\Lambda+a\), the induced equivalences of sites and configurations,
+and the corresponding star-algebra equivalence from \(\mathcal A_\Lambda\) to
+\(\mathcal A_{\Lambda+a}\). The finite-region translation commutes with the canonical inclusions
+of local observable algebras.
+
+This file concerns only finite regions. It does not define translations of algebraic-local or
+quasi-local observables, finite propagation, or quantum cellular automata.
+
+## Main definitions
+
+* `SpinChain.translateRegion` — translation of a finite region of \(\mathbb Z\).
+* `SpinChain.siteTranslation` — the induced equivalence of lattice sites.
+* `SpinChain.Config.translation` — the induced equivalence of spin configurations.
+* `SpinChain.localTranslation` — translation of a finite-region local observable algebra.
+
+## Main results
+
+* `SpinChain.translateRegion_zero` — translation by zero fixes a region.
+* `SpinChain.translateRegion_add` — successive region translations add their displacements.
+* `SpinChain.localTranslation_localInclusion` — finite-region translations commute with canonical
+  local inclusions.
+
+## References
+
+* Cirac--Perez-Garcia--Schuch--Verstraete, arXiv:1703.09188, Appendix, lines 2292--2298.
+* Schumacher--Werner, quant-ph/0405174, Definition 1.
+-/
+
+namespace SpinChain
+
+/-- The translated region \(\Lambda+a\) for a finite lattice region \(\Lambda\subset\mathbb Z\).
+
+Source: arXiv:1703.09188, Appendix, lines 2292--2298. -/
+def translateRegion (a : ℤ) (Λ : Finset ℤ) : Finset ℤ :=
+  Λ.map (Equiv.addRight a).toEmbedding
+
+/-- Membership in \(\Lambda+a\) is membership in \(\Lambda\) after subtracting \(a\).
+
+Source: arXiv:1703.09188, Appendix, lines 2292--2298. -/
+@[simp]
+lemma mem_translateRegion (a : ℤ) (Λ : Finset ℤ) (i : ℤ) :
+    i ∈ translateRegion a Λ ↔ i - a ∈ Λ := by
+  simp only [translateRegion, Finset.mem_map, Equiv.coe_toEmbedding]
+  constructor
+  · rintro ⟨j, hj, rfl⟩
+    simpa using hj
+  · intro hi
+    exact ⟨i - a, hi, by simp⟩
+
+/-- A site \(i+a\) lies in \(\Lambda+a\) exactly when \(i\) lies in \(\Lambda\).
+
+Source: arXiv:1703.09188, Appendix, lines 2292--2298. -/
+@[simp]
+lemma mem_translateRegion_add (a : ℤ) (Λ : Finset ℤ) (i : ℤ) :
+    i + a ∈ translateRegion a Λ ↔ i ∈ Λ := by
+  simp
+
+/-- Translation by zero fixes every finite lattice region.
+
+Source: arXiv:1703.09188, Appendix, lines 2292--2298. -/
+@[simp]
+lemma translateRegion_zero (Λ : Finset ℤ) : translateRegion 0 Λ = Λ := by
+  ext i
+  simp
+
+/-- Successive finite-region translations add their lattice displacements.
+
+Source: arXiv:1703.09188, Appendix, lines 2292--2298. -/
+lemma translateRegion_add (a b : ℤ) (Λ : Finset ℤ) :
+    translateRegion b (translateRegion a Λ) = translateRegion (a + b) Λ := by
+  ext i
+  simp only [mem_translateRegion]
+  ring_nf
+
+/-- Translation by a fixed displacement is injective on finite lattice regions.
+
+Source: arXiv:1703.09188, Appendix, lines 2292--2298. -/
+lemma translateRegion_injective (a : ℤ) : Function.Injective (translateRegion a) := by
+  exact Finset.map_injective (Equiv.addRight a).toEmbedding
+
+/-- Translation preserves inclusion of finite lattice regions.
+
+Source: arXiv:1703.09188, Appendix, lines 2292--2298. -/
+lemma translateRegion_mono (a : ℤ) {Λ Γ : Finset ℤ} (h : Λ ⊆ Γ) :
+    translateRegion a Λ ⊆ translateRegion a Γ := by
+  intro i hi
+  simpa only [mem_translateRegion] using h (by simpa only [mem_translateRegion] using hi)
+
+/-- Translation identifies the sites of \(\Lambda\) with those of \(\Lambda+a\).
+
+Source: arXiv:1703.09188, Appendix, lines 2292--2298. -/
+def siteTranslation (a : ℤ) (Λ : Finset ℤ) : Λ ≃ translateRegion a Λ :=
+  (Equiv.addRight a).subtypeEquiv fun i ↦ (mem_translateRegion_add a Λ i).symm
+
+/-- The site equivalence sends \(i\) to \(i+a\).
+
+Source: arXiv:1703.09188, Appendix, lines 2292--2298. -/
+@[simp]
+lemma siteTranslation_apply_val (a : ℤ) (Λ : Finset ℤ) (i : Λ) :
+    (siteTranslation a Λ i : ℤ) = i + a := rfl
+
+/-- The inverse site equivalence sends \(i\) to \(i-a\).
+
+Source: arXiv:1703.09188, Appendix, lines 2292--2298. -/
+@[simp]
+lemma siteTranslation_symm_apply_val (a : ℤ) (Λ : Finset ℤ)
+    (i : translateRegion a Λ) :
+    ((siteTranslation a Λ).symm i : ℤ) = i - a := by
+  change (Equiv.addRight a).symm i = i - a
+  simp [sub_eq_add_neg]
+
+/-- Translation by zero fixes the underlying value of every site.
+
+This value-level formulation avoids transporting between propositionally equal subtype indices.
+Source: arXiv:1703.09188, Appendix, lines 2292--2298. -/
+@[simp]
+lemma siteTranslation_zero (Λ : Finset ℤ) (i : Λ) :
+    (siteTranslation 0 Λ i : ℤ) = i := by
+  simp
+
+/-- Successive site translations agree with translation by the sum after coercion to \(\mathbb Z\).
+
+This value-level formulation avoids transporting between propositionally equal subtype indices.
+Source: arXiv:1703.09188, Appendix, lines 2292--2298. -/
+lemma siteTranslation_add (a b : ℤ) (Λ : Finset ℤ) (i : Λ) :
+    (siteTranslation b (translateRegion a Λ) (siteTranslation a Λ i) : ℤ) =
+      (siteTranslation (a + b) Λ i : ℤ) := by
+  simpa using add_assoc (i : ℤ) a b
+
+namespace Config
+
+/-- Relabelling configurations by the lattice translation \(i\mapsto i+a\).
+
+Source: arXiv:1703.09188, Appendix, lines 2292--2298. -/
+def translation (d : ℕ) (a : ℤ) (Λ : Finset ℤ) :
+    Config d Λ ≃ Config d (translateRegion a Λ) :=
+  (siteTranslation a Λ).arrowCongr (Equiv.refl (Fin d))
+
+/-- Evaluation of a translated configuration at a site of \(\Lambda+a\).
+
+Source: arXiv:1703.09188, Appendix, lines 2292--2298. -/
+@[simp]
+lemma translation_apply (d : ℕ) (a : ℤ) (Λ : Finset ℤ)
+    (x : Config d Λ) (i : translateRegion a Λ) :
+    translation d a Λ x i = x ((siteTranslation a Λ).symm i) := rfl
+
+/-- Evaluation of the inverse-translated configuration at a site of \(\Lambda\).
+
+Source: arXiv:1703.09188, Appendix, lines 2292--2298. -/
+@[simp]
+lemma translation_symm_apply (d : ℕ) (a : ℤ) (Λ : Finset ℤ)
+    (x : Config d (translateRegion a Λ)) (i : Λ) :
+    (translation d a Λ).symm x i = x (siteTranslation a Λ i) := rfl
+
+/-- A translated configuration evaluated at the corresponding translated site has its original
+value.
+
+Source: arXiv:1703.09188, Appendix, lines 2292--2298. -/
+@[simp]
+lemma translation_apply_siteTranslation (d : ℕ) (a : ℤ) (Λ : Finset ℤ)
+    (x : Config d Λ) (i : Λ) :
+    translation d a Λ x (siteTranslation a Λ i) = x i := by
+  simp
+
+/-- Translation by zero fixes every configuration when evaluated at corresponding sites.
+
+Source: arXiv:1703.09188, Appendix, lines 2292--2298. -/
+@[simp]
+lemma translation_zero (d : ℕ) (Λ : Finset ℤ) (x : Config d Λ) (i : Λ) :
+    translation d 0 Λ x (siteTranslation 0 Λ i) = x i := by
+  simp
+
+/-- Successive configuration translations agree pointwise with translation by the sum.
+
+The two sides are evaluated at the sites obtained by their respective site translations, avoiding
+transport between propositionally equal configuration types.
+Source: arXiv:1703.09188, Appendix, lines 2292--2298. -/
+lemma translation_add (d : ℕ) (a b : ℤ) (Λ : Finset ℤ) (x : Config d Λ) (i : Λ) :
+    translation d b (translateRegion a Λ) (translation d a Λ x)
+        (siteTranslation b (translateRegion a Λ) (siteTranslation a Λ i)) =
+      translation d (a + b) Λ x (siteTranslation (a + b) Λ i) := by
+  simp
+
+end Config
+
+/-- The finite-region translation
+\(\mathcal A_\Lambda\simeq\mathcal A_{\Lambda+a}\), obtained by reindexing configurations.
+
+Source: arXiv:1703.09188, Appendix, lines 2292--2298. -/
+noncomputable def localTranslation (d : ℕ) (a : ℤ) (Λ : Finset ℤ) :
+    LocalAlgebra d Λ ≃⋆ₐ[ℂ] LocalAlgebra d (translateRegion a Λ) :=
+  CStarMatrix.reindexₐ ℂ ℂ (Config.translation d a Λ)
+
+/-- Entrywise evaluation of the finite-region translation of a local observable.
+
+Source: arXiv:1703.09188, Appendix, lines 2292--2298. -/
+@[simp]
+lemma localTranslation_apply (d : ℕ) (a : ℤ) (Λ : Finset ℤ)
+    (A : LocalAlgebra d Λ) (x y : Config d (translateRegion a Λ)) :
+    localTranslation d a Λ A x y =
+      A ((Config.translation d a Λ).symm x) ((Config.translation d a Λ).symm y) := rfl
+
+/-- A translated local observable evaluated on translated configurations has its original matrix
+entry.
+
+Source: arXiv:1703.09188, Appendix, lines 2292--2298. -/
+@[simp]
+lemma localTranslation_apply_translation (d : ℕ) (a : ℤ) (Λ : Finset ℤ)
+    (A : LocalAlgebra d Λ) (x y : Config d Λ) :
+    localTranslation d a Λ A (Config.translation d a Λ x) (Config.translation d a Λ y) =
+      A x y := by
+  simp
+
+/-- Translation by zero fixes every local observable entry on corresponding configurations.
+
+Source: arXiv:1703.09188, Appendix, lines 2292--2298. -/
+@[simp]
+lemma localTranslation_zero (d : ℕ) (Λ : Finset ℤ)
+    (A : LocalAlgebra d Λ) (x y : Config d Λ) :
+    localTranslation d 0 Λ A (Config.translation d 0 Λ x) (Config.translation d 0 Λ y) =
+      A x y := by
+  simp
+
+/-- Successive finite-region local translations agree entrywise with translation by the sum.
+
+The two sides are evaluated on configurations obtained by their respective configuration
+translations, avoiding transport between propositionally equal matrix types.
+Source: arXiv:1703.09188, Appendix, lines 2292--2298. -/
+lemma localTranslation_add (d : ℕ) (a b : ℤ) (Λ : Finset ℤ)
+    (A : LocalAlgebra d Λ) (x y : Config d Λ) :
+    localTranslation d b (translateRegion a Λ) (localTranslation d a Λ A)
+        (Config.translation d b (translateRegion a Λ) (Config.translation d a Λ x))
+        (Config.translation d b (translateRegion a Λ) (Config.translation d a Λ y)) =
+      localTranslation d (a + b) Λ A
+        (Config.translation d (a + b) Λ x) (Config.translation d (a + b) Λ y) := by
+  simp
+
+/-- Finite-region translation commutes with the canonical inclusions
+\(\mathcal A_\Lambda\to\mathcal A_\Gamma\) for \(\Lambda\subseteq\Gamma\).
+
+Source: arXiv:1703.09188, Appendix, lines 2292--2298. -/
+lemma localTranslation_localInclusion {d : ℕ} (a : ℤ) {Λ Γ : Finset ℤ}
+    (h : Λ ⊆ Γ) (A : LocalAlgebra d Λ) :
+    localTranslation d a Γ (localInclusion h A) =
+      localInclusion (translateRegion_mono a h) (localTranslation d a Λ A) := by
+  ext x y
+  rw [localTranslation_apply, localInclusion_apply, localInclusion_apply,
+    localTranslation_apply]
+  congr 1
+  apply if_congr
+  · constructor <;> intro hxy
+    · funext i
+      let js : Γ := ⟨i - a, by simpa using (Finset.mem_sdiff.mp i.2).1⟩
+      let it : translateRegion a Γ := ⟨i, (Finset.mem_sdiff.mp i.2).1⟩
+      have hsite : siteTranslation a Γ js = it := by
+        apply Subtype.ext
+        simp [js, it]
+      have eq := congrFun hxy
+        ⟨i - a, Finset.mem_sdiff.mpr ⟨js.2, by
+          intro hi
+          exact (Finset.mem_sdiff.mp i.2).2 (by simpa using hi)⟩⟩
+      change (Config.translation d a Γ).symm x js =
+        (Config.translation d a Γ).symm y js at eq
+      change x it = y it
+      simpa only [Config.translation_symm_apply, hsite] using eq
+    · funext i
+      let js : Γ := ⟨i, (Finset.mem_sdiff.mp i.2).1⟩
+      let it : translateRegion a Γ :=
+        ⟨i + a, by simpa using (Finset.mem_sdiff.mp i.2).1⟩
+      have hsite : siteTranslation a Γ js = it := by
+        apply Subtype.ext
+        simp [js, it]
+      have eq := congrFun hxy
+        ⟨i + a, Finset.mem_sdiff.mpr ⟨it.2, by
+          intro hi
+          exact (Finset.mem_sdiff.mp i.2).2 (by simpa using hi)⟩⟩
+      change x it = y it at eq
+      change (Config.translation d a Γ).symm x js =
+        (Config.translation d a Γ).symm y js
+      simpa only [Config.translation_symm_apply, hsite] using eq
+  · rfl
+  · rfl
+
+/-- The star-algebra homomorphism square for finite-region translation and canonical inclusion
+commutes.
+
+Source: arXiv:1703.09188, Appendix, lines 2292--2298. -/
+lemma localTranslation_comp_localInclusion {d : ℕ} (a : ℤ) {Λ Γ : Finset ℤ}
+    (h : Λ ⊆ Γ) :
+    (localTranslation d a Γ).toStarAlgHom.comp (localInclusion h) =
+      (localInclusion (translateRegion_mono a h)).comp
+        (localTranslation d a Λ).toStarAlgHom := by
+  ext A : 1
+  exact localTranslation_localInclusion a h A
+
+end SpinChain
