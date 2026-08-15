@@ -65,6 +65,11 @@ for a canonical form after one positive blocking. Its raw sector weights may
 have phase cancellations at individual lengths, whereas `IsSourceSimple`
 explicitly excludes every positive-length null generated operator.
 
+**Scope restriction (positive-length nonvanishing):** the normalized project
+predicate does not itself exclude phase cancellation of the closed MPO at
+individual lengths, so this implication assumes nonvanishing explicitly. See
+`docs/paper-gaps/cpsv16_unit_weight_rfp_scale_tension.tex`.
+
 The CPSV basis is the family of distinct normal representatives in the
 normalized sector decomposition. Its spanning coefficients are the sector
 power sums. The displayed global gauge preserves every matrix product vector,
