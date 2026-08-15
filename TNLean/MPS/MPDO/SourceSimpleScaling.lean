@@ -74,7 +74,7 @@ theorem blockTensor_smul (c : ℂ) (M : MPOTensor d D) (L : ℕ) :
   rw [evalWord_smul c M (MPSTensor.wordOfBlock d L i)
     (MPSTensor.wordOfBlock d L j) (by simp), MPSTensor.length_wordOfBlock]
 
-/-- Positive real rescaling preserves the MPDO property. -/
+/-- Nonnegative real rescaling preserves the MPDO property, including the zero scalar. -/
 theorem IsMPDO.smul_ofReal {M : MPOTensor d D} (hM : IsMPDO M) {r : ℝ}
     (hr : 0 ≤ r) :
     IsMPDO ((r : ℂ) • M) := by
