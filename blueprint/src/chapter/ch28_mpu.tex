@@ -7621,6 +7621,124 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
   \end{align}
 \end{proof}
 
+\begin{definition}[Translation of a finite region]
+  \label{def:qca_translate_region}
+  \lean{SpinChain.translateRegion,SpinChain.mem_translateRegion,
+    SpinChain.mem_translateRegion_add,SpinChain.translateRegion_zero,
+    SpinChain.translateRegion_add,SpinChain.translateRegion_injective,
+    SpinChain.translateRegion_mono}
+  \leanok
+  For a finite region $\Lambda\subset\mathbb Z$ and $a\in\mathbb Z$, define
+  \begin{align}
+    \Lambda+a&=\{i+a\mid i\in\Lambda\}.
+  \end{align}
+  Thus
+  \begin{align}
+    j\in\Lambda+a&\iff j-a\in\Lambda, \\
+    \Lambda+0&=\Lambda, \\
+    (\Lambda+a)+b&=\Lambda+(a+b).
+  \end{align}
+  The map $\Lambda\mapsto\Lambda+a$ is injective. If
+  $\Lambda\subseteq\Gamma$, then $\Lambda+a\subseteq\Gamma+a$.
+\end{definition}
+
+\begin{definition}[Translation of sites and configurations]
+  \label{def:qca_finite_configuration_translation}
+  \lean{SpinChain.siteTranslation,SpinChain.siteTranslation_apply_val,
+    SpinChain.siteTranslation_symm_apply_val,SpinChain.Config.translation,
+    SpinChain.Config.translation_apply,SpinChain.Config.translation_symm_apply}
+  \leanok
+  \uses{def:qca_local_algebra,def:qca_translate_region}
+  Translation gives bijections
+  \begin{align}
+    t_{a,\Lambda}&\colon\Lambda\longrightarrow\Lambda+a,
+      &t_{a,\Lambda}(i)&=i+a, \\
+    T_{a,\Lambda}&\colon\operatorname{Config}_d(\Lambda)
+      \longrightarrow\operatorname{Config}_d(\Lambda+a),
+      &(T_{a,\Lambda}x)(j)&=x(j-a).
+  \end{align}
+  Their inverses translate sites and configurations by $-a$.
+\end{definition}
+
+\begin{definition}[Finite-region translation of local observables]
+  \label{def:qca_finite_local_translation}
+  \lean{SpinChain.localTranslation,SpinChain.localTranslation_apply}
+  \leanok
+  \uses{def:qca_local_algebra,def:qca_finite_configuration_translation}
+  Relabelling configurations defines a star-algebra equivalence
+  \begin{align}
+    \tau_{a,\Lambda}&\colon\mathcal A_\Lambda
+      \longrightarrow\mathcal A_{\Lambda+a}, \\
+    \tau_{a,\Lambda}(A)(x,y)
+      &=A(T_{a,\Lambda}^{-1}x,T_{a,\Lambda}^{-1}y).
+  \end{align}
+  This is the finite-region translation associated with the lattice
+  translation $i\mapsto i+a$.
+\end{definition}
+
+\begin{lemma}[Finite-region translation action laws]
+  \label{lem:qca_finite_translation_action}
+  \lean{SpinChain.siteTranslation_zero,SpinChain.siteTranslation_add,
+    SpinChain.Config.translation_apply_siteTranslation,
+    SpinChain.Config.translation_zero,SpinChain.Config.translation_add,
+    SpinChain.localTranslation_apply_translation,
+    SpinChain.localTranslation_zero,SpinChain.localTranslation_add}
+  \leanok
+  \uses{def:qca_finite_configuration_translation,
+    def:qca_finite_local_translation}
+  Translation by zero acts trivially on sites, configurations, and
+  finite-region observables. Successive translations by $a$ and $b$ agree
+  with translation by $a+b$. Pointwise, for $i\in\Lambda$,
+  $x,y\in\operatorname{Config}_d(\Lambda)$, and
+  $A\in\mathcal A_\Lambda$,
+  \begin{align}
+    t_{0,\Lambda}(i)&=i, \\
+    t_{b,\Lambda+a}(t_{a,\Lambda}(i))
+      &=t_{a+b,\Lambda}(i), \\
+    (T_{a,\Lambda}x)(t_{a,\Lambda}(i))&=x(i), \\
+    (T_{b,\Lambda+a}T_{a,\Lambda}x)
+      (t_{b,\Lambda+a}(t_{a,\Lambda}(i)))
+      &=(T_{a+b,\Lambda}x)(t_{a+b,\Lambda}(i)), \\
+    (\tau_{a,\Lambda}(A))(T_{a,\Lambda}x,T_{a,\Lambda}y)
+      &=A(x,y), \\
+    (\tau_{b,\Lambda+a}\tau_{a,\Lambda}(A))
+      (T_{b,\Lambda+a}T_{a,\Lambda}x,
+        T_{b,\Lambda+a}T_{a,\Lambda}y)
+      &=(\tau_{a+b,\Lambda}(A))
+        (T_{a+b,\Lambda}x,T_{a+b,\Lambda}y).
+  \end{align}
+  These identities express the additive action without identifying the
+  distinct configuration spaces before applying their canonical translation
+  bijections.
+\end{lemma}
+
+\begin{lemma}[Naturality of finite-region translation]
+  \label{lem:qca_finite_local_translation_naturality}
+  \lean{SpinChain.localTranslation_localInclusion,
+    SpinChain.localTranslation_comp_localInclusion}
+  \leanok
+  \uses{def:qca_local_inclusion,def:qca_translate_region,
+    def:qca_finite_local_translation}
+  If $\Lambda\subseteq\Gamma$, then for every
+  $A\in\mathcal A_\Lambda$,
+  \begin{align}
+    \tau_{a,\Gamma}(\iota_{\Lambda,\Gamma}(A))
+      &=\iota_{\Lambda+a,\Gamma+a}(\tau_{a,\Lambda}(A)).
+  \end{align}
+\end{lemma}
+
+\begin{proof}\leanok
+  The lattice translation identifies $\Gamma\setminus\Lambda$ with
+  $(\Gamma+a)\setminus(\Lambda+a)$. Hence relabelling configurations
+  carries the identity on the first complement to the identity on the
+  second complement, and
+  \begin{align}
+    \tau_{a,\Gamma}(A\otimes\mathbf 1_{\Gamma\setminus\Lambda})
+      &=\tau_{a,\Lambda}(A)
+        \otimes\mathbf 1_{(\Gamma+a)\setminus(\Lambda+a)}.
+  \end{align}
+\end{proof}
+
 \begin{definition}[Algebraic local algebra]
   \label{def:qca_algebraic_local_algebra}
   \lean{SpinChain.instDirectedSystemLocalAlgebra,

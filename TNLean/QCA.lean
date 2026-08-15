@@ -12,3 +12,4 @@ import TNLean.QCA.LocalAlgebra
 import TNLean.QCA.LocalLimit
 import TNLean.QCA.LocalNorm
 import TNLean.QCA.QuasiLocal
+import TNLean.QCA.Translation
