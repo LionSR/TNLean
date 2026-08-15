@@ -72,8 +72,8 @@ individual lengths, so this implication assumes nonvanishing explicitly. See
 
 The CPSV basis is the family of distinct normal representatives in the
 normalized sector decomposition. Its spanning coefficients are the sector
-power sums. The displayed global gauge preserves every matrix product vector,
-so the basis transports to the blocked MPO tensor. The nonnilpotency clause is
+power sums. The global gauge preserves every matrix product vector, so the basis
+transports to the blocked MPO tensor. The nonnilpotency clause is
 unchanged because the representatives themselves are unchanged.
 
 Source: arXiv:1606.00608, Definition 4.7, lines 815--822, together with the
