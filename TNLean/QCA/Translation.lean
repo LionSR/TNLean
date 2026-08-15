@@ -39,7 +39,7 @@ quasi-local observables, finite propagation, or quantum cellular automata.
 
 namespace SpinChain
 
-/-- The translate \(\Lambda+a\) of a finite lattice region \(\Lambda\subset\mathbb Z\).
+/-- The translated region \(\Lambda+a\) for a finite lattice region \(\Lambda\subset\mathbb Z\).
 
 Source: arXiv:1703.09188, Appendix, lines 2292--2298. -/
 def translateRegion (a : ℤ) (Λ : Finset ℤ) : Finset ℤ :=
