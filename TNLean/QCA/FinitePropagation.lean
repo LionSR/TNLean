@@ -86,7 +86,7 @@ it sends observables supported in every finite region \(\Lambda\) to observables
 Source: arXiv:1703.09188, Appendix, line 2298. -/
 def PropagatesWithin {d : ℕ} [NeZero d]
     (ω : QuasiLocalAlgebra d ≃⋆ₐ[ℂ] QuasiLocalAlgebra d) (𝓝 : Finset ℤ) : Prop :=
-  ∀ Λ x, QuasiLocalSupportedIn x Λ →
+  ∀ (Λ : Finset ℤ) (x : QuasiLocalAlgebra d), QuasiLocalSupportedIn x Λ →
     QuasiLocalSupportedIn (ω x) (regionSumset Λ 𝓝)
 
 /-- A quasi-local star-automorphism has finite propagation when it propagates within some finite
