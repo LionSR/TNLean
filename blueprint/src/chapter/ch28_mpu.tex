@@ -8424,6 +8424,65 @@ as separate results in the appendix.
   $\tau_{-a}$.
 \end{proof}
 
+\begin{definition}[Translation covariance]
+  \label{def:qca_translation_covariant}
+  \lean{SpinChain.TranslationCovariant}
+  \leanok
+  \uses{def:qca_quasi_local_translation,def:qca_quasi_local_algebra}
+  For $d>0$, a star-algebra automorphism $\omega$ of the quasi-local algebra
+  $\mathcal A$ is translation covariant if
+  \begin{align}
+    \omega\circ\tau_a=\tau_a\circ\omega
+  \end{align}
+  for every $a\in\mathbb Z$.  This is the covariance condition in the
+  definition of a one-dimensional QCA \cite[line~2298]{Cirac2017MPU}.
+\end{definition}
+
+\begin{theorem}[Pointwise characterization of translation covariance]
+  \label{thm:qca_translation_covariant_iff}
+  \lean{SpinChain.translationCovariant_iff}
+  \leanok
+  \uses{def:qca_translation_covariant}
+  For $d>0$, a star-algebra automorphism $\omega$ of $\mathcal A$ is
+  translation covariant if and only if
+  \begin{align}
+    \omega\bigl(\tau_a(A)\bigr)=\tau_a\bigl(\omega(A)\bigr)
+  \end{align}
+  for every $a\in\mathbb Z$ and every $A\in\mathcal A$.
+\end{theorem}
+
+\begin{proof}\leanok
+  \uses{def:qca_translation_covariant}
+  Two automorphisms are equal if and only if they agree on every observable.
+  Apply this observation to the two composites in the definition.
+\end{proof}
+
+\begin{theorem}[Identity and composition of translation-covariant automorphisms]
+  \label{thm:qca_translation_covariant_identity_composition}
+  \lean{SpinChain.translationCovariant_refl,
+    SpinChain.TranslationCovariant.trans}
+  \leanok
+  \uses{def:qca_translation_covariant}
+  For $d>0$, the identity automorphism of $\mathcal A$ is translation
+  covariant.  If $\omega$ and $\eta$ are translation covariant, then so is
+  the composite
+  \begin{align}
+    A\longmapsto\eta\bigl(\omega(A)\bigr),
+  \end{align}
+  which first applies $\omega$ and then $\eta$.
+\end{theorem}
+
+\begin{proof}\leanok
+  \uses{def:qca_translation_covariant}
+  The identity commutes pointwise with every translation.  For the composite,
+  translation covariance gives
+  \begin{align}
+    \eta\bigl(\omega(\tau_a(A))\bigr)
+      &=\eta\bigl(\tau_a(\omega(A))\bigr)
+       =\tau_a\bigl(\eta(\omega(A))\bigr).
+  \end{align}
+\end{proof}
+
 \begin{lemma}[Norm isometry of quasi-local translation]
   \label{lem:qca_quasi_local_translation_isometry}
   \lean{SpinChain.norm_quasiLocalTranslation,
