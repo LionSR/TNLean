@@ -36,9 +36,13 @@ coefficients that depend on the positive chain length.
 
 This proves a normalization-free variant of the question in
 arXiv:1606.00608, lines 995--997, for the displayed vertical presentation. It
-does not assert presentation independence. The source additionally assumes
+does not assert presentation independence.
+
+**Scope restriction (unit-weight convention):** The source additionally assumes
 that every canonical weight has modulus at most one and at least one has
-modulus one; that normalization is not part of this statement. -/
+modulus one; that normalization is not part of this statement. The resulting
+fixed-representative scale tension is recorded in
+`docs/paper-gaps/cpsv16_unit_weight_rfp_scale_tension.tex`. -/
 theorem exists_isRFPViaTS_not_lengthIndependent_bntCoefficients_R :
     ∃ (M : MPOTensor 4 4) (H : BNTAlgebraTensorClause M),
       MPSTensor.IsCPSVCanonicalForm M.toMPSTensor ∧
