@@ -7712,6 +7712,23 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
   bijections.
 \end{lemma}
 
+\begin{proof}\leanok
+  The site identities follow from
+  \begin{align}
+    (i+a)+b&=i+(a+b).
+  \end{align}
+  Relabelling a configuration is precomposition by the inverse site
+  translation, so evaluation at the corresponding translated site gives
+  \begin{align}
+    (T_{a,\Lambda}x)(t_{a,\Lambda}(i))&=x(i).
+  \end{align}
+  Applying this identity successively proves the configuration action laws.
+  Finally, the local observable translation relabels both matrix indices by
+  $T_{a,\Lambda}^{-1}$; evaluating on translated configurations therefore
+  gives $A(x,y)$, and applying this entrywise identity successively proves the
+  local observable action laws.
+\end{proof}
+
 \begin{lemma}[Naturality of finite-region translation]
   \label{lem:qca_finite_local_translation_naturality}
   \lean{SpinChain.localTranslation_localInclusion,
