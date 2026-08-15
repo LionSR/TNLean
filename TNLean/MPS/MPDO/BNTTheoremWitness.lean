@@ -644,8 +644,27 @@ end BNTLabelTheoremWitness
 
 namespace HasBNTLabelTheoremWitness
 
-/-- A proposition-level witness gives the two source equations with coefficients
-written as traces of the corresponding positive diagonal chi powers. -/
+/-- Existence of the source BNT-label witness gives the two source equations
+with the coefficients written as traces of the corresponding
+\(\chi_{\alpha,\beta,\gamma}\)-powers.
+
+This is the proposition-level form of Theorem IV.13(ii)'s equation
+\[
+  O_L(M_\alpha)O_L(M_\beta)
+    = \sum_\gamma
+      \operatorname{tr}(\chi_{\alpha,\beta,\gamma}^{L})O_L(M_\gamma)
+\]
+for positive \(L\), together with the length-one idempotent equation
+\[
+  m_\gamma =
+    \sum_{\alpha,\beta}
+      \operatorname{tr}(\chi_{\alpha,\beta,\gamma})m_\alpha m_\beta.
+\]
+It only unpacks the existential witness; constructing such a witness from an
+MPDO tensor remains the Appendix C.3--C.4 obligation.
+Source: arXiv:1606.00608, Theorem IV.13(ii), lines 972--985, and
+Appendix C.3--C.4, lines 1830--1942 of
+`Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
 theorem exists_source_chi_trace_equations {data : AlgebraStructureData d D}
     (h : HasBNTLabelTheoremWitness data) :
     ∃ W : BNTLabelTheoremWitness data,
