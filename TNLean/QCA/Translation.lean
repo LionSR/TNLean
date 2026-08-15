@@ -28,6 +28,8 @@ quasi-local observables, finite propagation, or quantum cellular automata.
 
 * `SpinChain.translateRegion_zero` — translation by zero fixes a region.
 * `SpinChain.translateRegion_add` — successive region translations add their displacements.
+* `SpinChain.localTranslation_norm` — finite-region translations preserve the operator norm.
+* `SpinChain.localTranslation_isometry` — finite-region translations are operator-norm isometries.
 * `SpinChain.localTranslation_localInclusion` — finite-region translations commute with canonical
   local inclusions.
 
@@ -210,6 +212,24 @@ lemma localTranslation_apply (d : ℕ) (a : ℤ) (Λ : Finset ℤ)
     (A : LocalAlgebra d Λ) (x y : Config d (translateRegion a Λ)) :
     localTranslation d a Λ A x y =
       A ((Config.translation d a Λ).symm x) ((Config.translation d a Λ).symm y) := rfl
+
+open scoped ComplexOrder in
+/-- Finite-region translation preserves the C⋆ operator norm.
+
+Context: arXiv:1703.09188, Appendix, lines 2292--2298, which introduce the quasi-local algebra
+and its lattice translation. -/
+lemma localTranslation_norm (d : ℕ) (a : ℤ) (Λ : Finset ℤ) (A : LocalAlgebra d Λ) :
+    ‖localTranslation d a Λ A‖ = ‖A‖ := by
+  exact StarAlgEquiv.norm_map (localTranslation d a Λ) A
+
+open scoped ComplexOrder in
+/-- Finite-region translation is an operator-norm isometry.
+
+Context: arXiv:1703.09188, Appendix, lines 2292--2298, which introduce the quasi-local algebra
+and its lattice translation. -/
+lemma localTranslation_isometry (d : ℕ) (a : ℤ) (Λ : Finset ℤ) :
+    Isometry (localTranslation d a Λ) := by
+  exact StarAlgEquiv.isometry (localTranslation d a Λ)
 
 /-- A translated local observable evaluated on translated configurations has its original matrix
 entry.

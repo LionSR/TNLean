@@ -7712,6 +7712,34 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
   translation $i\mapsto i+a$.
 \end{definition}
 
+\begin{lemma}[Norm preservation of finite-region translation]
+  \label{lem:qca_finite_local_translation_norm}
+  \lean{SpinChain.localTranslation_norm,
+    SpinChain.localTranslation_isometry}
+  \leanok
+  \uses{def:qca_finite_local_translation}
+  Let $d$ be a nonnegative integer, let $\Lambda\subset\mathbb Z$ be finite,
+  and let $a\in\mathbb Z$. For every $A\in\mathcal A_\Lambda$,
+  \begin{align}
+    \lVert\tau_{a,\Lambda}(A)\rVert&=\lVert A\rVert.
+  \end{align}
+  Consequently, $\tau_{a,\Lambda}$ is an isometry from
+  $\mathcal A_\Lambda$ onto $\mathcal A_{\Lambda+a}$.
+\end{lemma}
+
+\begin{proof}\leanok
+  \uses{def:qca_finite_local_translation}
+  Translation bijectively relabels the configuration basis. The resulting
+  star-algebra equivalence between the two finite matrix algebras preserves
+  the operator norm. Applying this identity to $A-B$ and using linearity gives
+  \begin{align}
+    \lVert\tau_{a,\Lambda}(A)-\tau_{a,\Lambda}(B)\rVert
+      &=\lVert\tau_{a,\Lambda}(A-B)\rVert
+       =\lVert A-B\rVert,
+  \end{align}
+  so distances are preserved.
+\end{proof}
+
 \begin{lemma}[Finite-region translation action laws]
   \label{lem:qca_finite_translation_action}
   \lean{SpinChain.siteTranslation_zero,SpinChain.siteTranslation_add,
@@ -8158,8 +8186,8 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
 
 \begin{proof}\leanok
   \uses{def:qca_algebraic_local_operator_norm,
-    def:qca_finite_local_translation,
     def:qca_algebraic_local_translation,
+    lem:qca_finite_local_translation_norm,
     thm:qca_local_observable_finite_support}
   Choose $A_\Lambda\in\mathcal A_\Lambda$ with
   $A=\iota_\Lambda(A_\Lambda)$. Finite-region translation is a star-algebra
