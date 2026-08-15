@@ -8706,3 +8706,38 @@ $\omega^{-1}$.
   region sumsets.  For the existential assertion, choose one finite propagation
   neighborhood for each automorphism and use their sumset.
 \end{proof}
+
+\begin{lemma}[Symmetric-interval normalization of finite propagation]
+  \label{lem:qca_finite_propagation_symmetric_interval}
+  \lean{SpinChain.exists_subset_symmetric_Icc,
+    SpinChain.PropagatesWithin.exists_symmetric_Icc,
+    SpinChain.HasFinitePropagation.exists_symmetric_Icc}
+  \leanok
+  \uses{def:qca_propagates_within,def:qca_finite_propagation}
+  Every finite set $\mathcal N\subset\mathbb Z$ is contained in
+  $[-R,R]\cap\mathbb Z$ for some $R\in\mathbb N$.  This includes
+  $\mathcal N=\varnothing$, for which one may take $R=0$.  If $\omega$
+  propagates within a fixed set $\mathcal N$, then $R$ may be chosen so that
+  \begin{align}
+    \mathcal N&\subseteq[-R,R]\cap\mathbb Z, \\
+    \omega&\text{ propagates within }[-R,R]\cap\mathbb Z.
+  \end{align}
+  Consequently, finite forward propagation admits a symmetric-interval
+  witness:
+  \begin{align}
+    \exists R\in\mathbb N,\qquad
+    \omega&\text{ propagates within }[-R,R]\cap\mathbb Z.
+  \end{align}
+\end{lemma}
+
+\begin{proof}\leanok
+  \uses{def:qca_finite_propagation,
+    lem:qca_propagation_neighborhood_mono}
+  Let $R$ be the maximum of $|n|$ over $n\in\mathcal N$, with value $0$
+  when $\mathcal N$ is empty.  Then $-R\leq n\leq R$ for every
+  $n\in\mathcal N$, which gives
+  $\mathcal N\subseteq[-R,R]\cap\mathbb Z$.  Enlargement of propagation
+  neighborhoods gives the fixed-neighborhood assertion.  Finally, choose a
+  finite propagation neighborhood and apply this enlargement to its symmetric
+  interval.
+\end{proof}
