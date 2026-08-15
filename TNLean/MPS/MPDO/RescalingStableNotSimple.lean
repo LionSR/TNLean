@@ -93,6 +93,10 @@ This conclusion is independent of the chosen BNT presentation: the proof uses
 only the existence of a unit-weight copy in any normalized BNT witness, then
 restricts transfer quasi-idempotence to that copy.
 
+**Scope restriction (BNT-refined horizontal form):** `IsHorizontalCF` is the
+project's BNT-refined exact-gauge predicate, which is stronger than literal CPSV
+canonical form. See `docs/paper-gaps/cpgsv17_vertical_cf_grouping.tex`.
+
 Source: arXiv:1606.00608, line 246 and lines 815--822. -/
 theorem blockTensor_R_not_isHorizontalCF (L : ℕ) (hL : 0 < L) :
     ¬ MPOTensor.IsHorizontalCF (MPOTensor.blockTensor R L) := by

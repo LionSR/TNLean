@@ -27,6 +27,27 @@
     \end{align}
 \end{proof}
 
+\begin{theorem}[Reindexing the direct-sum transfer map]%
+    \label{thm:direct_sum_transfer_reindex}
+    \lean{MPSTensor.transferMap_directSumTensor_reindex}
+    \leanok
+    \uses{def:transfer_map}
+    Let $(B_k)_k$ be a family of tensors, let $\Phi$ be the canonical
+    identification of the block-labelled bond space with the total bond space,
+    and let $\mathcal S_B$ be the block transfer sum. Then, for every block
+    matrix $Y$,
+    \begin{align}
+        \E_{\oplus_k B_k}(\Phi(Y))&=\Phi(\mathcal S_B(Y)).
+        \notag
+    \end{align}
+\end{theorem}
+
+\begin{proof}\leanok
+    Expand the direct-sum transfer map. Reindexing converts each block-diagonal
+    matrix product into the corresponding block-labelled product, and summing
+    over the physical index gives $\mathcal S_B$.
+\end{proof}
+
 \begin{theorem}[Direct-sum quasi-idempotence on the block transfer sum]%
     \label{thm:block_transfer_sum_quasi_idempotent_of_direct_sum}
     \lean{MPSTensor.blockTransferSum_blockTransferSum_eq_smul}
@@ -46,10 +67,11 @@
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{lem:block_diagonal_transfer_sum_to_block}
-    Reindex the total bond space by its block labels. Under this identification,
-    the direct-sum transfer map is $\mathcal S_B$. Transporting the assumed
-    equation through the reindexing gives the displayed identity.
+    \uses{thm:direct_sum_transfer_reindex}
+    Reindex the total bond space by its block labels. By
+    Theorem~\ref{thm:direct_sum_transfer_reindex}, the direct-sum transfer map
+    becomes $\mathcal S_B$. Transporting the assumed equation through this
+    identification gives the displayed identity.
 \end{proof}
 
 \begin{theorem}[Direct-sum quasi-idempotence on every mixed corner]%
