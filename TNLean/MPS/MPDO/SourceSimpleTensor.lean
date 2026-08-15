@@ -29,21 +29,21 @@ namespace MPOTensor
 
 variable {d D : ℕ}
 
-/-- **Normalization-free Definition 4.7 simplicity.** A nonzero tensor
-generating MPDOs is source-simple when, after some positive physical blocking,
-its doubled-index tensor has a CPSV basis of normal tensors and no basis element
-has nilpotent ket-against-bra contraction.
+/-- **Normalization-free Definition 4.7 simplicity.** A tensor generating a
+nonzero MPDO at every positive chain length is source-simple when, after some
+positive physical blocking, its doubled-index tensor has a CPSV basis of normal
+tensors and no basis element has nilpotent ket-against-bra contraction.
 
-The nonzero condition records the source boundary that the tensor generates a
-nontrivial density-operator family; in particular, the zero MPO tensor is not
-simple. The BNT witness uses `MPSTensor.IsCPSVBasisOfNormalTensors`, rather than
-an arbitrary family of canonical blocks. It does not impose the line-246
-unit-weight normalization and makes no claim that every positive blocking has
-such a witness.
+The positive-length nonzero condition records the source boundary that the
+tensor generates a genuine density-operator family; in particular, null
+periodic representations are not simple. The BNT witness uses
+`MPSTensor.IsCPSVBasisOfNormalTensors`, rather than an arbitrary family of
+canonical blocks. It does not impose the line-246 unit-weight normalization and
+makes no claim that every positive blocking has such a witness.
 
 Source: arXiv:1606.00608, Definition 4.7, lines 815--822. -/
 def IsSourceSimple (M : MPOTensor d D) : Prop :=
-  IsMPDO M ∧ M ≠ 0 ∧
+  IsMPDO M ∧ (∀ N : ℕ, 0 < N → mpo M N ≠ 0) ∧
     ∃ L : ℕ, 0 < L ∧
       ∃ g : ℕ,
         ∃ blocks : (j : Fin g) →

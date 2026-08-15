@@ -88,11 +88,11 @@ the normalized fixed-representative predicate `MPOTensor.IsSimple`.
 
 Source: arXiv:1606.00608, Definition 4.7, lines 815--822. -/
 theorem R_isSourceSimple : MPOTensor.IsSourceSimple R := by
-  have hRne : R ≠ 0 := by
-    intro hR
-    apply physTraceTransfer_R_not_isNilpotent
-    rw [hR]
-    exact IsNilpotent.zero
+  have hRne : ∀ N : ℕ, 0 < N → MPOTensor.mpo R N ≠ 0 := by
+    intro N hN hzero
+    have hentry := congrFun (congrFun hzero (fun _ => 0)) (fun _ => 0)
+    rw [mpo_R_entry_formula hN] at hentry
+    simp [chainIndicator, ChainOK, φ, wN, wMat, bit1, bit2] at hentry
   refine ⟨R_isMPDO, hRne, 1, by norm_num, ?_⟩
   let data := canonicalFormData.reindexPhysical oneSiteDoubledEquiv
   let ref := data.activeBNTRefinement

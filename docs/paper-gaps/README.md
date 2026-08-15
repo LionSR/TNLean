@@ -79,8 +79,9 @@ For MPDO renormalization fixed points:
   statement (iii), including inactive product sectors, is not claimed.
 - `cpsv16_simple_tensor_nilpotency.tex` identifies the source's nilpotent BNT
   elements with nilpotent physical-trace transfer matrices. The exact
-  source-facing predicate is `MPOTensor.IsSourceSimple`: it requires a nonzero
-  MPDO tensor and existentially chooses a positive physical blocking and a
+  source-facing predicate is `MPOTensor.IsSourceSimple`: it requires every
+  positive-length generated MPO to be nonzero and existentially chooses a
+  positive physical blocking and a
   coefficient-form basis of normal tensors whose physical-trace transfers are
   all nonnilpotent.
 - `cpsv16_unit_weight_rfp_scale_tension.tex` records the tension between the
