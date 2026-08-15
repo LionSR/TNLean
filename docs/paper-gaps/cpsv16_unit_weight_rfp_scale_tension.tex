@@ -90,11 +90,23 @@ rescaling of a fixed representative.
 
 By contrast, the simplicity definition at lines~815--822 is phrased through
 the elements of a BNT: the tensor is simple when none of those elements has
-nilpotent ket-against-bra contraction. Multiplying a BNT element by a nonzero
-scalar does not change nilpotency. That nilpotency clause is therefore
-insensitive to rescaling, even though a formal predicate that includes the
-line-246 canonical-form normalization is evaluated on a particular
-representative.
+nilpotent ket-against-bra contraction. Multiplying one BNT element by a nonzero
+scalar does not change nilpotency. This observation concerns the nilpotency
+clause alone; it does not imply that an arbitrary complex rescaling preserves
+the MPDO condition or either full simplicity predicate.
+
+Indeed, if $\rho_N(M)$ denotes the closed length-$N$ MPO, then the exact law is
+\begin{align}
+    \rho_N(cM)&=c^N\rho_N(M),
+    \label{eq:closed-mpo-scaling}
+\end{align}
+not $|c|^{2N}\rho_N(M)$. Consequently positivity is preserved in both
+directions by a strictly positive real rescaling $rM$, and the formal theorems
+\leanid{MPOTensor.isMPDO_smul_ofReal_iff} and
+\leanid{MPOTensor.isSourceSimple_smul_ofReal_iff} establish the corresponding
+invariances. They do not assert invariance under arbitrary nonzero complex
+scalars, and they do not imply that the rescaled tensor satisfies the same
+literal fixed-scale RFP equations of Definition~4.1.
 
 The declaration \leanid{MPOTensor.IsSourceSimple} records the
 normalization-free source condition: it requires every positive-length
@@ -108,9 +120,18 @@ first is a predicate on one displayed canonical-form representative. The second
 permits positive physical blocking, but still asks the resulting blocked tensor
 itself to admit such a normalized witness. Neither declaration is a quotient by
 nonzero scalar rescaling, and no equivalence with
-\leanid{MPOTensor.IsSourceSimple} is asserted. For a fixed tensor, however, a
-theorem may quantify over every normalized BNT witness rather than rely on one
-chosen presentation; the dimer obstruction below has precisely this form.
+\leanid{MPOTensor.IsSourceSimple} is asserted. There is, however, a sanctioned
+one-way bridge: \leanid{MPOTensor.IsSimple.isSourceSimple} derives source
+simplicity from normalized simplicity under the explicit hypothesis
+\begin{align}
+    \rho_N(M)&\ne0 &&\text{for every }N>0.
+    \label{eq:positive-length-nonzero}
+\end{align}
+The extra hypothesis cannot be omitted from the formal statement because the
+normalized sector weights may cancel at particular lengths. For a fixed tensor,
+a theorem may also quantify over every normalized BNT witness rather than rely
+on one chosen presentation; the dimer obstruction below has precisely this
+form.
 
 \section{The displayed dimer representative}
 
@@ -218,8 +239,17 @@ should not be deleted: it is the source's standing canonical-form convention.
 The obstruction does not produce a nilpotent BNT block, does not use the
 vertical coefficient family, and does not refute source simplicity. Conversely,
 the one-site source-simplicity witness does not assert that every positive
-blocking is source-simple, that arbitrary rescaling preserves the MPDO
-condition, or that the two simplicity interfaces are equivalent.
+blocking is source-simple, that arbitrary complex rescaling preserves the MPDO
+condition, that positive rescaling preserves the same fixed-scale RFP equations,
+or that the two simplicity interfaces are equivalent. The valid comparison is
+the conditional bridge \eqref{eq:positive-length-nonzero}, together with
+strictly positive real rescaling invariance of the MPDO and source-simple
+predicates.
+
+The declaration-free compatibility shell
+\path{TNLean/MPS/MPDO/RescalingStableLengthDependentRFPBNTClause.lean} has been
+deleted. The live explicit BNT declarations remain in
+\path{TNLean/MPS/MPDO/RescalingStableExplicitVerticalBNT.lean}.
 
 \bibliographystyle{alpha}
 \bibliography{references}
