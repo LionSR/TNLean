@@ -7667,9 +7667,14 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
   \begin{align}
     \Lambda+\{a\}&=\Lambda+a.
   \end{align}
-  Translating either argument by $a$ translates the resulting sumset by $a$.
-  Sumsets are associative, as needed to compose propagation bounds. This is
-  the finite region $\Lambda+\mathcal N$ in the propagation condition
+  Translation commutes with either argument, and sumsets are associative:
+  \begin{align}
+    (\Lambda+a)+\mathcal N&=(\Lambda+\mathcal N)+a, \\
+    \Lambda+(\mathcal N+a)&=(\Lambda+\mathcal N)+a, \\
+    (\Lambda+\mathcal N)+\mathcal M&=\Lambda+(\mathcal N+\mathcal M).
+  \end{align}
+  These identities support composition of propagation bounds. This is the
+  finite region $\Lambda+\mathcal N$ in the propagation condition
   of the QCA appendix of \cite{Cirac2017MPU}.
 \end{definition}
 
