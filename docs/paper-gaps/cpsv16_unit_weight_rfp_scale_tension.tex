@@ -9,7 +9,7 @@
 
 \title{The CPSV16 Unit-Weight Convention and Renormalization-Fixed-Point Scale}
 \author{}
-\date{2026-08-14}
+\date{2026-08-15}
 
 \begin{document}
 \maketitle
@@ -88,21 +88,22 @@ the same literal idempotence equation, then
 so $c=1$. Thus Definition~4.1 is not invariant under an arbitrary nonzero
 rescaling of a fixed representative.
 
-By contrast, the simplicity definition at lines~815--823 is phrased through
-the normalized elements of a BNT: the tensor is simple when none of those
-elements has nilpotent ket-against-bra contraction. Multiplying a BNT
-element by a nonzero scalar does not change nilpotency. The mathematical
-simplicity content is therefore insensitive to that rescaling, even though a
-formal predicate that includes the line-246 canonical-form normalization is evaluated
-on a particular representative.
+By contrast, the simplicity definition at lines~815--822 is phrased through
+the elements of a BNT: the tensor is simple when none of those elements has
+nilpotent ket-against-bra contraction. Multiplying a BNT element by a nonzero
+scalar does not change nilpotency. That nilpotency clause is therefore
+insensitive to rescaling, even though a formal predicate that includes the
+line-246 canonical-form normalization is evaluated on a particular
+representative.
 
 The declarations \leanid{MPOTensor.IsSimpleCanonicalForm} and
 \leanid{MPOTensor.IsSimple} retain the source's BNT normalization. The first is
 a predicate on one displayed canonical-form representative. The second permits
 positive physical blocking, but still asks the resulting blocked tensor itself
 to admit such a normalized witness. Neither declaration is a quotient by
-nonzero scalar rescaling, and neither asserts invariance under changing the
-canonical presentation.
+nonzero scalar rescaling. For a fixed tensor, however, a theorem may quantify
+over every normalized BNT witness rather than rely on one chosen presentation;
+the dimer obstruction below has precisely this form.
 
 \section{The displayed dimer representative}
 
@@ -132,15 +133,42 @@ Since $\mu\ne1$, the scale-pinning calculation above shows that this normalized
 representative does not satisfy the same literal physical-trace idempotence
 equation as $R$.
 
-This establishes only a mismatch between the displayed one-block canonical
-normalization and the RFP-pinned representative. It does not prove that
-\leanid{MPOTensor.IsSimple} applied to $R$ is false, does not rule out every
-alternative canonical presentation or blocking, and does not make the displayed
-BNT coefficients presentation-independent. In the namespace
-\leanid{MPOTensor.RescalingStableLengthDependentRFP}, the theorem
-\leanid{doubledPhysTraceTransfer_retainedBlock_not_isNilpotent} records
-exactly the non-nilpotency of the retained block and no stronger
-simplicity conclusion.
+The obstruction is stronger than this displayed-presentation mismatch. For
+every positive blocking length $L$, the doubled-index transfer map of the
+blocked tensor satisfies
+\begin{align}
+    \mathcal E_{R^{[L]}}^2
+    &=\left(\frac{337}{512}\right)^L\mathcal E_{R^{[L]}}.
+    \label{eq:blocked-quasi-idempotence}
+\end{align}
+Suppose that $R^{[L]}$ admitted any normalized horizontal BNT witness. The
+gauge to that witness transports \eqref{eq:blocked-quasi-idempotence}. The
+global unit-weight condition from line~246 supplies a copy whose weight has
+modulus one. Restricting the transported equation to that copy removes the
+weight. Its normal representative is left canonical, so its transfer map is
+trace preserving. Taking the trace of the quasi-idempotence equation at the
+identity forces
+\begin{align}
+    \left(\frac{337}{512}\right)^L&=1.
+\end{align}
+This contradicts $0<(337/512)^L<1$. Hence no positive blocking of $R$ admits a
+normalized horizontal canonical form. Since the formal simple-canonical-form
+predicate includes such a horizontal witness, the theorem
+\leanid{R_not_isSimple} in the namespace
+\leanid{MPOTensor.RescalingStableLengthDependentRFP} proves
+\begin{align}
+    \lnot\,\leanid{MPOTensor.IsSimple}\,R.
+\end{align}
+The argument quantifies over the arbitrary normalized BNT witness allowed by
+the formal predicate; it does not depend on the displayed one-block
+presentation.
+
+This failure is not a nilpotency result. The retained-block theorem still
+proves that the displayed canonical presentation has non-nilpotent
+physical-trace transfer. The contradiction instead combines quasi-idempotence
+of the doubled-index transfer, the line-246 unit-weight copy, and trace
+preservation of its normal representative. It also uses none of the vertical
+coefficient identities discussed below.
 
 \section{The vertical one-label identity}
 
@@ -165,18 +193,18 @@ not an invariance theorem for coefficients under changes of presentation.
 \section{Formalization boundary}
 
 \textbf{Verdict: scope restriction (fixed representative).} The current
-declarations are mathematically correct at their stated scope.
-The line-246 field should not be deleted: it is the source's standing
-canonical-form convention. The appropriate future interface is instead a
-scale-invariant simplicity surface, formulated either on a normalized
-representative or without including the unit-weight convention in the
-simplicity predicate.
+formal predicate is false for the displayed tensor $R$: every positive
+blocking has quasi-idempotence scalar $(337/512)^L<1$, while every normalized
+horizontal BNT witness would force that scalar to be one. This conclusion is
+independent of the choice of normalized BNT witness.
 
-This note adds no such predicate and proves no generic scale-pinning lemma. It
-only records why the existing simplicity predicates must be read as
-fixed-representative statements, and why non-nilpotency of the displayed dimer
-block does not by itself establish or refute the full predicate
-\leanid{MPOTensor.IsSimple} applied to $R$.
+The verdict remains representative-dependent. The line-246 field should not
+be deleted: it is the source's standing canonical-form convention. The result
+does not produce a nilpotent BNT block, does not use the vertical coefficient
+family, and does not show that any scale-invariant physical notion of
+simplicity fails for $R$. A future scale-invariant interface would have to be
+formulated either on a normalized representative or without including the
+unit-weight convention in the simplicity predicate.
 
 \bibliographystyle{alpha}
 \bibliography{references}

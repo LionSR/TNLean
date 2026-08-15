@@ -733,6 +733,158 @@
     $\lambda(1-\lambda)^2=0$. This fails at $\lambda=\frac{7}{25}$.
 \end{proof}
 
+\begin{lemma}[Doubled-index letters and their rank-one factorization]
+    \label{lem:mpdo_bnt_label_rescaling_stable_doubled_letter_factorization}
+    \lean{MPOTensor.RescalingStableLengthDependentRFP.toMPSTensor_R_apply}
+    \lean{MPOTensor.RescalingStableLengthDependentRFP.R_eq_vecMulVec}
+    \leanok
+    \uses{thm:mpdo_bnt_label_rescaling_stable_length_dependence}
+    Identify each physical index $p\in\{0,1,2,3\}$ with a pair
+    $(p_1,p_2)\in\{0,1\}^2$, and similarly write $q=(q_1,q_2)$. The
+    doubled-index letter at the paired index $(p,q)$ is the MPO letter $R^{pq}$.
+    Moreover, this bond matrix is the rank-one outer product
+    \begin{align}
+        R^{pq}_{ab}
+        &=\frac{25}{32}A^a_{p_1q_1}A^b_{p_2q_2},
+        \notag
+    \end{align}
+    or equivalently
+    \begin{align}
+        R^{pq}&=\frac{25}{32}u_{pq}v_{pq}^{\mathsf T}, &
+        u_{pq}(a)&=A^a_{p_1q_1}, &
+        v_{pq}(b)&=A^b_{p_2q_2}.
+        \notag
+    \end{align}
+\end{lemma}
+
+\begin{proof}\leanok
+    The first identity is the definition of the doubled-index reading. Expanding
+    the Kronecker-product definition of $R$ and using that the entries of the
+    four letters $A^a$ are real gives the displayed outer product.
+\end{proof}
+
+\begin{lemma}[Rank-one form of the dimer transfer map]
+    \label{lem:mpdo_bnt_label_rescaling_stable_transfer_rank_one}
+    \lean{MPOTensor.RescalingStableLengthDependentRFP.%
+        transferMap_R_toMPSTensor_eq}
+    \lean{MPOTensor.RescalingStableLengthDependentRFP.cFun_fixedDiag}
+    \leanok
+    \uses{thm:mpdo_bnt_label_rescaling_stable_length_dependence}
+    Set
+    \begin{align}
+        s&=\left(\frac45,\frac45,\frac35,\frac35\right), &
+        F&=\diag(s_0^2,s_1^2,s_2^2,s_3^2),
+        \notag\\
+        \lambda(X)&=\left(\frac{25}{32}\right)^2
+            \sum_{b=0}^3s_b^2X_{bb}.
+        \notag
+    \end{align}
+    Then the transfer map of $R$ has rank-one form
+    \begin{align}
+        \E_R(X)&=\lambda(X)F,
+        &\lambda(F)&=\frac{337}{512}.
+        \notag
+    \end{align}
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{lem:mpdo_bnt_label_rescaling_stable_doubled_letter_factorization}
+    By
+    Lemma~\ref{lem:mpdo_bnt_label_rescaling_stable_doubled_letter_factorization},
+    the doubled-index letters are the matrices $R^{pq}$, each with the displayed
+    outer-product factorization. Substituting these rank-one factors into the
+    transfer-map sum makes every term proportional to $F$, and collecting the
+    diagonal coefficients gives $\lambda(X)$. Substituting $X=F$ and evaluating
+    the four entries gives $337/512$.
+\end{proof}
+
+\begin{lemma}[One-site transfer quasi-idempotence of the dimer tensor]
+    \label{lem:mpdo_bnt_label_rescaling_stable_transfer_quasi_idempotent}
+    \lean{MPOTensor.RescalingStableLengthDependentRFP.%
+        transferMap_R_toMPSTensor_idem}
+    \leanok
+    \uses{thm:mpdo_bnt_label_rescaling_stable_length_dependence}
+    The transfer map of the dimer tensor $R$ satisfies
+    \begin{align}
+        \E_R^2&=\frac{337}{512}\E_R.
+        \notag
+    \end{align}
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{lem:mpdo_bnt_label_rescaling_stable_transfer_rank_one}
+    By Lemma~\ref{lem:mpdo_bnt_label_rescaling_stable_transfer_rank_one},
+    \begin{align}
+        \E_R(\E_R(X))
+        &=\lambda(X)\lambda(F)F
+         =\frac{337}{512}\E_R(X).
+        \notag
+    \end{align}
+\end{proof}
+
+\begin{theorem}[The rescaling-stable dimer tensor is not simple]
+    \label{thm:mpdo_bnt_label_rescaling_stable_not_simple}
+    \lean{MPOTensor.RescalingStableLengthDependentRFP.%
+        transferMap_blockTensor_R_toMPSTensor_quasi_idempotent}
+    \lean{MPOTensor.RescalingStableLengthDependentRFP.%
+        blockTensor_R_not_isHorizontalCF}
+    \lean{MPOTensor.RescalingStableLengthDependentRFP.R_not_isSimple}
+    \leanok
+    \uses{def:mpdo_simple_tensor, def:horizontal_cf_mpdo,
+        thm:mpdo_bnt_label_rescaling_stable_length_dependence}
+    Let $R$ be the dimer tensor of
+    Theorem~\ref{thm:mpdo_bnt_label_rescaling_stable_length_dependence}. For
+    every integer $L\geq0$, the transfer map of its $L$-site blocking satisfies
+    \begin{align}
+        \mathcal E_{R^{[L]}}^2
+        &=\left(\frac{337}{512}\right)^L\mathcal E_{R^{[L]}}.
+        \notag
+    \end{align}
+    For every positive integer $L$, the blocking $R^{[L]}$ admits no normalized
+    horizontal canonical form. Consequently $R$ is not simple in the
+    fixed-representative sense of
+    Definition~\ref{def:mpdo_simple_tensor}.
+
+    % Maintainer scope: the conclusion quantifies over every normalized BNT
+    % witness admitted by the fixed-representative simplicity definition. It
+    % does not assert that a BNT element is nilpotent, use the vertical
+    % coefficient family, or concern a scale-invariant notion of simplicity.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{lem:mpdo_bnt_label_rescaling_stable_transfer_quasi_idempotent,
+        thm:mpdo_blocking_doubled_index, thm:cpsv_physical_reindexing,
+        thm:transfer_map_block_tensor_quasi_idempotent,
+        thm:mpdo_horizontal_cf_quasi_idempotent_scalar,
+        lem:mpdo_simple_tensor_horizontal_cf}
+    By
+    Lemma~\ref{lem:mpdo_bnt_label_rescaling_stable_transfer_quasi_idempotent},
+    the one-site transfer map satisfies
+    $\E_R^2=\frac{337}{512}\E_R$.
+    Theorems~\ref{thm:mpdo_blocking_doubled_index} and
+    \ref{thm:cpsv_physical_reindexing} identify the doubled-index MPS tensor of
+    the MPO blocking $R^{[L]}$ with the physical relabeling of the $L$-site MPS
+    blocking, without changing its transfer map. After this transport,
+    Theorem~\ref{thm:transfer_map_block_tensor_quasi_idempotent} gives, for every
+    integer $L\geq0$,
+    \begin{align}
+        \E_{R^{[L]}}^2
+        &=\left(\frac{337}{512}\right)^L\E_{R^{[L]}}.
+        \notag
+    \end{align}
+    Now fix $L>0$ and suppose that the $L$-site blocking has a normalized
+    horizontal canonical form. By
+    Theorem~\ref{thm:mpdo_horizontal_cf_quasi_idempotent_scalar}, its
+    quasi-idempotence scalar must be one. On the other hand,
+    \begin{align}
+        0<\left(\frac{337}{512}\right)^L<1,
+        \notag
+    \end{align}
+    a contradiction. Simplicity would provide such a normalized horizontal
+    canonical form after some positive blocking by
+    \cite[lines~815--822]{Cirac2016MPDO_arXiv}; hence $R$ is not simple.
+\end{proof}
+
 \begin{theorem}[Positivity of the rescaling-stable coefficient family]%
     \label{thm:mpdo_bnt_label_rescaling_stable_ismpdo}
     \lean{MPOTensor.RescalingStableLengthDependentRFP.mpo_R_entry_formula}

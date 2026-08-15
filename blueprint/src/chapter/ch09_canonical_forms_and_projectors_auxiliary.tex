@@ -573,6 +573,27 @@ the coefficient argument of Chapter~\ref{ch:bnt}.
     Expand both transfer maps and take $C=X^{-1}$.
 \end{proof}
 
+\begin{theorem}[Gauge invariance of transfer quasi-idempotence]
+    \label{thm:cpsv_gauge_transfer_quasi_idempotence}
+    \lean{MPSTensor.GaugeEquiv.transferMap_comp_self_eq_smul_iff}
+    \leanok
+    \uses{def:gauge_equiv, def:transfer_map}
+    Let $A$ and $B$ be gauge-equivalent MPS tensors and let $c\in\C$. Then
+    \begin{align}
+        \E_B^2=c\E_B
+        \quad\Longleftrightarrow\quad
+        \E_A^2=c\E_A.
+        \notag
+    \end{align}
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:cpsv_gauge_transfer_similarity}
+    Theorem~\ref{thm:cpsv_gauge_transfer_similarity} identifies the two transfer
+    maps by an algebra automorphism. Such an automorphism preserves composition
+    and scalar multiplication, and therefore preserves the displayed equation.
+\end{proof}
+
 \begin{theorem}[Spectral radius under congruence similarity]
     \label{thm:cpsv_spectral_radius_similarity}
     \lean{spectralRadius_similarityMap_eq}

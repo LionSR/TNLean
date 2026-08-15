@@ -195,6 +195,47 @@
     with the corresponding transfer maps gives the stated identity.
 \end{proof}
 
+\begin{lemma}[Transfer map under scalar multiplication]
+    \label{lem:transfer_map_smul}
+    \lean{MPSTensor.transferMap_smul}
+    \leanok
+    \uses{def:transfer_map}
+    Let $A$ be an MPS tensor and let $w\in\C$. Then, for every bond matrix $X$,
+    \begin{align}
+        \E_{wA}(X)&=w\overline w\,\E_A(X).
+        \notag
+    \end{align}
+\end{lemma}
+
+\begin{proof}\leanok
+    Expand the transfer map and pull the scalar $w$ and its conjugate out of
+    each summand.
+\end{proof}
+
+\begin{lemma}[Left-canonical transfer maps preserve trace]
+    \label{lem:trace_transfer_map_left_canonical}
+    \lean{MPSTensor.trace_transferMap}
+    \leanok
+    \uses{def:transfer_map, def:left_canonical_tensor}
+    If $A$ is left canonical, then, for every bond matrix $X$,
+    \begin{align}
+        \tr(\E_A(X))&=\tr(X).
+        \notag
+    \end{align}
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{lem:trace_mul_transfer_map_adjoint}
+    Cyclicity of trace gives
+    \begin{align}
+        \tr(\E_A(X))
+        &=\tr\!\left(\left(\sum_i(A^i)^\dagger A^i\right)X\right)
+         =\tr(X),
+        \notag
+    \end{align}
+    since left canonicity makes the sum in parentheses equal to the identity.
+\end{proof}
+
 \begin{theorem}[Transfer map is a channel]\label{thm:transfer_channel}
     \lean{MPSTensor.transferMap_isChannel}
     \leanok

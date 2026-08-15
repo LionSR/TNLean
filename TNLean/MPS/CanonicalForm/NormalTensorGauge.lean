@@ -33,6 +33,8 @@ tensor.
 
 * `GaugeEquiv.transferMap_eq_similarityMap`: gauge-equivalent tensors have
   similar transfer maps.
+* `GaugeEquiv.transferMap_comp_self_eq_smul_iff`: transfer quasi-idempotence is
+  invariant under gauge equivalence.
 * `IsNormalTensor.of_gaugeEquiv`: CPSV normal-tensor status is invariant under
   gauge equivalence.
 * `exists_tpGauge_of_irreducible_spectralRadius_one`: an irreducible
@@ -122,6 +124,32 @@ theorem transferMap_eq_similarityMap {A B : MPSTensor d D} (h : GaugeEquiv A B) 
             (transferMap (d := d) (D := D) A) Y := by
             simp [similarityMap, transferMap_apply, Matrix.conjTranspose_nonsing_inv,
               hX_inv_inv, hXstar_inv_inv, Matrix.mul_assoc]
+
+/-- Gauge equivalence transports quasi-idempotence of the transfer map. -/
+theorem transferMap_comp_self_eq_smul_iff {A B : MPSTensor d D}
+    (h : GaugeEquiv A B) (c : ℂ) :
+    transferMap (d := d) (D := D) B ∘ₗ transferMap (d := d) (D := D) B =
+        c • transferMap (d := d) (D := D) B ↔
+      transferMap (d := d) (D := D) A ∘ₗ transferMap (d := d) (D := D) A =
+        c • transferMap (d := d) (D := D) A := by
+  obtain ⟨C, hC, hMap⟩ := h.transferMap_eq_similarityMap
+  let e := (Matrix.congruenceLinearEquiv C hC).symm.conjAlgEquiv ℂ
+  have hSimilarity (E : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ]
+      Matrix (Fin D) (Fin D) ℂ) :
+      similarityMap (D := D) C E = e E := by
+    apply LinearMap.ext
+    intro X
+    ext i j
+    simp [e, similarityMap, LinearEquiv.conjAlgEquiv_apply, Matrix.mul_assoc]
+  rw [hMap, hSimilarity]
+  constructor
+  · intro hPoly
+    apply e.injective
+    rw [← Module.End.mul_eq_comp] at hPoly ⊢
+    simpa using hPoly
+  · intro hPoly
+    rw [← Module.End.mul_eq_comp] at hPoly ⊢
+    simpa using congrArg e hPoly
 
 end GaugeEquiv
 
