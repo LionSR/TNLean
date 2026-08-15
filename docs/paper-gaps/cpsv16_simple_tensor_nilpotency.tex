@@ -47,12 +47,18 @@ on that algebra is nondegenerate. Consequently,
   \mathcal T_A^R=0.                                      \label{eq:nilpotent-equivalence}
 \end{align}
 Since the nilpotency index of a nilpotent $D\times D$ matrix is at most $D$,
-the line-819 condition is precisely nilpotency of $\mathcal T_A$. The formal
-predicate for a chosen blocked canonical form is
-\leanid{MPOTensor.IsSimpleCanonicalForm}; it records this condition for every
-basis element. The source predicate is \leanid{MPOTensor.IsSimple}; it
-existentially quantifies over the positive physical blocking required at
-line~815.
+the line-819 condition is precisely nilpotency of $\mathcal T_A$. The
+source-facing predicate is \leanid{MPOTensor.IsSourceSimple}: it requires the
+generated MPO to be nonzero at every positive chain length, existentially
+quantifies over the positive physical blocking required at line~815, chooses a
+basis of normal tensors for the blocked doubled-index tensor, and records this
+non-nilpotency condition for every basis element.
+
+The predicates \leanid{MPOTensor.IsSimpleCanonicalForm} and
+\leanid{MPOTensor.IsSimple} are separate normalized fixed-representative
+interfaces. They include a horizontal canonical-form witness with the source's
+line-246 unit-weight convention. No equivalence with
+\leanid{MPOTensor.IsSourceSimple} is asserted.
 
 The toric-code boundary tensor discussed after Theorem~4.9 of the source
 confirms the reading: its second basis element carries the one-by-one
@@ -60,18 +66,18 @@ transfer $\mathcal T = 0$, so the tensor is not simple, matching the
 source's use of that example outside the simple case.
 
 The source states the predicate for ``a BNT'' of the blocked tensor. The basis of
-normal tensors is unique up to gauge, phase, and permutation, so the choice
-of witness is immaterial mathematically; the formal predicate quantifies
-existentially over a positive blocking and horizontal canonical-form witness,
-and records non-nilpotency for that witness. No theorem currently transports
-non-nilpotency between witnesses; a proof of witness independence can be
-added when an argument needs it.
+normal tensors is unique up to gauge, phase, and permutation, so the choice of
+witness is immaterial mathematically. The formal source-facing predicate
+quantifies existentially over a positive blocking and a coefficient-form basis
+of normal tensors, and records non-nilpotency for that witness. It does not
+require a normalized horizontal canonical-form presentation.
 
 \section{Classification}
 
-Verdict: notational clarification. The formal definition is faithful to
-lines~819--822 under the identification of the line-819 partial-trace
-criterion with matrix nilpotency of the physical-trace transfer; no
-hypothesis is added or dropped.
+Verdict: notational clarification with an explicit nontriviality boundary. The
+formal definition records the source's density-operator setting by requiring
+all positive-length generated MPOs to be nonzero. Subject to that boundary, it
+matches lines~819--822 under the identification of the line-819 partial-trace
+criterion with matrix nilpotency of the physical-trace transfer.
 
 \end{document}
