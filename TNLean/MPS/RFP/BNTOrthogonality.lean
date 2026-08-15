@@ -211,6 +211,20 @@ theorem blockTransferSum_blockTransferSum_eq_smul
           rw [transferMap_directSumTensor_reindex B Y]
           rfl
 
+/-- Whole-tensor RFP of the direct sum makes
+the block-diagonal transfer sum idempotent. -/
+@[deprecated "Use `blockTransferSum_blockTransferSum_eq_smul` at scalar `1`."
+  (since := "2026-08-15")]
+theorem blockTransferSum_blockTransferSum
+    (B : (k : Fin r) → MPSTensor d (dim k))
+    (hRFP : IsTransferIdempotent (directSumTensor B))
+    (Y : Matrix ((k : Fin r) × Fin (dim k)) ((k : Fin r) × Fin (dim k)) ℂ) :
+    blockTransferSum B (blockTransferSum B Y) = blockTransferSum B Y := by
+  change transferMap (directSumTensor B) ∘ₗ transferMap (directSumTensor B) =
+    transferMap (directSumTensor B) at hRFP
+  simpa only [one_smul] using
+    blockTransferSum_blockTransferSum_eq_smul B 1 (by simpa only [one_smul] using hRFP) Y
+
 /-- The `(j, j')` bond-block restriction is surjective: every block matrix is the
 restriction of a direct-sum bond matrix. -/
 private lemma exists_toBlock_eq (j j' : Fin r) [NeZero (dim j)] [NeZero (dim j')]

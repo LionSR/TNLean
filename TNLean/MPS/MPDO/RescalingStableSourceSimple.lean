@@ -43,6 +43,14 @@ def oneSiteDoubledEquiv :
     (Equiv.prodCongr (MPSTensor.singleBlockEquiv 4) (MPSTensor.singleBlockEquiv 4)) |>.trans
       finProdFinEquiv
 
+@[deprecated "Simplify directly with `oneSiteDoubledEquiv`." (since := "2026-08-15")]
+@[simp]
+lemma oneSiteDoubledEquiv_diagonal (i : Fin (MPSTensor.blockPhysDim 4 1)) :
+    oneSiteDoubledEquiv (finProdFinEquiv (i, i)) =
+      finProdFinEquiv
+        (MPSTensor.singleBlockEquiv 4 i, MPSTensor.singleBlockEquiv 4 i) := by
+  simp [oneSiteDoubledEquiv]
+
 /-- One-site physical blocking of the dimer gives the canonical physical
 relabeling of its doubled-index tensor. -/
 theorem toMPSTensor_blockTensor_R_one :

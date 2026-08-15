@@ -16,9 +16,7 @@ The substantive component declarations remain public.
 | `MPOTensor.BNTLabelTheoremWitness.ofChi_hasBNTLabelTheoremWitness` | Use `⟨BNTLabelTheoremWitness.ofChi ...⟩`. |
 | `MPOTensor.RescalingStableLengthDependentRFP.oneLabelChi_matrix_eq_oneLabelChiMatrix2` | The equality is `rfl` from `oneLabelChiMatrix2`. |
 | `MPOTensor.RescalingStableLengthDependentRFP.R_hasBNTAlgebraTensorClause` | Use `⟨R_oneLabelBNTAlgebraTensorClause⟩`. |
-| `MPOTensor.RescalingStableLengthDependentRFP.oneSiteDoubledEquiv_diagonal` | Simplify directly with `oneSiteDoubledEquiv`. |
 | `MPOTensor.RescalingStableLengthDependentRFP.doubledPhysTraceTransfer_reindexPhysical_oneSiteDoubledEquiv` | The proof is now the local `hTransfer` step inside `R_isSourceSimple`. |
-| `MPSTensor.blockTransferSum_blockTransferSum` | Specialize `blockTransferSum_blockTransferSum_eq_smul` at scalar `1`. |
 | `MPSTensor.isLocallyOrthogonal_iff_isTransferIdempotent` | This is `Iff.rfl` from the definition of `IsLocallyOrthogonal`. |
 
 
@@ -35,8 +33,11 @@ with dated deprecations instead of being deleted. This includes:
 - the eight `MPOTensor.HasBNTLabelTheoremWitness.exists_*` packaging theorems
   retained in `BNTTheoremWitnessConsequences`;
 - `MPSTensor.duplicateScalarBlocks_counterexample`;
-- `MPOTensor.RescalingStableLengthDependentRFP.R_isSourceSimple_and_not_isSimple`; and
-- `MPSTensor.bellPairChain_isTransferIdempotent_and_not_isPhysicalCID`.
+- `MPOTensor.RescalingStableLengthDependentRFP.R_isSourceSimple_and_not_isSimple`;
+- `MPSTensor.bellPairChain_isTransferIdempotent_and_not_isPhysicalCID`;
+- `MPOTensor.RescalingStableLengthDependentRFP.oneSiteDoubledEquiv_diagonal`,
+  whose `@[simp]` behavior is part of the public automation API; and
+- `MPSTensor.blockTransferSum_blockTransferSum`.
 
 The old `TNLean.MPS.MPDO.BNTTheoremWitnessConsequences` import path is retained
 as the module containing the deprecated witness-packaging APIs. The theorem
