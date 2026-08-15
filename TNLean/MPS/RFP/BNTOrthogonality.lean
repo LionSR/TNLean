@@ -439,8 +439,8 @@ $\mathcal E^2=c\mathcal E$. Left canonicity makes $\mathcal E$ trace preserving;
 taking the trace at the identity therefore gives $D=cD$, and the positive bond
 dimension gives $c=1$.
 
-Source: arXiv:1606.00608, line 246 (unit-weight normalization) and lines
-543--555 (restriction of the transfer equation to a canonical-form block). -/
+Source convention: arXiv:1606.00608, line 246 (unit-weight normalization).
+The conclusion is a formal consequence of that convention and trace preservation. -/
 theorem eq_one_of_transferMap_comp_self_eq_smul
     (P : SectorDecomposition d) (hCF : IsBNTCanonicalForm P) (c : ℂ)
     (h : transferMap P.toTensor ∘ₗ transferMap P.toTensor =
