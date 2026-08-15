@@ -89,8 +89,8 @@ noncomputable def physicalAdjointNormalizedFlattening
   blocks := fun k ↦ MPSTensor.reindexPhysical (MPOTensor.physicalPairSwapEquiv d)
     (MPSTensor.mapStar (data.blocks k))
   blocks_normal := fun k ↦
-    (MPSTensor.IsNormalTensor.mapStar (data.blocks_normal k)
-      (data.blocks_left_canonical k)).reindexPhysical (MPOTensor.physicalPairSwapEquiv d)
+    (MPSTensor.IsNormalTensor.mapStar (data.blocks_normal k)).reindexPhysical
+      (MPOTensor.physicalPairSwapEquiv d)
   total_dim_le := data.total_dim_le
   ambient_coisometry := data.ambient_coisometry.map (starRingEnd ℂ)
   coisometric := by
