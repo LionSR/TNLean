@@ -96,14 +96,21 @@ insensitive to rescaling, even though a formal predicate that includes the
 line-246 canonical-form normalization is evaluated on a particular
 representative.
 
-The declarations \leanid{MPOTensor.IsSimpleCanonicalForm} and
-\leanid{MPOTensor.IsSimple} retain the source's BNT normalization. The first is
-a predicate on one displayed canonical-form representative. The second permits
-positive physical blocking, but still asks the resulting blocked tensor itself
-to admit such a normalized witness. Neither declaration is a quotient by
-nonzero scalar rescaling. For a fixed tensor, however, a theorem may quantify
-over every normalized BNT witness rather than rely on one chosen presentation;
-the dimer obstruction below has precisely this form.
+The declaration \leanid{MPOTensor.IsSourceSimple} records the
+normalization-free source condition: it requires a nonzero tensor generating
+MPDOs and asks for some positive blocking and a basis of normal tensors whose
+physical-trace transfers are all non-nilpotent. It does not impose the line-246
+unit-weight convention.
+
+By contrast, \leanid{MPOTensor.IsSimpleCanonicalForm} and
+\leanid{MPOTensor.IsSimple} are normalized fixed-representative interfaces. The
+first is a predicate on one displayed canonical-form representative. The second
+permits positive physical blocking, but still asks the resulting blocked tensor
+itself to admit such a normalized witness. Neither declaration is a quotient by
+nonzero scalar rescaling, and no equivalence with
+\leanid{MPOTensor.IsSourceSimple} is asserted. For a fixed tensor, however, a
+theorem may quantify over every normalized BNT witness rather than rely on one
+chosen presentation; the dimer obstruction below has precisely this form.
 
 \section{The displayed dimer representative}
 
@@ -163,12 +170,18 @@ The argument quantifies over the arbitrary normalized BNT witness allowed by
 the formal predicate; it does not depend on the displayed one-block
 presentation.
 
-This failure is not a nilpotency result. The retained-block theorem still
-proves that the displayed canonical presentation has non-nilpotent
-physical-trace transfer. The contradiction instead combines quasi-idempotence
-of the doubled-index transfer, the line-246 unit-weight copy, and trace
-preservation of its normal representative. It also uses none of the vertical
-coefficient identities discussed below.
+This failure is not a nilpotency result. The retained-block theorem proves
+that the displayed canonical presentation has non-nilpotent physical-trace
+transfer. Together with positivity and the active one-site BNT refinement, it
+witnesses
+\begin{align}
+    \leanid{MPOTensor.IsSourceSimple}\,R.
+\end{align}
+The source quantifier is existential and is witnessed by $L=1$; no assertion is
+made about every positive blocking. The normalized obstruction instead combines
+quasi-idempotence of the doubled-index transfer, the line-246 unit-weight copy,
+and trace preservation of its normal representative. It uses none of the
+vertical coefficient identities discussed below.
 
 \section{The vertical one-label identity}
 
@@ -192,19 +205,21 @@ not an invariance theorem for coefficients under changes of presentation.
 
 \section{Formalization boundary}
 
-\textbf{Verdict: scope restriction (fixed representative).} The current
-formal predicate is false for the displayed tensor $R$: every positive
-blocking has quasi-idempotence scalar $(337/512)^L<1$, while every normalized
-horizontal BNT witness would force that scalar to be one. This conclusion is
-independent of the choice of normalized BNT witness.
+\textbf{Verdict: two distinct formal interfaces.} The source-facing
+predicate \leanid{MPOTensor.IsSourceSimple} is true for $R$, with positive
+blocking length $L=1$. The normalized fixed-representative predicate
+\leanid{MPOTensor.IsSimple} is false for $R$: every positive blocking has
+quasi-idempotence scalar $\bigl(337/512\bigr)^L<1$, while every normalized horizontal BNT
+witness would force that scalar to be one. The latter conclusion is independent
+of the choice of normalized BNT witness.
 
-The verdict remains representative-dependent. The line-246 field should not
-be deleted: it is the source's standing canonical-form convention. The result
-does not produce a nilpotent BNT block, does not use the vertical coefficient
-family, and does not show that any scale-invariant physical notion of
-simplicity fails for $R$. A future scale-invariant interface would have to be
-formulated either on a normalized representative or without including the
-unit-weight convention in the simplicity predicate.
+The normalized verdict remains representative-dependent. The line-246 field
+should not be deleted: it is the source's standing canonical-form convention.
+The obstruction does not produce a nilpotent BNT block, does not use the
+vertical coefficient family, and does not refute source simplicity. Conversely,
+the one-site source-simplicity witness does not assert that every positive
+blocking is source-simple, that arbitrary rescaling preserves the MPDO
+condition, or that the two simplicity interfaces are equivalent.
 
 \bibliographystyle{alpha}
 \bibliography{references}
