@@ -51,6 +51,36 @@ through its own period agrees with the directly $p$-blocked block.
     blocked transfer map primitive.
 \end{proof}
 
+\begin{theorem}[Quasi-idempotence under physical blocking]%
+    \label{thm:transfer_map_block_tensor_quasi_idempotent}
+    \lean{MPSTensor.transferMap_blockTensor_quasi_idempotent}
+    \leanok
+    \uses{def:blocked_tensor, def:transfer_map}
+    Let $A$ be an MPS tensor and let $c\in\C$. If
+    \begin{align}
+        \E_A^2&=c\E_A,
+        \notag
+    \end{align}
+    then, for every integer $L\geq0$,
+    \begin{align}
+        \E_{A^{[L]}}^2&=c^L\E_{A^{[L]}}.
+        \notag
+    \end{align}
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{lem:blocked_irreducibility_direct_support}
+    The transfer map of $A^{[L]}$ is $\E_A^L$. Therefore
+    \begin{align}
+        (\E_A^L)^2
+        &=(\E_A^2)^L
+         =(c\E_A)^L
+         =c^L\E_A^L,
+        \notag
+    \end{align}
+    which is the required identity.
+\end{proof}
+
 \begin{lemma}[Adjoint primitivity equivalence]%
     \label{thm:primitive_adjoint_equiv}
     \lean{MPSTensor.IsPrimitive.adjoint_iff}\leanok

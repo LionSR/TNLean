@@ -5,8 +5,10 @@ Authors: TNLean contributors
 -/
 import TNLean.Algebra.ComplexPhasePositivity
 import TNLean.Algebra.FinSum
-import TNLean.MPS.RFP.ZeroCorrelationLength
 import TNLean.MPS.Core.MultiBlock
+import TNLean.MPS.FundamentalTheorem.SectorBNT.Basic
+import TNLean.MPS.RFP.ZeroCorrelationLength
+import TNLean.MPS.SharedInfra.Scaling
 import TNLean.Spectral.TransferOperatorGapNT
 
 /-!
@@ -32,6 +34,8 @@ The diagonal `j = j'` case is `IsIsometryCanonicalForm`
 * `isTransferIdempotent_directSumTensor_iff_pairwise_mixedTransferMap₂_isIdempotentElem`
   — exact reduction of whole-tensor transfer idempotence to every mixed block
   pair.
+* `IsBNTCanonicalForm.eq_one_of_transferMap_comp_self_eq_smul` — the BNT
+  unit-weight convention forces the scalar in transfer quasi-idempotence to be one.
 
 ## Route
 
@@ -182,13 +186,14 @@ theorem transferMap_directSumTensor_reindex
   rw [Matrix.conjTranspose_submatrix, Matrix.submatrix_mul_equiv _ _ _ e.symm _,
     Matrix.submatrix_mul_equiv _ _ _ e.symm _]
 
-/-- Whole-tensor RFP of the direct sum makes
-the block-diagonal transfer sum idempotent. -/
-theorem blockTransferSum_blockTransferSum
-    (B : (k : Fin r) → MPSTensor d (dim k))
-    (hRFP : IsTransferIdempotent (directSumTensor B))
+/-- A scalar quasi-idempotence relation for the full direct-sum transfer map restricts to
+the same relation for the block-diagonal transfer sum. -/
+theorem blockTransferSum_blockTransferSum_eq_smul
+    (B : (k : Fin r) → MPSTensor d (dim k)) (c : ℂ)
+    (h : transferMap (directSumTensor B) ∘ₗ transferMap (directSumTensor B) =
+      c • transferMap (directSumTensor B))
     (Y : Matrix ((k : Fin r) × Fin (dim k)) ((k : Fin r) × Fin (dim k)) ℂ) :
-    blockTransferSum B (blockTransferSum B Y) = blockTransferSum B Y := by
+    blockTransferSum B (blockTransferSum B Y) = c • blockTransferSum B Y := by
   classical
   set e := finSigmaFinEquiv (m := r) (n := dim) with he
   apply (Matrix.reindex e e).injective
@@ -199,11 +204,24 @@ theorem blockTransferSum_blockTransferSum
     _ = transferMap (directSumTensor B)
           (transferMap (directSumTensor B) (Matrix.reindex e e Y)) := by
             rw [transferMap_directSumTensor_reindex B Y]
-    _ = transferMap (directSumTensor B) (Matrix.reindex e e Y) := by
-          have h := LinearMap.congr_fun hRFP (Matrix.reindex e e Y)
-          simpa only [LinearMap.comp_apply] using h
-    _ = Matrix.reindex e e (blockTransferSum B Y) :=
-          transferMap_directSumTensor_reindex B Y
+    _ = c • transferMap (directSumTensor B) (Matrix.reindex e e Y) := by
+          have hY := LinearMap.congr_fun h (Matrix.reindex e e Y)
+          simpa only [LinearMap.comp_apply, LinearMap.smul_apply] using hY
+    _ = Matrix.reindex e e (c • blockTransferSum B Y) := by
+          rw [transferMap_directSumTensor_reindex B Y]
+          rfl
+
+/-- Whole-tensor RFP of the direct sum makes
+the block-diagonal transfer sum idempotent. -/
+theorem blockTransferSum_blockTransferSum
+    (B : (k : Fin r) → MPSTensor d (dim k))
+    (hRFP : IsTransferIdempotent (directSumTensor B))
+    (Y : Matrix ((k : Fin r) × Fin (dim k)) ((k : Fin r) × Fin (dim k)) ℂ) :
+    blockTransferSum B (blockTransferSum B Y) = blockTransferSum B Y := by
+  change transferMap (directSumTensor B) ∘ₗ transferMap (directSumTensor B) =
+    transferMap (directSumTensor B) at hRFP
+  simpa only [one_smul] using
+    blockTransferSum_blockTransferSum_eq_smul B 1 (by simpa only [one_smul] using hRFP) Y
 
 /-- The `(j, j')` bond-block restriction is surjective: every block matrix is the
 restriction of a direct-sum bond matrix. -/
@@ -224,22 +242,23 @@ private lemma exists_toBlock_eq (j j' : Fin r) [NeZero (dim j)] [NeZero (dim j')
     funext (Function.leftInverse_invFun hinj_j')
   rw [Matrix.submatrix_submatrix, hj, hj', Matrix.submatrix_id_id]
 
-/-- Whole-tensor RFP of the direct sum
-makes every (in particular off-diagonal) mixed transfer operator idempotent. -/
-theorem mixedTransferMap₂_isIdempotentElem_of_isTransferIdempotent_directSum
-    (B : (k : Fin r) → MPSTensor d (dim k))
-    (hRFP : IsTransferIdempotent (directSumTensor B)) (j j' : Fin r)
-    [NeZero (dim j)] [NeZero (dim j')] :
-    IsIdempotentElem (mixedTransferMap₂ (B j) (B j')) := by
+/-- Scalar quasi-idempotence of the full direct-sum transfer map restricts to every ordered
+block pair. In particular, the diagonal corner is the transfer map of that block. -/
+theorem mixedTransferMap₂_comp_self_eq_smul_of_transferMap_comp_self_eq_smul
+    (B : (k : Fin r) → MPSTensor d (dim k)) (c : ℂ)
+    (h : transferMap (directSumTensor B) ∘ₗ transferMap (directSumTensor B) =
+      c • transferMap (directSumTensor B))
+    (j j' : Fin r) [NeZero (dim j)] [NeZero (dim j')] :
+    mixedTransferMap₂ (B j) (B j') * mixedTransferMap₂ (B j) (B j') =
+      c • mixedTransferMap₂ (B j) (B j') := by
   classical
   have hStage1 : ∀ Y, (blockTransferSum B Y).submatrix (blockIncl j dim) (blockIncl j' dim) =
       mixedTransferMap₂ (B j) (B j') (Y.submatrix (blockIncl j dim) (blockIncl j' dim)) := by
     intro Y
     simpa only [blockTransferSum] using blockDiagonal'_transferSum_toBlock B Y j j'
-  change mixedTransferMap₂ (B j) (B j') * mixedTransferMap₂ (B j) (B j') =
-    mixedTransferMap₂ (B j) (B j')
-  refine LinearMap.ext fun Z => ?_
-  rw [Module.End.mul_apply]
+  apply LinearMap.ext
+  intro Z
+  rw [Module.End.mul_apply, LinearMap.smul_apply]
   obtain ⟨Y, hY⟩ := exists_toBlock_eq j j' Z
   have e1 : mixedTransferMap₂ (B j) (B j') Z =
       (blockTransferSum B Y).submatrix (blockIncl j dim) (blockIncl j' dim) := by
@@ -250,9 +269,25 @@ theorem mixedTransferMap₂_isIdempotentElem_of_isTransferIdempotent_directSum
             ((blockTransferSum B Y).submatrix (blockIncl j dim) (blockIncl j' dim)) := by rw [e1]
     _ = (blockTransferSum B (blockTransferSum B Y)).submatrix
           (blockIncl j dim) (blockIncl j' dim) := (hStage1 (blockTransferSum B Y)).symm
-    _ = (blockTransferSum B Y).submatrix (blockIncl j dim) (blockIncl j' dim) := by
-          rw [blockTransferSum_blockTransferSum B hRFP]
-    _ = mixedTransferMap₂ (B j) (B j') Z := e1.symm
+    _ = (c • blockTransferSum B Y).submatrix (blockIncl j dim) (blockIncl j' dim) := by
+          rw [blockTransferSum_blockTransferSum_eq_smul B c h]
+    _ = c • (blockTransferSum B Y).submatrix (blockIncl j dim) (blockIncl j' dim) := rfl
+    _ = c • mixedTransferMap₂ (B j) (B j') Z := congrArg (c • ·) e1.symm
+
+/-- Whole-tensor RFP of the direct sum
+makes every (in particular off-diagonal) mixed transfer operator idempotent. -/
+theorem mixedTransferMap₂_isIdempotentElem_of_isTransferIdempotent_directSum
+    (B : (k : Fin r) → MPSTensor d (dim k))
+    (hRFP : IsTransferIdempotent (directSumTensor B)) (j j' : Fin r)
+    [NeZero (dim j)] [NeZero (dim j')] :
+    IsIdempotentElem (mixedTransferMap₂ (B j) (B j')) := by
+  change transferMap (directSumTensor B) ∘ₗ transferMap (directSumTensor B) =
+    transferMap (directSumTensor B) at hRFP
+  change mixedTransferMap₂ (B j) (B j') * mixedTransferMap₂ (B j) (B j') =
+    mixedTransferMap₂ (B j) (B j')
+  simpa only [one_smul] using
+    mixedTransferMap₂_comp_self_eq_smul_of_transferMap_comp_self_eq_smul B 1
+      (by simpa only [one_smul] using hRFP) j j'
 
 /-- If every mixed transfer operator of a block family is idempotent, then the
 block-diagonal transfer sum is idempotent.
@@ -389,6 +424,79 @@ theorem phases_eq_of_isTransferIdempotent_directSum_scaled_self
     _ = μ q' := one_mul (μ q')
 
 end BlockDecomposition
+
+/-! ## Unit-weight obstruction to nontrivial transfer scaling -/
+
+namespace IsBNTCanonicalForm
+
+/-- The unit-weight convention in a normalized BNT presentation forces any
+transfer quasi-idempotence scalar to equal one.
+
+Choose the unit-modulus copy supplied by the BNT normalization, with weight
+$w$. Then $w\,\overline w=1$, so $\mathcal E_{wA}=\mathcal E_A$. Restricting the
+whole direct-sum transfer equation to that diagonal corner therefore gives
+$\mathcal E_A^2=c\mathcal E_A$. Left canonicity makes $\mathcal E_A$ trace
+preserving; taking the trace at the identity gives $D=cD$, and the positive
+bond dimension gives $c=1$.
+
+Source convention: arXiv:1606.00608, line 246 (unit-weight normalization).
+The conclusion is a formal consequence of that convention and trace preservation. -/
+theorem eq_one_of_transferMap_comp_self_eq_smul
+    (P : SectorDecomposition d) (hCF : IsBNTCanonicalForm P) (c : ℂ)
+    (h : transferMap P.toTensor ∘ₗ transferMap P.toTensor =
+      c • transferMap P.toTensor) :
+    c = 1 := by
+  classical
+  let B : (s : Fin P.totalCopies) → MPSTensor d (P.flatDim s) :=
+    fun s i ↦ P.flatWeight s • P.flatBasis s i
+  have hTensor : P.toTensor = directSumTensor B := by
+    ext i a b
+    simp [SectorDecomposition.toTensor, toTensorFromBlocks, directSumTensor, B]
+  rw [hTensor] at h
+  obtain ⟨j, q, hq⟩ := hCF.weight_unit_exists
+  let s : Fin P.totalCopies := P.flatIndexEquiv ⟨j, q⟩
+  haveI : NeZero (P.flatDim s) := by
+    refine ⟨?_⟩
+    simpa [s] using (hCF.basis_dim_pos j).ne'
+  have hcorner :=
+    mixedTransferMap₂_comp_self_eq_smul_of_transferMap_comp_self_eq_smul
+      B c h s s
+  rw [mixedTransferMap₂_self] at hcorner
+  have hs : P.flatIndexEquiv.symm s = ⟨j, q⟩ :=
+    P.flatIndexEquiv.symm_apply_apply ⟨j, q⟩
+  have hnorm : ‖P.flatWeight s‖ = 1 := by
+    change ‖P.weight (P.flatIndexEquiv.symm s).1
+      (P.flatIndexEquiv.symm s).2‖ = 1
+    rw [hs]
+    exact hq
+  have hscaled : transferMap (B s) = transferMap (P.flatBasis s) := by
+    apply LinearMap.ext
+    intro X
+    rw [show B s = (fun i ↦ P.flatWeight s • P.flatBasis s i) from rfl,
+      transferMap_smul]
+    have hphase : P.flatWeight s * starRingEnd ℂ (P.flatWeight s) = 1 := by
+      simpa [Complex.normSq_eq_norm_sq, hnorm] using
+        Complex.mul_conj (P.flatWeight s)
+    rw [hphase, one_smul]
+  rw [hscaled] at hcorner
+  have happ := LinearMap.congr_fun hcorner
+    (1 : Matrix (Fin (P.flatDim s)) (Fin (P.flatDim s)) ℂ)
+  have htr := congrArg Matrix.trace happ
+  have hleft : IsLeftCanonical (P.flatBasis s) := by
+    change IsLeftCanonical (P.basis (P.flatIndexEquiv.symm s).1)
+    rw [hs]
+    exact hCF.basis_left_canonical j
+  rw [Module.End.mul_apply, LinearMap.smul_apply,
+    trace_transferMap (P.flatBasis s) _ hleft, Matrix.trace_smul,
+    trace_transferMap (P.flatBasis s) _ hleft] at htr
+  have ht : Matrix.trace
+      (1 : Matrix (Fin (P.flatDim s)) (Fin (P.flatDim s)) ℂ) ≠ 0 := by
+    simpa [Matrix.trace_one] using
+      (Nat.cast_ne_zero.mpr (NeZero.ne (P.flatDim s)) : ((P.flatDim s : ℂ) ≠ 0))
+  apply mul_right_cancel₀ ht
+  simpa using htr.symm
+
+end IsBNTCanonicalForm
 
 /-! ## Spectral gap forces the off-diagonal operator to vanish -/
 

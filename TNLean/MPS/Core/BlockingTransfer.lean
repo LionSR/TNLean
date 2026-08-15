@@ -14,9 +14,10 @@ import Mathlib.LinearAlgebra.Eigenspace.Basic
 
 This file identifies the transfer map of a physically blocked tensor with the
 corresponding iterate of the original transfer map. As consequences,
-`transferMap_blockTensor_hasEigenvalue` and
-`transferMap_blockTensor_fixedPoint` transport eigenvalues and fixed points
-through blocking.
+`transferMap_blockTensor_quasi_idempotent`,
+`transferMap_blockTensor_hasEigenvalue`, and
+`transferMap_blockTensor_fixedPoint` transport quasi-idempotence, eigenvalues,
+and fixed points through blocking.
 -/
 
 open scoped Matrix ComplexOrder BigOperators
@@ -57,6 +58,29 @@ theorem transferMap_blockTensor
       (transferMap (d := d) (D := D) A) ^ L := by
   ext X : 1
   simpa using transferMap_blockTensor_apply (A := A) (L := L) (X := X)
+
+/-- Quasi-idempotence propagates through physical blocking, with the scalar raised to the
+blocking length. -/
+theorem transferMap_blockTensor_quasi_idempotent
+    (A : MPSTensor d D) (L : ℕ) (c : ℂ)
+    (h : transferMap (d := d) (D := D) A * transferMap (d := d) (D := D) A =
+      c • transferMap (d := d) (D := D) A) :
+    transferMap (d := blockPhysDim d L) (D := D)
+        (blockTensor (d := d) (D := D) A L) *
+      transferMap (d := blockPhysDim d L) (D := D)
+        (blockTensor (d := d) (D := D) A L) =
+      c ^ L • transferMap (d := blockPhysDim d L) (D := D)
+        (blockTensor (d := d) (D := D) A L) := by
+  rw [transferMap_blockTensor]
+  calc
+    (transferMap (d := d) (D := D) A) ^ L *
+          (transferMap (d := d) (D := D) A) ^ L =
+        ((transferMap (d := d) (D := D) A) ^ L) ^ 2 := by rw [pow_two]
+    _ = ((transferMap (d := d) (D := D) A) ^ 2) ^ L := by
+      simpa only [pow_mul] using congrArg
+        (fun n : ℕ => (transferMap (d := d) (D := D) A) ^ n) (Nat.mul_comm L 2)
+    _ = (c • transferMap (d := d) (D := D) A) ^ L := by rw [pow_two, h]
+    _ = c ^ L • (transferMap (d := d) (D := D) A) ^ L := by rw [smul_pow]
 
 /-- Eigenvalues transport along physical blocking: if `μ` is an eigenvalue of `transferMap A`,
 then `μ ^ L` is an eigenvalue of the transfer map of the blocked tensor. -/

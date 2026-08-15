@@ -27,6 +27,101 @@
     \end{align}
 \end{proof}
 
+\begin{theorem}[Reindexing the direct-sum transfer map]%
+    \label{thm:direct_sum_transfer_reindex}
+    \lean{MPSTensor.transferMap_directSumTensor_reindex}
+    \leanok
+    \uses{def:transfer_map}
+    Let $(B_k)_k$ be a family of tensors, let $\Phi$ be the canonical
+    identification of the block-labelled bond space with the total bond space,
+    and let $\mathcal S_B$ be the block transfer sum. Then, for every block
+    matrix $Y$,
+    \begin{align}
+        \E_{\oplus_k B_k}(\Phi(Y))&=\Phi(\mathcal S_B(Y)).
+        \notag
+    \end{align}
+\end{theorem}
+
+\begin{proof}\leanok
+    Since $\Phi$ preserves products and adjoints, expanding the transfer map
+    gives
+    \begin{align}
+        \E_{\oplus_k B_k}(\Phi(Y))
+        &=\sum_i\Phi\!\left(\bigoplus_k B_k^i\right)\Phi(Y)
+            \Phi\!\left(\bigoplus_k B_k^i\right)^\dagger
+        \notag\\
+        &=\Phi\!\left(\sum_i
+            \left(\bigoplus_k B_k^i\right)Y
+            \left(\bigoplus_k B_k^i\right)^\dagger\right)
+        \notag\\
+        &=\Phi(\mathcal S_B(Y)).
+        \notag
+    \end{align}
+\end{proof}
+
+\begin{theorem}[Direct-sum quasi-idempotence on the block transfer sum]%
+    \label{thm:block_transfer_sum_quasi_idempotent_of_direct_sum}
+    \lean{MPSTensor.blockTransferSum_blockTransferSum_eq_smul}
+    \leanok
+    \uses{def:transfer_map}
+    Let $(B_k)_k$ be a family of tensors and let $c\in\C$. If
+    \begin{align}
+        \E_{\oplus_k B_k}^2&=c\E_{\oplus_k B_k},
+        \notag
+    \end{align}
+    then the corresponding block transfer sum $\mathcal S_B$ satisfies, for
+    every bond matrix $Y$,
+    \begin{align}
+        \mathcal S_B(\mathcal S_B(Y))&=c\mathcal S_B(Y).
+        \notag
+    \end{align}
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:direct_sum_transfer_reindex}
+    Reindex the total bond space by its block labels. By
+    Theorem~\ref{thm:direct_sum_transfer_reindex}, the direct-sum transfer map
+    becomes $\mathcal S_B$. Transporting the assumed equation through this
+    identification gives the displayed identity.
+\end{proof}
+
+\begin{theorem}[Direct-sum quasi-idempotence on every mixed corner]%
+    \label{thm:mixed_transfer_quasi_idempotent_of_direct_sum}
+    \lean{MPSTensor.%
+        mixedTransferMap₂_comp_self_eq_smul_of_transferMap_comp_self_eq_smul}
+    \leanok
+    \uses{def:mixed_transfer_rect, def:transfer_map}
+    Let $(B_k)_k$ be a family of tensors and let $c\in\C$. If
+    \begin{align}
+        \E_{\oplus_k B_k}^2&=c\E_{\oplus_k B_k},
+        \notag
+    \end{align}
+    then, for every ordered pair of blocks $(j,j')$ whose two bond dimensions
+    are positive,
+    \begin{align}
+        \E_{j,j'}^2&=c\E_{j,j'}.
+        \notag
+    \end{align}
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:block_transfer_sum_quasi_idempotent_of_direct_sum,
+        lem:block_diagonal_transfer_sum_to_block}
+    Let $Z$ be an arbitrary rectangular matrix and realize it as the $(j,j')$
+    block of a matrix $Y$ on the total bond space. By
+    Lemma~\ref{lem:block_diagonal_transfer_sum_to_block},
+    $[\mathcal S_B(Y)]_{j,j'}=\E_{j,j'}(Z)$.
+    Theorem~\ref{thm:block_transfer_sum_quasi_idempotent_of_direct_sum} gives
+    $\mathcal S_B^2=c\mathcal S_B$, and hence
+    \begin{align}
+        \E_{j,j'}(\E_{j,j'}(Z))
+        &=[\mathcal S_B(\mathcal S_B(Y))]_{j,j'}
+         =[c\mathcal S_B(Y)]_{j,j'}
+         =c\E_{j,j'}(Z).
+        \notag
+    \end{align}
+\end{proof}
+
 \begin{lemma}[Pairwise idempotence of the block transfer sum]%
     \label{lem:block_transfer_sum_idempotent_of_pairwise_mixed}
     \lean{MPSTensor.blockTransferSum_idempotent_of_pairwise_mixedTransferMap₂}
