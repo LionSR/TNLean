@@ -88,7 +88,7 @@
     \label{lem:mpdo_eval_word_scalar_scaling}
     \lean{MPOTensor.evalWord_smul}
     \leanok
-    \uses{def:eval_word}
+    \uses{def:mpo_eval_word}
     Let $M$ be an MPO tensor and let $c\in\mathbb C$. If two physical words
     $u,v$ have the same length, then
     \begin{align}
@@ -121,7 +121,7 @@
     \label{thm:mpdo_cpsv_bnt_of_same_mpv}
     \lean{MPSTensor.IsCPSVBasisOfNormalTensors.of_sameMPV₂Pos}
     \leanok
-    \uses{def:bnt_cpsv, def:same_mpv}
+    \uses{def:bnt_cpsv, def:same_mpv2_pos}
     If $A$ and $A'$ generate the same positive-length MPV family, then every
     basis of normal tensors for $A$ is also a basis of normal tensors for
     $A'$.
