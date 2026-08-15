@@ -43,8 +43,9 @@ def TranslationCovariant {d : ℕ} [NeZero d]
 The multiplication on star-automorphisms satisfies `(ω * τ) A = ω (τ A)`, so the displayed
 identity has the same orientation as `Commute ω τ`.
 
-Source: arXiv:1703.09188, Appendix, line 2298. -/
-theorem translationCovariant_iff (d : ℕ) [NeZero d]
+Source context: arXiv:1703.09188, Appendix, line 2298; this characterization is not
+stated separately there. -/
+theorem translationCovariant_iff {d : ℕ} [NeZero d]
     (ω : QuasiLocalAlgebra d ≃⋆ₐ[ℂ] QuasiLocalAlgebra d) :
     TranslationCovariant ω ↔
       ∀ (a : ℤ) (A : QuasiLocalAlgebra d),
@@ -59,8 +60,9 @@ theorem translationCovariant_iff (d : ℕ) [NeZero d]
 
 /-- The identity star-automorphism of the quasi-local algebra is translation covariant.
 
-Source: arXiv:1703.09188, Appendix, line 2298. -/
-theorem translationCovariant_refl (d : ℕ) [NeZero d] :
+Source context: arXiv:1703.09188, Appendix, line 2298; this closure property is not stated
+separately there. -/
+theorem translationCovariant_refl {d : ℕ} [NeZero d] :
     TranslationCovariant (StarAlgEquiv.refl ℂ (QuasiLocalAlgebra d)) := by
   intro a
   rw [← StarAlgEquiv.aut_one]
@@ -71,7 +73,8 @@ theorem translationCovariant_refl (d : ℕ) [NeZero d] :
 Here `ω.trans η` first applies `ω` and then `η`. Under the star-automorphism group
 multiplication, this is `η * ω`; both factors commute with every translation.
 
-Source: arXiv:1703.09188, Appendix, line 2298. -/
+Source context: arXiv:1703.09188, Appendix, line 2298; this closure property is not stated
+separately there. -/
 theorem TranslationCovariant.trans
     {d : ℕ} [NeZero d]
     {ω η : QuasiLocalAlgebra d ≃⋆ₐ[ℂ] QuasiLocalAlgebra d}
