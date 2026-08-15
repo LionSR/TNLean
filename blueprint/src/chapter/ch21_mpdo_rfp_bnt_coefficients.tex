@@ -733,6 +733,36 @@
     $\lambda(1-\lambda)^2=0$. This fails at $\lambda=\frac{7}{25}$.
 \end{proof}
 
+\begin{lemma}[Doubled-index letters and their rank-one factorization]
+    \label{lem:mpdo_bnt_label_rescaling_stable_doubled_letter_factorization}
+    \lean{MPOTensor.RescalingStableLengthDependentRFP.toMPSTensor_R_apply}
+    \lean{MPOTensor.RescalingStableLengthDependentRFP.R_eq_vecMulVec}
+    \leanok
+    \uses{thm:mpdo_bnt_label_rescaling_stable_length_dependence}
+    Identify each physical index $p\in\{0,1,2,3\}$ with a pair
+    $(p_1,p_2)\in\{0,1\}^2$, and similarly write $q=(q_1,q_2)$. The
+    doubled-index letter at the paired index $(p,q)$ is the MPO letter $R^{pq}$.
+    Moreover, this bond matrix is the rank-one outer product
+    \begin{align}
+        R^{pq}_{ab}
+        &=\frac{25}{32}A^a_{p_1q_1}A^b_{p_2q_2},
+        \notag
+    \end{align}
+    or equivalently
+    \begin{align}
+        R^{pq}&=\frac{25}{32}u_{pq}v_{pq}^{\mathsf T}, &
+        u_{pq}(a)&=A^a_{p_1q_1}, &
+        v_{pq}(b)&=A^b_{p_2q_2}.
+        \notag
+    \end{align}
+\end{lemma}
+
+\begin{proof}\leanok
+    The first identity is the definition of the doubled-index reading. Expanding
+    the Kronecker-product definition of $R$ and using that the entries of the
+    four letters $A^a$ are real gives the displayed outer product.
+\end{proof}
+
 \begin{lemma}[Rank-one form of the dimer transfer map]
     \label{lem:mpdo_bnt_label_rescaling_stable_transfer_rank_one}
     \lean{MPOTensor.RescalingStableLengthDependentRFP.%
@@ -758,9 +788,14 @@
 \end{lemma}
 
 \begin{proof}\leanok
-    Expand the sixteen matrix-unit letters of $R$. Every term is proportional
-    to $F$, and collecting their diagonal coefficients gives $\lambda(X)$.
-    Substituting $X=F$ and evaluating the four entries gives $337/512$.
+    \uses{lem:mpdo_bnt_label_rescaling_stable_doubled_letter_factorization}
+    By
+    Lemma~\ref{lem:mpdo_bnt_label_rescaling_stable_doubled_letter_factorization},
+    the doubled-index letters are the matrices $R^{pq}$, each with the displayed
+    outer-product factorization. Substituting these rank-one factors into the
+    transfer-map sum makes every term proportional to $F$, and collecting the
+    diagonal coefficients gives $\lambda(X)$. Substituting $X=F$ and evaluating
+    the four entries gives $337/512$.
 \end{proof}
 
 \begin{lemma}[One-site transfer quasi-idempotence of the dimer tensor]
