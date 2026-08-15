@@ -5,9 +5,9 @@ Authors: TNLean contributors
 -/
 import TNLean.Algebra.ComplexPhasePositivity
 import TNLean.Algebra.FinSum
-import TNLean.MPS.RFP.ZeroCorrelationLength
 import TNLean.MPS.Core.MultiBlock
 import TNLean.MPS.FundamentalTheorem.SectorBNT.Basic
+import TNLean.MPS.RFP.ZeroCorrelationLength
 import TNLean.MPS.SharedInfra.Scaling
 import TNLean.Spectral.TransferOperatorGapNT
 
@@ -190,8 +190,8 @@ theorem transferMap_directSumTensor_reindex
 the same relation for the block-diagonal transfer sum. -/
 theorem blockTransferSum_blockTransferSum_eq_smul
     (B : (k : Fin r) → MPSTensor d (dim k)) (c : ℂ)
-    (h : ∀ X, transferMap (directSumTensor B)
-      (transferMap (directSumTensor B) X) = c • transferMap (directSumTensor B) X)
+    (h : transferMap (directSumTensor B) ∘ₗ transferMap (directSumTensor B) =
+      c • transferMap (directSumTensor B))
     (Y : Matrix ((k : Fin r) × Fin (dim k)) ((k : Fin r) × Fin (dim k)) ℂ) :
     blockTransferSum B (blockTransferSum B Y) = c • blockTransferSum B Y := by
   classical
@@ -204,7 +204,9 @@ theorem blockTransferSum_blockTransferSum_eq_smul
     _ = transferMap (directSumTensor B)
           (transferMap (directSumTensor B) (Matrix.reindex e e Y)) := by
             rw [transferMap_directSumTensor_reindex B Y]
-    _ = c • transferMap (directSumTensor B) (Matrix.reindex e e Y) := h _
+    _ = c • transferMap (directSumTensor B) (Matrix.reindex e e Y) := by
+          have hY := LinearMap.congr_fun h (Matrix.reindex e e Y)
+          simpa only [LinearMap.comp_apply, LinearMap.smul_apply] using hY
     _ = Matrix.reindex e e (c • blockTransferSum B Y) := by
           rw [transferMap_directSumTensor_reindex B Y]
           rfl
@@ -216,21 +218,10 @@ theorem blockTransferSum_blockTransferSum
     (hRFP : IsTransferIdempotent (directSumTensor B))
     (Y : Matrix ((k : Fin r) × Fin (dim k)) ((k : Fin r) × Fin (dim k)) ℂ) :
     blockTransferSum B (blockTransferSum B Y) = blockTransferSum B Y := by
-  classical
-  set e := finSigmaFinEquiv (m := r) (n := dim) with he
-  apply (Matrix.reindex e e).injective
-  calc
-    Matrix.reindex e e (blockTransferSum B (blockTransferSum B Y))
-        = transferMap (directSumTensor B) (Matrix.reindex e e (blockTransferSum B Y)) :=
-          (transferMap_directSumTensor_reindex B (blockTransferSum B Y)).symm
-    _ = transferMap (directSumTensor B)
-          (transferMap (directSumTensor B) (Matrix.reindex e e Y)) := by
-            rw [transferMap_directSumTensor_reindex B Y]
-    _ = transferMap (directSumTensor B) (Matrix.reindex e e Y) := by
-          have h := LinearMap.congr_fun hRFP (Matrix.reindex e e Y)
-          simpa only [LinearMap.comp_apply] using h
-    _ = Matrix.reindex e e (blockTransferSum B Y) :=
-          transferMap_directSumTensor_reindex B Y
+  change transferMap (directSumTensor B) ∘ₗ transferMap (directSumTensor B) =
+    transferMap (directSumTensor B) at hRFP
+  simpa only [one_smul] using
+    blockTransferSum_blockTransferSum_eq_smul B 1 (by simpa only [one_smul] using hRFP) Y
 
 /-- The `(j, j')` bond-block restriction is surjective: every block matrix is the
 restriction of a direct-sum bond matrix. -/
@@ -255,8 +246,8 @@ private lemma exists_toBlock_eq (j j' : Fin r) [NeZero (dim j)] [NeZero (dim j')
 block pair. In particular, the diagonal corner is the transfer map of that block. -/
 theorem mixedTransferMap₂_comp_self_eq_smul_of_transferMap_comp_self_eq_smul
     (B : (k : Fin r) → MPSTensor d (dim k)) (c : ℂ)
-    (h : ∀ X, transferMap (directSumTensor B)
-      (transferMap (directSumTensor B) X) = c • transferMap (directSumTensor B) X)
+    (h : transferMap (directSumTensor B) ∘ₗ transferMap (directSumTensor B) =
+      c • transferMap (directSumTensor B))
     (j j' : Fin r) [NeZero (dim j)] [NeZero (dim j')] :
     mixedTransferMap₂ (B j) (B j') * mixedTransferMap₂ (B j) (B j') =
       c • mixedTransferMap₂ (B j) (B j') := by
@@ -290,28 +281,13 @@ theorem mixedTransferMap₂_isIdempotentElem_of_isTransferIdempotent_directSum
     (hRFP : IsTransferIdempotent (directSumTensor B)) (j j' : Fin r)
     [NeZero (dim j)] [NeZero (dim j')] :
     IsIdempotentElem (mixedTransferMap₂ (B j) (B j')) := by
-  classical
-  have hStage1 : ∀ Y, (blockTransferSum B Y).submatrix (blockIncl j dim) (blockIncl j' dim) =
-      mixedTransferMap₂ (B j) (B j') (Y.submatrix (blockIncl j dim) (blockIncl j' dim)) := by
-    intro Y
-    simpa only [blockTransferSum] using blockDiagonal'_transferSum_toBlock B Y j j'
+  change transferMap (directSumTensor B) ∘ₗ transferMap (directSumTensor B) =
+    transferMap (directSumTensor B) at hRFP
   change mixedTransferMap₂ (B j) (B j') * mixedTransferMap₂ (B j) (B j') =
     mixedTransferMap₂ (B j) (B j')
-  refine LinearMap.ext fun Z => ?_
-  rw [Module.End.mul_apply]
-  obtain ⟨Y, hY⟩ := exists_toBlock_eq j j' Z
-  have e1 : mixedTransferMap₂ (B j) (B j') Z =
-      (blockTransferSum B Y).submatrix (blockIncl j dim) (blockIncl j' dim) := by
-    rw [hStage1, hY]
-  calc
-    mixedTransferMap₂ (B j) (B j') (mixedTransferMap₂ (B j) (B j') Z)
-        = mixedTransferMap₂ (B j) (B j')
-            ((blockTransferSum B Y).submatrix (blockIncl j dim) (blockIncl j' dim)) := by rw [e1]
-    _ = (blockTransferSum B (blockTransferSum B Y)).submatrix
-          (blockIncl j dim) (blockIncl j' dim) := (hStage1 (blockTransferSum B Y)).symm
-    _ = (blockTransferSum B Y).submatrix (blockIncl j dim) (blockIncl j' dim) := by
-          rw [blockTransferSum_blockTransferSum B hRFP]
-    _ = mixedTransferMap₂ (B j) (B j') Z := e1.symm
+  simpa only [one_smul] using
+    mixedTransferMap₂_comp_self_eq_smul_of_transferMap_comp_self_eq_smul B 1
+      (by simpa only [one_smul] using hRFP) j j'
 
 /-- If every mixed transfer operator of a block family is idempotent, then the
 block-diagonal transfer sum is idempotent.
@@ -477,10 +453,6 @@ theorem eq_one_of_transferMap_comp_self_eq_smul
     ext i a b
     simp [SectorDecomposition.toTensor, toTensorFromBlocks, directSumTensor, B]
   rw [hTensor] at h
-  have hB : ∀ X,
-      transferMap (directSumTensor B) (transferMap (directSumTensor B) X) =
-        c • transferMap (directSumTensor B) X :=
-    fun X ↦ LinearMap.congr_fun h X
   obtain ⟨j, q, hq⟩ := hCF.weight_unit_exists
   let s : Fin P.totalCopies := P.flatIndexEquiv ⟨j, q⟩
   haveI : NeZero (P.flatDim s) := by
@@ -488,7 +460,7 @@ theorem eq_one_of_transferMap_comp_self_eq_smul
     simpa [s] using (hCF.basis_dim_pos j).ne'
   have hcorner :=
     mixedTransferMap₂_comp_self_eq_smul_of_transferMap_comp_self_eq_smul
-      B c hB s s
+      B c h s s
   rw [mixedTransferMap₂_self] at hcorner
   have hs : P.flatIndexEquiv.symm s = ⟨j, q⟩ :=
     P.flatIndexEquiv.symm_apply_apply ⟨j, q⟩
