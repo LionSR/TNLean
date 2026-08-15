@@ -733,8 +733,8 @@
     $\lambda(1-\lambda)^2=0$. This fails at $\lambda=\frac{7}{25}$.
 \end{proof}
 
-\begin{theorem}[One-site transfer quasi-idempotence of the dimer tensor]
-    \label{thm:mpdo_bnt_label_rescaling_stable_transfer_quasi_idempotent}
+\begin{lemma}[One-site transfer quasi-idempotence of the dimer tensor]
+    \label{lem:mpdo_bnt_label_rescaling_stable_transfer_quasi_idempotent}
     \lean{MPOTensor.RescalingStableLengthDependentRFP.%
         transferMap_R_toMPSTensor_idem}
     \leanok
@@ -744,7 +744,7 @@
         \E_R^2&=\frac{337}{512}\E_R.
         \notag
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     The image of $\E_R$ is spanned by a fixed diagonal matrix. Applying the
@@ -783,12 +783,12 @@
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:mpdo_bnt_label_rescaling_stable_transfer_quasi_idempotent,
+    \uses{lem:mpdo_bnt_label_rescaling_stable_transfer_quasi_idempotent,
         thm:transfer_map_block_tensor_quasi_idempotent,
         thm:mpdo_horizontal_cf_quasi_idempotent_scalar,
         lem:mpdo_simple_tensor_horizontal_cf}
     By
-    Theorem~\ref{thm:mpdo_bnt_label_rescaling_stable_transfer_quasi_idempotent},
+    Lemma~\ref{lem:mpdo_bnt_label_rescaling_stable_transfer_quasi_idempotent},
     the one-site transfer map satisfies
     $\E_R^2=\frac{337}{512}\E_R$. Applying
     Theorem~\ref{thm:transfer_map_block_tensor_quasi_idempotent} gives, for every
