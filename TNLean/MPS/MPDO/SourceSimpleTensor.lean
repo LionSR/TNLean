@@ -11,9 +11,9 @@ import TNLean.MPS.MPDO.SimpleTensor
 This module records the source-facing simplicity condition of arXiv:1606.00608,
 Definition 4.7. After a positive physical blocking, the doubled-index tensor must
 admit a CPSV basis of normal tensors, and the ket-against-bra contraction of every
-basis element must be nonnilpotent. The interface requires a nonzero tensor that
-generates MPDOs, but deliberately excludes the separate line-246 unit-weight
-normalization.
+basis element must be nonnilpotent. The interface requires every positive-length
+generated MPO to be nonzero, but deliberately excludes the separate line-246
+unit-weight normalization.
 
 ## Main result
 
