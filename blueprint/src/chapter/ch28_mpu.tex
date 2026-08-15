@@ -8448,3 +8448,130 @@ as separate results in the appendix.
        =\lVert A-B\rVert.
   \end{align}
 \end{proof}
+
+\begin{definition}[Finite-region support in the quasi-local algebra]
+  \label{def:qca_quasi_local_supported_in}
+  \lean{SpinChain.QuasiLocalSupportedIn,
+    SpinChain.QuasiLocalSupportedIn.quasiLocalObservable,
+    SpinChain.QuasiLocalSupportedIn.iff_exists}
+  \leanok
+  \uses{def:qca_quasi_local_observable}
+  For $d>0$, a quasi-local observable $x\in\mathcal A$ is supported in a
+  finite region $\Lambda\subset\mathbb Z$ if it belongs to the image of the
+  canonical embedding $j_\Lambda\colon\mathcal A_\Lambda\to\mathcal A$.
+  Equivalently,
+  \begin{align}
+    x\text{ is supported in }\Lambda
+      &\iff x\in j_\Lambda(\mathcal A_\Lambda) \\
+      &\iff \text{there exists }A\in\mathcal A_\Lambda
+        \text{ such that }j_\Lambda(A)=x.
+  \end{align}
+  In particular, $j_\Lambda(A)$ is supported in $\Lambda$ for every
+  $A\in\mathcal A_\Lambda$.
+\end{definition}
+
+\begin{proof}\leanok
+  \uses{def:qca_quasi_local_observable}
+  These assertions follow directly from membership in the range of
+  $j_\Lambda$.
+\end{proof}
+
+\begin{lemma}[Monotonicity of quasi-local support]
+  \label{lem:qca_quasi_local_support_mono}
+  \lean{SpinChain.QuasiLocalSupportedIn.mono}
+  \leanok
+  \uses{def:qca_quasi_local_supported_in,def:qca_local_inclusion}
+  Let $d>0$.  If $x\in\mathcal A$ is supported in $\Lambda$ and
+  $\Lambda\subseteq\Gamma$, then $x$ is supported in $\Gamma$.
+\end{lemma}
+
+\begin{proof}\leanok
+  \uses{def:qca_quasi_local_supported_in,def:qca_local_inclusion,
+    lem:qca_quasi_local_observable}
+  Write $x=j_\Lambda(A)$.  Enlarge $A$ to $\mathcal A_\Gamma$ by tensoring
+  with the identity on $\Gamma\setminus\Lambda$.  Compatibility of the
+  canonical embeddings identifies the image of this enlargement with $x$.
+\end{proof}
+
+The appendix requires that ``there exists a finite subset
+$\mathcal N\subset\mathbb Z$'' such that, for every finite
+$\Lambda\subset\mathbb Z$,
+\begin{align}
+  \omega(\mathcal A_\Lambda)&\subset
+    \mathcal A_{\Lambda+\mathcal N}.
+\end{align}
+This is the propagation condition stated at line~2298 of
+\cite{Cirac2017MPU}.  The definitions below isolate this forward inclusion.
+They do not impose translation covariance or a propagation bound for
+$\omega^{-1}$.
+
+\begin{definition}[Propagation within a fixed neighborhood]
+  \label{def:qca_propagates_within}
+  \lean{SpinChain.PropagatesWithin}
+  \leanok
+  \uses{def:qca_quasi_local_supported_in,def:qca_region_sumset}
+  Let $d>0$, let $\omega\colon\mathcal A\to\mathcal A$ be a star-algebra
+  automorphism, and let $\mathcal N\subset\mathbb Z$ be finite.  The
+  automorphism $\omega$ propagates within $\mathcal N$ if, for every finite
+  region $\Lambda$ and every $x\in\mathcal A$,
+  \begin{align}
+    x\text{ supported in }\Lambda
+      &\implies
+    \omega(x)\text{ supported in }\Lambda+\mathcal N.
+  \end{align}
+\end{definition}
+
+\begin{definition}[Finite forward propagation]
+  \label{def:qca_finite_propagation}
+  \lean{SpinChain.HasFinitePropagation}
+  \leanok
+  \uses{def:qca_propagates_within}
+  Let $d>0$ and let $\omega\colon\mathcal A\to\mathcal A$ be a star-algebra
+  automorphism.  The automorphism $\omega$ has finite forward propagation if
+  there exists a finite set $\mathcal N\subset\mathbb Z$ such that $\omega$
+  propagates within $\mathcal N$.
+\end{definition}
+
+\begin{theorem}[Equivalent formulations of forward propagation]
+  \label{thm:qca_propagates_within_iff}
+  \lean{SpinChain.propagatesWithin_iff_quasiLocalObservable,
+    SpinChain.propagatesWithin_iff_range_subset,
+    SpinChain.propagatesWithin_iff_exists_local}
+  \leanok
+  \uses{def:qca_quasi_local_supported_in,def:qca_propagates_within,
+    def:qca_quasi_local_observable,def:qca_region_sumset}
+  Let $d>0$, let $\omega\colon\mathcal A\to\mathcal A$ be a star-algebra
+  automorphism, and let $\mathcal N\subset\mathbb Z$ be finite.  The following
+  conditions are equivalent:
+  \begin{align}
+    &\omega\text{ propagates within }\mathcal N; \tag{a}\\
+    &\omega(j_\Lambda(A))\text{ is supported in }
+      \Lambda+\mathcal N
+      \quad\text{for all finite }\Lambda
+      \text{ and }A\in\mathcal A_\Lambda; \tag{b}\\
+    &\omega\bigl(j_\Lambda(\mathcal A_\Lambda)\bigr)
+      \subseteq j_{\Lambda+\mathcal N}
+        (\mathcal A_{\Lambda+\mathcal N})
+      \quad\text{for every finite }\Lambda; \tag{c}\\
+    &\text{for every finite }\Lambda\text{ and }A\in\mathcal A_\Lambda,
+      \text{ there exists }B\in\mathcal A_{\Lambda+\mathcal N}
+      \text{ such that} \notag\\
+    &\hspace{8em}
+      \omega(j_\Lambda(A))=j_{\Lambda+\mathcal N}(B). \tag{d}
+  \end{align}
+  Thus condition~\textup{(c)} is precisely the range-inclusion formula from
+  line~2298 of \cite{Cirac2017MPU}, expressed inside the quasi-local algebra,
+  and condition~\textup{(d)} is its finite-region witness form.
+\end{theorem}
+
+\begin{proof}\leanok
+  \uses{def:qca_quasi_local_supported_in,def:qca_propagates_within,
+    def:qca_quasi_local_observable}
+  Every observable supported in $\Lambda$ has the form $j_\Lambda(A)$, so
+  \textup{(a)} and \textup{(b)} are equivalent.  Replacing support by
+  membership in the range of the canonical embedding gives \textup{(c)}.
+  Finally, membership in
+  $j_{\Lambda+\mathcal N}(\mathcal A_{\Lambda+\mathcal N})$ is equivalent to
+  the existence of a representative $B$ in that finite-region algebra, which
+  gives \textup{(d)}.
+\end{proof}
