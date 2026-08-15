@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.CanonicalForm.NormalTensorGauge
 import TNLean.MPS.Core.BlockingTransfer
-import TNLean.MPS.MPDO.SourceSimpleTensor
+import TNLean.MPS.MPDO.RescalingStableSourceSimple
 import TNLean.MPS.RFP.BNTOrthogonality
 
 /-!
