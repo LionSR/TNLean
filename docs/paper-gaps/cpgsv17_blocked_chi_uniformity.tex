@@ -144,12 +144,10 @@ power.
 
 The explicit module
 \path{TNLean/MPS/MPDO/RescalingStableExplicitVerticalBNT.lean} defines the
-capstone
+one-label clause
 \leanid{MPOTensor.RescalingStableLengthDependentRFP.%
-R_oneLabelBNTAlgebraTensorClause}.  The existential theorem
-\leanid{MPOTensor.RescalingStableLengthDependentRFP.%
-R_hasBNTAlgebraTensorClause} follows immediately from that explicit clause in
-the same module.  There is one BNT label.  Its normalized vertical component
+R_oneLabelBNTAlgebraTensorClause}.  There is one BNT label.  Its normalized
+vertical component
 has $16$ physical letters, bond dimension $4$, and
 \[
     M_0^{(a,b)}=A^a\otimes\overline{A^b}.
@@ -531,34 +529,17 @@ algebraic structure, and the corresponding theorem data.\footnote{%
 \leanid{MPOTensor.BNTLabelTheoremWitness.sourceLabel},
 \leanid{MPOTensor.BNTLabelTheoremWitness.targetLabel},
 \leanid{MPOTensor.BNTLabelTheoremWitness.positiveBlockedChi}.}  The existential
-nonempty statement can also be unpacked directly into a concrete witness
-carrying the source predicates, the corresponding same-length and idempotent
-equations written with $c^{(L)}_{\alpha,\beta,\gamma}$, and the same two
-equations with coefficients written as $\chi$-traces; the blocked-basis
-$\chi$-family is also identified as the pullback of the BNT-label
-$\chi$-family along the comparison maps.\footnote{%
-\leanid{MPOTensor.HasBNTLabelTheoremWitness.exists_source_predicates},
-\leanid{MPOTensor.HasBNTLabelTheoremWitness.%
-exists_positive_length_coeff_eq_ofChi},
-\leanid{MPOTensor.HasBNTLabelTheoremWitness.exists_source_ofChi_predicates},
-\leanid{MPOTensor.HasBNTLabelTheoremWitness.exists_source_ofChi_equations},
-\leanid{MPOTensor.HasBNTLabelTheoremWitness.exists_blocked_chi_pullback},
-\leanid{MPOTensor.HasBNTLabelTheoremWitness.%
-exists_blocked_coefficient_comparison},
-\leanid{MPOTensor.HasBNTLabelTheoremWitness.%
-exists_blocked_coefficient_comparison_ofChi},
-\leanid{MPOTensor.HasBNTLabelTheoremWitness.%
-exists_source_coefficient_equations},
-\leanid{MPOTensor.HasBNTLabelTheoremWitness.%
-exists_source_chi_trace_equations}.}
+nonempty statement can be unpacked directly into a concrete witness carrying
+the source predicates, the corresponding same-length and idempotent equations
+written with $c^{(L)}_{\alpha,\beta,\gamma}$, and the same two equations with
+coefficients written as $\chi$-traces; the blocked-basis $\chi$-family is also
+identified as the pullback of the BNT-label $\chi$-family along the comparison
+maps.
 The existential
 statement has the analogous canonical construction from a positive
 $\chi$-family, again leaving the product, idempotent, and blocked-comparison
 statements as inputs rather than reconstructing them from an MPDO tensor.\footnote{%
-\leanid{MPOTensor.BNTLabelTheoremWitness.ofChi},
-\leanid{MPOTensor.BNTLabelTheoremWitness.hasBNTLabelTheoremWitness},
-\leanid{MPOTensor.BNTLabelTheoremWitness.%
-ofChi_hasBNTLabelTheoremWitness}.}  Such a witness
+\leanid{MPOTensor.BNTLabelTheoremWitness.ofChi}.}  Such a witness
 immediately gives the source predicates and their consequences: the coefficient
 trace-power formula, the same-length product law, the idempotent scalar law,
 positivity of the diagonal $\chi$-entries, the blocked-basis coefficient

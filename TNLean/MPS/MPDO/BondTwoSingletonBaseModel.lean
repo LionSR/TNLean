@@ -802,9 +802,4 @@ noncomputable def baseMPOBNTAlgebraTensorClause :
   coeffs := normalizedSingletonCoeffs
   algebraClause := normalizedSingletonAlgebraClause
 
-/-- The singleton base MPO admits a tensor-attached BNT algebra clause. -/
-theorem baseMPO_hasBNTAlgebraTensorClause :
-    HasBNTAlgebraTensorClause baseMPO :=
-  ⟨baseMPOBNTAlgebraTensorClause⟩
-
 end MPOTensor.BondTwoSingletonBaseModel

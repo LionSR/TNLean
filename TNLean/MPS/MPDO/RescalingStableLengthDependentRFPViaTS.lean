@@ -126,12 +126,6 @@ def eigVals : Fin 2 → ℝ
   | 0 => 1
   | 1 => lambda
 
-lemma wMat_mulVec_eigVecs (s : Fin 2) :
-    wMat.mulVec (eigVecs s) = (eigVals s : ℂ) • eigVecs s := by
-  fin_cases s
-  · exact wMat_mulVec_ones
-  · exact wMat_mulVec_alt
-
 lemma eigVecs_sq_sum (s : Fin 2) : (eigVecs s 0) ^ 2 + (eigVecs s 1) ^ 2 = 2 := by
   fin_cases s <;> norm_num [eigVecs]
 

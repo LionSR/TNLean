@@ -57,7 +57,6 @@ import TNLean.MPS.MPDO.BNTSeparatingProjectors
 import TNLean.MPS.MPDO.BNTSourceSectorProjectors
 import TNLean.MPS.MPDO.BNTTheoremData
 import TNLean.MPS.MPDO.BNTTheoremWitness
-import TNLean.MPS.MPDO.BNTTheoremWitnessConsequences
 import TNLean.MPS.MPDO.BNTThreeSiteCollapse
 import TNLean.MPS.MPDO.BNTThreeSiteReducedClosure
 import TNLean.MPS.MPDO.BNTTripleFusionComparison
