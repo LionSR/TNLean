@@ -50,7 +50,7 @@ attribute [local instance] CStarMatrix.instNorm CStarMatrix.instNormedAddCommGro
 algebraic local algebra.
 
 Context: arXiv:1703.09188, Appendix, lines 2292--2298, which introduce the algebraic local
-algebra and its lattice translation operator. -/
+algebra and use the lattice translation operator. -/
 noncomputable def algebraicLocalTranslationHom (d : ℕ) (a : ℤ) :
     AlgebraicLocalAlgebra d →⋆ₐ[ℂ] AlgebraicLocalAlgebra d :=
   algebraicLocalAlgebraLift
@@ -71,7 +71,7 @@ noncomputable def algebraicLocalTranslationHom (d : ℕ) (a : ℤ) :
 representative.
 
 Context: arXiv:1703.09188, Appendix, lines 2292--2298, which introduce the algebraic local
-algebra and its lattice translation operator. -/
+algebra and use the lattice translation operator. -/
 @[simp]
 lemma algebraicLocalTranslationHom_localObservable (d : ℕ) (a : ℤ)
     (Λ : Finset ℤ) (A : LocalAlgebra d Λ) :
@@ -163,7 +163,7 @@ private lemma algebraicLocalTranslation_add_rep (d : ℕ) (a b : ℤ) (Λ : Fins
 observables.
 
 Context: arXiv:1703.09188, Appendix, lines 2292--2298, which introduce the algebraic local
-algebra and its lattice translation operator. -/
+algebra and use the lattice translation operator. -/
 @[simp]
 lemma algebraicLocalTranslationHom_zero (d : ℕ) :
     algebraicLocalTranslationHom d 0 = StarAlgHom.id ℂ (AlgebraicLocalAlgebra d) := by
@@ -175,7 +175,7 @@ lemma algebraicLocalTranslationHom_zero (d : ℕ) :
 /-- Successive algebraic-local translation homomorphisms compose by adding their displacements.
 
 Context: arXiv:1703.09188, Appendix, lines 2292--2298, which introduce the algebraic local
-algebra and its lattice translation operator. -/
+algebra and use the lattice translation operator. -/
 lemma algebraicLocalTranslationHom_add (d : ℕ) (a b : ℤ) :
     (algebraicLocalTranslationHom d b).comp (algebraicLocalTranslationHom d a) =
       algebraicLocalTranslationHom d (a + b) := by
@@ -188,7 +188,7 @@ lemma algebraicLocalTranslationHom_add (d : ℕ) (a b : ℤ) :
 algebra, with inverse given by the opposite displacement.
 
 Context: arXiv:1703.09188, Appendix, lines 2292--2298, which introduce the algebraic local
-algebra and its lattice translation operator. -/
+algebra and use the lattice translation operator. -/
 noncomputable def algebraicLocalTranslation (d : ℕ) (a : ℤ) :
     AlgebraicLocalAlgebra d ≃⋆ₐ[ℂ] AlgebraicLocalAlgebra d :=
   StarAlgEquiv.ofBijective (algebraicLocalTranslationHom d a) ⟨
@@ -221,7 +221,7 @@ lemma algebraicLocalTranslation_apply (d : ℕ) (a : ℤ) (A : AlgebraicLocalAlg
 representative.
 
 Context: arXiv:1703.09188, Appendix, lines 2292--2298, which introduce the algebraic local
-algebra and its lattice translation operator. -/
+algebra and use the lattice translation operator. -/
 lemma algebraicLocalTranslation_localObservable (d : ℕ) (a : ℤ)
     (Λ : Finset ℤ) (A : LocalAlgebra d Λ) :
     algebraicLocalTranslation d a (localObservable d Λ A) =
@@ -232,7 +232,7 @@ lemma algebraicLocalTranslation_localObservable (d : ℕ) (a : ℤ)
 /-- Translation by zero is the identity star-algebra equivalence.
 
 Context: arXiv:1703.09188, Appendix, lines 2292--2298, which introduce the algebraic local
-algebra and its lattice translation operator. -/
+algebra and use the lattice translation operator. -/
 @[simp]
 lemma algebraicLocalTranslation_zero (d : ℕ) :
     algebraicLocalTranslation d 0 = StarAlgEquiv.refl ℂ (AlgebraicLocalAlgebra d) := by
@@ -242,7 +242,7 @@ lemma algebraicLocalTranslation_zero (d : ℕ) :
 /-- Successive algebraic-local translation equivalences compose by adding their displacements.
 
 Context: arXiv:1703.09188, Appendix, lines 2292--2298, which introduce the algebraic local
-algebra and its lattice translation operator. -/
+algebra and use the lattice translation operator. -/
 lemma algebraicLocalTranslation_add (d : ℕ) (a b : ℤ) :
     (algebraicLocalTranslation d a).trans (algebraicLocalTranslation d b) =
       algebraicLocalTranslation d (a + b) := by
@@ -254,7 +254,7 @@ lemma algebraicLocalTranslation_add (d : ℕ) (a b : ℤ) :
 /-- The inverse of translation by `a` is translation by `-a`.
 
 Context: arXiv:1703.09188, Appendix, lines 2292--2298, which introduce the algebraic local
-algebra and its lattice translation operator. -/
+algebra and use the lattice translation operator. -/
 @[simp]
 lemma algebraicLocalTranslation_symm (d : ℕ) (a : ℤ) :
     (algebraicLocalTranslation d a).symm = algebraicLocalTranslation d (-a) := by
@@ -269,7 +269,7 @@ lemma algebraicLocalTranslation_symm (d : ℕ) (a : ℤ) :
 /-- Algebraic-local translation carries support in `Λ` to support in `Λ + a`.
 
 Context: arXiv:1703.09188, Appendix, lines 2292--2298, which introduce the algebraic local
-algebra and its lattice translation operator. -/
+algebra and use the lattice translation operator. -/
 lemma algebraicLocalTranslation_supportedIn (d : ℕ) (a : ℤ)
     {A : AlgebraicLocalAlgebra d} {Λ : Finset ℤ} (hA : SupportedIn A Λ) :
     SupportedIn (algebraicLocalTranslation d a A) (translateRegion a Λ) := by
@@ -280,7 +280,7 @@ lemma algebraicLocalTranslation_supportedIn (d : ℕ) (a : ℤ)
 /-- Algebraic-local translation carries support in `Λ` exactly to support in `Λ + a`.
 
 Context: arXiv:1703.09188, Appendix, lines 2292--2298, which introduce the algebraic local
-algebra and its lattice translation operator. -/
+algebra and use the lattice translation operator. -/
 lemma algebraicLocalTranslation_supportedIn_iff (d : ℕ) (a : ℤ)
     (A : AlgebraicLocalAlgebra d) (Λ : Finset ℤ) :
     SupportedIn A Λ ↔
