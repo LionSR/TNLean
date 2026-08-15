@@ -7981,7 +7981,8 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
 \end{definition}
 
 \begin{proof}\leanok
-  \uses{lem:qca_finite_local_translation_naturality,
+  \uses{def:qca_translate_region,def:qca_algebraic_local_algebra,
+    lem:qca_finite_local_translation_naturality,
     thm:qca_algebraic_local_algebra_universal}
   Naturality gives, for $\Lambda\subseteq\Gamma$,
   \begin{align}
@@ -8032,8 +8033,8 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
   \leanok
   \uses{def:qca_algebraic_local_translation_hom}
   For every $a\in\mathbb Z$, the homomorphism $\tau_a$ is a star-algebra
-  automorphism of $\mathcal A_{\mathrm{loc}}$. Its inverse is $\tau_{-a}$,
-  and on finite-region representatives
+  automorphism of $\mathcal A_{\mathrm{loc}}$, and on finite-region
+  representatives
   \begin{align}
     \tau_a(\iota_\Lambda(A))
       &=\iota_{\Lambda+a}(\tau_{a,\Lambda}(A)).
@@ -8072,7 +8073,12 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     lem:qca_algebraic_local_translation_hom_action}
   The first two identities are the homomorphism action laws expressed as
   identities of star-algebra automorphisms. Taking $b=-a$ in the composition
-  law gives the inverse identity.
+  law gives
+  \begin{align}
+    \tau_{-a}\circ\tau_a&=\tau_0=\operatorname{id}, \\
+    \tau_a\circ\tau_{-a}&=\tau_0=\operatorname{id},
+  \end{align}
+  which is the inverse identity.
 \end{proof}
 
 \begin{lemma}[Exact translation of algebraic-local supports]
@@ -8117,7 +8123,8 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
 \begin{proof}\leanok
   \uses{def:qca_algebraic_local_operator_norm,
     def:qca_finite_local_translation,
-    def:qca_algebraic_local_translation}
+    def:qca_algebraic_local_translation,
+    thm:qca_local_observable_finite_support}
   Choose $A_\Lambda\in\mathcal A_\Lambda$ with
   $A=\iota_\Lambda(A_\Lambda)$. Finite-region translation is a star-algebra
   equivalence of matrix algebras, hence preserves the operator norm. Therefore
