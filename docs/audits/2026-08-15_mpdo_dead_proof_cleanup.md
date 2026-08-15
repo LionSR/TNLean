@@ -23,7 +23,6 @@ declarations remain public.
 | `MPOTensor.HasBNTLabelTheoremWitness.exists_source_coefficient_equations` | Unpack the witness and use `same_length_product_eq_sum` and `idempotent_eq_sum`. |
 | `MPSTensor.duplicateScalarBlocks_counterexample` | Use `duplicateScalarBlocks_isInjective`, `duplicateScalarBlocks_leftCanonical`, `duplicateScalarWeights_ne_zero`, `duplicateScalarBlocks_not_hasBiCF`, and `duplicateScalarBlocks_not_exists_linearIndependent_wordEntryFamily`. |
 | `MPOTensor.BondTwoSingletonBaseModel.baseMPO_hasBNTAlgebraTensorClause` | Use `⟨baseMPOBNTAlgebraTensorClause⟩`. |
-| `MPOTensor.BondTwoSingletonBaseModel.gaugeDeformedBaseMPO_algebraClause_canonicalForm_not_isMPDO` | Use `gaugeDeformedBaseMPOBNTAlgebraTensorClause`, `gaugeDeformedBaseMPO_toMPSTensor_isCPSVCanonicalForm`, and `gaugeDeformedBaseMPO_gauge_not_isMPDO`. |
 | `MPOTensor.RescalingStableLengthDependentRFP.oneLabelChi_matrix_eq_oneLabelChiMatrix2` | The equality is `rfl` from `oneLabelChiMatrix2`. |
 | `MPOTensor.RescalingStableLengthDependentRFP.R_hasBNTAlgebraTensorClause` | Use `⟨R_oneLabelBNTAlgebraTensorClause⟩`. |
 | `MPOTensor.RescalingStableLengthDependentRFP.wMat_mulVec_eigVecs` | Split the `Fin 2` index and use `wMat_mulVec_ones` or `wMat_mulVec_alt`. |
