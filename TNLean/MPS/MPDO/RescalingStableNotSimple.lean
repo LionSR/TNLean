@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.CanonicalForm.NormalTensorGauge
 import TNLean.MPS.Core.BlockingTransfer
-import TNLean.MPS.MPDO.RescalingStableLengthDependentRFPCanonicalForm
+import TNLean.MPS.MPDO.RescalingStableSourceSimple
 import TNLean.MPS.RFP.BNTOrthogonality
 
 /-!
@@ -27,7 +27,10 @@ No vertical coefficient comparison is used.
   transfer scalar is $(337/512)^L$.
 * `blockTensor_R_not_isHorizontalCF` — no positive blocking admits a normalized
   BNT horizontal canonical form.
-* `R_not_isSimple` — the dimer tensor is not simple.
+* `R_not_isSimple` — the dimer tensor is not simple for the normalized
+  fixed-representative predicate.
+* `R_isSourceSimple_and_not_isSimple` — the normalization-free Definition 4.7
+  verdict and normalized fixed-representative verdict stated side by side.
 
 The obstruction combines the source normalization at arXiv:1606.00608, line
 246 with the positive blocking in the definition of simplicity at lines
@@ -133,5 +136,18 @@ theorem R_not_isSimple : ¬ MPOTensor.IsSimple R := by
   intro hSimple
   obtain ⟨_hMPDO, L, hL, hCanonical⟩ := hSimple
   exact blockTensor_R_not_isHorizontalCF L hL hCanonical.isHorizontalCF
+
+/-- The dimer tensor receives opposite verdicts from the two simplicity
+interfaces: it satisfies normalization-free Definition 4.7 simplicity, while it
+fails the normalized fixed-representative predicate `MPOTensor.IsSimple`.
+
+The first verdict uses the existential one-site BNT witness and does not assert
+simplicity at every positive blocking. The second is the line-246 normalization
+obstruction proved by `R_not_isSimple`.
+
+Source: arXiv:1606.00608, line 246 and Definition 4.7, lines 815--822. -/
+theorem R_isSourceSimple_and_not_isSimple :
+    MPOTensor.IsSourceSimple R ∧ ¬ MPOTensor.IsSimple R :=
+  ⟨R_isSourceSimple, R_not_isSimple⟩
 
 end MPOTensor.RescalingStableLengthDependentRFP

@@ -276,6 +276,7 @@ import TNLean.MPS.MPDO.RescalingStableLengthDependentRFPCanonicalForm
 import TNLean.MPS.MPDO.RescalingStableLengthDependentRFPCapstone
 import TNLean.MPS.MPDO.RescalingStableLengthDependentRFPViaTS
 import TNLean.MPS.MPDO.RescalingStableNotSimple
+import TNLean.MPS.MPDO.RescalingStableSourceSimple
 import TNLean.MPS.MPDO.RetainedClass
 import TNLean.MPS.MPDO.SALArbitraryCut
 import TNLean.MPS.MPDO.SALPhysicalSectorCyclicPositivity
@@ -293,6 +294,7 @@ import TNLean.MPS.MPDO.SimpleLocalStructure
 import TNLean.MPS.MPDO.SimpleTensor
 import TNLean.MPS.MPDO.SitewisePhysicalMatrix
 import TNLean.MPS.MPDO.SourceBNTBlocking
+import TNLean.MPS.MPDO.SourceSimpleTensor
 import TNLean.MPS.MPDO.SourceZCLMarginal
 import TNLean.MPS.MPDO.StackedLayers
 import TNLean.MPS.MPDO.StrongRFP
