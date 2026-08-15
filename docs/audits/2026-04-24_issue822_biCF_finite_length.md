@@ -36,6 +36,7 @@ Added a **formal obstruction** to the stronger Issue-#822 target:
 - `MPSTensor.duplicateScalarWeights_ne_zero`
 - `MPSTensor.duplicateScalarBlocks_not_linearIndependent_wordEntryFamily`
 - `MPSTensor.duplicateScalarBlocks_no_wordEntryFamily_linearIndependent`
+- `MPSTensor.duplicateScalarBlocks_counterexample`
 
 ### Docs
 

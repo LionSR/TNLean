@@ -114,6 +114,21 @@ theorem duplicateScalarBlocks_not_hasBiCF :
   have hentry := congrFun (congrFun hzero 0) 0
   simp [Δ] at hentry
 
+/-- Counterexample to deriving finite-length block separation from the
+other `HorizontalCFData` fields alone. -/
+@[deprecated "Use the five component duplicate-scalar counterexample theorems directly."
+  (since := "2026-08-15")]
+theorem duplicateScalarBlocks_counterexample :
+    (∀ k, IsInjective (duplicateScalarBlocks k)) ∧
+      (∀ k, ∑ i : Fin 1,
+        (duplicateScalarBlocks k i)ᴴ * duplicateScalarBlocks k i = 1) ∧
+      (∀ k, duplicateScalarWeights k ≠ 0) ∧
+      ¬ HasBiCF duplicateScalarBlocks ∧
+      ¬ ∃ L, LinearIndependent ℂ (wordEntryFamily duplicateScalarBlocks L) := by
+  refine ⟨duplicateScalarBlocks_isInjective, duplicateScalarBlocks_leftCanonical,
+    duplicateScalarWeights_ne_zero, duplicateScalarBlocks_not_hasBiCF,
+    duplicateScalarBlocks_not_exists_linearIndependent_wordEntryFamily⟩
+
 end DuplicateScalarBlocks
 
 end MPSTensor

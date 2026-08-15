@@ -41,8 +41,9 @@ entangled pair `|φ⟩ = (|00⟩ + |11⟩)/√2` is shared between `bₙ` and `a
   on `a₂` (adjacent regions, zero gap) the two-region expectation is `1`.
 * `bellPairChainTensor_shifted_twoPointExpectation`: after an allowed shift
   (one free site on each complementary arc) the expectation is `⟨Z⟩² = 0`.
-* `bellPairChainTensor_not_isPhysicalCID`: the unrestricted forward implication
-  is refuted by a normal renormalization fixed point.
+* `bellPairChainTensor_not_isPhysicalCID` and
+  `bellPairChain_isTransferIdempotent_and_not_isPhysicalCID`: the unrestricted
+  forward implication is refuted by a normal renormalization fixed point.
 
 See `docs/paper-gaps/cpsv16_pure_zcl_adjacent_gap_cid_scope.tex`.
 -/
@@ -474,6 +475,17 @@ theorem bellPairChainTensor_isNormalTensor : IsNormalTensor bellPairChainTensor 
     bellPairChainTensor_isLeftCanonical
 
 /-! ### The obstruction -/
+
+/-- The canonical normal renormalization fixed point of
+`lem:charact-NT-pure-RFP` with `Λ = (1/2, 1/2)` is transfer idempotent but
+does not have physical CID: the unrestricted forward implication of
+arXiv:1606.00608 (line 498) is false for adjacent regions, because the
+`𝔼⁰ = 1` block between adjacent observables is not governed by idempotence. -/
+@[deprecated "Use `bellPairChainTensor_isTransferIdempotent` and
+  `bellPairChainTensor_not_isPhysicalCID` directly." (since := "2026-08-15")]
+theorem bellPairChain_isTransferIdempotent_and_not_isPhysicalCID :
+    IsTransferIdempotent bellPairChainTensor ∧ ¬ IsPhysicalCID bellPairChainTensor :=
+  ⟨bellPairChainTensor_isTransferIdempotent, bellPairChainTensor_not_isPhysicalCID⟩
 
 /-- The full counterexample: a single normal tensor, with no copy
 weights, that is a renormalization fixed point but fails the source CID
