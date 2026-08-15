@@ -3,7 +3,8 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.MPS.CanonicalForm.Definitions
+import TNLean.MPS.CanonicalForm.BNTTransport
+import TNLean.MPS.CanonicalForm.NormalTensorGauge
 import TNLean.MPS.MPDO.SimpleTensor
 
 /-!
@@ -19,6 +20,8 @@ unit-weight normalization.
 ## Main result
 
 * `MPOTensor.IsSourceSimple`: normalization-free Definition 4.7 simplicity.
+* `MPOTensor.IsSimple.isSourceSimple`: the normalized-to-source bridge under
+  positive-length nonvanishing.
 
 ## References
 
@@ -53,5 +56,42 @@ def IsSourceSimple (M : MPOTensor d D) : Prop :=
           MPSTensor.IsCPSVBasisOfNormalTensors (blockTensor M L).toMPSTensor blocks ∧
             ∀ j, ¬ IsNilpotent
               (doubledPhysTraceTransfer (MPSTensor.blockPhysDim d L) (blocks j).2)
+
+/-- Normalized simplicity implies source simplicity when the generated MPO is
+nonzero at every positive length.
+
+The extra nonvanishing hypothesis is necessary because `IsSimple` only asks
+for a canonical form after one positive blocking. Its raw sector weights may
+have phase cancellations at individual lengths, whereas `IsSourceSimple`
+explicitly excludes every positive-length null generated operator.
+
+The CPSV basis is the family of distinct normal representatives in the
+normalized sector decomposition. Its spanning coefficients are the sector
+power sums. The displayed global gauge preserves every matrix product vector,
+so the basis transports to the blocked MPO tensor. The nonnilpotency clause is
+unchanged because the representatives themselves are unchanged.
+
+Source: arXiv:1606.00608, Definition 4.7, lines 815--822, together with the
+normalized fixed-representative interface of lines 238--246. -/
+theorem IsSimple.isSourceSimple {M : MPOTensor d D} (hM : IsSimple M)
+    (hM_ne : ∀ N : ℕ, 0 < N → mpo M N ≠ 0) :
+    IsSourceSimple M := by
+  obtain ⟨hMPDO, L, hL, -, S, hCF, hNonNil, hTotal, X, hEq⟩ := hM
+  refine ⟨hMPDO, hM_ne, L, hL, S.basisCount,
+    fun j ↦ ⟨S.basisDim j, S.basis j⟩, ?_, hNonNil⟩
+  subst hTotal
+  have hBNT : MPSTensor.IsCPSVBasisOfNormalTensors S.toTensor
+      (fun j ↦ ⟨S.basisDim j, S.basis j⟩) := by
+    letI : ∀ j : Fin S.basisCount, NeZero (S.basisDim j) :=
+      fun j ↦ ⟨(hCF.basis_dim_pos j).ne'⟩
+    refine {
+      blocks_normal := fun j ↦
+        MPSTensor.isNormalTensor_of_isNormal_leftCanonical (S.basis j)
+          (hCF.basis_isNormal j) (hCF.basis_left_canonical j)
+      spans_mpv := fun N _ ↦ ⟨S.coeff N, fun σ ↦ S.mpv_toTensor_eq_sum_coeff σ⟩
+      eventually_li := hCF.bnt_data }
+  apply hBNT.of_sameMPV₂Pos
+  intro N _ σ
+  exact (MPSTensor.GaugeEquiv.sameMPV ⟨MPSTensor.globalGaugeOfBlocks X, hEq⟩ N σ)
 
 end MPOTensor
