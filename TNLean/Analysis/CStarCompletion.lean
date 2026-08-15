@@ -22,6 +22,8 @@ both are imported together.
 * `UniformSpace.Completion.toComplAlgHom` — the canonical algebra homomorphism into the
   completion.
 * `UniformSpace.Completion.toComplStarAlgHom` — its star-preserving version.
+* `UniformSpace.Completion.mapStarAlgEquiv` — the extension of a continuous star-algebra
+  equivalence whose inverse is continuous.
 
 ## Main results
 
@@ -128,6 +130,71 @@ theorem denseRange_toComplStarAlgHom :
   Completion.denseRange_coe
 
 end Complex
+
+section MapStarAlgEquiv
+
+variable [NormedStarGroup A] [NormedAlgebra ℂ A]
+  {B : Type*} [NormedRing B] [StarRing B] [NormedStarGroup B] [NormedAlgebra ℂ B]
+
+/-- A continuous complex star-algebra equivalence with continuous inverse extends to the norm
+completions. -/
+noncomputable def mapStarAlgEquiv (f : A ≃⋆ₐ[ℂ] B)
+    (hf : Continuous f) (hf' : Continuous f.symm) : Completion A ≃⋆ₐ[ℂ] Completion B where
+  toFun := Completion.map f
+  invFun := Completion.map f.symm
+  left_inv x := by
+    induction x using Completion.induction_on with
+    | hp => exact isClosed_eq (by fun_prop) continuous_id
+    | ih a => simp only [Completion.map_coe
+        (uniformContinuous_addMonoidHom_of_continuous hf), Completion.map_coe
+        (uniformContinuous_addMonoidHom_of_continuous hf'), f.symm_apply_apply]
+  right_inv x := by
+    induction x using Completion.induction_on with
+    | hp => exact isClosed_eq (by fun_prop) continuous_id
+    | ih b => simp only [Completion.map_coe
+        (uniformContinuous_addMonoidHom_of_continuous hf'), Completion.map_coe
+        (uniformContinuous_addMonoidHom_of_continuous hf), f.apply_symm_apply]
+  map_mul' x y := by
+    induction x, y using Completion.induction_on₂ with
+    | hp => exact isClosed_eq (by fun_prop) (by fun_prop)
+    | ih a b => simp only [← coe_mul, Completion.map_coe
+        (uniformContinuous_addMonoidHom_of_continuous hf), map_mul]
+  map_add' x y := by
+    induction x, y using Completion.induction_on₂ with
+    | hp => exact isClosed_eq (by fun_prop) (by fun_prop)
+    | ih a b => simp only [← coe_add, Completion.map_coe
+        (uniformContinuous_addMonoidHom_of_continuous hf), map_add]
+  map_star' x := by
+    induction x using Completion.induction_on with
+    | hp => exact isClosed_eq (by fun_prop) (by fun_prop)
+    | ih a => simp only [← coe_star, Completion.map_coe
+        (uniformContinuous_addMonoidHom_of_continuous hf), map_star]
+  map_smul' c x := by
+    induction x using Completion.induction_on with
+    | hp =>
+        exact isClosed_eq
+          (Completion.continuous_map.comp
+            (ContinuousConstSMul.continuous_const_smul c))
+          ((ContinuousConstSMul.continuous_const_smul c).comp
+            Completion.continuous_map)
+    | ih a => simp only [← coe_smul, Completion.map_coe
+        (uniformContinuous_addMonoidHom_of_continuous hf), map_smul]
+
+/-- The extension of a star-algebra equivalence acts by the completion map. -/
+theorem mapStarAlgEquiv_apply (f : A ≃⋆ₐ[ℂ] B)
+    (hf : Continuous f) (hf' : Continuous f.symm) (x : Completion A) :
+    mapStarAlgEquiv f hf hf' x = Completion.map f x :=
+  rfl
+
+/-- The extension of a star-algebra equivalence agrees with it on the original algebra. -/
+@[simp]
+theorem mapStarAlgEquiv_coe (f : A ≃⋆ₐ[ℂ] B)
+    (hf : Continuous f) (hf' : Continuous f.symm) (a : A) :
+    mapStarAlgEquiv f hf hf' (a : Completion A) = (f a : B) := by
+  rw [mapStarAlgEquiv_apply, Completion.map_coe
+    (uniformContinuous_addMonoidHom_of_continuous hf)]
+
+end MapStarAlgEquiv
 
 section ComplexCStar
 

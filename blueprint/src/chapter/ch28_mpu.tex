@@ -8311,3 +8311,140 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
   Taking closures proves the second equality.  This theorem concerns the union
   over all finite regions and makes no claim about the image of a fixed region.
 \end{proof}
+
+The appendix introduces the quasi-local algebra and then invokes lattice
+translation in the definition of a QCA and in its covariance condition
+\cite[lines~2292--2306]{Cirac2017MPU}.  The following completion result and
+translation laws make this background structure explicit; they are not stated
+as separate results in the appendix.
+
+\begin{definition}[Extension of star-algebra equivalences to completions]
+  \label{def:completion_star_alg_equiv}
+  \lean{UniformSpace.Completion.mapStarAlgEquiv,
+    UniformSpace.Completion.mapStarAlgEquiv_apply,
+    UniformSpace.Completion.mapStarAlgEquiv_coe}
+  \leanok
+  Let $A$ and $B$ be complex normed star algebras, and let
+  $f\colon A\to B$ be a star-algebra equivalence.  If $f$ and $f^{-1}$ are
+  continuous, then $f$ extends to a star-algebra equivalence
+  \begin{align}
+    \widehat f\colon\widehat A&\longrightarrow\widehat B
+  \end{align}
+  between their norm completions.  Its underlying map is the continuous
+  extension of $f$.  Writing $j_A$ and $j_B$ for the canonical maps into the
+  completions, the extension satisfies
+  \begin{align}
+    \widehat f(j_A(x))&=j_B(f(x)).
+  \end{align}
+\end{definition}
+
+\begin{proof}\leanok
+  Apply the completion functor to $f$ and $f^{-1}$.  On the dense canonical
+  images their composites satisfy
+  \begin{align}
+    \widehat{f^{-1}}\bigl(\widehat f(j_A(x))\bigr)&=j_A(x), &
+    \widehat f\bigl(\widehat{f^{-1}}(j_B(y))\bigr)&=j_B(y).
+  \end{align}
+  Continuity gives the two inverse identities on the completions.
+  Multiplication, addition, scalar multiplication, and the star operation
+  commute with the extension because the corresponding identities hold on
+  the canonical images and both sides are continuous.
+\end{proof}
+
+\begin{definition}[Translation of quasi-local observables]
+  \label{def:qca_quasi_local_translation}
+  \lean{SpinChain.quasiLocalTranslation,
+    SpinChain.quasiLocalTranslation_apply,
+    SpinChain.quasiLocalTranslation_algebraicToQuasiLocal,
+    SpinChain.quasiLocalTranslation_quasiLocalObservable}
+  \leanok
+  \uses{def:completion_star_alg_equiv,
+    def:qca_algebraic_local_translation,def:qca_quasi_local_algebra,
+    def:qca_quasi_local_observable,
+    lem:qca_algebraic_local_translation_isometry}
+  For $d>0$ and every $a\in\mathbb Z$, algebraic-local translation extends to
+  a star-algebra automorphism
+  \begin{align}
+    \tau_a\colon\mathcal A&\longrightarrow\mathcal A
+  \end{align}
+  of the quasi-local algebra.  On the dense algebraic-local subalgebra and on
+  finite-region observables it satisfies
+  \begin{align}
+    \tau_a(j(A))&=j(\tau_a(A)), \\
+    \tau_a(j_\Lambda(A_\Lambda))
+      &=j_{\Lambda+a}(\tau_{a,\Lambda}(A_\Lambda)).
+  \end{align}
+\end{definition}
+
+\begin{proof}\leanok
+  \uses{def:completion_star_alg_equiv,
+    def:qca_algebraic_local_translation,
+    def:qca_quasi_local_algebra,
+    def:qca_quasi_local_observable,
+    lem:qca_algebraic_local_translation_action,
+    lem:qca_algebraic_local_translation_isometry}
+  Algebraic-local translation and its inverse translation by $-a$ are
+  operator-norm isometries, hence continuous.  Extend this equivalence to the
+  norm completion.  The extension identity gives
+  \begin{align}
+    \tau_a(j(A))&=j(\tau_a(A)).
+  \end{align}
+  Substituting $A=\iota_\Lambda(A_\Lambda)$ and using the finite-region
+  translation formula gives the second identity.
+\end{proof}
+
+\begin{lemma}[Quasi-local translation action laws]
+  \label{lem:qca_quasi_local_translation_action}
+  \lean{SpinChain.quasiLocalTranslation_zero,
+    SpinChain.quasiLocalTranslation_add,
+    SpinChain.quasiLocalTranslation_symm}
+  \leanok
+  \uses{def:qca_quasi_local_translation}
+  For $d>0$, the quasi-local automorphisms form an additive action of
+  $\mathbb Z$:
+  \begin{align}
+    \tau_0&=\operatorname{id}, \\
+    \tau_b\circ\tau_a&=\tau_{a+b}, \\
+    \tau_a^{-1}&=\tau_{-a}.
+  \end{align}
+\end{lemma}
+
+\begin{proof}\leanok
+  \uses{def:qca_quasi_local_translation,
+    lem:qca_algebraic_local_translation_action}
+  On the canonical image of the algebraic-local algebra,
+  \begin{align}
+    \tau_b\bigl(\tau_a(j(A))\bigr)
+      &=j\bigl(\tau_b(\tau_a(A))\bigr)
+       =j(\tau_{a+b}(A)), \\
+    \tau_0(j(A))&=j(A).
+  \end{align}
+  Continuity extends these identities to the completion.  Taking
+  $(a,b)=(a,-a)$ and $(-a,a)$ identifies the inverse of $\tau_a$ with
+  $\tau_{-a}$.
+\end{proof}
+
+\begin{lemma}[Norm isometry of quasi-local translation]
+  \label{lem:qca_quasi_local_translation_isometry}
+  \lean{SpinChain.norm_quasiLocalTranslation,
+    SpinChain.quasiLocalTranslation_isometry}
+  \leanok
+  \uses{def:qca_quasi_local_translation,def:qca_quasi_local_algebra}
+  For $d>0$, every quasi-local translation preserves the operator norm and
+  distance:
+  \begin{align}
+    \lVert\tau_a(A)\rVert&=\lVert A\rVert, \\
+    \lVert\tau_a(A)-\tau_a(B)\rVert&=\lVert A-B\rVert.
+  \end{align}
+\end{lemma}
+
+\begin{proof}\leanok
+  \uses{def:qca_quasi_local_translation,def:qca_quasi_local_algebra}
+  A star-algebra equivalence between complex C-star algebras preserves the
+  C-star norm.  Since $\tau_a$ is linear,
+  \begin{align}
+    \lVert\tau_a(A)-\tau_a(B)\rVert
+      &=\lVert\tau_a(A-B)\rVert
+       =\lVert A-B\rVert.
+  \end{align}
+\end{proof}
