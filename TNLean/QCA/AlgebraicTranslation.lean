@@ -306,8 +306,7 @@ lemma norm_algebraicLocalTranslation (d : ℕ) [NeZero d] (a : ℤ)
     ‖algebraicLocalTranslation d a A‖ = ‖A‖ := by
   induction A using DirectLimit.induction with
   | _ Λ A =>
-      change ‖localTranslation d a Λ A‖ = ‖A‖
-      exact StarAlgEquiv.norm_map (localTranslation d a Λ) A
+      exact localTranslation_norm d a Λ A
 
 /-- Algebraic-local translation is an operator-norm isometry.
 
