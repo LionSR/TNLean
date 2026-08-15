@@ -38,7 +38,8 @@ from an MPDO tensor.
 Source: arXiv:1606.00608, Theorem IV.13(ii), lines 972--985, and
 Appendix C.3--C.4, lines 1830--1942 of
 `Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
-@[deprecated "Unpack the witness and use its source predicates directly." (since := "2026-08-15")]
+@[deprecated "Unpack the witness and use its source predicates directly."
+  (since := "2026-08-15")]
 theorem exists_source_predicates {data : AlgebraStructureData d D}
     (h : HasBNTLabelTheoremWitness data) :
     ∃ W : BNTLabelTheoremWitness data,
@@ -60,7 +61,8 @@ coefficient family.
 Source: arXiv:1606.00608, Theorem IV.13(ii), lines 972--985, and
 Appendix C.4, lines 2015--2037 of
 `Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
-@[deprecated "Unpack the witness and use `BNTLabelTheoremWitness.coeff_eq_ofChi_coeff`." (since := "2026-08-15")]
+@[deprecated "Unpack the witness and use `BNTLabelTheoremWitness.coeff_eq_ofChi_coeff`."
+  (since := "2026-08-15")]
 theorem exists_positive_length_coeff_eq_ofChi {data : AlgebraStructureData d D}
     (h : HasBNTLabelTheoremWitness data) :
     ∃ W : BNTLabelTheoremWitness data,
@@ -79,7 +81,8 @@ witness; it does not construct the witness from an MPDO tensor.
 Source: arXiv:1606.00608, Theorem IV.13(ii), lines 972--985, and
 Appendix C.4, lines 2015--2037 of
 `Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
-@[deprecated "Unpack the witness and use the `ofChi` source predicates directly." (since := "2026-08-15")]
+@[deprecated "Unpack the witness and use the `ofChi` source predicates directly."
+  (since := "2026-08-15")]
 theorem exists_source_ofChi_predicates {data : AlgebraStructureData d D}
     (h : HasBNTLabelTheoremWitness data) :
     ∃ W : BNTLabelTheoremWitness data,
@@ -99,7 +102,8 @@ witness; it does not construct the witness from an MPDO tensor.
 Source: arXiv:1606.00608, Theorem IV.13(ii), lines 972--985, and
 Appendix C.4, lines 2015--2037 of
 `Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
-@[deprecated "Unpack the witness and use the `ofChi` source equations directly." (since := "2026-08-15")]
+@[deprecated "Unpack the witness and use the `ofChi` source equations directly."
+  (since := "2026-08-15")]
 theorem exists_source_ofChi_equations {data : AlgebraStructureData d D}
     (h : HasBNTLabelTheoremWitness data) :
     ∃ W : BNTLabelTheoremWitness data,
@@ -125,7 +129,8 @@ MPDO tensor remains the Appendix C.3--C.4 obligation.
 Source: arXiv:1606.00608, Theorem IV.13(ii), lines 972--985, and
 Appendix C.3--C.4, lines 1830--1942 of
 `Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
-@[deprecated "Unpack the witness and use `positiveBlockedChi_toDiagonal_of_pos`." (since := "2026-08-15")]
+@[deprecated "Unpack the witness and use `positiveBlockedChi_toDiagonal_of_pos`."
+  (since := "2026-08-15")]
 theorem exists_blocked_chi_pullback {data : AlgebraStructureData d D}
     (h : HasBNTLabelTheoremWitness data) :
     ∃ W : BNTLabelTheoremWitness data,
@@ -150,7 +155,8 @@ MPDO tensor remains the Appendix C.3--C.4 obligation.
 Source: arXiv:1606.00608, Theorem IV.13(ii), lines 972--985, and
 Appendix C.3, lines 1830--1922 of
 `Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
-@[deprecated "Unpack the witness and use `blocked_coeff_eq`." (since := "2026-08-15")]
+@[deprecated "Unpack the witness and use `blocked_coeff_eq`."
+  (since := "2026-08-15")]
 theorem exists_blocked_coefficient_comparison {data : AlgebraStructureData d D}
     (h : HasBNTLabelTheoremWitness data) :
     ∃ W : BNTLabelTheoremWitness data,
@@ -175,7 +181,8 @@ C.3--C.4 obligation.
 Source: arXiv:1606.00608, Theorem IV.13(ii), lines 972--985, and
 Appendix C.3--C.4, lines 1830--1942 of
 `Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
-@[deprecated "Unpack the witness and use `blocked_coeff_eq_ofChi`." (since := "2026-08-15")]
+@[deprecated "Unpack the witness and use `blocked_coeff_eq_ofChi`."
+  (since := "2026-08-15")]
 theorem exists_blocked_coefficient_comparison_ofChi {data : AlgebraStructureData d D}
     (h : HasBNTLabelTheoremWitness data) :
     ∃ W : BNTLabelTheoremWitness data,
@@ -208,7 +215,8 @@ MPDO tensor remains the Appendix C.3--C.4 obligation.
 Source: arXiv:1606.00608, Theorem IV.13(ii), lines 972--985, and
 Appendix C.3--C.4, lines 1830--1942 of
 `Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
-@[deprecated "Unpack the witness and use the source coefficient equations directly." (since := "2026-08-15")]
+@[deprecated "Unpack the witness and use the source coefficient equations directly."
+  (since := "2026-08-15")]
 theorem exists_source_coefficient_equations {data : AlgebraStructureData d D}
     (h : HasBNTLabelTheoremWitness data) :
     ∃ W : BNTLabelTheoremWitness data,
