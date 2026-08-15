@@ -182,6 +182,29 @@ theorem transferMap_directSumTensor_reindex
   rw [Matrix.conjTranspose_submatrix, Matrix.submatrix_mul_equiv _ _ _ e.symm _,
     Matrix.submatrix_mul_equiv _ _ _ e.symm _]
 
+/-- A scalar quasi-idempotence relation for the full direct-sum transfer map restricts to
+the same relation for the block-diagonal transfer sum. -/
+theorem blockTransferSum_blockTransferSum_eq_smul
+    (B : (k : Fin r) → MPSTensor d (dim k)) (c : ℂ)
+    (h : ∀ X, transferMap (directSumTensor B)
+      (transferMap (directSumTensor B) X) = c • transferMap (directSumTensor B) X)
+    (Y : Matrix ((k : Fin r) × Fin (dim k)) ((k : Fin r) × Fin (dim k)) ℂ) :
+    blockTransferSum B (blockTransferSum B Y) = c • blockTransferSum B Y := by
+  classical
+  set e := finSigmaFinEquiv (m := r) (n := dim) with he
+  apply (Matrix.reindex e e).injective
+  calc
+    Matrix.reindex e e (blockTransferSum B (blockTransferSum B Y))
+        = transferMap (directSumTensor B) (Matrix.reindex e e (blockTransferSum B Y)) :=
+          (transferMap_directSumTensor_reindex B (blockTransferSum B Y)).symm
+    _ = transferMap (directSumTensor B)
+          (transferMap (directSumTensor B) (Matrix.reindex e e Y)) := by
+            rw [transferMap_directSumTensor_reindex B Y]
+    _ = c • transferMap (directSumTensor B) (Matrix.reindex e e Y) := h _
+    _ = Matrix.reindex e e (c • blockTransferSum B Y) := by
+          rw [transferMap_directSumTensor_reindex B Y]
+          rfl
+
 /-- Whole-tensor RFP of the direct sum makes
 the block-diagonal transfer sum idempotent. -/
 theorem blockTransferSum_blockTransferSum
@@ -223,6 +246,38 @@ private lemma exists_toBlock_eq (j j' : Fin r) [NeZero (dim j)] [NeZero (dim j')
   have hj' : Function.invFun (blockIncl j' dim) ∘ blockIncl j' dim = id :=
     funext (Function.leftInverse_invFun hinj_j')
   rw [Matrix.submatrix_submatrix, hj, hj', Matrix.submatrix_id_id]
+
+/-- Scalar quasi-idempotence of the full direct-sum transfer map restricts to every ordered
+block pair. In particular, the diagonal corner is the transfer map of that block. -/
+theorem mixedTransferMap₂_comp_self_eq_smul_of_transferMap_comp_self_eq_smul
+    (B : (k : Fin r) → MPSTensor d (dim k)) (c : ℂ)
+    (h : ∀ X, transferMap (directSumTensor B)
+      (transferMap (directSumTensor B) X) = c • transferMap (directSumTensor B) X)
+    (j j' : Fin r) [NeZero (dim j)] [NeZero (dim j')] :
+    mixedTransferMap₂ (B j) (B j') * mixedTransferMap₂ (B j) (B j') =
+      c • mixedTransferMap₂ (B j) (B j') := by
+  classical
+  have hStage1 : ∀ Y, (blockTransferSum B Y).submatrix (blockIncl j dim) (blockIncl j' dim) =
+      mixedTransferMap₂ (B j) (B j') (Y.submatrix (blockIncl j dim) (blockIncl j' dim)) := by
+    intro Y
+    simpa only [blockTransferSum] using blockDiagonal'_transferSum_toBlock B Y j j'
+  apply LinearMap.ext
+  intro Z
+  rw [Module.End.mul_apply, LinearMap.smul_apply]
+  obtain ⟨Y, hY⟩ := exists_toBlock_eq j j' Z
+  have e1 : mixedTransferMap₂ (B j) (B j') Z =
+      (blockTransferSum B Y).submatrix (blockIncl j dim) (blockIncl j' dim) := by
+    rw [hStage1, hY]
+  calc
+    mixedTransferMap₂ (B j) (B j') (mixedTransferMap₂ (B j) (B j') Z)
+        = mixedTransferMap₂ (B j) (B j')
+            ((blockTransferSum B Y).submatrix (blockIncl j dim) (blockIncl j' dim)) := by rw [e1]
+    _ = (blockTransferSum B (blockTransferSum B Y)).submatrix
+          (blockIncl j dim) (blockIncl j' dim) := (hStage1 (blockTransferSum B Y)).symm
+    _ = (c • blockTransferSum B Y).submatrix (blockIncl j dim) (blockIncl j' dim) := by
+          rw [blockTransferSum_blockTransferSum_eq_smul B c h]
+    _ = c • (blockTransferSum B Y).submatrix (blockIncl j dim) (blockIncl j' dim) := rfl
+    _ = c • mixedTransferMap₂ (B j) (B j') Z := congrArg (c • ·) e1.symm
 
 /-- Whole-tensor RFP of the direct sum
 makes every (in particular off-diagonal) mixed transfer operator idempotent. -/
