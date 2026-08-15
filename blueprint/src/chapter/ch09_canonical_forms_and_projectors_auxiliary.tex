@@ -350,8 +350,8 @@ the coefficient argument of Chapter~\ref{ch:bnt}.
     \lean{MPSTensor.IsNormalTensor.mapStar}
     \leanok
     \uses{def:left_canonical_tensor,def:nt_cpsv,def:gauge_equiv}
-    Let $\overline A$ denote entrywise conjugation of every matrix $A^i$. If
-    $A$ and $B$ are gauge equivalent through $X$, then $\overline A$ and
+    For a tensor or matrix, an overline denotes entrywise conjugation. If $A$
+    and $B$ are gauge equivalent through $X$, then $\overline A$ and
     $\overline B$ are gauge equivalent through $\overline X$. If $A$ is
     left-canonical, then $\overline A$ is left-canonical. Independently, if $A$
     is a CPSV normal tensor, then $\overline A$ is a CPSV normal tensor.
@@ -359,11 +359,11 @@ the coefficient argument of Chapter~\ref{ch:bnt}.
 
 \begin{proof}\leanok
     \uses{def:left_canonical_tensor,def:gauge_equiv,
-        thm:cpsv_normal_tp_gauge,
+        thm:cpsv_normal_tp_gauge,thm:pure_perron_tp_gauge,
         thm:cpsv_normal_tensor_gauge_transport,
         thm:is_normal_tensor_of_is_normal_left_canonical}
     Entrywise conjugating $B^i=X A^i X^{-1}$ gives
-    $\overline{B^i}=\overline X\,\overline{A^i}\,\overline X^{-1}$.
+    $\overline{B^i}=\overline X\,\overline{A^i}\,(\overline X)^{-1}$.
     Conjugating the left-canonical identity gives
     \begin{align}
         \sum_i(\overline{A^i})^\dagger\overline{A^i}

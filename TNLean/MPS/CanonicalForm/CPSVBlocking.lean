@@ -61,7 +61,6 @@ end GaugeEquiv
 
 namespace IsNormalTensor
 
-
 /-- Positive physical blocking preserves CPSV normal tensors.
 
 The proof puts the tensor into its trace-preserving Perron gauge.  Positive

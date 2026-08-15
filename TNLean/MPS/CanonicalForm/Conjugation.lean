@@ -131,9 +131,10 @@ theorem GaugeEquiv.mapStar {A B : MPSTensor d D} (h : GaugeEquiv A B) :
 /-- Entrywise complex conjugation preserves CPSV normal tensors.
 
 The proof uses the pure trace-preserving Perron gauge associated with the
-normal tensor, conjugates that gauge, and transports normality back. This is
-the normalization of arXiv:1606.00608, lines 224--235, together with the gauge
-relation at lines 264--268. -/
+normal tensor, conjugates that gauge, and transports normality back. Entrywise
+conjugation transports the spectral-radius-one normalization of
+arXiv:1606.00608, lines 224--235, together with the gauge relation at lines
+264--268. -/
 theorem IsNormalTensor.mapStar {A : MPSTensor d D} (hA : IsNormalTensor A) :
     IsNormalTensor (mapStar A) := by
   letI : NeZero D := ⟨hA.bondDim_ne_zero⟩
