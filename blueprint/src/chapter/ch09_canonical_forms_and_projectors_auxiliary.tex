@@ -359,7 +359,7 @@ the coefficient argument of Chapter~\ref{ch:bnt}.
 
 \begin{proof}\leanok
     \uses{def:left_canonical_tensor,def:gauge_equiv,
-        thm:cpsv_normal_tp_gauge,thm:pure_perron_tp_gauge,
+        thm:cpsv_normal_tp_gauge,
         thm:cpsv_normal_tensor_gauge_transport,
         thm:is_normal_tensor_of_is_normal_left_canonical}
     Entrywise conjugating $B^i=X A^i X^{-1}$ gives
@@ -373,7 +373,8 @@ the coefficient argument of Chapter~\ref{ch:bnt}.
     For the normal-tensor assertion, put $A$ into the trace-preserving Perron
     gauge supplied by Theorem~\ref{thm:cpsv_normal_tp_gauge}. Gauge transport
     preserves normal-tensor status, and entrywise conjugation preserves the
-    gauge relation. The conjugated representative is left-canonical; moreover,
+    gauge relation. The Perron representative is trace-preserving, hence
+    left-canonical, and conjugation preserves this identity. Moreover,
     \lean{MPSTensor.IsNormal.mapStar}
     entrywise conjugation preserves its positive-length block injectivity.
     Theorem~\ref{thm:is_normal_tensor_of_is_normal_left_canonical} therefore
