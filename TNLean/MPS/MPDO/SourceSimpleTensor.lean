@@ -60,14 +60,14 @@ def IsSourceSimple (M : MPOTensor d D) : Prop :=
 /-- Normalized simplicity implies source simplicity when the generated MPO is
 nonzero at every positive length.
 
-The extra nonvanishing hypothesis is necessary because `IsSimple` only asks
-for a canonical form after one positive blocking. Its raw sector weights may
-have phase cancellations at individual lengths, whereas `IsSourceSimple`
-explicitly excludes every positive-length null generated operator.
+The current proof uses the extra nonvanishing hypothesis because `IsSimple`
+only asks for a canonical form after one positive blocking, while raw sector
+weights can algebraically cancel at individual lengths. Whether the full
+`IsSimple` predicate rules out complete cancellation of the closed MPO is not
+yet formalized.
 
-**Scope restriction (positive-length nonvanishing):** the normalized project
-predicate does not itself exclude phase cancellation of the closed MPO at
-individual lengths, so this implication assumes nonvanishing explicitly. See
+**Scope restriction (positive-length nonvanishing):** this implication therefore
+assumes nonvanishing explicitly. See
 `docs/paper-gaps/cpsv16_unit_weight_rfp_scale_tension.tex`.
 
 The CPSV basis is the family of distinct normal representatives in the
