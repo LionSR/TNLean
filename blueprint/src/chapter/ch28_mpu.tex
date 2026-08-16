@@ -8768,9 +8768,9 @@ $\omega^{-1}$.
     SpinChain.IsQCA.hasFinitePropagation}
   \leanok
   \uses{def:qca}
-  For $d>0$, a star-algebra automorphism $\omega$ of $\mathcal A$ is a quantum
-  cellular automaton if and only if it is translation covariant and has finite forward
-  propagation.  These two properties therefore construct a quantum cellular
+  For $d>0$, a star-algebra automorphism $\omega$ of $\mathcal A$ is a
+  quantum cellular automaton if and only if it is translation covariant and
+  has finite forward propagation.  These two properties therefore construct a
   automaton, and every quantum cellular automaton satisfies each of them.
 \end{theorem}
 
@@ -8785,7 +8785,8 @@ $\omega^{-1}$.
   \lean{SpinChain.isQCA_refl}
   \leanok
   \uses{def:qca}
-  For $d>0$, the identity automorphism of $\mathcal A$ is a quantum cellular automaton.
+  For $d>0$, the identity automorphism of $\mathcal A$ is a quantum cellular
+  automaton.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -8798,6 +8799,25 @@ $\omega^{-1}$.
   remains unchanged, and $\Lambda+\{0\}=\Lambda$.
 \end{proof}
 
-Closure under forward composition is deferred to issue~\#6481, which supplies
-composition of finite propagation bounds.  No inverse-locality assertion is
-needed for that closure statement.
+\begin{theorem}[Composition of quantum cellular automata]
+  \label{thm:qca_composition}
+  \lean{SpinChain.IsQCA.trans}
+  \leanok
+  \uses{def:qca}
+  Let $d>0$.  If $\omega$ and $\eta$ are quantum cellular automata on
+  $\mathcal A$, then $\eta\circ\omega$ is a quantum cellular automaton.  This
+  composite first applies $\omega$ and then $\eta$.  No propagation condition
+  for either inverse is required.
+\end{theorem}
+
+\begin{proof}\leanok
+  \uses{thm:qca_iff_mk_projections,
+    thm:qca_translation_covariant_identity_composition,
+    lem:qca_forward_propagation_comp}
+  Both defining properties are closed under composition in the stated order.
+  Translation covariance of $\omega$ and $\eta$ gives translation covariance
+  of $\eta\circ\omega$.  If $\mathcal N$ and $\mathcal M$ are forward
+  propagation neighborhoods for $\omega$ and $\eta$, respectively, then
+  $\mathcal N+\mathcal M$ is a forward propagation neighborhood for
+  $\eta\circ\omega$.  Hence the composite is a quantum cellular automaton.
+\end{proof}
