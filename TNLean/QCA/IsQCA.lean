@@ -42,7 +42,7 @@ def IsQCA {d : ℕ} [NeZero d]
 /-- The exact characterization of a QCA by translation covariance and finite forward propagation.
 
 Source: arXiv:1703.09188, Appendix, line 2298. -/
-@[simp] theorem isQCA_iff {d : ℕ} [NeZero d]
+theorem isQCA_iff {d : ℕ} [NeZero d]
     (ω : QuasiLocalAlgebra d ≃⋆ₐ[ℂ] QuasiLocalAlgebra d) :
     IsQCA ω ↔ TranslationCovariant ω ∧ HasFinitePropagation ω :=
   Iff.rfl
