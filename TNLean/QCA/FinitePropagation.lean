@@ -15,7 +15,7 @@ neighborhood when it sends every observable supported in \(\Lambda\) to one supp
 \(\Lambda + \mathcal N\), uniformly over finite regions \(\Lambda\).
 
 This file records equivalent support, range-inclusion, and finite-region witness formulations of
-that condition, together with neighborhood monotonicity. Composition is treated separately.
+that condition, together with neighborhood monotonicity and forward-composition closure.
 
 ## Main definitions
 
@@ -32,7 +32,9 @@ that condition, together with neighborhood monotonicity. Composition is treated 
 * `SpinChain.propagatesWithin_iff_range_subset` — the range-inclusion formulation.
 * `SpinChain.propagatesWithin_iff_exists_local` — the finite-region witness formulation.
 * `SpinChain.PropagatesWithin.mono` — propagation is monotone under neighborhood enlargement.
+* `SpinChain.PropagatesWithin.trans` — forward propagation bounds compose by region sumset.
 * `SpinChain.HasFinitePropagation.exists_superset` — valid neighborhoods can contain any finite set.
+* `SpinChain.HasFinitePropagation.trans` — finite forward propagation is closed under composition.
 
 ## References
 
@@ -100,7 +102,7 @@ def HasFinitePropagation {d : ℕ} [NeZero d]
   ∃ 𝓝 : Finset ℤ, PropagatesWithin ω 𝓝
 
 variable {d : ℕ} [NeZero d]
-  {ω : QuasiLocalAlgebra d ≃⋆ₐ[ℂ] QuasiLocalAlgebra d} {𝓝 𝓜 : Finset ℤ}
+  {ω η : QuasiLocalAlgebra d ≃⋆ₐ[ℂ] QuasiLocalAlgebra d} {𝓝 𝓜 : Finset ℤ}
 
 namespace PropagatesWithin
 
@@ -111,6 +113,16 @@ lemma mono (hω : PropagatesWithin ω 𝓝) (h𝓝𝓜 : 𝓝 ⊆ 𝓜) :
     PropagatesWithin ω 𝓜 := by
   intro Λ x hx
   exact (hω Λ x hx).mono (regionSumset_mono_right Λ h𝓝𝓜)
+
+/-- Forward propagation bounds compose: applying first `ω` and then `η` enlarges support by
+`𝓝` and then by `𝓜`, hence by their region sumset.
+
+Source: arXiv:1703.09188, Appendix, line 2298. -/
+lemma trans (hω : PropagatesWithin ω 𝓝) (hη : PropagatesWithin η 𝓜) :
+    PropagatesWithin (ω.trans η) (regionSumset 𝓝 𝓜) := by
+  intro Λ x hx
+  rw [← regionSumset_assoc]
+  exact hη (regionSumset Λ 𝓝) (ω x) (hω Λ x hx)
 
 end PropagatesWithin
 
@@ -124,6 +136,16 @@ lemma exists_superset (hω : HasFinitePropagation ω) (𝓢 : Finset ℤ) :
     ∃ 𝓜 : Finset ℤ, 𝓢 ⊆ 𝓜 ∧ PropagatesWithin ω 𝓜 := by
   obtain ⟨𝓚, h𝓚⟩ := hω
   exact ⟨𝓚 ∪ 𝓢, Finset.subset_union_right, h𝓚.mono Finset.subset_union_left⟩
+
+/-- Finite forward propagation is closed under composition, with the first automorphism applied
+before the second.
+
+Source: arXiv:1703.09188, Appendix, line 2298. -/
+lemma trans (hω : HasFinitePropagation ω) (hη : HasFinitePropagation η) :
+    HasFinitePropagation (ω.trans η) := by
+  obtain ⟨𝓝, h𝓝⟩ := hω
+  obtain ⟨𝓜, h𝓜⟩ := hη
+  exact ⟨regionSumset 𝓝 𝓜, h𝓝.trans h𝓜⟩
 
 end HasFinitePropagation
 
