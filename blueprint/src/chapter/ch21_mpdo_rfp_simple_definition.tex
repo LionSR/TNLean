@@ -70,18 +70,31 @@
     \leanok
     \uses{def:mpdo, def:mpdo_physical_blocking, def:bnt_cpsv,
         def:mpdo_doubled_phys_trace_transfer}
-    A tensor generating a nonzero MPDO at every positive chain length is
-    \emph{source-simple} if there is a positive physical blocking length $L$
-    such that the doubled-index tensor of the $L$-site blocking has a finite
-    basis of normal tensors
+    A tensor generating MPDOs is \emph{source-simple} if there is a positive
+    physical blocking length $L$ such that the doubled-index tensor of the
+    $L$-site blocking has a finite basis of normal tensors
     $B_1,\ldots,B_g$ and every physical-trace transfer $\mathcal T_{B_j}$ is
     non-nilpotent. This is the simplicity condition
     of~\cite[lines~815--822]{Cirac2016MPDO_arXiv}.
 
     The quantifier over the blocking length is existential. The definition
-    imposes neither the global unit-weight normalization
-    of~\cite[line~246]{Cirac2016MPDO_arXiv} nor a normalized horizontal
-    canonical-form witness.
+    imposes neither positive-length nonvanishing nor the global unit-weight
+    normalization of~\cite[line~246]{Cirac2016MPDO_arXiv}, and it does not
+    require a normalized horizontal canonical-form witness.
+\end{definition}
+
+\begin{definition}[Nonvanishing source-simple tensor]
+    \label{def:mpdo_nonvanishing_source_simple_tensor}
+    \lean{MPOTensor.IsNonvanishingSourceSimple}
+    \leanok
+    \uses{def:mpdo_source_simple_tensor, def:mpo_family}
+    A tensor is \emph{nonvanishing source-simple} if it is source-simple and
+    \begin{align}
+        \rho^{(N)}(M)&\ne0 &&\text{for every }N>0.
+        \notag
+    \end{align}
+    The nonvanishing condition is a project strengthening and is not part of
+    Definition~4.7 of~\cite{Cirac2016MPDO_arXiv}.
 \end{definition}
 
 \begin{lemma}[Scaling law for MPO words]
@@ -247,13 +260,12 @@
 
 \begin{proof}\leanok
     \uses{thm:mpdo_nonnegative_rescaling,
-        thm:mpdo_mpo_scalar_scaling,
         thm:mpdo_block_tensor_scalar_scaling,
         thm:mpdo_cpsv_bnt_scalar_scaling}
-    Positive rescaling preserves the MPDO condition and positive-length
-    nonvanishing. For a blocking length $L$, it multiplies the blocked tensor
-    by $r^L$; the same normal basis spans the rescaled tensor after multiplying
-    its length-$N$ coefficients by $r^{LN}$.
+    Positive rescaling preserves the MPDO condition. For a blocking length
+    $L$, it multiplies the blocked tensor by $r^L$; the same normal basis spans
+    the rescaled tensor after multiplying its length-$N$ coefficients by
+    $r^{LN}$.
 \end{proof}
 
 \begin{theorem}[Positive rescaling invariance of source simplicity]
@@ -267,6 +279,36 @@
 
 \begin{proof}\leanok
     \uses{thm:mpdo_source_simple_positive_rescaling}
+    Apply the preceding implication first with $r$ and then with $r^{-1}$.
+\end{proof}
+
+\begin{theorem}[Positive rescaling preserves nonvanishing source simplicity]
+    \label{thm:mpdo_nonvanishing_source_simple_positive_rescaling}
+    \lean{MPOTensor.IsNonvanishingSourceSimple.smul_ofReal}
+    \leanok
+    \uses{def:mpdo_nonvanishing_source_simple_tensor}
+    Let $M$ be nonvanishing source-simple and let $r>0$ be real. Then $rM$ is
+    nonvanishing source-simple.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpdo_source_simple_positive_rescaling,
+        thm:mpdo_mpo_scalar_scaling}
+    Source simplicity is preserved by the preceding theorem. Moreover,
+    $\rho^{(N)}(rM)=r^N\rho^{(N)}(M)$, and $r^N$ is nonzero for every $N$.
+\end{proof}
+
+\begin{theorem}[Positive rescaling invariance of nonvanishing source simplicity]
+    \label{thm:mpdo_nonvanishing_source_simple_positive_rescaling_iff}
+    \lean{MPOTensor.isNonvanishingSourceSimple_smul_ofReal_iff}
+    \leanok
+    \uses{def:mpdo_nonvanishing_source_simple_tensor}
+    Let $M$ be an MPO tensor and let $r>0$ be real. Then $rM$ is nonvanishing
+    source-simple if and only if $M$ is nonvanishing source-simple.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpdo_nonvanishing_source_simple_positive_rescaling}
     Apply the preceding implication first with $r$ and then with $r^{-1}$.
 \end{proof}
 
@@ -290,13 +332,13 @@
     asserted.
 \end{definition}
 
-\begin{theorem}[Normalized simplicity implies source simplicity under nonvanishing]
-    \label{thm:mpdo_simple_implies_source_simple_of_nonzero}
+\begin{theorem}[Normalized simplicity implies source simplicity]
+    \label{thm:mpdo_simple_implies_source_simple}
     \lean{MPOTensor.IsSimple.isSourceSimple}
     \leanok
     \uses{def:mpdo_source_simple_tensor, def:mpdo_simple_tensor}
-    Let $M$ satisfy normalized fixed-representative simplicity. If
-    $\rho^{(N)}(M)\ne0$ for every $N>0$, then $M$ is source-simple.
+    Every tensor satisfying normalized fixed-representative simplicity is
+    source-simple.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -306,8 +348,8 @@
         thm:mpdo_cpsv_bnt_of_same_mpv,
         thm:gauge_invariance}
     Use the distinct normal representatives in the normalized sector
-    decomposition as the source basis. For every $N>0$, Lemma~\ref{lem:paper_decomp_formula}
-    gives
+    decomposition as the source basis. For every $N>0$,
+    Lemma~\ref{lem:paper_decomp_formula} gives
     \begin{align}
         V^{(N)}(A_{\mathrm{tot}})_\sigma
         =\sum_{j=1}^{g} c_{S,j}^{(N)}V^{(N)}(A_j)_\sigma.
@@ -320,50 +362,68 @@
     representatives $A_j$ are unchanged.
 \end{proof}
 
-\begin{theorem}[Vanishing separates the project simplicity predicates]
-    \label{thm:mpdo_simple_not_source_simple_counterexample}
+\begin{theorem}[Normalized simplicity implies nonvanishing source simplicity
+    under nonvanishing]
+    \label{thm:mpdo_simple_implies_nonvanishing_source_simple_of_nonzero}
+    \lean{MPOTensor.IsSimple.isNonvanishingSourceSimple}
+    \leanok
+    \uses{def:mpdo_nonvanishing_source_simple_tensor,
+        thm:mpdo_simple_implies_source_simple}
+    Let $M$ satisfy normalized fixed-representative simplicity. If
+    $\rho^{(N)}(M)\ne0$ for every $N>0$, then $M$ is nonvanishing
+    source-simple.
+\end{theorem}
+
+\begin{proof}\leanok
+    Combine Theorem~\ref{thm:mpdo_simple_implies_source_simple} with the stated
+    positive-length nonvanishing hypothesis.
+\end{proof}
+
+\begin{theorem}[Vanishing separates source simplicity from its strengthening]
+    \label{thm:mpdo_simple_vanishing_source_simple_status}
     \lean{MPOTensor.SimpleVanishingCounterexample.M,
+        MPOTensor.SimpleVanishingCounterexample.M_apply,
         MPOTensor.SimpleVanishingCounterexample.mpo_eq,
         MPOTensor.SimpleVanishingCounterexample.M_isMPDO,
         MPOTensor.SimpleVanishingCounterexample.mpo_one_eq_zero,
         MPOTensor.SimpleVanishingCounterexample.M_isSimple,
-        MPOTensor.SimpleVanishingCounterexample.isSimple_and_not_isSourceSimple}
+        MPOTensor.SimpleVanishingCounterexample.M_isSourceSimple,
+        MPOTensor.SimpleVanishingCounterexample.%
+            M_not_isNonvanishingSourceSimple,
+        MPOTensor.SimpleVanishingCounterexample.%
+            M_isSimple_and_isSourceSimple_and_not_isNonvanishingSourceSimple}
     \leanok
-    \uses{def:mpdo_source_simple_tensor, def:mpdo_simple_tensor}
-    There is a one-letter bond-two tensor $M$ such that, for every $N\geq 0$,
+    \uses{def:mpdo_source_simple_tensor,
+        def:mpdo_nonvanishing_source_simple_tensor,
+        def:mpdo_simple_tensor,
+        thm:mpdo_simple_implies_source_simple}
+    There is a one-letter bond-two tensor $M$ such that, for every $N\geq0$,
     \begin{align}
         \rho^{(N)}(M)&=\bigl(1+(-1)^N\bigr)I.
         \notag
     \end{align}
-    Its two-site blocking admits a normalized simple canonical form, and
-    \begin{align}
-        M\text{ satisfies the project normalized-simple predicate}
-        \quad\text{and}\quad
-        M\text{ does not satisfy the project source-simple predicate}.
-        \notag
-    \end{align}
-    Thus the positive-length nonvanishing hypothesis in the project bridge
-    Theorem~\ref{thm:mpdo_simple_implies_source_simple_of_nonzero} is necessary.
+    The tensor is normalized-simple and source-simple, but it is not
+    nonvanishing source-simple.
 \end{theorem}
 
 \begin{proof}\leanok
-    The sole local virtual matrix is $\operatorname{diag}(1,-1)$, so taking its
-    $N$th power and tracing gives the displayed formula. The resulting operator
-    is $2I$ at even lengths and zero at odd lengths, hence is positive
-    semidefinite at every positive length. After blocking two sites, both
-    virtual phases are one. The blocked tensor therefore has a one-sector
-    normalized basis-of-normal-tensors decomposition whose scalar
-    physical-trace transfer is non-nilpotent. This proves the project
-    normalized-simple predicate. On the other hand, $\rho^{(1)}(M)=0$, which
-    violates the additional positive-length nonvanishing clause in the project
-    source-simple predicate.
+    The sole local virtual matrix is $Z=\operatorname{diag}(1,-1)$, and
+    $Z^2=I$. Thus tracing $Z^N$ gives the displayed closed-MPO formula, which
+    is $2I$ at even lengths and zero at odd lengths. In particular the family
+    is positive semidefinite, while $\rho^{(1)}(M)=0$.
+
+    Block two sites. The normalized canonical form has one sector, represented
+    by the scalar unit normal tensor. It has two copies, both with unit weight,
+    so its total virtual dimension is $2$. Its doubled physical-trace transfer
+    is the one-by-one matrix $(1)$, which is non-nilpotent. Hence $M$ is
+    normalized-simple and therefore source-simple by
+    Theorem~\ref{thm:mpdo_simple_implies_source_simple}. The vanishing at length
+    one excludes only the strengthened nonvanishing source-simple predicate.
 \end{proof}
 
-This separation concerns only the two project predicates. Since the simplicity
-definition in~\cite[lines~815--823]{Cirac2016MPDO_arXiv} does not impose
-positive-length nonvanishing, the example is not a counterexample to that
-source definition. It asserts neither an RFP property nor any rigidity statement
-for BNT structure coefficients.
+The example does not refute Definition~4.7 of
+\cite{Cirac2016MPDO_arXiv}. It asserts neither an RFP property nor any rigidity
+statement for BNT structure coefficients.
 
 \begin{definition}[Normalized simplicity in blocked canonical form]
     \label{def:mpdo_simple_cf_tensor}

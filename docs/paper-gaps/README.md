@@ -79,16 +79,18 @@ For MPDO renormalization fixed points:
   statement (iii), including inactive product sectors, is not claimed.
 - `cpsv16_simple_tensor_nilpotency.tex` identifies the source's nilpotent BNT
   elements with nilpotent physical-trace transfer matrices. The exact
-  source-facing predicate is `MPOTensor.IsSourceSimple`: it requires every
-  positive-length generated MPO to be nonzero and existentially chooses a
-  positive physical blocking and a
-  coefficient-form basis of normal tensors whose physical-trace transfers are
-  all nonnilpotent.
+  source-facing predicate is `MPOTensor.IsSourceSimple`: it existentially
+  chooses a positive physical blocking and a coefficient-form basis of normal
+  tensors whose physical-trace transfers are all nonnilpotent. The separate
+  predicate `MPOTensor.IsNonvanishingSourceSimple` adds nonvanishing of every
+  positive-length generated MPO.
 - `cpsv16_unit_weight_rfp_scale_tension.tex` records the tension between the
   source's line-246 unit-weight convention and the scale fixed by Definition
-  4.1. The dimer tensor satisfies `MPOTensor.IsSourceSimple`, witnessed by
-  blocking length one, but fails the normalized fixed-representative predicate
-  `MPOTensor.IsSimple`. No equivalence between these interfaces is asserted.
+  4.1. The dimer tensor satisfies both `MPOTensor.IsSourceSimple` and
+  `MPOTensor.IsNonvanishingSourceSimple`, witnessed by blocking length one, but
+  fails the normalized fixed-representative predicate `MPOTensor.IsSimple`.
+  Normalized simplicity implies source simplicity unconditionally; its bridge
+  to the strengthened predicate requires positive-length nonvanishing.
 - `cpsv16_gsnnch_sector_decomposition.tex` records that
   `MPOTensor.GSNNCHData` retains the source orthogonal sectors and natural
   multiplicities. Positive commuting products on supplied orthogonal sectors

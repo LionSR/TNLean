@@ -1115,9 +1115,7 @@
         thm:mpdo_bnt_label_rescaling_stable_cf,
         thm:mpdo_bnt_label_rescaling_stable_non_nilpotent}
     Theorem~\ref{thm:mpdo_bnt_label_rescaling_stable_ismpdo} gives the MPDO
-    condition. The entry formula gives a nonzero diagonal entry of
-    $\rho^{(N)}(R)$ at every positive length $N$. Choose the one-site blocking.
-    Its doubled-index tensor is the
+    condition. Choose the one-site blocking. Its doubled-index tensor is the
     canonical physical relabeling of $R^{\bullet\bullet}$. Refine the canonical
     form from Theorem~\ref{thm:mpdo_bnt_label_rescaling_stable_cf} to its active
     basis of normal tensors. The only retained member is $\widehat R$, whose
@@ -1125,21 +1123,42 @@
     Theorem~\ref{thm:mpdo_bnt_label_rescaling_stable_non_nilpotent}.
 \end{proof}
 
-\begin{theorem}[The two simplicity interfaces give opposite verdicts]
+\begin{theorem}[Nonvanishing source simplicity of the rescaling-stable dimer]
+    \label{thm:mpdo_bnt_label_rescaling_stable_nonvanishing_source_simple}
+    \lean{MPOTensor.RescalingStableLengthDependentRFP.%
+        R_isNonvanishingSourceSimple}
+    \leanok
+    \uses{def:mpdo_nonvanishing_source_simple_tensor,
+        thm:mpdo_bnt_label_rescaling_stable_source_simple,
+        thm:mpdo_bnt_label_rescaling_stable_ismpdo}
+    The dimer tensor $R$ is nonvanishing source-simple.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpdo_bnt_label_rescaling_stable_source_simple,
+        thm:mpdo_bnt_label_rescaling_stable_ismpdo}
+    Source simplicity follows from the preceding theorem. For every positive
+    length, the closed-MPO entry formula supplies a nonzero all-zero diagonal
+    entry, so the closed operator does not vanish.
+\end{proof}
+
+\begin{theorem}[Source and normalized simplicity give opposite verdicts]
     \label{thm:mpdo_bnt_label_rescaling_stable_simplicity_verdicts}
     \lean{MPOTensor.RescalingStableLengthDependentRFP.%
+        R_isNonvanishingSourceSimple,
+        MPOTensor.RescalingStableLengthDependentRFP.%
         R_isSourceSimple_and_not_isSimple}
     \leanok
-    \uses{thm:mpdo_bnt_label_rescaling_stable_source_simple,
+    \uses{thm:mpdo_bnt_label_rescaling_stable_nonvanishing_source_simple,
         thm:mpdo_bnt_label_rescaling_stable_not_simple}
-    The dimer tensor $R$ is source-simple, witnessed by the one-site blocking,
+    The dimer tensor $R$ is nonvanishing source-simple, and hence source-simple,
     but it does not satisfy normalized fixed-representative simplicity.
 \end{theorem}
 
 \begin{proof}\leanok
     Combine
-    Theorem~\ref{thm:mpdo_bnt_label_rescaling_stable_source_simple} with
-    Theorem~\ref{thm:mpdo_bnt_label_rescaling_stable_not_simple}.
+    Theorem~\ref{thm:mpdo_bnt_label_rescaling_stable_nonvanishing_source_simple}
+    with Theorem~\ref{thm:mpdo_bnt_label_rescaling_stable_not_simple}.
 \end{proof}
 
 \begin{theorem}[The rescaling-stable tensor is a renormalization fixed

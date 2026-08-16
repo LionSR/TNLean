@@ -12,16 +12,21 @@ import TNLean.MPS.MPDO.SimpleTensor
 
 This module records the source-facing simplicity condition of arXiv:1606.00608,
 Definition 4.7. After a positive physical blocking, the doubled-index tensor must
-admit a CPSV basis of normal tensors, and the ket-against-bra contraction of every
-basis element must be nonnilpotent. The interface requires every positive-length
-generated MPO to be nonzero, but deliberately excludes the separate line-246
-unit-weight normalization.
+admit a CPSV basis of normal tensors, and the ket-against-bra contraction of
+every basis element must be nonnilpotent. The source definition does not require
+every positive-length generated MPO to be nonzero and excludes the separate
+line-246 unit-weight normalization. The strengthened nonvanishing interface is
+recorded separately.
 
-## Main result
+## Main results
 
 * `MPOTensor.IsSourceSimple`: normalization-free Definition 4.7 simplicity.
+* `MPOTensor.IsNonvanishingSourceSimple`: source simplicity together with
+  positive-length nonvanishing.
 * `MPOTensor.IsSimple.isSourceSimple`: normalized simplicity implies source
-  simplicity under positive-length nonvanishing.
+  simplicity unconditionally.
+* `MPOTensor.IsSimple.isNonvanishingSourceSimple`: normalized simplicity implies
+  the strengthened interface under positive-length nonvanishing.
 
 ## References
 
@@ -33,56 +38,58 @@ namespace MPOTensor
 
 variable {d D : ℕ}
 
-/-- **Normalization-free Definition 4.7 simplicity.** A tensor generating a
-nonzero MPDO at every positive chain length is source-simple when, after some
-positive physical blocking, its doubled-index tensor has a CPSV basis of normal
-tensors and no basis element has nilpotent ket-against-bra contraction.
+/-- **Normalization-free Definition 4.7 simplicity.** A tensor is source-simple
+when it generates an MPDO and, after some positive physical blocking, its
+doubled-index tensor has a CPSV basis of normal tensors whose ket-against-bra
+contractions are all nonnilpotent.
 
-The positive-length nonzero condition records the source boundary that the
-tensor generates a genuine density-operator family; in particular, null
-periodic representations are not simple. The BNT witness uses
-`MPSTensor.IsCPSVBasisOfNormalTensors`, rather than an arbitrary family of
-canonical blocks. It does not impose the line-246 unit-weight normalization and
-makes no claim that every positive blocking has such a witness.
+The BNT witness uses `MPSTensor.IsCPSVBasisOfNormalTensors`, rather than an
+arbitrary family of canonical blocks. The predicate does not impose either
+positive-length nonvanishing or the line-246 unit-weight normalization and makes
+no claim that every positive blocking has such a witness.
 
 Source: arXiv:1606.00608, Definition 4.7, lines 815--822. -/
 def IsSourceSimple (M : MPOTensor d D) : Prop :=
-  IsMPDO M ∧ (∀ N : ℕ, 0 < N → mpo M N ≠ 0) ∧
-    ∃ L : ℕ, 0 < L ∧
-      ∃ g : ℕ,
-        ∃ blocks : (j : Fin g) →
-            Σ D' : ℕ, MPSTensor
-              (MPSTensor.blockPhysDim d L * MPSTensor.blockPhysDim d L) D',
-          MPSTensor.IsCPSVBasisOfNormalTensors (blockTensor M L).toMPSTensor blocks ∧
-            ∀ j, ¬ IsNilpotent
-              (doubledPhysTraceTransfer (MPSTensor.blockPhysDim d L) (blocks j).2)
+  IsMPDO M ∧ ∃ L : ℕ, 0 < L ∧
+    ∃ g : ℕ,
+      ∃ blocks : (j : Fin g) →
+          Σ D' : ℕ, MPSTensor
+            (MPSTensor.blockPhysDim d L * MPSTensor.blockPhysDim d L) D',
+        MPSTensor.IsCPSVBasisOfNormalTensors (blockTensor M L).toMPSTensor blocks ∧
+          ∀ j, ¬ IsNilpotent
+            (doubledPhysTraceTransfer (MPSTensor.blockPhysDim d L) (blocks j).2)
 
-/-- Normalized simplicity implies source simplicity when the generated MPO is
-nonzero at every positive length.
+/-- Source simplicity strengthened by nonvanishing of every positive-length
+closed MPO. This condition is not part of CPSV16 Definition 4.7.
 
-The current proof uses the extra nonvanishing hypothesis because `IsSimple`
-only asks for a canonical form after one positive blocking, while raw sector
-weights can algebraically cancel at individual lengths. Whether the full
-`IsSimple` predicate rules out complete cancellation of the closed MPO is not
-yet formalized.
+Source predicate: arXiv:1606.00608, Definition 4.7, lines 815--822. -/
+def IsNonvanishingSourceSimple (M : MPOTensor d D) : Prop :=
+  IsSourceSimple M ∧ ∀ N : ℕ, 0 < N → mpo M N ≠ 0
 
-**Scope restriction (positive-length nonvanishing):** this implication therefore
-assumes nonvanishing explicitly. See
-`docs/paper-gaps/cpsv16_unit_weight_rfp_scale_tension.tex`.
+/-- The strengthened nonvanishing interface implies source simplicity. -/
+theorem IsNonvanishingSourceSimple.isSourceSimple {M : MPOTensor d D}
+    (hM : IsNonvanishingSourceSimple M) : IsSourceSimple M :=
+  hM.1
+
+/-- The strengthened interface supplies nonvanishing at every positive length. -/
+theorem IsNonvanishingSourceSimple.mpo_ne_zero {M : MPOTensor d D}
+    (hM : IsNonvanishingSourceSimple M) (N : ℕ) (hN : 0 < N) : mpo M N ≠ 0 :=
+  hM.2 N hN
+
+/-- Normalized simplicity implies source simplicity.
 
 The CPSV basis is the family of distinct normal representatives in the
 normalized sector decomposition. Its spanning coefficients are the sector
 power sums. The global gauge preserves every matrix product vector, so the basis
-transports to the blocked MPO tensor. The nonnilpotency clause is
-unchanged because the representatives themselves are unchanged.
+transports to the blocked MPO tensor. The nonnilpotency clause is unchanged
+because the representatives themselves are unchanged.
 
 Source: arXiv:1606.00608, Definition 4.7, lines 815--822, together with the
 normalized fixed-representative interface of lines 238--246. -/
-theorem IsSimple.isSourceSimple {M : MPOTensor d D} (hM : IsSimple M)
-    (hM_ne : ∀ N : ℕ, 0 < N → mpo M N ≠ 0) :
+theorem IsSimple.isSourceSimple {M : MPOTensor d D} (hM : IsSimple M) :
     IsSourceSimple M := by
   obtain ⟨hMPDO, L, hL, -, S, hCF, hNonNil, hTotal, X, hEq⟩ := hM
-  refine ⟨hMPDO, hM_ne, L, hL, S.basisCount,
+  refine ⟨hMPDO, L, hL, S.basisCount,
     fun j ↦ ⟨S.basisDim j, S.basis j⟩, ?_, hNonNil⟩
   subst hTotal
   have hBNT : MPSTensor.IsCPSVBasisOfNormalTensors S.toTensor
@@ -98,5 +105,14 @@ theorem IsSimple.isSourceSimple {M : MPOTensor d D} (hM : IsSimple M)
   apply hBNT.of_sameMPV₂Pos
   intro N _ σ
   exact (MPSTensor.GaugeEquiv.sameMPV ⟨MPSTensor.globalGaugeOfBlocks X, hEq⟩ N σ)
+
+/-- Normalized simplicity implies the strengthened nonvanishing source interface
+when every positive-length closed MPO is nonzero.
+
+The nonvanishing assumption is additional to CPSV16 Definition 4.7. -/
+theorem IsSimple.isNonvanishingSourceSimple {M : MPOTensor d D} (hM : IsSimple M)
+    (hM_ne : ∀ N : ℕ, 0 < N → mpo M N ≠ 0) :
+    IsNonvanishingSourceSimple M :=
+  ⟨hM.isSourceSimple, hM_ne⟩
 
 end MPOTensor
