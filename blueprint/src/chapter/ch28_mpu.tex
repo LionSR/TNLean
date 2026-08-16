@@ -5755,11 +5755,12 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
   Then the rank-one doubled-virtual matrix satisfies
   \begin{align}
     C\!\left(\mathcal W,
-      \lvert\operatorname{vec}(R))(\operatorname{vec}(L)\rvert\right)^{ij}
+      \operatorname{vec}(R)\operatorname{vec}(L)^T\right)^{ij}
       &=L W^{ij}R.
       \label{eq:mpu_factor_free_rank_one}
   \end{align}
-  No transpose, adjoint, or normalization factor occurs. The binary map
+  No adjoint or normalization factor occurs in the contraction result. The
+  binary map
   $(\mathcal W,E)\mapsto C(\mathcal W,E)$, the map
   $\mathcal W\mapsto E(\mathcal W)$, and consequently the map
   $\mathcal W\mapsto\widehat{\mathcal W}_{\mathrm{ff}}$ are continuous.
@@ -5775,7 +5776,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
   (\ref{eq:mpu_factor_free_rank_one}) and using column stacking gives
   \begin{align}
     C\!\left(\mathcal W,
-      \lvert\operatorname{vec}(R))(\operatorname{vec}(L)\rvert\right)^{ij}_{ab}
+      \operatorname{vec}(R)\operatorname{vec}(L)^T\right)^{ij}_{ab}
       &=\sum_{c,e}R_{eb}L_{ac}W^{ij}_{ce}\\
       &=\sum_{c,e}L_{ac}W^{ij}_{ce}R_{eb}
        =(L W^{ij}R)_{ab}.
