@@ -5575,6 +5575,34 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
   \end{align}
 \end{proof}
 
+\begin{theorem}[Transversality of the reduced range]
+  \label{thm:mpu_two_projection_reduced_projection_transversality}
+  \lean{LinearMap.IsSymmetricProjection.disjoint_ker_range_reducedProjection,
+    Matrix.disjoint_ker_range_reducedProjection}
+  \leanok
+  \uses{def:mpu_two_projection_reduced_projection,
+    thm:mpu_two_projection_reduced_projection}
+  For orthogonal projections $P$ and $Q$, the reduced range contains no
+  nonzero vector annihilated by $Q$:
+  \begin{align}
+    \ker Q\cap\operatorname{ran}(\widetilde P)&=\{0\}.
+    \label{eq:mpu_reduced_projection_transversality}
+  \end{align}
+  % Source lines: paper_v2.tex 764--781.
+\end{theorem}
+
+\begin{proof}\leanok
+  If $x=PQy$ and $Qx=0$, then $Px=x$ and symmetry of the two projections gives
+  \begin{align}
+    \langle x,x\rangle
+      &=\langle PQy,PQy\rangle
+       =\langle Qy,PQy\rangle
+       =\langle y,QPQy\rangle
+       =0.
+  \end{align}
+  Hence $x=0$.
+\end{proof}
+
 \begin{theorem}[Invertible right factor for the reduced projection]
   \label{thm:mpu_two_projection_reduced_projection_right_factor}
   \lean{LinearMap.IsSymmetricProjection.exists_reducedProjection_rightFactor}
@@ -5594,6 +5622,169 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
   \end{align}
   and the equal-ranges right-factor theorem give an invertible $Y$ satisfying
   $\widetilde P QY=\widetilde P$.
+\end{proof}
+
+\begin{definition}[Matrix reduced projection]
+  \label{def:mpu_matrix_reduced_projection}
+  \lean{Matrix.reducedProjection}
+  \leanok
+  \uses{def:mpu_two_projection_reduced_projection}
+  In standard Euclidean coordinates, let $\widetilde P$ be the matrix of the
+  reduced projection associated with two square matrices $P$ and $Q$.
+\end{definition}
+
+\begin{theorem}[Coordinate identities for the reduced projection]
+  \label{thm:mpu_matrix_reduced_projection}
+  \lean{Matrix.toEuclideanLin_reducedProjection,
+    Matrix.reducedProjection_isOrthogonalProjection,
+    Matrix.mul_reducedProjection,
+    Matrix.reducedProjection_mul,
+    Matrix.reducedProjection_mul_second,
+    Matrix.second_mul_reducedProjection,
+    Matrix.exists_reducedProjection_rightFactor}
+  \leanok
+  \uses{def:mpu_matrix_reduced_projection,
+    thm:mpu_two_projection_reduced_projection,
+    thm:mpu_two_projection_reduced_projection_right_factor}
+  If $P$ and $Q$ are orthogonal projections, then $\widetilde P$ is an
+  orthogonal projection and
+  \begin{align}
+    P\widetilde P&=\widetilde P,&
+    \widetilde P P&=\widetilde P,&
+    \widetilde P Q&=PQ,&
+    Q\widetilde P&=QP.
+    \label{eq:mpu_reduced_projection_coordinate_identities}
+  \end{align}
+  There is also an invertible matrix $Y$ satisfying
+  $\widetilde P QY=\widetilde P$.
+  % The tagged Lean declarations prove that \widetilde P is an orthogonal
+  % projection for arbitrary P and Q; the hypotheses above are those of the source.
+  % Source lines: paper_v2.tex 764--770.
+\end{theorem}
+
+\begin{lemma}[Transfer map under virtual sandwiching]
+  \label{lem:mpu_transfer_map_virtual_sandwich}
+  \lean{MPOTensor.transferMap_virtualSandwich}
+  \leanok
+  \uses{def:mpo_transfer_map,def:mpu_virtual_sandwich}
+  Let $U=(U^{ij})$ be an MPO tensor, and let
+  $\widehat U^{ij}=AU^{ij}B$. Then
+  \begin{align}
+    E_{\widehat U}(X)&=A E_U(BXB^\dagger)A^\dagger.
+  \end{align}
+\end{lemma}
+
+\begin{proof}\leanok
+  Expand the transfer map and collect the factors $A$, $B$, $B^\dagger$, and
+  $A^\dagger$ outside the finite sum.
+\end{proof}
+
+\begin{lemma}[Positive definite support compression]
+  \label{lem:mpu_support_compression_posdef}
+  \lean{Matrix.PosSemidef.compression_posDef_of_support_action_ne_zero}
+  \leanok
+  \uses{def:support_proj}
+  Let $\rho\succeq0$. If
+  \begin{align}
+    \operatorname{supp}(\rho)(Vx)&\neq0
+    \qquad\text{for every }x\neq0,
+  \end{align}
+  then
+  \begin{align}
+    V^\dagger\rho V&\succ0.
+  \end{align}
+\end{lemma}
+
+\begin{proof}\leanok
+  If the quadratic form of $V^\dagger\rho V$ vanished at a nonzero vector $x$,
+  positive semidefiniteness would give $\rho Vx=0$. The support projection would
+  then annihilate $Vx$, contrary to the hypothesis.
+\end{proof}
+
+\begin{theorem}[Reduced representative under a supplied positive fixed pair]
+  \label{thm:mpu_reduced_representative}
+  \lean{MPOTensor.mpo_virtualSandwich_reducedProjection_eq,
+    MPOTensor.transferMap_virtualSandwich_reducedProjection,
+    MPOTensor.trace_compressed_fixed_pair_reducedProjection,
+    MPOTensor.compressed_fixed_pair_posDef_reducedProjection}
+  \leanok
+  \uses{def:mpo_family,def:mpo_transfer_map,def:support_proj,
+    def:mpu_virtual_sandwich,def:mpu_matrix_reduced_projection,
+    lem:mpu_transfer_map_virtual_sandwich,lem:mpu_support_compression_posdef,
+    thm:mpu_matrix_reduced_projection,
+    thm:mpu_two_projection_reduced_projection_transversality}
+  Let $W=(W^{ij})$ be an MPO tensor. Let $L,R\succeq0$ satisfy
+  \begin{align}
+    E_W(X)&=\operatorname{tr}(LX)R,&
+    \operatorname{tr}(LR)&=1,
+  \end{align}
+  and let $P$ and $Q$ be their support projections. Assume, letter by letter,
+  \begin{align}
+    W^{ij}P&=W^{ij},&QW^{ij}&=W^{ij}.
+  \end{align}
+  Set $T=\widetilde P$ and $\widetilde W^{ij}=TW^{ij}T$. Then, for every
+  $N\geq0$,
+  \begin{align}
+    \operatorname{MPO}_N(\widetilde W)&=\operatorname{MPO}_N(W),\\
+    E_{\widetilde W}(X)
+      &=\operatorname{tr}\!\bigl((TLT)X\bigr)\,TRT,\\
+    \operatorname{tr}\!\bigl((TLT)(TRT)\bigr)&=1.
+  \end{align}
+  Moreover, if $V^\dagger V=I$ and $VV^\dagger=T$, then
+  \begin{align}
+    V^\dagger LV&\succ0,&V^\dagger RV&\succ0.
+  \end{align}
+  % Scope restriction: the positivity, support, absorption, transfer, and
+  % normalization assumptions are supplied explicitly. The source derives them
+  % by blocking D^4 sites and using the isometry in the proof of Proposition IV.5.
+  % See docs/paper-gaps/mpu_reduced_representative_supplied_fixed_pair.tex.
+  % Source lines: paper_v2.tex 747--783.
+\end{theorem}
+
+\begin{proof}\leanok
+  For every nonempty word $w$, idempotence of $T$ and
+  (\ref{eq:mpu_reduced_projection_coordinate_identities}) give
+  \begin{align}
+    \widetilde W_w&=TW_wT.
+  \end{align}
+  Cyclicity of the trace, together with $QW_w=W_w=W_wP$, therefore gives
+  $\operatorname{tr}(TW_wT)=\operatorname{tr}(W_w)$. Length zero is immediate.
+  Lemma~\ref{lem:mpu_transfer_map_virtual_sandwich}, with $A=B=T$ and
+  $T^\dagger=T$, gives
+  \begin{align}
+    E_{\widetilde W}(X)
+      &=\operatorname{tr}(LTXT)\,TRT
+       =\operatorname{tr}((TLT)X)\,TRT.
+  \end{align}
+  Since $P$ and $Q$ are the support projections of $L$ and $R$, respectively,
+  \begin{align}
+    PL&=LP=L,&QR&=RQ=R.
+  \end{align}
+  Combining these absorptions with
+  (\ref{eq:mpu_reduced_projection_coordinate_identities}), $T^2=T$, and
+  cyclicity of the trace gives
+  \begin{align}
+    \operatorname{tr}\!\bigl((TLT)(TRT)\bigr)
+      &=\operatorname{tr}(LTRT)
+       =\operatorname{tr}(LRT)
+       =\operatorname{tr}(RTL)
+       =\operatorname{tr}(RL)
+       =\operatorname{tr}(LR)
+       =1.
+  \end{align}
+  Let $x\neq0$ and set $u=Vx$. Since $V^\dagger V=I$, one has $u\neq0$;
+  since $VV^\dagger=T$, one has $Tu=u$. Equation
+  (\ref{eq:mpu_reduced_projection_coordinate_identities}) gives $Pu=u$, and
+  (\ref{eq:mpu_reduced_projection_transversality}) gives $Qu\neq0$. Thus
+  \begin{align}
+    \operatorname{supp}(L)u&=Pu=u\neq0,&
+    \operatorname{supp}(R)u&=Qu\neq0.
+  \end{align}
+  Applying Lemma~\ref{lem:mpu_support_compression_posdef} to $L$ and $R$ yields
+  \begin{align}
+    x^\dagger(V^\dagger LV)x&=u^\dagger Lu>0,&
+    x^\dagger(V^\dagger RV)x&=u^\dagger Ru>0.
+  \end{align}
 \end{proof}
 
 \begin{theorem}[Lower semicontinuity of finite matrix rank]
@@ -5941,6 +6132,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     thm:mpu_two_projection_angle_defect_sum,
     thm:mpu_two_projection_reduced_projection,
     thm:mpu_two_projection_reduced_projection_right_factor,
+    thm:mpu_reduced_representative,
     thm:mpu_rank_lower_semicontinuous,
     thm:mpu_fixed_product_preconnected,
     thm:mpu_factor_free_sandwich_continuous,

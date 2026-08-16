@@ -55,6 +55,21 @@ theorem continuous_virtualSandwich {X : Type*} [TopologicalSpace X]
     (continuous_apply j).comp ((continuous_apply i).comp hU)
   simpa [virtualSandwich] using (hA.matrix_mul hUij).matrix_mul hB
 
+/-- The transfer map of a virtual sandwich is obtained by compressing its input by the
+right virtual factor and its output by the left virtual factor:
+$$
+  E_{AUB}(X)=A\,E_U(BXB^\dagger)\,A^\dagger.
+$$
+
+This identity requires no invertibility or projection hypotheses. -/
+theorem transferMap_virtualSandwich
+    (A : Matrix (Fin D) (Fin D) ℂ) (U : MPOTensor d D)
+    (B X : Matrix (Fin D) (Fin D) ℂ) :
+    transferMap (virtualSandwich A U B) X =
+      A * transferMap U (B * X * Bᴴ) * Aᴴ := by
+  simp only [transferMap_apply, virtualSandwich_apply, Matrix.conjTranspose_mul,
+    Finset.mul_sum, Finset.sum_mul, Matrix.mul_assoc]
+
 /-- The first raw source cut of a virtual sandwich is
 $(A\otimes I_d)M_1(U)(I_d\otimes B)$, with no transpose or conjugation.
 
