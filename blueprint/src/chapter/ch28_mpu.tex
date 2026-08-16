@@ -5585,6 +5585,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
   nonzero vector annihilated by $Q$:
   \begin{align}
     \ker Q\cap\operatorname{ran}(\widetilde P)&=\{0\}.
+    \label{eq:mpu_reduced_projection_transversality}
   \end{align}
   % Source lines: paper_v2.tex 764--781.
 \end{theorem}
@@ -5651,9 +5652,12 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     \widetilde P P&=\widetilde P,&
     \widetilde P Q&=PQ,&
     Q\widetilde P&=QP.
+    \label{eq:mpu_reduced_projection_coordinate_identities}
   \end{align}
   There is also an invertible matrix $Y$ satisfying
   $\widetilde P QY=\widetilde P$.
+  % The tagged Lean declarations prove that \widetilde P is an orthogonal
+  % projection for arbitrary P and Q; the hypotheses above are those of the source.
   % Source lines: paper_v2.tex 764--770.
 \end{theorem}
 
@@ -5667,7 +5671,8 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     MPOTensor.compressed_fixed_pair_posDef_reducedProjection}
   \leanok
   \uses{def:mpo_family,def:mpo_transfer_map,def:support_proj,
-    def:mpu_virtual_sandwich,thm:mpu_matrix_reduced_projection,
+    def:mpu_virtual_sandwich,def:mpu_matrix_reduced_projection,
+    thm:mpu_matrix_reduced_projection,
     thm:mpu_two_projection_reduced_projection_transversality}
   Let $W=(W^{ij})$ be an MPO tensor. Let $L,R\succeq0$ satisfy
   \begin{align}
@@ -5690,17 +5695,16 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
   \begin{align}
     V^\dagger LV&\succ0,&V^\dagger RV&\succ0.
   \end{align}
-  All positivity, support, absorption, transfer, and normalization assumptions
-  in this statement are supplied explicitly; the source derives them by
-  blocking to $D^4$ sites and passing through the isometry of the
-  Proposition~IV.5 argument, and this restriction is recorded in
-  \path{docs/paper-gaps/mpu_reduced_representative_supplied_fixed_pair.tex}.
+  % Scope restriction: the positivity, support, absorption, transfer, and
+  % normalization assumptions are supplied explicitly. The source derives them
+  % by blocking D^4 sites and using the isometry in the proof of Proposition IV.5.
+  % See docs/paper-gaps/mpu_reduced_representative_supplied_fixed_pair.tex.
   % Source lines: paper_v2.tex 747--783.
 \end{theorem}
 
 \begin{proof}\leanok
-  For every nonempty word $w$, idempotence of $T$ and the identities
-  $TQ=PQ$, $PT=T$ give
+  For every nonempty word $w$, idempotence of $T$ and
+  (\ref{eq:mpu_reduced_projection_coordinate_identities}) give
   \begin{align}
     \widetilde W_w&=TW_wT.
   \end{align}
@@ -5713,11 +5717,40 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
        =\operatorname{tr}(LTXT)\,TRT
        =\operatorname{tr}((TLT)X)\,TRT.
   \end{align}
-  Support absorption and trace cyclicity preserve the pairing normalization.
-  Finally, $\operatorname{ran}T\subseteq\operatorname{ran}P$, so the left
-  compression is positive definite. For the right compression, transversality
-  gives $\ker Q\cap\operatorname{ran}T=\{0\}$; hence every nonzero vector in
-  the isometric coordinates has a nonzero component in the support of $R$.
+  Since $P$ and $Q$ are the support projections of $L$ and $R$, respectively,
+  \begin{align}
+    PL&=LP=L,&QR&=RQ=R.
+  \end{align}
+  Combining these absorptions with
+  (\ref{eq:mpu_reduced_projection_coordinate_identities}), $T^2=T$, and
+  cyclicity of the trace gives
+  \begin{align}
+    \operatorname{tr}\!\bigl((TLT)(TRT)\bigr)
+      &=\operatorname{tr}(LTRT)
+       =\operatorname{tr}(LRT)
+       =\operatorname{tr}(RTL)
+       =\operatorname{tr}(RL)
+       =\operatorname{tr}(LR)
+       =1.
+  \end{align}
+  Let $x\neq0$ and set $u=Vx$. Since $V^\dagger V=I$, one has $u\neq0$;
+  since $VV^\dagger=T$, one has $Tu=u$. Equation
+  (\ref{eq:mpu_reduced_projection_coordinate_identities}) gives $Pu=u$, and
+  (\ref{eq:mpu_reduced_projection_transversality}) gives $Qu\neq0$. Thus
+  \begin{align}
+    \operatorname{supp}(L)u&=Pu=u\neq0,&
+    \operatorname{supp}(R)u&=Qu\neq0.
+  \end{align}
+  The support criterion for a positive semidefinite matrix $\rho$ states that
+  \begin{align}
+    \operatorname{supp}(\rho)(Vx)\neq0\quad\text{for every }x\neq0
+    \quad\Longrightarrow\quad V^\dagger\rho V\succ0.
+  \end{align}
+  Applying it to $L$ and $R$ yields
+  \begin{align}
+    x^\dagger(V^\dagger LV)x&=u^\dagger Lu>0,&
+    x^\dagger(V^\dagger RV)x&=u^\dagger Ru>0.
+  \end{align}
 \end{proof}
 
 \begin{theorem}[Lower semicontinuity of finite matrix rank]

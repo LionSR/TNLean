@@ -59,12 +59,12 @@ theorem dotProduct_mulVec_pos_of_supportProj_fixed
   -- Combined with the fixed-point hypothesis, this forces `v = 0`.
   exact hv_ne (hv_fix.symm.trans hPv)
 
-/-- An isometric compression of a positive semidefinite matrix is positive definite if
+/-- A compression `Vᴴ * ρ * V` of a positive semidefinite matrix is positive definite if
 its support projection does not annihilate the image of any nonzero coordinate vector.
 
-Unlike `compression_on_support_posDef`, this criterion does not require the isometry's
-range to equal the whole support. It applies, for example, when that range is merely
-transverse to the kernel of the support projection. -/
+Unlike `compression_on_support_posDef`, this criterion does not require the image of `V`
+to equal the whole support. It applies, for example, when that image is merely transverse
+to the kernel of the support projection. -/
 theorem compression_posDef_of_support_action_ne_zero
     {k : ℕ} (V : Matrix (Fin D) (Fin k) ℂ)
     (hSupport : ∀ x : Fin k → ℂ, x ≠ 0 →

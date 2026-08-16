@@ -175,8 +175,8 @@ private theorem transferMap_virtualSandwich_projection
 
 /-- The reduced tensor has the compressed rank-one transfer formula.
 
-The rank-one formula and both support projections are hypotheses, rather than
-consequences of `IsMPU`.
+The rank-one formula is supplied as a hypothesis rather than derived from `IsMPU`;
+the matrices `P` and `Q` forming the reduced projection are parameters.
 
 Source: arXiv:1703.09188, Proposition IV.5, lines 747--752 and 778--781. -/
 theorem transferMap_virtualSandwich_reducedProjection

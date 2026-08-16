@@ -111,7 +111,8 @@ This is the injectivity property needed to restrict a positive semidefinite matr
 support projection `Q` to the reduced range. Although the reduced range need not be
 contained in `range Q`, no nonzero vector in it is annihilated by `Q`.
 
-Source: arXiv:1703.09188, Proposition IV.5, lines 764–781. -/
+This result is not stated separately in the source. It is the coordinate-free content
+behind the full-rank claim in arXiv:1703.09188, Proposition IV.5, lines 778--781. -/
 theorem disjoint_ker_range_reducedProjection {P Q : E →ₗ[ℂ] E}
     (hP : P.IsSymmetricProjection) (hQ : Q.IsSymmetricProjection) :
     Disjoint (LinearMap.ker Q) (LinearMap.range (reducedProjection P Q)) := by
