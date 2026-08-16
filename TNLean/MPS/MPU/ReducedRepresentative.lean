@@ -14,6 +14,10 @@ This file formalizes the reduced-representative calculation in
 [Cirac--Perez-Garcia--Schuch--Verstraete 2017, arXiv:1703.09188],
 Proposition IV.5, lines 747--783. All fixed-point and support hypotheses are explicit:
 none is inferred from the bare MPU predicate.
+**Scope restriction (supplied fixed pair):** the source derives these
+hypotheses by blocking to `D ^ 4` sites and passing through the isometry `V`
+of the Proposition IV.5 argument, a supplier this file does not construct. See
+`docs/paper-gaps/mpu_reduced_representative_supplied_fixed_pair.tex`.
 -/
 
 open scoped Matrix ComplexOrder BigOperators
