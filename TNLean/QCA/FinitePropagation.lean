@@ -3,6 +3,8 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import Mathlib.Data.Finset.Lattice.Fold
+import Mathlib.Data.Int.Interval
 import TNLean.QCA.QuasiLocal
 import TNLean.QCA.RegionSumset
 
@@ -15,7 +17,8 @@ neighborhood when it sends every observable supported in \(\Lambda\) to one supp
 \(\Lambda + \mathcal N\), uniformly over finite regions \(\Lambda\).
 
 This file records equivalent support, range-inclusion, and finite-region witness formulations of
-that condition, together with neighborhood monotonicity and forward-composition closure.
+that condition, together with neighborhood monotonicity, forward-composition closure, and
+normalization to a symmetric interval.
 
 ## Main definitions
 
@@ -31,10 +34,16 @@ that condition, together with neighborhood monotonicity and forward-composition 
 * `SpinChain.propagatesWithin_iff_quasiLocalObservable` — the universal pointwise formulation.
 * `SpinChain.propagatesWithin_iff_range_subset` — the range-inclusion formulation.
 * `SpinChain.propagatesWithin_iff_exists_local` — the finite-region witness formulation.
+* `SpinChain.exists_subset_symmetric_Icc` — every finite integer region lies in some
+  symmetric interval.
 * `SpinChain.PropagatesWithin.mono` — propagation is monotone under neighborhood enlargement.
 * `SpinChain.PropagatesWithin.trans` — forward propagation bounds compose by region sumset.
+* `SpinChain.PropagatesWithin.exists_symmetric_Icc` — a propagation neighborhood can be enlarged
+  to a symmetric interval.
 * `SpinChain.HasFinitePropagation.exists_superset` — valid neighborhoods can contain any finite set.
 * `SpinChain.HasFinitePropagation.trans` — finite forward propagation is closed under composition.
+* `SpinChain.HasFinitePropagation.exists_symmetric_Icc` — finite propagation admits a symmetric
+  interval witness.
 
 ## References
 
@@ -101,6 +110,17 @@ def HasFinitePropagation {d : ℕ} [NeZero d]
     (ω : QuasiLocalAlgebra d ≃⋆ₐ[ℂ] QuasiLocalAlgebra d) : Prop :=
   ∃ 𝓝 : Finset ℤ, PropagatesWithin ω 𝓝
 
+/-- Every finite set of integers is contained in a symmetric interval
+\([-R,R] \cap \mathbb Z\).
+
+Source: arXiv:1703.09188, Appendix, line 2298. -/
+lemma exists_subset_symmetric_Icc (𝓝 : Finset ℤ) :
+    ∃ R : ℕ, 𝓝 ⊆ Finset.Icc (-(R : ℤ)) (R : ℤ) := by
+  refine ⟨𝓝.sup Int.natAbs, ?_⟩
+  intro n hn
+  rw [Finset.mem_Icc, ← abs_le, Int.abs_eq_natAbs]
+  exact_mod_cast Finset.le_sup hn
+
 variable {d : ℕ} [NeZero d]
   {ω η : QuasiLocalAlgebra d ≃⋆ₐ[ℂ] QuasiLocalAlgebra d} {𝓝 𝓜 : Finset ℤ}
 
@@ -124,6 +144,16 @@ lemma trans (hω : PropagatesWithin ω 𝓝) (hη : PropagatesWithin η 𝓜) :
   rw [← regionSumset_assoc]
   exact hη (regionSumset Λ 𝓝) (ω x) (hω Λ x hx)
 
+/-- A finite propagation neighborhood can be enlarged to a symmetric interval
+\([-R,R] \cap \mathbb Z\).
+
+Source: arXiv:1703.09188, Appendix, line 2298. -/
+lemma exists_symmetric_Icc (hω : PropagatesWithin ω 𝓝) :
+    ∃ R : ℕ, 𝓝 ⊆ Finset.Icc (-(R : ℤ)) (R : ℤ) ∧
+      PropagatesWithin ω (Finset.Icc (-(R : ℤ)) (R : ℤ)) := by
+  obtain ⟨R, h𝓝R⟩ := exists_subset_symmetric_Icc 𝓝
+  exact ⟨R, h𝓝R, hω.mono h𝓝R⟩
+
 end PropagatesWithin
 
 namespace HasFinitePropagation
@@ -146,6 +176,16 @@ lemma trans (hω : HasFinitePropagation ω) (hη : HasFinitePropagation η) :
   obtain ⟨𝓝, h𝓝⟩ := hω
   obtain ⟨𝓜, h𝓜⟩ := hη
   exact ⟨regionSumset 𝓝 𝓜, h𝓝.trans h𝓜⟩
+
+/-- Finite forward propagation admits a symmetric-interval witness
+\([-R,R] \cap \mathbb Z\).
+
+Source: arXiv:1703.09188, Appendix, line 2298. -/
+lemma exists_symmetric_Icc (hω : HasFinitePropagation ω) :
+    ∃ R : ℕ, PropagatesWithin ω (Finset.Icc (-(R : ℤ)) (R : ℤ)) := by
+  obtain ⟨𝓝, h𝓝⟩ := hω
+  obtain ⟨R, _, hR⟩ := h𝓝.exists_symmetric_Icc
+  exact ⟨R, hR⟩
 
 end HasFinitePropagation
 
