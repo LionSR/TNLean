@@ -93,7 +93,7 @@
         \rho^{(N)}(M)&\ne0 &&\text{for every }N>0.
         \notag
     \end{align}
-    The nonvanishing condition is a project strengthening and is not part of
+    The nonvanishing condition is an additional refinement and is not part of
     Definition~4.7 of~\cite{Cirac2016MPDO_arXiv}.
 \end{definition}
 
@@ -323,7 +323,7 @@
     length for which the blocked tensor admits the normalized canonical-form
     witness of Definition~\ref{def:mpdo_simple_cf_tensor}.
 
-    This project interface includes the global unit-weight convention
+    This normalized condition includes the global unit-weight convention
     of~\cite[line~246]{Cirac2016MPDO_arXiv} at the scale of the blocked
     tensor.
     It is therefore distinct from source simplicity in
@@ -408,11 +408,16 @@
 
 \begin{proof}\leanok
     The sole local virtual matrix is $Z=\operatorname{diag}(1,-1)$, and
-    $Z^2=I$. Thus tracing $Z^N$ gives the displayed closed-MPO formula, which
-    is $2I$ at even lengths and zero at odd lengths. In particular the family
-    is positive semidefinite, while $\rho^{(1)}(M)=0$.
+    \begin{align}
+        Z^2&=I,
+        &\tr(Z^N)&=1+(-1)^N.
+        \notag
+    \end{align}
+    Hence the closed MPO is $2I$ at even lengths and zero at odd lengths. In
+    particular the family is positive semidefinite, while $\rho^{(1)}(M)=0$.
 
-    Block two sites. The normalized canonical form has one sector, represented
+    Block two sites. Since the single blocked letter is $Z^2=I$, the normalized
+    canonical form has one sector, represented
     by the scalar unit normal tensor. It has two copies, both with unit weight,
     so its total virtual dimension is $2$. Its doubled physical-trace transfer
     is the one-by-one matrix $(1)$, which is non-nilpotent. Hence $M$ is
