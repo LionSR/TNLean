@@ -8780,6 +8780,87 @@ $\omega^{-1}$.
   interval.
 \end{proof}
 
+\begin{definition}[Two-sided finite-propagation predicates]
+  \label{def:qca_two_sided_finite_propagation}
+  \lean{SpinChain.PropagatesWithinTwoSided,
+    SpinChain.HasTwoSidedFinitePropagation}
+  \leanok
+  \uses{def:qca_propagates_within,def:qca_finite_propagation}
+  Let $d>0$, and let $\omega$ be a star-algebra automorphism of $\mathcal A$.
+  A finite set $\mathcal N\subset\mathbb Z$ is a two-sided propagation
+  neighborhood when
+  \begin{align}
+    \omega(\mathcal A_\Lambda)&\subseteq
+      \mathcal A_{\Lambda+\mathcal N}
+  \end{align}
+  and
+  \begin{align}
+    \omega^{-1}(\mathcal A_\Lambda)&\subseteq
+      \mathcal A_{\Lambda+\mathcal N}
+  \end{align}
+  for every finite $\Lambda\subset\mathbb Z$.  The automorphism has two-sided
+  finite propagation when $\omega$ and $\omega^{-1}$ each have a finite forward
+  propagation neighborhood; the two neighborhoods need not initially agree.
+
+  These are derived convenience predicates.  The definition in
+  \cite[line~2298]{Cirac2017MPU} and Schumacher--Werner,
+  quant-ph/0405174, Definition~1, both define locality by the forward inclusion
+  for $\omega$ alone.  In particular, these predicates do not assert that
+  forward locality implies locality of the inverse.
+\end{definition}
+
+\begin{lemma}[Common neighborhoods for two-sided propagation]
+  \label{lem:qca_two_sided_common_neighborhood}
+  \lean{SpinChain.neg_symmetric_Icc,
+    SpinChain.PropagatesWithinTwoSided.mono,
+    SpinChain.PropagatesWithinTwoSided.of_reflected,
+    SpinChain.PropagatesWithinTwoSided.exists_symmetric_Icc,
+    SpinChain.HasTwoSidedFinitePropagation.exists_common_neighborhood,
+    SpinChain.HasTwoSidedFinitePropagation.exists_symmetric_Icc}
+  \leanok
+  \uses{def:qca_two_sided_finite_propagation}
+  For a finite set $\mathcal N\subset\mathbb Z$, write
+  \begin{align}
+    -\mathcal N&=\{-a\mid a\in\mathcal N\}.
+  \end{align}
+  Reflection fixes every symmetric interval:
+  \begin{align}
+    -\bigl([-R,R]\cap\mathbb Z\bigr)&=[-R,R]\cap\mathbb Z.
+  \end{align}
+  If $\mathcal N\subseteq\mathcal M$, then every common two-sided bound by
+  $\mathcal N$ is also a common bound by $\mathcal M$.  More generally, if
+  $\omega$ propagates within $\mathcal N$ and $\omega^{-1}$ propagates within
+  $-\mathcal N$, then both propagate within
+  \begin{align}
+    \mathcal N\cup(-\mathcal N).
+  \end{align}
+  Finally, any two-sided finite-propagation pair admits a common finite
+  neighborhood and therefore a common symmetric-interval neighborhood.  Thus
+  there is an $R\in\mathbb N$ such that
+  \begin{align}
+    \omega(\mathcal A_\Lambda)&\subseteq
+      \mathcal A_{\Lambda+([-R,R]\cap\mathbb Z)}
+  \end{align}
+  and
+  \begin{align}
+    \omega^{-1}(\mathcal A_\Lambda)&\subseteq
+      \mathcal A_{\Lambda+([-R,R]\cap\mathbb Z)}
+  \end{align}
+  for every finite $\Lambda\subset\mathbb Z$.
+\end{lemma}
+
+\begin{proof}\leanok
+  \uses{def:qca_two_sided_finite_propagation,
+    lem:qca_propagation_neighborhood_mono,
+    lem:qca_finite_propagation_symmetric_interval}
+  Negation reverses the two endpoint inequalities, so it preserves
+  $[-R,R]\cap\mathbb Z$.  Enlarge each supplied neighborhood using monotonicity.
+  For reflected bounds, both inclusions into $\mathcal N\cup(-\mathcal N)$ are
+  immediate.  For arbitrary finite forward and inverse neighborhoods, first
+  take their union and then enlarge that common neighborhood to a symmetric
+  interval.
+\end{proof}
+
 \begin{definition}[One-dimensional quantum cellular automaton]
   \label{def:qca}
   \lean{SpinChain.IsQCA}
