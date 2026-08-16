@@ -43,8 +43,7 @@ def oneSiteDoubledEquiv :
     (Equiv.prodCongr (MPSTensor.singleBlockEquiv 4) (MPSTensor.singleBlockEquiv 4)) |>.trans
       finProdFinEquiv
 
-@[deprecated "Simplify directly with `oneSiteDoubledEquiv`." (since := "2026-08-15")]
-@[simp]
+@[deprecated "Simplify directly with `oneSiteDoubledEquiv`." (since := "2026-08-15"), simp]
 lemma oneSiteDoubledEquiv_diagonal (i : Fin (MPSTensor.blockPhysDim 4 1)) :
     oneSiteDoubledEquiv (finProdFinEquiv (i, i)) =
       finProdFinEquiv
