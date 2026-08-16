@@ -8741,3 +8741,83 @@ $\omega^{-1}$.
   finite propagation neighborhood and apply this enlargement to its symmetric
   interval.
 \end{proof}
+
+\begin{definition}[One-dimensional quantum cellular automaton]
+  \label{def:qca}
+  \lean{SpinChain.IsQCA}
+  \leanok
+  \uses{def:qca_translation_covariant,def:qca_finite_propagation}
+  Let $d>0$ and let $\omega\colon\mathcal A\to\mathcal A$ be a star-algebra
+  automorphism.  The automorphism $\omega$ is a one-dimensional quantum
+  cellular automaton if it is translation covariant and has finite forward
+  propagation.  Thus there exists a finite set $\mathcal N\subset\mathbb Z$
+  such that, for every finite $\Lambda\subset\mathbb Z$,
+  \begin{align}
+    \omega(\mathcal A_\Lambda)&\subseteq
+      \mathcal A_{\Lambda+\mathcal N}.
+  \end{align}
+  This is the definition at line~2298 of \cite{Cirac2017MPU}.  It imposes only
+  the displayed forward propagation condition and makes no locality claim for
+  $\omega^{-1}$.
+\end{definition}
+
+\begin{theorem}[Exact interface for quantum cellular automata]
+  \label{thm:qca_iff_mk_projections}
+  \lean{SpinChain.isQCA_iff,SpinChain.IsQCA.mk,
+    SpinChain.IsQCA.translationCovariant,
+    SpinChain.IsQCA.hasFinitePropagation}
+  \leanok
+  \uses{def:qca}
+  For $d>0$, a star-algebra automorphism $\omega$ of $\mathcal A$ is a
+  quantum cellular automaton if and only if it is translation covariant and
+  has finite forward propagation.  These two properties therefore construct an
+  automaton, and every quantum cellular automaton satisfies each of them.
+\end{theorem}
+
+\begin{proof}\leanok
+  \uses{def:qca}
+  This is the conjunction defining a quantum cellular automaton, together with
+  its introduction and elimination rules.
+\end{proof}
+
+\begin{theorem}[Identity quantum cellular automaton]
+  \label{thm:qca_identity}
+  \lean{SpinChain.isQCA_refl}
+  \leanok
+  \uses{def:qca}
+  For $d>0$, the identity automorphism of $\mathcal A$ is a quantum cellular
+  automaton.
+\end{theorem}
+
+\begin{proof}\leanok
+  \uses{def:qca_finite_propagation,def:qca_propagates_within,
+    def:qca_region_sumset,
+    thm:qca_iff_mk_projections,
+    thm:qca_translation_covariant_identity_composition}
+  The identity is translation covariant.  For finite forward propagation,
+  choose the neighborhood $\{0\}$.  An observable supported in $\Lambda$
+  remains unchanged, and $\Lambda+\{0\}=\Lambda$.
+\end{proof}
+
+\begin{theorem}[Composition of quantum cellular automata]
+  \label{thm:qca_composition}
+  \lean{SpinChain.IsQCA.trans}
+  \leanok
+  \uses{def:qca}
+  Let $d>0$.  If $\omega$ and $\eta$ are quantum cellular automata on
+  $\mathcal A$, then $\eta\circ\omega$ is a quantum cellular automaton.  This
+  composite first applies $\omega$ and then $\eta$.  No propagation condition
+  for either inverse is required.
+\end{theorem}
+
+\begin{proof}\leanok
+  \uses{thm:qca_iff_mk_projections,
+    thm:qca_translation_covariant_identity_composition,
+    lem:qca_forward_propagation_comp}
+  Both defining properties are closed under composition in the stated order.
+  Translation covariance of $\omega$ and $\eta$ gives translation covariance
+  of $\eta\circ\omega$.  If $\mathcal N$ and $\mathcal M$ are forward
+  propagation neighborhoods for $\omega$ and $\eta$, respectively, then
+  $\mathcal N+\mathcal M$ is a forward propagation neighborhood for
+  $\eta\circ\omega$.  Hence the composite is a quantum cellular automaton.
+\end{proof}
