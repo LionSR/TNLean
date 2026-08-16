@@ -104,6 +104,30 @@ theorem comp_reducedProjection_left {P Q : E →ₗ[ℂ] E}
   simpa [LinearMap.adjoint_comp, hP.isSymmetric.adjoint_eq, hQ.isSymmetric.adjoint_eq,
     (reducedProjection_isSymmetric P Q).isSymmetric.adjoint_eq] using h.symm
 
+/-- The kernel of the second projection is transverse to the range of the reduced
+projection.
+
+This is the injectivity property needed to restrict a positive semidefinite matrix with
+support projection `Q` to the reduced range. Although the reduced range need not be
+contained in `range Q`, no nonzero vector in it is annihilated by `Q`.
+
+This result is not stated separately in the source. It is the coordinate-free content
+behind the full-rank claim in arXiv:1703.09188, Proposition IV.5, lines 778--781. -/
+theorem disjoint_ker_range_reducedProjection {P Q : E →ₗ[ℂ] E}
+    (hP : P.IsSymmetricProjection) (hQ : Q.IsSymmetricProjection) :
+    Disjoint (LinearMap.ker Q) (LinearMap.range (reducedProjection P Q)) := by
+  rw [Submodule.disjoint_def]
+  intro x hxQ hxT
+  rw [range_reducedProjection] at hxT
+  obtain ⟨y, rfl⟩ := hxT
+  apply (inner_self_eq_zero (𝕜 := ℂ)).mp
+  change ⟪P (Q y), P (Q y)⟫_ℂ = 0
+  rw [hP.isSymmetric (Q y) (P (Q y))]
+  have hPQy := congrArg (fun A : Module.End ℂ E ↦ A (Q y)) hP.isIdempotentElem.eq
+  rw [show P (P (Q y)) = P (Q y) by simpa [Module.End.mul_apply] using hPQy]
+  rw [hQ.isSymmetric y (P (Q y)),
+    show Q (P (Q y)) = 0 from LinearMap.mem_ker.mp hxQ, inner_zero_right]
+
 /-- The reduced product and the reduced projection have the same range.
 
 This derived range equality is the input to the equal-range right-factor theorem; it is
