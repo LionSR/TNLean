@@ -381,7 +381,7 @@ Additionally:
 * Numbered theorem: `IsPositiveMap.wolf_prop_6_8` —
   `TNLean.Channel.WolfChapter6Wrappers`.
 
-### Wolf Corollary 6.8 (Linearly independent stationary states) — FORMALIZED
+### Wolf Corollary 6.5 (Linearly independent stationary states) — FORMALIZED
 
 In `TNLean.Channel.FixedPoint.StationarySpan`:
 
@@ -396,7 +396,7 @@ In `TNLean.Channel.FixedPoint.StationarySpan`:
   the fixed-point subspace is spanned (over ℂ) by stationary density matrices
   (PSD, trace 1, fixed by `E`).
 * `IsPositiveMap.exists_stationaryDensity_basis_of_fixedPointsSubmodule` —
-  Wolf Corollary 6.8: when the fixed-point subspace has dimension `r`, there
+  Wolf Corollary 6.5: when the fixed-point subspace has dimension `r`, there
   exist `r` linearly independent stationary density matrices spanning it.
 
 ### Wolf Corollary 6.6 (projected support corner) — FORMALIZED (Kraus case)

@@ -32,7 +32,7 @@ element of `X_T` in peripheral eigenvectors: on the `μ`-eigenspace `T` acts as
 multiplication by the unit phase `μ`, and a nonzero scalar maps an eigenspace
 onto itself (`Module.End.map_eigenspace_of_ne_zero`).
 
-## Main statements
+## Main results
 
 * `IsPositiveMap.fixedPointsSubmodule_peripheralProjection`: `X_T` is the
   fixed-point space of `T_φ`.

@@ -12,7 +12,7 @@ An endomorphism acts on its `μ`-eigenspace as multiplication by `μ`.  When
 `μ ≠ 0` that action is invertible, so the eigenspace is mapped *onto* itself
 and not merely into itself.
 
-## Main statements
+## Main results
 
 * `Module.End.map_eigenspace_of_ne_zero`: `f (ker (f - μ)) = ker (f - μ)` for
   `μ ≠ 0`.

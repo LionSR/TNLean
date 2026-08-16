@@ -344,18 +344,26 @@
         cor:peripheral_projection_channel,
         cor:stationary_density_span}
     Write $V_\mu=\ker(T-\mu)$ for the eigenspace of a peripheral eigenvalue
-    $\mu$, so that $\mathcal X_T=\sum_{|\mu|=1}V_\mu$ once the peripheral
-    Jordan blocks are known to be trivial.
-
-    The image of the projection $T_\varphi$ is its set of fixed points, and a
-    matrix is fixed by $T_\varphi$ exactly when it lies in the peripheral
-    subspace:
+    $\mu$, so that $\mathcal X_T=\sum_{|\mu|=1}V_\mu$ by the definition of
+    $\mathcal X_T$. The image of the projection $T_\varphi$ is its set of
+    fixed points, and the fixed points of $T_\varphi$ are the linear
+    combinations of peripheral eigenvectors:
     \begin{align}
-        T_\varphi(\MN{D})=\{X\in\MN{D}\mid T_\varphi(X)=X\}
-        =\sum_{|\mu|=1}V_\mu=\mathcal X_T,
+        T_\varphi(\MN{D})
+         & =\{X\in\MN{D}\mid T_\varphi(X)=X\}
+        \label{eq:channel_asymptotic_fixed_points}\\
+         & =\sum_{|\mu|=1}V_\mu
+        \label{eq:channel_asymptotic_eigenspace_sum}\\
+         & =\mathcal X_T.
+        \label{eq:channel_asymptotic_definition}
     \end{align}
-    the third equality by triviality of the peripheral Jordan blocks. This is
-    the first claim.
+    The equality (\ref{eq:channel_asymptotic_fixed_points}) holds because
+    $T_\varphi$ is a projection; a matrix fixed by $T_\varphi$ lies in the
+    peripheral subspace, whose Jordan blocks are trivial for a positive
+    trace-preserving map (Theorem~\ref{thm:peripheral_jordan_trivial}),
+    which gives (\ref{eq:channel_asymptotic_eigenspace_sum}); and
+    (\ref{eq:channel_asymptotic_definition}) is the definition of
+    $\mathcal X_T$. This is the first claim.
 
     The projection $T_\varphi$ is itself positive and trace-preserving, so its
     fixed-point space is spanned by its stationary density matrices:
