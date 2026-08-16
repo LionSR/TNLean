@@ -116,14 +116,14 @@ end PropagatesWithin
 
 namespace HasFinitePropagation
 
-/-- Any finite region is contained in some propagation neighborhood of an automorphism with
-finite forward propagation.
+/-- Any prescribed finite set is contained in some propagation neighborhood of an automorphism
+with finite forward propagation.
 
 Source: arXiv:1703.09188, Appendix, line 2298. -/
-lemma exists_superset (hω : HasFinitePropagation ω) (𝓝 : Finset ℤ) :
-    ∃ 𝓜 : Finset ℤ, 𝓝 ⊆ 𝓜 ∧ PropagatesWithin ω 𝓜 := by
-  obtain ⟨𝓜, h𝓜⟩ := hω
-  exact ⟨𝓜 ∪ 𝓝, Finset.subset_union_right, h𝓜.mono Finset.subset_union_left⟩
+lemma exists_superset (hω : HasFinitePropagation ω) (𝓢 : Finset ℤ) :
+    ∃ 𝓜 : Finset ℤ, 𝓢 ⊆ 𝓜 ∧ PropagatesWithin ω 𝓜 := by
+  obtain ⟨𝓚, h𝓚⟩ := hω
+  exact ⟨𝓚 ∪ 𝓢, Finset.subset_union_right, h𝓚.mono Finset.subset_union_left⟩
 
 end HasFinitePropagation
 
