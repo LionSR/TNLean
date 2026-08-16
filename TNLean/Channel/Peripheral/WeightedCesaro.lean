@@ -42,6 +42,12 @@ unit phases leaves the norms unchanged, so the averages tend to zero as well.
   pointwise to `T_φ`.
 * `IsPositiveMap.tendsto_endEquiv_weightedCesaroMean_peripheralProjection`:
   the same convergence in the operator norm.
+* `IsPositiveMap.tendsto_weightedCesaroMean_toFinset_peripheralProjection`:
+  **Wolf Equation (6.15)** with the peripheral spectrum enumerated by its own
+  finiteness proof, pointwise.
+* `IsPositiveMap.tendsto_endEquiv_weightedCesaroMean_toFinset_peripheralProjection`:
+  the same convergence in the operator norm, with the peripheral spectrum
+  enumerated by its own finiteness proof.
 
 ## References
 
@@ -208,7 +214,17 @@ theorem tendsto_endEquiv_weightedCesaroMean_peripheralProjection
     hPos.tendsto_weightedCesaroMean_peripheralProjection hTP hs X
 
 /-- **Wolf Equation (6.15)** with the peripheral spectrum enumerated by its own
-finiteness proof. -/
+finiteness proof.
+
+**Local fix (deduplicated phases):** the inner sum of Wolf Equation (6.15) is
+printed over `k : |λ_k| = 1` with `k` indexing the Jordan blocks of
+Equations (6.4)--(6.5) of the source, where several blocks may share an
+eigenvalue.  The summand `(conj λ_k • T)^n` depends only on the eigenvalue
+`λ_k`, so a literal block-indexed reading counts each peripheral phase with
+its geometric multiplicity, and the identity channel on `M_D(ℂ)` with `D > 1`
+would converge to `D ^ 2 • id` instead of `T_φ`.  This theorem reads `k` as
+indexing the distinct peripheral eigenvalues, each phase counted once.  See
+`docs/paper-gaps/wolf_ch6_eq615_deduplicated_phases.tex`. -/
 theorem tendsto_weightedCesaroMean_toFinset_peripheralProjection
     (hPos : IsPositiveMap T) (hTP : IsTracePreservingMap T)
     (X : Matrix (Fin D) (Fin D) ℂ) :
@@ -217,5 +233,24 @@ theorem tendsto_weightedCesaroMean_toFinset_peripheralProjection
       (𝓝 (T.peripheralProjection X)) :=
   hPos.tendsto_weightedCesaroMean_peripheralProjection hTP
     (Set.Finite.coe_toFinset _) X
+
+/-- **Wolf Equation (6.15), operator-norm form.**  The phase-weighted averages
+over the distinct peripheral eigenvalues, each phase counted once, converge to
+`T_φ` in the operator norm.
+
+Source: Wolf, Equation (6.15); local source
+`Notes/WolfNoteTexSource/ch06_spectral_properties.tex`, lines 258--264.
+
+**Local fix (deduplicated phases):** as in
+`IsPositiveMap.tendsto_weightedCesaroMean_toFinset_peripheralProjection`, the
+averages count each distinct peripheral eigenvalue once; see
+`docs/paper-gaps/wolf_ch6_eq615_deduplicated_phases.tex`. -/
+theorem tendsto_endEquiv_weightedCesaroMean_toFinset_peripheralProjection
+    (hPos : IsPositiveMap T) (hTP : IsTracePreservingMap T) :
+    Tendsto (fun N : ℕ ↦
+        endEquiv (T.weightedCesaroMean (peripheralEigenvalues_finite T).toFinset N)) atTop
+      (𝓝 (endEquiv T.peripheralProjection)) :=
+  hPos.tendsto_endEquiv_weightedCesaroMean_peripheralProjection hTP
+    (Set.Finite.coe_toFinset _)
 
 end IsPositiveMap

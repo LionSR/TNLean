@@ -26,7 +26,6 @@
     \begin{align}
         \sum_{n=1}^{N}\zeta^{n}
          & =\frac{\zeta-\zeta^{N+1}}{1-\zeta}
-        \notag
     \end{align}
     is bounded by $2/\lvert1-\zeta\rvert$ uniformly in $N$, so dividing by
     $N$ sends it to zero.
@@ -41,7 +40,6 @@
     \begin{align}
         \frac{1}{N}\sum_{n=1}^{N}u_{n}
          & \longrightarrow0.
-        \notag
     \end{align}
 \end{lemma}
 
@@ -101,7 +99,8 @@
     \label{thm:peripheral_projection_weighted_cesaro}
     \lean{IsPositiveMap.tendsto_weightedCesaroMean_peripheralProjection,
         IsPositiveMap.tendsto_endEquiv_weightedCesaroMean_peripheralProjection,
-        IsPositiveMap.tendsto_weightedCesaroMean_toFinset_peripheralProjection}
+        IsPositiveMap.tendsto_weightedCesaroMean_toFinset_peripheralProjection,
+        IsPositiveMap.tendsto_endEquiv_weightedCesaroMean_toFinset_peripheralProjection}
     \leanok
     \uses{def:peripheral_spectral_projections, def:weighted_cesaro_mean}
     Let $T:\MN{D}\to\MN{D}$ be positive and trace-preserving, with $D>0$, and
@@ -114,6 +113,16 @@
     \end{align}
     both pointwise and in operator norm. This is
     \cite[Equation~(6.15)]{Wolf2012Quantum}.
+
+    \textbf{Local fix (deduplicated phases):} the inner sum runs over the
+    distinct peripheral eigenvalues, each phase counted once. Indexed by the
+    Jordan blocks of \cite[Equations~(6.4)--(6.5)]{Wolf2012Quantum}, where
+    several blocks may share an eigenvalue, the summand
+    $(\bar\lambda_{k}T)^{n}$ would repeat each phase according to its
+    geometric multiplicity, and for the identity channel the right-hand side
+    would converge to $D^{2}$ times the identity rather than $T_\varphi$. The
+    comparison is recorded in
+    \path{docs/paper-gaps/wolf_ch6_eq615_deduplicated_phases.tex}.
 \end{theorem}
 
 \begin{proof}\leanok
