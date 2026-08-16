@@ -96,20 +96,20 @@ theorem stinespringV_isometry_iff_kraus_normalized {r : ℕ}
 
 /-! ### Stinespring representation of the dual and Schrödinger maps -/
 
-/-- **Stinespring representation, Heisenberg picture** (Wolf Theorem 2.2, Eq. (2.11)):
+/-- **Stinespring representation, Heisenberg picture** (Wolf Theorem 2.2,
+Eq. (2.11)): \(T^*(A) = V^\dagger (A \otimes \mathbb 1_r) V\), where \(V\) is
+the Stinespring isometry. This matches the Kraus form
+\(T^*(A) = \sum_j K_j^\dagger A K_j\). In this file, \(T^*\) is the Heisenberg
+dual acting on observables, while the Schrödinger map uses adjoints in the
+opposite order.
 
-  `T*(A) = V† (A ⊗ 𝟙_r) V`
-
-where `V` is the Stinespring isometry. This matches the Kraus form
-`T*(A) = ∑ⱼ Kⱼ† A Kⱼ`.
-In this file, `T*` is the Heisenberg dual acting on observables, while the
-Schrödinger map uses adjoints in the opposite order.
-
-The two index types are unrelated: for Kraus operators `Kⱼ : Matrix β α ℂ` the
-observable `A` lives on the output space `ℂ^β` and the displayed identity lives
-on the input space `ℂ^α`. This is Wolf's rectangular shape `T : M_d → M_{d'}`,
-with input space `ℂ^α = ℂ^d` and output space `ℂ^β = ℂ^{d'}`; the square case
-is `α = β`. -/
+The two index types are unrelated: for Kraus operators \(K_j\) of matrix type
+`Matrix β α ℂ`, the observable \(A\) lives on the output space
+\(\mathbb C^{\beta}\) and the displayed identity lives on the input space
+\(\mathbb C^{\alpha}\). The symbols \(\alpha\) and \(\beta\) are index types:
+in Wolf's rectangular shape \(T : M_d \to M_{d'}\) one takes
+\(\alpha = \mathrm{Fin}\ d\) and \(\beta = \mathrm{Fin}\ d'\), and the square
+case is \(\alpha = \beta\). -/
 theorem stinespring_dual_representation {r : ℕ} {α β : Type*} [Fintype β]
     (K : Fin r → Matrix β α ℂ) (A : Matrix β β ℂ) :
     (stinespringV K)ᴴ *
@@ -214,12 +214,12 @@ theorem stinespring_schrodinger_representation {r : ℕ}
 
 /-! ### `π` as a concrete `*`-representation and existential Stinespring statements -/
 
-/-- The concrete representation `π(A) = A ⊗ 𝟙_r` used in the finite-dimensional
-Stinespring construction.
+/-- The concrete representation \(\pi(A) = A \otimes \mathbb 1_r\) used in the
+finite-dimensional Stinespring construction.
 
-The observable index type is arbitrary, so that `π` also covers Wolf's
-rectangular setting, where `A` ranges over the output algebra `M_{d'}` while the
-Stinespring matrix has input space `ℂ^d`. -/
+The observable index type is arbitrary, so that \(\pi\) also covers Wolf's
+rectangular setting, where \(A\) ranges over the output algebra \(M_{d'}\)
+while the Stinespring matrix has input space \(\mathbb C^d\). -/
 noncomputable def stinespringPi {r : ℕ} {β : Type*}
     (A : Matrix β β ℂ) :
     Matrix (β × Fin r) (β × Fin r) ℂ :=

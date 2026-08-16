@@ -122,14 +122,17 @@ project import.
   - **Full statement** in `TNLean/Channel/StinespringRectangular.lean`
     (namespace `ChoiRectangular`):
     `exists_stinespringV_of_isKrausCP` /
-    `exists_stinespringV_traceAdjointMap_of_isKrausCP`
+    `exists_stinespringV_pairing_of_isKrausCP`
     — for a completely positive `T : M_d → M_{d'}` and every `r ≥ rank(τ)`
     there is a `V : ℂ^d → ℂ^{d'} ⊗ ℂ^r` with `T*(A) = V†(A ⊗ 𝟙_r)V`, an
     isometry exactly when `T` is trace preserving ✓
     `exists_stinespringV_choiRank_of_isKrausCP` /
-    `exists_stinespringV_traceAdjointMap_choiRank_of_isKrausCP`
-    — the dilation at the Choi-rank ancilla dimension `r = rank(τ)`, called a
-    minimal dilation ✓
+    `exists_stinespringV_pairing_choiRank_of_isKrausCP`
+    — the dilation at the Choi-rank ancilla dimension `r = rank(τ)` ✓
+    `choiRank_le_of_stinespring_dual_representation`
+    — the converse bound: a dilation with ancilla dimension `r` forces
+    `rank(τ) ≤ r`, so `r = rank(τ)` is the least admissible ancilla dimension
+    and dilations with it are minimal (discussion after Thm. 2.2) ✓
 
 * **Theorem 2.3** (ordered CP-maps):
   - `CPDominates` — CP partial order: `S - T` is completely positive ✓

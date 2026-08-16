@@ -209,9 +209,9 @@ channel:
 \begin{theorem}[Stinespring representation, rectangular form]
     \label{thm:stinespring_rectangular}
     \lean{ChoiRectangular.exists_stinespringV_of_isKrausCP,
-        ChoiRectangular.exists_stinespringV_traceAdjointMap_of_isKrausCP,
         ChoiRectangular.exists_stinespringV_choiRank_of_isKrausCP,
-        ChoiRectangular.exists_stinespringV_traceAdjointMap_choiRank_of_isKrausCP}
+        ChoiRectangular.exists_stinespringV_pairing_of_isKrausCP,
+        ChoiRectangular.exists_stinespringV_pairing_choiRank_of_isKrausCP}
     \leanok
     \uses{def:is_kraus_cp, def:trace_pairing_adjoint, def:kraus_rank_rect}
     Let $T:\MN{d}\to\MN{d'}$ be completely positive with Choi matrix $\tau$ and
@@ -223,8 +223,9 @@ channel:
     \end{align}
     and $V$ is an isometry, $V^\dagger V=\Id_d$, if and only if $T$ is trace
     preserving. In particular $r=\rank(\tau)$ is an admissible ancilla
-    dimension, and a dilation with that ancilla dimension is called minimal.
-    This is \cite[Theorem~2.2]{Wolf2012Quantum}.
+    dimension; by Lemma~\ref{lem:stinespring_rectangular_least_dim} no smaller
+    ancilla dimension is admissible, and a dilation with $r=\rank(\tau)$ is
+    called minimal. This is \cite[Theorem~2.2]{Wolf2012Quantum}.
 \end{theorem}
 
 \begin{proof}
@@ -250,6 +251,44 @@ channel:
     (\ref{eq:stinespring_rectangular}). Finally
     $V^\dagger V=\sum_j K_j^\dagger K_j$, and the latter equals $\Id_d$
     exactly when $T$ is trace preserving.
+\end{proof}
+
+\begin{lemma}[Least dilation dimension]\label{lem:stinespring_rectangular_least_dim}
+    \lean{ChoiRectangular.choiRank_le_of_stinespring_dual_representation}
+    \leanok
+    \uses{def:trace_pairing_adjoint, def:kraus_rank_rect}
+    Let $T:\MN{d}\to\MN{d'}$ be a linear map with Choi matrix $\tau$ and dual
+    $T^*$. If for some ancilla dimension $r$ there is a
+    $V:\C^{d}\to\C^{d'}\otimes\C^{r}$ such that
+    (\ref{eq:stinespring_rectangular}) holds for all $A\in\MN{d'}$, then
+    $\rank(\tau)\le r$. Together with
+    Theorem~\ref{thm:stinespring_rectangular}, the least admissible ancilla
+    dimension is $\rank(\tau)$, and dilations with $r=\rank(\tau)$ are
+    minimal. This is the discussion following
+    \cite[Theorem~2.2]{Wolf2012Quantum}.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{def:stinespring_v, thm:kraus_rect_rank_minimal,
+        thm:stinespring_dual_representation,
+        thm:trace_pairing_adjoint_identity, thm:trace_nondeg}
+    The Kraus operators are recovered from $V$ as the blocks
+    $K_j=(\Id_{d'}\otimes\bra{j})V$, which satisfy
+    $V=\sum_jK_j\otimes\ket{j}$, so that
+    $T^*(A)=\sum_jK_j^\dagger AK_j$ for every $A\in\MN{d'}$. For every
+    $X\in\MN{d}$, the trace pairing gives
+    \begin{align}
+        \tr\bigl[A\,T(X)\bigr]
+        &=\tr\bigl[T^*(A)X\bigr]
+          =\tr\Bigl[\sum_jK_j^\dagger AK_j\,X\Bigr]
+          =\tr\Bigl[A\sum_jK_jXK_j^\dagger\Bigr],
+        \label{eq:stinespring_rectangular_least_pairing}
+    \end{align}
+    and nondegeneracy of the trace pairing yields
+    $T(X)=\sum_jK_jXK_j^\dagger$: an $r$-operator Kraus family of $T$. Any
+    $r$-operator Kraus family forces $\rank(\tau)\le r$, the bound in the
+    minimality of the Kraus rank.
 \end{proof}
 
 %% =========================================================
