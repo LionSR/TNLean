@@ -5,7 +5,6 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.CanonicalForm.CPSVBlocking
 import TNLean.MPS.MPDO.BondTwoSingletonBaseModel
-import TNLean.MPS.MPDO.InvariantProjection
 
 /-!
 # Physical similarities of the bond-two singleton base model
@@ -470,6 +469,9 @@ full-contract counterexample and does not construct an
 `IdentityMarkedRealization`; it isolates all-length MPDO positivity as the
 failed standing hypothesis in this family.  Source: CPSV16, Appendix C.4,
 lines 2048--2057, and Theorem 4.14(ii). -/
+@[deprecated "Use `gaugeDeformedBaseMPOBNTAlgebraTensorClause`,
+  `gaugeDeformedBaseMPO_toMPSTensor_isCPSVCanonicalForm`, and
+  `gaugeDeformedBaseMPO_gauge_not_isMPDO` directly." (since := "2026-08-16")]
 theorem gaugeDeformedBaseMPO_algebraClause_canonicalForm_not_isMPDO :
     Nonempty (BNTAlgebraTensorClause (gaugeDeformedBaseMPO gauge)) ∧
       MPSTensor.IsCPSVCanonicalForm
