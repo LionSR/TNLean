@@ -8631,3 +8631,43 @@ $\omega^{-1}$.
   the existence of a representative $B$ in that finite-region algebra, which
   gives \textup{(d)}.
 \end{proof}
+
+\begin{lemma}[Enlargement of propagation neighborhoods]
+  \label{lem:qca_propagation_neighborhood_mono}
+  \lean{SpinChain.PropagatesWithin.mono,
+    SpinChain.HasFinitePropagation.exists_superset}
+  \leanok
+  \uses{def:qca_propagates_within,def:qca_finite_propagation}
+  Let $d>0$ and let $\omega\colon\mathcal A\to\mathcal A$ be a star-algebra
+  automorphism.  If $\mathcal N\subseteq\mathcal M$ and $\omega$ propagates
+  within $\mathcal N$, then $\omega$ propagates within $\mathcal M$.  More
+  explicitly, for every finite region $\Lambda$,
+  \begin{align}
+    \Lambda+\mathcal N&\subseteq\Lambda+\mathcal M, \\
+    x\text{ supported in }\Lambda
+      &\implies \omega(x)\text{ supported in }\Lambda+\mathcal N
+      \implies \omega(x)\text{ supported in }\Lambda+\mathcal M.
+  \end{align}
+  Consequently, if $\omega$ has finite forward propagation, then for every
+  prescribed finite set $\mathcal N\subset\mathbb Z$ there is a finite set
+  $\mathcal M\subset\mathbb Z$ such that
+  \begin{align}
+    \mathcal N&\subseteq\mathcal M, \\
+    &\forall\Lambda\Subset\mathbb Z,\quad
+      \omega(\mathcal A_\Lambda)\subseteq
+      \mathcal A_{\Lambda+\mathcal M}.
+  \end{align}
+  This is the neighborhood-enlargement consequence of the propagation
+  condition in Appendix line~2298 of \cite{Cirac2017MPU}.
+\end{lemma}
+
+\begin{proof}\leanok
+  \uses{def:qca_region_sumset,lem:qca_quasi_local_support_mono,
+    def:qca_propagates_within,def:qca_finite_propagation}
+  Monotonicity of the sumset in its second argument gives
+  $\Lambda+\mathcal N\subseteq\Lambda+\mathcal M$.  Monotonicity of
+  quasi-local support then enlarges the support of $\omega(x)$ from
+  $\Lambda+\mathcal N$ to $\Lambda+\mathcal M$.  For the final assertion,
+  choose a finite propagation neighborhood $\mathcal K$ and take
+  $\mathcal M=\mathcal K\cup\mathcal N$.
+\end{proof}
