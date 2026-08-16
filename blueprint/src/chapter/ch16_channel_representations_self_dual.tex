@@ -3,12 +3,13 @@
 %% =========================================================
 
 The transfer matrix $\widehat T_{\alpha\beta}=\tr(F_\alpha^\dagger T(G_\beta))$
-of \cite[Section~2.2, equation~(2.20)]{Wolf2012Quantum} is built from two
+of \cite[Section~2.3, Equation~(2.20)]{Wolf2012Quantum} is built from two
 orthonormal families. Taking one and the same family on both sides turns the
 Hermiticity of $\widehat T$ into a statement about $T$ alone, and that statement
 is self-duality. Orthonormality is always meant for the Hilbert--Schmidt
-pairing, $\tr(G_\beta^\dagger G_{\beta'})=\delta_{\beta\beta'}$
-\cite[Section~2.2]{Wolf2012Quantum}; the families are not assumed Hermitian.
+pairing of \cite[Section~2.3, Equation~(2.18)]{Wolf2012Quantum}, that is,
+$\tr(G_\beta^\dagger G_{\beta'})=\delta_{\beta\beta'}$; the families are not
+assumed Hermitian.
 
 \begin{definition}[Hilbert--Schmidt orthonormal family]
     \label{def:hilbert_schmidt_orthonormal}
@@ -19,11 +20,12 @@ pairing, $\tr(G_\beta^\dagger G_{\beta'})=\delta_{\beta\beta'}$
     \begin{align}
         \tr\bigl(\sigma_\alpha^\dagger \sigma_\beta\bigr)
         &= \delta_{\alpha\beta}.
-        \notag
     \end{align}
+    This is the pairing $\tr(PA^\dagger B)$ of
+    \cite[Equation~(2.18)]{Wolf2012Quantum} in the case $P=\Id$.
 \end{definition}
 
-\begin{definition}[Transfer matrix in one orthonormal family]
+\begin{definition}[Transfer matrix in one family]
     \label{def:transfer_matrix_of_basis}
     \lean{transferMatrixOfBasis}
     \leanok
@@ -32,9 +34,9 @@ pairing, $\tr(G_\beta^\dagger G_{\beta'})=\delta_{\beta\beta'}$
     $(\sigma_\alpha)$} is
     \begin{align}
         \widehat T_{\alpha\beta}
-        &= \tr\bigl(\sigma_\alpha^\dagger T(\sigma_\beta)\bigr).
-        \notag
+        &= \tr\bigl(\sigma_\alpha^\dagger T(\sigma_\beta)\bigr),
     \end{align}
+    which is \cite[Equation~(2.20)]{Wolf2012Quantum} with $F_\alpha=G_\alpha$.
 \end{definition}
 
 \begin{lemma}[Coordinates in a Hilbert--Schmidt orthonormal basis]
@@ -54,10 +56,15 @@ pairing, $\tr(G_\beta^\dagger G_{\beta'})=\delta_{\beta\beta'}$
 
 \begin{proof}\leanok
     Expanding $X=\sum_\beta c_\beta\sigma_\beta$ and pairing with
-    $\sigma_\alpha$ gives $\tr(\sigma_\alpha^\dagger X)=c_\alpha$ by
-    orthonormality. Vanishing of all coordinates forces $X=0$. For Hermitian
-    $\sigma_\alpha$ the two pairings $\tr(\sigma_\alpha^\dagger X)$ and
-    $\tr(\sigma_\alpha X)$ agree.
+    $\sigma_\alpha$ gives, by orthonormality,
+    \begin{align}
+        \tr\bigl(\sigma_\alpha^\dagger X\bigr)
+        &= \sum_\beta c_\beta\,\tr\bigl(\sigma_\alpha^\dagger\sigma_\beta\bigr)
+         = c_\alpha.
+    \end{align}
+    Vanishing of all coordinates forces $X=0$. For Hermitian $\sigma_\alpha$ the
+    two pairings $\tr(\sigma_\alpha^\dagger X)$ and $\tr(\sigma_\alpha X)$
+    agree.
 \end{proof}
 
 \begin{lemma}[Transfer matrix of the dual map]
@@ -71,29 +78,33 @@ pairing, $\tr(G_\beta^\dagger G_{\beta'})=\delta_{\beta\beta'}$
     family $(\sigma_\alpha)$ used on both sides,
     \begin{align}
         \bigl(\widehat T\bigr)^\dagger &= \widehat{T^*},
-        \notag
     \end{align}
     and the same identity holds for the transfer matrix taken in the matrix
-    units.
+    units. This is the Hermitian-map case of the sentence following
+    \cite[Equation~(2.20)]{Wolf2012Quantum}.
 \end{lemma}
 
 \begin{proof}\leanok
     \uses{def:trace_pairing_adjoint, def:mpu_transfer_matrix}
-    The $(\alpha,\beta)$ entry of $(\widehat T)^\dagger$ is
-    $\overline{\tr(\sigma_\beta^\dagger T(\sigma_\alpha))}
-    =\tr\bigl(T(\sigma_\alpha)^\dagger\sigma_\beta\bigr)$. Hermiticity
-    preservation replaces $T(\sigma_\alpha)^\dagger$ by
-    $T(\sigma_\alpha^\dagger)$, and the defining identity
-    $\tr(AT^*(B))=\tr(T(A)B)$ of the dual map turns the result into
-    $\tr(\sigma_\alpha^\dagger T^*(\sigma_\beta))$.
+    Conjugating the trace and then using Hermiticity preservation and the
+    defining identity $\tr(AT^*(B))=\tr(T(A)B)$ of the dual map computes the
+    $(\alpha,\beta)$ entry of $(\widehat T)^\dagger$:
+    \begin{align}
+        \overline{\tr\bigl(\sigma_\beta^\dagger T(\sigma_\alpha)\bigr)}
+        &= \tr\bigl(T(\sigma_\alpha)^\dagger\sigma_\beta\bigr)
+         = \tr\bigl(T(\sigma_\alpha^\dagger)\sigma_\beta\bigr)
+         = \tr\bigl(\sigma_\alpha^\dagger T^*(\sigma_\beta)\bigr).
+    \end{align}
 
-    In the matrix units the same two steps appear entrywise. There the
-    $\bigl((j,i),(\ell,k)\bigr)$ entry of $\widehat T$ is
-    $\bigl(T(E_{k\ell})\bigr)_{ij}$, and the entry of
-    $\widehat{T^*}$ is $\tr\bigl(E_{k\ell}\,T(E_{ji})\bigr)$ by the entrywise
-    form of the dual map; conjugating the first and using
-    $E_{k\ell}^\dagger=E_{\ell k}$ together with Hermiticity preservation
-    identifies the two.
+    In the matrix units the same two steps appear entrywise. For the entrywise
+    form of the dual map and $E_{ij}^\dagger=E_{ji}$,
+    \begin{align}
+        \overline{\bigl(T(E_{ij})\bigr)_{k\ell}}
+        &= \bigl(T(E_{ji})\bigr)_{\ell k}
+         = \bigl(T^*(E_{k\ell})\bigr)_{ij},
+    \end{align}
+    and these are the $\bigl((j,i),(\ell,k)\bigr)$ entries of
+    $(\widehat T)^\dagger$ and of $\widehat{T^*}$.
 \end{proof}
 
 \begin{lemma}[Dual map of a Kraus family]
@@ -103,17 +114,24 @@ pairing, $\tr(G_\beta^\dagger G_{\beta'})=\delta_{\beta\beta'}$
     \leanok
     \uses{def:trace_pairing_adjoint, def:cp_map}
     If $T(X)=\sum_j K_j X K_j^\dagger$ then $T^*(X)=\sum_j K_j^\dagger X K_j$: the
-    Kraus operators of $T$ and of $T^*$ differ by Hermitian conjugation. Such a
-    $T$ also satisfies $T(X^\dagger)=T(X)^\dagger$.
+    Kraus operators of $T$ and of $T^*$ differ by Hermitian conjugation, as in
+    \cite[Section~2.2, after Proposition~2.4]{Wolf2012Quantum}. Such a $T$
+    satisfies $T(X^\dagger)=T(X)^\dagger$, and so does every completely positive
+    map.
 \end{lemma}
 
 \begin{proof}\leanok
-    For every $N$,
-    $\tr\bigl(\sum_j K_j^\dagger XK_j\,N\bigr)
-    =\sum_j\tr\bigl(X\,K_jNK_j^\dagger\bigr)=\tr(X\,T(N))$ by cyclicity of the
-    trace, which is the defining identity of $T^*$. Nondegeneracy of the trace
-    pairing identifies the two maps. Hermiticity preservation is the
-    conjugate transpose of the Kraus sum.
+    The candidate $X\mapsto\sum_jK_j^\dagger XK_j$ satisfies the defining
+    property of $T^*$: for every $N$, cyclicity of the trace gives
+    \begin{align}
+        \tr\bigl(T^*(X)\,N\bigr)
+        &= \sum_j\tr\bigl(K_j^\dagger XK_j\,N\bigr)
+         = \sum_j\tr\bigl(X\,K_jNK_j^\dagger\bigr)
+         = \tr\bigl(X\,T(N)\bigr),
+    \end{align}
+    and nondegeneracy of the trace pairing identifies the two maps. Hermiticity
+    preservation is the conjugate transpose of the Kraus sum, and it descends to
+    completely positive maps by taking any Kraus representation.
 \end{proof}
 
 \begin{lemma}[Hermitian recombination of a symmetrized Kraus family]
@@ -132,35 +150,11 @@ pairing, $\tr(G_\beta^\dagger G_{\beta'})=\delta_{\beta\beta'}$
     \begin{align}
         T(X)
         &= \frac12\sum_j\bigl(K_jXK_j^\dagger+K_j^\dagger XK_j\bigr),
-        \notag
     \end{align}
-    that is, the Kraus family $(K_j,K_j^\dagger)/\sqrt2$. Mixing each such pair by
-    the unitary $(a,b)\mapsto\bigl((a+b)/\sqrt2,\;i(a-b)/\sqrt2\bigr)$ leaves the
-    map unchanged and produces the pair $\tfrac12(K_j+K_j^\dagger)$,
+    that is, the Kraus family $(K_j,K_j^\dagger)/\sqrt2$. Mixing each such pair
+    by the unitary $(a,b)\mapsto\bigl((a+b)/\sqrt2,\;i(a-b)/\sqrt2\bigr)$ leaves
+    the map unchanged and produces the pair $\tfrac12(K_j+K_j^\dagger)$,
     $\tfrac{i}{2}(K_j-K_j^\dagger)$, both of which are Hermitian.
-\end{proof}
-
-\begin{lemma}[The transfer matrix determines the map]
-    \label{lem:transfer_matrix_of_basis_injective}
-    \lean{transferMatrixOfBasis_injective}
-    \leanok
-    \uses{def:transfer_matrix_of_basis, def:hilbert_schmidt_orthonormal}
-    Let $(\sigma_\alpha)$ be a Hilbert--Schmidt orthonormal basis of $\MN{d}$.
-    For linear maps $S,T:\MN{d}\to\MN{d}$,
-    \begin{align}
-        \widehat T=\widehat S
-        &\implies T=S.
-        \notag
-    \end{align}
-\end{lemma}
-
-\begin{proof}\leanok
-    \uses{lem:hilbert_schmidt_orthonormal_coordinates}
-    Equality of the transfer matrices reads
-    $\tr\bigl(\sigma_\alpha^\dagger(T-S)(\sigma_\beta)\bigr)=0$ for all
-    $\alpha,\beta$. For fixed $\beta$ this makes every coordinate of
-    $(T-S)(\sigma_\beta)$ vanish, so $(T-S)(\sigma_\beta)=0$; a linear map
-    vanishing on a basis is zero.
 \end{proof}
 
 \begin{lemma}[Self-duality against Hermiticity of the transfer matrix]
@@ -175,18 +169,24 @@ pairing, $\tr(G_\beta^\dagger G_{\beta'})=\delta_{\beta\beta'}$
     \begin{align}
         \widehat T=\widehat T^\dagger
         &\iff T=T^*.
-        \notag
     \end{align}
 \end{lemma}
 
 \begin{proof}\leanok
     \uses{lem:transfer_matrix_of_basis_dual,
-        lem:transfer_matrix_of_basis_injective}
+        lem:hilbert_schmidt_orthonormal_coordinates}
     By Lemma~\ref{lem:transfer_matrix_of_basis_dual},
-    $\widehat T^\dagger=\widehat{T^*}$. So
-    $\widehat T=\widehat T^\dagger$ reads $\widehat{T^*}=\widehat T$, which by
-    Lemma~\ref{lem:transfer_matrix_of_basis_injective} is $T^*=T$; the converse
-    substitutes $T^*=T$ into the same identity.
+    $\widehat T^\dagger=\widehat{T^*}$. So $\widehat T=\widehat T^\dagger$ reads
+    $\widehat{T^*}=\widehat T$, that is, for every $\alpha$ and $\beta$,
+    \begin{align}
+        \tr\bigl(\sigma_\alpha^\dagger(T^*-T)(\sigma_\beta)\bigr)=0
+        &\Rightarrow (T^*-T)(\sigma_\beta)=0 \Rightarrow T^*=T,
+    \end{align}
+    where the first implication applies
+    Lemma~\ref{lem:hilbert_schmidt_orthonormal_coordinates} to
+    $(T^*-T)(\sigma_\beta)$ and the second holds because a linear map vanishing
+    on a basis is zero. The converse substitutes $T^*=T$ into
+    Lemma~\ref{lem:transfer_matrix_of_basis_dual}.
 \end{proof}
 
 \begin{lemma}[The same equivalence in the matrix units]
@@ -199,19 +199,28 @@ pairing, $\tr(G_\beta^\dagger G_{\beta'})=\delta_{\beta\beta'}$
     \begin{align}
         \widehat T=\widehat T^\dagger
         &\iff T=T^*.
-        \notag
     \end{align}
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{lem:transfer_matrix_of_basis_dual, lem:trace_adjoint_of_kraus}
-    Complete positivity gives $T(X^\dagger)=T(X)^\dagger$, so
+    \uses{lem:transfer_matrix_of_basis_dual, lem:trace_adjoint_of_kraus,
+        thm:mpu_transfer_matrix_vectorization}
+    Complete positivity gives $T(X^\dagger)=T(X)^\dagger$
+    (Lemma~\ref{lem:trace_adjoint_of_kraus}), so
     $\widehat T^\dagger=\widehat{T^*}$ for the matrix-unit transfer matrix as
-    well, and that transfer matrix determines the map.
+    well (Lemma~\ref{lem:transfer_matrix_of_basis_dual}). By
+    Theorem~\ref{thm:mpu_transfer_matrix_vectorization},
+    $\widehat S\operatorname{vec}(\rho)=\operatorname{vec}(S(\rho))$ for every
+    linear map $S$ and every $\rho\in\MN{d}$; applied with $S=T^*$ and $S=T$
+    this turns equality of the transfer matrices into equality of the maps,
+    \begin{align}
+        \widehat{T^*}=\widehat T
+        &\Rightarrow T^*=T.
+    \end{align}
 \end{proof}
 
-\begin{proposition}[Self-dual channels]
-    \label{prop:self_dual_channels}
+\begin{theorem}[Self-dual channels]
+    \label{thm:self_dual_channels}
     \lean{self_dual_tfae}
     \leanok
     \uses{def:cp_map, def:trace_pairing_adjoint, def:transfer_matrix_of_basis,
@@ -224,9 +233,8 @@ pairing, $\tr(G_\beta^\dagger G_{\beta'})=\delta_{\beta\beta'}$
             the family $(\sigma_\alpha)$ on both sides.
         \item $T$ admits a family of Hermitian Kraus operators.
     \end{enumerate}
-    This is the proposition ``Self-dual channels'' of
-    \cite[Section~2.2]{Wolf2012Quantum}.
-\end{proposition}
+    This is \cite[Proposition~2.6]{Wolf2012Quantum}.
+\end{theorem}
 
 \begin{proof}\leanok
     \uses{lem:transfer_matrix_of_basis_hermitian_iff, lem:trace_adjoint_of_kraus,
@@ -235,21 +243,20 @@ pairing, $\tr(G_\beta^\dagger G_{\beta'})=\delta_{\beta\beta'}$
     Lemma~\ref{lem:transfer_matrix_of_basis_hermitian_iff}, complete positivity
     supplying the Hermiticity preservation it requires. For $3\Rightarrow1$, a
     family of Hermitian Kraus operators is fixed by the exchange
-    $K_j\mapsto K_j^\dagger$ that carries $T$ to $T^*$:
+    $K_j\mapsto K_j^\dagger$ that carries $T$ to $T^*$
+    (Lemma~\ref{lem:trace_adjoint_of_kraus}):
     \begin{align}
         T^*(X)
         &= \sum_j K_j^\dagger XK_j
-        = \sum_j K_jXK_j^\dagger
-        = T(X).
-        \notag
+         = \sum_j K_jXK_j^\dagger
+         = T(X).
     \end{align}
     For $1\Rightarrow3$, condition~1 turns any Kraus representation
     $T(X)=\sum_jK_jXK_j^\dagger$ into a second one,
     \begin{align}
         T(X)
         &= T^*(X)
-        = \sum_j K_j^\dagger XK_j,
-        \notag
+         = \sum_j K_j^\dagger XK_j,
     \end{align}
     and the Hermitian recombination of the symmetrized family
     (Lemma~\ref{lem:hermitian_kraus_of_self_dual}) yields condition~3.
