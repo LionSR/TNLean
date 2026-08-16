@@ -8457,6 +8457,28 @@ as separate results in the appendix.
   Apply this observation to the two composites in the definition.
 \end{proof}
 
+\begin{theorem}[Translation covariance from unit translation]
+  \label{thm:qca_translation_covariant_iff_commute_one}
+  \lean{SpinChain.translationCovariant_iff_commute_one}
+  \leanok
+  \uses{def:qca_translation_covariant}
+  For $d>0$, a star-algebra automorphism $\omega$ of $\mathcal A$ commutes with
+  every integer translation if and only if it commutes with unit translation:
+  \begin{align}
+    \omega\circ\tau_1=\tau_1\circ\omega.
+  \end{align}
+\end{theorem}
+
+\begin{proof}\leanok
+  \uses{def:qca_translation_covariant,
+    lem:qca_quasi_local_translation_action}
+  The forward implication follows by taking the translation step to be $1$.
+  Conversely, induction and the additive action law show that $\omega$ commutes
+  with $\tau_n$ for every $n\geq 0$.  Since $\tau_{-n}=\tau_n^{-1}$, commutation
+  with $\tau_n$ implies commutation with $\tau_{-n}$, which covers every integer
+  translation.
+\end{proof}
+
 \begin{theorem}[Identity and composition of translation-covariant automorphisms]
   \label{thm:qca_translation_covariant_identity_composition}
   \lean{SpinChain.translationCovariant_refl,
