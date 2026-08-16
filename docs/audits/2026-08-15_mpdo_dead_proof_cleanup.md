@@ -49,7 +49,6 @@ The dead conjunction wrapper
 was initially retained without modification because touching its
 `BondTwoSingletonPhysicalGauge` module triggered the repository's 50-second
 changed-module timing limit (62 seconds, then 52 seconds) despite successful full
-Lean builds. The follow-up cleanup removes the unused direct
-`InvariantProjection` import from that module and places the wrapper on a dated
-deprecation transition. Its three component theorems are preferred at use sites;
-issue #6503 tracks deletion after the compatibility transition.
+Lean builds. The follow-up cleanup places the wrapper on a dated deprecation
+transition. Its three component theorems are preferred at use sites; issue #6503
+tracks deletion after the compatibility transition.

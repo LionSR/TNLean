@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.CanonicalForm.CPSVBlocking
 import TNLean.MPS.MPDO.BondTwoSingletonBaseModel
+import TNLean.MPS.MPDO.InvariantProjection
 
 /-!
 # Physical similarities of the bond-two singleton base model
