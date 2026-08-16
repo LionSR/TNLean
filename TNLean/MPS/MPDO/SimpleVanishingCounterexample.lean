@@ -243,16 +243,27 @@ private theorem blockTensor_M_two_isSimpleCanonicalForm :
   exact (cast_eq _ _).symm
 
 /-- The tensor is simple in the normalized fixed-representative sense, with
-blocking length two and the explicitly blocked sign-flip BNT witness. -/
+blocking length two and the explicitly blocked sign-flip BNT witness.
+
+Source: arXiv:1606.00608, normalized canonical form at lines 237--246, together
+with blocking and BNT decomposition at lines 227--231 and 271--301. -/
 theorem M_isSimple : IsSimple M :=
   ⟨M_isMPDO, 2, by norm_num, blockTensor_M_two_isSimpleCanonicalForm⟩
 
 /-- The sign-flip tensor satisfies the source-faithful Definition 4.7 predicate.
-This follows unconditionally from its normalized simplicity witness.
+Its exact closed-MPO formula supplies the nonzero length `N = 2`; normalized
+simplicity supplies the blocked BNT and nonnilpotency witness.
 
-Source: arXiv:1606.00608, Definition 4.7, lines 815--822. -/
-theorem M_isSourceSimple : IsSourceSimple M :=
-  M_isSimple.isSourceSimple
+Source: arXiv:1606.00608, canonical-block convention at lines 217--246 and
+Definition 4.7 at lines 815--822. -/
+theorem M_isSourceSimple : IsSourceSimple M := by
+  obtain ⟨hMPDO, -, hBNT⟩ := M_isSimple.isSourceSimple
+  have hMpoTwo : mpo M 2 ≠ 0 := by
+    intro hzero
+    rw [mpo_eq] at hzero
+    have hentry := congrFun (congrFun hzero (fun _ => 0)) (fun _ => 0)
+    norm_num at hentry
+  exact ⟨hMPDO, ⟨2, by norm_num, hMpoTwo⟩, hBNT⟩
 
 /-- The sign-flip tensor fails the strengthened source-simple interface because
 its one-site closed MPO vanishes. The nonvanishing condition is additional to

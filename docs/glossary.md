@@ -495,15 +495,20 @@ model different levels of data and different sources.
   scalar rescaling; see
   `docs/paper-gaps/cpsv16_unit_weight_rfp_scale_tension.tex`.
 - `MPOTensor.IsSourceSimple` in `TNLean/MPS/MPDO/SourceSimpleTensor.lean`
-  is the normalization-free Definition 4.7 predicate from arXiv:1606.00608,
-  lines 815--822. It existentially chooses a positive physical blocking whose
+  is the normalization-free source predicate reflecting the active
+  canonical-block convention at lines 217--246 and Definition 4.7 at lines
+  815--822 of arXiv:1606.00608. It requires a nonzero closed MPO at some
+  positive length and existentially chooses a positive physical blocking whose
   doubled-index tensor has a coefficient-form basis of normal tensors with
-  nonnilpotent physical-trace transfers. It does not require the generated MPO
-  to be nonzero at every positive chain length.
+  nonnilpotent physical-trace transfers. This excludes the identically zero
+  family but permits isolated vanishing lengths. It does not in general exclude
+  dormant extra candidates in an arbitrary BNT presentation.
 - `MPOTensor.IsNonvanishingSourceSimple` strengthens source simplicity by
   requiring $\rho_N(M)\ne0$ for every $N>0$. Normalized simplicity implies
   source simplicity unconditionally through
-  `MPOTensor.IsSimple.isSourceSimple`; the implication to the strengthened
+  `MPOTensor.IsSimple.isSourceSimple`. Its proof combines eventual linear
+  independence, a non-eventually-zero sector coefficient, canonical-form gauge
+  transport, and physical unblocking. The implication to the strengthened
   predicate, `MPOTensor.IsSimple.isNonvanishingSourceSimple`, assumes positive-length
   nonvanishing. The sign-flip tensor in
   `TNLean/MPS/MPDO/SimpleVanishingCounterexample.lean` satisfies

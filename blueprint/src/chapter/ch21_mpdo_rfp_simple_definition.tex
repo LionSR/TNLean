@@ -66,26 +66,36 @@
 
 \begin{definition}[Source-simple tensor]
     \label{def:mpdo_source_simple_tensor}
-    \lean{MPOTensor.IsSourceSimple}
+    \lean{MPOTensor.IsSourceSimple,
+        MPOTensor.IsSourceSimple.exists_mpo_ne_zero}
     \leanok
-    \uses{def:mpdo, def:mpdo_physical_blocking, def:bnt_cpsv,
+    \uses{def:mpdo, def:mpo_family, def:mpdo_physical_blocking, def:bnt_cpsv,
         def:mpdo_doubled_phys_trace_transfer}
-    A tensor generating MPDOs is \emph{source-simple} if there is a positive
-    physical blocking length $L$ such that the doubled-index tensor of the
-    $L$-site blocking has a finite basis of normal tensors
-    $B_1,\ldots,B_g$ and every physical-trace transfer $\mathcal T_{B_j}$ is
-    non-nilpotent. This is the simplicity condition
-    of~\cite[lines~815--822]{Cirac2016MPDO_arXiv}.
+    A tensor generating MPDOs is \emph{source-simple} if its closed MPO is
+    nonzero at some positive length and there is a positive physical blocking
+    length $L$ such that the doubled-index tensor of the $L$-site blocking has
+    a finite basis of normal tensors $B_1,\ldots,B_g$ for which every
+    physical-trace transfer $\mathcal T_{B_j}$ is non-nilpotent. This records
+    the standing active canonical-block convention of
+    \cite[lines~217--246]{Cirac2016MPDO_arXiv} together with the simplicity
+    condition of \cite[lines~815--822]{Cirac2016MPDO_arXiv}.
 
-    The quantifier over the blocking length is existential. The definition
-    imposes neither positive-length nonvanishing nor the global unit-weight
-    normalization of~\cite[line~246]{Cirac2016MPDO_arXiv}, and it does not
-    require a normalized horizontal canonical-form witness.
+    Both the nonzero length and the blocking length are existential. Thus the
+    definition excludes the identically zero closed-MPO family but permits
+    isolated vanishing lengths. The existential nontriviality condition does
+    not exclude dormant extra candidates in an arbitrary normal-basis
+    presentation; in particular, it is not a claim that every member
+    of every possible presentation is active. The definition also omits the
+    global unit-weight normalization of
+    \cite[line~246]{Cirac2016MPDO_arXiv} and does not require a normalized
+    horizontal canonical-form witness.
 \end{definition}
 
 \begin{definition}[Nonvanishing source-simple tensor]
     \label{def:mpdo_nonvanishing_source_simple_tensor}
-    \lean{MPOTensor.IsNonvanishingSourceSimple}
+    \lean{MPOTensor.IsNonvanishingSourceSimple,
+        MPOTensor.IsNonvanishingSourceSimple.isSourceSimple,
+        MPOTensor.IsNonvanishingSourceSimple.mpo_ne_zero}
     \leanok
     \uses{def:mpdo_source_simple_tensor, def:mpo_family}
     A tensor is \emph{nonvanishing source-simple} if it is source-simple and,
@@ -257,12 +267,13 @@
 
 \begin{proof}\leanok
     \uses{thm:mpdo_nonnegative_rescaling,
+        thm:mpdo_mpo_scalar_scaling,
         thm:mpdo_block_tensor_scalar_scaling,
         thm:mpdo_cpsv_bnt_scalar_scaling}
-    Positive rescaling preserves the MPDO condition. For a blocking length
-    $L$, it multiplies the blocked tensor by $r^L$; the same normal basis spans
-    the rescaled tensor after multiplying its length-$N$ coefficients by
-    $r^{LN}$.
+    Positive rescaling preserves the MPDO condition and the nonzero closed MPO
+    at the chosen positive length. For a blocking length $L$, it multiplies the
+    blocked tensor by $r^L$; the same normal basis spans the rescaled tensor
+    after multiplying its length-$N$ coefficients by $r^{LN}$.
 \end{proof}
 
 \begin{theorem}[Positive rescaling invariance of source simplicity]
@@ -351,8 +362,11 @@
     \uses{cor:sector_bnt_cf_basis_normal,
         thm:is_normal_tensor_of_is_normal_left_canonical,
         lem:paper_decomp_formula,
+        lem:sector_bnt_weight_unit_exists_of_struct,
+        lem:sector_bnt_coeff_not_eventually_zero,
         thm:mpdo_cpsv_bnt_of_same_mpv,
-        thm:gauge_invariance}
+        thm:gauge_invariance,
+        thm:mpdo_closed_chain_physical_blocking}
     Use the distinct normal representatives in the normalized sector
     decomposition as the source basis. For every $N>0$,
     Lemma~\ref{lem:paper_decomp_formula} gives
@@ -361,7 +375,18 @@
         =\sum_{j=1}^{g} c_{S,j}^{(N)}V^{(N)}(A_j)_\sigma.
         \notag
     \end{align}
-    The canonical-form gauge and Theorem~\ref{thm:gauge_invariance} give
+    Choose a sector carrying a unit-modulus copy. The basis vectors are
+    linearly independent for all sufficiently large $N$, and its sector
+    coefficient $c_{S,j}^{(N)}$ is not eventually zero by
+    Lemma~\ref{lem:sector_bnt_coeff_not_eventually_zero}. At a sufficiently
+    large length where that coefficient is nonzero, the displayed expansion
+    is therefore a nonzero blocked-chain state. The canonical-form gauge and
+    Theorem~\ref{thm:gauge_invariance} preserve this state. The closed-chain
+    blocking identity in
+    Theorem~\ref{thm:mpdo_closed_chain_physical_blocking} then unblocks it to a
+    nonzero closed MPO at a positive multiple of $L$.
+
+    The same gauge gives
     $\mc{V}^+(M^{[L]})=\mc{V}^+(A_{\mathrm{tot}})$. Substituting this equality
     into the displayed expansion yields the same coefficients for the blocked
     tensor. The non-nilpotency condition is unchanged because the
@@ -420,7 +445,9 @@
         \notag
     \end{align}
     Hence the closed MPO is $2I$ at even lengths and zero at odd lengths. In
-    particular the family is positive semidefinite, while $\rho^{(1)}(M)=0$.
+    particular $\rho^{(2)}(M)=2I\ne0$, so the source family is existentially
+    nontrivial, while $\rho^{(1)}(M)=0$. Every closed MPO is positive
+    semidefinite.
 
     Block two sites. Since the single blocked letter is $Z^2=I$, the normalized
     canonical form has one sector, represented

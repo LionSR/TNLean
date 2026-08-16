@@ -156,12 +156,15 @@ lines 815--822. -/
 theorem IsSourceSimple.smul_ofReal {M : MPOTensor d D} (hM : IsSourceSimple M)
     {r : ℝ} (hr : 0 < r) :
     IsSourceSimple ((r : ℂ) • M) := by
-  obtain ⟨hMPDO, L, hL, g, blocks, hBNT, hnil⟩ := hM
-  refine ⟨hMPDO.smul_ofReal (le_of_lt hr), L, hL, g, blocks, ?_, hnil⟩
-  rw [blockTensor_smul]
-  change MPSTensor.IsCPSVBasisOfNormalTensors
-    (((r : ℂ) ^ L) • (blockTensor M L).toMPSTensor) blocks
-  exact hBNT.smul_left ((r : ℂ) ^ L)
+  obtain ⟨hMPDO, ⟨N, hN, hMpo⟩, L, hL, g, blocks, hBNT, hnil⟩ := hM
+  refine ⟨hMPDO.smul_ofReal (le_of_lt hr), ⟨N, hN, ?_⟩,
+    L, hL, g, blocks, ?_, hnil⟩
+  · rw [mpo_smul]
+    exact smul_ne_zero (pow_ne_zero N (Complex.ofReal_ne_zero.mpr hr.ne')) hMpo
+  · rw [blockTensor_smul]
+    change MPSTensor.IsCPSVBasisOfNormalTensors
+      (((r : ℂ) ^ L) • (blockTensor M L).toMPSTensor) blocks
+    exact hBNT.smul_left ((r : ℂ) ^ L)
 
 /-- Strictly positive real rescaling preserves source simplicity together with
 positive-length nonvanishing.

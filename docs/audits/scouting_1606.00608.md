@@ -103,7 +103,7 @@ This is the paper's main novel contribution. **None of §4 is formalized.**
 |------|-------------|-----------------|------------|
 | **Prop 4.5 (I_L monotone)** `PropILILp1` | Mutual info I_L ≤ I_{L+1} for MPDO, bounded by 4 log D | Medium (needs entropy) | Not formalized. Proof uses strong subadditivity. |
 | **Def 4.6: SAL (mixed)** `def:area-law` | I_1 = I_2 = ... | Easy (given entropy) | Not formalized. |
-| **Def 4.7: Simple tensor** | None of BNT elements is nilpotent | Easy | Formalized as `MPOTensor.IsSourceSimple`; `MPOTensor.IsNonvanishingSourceSimple` is the separate strengthened interface. |
+| **Def 4.7: Simple tensor** | None of BNT elements is nilpotent | Easy | Formalized as `MPOTensor.IsSourceSimple`, including existential positive-length nontriviality from the standing active-block convention; `MPOTensor.IsNonvanishingSourceSimple` is the stronger all-positive-length interface. |
 | **Def 4.8: GSNNCH** `defrhoNComm` | ρ^(N) ∝ ⊕_x n_x exp(-Σ τ_j(h^(x))) with commuting h | Hard | Not formalized. |
 | **Thm 4.9 (main, simple case)** `thm:main-simple` | For simple K in biCF: (i)RFP ⟹ (ii)ZCL+SAL ⟺ (iii)GSNNCH+ZCL ⟹ (iv)structural ⟹ (v)blocked RFP | **VERY HARD** | Not formalized. 500+ lines of proof in Appendix C. |
 
