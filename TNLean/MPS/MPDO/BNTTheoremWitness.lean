@@ -662,9 +662,9 @@ for positive \(L\), together with the length-one idempotent equation
 \]
 It only unpacks the existential witness; constructing such a witness from an
 MPDO tensor remains the Appendix C.3--C.4 obligation.
-Source: arXiv:1606.00608, Theorem IV.13(ii), lines 972--985, and
-Appendix C.3--C.4, lines 1830--1942 of
-`Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
+Source: arXiv:1606.00608, Theorem IV.13(ii), lines 972--985; its Appendix C.4
+restatement, lines 1925--1942; and the diagonal \(\chi\)-construction, lines
+2020--2042 of `Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
 theorem exists_source_chi_trace_equations {data : AlgebraStructureData d D}
     (h : HasBNTLabelTheoremWitness data) :
     ∃ W : BNTLabelTheoremWitness data,
