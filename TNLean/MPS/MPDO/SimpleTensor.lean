@@ -31,8 +31,8 @@ independent of the copy index $q$ (Appendix C.2, lines 1646--1661).
   $\mu_{j,q}\,\mathcal{B}_j$.
 * `MPOTensor.IsSimpleCanonicalForm`: simplicity for a tensor already in the
   blocked canonical-form setting of Appendix C.2.
-* `MPOTensor.IsSimple`: the source simplicity predicate, allowing the positive
-  physical blocking required before the BNT canonical form is chosen.
+* `MPOTensor.IsSimple`: normalized fixed-representative simplicity after a
+  positive physical blocking, including the global unit-weight convention.
 * `MPOTensor.weight_copy_independent_of_isSourceZCL`: zero correlation length
   makes the canonical-form weights independent of the copy index.
 * `MPOTensor.IsSimpleCanonicalForm.exists_weight_copy_independent_of_isSourceZCL`:
@@ -138,15 +138,17 @@ def IsSimpleCanonicalForm (M : MPOTensor d D) : Prop :=
                       GL (Fin S.totalDim) ℂ) :
                     Matrix (Fin S.totalDim) (Fin S.totalDim) ℂ))
 
-/-- **Simple MPO tensor** (arXiv:1606.00608, lines 815--822). Before choosing
-the BNT, the source blocks a positive number of physical sites (line 815).
-A tensor is simple when one such blocked tensor is a simple canonical-form
-tensor in the sense above.
+/-- **Normalized fixed-representative simplicity.** Before choosing the BNT,
+the source blocks a positive number of physical sites at
+arXiv:1606.00608, line 815. This predicate strengthens the source simplicity
+condition of lines 815--822 by requiring the blocked tensor itself to admit the
+normalized canonical-form witness above, including the global unit-weight
+convention of line 246. The source-faithful predicate is
+`MPOTensor.IsSourceSimple` in `TNLean/MPS/MPDO/SourceSimpleTensor.lean`.
 
 **Scope restriction (fixed representative):** This permits a positive physical
 blocking but does not quotient the blocked tensor by nonzero scalar rescaling or
-assert presentation independence. Its canonical-form witness therefore retains
-the line-246 unit-weight convention at the scale of `blockTensor M L`. See
+assert presentation independence. See
 `docs/paper-gaps/cpsv16_unit_weight_rfp_scale_tension.tex`. -/
 def IsSimple (M : MPOTensor d D) : Prop :=
   IsMPDO M ∧ ∃ L : ℕ, 0 < L ∧ IsSimpleCanonicalForm (blockTensor M L)

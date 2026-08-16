@@ -10,8 +10,9 @@ import TNLean.MPS.MPDO.SourceSimpleTensor
 # Positive rescaling of source-simple MPO tensors
 
 This module records the exact effect of a scalar rescaling on closed MPOs and
-physical blocking. It then proves that the normalization-free source simplicity
-predicate is invariant under multiplication by a strictly positive real scalar.
+physical blocking. It then proves that both normalization-free source simplicity
+and its positive-length nonvanishing strengthening are invariant under
+multiplication by a strictly positive real scalar.
 
 An arbitrary nonzero complex scalar does not preserve the MPDO condition: at
 chain length `N`, the closed operator is multiplied by `c ^ N`, not by
@@ -27,6 +28,8 @@ chain length `N`, the closed operator is multiplied by `c ^ N`, not by
   real rescaling.
 * `MPOTensor.isSourceSimple_smul_ofReal_iff`: source simplicity is invariant
   under strictly positive real rescaling, with the same normal-basis blocks.
+* `MPOTensor.isNonvanishingSourceSimple_smul_ofReal_iff`: the strengthened
+  nonvanishing interface is invariant under strictly positive real rescaling.
 
 ## References
 
@@ -153,15 +156,29 @@ lines 815--822. -/
 theorem IsSourceSimple.smul_ofReal {M : MPOTensor d D} (hM : IsSourceSimple M)
     {r : ℝ} (hr : 0 < r) :
     IsSourceSimple ((r : ℂ) • M) := by
-  obtain ⟨hMPDO, hne, L, hL, g, blocks, hBNT, hnil⟩ := hM
-  refine ⟨hMPDO.smul_ofReal (le_of_lt hr), ?_, L, hL, g, blocks, ?_, hnil⟩
-  · intro N hN
-    rw [mpo_smul]
-    exact smul_ne_zero (pow_ne_zero N (Complex.ofReal_ne_zero.mpr (ne_of_gt hr))) (hne N hN)
+  obtain ⟨hMPDO, ⟨N, hN, hMpo⟩, L, hL, g, blocks, hBNT, hnil⟩ := hM
+  refine ⟨hMPDO.smul_ofReal (le_of_lt hr), ⟨N, hN, ?_⟩,
+    L, hL, g, blocks, ?_, hnil⟩
+  · rw [mpo_smul]
+    exact smul_ne_zero (pow_ne_zero N (Complex.ofReal_ne_zero.mpr hr.ne')) hMpo
   · rw [blockTensor_smul]
     change MPSTensor.IsCPSVBasisOfNormalTensors
       (((r : ℂ) ^ L) • (blockTensor M L).toMPSTensor) blocks
     exact hBNT.smul_left ((r : ℂ) ^ L)
+
+/-- Strictly positive real rescaling preserves source simplicity together with
+positive-length nonvanishing.
+
+The nonvanishing condition is additional to arXiv:1606.00608, Definition 4.7,
+lines 815--822. -/
+theorem IsNonvanishingSourceSimple.smul_ofReal {M : MPOTensor d D}
+    (hM : IsNonvanishingSourceSimple M) {r : ℝ} (hr : 0 < r) :
+    IsNonvanishingSourceSimple ((r : ℂ) • M) := by
+  refine ⟨hM.isSourceSimple.smul_ofReal hr, ?_⟩
+  intro N hN
+  rw [mpo_smul]
+  exact smul_ne_zero (pow_ne_zero N (Complex.ofReal_ne_zero.mpr (ne_of_gt hr)))
+    (hM.mpo_ne_zero N hN)
 
 /-- Source simplicity is invariant under multiplication by a strictly positive real scalar.
 
@@ -177,6 +194,22 @@ theorem isSourceSimple_smul_ofReal_iff (M : MPOTensor d D) {r : ℝ} (hr : 0 < r
       rw [← Complex.ofReal_mul]
       simp [ne_of_gt hr]
     simpa only [smul_smul, hri, one_smul] using hinv
+  · exact fun hM ↦ hM.smul_ofReal hr
+
+/-- Source simplicity with positive-length nonvanishing is invariant under
+multiplication by a strictly positive real scalar.
+
+The nonvanishing condition is additional to arXiv:1606.00608, Definition 4.7,
+lines 815--822. -/
+theorem isNonvanishingSourceSimple_smul_ofReal_iff (M : MPOTensor d D)
+    {r : ℝ} (hr : 0 < r) :
+    IsNonvanishingSourceSimple ((r : ℂ) • M) ↔ IsNonvanishingSourceSimple M := by
+  constructor
+  · intro hscaled
+    refine ⟨(isSourceSimple_smul_ofReal_iff M hr).mp hscaled.isSourceSimple, ?_⟩
+    intro N hN hzero
+    apply hscaled.mpo_ne_zero N hN
+    rw [mpo_smul, hzero, smul_zero]
   · exact fun hM ↦ hM.smul_ofReal hr
 
 end MPOTensor
