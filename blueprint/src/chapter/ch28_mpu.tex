@@ -5580,7 +5580,8 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
   \lean{LinearMap.IsSymmetricProjection.disjoint_ker_range_reducedProjection,
     Matrix.disjoint_ker_range_reducedProjection}
   \leanok
-  \uses{thm:mpu_two_projection_reduced_projection}
+  \uses{def:mpu_two_projection_reduced_projection,
+    thm:mpu_two_projection_reduced_projection}
   For orthogonal projections $P$ and $Q$, the reduced range contains no
   nonzero vector annihilated by $Q$:
   \begin{align}
@@ -5661,17 +5662,55 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
   % Source lines: paper_v2.tex 764--770.
 \end{theorem}
 
+\begin{lemma}[Transfer map under virtual sandwiching]
+  \label{lem:mpu_transfer_map_virtual_sandwich}
+  \lean{MPOTensor.transferMap_virtualSandwich}
+  \leanok
+  \uses{def:mpo_transfer_map,def:mpu_virtual_sandwich}
+  Let $U=(U^{ij})$ be an MPO tensor, and let
+  $\widehat U^{ij}=AU^{ij}B$. Then
+  \begin{align}
+    E_{\widehat U}(X)&=A E_U(BXB^\dagger)A^\dagger.
+  \end{align}
+\end{lemma}
+
+\begin{proof}\leanok
+  Expand the transfer map and collect the factors $A$, $B$, $B^\dagger$, and
+  $A^\dagger$ outside the finite sum.
+\end{proof}
+
+\begin{lemma}[Positive definite support compression]
+  \label{lem:mpu_support_compression_posdef}
+  \lean{Matrix.PosSemidef.compression_posDef_of_support_action_ne_zero}
+  \leanok
+  \uses{def:support_proj}
+  Let $\rho\succeq0$. If
+  \begin{align}
+    \operatorname{supp}(\rho)(Vx)&\neq0
+    \qquad\text{for every }x\neq0,
+  \end{align}
+  then
+  \begin{align}
+    V^\dagger\rho V&\succ0.
+  \end{align}
+\end{lemma}
+
+\begin{proof}\leanok
+  If the quadratic form of $V^\dagger\rho V$ vanished at a nonzero vector $x$,
+  positive semidefiniteness would give $\rho Vx=0$. The support projection would
+  then annihilate $Vx$, contrary to the hypothesis.
+\end{proof}
+
 \begin{theorem}[Reduced representative under a supplied positive fixed pair]
   \label{thm:mpu_reduced_representative}
   \lean{MPOTensor.mpo_virtualSandwich_reducedProjection_eq,
-    MPOTensor.transferMap_virtualSandwich,
     MPOTensor.transferMap_virtualSandwich_reducedProjection,
     MPOTensor.trace_compressed_fixed_pair_reducedProjection,
-    Matrix.PosSemidef.compression_posDef_of_support_action_ne_zero,
     MPOTensor.compressed_fixed_pair_posDef_reducedProjection}
   \leanok
   \uses{def:mpo_family,def:mpo_transfer_map,def:support_proj,
     def:mpu_virtual_sandwich,def:mpu_matrix_reduced_projection,
+    lem:mpu_transfer_map_virtual_sandwich,lem:mpu_support_compression_posdef,
     thm:mpu_matrix_reduced_projection,
     thm:mpu_two_projection_reduced_projection_transversality}
   Let $W=(W^{ij})$ be an MPO tensor. Let $L,R\succeq0$ satisfy
@@ -5710,11 +5749,11 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
   \end{align}
   Cyclicity of the trace, together with $QW_w=W_w=W_wP$, therefore gives
   $\operatorname{tr}(TW_wT)=\operatorname{tr}(W_w)$. Length zero is immediate.
-  Expanding the transfer map yields
+  Lemma~\ref{lem:mpu_transfer_map_virtual_sandwich}, with $A=B=T$ and
+  $T^\dagger=T$, gives
   \begin{align}
     E_{\widetilde W}(X)
-      &=T E_W(TXT)T
-       =\operatorname{tr}(LTXT)\,TRT
+      &=\operatorname{tr}(LTXT)\,TRT
        =\operatorname{tr}((TLT)X)\,TRT.
   \end{align}
   Since $P$ and $Q$ are the support projections of $L$ and $R$, respectively,
@@ -5741,12 +5780,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     \operatorname{supp}(L)u&=Pu=u\neq0,&
     \operatorname{supp}(R)u&=Qu\neq0.
   \end{align}
-  The support criterion for a positive semidefinite matrix $\rho$ states that
-  \begin{align}
-    \operatorname{supp}(\rho)(Vx)\neq0\quad\text{for every }x\neq0
-    \quad\Longrightarrow\quad V^\dagger\rho V\succ0.
-  \end{align}
-  Applying it to $L$ and $R$ yields
+  Applying Lemma~\ref{lem:mpu_support_compression_posdef} to $L$ and $R$ yields
   \begin{align}
     x^\dagger(V^\dagger LV)x&=u^\dagger Lu>0,&
     x^\dagger(V^\dagger RV)x&=u^\dagger Ru>0.
