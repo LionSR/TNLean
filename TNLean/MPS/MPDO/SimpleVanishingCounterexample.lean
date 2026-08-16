@@ -16,9 +16,10 @@ positive length but vanishes at odd lengths. After blocking two sites, both
 virtual phases become $1$, and the resulting tensor has an explicit normalized
 BNT canonical form with a nonnilpotent scalar representative.
 
-This gives a concrete separation between the fixed-representative predicate
-`MPOTensor.IsSimple` and the normalization-free source predicate
-`MPOTensor.IsSourceSimple`: the positive-length nonvanishing hypothesis in
+This gives a concrete separation between the project predicates
+`MPOTensor.IsSimple` and `MPOTensor.IsSourceSimple`. The latter strengthens the
+printed simplicity condition by requiring nonvanishing at every positive length,
+and this example proves that the extra hypothesis in
 `MPOTensor.IsSimple.isSourceSimple` cannot be removed.
 
 ## Main results
@@ -243,10 +244,9 @@ blocking length two and the explicitly blocked sign-flip BNT witness. -/
 theorem M_isSimple : IsSimple M :=
   ⟨M_isMPDO, 2, by norm_num, blockTensor_M_two_isSimpleCanonicalForm⟩
 
-/-- The normalized simplicity predicate does not imply source simplicity:
-this tensor is normalized-simple after two-site blocking, but its one-site MPO
-vanishes, contradicting the positive-length nonvanishing clause of
-`IsSourceSimple`. -/
+/-- The normalized simplicity predicate does not imply the project's strengthened
+`IsSourceSimple` predicate: this tensor is normalized-simple after two-site blocking, but its
+one-site MPO vanishes, contradicting the added positive-length nonvanishing clause. -/
 theorem isSimple_and_not_isSourceSimple : IsSimple M ∧ ¬ IsSourceSimple M := by
   refine ⟨M_isSimple, ?_⟩
   intro hSource
