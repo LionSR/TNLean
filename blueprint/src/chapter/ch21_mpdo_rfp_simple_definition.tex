@@ -320,7 +320,7 @@
     representatives $A_j$ are unchanged.
 \end{proof}
 
-\begin{theorem}[Normalized simplicity does not imply source simplicity]
+\begin{theorem}[Vanishing separates the project simplicity predicates]
     \label{thm:mpdo_simple_not_source_simple_counterexample}
     \lean{MPOTensor.SimpleVanishingCounterexample.M,
         MPOTensor.SimpleVanishingCounterexample.mpo_eq,
@@ -337,12 +337,12 @@
     \end{align}
     Its two-site blocking admits a normalized simple canonical form, and
     \begin{align}
-        M\text{ is normalized-simple}
+        M\text{ satisfies the project normalized-simple predicate}
         \quad\text{and}\quad
-        M\text{ is not source-simple}.
+        M\text{ does not satisfy the project source-simple predicate}.
         \notag
     \end{align}
-    Thus the positive-length nonvanishing hypothesis in
+    Thus the positive-length nonvanishing hypothesis in the project bridge
     Theorem~\ref{thm:mpdo_simple_implies_source_simple_of_nonzero} is necessary.
 \end{theorem}
 
@@ -353,13 +353,17 @@
     semidefinite at every positive length. After blocking two sites, both
     virtual phases are one. The blocked tensor therefore has a one-sector
     normalized basis-of-normal-tensors decomposition whose scalar
-    physical-trace transfer is non-nilpotent. This proves normalized simplicity.
-    On the other hand, $\rho^{(1)}(M)=0$, which violates the positive-length
-    nonvanishing clause in source simplicity.
+    physical-trace transfer is non-nilpotent. This proves the project
+    normalized-simple predicate. On the other hand, $\rho^{(1)}(M)=0$, which
+    violates the additional positive-length nonvanishing clause in the project
+    source-simple predicate.
 \end{proof}
 
-This separation concerns only the two simplicity predicates. It asserts neither
-an RFP property nor any rigidity statement for BNT structure coefficients.
+This separation concerns only the two project predicates. Since the simplicity
+definition in~\cite[lines~815--823]{Cirac2016MPDO_arXiv} does not impose
+positive-length nonvanishing, the example is not a counterexample to that
+source definition. It asserts neither an RFP property nor any rigidity statement
+for BNT structure coefficients.
 
 \begin{definition}[Normalized simplicity in blocked canonical form]
     \label{def:mpdo_simple_cf_tensor}

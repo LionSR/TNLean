@@ -108,11 +108,14 @@ invariances. They do not assert invariance under arbitrary nonzero complex
 scalars, and they do not imply that the rescaled tensor satisfies the same
 literal fixed-scale RFP equations of Definition~4.1.
 
-The declaration \leanid{MPOTensor.IsSourceSimple} records the
-normalization-free source condition: it requires every positive-length
-generated MPO to be nonzero and asks for some positive blocking and a basis of
-normal tensors whose physical-trace transfers are all non-nilpotent. It does
-not impose the line-246 unit-weight convention.
+The declaration \leanid{MPOTensor.IsSourceSimple} records a
+normalization-free project predicate motivated by the source definition. It
+asks for some positive blocking and a basis of normal tensors whose
+physical-trace transfers are all non-nilpotent, and it additionally requires
+every positive-length generated MPO to be nonzero. This last requirement is a
+project strengthening of the simplicity definition at lines~815--823, not a
+clause stated there. The project predicate does not impose the line-246
+unit-weight convention.
 
 By contrast, \leanid{MPOTensor.IsSimpleCanonicalForm} and
 \leanid{MPOTensor.IsSimple} are normalized fixed-representative interfaces. The
@@ -127,9 +130,9 @@ simplicity from normalized simplicity under the explicit hypothesis
     \rho_N(M)&\ne0 &&\text{for every }N>0.
     \label{eq:positive-length-nonzero}
 \end{align}
-This extra hypothesis is necessary. The compiled tensor
-\leanid{MPOTensor.SimpleVanishingCounterexample.M}, whose sole local virtual
-matrix is $\operatorname{diag}(1,-1)$, satisfies
+This extra hypothesis is necessary for the project bridge theorem. The compiled
+tensor \leanid{MPOTensor.SimpleVanishingCounterexample.M}, whose sole local
+virtual matrix is $\operatorname{diag}(1,-1)$, satisfies
 \begin{align}
     \rho_N(M)&=\bigl(1+(-1)^N\bigr)I.
     \label{eq:simple-vanishing-counterexample}
@@ -137,11 +140,14 @@ matrix is $\operatorname{diag}(1,-1)$, satisfies
 It generates positive semidefinite MPOs, and its two-site blocking admits a
 normalized simple canonical form, but $\rho_1(M)=0$. The theorem
 \leanid{MPOTensor.SimpleVanishingCounterexample.isSimple_and_not_isSourceSimple}
-therefore proves normalized simplicity together with failure of source
-simplicity. This witness is not an RFP claim and gives no rigidity statement
-for BNT structure coefficients. For a fixed tensor, a theorem may also quantify
-over every normalized BNT witness rather than rely on one chosen presentation;
-the dimer obstruction below has precisely this form.
+therefore separates the project predicates: normalized fixed-representative
+simplicity holds, while the strengthened project source-simple predicate fails
+because of its added nonvanishing clause. It does not show failure of the
+simplicity definition at lines~815--823, which has no such clause. This witness
+is not an RFP claim and gives no rigidity statement for BNT structure
+coefficients. For a fixed tensor, a theorem may also quantify over every
+normalized BNT witness rather than rely on one chosen presentation; the dimer
+obstruction below has precisely this form.
 
 \section{The displayed dimer representative}
 
