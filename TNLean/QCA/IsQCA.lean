@@ -11,11 +11,8 @@ import TNLean.QCA.TranslationCovariance
 
 A one-dimensional quantum cellular automaton (QCA) is a translation-covariant star-automorphism
 of the quasi-local observable algebra with finite forward propagation. This file packages those two
-conditions and records its basic interface and the identity example.
-
-Forward-composition closure is deferred to issue #6481, which supplies composition for finite
-propagation. Once that component result is available, it combines directly with
-`TranslationCovariant.trans`.
+conditions and records its basic interface, the identity example, and closure under forward
+composition.
 
 ## Main definitions
 
@@ -24,6 +21,7 @@ propagation. Once that component result is available, it combines directly with
 ## Main results
 
 * `SpinChain.isQCA_iff` — the exact unfolding of the QCA predicate.
+* `SpinChain.IsQCA.trans` — forward composition of QCAs is a QCA.
 * `SpinChain.isQCA_refl` — the identity star-automorphism is a QCA.
 
 ## References
@@ -52,7 +50,7 @@ Source: arXiv:1703.09188, Appendix, line 2298. -/
 namespace IsQCA
 
 variable {d : ℕ} [NeZero d]
-  {ω : QuasiLocalAlgebra d ≃⋆ₐ[ℂ] QuasiLocalAlgebra d}
+  {ω η : QuasiLocalAlgebra d ≃⋆ₐ[ℂ] QuasiLocalAlgebra d}
 
 /-- Build a QCA from translation covariance and finite forward propagation.
 
@@ -71,6 +69,16 @@ theorem translationCovariant (hω : IsQCA ω) : TranslationCovariant ω :=
 Source context: arXiv:1703.09188, Appendix, line 2298. -/
 theorem hasFinitePropagation (hω : IsQCA ω) : HasFinitePropagation ω :=
   hω.2
+
+/-- Forward composition of quantum cellular automata is a quantum cellular automaton.
+
+Here `ω.trans η` first applies `ω` and then `η`.
+
+Source context: arXiv:1703.09188, Appendix, line 2298; this closure property is not stated
+separately there. -/
+theorem trans (hω : IsQCA ω) (hη : IsQCA η) : IsQCA (ω.trans η) :=
+  ⟨TranslationCovariant.trans hω.translationCovariant hη.translationCovariant,
+    HasFinitePropagation.trans hω.hasFinitePropagation hη.hasFinitePropagation⟩
 
 end IsQCA
 
