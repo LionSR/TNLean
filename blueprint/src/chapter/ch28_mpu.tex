@@ -8473,12 +8473,25 @@ as separate results in the appendix.
   \uses{def:qca_translation_covariant,
     lem:qca_quasi_local_translation_action}
   The forward implication follows by taking the translation step to be $1$.
-  Conversely, use two-sided integer induction.  The zero case is the identity
-  translation.  In the successor step, compose the induction hypothesis with
-  commutation by $\tau_1$.  In the predecessor step, use
-  $\tau_{-1}=\tau_1^{-1}$ and compose commutation by $\tau_{-1}$ with the
-  induction hypothesis.  The additive action law identifies the resulting
-  composites with the required integer translations.
+  Conversely, use two-sided integer induction.  The zero case follows from
+  $\tau_0=\operatorname{id}$.  For the successor step, the additive action law
+  gives $\tau_{i+1}=\tau_1\circ\tau_i$, and
+  \begin{align}
+    \omega\circ\tau_{i+1}
+      &=\omega\circ\tau_1\circ\tau_i
+       =\tau_1\circ\omega\circ\tau_i \\
+      &=\tau_1\circ\tau_i\circ\omega
+       =\tau_{i+1}\circ\omega.
+  \end{align}
+  For the predecessor step, $\tau_{-1}=\tau_1^{-1}$ transfers commutation
+  to $\tau_{-1}$, while $\tau_{i-1}=\tau_{-1}\circ\tau_i$, so
+  \begin{align}
+    \omega\circ\tau_{i-1}
+      &=\omega\circ\tau_{-1}\circ\tau_i
+       =\tau_{-1}\circ\omega\circ\tau_i \\
+      &=\tau_{-1}\circ\tau_i\circ\omega
+       =\tau_{i-1}\circ\omega.
+  \end{align}
 \end{proof}
 
 \begin{theorem}[Identity and composition of translation-covariant automorphisms]
