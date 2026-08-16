@@ -79,7 +79,7 @@ theorem translationCovariant_iff_commute_one {d : ℕ} [NeZero d]
   · intro h a
     induction a using Int.induction_on with
     | zero =>
-        rw [quasiLocalTranslation_one]
+        rw [← quasiLocalTranslation_one]
         exact Commute.one_right _
     | succ i hi =>
         rw [← quasiLocalTranslation_mul]

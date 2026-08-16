@@ -176,15 +176,13 @@ lemma quasiLocalTranslation_inv (d : ℕ) [NeZero d] (a : ℤ) :
     (quasiLocalTranslation d a)⁻¹ = quasiLocalTranslation d (-a) := by
   rw [StarAlgEquiv.aut_inv, quasiLocalTranslation_symm]
 
-/-- Quasi-local translation by zero is the identity automorphism.
+/-- The identity automorphism is quasi-local translation by zero.
 
 Source context: the group-action laws are implicit in the translation operator invoked in
 arXiv:1703.09188, Appendix, line 2298; they are not stated separately there. -/
-@[simp]
 lemma quasiLocalTranslation_one (d : ℕ) [NeZero d] :
-    quasiLocalTranslation d 0 =
-      (1 : QuasiLocalAlgebra d ≃⋆ₐ[ℂ] QuasiLocalAlgebra d) := by
-  simpa only [StarAlgEquiv.aut_one] using quasiLocalTranslation_zero d
+    (1 : QuasiLocalAlgebra d ≃⋆ₐ[ℂ] QuasiLocalAlgebra d) = quasiLocalTranslation d 0 := by
+  rw [StarAlgEquiv.aut_one, quasiLocalTranslation_zero]
 
 /-- Quasi-local translation preserves the operator norm.
 
