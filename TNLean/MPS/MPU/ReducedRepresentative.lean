@@ -276,7 +276,7 @@ theorem compressed_fixed_pair_posDef_reducedProjection
     rw [show T = V * Vᴴ by simpa [T] using hVrange.symm, Matrix.mulVec_mulVec]
     simp [Matrix.mul_assoc, hV]
   constructor
-  · apply hL.compression_posDef_of_support_action_ne_zero V hV
+  · apply hL.compression_posDef_of_support_action_ne_zero V
     intro x hx hzero
     have hPx : P *ᵥ (V *ᵥ x) = V *ᵥ x := by
       calc
@@ -287,7 +287,7 @@ theorem compressed_fixed_pair_posDef_reducedProjection
     exact hx (by
       have := congrArg (fun y ↦ Vᴴ *ᵥ y) hzero
       simpa [Matrix.mulVec_mulVec, hV] using this)
-  · apply hR.compression_posDef_of_support_action_ne_zero V hV
+  · apply hR.compression_posDef_of_support_action_ne_zero V
     intro x hx hzero
     let y : EuclideanSpace ℂ (Fin D) := WithLp.toLp 2 (V *ᵥ x)
     have hy : y ≠ 0 := by
