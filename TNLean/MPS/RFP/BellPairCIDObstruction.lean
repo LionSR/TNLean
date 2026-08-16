@@ -481,6 +481,8 @@ theorem bellPairChainTensor_isNormalTensor : IsNormalTensor bellPairChainTensor 
 does not have physical CID: the unrestricted forward implication of
 arXiv:1606.00608 (line 498) is false for adjacent regions, because the
 `𝔼⁰ = 1` block between adjacent observables is not governed by idempotence. -/
+@[deprecated "Use `bellPairChainTensor_isTransferIdempotent` and
+  `bellPairChainTensor_not_isPhysicalCID` directly." (since := "2026-08-15")]
 theorem bellPairChain_isTransferIdempotent_and_not_isPhysicalCID :
     IsTransferIdempotent bellPairChainTensor ∧ ¬ IsPhysicalCID bellPairChainTensor :=
   ⟨bellPairChainTensor_isTransferIdempotent, bellPairChainTensor_not_isPhysicalCID⟩

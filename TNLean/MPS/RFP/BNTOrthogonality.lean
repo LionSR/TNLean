@@ -213,6 +213,8 @@ theorem blockTransferSum_blockTransferSum_eq_smul
 
 /-- Whole-tensor RFP of the direct sum makes
 the block-diagonal transfer sum idempotent. -/
+@[deprecated "Use `blockTransferSum_blockTransferSum_eq_smul` at scalar `1`."
+  (since := "2026-08-15")]
 theorem blockTransferSum_blockTransferSum
     (B : (k : Fin r) → MPSTensor d (dim k))
     (hRFP : IsTransferIdempotent (directSumTensor B))

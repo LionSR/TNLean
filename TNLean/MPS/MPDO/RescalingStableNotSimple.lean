@@ -146,6 +146,8 @@ simplicity at every positive blocking. The second is the line-246 normalization
 obstruction proved by `R_not_isSimple`.
 
 Source: arXiv:1606.00608, line 246 and Definition 4.7, lines 815--822. -/
+@[deprecated "Use `R_isSourceSimple` and `R_not_isSimple` directly."
+  (since := "2026-08-15")]
 theorem R_isSourceSimple_and_not_isSimple :
     MPOTensor.IsSourceSimple R ∧ ¬ MPOTensor.IsSimple R :=
   ⟨R_isSourceSimple, R_not_isSimple⟩

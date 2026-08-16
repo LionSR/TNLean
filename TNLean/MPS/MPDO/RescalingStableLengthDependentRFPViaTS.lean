@@ -126,6 +126,8 @@ def eigVals : Fin 2 → ℝ
   | 0 => 1
   | 1 => lambda
 
+@[deprecated "Split the `Fin 2` index and use `wMat_mulVec_ones` or `wMat_mulVec_alt`."
+  (since := "2026-08-15")]
 lemma wMat_mulVec_eigVecs (s : Fin 2) :
     wMat.mulVec (eigVecs s) = (eigVals s : ℂ) • eigVecs s := by
   fin_cases s

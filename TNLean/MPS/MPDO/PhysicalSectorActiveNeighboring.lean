@@ -57,6 +57,8 @@ noncomputable def neighboringSupportInclusion
   (A.sector k).rightInclusion ⊗ₖ (A.sector h).leftInclusion
 
 /-- The neighboring inclusion is an isometry. -/
+@[deprecated "Use `neighboringSupportInclusion` with the component inclusion isometries."
+  (since := "2026-08-15")]
 theorem neighboringSupportInclusion_isometry
     (F : PhysicalSectorFactorization K) (A : ActiveFactorSupportData F)
     (k h : Fin F.sectorCount) :

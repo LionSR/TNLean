@@ -88,11 +88,6 @@ arithmetic with `wMat` and `hadamard2`. -/
 def oneLabelChiMatrix2 : Matrix (Fin 2) (Fin 2) ℂ :=
   Matrix.diagonal (fun k : Fin 2 => oneLabelChi.entry 0 0 0 k)
 
-/-- `oneLabelChiMatrix2` is `oneLabelChi.matrix 0 0 0`, at the concrete index
-type `Fin 2`. -/
-theorem oneLabelChi_matrix_eq_oneLabelChiMatrix2 :
-    oneLabelChi.matrix 0 0 0 = oneLabelChiMatrix2 := rfl
-
 /-- The Hadamard change of basis intertwines `χ` and `wMat`:
 `hadamard2 * χ = wMat * hadamard2`. Derived from
 `hadamard2_mul_diagonal_oneLabelChi_mul_hadamard2` by cancelling one factor
