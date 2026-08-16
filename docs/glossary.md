@@ -500,9 +500,13 @@ model different levels of data and different sources.
   every positive chain length and existentially chooses a positive physical
   blocking whose doubled-index tensor has a coefficient-form basis of normal
   tensors with nonnilpotent physical-trace transfers. The one-way implication
-  `MPOTensor.IsSimple.isSourceSimple` requires the explicit
-  hypothesis that every positive-length generated MPO is nonzero; it is not an
-  equivalence with either normalized predicate.
+  `MPOTensor.IsSimple.isSourceSimple` is strictly conditional: it requires every
+  positive-length generated MPO to be nonzero. The tensor in
+  `TNLean/MPS/MPDO/SimpleVanishingCounterexample.lean` satisfies
+  $\rho_N(M)=(1+(-1)^N)I$, is normalized-simple after blocking two sites, and is
+  not source-simple because $\rho_1(M)=0$. Thus the implication does not hold
+  without its nonvanishing hypothesis, and it is not an equivalence with either
+  normalized predicate.
 - Scalar rescaling of a closed length-$N$ MPO obeys
   $\rho_N(cM)=c^N\rho_N(M)$ by `MPOTensor.mpo_smul`, not a
   $|c|^{2N}$ law. Accordingly, `MPOTensor.isMPDO_smul_ofReal_iff` and

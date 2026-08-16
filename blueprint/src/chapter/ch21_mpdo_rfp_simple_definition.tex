@@ -320,6 +320,47 @@
     representatives $A_j$ are unchanged.
 \end{proof}
 
+\begin{theorem}[Normalized simplicity does not imply source simplicity]
+    \label{thm:mpdo_simple_not_source_simple_counterexample}
+    \lean{MPOTensor.SimpleVanishingCounterexample.M,
+        MPOTensor.SimpleVanishingCounterexample.mpo_eq,
+        MPOTensor.SimpleVanishingCounterexample.M_isMPDO,
+        MPOTensor.SimpleVanishingCounterexample.mpo_one_eq_zero,
+        MPOTensor.SimpleVanishingCounterexample.M_isSimple,
+        MPOTensor.SimpleVanishingCounterexample.isSimple_and_not_isSourceSimple}
+    \leanok
+    \uses{def:mpdo_source_simple_tensor, def:mpdo_simple_tensor}
+    There is a one-letter bond-two tensor $M$ such that, for every $N\geq 0$,
+    \begin{align}
+        \rho^{(N)}(M)&=\bigl(1+(-1)^N\bigr)I.
+        \notag
+    \end{align}
+    Its two-site blocking admits a normalized simple canonical form, and
+    \begin{align}
+        M\text{ is normalized-simple}
+        \quad\text{and}\quad
+        M\text{ is not source-simple}.
+        \notag
+    \end{align}
+    Thus the positive-length nonvanishing hypothesis in
+    Theorem~\ref{thm:mpdo_simple_implies_source_simple_of_nonzero} is necessary.
+\end{theorem}
+
+\begin{proof}\leanok
+    The sole local virtual matrix is $\operatorname{diag}(1,-1)$, so taking its
+    $N$th power and tracing gives the displayed formula. The resulting operator
+    is $2I$ at even lengths and zero at odd lengths, hence is positive
+    semidefinite at every positive length. After blocking two sites, both
+    virtual phases are one. The blocked tensor therefore has a one-sector
+    normalized basis-of-normal-tensors decomposition whose scalar
+    physical-trace transfer is non-nilpotent. This proves normalized simplicity.
+    On the other hand, $\rho^{(1)}(M)=0$, which violates the positive-length
+    nonvanishing clause in source simplicity.
+\end{proof}
+
+This separation concerns only the two simplicity predicates. It asserts neither
+an RFP property nor any rigidity statement for BNT structure coefficients.
+
 \begin{definition}[Normalized simplicity in blocked canonical form]
     \label{def:mpdo_simple_cf_tensor}
     \lean{MPOTensor.IsSimpleCanonicalForm}
