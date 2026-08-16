@@ -1138,8 +1138,17 @@
     \uses{thm:mpdo_bnt_label_rescaling_stable_source_simple,
         thm:mpdo_bnt_label_rescaling_stable_ismpdo}
     Source simplicity follows from the preceding theorem. For every positive
-    length, the closed-MPO entry formula supplies a nonzero all-zero diagonal
-    entry, so the closed operator does not vanish.
+    length $N$, evaluating the entry identity of
+    Theorem~\ref{thm:mpdo_bnt_label_rescaling_stable_ismpdo} at the all-zero
+    configuration gives
+    \begin{align}
+        \rho^{(N)}(R)_{\vec 0,\vec 0}
+        &=\left(\frac{25}{32}\right)^N
+          \left(\frac{16}{25}\right)^N
+          =\left(\frac12\right)^N\ne0.
+        \notag
+    \end{align}
+    Hence the closed operator does not vanish.
 \end{proof}
 
 \begin{theorem}[Source and normalized simplicity give opposite verdicts]
