@@ -101,53 +101,54 @@ Indeed, if $\rho_N(M)$ denotes the closed length-$N$ MPO, then the exact law is
     \label{eq:closed-mpo-scaling}
 \end{align}
 not $|c|^{2N}\rho_N(M)$. Consequently positivity is preserved in both
-directions by a strictly positive real rescaling $rM$, and the formal theorems
-\leanid{MPOTensor.isMPDO_smul_ofReal_iff} and
-\leanid{MPOTensor.isSourceSimple_smul_ofReal_iff} establish the corresponding
-invariances. They do not assert invariance under arbitrary nonzero complex
-scalars, and they do not imply that the rescaled tensor satisfies the same
-literal fixed-scale RFP equations of Definition~4.1.
+directions by a strictly positive real rescaling $rM$. The formal theorems
+\leanid{MPOTensor.isMPDO_smul_ofReal_iff},
+\leanid{MPOTensor.isSourceSimple_smul_ofReal_iff}, and
+\leanid{MPOTensor.isNonvanishingSourceSimple_smul_ofReal_iff} establish the
+corresponding invariances for the MPDO, source-simple, and nonvanishing
+source-simple predicates. They do not assert invariance under arbitrary nonzero
+complex scalars, and they do not imply that the rescaled tensor satisfies the
+same literal fixed-scale RFP equations of Definition~4.1.
 
-The declaration \leanid{MPOTensor.IsSourceSimple} records a
-normalization-free project predicate motivated by the source definition. It
-asks for some positive blocking and a basis of normal tensors whose
-physical-trace transfers are all non-nilpotent, and it additionally requires
-every positive-length generated MPO to be nonzero. This last requirement is a
-project strengthening of the simplicity definition at lines~815--823, not a
-clause stated there. The project predicate does not impose the line-246
-unit-weight convention.
+The declaration \leanid{MPOTensor.IsSourceSimple} records the
+normalization-free Definition~4.7 predicate. It asks for some positive blocking
+and a basis of normal tensors whose physical-trace transfers are all
+non-nilpotent. It imposes neither positive-length nonvanishing nor the line-246
+unit-weight convention. The strengthened project predicate
+\leanid{MPOTensor.IsNonvanishingSourceSimple} adds the condition
+\begin{align}
+    \rho_N(M)&\ne0 &&\text{for every }N>0.
+    \label{eq:positive-length-nonzero}
+\end{align}
 
 By contrast, \leanid{MPOTensor.IsSimpleCanonicalForm} and
 \leanid{MPOTensor.IsSimple} are normalized fixed-representative interfaces. The
 first is a predicate on one displayed canonical-form representative. The second
 permits positive physical blocking, but still asks the resulting blocked tensor
 itself to admit such a normalized witness. Neither declaration is a quotient by
-nonzero scalar rescaling, and no equivalence with
-\leanid{MPOTensor.IsSourceSimple} is asserted. The one-way implication
-\leanid{MPOTensor.IsSimple.isSourceSimple} derives source
-simplicity from normalized simplicity under the explicit hypothesis
-\begin{align}
-    \rho_N(M)&\ne0 &&\text{for every }N>0.
-    \label{eq:positive-length-nonzero}
-\end{align}
-This extra hypothesis is necessary for the project bridge theorem. The compiled
-tensor \leanid{MPOTensor.SimpleVanishingCounterexample.M}, whose sole local
-virtual matrix is $\operatorname{diag}(1,-1)$, satisfies
+nonzero scalar rescaling, and no equivalence with either source predicate is
+asserted. The implication \leanid{MPOTensor.IsSimple.isSourceSimple} is
+unconditional. The strengthened implication
+\leanid{MPOTensor.IsSimple.isNonvanishingSourceSimple} uses
+\eqref{eq:positive-length-nonzero}.
+
+The compiled tensor \leanid{MPOTensor.SimpleVanishingCounterexample.M}, whose
+sole local virtual matrix is $\operatorname{diag}(1,-1)$, satisfies
 \begin{align}
     \rho_N(M)&=\bigl(1+(-1)^N\bigr)I.
     \label{eq:simple-vanishing-counterexample}
 \end{align}
-It generates positive semidefinite MPOs, and its two-site blocking admits a
-normalized simple canonical form, but $\rho_1(M)=0$. The theorem
-\leanid{MPOTensor.SimpleVanishingCounterexample.isSimple_and_not_isSourceSimple}
-therefore separates the project predicates: normalized fixed-representative
-simplicity holds, while the strengthened project source-simple predicate fails
-because of its added nonvanishing clause. It does not show failure of the
-simplicity definition at lines~815--823, which has no such clause. This witness
-is not an RFP claim and gives no rigidity statement for BNT structure
-coefficients. For a fixed tensor, a theorem may also quantify over every
-normalized BNT witness rather than rely on one chosen presentation; the dimer
-obstruction below has precisely this form.
+Since $\operatorname{diag}(1,-1)^2=I$, its two-site blocking has one sector,
+the scalar unit normal representative, two copies of unit weight, and total
+virtual dimension two. The doubled physical-trace transfer is the one-by-one
+matrix $(1)$ and is non-nilpotent. Thus
+\leanid{MPOTensor.SimpleVanishingCounterexample.M_isSimple_and_isSourceSimple_and_not_isNonvanishingSourceSimple} proves that
+the tensor is normalized-simple and source-simple, but not nonvanishing
+source-simple because $\rho_1(M)=0$. This witness does not refute
+Definition~4.7, is not an RFP claim, and gives no rigidity statement for BNT
+structure coefficients. For a fixed tensor, a theorem may also quantify over
+every normalized BNT witness rather than rely on one chosen presentation; the
+dimer obstruction below has precisely this form.
 
 \section{The displayed dimer representative}
 
@@ -214,6 +215,10 @@ witnesses
 \begin{align}
     \leanid{MPOTensor.IsSourceSimple}\,R.
 \end{align}
+The explicit nonzero closed-MPO entry at every positive length further gives
+\begin{align}
+    \leanid{MPOTensor.IsNonvanishingSourceSimple}\,R.
+\end{align}
 The source quantifier is existential and is witnessed by $L=1$; no assertion is
 made about every positive blocking. The normalized obstruction instead combines
 quasi-idempotence of the doubled-index transfer, the line-246 unit-weight copy,
@@ -242,8 +247,9 @@ not an invariance theorem for coefficients under changes of presentation.
 
 \section{Formalization boundary}
 
-\textbf{Verdict: two distinct formal interfaces.} The source-facing
-predicate \leanid{MPOTensor.IsSourceSimple} is true for $R$, with positive
+\textbf{Verdict: three distinct formal interfaces.} The source-facing
+predicate \leanid{MPOTensor.IsSourceSimple} and its nonvanishing strengthening
+\leanid{MPOTensor.IsNonvanishingSourceSimple} are true for $R$, with positive
 blocking length $L=1$. The normalized fixed-representative predicate
 \leanid{MPOTensor.IsSimple} is false for $R$: every positive blocking has
 quasi-idempotence scalar $\bigl(337/512\bigr)^L<1$, while every normalized horizontal BNT
@@ -257,10 +263,12 @@ vertical coefficient family, and does not refute source simplicity. Conversely,
 the one-site source-simplicity witness does not assert that every positive
 blocking is source-simple, that arbitrary complex rescaling preserves the MPDO
 condition, that positive rescaling preserves the same fixed-scale RFP equations,
-or that the two simplicity interfaces are equivalent. The valid comparison is
-the conditional implication \eqref{eq:positive-length-nonzero}, together with
-strictly positive real rescaling invariance of the MPDO and source-simple
-predicates.\footnote{Deletion audit: the declaration-free compatibility shell
+or that the simplicity interfaces are equivalent. The valid comparisons are
+the unconditional implication from normalized simplicity to source simplicity
+and the conditional implication to nonvanishing source simplicity using
+\eqref{eq:positive-length-nonzero}, together with strictly positive real
+rescaling invariance of the MPDO and both source predicates.\footnote{Deletion
+audit: the declaration-free compatibility shell
 \path{TNLean/MPS/MPDO/RescalingStableLengthDependentRFPBNTClause.lean} was
 removed; the live explicit BNT declarations remain in
 \path{TNLean/MPS/MPDO/RescalingStableExplicitVerticalBNT.lean}.}

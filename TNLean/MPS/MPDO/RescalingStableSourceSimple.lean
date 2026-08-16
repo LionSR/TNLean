@@ -22,6 +22,8 @@ canonical form. Its retained block has nonnilpotent ket-against-bra contraction.
   relabeling of the doubled tensor.
 * `R_isSourceSimple`: the dimer satisfies normalization-free Definition 4.7
   simplicity.
+* `R_isNonvanishingSourceSimple`: the dimer also satisfies the strengthened
+  positive-length nonvanishing interface.
 
 ## References
 
@@ -74,12 +76,7 @@ the normalized fixed-representative predicate `MPOTensor.IsSimple`.
 
 Source: arXiv:1606.00608, Definition 4.7, lines 815--822. -/
 theorem R_isSourceSimple : MPOTensor.IsSourceSimple R := by
-  have hRne : ∀ N : ℕ, 0 < N → MPOTensor.mpo R N ≠ 0 := by
-    intro N hN hzero
-    have hentry := congrFun (congrFun hzero (fun _ => 0)) (fun _ => 0)
-    rw [mpo_R_entry_formula hN] at hentry
-    simp [chainIndicator, ChainOK, φ, wN, wMat, bondBit1, bondBit2] at hentry
-  refine ⟨R_isMPDO, hRne, 1, by norm_num, ?_⟩
+  refine ⟨R_isMPDO, 1, by norm_num, ?_⟩
   let data := canonicalFormData.reindexPhysical oneSiteDoubledEquiv
   let ref := data.activeBNTRefinement
   refine ⟨data.activePhaseClasses.g,
@@ -102,5 +99,16 @@ theorem R_isSourceSimple : MPOTensor.IsSourceSimple R := by
         (fun i : Fin 4 => retainedBlock (finProdFinEquiv (i, i)))
     rw [hTransfer]
     exact doubledPhysTraceTransfer_retainedBlock_not_isNilpotent
+
+/-- The dimer is source-simple and its closed MPO is nonzero at every positive
+chain length. The latter follows from the explicit all-zero matrix entry.
+
+The nonvanishing conjunct is additional to CPSV16 Definition 4.7. -/
+theorem R_isNonvanishingSourceSimple : MPOTensor.IsNonvanishingSourceSimple R := by
+  refine ⟨R_isSourceSimple, ?_⟩
+  intro N hN hzero
+  have hentry := congrFun (congrFun hzero (fun _ => 0)) (fun _ => 0)
+  rw [mpo_R_entry_formula hN] at hentry
+  simp [chainIndicator, ChainOK, φ, wN, wMat, bondBit1, bondBit2] at hentry
 
 end MPOTensor.RescalingStableLengthDependentRFP

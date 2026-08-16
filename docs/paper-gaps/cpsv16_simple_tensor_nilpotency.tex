@@ -48,11 +48,14 @@ on that algebra is nondegenerate. Consequently,
 \end{align}
 Since the nilpotency index of a nilpotent $D\times D$ matrix is at most $D$,
 the line-819 condition is precisely nilpotency of $\mathcal T_A$. The
-source-facing predicate is \leanid{MPOTensor.IsSourceSimple}: it requires the
-generated MPO to be nonzero at every positive chain length, existentially
-quantifies over the positive physical blocking required at line~815, chooses a
-basis of normal tensors for the blocked doubled-index tensor, and records this
-non-nilpotency condition for every basis element.
+source-facing predicate is \leanid{MPOTensor.IsSourceSimple}: it
+existentially quantifies over the positive physical blocking required at
+line~815, chooses a basis of normal tensors for the blocked doubled-index
+tensor, and records this non-nilpotency condition for every basis element. The
+strengthened project predicate
+\leanid{MPOTensor.IsNonvanishingSourceSimple} additionally requires the
+generated MPO to be nonzero at every positive chain length; that clause is not
+part of Definition~4.7.
 
 The predicates \leanid{MPOTensor.IsSimpleCanonicalForm} and
 \leanid{MPOTensor.IsSimple} are separate normalized fixed-representative
@@ -74,10 +77,10 @@ require a normalized horizontal canonical-form presentation.
 
 \section{Classification}
 
-Verdict: notational clarification with an explicit nontriviality boundary. The
-formal definition records the source's density-operator setting by requiring
-all positive-length generated MPOs to be nonzero. Subject to that boundary, it
-matches lines~819--822 under the identification of the line-819 partial-trace
-criterion with matrix nilpotency of the physical-trace transfer.
+Verdict: the formal source predicate matches lines~815--822 under the
+identification of the line-819 partial-trace criterion with matrix nilpotency of
+the physical-trace transfer. Positive-length nonvanishing is available only in
+the separate strengthened project predicate and is not needed for this source
+reading.
 
 \end{document}

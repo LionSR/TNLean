@@ -495,26 +495,29 @@ model different levels of data and different sources.
   scalar rescaling; see
   `docs/paper-gaps/cpsv16_unit_weight_rfp_scale_tension.tex`.
 - `MPOTensor.IsSourceSimple` in `TNLean/MPS/MPDO/SourceSimpleTensor.lean`
-  is a normalization-free project predicate motivated by arXiv:1606.00608,
+  is the normalization-free Definition 4.7 predicate from arXiv:1606.00608,
   lines 815--823. It existentially chooses a positive physical blocking whose
   doubled-index tensor has a coefficient-form basis of normal tensors with
-  nonnilpotent physical-trace transfers. Unlike the paper's definition, it also
-  requires a nonzero generated MPO at every positive chain length. The project
-  implication `MPOTensor.IsSimple.isSourceSimple` is therefore strictly
-  conditional on this extra nonvanishing hypothesis. The tensor in
+  nonnilpotent physical-trace transfers. It does not require the generated MPO
+  to be nonzero at every positive chain length.
+- `MPOTensor.IsNonvanishingSourceSimple` strengthens source simplicity by
+  requiring $\rho_N(M)\ne0$ for every $N>0$. Normalized simplicity implies
+  source simplicity unconditionally through
+  `MPOTensor.IsSimple.isSourceSimple`; the bridge to the strengthened predicate,
+  `MPOTensor.IsSimple.isNonvanishingSourceSimple`, assumes positive-length
+  nonvanishing. The sign-flip tensor in
   `TNLean/MPS/MPDO/SimpleVanishingCounterexample.lean` satisfies
-  $\rho_N(M)=(1+(-1)^N)I$ and is normalized-simple after blocking two sites, but
-  it fails the strengthened project predicate because $\rho_1(M)=0$. Thus the
-  hypothesis is load-bearing for the project implication. This does not refute
-  the paper's simplicity definition and does not give an equivalence with either
-  normalized project predicate.
+  $\rho_N(M)=(1+(-1)^N)I$. It is normalized-simple and source-simple, but it is
+  not nonvanishing source-simple because $\rho_1(M)=0$. This does not refute
+  Definition 4.7 and is not an RFP or BNT-coefficient-rigidity claim.
 - Scalar rescaling of a closed length-$N$ MPO obeys
   $\rho_N(cM)=c^N\rho_N(M)$ by `MPOTensor.mpo_smul`, not a
-  $|c|^{2N}$ law. Accordingly, `MPOTensor.isMPDO_smul_ofReal_iff` and
-  `MPOTensor.isSourceSimple_smul_ofReal_iff` give invariance only under
-  strictly positive real rescaling. They do not give arbitrary complex
-  invariance, an `IsSimple` equivalence, or preservation of the same
-  fixed-scale RFP equations after rescaling.
+  $|c|^{2N}$ law. Accordingly, `MPOTensor.isMPDO_smul_ofReal_iff`,
+  `MPOTensor.isSourceSimple_smul_ofReal_iff`, and
+  `MPOTensor.isNonvanishingSourceSimple_smul_ofReal_iff` give invariance only
+  under strictly positive real rescaling. They do not give arbitrary complex
+  invariance, an `IsSimple` equivalence, or preservation of the same fixed-scale
+  RFP equations after rescaling.
 
 The `CF` spelling in these established MPDO names is retained for compatibility
 and paper-local vocabulary. New public predicates should spell out

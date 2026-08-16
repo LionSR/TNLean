@@ -16,11 +16,10 @@ positive length but vanishes at odd lengths. After blocking two sites, both
 virtual phases become $1$, and the resulting tensor has an explicit normalized
 BNT canonical form with a nonnilpotent scalar representative.
 
-This gives a concrete separation between the project predicates
-`MPOTensor.IsSimple` and `MPOTensor.IsSourceSimple`. The latter strengthens the
-printed simplicity condition by requiring nonvanishing at every positive length,
-and this example proves that the extra hypothesis in
-`MPOTensor.IsSimple.isSourceSimple` cannot be removed.
+This tensor satisfies both normalized simplicity and the source-faithful
+Definition 4.7 predicate. It separates those predicates from the explicitly
+stronger `MPOTensor.IsNonvanishingSourceSimple` interface because its one-site
+closed MPO vanishes.
 
 ## Main results
 
@@ -29,8 +28,12 @@ and this example proves that the extra hypothesis in
 * `MPOTensor.SimpleVanishingCounterexample.mpo_one_eq_zero`: the one-site MPO vanishes.
 * `MPOTensor.SimpleVanishingCounterexample.M_isSimple`: normalized simplicity after blocking
   two sites.
-* `MPOTensor.SimpleVanishingCounterexample.isSimple_and_not_isSourceSimple`: separation of the
-  two predicates.
+* `MPOTensor.SimpleVanishingCounterexample.M_isSourceSimple`: source-faithful Definition 4.7
+  simplicity.
+* `MPOTensor.SimpleVanishingCounterexample.M_not_isNonvanishingSourceSimple`: failure of the
+  strengthened positive-length nonvanishing interface.
+* `M_isSimple_and_isSourceSimple_and_not_isNonvanishingSourceSimple`: the three
+  conclusions stated together.
 -/
 
 open scoped Matrix BigOperators ComplexOrder
@@ -244,12 +247,26 @@ blocking length two and the explicitly blocked sign-flip BNT witness. -/
 theorem M_isSimple : IsSimple M :=
   ⟨M_isMPDO, 2, by norm_num, blockTensor_M_two_isSimpleCanonicalForm⟩
 
-/-- The normalized simplicity predicate does not imply the project's strengthened
-`IsSourceSimple` predicate: this tensor is normalized-simple after two-site blocking, but its
-one-site MPO vanishes, contradicting the added positive-length nonvanishing clause. -/
-theorem isSimple_and_not_isSourceSimple : IsSimple M ∧ ¬ IsSourceSimple M := by
-  refine ⟨M_isSimple, ?_⟩
+/-- The sign-flip tensor satisfies the source-faithful Definition 4.7 predicate.
+This follows unconditionally from its normalized simplicity witness.
+
+Source: arXiv:1606.00608, Definition 4.7, lines 815--822. -/
+theorem M_isSourceSimple : IsSourceSimple M :=
+  M_isSimple.isSourceSimple
+
+/-- The sign-flip tensor fails the strengthened source-simple interface because
+its one-site closed MPO vanishes. The nonvanishing condition is additional to
+CPSV16 Definition 4.7. -/
+theorem M_not_isNonvanishingSourceSimple : ¬ IsNonvanishingSourceSimple M := by
   intro hSource
-  exact hSource.2.1 1 (by norm_num) mpo_one_eq_zero
+  exact hSource.mpo_ne_zero 1 (by norm_num) mpo_one_eq_zero
+
+/-- The sign-flip tensor is normalized-simple and source-simple, but it does not
+satisfy the additional positive-length nonvanishing condition.
+
+Source predicate: arXiv:1606.00608, Definition 4.7, lines 815--822. -/
+theorem M_isSimple_and_isSourceSimple_and_not_isNonvanishingSourceSimple :
+    IsSimple M ∧ IsSourceSimple M ∧ ¬ IsNonvanishingSourceSimple M :=
+  ⟨M_isSimple, M_isSourceSimple, M_not_isNonvanishingSourceSimple⟩
 
 end MPOTensor.SimpleVanishingCounterexample
