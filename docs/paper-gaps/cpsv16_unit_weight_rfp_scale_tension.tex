@@ -111,10 +111,19 @@ complex scalars, and they do not imply that the rescaled tensor satisfies the
 same literal fixed-scale RFP equations of Definition~4.1.
 
 The declaration \leanid{MPOTensor.IsSourceSimple} records the
-normalization-free Definition~4.7 predicate. It asks for some positive blocking
-and a basis of normal tensors whose physical-trace transfers are all
-non-nilpotent. It imposes neither positive-length nonvanishing nor the line-246
-unit-weight convention. The strengthened project predicate
+normalization-free source predicate reflecting the active canonical-block
+convention at lines~217--246 and Definition~4.7. It requires a positive length
+$N$ for which
+\begin{align}
+    \rho_N(M)&\ne0,
+    \label{eq:some-positive-length-nonzero}
+\end{align}
+and asks for some positive blocking and a basis of normal tensors whose
+physical-trace transfers are all non-nilpotent. The existential clause excludes
+the identically zero family but permits isolated vanishing lengths. It does not
+in general exclude dormant extra candidates in an arbitrary BNT presentation.
+The predicate does not impose the line-246 unit-weight convention. The
+strengthened project predicate
 \leanid{MPOTensor.IsNonvanishingSourceSimple} adds the condition
 \begin{align}
     \rho_N(M)&\ne0 &&\text{for every }N>0.
@@ -128,7 +137,10 @@ permits positive physical blocking, but still asks the resulting blocked tensor
 itself to admit such a normalized witness. Neither declaration is a quotient by
 nonzero scalar rescaling, and no equivalence with either source predicate is
 asserted. The implication \leanid{MPOTensor.IsSimple.isSourceSimple} is
-unconditional. The strengthened implication
+unconditional. Its proof uses eventual linear independence of the normal
+sectors, a sector coefficient that is not eventually zero, transport through
+the canonical-form gauge, and physical unblocking to obtain
+\eqref{eq:some-positive-length-nonzero}. The strengthened implication
 \leanid{MPOTensor.IsSimple.isNonvanishingSourceSimple} uses
 \eqref{eq:positive-length-nonzero}.
 
@@ -143,8 +155,9 @@ the scalar unit normal representative, two copies of unit weight, and total
 virtual dimension two. The doubled physical-trace transfer is the one-by-one
 matrix $(1)$ and is non-nilpotent. Thus
 \leanid{MPOTensor.SimpleVanishingCounterexample.M_isSimple_and_isSourceSimple_and_not_isNonvanishingSourceSimple} proves that
-the tensor is normalized-simple and source-simple, but not nonvanishing
-source-simple because $\rho_1(M)=0$. This witness does not refute
+the tensor is normalized-simple and source-simple: $\rho_2(M)=2I\ne0$
+supplies existential nontriviality. It is not nonvanishing source-simple because
+$\rho_1(M)=0$. This witness does not refute
 Definition~4.7, is not an RFP claim, and gives no rigidity statement for BNT
 structure coefficients. For a fixed tensor, a theorem may also quantify over
 every normalized BNT witness rather than rely on one chosen presentation; the
@@ -264,8 +277,10 @@ the one-site source-simplicity witness does not assert that every positive
 blocking is source-simple, that arbitrary complex rescaling preserves the MPDO
 condition, that positive rescaling preserves the same fixed-scale RFP equations,
 or that the simplicity interfaces are equivalent. The valid comparisons are
-the unconditional implication from normalized simplicity to source simplicity
-and the conditional implication to nonvanishing source simplicity using
+the unconditional implication from normalized simplicity to source simplicity,
+whose proof obtains existential nontriviality by eventual linear independence,
+a non-eventually-zero sector coefficient, gauge transport, and unblocking, and
+the conditional implication to nonvanishing source simplicity using
 \eqref{eq:positive-length-nonzero}, together with strictly positive real
 rescaling invariance of the MPDO and both source predicates.\footnote{Deletion
 audit: the declaration-free compatibility shell
