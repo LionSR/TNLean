@@ -24,6 +24,21 @@ abstracted — record why, so it is not re-proposed).
 
 ## Promoted
 
+### quasi-local translation laws in automorphism-group form — promoted
+- **Pattern:** convert translation composition, symmetry, and identity laws from
+  `StarAlgEquiv.trans`, `StarAlgEquiv.symm`, and `StarAlgEquiv.refl` into group
+  multiplication, inverse, and one before applying `Commute` closure lemmas.
+- **Seen:** six `StarAlgEquiv.aut_mul` / `aut_inv` / `aut_one` rewrites at five
+  call sites in `TNLean/QCA/TranslationCovariance.lean` before promotion
+  (2026-08-16).
+- **Abstraction:** `SpinChain.quasiLocalTranslation_mul`,
+  `SpinChain.quasiLocalTranslation_inv`, and `SpinChain.quasiLocalTranslation_one`
+  in `TNLean/QCA/QuasiLocalTranslation.lean`.
+- **Notes:** automorphism multiplication reverses `StarAlgEquiv.trans`, so
+  `quasiLocalTranslation d a * quasiLocalTranslation d b` translates by `b + a`.
+  The covariance proofs now use the group-form laws directly and contain no
+  `StarAlgEquiv.aut_mul` / `aut_inv` / `aut_one` conversions.
+
 ### contiguous restriction of open-boundary MPS vectors — promoted
 - **Pattern:** split a full-chain configuration into the words left of, inside,
   and right of a nonwrapping window; absorb both outside words into the boundary

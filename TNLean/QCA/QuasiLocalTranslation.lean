@@ -28,7 +28,9 @@ in the completion, finite propagation, translation covariance, or quantum cellul
 * `SpinChain.quasiLocalTranslation_quasiLocalObservable` — evaluation on a finite-region
   representative.
 * `SpinChain.quasiLocalTranslation_zero`, `SpinChain.quasiLocalTranslation_add`, and
-  `SpinChain.quasiLocalTranslation_symm` — the additive action and inverse laws.
+  `SpinChain.quasiLocalTranslation_symm` — the additive action in composition form.
+* `SpinChain.quasiLocalTranslation_one`, `SpinChain.quasiLocalTranslation_mul`, and
+  `SpinChain.quasiLocalTranslation_inv` — the same action in automorphism-group form.
 * `SpinChain.norm_quasiLocalTranslation` and `SpinChain.quasiLocalTranslation_isometry` — norm
   and distance preservation.
 
@@ -152,6 +154,37 @@ lemma quasiLocalTranslation_symm (d : ℕ) [NeZero d] (a : ℤ) :
   rw [← StarAlgEquiv.trans_apply, quasiLocalTranslation_add, neg_add_cancel,
     quasiLocalTranslation_zero]
   rfl
+
+/-- The product of quasi-local translations is translation by the displacements in reversed
+order.
+
+The reversal comes from automorphism multiplication: `ω * η` first applies `η` and then `ω`.
+Source context: the group-action laws are implicit in the translation operator invoked in
+arXiv:1703.09188, Appendix, line 2298; they are not stated separately there. -/
+@[simp]
+lemma quasiLocalTranslation_mul (d : ℕ) [NeZero d] (a b : ℤ) :
+    quasiLocalTranslation d a * quasiLocalTranslation d b =
+      quasiLocalTranslation d (b + a) := by
+  simpa only [StarAlgEquiv.aut_mul] using quasiLocalTranslation_add d b a
+
+/-- The group inverse of quasi-local translation by `a` is translation by `-a`.
+
+Source context: the group-action laws are implicit in the translation operator invoked in
+arXiv:1703.09188, Appendix, line 2298; they are not stated separately there. -/
+@[simp]
+lemma quasiLocalTranslation_inv (d : ℕ) [NeZero d] (a : ℤ) :
+    (quasiLocalTranslation d a)⁻¹ = quasiLocalTranslation d (-a) := by
+  rw [StarAlgEquiv.aut_inv, quasiLocalTranslation_symm]
+
+/-- Quasi-local translation by zero is the identity automorphism.
+
+Source context: the group-action laws are implicit in the translation operator invoked in
+arXiv:1703.09188, Appendix, line 2298; they are not stated separately there. -/
+@[simp]
+lemma quasiLocalTranslation_one (d : ℕ) [NeZero d] :
+    quasiLocalTranslation d 0 =
+      (1 : QuasiLocalAlgebra d ≃⋆ₐ[ℂ] QuasiLocalAlgebra d) := by
+  simpa only [StarAlgEquiv.aut_one] using quasiLocalTranslation_zero d
 
 /-- Quasi-local translation preserves the operator norm.
 
