@@ -79,14 +79,13 @@ theorem translationCovariant_iff_commute_one {d : ℕ} [NeZero d]
   · intro h a
     induction a using Int.induction_on with
     | zero =>
-        rw [quasiLocalTranslation_zero, ← StarAlgEquiv.aut_one]
+        rw [← quasiLocalTranslation_one]
         exact Commute.one_right _
     | succ i hi =>
-        rw [← quasiLocalTranslation_add, ← StarAlgEquiv.aut_mul]
+        rw [← quasiLocalTranslation_mul]
         exact h.mul_right hi
     | pred i hi =>
-        rw [sub_eq_add_neg, ← quasiLocalTranslation_add, ← quasiLocalTranslation_symm d 1,
-          ← StarAlgEquiv.aut_inv, ← StarAlgEquiv.aut_mul]
+        rw [sub_eq_add_neg, ← quasiLocalTranslation_mul, ← quasiLocalTranslation_inv]
         exact h.inv_right.mul_right hi
 
 /-- The identity star-automorphism of the quasi-local algebra is translation covariant.
@@ -95,8 +94,8 @@ Source context: arXiv:1703.09188, Appendix, line 2298; this closure property is 
 separately there. -/
 theorem translationCovariant_refl {d : ℕ} [NeZero d] :
     TranslationCovariant (StarAlgEquiv.refl ℂ (QuasiLocalAlgebra d)) := by
+  change TranslationCovariant (1 : QuasiLocalAlgebra d ≃⋆ₐ[ℂ] QuasiLocalAlgebra d)
   intro a
-  rw [← StarAlgEquiv.aut_one]
   exact Commute.one_left _
 
 /-- Forward composition of translation-covariant star-automorphisms is translation covariant.
@@ -111,8 +110,8 @@ theorem TranslationCovariant.trans
     {ω η : QuasiLocalAlgebra d ≃⋆ₐ[ℂ] QuasiLocalAlgebra d}
     (hω : TranslationCovariant ω) (hη : TranslationCovariant η) :
     TranslationCovariant (ω.trans η) := by
+  change TranslationCovariant (η * ω)
   intro a
-  rw [← StarAlgEquiv.aut_mul]
   exact (hη a).mul_left (hω a)
 
 end SpinChain
