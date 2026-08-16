@@ -1064,6 +1064,22 @@ abstracted — record why, so it is not re-proposed).
 Seeded from `scripts/tactic_pattern_scan.py` (2026-07-18 scan; re-run for
 current counts and full location lists).
 
+### quasi-local translation laws in automorphism-group form — candidate
+- **Pattern:** convert translation composition, symmetry, and identity laws from
+  `StarAlgEquiv.trans`, `StarAlgEquiv.symm`, and `StarAlgEquiv.refl` into group
+  multiplication, inverse, and one before applying `Commute` closure lemmas.
+- **Seen:** six short `StarAlgEquiv.aut_mul` / `aut_inv` / `aut_one` conversions
+  at five call sites, all in `TNLean/QCA/TranslationCovariance.lean`, before the
+  call-site simplification (2026-08-16).
+- **Abstraction:** the reusable public laws `SpinChain.quasiLocalTranslation_mul`,
+  `SpinChain.quasiLocalTranslation_inv`, and `SpinChain.quasiLocalTranslation_one`
+  are available in `TNLean/QCA/QuasiLocalTranslation.lean`.
+- **Notes:** automorphism multiplication reverses `StarAlgEquiv.trans`, so
+  `quasiLocalTranslation d a * quasiLocalTranslation d b` translates by `b + a`.
+  The five motivating call sites now use the public laws, but the pattern remains
+  below the cross-file promotion threshold. Reconsider its ledger status only if
+  the conversion recurs independently in another file.
+
 ### flattened-pair reconstruction from quotient and remainder — candidate
 - **Pattern:** rewrite `ij : Fin (d * d)` as
   `finProdFinEquiv (ij.divNat, ij.modNat)` using
