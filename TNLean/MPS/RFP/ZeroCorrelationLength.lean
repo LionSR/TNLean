@@ -180,8 +180,7 @@ theorem isPositiveGapPhysicalCID_of_isTransferIdempotent
 
 /-- Local orthogonality in the single-block convention used by this file:
 the self-transfer map is idempotent. Thus, for one tensor `A`, this is
-definitionally equivalent to `IsTransferIdempotent A` (see
-`isLocallyOrthogonal_iff_isTransferIdempotent`).
+by definition `IsTransferIdempotent A`.
 
 **Scope restriction (arXiv:1606.00608, Definition 3.5):** in the source, local
 orthogonality is a BNT-level condition: for distinct BNT components `j ≠ k`, the
@@ -190,12 +189,6 @@ does not formalize those equations. The missing BNT-level statement is recorded
 in `docs/paper-gaps/cpsv16_pure_zcl_local_orthogonality_scope.tex`. -/
 def IsLocallyOrthogonal (A : MPSTensor d D) : Prop :=
   IsTransferIdempotent A
-
-/-- `IsLocallyOrthogonal` is definitionally equal to `IsTransferIdempotent` for a single
-BNT block. -/
-lemma isLocallyOrthogonal_iff_isTransferIdempotent (A : MPSTensor d D) :
-    IsLocallyOrthogonal A ↔ IsTransferIdempotent A :=
-  Iff.rfl
 
 /-- BNT-level local orthogonality (arXiv:1606.00608, Definition 3.5):
 for distinct BNT components `j ≠ j'`, the mixed-sector transfer matrix

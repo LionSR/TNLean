@@ -35,9 +35,11 @@ the diagonal \(\chi_{\alpha,\beta,\gamma}\)-entries.
 
 This only unpacks the existential witness; it does not construct that witness
 from an MPDO tensor.
-Source: arXiv:1606.00608, Theorem IV.13(ii), lines 972--985, and
-Appendix C.3--C.4, lines 1830--1942 of
+Source: arXiv:1606.00608, Theorem IV.13(ii), lines 972--985, Appendix C.3,
+lines 1830--1922, and Appendix C.4, lines 2020--2042 of
 `Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
+@[deprecated "Unpack the witness and use its source predicates directly."
+  (since := "2026-08-15")]
 theorem exists_source_predicates {data : AlgebraStructureData d D}
     (h : HasBNTLabelTheoremWitness data) :
     ∃ W : BNTLabelTheoremWitness data,
@@ -59,6 +61,8 @@ coefficient family.
 Source: arXiv:1606.00608, Theorem IV.13(ii), lines 972--985, and
 Appendix C.4, lines 2015--2037 of
 `Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
+@[deprecated "Unpack the witness and use `BNTLabelTheoremWitness.coeff_eq_ofChi_coeff`."
+  (since := "2026-08-15")]
 theorem exists_positive_length_coeff_eq_ofChi {data : AlgebraStructureData d D}
     (h : HasBNTLabelTheoremWitness data) :
     ∃ W : BNTLabelTheoremWitness data,
@@ -77,6 +81,8 @@ witness; it does not construct the witness from an MPDO tensor.
 Source: arXiv:1606.00608, Theorem IV.13(ii), lines 972--985, and
 Appendix C.4, lines 2015--2037 of
 `Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
+@[deprecated "Unpack the witness and use the `ofChi` source predicates directly."
+  (since := "2026-08-15")]
 theorem exists_source_ofChi_predicates {data : AlgebraStructureData d D}
     (h : HasBNTLabelTheoremWitness data) :
     ∃ W : BNTLabelTheoremWitness data,
@@ -96,6 +102,8 @@ witness; it does not construct the witness from an MPDO tensor.
 Source: arXiv:1606.00608, Theorem IV.13(ii), lines 972--985, and
 Appendix C.4, lines 2015--2037 of
 `Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
+@[deprecated "Unpack the witness and use the `ofChi` source equations directly."
+  (since := "2026-08-15")]
 theorem exists_source_ofChi_equations {data : AlgebraStructureData d D}
     (h : HasBNTLabelTheoremWitness data) :
     ∃ W : BNTLabelTheoremWitness data,
@@ -117,10 +125,12 @@ blocked-basis \(\chi\)-family is the pullback of the BNT-label
 \(\chi_{\alpha,\beta,\gamma}\)-family along the blocked-basis comparison maps.
 
 This only unpacks the existential witness; constructing such a witness from an
-MPDO tensor remains the Appendix C.3--C.4 obligation.
-Source: arXiv:1606.00608, Theorem IV.13(ii), lines 972--985, and
-Appendix C.3--C.4, lines 1830--1942 of
+MPDO tensor remains the Appendix C.4 obligation.
+Source: arXiv:1606.00608, Theorem IV.13(ii), lines 972--985, and the
+\(\chi\)-construction in Appendix C.4, lines 2020--2042 of
 `Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
+@[deprecated "Unpack the witness and use `positiveBlockedChi_toDiagonal_of_pos`."
+  (since := "2026-08-15")]
 theorem exists_blocked_chi_pullback {data : AlgebraStructureData d D}
     (h : HasBNTLabelTheoremWitness data) :
     ∃ W : BNTLabelTheoremWitness data,
@@ -141,10 +151,13 @@ blocked-basis multiplication coefficients and the BNT-label coefficients:
   c^{(n)}_{\sigma_n(i),\sigma_n(j),\tau_n(k)}.
 \]
 It only unpacks the existential witness; constructing such a witness from an
-MPDO tensor remains the Appendix C.3--C.4 obligation.
+MPDO tensor remains the Appendix C.3--C.4 obligation. Appendix C.3, lines
+1830--1922 supplies the vertical canonical-form comparison; it does not extract
+\(\chi\), whose construction occurs in Appendix C.4, lines 2020--2042.
 Source: arXiv:1606.00608, Theorem IV.13(ii), lines 972--985, and
-Appendix C.3, lines 1830--1922 of
-`Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
+`Papers/1606.00608/MPDO-22-12-17-2.tex`, lines 1830--1922 and 2020--2042. -/
+@[deprecated "Unpack the witness and use `blocked_coeff_eq`."
+  (since := "2026-08-15")]
 theorem exists_blocked_coefficient_comparison {data : AlgebraStructureData d D}
     (h : HasBNTLabelTheoremWitness data) :
     ∃ W : BNTLabelTheoremWitness data,
@@ -165,10 +178,13 @@ same \(\chi_{\alpha,\beta,\gamma}\)-matrices.
 
 This only rephrases the positive-length coefficient identity carried by the
 witness; constructing such a witness from an MPDO tensor remains the Appendix
-C.3--C.4 obligation.
+C.3--C.4 obligation. Appendix C.3, lines 1830--1922 supplies the vertical
+canonical-form comparison; the \(\chi\)-construction occurs in Appendix C.4,
+lines 2020--2042.
 Source: arXiv:1606.00608, Theorem IV.13(ii), lines 972--985, and
-Appendix C.3--C.4, lines 1830--1942 of
-`Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
+`Papers/1606.00608/MPDO-22-12-17-2.tex`, lines 1830--1922 and 2020--2042. -/
+@[deprecated "Unpack the witness and use `blocked_coeff_eq_ofChi`."
+  (since := "2026-08-15")]
 theorem exists_blocked_coefficient_comparison_ofChi {data : AlgebraStructureData d D}
     (h : HasBNTLabelTheoremWitness data) :
     ∃ W : BNTLabelTheoremWitness data,
@@ -198,9 +214,11 @@ for positive \(L\), together with the idempotent equation
 \]
 It only unpacks the existential witness; constructing such a witness from an
 MPDO tensor remains the Appendix C.3--C.4 obligation.
-Source: arXiv:1606.00608, Theorem IV.13(ii), lines 972--985, and
-Appendix C.3--C.4, lines 1830--1942 of
+Source: arXiv:1606.00608, Theorem IV.13(ii), lines 972--985, Appendix C.3,
+lines 1830--1922, and Appendix C.4, lines 2020--2042 of
 `Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
+@[deprecated "Unpack the witness and use the source coefficient equations directly."
+  (since := "2026-08-15")]
 theorem exists_source_coefficient_equations {data : AlgebraStructureData d D}
     (h : HasBNTLabelTheoremWitness data) :
     ∃ W : BNTLabelTheoremWitness data,
@@ -214,42 +232,6 @@ theorem exists_source_coefficient_equations {data : AlgebraStructureData d D}
               (W.traceScalars.traceScalar α * W.traceScalars.traceScalar β)) := by
   obtain ⟨W⟩ := h
   exact ⟨W, W.same_length_product_eq_sum, W.idempotent_eq_sum⟩
-
-/-- Existence of the source BNT-label witness gives the two source equations
-with the coefficients written as traces of the corresponding
-\(\chi_{\alpha,\beta,\gamma}\)-powers.
-
-This is the proposition-level form of Theorem IV.13(ii)'s equation
-\[
-  O_L(M_\alpha)O_L(M_\beta)
-    = \sum_\gamma
-      \operatorname{tr}(\chi_{\alpha,\beta,\gamma}^{L})O_L(M_\gamma)
-\]
-for positive \(L\), together with the length-one idempotent equation
-\[
-  m_\gamma =
-    \sum_{\alpha,\beta}
-      \operatorname{tr}(\chi_{\alpha,\beta,\gamma})m_\alpha m_\beta.
-\]
-It only unpacks the existential witness; constructing such a witness from an
-MPDO tensor remains the Appendix C.3--C.4 obligation.
-Source: arXiv:1606.00608, Theorem IV.13(ii), lines 972--985, and
-Appendix C.3--C.4, lines 1830--1942 of
-`Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
-theorem exists_source_chi_trace_equations {data : AlgebraStructureData d D}
-    (h : HasBNTLabelTheoremWitness data) :
-    ∃ W : BNTLabelTheoremWitness data,
-      (∀ L : ℕ, 0 < L → ∀ α β : W.Label,
-        W.operators.operator L α * W.operators.operator L β =
-          ∑ γ : W.Label, (W.positiveChi.chi.matrix α β γ ^ L).trace •
-            W.operators.operator L γ) ∧
-      (∀ γ : W.Label,
-        W.traceScalars.traceScalar γ =
-          ∑ α : W.Label, ∑ β : W.Label,
-            (W.positiveChi.chi.matrix α β γ).trace *
-              (W.traceScalars.traceScalar α * W.traceScalars.traceScalar β)) := by
-  obtain ⟨W⟩ := h
-  exact ⟨W, W.same_length_product_eq_sum_chi_trace_pow, W.idempotent_eq_sum_chi_trace⟩
 
 end HasBNTLabelTheoremWitness
 

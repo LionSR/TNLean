@@ -205,41 +205,6 @@ noncomputable def ofChi (data : AlgebraStructureData d D)
     BNTLabelTheoremData.ofChi (data := data) χ hχ operators traceScalars
       sameLengthProduct idempotent blockedComparison
 
-/-- A concrete BNT-label theorem witness gives the proposition-level existence
-statement for Theorem IV.13(ii).
-
-Source: arXiv:1606.00608, Theorem IV.13(ii), lines 972--985, and
-Appendix C.3--C.4, lines 1830--1942 of
-`Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
-theorem hasBNTLabelTheoremWitness {data : AlgebraStructureData d D}
-    (W : BNTLabelTheoremWitness data) : HasBNTLabelTheoremWitness data :=
-  ⟨W⟩
-
-/-- The canonical \(\chi\)-based construction gives the proposition-level
-existence statement for Theorem IV.13(ii), once the product law, idempotent
-law, and blocked-basis comparison have been supplied for the canonical
-coefficient family.
-
-Source: arXiv:1606.00608, Theorem IV.13(ii), lines 972--985, and
-Appendix C.4, lines 2015--2037 of
-`Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
-theorem ofChi_hasBNTLabelTheoremWitness (data : AlgebraStructureData d D)
-    (Λ : Type) (O : ℕ → Type) [Fintype Λ]
-    [∀ L : ℕ, AddCommMonoid (O L)] [∀ L : ℕ, Module ℂ (O L)]
-    [∀ L : ℕ, Mul (O L)]
-    (χ : DiagonalChiFamily Λ) (hχ : χ.PosEntries)
-    (operators : BNTLabelOperatorFamily Λ O)
-    (traceScalars : BNTLabelTraceScalarFamily Λ)
-    (sameLengthProduct :
-      operators.HasSameLengthProductForm (BNTLabelCoefficientFamily.ofChi χ))
-    (idempotent :
-      traceScalars.HasIdempotentCoefficientForm (BNTLabelCoefficientFamily.ofChi χ))
-    (blockedComparison :
-      BNTBlockedBasisCoefficientComparison data (BNTLabelCoefficientFamily.ofChi χ)) :
-    HasBNTLabelTheoremWitness data :=
-  ⟨ofChi data Λ O χ hχ operators traceScalars sameLengthProduct idempotent
-    blockedComparison⟩
-
 variable {data : AlgebraStructureData d D} (W : BNTLabelTheoremWitness data)
 
 private instance instLabelFintype : Fintype W.Label :=
@@ -676,5 +641,46 @@ lemma blocked_coeff_eq_positiveBlockedChi_trace_pow
   W.toPositiveBlockedStructureChiTracePowerForm.eq_trace_pow n hn i j k
 
 end BNTLabelTheoremWitness
+
+namespace HasBNTLabelTheoremWitness
+
+/-- Existence of the source BNT-label witness gives the two source equations
+with the coefficients written as traces of the corresponding
+\(\chi_{\alpha,\beta,\gamma}\)-powers.
+
+This is the proposition-level form of Theorem IV.13(ii)'s equation
+\[
+  O_L(M_\alpha)O_L(M_\beta)
+    = \sum_\gamma
+      \operatorname{tr}(\chi_{\alpha,\beta,\gamma}^{L})O_L(M_\gamma)
+\]
+for positive \(L\), together with the length-one idempotent equation
+\[
+  m_\gamma =
+    \sum_{\alpha,\beta}
+      \operatorname{tr}(\chi_{\alpha,\beta,\gamma})m_\alpha m_\beta.
+\]
+It only unpacks the existential witness; constructing such a witness from an
+MPDO tensor remains the Appendix C.3--C.4 obligation.
+Source: arXiv:1606.00608, Theorem IV.13(ii), lines 972--985; its Appendix C.4
+restatement, lines 1925--1942; and the diagonal \(\chi\)-construction, lines
+2020--2042 of `Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
+theorem exists_source_chi_trace_equations {data : AlgebraStructureData d D}
+    (h : HasBNTLabelTheoremWitness data) :
+    ∃ W : BNTLabelTheoremWitness data,
+      (∀ L : ℕ, 0 < L → ∀ α β : W.Label,
+        W.operators.operator L α * W.operators.operator L β =
+          ∑ γ : W.Label, (W.positiveChi.chi.matrix α β γ ^ L).trace •
+            W.operators.operator L γ) ∧
+      (∀ γ : W.Label,
+        W.traceScalars.traceScalar γ =
+          ∑ α : W.Label, ∑ β : W.Label,
+            (W.positiveChi.chi.matrix α β γ).trace *
+              (W.traceScalars.traceScalar α * W.traceScalars.traceScalar β)) := by
+  obtain ⟨W⟩ := h
+  exact ⟨W, W.same_length_product_eq_sum_chi_trace_pow,
+    W.idempotent_eq_sum_chi_trace⟩
+
+end HasBNTLabelTheoremWitness
 
 end MPOTensor

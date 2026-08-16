@@ -84,6 +84,8 @@ theorem transferMap_blockTensor_quasi_idempotent
 
 /-- Eigenvalues transport along physical blocking: if `μ` is an eigenvalue of `transferMap A`,
 then `μ ^ L` is an eigenvalue of the transfer map of the blocked tensor. -/
+@[deprecated "Rewrite with `transferMap_blockTensor`, then apply `Module.End.HasEigenvalue.pow`."
+  (since := "2026-08-15")]
 theorem transferMap_blockTensor_hasEigenvalue
     (A : MPSTensor d D) (L : ℕ) {μ : ℂ}
     (hμ : Module.End.HasEigenvalue (transferMap (d := d) (D := D) A) μ) :

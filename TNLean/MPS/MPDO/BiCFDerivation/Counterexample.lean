@@ -116,6 +116,8 @@ theorem duplicateScalarBlocks_not_hasBiCF :
 
 /-- Counterexample to deriving finite-length block separation from the
 other `HorizontalCFData` fields alone. -/
+@[deprecated "Use the five component duplicate-scalar counterexample theorems directly."
+  (since := "2026-08-15")]
 theorem duplicateScalarBlocks_counterexample :
     (∀ k, IsInjective (duplicateScalarBlocks k)) ∧
       (∀ k, ∑ i : Fin 1,

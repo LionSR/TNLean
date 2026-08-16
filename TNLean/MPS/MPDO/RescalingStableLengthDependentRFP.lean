@@ -89,10 +89,9 @@ letters entangle bra- and ket-side labels, so no purification tensor exists.
   spectral-radius one). The letters of `R` form the full matrix-unit basis of M₄
   (`R_toMPSTensor_isInjective`).
 * The module `TNLean.MPS.MPDO.RescalingStableExplicitVerticalBNT` gives an explicit
-  one-label witness with normalized component `(doubledTensor A).toMPSTensor`.
-  The existential theorem `R_hasBNTAlgebraTensorClause` is immediate from this
-  clause. Its tensor-attached component is the rotated vertical contraction, not
-  the original horizontal operator `mpo R L`. The multiplicity matrix `[25/32]`
+  one-label clause with normalized component `(doubledTensor A).toMPSTensor`.
+  Its tensor-attached component is the rotated vertical contraction, not the
+  original horizontal operator `mpo R L`. The multiplicity matrix `[25/32]`
   is distinct from the chi matrix `diag(1, 7/25)`. This boundary is documented in
   `docs/paper-gaps/cpgsv17_blocked_chi_uniformity.tex`.
 
@@ -401,7 +400,9 @@ def coeff' : Fin 2 → Fin 2 → ℂ
 
 /-- Consistency of the explicit values in `coeff'` with the letter
 matrices `A`: every nonzero entry of every letter `A a` at position
-`(r, c)` equals `coeff' r c`. -/
+`(r, c)` equals `coeff' r c`.
+
+Project example; not from CPSV16. -/
 lemma A_entry_eq_coeff' {a : Fin 4} {r c : Fin 2} (h : A a r c ≠ 0) :
     A a r c = coeff' r c := by
   fin_cases a <;> fin_cases r <;> fin_cases c <;> simp_all [A, coeff']
@@ -450,9 +451,8 @@ lemma chainIndicator_posSemidef (N : ℕ) : (chainIndicator N).PosSemidef := by
   exact Matrix.posSemidef_vecMulVec_self_star c
 
 /-- The local factor `wMat = !![16/25, 9/25; 9/25, 16/25]` of the
-Kronecker-power factorization of the closed operator, entrywise the
-square of `coeff'` (`coeff_sq_eq_wMat`).  Its eigenvalues are `1` and
-`7/25` — the `χ = diag(1, 7/25)` of the one-label coefficient family
+Kronecker-power factorization of the closed operator. Its eigenvalues are `1`
+and `7/25` — the `χ = diag(1, 7/25)` of the one-label coefficient family
 `oneLabelChi`.
 
 Project example; not from CPSV16. -/
@@ -507,9 +507,8 @@ lemma wMat_mulVec_alt : wMat.mulVec ![1, -1] = (lambda : ℂ) • ![1, -1] := by
 by explicit eigenvectors.** For each `k : Fin 2`, `oneLabelChi.entry 0 0 0 k`
 (`1` at `k = 0`, `lambda` at `k = 1`) is an eigenvalue of `wMat`, witnessed
 by the Walsh–Hadamard eigenvectors `![1, 1]` and `![1, -1]`.  This
-identifies the local factor of the `R_isMPDO` factorization (`wMat`, via
-`coeff_sq_eq_wMat`) with the one-label `χ` block `oneLabelChi` declared
-independently in this file.
+identifies the local factor `wMat` of the `R_isMPDO` factorization with the
+one-label `χ` block `oneLabelChi` declared independently in this file.
 
 This eigenvector-only link is superseded by the exact diagonalization
 identity `wMat_eq_conj_diagonal_oneLabelChi`, which identifies `wMat` itself
@@ -624,8 +623,7 @@ string: `(φ N p) n = bondBit1 (p n)`.  In the planned factorization it pulls
 Project example; not from CPSV16. -/
 def φ (N : ℕ) (p : Fin N → Fin 4) : Fin N → Fin 2 := fun n => bondBit1 (p n)
 
-/-- `wMat` is the entrywise square of `coeff'`: the local factor's entries
-are the squared magnitudes of the letter-matrix entries. -/
+/-- `wMat` is the entrywise square of `coeff'`. -/
 lemma coeff_sq_eq_wMat (i j : Fin 2) : (coeff' i j)^2 = wMat i j := by
   fin_cases i <;> fin_cases j <;> norm_num [coeff', wMat]
 
