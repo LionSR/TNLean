@@ -17,6 +17,8 @@ positive definite when restricted to its support. This low-layer analysis module
 * `Matrix.PosSemidef.dotProduct_mulVec_pos_of_supportProj_fixed` — if `v` is a nonzero vector
   fixed by the support projection, then the quadratic form `x ↦ x⋆ ρ x` is strictly positive
   on `v`.
+* `Matrix.PosSemidef.compression_posDef_of_support_action_ne_zero` — a compression is
+  positive definite when every nonzero coordinate vector has nonzero support component.
 * `Matrix.PosSemidef.compression_on_support_posDef` — given a compression isometry
   `V : Matrix (Fin k) (Fin D) ℂ` with `V * Vᴴ = 1` and `Vᴴ * V = supportProj ρ`, the
   compression `V * ρ * Vᴴ` is positive definite.
@@ -56,6 +58,34 @@ theorem dotProduct_mulVec_pos_of_supportProj_fixed
     hρ.supportProj_mulVec_eq_zero_of_mulVec_eq_zero v hρv
   -- Combined with the fixed-point hypothesis, this forces `v = 0`.
   exact hv_ne (hv_fix.symm.trans hPv)
+
+/-- An isometric compression of a positive semidefinite matrix is positive definite if
+its support projection does not annihilate the image of any nonzero coordinate vector.
+
+Unlike `compression_on_support_posDef`, this criterion does not require the isometry's
+range to equal the whole support. It applies, for example, when that range is merely
+transverse to the kernel of the support projection. -/
+theorem compression_posDef_of_support_action_ne_zero
+    {k : ℕ} (V : Matrix (Fin D) (Fin k) ℂ)
+    (hSupport : ∀ x : Fin k → ℂ, x ≠ 0 →
+      hρ.supportProj *ᵥ (V *ᵥ x) ≠ 0) :
+    (Vᴴ * ρ * V).PosDef := by
+  have hHerm : (Vᴴ * ρ * V).IsHermitian := by
+    unfold Matrix.IsHermitian
+    rw [Matrix.conjTranspose_mul, Matrix.conjTranspose_mul,
+      Matrix.conjTranspose_conjTranspose, hρ.isHermitian.eq, Matrix.mul_assoc]
+  refine Matrix.PosDef.of_dotProduct_mulVec_pos hHerm ?_
+  intro x hx
+  have hnonneg := hρ.dotProduct_mulVec_nonneg (V *ᵥ x)
+  have hne : star (V *ᵥ x) ⬝ᵥ (ρ *ᵥ (V *ᵥ x)) ≠ 0 := by
+    intro hzero
+    have hρv := (hρ.dotProduct_mulVec_zero_iff (V *ᵥ x)).mp hzero
+    exact hSupport x hx (hρ.supportProj_mulVec_eq_zero_of_mulVec_eq_zero _ hρv)
+  have hpos : 0 < star (V *ᵥ x) ⬝ᵥ (ρ *ᵥ (V *ᵥ x)) :=
+    lt_of_le_of_ne hnonneg hne.symm
+  convert hpos using 1
+  simp [Matrix.mulVec_mulVec, Matrix.dotProduct_mulVec, Matrix.star_mulVec,
+    Matrix.mul_assoc]
 
 /-- **Faithful compression onto the support sector.** Given a PSD matrix `ρ`, set
 `P := supportProj ρ`, and suppose `V : Matrix (Fin k) (Fin D) ℂ` is a compression isometry

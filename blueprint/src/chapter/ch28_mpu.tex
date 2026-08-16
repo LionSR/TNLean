@@ -5633,8 +5633,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
 
 \begin{theorem}[Coordinate identities for the reduced projection]
   \label{thm:mpu_matrix_reduced_projection}
-  \lean{Matrix.isSymmetricProjection_toEuclideanLin,
-    Matrix.toEuclideanLin_reducedProjection,
+  \lean{Matrix.toEuclideanLin_reducedProjection,
     Matrix.reducedProjection_isOrthogonalProjection,
     Matrix.mul_reducedProjection,
     Matrix.reducedProjection_mul,
@@ -5661,12 +5660,14 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
 \begin{theorem}[Reduced representative under a supplied positive fixed pair]
   \label{thm:mpu_reduced_representative}
   \lean{MPOTensor.mpo_virtualSandwich_reducedProjection_eq,
-    MPOTensor.transferMap_virtualSandwich_same,
+    MPOTensor.transferMap_virtualSandwich,
     MPOTensor.transferMap_virtualSandwich_reducedProjection,
-    MPOTensor.trace_compressed_fixedPair_reducedProjection,
-    MPOTensor.compressed_fixedPair_posDef_reducedProjection}
+    MPOTensor.trace_compressed_fixed_pair_reducedProjection,
+    Matrix.PosSemidef.compression_posDef_of_support_action_ne_zero,
+    MPOTensor.compressed_fixed_pair_posDef_reducedProjection}
   \leanok
-  \uses{thm:mpu_matrix_reduced_projection,
+  \uses{def:mpo_family,def:mpo_transfer_map,def:support_proj,
+    def:mpu_virtual_sandwich,thm:mpu_matrix_reduced_projection,
     thm:mpu_two_projection_reduced_projection_transversality}
   Let $W=(W^{ij})$ be an MPO tensor. Let $L,R\succeq0$ satisfy
   \begin{align}

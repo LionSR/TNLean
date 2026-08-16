@@ -3,8 +3,8 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import TNLean.Analysis.MatrixReducedProjection
 import TNLean.Analysis.SupportCompression
-import TNLean.Analysis.TwoProjectionReducedProjection
 import TNLean.MPS.MPU.VirtualSandwich
 
 /-!
@@ -60,7 +60,7 @@ private theorem mul_evalWord_of_letterwise_left_absorption
 
 private theorem evalWord_virtualSandwich_reducedProjection
     (W : MPOTensor d D) (P Q : Matrix (Fin D) (Fin D) ℂ)
-    (hP : IsOrthogonalProjection P) (_hQ : IsOrthogonalProjection Q)
+    (hP : IsOrthogonalProjection P)
     (hWP : ∀ i j, W i j * P = W i j)
     (hQW : ∀ i j, Q * W i j = W i j) :
     ∀ {is js : List (Fin d)}, is.length = js.length → is ≠ [] →
@@ -115,7 +115,7 @@ system size, under the paper's explicit letterwise support absorptions.
 Source: arXiv:1703.09188, Proposition IV.5, lines 756 and 773--783. -/
 theorem mpo_virtualSandwich_reducedProjection_eq
     (W : MPOTensor d D) (P Q : Matrix (Fin D) (Fin D) ℂ)
-    (hP : IsOrthogonalProjection P) (hQ : IsOrthogonalProjection Q)
+    (hP : IsOrthogonalProjection P)
     (hWP : ∀ i j, W i j * P = W i j)
     (hQW : ∀ i j, Q * W i j = W i j) (N : ℕ) :
     mpo (virtualSandwich (Matrix.reducedProjection P Q) W
@@ -132,7 +132,7 @@ theorem mpo_virtualSandwich_reducedProjection_eq
       apply hN
       have := congrArg List.length hnil
       simpa using this
-    have hword := evalWord_virtualSandwich_reducedProjection W P Q hP hQ hWP hQW
+    have hword := evalWord_virtualSandwich_reducedProjection W P Q hP hWP hQW
       (is := List.ofFn σ) (js := List.ofFn τ)
       (show (List.ofFn σ).length = (List.ofFn τ).length by simp) hσ
     simp only [mpo_apply, mpoMatrixEntry, hword]
@@ -162,19 +162,12 @@ theorem mpo_virtualSandwich_reducedProjection_eq
             Matrix.trace_mul_comm _ _
       _ = Matrix.trace (evalWord W (List.ofFn σ) (List.ofFn τ)) := by rw [hwordP]
 
-/-- Sandwiching every virtual letter by a Hermitian matrix sandwiches the transfer-map
-output and compresses its input.
-
-This is the algebraic transfer identity used in arXiv:1703.09188, Proposition IV.5,
-lines 778--781. -/
-theorem transferMap_virtualSandwich_same
+private theorem transferMap_virtualSandwich_projection
     (W : MPOTensor d D) (T : Matrix (Fin D) (Fin D) ℂ) (hT : T.IsHermitian)
     (X : Matrix (Fin D) (Fin D) ℂ) :
     transferMap (virtualSandwich T W T) X =
       T * transferMap W (T * X * T) * T := by
-  simp only [transferMap_apply, virtualSandwich_apply, Matrix.conjTranspose_mul,
-    hT.eq, Finset.mul_sum, Finset.sum_mul]
-  simp only [Matrix.mul_assoc]
+  simpa only [hT.eq] using transferMap_virtualSandwich T W T X
 
 /-- The reduced tensor has the compressed rank-one transfer formula.
 
@@ -193,7 +186,7 @@ theorem transferMap_virtualSandwich_reducedProjection
         (Matrix.reducedProjection P Q * R * Matrix.reducedProjection P Q) := by
   let T := Matrix.reducedProjection P Q
   have hTproj := Matrix.reducedProjection_isOrthogonalProjection P Q
-  rw [transferMap_virtualSandwich_same W T hTproj.1 X, hTransfer]
+  rw [transferMap_virtualSandwich_projection W T hTproj.1 X, hTransfer]
   simp only [Matrix.mul_smul, Matrix.smul_mul]
   congr 1
   calc
@@ -204,14 +197,14 @@ theorem transferMap_virtualSandwich_reducedProjection
     _ = Matrix.trace ((T * L * T) * X) := by simp only [Matrix.mul_assoc]
 
 /-- The compressed left and right matrices retain the normalization
-`trace (L * R) = 1`.
+`trace (L * R) = 1` under the two-sided support absorptions for `L` and `R`.
 
 Source: arXiv:1703.09188, Proposition IV.5, lines 750--752 and 778--781. -/
-theorem trace_compressed_fixedPair_reducedProjection
+theorem trace_compressed_fixed_pair_reducedProjection
     (L R P Q : Matrix (Fin D) (Fin D) ℂ)
-    (hL : L.PosSemidef) (hR : R.PosSemidef)
-    (hLP : hL.supportProj = P) (hRQ : hR.supportProj = Q)
     (hP : IsOrthogonalProjection P) (hQ : IsOrthogonalProjection Q)
+    (hPL : P * L = L) (hLP : L * P = L)
+    (hQR : Q * R = R) (hRQ : R * Q = R)
     (htr : Matrix.trace (L * R) = 1) :
     Matrix.trace ((Matrix.reducedProjection P Q * L * Matrix.reducedProjection P Q) *
       (Matrix.reducedProjection P Q * R * Matrix.reducedProjection P Q)) = 1 := by
@@ -219,10 +212,6 @@ theorem trace_compressed_fixedPair_reducedProjection
   have hTproj := Matrix.reducedProjection_isOrthogonalProjection P Q
   have hTQ : T * Q = P * Q := Matrix.reducedProjection_mul_second hP
   have hQT : Q * T = Q * P := (Matrix.second_mul_reducedProjection hP hQ).symm
-  have hPL : P * L = L := by rw [← hLP]; exact hL.supportProj_mul_self
-  have hLP' : L * P = L := by rw [← hLP]; exact hL.mul_supportProj_self
-  have hQR : Q * R = R := by rw [← hRQ]; exact hR.supportProj_mul_self
-  have hRQ' : R * Q = R := by rw [← hRQ]; exact hR.mul_supportProj_self
   have hTR : T * R = P * R := by
     calc
       T * R = T * (Q * R) := by rw [hQR]
@@ -246,7 +235,7 @@ theorem trace_compressed_fixedPair_reducedProjection
       calc
         L * T * R * T = L * (T * R) * T := by simp only [Matrix.mul_assoc]
         _ = L * (P * R) * T := by rw [hTR]
-        _ = L * R * T := by rw [← Matrix.mul_assoc, hLP']
+        _ = L * R * T := by rw [← Matrix.mul_assoc, hLP]
     _ = Matrix.trace (R * T * L) := by
       rw [show L * R * T = L * (R * T) by simp only [Matrix.mul_assoc]]
       rw [Matrix.trace_mul_cycle' L R T, Matrix.trace_mul_cycle' T L R]
@@ -254,64 +243,40 @@ theorem trace_compressed_fixedPair_reducedProjection
     _ = Matrix.trace (R * L) := by
       congr 1
       calc
-        R * T * L = (R * Q) * T * (P * L) := by rw [hRQ', hPL]
+        R * T * L = (R * Q) * T * (P * L) := by rw [hRQ, hPL]
         _ = R * (Q * T) * (P * L) := by noncomm_ring
         _ = R * (Q * P) * (P * L) := by rw [hQT]
         _ = (R * Q) * (P * P) * L := by noncomm_ring
-        _ = R * L := by rw [hRQ', hP.2, Matrix.mul_assoc, hPL]
+        _ = R * L := by rw [hRQ, hP.2, Matrix.mul_assoc, hPL]
     _ = Matrix.trace (L * R) := Matrix.trace_mul_comm R L
     _ = 1 := htr
-
-private theorem compression_posDef_of_support_action_ne_zero
-    {k : ℕ} (A : Matrix (Fin D) (Fin D) ℂ) (hA : A.PosSemidef)
-    (V : Matrix (Fin D) (Fin k) ℂ) (hV : Vᴴ * V = 1)
-    (hSupport : ∀ x : Fin k → ℂ, x ≠ 0 →
-      hA.supportProj *ᵥ (V *ᵥ x) ≠ 0) :
-    (Vᴴ * A * V).PosDef := by
-  have hHerm : (Vᴴ * A * V).IsHermitian := by
-    unfold Matrix.IsHermitian
-    rw [Matrix.conjTranspose_mul, Matrix.conjTranspose_mul,
-      Matrix.conjTranspose_conjTranspose, hA.isHermitian.eq, Matrix.mul_assoc]
-  refine Matrix.PosDef.of_dotProduct_mulVec_pos hHerm ?_
-  intro x hx
-  have hVx : V *ᵥ x ≠ 0 := by
-    intro hzero
-    apply hx
-    have := congrArg (fun y ↦ Vᴴ *ᵥ y) hzero
-    simpa [Matrix.mulVec_mulVec, hV] using this
-  have hnonneg := hA.dotProduct_mulVec_nonneg (V *ᵥ x)
-  have hne : star (V *ᵥ x) ⬝ᵥ (A *ᵥ (V *ᵥ x)) ≠ 0 := by
-    intro hzero
-    have hAv := (hA.dotProduct_mulVec_zero_iff (V *ᵥ x)).mp hzero
-    exact hSupport x hx (hA.supportProj_mulVec_eq_zero_of_mulVec_eq_zero _ hAv)
-  have hpos : 0 < star (V *ᵥ x) ⬝ᵥ (A *ᵥ (V *ᵥ x)) :=
-    lt_of_le_of_ne hnonneg hne.symm
-  convert hpos using 1
-  simp [Matrix.mulVec_mulVec, Matrix.dotProduct_mulVec, Matrix.star_mulVec,
-    Matrix.mul_assoc]
 
 /-- In isometric coordinates for the reduced range, both compressed fixed matrices are
 positive definite. The right-hand statement uses reduced-range transversality, since the
 reduced range need not be contained in `range Q`.
 
 Source: arXiv:1703.09188, Proposition IV.5, lines 756 and 778--781. -/
-theorem compressed_fixedPair_posDef_reducedProjection
+theorem compressed_fixed_pair_posDef_reducedProjection
     (L R P Q : Matrix (Fin D) (Fin D) ℂ)
     (hL : L.PosSemidef) (hR : R.PosSemidef)
     (hLP : hL.supportProj = P) (hRQ : hR.supportProj = Q)
-    (hP : IsOrthogonalProjection P) (hQ : IsOrthogonalProjection Q)
     {k : ℕ} (V : Matrix (Fin D) (Fin k) ℂ)
     (hV : Vᴴ * V = 1)
     (hVrange : V * Vᴴ = Matrix.reducedProjection P Q) :
     (Vᴴ * L * V).PosDef ∧ (Vᴴ * R * V).PosDef := by
+  have hP : IsOrthogonalProjection P := by
+    rw [← hLP]
+    exact hL.isOrthogonalProjection_supportProj
+  have hQ : IsOrthogonalProjection Q := by
+    rw [← hRQ]
+    exact hR.isOrthogonalProjection_supportProj
   let T := Matrix.reducedProjection P Q
-  have hTproj := Matrix.reducedProjection_isOrthogonalProjection P Q
   have hPT : P * T = T := Matrix.mul_reducedProjection hP
   have hVfixed (x : Fin k → ℂ) : T *ᵥ (V *ᵥ x) = V *ᵥ x := by
     rw [show T = V * Vᴴ by simpa [T] using hVrange.symm, Matrix.mulVec_mulVec]
     simp [Matrix.mul_assoc, hV]
   constructor
-  · apply compression_posDef_of_support_action_ne_zero L hL V hV
+  · apply hL.compression_posDef_of_support_action_ne_zero V hV
     intro x hx hzero
     have hPx : P *ᵥ (V *ᵥ x) = V *ᵥ x := by
       calc
@@ -322,7 +287,7 @@ theorem compressed_fixedPair_posDef_reducedProjection
     exact hx (by
       have := congrArg (fun y ↦ Vᴴ *ᵥ y) hzero
       simpa [Matrix.mulVec_mulVec, hV] using this)
-  · apply compression_posDef_of_support_action_ne_zero R hR V hV
+  · apply hR.compression_posDef_of_support_action_ne_zero V hV
     intro x hx hzero
     let y : EuclideanSpace ℂ (Fin D) := WithLp.toLp 2 (V *ᵥ x)
     have hy : y ≠ 0 := by
