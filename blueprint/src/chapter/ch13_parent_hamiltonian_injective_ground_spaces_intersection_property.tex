@@ -318,62 +318,34 @@
     restriction again has the form of a ground-space vector.
 \end{proof}
 
-\begin{theorem}[Ground-space contiguous-window restriction]
-    \label{thm:contiguous_restriction_ground_space_map_intersection}
-    \lean{MPSTensor.contiguousRestrictₗ_groundSpaceMap_mem_groundSpace}
-    \leanok
-    \uses{def:ground_space_map, def:ground_space_parent,
+\begin{remark}[Ground-space contiguous-window restriction]
+    \label{rem:contiguous_restriction_ground_space_map_intersection}
+    \uses{thm:contiguous_restriction_ground_space_map,
+        def:ground_space_map, def:ground_space_parent,
         rem:contiguous_window_operators}
-    Assume $s+L \le N$, and let $\tau$ be a full configuration supplying the
-    complementary values. Write the words to the left and right of the window
-    $[s,s+L-1]$ as
-    \begin{align}
-        w_L&=(\tau_0,\ldots,\tau_{s-1}),
-        \notag\\
-        w_R&=(\tau_{s+L},\ldots,\tau_{N-1}).
-        \notag
-    \end{align}
-    For every boundary matrix $X$, both outside words are absorbed into the
-    boundary matrix, and the restriction is again a ground-space vector:
+    The two-sided window restriction is recorded in the martingale chapter as
+    Theorem~\ref{thm:contiguous_restriction_ground_space_map}: for sites
+    $s,L,N$ with $s+L \le N$, a full configuration $\tau$ supplying the
+    complementary values, and a boundary matrix $X$, the nonwrapping
+    restriction of the open-boundary ground-space vector $\Gamma_N(X)$ to the
+    window $[s,s+L-1]$ is again an open-boundary ground-space vector,
     \begin{align}
         \Res^\tau_{s,L}\Gamma_N(X)&\in G_L(A).
         \notag
     \end{align}
-    This two-sided absorption generalizes
-    Lemma~\ref{lem:ground_space_in_tail_ground}, whose suffix restriction
-    absorbs only the prefix. It is the frustration-free restriction identity
-    for the nonwrapping windows of the compatible open chain of
-    \cite[Equation~(3.12)]{Nachtergaele1996Spectral}, whose zero-energy space
-    is identified in \cite[Equation~(3.13)]{Nachtergaele1996Spectral}.
-\end{theorem}
-
-\begin{proof}
-    \leanok
-    \uses{lem:ground_space_map_apply, lem:eval_word_append}
-    For a length-$L$ word $\omega$, inserting $\omega$ into the window turns
-    the configuration word into $w_L\omega w_R$, and multiplicativity of word
-    evaluation gives
-    \begin{align}
-        A^{w_L\omega w_R}
-        &= A^{w_L}A^\omega A^{w_R}.
-        \notag
-    \end{align}
-    The restriction therefore evaluates to
-    \begin{align}
-        (\Res^\tau_{s,L}\Gamma_N(X))(\omega)
-        &= \tr(A^{w_L}A^\omega A^{w_R}X),
-        \notag
-    \end{align}
-    and cyclicity of the trace moves both outside words onto the boundary
-    matrix:
+    Both outside words are absorbed into the boundary matrix: writing
+    $w_L=(\tau_0,\ldots,\tau_{s-1})$ and
+    $w_R=(\tau_{s+L},\ldots,\tau_{N-1})$, word multiplicativity and
+    cyclicity of the trace give
     \begin{align}
         \tr(A^{w_L}A^\omega A^{w_R}X)
-        &= \tr(A^\omega A^{w_R}XA^{w_L}).
+        &=\tr(A^\omega A^{w_R}XA^{w_L}),
         \notag
     \end{align}
-    The right-hand side is $\Gamma_L(A^{w_R}XA^{w_L})(\omega)$, so the
-    restricted vector is the ground-space vector $\Gamma_L(A^{w_R}XA^{w_L})$.
-\end{proof}
+    so the restriction is $\Gamma_L(A^{w_R}XA^{w_L})$. This two-sided
+    absorption generalizes Lemma~\ref{lem:ground_space_in_tail_ground},
+    whose suffix restriction absorbs only the prefix.
+\end{remark}
 
 \begin{lemma}[Left-tail compatibility]\label{lem:left_tail_compatibility}
     \lean{MPSTensor.exists_left_tail_compatibility}
