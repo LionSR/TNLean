@@ -139,6 +139,27 @@ theorem re_inner_anticommutator_ge_neg_of_norm_apply_le {P Q : E →ₗ[𝕜] E}
   nlinarith [hcross_lb, hamgm, hc,
     mul_nonneg (norm_nonneg (P v)) (norm_nonneg (Q v))]
 
+/-- Pairwise anticommutator upper bound for two symmetric projections.
+
+For symmetric projections `P` and `Q`, the positivity of `‖(P - Q) v‖²`
+(equivalently, of the operator `(P - Q) ^ 2`) expands, using idempotence of
+`P` and `Q`, into the anticommutator estimate `P Q + Q P ≤ P + Q` in
+quadratic-form terms:
+
+`Re ⟪P v, Q v⟫ + Re ⟪Q v, P v⟫ ≤ Re ⟪P v, v⟫ + Re ⟪Q v, v⟫.` -/
+theorem re_inner_anticommutator_le {P Q : E →ₗ[𝕜] E} (hP : P.IsSymmetricProjection)
+    (hQ : Q.IsSymmetricProjection) (v : E) :
+    RCLike.re ⟪P v, Q v⟫_𝕜 + RCLike.re ⟪Q v, P v⟫_𝕜 ≤
+      RCLike.re ⟪P v, v⟫_𝕜 + RCLike.re ⟪Q v, v⟫_𝕜 := by
+  have h0 : (0 : ℝ) ≤ RCLike.re ⟪P v - Q v, P v - Q v⟫_𝕜 :=
+    inner_self_nonneg (x := P v - Q v)
+  rw [inner_sub_sub_self] at h0
+  have h0' : (0 : ℝ) ≤ RCLike.re ⟪P v, P v⟫_𝕜 - RCLike.re ⟪P v, Q v⟫_𝕜 -
+      RCLike.re ⟪Q v, P v⟫_𝕜 + RCLike.re ⟪Q v, Q v⟫_𝕜 := by
+    simpa only [map_add, map_sub] using h0
+  rw [hP.re_inner_apply_apply_self, hQ.re_inner_apply_apply_self] at h0'
+  linarith
+
 /-- Commuting symmetric projections have nonnegative ordered cross terms.
 
 If `P` and `Q` are symmetric projections that commute pointwise, then
