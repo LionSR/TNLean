@@ -3,8 +3,8 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import TNLean.Analysis.MatrixReducedProjection
 import TNLean.Analysis.MatrixSqrt
-import TNLean.MPS.MPU.ReducedRepresentative
 import TNLean.MPS.MPU.VirtualSandwich
 
 /-!
@@ -126,7 +126,7 @@ theorem exists_units_for_hat_reduced_projection
       hL.supportProj * hR.supportProj * Y =
         Matrix.reducedProjection hL.supportProj hR.supportProj := by
   have hP : IsOrthogonalProjection hL.supportProj :=
-    ⟨hL.supportProj_isHermitian, hL.isHermitian.supportProj_idem⟩
+    hL.isOrthogonalProjection_supportProj
   obtain ⟨Y, hY, hTQY⟩ := Matrix.exists_reducedProjection_rightFactor
     (P := hL.supportProj) (Q := hR.supportProj) hP
   have hPQY : hL.supportProj * hR.supportProj * Y =

@@ -5795,7 +5795,8 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     MPOTensor.exists_units_for_hat_reduced_projection}
   \leanok
   \uses{def:support_proj,def:mpu_virtual_sandwich,
-    def:mpu_matrix_reduced_projection,def:mpu_right_rank,def:mpu_left_rank}
+    def:mpu_matrix_reduced_projection,def:mpu_right_rank,def:mpu_left_rank,
+    def:mpu_ambient_support_inverse_extension}
   Let $W=(W^{ij})$ be an MPO tensor, let $P$ be an orthogonal projection,
   let $Q$ be a square matrix of the same size, and set $\widetilde P$ equal
   to their reduced projection.
@@ -5819,10 +5820,20 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     \ell[\widehat W]&=\ell[\widetilde W].
       \label{eq:mpu_reduced_hat_left_rank}
   \end{align}
-  If $L,R\succeq0$ and $P=\operatorname{supp}(L)$,
-  $Q=\operatorname{supp}(R)$, such invertible matrices may be chosen as
-  $X=L^++(I-P)$, $Z=R^++(I-Q)$, together with an invertible right factor $Y$
-  of the reduced projection.
+  The ranks agree because invariance under invertible outer factors
+  (Theorem~\ref{thm:mpu_virtual_sandwich_source_ranks}) gives
+  \begin{align}
+    r[\widehat W]&=r[X\widehat W(ZY)]=r[\widetilde W],
+    \notag\\
+    \ell[\widehat W]&=\ell[X\widehat W(ZY)]=\ell[\widetilde W],
+    \notag
+  \end{align}
+  the first equality in each line being the invariance identity with
+  invertible $X$ and $ZY$ and the second being
+  (\ref{eq:mpu_reduced_hat_chain_tilde}). If $L,R\succeq0$ and
+  $P=\operatorname{supp}(L)$, $Q=\operatorname{supp}(R)$, such invertible
+  matrices may be chosen as $X=L^++(\Id-P)$, $Z=R^++(\Id-Q)$, together
+  with an invertible right factor $Y$ of the reduced projection.
   % Scope restriction: the fixed pair, the equations XL=P and RZ=Q, and the
   % letterwise absorptions are supplied hypotheses, not consequences of a bare
   % MPU assumption. See
