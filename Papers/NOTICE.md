@@ -9,13 +9,14 @@ works remains with their authors and, where applicable, their publishers.
 `LICENSE` (Apache License 2.0) applies to the Lean code, the blueprint, and
 the other original content of this repository, not to this directory. The
 sources below carry arXiv's non-exclusive distribution license (or, for the
-two oldest submissions, arXiv's assumed license for 1991-2003 submissions),
+older submissions noted below, arXiv's assumed license for 1991-2003 submissions),
 which grants no redistribution rights beyond arXiv itself. Do not reuse them
 outside this repository without the authors' permission; the version of
 record for each paper is the arXiv posting or the journal publication.
 
 | arXiv ID | Title | Authors | arXiv license |
 |---|---|---|---|
+| [quant-ph/0405174](https://arxiv.org/abs/quant-ph/0405174) | Reversible Quantum Cellular Automata | B. Schumacher, R. F. Werner | assumed 1991-2003 |
 | [quant-ph/0608197](https://arxiv.org/abs/quant-ph/0608197) | Matrix Product State Representations | D. Pérez-García, F. Verstraete, M. M. Wolf, J. I. Cirac | assumed 1991-2003 |
 | [0802.0447](https://arxiv.org/abs/0802.0447) | String Order and Symmetries in Quantum Spin Lattices | D. Pérez-García, M. M. Wolf, M. Sanz, F. Verstraete, J. I. Cirac | assumed 1991-2003 |
 | [0909.5347](https://arxiv.org/abs/0909.5347) | A quantum version of Wielandt's inequality | M. Sanz, D. Pérez-García, M. M. Wolf, J. I. Cirac | non-exclusive-distrib 1.0 |
