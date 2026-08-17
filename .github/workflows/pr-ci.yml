@@ -477,6 +477,7 @@ jobs:
       !cancelled() && (
         github.event_name != 'pull_request' ||
         needs.changes.outputs.lean == 'true' ||
+        needs.changes.outputs.blueprint == 'true' ||
         needs.changes.outputs.workflow == 'true'
       )
     runs-on: ubuntu-latest
@@ -563,6 +564,15 @@ jobs:
 
       - name: Run text-based style linter
         run: lake exe lint_style --github
+
+      # `checkdecls` imports TNLean modules to resolve every tagged declaration,
+      # so it must run after the project build rather than in the TeX-only job.
+      - name: Generate Blueprint Lean declaration list
+        run: python3 scripts/blueprint_lean_sync.py --root . --update-lean-decls
+
+      - name: Check Blueprint Lean declarations
+        timeout-minutes: 10
+        run: lake exe checkdecls blueprint/lean_decls
 
       # A cancelled or failed build can leave partially written `.olean` files.
       # Restore only caches saved after the complete build and style checks pass.
@@ -724,18 +734,6 @@ jobs:
               'blueprint/src/**/*.tex' 'blueprint/src/*.tex')
           fi
           echo "has_changed_lean=$has_changed_lean" >> "$GITHUB_OUTPUT"
-
-      - name: Set up Lean toolchain
-        id: lean-setup
-        if: github.event_name != 'pull_request' || steps.changed-lean-files.outputs.has_changed_lean == 'true'
-        continue-on-error: true
-        timeout-minutes: 6
-        uses: texra-ai/lean-env-action@v1
-        with:
-          # Do not save a GitHub cache of .lake: per-run ~2.4 GB entries
-          # evict the main-branch build cache from the 10 GB repository
-          # budget within minutes. Mathlib comes from `lake exe cache get`.
-          use-github-cache: false
 
       - name: Install blueprint system dependencies
         if: env.TEX_CHANGED == 'true'
@@ -912,13 +910,13 @@ jobs:
 
       - name: Fetch PR base ref for diff
         id: fetch-base-ref
-        if: github.event_name == 'pull_request' && steps.lean-setup.outcome == 'success'
+        if: github.event_name == 'pull_request' && steps.changed-lean-files.outputs.has_changed_lean == 'true'
         env:
           BASE_REF: ${{ github.event.pull_request.base.ref }}
         run: git fetch --no-tags origin "$BASE_REF"
 
       - name: Error on changed Lean declarations missing blueprint entries
-        if: github.event_name == 'pull_request' && steps.lean-setup.outcome == 'success'
+        if: github.event_name == 'pull_request' && steps.changed-lean-files.outputs.has_changed_lean == 'true'
         env:
           BASE_REF: origin/${{ github.event.pull_request.base.ref }}
         run: |
@@ -963,12 +961,3 @@ jobs:
               check=True,
           )
           PY
-
-      - name: Check blueprint Lean declarations
-        if: steps.lean-setup.outcome == 'success' && steps.lean-decls.outcome == 'success'
-        continue-on-error: true
-        timeout-minutes: 10
-        run: |
-          if ! lake exe checkdecls blueprint/lean_decls; then
-            echo "::warning::Some blueprint/lean_decls entries have no matching Lean declaration yet (this is expected while formalization is in progress)"
-          fi
