@@ -131,7 +131,7 @@ theorem inverseGram_reassocTailBoundaryMapES_eq_fiberwise_inverseGram
           (tailBoundaryMapES_injective_of_groundSpaceMapES_injective A K (L + Q) h)) =
       boundaryFiberwiseMap (D := D) (Cfg d K)
         (ContinuousLinearMap.inverseGram (groundSpaceMapES A (L + Q)) h) := by
-  rw [ContinuousLinearMap.inverseGram_eq_inverse]
+  refine Eq.trans (ContinuousLinearMap.inverseGram_eq_inverse _ _) ?_
   apply ContinuousLinearMap.inverse_eq
   · rw [reassocTailBoundaryMapES_adjoint_comp_self_eq_fiberwise_groundSpaceGram,
       groundSpaceGram, boundaryFiberwiseMap_comp,
@@ -261,10 +261,18 @@ theorem norm_reassocTailBoundaryMapES_comp_inverseGram_le_sqrt
       (ContinuousLinearMap.inverseGram (reassocTailBoundaryMapES A K L Q) hTail)‖ ≤
       Real.sqrt ‖ContinuousLinearMap.inverseGram (groundSpaceMapES A (L + Q)) h‖ := by
   dsimp only
-  rw [ContinuousLinearMap.norm_T_comp_inverseGram_eq_sqrt]
-  apply Real.sqrt_le_sqrt
-  rw [inverseGram_reassocTailBoundaryMapES_eq_fiberwise_inverseGram A K L Q h]
-  exact norm_boundaryFiberwiseMap_le _ _
+  calc
+    _ = Real.sqrt ‖ContinuousLinearMap.inverseGram
+          (reassocTailBoundaryMapES A K L Q)
+          ((physicalReassocES (d := d) K L Q).injective.comp
+            (tailBoundaryMapES_injective_of_groundSpaceMapES_injective
+              A K (L + Q) h))‖ :=
+      ContinuousLinearMap.norm_T_comp_inverseGram_eq_sqrt _ _
+    _ ≤ Real.sqrt ‖ContinuousLinearMap.inverseGram
+          (groundSpaceMapES A (L + Q)) h‖ := by
+      apply Real.sqrt_le_sqrt
+      rw [inverseGram_reassocTailBoundaryMapES_eq_fiberwise_inverseGram A K L Q h]
+      exact norm_boundaryFiberwiseMap_le _ _
 
 
 
@@ -352,7 +360,14 @@ theorem wholeIncrement_injectiveRangeProjector_residual_eq_centered_sub_correcti
         wholeIncrementLeftFiniteGramCorrectionES A K L Q ρ hρ
           hLocalTail hLocalLeft := by
   dsimp only
-  rw [whole_increment_injectiveRangeProjector_residual_eq]
+  refine Eq.trans (whole_increment_injectiveRangeProjector_residual_eq
+    A K L Q
+    ((physicalReassocES (d := d) K L Q).injective.comp
+      (tailBoundaryMapES_injective_of_groundSpaceMapES_injective
+        A K (L + Q) hLocalTail))
+    (leftBoundaryMapES_injective_of_groundSpaceMapES_injective
+      A (K + L) Q hLocalLeft)
+    hFull) ?_
   rw [inverseGram_reassocTailBoundaryMapES_eq_fiberwise_inverseGram
       A K L Q hLocalTail,
     inverseGram_leftBoundaryMapES_eq_fiberwise_inverseGram
