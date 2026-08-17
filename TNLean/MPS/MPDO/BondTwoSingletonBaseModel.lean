@@ -484,8 +484,9 @@ theorem normalizedSingletonCoeffs_coeff
     (L : ℕ) (alpha beta gamma : Fin 1) :
     normalizedSingletonCoeffs.coeff L alpha beta gamma =
       (singletonScale : ℂ) ^ L := by
-  simp [normalizedSingletonCoeffs, BNTLabelCoefficientFamily.ofChi,
-    DiagonalChiFamily.tracePowerCoeff, normalizedSingletonChi]
+  change (∑ _q : Fin 1, (singletonScale : ℂ) ^ L) =
+    (singletonScale : ℂ) ^ L
+  exact Fin.sum_univ_one (fun _q : Fin 1 => (singletonScale : ℂ) ^ L)
 
 /-- The normalized singleton family, indexed by its unique BNT label. -/
 private def normalizedSingletonFamily :
@@ -580,7 +581,18 @@ theorem normalizedSingleton_verticalAssembledTensor :
       (Matrix.blockDiagonal' (fun _k : Fin 1 ↦
         (singletonScale : ℂ)⁻¹ •
           ((singletonScale : ℂ) • singletonTensor v)))) i j = singletonTensor v i j
-  simp [Matrix.reindex_apply, hsymm, hs]
+  rw [Matrix.reindex_apply]
+  change (Matrix.blockDiagonal' (fun _k : Fin 1 ↦
+      (singletonScale : ℂ)⁻¹ • ((singletonScale : ℂ) • singletonTensor v)))
+    (e.symm i) (e.symm j) = singletonTensor v i j
+  rw [hsymm i, hsymm j]
+  refine (Matrix.blockDiagonal'_apply_eq
+    (fun _k : Fin 1 ↦ (singletonScale : ℂ)⁻¹ •
+      ((singletonScale : ℂ) • singletonTensor v)) (0 : Fin 1)
+    (show Fin 2 from i) (show Fin 2 from j)).trans ?_
+  change (singletonScale : ℂ)⁻¹ *
+    ((singletonScale : ℂ) * singletonTensor v i j) = singletonTensor v i j
+  exact inv_mul_cancel_left₀ hs (singletonTensor v i j)
 
 private abbrev singletonBondDim : Fin 1 → ℕ := fun _ ↦ 2
 private abbrev singletonMultiplicity : Fin 1 → ℕ := fun _ ↦ 1

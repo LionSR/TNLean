@@ -123,7 +123,7 @@ theorem tiBoundaryConfigMap_boundaryEdgeMap (T : Tensor (torusGraph width height
       Fin.cast (bondDim_boundaryEdgeMap_translate hT a b R f).symm (bdry f) := by
   rw [tiBoundaryConfigMap, regionBoundaryConfigMap_boundaryEdgeMap]
   apply Fin.eq_of_val_eq
-  simp
+  simp only [Fin.val_cast]
 
 /-- **Translation covariance of the blocked weight of a translation-invariant tensor.**
 
@@ -307,7 +307,7 @@ theorem regionBlockedWeight_reindexTensor_translate {A B : Tensor (torusGraph wi
       tiBoundaryConfigMap B hB a b R (fun f => Fin.cast (congr_fun hbd f.1) (bdry f)) := by
     funext f
     apply Fin.eq_of_val_eq
-    simp [tiBoundaryConfigMap, regionBoundaryConfigMap]
+    rfl
   have h1 := regionBlockedWeight_reindexTensor (G := torusGraph width height)
     (applyGauge B X) hbd (Region.map (translate a b) R)
     (tiBoundaryConfigMap A hA a b R bdry) (regionPhysicalConfigMap (translate a b) R τ)
@@ -348,10 +348,22 @@ theorem twoBlockScalarProportional_translate {A B : Tensor (torusGraph width hei
   intro u bdry' τ'
   obtain ⟨bdry, rfl⟩ := tiBoundaryConfigMap_surjective A hA a b R bdry'
   obtain ⟨τ, rfl⟩ := regionPhysicalConfigMap_surjective (d := d) (translate a b) R τ'
-  simp only [regionTwoBlock_apply]
-  rw [regionBlockedWeight_tiBoundaryConfigMap A hA a b R bdry τ,
-    regionBlockedWeight_reindexTensor_translate hA hB hX hbd a b R bdry τ]
-  exact hprop PUnit.unit bdry τ
+  calc
+    regionTwoBlock (G := torusGraph width height) A (Region.map (translate a b) R)
+        u (tiBoundaryConfigMap A hA a b R bdry)
+        (regionPhysicalConfigMap (translate a b) R τ) =
+      regionTwoBlock (G := torusGraph width height) A R u bdry τ :=
+        regionBlockedWeight_tiBoundaryConfigMap A hA a b R bdry τ
+    _ = c * regionTwoBlock (G := torusGraph width height)
+        (reindexTensor (G := torusGraph width height) (applyGauge B X) hbd) R u bdry τ :=
+      hprop u bdry τ
+    _ = c * regionTwoBlock (G := torusGraph width height)
+        (reindexTensor (G := torusGraph width height) (applyGauge B X) hbd)
+        (Region.map (translate a b) R) u
+        (tiBoundaryConfigMap A hA a b R bdry)
+        (regionPhysicalConfigMap (translate a b) R τ) :=
+      congrArg (c * ·)
+        (regionBlockedWeight_reindexTensor_translate hA hB hX hbd a b R bdry τ).symm
 
 end Torus
 

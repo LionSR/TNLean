@@ -327,12 +327,14 @@ theorem cyclicActiveLeftRestriction_neighboringOperator
   classical
   by_cases hh : F.IsCyclicActiveSector h
   · rw [if_pos hh]
+    unfold neighboringOperator
     ext x y
-    simp [neighboringOperator_apply, hh]
+    simp [hh]
+    exact (Matrix.of_apply _ _ _).symm
   · rw [if_neg hh]
+    unfold neighboringOperator
     ext x y
-    simp only [neighboringOperator_apply,
-      cyclicActiveLeftRestriction_leftTensor,
+    simp only [cyclicActiveLeftRestriction_leftTensor,
       cyclicActiveLeftRestriction_rightTensor, hh, if_false]
     change (∑ _ : Fin D, _ * 0) = 0
     simp

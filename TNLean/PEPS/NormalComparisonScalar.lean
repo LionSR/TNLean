@@ -128,8 +128,11 @@ theorem twoBlockScalarProportional_one_of_empty (A C : Tensor G d)
     TwoBlockScalarProportional (regionTwoBlock (G := G) A (∅ : Finset V))
       (regionTwoBlock (G := G) (reindexTensor (G := G) C hbd) (∅ : Finset V)) 1 := by
   intro η μ σ
-  rw [regionTwoBlock_apply, regionTwoBlock_apply, one_mul,
-    regionBlockedWeight_empty, regionBlockedWeight_empty]
+  let μC : RegionBoundaryConfig (G := G) (reindexTensor (G := G) C hbd) (∅ : Finset V) :=
+    fun f => μ f
+  change regionBlockedWeight (G := G) A ∅ μ σ =
+    1 * regionBlockedWeight (G := G) (reindexTensor (G := G) C hbd) ∅ μC σ
+  rw [one_mul, regionBlockedWeight_empty, regionBlockedWeight_empty]
   rfl
 
 /-- **The full-region comparison proportionality.**  Over the full vertex set
@@ -148,9 +151,13 @@ theorem twoBlockScalarProportional_one_of_univ (A B : Tensor G d)
       (regionTwoBlock (G := G) (reindexTensor (G := G) (applyGauge B X) hbond)
         (Finset.univ : Finset V)) 1 := by
   intro η μ τ
-  rw [regionTwoBlock_apply, regionTwoBlock_apply, one_mul,
-    regionBlockedWeight_univ, regionBlockedWeight_univ,
-    stateCoeff_reindexTensor (applyGauge B X) hbond, applyGauge_stateCoeff]
+  let C := reindexTensor (G := G) (applyGauge B X) hbond
+  let μC : RegionBoundaryConfig (G := G) C (Finset.univ : Finset V) := fun f => μ f
+  change regionBlockedWeight (G := G) A Finset.univ μ τ =
+    1 * regionBlockedWeight (G := G) C Finset.univ μC τ
+  rw [one_mul, regionBlockedWeight_univ, regionBlockedWeight_univ]
+  change stateCoeff A _ = stateCoeff (reindexTensor (G := G) (applyGauge B X) hbond) _
+  rw [stateCoeff_reindexTensor (applyGauge B X) hbond, applyGauge_stateCoeff]
   exact hAB _
 
 /-! ### The per-vertex scalar from the one-site comparison -/

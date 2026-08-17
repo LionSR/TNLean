@@ -264,6 +264,36 @@ theorem overlapLeft_firstStrip_fiber_weightCombination_eq_zero {R₁ R₂ : Fins
       rw [cFiber, if_neg hδbdry, zero_mul]
     · rw [if_neg hind, mul_zero]
 
+private theorem overlapLeft_firstStrip_fiber_weightCombination_eq_zero_rightGeometry
+    {R₁ R₂ : Finset V}
+    (hR₁ : RegionBlockedTensorInjective (G := G) A R₁)
+    (c : RegionBoundaryConfig (G := G) A (R₁ ∪ R₂) → ℂ)
+    (hc : ∑ bdry : RegionBoundaryConfig (G := G) A
+          (Finset.univ \ (overlapLeftGeometry (V := V) R₁ R₂).red),
+        (fun b => c (regionBoundaryConfigCongr (A := A)
+            (overlapLeftGeometry_univ_sdiff_red R₁ R₂) b)) bdry •
+          regionBlockedWeight (G := G) A
+            (Finset.univ \ (overlapLeftGeometry (V := V) R₁ R₂).red) bdry = 0)
+    (δ : P0OuterConfig A R₁ R₂)
+    (β₁ : RegionBoundaryConfig (G := G) A R₁)
+    (σcompl : RegionPhysicalConfig (V := V) (d := d)
+      (overlapRightGeometry (V := V) R₁ R₂).complement) :
+    ∑ bc' : RegionBoundaryConfig (G := G) A
+        (overlapRightGeometry (V := V) R₁ R₂).complement,
+      (∑ bdry : RegionBoundaryConfig (G := G) A (R₁ ∪ R₂),
+          cFiber (A := A) c δ bdry *
+            (if ∃ q : VirtualConfig A,
+                regionBoundaryLabel (G := G) A (R₁ ∪ R₂) q = bdry ∧
+                  regionBoundaryLabel (G := G) A R₁ q = β₁ ∧
+                  regionBoundaryLabel (G := G) A
+                    (overlapRightGeometry (V := V) R₁ R₂).complement q = bc'
+              then (1 : ℂ) else 0)) •
+        regionBlockedWeight (G := G) A
+          (overlapRightGeometry (V := V) R₁ R₂).complement bc' σcompl = 0 := by
+  convert overlapLeft_firstStrip_fiber_weightCombination_eq_zero (G := G) (A := A)
+    hR₁ c hc δ β₁ σcompl using 1
+  all_goals rfl
+
 /-! ### The `P₀`-fiber bridge: the right coupling vanishes
 
 The right coupling combination of the `δ`-fiber bridge row, read through the right-geometry
@@ -335,58 +365,30 @@ theorem overlapFiber_bridge_rightCoupling_eq_zero {R₁ R₂ : Finset V}
         ∑ β₁ : RegionBoundaryConfig (G := G) A R₁,
           (if ∃ q₁ : VirtualConfig A,
               regionBoundaryLabel (G := G) A R₁ q₁ = β₁ ∧
-                regionBoundaryLabel (G := G) A (R₁ ∩ R₂) q₁ = bβ
+                regionBoundaryLabel (G := G) A
+                  (overlapRightGeometry (V := V) R₁ R₂).blue q₁ = bβ
             then (1 : ℂ) else 0) *
             ∑ bdry : RegionBoundaryConfig (G := G) A (R₁ ∪ R₂),
               (cFiber (A := A) c δ) bdry *
                 (if ∃ q₂ : VirtualConfig A,
                     regionBoundaryLabel (G := G) A (R₁ ∪ R₂) q₂ = bdry ∧
                       regionBoundaryLabel (G := G) A R₁ q₂ = β₁ ∧
-                        regionBoundaryLabel (G := G) A (R₂ \ R₁) q₂ = bc'
+                        regionBoundaryLabel (G := G) A
+                          (overlapRightGeometry (V := V) R₁ R₂).complement q₂ = bc'
                   then (1 : ℂ) else 0) := by
     intro bc'
-    rw [show (∑ hostlab : RegionBoundaryConfig (G := G) A
-          (Finset.univ \ (overlapRightGeometry (V := V) R₁ R₂).red),
-          row hostlab •
-            (if ∃ q : VirtualConfig A,
-                regionBoundaryLabel (G := G) A
-                  (Finset.univ \ (overlapRightGeometry (V := V) R₁ R₂).red) q = hostlab ∧
-                  regionBoundaryLabel (G := G) A (overlapRightGeometry (V := V) R₁ R₂).blue q = bβ ∧
-                    regionBoundaryLabel (G := G) A
-                      (overlapRightGeometry (V := V) R₁ R₂).complement q = bc'
-              then (1 : ℂ) else 0)) =
-        ∑ b₂ : RegionBoundaryConfig (G := G) A R₂,
-          overlapBridgeRow (G := G) (A := A) (cFiber (A := A) c δ) b₂ *
-            (if ∃ q : VirtualConfig A,
-                regionBoundaryLabel (G := G) A R₂ q = b₂ ∧
-                  regionBoundaryLabel (G := G) A (R₁ ∩ R₂) q = bβ ∧
-                    regionBoundaryLabel (G := G) A (R₂ \ R₁) q = bc'
-              then (1 : ℂ) else 0) from ?_]
-    · exact overlapBridge_coeff_eq (G := G) (A := A) (cFiber (A := A) c δ) bβ bc'
-    · refine Fintype.sum_equiv (regionBoundaryConfigCongr (A := A) hHR) _ _ (fun hostlab => ?_)
-      rw [hrow, smul_eq_mul]
-      exact congrArg (overlapBridgeRow (G := G) (A := A) (cFiber (A := A) c δ)
-          (regionBoundaryConfigCongr (A := A) hHR hostlab) * ·)
-        (existsLabel_indicator_congr (A := A) hHR hostlab
-          (fun q => regionBoundaryLabel (G := G) A (R₁ ∩ R₂) q = bβ ∧
-            regionBoundaryLabel (G := G) A (R₂ \ R₁) q = bc'))
+    rw [hrow]
+    simp only [smul_eq_mul]
+    exact overlapBridge_geometry_host_coeff_eq (G := G) (A := A)
+      (cFiber (A := A) c δ) bβ bc' hHR
   rw [Finset.sum_congr rfl (fun bc' _ => by rw [hcoeff bc', Finset.sum_smul])]
   rw [Finset.sum_comm]
   refine Finset.sum_eq_zero (fun β₁ _ => ?_)
   rw [Finset.sum_congr rfl (fun bc' _ => by rw [mul_smul]), ← Finset.smul_sum]
-  have hstripzero := overlapLeft_firstStrip_fiber_weightCombination_eq_zero (G := G) (A := A)
-      hR₁ c hc δ β₁ σcompl
-  rw [(by exact hstripzero : (∑ x : RegionBoundaryConfig (G := G) A
-          (overlapRightGeometry (V := V) R₁ R₂).complement,
-        (∑ bdry : RegionBoundaryConfig (G := G) A (R₁ ∪ R₂),
-            cFiber (A := A) c δ bdry *
-              (if ∃ q₂ : VirtualConfig A,
-                  regionBoundaryLabel (G := G) A (R₁ ∪ R₂) q₂ = bdry ∧
-                    regionBoundaryLabel (G := G) A R₁ q₂ = β₁ ∧
-                      regionBoundaryLabel (G := G) A (R₂ \ R₁) q₂ = x
-                then (1 : ℂ) else 0)) •
-          regionBlockedWeight (G := G) A (overlapRightGeometry (V := V) R₁ R₂).complement
-            x σcompl) = 0), smul_zero]
+  have hstripzero :=
+    overlapLeft_firstStrip_fiber_weightCombination_eq_zero_rightGeometry
+      (G := G) (A := A) hR₁ c hc δ β₁ σcompl
+  rw [hstripzero, smul_zero]
 
 /-! ### The `P₀`-fiber bridge row vanishes after inverting `R₂`
 

@@ -20,6 +20,8 @@ open scoped Matrix BigOperators ComplexOrder Kronecker
 
 namespace MPOTensor.PhysicalSectorFactorization
 
+attribute [local instance] Classical.decEq Classical.propDecidable
+
 universe u
 
 variable {d D : ℕ} {K : MPOTensor d D}
@@ -86,13 +88,25 @@ theorem cyclicActiveLeftOpenBlock_posSemidef
     (F.cyclicActiveLeftOpenBlock lam b k).PosSemidef := by
   classical
   by_cases hk : F.IsCyclicActiveRetainedWord k
-  · rw [cyclicActiveLeftOpenBlock, dif_pos hk]
+  · let P : Matrix (F.LeftOpenEdgeIndex k) (F.LeftOpenEdgeIndex k) ℂ := by
+      exact ((lam : ℂ) ^ 2) •
+        (F.cyclicActiveLeftBoundary b ((F.cyclicActiveRetainedWord hk) 0) ⊗ₖ
+          Matrix.finKronecker (fun i : Fin A ↦
+            F.neighboringOperator (k i.castSucc) (k i.succ)))
+    have hblock : F.cyclicActiveLeftOpenBlock lam b k = P := by
+      ext x y
+      simp [cyclicActiveLeftOpenBlock, P, hk]
+    rw [hblock]
+    unfold P
     apply Matrix.PosSemidef.smul
     · exact (F.cyclicActiveLeftBoundary_posSemidef hpos b hb _).kronecker
         (Matrix.finKronecker_posSemidef _ fun i ↦ hpos _ _)
     · have hs : 0 ≤ lam ^ 2 := sq_nonneg lam
       exact_mod_cast hs
-  · rw [cyclicActiveLeftOpenBlock, dif_neg hk]
+  · have hblock : F.cyclicActiveLeftOpenBlock lam b k = 0 := by
+      ext x y
+      simp [cyclicActiveLeftOpenBlock, hk]
+    rw [hblock]
     exact Matrix.PosSemidef.zero
 
 /-- The right open-chain factor is positive semidefinite when the neighbouring
@@ -112,10 +126,12 @@ theorem cyclicActiveRightOpenBlock_posSemidef
     (F.cyclicActiveRightOpenBlock a k).PosSemidef := by
   classical
   by_cases hk : F.IsCyclicActiveRetainedWord k
-  · rw [cyclicActiveRightOpenBlock, dif_pos hk]
+  · unfold cyclicActiveRightOpenBlock
+    simp only [dif_pos hk]
     exact (Matrix.finKronecker_posSemidef _ fun i ↦ hpos _ _).kronecker
       (F.cyclicActiveRightBoundary_posSemidef hpos a ha _)
-  · rw [cyclicActiveRightOpenBlock, dif_neg hk]
+  · unfold cyclicActiveRightOpenBlock
+    simp only [dif_neg hk]
     exact Matrix.PosSemidef.zero
 
 /-- The left path factor on the standard `A ⊗ B_jᴸ` coordinates.

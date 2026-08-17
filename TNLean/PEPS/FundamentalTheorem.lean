@@ -218,7 +218,8 @@ theorem isVertexInjective_absorbEdgeGauges (B : Tensor G d)
   intro v
   have hcomp : (absorbEdgeGauges B Z).component v =
       fun η => fun σ => gaugeVertex B Z v η σ := by
-    funext η σ; rw [absorbEdgeGauges_component]
+    funext η σ
+    rfl
   rw [hcomp]
   set K : Matrix (LocalVirtualConfig B v) (LocalVirtualConfig B v) ℂ :=
     Matrix.of (fun η η' => ∏ ie : IncidentEdge G v,
@@ -265,8 +266,7 @@ theorem post_absorption_edge_insertion_equality (A B : Tensor G d)
   · exact hDim
   intro e σ M
   simp only [absorbEdgeGauges]
-  rw [hΦcoeff e σ M, hΦconj e M, edgeInsertedCoeff_applyGauge]
-  congr 1
+  rw [hΦcoeff e σ M, hΦconj e M]
   have hZt :
       (↑(glReindex (congr_fun hDim e) (glTranspose (X e))) :
           Matrix (Fin (B.bondDim e)) (Fin (B.bondDim e)) ℂ)ᵀ =
@@ -284,8 +284,34 @@ theorem post_absorption_edge_insertion_equality (A B : Tensor G d)
       glTranspose_inv_coe]
     simp only [Matrix.coe_reindexAlgEquiv, Matrix.transpose_reindex,
       Matrix.transpose_transpose]
-  rw [hZt, hZit, map_mul, map_mul]
-  rfl
+  have hMatrix :
+      (↑(glReindex (congr_fun hDim e) (glTranspose (X e))) :
+          Matrix (Fin (B.bondDim e)) (Fin (B.bondDim e)) ℂ)ᵀ *
+          Matrix.reindexAlgEquiv ℂ ℂ (finCongr (congr_fun hDim e)) M *
+          ((↑(glReindex (congr_fun hDim e) (glTranspose (X e))) :
+            Matrix (Fin (B.bondDim e)) (Fin (B.bondDim e)) ℂ)⁻¹)ᵀ =
+        Matrix.reindexAlgEquiv ℂ ℂ (finCongr (congr_fun hDim e))
+          ((↑(X e) : Matrix (Fin (A.bondDim e)) (Fin (A.bondDim e)) ℂ) * M *
+            (↑(X e)⁻¹ : Matrix (Fin (A.bondDim e)) (Fin (A.bondDim e)) ℂ)) := by
+    rw [hZt, hZit, map_mul, map_mul]
+  calc
+    edgeInsertedCoeff (G := G) B e σ
+        (Matrix.reindexAlgEquiv ℂ ℂ (finCongr (congr_fun hDim e))
+          ((↑(X e) : Matrix (Fin (A.bondDim e)) (Fin (A.bondDim e)) ℂ) * M *
+            (↑(X e)⁻¹ : Matrix (Fin (A.bondDim e)) (Fin (A.bondDim e)) ℂ))) =
+      edgeInsertedCoeff (G := G) B e σ
+        ((↑(glReindex (congr_fun hDim e) (glTranspose (X e))) :
+            Matrix (Fin (B.bondDim e)) (Fin (B.bondDim e)) ℂ)ᵀ *
+          Matrix.reindexAlgEquiv ℂ ℂ (finCongr (congr_fun hDim e)) M *
+          ((↑(glReindex (congr_fun hDim e) (glTranspose (X e))) :
+            Matrix (Fin (B.bondDim e)) (Fin (B.bondDim e)) ℂ)⁻¹)ᵀ) :=
+        congrArg (fun N => edgeInsertedCoeff (G := G) B e σ N) hMatrix.symm
+    _ = edgeInsertedCoeff (G := G)
+        (applyGauge B (fun e => glReindex (congr_fun hDim e) (glTranspose (X e)))) e σ
+        (Matrix.reindexAlgEquiv ℂ ℂ (finCongr (congr_fun hDim e)) M) :=
+      (edgeInsertedCoeff_applyGauge B
+        (fun e => glReindex (congr_fun hDim e) (glTranspose (X e))) e σ
+        (Matrix.reindexAlgEquiv ℂ ℂ (finCongr (congr_fun hDim e)) M)).symm
 
 omit [Fintype V] in
 /-- Reindexing a PEPS tensor along a bond-dimension equality preserves vertex

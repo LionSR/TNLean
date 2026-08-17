@@ -332,7 +332,10 @@ theorem threeBlockBlueCoeff_comp {R S P : Finset V} (hRS : R ⊆ S) (hSP : S ⊆
             regionBoundaryLabel (G := G) A (Finset.univ \ P) η = bcP),
         (∏ w : {w : V // w ∈ S \ R}, A.component w.1 (fun ie => η ie.1) (σ₁ w)) *
           ∏ w : {w : V // w ∈ P \ S}, A.component w.1 (fun ie => η ie.1) (σ₂ w) from by
-      rw [ThreeBlockGeometry.threeBlockBlueCoeff]
+      change (∑ η ∈ Finset.univ.filter (fun η : VirtualConfig A =>
+          regionBoundaryLabel (G := G) A (Finset.univ \ R) η = bdryR ∧
+            regionBoundaryLabel (G := G) A (Finset.univ \ P) η = bcP),
+        ∏ w : {w : V // w ∈ P \ R}, A.component w.1 (fun ie => η ie.1) (σ w)) = _
       refine Finset.sum_congr rfl (fun η _ => ?_)
       exact regionProd_split (A := A) sdiff_disjoint_sdiff
         (sdiff_union_sdiff_of_subset hRS hSP) η σ
@@ -402,8 +405,17 @@ theorem threeBlockBlueCoeff_comp {R S P : Finset V} (hRS : R ⊆ S) (hSP : S ⊆
               regionBoundaryLabel (G := G) A (Finset.univ \ P) q = bcP),
             ∏ w : {w : V // w ∈ P \ S}, A.component w.1 (fun ie => q₂ ie.1) (σ₂ w))]
     refine Finset.sum_congr rfl (fun ν' _ => ?_)
-    rw [regionComplementBoundaryConfigEquiv_apply,
-      ThreeBlockGeometry.threeBlockBlueCoeff, ThreeBlockGeometry.threeBlockBlueCoeff]
+    rw [regionComplementBoundaryConfigEquiv_apply]
+    change ((∑ q₁ ∈ Finset.univ.filter (fun q : VirtualConfig A =>
+        regionBoundaryLabel (G := G) A (Finset.univ \ R) q = bdryR ∧
+          regionBoundaryLabel (G := G) A (Finset.univ \ S) q =
+            regionComplementBoundaryConfig (G := G) A S ν'),
+      ∏ w : {w : V // w ∈ S \ R}, A.component w.1 (fun ie => q₁ ie.1) (σ₁ w)) *
+      ∑ q₂ ∈ Finset.univ.filter (fun q : VirtualConfig A =>
+        regionBoundaryLabel (G := G) A (Finset.univ \ S) q =
+            regionComplementBoundaryConfig (G := G) A S ν' ∧
+          regionBoundaryLabel (G := G) A (Finset.univ \ P) q = bcP),
+        ∏ w : {w : V // w ∈ P \ S}, A.component w.1 (fun ie => q₂ ie.1) (σ₂ w)) = _
     rfl
 
 /-! ### The bare and clean composition laws -/

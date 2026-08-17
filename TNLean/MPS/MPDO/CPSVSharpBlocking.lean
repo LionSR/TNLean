@@ -160,7 +160,7 @@ theorem CPSVCanonicalFormData.sum_activeRepresentative_dim_le
     have hEnum : data.activePhaseClasses.enum j
         ⟨0, data.activePhaseClasses.copies_pos j⟩ =
         data.activePhaseClasses.repr j := by
-      simp [CPSVCanonicalFormData.activePhaseClasses]
+      exact mpvPhaseClassData_enum_zero_eq_repr data.activeBlocks j
     change ((data.activeEquiv
       (data.activePhaseClasses.enum j
         ⟨0, data.activePhaseClasses.copies_pos j⟩) : data.Active) : Fin data.r) =

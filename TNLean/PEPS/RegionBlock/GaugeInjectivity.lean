@@ -128,13 +128,33 @@ noncomputable def regionLocalBoundary (B : Tensor G d) (R : Finset V)
   else ξ ⟨f.1.1.2, boundary_right_mem (G := G) R f.2 h⟩ (edgeRightIncident (G := G) f.1)
 
 omit [Fintype V] in
+private theorem regionLocalBoundary_eq_left (B : Tensor G d) (R : Finset V)
+    (ξ : RegionLocalConfig (G := G) B R)
+    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f}) (h : f.1.1.1 ∈ R) :
+    regionLocalBoundary (G := G) B R ξ f =
+      ξ ⟨f.1.1.1, h⟩ (edgeLeftIncident (G := G) f.1) := by
+  unfold regionLocalBoundary
+  exact dite_eq_left h
+
+omit [Fintype V] in
+private theorem regionLocalBoundary_eq_right (B : Tensor G d) (R : Finset V)
+    (ξ : RegionLocalConfig (G := G) B R)
+    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f}) (h : f.1.1.1 ∉ R) :
+    regionLocalBoundary (G := G) B R ξ f =
+      ξ ⟨f.1.1.2, boundary_right_mem (G := G) R f.2 h⟩
+        (edgeRightIncident (G := G) f.1) := by
+  unfold regionLocalBoundary
+  exact dite_eq_right h
+
+omit [Fintype V] in
 /-- The boundary reading of the region-local configuration of a global configuration is the
 global label of the boundary edge. -/
 theorem regionLocalBoundary_ofGlobal (B : Tensor G d) (R : Finset V) (ζ : VirtualConfig B)
     (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f}) :
     regionLocalBoundary (G := G) B R (regionLocalOfGlobal (G := G) B R ζ) f = ζ f.1 := by
-  rw [regionLocalBoundary]
-  split <;> rfl
+  by_cases h : f.1.1.1 ∈ R
+  · exact (regionLocalBoundary_eq_left B R _ f h).trans rfl
+  · exact (regionLocalBoundary_eq_right B R _ f h).trans rfl
 
 /-- A region-local configuration is *consistent* when the two endpoints of every interior
 edge of `R` carry the same virtual index. -/
@@ -393,15 +413,53 @@ theorem regionGaugeFactor_boundary (B : Tensor G d)
     (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f}) (z : Fin (B.bondDim f.1)) :
     regionGaugeFactor (G := G) B X R ξ f.1 z =
       regionBoundaryGauge (G := G) B X R f z (regionLocalBoundary (G := G) B R ξ f) := by
-  rw [regionGaugeFactor, regionBoundaryGauge, regionLocalBoundary]
   by_cases h1 : f.1.1.1 ∈ R
   · have h2 : f.1.1.2 ∉ R := by
       rcases f.2 with ⟨_, hr⟩ | ⟨hl, _⟩
       · exact hr
       · exact absurd h1 hl
-    rw [dif_pos h1, dif_neg h2, mul_one, if_pos h1, dif_pos h1, edgeGaugeAt_left]
+    let q : Fin (B.bondDim f.1) :=
+      ξ ⟨f.1.1.1, h1⟩ (edgeLeftIncident (G := G) f.1)
+    have hfactor : regionGaugeFactor (G := G) B X R ξ f.1 z =
+        edgeGaugeAt B X f.1.1.1 (edgeLeftIncident (G := G) f.1) z q := by
+      unfold regionGaugeFactor
+      exact (congrArg₂ (· * ·) (dite_eq_left h1) (dite_eq_right h2)).trans (mul_one _)
+    have hboundary : regionBoundaryGauge (G := G) B X R f z
+        (regionLocalBoundary (G := G) B R ξ f) =
+          (X f.1 : Matrix (Fin (B.bondDim f.1)) (Fin (B.bondDim f.1)) ℂ) z q := by
+      unfold regionBoundaryGauge
+      calc
+        _ = (X f.1 : Matrix (Fin (B.bondDim f.1)) (Fin (B.bondDim f.1)) ℂ) z
+            (regionLocalBoundary (G := G) B R ξ f) :=
+          congrArg (fun Y : Matrix (Fin (B.bondDim f.1)) (Fin (B.bondDim f.1)) ℂ =>
+            Y z (regionLocalBoundary (G := G) B R ξ f)) (ite_eq_left h1)
+        _ = _ := congrArg
+          (fun x => (X f.1 : Matrix (Fin (B.bondDim f.1)) (Fin (B.bondDim f.1)) ℂ) z x)
+          (regionLocalBoundary_eq_left B R ξ f h1)
+    exact hfactor.trans ((congrFun (congrFun (edgeGaugeAt_left B X f.1) z) q).trans hboundary.symm)
   · have h2 : f.1.1.2 ∈ R := boundary_right_mem (G := G) R f.2 h1
-    rw [dif_neg h1, dif_pos h2, one_mul, if_neg h1, dif_neg h1, edgeGaugeAt_right]
+    let q : Fin (B.bondDim f.1) :=
+      ξ ⟨f.1.1.2, h2⟩ (edgeRightIncident (G := G) f.1)
+    have hfactor : regionGaugeFactor (G := G) B X R ξ f.1 z =
+        edgeGaugeAt B X f.1.1.2 (edgeRightIncident (G := G) f.1) z q := by
+      unfold regionGaugeFactor
+      exact (congrArg₂ (· * ·) (dite_eq_right h1) (dite_eq_left h2)).trans (one_mul _)
+    have hboundary : regionBoundaryGauge (G := G) B X R f z
+        (regionLocalBoundary (G := G) B R ξ f) =
+          (((X f.1)⁻¹ : GL (Fin (B.bondDim f.1)) ℂ) :
+            Matrix (Fin (B.bondDim f.1)) (Fin (B.bondDim f.1)) ℂ)ᵀ z q := by
+      unfold regionBoundaryGauge
+      calc
+        _ = (((X f.1)⁻¹ : GL (Fin (B.bondDim f.1)) ℂ) :
+              Matrix (Fin (B.bondDim f.1)) (Fin (B.bondDim f.1)) ℂ)ᵀ z
+            (regionLocalBoundary (G := G) B R ξ f) :=
+          congrArg (fun Y : Matrix (Fin (B.bondDim f.1)) (Fin (B.bondDim f.1)) ℂ =>
+            Y z (regionLocalBoundary (G := G) B R ξ f)) (ite_eq_right h1)
+        _ = _ := congrArg
+          (fun x => (((X f.1)⁻¹ : GL (Fin (B.bondDim f.1)) ℂ) :
+            Matrix (Fin (B.bondDim f.1)) (Fin (B.bondDim f.1)) ℂ)ᵀ z x)
+          (regionLocalBoundary_eq_right B R ξ f h1)
+    exact hfactor.trans ((congrFun (congrFun (edgeGaugeAt_right B X f.1) z) q).trans hboundary.symm)
 
 open scoped Classical in
 /-- The contribution of a non-boundary edge to the gauged region weight after the outer
@@ -433,22 +491,44 @@ theorem sum_regionGaugeFactor_nonboundary (B : Tensor G d)
   · have h2 : e.1.1.2 ∈ R := nonboundary_right_mem (G := G) R e.2 h1
     have hinc : IsRegionIncidentEdge (G := G) R e.1 := Or.inl h1
     rw [regionEdgeContraction, if_pos hinc]
-    rw [show (∑ z : Fin (B.bondDim e.1), regionGaugeFactor (G := G) B X R ξ e.1 z) =
-        ∑ z : Fin (B.bondDim e.1),
-          (X e.1 : Matrix (Fin (B.bondDim e.1)) (Fin (B.bondDim e.1)) ℂ) z
-              (ξ ⟨e.1.1.1, h1⟩ (edgeLeftIncident (G := G) e.1)) *
-            ((X e.1 : Matrix (Fin (B.bondDim e.1)) (Fin (B.bondDim e.1)) ℂ)⁻¹)
-              (ξ ⟨e.1.1.2, h2⟩ (edgeRightIncident (G := G) e.1)) z from
-      Finset.sum_congr rfl fun z _ => by
-        rw [regionGaugeFactor, dif_pos h1, dif_pos h2, edgeGaugeAt_left, edgeGaugeAt_right,
-          Matrix.GeneralLinearGroup.coe_inv, Matrix.transpose_apply]]
-    rw [gauge_sum_left_right_matrix_inv (X e.1)]
-    refine if_congr ?_ rfl rfl
-    constructor
-    · intro hab _ _
-      exact hab
-    · intro h
-      exact h h1 h2
+    let a : Fin (B.bondDim e.1) :=
+      ξ ⟨e.1.1.1, h1⟩ (edgeLeftIncident (G := G) e.1)
+    let b : Fin (B.bondDim e.1) :=
+      ξ ⟨e.1.1.2, h2⟩ (edgeRightIncident (G := G) e.1)
+    calc
+      (∑ z : Fin (B.bondDim e.1), regionGaugeFactor (G := G) B X R ξ e.1 z) =
+          ∑ z : Fin (B.bondDim e.1),
+            (X e.1 : Matrix (Fin (B.bondDim e.1)) (Fin (B.bondDim e.1)) ℂ) z a *
+              ((X e.1 : Matrix (Fin (B.bondDim e.1)) (Fin (B.bondDim e.1)) ℂ)⁻¹) b z := by
+        refine Finset.sum_congr rfl fun z _ => ?_
+        unfold regionGaugeFactor
+        simp only [h1, h2, dite_true]
+        change edgeGaugeAt B X e.1.1.1 (edgeLeftIncident (G := G) e.1) z a *
+            edgeGaugeAt B X e.1.1.2 (edgeRightIncident (G := G) e.1) z b = _
+        calc
+          _ = (X e.1 : Matrix (Fin (B.bondDim e.1)) (Fin (B.bondDim e.1)) ℂ) z a *
+              (((X e.1)⁻¹ : GL (Fin (B.bondDim e.1)) ℂ) :
+                Matrix (Fin (B.bondDim e.1)) (Fin (B.bondDim e.1)) ℂ)ᵀ z b :=
+            congrArg₂ (· * ·)
+              (congrFun (congrFun (edgeGaugeAt_left B X e.1) z) a)
+              (congrFun (congrFun (edgeGaugeAt_right B X e.1) z) b)
+          _ = _ := congrArg
+            (fun Y : Matrix (Fin (B.bondDim e.1)) (Fin (B.bondDim e.1)) ℂ =>
+              (X e.1 : Matrix (Fin (B.bondDim e.1)) (Fin (B.bondDim e.1)) ℂ) z a * Y b z)
+            (Matrix.GeneralLinearGroup.coe_inv (X e.1))
+      _ = if a = b then 1 else 0 := by
+        by_cases hab : a = b
+        · simpa only [if_pos hab] using gauge_sum_left_right_matrix_inv (X e.1) a b
+        · simpa only [if_neg hab] using gauge_sum_left_right_matrix_inv (X e.1) a b
+      _ = if ∀ (h1 : e.1.1.1 ∈ R) (h2 : e.1.1.2 ∈ R),
+          ξ ⟨e.1.1.1, h1⟩ (edgeLeftIncident (G := G) e.1) =
+            ξ ⟨e.1.1.2, h2⟩ (edgeRightIncident (G := G) e.1) then 1 else 0 := by
+        refine if_congr ?_ rfl rfl
+        constructor
+        · intro hab _ _
+          exact hab
+        · intro h
+          exact h h1 h2
   · have h2 : e.1.1.2 ∉ R := nonboundary_right_not_mem (G := G) R e.2 h1
     have hninc : ¬ IsRegionIncidentEdge (G := G) R e.1 :=
       fun hinc => hinc.elim (fun h => absurd h h1) (fun h => absurd h h2)
@@ -530,6 +610,24 @@ noncomputable def regionIncidentRead (B : Tensor G d) (R : Finset V)
   if h1 : e.1.1 ∈ R then ξ ⟨e.1.1, h1⟩ (edgeLeftIncident (G := G) e)
   else ξ ⟨e.1.2, he.resolve_left h1⟩ (edgeRightIncident (G := G) e)
 
+omit [Fintype V] in
+private theorem regionIncidentRead_eq_left (B : Tensor G d) (R : Finset V)
+    (ξ : RegionLocalConfig (G := G) B R) (e : Edge G)
+    (he : IsRegionIncidentEdge (G := G) R e) (h1 : e.1.1 ∈ R) :
+    regionIncidentRead (G := G) B R ξ e he =
+      (ξ ⟨e.1.1, h1⟩ (edgeLeftIncident (G := G) e) : Fin (B.bondDim e)) := by
+  unfold regionIncidentRead
+  exact dite_eq_left h1
+
+omit [Fintype V] in
+private theorem regionIncidentRead_eq_right (B : Tensor G d) (R : Finset V)
+    (ξ : RegionLocalConfig (G := G) B R) (e : Edge G)
+    (he : IsRegionIncidentEdge (G := G) R e) (h1 : e.1.1 ∉ R) :
+    regionIncidentRead (G := G) B R ξ e he =
+      (ξ ⟨e.1.2, he.resolve_left h1⟩ (edgeRightIncident (G := G) e) : Fin (B.bondDim e)) := by
+  unfold regionIncidentRead
+  exact dite_eq_right h1
+
 open scoped Classical in
 /-- Rebuild a global virtual configuration from a region-local configuration on the
 `R`-incident edges and free labels on the remaining edges. -/
@@ -540,6 +638,24 @@ noncomputable def regionGlobalOfLocal (B : Tensor G d) (R : Finset V)
   fun e => if he : IsRegionIncidentEdge (G := G) R e then
       regionIncidentRead (G := G) B R ξ e he
     else h ⟨e, he⟩
+
+omit [Fintype V] in
+private theorem regionGlobalOfLocal_eq_incident (B : Tensor G d) (R : Finset V)
+    (ξ : RegionLocalConfig (G := G) B R)
+    (h : (e : {e : Edge G // ¬ IsRegionIncidentEdge (G := G) R e}) → Fin (B.bondDim e.1))
+    (e : Edge G) (he : IsRegionIncidentEdge (G := G) R e) :
+    regionGlobalOfLocal (G := G) B R ξ h e = regionIncidentRead (G := G) B R ξ e he := by
+  unfold regionGlobalOfLocal
+  exact dite_eq_left he
+
+omit [Fintype V] in
+private theorem regionGlobalOfLocal_eq_nonincident (B : Tensor G d) (R : Finset V)
+    (ξ : RegionLocalConfig (G := G) B R)
+    (h : (e : {e : Edge G // ¬ IsRegionIncidentEdge (G := G) R e}) → Fin (B.bondDim e.1))
+    (e : Edge G) (he : ¬ IsRegionIncidentEdge (G := G) R e) :
+    regionGlobalOfLocal (G := G) B R ξ h e = h ⟨e, he⟩ := by
+  unfold regionGlobalOfLocal
+  exact dite_eq_right he
 
 open scoped Classical in
 /-- The fiber of the region reading over a consistent region-local configuration has one
@@ -567,39 +683,46 @@ theorem regionLocalOfGlobal_fiber_card (B : Tensor G d) (R : Finset V)
       by_cases hleft : e.1.1 = v
       · subst v
         have hinc : IsRegionIncidentEdge (G := G) R e := Or.inl hv
-        rw [regionGlobalOfLocal, dif_pos hinc, regionIncidentRead, dif_pos hv]
-        rfl
+        have hg := regionGlobalOfLocal_eq_incident B R ξ h e hinc
+        have hr := regionIncidentRead_eq_left B R ξ e hinc hv
+        exact Fin.eq_of_val_eq ((congrArg Fin.val hg).trans ((congrArg Fin.val hr).trans rfl))
       · have hright : e.1.2 = v := by
           rcases hie with hL | hR
           · exact absurd hL hleft
           · exact hR
         subst v
         have hinc : IsRegionIncidentEdge (G := G) R e := Or.inr hv
-        rw [regionGlobalOfLocal, dif_pos hinc, regionIncidentRead]
         by_cases h1 : e.1.1 ∈ R
-        · rw [dif_pos h1]
-          exact hξ e h1 hv
-        · rw [dif_neg h1]
-          rfl
+        · have hg := regionGlobalOfLocal_eq_incident B R ξ h e hinc
+          have hr := regionIncidentRead_eq_left B R ξ e hinc h1
+          exact Fin.eq_of_val_eq ((congrArg Fin.val hg).trans
+            ((congrArg Fin.val hr).trans (congrArg Fin.val (hξ e h1 hv))))
+        · have hg := regionGlobalOfLocal_eq_incident B R ξ h e hinc
+          have hr := regionIncidentRead_eq_right B R ξ e hinc h1
+          exact Fin.eq_of_val_eq ((congrArg Fin.val hg).trans ((congrArg Fin.val hr).trans rfl))
     · -- Rebuilding from the free labels of a fiber member recovers it.
       intro ζ hζ
       simp only [Finset.mem_coe, Finset.mem_filter, Finset.mem_univ, true_and] at hζ
       funext e
-      rw [regionGlobalOfLocal]
       by_cases he : IsRegionIncidentEdge (G := G) R e
-      · rw [dif_pos he, regionIncidentRead]
-        subst hζ
+      · subst hζ
         by_cases h1 : e.1.1 ∈ R
-        · rw [dif_pos h1]
-          rfl
-        · rw [dif_neg h1]
-          rfl
-      · rw [dif_neg he]
+        · have hg := regionGlobalOfLocal_eq_incident B R
+            (regionLocalOfGlobal (G := G) B R ζ) (fun e => ζ e.1) e he
+          have hr := regionIncidentRead_eq_left B R
+            (regionLocalOfGlobal (G := G) B R ζ) e he h1
+          exact Fin.eq_of_val_eq ((congrArg Fin.val hg).trans ((congrArg Fin.val hr).trans rfl))
+        · have hg := regionGlobalOfLocal_eq_incident B R
+            (regionLocalOfGlobal (G := G) B R ζ) (fun e => ζ e.1) e he
+          have hr := regionIncidentRead_eq_right B R
+            (regionLocalOfGlobal (G := G) B R ζ) e he h1
+          exact Fin.eq_of_val_eq ((congrArg Fin.val hg).trans ((congrArg Fin.val hr).trans rfl))
+      · exact regionGlobalOfLocal_eq_nonincident B R ξ (fun e => ζ e.1) e he
     · -- The free labels of a rebuilt configuration are the free labels.
       intro h _
       funext e
       change regionGlobalOfLocal (G := G) B R ξ h e.1 = h e
-      rw [regionGlobalOfLocal, dif_neg e.2]
+      exact regionGlobalOfLocal_eq_nonincident B R ξ h e.1 e.2
   · rw [Finset.card_univ, Fintype.card_pi]
     simp only [Fintype.card_fin]
     rw [regionNonincidentBondProd,

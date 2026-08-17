@@ -131,7 +131,34 @@ private theorem cubePhaseDoubledTensor_eq_toTensorFromBlocks :
         congrArg Sigma.fst (finSigmaFinEquiv.injective (congrArg Prod.snd hp))⟩
     · rintro ⟨rfl, rfl⟩
       rfl
+  have hdoubled (k₁ k₂ : Fin 2) :
+      cubePhaseDoubledWeight
+          (finProdFinEquiv
+            (finSigmaFinEquiv ⟨k₁, (0 : Fin (cubePhaseBondDim k₁))⟩,
+              finSigmaFinEquiv ⟨k₂, (0 : Fin (cubePhaseBondDim k₂))⟩)) =
+        cubePhaseWeight k₁ * star (cubePhaseWeight k₂) := by
+    simp [cubePhaseDoubledWeight]
+  have hblocks (p : Fin 1) (q r : Fin 4) :
+      toTensorFromBlocks cubePhaseDoubledWeight (fun _ : Fin 4 => scalarUnitTensor) p q r =
+        if q = r then cubePhaseDoubledWeight q else 0 := by
+    change Matrix.blockDiagonal' (fun k : Fin 4 =>
+      cubePhaseDoubledWeight k • scalarUnitTensor p)
+        (finSigmaFinEquiv.symm q) (finSigmaFinEquiv.symm r) = _
+    rw [hflat_symm q, hflat_symm r, Matrix.blockDiagonal'_apply]
+    simp [scalarUnitTensor]
+  have hbase (p : Fin 1) (q r : Fin 2) :
+      toTensorFromBlocks cubePhaseWeight (fun _ : Fin 2 => scalarUnitTensor) p
+          (finSigmaFinEquiv ⟨q, (0 : Fin (cubePhaseBondDim q))⟩)
+          (finSigmaFinEquiv ⟨r, (0 : Fin (cubePhaseBondDim r))⟩) =
+        if q = r then cubePhaseWeight q else 0 := by
+    change Matrix.blockDiagonal' (fun k : Fin 2 => cubePhaseWeight k • scalarUnitTensor p)
+      (finSigmaFinEquiv.symm (finSigmaFinEquiv ⟨q, 0⟩))
+      (finSigmaFinEquiv.symm (finSigmaFinEquiv ⟨r, 0⟩)) = _
+    rw [finSigmaFinEquiv.symm_apply_apply, finSigmaFinEquiv.symm_apply_apply,
+      Matrix.blockDiagonal'_apply]
+    simp [scalarUnitTensor]
   ext p a b
+  apply Eq.trans ?_ (hblocks p a b).symm
   obtain ⟨⟨a₁, a₂⟩, rfl⟩ := (finProdFinEquiv :
     Fin (∑ k : Fin 2, cubePhaseBondDim k) ×
       Fin (∑ k : Fin 2, cubePhaseBondDim k) ≃
@@ -158,17 +185,20 @@ private theorem cubePhaseDoubledTensor_eq_toTensorFromBlocks :
   fin_cases ka₁ <;> fin_cases ka₂ <;> fin_cases kb₁ <;> fin_cases kb₂ <;>
     simp only [cubePhaseBondDim] at ua₁ ua₂ ub₁ ub₂ <;>
     fin_cases ua₁ <;> fin_cases ua₂ <;> fin_cases ub₁ <;> fin_cases ub₂ <;>
-    simp only [MPOTensor.toMPSTensor, doubledTensor, cubePhaseBondDim, cubePhaseTensor,
-      toTensorFromBlocks, cubePhaseWeight, scalarUnitTensor, Matrix.reindex_apply,
+    simp only [MPOTensor.toMPSTensor, doubledTensor, cubePhaseTensor,
+      cubePhaseWeight, scalarUnitTensor, Matrix.reindex_apply,
       Nat.reduceAdd, Fin.zero_eta, Fin.isValue, Fin.mk_one, Matrix.submatrix_apply,
       finProdFinEquiv.symm_apply_apply, Matrix.kroneckerMap_apply,
       finSigmaFinEquiv.symm_apply_apply, Matrix.blockDiagonal'_apply, zero_ne_one,
       one_ne_zero, ↓reduceDIte, Matrix.map_apply, cast_eq, Matrix.smul_apply,
       Matrix.one_apply_eq, smul_eq_mul, map_zero, map_one, mul_zero, zero_mul,
-      mul_one, one_mul, cubePhaseDoubledWeight, finProdFinEquiv_symm_apply,
+      mul_one, one_mul, hbase, hdoubled, finProdFinEquiv_symm_apply,
       RCLike.star_def, hflat_symm, finProdFinEquiv_divNat, finProdFinEquiv_modNat,
-      dite_eq_ite, right_eq_ite_iff, imp_false] <;>
-    (intro h; have := (hcoord _ _ _ _).mp h; omega)
+      dite_eq_ite, right_eq_ite_iff, imp_false, primitiveCubeRoot_mul_star,
+      if_true, if_false] <;>
+    first
+    | exact (if_pos ((hcoord _ _ _ _).mpr ⟨rfl, rfl⟩)).symm
+    | (intro h; have := (hcoord _ _ _ _).mp h; omega)
 
 /-- Every scalar-block weight in the doubled decomposition has modulus one.
 

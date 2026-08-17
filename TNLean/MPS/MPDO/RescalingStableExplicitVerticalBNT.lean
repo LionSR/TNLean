@@ -283,7 +283,16 @@ private theorem oneLabel_verticalAssembledTensor :
       (Matrix.blockDiagonal' (fun _k : Fin 1 ↦
         (25 / 32 : ℂ) • verticalComponent v))) i j =
           ((25 / 32 : ℂ) • verticalComponent v) i j
-  simp [Matrix.reindex_apply, hsymm]
+  change Matrix.blockDiagonal' (fun _k : Fin 1 ↦
+      (25 / 32 : ℂ) • verticalComponent v) (e.symm i) (e.symm j) =
+    ((25 / 32 : ℂ) • verticalComponent v) i j
+  calc
+    _ = Matrix.blockDiagonal' (fun _k : Fin 1 ↦
+        (25 / 32 : ℂ) • verticalComponent v) ⟨0, i⟩ ⟨0, j⟩ :=
+      congrArg₂ (Matrix.blockDiagonal' (fun _k : Fin 1 ↦
+        (25 / 32 : ℂ) • verticalComponent v)) (hsymm i) (hsymm j)
+    _ = _ := Matrix.blockDiagonal'_apply_eq
+      (fun _k : Fin 1 ↦ (25 / 32 : ℂ) • verticalComponent v) 0 i j
 
 private theorem oneLabelMultiplicity_pos (α : Fin 1) :
     0 < oneLabelMultiplicity α := by simp

@@ -202,6 +202,7 @@ theorem edgeInsertedCoeff_eq_applyGauge_of_region (A B : Tensor G d) (R : Finset
       edgeInsertedCoeff (G := G) (applyGauge B X) f.1 σ
         (Matrix.reindexAlgEquiv ℂ ℂ (finCongr (congr_fun hbd f.1)) N) := by
   classical
+  letI : DecidableEq V := LinearOrder.toDecidableEq
   -- The interior multiplicity is shared and positive.
   have hbd' : A.bondDim = (applyGauge B X).bondDim := hbd
   have hmult : regionInteriorBondProd (G := G) A R =
@@ -217,7 +218,10 @@ theorem edgeInsertedCoeff_eq_applyGauge_of_region (A B : Tensor G d) (R : Finset
     (fun w => σ w.1) (fun w => σ w.1)
   rw [regionInsertedCoeff_eq_smul_edgeInsertedCoeff A R f
       (regionEdgeOrient (G := G) A R f N),
-    regionInsertedCoeff_eq_smul_edgeInsertedCoeff (applyGauge B X) R f] at hkey
+    regionInsertedCoeff_eq_smul_edgeInsertedCoeff (applyGauge B X) R f
+      (Matrix.reindexAlgEquiv ℂ ℂ (finCongr (congr_fun hbd f.1))
+        (regionEdgeOrient (G := G) A R f N))
+      (fun w => σ w.1) (fun w => σ w.1)] at hkey
   -- The orientation is an involution, so the corrected matrices unwind on both sides.
   rw [regionEdgeOrient_regionEdgeOrient A R f] at hkey
   -- The bond dimension of `applyGauge B X` at `f.1` is that of `B`, so the two orientations agree.
@@ -225,15 +229,22 @@ theorem edgeInsertedCoeff_eq_applyGauge_of_region (A B : Tensor G d) (R : Finset
       (Matrix.reindexAlgEquiv ℂ ℂ (finCongr (congr_fun hbd f.1))
         (regionEdgeOrient (G := G) A R f N)) =
         Matrix.reindexAlgEquiv ℂ ℂ (finCongr (congr_fun hbd f.1)) N := by
-    rw [regionEdgeOrient, regionEdgeOrient]
+    rw [regionEdgeOrient_applyGauge]
     by_cases h : f.1.1.1 ∈ R
-    · simp only [if_pos h]
-    · simp only [if_neg h]
-      change ((Matrix.reindex (finCongr (congr_fun hbd f.1))
-          (finCongr (congr_fun hbd f.1))) Nᵀ)ᵀ =
-        (Matrix.reindex (finCongr (congr_fun hbd f.1))
-          (finCongr (congr_fun hbd f.1))) N
-      rw [Matrix.transpose_reindex, Matrix.transpose_transpose]
+    · rw [show regionEdgeOrient (G := G) B R f
+          (Matrix.reindexAlgEquiv ℂ ℂ (finCongr (congr_fun hbd f.1))
+            (regionEdgeOrient (G := G) A R f N)) =
+          Matrix.reindexAlgEquiv ℂ ℂ (finCongr (congr_fun hbd f.1))
+            (regionEdgeOrient (G := G) A R f N) from if_pos h,
+        show regionEdgeOrient (G := G) A R f N = N from if_pos h]
+    · rw [show regionEdgeOrient (G := G) B R f
+          (Matrix.reindexAlgEquiv ℂ ℂ (finCongr (congr_fun hbd f.1))
+            (regionEdgeOrient (G := G) A R f N)) =
+          (Matrix.reindexAlgEquiv ℂ ℂ (finCongr (congr_fun hbd f.1))
+            (regionEdgeOrient (G := G) A R f N)).transpose from if_neg h,
+        show regionEdgeOrient (G := G) A R f N = N.transpose from if_neg h]
+      ext i j
+      rfl
   rw [horient] at hkey
   -- Cancel the shared positive interior multiplicity and rewrite the assembled configuration.
   rw [assembleRegionσ_restrict R σ, hmult] at hkey
@@ -270,6 +281,7 @@ theorem regionInsertedCoeff_eq_applyGauge_of_edge (A B : Tensor G d)
     regionInsertedCoeff (G := G) A R f M σ τ =
       regionInsertedCoeff (G := G) (applyGauge B X) R f
         (Matrix.reindexAlgEquiv ℂ ℂ (finCongr (congr_fun hbd f.1)) M) σ τ := by
+  letI : DecidableEq V := LinearOrder.toDecidableEq
   subst hfe
   -- Read both region coefficients through the region-to-edge identity.
   rw [regionInsertedCoeff_eq_smul_edgeInsertedCoeff A R f M σ τ,
@@ -283,15 +295,18 @@ theorem regionInsertedCoeff_eq_applyGauge_of_edge (A B : Tensor G d)
       (Matrix.reindexAlgEquiv ℂ ℂ (finCongr (congr_fun hbd f.1)) M) =
         Matrix.reindexAlgEquiv ℂ ℂ (finCongr (congr_fun hbd f.1))
           (regionEdgeOrient (G := G) A R f M) := by
-    rw [regionEdgeOrient, regionEdgeOrient]
+    rw [regionEdgeOrient_applyGauge]
     by_cases h : f.1.1.1 ∈ R
-    · simp only [if_pos h]
-    · simp only [if_neg h]
-      change ((Matrix.reindex (finCongr (congr_fun hbd f.1))
-          (finCongr (congr_fun hbd f.1))) M)ᵀ =
-        (Matrix.reindex (finCongr (congr_fun hbd f.1))
-          (finCongr (congr_fun hbd f.1))) Mᵀ
-      exact Matrix.transpose_reindex _ _ _
+    · rw [show regionEdgeOrient (G := G) B R f
+          (Matrix.reindexAlgEquiv ℂ ℂ (finCongr (congr_fun hbd f.1)) M) =
+          Matrix.reindexAlgEquiv ℂ ℂ (finCongr (congr_fun hbd f.1)) M from if_pos h,
+        show regionEdgeOrient (G := G) A R f M = M from if_pos h]
+    · rw [show regionEdgeOrient (G := G) B R f
+          (Matrix.reindexAlgEquiv ℂ ℂ (finCongr (congr_fun hbd f.1)) M) =
+          (Matrix.reindexAlgEquiv ℂ ℂ (finCongr (congr_fun hbd f.1)) M).transpose from if_neg h,
+        show regionEdgeOrient (G := G) A R f M = M.transpose from if_neg h]
+      ext i j
+      rfl
   rw [horient]
   exact hedge (assembleRegionσ (V := V) (d := d) R σ τ) (regionEdgeOrient (G := G) A R f M)
 

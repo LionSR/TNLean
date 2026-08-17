@@ -99,17 +99,14 @@ theorem zeroRightTensorOnInactive_neighboringOperator
     (F.zeroRightTensorOnInactive active hleft).neighboringOperator k h =
       if active k then F.neighboringOperator k h else 0 := by
   classical
+  unfold neighboringOperator
+  dsimp only [zeroRightTensorOnInactive]
+  ext x y
   by_cases hk : active k
-  · rw [if_pos hk]
-    ext x y
-    simp [neighboringOperator_apply, hk]
-  · rw [if_neg hk]
-    apply Matrix.ext
-    intro x y
-    rw [neighboringOperator_apply]
-    simp only [zeroRightTensorOnInactive_leftTensor,
-      zeroRightTensorOnInactive_rightTensor, if_neg hk]
-    change (∑ _alpha : Fin D, 0 * F.leftTensor h _alpha x.2 y.2) = 0
+  · simp only [if_pos hk, Matrix.of_apply]
+    rfl
+  · simp only [if_neg hk, Matrix.of_apply, Matrix.zero_apply]
+    change (∑ alpha : Fin D, (0 : ℂ) * F.leftTensor h alpha x.2 y.2) = 0
     simp
 
 end MPOTensor.PhysicalSectorFactorization
@@ -186,10 +183,21 @@ theorem zeroWeightReparameterizedInverseMapPhysicalSectorFactorization_neighbori
       K hK R hρ hη α₁ β₃ hm).neighboringOperator k h =
       if hη.p k ≠ 0 then sectorEta K hK hη R α₁ β₃ k h else 0 := by
   classical
-  unfold zeroWeightReparameterizedInverseMapPhysicalSectorFactorization
-  rw [PhysicalSectorFactorization.zeroRightTensorOnInactive_neighboringOperator]
-  split
-  · rw [inverseMapPhysicalSectorFactorization_neighboringOperator_eq_sectorEta]
-  · rfl
+  let F := inverseMapPhysicalSectorFactorization K hK R hρ hη α₁ β₃ hm
+  have hleftF : ∀ k : Fin F.sectorCount, ¬ hη.p k ≠ 0 →
+      ∀ beta, F.leftTensor k beta = 0 := by
+    intro j hj beta
+    exact sectorTensorL_eq_zero_of_weight_eq_zero
+      K hK hη R α₁ β₃ j beta (not_ne_iff.mp hj)
+  have hneighbor :=
+    F.zeroRightTensorOnInactive_neighboringOperator (fun j => hη.p j ≠ 0) hleftF k h
+  change (F.zeroRightTensorOnInactive (fun j => hη.p j ≠ 0) hleftF).neighboringOperator k h = _
+  refine hneighbor.trans ?_
+  by_cases hk : hη.p k ≠ 0
+  · rw [if_pos hk, if_pos hk]
+    exact inverseMapPhysicalSectorFactorization_neighboringOperator_eq_sectorEta
+      K hK R hρ hη α₁ β₃ hm k h
+  · rw [if_neg hk, if_neg hk]
+    rfl
 
 end MPOTensor

@@ -608,6 +608,10 @@ theorem edgeInsertedCoeff_eq_pow_card_mul_reindexTensor (A C : Tensor G d)
       lam ^ (Fintype.card V) *
         edgeInsertedCoeff (G := G) (reindexTensor (G := G) C hbd) e σ N := by
   classical
+  let N' : Matrix (Fin ((reindexTensor (G := G) C hbd).bondDim e))
+      (Fin ((reindexTensor (G := G) C hbd).bondDim e)) ℂ := fun i j => N i j
+  change edgeInsertedCoeff (G := G) A e σ N =
+    lam ^ Fintype.card V * edgeInsertedCoeff (G := G) (reindexTensor (G := G) C hbd) e σ N'
   rw [edgeInsertedCoeff_eq_doubled, edgeInsertedCoeff_eq_doubled, Finset.mul_sum]
   refine Fintype.sum_equiv (Equiv.refl _) _ _ (fun x => ?_)
   simp only [Equiv.refl_apply]

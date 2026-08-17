@@ -291,7 +291,8 @@ theorem component_eq_of_regionProportional (A Btilde : Tensor G d) (R : Finset V
         rw [Finset.sum_mul]
         refine Finset.sum_congr rfl (fun η' hη' => ?_)
         rw [Finset.mem_filter] at hη'
-        rw [regionBlockedTensorFamily, hη'.2.2]
+        unfold regionBlockedTensorFamily
+        rw [hη'.2.2]
       -- Step 2: match the fiber filters and collapse them to the filtered sum over consistent
       -- configurations.
       rw [step1]
@@ -434,8 +435,7 @@ theorem component_eq_gaugeVertex_of_twoBlockProportional (A B : Tensor G d) (R :
     (fun b ρ => hRprop PUnit.unit b ρ)
     (fun μ σ' => hSprop PUnit.unit μ σ')
     η σ
-  rw [hext, reindexTensor_component]
-  rfl
+  exact hext.trans rfl
 
 end PEPS
 end TNLean

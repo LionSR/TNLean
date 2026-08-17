@@ -145,18 +145,25 @@ theorem FlatBlockedBNTComparison.exists_unitaryNormalization_of_cpsvCanonicalFor
           (↑((C.gauge j)⁻¹) : Matrix (Fin (S.flatDim j))
             (Fin (S.flatDim j)) ℂ)) := by
     intro ab
+    dsimp only [Vact, x]
     symm
-    calc
-      c • ((C.gauge j : Matrix (Fin (S.flatDim j))
-            (Fin (S.flatDim j)) ℂ) * A ab *
-          (↑((C.gauge j)⁻¹) : Matrix (Fin (S.flatDim j))
-            (Fin (S.flatDim j)) ℂ)) =
-        S.flatCoefficient j • S.flatBlock j ab := by
-          rw [C.block_eq j ab]
-          simp only [c, A, smul_smul]
-      _ = Vactᴴ * verticalTensor (blockTwo M) ab * Vact := by
-        change S.coefficient x.1 x.2 • S.block x.1 x.2 ab = _
-        exact S.ambient_compression M U₁ hU₁ hReconstruct₁ x ab
+    have hblock :
+        c • ((C.gauge j : Matrix (Fin (S.flatDim j))
+              (Fin (S.flatDim j)) ℂ) * A ab *
+            (↑((C.gauge j)⁻¹) : Matrix (Fin (S.flatDim j))
+              (Fin (S.flatDim j)) ℂ)) =
+          S.flatCoefficient j • S.flatBlock j ab := by
+      rw [C.block_eq j ab]
+      simp only [c, A, smul_smul]
+    have hamb : S.flatCoefficient j • S.flatBlock j ab =
+        (S.ambientInclusion U₁ (S.activeLabelEquiv j))ᴴ *
+          verticalTensor (blockTwo M) ab *
+            S.ambientInclusion U₁ (S.activeLabelEquiv j) := by
+      change S.coefficient (S.activeLabelEquiv j).1 (S.activeLabelEquiv j).2 •
+        S.block (S.activeLabelEquiv j).1 (S.activeLabelEquiv j).2 ab = _
+      exact S.ambient_compression M U₁ hU₁ hReconstruct₁ (S.activeLabelEquiv j) ab
+    ext p q
+    exact (congrFun (congrFun hblock p) q).trans (congrFun (congrFun hamb p) q)
   have hReferenceCorner : ∀ ab,
       Vrefᴴ * verticalTensor (blockTwo M) ab * Vref = c₀ • A ab := by
     intro ab

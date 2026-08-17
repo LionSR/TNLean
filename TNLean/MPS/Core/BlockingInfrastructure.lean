@@ -325,11 +325,15 @@ theorem wordOfBlock_blockIndexOfList (d L : ℕ) (w : List (Fin d))
     wordOfBlock d L (blockIndexOfList d L w h) = w := by
   classical
   unfold blockIndexOfList wordOfBlock decodeBlock
-  conv_rhs => rw [← List.ofFn_get w]
-  have hcongr :=
-    (List.ofFn_congr (m := L) (n := w.length) h.symm
-      (fun i : Fin L => w.get (Fin.cast h.symm i)))
-  simpa [Function.comp, Fin.cast_cast, blockPhysDim] using hcongr
+  change List.ofFn (finFunctionFinEquiv.symm
+    (finFunctionFinEquiv (fun i : Fin L => w.get (Fin.cast h.symm i)))) = w
+  rw [finFunctionFinEquiv.symm_apply_apply]
+  have hcongr := List.ofFn_congr h.symm
+    (fun i : Fin L => w.get (Fin.cast h.symm i))
+  calc
+    List.ofFn (fun i : Fin L => w.get (Fin.cast h.symm i)) = List.ofFn w.get := by
+      simpa only [Fin.cast_cast, Fin.cast_refl, id_eq] using hcongr
+    _ = w := List.ofFn_get w
 
 /-- The physical index of the direct block obtained from an iterated blocked index. -/
 noncomputable def iteratedBlockIndex (d m n : ℕ)

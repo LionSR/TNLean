@@ -335,12 +335,25 @@ private theorem positiveEtaPhysicalSectorFactorization_sectorBond_eq
   have hneighbor (q h : Fin K) : F.neighboringOperator q h = η q h :=
     positiveEtaPhysicalSectorFactorization_neighboringOperator
       dl dr e U η hU hdl hdr q h
+  have hneighborFamily :
+      (fun qh : Fin K × Fin K ↦
+        ((1 : Matrix (Fin (dl qh.1)) (Fin (dl qh.1)) ℂ) ⊗ₖ
+          F.neighboringOperator qh.1 qh.2) ⊗ₖ
+            (1 : Matrix (Fin (dr qh.2)) (Fin (dr qh.2)) ℂ)) =
+      (fun qh : Fin K × Fin K ↦
+        ((1 : Matrix (Fin (dl qh.1)) (Fin (dl qh.1)) ℂ) ⊗ₖ
+          η qh.1 qh.2) ⊗ₖ
+            (1 : Matrix (Fin (dr qh.2)) (Fin (dr qh.2)) ℂ)) := by
+    funext qh
+    rw [hneighbor]
+    rfl
+  have hneighborBlock := congrArg Matrix.blockDiagonal' hneighborFamily
   change F.sectorCoordinateBond =
     singleKrausMap F.physicalCoordinateMatrixTwo data.pairBond
   apply (Matrix.reindex (Matrix.etaPairSpatialBlockEquiv F.etaSectorFinEquiv).symm
     (Matrix.etaPairSpatialBlockEquiv F.etaSectorFinEquiv).symm).injective
-  rw [F.sectorCoordinateBond_etaPair_decomposition]
-  simp_rw [hneighbor]
+  refine F.sectorCoordinateBond_etaPair_decomposition.trans ?_
+  refine hneighborBlock.trans ?_
   rw [positiveEtaPhysicalSectorFactorization_conjugate_pairBond]
   rw [positiveEtaPhysicalSectorFactorization_etaPairEquiv]
   let E := Equiv.prodCongr F.physicalFinEquiv F.physicalFinEquiv
@@ -350,8 +363,6 @@ private theorem positiveEtaPhysicalSectorFactorization_sectorBond_eq
     exact E.symm_apply_apply _
   dsimp only [E] at hindex
   ext x y
-  simp only [Matrix.reindex_apply, Matrix.submatrix_apply]
-  simp only [Equiv.symm_symm]
   change (Matrix.blockDiagonal' fun qh : Fin K × Fin K ↦
       ((1 : Matrix (Fin (dl qh.1)) (Fin (dl qh.1)) ℂ) ⊗ₖ
         η qh.1 qh.2) ⊗ₖ

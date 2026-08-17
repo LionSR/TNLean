@@ -189,6 +189,8 @@ private theorem trace_rightTensor_mul_trace_leftTensor_eq_map_activeSectorTraceM
   rw [← (hpos k h).isHermitian.trace_eq_ofReal_re]
   simp only [PhysicalSectorFactorization.neighboringOperator, Matrix.trace,
     Matrix.diag, Matrix.of_apply]
+  change (∑ j : Fin D,
+    (∑ i, F.rightTensor k j i i) * (∑ i, F.leftTensor h j i i)) = _
   rw [Finset.sum_comm]
   apply Finset.sum_congr rfl
   intro j _
@@ -232,6 +234,10 @@ theorem activeSectorTraceMatrix_pow_two_eq_pow_three_of_literal_ZCL
     ext beta alpha
     simp only [closedSectorPairingOperator, Matrix.sum_apply,
       Matrix.vecMulVec_apply, Matrix.mul_apply, L, Q]
+    change (∑ c : Fin F.sectorCount,
+        (F.leftTensor c beta).trace * (F.rightTensor c alpha).trace) =
+      ∑ a : F.ActiveSector p,
+        (F.leftTensor a beta).trace * (F.rightTensor a alpha).trace
     rw [← Finset.sum_subtype (Finset.univ.filter (fun k ↦ p k ≠ 0)) (by simp)
       (fun k ↦ (F.leftTensor k beta).trace * (F.rightTensor k alpha).trace)]
     rw [Finset.sum_filter]

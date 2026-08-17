@@ -242,7 +242,7 @@ theorem regionInsertedCoeff_eq_compl (A : Tensor G d) (R : Finset V)
   set f' := regionBoundaryEdgeToCompl (G := G) R f with hf'
   set E := regionComplementBoundaryConfigEquiv (G := G) A R with hE
   set sigt := regionDoubleComplPhysicalConfig (V := V) (d := d) R σ with hsigt
-  rw [regionInsertedCoeff_eq, regionInsertedCoeff_eq]
+  unfold regionInsertedCoeff
   -- The complement-side double sum, reindexed over `(μ_R, ν_R)` via `E × E`.
   rw [show (∑ μ' : RegionBoundaryConfig (G := G) A (Finset.univ \ R),
         ∑ ν' : RegionBoundaryConfig (G := G) A (Finset.univ \ R),

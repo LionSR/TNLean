@@ -144,7 +144,8 @@ theorem regionOpenCoeff_update_eq (A : Tensor G d) (R : Finset V)
       regionOpenCoeff (G := G) A R f
         (Function.update ν f (η (regionBoundaryEdgeInIncident (G := G) R f))) σ η := by
   classical
-  set inc := regionBoundaryEdgeInIncident (G := G) R f with hinc
+  let inc := regionBoundaryEdgeInIncident (G := G) R f
+  let a : Fin (A.bondDim f.1) := η inc
   set ηx := (localVirtualConfigSplitAt (G := G) A inc).symm
       (ν f, (localVirtualConfigSplitAt (G := G) A inc η).2) with hηx
   have hηxinc : ηx inc = ν f := by rw [hηx, localVirtualConfigSplitAt_symm_apply_fst]
@@ -158,25 +159,25 @@ theorem regionOpenCoeff_update_eq (A : Tensor G d) (R : Finset V)
     regionBoundaryLabel (G := G) A R ζ = ν ∧
       regionVertexLocalConfig (G := G) A R f ζ = ηx
   let Q : VirtualConfig A → Prop := fun ζ =>
-    regionBoundaryLabel (G := G) A R ζ = Function.update ν f (η inc) ∧
+    regionBoundaryLabel (G := G) A R ζ = Function.update ν f a ∧
       regionVertexLocalConfig (G := G) A R f ζ = η
   change (∑ ζ ∈ Finset.univ.filter P, regionRestProd (G := G) A R f σ ζ) =
     ∑ ζ ∈ Finset.univ.filter Q, regionRestProd (G := G) A R f σ ζ
   let φ : {ζ : VirtualConfig A // P ζ} ≃ {ζ : VirtualConfig A // Q ζ} := {
-    toFun ζ := ⟨Function.update ζ.1 f.1 (η inc), by
+    toFun ζ := ⟨Function.update ζ.1 f.1 a, by
       obtain ⟨hbl, hvl⟩ := ζ.2
       refine ⟨?_, ?_⟩
       · funext g; rw [regionBoundaryLabel_apply]
         by_cases hg : g = f
         · subst hg; rw [Function.update_self, Function.update_self]
         · have hne : g.1 ≠ f.1 := fun h => hg (Subtype.ext h)
-          rw [Function.update_of_ne hne (η inc) ζ.1, Function.update_of_ne hg (η inc) ν]
+          rw [Function.update_of_ne hne a ζ.1, Function.update_of_ne hg a ν]
           have := congrFun hbl g; rw [regionBoundaryLabel_apply] at this; exact this
       · funext ie; rw [regionVertexLocalConfig_apply]
         by_cases hie : ie = inc
         · subst hie; exact Function.update_self _ _ _
         · have hne : ie.1 ≠ f.1 := fun h => hie (Subtype.ext h)
-          rw [Function.update_of_ne hne (η inc) ζ.1]
+          rw [Function.update_of_ne hne a ζ.1]
           have := congrFun hvl ie; rw [regionVertexLocalConfig_apply] at this
           rw [this, hηxother ie hie]⟩
     invFun ζ := ⟨Function.update ζ.1 f.1 (ν f), by
@@ -201,7 +202,7 @@ theorem regionOpenCoeff_update_eq (A : Tensor G d) (R : Finset V)
       obtain ⟨hbl, _⟩ := ζ.2
       apply Subtype.ext
       funext e
-      change Function.update (Function.update ζ.1 f.1 (η inc)) f.1 (ν f) e = ζ.1 e
+      change Function.update (Function.update ζ.1 f.1 a) f.1 (ν f) e = ζ.1 e
       by_cases he : e = f.1
       · subst he; rw [Function.update_self]
         have := congrFun hbl f; rw [regionBoundaryLabel_apply] at this; exact this.symm
@@ -210,7 +211,7 @@ theorem regionOpenCoeff_update_eq (A : Tensor G d) (R : Finset V)
       obtain ⟨hbl, _⟩ := ζ.2
       apply Subtype.ext
       funext e
-      change Function.update (Function.update ζ.1 f.1 (ν f)) f.1 (η inc) e = ζ.1 e
+      change Function.update (Function.update ζ.1 f.1 (ν f)) f.1 a e = ζ.1 e
       by_cases he : e = f.1
       · subst he; rw [Function.update_self]
         have := congrFun hbl f
@@ -225,8 +226,8 @@ theorem regionOpenCoeff_update_eq (A : Tensor G d) (R : Finset V)
       refine Fintype.sum_equiv φ _ _ ?_
       intro ζ
       exact (regionRestProd_congr_off_f (G := G) A R f σ ζ.1
-        (Function.update ζ.1 f.1 (η inc))
-        (fun e he => (Function.update_of_ne he (η inc) ζ.1).symm))
+        (Function.update ζ.1 f.1 a)
+        (fun e he => (Function.update_of_ne he a ζ.1).symm))
     _ = ∑ ζ ∈ Finset.univ.filter Q, regionRestProd (G := G) A R f σ ζ := by
       rw [Finset.sum_subtype (Finset.univ.filter Q) (p := Q) (fun ζ => by simp)
         (fun ζ => regionRestProd (G := G) A R f σ ζ)]
@@ -257,16 +258,17 @@ theorem region_lhs_coeff (A : Tensor G d) (R : Finset V)
         regionOpenCoeff (G := G) A R f
           (Function.update ν f (η (regionBoundaryEdgeInIncident (G := G) R f))) σ η := by
   classical
-  set inc := regionBoundaryEdgeInIncident (G := G) R f with hinc
-  rw [Finset.sum_eq_single (Function.update ν f (η inc))]
-  · have hsame : SameAwayFromBond f (Function.update ν f (η inc)) ν := by
+  let inc := regionBoundaryEdgeInIncident (G := G) R f
+  let a : Fin (A.bondDim f.1) := η inc
+  rw [Finset.sum_eq_single (Function.update ν f a)]
+  · have hsame : SameAwayFromBond f (Function.update ν f a) ν := by
       intro c hc; rw [Function.update_of_ne hc]
-    have hμf : (Function.update ν f (η inc)) f = η inc := Function.update_self _ _ _
+    have hμf : (Function.update ν f a) f = a := Function.update_self _ _ _
     rw [if_pos hsame, hμf]
   · intro μ _ hμne
     by_cases hsame : SameAwayFromBond f μ ν
     · rw [if_pos hsame]
-      have hμf_ne : μ f ≠ η inc := by
+      have hμf_ne : μ f ≠ a := by
         intro hμf
         apply hμne
         funext c
@@ -293,7 +295,13 @@ theorem region_rhs_coeff (A : Tensor G d) (R : Finset V)
         regionOpenCoeff (G := G) A R f
           (Function.update ν f (η (regionBoundaryEdgeInIncident (G := G) R f))) σ η := by
   classical
-  rw [localIncidentMatrixOp_apply]
+  change (∑ x : Fin (A.bondDim f.1),
+      M.transpose x (η (regionBoundaryEdgeInIncident (G := G) R f)) *
+        regionOpenCoeff (G := G) A R f ν σ
+          ((localVirtualConfigSplitAt (G := G) A
+            (regionBoundaryEdgeInIncident (G := G) R f)).symm
+              (x, (localVirtualConfigSplitAt (G := G) A
+                (regionBoundaryEdgeInIncident (G := G) R f) η).2))) = _
   refine (Fintype.sum_eq_single (ν f) ?_).trans ?_
   · intro x hxne
     have hcfg : ((localVirtualConfigSplitAt (G := G) A
@@ -303,7 +311,14 @@ theorem region_rhs_coeff (A : Tensor G d) (R : Finset V)
           (regionBoundaryEdgeInIncident (G := G) R f) = x := by
       rw [localVirtualConfigSplitAt_symm_apply_fst]
     rw [regionOpenCoeff_eq_zero_of_ne A R f ν σ _ (by rw [hcfg]; exact hxne), mul_zero]
-  · rw [Matrix.transpose_apply, regionOpenCoeff_update_eq A R f ν σ η]
+  · change M (η (regionBoundaryEdgeInIncident (G := G) R f)) (ν f) *
+        regionOpenCoeff (G := G) A R f ν σ
+          ((localVirtualConfigSplitAt (G := G) A
+            (regionBoundaryEdgeInIncident (G := G) R f)).symm
+              (ν f, (localVirtualConfigSplitAt (G := G) A
+                (regionBoundaryEdgeInIncident (G := G) R f) η).2)) = _
+    exact congrArg (fun z => M (η (regionBoundaryEdgeInIncident (G := G) R f)) (ν f) * z)
+      (regionOpenCoeff_update_eq A R f ν σ η)
 
 /-- The blocked-region weight as a function of the physical leg at the in-region
 endpoint `v`, used as the realization vector that the physical operator acts on. -/

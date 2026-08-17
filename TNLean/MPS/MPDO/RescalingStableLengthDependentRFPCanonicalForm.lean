@@ -412,11 +412,20 @@ lemma toTensorFromBlocks_single_eq (i : Fin 16) :
     rw [e.apply_symm_apply, hflat]
   unfold MPSTensor.toTensorFromBlocks
   ext a b
+  let a' : Fin 4 := a
+  let b' : Fin 4 := b
   change (Matrix.reindex e e)
-      (Matrix.blockDiagonal' (fun _ : Fin 1 => (weight : ℂ) • retainedBlock i)) a b =
-    ((weight : ℂ) • retainedBlock i) a b
-  rw [Matrix.reindex_apply, Matrix.submatrix_apply, hflat_symm, hflat_symm]
-  simp
+      (Matrix.blockDiagonal' (fun _ : Fin 1 => (weight : ℂ) • retainedBlock i)) a' b' =
+    ((weight : ℂ) • retainedBlock i) a' b'
+  change Matrix.blockDiagonal' (fun _ : Fin 1 => (weight : ℂ) • retainedBlock i)
+      (e.symm a') (e.symm b') = ((weight : ℂ) • retainedBlock i) a' b'
+  calc
+    _ = Matrix.blockDiagonal' (fun _ : Fin 1 => (weight : ℂ) • retainedBlock i)
+        ⟨0, a'⟩ ⟨0, b'⟩ := congrArg₂
+          (Matrix.blockDiagonal' (fun _ : Fin 1 => (weight : ℂ) • retainedBlock i))
+          (hflat_symm a') (hflat_symm b')
+    _ = _ := Matrix.blockDiagonal'_apply_eq
+      (fun _ : Fin 1 => (weight : ℂ) • retainedBlock i) 0 a' b'
 
 /-- The literal CPSV canonical-form witness data for `R.toMPSTensor`: a single retained
 normal block (`retainedBlock`) occupying the full ambient bond dimension `4`, weight

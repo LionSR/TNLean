@@ -220,11 +220,13 @@ theorem closedSectorTraceMatrix_normalized_relations
   have hS : closedSectorPairingOperator
       (sectorTensorL K hK hη R α₁ β₃) (sectorTensorR K hK hη β₃) = L * Q := by
     ext β α
-    simp [closedSectorPairingOperator, L, Q, Matrix.mul_apply, Matrix.sum_apply,
-      Matrix.vecMulVec_apply, closedSectorL, closedSectorR]
+    simp only [closedSectorPairingOperator, Matrix.sum_apply, Matrix.vecMulVec_apply]
+    exact (Matrix.mul_apply (M := L) (N := Q) (i := β) (k := α)).symm
   have hT : closedSectorTraceMatrix K hK hη R α₁ β₃ = Q * L := by
     ext k h
-    simp [closedSectorTraceMatrix, Q, L, Matrix.mul_apply, dotProduct]
+    change (closedSectorR K hK hη β₃ k ⬝ᵥ
+      closedSectorL K hK hη R α₁ β₃ h) = (Q * L) k h
+    exact (Matrix.mul_apply (M := Q) (N := L) (i := k) (k := h)).symm
   refine ⟨lam, hlam, ?_⟩
   dsimp only
   have hrect : IsIdempotentElem (((lam : ℂ)⁻¹ • L) * Q) := by

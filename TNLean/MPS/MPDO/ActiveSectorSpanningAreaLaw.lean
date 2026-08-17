@@ -541,7 +541,7 @@ theorem tensor_has_sal_sourceZCL_and_non_rankOne_activeTraceMatrix :
     trace_activeSectorTraceMatrix, activeSectorTraceMatrix_not_rankOne,
     rectangular_remainder_ne_zero⟩
   intro k h
-  rw [inverseMapFactorization_neighboringOperator]
-  exact neighboringOperator_posSemidef k h
+  have hEq := inverseMapFactorization_neighboringOperator k h
+  exact hEq.symm ▸ neighboringOperator_posSemidef k h
 
 end MPOTensor.ActiveSectorSpanningCounterexample

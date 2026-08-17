@@ -37,6 +37,8 @@ open scoped Matrix ComplexOrder BigOperators
 
 namespace MPOTensor
 
+attribute [local instance] Classical.decEq Classical.propDecidable
+
 variable {d D : ℕ}
   {rho : Matrix (Fin d × Fin d × Fin d) (Fin d × Fin d × Fin d) ℂ}
 

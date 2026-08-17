@@ -83,12 +83,17 @@ theorem reindex_mpo_cyclicEdgeWeightTensor_etaCyclicEdgeWeight
       Matrix.blockDiagonal' fun k : Fin N → Fin K ↦
         fun x y ↦ ∏ n : Fin N, η (k n) (k (n + 1)) (x n) (y n) := by
   classical
+  let P : (k : Fin N → Fin K) →
+      Matrix ((n : Fin N) → Matrix.EtaEdgeIndex dl dr (k n) (k (n + 1)))
+        ((n : Fin N) → Matrix.EtaEdgeIndex dl dr (k n) (k (n + 1))) ℂ :=
+    fun k x y => ∏ n : Fin N, η (k n) (k (n + 1)) (x n) (y n)
   ext ⟨k, x⟩ ⟨h, y⟩
   rw [Matrix.reindex_apply, Matrix.submatrix_apply,
     mpo_cyclicEdgeWeightTensor]
+  change _ = Matrix.blockDiagonal' P ⟨k, x⟩ ⟨h, y⟩
   by_cases hkh : k = h
   · subst h
-    rw [Matrix.blockDiagonal'_apply_eq]
+    apply Eq.trans ?_ (Matrix.blockDiagonal'_apply_eq P k x y).symm
     apply Finset.prod_congr rfl
     intro n _
     have hx (m : Fin N) :
@@ -105,7 +110,7 @@ theorem reindex_mpo_cyclicEdgeWeightTensor_etaCyclicEdgeWeight
     exact congrArg₂ (η (k n) (k (n + 1)))
       (Matrix.etaFixedSectorCyclicEdgeEquiv_symm_edge dl dr k x n)
       (Matrix.etaFixedSectorCyclicEdgeEquiv_symm_edge dl dr k y n)
-  · rw [Matrix.blockDiagonal'_apply_ne _ _ _ hkh]
+  · apply Eq.trans ?_ (Matrix.blockDiagonal'_apply_ne P x y hkh).symm
     obtain ⟨n, hn⟩ := Function.ne_iff.mp hkh
     apply Finset.prod_eq_zero (Finset.mem_univ n)
     have hk :

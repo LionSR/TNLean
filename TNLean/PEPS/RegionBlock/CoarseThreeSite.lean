@@ -273,8 +273,7 @@ theorem coarseTensor_component_eq (v : Fin 3) :
         ((regionBlockedTensorFamily (G := G) A (F.regionOf v)) ∘ F.legEquiv v) := by
   funext legs
   funext p
-  simp only [coarseTensor_component, Function.comp_apply, LinearMap.funLeft_apply,
-    regionBlockedTensorFamily]
+  rfl
 
 /-- **Vertex injectivity of the coarse tensor.** The component family at every
 coarse super-site is linearly independent, inherited from the blocked-region

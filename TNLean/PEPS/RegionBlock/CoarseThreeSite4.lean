@@ -106,13 +106,19 @@ def crossingTripleEquiv (F : CoherentCoarseBlockingFrame (G := G) (d := d) A) :
   right_inv t := by
     obtain ⟨a, b, c⟩ := t
     refine Prod.ext ?_ (Prod.ext ?_ ?_)
-    · dsimp only; rw [dif_pos rfl]; exact (F.bondModel coarseEdgeRB).apply_symm_apply _
-    · dsimp only; rw [dif_neg (show coarseEdgeRC ≠ coarseEdgeRB by decide), dif_pos rfl]
-      exact (F.bondModel coarseEdgeRC).apply_symm_apply _
     · dsimp only
-      rw [dif_neg (show coarseEdgeBC ≠ coarseEdgeRB by decide),
-        dif_neg (show coarseEdgeBC ≠ coarseEdgeRC by decide), dif_pos rfl]
-      exact (F.bondModel coarseEdgeBC).apply_symm_apply _
+      refine (congrArg (F.bondModel coarseEdgeRB) ?_).trans
+        ((F.bondModel coarseEdgeRB).apply_symm_apply a)
+      exact dif_pos rfl
+    · dsimp only
+      refine (congrArg (F.bondModel coarseEdgeRC) ?_).trans
+        ((F.bondModel coarseEdgeRC).apply_symm_apply b)
+      exact (dif_neg (show coarseEdgeRC ≠ coarseEdgeRB by decide)).trans (dif_pos rfl)
+    · dsimp only
+      refine (congrArg (F.bondModel coarseEdgeBC) ?_).trans
+        ((F.bondModel coarseEdgeBC).apply_symm_apply c)
+      exact (dif_neg (show coarseEdgeBC ≠ coarseEdgeRB by decide)).trans
+        ((dif_neg (show coarseEdgeBC ≠ coarseEdgeRC by decide)).trans (dif_pos rfl))
 
 @[simp] theorem crossingTripleEquiv_apply (F : CoherentCoarseBlockingFrame (G := G) (d := d) A)
     (η : VirtualConfig (F.frame.coarseTensor)) :
@@ -191,7 +197,7 @@ theorem bondModel_rb_eq_of_legEquivRed_eq (hP : F.frame.IsPartition)
   have hkey := congrFun h ⟨g.1, hbdry⟩
   rw [F.legEquivRed_apply_eq hP η ⟨g.1, hbdry⟩, dif_pos hcross] at hkey
   simp only [regionBoundaryLabel_apply] at hkey
-  rw [crossingLabel]; exact hkey
+  exact hkey
 
 /-- **Red boundary match, `r-c` super-bond.** -/
 theorem bondModel_rc_eq_of_legEquivRed_eq (hP : F.frame.IsPartition)
@@ -209,7 +215,7 @@ theorem bondModel_rc_eq_of_legEquivRed_eq (hP : F.frame.IsPartition)
   have hkey := congrFun h ⟨g.1, hbdry⟩
   rw [F.legEquivRed_apply_eq hP η ⟨g.1, hbdry⟩, dif_neg hnb] at hkey
   simp only [regionBoundaryLabel_apply] at hkey
-  rw [crossingLabel]; exact hkey
+  exact hkey
 
 /-- **Blue boundary match, `r-b` super-bond.** -/
 theorem bondModel_rb_eq_of_legEquivBlue_eq (hP : F.frame.IsPartition)
@@ -242,7 +248,7 @@ theorem bondModel_bc_eq_of_legEquivBlue_eq (hP : F.frame.IsPartition)
   have hkey := congrFun h ⟨g.1, hbdry⟩
   rw [F.legEquivBlue_apply_eq hP η ⟨g.1, hbdry⟩, dif_neg hnb] at hkey
   simp only [regionBoundaryLabel_apply] at hkey
-  rw [crossingLabel]; exact hkey
+  exact hkey
 
 /-- **Complement boundary match, `r-c` super-bond.** -/
 theorem bondModel_rc_eq_of_legEquivComplement_eq (hP : F.frame.IsPartition)
@@ -299,13 +305,11 @@ theorem legEquivRed_eq_of_bondModel (hP : F.frame.IsPartition)
   rw [F.legEquivRed_apply_eq hP η b]
   by_cases hb : IsCrossingEdge (G := G) A F.frame.red F.frame.blue b.1
   · rw [dif_pos hb]
-    have := congrFun hrb ⟨b.1, hb⟩
-    rw [crossingLabel_apply] at this; rw [this]; rfl
+    exact congrFun hrb ⟨b.1, hb⟩
   · rw [dif_neg hb]
     have hc : IsCrossingEdge (G := G) A F.frame.red F.frame.complement b.1 :=
       (F.frame.isCrossingEdge_red_blue_or_red_complement hP b.2).resolve_left hb
-    have := congrFun hrc ⟨b.1, hc⟩
-    rw [crossingLabel_apply] at this; rw [this]; rfl
+    exact congrFun hrc ⟨b.1, hc⟩
 
 /-- **Blue boundary recovery.** -/
 theorem legEquivBlue_eq_of_bondModel (hP : F.frame.IsPartition)
@@ -320,12 +324,11 @@ theorem legEquivBlue_eq_of_bondModel (hP : F.frame.IsPartition)
   rw [F.legEquivBlue_apply_eq hP η b]
   by_cases hb : IsCrossingEdge (G := G) A F.frame.red F.frame.blue b.1
   · rw [dif_pos hb]
-    have := congrFun hrb ⟨b.1, hb⟩; rw [this]; rfl
+    exact congrFun hrb ⟨b.1, hb⟩
   · rw [dif_neg hb]
     have hc : IsCrossingEdge (G := G) A F.frame.blue F.frame.complement b.1 :=
       (F.frame.isCrossingEdge_red_blue_or_blue_complement hP b.2).resolve_left hb
-    have := congrFun hbc ⟨b.1, hc⟩
-    rw [crossingLabel_apply] at this; rw [this]; rfl
+    exact congrFun hbc ⟨b.1, hc⟩
 
 /-- **Complement boundary recovery.** -/
 theorem legEquivComplement_eq_of_bondModel (hP : F.frame.IsPartition)

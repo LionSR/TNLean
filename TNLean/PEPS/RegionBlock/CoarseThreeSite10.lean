@@ -63,6 +63,14 @@ theorem redBundleInsertedCoeff_bondModelMatrix_eq_configSum
             A.component w.1 (fun ie => η ie.1)
               ((F.frame.toThreeBlockGeometry hP).complPhysical σb σc w)) := by
   classical
+  let σb' : RegionPhysicalConfig (V := V) (d := d)
+      (F.frame.toThreeBlockGeometry hP).blue := fun w => σb w
+  let σc' : RegionPhysicalConfig (V := V) (d := d)
+      (F.frame.toThreeBlockGeometry hP).complement := fun w => σc w
+  let σhost : RegionPhysicalConfig (V := V) (d := d) (Finset.univ \ F.frame.red) :=
+    (F.frame.toThreeBlockGeometry hP).complPhysical σb' σc'
+  change redBundleInsertedCoeff (G := G) A F.frame.red F.frame.blue
+      (bondModelMatrix (G := G) F M) σr σhost = _
   rw [redBundleInsertedCoeff_eq]
   -- Pull the red blocked-region weight out of the inner host sum, then group the red
   -- configurations through `blockedWeight_as_configSum`.

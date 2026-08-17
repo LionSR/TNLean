@@ -131,7 +131,12 @@ theorem inverseGram_reassocTailBoundaryMapES_eq_fiberwise_inverseGram
           (tailBoundaryMapES_injective_of_groundSpaceMapES_injective A K (L + Q) h)) =
       boundaryFiberwiseMap (D := D) (Cfg d K)
         (ContinuousLinearMap.inverseGram (groundSpaceMapES A (L + Q)) h) := by
-  refine Eq.trans (ContinuousLinearMap.inverseGram_eq_inverse _ _) ?_
+  let hTail : Function.Injective (reassocTailBoundaryMapES A K L Q) := by
+    rw [reassocTailBoundaryMapES]
+    exact (physicalReassocES (d := d) K L Q).injective.comp
+      (tailBoundaryMapES_injective_of_groundSpaceMapES_injective A K (L + Q) h)
+  change ContinuousLinearMap.inverseGram (reassocTailBoundaryMapES A K L Q) hTail = _
+  rw [ContinuousLinearMap.inverseGram_eq_inverse]
   apply ContinuousLinearMap.inverse_eq
   · rw [reassocTailBoundaryMapES_adjoint_comp_self_eq_fiberwise_groundSpaceGram,
       groundSpaceGram, boundaryFiberwiseMap_comp,

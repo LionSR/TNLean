@@ -39,6 +39,13 @@ namespace MPSTensor
 
 variable {d D : ℕ}
 
+private noncomputable def groundSpaceESHasOrthogonalProjection
+    (A : MPSTensor d D) (N : ℕ) : (groundSpaceES A N).HasOrthogonalProjection := by
+  letI : CompleteSpace (groundSpaceES A N) := FiniteDimensional.complete ℂ _
+  exact Submodule.HasOrthogonalProjection.ofCompleteSpace _
+
+attribute [local instance] groundSpaceESHasOrthogonalProjection
+
 private theorem tendsto_sqrt_succ_mul_pow_of_lt_one {r : ℝ}
     (hr : 0 ≤ r) (hr_lt_one : r < 1) :
     Tendsto (fun n : ℕ => Real.sqrt ((n + 1 : ℕ) : ℝ) * r ^ n) atTop (𝓝 0) := by

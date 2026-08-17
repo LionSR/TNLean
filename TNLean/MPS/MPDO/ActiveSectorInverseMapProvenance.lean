@@ -69,7 +69,8 @@ private lemma sectorMatrix_linearIndependent : LinearIndependent ℂ sectorMatri
   have h01 := congrFun (congrFun hzero 0) 1
   have h10 := congrFun (congrFun hzero 1) 0
   have h11 := congrFun (congrFun hzero 1) 1
-  simp [sectorMatrix, leftPairing, rightPairing, Matrix.sum_apply,
+  simp only [Matrix.sum_apply, Matrix.smul_apply] at h00 h01 h10 h11
+  simp [sectorMatrix, leftPairing, rightPairing,
     Fin.sum_univ_four] at h00 h01 h10 h11
   fin_cases k
   · change c 0 = 0
@@ -109,6 +110,7 @@ private lemma inverseTensor_diagonal_eq_dualCoefficient (i : Fin 4) :
       (∑ j : Fin 4, dualCoefficient j alpha beta • sectorMatrix j) =
         Matrix.single alpha beta (1 : ℂ) := by
     ext x y
+    simp only [Matrix.sum_apply, Matrix.smul_apply]
     fin_cases alpha <;> fin_cases beta <;> fin_cases x <;> fin_cases y <;>
       simp [dualCoefficient, sectorMatrix, leftPairing, rightPairing,
         Fin.sum_univ_four, Matrix.single] <;> norm_num
@@ -436,7 +438,11 @@ lemma inverseMapFactorization_neighboringOperator (k h : Fin 4) :
     inverseMapFactorization.neighboringOperator k h =
       factorization.neighboringOperator k h := by
   unfold inverseMapFactorization
-  rw [zeroWeightReparameterizedInverseMapPhysicalSectorFactorization_neighboringOperator]
+  apply Eq.trans
+    (zeroWeightReparameterizedInverseMapPhysicalSectorFactorization_neighboringOperator
+      tensor tensor_isInjective (normalizedFourSiteTail tensor)
+      isThreeSiteClosure_threeSiteState hayashiData 0 0
+      normalizedFourSiteTail_tensor_zero_zero_ne k h)
   have hk : hayashiData.p k ≠ 0 := by
     change p k ≠ 0
     norm_num [p]
@@ -448,9 +454,19 @@ lemma inverseMapFactorization_neighboringOperator (k h : Fin 4) :
   fin_cases xL
   fin_cases yR
   fin_cases yL
-  simp only [sectorEta, Matrix.sum_apply, Matrix.kroneckerMap_apply,
-    PhysicalSectorFactorization.neighboringOperator_apply]
+  simp only [sectorEta, Matrix.sum_apply, Matrix.kroneckerMap_apply]
   simp_rw [sectorTensorL_hayashiData, sectorTensorR_hayashiData]
+  change (∑ x : Fin 2,
+      factorization.rightTensor k x ⟨0, factorization.rightDim_pos k⟩
+          ⟨0, factorization.rightDim_pos k⟩ *
+        factorization.leftTensor h x ⟨0, factorization.leftDim_pos h⟩
+          ⟨0, factorization.leftDim_pos h⟩) =
+    ∑ x : Fin 2,
+      factorization.rightTensor k x ⟨0, factorization.rightDim_pos k⟩
+          ⟨0, factorization.rightDim_pos k⟩ *
+        factorization.leftTensor h x ⟨0, factorization.leftDim_pos h⟩
+          ⟨0, factorization.leftDim_pos h⟩
+  rfl
 
 /-- The nonzero rectangular remainder survives the exact Hayashi/tail/inverse-map
 provenance. Thus the arbitrary-factorization boundary isolated previously is

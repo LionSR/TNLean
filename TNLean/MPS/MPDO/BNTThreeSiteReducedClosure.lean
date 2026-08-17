@@ -223,12 +223,10 @@ theorem reducedBlockState_reindex_isThreeSiteFamilyClosure_of_sameMPV₂Pos
       rw [← List.ofFn_fin_append]
       apply List.ext_getElem
       · simp
-        omega
       · intro n hn₁ hn₂
         simp only [List.getElem_ofFn, Function.comp_apply]
         congr 1
     rw [hwords u, hwords v, List.ofFn_fin_append, List.ofFn_fin_append]
-    rfl
   rw [Matrix.reindex_apply]
   change M.reducedBlockState (L + 3) 3 (by omega) u v = _
   rw [hReduced]

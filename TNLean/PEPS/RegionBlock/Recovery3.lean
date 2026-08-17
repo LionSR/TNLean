@@ -537,9 +537,11 @@ theorem regionTransferMatrix_mul_of_realizes (A B : Tensor G d) (R : Finset V)
       localIncidentMatrixOp B inc (Nm * Nm').transpose := h1.trans h2.symm
   have hread := congrArg
     (incidentMatrixOfLocalOp B inc (edgeIncidentReferenceResidual B inc hposB)) hops
-  rw [incidentMatrixOfLocalOp_localIncidentMatrixOp,
-    incidentMatrixOfLocalOp_localIncidentMatrixOp] at hread
-  exact Matrix.transpose_injective hread
+  have hreadNmm := incidentMatrixOfLocalOp_localIncidentMatrixOp B inc
+    (edgeIncidentReferenceResidual B inc hposB) Nmm.transpose
+  have hreadProd := incidentMatrixOfLocalOp_localIncidentMatrixOp B inc
+    (edgeIncidentReferenceResidual B inc hposB) (Nm * Nm').transpose
+  exact Matrix.transpose_injective (hreadNmm.symm.trans (hread.trans hreadProd))
 
 /-- The forward transfer is unital under a realized matrix transfer. -/
 theorem regionTransferMatrix_one_of_realizes (A B : Tensor G d) (R : Finset V)

@@ -238,8 +238,8 @@ theorem exists_rephase_zeroWeightInverseMap_posSemidef
   obtain ⟨z, hz⟩ :=
     exists_vertexPhase_smul_posSemidef hη eta hcyc hrec
   refine ⟨z, fun k h ↦ ?_⟩
-  rw [F.rephase_neighboringOperator]
-  exact hz k h
+  have hop := F.rephase_neighboringOperator z k h
+  exact Eq.mpr (congrArg Matrix.PosSemidef hop) (hz k h)
 
 /-- The inverse-map construction admits a physical-sector factorization whose
 neighboring operators are all positive semidefinite, with no recurrence

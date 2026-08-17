@@ -119,8 +119,11 @@ theorem bondModelMatrix_eq_singletonBundleMatrix
           (singletonCrossingEquiv (G := G) A F.frame.red F.frame.blue e hsingle r) =
         (F.bondModel coarseEdgeRB).symm r := by
     intro r
-    rw [Equiv.symm_apply_eq, bridgeEquiv, Equiv.trans_apply, Equiv.apply_symm_apply]
-    rfl
+    change (F.bondModel coarseEdgeRB).symm
+        ((singletonCrossingEquiv (G := G) A F.frame.red F.frame.blue e hsingle).symm
+          (singletonCrossingEquiv (G := G) A F.frame.red F.frame.blue e hsingle r)) =
+      (F.bondModel coarseEdgeRB).symm r
+    rw [Equiv.symm_apply_apply]
   rw [bondModelMatrix_apply, singletonBundleMatrix, Matrix.coe_reindexAlgEquiv,
     Matrix.reindex_apply, Matrix.submatrix_apply, hbe, hbe]
 
@@ -185,9 +188,22 @@ theorem edgeInsertedCoeff_coarseTensor_descent_single
           (coarseProj F.frame.red (s 0))
           ((F.frame.toThreeBlockGeometry hP).complPhysical
             (coarseProj F.frame.blue (s 1)) (coarseProj F.frame.complement (s 2))) := by
+  let σb : RegionPhysicalConfig (V := V) (d := d)
+      (F.frame.toThreeBlockGeometry hP).blue := fun w => coarseProj F.frame.blue (s 1) w
+  let σc : RegionPhysicalConfig (V := V) (d := d)
+      (F.frame.toThreeBlockGeometry hP).complement :=
+    fun w => coarseProj F.frame.complement (s 2) w
+  let σhost : RegionPhysicalConfig (V := V) (d := d) (Finset.univ \ F.frame.red) :=
+    (F.frame.toThreeBlockGeometry hP).complPhysical σb σc
+  change edgeInsertedCoeff (G := coarseGraph) F.frame.coarseTensor coarseEdgeRB s M =
+    hostMergeFiberProd F • regionInsertedCoeff (G := G) A F.frame.red
+      (singleBoundaryEdge (G := G) A F.frame.red F.frame.blue e hsingle)
+      (Matrix.reindexAlgEquiv ℂ ℂ (bridgeEquiv (G := G) F e hsingle) M)
+      (coarseProj F.frame.red (s 0)) σhost
   rw [edgeInsertedCoeff_coarseTensor_descent F hP s M,
-    bondModelMatrix_eq_singletonBundleMatrix F e hsingle M,
-    redBundleInsertedCoeff_singleton F.frame.red F.frame.blue e hsingle]
+    bondModelMatrix_eq_singletonBundleMatrix F e hsingle M]
+  exact congrArg (hostMergeFiberProd F • ·)
+    (redBundleInsertedCoeff_singleton F.frame.red F.frame.blue e hsingle _ _ σhost)
 
 /-! ### Region transport of the single-edge inserted coefficient
 
@@ -279,13 +295,31 @@ theorem regionInsertedCoeff_eq_of_coarse_eq
   -- The same coarse assignment realizes the transported legs on the second frame.
   have hsσ' : coarseProj F'.frame.red (s 0) = regionPhysicalConfigCongr (d := d) hred σ := by
     rw [← hsσ]; funext w; rfl
+  let σb : RegionPhysicalConfig (V := V) (d := d)
+      (F.frame.toThreeBlockGeometry hP).blue := fun w => coarseProj F.frame.blue (s 1) w
+  let σc : RegionPhysicalConfig (V := V) (d := d)
+      (F.frame.toThreeBlockGeometry hP).complement :=
+    fun w => coarseProj F.frame.complement (s 2) w
+  let σb' : RegionPhysicalConfig (V := V) (d := d)
+      (F'.frame.toThreeBlockGeometry hP').blue := fun w => coarseProj F'.frame.blue (s 1) w
+  let σc' : RegionPhysicalConfig (V := V) (d := d)
+      (F'.frame.toThreeBlockGeometry hP').complement :=
+    fun w => coarseProj F'.frame.complement (s 2) w
+  let host : RegionPhysicalConfig (V := V) (d := d) (Finset.univ \ F.frame.red) :=
+    (F.frame.toThreeBlockGeometry hP).complPhysical σb σc
+  let host' : RegionPhysicalConfig (V := V) (d := d) (Finset.univ \ F'.frame.red) :=
+    (F'.frame.toThreeBlockGeometry hP').complPhysical σb' σc'
+  have hsτTyped : host = τ := hsτ
   have hsτ' : (F'.frame.toThreeBlockGeometry hP').complPhysical
         (coarseProj F'.frame.blue (s 1)) (coarseProj F'.frame.complement (s 2)) =
       regionPhysicalConfigCongr (d := d)
         (show Finset.univ \ F.frame.red = Finset.univ \ F'.frame.red by rw [hred]) τ := by
+    change host' = regionPhysicalConfigCongr (d := d)
+      (show Finset.univ \ F.frame.red = Finset.univ \ F'.frame.red by rw [hred]) τ
     funext w
-    rw [regionPhysicalConfigCongr_apply, ← hsτ]
+    rw [regionPhysicalConfigCongr_apply, ← hsτTyped]
     -- Both fused host legs read `coarseDecode` on the same branch (blue/complement shared).
+    dsimp only [host, host', σb, σb', σc, σc']
     simp only [ThreeBlockGeometry.complPhysical, coarseProj]
     by_cases hb : w.1 ∈ F'.frame.blue
     · rw [dif_pos (show w.1 ∈ (F'.frame.toThreeBlockGeometry hP').blue from hb),

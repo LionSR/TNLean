@@ -313,7 +313,9 @@ theorem groupedIndexEquiv_inr (data : CPSVCanonicalFormData A) (k : data.Inactiv
 theorem groupedListedEquiv_groupedPosition (data : CPSVCanonicalFormData A)
     (x : data.GroupedIndex) :
     data.groupedListedEquiv (data.groupedPosition x) = data.groupedIndexEquiv x := by
-  simp [groupedListedEquiv, groupedPosition, groupedEnum]
+  change data.groupedIndexEquiv (data.groupedEnum (data.groupedEnum.symm x)) =
+    data.groupedIndexEquiv x
+  rw [data.groupedEnum.apply_symm_apply]
 
 /-- Locate an active phase-class copy in the original listed block family. -/
 theorem groupedListedEquiv_activeCopy (data : CPSVCanonicalFormData A)

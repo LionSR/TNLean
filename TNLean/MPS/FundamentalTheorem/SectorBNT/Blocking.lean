@@ -336,10 +336,12 @@ theorem IsBNTCanonicalForm.blockTensor
       (hLI N (by omega)).eq_of_smul_apply_eq_smul_apply 1 (ζ ^ N) k j one_ne_zero hEq
     exact hjk hkj.symm
   · intro j q
-    rw [blockTensor_weight, norm_pow]
+    change ‖P.weight j q ^ p‖ ≤ 1
+    rw [norm_pow]
     exact pow_le_one₀ (norm_nonneg _) (hCF.weight_norm_le_one j q)
   · obtain ⟨j, q, hq⟩ := hCF.weight_unit_exists
     refine ⟨j, q, ?_⟩
-    rw [blockTensor_weight, norm_pow, hq, one_pow]
+    change ‖P.weight j q ^ p‖ = 1
+    rw [norm_pow, hq, one_pow]
 
 end MPSTensor.SectorDecomposition

@@ -65,12 +65,14 @@ theorem rephase_neighboringOperator (F : PhysicalSectorFactorization K)
     (F.rephase z).neighboringOperator k h =
       ((((z k)⁻¹ * z h : Circle) : ℂ) • F.neighboringOperator k h) := by
   ext x y
-  simp only [neighboringOperator_apply, Matrix.smul_apply, smul_eq_mul]
+  change (∑ a : Fin D,
+      (((z k : ℂ)⁻¹) * F.rightTensor k a x.1 y.1) *
+        ((z h : ℂ) * F.leftTensor h a x.2 y.2)) =
+    (((z k)⁻¹ * z h : Circle) : ℂ) *
+      ∑ a : Fin D, F.rightTensor k a x.1 y.1 * F.leftTensor h a x.2 y.2
   simp_rw [Finset.mul_sum]
   apply Finset.sum_congr rfl
   intro a _
-  change (((z k : ℂ)⁻¹) * F.rightTensor k a x.1 y.1) *
-      ((z h : ℂ) * F.leftTensor h a x.2 y.2) = _
   simp only [Circle.coe_mul, Circle.coe_inv]
   ring
 

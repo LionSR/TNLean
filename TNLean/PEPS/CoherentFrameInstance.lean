@@ -105,9 +105,14 @@ noncomputable def legPair0 {cbd : Edge coarseGraph → ℕ} :
     · rw [dif_neg (show incidentRC0 ≠ incidentRB0 by decide)]
   right_inv p := by
     obtain ⟨a, b⟩ := p
+    let a' : Fin (cbd incidentRB0.1) := ⟨a.1, a.2⟩
+    let b' : Fin (cbd incidentRC0.1) := ⟨b.1, b.2⟩
     refine Prod.ext ?_ ?_
-    · dsimp only; rw [dif_pos rfl]
-    · dsimp only; rw [dif_neg (show incidentRC0 ≠ incidentRB0 by decide)]
+    · change (if h : incidentRB0 = incidentRB0 then h ▸ a' else (h rfl).elim) = a'
+      rw [dif_pos rfl]
+    · change (if h : incidentRC0 = incidentRB0 then h ▸ a' else
+          ((incident0_cases incidentRC0).resolve_left h) ▸ b') = b'
+      rw [dif_neg (show incidentRC0 ≠ incidentRB0 by decide)]
 
 /-- A blue super-site leg assignment is the pair of its `r-b` and `b-c` values. -/
 noncomputable def legPair1 {cbd : Edge coarseGraph → ℕ} :
@@ -124,9 +129,14 @@ noncomputable def legPair1 {cbd : Edge coarseGraph → ℕ} :
     · rw [dif_neg (show incidentBC1 ≠ incidentRB1 by decide)]
   right_inv p := by
     obtain ⟨a, b⟩ := p
+    let a' : Fin (cbd incidentRB1.1) := ⟨a.1, a.2⟩
+    let b' : Fin (cbd incidentBC1.1) := ⟨b.1, b.2⟩
     refine Prod.ext ?_ ?_
-    · dsimp only; rw [dif_pos rfl]
-    · dsimp only; rw [dif_neg (show incidentBC1 ≠ incidentRB1 by decide)]
+    · change (if h : incidentRB1 = incidentRB1 then h ▸ a' else (h rfl).elim) = a'
+      rw [dif_pos rfl]
+    · change (if h : incidentBC1 = incidentRB1 then h ▸ a' else
+          ((incident1_cases incidentBC1).resolve_left h) ▸ b') = b'
+      rw [dif_neg (show incidentBC1 ≠ incidentRB1 by decide)]
 
 /-- A complement super-site leg assignment is the pair of its `r-c` and `b-c` values. -/
 noncomputable def legPair2 {cbd : Edge coarseGraph → ℕ} :
@@ -143,9 +153,14 @@ noncomputable def legPair2 {cbd : Edge coarseGraph → ℕ} :
     · rw [dif_neg (show incidentBC2 ≠ incidentRC2 by decide)]
   right_inv p := by
     obtain ⟨a, b⟩ := p
+    let a' : Fin (cbd incidentRC2.1) := ⟨a.1, a.2⟩
+    let b' : Fin (cbd incidentBC2.1) := ⟨b.1, b.2⟩
     refine Prod.ext ?_ ?_
-    · dsimp only; rw [dif_pos rfl]
-    · dsimp only; rw [dif_neg (show incidentBC2 ≠ incidentRC2 by decide)]
+    · change (if h : incidentRC2 = incidentRC2 then h ▸ a' else (h rfl).elim) = a'
+      rw [dif_pos rfl]
+    · change (if h : incidentBC2 = incidentRC2 then h ▸ a' else
+          ((incident2_cases incidentBC2).resolve_left h) ▸ b') = b'
+      rw [dif_neg (show incidentBC2 ≠ incidentRC2 by decide)]
 
 @[simp] theorem legPair0_apply_fst {cbd : Edge coarseGraph → ℕ}
     (legs : (ie : IncidentEdge coarseGraph 0) → Fin (cbd ie.1)) :

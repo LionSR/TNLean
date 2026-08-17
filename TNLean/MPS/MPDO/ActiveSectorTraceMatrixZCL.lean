@@ -81,7 +81,11 @@ theorem activeSectorTraceMatrix_normalized_relations_of_isSourceZCL
       F.leftTensor F.rightTensor hfactor]
     ext beta alpha
     simp only [MPOTensor.closedSectorPairingOperator, Matrix.sum_apply,
-      Matrix.vecMulVec_apply, Matrix.mul_apply, L, Q]
+      Matrix.vecMulVec_apply]
+    change (∑ c : Fin F.sectorCount,
+      (F.leftTensor c beta).trace * (F.rightTensor c alpha).trace) =
+        ∑ a : F.ActiveSector p,
+          (F.leftTensor a beta).trace * (F.rightTensor a alpha).trace
     rw [← Finset.sum_subtype (Finset.univ.filter (fun k ↦ p k ≠ 0)) (by simp)
       (fun k ↦ (F.leftTensor k beta).trace * (F.rightTensor k alpha).trace)]
     rw [Finset.sum_filter]

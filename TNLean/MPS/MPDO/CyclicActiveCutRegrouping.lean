@@ -21,6 +21,8 @@ open scoped Matrix BigOperators ComplexOrder Kronecker
 
 namespace MPOTensor.PhysicalSectorFactorization
 
+attribute [local instance] Classical.decEq Classical.propDecidable
+
 universe u
 
 variable {d D : ℕ} {K : MPOTensor d D}
@@ -560,14 +562,67 @@ theorem reindex_cyclicActiveFourthRegionBlock_eq_cutRaw
             have huMR' : (v' ⟨A, by omega⟩).2 ≍ uR'.1 :=
               (sectorIndex_snd_heq_of_heq F hkMiddle hvM').trans
                 (F.rightFiberOpenEdgeEquiv_symm_fst_heq j kR zR').symm
-            simp only [cyclicActiveFourthRegionBlock,
-              cyclicActiveLeftOpenBlock, cyclicActiveRightOpenBlock,
-              dif_pos (hkActive.mpr ⟨hL, hR⟩), dif_pos hL, dif_pos hR,
-              Matrix.smul_apply, smul_eq_mul, Matrix.kroneckerMap_apply,
-              Matrix.finKronecker_apply]
-            rw [F.cyclicActiveSeparatedBoundary_eq_right_kronecker_left]
-            simp only [Matrix.kroneckerMap_apply]
-            rw [retainedBulkProduct, Fin.prod_univ_add]
+            let PFourth : Matrix (F.RetainedOpenEdgeIndex k)
+                (F.RetainedOpenEdgeIndex k) ℂ := by
+              let kC := F.cyclicActiveRetainedWord (hkActive.mpr ⟨hL, hR⟩)
+              exact ((lam : ℂ) ^ 2) •
+                (F.retainedBulkProduct k ⊗ₖ
+                  F.cyclicActiveSeparatedBoundary a b
+                    (kC (Fin.last (A + C) + 1)) (kC (Fin.last (A + C))))
+            have hFourth : F.cyclicActiveFourthRegionBlock lam a b k = PFourth := by
+              ext x y
+              simp [cyclicActiveFourthRegionBlock, PFourth, hkActive.mpr ⟨hL, hR⟩]
+            let PLeft : Matrix (F.LeftOpenEdgeIndex (F.leftSectorWord j kL))
+                (F.LeftOpenEdgeIndex (F.leftSectorWord j kL)) ℂ := by
+              exact ((lam : ℂ) ^ 2) •
+                (F.cyclicActiveLeftBoundary b
+                    ((F.cyclicActiveRetainedWord hL) 0) ⊗ₖ
+                  Matrix.finKronecker (fun i : Fin A ↦
+                    F.neighboringOperator (F.leftSectorWord j kL i.castSucc)
+                      (F.leftSectorWord j kL i.succ)))
+            have hLeft : F.cyclicActiveLeftOpenBlock lam b
+                (F.leftSectorWord j kL) = PLeft := by
+              ext x y
+              simp [cyclicActiveLeftOpenBlock, PLeft, hL]
+            let PRight : Matrix (F.RightOpenEdgeIndex (F.rightSectorWord j kR))
+                (F.RightOpenEdgeIndex (F.rightSectorWord j kR)) ℂ := by
+              exact Matrix.finKronecker (fun i : Fin C ↦
+                  F.neighboringOperator (F.rightSectorWord j kR i.castSucc)
+                    (F.rightSectorWord j kR i.succ)) ⊗ₖ
+                F.cyclicActiveRightBoundary a
+                  ((F.cyclicActiveRetainedWord hR) (Fin.last C))
+            have hRight : F.cyclicActiveRightOpenBlock a
+                (F.rightSectorWord j kR) = PRight := by
+              ext x y
+              simp [cyclicActiveRightOpenBlock, PRight, hR]
+            rw [hFourth, hLeft, hRight]
+            unfold PFourth PLeft PRight
+            change ((lam : ℂ) ^ 2) *
+                ((∏ q : Fin (A + C),
+                    F.neighboringOperator
+                      (k ((Fin.last (A + C)).succAbove q))
+                      (k ((Fin.last (A + C)).succAbove q + 1))
+                      (z.1 q) (z'.1 q)) *
+                  (F.cyclicActiveRightBoundary a
+                      ((F.cyclicActiveRetainedWord (hkActive.mpr ⟨hL, hR⟩))
+                        (Fin.last (A + C))) z.2.1 z'.2.1 *
+                    F.cyclicActiveLeftBoundary b
+                      ((F.cyclicActiveRetainedWord (hkActive.mpr ⟨hL, hR⟩))
+                        (Fin.last (A + C) + 1)) z.2.2 z'.2.2)) =
+              (((lam : ℂ) ^ 2) *
+                  (F.cyclicActiveLeftBoundary b
+                      ((F.cyclicActiveRetainedWord hL) 0) zL.1 zL'.1 *
+                    ∏ i : Fin A,
+                      F.neighboringOperator
+                        (F.leftSectorWord j kL i.castSucc)
+                        (F.leftSectorWord j kL i.succ) (zL.2 i) (zL'.2 i))) *
+                ((∏ i : Fin C,
+                    F.neighboringOperator
+                      (F.rightSectorWord j kR i.castSucc)
+                      (F.rightSectorWord j kR i.succ) (zR.1 i) (zR'.1 i)) *
+                  F.cyclicActiveRightBoundary a
+                    ((F.cyclicActiveRetainedWord hR) (Fin.last C)) zR.2 zR'.2)
+            rw [Fin.prod_univ_add]
             have hprodL :
                 (∏ i : Fin A,
                   F.neighboringOperator
