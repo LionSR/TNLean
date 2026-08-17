@@ -341,6 +341,8 @@ noncomputable def weightedCornerFixedPointsStarSubalgebra
     (hρ_fix : map K ρ = ρ) :
     letI hQ : IsIdempotentElem (stationaryProj hρ_psd) :=
       (isOrthogonalProjection_stationaryProj hρ_psd).2
+    letI : Semiring hQ.Corner := instSemiringCorner _ hQ
+    letI : Algebra ℂ hQ.Corner := MatrixCorner.instAlgebraComplexCorner hQ
     letI : Star hQ.Corner := MatrixCorner.cornerStar hQ
       (isOrthogonalProjection_stationaryProj hρ_psd).1.eq
     letI : StarRing hQ.Corner := MatrixCorner.cornerStarRing hQ
@@ -350,6 +352,8 @@ noncomputable def weightedCornerFixedPointsStarSubalgebra
     StarSubalgebra ℂ hQ.Corner :=
   letI hQ : IsIdempotentElem (stationaryProj hρ_psd) :=
     (isOrthogonalProjection_stationaryProj hρ_psd).2
+  letI : Semiring hQ.Corner := instSemiringCorner _ hQ
+  letI : Algebra ℂ hQ.Corner := MatrixCorner.instAlgebraComplexCorner hQ
   letI : Star hQ.Corner := MatrixCorner.cornerStar hQ
     (isOrthogonalProjection_stationaryProj hρ_psd).1.eq
   letI : StarRing hQ.Corner := MatrixCorner.cornerStarRing hQ
@@ -411,6 +415,8 @@ in it exactly when $\sqrt{\rho}\, Y \sqrt{\rho}$ is fixed by the map. -/
     (hQ : IsIdempotentElem (stationaryProj hρ_psd) :=
       (isOrthogonalProjection_stationaryProj hρ_psd).2)
     (Y : hQ.Corner) :
+    letI : Semiring hQ.Corner := instSemiringCorner _ hQ
+    letI : Algebra ℂ hQ.Corner := MatrixCorner.instAlgebraComplexCorner hQ
     letI : Star hQ.Corner := MatrixCorner.cornerStar hQ
       (isOrthogonalProjection_stationaryProj hρ_psd).1.eq
     letI : StarRing hQ.Corner := MatrixCorner.cornerStarRing hQ

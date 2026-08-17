@@ -147,9 +147,13 @@ theorem supportedMarginalInputScaling_eq_singleKrausMap
   apply LinearMap.ext
   intro X
   ext i j
-  simp [supportedMarginalInputScaling, singleKrausMap_apply,
-    marginalInvSqrtDiagonal, Matrix.mul_apply, marginalInvSqrt,
-    Matrix.diagonal_apply]
+  calc
+    (supportedMarginalInputScaling p) X i j =
+        marginalInvSqrt p i * X i j * marginalInvSqrt p j := by rfl
+    _ = (singleKrausMap (marginalInvSqrtDiagonal p)) X i j := by
+      symm
+      simp [singleKrausMap_apply, marginalInvSqrtDiagonal, Matrix.mul_apply,
+        Matrix.diagonal_apply]
 
 omit [DecidableEq β] in
 /-- The Choi matrix of the operator-Schmidt reshaping is the original

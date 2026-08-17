@@ -170,7 +170,9 @@ private theorem norm_expSemigroupCLM_taylor_bound [NeZero D]
       ((s : ℂ) • E)
   simp only [expSemigroupCLM] at h ⊢
   have hnorm_smul : ‖(s : ℂ) • E‖ = s * ‖E‖ := by
-    rw [norm_smul, Complex.norm_real, Real.norm_eq_abs, abs_of_nonneg hs]
+    calc
+      ‖(s : ℂ) • E‖ = ‖(s • E : Mat →L[ℂ] Mat)‖ := rfl
+      _ = s * ‖E‖ := norm_smul_of_nonneg hs E
   calc ‖expSemigroupCLM E s - (1 + (s : ℂ) • E)‖
       = ‖NormedSpace.exp ((s : ℂ) • E) - 1 - (s : ℂ) • E‖ := by
         congr 1; unfold expSemigroupCLM; abel
