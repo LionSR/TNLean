@@ -17,7 +17,7 @@ This file collects translation-invariance, triangular-counting, window-counting,
 and offset-partition identities for sums over a finite cyclic group.
 -/
 
-namespace ProjectionGeometry
+namespace ZModCyclicSums
 
 section CyclicSums
 
@@ -359,4 +359,4 @@ theorem sum_offset_partition (F : ZMod N → M) {m : ℕ} (hm1 : 1 ≤ m) (hm : 
 
 end CyclicSums
 
-end ProjectionGeometry
+end ZModCyclicSums

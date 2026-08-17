@@ -128,7 +128,7 @@ theorem cyclicWindowSum_sq_sum_eq (h : ZMod N → E →ₗ[𝕜] E)
     _ = m • ∑ i : ZMod N, h i * h i +
         ∑ e ∈ Finset.Ico 1 m, (m - e) •
           ∑ i : ZMod N, (h i * h (i + e) + h i * h (i - e)) :=
-      sum_cyclic_window_eq (fun i j => h i * h j) m
+      ZModCyclicSums.sum_cyclic_window_eq (fun i j => h i * h j) m
     _ = m • ∑ i : ZMod N, h i +
         ∑ e ∈ Finset.Ico 1 m, (m - e) • cyclicCrossTerms h e := by
       rw [Finset.sum_congr rfl fun i _ => hDiag i]
@@ -173,7 +173,7 @@ theorem re_inner_cyclicWindowSum_sum_eq (h : ZMod N → E →ₗ[𝕜] E)
         Finset.sum_congr rfl fun s _ => hExpand s
     _ = m • ∑ i : ZMod N, T i i +
         ∑ e ∈ Finset.Ico 1 m, (m - e) • ∑ i : ZMod N, (T i (i + e) + T i (i - e)) :=
-        sum_cyclic_window_eq T m
+        ZModCyclicSums.sum_cyclic_window_eq T m
     _ = m * RCLike.re ⟪(∑ i, h i) v, v⟫_𝕜 +
         ∑ e ∈ Finset.Ico 1 m, (m - e) * reInnerCyclicCrossTerms h e v := by
         rw [hDiag, nsmul_eq_mul]
@@ -206,7 +206,7 @@ theorem re_inner_cyclicWindowSum_sum_apply (h : ZMod N → E →ₗ[𝕜] E) (m 
   have hTrans : ∀ q : Fin m, (∑ s : ZMod N, RCLike.re ⟪h (s + (q : ℕ)) v, v⟫_𝕜) =
       RCLike.re ⟪(∑ i, h i) v, v⟫_𝕜 := by
     intro q
-    have hTra := sum_comp_addRight (M := ℝ)
+    have hTra := ZModCyclicSums.sum_comp_addRight (M := ℝ)
       (fun u : ZMod N => RCLike.re ⟪h u v, v⟫_𝕜) ((q : ℕ) : ZMod N)
     rw [hTra]
     exact (re_inner_sum_apply_left h v).symm
@@ -232,7 +232,7 @@ theorem re_inner_cyclicCrossTerms_le_two (h : ZMod N → E →ₗ[𝕜] E)
     abel_nf
   have hDiag : (∑ i : ZMod N, RCLike.re ⟪h (i + e) v, v⟫_𝕜) =
       ∑ i : ZMod N, RCLike.re ⟪h i v, v⟫_𝕜 :=
-    sum_comp_addRight (fun u : ZMod N => RCLike.re ⟪h u v, v⟫_𝕜) _
+    ZModCyclicSums.sum_comp_addRight (fun u : ZMod N => RCLike.re ⟪h u v, v⟫_𝕜) _
   have hSplit : reInnerCyclicCrossTerms h e v =
       (∑ i : ZMod N, (RCLike.re ⟪h i v, h (i + e) v⟫_𝕜 +
         RCLike.re ⟪h (i + e) v, h i v⟫_𝕜)) := by
@@ -313,7 +313,7 @@ theorem re_inner_sum_two_ge_sum_cyclicCrossTerms (h : ZMod N → E →ₗ[𝕜] 
     rw [hEq, add_zero]
   -- Partition the nonzero offsets.
   set F : ZMod N → ℝ := fun u => ∑ i : ZMod N, T i (i + u) with hF
-  have hPart := sum_offset_partition F hm1 hN
+  have hPart := ZModCyclicSums.sum_offset_partition F hm1 hN
   -- The middle offsets carry nonnegative cross terms.
   have hMidNonneg : 0 ≤ ∑ k ∈ Finset.Ico m (N - m + 1), F k := by
     refine Finset.sum_nonneg fun k hk => Finset.sum_nonneg fun i _ => ?_

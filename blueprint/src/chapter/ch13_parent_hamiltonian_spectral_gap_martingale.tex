@@ -2617,11 +2617,11 @@ $N=L$. They give no gap estimate for $N>L$ and no periodic coercivity.
     \lean{ProjectionGeometry.cyclicWindowSum,
         ProjectionGeometry.cyclicCrossTerms,
         ProjectionGeometry.reInnerCyclicCrossTerms,
-        ProjectionGeometry.sum_comp_addRight,
-        ProjectionGeometry.sum_comp_addLeft,
-        ProjectionGeometry.sum_range_Ico_triangular,
-        ProjectionGeometry.sum_range_Ico_triangular_lower,
-        ProjectionGeometry.sum_cyclic_window_eq,
+        ZModCyclicSums.sum_comp_addRight,
+        ZModCyclicSums.sum_comp_addLeft,
+        ZModCyclicSums.sum_range_Ico_triangular,
+        ZModCyclicSums.sum_range_Ico_triangular_lower,
+        ZModCyclicSums.sum_cyclic_window_eq,
         ProjectionGeometry.cyclicWindowSum_sq_sum_eq,
         ProjectionGeometry.re_inner_cyclicWindowSum_sum_eq,
         ProjectionGeometry.re_inner_cyclicWindowSum_sum_apply}
@@ -2664,7 +2664,7 @@ $N=L$. They give no gap estimate for $N>L$ and no periodic coercivity.
 
 \begin{theorem}[Cyclic cross-term estimates]
     \label{thm:cyclic_knabe_cross_estimates}
-    \lean{ProjectionGeometry.sum_offset_partition,
+    \lean{ZModCyclicSums.sum_offset_partition,
         ProjectionGeometry.re_inner_cyclicCrossTerms_le_two,
         ProjectionGeometry.re_inner_cyclicCrossTerms_nonneg,
         ProjectionGeometry.re_inner_sum_two_ge_sum_cyclicCrossTerms}
