@@ -16,6 +16,7 @@ import TNLean.QCA.LocalAlgebra
 import TNLean.QCA.LocalLimit
 import TNLean.QCA.LocalNorm
 import TNLean.QCA.QuasiLocal
+import TNLean.QCA.QuasiLocalCommutant
 import TNLean.QCA.QuasiLocalTranslation
 import TNLean.QCA.RegionSumset
 import TNLean.QCA.RelativeCommutant
