@@ -56,8 +56,7 @@ unit phases leaves the norms unchanged, so the averages tend to zero as well.
   lines 258--264.
 -/
 
-open scoped Matrix ComplexOrder Matrix.Norms.Frobenius Topology
-open Matrix Filter
+open Filter Topology
 
 namespace Module.End
 
@@ -82,28 +81,15 @@ theorem weightedCesaroMean_apply (f : Module.End ℂ V) (s : Finset ℂ) (N : �
       (N : ℂ)⁻¹ • ∑ n ∈ Finset.Icc 1 N, ∑ μ ∈ s, (((starRingEnd ℂ) μ • f) ^ n) x := by
   simp [weightedCesaroMean]
 
-/-- Peeling one factor off a power of an endomorphism. -/
-private theorem pow_succ_apply (f : Module.End ℂ V) (n : ℕ) (x : V) :
-    (f ^ (n + 1)) x = f ((f ^ n) x) := by
-  rw [pow_succ']; rfl
-
-/-- Powers of a phase-shifted endomorphism carry the phase out as a scalar. -/
-private theorem smul_pow_apply (c : ℂ) (f : Module.End ℂ V) (n : ℕ) (x : V) :
-    ((c • f) ^ n) x = c ^ n • ((f ^ n) x) := by
-  induction n with
-  | zero => simp
-  | succ n ih =>
-      rw [pow_succ_apply, ih, LinearMap.smul_apply, map_smul, smul_smul, pow_succ_apply,
-        pow_succ', mul_comm]
-
 /-- On the `μ`-eigenspace the `n`-th power acts as the scalar `μ ^ n`. -/
 private theorem pow_apply_of_mem_eigenspace {f : Module.End ℂ V} {μ : ℂ} {x : V}
     (hx : x ∈ f.eigenspace μ) (n : ℕ) : (f ^ n) x = μ ^ n • x := by
   induction n with
   | zero => simp
   | succ n ih =>
-      rw [pow_succ_apply, ih, map_smul, Module.End.mem_eigenspace_iff.mp hx, smul_smul,
-        pow_succ', mul_comm]
+      rw [pow_succ']
+      change f ((f ^ n) x) = _
+      rw [ih, map_smul, Module.End.mem_eigenspace_iff.mp hx, smul_smul, pow_succ', mul_comm]
 
 end Definition
 
@@ -136,7 +122,8 @@ theorem tendsto_weightedCesaroMean_apply_self_of_mem_iSup_eigenspace
       refine Finset.sum_congr rfl fun n _ ↦ ?_
       rw [Finset.sum_smul]
       refine Finset.sum_congr rfl fun μ _ ↦ ?_
-      rw [smul_pow_apply, pow_apply_of_mem_eigenspace (v lam).2, smul_smul, ← mul_pow]
+      rw [smul_pow, LinearMap.smul_apply, pow_apply_of_mem_eigenspace (v lam).2,
+        smul_smul, ← mul_pow]
     have hlim := (WeightedCesaro.tendsto_cesaro_phase_sum hs hlam).smul
       (tendsto_const_nhds (x := (v lam : V)) (f := atTop (α := ℕ)))
     rw [one_smul] at hlim
@@ -156,7 +143,8 @@ theorem tendsto_weightedCesaroMean_apply_zero_of_tendsto_pow_zero
     intro μ hμ
     have hnorm : ∀ n : ℕ, ‖(((starRingEnd ℂ) μ • f) ^ n) x‖ = ‖(f ^ n) x‖ := by
       intro n
-      rw [smul_pow_apply, norm_smul, norm_pow, RCLike.norm_conj, hs μ hμ, one_pow, one_mul]
+      rw [smul_pow, LinearMap.smul_apply, norm_smul, norm_pow, RCLike.norm_conj, hs μ hμ,
+        one_pow, one_mul]
     refine tendsto_zero_iff_norm_tendsto_zero.mpr ?_
     simpa only [hnorm] using tendsto_zero_iff_norm_tendsto_zero.mp hx
   have hsum : Tendsto (fun n : ℕ ↦ ∑ μ ∈ s, (((starRingEnd ℂ) μ • f) ^ n) x) atTop (𝓝 0) := by
@@ -168,6 +156,8 @@ end Convergence
 end Module.End
 
 namespace IsPositiveMap
+
+open scoped Matrix.Norms.Frobenius
 
 variable {D : ℕ} [NeZero D] {T : Module.End ℂ (Matrix (Fin D) (Fin D) ℂ)}
 
