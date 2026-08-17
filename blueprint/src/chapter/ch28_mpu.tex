@@ -7814,6 +7814,42 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
   \end{align}
 \end{proof}
 
+\begin{lemma}[Disjoint finite-region observables commute]
+  \label{lem:qca_disjoint_local_inclusion_commute}
+  \lean{SpinChain.localInclusion_mul_comm_of_disjoint}
+  \leanok
+  \uses{def:qca_local_inclusion}
+  If $\Lambda\cap\Gamma=\varnothing$, $A\in\mathcal A_\Lambda$, and
+  $B\in\mathcal A_\Gamma$, then their images in the algebra of the union
+  satisfy
+  \begin{align}
+    \iota_{\Lambda,\Lambda\cup\Gamma}(A)
+      \iota_{\Gamma,\Lambda\cup\Gamma}(B)
+      &=\iota_{\Gamma,\Lambda\cup\Gamma}(B)
+        \iota_{\Lambda,\Lambda\cup\Gamma}(A).
+  \end{align}
+  This tensor-factor identity is local algebra infrastructure for the
+  quasi-local algebra used in \cite[lines~2292--2300]{Cirac2017MPU}; the
+  appendix does not state it as a separate theorem.
+  % Source context: paper_v2.tex 2292--2300.
+\end{lemma}
+
+\begin{proof}\leanok
+  For configurations $x,y$ on $\Lambda\cup\Gamma$, split each intermediate
+  configuration $z$ into $(z|_\Lambda,z|_\Gamma)$.  The matrix entry of the
+  left-hand side is
+  \begin{align}
+    \sum_{z_\Lambda,z_\Gamma}
+      A(x|_\Lambda,z_\Lambda)
+      \delta_{x|_\Gamma,z_\Gamma}
+      B(z_\Gamma,y|_\Gamma)
+      \delta_{z_\Lambda,y|_\Lambda}
+      &=A(x|_\Lambda,y|_\Lambda)
+        B(x|_\Gamma,y|_\Gamma).
+  \end{align}
+  Reversing the two factors gives the same scalar product.
+\end{proof}
+
 \begin{definition}[Translation of a finite region]
   \label{def:qca_translate_region}
   \lean{SpinChain.translateRegion,SpinChain.mem_translateRegion,
@@ -8215,6 +8251,46 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
   its direct limit is therefore injective.  Finally, every element of an
   algebraic direct limit has a representative in one member of the directed
   system.
+\end{proof}
+
+\begin{theorem}[Disjointly supported local observables commute]
+  \label{thm:qca_disjoint_supported_local_commute}
+  \lean{SpinChain.localObservable_mul_comm_of_disjoint,
+    SpinChain.SupportedIn.mul_comm_of_disjoint}
+  \leanok
+  \uses{lem:qca_disjoint_local_inclusion_commute,def:qca_supported_in}
+  If $X,Y\in\mathcal A_{\mathrm{loc}}$ are supported in finite regions
+  $\Lambda$ and $\Gamma$ with $\Lambda\cap\Gamma=\varnothing$, then
+  \begin{align}
+    XY&=YX.
+  \end{align}
+  In particular, for $A\in\mathcal A_\Lambda$ and
+  $B\in\mathcal A_\Gamma$,
+  \begin{align}
+    \iota_\Lambda(A)\iota_\Gamma(B)
+      &=\iota_\Gamma(B)\iota_\Lambda(A).
+  \end{align}
+  This is the algebraic-local form of the tensor-factor identity underlying
+  the construction in \cite[lines~2292--2300]{Cirac2017MPU}, not a named
+  theorem of the appendix.
+  % Source context: paper_v2.tex 2292--2300.
+\end{theorem}
+
+\begin{proof}\leanok
+  Choose representatives $X=\iota_\Lambda(A)$ and
+  $Y=\iota_\Gamma(B)$.  Embed both into
+  $\mathcal A_{\Lambda\cup\Gamma}$.  The preceding finite-region identity
+  gives
+  \begin{align}
+    XY
+      &=\iota_{\Lambda\cup\Gamma}
+        \bigl(\iota_{\Lambda,\Lambda\cup\Gamma}(A)
+        \iota_{\Gamma,\Lambda\cup\Gamma}(B)\bigr) \\
+      &=\iota_{\Lambda\cup\Gamma}
+        \bigl(\iota_{\Gamma,\Lambda\cup\Gamma}(B)
+        \iota_{\Lambda,\Lambda\cup\Gamma}(A)\bigr)
+       =YX.
+  \end{align}
 \end{proof}
 
 \begin{definition}[Algebraic-local translation homomorphism]
@@ -8780,6 +8856,39 @@ as separate results in the appendix.
   Write $x=j_\Lambda(A)$.  Enlarge $A$ to $\mathcal A_\Gamma$ by tensoring
   with the identity on $\Gamma\setminus\Lambda$.  Compatibility of the
   canonical embeddings identifies the image of this enlargement with $x$.
+\end{proof}
+
+\begin{theorem}[Disjointly supported quasi-local observables commute]
+  \label{thm:qca_disjoint_quasi_local_commute}
+  \lean{SpinChain.quasiLocalObservable_mul_comm_of_disjoint,
+    SpinChain.QuasiLocalSupportedIn.mul_comm_of_disjoint}
+  \leanok
+  \uses{thm:qca_disjoint_supported_local_commute,
+    def:qca_quasi_local_supported_in}
+  Let $d>0$.  If $x,y\in\mathcal A$ are supported in finite regions
+  $\Lambda$ and $\Gamma$ with $\Lambda\cap\Gamma=\varnothing$, then
+  \begin{align}
+    xy&=yx.
+  \end{align}
+  Equivalently, for $A\in\mathcal A_\Lambda$ and
+  $B\in\mathcal A_\Gamma$,
+  \begin{align}
+    j_\Lambda(A)j_\Gamma(B)&=j_\Gamma(B)j_\Lambda(A).
+  \end{align}
+  This is finite-support infrastructure for the quasi-local algebra in
+  \cite[lines~2292--2300]{Cirac2017MPU}; it is not stated there as a separate
+  theorem.
+  % Source context: paper_v2.tex 2292--2300.
+\end{theorem}
+
+\begin{proof}\leanok
+  The completion map is a star-algebra homomorphism.  Applying it to the
+  algebraic-local identity gives
+  \begin{align}
+    j(XY)=j(YX),
+  \end{align}
+  and finite-region support provides representatives
+  $x=j_\Lambda(A)$ and $y=j_\Gamma(B)$.
 \end{proof}
 
 The appendix requires that ``there exists a finite subset
