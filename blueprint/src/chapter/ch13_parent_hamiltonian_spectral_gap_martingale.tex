@@ -2615,6 +2615,119 @@ $N=L$. They give no gap estimate for $N>L$ and no periodic coercivity.
     for every $v\in(\ker Q)^\perp$.
 \end{lemma}
 
+% Source: Rozmán--Molnár--Schuch, arXiv:2607.19078v1, Lemma block-obc
+% (statement at main.tex lines 607--651, argument at lines 795--811).  The
+% source tex is not vendored under Papers/, and references.bib has no key for
+% it; cite by footnote until the paper is vendored and a bib entry is added.
+\begin{theorem}[Kernels of positively weighted sums of positive operators]
+    \label{thm:weighted_sum_kernel}
+    \lean{LinearMap.IsPositive.apply_eq_zero_of_re_inner_eq_zero,
+        WeightedPositiveKernel.re_inner_weighted_sum_apply,
+        WeightedPositiveKernel.apply_weighted_sum_eq_zero_iff,
+        WeightedPositiveKernel.apply_sum_eq_zero_iff,
+        WeightedPositiveKernel.ker_weighted_sum_eq_iInf,
+        WeightedPositiveKernel.ker_sum_eq_iInf,
+        WeightedPositiveKernel.ker_weighted_sum_eq_sum}
+    \leanok
+    Let $(P_i)_{i\in I}$ be a finite family of positive operators on an
+    inner product space.  A positive operator $P$ annihilates a vector $v$
+    as soon as $\operatorname{Re}\langle Pv,v\rangle=0$, and consequently,
+    for real weights $w_i>0$,
+    \begin{align}
+        \ker\Bigl(\sum_{i\in I}w_iP_i\Bigr)
+        =\ker\Bigl(\sum_{i\in I}P_i\Bigr)
+        =\bigcap_{i\in I}\ker P_i,
+        \label{eq:ph_weighted_sum_kernel}
+    \end{align}
+    equivalently $(\sum_{i\in I}w_iP_i)v=0$ exactly when $P_iv=0$ for
+    every $i\in I$.  For the empty family both sums are zero and all three
+    kernels are the full space.  This is the analytic kernel step of the
+    blocked-sum comparison in Lemma~\texttt{block-obc} of
+    Rozmán--Molnár--Schuch\footnote{arXiv:2607.19078v1.}, in which the
+    blocked parent Hamiltonian is a weighted sum $\sum_i\gamma_ih_i$ of
+    positive local terms with $\gamma_i>0$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    If $(\sum_iw_iP_i)v=0$, the real part of the inner product with $v$
+    expands as
+    \begin{align}
+        \operatorname{Re}\Bigl\langle\Bigl(\sum_iw_iP_i\Bigr)v,v\Bigr\rangle
+        =\sum_iw_i\operatorname{Re}\langle P_iv,v\rangle
+        =0.
+    \end{align}
+    Each summand is nonnegative, so each vanishes, and $w_i>0$ forces
+    $\operatorname{Re}\langle P_iv,v\rangle=0$.  For a positive operator
+    $P$, the quadratic form is nonnegative along the real affine line
+    $t\mapsto v+t\cdot(Pv)$ and vanishes at $t=0$; its linear coefficient
+    is $2\lVert Pv\rVert^2$, so evaluating at small negative $t$ forces
+    $\lVert Pv\rVert=0$, that is $Pv=0$.  The converse inclusion holds
+    term by term, and the unweighted comparison is the case $w_i=1$.
+\end{proof}
+
+\begin{theorem}[Loewner domination of positively weighted sums]
+    \label{thm:weighted_sum_loewner}
+    \lean{WeightedPositiveKernel.isPositive_weighted_sum,
+        WeightedPositiveKernel.weighted_sum_le_sum}
+    \leanok
+    Let $(P_i)_{i\in I}$ be a finite family of positive operators on an
+    inner product space, with real weights $(w_i)_{i\in I}$.  If
+    $w_i\geq0$ for every $i$, then $\sum_{i\in I}w_iP_i$ is positive.  If
+    $w_i\leq1$ for every $i$, then
+    \begin{align}
+        \sum_{i\in I}w_iP_i
+        &\leq\sum_{i\in I}P_i
+    \end{align}
+    in Loewner order.  This is the comparison step of the blocked-sum
+    argument in the source cited in
+    Theorem~\ref{thm:weighted_sum_kernel}, where the coefficients satisfy
+    $0<\gamma_i\leq1$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Positivity of the weighted sum follows from positivity of each scalar
+    multiple $w_iP_i$ and of finite sums of positive operators.  For the
+    domination, the difference is again a weighted sum,
+    \begin{align}
+        \sum_{i\in I}P_i-\sum_{i\in I}w_iP_i
+        =\sum_{i\in I}(1-w_i)P_i,
+    \end{align}
+    now with nonnegative weights $1-w_i\geq0$, hence positive.
+\end{proof}
+
+\begin{theorem}[Gap transfer through a positively weighted sum]
+    \label{thm:weighted_sum_gap_transfer}
+    \lean{WeightedPositiveKernel.norm_gap_sum_of_weighted_sum}
+    \leanok
+    Let $(P_i)_{i\in I}$ be a finite family of positive operators on a
+    finite-dimensional complex inner product space, with real weights
+    $0<w_i\leq1$, and let $\gamma\geq0$.  If
+    \begin{align}
+        \gamma\lVert v\rVert
+        &\leq\Bigl\lVert\Bigl(\sum_{i\in I}w_iP_i\Bigr)v\Bigr\rVert
+    \end{align}
+    for every $v\in\bigl(\ker\sum_{i\in I}w_iP_i\bigr)^\perp$, then
+    \begin{align}
+        \gamma\lVert v\rVert
+        &\leq\Bigl\lVert\Bigl(\sum_{i\in I}P_i\Bigr)v\Bigr\rVert
+    \end{align}
+    for every $v\in\bigl(\ker\sum_{i\in I}P_i\bigr)^\perp$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:weighted_sum_kernel, thm:weighted_sum_loewner,
+        lem:positive_gap_transfer_loewner}
+    The weighted sum is positive and, by
+    Theorem~\ref{thm:weighted_sum_loewner}, dominated by the unweighted
+    sum; by the kernel equality~(\ref{eq:ph_weighted_sum_kernel}) of
+    Theorem~\ref{thm:weighted_sum_kernel}, the two sums have the same
+    kernel.  Lemma~\ref{lem:positive_gap_transfer_loewner} transfers the
+    norm gap from the smaller weighted sum to the larger unweighted sum.
+\end{proof}
+
 \begin{lemma}[Blocked local terms and the aligned sparse sum]
     \label{lem:blocked_original_aligned_sparse_sum}
     \lean{MPSTensor.parentInteractionES_blockTensor_conj,

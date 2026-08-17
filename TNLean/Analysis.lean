@@ -72,3 +72,4 @@ import TNLean.Analysis.TwoProjectionCompressionSpectrum
 import TNLean.Analysis.TwoProjectionDefectBlockSum
 import TNLean.Analysis.TwoProjectionReducedProjection
 import TNLean.Analysis.UpperTriangularBound
+import TNLean.Analysis.WeightedPositiveKernel
