@@ -14,19 +14,20 @@ one-dimensional cyclic family of symmetric projections with a finite
 interaction range `R`.
 
 Let `h i` be symmetric projections indexed by the cyclic group `ZMod N`, and
-write `H = ∑ i, h i` for the total term.  For `m ≥ R`, let
-`cyclicWindowSum h m s = ∑ q : Fin m, h (s + q)` be the sum of `m` consecutive
-terms starting at `s`, and suppose every window satisfies the quadratic-form
-gap `γ • Re ⟪A s v, v⟫ ≤ Re ⟪A s v, A s v⟫` uniformly in `s` and `v`.  If terms
-at cyclic separation at least `R` commute pointwise, then for `N ≥ 2 * m` the
-total term satisfies, as a quadratic form,
+write \(H=\sum_i h_i\). For \(m\geq R\), define the window sum
+\(A_s=\sum_{q=0}^{m-1}h_{s+q}\), represented by `cyclicWindowSum h m s`.
+Suppose every window satisfies
+\(\gamma\,\operatorname{Re}\langle A_s v,v\rangle\leq
+\operatorname{Re}\langle A_s v,A_s v\rangle\), uniformly in \(s\) and \(v\).
+If terms at cyclic separation at least \(R\) commute pointwise and \(N\geq2m\),
+then
+\(\delta\,\operatorname{Re}\langle Hv,v\rangle\leq
+\operatorname{Re}\langle Hv,Hv\rangle\), where
+\(\delta=(m\gamma-(R-1)^2)/(m-R+1)\), whenever
+\((R-1)^2<m\gamma\).
 
-`δ * Re ⟪H v, v⟫ ≤ Re ⟪H v, H v⟫,  δ = (m * γ - (R - 1) ^ 2) / (m - R + 1),`
-
-whenever the numerator `(R - 1) ^ 2 < m * γ` is positive.
-
-For `R = 2` this recovers Knabe's nearest-neighbor coefficient
-`(m * γ - 1) / (m - 1)`.
+For \(R=2\), this recovers Knabe's nearest-neighbor coefficient
+\((m\gamma-1)/(m-1)\).
 
 ## Sources
 
@@ -42,8 +43,6 @@ the cited sources, and is not attributed to any of them.
 
 ## Main results
 
-* `LinearMap.IsSymmetricProjection.re_inner_anticommutator_le`: the pairwise
-  bound `P Q + Q P ≤ P + Q` for symmetric projections.
 * `ProjectionGeometry.cyclicWindowSum_sq_sum_eq`: the cyclic double-counting
   identity `∑ s A s ^ 2 = m • H + ∑ e (m - e) • Q e`.
 * `ProjectionGeometry.quadraticForm_sum_projections_of_cyclic_knabe`: the
@@ -53,33 +52,6 @@ the cited sources, and is not attributed to any of them.
 -/
 
 open scoped InnerProductSpace
-
-namespace LinearMap.IsSymmetricProjection
-
-variable {𝕜 E : Type*} [RCLike 𝕜] [NormedAddCommGroup E] [InnerProductSpace 𝕜 E]
-
-/-- Pairwise anticommutator upper bound for two symmetric projections.
-
-For symmetric projections `P` and `Q`, the positivity of `‖(P - Q) v‖²`
-(equivalently, of the operator `(P - Q) ^ 2`) expands, using idempotence of
-`P` and `Q`, into the anticommutator estimate `P Q + Q P ≤ P + Q` in
-quadratic-form terms:
-
-`Re ⟪P v, Q v⟫ + Re ⟪Q v, P v⟫ ≤ Re ⟪P v, v⟫ + Re ⟪Q v, v⟫.` -/
-theorem re_inner_anticommutator_le {P Q : E →ₗ[𝕜] E} (hP : P.IsSymmetricProjection)
-    (hQ : Q.IsSymmetricProjection) (v : E) :
-    RCLike.re ⟪P v, Q v⟫_𝕜 + RCLike.re ⟪Q v, P v⟫_𝕜 ≤
-      RCLike.re ⟪P v, v⟫_𝕜 + RCLike.re ⟪Q v, v⟫_𝕜 := by
-  have h0 : (0 : ℝ) ≤ RCLike.re ⟪P v - Q v, P v - Q v⟫_𝕜 :=
-    inner_self_nonneg (x := P v - Q v)
-  rw [inner_sub_sub_self] at h0
-  have h0' : (0 : ℝ) ≤ RCLike.re ⟪P v, P v⟫_𝕜 - RCLike.re ⟪P v, Q v⟫_𝕜 -
-      RCLike.re ⟪Q v, P v⟫_𝕜 + RCLike.re ⟪Q v, Q v⟫_𝕜 := by
-    simpa only [map_add, map_sub] using h0
-  rw [hP.re_inner_apply_apply_self, hQ.re_inner_apply_apply_self] at h0'
-  linarith
-
-end LinearMap.IsSymmetricProjection
 
 namespace ProjectionGeometry
 
@@ -139,6 +111,23 @@ all sites of the two ordered quadratic forms of the pairs at cyclic offsets
 `e` and `-e`. -/
 def reInnerCyclicCrossTerms (h : ZMod N → E →ₗ[𝕜] E) (e : ℕ) (v : E) : ℝ :=
   ∑ i : ZMod N, (RCLike.re ⟪h i v, h (i + e) v⟫_𝕜 + RCLike.re ⟪h i v, h (i - e) v⟫_𝕜)
+
+/-- For a cyclic family of symmetric projections, the real cross-term sum is
+the quadratic form of the corresponding cross-term operator. -/
+theorem reInnerCyclicCrossTerms_eq_re_inner_cyclicCrossTerms
+    (h : ZMod N → E →ₗ[𝕜] E) (hh : ∀ i, (h i).IsSymmetricProjection)
+    (e : ℕ) (v : E) :
+    reInnerCyclicCrossTerms h e v = RCLike.re ⟪cyclicCrossTerms h e v, v⟫_𝕜 := by
+  classical
+  unfold reInnerCyclicCrossTerms cyclicCrossTerms
+  simp only [LinearMap.sum_apply, LinearMap.add_apply, sum_inner, map_sum]
+  refine Finset.sum_congr rfl fun i _ => ?_
+  change RCLike.re ⟪h i v, h (i + e) v⟫_𝕜 + RCLike.re ⟪h i v, h (i - e) v⟫_𝕜 =
+    RCLike.re ⟪h i (h (i + e) v) + h i (h (i - e) v), v⟫_𝕜
+  rw [inner_add_left, map_add, (hh i).isSymmetric (h (i + e) v) v,
+    (hh i).isSymmetric (h (i - e) v) v,
+    ← inner_conj_symm (h i v) (h (i + e) v),
+    ← inner_conj_symm (h i v) (h (i - e) v), RCLike.conj_re, RCLike.conj_re]
 
 /-- The cyclic double-counting identity for a family of symmetric projections:
 summing the quadratic form of every window of `m` consecutive terms produces
@@ -429,39 +418,29 @@ theorem quadraticForm_sum_projections_of_cyclic_knabe
   have hv := re_inner_sum_two_ge_sum_cyclicCrossTerms h hh hm1 hN hmR hcomm v
   -- The sum of the short-offset weights.
   have hvi : 2 * (∑ e ∈ Finset.Ico 1 R, ((R : ℝ) - 1 - e)) = ((R : ℝ) - 1) * ((R : ℝ) - 2) := by
-    have hnbij : (∑ e ∈ Finset.Ico 1 R, ((R : ℝ) - 1 - e)) =
-        ∑ d ∈ Finset.range (R - 1), ((d : ℕ) : ℝ) := by
-      refine Finset.sum_nbij' (fun e => R - 1 - e) (fun d => R - 1 - d) ?_ ?_ ?_ ?_ ?_
-      · intro e he
-        simp only [Finset.mem_Ico, Finset.mem_range] at he ⊢
-        omega
-      · intro d hd
-        simp only [Finset.mem_Ico, Finset.mem_range] at hd ⊢
-        omega
-      · intro e he
-        simp only [Finset.mem_Ico] at he
-        omega
-      · intro d hd
-        simp only [Finset.mem_range] at hd
-        omega
-      · intro e he
-        have heR : e ≤ R - 1 := by
-          simp only [Finset.mem_Ico] at he
-          omega
-        change ((R : ℝ) - 1 - e) = ((R - 1 - e : ℕ) : ℝ)
-        rw [Nat.cast_sub heR, Nat.cast_sub (by omega : 1 ≤ R)]
-        norm_num
+    have hCast : ∀ e ∈ Finset.Ico 1 R,
+        ((R : ℝ) - 1 - e) = ((R - 1 - e : ℕ) : ℝ) := by
+      intro e he
+      simp only [Finset.mem_Ico] at he
+      rw [Nat.cast_sub (by omega : e ≤ R - 1), Nat.cast_sub hR]
+      norm_num
+    rw [Finset.sum_congr rfl hCast,
+      Finset.sum_Ico_reflect (fun d : ℕ => (d : ℝ)) 1 (n := R - 1) (by omega)]
+    simp only [Nat.sub_add_cancel hR, Nat.sub_self, Nat.Ico_zero_eq_range]
     have hTwo : ∀ n : ℕ, 2 * (∑ d ∈ Finset.range n, ((d : ℕ) : ℝ)) =
-        ((n : ℝ) * (((n : ℝ) - 1))) := by
+        (n : ℝ) * ((n : ℝ) - 1) := by
       intro n
-      induction n with
-      | zero => norm_num
-      | succ n ih =>
-          rw [Finset.sum_range_succ]
-          push_cast
-          nlinarith
-    rw [hnbij, hTwo (R - 1), Nat.cast_sub hR]
-    push_cast
+      by_cases hn : n = 0
+      · simp [hn]
+      · have hn1 : 1 ≤ n := Nat.one_le_iff_ne_zero.mpr hn
+        have hcast : ((n - 1 : ℕ) : ℝ) = (n : ℝ) - 1 := by
+          rw [Nat.cast_sub hn1]
+          norm_num
+        have hnat := congrArg (fun x : ℕ => (x : ℝ)) (Finset.sum_range_id_mul_two n)
+        push_cast at hnat
+        rw [← hcast, mul_comm]
+        exact hnat
+    rw [hTwo (R - 1), Nat.cast_sub hR]
     ring
   -- Assemble the upper bound on the summed window squares.
   have hc : (0 : ℝ) < ((m - R + 1 : ℕ) : ℝ) := by

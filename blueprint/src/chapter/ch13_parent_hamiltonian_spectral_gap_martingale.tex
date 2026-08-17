@@ -2607,9 +2607,17 @@ $N=L$. They give no gap estimate for $N>L$ and no periodic coercivity.
 
 \begin{proof}
     \leanok
-    Expanding the nonnegative quantity
-    $\operatorname{Re}\langle(P-Q)v,(P-Q)v\rangle$ and using
-    $P^2=P$ and $Q^2=Q$ gives the inequality.
+    Symmetry and idempotence give
+    \begin{align}
+        0
+        &\leq \operatorname{Re}\langle(P-Q)v,(P-Q)v\rangle,\\
+        \operatorname{Re}\langle(P-Q)v,(P-Q)v\rangle
+        &=\operatorname{Re}\langle Pv,v\rangle
+          -\operatorname{Re}\langle Pv,Qv\rangle
+          -\operatorname{Re}\langle Qv,Pv\rangle
+          +\operatorname{Re}\langle Qv,v\rangle.
+    \end{align}
+    Rearranging the second line proves the claim.
 \end{proof}
 
 \begin{theorem}[Cyclic window double counting]
@@ -2617,6 +2625,7 @@ $N=L$. They give no gap estimate for $N>L$ and no periodic coercivity.
     \lean{ProjectionGeometry.cyclicWindowSum,
         ProjectionGeometry.cyclicCrossTerms,
         ProjectionGeometry.reInnerCyclicCrossTerms,
+        ProjectionGeometry.reInnerCyclicCrossTerms_eq_re_inner_cyclicCrossTerms,
         ZModCyclicSums.sum_comp_addRight,
         ZModCyclicSums.sum_comp_addLeft,
         ZModCyclicSums.sum_range_Ico_triangular,
@@ -2687,7 +2696,8 @@ $N=L$. They give no gap estimate for $N>L$ and no periodic coercivity.
 \begin{proof}
     \leanok
     \uses{thm:projection_anticommutator_upper_bound,
-        thm:cyclic_knabe_double_counting}
+        thm:cyclic_knabe_double_counting,
+        rem:projection_geometry_rowsum_identities}
     Translation of the reversed leg gives
     \begin{align}
         \sum_i\operatorname{Re}\langle h_{i+q}v,h_i v\rangle
