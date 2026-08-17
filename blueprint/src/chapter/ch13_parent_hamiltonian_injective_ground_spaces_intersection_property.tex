@@ -318,8 +318,8 @@
     restriction again has the form of a ground-space vector.
 \end{proof}
 
-\begin{lemma}[Ground-space contiguous-window restriction]
-    \label{lem:contiguous_restriction_ground_space_map}
+\begin{theorem}[Ground-space contiguous-window restriction]
+    \label{thm:contiguous_restriction_ground_space_map_intersection}
     \lean{MPSTensor.contiguousRestrictₗ_groundSpaceMap_mem_groundSpace}
     \leanok
     \uses{def:ground_space_map, def:ground_space_parent,
@@ -334,17 +334,18 @@
         \notag
     \end{align}
     For every boundary matrix $X$, both outside words are absorbed into the
-    boundary matrix:
+    boundary matrix, and the restriction is again a ground-space vector:
     \begin{align}
-        \Res^\tau_{s,L}\Gamma_N(X)
-        &= \Gamma_L(A^{w_R}XA^{w_L})\in G_L(A).
+        \Res^\tau_{s,L}\Gamma_N(X)&\in G_L(A).
         \notag
     \end{align}
     This two-sided absorption generalizes
     Lemma~\ref{lem:ground_space_in_tail_ground}, whose suffix restriction
-    absorbs only the prefix. The identity is the nonwrapping restriction of
-    \cite[Equation~(3.12)]{Nachtergaele1996Spectral}.
-\end{lemma}
+    absorbs only the prefix. It is the frustration-free restriction identity
+    for the nonwrapping windows of the compatible open chain of
+    \cite[Equation~(3.12)]{Nachtergaele1996Spectral}, whose zero-energy space
+    is identified in \cite[Equation~(3.13)]{Nachtergaele1996Spectral}.
+\end{theorem}
 
 \begin{proof}
     \leanok
