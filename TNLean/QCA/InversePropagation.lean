@@ -20,8 +20,6 @@ characterization of finite support by commutation with all observables outside t
 
 ## Main results
 
-* `SpinChain.disjoint_regionSumset_of_disjoint_regionSumset_neg` — reflected-neighborhood region
-  arithmetic.
 * `SpinChain.PropagatesWithin.symm` — a forward propagation bound gives the reflected bound for
   the inverse.
 * `SpinChain.HasFinitePropagation.symm` — finite propagation is preserved by inversion.
@@ -36,23 +34,6 @@ characterization of finite support by commutation with all observables outside t
 open scoped Pointwise
 
 namespace SpinChain
-
-/-- If \(\Gamma\) is disjoint from \(\Lambda+(-\mathcal N)\), then
-\(\Gamma+\mathcal N\) is disjoint from \(\Lambda\).
-
-This is elementary finite-region arithmetic underlying the reflected inverse-propagation bound. -/
-lemma disjoint_regionSumset_of_disjoint_regionSumset_neg
-    {Γ Λ 𝓝 : Finset ℤ} (h : Disjoint Γ (regionSumset Λ (-𝓝))) :
-    Disjoint (regionSumset Γ 𝓝) Λ := by
-  rw [Finset.disjoint_left] at h ⊢
-  intro z hz hzΛ
-  obtain ⟨g, hg, n, hn, hgn⟩ := (mem_regionSumset z Γ 𝓝).mp hz
-  apply h hg
-  rw [mem_regionSumset]
-  refine ⟨z, hzΛ, -n, ?_, ?_⟩
-  · exact Finset.neg_mem_neg hn
-  · rw [← hgn]
-    simp
 
 variable {d : ℕ} [NeZero d]
   {ω : QuasiLocalAlgebra d ≃⋆ₐ[ℂ] QuasiLocalAlgebra d} {𝓝 : Finset ℤ}
@@ -70,7 +51,7 @@ theorem symm (hω : PropagatesWithin ω 𝓝) : PropagatesWithin ω.symm (-𝓝)
   rw [quasiLocalSupportedIn_iff_commute_disjoint]
   intro Γ hΓ y hy
   have hωy := hω Γ y hy
-  have hregions := disjoint_regionSumset_of_disjoint_regionSumset_neg hΓ
+  have hregions := disjoint_regionSumset_neg_iff.mp hΓ
   have hcomm : Commute x (ω y) :=
     (quasiLocalSupportedIn_iff_commute_disjoint x Λ).mp hx
       (regionSumset Γ 𝓝) hregions (ω y) hωy

@@ -9341,25 +9341,25 @@ $\omega^{-1}$.
 \end{proof}
 
 \begin{lemma}[Disjointness for reflected neighborhoods]
-  \label{lem:qca_reflected_region_disjoint}
-  \lean{SpinChain.disjoint_regionSumset_of_disjoint_regionSumset_neg}
+  \label{lem:qca_disjoint_region_sumset_neg_iff}
+  \lean{SpinChain.disjoint_regionSumset_neg_iff}
   \leanok
   \uses{def:qca_region_sumset}
-  Let $\Gamma,\Lambda,\mathcal N\subset\mathbb Z$ be finite.  If
+  Let $\Gamma,\Lambda,\mathcal N\subset\mathbb Z$ be finite.  Then
   \begin{align}
-    \Gamma\cap(\Lambda+(-\mathcal N))&=\varnothing,
-  \end{align}
-  then
-  \begin{align}
-    (\Gamma+\mathcal N)\cap\Lambda&=\varnothing.
+    \Gamma\cap(\Lambda+(-\mathcal N))=\varnothing
+      \quad\Longleftrightarrow\quad
+    (\Gamma+\mathcal N)\cap\Lambda=\varnothing.
   \end{align}
 \end{lemma}
 
 \begin{proof}\leanok
   If $g+n=\lambda$ for $g\in\Gamma$, $n\in\mathcal N$, and
   $\lambda\in\Lambda$, then
-  $g=\lambda+(-n)\in\Lambda+(-\mathcal N)$, contradicting the assumed
-  disjointness.
+  $g=\lambda+(-n)\in\Lambda+(-\mathcal N)$, proving the forward implication.
+  Conversely, if $g\in\Gamma$ and $g=\lambda+(-n)$ with
+  $\lambda\in\Lambda$ and $n\in\mathcal N$, then
+  $\lambda=g+n\in\Gamma+\mathcal N$.
 \end{proof}
 
 \begin{theorem}[Inverse propagation and inverse covariance]
@@ -9378,13 +9378,14 @@ $\omega^{-1}$.
   $\omega^{-1}$.
 
   This is a consequence of the forward-only locality definition, not part of
-  that definition.  Schumacher--Werner obtain inverse locality through their
-  Lemma~5, Theorem~6, and Corollary~7.  The proof here uses exact outside
-  commutants instead.
+  that definition.  Schumacher--Werner, quant-ph/0405174, derive inverse
+  locality through Lemma~5, Theorem~6, and Corollary~7 using the generalized
+  Margolus structure.  The proof here instead uses TNLean's exact
+  outside-commutant infrastructure.
 \end{theorem}
 
 \begin{proof}\leanok
-  \uses{lem:qca_reflected_region_disjoint,
+  \uses{lem:qca_disjoint_region_sumset_neg_iff,
     thm:qca_quasi_local_supported_iff_commute_disjoint}
   Let $x\in\mathcal A_\Lambda$ and let
   $y\in\mathcal A_\Gamma$, where
