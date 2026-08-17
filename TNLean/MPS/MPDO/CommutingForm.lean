@@ -675,8 +675,15 @@ noncomputable def ofCommutingFormData
 @[simp] theorem ofCommutingFormData_unnormalizedState
     (form : CommutingFormData d N) :
     (ofCommutingFormData form).unnormalizedState = form.product := by
-  simp [unnormalizedState, sectorProduct, bondAt, ofCommutingFormData,
-    CommutingFormData.product, CommutingFormData.bondAt]
+  rw [unnormalizedState]
+  change (∑ x : Fin 1, ((ofCommutingFormData form).multiplicity x : ℂ) •
+    (ofCommutingFormData form).sectorProduct x) = form.product
+  rw [Fin.sum_univ_one]
+  unfold sectorProduct bondAt
+  simp only [ofCommutingFormData]
+  rw [Nat.cast_one, one_smul]
+  unfold CommutingFormData.product CommutingFormData.bondAt
+  congr
 
 end GSNNCHData
 
