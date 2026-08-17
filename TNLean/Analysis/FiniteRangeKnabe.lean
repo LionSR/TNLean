@@ -26,8 +26,10 @@ then
 \(\delta=(m\gamma-(R-1)^2)/(m-R+1)\), whenever
 \((R-1)^2<m\gamma\).
 
-For \(R=2\), this recovers Knabe's nearest-neighbor coefficient
-\((m\gamma-1)/(m-1)\).
+For \(R=2\), the coefficient becomes the nearest-neighbor value
+\((m\gamma-1)/(m-1)\); the threshold \(\gamma>1/m\) that it demands is
+Knabe's, while the closed form itself is obtained by the present
+derivation, as recorded under Sources.
 
 ## Sources
 
@@ -44,7 +46,8 @@ the cited sources, and is not attributed to any of them.
 ## Main results
 
 * `ProjectionGeometry.cyclicWindowSum_sq_sum_eq`: the cyclic double-counting
-  identity `∑ s A s ^ 2 = m • H + ∑ e (m - e) • Q e`.
+  identity \(\sum_s A_s^2=mH+\sum_{e}(m-e)Q_e\), where
+  \(Q_e=\sum_i(h_ih_{i+e}+h_ih_{i-e})\).
 * `ProjectionGeometry.quadraticForm_sum_projections_of_cyclic_knabe`: the
   finite-range Knabe inequality.
 * `ProjectionGeometry.quadraticForm_sum_projections_of_cyclic_knabe_nearest_neighbor`:
