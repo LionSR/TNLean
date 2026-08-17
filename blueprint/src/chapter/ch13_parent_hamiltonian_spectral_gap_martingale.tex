@@ -2614,18 +2614,26 @@ $N=L$. They give no gap estimate for $N>L$ and no periodic coercivity.
 
 \begin{theorem}[Cyclic window double counting]
     \label{thm:cyclic_knabe_double_counting}
-    \lean{ProjectionGeometry.sum_offset_partition,
+    \lean{ProjectionGeometry.cyclicWindowSum,
+        ProjectionGeometry.cyclicCrossTerms,
+        ProjectionGeometry.reInnerCyclicCrossTerms,
+        ProjectionGeometry.sum_comp_addRight,
+        ProjectionGeometry.sum_comp_addLeft,
+        ProjectionGeometry.sum_range_Ico_triangular,
+        ProjectionGeometry.sum_range_Ico_triangular_lower,
         ProjectionGeometry.sum_cyclic_window_eq,
         ProjectionGeometry.cyclicWindowSum_sq_sum_eq,
         ProjectionGeometry.re_inner_cyclicWindowSum_sum_eq,
         ProjectionGeometry.re_inner_cyclicWindowSum_sum_apply}
     \leanok
-    Let $h_i$, with $i\in\mathbb Z/N\mathbb Z$, be orthogonal projections.
-    Define
+    Let $h_i$, with $i\in\mathbb Z/N\mathbb Z$, be orthogonal projections. Define
     \begin{align}
-        H&=\sum_i h_i,
-        &A_s&=\sum_{a=0}^{m-1}h_{s+a},
-        &Q_q&=\sum_i\bigl(h_i h_{i+q}+h_i h_{i-q}\bigr).
+        H&=\sum_i h_i,\\
+        A_s&=\sum_{a=0}^{m-1}h_{s+a},\\
+        Q_q&=\sum_i\bigl(h_i h_{i+q}+h_i h_{i-q}\bigr),\\
+        C_q(v)&=\sum_i\bigl(\operatorname{Re}\langle h_i v,h_{i+q}v\rangle
+            +\operatorname{Re}\langle h_i v,h_{i-q}v\rangle\bigr)
+            =\operatorname{Re}\langle Q_qv,v\rangle.
     \end{align}
     Then
     \begin{align}
@@ -2638,16 +2646,26 @@ $N=L$. They give no gap estimate for $N>L$ and no periodic coercivity.
 
 \begin{proof}
     \leanok
-    For fixed offsets $a,b\in\{0,\ldots,m-1\}$, translation by $a$ sends
-    $(s+a,s+b)$ to $(i,i+b-a)$. The diagonal $a=b$ occurs $m$ times. For
-    $1\leq q<m$, each of the differences $q$ and $-q$ occurs $m-q$ times,
-    which gives~(\ref{eq:cyclic_knabe_window_square}). The second identity
-    follows by counting each $h_i$ in exactly $m$ windows.
+    For fixed offsets $a,b\in\{0,\ldots,m-1\}$, translation by $a$ gives
+    \begin{align}
+        \sum_s h_{s+a}h_{s+b}
+        &=\sum_i h_i h_{i+b-a}.\label{eq:cyclic_knabe_reindex}
+    \end{align}
+    The case $a=b$ contributes $mH$, while each of the differences
+    $b-a=q$ and $b-a=-q$ contributes $(m-q)Q_q$. Summing
+    (\ref{eq:cyclic_knabe_reindex}) over $a$ and $b$ gives
+    (\ref{eq:cyclic_knabe_window_square}). Translation invariance also gives
+    \begin{align}
+        \sum_s \operatorname{Re}\langle A_s v,v\rangle
+        &=m\operatorname{Re}\langle Hv,v\rangle.
+        \label{eq:cyclic_knabe_window_linear}
+    \end{align}
 \end{proof}
 
 \begin{theorem}[Cyclic cross-term estimates]
     \label{thm:cyclic_knabe_cross_estimates}
-    \lean{ProjectionGeometry.re_inner_cyclicCrossTerms_le_two,
+    \lean{ProjectionGeometry.sum_offset_partition,
+        ProjectionGeometry.re_inner_cyclicCrossTerms_le_two,
         ProjectionGeometry.re_inner_cyclicCrossTerms_nonneg,
         ProjectionGeometry.re_inner_sum_two_ge_sum_cyclicCrossTerms}
     \leanok
@@ -2658,7 +2676,7 @@ $N=L$. They give no gap estimate for $N>L$ and no periodic coercivity.
     \end{align}
     Suppose that $h_i$ and $h_{i+d}$ commute whenever
     $R\leq d\leq N-R$. Then the cross term is nonnegative for these offsets.
-    If $R\leq m$ and $2m\leq N$, it follows that
+    If $1\leq m$, $R\leq m$, and $2m\leq N$, it follows that
     \begin{align}
         \operatorname{Re}\langle Hv,v\rangle
         +\sum_{q=1}^{m-1}\operatorname{Re}\langle Q_qv,v\rangle
@@ -2670,18 +2688,38 @@ $N=L$. They give no gap estimate for $N>L$ and no periodic coercivity.
     \leanok
     \uses{thm:projection_anticommutator_upper_bound,
         thm:cyclic_knabe_double_counting}
+    Translation of the reversed leg gives
+    \begin{align}
+        \sum_i\operatorname{Re}\langle h_{i+q}v,h_i v\rangle
+        &=\sum_i\operatorname{Re}\langle h_i v,h_{i-q}v\rangle.
+        \label{eq:cyclic_knabe_reversed_leg}
+    \end{align}
     Summing Theorem~\ref{thm:projection_anticommutator_upper_bound} over $i$
-    proves the upper bound. Commuting projections have nonnegative products.
-    Partition the nonzero cyclic offsets into $1\leq q<m$, their reflections
-    $N-q$, and $m\leq q\leq N-m$; the last group is nonnegative.
+    and using (\ref{eq:cyclic_knabe_reversed_leg}) proves the upper bound.
+    If $h_i$ and $h_{i+d}$ commute, their symmetry and idempotence give
+    \begin{align}
+        0&\leq\operatorname{Re}\langle h_i v,h_{i+d}v\rangle.
+        \label{eq:cyclic_knabe_commuting_nonnegative}
+    \end{align}
+    Partitioning the nonzero cyclic offsets into $1\leq q<m$, their
+    reflections $N-q$, and $m\leq k\leq N-m$ gives
+    \begin{align}
+        \operatorname{Re}\langle Hv,Hv\rangle
+        &=\operatorname{Re}\langle Hv,v\rangle
+          +\sum_{q=1}^{m-1}\operatorname{Re}\langle Q_qv,v\rangle
+          +\sum_{k=m}^{N-m}\sum_i
+            \operatorname{Re}\langle h_i v,h_{i+k}v\rangle.
+        \label{eq:cyclic_knabe_offset_partition}
+    \end{align}
+    The last sum in (\ref{eq:cyclic_knabe_offset_partition}) is nonnegative by
+    (\ref{eq:cyclic_knabe_commuting_nonnegative}), which proves the lower bound.
 \end{proof}
 
 \begin{theorem}[Finite-range cyclic Knabe inequality]
     \label{thm:finite_range_cyclic_knabe}
     \lean{ProjectionGeometry.quadraticForm_sum_projections_of_cyclic_knabe}
     \leanok
-    \uses{thm:cyclic_knabe_double_counting,
-        thm:cyclic_knabe_cross_estimates}
+    \uses{thm:cyclic_knabe_double_counting}
     Let $1\leq R\leq m$, $2m\leq N$, and let $h_i$ be cyclically indexed
     orthogonal projections such that $h_i$ commutes with $h_{i+d}$ whenever
     $R\leq d\leq N-R$. Suppose that, for every $s$ and $v$,
@@ -2699,8 +2737,9 @@ $N=L$. They give no gap estimate for $N>L$ and no periodic coercivity.
         &\leq\operatorname{Re}\langle Hv,Hv\rangle.
     \end{align}
     The coefficient for general $R$ is derived here and is not attributed to
-    the cited papers. Its source comparison is recorded in
-    \path{docs/paper-gaps/knabe_finite_range_coefficient.tex}.
+    the cited papers.
+    % Its source comparison is recorded in
+    % docs/paper-gaps/knabe_finite_range_coefficient.tex.
 \end{theorem}
 
 \begin{proof}
