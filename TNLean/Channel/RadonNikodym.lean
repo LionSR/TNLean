@@ -214,8 +214,11 @@ theorem radon_nikodym_of_stinespring_of_kraus_family
   · intro i
     exact Matrix.posSemidef_conjTranspose_mul_self (C i)
   · ext j k
-    simp only [Matrix.sum_apply, Matrix.mul_apply, Matrix.conjTranspose_apply, C]
-    rw [Finset.sum_comm]
+    have hexpand : ((∑ c : ι, (C c)ᴴ * C c) : Matrix (Fin r) (Fin r) ℂ) j k =
+        ∑ c : ι, ∑ α : η, star (C c α j) * C c α k := by
+      rw [Matrix.sum_apply]
+      exact Finset.sum_congr rfl fun c _ => rfl
+    rw [hexpand, Finset.sum_comm]
     have hcollapse : ∀ α : η,
         (∑ i : ι,
           star (if label α = i then star (W α j) else 0) *
@@ -229,6 +232,10 @@ theorem radon_nikodym_of_stinespring_of_kraus_family
         simp [hne]
       · intro h
         exact absurd (Finset.mem_univ (label α)) h
+    change (∑ α : η, ∑ i : ι,
+      star (if label α = i then star (W α j) else 0) *
+        (if label α = i then star (W α k) else 0)) =
+      (1 : Matrix (Fin r) (Fin r) ℂ) j k
     simp_rw [hcollapse]
     have hentry := congr_fun (congr_fun hW k) j
     simp only [Matrix.mul_apply, Matrix.conjTranspose_apply, Matrix.one_apply] at hentry

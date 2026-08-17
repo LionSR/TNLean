@@ -82,9 +82,15 @@ theorem charpoly_add_pureStateMatrix_of_two_le (hd : 2 ≤ d)
   have hAB : A * B = pureStateMatrix p + pureStateMatrix q := by
     rw [← p.mk_rep, ← q.mk_rep, pureStateMatrix_mk, pureStateMatrix_mk]
     ext i j
-    simp [A, B, Matrix.mul_apply, Fin.sum_univ_two, normalizedPureStateMatrix, vp, vq,
-      ap, aq, Matrix.vecMulVec_apply, Pi.star_apply]
-    ring
+    calc
+      (A * B) i j = ∑ k : Fin 2, A i k * B k j := rfl
+      _ = ap⁻¹ * vp i * star (vp j) + aq⁻¹ * vq i * star (vq j) := by
+        rw [Fin.sum_univ_two]
+        simp only [A, B, Matrix.cons_val_zero, Matrix.cons_val_one]
+        ring
+      _ = (normalizedPureStateMatrix p.rep + normalizedPureStateMatrix q.rep) i j := by
+        simp [normalizedPureStateMatrix, vp, vq, ap, aq, Matrix.vecMulVec_apply, Pi.star_apply]
+        ring
   have h00 : (B * A) 0 0 = 1 := by
     simp only [A, B, Matrix.mul_apply, Matrix.cons_val_zero, ap, vp]
     calc

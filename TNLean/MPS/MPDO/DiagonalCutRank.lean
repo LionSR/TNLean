@@ -66,7 +66,9 @@ private theorem rank_traceMulMatrix_le
   let Y : Matrix (Fin D × Fin D) c ℂ := fun ab y ↦ B y ab.2 ab.1
   have hfactor : traceMulMatrix A B = X * Y := by
     ext x y
-    simp [traceMulMatrix, X, Y, Matrix.mul_apply, Matrix.trace, Fintype.sum_prod_type]
+    change (∑ i, ∑ j, A x i j * B y j i) =
+      ∑ ab : Fin D × Fin D, A x ab.1 ab.2 * B y ab.2 ab.1
+    rw [Fintype.sum_prod_type]
   rw [hfactor]
   refine (Matrix.rank_mul_le_left X Y).trans ?_
   simpa using Matrix.rank_le_card_width X
