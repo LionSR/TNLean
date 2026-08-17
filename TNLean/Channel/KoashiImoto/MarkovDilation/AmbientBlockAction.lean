@@ -338,13 +338,12 @@ theorem MarkovDilation.bipartiteBlock_ambientBipartiteBlockMatrix
       Matrix.reindex_apply, Matrix.submatrix_apply,
       markovBipartiteBlockEquiv_symm_apply,
       Equiv.symm_apply_apply, Matrix.blockDiagonal'_apply,
-      Matrix.kroneckerMap_apply, Matrix.zero_apply, dite_eq_ite,
+      Matrix.zero_apply, dite_eq_ite,
       ite_self, Sum.inl_ne_inr, Sum.inr_ne_inl, ↓reduceDIte]
   case inr.inr =>
     by_cases h : j = j'
     · subst j'
-      simp only [↓reduceDIte, cast_eq, mul_eq_mul_left_iff]
-      exact Or.inl rfl
+      rfl
     · simp [h]
 
 /-- A dependent direct sum of pure-ancilla dilation blocks acts sectorwise on
@@ -406,8 +405,16 @@ theorem MarkovDilation.blockDilation_fixedEnv_idTensorMap_blockDiagonal
   rw [hx, hy]
   rw [idTensorMapLM_apply, idTensorMap_apply,
     bipartiteBlock_ambientBipartiteBlockMatrix,
-    pureAncillaRecovery_eq_rectangularKrausMap,
-    rectangularKrausMap_apply_entry]
+    pureAncillaRecovery_eq_rectangularKrausMap]
+  rw [rectangularKrausMap_apply_entry
+    (fun i bc b => (blockDilationUnitary eB Ulocal *
+      fixedEnvEmbedding (S := Fin dB) (c₀, k₀)) (bc.1, (bc.2, i)) b)
+    (Matrix.reindex eB eB
+      (Matrix.blockDiagonal' fun s => match s with
+        | Sum.inl _ => 0
+        | Sum.inr j => fun uv uv' =>
+            σ j uv.1 uv'.1 * ω j (a, uv.2) (a', uv'.2)))
+    (eB ⟨s, (u, v)⟩, c) (eB ⟨t, (u', v')⟩, c')]
   rcases s with z | j <;> rcases t with z' | j'
   all_goals simp_rw [← eB.sum_comp, Fintype.sum_sigma,
     Fintype.sum_sum_type]
@@ -418,7 +425,7 @@ theorem MarkovDilation.blockDilation_fixedEnv_idTensorMap_blockDiagonal
     RCLike.star_def, zero_mul, Finset.sum_const_zero, ↓reduceDIte,
     add_zero, Sum.inr.injEq, mul_dite, dite_mul,
     Finset.sum_dite_irrel, Finset.sum_dite_eq, Finset.mem_univ,
-    ↓reduceIte, cast_eq, zero_add, Matrix.kroneckerMap_apply]
+    ↓reduceIte, cast_eq, zero_add]
   case inl.inl | inl.inr | inr.inl =>
     apply Finset.sum_eq_zero
     intro i _
@@ -433,8 +440,17 @@ theorem MarkovDilation.blockDilation_fixedEnv_idTensorMap_blockDiagonal
   case inr.inr =>
     by_cases hj : j = j'
     · subst j'
-      simp only [cast_eq]
-      rw [rectangularKrausMap_apply_entry]
+      simp only [cast_eq, dite_true]
+      have hkronecker :
+          (ω j ⊗ₖ rectangularKrausMap (fun i => L i j) (σ j))
+              ((a, v), (u, c)) ((a', v'), (u', c')) =
+            ω j (a, v) (a', v') *
+              rectangularKrausMap (fun i => L i j) (σ j) (u, c) (u', c') := by
+        rfl
+      have hrectangular := rectangularKrausMap_apply_entry
+        (fun i => L i j) (σ j) (u, c) (u', c')
+      refine Eq.trans ?_ hkronecker.symm
+      refine Eq.trans ?_ (congrArg (ω j (a, v) (a', v') * ·) hrectangular.symm)
       simp_rw [Finset.mul_sum]
       apply Finset.sum_congr rfl
       intro i _
