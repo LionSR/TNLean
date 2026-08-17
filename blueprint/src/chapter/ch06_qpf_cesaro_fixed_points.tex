@@ -309,6 +309,80 @@
     that $T_\varphi$ also fixes it pointwise.
 \end{proof}
 
+\begin{theorem}[Asymptotic image]
+    \label{thm:peripheral_asymptotic_image}
+    \lean{Module.End.map_eigenspace_of_ne_zero,
+        IsPositiveMap.fixedPointsSubmodule_peripheralProjection,
+        IsPositiveMap.range_peripheralProjection_eq_iSup_eigenspace,
+        IsPositiveMap.span_stationaryDensity_peripheralProjection_eq_peripheralSubspace,
+        IsPositiveMap.exists_posSemidef_span_eq_iSup_eigenspace,
+        IsPositiveMap.map_peripheralSubspace,
+        IsPositiveMap.asymptotic_image}
+    \leanok
+    \uses{def:peripheral_spectral_projections}
+    Let $T:\MN{D}\to\MN{D}$ be positive and trace-preserving, with $D>0$, and
+    let
+    \begin{align}
+        \mathcal X_T
+        =\spn\{X\in\MN{D}\mid
+        \exists\varphi\in\R:\ T(X)=e^{i\varphi}X\}
+    \end{align}
+    be the span of its peripheral eigenvectors. Then
+    \begin{enumerate}
+        \item $T_\varphi(\MN{D})=\mathcal X_T$,
+        \item there are positive semidefinite matrices $\rho_i$ with
+              $\mathcal X_T=\spn\{\rho_i\}$,
+        \item $T(\mathcal X_T)=\mathcal X_T$.
+    \end{enumerate}
+    This is \cite[Proposition~6.12 (Asymptotic image)]{Wolf2012Quantum}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:peripheral_spectral_projections,
+        thm:peripheral_spectral_projection_properties,
+        thm:peripheral_jordan_trivial,
+        cor:peripheral_projection_channel,
+        cor:stationary_density_span}
+    Write $V_\mu=\ker(T-\mu)$ for the eigenspace of a peripheral eigenvalue
+    $\mu$, so that $\mathcal X_T=\sum_{|\mu|=1}V_\mu$ by the definition of
+    $\mathcal X_T$. The image of the projection $T_\varphi$ is its set of
+    fixed points, and the fixed points of $T_\varphi$ are the linear
+    combinations of peripheral eigenvectors:
+    \begin{align}
+        T_\varphi(\MN{D})
+         & =\{X\in\MN{D}\mid T_\varphi(X)=X\}
+        \label{eq:channel_asymptotic_fixed_points}\\
+         & =\sum_{|\mu|=1}V_\mu
+        \label{eq:channel_asymptotic_eigenspace_sum}\\
+         & =\mathcal X_T.
+        \label{eq:channel_asymptotic_definition}
+    \end{align}
+    The equality (\ref{eq:channel_asymptotic_fixed_points}) holds because
+    $T_\varphi$ is a projection; a matrix fixed by $T_\varphi$ lies in the
+    peripheral subspace, whose Jordan blocks are trivial for a positive
+    trace-preserving map (Theorem~\ref{thm:peripheral_jordan_trivial}),
+    which gives (\ref{eq:channel_asymptotic_eigenspace_sum}); and
+    (\ref{eq:channel_asymptotic_definition}) is the definition of
+    $\mathcal X_T$. This is the first claim.
+
+    The projection $T_\varphi$ is itself positive and trace-preserving, so its
+    fixed-point space is spanned by its stationary density matrices:
+    \begin{align}
+        \mathcal X_T=\{X\in\MN{D}\mid T_\varphi(X)=X\}
+        =\spn\{\rho\mid \rho\ \text{a stationary density matrix of }T_\varphi\}.
+    \end{align}
+    Every such $\rho$ is positive semidefinite, which is the second claim.
+
+    On $V_\mu$ the map $T$ acts as multiplication by $\mu$, and $|\mu|=1$
+    forces $\mu\neq0$, so multiplication by $\mu$ carries $V_\mu$ onto itself
+    and $T(V_\mu)=\mu V_\mu=V_\mu$. Summing over the peripheral eigenvalues,
+    \begin{align}
+        T(\mathcal X_T)=T\Bigl(\sum_{|\mu|=1}V_\mu\Bigr)
+        =\sum_{|\mu|=1}T(V_\mu)=\sum_{|\mu|=1}V_\mu=\mathcal X_T,
+    \end{align}
+    which is the third claim.
+\end{proof}
+
 \begin{theorem}[Ces\`aro fixed-point theorem]\label{thm:cesaro_fixedpoint}
     \lean{IsChannel.exists_posSemidef_fixedPoint}
     \leanok

@@ -22,6 +22,7 @@ import TNLean.Algebra.CornerCompression
 import TNLean.Algebra.CornerSkolemNoether
 import TNLean.Algebra.DependentBlockDiagonal
 import TNLean.Algebra.DirectedWalkCoboundary
+import TNLean.Algebra.EigenspaceMap
 import TNLean.Algebra.EigenvectorProjection
 import TNLean.Algebra.EqualRangeRightFactor
 import TNLean.Algebra.EventuallyConstantCycleWeights

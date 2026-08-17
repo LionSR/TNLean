@@ -7,6 +7,7 @@ import TNLean.Analysis.MeanErgodic
 import TNLean.Analysis.Dirichlet
 import TNLean.Channel.Determinant.Bound
 import TNLean.Channel.FixedPoint.Algebra
+import TNLean.Channel.Peripheral.AsymptoticImage
 import TNLean.Channel.Peripheral.CyclicGroupKraus
 import TNLean.Channel.Peripheral.JordanBlocks
 import TNLean.Channel.Peripheral.SpectralRadius
@@ -380,7 +381,7 @@ Additionally:
 * Numbered theorem: `IsPositiveMap.wolf_prop_6_8` —
   `TNLean.Channel.WolfChapter6Wrappers`.
 
-### Wolf Corollary 6.8 (Linearly independent stationary states) — FORMALIZED
+### Wolf Corollary 6.5 (Linearly independent stationary states) — FORMALIZED
 
 In `TNLean.Channel.FixedPoint.StationarySpan`:
 
@@ -395,7 +396,7 @@ In `TNLean.Channel.FixedPoint.StationarySpan`:
   the fixed-point subspace is spanned (over ℂ) by stationary density matrices
   (PSD, trace 1, fixed by `E`).
 * `IsPositiveMap.exists_stationaryDensity_basis_of_fixedPointsSubmodule` —
-  Wolf Corollary 6.8: when the fixed-point subspace has dimension `r`, there
+  Wolf Corollary 6.5: when the fixed-point subspace has dimension `r`, there
   exist `r` linearly independent stationary density matrices spanning it.
 
 ### Wolf Corollary 6.6 (projected support corner) — FORMALIZED (Kraus case)
@@ -662,6 +663,26 @@ machinery (Proposition 3).
 ---
 
 ## Section 6.5 Cycles and recurrences
+
+### Wolf Proposition 6.12 (Asymptotic image) — FORMALIZED
+
+For a positive trace-preserving `T` on `M_D(ℂ)`, write `X_T` for the span of
+the peripheral eigenvectors and `T_φ` for the peripheral spectral projection.
+All three clauses live in `TNLean.Channel.Peripheral.AsymptoticImage`:
+
+* `IsPositiveMap.range_peripheralProjection_eq_iSup_eigenspace` —
+  clause 1, `T_φ (M_D(ℂ)) = X_T`.
+* `IsPositiveMap.exists_posSemidef_span_eq_iSup_eigenspace` —
+  clause 2, `X_T` is the span of a set of positive semidefinite matrices; the
+  spanning form `IsPositiveMap.span_stationaryDensity_peripheralProjection_eq_peripheralSubspace`
+  identifies that set with the stationary densities of `T_φ`.
+* `IsPositiveMap.map_peripheralSubspace` — clause 3, `T (X_T) = X_T`.
+* `IsPositiveMap.asymptotic_image` — the three clauses together.
+
+The auxiliary `IsPositiveMap.fixedPointsSubmodule_peripheralProjection`
+records that `X_T` is the fixed-point space of `T_φ`, and
+`Module.End.map_eigenspace_of_ne_zero` supplies the one-eigenvalue case of
+clause 3.
 
 ### Wolf Theorem 6.16 (Structure of cycles) — PARTIALLY FORMALIZED
 
