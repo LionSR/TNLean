@@ -194,9 +194,14 @@ theorem exists_mul_conjTranspose_of_isHermitian_idempotent_rank
   refine ⟨V, ?_⟩
   apply Matrix.toEuclideanLin.injective
   have hVV : V * Vᴴ = ∑ j : Fin k, Matrix.vecMulVec (b j : E) (star (b j : E)) := by
-    dsimp [V]
     ext a c
-    simp [Matrix.mul_apply, Matrix.conjTranspose_apply, Matrix.sum_apply, Matrix.vecMulVec]
+    calc
+      (V * Vᴴ) a c = ∑ j, V a j * star (V c j) := by
+        rw [Matrix.mul_apply]
+        rfl
+      _ = (∑ j : Fin k, Matrix.vecMulVec (b j : E) (star (b j : E))) a c := by
+        rw [Matrix.sum_apply]
+        rfl
   have hsum_rankOne :
       Matrix.toEuclideanLin (V * Vᴴ) =
         ∑ j : Fin k, (InnerProductSpace.rankOne ℂ (b j : E) (b j : E) : E →ₗ[ℂ] E) := by

@@ -48,10 +48,15 @@ lemma blockMatrix_CtC_posSemidef (A B : Mat) :
     | Sum.inr b => B i b
   have hC_sq : Cᴴ * C = Matrix.fromBlocks (Aᴴ * A) (Aᴴ * B) (Bᴴ * A) (Bᴴ * B) := by
     ext i j
-    rcases i with (i | i) <;> rcases j with (j | j) <;>
-      simp [C, Matrix.fromBlocks_apply₁₁, Matrix.fromBlocks_apply₁₂,
-        Matrix.fromBlocks_apply₂₁, Matrix.fromBlocks_apply₂₂,
-        Matrix.mul_apply, Matrix.conjTranspose_apply]
+    rcases i with (i | i) <;> rcases j with (j | j)
+    · change (∑ k, star (A k i) * A k j) = ∑ k, star (A k i) * A k j
+      rfl
+    · change (∑ k, star (A k i) * B k j) = ∑ k, star (A k i) * B k j
+      rfl
+    · change (∑ k, star (B k i) * A k j) = ∑ k, star (B k i) * A k j
+      rfl
+    · change (∑ k, star (B k i) * B k j) = ∑ k, star (B k i) * B k j
+      rfl
   rw [← hC_sq]
   exact Matrix.posSemidef_conjTranspose_mul_self C
 
