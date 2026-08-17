@@ -745,15 +745,24 @@ theorem resonate_endpoint_coeff_reconcile (A : Tensor G d) (e : Edge G)
           ((localVirtualConfigSplitAt (G := G) A (edgeRightIncident (G := G) e)).symm (x, ρr))))
         ((localVirtualConfigSplitAt (G := G) A (edgeRightIncident (G := G) e)).symm (k, ρr)) := by
   classical
-  set sL := localVirtualConfigSplitAt (G := G) A (edgeLeftIncident (G := G) e) with hsL
-  set sR := localVirtualConfigSplitAt (G := G) A (edgeRightIncident (G := G) e) with hsR
+  change ResidualLocalConfig (G := G) A (⟨e, Or.inl rfl⟩ : IncidentEdge G e.1.1) at ρl
+  change ResidualLocalConfig (G := G) A (⟨e, Or.inr rfl⟩ : IncidentEdge G e.1.2) at ρr
+  set sL := localVirtualConfigSplitAt (G := G) A
+    (⟨e, Or.inl rfl⟩ : IncidentEdge G e.1.1) with hsL
+  set sR := localVirtualConfigSplitAt (G := G) A
+    (⟨e, Or.inr rfl⟩ : IncidentEdge G e.1.2) with hsR
+  change LocalVirtualConfig A e.1.1 ≃ Fin (A.bondDim e) ×
+    ResidualLocalConfig A (⟨e, Or.inl rfl⟩ : IncidentEdge G e.1.1) at sL
+  change LocalVirtualConfig A e.1.2 ≃ Fin (A.bondDim e) ×
+    ResidualLocalConfig A (⟨e, Or.inr rfl⟩ : IncidentEdge G e.1.2) at sR
   set ΨL := localLeftInverseAt A hu
   have hL := resonate_invert_right_endpoint (G := G) A e hMid hv O₁ O₂ hEq ρl ρr k
   have hΨ : ΨL (O₁ (A.component e.1.1 (sL.symm (k, ρl)))) =
       ΨL (∑ j : Fin (A.bondDim e),
         (localLeftInverseAt A hv (O₂ (A.component e.1.2 (sR.symm (j, ρr))))
           (sR.symm (k, ρr))) • A.component e.1.1 (sL.symm (j, ρl))) := by
-    rw [hL]
+    convert congrArg ΨL hL using 1 <;>
+      simp only [hsL, hsR, edgeLeftIncident, edgeRightIncident] <;> rfl
   rw [map_sum] at hΨ
   simp only [map_smul] at hΨ
   have hEval := congrFun hΨ (sL.symm (x, ρl))
@@ -763,9 +772,16 @@ theorem resonate_endpoint_coeff_reconcile (A : Tensor G d) (e : Edge G)
     intro j
     rw [← localTensorMap_apply_single]
     exact localLeftInverseAt_apply_localTensorMap A hu _
-  simp only [hΨcomp] at hEval
-  rw [hEval, Finset.sum_eq_single x]
+  have hΨcomp_eval : ∀ j,
+      ΨL (A.component e.1.1 (sL.symm (j, ρl))) (sL.symm (x, ρl)) =
+        (Pi.single (sL.symm (j, ρl)) (1 : ℂ) : LocalVirtualConfig A e.1.1 → ℂ)
+          (sL.symm (x, ρl)) := fun j =>
+    congrFun (hΨcomp j) (sL.symm (x, ρl))
+  simp only [hΨcomp_eval] at hEval
+  refine hEval.trans ?_
+  rw [Finset.sum_eq_single x]
   · rw [Pi.single_eq_same, mul_one]
+    rfl
   · intro j _ hj
     have hne : sL.symm (x, ρl) ≠ sL.symm (j, ρl) := by
       intro h
@@ -832,12 +848,20 @@ theorem physical_to_virtual_insertion
   classical
   obtain ⟨hu, hv⟩ := hA.endpoint_linearIndependent
   have hMid := hA.middle_injective
-  set sL := localVirtualConfigSplitAt (G := G) A (edgeLeftIncident (G := G) e) with hsL
-  set sR := localVirtualConfigSplitAt (G := G) A (edgeRightIncident (G := G) e) with hsR
+  set sL := localVirtualConfigSplitAt (G := G) A
+    (⟨e, Or.inl rfl⟩ : IncidentEdge G e.1.1) with hsL
+  set sR := localVirtualConfigSplitAt (G := G) A
+    (⟨e, Or.inr rfl⟩ : IncidentEdge G e.1.2) with hsR
+  change LocalVirtualConfig A e.1.1 ≃ Fin (A.bondDim e) ×
+    ResidualLocalConfig A (⟨e, Or.inl rfl⟩ : IncidentEdge G e.1.1) at sL
+  change LocalVirtualConfig A e.1.2 ≃ Fin (A.bondDim e) ×
+    ResidualLocalConfig A (⟨e, Or.inr rfl⟩ : IncidentEdge G e.1.2) at sR
   -- Reference residual configurations, nonempty because every bond is positive.
-  set ρl0 : ResidualLocalConfig (G := G) A (edgeLeftIncident (G := G) e) :=
+  set ρl0 : ResidualLocalConfig (G := G) A
+      (⟨e, Or.inl rfl⟩ : IncidentEdge G e.1.1) :=
     fun je => ⟨0, hpos je.1.1⟩ with hρl0
-  set ρr0 : ResidualLocalConfig (G := G) A (edgeRightIncident (G := G) e) :=
+  set ρr0 : ResidualLocalConfig (G := G) A
+      (⟨e, Or.inr rfl⟩ : IncidentEdge G e.1.2) :=
     fun je => ⟨0, hpos je.1.1⟩ with hρr0
   -- The common bond matrix, read off from the right-endpoint inversion.
   set M : Matrix (Fin (A.bondDim e)) (Fin (A.bondDim e)) ℂ :=
@@ -845,23 +869,29 @@ theorem physical_to_virtual_insertion
       (O₂ (A.component e.1.2 (sR.symm (a, ρr0)))) (sR.symm (b, ρr0)) with hM
   refine ⟨M, ?_, ?_⟩
   · -- Left endpoint: O₁ realizes the matrix action of Mᵀ.
+    change ∀ c : LocalVirtualConfig A e.1.1 → ℂ,
+      O₁ (localTensorMap A e.1.1 c) = localTensorMap A e.1.1
+        (localIncidentMatrixOp A (⟨e, Or.inl rfl⟩ : IncidentEdge G e.1.1) M.transpose c)
     have hLbasis : ∀ η : LocalVirtualConfig A e.1.1,
         O₁ (A.component e.1.1 η) =
           localTensorMap A e.1.1
-            (localIncidentMatrixOp A (edgeLeftIncident (G := G) e) M.transpose
+            (localIncidentMatrixOp A (⟨e, Or.inl rfl⟩ : IncidentEdge G e.1.1) M.transpose
               (Pi.single η (1 : ℂ))) := by
       intro η
       have hηeq : η = sL.symm (((sL η).1, (sL η).2)) := by
         rw [Prod.mk.eta, Equiv.symm_apply_apply]
       rw [hηeq, localTensorMap_localIncidentMatrixOp_single (G := G) A
-        (edgeLeftIncident (G := G) e) _ (sL η).1 (sL η).2]
+        (⟨e, Or.inl rfl⟩ : IncidentEdge G e.1.1) _ (sL η).1 (sL η).2]
+      rw [← hsL]
       have hL := resonate_invert_right_endpoint (G := G) A e hMid hv O₁ O₂ hEq
         (sL η).2 ρr0 (sL η).1
-      rw [hsL] at hL ⊢
-      rw [hL]
+      dsimp only [edgeLeftIncident, edgeRightIncident] at hL
+      rw [← hsL, ← hsR] at hL
+      refine hL.trans ?_
       refine Finset.sum_congr rfl ?_
       intro k _
       rw [Matrix.transpose_apply, hM]
+      rfl
     intro c
     rw [← Finset.univ_sum_single c]
     simp only [map_sum]
@@ -876,26 +906,34 @@ theorem physical_to_virtual_insertion
     rw [localTensorMap_apply_single]
     exact hLbasis η
   · -- Right endpoint: O₂ realizes the matrix action of M.
+    change ∀ c : LocalVirtualConfig A e.1.2 → ℂ,
+      O₂ (localTensorMap A e.1.2 c) = localTensorMap A e.1.2
+        (localIncidentMatrixOp A (⟨e, Or.inr rfl⟩ : IncidentEdge G e.1.2) M c)
     have hRbasis : ∀ η : LocalVirtualConfig A e.1.2,
         O₂ (A.component e.1.2 η) =
           localTensorMap A e.1.2
-            (localIncidentMatrixOp A (edgeRightIncident (G := G) e) M
+            (localIncidentMatrixOp A (⟨e, Or.inr rfl⟩ : IncidentEdge G e.1.2) M
               (Pi.single η (1 : ℂ))) := by
       intro η
       have hηeq : η = sR.symm (((sR η).1, (sR η).2)) := by
         rw [Prod.mk.eta, Equiv.symm_apply_apply]
       rw [hηeq, localTensorMap_localIncidentMatrixOp_single (G := G) A
-        (edgeRightIncident (G := G) e) _ (sR η).1 (sR η).2]
+        (⟨e, Or.inr rfl⟩ : IncidentEdge G e.1.2) _ (sR η).1 (sR η).2]
+      rw [← hsR]
       have hR := resonate_invert_left_endpoint (G := G) A e hMid hu O₁ O₂ hEq
         ρl0 (sR η).2 (sR η).1
-      rw [hsR] at hR ⊢
-      rw [hR]
+      dsimp only [edgeLeftIncident, edgeRightIncident] at hR
+      rw [← hsL, ← hsR] at hR
+      refine hR.trans ?_
       refine Finset.sum_congr rfl ?_
       intro k _
       rw [hM]
       have hrec := resonate_endpoint_coeff_reconcile (G := G) A e hMid hu hv O₁ O₂ hEq
         ρl0 ρr0 (sR η).1 k
+      dsimp only [edgeLeftIncident, edgeRightIncident] at hrec
+      rw [← hsL, ← hsR] at hrec
       rw [hrec]
+      rfl
     intro c
     rw [← Finset.univ_sum_single c]
     simp only [map_sum]
