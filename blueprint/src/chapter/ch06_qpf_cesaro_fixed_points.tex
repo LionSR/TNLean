@@ -89,6 +89,26 @@
     The peripheral and non-peripheral spectral subspaces are complementary.
 \end{theorem}
 
+\begin{lemma}[Powers vanish on the non-peripheral subspace]
+    \label{lem:non_peripheral_pow_vanishing}
+    \lean{Module.End.tendsto_pow_apply_zero_of_mem_nonPeripheralSubspace}
+    \leanok
+    \uses{def:peripheral_spectral_splitting}
+    Let $T$ be an endomorphism of a finite-dimensional complex vector space
+    whose every eigenvalue has modulus at most one. Then $T^{n}(Y)\to0$ for
+    every $Y$ in the non-peripheral subspace:
+    \begin{align}
+        T^{n}(Y)&\longrightarrow0
+        \notag
+    \end{align}
+\end{lemma}
+
+\begin{proof}\leanok
+    Every non-peripheral eigenvalue then has modulus strictly below one, so
+    its maximal generalized eigenspace is annihilated by the powers, and the
+    non-peripheral subspace is the sum of those eigenspaces.
+\end{proof}
+
 \begin{definition}[Peripheral spectral projections]
     \label{def:peripheral_spectral_projections}
     \lean{Module.End.peripheralProjection,
