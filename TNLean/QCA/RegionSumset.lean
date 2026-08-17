@@ -22,6 +22,7 @@ observable algebras, or quantum cellular automata.
 ## Main results
 
 * `SpinChain.mem_regionSumset` — membership in a finite-region sumset.
+* `SpinChain.disjoint_regionSumset_neg_iff` — reflected sumsets exchange disjointness.
 * `SpinChain.regionSumset_singleton_right` — addition by a singleton is `translateRegion`.
 * `SpinChain.regionSumset_mono` — the sumset is monotone in both regions.
 * `SpinChain.regionSumset_assoc` — finite-region sumsets are associative.
@@ -52,6 +53,32 @@ Source: arXiv:1703.09188, Appendix, lines 2292--2298. -/
 lemma mem_regionSumset (i : ℤ) (Λ 𝓝 : Finset ℤ) :
     i ∈ regionSumset Λ 𝓝 ↔ ∃ j ∈ Λ, ∃ a ∈ 𝓝, j + a = i :=
   Finset.mem_add
+
+/-- A region \(\Gamma\) is disjoint from \(\Lambda+(-\mathcal N)\) if and only if
+\(\Gamma+\mathcal N\) is disjoint from \(\Lambda\).
+
+This is elementary finite-region arithmetic for reflected neighborhoods.
+Source: arXiv:1703.09188, Appendix, lines 2292--2298. -/
+lemma disjoint_regionSumset_neg_iff {Γ Λ 𝓝 : Finset ℤ} :
+    Disjoint Γ (regionSumset Λ (-𝓝)) ↔ Disjoint (regionSumset Γ 𝓝) Λ := by
+  constructor
+  · intro h
+    rw [Finset.disjoint_left] at h ⊢
+    intro z hz hzΛ
+    obtain ⟨g, hg, n, hn, hgn⟩ := (mem_regionSumset z Γ 𝓝).mp hz
+    apply h hg
+    rw [mem_regionSumset]
+    refine ⟨z, hzΛ, -n, Finset.neg_mem_neg hn, ?_⟩
+    rw [← hgn]
+    simp
+  · intro h
+    rw [Finset.disjoint_left] at h ⊢
+    intro g hg hgsum
+    obtain ⟨z, hz, n, hn, hzng⟩ := (mem_regionSumset g Λ (-𝓝)).mp hgsum
+    obtain ⟨m, hm, rfl⟩ := Finset.mem_neg.mp hn
+    apply h ((mem_regionSumset z Γ 𝓝).mpr ⟨g, hg, m, hm, ?_⟩) hz
+    rw [← hzng]
+    simp
 
 /-- Adding the singleton displacement region \(\{a\}\) agrees with translation by \(a\).
 
