@@ -4,8 +4,8 @@ name: PR CI
 # Lean-blueprint sync, and the Lean module-policy guards, formerly
 # lean_action_ci.yml, lint-blueprint.yml, and oversized-lean-files.yml.
 # One workflow means one completion event for the auto-fix dispatcher and
-# per-job change gating: Lean-only changes skip the TeX pipeline, and
-# blueprint-only changes skip the Lean build.
+# per-job change gating: Lean-only changes skip the TeX pipeline, while
+# blueprint changes also run the Lean build for compiled declaration checking.
 
 on:
   push:
