@@ -168,8 +168,8 @@ variable {d : ℕ} [NeZero d] {x : AlgebraicLocalAlgebra d} {Λ : Finset ℤ}
 every algebraic-local observable supported in a disjoint finite region.
 
 This is an algebraic-local consequence of the finite relative-commutant theorem. It is not stated
-by Schumacher--Werner; their Theorem 6 and Corollary 7 instead give the generalized Margolus
-structure and inverse locality for nearest-neighbor QCAs. -/
+by Schumacher--Werner. Their Theorem 6 gives the generalized Margolus structure, and Corollary 7
+says that the inverse of a nearest-neighbor QCA exists and is a nearest-neighbor QCA. -/
 theorem supportedIn_iff_commute_disjoint :
     SupportedIn x Λ ↔
       ∀ Γ, Disjoint Γ Λ →
