@@ -9340,14 +9340,35 @@ $\omega^{-1}$.
   interval.
 \end{proof}
 
+\begin{lemma}[Disjointness for reflected neighborhoods]
+  \label{lem:qca_reflected_region_disjoint}
+  \lean{SpinChain.disjoint_regionSumset_of_disjoint_regionSumset_neg}
+  \leanok
+  \uses{def:qca_region_sumset}
+  Let $\Gamma,\Lambda,\mathcal N\subset\mathbb Z$ be finite.  If
+  \begin{align}
+    \Gamma\cap(\Lambda+(-\mathcal N))&=\varnothing,
+  \end{align}
+  then
+  \begin{align}
+    (\Gamma+\mathcal N)\cap\Lambda&=\varnothing.
+  \end{align}
+\end{lemma}
+
+\begin{proof}\leanok
+  If $g+n=\lambda$ for $g\in\Gamma$, $n\in\mathcal N$, and
+  $\lambda\in\Lambda$, then
+  $g=\lambda+(-n)\in\Lambda+(-\mathcal N)$, contradicting the assumed
+  disjointness.
+\end{proof}
+
 \begin{theorem}[Inverse propagation and inverse covariance]
   \label{thm:qca_inverse_propagation}
-  \lean{SpinChain.disjoint_regionSumset_of_disjoint_regionSumset_neg,
-    SpinChain.PropagatesWithin.symm,
+  \lean{SpinChain.PropagatesWithin.symm,
     SpinChain.HasFinitePropagation.symm,
     SpinChain.TranslationCovariant.symm}
   \leanok
-  \uses{def:qca_region_sumset,def:qca_propagates_within,
+  \uses{def:qca_propagates_within,
     def:qca_finite_propagation,def:qca_translation_covariant}
   Let $d>0$, let $\omega$ be a star-algebra automorphism of $\mathcal A$, and
   let $\mathcal N\subset\mathbb Z$ be finite.  If $\omega$ propagates within
@@ -9363,15 +9384,8 @@ $\omega^{-1}$.
 \end{theorem}
 
 \begin{proof}\leanok
-  \uses{thm:qca_quasi_local_supported_iff_commute_disjoint}
-  First observe that
-  \begin{align}
-    \Gamma\cap(\Lambda+(-\mathcal N))=\varnothing
-      &\implies (\Gamma+\mathcal N)\cap\Lambda=\varnothing.
-  \end{align}
-  Indeed, $g+n=\lambda$ would imply
-  $g=\lambda+(-n)\in\Lambda+(-\mathcal N)$.
-
+  \uses{lem:qca_reflected_region_disjoint,
+    thm:qca_quasi_local_supported_iff_commute_disjoint}
   Let $x\in\mathcal A_\Lambda$ and let
   $y\in\mathcal A_\Gamma$, where
   $\Gamma\cap(\Lambda+(-\mathcal N))=\varnothing$.  Forward locality gives
