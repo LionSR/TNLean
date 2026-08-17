@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import TNLean.QCA.FinitePropagation
 import TNLean.QCA.QuasiLocalCommutant
 import TNLean.QCA.TranslationCovariance
 
@@ -50,7 +51,8 @@ lemma disjoint_regionSumset_of_disjoint_regionSumset_neg
   rw [mem_regionSumset]
   refine ⟨z, hzΛ, -n, ?_, ?_⟩
   · exact Finset.neg_mem_neg hn
-  · omega
+  · rw [← hgn]
+    simp
 
 variable {d : ℕ} [NeZero d]
   {ω : QuasiLocalAlgebra d ≃⋆ₐ[ℂ] QuasiLocalAlgebra d} {𝓝 : Finset ℤ}
