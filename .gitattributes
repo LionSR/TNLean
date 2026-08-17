@@ -1,1 +1,2 @@
 .github/workflows/*.lock.yml linguist-generated=true merge=ours
+Papers/quant-ph_0405174/*.eps binary
