@@ -96,7 +96,8 @@ private lemma mpv_twoBlockTensor_eq {n m N : ℕ}
             (1 : ℂ) ^ N •
                 mpv (twoBlockBlocks (d := d) (n := n) (m := m) A₁ A₂ 0) σ =
               mpv A₁ σ := by
-          simp [twoBlockBlocks]
+          rw [one_pow, one_smul]
+          rfl
         have h1 :
             (1 : ℂ) ^ N •
                 mpv (twoBlockBlocks (d := d) (n := n) (m := m) A₁ A₂ (Fin.succ 0)) σ =

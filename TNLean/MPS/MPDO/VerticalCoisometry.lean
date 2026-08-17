@@ -98,8 +98,18 @@ theorem sigmaBlockRow_conjTranspose_mul
       ∑ k, W k * C k := by
   classical
   ext a b
-  simp [Matrix.sum_apply, Matrix.mul_apply, ← Finset.univ_sigma_univ,
-    Finset.sum_sigma]
+  calc
+    ((sigmaBlockRow W)ᴴ *
+        (show Matrix ((k : Fin r) × Fin (dim k)) (Fin d) ℂ from
+          fun x a ↦ C x.1 x.2 a)) a b =
+        ∑ x : (k : Fin r) × Fin (dim k), W x.1 a x.2 * C x.1 x.2 b := by
+      rw [sigmaBlockRow_conjTranspose]
+      rfl
+    _ = ∑ k : Fin r, ∑ j : Fin (dim k), W k a j * C k j b :=
+      Fintype.sum_sigma _
+    _ = (∑ k, W k * C k) a b := by
+      rw [Matrix.sum_apply]
+      exact Finset.sum_congr rfl fun k _ => rfl
 
 /-- The Gram matrix of a block row is block diagonal when the ranges of its
 constituent isometries are pairwise orthogonal. -/
@@ -112,10 +122,21 @@ theorem sigmaBlockRow_mul_conjTranspose
   ext ⟨k, x⟩ ⟨l, y⟩
   by_cases hkl : k = l
   · subst l
-    simp [sigmaBlockRow, Matrix.mul_apply]
+    rw [blockDiagonal'_apply_eq]
+    calc
+      (sigmaBlockRow W * (sigmaBlockRow W)ᴴ) ⟨k, x⟩ ⟨k, y⟩ =
+          ∑ j : Fin d, star (W k j x) * W k j y := by
+        rw [sigmaBlockRow_conjTranspose]
+        rfl
+      _ = ((W k)ᴴ * W k) x y := rfl
   · rw [blockDiagonal'_apply_ne _ _ _ hkl]
     have h := congrFun (congrFun (horth k l hkl) x) y
-    simpa [sigmaBlockRow, Matrix.mul_apply] using h
+    calc
+      (sigmaBlockRow W * (sigmaBlockRow W)ᴴ) ⟨k, x⟩ ⟨l, y⟩ =
+          ∑ j : Fin d, star (W k j x) * W l j y := by
+        rw [sigmaBlockRow_conjTranspose]
+        rfl
+      _ = 0 := h
 
 /-- The block row of pairwise orthogonal isometries is a coisometry.
 
@@ -149,11 +170,16 @@ theorem sigmaBlockRow_conjugation
   intro v
   ext ⟨k, x⟩ ⟨l, y⟩
   rw [Matrix.mul_assoc]
-  simp only [Matrix.mul_apply, sigmaBlockRow, sigmaBlockRow_conjTranspose]
-  conv_lhs =>
-    enter [2, a]
-    rw [show (∑ b, T v a b * W l b y) = (W l * B l v) a y by
-      exact congrFun (congrFun (hinter l v) a) y]
+  have hleft :
+      (sigmaBlockRow W * (T v * (sigmaBlockRow W)ᴴ)) ⟨k, x⟩ ⟨l, y⟩ =
+        ∑ a : Fin d, star (W k a x) * (∑ b : Fin d, T v a b * W l b y) := by
+    rw [sigmaBlockRow_conjTranspose]
+    rfl
+  rw [hleft]
+  have hinter_entry (a : Fin d) :
+      (∑ b : Fin d, T v a b * W l b y) = (W l * B l v) a y :=
+    congrFun (congrFun (hinter l v) a) y
+  simp_rw [hinter_entry]
   change ((W k)ᴴ * (W l * B l v)) x y = _
   rw [← Matrix.mul_assoc]
   by_cases hkl : k = l
