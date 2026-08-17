@@ -22,7 +22,7 @@ rev = "f7090d72cce7dc3f08bcbd4dfb0347148e5bb923"
 [[require]]
 name = "mathlib"
 scope = "leanprover-community"
-rev = "v4.32.0"
+rev = "v4.34.0-rc1"
 
 [[lean_lib]]
 name = "TNLean"
