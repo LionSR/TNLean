@@ -2644,10 +2644,13 @@ $N=L$. They give no gap estimate for $N>L$ and no periodic coercivity.
             +\operatorname{Re}\langle h_i v,h_{i-q}v\rangle\bigr)
             =\operatorname{Re}\langle Q_qv,v\rangle.
     \end{align}
-    Then
+    Then, for every vector $v$,
     \begin{align}
         \sum_s A_s^2
         &=mH+\sum_{q=1}^{m-1}(m-q)Q_q,\label{eq:cyclic_knabe_window_square}\\
+        \sum_s\operatorname{Re}\langle A_sv,A_sv\rangle
+        &=m\operatorname{Re}\langle Hv,v\rangle
+        +\sum_{q=1}^{m-1}(m-q)C_q(v),\label{eq:cyclic_knabe_window_square_form}\\
         \sum_s\operatorname{Re}\langle A_s v,v\rangle
         &=m\operatorname{Re}\langle Hv,v\rangle.
     \end{align}
@@ -2678,6 +2681,7 @@ $N=L$. They give no gap estimate for $N>L$ and no periodic coercivity.
         ProjectionGeometry.re_inner_cyclicCrossTerms_nonneg,
         ProjectionGeometry.re_inner_sum_two_ge_sum_cyclicCrossTerms}
     \leanok
+    \uses{thm:cyclic_knabe_double_counting}
     For $Q_q$ as in Theorem~\ref{thm:cyclic_knabe_double_counting},
     \begin{align}
         \operatorname{Re}\langle Q_qv,v\rangle
@@ -2762,13 +2766,33 @@ $N=L$. They give no gap estimate for $N>L$ and no periodic coercivity.
         m\gamma\operatorname{Re}\langle Hv,v\rangle
         &\leq\sum_s\operatorname{Re}\langle A_sv,A_sv\rangle.
     \end{align}
-    Decompose $m-q=c+(R-1-q)$. For $q<R$, the anticommutator bound and
+    Decompose $m-q=c+(R-1-q)$ and expand
+    (\ref{eq:cyclic_knabe_window_square_form}): the weights $q\leq R-2$
+    carry the coefficient $c$ plus the positive part $R-1-q$, while for
+    $q\geq R$ the coefficient $R-1-q$ is nonpositive and the cross term is
+    nonnegative, so those summands are bounded by $c\,C_q(v)$. For the
+    positive parts, the anticommutator bound and the triangular identity
     \begin{align}
         2\sum_{q=1}^{R-1}(R-1-q)&=(R-1)(R-2)
     \end{align}
-    control the positive coefficients. For $q\geq R$, the coefficient
-    $R-1-q$ is nonpositive and the cross term is nonnegative. The cyclic
-    cross-term estimate therefore gives
+    combine with the decomposition
+    \begin{align}
+        m-c+(R-1)(R-2)&=(R-1)^2,
+        \qquad c=m-R+1,
+        \label{eq:cyclic_knabe_coefficient}
+    \end{align}
+    so that
+    \begin{align}
+        \sum_s\operatorname{Re}\langle A_sv,A_sv\rangle
+        &\leq\bigl(m+(R-1)(R-2)\bigr)\operatorname{Re}\langle Hv,v\rangle
+        +c\sum_{q=1}^{m-1}C_q(v)
+        \notag\\
+        &\leq\bigl(m+(R-1)(R-2)\bigr)\operatorname{Re}\langle Hv,v\rangle
+        +c\bigl(\operatorname{Re}\langle Hv,Hv\rangle
+        -\operatorname{Re}\langle Hv,v\rangle\bigr).
+        \notag
+    \end{align}
+    The cyclic cross-term estimate therefore gives
     \begin{align}
         \sum_s\operatorname{Re}\langle A_sv,A_sv\rangle
         &\leq c\operatorname{Re}\langle Hv,Hv\rangle

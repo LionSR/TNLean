@@ -56,8 +56,6 @@ open scoped InnerProductSpace
 namespace ProjectionGeometry
 
 
-
-
 section CyclicFamily
 
 variable {𝕜 E : Type*} [RCLike 𝕜] [NormedAddCommGroup E] [InnerProductSpace 𝕜 E]
