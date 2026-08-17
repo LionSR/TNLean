@@ -9340,6 +9340,53 @@ $\omega^{-1}$.
   interval.
 \end{proof}
 
+\begin{theorem}[Inverse propagation and inverse covariance]
+  \label{thm:qca_inverse_propagation}
+  \lean{SpinChain.disjoint_regionSumset_of_disjoint_regionSumset_neg,
+    SpinChain.PropagatesWithin.symm,
+    SpinChain.HasFinitePropagation.symm,
+    SpinChain.TranslationCovariant.symm}
+  \leanok
+  \uses{def:qca_region_sumset,def:qca_propagates_within,
+    def:qca_finite_propagation,def:qca_translation_covariant}
+  Let $d>0$, let $\omega$ be a star-algebra automorphism of $\mathcal A$, and
+  let $\mathcal N\subset\mathbb Z$ be finite.  If $\omega$ propagates within
+  $\mathcal N$, then $\omega^{-1}$ propagates within $-\mathcal N$.  Therefore
+  finite forward propagation of $\omega$ implies finite forward propagation of
+  $\omega^{-1}$.  Moreover, if $\omega$ is translation covariant, then so is
+  $\omega^{-1}$.
+
+  This is a consequence of the forward-only locality definition, not part of
+  that definition.  Schumacher--Werner obtain inverse locality through their
+  Lemma~5, Theorem~6, and Corollary~7.  The proof here uses exact outside
+  commutants instead.
+\end{theorem}
+
+\begin{proof}\leanok
+  \uses{thm:qca_quasi_local_supported_iff_commute_disjoint}
+  First observe that
+  \begin{align}
+    \Gamma\cap(\Lambda+(-\mathcal N))=\varnothing
+      &\implies (\Gamma+\mathcal N)\cap\Lambda=\varnothing.
+  \end{align}
+  Indeed, $g+n=\lambda$ would imply
+  $g=\lambda+(-n)\in\Lambda+(-\mathcal N)$.
+
+  Let $x\in\mathcal A_\Lambda$ and let
+  $y\in\mathcal A_\Gamma$, where
+  $\Gamma\cap(\Lambda+(-\mathcal N))=\varnothing$.  Forward locality gives
+  $\omega(y)\in\mathcal A_{\Gamma+\mathcal N}$.  The regions
+  $\Gamma+\mathcal N$ and $\Lambda$ are disjoint, so $x$ commutes with
+  $\omega(y)$.  Applying $\omega^{-1}$ shows that $\omega^{-1}(x)$ commutes
+  with $y$.  The exact outside-commutant characterization now gives
+  \begin{align}
+    \omega^{-1}(x)&\in\mathcal A_{\Lambda+(-\mathcal N)}.
+  \end{align}
+  Choosing the reflected finite neighborhood proves the existential statement.
+  Finally, an inverse commutes with every translation whenever the original
+  automorphism does.
+\end{proof}
+
 \begin{definition}[One-dimensional quantum cellular automaton]
   \label{def:qca}
   \lean{SpinChain.IsQCA}
@@ -9418,4 +9465,20 @@ $\omega^{-1}$.
   propagation neighborhoods for $\omega$ and $\eta$, respectively, then
   $\mathcal N+\mathcal M$ is a forward propagation neighborhood for
   $\eta\circ\omega$.  Hence the composite is a quantum cellular automaton.
+\end{proof}
+
+\begin{theorem}[Inverse quantum cellular automaton]
+  \label{thm:qca_inverse}
+  \lean{SpinChain.IsQCA.symm}
+  \leanok
+  \uses{def:qca}
+  Let $d>0$.  If $\omega$ is a quantum cellular automaton on $\mathcal A$, then
+  $\omega^{-1}$ is also a quantum cellular automaton.
+\end{theorem}
+
+\begin{proof}\leanok
+  \uses{thm:qca_iff_mk_projections,thm:qca_inverse_propagation}
+  Translation covariance and finite forward propagation are both preserved by
+  inversion.  These are the two defining properties of a quantum cellular
+  automaton.
 \end{proof}
