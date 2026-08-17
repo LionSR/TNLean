@@ -38,6 +38,7 @@ linear map between matrix algebras.
 * `Matrix.traceBilinForm_nondegenerate` — nondegeneracy of the bilinear trace pairing
 * `Matrix.exists_identity_traceless_basis` — an identity-plus-traceless basis
 * `Matrix.trace_traceAdjointMap_mul` — the adjoint satisfies `tr(E*(ρ) X) = tr(ρ E(X))`
+* `Matrix.traceAdjointMap_apply_apply` — the entries of the adjoint against matrix units
 * `Matrix.traceAdjointMap_traceAdjointMap` — the trace-pairing adjoint is involutive
 * `Matrix.traceAdjointMap_comp` — the trace-pairing adjoint reverses composition
 -/
@@ -250,6 +251,16 @@ theorem trace_traceAdjointMap_mul {n m : Type*} [Fintype n] [Fintype m]
       simp [Matrix.single, smul_eq_mul]
     rw [hsingle, map_smul, Matrix.mul_smul, Matrix.trace_smul]
     simp [traceAdjointMap, Matrix.trace_mul_single, MulOpposite.op_one, one_smul]
+
+/-- Entries of the trace-pairing adjoint: E*(ρ)ᵢⱼ = tr(ρ E(Eⱼᵢ)) with Eⱼᵢ the
+matrix unit. -/
+theorem traceAdjointMap_apply_apply {n m : Type*} [Fintype n] [Fintype m]
+    [DecidableEq n] (E : Matrix n n ℂ →ₗ[ℂ] Matrix m m ℂ)
+    (ρ : Matrix m m ℂ) (i j : n) :
+    traceAdjointMap E ρ i j = Matrix.trace (ρ * E (Matrix.single j i 1)) := by
+  have hsingle := Matrix.trace_mul_single (traceAdjointMap E ρ) j i (1 : ℂ)
+  rw [trace_traceAdjointMap_mul] at hsingle
+  simpa using hsingle.symm
 
 /-- The trace-pairing adjoint is involutive.
 

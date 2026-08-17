@@ -90,6 +90,7 @@ import TNLean.Channel.SchmidtNumberCompact
 import TNLean.Channel.SchmidtNumberFactors
 import TNLean.Channel.SchmidtRank
 import TNLean.Channel.Schwarz
+import TNLean.Channel.SelfDual
 import TNLean.Channel.Semigroup
 import TNLean.Channel.Separable
 import TNLean.Channel.SingleKraus
