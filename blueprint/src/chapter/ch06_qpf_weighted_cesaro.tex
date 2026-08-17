@@ -104,25 +104,24 @@
     \leanok
     \uses{def:peripheral_spectral_projections, def:weighted_cesaro_mean}
     Let $T:\MN{D}\to\MN{D}$ be positive and trace-preserving, with $D>0$, and
-    let $\lambda_{1},\lambda_{2},\dots$ denote its eigenvalues. Then
+    let $\lambda_{1},\dots,\lambda_{m}$ denote the distinct eigenvalues of
+    $T$ of modulus one. Then
     \begin{align}
         T_\varphi
          & =\lim_{N\to\infty}\frac{1}{N}\sum_{n=1}^{N}
-        \sum_{k:\lvert\lambda_{k}\rvert=1}(\bar\lambda_{k}T)^{n},
+        \sum_{k=1}^{m}(\bar\lambda_{k}T)^{n},
         \label{eq:peripheral_projection_weighted_cesaro}
     \end{align}
     both pointwise and in operator norm. This is
     \cite[Equation~(6.15)]{Wolf2012Quantum}.
-
-    \textbf{Local fix (deduplicated phases):} the inner sum runs over the
-    distinct peripheral eigenvalues, each phase counted once. Indexed by the
-    Jordan blocks of \cite[Equations~(6.4)--(6.5)]{Wolf2012Quantum}, where
-    several blocks may share an eigenvalue, the summand
-    $(\bar\lambda_{k}T)^{n}$ would repeat each phase according to its
-    geometric multiplicity, and for the identity channel the right-hand side
-    would converge to $D^{2}$ times the identity rather than $T_\varphi$. The
-    comparison is recorded in
-    \path{docs/paper-gaps/wolf_ch6_eq615_deduplicated_phases.tex}.
+    % Local fix (distinct phases): Wolf's Equation (6.15) indexes the inner
+    % sum by the Jordan blocks of Equations (6.4)-(6.5), where several blocks
+    % may share an eigenvalue; on that reading the summand (bar lambda_k T)^n
+    % repeats each phase according to its geometric multiplicity, and for the
+    % identity channel the right-hand side would converge to D^2 times the
+    % identity rather than T_phi. The formalization averages over the distinct
+    % peripheral eigenvalues, as stated. The comparison is recorded in
+    % docs/paper-gaps/wolf_ch6_eq615_deduplicated_phases.tex.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -135,7 +134,8 @@
     Split $X=T_\varphi(X)+(X-T_\varphi(X))$ along the complementary spectral
     subspaces. Bounded forward orbits force every eigenvalue to have modulus
     at most one, so every eigenvalue outside the peripheral spectrum has
-    modulus strictly below one and $T^{n}$ vanishes on the non-peripheral
+    modulus strictly below one and $T^{n}(Y)\to0$ for every $Y$ in the
+    non-peripheral
     subspace; part (ii) of
     Lemma~\ref{lem:weighted_cesaro_mean_on_splitting} sends the second
     summand to zero. Triviality of the peripheral Jordan blocks identifies
