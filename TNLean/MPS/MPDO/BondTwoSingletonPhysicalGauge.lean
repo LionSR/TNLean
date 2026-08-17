@@ -461,25 +461,4 @@ theorem gaugeDeformedBaseMPO_toMPSTensor_isCPSVCanonicalForm :
     gaugeDeformedSymbolBlocks
     (fun a ↦ gaugeDeformedSymbolTensor_isNormalTensor a)).isCPSVCanonicalForm
 
-/-- The concrete deformation satisfies the tensor-attached algebra clause and
-literal horizontal canonical-form premises of CPSV16, Theorem 4.14(ii), but is
-not an MPDO.
-
-The failure occurs already at length two.  Accordingly this theorem is not a
-full-contract counterexample and does not construct an
-`IdentityMarkedRealization`; it isolates all-length MPDO positivity as the
-failed standing hypothesis in this family.  Source: CPSV16, Appendix C.4,
-lines 2048--2057, and Theorem 4.14(ii). -/
-@[deprecated "Use `gaugeDeformedBaseMPOBNTAlgebraTensorClause`,
-  `gaugeDeformedBaseMPO_toMPSTensor_isCPSVCanonicalForm`, and
-  `gaugeDeformedBaseMPO_gauge_not_isMPDO` directly." (since := "2026-08-16")]
-theorem gaugeDeformedBaseMPO_algebraClause_canonicalForm_not_isMPDO :
-    Nonempty (BNTAlgebraTensorClause (gaugeDeformedBaseMPO gauge)) ∧
-      MPSTensor.IsCPSVCanonicalForm
-        (gaugeDeformedBaseMPO gauge).toMPSTensor ∧
-      ¬ IsMPDO (gaugeDeformedBaseMPO gauge) :=
-  ⟨⟨gaugeDeformedBaseMPOBNTAlgebraTensorClause⟩,
-    gaugeDeformedBaseMPO_toMPSTensor_isCPSVCanonicalForm,
-    gaugeDeformedBaseMPO_gauge_not_isMPDO⟩
-
 end MPOTensor.BondTwoSingletonBaseModel
