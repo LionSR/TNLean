@@ -37,7 +37,10 @@ def unitsPhase : Units ℂ →* Circle where
     simp
   map_mul' z w := by
     apply Circle.ext
-    simp [div_mul_div_comm]
+    change (z : ℂ) * (w : ℂ) / ‖(z : ℂ) * (w : ℂ)‖ =
+      ((z : ℂ) / ‖(z : ℂ)‖) * ((w : ℂ) / ‖(w : ℂ)‖)
+    rw [norm_mul, div_mul_div_comm]
+    norm_cast
 
 /-- The unit-modulus part of a specified nonzero complex number. -/
 def phase (c : ℂ) (hc : c ≠ 0) : Circle :=
@@ -52,7 +55,8 @@ theorem phase_smul_posSemidef
   have hscaled : ((‖c‖⁻¹ : ℝ) • (c • M)).PosSemidef :=
     h.smul (inv_nonneg.mpr habs_pos.le)
   have hphase : ((phase c hc : Circle) : ℂ) = (‖c‖⁻¹ : ℝ) • c := by
-    simp [phase, unitsPhase, Complex.real_smul, div_eq_mul_inv, mul_comm]
+    change c / ‖c‖ = (‖c‖⁻¹ : ℝ) • c
+    simp [Complex.real_smul, div_eq_mul_inv, mul_comm]
   rw [hphase, IsScalarTower.smul_assoc]
   exact hscaled
 
@@ -70,7 +74,7 @@ theorem eq_of_smul_posSemidef
     hM hu hv (Circle.coe_ne_zero u) (Circle.coe_ne_zero v)
   have ht_one : t = 1 := by
     have hnorm := congrArg norm huv
-    simpa [norm_mul, abs_of_pos ht] using hnorm.symm
+    simpa [norm_mul, abs_of_pos ht, Circle.norm_coe] using hnorm.symm
   apply Circle.ext
   simpa [ht_one] using huv
 

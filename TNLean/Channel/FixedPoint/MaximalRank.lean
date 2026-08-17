@@ -154,9 +154,9 @@ theorem maximalSupport_of_maximalRank
       rw [hσdef, map_smul, hρ₀_fix]
     have hσ_rank : σ.rank = ρ₀.rank := by
       rw [hσdef, Matrix.smul_eq_diagonal_mul]
-      refine Matrix.rank_mul_eq_right_of_isUnit_det _ _ ?_
+      refine Matrix.rank_mul_eq_right_of_det_ne_zero _ _ ?_
       rw [Matrix.det_diagonal, Finset.prod_const]
-      exact (isUnit_iff_ne_zero.mpr (Complex.ofReal_ne_zero.mpr hc_re_ne)).pow _
+      exact pow_ne_zero _ (Complex.ofReal_ne_zero.mpr hc_re_ne)
     -- The two ranks agree.
     have h1 : ρ₀.rank ≤ ρ.rank := hσ_rank ▸ hρ_max σ hσ_psd hσ_tr hσ_fix
     have hQ₀ρQ₀ : Q₀ * ρ * Q₀ = ρ := hmax ρ hρ_fix

@@ -65,8 +65,7 @@ private theorem incidentComplementPiEquiv_symm_apply_of
       (fun f : {f : {f : Edge G // f ≠ e} // IsIncidentTo (G := G) e j f} =>
         Fin (A.bondDim f.1.1))
       (middleIncidentComplementEquiv (G := G) e hj)) η ⟨f, hinc⟩ = η ⟨f.1, hinc⟩
-  rw [Equiv.piCongrLeft_apply]
-  simp [middleIncidentComplementEquiv]
+  rfl
 
 /-- The star-bond split equivalence at a middle vertex `j`. -/
 noncomputable def edgeComplementConfigSplitAt (A : Tensor G d) (e : Edge G) {j : V}

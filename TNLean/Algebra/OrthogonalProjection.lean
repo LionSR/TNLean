@@ -130,8 +130,16 @@ theorem IsOrthogonalProjection.exists_range_isometry
       · intro h
         subst k
         rfl
-    simpa [V, Matrix.mul_apply, Matrix.conjTranspose_apply, Matrix.one_apply, heq]
-      using hentry
+    change (∑ i : Fin D, starRingEnd ℂ (Umat i ↑(eS.symm j)) *
+      Umat i ↑(eS.symm k)) =
+        if (eS.symm j).1 = (eS.symm k).1 then 1 else 0 at hentry
+    change (∑ i : Fin D, starRingEnd ℂ (Umat i ↑(eS.symm j)) *
+      Umat i ↑(eS.symm k)) = if j = k then 1 else 0
+    by_cases hjk : j = k
+    · subst k
+      simpa using hentry
+    · have hval : (eS.symm j).1 ≠ (eS.symm k).1 := fun h ↦ hjk (heq.mp h)
+      simpa [hjk, hval] using hentry
   · have hPdecomp : P = Umat * Matrix.diagonal f * Umatᴴ := by
       calc
         P = (Umat * Umatᴴ) * P * (Umat * Umatᴴ) := by rw [hUU]; simp

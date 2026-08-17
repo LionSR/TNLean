@@ -88,9 +88,8 @@ theorem isUnit_restrict_maxGenEigenspace_of_ne_zero
     rw [Module.algebraMap_end_eq_smul_id, LinearMap.smul_apply, LinearMap.id_apply]
   have ha_restrict_eq : a.restrict ha_maps = algebraMap K (End K ↥W) μ := by
     ext ⟨v, hv⟩
-    simp only [ha_apply, LinearMap.coe_restrict_apply,
-      Module.algebraMap_end_eq_smul_id, LinearMap.smul_apply, LinearMap.id_apply,
-      SetLike.val_smul]
+    change a v = μ • v
+    exact ha_apply v
   have ha_unit : IsUnit (a.restrict ha_maps) := by
     rw [ha_restrict_eq]; exact (Ne.isUnit hμ).map (algebraMap K (End K ↥W))
   have hcomm : Commute (N.restrict hN_maps) (a.restrict ha_maps) := by

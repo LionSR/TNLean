@@ -232,14 +232,32 @@ private lemma spectral_sourceA_solution {A B : Matrix n n ℂ}
   let X : Matrix n n ℂ := UA * Y * star UB
   have hα (i : n) : 0 < α i := hA.eigenvalues_pos i
   have hβ (j : n) : 0 < β j := hB.eigenvalues_pos j
-  have hcore : Dα * Y + t • (Y * Dβ) = Dα * W := by
+  have hDαY : Dα * Y = fun i j => (α i : ℂ) * Y i j := by
     ext i j
-    simp only [Dα, Dβ, Y, Matrix.diagonal_mul, Matrix.mul_diagonal,
-      Matrix.add_apply, Matrix.smul_apply, Complex.real_smul]
+    simp only [Dα, Matrix.diagonal_mul]
+  have hYDβ : Y * Dβ = fun i j => Y i j * (β j : ℂ) := by
+    ext i j
+    simp only [Dβ, Matrix.mul_diagonal]
+  have hDαW : Dα * W = fun i j => (α i : ℂ) * W i j := by
+    ext i j
+    simp only [Dα, Matrix.diagonal_mul]
+  have hcore : Dα * Y + t • (Y * Dβ) = Dα * W := by
+    rw [hDαY, hYDβ, hDαW]
+    ext i j
+    simp only [Y]
     have hden : (α i : ℂ) + t * β j ≠ 0 := by
       exact_mod_cast
         (ne_of_gt (add_pos (hα i) (mul_pos ht (hβ j))))
-    field_simp
+    change (α i : ℂ) * ((α i : ℂ) / ((α i : ℂ) + t * β j) * W i j) +
+      t * (((α i : ℂ) / ((α i : ℂ) + t * β j) * W i j) * β j) =
+        (α i : ℂ) * W i j
+    rw [div_eq_mul_inv]
+    calc
+      (α i : ℂ) * (((α i : ℂ) * ((α i : ℂ) + t * β j)⁻¹) * W i j) +
+          t * ((((α i : ℂ) * ((α i : ℂ) + t * β j)⁻¹) * W i j) * β j) =
+          (α i : ℂ) * W i j *
+            (((α i : ℂ) + t * β j) * ((α i : ℂ) + t * β j)⁻¹) := by ring
+      _ = (α i : ℂ) * W i j := by rw [mul_inv_cancel₀ hden, mul_one]
   have hAform : A = UA * Dα * star UA := by
     simpa only [UA, Dα, α] using hA.isHermitian.spectral_form
   have hBform : B = UB * Dβ * star UB := by
@@ -321,10 +339,20 @@ private lemma spectral_sourceA_pairing {A B : Matrix n n ℂ}
   have hDY : Dα * Y = fun i j => (α i : ℂ) * Y i j := by
     ext i j
     simp only [Dα, Matrix.diagonal_mul]
-  rw [hDY]
-  simp only [Matrix.trace, Matrix.diag_apply, Matrix.mul_apply, Y,
-    Matrix.star_apply, Complex.star_def,
-    Complex.re_sum]
+  have hMul : (Dα * Y) * star W =
+      fun i k => ∑ j, ((α i : ℂ) * Y i j) * star (W k j) := by
+    ext i k
+    rw [Matrix.mul_apply]
+    apply Finset.sum_congr rfl
+    intro j _
+    rw [hDY, Matrix.star_apply]
+  rw [hMul]
+  have hTrace : Matrix.trace
+      (fun i k => ∑ j, ((α i : ℂ) * Y i j) * star (W k j) : Matrix n n ℂ) =
+      ∑ i, ∑ j, ((α i : ℂ) * Y i j) * star (W i j) := by
+    rfl
+  rw [hTrace]
+  simp only [Y, Complex.re_sum]
   apply Finset.sum_congr rfl
   intro i _
   apply Finset.sum_congr rfl
@@ -374,13 +402,25 @@ private lemma spectral_sourceB_solution {A B : Matrix n n ℂ}
   let X : Matrix n n ℂ := UA * Y * star UB
   have hα (i : n) : 0 < α i := hA.eigenvalues_pos i
   have hβ (j : n) : 0 < β j := hB.eigenvalues_pos j
-  have hcore : Dα * Y + t • (Y * Dβ) = W * Dβ := by
+  have hDαY : Dα * Y = fun i j => (α i : ℂ) * Y i j := by
     ext i j
-    simp only [Dα, Dβ, Y, Matrix.diagonal_mul, Matrix.mul_diagonal,
-      Matrix.add_apply, Matrix.smul_apply, Complex.real_smul]
+    simp only [Dα, Matrix.diagonal_mul]
+  have hYDβ : Y * Dβ = fun i j => Y i j * (β j : ℂ) := by
+    ext i j
+    simp only [Dβ, Matrix.mul_diagonal]
+  have hWDβ : W * Dβ = fun i j => W i j * (β j : ℂ) := by
+    ext i j
+    simp only [Dβ, Matrix.mul_diagonal]
+  have hcore : Dα * Y + t • (Y * Dβ) = W * Dβ := by
+    rw [hDαY, hYDβ, hWDβ]
+    ext i j
+    simp only [Y]
     have hden : (α i : ℂ) + t * β j ≠ 0 := by
       exact_mod_cast
         (ne_of_gt (add_pos (hα i) (mul_pos ht (hβ j))))
+    change (α i : ℂ) * ((β j : ℂ) / ((α i : ℂ) + t * β j) * W i j) +
+      t * (((β j : ℂ) / ((α i : ℂ) + t * β j) * W i j) * β j) =
+        W i j * β j
     rw [div_eq_mul_inv]
     calc
       (α i : ℂ) * (((β j : ℂ) * ((α i : ℂ) + t * β j)⁻¹) * W i j) +
@@ -466,14 +506,23 @@ private lemma spectral_sourceB_pairing {A B : Matrix n n ℂ}
   simp only [Matrix.mul_assoc]
   rw [hUB, Matrix.mul_one]
   rw [← Matrix.mul_assoc (star UB) UA Y, ← hstarW]
-  have hD : Dβ * (star W * Y) =
-      fun i j => (β i : ℂ) * (star W * Y) i j := by
+  have hStarWY : star W * Y =
+      (fun i j => ∑ x, star (W x i) * Y x j : Matrix n n ℂ) := by
     ext i j
-    simp only [Dβ, Matrix.diagonal_mul]
+    exact Matrix.mul_apply
+  have hD : Dβ * (star W * Y) =
+      fun i j => (β i : ℂ) * ∑ x, star (W x i) * Y x j := by
+    ext i j
+    rw [show (Dβ * (star W * Y)) i j = (β i : ℂ) * (star W * Y) i j by
+      exact Matrix.diagonal_mul _ _ _ _]
+    rw [hStarWY]
   rw [hD]
-  simp only [Matrix.trace, Matrix.diag_apply, Matrix.mul_apply, Y, W,
-    Matrix.star_apply, Complex.star_def,
-    Complex.re_sum]
+  have hTrace : Matrix.trace
+      (fun i j => (β i : ℂ) * ∑ x, star (W x i) * Y x j : Matrix n n ℂ) =
+      ∑ j, (β j : ℂ) * ∑ x, star (W x j) * Y x j := by
+    rfl
+  rw [hTrace]
+  simp only [Y, Complex.re_sum]
   rw [Finset.sum_comm]
   apply Finset.sum_congr rfl
   intro j _

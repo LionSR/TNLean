@@ -117,7 +117,12 @@ private theorem exists_nontrivial_row_relation
   let E : Matrix S X ℝ := fun x z ↦ if x.1 = z then 1 else 0
   have hA : A = E * P := by
     ext x y
-    simp [A, E, Matrix.mul_apply]
+    change P x.1 y = ∑ z, (if x.1 = z then 1 else 0) * P z y
+    rw [Finset.sum_eq_single x.1]
+    · simp
+    · intro z _ hz
+      simp [Ne.symm hz]
+    · simp
   have hnot : ¬LinearIndependent ℝ (fun x : S ↦ P.row x.1) := by
     intro hlin
     have hrankA : A.rank ≤ P.rank := by

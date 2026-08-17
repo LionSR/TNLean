@@ -157,8 +157,11 @@ theorem choi_projected_posSemidef_implies_ccp
       congr 1
       ext p
       rcases p with ⟨i, j⟩
-      simp [κ, c, Matrix.conjTranspose_apply, div_eq_mul_inv]
+      simp only [κ, c, div_eq_mul_inv]
       field_simp [hsqrtD]
+      change star (((Real.sqrt D : ℝ) : ℂ) * a (i, j)) =
+        ((Real.sqrt D : ℝ) : ℂ) * star (a (i, j))
+      simp
     have hτΩ : τ * Ω = Matrix.vecMulVec u ω := by
       dsimp [Ω]
       rw [Matrix.omegaProj, Matrix.mul_vecMulVec]

@@ -84,8 +84,9 @@ omit [DecidableRel G.Adj] in
 theorem prod_incVertex_endpoint (s : Edge G → ℂˣ) (e : Edge G) :
     (∏ x : incVertex (G := G) e, (if e.1.1 = x.1 then s e else (s e)⁻¹)) = 1 := by
   have hne : (e.1.1 : V) ≠ e.1.2 := ne_of_lt e.2.1
-  have huniv : (Finset.univ : Finset (incVertex (G := G) e)) =
-        {⟨e.1.1, Or.inl rfl⟩, ⟨e.1.2, Or.inr rfl⟩} := by
+  let x₁ : incVertex (G := G) e := ⟨e.1.1, Or.inl rfl⟩
+  let x₂ : incVertex (G := G) e := ⟨e.1.2, Or.inr rfl⟩
+  have huniv : (Finset.univ : Finset (incVertex (G := G) e)) = {x₁, x₂} := by
     ext x
     simp only [Finset.mem_univ, Finset.mem_insert, Finset.mem_singleton, true_iff]
     rcases x.2 with h | h

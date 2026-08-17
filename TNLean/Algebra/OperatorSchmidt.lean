@@ -90,9 +90,14 @@ arXiv:1903.05373, definition preceding Theorem 1. -/
 theorem range_operatorSchmidtMap_eq_operatorBlockSpan
     (ρ : Matrix (m × n) (m × n) R) :
     LinearMap.range (operatorSchmidtMap ρ) = operatorBlockSpan ρ := by
-  rw [operatorSchmidtMap, LinearMap.range_comp, LinearEquiv.range, Submodule.map_top]
-  rw [Fintype.range_linearCombination]
-  rw [operatorBlockSpan]
+  calc
+    LinearMap.range (operatorSchmidtMap ρ) =
+        LinearMap.range (Fintype.linearCombination R fun ij : m × m ↦
+          operatorBlock ρ ij.1 ij.2) := by
+      exact LinearMap.range_comp_of_range_eq_top _
+        (LinearEquiv.range (LinearEquiv.curry R R m m).symm)
+    _ = operatorBlockSpan ρ := by
+      rw [Fintype.range_linearCombination, operatorBlockSpan]
 
 end Semiring
 

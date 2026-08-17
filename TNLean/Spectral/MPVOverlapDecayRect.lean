@@ -94,7 +94,7 @@ theorem mpvOverlap_tendsto_zero_of_mixedTransferSpectralRadius_lt_one
     -- `Φ` preserves powers; `((Φ M : V →L[ℂ] V) : V →ₗ[ℂ] V) = M` by definition.
     have hpow : (F' ^ n) =
         Φ ((mixedTransferMap₂ (d := d) (D₁ := D₁) (D₂ := D₂) A B) ^ n) := by
-      simp [F', Φ]
+      exact (map_pow Φ (mixedTransferMap₂ A B) n).symm
     -- Pass to underlying linear maps.
     have hlin :
         ((F' ^ n : V →L[ℂ] V) : V →ₗ[ℂ] V) =

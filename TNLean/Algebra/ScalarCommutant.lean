@@ -87,7 +87,9 @@ lemma exists_eq_kronecker_one_of_intertwines_span_eq_top
   have hZ (a : m₁) (b : m₂) (i : ι) : Z a b * A i = A i * Z a b := by
     ext x y
     have h := congrFun (congrFun (hC i) (a, x)) (b, y)
-    simpa [Z, Matrix.mul_apply, Matrix.one_apply, Fintype.sum_prod_type] using h.symm
+    change (∑ z, Z a b x z * A i z y) = ∑ z, A i x z * Z a b z y
+    simpa [Z, Matrix.mul_apply, Matrix.kroneckerMap_apply, Matrix.one_apply,
+      Fintype.sum_prod_type] using h.symm
   have hscalar (a : m₁) (b : m₂) : ∃ c : R, Z a b = Matrix.scalar d c := by
     apply Matrix.isScalar_of_commute_span_eq_top (Z a b) hA
     rintro M ⟨i, rfl⟩
@@ -96,6 +98,7 @@ lemma exists_eq_kronecker_one_of_intertwines_span_eq_top
   refine ⟨F, ?_⟩
   ext ⟨a, x⟩ ⟨b, y⟩
   have h := congrFun (congrFun (Classical.choose_spec (hscalar a b)) x) y
+  change C (a, x) (b, y) = F a b * (1 : Matrix d d R) x y
   simpa [Z, F, Matrix.scalar_apply, Matrix.diagonal_apply, Matrix.one_apply] using h
 
 /-! ## Block-diagonal commutants -/
@@ -163,8 +166,13 @@ theorem isBlockDiagonal'_iff_offBlock_zero {R : Type*} [Zero R]
     rcases y with ⟨j, b⟩
     by_cases hij : i = j
     · subst j
-      rw [Matrix.blockDiagonal'_apply_eq]
-    · rw [Matrix.blockDiagonal'_apply_ne _ a b hij, hzero hij a b]
+      exact (Matrix.blockDiagonal'_apply_eq
+        (fun i a b => X ⟨i, a⟩ ⟨i, b⟩) i a b).symm
+    · calc
+        X ⟨i, a⟩ ⟨j, b⟩ = 0 := hzero hij a b
+        _ = Matrix.blockDiagonal' (fun i a b => X ⟨i, a⟩ ⟨i, b⟩)
+            ⟨i, a⟩ ⟨j, b⟩ :=
+          (Matrix.blockDiagonal'_apply_ne _ a b hij).symm
 
 section Semiring
 

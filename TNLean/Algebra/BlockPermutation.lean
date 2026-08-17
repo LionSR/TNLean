@@ -209,7 +209,8 @@ theorem exists_blockEquiv_of_ringEquiv_pi_simple
     simp
   refine ⟨Equiv.ofBijective σfun ⟨hσfun_inj, hσfun_surj⟩, ?_⟩
   intro i
-  simpa using hσfun i
+  change T.mapTwoSidedIdeal (blockIdeal R i) = blockIdeal S (σfun i)
+  exact hσfun i
 
 /-- A ring automorphism of `∀ i, R i` (product of simple rings) permutes the block ideals,
 yielding a permutation `σ : ι ≃ ι`. -/

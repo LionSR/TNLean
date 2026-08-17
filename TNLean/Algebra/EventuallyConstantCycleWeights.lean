@@ -216,7 +216,8 @@ private theorem positiveCycle_card_eq_cycleWeightSum {w : V → V → ℕ}
     Fintype.card (PositiveCycle w hN) = cycleWeightSum w hN := by
   classical
   unfold PositiveCycle
-  rw [Fintype.card_subtype]
+  rw [@Fintype.card_subtype _ _ (fun x : Fin N → V ↦ cycleWeight w hN x ≠ 0)
+    (instFintypePositiveCycle w hN) _]
   unfold cycleWeightSum
   rw [← Finset.sum_filter_ne_zero]
   rw [Finset.card_eq_sum_ones]

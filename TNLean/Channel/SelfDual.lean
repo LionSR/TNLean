@@ -231,8 +231,10 @@ theorem exists_hermitian_kraus_of_self_dual {r : ℕ}
     fun b b' => if b then (if b' then -Complex.I else Complex.I) else 1 with hW
   have hWunit : Wᴴ * W = (2 : ℂ) • (1 : Matrix Bool Bool ℂ) := by
     ext b b'
+    change (∑ x : Bool, star (W x b) * W x b') =
+      (2 : ℂ) * (if b = b' then 1 else 0)
     cases b <;> cases b' <;>
-      simp [hW, Matrix.mul_apply, Matrix.conjTranspose_apply, Complex.I_mul_I] <;>
+      simp [hW, Complex.I_mul_I] <;>
       norm_num
   set U : Matrix (Fin r × Bool) (Fin r × Bool) ℂ :=
     (1 : Matrix (Fin r) (Fin r) ℂ) ⊗ₖ (c • W) with hU

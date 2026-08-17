@@ -781,8 +781,9 @@ theorem exists_bondGauge_of_fullContraction
     (a := fun μ p => A₁ p.1 μ p.2)
     (b := fun ν p => B₁ p.1 ν p.2) (g := g) (g' := g') hA₁c hg1 hg1'
   refine ⟨g, g', ?_, ?_, ?_⟩
-  · ext μ κ
-    rw [Matrix.mul_apply, Matrix.one_apply]
+  · apply Matrix.ext
+    intro μ κ
+    change (∑ ν, g μ ν * g' ν κ) = if μ = κ then 1 else 0
     exact hinv μ κ
   · intro η₁ μ σ₁
     have := hg1 μ (η₁, σ₁)

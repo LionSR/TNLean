@@ -84,8 +84,10 @@ omit [Fintype V] in
     (r : (f : {f : Edge G // ¬ IsIncidentEdge (G := G) j f}) → Fin (A.bondDim f.1))
     (ie : IncidentEdge G j) :
     (vertexConfigSplitAt (G := G) A j).symm (η, r) ie.1 = η ie := by
-  unfold vertexConfigSplitAt virtualConfigSplit IsIncidentEdge
-  rw [Equiv.piEquivPiSubtypeProd_symm_apply, dif_pos ie.2]
+  change (if h : IsIncidentEdge (G := G) j ie.1 then η ⟨ie.1, h⟩ else r ⟨ie.1, h⟩) = η ie
+  split
+  · rfl
+  · exact (‹¬ IsIncidentEdge (G := G) j ie.1› (isIncidentEdge_of_incident (G := G) j ie)).elim
 
 /-- Reindex every virtual bond along equality of the bond-dimension families. -/
 noncomputable def virtualConfigCongr (A B : Tensor G d) (h : A.bondDim = B.bondDim) :

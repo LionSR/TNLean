@@ -182,16 +182,16 @@ theorem kraus_rectangular_freedom
   refine ⟨fun α j => (U : Matrix (Fin r₁) (Fin r₁) ℂ) α (Fin.castLE hCard j), ?_, ?_⟩
   · -- V†V = 1
     ext j k
-    simp only [Matrix.mul_apply, Matrix.conjTranspose_apply, Matrix.one_apply]
-    have h_uu := congr_fun (congr_fun hU_unitary (Fin.castLE hCard j)) (Fin.castLE hCard k)
-    simp only [Matrix.mul_apply, Matrix.conjTranspose_apply, Matrix.one_apply] at h_uu
-    rw [h_uu]; simp [(Fin.castLE_injective hCard).eq_iff]
+    change ((U : Matrix (Fin r₁) (Fin r₁) ℂ)ᴴ * (U : Matrix (Fin r₁) (Fin r₁) ℂ))
+      (Fin.castLE hCard j) (Fin.castLE hCard k) = (1 : Matrix (Fin r₂) (Fin r₂) ℂ) j k
+    rw [hU_unitary]
+    simp only [Matrix.one_apply, (Fin.castLE_injective hCard).eq_iff]
   · -- B α = ∑ j, V(α,j) • A j
     intro α; ext a b
     have h_entry : (B α) a b =
         ∑ β : Fin r₁, (U : Matrix (Fin r₁) (Fin r₁) ℂ) α β * (A' β) a b := by
-      have := congr_fun (congr_fun hU_mat_eq α) (a, b)
-      simpa [Matrix.mul_apply, MB, MA'] using this.symm
+      change (B α) a b = ((U : Matrix (Fin r₁) (Fin r₁) ℂ) * MA') α (a, b)
+      exact (congr_fun (congr_fun hU_mat_eq α) (a, b)).symm
     rw [h_entry]; simp only [Matrix.sum_apply, Matrix.smul_apply, smul_eq_mul]
     rw [Fin.sum_castLE_extend_zero
       (fun j => (U : Matrix (Fin r₁) (Fin r₁) ℂ) α (Fin.castLE hCard j) *
@@ -232,14 +232,15 @@ theorem kraus_rectangular_freedom'
   refine ⟨fun α j => V' (e₁ α) (e₂ j), ?_, ?_⟩
   · -- V†V = 1
     ext j k
-    simp only [Matrix.mul_apply, Matrix.conjTranspose_apply, Matrix.one_apply]
+    change (∑ x : ι₁, star (V' (e₁ x) (e₂ j)) * V' (e₁ x) (e₂ k)) =
+      if j = k then 1 else 0
     rw [show ∑ x : ι₁, star (V' (e₁ x) (e₂ j)) * V' (e₁ x) (e₂ k) =
         ∑ β, star (V' β (e₂ j)) * V' β (e₂ k) from
       e₁.sum_comp (fun β => star (V' β (e₂ j)) * V' β (e₂ k))]
     have h_entry := congr_fun (congr_fun hV'_iso (e₂ j)) (e₂ k)
-    simp only [Matrix.mul_apply, Matrix.conjTranspose_apply, Matrix.one_apply,
-      e₂.injective.eq_iff] at h_entry
-    exact h_entry
+    change (∑ β, star (V' β (e₂ j)) * V' β (e₂ k)) =
+      if e₂ j = e₂ k then 1 else 0 at h_entry
+    simpa only [e₂.injective.eq_iff] using h_entry
   · -- B α = ∑ j, V(α,j) • A j
     intro α
     have := hV'_decomp (e₁ α)

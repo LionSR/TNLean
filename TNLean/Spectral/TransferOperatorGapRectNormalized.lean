@@ -222,7 +222,7 @@ theorem mixedTransferMap₂_pow_tendsto_zero_of_spectralRadius_lt_one
     intro n
     have hPow :
         (F ^ n : V →L[ℂ] V) = Φ ((mixedTransferMap₂ A B) ^ n) := by
-      simp [V, Φ, F, map_pow]
+      exact (map_pow Φ (mixedTransferMap₂ A B) n).symm
     rw [hPow]
     rfl
   exact hEval.congr hApply
