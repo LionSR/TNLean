@@ -11,6 +11,7 @@ import TNLean.Analysis.OperatorNormConvergence
 import Mathlib.Data.Nat.Choose.Bounds
 import Mathlib.Data.Nat.Choose.Sum
 import Mathlib.Analysis.SpecificLimits.Normed
+import Mathlib.Analysis.Matrix.Order
 
 /-!
 # The recurrent subsequence and Cesàro spectral identities — Wolf Proposition 6.3
@@ -408,7 +409,7 @@ theorem peripheralProjection_isPositiveMap
     IsPositiveMap T.peripheralProjection := by
   intro X hX
   obtain ⟨n, -, -, hn⟩ := hPos.exists_strictMono_tendsto_pow_peripheralProjection hTP
-  exact isClosed_posSemidef.mem_of_tendsto (hn X)
+  exact Matrix.posSemidef_is_closed.mem_of_tendsto (hn X)
     (Filter.Eventually.of_forall fun i ↦ pow_posSemidef_of_isPositiveMap hPos hX (n i))
 
 /-- The peripheral spectral projection `T_φ` of a positive trace-preserving

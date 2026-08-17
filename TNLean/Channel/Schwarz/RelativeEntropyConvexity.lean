@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.Analysis.KleinInequality
 import TNLean.Channel.Schwarz.AndoLieb
+import Mathlib.Analysis.CStarAlgebra.Matrix
 
 /-!
 # Joint convexity of the quantum relative entropy
@@ -135,7 +136,7 @@ private local instance instRECPartialOrder : PartialOrder Mat :=
 private local instance instRECStarOrderedRing : StarOrderedRing Mat :=
   Matrix.instStarOrderedRing
 private local instance instRECCStarAlgebra : CStarAlgebra Mat :=
-  CStarAlgebra.mk
+  Matrix.instCStarAlgebra
 
 /-- The set of positive definite matrices, the faithful domain of the quantum
 relative entropy. -/

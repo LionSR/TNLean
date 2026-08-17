@@ -5,7 +5,6 @@ Authors: Sirui Lu
 -/
 import TNLean.Analysis.CfcConjugation
 import TNLean.Analysis.LiebScalarIntegral
-import TNLean.Analysis.MatrixOrderTopology
 import TNLean.Analysis.TraceCFC
 import Mathlib.Analysis.CStarAlgebra.Matrix
 import Mathlib.Analysis.SpecialFunctions.ContinuousFunctionalCalculus.Rpow.Basic
@@ -58,10 +57,9 @@ namespace Matrix
 
 variable {n : Type*} [Fintype n] [DecidableEq n]
 
-/-- `Matrix.matrixCStarAlgebra` (`TNLean.Analysis.MatrixOrderTopology`), registered as a
-`local instance` so the `L²`-operator norm does not leak onto `Matrix n n ℂ` for transitive
-importers (see `Mathlib/Analysis/CStarAlgebra/Matrix.lean`). -/
-noncomputable local instance : CStarAlgebra (Matrix n n ℂ) := Matrix.matrixCStarAlgebra
+/-- Mathlib's matrix `CStarAlgebra`, registered locally so the `L²`-operator norm does
+not leak onto `Matrix n n ℂ` for transitive importers. -/
+noncomputable local instance : CStarAlgebra (Matrix n n ℂ) := Matrix.instCStarAlgebra
 
 
 omit [Fintype n] in
@@ -90,8 +88,9 @@ lemma integral_entry {X : Type*} [MeasurableSpace X] {μ : MeasureTheory.Measure
   have hcle : Continuous (Matrix.entryLinearMap ℂ ℂ i j) :=
     LinearMap.continuous_of_finiteDimensional _
   let L : Matrix m k ℂ →L[ℂ] ℂ := ⟨Matrix.entryLinearMap ℂ ℂ i j, hcle⟩
-  have := (L.integral_comp_comm hF).symm
-  simpa [L, Matrix.entryLinearMap] using this
+  have hcomm := (L.integral_comp_comm hF).symm
+  change L (∫ x, F x ∂μ) = ∫ x, L (F x) ∂μ
+  exact hcomm
 
 /-- The resolvent integrand of the diagonal Lieb pair is the diagonal matrix of the
 scalar Lieb integrands. -/

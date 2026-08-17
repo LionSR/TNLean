@@ -9,6 +9,7 @@ import TNLean.Channel.ChoiJamiolkowski
 import TNLean.Channel.Schwarz.Basic
 import Mathlib.Analysis.SpecificLimits.Normed
 import Mathlib.Topology.Algebra.Module.FiniteDimension
+import Mathlib.Analysis.Matrix.Order
 
 /-!
 # Complete-positivity closure lemmas for semigroup arguments
@@ -215,7 +216,7 @@ theorem isClosed_setOf_isCPMap [NeZero D] :
     simpa [ChoiJamiolkowski.choiCLM] using
       (ChoiJamiolkowski.cp_iff_choi_posSemidef (D := D) (T := T.toLinearMap))
   rw [hset]
-  exact matrix_isClosed_posSemidef.preimage
+  exact Matrix.posSemidef_is_closed.preimage
     ((ChoiJamiolkowski.choiCLM (D := D)).continuous)
 
 /-- A CLM-limit of completely positive maps is completely positive. -/

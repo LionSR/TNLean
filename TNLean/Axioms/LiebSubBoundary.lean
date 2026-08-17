@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.Axioms.OperatorConvexity
 import TNLean.Algebra.MatrixAux
+import Mathlib.Analysis.CStarAlgebra.Matrix
 
 /-!
 # Lieb concavity on the sub-boundary region
@@ -67,7 +68,8 @@ private local instance instLSBNormedAlgebra : NormedAlgebra ℂ Mat :=
   Matrix.instL2OpNormedAlgebra
 private local instance instLSBCStarRing : CStarRing Mat :=
   Matrix.instCStarRing
-private local instance instLSBCStarAlgebra : CStarAlgebra Mat where
+private local instance instLSBCStarAlgebra : CStarAlgebra Mat :=
+  Matrix.instCStarAlgebra
 
 section LiebSubBoundary
 

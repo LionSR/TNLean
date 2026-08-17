@@ -70,7 +70,7 @@ private local instance instAndoLiebPartialOrder : PartialOrder Mat :=
 private local instance instAndoLiebStarOrderedRing : StarOrderedRing Mat :=
   Matrix.instStarOrderedRing
 private local instance instAndoLiebCStarAlgebra : CStarAlgebra Mat :=
-  CStarAlgebra.mk
+  Matrix.instCStarAlgebra
 
 /-! ## Trace convexity and concavity of matrix powers -/
 

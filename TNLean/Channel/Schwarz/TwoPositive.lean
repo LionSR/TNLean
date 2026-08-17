@@ -12,6 +12,7 @@ import TNLean.Channel.Schwarz.KadisonSchwarz
 import TNLean.Channel.Schwarz.PositiveMapProperties
 import Mathlib.Analysis.CStarAlgebra.Matrix
 import Mathlib.Data.Matrix.Composition
+import Mathlib.Analysis.Matrix.Order
 
 /-!
 # 2-Positive maps and the generalized Kadison–Schwarz inequality
@@ -640,7 +641,7 @@ theorem isClosed_setOf_isNPositiveMap [Finite n] (k : ℕ) :
     simp [IsNPositiveMap, ampEval]
   rw [hset]
   exact isClosed_iInter fun X => isClosed_iInter fun _hX =>
-    matrix_isClosed_posSemidef.preimage ((ampEval X).continuous_of_finiteDimensional)
+    Matrix.posSemidef_is_closed.preimage ((ampEval X).continuous_of_finiteDimensional)
 
 omit [DecidableEq n] in
 /-- CP maps are 2-positive. -/

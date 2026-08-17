@@ -7,6 +7,7 @@ import TNLean.Channel.Schwarz.SchwarzNormal
 import TNLean.Channel.Schwarz.PositiveMapProperties
 import Mathlib.Analysis.CStarAlgebra.ContinuousFunctionalCalculus.Commute
 import Mathlib.Analysis.CStarAlgebra.ContinuousFunctionalCalculus.Order
+import Mathlib.Analysis.CStarAlgebra.Matrix
 import Mathlib.Analysis.SpecificLimits.Basic
 import Mathlib.Analysis.SpecialFunctions.ContinuousFunctionalCalculus.Rpow.Basic
 
@@ -52,13 +53,8 @@ attribute [local instance] Matrix.instL2OpNormedAddCommGroup
 attribute [local instance] Matrix.instL2OpNormedRing
 attribute [local instance] Matrix.instL2OpNormedAlgebra
 
-noncomputable local instance : CStarAlgebra Mat where
-  toNormedRing := Matrix.instL2OpNormedRing
-  toStarRing := inferInstance
-  toCompleteSpace := inferInstance
-  toCStarRing := Matrix.instCStarRing
-  toNormedAlgebra := Matrix.instL2OpNormedAlgebra
-  toStarModule := inferInstance
+noncomputable local instance : CStarAlgebra Mat :=
+  Matrix.instCStarAlgebra
 
 /-! ### Contraction lemma -/
 
@@ -390,12 +386,11 @@ private lemma krausAdjointMapLinear_isPositiveMap (K : Fin d → Mat) :
     IsPositiveMap (krausAdjointMapLinear (d := d) (D := D) K) := by
   intro X hX
   classical
-  simpa only [krausAdjointMapLinear, LinearMap.coe_mk, AddHom.coe_mk, krausAdjointMap,
-    Matrix.mul_assoc] using
-    Matrix.posSemidef_sum (s := Finset.univ) (x := fun i => (K i)ᴴ * X * K i)
-      (fun i _ => by
-        simpa only [Matrix.mul_assoc, conjTranspose_conjTranspose] using
-          hX.mul_mul_conjTranspose_same (B := (K i)ᴴ))
+  change (∑ i, (K i)ᴴ * X * K i).PosSemidef
+  exact Matrix.posSemidef_sum (s := Finset.univ) (x := fun i => (K i)ᴴ * X * K i)
+    (fun i _ => by
+      simpa only [conjTranspose_conjTranspose] using
+        hX.mul_mul_conjTranspose_same (B := (K i)ᴴ))
 
 /-- The missing order-theoretic step in Wolf Theorem 5.6: if `D ≥ 0` commutes with
 `A` and dominates `Aᴴ * A`, then it also dominates `A * Aᴴ`.
@@ -455,8 +450,8 @@ theorem kadison_schwarz_commuting_dominant_cp_of_two_sided_bound
       krausAdjointMap K (Aᴴ * A) := by
     simpa only [krausAdjointMap_conjTranspose] using hKSLeft'
   have hDomLeftMap : krausAdjointMap K (Aᴴ * A) ≤ krausAdjointMap K Dom := by
-    simpa only [T, krausAdjointMapLinear, LinearMap.coe_mk, AddHom.coe_mk] using
-      hPosT.map_le_map hDomLeft
+    change T (Aᴴ * A) ≤ T Dom
+    exact hPosT.map_le_map hDomLeft
   have hKSRight' : (krausAdjointMap K (Aᴴ))ᴴ * krausAdjointMap K (Aᴴ) ≤
       krausAdjointMap K (A * Aᴴ) := by
     simpa only [krausAdjointMap_conjTranspose, conjTranspose_conjTranspose] using
@@ -467,8 +462,8 @@ theorem kadison_schwarz_commuting_dominant_cp_of_two_sided_bound
       krausAdjointMap K (A * Aᴴ) := by
     simpa only [krausAdjointMap_conjTranspose, conjTranspose_conjTranspose] using hKSRight'
   have hDomRightMap : krausAdjointMap K (A * Aᴴ) ≤ krausAdjointMap K Dom := by
-    simpa only [T, krausAdjointMapLinear, LinearMap.coe_mk, AddHom.coe_mk] using
-      hPosT.map_le_map hDomRight
+    change T (A * Aᴴ) ≤ T Dom
+    exact hPosT.map_le_map hDomRight
   refine ⟨hKSLeft.trans hDomLeftMap, hKSRight.trans hDomRightMap⟩
 
 /-- Wolf Theorem 5.6 in the CP/Kraus setting.
@@ -497,12 +492,7 @@ private lemma intertwine_sqrt_of_mul_eq
     (hAQ : A * Q = P * A) :
     A * CFC.sqrt Q = CFC.sqrt P * A := by
   letI : CStarAlgebra (Matrix (Fin D ⊕ Fin D) (Fin D ⊕ Fin D) ℂ) :=
-    { toNormedRing := Matrix.instL2OpNormedRing
-      toStarRing := inferInstance
-      toCompleteSpace := inferInstance
-      toCStarRing := Matrix.instCStarRing
-      toNormedAlgebra := Matrix.instL2OpNormedAlgebra
-      toStarModule := inferInstance }
+    Matrix.instCStarAlgebra
   let M : Matrix (Fin D ⊕ Fin D) (Fin D ⊕ Fin D) ℂ := Matrix.fromBlocks P 0 0 Q
   let K : Matrix (Fin D ⊕ Fin D) (Fin D ⊕ Fin D) ℂ := Matrix.fromBlocks 0 A 0 0
   let J : Matrix (Fin D ⊕ Fin D) (Fin D ⊕ Fin D) ℂ := Matrix.fromBlocks (1 : Mat) 0 0 0

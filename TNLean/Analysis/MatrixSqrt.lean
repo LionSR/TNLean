@@ -7,6 +7,7 @@ import TNLean.Algebra.PosSemidefSupport
 import TNLean.Analysis.CfcKronecker
 import TNLean.Analysis.TraceCFC
 import Mathlib.Analysis.CStarAlgebra.ContinuousFunctionalCalculus.Order
+import Mathlib.Analysis.CStarAlgebra.Matrix
 import Mathlib.Analysis.Matrix.Order
 import Mathlib.Analysis.Matrix.PosDef
 import Mathlib.Analysis.SpecialFunctions.ContinuousFunctionalCalculus.ExpLog.Basic
@@ -123,7 +124,7 @@ noncomputable local instance cfcLogPartialOrder : PartialOrder (Matrix n n ℂ) 
 noncomputable local instance cfcLogStarOrderedRing : StarOrderedRing (Matrix n n ℂ) :=
   Matrix.instStarOrderedRing
 noncomputable local instance cfcLogCStarAlgebra : CStarAlgebra (Matrix n n ℂ) :=
-  CStarAlgebra.mk
+  Matrix.instCStarAlgebra
 
 /-- The Hermitian functional-calculus square root of a positive-semidefinite
 matrix is Hermitian. -/

@@ -186,7 +186,8 @@ private local instance instAxiomOCNormedAlgebra : NormedAlgebra ℂ Mat :=
   Matrix.instL2OpNormedAlgebra
 private local instance instAxiomOCCStarRing : CStarRing Mat :=
   Matrix.instCStarRing
-private local instance instAxiomOCCStarAlgebra : CStarAlgebra Mat where
+private local instance instAxiomOCCStarAlgebra : CStarAlgebra Mat :=
+  Matrix.instCStarAlgebra
 
 /-! ## Operator Jensen inequalities for positive maps -/
 

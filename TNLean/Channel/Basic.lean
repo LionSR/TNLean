@@ -3,7 +3,6 @@ Copyright (c) 2025 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.Analysis.MatrixOrderTopology
 import Mathlib.Analysis.Matrix.PosDef
 import Mathlib.Analysis.Matrix.Order
 import Mathlib.Analysis.Matrix.Spectrum
@@ -41,7 +40,6 @@ Chapters 3 and 6 of Wolf's lecture notes.
 * `Matrix.transposeLinearMapComplex_isTracePreservingMap`: matrix transposition is
   trace-preserving
 * `IsPositiveMap.map_isHermitian`: positive maps preserve Hermiticity
-* `isClosed_posSemidef`: the positive semidefinite cone is closed
 * `densityMatrices_isCompact`: the set of density matrices is compact
 * `densityMatrices_isConvex`: the set of density matrices is convex
 * `IsChannel.map_densityMatrices`: channels map density matrices to density matrices
@@ -348,11 +346,6 @@ theorem posSemidef_trace_bounded_isBounded (c : ℝ) :
           pow_le_pow_left₀ (norm_nonneg _) (hentry i j) 2
     _ = (↑D * c) ^ 2 := by simp [sum_const]; ring
 
-/-- The PSD cone is closed on `Fin D`-indexed matrices. -/
-theorem isClosed_posSemidef :
-    IsClosed {X : Matrix (Fin D) (Fin D) ℂ | X.PosSemidef} :=
-  matrix_isClosed_posSemidef
-
 /-- The set of density matrices is compact (Heine-Borel).
 
 Closed: intersection of the closed PSD cone and the closed set `{trace = 1}`.
@@ -361,7 +354,7 @@ theorem densityMatrices_isCompact :
     IsCompact (densityMatrices D) := by
   haveI : ProperSpace (Matrix (Fin D) (Fin D) ℂ) := FiniteDimensional.proper_rclike ℂ _
   exact Metric.isCompact_of_isClosed_isBounded
-    (isClosed_posSemidef.inter (isClosed_eq continuous_id.matrix_trace continuous_const))
+    (Matrix.posSemidef_is_closed.inter (isClosed_eq continuous_id.matrix_trace continuous_const))
     ((posSemidef_trace_bounded_isBounded 1).subset fun _ ⟨h1, h2⟩ => ⟨h1, by rw [h2]; simp⟩)
 
 /-- The set of density matrices is convex.

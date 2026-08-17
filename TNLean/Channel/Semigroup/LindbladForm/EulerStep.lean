@@ -9,6 +9,7 @@ import TNLean.Channel.Semigroup.LindbladForm.ChoiCCP
 import TNLean.Channel.Semigroup.CPClosure
 import TNLean.Channel.Semigroup.ProductFormula
 import Mathlib.Analysis.Calculus.MeanValue
+import Mathlib.Analysis.Matrix.Order
 
 /-!
 # Lindblad Form — Euler Step Approximation (Wolf Proposition 7.3)
@@ -188,7 +189,7 @@ theorem cp_semigroup_implies_ccp_generator
       simpa [slope, hgp0] using hscaled
     have hproj_psd : (ChoiJamiolkowski.projectedChoiMatrix L).PosSemidef := by
       haveI : (nhdsWithin (0 : ℝ) (Set.Ioi 0)).NeBot := nhdsWithin_Ioi_neBot le_rfl
-      exact matrix_isClosed_posSemidef.mem_of_tendsto hgp_slope hslope_proj_psd
+      exact Matrix.posSemidef_is_closed.mem_of_tendsto hgp_slope hslope_proj_psd
     have hclosed_herm : IsClosed {X : MatChoi D | X.IsHermitian} := by
       change IsClosed {X : MatChoi D | star X = X}
       exact isClosed_eq continuous_star continuous_id

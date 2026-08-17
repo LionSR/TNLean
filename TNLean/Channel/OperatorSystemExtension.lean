@@ -3,7 +3,6 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.Analysis.MatrixOrderTopology
 import TNLean.Channel.OperatorSystem
 import TNLean.Channel.ChoiRectangular
 import Mathlib.Analysis.CStarAlgebra.Matrix
@@ -99,7 +98,7 @@ a self-adjoint element of a `C^*`-algebra lies in `[-‖A‖, ‖A‖]`
 theorem IsHermitian.norm_smul_one_sub_posSemidef {ι : Type*} [Fintype ι] [DecidableEq ι]
     {A : Matrix ι ι ℂ} (hA : A.IsHermitian) :
     (‖A‖ • (1 : Matrix ι ι ℂ) - A).PosSemidef := by
-  letI : CStarAlgebra (Matrix ι ι ℂ) := Matrix.matrixCStarAlgebra
+  letI : CStarAlgebra (Matrix ι ι ℂ) := Matrix.instCStarAlgebra
   have hsa : IsSelfAdjoint A := isSelfAdjoint_iff.mpr (Matrix.star_eq_conjTranspose A ▸ hA)
   have hle : A ≤ algebraMap ℝ (Matrix ι ι ℂ) ‖A‖ := hsa.le_algebraMap_norm_self
   rw [Algebra.algebraMap_eq_smul_one] at hle
@@ -119,7 +118,7 @@ both `‖A‖∞ • 1 - A` and `‖A‖∞ • 1` are positive semidefinite, `�
 theorem PosSemidef.norm_smul_one_sub_le {ι : Type*} [Fintype ι] [DecidableEq ι]
     {A : Matrix ι ι ℂ} (hA : A.PosSemidef) :
     ‖‖A‖ • (1 : Matrix ι ι ℂ) - A‖ ≤ ‖A‖ := by
-  letI : CStarAlgebra (Matrix ι ι ℂ) := Matrix.matrixCStarAlgebra
+  letI : CStarAlgebra (Matrix ι ι ℂ) := Matrix.instCStarAlgebra
   have hnn : (0 : Matrix ι ι ℂ) ≤ ‖A‖ • (1 : Matrix ι ι ℂ) - A :=
     (hA.1.norm_smul_one_sub_posSemidef).nonneg
   have hle : ‖A‖ • (1 : Matrix ι ι ℂ) - A ≤ ‖A‖ • (1 : Matrix ι ι ℂ) := by
@@ -707,12 +706,17 @@ noncomputable def reconstructedMap (tau' : Matrix (Fin m × Fin n) (Fin m × Fin
   toFun B i j := (n : ℂ) * tau' (kroneckerMap (· * ·) B (Matrix.single i j 1))
   map_add' X Y := by
     ext i j
-    rw [Matrix.add_apply, kroneckerMap_add_left (· * ·) (fun a₁ a₂ b => add_mul a₁ a₂ b) X Y,
+    change (n : ℂ) * tau' (kroneckerMap (· * ·) (X + Y) (Matrix.single i j 1)) =
+      (n : ℂ) * tau' (kroneckerMap (· * ·) X (Matrix.single i j 1)) +
+        (n : ℂ) * tau' (kroneckerMap (· * ·) Y (Matrix.single i j 1))
+    rw [kroneckerMap_add_left (· * ·) (fun a₁ a₂ b => add_mul a₁ a₂ b) X Y,
       map_add, mul_add]
   map_smul' c X := by
     ext i j
-    rw [Matrix.smul_apply, smul_eq_mul, RingHom.id_apply,
-      kroneckerMap_smul_left (· * ·) c (fun a b => smul_mul_assoc c a b) X, map_smul, smul_eq_mul]
+    change (n : ℂ) * tau' (kroneckerMap (· * ·) (c • X) (Matrix.single i j 1)) =
+      c * ((n : ℂ) * tau' (kroneckerMap (· * ·) X (Matrix.single i j 1)))
+    rw [kroneckerMap_smul_left (· * ·) c (fun a b => smul_mul_assoc c a b) X, map_smul]
+    simp only [smul_eq_mul]
     ring
 
 theorem reconstructedMap_apply (tau' : Matrix (Fin m × Fin n) (Fin m × Fin n) ℂ →ₗ[ℂ] ℂ)

@@ -5,7 +5,6 @@ Authors: TNLean contributors
 -/
 import TNLean.Algebra.KroneckerFactorPositivity
 import TNLean.Algebra.MatrixOperatorSpace
-import TNLean.Analysis.MatrixOrderTopology
 import TNLean.Channel.Basic
 import Mathlib.Analysis.CStarAlgebra.Matrix
 import Mathlib.Analysis.CStarAlgebra.ContinuousFunctionalCalculus.Unital
@@ -60,8 +59,8 @@ theorem IsPositiveMap.map_conjTranspose
   letI := Fintype.ofFinite n
   letI := Classical.decEq m
   letI := Classical.decEq n
-  letI : CStarAlgebra (Matrix m m ℂ) := Matrix.matrixCStarAlgebra
-  letI : CStarAlgebra (Matrix n n ℂ) := Matrix.matrixCStarAlgebra
+  letI : CStarAlgebra (Matrix m m ℂ) := Matrix.instCStarAlgebra
+  letI : CStarAlgebra (Matrix n n ℂ) := Matrix.instCStarAlgebra
   change hT.toPositiveLinearMap Aᴴ = (hT.toPositiveLinearMap A)ᴴ
   simpa [Matrix.star_eq_conjTranspose] using map_star hT.toPositiveLinearMap A
 
@@ -156,8 +155,8 @@ theorem Matrix.PosSemidef.fromBlocks_diag
   classical
   letI := Fintype.ofFinite m
   letI := Fintype.ofFinite o
-  letI : CStarAlgebra (Matrix m m ℂ) := Matrix.matrixCStarAlgebra
-  letI : CStarAlgebra (Matrix o o ℂ) := Matrix.matrixCStarAlgebra
+  letI : CStarAlgebra (Matrix m m ℂ) := Matrix.instCStarAlgebra
+  letI : CStarAlgebra (Matrix o o ℂ) := Matrix.instCStarAlgebra
   obtain ⟨CA, hCA⟩ := CStarAlgebra.nonneg_iff_eq_mul_star_self.mp
     ((Matrix.nonneg_iff_posSemidef).mpr hA)
   obtain ⟨CB, hCB⟩ := CStarAlgebra.nonneg_iff_eq_mul_star_self.mp
