@@ -1,0 +1,102 @@
+\documentclass{article}
+
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+\setlength{\emergencystretch}{2em}
+
+\input{command}
+
+\title{The Finite-Range Cyclic Knabe Coefficient}
+\author{}
+\date{\today}
+
+\begin{document}
+\maketitle
+
+\section{Source statements}
+
+For a nearest-neighbor chain, let $m$ be the number of local interaction
+terms in each window and let $\gamma$ be the gap of the corresponding open
+window Hamiltonian. Knabe's finite-size criterion gives the threshold
+$\gamma>1/m$. This threshold originates in \cite{Knabe1988Energy}. It is
+quoted for MPS parent Hamiltonians in lines~1483--1489 of the local source for
+\cite{PerezGarcia2007Matrix} and in lines~2194--2197 of the local source for
+\cite{Cirac2021Matrix}. The quoted passages state only the threshold. The
+closed-form periodic coefficient
+\begin{align}
+    \delta&=\frac{m\gamma-1}{m-1}
+\end{align}
+is obtained by the present derivation, as the range-two case of the coefficient
+below.
+
+\section{Finite-range derivation}
+
+Let $h_i$, $i\in\mathbb Z/N\mathbb Z$, be orthogonal projections, let
+$H=\sum_i h_i$, and define
+\begin{align}
+    A_s&=\sum_{a=0}^{m-1}h_{s+a},
+    &Q_q&=\sum_i\bigl(h_i h_{i+q}+h_i h_{i-q}\bigr).
+\end{align}
+Assume $1\leq R\leq m$, $N\geq2m$, and that terms at cyclic separation at
+least $R$ commute. Cyclic double counting gives
+\begin{align}
+    \sum_s A_s^2&=mH+\sum_{q=1}^{m-1}(m-q)Q_q.
+\end{align}
+The projection inequality $h_i h_j+h_j h_i\leq h_i+h_j$ gives $Q_q\leq2H$.
+The separated terms satisfy $Q_q\geq0$ for $q\geq R$, and expansion of $H^2$
+gives
+\begin{align}
+    H+\sum_{q=1}^{m-1}Q_q&\leq H^2.
+\end{align}
+Set $c=m-R+1$, so that $m-q=c+(R-1-q)$. The correction term splits as
+\begin{align}
+    \sum_{q=1}^{m-1}(R-1-q)Q_q
+    &=\sum_{q=1}^{R-2}(R-1-q)Q_q
+      +\sum_{q=R}^{m-1}(R-1-q)Q_q,\\
+    \sum_{q=1}^{R-2}(R-1-q)Q_q
+    &\leq 2H\sum_{q=1}^{R-2}(R-1-q),\\
+    \sum_{q=R}^{m-1}(R-1-q)Q_q
+    &\leq0.
+\end{align}
+Indeed, the first sum has positive weights and $Q_q\leq2H$ termwise. In the
+second sum, $R-1-q\leq0$ and $Q_q\geq0$: the latter estimate applies because
+$R\leq q\leq m-1\leq N-R$. The triangular sum is
+\begin{align}
+    \sum_{q=1}^{R-2}(R-1-q)
+    &=\frac{(R-1)(R-2)}{2}.
+\end{align}
+Therefore
+\begin{align}
+    \sum_s A_s^2
+    &\leq cH^2+\bigl(m-c+(R-1)(R-2)\bigr)H,\\
+    m-c+(R-1)(R-2)
+    &=(R-1)^2,\\
+    \sum_s A_s^2
+    &\leq cH^2+(R-1)^2H.
+\end{align}
+Consequently, the local inequalities $A_s^2\geq\gamma A_s$ imply
+\begin{align}
+    H^2&\geq\frac{m\gamma-(R-1)^2}{m-R+1}H.
+\end{align}
+The condition $(R-1)^2<m\gamma$ makes this coefficient positive. At $R=2$
+it reduces to Knabe's nearest-neighbor coefficient.
+
+\section{Verdict}
+
+The nearest-neighbor threshold is source-attributed as above. The coefficient
+for arbitrary finite range is a TNLean derivation, formalized by the cyclic
+projection theorem.\footnote{Formal declaration:
+\leanid{ProjectionGeometry.quadraticForm_sum_projections_of_cyclic_knabe}.}
+It is not a statement attributed
+to Knabe, to the gap-from-hypotheses criterion
+\cite[Theorem~2.1(i)]{Nachtergaele1996Spectral} of Nachtergaele's martingale
+argument, or to the two MPS reviews. The abstract result concerns a cyclic family of
+projections. Applying it to every sufficiently large MPS parent Hamiltonian
+still requires a uniform gap for the corresponding nonwrapping open
+interaction.
+
+\bibliographystyle{alpha}
+\bibliography{references}
+
+\end{document}
