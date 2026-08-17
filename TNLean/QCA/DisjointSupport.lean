@@ -16,13 +16,13 @@ named result of the source.
 
 ## Main results
 
-* `SpinChain.localInclusion_mul_comm_of_disjoint` — disjoint finite-region observables commute in
+* `SpinChain.localInclusion_commute_of_disjoint` — disjoint finite-region observables commute in
   the algebra on their union.
-* `SpinChain.localObservable_mul_comm_of_disjoint` — their algebraic-local images commute.
-* `SpinChain.SupportedIn.mul_comm_of_disjoint` — algebraic observables with disjoint supports
+* `SpinChain.localObservable_commute_of_disjoint` — their algebraic-local images commute.
+* `SpinChain.SupportedIn.commute_of_disjoint` — algebraic observables with disjoint supports
   commute.
-* `SpinChain.quasiLocalObservable_mul_comm_of_disjoint` — their quasi-local images commute.
-* `SpinChain.QuasiLocalSupportedIn.mul_comm_of_disjoint` — quasi-local observables with disjoint
+* `SpinChain.quasiLocalObservable_commute_of_disjoint` — their quasi-local images commute.
+* `SpinChain.QuasiLocalSupportedIn.commute_of_disjoint` — quasi-local observables with disjoint
   finite supports commute.
 
 ## References
@@ -112,12 +112,11 @@ algebra on their union.
 
 This is elementary tensor-factor infrastructure underlying arXiv:1703.09188, Appendix,
 lines 2292--2300. -/
-theorem localInclusion_mul_comm_of_disjoint (hΛΓ : Disjoint Λ Γ)
+theorem localInclusion_commute_of_disjoint (hΛΓ : Disjoint Λ Γ)
     (A : LocalAlgebra d Λ) (B : LocalAlgebra d Γ) :
-    localInclusion (d := d) Finset.subset_union_left A *
-        localInclusion Finset.subset_union_right B =
-      localInclusion Finset.subset_union_right B *
-        localInclusion Finset.subset_union_left A := by
+    Commute (localInclusion (d := d) Finset.subset_union_left A)
+      (localInclusion Finset.subset_union_right B) := by
+  rw [commute_iff_eq]
   ext x y
   change (∑ z, localInclusion Finset.subset_union_left A x z *
       localInclusion Finset.subset_union_right B z y) =
@@ -166,50 +165,49 @@ theorem localInclusion_mul_comm_of_disjoint (hΛΓ : Disjoint Λ Γ)
 
 This is elementary tensor-factor infrastructure underlying arXiv:1703.09188, Appendix,
 lines 2292--2300. -/
-theorem localObservable_mul_comm_of_disjoint (hΛΓ : Disjoint Λ Γ)
+theorem localObservable_commute_of_disjoint (hΛΓ : Disjoint Λ Γ)
     (A : LocalAlgebra d Λ) (B : LocalAlgebra d Γ) :
-    localObservable d Λ A * localObservable d Γ B =
-      localObservable d Γ B * localObservable d Λ A := by
-  rw [← localObservable_localInclusion d Finset.subset_union_left A,
+    Commute (localObservable d Λ A) (localObservable d Γ B) := by
+  rw [commute_iff_eq, ← localObservable_localInclusion d Finset.subset_union_left A,
     ← localObservable_localInclusion d Finset.subset_union_right B,
-    ← map_mul, localInclusion_mul_comm_of_disjoint hΛΓ, map_mul]
+    ← map_mul, (localInclusion_commute_of_disjoint hΛΓ A B).eq, map_mul]
 
 /-- Algebraic local observables with disjoint finite supports commute.
 
 This is elementary tensor-factor infrastructure underlying arXiv:1703.09188, Appendix,
 lines 2292--2300. -/
-theorem SupportedIn.mul_comm_of_disjoint {X Y : AlgebraicLocalAlgebra d}
+theorem SupportedIn.commute_of_disjoint {X Y : AlgebraicLocalAlgebra d}
     (hX : SupportedIn X Λ) (hY : SupportedIn Y Γ) (hΛΓ : Disjoint Λ Γ) :
-    X * Y = Y * X := by
+    Commute X Y := by
   obtain ⟨A, rfl⟩ := hX
   obtain ⟨B, rfl⟩ := hY
-  exact localObservable_mul_comm_of_disjoint hΛΓ A B
+  exact localObservable_commute_of_disjoint hΛΓ A B
 
 /-- Canonical quasi-local observables from disjoint regions commute.
 
 This is elementary tensor-factor infrastructure underlying arXiv:1703.09188, Appendix,
 lines 2292--2300. -/
-theorem quasiLocalObservable_mul_comm_of_disjoint [NeZero d] (hΛΓ : Disjoint Λ Γ)
+theorem quasiLocalObservable_commute_of_disjoint [NeZero d] (hΛΓ : Disjoint Λ Γ)
     (A : LocalAlgebra d Λ) (B : LocalAlgebra d Γ) :
-    quasiLocalObservable d Λ A * quasiLocalObservable d Γ B =
-      quasiLocalObservable d Γ B * quasiLocalObservable d Λ A := by
+    Commute (quasiLocalObservable d Λ A) (quasiLocalObservable d Γ B) := by
+  rw [commute_iff_eq]
   change algebraicToQuasiLocal d (localObservable d Λ A) *
       algebraicToQuasiLocal d (localObservable d Γ B) =
     algebraicToQuasiLocal d (localObservable d Γ B) *
       algebraicToQuasiLocal d (localObservable d Λ A)
-  rw [← map_mul, localObservable_mul_comm_of_disjoint hΛΓ, map_mul]
+  rw [← map_mul, (localObservable_commute_of_disjoint hΛΓ A B).eq, map_mul]
 
 /-- Quasi-local observables with disjoint finite supports commute.
 
 This is elementary tensor-factor infrastructure underlying arXiv:1703.09188, Appendix,
 lines 2292--2300. -/
-theorem QuasiLocalSupportedIn.mul_comm_of_disjoint [NeZero d]
+theorem QuasiLocalSupportedIn.commute_of_disjoint [NeZero d]
     {X Y : QuasiLocalAlgebra d} (hX : QuasiLocalSupportedIn X Λ)
     (hY : QuasiLocalSupportedIn Y Γ) (hΛΓ : Disjoint Λ Γ) :
-    X * Y = Y * X := by
+    Commute X Y := by
   obtain ⟨A, rfl⟩ := hX
   obtain ⟨B, rfl⟩ := hY
-  exact quasiLocalObservable_mul_comm_of_disjoint hΛΓ A B
+  exact quasiLocalObservable_commute_of_disjoint hΛΓ A B
 
 end Local
 

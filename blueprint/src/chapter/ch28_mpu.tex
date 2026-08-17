@@ -7814,9 +7814,9 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
   \end{align}
 \end{proof}
 
-\begin{lemma}[Disjoint finite-region observables commute]
-  \label{lem:qca_disjoint_local_inclusion_commute}
-  \lean{SpinChain.localInclusion_mul_comm_of_disjoint}
+\begin{theorem}[Disjoint finite-region observables commute]
+  \label{thm:qca_disjoint_local_inclusion_commute}
+  \lean{SpinChain.localInclusion_commute_of_disjoint}
   \leanok
   \uses{def:qca_local_inclusion}
   If $\Lambda\cap\Gamma=\varnothing$, $A\in\mathcal A_\Lambda$, and
@@ -7832,7 +7832,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
   quasi-local algebra used in \cite[lines~2292--2300]{Cirac2017MPU}; the
   appendix does not state it as a separate theorem.
   % Source context: paper_v2.tex 2292--2300.
-\end{lemma}
+\end{theorem}
 
 \begin{proof}\leanok
   For configurations $x,y$ on $\Lambda\cup\Gamma$, split each intermediate
@@ -8255,10 +8255,10 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
 
 \begin{theorem}[Disjointly supported local observables commute]
   \label{thm:qca_disjoint_supported_local_commute}
-  \lean{SpinChain.localObservable_mul_comm_of_disjoint,
-    SpinChain.SupportedIn.mul_comm_of_disjoint}
+  \lean{SpinChain.localObservable_commute_of_disjoint,
+    SpinChain.SupportedIn.commute_of_disjoint}
   \leanok
-  \uses{lem:qca_disjoint_local_inclusion_commute,def:qca_supported_in}
+  \uses{def:qca_supported_in}
   If $X,Y\in\mathcal A_{\mathrm{loc}}$ are supported in finite regions
   $\Lambda$ and $\Gamma$ with $\Lambda\cap\Gamma=\varnothing$, then
   \begin{align}
@@ -8277,6 +8277,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
 \end{theorem}
 
 \begin{proof}\leanok
+  \uses{thm:qca_disjoint_local_inclusion_commute}
   Choose representatives $X=\iota_\Lambda(A)$ and
   $Y=\iota_\Gamma(B)$.  Embed both into
   $\mathcal A_{\Lambda\cup\Gamma}$.  The preceding finite-region identity
@@ -8860,11 +8861,10 @@ as separate results in the appendix.
 
 \begin{theorem}[Disjointly supported quasi-local observables commute]
   \label{thm:qca_disjoint_quasi_local_commute}
-  \lean{SpinChain.quasiLocalObservable_mul_comm_of_disjoint,
-    SpinChain.QuasiLocalSupportedIn.mul_comm_of_disjoint}
+  \lean{SpinChain.quasiLocalObservable_commute_of_disjoint,
+    SpinChain.QuasiLocalSupportedIn.commute_of_disjoint}
   \leanok
-  \uses{thm:qca_disjoint_supported_local_commute,
-    def:qca_quasi_local_supported_in}
+  \uses{def:qca_quasi_local_supported_in}
   Let $d>0$.  If $x,y\in\mathcal A$ are supported in finite regions
   $\Lambda$ and $\Gamma$ with $\Lambda\cap\Gamma=\varnothing$, then
   \begin{align}
@@ -8882,6 +8882,7 @@ as separate results in the appendix.
 \end{theorem}
 
 \begin{proof}\leanok
+  \uses{thm:qca_disjoint_supported_local_commute}
   The completion map is a star-algebra homomorphism.  Applying it to the
   algebraic-local identity gives
   \begin{align}
