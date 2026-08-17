@@ -9028,6 +9028,47 @@ support by commutation with observables on the complementary tensor factor.
   finite average sum to one.  Apply this contraction to $M-X$.
 \end{proof}
 
+\begin{theorem}[Exact support from outside commutation]
+  \label{thm:qca_quasi_local_supported_iff_commute_disjoint}
+  \lean{SpinChain.quasiLocalSupportedIn_iff_commute_disjoint}
+  \leanok
+  \uses{def:qca_quasi_local_supported_in}
+  Let $d>0$, let $\Lambda\subset\mathbb Z$ be finite, and let
+  $x\in\mathcal A$.  Then
+  \begin{align}
+    x\in\mathcal A_\Lambda
+      \quad\Longleftrightarrow\quad
+    [x,y]=0
+    \text{ for every }y\in\mathcal A_\Gamma
+    \text{ and every finite }\Gamma\cap\Lambda=\varnothing.
+  \end{align}
+  This is standard infrastructure for the UHF algebra used in TNLean.  It is
+  not a theorem stated in \cite{Cirac2017MPU} or by Schumacher--Werner,
+  quant-ph/0405174.
+\end{theorem}
+
+\begin{proof}\leanok
+  \uses{thm:qca_disjoint_quasi_local_commute,
+    lem:qca_quasi_local_observable,thm:qca_quasi_local_density,
+    lem:qca_local_inclusion_norm,thm:weyl_operator_unitary,
+    thm:mpu_reindex_unitary,def:qca_complementary_weyl_twirl,
+    lem:qca_complementary_weyl_twirl_eq}
+  The forward implication follows from commutation of disjoint tensor factors.
+  Conversely, approximate $x$ by $A\in\mathcal A_\Delta$, where
+  $\Lambda\subseteq\Delta$.  Split
+  $\Delta=\Lambda\sqcup(\Delta\setminus\Lambda)$ and average $A$ over Weyl
+  unitaries on the second factor.  Every such conjugation fixes $x$ by the
+  commutation hypothesis, so unitary invariance and convexity give
+  \begin{align}
+    \lVert\mathcal E_{\Delta\setminus\Lambda}(A)-x\rVert
+      &\le \lVert A-x\rVert.
+  \end{align}
+  The Weyl identity writes the average as $B\otimes\mathbf 1$ for some
+  $B\in\mathcal A_\Lambda$.  Thus elements of $\mathcal A_\Lambda$ approximate
+  $x$ arbitrarily well.  The embedding of $\mathcal A_\Lambda$ is isometric,
+  hence has closed range, and therefore $x\in\mathcal A_\Lambda$.
+\end{proof}
+
 The appendix requires that ``there exists a finite subset
 $\mathcal N\subset\mathbb Z$'' such that, for every finite
 $\Lambda\subset\mathbb Z$,
