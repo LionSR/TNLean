@@ -3,16 +3,15 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.QCA.FinitePropagation
-import TNLean.QCA.TranslationCovariance
+import TNLean.QCA.InversePropagation
 
 /-!
 # One-dimensional quantum cellular automata
 
 A one-dimensional quantum cellular automaton (QCA) is a translation-covariant star-automorphism
 of the quasi-local observable algebra with finite forward propagation. This file packages those two
-conditions and records its basic interface, the identity example, and closure under forward
-composition.
+conditions and records its basic interface, the identity example, and closure under composition
+and inversion.
 
 ## Main definitions
 
@@ -22,6 +21,7 @@ composition.
 
 * `SpinChain.isQCA_iff` — the exact unfolding of the QCA predicate.
 * `SpinChain.IsQCA.trans` — forward composition of QCAs is a QCA.
+* `SpinChain.IsQCA.symm` — the inverse of a QCA is a QCA.
 * `SpinChain.isQCA_refl` — the identity star-automorphism is a QCA.
 
 ## References
@@ -79,6 +79,13 @@ separately there. -/
 theorem trans (hω : IsQCA ω) (hη : IsQCA η) : IsQCA (ω.trans η) :=
   ⟨TranslationCovariant.trans hω.translationCovariant hη.translationCovariant,
     HasFinitePropagation.trans hω.hasFinitePropagation hη.hasFinitePropagation⟩
+
+/-- The inverse of a quantum cellular automaton is a quantum cellular automaton.
+
+The QCA definition is forward-only. Inverse locality is a derived consequence, corresponding to
+Schumacher--Werner, Lemma 5, Theorem 6, and Corollary 7. -/
+theorem symm (hω : IsQCA ω) : IsQCA ω.symm :=
+  ⟨hω.translationCovariant.symm, hω.hasFinitePropagation.symm⟩
 
 end IsQCA
 
