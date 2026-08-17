@@ -28,7 +28,7 @@ repository, so the citation is by arXiv identifier and lemma label.
   that vector.
 * `WeightedPositiveKernel.ker_weighted_sum_eq_sum`: strictly positive real
   weights do not change the kernel of a finite sum of positive operators;
-  `WeightedPositiveKernel.ker_weighted_sum_eq_iInter` identifies the common
+  `WeightedPositiveKernel.ker_weighted_sum_eq_iInf` identifies the common
   kernel with the intersection of the individual kernels.
 * `WeightedPositiveKernel.weighted_sum_le_sum`: weights at most one place the
   weighted sum below the unweighted sum in Loewner order.
