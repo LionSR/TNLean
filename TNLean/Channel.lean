@@ -16,6 +16,7 @@ import TNLean.Channel.ChoiDoeblin
 import TNLean.Channel.ChoiJamiolkowski
 import TNLean.Channel.ChoiRectangular
 import TNLean.Channel.ChoiTypeMap
+import TNLean.Channel.ComplementaryWeylTwirl
 import TNLean.Channel.CompletelyPositiveBridge
 import TNLean.Channel.DecomposablePPT
 import TNLean.Channel.DensityRetract
