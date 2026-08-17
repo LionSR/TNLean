@@ -238,6 +238,23 @@ lemma prod_incident_eq_prod_edge (f : (v : V) → IncidentEdge G v → ℂ) :
           rw [Fin.prod_univ_two]
           simp [incidentSigmaEquivEdgeSide]
 
+private def leftIncidentValue (A : Tensor G d)
+    (ξ : (v : V) → (ie : IncidentEdge G v) → Fin (A.bondDim ie.1)) (e : Edge G) :
+    Fin (A.bondDim e) :=
+  ξ e.1.1 (edgeLeftIncident (G := G) e)
+
+private def rightIncidentValue (A : Tensor G d)
+    (ξ : (v : V) → (ie : IncidentEdge G v) → Fin (A.bondDim ie.1)) (e : Edge G) :
+    Fin (A.bondDim e) :=
+  ξ e.1.2 (edgeRightIncident (G := G) e)
+
+private def finEqDelta {n : ℕ} (a b : Fin n) : ℂ :=
+  @ite ℂ (a = b) (instDecidableEqFin n a b) 1 0
+
+private theorem finEqDelta_eq {n : ℕ} (a b : Fin n) :
+    finEqDelta a b = if a = b then 1 else 0 := by
+  by_cases h : a = b <;> simp [finEqDelta, h]
+
 private lemma gauge_sum_over_virtual (A : Tensor G d)
     (X : (e : Edge G) → GL (Fin (A.bondDim e)) ℂ)
     (ξ : LocalConfig (G := G) A) :
@@ -245,8 +262,8 @@ private lemma gauge_sum_over_virtual (A : Tensor G d)
       ∏ v : V, ∏ ie : IncidentEdge G v,
         edgeGaugeAt A X v ie (η ie.1) (ξ v ie)) =
       ∏ e : Edge G,
-        if ξ e.1.1 (edgeLeftIncident (G := G) e) =
-            ξ e.1.2 (edgeRightIncident (G := G) e) then 1 else 0 := by
+        finEqDelta
+          (leftIncidentValue A ξ e) (rightIncidentValue A ξ e) := by
   classical
   have hinc : ∀ η : VirtualConfig A,
       (∏ v : V, ∏ ie : IncidentEdge G v,
@@ -286,8 +303,9 @@ private lemma gauge_sum_over_virtual (A : Tensor G d)
                 j (ξ e.1.1 (edgeLeftIncident (G := G) e)) *
               ((X e : Matrix (Fin (A.bondDim e)) (Fin (A.bondDim e)) ℂ)⁻¹)
                 (ξ e.1.2 (edgeRightIncident (G := G) e)) j)).symm]
-  simp only [gauge_sum_left_right_matrix_inv]
-  rfl
+  refine Finset.prod_congr rfl ?_
+  intro e he
+  exact (gauge_sum_left_right_matrix_inv _ _ _).trans (finEqDelta_eq _ _).symm
 
 /-- Project a global virtual configuration to a local (vertex-wise) one by
 reading off the index assigned to each incident edge. -/
@@ -338,8 +356,8 @@ private noncomputable def virtualConfigEquivConsistentLocal (A : Tensor G d) :
 private lemma sum_local_with_edge_deltas (A : Tensor G d) (σ : V → Fin d) :
     (∑ ξ : LocalConfig (G := G) A,
       (∏ e : Edge G,
-        if ξ e.1.1 (edgeLeftIncident (G := G) e) =
-            ξ e.1.2 (edgeRightIncident (G := G) e) then (1 : ℂ) else 0) *
+        finEqDelta
+          (leftIncidentValue A ξ e) (rightIncidentValue A ξ e)) *
         ∏ v : V, A.component v (ξ v) (σ v)) =
       stateCoeff A σ := by
   classical
@@ -348,37 +366,36 @@ private lemma sum_local_with_edge_deltas (A : Tensor G d) (σ : V → Fin d) :
   have hfilter :
       (∑ ξ : LocalConfig (G := G) A,
         (∏ e : Edge G,
-          if ξ e.1.1 (edgeLeftIncident (G := G) e) =
-              ξ e.1.2 (edgeRightIncident (G := G) e) then (1 : ℂ) else 0) * F ξ) =
+          finEqDelta
+            (leftIncidentValue A ξ e) (rightIncidentValue A ξ e)) * F ξ) =
         ∑ ξ : {ξ : LocalConfig (G := G) A // IsConsistent A ξ}, F ξ.1 := by
     calc
       (∑ ξ : LocalConfig (G := G) A,
         (∏ e : Edge G,
-          if ξ e.1.1 (edgeLeftIncident (G := G) e) =
-              ξ e.1.2 (edgeRightIncident (G := G) e) then (1 : ℂ) else 0) * F ξ)
+          finEqDelta
+            (leftIncidentValue A ξ e) (rightIncidentValue A ξ e)) * F ξ)
           = ∑ ξ : LocalConfig (G := G) A, if IsConsistent A ξ then F ξ else 0 := by
             refine Finset.sum_congr rfl ?_
             intro ξ hξ
             have hprod :
                 (∏ e : Edge G,
-                  if ξ e.1.1 (edgeLeftIncident (G := G) e) =
-                      ξ e.1.2 (edgeRightIncident (G := G) e) then (1 : ℂ) else 0) =
+                  finEqDelta
+                    (leftIncidentValue A ξ e) (rightIncidentValue A ξ e)) =
                   if IsConsistent A ξ then 1 else 0 := by
-              simpa [IsConsistent] using
-                (Fintype.prod_boole
-                  (p := fun e : Edge G =>
-                    ξ e.1.1 (edgeLeftIncident (G := G) e) =
-                      ξ e.1.2 (edgeRightIncident (G := G) e)) :
-                  (∏ e : Edge G,
-                    ite
-                      (ξ e.1.1 (edgeLeftIncident (G := G) e) =
-                        ξ e.1.2 (edgeRightIncident (G := G) e))
-                      (1 : ℂ) 0) =
-                    ite
-                      (∀ e : Edge G,
-                        ξ e.1.1 (edgeLeftIncident (G := G) e) =
-                          ξ e.1.2 (edgeRightIncident (G := G) e))
-                      (1 : ℂ) 0)
+              by_cases hcons : IsConsistent A ξ
+              · rw [ite_eq_left hcons]
+                apply Finset.prod_eq_one
+                intro e he
+                have heq : leftIncidentValue A ξ e = rightIncidentValue A ξ e := hcons e
+                unfold finEqDelta
+                rw [ite_eq_left heq]
+              · rw [ite_eq_right hcons]
+                simp only [IsConsistent, not_forall] at hcons
+                obtain ⟨e, he⟩ := hcons
+                apply Finset.prod_eq_zero (Finset.mem_univ e)
+                have hne : ¬ leftIncidentValue A ξ e = rightIncidentValue A ξ e := he
+                unfold finEqDelta
+                rw [ite_eq_right hne]
             rw [hprod]
             by_cases h : IsConsistent A ξ <;> simp [h]
       _ = ∑ ξ : {ξ : LocalConfig (G := G) A // IsConsistent A ξ}, F ξ.1 := by
@@ -651,7 +668,10 @@ theorem localOfDoubled_left_ne (A : Tensor G d) (e : Edge G)
     (g : {g : Edge G // g ≠ e}) :
     localOfDoubled (G := G) A e i k ζ g.1.1.1 (edgeLeftIncident (G := G) g.1) = ζ g := by
   unfold localOfDoubled
-  simp only [edgeLeftIncident, dif_neg g.2]
+  split
+  · rename_i h
+    exact (g.2 h).elim
+  · rfl
 
 omit [Fintype V] in
 /-- On any edge other than `e`, the rebuilt configuration reads the complement
@@ -661,7 +681,10 @@ theorem localOfDoubled_right_ne (A : Tensor G d) (e : Edge G)
     (g : {g : Edge G // g ≠ e}) :
     localOfDoubled (G := G) A e i k ζ g.1.1.2 (edgeRightIncident (G := G) g.1) = ζ g := by
   unfold localOfDoubled
-  simp only [edgeRightIncident, dif_neg g.2]
+  split
+  · rename_i h
+    exact (g.2 h).elim
+  · rfl
 
 /-- Local configurations consistent off `e` are the same finite data as the two
 open edge indices together with a free configuration on every other edge. -/
@@ -673,8 +696,8 @@ noncomputable def consistentOffEquivDoubled (A : Tensor G d) (e : Edge G) :
               fun f => ξ.1 f.1.1.1 (edgeLeftIncident (G := G) f.1))
   invFun y := ⟨localOfDoubled (G := G) A e y.1 y.2.1 y.2.2, by
     intro f hf
-    unfold localOfDoubled
-    simp only [edgeLeftIncident, edgeRightIncident, dif_neg hf]⟩
+    exact (localOfDoubled_left_ne (G := G) A e y.1 y.2.1 y.2.2 ⟨f, hf⟩).trans
+      (localOfDoubled_right_ne (G := G) A e y.1 y.2.1 y.2.2 ⟨f, hf⟩).symm⟩
   left_inv ξ := by
     rcases ξ with ⟨ξ, hξ⟩
     apply Subtype.ext
@@ -707,16 +730,15 @@ noncomputable def consistentOffEquivDoubled (A : Tensor G d) (e : Edge G) :
     · funext f
       change localOfDoubled (G := G) A e i k ζ f.1.1.1 (edgeLeftIncident (G := G) f.1) = ζ f
       have hf : f.1 ≠ e := f.2
-      unfold localOfDoubled
-      simp only [edgeLeftIncident, dif_neg hf]
+      exact localOfDoubled_left_ne (G := G) A e i k ζ f
 
 /-- The per-edge consistency deltas off `e` collapse to the consistency-off-`e`
 predicate. -/
 theorem prod_off_delta_eq (A : Tensor G d) (e : Edge G)
     (ξ : OpenLocalConfig (G := G) A) [Decidable (IsConsistentOff (G := G) A e ξ)] :
     (∏ f : {f : Edge G // f ≠ e},
-      if ξ f.1.1.1 (edgeLeftIncident (G := G) f.1) =
-          ξ f.1.1.2 (edgeRightIncident (G := G) f.1) then (1 : ℂ) else 0) =
+      finEqDelta
+        (leftIncidentValue A ξ f.1) (rightIncidentValue A ξ f.1)) =
       if IsConsistentOff (G := G) A e ξ then 1 else 0 := by
   classical
   have hpred : (∀ f : {f : Edge G // f ≠ e},
@@ -725,8 +747,25 @@ theorem prod_off_delta_eq (A : Tensor G d) (e : Edge G)
     constructor
     · intro h f hf; exact h ⟨f, hf⟩
     · intro h f; exact h f.1 f.2
-  rw [Fintype.prod_boole]
-  exact if_congr hpred rfl rfl
+  by_cases hcons : IsConsistentOff (G := G) A e ξ
+  · rw [ite_eq_left hcons]
+    apply Finset.prod_eq_one
+    intro f hf
+    have heq : leftIncidentValue A ξ f.1 = rightIncidentValue A ξ f.1 :=
+      hcons f.1 f.2
+    unfold finEqDelta
+    rw [ite_eq_left heq]
+  · rw [ite_eq_right hcons]
+    have hn : ¬ ∀ f : {f : Edge G // f ≠ e},
+        ξ f.1.1.1 (edgeLeftIncident (G := G) f.1) =
+          ξ f.1.1.2 (edgeRightIncident (G := G) f.1) :=
+      mt hpred.mp hcons
+    simp only [not_forall] at hn
+    obtain ⟨f, hf⟩ := hn
+    apply Finset.prod_eq_zero (Finset.mem_univ f)
+    have hne : ¬ leftIncidentValue A ξ f.1 = rightIncidentValue A ξ f.1 := hf
+    unfold finEqDelta
+    rw [ite_eq_right hne]
 
 omit [Fintype V] in
 /-- The left endpoint local configuration of a complement-built boundary datum is
@@ -799,8 +838,8 @@ theorem edgeInsertedCoeff_eq_sum_local (A : Tensor G d) (e : Edge G)
     edgeInsertedCoeff (G := G) A e σ N =
       ∑ ξ : OpenLocalConfig (G := G) A,
         (∏ f : {f : Edge G // f ≠ e},
-          if ξ f.1.1.1 (edgeLeftIncident (G := G) f.1) =
-              ξ f.1.1.2 (edgeRightIncident (G := G) f.1) then (1 : ℂ) else 0) *
+          finEqDelta
+            (leftIncidentValue A ξ f.1) (rightIncidentValue A ξ f.1)) *
           N (ξ e.1.1 (edgeLeftIncident (G := G) e))
             (ξ e.1.2 (edgeRightIncident (G := G) e)) *
           ∏ v : V, A.component v (ξ v) (σ v) := by
@@ -814,8 +853,8 @@ theorem edgeInsertedCoeff_eq_sum_local (A : Tensor G d) (e : Edge G)
   have hcollapse :
       (∑ ξ : OpenLocalConfig (G := G) A,
         (∏ f : {f : Edge G // f ≠ e},
-          if ξ f.1.1.1 (edgeLeftIncident (G := G) f.1) =
-              ξ f.1.1.2 (edgeRightIncident (G := G) f.1) then (1 : ℂ) else 0) *
+          finEqDelta
+            (leftIncidentValue A ξ f.1) (rightIncidentValue A ξ f.1)) *
           N (ξ e.1.1 (edgeLeftIncident (G := G) e))
             (ξ e.1.2 (edgeRightIncident (G := G) e)) *
           ∏ v : V, A.component v (ξ v) (σ v)) =
@@ -823,8 +862,8 @@ theorem edgeInsertedCoeff_eq_sum_local (A : Tensor G d) (e : Edge G)
     calc
       (∑ ξ : OpenLocalConfig (G := G) A,
         (∏ f : {f : Edge G // f ≠ e},
-          if ξ f.1.1.1 (edgeLeftIncident (G := G) f.1) =
-              ξ f.1.1.2 (edgeRightIncident (G := G) f.1) then (1 : ℂ) else 0) *
+          finEqDelta
+            (leftIncidentValue A ξ f.1) (rightIncidentValue A ξ f.1)) *
           N (ξ e.1.1 (edgeLeftIncident (G := G) e))
             (ξ e.1.2 (edgeRightIncident (G := G) e)) *
           ∏ v : V, A.component v (ξ v) (σ v))
