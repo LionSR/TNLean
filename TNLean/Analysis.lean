@@ -37,6 +37,7 @@ import TNLean.Analysis.LiebScalarIntegral
 import TNLean.Analysis.MarginalSupport
 import TNLean.Analysis.MatrixFamilySupport
 import TNLean.Analysis.MatrixOrderTopology
+import TNLean.Analysis.MatrixReducedProjection
 import TNLean.Analysis.MatrixSqrt
 import TNLean.Analysis.MatrixTraceInequalities
 import TNLean.Analysis.MeanErgodic
@@ -72,3 +73,4 @@ import TNLean.Analysis.TwoProjectionDefectBlockSum
 import TNLean.Analysis.TwoProjectionReducedProjection
 import TNLean.Analysis.UpperTriangularBound
 import TNLean.Analysis.WeightedCesaroMean
+import TNLean.Analysis.WeightedPositiveKernel
