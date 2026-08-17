@@ -89,6 +89,35 @@
     The peripheral and non-peripheral spectral subspaces are complementary.
 \end{theorem}
 
+\begin{lemma}[Powers vanish on the non-peripheral subspace]
+    \label{lem:non_peripheral_pow_vanishing}
+    \lean{Module.End.tendsto_pow_apply_zero_of_mem_nonPeripheralSubspace}
+    \leanok
+    \uses{def:peripheral_spectral_splitting}
+    Let $T$ be an endomorphism of a finite-dimensional complex vector space
+    whose every eigenvalue has modulus at most one. Then $T^{n}(Y)\to0$ for
+    every $Y$ in the non-peripheral subspace:
+    \begin{align}
+        T^{n}(Y)&\longrightarrow0.
+        \label{eq:non_peripheral_pow_vanishing}
+    \end{align}
+\end{lemma}
+
+\begin{proof}\leanok
+    Every non-peripheral eigenvalue $\mu$ has modulus strictly below one.
+    On the corresponding maximal generalized eigenspace write
+    $T=\mu\Id+N$ with $N^{\ell}=0$; the binomial expansion gives
+    \begin{align}
+        (\mu\Id+N)^{n}
+        &=\sum_{m=0}^{\ell-1}\binom{n}{m}\mu^{n-m}N^{m}
+        \longrightarrow0,
+        \label{eq:non_peripheral_jordan_decay}
+    \end{align}
+    since each summand carries the factor $\mu^{n}\to0$ against a polynomial
+    in $n$. The non-peripheral subspace is the sum of these eigenspaces, and
+    convergence to zero is preserved by finite sums.
+\end{proof}
+
 \begin{definition}[Peripheral spectral projections]
     \label{def:peripheral_spectral_projections}
     \lean{Module.End.peripheralProjection,
