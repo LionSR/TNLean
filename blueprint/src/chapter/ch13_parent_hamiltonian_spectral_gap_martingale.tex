@@ -2607,7 +2607,7 @@ $N=L$. They give no gap estimate for $N>L$ and no periodic coercivity.
 
 \begin{proof}
     \leanok
-    Symmetry and idempotence give
+    Positivity of the inner product gives
     \begin{align}
         0
         &\leq \operatorname{Re}\langle(P-Q)v,(P-Q)v\rangle,\\
@@ -2617,7 +2617,8 @@ $N=L$. They give no gap estimate for $N>L$ and no periodic coercivity.
           -\operatorname{Re}\langle Qv,Pv\rangle
           +\operatorname{Re}\langle Qv,v\rangle.
     \end{align}
-    Rearranging the second line proves the claim.
+    Symmetry and idempotence expand the left-hand side into the second line;
+    rearranging it proves the claim.
 \end{proof}
 
 \begin{theorem}[Cyclic window double counting]
@@ -2627,7 +2628,6 @@ $N=L$. They give no gap estimate for $N>L$ and no periodic coercivity.
         ProjectionGeometry.reInnerCyclicCrossTerms,
         ProjectionGeometry.reInnerCyclicCrossTerms_eq_re_inner_cyclicCrossTerms,
         ZModCyclicSums.sum_comp_addRight,
-        ZModCyclicSums.sum_comp_addLeft,
         ZModCyclicSums.sum_range_Ico_triangular,
         ZModCyclicSums.sum_range_Ico_triangular_lower,
         ZModCyclicSums.sum_cyclic_window_eq,

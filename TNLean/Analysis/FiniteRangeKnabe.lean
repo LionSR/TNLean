@@ -55,7 +55,6 @@ open scoped InnerProductSpace
 
 namespace ProjectionGeometry
 
-
 section CyclicFamily
 
 variable {𝕜 E : Type*} [RCLike 𝕜] [NormedAddCommGroup E] [InnerProductSpace 𝕜 E]
@@ -348,7 +347,6 @@ theorem re_inner_sum_two_ge_sum_cyclicCrossTerms (h : ZMod N → E →ₗ[𝕜] 
           Finset.sum_congr rfl fun i _ => hInner i,
           Finset.sum_congr rfl fun i _ => hSplit0 i, Finset.sum_add_distrib, hCrossSum,
           ← hPart, hswap2]
-
 
 /-- **Finite-range cyclic Knabe inequality.**
 
