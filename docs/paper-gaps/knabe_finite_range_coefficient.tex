@@ -16,16 +16,19 @@
 
 \section{Source statements}
 
-Knabe's finite-size criterion gives the nearest-neighbor threshold
-$\gamma>1/m$ and periodic coefficient
-\begin{align}
-    \delta&=\frac{m\gamma-1}{m-1}.
-\end{align}
-This criterion originates in \cite{Knabe1988Energy}. It is quoted for MPS
-parent Hamiltonians in lines~1483--1489 of the local source for
+For a nearest-neighbor chain, let $m$ be the number of local interaction
+terms in each window and let $\gamma$ be the gap of the corresponding open
+window Hamiltonian. Knabe's finite-size criterion gives the threshold
+$\gamma>1/m$. This threshold originates in \cite{Knabe1988Energy}. It is
+quoted for MPS parent Hamiltonians in lines~1483--1489 of the local source for
 \cite{PerezGarcia2007Matrix} and in lines~2194--2197 of the local source for
-\cite{Cirac2021Matrix}. These passages do not state the general finite-range
-coefficient below.
+\cite{Cirac2021Matrix}. The quoted passages state only the threshold. The
+closed-form periodic coefficient
+\begin{align}
+    \delta&=\frac{m\gamma-1}{m-1}
+\end{align}
+is obtained by the present derivation, as the range-two case of the coefficient
+below.
 
 \section{Finite-range derivation}
 
@@ -62,10 +65,12 @@ it reduces to Knabe's nearest-neighbor coefficient.
 
 The nearest-neighbor threshold is source-attributed as above. The coefficient
 for arbitrary finite range is a TNLean derivation, not a statement attributed
-to Knabe, Nachtergaele, or the two MPS reviews. The abstract result concerns a
-cyclic family of projections. Applying it to every sufficiently large MPS
-parent Hamiltonian still requires a uniform gap for the corresponding
-nonwrapping open interaction.
+to Knabe, to Nachtergaele's martingale finite-size criterion
+\cite[Equations~(2.4)--(2.5) and Theorem~3]{Nachtergaele1996Spectral}, or to
+the two MPS reviews. The abstract result concerns a cyclic family of
+projections. Applying it to every sufficiently large MPS parent Hamiltonian
+still requires a uniform gap for the corresponding nonwrapping open
+interaction.
 
 \bibliographystyle{alpha}
 \bibliography{references}

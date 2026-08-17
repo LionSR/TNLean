@@ -99,3 +99,4 @@ import TNLean.Algebra.TracePairing
 import TNLean.Algebra.TracePowerCharPoly
 import TNLean.Algebra.TraceReindex
 import TNLean.Algebra.UnitModulusPowerSum
+import TNLean.Algebra.ZModCyclicSums

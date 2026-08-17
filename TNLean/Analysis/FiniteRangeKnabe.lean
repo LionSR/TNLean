@@ -3,9 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import Mathlib.Algebra.BigOperators.Intervals
-import Mathlib.Data.ZMod.Basic
-import Mathlib.Order.Interval.Finset.Nat
+import TNLean.Algebra.ZModCyclicSums
 import TNLean.Analysis.ProjectionGeometry
 
 /-!
@@ -75,353 +73,16 @@ theorem re_inner_anticommutator_le {P Q : E →ₗ[𝕜] E} (hP : P.IsSymmetricP
   have h0 : (0 : ℝ) ≤ RCLike.re ⟪P v - Q v, P v - Q v⟫_𝕜 :=
     inner_self_nonneg (x := P v - Q v)
   rw [inner_sub_sub_self] at h0
-  simp only [map_add, map_sub] at h0
-  rw [hP.re_inner_apply_apply_self, hQ.re_inner_apply_apply_self] at h0
+  have h0' : (0 : ℝ) ≤ RCLike.re ⟪P v, P v⟫_𝕜 - RCLike.re ⟪P v, Q v⟫_𝕜 -
+      RCLike.re ⟪Q v, P v⟫_𝕜 + RCLike.re ⟪Q v, Q v⟫_𝕜 := by
+    simpa only [map_add, map_sub] using h0
+  rw [hP.re_inner_apply_apply_self, hQ.re_inner_apply_apply_self] at h0'
   linarith
 
 end LinearMap.IsSymmetricProjection
 
 namespace ProjectionGeometry
 
-section CyclicSums
-
-variable {M : Type*} [AddCommMonoid M] {N : ℕ} [NeZero N]
-
-/-- Cyclic translation invariance: summing over the cyclic group `ZMod N`
-commutes with right translation of the index. -/
-theorem sum_comp_addRight (F : ZMod N → M) (d : ZMod N) :
-    ∑ i, F (i + d) = ∑ i, F i := by
-  simpa using Equiv.sum_comp (Equiv.addRight d) F
-
-/-- Cyclic translation invariance: summing over the cyclic group `ZMod N`
-commutes with left translation of the index. -/
-theorem sum_comp_addLeft (F : ZMod N → M) (d : ZMod N) :
-    ∑ i, F (d + i) = ∑ i, F i := by
-  simpa using Equiv.sum_comp (Equiv.addLeft d) F
-
-/-- Weighted triangular count, upper form.  Summing the offsets `e` with
-`1 ≤ e < m - q` over all `q < m` counts each `e` with `1 ≤ e < m` exactly
-`m - e` times. -/
-theorem sum_range_Ico_triangular (F : ℕ → M) (m : ℕ) :
-    (∑ q ∈ Finset.range m, ∑ e ∈ Finset.Ico 1 (m - q), F e) =
-      ∑ e ∈ Finset.Ico 1 m, (m - e) • F e := by
-  classical
-  have hExtend : ∀ q ∈ Finset.range m,
-      (∑ e ∈ Finset.Ico 1 (m - q), F e) =
-        ∑ e ∈ Finset.Ico 1 m, (if e ∈ Finset.Ico 1 (m - q) then F e else 0) := by
-    intro q _
-    have hfil : (Finset.Ico 1 m).filter (fun e => e ∈ Finset.Ico 1 (m - q)) =
-        Finset.Ico 1 (m - q) := by
-      refine Finset.ext fun x => ?_
-      simp only [Finset.mem_filter, Finset.mem_Ico]
-      omega
-    have h1 : (∑ e ∈ Finset.Ico 1 (m - q), F e) =
-        ∑ e ∈ (Finset.Ico 1 m).filter (fun e => e ∈ Finset.Ico 1 (m - q)), F e := by
-      rw [hfil]
-    rw [h1, Finset.sum_filter]
-  rw [Finset.sum_congr rfl (fun q hq => hExtend q hq), Finset.sum_comm]
-  refine Finset.sum_congr rfl fun e he => ?_
-  have hem : 1 ≤ e ∧ e < m := Finset.mem_Ico.mp he
-  have hCard : ∑ q ∈ Finset.range m, (if q ∈ Finset.range (m - e) then F e else 0) =
-      (m - e) • F e := by
-    have hfil : (Finset.range m).filter (fun q => q ∈ Finset.range (m - e)) =
-        Finset.range (m - e) := by
-      refine Finset.ext fun x => ?_
-      simp only [Finset.mem_filter, Finset.mem_range]
-      omega
-    rw [← Finset.sum_filter (s := Finset.range m), hfil, Finset.sum_const]
-    congr 1
-    simp
-  rw [← hCard]
-  refine Finset.sum_congr rfl fun q hq => ?_
-  have hqm : q < m := Finset.mem_range.mp hq
-  by_cases h1 : e ∈ Finset.Ico 1 (m - q)
-  · by_cases h2 : q ∈ Finset.range (m - e)
-    · simp [h1, h2]
-    · exfalso
-      simp only [Finset.mem_Ico, Finset.mem_range] at h1 h2
-      omega
-  · by_cases h2 : q ∈ Finset.range (m - e)
-    · exfalso
-      simp only [Finset.mem_Ico, Finset.mem_range] at h1 h2
-      omega
-    · simp [h1, h2]
-
-/-- Weighted triangular count, lower form.  Summing the offsets `e` with
-`1 ≤ e ≤ q` over all `q < m` counts each `e` with `1 ≤ e < m` exactly
-`m - e` times. -/
-theorem sum_range_Ico_triangular_lower (F : ℕ → M) (m : ℕ) :
-    (∑ q ∈ Finset.range m, ∑ e ∈ Finset.Ico 1 (q + 1), F e) =
-      ∑ e ∈ Finset.Ico 1 m, (m - e) • F e := by
-  classical
-  have hExtend : ∀ q ∈ Finset.range m,
-      (∑ e ∈ Finset.Ico 1 (q + 1), F e) =
-        ∑ e ∈ Finset.Ico 1 m, (if e ∈ Finset.Ico 1 (q + 1) then F e else 0) := by
-    intro q hq
-    have hqm : q < m := Finset.mem_range.mp hq
-    have hfil : (Finset.Ico 1 m).filter (fun e => e ∈ Finset.Ico 1 (q + 1)) =
-        Finset.Ico 1 (q + 1) := by
-      refine Finset.ext fun x => ?_
-      simp only [Finset.mem_filter, Finset.mem_Ico]
-      omega
-    have h1 : (∑ e ∈ Finset.Ico 1 (q + 1), F e) =
-        ∑ e ∈ (Finset.Ico 1 m).filter (fun e => e ∈ Finset.Ico 1 (q + 1)), F e := by
-      rw [hfil]
-    rw [h1, Finset.sum_filter]
-  rw [Finset.sum_congr rfl (fun q hq => hExtend q hq), Finset.sum_comm]
-  refine Finset.sum_congr rfl fun e he => ?_
-  have hem : 1 ≤ e ∧ e < m := Finset.mem_Ico.mp he
-  have hCard : ∑ q ∈ Finset.range m, (if q ∈ Finset.Ico e m then F e else 0) =
-      (m - e) • F e := by
-    have hfil : (Finset.range m).filter (fun q => q ∈ Finset.Ico e m) =
-        Finset.Ico e m := by
-      refine Finset.ext fun x => ?_
-      simp only [Finset.mem_filter, Finset.mem_range, Finset.mem_Ico]
-      omega
-    rw [← Finset.sum_filter (s := Finset.range m), hfil, Finset.sum_const]
-    congr 1
-    simp
-  rw [← hCard]
-  refine Finset.sum_congr rfl fun q hq => ?_
-  have hqm : q < m := Finset.mem_range.mp hq
-  by_cases h1 : e ∈ Finset.Ico 1 (q + 1)
-  · by_cases h2 : q ∈ Finset.Ico e m
-    · simp [h1, h2]
-    · exfalso
-      simp only [Finset.mem_Ico] at h1 h2
-      omega
-  · by_cases h2 : q ∈ Finset.Ico e m
-    · exfalso
-      simp only [Finset.mem_Ico] at h1 h2
-      omega
-    · simp [h1, h2]
-
-/-- Cyclic double counting for a square window of offsets.  For any function
-`T` on pairs of cyclic sites, summing `T (s + q) (s + q')` over all starting
-points `s` and all pairs of offsets `q, q' < m` produces the diagonal `T i i`
-with multiplicity `m`, and each ordered pair `(i, i + e)` and `(i, i - e)` with
-`1 ≤ e < m` with multiplicity `m - e`. -/
-theorem sum_cyclic_window_eq (T : ZMod N → ZMod N → M) (m : ℕ) :
-    (∑ s : ZMod N, ∑ q ∈ Finset.range m, ∑ q' ∈ Finset.range m,
-        T (s + q) (s + q')) =
-      m • ∑ i : ZMod N, T i i +
-        ∑ e ∈ Finset.Ico 1 m, (m - e) •
-          ∑ i : ZMod N, (T i (i + e) + T i (i - e)) := by
-  classical
-  -- Translate the sum over starting points for each fixed pair of offsets.
-  have hStep1 : ∀ q ∈ Finset.range m, ∀ q' ∈ Finset.range m,
-      (∑ s : ZMod N, T (s + q) (s + q')) = ∑ i : ZMod N, T i (i + (q' - q)) := by
-    intro q _ q' _
-    have harg : ∀ s : ZMod N, (s + q) + (q' - q) = s + q' := by
-      intro s
-      abel
-    calc (∑ s : ZMod N, T (s + q) (s + q'))
-        = ∑ s : ZMod N, T (s + q) ((s + q) + (q' - q)) :=
-          Finset.sum_congr rfl fun s _ => by rw [harg s]
-      _ = ∑ i : ZMod N, T i (i + (q' - q)) :=
-          sum_comp_addRight (fun u => T u (u + (q' - q))) q
-  -- Flatten the sum over starting points to the inside.
-  have hFlat : (∑ s : ZMod N, ∑ q ∈ Finset.range m, ∑ q' ∈ Finset.range m,
-      T (s + q) (s + q')) =
-      ∑ i : ZMod N, ∑ q ∈ Finset.range m, ∑ q' ∈ Finset.range m,
-        T i (i + (q' - q)) := by
-    conv_rhs => rw [Finset.sum_comm]
-    conv_lhs => rw [Finset.sum_comm]
-    refine Finset.sum_congr rfl fun q hq => ?_
-    conv_rhs => rw [Finset.sum_comm]
-    conv_lhs => rw [Finset.sum_comm]
-    exact Finset.sum_congr rfl fun q' hq' => hStep1 q hq q' hq'
-  -- Split each offset square into the diagonal and the two triangles.
-  have hSplit : ∀ i : ZMod N,
-      (∑ q ∈ Finset.range m, ∑ q' ∈ Finset.range m, T i (i + (q' - q))) =
-        (∑ q ∈ Finset.range m, T i i) +
-          ((∑ q ∈ Finset.range m, ∑ e ∈ Finset.Ico 1 (m - q), T i (i + e)) +
-            ∑ q ∈ Finset.range m, ∑ e ∈ Finset.Ico 1 (q + 1), T i (i - e)) := by
-    intro i
-    have hPer : ∀ q ∈ Finset.range m,
-        (∑ q' ∈ Finset.range m, T i (i + (q' - q))) =
-          T i i + ((∑ e ∈ Finset.Ico 1 (m - q), T i (i + e)) +
-            ∑ e ∈ Finset.Ico 1 (q + 1), T i (i - e)) := by
-      intro q hq
-      have hqm : q < m := Finset.mem_range.mp hq
-      have hRange : Finset.range m =
-          Finset.Ico 0 q ∪ insert q (Finset.Ico (q + 1) m) := by
-        have h1 : Finset.range m = Finset.Ico 0 m := Finset.range_eq_Ico m
-        have h2 : Finset.Ico 0 m = Finset.Ico 0 q ∪ Finset.Ico q m :=
-          (Finset.Ico_union_Ico_eq_Ico (by omega) (by omega)).symm
-        have h3 : Finset.Ico q m = insert q (Finset.Ico (q + 1) m) := by
-          rw [← Finset.insert_erase (Finset.mem_Ico.mpr ⟨le_refl q, by omega⟩),
-            ← Nat.Ico_succ_left_eq_erase_Ico]
-        rw [h1, h2, h3]
-      rw [hRange, Finset.sum_union (Finset.disjoint_iff_inter_eq_empty.mpr
-        (Finset.eq_empty_iff_forall_notMem.mpr fun x hx => by
-          simp only [Finset.mem_inter, Finset.mem_Ico, Finset.mem_insert] at hx
-          omega)), Finset.sum_insert (by
-        intro hxs
-        simp only [Finset.mem_Ico] at hxs
-        omega)]
-      -- The strict lower triangle reindexes by the positive offset difference.
-      have hFirst : (∑ q' ∈ Finset.Ico 0 q, T i (i + (q' - q))) =
-          ∑ e ∈ Finset.Ico 1 (q + 1), T i (i - e) := by
-        refine Finset.sum_nbij' (fun q' => q - q') (fun e => q - e) ?_ ?_ ?_ ?_ ?_
-        · intro q' hq'
-          simp only [Finset.mem_Ico] at hq' ⊢
-          omega
-        · intro e he
-          simp only [Finset.mem_Ico] at he ⊢
-          omega
-        · intro q' hq'
-          simp only [Finset.mem_Ico] at hq'
-          omega
-        · intro e he
-          simp only [Finset.mem_Ico] at he
-          omega
-        · intro q' hq'
-          have hq'q : q' ≤ q := by
-            simp only [Finset.mem_Ico] at hq'
-            omega
-          have hcast : ((q' : ZMod N) - q) = -((q - q' : ℕ) : ZMod N) := by
-            have hsub : (((q - q' : ℕ) : ZMod N)) + (q' : ZMod N) = (q : ZMod N) := by
-              rw [← Nat.cast_add, Nat.sub_add_cancel hq'q]
-            linear_combination (norm := module) hsub
-          change T i (i + (↑q' - ↑q)) = T i (i - ↑(q - q'))
-          congr 1
-          rw [hcast]
-          abel
-      -- The strict upper triangle reindexes by the positive offset difference.
-      have hThird : (∑ q' ∈ Finset.Ico (q + 1) m, T i (i + (q' - q))) =
-          ∑ e ∈ Finset.Ico 1 (m - q), T i (i + e) := by
-        refine Finset.sum_nbij' (fun q' => q' - q) (fun e => q + e) ?_ ?_ ?_ ?_ ?_
-        · intro q' hq'
-          simp only [Finset.mem_Ico] at hq' ⊢
-          omega
-        · intro e he
-          simp only [Finset.mem_Ico] at he ⊢
-          omega
-        · intro q' hq'
-          simp only [Finset.mem_Ico] at hq'
-          omega
-        · intro e he
-          simp only [Finset.mem_Ico] at he
-          omega
-        · intro q' hq'
-          have hq'q : q < q' := by
-            simp only [Finset.mem_Ico] at hq'
-            omega
-          change T i (i + (↑q' - ↑q)) = T i (i + ↑(q' - q))
-          rw [Nat.cast_sub hq'q.le]
-      rw [hFirst, hThird, sub_self, add_zero]
-      ac_rfl
-    rw [Finset.sum_congr rfl hPer, Finset.sum_add_distrib, Finset.sum_add_distrib]
-  -- Assemble: diagonal, then the two weighted triangles.
-  rw [hFlat, Finset.sum_congr rfl fun i _ => hSplit i, Finset.sum_add_distrib,
-    Finset.sum_add_distrib]
-  have hDiag : (∑ i : ZMod N, ∑ q ∈ Finset.range m, T i i) = m • ∑ i : ZMod N, T i i := by
-    rw [Finset.sum_comm]
-    simp
-  rw [hDiag]
-  have hUpper : (∑ i : ZMod N, ∑ q ∈ Finset.range m, ∑ e ∈ Finset.Ico 1 (m - q),
-      T i (i + e)) = ∑ e ∈ Finset.Ico 1 m, (m - e) • ∑ i : ZMod N, T i (i + e) := by
-    rw [Finset.sum_congr rfl fun i _ => sum_range_Ico_triangular (fun e => T i (i + e)) m,
-      Finset.sum_comm]
-    exact Finset.sum_congr rfl fun e _ => (Finset.smul_sum).symm
-  have hLower : (∑ i : ZMod N, ∑ q ∈ Finset.range m, ∑ e ∈ Finset.Ico 1 (q + 1),
-      T i (i - e)) = ∑ e ∈ Finset.Ico 1 m, (m - e) • ∑ i : ZMod N, T i (i - e) := by
-    rw [Finset.sum_congr rfl fun i _ =>
-      sum_range_Ico_triangular_lower (fun e => T i (i - e)) m, Finset.sum_comm]
-    exact Finset.sum_congr rfl fun e _ => (Finset.smul_sum).symm
-  have hComb : (∑ e ∈ Finset.Ico 1 m, (m - e) •
-        ∑ i : ZMod N, (T i (i + e) + T i (i - e))) =
-      (∑ e ∈ Finset.Ico 1 m, (m - e) • ∑ i : ZMod N, T i (i + e)) +
-        (∑ e ∈ Finset.Ico 1 m, (m - e) • ∑ i : ZMod N, T i (i - e)) := by
-    rw [← Finset.sum_add_distrib]
-    exact Finset.sum_congr rfl fun e _ => by rw [Finset.sum_add_distrib, smul_add]
-  rw [hUpper, hLower, ← hComb]
-
-/-- Partition of the nonzero cyclic offsets into short offsets `1 ≤ e < m`,
-the reflection `N - e` of each short offset, and middle offsets
-`m ≤ k ≤ N - m`.  The partition requires `1 ≤ m ≤ N / 2`, so that the middle
-interval is well placed and short offsets and their reflections are distinct. -/
-theorem sum_offset_partition (F : ZMod N → M) {m : ℕ} (hm1 : 1 ≤ m) (hm : 2 * m ≤ N) :
-    (∑ u ∈ (Finset.univ.erase 0 : Finset (ZMod N)), F u) =
-      (∑ e ∈ Finset.Ico 1 m, (F e + F ((N - e : ℕ) : ZMod N))) +
-        ∑ k ∈ Finset.Ico m (N - m + 1), F k := by
-  classical
-  -- Index the nonzero cyclic offsets by the integer interval `1 ≤ k < N`.
-  have hBij : (∑ u ∈ Finset.univ.erase (0 : ZMod N), F u) =
-      ∑ k ∈ Finset.Ico 1 N, F k := by
-    refine Finset.sum_nbij' (fun u => u.val) (fun k => (k : ZMod N)) ?_ ?_ ?_ ?_ ?_
-    · intro u hu
-      have hu0 : u ≠ 0 := by simpa using hu
-      have hlt : u.val < N := ZMod.val_lt u
-      have hne : u.val ≠ 0 := fun h0 => hu0 (by
-        rw [← ZMod.natCast_zmod_val u, h0]
-        simp)
-      simp only [Finset.mem_Ico]
-      omega
-    · intro k hk
-      simp only [Finset.mem_Ico] at hk
-      have hkne : (k : ZMod N) ≠ 0 := by
-        intro h0
-        have hkmod : k % N = 0 := by
-          rw [← ZMod.val_natCast N k, h0]
-          simp
-        rw [Nat.mod_eq_of_lt (by omega)] at hkmod
-        omega
-      exact Finset.mem_erase.2 ⟨hkne, Finset.mem_univ _⟩
-    · intro u _
-      exact ZMod.natCast_zmod_val u
-    · intro k hk
-      simp only [Finset.mem_Ico] at hk
-      have hkN : ((k : ZMod N)).val = k % N := ZMod.val_natCast N k
-      rw [hkN, Nat.mod_eq_of_lt (by omega)]
-    · intro u _
-      rw [ZMod.natCast_zmod_val]
-  rw [hBij]
-  -- Split the interval `1 ≤ k < N` into short, middle, and long offsets.
-  have hUnion : (Finset.Ico 1 m ∪ Finset.Ico m (N - m + 1)) ∪ Finset.Ico (N - m + 1) N =
-      Finset.Ico 1 N := by
-    have hU1 : Finset.Ico 1 m ∪ Finset.Ico m (N - m + 1) = Finset.Ico 1 (N - m + 1) :=
-      Finset.Ico_union_Ico_eq_Ico (by omega) (by omega)
-    have hU2 : Finset.Ico 1 (N - m + 1) ∪ Finset.Ico (N - m + 1) N = Finset.Ico 1 N :=
-      Finset.Ico_union_Ico_eq_Ico (by omega) (by omega)
-    rw [hU1, hU2]
-  have hDisj1 : Disjoint (Finset.Ico 1 m) (Finset.Ico m (N - m + 1)) := by
-    rw [Finset.disjoint_iff_inter_eq_empty]
-    refine Finset.eq_empty_iff_forall_notMem.mpr fun x hx => ?_
-    simp only [Finset.mem_inter, Finset.mem_Ico] at hx
-    omega
-  have hDisj2 : Disjoint (Finset.Ico 1 m ∪ Finset.Ico m (N - m + 1))
-      (Finset.Ico (N - m + 1) N) := by
-    rw [Finset.disjoint_iff_inter_eq_empty]
-    refine Finset.eq_empty_iff_forall_notMem.mpr fun x hx => ?_
-    simp only [Finset.mem_inter, Finset.mem_union, Finset.mem_Ico] at hx
-    omega
-  -- Reflect the long offsets `N - m + 1 ≤ k < N` back to short offsets.
-  have hLong : (∑ k ∈ Finset.Ico (N - m + 1) N, F k) =
-      ∑ e ∈ Finset.Ico 1 m, F ((N - e : ℕ) : ZMod N) := by
-    refine Finset.sum_nbij' (fun k => N - k) (fun e => N - e) ?_ ?_ ?_ ?_ ?_
-    · intro k hk
-      simp only [Finset.mem_Ico] at hk ⊢
-      omega
-    · intro e he
-      simp only [Finset.mem_Ico] at he ⊢
-      omega
-    · intro k hk
-      simp only [Finset.mem_Ico] at hk
-      omega
-    · intro e he
-      simp only [Finset.mem_Ico] at he
-      omega
-    · intro k hk
-      simp only [Finset.mem_Ico] at hk
-      have hkN : N - (N - k) = k := by omega
-      simp only [hkN]
-  rw [← hUnion, Finset.sum_union hDisj2, Finset.sum_union hDisj1, hLong,
-    Finset.sum_add_distrib]
-  ac_rfl
-
-end CyclicSums
 
 
 
@@ -476,7 +137,7 @@ theorem cyclicWindowSum_sq_sum_eq (h : ZMod N → E →ₗ[𝕜] E)
 /-- The ordered real cross terms of a cyclic family at offset `e`: the sum over
 all sites of the two ordered quadratic forms of the pairs at cyclic offsets
 `e` and `-e`. -/
-def re_inner_cyclicCrossTerms (h : ZMod N → E →ₗ[𝕜] E) (e : ℕ) (v : E) : ℝ :=
+def reInnerCyclicCrossTerms (h : ZMod N → E →ₗ[𝕜] E) (e : ℕ) (v : E) : ℝ :=
   ∑ i : ZMod N, (RCLike.re ⟪h i v, h (i + e) v⟫_𝕜 + RCLike.re ⟪h i v, h (i - e) v⟫_𝕜)
 
 /-- The cyclic double-counting identity for a family of symmetric projections:
@@ -487,7 +148,7 @@ theorem re_inner_cyclicWindowSum_sum_eq (h : ZMod N → E →ₗ[𝕜] E)
     (hh : ∀ i, (h i).IsSymmetricProjection) (m : ℕ) (v : E) :
     (∑ s : ZMod N, RCLike.re ⟪cyclicWindowSum h m s v, cyclicWindowSum h m s v⟫_𝕜) =
       m * RCLike.re ⟪(∑ i, h i) v, v⟫_𝕜 +
-        ∑ e ∈ Finset.Ico 1 m, (m - e) * re_inner_cyclicCrossTerms h e v := by
+        ∑ e ∈ Finset.Ico 1 m, (m - e) * reInnerCyclicCrossTerms h e v := by
   classical
   have hExpand : ∀ s : ZMod N,
       RCLike.re ⟪cyclicWindowSum h m s v, cyclicWindowSum h m s v⟫_𝕜 =
@@ -504,7 +165,6 @@ theorem re_inner_cyclicWindowSum_sum_eq (h : ZMod N → E →ₗ[𝕜] E)
   set T : ZMod N → ZMod N → ℝ := fun i j => RCLike.re ⟪h i v, h j v⟫_𝕜 with hT
   have hDiag : (∑ i : ZMod N, T i i) = RCLike.re ⟪(∑ i, h i) v, v⟫_𝕜 := by
     rw [hT]
-    simp only []
     rw [re_inner_sum_apply_left h v]
     exact Finset.sum_congr rfl fun i _ => (hh i).re_inner_apply_apply_self v
   calc (∑ s : ZMod N, RCLike.re ⟪cyclicWindowSum h m s v, cyclicWindowSum h m s v⟫_𝕜)
@@ -515,11 +175,11 @@ theorem re_inner_cyclicWindowSum_sum_eq (h : ZMod N → E →ₗ[𝕜] E)
         ∑ e ∈ Finset.Ico 1 m, (m - e) • ∑ i : ZMod N, (T i (i + e) + T i (i - e)) :=
         sum_cyclic_window_eq T m
     _ = m * RCLike.re ⟪(∑ i, h i) v, v⟫_𝕜 +
-        ∑ e ∈ Finset.Ico 1 m, (m - e) * re_inner_cyclicCrossTerms h e v := by
+        ∑ e ∈ Finset.Ico 1 m, (m - e) * reInnerCyclicCrossTerms h e v := by
         rw [hDiag, nsmul_eq_mul]
         have hsmulB : ∀ e ∈ Finset.Ico 1 m,
             ((m - e : ℕ) • (∑ i : ZMod N, (T i (i + e) + T i (i - e)))) =
-              ((m : ℝ) - (e : ℝ)) * re_inner_cyclicCrossTerms h e v := by
+              ((m : ℝ) - (e : ℝ)) * reInnerCyclicCrossTerms h e v := by
           intro e he
           simp only [Finset.mem_Ico] at he
           rw [nsmul_eq_mul, Nat.cast_sub (by omega)]
@@ -557,7 +217,7 @@ theorem re_inner_cyclicWindowSum_sum_apply (h : ZMod N → E →ₗ[𝕜] E) (m 
 any offset are bounded by twice the total quadratic form. -/
 theorem re_inner_cyclicCrossTerms_le_two (h : ZMod N → E →ₗ[𝕜] E)
     (hh : ∀ i, (h i).IsSymmetricProjection) (e : ℕ) (v : E) :
-    re_inner_cyclicCrossTerms h e v ≤ 2 * RCLike.re ⟪(∑ i, h i) v, v⟫_𝕜 := by
+    reInnerCyclicCrossTerms h e v ≤ 2 * RCLike.re ⟪(∑ i, h i) v, v⟫_𝕜 := by
   classical
   have hPair : ∀ i : ZMod N,
       RCLike.re ⟪h i v, h (i + e) v⟫_𝕜 + RCLike.re ⟪h (i + e) v, h i v⟫_𝕜 ≤
@@ -573,12 +233,12 @@ theorem re_inner_cyclicCrossTerms_le_two (h : ZMod N → E →ₗ[𝕜] E)
   have hDiag : (∑ i : ZMod N, RCLike.re ⟪h (i + e) v, v⟫_𝕜) =
       ∑ i : ZMod N, RCLike.re ⟪h i v, v⟫_𝕜 :=
     sum_comp_addRight (fun u : ZMod N => RCLike.re ⟪h u v, v⟫_𝕜) _
-  have hSplit : re_inner_cyclicCrossTerms h e v =
+  have hSplit : reInnerCyclicCrossTerms h e v =
       (∑ i : ZMod N, (RCLike.re ⟪h i v, h (i + e) v⟫_𝕜 +
         RCLike.re ⟪h (i + e) v, h i v⟫_𝕜)) := by
-    unfold re_inner_cyclicCrossTerms
+    unfold reInnerCyclicCrossTerms
     rw [Finset.sum_add_distrib, Finset.sum_add_distrib, hTrans]
-  calc re_inner_cyclicCrossTerms h e v
+  calc reInnerCyclicCrossTerms h e v
       = (∑ i : ZMod N, (RCLike.re ⟪h i v, h (i + e) v⟫_𝕜 +
         RCLike.re ⟪h (i + e) v, h i v⟫_𝕜)) := hSplit
     _ ≤ (∑ i : ZMod N, (RCLike.re ⟪h i v, v⟫_𝕜 +
@@ -599,7 +259,7 @@ theorem re_inner_cyclicCrossTerms_nonneg (h : ZMod N → E →ₗ[𝕜] E)
     (hcomm : ∀ d : ℕ, R ≤ d → d + R ≤ N → ∀ i : ZMod N, ∀ v : E,
       h i (h ((i + (d : ZMod N))) v) = h ((i + (d : ZMod N))) (h i v))
     {e : ℕ} (he1 : R ≤ e) (he2 : e + R ≤ N) (v : E) :
-    0 ≤ re_inner_cyclicCrossTerms h e v := by
+    0 ≤ reInnerCyclicCrossTerms h e v := by
   have h1 : ∀ i : ZMod N, 0 ≤ RCLike.re ⟪h i v, h (i + e) v⟫_𝕜 :=
     fun i => LinearMap.IsSymmetricProjection.re_inner_apply_apply_nonneg_of_commute
       (hh i) (hh (i + e)) (hcomm e he1 he2 i) v
@@ -628,7 +288,7 @@ theorem re_inner_sum_two_ge_sum_cyclicCrossTerms (h : ZMod N → E →ₗ[𝕜] 
     (hcomm : ∀ d : ℕ, R ≤ d → d + R ≤ N → ∀ i : ZMod N, ∀ v : E,
       h i (h ((i + (d : ZMod N))) v) = h ((i + (d : ZMod N))) (h i v))
     (v : E) :
-    RCLike.re ⟪(∑ i, h i) v, v⟫_𝕜 + ∑ e ∈ Finset.Ico 1 m, re_inner_cyclicCrossTerms h e v ≤
+    RCLike.re ⟪(∑ i, h i) v, v⟫_𝕜 + ∑ e ∈ Finset.Ico 1 m, reInnerCyclicCrossTerms h e v ≤
       RCLike.re ⟪(∑ i, h i) v, (∑ i, h i) v⟫_𝕜 := by
   classical
   set T : ZMod N → ZMod N → ℝ := fun i j => RCLike.re ⟪h i v, h j v⟫_𝕜 with hT
@@ -663,7 +323,7 @@ theorem re_inner_sum_two_ge_sum_cyclicCrossTerms (h : ZMod N → E →ₗ[𝕜] 
   -- The reflected short offsets reproduce the second leg of the cross terms.
   have hCross : ∀ e ∈ Finset.Ico 1 m,
       F ((e : ZMod N)) + F ((N - e : ℕ) : ZMod N) =
-        re_inner_cyclicCrossTerms h e v := by
+        reInnerCyclicCrossTerms h e v := by
     intro e he
     simp only [Finset.mem_Ico] at he
     have hshift : (∑ i : ZMod N, T i (i + ((N - e : ℕ) : ZMod N))) =
@@ -679,18 +339,18 @@ theorem re_inner_sum_two_ge_sum_cyclicCrossTerms (h : ZMod N → E →ₗ[𝕜] 
         (∑ i : ZMod N, T i (i + ((N - e : ℕ) : ZMod N))) = _
     rw [hshift, ← Finset.sum_add_distrib]
     rfl
-  calc RCLike.re ⟪(∑ i, h i) v, v⟫_𝕜 + ∑ e ∈ Finset.Ico 1 m, re_inner_cyclicCrossTerms h e v
-      = (∑ i : ZMod N, T i i) + (∑ e ∈ Finset.Ico 1 m, re_inner_cyclicCrossTerms h e v) := by
+  calc RCLike.re ⟪(∑ i, h i) v, v⟫_𝕜 + ∑ e ∈ Finset.Ico 1 m, reInnerCyclicCrossTerms h e v
+      = (∑ i : ZMod N, T i i) + (∑ e ∈ Finset.Ico 1 m, reInnerCyclicCrossTerms h e v) := by
         rw [re_inner_sum_apply_left h v]
         congr 1
         exact Finset.sum_congr rfl fun i _ => ((hh i).re_inner_apply_apply_self v).symm
     _ ≤ (∑ i : ZMod N, T i i) +
-        (∑ e ∈ Finset.Ico 1 m, re_inner_cyclicCrossTerms h e v +
+        (∑ e ∈ Finset.Ico 1 m, reInnerCyclicCrossTerms h e v +
           ∑ k ∈ Finset.Ico m (N - m + 1), F k) := by
         have hle := hMidNonneg
         linarith
     _ = RCLike.re ⟪(∑ i, h i) v, (∑ i, h i) v⟫_𝕜 := by
-        have hCrossSum : (∑ e ∈ Finset.Ico 1 m, re_inner_cyclicCrossTerms h e v) =
+        have hCrossSum : (∑ e ∈ Finset.Ico 1 m, reInnerCyclicCrossTerms h e v) =
             (∑ e ∈ Finset.Ico 1 m, (F ((e : ZMod N)) + F ((N - e : ℕ) : ZMod N))) :=
           Finset.sum_congr rfl fun e he => (hCross e he).symm
         have hswap2 : (∑ u ∈ (Finset.univ.erase 0 : Finset (ZMod N)),
@@ -756,11 +416,11 @@ theorem quadraticForm_sum_projections_of_cyclic_knabe
   -- The cyclic expansion.
   have hii := re_inner_cyclicWindowSum_sum_eq h hh m v
   -- The pairwise bound, summed over the ring.
-  have hiii : ∀ e ∈ Finset.Ico 1 m, re_inner_cyclicCrossTerms h e v ≤
+  have hiii : ∀ e ∈ Finset.Ico 1 m, reInnerCyclicCrossTerms h e v ≤
       2 * RCLike.re ⟪(∑ i, h i) v, v⟫_𝕜 :=
     fun e _ => re_inner_cyclicCrossTerms_le_two h hh e v
   -- Nonnegative cross terms at separated offsets.
-  have hiv : ∀ e ∈ Finset.Ico R m, 0 ≤ re_inner_cyclicCrossTerms h e v := by
+  have hiv : ∀ e ∈ Finset.Ico R m, 0 ≤ reInnerCyclicCrossTerms h e v := by
     intro e he
     simp only [Finset.mem_Ico] at he
     have he2 : e + R ≤ N := by omega
@@ -807,13 +467,13 @@ theorem quadraticForm_sum_projections_of_cyclic_knabe
   have hc : (0 : ℝ) < ((m - R + 1 : ℕ) : ℝ) := by
     have h1 : 0 < m - R + 1 := by omega
     exact_mod_cast h1
-  have hSplit : (∑ e ∈ Finset.Ico 1 m, ((m : ℝ) - e) * re_inner_cyclicCrossTerms h e v) =
-      (((m - R + 1 : ℕ) : ℝ) * (∑ e ∈ Finset.Ico 1 m, re_inner_cyclicCrossTerms h e v) +
-        ∑ e ∈ Finset.Ico 1 m, (((R : ℝ) - 1 - e) * re_inner_cyclicCrossTerms h e v)) := by
+  have hSplit : (∑ e ∈ Finset.Ico 1 m, ((m : ℝ) - e) * reInnerCyclicCrossTerms h e v) =
+      (((m - R + 1 : ℕ) : ℝ) * (∑ e ∈ Finset.Ico 1 m, reInnerCyclicCrossTerms h e v) +
+        ∑ e ∈ Finset.Ico 1 m, (((R : ℝ) - 1 - e) * reInnerCyclicCrossTerms h e v)) := by
     have hCoeff : ∀ e ∈ Finset.Ico 1 m,
-        (((m : ℝ) - e) * re_inner_cyclicCrossTerms h e v) =
-          (((m - R + 1 : ℕ) : ℝ) * re_inner_cyclicCrossTerms h e v +
-            (((R : ℝ) - 1 - e) * re_inner_cyclicCrossTerms h e v)) := by
+        (((m : ℝ) - e) * reInnerCyclicCrossTerms h e v) =
+          (((m - R + 1 : ℕ) : ℝ) * reInnerCyclicCrossTerms h e v +
+            (((R : ℝ) - 1 - e) * reInnerCyclicCrossTerms h e v)) := by
       intro e he
       simp only [Finset.mem_Ico] at he
       have hc2 : ((m - R + 1 : ℕ) : ℝ) = (m : ℝ) - (R : ℝ) + 1 := by
@@ -828,7 +488,7 @@ theorem quadraticForm_sum_projections_of_cyclic_knabe
       rw [hEq]
       ring
     rw [Finset.sum_congr rfl hCoeff, Finset.sum_add_distrib, Finset.mul_sum]
-  have hDrop : (∑ e ∈ Finset.Ico 1 m, (((R : ℝ) - 1 - e) * re_inner_cyclicCrossTerms h e v)) ≤
+  have hDrop : (∑ e ∈ Finset.Ico 1 m, (((R : ℝ) - 1 - e) * reInnerCyclicCrossTerms h e v)) ≤
       ((R : ℝ) - 1) * ((R : ℝ) - 2) * RCLike.re ⟪(∑ i, h i) v, v⟫_𝕜 := by
     have hUnion : Finset.Ico 1 m = Finset.Ico 1 R ∪ Finset.Ico R m :=
       (Finset.Ico_union_Ico_eq_Ico (a := 1) (b := R) (c := m) (by omega) (by omega)).symm
@@ -838,9 +498,9 @@ theorem quadraticForm_sum_projections_of_cyclic_knabe
       simp only [Finset.mem_inter, Finset.mem_Ico] at hx
       omega
     rw [hUnion, Finset.sum_union hDisj]
-    have hShort : (∑ e ∈ Finset.Ico 1 R, (((R : ℝ) - 1 - e) * re_inner_cyclicCrossTerms h e v)) ≤
+    have hShort : (∑ e ∈ Finset.Ico 1 R, (((R : ℝ) - 1 - e) * reInnerCyclicCrossTerms h e v)) ≤
         ((R : ℝ) - 1) * ((R : ℝ) - 2) * RCLike.re ⟪(∑ i, h i) v, v⟫_𝕜 := by
-      calc (∑ e ∈ Finset.Ico 1 R, (((R : ℝ) - 1 - e) * re_inner_cyclicCrossTerms h e v))
+      calc (∑ e ∈ Finset.Ico 1 R, (((R : ℝ) - 1 - e) * reInnerCyclicCrossTerms h e v))
           ≤ (∑ e ∈ Finset.Ico 1 R, (((R : ℝ) - 1 - e) *
               (2 * RCLike.re ⟪(∑ i, h i) v, v⟫_𝕜))) := by
             refine Finset.sum_le_sum fun e he => ?_
@@ -858,7 +518,7 @@ theorem quadraticForm_sum_projections_of_cyclic_knabe
                   (2 * ∑ e ∈ Finset.Ico 1 R, (R - 1 - (e : ℝ))) *
                     RCLike.re ⟪(∑ i, h i) v, v⟫_𝕜 := by ring
               _ = _ := by rw [hvi]
-    have hLong : (∑ e ∈ Finset.Ico R m, (((R : ℝ) - 1 - e) * re_inner_cyclicCrossTerms h e v)) ≤
+    have hLong : (∑ e ∈ Finset.Ico R m, (((R : ℝ) - 1 - e) * reInnerCyclicCrossTerms h e v)) ≤
         0 := by
       refine Finset.sum_nonpos fun e he => ?_
       have he' := Finset.mem_Ico.mp he
@@ -870,13 +530,13 @@ theorem quadraticForm_sum_projections_of_cyclic_knabe
       RCLike.re ⟪cyclicWindowSum h m s v, cyclicWindowSum h m s v⟫_𝕜) ≤
       (((m - R + 1 : ℕ) : ℝ) * RCLike.re ⟪(∑ i, h i) v, (∑ i, h i) v⟫_𝕜 +
         ((R : ℝ) - 1) ^ 2 * RCLike.re ⟪(∑ i, h i) v, v⟫_𝕜) := by
-    have hCrossSumLe : (∑ e ∈ Finset.Ico 1 m, re_inner_cyclicCrossTerms h e v) ≤
+    have hCrossSumLe : (∑ e ∈ Finset.Ico 1 m, reInnerCyclicCrossTerms h e v) ≤
         RCLike.re ⟪(∑ i, h i) v, (∑ i, h i) v⟫_𝕜 - RCLike.re ⟪(∑ i, h i) v, v⟫_𝕜 := by
       have h1 := hv
       linarith
     rw [hii, hSplit]
     have hMidLe : (((m - R + 1 : ℕ) : ℝ) *
-        (∑ e ∈ Finset.Ico 1 m, re_inner_cyclicCrossTerms h e v)) ≤
+        (∑ e ∈ Finset.Ico 1 m, reInnerCyclicCrossTerms h e v)) ≤
         (((m - R + 1 : ℕ) : ℝ) *
           (RCLike.re ⟪(∑ i, h i) v, (∑ i, h i) v⟫_𝕜 -
             RCLike.re ⟪(∑ i, h i) v, v⟫_𝕜)) :=
@@ -888,9 +548,9 @@ theorem quadraticForm_sum_projections_of_cyclic_knabe
     calc
       (m : ℝ) * RCLike.re ⟪(∑ i, h i) v, v⟫_𝕜 +
           (((m - R + 1 : ℕ) : ℝ) *
-            (∑ e ∈ Finset.Ico 1 m, re_inner_cyclicCrossTerms h e v) +
+            (∑ e ∈ Finset.Ico 1 m, reInnerCyclicCrossTerms h e v) +
           ∑ e ∈ Finset.Ico 1 m,
-            ((R : ℝ) - 1 - e) * re_inner_cyclicCrossTerms h e v)
+            ((R : ℝ) - 1 - e) * reInnerCyclicCrossTerms h e v)
         ≤ (m : ℝ) * RCLike.re ⟪(∑ i, h i) v, v⟫_𝕜 +
             ((m - R + 1 : ℕ) : ℝ) *
               (RCLike.re ⟪(∑ i, h i) v, (∑ i, h i) v⟫_𝕜 -
