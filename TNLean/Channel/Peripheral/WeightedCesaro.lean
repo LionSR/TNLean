@@ -89,7 +89,7 @@ private theorem pow_apply_of_mem_eigenspace {f : Module.End ℂ V} {μ : ℂ} {x
   | succ n ih =>
       rw [pow_succ']
       change f ((f ^ n) x) = _
-      rw [ih, map_smul, Module.End.mem_eigenspace_iff.mp hx, smul_smul, pow_succ', mul_comm]
+      rw [ih, map_smul, Module.End.mem_eigenspace_iff.mp hx, smul_smul, pow_succ]
 
 end Definition
 

@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.Algebra.OrthogonalProjection
+import TNLean.Analysis.TraceNormAbs
 import TNLean.Analysis.TwoProjectionReducedProjection
 
 /-!
@@ -18,15 +19,6 @@ right factor from `LinearMap.IsSymmetricProjection.reducedProjection`.
 namespace Matrix
 
 variable {D : ℕ}
-
-private theorem toEuclideanLin_mul (A B : Matrix (Fin D) (Fin D) ℂ) :
-    Matrix.toEuclideanLin (A * B) =
-      (Matrix.toEuclideanLin A).comp (Matrix.toEuclideanLin B) := by
-  change Matrix.toLin (EuclideanSpace.basisFun (Fin D) ℂ).toBasis
-      (EuclideanSpace.basisFun (Fin D) ℂ).toBasis (A * B) = _
-  exact Matrix.toLin_mul (EuclideanSpace.basisFun (Fin D) ℂ).toBasis
-    (EuclideanSpace.basisFun (Fin D) ℂ).toBasis
-    (EuclideanSpace.basisFun (Fin D) ℂ).toBasis A B
 
 private theorem isSymmetricProjection_toEuclideanLin
     {P : Matrix (Fin D) (Fin D) ℂ} (hP : IsOrthogonalProjection P) :

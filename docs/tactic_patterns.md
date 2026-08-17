@@ -506,6 +506,17 @@ abstracted — record why, so it is not re-proposed).
 
 ## Completed refactors
 
+### Euclidean linear-map multiplicativity
+- **Pattern:** prove that `Matrix.toEuclideanLin (A * B)` is the composition of the
+  Euclidean linear maps represented by `A` and `B` by expanding both sides through
+  `Matrix.toLin_mul` in the standard orthonormal basis.
+- **Reuse:** `Matrix.toEuclideanLin_mul` in `TNLean/Analysis/TraceNormAbs.lean` is the shared
+  layer-0 statement.
+- **Result:** `TNLean/Analysis/MatrixReducedProjection.lean` uses the shared theorem directly,
+  and `PositiveOnAbelian.Internal.toEuclideanLin_mul` remains as a compatibility wrapper for
+  its three existing Channel call sites. The two-copy candidate was promoted early as required
+  by issue #6525, preventing a third layer-crossing copy.
+
 ### One-step cyclic-forward offset
 - **Identity:** `MPSTensor.cyclicForwardSite_one_offset` states that the old starting site has
   offset `N - 1` from its one-step cyclic successor.
@@ -1063,6 +1074,19 @@ abstracted — record why, so it is not re-proposed).
 
 Seeded from `scripts/tactic_pattern_scan.py` (2026-07-18 scan; re-run for
 current counts and full location lists).
+
+### powers on an eigenspace — candidate
+- **Pattern:** prove `(f ^ n) x = μ ^ n • x` from `x ∈ f.eigenspace μ`, either by induction
+  using `Module.End.mem_eigenspace_iff` or by splitting on `x = 0` before applying
+  `HasEigenvector.pow_apply`.
+- **Seen:** 2 occurrences across `TNLean/Channel/Peripheral/WeightedCesaro.lean` and
+  `TNLean/Channel/Peripheral/CesaroRecurrence.lean` (review on 2026-08-17).
+- **Abstraction (proposed):** if a third occurrence appears, promote the private
+  `pow_apply_of_mem_eigenspace` next to the shared `Module.End.eigenspace` API and refactor
+  the case-split variant to use it.
+- **Notes:** This is below the rule-of-three threshold. The induction handles the zero vector
+  without constructing a `HasEigenvector`; keep the helper private until another independent
+  consumer fixes the useful public location.
 
 ### quasi-local translation laws in automorphism-group form — candidate
 - **Pattern:** convert translation composition, symmetry, and identity laws from
