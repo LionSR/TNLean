@@ -216,7 +216,7 @@ theorem tendsto_endEquiv_weightedCesaroMean_peripheralProjection
 /-- **Wolf Equation (6.15)** with the peripheral spectrum enumerated by its own
 finiteness proof.
 
-**Local fix (deduplicated phases):** the inner sum of Wolf Equation (6.15) is
+**Local fix (distinct phases):** the inner sum of Wolf Equation (6.15) is
 printed over `k : |λ_k| = 1` with `k` indexing the Jordan blocks of
 Equations (6.4)--(6.5) of the source, where several blocks may share an
 eigenvalue.  The summand `(conj λ_k • T)^n` depends only on the eigenvalue
@@ -241,7 +241,7 @@ over the distinct peripheral eigenvalues, each phase counted once, converge to
 Source: Wolf, Equation (6.15); local source
 `Notes/WolfNoteTexSource/ch06_spectral_properties.tex`, lines 258--264.
 
-**Local fix (deduplicated phases):** as in
+**Local fix (distinct phases):** as in
 `IsPositiveMap.tendsto_weightedCesaroMean_toFinset_peripheralProjection`, the
 averages count each distinct peripheral eigenvalue once; see
 `docs/paper-gaps/wolf_ch6_eq615_deduplicated_phases.tex`. -/
