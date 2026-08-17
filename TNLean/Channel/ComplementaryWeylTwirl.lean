@@ -6,7 +6,7 @@ Authors: TNLean contributors
 import Mathlib.Analysis.CStarAlgebra.Matrix
 import TNLean.Algebra.MatrixReindexUnitary
 import TNLean.Channel.PartialTrace
-import TNLean.Channel.Schwarz.WeylTwirl
+import TNLean.Channel.WeylTwirl
 
 /-!
 # Complementary-factor Weyl twirls
@@ -233,6 +233,16 @@ theorem complementaryWeylTwirl_eq_partialTraceRight_kronecker (e : C ≃ ZMod dC
     complementaryWeylTwirl e ζ M =
       partialTraceRight M ⊗ₖ ((dC : ℂ)⁻¹ • (1 : Matrix C C ℂ)) := by
   exact sum_kronecker_one_reindexedWeyl_conj e hζ M
+
+/-- The complementary-factor Weyl twirl lands explicitly in the retained
+matrix factor, with witness `(dC : ℂ)⁻¹ • partialTraceRight M`. -/
+theorem complementaryWeylTwirl_eq_smul_partialTraceRight_kronecker_one
+    (e : C ≃ ZMod dC) {ζ : ℂ} (hζ : IsPrimitiveRoot ζ dC)
+    (M : Matrix (S × C) (S × C) ℂ) :
+    complementaryWeylTwirl e ζ M =
+      ((dC : ℂ)⁻¹ • partialTraceRight M) ⊗ₖ (1 : Matrix C C ℂ) := by
+  rw [complementaryWeylTwirl_eq_partialTraceRight_kronecker e hζ M,
+    Matrix.kronecker_smul, Matrix.smul_kronecker]
 
 private theorem one_kronecker_reindexedWeyl_mem_unitary (e : C ≃ ZMod dC)
     {ζ : ℂ} (hζ : IsPrimitiveRoot ζ dC) (a b : ZMod dC) :

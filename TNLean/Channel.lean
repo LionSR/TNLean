@@ -104,6 +104,7 @@ import TNLean.Channel.SupportedMarginalChannel
 import TNLean.Channel.TensorMap
 import TNLean.Channel.TransferMatrix
 import TNLean.Channel.WeightedHilbertSchmidt
+import TNLean.Channel.WeylTwirl
 import TNLean.Channel.WhitenedChoi
 import TNLean.Channel.Wigner
 import TNLean.Channel.WolfChapter2Index

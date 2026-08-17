@@ -8915,17 +8915,20 @@ support by commutation with observables on the complementary tensor factor.
 \begin{lemma}[Complementary-factor Weyl average]
   \label{lem:qca_complementary_weyl_twirl_eq}
   \lean{Matrix.sum_kronecker_one_reindexedWeyl_conj,
-    Matrix.complementaryWeylTwirl_eq_partialTraceRight_kronecker}
+    Matrix.complementaryWeylTwirl_eq_partialTraceRight_kronecker,
+    Matrix.complementaryWeylTwirl_eq_smul_partialTraceRight_kronecker_one}
   \leanok
   \uses{def:qca_complementary_weyl_twirl}
   For every $M\in\operatorname{Mat}_{S\times C}(\mathbb C)$,
   \begin{align}
     \mathcal E_C(M)
-      &= \operatorname{tr}_C(M)\otimes\frac{\mathbf 1_C}{n}.
+      &= \operatorname{tr}_C(M)\otimes\frac{\mathbf 1_C}{n} \\
+      &= \left(\frac{1}{n}\operatorname{tr}_C(M)\right)\otimes\mathbf 1_C.
   \end{align}
 \end{lemma}
 
 \begin{proof}\leanok
+  \uses{thm:weyl_twirl}
   Split $M$ into $C\times C$ blocks indexed by $S$.  The Weyl average sends
   each block $B$ to $(\operatorname{tr}B/n)\mathbf 1_C$, so its block trace is
   the corresponding entry of $\operatorname{tr}_C(M)$.
@@ -8937,8 +8940,8 @@ support by commutation with observables on the complementary tensor factor.
     Matrix.norm_complementaryWeylTwirl_sub_le}
   \leanok
   \uses{def:qca_complementary_weyl_twirl}
-  The average is contractive in the operator norm.  Moreover, if every
-  complementary Weyl conjugation fixes $X$, then
+  Let $S$ be a nonempty finite set.  The average is contractive in the operator
+  norm.  Moreover, if every complementary Weyl conjugation fixes $X$, then
   \begin{align}
     \lVert\mathcal E_C(M)-X\rVert
       &\le \lVert M-X\rVert.
@@ -8946,6 +8949,7 @@ support by commutation with observables on the complementary tensor factor.
 \end{lemma}
 
 \begin{proof}\leanok
+  \uses{thm:weyl_operator_unitary}
   Unitary conjugation preserves the operator norm, and the coefficients of the
   finite average sum to one.  Apply this contraction to $M-X$.
 \end{proof}
