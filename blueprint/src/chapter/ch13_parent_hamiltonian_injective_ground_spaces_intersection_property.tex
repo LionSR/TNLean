@@ -318,6 +318,35 @@
     restriction again has the form of a ground-space vector.
 \end{proof}
 
+\begin{remark}[Ground-space contiguous-window restriction]
+    \label{rem:contiguous_restriction_ground_space_map_intersection}
+    \uses{thm:contiguous_restriction_ground_space_map,
+        def:ground_space_map, def:ground_space_parent,
+        rem:contiguous_window_operators}
+    The two-sided window restriction is recorded in the martingale chapter as
+    Theorem~\ref{thm:contiguous_restriction_ground_space_map}: for sites
+    $s,L,N$ with $s+L \le N$, a full configuration $\tau$ supplying the
+    complementary values, and a boundary matrix $X$, the nonwrapping
+    restriction of the open-boundary ground-space vector $\Gamma_N(X)$ to the
+    window $[s,s+L-1]$ is again an open-boundary ground-space vector,
+    \begin{align}
+        \Res^\tau_{s,L}\Gamma_N(X)&\in G_L(A).
+        \notag
+    \end{align}
+    Both outside words are absorbed into the boundary matrix: writing
+    $w_L=(\tau_0,\ldots,\tau_{s-1})$ and
+    $w_R=(\tau_{s+L},\ldots,\tau_{N-1})$, word multiplicativity and
+    cyclicity of the trace give, for any window word $\omega$,
+    \begin{align}
+        \tr(A^{w_L}A^\omega A^{w_R}X)
+        &=\tr(A^\omega A^{w_R}XA^{w_L}),
+        \notag
+    \end{align}
+    so the restriction is $\Gamma_L(A^{w_R}XA^{w_L})$. This two-sided
+    absorption generalizes Lemma~\ref{lem:ground_space_in_tail_ground},
+    whose suffix restriction absorbs only the prefix.
+\end{remark}
+
 \begin{lemma}[Left-tail compatibility]\label{lem:left_tail_compatibility}
     \lean{MPSTensor.exists_left_tail_compatibility}
     \leanok
