@@ -14,8 +14,8 @@ complementary subregion is exactly the matrix algebra on the retained subregion.
 statement in the algebraic local algebra characterizes finite support by commutation with every
 observable supported in a disjoint finite region.
 
-These are source-independent finite-dimensional and algebraic-local facts. They do not assert the
-norm-completed support characterization of Schumacher--Werner.
+These are source-independent finite-dimensional and algebraic-local facts. They are not statements
+of Schumacher--Werner.
 
 ## Main results
 
@@ -167,8 +167,9 @@ variable {d : ℕ} [NeZero d] {x : AlgebraicLocalAlgebra d} {Λ : Finset ℤ}
 /-- An algebraic-local observable is supported in a finite region exactly when it commutes with
 every algebraic-local observable supported in a disjoint finite region.
 
-This is an algebraic-local consequence of the finite relative-commutant theorem. It is not the
-norm-completed support characterization in Schumacher--Werner, Theorem 6 and Corollary 7. -/
+This is an algebraic-local consequence of the finite relative-commutant theorem. It is not stated
+by Schumacher--Werner; their Theorem 6 and Corollary 7 instead give the generalized Margolus
+structure and inverse locality for nearest-neighbor QCAs. -/
 theorem supportedIn_iff_commute_disjoint :
     SupportedIn x Λ ↔
       ∀ Γ, Disjoint Γ Λ →
