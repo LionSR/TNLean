@@ -5794,7 +5794,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     MPOTensor.left_rank_hat_eq_reduced_projection,
     MPOTensor.exists_units_for_hat_reduced_projection}
   \leanok
-  \uses{def:support_proj,def:mpu_virtual_sandwich,
+  \uses{def:mpo_family,def:support_proj,def:mpu_virtual_sandwich,
     def:mpu_matrix_reduced_projection,def:mpu_right_rank,def:mpu_left_rank,
     def:mpu_ambient_support_inverse_extension}
   Let $W=(W^{ij})$ be an MPO tensor, let $P$ be an orthogonal projection,
@@ -5829,8 +5829,10 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     \notag
   \end{align}
   the first equality in each line being the invariance identity with
-  invertible $X$ and $ZY$ and the second being
-  (\ref{eq:mpu_reduced_hat_chain_tilde}). If $L,R\succeq0$ and
+  invertible $X$ and $ZY$, and the second rewriting
+  $X\widehat W(ZY)$ through
+  (\ref{eq:mpu_reduced_hat_chain_pwqy})--(\ref{eq:mpu_reduced_hat_chain_reduced})
+  and (\ref{eq:mpu_reduced_hat_chain_tilde}) to $\widetilde W$. If $L,R\succeq0$ and
   $P=\operatorname{supp}(L)$, $Q=\operatorname{supp}(R)$, such invertible
   matrices may be chosen as $X=L^++(\Id-P)$, $Z=R^++(\Id-Q)$, together
   with an invertible right factor $Y$ of the reduced projection.
@@ -5842,7 +5844,8 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
 \end{theorem}
 
 \begin{proof}\leanok
-  \uses{def:mpu_virtual_sandwich,thm:mpu_matrix_reduced_projection,
+  \uses{def:support_proj,def:mpu_virtual_sandwich,
+    thm:mpu_matrix_reduced_projection,
     thm:mpu_virtual_sandwich_source_ranks,
     thm:mpu_ambient_support_inverse_extension}
   Expanding each virtual sandwich and using $XL=P$ and $RZ=Q$ gives
