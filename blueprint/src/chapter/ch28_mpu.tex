@@ -5802,8 +5802,8 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
   to their reduced projection.
   Assume, letter by letter, $W^{ij}P=W^{ij}=QW^{ij}$. Set
   $\widehat W^{ij}=LW^{ij}R$ and
-  $\widetilde W^{ij}=\widetilde P W^{ij}\widetilde P$. If $X,Z,Y$ are
-  invertible and satisfy $XL=P$, $RZ=Q$, and $PQY=\widetilde P$, then
+  $\widetilde W^{ij}=\widetilde P W^{ij}\widetilde P$. If $X,Z,Y$ satisfy
+  $XL=P$, $RZ=Q$, and $PQY=\widetilde P$, then
   \begin{align}
     X\widehat W ZY&=PWQY
       \label{eq:mpu_reduced_hat_chain_pwqy}\\
@@ -5840,6 +5840,9 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
   % letterwise absorptions are supplied hypotheses, not consequences of a bare
   % MPU assumption. See
   % docs/paper-gaps/mpu_reduced_representative_supplied_fixed_pair.tex.
+  % The identity chain is formalized without the invertibility hypotheses
+  % (the paper takes X, Y, Z invertible at line 792); invertibility of X, Z, Y
+  % is used only for the rank conclusion.
   % Source lines: paper_v2.tex 786--804.
 \end{theorem}
 

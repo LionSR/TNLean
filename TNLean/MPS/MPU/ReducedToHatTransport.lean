@@ -14,7 +14,7 @@ open scoped ComplexOrder
 
 This module proves the matrix identity comparing the paper's hatted tensor
 $\widehat W=LWR$ with the reduced tensor $\widetilde W=\widetilde P W\widetilde P$,
-and then compares their two raw source-cut ranks.
+and then compares their two raw source ranks.
 
 **Scope restriction (supplied fixed pair):** the identities defining the outer
 factors and the letterwise support absorptions are explicit hypotheses. They are
@@ -24,7 +24,6 @@ and constructing a positive fixed pair. See
 
 Source: `Papers/1703.09188/paper_v2.tex:786-804`.
 -/
-
 
 namespace MPOTensor
 
