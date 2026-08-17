@@ -9032,10 +9032,7 @@ support by commutation with observables on the complementary tensor factor.
   \label{thm:qca_quasi_local_supported_iff_commute_disjoint}
   \lean{SpinChain.quasiLocalSupportedIn_iff_commute_disjoint}
   \leanok
-  \uses{def:qca_quasi_local_supported_in,
-    thm:qca_disjoint_quasi_local_commute,
-    lem:qca_complementary_weyl_twirl_eq,
-    lem:qca_complementary_weyl_twirl_norm}
+  \uses{def:qca_quasi_local_supported_in}
   Let $d>0$, let $\Lambda\subset\mathbb Z$ be finite, and let
   $x\in\mathcal A$.  Then
   \begin{align}
@@ -9052,8 +9049,10 @@ support by commutation with observables on the complementary tensor factor.
 
 \begin{proof}\leanok
   \uses{thm:qca_disjoint_quasi_local_commute,
-    lem:qca_complementary_weyl_twirl_eq,
-    lem:qca_complementary_weyl_twirl_norm}
+    lem:qca_quasi_local_observable,thm:qca_quasi_local_density,
+    lem:qca_local_inclusion_norm,thm:weyl_operator_unitary,
+    thm:mpu_reindex_unitary,def:qca_complementary_weyl_twirl,
+    lem:qca_complementary_weyl_twirl_eq}
   The forward implication follows from commutation of disjoint tensor factors.
   Conversely, approximate $x$ by $A\in\mathcal A_\Delta$, where
   $\Lambda\subseteq\Delta$.  Split
