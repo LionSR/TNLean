@@ -109,7 +109,9 @@ theorem hasSchmidtRankLE_padSecondFactor {n : ℕ}
     with hE
   have hfactor : schmidtCoeffMatrix (padSecondFactor ψ) = M * E := by
     ext i j
-    simp only [schmidtCoeffMatrix_apply, padSecondFactor, Matrix.mul_apply, hM, hE]
+    change (if hj : (j : ℕ) < d' then ψ (i, ⟨(j : ℕ), hj⟩) else 0) =
+      ∑ k, M i k * E k j
+    rw [hM, hE]
     by_cases hj : (j : ℕ) < d'
     · simp only [hj, dif_pos]
       rw [Finset.sum_eq_single (⟨(j : ℕ), hj⟩ : Fin d')]
@@ -325,7 +327,9 @@ theorem hasSchmidtRankLE_padFirstFactor {n : ℕ}
     with hF
   have hfactor : schmidtCoeffMatrix (padFirstFactor ψ) = F * M := by
     ext i j
-    simp only [schmidtCoeffMatrix_apply, padFirstFactor, Matrix.mul_apply, hM, hF]
+    change (if hi : (i : ℕ) < d then ψ (⟨(i : ℕ), hi⟩, j) else 0) =
+      ∑ k, F i k * M k j
+    rw [hF, hM]
     by_cases hi : (i : ℕ) < d
     · simp only [hi, dif_pos]
       rw [Finset.sum_eq_single (⟨(i : ℕ), hi⟩ : Fin d)]
