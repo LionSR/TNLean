@@ -57,7 +57,8 @@ lemma mem_regionSumset (i : ℤ) (Λ 𝓝 : Finset ℤ) :
 /-- A region \(\Gamma\) is disjoint from \(\Lambda+(-\mathcal N)\) if and only if
 \(\Gamma+\mathcal N\) is disjoint from \(\Lambda\).
 
-This is elementary finite-region arithmetic for reflected neighborhoods. -/
+This is elementary finite-region arithmetic for reflected neighborhoods.
+Source: arXiv:1703.09188, Appendix, lines 2292--2298. -/
 lemma disjoint_regionSumset_neg_iff {Γ Λ 𝓝 : Finset ℤ} :
     Disjoint Γ (regionSumset Λ (-𝓝)) ↔ Disjoint (regionSumset Γ 𝓝) Λ := by
   constructor
