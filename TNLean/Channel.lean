@@ -99,6 +99,7 @@ import TNLean.Channel.SingleKrausPositivity
 import TNLean.Channel.Spectral
 import TNLean.Channel.StarSubalgebraConditionalExpectation
 import TNLean.Channel.Stinespring
+import TNLean.Channel.StinespringRectangular
 import TNLean.Channel.SupportCompletion
 import TNLean.Channel.SupportedMarginalChannel
 import TNLean.Channel.TensorMap
