@@ -7850,6 +7850,43 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
   Reversing the two factors gives the same scalar product.
 \end{proof}
 
+\begin{theorem}[Finite relative commutant]
+  \label{thm:qca_finite_relative_commutant}
+  \lean{SpinChain.mem_range_localInclusion_iff_commute_complement}
+  \leanok
+  \uses{def:qca_local_inclusion}
+  Let $\Lambda\subseteq\Gamma$ be finite regions and
+  $A\in\mathcal A_\Gamma$. Then $A$ acts trivially outside $\Lambda$ if
+  and only if it commutes with the full observable algebra on the complement:
+  \begin{align}
+    A\in\iota_{\Lambda,\Gamma}(\mathcal A_\Lambda)
+      &\iff
+      \forall B\in\mathcal A_{\Gamma\setminus\Lambda},\quad
+      A\iota_{\Gamma\setminus\Lambda,\Gamma}(B)
+        =\iota_{\Gamma\setminus\Lambda,\Gamma}(B)A.
+  \end{align}
+  This is a finite-dimensional tensor-factor identity. It is not a statement
+  of Schumacher--Werner or the QCA appendix of \cite{Cirac2017MPU}.
+\end{theorem}
+
+\begin{proof}\leanok
+  Splitting configurations gives
+  $\mathcal A_\Gamma\cong
+  \mathcal A_\Lambda\otimes\mathcal A_{\Gamma\setminus\Lambda}$. Under this
+  identification, the two inclusions are $C\mapsto C\otimes\mathbf 1$ and
+  $B\mapsto\mathbf 1\otimes B$. Write an arbitrary matrix in blocks indexed
+  by configurations on $\Lambda$. If it commutes with every
+  $\mathbf 1\otimes B$, each block commutes with the full matrix algebra on
+  $\Gamma\setminus\Lambda$ and is therefore scalar. Thus the matrix is
+  $C\otimes\mathbf 1$ for some $C\in\mathcal A_\Lambda$. The converse follows
+  from
+  \begin{align}
+    (C\otimes\mathbf 1)(\mathbf 1\otimes B)
+      &=C\otimes B
+       =(\mathbf 1\otimes B)(C\otimes\mathbf 1).
+  \end{align}
+\end{proof}
+
 \begin{definition}[Translation of a finite region]
   \label{def:qca_translate_region}
   \lean{SpinChain.translateRegion,SpinChain.mem_translateRegion,
@@ -8292,6 +8329,42 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
         \iota_{\Lambda,\Lambda\cup\Gamma}(A)\bigr)
        =YX.
   \end{align}
+\end{proof}
+
+\begin{theorem}[Algebraic-local relative commutant]
+  \label{thm:qca_algebraic_local_relative_commutant}
+  \lean{SpinChain.supportedIn_iff_commute_disjoint}
+  \leanok
+  \uses{def:qca_supported_in}
+  Assume $d>0$. A local observable $X\in\mathcal A_{\mathrm{loc}}$ is
+  supported in a finite region $\Lambda$ if and only if it commutes with every
+  local observable having a finite support disjoint from $\Lambda$:
+  \begin{align}
+    X\in\iota_\Lambda(\mathcal A_\Lambda)
+      &\iff
+      \forall \Gamma,\ \forall Y,\quad
+      \bigl(\Gamma\cap\Lambda=\varnothing\ \land\
+        Y\in\iota_\Gamma(\mathcal A_\Gamma)\bigr)\Longrightarrow XY=YX.
+  \end{align}
+  This is an algebraic-local statement. It does not assert the corresponding
+  characterization in the norm completion and is not Schumacher--Werner
+  Theorem~6 or Corollary~7.
+\end{theorem}
+
+\begin{proof}\leanok
+  \uses{thm:qca_finite_relative_commutant,
+    thm:qca_disjoint_supported_local_commute,
+    thm:qca_local_observable_finite_support}
+  The forward implication is commutation of disjointly supported observables.
+  Conversely, choose a finite support $\Delta$ of $X$ and represent $X$ by
+  $A\in\mathcal A_{\Lambda\cup\Delta}$. The hypothesis says that $A$ commutes
+  with every observable on $(\Lambda\cup\Delta)\setminus\Lambda$. Since
+  $d>0$, the canonical map from $\mathcal A_{\Lambda\cup\Delta}$ into
+  $\mathcal A_{\mathrm{loc}}$ is injective, so this commutation already holds
+  in the finite-region algebra. The finite relative-commutant theorem gives
+  $A=\iota_{\Lambda,\Lambda\cup\Delta}(A_\Lambda)$ for some
+  $A_\Lambda\in\mathcal A_\Lambda$. Hence
+  $X=\iota_\Lambda(A_\Lambda)$.
 \end{proof}
 
 \begin{definition}[Algebraic-local translation homomorphism]
