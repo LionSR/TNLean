@@ -9407,6 +9407,50 @@ $\omega^{-1}$.
   \end{align}
 \end{proof}
 
+\begin{theorem}[Forward and two-sided finite propagation]
+  \label{thm:qca_forward_iff_two_sided_propagation}
+  \lean{SpinChain.PropagatesWithinTwoSided.of_forward,
+    SpinChain.hasFinitePropagation_iff_hasTwoSidedFinitePropagation,
+    SpinChain.HasFinitePropagation.exists_common_twoSided_neighborhood,
+    SpinChain.HasFinitePropagation.exists_twoSided_symmetric_Icc}
+  \leanok
+  \uses{def:qca_finite_propagation,
+    def:qca_two_sided_finite_propagation}
+  Let $d>0$ and let $\omega$ be a star-algebra automorphism of $\mathcal A$.
+  Then
+  \begin{align}
+    \omega\text{ has finite forward propagation}
+      &\iff
+    \omega\text{ has two-sided finite propagation}.
+  \end{align}
+  More precisely, a forward bound by a finite set $\mathcal N$ gives an inverse
+  bound by $-\mathcal N$, so both maps propagate within the enlarged common
+  neighborhood
+  \begin{align}
+    \mathcal N\cup(-\mathcal N).
+  \end{align}
+  This statement remains valid when $\mathcal N=\varnothing$.  For an arbitrary
+  finite forward-propagation witness, there is therefore a common finite
+  neighborhood for $\omega$ and $\omega^{-1}$, and it may be enlarged to a
+  symmetric interval $[-R,R]\cap\mathbb Z$.
+
+  This equivalence is a derived convenience theorem.  It does not change the
+  forward-only locality definition at line~2298 of \cite{Cirac2017MPU} or in
+  Schumacher--Werner, Definition~1.
+\end{theorem}
+
+\begin{proof}\leanok
+  \uses{lem:qca_two_sided_common_neighborhood,
+    thm:qca_inverse_propagation}
+  Derived inverse locality sends a forward bound by $\mathcal N$ to an inverse
+  bound by $-\mathcal N$.  Enlarging both bounds to
+  $\mathcal N\cup(-\mathcal N)$ gives the fixed-neighborhood statement.  At the
+  existential level, forward finite propagation gives finite propagation of
+  the inverse, hence the two-sided predicate.  The converse is its first
+  conjunct.  Finally, apply the common-neighborhood and symmetric-interval
+  enlargement results to the resulting two-sided pair.
+\end{proof}
+
 \begin{definition}[One-dimensional quantum cellular automaton]
   \label{def:qca}
   \lean{SpinChain.IsQCA}
