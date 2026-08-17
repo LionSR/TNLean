@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import TNLean.Analysis.TraceNormAbs
 import TNLean.Channel.Basic
 import TNLean.Channel.Schwarz.PositiveMapProperties
 import Mathlib.Analysis.InnerProductSpace.JointEigenspace
@@ -54,11 +55,7 @@ the Euclidean linear map level. -/
 lemma toEuclideanLin_mul (A B : Matrix (Fin D) (Fin D) ℂ) :
     (Matrix.toEuclideanLin A : EuclideanSpace ℂ (Fin D) →ₗ[ℂ] EuclideanSpace ℂ (Fin D)) *
       Matrix.toEuclideanLin B = Matrix.toEuclideanLin (A * B) := by
-  rw [Module.End.mul_eq_comp]
-  simpa only [Matrix.toEuclideanLin_eq_toLin_orthonormal] using
-    (Matrix.toLin_mul (EuclideanSpace.basisFun (Fin D) ℂ).toBasis
-      (EuclideanSpace.basisFun (Fin D) ℂ).toBasis
-      (EuclideanSpace.basisFun (Fin D) ℂ).toBasis A B).symm
+  simpa only [Module.End.mul_eq_comp] using (Matrix.toEuclideanLin_mul A B).symm
 
 end Internal
 
