@@ -37,7 +37,7 @@ $$
 All identities involving the fixed pair and its support absorptions are supplied.
 
 Source: `Papers/1703.09188/paper_v2.tex:786-804`. -/
-theorem virtual_sandwich_hat_eq_reduced_projection
+theorem virtualSandwich_hat_eq_reducedProjection
     (W : MPOTensor d D) (L R P Q X Z Y : Matrix (Fin D) (Fin D) ℂ)
     (hP : IsOrthogonalProjection P)
     (hXL : X * L = P) (hRZ : R * Z = Q)
@@ -74,7 +74,7 @@ theorem virtual_sandwich_hat_eq_reduced_projection
 representative equals that of the reduced representative.
 
 Source: `Papers/1703.09188/paper_v2.tex:786-804`. -/
-theorem right_rank_hat_eq_reduced_projection
+theorem rightRank_hat_eq_reducedProjection
     (W : MPOTensor d D) (L R P Q X Z Y : Matrix (Fin D) (Fin D) ℂ)
     (hP : IsOrthogonalProjection P)
     (hXL : X * L = P) (hRZ : R * Z = Q)
@@ -85,7 +85,7 @@ theorem right_rank_hat_eq_reduced_projection
     r[virtualSandwich L W R] =
       r[virtualSandwich (Matrix.reducedProjection P Q) W
         (Matrix.reducedProjection P Q)] := by
-  rw [← virtual_sandwich_hat_eq_reduced_projection W L R P Q X Z Y
+  rw [← virtualSandwich_hat_eq_reducedProjection W L R P Q X Z Y
     hP hXL hRZ hPQY hWP hQW]
   exact (rightRank_virtualSandwich X (virtualSandwich L W R) (Z * Y)
     hX (hZ.mul hY)).symm
@@ -94,7 +94,7 @@ theorem right_rank_hat_eq_reduced_projection
 representative equals that of the reduced representative.
 
 Source: `Papers/1703.09188/paper_v2.tex:786-804`. -/
-theorem left_rank_hat_eq_reduced_projection
+theorem leftRank_hat_eq_reducedProjection
     (W : MPOTensor d D) (L R P Q X Z Y : Matrix (Fin D) (Fin D) ℂ)
     (hP : IsOrthogonalProjection P)
     (hXL : X * L = P) (hRZ : R * Z = Q)
@@ -105,7 +105,7 @@ theorem left_rank_hat_eq_reduced_projection
     ℓ[virtualSandwich L W R] =
       ℓ[virtualSandwich (Matrix.reducedProjection P Q) W
         (Matrix.reducedProjection P Q)] := by
-  rw [← virtual_sandwich_hat_eq_reduced_projection W L R P Q X Z Y
+  rw [← virtualSandwich_hat_eq_reducedProjection W L R P Q X Z Y
     hP hXL hRZ hPQY hWP hQW]
   exact (leftRank_virtualSandwich X (virtualSandwich L W R) (Z * Y)
     hX (hZ.mul hY)).symm
@@ -118,7 +118,7 @@ $$
 where $P$ and $Q$ are their support projections.
 
 Source: `Papers/1703.09188/paper_v2.tex:786-804`. -/
-theorem exists_units_for_hat_reduced_projection
+theorem exists_units_for_hat_reducedProjection
     {L R : Matrix (Fin D) (Fin D) ℂ} (hL : L.PosSemidef) (hR : R.PosSemidef) :
     ∃ X Z Y : Matrix (Fin D) (Fin D) ℂ,
       IsUnit X ∧ IsUnit Z ∧ IsUnit Y ∧
