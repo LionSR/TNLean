@@ -73,7 +73,7 @@ private lemma reindex_localInclusion_sdiff (h : Λ ⊆ Γ)
       CStarMatrix.ofMatrix
         (Matrix.rightKroneckerEmbed (m := Config d Λ) (CStarMatrix.ofMatrix.symm B)) := by
   ext p q
-  rw [CStarMatrix.reindexₐ_apply, Matrix.reindex_apply]
+  rw [CStarMatrix.reindexₐ_apply]
   change localInclusion (Finset.sdiff_subset : Γ \ Λ ⊆ Γ) B
       ((Config.splitEquiv h).symm p) ((Config.splitEquiv h).symm q) = _
   rw [localInclusion_apply]
