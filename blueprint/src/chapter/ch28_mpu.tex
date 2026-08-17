@@ -8892,6 +8892,68 @@ as separate results in the appendix.
   $x=j_\Lambda(A)$ and $y=j_\Gamma(B)$.
 \end{proof}
 
+The following finite-dimensional averaging fact is standard and is not a
+claim from \cite{Cirac2017MPU}.  It will be used to characterize exact local
+support by commutation with observables on the complementary tensor factor.
+
+\begin{definition}[Complementary-factor Weyl twirl]
+  \label{def:qca_complementary_weyl_twirl}
+  \lean{Matrix.reindexedWeyl,Matrix.complementaryWeylTwirl}
+  \leanok
+  Let $S$ and $C$ be finite sets, let $n=|C|>0$, and choose an equivalence
+  $e\colon C\simeq\mathbb Z/n\mathbb Z$ and a primitive $n$-th root of unity
+  $\zeta$.  If $W_{a,b}$ is the corresponding reindexed Weyl operator on
+  $\mathbb C^C$, define
+  \begin{align}
+    \mathcal E_C(M)
+      &= \frac{1}{n^2}\sum_{a,b\in\mathbb Z/n\mathbb Z}
+        (\mathbf 1_S\otimes W_{a,b})M
+        (\mathbf 1_S\otimes W_{a,b})^\dagger.
+  \end{align}
+\end{definition}
+
+\begin{lemma}[Complementary-factor Weyl average]
+  \label{lem:qca_complementary_weyl_twirl_eq}
+  \lean{Matrix.sum_kronecker_one_reindexedWeyl_conj,
+    Matrix.complementaryWeylTwirl_eq_partialTraceRight_kronecker,
+    Matrix.complementaryWeylTwirl_eq_smul_partialTraceRight_kronecker_one}
+  \leanok
+  \uses{def:qca_complementary_weyl_twirl}
+  For every $M\in\operatorname{Mat}_{S\times C}(\mathbb C)$,
+  \begin{align}
+    \mathcal E_C(M)
+      &= \operatorname{tr}_C(M)\otimes\frac{\mathbf 1_C}{n} \\
+      &= \left(\frac{1}{n}\operatorname{tr}_C(M)\right)\otimes\mathbf 1_C.
+  \end{align}
+\end{lemma}
+
+\begin{proof}\leanok
+  \uses{thm:weyl_twirl}
+  Split $M$ into $C\times C$ blocks indexed by $S$.  The Weyl average sends
+  each block $B$ to $(\operatorname{tr}B/n)\mathbf 1_C$, so its block trace is
+  the corresponding entry of $\operatorname{tr}_C(M)$.
+\end{proof}
+
+\begin{lemma}[Norm estimate for the complementary-factor twirl]
+  \label{lem:qca_complementary_weyl_twirl_norm}
+  \lean{Matrix.norm_complementaryWeylTwirl_le,
+    Matrix.norm_complementaryWeylTwirl_sub_le}
+  \leanok
+  \uses{def:qca_complementary_weyl_twirl}
+  Let $S$ be a nonempty finite set.  The average is contractive in the operator
+  norm.  Moreover, if every complementary Weyl conjugation fixes $X$, then
+  \begin{align}
+    \lVert\mathcal E_C(M)-X\rVert
+      &\le \lVert M-X\rVert.
+  \end{align}
+\end{lemma}
+
+\begin{proof}\leanok
+  \uses{thm:weyl_operator_unitary}
+  Unitary conjugation preserves the operator norm, and the coefficients of the
+  finite average sum to one.  Apply this contraction to $M-X$.
+\end{proof}
+
 The appendix requires that ``there exists a finite subset
 $\mathcal N\subset\mathbb Z$'' such that, for every finite
 $\Lambda\subset\mathbb Z$,
