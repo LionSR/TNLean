@@ -109,17 +109,18 @@ channel:
     \lean{stinespring_dual_representation}
     \leanok
     \uses{def:stinespring_v, def:cp_map, thm:stinespring_v_conjTranspose_mul}
-    Let $K_j:\C^{d}\to\C^{d'}$ be Kraus operators of $T:\MN{d}\to\MN{d'}$ and
-    let $V=\sum_j K_j\otimes\ket{j}$. Then, for every observable $A\in\MN{d'}$
-    on the output space,
+    Let $K_j:\C^{d}\to\C^{d'}$, $j=0,\dots,r-1$, be an arbitrary family of
+    matrices and let $V=\sum_j K_j\otimes\ket{j}$. Then, for every observable
+    $A\in\MN{d'}$ on the output space,
     \begin{align}
         V^\dagger(A\otimes\Id_r)V
-        &=\sum_j K_j^\dagger A K_j
-          =T^*(A).
+        &=\sum_j K_j^\dagger A K_j,
         \label{eq:representations_stinespring_dual}
     \end{align}
-    Both sides lie in $\MN{d}$, on the input space. This is the Stinespring
-    representation of the \emph{dual} (Heisenberg picture) map $T^*$; the
+    an identity in $\MN{d}$ on the input space, valid for arbitrary $K$
+    independently of any channel. When the $K_j$ are Kraus operators of a map
+    $T:\MN{d}\to\MN{d'}$, the right-hand side is the dual
+    (Heisenberg-picture) map $T^*(A)$ of \ref{def:trace_pairing_adjoint}; the
     square case is $d=d'$.
 \end{theorem}
 
@@ -129,7 +130,9 @@ channel:
     Compute $(V^\dagger(A\otimes\Id_r)V)_{ab}$
     by summing over the product index $(i,j)$;
     the $\delta_{jl}$ from $\Id_r$ collapses the sum over $l$, giving
-    $\sum_j K_j^\dagger A K_j$.
+    $\sum_j K_j^\dagger A K_j$. For Kraus operators of $T$, the trace
+    pairing identifies this sum with $T^*(A)$, as displayed in the proof of
+    Theorem~\ref{thm:stinespring_rectangular}.
 \end{proof}
 
 \begin{theorem}[The Stinespring isometry condition iff trace preservation]\label{thm:stinespringV_isometry_iff_kraus_normalized}
