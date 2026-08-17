@@ -59,7 +59,7 @@ This statement deliberately keeps the positive-length hypothesis.  Theorem
 IV.13(ii) does not constrain the artificial length-zero value of the formal
 coefficient family.
 Source: arXiv:1606.00608, Theorem IV.13(ii), lines 972--985, and
-Appendix C.4, lines 2015--2037 of
+Appendix C.4, lines 2020--2042 of
 `Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
 @[deprecated "Unpack the witness and use `BNTLabelTheoremWitness.coeff_eq_ofChi_coeff`."
   (since := "2026-08-15")]
@@ -79,7 +79,7 @@ family determined by its \(\chi_{\alpha,\beta,\gamma}\)-matrices.
 This only rephrases the positive-length coefficient identity carried by the
 witness; it does not construct the witness from an MPDO tensor.
 Source: arXiv:1606.00608, Theorem IV.13(ii), lines 972--985, and
-Appendix C.4, lines 2015--2037 of
+Appendix C.4, lines 2020--2042 of
 `Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
 @[deprecated "Unpack the witness and use the `ofChi` source predicates directly."
   (since := "2026-08-15")]
@@ -100,7 +100,7 @@ written with the canonical coefficient family determined by its
 This only rephrases the positive-length coefficient identity carried by the
 witness; it does not construct the witness from an MPDO tensor.
 Source: arXiv:1606.00608, Theorem IV.13(ii), lines 972--985, and
-Appendix C.4, lines 2015--2037 of
+Appendix C.4, lines 2020--2042 of
 `Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
 @[deprecated "Unpack the witness and use the `ofChi` source equations directly."
   (since := "2026-08-15")]
