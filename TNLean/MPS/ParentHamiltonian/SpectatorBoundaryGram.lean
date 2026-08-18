@@ -424,6 +424,28 @@ noncomputable def physicalReassocES (K L Q : ℕ) :
     (Equiv.arrowCongr (finCongr (Nat.add_assoc K L Q).symm)
       (Equiv.refl (Fin d)))).toContinuousLinearEquiv
 
+/-- Reassociation is the identity when the suffix increment has length one. -/
+theorem physicalReassocES_one (K L : ℕ) :
+    physicalReassocES (d := d) K L 1 = 1 := by
+  have hfin : finCongr (Nat.add_assoc K L 1).symm = Equiv.refl (Fin (K + L + 1)) := by
+    apply Equiv.ext
+    intro i
+    apply Fin.ext
+    exact finCongr_apply_coe _ _
+  have harrow :
+      Equiv.arrowCongr (finCongr (Nat.add_assoc K L 1).symm) (Equiv.refl (Fin d)) =
+        Equiv.refl (Cfg d (K + L + 1)) := by
+    rw [hfin]
+    rfl
+  apply ContinuousLinearEquiv.coe_injective
+  apply ContinuousLinearMap.ext
+  intro v
+  change LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ
+      (Equiv.arrowCongr (finCongr (Nat.add_assoc K L 1).symm)
+        (Equiv.refl (Fin d))) v = v
+  rw [harrow]
+  rfl
+
 /-- Reassociation sends the length-\(K+(L+Q)\) ground-space map to the
 length-\((K+L)+Q\) ground-space map in the common physical coordinates. -/
 theorem physicalReassocES_comp_groundSpaceMapES
@@ -453,6 +475,12 @@ noncomputable def reassocTailBoundaryMapES (A : MPSTensor d D) (K L Q : ℕ) :
       EuclideanSpace ℂ (Cfg d (K + L + Q)) :=
   (physicalReassocES (d := d) K L Q).toContinuousLinearMap.comp
     (tailBoundaryMapES A K (L + Q))
+
+/-- A one-site suffix increment needs no physical-coordinate reassociation. -/
+theorem reassocTailBoundaryMapES_one (A : MPSTensor d D) (K L : ℕ) :
+    reassocTailBoundaryMapES A K L 1 = tailBoundaryMapES A K (L + 1) := by
+  rw [reassocTailBoundaryMapES, physicalReassocES_one]
+  rfl
 
 /-- The reassociated tail map has the same whole-window factorization as the
 left window with \(Q\) spectator sites. -/
