@@ -21,6 +21,7 @@ import TNLean.MPS.MPU.MatchingContractions
 import TNLean.MPS.MPU.PhysicalAdjointCanonicalForm
 import TNLean.MPS.MPU.PhysicalAncilla
 import TNLean.MPS.MPU.ReducedRepresentative
+import TNLean.MPS.MPU.ReducedToHatTransport
 import TNLean.MPS.MPU.ResidualAlgebra
 import TNLean.MPS.MPU.Simple
 import TNLean.MPS.MPU.SimpleBlocking

@@ -5787,6 +5787,96 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
   \end{align}
 \end{proof}
 
+\begin{theorem}[Source-rank comparison of the hatted and reduced tensors]
+  \label{thm:mpu_reduced_to_hat_source_ranks}
+  \lean{MPOTensor.virtualSandwich_hat_eq_reducedProjection,
+    MPOTensor.rightRank_hat_eq_reducedProjection,
+    MPOTensor.leftRank_hat_eq_reducedProjection,
+    MPOTensor.exists_units_for_hat_reducedProjection}
+  \leanok
+  \uses{def:mpo_family,def:support_proj,def:mpu_virtual_sandwich,
+    def:mpu_matrix_reduced_projection,def:mpu_right_rank,def:mpu_left_rank,
+    def:mpu_ambient_support_inverse_extension}
+  Let $W=(W^{ij})$ be an MPO tensor, let $L$, $R$, $X$, $Z$, $Y$ be square
+  matrices of the same size, let $P$ be an orthogonal projection, let $Q$
+  be a square matrix of the same size, and set $\widetilde P$ equal to
+  their reduced projection.
+  Assume, letter by letter, $W^{ij}P=W^{ij}=QW^{ij}$. Set
+  $\widehat W^{ij}=LW^{ij}R$ and
+  $\widetilde W^{ij}=\widetilde P W^{ij}\widetilde P$. If $X,Z,Y$ satisfy
+  $XL=P$, $RZ=Q$, and $PQY=\widetilde P$, then
+  \begin{align}
+    X\widehat W ZY&=PWQY
+      \label{eq:mpu_reduced_hat_chain_pwqy}\\
+    PWQY&=PQWPQY
+      \label{eq:mpu_reduced_hat_chain_pqwpqy}\\
+    PQWPQY&=\widetilde P W\widetilde P
+      \label{eq:mpu_reduced_hat_chain_reduced}\\
+    \widetilde P W\widetilde P&=\widetilde W.
+      \label{eq:mpu_reduced_hat_chain_tilde}
+  \end{align}
+  If in addition $X$, $Z$, and $Y$ are invertible, then
+  \begin{align}
+    r[\widehat W]&=r[\widetilde W],\label{eq:mpu_reduced_hat_right_rank}\\
+    \ell[\widehat W]&=\ell[\widetilde W].
+      \label{eq:mpu_reduced_hat_left_rank}
+  \end{align} If $L,R\succeq0$ and
+  $P=\operatorname{supp}(L)$, $Q=\operatorname{supp}(R)$, such invertible
+  matrices may be chosen as $X=L^++(\Id-P)$, $Z=R^++(\Id-Q)$, together
+  with an invertible right factor $Y$ of the reduced projection.
+  % Scope restriction: the fixed pair, the equations XL=P and RZ=Q, and the
+  % letterwise absorptions are supplied hypotheses, not consequences of a bare
+  % MPU assumption. See
+  % docs/paper-gaps/mpu_reduced_representative_supplied_fixed_pair.tex.
+  % The identity chain is formalized without the invertibility hypotheses
+  % (the paper takes X, Y, Z invertible at line 792); invertibility of X, Z, Y
+  % is used only for the rank conclusion.
+  % Source lines: paper_v2.tex 786--804.
+\end{theorem}
+
+\begin{proof}\leanok
+  \uses{def:support_proj,def:mpu_virtual_sandwich,
+    thm:mpu_matrix_reduced_projection,
+    thm:mpu_virtual_sandwich_source_ranks,
+    thm:mpu_ambient_support_inverse_extension}
+  Expanding each virtual sandwich and using $XL=P$ and $RZ=Q$ gives
+  (\ref{eq:mpu_reduced_hat_chain_pwqy}). The absorptions
+  $QW^{ij}=W^{ij}=W^{ij}P$ give, letter by letter,
+  \begin{align}
+    PW^{ij}QY
+    &=P(QW^{ij})QY=PQ(W^{ij}P)QY=PQW^{ij}PQY,
+    \notag
+  \end{align}
+  which is (\ref{eq:mpu_reduced_hat_chain_pqwpqy}). Since
+  $\widetilde P Q=PQ$ and $PQY=\widetilde P$,
+  \begin{align}
+    PQW^{ij}PQY
+      &=(\widetilde P Q)W^{ij}\widetilde P
+       =\widetilde P W^{ij}\widetilde P.
+  \end{align}
+  This proves (\ref{eq:mpu_reduced_hat_chain_reduced}) and
+  (\ref{eq:mpu_reduced_hat_chain_tilde}). Thus $\widetilde W$ is obtained
+  from $\widehat W$ by left multiplication by $X$ and right multiplication
+  by $ZY$. Invertibility of these factors and the source ranks of a
+  virtual sandwich (Theorem~\ref{thm:mpu_virtual_sandwich_source_ranks})
+  give
+  \begin{align}
+    r[\widehat W]&=r[X\widehat W(ZY)]=r[\widetilde W],
+    \notag\\
+    \ell[\widehat W]&=\ell[X\widehat W(ZY)]=\ell[\widetilde W],
+    \notag
+  \end{align}
+  the first equality in each line being the invariance identity with
+  invertible $X$ and $ZY$, and the second rewriting $X\widehat W(ZY)$
+  through
+  (\ref{eq:mpu_reduced_hat_chain_pwqy})--(\ref{eq:mpu_reduced_hat_chain_reduced})
+  and (\ref{eq:mpu_reduced_hat_chain_tilde}) to $\widetilde W$, which gives
+  (\ref{eq:mpu_reduced_hat_right_rank}) and
+  (\ref{eq:mpu_reduced_hat_left_rank}). For positive semidefinite $L$ and
+  $R$, their ambient support-inverse extensions supply $X$ and $Z$; the
+  invertible right-factor identity for $\widetilde P Q$ supplies $Y$.
+\end{proof}
+
 \begin{theorem}[Lower semicontinuity of finite matrix rank]
   \label{thm:mpu_rank_lower_semicontinuous}
   \lean{Matrix.lowerSemicontinuous_rank,
