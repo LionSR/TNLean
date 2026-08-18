@@ -200,7 +200,7 @@ theorem exists_torusCovariantAbsorbedGaugeFamily
         (isHorizontalTorusEdge_torusHorizontalReferenceEdge xhStart yhStart)
     rw [hXdef]
     simp only
-    rw [dif_pos hhor]
+    rw [dite_eq_left hhor]
     generalize translate_horizontalReferenceEdge (xStart := xhStart) (yStart := yhStart) hhor
       = pq
     obtain ⟨⟨a', b'⟩, hspec⟩ := pq
@@ -224,7 +224,7 @@ theorem exists_torusCovariantAbsorbedGaugeFamily
       torusEdge_not_horizontal_and_vertical _ ⟨hcon, hver⟩
     rw [hXdef]
     simp only
-    rw [dif_neg hnh]
+    rw [dite_eq_right hnh]
     generalize translate_verticalReferenceEdge (xStart := xvStart) (yStart := yvStart)
       ((torusEdge_horizontal_or_vertical _).resolve_left hnh) = pq
     obtain ⟨⟨a', b'⟩, hspec⟩ := pq

@@ -101,13 +101,13 @@ theorem tendsto_cesaro_phase_sum {s : Finset ℂ} (hs : ∀ μ ∈ s, ‖μ‖ =
     intro μ hμ
     by_cases hμlam : μ = lam
     · subst hμlam
-      rw [if_pos rfl]
+      rw [ite_eq_left rfl]
       have hone : (starRingEnd ℂ) μ * μ = 1 := by
         rw [Complex.conj_mul', hs μ hμ]
         norm_num
       simp only [hone]
       exact tendsto_cesaro_geom_one
-    · rw [if_neg hμlam]
+    · rw [ite_eq_right hμlam]
       refine tendsto_cesaro_geom_zero ?_ ?_
       · rw [norm_mul, RCLike.norm_conj, hs μ hμ, hlam1, one_mul]
       · intro hζ
@@ -116,7 +116,7 @@ theorem tendsto_cesaro_phase_sum {s : Finset ℂ} (hs : ∀ μ ∈ s, ‖μ‖ =
         rw [← mul_assoc, Complex.mul_conj', hs μ hμ] at hmul
         simpa using hmul.symm
   have hsum := tendsto_finsetSum s hterm
-  rw [Finset.sum_ite_eq' s lam (fun _ : ℂ ↦ (1 : ℂ)), if_pos hlam] at hsum
+  rw [Finset.sum_ite_eq' s lam (fun _ : ℂ ↦ (1 : ℂ)), ite_eq_left hlam] at hsum
   refine hsum.congr fun N ↦ ?_
   rw [← Finset.mul_sum, Finset.sum_comm]
 

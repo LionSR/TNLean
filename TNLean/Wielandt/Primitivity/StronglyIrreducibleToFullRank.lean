@@ -441,7 +441,7 @@ private theorem trace_conjTranspose_posDef_mul_lower [NeZero D]
       Continuous.matrix_trace <|
         (continuous_id.matrix_conjTranspose.matrix_mul continuous_const).matrix_mul continuous_id
   -- Step 2: ProperSpace gives compact unit sphere
-  haveI : ProperSpace (Matrix (Fin D) (Fin D) ℂ) :=
+  have : ProperSpace (Matrix (Fin D) (Fin D) ℂ) :=
     FiniteDimensional.proper_rclike ℂ _
   have hcomp : IsCompact (Metric.sphere (0 : Matrix (Fin D) (Fin D) ℂ) 1) :=
     isCompact_sphere 0 1

@@ -133,7 +133,7 @@ lemma sectorTensor_proportional_of_blockedMatch
           c • (U * (φB (u + q) (blocksB (u + q) i)).1 * Uᴴ) := by
     intro u
     obtain ⟨hdim, hMatch⟩ := hBlockMatch u
-    haveI : NeZero (dimA u) := ⟨hNondeg u⟩
+    have : NeZero (dimA u) := ⟨hNondeg u⟩
     exact exists_ambient_corner_gauge_of_gaugePhase
       (blocksA u) (blocksB (u + q)) hdim (PA u) (PB (u + q))
       (φA u) (φB (u + q)) (hPA_proj u) (hPB_proj (u + q))
@@ -561,7 +561,7 @@ lemma sectorTensor_proportional_of_blockedMatch
     IsAlgClosed.exists_pow_nat_eq (k := ℂ) z (NeZero.pos m)
   have hP_ne : ∀ k, P k ≠ 0 := by
     intro k hPk
-    haveI : NeZero (dimA' k) := ⟨hNondeg (-k)⟩
+    have : NeZero (dimA' k) := ⟨hNondeg (-k)⟩
     have hsupp := (φA' k (1 : MatrixAlg (dimA' k))).2
     have hval : (φA' k (1 : MatrixAlg (dimA' k))).1 = 0 := by
       simpa only [hPk, zero_mul, mul_zero] using hsupp.symm

@@ -708,7 +708,7 @@ theorem exists_markovDilationBlockForm
       (Σ F : AmbientMarkovBipartiteBlockForm ρ_ABC hρ_dm,
         MarkovDilationBlockForm ρ_ABC hρ_dm F) := by
   classical
-  letI : Nonempty (ActiveConditionalEffectIndex (traceC_ABC ρ_ABC)) :=
+  let : Nonempty (ActiveConditionalEffectIndex (traceC_ABC ρ_ABC)) :=
     activeConditionalEffectIndex_nonempty (traceC_ABC ρ_ABC) (by
       rw [← trace_eq_trace_traceC_ABC]
       exact hρ_dm.2)

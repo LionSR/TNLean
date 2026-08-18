@@ -121,10 +121,10 @@ theorem blockState_apply {dA dC : ℕ} {m : ℕ} {dL dR : Fin m → ℕ}
   rw [hidx1, hidx2]
   by_cases h : j = j'
   · subst h
-    rw [Matrix.blockDiagonal'_apply_eq, dif_pos rfl]
+    rw [Matrix.blockDiagonal'_apply_eq, dite_eq_left rfl]
     simp only [Matrix.smul_apply, Matrix.kroneckerMap_apply, smul_eq_mul]
     ring
-  · rw [Matrix.blockDiagonal'_apply_ne _ _ _ h, dif_neg h]
+  · rw [Matrix.blockDiagonal'_apply_ne _ _ _ h, dite_eq_right h]
 
 end HayashiMarkov
 

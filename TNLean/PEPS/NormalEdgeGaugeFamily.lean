@@ -153,7 +153,7 @@ theorem gl_conj_unique_scalar {n : ℕ} (Z Z' : GL (Fin n) ℂ)
   -- The scalar is nonzero: when the bond space is empty pick `1`, else use `det W`.
   rcases isEmpty_or_nonempty (Fin n) with hempty | hne
   · exact ⟨1, by simp only [Units.val_one, one_smul]; exact Subsingleton.elim _ _⟩
-  · letI : Nonempty (Fin n) := hne
+  · let : Nonempty (Fin n) := hne
     have hc0 : c ≠ 0 := by
       rintro rfl
       rw [hc, hscal, zero_smul] at hWunit

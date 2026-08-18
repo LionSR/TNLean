@@ -100,8 +100,8 @@ lemma exists_nondecaying_overlap_exact_of_eventuallyProportional
     obtain ⟨α, hα⟩ := exists_state_scalar_of_nondecaying_overlap hP hQ hk
     exact ⟨k, α, hα⟩
   choose kOf αOf hStateOf using hScalar
-  letI : Fintype {j : Fin P.basisCount // j ∈ T} := Subtype.fintype (fun j => j ∈ T)
-  letI : Fintype {j : Fin P.basisCount // j ∉ T} := Subtype.fintype (fun j => j ∉ T)
+  let : Fintype {j : Fin P.basisCount // j ∈ T} := Subtype.fintype (fun j => j ∈ T)
+  let : Fintype {j : Fin P.basisCount // j ∉ T} := Subtype.fintype (fun j => j ∉ T)
   have hLI : ∀ᶠ N in atTop,
       LinearIndependent ℂ
         (Sum.elim

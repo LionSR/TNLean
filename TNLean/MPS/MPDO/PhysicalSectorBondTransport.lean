@@ -87,13 +87,13 @@ private theorem offset_from_finRotate {N : ℕ} (hN : 2 ≤ N) (i k : Fin N) :
       have hk' := MPSTensor.eq_cyclic_site_of_offset_eq (Fin.pos i) hr
       simpa [Nat.mod_eq_of_lt i.isLt] using hk'
     subst k
-    rw [if_pos hr]
+    rw [ite_eq_left hr]
     have hforward : finRotate N i = MPSTensor.cyclicForwardSite i 1 := by
       ext
       simp [finRotate_apply, Fin.add_def, MPSTensor.cyclicForwardSite]
     rw [hforward]
     exact MPSTensor.cyclicForwardSite_one_offset i
-  · rw [if_neg hr]
+  · rw [ite_eq_right hr]
     change (k.val + N - (finRotate N i).val) % N = r - 1
     have hk : k = ⟨((finRotate N i).val + (r - 1)) % N,
         Nat.mod_lt _ (by omega)⟩ := by
@@ -146,12 +146,12 @@ theorem embedLocalOperator_two_zero_nested {N : ℕ} (hN : 3 ≤ N)
   rw [extractWindow_two_eq_zero_of_three i σ,
     extractWindow_two_eq_zero_of_three i τ]
   by_cases h3 : AgreesOutsideWindow (d := d) 3 (by omega) i σ τ
-  · rw [if_pos h3]
+  · rw [ite_eq_left h3]
     by_cases h2 : AgreesOutsideWindow (d := d) 2 (by decide) (0 : Fin 3)
         (MPSTensor.extractWindow 3 i σ) (MPSTensor.extractWindow 3 i τ)
-    · rw [if_pos h2, if_pos (hAgree.mp ⟨h3, h2⟩)]
-    · rw [if_neg h2, if_neg (fun h ↦ h2 (hAgree.mpr h).2)]
-  · rw [if_neg h3, if_neg (fun h ↦ h3 (hAgree.mpr h).1)]
+    · rw [ite_eq_left h2, ite_eq_left (hAgree.mp ⟨h3, h2⟩)]
+    · rw [ite_eq_right h2, ite_eq_right (fun h ↦ h2 (hAgree.mpr h).2)]
+  · rw [ite_eq_right h3, ite_eq_right (fun h ↦ h3 (hAgree.mpr h).1)]
 
 /-- Embedding the second bond of a three-site window agrees with embedding the
 translated bond directly in the ambient periodic chain. -/
@@ -183,7 +183,7 @@ theorem embedLocalOperator_two_one_nested {N : ℕ} (hN : 3 ≤ N)
       · apply h3 k
         change ¬ r < 3
         change ¬ ((k.val + N - (finRotate N i).val) % N < 2) at hk
-        rw [hoff, if_neg hr] at hk
+        rw [hoff, ite_eq_right hr] at hk
         omega
     · intro h2
       rw [agreesOutsideWindow_iff] at h2
@@ -196,25 +196,25 @@ theorem embedLocalOperator_two_one_nested {N : ℕ} (hN : 3 ≤ N)
         have hr : r ≠ 0 := by
           change ¬ r < 3 at hk3
           omega
-        rw [hoff, if_neg hr]
+        rw [hoff, ite_eq_right hr]
         change ¬ r < 3 at hk3
         omega
       · have hi := h2 i
         have hoff := offset_from_finRotate (by omega : 2 ≤ N) i i
         have hzero : (i.val + N - i.val) % N = 0 := by
           rw [show i.val + N - i.val = N by omega, Nat.mod_self]
-        specialize hi (by rw [hoff, if_pos hzero]; omega)
+        specialize hi (by rw [hoff, ite_eq_left hzero]; omega)
         simpa [MPSTensor.extractWindow, Nat.mod_eq_of_lt i.isLt] using hi
   simp only [embedLocalOperator_apply]
   rw [extractWindow_two_finRotate_eq_one_of_three i σ,
     extractWindow_two_finRotate_eq_one_of_three i τ]
   by_cases h3 : AgreesOutsideWindow (d := d) 3 (by omega) i σ τ
-  · rw [if_pos h3]
+  · rw [ite_eq_left h3]
     by_cases h2 : AgreesOutsideWindow (d := d) 2 (by decide) (1 : Fin 3)
         (MPSTensor.extractWindow 3 i σ) (MPSTensor.extractWindow 3 i τ)
-    · rw [if_pos h2, if_pos (hAgree.mp ⟨h3, h2⟩)]
-    · rw [if_neg h2, if_neg (fun h ↦ h2 (hAgree.mpr h).2)]
-  · rw [if_neg h3, if_neg (fun h ↦ h3 (hAgree.mpr h).1)]
+    · rw [ite_eq_left h2, ite_eq_left (hAgree.mp ⟨h3, h2⟩)]
+    · rw [ite_eq_right h2, ite_eq_right (fun h ↦ h2 (hAgree.mpr h).2)]
+  · rw [ite_eq_right h3, ite_eq_right (fun h ↦ h3 (hAgree.mpr h).1)]
 
 /-- The first two sites extracted from the inverse three-site regrouping have
 the expected two-site outer and neighboring coordinates.

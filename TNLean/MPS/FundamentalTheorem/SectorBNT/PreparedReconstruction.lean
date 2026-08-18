@@ -68,7 +68,7 @@ theorem exists_isBNTCanonicalForm_exact_of_tp_primitive_irr_blocks
           Matrix.reindex e e
             ((X : Matrix _ _ ℂ) * P.toTensor i * (↑(X⁻¹) : Matrix _ _ ℂ)) := by
   classical
-  haveI : ∀ k, NeZero (dim k) := fun k => ⟨(hDim k).ne'⟩
+  have : ∀ k, NeZero (dim k) := fun k => ⟨(hDim k).ne'⟩
   let P := collapsedBntSectorDecomp (d := d) μ blocks hμne
   have hBNT := isBNTCanonicalForm_collapsedBntSectorDecomp_of_tp_primitive_irr_blocks
     μ blocks hDim hTP hPrim hIrr hμne hμLe hμUnit

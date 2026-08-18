@@ -183,7 +183,7 @@ private theorem shiftWindow_zero {L : ℕ} (hk : 0 ≤ L) (a b : Fin L → Fin d
   funext i
   have hi := i.isLt
   simp only [shiftWindow]
-  rw [dif_pos (show i.val + 0 < L by omega)]
+  rw [dite_eq_left (show i.val + 0 < L by omega)]
   exact congrArg a (Fin.ext (show i.val + 0 = i.val by omega))
 
 private theorem shiftWindow_self {L : ℕ} (hk : L ≤ L) (a b : Fin L → Fin d) :
@@ -191,7 +191,7 @@ private theorem shiftWindow_self {L : ℕ} (hk : L ≤ L) (a b : Fin L → Fin d
   funext i
   have hi := i.isLt
   simp only [shiftWindow]
-  rw [dif_neg (show ¬ i.val + L < L by omega)]
+  rw [dite_eq_right (show ¬ i.val + L < L by omega)]
   exact congrArg b (Fin.ext (show i.val + L - L = i.val by omega))
 
 private theorem shiftWindow_apply_zero {L' k : ℕ} (hk : k ≤ L')
@@ -199,7 +199,7 @@ private theorem shiftWindow_apply_zero {L' k : ℕ} (hk : k ≤ L')
     shiftWindow k hk' a b 0 = a ⟨k, by omega⟩ := by
   have h0 : (0 : Fin (L' + 1)).val = 0 := rfl
   simp only [shiftWindow]
-  rw [dif_pos (show (0 : Fin (L' + 1)).val + k < L' + 1 by omega)]
+  rw [dite_eq_left (show (0 : Fin (L' + 1)).val + k < L' + 1 by omega)]
   exact congrArg a (Fin.ext (show (0 : Fin (L' + 1)).val + k = k by omega))
 
 /-- Shifting the deformed window by one site: popping the leading letter and
@@ -219,7 +219,7 @@ private theorem tail_snoc_shiftWindow {L' k : ℕ} (hk : k ≤ L')
       rw [Fin.succ_last, Fin.snoc_last]
       have hlast : (Fin.last L').val = L' := rfl
       simp only [shiftWindow]
-      rw [dif_neg (show ¬ (Fin.last L').val + (k + 1) < L' + 1 by omega)]
+      rw [dite_eq_right (show ¬ (Fin.last L').val + (k + 1) < L' + 1 by omega)]
       exact congrArg b
         (Fin.ext (show k = (Fin.last L').val + (k + 1) - (L' + 1) by omega))
   | cast i =>
@@ -232,14 +232,14 @@ private theorem tail_snoc_shiftWindow {L' k : ℕ} (hk : k ≤ L')
       have hi := i.isLt
       simp only [shiftWindow]
       by_cases h2 : i.val + 1 + k < L' + 1
-      · rw [dif_pos (show (i.succ : Fin (L' + 1)).val + k < L' + 1 by omega),
-          dif_pos (show (i.castSucc : Fin (L' + 1)).val + (k + 1) < L' + 1 by
+      · rw [dite_eq_left (show (i.succ : Fin (L' + 1)).val + k < L' + 1 by omega),
+          dite_eq_left (show (i.castSucc : Fin (L' + 1)).val + (k + 1) < L' + 1 by
             omega)]
         exact congrArg a (Fin.ext
           (show (i.succ : Fin (L' + 1)).val + k =
             (i.castSucc : Fin (L' + 1)).val + (k + 1) by omega))
-      · rw [dif_neg (show ¬ (i.succ : Fin (L' + 1)).val + k < L' + 1 by omega),
-          dif_neg (show ¬ (i.castSucc : Fin (L' + 1)).val + (k + 1) < L' + 1 by
+      · rw [dite_eq_right (show ¬ (i.succ : Fin (L' + 1)).val + k < L' + 1 by omega),
+          dite_eq_right (show ¬ (i.castSucc : Fin (L' + 1)).val + (k + 1) < L' + 1 by
             omega)]
         exact congrArg b (Fin.ext
           (show (i.succ : Fin (L' + 1)).val + k - (L' + 1) =

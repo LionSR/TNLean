@@ -337,7 +337,7 @@ theorem channelDet_norm_eq_one_iff_exists_unitaryChannel
   · intro h
     by_cases hd : d = 0
     · subst hd; exact ⟨1, Subsingleton.elim _ _⟩
-    · haveI : NeZero d := ⟨hd⟩
+    · have : NeZero d := ⟨hd⟩
       exact forward_det_one_implies_unitaryChannel hT h
   · rintro ⟨U, rfl⟩
     exact channelDet_norm_eq_one_of_unitaryChannel U

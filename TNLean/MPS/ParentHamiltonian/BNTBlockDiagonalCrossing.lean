@@ -128,7 +128,7 @@ theorem blockDiagonal_boundary_cyclicRestrict_component_apply_crossing
         have hoffLt : (k + N - i.val) % N < L := by
           rw [hoff]
           omega
-        rw [cyclicCfg, dif_pos hoffLt]
+        rw [cyclicCfg, dite_eq_left hoffLt]
         rw [List.getElem_append_left]
         · have hhead :
               headWord[k]'(by simpa [headWord, List.length_ofFn] using hkHead) =
@@ -143,7 +143,7 @@ theorem blockDiagonal_boundary_cyclicRestrict_component_apply_crossing
           have hoffNot : ¬(k + N - i.val) % N < L := by
             rw [hoff]
             omega
-          rw [cyclicCfg, dif_neg hoffNot]
+          rw [cyclicCfg, dite_eq_right hoffNot]
           rw [List.getElem_append_right]
           · rw [List.getElem_append_left]
             · have hidx :
@@ -170,7 +170,7 @@ theorem blockDiagonal_boundary_cyclicRestrict_component_apply_crossing
           have hoffLt : (k + N - i.val) % N < L := by
             rw [hoff]
             omega
-          rw [cyclicCfg, dif_pos hoffLt]
+          rw [cyclicCfg, dite_eq_left hoffLt]
           rw [List.getElem_append_right]
           · rw [List.getElem_append_right]
             · have hidx :

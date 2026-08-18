@@ -53,7 +53,7 @@ This closes the sub-boundary gap recorded in
 * Wolf, *Quantum Channels & Operations: Guided Tour*, Theorem 5.15
 -/
 
-open scoped Matrix ComplexOrder MatrixOrder NNReal Topology
+open scoped Matrix ComplexOrder MatrixOrder NNReal Topology Matrix.Norms.L2Operator
 open Matrix
 
 noncomputable section
@@ -61,15 +61,6 @@ noncomputable section
 variable {D : ℕ}
 
 local notation "Mat" => Matrix (Fin D) (Fin D) ℂ
-
-private local instance instLSBNormedRing : NormedRing Mat :=
-  Matrix.instL2OpNormedRing
-private local instance instLSBNormedAlgebra : NormedAlgebra ℂ Mat :=
-  Matrix.instL2OpNormedAlgebra
-private local instance instLSBCStarRing : CStarRing Mat :=
-  Matrix.instCStarRing
-private local instance instLSBCStarAlgebra : CStarAlgebra Mat :=
-  Matrix.instCStarAlgebra
 
 section LiebSubBoundary
 

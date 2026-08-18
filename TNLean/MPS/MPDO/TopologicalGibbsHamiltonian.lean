@@ -55,14 +55,14 @@ theorem embedLocalOperator_twoSite_first_diagonal
   by_cases hστ : σ = τ
   · subst τ
     simp only [embedLocalOperator_apply, Matrix.diagonal_apply_eq]
-    rw [if_pos]
+    rw [ite_eq_left]
     · congr 2
       apply Fin.ext
       simp [MPSTensor.extractWindow, Nat.mod_eq_of_lt i.isLt]
     · exact MPSTensor.replaceWindow_extractWindow 2 hN i σ
   · simp only [embedLocalOperator_apply]
     by_cases hAgree : AgreesOutsideWindow (d := d) 2 hN i σ τ
-    · rw [if_pos hAgree]
+    · rw [ite_eq_left hAgree]
       have hWindow :
           MPSTensor.extractWindow 2 i σ ≠
             MPSTensor.extractWindow 2 i τ := by
@@ -74,7 +74,7 @@ theorem embedLocalOperator_twoSite_first_diagonal
           exact MPSTensor.replaceWindow_extractWindow 2 hN i τ
         exact hστ (hAgree.symm.trans hτ)
       simp [hWindow, hστ]
-    · rw [if_neg hAgree]
+    · rw [ite_eq_right hAgree]
       simp [hστ]
 
 end MPOTensor
@@ -216,7 +216,7 @@ theorem topologicalMultiplicityWeightFactorSucc_eq_diagonal
     by_cases huv : u = v
     · subst v
       simp only [Matrix.smul_apply, Matrix.one_apply, smul_eq_mul,
-        Matrix.diagonal_apply_eq, if_true, mul_one]
+        Matrix.diagonal_apply_eq, ite_true, mul_one]
       apply Finset.prod_congr rfl
       intro n _
       rw [H.verticalCopyChainEquiv_symm_apply]
@@ -230,7 +230,7 @@ theorem topologicalMultiplicityWeightFactorSucc_eq_diagonal
           (H.verticalCopyChainEquiv N).symm ⟨p, u⟩ ≠
             (H.verticalCopyChainEquiv N).symm ⟨p, v⟩ :=
         (H.verticalCopyChainEquiv N).symm.injective.ne hSigma
-      rw [Matrix.smul_apply, Matrix.one_apply, if_neg huv, smul_zero,
+      rw [Matrix.smul_apply, Matrix.one_apply, ite_eq_right huv, smul_zero,
         Matrix.diagonal_apply_ne _ hChain]
   · rw [Matrix.blockDiagonal'_apply_ne _ _ _ hpq,
       Matrix.diagonal_apply_ne]

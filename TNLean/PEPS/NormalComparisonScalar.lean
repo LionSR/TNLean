@@ -72,12 +72,12 @@ theorem regionBlockedWeight_empty (A : Tensor G d)
     (τ : RegionPhysicalConfig (V := V) (d := d) (∅ : Finset V)) :
     regionBlockedWeight (G := G) A ∅ μ τ = (Fintype.card (VirtualConfig A) : ℂ) := by
   classical
-  haveI hbdry : IsEmpty {f : Edge G // IsRegionBoundaryEdge (G := G) (∅ : Finset V) f} := by
+  have hbdry : IsEmpty {f : Edge G // IsRegionBoundaryEdge (G := G) (∅ : Finset V) f} := by
     refine ⟨fun f => ?_⟩
     rcases f.2 with ⟨h1, _⟩ | ⟨_, h2⟩
     · exact absurd h1 (Finset.notMem_empty _)
     · exact absurd h2 (Finset.notMem_empty _)
-  haveI hvert : IsEmpty {w : V // w ∈ (∅ : Finset V)} :=
+  have hvert : IsEmpty {w : V // w ∈ (∅ : Finset V)} :=
     ⟨fun w => absurd w.2 (Finset.notMem_empty _)⟩
   unfold regionBlockedWeight
   have hfilter : (Finset.univ.filter
@@ -99,7 +99,7 @@ theorem regionBlockedWeight_univ (A : Tensor G d)
     regionBlockedWeight (G := G) A Finset.univ μ τ =
       stateCoeff A (fun v => τ ⟨v, Finset.mem_univ v⟩) := by
   classical
-  haveI hbdry :
+  have hbdry :
       IsEmpty {f : Edge G // IsRegionBoundaryEdge (G := G) (Finset.univ : Finset V) f} := by
     refine ⟨fun f => ?_⟩
     rcases f.2 with ⟨_, h2⟩ | ⟨h1, _⟩
@@ -273,7 +273,7 @@ theorem exists_normalPerVertexScalar
       exact twoBlockScalarProportional_one_of_empty A (applyGauge B X) hbond
     · have hRtop : h.oneSiteSeparation.withoutSite v ≠ Finset.univ := fun htop =>
         hvR (htop ▸ Finset.mem_univ v)
-      haveI := nonempty_regionBoundaryEdge_of_connected hconn
+      have := nonempty_regionBoundaryEdge_of_connected hconn
         (Finset.nonempty_iff_ne_empty.mpr hRempty) hRtop
       exact twoBlockProportional_of_edgeAbsorbed A B hbond X
         (h.oneSiteSeparation.withoutSite v) hRA hCA hRC hCC hedge
@@ -291,7 +291,7 @@ theorem exists_normalPerVertexScalar
       exact twoBlockScalarProportional_one_of_univ A B hbond X hAB
     · have hSne : (insert v (h.oneSiteSeparation.withoutSite v)).Nonempty :=
         ⟨v, Finset.mem_insert_self v _⟩
-      haveI := nonempty_regionBoundaryEdge_of_connected hconn hSne hStop
+      have := nonempty_regionBoundaryEdge_of_connected hconn hSne hStop
       exact twoBlockProportional_of_edgeAbsorbed A B hbond X
         (insert v (h.oneSiteSeparation.withoutSite v)) hSA hCSA hSC hCSC hedge
   obtain ⟨cR, hcR0, hcRprop⟩ := hpropR

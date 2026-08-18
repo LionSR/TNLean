@@ -289,7 +289,7 @@ theorem AppendixBStructuralData.mpv_coreTensor_eq_cyclicVirtualPairState
     {L : ℕ} (hL : 0 < L) (σ : Cfg d L) :
     mpv hStruct.coreTensor σ = hStruct.cyclicVirtualPairState hL σ := by
   classical
-  haveI : NeZero L := ⟨Nat.ne_of_gt hL⟩
+  have : NeZero L := ⟨Nat.ne_of_gt hL⟩
   rw [mpv, coeff, trace_evalWord_eq_sum_cyclic]
   simp [AppendixBStructuralData.cyclicVirtualPairState,
     AppendixBStructuralData.coreTensor, cyclicVirtualSucc, Matrix.diagonal_mul]

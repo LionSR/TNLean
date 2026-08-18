@@ -91,7 +91,7 @@ theorem probability_ne_zero_of_reparameterized_neighboringOperator_ne_zero
   constructor
   · intro hk
     rw [zeroWeightReparameterizedInverseMapPhysicalSectorFactorization_neighboringOperator,
-      if_neg (fun hne ↦ hne hk)] at hkh
+      ite_eq_right (fun hne ↦ hne hk)] at hkh
     exact hkh rfl
   · intro hh
     rw [zeroWeightReparameterizedInverseMapPhysicalSectorFactorization_neighboringOperator,

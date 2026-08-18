@@ -108,9 +108,9 @@ private theorem channel_fixedPoint_in_PMP
     refine congrArg ((1 / ↑(N + 1 : ℕ) : ℂ) • ·) ?_
     exact Finset.sum_congr rfl (fun n _ => h_iter_PMP n)
   -- Extract convergent subsequence
-  haveI : TopologicalSpace.PseudoMetrizableSpace Mat :=
+  have : TopologicalSpace.PseudoMetrizableSpace Mat :=
     PseudoEMetricSpace.pseudoMetrizableSpace
-  haveI : FirstCountableTopology Mat :=
+  have : FirstCountableTopology Mat :=
     TopologicalSpace.PseudoMetrizableSpace.firstCountableTopology
   obtain ⟨ρ, hρ_mem, φ, hφ_mono, hφ_tendsto⟩ :=
     densityMatrices_isCompact.tendsto_subseq hσ_dm
@@ -377,19 +377,19 @@ theorem hasRankDeficientKernelElement_of_hasBlockUpperTriangularLindblad
   obtain ⟨P, F, hP_nt, hL_eq, hL_block, hκ_block⟩ := h
   have hP_ne : P ≠ 0 := hP_nt.2.1
   have hD : 0 < D := pos_dim_of_nontrivialProjection hP_nt
-  haveI : NeZero D := ⟨hD.ne'⟩
+  have : NeZero D := ⟨hD.ne'⟩
   have hgen : GeneratorPreservesCompression L P := by
     rw [hL_eq]
     exact generator_preserves_compression_of_blockUpperTriangular hP_nt.1 hL_block hκ_block
   have hT_pres := semigroup_preserves_compression_of_generator hP_nt.1 hgen
   obtain ⟨ρ_shift, hρ_mem, hρ_PMP, hρ_fix⟩ :=
     exists_fixed_point_sequence_in_PMP hP_nt.1 hP_ne hGKSL hT_pres
-  haveI : TopologicalSpace.PseudoMetrizableSpace Mat :=
+  have : TopologicalSpace.PseudoMetrizableSpace Mat :=
     PseudoEMetricSpace.pseudoMetrizableSpace
-  haveI : FirstCountableTopology Mat :=
+  have : FirstCountableTopology Mat :=
     TopologicalSpace.PseudoMetrizableSpace.firstCountableTopology
-  haveI : (nhds (0 : Mat)).IsCountablyGenerated := by infer_instance
-  haveI : (_root_.uniformity Mat).IsCountablyGenerated :=
+  have : (nhds (0 : Mat)).IsCountablyGenerated := by infer_instance
+  have : (_root_.uniformity Mat).IsCountablyGenerated :=
     IsUniformAddGroup.uniformity_countably_generated
   obtain ⟨ρ, hρ_dm, φ, hφ_mono, hφ_tendsto⟩ :=
     densityMatrices_isCompact.tendsto_subseq hρ_mem

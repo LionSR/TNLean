@@ -126,7 +126,7 @@ lemma eventually_linearIndependent_of_finite_overlap_tendsto_orthonormal
     · have h1 : Tendsto (fun N => star (mpvInner (d := d) (A i) (A j) N)) atTop (nhds 0) :=
         (h_cross i j h).congr fun N =>
           mpvOverlap_eq_star_mpvInner (A := A i) (B := A j) N
-      simpa [mpvInner, if_neg h] using h1.star
+      simpa [mpvInner, ite_eq_right h] using h1.star
   -- Translate the Gram convergence to the embedded vectors `v` in the fixed space `V`.
   have hGram : ∀ i j : ι,
       Tendsto (fun N => ⟪v i N, v j N⟫_ℂ)

@@ -161,13 +161,13 @@ theorem mergeCollapse2 {T B₁ B₂ K₁ H₂ : Finset V}
                 regionBoundaryLabel (G := G) A H₂ η = c₂ then Finset.univ else ∅) from ?_]
       · by_cases hcompat : regionBoundaryLabel (G := G) A (Finset.univ \ K₁) η = c₁ ∧
             regionBoundaryLabel (G := G) A H₂ η = c₂
-        · rw [if_pos hcompat, if_pos hcompat, Finset.inter_univ,
+        · rw [ite_eq_left hcompat, ite_eq_left hcompat, Finset.inter_univ,
             regionFiber_card (G := G) A T η]
-        · rw [if_neg hcompat, if_neg hcompat, Finset.inter_empty, Finset.card_empty,
+        · rw [ite_eq_right hcompat, ite_eq_right hcompat, Finset.inter_empty, Finset.card_empty,
             zero_smul, smul_zero]
       · by_cases hcompat : regionBoundaryLabel (G := G) A (Finset.univ \ K₁) η = c₁ ∧
             regionBoundaryLabel (G := G) A H₂ η = c₂
-        · rw [if_pos hcompat, Finset.inter_univ]
+        · rw [ite_eq_left hcompat, Finset.inter_univ]
           refine Finset.filter_congr (fun p _ => ?_)
           constructor
           · rintro ⟨⟨_, hagree⟩, hmerge⟩; exact ⟨hagree, hmerge⟩
@@ -177,7 +177,7 @@ theorem mergeCollapse2 {T B₁ B₂ K₁ H₂ : Finset V}
               exact hcompat.1
             · rw [← regionBoundaryLabel_regionMerge_of_subset_left hH₂ p, hmerge]
               exact hcompat.2
-        · rw [if_neg hcompat, Finset.inter_empty, Finset.filter_eq_empty_iff]
+        · rw [ite_eq_right hcompat, Finset.inter_empty, Finset.filter_eq_empty_iff]
           rintro p _ ⟨⟨⟨hc₁, hc₂⟩, hagree⟩, hmerge⟩
           apply hcompat
           refine ⟨?_, ?_⟩
@@ -197,10 +197,10 @@ theorem mergeCollapse2 {T B₁ B₂ K₁ H₂ : Finset V}
         add_zero]
       · refine Finset.sum_congr rfl (fun η hη => ?_)
         rw [Finset.mem_filter] at hη
-        rw [if_pos hη.2]
+        rw [ite_eq_left hη.2]
       · refine Finset.sum_eq_zero (fun η hη => ?_)
         rw [Finset.mem_filter] at hη
-        rw [if_neg hη.2, smul_zero]
+        rw [ite_eq_right hη.2, smul_zero]
   · -- Each agreeing summand is the merged summand at the merged configuration.
     refine Finset.sum_congr rfl (fun p hp => ?_)
     rw [Finset.mem_filter] at hp
@@ -269,15 +269,21 @@ theorem regionProd_split {B B₁ B₂ : Finset V} (hdisj : Disjoint B₁ B₂)
       with hgf
     have hBval : (∏ w : {w : V // w ∈ B}, A.component w.1 (fun ie => ζ ie.1) (σ w)) =
         ∏ w : {w : V // w ∈ B}, A.component w.1 (fun ie => ζ ie.1) (gf w.1) := by
-      refine Finset.prod_congr rfl (fun w _ => ?_); congr 1; rw [hgf]; simp only [dif_pos w.2]
+      refine Finset.prod_congr rfl (fun w _ => ?_); congr 1; rw [hgf]; simp only [dite_eq_left w.2]
     have hB₁val : (∏ w : {w : V // w ∈ B₁},
           A.component w.1 (fun ie => ζ ie.1) (σ ⟨w.1, h₁ w.2⟩)) =
         ∏ w : {w : V // w ∈ B₁}, A.component w.1 (fun ie => ζ ie.1) (gf w.1) := by
-      refine Finset.prod_congr rfl (fun w _ => ?_); congr 1; rw [hgf]; simp only [dif_pos (h₁ w.2)]
+      refine Finset.prod_congr rfl (fun w _ => ?_)
+      congr 1
+      rw [hgf]
+      simp only [dite_eq_left (h₁ w.2)]
     have hB₂val : (∏ w : {w : V // w ∈ B₂},
           A.component w.1 (fun ie => ζ ie.1) (σ ⟨w.1, h₂ w.2⟩)) =
         ∏ w : {w : V // w ∈ B₂}, A.component w.1 (fun ie => ζ ie.1) (gf w.1) := by
-      refine Finset.prod_congr rfl (fun w _ => ?_); congr 1; rw [hgf]; simp only [dif_pos (h₂ w.2)]
+      refine Finset.prod_congr rfl (fun w _ => ?_)
+      congr 1
+      rw [hgf]
+      simp only [dite_eq_left (h₂ w.2)]
     rw [hBval, hB₁val, hB₂val,
       ← Finset.prod_subtype B (fun x => Iff.rfl)
         (fun w => A.component w (fun ie => ζ ie.1) (gf w)),

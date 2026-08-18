@@ -113,7 +113,7 @@ private lemma sectorDim_ne_zero_succ_of_cyclicSectorDecomp
     have hone_zero : (1 : Matrix (Fin (dim u)) (Fin (dim u)) ℂ) = 0 := by
       apply (φ u).injective
       simpa only [map_zero] using hφ_one_zero
-    haveI : NeZero (dim u) := ⟨hNondeg⟩
+    have : NeZero (dim u) := ⟨hNondeg⟩
     exact one_ne_zero hone_zero
   intro hzero
   have hPsucc_zero : P (u + 1) = 0 := by
@@ -207,10 +207,10 @@ private lemma sectorGaugePhaseEquiv_succ_of_cyclicTransport
     sectorDim_ne_zero_succ_of_cyclicSectorDecomp A blocksA hA_cyclic hNondeg
   have hNondegB_succ : dimB (v + 1) ≠ 0 :=
     sectorDim_ne_zero_succ_of_cyclicSectorDecomp B blocksB hB_cyclic hNondegB_v
-  haveI : NeZero (dimA u) := ⟨hNondeg⟩
-  haveI : NeZero (dimB v) := ⟨hNondegB_v⟩
-  haveI : NeZero (dimA (u + 1)) := ⟨hNondegA_succ⟩
-  haveI : NeZero (dimB (v + 1)) := ⟨hNondegB_succ⟩
+  have : NeZero (dimA u) := ⟨hNondeg⟩
+  have : NeZero (dimB v) := ⟨hNondegB_v⟩
+  have : NeZero (dimA (u + 1)) := ⟨hNondegA_succ⟩
+  have : NeZero (dimB (v + 1)) := ⟨hNondegB_succ⟩
   -- Primitivity + irreducibility of each sector (Lemma bdcf, via periodicity).
   obtain ⟨hPrimA_u, hIrrA_u⟩ :=
     primitive_and_irreducible_sectorBlocks_of_cyclicDecomp A hA blocksA hA_blocks_lc hA_mpv

@@ -242,12 +242,6 @@ section Diagonal
 
 variable {n : Type*} [Fintype n] [DecidableEq n]
 
-/-- The `C⋆`-algebra structure on matrices from the `L²`-operator norm, used
-locally to identify the abstract continuous functional calculus on a diagonal
-matrix. -/
-noncomputable local instance diagonalMatrixCStarAlgebra : CStarAlgebra (Matrix n n ℂ) :=
-  Matrix.instCStarAlgebra
-
 /-- The real spectrum of a real-valued diagonal matrix is the range of its diagonal. -/
 private lemma spectrum_real_ofReal_diagonal (g : n → ℝ) :
     spectrum ℝ (diagonal (fun i => (g i : ℂ))) = Set.range g := by

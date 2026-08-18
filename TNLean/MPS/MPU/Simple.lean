@@ -224,7 +224,7 @@ theorem mpo_doubleLayerTensor_eq_one {U : MPOTensor d D} (hU : IsMPUSimple U)
   by_cases hστ : σ = τ
   · subst τ
     simp
-  · rw [if_neg hστ]
+  · rw [ite_eq_right hστ]
     have hpoint : ∃ x, σ x ≠ τ x := by
       by_contra h
       apply hστ

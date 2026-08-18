@@ -66,7 +66,7 @@ theorem supportLeftRightSuperoperator_posSemidef
     (hA : A.PosSemidef) (hB : B.PosSemidef)
     {t : ℝ} (ht : 0 ≤ t) :
     (supportLeftRightSuperoperator A B t).PosSemidef := by
-  letI := Fintype.ofFinite n
+  let := Fintype.ofFinite n
   have hI : (1 : Matrix n n ℂ).PosSemidef := Matrix.PosSemidef.one
   exact (hA.kronecker hI).add ((hI.kronecker hB.transpose).smul ht)
 
@@ -90,7 +90,7 @@ theorem supportLeftRightSupportInv_eq
     {t : ℝ} (ht : 0 ≤ t) :
     supportLeftRightSupportInv hA hB t =
       (supportLeftRightSuperoperator_posSemidef hA hB ht).supportInv := by
-  simp only [supportLeftRightSupportInv, dif_pos ht]
+  simp only [supportLeftRightSupportInv, dite_eq_left ht]
 
 /-- The source-\(A\) quadratic form on the support of \(B\). Its source vector
 is \(\operatorname{vec}((A P_B)^{\mathsf T})\), so zero eigenvalues of \(B\)
@@ -459,7 +459,7 @@ private lemma spectral_support_sourceA_pairing
       α i ^ 2 / (α i + t * β j) * Complex.normSq (W i j)
     else 0
   by_cases hβ : 0 < β j
-  · simp only [hβ, if_true, one_mul, Complex.re_sum]
+  · simp only [hβ, ite_true, one_mul, Complex.re_sum]
     apply Finset.sum_congr rfl
     intro i _
     have hnorm : star (W i j) * W i j =
@@ -562,7 +562,7 @@ private lemma spectral_support_sourceB_pairing
       β j ^ 2 / (α i + t * β j) * Complex.normSq (W i j)
     else 0
   by_cases hβ : 0 < β j
-  · simp only [hβ, if_true]
+  · simp only [hβ, ite_true]
     rw [Finset.mul_sum, Complex.re_sum]
     apply Finset.sum_congr rfl
     intro i _
@@ -787,7 +787,7 @@ theorem supportRelativeEntropyLeftRightIntegrand_eq_spectral
   apply Finset.sum_congr rfl
   intro j _
   by_cases hβ : 0 < β j
-  · simp only [hβ, if_true, relativeEntropyScalar]
+  · simp only [hβ, ite_true, relativeEntropyScalar]
     ring
   · have hβzero : β j = 0 :=
       le_antisymm (not_lt.mp hβ) (hB.eigenvalues_nonneg j)
@@ -817,7 +817,7 @@ theorem supportRelativeEntropySpectralIntegrand_continuousOn
   apply continuousOn_finsetSum Finset.univ
   intro j _
   by_cases hβ : 0 < hB.isHermitian.eigenvalues j
-  · simp only [hβ, if_true]
+  · simp only [hβ, ite_true]
     intro t ht
     have ht0 : 0 < t := ht
     have hden :
@@ -829,7 +829,7 @@ theorem supportRelativeEntropySpectralIntegrand_continuousOn
     apply ContinuousAt.continuousWithinAt
     unfold relativeEntropyScalar
     fun_prop
-  · simp only [hβ, if_false]
+  · simp only [hβ, ite_false]
     exact continuousOn_const
 
 /-- The support-domain left-right quadratic integrand is continuous on

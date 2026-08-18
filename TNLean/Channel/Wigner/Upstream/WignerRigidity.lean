@@ -43,9 +43,9 @@ lemma masterVec_repr
   rw [b.repr_apply_apply]
   unfold masterVec
   rw [inner_sum, Finset.sum_eq_single k]
-  · rw [inner_smul_right, orthonormal_iff_ite.mp b.orthonormal k k, if_pos rfl, mul_one]
+  · rw [inner_smul_right, orthonormal_iff_ite.mp b.orthonormal k k, ite_eq_left rfl, mul_one]
   · intro j _ hjk
-    rw [inner_smul_right, orthonormal_iff_ite.mp b.orthonormal k j, if_neg (Ne.symm hjk),
+    rw [inner_smul_right, orthonormal_iff_ite.mp b.orthonormal k j, ite_eq_right (Ne.symm hjk),
         mul_zero]
   · intro h; exact absurd (Finset.mem_univ k) h
 
@@ -96,13 +96,13 @@ lemma Iprobe_ne_negIprobe
       (Projectivization.mk ℂ (b i - Complex.I • b j) (subI_basis_ne_zero b hij)) = 0 := by
     rw [transProb_mk_eq_zero_iff]
     have e1 : (inner ℂ (b i) (b i) : ℂ) = 1 := by
-      rw [orthonormal_iff_ite.mp b.orthonormal i i, if_pos rfl]
+      rw [orthonormal_iff_ite.mp b.orthonormal i i, ite_eq_left rfl]
     have e2 : (inner ℂ (b i) (b j) : ℂ) = 0 := by
-      rw [orthonormal_iff_ite.mp b.orthonormal i j, if_neg hij]
+      rw [orthonormal_iff_ite.mp b.orthonormal i j, ite_eq_right hij]
     have e3 : (inner ℂ (b j) (b i) : ℂ) = 0 := by
-      rw [orthonormal_iff_ite.mp b.orthonormal j i, if_neg (Ne.symm hij)]
+      rw [orthonormal_iff_ite.mp b.orthonormal j i, ite_eq_right (Ne.symm hij)]
     have e4 : (inner ℂ (b j) (b j) : ℂ) = 1 := by
-      rw [orthonormal_iff_ite.mp b.orthonormal j j, if_pos rfl]
+      rw [orthonormal_iff_ite.mp b.orthonormal j j, ite_eq_left rfl]
     rw [inner_add_left, inner_sub_right, inner_sub_right, inner_smul_left, inner_smul_right,
         inner_smul_left, inner_smul_right, e1, e2, e3, e4]
     simp [Complex.conj_I]
@@ -339,7 +339,7 @@ theorem diagReducedMap_complexSign_closure
             (Projectivization.mk ℂ (b i + Complex.I • b j) (Iadd_basis_ne_zero b hij))
           = Projectivization.mk ℂ (b i - Complex.I • b j) (subI_basis_ne_zero b hij)) := by
   rcases lt_or_ge N 2 with hN | hN
-  · haveI : Subsingleton (Fin N) := Fin.subsingleton_iff_le_one.mpr (by omega)
+  · have : Subsingleton (Fin N) := Fin.subsingleton_iff_le_one.mpr (by omega)
     exact Or.inl (fun i j hij => absurd (Subsingleton.elim i j) hij)
   · have h01 : (⟨0, by omega⟩ : Fin N) ≠ ⟨1, by omega⟩ := Fin.ne_of_val_ne (by norm_num)
     rcases diagReducedMap_complex_probe_general hf b i₀ h01 with hfix | hflip

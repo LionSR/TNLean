@@ -157,7 +157,7 @@ theorem isTraceAnnihilating_of_isTracePreservingMap_semigroup
     tendsto_const_nhds.congr' <| eventually_nhdsWithin_of_forall fun h hh => by
       simp only [slope, vsub_eq_sub, Function.comp]
       rw [hconst h (le_of_lt hh), h0, sub_self, smul_zero]
-  haveI : (nhdsWithin (0 : ℝ) (Set.Ioi 0)).NeBot := nhdsWithin_Ioi_neBot le_rfl
+  have : (nhdsWithin (0 : ℝ) (Set.Ioi 0)).NeBot := nhdsWithin_Ioi_neBot le_rfl
   exact (tendsto_nhds_unique hslope_zero hright).symm
 
 end LindbladForms

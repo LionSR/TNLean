@@ -506,7 +506,7 @@ theorem MarkovDilation.blockDilation_fixedEnv_idTensorMap_blockDiagonal
           Ulocal (Ne.symm hkj)]
         simp
       · simp
-    · rw [dif_neg hj]
+    · rw [dite_eq_right hj]
       apply Finset.sum_eq_zero
       intro i _
       apply Finset.sum_eq_zero

@@ -243,7 +243,7 @@ theorem comparisonRegionProportional_of_interiorAbsorbed
     have hi := hBr.compl_comparisonRegion_injective hUB (a := v.1.1) (b := v.2.1)
       (by omega) (by omega) (by omega) (by omega)
     rwa [regionInjectivityDataOf_isInjective] at hi
-  haveI hNeR : Nonempty {f : Edge (squareLatticeGraph width height) //
+  have hNeR : Nonempty {f : Edge (squareLatticeGraph width height) //
       IsRegionBoundaryEdge (G := squareLatticeGraph width height)
         (normalSquareComparisonRegion v.1.1 v.2.1) f} :=
     ⟨⟨squareLatticeUpEdge v.1.1 v.2.1 (by omega) (by omega),
@@ -318,7 +318,7 @@ theorem comparisonSquareProportional_of_interiorAbsorbed
     have hi := hBr.compl_comparisonSquare_injective hUB (a := v.1.1) (b := v.2.1)
       (by omega) (by omega) (by omega) (by omega)
     rwa [regionInjectivityDataOf_isInjective] at hi
-  haveI hNeS : Nonempty {f : Edge (squareLatticeGraph width height) //
+  have hNeS : Nonempty {f : Edge (squareLatticeGraph width height) //
       IsRegionBoundaryEdge (G := squareLatticeGraph width height)
         (normalSquareComparisonSquare v.1.1 v.2.1) f} :=
     ⟨⟨squareLatticeUpEdge v.1.1 (v.2.1 - 1) (by omega) (by omega),

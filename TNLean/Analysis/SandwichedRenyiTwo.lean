@@ -81,19 +81,6 @@ local notation "Mat" => Matrix (Fin D) (Fin D) ℂ
 
 open scoped Matrix.Norms.L2Operator
 
-private local instance instRenyiTwoNormedRing : NormedRing Mat :=
-  Matrix.instL2OpNormedRing
-private local instance instRenyiTwoNormedAlgebra : NormedAlgebra ℂ Mat :=
-  Matrix.instL2OpNormedAlgebra
-private local instance instRenyiTwoCStarRing : CStarRing Mat :=
-  Matrix.instCStarRing
-private local instance instRenyiTwoPartialOrder : PartialOrder Mat :=
-  Matrix.instPartialOrder
-private local instance instRenyiTwoStarOrderedRing : StarOrderedRing Mat :=
-  Matrix.instStarOrderedRing
-private local instance instRenyiTwoCStarAlgebra : CStarAlgebra Mat :=
-  Matrix.instCStarAlgebra
-
 namespace Matrix.PosSemidef
 
 /-- Sandwiching a positive-semidefinite matrix between equal real powers of a

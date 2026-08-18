@@ -457,7 +457,7 @@ theorem eq_one_of_transferMap_comp_self_eq_smul
   rw [hTensor] at h
   obtain ⟨j, q, hq⟩ := hCF.weight_unit_exists
   let s : Fin P.totalCopies := P.flatIndexEquiv ⟨j, q⟩
-  haveI : NeZero (P.flatDim s) := by
+  have : NeZero (P.flatDim s) := by
     refine ⟨?_⟩
     simpa [s] using (hCF.basis_dim_pos j).ne'
   have hcorner :=
@@ -524,13 +524,13 @@ private lemma mixedTransferMap₂_eq_zero_of_isIdempotentElem
   classical
   let Φ : (V →ₗ[ℂ] V) ≃ₐ[ℂ] (V →L[ℂ] V) := Module.End.toContinuousLinearMap V
   let F' : V →L[ℂ] V := Φ (mixedTransferMap₂ A B)
-  letI : NormedAddCommGroup (V →L[ℂ] V) := ContinuousLinearMap.toNormedAddCommGroup
-  letI : SeminormedRing (V →L[ℂ] V) := ContinuousLinearMap.toSeminormedRing
-  letI : NormedRing (V →L[ℂ] V) := ContinuousLinearMap.toNormedRing
-  letI : NormedSpace ℂ (V →L[ℂ] V) := ContinuousLinearMap.toNormedSpace
-  letI : NormedAlgebra ℂ (V →L[ℂ] V) := ContinuousLinearMap.toNormedAlgebra
-  haveI : FiniteDimensional ℂ (V →L[ℂ] V) := Φ.toLinearEquiv.finiteDimensional
-  haveI hComplete : CompleteSpace (V →L[ℂ] V) := FiniteDimensional.complete ℂ _
+  let : NormedAddCommGroup (V →L[ℂ] V) := ContinuousLinearMap.toNormedAddCommGroup
+  let : SeminormedRing (V →L[ℂ] V) := ContinuousLinearMap.toSeminormedRing
+  let : NormedRing (V →L[ℂ] V) := ContinuousLinearMap.toNormedRing
+  let : NormedSpace ℂ (V →L[ℂ] V) := ContinuousLinearMap.toNormedSpace
+  let : NormedAlgebra ℂ (V →L[ℂ] V) := ContinuousLinearMap.toNormedAlgebra
+  have : FiniteDimensional ℂ (V →L[ℂ] V) := Φ.toLinearEquiv.finiteDimensional
+  have hComplete : CompleteSpace (V →L[ℂ] V) := FiniteDimensional.complete ℂ _
   have hSpectF : spectralRadius ℂ F' < 1 := by
     change spectralRadius ℂ
       (((Module.End.toContinuousLinearMap V)

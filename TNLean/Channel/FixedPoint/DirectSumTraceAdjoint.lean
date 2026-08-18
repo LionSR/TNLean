@@ -241,8 +241,8 @@ theorem directSumTraceAdjointMapBetween_comp
       (directSumTraceAdjointMapBetween T).comp
         (directSumTraceAdjointMapBetween S) := by
   classical
-  letI := Fintype.ofFinite ι
-  letI (i : ι) := Fintype.ofFinite (n i)
+  let := Fintype.ofFinite ι
+  let (i : ι) := Fintype.ofFinite (n i)
   apply LinearMap.ext
   intro A
   apply eq_of_sum_trace_mul_eq
@@ -300,8 +300,8 @@ theorem traceAdjointMap_directSumMapExtension
     Matrix.traceAdjointMap (directSumMapExtension T) =
       directSumMapExtension (directSumTraceAdjointMapBetween T) := by
   classical
-  letI := Fintype.ofFinite ι
-  letI (i : ι) := Fintype.ofFinite (n i)
+  let := Fintype.ofFinite ι
+  let (i : ι) := Fintype.ofFinite (n i)
   apply LinearMap.ext
   intro A
   apply Matrix.ext_iff_trace_mul_right.mpr

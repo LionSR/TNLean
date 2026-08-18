@@ -394,7 +394,7 @@ theorem gauge_unique_mod_edge_scalars (A B : Tensor G d)
       rintro h0
       have hu : IsUnit (0 : Matrix (Fin (A.bondDim ie.1)) (Fin (A.bondDim ie.1)) ℂ) :=
         h0 ▸ hUnitY v ie
-      letI : Nonempty (Fin (A.bondDim ie.1)) := hneVertex v ie
+      let : Nonempty (Fin (A.bondDim ie.1)) := hneVertex v ie
       rw [Matrix.isUnit_iff_isUnit_det, Matrix.det_zero] at hu
       exact not_isUnit_zero hu
     have hab : a • edgeGaugeAt A Y v ie = b • edgeGaugeAt A Y v ie := ha ▸ hb
@@ -419,7 +419,7 @@ theorem gauge_unique_mod_edge_scalars (A B : Tensor G d)
     have hrel := hcvProp e.1.1 ⟨e, Or.inl rfl⟩
     rw [hloIncX, hloIncY, h0, zero_smul] at hrel
     have hXunit : IsUnit (X e).val := (X e).isUnit
-    letI : Nonempty (Fin (A.bondDim e)) := hneVertex e.1.1 ⟨e, Or.inl rfl⟩
+    let : Nonempty (Fin (A.bondDim e)) := hneVertex e.1.1 ⟨e, Or.inl rfl⟩
     rw [hrel, Matrix.isUnit_iff_isUnit_det, Matrix.det_zero] at hXunit
     exact not_isUnit_zero hXunit
   -- The edge-scalar family.
@@ -451,8 +451,8 @@ theorem gauge_unique_mod_edge_scalars (A B : Tensor G d)
       refine huniq v ie _ _ ?_ (hcvProp v ie)
       unfold edgeScalarAt edgeGaugeAt
       by_cases h : ie.1.1.1 = v
-      · simp only [if_pos h]; rw [hprop ie.1]
-      · simp only [if_neg h]
+      · simp only [ite_eq_left h]; rw [hprop ie.1]
+      · simp only [ite_eq_right h]
         rw [hpropInv ie.1, Matrix.transpose_smul, Units.val_inv_eq_inv_val]
     calc (∏ ie : IncidentEdge G v, edgeScalarAt (G := G) c v ie)
         = ∏ ie : IncidentEdge G v, cvFun v ie :=
@@ -462,8 +462,8 @@ theorem gauge_unique_mod_edge_scalars (A B : Tensor G d)
     intro v ie
     unfold edgeScalarAt edgeGaugeAt
     by_cases h : ie.1.1.1 = v
-    · simp only [if_pos h]; rw [hprop ie.1]
-    · simp only [if_neg h]
+    · simp only [ite_eq_left h]; rw [hprop ie.1]
+    · simp only [ite_eq_right h]
       rw [hpropInv ie.1, Matrix.transpose_smul, Units.val_inv_eq_inv_val]
 
 

@@ -290,23 +290,23 @@ private lemma isThreeSiteClosure_threeSiteState :
     · subst j₂
       by_cases h₃ : i₃ = j₃
       · subst j₃
-        simp only [threeSiteState, if_pos]
-        simp only [tensor, if_pos]
+        simp only [threeSiteState, ite_eq_left]
+        simp only [tensor, ite_eq_left]
         exact (trace_three_sectorMatrices_mul_transfer i₁ i₂ i₃).symm
       · have htuple : (i₁, i₂, i₃) ≠ (i₁, i₂, j₃) := by
           intro h
           exact h₃ (congrArg (fun x => x.2.2) h)
-        rw [threeSiteState, if_neg htuple]
+        rw [threeSiteState, ite_eq_right htuple]
         simp [tensor, h₃]
     · have htuple : (i₁, i₂, i₃) ≠ (i₁, j₂, j₃) := by
         intro h
         exact h₂ (congrArg (fun x => x.2.1) h)
-      rw [threeSiteState, if_neg htuple]
+      rw [threeSiteState, ite_eq_right htuple]
       simp [tensor, h₂]
   · have htuple : (i₁, i₂, i₃) ≠ (j₁, j₂, j₃) := by
       intro h
       exact h₁ (congrArg Prod.fst h)
-    rw [threeSiteState, if_neg htuple]
+    rw [threeSiteState, ite_eq_right htuple]
     simp [tensor, h₁]
 
 /-- The refined four-sector Hayashi decomposition of the explicit three-site
@@ -446,7 +446,7 @@ lemma inverseMapFactorization_neighboringOperator (k h : Fin 4) :
   have hk : hayashiData.p k ≠ 0 := by
     change p k ≠ 0
     norm_num [p]
-  rw [if_pos hk]
+  rw [ite_eq_left hk]
   ext x y
   obtain ⟨xR, xL⟩ := x
   obtain ⟨yR, yL⟩ := y

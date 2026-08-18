@@ -144,7 +144,7 @@ private theorem log_smul_posSemidef {A : Matrix n n ℂ}
   simp only [p, smul_eq_mul]
   by_cases hx : x = 0
   · simp [hx]
-  · rw [if_pos hx, Real.log_mul hc.ne' hx]
+  · rw [ite_eq_left hx, Real.log_mul hc.ne' hx]
     ring
 
 open scoped Matrix.Norms.L2Operator in
@@ -423,16 +423,16 @@ theorem
               ((star (hA.isHermitian.eigenvectorUnitary : Matrix n n ℂ) *
                 (hB.isHermitian.eigenvectorUnitary : Matrix n n ℂ)) i j) := by
     by_cases hβpos : 0 < hB.isHermitian.eigenvalues j
-    · simpa only [hβpos, if_true] using hterm i j
+    · simpa only [hβpos, ite_true] using hterm i j
     · have hβzero : hB.isHermitian.eigenvalues j = 0 :=
         le_antisymm (not_lt.mp hβpos) (hB.eigenvalues_nonneg j)
       have hweight :=
         eigenvalue_mul_overlap_normSq_eq_zero_of_kernel_le
           hA hB hker i j hβzero
       refine ⟨?_, ?_⟩
-      · simp only [hβpos, if_false]
+      · simp only [hβpos, ite_false]
         exact integrableOn_zero
-      · simp only [hβzero, lt_self_iff_false, if_false, integral_zero, Real.log_zero,
+      · simp only [hβzero, lt_self_iff_false, ite_false, integral_zero, Real.log_zero,
           sub_zero]
         rw [mul_right_comm, hweight, zero_mul]
   have hintegral :

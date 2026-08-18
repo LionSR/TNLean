@@ -68,11 +68,11 @@ theorem prod_region_incident_eq_prod_edge (R : Finset V) (f : (w : V) → Incide
         = ∏ w ∈ (Finset.univ : Finset V), ∏ ie : IncidentEdge G w,
             (if w ∈ R then f w ie else (1 : ℂ)) :=
       Finset.prod_subset (Finset.subset_univ R) (fun w _ hw =>
-        Finset.prod_eq_one (fun ie _ => by rw [if_neg hw]))
+        Finset.prod_eq_one (fun ie _ => by rw [ite_eq_right hw]))
     rw [← hsub]
     refine Finset.prod_congr rfl (fun w hw => ?_)
     refine Finset.prod_congr rfl (fun ie _ => ?_)
-    rw [if_pos hw]
+    rw [ite_eq_left hw]
   rw [hLHS, prod_incident_eq_prod_edge (G := G) (fun w ie => if w ∈ R then f w ie else (1 : ℂ))]
 
 /-! ### Region-local configurations
@@ -196,9 +196,9 @@ theorem regionBoundaryGauge_mul_inv (B : Tensor G d)
     regionBoundaryGauge (G := G) B X R f * regionBoundaryGaugeInv (G := G) B X R f = 1 := by
   rw [regionBoundaryGauge, regionBoundaryGaugeInv]
   by_cases h : f.1.1.1 ∈ R
-  · rw [if_pos h, if_pos h]
+  · rw [ite_eq_left h, ite_eq_left h]
     simp
-  · rw [if_neg h, if_neg h, ← Matrix.transpose_mul]
+  · rw [ite_eq_right h, ite_eq_right h, ← Matrix.transpose_mul]
     simp
 
 /-! ### Expanding the gauged region product
@@ -277,7 +277,7 @@ lemma prod_region_edgeGauge_eq_prod_factor (B : Tensor G d)
     Finset.prod_congr rfl fun w _ => Finset.prod_congr rfl fun ie _ => by
       change edgeGaugeAt B X w.1 ie (ζ ie.1) (ξ w ie) =
         if h : w.1 ∈ R then edgeGaugeAt B X w.1 ie (ζ ie.1) (ξ ⟨w.1, h⟩ ie) else 1
-      rw [dif_pos w.2]]
+      rw [dite_eq_left w.2]]
   rw [prod_region_incident_eq_prod_edge R
     (fun (v : V) (ie : IncidentEdge G v) =>
       if h : v ∈ R then edgeGaugeAt B X v ie (ζ ie.1) (ξ ⟨v, h⟩ ie) else 1)]
@@ -303,20 +303,20 @@ noncomputable def regionBoundaryFiberEquiv (B : Tensor G d) (R : Finset V)
   invFun h := ⟨fun e =>
       if hb : IsRegionBoundaryEdge (G := G) R e then bdry ⟨e, hb⟩ else h ⟨e, hb⟩, by
     funext f
-    rw [regionBoundaryLabel_apply, dif_pos f.2]⟩
+    rw [regionBoundaryLabel_apply, dite_eq_left f.2]⟩
   left_inv ζ := by
     apply Subtype.ext
     funext e
     change (if hb : IsRegionBoundaryEdge (G := G) R e then bdry ⟨e, hb⟩ else ζ.1 e) = ζ.1 e
     by_cases hb : IsRegionBoundaryEdge (G := G) R e
-    · rw [dif_pos hb]
+    · rw [dite_eq_left hb]
       exact (congrFun ζ.2 ⟨e, hb⟩).symm
-    · rw [dif_neg hb]
+    · rw [dite_eq_right hb]
   right_inv h := by
     funext e
     change (if hb : IsRegionBoundaryEdge (G := G) R e.1 then bdry ⟨e.1, hb⟩ else h ⟨e.1, hb⟩) =
       h e
-    rw [dif_neg e.2]
+    rw [dite_eq_right e.2]
 
 open scoped Classical in
 /-- **Boundary-pinned factorization of the outer sum.**  A per-edge product summed over the
@@ -348,9 +348,9 @@ theorem sum_boundaryFiber_prod_edge (B : Tensor G d) (R : Finset V)
       g e (if hb : IsRegionBoundaryEdge (G := G) R e then bdry ⟨e, hb⟩ else h ⟨e, hb⟩))
     (fun ζ => Finset.prod_congr rfl fun e _ => by
       by_cases hb : IsRegionBoundaryEdge (G := G) R e
-      · rw [dif_pos hb]
+      · rw [dite_eq_left hb]
         exact congrArg (g e) (congrFun ζ.2 ⟨e, hb⟩)
-      · rw [dif_neg hb]
+      · rw [dite_eq_right hb]
         rfl)]
   -- Split each edge product into the pinned boundary part and the free part.
   rw [Finset.sum_congr rfl (fun h _ => show
@@ -363,8 +363,8 @@ theorem sum_boundaryFiber_prod_edge (B : Tensor G d) (R : Finset V)
       (fun e =>
         g e (if hb : IsRegionBoundaryEdge (G := G) R e then bdry ⟨e, hb⟩ else h ⟨e, hb⟩))]
     congr 1
-    · exact Finset.prod_congr rfl fun f _ => by rw [dif_pos f.2]
-    · exact Finset.prod_congr rfl fun e _ => by rw [dif_neg e.2])]
+    · exact Finset.prod_congr rfl fun f _ => by rw [dite_eq_left f.2]
+    · exact Finset.prod_congr rfl fun e _ => by rw [dite_eq_right e.2])]
   -- Pull the pinned factor out and exchange the free sum with the edge product.
   rw [← Finset.mul_sum]
   congr 1
@@ -490,7 +490,7 @@ theorem sum_regionGaugeFactor_nonboundary (B : Tensor G d)
   by_cases h1 : e.1.1.1 ∈ R
   · have h2 : e.1.1.2 ∈ R := nonboundary_right_mem (G := G) R e.2 h1
     have hinc : IsRegionIncidentEdge (G := G) R e.1 := Or.inl h1
-    rw [regionEdgeContraction, if_pos hinc]
+    rw [regionEdgeContraction, ite_eq_left hinc]
     let a : Fin (B.bondDim e.1) :=
       ξ ⟨e.1.1.1, h1⟩ (edgeLeftIncident (G := G) e.1)
     let b : Fin (B.bondDim e.1) :=
@@ -518,8 +518,8 @@ theorem sum_regionGaugeFactor_nonboundary (B : Tensor G d)
             (Matrix.GeneralLinearGroup.coe_inv (X e.1))
       _ = if a = b then 1 else 0 := by
         by_cases hab : a = b
-        · simpa only [if_pos hab] using gauge_sum_left_right_matrix_inv (X e.1) a b
-        · simpa only [if_neg hab] using gauge_sum_left_right_matrix_inv (X e.1) a b
+        · simpa only [ite_eq_left hab] using gauge_sum_left_right_matrix_inv (X e.1) a b
+        · simpa only [ite_eq_right hab] using gauge_sum_left_right_matrix_inv (X e.1) a b
       _ = if ∀ (h1 : e.1.1.1 ∈ R) (h2 : e.1.1.2 ∈ R),
           ξ ⟨e.1.1.1, h1⟩ (edgeLeftIncident (G := G) e.1) =
             ξ ⟨e.1.1.2, h2⟩ (edgeRightIncident (G := G) e.1) then 1 else 0 := by
@@ -532,10 +532,10 @@ theorem sum_regionGaugeFactor_nonboundary (B : Tensor G d)
   · have h2 : e.1.1.2 ∉ R := nonboundary_right_not_mem (G := G) R e.2 h1
     have hninc : ¬ IsRegionIncidentEdge (G := G) R e.1 :=
       fun hinc => hinc.elim (fun h => absurd h h1) (fun h => absurd h h2)
-    rw [regionEdgeContraction, if_neg hninc]
+    rw [regionEdgeContraction, ite_eq_right hninc]
     rw [Finset.sum_congr rfl (fun z _ =>
       show regionGaugeFactor (G := G) B X R ξ e.1 z = 1 by
-        rw [regionGaugeFactor, dif_neg h1, dif_neg h2, mul_one])]
+        rw [regionGaugeFactor, dite_eq_right h1, dite_eq_right h2, mul_one])]
     simp
 
 /-! ### Collapsing the gluing deltas to a global configuration
@@ -575,9 +575,9 @@ theorem prod_regionEdgeContraction (B : Tensor G d) (R : Finset V)
     intro e
     rw [regionEdgeContraction]
     by_cases hinc : IsRegionIncidentEdge (G := G) R e.1
-    · rw [if_pos hinc, if_pos hinc, mul_one]
-    · rw [if_neg hinc, if_neg hinc,
-        if_pos (fun h1 _ => absurd h1 (fun hm => hinc (Or.inl hm))), one_mul]
+    · rw [ite_eq_left hinc, ite_eq_left hinc, mul_one]
+    · rw [ite_eq_right hinc, ite_eq_right hinc,
+        ite_eq_left (fun h1 _ => absurd h1 (fun hm => hinc (Or.inl hm))), one_mul]
   rw [Finset.prod_congr rfl (fun e _ => hsplit e), Finset.prod_mul_distrib,
     Fintype.prod_boole, ite_mul, one_mul, zero_mul]
   refine if_congr ?_ ?_ rfl
@@ -858,8 +858,8 @@ theorem regionBlockedWeight_applyGauge_eq_globalSum (B : Tensor G d)
         rw [Finset.mul_sum, Finset.sum_filter]
         refine Finset.sum_congr rfl fun ξ _ => ?_
         by_cases hcons : IsRegionConsistent (G := G) B R ξ
-        · rw [if_pos hcons, if_pos hcons]
-        · rw [if_neg hcons, if_neg hcons, zero_mul]
+        · rw [ite_eq_left hcons, ite_eq_left hcons]
+        · rw [ite_eq_right hcons, ite_eq_right hcons, zero_mul]
     -- Reassemble the consistent configurations into global configurations.
     _ = ∑ ζ : VirtualConfig B,
           (∏ f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f},

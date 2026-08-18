@@ -74,7 +74,7 @@ theorem exists_adapted_orthonormal_family_of_sameIsotype
   classical
   obtain ⟨p₀, hp₀⟩ := hne
   have hp₀irr : S.IsIrreducibleSubspace p₀ := hirr p₀ hp₀
-  haveI : Fintype ↥Dc := hfin.fintype
+  have : Fintype ↥Dc := hfin.fintype
   -- An orthonormal basis of the base piece and an enumeration of the family.
   set e : OrthonormalBasis (Fin (Module.finrank ℂ p₀)) ℂ ↥p₀ := stdOrthonormalBasis ℂ ↥p₀
   set σ : Fin (Fintype.card ↥Dc) ≃ ↥Dc := (Fintype.equivFin ↥Dc).symm

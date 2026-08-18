@@ -136,10 +136,10 @@ theorem rectSpanNilpIndexLeftStep_surjective_of_finrank_eq
     (hfin : finrank ℂ (rectSpan ((A i₀) ^ nilpIndex (toLin' (A i₀))) A n) =
             finrank ℂ (rectSpan ((A i₀) ^ nilpIndex (toLin' (A i₀))) A (n + 1))) :
     Function.Surjective (rectSpanNilpIndexLeftStep A i₀ n) := by
-  haveI : FiniteDimensional ℂ
+  have : FiniteDimensional ℂ
       (rectSpan ((A i₀) ^ nilpIndex (toLin' (A i₀))) A n) :=
     FiniteDimensional.finiteDimensional_submodule _
-  haveI : FiniteDimensional ℂ
+  have : FiniteDimensional ℂ
       (rectSpan ((A i₀) ^ nilpIndex (toLin' (A i₀))) A (n + 1)) :=
     FiniteDimensional.finiteDimensional_submodule _
   exact (LinearMap.injective_iff_surjective_of_finrank_eq_finrank hfin).mp

@@ -106,7 +106,7 @@ private theorem transferMap_hermitian_fixedPoint_eq_zero_of_trace_eq_zero
     have hpos : (0 : ℂ) < Matrix.trace ρ := by
       -- Need `Nonempty (Fin D)` for `trace_pos`; follows from `NeZero D`.
       have hDpos : 0 < D := Nat.pos_of_ne_zero (NeZero.ne D)
-      letI : Nonempty (Fin D) := ⟨⟨0, hDpos⟩⟩
+      let : Nonempty (Fin D) := ⟨⟨0, hDpos⟩⟩
       simpa only [gt_iff_lt] using (Matrix.PosDef.trace_pos (A := ρ) hρ.pos_def)
     intro hρ0
     have : (Matrix.trace ρ) = 0 := by simp [hρ0]
@@ -371,7 +371,7 @@ theorem spectralRadius_compl_lt_one_of_peripheralPrimitive
   have hρ_psd : ρ.PosSemidef := hρ.pos_def.posSemidef
   have hρ_ne : ρ ≠ 0 := by
     have hDpos : 0 < D := Nat.pos_of_ne_zero (NeZero.ne D)
-    letI : Nonempty (Fin D) := ⟨⟨0, hDpos⟩⟩
+    let : Nonempty (Fin D) := ⟨⟨0, hDpos⟩⟩
     have htr_pos : (0 : ℂ) < Matrix.trace ρ := by
       simpa only using (Matrix.PosDef.trace_pos (A := ρ) hρ.pos_def)
     intro hρ0

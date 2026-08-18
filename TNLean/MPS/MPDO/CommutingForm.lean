@@ -114,7 +114,7 @@ theorem agreesOutsideWindow_iff (L : ℕ) {N : ℕ} (hLN : L ≤ N)
     funext k
     unfold MPSTensor.replaceWindow
     by_cases hk : (k.val + N - i.val) % N < L
-    · rw [dif_pos hk]
+    · rw [dite_eq_left hk]
       have hself := congrFun (MPSTensor.replaceWindow_extractWindow L hLN i σ) k
       simpa [MPSTensor.replaceWindow, hk] using hself
     · simp [hk, h k hk]
@@ -139,9 +139,9 @@ def windowComplementEquiv (L N : ℕ) (hLN : L ≤ N) (i : Fin N) :
     have hsite : (i.val + offset) % N = k.val :=
       MPSTensor.add_offset_mod_eq i.isLt k.isLt
     by_cases hoff : offset < L
-    · rw [dif_pos hoff]
+    · rw [dite_eq_left hoff]
       exact congrArg σ (Fin.ext hsite)
-    · rw [dif_neg hoff]
+    · rw [dite_eq_right hoff]
       apply congrArg σ
       apply Fin.ext
       change (i.val + L + (offset - L)) % N = k.val
@@ -154,7 +154,7 @@ def windowComplementEquiv (L N : ℕ) (hLN : L ≤ N) (i : Fin N) :
       simp only [MPSTensor.extractWindow]
       have hoff : (((i.val + r.val) % N + N - i.val) % N) = r.val :=
         MPSTensor.offset_mod_eq i.isLt (Nat.lt_of_lt_of_le r.isLt hLN)
-      rw [dif_pos (hoff.symm ▸ r.isLt)]
+      rw [dite_eq_left (hoff.symm ▸ r.isLt)]
       exact congrArg x.1 (Fin.ext hoff)
     · funext r
       simp only
@@ -165,7 +165,7 @@ def windowComplementEquiv (L N : ℕ) (hLN : L ≤ N) (i : Fin N) :
       have hnot :
           ¬ (((i.val + L + r.val) % N + N - i.val) % N) < L := by
         omega
-      rw [dif_neg hnot]
+      rw [dite_eq_right hnot]
       apply congrArg x.2
       apply Fin.ext
       change (((i.val + L + r.val) % N + N - i.val) % N) - L = r.val
@@ -189,7 +189,7 @@ def windowComplementEquiv (L N : ℕ) (hLN : L ≤ N) (i : Fin N) :
     have hnot :
         ¬ (((i.val + L + r.val) % N + N - i.val) % N) < L := by
       omega
-    rw [dif_neg hnot]
+    rw [dite_eq_right hnot]
 
 /-- In cyclic-window coordinates, a local operator is the tensor product of
 the window operator with the identity on the complement. -/
@@ -221,11 +221,11 @@ theorem reindex_embedLocalOperator_windowComplement
   · change (if AgreesOutsideWindow (d := d) L hLN i σ τ then
         B (MPSTensor.extractWindow L i σ) (MPSTensor.extractWindow L i τ) else 0) =
       B x y * (if u = v then 1 else 0)
-    rw [if_pos (hAgree.mpr h), hx, hy, if_pos h.symm, mul_one]
+    rw [ite_eq_left (hAgree.mpr h), hx, hy, ite_eq_left h.symm, mul_one]
   · change (if AgreesOutsideWindow (d := d) L hLN i σ τ then
         B (MPSTensor.extractWindow L i σ) (MPSTensor.extractWindow L i τ) else 0) =
       B x y * (if u = v then 1 else 0)
-    rw [if_neg (hAgree.not.mpr h), if_neg (Ne.symm h), mul_zero]
+    rw [ite_eq_right (hAgree.not.mpr h), ite_eq_right (Ne.symm h), mul_zero]
 
 /-- Embedding two operators into the same cyclic window preserves their
 product. -/
@@ -293,7 +293,7 @@ theorem embedLocalOperator_mulVec_apply (L N : ℕ) (hLN : L ≤ N) (i : Fin N)
       rw [Finset.sum_eq_single (e σ).2]
       · simp [hreplace]
       · intro u _ hu
-        rw [if_neg (Ne.symm hu), mul_zero, zero_mul]
+        rw [ite_eq_right (Ne.symm hu), mul_zero, zero_mul]
       · simp
 
 private theorem cyclicWindowsDisjoint_of_not_overlap {N L : ℕ} (hLN : L ≤ N)
@@ -322,7 +322,7 @@ private theorem extractWindow_replaceWindow_of_not_cyclicWindowsOverlap
     intro hj
     exact cyclicWindowsDisjoint_of_not_overlap hLN hij
       ⟨(i.val + r.val) % N, Nat.mod_lt _ (Fin.pos i)⟩ hi hj
-  rw [dif_neg hnotj]
+  rw [dite_eq_right hnotj]
 
 private theorem replaceWindow_commute_of_not_cyclicWindowsOverlap
     {N L : ℕ} (hLN : L ≤ N) {i j : Fin N}

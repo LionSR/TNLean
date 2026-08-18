@@ -169,7 +169,7 @@ The remaining Mathlib or local formalization gaps are:
   conjecture*, 1973]
 -/
 
-open scoped Matrix ComplexOrder MatrixOrder NNReal Topology
+open scoped Matrix ComplexOrder MatrixOrder NNReal Topology Matrix.Norms.L2Operator
 open Matrix
 open MeasureTheory
 open Filter
@@ -179,15 +179,6 @@ noncomputable section
 variable {D : ℕ}
 
 local notation "Mat" => Matrix (Fin D) (Fin D) ℂ
-
-private local instance instAxiomOCNormedRing : NormedRing Mat :=
-  Matrix.instL2OpNormedRing
-private local instance instAxiomOCNormedAlgebra : NormedAlgebra ℂ Mat :=
-  Matrix.instL2OpNormedAlgebra
-private local instance instAxiomOCCStarRing : CStarRing Mat :=
-  Matrix.instCStarRing
-private local instance instAxiomOCCStarAlgebra : CStarAlgebra Mat :=
-  Matrix.instCStarAlgebra
 
 /-! ## Operator Jensen inequalities for positive maps -/
 
@@ -207,7 +198,7 @@ private lemma IsPositiveMap.map_posDef_of_unital
     (T A).PosDef := by
   classical
   by_cases hne : Nonempty (Fin D)
-  · letI : Nonempty (Fin D) := hne
+  · let : Nonempty (Fin D) := hne
     let lam : ℝ := minEigenvalue hA.isHermitian
     have hlam : 0 < lam := minEigenvalue_pos_of_posDef hA.isHermitian hA
     have hdiff :
@@ -392,7 +383,7 @@ private lemma tendstoUniformlyOn_rpow_exponent_two
     (s : Set ℝ) (hs : IsCompact s) :
     TendstoUniformlyOn (fun q : ℝ => fun x : ℝ => x ^ q) (fun x : ℝ => x ^ (2 : ℝ))
       (𝓝[<] (2 : ℝ)) s := by
-  haveI : CompactSpace s := isCompact_iff_compactSpace.mp hs
+  have : CompactSpace s := isCompact_iff_compactSpace.mp hs
   set G : ℝ → ℝ → ℝ := fun q x => x ^ (max q (1 / 2 : ℝ)) with hG
   have hGcont : ∀ q : ℝ, ContinuousOn (G q) s := by
     intro q
@@ -404,19 +395,19 @@ private lemma tendstoUniformlyOn_rpow_exponent_two
     intro x hx
     exact Or.inr (by norm_num)
   have key : TendstoUniformlyOn G (fun x : ℝ => x ^ (2 : ℝ)) (𝓝[<] (2 : ℝ)) s := by
-    rw [← (hf.tendsto_restrict_iff_tendstoUniformlyOn hGcont)]
+    rw [← (hf.tendsto_domRestrict_iff_tendstoUniformlyOn hGcont)]
     have hjoint : Continuous (Function.uncurry G) := by
       rw [hG]
       apply Continuous.rpow continuous_snd
         (continuous_id.comp continuous_fst |>.max continuous_const)
       intro x
       exact Or.inr (lt_of_lt_of_le (by norm_num) (le_max_right _ _))
-    have hΦcont : Continuous (fun q : ℝ => (⟨_, (hGcont q).restrict⟩ : C(s, ℝ))) := by
+    have hΦcont : Continuous (fun q : ℝ => (⟨_, (hGcont q).domRestrict⟩ : C(s, ℝ))) := by
       apply ContinuousMap.continuous_of_continuous_uncurry
       exact hjoint.comp (continuous_id.prodMap continuous_subtype_val)
-    have hΦ2 : (⟨_, (hGcont 2).restrict⟩ : C(s, ℝ)) = ⟨_, hf.restrict⟩ := by
+    have hΦ2 : (⟨_, (hGcont 2).domRestrict⟩ : C(s, ℝ)) = ⟨_, hf.domRestrict⟩ := by
       ext x
-      simp only [ContinuousMap.coe_mk, Set.restrict_apply, hG]
+      simp only [ContinuousMap.coe_mk, Set.domRestrict_apply, hG]
       congr 1
       norm_num
     rw [← hΦ2]

@@ -163,7 +163,7 @@ private lemma rect_kadison_schwarz_le
       (Matrix.fromBlocks (rectKrausMap K (Xᴴ * X)) ((rectKrausMap K X)ᴴ)
         ((rectKrausMap K X)ᴴᴴ) (1 : Matrix m m ℂ)).PosSemidef := by
     simpa only [conjTranspose_conjTranspose, h_block_eq] using h_sum_psd
-  haveI : Invertible (1 : Matrix m m ℂ) := invertibleOne
+  have : Invertible (1 : Matrix m m ℂ) := invertibleOne
   rw [Matrix.le_iff]
   simpa only [inv_one, mul_one, conjTranspose_conjTranspose] using
     (Matrix.PosDef.fromBlocks₂₂ (A := rectKrausMap K (Xᴴ * X))

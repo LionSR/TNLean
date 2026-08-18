@@ -700,7 +700,7 @@ private lemma partialTraceRightKraus_conjTranspose_mul_apply
       simp [partialTraceRightKraus, Matrix.conjTranspose_apply, hleft]
     · intro hmem
       simp at hmem
-  · rw [if_neg h]
+  · rw [ite_eq_right h]
     apply Finset.sum_eq_zero
     intro i _
     by_cases hip : i = p.1 ∧ k = p.2
@@ -944,10 +944,10 @@ private theorem preparationKraus_sum_conjTranspose_mul
   by_cases hab : a = b
   · subst b
     rw [Matrix.one_apply_eq, Matrix.sum_apply]
-    simpa only [preparationKraus_conjTranspose_mul_apply, if_pos] using hsum
+    simpa only [preparationKraus_conjTranspose_mul_apply, ite_eq_left] using hsum
   · rw [Matrix.one_apply_ne hab, Matrix.sum_apply]
     exact Finset.sum_eq_zero fun j _ => by
-      rw [preparationKraus_conjTranspose_mul_apply, if_neg hab]
+      rw [preparationKraus_conjTranspose_mul_apply, ite_eq_right hab]
 
 /-- The explicit preparation Kraus family resolves the identity,
 $\sum_j A_j^\dagger A_j=I$, when the prepared matrix has trace one. -/

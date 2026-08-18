@@ -201,8 +201,8 @@ theorem directSumDiagonalEmbedding_posDef
     {A : ∀ k, Matrix (n k) (n k) ℂ} (hA : ∀ k, (A k).PosDef) :
     (directSumDiagonalEmbedding A).PosDef := by
   classical
-  letI := Fintype.ofFinite ι
-  letI (k : ι) := Fintype.ofFinite (n k)
+  let := Fintype.ofFinite ι
+  let (k : ι) := Fintype.ofFinite (n k)
   have hpsd : (directSumDiagonalEmbedding A).PosSemidef :=
     directSumDiagonalEmbedding_posSemidef fun k ↦ (hA k).posSemidef
   apply hpsd.posDef_iff_isUnit.mpr

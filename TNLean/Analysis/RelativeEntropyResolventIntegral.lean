@@ -588,7 +588,7 @@ theorem sourceA_resolvent_quadratic_spectral {A B : Matrix n n ℂ}
     rw [leftRight_mulVec_vec_transpose, hsolution]
   have hS : S.PosDef := by
     simpa only [S] using superop_leftRight_posDef ht hA hB
-  letI : Invertible S := hS.isUnit.invertible
+  let : Invertible S := hS.isUnit.invertible
   have hinv : S⁻¹ *ᵥ vec Aᵀ = vec Xᵀ := by
     rw [← hvec, mulVec_mulVec, inv_mul_of_invertible, one_mulVec]
   simp only [sourceAResolventQuadratic]
@@ -635,7 +635,7 @@ theorem sourceB_resolvent_quadratic_spectral {A B : Matrix n n ℂ}
     rw [leftRight_mulVec_vec_transpose, hsolution]
   have hS : S.PosDef := by
     simpa only [S] using superop_leftRight_posDef ht hA hB
-  letI : Invertible S := hS.isUnit.invertible
+  let : Invertible S := hS.isUnit.invertible
   have hinv : S⁻¹ *ᵥ vec Bᵀ = vec Xᵀ := by
     rw [← hvec, mulVec_mulVec, inv_mul_of_invertible, one_mulVec]
   simp only [sourceBResolventQuadratic]

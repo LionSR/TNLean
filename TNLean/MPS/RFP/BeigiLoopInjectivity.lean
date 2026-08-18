@@ -39,7 +39,7 @@ private theorem span_range_vecMulVec_eq_top
     Submodule.span ℂ
       (Set.range fun p : ι × κ ↦ Matrix.vecMulVec (u p.1) (v p.2)) = ⊤ := by
   classical
-  letI := Fintype.ofFinite n
+  let := Fintype.ofFinite n
   let S := Submodule.span ℂ
     (Set.range fun p : ι × κ ↦ Matrix.vecMulVec (u p.1) (v p.2))
   have hright (i : ι) : ∀ y ∈ Submodule.span ℂ (Set.range v),

@@ -216,7 +216,7 @@ private theorem lastPair_sum_blockDiagonal (α β γ : Λ) (i k : Fin p) :
   by_cases hδ : δ = δ'
   · subst hδ; simp
   · simp only [Prod.swap_prod_mk, Matrix.kronecker_apply]
-    rw [dif_neg hδ]
+    rw [dite_eq_right hδ]
     simp only [Matrix.blockDiagonal'_apply_ne _ _ _ hδ, mul_zero,
       Finset.sum_const_zero]
 

@@ -790,7 +790,7 @@ theorem exists_common_blocking_all_primitive
   have hP_pos : 0 < P := lcmPeriod_pos pk_pos
   refine ⟨P, hP_pos, fun k => ?_⟩
   have hk_dvd : pk k ∣ P := dvd_lcmPeriod pk k
-  haveI : NeZero (dim k) := ⟨Nat.ne_of_gt (hDim k)⟩
+  have : NeZero (dim k) := ⟨Nat.ne_of_gt (hDim k)⟩
   exact isPrimitive_transferMap_blockTensor_of_dvd (blocks k) (pk k) P hk_dvd hP_pos (pk_prim k)
 
 /-- Common blocking from TP + irreducible hypotheses (the standard reduction entry point).
@@ -812,7 +812,7 @@ theorem exists_common_blocking_all_primitive_of_TP_irr
         (transferMap (d := blockPhysDim d p) (D := dim k)
           (blockTensor (d := d) (D := dim k) (blocks k) p)) := by
     intro k
-    haveI : NeZero (dim k) := ⟨Nat.ne_of_gt (hDim k)⟩
+    have : NeZero (dim k) := ⟨Nat.ne_of_gt (hDim k)⟩
     exact exists_blockTensor_isPrimitive_of_TP_of_isIrreducibleTensor
       (blocks k) (hTP k) (hIrr k) (hDim k)
   exact exists_common_blocking_all_primitive blocks hDim hPer

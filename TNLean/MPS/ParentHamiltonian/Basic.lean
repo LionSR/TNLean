@@ -63,7 +63,7 @@ most the chain length. -/
     localTerm A L N i ψ σ =
       parentInteraction A L
         (fun τ => ψ (replaceWindow L hLN i σ τ)) (extractWindow L i σ) := by
-  rw [localTerm, dif_pos hLN]
+  rw [localTerm, dite_eq_left hLN]
   rfl
 
 /-- Every translated local parent interaction is idempotent.
@@ -166,10 +166,10 @@ lemma mpv_window_mem_groundSpace (A : MPSTensor d D) (L N : ℕ) (hLN : L ≤ N)
     rw [hoffset]
     by_cases hkL : k < L
     · -- Window part → τ
-      rw [dif_pos hkL, List.getElem_append_left (by simp only [List.length_ofFn]; exact hkL),
+      rw [dite_eq_left hkL, List.getElem_append_left (by simp only [List.length_ofFn]; exact hkL),
           List.getElem_ofFn]
     · -- Complement part → σ
-      rw [dif_neg hkL, List.getElem_append_right (by simp; omega), List.getElem_ofFn]
+      rw [dite_eq_right hkL, List.getElem_append_right (by simp; omega), List.getElem_ofFn]
       simp only [List.length_ofFn]
       congr 1; apply Fin.ext
       change (k + i.val) % N = (i.val + L + (k - L)) % N

@@ -204,7 +204,7 @@ the word span at step 1. This is `dim(T₁) ≥ dim(S₁) = krausRank(A)`. -/
 theorem finrank_cumulativeSpan_one_ge_wordSpan_one (A : MPSTensor d D) :
     Module.finrank ℂ (cumulativeSpan A 1) ≥
     Module.finrank ℂ (wordSpan A 1) := by
-  haveI : FiniteDimensional ℂ ↥(cumulativeSpan A 1) :=
+  have : FiniteDimensional ℂ ↥(cumulativeSpan A 1) :=
     FiniteDimensional.finiteDimensional_submodule _
   exact Submodule.finrank_mono (wordSpan_one_le_cumulativeSpan_one A)
 
@@ -341,7 +341,7 @@ theorem cumulativeSpan_eq_top_of_isNormal_sharp [NeZero D]
         rw [eq_top_iff]
         suffices h : Module.finrank ℂ (cumulativeSpan A n) =
             Module.finrank ℂ (Matrix (Fin D) (Fin D) ℂ) by
-          haveI : FiniteDimensional ℂ (Matrix (Fin D) (Fin D) ℂ) :=
+          have : FiniteDimensional ℂ (Matrix (Fin D) (Fin D) ℂ) :=
             inferInstance
           exact (Submodule.eq_top_of_finrank_eq h).ge
         calc Module.finrank ℂ (cumulativeSpan A n) = D ^ 2 := h_eq
@@ -525,7 +525,7 @@ theorem exists_nonzero_trace_word_sharp_pos [NeZero D]
     intro n hn hne
     by_cases heq : V n = V (n + 1)
     · exact absurd (hV_stab n hn heq) hne
-    · haveI : FiniteDimensional ℂ ↥(V (n + 1)) :=
+    · have : FiniteDimensional ℂ ↥(V (n + 1)) :=
         FiniteDimensional.finiteDimensional_submodule _
       exact Submodule.finrank_lt_finrank_of_lt
         (lt_of_le_of_ne (hV_mono (Nat.le_succ n)) heq)
@@ -563,7 +563,7 @@ theorem exists_nonzero_trace_word_sharp_pos [NeZero D]
     induction k with
     | zero =>
       intro _
-      haveI : FiniteDimensional ℂ ↥(V 1) :=
+      have : FiniteDimensional ℂ ↥(V 1) :=
         FiniteDimensional.finiteDimensional_submodule _
       right
       simpa only [Nat.add_zero, add_zero, ge_iff_le] using

@@ -47,7 +47,7 @@ theorem fixed_eq_scalar_of_isIrreducibleTensor_unital
     (hfix : transferMap (d := d) (D := D) A X = X) :
     ∃ c : ℂ, X = c • (1 : Matrix (Fin D) (Fin D) ℂ) := by
   classical
-  haveI : NeZero D := by
+  have : NeZero D := by
     rcases ‹Nonempty (Fin D)› with ⟨i⟩
     exact ⟨Nat.ne_of_gt (lt_of_le_of_lt (Nat.zero_le i.1) i.2)⟩
   have hUnitalKraus : KadisonSchwarz.IsUnitalKraus (d := d) (D := D) A := by

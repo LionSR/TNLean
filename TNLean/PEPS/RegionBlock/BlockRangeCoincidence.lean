@@ -156,13 +156,13 @@ theorem sum_regionBlockedWeight_mul_complement (A : Tensor G d) (R : Finset V)
     rw [Finset.sum_comm]
     refine Finset.sum_congr rfl (fun ζ _ => ?_)
     rw [Finset.sum_eq_single (regionBoundaryLabel (G := G) A R ζ)]
-    · rw [if_pos rfl]
+    · rw [ite_eq_left rfl]
       refine Finset.sum_congr rfl (fun ξ _ => ?_)
       by_cases heq : regionBoundaryLabel (G := G) A R ζ = regionBoundaryLabel (G := G) A R ξ
-      · rw [if_pos heq.symm, if_pos heq]
-      · rw [if_neg (fun h => heq h.symm), if_neg heq]
+      · rw [ite_eq_left heq.symm, ite_eq_left heq]
+      · rw [ite_eq_right (fun h => heq h.symm), ite_eq_right heq]
     · intro μ _ hμ
-      rw [if_neg (fun h => hμ h.symm)]
+      rw [ite_eq_right (fun h => hμ h.symm)]
     · intro h; exact absurd (Finset.mem_univ _) h
   · -- The complement filter matches the region filter after the boundary-edge
     -- identification, and the product of sums is the doubled sum.

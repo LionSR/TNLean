@@ -95,7 +95,7 @@ theorem IsNormalTensor.exists_gaugeEquiv_singleSectorDecomposition
       GaugeEquiv A B ∧
       IsBNTCanonicalForm (singleSectorDecomposition B) ∧
       SameMPV₂Pos A (singleSectorDecomposition B).toTensor := by
-  letI : NeZero D := ⟨hA.bondDim_ne_zero⟩
+  let : NeZero D := ⟨hA.bondDim_ne_zero⟩
   obtain ⟨σ, _hσ, _hσfix, hLeft, hGauge, hPrim, hIrr⟩ := hA.exists_tpGauge
   let B := tpGauge (d := d) (D := D) A σ
   have hSelf :

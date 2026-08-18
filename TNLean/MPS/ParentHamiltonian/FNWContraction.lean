@@ -529,9 +529,9 @@ theorem IsPrimitiveMPS.wholeIncrement_groundProjection_defect_le_geometric
   simpa only [ContinuousLinearMap.injectiveRangeProjector_eq_starProjection,
     range_groundSpaceMapES, q] using hInjectiveDefect
 
-private noncomputable def groundSpaceESHasOrthogonalProjection
+private theorem groundSpaceESHasOrthogonalProjection
     (A : MPSTensor d D) (N : ℕ) : (groundSpaceES A N).HasOrthogonalProjection := by
-  letI : CompleteSpace (groundSpaceES A N) := FiniteDimensional.complete ℂ _
+  let : CompleteSpace (groundSpaceES A N) := FiniteDimensional.complete ℂ _
   exact Submodule.HasOrthogonalProjection.ofCompleteSpace _
 
 attribute [local instance] groundSpaceESHasOrthogonalProjection

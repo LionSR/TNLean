@@ -99,7 +99,7 @@ theorem insertedTensor_ketLeftAction_toMPSTensor
   rw [Fintype.sum_eq_single p.modNat]
   · simp
   · intro j hj
-    rw [if_neg (Ne.symm hj)]
+    rw [ite_eq_right (Ne.symm hj)]
 
 /-- Inserting the doubled-index two-sided action gives the doubled-index tensor
 of two-sided multiplication of the vertically viewed MPO tensor.

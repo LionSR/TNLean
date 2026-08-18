@@ -81,7 +81,7 @@ theorem rg_flow_converges_of_cf {r : ℕ} {dim : Fin r → ℕ}
           (nhds (E_infty ρ)) := by
   have hInj := hCF.block_injective k
   have hNorm := hCF.leftCanonical k
-  letI : NeZero (dim k) := ⟨Nat.ne_of_gt (hCF.dim_pos k)⟩
+  let : NeZero (dim k) := ⟨Nat.ne_of_gt (hCF.dim_pos k)⟩
   -- Obtain the unique positive-definite fixed point (quantum Perron-Frobenius).
   obtain ⟨ρ₀, hufp⟩ := injective_transfer_unique_fixed_point' (A k) hInj hNorm
   have htr : Matrix.trace ρ₀ ≠ 0 := ne_of_gt hufp.pos_def.trace_pos

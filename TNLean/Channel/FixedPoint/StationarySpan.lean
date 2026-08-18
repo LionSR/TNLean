@@ -222,7 +222,7 @@ theorem exists_stationaryDensity_basis_of_fixedPointsSubmodule
   have h_stationary : ∀ i, IsStationaryDensity E (f i) := by
     intro i
     have : f i ∈ S := hf_mem i
-    rw [hS, Set.mem_setOf_eq] at this
+    rw [hS, Set.mem_ofPred_eq] at this
     exact this
   -- Also rewrite the span goal using h_span
   rw [← h_span]

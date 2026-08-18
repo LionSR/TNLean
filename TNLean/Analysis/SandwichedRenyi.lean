@@ -67,19 +67,6 @@ local notation "Mat" => Matrix (Fin D) (Fin D) ℂ
 
 open scoped Matrix.Norms.L2Operator
 
-private local instance instRenyiNormedRing : NormedRing Mat :=
-  Matrix.instL2OpNormedRing
-private local instance instRenyiNormedAlgebra : NormedAlgebra ℂ Mat :=
-  Matrix.instL2OpNormedAlgebra
-private local instance instRenyiCStarRing : CStarRing Mat :=
-  Matrix.instCStarRing
-private local instance instRenyiPartialOrder : PartialOrder Mat :=
-  Matrix.instPartialOrder
-private local instance instRenyiStarOrderedRing : StarOrderedRing Mat :=
-  Matrix.instStarOrderedRing
-private local instance instRenyiCStarAlgebra : CStarAlgebra Mat :=
-  Matrix.instCStarAlgebra
-
 /-- The total sandwiched Rényi trace functional
 \[
   \operatorname{Re}\operatorname{Tr}\!\left[

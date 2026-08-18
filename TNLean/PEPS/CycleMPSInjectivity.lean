@@ -416,12 +416,12 @@ def arcBoundaryConfig (hn : 3 ≤ n) {L : ℕ} (hL : 0 < L) (hLn : L < n)
 @[simp] theorem arcBoundaryConfig_left (hn : 3 ≤ n) {L : ℕ} (hL : 0 < L) (hLn : L < n)
     (A : MPSTensor d D) (s : Fin n) (a b : Fin D) :
     arcBoundaryConfig hn hL hLn A s a b (arcLeftBoundary hn hL hLn s) = a :=
-  if_pos rfl
+  ite_eq_left rfl
 
 @[simp] theorem arcBoundaryConfig_right (hn : 3 ≤ n) {L : ℕ} (hL : 0 < L) (hLn : L < n)
     (A : MPSTensor d D) (s : Fin n) (a b : Fin D) :
     arcBoundaryConfig hn hL hLn A s a b (arcRightBoundary hn hL hLn s) = b :=
-  if_neg (arcRightBoundary_ne_leftBoundary hn hL hLn s)
+  ite_eq_right (arcRightBoundary_ne_leftBoundary hn hL hLn s)
 
 /-- A boundary assignment of the arc is determined by its two bond values. -/
 theorem arcBoundaryConfig_recon (hn : 3 ≤ n) {L : ℕ} (hL : 0 < L) (hLn : L < n)

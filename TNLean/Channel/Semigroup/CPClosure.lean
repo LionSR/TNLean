@@ -278,7 +278,7 @@ theorem IsCPMap.expSemigroup
   by_cases hD : D = 0
   · subst hD
     exact isCPMap_finZero _
-  · haveI : NeZero D := ⟨hD⟩
+  · have : NeZero D := ⟨hD⟩
     let termLM : ℕ → LM D := fun n =>
       (endEquiv (D := D)).symm (((Nat.factorial n : ℂ)⁻¹) • (((t : ℂ) • endEquiv (D := D) L) ^ n))
     have hterm : ∀ n : ℕ, IsCPMap (termLM n) := by
@@ -336,7 +336,7 @@ theorem IsCPMap.expSemigroup
             simp [partialLM]
             rfl
         | succ n ih =>
-            simp [partialLM, termLM, expSemigroupSeriesTerm]
+            simp [partialLM, termLM]
             rfl
       have hseries' :=
         Filter.Tendsto.congr (fun n => (hpartial_eq n).symm) hseries

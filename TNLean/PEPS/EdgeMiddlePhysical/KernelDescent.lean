@@ -92,7 +92,7 @@ private theorem edgeComplementConfigSplitAt_symm_apply_incident
         (incidentComplementPiEquiv (G := G) A e hj).symm η ⟨f, h⟩
       else
         r ⟨f, h⟩) = η ⟨f.1, hinc⟩
-  rw [dif_pos hinc]
+  rw [dite_eq_left hinc]
   exact incidentComplementPiEquiv_symm_apply_of (G := G) A e hj η f hinc
 
 @[simp] theorem edgeComplementConfigSplitAt_fst (A : Tensor G d) (e : Edge G) {j : V}
@@ -177,7 +177,7 @@ theorem exposedIndicator_erase (S : Finset V) (j : V)
   by_cases hAll : ∀ f : {f : Edge G // f ≠ e},
       f.1.1.1 ∉ S.erase j → f.1.1.2 ∉ S.erase j → ζ f = ζ₀ f
   · -- erase condition holds; both S-cond and extra-cond hold
-    rw [if_pos hAll]
+    rw [ite_eq_left hAll]
     have hS : ∀ f : {f : Edge G // f ≠ e}, f.1.1.1 ∉ S → f.1.1.2 ∉ S → ζ f = ζ₀ f := by
       intro f hf1 hf2
       exact hAll f
@@ -187,12 +187,12 @@ theorem exposedIndicator_erase (S : Finset V) (j : V)
         f.1.1.1 ∉ S.erase j → f.1.1.2 ∉ S.erase j → ζ f = ζ₀ f := by
       intro f _ hf1 hf2
       exact hAll f hf1 hf2
-    rw [if_pos hS, if_pos hE, one_mul]
-  · rw [if_neg hAll]
+    rw [ite_eq_left hS, ite_eq_left hE, one_mul]
+  · rw [ite_eq_right hAll]
     -- erase condition fails: need product = 0, i.e. one of S-cond or extra-cond fails
     by_cases hS : ∀ f : {f : Edge G // f ≠ e}, f.1.1.1 ∉ S → f.1.1.2 ∉ S → ζ f = ζ₀ f
     · -- S-cond holds; then extra-cond must fail (else erase holds)
-      rw [if_pos hS, one_mul, if_neg]
+      rw [ite_eq_left hS, one_mul, ite_eq_right]
       intro hE
       apply hAll
       intro f hf1 hf2
@@ -205,7 +205,7 @@ theorem exposedIndicator_erase (S : Finset V) (j : V)
           have h1 : f.1.1.1 ∉ S := fun h => hf1 (Finset.mem_erase.mpr ⟨hj1, h⟩)
           have h2 : f.1.1.2 ∉ S := fun h => hf2 (Finset.mem_erase.mpr ⟨hj2, h⟩)
           exact hS f h1 h2
-    · rw [if_neg hS, zero_mul]
+    · rw [ite_eq_right hS, zero_mul]
 
 /-- The extra indicator on a split configuration depends only on the local
 configuration `η` at `j`. -/
@@ -258,7 +258,7 @@ theorem kFactor_split_mid {j : V} (hj : j ∈ edgeMiddleVertices e)
       A.component j η (τ j) := by
   classical
   unfold kFactor
-  rw [dif_pos hj]
+  rw [dite_eq_left hj]
   congr 1
   funext ie
   exact edgeComplementValue_edgeComplementConfigSplitAt_symm (G := G) A e hj η r ie
@@ -315,8 +315,8 @@ theorem kMarginal_eq_zero (hA : IsVertexInjective A)
     have hvj : v ≠ j := Finset.ne_of_mem_erase hv
     unfold kFactor
     by_cases hvm : v ∈ edgeMiddleVertices e
-    · rw [dif_pos hvm, dif_pos hvm, Function.update_of_ne hvj]
-    · rw [dif_neg hvm, dif_neg hvm]
+    · rw [dite_eq_left hvm, dite_eq_left hvm, Function.update_of_ne hvj]
+    · rw [dite_eq_right hvm, dite_eq_right hvm]
   rw [hProdErase, hAj]
   rw [show (exposedIndicator (G := G) A e S
         ((edgeComplementConfigSplitAt (G := G) A e hj).symm (η, r)) ζ₀ *
@@ -414,7 +414,7 @@ theorem boundaryLabelOfComplement_boundaryWitness (hpos : ∀ f : Edge G, 0 < A.
     change boundaryWitness (G := G) A e hpos ρ
       ⟨ie.1.1, otherLeft_edge_ne' (G := G) e ie⟩ = ρ.1 ie
     have hL : ie.1.1.1.1 = e.1.1 ∨ ie.1.1.1.2 = e.1.1 := ie.1.2
-    rw [boundaryWitness, dif_pos hL]
+    rw [boundaryWitness, dite_eq_left hL]
   · funext ie
     change boundaryWitness (G := G) A e hpos ρ
       ⟨ie.1.1, otherRight_edge_ne' (G := G) e ie⟩ = ρ.2 ie
@@ -422,7 +422,7 @@ theorem boundaryLabelOfComplement_boundaryWitness (hpos : ∀ f : Edge G, 0 < A.
     have hnotL : ¬ (ie.1.1.1.1 = e.1.1 ∨ ie.1.1.1.2 = e.1.1) := by
       intro hL
       exact (otherRight_edge_ne' (G := G) e ie) (incidentBoth_eq_edge (G := G) e ie.1.1 hL hR)
-    rw [boundaryWitness, dif_neg hnotL, dif_pos hR]
+    rw [boundaryWitness, dite_eq_right hnotL, dite_eq_left hR]
 
 /-- The kernel condition at the empty region forces the coefficient family to
 vanish. -/
@@ -473,7 +473,7 @@ theorem edgeMiddleKernelCondition_empty_eq_zero (hA : IsVertexInjective A)
   simp_rw [hExp, ite_mul, one_mul, zero_mul] at hKρ
   rw [Finset.sum_ite_eq' Finset.univ (boundaryWitness (G := G) A e hpos ρ)
       (fun ζ => complementWeight (G := G) A e c ζ)] at hKρ
-  simp only [Finset.mem_univ, if_true] at hKρ
+  simp only [Finset.mem_univ, ite_true] at hKρ
   -- hKρ : complementWeight c (boundaryWitness ρ) = 0
   rw [complementWeight, boundaryLabelOfComplement_boundaryWitness (G := G) A e hpos ρ] at hKρ
   simpa using hKρ
@@ -534,7 +534,7 @@ theorem exposedIndicator_edgeMiddleVertices
     exposedIndicator (G := G) A e (edgeMiddleVertices e) ζ ζ₀ = 1 := by
   classical
   unfold exposedIndicator
-  rw [if_pos]
+  rw [ite_eq_left]
   intro f hf1 hf2
   -- both endpoints of f are outside midV, so both are in {e.1.1, e.1.2}; with f ≠ e impossible
   rw [mem_edgeMiddleVertices_iff, not_and_or, not_not, not_not] at hf1 hf2
@@ -569,7 +569,7 @@ theorem kProd_eq_family_prod (ζ : EdgeComplementConfig (G := G) A e) (τ : V �
       else 1)]
   refine Finset.prod_congr rfl ?_
   intro v _
-  rw [dif_pos v.2]
+  rw [dite_eq_left v.2]
 
 /-- A vanishing linear combination of the middle tensor family gives the kernel
 condition at the full middle region. -/

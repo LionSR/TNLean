@@ -173,7 +173,7 @@ theorem isTP_adaptedKrausBlocks
   ext a b
   have hEntry := congrFun (congrFun hBlock (a, z)) (b, z)
   simpa only [Matrix.star_eq_conjTranspose, Matrix.sum_apply,
-    Matrix.kroneckerMap_apply, Matrix.one_apply, Matrix.one_mul, z, if_true,
+    Matrix.kroneckerMap_apply, Matrix.one_apply, Matrix.one_mul, z, ite_true,
     mul_one, Prod.mk.injEq, and_true] using hEntry
 
 /-- In adapted coordinates, a preserving Kraus map acts on a simple tensor
@@ -335,8 +335,8 @@ theorem exists_pos_normalizedBlockWeight
       (Φ (commonAverage ρ)) = 0 := by
     rw [hΦbar]
     simp [hzero, Matrix.directSumBlockCompression_blockDiagonal']
-  letI : Nonempty (Fin (m j)) := Fin.pos_iff_nonempty.mp (hm j)
-  letI : Nonempty (Fin (d j)) := Fin.pos_iff_nonempty.mp (hd j)
+  let : Nonempty (Fin (m j)) := Fin.pos_iff_nonempty.mp (hm j)
+  let : Nonempty (Fin (d j)) := Fin.pos_iff_nonempty.mp (hd j)
   exact hblockPD.isUnit.ne_zero hz
 
 /-- Every local left-factor channel fixes the common density matrix of its

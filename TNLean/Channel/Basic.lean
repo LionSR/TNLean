@@ -235,8 +235,8 @@ theorem IsPositiveMap.map_isHermitian
     (hE : IsPositiveMap E) {X : Matrix n n ℂ} (hX : X.IsHermitian) :
     (E X).IsHermitian := by
   classical
-  letI := Fintype.ofFinite m
-  letI := Fintype.ofFinite n
+  let := Fintype.ofFinite m
+  let := Fintype.ofFinite n
   exact IsSelfAdjoint.isHermitian
     (hX.isSelfAdjoint.map' hE.toPositiveLinearMap)
 
@@ -352,7 +352,7 @@ Closed: intersection of the closed PSD cone and the closed set `{trace = 1}`.
 Bounded: PSD matrices with unit trace have bounded entries. -/
 theorem densityMatrices_isCompact :
     IsCompact (densityMatrices D) := by
-  haveI : ProperSpace (Matrix (Fin D) (Fin D) ℂ) := FiniteDimensional.proper_rclike ℂ _
+  have : ProperSpace (Matrix (Fin D) (Fin D) ℂ) := FiniteDimensional.proper_rclike ℂ _
   exact Metric.isCompact_of_isClosed_isBounded
     (Matrix.posSemidef_is_closed.inter (isClosed_eq continuous_id.matrix_trace continuous_const))
     ((posSemidef_trace_bounded_isBounded 1).subset fun _ ⟨h1, h2⟩ => ⟨h1, by rw [h2]; simp⟩)

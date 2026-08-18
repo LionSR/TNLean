@@ -78,7 +78,7 @@ theorem normalizedDiagonal_outputLayer_pow_apply [NeZero d]
   classical
   rw [← normalizedDiagonal_blockTensor K]
   simp only [normalizedDiagonal, contractPhysical, Matrix.one_apply, ite_smul,
-    one_smul, zero_smul, Finset.sum_ite_eq', Finset.mem_univ, if_true,
+    one_smul, zero_smul, Finset.sum_ite_eq', Finset.mem_univ, ite_true,
     blockTensor_apply, Matrix.smul_apply, smul_eq_mul]
   have hdim : (MPSTensor.blockPhysDim d K : ℂ)⁻¹ = ((d : ℂ)⁻¹) ^ K := by
     rw [MPSTensor.blockPhysDim_eq_pow, Nat.cast_pow, inv_pow]

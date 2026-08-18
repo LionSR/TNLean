@@ -101,18 +101,18 @@ noncomputable def legPair0 {cbd : Edge coarseGraph → ℕ} :
   left_inv legs := by
     funext ie; dsimp only
     rcases incident0_cases ie with h | h <;> subst h
-    · rw [dif_pos rfl]
-    · rw [dif_neg (show incidentRC0 ≠ incidentRB0 by decide)]
+    · rw [dite_eq_left rfl]
+    · rw [dite_eq_right (show incidentRC0 ≠ incidentRB0 by decide)]
   right_inv p := by
     obtain ⟨a, b⟩ := p
     let a' : Fin (cbd incidentRB0.1) := ⟨a.1, a.2⟩
     let b' : Fin (cbd incidentRC0.1) := ⟨b.1, b.2⟩
     refine Prod.ext ?_ ?_
     · change (if h : incidentRB0 = incidentRB0 then h ▸ a' else (h rfl).elim) = a'
-      rw [dif_pos rfl]
+      rw [dite_eq_left rfl]
     · change (if h : incidentRC0 = incidentRB0 then h ▸ a' else
           ((incident0_cases incidentRC0).resolve_left h) ▸ b') = b'
-      rw [dif_neg (show incidentRC0 ≠ incidentRB0 by decide)]
+      rw [dite_eq_right (show incidentRC0 ≠ incidentRB0 by decide)]
 
 /-- A blue super-site leg assignment is the pair of its `r-b` and `b-c` values. -/
 noncomputable def legPair1 {cbd : Edge coarseGraph → ℕ} :
@@ -125,18 +125,18 @@ noncomputable def legPair1 {cbd : Edge coarseGraph → ℕ} :
   left_inv legs := by
     funext ie; dsimp only
     rcases incident1_cases ie with h | h <;> subst h
-    · rw [dif_pos rfl]
-    · rw [dif_neg (show incidentBC1 ≠ incidentRB1 by decide)]
+    · rw [dite_eq_left rfl]
+    · rw [dite_eq_right (show incidentBC1 ≠ incidentRB1 by decide)]
   right_inv p := by
     obtain ⟨a, b⟩ := p
     let a' : Fin (cbd incidentRB1.1) := ⟨a.1, a.2⟩
     let b' : Fin (cbd incidentBC1.1) := ⟨b.1, b.2⟩
     refine Prod.ext ?_ ?_
     · change (if h : incidentRB1 = incidentRB1 then h ▸ a' else (h rfl).elim) = a'
-      rw [dif_pos rfl]
+      rw [dite_eq_left rfl]
     · change (if h : incidentBC1 = incidentRB1 then h ▸ a' else
           ((incident1_cases incidentBC1).resolve_left h) ▸ b') = b'
-      rw [dif_neg (show incidentBC1 ≠ incidentRB1 by decide)]
+      rw [dite_eq_right (show incidentBC1 ≠ incidentRB1 by decide)]
 
 /-- A complement super-site leg assignment is the pair of its `r-c` and `b-c` values. -/
 noncomputable def legPair2 {cbd : Edge coarseGraph → ℕ} :
@@ -149,18 +149,18 @@ noncomputable def legPair2 {cbd : Edge coarseGraph → ℕ} :
   left_inv legs := by
     funext ie; dsimp only
     rcases incident2_cases ie with h | h <;> subst h
-    · rw [dif_pos rfl]
-    · rw [dif_neg (show incidentBC2 ≠ incidentRC2 by decide)]
+    · rw [dite_eq_left rfl]
+    · rw [dite_eq_right (show incidentBC2 ≠ incidentRC2 by decide)]
   right_inv p := by
     obtain ⟨a, b⟩ := p
     let a' : Fin (cbd incidentRC2.1) := ⟨a.1, a.2⟩
     let b' : Fin (cbd incidentBC2.1) := ⟨b.1, b.2⟩
     refine Prod.ext ?_ ?_
     · change (if h : incidentRC2 = incidentRC2 then h ▸ a' else (h rfl).elim) = a'
-      rw [dif_pos rfl]
+      rw [dite_eq_left rfl]
     · change (if h : incidentBC2 = incidentRC2 then h ▸ a' else
           ((incident2_cases incidentBC2).resolve_left h) ▸ b') = b'
-      rw [dif_neg (show incidentBC2 ≠ incidentRC2 by decide)]
+      rw [dite_eq_right (show incidentBC2 ≠ incidentRC2 by decide)]
 
 @[simp] theorem legPair0_apply_fst {cbd : Edge coarseGraph → ℕ}
     (legs : (ie : IncidentEdge coarseGraph 0) → Fin (cbd ie.1)) :
@@ -483,14 +483,14 @@ noncomputable def redBoundaryEquivOf
   left_inv μ := by
     funext b; dsimp only
     by_cases hb : IsCrossingEdge (G := G) A red blue b.1
-    · rw [dif_pos hb]
-    · rw [dif_neg hb]
+    · rw [dite_eq_left hb]
+    · rw [dite_eq_right hb]
   right_inv p := by
     obtain ⟨a, b⟩ := p
     refine Prod.ext ?_ ?_
-    · funext g; dsimp only; rw [dif_pos g.2]
+    · funext g; dsimp only; rw [dite_eq_left g.2]
     · funext g; dsimp only
-      rw [dif_neg fun hb => not_crossing_red_blue_red_complement hrb hrc hbc hb g.2]
+      rw [dite_eq_right fun hb => not_crossing_red_blue_red_complement hrb hrc hbc hb g.2]
 
 open scoped Classical in
 /-- The blue boundary configuration splits into its `r-b` and `b-c` crossing
@@ -507,14 +507,14 @@ noncomputable def blueBoundaryEquivOf
   left_inv μ := by
     funext b; dsimp only
     by_cases hb : IsCrossingEdge (G := G) A red blue b.1
-    · rw [dif_pos hb]
-    · rw [dif_neg hb]
+    · rw [dite_eq_left hb]
+    · rw [dite_eq_right hb]
   right_inv p := by
     obtain ⟨a, b⟩ := p
     refine Prod.ext ?_ ?_
-    · funext g; dsimp only; rw [dif_pos g.2]
+    · funext g; dsimp only; rw [dite_eq_left g.2]
     · funext g; dsimp only
-      rw [dif_neg fun hb => not_crossing_red_blue_blue_complement hrb hrc hbc hb g.2]
+      rw [dite_eq_right fun hb => not_crossing_red_blue_blue_complement hrb hrc hbc hb g.2]
 
 open scoped Classical in
 /-- The complement boundary configuration splits into its `r-c` and `b-c` crossing
@@ -531,14 +531,14 @@ noncomputable def complementBoundaryEquivOf
   left_inv μ := by
     funext b; dsimp only
     by_cases hb : IsCrossingEdge (G := G) A red complement b.1
-    · rw [dif_pos hb]
-    · rw [dif_neg hb]
+    · rw [dite_eq_left hb]
+    · rw [dite_eq_right hb]
   right_inv p := by
     obtain ⟨a, b⟩ := p
     refine Prod.ext ?_ ?_
-    · funext g; dsimp only; rw [dif_pos g.2]
+    · funext g; dsimp only; rw [dite_eq_left g.2]
     · funext g; dsimp only
-      rw [dif_neg fun hc => not_crossing_red_complement_blue_complement hrb hrc hbc hc g.2]
+      rw [dite_eq_right fun hc => not_crossing_red_complement_blue_complement hrb hrc hbc hc g.2]
 
 /-! ### The canonical coarse bond dimensions and bond models
 
@@ -693,7 +693,7 @@ theorem coherentBondModel_rb
     (hcover : red ∪ blue ∪ complement = Finset.univ) :
     coherentBondModel hRed hBlue hCompl hd hpos hrb hrc hbc hcover coarseEdgeRB =
       bondModelOf red blue complement coarseEdgeRB := by
-  rw [coherentBondModel, dif_pos rfl]
+  rw [coherentBondModel, dite_eq_left rfl]
 
 theorem coherentBondModel_rc
     (hRed : RegionBlockedTensorInjective (G := G) A red)
@@ -704,7 +704,7 @@ theorem coherentBondModel_rc
     (hcover : red ∪ blue ∪ complement = Finset.univ) :
     coherentBondModel hRed hBlue hCompl hd hpos hrb hrc hbc hcover coarseEdgeRC =
       bondModelOf red blue complement coarseEdgeRC := by
-  rw [coherentBondModel, dif_neg (by decide), dif_pos rfl]
+  rw [coherentBondModel, dite_eq_right (by decide), dite_eq_left rfl]
 
 theorem coherentBondModel_bc
     (hRed : RegionBlockedTensorInjective (G := G) A red)
@@ -715,7 +715,7 @@ theorem coherentBondModel_bc
     (hcover : red ∪ blue ∪ complement = Finset.univ) :
     coherentBondModel hRed hBlue hCompl hd hpos hrb hrc hbc hcover coarseEdgeBC =
       bondModelOf red blue complement coarseEdgeBC := by
-  rw [coherentBondModel, dif_neg (by decide), dif_neg (by decide), dif_pos rfl]
+  rw [coherentBondModel, dite_eq_right (by decide), dite_eq_right (by decide), dite_eq_left rfl]
 
 /-! ### The six factoring fields
 
@@ -755,7 +755,7 @@ theorem coarseFrameOfRegions_factor_red
       ((bondModelOf red blue complement coarseEdgeRB).prodCongr
         (bondModelOf red blue complement coarseEdgeRC)) legs)) b = _
   rw [redBoundaryEquivOf, Equiv.coe_fn_symm_mk,
-    dif_pos (show IsCrossingEdge (G := G) A red blue b.1 from hf)]
+    dite_eq_left (show IsCrossingEdge (G := G) A red blue b.1 from hf)]
   rfl
 
 /-- The red super-site reads its `r-c` boundary edges through the `r-c` bond model. -/
@@ -779,7 +779,7 @@ theorem coarseFrameOfRegions_factor_red_rc
       ((bondModelOf red blue complement coarseEdgeRB).prodCongr
         (bondModelOf red blue complement coarseEdgeRC)) legs)) b = _
   rw [redBoundaryEquivOf, Equiv.coe_fn_symm_mk,
-    dif_neg (show ¬ IsCrossingEdge (G := G) A red blue b.1 from
+    dite_eq_right (show ¬ IsCrossingEdge (G := G) A red blue b.1 from
       fun h => not_crossing_red_blue_red_complement hrb hrc hbc h hf)]
   rfl
 
@@ -804,7 +804,7 @@ theorem coarseFrameOfRegions_factor_blue_rb
       ((bondModelOf red blue complement coarseEdgeRB).prodCongr
         (bondModelOf red blue complement coarseEdgeBC)) legs)) b = _
   rw [blueBoundaryEquivOf, Equiv.coe_fn_symm_mk,
-    dif_pos (show IsCrossingEdge (G := G) A red blue b.1 from hf)]
+    dite_eq_left (show IsCrossingEdge (G := G) A red blue b.1 from hf)]
   rfl
 
 /-- The blue super-site reads its `b-c` boundary edges through the `b-c` bond model. -/
@@ -828,7 +828,7 @@ theorem coarseFrameOfRegions_factor_blue_bc
       ((bondModelOf red blue complement coarseEdgeRB).prodCongr
         (bondModelOf red blue complement coarseEdgeBC)) legs)) b = _
   rw [blueBoundaryEquivOf, Equiv.coe_fn_symm_mk,
-    dif_neg (show ¬ IsCrossingEdge (G := G) A red blue b.1 from
+    dite_eq_right (show ¬ IsCrossingEdge (G := G) A red blue b.1 from
       fun h => not_crossing_red_blue_blue_complement hrb hrc hbc h hf)]
   rfl
 
@@ -855,7 +855,7 @@ theorem coarseFrameOfRegions_factor_compl_rc
       ((bondModelOf red blue complement coarseEdgeRC).prodCongr
         (bondModelOf red blue complement coarseEdgeBC)) legs)) b = _
   rw [complementBoundaryEquivOf, Equiv.coe_fn_symm_mk,
-    dif_pos (show IsCrossingEdge (G := G) A red complement b.1 from hf)]
+    dite_eq_left (show IsCrossingEdge (G := G) A red complement b.1 from hf)]
   rfl
 
 /-- The complement super-site reads its `b-c` boundary edges through the `b-c` bond
@@ -881,7 +881,7 @@ theorem coarseFrameOfRegions_factor_compl_bc
       ((bondModelOf red blue complement coarseEdgeRC).prodCongr
         (bondModelOf red blue complement coarseEdgeBC)) legs)) b = _
   rw [complementBoundaryEquivOf, Equiv.coe_fn_symm_mk,
-    dif_neg (show ¬ IsCrossingEdge (G := G) A red complement b.1 from
+    dite_eq_right (show ¬ IsCrossingEdge (G := G) A red complement b.1 from
       fun h => not_crossing_red_complement_blue_complement hrb hrc hbc h hf)]
   rfl
 

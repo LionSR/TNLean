@@ -55,12 +55,12 @@ private theorem exists_supportProj_le_smul {ρ : Mat} (hρ : ρ.PosSemidef) :
     IsOrthogonalProjection.exists_range_isometry hQproj
   cases isEmpty_or_nonempty (Fin n) with
   | inl hn =>
-      letI := hn
+      let := hn
       have hVzero : V = 0 := Subsingleton.elim _ _
       have hQzero : Q = 0 := by simpa [hVzero] using hVrange.symm
       exact ⟨0, by simp [Q, hQzero]⟩
   | inr hn =>
-      letI := hn
+      let := hn
       let σ : Matrix (Fin n) (Fin n) ℂ := Vᴴ * ρ * V
       have hσpd : σ.PosDef := by
         have h := Matrix.PosSemidef.compression_on_support_posDef
@@ -137,11 +137,11 @@ theorem map_posSemidef_supported_on_fixedPoint_support
   classical
   cases isEmpty_or_nonempty (Fin D) with
   | inl hD =>
-      letI := hD
+      let := hD
       have hAzero : A = 0 := Subsingleton.elim _ _
       simp [hAzero]
   | inr hD =>
-      letI := hD
+      let := hD
       let Q : Mat := Kraus.stationaryProj hρ
       have hQproj : IsOrthogonalProjection Q :=
         Kraus.isOrthogonalProjection_stationaryProj hρ

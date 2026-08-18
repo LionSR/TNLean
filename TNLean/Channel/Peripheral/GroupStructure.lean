@@ -360,14 +360,14 @@ theorem peripheral_eigenvalues_cyclic_structure
         rw [Units.val_inv_eq_inv_val]
         exact peripheral_eigenvalues_closed_under_inv K hUnital ρ hρ hρfix hIrr ha }
   -- Step 2: The subgroup is finite (image in ℂ lands in a finite set)
-  haveI hFinS : Finite ↥periphSubgroup := by
+  have hFinS : Finite ↥periphSubgroup := by
     have : Set.Finite {u : ℂˣ | (u : ℂ) ∈ peripheralEigenvalues E} := by
       have hinj : Set.InjOn Units.val (Units.val ⁻¹' (peripheralEigenvalues E)) :=
         fun _ _ _ _ h => Units.val_injective h
       exact hfin.preimage hinj
     exact this.to_subtype
   -- Step 3: Finite subgroups of ℂˣ are cyclic.
-  haveI : IsCyclic ↥periphSubgroup := isCyclic_subgroup_units periphSubgroup
+  have : IsCyclic ↥periphSubgroup := isCyclic_subgroup_units periphSubgroup
   -- Step 4: Extract a generator g with orderOf g = |S| = m
   obtain ⟨g, hg_order⟩ := isCyclic_iff_exists_orderOf_eq_natCard.mp ‹IsCyclic ↥periphSubgroup›
   set m := Nat.card ↥periphSubgroup with hm_def
@@ -487,7 +487,7 @@ theorem peripheral_eigenvalues_form_cyclic_group
     have hperiph_range : peripheralEigenvalues (MPSTensor.transferMap (d := r) (D := D) K) =
         Set.range (fun j : Fin m => γ ^ (j : ℕ)) := by
       rw [hset_eq]; ext x; simp [Set.mem_range, eq_comm]
-    haveI : NeZero m := ⟨by omega⟩
+    have : NeZero m := ⟨by omega⟩
     -- Get cyclic decomposition: m orthogonal projections summing to identity
     obtain ⟨U, P, _, _, hUm, hPproj, hPsum, _, hcyclic⟩ :=
       MPSTensor.exists_cyclic_decomposition_of_irreducible_schwarz
@@ -624,7 +624,7 @@ theorem channel_period_divides_dim
     m ∣ D := by
   -- Get cyclic decomposition
   set E := MPSTensor.transferMap (d := r) (D := D) K
-  haveI : NeZero m := ⟨by omega⟩
+  have : NeZero m := ⟨by omega⟩
   have hperiph_range : peripheralEigenvalues E =
       Set.range (fun j : Fin m => γ ^ (j : ℕ)) := by
     rw [hgen]; ext x; simp [Set.mem_range, eq_comm]

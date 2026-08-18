@@ -64,8 +64,8 @@ noncomputable def AppendixBStructuralData.virtualBondProjection
   map_add' v w := by
     funext p
     by_cases hp : p.1 = p.2
-    · simp only [hp, if_true, Pi.add_apply, mul_add, Finset.sum_add_distrib]
-    · simp only [Pi.add_apply, hp, if_false, add_zero]
+    · simp only [hp, ite_true, Pi.add_apply, mul_add, Finset.sum_add_distrib]
+    · simp only [Pi.add_apply, hp, ite_false, add_zero]
   map_smul' c v := by
     funext p
     by_cases hp : p.1 = p.2
@@ -154,8 +154,8 @@ noncomputable def AppendixBStructuralData.leftVirtualBondProjection
   map_add' v w := by
     funext p
     by_cases hp : (p 0).2 = (p 1).1
-    · simp only [hp, if_true, Pi.add_apply, mul_add, Finset.sum_add_distrib]
-    · simp only [Pi.add_apply, hp, if_false, add_zero]
+    · simp only [hp, ite_true, Pi.add_apply, mul_add, Finset.sum_add_distrib]
+    · simp only [Pi.add_apply, hp, ite_false, add_zero]
   map_smul' c v := by
     funext p
     by_cases hp : (p 0).2 = (p 1).1
@@ -178,8 +178,8 @@ noncomputable def AppendixBStructuralData.rightVirtualBondProjection
   map_add' v w := by
     funext p
     by_cases hp : (p 1).2 = (p 2).1
-    · simp only [hp, if_true, Pi.add_apply, mul_add, Finset.sum_add_distrib]
-    · simp only [Pi.add_apply, hp, if_false, add_zero]
+    · simp only [hp, ite_true, Pi.add_apply, mul_add, Finset.sum_add_distrib]
+    · simp only [Pi.add_apply, hp, ite_false, add_zero]
   map_smul' c v := by
     funext p
     by_cases hp : (p 1).2 = (p 2).1
@@ -268,8 +268,8 @@ noncomputable def AppendixBStructuralData.twoSiteVirtualBondProjection
   map_add' v w := by
     funext p
     by_cases hp : (p 0).2 = (p 1).1
-    · simp only [hp, if_true, Pi.add_apply, mul_add, Finset.sum_add_distrib]
-    · simp only [Pi.add_apply, hp, if_false, add_zero]
+    · simp only [hp, ite_true, Pi.add_apply, mul_add, Finset.sum_add_distrib]
+    · simp only [Pi.add_apply, hp, ite_false, add_zero]
   map_smul' c v := by
     funext p
     by_cases hp : (p 0).2 = (p 1).1

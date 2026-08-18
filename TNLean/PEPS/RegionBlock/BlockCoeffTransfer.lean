@@ -293,9 +293,9 @@ theorem blockTransferRow_mem_range (A B : Tensor G d) (R : Finset V)
       simp only [map_smul, Finset.sum_apply, Pi.smul_apply, smul_eq_mul, mul_comm]
     · funext σ
       rw [Finset.sum_apply, Finset.sum_eq_single σ]
-      · rw [Pi.smul_apply, if_pos rfl, smul_eq_mul, mul_one]
+      · rw [Pi.smul_apply, ite_eq_left rfl, smul_eq_mul, mul_one]
       · intro σ'' _ hne
-        rw [Pi.smul_apply, if_neg (Ne.symm hne), smul_zero]
+        rw [Pi.smul_apply, ite_eq_right (Ne.symm hne), smul_zero]
       · intro hσ; exact absurd (Finset.mem_univ σ) hσ
   rw [hexpand]
   refine Submodule.sum_mem _ (fun σ' _ => ?_)

@@ -60,7 +60,7 @@ theorem exists_cpsvCanonicalForm_representative_after_blocking
     toTensorFromBlocks (d := blockPhysDim d p) μA blocksA
   have hNormalA : ∀ k, IsNormalTensor (blocksA k) := by
     intro k
-    letI : NeZero (dimA k) := ⟨Nat.ne_of_gt (hDimA k)⟩
+    let : NeZero (dimA k) := ⟨Nat.ne_of_gt (hDimA k)⟩
     exact isNormalTensor_of_isNormal_leftCanonical (blocksA k)
       (isNormal_of_tp_primitive_irreducible (blocksA k)
         (hLeftA k) (hPrimitiveA k) (hIrreducibleA k))

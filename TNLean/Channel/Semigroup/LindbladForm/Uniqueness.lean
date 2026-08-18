@@ -52,7 +52,7 @@ private theorem choi_phi_mulVec_omega_eq_zero
   conv =>
     lhs; arg 2; ext j₂; arg 2; ext j₁
     rw [mul_ite, mul_zero]
-  simp_rw [Finset.sum_ite_eq, Finset.mem_univ, if_true]
+  simp_rw [Finset.sum_ite_eq, Finset.mem_univ, ite_true]
   -- Rewrite bipartiteSlice using ChoiJamiolkowski.omegaSlice_eq_single
   simp_rw [ChoiJamiolkowski.omegaSlice_eq_single]
   -- Unfold G.φ (Kraus sum)
@@ -74,14 +74,14 @@ private theorem choi_phi_mulVec_omega_eq_zero
         if a = i₂ then α * star (F.L k j j) else 0 := by
       intro a
       by_cases ha : a = i₂
-      · rw [if_pos ha, ha, Finset.sum_eq_single j]
+      · rw [ite_eq_left ha, ha, Finset.sum_eq_single j]
         · simp
         · intro b _ hbj
-          rw [Matrix.single_apply, if_neg (by tauto), zero_mul]
+          rw [Matrix.single_apply, ite_eq_right (by tauto), zero_mul]
         · exact absurd (Finset.mem_univ _)
-      · rw [if_neg ha]
+      · rw [ite_eq_right ha]
         exact Finset.sum_eq_zero fun x _ => by
-          rw [Matrix.single_apply, if_neg (by tauto), zero_mul]
+          rw [Matrix.single_apply, ite_eq_right (by tauto), zero_mul]
     simp_rw [hinner]
     -- Collapse to single i₂ term via Finset.sum_eq_single
     rw [Finset.sum_eq_single i₂]
@@ -143,7 +143,7 @@ theorem generatorDecomp_traceless_unique_phi
     F.toGeneratorDecomp.φ = F'.toGeneratorDecomp.φ := by
   by_cases hD : D = 0
   · subst hD; exact Subsingleton.elim _ _
-  · haveI : NeZero D := ⟨hD⟩
+  · have : NeZero D := ⟨hD⟩
     set G := F.toGeneratorDecomp
     set G' := F'.toGeneratorDecomp
     have hGL : G.toLinearMap = G'.toLinearMap := by
@@ -187,7 +187,7 @@ theorem generatorDecomp_traceless_unique_kappa_modPhase
         F.toGeneratorDecomp.κ + (Complex.I * (l : ℂ)) • (1 : Matrix (Fin D) (Fin D) ℂ) := by
   by_cases hD : D = 0
   · subst hD; exact ⟨0, Subsingleton.elim _ _⟩
-  · haveI : NeZero D := ⟨hD⟩
+  · have : NeZero D := ⟨hD⟩
     set G := F.toGeneratorDecomp
     set G' := F'.toGeneratorDecomp
     have hφ := generatorDecomp_traceless_unique_phi F F' hL htr htr'
@@ -249,7 +249,7 @@ theorem generatorDecomp_traceless_unique_kappa_modPhase
       simp only [Matrix.smul_apply, Matrix.one_apply, smul_eq_mul]
       by_cases hpq : p = q
       · subst hpq; simp [hd_eq p]
-      · rw [hΔ_off p q hpq, if_neg hpq, mul_zero]
+      · rw [hΔ_off p q hpq, ite_eq_right hpq, mul_zero]
     refine ⟨d.im, ?_⟩
     have hGΔ : G'.κ = G.κ + Δ := by simp [Δ]
     rw [hGΔ, hΔ_eq, hd_val, Complex.I_mul_im, Complex.ofReal_re]

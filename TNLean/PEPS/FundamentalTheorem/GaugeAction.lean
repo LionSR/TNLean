@@ -705,19 +705,19 @@ noncomputable def consistentOffEquivDoubled (A : Tensor G d) (e : Edge G) :
     change localOfDoubled (G := G) A e _ _ _ v ie = ξ v ie
     unfold localOfDoubled
     by_cases hie : ie.1 = e
-    · rw [dif_pos hie]
+    · rw [dite_eq_left hie]
       obtain ⟨f, hf⟩ := ie
       simp only at hie ⊢
       subst hie
       rcases hf with hL | hR
       · subst hL
-        rw [if_pos rfl]
+        rw [ite_eq_left rfl]
         simp [edgeLeftIncident]
       · subst hR
         have hvne : ¬ f.1.2 = f.1.1 := (edgeLeft_ne_edgeRight f).symm
-        rw [if_neg hvne]
+        rw [ite_eq_right hvne]
         simp [edgeRightIncident]
-    · rw [dif_neg hie]
+    · rw [dite_eq_right hie]
       exact (localConfig_value_eq_left (G := G) A e ξ hξ ie hie).symm
   right_inv y := by
     rcases y with ⟨i, k, ζ⟩
@@ -823,7 +823,7 @@ private theorem edgeComplementValue_eq_localOfDoubled (A : Tensor G d) (e : Edge
     rcases ie.2 with hl | hr
     · exact hvne.1 (hl.symm.trans (congrArg (fun f : Edge G => f.1.1) h))
     · exact hvne.2 (hr.symm.trans (congrArg (fun f : Edge G => f.1.2) h))
-  rw [dif_neg hie_ne]
+  rw [dite_eq_right hie_ne]
 
 /-- Local-configuration form of the inserted-edge coefficient: a sum over all
 local configurations, with consistency deltas forcing agreement on every edge

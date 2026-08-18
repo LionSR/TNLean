@@ -98,7 +98,6 @@ a self-adjoint element of a `C^*`-algebra lies in `[-‖A‖, ‖A‖]`
 theorem IsHermitian.norm_smul_one_sub_posSemidef {ι : Type*} [Fintype ι] [DecidableEq ι]
     {A : Matrix ι ι ℂ} (hA : A.IsHermitian) :
     (‖A‖ • (1 : Matrix ι ι ℂ) - A).PosSemidef := by
-  letI : CStarAlgebra (Matrix ι ι ℂ) := Matrix.instCStarAlgebra
   have hsa : IsSelfAdjoint A := isSelfAdjoint_iff.mpr (Matrix.star_eq_conjTranspose A ▸ hA)
   have hle : A ≤ algebraMap ℝ (Matrix ι ι ℂ) ‖A‖ := hsa.le_algebraMap_norm_self
   rw [Algebra.algebraMap_eq_smul_one] at hle
@@ -118,7 +117,6 @@ both `‖A‖∞ • 1 - A` and `‖A‖∞ • 1` are positive semidefinite, `�
 theorem PosSemidef.norm_smul_one_sub_le {ι : Type*} [Fintype ι] [DecidableEq ι]
     {A : Matrix ι ι ℂ} (hA : A.PosSemidef) :
     ‖‖A‖ • (1 : Matrix ι ι ℂ) - A‖ ≤ ‖A‖ := by
-  letI : CStarAlgebra (Matrix ι ι ℂ) := Matrix.instCStarAlgebra
   have hnn : (0 : Matrix ι ι ℂ) ≤ ‖A‖ • (1 : Matrix ι ι ℂ) - A :=
     (hA.1.norm_smul_one_sub_posSemidef).nonneg
   have hle : ‖A‖ • (1 : Matrix ι ι ℂ) - A ≤ ‖A‖ • (1 : Matrix ι ι ℂ) := by
@@ -128,7 +126,7 @@ theorem PosSemidef.norm_smul_one_sub_le {ι : Type*} [Fintype ι] [DecidableEq �
   rw [norm_smul, Real.norm_eq_abs, abs_of_nonneg (norm_nonneg A)] at hmono
   have hone : ‖(1 : Matrix ι ι ℂ)‖ ≤ 1 := by
     by_cases hnt : Nontrivial (Matrix ι ι ℂ)
-    · haveI := hnt
+    · have := hnt
       exact (norm_one (α := Matrix ι ι ℂ)).le
     · rw [not_nontrivial_iff_subsingleton] at hnt
       simp [Subsingleton.elim (1 : Matrix ι ι ℂ) 0]
@@ -652,8 +650,8 @@ theorem trace_rieszMatrix_mul [NeZero m] [NeZero n]
     (tau' : Matrix (Fin m × Fin n) (Fin m × Fin n) ℂ →ₗ[ℂ] ℂ)
     (X : Matrix (Fin m × Fin n) (Fin m × Fin n) ℂ) :
     Matrix.trace (rieszMatrix tau' * X) = tau' X := by
-  haveI : Nonempty (Fin m) := ⟨⟨0, Nat.pos_of_ne_zero (NeZero.ne m)⟩⟩
-  haveI : Nonempty (Fin n) := ⟨⟨0, Nat.pos_of_ne_zero (NeZero.ne n)⟩⟩
+  have : Nonempty (Fin m) := ⟨⟨0, Nat.pos_of_ne_zero (NeZero.ne m)⟩⟩
+  have : Nonempty (Fin n) := ⟨⟨0, Nat.pos_of_ne_zero (NeZero.ne n)⟩⟩
   refine Matrix.induction_on X ?_ ?_
   · intro p q hp hq
     rw [Matrix.mul_add, Matrix.trace_add, hp, hq, map_add]
@@ -944,7 +942,7 @@ theorem tau_kron_single {S : Submodule ℂ (Matrix (Fin m) (Fin m) ℂ)}
   simp only [hp2b]
   -- Collapse p2a to j0.
   rw [Finset.sum_eq_single j0]
-  · simp only [if_true]
+  · simp only [ite_true]
     rw [← mul_assoc, hc]
   · intro b _ hb; simp [hb]
   · intro h; exact absurd (Finset.mem_univ j0) h

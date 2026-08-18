@@ -37,7 +37,7 @@ general PSD case follows by approximating `D` with `D + ε · I`.
 * [M. Wolf, *Quantum Channels & Operations: Guided Tour*, Theorems 5.5 and 5.6][Wolf2012QChannels]
 -/
 
-open scoped Matrix ComplexOrder MatrixOrder TNOperatorSpace
+open scoped Matrix ComplexOrder MatrixOrder Matrix.Norms.L2Operator TNOperatorSpace
 open Matrix
 
 /-! ### C*-algebra formalization for matrices -/
@@ -47,14 +47,6 @@ namespace KadisonSchwarz
 variable {d D : ℕ}
 
 local notation "Mat" => Matrix (Fin D) (Fin D) ℂ
-
--- Equip matrices with the L2 operator norm for the C*-algebra structure.
-attribute [local instance] Matrix.instL2OpNormedAddCommGroup
-attribute [local instance] Matrix.instL2OpNormedRing
-attribute [local instance] Matrix.instL2OpNormedAlgebra
-
-noncomputable local instance : CStarAlgebra Mat :=
-  Matrix.instCStarAlgebra
 
 /-! ### Contraction lemma -/
 
@@ -160,12 +152,7 @@ private lemma le_of_forall_le_add_pos_smul_one (B D : Mat)
         Filter.Tendsto (fun n : ℕ => ((((1 / ((n : ℝ) + 1)) : ℝ) : ℂ)))
           Filter.atTop (nhds (0 : ℂ)) :=
       (Complex.continuous_ofReal.tendsto 0).comp tendsto_one_div_add_atTop_nhds_zero_nat
-    have hzero :
-        Filter.Tendsto
-          (fun n : ℕ => ((((1 / ((n : ℝ) + 1)) : ℝ) : ℂ)) • (1 : Mat))
-        Filter.atTop (nhds (0 : Mat)) := by
-      simpa only [one_div, Complex.ofReal_inv, Complex.ofReal_add, Complex.ofReal_natCast,
-        Complex.ofReal_one, zero_smul] using hε.smul_const (1 : Mat)
+    have hzero := hε.zero_smul_const (1 : Mat)
     simpa only [g, one_div, Complex.ofReal_inv, Complex.ofReal_add, Complex.ofReal_natCast,
       Complex.ofReal_one, add_zero] using hzero.const_add (D - B)
   have hg_nonneg : ∀ n, 0 ≤ g n := by
@@ -491,8 +478,6 @@ private lemma intertwine_sqrt_of_mul_eq
     (hQ : (0 : Mat) ≤ Q)
     (hAQ : A * Q = P * A) :
     A * CFC.sqrt Q = CFC.sqrt P * A := by
-  letI : CStarAlgebra (Matrix (Fin D ⊕ Fin D) (Fin D ⊕ Fin D) ℂ) :=
-    Matrix.instCStarAlgebra
   let M : Matrix (Fin D ⊕ Fin D) (Fin D ⊕ Fin D) ℂ := Matrix.fromBlocks P 0 0 Q
   let K : Matrix (Fin D ⊕ Fin D) (Fin D ⊕ Fin D) ℂ := Matrix.fromBlocks 0 A 0 0
   let J : Matrix (Fin D ⊕ Fin D) (Fin D ⊕ Fin D) ℂ := Matrix.fromBlocks (1 : Mat) 0 0 0

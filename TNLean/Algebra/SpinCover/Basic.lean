@@ -253,7 +253,7 @@ lemma pauliConjAd_orthogonal (U : GL (Fin 2) ℂ) (i j : Fin 3) :
     Matrix.trace_smul, smul_eq_mul] at key
   rw [Finset.sum_comm] at key
   simp only [pauli_mul_pauli_trace, mul_ite, mul_zero,
-    Finset.sum_ite_eq', Finset.mem_univ, if_true] at key
+    Finset.sum_ite_eq', Finset.mem_univ, ite_true] at key
   -- key : ∑ x, pauliConjAd U x j * (pauliConjAd U x i * 2) = if i = j then 2 else 0
   have hsum : (∑ k, pauliConjAd U k i * pauliConjAd U k j) * 2 =
       ∑ x, pauliConjAd U x j * (pauliConjAd U x i * 2) := by

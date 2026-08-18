@@ -150,7 +150,7 @@ theorem grouped_sector_gram_eq_pos_smul_one_of_dressing
     ∃ ω : ℝ, 0 < ω ∧
       (X j q : Matrix (Fin (dim ((C).enum j q)))
         (Fin (dim ((C).enum j q))) ℂ)ᴴ * X j q = (ω : ℂ) • 1 := by
-  letI : NeZero (dim ((C).enum j q)) :=
+  let : NeZero (dim ((C).enum j q)) :=
     ⟨(_hDimPos ((C).enum j q)).ne'⟩
   let A := cast (congrArg (MPSTensor (D * D)) (hdim j q))
     (blocks ((C).repr j))

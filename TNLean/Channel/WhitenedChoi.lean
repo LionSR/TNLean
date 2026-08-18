@@ -192,7 +192,7 @@ theorem marginalInvSqrtDiagonal_mul_diagonalMarginalQuarter
     ext i j
     by_cases hij : i = j
     · subst j
-      simp only [Matrix.diagonal_apply, if_pos, marginalInvSqrt]
+      simp only [Matrix.diagonal_apply, ite_eq_left, marginalInvSqrt]
       have hsqrt : (Real.sqrt (p i) : ℂ) ≠ 0 := by
         exact_mod_cast ne_of_gt (Real.sqrt_pos.2 (hp i))
       have hsq : (Real.sqrt (Real.sqrt (p i)) : ℂ) ^ 2 =

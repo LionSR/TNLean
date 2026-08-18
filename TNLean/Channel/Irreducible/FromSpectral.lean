@@ -295,9 +295,9 @@ theorem isIrreducibleMap_of_channel_posDef_fixedPoint_unique
     rw [Matrix.mul_smul, Matrix.smul_mul, Finset.mul_sum, Finset.sum_mul]
     congr 1
     exact Finset.sum_congr rfl (fun n _ => hcorner_iter n)
-  haveI : TopologicalSpace.PseudoMetrizableSpace (Matrix (Fin D) (Fin D) ℂ) :=
+  have : TopologicalSpace.PseudoMetrizableSpace (Matrix (Fin D) (Fin D) ℂ) :=
     PseudoEMetricSpace.pseudoMetrizableSpace
-  haveI : FirstCountableTopology (Matrix (Fin D) (Fin D) ℂ) :=
+  have : FirstCountableTopology (Matrix (Fin D) (Fin D) ℂ) :=
     TopologicalSpace.PseudoMetrizableSpace.firstCountableTopology
   obtain ⟨σ, _hσ_mem, φ, hφ_mono, hφ_tendsto⟩ :=
     densityMatrices_isCompact.tendsto_subseq hces_mem
@@ -396,7 +396,7 @@ theorem isIrreducibleMap_of_hasSpectralProperties
   have hS_unit : IsUnit S := by
     simpa [hS_def] using (CFC.isUnit_sqrt_iff σ hσ_nonneg).2 (Matrix.PosDef.isUnit hσ_pd)
   have hS_inv_inv : S⁻¹⁻¹ = S := by
-    letI := hS_unit.invertible
+    let := hS_unit.invertible
     exact Matrix.inv_inv_of_invertible S
   have hS_inv_herm : (S⁻¹)ᴴ = S⁻¹ := by
     simpa [hS_herm] using Matrix.conjTranspose_nonsing_inv S

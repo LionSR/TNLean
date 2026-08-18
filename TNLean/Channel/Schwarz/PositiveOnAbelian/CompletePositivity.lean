@@ -96,7 +96,7 @@ private theorem blockPositive_bipartiteSlice_omegaProj [NeZero D] :
       ChoiJamiolkowski.omegaCoeff_eq_inv (Nat.pos_of_ne_zero (NeZero.ne D)),
       Matrix.single_mulVec]
     simp only [dotProduct, Function.update_apply, Pi.zero_apply, mul_ite, mul_zero,
-      Finset.sum_ite_eq', mem_univ, if_true, Pi.star_apply, one_div, RCLike.star_def]
+      Finset.sum_ite_eq', mem_univ, ite_true, Pi.star_apply, one_div, RCLike.star_def]
     ring
   simp only [hterm]
   simp_rw [← Finset.mul_sum]

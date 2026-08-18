@@ -301,7 +301,7 @@ theorem isMPDO_of_neighboringOperator_pos
     F.physicalCoordinateMatrix F.physicalCoordinateMatrix_isometry K
   rw [← F.sectorCoordinateTensor_eq_changePhysicalBasis]
   intro N hN
-  letI : NeZero N := ⟨Nat.ne_of_gt hN⟩
+  let : NeZero N := ⟨Nat.ne_of_gt hN⟩
   exact F.mpo_sectorCoordinateTensor_posSemidef hpos
 
 /-- The sector-coordinate bond indexed by two-site configurations. -/

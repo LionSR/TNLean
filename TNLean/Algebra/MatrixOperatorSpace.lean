@@ -75,7 +75,7 @@ instance : ContinuousSMul ℝ ℂ :=
 
 instance (n : Type*) [Finite n] : ContinuousSMul ℝ (Matrix n n ℂ) := by
   classical
-  letI : Fintype n := Fintype.ofFinite n
+  let : Fintype n := Fintype.ofFinite n
   exact show ContinuousSMul ℝ (RestrictScalars ℝ ℂ (Matrix n n ℂ)) from inferInstance
 
 omit [DecidableEq n] [Fintype n] in
@@ -108,7 +108,7 @@ instance instNormOneClassMatrixCLM
 
 instance instNormOneClassMatrixCLMFin
     (D : ℕ) [NeZero D] : NormOneClass (TNLean.MatrixCLM (Fin D)) := by
-  haveI : Nonempty (Fin D) := Fin.pos_iff_nonempty.mp (NeZero.pos D)
+  have : Nonempty (Fin D) := Fin.pos_iff_nonempty.mp (NeZero.pos D)
   infer_instance
 
 instance instENormedAddCommMonoidMatrixCLM

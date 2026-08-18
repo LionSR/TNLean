@@ -183,17 +183,17 @@ lemma oneSector_neighboringOperator_eq
   simp only [oneSectorFactorization, Matrix.one_apply]
   by_cases hxy : x₂ = y₂
   · subst y₂
-    rw [if_pos True.intro, one_mul]
-    exact ((Matrix.diagonal_apply sectorWeight x₂ x₂).trans (if_pos rfl)).trans
+    rw [ite_eq_left True.intro, one_mul]
+    exact ((Matrix.diagonal_apply sectorWeight x₂ x₂).trans (ite_eq_left rfl)).trans
       ((Matrix.diagonal_apply (fun x : Fin 1 × Fin 2 => sectorWeight x.2)
-        (⟨0, x₂⟩ : Fin 1 × Fin 2) ⟨0, x₂⟩).trans (if_pos rfl)).symm
-  · rw [if_pos True.intro, one_mul]
+        (⟨0, x₂⟩ : Fin 1 × Fin 2) ⟨0, x₂⟩).trans (ite_eq_left rfl)).symm
+  · rw [ite_eq_left True.intro, one_mul]
     have hpair : (⟨0, x₂⟩ : Fin 1 × Fin 2) ≠ ⟨0, y₂⟩ := by
       intro hp
       exact hxy (congrArg Prod.snd hp)
-    exact ((Matrix.diagonal_apply sectorWeight x₂ y₂).trans (if_neg hxy)).trans
+    exact ((Matrix.diagonal_apply sectorWeight x₂ y₂).trans (ite_eq_right hxy)).trans
       ((Matrix.diagonal_apply (fun x : Fin 1 × Fin 2 => sectorWeight x.2)
-        (⟨0, x₂⟩ : Fin 1 × Fin 2) ⟨0, y₂⟩).trans (if_neg hpair)).symm
+        (⟨0, x₂⟩ : Fin 1 × Fin 2) ⟨0, y₂⟩).trans (ite_eq_right hpair)).symm
 
 /-- Every neighboring operator in the one-sector factorization is positive
 semidefinite.
@@ -216,10 +216,10 @@ lemma oneSectorTraceMatrix_eq : oneSectorTraceMatrix = 1 := by
   have htrace :
       (Matrix.trace (Matrix.diagonal (fun x : Fin 1 × Fin 2 => sectorWeight x.2))).re = 1 := by
     rw [Matrix.trace_diagonal, Fintype.sum_prod_type]
-    simp [sectorWeight, Fin.sum_univ_two]
+    simp [sectorWeight]
   ext k h
   have hone : (1 : Matrix (Fin 1) (Fin 1) ℝ) k h = 1 := by
-    rw [Matrix.one_apply, if_pos (Subsingleton.elim k h)]
+    rw [Matrix.one_apply, ite_eq_left (Subsingleton.elim k h)]
   unfold oneSectorTraceMatrix
   rw [oneSector_neighboringOperator_eq k h]
   exact htrace.trans hone.symm

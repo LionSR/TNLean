@@ -206,13 +206,13 @@ theorem isMPOBlockLeftInverse_outer_inverse_threeSite_collapse
   by_cases hxy : x.1 = y.1
   · have hsysx : sx = sy := by simpa [x, y] using hxy
     subst sy
-    rw [dif_pos rfl, Finset.sum_eq_single sx]
+    rw [dite_eq_left rfl, Finset.sum_eq_single sx]
     · simp [x, y, Matrix.trace_single_mul]
     · intro s _ hs
       have hxs : sx ≠ s := Ne.symm hs
       simp [x, y, hxs]
     · simp
-  · rw [dif_neg hxy]
+  · rw [dite_eq_right hxy]
     apply Finset.sum_eq_zero
     intro s _
     by_cases hxs : x.1 = s

@@ -85,7 +85,7 @@ theorem edgeGaugeAt_of_fst {V : Type*} [LinearOrder V]
     (X : (e : Edge G) → GL (Fin (A.bondDim e)) ℂ) (v : V) (ie : IncidentEdge G v)
     (h : ie.1.1.1 = v) :
     edgeGaugeAt A X v ie = (X ie.1 : Matrix (Fin (A.bondDim ie.1)) (Fin (A.bondDim ie.1)) ℂ) :=
-  if_pos h
+  ite_eq_left h
 
 /-- The gauge matrix at an incidence whose stored second endpoint is the
 vertex. -/
@@ -96,7 +96,7 @@ theorem edgeGaugeAt_of_snd {V : Type*} [LinearOrder V]
     edgeGaugeAt A X v ie =
       (((X ie.1)⁻¹ : GL (Fin (A.bondDim ie.1)) ℂ) :
         Matrix (Fin (A.bondDim ie.1)) (Fin (A.bondDim ie.1)) ℂ)ᵀ :=
-  if_neg h
+  ite_eq_right h
 
 /-- The oriented gauge matrix of the bond entering a site of the closed
 chain. -/
@@ -159,12 +159,12 @@ theorem gaugeVertex_cycleTensorOfMPS (hn : 3 ≤ n) (A : MPSTensor d D)
 /-- Reading a bond-pair assignment at the bond entering the site. -/
 theorem cycleIncidentPairEquiv_symm_left (hn : 3 ≤ n) (v : Fin n) (p : Fin D × Fin D) :
     (cycleIncidentPairEquiv (D := D) hn v).symm p (cycleLeftIncident hn v) = p.1 :=
-  if_pos rfl
+  ite_eq_left rfl
 
 /-- Reading a bond-pair assignment at the bond leaving the site. -/
 theorem cycleIncidentPairEquiv_symm_right (hn : 3 ≤ n) (v : Fin n) (p : Fin D × Fin D) :
     (cycleIncidentPairEquiv (D := D) hn v).symm p (cycleRightIncident hn v) = p.2 :=
-  if_neg (cycleLeftIncident_ne_cycleRightIncident hn v).symm
+  ite_eq_right (cycleLeftIncident_ne_cycleRightIncident hn v).symm
 
 /-- The component of the cycle tensor at a bond-pair assignment is the matrix
 entry at the pair. -/
@@ -271,7 +271,7 @@ theorem cycleLeftGauge_eq (hn : 3 ≤ n) (A : MPSTensor d D)
     have hM : cycleLeftGauge hn A X v =
         (X (cycleSuccEdge hn (v - 1)) : Matrix (Fin D) (Fin D) ℂ) :=
       edgeGaugeAt_of_fst _ _ _ _ hfst
-    rw [hM, cycleGaugeOfEdgeGauge, if_pos hv0, inv_inv]
+    rw [hM, cycleGaugeOfEdgeGauge, ite_eq_left hv0, inv_inv]
   · -- Away from the seam the bond is stored with the predecessor first.
     have hfst : ¬ (cycleSuccEdge hn (v - 1)).1.1 = v := by
       rw [cycleSuccEdge_val_of_lt hn (pred_val_lt hn hv0)]
@@ -280,7 +280,7 @@ theorem cycleLeftGauge_eq (hn : 3 ≤ n) (A : MPSTensor d D)
         (((X (cycleSuccEdge hn (v - 1)))⁻¹ : GL (Fin D) ℂ) :
           Matrix (Fin D) (Fin D) ℂ)ᵀ :=
       edgeGaugeAt_of_snd _ _ _ _ hfst
-    rw [hM, cycleGaugeOfEdgeGauge, if_neg hv0, glTranspose_inv_coe]
+    rw [hM, cycleGaugeOfEdgeGauge, ite_eq_right hv0, glTranspose_inv_coe]
 
 /-- The transposed oriented gauge matrix of the bond leaving a site is the
 per-bond gauge of the bond entering the next site. -/
@@ -303,7 +303,7 @@ theorem cycleRightGauge_transpose_eq (hn : 3 ≤ n) (A : MPSTensor d D)
     have hM : cycleRightGauge hn A X v =
         (((X (cycleSuccEdge hn v))⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ)ᵀ :=
       edgeGaugeAt_of_snd _ _ _ _ hfst
-    rw [hM, Matrix.transpose_transpose, cycleGaugeOfEdgeGauge, if_pos hnext0, hsub]
+    rw [hM, Matrix.transpose_transpose, cycleGaugeOfEdgeGauge, ite_eq_left hnext0, hsub]
   · -- Away from the seam the bond is stored with `v` first.
     have hfst : (cycleSuccEdge hn v).1.1 = v := by
       rw [cycleSuccEdge_val_of_lt hn (by omega : v.val + 1 < n)]
@@ -318,7 +318,7 @@ theorem cycleRightGauge_transpose_eq (hn : 3 ≤ n) (A : MPSTensor d D)
     have hM : cycleRightGauge hn A X v =
         (X (cycleSuccEdge hn v) : Matrix (Fin D) (Fin D) ℂ) :=
       edgeGaugeAt_of_fst _ _ _ _ hfst
-    rw [hM, cycleGaugeOfEdgeGauge, if_neg hnext0, hsub, glTranspose_coe]
+    rw [hM, cycleGaugeOfEdgeGauge, ite_eq_right hnext0, hsub, glTranspose_coe]
 
 /-- **Per-site component identity in per-bond gauge form.**  At a site `v` of
 the closed chain, the gauge-equivalence component identity holds for all bond
@@ -355,7 +355,7 @@ theorem cycleGaugeOfEdgeGauge_edgeGaugeOfCycleGauge (hn : 3 ≤ n)
     cycleGaugeOfEdgeGauge hn (edgeGaugeOfCycleGauge Z) v = Z v := by
   rw [cycleGaugeOfEdgeGauge]
   by_cases hv0 : v = 0
-  · rw [if_pos hv0]
+  · rw [ite_eq_left hv0]
     have hpair := cycleSuccEdge_val_of_eq hn (pred_zero_wrap hn hv0)
     have hcond : ¬ ((cycleSuccEdge hn (v - 1)).1.1 + 1 = (cycleSuccEdge hn (v - 1)).1.2) := by
       rw [hpair]
@@ -367,14 +367,14 @@ theorem cycleGaugeOfEdgeGauge_edgeGaugeOfCycleGauge (hn : 3 ≤ n)
       rw [Fin.val_add_eq_ite, h1, val_sub_eq_ite, h1] at hval
       have := v.isLt
       split_ifs at hval <;> omega
-    rw [edgeGaugeOfCycleGauge, if_neg hcond, hpair]
+    rw [edgeGaugeOfCycleGauge, ite_eq_right hcond, hpair]
     change ((Z (v - 1 + 1))⁻¹)⁻¹ = Z v
     rw [sub_add_cancel, inv_inv]
-  · rw [if_neg hv0]
+  · rw [ite_eq_right hv0]
     have hpair := cycleSuccEdge_val_of_lt hn (pred_val_lt hn hv0)
     have hcond : (cycleSuccEdge hn (v - 1)).1.1 + 1 = (cycleSuccEdge hn (v - 1)).1.2 := by
       rw [hpair]
-    rw [edgeGaugeOfCycleGauge, if_pos hcond, hpair]
+    rw [edgeGaugeOfCycleGauge, ite_eq_left hcond, hpair]
     change glTranspose (glTranspose (Z (v - 1 + 1))) = Z v
     rw [sub_add_cancel, glTranspose_glTranspose]
 

@@ -81,7 +81,7 @@ theorem rephase_zeroWeightReparameterized_neighboringOperator_eq_zero_of_inciden
   have hvanish : F.neighboringOperator k h = 0 := by
     rcases hzero with hk | hh
     · rw [zeroWeightReparameterizedInverseMapPhysicalSectorFactorization_neighboringOperator,
-        if_neg (not_ne_iff.mpr hk)]
+        ite_eq_right (not_ne_iff.mpr hk)]
       rfl
     · rw [zeroWeightReparameterizedInverseMapPhysicalSectorFactorization_neighboringOperator]
       split

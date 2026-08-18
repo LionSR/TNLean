@@ -141,7 +141,7 @@ theorem terminalEigenProjectionFamily_isOrthogonalProjection
   · subst γ
     simpa [terminalEigenProjectionFamily] using
       H.terminalEigenProjection_isOrthogonalProjection hM s
-  · simp only [terminalEigenProjectionFamily, dif_neg hγ]
+  · simp only [terminalEigenProjectionFamily, dite_eq_right hγ]
     exact ⟨Matrix.isHermitian_zero, by simp⟩
 
 /-- Terminal families attached to distinct spectral indices multiply to zero.

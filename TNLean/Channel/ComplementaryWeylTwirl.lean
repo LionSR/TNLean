@@ -85,11 +85,11 @@ private theorem kronecker_one_conj_block {S C : Type*} [Fintype S] [DecidableEq 
     Matrix.one_apply]
   rw [Finset.sum_eq_single s₂]
   · refine Finset.sum_congr rfl fun c _ => ?_
-    rw [if_pos rfl, one_mul]
+    rw [ite_eq_left rfl, one_mul]
     congr 1
     rw [Finset.sum_eq_single s₁]
     · refine Finset.sum_congr rfl fun c' _ => ?_
-      rw [if_pos rfl, one_mul]
+      rw [ite_eq_left rfl, one_mul]
     · intro s' _ hs'; simp [Ne.symm hs']
     · intro h; exact absurd (Finset.mem_univ s₁) h
   · intro s' _ hs'; simp [hs']
@@ -255,7 +255,7 @@ private theorem one_kronecker_reindexedWeyl_mem_unitary (e : C ≃ ZMod dC)
 theorem norm_complementaryWeylTwirl_le [Nonempty S] (e : C ≃ ZMod dC) {ζ : ℂ}
     (hζ : IsPrimitiveRoot ζ dC) (M : Matrix (S × C) (S × C) ℂ) :
     ‖complementaryWeylTwirl e ζ M‖ ≤ ‖M‖ := by
-  letI : Nonempty C := ⟨e.symm 0⟩
+  let : Nonempty C := ⟨e.symm 0⟩
   rw [complementaryWeylTwirl, norm_smul]
   have hterm : ∀ a b : ZMod dC,
       ‖((1 : Matrix S S ℂ) ⊗ₖ reindexedWeyl e ζ a b) * M *

@@ -368,7 +368,7 @@ theorem IsCPMap.meanErgodicProjection_isCPMap
   classical
   rcases Nat.eq_zero_or_pos D with rfl | hD
   · exact isCPMap_finZero _
-  haveI : NeZero D := ⟨hD.ne'⟩
+  have : NeZero D := ⟨hD.ne'⟩
   set S : ℕ → Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ :=
     fun N ↦ (((N : ℝ)⁻¹ : ℝ) : ℂ) • ∑ n ∈ Finset.range N, T ^ n with hSdef
   have hScp : ∀ N, IsCPMap (S N) := fun N ↦

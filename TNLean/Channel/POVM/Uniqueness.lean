@@ -104,7 +104,7 @@ private theorem stinespring_conjTranspose_mul_naimarkProjection_mul
               (if p1 = q1 ∧ p2 = i ∧ q2 = i then (1 : ℂ) else 0)) = 0 := by
       refine Finset.sum_eq_zero fun p1 _ => ?_
       refine Finset.sum_eq_zero fun p2 _ => ?_
-      rw [if_neg (fun h => hq2 h.2.2)]
+      rw [ite_eq_right (fun h => hq2 h.2.2)]
       ring
     rw [hinner, zero_mul]
   · intro h

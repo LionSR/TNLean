@@ -320,10 +320,10 @@ lemma imageVec_orthonormal
   intro i j
   rcases eq_or_ne i j with hij | hij
   · subst hij
-    simp only [if_true]
+    simp only [ite_true]
     rw [inner_self_eq_norm_sq_to_K, imageVec_norm hf b i]
     norm_num
-  · simp only [if_neg hij]
+  · simp only [ite_eq_right hij]
     -- source rays orthogonal ⇒ source reps orthogonal ⇒ image reps orthogonal
     have hsrc : transProb (srcPoint b i) (srcPoint b j) = 0 :=
       orthonormalBasis_pairwise_orthogonal b hij

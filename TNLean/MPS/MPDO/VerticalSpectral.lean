@@ -76,7 +76,7 @@ theorem IsHorizontalCF.exists_normal_verticalBlockDecomp_with_isometry
         MPSTensor.transferMap (d := D * D) (D := dim₀ k) (blocks₀ k) ρ =
           (t : ℂ) • ρ := by
     intro k hk
-    haveI : NeZero (dim₀ k) := ⟨(hpos k).ne'⟩
+    have : NeZero (dim₀ k) := ⟨(hpos k).ne'⟩
     exact MPSTensor.exists_posDef_transferMap_eigenvector_of_irreducible
       (blocks₀ k) (hirr k) hk
   choose ρf tf hρf htf hEigf using hPF
@@ -100,7 +100,7 @@ theorem IsHorizontalCF.exists_normal_verticalBlockDecomp_with_isometry
     fun j => hpos (e j).1, fun j => hμpos (e j), ?_,
     fun j => hiso (e j).1, ?_, ?_, ?_, ?_, ?_⟩
   · intro j
-    haveI : NeZero (dim₀ (e j).1) := ⟨(hpos (e j).1).ne'⟩
+    have : NeZero (dim₀ (e j).1) := ⟨(hpos (e j).1).ne'⟩
     exact MPSTensor.isNormalTensor_invSqrt_smul_of_unique_peripheral
       (blocks₀ (e j).1) (hirr (e j).1)
       (ρf (e j).1 (e j).2) (tf (e j).1 (e j).2)

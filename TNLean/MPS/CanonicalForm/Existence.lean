@@ -332,7 +332,7 @@ theorem exists_irreducible_blockDecomp_nonzeroBlocks (A : MPSTensor d D) :
           by_contra hi
           exact hk ⟨i, hi⟩
         have hzero := mpv_eq_zero_of_all_zero (blocks₀ k) hkz σ hN
-        rw [if_neg hk]
+        rw [ite_eq_right hk]
         exact hzero
     calc
       mpv A σ = ∑ k : Fin r₀, mpv (blocks₀ k) σ := hA

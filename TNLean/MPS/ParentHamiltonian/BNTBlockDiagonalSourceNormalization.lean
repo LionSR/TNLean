@@ -69,7 +69,7 @@ Source: arXiv:quant-ph/0608197, Theorem 12 direct-sum proof lines 1346--1421
 and canonical normalization lines 742--763 in
 `Papers/quant-ph_0608197/MPSarchive.tex`. -/
 theorem
-    chainGroundSpace_toTensorFromBlocks_le_iSup_and_iSupIndep_of_bnt_unital_c1_pgvwc07_of_dualFixedPoint
+chainGroundSpace_toTensorFromBlocks_le_iSup_and_iSupIndep_of_bnt_unital_c1_pgvwc07_of_dualFixedPoint
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
     (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
     (hr : 2 ≤ r) (hμ : ∀ k : Fin r, μ k ≠ 0)
@@ -131,10 +131,10 @@ theorem
             (∀ j, φ' j ∈ groundSpace (A j) N) →
               ψ = ∑ j, φ' j → φ' = φ := by
   classical
-  obtain ⟨hLe, hIndep⟩ :=
-    chainGroundSpace_toTensorFromBlocks_le_iSup_and_iSupIndep_of_bnt_unital_c1_pgvwc07_of_dualFixedPoint
+  obtain ⟨hLe, hIndep⟩ := (
+chainGroundSpace_toTensorFromBlocks_le_iSup_and_iSupIndep_of_bnt_unital_c1_pgvwc07_of_dualFixedPoint
       μ A hr hμ hIrr hBlocks Λ hΛ hDualFixed hBlk hL₀ hUnital
-        hN hL hLN hRange
+        hN hL hLN hRange)
   obtain ⟨φ, hφ, hφsum⟩ :=
     (Submodule.mem_iSup_iff_exists_finsupp
       (fun j : Fin r => groundSpace (A j) N) ψ).mp (hLe hψ)

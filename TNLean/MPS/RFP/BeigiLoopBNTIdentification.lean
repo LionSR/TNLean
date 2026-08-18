@@ -340,7 +340,7 @@ private theorem BeigiSectorGraphData.normalizedMinimalLoopTensor_overlap_tendsto
   refine tendsto_const_nhds.congr' ?_
   refine (Filter.eventually_gt_atTop 0).mono ?_
   intro N hN
-  letI : NeZero N := ⟨hN.ne'⟩
+  let : NeZero N := ⟨hN.ne'⟩
   symm
   change mpvOverlap (d := d) (F.normalizedMinimalLoopTensor l)
     (F.normalizedMinimalLoopTensor m) N = 0
@@ -361,7 +361,7 @@ private theorem BeigiSectorGraphData.mpvState_mem_span_normalizedMinimalLoopTens
     mpvState (d := d) C N ∈
       Submodule.span ℂ (Set.range fun l : Loop F.edgeWeight =>
         mpvState (d := d) (F.normalizedMinimalLoopTensor l) N) := by
-  letI : NeZero N := ⟨by omega⟩
+  let : NeZero N := ⟨by omega⟩
   have hLoopSpan := F.span_loopProductStateES_eq_parentHamiltonianGroundSpaceES hparent hN
   have hInLoopSpan : mpvState (d := d) C N ∈
       Submodule.span ℂ
@@ -472,7 +472,7 @@ theorem nncph_implies_rfp
   classical
   have hNNCPH3 : IsNNCPH B 3 := (hNNCPH 3 (by omega)).isNNCPH
   let F : BeigiSectorGraphData B := hNNCPH3.beigiSectorGraphData
-  letI : ∀ l : Loop F.edgeWeight, NeZero (F.loopSchmidtRank l) :=
+  let : ∀ l : Loop F.edgeWeight, NeZero (F.loopSchmidtRank l) :=
     fun l => ⟨(F.loopSchmidtRank_pos l).ne'⟩
   have hBNormal : IsNormalTensor B :=
     isNormalTensor_of_isNormal_leftCanonical B hNT hLeft
@@ -534,13 +534,13 @@ theorem isTransferIdempotent_basisDirectSum_of_hasNNCPHGroundSpaces
     (hNNCPH : HasNNCPHGroundSpaces (directSumTensor P.basis) P.basis) :
     IsTransferIdempotent (directSumTensor P.basis) := by
   classical
-  letI : ∀ j : Fin P.basisCount, NeZero (P.basisDim j) :=
+  let : ∀ j : Fin P.basisCount, NeZero (P.basisDim j) :=
     fun j ↦ ⟨(hCF.basis_dim_pos j).ne'⟩
   have hNNCPH3 : IsNNCPH (directSumTensor P.basis) 3 :=
     (hNNCPH 3 (by omega)).isNNCPH
   let F : BeigiSectorGraphData (directSumTensor P.basis) :=
     hNNCPH3.beigiSectorGraphData
-  letI : ∀ l : Loop F.edgeWeight, NeZero (F.loopSchmidtRank l) :=
+  let : ∀ l : Loop F.edgeWeight, NeZero (F.loopSchmidtRank l) :=
     fun l => ⟨(F.loopSchmidtRank_pos l).ne'⟩
   have hBasisNormal : ∀ j, IsNormalTensor (P.basis j) := by
     intro j

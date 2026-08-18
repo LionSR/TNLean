@@ -84,7 +84,7 @@ omit [DecidableRel G.Adj] in
     have := w.2
     rw [Finset.mem_sdiff] at this
     exact this.2
-  rw [assembleRegionσ, dif_neg hw]
+  rw [assembleRegionσ, dite_eq_right hw]
 
 omit [Fintype V] in
 /-- The vertex product over `R` reads a global virtual configuration only through
@@ -127,7 +127,7 @@ theorem regionInsertedCoeff_identity (A : Tensor G d) (R : Finset V)
   rw [Finset.sum_eq_single μ]
   · -- Diagonal term: `SameAwayFromBond f μ μ` holds and `1 (μ f) (μ f) = 1`.
     have hdiag : SameAwayFromBond f μ μ := fun c _ => rfl
-    rw [if_pos hdiag, Matrix.one_apply_eq, one_mul]
+    rw [ite_eq_left hdiag, Matrix.one_apply_eq, one_mul]
   · -- Off-diagonal `ν ≠ μ`: the summand vanishes.
     intro ν _ hνμ
     rw [mul_eq_zero, mul_eq_zero]

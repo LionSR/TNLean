@@ -111,7 +111,7 @@ theorem completedBntSectorProjection_isOrthogonal
   · intro k l hkl
     by_cases hk : completedBntSectorLabel hC hρ hη hR s₀ k = s
     · by_cases hl : completedBntSectorLabel hC hρ hη hR s₀ l = s
-      · simp only [hk, hl, if_pos]
+      · simp only [hk, hl, ite_eq_left]
         exact hη.sectorProjection_mul_eq_zero hkl
       · simp [hl]
     · simp [hk]
@@ -139,7 +139,7 @@ theorem completedBntSectorProjection_mul_eq_zero
   intro l _
   by_cases hk : completedBntSectorLabel hC hρ hη hR s₀ k = s
   · by_cases hl : completedBntSectorLabel hC hρ hη hR s₀ l = t
-    · simp only [hk, hl, if_pos]
+    · simp only [hk, hl, ite_eq_left]
       apply hη.sectorProjection_mul_eq_zero
       intro hkl
       apply hst
@@ -197,7 +197,7 @@ theorem completedBntSectorProjection_mul_physicalSlice_mul_eq_zero
   intro l _
   by_cases hks : completedBntSectorLabel hC hρ hη hR s₀ k = s
   · by_cases hlt : completedBntSectorLabel hC hρ hη hR s₀ l = t
-    · simp only [hks, hlt, if_pos]
+    · simp only [hks, hlt, ite_eq_left]
       by_cases hkl : k = l
       · subst l
         have hst_eq : s = t := hks.symm.trans hlt

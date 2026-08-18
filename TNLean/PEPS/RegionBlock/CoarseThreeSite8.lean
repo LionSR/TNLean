@@ -197,12 +197,12 @@ theorem redBundleInsertedCoeff_singleton (red blue : Finset V) (e : Edge G)
   refine Finset.sum_congr rfl (fun μ _ => Finset.sum_congr rfl (fun ν _ => ?_))
   dsimp only [K, M', f]
   by_cases h : SameAwayFromRBBundle (G := G) A red blue μ ν
-  · rw [if_pos h,
-      if_pos ((sameAwayFromRBBundle_iff_sameAwayFromBond red blue e hsingle μ ν).mp h),
+  · rw [ite_eq_left h,
+      ite_eq_left ((sameAwayFromRBBundle_iff_sameAwayFromBond red blue e hsingle μ ν).mp h),
       singletonCrossingEquiv_redBoundaryRBCrossing,
       singletonCrossingEquiv_redBoundaryRBCrossing]
-  · rw [if_neg h,
-      if_neg (fun h' => h
+  · rw [ite_eq_right h,
+      ite_eq_right (fun h' => h
         ((sameAwayFromRBBundle_iff_sameAwayFromBond red blue e hsingle μ ν).mpr h'))]
 
 end PEPS

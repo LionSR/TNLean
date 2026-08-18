@@ -227,7 +227,7 @@ private theorem extractWindow_replaceWindow_of_cyclic_windows_disjoint {N L : �
   have hnotj : ¬ (((i.val + r.val) % N + N - j.val) % N < L) := by
     intro hj
     exact hij ⟨(i.val + r.val) % N, Nat.mod_lt _ (Fin.pos i)⟩ hi hj
-  rw [dif_neg hnotj]
+  rw [dite_eq_right hnotj]
 
 private theorem replaceWindow_commute_of_cyclic_windows_disjoint {N L : ℕ}
     (hLN : L ≤ N) {i j : Fin N} (hij : CyclicWindowsDisjoint L i j)
@@ -278,8 +278,8 @@ private theorem separateLinearMap_apply_commute
     P (WithLp.toLp 2 (fun a' => Q (WithLp.toLp 2 (fun b' => F a' b')) b)) a =
       Q (WithLp.toLp 2 (fun b' => P (WithLp.toLp 2 (fun a' => F a' b')) a)) b := by
   classical
-  letI := Fintype.ofFinite α
-  letI := Fintype.ofFinite β
+  let := Fintype.ofFinite α
+  let := Fintype.ofFinite β
   calc
     P (WithLp.toLp 2 (fun a' => Q (WithLp.toLp 2 (fun b' => F a' b')) b)) a
         = ∑ a', (Q (WithLp.toLp 2 (fun b' => F a' b')) b) *
@@ -574,9 +574,9 @@ theorem adjacent_localTermES_eq_zero_iff_mem_groundSpaceES_succ {A : MPSTensor d
   simp only [LinearMap.comp_apply]
   by_cases hστ : SameOutsideWindow (L := L) i σ τ
   · rw [cyclicRestrictES_adjoint_apply hN hLN i σ τ]
-    rw [if_pos hστ, localTermES_apply A L i hLN v σ]
+    rw [ite_eq_left hστ, localTermES_apply A L i hLN v σ]
     simp [hστ, cyclicRestrictES_eq_of_sameOutsideWindow hN i hστ]
-  · rw [cyclicRestrictES_adjoint_apply hN hLN i σ τ, if_neg hστ]
+  · rw [cyclicRestrictES_adjoint_apply hN hLN i σ τ, ite_eq_right hστ]
     simp [hστ]
 
 private theorem sameOutsideWindow_card {N : ℕ} {L : ℕ} (hLN : L ≤ N)

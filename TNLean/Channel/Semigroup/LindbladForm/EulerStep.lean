@@ -82,9 +82,9 @@ theorem cp_semigroup_implies_ccp_generator
     refine ⟨G, ?_⟩
     ext ρ i j
     exact i.elim0
-  · haveI : NeZero D := ⟨hD⟩
-    letI : NormedAddCommGroup (MatChoi D) := Matrix.linftyOpNormedAddCommGroup
-    letI : NormedSpace ℝ (MatChoi D) := Matrix.linftyOpNormedSpace
+  · have : NeZero D := ⟨hD⟩
+    let : NormedAddCommGroup (MatChoi D) := Matrix.linftyOpNormedAddCommGroup
+    let : NormedSpace ℝ (MatChoi D) := Matrix.linftyOpNormedSpace
     let L_CLM : Matrix (Fin D) (Fin D) ℂ →L[ℂ] Matrix (Fin D) (Fin D) ℂ :=
       (Module.End.toContinuousLinearMap (Matrix (Fin D) (Fin D) ℂ)) L
     let P : MatChoi D := 1 - Matrix.omegaProj D
@@ -188,7 +188,7 @@ theorem cp_semigroup_implies_ccp_generator
         simpa using hscaledC
       simpa [slope, hgp0] using hscaled
     have hproj_psd : (ChoiJamiolkowski.projectedChoiMatrix L).PosSemidef := by
-      haveI : (nhdsWithin (0 : ℝ) (Set.Ioi 0)).NeBot := nhdsWithin_Ioi_neBot le_rfl
+      have : (nhdsWithin (0 : ℝ) (Set.Ioi 0)).NeBot := nhdsWithin_Ioi_neBot le_rfl
       exact Matrix.posSemidef_is_closed.mem_of_tendsto hgp_slope hslope_proj_psd
     have hclosed_herm : IsClosed {X : MatChoi D | X.IsHermitian} := by
       change IsClosed {X : MatChoi D | star X = X}
@@ -213,7 +213,7 @@ theorem cp_semigroup_implies_ccp_generator
         IsSelfAdjoint.smul (IsSelfAdjoint.of_nonneg hscale) hdiff
       simpa [slope] using hsmul_herm
     have hchoi_herm : (ChoiJamiolkowski.choiMatrix L).IsHermitian := by
-      haveI : (nhdsWithin (0 : ℝ) (Set.Ioi 0)).NeBot := nhdsWithin_Ioi_neBot le_rfl
+      have : (nhdsWithin (0 : ℝ) (Set.Ioi 0)).NeBot := nhdsWithin_Ioi_neBot le_rfl
       exact hclosed_herm.mem_of_tendsto hg_slope hslope_choi_herm
     have hpres :
         ∀ B : Matrix (Fin D) (Fin D) ℂ, L (Bᴴ) = (L B)ᴴ :=
@@ -421,7 +421,7 @@ private theorem generatorDecomp_cp_semigroup (G : GeneratorDecomp D) :
   by_cases hD : D = 0
   · subst hD
     exact isCPMap_finZero _
-  · haveI : NeZero D := ⟨hD⟩
+  · have : NeZero D := ⟨hD⟩
     let approx : ℕ → Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ :=
       fun n => (eulerStep G (t / (n + 1))) ^ (n + 1)
     have happrox_cp : ∀ n : ℕ, IsCPMap (approx n) := by

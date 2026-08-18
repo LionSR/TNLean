@@ -126,8 +126,8 @@ private theorem linearIndependent_ambientBlockCorners
     intro l
     by_cases hlk : l = k
     · subst l
-      rw [if_pos rfl, data.ambientBlockCompression_self]
-    · rw [if_neg hlk]
+      rw [ite_eq_left rfl, data.ambientBlockCompression_self]
+    · rw [ite_eq_right hlk]
       exact data.ambientBlockCompression_eq_zero_of_ne
         (k := k.1) (l := l.1) (fun h => hlk (Subtype.ext h.symm)) (X l)
   simp_rw [hterm] at hcompressed
@@ -306,7 +306,7 @@ theorem card_active_eq_one_of_shifted_transfer_trace
   classical
   have hactive : Nonempty data.Active := by
     by_contra hempty
-    haveI : IsEmpty data.Active := not_nonempty_iff.mp hempty
+    have : IsEmpty data.Active := not_nonempty_iff.mp hempty
     have hweight : ∀ k : Fin data.r, data.weights k = 0 := by
       intro k
       by_contra hk

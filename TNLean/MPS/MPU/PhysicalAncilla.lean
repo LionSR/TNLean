@@ -347,7 +347,7 @@ noncomputable def normalizedDiagonalLiftCFIIData
       simp only [normalizedDiagonalLift_apply]
       rw [data.reconstruct ij]
       simp only [MPSTensor.toTensorFromBlocks]
-      simp only [normalizedDiagonalLift_apply, if_pos]
+      simp only [normalizedDiagonalLift_apply, ite_eq_left]
       rw [show (fun k ↦ data.weights k • ((Real.sqrt x : ℂ)⁻¹ • data.blocks k ij)) =
           ((Real.sqrt x : ℂ)⁻¹) •
             (fun k ↦ data.weights k • data.blocks k ij) by
@@ -355,7 +355,7 @@ noncomputable def normalizedDiagonalLiftCFIIData
         simp [smul_smul, mul_comm]]
       rw [Matrix.blockDiagonal'_smul]
       simp [Matrix.submatrix_smul, Matrix.mul_smul, Matrix.smul_mul]
-    · simp only [normalizedDiagonalLift_apply, if_neg hab, MPSTensor.toTensorFromBlocks,
+    · simp only [normalizedDiagonalLift_apply, ite_eq_right hab, MPSTensor.toTensorFromBlocks,
         smul_zero]
       rw [show (fun _ : Fin data.r ↦
           (0 : Matrix (Fin (data.dim _)) (Fin (data.dim _)) ℂ)) = 0 by rfl,

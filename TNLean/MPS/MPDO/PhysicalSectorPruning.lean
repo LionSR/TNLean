@@ -103,9 +103,9 @@ theorem zeroRightTensorOnInactive_neighboringOperator
   dsimp only [zeroRightTensorOnInactive]
   ext x y
   by_cases hk : active k
-  · simp only [if_pos hk, Matrix.of_apply]
+  · simp only [ite_eq_left hk, Matrix.of_apply]
     rfl
-  · simp only [if_neg hk, Matrix.of_apply, Matrix.zero_apply]
+  · simp only [ite_eq_right hk, Matrix.zero_apply]
     change (∑ alpha : Fin D, (0 : ℂ) * F.leftTensor h alpha x.2 y.2) = 0
     simp
 
@@ -194,10 +194,10 @@ theorem zeroWeightReparameterizedInverseMapPhysicalSectorFactorization_neighbori
   change (F.zeroRightTensorOnInactive (fun j => hη.p j ≠ 0) hleftF).neighboringOperator k h = _
   refine hneighbor.trans ?_
   by_cases hk : hη.p k ≠ 0
-  · rw [if_pos hk, if_pos hk]
+  · rw [ite_eq_left hk, ite_eq_left hk]
     exact inverseMapPhysicalSectorFactorization_neighboringOperator_eq_sectorEta
       K hK R hρ hη α₁ β₃ hm k h
-  · rw [if_neg hk, if_neg hk]
+  · rw [ite_eq_right hk, ite_eq_right hk]
     rfl
 
 end MPOTensor

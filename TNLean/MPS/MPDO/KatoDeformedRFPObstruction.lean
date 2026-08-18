@@ -121,7 +121,7 @@ private lemma prod_tensor_diagonal :
         simp [configurationSign]
   | succ N ih =>
       intro σ
-      rw [List.ofFn_succ, List.prod_cons, tensor, if_pos rfl,
+      rw [List.ofFn_succ, List.prod_cons, tensor, ite_eq_left rfl,
         ih (fun i => σ i.succ), Matrix.diagonal_mul_diagonal]
       ext a b
       fin_cases a <;> fin_cases b <;>
@@ -548,11 +548,11 @@ private theorem toMPSTensor_eq_toTensorFromBlocks :
       rcases hp12 with rfl | rfl
       · -- p = (1 : Fin (2*2)); divNat ≠ modNat, so tensor=0 and blocks=0
         have h1 : ¬ ((1 : Fin (2*2)).divNat = (1 : Fin (2*2)).modNat) := by decide
-        rw [tensor, if_neg h1]
+        rw [tensor, ite_eq_right h1]
         fin_cases x <;> simp [katoCFBlock0, katoCFBlock1]
       · -- p = (2 : Fin (2*2)); divNat ≠ modNat, so tensor=0 and blocks=0
         have h2 : ¬ ((2 : Fin (2*2)).divNat = (2 : Fin (2*2)).modNat) := by decide
-        rw [tensor, if_neg h2]
+        rw [tensor, ite_eq_right h2]
         fin_cases x <;> simp [katoCFBlock0, katoCFBlock1]
   · rw [Matrix.blockDiagonal'_apply_ne (fun k : Fin 2 => (katoCFWeights k) • (katoCFBlocks k p))
       (0 : Fin 1) (0 : Fin 1) h]
@@ -571,7 +571,7 @@ private theorem toMPSTensor_eq_toTensorFromBlocks :
       · simp [tensor, siteSign, pauliZ, Fin.divNat, Fin.modNat, h]
       · simp [tensor, siteSign, pauliZ, Fin.divNat, Fin.modNat, h]
     · -- p.divNat ≠ p.modNat: tensor evaluates to 0 because off-diagonal physical letter
-      rw [tensor, if_neg hp_diag]
+      rw [tensor, ite_eq_right hp_diag]
       simp
 
 /-- The doubled-index MPS tensor of Kato's $p=1/2$ tensor is in literal CPSV

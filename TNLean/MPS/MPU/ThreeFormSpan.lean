@@ -335,9 +335,9 @@ private theorem doubleLayer_entry_eq_diagonal_add_residual
   rw [residualSlice, contractPhysical_single]
   by_cases hij : i = j
   · subst j
-    rw [if_pos rfl, Matrix.trace_single_eq_same]
+    rw [ite_eq_left rfl, Matrix.trace_single_eq_same]
     simp
-  · rw [if_neg hij, Matrix.trace_single_eq_of_ne j i (1 : ℂ) (Ne.symm hij)]
+  · rw [ite_eq_right hij, Matrix.trace_single_eq_of_ne j i (1 : ℂ) (Ne.symm hij)]
     simp
 
 private theorem diagonal_coeff_prod_eq
@@ -348,7 +348,7 @@ private theorem diagonal_coeff_prod_eq
   by_cases hIJ : I = J
   · subst J
     simp
-  · rw [if_neg hIJ]
+  · rw [ite_eq_right hIJ]
     have hdiff : ∃ k : Fin N,
         MPSTensor.decodeBlock d N I k ≠ MPSTensor.decodeBlock d N J k := by
       by_contra h
@@ -356,7 +356,7 @@ private theorem diagonal_coeff_prod_eq
       apply hIJ
       exact (MPSTensor.decodeBlockEquiv d N).injective (funext h)
     obtain ⟨k, hk⟩ := hdiff
-    exact Finset.prod_eq_zero (Finset.mem_univ k) (if_neg hk)
+    exact Finset.prod_eq_zero (Finset.mem_univ k) (ite_eq_right hk)
 
 /-- Every matrix-unit residual coefficient after the second, length-`D²`
 blocking belongs to the basis-invariant sum of the forms `E A`, `A E`, and
@@ -400,8 +400,8 @@ theorem IsMPU.residualSlice_doubleLayerTensor_blockTensor_single_mem_threeFormSu
       if I = J then 1 else 0 := by
     by_cases hIJ : I = J
     · subst J
-      rw [if_pos rfl, Matrix.trace_single_eq_same]
-    · rw [if_neg hIJ,
+      rw [ite_eq_left rfl, Matrix.trace_single_eq_same]
+    · rw [ite_eq_right hIJ,
         Matrix.trace_single_eq_of_ne J I (1 : ℂ) (Ne.symm hIJ)]
   rw [doubleLayerTensor_blockTensor, residualSlice, contractPhysical_single,
     normalizedDiagonal_blockTensor, hentry, htrace, ← hc]

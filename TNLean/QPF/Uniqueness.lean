@@ -251,7 +251,7 @@ theorem posSemidef_fixedPoint_unique_of_irreducible
     posSemidef_fixedPoint_isPosDef_of_irreducible A hIrr σ hσ_psd hσ_ne hσ_fix
   by_cases hD : D = 0
   · exact ⟨1, by ext i; exact (Fin.elim0 (hD ▸ i))⟩
-  · haveI : Nonempty (Fin D) := ⟨⟨0, Nat.pos_of_ne_zero hD⟩⟩
+  · have : Nonempty (Fin D) := ⟨⟨0, Nat.pos_of_ne_zero hD⟩⟩
     obtain ⟨c₀, _, hτ_psd, hτ_not_pd⟩ := exists_critical_scalar hρ_pd hσ_pd
     set τ := σ - (↑c₀ : ℂ) • ρ
     have hτ_fix : transferMap (d := d) (D := D) A τ = τ := by

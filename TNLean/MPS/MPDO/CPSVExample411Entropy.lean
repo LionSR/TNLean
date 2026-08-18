@@ -54,7 +54,7 @@ private theorem cycleWeight_nonneg {N : ℕ} [NeZero N] (σ : Fin N → Fin 2) :
 positive length. -/
 theorem M_isMPDO : IsMPDO M := by
   intro N hN
-  letI : NeZero N := ⟨hN.ne'⟩
+  let : NeZero N := ⟨hN.ne'⟩
   rw [mpo_M_eq_diagonal]
   exact Matrix.PosSemidef.diagonal cycleWeight_nonneg
 

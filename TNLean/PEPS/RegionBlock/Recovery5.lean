@@ -62,8 +62,8 @@ theorem regionBoundaryEdgeOutVertex_not_mem (R : Finset V)
     regionBoundaryEdgeOutVertex (G := G) R f ∉ R := by
   unfold regionBoundaryEdgeOutVertex
   rcases f.2 with ⟨h1, h2⟩ | ⟨h1, h2⟩
-  · rw [if_pos h1]; exact h2
-  · rw [if_neg h1]; exact h1
+  · rw [ite_eq_left h1]; exact h2
+  · rw [ite_eq_right h1]; exact h1
 
 omit [DecidableRel G.Adj] in
 /-- The out-of-region endpoint of a boundary edge lies in the set complement
@@ -89,8 +89,8 @@ theorem regionBoundaryEdgeInVertex_compl_eq_outVertex (R : Finset V)
   rw [regionBoundaryEdgeInVertex, regionBoundaryEdgeOutVertex,
     regionBoundaryEdgeToCompl]
   rcases f.2 with ⟨h1, h2⟩ | ⟨h1, h2⟩
-  · rw [if_pos h1, if_neg (by rw [Finset.mem_sdiff]; push Not; exact fun _ => h1)]
-  · rw [if_neg h1, if_pos (by rw [Finset.mem_sdiff]; exact ⟨Finset.mem_univ _, h1⟩)]
+  · rw [ite_eq_left h1, ite_eq_right (by rw [Finset.mem_sdiff]; push Not; exact fun _ => h1)]
+  · rw [ite_eq_right h1, ite_eq_left (by rw [Finset.mem_sdiff]; exact ⟨Finset.mem_univ _, h1⟩)]
 
 /-! ### The blocked-region tensor map and its left inverse
 

@@ -215,7 +215,7 @@ theorem exists_tpGauge_of_irreducible_spectralRadius_one
       ((Module.End.toContinuousLinearMap (Matrix (Fin D) (Fin D) ℂ))
         (transferMap (d := d) (D := D) A))
       hRadius
-  letI : NeZero D := ⟨hD⟩
+  let : NeZero D := ⟨hD⟩
   have hA : ∃ i, A i ≠ 0 := by
     by_contra hzero
     push Not at hzero
@@ -309,7 +309,7 @@ theorem IsNormalTensor.exists_tpGauge
 block-injective. -/
 theorem IsNormalTensor.isNormal
     {A : MPSTensor d D} (h : IsNormalTensor A) : IsNormal A := by
-  letI : NeZero D := ⟨h.bondDim_ne_zero⟩
+  let : NeZero D := ⟨h.bondDim_ne_zero⟩
   obtain ⟨σ, _hσ, _hσfix, hTP, hGauge, hPrim, hIrr⟩ := h.exists_tpGauge
   have hNormalGauge : IsNormal (tpGauge (d := d) (D := D) A σ) :=
     isNormal_of_tp_primitive_irreducible _ hTP hPrim hIrr

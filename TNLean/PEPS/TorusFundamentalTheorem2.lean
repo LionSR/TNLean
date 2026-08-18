@@ -380,10 +380,10 @@ theorem fundamentalTheorem_normalTorusPEPS_unconditional
     have hi := hBr.compl_cornerSquare_injective hUB hw hh
     rwa [regionInjectivityDataOf_isInjective] at hi
   -- Boundary edges of the two base comparison regions.
-  haveI hNeR : Nonempty {f : Edge (torusGraph width height) //
+  have hNeR : Nonempty {f : Edge (torusGraph width height) //
       IsRegionBoundaryEdge (G := torusGraph width height) cornerRegion f} :=
     ⟨⟨torusUpEdge cornerVertex, isRegionBoundaryEdge_cornerRegion hw hh⟩⟩
-  haveI hNeS : Nonempty {f : Edge (torusGraph width height) //
+  have hNeS : Nonempty {f : Edge (torusGraph width height) //
       IsRegionBoundaryEdge (G := torusGraph width height)
         (insert (cornerVertex : TorusVertex width height) cornerRegion) f} := by
     rw [insert_cornerVertex_cornerRegion hw hh]

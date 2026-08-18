@@ -567,7 +567,7 @@ theorem vonNeumannEntropy_normalizedPureState {d D : ℕ} (A : MPSTensor d D) (N
   set n := Fintype.card (Fin N → Fin d) with hn
   have hcard : 1 ≤ n := by
     rw [hn, Nat.one_le_iff_ne_zero]; intro h0
-    haveI : IsEmpty (Fin N → Fin d) := Fintype.card_eq_zero_iff.mp h0
+    have : IsEmpty (Fin N → Fin d) := Fintype.card_eq_zero_iff.mp h0
     exact htr (by simp [Matrix.trace, Matrix.diag, Finset.univ_eq_empty])
   have hdotEq : (fun σ : Fin N → Fin d => MPSTensor.mpv A σ) ⬝ᵥ
       (star (fun σ : Fin N → Fin d => MPSTensor.mpv A σ)) =

@@ -137,7 +137,7 @@ arXiv:1606.00608, lines 224--235, together with the gauge relation at lines
 264--268. -/
 theorem IsNormalTensor.mapStar {A : MPSTensor d D} (hA : IsNormalTensor A) :
     IsNormalTensor (mapStar A) := by
-  letI : NeZero D := ⟨hA.bondDim_ne_zero⟩
+  let : NeZero D := ⟨hA.bondDim_ne_zero⟩
   obtain ⟨σ, _hσ, _hσfix, hLeft, hGauge, _hPrim, _hIrr⟩ := hA.exists_tpGauge
   have hGaugeNormal : IsNormalTensor (tpGauge (d := d) (D := D) A σ) :=
     hA.of_gaugeEquiv hGauge.symm

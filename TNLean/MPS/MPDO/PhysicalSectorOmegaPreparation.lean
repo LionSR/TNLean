@@ -97,7 +97,7 @@ Source: arXiv:1606.00608, Appendix C.2, lines 1395--1402. -/
 theorem NeighboringTraceFactorization.sector_nonempty
     (H : NeighboringTraceFactorization F) : Nonempty (Fin F.sectorCount) := by
   by_contra hempty
-  haveI : IsEmpty (Fin F.sectorCount) := not_nonempty_iff.mp hempty
+  have : IsEmpty (Fin F.sectorCount) := not_nonempty_iff.mp hempty
   have hzero : ∑ l : Fin F.sectorCount, H.a l * H.b l = 0 := by simp
   have hsum := H.sum_mul
   rw [hzero] at hsum

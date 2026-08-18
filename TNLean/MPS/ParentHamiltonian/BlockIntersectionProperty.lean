@@ -245,7 +245,7 @@ theorem groundSpace_iSupIndep_of_wordTupleSpanTop
   have hX : ∀ i : Fin r, ∀ hi : i ∈ s, groundSpaceMap (A i) n (X i) = φ i := by
     intro i hi
     dsimp [X]
-    rw [dif_pos hi]
+    rw [dite_eq_left hi]
     exact Classical.choose_spec (hMatrix i hi)
   have hsum_all : (∑ i : Fin r, groundSpaceMap (A i) n (X i)) = 0 := by
     calc

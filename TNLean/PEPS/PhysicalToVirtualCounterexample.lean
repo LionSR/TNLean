@@ -122,7 +122,7 @@ theorem right_config_unique :
   intro a b
   funext ie
   have h1 : a3.bondDim ie.1 = 1 := bond_dim_incident_one ie
-  haveI : Subsingleton (Fin (a3.bondDim ie.1)) := by rw [h1]; infer_instance
+  have : Subsingleton (Fin (a3.bondDim ie.1)) := by rw [h1]; infer_instance
   apply Subsingleton.elim
 
 /-- `a3.component 1 η = ![1,0]` for every (the unique) config `η`. -/

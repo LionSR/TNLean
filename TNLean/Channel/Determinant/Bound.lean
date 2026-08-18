@@ -286,7 +286,7 @@ theorem channelDet_norm_le_one_of_positive_tracePreserving
   · subst hd
     rw [channelDet_eq_linearMap_det, LinearMap.det_eq_one_of_subsingleton]
     norm_num
-  · haveI : NeZero d := ⟨hd⟩
+  · have : NeZero d := ⟨hd⟩
     apply channelDet_norm_le_one_of_eigenvalues_bounded
     intro μ hμ
     exact hPos.eigenvalue_norm_le_one_of_tracePreserving (d := d) hTP μ

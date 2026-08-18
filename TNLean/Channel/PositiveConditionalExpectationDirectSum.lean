@@ -223,7 +223,7 @@ private theorem partialTraceLeft_kronecker_one_mul_eq_mul_kronecker_one
   simp_rw [Fintype.sum_prod_type]
   simp only [Matrix.kroneckerMap_apply, Matrix.one_apply]
   simp only [mul_ite, mul_one, mul_zero, ite_mul, zero_mul, Finset.sum_ite_eq,
-    Finset.mem_univ, if_true, Finset.sum_ite_eq']
+    Finset.mem_univ, ite_true, Finset.sum_ite_eq']
   rw [Finset.sum_comm]
   apply Finset.sum_congr rfl
   intro a _
@@ -728,8 +728,8 @@ theorem exists_block_densities_of_positive_retraction
   classical
   obtain ⟨K, d, m, e, U, hU, hd, hm, hBlock⟩ :=
     S.exists_unitary_conj_blockDiagonal_iff
-  letI : ∀ k, NeZero (m k) := fun k => ⟨Nat.ne_of_gt (hm k)⟩
-  letI : ∀ k, NeZero (d k) := fun k => ⟨Nat.ne_of_gt (hd k)⟩
+  let : ∀ k, NeZero (m k) := fun k => ⟨Nat.ne_of_gt (hm k)⟩
+  let : ∀ k, NeZero (d k) := fun k => ⟨Nat.ne_of_gt (hd k)⟩
   let Φ := Matrix.unitaryReindexLinearEquiv e U hU
   let Ehat : Matrix ((k : Fin K) × (Fin (m k) × Fin (d k)))
       ((k : Fin K) × (Fin (m k) × Fin (d k))) ℂ →ₗ[ℂ]

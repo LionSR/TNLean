@@ -581,7 +581,7 @@ theorem UnitarySectorConjugacy.physicalT_isKrausCPTP
     subst d
     exact zero_isKrausCPTP_of_isEmpty
   · rename_i hd
-    letI : NeZero d := ⟨hd⟩
+    let : NeZero d := ⟨hd⟩
     exact Matrix.supportCompletion_isKrausCPTP
       C.rawPhysicalT H.oneSiteRetainedProjection
       (Matrix.faithfulDensity (Fin d × Fin d))
@@ -614,7 +614,7 @@ theorem UnitarySectorConjugacy.physicalS_isKrausCPTP
     subst d
     exact zero_isKrausCPTP_of_isEmpty
   · rename_i hd
-    letI : NeZero d := ⟨hd⟩
+    let : NeZero d := ⟨hd⟩
     exact Matrix.supportCompletion_isKrausCPTP
       C.rawPhysicalS S.toTwoSiteMultiplicitySpectrum.twoSiteRetainedProjection
       (Matrix.faithfulDensity (Fin d))
@@ -643,7 +643,7 @@ theorem UnitarySectorConjugacy.physicalT_physClose1
     subst d
     exact Subsingleton.elim _ _
   · rename_i hd
-    letI : NeZero d := ⟨hd⟩
+    let : NeZero d := ⟨hd⟩
     calc
       Matrix.supportCompletion C.rawPhysicalT H.oneSiteRetainedProjection
           (Matrix.faithfulDensity (Fin d × Fin d)) (physClose1 M X) =
@@ -674,7 +674,7 @@ theorem UnitarySectorConjugacy.physicalS_physClose2
     subst d
     exact Subsingleton.elim _ _
   · rename_i hd
-    letI : NeZero d := ⟨hd⟩
+    let : NeZero d := ⟨hd⟩
     calc
       Matrix.supportCompletion C.rawPhysicalS
           S.toTwoSiteMultiplicitySpectrum.twoSiteRetainedProjection

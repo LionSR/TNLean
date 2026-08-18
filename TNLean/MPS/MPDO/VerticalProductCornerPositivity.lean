@@ -71,7 +71,7 @@ theorem FlatBlockedBNTComparison.activeCoefficient_mul_phase_pos_of_sectorCompre
   let Vref := C.referenceInclusion mult₂ hMult₂ U₂ j
   let c := S.flatCoefficient j * C.phase j
   let c₀ := weight₂ (C.label j) ⟨0, hMult₂ (C.label j)⟩
-  letI : NeZero (S.flatDim j) := ⟨(S.flatDim_pos j).ne'⟩
+  let : NeZero (S.flatDim j) := ⟨(S.flatDim_pos j).ne'⟩
   have hA : MPSTensor.IsNormalTensor A :=
     (MPSTensor.isNormalTensor_cast_iff (C.dim_eq j) (A₂ (C.label j))).2
       (hNormal₂ (C.label j))
@@ -205,7 +205,7 @@ theorem FlatBlockedBNTComparison.exists_unitaryNormalization
   let Vref := C.referenceInclusion mult₂ hMult₂ U₂ j
   let c := S.flatCoefficient j * C.phase j
   let c₀ := weight₂ (C.label j) ⟨0, hMult₂ (C.label j)⟩
-  letI : NeZero (S.flatDim j) := ⟨(S.flatDim_pos j).ne'⟩
+  let : NeZero (S.flatDim j) := ⟨(S.flatDim_pos j).ne'⟩
   have hA : MPSTensor.IsNormalTensor A :=
     (MPSTensor.isNormalTensor_cast_iff (C.dim_eq j) (A₂ (C.label j))).2
       (hNormal₂ (C.label j))

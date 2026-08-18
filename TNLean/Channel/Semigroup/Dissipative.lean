@@ -139,10 +139,10 @@ private theorem exp_leftMulCLM
       leftMulCLMAlgHom D (NormedSpace.exp A) := by
   change clmExpD (leftMulCLMAlgHom D A) =
     leftMulCLMAlgHom D (matExpD A)
-  letI : NormedRing (Mat D) := Matrix.linftyOpNormedRing (n := Fin D) (α := ℂ)
-  letI : NormedAlgebra ℂ (Mat D) :=
+  let : NormedRing (Mat D) := Matrix.linftyOpNormedRing (n := Fin D) (α := ℂ)
+  let : NormedAlgebra ℂ (Mat D) :=
     Matrix.linftyOpNormedAlgebra (R := ℂ) (n := Fin D) (α := ℂ)
-  letI : CompleteSpace (Mat D) := FiniteDimensional.complete ℂ (Mat D)
+  let : CompleteSpace (Mat D) := FiniteDimensional.complete ℂ (Mat D)
   have h := NormedSpace.map_exp (leftMulCLMAlgHom D) continuous_leftMulCLMAlgHom A
   exact h.symm
 
@@ -186,7 +186,7 @@ theorem expSemigroup_dissipativeDrift_apply
       · simpa [smul_neg] using
           (map_smul (rightMulCLMAlgHom D) (t : ℂ) (MulOpposite.op (-κᴴ))).symm
     have hcomm := left_right_commute (D := D) (-(t : ℂ) • κ) (-(t : ℂ) • κᴴ)
-    letI : CompleteSpace (Mat D →L[ℂ] Mat D) :=
+    let : CompleteSpace (Mat D →L[ℂ] Mat D) :=
       FiniteDimensional.complete ℂ (Mat D →L[ℂ] Mat D)
     have hsum :
         NormedSpace.exp

@@ -104,7 +104,7 @@ theorem quasiLocalSupportedIn_iff_commute_disjoint {d : ℕ} [NeZero d]
     let S := Config d Λ
     let C := Config d (Δ \ Λ)
     let dC := Fintype.card C
-    letI : NeZero dC := ⟨by simp [dC, Fintype.card_ne_zero (α := C)]⟩
+    let : NeZero dC := ⟨by simp [dC, Fintype.card_ne_zero (α := C)]⟩
     let eC : C ≃ ZMod dC := (Fintype.equivFin C).trans (ZMod.finEquiv dC).toEquiv
     let ζ : ℂ := Complex.exp (2 * Real.pi * Complex.I / dC)
     have hζ : IsPrimitiveRoot ζ dC := Complex.isPrimitiveRoot_exp dC (NeZero.ne dC)

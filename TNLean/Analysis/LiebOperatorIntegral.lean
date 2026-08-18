@@ -57,11 +57,6 @@ namespace Matrix
 
 variable {n : Type*} [Fintype n] [DecidableEq n]
 
-/-- Mathlib's matrix `CStarAlgebra`, registered locally so the `L²`-operator norm does
-not leak onto `Matrix n n ℂ` for transitive importers. -/
-noncomputable local instance : CStarAlgebra (Matrix n n ℂ) := Matrix.instCStarAlgebra
-
-
 omit [Fintype n] in
 /-- A real-valued diagonal matrix with positive entries is positive definite. -/
 private lemma posDef_ofReal_diagonal {g : n → ℝ} (hg : ∀ i, 0 < g i) :
@@ -322,7 +317,7 @@ theorem superop_lieb_integral_rep {D : ℕ} {s : ℝ} (hs : s ∈ Set.Ioo (0 : �
   have hVstarV : star V * V = 1 := Unitary.star_mul_self_of_mem hVunit
   have hVVstar : V * star V = 1 := Unitary.mul_star_self_of_mem hVunit
   have hVinv : star V = V⁻¹ := (Matrix.inv_eq_left_inv hVstarV).symm
-  letI : Invertible V := ⟨star V, hVstarV, hVVstar⟩
+  let : Invertible V := ⟨star V, hVstarV, hVVstar⟩
   -- The conjugation `M ↦ V M V^†` as a continuous linear map.
   set Φ : Matrix (Fin D × Fin D) (Fin D × Fin D) ℂ →L[ℂ]
       Matrix (Fin D × Fin D) (Fin D × Fin D) ℂ :=

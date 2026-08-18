@@ -180,7 +180,7 @@ theorem isNPositiveMap_iff_forall_ampliation_rank_one_posSemidef
     IsNPositiveMap k E ↔
       ∀ φ : n × Fin k → ℂ,
         (nPositiveAmpliation k E (Matrix.vecMulVec φ (star φ))).PosSemidef := by
-  letI := Fintype.ofFinite n
+  let := Fintype.ofFinite n
   constructor
   · intro hE φ
     exact hE _ (Matrix.posSemidef_vecMulVec_self_star φ)
@@ -768,7 +768,7 @@ theorem kadison_schwarz_2positive
           (E (Matrix.of fun i j => P' (i, ip.2) (j, jq.2))) ip.1 jq.1)).PosSemidef := by
       simpa [Matrix.reindex_apply] using hY'.submatrix e.symm
     simpa [hBlock] using hYsum
-  haveI : Invertible (1 : Matrix n n ℂ) := invertibleOne
+  have : Invertible (1 : Matrix n n ℂ) := invertibleOne
   simpa [inv_one, Matrix.mul_assoc, conjTranspose_conjTranspose] using
     (Matrix.PosDef.fromBlocks₂₂ (A := E (Xᴴ * X)) (B := (E X)ᴴ)
       (D := (1 : Matrix n n ℂ)) Matrix.PosDef.one).1 hBlockPsD

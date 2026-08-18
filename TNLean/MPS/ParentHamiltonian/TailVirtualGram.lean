@@ -130,7 +130,7 @@ theorem IsPrimitiveMPS.tailVirtualMapES_norm_four_pow_uniform
     [NeZero D] {A : MPSTensor d D} {ρ : Matrix (Fin D) (Fin D) ℂ}
     (hP : IsPrimitiveMPS A ρ) :
     ∃ C : ℝ, 0 < C ∧ ∀ K : ℕ, ‖tailVirtualMapES A K‖ ^ 4 ≤ C := by
-  letI : NormedRing (Matrix (Fin D) (Fin D) ℂ) := Matrix.instL2OpNormedRing
+  let : NormedRing (Matrix (Fin D) (Fin D) ℂ) := Matrix.instL2OpNormedRing
   let E := transferMap (d := d) (D := D) A
   have htr : Matrix.trace ρ ≠ 0 := by
     intro h

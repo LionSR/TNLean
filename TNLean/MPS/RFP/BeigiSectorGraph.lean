@@ -254,7 +254,7 @@ private theorem embedLocalOperator_groundBond_eq_one_sub {N : ℕ} (hN : 2 ≤ N
   rw [groundBond_eq_one_sub_toMatrix']
   ext σ τ
   by_cases hστ : MPOTensor.AgreesOutsideWindow (d := d) 2 hN i σ τ
-  · simp only [MPOTensor.embedLocalOperator_apply, hστ, if_true,
+  · simp only [MPOTensor.embedLocalOperator_apply, hστ, ite_true,
       Matrix.sub_apply, Matrix.one_apply]
     by_cases hEq : σ = τ
     · subst τ
@@ -660,7 +660,7 @@ theorem parentHamiltonianGroundSpaceES_finrank_eq
         ∏ n : Fin N,
           Module.finrank ℂ (F.edgeGroundSpace (c.1 n) (c.1 (n + 1))) := by
   classical
-  letI : NeZero N := ⟨by omega⟩
+  let : NeZero N := ⟨by omega⟩
   let weight : (Fin N → Fin F.sectorCount) → ℕ := fun k ↦
     ∏ n : Fin N, Module.finrank ℂ (F.edgeGroundSpace (k n) (k (n + 1)))
   let cycle : (Fin N → Fin F.sectorCount) → Prop := fun k ↦

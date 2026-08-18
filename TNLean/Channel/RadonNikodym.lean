@@ -253,11 +253,11 @@ theorem radon_nikodym_of_stinespring_of_kraus_family
               rw [hB α]
               rw [Matrix.conjTranspose_sum]
               simp [C, hα, A, Matrix.conjTranspose_smul]
-            rw [if_pos hα, ← hlin]
+            rw [ite_eq_left hα, ← hlin]
             simp [Matrix.conjTranspose_conjTranspose]
           · have hzero : (∑ j : Fin r, C i α j • K j) = 0 := by
               simp [C, hα]
-            rw [if_neg hα, hzero]
+            rw [ite_eq_right hα, hzero]
             simp
       _ = (stinespringV K)ᴴ * Matrix.kroneckerMap (· * ·) X ((C i)ᴴ * C i) *
             stinespringV K := by

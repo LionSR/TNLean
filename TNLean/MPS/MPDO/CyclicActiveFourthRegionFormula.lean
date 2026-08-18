@@ -118,7 +118,7 @@ theorem reindex_threeSuffixSectorContraction_eq_cyclicActiveUnnormalized
   classical
   ext x y
   simp only [Matrix.reindex_apply, Matrix.submatrix_apply, threeSuffixSectorContraction,
-    suffixSectorContraction, Matrix.kroneckerMap_apply]
+    suffixSectorContraction]
   have hrestrict :
       (∑ t : Fin 3 → Fin F.sectorCount,
           ∑ z : F.SectorChainFiber t,
@@ -195,8 +195,7 @@ theorem reindex_threeSuffixSectorContraction_eq_cyclicActiveUnnormalized
         fin_cases i <;> rfl
       rw [ht]
     _ = _ := by
-      simp only [Matrix.sum_apply, Matrix.smul_apply, smul_eq_mul,
-        cyclicActiveUnnormalizedTwoStepBoundaryContraction]
+      simp only [cyclicActiveUnnormalizedTwoStepBoundaryContraction]
       simp_rw [F.sum_threeSuffixFiber_cyclicNeighboringProduct_active]
       simp only [Matrix.kroneckerMap_apply]
       have sum_swap (g : F.CyclicActiveSector → F.CyclicActiveSector →

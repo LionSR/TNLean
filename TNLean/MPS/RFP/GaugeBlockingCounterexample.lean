@@ -186,18 +186,13 @@ private theorem cubePhaseDoubledTensor_eq_toTensorFromBlocks :
     simp only [cubePhaseBondDim] at ua₁ ua₂ ub₁ ub₂ <;>
     fin_cases ua₁ <;> fin_cases ua₂ <;> fin_cases ub₁ <;> fin_cases ub₂ <;>
     simp only [MPOTensor.toMPSTensor, doubledTensor, cubePhaseTensor,
-      cubePhaseWeight, scalarUnitTensor, Matrix.reindex_apply,
-      Nat.reduceAdd, Fin.zero_eta, Fin.isValue, Fin.mk_one, Matrix.submatrix_apply,
-      finProdFinEquiv.symm_apply_apply, Matrix.kroneckerMap_apply,
-      finSigmaFinEquiv.symm_apply_apply, Matrix.blockDiagonal'_apply, zero_ne_one,
-      one_ne_zero, ↓reduceDIte, Matrix.map_apply, cast_eq, Matrix.smul_apply,
-      Matrix.one_apply_eq, smul_eq_mul, map_zero, map_one, mul_zero, zero_mul,
-      mul_one, one_mul, hbase, hdoubled, finProdFinEquiv_symm_apply,
-      RCLike.star_def, hflat_symm, finProdFinEquiv_divNat, finProdFinEquiv_modNat,
-      dite_eq_ite, right_eq_ite_iff, imp_false, primitiveCubeRoot_mul_star,
-      if_true, if_false] <;>
+      cubePhaseWeight, Fin.zero_eta, Fin.isValue, Fin.mk_one, Matrix.submatrix_apply,
+      finProdFinEquiv.symm_apply_apply, Matrix.kroneckerMap_apply, zero_ne_one,
+      one_ne_zero, Matrix.map_apply, map_zero, map_one, mul_zero, zero_mul,
+      mul_one, one_mul, hbase, hdoubled, RCLike.star_def, right_eq_ite_iff,
+      imp_false, ite_true, ite_false] <;>
     first
-    | exact (if_pos ((hcoord _ _ _ _).mpr ⟨rfl, rfl⟩)).symm
+    | exact (ite_eq_left ((hcoord _ _ _ _).mpr ⟨rfl, rfl⟩)).symm
     | (intro h; have := (hcoord _ _ _ _).mp h; omega)
 
 /-- Every scalar-block weight in the doubled decomposition has modulus one.

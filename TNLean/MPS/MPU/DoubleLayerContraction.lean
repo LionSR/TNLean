@@ -102,7 +102,7 @@ theorem normalizedDiagonal_blockTensor [NeZero d] (L : ℕ)
   have hdim : (MPSTensor.blockPhysDim d L : ℂ)⁻¹ = ((d : ℂ)⁻¹) ^ L := by
     rw [MPSTensor.blockPhysDim_eq_pow, Nat.cast_pow, inv_pow]
   simp only [normalizedDiagonal, contractPhysical, Matrix.one_apply, ite_smul,
-    one_smul, zero_smul, Finset.sum_ite_eq', Finset.mem_univ, if_true,
+    one_smul, zero_smul, Finset.sum_ite_eq', Finset.mem_univ, ite_true,
     blockTensor_apply, hdim]
   have hsum := (MPSTensor.decodeBlockEquiv d L).sum_comp
     (fun σ ↦ evalWord W (List.ofFn σ) (List.ofFn σ))
@@ -133,7 +133,7 @@ theorem normalizedDiagonal_pow_eq_sum_evalWord
         ∑ τ : Fin K → Fin d, evalWord W (List.ofFn τ) (List.ofFn τ) := by
   classical
   simp only [normalizedDiagonal, contractPhysical, Matrix.one_apply, ite_smul,
-    one_smul, zero_smul, Finset.sum_ite_eq', Finset.mem_univ, if_true,
+    one_smul, zero_smul, Finset.sum_ite_eq', Finset.mem_univ, ite_true,
     evalWord_ofFn]
   rw [smul_pow]
   congr 1
@@ -296,9 +296,9 @@ theorem exists_identity_add_traceless_decomposition [NeZero d]
       Matrix.one_mul, smul_eq_mul]
     by_cases hae : a = e
     · subst a
-      rw [he, Matrix.trace_one, Fintype.card_fin, if_pos rfl]
+      rw [he, Matrix.trace_one, Fintype.card_fin, ite_eq_left rfl]
       field_simp [Nat.cast_ne_zero.mpr (NeZero.ne d)]
-    · rw [htr a hae, mul_zero, if_neg (Ne.symm hae)]
+    · rw [htr a hae, mul_zero, ite_eq_right (Ne.symm hae)]
   have hSe : S e = normalizedDiagonal W := by
     simp only [S, hτe, normalizedDiagonal]
     change contractPhysicalLinear W (((d : ℂ)⁻¹) • 1) = _
@@ -369,7 +369,7 @@ theorem trace_prod_contractPhysical_of_mpo_eq_one
     simpa [mpo_apply, mpoMatrixEntry, evalWord_ofFn, Matrix.one_apply] using h
   simp_rw [hentry]
   simp only [mul_ite, mul_one, mul_zero]
-  simp_rw [Finset.sum_ite_eq', Finset.mem_univ, if_true]
+  simp_rw [Finset.sum_ite_eq', Finset.mem_univ, ite_true]
   simp only [Matrix.trace, Matrix.diag]
   exact (Fintype.prod_sum (fun k i ↦ (X k) i i)).symm
 
@@ -558,7 +558,7 @@ theorem IsMPU.blocked_normalizedDiagonal_sandwich_residual_prod_eq_zero
     normalizedDiagonal (doubleLayerTensor V) *
         (List.ofFn (fun k ↦ residualSlice (doubleLayerTensor V) (X k))).prod *
       normalizedDiagonal (doubleLayerTensor V) = 0 := by
-  letI : NeZero (MPSTensor.blockPhysDim d J) := ⟨by
+  let : NeZero (MPSTensor.blockPhysDim d J) := ⟨by
     rw [MPSTensor.blockPhysDim_eq_pow]
     exact pow_ne_zero J (NeZero.ne d)⟩
   let V := MPOTensor.blockTensor U J

@@ -35,7 +35,7 @@ def cyclicTranslateState {N : ℕ} (s : Fin N) :
 
 private theorem cyclic_offset_eq_sub {N : ℕ} (k i : Fin N) :
     ((k.val + N - i.val) % N) = (k - i).val := by
-  letI : NeZero N := ⟨(Fin.pos k).ne'⟩
+  let : NeZero N := ⟨(Fin.pos k).ne'⟩
   have h := offset_mod_eq i.isLt (k - i).isLt
   have hadd : i + (k - i) = k := by
     abel
@@ -46,7 +46,7 @@ private theorem cyclic_offset_eq_sub {N : ℕ} (k i : Fin N) :
 private theorem cyclic_offset_translate {N : ℕ} (k i s : Fin N) :
     (((k + s).val + N - i.val) % N) =
       ((k.val + N - (i - s).val) % N) := by
-  letI : NeZero N := ⟨(Fin.pos k).ne'⟩
+  let : NeZero N := ⟨(Fin.pos k).ne'⟩
   rw [cyclic_offset_eq_sub, cyclic_offset_eq_sub]
   have hFin : k + s - i = k - (i - s) := by
     abel
@@ -91,7 +91,7 @@ theorem cyclicTranslateState_mem_chainGroundSpace (A : MPSTensor d D)
     {L N : ℕ} (hN : 0 < N) (hLN : L ≤ N) (s : Fin N)
     {ψ : NSiteSpace d N} (hψ : ψ ∈ chainGroundSpace A L N) :
     cyclicTranslateState s ψ ∈ chainGroundSpace A L N := by
-  rw [chainGroundSpace, dif_pos ⟨hN, hLN⟩] at hψ ⊢
+  rw [chainGroundSpace, dite_eq_left ⟨hN, hLN⟩] at hψ ⊢
   simp only [Submodule.mem_iInf, Submodule.mem_comap] at hψ ⊢
   intro i τ
   rw [cyclicRestrictₗ_cyclicTranslateState hN s i τ ψ]

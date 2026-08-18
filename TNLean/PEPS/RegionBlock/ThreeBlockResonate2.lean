@@ -295,7 +295,7 @@ theorem threeBlockBlueFiber_card
         regionInteriorBondProd (G := G) A D.blue else 0 := by
   classical
   by_cases hcompat : regionBoundaryLabel (G := G) A (Finset.univ \ D.red) η = bdry
-  · rw [if_pos hcompat]
+  · rw [ite_eq_left hcompat]
     rw [show (Finset.univ.filter (fun p : VirtualConfig A × VirtualConfig A =>
           regionBoundaryLabel (G := G) A (Finset.univ \ D.red) p.2 = bdry ∧
             (regionBoundaryLabel (G := G) A D.blue p.1 =
@@ -313,7 +313,7 @@ theorem threeBlockBlueFiber_card
         refine ⟨?_, hagree, hmerge⟩
         rw [hostLabel_p2_eq_hostLabel_regionMerge_blue (A := A) (e := e) D p hagree,
           hmerge, hcompat]
-  · rw [if_neg hcompat]
+  · rw [ite_eq_right hcompat]
     rw [Finset.card_eq_zero, Finset.filter_eq_empty_iff]
     rintro p _ ⟨hhost, hagree, hmerge⟩
     apply hcompat
@@ -421,8 +421,8 @@ theorem threeBlockDoubleSum_eq_smul_single_blue
           refine Finset.filter_congr (fun p _ => ?_); tauto,
         threeBlockBlueFiber_card (A := A) (e := e) D bdry η]
       by_cases hcompat : regionBoundaryLabel (G := G) A (Finset.univ \ D.red) η = bdry
-      · rw [if_pos hcompat, if_pos hcompat]
-      · rw [if_neg hcompat, if_neg hcompat, zero_smul, smul_zero]
+      · rw [ite_eq_left hcompat, ite_eq_left hcompat]
+      · rw [ite_eq_right hcompat, ite_eq_right hcompat, zero_smul, smul_zero]
     · rw [Finset.smul_sum, ← Finset.sum_filter_add_sum_filter_not Finset.univ
           (fun η : VirtualConfig A =>
             regionBoundaryLabel (G := G) A (Finset.univ \ D.red) η = bdry)]
@@ -439,10 +439,10 @@ theorem threeBlockDoubleSum_eq_smul_single_blue
         add_zero]
       · refine Finset.sum_congr rfl (fun η hη => ?_)
         rw [Finset.mem_filter] at hη
-        rw [if_pos hη.2]
+        rw [ite_eq_left hη.2]
       · refine Finset.sum_eq_zero (fun η hη => ?_)
         rw [Finset.mem_filter] at hη
-        rw [if_neg hη.2, smul_zero]
+        rw [ite_eq_right hη.2, smul_zero]
   · refine Finset.sum_congr rfl (fun p hp => ?_)
     rw [Finset.mem_filter] at hp
     rw [regionProd_eq_merge (G := G) A D.blue σblue p,

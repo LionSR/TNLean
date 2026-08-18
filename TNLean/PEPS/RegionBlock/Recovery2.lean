@@ -71,11 +71,11 @@ theorem regionBoundaryEdge_endpoint_in_R_eq (R : Finset V)
     w = regionBoundaryEdgeInVertex (G := G) R f := by
   rcases f.2 with ⟨h1, h2⟩ | ⟨h1, h2⟩
   · rcases hw with hw | hw
-    · rw [regionBoundaryEdgeInVertex, if_pos h1]; exact hw.symm
+    · rw [regionBoundaryEdgeInVertex, ite_eq_left h1]; exact hw.symm
     · exact absurd (hw ▸ hwR) h2
   · rcases hw with hw | hw
     · exact absurd (hw ▸ hwR) h1
-    · rw [regionBoundaryEdgeInVertex, if_neg h1]; exact hw.symm
+    · rw [regionBoundaryEdgeInVertex, ite_eq_right h1]; exact hw.symm
 
 omit [Fintype V] in
 /-- The rest-of-region product reads a global virtual configuration only away from
@@ -264,10 +264,10 @@ theorem region_lhs_coeff (A : Tensor G d) (R : Finset V)
   · have hsame : SameAwayFromBond f (Function.update ν f a) ν := by
       intro c hc; rw [Function.update_of_ne hc]
     have hμf : (Function.update ν f a) f = a := Function.update_self _ _ _
-    rw [if_pos hsame, hμf]
+    rw [ite_eq_left hsame, hμf]
   · intro μ _ hμne
     by_cases hsame : SameAwayFromBond f μ ν
-    · rw [if_pos hsame]
+    · rw [ite_eq_left hsame]
       have hμf_ne : μ f ≠ a := by
         intro hμf
         apply hμne
@@ -276,7 +276,7 @@ theorem region_lhs_coeff (A : Tensor G d) (R : Finset V)
         · subst hc; rw [Function.update_self, hμf]
         · rw [Function.update_of_ne hc]; exact hsame c hc
       rw [regionOpenCoeff_eq_zero_of_ne A R f μ σ η (fun h => hμf_ne h.symm), mul_zero]
-    · rw [if_neg hsame, zero_mul]
+    · rw [ite_eq_right hsame, zero_mul]
   · intro h; exact absurd (Finset.mem_univ _) h
 
 open scoped Classical in

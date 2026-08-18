@@ -479,7 +479,7 @@ theorem isTransferIdempotent_basisDirectSum_iff (hCF : IsBNTCanonicalForm P) :
       ((∀ k, IsIsometryCanonicalForm (P.basis k)) ∧
         ∀ j j' : Fin P.basisCount, j ≠ j' →
           mixedTransferMap₂ (P.basis j) (P.basis j') = 0) := by
-  letI : ∀ k : Fin P.basisCount, NeZero (P.basisDim k) :=
+  let : ∀ k : Fin P.basisCount, NeZero (P.basisDim k) :=
     fun k => ⟨(hCF.basis_dim_pos k).ne'⟩
   exact isTransferIdempotent_directSumTensor_iff P.basis hCF.basis_isNormal
     hCF.basis_irreducible hCF.basis_left_canonical hCF.basis_distinct
@@ -508,7 +508,7 @@ theorem exists_residualIsometryFamily_of_isTransferIdempotent_basisDirectSum
         X j * Matrix.diagonal (fun k => (Real.sqrt (Λ j k) : ℂ)) *
           U j i * (X j)⁻¹) ∧
       IsResidualIsometryFamily U := by
-  letI : ∀ k : Fin P.basisCount, NeZero (P.basisDim k) :=
+  let : ∀ k : Fin P.basisCount, NeZero (P.basisDim k) :=
     fun k => ⟨(hCF.basis_dim_pos k).ne'⟩
   exact exists_residualIsometryFamily_of_isTransferIdempotent_directSum P.basis
     hCF.basis_isNormal hCF.basis_irreducible hCF.basis_left_canonical hCF.basis_distinct hRFP

@@ -235,8 +235,8 @@ theorem overlapLeft_firstStrip_fiber_weightCombination_eq_zero {R₁ R₂ : Fins
       · obtain ⟨q, hu, hr, _⟩ := hind
         have hδbdry : unionToP0Outer (A := A) bdry = δ := by
           rw [← hu, unionToP0Outer_regionBoundaryLabel]; exact hβδ q hr
-        rw [cFiber, if_pos hδbdry]
-      · rw [if_neg hind, mul_zero, mul_zero]
+        rw [cFiber, ite_eq_left hδbdry]
+      · rw [ite_eq_right hind, mul_zero, mul_zero]
     rw [Finset.sum_congr rfl (fun bc' _ => by rw [hrepl bc'])]
     exact overlapLeft_firstStrip_weightCombination_eq_zero (G := G) (A := A) hR₁ c hc β₁ σcompl
   · -- Some configuration realizes `β₁` with `P₀`-outer label other than `δ`; the `R₁` label
@@ -261,8 +261,8 @@ theorem overlapLeft_firstStrip_fiber_weightCombination_eq_zero {R₁ R₂ : Fins
         p0OuterLabel_eq_of_R₁ (G := G) (hr.trans hq₀r.symm)
       have hδbdry : unionToP0Outer (A := A) bdry ≠ δ := by
         rw [← hu, unionToP0Outer_regionBoundaryLabel, hpq]; exact hq₀δ
-      rw [cFiber, if_neg hδbdry, zero_mul]
-    · rw [if_neg hind, mul_zero]
+      rw [cFiber, ite_eq_right hδbdry, zero_mul]
+    · rw [ite_eq_right hind, mul_zero]
 
 private theorem overlapLeft_firstStrip_fiber_weightCombination_eq_zero_rightGeometry
     {R₁ R₂ : Finset V}
@@ -520,7 +520,7 @@ theorem exists_regionBoundaryLabel_union_eq {R₁ R₂ : Finset V}
   refine ⟨fun e => if h : IsRegionBoundaryEdge (G := G) (R₁ ∪ R₂) e then bdry ⟨e, h⟩
     else ⟨0, hpos e⟩, ?_⟩
   funext f
-  rw [regionBoundaryLabel_apply, dif_pos f.2]
+  rw [regionBoundaryLabel_apply, dite_eq_left f.2]
 
 open scoped Classical in
 /-- **The overlapping union-of-injective-regions lemma.** For two finite regions `R₁`, `R₂` whose
@@ -566,9 +566,9 @@ theorem regionBlockedTensorInjective_union_overlap {R₁ R₂ : Finset V}
     have hfiber : cFiber (A := A) c (p0OuterLabel A R₁ R₂ q₀)
         (regionBoundaryLabel (G := G) A (R₁ ∪ R₂) q₀) =
         c (regionBoundaryLabel (G := G) A (R₁ ∪ R₂) q₀) := by
-      rw [cFiber, if_pos]
+      rw [cFiber, ite_eq_left]
       rw [unionToP0Outer_regionBoundaryLabel]
-    rw [hfiber, if_pos ⟨q₀, rfl, rfl⟩, smul_eq_mul, mul_one] at hrow0b
+    rw [hfiber, ite_eq_left ⟨q₀, rfl, rfl⟩, smul_eq_mul, mul_one] at hrow0b
     rw [← hq₀]; exact hrow0b
   · -- Other `bdry`: either fiber mismatch or no joint realization.
     intro bdry _ hne
@@ -584,8 +584,8 @@ theorem regionBlockedTensorInjective_union_overlap {R₁ R₂ : Finset V}
         have hδq : p0OuterLabel A R₁ R₂ q = p0OuterLabel A R₁ R₂ q₀ := by
           rw [← unionToP0Outer_regionBoundaryLabel, hqu]; exact hfib
         exact regionBoundaryLabel_union_eq_of_R₂_p0Outer (G := G) hqr hδq
-      · rw [cFiber, if_neg hfib, zero_smul]
-    · rw [if_neg hreal, smul_zero]
+      · rw [cFiber, ite_eq_right hfib, zero_smul]
+    · rw [ite_eq_right hreal, smul_zero]
   · intro hcontra; exact absurd (Finset.mem_univ _) hcontra
 
 end PEPS

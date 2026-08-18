@@ -192,8 +192,8 @@ theorem exponential_convergence_of_primitive [NeZero D]
   let P : V →ₗ[ℂ] V := fixedPointProj (D := D) ρ (ne_of_gt hρ_pd.trace_pos)
   let N : V →ₗ[ℂ] V := E - P
   let Φ : (V →ₗ[ℂ] V) ≃ₐ[ℂ] (V →L[ℂ] V) := Module.End.toContinuousLinearMap V
-  letI : NormedAddCommGroup (V →L[ℂ] V) := ContinuousLinearMap.toNormedAddCommGroup
-  letI : NormedSpace ℂ (V →L[ℂ] V) := ContinuousLinearMap.toNormedSpace
+  let : NormedAddCommGroup (V →L[ℂ] V) := ContinuousLinearMap.toNormedAddCommGroup
+  let : NormedSpace ℂ (V →L[ℂ] V) := ContinuousLinearMap.toNormedSpace
   have hPrim : IsPrimitive E :=
     isPeripherallyPrimitive_of_isPrimitivePaper A hNorm
       (isPrimitivePaper_of_hasEventuallyFullKrausRank A

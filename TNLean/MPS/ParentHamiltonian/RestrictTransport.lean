@@ -190,25 +190,25 @@ theorem tailRestrictₗ_contiguousRestrictₗ
   ext ⟨k, hk⟩
   simp only [contiguousCfg]
   by_cases hLeft : s ≤ k ∧ k < s + K
-  · rw [dif_pos (show s ≤ k ∧ k < s + (K + L) by omega)]
-    rw [dif_neg (show ¬(s + K ≤ k ∧ k < s + K + L) by omega)]
-    rw [dif_pos hLeft]
+  · rw [dite_eq_left (show s ≤ k ∧ k < s + (K + L) by omega)]
+    rw [dite_eq_right (show ¬(s + K ≤ k ∧ k < s + K + L) by omega)]
+    rw [dite_eq_left hLeft]
     have hidx : (⟨k - s, by omega⟩ : Fin (K + L)) =
         Fin.castAdd L (⟨k - s, by omega⟩ : Fin K) := by
       ext
       simp [Fin.castAdd]
     rw [hidx, Fin.append_left]
   · by_cases hRight : s + K ≤ k ∧ k < s + K + L
-    · rw [dif_pos (show s ≤ k ∧ k < s + (K + L) by omega)]
-      rw [dif_pos hRight]
+    · rw [dite_eq_left (show s ≤ k ∧ k < s + (K + L) by omega)]
+      rw [dite_eq_left hRight]
       have hidx : (⟨k - s, by omega⟩ : Fin (K + L)) =
           Fin.natAdd K (⟨k - (s + K), by omega⟩ : Fin L) := by
         ext
         simp [Fin.natAdd]
         omega
       rw [hidx, Fin.append_right]
-    · rw [dif_neg (show ¬(s ≤ k ∧ k < s + (K + L)) by omega)]
-      rw [dif_neg hRight]
-      rw [dif_neg hLeft]
+    · rw [dite_eq_right (show ¬(s ≤ k ∧ k < s + (K + L)) by omega)]
+      rw [dite_eq_right hRight]
+      rw [dite_eq_right hLeft]
 
 end MPSTensor

@@ -375,7 +375,7 @@ theorem localOfDoubled_eq_global_off_left (A : Tensor G d) (e : Edge G)
   · -- je is some other edge `g ≠ e`; both sides read the complement configuration.
     rw [virtualConfigSplitAt_symm_ne A e (k, ζc) ⟨je.1, hje⟩]
     unfold localOfDoubled
-    rw [dif_neg hje]
+    rw [dite_eq_right hje]
 
 omit [Fintype V] in
 /-- At the left endpoint `v = e.1.1`, the edge-doubled local configuration is the
@@ -402,7 +402,7 @@ theorem localOfDoubled_eq_update_at_left (A : Tensor G d) (e : Edge G)
     have hjne : je.1 ≠ e := fun h => hje (Subtype.ext h)
     rw [vertexStarLabel_apply, virtualConfigSplitAt_symm_ne A e (k, ζc) ⟨je.1, hjne⟩]
     unfold localOfDoubled
-    rw [dif_neg hjne]
+    rw [dite_eq_right hjne]
 
 open scoped Classical in
 /-- The vertex/complement two-block inserted coefficient as a sum over global
@@ -533,7 +533,7 @@ theorem localOfDoubled_eq_global_off_right (A : Tensor G d) (e : Edge G)
     simp only [edgeLeftIncident_edge, virtualConfigSplitAt_symm_edge]
   · rw [virtualConfigSplitAt_symm_ne A e (i, ζc) ⟨je.1, hje⟩]
     unfold localOfDoubled
-    rw [dif_neg hje]
+    rw [dite_eq_right hje]
 
 omit [Fintype V] in
 /-- At the right endpoint `v = e.1.2`, the edge-doubled local configuration is the
@@ -560,7 +560,7 @@ theorem localOfDoubled_eq_update_at_right (A : Tensor G d) (e : Edge G)
     have hjne : je.1 ≠ e := fun h => hje (Subtype.ext h)
     rw [vertexStarLabel_apply, virtualConfigSplitAt_symm_ne A e (i, ζc) ⟨je.1, hjne⟩]
     unfold localOfDoubled
-    rw [dif_neg hjne]
+    rw [dite_eq_right hjne]
 
 open scoped Classical in
 /-- The edge-inserted coefficient on the right-incidence-oriented edge equals the
@@ -656,12 +656,12 @@ theorem twoBlockInsertedCoeff_eq_edgeInsertedCoeff (A : Tensor G d) (v : V)
   · -- left endpoint: `e.1.1 = v`
     subst h
     rw [orientedInsert]
-    rw [if_pos (by rfl : (⟨e, Or.inl rfl⟩ : IncidentEdge G e.1.1).1.1.1 = e.1.1)]
+    rw [ite_eq_left (by rfl : (⟨e, Or.inl rfl⟩ : IncidentEdge G e.1.1).1.1.1 = e.1.1)]
     exact (edgeInsertedCoeff_eq_twoBlock_left A e M σ₁ τ).symm
   · -- right endpoint: `e.1.2 = v`
     subst h
     rw [orientedInsert]
-    rw [if_neg (by exact ne_of_lt e.2.1 :
+    rw [ite_eq_right (by exact ne_of_lt e.2.1 :
       ¬ (⟨e, Or.inr rfl⟩ : IncidentEdge G e.1.2).1.1.1 = e.1.2)]
     exact (edgeInsertedCoeff_eq_twoBlock_right A e M σ₁ τ).symm
 
@@ -700,11 +700,11 @@ theorem localOfDoubled_reindexTensor (B : Tensor G d) {bd : Edge G → ℕ}
         (fun f => Fin.cast (congr_fun h f.1) (ζc f)) v ie := by
   unfold localOfDoubled
   by_cases hie : ie.1 = e
-  · rw [dif_pos hie, dif_pos hie]
+  · rw [dite_eq_left hie, dite_eq_left hie]
     by_cases hv : v = e.1.1 <;>
       simp only [hv, reindexTensor_bondDim, Fin.cast_cast] <;>
       apply Fin.ext <;> rfl
-  · rw [dif_neg hie, dif_neg hie]
+  · rw [dite_eq_right hie, dite_eq_right hie]
 
 open scoped Classical in
 /-- `edgeInsertedCoeff` transports along a bond-dimension reindex by conjugating

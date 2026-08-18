@@ -295,7 +295,7 @@ theorem peripheralEigenvalues_eq_range_primitiveRoot [NeZero D]
     exact mul_right_cancel₀ hP_ne h_eq
   -- With all elements being m-th roots, use IsPrimitiveRoot to get the range form.
   have hm_ne : m ≠ 0 := Nat.pos_iff_ne_zero.mp hm_pos
-  haveI : NeZero m := ⟨hm_ne⟩
+  have : NeZero m := ⟨hm_ne⟩
   set γ : ℂ := Complex.exp (2 * ↑Real.pi * Complex.I / ↑m)
   have hγ : IsPrimitiveRoot γ m := Complex.isPrimitiveRoot_exp m hm_ne
   refine ⟨γ, hγ, ?_⟩

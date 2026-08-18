@@ -260,7 +260,7 @@ theorem exists_verticalBNTGrouping_with_isometry_of_decomposition
     hInt, hIntStar, hCorner, hReconstruct⟩ :=
     hDecomp
   let classes := MPSTensor.mpvPhaseClassData blocks
-  haveI : ∀ k, NeZero (dim k) := fun k => ⟨(hdimPos k).ne'⟩
+  have : ∀ k, NeZero (dim k) := fun k => ⟨(hdimPos k).ne'⟩
   have hClassGauge : ∀ j q,
       ∃ (hdim : dim (classes.repr j) = dim (classes.enum j q))
         (X : GL (Fin (dim (classes.enum j q))) ℂ) (ζ : ℂ),

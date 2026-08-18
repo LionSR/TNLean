@@ -136,7 +136,7 @@ lemma R_eq_single (a0 b0 : Fin 4) :
     by_cases hb : b = b0
     · subst hb
       rw [A_apply_aRow_aCol]
-      simp only [true_and, if_true]
+      simp only [true_and, ite_true]
       ring
     · rw [A_apply_ne_zero b0 b (Ne.symm hb)]
       simp [Ne.symm hb]

@@ -122,7 +122,7 @@ theorem exists_perm_dimEq_gaugePhaseEquiv_of_overlapOrtho
         mpvState (d := d) (B j) N =
           ∑ i : Fin g, (U N) i j • mpvState (d := d) (A i) N := by
     intro N hN
-    simp only [U, dif_pos hN]
+    simp only [U, dite_eq_left hN]
     exact (hN0 N hN).choose_spec
   --
   -- ═══════════════════════════════════════════════════════════════════════════
@@ -214,7 +214,7 @@ theorem exists_perm_dimEq_gaugePhaseEquiv_of_overlapOrtho
         filter_upwards [hGA_det_ne, Filter.eventually_atTop.2 ⟨N0, fun N h => h⟩]
           with N hdetN hN0N
         have hunit : IsUnit (GA N).det := isUnit_iff_ne_zero.2 hdetN
-        haveI : Invertible (GA N) := Matrix.invertibleOfIsUnitDet _ hunit
+        have : Invertible (GA N) := Matrix.invertibleOfIsUnitDet _ hunit
         have hvk : ∀ k, v N k = ∑ i, GA N k i * u N i := hvu N hN0N
         have hmat : (GA N).mulVec (u N) = v N := by
           ext k'; simp only [Matrix.mulVec, dotProduct, hvk k']

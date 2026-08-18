@@ -165,7 +165,7 @@ lemma exists_cumulativeSpan_eq_top_of_algSpan_eq_top (A : MPSTensor d D)
   have hx : ∀ x : Matrix (Fin D) (Fin D) ℂ, ∃ N, x ∈ cumulativeSpan A N :=
     fun x => mem_cumulativeSpan_of_mem_algSpan A (hmem x)
   -- The module is Noetherian (finite-dimensional over a field)
-  haveI : IsNoetherian ℂ (Matrix (Fin D) (Fin D) ℂ) :=
+  have : IsNoetherian ℂ (Matrix (Fin D) (Fin D) ℂ) :=
     isNoetherian_of_isNoetherianRing_of_finite ℂ _
   -- Construct the monotone chain as an order homomorphism
   let f : ℕ →o Submodule ℂ (Matrix (Fin D) (Fin D) ℂ) :=

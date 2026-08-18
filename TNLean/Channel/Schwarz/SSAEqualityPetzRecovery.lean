@@ -156,7 +156,7 @@ theorem partialTraceRightPetzMap_product_marginal_recovery_of_isSSAEquality
                 simpa only [σr, σ0, productTensorReference, r] using
                   partialTraceRight_submatrix_prodAssoc σ0]
   let ρIndex := Classical.choice (nonempty_of_trace_eq_one ρ_ABC hρ_dm.2)
-  letI : Nonempty (Fin dC) := ⟨ρIndex.2.2⟩
+  let : Nonempty (Fin dC) := ⟨ρIndex.2.2⟩
   have hrec :=
     partialTraceRightPetzMap_eq_of_relativeEntropy_eq_general_support
       hρr hσr hsupp heq

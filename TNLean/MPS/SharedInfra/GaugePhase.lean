@@ -10,6 +10,7 @@ import TNLean.Spectral.MPVOverlapDecay
 import TNLean.Spectral.TransferOperatorGapNT
 
 import Mathlib.Analysis.Real.Sqrt
+import Mathlib.Topology.Algebra.GroupWithZero
 
 /-!
 # Shared gauge-phase lemmas for MPS tensors
@@ -191,11 +192,8 @@ private theorem norm_eq_one_of_selfOverlap_scale_at_nonzero_limit_pos_aux
   have hAA_ne : ∀ᶠ N in Filter.atTop, ‖mpvOverlap (d := d) A A N‖ ≠ 0 :=
     hAA.eventually_ne hr
   have hRatio : Filter.Tendsto (fun N => ‖mpvOverlap (d := d) B B N‖ /
-      ‖mpvOverlap (d := d) A A N‖) Filter.atTop (nhds 1) := by
-    change Filter.Tendsto
-      ((fun N => ‖mpvOverlap (d := d) B B N‖) /
-        fun N => ‖mpvOverlap (d := d) A A N‖) Filter.atTop (nhds 1)
-    simpa [div_self hr] using hBB.div hAA hr
+      ‖mpvOverlap (d := d) A A N‖) Filter.atTop (nhds 1) :=
+    (tendsto_div_nhds_one_iff_eq₀ hBB hAA hr).2 rfl
   have hRatioEq : ∀ᶠ N in Filter.atTop,
       ‖mpvOverlap (d := d) B B N‖ / ‖mpvOverlap (d := d) A A N‖ = (‖ζ‖ ^ 2) ^ N := by
     filter_upwards [hAA_ne, Filter.eventually_ge_atTop 1] with N hN hNpos

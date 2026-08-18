@@ -447,8 +447,8 @@ private theorem trace_breuerHall_trace_summand
     rw [Finset.sum_comm]
     refine Finset.sum_congr rfl fun j2 _ => ?_
     rw [Finset.sum_eq_single i1]
-    · rw [if_pos rfl]; ring
-    · intro j1 _ hj1; rw [if_neg (Ne.symm hj1)]; ring
+    · rw [ite_eq_left rfl]; ring
+    · intro j1 _ hj1; rw [ite_eq_right (Ne.symm hj1)]; ring
     · simp
   simp_rw [hc1]
   rw [Finset.sum_comm]
@@ -515,7 +515,7 @@ private theorem trace_breuerHall_transpose_summand
       have hne : ¬ (p1 = q2 ∧ p2 = q1) := by
         rintro ⟨h1, h2⟩
         exact hq (Prod.ext h2.symm h1.symm)
-      rw [Matrix.swapMatrix_apply, if_neg hne, zero_mul]
+      rw [Matrix.swapMatrix_apply, ite_eq_right hne, zero_mul]
     · simp
   rw [htrace]
   simp only [Fintype.sum_prod_type, Matrix.bipartiteSlice_apply]

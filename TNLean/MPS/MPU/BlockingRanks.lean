@@ -94,7 +94,7 @@ private theorem sourceCutM₁_blockTensor_succ_factorization
   symm
   simp only [sourceCutM₁_apply, Matrix.mul_apply, rightSuccLeft, rightSuccRight]
   rw [Fintype.sum_prod_type, Fintype.sum_eq_single (blockHead k I)]
-  · simp only [if_pos]
+  · simp only [ite_eq_left]
     change (∑ q, (∑ γ, U (blockHead k I) (blockHead k J) α γ *
       Matrix.conjTranspose S.V (γ, blockTail k J) q) *
         (S.diagonal * S.U) q (blockTail k I, β)) = _
@@ -150,7 +150,7 @@ private theorem sourceCutM₂_blockTensor_succ_factorization
   symm
   simp only [sourceCutM₂_apply, Matrix.mul_apply, leftSuccLeft, leftSuccRight]
   rw [Fintype.sum_prod_type, Fintype.sum_eq_single (blockHead k J)]
-  · simp only [if_pos]
+  · simp only [ite_eq_left]
     change (∑ q, (∑ γ, U (blockHead k I) (blockHead k J) α γ *
       Matrix.conjTranspose S.V (γ, blockTail k I) q) *
         (S.diagonal * S.U) q (blockTail k J, β)) = _

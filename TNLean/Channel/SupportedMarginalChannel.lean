@@ -219,7 +219,7 @@ theorem supportedMarginalMap_diagonal
   apply Finset.sum_congr rfl
   intro i _
   rw [Finset.sum_eq_single i]
-  · simp only [Matrix.diagonal_apply, if_pos, marginalInvSqrt]
+  · simp only [Matrix.diagonal_apply, ite_eq_left, marginalInvSqrt]
     have hi : (Real.sqrt (p i) : ℂ) ≠ 0 := by
       exact_mod_cast ne_of_gt (Real.sqrt_pos.2 (hp i))
     have hsq : (Real.sqrt (p i) : ℂ) * (Real.sqrt (p i) : ℂ) = (p i : ℂ) := by

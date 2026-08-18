@@ -192,7 +192,7 @@ theorem coordinateDirectSumConditionalExpectation_offDiagonal
 theorem coordinateDirectSumConditionalExpectation_isKrausCPTP
     (hm : ∀ k, 0 < m k) :
     IsKrausCPTP (coordinateDirectSumConditionalExpectation (m := m) (d := d)) := by
-  letI (k : κ) : NeZero (m k) := ⟨Nat.ne_of_gt (hm k)⟩
+  let (k : κ) : NeZero (m k) := ⟨Nat.ne_of_gt (hm k)⟩
   apply isKrausCPTP_of_isKrausCP_trace_preserving
   · change IsKrausCP (directSumExtension (LinearMap.piMap fun k ↦
       rightFactorConditionalExpectation (m := m k) (d := d k)))
@@ -228,7 +228,7 @@ theorem coordinateDirectSumConditionalExpectation_fixes
     coordinateDirectSumConditionalExpectation (m := m) (d := d)
         (coordinateRightFactorStarAlgHom (m := m) B) =
       coordinateRightFactorStarAlgHom (m := m) B := by
-  letI (k : κ) : NeZero (m k) := ⟨Nat.ne_of_gt (hm k)⟩
+  let (k : κ) : NeZero (m k) := ⟨Nat.ne_of_gt (hm k)⟩
   apply (directSumExtension_embedding_eq_self_iff _ _).2
   funext k
   exact rightFactorConditionalExpectation_fixes (B k)
@@ -242,7 +242,7 @@ theorem coordinateDirectSumConditionalExpectation_idempotent
     coordinateDirectSumConditionalExpectation (m := m) (d := d)
         (coordinateDirectSumConditionalExpectation (m := m) (d := d) A) =
       coordinateDirectSumConditionalExpectation (m := m) (d := d) A := by
-  letI (k : κ) : NeZero (m k) := ⟨Nat.ne_of_gt (hm k)⟩
+  let (k : κ) : NeZero (m k) := ⟨Nat.ne_of_gt (hm k)⟩
   let T := LinearMap.piMap fun k ↦
     rightFactorConditionalExpectation (m := m k) (d := d k)
   change directSumExtension T
@@ -257,7 +257,7 @@ omit [Fintype κ] in
 theorem coordinateDirectSumConditionalExpectation_unital
     (hm : ∀ k, 0 < m k) :
     coordinateDirectSumConditionalExpectation (m := m) (d := d) 1 = 1 := by
-  letI (k : κ) : NeZero (m k) := ⟨Nat.ne_of_gt (hm k)⟩
+  let (k : κ) : NeZero (m k) := ⟨Nat.ne_of_gt (hm k)⟩
   rw [show (1 : Matrix ((k : κ) × (Fin (m k) × Fin (d k)))
       ((k : κ) × (Fin (m k) × Fin (d k))) ℂ) =
         directSumDiagonalEmbedding 1 from Matrix.blockDiagonal'_one.symm]

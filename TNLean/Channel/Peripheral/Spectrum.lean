@@ -153,7 +153,7 @@ theorem peripheral_isRootOfUnity_of_pow_eigenvalue
   cases n with
   | zero => simp
   | succ n =>
-      simp only [Set.mem_insert_iff, Set.mem_setOf_eq]
+      simp only [Set.mem_insert_iff, Set.mem_ofPred_eq]
       right
       exact ⟨n, rfl⟩
 

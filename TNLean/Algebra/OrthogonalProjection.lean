@@ -114,7 +114,7 @@ theorem IsOrthogonalProjection.exists_range_isometry
       simpa [Matrix.diagonal_mul_diagonal] using hdiag_idem
     exact IsIdempotentElem.iff_eq_zero_or_one.mp (congrFun hfun j)
   let p : Fin D → Prop := fun j ↦ f j = 1
-  haveI : DecidablePred p := fun _ ↦ inferInstance
+  have : DecidablePred p := fun _ ↦ inferInstance
   let S := {j : Fin D // p j}
   let n := Fintype.card S
   let eS : S ≃ Fin n := Fintype.equivFin S
@@ -226,7 +226,7 @@ theorem orthogonalProjection_mul_eq_zero_of_sum_eq_one {m : ℕ}
     intro j
     by_cases hj : j = k
     · simp [hB, hj]
-    · simp only [hB, hj, if_false]
+    · simp only [hB, hj, ite_false]
       rw [Matrix.conjTranspose_mul, (hproj j).1.eq, (hproj k).1.eq]
       calc P k * P j * (P j * P k)
           = P k * (P j * P j) * P k := by simp only [Matrix.mul_assoc]
@@ -255,7 +255,7 @@ theorem orthogonalProjection_mul_eq_zero_of_sum_eq_one {m : ℕ}
           (Finset.sum_erase Finset.univ (by simp)).symm
       _ = ∑ j ∈ Finset.univ.erase k, P k * P j * P k :=
           Finset.sum_congr rfl fun j hj => by
-            rw [if_neg (Finset.mem_erase.mp hj).1]
+            rw [ite_eq_right (Finset.mem_erase.mp hj).1]
       _ = 0 := hzero
   have hBl := hBzero l
   rw [hB] at hBl

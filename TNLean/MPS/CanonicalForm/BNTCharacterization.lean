@@ -131,8 +131,8 @@ theorem SectorDecomposition.exists_phase_match_of_isCPSVBasisOfNormalTensors
         rw [inv_mul_cancel_left₀ hζN]
       _ = (ζ ^ N)⁻¹ * mpv (B k) σ := by rw [← hB_mpv]
   choose kOf αOf hStateOf using hScalar
-  letI : Fintype {j : Fin P.basisCount // j ∈ T} := Subtype.fintype (fun j => j ∈ T)
-  letI : Fintype {j : Fin P.basisCount // j ∉ T} := Subtype.fintype (fun j => j ∉ T)
+  let : Fintype {j : Fin P.basisCount // j ∈ T} := Subtype.fintype (fun j => j ∈ T)
+  let : Fintype {j : Fin P.basisCount // j ∉ T} := Subtype.fintype (fun j => j ∉ T)
   let C :
       (x : Sum {j : Fin P.basisCount // j ∈ T} (Fin g)) →
         MPSTensor d
@@ -274,7 +274,7 @@ private theorem isCPSVBasisOfNormalTensors_iff_active_blocks_covered_and_minimal
           P.basisDim j = dimCF (classes.repr j) := by
         intro j
         rfl
-      letI : ∀ j : Fin P.basisCount, NeZero (P.basisDim j) := fun j => by
+      let : ∀ j : Fin P.basisCount, NeZero (P.basisDim j) := fun j => by
         rw [hPBasisDim j]
         infer_instance
       have hPNormal : ∀ j : Fin P.basisCount, IsNormalTensor (P.basis j) := by
@@ -419,7 +419,7 @@ theorem isCPSVBasisOfNormalTensors_iff_canonicalForm_covered_and_minimal
     fun k ↦ μ (activeEquiv k)
   let blocksActive : (k : Fin (Fintype.card Active)) → MPSTensor d (dimActive k) :=
     fun k ↦ blocks (activeEquiv k)
-  letI : ∀ k, NeZero (dimActive k) := fun k ↦ by
+  let : ∀ k, NeZero (dimActive k) := fun k ↦ by
     simp only [dimActive]
     infer_instance
   have hActiveNormal : ∀ k, IsNormalTensor (blocksActive k) := by
@@ -483,7 +483,7 @@ theorem CPSVCanonicalFormData.isCPSVBasisOfNormalTensors_iff_covered_and_minimal
             ((X : Matrix (Fin (dimB k)) (Fin (dimB k)) ℂ) *
               (cast (congr_arg (MPSTensor d) hdim) (basis j)) i *
               (↑(X⁻¹) : Matrix (Fin (dimB k)) (Fin (dimB k)) ℂ))) := by
-  letI : ∀ k, NeZero (data.dim k) := fun k ↦ ⟨Nat.ne_of_gt (data.dim_pos k)⟩
+  let : ∀ k, NeZero (data.dim k) := fun k ↦ ⟨Nat.ne_of_gt (data.dim_pos k)⟩
   exact isCPSVBasisOfNormalTensors_iff_canonicalForm_covered_and_minimal
     A data.weights data.blocks basis data.blocks_normal
       data.sameMPV₂Pos_toTensorFromBlocks

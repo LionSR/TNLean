@@ -66,7 +66,7 @@ theorem ft_sector_bnt_proportional_unitary_sector_match_witnesses
             (cast (congr_arg (MPSTensor d) (hDim k)) (P.basis (β k))) i *
             (U : Matrix (Fin (Q.basisDim k)) (Fin (Q.basisDim k)) ℂ)ᴴ) := by
     intro k
-    letI : NeZero (Q.basisDim k) := ⟨ne_of_gt (hQ.basis_dim_pos k)⟩
+    let : NeZero (Q.basisDim k) := ⟨ne_of_gt (hQ.basis_dim_pos k)⟩
     apply exists_unitaryConj_gaugePhase_of_leftCanonical_irreducible (hGPE k)
     · exact (leftCanonical_cast_dim (hDim k) (P.basis (β k))).2
         (hP.basis_left_canonical (β k))
@@ -138,7 +138,7 @@ theorem ft_sector_bnt_equal_unitary_global_gauge_witnesses
             (cast (congr_arg (MPSTensor d) (hDim k)) (P.basis (β k))) i *
             (U : Matrix (Fin (Q.basisDim k)) (Fin (Q.basisDim k)) ℂ)ᴴ) := by
     intro k
-    letI : NeZero (Q.basisDim k) := ⟨ne_of_gt (hQ.basis_dim_pos k)⟩
+    let : NeZero (Q.basisDim k) := ⟨ne_of_gt (hQ.basis_dim_pos k)⟩
     obtain ⟨U, _, hU⟩ :=
       exists_unitaryConj_of_gaugePhase_data_of_leftCanonical_irreducible
         (Xblock k) (ζ k) (hζ_ne k) (hConj k)

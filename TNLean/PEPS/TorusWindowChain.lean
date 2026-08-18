@@ -141,7 +141,7 @@ theorem horizontalStaircaseEndPair_disjoint {L K : ℕ}
   rw [show (L : ZMod width) = ((L : ℕ) : ZMod width) by norm_cast,
     zmod_val_sub_shift width v.1 s.1 L (by omega)] at hvRx
   have hd := ZMod.val_lt (v.1 - s.1)
-  rw [if_pos (by omega : (v.1 - s.1).val < L)] at hvRx
+  rw [ite_eq_left (by omega : (v.1 - s.1).val < L)] at hvRx
   omega
 
 /-! ### Injectivity of the end windows and the completed corner
@@ -222,7 +222,7 @@ theorem horizontalStaircaseCorner_disjoint_endPair {L K : ℕ} (hK : 0 < K)
     obtain ⟨_, hvLy⟩ := hvL
     -- The left window has row distance `< K`; the corner's shifts past `K`, so the
     -- corner row distance wraps and exceeds `K - 1`.
-    rw [if_pos (by omega : (v.2 - s.2).val < K)] at hvCy
+    rw [ite_eq_left (by omega : (v.2 - s.2).val < K)] at hvCy
     omega
   · rw [horizontalStaircaseRightWindow, mem_torusArcRectangle] at hvR
     obtain ⟨hvRx, _⟩ := hvR
@@ -230,7 +230,7 @@ theorem horizontalStaircaseCorner_disjoint_endPair {L K : ℕ} (hK : 0 < K)
     rw [show (L : ZMod width) = ((L : ℕ) : ZMod width) by norm_cast,
       zmod_val_sub_shift width v.1 s.1 L (by omega)] at hvRx
     have hdx := ZMod.val_lt (v.1 - s.1)
-    rw [if_pos (by omega : (v.1 - s.1).val < L)] at hvRx
+    rw [ite_eq_left (by omega : (v.1 - s.1).val < L)] at hvRx
     omega
 
 /-- **The patch decomposition.** The horizontal staircase patch `P` is the union of
@@ -268,22 +268,22 @@ theorem horizontalStaircasePatch_eq_endPair_union_corner {L K : ℕ} (hL : 0 < L
       split_ifs at hy with hc
       · -- A wrapped row: the corner's top, in the corner block.
         right
-        rw [if_pos (by omega : (v.2 - s.2).val < K)]; omega
+        rw [ite_eq_left (by omega : (v.2 - s.2).val < K)]; omega
       · -- An unwrapped row in `[b + K - 1, b + 2K - 1)`: split on the column.
         by_cases hcx : (v.1 - s.1).val < L
         · -- Left columns at this row: either the corner or the left window bottom.
           by_cases hrow : (v.2 - s.2).val < K
           · exact Or.inl (Or.inl ⟨hcx, hrow⟩)
-          · right; rw [if_neg (by omega : ¬ (v.2 - s.2).val < K)]; omega
+          · right; rw [ite_eq_right (by omega : ¬ (v.2 - s.2).val < K)]; omega
         · -- Right columns at this row: the right window.
           left; right
           refine ⟨?_, ?_⟩
-          · rw [if_neg hcx]; omega
-          · rw [if_neg (by omega : ¬ (v.2 - s.2).val < K - 1)]; omega
+          · rw [ite_eq_right hcx]; omega
+          · rw [ite_eq_right (by omega : ¬ (v.2 - s.2).val < K - 1)]; omega
     · -- Vertical band: split on whether the row distance reaches `K`.
       by_cases hrow : (v.2 - s.2).val < K
       · exact Or.inl (Or.inl ⟨hx, hrow⟩)
-      · right; rw [if_neg (by omega : ¬ (v.2 - s.2).val < K)]; omega
+      · right; rw [ite_eq_right (by omega : ¬ (v.2 - s.2).val < K)]; omega
   · rintro ((⟨hx, hy⟩ | ⟨hx, hy⟩) | ⟨hx, hy⟩)
     · -- Left window: in the vertical band.
       right; exact ⟨hx, by omega⟩
@@ -293,12 +293,12 @@ theorem horizontalStaircasePatch_eq_endPair_union_corner {L K : ℕ} (hL : 0 < L
       · left; refine ⟨by omega, ?_⟩
         split_ifs at hy with hcy
         · omega
-        · rw [if_neg (by omega : ¬ (v.2 - s.2).val < K - 1)]; omega
+        · rw [ite_eq_right (by omega : ¬ (v.2 - s.2).val < K - 1)]; omega
     · -- Corner block: in the horizontal band.
       split_ifs at hy with hcy
       · omega
       · left; refine ⟨by omega, ?_⟩
-        rw [if_neg (by omega : ¬ (v.2 - s.2).val < K - 1)]; omega
+        rw [ite_eq_right (by omega : ¬ (v.2 - s.2).val < K - 1)]; omega
 
 /-- **The corner is the patch difference of the end pair.** `P \ S = corner`: the
 single block the corner stripping completes and inverts.  Immediate from the patch

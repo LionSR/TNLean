@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import Mathlib.Data.Finset.Image
 import TNLean.QCA.LocalAlgebra
 
 /-!
@@ -20,7 +21,6 @@ quasi-local observables, finite propagation, or quantum cellular automata.
 ## Main definitions
 
 * `SpinChain.translateRegion` — translation of a finite region of \(\mathbb Z\).
-* `SpinChain.siteTranslation` — the induced equivalence of lattice sites.
 * `SpinChain.Config.translation` — the induced equivalence of spin configurations.
 * `SpinChain.localTranslation` — translation of a finite-region local observable algebra.
 
@@ -44,7 +44,7 @@ namespace SpinChain
 /-- The translated region \(\Lambda+a\) for a finite lattice region \(\Lambda\subset\mathbb Z\).
 
 Source: arXiv:1703.09188, Appendix, lines 2292--2298. -/
-def translateRegion (a : ℤ) (Λ : Finset ℤ) : Finset ℤ :=
+abbrev translateRegion (a : ℤ) (Λ : Finset ℤ) : Finset ℤ :=
   Λ.map (Equiv.addRight a).toEmbedding
 
 /-- Membership in \(\Lambda+a\) is membership in \(\Lambda\) after subtracting \(a\).
@@ -73,8 +73,11 @@ lemma mem_translateRegion_add (a : ℤ) (Λ : Finset ℤ) (i : ℤ) :
 Source: arXiv:1703.09188, Appendix, lines 2292--2298. -/
 @[simp]
 lemma translateRegion_zero (Λ : Finset ℤ) : translateRegion 0 Λ = Λ := by
-  ext i
-  simp
+  change Λ.map (Equiv.addRight 0).toEmbedding = Λ
+  rw [show (Equiv.addRight 0).toEmbedding = Function.Embedding.refl ℤ by
+    ext i
+    simp]
+  exact Finset.map_refl
 
 /-- Successive finite-region translations add their lattice displacements.
 
@@ -99,18 +102,13 @@ lemma translateRegion_mono (a : ℤ) {Λ Γ : Finset ℤ} (h : Λ ⊆ Γ) :
   intro i hi
   simpa only [mem_translateRegion] using h (by simpa only [mem_translateRegion] using hi)
 
-/-- Translation identifies the sites of \(\Lambda\) with those of \(\Lambda+a\).
-
-Source: arXiv:1703.09188, Appendix, lines 2292--2298. -/
-def siteTranslation (a : ℤ) (Λ : Finset ℤ) : Λ ≃ translateRegion a Λ :=
-  (Equiv.addRight a).subtypeEquiv fun i ↦ (mem_translateRegion_add a Λ i).symm
-
 /-- The site equivalence sends \(i\) to \(i+a\).
 
 Source: arXiv:1703.09188, Appendix, lines 2292--2298. -/
 @[simp]
 lemma siteTranslation_apply_val (a : ℤ) (Λ : Finset ℤ) (i : Λ) :
-    (siteTranslation a Λ i : ℤ) = i + a := rfl
+    (Finset.equivMap (Equiv.addRight a).toEmbedding Λ i : ℤ) = i + a := by
+  exact Finset.equivMap_apply_coe (Equiv.addRight a).toEmbedding Λ i
 
 /-- The inverse site equivalence sends \(i\) to \(i-a\).
 
@@ -118,9 +116,11 @@ Source: arXiv:1703.09188, Appendix, lines 2292--2298. -/
 @[simp]
 lemma siteTranslation_symm_apply_val (a : ℤ) (Λ : Finset ℤ)
     (i : translateRegion a Λ) :
-    ((siteTranslation a Λ).symm i : ℤ) = i - a := by
-  change (Equiv.addRight a).symm i = i - a
-  simp [sub_eq_add_neg]
+    ((Finset.equivMap (Equiv.addRight a).toEmbedding Λ).symm i : ℤ) = i - a := by
+  have h := congrArg Subtype.val
+    ((Finset.equivMap (Equiv.addRight a).toEmbedding Λ).apply_symm_apply i)
+  change ((Finset.equivMap (Equiv.addRight a).toEmbedding Λ).symm i : ℤ) + a = i at h
+  omega
 
 /-- Translation by zero fixes the underlying value of every site.
 
@@ -128,7 +128,7 @@ This value-level formulation avoids transporting between propositionally equal s
 Source: arXiv:1703.09188, Appendix, lines 2292--2298. -/
 @[simp]
 lemma siteTranslation_zero (Λ : Finset ℤ) (i : Λ) :
-    (siteTranslation 0 Λ i : ℤ) = i := by
+    (Finset.equivMap (Equiv.addRight 0).toEmbedding Λ i : ℤ) = i := by
   simp
 
 /-- Successive site translations agree with translation by the sum after coercion to \(\mathbb Z\).
@@ -136,18 +136,20 @@ lemma siteTranslation_zero (Λ : Finset ℤ) (i : Λ) :
 This value-level formulation avoids transporting between propositionally equal subtype indices.
 Source: arXiv:1703.09188, Appendix, lines 2292--2298. -/
 lemma siteTranslation_add (a b : ℤ) (Λ : Finset ℤ) (i : Λ) :
-    (siteTranslation b (translateRegion a Λ) (siteTranslation a Λ i) : ℤ) =
-      (siteTranslation (a + b) Λ i : ℤ) := by
-  simpa using add_assoc (i : ℤ) a b
+    (Finset.equivMap (Equiv.addRight b).toEmbedding (translateRegion a Λ)
+        (Finset.equivMap (Equiv.addRight a).toEmbedding Λ i) : ℤ) =
+      (Finset.equivMap (Equiv.addRight (a + b)).toEmbedding Λ i : ℤ) := by
+  change (i : ℤ) + a + b = (i : ℤ) + (a + b)
+  exact add_assoc (i : ℤ) a b
 
 namespace Config
 
 /-- Relabelling configurations by the lattice translation \(i\mapsto i+a\).
 
 Source: arXiv:1703.09188, Appendix, lines 2292--2298. -/
-def translation (d : ℕ) (a : ℤ) (Λ : Finset ℤ) :
+noncomputable def translation (d : ℕ) (a : ℤ) (Λ : Finset ℤ) :
     Config d Λ ≃ Config d (translateRegion a Λ) :=
-  (siteTranslation a Λ).arrowCongr (Equiv.refl (Fin d))
+  (Finset.equivMap (Equiv.addRight a).toEmbedding Λ).arrowCongr (Equiv.refl (Fin d))
 
 /-- Evaluation of a translated configuration at a site of \(\Lambda+a\).
 
@@ -155,7 +157,8 @@ Source: arXiv:1703.09188, Appendix, lines 2292--2298. -/
 @[simp]
 lemma translation_apply (d : ℕ) (a : ℤ) (Λ : Finset ℤ)
     (x : Config d Λ) (i : translateRegion a Λ) :
-    translation d a Λ x i = x ((siteTranslation a Λ).symm i) := rfl
+    translation d a Λ x i =
+      x ((Finset.equivMap (Equiv.addRight a).toEmbedding Λ).symm i) := rfl
 
 /-- Evaluation of the inverse-translated configuration at a site of \(\Lambda\).
 
@@ -163,7 +166,8 @@ Source: arXiv:1703.09188, Appendix, lines 2292--2298. -/
 @[simp]
 lemma translation_symm_apply (d : ℕ) (a : ℤ) (Λ : Finset ℤ)
     (x : Config d (translateRegion a Λ)) (i : Λ) :
-    (translation d a Λ).symm x i = x (siteTranslation a Λ i) := rfl
+    (translation d a Λ).symm x i =
+      x (Finset.equivMap (Equiv.addRight a).toEmbedding Λ i) := rfl
 
 /-- A translated configuration evaluated at the corresponding translated site has its original
 value.
@@ -172,15 +176,15 @@ Source: arXiv:1703.09188, Appendix, lines 2292--2298. -/
 @[simp]
 lemma translation_apply_siteTranslation (d : ℕ) (a : ℤ) (Λ : Finset ℤ)
     (x : Config d Λ) (i : Λ) :
-    translation d a Λ x (siteTranslation a Λ i) = x i := by
-  simp
+    translation d a Λ x (Finset.equivMap (Equiv.addRight a).toEmbedding Λ i) = x i := by
+  rw [translation_apply, Equiv.symm_apply_apply]
 
 /-- Translation by zero fixes every configuration when evaluated at corresponding sites.
 
 Source: arXiv:1703.09188, Appendix, lines 2292--2298. -/
 @[simp]
 lemma translation_zero (d : ℕ) (Λ : Finset ℤ) (x : Config d Λ) (i : Λ) :
-    translation d 0 Λ x (siteTranslation 0 Λ i) = x i := by
+    translation d 0 Λ x (Finset.equivMap (Equiv.addRight 0).toEmbedding Λ i) = x i := by
   simp
 
 /-- Successive configuration translations agree pointwise with translation by the sum.
@@ -190,9 +194,11 @@ transport between propositionally equal configuration types.
 Source: arXiv:1703.09188, Appendix, lines 2292--2298. -/
 lemma translation_add (d : ℕ) (a b : ℤ) (Λ : Finset ℤ) (x : Config d Λ) (i : Λ) :
     translation d b (translateRegion a Λ) (translation d a Λ x)
-        (siteTranslation b (translateRegion a Λ) (siteTranslation a Λ i)) =
-      translation d (a + b) Λ x (siteTranslation (a + b) Λ i) := by
-  simp
+        (Finset.equivMap (Equiv.addRight b).toEmbedding (translateRegion a Λ)
+          (Finset.equivMap (Equiv.addRight a).toEmbedding Λ i)) =
+      translation d (a + b) Λ x
+        (Finset.equivMap (Equiv.addRight (a + b)).toEmbedding Λ i) := by
+  simp only [translation_apply, Equiv.symm_apply_apply]
 
 end Config
 
@@ -281,15 +287,16 @@ lemma localTranslation_localInclusion {d : ℕ} (a : ℤ) {Λ Γ : Finset ℤ}
   apply if_congr
   · constructor <;> intro hxy
     · funext i
-      let js : Γ := ⟨i - a, by simpa using (Finset.mem_sdiff.mp i.2).1⟩
+      let js : Γ :=
+        ⟨i - a, (mem_translateRegion a Γ i).mp (Finset.mem_sdiff.mp i.2).1⟩
       let it : translateRegion a Γ := ⟨i, (Finset.mem_sdiff.mp i.2).1⟩
-      have hsite : siteTranslation a Γ js = it := by
+      have hsite : Finset.equivMap (Equiv.addRight a).toEmbedding Γ js = it := by
         apply Subtype.ext
         simp [js, it]
       have eq := congrFun hxy
         ⟨i - a, Finset.mem_sdiff.mpr ⟨js.2, by
           intro hi
-          exact (Finset.mem_sdiff.mp i.2).2 (by simpa using hi)⟩⟩
+          exact (Finset.mem_sdiff.mp i.2).2 ((mem_translateRegion a Λ i).mpr hi)⟩⟩
       change (Config.translation d a Γ).symm x js =
         (Config.translation d a Γ).symm y js at eq
       change x it = y it
@@ -298,7 +305,7 @@ lemma localTranslation_localInclusion {d : ℕ} (a : ℤ) {Λ Γ : Finset ℤ}
       let js : Γ := ⟨i, (Finset.mem_sdiff.mp i.2).1⟩
       let it : translateRegion a Γ :=
         ⟨i + a, by simpa using (Finset.mem_sdiff.mp i.2).1⟩
-      have hsite : siteTranslation a Γ js = it := by
+      have hsite : Finset.equivMap (Equiv.addRight a).toEmbedding Γ js = it := by
         apply Subtype.ext
         simp [js, it]
       have eq := congrFun hxy

@@ -48,7 +48,7 @@ theorem isPrimitive_transferMap_commonPeriodBlocking
         (transferMap (d := blockPhysDim d (lcmPeriod periods)) (D := dim i)
           (commonPeriodBlocking (d := d) blocks periods i)) := by
   intro i
-  letI : NeZero (dim i) := ⟨Nat.ne_of_gt (hDim i)⟩
+  let : NeZero (dim i) := ⟨Nat.ne_of_gt (hDim i)⟩
   simpa [commonPeriodBlocking] using
     isPrimitive_transferMap_blockTensor_of_dvd
       (d := d) (D := dim i)

@@ -307,7 +307,7 @@ theorem exists_common_isNBlkInjective_of_isNormal_leftCanonical
     (hNormal : ∀ k, IsNormal (blocks k)) :
     ∃ L : ℕ, 0 < L ∧ ∀ k : Fin r, IsNBlkInjective (blocks k) L := by
   classical
-  haveI : ∀ k : Fin r, NeZero (dim k) := fun k => ⟨hNonzero k⟩
+  have : ∀ k : Fin r, NeZero (dim k) := fun k => ⟨hNonzero k⟩
   have hBlock : ∀ k : Fin r, ∃ L : ℕ, 0 < L ∧ L ≤ (dim k) ^ 4 ∧
       IsInjective (blockTensor (d := d) (D := dim k) (blocks k) L) := by
     intro k

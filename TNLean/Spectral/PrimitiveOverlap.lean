@@ -94,18 +94,18 @@ theorem linearMap_trace_pow_tendsto_one_of_spectralRadius_compl_lt_one
     Filter.Tendsto (fun n => (LinearMap.trace ℂ V) (E ^ n)) Filter.atTop (nhds (1 : ℂ)) := by
   classical
   -- Notations
-  letI : FiniteDimensional ℂ V := by infer_instance
-  letI : CompleteSpace V := FiniteDimensional.complete ℂ V
-  letI : Nontrivial V := by infer_instance
+  let : FiniteDimensional ℂ V := by infer_instance
+  let : CompleteSpace V := FiniteDimensional.complete ℂ V
+  let : Nontrivial V := by infer_instance
   let Φ : (V →ₗ[ℂ] V) ≃ₐ[ℂ] (V →L[ℂ] V) := Module.End.toContinuousLinearMap V
-  letI : NormedAddCommGroup (V →L[ℂ] V) := ContinuousLinearMap.toNormedAddCommGroup
-  letI : SeminormedRing (V →L[ℂ] V) := ContinuousLinearMap.toSeminormedRing
-  letI : NormedRing (V →L[ℂ] V) := ContinuousLinearMap.toNormedRing
-  letI : NormedSpace ℂ (V →L[ℂ] V) := ContinuousLinearMap.toNormedSpace
-  letI : NormedAlgebra ℂ (V →L[ℂ] V) := ContinuousLinearMap.toNormedAlgebra
-  haveI : FiniteDimensional ℂ (V →L[ℂ] V) := Φ.toLinearEquiv.finiteDimensional
+  let : NormedAddCommGroup (V →L[ℂ] V) := ContinuousLinearMap.toNormedAddCommGroup
+  let : SeminormedRing (V →L[ℂ] V) := ContinuousLinearMap.toSeminormedRing
+  let : NormedRing (V →L[ℂ] V) := ContinuousLinearMap.toNormedRing
+  let : NormedSpace ℂ (V →L[ℂ] V) := ContinuousLinearMap.toNormedSpace
+  let : NormedAlgebra ℂ (V →L[ℂ] V) := ContinuousLinearMap.toNormedAlgebra
+  have : FiniteDimensional ℂ (V →L[ℂ] V) := Φ.toLinearEquiv.finiteDimensional
   have hComplete : CompleteSpace (V →L[ℂ] V) := FiniteDimensional.complete ℂ (V →L[ℂ] V)
-  letI : CompleteSpace (V →L[ℂ] V) := hComplete
+  let : CompleteSpace (V →L[ℂ] V) := hComplete
   let P : V →ₗ[ℂ] V := fixedPointProj (D := D) ρ htr
   let N : V →ₗ[ℂ] V := E - P
   have hSpectN : spectralRadius ℂ (Φ N) < 1 := by

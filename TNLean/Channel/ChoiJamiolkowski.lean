@@ -649,7 +649,7 @@ theorem choiMatrix_transposeLinearMapComplex_eq_swap (hD : 0 < D) :
     subst h₂
     simp [Matrix.swapMatrix_apply]
   · have hsingle : Matrix.single i₂ j₂ (1 / (D : ℂ)) j₁ i₁ = 0 := by
-      rw [Matrix.single_apply, if_neg]
+      rw [Matrix.single_apply, ite_eq_right]
       intro hcond
       exact h ⟨hcond.2.symm, hcond.1⟩
     rw [hsingle]
@@ -680,7 +680,7 @@ theorem transposeLinearMapComplex_not_isCPMap {D : ℕ} (hD : 2 ≤ D) :
     ¬ IsCPMap (Matrix.transposeLinearMapComplex (Fin D)) := by
   intro hcp
   have hDpos : 0 < D := lt_of_lt_of_le (by norm_num) hD
-  letI : NeZero D := ⟨Nat.ne_of_gt hDpos⟩
+  let : NeZero D := ⟨Nat.ne_of_gt hDpos⟩
   have hpsd : (choiMatrix (Matrix.transposeLinearMapComplex (Fin D))).PosSemidef :=
     (cp_iff_choi_posSemidef (D := D)
       (T := Matrix.transposeLinearMapComplex (Fin D))).mp hcp

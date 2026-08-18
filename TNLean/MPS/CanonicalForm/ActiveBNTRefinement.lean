@@ -407,7 +407,7 @@ theorem exists_activeBNTRefinement (data : CPSVCanonicalFormData A) :
   let repIndex : Fin classes.g → data.Active := data.activeRepresentativeIndex
   let classCopy : data.Active → (Σ j : Fin classes.g, Fin (classes.copies j)) :=
     data.activeClassCopy
-  letI : ∀ k, NeZero (data.dim k) :=
+  let : ∀ k, NeZero (data.dim k) :=
     fun k => ⟨Nat.ne_of_gt (data.dim_pos k)⟩
   have hPhase : ∀ k : data.Active,
       MPVBlockPhaseEquiv (data.blocks (repIndex (classCopy k).1)) (data.blocks k) := by
@@ -477,7 +477,7 @@ theorem exists_activeBNTRefinement (data : CPSVCanonicalFormData A) :
         (cast (congr_arg (MPSTensor d) (copyDimEq k))
           (data.blocks (repIndex (classCopy k).1))) i := by
     intro k
-    simp only [regroupedBlocks, dif_pos k.property]
+    simp only [regroupedBlocks, dite_eq_left k.property]
   have hRegroupedInactive : ∀ k, data.weights k = 0 →
       regroupedBlocks k = data.blocks k := by
     intro k hk
@@ -490,9 +490,9 @@ theorem exists_activeBNTRefinement (data : CPSVCanonicalFormData A) :
     by_cases hk : data.weights k ≠ 0
     · let ka : data.Active := ⟨k, hk⟩
       have hrel := copyRelation ka i
-      simp only [listedGauge, regroupedBlocks, dif_pos hk]
+      simp only [listedGauge, regroupedBlocks, dite_eq_left hk]
       simpa [Matrix.mul_smul, Matrix.smul_mul] using hrel
-    · simp only [listedGauge, regroupedBlocks, dif_neg hk]
+    · simp only [listedGauge, regroupedBlocks, dite_eq_right hk]
       simp
   have hRegroup :=
     toTensorFromBlocks_eq_globalGaugeOfBlocks_conj data.weights

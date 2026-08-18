@@ -240,7 +240,7 @@ def assembleTri (F : CoherentCoarseBlockingFrame (G := G) (d := d) A) (hP : F.fr
     (σb : RegionPhysicalConfig (V := V) (d := d) F.frame.blue)
     (σc : RegionPhysicalConfig (V := V) (d := d) F.frame.complement)
     (w : {w : V // w ∈ F.frame.red}) :
-    assembleTri F hP σr σb σc w.1 = σr w := by rw [assembleTri, dif_pos w.2]
+    assembleTri F hP σr σb σc w.1 = σr w := by rw [assembleTri, dite_eq_left w.2]
 
 @[simp] theorem assembleTri_blue (F : CoherentCoarseBlockingFrame (G := G) (d := d) A)
     (hP : F.frame.IsPartition)
@@ -251,7 +251,7 @@ def assembleTri (F : CoherentCoarseBlockingFrame (G := G) (d := d) A) (hP : F.fr
     assembleTri F hP σr σb σc w.1 = σb w := by
   have hnr : w.1 ∉ F.frame.red := fun hr =>
     (Finset.disjoint_left.mp hP.red_disjoint_blue) hr w.2
-  rw [assembleTri, dif_neg hnr, dif_pos w.2]
+  rw [assembleTri, dite_eq_right hnr, dite_eq_left w.2]
 
 @[simp] theorem assembleTri_compl (F : CoherentCoarseBlockingFrame (G := G) (d := d) A)
     (hP : F.frame.IsPartition)
@@ -264,7 +264,7 @@ def assembleTri (F : CoherentCoarseBlockingFrame (G := G) (d := d) A) (hP : F.fr
     (Finset.disjoint_left.mp hP.red_disjoint_complement) hr w.2
   have hnb : w.1 ∉ F.frame.blue := fun hb =>
     (Finset.disjoint_left.mp hP.blue_disjoint_complement) hb w.2
-  rw [assembleTri, dif_neg hnr, dif_neg hnb]
+  rw [assembleTri, dite_eq_right hnr, dite_eq_right hnb]
 
 /-- The global vertex product of the assembled physical configuration splits as the
 product of the three regions' vertex products, at any fixed global virtual
@@ -429,30 +429,30 @@ theorem triFiber_card (F : CoherentCoarseBlockingFrame (G := G) (d := d) A)
         isRegionBoundaryEdge_touches (G := G) F.frame.red g.2.1
       have hb : IsRegionIncidentEdge (G := G) F.frame.blue g.1 :=
         isRegionBoundaryEdge_touches (G := G) F.frame.blue g.2.2
-      rw [dif_pos hr, dif_pos hb]
+      rw [dite_eq_left hr, dite_eq_left hb]
     · funext g
       simp only [crossingLabel, triFiberTriple]
       have hr : IsRegionIncidentEdge (G := G) F.frame.red g.1 :=
         isRegionBoundaryEdge_touches (G := G) F.frame.red g.2.1
       have hc : IsRegionIncidentEdge (G := G) F.frame.complement g.1 :=
         isRegionBoundaryEdge_touches (G := G) F.frame.complement g.2.2
-      rw [dif_pos hr, dif_pos hc]
+      rw [dite_eq_left hr, dite_eq_left hc]
     · funext g
       simp only [crossingLabel, triFiberTriple]
       have hb : IsRegionIncidentEdge (G := G) F.frame.blue g.1 :=
         isRegionBoundaryEdge_touches (G := G) F.frame.blue g.2.1
       have hc : IsRegionIncidentEdge (G := G) F.frame.complement g.1 :=
         isRegionBoundaryEdge_touches (G := G) F.frame.complement g.2.2
-      rw [dif_pos hb, dif_pos hc]
+      rw [dite_eq_left hb, dite_eq_left hc]
     · funext e
       simp only [triMerge, triFiberTriple]
       by_cases hr : IsRegionIncidentEdge (G := G) F.frame.red e
-      · rw [mergeVirtualConfig_of_pos A _ _ _ hr, dif_pos hr]
+      · rw [mergeVirtualConfig_of_pos A _ _ _ hr, dite_eq_left hr]
       · rw [mergeVirtualConfig_of_neg A _ _ _ hr]
         by_cases hb : IsRegionIncidentEdge (G := G) F.frame.blue e
-        · rw [mergeVirtualConfig_of_pos A _ _ _ hb, dif_pos hb]
+        · rw [mergeVirtualConfig_of_pos A _ _ _ hb, dite_eq_left hb]
         · rw [mergeVirtualConfig_of_neg A _ _ _ hb,
-            dif_pos (complIncident_of_not_red_not_blue F hP hr hb)]
+            dite_eq_left (complIncident_of_not_red_not_blue F hP hr hb)]
   · -- Reconstructing from the free indices of a fiber triple recovers the triple.
     intro p hp
     simp only [Finset.mem_coe, Finset.mem_filter, Finset.mem_univ, true_and] at hp
@@ -462,15 +462,15 @@ theorem triFiber_card (F : CoherentCoarseBlockingFrame (G := G) (d := d) A)
     · funext e
       simp only [triFiberTriple, triFiberLegs]
       by_cases hr : IsRegionIncidentEdge (G := G) F.frame.red e
-      · rw [dif_pos hr]
+      · rw [dite_eq_left hr]
         have := hmerge' e
         rw [triMerge, mergeVirtualConfig_of_pos A _ _ _ hr] at this
         exact this.symm
-      · rw [dif_neg hr]
+      · rw [dite_eq_right hr]
     · funext e
       simp only [triFiberTriple, triFiberLegs]
       by_cases hb : IsRegionIncidentEdge (G := G) F.frame.blue e
-      · rw [dif_pos hb]
+      · rw [dite_eq_left hb]
         by_cases hr : IsRegionIncidentEdge (G := G) F.frame.red e
         · have := hmerge' e
           rw [triMerge, mergeVirtualConfig_of_pos A _ _ _ hr] at this
@@ -479,11 +479,11 @@ theorem triFiber_card (F : CoherentCoarseBlockingFrame (G := G) (d := d) A)
           rw [triMerge, mergeVirtualConfig_of_neg A _ _ _ hr,
             mergeVirtualConfig_of_pos A _ _ _ hb] at this
           exact this.symm
-      · rw [dif_neg hb]
+      · rw [dite_eq_right hb]
     · funext e
       simp only [triFiberTriple, triFiberLegs]
       by_cases hc : IsRegionIncidentEdge (G := G) F.frame.complement e
-      · rw [dif_pos hc]
+      · rw [dite_eq_left hc]
         by_cases hr : IsRegionIncidentEdge (G := G) F.frame.red e
         · have := hmerge' e
           rw [triMerge, mergeVirtualConfig_of_pos A _ _ _ hr] at this
@@ -497,14 +497,14 @@ theorem triFiber_card (F : CoherentCoarseBlockingFrame (G := G) (d := d) A)
             rw [triMerge, mergeVirtualConfig_of_neg A _ _ _ hr,
               mergeVirtualConfig_of_neg A _ _ _ hb] at this
             exact this.symm
-      · rw [dif_neg hc]
+      · rw [dite_eq_right hc]
   · -- Reading the free indices of a reconstruction recovers them.
     intro legs _
     obtain ⟨lr, lb, lc⟩ := legs
     refine Prod.ext ?_ (Prod.ext ?_ ?_)
-    · funext e; simp only [triFiberLegs, triFiberTriple]; rw [dif_neg e.2]
-    · funext e; simp only [triFiberLegs, triFiberTriple]; rw [dif_neg e.2]
-    · funext e; simp only [triFiberLegs, triFiberTriple]; rw [dif_neg e.2]
+    · funext e; simp only [triFiberLegs, triFiberTriple]; rw [dite_eq_right e.2]
+    · funext e; simp only [triFiberLegs, triFiberTriple]; rw [dite_eq_right e.2]
+    · funext e; simp only [triFiberLegs, triFiberTriple]; rw [dite_eq_right e.2]
 
 /-! ### The three-region merge collapse
 
@@ -613,11 +613,11 @@ theorem assembleTri_eq_decode {A : Tensor G d}
       else coarseDecode V d (s 2) w := by
   rw [assembleTri]
   by_cases hr : w ∈ F.frame.red
-  · rw [dif_pos hr, if_pos hr]; rfl
-  · rw [dif_neg hr, if_neg hr]
+  · rw [dite_eq_left hr, ite_eq_left hr]; rfl
+  · rw [dite_eq_right hr, ite_eq_right hr]
     by_cases hb : w ∈ F.frame.blue
-    · rw [dif_pos hb, if_pos hb]; rfl
-    · rw [dif_neg hb, if_neg hb]; rfl
+    · rw [dite_eq_left hb, ite_eq_left hb]; rfl
+    · rw [dite_eq_right hb, ite_eq_right hb]; rfl
 
 open scoped Classical in
 /-- **Same-state transport to the coarse tensors.** Two coherent frames over tensors

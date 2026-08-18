@@ -114,7 +114,7 @@ lemma nilpotentShift_pow_apply {k : ℕ} {i j : Fin D} :
         · have : x = ℓ := Fin.ext (by omega)
           exact (hxne this).elim
         · have : (if (x : ℕ) = (i : ℕ) + k then (1 : ℂ) else 0) = 0 := by
-            rw [if_neg hxcond]
+            rw [ite_eq_right hxcond]
           rw [this]
           simp
       have h_val : ((if (ℓ : ℕ) = (i : ℕ) + k then (1 : ℂ) else 0) *
@@ -125,30 +125,30 @@ lemma nilpotentShift_pow_apply {k : ℕ} {i j : Fin D} :
           (if (j : ℕ) = (x : ℕ) + 1 then (1 : ℂ) else 0))) = 1 := by
           rw [hsum, h_val]
         _ = (if (j : ℕ) = (i : ℕ) + (k + 1) then (1 : ℂ) else 0) := by
-          rw [if_pos h_target]
+          rw [ite_eq_left h_target]
     · have hzero : (∑ x : Fin D, ((if (x : ℕ) = (i : ℕ) + k then (1 : ℂ) else 0) *
           (if (j : ℕ) = (x : ℕ) + 1 then (1 : ℂ) else 0))) = 0 := by
         apply Finset.sum_eq_zero
         intro x _
         by_cases hxcond : (x : ℕ) = (i : ℕ) + k
         · have : (if (x : ℕ) = (i : ℕ) + k then (1 : ℂ) else 0) = 1 := by
-            rw [if_pos hxcond]
+            rw [ite_eq_left hxcond]
           rw [this]
           have : (if (j : ℕ) = (x : ℕ) + 1 then (1 : ℂ) else 0) = 0 := by
             by_cases hjcond : (j : ℕ) = (x : ℕ) + 1
             · exfalso; apply h_target; omega
-            · rw [if_neg hjcond]
+            · rw [ite_eq_right hjcond]
           rw [this]
           simp
         · have : (if (x : ℕ) = (i : ℕ) + k then (1 : ℂ) else 0) = 0 := by
-            rw [if_neg hxcond]
+            rw [ite_eq_right hxcond]
           rw [this]
           simp
       calc
         (∑ x : Fin D, ((if (x : ℕ) = (i : ℕ) + k then (1 : ℂ) else 0) *
           (if (j : ℕ) = (x : ℕ) + 1 then (1 : ℂ) else 0))) = (0 : ℂ) := hzero
         _ = (if (j : ℕ) = (i : ℕ) + (k + 1) then (1 : ℂ) else 0) := by
-          rw [if_neg h_target]
+          rw [ite_eq_right h_target]
 
 /-- $N^D = 0$; the nilpotent index is at most $D$.  Requires $D \ge 1$.
 Source: Wolf (2012), Chapter 8, line 1211. -/
@@ -345,27 +345,27 @@ lemma conjTranspose_nilpotentShift_mul_self (D : ℕ) :
   by_cases hij : i = j
   · subst hij
     by_cases hi : (i : ℕ) = 0
-    · rw [if_pos rfl, if_pos hi]
+    · rw [ite_eq_left rfl, ite_eq_left hi]
       refine Finset.sum_eq_zero fun k _ => ?_
-      rw [if_neg]
+      rw [ite_eq_right]
       omega
-    · rw [if_pos rfl, if_neg hi]
+    · rw [ite_eq_left rfl, ite_eq_right hi]
       have hlt : (i : ℕ) - 1 < D := lt_of_le_of_lt (Nat.sub_le _ _) i.is_lt
       -- `hval` is never named below, but it puts the value of the witness coordinate in
       -- context, which is what lets the `omega` calls in this branch see it.
       have hval : ((⟨(i : ℕ) - 1, hlt⟩ : Fin D) : ℕ) = (i : ℕ) - 1 := rfl
       rw [Finset.sum_eq_single (⟨(i : ℕ) - 1, hlt⟩ : Fin D)]
       · have hi' : (i : ℕ) = ((⟨(i : ℕ) - 1, hlt⟩ : Fin D) : ℕ) + 1 := by omega
-        rw [if_pos ⟨hi', hi'⟩]
+        rw [ite_eq_left ⟨hi', hi'⟩]
       · intro k _ hk
-        rw [if_neg]
+        rw [ite_eq_right]
         rintro ⟨h₁, h₂⟩
         exact hk (Fin.ext (by omega))
       · intro hmem
         exact absurd (Finset.mem_univ _) hmem
-  · rw [if_neg hij]
+  · rw [ite_eq_right hij]
     refine Finset.sum_eq_zero fun k _ => ?_
-    rw [if_neg]
+    rw [ite_eq_right]
     rintro ⟨h₁, h₂⟩
     exact hij (Fin.ext (by omega))
 
@@ -433,7 +433,7 @@ theorem le_l2_opNorm_jordanBlock_pow (D : ℕ) [NeZero D] (a : ℂ) (n k₀ : �
     rw [Finset.sum_eq_single k₀]
     · simp
     · intro k _ hk
-      rw [if_neg (by simpa using fun h => hk (by omega)), mul_zero]
+      rw [ite_eq_right (by simpa using fun h => hk (by omega)), mul_zero]
     · intro hcon
       exact absurd hmem hcon
   calc ‖a‖ ^ (n - k₀) * (n.choose k₀ : ℝ)

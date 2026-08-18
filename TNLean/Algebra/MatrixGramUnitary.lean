@@ -44,10 +44,10 @@ theorem exists_unitary_mul_eq_of_conjTranspose_mul_eq
     (hGram : Bᴴ * B = Aᴴ * A) :
     ∃ U : Matrix.unitaryGroup m ℂ, B = (U : Matrix m m ℂ) * A := by
   classical
-  letI : Fintype n := Fintype.ofFinite n
-  letI : InnerProductSpace ℂ (EuclideanSpace ℂ m) :=
+  let : Fintype n := Fintype.ofFinite n
+  let : InnerProductSpace ℂ (EuclideanSpace ℂ m) :=
     PiLp.innerProductSpace (fun _ : m => ℂ)
-  letI : FiniteDimensional ℂ (EuclideanSpace ℂ m) :=
+  let : FiniteDimensional ℂ (EuclideanSpace ℂ m) :=
     (EuclideanSpace.basisFun m ℂ).toBasis.finiteDimensional_of_finite
   let fB : EuclideanSpace ℂ n →ₗ[ℂ] EuclideanSpace ℂ m :=
     Matrix.toEuclideanLin B

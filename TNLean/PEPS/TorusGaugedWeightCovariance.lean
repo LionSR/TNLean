@@ -179,18 +179,18 @@ theorem regionBoundaryGauge_translate {B : Tensor (torusGraph width height) d}
   rw [regionBoundaryGauge, regionBoundaryGauge]
   rcases hor with hfst | hfst
   · -- The translation preserves the stored endpoint order.
-    rw [if_pos hfst] at hGL
+    rw [ite_eq_left hfst] at hGL
     have hmem : (boundaryEdgeMap (translate a b) R f).1.1.1 ∈ Region.map (translate a b) R ↔
         f.1.1.1 ∈ R := by
       rw [hfst]
       exact mem_Region_map_apply (translate a b) R f.1.1.1
     by_cases hPf : f.1.1.1 ∈ R
-    · rw [if_pos (hmem.mpr hPf), if_pos hPf, hGL, glReindex_coe]
+    · rw [ite_eq_left (hmem.mpr hPf), ite_eq_left hPf, hGL, glReindex_coe]
     · have hX' : (X (boundaryEdgeMap (translate a b) R f).1)⁻¹ =
           glReindex h ((X f.1)⁻¹) := by
         rw [hGL]
         exact (map_inv (glReindex h) (X f.1)).symm
-      rw [if_neg (fun hcon => hPf (hmem.mp hcon)), if_neg hPf, hX',
+      rw [ite_eq_right (fun hcon => hPf (hmem.mp hcon)), ite_eq_right hPf, hX',
         glReindex_coe]
       simpa only [Matrix.coe_reindexAlgEquiv] using
         (Matrix.transpose_reindex (finCongr h) (finCongr h)
@@ -200,7 +200,7 @@ theorem regionBoundaryGauge_translate {B : Tensor (torusGraph width height) d}
       rw [hfst]
       intro hcon
       exact hne ((translate a b).toEquiv.injective hcon).symm
-    rw [if_neg hQ] at hGL
+    rw [ite_eq_right hQ] at hGL
     have hmem : (boundaryEdgeMap (translate a b) R f).1.1.1 ∈ Region.map (translate a b) R ↔
         f.1.1.2 ∈ R := by
       rw [hfst]
@@ -216,7 +216,7 @@ theorem regionBoundaryGauge_translate {B : Tensor (torusGraph width height) d}
           glReindex h (glTranspose (X f.1)) := by
         rw [hGL, (map_inv (glReindex h) ((glTranspose (X f.1))⁻¹)).symm]
         exact congrArg (glReindex h) (inv_inv (glTranspose (X f.1)))
-      rw [if_neg (fun hcon => hv (hmem.mp hcon)), if_pos hPf, hX',
+      rw [ite_eq_right (fun hcon => hv (hmem.mp hcon)), ite_eq_left hPf, hX',
         glReindex_coe, glTranspose_coe]
       change ((Matrix.reindex (finCongr h) (finCongr h))
           (↑(X f.1) : Matrix (Fin (B.bondDim f.1)) (Fin (B.bondDim f.1)) ℂ)ᵀ)ᵀ =
@@ -227,7 +227,7 @@ theorem regionBoundaryGauge_translate {B : Tensor (torusGraph width height) d}
         rcases hexcl with ⟨hcon, _⟩ | ⟨_, hv⟩
         · exact absurd hcon hPf
         · exact hv
-      rw [if_pos (hmem.mpr hv), if_neg hPf, hGL, glReindex_coe, glTranspose_inv_coe]
+      rw [ite_eq_left (hmem.mpr hv), ite_eq_right hPf, hGL, glReindex_coe, glTranspose_inv_coe]
 
 /-! ### Covariance of the gauge-absorbed blocked weight -/
 

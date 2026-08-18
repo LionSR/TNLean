@@ -136,8 +136,8 @@ theorem generatorPreservesCompression_of_semigroupPreservesCompression
     simp [expSemigroup_zero] at h
     exact h.hasDerivWithinAt
   -- The compression map M ↦ P * M * P is a continuous ℝ-linear map
-  letI : NormedAddCommGroup Mat := Matrix.linftyOpNormedAddCommGroup
-  letI : NormedSpace ℝ Mat := Matrix.linftyOpNormedSpace
+  let : NormedAddCommGroup Mat := Matrix.linftyOpNormedAddCommGroup
+  let : NormedSpace ℝ Mat := Matrix.linftyOpNormedSpace
   let compress : Mat →ₗ[ℝ] Mat :=
     { toFun := fun M => P * M * P
       map_add' := by
@@ -310,7 +310,7 @@ theorem semigroup_preserves_compression_of_generator
   let compressCLM : Mat →L[ℂ] Mat :=
     LinearMap.toContinuousLinearMap compress
   have hcompress_clm : ∀ M : Mat, compressCLM M = P * M * P := hcompress
-  letI : CompleteSpace (Mat →L[ℂ] Mat) :=
+  let : CompleteSpace (Mat →L[ℂ] Mat) :=
     FiniteDimensional.complete ℂ (Mat →L[ℂ] Mat)
   have hexp_sum : HasSum (fun n : ℕ => ((Nat.factorial n : ℂ)⁻¹) • ((t : ℂ) • E) ^ n)
       (NormedSpace.exp ((t : ℂ) • E)) :=

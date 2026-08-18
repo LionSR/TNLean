@@ -23,7 +23,7 @@ right inverse given by its conjugate transpose preserves positive definiteness. 
 theorem PosDef.mul_mul_conjTranspose_of_mul_conjTranspose_eq_one
     {A : Matrix n n ℂ} (hA : A.PosDef) (V : Matrix m n ℂ)
     (hV : V * Vᴴ = 1) : (V * A * Vᴴ).PosDef := by
-  letI := Fintype.ofFinite m
+  let := Fintype.ofFinite m
   apply hA.mul_mul_conjTranspose_same
   intro x y hxy
   have := congrArg (fun z => Matrix.vecMul z Vᴴ) hxy

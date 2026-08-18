@@ -19,7 +19,8 @@ inserted coefficient of the bond-model-conjugated matrix.
 
 - [Molnár, Garre-Rubio, Pérez-García, Schuch, Cirac, *Normal projected entangled
   pair states generating the same state*, arXiv:1804.04964, Section 3, proof of
-  Theorem 3, lines 254--583 of `Papers/1804.04964/paper_normal.tex`](https://arxiv.org/abs/1804.04964)
+  Theorem 3, lines 254--583 of `Papers/1804.04964/paper_normal.tex`
+  ([arXiv:1804.04964](https://arxiv.org/abs/1804.04964))
 -/
 
 open scoped BigOperators Matrix
@@ -175,10 +176,10 @@ theorem redBundleInsertedCoeff_bondModelMatrix_eq_configSum
     by_cases hag : SameAwayFromRBBundle (G := G) A F.frame.red F.frame.blue
         (regionBoundaryLabel (G := G) A F.frame.red ζr)
         (regionBoundaryLabel (G := G) A F.frame.red η)
-    · rw [if_pos hag,
-        if_pos ((sameAwayFromRBBundle_regionBoundaryLabel_iff F hP ζr η).mp hag)]
-    · rw [if_neg hag,
-        if_neg (fun h => hag
+    · rw [ite_eq_left hag,
+        ite_eq_left ((sameAwayFromRBBundle_regionBoundaryLabel_iff F hP ζr η).mp hag)]
+    · rw [ite_eq_right hag,
+        ite_eq_right (fun h => hag
           ((sameAwayFromRBBundle_regionBoundaryLabel_iff F hP ζr η).mpr h)), zero_mul]
   -- Multiply the host collapse by the factored red vertex product.
   rw [hhost, Finset.sum_mul]
@@ -261,17 +262,21 @@ theorem relaxedTripleSum_collapse
     change _ = (if HostPairAgrees F ζb ζc then hostCoeff (hostMerge F ζb ζc) else 0)
     by_cases hbc : HostPairAgrees F ζb ζc
     · by_cases hrh : RedHostAgrees F ζr ζb ζc
-      · rw [if_pos ((crossTripleAgreesAwayRB_iff F ζr ζb ζc).mpr ⟨hbc, hrh⟩), if_pos hbc]
+      · rw [ite_eq_left ((crossTripleAgreesAwayRB_iff F ζr ζb ζc).mpr ⟨hbc, hrh⟩), ite_eq_left hbc]
         change _ = (if ∀ gg : Edge G,
             IsCrossingEdge (G := G) A F.frame.red F.frame.complement gg →
               ζr gg = hostMerge F ζb ζc gg then _ else _) * _ * _
-        rw [if_pos (fun gg hgg => hrh gg hgg)]
-      · rw [if_neg (fun h => hrh ((crossTripleAgreesAwayRB_iff F ζr ζb ζc).mp h).2), if_pos hbc]
+        rw [ite_eq_left (fun gg hgg => hrh gg hgg)]
+      · rw [ite_eq_right
+            (fun h => hrh ((crossTripleAgreesAwayRB_iff F ζr ζb ζc).mp h).2),
+          ite_eq_left hbc]
         change _ = (if ∀ gg : Edge G,
             IsCrossingEdge (G := G) A F.frame.red F.frame.complement gg →
               ζr gg = hostMerge F ζb ζc gg then _ else _) * _ * _
-        rw [if_neg (fun h => hrh (fun gg hgg => h gg hgg)), zero_mul, zero_mul]
-    · rw [if_neg (fun h => hbc ((crossTripleAgreesAwayRB_iff F ζr ζb ζc).mp h).1), if_neg hbc]
+        rw [ite_eq_right (fun h => hrh (fun gg hgg => h gg hgg)), zero_mul, zero_mul]
+    · rw [ite_eq_right
+          (fun h => hbc ((crossTripleAgreesAwayRB_iff F ζr ζb ζc).mp h).1),
+        ite_eq_right hbc]
   rw [hpair, hostMerge_fiberwise_collapse F hostCoeff, Finset.smul_sum]
 
 /-! ### The inserted-coefficient descent

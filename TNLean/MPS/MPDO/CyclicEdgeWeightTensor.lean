@@ -94,6 +94,6 @@ theorem mpo_cyclicEdgeWeightTensor
     obtain ⟨n, hn⟩ := hne
     apply Finset.prod_eq_zero (Finset.mem_univ n)
     rw [cyclicEdgeWeightTensor]
-    rw [if_neg (by simpa [g0] using hn)]
+    rw [ite_eq_right (by simpa [g0] using hn)]
 
 end MPOTensor

@@ -76,7 +76,7 @@ theorem isPrimitive_and_isNormal_of_irreducible_leftCanonical_selfOverlap_tendst
       peripheralEigenvalues (transferMap (d := d) (D := D) (fun i ↦ (A i)ᴴ)) =
         Set.range (fun j : Fin m ↦ γ ^ (j : ℕ)) := by
     simpa [m] using hPeriphK
-  haveI : NeZero m := ⟨hm'.ne'⟩
+  have : NeZero m := ⟨hm'.ne'⟩
   have hKRoots :
       peripheralEigenvalues (transferMap (d := d) (D := D) (fun i ↦ (A i)ᴴ)) =
         {z : ℂ | z ^ m = 1} := by
@@ -91,11 +91,11 @@ theorem isPrimitive_and_isNormal_of_irreducible_leftCanonical_selfOverlap_tendst
       exact ⟨⟨i, hi⟩, hiz⟩
   have hM : (1 : Matrix (Fin D) (Fin D) ℂ).PosDef := by
     simpa using (Matrix.PosDef.one (n := Fin D) (R := ℂ))
-  letI : NormedAddCommGroup (Matrix (Fin D) (Fin D) ℂ) :=
+  let : NormedAddCommGroup (Matrix (Fin D) (Fin D) ℂ) :=
     Matrix.toMatrixNormedAddCommGroup (n := Fin D) (𝕜 := ℂ) 1 hM
-  letI : SeminormedAddCommGroup (Matrix (Fin D) (Fin D) ℂ) :=
+  let : SeminormedAddCommGroup (Matrix (Fin D) (Fin D) ℂ) :=
     Matrix.toMatrixSeminormedAddCommGroup (n := Fin D) (𝕜 := ℂ) 1 hM.posSemidef
-  letI : InnerProductSpace ℂ (Matrix (Fin D) (Fin D) ℂ) :=
+  let : InnerProductSpace ℂ (Matrix (Fin D) (Fin D) ℂ) :=
     Matrix.toMatrixInnerProductSpace (n := Fin D) (𝕜 := ℂ) 1 hM.posSemidef
   have hAdj :
       transferMap (d := d) (D := D) (fun i ↦ (A i)ᴴ) =
@@ -184,7 +184,7 @@ and positive bond dimension imply eventual block injectivity.
 Source: CPSV21, arXiv:2011.12127, lines 1815--1830. -/
 theorem basis_isNormal (hCF : IsBNTCanonicalForm P) (j : Fin P.basisCount) :
     IsNormal (P.basis j) := by
-  letI : NeZero (P.basisDim j) := ⟨(hCF.basis_dim_pos j).ne'⟩
+  let : NeZero (P.basisDim j) := ⟨(hCF.basis_dim_pos j).ne'⟩
   exact isNormal_of_irreducible_leftCanonical_selfOverlap_tendsto_one
     (P.basis j) (hCF.basis_irreducible j) (hCF.basis_left_canonical j)
       (hCF.basis_normalized_self_overlap j)
@@ -202,7 +202,7 @@ theorem basis_isNBlkInjective_totalDim_pow_four
     ∀ j : Fin P.basisCount,
       IsNBlkInjective (P.basis j) (P.totalDim ^ 4) := by
   intro j
-  letI : NeZero (P.basisDim j) := ⟨(hCF.basis_dim_pos j).ne'⟩
+  let : NeZero (P.basisDim j) := ⟨(hCF.basis_dim_pos j).ne'⟩
   have hNormal : IsNormal (P.basis j) := hCF.basis_isNormal j
   have hOwn : IsNBlkInjective (P.basis j) ((P.basisDim j) ^ 4) :=
     isNBlkInjective_pow_four_of_isNormal_leftCanonical

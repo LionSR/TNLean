@@ -102,8 +102,8 @@ lemma inverse_compression_le
     simpa [Matrix.mulVec_mulVec, hW] using hxy'
   have hD : (Wᴴ * Y * W).PosDef :=
     hY.conjTranspose_mul_mul_same hWinj
-  letI : Invertible Y := hY.isUnit.invertible
-  letI : Invertible (Wᴴ * Y * W) := hD.isUnit.invertible
+  let : Invertible Y := hY.isUnit.invertible
+  let : Invertible (Wᴴ * Y * W) := hD.isUnit.invertible
   have hBlock : (Matrix.fromBlocks Y⁻¹ W Wᴴ (Wᴴ * Y * W)).PosSemidef := by
     exact (Matrix.PosDef.fromBlocks₁₁ (B := W) (D := Wᴴ * Y * W) hY.inv).2 <| by
       simpa using (Matrix.PosSemidef.zero : (0 : Matrix m m ℂ).PosSemidef)

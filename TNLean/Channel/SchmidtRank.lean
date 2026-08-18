@@ -180,7 +180,7 @@ theorem schmidtRank_eq_finrank_range_toEuclideanLin [Finite m] [DecidableEq n]
         (Matrix.toEuclideanLin (schmidtCoeffMatrix ψ) :
           EuclideanSpace ℂ n →ₗ[ℂ] EuclideanSpace ℂ m)) := by
   classical
-  letI := Fintype.ofFinite m
+  let := Fintype.ofFinite m
   rw [schmidtRank, Matrix.toEuclideanLin_eq_toLin_orthonormal]
   exact Matrix.rank_eq_finrank_range_toLin (schmidtCoeffMatrix ψ)
     (EuclideanSpace.basisFun m ℂ).toBasis

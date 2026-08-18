@@ -109,7 +109,7 @@ rank-one operator. -/
 theorem mpo_baseMPO_eq_unnormalizedGHZRankOne
     (N : ℕ) (hN : 0 < N) :
     mpo baseMPO N = unnormalizedGHZRankOne N := by
-  letI : NeZero N := ⟨Nat.ne_of_gt hN⟩
+  let : NeZero N := ⟨Nat.ne_of_gt hN⟩
   ext sigma tau
   rw [baseMPO_eq_cyclicEdgeWeightTensor, mpo_cyclicEdgeWeightTensor]
   change (∏ n : Fin N,
@@ -267,7 +267,7 @@ theorem mpo_verticalBNTMPO_singletonTensor_eq_diagonal
     (N : ℕ) (hN : 0 < N) :
     mpo (verticalBNTMPO singletonTensor) N =
       Matrix.diagonal (retainedCyclicIndicator N) := by
-  letI : NeZero N := ⟨Nat.ne_of_gt hN⟩
+  let : NeZero N := ⟨Nat.ne_of_gt hN⟩
   ext sigma tau
   rw [mpo_apply, mpoMatrixEntry, evalWord_ofFn]
   have hcyc := MPSTensor.trace_evalWord_eq_sum_cyclic singletonTensor
@@ -287,7 +287,7 @@ theorem mpo_verticalBNTMPO_singletonTensor_eq_diagonal
       simp only [singletonTensor, Equiv.symm_apply_apply,
         Matrix.single, g0, finRotate_apply]
       split_ifs <;> simp_all [edgeSource, edgeTarget]
-    · rw [if_neg hst]
+    · rw [ite_eq_right hst]
       obtain ⟨n, hn⟩ := Function.ne_iff.mp hst
       apply Finset.prod_eq_zero (Finset.mem_univ n)
       simp [singletonTensor, hn]
@@ -318,7 +318,7 @@ private lemma retainedCyclicIndicator_eq_zero_or_one
     obtain ⟨n, hn⟩ := h
     unfold retainedCyclicIndicator
     apply Finset.prod_eq_zero (Finset.mem_univ n)
-    rw [if_neg (by simpa only [finRotate_apply] using hn)]
+    rw [ite_eq_right (by simpa only [finRotate_apply] using hn)]
 
 /-- At every positive length the raw retained closed operator is Hermitian and
 idempotent, hence an orthogonal projection in the matrix algebra indexed by

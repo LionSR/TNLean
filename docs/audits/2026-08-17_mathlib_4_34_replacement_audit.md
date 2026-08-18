@@ -14,7 +14,9 @@ performed:
 
 - Lean: `leanprover/lean4:v4.34.0-rc1`;
 - Mathlib: `v4.34.0-rc1`;
-- Mathlib commit: `de5ce8a9a66a4aa68a9bdbb35b63a06d34d9ca11`.
+- Mathlib commit: `de5ce8a9a66a4aa68a9bdbb35b63a06d34d9ca11`;
+- Gametheory compatibility commit:
+  `ec93e4daed4ad8b4784a9d760e492832e7711433`.
 
 There was no final `v4.34.0` tag. The comparison baseline is Mathlib
 `v4.32.0`, commit `81a5d257c8e410db227a6665ed08f64fea08e997`.
@@ -28,8 +30,8 @@ subject areas were excluded after the initial inventory.
 
 ## Summary
 
-The range contains two deletion-scale replacements in the same low-level
-matrix module.
+The range contains one module-level replacement, several declaration-level
+replacements, and multiple proof-level simplifications.
 
 1. Mathlib now proves that the positive-semidefinite cone of square `RCLike`
    matrices is closed and supplies the corresponding scoped
@@ -37,18 +39,30 @@ matrix module.
    topology development.
 2. Mathlib now supplies the `CStarAlgebra` instance for finite complex matrices
    in the L2 operator norm. This replaces TNLean's local bundled instance and
-   the duplicate hand-built instances at its use sites.
+   all local instance aliases at its use sites.
+3. Mathlib now proves rank invariance under multiplication by a non-zero-divisor.
+   This replaces TNLean's field-specialized `Matrix.rank_smul_of_ne_zero`.
+4. Mathlib's existing nondegenerate-matrix API replaces the local
+   `linearIndependent_sum_smul` pass-through lemma and its 46-line proof.
+5. Mathlib's Gram-matrix characterization replaces three local coordinate
+   proofs for orthonormal matrix columns.
+6. Continuous-linear-map rank openness replaces the determinant-minor support
+   stack for matrix rank closedness.
+7. `Finset.equivMap` replaces local site-translation and graph-region image
+   equivalence constructors.
 
-Two new determinant lemmas also remove local proof plumbing without replacing
-project declarations:
+New determinant and limit lemmas also remove local proof plumbing:
 
 - determinant nonvanishing now gives `mulVec` injectivity directly;
-- determinant nonvanishing now preserves matrix rank under multiplication
-  directly.
+- determinant nonvanishing now preserves matrix rank under multiplication;
+- scalar limits to zero or one act on constants directly;
+- a quotient tending to one can be characterized from the limits of its
+  numerator and denominator.
 
 No other sound deletion-scale replacement was found. In particular, the new
-convex-hull, rank, resolvent, direct-sum, echelon-form, and tensor-product APIs
-do not subsume the corresponding TNLean mathematics described below.
+convex-hull, rank-closedness, resolvent, direct-sum, echelon-form, and
+tensor-product APIs do not subsume the corresponding TNLean mathematics
+described below.
 
 ## Closedness of the positive-semidefinite cone
 
@@ -138,13 +152,11 @@ Matrix.instL2OpNormedAlgebra
 Matrix.instCStarRing
 ```
 
-It therefore exactly replaces that local definition. At sites where TNLean
-intentionally avoids opening the operator-norm scope globally, the conservative
-replacement is
-
-```lean
-letI : CStarAlgebra (Matrix n n ℂ) := Matrix.instCStarAlgebra
-```
+It therefore exactly replaces that local definition. A second-pass audit found
+that local aliases and nested `let` bindings for the upstream instance were
+still acting as pass-through layers. All such bindings are removed. Each file
+now opens `Matrix.Norms.L2Operator` only in the section that needs the canonical
+matrix norm and C-star structures.
 
 The replacement applies to the explicit users in:
 
@@ -219,6 +231,177 @@ provides an `IsUnit` witness, such as `SingleKrausPositivity.lean` and
 
 Status: local proof simplification, not a theorem replacement.
 
+## Rank under scalar multiplication
+
+Mathlib commit:
+
+- `3b3cdbb692`, `feat(LinearAlgebra/Matrix/Rank): rank under scalar
+  multiplication by a non-zero-divisor`.
+
+Import and declaration:
+
+```lean
+import Mathlib.LinearAlgebra.Matrix.Rank
+
+Matrix.rank_smul_of_mem_nonZeroDivisors
+```
+
+This theorem works over a commutative ring and strictly generalizes TNLean's
+field-specialized `Matrix.rank_smul_of_ne_zero`. The local theorem is deleted.
+Its six consumers now invoke the Mathlib theorem directly with
+`mem_nonZeroDivisors_of_ne_zero`. Five consumers also drop their import of
+`TNLean.Algebra.MatrixRankBaseChange`; `DiagonalCutRank.lean` retains that import
+for the still-local scalar-extension theorem `Matrix.rank_map_algebraMap`.
+
+Status: exact declaration replacement and pass-through deletion.
+
+## Linear independence under a nondegenerate coefficient matrix
+
+Import and declaration:
+
+```lean
+import Mathlib.LinearAlgebra.Matrix.Nondegenerate
+
+LinearIndependent.sum_smul_of_nondegenerate
+```
+
+This API already existed at the 4.32 baseline, but the expanded pass-through
+audit found a redundant 46-line specialization named
+`linearIndependent_sum_smul` in `PEPS/RegionBlock/GaugeInjectivity2.lean`.
+The sole consumer now proves the coefficient matrix nondegenerate from its
+supplied right inverse and applies the Mathlib theorem directly. The local
+lemma is deleted.
+
+Status: exact replacement found while auditing the upgrade; not new in 4.34.
+
+## Scalar and quotient limits
+
+Mathlib commit:
+
+- `73fbc3ec50`, adding specialized scalar-limit lemmas.
+
+Relevant declarations include:
+
+```lean
+Filter.Tendsto.zero_smul_const
+Filter.Tendsto.one_smul_const
+tendsto_div_nhds_one_iff_eq₀
+```
+
+`zero_smul_const` and `one_smul_const` replace manual combinations of
+`Tendsto.smul`, `tendsto_const_nhds`, and final `zero_smul` or `one_smul`
+normalization in:
+
+- `Channel/Peripheral/CesaroRecurrence.lean`;
+- `Channel/Peripheral/WeightedCesaro.lean`;
+- `Channel/Schwarz/SchwarzSubnormal.lean`.
+
+`tendsto_div_nhds_one_iff_eq₀` replaces a manually assembled quotient limit in
+`MPS/SharedInfra/GaugePhase.lean`.
+
+Status: direct proof simplifications.
+
+## Matrix rank closedness through continuous-linear-map rank openness
+
+Import and upstream declaration:
+
+```lean
+import Mathlib.Analysis.Normed.Module.FiniteDimension
+
+isOpen_setOfPred_nat_le_rank
+```
+
+The mathematical theorem predates 4.32; the current `Set.ofPred` name was
+introduced in the 4.33 rename campaign. It proves openness of the set of
+continuous linear maps whose rank is at least a fixed natural number.
+Transporting this set through the matrix-to-continuous-linear-map equivalence
+shows that `{A | A.rank ≤ k}` is closed.
+
+`Matrix.isClosed_setOf_rank_le` remains as a useful matrix specialization, and
+the blueprint-tagged lower-semicontinuity declarations remain project API. The
+upstream transport replaces their former determinant-minor support proof, so
+the following internal-only declarations are deleted:
+
+```lean
+Matrix.exists_injective_linearIndependent_cols_of_lt_rank
+Matrix.lt_rank_iff_exists_isUnit_submatrix
+```
+
+Status: approximately one hundred lines of local support machinery removed;
+the matrix adaptation itself remains local.
+
+## Orthonormal families and Gram matrices
+
+Mathlib 4.33 added:
+
+```lean
+Matrix.gram_eq_one_iff_orthonormal
+```
+
+Together with `Matrix.gram_eq_conjTranspose_mul`, this replaces three local
+coordinate proofs that an orthonormal column family gives a unit Gram matrix.
+The two public wrappers in `Channel/SchmidtDecomposition.lean` and the private
+copy in `Algebra/CompactSVD.lean` are deleted, and their consumers use the
+Mathlib Gram identities directly.
+
+Status: three pass-through proofs deleted.
+
+## Finset image equivalences
+
+Mathlib 4.33 added:
+
+```lean
+Finset.equivMap
+Finset.equivMap_apply_coe
+Finset.equivMap_symm_apply
+```
+
+`Finset.equivMap` is the canonical equivalence between a finite set and its
+image under an embedding. It replaces two local equivalence constructors:
+
+- `SpinChain.siteTranslation` in `QCA/Translation.lean`;
+- `TNLean.PEPS.regionVertexMapEquiv` in `PEPS/RegionTransport.lean`.
+
+The project-specific translation and graph-transport APIs remain, but their
+consumers now use the upstream finite-image equivalence directly. Inverse
+computations in the PEPS transport use the upstream `apply_symm_apply` law
+rather than reduction of a local constructor.
+
+Status: two pass-through declarations deleted.
+
+## Renamed APIs and Lean 4.34 warning cleanup
+
+The 4.33 and 4.34 source ranges also introduced deprecations and stricter style
+linters. TNLean now uses the current names directly, including:
+
+```lean
+if_pos       → ite_eq_left
+if_neg       → ite_eq_right
+dif_pos      → dite_eq_left
+dif_neg      → dite_eq_right
+if_true      → ite_true
+if_false     → ite_false
+Set.restrict → Set.domRestrict
+LinearEquiv.ofLinear → LinearEquiv.ofLinearMap
+```
+
+The new proposition-instance linter also observes that tactic-mode `have` and
+`let` already register proposition-valued local instances. Its reported
+`haveI` and `letI` sites were converted without changing proofs. Remaining
+unused-tactic, unused-simp-argument, flexible-tactic, finite-typeclass, and
+source-layout warnings were repaired individually rather than suppressed.
+The pinned Gametheory dependency was updated in the same way; its complete
+package build now emits no warnings from Gametheory sources.
+
+The first complete warning inventory contained 2,403 warning headers across
+492 files. After the cleanup, the post-rebase 10,201-job build reports only 13
+pre-existing long-line warnings in two parent-Hamiltonian modules. Each of
+those lines contains an exported identifier whose name alone prevents ordinary
+wrapping. They are retained because the audit excludes public renaming solely
+to satisfy the line-length linter and excludes local or global suppression.
+No deprecation, proposition-instance, tactic, simp-argument, option-scope, or
+Gametheory warning remains.
+
 ## New APIs that do not replace TNLean mathematics
 
 ### Compact convex hulls
@@ -234,15 +417,6 @@ IsCompact s → IsCompact (convexHull ℝ s)
 
 proved in `TNLean/Analysis/ConvexHullCompact.lean`. The new theorem is a useful
 ingredient but does not justify deleting the local Caratheodory argument.
-
-### Rank-minor closedness
-
-The enlarged nonsingularity API relates determinant nonvanishing, regularity,
-row and column independence, products, and powers. It does not provide the
-rank-minor characterization or semicontinuity results in
-`TNLean/Algebra/MatrixRankClosed.lean`. No replacement was found for
-`Matrix.lt_rank_iff_exists_isUnit_submatrix`,
-`Matrix.isClosed_setOf_rank_le`, or `Matrix.lowerSemicontinuous_rank`.
 
 ### Second resolvent identity
 

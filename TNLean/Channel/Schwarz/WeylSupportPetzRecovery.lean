@@ -287,7 +287,7 @@ theorem partialTraceRightPetzMap_eq_of_relativeEntropy_eq_general_support
   classical
   set dL := Fintype.card L
   set dR := Fintype.card R
-  letI : NeZero dR := ⟨by simp [dR, Fintype.card_ne_zero (α := R)]⟩
+  let : NeZero dR := ⟨by simp [dR, Fintype.card_ne_zero (α := R)]⟩
   set eL : L ≃ Fin dL := Fintype.equivFin L
   set eR : R ≃ ZMod dR :=
     (Fintype.equivFin R).trans (ZMod.finEquiv dR).toEquiv
@@ -316,8 +316,8 @@ theorem partialTraceRightPetzChannel_recovery_of_dpi_equality
   classical
   let ρIndex := Classical.choice (nonempty_of_trace_eq_one ρ hρtrace)
   let σIndex := Classical.choice (nonempty_of_trace_eq_one σ hσtrace)
-  letI : Nonempty L := ⟨ρIndex.1⟩
-  letI : Nonempty R := ⟨σIndex.2⟩
+  let : Nonempty L := ⟨ρIndex.1⟩
+  let : Nonempty R := ⟨σIndex.2⟩
   rw [partialTraceRightPetzChannel_apply_partialTraceRight_of_support
     hρ hσ hsupp]
   exact partialTraceRightPetzMap_eq_of_relativeEntropy_eq_general_support

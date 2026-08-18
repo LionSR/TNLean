@@ -281,7 +281,7 @@ theorem trace_evalWord_eq_sum_cyclic {n : ℕ} [NeZero n] (A : MPSTensor d D)
         rw [Finset.sum_ite_eq' Finset.univ (g 0)
           (fun c => ∏ j : Fin (N + 1), A (σ j) (g j)
             ((Fin.snoc g c : Fin (N + 2) → Fin D) j.succ))]
-        simp only [Finset.mem_univ, if_true]
+        simp only [Finset.mem_univ, ite_true]
         exact Finset.prod_congr rfl fun v _ => by rw [snoc_head_apply_succ]
 
 end MPSTensor

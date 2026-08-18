@@ -144,7 +144,7 @@ theorem kraus_rectangular_freedom
   let MA' : Matrix (Fin r₁) (Fin d' × Fin d) ℂ := fun α x => A' α x.1 x.2
   have hGram : MBᴴ * MB = MA'ᴴ * MA' := by
     ext ⟨a, b⟩ ⟨c, e⟩
-    simp only [Matrix.mul_apply, Matrix.conjTranspose_apply, MB, MA']
+    simp only [MB, MA']
     -- Use dual map equality at single a c 1
     have h_entry := congr_fun (congr_fun (hdual (Matrix.single a c 1)) b) e
     simp only [Matrix.sum_apply, Matrix.mul_apply, Matrix.conjTranspose_apply,

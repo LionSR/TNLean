@@ -61,7 +61,7 @@ private theorem reindex_eq_equivalenceCoisometry_conj
     ((1 : Matrix β β ℂ).submatrix e id)ᴴ * M *
       (1 : Matrix β β ℂ).submatrix e id
   classical
-  letI := Fintype.ofFinite β
+  let := Fintype.ofFinite β
   rw [Matrix.conjTranspose_submatrix]
   simp only [Matrix.conjTranspose_one]
   rw [Matrix.one_submatrix_mul id e M]
@@ -155,7 +155,7 @@ theorem exists_active_isBNTCanonicalForm_exact
             ((X : Matrix _ _ ℂ) * P.toTensor i *
               (↑(X⁻¹) : Matrix _ _ ℂ)) * U := by
   classical
-  haveI : ∀ k, NeZero (data.activeDim k) :=
+  have : ∀ k, NeZero (data.activeDim k) :=
     fun k => ⟨(data.dim_pos (data.activeEquiv k)).ne'⟩
   choose σ hσ hσfix hTP hGauge hPrim hIrr using
     fun k => (data.blocks_normal (data.activeEquiv k)).exists_tpGauge

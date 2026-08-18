@@ -74,7 +74,7 @@ tensors; the closure under reblocking is used in the normal-block arguments at
 lines 332--345. -/
 theorem blockTensor {A : MPSTensor d D} (hA : IsNormalTensor A) (p : ℕ) (hp : 0 < p) :
     IsNormalTensor (MPSTensor.blockTensor (d := d) (D := D) A p) := by
-  letI : NeZero D := ⟨hA.bondDim_ne_zero⟩
+  let : NeZero D := ⟨hA.bondDim_ne_zero⟩
   obtain ⟨σ, _hσpos, _hσfix, hTP, hGauge, hPrim, hIrr⟩ := hA.exists_tpGauge
   let B : MPSTensor d D := tpGauge (d := d) (D := D) A σ
   have hExtra := tp_primitive_irreducible_extra_blocking

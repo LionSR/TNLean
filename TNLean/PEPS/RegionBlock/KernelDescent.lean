@@ -85,7 +85,7 @@ theorem rbExposedIndicator_erase (S : Finset V) (j : V) (ζ ζ₀ : VirtualConfi
   unfold rbExposedIndicator rbExtraIndicator
   by_cases hAll : ∀ f : Edge G, (f.1.1 ∈ R ∨ f.1.2 ∈ R) →
       f.1.1 ∉ S.erase j → f.1.2 ∉ S.erase j → ζ f = ζ₀ f
-  · rw [if_pos hAll]
+  · rw [ite_eq_left hAll]
     have hS : ∀ f : Edge G, (f.1.1 ∈ R ∨ f.1.2 ∈ R) →
         f.1.1 ∉ S → f.1.2 ∉ S → ζ f = ζ₀ f := by
       intro f hR hf1 hf2
@@ -96,11 +96,11 @@ theorem rbExposedIndicator_erase (S : Finset V) (j : V) (ζ ζ₀ : VirtualConfi
         f.1.1 ∉ S.erase j → f.1.2 ∉ S.erase j → ζ f = ζ₀ f := by
       intro f hR _ hf1 hf2
       exact hAll f hR hf1 hf2
-    rw [if_pos hS, if_pos hE, one_mul]
-  · rw [if_neg hAll]
+    rw [ite_eq_left hS, ite_eq_left hE, one_mul]
+  · rw [ite_eq_right hAll]
     by_cases hS : ∀ f : Edge G, (f.1.1 ∈ R ∨ f.1.2 ∈ R) →
         f.1.1 ∉ S → f.1.2 ∉ S → ζ f = ζ₀ f
-    · rw [if_pos hS, one_mul, if_neg]
+    · rw [ite_eq_left hS, one_mul, ite_eq_right]
       intro hE
       apply hAll
       intro f hR hf1 hf2
@@ -111,7 +111,7 @@ theorem rbExposedIndicator_erase (S : Finset V) (j : V) (ζ ζ₀ : VirtualConfi
         · have h1 : f.1.1 ∉ S := fun h => hf1 (Finset.mem_erase.mpr ⟨hj1, h⟩)
           have h2 : f.1.2 ∉ S := fun h => hf2 (Finset.mem_erase.mpr ⟨hj2, h⟩)
           exact hS f hR h1 h2
-    · rw [if_neg hS, zero_mul]
+    · rw [ite_eq_right hS, zero_mul]
 
 /-- The extra indicator on a split configuration depends only on the local
 configuration `η` at `j`. -/
@@ -138,7 +138,7 @@ theorem rbExtraIndicator_split (S : Finset V) {j : V}
     have hIs : IsIncidentEdge (G := G) j f := hinc
     change (if hh : IsIncidentEdge (G := G) j f then η ⟨f, hh⟩ else r ⟨f, hh⟩) =
       η ⟨f, hinc⟩
-    rw [dif_pos hIs]
+    rw [dite_eq_left hIs]
   congr 1
   apply propext
   constructor
@@ -160,7 +160,7 @@ theorem rbFactor_split_mid {j : V} (hjR : j ∈ R)
       A.component j η (τ j) := by
   classical
   unfold rbFactor
-  rw [if_pos hjR]
+  rw [ite_eq_left hjR]
   congr 1
   funext ie
   exact vertexConfigSplitAt_symm_apply_incident (G := G) A j η r ie
@@ -211,8 +211,8 @@ theorem rbMarginal_eq_zero (hA : IsVertexInjective A)
     have hwj : w ≠ j := Finset.ne_of_mem_erase hw
     unfold rbFactor
     by_cases hwR : w ∈ R
-    · rw [if_pos hwR, if_pos hwR, Function.update_of_ne hwj]
-    · rw [if_neg hwR, if_neg hwR]
+    · rw [ite_eq_left hwR, ite_eq_left hwR, Function.update_of_ne hwj]
+    · rw [ite_eq_right hwR, ite_eq_right hwR]
   rw [hProdErase, hAj]
   rw [show (rbExposedIndicator (G := G) A R S
         ((vertexConfigSplitAt (G := G) A j).symm (η, r)) ζ₀ *
@@ -286,7 +286,7 @@ theorem regionBoundaryLabel_regionBoundaryWitness (hpos : ∀ f : Edge G, 0 < A.
   funext f
   change regionBoundaryWitness (G := G) A R hpos ρ f.1 = ρ f
   have h : IsRegionBoundaryEdge (G := G) R f.1 := f.2
-  rw [regionBoundaryWitness, dif_pos h]
+  rw [regionBoundaryWitness, dite_eq_left h]
 
 /-- An edge touches `R` when at least one of its endpoints lies in `R`. The edges
 touching `R` are the crossing edges together with the internal edges of `R`. -/
@@ -325,7 +325,7 @@ omit [Fintype V] in
     (t : TouchConfig (G := G) A R) (x : ExteriorConfig (G := G) A R)
     (f : {f : Edge G // IsTouchingEdge (G := G) R f}) :
     (regionTouchSplit (G := G) A R).symm (t, x) f.1 = t f := by
-  rw [regionTouchSplit, Equiv.piEquivPiSubtypeProd_symm_apply, dif_pos f.2]
+  rw [regionTouchSplit, Equiv.piEquivPiSubtypeProd_symm_apply, dite_eq_left f.2]
 
 omit [Fintype V] in
 /-- The boundary label of a split configuration depends only on the touching
@@ -436,7 +436,7 @@ theorem regionKernelCondition_empty_eq_zero (hA : IsVertexInjective A)
       (fun t => ∑ x : ExteriorConfig (G := G) A R,
         c (regionBoundaryLabel (G := G) A R
           ((regionTouchSplit (G := G) A R).symm (t, x))))] at hKρ'
-  simp only [Finset.mem_univ, if_true] at hKρ'
+  simp only [Finset.mem_univ, ite_true] at hKρ'
   -- After pinning `t`, every summand equals `c ρ`.
   rw [show (∑ x : ExteriorConfig (G := G) A R,
         c (regionBoundaryLabel (G := G) A R
@@ -471,7 +471,7 @@ theorem rbExposedIndicator_full (ζ ζ₀ : VirtualConfig A) :
     rbExposedIndicator (G := G) A R R ζ ζ₀ = 1 := by
   classical
   unfold rbExposedIndicator
-  rw [if_pos]
+  rw [ite_eq_left]
   intro f hR hf1 hf2
   rcases hR with h | h
   · exact absurd h hf1
@@ -489,7 +489,7 @@ theorem rbProd_eq_family_prod (ζ : VirtualConfig A) (τ : V → Fin d) :
   refine Finset.prod_congr rfl ?_
   intro w _
   unfold rbFactor
-  rw [if_pos w.2]
+  rw [ite_eq_left w.2]
 
 /-- The blocked-region family as a fibered sum over global configurations with a
 given boundary label. -/

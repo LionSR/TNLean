@@ -204,11 +204,11 @@ theorem exists_kraus_orthogonal_of_isKrausCP [NeZero d]
   · intro i j hij
     have hne : e i ≠ e j := fun h => hij (e.injective h)
     have hg := hgram (e i) (e j)
-    rw [if_neg (show e j ≠ e i from fun h => hne h.symm), mul_zero] at hg
+    rw [ite_eq_right (show e j ≠ e i from fun h => hne h.symm), mul_zero] at hg
     exact hg
   · intro i
     have hg := hgram (e i) (e i)
-    rw [if_pos rfl, mul_one] at hg
+    rw [ite_eq_left rfl, mul_one] at hg
     rw [hg, mul_assoc]
     have hlam : (Real.sqrt (hτ.eigenvalues (e i).1) : ℂ) *
         (Real.sqrt (hτ.eigenvalues (e i).1) : ℂ) =

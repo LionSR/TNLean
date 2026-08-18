@@ -131,7 +131,7 @@ omit [LinearOrder V] in
     (σcompl : RegionPhysicalConfig (V := V) (d := d) g.complement)
     (w : {w : V // w ∈ Finset.univ \ g.red}) (hb : w.1 ∈ g.blue) :
     g.complPhysical (d := d) σblue σcompl w = σblue ⟨w.1, hb⟩ := by
-  rw [ThreeBlockGeometry.complPhysical, dif_pos hb]
+  rw [ThreeBlockGeometry.complPhysical, dite_eq_left hb]
 
 omit [LinearOrder V] in
 @[simp] theorem ThreeBlockGeometry.complPhysical_apply_not_blue
@@ -139,7 +139,7 @@ omit [LinearOrder V] in
     (σcompl : RegionPhysicalConfig (V := V) (d := d) g.complement)
     (w : {w : V // w ∈ Finset.univ \ g.red}) (hb : w.1 ∉ g.blue) (hc : w.1 ∈ g.complement) :
     g.complPhysical (d := d) σblue σcompl w = σcompl ⟨w.1, hc⟩ := by
-  rw [ThreeBlockGeometry.complPhysical, dif_neg hb]
+  rw [ThreeBlockGeometry.complPhysical, dite_eq_right hb]
 
 /-- The product of the vertex tensors over `univ \ red`, read with the fused
 blue/complement physical leg, factors as the blue product times the complement
@@ -176,7 +176,7 @@ theorem ThreeBlockGeometry.prod_sdiff_red_eq_blue_mul_complement
       refine Finset.prod_congr rfl (fun w _ => ?_)
       congr 1
       by_cases hb : w.1 ∈ g.blue
-      · rw [g.complPhysical_apply_blue (d := d) σblue σcompl w hb, hgf]; simp only [dif_pos hb]
+      · rw [g.complPhysical_apply_blue (d := d) σblue σcompl w hb, hgf]; simp only [dite_eq_left hb]
       · have hwnotred : w.1 ∉ g.red := (Finset.mem_sdiff.mp w.2).2
         have hc : w.1 ∈ g.complement := by
           have hcover : w.1 ∈ g.red ∪ g.blue ∪ g.complement := by
@@ -187,13 +187,13 @@ theorem ThreeBlockGeometry.prod_sdiff_red_eq_blue_mul_complement
             · exact absurd hbl hb
           · exact hc
         rw [g.complPhysical_apply_not_blue (d := d) σblue σcompl w hb hc, hgf]
-        simp only [dif_neg hb, dif_pos hc]
+        simp only [dite_eq_right hb, dite_eq_left hc]
     have hblue : (∏ w : {w : V // w ∈ g.blue},
           A.component w.1 (fun ie => ζ ie.1) (σblue w)) =
         ∏ w : {w : V // w ∈ g.blue},
           A.component w.1 (fun ie => ζ ie.1) (gf w.1) := by
       refine Finset.prod_congr rfl (fun w _ => ?_)
-      congr 1; rw [hgf]; simp only [dif_pos w.2]
+      congr 1; rw [hgf]; simp only [dite_eq_left w.2]
     have hcompl : (∏ w : {w : V // w ∈ g.complement},
           A.component w.1 (fun ie => ζ ie.1) (σcompl w)) =
         ∏ w : {w : V // w ∈ g.complement},
@@ -202,7 +202,7 @@ theorem ThreeBlockGeometry.prod_sdiff_red_eq_blue_mul_complement
       congr 1
       have hb : w.1 ∉ g.blue := fun h =>
         (Finset.disjoint_left.mp g.blue_disjoint_complement) h w.2
-      rw [hgf]; simp only [dif_neg hb, dif_pos w.2]
+      rw [hgf]; simp only [dite_eq_right hb, dite_eq_left w.2]
     rw [hsdiff, hblue, hcompl]
     rw [← Finset.prod_subtype (Finset.univ \ g.red) (fun x => Iff.rfl)
         (fun w => A.component w (fun ie => ζ ie.1) (gf w)),
@@ -343,7 +343,7 @@ theorem ThreeBlockGeometry.threeBlockFiber_card
   classical
   -- The host label of the blue side is the host label of the merge on this fiber.
   by_cases hcompat : regionBoundaryLabel (G := G) A (Finset.univ \ g.red) η = bdry
-  · rw [if_pos hcompat]
+  · rw [ite_eq_left hcompat]
     -- The host constraint is implied by the agreement and the merge identity.
     rw [show (Finset.univ.filter (fun p : VirtualConfig A × VirtualConfig A =>
           regionBoundaryLabel (G := G) A (Finset.univ \ g.red) p.2 = bdry ∧
@@ -362,7 +362,7 @@ theorem ThreeBlockGeometry.threeBlockFiber_card
         refine ⟨?_, hagree, hmerge⟩
         rw [g.hostLabel_p2_eq_hostLabel_regionMerge_complement p hagree,
           hmerge, hcompat]
-  · rw [if_neg hcompat]
+  · rw [ite_eq_right hcompat]
     rw [Finset.card_eq_zero, Finset.filter_eq_empty_iff]
     rintro p _ ⟨hhost, hagree, hmerge⟩
     apply hcompat
@@ -474,8 +474,8 @@ theorem ThreeBlockGeometry.threeBlockDoubleSum_eq_smul_single
           refine Finset.filter_congr (fun p _ => ?_); tauto,
         g.threeBlockFiber_card bdry η]
       by_cases hcompat : regionBoundaryLabel (G := G) A (Finset.univ \ g.red) η = bdry
-      · rw [if_pos hcompat, if_pos hcompat]
-      · rw [if_neg hcompat, if_neg hcompat, zero_smul, smul_zero]
+      · rw [ite_eq_left hcompat, ite_eq_left hcompat]
+      · rw [ite_eq_right hcompat, ite_eq_right hcompat, zero_smul, smul_zero]
     · rw [Finset.smul_sum, ← Finset.sum_filter_add_sum_filter_not Finset.univ
           (fun η : VirtualConfig A =>
             regionBoundaryLabel (G := G) A (Finset.univ \ g.red) η = bdry)]
@@ -492,10 +492,10 @@ theorem ThreeBlockGeometry.threeBlockDoubleSum_eq_smul_single
         add_zero]
       · refine Finset.sum_congr rfl (fun η hη => ?_)
         rw [Finset.mem_filter] at hη
-        rw [if_pos hη.2]
+        rw [ite_eq_left hη.2]
       · refine Finset.sum_eq_zero (fun η hη => ?_)
         rw [Finset.mem_filter] at hη
-        rw [if_neg hη.2, smul_zero]
+        rw [ite_eq_right hη.2, smul_zero]
   · -- Each agreeing summand is the merged summand at the merged configuration.
     refine Finset.sum_congr rfl (fun p hp => ?_)
     rw [Finset.mem_filter] at hp

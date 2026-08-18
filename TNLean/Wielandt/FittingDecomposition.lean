@@ -97,7 +97,7 @@ theorem isUnit_restrict_maxGenEigenspace_of_ne_zero
     exact Commute.smul_right (Commute.one_right _) μ
   have hsum : f.restrict hf_maps = a.restrict ha_maps + N.restrict hN_maps := by
     ext ⟨v, hv⟩
-    simp only [LinearMap.restrict_apply, LinearMap.add_apply]
+    simp only [LinearMap.add_apply]
     change f v = a v + (f - a) v; simp [LinearMap.sub_apply]
   rw [hsum]; exact hnil.isUnit_add_left_of_commute ha_unit hcomm
 

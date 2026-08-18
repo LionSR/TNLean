@@ -216,7 +216,7 @@ private theorem S_basis_transfer_not_nilpotent (j : Fin S.basisCount) :
     norm_num [doubledPhysTraceTransfer, MPSTensor.scalarUnitTensor,
       Matrix.mul_apply, Matrix.smul_apply]
   rw [hT]
-  letI : Nonempty (Fin (S.basisDim j)) :=
+  let : Nonempty (Fin (S.basisDim j)) :=
     ⟨⟨0, S_isBNTCanonicalForm.basis_dim_pos j⟩⟩
   exact not_isNilpotent_one
 

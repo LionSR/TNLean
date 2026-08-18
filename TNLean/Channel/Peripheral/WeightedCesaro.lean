@@ -124,9 +124,8 @@ theorem tendsto_weightedCesaroMean_apply_self_of_mem_iSup_eigenspace
       refine Finset.sum_congr rfl fun μ _ ↦ ?_
       rw [smul_pow, LinearMap.smul_apply, pow_apply_of_mem_eigenspace (v lam).2,
         smul_smul, ← mul_pow]
-    have hlim := (WeightedCesaro.tendsto_cesaro_phase_sum hs hlam).smul
-      (tendsto_const_nhds (x := (v lam : V)) (f := atTop (α := ℕ)))
-    rw [one_smul] at hlim
+    have hlim :=
+      (WeightedCesaro.tendsto_cesaro_phase_sum hs hlam).one_smul_const (v lam : V)
     exact hlim.congr fun N ↦ (hkey N).symm
   simpa only [map_sum] using tendsto_finsetSum _ hterm
 

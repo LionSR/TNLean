@@ -43,7 +43,7 @@ private lemma cyclic_matrix_single_chain_apply
     by_cases hs : s = (p (u + 1)).1
     · subst s
       simp
-    · rw [if_neg hs,
+    · rw [ite_eq_right hs,
         Matrix.mul_single_apply_of_ne (1 : ℂ) (p u).2 (p (u + 1)).1 r
           s hs]
   | succ n ih =>
@@ -188,7 +188,7 @@ private lemma trace_cyclic_matrix_single_chain
     rw [cyclicList_zero_card_eq_ofFn] at hchain
     by_cases hr : r = (p 0).1
     · subst r
-      rw [if_pos rfl] at hchain ⊢
+      rw [ite_eq_left rfl] at hchain ⊢
       rw [hchain]
       calc
         M 0 (p 0).1 (p 0).2 *
@@ -204,20 +204,20 @@ private lemma trace_cyclic_matrix_single_chain
               rw [hcycle, List.prod_cons]
         _ = (List.ofFn f).prod := by rw [cyclicList_zero_card_eq_ofFn]
         _ = ∏ k, f k := List.prod_ofFn
-    · rw [if_neg hr] at hchain ⊢
+    · rw [ite_eq_right hr] at hchain ⊢
       exact hchain
   rw [Matrix.trace, Finset.sum_eq_single (p 0).1]
   · change
       (List.ofFn
         (fun k => M k * Matrix.single (p k).2 (p (k + 1)).1 (1 : ℂ))).prod
           (p 0).1 (p 0).1 = _
-    rw [hdiag, if_pos rfl]
+    rw [hdiag, ite_eq_left rfl]
   · intro r _ hr
     change
       (List.ofFn
         (fun k => M k * Matrix.single (p k).2 (p (k + 1)).1 (1 : ℂ))).prod
           r r = 0
-    rw [hdiag, if_neg hr]
+    rw [hdiag, ite_eq_right hr]
   · simp
 
 /-- A cyclic product identity tested on all matrices in the intervening
@@ -296,7 +296,7 @@ private lemma piTensorProduct_eq_smul_of_cyclic_products
     have hm : m.pred + 1 = m := Nat.succ_pred_eq_of_pos (NeZero.pos m)
     have hchain :=
       cyclic_matrix_single_chain_apply M p 0 m.pred (p 0).1 (p 0).1
-    rw [hm, nsmul_card_one_fin, zero_add, if_pos rfl] at hchain
+    rw [hm, nsmul_card_one_fin, zero_add, ite_eq_left rfl] at hchain
     calc
       (List.ofFn (fun k => M k * X k)).prod (p 0).1 (p 0).1 =
           M 0 (p 0).1 (p 0).2 *

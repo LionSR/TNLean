@@ -106,7 +106,7 @@ theorem mpo_rightShiftTensor (d N : ℕ) [NeZero N] :
 /-- The right-shift tensor is an MPU. -/
 theorem rightShiftTensor_isMPU (d : ℕ) : IsMPU (rightShiftTensor d) := by
   intro N hN
-  letI : NeZero N := ⟨Nat.ne_of_gt (lt_trans Nat.zero_lt_one hN)⟩
+  let : NeZero N := ⟨Nat.ne_of_gt (lt_trans Nat.zero_lt_one hN)⟩
   rw [mpo_rightShiftTensor]
   rw [Matrix.mem_unitaryGroup_iff]
   simp only [Matrix.star_eq_conjTranspose, Matrix.conjTranspose_permMatrix]

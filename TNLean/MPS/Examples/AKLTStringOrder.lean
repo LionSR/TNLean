@@ -115,7 +115,7 @@ private theorem aklt_sum_conjTranspose_mul :
       Complex.ofReal_one]
   fin_cases a <;> fin_cases b <;>
     simp only [Fin.isValue, Fin.zero_eta, Fin.mk_one, Matrix.cons_val_zero,
-      Matrix.cons_val_one, one_ne_zero, zero_ne_one, if_true, if_false, mul_zero,
+      Matrix.cons_val_one, one_ne_zero, zero_ne_one, ite_true, ite_false, mul_zero,
       zero_mul, mul_one, add_zero, zero_add, neg_zero, mul_neg, neg_mul, neg_neg] <;>
     first
       | rfl

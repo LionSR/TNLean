@@ -322,11 +322,11 @@ theorem regionInsertedCoeff_eq_of_coarse_eq
     dsimp only [host, host', σb, σb', σc, σc']
     simp only [ThreeBlockGeometry.complPhysical, coarseProj]
     by_cases hb : w.1 ∈ F'.frame.blue
-    · rw [dif_pos (show w.1 ∈ (F'.frame.toThreeBlockGeometry hP').blue from hb),
-        dif_pos (show w.1 ∈ (F.frame.toThreeBlockGeometry hP).blue by rw [show
+    · rw [dite_eq_left (show w.1 ∈ (F'.frame.toThreeBlockGeometry hP').blue from hb),
+        dite_eq_left (show w.1 ∈ (F.frame.toThreeBlockGeometry hP).blue by rw [show
           (F.frame.toThreeBlockGeometry hP).blue = F.frame.blue from rfl, hblue]; exact hb)]
-    · rw [dif_neg (show w.1 ∉ (F'.frame.toThreeBlockGeometry hP').blue from hb),
-        dif_neg (show w.1 ∉ (F.frame.toThreeBlockGeometry hP).blue by rw [show
+    · rw [dite_eq_right (show w.1 ∉ (F'.frame.toThreeBlockGeometry hP').blue from hb),
+        dite_eq_right (show w.1 ∉ (F.frame.toThreeBlockGeometry hP).blue by rw [show
           (F.frame.toThreeBlockGeometry hP).blue = F.frame.blue from rfl, hblue]; exact hb)]
   -- The host-merge fiber products of the two frames coincide and are positive.
   have hfiber : hostMergeFiberProd (G := G) F = hostMergeFiberProd (G := G) F' :=

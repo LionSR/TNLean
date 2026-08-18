@@ -259,7 +259,7 @@ theorem log_kronecker_posSemidef {A : Matrix m m ℂ} {B : Matrix n n ℂ}
       · simp [hg, ha0]
       by_cases hb0 : evB p.2 = 0
       · simp [hg, hb0]
-      rw [if_pos ha0, if_pos hb0, mul_one, one_mul, hg, Real.log_mul ha0 hb0]
+      rw [ite_eq_left ha0, ite_eq_left hb0, mul_one, one_mul, hg, Real.log_mul ha0 hb0]
       push_cast
       rfl
     · simp [Matrix.diagonal_apply_ne _ hpq]

@@ -165,7 +165,7 @@ theorem kadison_schwarz (K : ι → Matrix n n ℂ)
       (Matrix.fromBlocks (map K (Xᴴ * X)) ((map K X)ᴴ)
         ((map K X)ᴴᴴ) (1 : Matrix n n ℂ)).PosSemidef := by
     simpa [h_block_eq] using h_sum_psd
-  haveI : Invertible (1 : Matrix n n ℂ) := invertibleOne
+  have : Invertible (1 : Matrix n n ℂ) := invertibleOne
   simpa [inv_one, Matrix.mul_assoc, conjTranspose_conjTranspose] using
     (Matrix.PosDef.fromBlocks₂₂ (A := map K (Xᴴ * X)) (B := (map K X)ᴴ)
       (D := (1 : Matrix n n ℂ)) Matrix.PosDef.one).1 h_block_psd

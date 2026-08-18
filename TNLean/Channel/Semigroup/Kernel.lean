@@ -83,14 +83,14 @@ nonnegative time. -/
 theorem expSemigroup_apply_eq_self_of_generator_apply_eq_zero
     (L : Mat →ₗ[ℂ] Mat) {X : Mat} (hX : L X = 0) :
     ∀ t : ℝ, 0 ≤ t → expSemigroup L t X = X := by
-  letI : AddCommGroup Mat := Matrix.linftyOpNormedAddCommGroup.toAddCommGroup
-  letI : NormedAddCommGroup Mat := Matrix.linftyOpNormedAddCommGroup
-  letI : Module ℝ Mat :=
+  let : AddCommGroup Mat := Matrix.linftyOpNormedAddCommGroup.toAddCommGroup
+  let : NormedAddCommGroup Mat := Matrix.linftyOpNormedAddCommGroup
+  let : Module ℝ Mat :=
     (TNOperatorSpace.instNormedSpaceRealMatrixComplex_tNLean (Fin D)).toModule
-  letI : TopologicalSpace Mat := PseudoMetricSpace.toUniformSpace.toTopologicalSpace
-  letI : NormedSpace ℝ Mat :=
+  let : TopologicalSpace Mat := PseudoMetricSpace.toUniformSpace.toTopologicalSpace
+  let : NormedSpace ℝ Mat :=
     TNOperatorSpace.instNormedSpaceRealMatrixComplex_tNLean (Fin D)
-  letI : ContinuousSMul ℝ Mat := inferInstance
+  let : ContinuousSMul ℝ Mat := inferInstance
   intro t _ht
   have hdiff :
       @Differentiable ℝ _ ℝ _ _ _ Mat

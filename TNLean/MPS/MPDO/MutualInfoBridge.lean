@@ -134,7 +134,7 @@ theorem reducedBlockState_full (M : MPOTensor d D) (N : ℕ) :
   simp only [reducedBlockState, blockReducedState, Matrix.partialTraceRight_apply,
     Matrix.submatrix_apply, blockSplitEquiv_symm_apply, blockReindexEquiv,
     Equiv.arrowCongr_symm, Equiv.refl_symm, finCongr_symm]
-  letI : Unique (Fin (N - N) → Fin d) :=
+  let : Unique (Fin (N - N) → Fin d) :=
     { default := fun i ↦ (Fin.cast (Nat.sub_self N) i).elim0
       uniq := fun _ ↦ funext fun i ↦ (Fin.cast (Nat.sub_self N) i).elim0 }
   rw [Fintype.sum_unique]

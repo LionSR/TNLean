@@ -161,8 +161,8 @@ theorem regionComplementPhysicalConfig_surjective (R : Finset V)
   set vout : V := if f.1.1.1 ∈ R then f.1.1.2 else f.1.1.1 with hvout
   have hvoutR : vout ∉ R := by
     rw [hvout]; rcases f.2 with ⟨h1, h2⟩ | ⟨h1, h2⟩
-    · rw [if_pos h1]; exact h2
-    · rw [if_neg h1]; exact h1
+    · rw [ite_eq_left h1]; exact h2
+    · rw [ite_eq_right h1]; exact h1
   have hvoutv : vout ≠ v := by
     intro hc; rw [hc] at hvoutR; exact hvoutR hvR
   intro ρ
@@ -177,9 +177,9 @@ theorem regionComplementPhysicalConfig_surjective (R : Finset V)
   -- Evaluate the assembled config at `w.1 ≠ v`.
   change assembleRegionσ (V := V) (d := d) R _ _ w.1 = ρ w
   by_cases hwR : w.1 ∈ R
-  · simp only [assembleRegionσ, dif_pos hwR]
-    rw [dif_neg w.2]
-  · simp only [assembleRegionσ, dif_neg hwR]
+  · simp only [assembleRegionσ, dite_eq_left hwR]
+    rw [dite_eq_right w.2]
+  · simp only [assembleRegionσ, dite_eq_right hwR]
 
 open scoped Classical in
 /-- **Region spanning at the in-region endpoint.** The state-vector coefficients

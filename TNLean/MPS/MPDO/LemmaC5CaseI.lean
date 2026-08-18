@@ -184,8 +184,7 @@ private theorem trace_rightTensor_mul_trace_leftTensor_eq_map_activeSectorTraceM
     Q * L = Matrix.map (F.activeSectorTraceMatrix p) Complex.ofReal := by
   dsimp only
   ext k h
-  simp only [Matrix.mul_apply, Matrix.map_apply,
-    PhysicalSectorFactorization.activeSectorTraceMatrix]
+  simp only [Matrix.map_apply, PhysicalSectorFactorization.activeSectorTraceMatrix]
   rw [← (hpos k h).isHermitian.trace_eq_ofReal_re]
   simp only [PhysicalSectorFactorization.neighboringOperator, Matrix.trace,
     Matrix.diag, Matrix.of_apply]
@@ -233,7 +232,7 @@ theorem activeSectorTraceMatrix_pow_two_eq_pow_three_of_literal_ZCL
       F.leftTensor F.rightTensor hfactor]
     ext beta alpha
     simp only [closedSectorPairingOperator, Matrix.sum_apply,
-      Matrix.vecMulVec_apply, Matrix.mul_apply, L, Q]
+      Matrix.vecMulVec_apply, L, Q]
     change (∑ c : Fin F.sectorCount,
         (F.leftTensor c beta).trace * (F.rightTensor c alpha).trace) =
       ∑ a : F.ActiveSector p,
@@ -245,7 +244,7 @@ theorem activeSectorTraceMatrix_pow_two_eq_pow_three_of_literal_ZCL
     intro k _
     by_cases hk : p k ≠ 0
     · simp [hk]
-    · rw [if_neg hk, hinactive k (not_ne_iff.mp hk) beta, Matrix.trace_zero, zero_mul]
+    · rw [ite_eq_right hk, hinactive k (not_ne_iff.mp hk) beta, Matrix.trace_zero, zero_mul]
   -- From literal ZCL, L*Q is idempotent
   have h_idem : IsIdempotentElem (L * Q) := by
     rw [← hphys]
@@ -427,7 +426,8 @@ theorem sitewise_prod_conjTranspose_mul_self {N : ℕ} (U : Matrix (Fin d) (Fin 
     by_cases hστ : σ = τ
     · simp [hστ, Matrix.one_apply]
     · obtain ⟨n, hn⟩ := Function.ne_iff.mp hστ
-      rw [Finset.prod_eq_zero (Finset.mem_univ n) (if_neg hn), Matrix.one_apply, if_neg hστ]
+      rw [Finset.prod_eq_zero (Finset.mem_univ n) (ite_eq_right hn),
+        Matrix.one_apply, ite_eq_right hστ]
   · rw [Finset.prod_univ_sum (fun _ : Fin N => (Finset.univ : Finset (Fin d)))
       (fun n x => star (U x (σ n)) * U x (τ n))]
     simp only [Fintype.piFinset_univ]
@@ -524,7 +524,7 @@ theorem sum_prod_traceSq_eq_sum_active
     intro k _
     by_cases hk : ∀ i, p (k i) ≠ 0
     · simp [hk]
-    · rw [if_neg hk, prod_traceSq_eq_zero_of_not_forall_active K F p hinactive k hk]
+    · rw [ite_eq_right hk, prod_traceSq_eq_zero_of_not_forall_active K F p hinactive k hk]
 
 /-- **The overlap formula.** The doubled-index MPS self-overlap equals the real cast of
 `tr(S^N)`, where `S` is the active-sector trace-squared matrix.
@@ -617,7 +617,7 @@ theorem card_activeSector_eq_one_of_literal_ZCL
   have hcard1 : 1 < Fintype.card (F.ActiveSector p) := by
     have h1 : 1 ≤ Fintype.card (F.ActiveSector p) := Fintype.card_pos
     omega
-  haveI : Nontrivial (F.ActiveSector p) := Fintype.one_lt_card_iff_nontrivial.mp hcard1
+  have : Nontrivial (F.ActiveSector p) := Fintype.one_lt_card_iff_nontrivial.mp hcard1
   set T := F.activeSectorTraceMatrix p with hTdef
   have hTsq : T ^ 2 = T ^ 3 :=
     activeSectorTraceMatrix_pow_two_eq_pow_three_of_literal_ZCL K F p hZCL_sq hinactive hpos
@@ -662,7 +662,7 @@ theorem card_activeSector_eq_one_of_literal_ZCL
         Filter.atTop (nhds (1 : ℂ)) := by
       apply hoverlap.congr'
       filter_upwards [Filter.eventually_gt_atTop 0] with N hN
-      haveI : NeZero N := ⟨hN.ne'⟩
+      have : NeZero N := ⟨hN.ne'⟩
       exact mpvOverlap_toMPSTensor_self_eq_ofReal_trace_activeSectorTraceSqMatrix_pow
         K F p hpos hinactive
     exact Filter.tendsto_ofReal_iff.mp hcongr
@@ -689,7 +689,7 @@ theorem activeSectorTraceMatrix_pow_two_eq_of_literal_ZCL
     (F.activeSectorTraceMatrix p) ^ 2 = F.activeSectorTraceMatrix p := by
   have hcard := card_activeSector_eq_one_of_literal_ZCL K F p hpos hspan hnonzero htriangle
     hZCL_sq hinactive hK_normal
-  haveI : Subsingleton (F.ActiveSector p) := Fintype.card_le_one_iff_subsingleton.mp hcard.le
+  have : Subsingleton (F.ActiveSector p) := Fintype.card_le_one_iff_subsingleton.mp hcard.le
   set T := F.activeSectorTraceMatrix p with hTdef
   have hTsq3 : T ^ 2 = T ^ 3 :=
     activeSectorTraceMatrix_pow_two_eq_pow_three_of_literal_ZCL K F p hZCL_sq hinactive hpos
@@ -738,7 +738,7 @@ theorem activeSectorTraceMatrix_rank_one_coefficients_of_literal_ZCL
         ∑ k, a k * b k = 1 := by
   have hcard := card_activeSector_eq_one_of_literal_ZCL K F p hpos hspan hnonzero htriangle
     hZCL_sq hinactive hK_normal
-  letI : Unique (F.ActiveSector p) :=
+  let : Unique (F.ActiveSector p) :=
     Classical.choice (Fintype.card_eq_one_iff_nonempty_unique.mp hcard)
   let T := F.activeSectorTraceMatrix p
   have hT : T ^ 2 = T :=

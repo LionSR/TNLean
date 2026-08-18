@@ -95,9 +95,9 @@ theorem twoBlockInsertedCoeff_swap
   have hsym : SameAwayFromBond b ν μ ↔ SameAwayFromBond b μ ν :=
     ⟨fun h c hc => (h c hc).symm, fun h c hc => (h c hc).symm⟩
   by_cases hsame : SameAwayFromBond b μ ν
-  · rw [if_pos hsame, if_pos (hsym.mpr hsame), Matrix.transpose_apply]
+  · rw [ite_eq_left hsame, ite_eq_left (hsym.mpr hsame), Matrix.transpose_apply]
     ring
-  · rw [if_neg hsame, if_neg (fun h => hsame (hsym.mp h)), zero_mul, zero_mul, zero_mul]
+  · rw [ite_eq_right hsame, ite_eq_right (fun h => hsame (hsym.mp h)), zero_mul, zero_mul, zero_mul]
 
 end TwoBlockSwap
 

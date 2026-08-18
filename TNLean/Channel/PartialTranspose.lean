@@ -246,7 +246,7 @@ theorem partialTransposeLeft_conj_kronecker_one
     kronecker_apply, Matrix.one_apply, Matrix.transpose_apply]
   -- Collapse the Kronecker deltas on the second factor.
   simp only [mul_ite, ite_mul, mul_zero, zero_mul, Finset.sum_ite_eq, Finset.sum_ite_eq',
-    Finset.mem_univ, if_true]
+    Finset.mem_univ, ite_true]
   -- Push the outer column factor inside each inner sum, then swap the two sums.
   simp only [Finset.sum_mul]
   rw [Finset.sum_comm]

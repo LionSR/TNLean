@@ -31,18 +31,6 @@
     factors $P$ through the $D^2$-dimensional space indexed by pairs $(a,b)$.
 \end{proof}
 
-\begin{theorem}[Rank under nonzero scalar multiplication]
-    \label{thm:matrix_rank_smul}
-    \lean{Matrix.rank_smul_of_ne_zero}
-    \leanok
-    Let $K$ be a field, let $A$ be a finite matrix over $K$, and let
-    $a\in K$ be nonzero. Then $\rank_{K}(aA)=\rank_{K}A$.
-\end{theorem}
-\begin{proof}\leanok
-    Multiplication by $a$ identifies the column spaces, with inverse given by
-    multiplication by $a^{-1}$.
-\end{proof}
-
 \begin{theorem}[Rank under faithful scalar extension]
     \label{thm:matrix_rank_scalar_extension}
     \lean{Matrix.rank_map_algebraMap}
@@ -183,7 +171,6 @@
     \leanok
     \uses{thm:mpo_diagonal_cut_rank,
       thm:classical_mutual_information_le_log_rank,
-      thm:matrix_rank_smul,
       thm:matrix_rank_scalar_extension}
     Let $D\geq1$, and let $W$ be a real diagonal coefficient matrix across a
     periodic cut of an MPO with bond dimension $D$. Suppose its scalar
@@ -193,9 +180,9 @@
     $I(X:Y)_P\leq2\log D$.
 \end{theorem}
 \begin{proof}\leanok
-    Normalization does not change real rank by
-    Theorem~\ref{thm:matrix_rank_smul}. Faithful scalar extension does
-    not change rank by Theorem~\ref{thm:matrix_rank_scalar_extension}; hence
+    Normalization by the nonzero scalar $Z^{-1}$ does not change real rank.
+    Faithful scalar extension does not change rank by
+    Theorem~\ref{thm:matrix_rank_scalar_extension}; hence
     Theorem~\ref{thm:mpo_diagonal_cut_rank} gives
     $\rank_{\R}P\leq D^2$.
     Theorem~\ref{thm:classical_mutual_information_le_log_rank} gives

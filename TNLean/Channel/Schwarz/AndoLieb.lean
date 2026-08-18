@@ -50,7 +50,7 @@ convexity/concavity consequences for matrix power functions.
   conjecture*, 1973]
 -/
 
-open scoped Matrix ComplexOrder MatrixOrder
+open scoped Matrix ComplexOrder MatrixOrder Matrix.Norms.L2Operator
 open Matrix
 
 noncomputable section
@@ -58,19 +58,6 @@ noncomputable section
 variable {D : ℕ}
 
 local notation "Mat" => Matrix (Fin D) (Fin D) ℂ
-
-private local instance instAndoLiebNormedRing : NormedRing Mat :=
-  Matrix.instL2OpNormedRing
-private local instance instAndoLiebNormedAlgebra : NormedAlgebra ℂ Mat :=
-  Matrix.instL2OpNormedAlgebra
-private local instance instAndoLiebCStarRing : CStarRing Mat :=
-  Matrix.instCStarRing
-private local instance instAndoLiebPartialOrder : PartialOrder Mat :=
-  Matrix.instPartialOrder
-private local instance instAndoLiebStarOrderedRing : StarOrderedRing Mat :=
-  Matrix.instStarOrderedRing
-private local instance instAndoLiebCStarAlgebra : CStarAlgebra Mat :=
-  Matrix.instCStarAlgebra
 
 /-! ## Trace convexity and concavity of matrix powers -/
 

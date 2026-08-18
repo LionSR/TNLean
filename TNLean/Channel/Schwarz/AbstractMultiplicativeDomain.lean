@@ -109,7 +109,7 @@ theorem eq_zero_of_forall_quadratic_posSemidef
       (((t : ℂ) • B) + ((t ^ 2 : ℝ) : ℂ) • D).PosSemidef) :
     B = 0 := by
   classical
-  letI := Fintype.ofFinite m
+  let := Fintype.ofFinite m
   apply Matrix.eq_zero_of_forall_star_dotProduct_mulVec_eq_zero
   intro x
   let b : ℂ := star x ⬝ᵥ B *ᵥ x

@@ -116,13 +116,13 @@ Source: arXiv:1606.00608, equations (3.16)--(3.17), lines 549--578. -/
     by_cases hpq : p = q
     · subst q
       simp
-    · rw [if_neg hpq]
+    · rw [ite_eq_right hpq]
       have hpoint : ∃ t : Fin N, p t ≠ q t := by
         apply not_forall.mp
         intro h
         exact hpq (funext h)
       obtain ⟨t, ht⟩ := hpoint
-      exact Finset.prod_eq_zero (Finset.mem_univ t) (if_neg ht)
+      exact Finset.prod_eq_zero (Finset.mem_univ t) (ite_eq_right ht)
   calc
     _ = ∑ σ : Cfg d N, ∑ q : Fin N → Fin D × Fin D,
         ((∏ t : Fin N, star (hStruct.U (σ t) (p t).1 (p t).2)) *

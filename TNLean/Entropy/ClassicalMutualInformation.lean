@@ -245,7 +245,7 @@ private theorem rank_rowPerturbation_le
     (P : Matrix X Y ℝ) (β : X → ℝ) (ε : ℝ) :
     (Matrix.rowPerturbation P β ε).rank ≤ P.rank := by
   classical
-  letI := Fintype.ofFinite X
+  let := Fintype.ofFinite X
   have hfactor : Matrix.rowPerturbation P β ε =
       Matrix.diagonal (fun x ↦ 1 + ε * β x) * P := by
     ext x y

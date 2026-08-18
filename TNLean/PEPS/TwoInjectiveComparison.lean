@@ -162,10 +162,10 @@ theorem bondGauge_master_constraint
         refine Finset.sum_congr rfl ?_
         intro μ _
         by_cases hμ : μ b = p
-        · rw [if_pos hμ, if_pos hμ]
+        · rw [ite_eq_left hμ, ite_eq_left hμ]
           simp only [Function.update_idem]
           rw [hg1 η₁ μ σ₁, ← hμ, Function.update_eq_self]
-        · rw [if_neg hμ, if_neg hμ]
+        · rw [ite_eq_right hμ, ite_eq_right hμ]
       rw [stepA, reindex_update b p q
         (fun ρ : SharedBondConfig bondDim =>
           (∑ ν, g (Function.update ρ b p) ν * B₁ η₁ ν σ₁) * A₂ η₂ ρ σ₂)]
@@ -178,9 +178,9 @@ theorem bondGauge_master_constraint
         refine Finset.sum_congr rfl ?_
         intro ρ _
         by_cases hρ : ρ b = q
-        · simp only [if_pos hρ]
+        · simp only [ite_eq_left hρ]
           rw [Finset.sum_mul]
-        · simp [if_neg hρ]
+        · simp [ite_eq_right hρ]
       rw [stepB]
       exact Finset.sum_comm
     -- Rewrite the `B`-side as a bilinear form with coefficient `cRHS`.
@@ -192,11 +192,11 @@ theorem bondGauge_master_constraint
       refine Finset.sum_congr rfl ?_
       intro ν _
       by_cases hν : ν b = p
-      · simp only [if_pos hν]
+      · simp only [ite_eq_left hν]
         rw [hg2 η₂ (Function.update ν b q) σ₂, Finset.mul_sum]
         refine Finset.sum_congr rfl ?_
         intro ρ _; ring
-      · simp only [if_neg hν]
+      · simp only [ite_eq_right hν]
         rw [eq_comm, Finset.sum_eq_zero]
         intro ρ _; ring
     -- Combine: the difference of the two bilinear forms vanishes.
@@ -246,8 +246,8 @@ theorem bondGauge_scalar_of_master
       μ b ≠ ν b → g μ ν = 0 := by
     intro b μ ν hne
     have h := hmaster b (μ b) (μ b) ν μ
-    rw [if_pos rfl, Function.update_eq_self] at h
-    rw [if_neg (fun hh => hne hh.symm)] at h
+    rw [ite_eq_left rfl, Function.update_eq_self] at h
+    rw [ite_eq_right (fun hh => hne hh.symm)] at h
     exact h
   have hdiag : ∀ μ ν : SharedBondConfig bondDim, μ ≠ ν → g μ ν = 0 := by
     intro μ ν hne
@@ -258,9 +258,9 @@ theorem bondGauge_scalar_of_master
       g ν ν = g (Function.update ν b q) (Function.update ν b q) := by
     intro b q ν
     have h := hmaster b (ν b) q ν (Function.update ν b q)
-    rw [Function.update_self, if_pos rfl] at h
+    rw [Function.update_self, ite_eq_left rfl] at h
     rw [Function.update_idem, Function.update_eq_self] at h
-    rw [if_pos rfl] at h
+    rw [ite_eq_left rfl] at h
     exact h
   -- Diagonal values agree whenever configurations agree off a finite bond set.
   have hagree : ∀ (s : Finset Bond) (μ ν : SharedBondConfig bondDim),
@@ -292,8 +292,8 @@ theorem bondGauge_scalar_of_master
   have hform : ∀ μ ν : SharedBondConfig bondDim, g μ ν = lam * (if μ = ν then 1 else 0) := by
     intro μ ν
     by_cases h : μ = ν
-    · subst h; rw [if_pos rfl, mul_one]; exact hdiagconst μ
-    · rw [if_neg h, mul_zero]; exact hdiag μ ν h
+    · subst h; rw [ite_eq_left rfl, mul_one]; exact hdiagconst μ
+    · rw [ite_eq_right h, mul_zero]; exact hdiag μ ν h
   -- Invertibility forces `lam ≠ 0`.
   have hlam : lam ≠ 0 := by
     intro hlam0
@@ -336,7 +336,7 @@ theorem two_injective_tensor_insertion_comparison_core
     (hbond : ∀ b, Nonempty (bondDim b)) :
     TwoBlockReciprocalScalarProportional A₁ B₁ A₂ B₂ := by
   classical
-  haveI : Nonempty (SharedBondConfig bondDim) := Classical.nonempty_pi.mpr hbond
+  have : Nonempty (SharedBondConfig bondDim) := Classical.nonempty_pi.mpr hbond
   -- The bond gauge from operator-Schmidt uniqueness.
   obtain ⟨g, g', hgg', hg1, hg2⟩ :=
     exists_bondGauge_of_fullContraction A₁ B₁ A₂ B₂ hA₁ hA₂ hB₁ hB₂
@@ -353,9 +353,9 @@ theorem two_injective_tensor_insertion_comparison_core
     rw [hg1 η₁ μ σ₁]
     rw [Finset.sum_congr rfl (fun ν _ => by rw [hform μ ν])]
     rw [Finset.sum_eq_single μ]
-    · rw [if_pos rfl, mul_one]
+    · rw [ite_eq_left rfl, mul_one]
     · intro ν _ hν
-      rw [if_neg (fun hh => hν hh.symm), mul_zero, zero_mul]
+      rw [ite_eq_right (fun hh => hν hh.symm), mul_zero, zero_mul]
     · intro h; exact absurd (Finset.mem_univ _) h
   · -- A₂ = lam⁻¹ • B₂, equivalently B₂ = lam • A₂.
     intro η₂ ν σ₂
@@ -363,9 +363,9 @@ theorem two_injective_tensor_insertion_comparison_core
       rw [hg2 η₂ ν σ₂]
       rw [Finset.sum_congr rfl (fun μ _ => by rw [hform μ ν])]
       rw [Finset.sum_eq_single ν]
-      · rw [if_pos rfl, mul_one]
+      · rw [ite_eq_left rfl, mul_one]
       · intro μ _ hμ
-        rw [if_neg hμ, mul_zero, zero_mul]
+        rw [ite_eq_right hμ, mul_zero, zero_mul]
       · intro h; exact absurd (Finset.mem_univ _) h
     rw [eq_comm, inv_mul_eq_iff_eq_mul₀ hlam, mul_comm]
     rw [mul_comm] at hB₂eq

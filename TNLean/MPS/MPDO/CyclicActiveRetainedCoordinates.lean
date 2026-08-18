@@ -336,7 +336,7 @@ theorem exists_cyclicNeighboringProduct_diag_ne_zero_of_isCyclicActiveSector
     F.exists_retainedBulkProduct_diag_ne_zero_of_isCyclicActiveSector hpos hq
   obtain ⟨m, rfl⟩ :=
     Nat.exists_eq_succ_of_ne_zero (Nat.ne_of_gt hn)
-  letI : NeZero m.succ := ⟨Nat.succ_ne_zero m⟩
+  let : NeZero m.succ := ⟨Nat.succ_ne_zero m⟩
   have hedge : ∀ j : Fin m.succ,
       F.neighboringOperator
         (k ((Fin.last m.succ).succAbove j))

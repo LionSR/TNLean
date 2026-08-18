@@ -188,8 +188,7 @@ theorem tendsto_pow_apply_zero_of_norm_lt_one {f : Module.End ℂ V} {μ : ℂ}
           simpa only [zero_div] using (tendsto_choose_mul_pow_zero hμ m).div_const (μ ^ m)
         exact hdiv.congr'
           (Filter.eventually_atTop.mpr ⟨m, fun n hn ↦ (heq n hn).symm⟩)
-      simpa using hscal.smul
-        (tendsto_const_nhds (x := ((f - μ • 1) ^ m) x))
+      exact hscal.zero_smul_const (((f - μ • 1) ^ m) x)
     have hsum : Tendsto (fun n : ℕ ↦ ∑ m ∈ Finset.range l,
         ((n.choose m : ℂ) * μ ^ (n - m)) • (((f - μ • 1) ^ m) x)) atTop
         (𝓝 (∑ m ∈ Finset.range l, (0 : V))) :=
@@ -260,9 +259,8 @@ theorem tendsto_pow_apply_self_of_mem_iSup_eigenspace {f : Module.End ℂ V}
       rcases eq_or_ne (v μ : V) 0 with hz | hz
       · rw [hz, map_zero, smul_zero]
       · exact HasEigenvector.pow_apply ⟨hmem, hz⟩ (n i)
-    have hlim : Tendsto (fun i : ℕ ↦ μ ^ n i • (v μ : V)) atTop (𝓝 ((1 : ℂ) • (v μ : V))) :=
-      (hn μ hμ).smul tendsto_const_nhds
-    rw [one_smul] at hlim
+    have hlim : Tendsto (fun i : ℕ ↦ μ ^ n i • (v μ : V)) atTop (𝓝 (v μ : V)) :=
+      (hn μ hμ).one_smul_const (v μ : V)
     exact hlim.congr' (Filter.Eventually.of_forall fun i ↦ (hEq i).symm)
   simpa only [map_sum] using tendsto_finsetSum _ fun μ hμ ↦ hterm μ hμ
 
@@ -360,7 +358,7 @@ private theorem exists_dirichlet_recurrent_subsequence :
     ∃ n : ℕ → ℕ, StrictMono n ∧ 0 < n 0 ∧
       ∀ μ ∈ peripheralEigenvalues T, Tendsto (fun i : ℕ ↦ μ ^ n i) atTop (𝓝 1) := by
   classical
-  letI := (peripheralEigenvalues_finite T).fintype
+  let := (peripheralEigenvalues_finite T).fintype
   obtain ⟨n, hnmono, hn0, hn⟩ := Dirichlet.exists_strictMono_pow_tendsto_one
     (fun μ : peripheralEigenvalues T ↦ (μ : ℂ)) (fun μ ↦ μ.prop.2)
   exact ⟨n, hnmono, hn0, fun μ hμ ↦ hn ⟨μ, hμ⟩⟩

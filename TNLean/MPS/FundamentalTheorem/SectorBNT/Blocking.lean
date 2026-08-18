@@ -266,7 +266,7 @@ theorem IsBNTCanonicalForm.blockTensor
   have hPrimitive : ∀ j : Fin P.basisCount,
       _root_.IsPrimitive (transferMap (P.basis j)) := by
     intro j
-    letI : NeZero (P.basisDim j) := ⟨(hCF.basis_dim_pos j).ne'⟩
+    let : NeZero (P.basisDim j) := ⟨(hCF.basis_dim_pos j).ne'⟩
     exact
       (isPrimitive_and_isNormal_of_irreducible_leftCanonical_selfOverlap_tendsto_one
         (P.basis j) (hCF.basis_irreducible j) (hCF.basis_left_canonical j)
@@ -299,7 +299,7 @@ theorem IsBNTCanonicalForm.blockTensor
       weight_norm_le_one := ?_
       weight_unit_exists := ?_ }
   · intro j
-    letI : NeZero (P.basisDim j) := ⟨(hCF.basis_dim_pos j).ne'⟩
+    let : NeZero (P.basisDim j) := ⟨(hCF.basis_dim_pos j).ne'⟩
     exact isIrreducibleTensor_blockTensor_of_tp_primitive_irr
       (P.basis j) (hCF.basis_left_canonical j) (hPrimitive j)
         (hCF.basis_irreducible j) hp
@@ -310,7 +310,7 @@ theorem IsBNTCanonicalForm.blockTensor
         (MPSTensor.blockTensor (P.basis j) p)
         (MPSTensor.blockTensor (P.basis j) p) N) atTop (nhds 1)
     intro j
-    letI : NeZero (P.basisDim j) := ⟨(hCF.basis_dim_pos j).ne'⟩
+    let : NeZero (P.basisDim j) := ⟨(hCF.basis_dim_pos j).ne'⟩
     have hMul : Tendsto (fun a : ℕ ↦ a * p) atTop atTop := by
       refine tendsto_atTop.2 fun b ↦ ?_
       filter_upwards [eventually_ge_atTop b] with a ha
