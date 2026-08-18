@@ -262,20 +262,23 @@ outer square-root factors yields
 \section{Auxiliary Perron reductions}
 \label{sec:app_qpf_perron}
 
-\begin{theorem}[Adjoint transfer map is nonzero]%
+\begin{theorem}[Nonzero Kraus maps]%
     \label{thm:adjoint_transfer_ne_zero}
-    \lean{MPSTensor.adjointTransferMap_ne_zero_of_nonzero}
+    \lean{Kraus.mapLM_ne_zero_of_exists_ne_zero}
     \leanok
     \uses{def:transfer_map}
-    If some Kraus operator $A^i \neq 0$, then the adjoint transfer
-    map $\E_A^\dagger(X) = \sum_i (A^i)^\dagger X A^i$ is nonzero.
+    If some Kraus operator $K^i \neq 0$, then the Kraus map
+    $X \mapsto \sum_i K^i X (K^i)^\dagger$ is nonzero. Applied to the
+    conjugate-transposed family, the adjoint transfer
+    map $\E_A^\dagger(X) = \sum_i (A^i)^\dagger X A^i$ of a tensor with some
+    $A^i \neq 0$ is nonzero.
 \end{theorem}
 
 \begin{proof}\leanok
-    If $\E_A^\dagger = 0$ then $\E_A^\dagger(\Id) = 0$,
-    so $\sum_i (A^i)^\dagger A^i = 0$.
-    Since each summand $(A^i)^\dagger A^i$ is positive semidefinite,
-    each $(A^i)^\dagger A^i = 0$ and hence each $A^i = 0$.
+    If the map vanishes, evaluating at $\Id$ gives
+    $\sum_i K^i (K^i)^\dagger = 0$.
+    Since each summand $K^i (K^i)^\dagger$ is positive semidefinite,
+    each $K^i (K^i)^\dagger = 0$ and hence each $K^i = 0$.
 \end{proof}
 
 \begin{theorem}[Real spectral-radius identity]
