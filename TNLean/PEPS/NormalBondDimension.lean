@@ -111,7 +111,8 @@ theorem IsVertexInjective.scaleVertex {A : Tensor G d} (hA : IsVertexInjective A
         (fun _ : (ie : IncidentEdge G v) → Fin (A.bondDim ie.1) => Units.mk0 c hc) •
           A.component v := by
       funext η σ
-      simp [PEPS.scaleVertex, hv, Units.smul_def]
+      simp [PEPS.scaleVertex, hv]
+      rfl
     rw [hcomp]
     exact (hA v).units_smul _
   · have hcomp : (PEPS.scaleVertex A v₀ c).component v = A.component v := by

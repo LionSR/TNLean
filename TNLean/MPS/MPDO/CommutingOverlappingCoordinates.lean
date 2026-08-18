@@ -96,7 +96,7 @@ theorem reindex_embedLocalOperator_zero_eq_leftOverlappingLift
   · have ha := hAgree.mpr h
     simp only [Matrix.reindex_apply, Matrix.submatrix_apply,
       embedLocalOperator_apply]
-    rw [if_pos ha]
+    rw [ite_eq_left ha]
     subst k'
     simp only [MPSTensor.extractWindow, threeSiteOverlappingEquiv,
       Equiv.symm_trans, Equiv.symm_symm, Fin.isValue,
@@ -121,7 +121,7 @@ theorem reindex_embedLocalOperator_zero_eq_leftOverlappingLift
       fun ha ↦ h (hAgree.mp ha)
     simp only [Matrix.reindex_apply, Matrix.submatrix_apply,
       embedLocalOperator_apply]
-    rw [if_neg ha]
+    rw [ite_eq_right ha]
     have hk : k ≠ k' := fun hk ↦ h hk.symm
     simp [Matrix.leftOverlappingLift, hk]
 
@@ -156,7 +156,7 @@ theorem reindex_embedLocalOperator_one_eq_rightOverlappingLift
   · have ha := hAgree.mpr h
     simp only [Matrix.reindex_apply, Matrix.submatrix_apply,
       embedLocalOperator_apply]
-    rw [if_pos ha]
+    rw [ite_eq_left ha]
     subst i'
     simp only [MPSTensor.extractWindow, threeSiteOverlappingEquiv,
       Equiv.symm_trans, Equiv.symm_symm, Fin.isValue,
@@ -181,7 +181,7 @@ theorem reindex_embedLocalOperator_one_eq_rightOverlappingLift
       fun ha ↦ h (hAgree.mp ha)
     simp only [Matrix.reindex_apply, Matrix.submatrix_apply,
       embedLocalOperator_apply]
-    rw [if_neg ha]
+    rw [ite_eq_right ha]
     have hi : i ≠ i' := fun hi ↦ h hi.symm
     simp [Matrix.rightOverlappingLift, hi]
 

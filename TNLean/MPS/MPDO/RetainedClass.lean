@@ -41,7 +41,7 @@ private theorem bntCanonicalForm_toTensor_ne_zero
     (hP : MPSTensor.IsBNTCanonicalForm P) : P.toTensor ≠ 0 := by
   classical
   obtain ⟨j, q, _hq⟩ := hP.weight_unit_exists
-  haveI : NeZero (P.basisDim j) := ⟨(hP.basis_dim_pos j).ne'⟩
+  have : NeZero (P.basisDim j) := ⟨(hP.basis_dim_pos j).ne'⟩
   have hBasis : ∃ i, P.basis j i ≠ 0 := by
     by_contra hzero
     push Not at hzero

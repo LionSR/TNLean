@@ -106,7 +106,7 @@ private theorem cyclicCfg_last_eq {N L : ℕ} (hN : 2 ≤ N) (hLN : L ≤ N) (hL
   have hval : (N - 1 : ℕ) + N - (N - 1 : ℕ) = N := by omega
   have hoffset : ((N - 1) + N - (N - 1)) % N = 0 := by
     rw [hval]; exact Nat.mod_self N
-  rw [dif_pos (show ((N - 1) + N - (N - 1)) % N < L by rw [hoffset]; omega)]
+  rw [dite_eq_left (show ((N - 1) + N - (N - 1)) % N < L by rw [hoffset]; omega)]
   congr 1; ext; simp
 
 /-- At the wrapping position \(N-1\), sites \(0,\ldots,L-2\) get
@@ -120,7 +120,7 @@ private theorem cyclicCfg_window_site {N L : ℕ} (hN : 2 ≤ N) (_hLN : L ≤ N
   have hoffset : (k + N - (N - 1)) % N = k + 1 := by
     have : k + N - (N - 1) = k + 1 := by omega
     rw [this, Nat.mod_eq_of_lt (by omega)]
-  rw [dif_pos (show (k + N - (N - 1)) % N < L by rw [hoffset]; omega)]
+  rw [dite_eq_left (show (k + N - (N - 1)) % N < L by rw [hoffset]; omega)]
   congr 1; ext; simp [hoffset]
 
 /-- At the wrapping position \(N-1\), complement sites get \(\tau\) values. -/
@@ -133,7 +133,7 @@ private theorem cyclicCfg_complement_site {N L : ℕ} (hN : 2 ≤ N) (_hLN : L �
   have hoffset : (k + N - (N - 1)) % N = k + 1 := by
     have : k + N - (N - 1) = k + 1 := by omega
     rw [this, Nat.mod_eq_of_lt (by omega)]
-  rw [dif_neg (show ¬((k + N - (N - 1)) % N < L) by rw [hoffset]; omega)]
+  rw [dite_eq_right (show ¬((k + N - (N - 1)) % N < L) by rw [hoffset]; omega)]
 
 /-! ### Snoc factorization
 
@@ -207,7 +207,7 @@ theorem init_evalWord_split {A : MPSTensor d D}
       have hoffset : (k + (M + 1) - M) % (M + 1) = k + 1 := by
         have : k + (M + 1) - M = k + 1 := by omega
         rw [this, Nat.mod_eq_of_lt (by omega)]
-      rw [dif_neg (by rw [hoffset]; omega)]
+      rw [dite_eq_right (by rw [hoffset]; omega)]
       congr 1; ext; simp; omega
 
 /-! ### Factorization at the second boundary-crossing position
@@ -230,7 +230,7 @@ private theorem cyclicCfg_mirror_zero_eq {N L : ℕ} (hN : 2 ≤ N) (hLN : L ≤
   have hoffset_lt : (0 + N - (N - L + 1)) % N < L := by
     rw [hoffset]
     omega
-  rw [dif_pos hoffset_lt]
+  rw [dite_eq_left hoffset_lt]
   apply congrArg σ_w
   ext
   exact hoffset
@@ -247,7 +247,7 @@ private theorem cyclicCfg_mirror_complement_site {N L : ℕ}
   have hoffset : (k + N - (N - L + 1)) % N = k + L - 1 := by
     have : k + N - (N - L + 1) = k + L - 1 := by omega
     rw [this, Nat.mod_eq_of_lt (by omega)]
-  rw [dif_neg (show ¬((k + N - (N - L + 1)) % N < L) by rw [hoffset]; omega)]
+  rw [dite_eq_right (show ¬((k + N - (N - L + 1)) % N < L) by rw [hoffset]; omega)]
 
 /-- At the second boundary-crossing position \(N - L + 1\), the final \(L - 1\)
 physical sites carry the first \(L - 1\) entries of the window. -/
@@ -263,7 +263,7 @@ private theorem cyclicCfg_mirror_window_site {N L : ℕ}
     have : N - L + 1 + k + N - (N - L + 1) = N + k := by omega
     rw [this, Nat.add_mod_left]
     exact Nat.mod_eq_of_lt (by omega)
-  rw [dif_pos (show (N - L + 1 + k + N - (N - L + 1)) % N < L by rw [hoffset]; omega)]
+  rw [dite_eq_left (show (N - L + 1 + k + N - (N - L + 1)) % N < L by rw [hoffset]; omega)]
   congr 1; ext; simp [hoffset]
 
 /-- At the second boundary-crossing position \(N - L + 1\), the cyclic word factors as
@@ -586,7 +586,7 @@ theorem wrappedMiddleBackground_complement (L₀ N : ℕ) (η : Fin d)
       wrappedMiddleBackground L₀ N η μ ⟨k.val + L₀, by omega⟩) = μ := by
   ext k
   simp only [wrappedMiddleBackground]
-  rw [dif_pos]
+  rw [dite_eq_left]
   · congr 1
     ext
     simp
@@ -600,7 +600,7 @@ theorem mirrorMiddleBackground_complement (L₀ N : ℕ) (η : Fin d)
       mirrorMiddleBackground L₀ N η μ ⟨k.val + 1, by omega⟩) = μ := by
   ext k
   simp only [mirrorMiddleBackground]
-  rw [dif_pos]
+  rw [dite_eq_left]
   · congr 1
   · constructor <;> omega
 
@@ -954,7 +954,7 @@ theorem boundary_matrix_commutes {A : MPSTensor d D} [NeZero D]
     rw [hYeq τ, ← Matrix.mul_assoc] at h1
     rw [sub_mul, sub_eq_zero]; exact h1
   -- Conclude: X * M₁ = M₁ * X
-  haveI : NeZero d := neZero_d_of_isInjective hA
+  have : NeZero d := neZero_d_of_isInjective hA
   have hd : 0 < d := Nat.pos_of_ne_zero (NeZero.ne d)
   have hComm : ∀ M₁ : Matrix (Fin D) (Fin D) ℂ, X * M₁ = M₁ * X := by
     intro M₁
@@ -976,7 +976,7 @@ theorem boundary_matrix_commutes {A : MPSTensor d D} [NeZero D]
             else ⟨0, hd⟩
           have hτ₀ : (fun k : Fin (M + 1 - L) => τ₀ ⟨k.val + L - 1, by omega⟩) = f := by
             ext ⟨k, hk⟩; simp only [τ₀]
-            rw [dif_pos ⟨by omega, by omega⟩]
+            rw [dite_eq_left ⟨by omega, by omega⟩]
             congr 2; ext1; dsimp only; omega
           rw [← hτ₀]; exact hCommComp M₁ τ₀
       have := congrArg (· 1) hφ

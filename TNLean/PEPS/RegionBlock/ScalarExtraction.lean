@@ -97,9 +97,9 @@ theorem localConfig_eq_of_insertConsistent (A : Tensor G d) (R : Finset V) {v : 
     have hb : IsRegionBoundaryEdge (G := G) R ie.1 :=
       isRegionBoundaryEdge_of_vIncident_regionIncident (G := G) R hv ie.2 hinc
     have h1 : boundaryLabelOfInsert (G := G) A R hv μ η ⟨ie.1, hb⟩ = η ie := by
-      rw [boundaryLabelOfInsert, dif_pos ie.2]
+      rw [boundaryLabelOfInsert, dite_eq_left ie.2]
     have h2 : boundaryLabelOfInsert (G := G) A R hv μ η' ⟨ie.1, hb⟩ = η' ie := by
-      rw [boundaryLabelOfInsert, dif_pos ie.2]
+      rw [boundaryLabelOfInsert, dite_eq_left ie.2]
     rw [← h1, ← h2, congrFun hbridge ⟨ie.1, hb⟩]
   · -- `v`-incident, non-`R`-incident: a `v`-incident `insert v R`-boundary edge.
     have hb : IsRegionBoundaryEdge (G := G) (insert v R) ie.1 :=
@@ -173,7 +173,7 @@ theorem insertConsistent_insertConsistentExtend (A : Tensor G d) (R : Finset V) 
     InsertConsistent (G := G) A R (insertConsistentExtend (G := G) A R μ₀ η) η := by
   classical
   intro g hgv
-  rw [insertConsistentExtend, dif_pos hgv]
+  rw [insertConsistentExtend, dite_eq_left hgv]
 
 /-- The inserted-site overcounting multiplicity is positive when every bond
 dimension is positive. -/
@@ -266,9 +266,9 @@ theorem component_eq_of_regionProportional (A Btilde : Tensor G d) (R : Finset V
     have hσR : restrictInsertPhysical (V := V) (d := d) R σ = ρ := by
       funext w
       rw [restrictInsertPhysical]
-      simp only [σ, dif_pos w.2]
+      simp only [σ, dite_eq_left w.2]
     have hσv : σ ⟨v, Finset.mem_insert_self v R⟩ = σv := by
-      simp only [σ, dif_neg hv]
+      simp only [σ, dite_eq_right hv]
     -- Regroup the bridge-label sum over the consistent local configurations.
     have hregroup :
         ∑ b : RegionBoundaryConfig (G := G) A R, g b * regionBlockedTensorFamily (G := G) C R b ρ
@@ -291,7 +291,8 @@ theorem component_eq_of_regionProportional (A Btilde : Tensor G d) (R : Finset V
         rw [Finset.sum_mul]
         refine Finset.sum_congr rfl (fun η' hη' => ?_)
         rw [Finset.mem_filter] at hη'
-        rw [regionBlockedTensorFamily, hη'.2.2]
+        unfold regionBlockedTensorFamily
+        rw [hη'.2.2]
       -- Step 2: match the fiber filters and collapse them to the filtered sum over consistent
       -- configurations.
       rw [step1]
@@ -315,8 +316,8 @@ theorem component_eq_of_regionProportional (A Btilde : Tensor G d) (R : Finset V
       refine Finset.sum_congr rfl (fun η' _ => ?_)
       simp only [hgCdef]
       by_cases hc : InsertConsistent (G := G) A R μ η'
-      · rw [if_pos hc, if_pos hc]
-      · rw [if_neg hc, if_neg hc, mul_zero]
+      · rw [ite_eq_left hc, ite_eq_left hc]
+      · rw [ite_eq_right hc, ite_eq_right hc, mul_zero]
     rw [hregroup]
     -- The vanishing combination from the two factorizations.
     -- The C-side inserted-site factorization at the base label `μ`.
@@ -341,8 +342,8 @@ theorem component_eq_of_regionProportional (A Btilde : Tensor G d) (R : Finset V
       rw [mul_left_comm]
       congr 1
       by_cases hc : InsertConsistent (G := G) A R μ η'
-      · rw [if_pos hc, if_pos hc, hR (boundaryLabelOfInsert (G := G) A R hv μ η') ρ]
-      · rw [if_neg hc, if_neg hc, mul_zero]
+      · rw [ite_eq_left hc, ite_eq_left hc, hR (boundaryLabelOfInsert (G := G) A R hv μ η') ρ]
+      · rw [ite_eq_right hc, ite_eq_right hc, mul_zero]
     -- Equate the two factorizations through `hS`.
     have hAS : m • regionBlockedWeight (G := G) A (insert v R) μ σ
         = c_S * (m • regionBlockedWeight (G := G) C (insert v R) μ σ) := by
@@ -375,7 +376,7 @@ theorem component_eq_of_regionProportional (A Btilde : Tensor G d) (R : Finset V
     rw [hgdef]
     beta_reduce
     rw [Finset.filter_congr (q := fun η' => η' = η) ?_]
-    · rw [Finset.filter_eq', if_pos (Finset.mem_univ _), Finset.sum_singleton]
+    · rw [Finset.filter_eq', ite_eq_left (Finset.mem_univ _), Finset.sum_singleton]
     · intro η' _
       constructor
       · rintro ⟨hcons', hbr⟩
@@ -434,8 +435,7 @@ theorem component_eq_gaugeVertex_of_twoBlockProportional (A B : Tensor G d) (R :
     (fun b ρ => hRprop PUnit.unit b ρ)
     (fun μ σ' => hSprop PUnit.unit μ σ')
     η σ
-  rw [hext, reindexTensor_component]
-  rfl
+  exact hext.trans rfl
 
 end PEPS
 end TNLean

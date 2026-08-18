@@ -56,7 +56,7 @@ lemma isIrreducibleAction_of_isIrreducibleTensor
     have : W = ⊤ :=
       (Submodule.map_eq_top_iff (p := W) (e := e)).1 (by simpa [W'] using h)
     exact hW_ne_top this
-  haveI : W'.HasOrthogonalProjection := by infer_instance
+  have : W'.HasOrthogonalProjection := by infer_instance
   let p' : E →L[ℂ] E := W'.starProjection
   -- Convert the orthogonal projection to a matrix via `Matrix.toEuclideanLin.symm`.
   let P : Matrix (Fin D) (Fin D) ℂ :=

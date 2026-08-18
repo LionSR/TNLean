@@ -264,14 +264,12 @@ theorem IsNormal.gram_eq_pos_smul_gram_of_gram_conj_eq
     ext i
     exact i.elim0
   · let i : Fin D := ⟨0, hD⟩
-    have hXunit : IsUnit X := (Matrix.isUnit_iff_isUnit_det X).mpr hX
-    have hYunit : IsUnit Y := (Matrix.isUnit_iff_isUnit_det Y).mpr hY
     have hGXpd : (Xᴴ * X).PosDef :=
       Matrix.PosDef.conjTranspose_mul_self X
-        (Matrix.mulVec_injective_of_isUnit hXunit)
+        (Matrix.mulVec_injective_of_det_ne_zero hX.ne_zero)
     have hGYpd : (Yᴴ * Y).PosDef :=
       Matrix.PosDef.conjTranspose_mul_self Y
-        (Matrix.mulVec_injective_of_isUnit hYunit)
+        (Matrix.mulVec_injective_of_det_ne_zero hY.ne_zero)
     have hcEntry : (Xᴴ * X) i i = c * (Yᴴ * Y) i i := by
       simpa [Matrix.smul_apply] using congr_fun (congr_fun hcGram i) i
     have hcPos : (0 : ℂ) < c := by

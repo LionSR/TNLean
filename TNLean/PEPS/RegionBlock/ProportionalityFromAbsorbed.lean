@@ -249,7 +249,7 @@ theorem twoBlockScalarProportional_unique (A Btilde : Tensor G d) (R : Finset V)
   have h2 := hc' PUnit.unit b ρ
   simp only [regionTwoBlock_apply] at h1 h2
   have : c * regionBlockedWeight (G := G) C R b ρ =
-      c' * regionBlockedWeight (G := G) C R b ρ := by rw [← h1, ← h2]
+      c' * regionBlockedWeight (G := G) C R b ρ := h1.symm.trans h2
   exact mul_right_cancel₀ hρ this
 
 end PEPS

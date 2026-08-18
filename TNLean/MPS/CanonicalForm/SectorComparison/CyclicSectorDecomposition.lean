@@ -257,7 +257,7 @@ private theorem
   have hMulRight := cyclic_projection_mul_right (A := A) (m := m) hTP P hPproj hcyclic
   have hPne : ∀ k : Fin m, P k ≠ 0 := cyclic_projection_nonzero_of_sum_one hPsum hcyclic
   intro u
-  haveI : NeZero (dim u) := ⟨hNondeg u⟩
+  have : NeZero (dim u) := ⟨hNondeg u⟩
   let hInv : PreservesCorner (P u) (T ^ m) :=
     preserves_corner_pow_of_cyclic_decomp (T := T) P hPproj hPsum hcyclic hMulLeft hMulRight u
   have hCornerPrim : _root_.IsPrimitive (cornerRestriction (P u) (T ^ m) hInv) :=
@@ -274,11 +274,11 @@ private theorem
   have hM : (1 : Matrix (Fin (dim u)) (Fin (dim u)) ℂ).PosDef := by
     classical
     simpa only using (Matrix.PosDef.one (n := Fin (dim u)) (R := ℂ))
-  letI : NormedAddCommGroup (Matrix (Fin (dim u)) (Fin (dim u)) ℂ) :=
+  let : NormedAddCommGroup (Matrix (Fin (dim u)) (Fin (dim u)) ℂ) :=
     Matrix.toMatrixNormedAddCommGroup (n := Fin (dim u)) (𝕜 := ℂ) 1 hM
-  letI : SeminormedAddCommGroup (Matrix (Fin (dim u)) (Fin (dim u)) ℂ) :=
+  let : SeminormedAddCommGroup (Matrix (Fin (dim u)) (Fin (dim u)) ℂ) :=
     Matrix.toMatrixSeminormedAddCommGroup (n := Fin (dim u)) (𝕜 := ℂ) 1 hM.posSemidef
-  letI : InnerProductSpace ℂ (Matrix (Fin (dim u)) (Fin (dim u)) ℂ) :=
+  let : InnerProductSpace ℂ (Matrix (Fin (dim u)) (Fin (dim u)) ℂ) :=
     Matrix.toMatrixInnerProductSpace (n := Fin (dim u)) (𝕜 := ℂ) 1 hM.posSemidef
   have hAdj :
       transferMap (d := blockPhysDim d m) (D := dim u) (fun i => (blocks u i)ᴴ) =
@@ -405,7 +405,7 @@ private theorem exists_cyclic_sector_decomp_with_peripheral_data_of_TP_of_irredu
     ext x
     simp [Set.mem_range, eq_comm]
   let hne : NeZero m := ⟨Nat.ne_of_gt hm_pos⟩
-  haveI : NeZero m := hne
+  have : NeZero m := hne
   obtain ⟨dim, blocks, P, φ, hTP_blocks, hSame, hPproj, hPsum, hcyclic, hComm,
       hTrace, hIntertwine, hMul, hStar, hNondeg⟩ :=
     exists_cyclic_sector_decomp_after_blocking A hTP hIrr ρ hρ_pd h_adjfix hIrrK hγ_prim
@@ -458,7 +458,7 @@ theorem exists_cyclic_sector_decomp_after_blocking_of_TP_of_isIrreducibleTensor
   obtain ⟨m, hne, hm_pos, _γ, _hγ_prim, _hperiph, hdecomp⟩ :=
     exists_cyclic_sector_decomp_with_peripheral_data_of_TP_of_irreducible
       A hTP hIrr
-  haveI : NeZero m := hne
+  have : NeZero m := hne
   obtain ⟨dim, blocks, P, φ, hTP_blocks, hSame, hPproj, hPsum, hcyclic, hComm,
     hTrace, hIntertwine, hMul, hStar, hNondeg⟩ := hdecomp
   exact ⟨m, hne, hm_pos, dim, blocks, P, φ, hTP_blocks, hSame, hPproj, hPsum, hcyclic,
@@ -492,7 +492,7 @@ theorem exists_primitive_irreducible_cyclic_sector_decomp_of_TP_of_isIrreducible
   obtain ⟨m, hne, hm_pos, _γ, hγ_prim, hperiph_range, hdecomp⟩ :=
     exists_cyclic_sector_decomp_with_peripheral_data_of_TP_of_irreducible
       A hTP hIrr
-  haveI : NeZero m := hne
+  have : NeZero m := hne
   obtain ⟨dim, blocks, P, φ, hTP_blocks, hSame, hPproj, hPsum, hcyclic, _hComm,
       _hTrace, hIntertwine, hMul, hStar, hNondeg⟩ :=
     hdecomp

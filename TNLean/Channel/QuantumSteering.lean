@@ -311,7 +311,7 @@ theorem exists_instrument_of_isConvexDecomposition (hρ : ρ.PosSemidef) (_hρtr
       have hzero : C * (1 - Cinv * C) * Cᴴ = 0 := mul_purificationPinvComplement_mul hρ hCC
       rw [hEi, Matrix.mul_add, Matrix.add_mul, hCX i0, hzero, add_zero]
     · have hEi : (E i)ᵀ = X i := by
-        simp only [hEdef, if_neg hi]
+        simp only [hEdef, ite_eq_right hi]
         rw [Matrix.transpose_add, Matrix.transpose_transpose, Matrix.transpose_zero, add_zero]
       rw [hEi]
       exact hCX i

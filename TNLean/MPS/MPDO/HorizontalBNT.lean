@@ -52,7 +52,7 @@ theorem insertedTensor_toTensorFromBlocks {r : ℕ} {dim : Fin r → ℕ}
   rw [Matrix.sum_apply]
   simp_rw [Matrix.smul_apply]
   by_cases h : a.1 = b.1
-  · simp_rw [Matrix.blockDiagonal'_apply, dif_pos h]
+  · simp_rw [Matrix.blockDiagonal'_apply, dite_eq_left h]
     simp only [insertedTensor, Matrix.sum_apply, Matrix.smul_apply, smul_eq_mul]
     calc
       ∑ x, Y i x * (μ a.1 * A a.1 x a.2 (cast _ b.2)) =
@@ -62,7 +62,7 @@ theorem insertedTensor_toTensorFromBlocks {r : ℕ} {dim : Fin r → ℕ}
         ring
       _ = μ a.1 * ∑ x, Y i x * A a.1 x a.2 (cast _ b.2) :=
         (Finset.mul_sum ..).symm
-  · simp_rw [Matrix.blockDiagonal'_apply, dif_neg h]
+  · simp_rw [Matrix.blockDiagonal'_apply, dite_eq_right h]
     simp
 
 /-- Equality of insertions on every minimal representative gives equality on

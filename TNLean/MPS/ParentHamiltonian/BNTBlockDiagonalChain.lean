@@ -552,7 +552,7 @@ theorem blockDiagonal_boundary_cyclicRestrict_sum_mem_iSup_groundSpace
   have hLocal :
       cyclicRestrictₗ hN L i τ ψ ∈
         groundSpace (toTensorFromBlocks (d := d) (μ := μ) A) L := by
-    rw [chainGroundSpace, dif_pos ⟨hN, hLN⟩] at hψ
+    rw [chainGroundSpace, dite_eq_left ⟨hN, hLN⟩] at hψ
     let S : Submodule ℂ (NSiteSpace d L) :=
       groundSpace (toTensorFromBlocks (d := d) (μ := μ) A) L
     change cyclicRestrictₗ hN L i τ ψ ∈ S
@@ -645,7 +645,7 @@ theorem blockDiagonal_boundary_component_chainGroundSpace_of_crossing_windows
     ∀ j : Fin r,
       groundSpaceMap (A j) N ((μ j) ^ N • X j) ∈ chainGroundSpace (A j) L N := by
   intro j
-  rw [chainGroundSpace, dif_pos ⟨hN, hLN⟩]
+  rw [chainGroundSpace, dite_eq_left ⟨hN, hLN⟩]
   simp only [Submodule.mem_iInf, Submodule.mem_comap]
   intro i τ
   by_cases hi : i.val + L ≤ N

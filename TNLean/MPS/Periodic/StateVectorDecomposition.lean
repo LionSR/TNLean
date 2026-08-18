@@ -269,8 +269,8 @@ theorem exists_paper_cyclic_projectors_of_isPeriodic
       (∀ k, IsOrthogonalProjection (Q k)) ∧
       (∑ k, Q k = 1) ∧
       (∀ k i, Q k * A i = A i * Q (k + 1)) := by
-  letI : NeZero D := ⟨hA.bondDim_ne_zero⟩
-  letI : NeZero p := ⟨Nat.ne_of_gt hA.period_pos⟩
+  let : NeZero D := ⟨hA.bondDim_ne_zero⟩
+  let : NeZero p := ⟨Nat.ne_of_gt hA.period_pos⟩
   obtain ⟨_dim, _blocks, P, _φ, _V, _hLC, _hMPV, hPproj, hPsum, hCyclic,
     _hComm, _hTrace, _hIntertwine, _hMul, _hStar, _hNondeg, _hLetter,
     _hV_iso, _hV_range, _hEmbed⟩ :=
@@ -339,7 +339,7 @@ theorem pgvwc07_periodic_stateVector_boundary_decomposition_of_dvd
       (∀ u : Fin p, u + N • (1 : Fin p) = u) ∧
       (∀ σ : Fin N → Fin d,
         mpv A σ = ∑ u : Fin p, Matrix.trace (cornerProd Q A u (List.ofFn σ))) := by
-  letI : NeZero p := ⟨Nat.ne_of_gt hA.period_pos⟩
+  let : NeZero p := ⟨Nat.ne_of_gt hA.period_pos⟩
   obtain ⟨Q, hQproj, hQsum, hshift⟩ := exists_paper_cyclic_projectors_of_isPeriodic A hA
   refine ⟨Q, hQproj, hQsum, hshift, ?_, ?_, ?_⟩
   · intro u j i
@@ -382,7 +382,7 @@ theorem pgvwc07_periodic_stateVector_decomposition_of_dvd
       (∀ σ : Fin N → Fin d,
         mpv A σ = ∑ u : Fin p,
           MPSChainTensor.coeff (projectorComponentChain Q A u N) σ) := by
-  letI : NeZero p := ⟨Nat.ne_of_gt hA.period_pos⟩
+  let : NeZero p := ⟨Nat.ne_of_gt hA.period_pos⟩
   obtain ⟨Q, hQproj, hQsum, hshift⟩ := exists_paper_cyclic_projectors_of_isPeriodic A hA
   refine ⟨Q, hQproj, hQsum, hshift, ?_, ?_, ?_⟩
   · intro u j i
@@ -407,7 +407,7 @@ theorem pgvwc07_stateVector_eq_zero_of_not_dvd
     (A : MPSTensor d D) (hA : IsPeriodic p A)
     {N : ℕ} (hN : ¬p ∣ N) :
     ∀ σ : Fin N → Fin d, mpv A σ = 0 := by
-  letI : NeZero p := ⟨Nat.ne_of_gt hA.period_pos⟩
+  let : NeZero p := ⟨Nat.ne_of_gt hA.period_pos⟩
   obtain ⟨Q, hQproj, hQsum, hshift⟩ := exists_paper_cyclic_projectors_of_isPeriodic A hA
   have hNpos : 0 < N := by
     by_contra h

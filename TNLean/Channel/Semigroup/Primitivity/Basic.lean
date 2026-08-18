@@ -99,7 +99,7 @@ theorem eigenvalue_exp_of_eigenvalue_generator
     (endEquiv (D := D)).toLinearEquiv.finiteDimensional
   let hComplete :
       CompleteSpace (Matrix (Fin D) (Fin D) ℂ →L[ℂ] Matrix (Fin D) (Fin D) ℂ) := by
-    letI : FiniteDimensional ℂ
+    let : FiniteDimensional ℂ
         (Matrix (Fin D) (Fin D) ℂ →L[ℂ] Matrix (Fin D) (Fin D) ℂ) := hFinite
     exact FiniteDimensional.complete ℂ
       (Matrix (Fin D) (Fin D) ℂ →L[ℂ] Matrix (Fin D) (Fin D) ℂ)

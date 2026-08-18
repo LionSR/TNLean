@@ -48,10 +48,10 @@ theorem changePhysicalBasis_eq_ite_of_pairwise_orthogonal_twoSided_physicalSuppo
     changePhysicalBasis (P s) (K t) = if s = t then K t else 0 := by
   by_cases hst : s = t
   · subst t
-    rw [if_pos rfl]
+    rw [ite_eq_left rfl]
     exact changePhysicalBasis_eq_self_of_twoSided_physicalSlice
       (P s) (K s) (hP s) (hSupport s)
-  · rw [if_neg hst]
+  · rw [ite_eq_right hst]
     ext i j β α
     change (P s * physicalSlice (K t) β α * (P s)ᴴ) i j = 0
     rw [(hP s).1.eq]

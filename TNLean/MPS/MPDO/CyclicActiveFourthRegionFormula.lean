@@ -118,7 +118,7 @@ theorem reindex_threeSuffixSectorContraction_eq_cyclicActiveUnnormalized
   classical
   ext x y
   simp only [Matrix.reindex_apply, Matrix.submatrix_apply, threeSuffixSectorContraction,
-    suffixSectorContraction, Matrix.kroneckerMap_apply]
+    suffixSectorContraction]
   have hrestrict :
       (∑ t : Fin 3 → Fin F.sectorCount,
           ∑ z : F.SectorChainFiber t,
@@ -195,8 +195,7 @@ theorem reindex_threeSuffixSectorContraction_eq_cyclicActiveUnnormalized
         fin_cases i <;> rfl
       rw [ht]
     _ = _ := by
-      simp only [Matrix.sum_apply, Matrix.smul_apply, smul_eq_mul,
-        cyclicActiveUnnormalizedTwoStepBoundaryContraction]
+      simp only [cyclicActiveUnnormalizedTwoStepBoundaryContraction]
       simp_rw [F.sum_threeSuffixFiber_cyclicNeighboringProduct_active]
       simp only [Matrix.kroneckerMap_apply]
       have sum_swap (g : F.CyclicActiveSector → F.CyclicActiveSector →
@@ -227,7 +226,27 @@ theorem reindex_threeSuffixSectorContraction_eq_cyclicActiveUnnormalized
             intro q _
             simpa only [mul_comm, mul_left_comm, mul_assoc] using
               (Fintype.sum_mul_mul_eq_mul_sum_mul (R q) (L q) (C q)).symm
-      exact distribute _ _ _ _
+      have hrhs :
+          Matrix.kroneckerMap (fun x1 x2 : ℂ => x1 * x2) (F.retainedBulkProduct k)
+              (∑ q, ∑ h, ((F.cyclicActiveSectorTraceMatrix ^ 2) q h : ℂ) •
+                Matrix.kroneckerMap (fun x1 x2 : ℂ => x1 * x2)
+                  (F.neighboringOperator (k (Fin.last n)) (q : Fin F.sectorCount)).partialTraceRight
+                  (F.neighboringOperator (h : Fin F.sectorCount)
+                    (k (Fin.last n + 1))).partialTraceLeft) x y =
+            F.retainedBulkProduct k x.1 y.1 *
+              ∑ q, ∑ h, ((F.cyclicActiveSectorTraceMatrix ^ 2) q h : ℂ) *
+                ((F.neighboringOperator (k (Fin.last n))
+                    (q : Fin F.sectorCount)).partialTraceRight x.2.1 y.2.1 *
+                  (F.neighboringOperator (h : Fin F.sectorCount)
+                    (k (Fin.last n + 1))).partialTraceLeft x.2.2 y.2.2) := by
+        simp only [Matrix.kroneckerMap_apply, Matrix.sum_apply, Matrix.smul_apply, smul_eq_mul]
+      exact (distribute (F.retainedBulkProduct k x.1 y.1)
+        (fun q => (F.neighboringOperator (k (Fin.last n)) (q : Fin F.sectorCount)).partialTraceRight
+          x.2.1 y.2.1)
+        (fun _ h =>
+          (F.neighboringOperator (h : Fin F.sectorCount)
+            (k (Fin.last n + 1))).partialTraceLeft x.2.2 y.2.2)
+        (fun q h => ((F.cyclicActiveSectorTraceMatrix ^ 2) q h : ℂ))).trans hrhs.symm
 
 /-- Every retained sector block of the three-suffix contraction has the
 separated fourth-region form, with blocks outside cyclic-active support equal
@@ -257,9 +276,16 @@ theorem reindex_threeSuffixSectorContraction_eq_cyclicActiveFourthRegionBlock
     rw [F.cyclicActiveUnnormalizedTwoStepBoundaryContraction_eq_smul
       lam hlam, F.cyclicActiveTwoStepBoundaryContraction_eq_separated
       lam a b hab]
+    rw [show F.cyclicActiveFourthRegionBlock lam a b k =
+        ((lam : ℂ) ^ 2) •
+          (F.retainedBulkProduct k ⊗ₖ
+            F.cyclicActiveSeparatedBoundary a b
+              (F.cyclicActiveRetainedWord hk (Fin.last n + 1))
+              (F.cyclicActiveRetainedWord hk (Fin.last n))) from by
+      unfold cyclicActiveFourthRegionBlock
+      exact dite_eq_left hk]
     ext x y
-    simp only [cyclicActiveFourthRegionBlock, dif_pos hk,
-      Matrix.kroneckerMap_apply, Matrix.smul_apply, smul_eq_mul]
+    simp only [Matrix.kroneckerMap_apply, Matrix.smul_apply, smul_eq_mul]
     ring
   · rw [F.threeSuffixSectorContraction_eq_zero_of_not_isCyclicActiveRetainedWord
       k hk]

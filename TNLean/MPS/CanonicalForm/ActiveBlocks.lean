@@ -288,11 +288,26 @@ theorem toTensorFromBlocks_active_eq_submatrix
       ⟨(data.activeEquiv kx).1, mx⟩ ⟨(data.activeEquiv ky).1, my⟩
   by_cases h : kx = ky
   · subst ky
-    rw [Matrix.blockDiagonal'_apply_eq, Matrix.blockDiagonal'_apply_eq]
-    rfl
-  · rw [Matrix.blockDiagonal'_apply_ne _ _ _ h,
-      Matrix.blockDiagonal'_apply_ne]
-    exact fun he => h (data.activeEquiv.injective (Subtype.ext he))
+    calc
+      Matrix.blockDiagonal' (fun k => data.activeWeight k • data.activeBlocks k i)
+          ⟨kx, mx⟩ ⟨kx, my⟩ =
+        (data.activeWeight kx • data.activeBlocks kx i) mx my :=
+          Matrix.blockDiagonal'_apply_eq _ _ _ _
+      _ = (data.weights (data.activeEquiv kx).1 • data.blocks (data.activeEquiv kx).1 i)
+          mx my := rfl
+      _ = Matrix.blockDiagonal' (fun k => data.weights k • data.blocks k i)
+          ⟨(data.activeEquiv kx).1, mx⟩ ⟨(data.activeEquiv kx).1, my⟩ :=
+        (Matrix.blockDiagonal'_apply_eq
+          (fun k => data.weights k • data.blocks k i)
+          (data.activeEquiv kx).1 mx my).symm
+  · have hactive : (data.activeEquiv kx).1 ≠ (data.activeEquiv ky).1 :=
+      fun he => h (data.activeEquiv.injective (Subtype.ext he))
+    calc
+      Matrix.blockDiagonal' (fun k => data.activeWeight k • data.activeBlocks k i)
+          ⟨kx, mx⟩ ⟨ky, my⟩ = 0 := Matrix.blockDiagonal'_apply_ne _ _ _ h
+      _ = Matrix.blockDiagonal' (fun k => data.weights k • data.blocks k i)
+          ⟨(data.activeEquiv kx).1, mx⟩ ⟨(data.activeEquiv ky).1, my⟩ :=
+        (Matrix.blockDiagonal'_apply_ne _ _ _ hactive).symm
 
 private theorem weight_eq_zero_of_coordinate_not_active
     (data : CPSVCanonicalFormData A)

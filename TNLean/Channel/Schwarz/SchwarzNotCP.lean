@@ -78,8 +78,10 @@ private def wolfExample53J : M2 := ![![0, -1], ![1, 0]]
 private lemma trace_smul_one_sub_eq_wolfExample53J_mul_transpose_mul_conjTranspose (M : M2) :
     Matrix.trace M • (1 : M2) - M = wolfExample53J * Mᵀ * wolfExample53Jᴴ := by
   ext i j
+  change Matrix.trace M * (if i = j then 1 else 0) - M i j =
+    ∑ x, (∑ y, wolfExample53J i y * M x y) * star (wolfExample53J j x)
   fin_cases i <;> fin_cases j <;>
-    simp [wolfExample53J, Matrix.mul_apply, Matrix.trace, Fin.sum_univ_two]
+    simp [wolfExample53J, Matrix.trace, Fin.sum_univ_two]
 
 private lemma trace_smul_one_sub_posSemidef_of_posSemidef (M : M2) (hM : M.PosSemidef) :
     (Matrix.trace M • (1 : M2) - M).PosSemidef := by

@@ -146,7 +146,7 @@ private theorem transport_one_eq_smul_one {A C : MPSTensor d D} {L k : ℕ}
           exact ⟨evalWord A (List.ofFn τ), hΛk τ⟩
   have hinj : Function.Injective Λk := LinearMap.injective_iff_surjective.mpr hsurj
   refine ⟨c, fun hc0 => ?_, hV⟩
-  haveI : Nonempty (Fin D) := ⟨⟨0, hD⟩⟩
+  have : Nonempty (Fin D) := ⟨⟨0, hD⟩⟩
   apply (show (1 : Matrix (Fin D) (Fin D) ℂ) ≠ 0 from one_ne_zero)
   apply hinj
   rw [hV, hc0, zero_smul, map_zero]
@@ -189,7 +189,7 @@ private theorem exists_evalWord_ne_zero {A : MPSTensor d D} {L n : ℕ}
       (Set.range fun σ : Fin n → Fin d => evalWord A (List.ofFn σ)) :=
     hspan ▸ Submodule.mem_top
   obtain ⟨c, hc⟩ := Submodule.mem_span_range_iff_exists_fun ℂ |>.mp h1
-  haveI : Nonempty (Fin D) := ⟨⟨0, hD⟩⟩
+  have : Nonempty (Fin D) := ⟨⟨0, hD⟩⟩
   apply (show (1 : Matrix (Fin D) (Fin D) ℂ) ≠ 0 from one_ne_zero)
   rw [← hc]
   exact Finset.sum_eq_zero fun σ _ => by rw [hall σ, smul_zero]
@@ -426,7 +426,7 @@ theorem overlapWindow_exists_bondOperator {B : MPSTensor d D} {n L : ℕ}
     ∃ X : Matrix (Fin D) (Fin D) ℂ,
       (∀ a, C 0 a = evalWord B (List.ofFn a) * X) ∧
         (∀ b, C L b = X * evalWord B (List.ofFn b)) := by
-  haveI : NeZero n := ⟨by omega⟩
+  have : NeZero n := ⟨by omega⟩
   obtain ⟨X, hX0, hXL⟩ := MPSChainTensor.overlapWindow_exists_bondOperator
     (A := fun _ : Fin n => B) hL hn
     (MPSChainTensor.isWindowInjective_const hB) 0 C
@@ -460,7 +460,7 @@ theorem exists_conjugation_of_mpv_eq {n L d D : ℕ}
         MPSTensor.evalWord B w =
           (Z : Matrix (Fin D) (Fin D) ℂ) * MPSTensor.evalWord A w *
             (((Z⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ)) := by
-  haveI : NeZero n := ⟨by omega⟩
+  have : NeZero n := ⟨by omega⟩
   -- Build constant chains.
   set A' : MPSChainTensor d D n := fun _ : Fin n => A with hA'
   set B' : MPSChainTensor d D n := fun _ : Fin n => B with hB'
@@ -711,7 +711,7 @@ theorem fundamentalTheorem_normalMPS_translationInvariant_of_overlap
     (hAB : ∀ σ : Fin n → Fin d, MPSTensor.mpv A σ = MPSTensor.mpv B σ) :
     ∃ (Z : GL (Fin D) ℂ) (lam : ℂ), lam ^ n = 1 ∧
       ∀ i : Fin d, B i = lam • ((Z⁻¹ : GL (Fin D) ℂ) * A i * (Z : GL (Fin D) ℂ)) := by
-  haveI : NeZero n := ⟨by omega⟩
+  have : NeZero n := ⟨by omega⟩
   -- The conjugation at length `n` from the site-dependent chain capstone.
   obtain ⟨P, hP⟩ := MPSTensor.exists_conjugation_of_mpv_eq hL hn hD A B hA hB hAB
   -- Absorb the gauge: the conjugated `B` has equal word products with `A`.
@@ -791,7 +791,7 @@ theorem fundamentalTheorem_normalMPS_of_overlap {n L d D : ℕ} [NeZero n]
     rw [Fin.val_add_eq_ite, h1]
     have hv := v.isLt
     by_cases hwrap : n ≤ v.val + 1
-    · rw [if_pos hwrap]
+    · rw [ite_eq_left hwrap]
       have hv' : v.val = n - 1 := by omega
       have hexp : v.val + 1 - n = 0 := by omega
       rw [hexp, pow_zero, mul_one, hv']
@@ -801,7 +801,7 @@ theorem fundamentalTheorem_normalMPS_of_overlap {n L d D : ℕ} [NeZero n]
       field_simp
       rw [← hmul]
       ring
-    · rw [if_neg hwrap, pow_succ]
+    · rw [ite_eq_right hwrap, pow_succ]
       rw [← mul_assoc, inv_mul_cancel₀ (hpow0 v.val), one_mul]
   rw [mul_comm (lam ^ ((v + 1 : Fin n) : ℕ)) ((lam ^ (v : ℕ))⁻¹), hscal]
   exact hZ₀ i

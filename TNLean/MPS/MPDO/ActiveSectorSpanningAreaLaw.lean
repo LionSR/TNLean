@@ -193,7 +193,7 @@ private lemma evalWord_same_eq (i : Fin 4) (w : List (Fin 4)) :
   | nil =>
       simp [evalWord, tensor, sectorMatrix_eq_crossSectorMatrix, lastFrom]
   | cons j w ih =>
-      rw [evalWord_cons, tensor, if_pos rfl, sectorMatrix_eq_crossSectorMatrix,
+      rw [evalWord_cons, tensor, ite_eq_left rfl, sectorMatrix_eq_crossSectorMatrix,
         ih j, Matrix.mul_smul, crossSectorMatrix_mul, pairing_eq_transition]
       simp only [pathWeight_cons_cons, lastFrom, smul_smul]
       push_cast
@@ -232,12 +232,12 @@ private lemma evalWord_eq_zero_of_ne :
           have hlen' : u.length = v.length := by simpa using hlen
           by_cases hij : i = j
           · subst j
-            rw [evalWord_cons, tensor, if_pos rfl]
+            rw [evalWord_cons, tensor, ite_eq_left rfl]
             have huv : u ≠ v := by
               intro huv
               exact hne (huv ▸ rfl)
             rw [ih v hlen' huv, Matrix.mul_zero]
-          · rw [evalWord_cons, tensor, if_neg hij, Matrix.zero_mul]
+          · rw [evalWord_cons, tensor, ite_eq_right hij, Matrix.zero_mul]
 
 private lemma trace_evalWord_same_mul_loop (i : Fin 4) (w : List (Fin 4)) :
     Matrix.trace
@@ -541,7 +541,7 @@ theorem tensor_has_sal_sourceZCL_and_non_rankOne_activeTraceMatrix :
     trace_activeSectorTraceMatrix, activeSectorTraceMatrix_not_rankOne,
     rectangular_remainder_ne_zero⟩
   intro k h
-  rw [inverseMapFactorization_neighboringOperator]
-  exact neighboringOperator_posSemidef k h
+  have hEq := inverseMapFactorization_neighboringOperator k h
+  exact hEq.symm ▸ neighboringOperator_posSemidef k h
 
 end MPOTensor.ActiveSectorSpanningCounterexample

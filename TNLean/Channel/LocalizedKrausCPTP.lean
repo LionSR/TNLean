@@ -73,7 +73,7 @@ theorem tensorMapId_posSemidef_of_isKrausCP {α β δ : Type*} [Fintype α] [Dec
     {X : Matrix (α × δ) (α × δ) ℂ} (hX : X.PosSemidef) :
     (Matrix.tensorMapId S X).PosSemidef := by
   classical
-  letI := Fintype.ofFinite δ
+  let := Fintype.ofFinite δ
   have hkraus := (tensorMapIdLM_isKrausCP (δ := δ) hS).map_posSemidef hX
   rwa [Matrix.tensorMapIdLM_apply] at hkraus
 

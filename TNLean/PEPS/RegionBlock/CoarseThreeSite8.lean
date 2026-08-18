@@ -184,15 +184,25 @@ theorem redBundleInsertedCoeff_singleton (red blue : Finset V) (e : Edge G)
       regionInsertedCoeff (G := G) A red
         (singleBoundaryEdge (G := G) A red blue e hsingle) M σ τ := by
   classical
+  let f : {f : Edge G // IsRegionBoundaryEdge (G := G) red f} :=
+    singleBoundaryEdge (G := G) A red blue e hsingle
+  let M' : Matrix (Fin (A.bondDim f.1)) (Fin (A.bondDim f.1)) ℂ := fun i j => M i j
+  let K : Matrix (CrossingConfig (G := G) A red blue)
+      (CrossingConfig (G := G) A red blue) ℂ := fun p q =>
+    M (singletonCrossingEquiv (G := G) A red blue e hsingle p)
+      (singletonCrossingEquiv (G := G) A red blue e hsingle q)
+  change redBundleInsertedCoeff (G := G) A red blue K σ τ =
+    regionInsertedCoeff (G := G) A red f M' σ τ
   rw [redBundleInsertedCoeff_eq, regionInsertedCoeff_eq]
   refine Finset.sum_congr rfl (fun μ _ => Finset.sum_congr rfl (fun ν _ => ?_))
+  dsimp only [K, M', f]
   by_cases h : SameAwayFromRBBundle (G := G) A red blue μ ν
-  · rw [if_pos h,
-      if_pos ((sameAwayFromRBBundle_iff_sameAwayFromBond red blue e hsingle μ ν).mp h),
-      singletonBundleMatrix, singletonCrossingEquiv_redBoundaryRBCrossing,
+  · rw [ite_eq_left h,
+      ite_eq_left ((sameAwayFromRBBundle_iff_sameAwayFromBond red blue e hsingle μ ν).mp h),
+      singletonCrossingEquiv_redBoundaryRBCrossing,
       singletonCrossingEquiv_redBoundaryRBCrossing]
-  · rw [if_neg h,
-      if_neg (fun h' => h
+  · rw [ite_eq_right h,
+      ite_eq_right (fun h' => h
         ((sameAwayFromRBBundle_iff_sameAwayFromBond red blue e hsingle μ ν).mpr h'))]
 
 end PEPS

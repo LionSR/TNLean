@@ -308,11 +308,11 @@ theorem coeff_identity_via_matched_mpv_phase_proportional
         mpv P.toTensor σ = c * mpv Q.toTensor σ then h.choose else 1, ?_, ?_⟩
     · refine hProp.mono ?_
       intro N hN
-      simp only [dif_pos hN]
+      simp only [dite_eq_left hN]
       exact hN.choose_spec.1
     · refine hProp.mono ?_
       intro N hN
-      simp only [dif_pos hN]
+      simp only [dite_eq_left hN]
       exact hN.choose_spec.2
   refine ⟨c, hc_ne, ?_⟩
   have hζ_mpv' : ∀ᶠ N in atTop,

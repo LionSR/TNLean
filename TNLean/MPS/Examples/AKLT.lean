@@ -245,7 +245,7 @@ $\begin{pmatrix} -1 & 0 & 0 \\ 0 & 0 & 1 \\ 0 & 1 & 0 \end{pmatrix}$. -/
 def akltZ2Action :
     Multiplicative (ZMod 2) →* Matrix (Fin 3) (Fin 3) ℂ where
   toFun g := if Multiplicative.toAdd g = 0 then 1
-    else Matrix.of !![(-1 : ℂ), 0, 0; 0, 0, 1; 0, 1, 0]
+    else !![(-1 : ℂ), 0, 0; 0, 0, 1; 0, 1, 0]
   map_one' := by simp [toAdd_one]
   map_mul' a b := by
     rcases zmod2_cases a with rfl | rfl <;> rcases zmod2_cases b with rfl | rfl <;>

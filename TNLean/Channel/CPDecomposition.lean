@@ -92,7 +92,7 @@ theorem exists_four_isKrausCP_complexCombination
       (∀ k, IsKrausCP (S k)) ∧ T = ∑ k, c k • S k := by
   rcases Nat.eq_zero_or_pos d with rfl | hd
   · exact ⟨0, 0, fun _ => isKrausCP_zero, by simp [eq_zero_of_isEmpty T]⟩
-  haveI : NeZero d := ⟨hd.ne'⟩
+  have : NeZero d := ⟨hd.ne'⟩
   obtain ⟨H₁, H₂, hH₁, hH₂, hsplit⟩ :=
     Matrix.exists_isHermitian_eq_add_smul_I (choiMatrix T)
   obtain ⟨P₁, N₁, hP₁, hN₁, hH₁eq⟩ := hH₁.exists_eq_sub_posSemidef
@@ -128,7 +128,7 @@ theorem exists_two_isKrausCP_realCombination_of_hermiticityPreserving
       (∀ k, IsKrausCP (S k)) ∧ T = ∑ k, (c k : ℂ) • S k := by
   rcases Nat.eq_zero_or_pos d with rfl | hd
   · exact ⟨0, 0, fun _ => isKrausCP_zero, by simp [eq_zero_of_isEmpty T]⟩
-  haveI : NeZero d := ⟨hd.ne'⟩
+  have : NeZero d := ⟨hd.ne'⟩
   have hherm : (choiMatrix T).IsHermitian :=
     (choiMatrix_isHermitian_iff_hermiticityPreserving T).mpr hT
   obtain ⟨P, N, hP, hN, hsplit⟩ := hherm.exists_eq_sub_posSemidef

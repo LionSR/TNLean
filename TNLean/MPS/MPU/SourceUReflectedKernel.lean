@@ -83,7 +83,7 @@ theorem normalizedDiagonal_doubleLayerTensor_physicalAdjointTensor
   obtain ⟨⟨a, c⟩, rfl⟩ := finProdFinEquiv.surjective x
   obtain ⟨⟨b, e⟩, rfl⟩ := finProdFinEquiv.surjective y
   simp only [normalizedDiagonal, contractPhysical, Matrix.one_apply, ite_smul,
-    one_smul, zero_smul, Finset.sum_ite_eq', Finset.mem_univ, if_true,
+    one_smul, zero_smul, Finset.sum_ite_eq', Finset.mem_univ, ite_true,
     Matrix.submatrix_apply, Matrix.smul_apply,
     Matrix.sum_apply, doubleLayerTensor_apply, kroneckerMap_apply,
     physicalAdjointTensor_apply, star_star]
@@ -146,7 +146,7 @@ theorem conjTranspose_normalizedDiagonal_reflected_eq_vecMulVec
         (fun x : Fin (D * D) ↦
           (1 : Matrix (Fin D) (Fin D) ℂ).vec (finProdFinEquiv.symm x))
         (fun x : Fin (D * D) ↦ ρ.vec (finProdFinEquiv.symm x)) := by
-  letI : NeZero (MPSTensor.blockPhysDim d K) := ⟨by
+  let : NeZero (MPSTensor.blockPhysDim d K) := ⟨by
     rw [MPSTensor.blockPhysDim_eq_pow]
     exact pow_ne_zero K (NeZero.ne d)⟩
   rw [← physicalAdjointTensor_blockTensor]
@@ -171,7 +171,7 @@ theorem reflected_transfer_power_eq_vecMulVec_transpose [NeZero d]
         (MPSTensor.transferMap (physicalAdjointTensor U).normalizedFlattening) ^ J =
       Matrix.vecMulVec ρ.transpose.vec
         (1 : Matrix (Fin D) (Fin D) ℂ).vec := by
-  letI : NeZero (MPSTensor.blockPhysDim d J) := ⟨by
+  let : NeZero (MPSTensor.blockPhysDim d J) := ⟨by
     simpa only [MPSTensor.blockPhysDim_eq_pow] using
       pow_ne_zero J (NeZero.ne d)⟩
   rw [← Equiv.apply_eq_iff_eq

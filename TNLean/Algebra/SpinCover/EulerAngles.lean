@@ -75,7 +75,7 @@ lemma su2Diag_mem_specialUnitaryGroup (θ : ℝ) :
         Matrix.one_apply, Complex.star_def, Fin.mk_zero, Fin.mk_one, Matrix.cons_val_zero,
         Matrix.cons_val_one, Matrix.of_apply, Matrix.cons_val', Matrix.empty_val',
         Matrix.cons_val_fin_one, ← Complex.exp_conj, ← Complex.exp_add, map_zero, mul_zero,
-        zero_mul, add_zero, zero_add, Fin.isValue, Fin.reduceEq, if_true, if_false] <;>
+        zero_mul, add_zero, zero_add, Fin.isValue, Fin.reduceEq, ite_true, ite_false] <;>
       first
         | rfl
         | (rw [← Complex.exp_zero]; congr 1
@@ -100,7 +100,7 @@ lemma su2Xrot_mem_specialUnitaryGroup (β : ℝ) :
         Matrix.of_apply, Matrix.cons_val', Matrix.empty_val',
         Matrix.cons_val_fin_one, Complex.star_def, map_neg, map_mul,
         Complex.conj_I, Complex.conj_ofReal, Fin.isValue, Fin.reduceEq,
-        if_true, if_false] <;>
+        ite_true, ite_false] <;>
       first
         | linear_combination hp - (Real.sin (β / 2) : ℂ) ^ 2 * Complex.I_sq
         | ring
@@ -248,9 +248,9 @@ lemma so3_euler_decomp (M : Matrix (Fin 3) (Fin 3) ℝ)
     linarith only [this]
   -- norms of relevant rows/cols
   have hr22 : M 2 0 * M 2 0 + M 2 1 * M 2 1 + M 2 2 * M 2 2 = 1 := by
-    have := row 2 2; rwa [if_pos rfl] at this
+    have := row 2 2; rwa [ite_eq_left rfl] at this
   have hc22 : M 0 2 * M 0 2 + M 1 2 * M 1 2 + M 2 2 * M 2 2 = 1 := by
-    have := col 2 2; rwa [if_pos rfl] at this
+    have := col 2 2; rwa [ite_eq_left rfl] at this
   have hbound : M 2 2 ^ 2 ≤ 1 := by
     nlinarith only [hr22, sq_nonneg (M 2 0), sq_nonneg (M 2 1)]
   set sβ := Real.sqrt (1 - M 2 2 ^ 2) with hsβdef
@@ -274,7 +274,7 @@ lemma so3_euler_decomp (M : Matrix (Fin 3) (Fin 3) ℝ)
       nlinarith only [hc22, h22sq, sq_nonneg (M 0 2), sq_nonneg (M 1 2)]
     have hcol0 : M 0 0 ^ 2 + M 1 0 ^ 2 = 1 := by
       have := col 0 0
-      rw [if_pos rfl] at this
+      rw [ite_eq_left rfl] at this
       nlinarith only [this, hz20]
     obtain ⟨α, hcosα, hsinα⟩ :=
       exists_cos_sin (c := M 0 0) (s := M 1 0) (by nlinarith only [hcol0])

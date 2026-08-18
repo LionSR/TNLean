@@ -208,7 +208,7 @@ private lemma cyclicCfg_extractWindow_eq {N : ℕ} (hN : 2 ≤ N) (i : Fin N)
   ext k
   simp only [cyclicCfg]
   by_cases hk : (k.val + N - i.val) % N < 2
-  · rw [dif_pos hk]
+  · rw [dite_eq_left hk]
     have hsite :
         k =
           ⟨(i.val + (k.val + N - i.val) % N) % N,
@@ -216,7 +216,7 @@ private lemma cyclicCfg_extractWindow_eq {N : ℕ} (hN : 2 ≤ N) (i : Fin N)
       eq_cyclic_site_of_offset_eq (N := N) (by omega : 0 < N)
         (i := i) (k := k) (r := (k.val + N - i.val) % N) rfl
     exact congrArg Fin.val (by simpa [extractWindow] using congrArg σ hsite.symm)
-  · rw [dif_neg hk]
+  · rw [dite_eq_right hk]
 
 private lemma ghz_chainGroundSpace_apply_eq_zero_of_adjacent_ne {N : ℕ} (hN : 2 ≤ N)
     {ψ : NSiteSpace 2 N} (hψ : ψ ∈ chainGroundSpace ghzTensor 2 N)
@@ -224,7 +224,7 @@ private lemma ghz_chainGroundSpace_apply_eq_zero_of_adjacent_ne {N : ℕ} (hN : 
     (hne : σ i ≠ σ (cyclicForwardSite i 1)) :
     ψ σ = 0 := by
   have hNpos : 0 < N := by omega
-  rw [chainGroundSpace, dif_pos ⟨hNpos, hN⟩] at hψ
+  rw [chainGroundSpace, dite_eq_left ⟨hNpos, hN⟩] at hψ
   simp only [Submodule.mem_iInf, Submodule.mem_comap] at hψ
   have hv := hψ i σ
   rw [ghz_groundSpace_two_eq_span] at hv
@@ -281,7 +281,7 @@ constraints. -/
 theorem constantKet_mem_ghz_chainGroundSpace {N : ℕ} (hN : 2 ≤ N) (a : Fin 2) :
     constantKet a N ∈ chainGroundSpace ghzTensor 2 N := by
   have hNpos : 0 < N := by omega
-  rw [chainGroundSpace, dif_pos ⟨hNpos, hN⟩]
+  rw [chainGroundSpace, dite_eq_left ⟨hNpos, hN⟩]
   simp only [Submodule.mem_iInf, Submodule.mem_comap]
   intro i τ
   rw [ghz_groundSpace_two_eq_span]

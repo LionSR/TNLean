@@ -366,9 +366,9 @@ theorem exists_blockTensor_isPrimitive_of_TP_of_isIrreducibleTensor
   have hM : (1 : Matrix (Fin D) (Fin D) ℂ).PosDef := by
     classical
     simpa only using (Matrix.PosDef.one (n := Fin D) (R := ℂ))
-  letI : NormedAddCommGroup (Matrix (Fin D) (Fin D) ℂ) :=
+  let : NormedAddCommGroup (Matrix (Fin D) (Fin D) ℂ) :=
     Matrix.toMatrixNormedAddCommGroup (n := Fin D) (𝕜 := ℂ) 1 hM
-  letI : InnerProductSpace ℂ (Matrix (Fin D) (Fin D) ℂ) :=
+  let : InnerProductSpace ℂ (Matrix (Fin D) (Fin D) ℂ) :=
     Matrix.toMatrixInnerProductSpace (n := Fin D) (𝕜 := ℂ) 1 hM.posSemidef
   have hE_adj : E = (transferMap (d := d) (D := D) A).adjoint := by
     -- `E = transferMap (A†)` and use the lemma.

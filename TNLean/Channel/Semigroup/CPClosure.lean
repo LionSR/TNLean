@@ -9,6 +9,7 @@ import TNLean.Channel.ChoiJamiolkowski
 import TNLean.Channel.Schwarz.Basic
 import Mathlib.Analysis.SpecificLimits.Normed
 import Mathlib.Topology.Algebra.Module.FiniteDimension
+import Mathlib.Analysis.Matrix.Order
 
 /-!
 # Complete-positivity closure lemmas for semigroup arguments
@@ -215,7 +216,7 @@ theorem isClosed_setOf_isCPMap [NeZero D] :
     simpa [ChoiJamiolkowski.choiCLM] using
       (ChoiJamiolkowski.cp_iff_choi_posSemidef (D := D) (T := T.toLinearMap))
   rw [hset]
-  exact matrix_isClosed_posSemidef.preimage
+  exact Matrix.posSemidef_is_closed.preimage
     ((ChoiJamiolkowski.choiCLM (D := D)).continuous)
 
 /-- A CLM-limit of completely positive maps is completely positive. -/
@@ -277,7 +278,7 @@ theorem IsCPMap.expSemigroup
   by_cases hD : D = 0
   · subst hD
     exact isCPMap_finZero _
-  · haveI : NeZero D := ⟨hD⟩
+  · have : NeZero D := ⟨hD⟩
     let termLM : ℕ → LM D := fun n =>
       (endEquiv (D := D)).symm (((Nat.factorial n : ℂ)⁻¹) • (((t : ℂ) • endEquiv (D := D) L) ^ n))
     have hterm : ∀ n : ℕ, IsCPMap (termLM n) := by
@@ -335,7 +336,7 @@ theorem IsCPMap.expSemigroup
             simp [partialLM]
             rfl
         | succ n ih =>
-            simp [partialLM, termLM, expSemigroupSeriesTerm]
+            simp [partialLM, termLM]
             rfl
       have hseries' :=
         Filter.Tendsto.congr (fun n => (hpartial_eq n).symm) hseries

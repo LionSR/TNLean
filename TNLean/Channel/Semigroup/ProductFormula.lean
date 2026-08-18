@@ -79,7 +79,7 @@ theorem norm_expSemigroupCLM_le [NeZero D]
   have habs : |t| = t := abs_of_nonneg ht
   change ‖NormedSpace.exp (((t : ℂ) • A))‖ ≤ Real.exp (t * ‖A‖)
   rw [show ‖((t : ℂ) • A)‖ = t * ‖A‖ by
-    simp [norm_smul, Real.norm_eq_abs, habs]] at h
+    exact norm_smul_of_nonneg ht A] at h
   exact h
 
 /-- A single Lie--Trotter step has the expected operator-norm bound. -/
@@ -123,7 +123,9 @@ theorem expSemigroupCLM_pow_eq
 theorem norm_pow_sub_pow_le_of_norm_le [NeZero D]
     {A B : MatrixCLM (Fin D)} {M : ℝ} (hM : 1 ≤ M) (hA : ‖A‖ ≤ M) (hB : ‖B‖ ≤ M) :
     ∀ m : ℕ, ‖A ^ m - B ^ m‖ ≤ (m : ℝ) * M ^ m * ‖A - B‖
-  | 0 => by simp
+  | 0 => by
+      simp only [pow_zero, sub_self, Nat.cast_zero, zero_mul]
+      exact le_of_eq ContinuousLinearMap.opNorm_zero
   | m + 1 => by
       have hm := norm_pow_sub_pow_le_of_norm_le hM hA hB m
       have hsplit : A ^ (m + 1) - B ^ (m + 1) = A ^ m * (A - B) + (A ^ m - B ^ m) * B := by

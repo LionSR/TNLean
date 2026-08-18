@@ -11,7 +11,7 @@ import TNLean.Channel.Peripheral.PeriodicityRemoval
 import TNLean.Channel.Peripheral.Conjugation
 
 import Mathlib.Analysis.Complex.Order
-import Mathlib.Data.Real.Sqrt
+import Mathlib.Analysis.Real.Sqrt
 import Mathlib.LinearAlgebra.FiniteDimensional.Lemmas
 
 /-!
@@ -261,7 +261,7 @@ noncomputable def mulLeftRightLinearEquiv
     (hLL : L * Linv = 1) (hL : Linv * L = 1)
     (hRR : R * Rinv = 1) (hR : Rinv * R = 1) :
     Matrix (Fin D) (Fin D) ℂ ≃ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ :=
-  LinearEquiv.ofLinear
+  LinearEquiv.ofLinearMap
     (LinearMap.mulLeftRight ℂ (L, R))
     (LinearMap.mulLeftRight ℂ (Linv, Rinv))
     (by
@@ -299,7 +299,7 @@ noncomputable def mulLeftRightLinearEquiv
     (hRR : R * Rinv = 1) (hR : Rinv * R = 1)
     (X : Matrix (Fin D) (Fin D) ℂ) :
     mulLeftRightLinearEquiv (D := D) L R Linv Rinv hLL hL hRR hR X = L * X * R := by
-  simp [mulLeftRightLinearEquiv, LinearEquiv.ofLinear_apply, LinearMap.mulLeftRight_apply]
+  simp [mulLeftRightLinearEquiv, LinearEquiv.coe_ofLinearMap, LinearMap.mulLeftRight_apply]
 
 @[simp] lemma mulLeftRightLinearEquiv_symm_apply
     (L R Linv Rinv : Matrix (Fin D) (Fin D) ℂ)
@@ -307,7 +307,8 @@ noncomputable def mulLeftRightLinearEquiv
     (hRR : R * Rinv = 1) (hR : Rinv * R = 1)
     (X : Matrix (Fin D) (Fin D) ℂ) :
     (mulLeftRightLinearEquiv (D := D) L R Linv Rinv hLL hL hRR hR).symm X = Linv * X * Rinv := by
-  simp [mulLeftRightLinearEquiv, LinearEquiv.ofLinear_symm_apply, LinearMap.mulLeftRight_apply]
+  simp [mulLeftRightLinearEquiv, LinearEquiv.symm_ofLinearMap,
+    LinearEquiv.coe_ofLinearMap, LinearMap.mulLeftRight_apply]
 
 end Similarity
 

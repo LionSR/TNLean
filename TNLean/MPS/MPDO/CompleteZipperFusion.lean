@@ -188,7 +188,7 @@ private theorem rectangularIntertwiner_eq_zero (d e : Λ) (hde : d ≠ e)
       funext i
       rw [Matrix.mul_sum]
     _ = C * (0 : Matrix (Fin (Fus.bondDim e)) (Fin (Fus.bondDim e)) ℂ) := by
-      rw [Fus.finalBlockSelector_sum d e, if_neg hde]
+      rw [Fus.finalBlockSelector_sum d e, ite_eq_right hde]
     _ = 0 := Matrix.mul_zero C
 
 /-- The bond-amplified corner of the printed comparison at a fixed final label. -/
@@ -248,7 +248,7 @@ theorem fullPrintedFMatrix_finalSector_eq_zero
           rw [rightTripleDirectSumLetter, rightFinalRow,
             Matrix.blockDiagonal'_apply_eq]
           simp only [kroneckerMap_apply, Matrix.one_apply,
-            if_neg (Ne.symm hq), zero_mul])
+            ite_eq_right (Ne.symm hq), zero_mul])
         (fun h => absurd (Finset.mem_univ mR) h)]
       refine Finset.sum_congr rfl fun z _ => ?_
       simp [rightTripleDirectSumLetter, rightFinalRow, leftFinalRow,
@@ -323,7 +323,7 @@ theorem exists_printedFMatrixAmplified_eq_kronecker_one (a b c d : Λ) :
         rw [rightTripleDirectSumLetter, rightFinalRow,
           Matrix.blockDiagonal'_apply_eq]
         simp only [kroneckerMap_apply, Matrix.one_apply,
-          if_neg (Ne.symm hq), zero_mul])
+          ite_eq_right (Ne.symm hq), zero_mul])
       (fun h => absurd (Finset.mem_univ mR) h)]
     refine Finset.sum_congr rfl fun z _ => ?_
     simp [rightTripleDirectSumLetter, rightFinalRow, leftFinalRow,

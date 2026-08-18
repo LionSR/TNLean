@@ -49,7 +49,7 @@ theorem normalizePosSemidef_posSemidef
     {M : Matrix n n ℂ} (hM : M.PosSemidef) :
     (normalizePosSemidef x₀ M).PosSemidef := by
   classical
-  letI : Nonempty n := ⟨x₀⟩
+  let : Nonempty n := ⟨x₀⟩
   rw [normalizePosSemidef]
   split_ifs with htr
   · apply Matrix.PosSemidef.one.smul
@@ -64,7 +64,7 @@ theorem normalizePosSemidef_trace
     {M : Matrix n n ℂ} (hM : M.PosSemidef) :
     (normalizePosSemidef x₀ M).trace = 1 := by
   classical
-  letI : Nonempty n := ⟨x₀⟩
+  let : Nonempty n := ⟨x₀⟩
   have htrace : M.trace = (M.trace.re : ℂ) := by
     apply Complex.ext
     · simp
@@ -84,7 +84,7 @@ theorem trace_re_smul_normalizePosSemidef
     {M : Matrix n n ℂ} (hM : M.PosSemidef) :
     (M.trace.re : ℂ) • normalizePosSemidef x₀ M = M := by
   classical
-  letI : Nonempty n := ⟨x₀⟩
+  let : Nonempty n := ⟨x₀⟩
   have htrace : M.trace = (M.trace.re : ℂ) := by
     apply Complex.ext
     · simp

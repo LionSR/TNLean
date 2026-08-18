@@ -43,7 +43,7 @@ attribute [local instance] Matrix.instL2OpNormedAlgebra
 
 private instance {n : Type*} [Fintype n] :
     NonUnitalContinuousFunctionalCalculus ℝ (Matrix n n ℂ) IsSelfAdjoint := by
-  letI := Classical.decEq n
+  let := Classical.decEq n
   exact ContinuousFunctionalCalculus.toNonUnital
 
 /-- Resolvent form of the Löwner real-power integrand. -/
@@ -193,9 +193,9 @@ theorem sourceB_resolvent_eq_relativeModular
     exact hA.kronecker hB.inv.transpose
   have hR : res.PosDef := by
     exact (Matrix.PosDef.one.smul ht).add hΔ
-  letI : Invertible B := hB.isUnit.invertible
-  letI : Invertible cMat := hC.isUnit.invertible
-  letI : Invertible res := hR.isUnit.invertible
+  let : Invertible B := hB.isUnit.invertible
+  let : Invertible cMat := hC.isUnit.invertible
+  let : Invertible res := hR.isUnit.invertible
   have hBT : Bᵀ * (B⁻¹)ᵀ = (1 : Matrix n n ℂ) := by
     rw [← Matrix.transpose_mul, inv_mul_of_invertible, Matrix.transpose_one]
   have hCΔ : cMat * delta = A ⊗ₖ (1 : Matrix n n ℂ) := by
@@ -243,7 +243,7 @@ theorem relativeModular_sqrt_mulVec_vec_one
   have hqBunit : IsUnit qB := by
     apply (CFC.isUnit_sqrt_iff B hB.posSemidef.nonneg).2
     exact hB.isUnit
-  letI : Invertible qB := hqBunit.invertible
+  let : Invertible qB := hqBunit.invertible
   have hqB_inv_sq : qB⁻¹ * qB⁻¹ = B⁻¹ := by
     rw [← Matrix.mul_inv_rev, hqB_sq]
   have hqDelta_sq : qDelta * qDelta = delta := by

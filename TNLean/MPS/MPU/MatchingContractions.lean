@@ -62,10 +62,10 @@ theorem IsMPU.normalized_mpo_tail_coisometry [NeZero d]
   by_cases hpq : p = q
   · subst q
     simp only [Finset.sum_const, Finset.card_univ, nsmul_eq_mul,
-      Fintype.card_pi_const, Fintype.card_fin, Nat.cast_pow, if_pos]
+      Fintype.card_pi_const, Fintype.card_fin, Nat.cast_pow, ite_eq_left]
     have hd : (d : ℂ) ≠ 0 := Nat.cast_ne_zero.mpr (NeZero.ne d)
     rw [inv_pow, ← mul_assoc, inv_mul_cancel₀ (pow_ne_zero K hd), one_mul]
-  · rw [if_neg hpq, if_neg (Ne.symm hpq)]
+  · rw [ite_eq_right hpq, ite_eq_right (Ne.symm hpq)]
     simp
 
 /-- Input-first MPU isometry, with a common input tail of length \(K\)
@@ -107,10 +107,10 @@ theorem IsMPU.normalized_mpo_tail_isometry [NeZero d]
   by_cases hpq : p = q
   · subst q
     simp only [Finset.sum_const, Finset.card_univ, nsmul_eq_mul,
-      Fintype.card_pi_const, Fintype.card_fin, Nat.cast_pow, if_pos]
+      Fintype.card_pi_const, Fintype.card_fin, Nat.cast_pow, ite_eq_left]
     have hd : (d : ℂ) ≠ 0 := Nat.cast_ne_zero.mpr (NeZero.ne d)
     rw [inv_pow, ← mul_assoc, inv_mul_cancel₀ (pow_ne_zero K hd), one_mul]
-  · rw [if_neg hpq]
+  · rw [ite_eq_right hpq]
     simp
 
 /-- The stabilized first block followed by the corrected \(D^2\) block has the
@@ -159,7 +159,7 @@ theorem IsMPU.blockTensor_mul_sq_simple_contractions_of_transfer_power
     change normalizedDiagonal (doubleLayerTensor (MPOTensor.blockTensor U J)) = _
     rw [normalizedDiagonal_doubleLayerTensor_blockTensor, hpower]
     rfl
-  letI : NeZero (MPSTensor.blockPhysDim d J) := ⟨by
+  let : NeZero (MPSTensor.blockPhysDim d J) := ⟨by
     rw [MPSTensor.blockPhysDim_eq_pow]
     exact pow_ne_zero J (NeZero.ne d)⟩
   have hs := hVmpu.blockTensor_sq_simple_contractions_of_normalizedDiagonal_eq_vecMulVec

@@ -740,7 +740,7 @@ theorem weyl_sqrt_ratio_eq_of_partialTraceRight_eq
     hσ.posSemidef.sqrt_smul hqpos.le] at hratio
   have hsqrtq : Real.sqrt (((dC : ℝ) ^ 2)⁻¹) ≠ 0 :=
     Real.sqrt_ne_zero'.mpr hqpos
-  letI : Invertible (Real.sqrt (((dC : ℝ) ^ 2)⁻¹) : ℂ) :=
+  let : Invertible (Real.sqrt (((dC : ℝ) ^ 2)⁻¹) : ℂ) :=
     invertibleOfNonzero (by exact_mod_cast hsqrtq)
   have hsqrtσunit : IsUnit (CFC.sqrt σ) := by
     exact (CFC.isUnit_sqrt_iff σ hσ.posSemidef.nonneg).2 hσ.isUnit
@@ -845,7 +845,7 @@ theorem weyl_identity_sandwich_of_partialTraceRight_eq
     exact hleftGram.symm.trans (hgram.trans hrightGram)
   have hsqrtσunit : IsUnit (CFC.sqrt σ) :=
     (CFC.isUnit_sqrt_iff σ hσ.posSemidef.nonneg).2 hσ.isUnit
-  letI : Invertible (CFC.sqrt σ) := hsqrtσunit.invertible
+  let : Invertible (CFC.sqrt σ) := hsqrtσunit.invertible
   have hsandwich : CFC.sqrt σ *
       ((CFC.sqrt barσ)⁻¹ * barρ * (CFC.sqrt barσ)⁻¹) *
       CFC.sqrt σ = ρ := by

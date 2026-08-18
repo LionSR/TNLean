@@ -282,7 +282,7 @@ theorem exists_common_injective_blocking_of_tp_primitive_irr_family
       IsIrreducibleTensor (blockTensor (d := d) (D := dim k) (blocks k) L) := by
   classical
   -- `NeZero (dim k)` for each `k` from positivity.
-  haveI : ∀ k, NeZero (dim k) := fun k => ⟨(hDim k).ne'⟩
+  have : ∀ k, NeZero (dim k) := fun k => ⟨(hDim k).ne'⟩
   -- Per-block injective blocking lengths.
   have hBlock : ∀ k : Fin r, ∃ Lk : ℕ, 0 < Lk ∧
       IsInjective (blockTensor (d := d) (D := dim k) (blocks k) Lk) := by

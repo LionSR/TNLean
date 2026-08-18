@@ -91,7 +91,7 @@ and the open-boundary coefficient vanishes. -/
 theorem coeff_eq_zero_of_bondDim_eq_zero (A : OBCChainTensor d D N)
     (σ : Fin N → Fin d) (k : Fin (N + 1)) (hk : A.bondDim k = 0) :
     coeff A σ = 0 := by
-  letI : IsEmpty ((j : Fin (N + 1)) → Fin (A.bondDim j)) :=
+  let : IsEmpty ((j : Fin (N + 1)) → Fin (A.bondDim j)) :=
     ⟨fun α => Fin.elim0 (hk ▸ α k)⟩
   simp [coeff]
 
@@ -134,7 +134,7 @@ private theorem coeff_eq_sum_init (A : OBCChainTensor d D N)
             ((Fin.snoc (α := fun j => Fin (A.bondDim j)) g (rightIndex A)) k.castSucc)
             ((Fin.snoc (α := fun j => Fin (A.bondDim j)) g (rightIndex A)) k.succ) := by
   classical
-  letI : Unique (Fin (A.bondDim (Fin.last N))) :=
+  let : Unique (Fin (A.bondDim (Fin.last N))) :=
     Equiv.unique (Fin.castOrderIso A.right_dim).toEquiv
   rw [coeff, ← Equiv.sum_comp
     (Fin.snocEquiv fun k : Fin (N + 1) => Fin (A.bondDim k))]
@@ -169,11 +169,11 @@ theorem coeff_zeroPad (A : OBCChainTensor d D N) [NeZero N]
   apply Finset.sum_congr rfl
   intro g _
   by_cases hlt : ∀ k, (g k).val < A.bondDim k.castSucc
-  · rw [dif_pos hlt]
+  · rw [dite_eq_left hlt]
     apply Finset.prod_congr rfl
     intro k _
     simp only [zeroPad]
-    rw [dif_pos (hlt k)]
+    rw [dite_eq_left (hlt k)]
     by_cases hk : k = Fin.last n
     · subst hk
       have hnext : (Fin.last n + 1 : Fin (n + 1)) = 0 := Fin.last_add_one n
@@ -183,7 +183,7 @@ theorem coeff_zeroPad (A : OBCChainTensor d D N) [NeZero N]
         change (g 0).val < A.bondDim (0 : Fin (n + 2)) at hzero
         rw [A.left_dim] at hzero
         exact hzero
-      rw [hnext, dif_pos hcol]
+      rw [hnext, dite_eq_left hcol]
       congr 2
       · rw [Fin.snoc_castSucc]
       · apply Fin.ext
@@ -212,7 +212,7 @@ theorem coeff_zeroPad (A : OBCChainTensor d D N) [NeZero N]
       have hcol : (g (k + 1)).val < A.bondDim k.succ := by
         rw [hj, hsucc]
         exact hlt j
-      rw [dif_pos hcol]
+      rw [dite_eq_left hcol]
       congr 2
       · rw [Fin.snoc_castSucc]
       · apply Fin.ext
@@ -220,12 +220,12 @@ theorem coeff_zeroPad (A : OBCChainTensor d D N) [NeZero N]
           (⟨(g i).val, hlt i⟩ : Fin (A.bondDim i.castSucc))) (rightIndex A) k.succ).val =
           (g (k + 1)).val
         rw [hsucc, Fin.snoc_castSucc, hj]
-  · rw [dif_neg hlt]
+  · rw [dite_eq_right hlt]
     obtain ⟨k, hk⟩ := Classical.not_forall.mp hlt
     symm
     apply Finset.prod_eq_zero (Finset.mem_univ k)
     simp only [zeroPad]
-    rw [dif_neg hk]
+    rw [dite_eq_right hk]
 
 /-- A zero-dimensional virtual bond also makes the positive-length padded
 square-chain coefficient vanish. -/

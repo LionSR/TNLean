@@ -390,7 +390,7 @@ theorem activeSectorTraceMatrix_isIrreducible
       ∃ x y : F.SectorIndex k, F.sectorVirtualMatrix k x y ≠ 0) :
     Matrix.IsIrreducible (F.activeSectorTraceMatrix p) := by
   classical
-  letI : Quiver (F.ActiveSector p) :=
+  let : Quiver (F.ActiveSector p) :=
     Matrix.toQuiver (F.activeSectorTraceMatrix p)
   refine ⟨F.activeSectorTraceMatrix_nonneg p hpos, ?_⟩
   have hconnected : Quiver.IsStronglyConnected (F.ActiveSector p) := by

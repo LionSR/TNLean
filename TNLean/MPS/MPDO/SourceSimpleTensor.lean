@@ -159,7 +159,7 @@ theorem IsSimple.isSourceSimple {M : MPOTensor d D} (hM : IsSimple M) :
     fun j ↦ ⟨S.basisDim j, S.basis j⟩, ?_, hNonNil⟩
   have hBNT : MPSTensor.IsCPSVBasisOfNormalTensors S.toTensor
       (fun j ↦ ⟨S.basisDim j, S.basis j⟩) := by
-    letI : ∀ j : Fin S.basisCount, NeZero (S.basisDim j) :=
+    let : ∀ j : Fin S.basisCount, NeZero (S.basisDim j) :=
       fun j ↦ ⟨(hCF.basis_dim_pos j).ne'⟩
     refine {
       blocks_normal := fun j ↦

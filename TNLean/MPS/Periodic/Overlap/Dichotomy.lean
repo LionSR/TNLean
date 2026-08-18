@@ -69,7 +69,7 @@ theorem periodicOverlapDichotomy
   classical
   by_cases hm : m_a = m_b
   · subst hm
-    haveI : NeZero m_a := ⟨hA.period_pos.ne'⟩
+    have : NeZero m_a := ⟨hA.period_pos.ne'⟩
     by_cases hD : D₁ = D₂
     · subst hD
       obtain ⟨dimA, blocksA, PA, φA, hA_blocks_lc, hA_mpv, hPAproj, hPAsum,
@@ -142,8 +142,8 @@ theorem periodicFamily_eventuallyLinearlyIndependent_of_cross_overlap_tendsto_ze
   -- eventually linearly independent by
   -- `eventually_linearIndependent_of_gram_tendsto_nondegenerate`.
   classical
-  letI : Fintype ι := Fintype.ofFinite ι
-  letI : ∀ k, NeZero (dim k) := fun k => ⟨(hPer k).bondDim_ne_zero⟩
+  let : Fintype ι := Fintype.ofFinite ι
+  let : ∀ k, NeZero (dim k) := fun k => ⟨(hPer k).bondDim_ne_zero⟩
   set V := lp (fun N : ℕ => MPVSpace d N) 2 with hV
   set v : ι → ℕ → V :=
     fun k N => lp.single 2 (p * N) (mpvState (d := d) (A k) (p * N)) with hv
@@ -226,7 +226,7 @@ theorem periodicBasis_eventuallyLinearlyIndependent
         ¬ RepeatedBlocks (cast (congr_arg (MPSTensor d) hdim) (A i)) (A j)) :
     ∃ N₀ : ℕ, ∀ N ≥ N₀,
       LinearIndependent ℂ (fun k => mpvState (A k) (p * N)) := by
-  letI : ∀ k, NeZero (dim k) := fun k => ⟨(hPer k).bondDim_ne_zero⟩
+  let : ∀ k, NeZero (dim k) := fun k => ⟨(hPer k).bondDim_ne_zero⟩
   refine periodicFamily_eventuallyLinearlyIndependent_of_cross_overlap_tendsto_zero
     A period hPer p hDiv ?_
   intro i j hij

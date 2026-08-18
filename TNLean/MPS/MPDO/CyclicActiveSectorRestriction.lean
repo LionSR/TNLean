@@ -287,7 +287,7 @@ noncomputable def cyclicActiveLeftRestriction
     by_cases hk : F.IsCyclicActiveSector k
     · simp [hk]
     · ext x y
-      simp only [hk, if_false, Matrix.kroneckerMap_apply, Matrix.zero_apply,
+      simp only [hk, ite_false, Matrix.kroneckerMap_apply, Matrix.zero_apply,
         zero_mul]
       have hzero := F.sectorVirtualMatrix_eq_zero_of_not_isCyclicActiveSector
         hK k hk (x.1, x.2) (y.1, y.2)
@@ -326,14 +326,17 @@ theorem cyclicActiveLeftRestriction_neighboringOperator
       if F.IsCyclicActiveSector h then F.neighboringOperator k h else 0 := by
   classical
   by_cases hh : F.IsCyclicActiveSector h
-  · rw [if_pos hh]
+  · rw [ite_eq_left hh]
+    unfold neighboringOperator
     ext x y
-    simp [neighboringOperator_apply, hh]
-  · rw [if_neg hh]
+    simp only [cyclicActiveLeftRestriction_rightTensor,
+      cyclicActiveLeftRestriction_leftTensor, hh, ite_true, Matrix.of_apply]
+    exact (Matrix.of_apply _ _ _).symm
+  · rw [ite_eq_right hh]
+    unfold neighboringOperator
     ext x y
-    simp only [neighboringOperator_apply,
-      cyclicActiveLeftRestriction_leftTensor,
-      cyclicActiveLeftRestriction_rightTensor, hh, if_false]
+    simp only [cyclicActiveLeftRestriction_leftTensor,
+      cyclicActiveLeftRestriction_rightTensor, hh, ite_false]
     change (∑ _ : Fin D, _ * 0) = 0
     simp
 
@@ -360,7 +363,7 @@ theorem reindex_cyclicActiveLeftRestriction_activeSectorTraceMatrix
   change ((F.cyclicActiveLeftRestriction hK).neighboringOperator
       k.1 h.1).trace.re = (F.neighboringOperator k.1 h.1).trace.re
   rw [F.cyclicActiveLeftRestriction_neighboringOperator hK]
-  rw [if_pos ((F.cyclicActiveWeight_ne_zero_iff h.1).1 h.2)]
+  rw [ite_eq_left ((F.cyclicActiveWeight_ne_zero_iff h.1).1 h.2)]
   rfl
 
 private theorem cyclicActiveLeftRestriction_leftTensor_eq_zero_of_weight_eq_zero
@@ -369,7 +372,7 @@ private theorem cyclicActiveLeftRestriction_leftTensor_eq_zero_of_weight_eq_zero
     (beta : Fin D) :
     (F.cyclicActiveLeftRestriction hK).leftTensor k beta = 0 := by
   rw [F.cyclicActiveLeftRestriction_leftTensor hK]
-  apply if_neg
+  apply ite_eq_right
   intro hactive
   exact (F.cyclicActiveWeight_ne_zero_iff k).2 hactive hk
 
@@ -630,7 +633,7 @@ theorem cyclicActiveSectorTraceMatrix_rank_pow_two_eq_one
       F.cyclicActiveSectorTraceMatrix ^ 3) :
     (F.cyclicActiveSectorTraceMatrix ^ 2).rank = 1 := by
   classical
-  letI : Nonempty F.CyclicActiveSector := F.nonempty_cyclicActiveSector hK
+  let : Nonempty F.CyclicActiveSector := F.nonempty_cyclicActiveSector hK
   exact (F.cyclicActiveSectorTraceMatrix_isPrimitive hK hpos)
     |>.rank_pow_two_eq_one_of_pow_two_eq_pow_three hpow
 
@@ -651,7 +654,7 @@ theorem normalized_cyclicActiveSectorTraceMatrix_rank_pow_two_eq_one
       (lam⁻¹ • F.cyclicActiveSectorTraceMatrix) ^ 3) :
     ((lam⁻¹ • F.cyclicActiveSectorTraceMatrix) ^ 2).rank = 1 := by
   classical
-  letI : Nonempty F.CyclicActiveSector := F.nonempty_cyclicActiveSector hK
+  let : Nonempty F.CyclicActiveSector := F.nonempty_cyclicActiveSector hK
   exact (F.cyclicActiveSectorTraceMatrix_isPrimitive hK hpos)
     |>.smul_of_pos (inv_pos.mpr hlam)
     |>.rank_pow_two_eq_one_of_pow_two_eq_pow_three hpow
@@ -683,7 +686,7 @@ theorem exists_normalized_cyclicActiveSectorTraceMatrix_pos_factorization_of_isS
   obtain ⟨lam, hlam, hpow, _⟩ :=
     F.cyclicActiveSectorTraceMatrix_normalized_relations_of_isSourceZCL
       hK hpos hZCL
-  letI : Nonempty F.CyclicActiveSector := F.nonempty_cyclicActiveSector hK
+  let : Nonempty F.CyclicActiveSector := F.nonempty_cyclicActiveSector hK
   have hprimitive :
       Matrix.IsPrimitive (lam⁻¹ • F.cyclicActiveSectorTraceMatrix) :=
     (F.cyclicActiveSectorTraceMatrix_isPrimitive hK hpos)

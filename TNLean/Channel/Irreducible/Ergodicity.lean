@@ -133,11 +133,11 @@ theorem IsChannel.exists_unique_density_fixedPoint_of_irreducible
       σ ∈ densityMatrices D ∧ σ.PosDef ∧ E σ = σ ∧
       ∀ τ : Matrix (Fin D) (Fin D) ℂ,
         τ ∈ densityMatrices D → E τ = τ → τ = σ := by
-  haveI : NeZero D := ⟨Nat.ne_of_gt hD⟩
+  have : NeZero D := ⟨Nat.ne_of_gt hD⟩
   obtain ⟨ρ₀, hρ₀⟩ := densityMatrices_nonempty hD
   have hces_mem : ∀ N : ℕ, cesaroMean E ρ₀ (N + 1) ∈ densityMatrices D :=
     IsChannel.cesaroMean_mem_densityMatrices (E := E) hE hρ₀
-  haveI : FirstCountableTopology (Matrix (Fin D) (Fin D) ℂ) := by
+  have : FirstCountableTopology (Matrix (Fin D) (Fin D) ℂ) := by
     change FirstCountableTopology (Fin D → Fin D → ℂ)
     infer_instance
   obtain ⟨σ, _hσ_mem, φ, hφ_mono, hφ_tendsto⟩ :=
@@ -186,7 +186,7 @@ theorem IsChannel.cesaroMean_tendsto_of_irreducible
     IsChannel.exists_unique_density_fixedPoint_of_irreducible (E := E) hE hIrr hD
   have hces_mem : ∀ N : ℕ, cesaroMean E ρ (N + 1) ∈ densityMatrices D :=
     IsChannel.cesaroMean_mem_densityMatrices (E := E) hE hρ
-  haveI : FirstCountableTopology (Matrix (Fin D) (Fin D) ℂ) := by
+  have : FirstCountableTopology (Matrix (Fin D) (Fin D) ℂ) := by
     change FirstCountableTopology (Fin D → Fin D → ℂ)
     infer_instance
   have h_tendsto : Filter.Tendsto (fun N => cesaroMean E ρ (N + 1))

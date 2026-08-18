@@ -82,14 +82,14 @@ theorem ofGaugeEquiv_eq_ofVirtualMatrices
         (X : Matrix (Fin D) (Fin D) ℂ)) = 1
     rw [← Units.val_mul]
     simp
-  calc
-    (F.ofGaugeEquiv hGauge).neighboringOperator k h =
+  have htransport :
+      (F.ofGaugeEquiv hGauge).neighboringOperator k h =
         F.neighboringOperatorWithMatrix k h (y * x) := by
-      simpa only [ofGaugeEquiv_eq_ofVirtualMatrices, X, x, y] using
-        F.ofVirtualMatrices_neighboringOperator x y hX k h
-    _ = F.neighboringOperator k h := by
-      rw [hyx]
-      exact F.neighboringOperatorWithMatrix_one k h
+    simpa only [ofGaugeEquiv_eq_ofVirtualMatrices, X, x, y] using
+      F.ofVirtualMatrices_neighboringOperator x y hX k h
+  exact htransport.trans (by
+    rw [hyx]
+    exact F.neighboringOperatorWithMatrix_one k h)
 
 /-- Positivity of the neighboring operators is preserved by virtual-gauge
 transport. -/

@@ -155,11 +155,11 @@ theorem exists_maximalSupport_fixedPoint_of_hasBoundedOrbits
   intro X hXfix
   cases isEmpty_or_nonempty (Fin D) with
   | inl hD =>
-      letI := hD
+      let := hD
       have hXzero : X = 0 := Subsingleton.elim _ _
       rw [hXzero, Matrix.mul_zero, Matrix.zero_mul]
   | inr hD =>
-      letI := hD
+      let := hD
       have hbound (A : Matrix (Fin D) (Fin D) ℂ) (hA : A.PosSemidef) :
           P A ≤ A.trace • ρ₀ := by
         have hshift : (A.trace • (1 : Matrix (Fin D) (Fin D) ℂ) - A).PosSemidef :=

@@ -59,7 +59,7 @@ theorem sum_pow_val_eq_ite {ξ : ℂ} (hξ : ξ ^ d = 1) :
   rw [hsum]
   by_cases h : ξ = 1
   · simp [h]
-  · simp only [h, if_false]
+  · simp only [h, ite_false]
     have key := geom_sum_mul ξ d
     rw [hξ, sub_self] at key
     exact (mul_eq_zero.mp key).resolve_right (sub_ne_zero_of_ne h)
@@ -103,8 +103,8 @@ theorem sum_rootOfUnity_pow_eq {ζ : ℂ} (hζ : IsPrimitiveRoot ζ d) (i j : ZM
     rw [hξdef, mul_pow, h1, h2, mul_one]
   rw [sum_pow_val_eq_ite hξd]
   by_cases h : i = j
-  · rw [if_pos h, if_pos ((pow_mul_conj_pow_eq_one_iff hζ i j).2 h)]
-  · rw [if_neg h, if_neg (fun hc => h ((pow_mul_conj_pow_eq_one_iff hζ i j).1 hc))]
+  · rw [ite_eq_left h, ite_eq_left ((pow_mul_conj_pow_eq_one_iff hζ i j).2 h)]
+  · rw [ite_eq_right h, ite_eq_right (fun hc => h ((pow_mul_conj_pow_eq_one_iff hζ i j).1 hc))]
 
 /-! ### The Weyl operators -/
 
@@ -175,7 +175,7 @@ theorem sum_weylClock_pow_conj {ζ : ℂ} (hζ : IsPrimitiveRoot ζ d)
   rw [← Finset.sum_mul, sum_rootOfUnity_pow_eq hζ i j]
   by_cases h : i = j
   · subst h; simp
-  · rw [if_neg h]; simp [if_neg h]
+  · rw [ite_eq_right h]; simp [ite_eq_right h]
 
 /-- The shift conjugation $X^a (\operatorname{diagonal} v) (X^a)^{\dagger}$
 cyclically permutes the diagonal entries. -/
@@ -189,7 +189,7 @@ theorem weylShift_pow_conj_diagonal (a : ZMod d) (v : ZMod d → ℂ) :
   simp only [Equiv.coe_addRight, id_eq, diagonal_apply]
   by_cases h : i = j
   · subst h; simp
-  · rw [if_neg h, if_neg]
+  · rw [ite_eq_right h, ite_eq_right]
     exact fun hc => h (add_right_cancel (hc : i + (a.val : ZMod d) = j + (a.val : ZMod d)))
 
 /-- The shift twirl of a diagonal matrix is the scalar matrix carrying the sum of
@@ -203,11 +203,11 @@ theorem sum_weylShift_pow_conj_diagonal (v : ZMod d → ℂ) :
   rw [Matrix.sum_apply, Matrix.smul_apply, one_apply, smul_eq_mul]
   by_cases h : i = j
   · subst h
-    simp only [diagonal_apply_eq, if_true, mul_one]
+    simp only [diagonal_apply_eq, ite_true, mul_one]
     rw [show (∑ a : ZMod d, v (i + (a.val : ZMod d))) = ∑ a : ZMod d, v (i + a) from
       Finset.sum_congr rfl (fun a _ => by rw [ZMod.natCast_zmod_val])]
     exact Fintype.sum_equiv (Equiv.addLeft i) _ _ (fun a => by simp)
-  · simp only [diagonal_apply, if_neg h, Finset.sum_const_zero, mul_zero]
+  · simp only [diagonal_apply, ite_eq_right h, Finset.sum_const_zero, mul_zero]
 
 /-! ### The unitary 1-design twirl -/
 

@@ -224,7 +224,7 @@ theorem exists_isHermitian_witness (n : ℕ)
   classical
   -- The Frobenius normed structure makes the matrix space a real locally convex space,
   -- the ambient hypothesis of the geometric Hahn–Banach separation theorem.
-  haveI : LocallyConvexSpace ℝ (Matrix (Fin d × Fin d') (Fin d × Fin d') ℂ) :=
+  have : LocallyConvexSpace ℝ (Matrix (Fin d × Fin d') (Fin d × Fin d') ℂ) :=
     NormedSpace.toLocallyConvexSpace (E := Matrix (Fin d × Fin d') (Fin d × Fin d') ℂ)
   -- ρ is separated from the compact convex set `S_n` by a hyperplane.
   set Sn : Set (Matrix (Fin d × Fin d') (Fin d × Fin d') ℂ) :=

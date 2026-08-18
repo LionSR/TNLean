@@ -66,7 +66,7 @@ theorem mpvOverlap_norm_tendsto_one_of_eventually_proportionalMPV₂
     have hN' : proportionalAt N := by
       simpa [proportionalAt, mpv, coeff] using hN
     dsimp [c]
-    rw [dif_pos hN']
+    rw [dite_eq_left hN']
     simpa [mpv, coeff] using Classical.choose_spec hN' σ
   have hOverlapAB :
       (fun N => mpvOverlap (d := d) A B N) =ᶠ[Filter.atTop]

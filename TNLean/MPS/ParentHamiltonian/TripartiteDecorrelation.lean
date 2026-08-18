@@ -261,7 +261,7 @@ theorem lift_marginalXB_eq_sum (P : Matrix (A × (X × B)) (A × (X × B)) ℂ) 
     symm
     apply Finset.sum_eq_zero
     intro c _
-    rw [if_neg]
+    rw [ite_eq_right]
     intro h
     apply haa
     calc
@@ -293,7 +293,7 @@ theorem lift_marginalAX_eq_sum (P : Matrix (A × (X × B)) (A × (X × B)) ℂ) 
     symm
     apply Finset.sum_eq_zero
     intro c _
-    rw [if_neg]
+    rw [ite_eq_right]
     intro h
     apply hbb
     calc

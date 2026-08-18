@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import Mathlib.Data.Finset.Image
 import TNLean.PEPS.IsoTransport
 import TNLean.PEPS.RegionBlock.Basic
 
@@ -117,14 +118,6 @@ def regionBoundaryEdgeMapEquiv (φ : G ≃g G') (R : Finset V) :
   left_inv f := by apply Subtype.ext; simp [Edge.map_map_symm]
   right_inv f := by apply Subtype.ext; simp [Edge.map_symm_map]
 
-/-- The vertices of the image region correspond to the vertices of `R` by `φ`. -/
-def regionVertexMapEquiv (φ : G ≃g G') (R : Finset V) :
-    {w : W // w ∈ Region.map φ R} ≃ {w : V // w ∈ R} where
-  toFun w := ⟨φ.symm w.1, (mem_Region_map φ R w.1).mp w.2⟩
-  invFun w := ⟨φ w.1, (mem_Region_map_apply φ R w.1).mpr w.2⟩
-  left_inv w := by apply Subtype.ext; simp
-  right_inv w := by apply Subtype.ext; simp
-
 /-! ### Transport of the blocked-region weight
 
 The blocked-region weight of `A.transport φ` over the image region is the blocked-region
@@ -158,10 +151,10 @@ theorem regionBoundaryConfigMapEquiv_apply (A : Tensor G d) (φ : G ≃g G') (R 
   rfl
 
 /-- The physical configuration on the image region induced from one on `R` by `φ`. -/
-def regionPhysicalConfigMap (φ : G ≃g G') (R : Finset V)
+noncomputable def regionPhysicalConfigMap (φ : G ≃g G') (R : Finset V)
     (τ : RegionPhysicalConfig (V := V) (d := d) R) :
     RegionPhysicalConfig (V := W) (d := d) (Region.map φ R) :=
-  fun w => τ (regionVertexMapEquiv φ R w)
+  fun w => τ ((Finset.equivMap φ.toEquiv.toEmbedding R).symm w)
 
 omit [Fintype V] [Fintype W] in
 /-- The boundary-configuration map is injective. -/
@@ -200,23 +193,25 @@ omit [Fintype V] [Fintype W] in
 /-- The vertex product of `A.transport φ` over the image region, at the transported
 configurations, equals the vertex product of `A` over `R`: each factor at `w` matches the
 factor of `A` at `φ.symm w` by `transport_component_vcEquiv`, and the vertices reindex by
-`regionVertexMapEquiv`. -/
+`Finset.equivMap`. -/
 theorem regionVertexProd_transport (A : Tensor G d) (φ : G ≃g G') (R : Finset V)
     (η : VirtualConfig A) (τ : RegionPhysicalConfig (V := V) (d := d) R) :
     ∏ w : {w : W // w ∈ Region.map φ R},
         (A.transport φ).component w.1
           (fun ie => ((vcEquiv A φ).symm η) ie.1) (regionPhysicalConfigMap φ R τ w)
       = ∏ w : {w : V // w ∈ R}, A.component w.1 (fun ie => η ie.1) (τ w) := by
-  rw [← Equiv.prod_comp (regionVertexMapEquiv φ R)
+  rw [← Equiv.prod_comp ((Finset.equivMap φ.toEquiv.toEmbedding R).symm)
     (fun w : {w : V // w ∈ R} => A.component w.1 (fun ie => η ie.1) (τ w))]
   refine Finset.prod_congr rfl fun w _ => ?_
-  -- The image vertex `w.1` has preimage `φ.symm w.1 = (regionVertexMapEquiv φ R w).1`.
-  have hphys : regionPhysicalConfigMap φ R τ w = τ (regionVertexMapEquiv φ R w) := rfl
-  rw [hphys]
-  -- `transport_component_vcEquiv` matches the component at `w.1` with the component of `A`
-  -- at `φ.symm w.1`, using any global physical configuration agreeing at `w.1`.
+  have hw : ((Finset.equivMap φ.toEquiv.toEmbedding R).symm w).1 = φ.symm w.1 := by
+    apply φ.injective
+    rw [φ.apply_symm_apply]
+    simpa only [Finset.equivMap_apply_coe, Equiv.coe_toEmbedding,
+      RelIso.coe_fn_toEquiv] using congrArg Subtype.val
+        ((Finset.equivMap φ.toEquiv.toEmbedding R).apply_symm_apply w)
+  rw [hw]
   exact transport_component_vcEquiv A φ η
-    (fun _ => τ (regionVertexMapEquiv φ R w)) w.1
+    (fun _ => τ ((Finset.equivMap φ.toEquiv.toEmbedding R).symm w)) w.1
 
 open scoped Classical in
 /-- **Transport of the blocked-region weight.**
@@ -247,15 +242,17 @@ theorem regionBlockedWeight_transport (A : Tensor G d) (φ : G ≃g G') (R : Fin
       else 0)]
   refine Finset.sum_congr rfl fun η _ => ?_
   by_cases hb : regionBoundaryLabel (G := G) A R η = bdry
-  · rw [if_pos hb, if_pos ((regionBoundaryLabel_transport_iff A φ R η bdry).mpr hb),
+  · rw [ite_eq_left hb, ite_eq_left ((regionBoundaryLabel_transport_iff A φ R η bdry).mpr hb),
       regionVertexProd_transport]
-  · rw [if_neg hb, if_neg (fun h => hb ((regionBoundaryLabel_transport_iff A φ R η bdry).mp h))]
+  · rw [ite_eq_right hb, ite_eq_right (fun h =>
+      hb ((regionBoundaryLabel_transport_iff A φ R η bdry).mp h))]
 
 /-- The physical-configuration equivalence induced by `φ` on the region. -/
-def regionPhysicalConfigMapEquiv (φ : G ≃g G') (R : Finset V) :
+noncomputable def regionPhysicalConfigMapEquiv (φ : G ≃g G') (R : Finset V) :
     RegionPhysicalConfig (V := V) (d := d) R ≃
       RegionPhysicalConfig (V := W) (d := d) (Region.map φ R) :=
-  Equiv.piCongrLeft' (fun _ : {w : V // w ∈ R} => Fin d) (regionVertexMapEquiv φ R).symm
+  Equiv.piCongrLeft' (fun _ : {w : V // w ∈ R} => Fin d)
+    (Finset.equivMap φ.toEquiv.toEmbedding R)
 
 /-- The transported blocked-region tensor family is the original family reindexed: the
 boundary index by `regionBoundaryConfigMapEquiv`, the physical-leg domain by

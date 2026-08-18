@@ -100,9 +100,9 @@ theorem firstSiteMatrix_isHermitian {P : Matrix (Fin d) (Fin d) ℂ}
   refine Matrix.ext fun σ τ => ?_
   simp only [Matrix.conjTranspose_apply, firstSiteMatrix]
   by_cases h : σ ∘ Fin.succ = τ ∘ Fin.succ
-  · rw [if_pos h, if_pos h.symm, mul_one, mul_one]
+  · rw [ite_eq_left h, ite_eq_left h.symm, mul_one, mul_one]
     exact hP.apply _ _
-  · rw [if_neg h, if_neg fun hh => h hh.symm, mul_zero, mul_zero, star_zero]
+  · rw [ite_eq_right h, ite_eq_right fun hh => h hh.symm, mul_zero, mul_zero, star_zero]
 
 /-- Reindex a sum over an $(N+1)$-site configuration by its first value and
 its remaining $N$ values. -/
@@ -125,9 +125,9 @@ theorem firstSiteMatrix_mul_apply (P : Matrix (Fin d) (Fin d) ℂ) {N : ℕ}
   refine Finset.sum_congr rfl fun i _ => ?_
   simp only [firstSiteMatrix, Fin.cons_zero, Function.comp_def, Fin.cons_succ]
   rw [Fintype.sum_eq_single (fun n : Fin N => σ (Fin.succ n))]
-  · rw [if_pos rfl, mul_one]
+  · rw [ite_eq_left rfl, mul_one]
   · intro ρ hρ
-    rw [if_neg fun hh => hρ hh.symm, mul_zero, zero_mul]
+    rw [ite_eq_right fun hh => hρ hh.symm, mul_zero, zero_mul]
 
 /-- Right multiplication by the first-spin action, entrywise:
 $(GP_1)_{\sigma\tau}=\sum_jG_{\sigma,(j,\tau')}P_{j\tau_0}$, where
@@ -141,9 +141,9 @@ theorem mul_firstSiteMatrix_apply (P : Matrix (Fin d) (Fin d) ℂ) {N : ℕ}
   refine Finset.sum_congr rfl fun j _ => ?_
   simp only [firstSiteMatrix, Fin.cons_zero, Function.comp_def, Fin.cons_succ]
   rw [Fintype.sum_eq_single (fun n : Fin N => τ (Fin.succ n))]
-  · rw [if_pos rfl, mul_one]
+  · rw [ite_eq_left rfl, mul_one]
   · intro ρ hρ
-    rw [if_neg hρ, mul_zero, mul_zero]
+    rw [ite_eq_right hρ, mul_zero, mul_zero]
 
 /-- First-site actions compose site by site:
 $P_1Q_1 = (PQ)_1$ on an $(N+1)$-site chain. -/
@@ -159,9 +159,9 @@ theorem firstSiteMatrix_mul_firstSiteMatrix
     funext n
     simp [Fin.cons_succ]
   by_cases hcond : σ ∘ Fin.succ = τ ∘ Fin.succ
-  · simp only [firstSiteMatrix, Fin.cons_zero, hcons, if_pos hcond, mul_one,
+  · simp only [firstSiteMatrix, Fin.cons_zero, hcons, ite_eq_left hcond, mul_one,
       Matrix.mul_apply]
-  · simp only [firstSiteMatrix, Fin.cons_zero, hcons, if_neg hcond, mul_zero,
+  · simp only [firstSiteMatrix, Fin.cons_zero, hcons, ite_eq_right hcond, mul_zero,
       Finset.sum_const_zero]
 
 /-- Move a finite scalar-weighted sum inside a trace pairing. -/

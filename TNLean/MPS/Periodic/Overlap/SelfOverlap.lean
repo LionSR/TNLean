@@ -139,7 +139,7 @@ private lemma not_gaugePhaseEquiv_of_orthogonal_cyclicSector_traces
   obtain ⟨U, ζ, hζ, hU_ne, hSupp, hEig⟩ :
       ∃ (U : MatrixAlg D) (ζ : ℂ), ‖ζ‖ = 1 ∧ U ≠ 0 ∧ U = P u * U * P v ∧
         ((transferMap (d := d) (D := D) A) ^ m) U = ζ • U := by
-    haveI : NeZero (dim u) := ⟨hNondeg u⟩
+    have : NeZero (dim u) := ⟨hNondeg u⟩
     obtain ⟨U, ζ, hζ, hU_ne, hSupp, hEig_block⟩ :=
       exists_offDiag_eigenvector_of_gaugePhase_cast_left
         (D := D) (d₀ := blockPhysDim d m) (Du := dim u) (Dv := dim v) hdim
@@ -280,7 +280,7 @@ private theorem sectorOverlap_tendsto_delta_of_cyclicSectorDecomp
     ⟨P, φ, hPproj, hPsum, hCyclicP, hComm, hTrace, hIntertwine, hMul, hStar⟩
   by_cases huv : u = v
   · subst v
-    haveI : NeZero (dim u) := ⟨hNondeg u⟩
+    have : NeZero (dim u) := ⟨hNondeg u⟩
     obtain ⟨hPrim, hIrr⟩ :=
       primitive_and_irreducible_sectorBlocks_of_cyclicDecomp
         A hP blocks hBlocks_lc hBlocks_mpv hCyclic u (hNondeg u)
@@ -302,8 +302,8 @@ private theorem sectorOverlap_tendsto_delta_of_cyclicSectorDecomp
     have hIrr_v : IsIrreducibleTensor (blocks v) :=
       (primitive_and_irreducible_sectorBlocks_of_cyclicDecomp
         A hP blocks hBlocks_lc hBlocks_mpv hCyclic v (hNondeg v)).2
-    haveI : NeZero (dim u) := ⟨hNondeg u⟩
-    haveI : NeZero (dim v) := ⟨hNondeg v⟩
+    have : NeZero (dim u) := ⟨hNondeg u⟩
+    have : NeZero (dim v) := ⟨hNondeg v⟩
     by_cases hdim : dim u = dim v
     · have hNot :
           ¬ GaugePhaseEquiv
@@ -427,7 +427,7 @@ theorem periodicSelfOverlap_tendsto
     [NeZero D] (A : MPSTensor d D) {m : ℕ}
     (hP : IsPeriodic m A) :
     Tendsto (fun k => mpvOverlap A A (m * k)) atTop (nhds (m : ℂ)) := by
-  letI : NeZero m := ⟨Nat.ne_of_gt hP.period_pos⟩
+  let : NeZero m := ⟨Nat.ne_of_gt hP.period_pos⟩
   obtain ⟨dim, blocks, P, φ, V, hBlocks_lc, hBlocks_mpv, hPproj, hPsum, hCyclicRaw,
     hComm, hTrace, hIntertwine, hMul, hStar, hNondeg, hLetterRaw, hV_iso, hV_range,
     hEmbed⟩ :=

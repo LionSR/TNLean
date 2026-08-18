@@ -197,7 +197,7 @@ theorem exists_ge_pow_sub_one_norm_le {ι : Type*} [Finite ι] (θ : ι → ℂ)
     (hθ : ∀ k, ‖θ k‖ = 1) {ε : ℝ} (hε : 0 < ε) (B : ℕ) :
     ∃ n : ℕ, B ≤ n ∧ ∀ k, ‖θ k ^ n - 1‖ ≤ ε := by
   classical
-  letI := Fintype.ofFinite ι
+  let := Fintype.ofFinite ι
   rcases isEmpty_or_nonempty ι with hι | hι
   · exact ⟨B, le_rfl, fun k ↦ isEmptyElim k⟩
   -- Choose arguments for the phases.

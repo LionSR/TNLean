@@ -86,12 +86,12 @@ theorem mpo_idTensor (d N : ℕ) : mpo (idTensor d) N = 1 := by
   simp only [mpo_apply, mpoMatrixEntry, evalWord_ofFn, Matrix.one_apply]
   by_cases h : σ = τ
   · subst h
-    rw [if_pos rfl, List.prod_eq_one, Matrix.trace_one, Fintype.card_fin,
+    rw [ite_eq_left rfl, List.prod_eq_one, Matrix.trace_one, Fintype.card_fin,
       Nat.cast_one]
     intro X hX
     obtain ⟨l, rfl⟩ := List.mem_ofFn.mp hX
     simp [idTensor]
-  · rw [if_neg h]
+  · rw [ite_eq_right h]
     obtain ⟨l, hl⟩ : ∃ l, σ l ≠ τ l := Function.ne_iff.mp h
     have hzero : (0 : Matrix (Fin 1) (Fin 1) ℂ) ∈
         List.ofFn fun l => idTensor d (σ l) (τ l) :=
@@ -237,9 +237,9 @@ theorem verticalTensor_idTensor (v : Fin (1 * 1)) :
   simp only [verticalTensor_apply, idTensor]
   by_cases h : i = j
   · subst h
-    rw [if_pos rfl, Subsingleton.elim v.modNat v.divNat, Matrix.one_apply_eq,
+    rw [ite_eq_left rfl, Subsingleton.elim v.modNat v.divNat, Matrix.one_apply_eq,
       Matrix.one_apply_eq]
-  · rw [if_neg h, Matrix.zero_apply, Matrix.one_apply_ne h]
+  · rw [ite_eq_right h, Matrix.zero_apply, Matrix.one_apply_ne h]
 
 /-- The vertically viewed letters of a layer product are the products of the
 layers' vertically viewed letters: stacking layers concatenates the vertical

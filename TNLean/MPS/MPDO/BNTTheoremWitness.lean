@@ -113,10 +113,10 @@ theorem positive_blocked_chi_witness {data : AlgebraStructureData d D}
     (h : HasBNTLabelTheoremWitness data) :
     Nonempty (AlgebraStructureData.PositiveBlockedStructureChiTracePowerForm data) := by
   rcases h with ⟨W⟩
-  letI : Fintype W.Label := W.labelFintype
-  letI : ∀ L : ℕ, AddCommMonoid (W.OperatorSpace L) := W.operatorAddCommMonoid
-  letI : ∀ L : ℕ, Module ℂ (W.OperatorSpace L) := W.operatorModule
-  letI : ∀ L : ℕ, Mul (W.OperatorSpace L) := W.operatorMul
+  let : Fintype W.Label := W.labelFintype
+  let : ∀ L : ℕ, AddCommMonoid (W.OperatorSpace L) := W.operatorAddCommMonoid
+  let : ∀ L : ℕ, Module ℂ (W.OperatorSpace L) := W.operatorModule
+  let : ∀ L : ℕ, Mul (W.OperatorSpace L) := W.operatorMul
   exact ⟨W.theoremData.toPositiveBlockedStructureChiTracePowerForm⟩
 
 /-- Existence of the source BNT-label witness gives a blocked-basis

@@ -21,6 +21,16 @@ variable {V : Type*} [Fintype V] [LinearOrder V]
 variable {G : SimpleGraph V} [DecidableRel G.Adj] {d : ℕ}
 
 
+
+private def edgeFinEqDelta (A : Tensor G d) (ξ : OpenLocalConfig (G := G) A)
+    (e : Edge G) : ℂ :=
+  @ite ℂ
+    (ξ e.1.1 (edgeLeftIncident (G := G) e) =
+      ξ e.1.2 (edgeRightIncident (G := G) e))
+    (instDecidableEqFin (A.bondDim e)
+      (ξ e.1.1 (edgeLeftIncident (G := G) e))
+      (ξ e.1.2 (edgeRightIncident (G := G) e))) 1 0
+
 /-- The gauge-matrix product over all vertices and incident edges factors into one
 two-endpoint factor per edge: the left gauge `X_g` and the right gauge
 `(X_g⁻¹)ᵀ`, evaluated against the outer and inner configurations. -/
@@ -59,14 +69,12 @@ private lemma open_gauge_sum_over_outer (A : Tensor G d)
     (ω : OpenLocalConfig (G := G) A) :
     (∑ ξ : OpenLocalConfig (G := G) A,
       (∏ f : {f : Edge G // f ≠ e},
-        if ξ f.1.1.1 (edgeLeftIncident (G := G) f.1) =
-            ξ f.1.1.2 (edgeRightIncident (G := G) f.1) then (1 : ℂ) else 0) *
+        edgeFinEqDelta A ξ f.1) *
         N (ξ e.1.1 (edgeLeftIncident (G := G) e))
           (ξ e.1.2 (edgeRightIncident (G := G) e)) *
         ∏ v : V, ∏ ie : IncidentEdge G v, edgeGaugeAt A X v ie (ξ v ie) (ω v ie)) =
       (∏ f : {f : Edge G // f ≠ e},
-        if ω f.1.1.1 (edgeLeftIncident (G := G) f.1) =
-            ω f.1.1.2 (edgeRightIncident (G := G) f.1) then (1 : ℂ) else 0) *
+        edgeFinEqDelta A ω f.1) *
         ((X e : Matrix (Fin (A.bondDim e)) (Fin (A.bondDim e)) ℂ)ᵀ * N *
           ((X e : Matrix (Fin (A.bondDim e)) (Fin (A.bondDim e)) ℂ)⁻¹)ᵀ)
           (ω e.1.1 (edgeLeftIncident (G := G) e)) (ω e.1.2 (edgeRightIncident (G := G) e)) := by
@@ -85,8 +93,7 @@ private lemma open_gauge_sum_over_outer (A : Tensor G d)
   have hcollapse :
       (∑ ξ : OpenLocalConfig (G := G) A,
         (∏ f : {f : Edge G // f ≠ e},
-          if ξ f.1.1.1 (edgeLeftIncident (G := G) f.1) =
-              ξ f.1.1.2 (edgeRightIncident (G := G) f.1) then (1 : ℂ) else 0) *
+          edgeFinEqDelta A ξ f.1) *
           N (ξ e.1.1 (edgeLeftIncident (G := G) e))
             (ξ e.1.2 (edgeRightIncident (G := G) e)) *
           ∏ g : Edge G,
@@ -101,7 +108,10 @@ private lemma open_gauge_sum_over_outer (A : Tensor G d)
             if IsConsistentOff (G := G) A e ξ then G' ξ else 0 := by
             refine Finset.sum_congr rfl ?_
             intro ξ _
-            rw [prod_off_delta_eq]
+            have hdelta : (∏ f : {f : Edge G // f ≠ e}, edgeFinEqDelta A ξ f.1) =
+                if IsConsistentOff (G := G) A e ξ then 1 else 0 :=
+              prod_off_delta_eq A e ξ
+            rw [hdelta]
             by_cases h : IsConsistentOff (G := G) A e ξ <;> simp [h, hG']
       _ = ∑ ξ : {ξ : OpenLocalConfig (G := G) A // IsConsistentOff (G := G) A e ξ},
             G' ξ.1 := by
@@ -195,8 +205,7 @@ private lemma open_gauge_sum_over_outer (A : Tensor G d)
             ((X e : Matrix (Fin (A.bondDim e)) (Fin (A.bondDim e)) ℂ)⁻¹)
               (ω e.1.2 (edgeRightIncident (G := G) e)) k)) *
         ∏ f : {f : Edge G // f ≠ e},
-          if ω f.1.1.1 (edgeLeftIncident (G := G) f.1) =
-              ω f.1.1.2 (edgeRightIncident (G := G) f.1) then (1 : ℂ) else 0 := by
+          edgeFinEqDelta A ω f.1 := by
     intro i
     -- the complement sum factors into one per-edge sum, each cancelling to a delta.
     have hQ :
@@ -207,8 +216,7 @@ private lemma open_gauge_sum_over_outer (A : Tensor G d)
               ((X g.1 : Matrix (Fin (A.bondDim g.1)) (Fin (A.bondDim g.1)) ℂ)⁻¹)
                 (ω g.1.1.2 (edgeRightIncident (G := G) g.1)) (ζ g)) =
           ∏ f : {f : Edge G // f ≠ e},
-            if ω f.1.1.1 (edgeLeftIncident (G := G) f.1) =
-                ω f.1.1.2 (edgeRightIncident (G := G) f.1) then (1 : ℂ) else 0 := by
+            edgeFinEqDelta A ω f.1 := by
       rw [show (∑ ζ : EdgeComplementConfig (G := G) A e,
           ∏ g : {g : Edge G // g ≠ e},
             (X g.1 : Matrix (Fin (A.bondDim g.1)) (Fin (A.bondDim g.1)) ℂ)
@@ -237,8 +245,60 @@ private lemma open_gauge_sum_over_outer (A : Tensor G d)
   rw [← Finset.sum_mul, mul_comm]
   congr 1
   -- the open-edge double sum is the conjugation `(X_eᵀ N (X_e⁻¹)ᵀ)`.
-  simp only [Matrix.mul_apply, Matrix.transpose_apply, Finset.sum_mul]
-  rw [Finset.sum_comm]
+  have hmatrix :
+      ((X e : Matrix (Fin (A.bondDim e)) (Fin (A.bondDim e)) ℂ)ᵀ * N *
+        ((X e : Matrix (Fin (A.bondDim e)) (Fin (A.bondDim e)) ℂ)⁻¹)ᵀ)
+          (ω e.1.1 (edgeLeftIncident (G := G) e))
+          (ω e.1.2 (edgeRightIncident (G := G) e)) =
+        ∑ k, ∑ i,
+          (X e : Matrix (Fin (A.bondDim e)) (Fin (A.bondDim e)) ℂ)
+              i (ω e.1.1 (edgeLeftIncident (G := G) e)) * N i k *
+            ((X e : Matrix (Fin (A.bondDim e)) (Fin (A.bondDim e)) ℂ)⁻¹)
+              (ω e.1.2 (edgeRightIncident (G := G) e)) k := by
+    have hinner (k : Fin (A.bondDim e)) :
+        ((X e : Matrix (Fin (A.bondDim e)) (Fin (A.bondDim e)) ℂ)ᵀ * N)
+            (ω e.1.1 (edgeLeftIncident (G := G) e)) k =
+          ∑ i, (X e : Matrix (Fin (A.bondDim e)) (Fin (A.bondDim e)) ℂ)
+            i (ω e.1.1 (edgeLeftIncident (G := G) e)) * N i k := by
+      calc
+        _ = ∑ i,
+            (X e : Matrix (Fin (A.bondDim e)) (Fin (A.bondDim e)) ℂ)ᵀ
+              (ω e.1.1 (edgeLeftIncident (G := G) e)) i * N i k := Matrix.mul_apply
+        _ = _ := by
+          apply Finset.sum_congr rfl
+          intro i _
+          exact congrArg (fun z : ℂ => z * N i k)
+            (Matrix.transpose_apply
+              (X e : Matrix (Fin (A.bondDim e)) (Fin (A.bondDim e)) ℂ)
+              (ω e.1.1 (edgeLeftIncident (G := G) e)) i)
+    calc
+      _ = ∑ k,
+          ((X e : Matrix (Fin (A.bondDim e)) (Fin (A.bondDim e)) ℂ)ᵀ * N)
+              (ω e.1.1 (edgeLeftIncident (G := G) e)) k *
+            ((X e : Matrix (Fin (A.bondDim e)) (Fin (A.bondDim e)) ℂ)⁻¹)ᵀ k
+              (ω e.1.2 (edgeRightIncident (G := G) e)) := Matrix.mul_apply
+      _ = _ := by
+        apply Finset.sum_congr rfl
+        intro k _
+        rw [hinner k]
+        have hright :
+            ((X e : Matrix (Fin (A.bondDim e)) (Fin (A.bondDim e)) ℂ)⁻¹)ᵀ k
+                (ω e.1.2 (edgeRightIncident (G := G) e)) =
+              ((X e : Matrix (Fin (A.bondDim e)) (Fin (A.bondDim e)) ℂ)⁻¹)
+                (ω e.1.2 (edgeRightIncident (G := G) e)) k :=
+          Matrix.transpose_apply _ _ _
+        calc
+          _ = (∑ i,
+                (X e : Matrix (Fin (A.bondDim e)) (Fin (A.bondDim e)) ℂ)
+                    i (ω e.1.1 (edgeLeftIncident (G := G) e)) * N i k) *
+              ((X e : Matrix (Fin (A.bondDim e)) (Fin (A.bondDim e)) ℂ)⁻¹)
+                (ω e.1.2 (edgeRightIncident (G := G) e)) k :=
+            congrArg (fun z : ℂ => (∑ i,
+              (X e : Matrix (Fin (A.bondDim e)) (Fin (A.bondDim e)) ℂ)
+                i (ω e.1.1 (edgeLeftIncident (G := G) e)) * N i k) * z) hright
+          _ = _ := by
+            rw [Finset.sum_mul]
+  rw [hmatrix, Finset.sum_comm]
   refine Finset.sum_congr rfl ?_
   intro i _
   refine Finset.sum_congr rfl ?_
@@ -287,16 +347,14 @@ theorem edgeInsertedCoeff_applyGauge (B : Tensor G d)
   -- For fixed inner `ω`, pull `∏ v B.component v (ω v)` out and apply the gauge sum.
   have hpull : ∀ ξ : OpenLocalConfig (G := G) (applyGauge B Z),
       (∏ f : {f : Edge G // f ≠ e},
-        if ξ f.1.1.1 (edgeLeftIncident (G := G) f.1) =
-            ξ f.1.1.2 (edgeRightIncident (G := G) f.1) then (1 : ℂ) else 0) *
+        edgeFinEqDelta B ξ f.1) *
         N (ξ e.1.1 (edgeLeftIncident (G := G) e))
           (ξ e.1.2 (edgeRightIncident (G := G) e)) *
         ∏ v : V,
           ((∏ ie : IncidentEdge G v, edgeGaugeAt B Z v ie (ξ v ie) (ω v ie)) *
             B.component v (ω v) (σ v)) =
       ((∏ f : {f : Edge G // f ≠ e},
-        if ξ f.1.1.1 (edgeLeftIncident (G := G) f.1) =
-            ξ f.1.1.2 (edgeRightIncident (G := G) f.1) then (1 : ℂ) else 0) *
+        edgeFinEqDelta B ξ f.1) *
         N (ξ e.1.1 (edgeLeftIncident (G := G) e))
           (ξ e.1.2 (edgeRightIncident (G := G) e)) *
         ∏ v : V, ∏ ie : IncidentEdge G v, edgeGaugeAt B Z v ie (ξ v ie) (ω v ie)) *
@@ -304,7 +362,7 @@ theorem edgeInsertedCoeff_applyGauge (B : Tensor G d)
     intro ξ
     rw [Finset.prod_mul_distrib]
     ring
-  rw [Finset.sum_congr rfl (fun ξ _ => hpull ξ)]
+  rw [Finset.sum_congr rfl (fun ξ _ => by exact hpull ξ)]
   rw [← Finset.sum_mul]
   congr 1
   exact open_gauge_sum_over_outer B Z e N ω

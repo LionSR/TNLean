@@ -123,7 +123,7 @@ theorem supportRelativeModular_sourceB_solution
   have hres : res.PosDef := by
     simpa only [res, delta, Bplus, PosSemidef.supportInv] using
       supportRelativeModular_resolvent_posDef hA hB ht
-  letI : Invertible res := hres.isUnit.invertible
+  let : Invertible res := hres.isUnit.invertible
   have hSP : S * P = C * res := by
     simpa only [S, supportLeftRightSuperoperator, P, C, res, delta, Bplus,
       PosSemidef.supportInv] using

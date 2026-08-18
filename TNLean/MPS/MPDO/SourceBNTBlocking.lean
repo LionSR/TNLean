@@ -137,7 +137,7 @@ theorem IsCPSVBasisOfNormalTensors.exists_positive_wordTupleSpanTop
     ∃ L : ℕ, 0 < L ∧ WordTupleSpanTop B L := by
   classical
   have hdimPos := hBNT.blocks_dim_pos
-  letI : ∀ j : Fin g, NeZero (dim j) := fun j => ⟨(hdimPos j).ne'⟩
+  let : ∀ j : Fin g, NeZero (dim j) := fun j => ⟨(hdimPos j).ne'⟩
   choose σ _hσ _hσfix hTP hGauge hPrim hIrr using
     fun j => (hBNT.blocks_normal j).exists_tpGauge
   let prepared : (j : Fin g) → MPSTensor d (dim j) :=

@@ -333,7 +333,7 @@ theorem isPositiveMap_of_forall_vecMulVec_posSemidef
     (h : ∀ w : m → ℂ, (Φ (vecMulVec w (star w))).PosSemidef) :
     IsPositiveMap Φ := by
   classical
-  letI := Fintype.ofFinite m
+  let := Fintype.ofFinite m
   intro X hX
   rw [hX.eq_sum_vecMulVec_nonzero_eigs]
   rw [map_sum]

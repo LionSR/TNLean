@@ -237,13 +237,13 @@ theorem unitModulus_power_sum_not_tendsto_zero
         (nhds (if μ p.1 * star (μ p.2) = 1 then (1 : ℂ) else 0)) := by
     intro p
     by_cases hν1 : μ p.1 * star (μ p.2) = 1
-    · rw [if_pos hν1]
+    · rw [ite_eq_left hν1]
       have := cesaro_geom_sum_one_tendsto_one
       refine this.congr' ?_
       refine Filter.Eventually.of_forall ?_
       intro T
       rw [hν1]
-    · rw [if_neg hν1]
+    · rw [ite_eq_right hν1]
       exact cesaro_geom_sum_tendsto_zero (hPair_unit p) hν1
   -- Sum of Cesaro limits is the Cesaro limit of the sum.
   have hSum_cesaro :

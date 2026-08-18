@@ -111,7 +111,7 @@ private theorem embed_twoSiteSectorProjection_eq_finKronecker
   simp only [embedLocalOperator_apply, sitewisePhysicalMatrix,
     Matrix.finKronecker_apply]
   by_cases hAgree : AgreesOutsideWindow (d := d) 2 hN i σ τ
-  · rw [if_pos hAgree, MPSTensor.prod_cyclicWindow_complement 2 N hN i]
+  · rw [ite_eq_left hAgree, MPSTensor.prod_cyclicWindow_complement 2 N hN i]
     rw [agreesOutsideWindow_iff] at hAgree
     apply Eq.symm
     calc
@@ -144,21 +144,21 @@ private theorem embed_twoSiteSectorProjection_eq_finKronecker
             simpa [Nat.add_assoc] using MPSTensor.offset_mod_eq i.isLt
               (by omega : 2 + r.val < N)
           rw [hoff]
-          rw [if_neg (by omega)]
+          rw [ite_eq_right (by omega)]
           simp only [Matrix.one_apply]
-          rw [if_pos]
+          rw [ite_eq_left]
           exact (hAgree
             ⟨(i.val + 2 + r.val) % N, Nat.mod_lt _ (Fin.pos i)⟩
             (by rw [hoff]; omega)).symm
       _ = _ := by simp [MPSTensor.extractWindow]
-  · rw [if_neg hAgree]
+  · rw [ite_eq_right hAgree]
     rw [agreesOutsideWindow_iff] at hAgree
     push Not at hAgree
     obtain ⟨n, hn, hστ⟩ := hAgree
     apply Eq.symm
     apply Finset.prod_eq_zero (i := n) (Finset.mem_univ n)
     simp only [cyclicBondProjectionFactor]
-    rw [if_neg (by omega), Matrix.one_apply, if_neg (Ne.symm hστ)]
+    rw [ite_eq_right (by omega), Matrix.one_apply, ite_eq_right (Ne.symm hστ)]
 
 private theorem finKronecker_list_prod_of_ne_nil {N : ℕ}
     (l : List (Fin N → Matrix (Fin d) (Fin d) ℂ)) (hl : l ≠ []) :
@@ -262,7 +262,7 @@ private theorem openBondProjectionProduct_eq_sitewise
       simp only [factors, cyclicBondProjectionFactor]
       have hoff : (n.val + N - n.val) % N = 0 := by
         rw [show n.val + N - n.val = N by omega, Nat.mod_self]
-      rw [if_pos (by rw [hoff]; omega)]
+      rw [ite_eq_left (by rw [hoff]; omega)]
     · refine ⟨⟨N - 2, by omega⟩, ?_⟩
       simp only [factors, cyclicBondProjectionFactor]
       have hn : n.val = N - 1 := by omega
@@ -270,7 +270,7 @@ private theorem openBondProjectionProduct_eq_sitewise
         rw [hn]
         rw [show N - 1 + N - (N - 2) = N + 1 by omega,
           Nat.add_mod_left, Nat.mod_eq_of_lt (by omega : 1 < N)]
-      rw [hoff, if_pos (by omega)]
+      rw [hoff, ite_eq_left (by omega)]
 
 private theorem list_prod_mul_eq_of_forall
     {n : Type*} [Fintype n] [DecidableEq n]

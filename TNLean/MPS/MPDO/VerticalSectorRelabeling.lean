@@ -118,8 +118,8 @@ theorem transportedVerticalSector_exists_unitaryBlockEquiv
       hU₂ := hU₂
       hTCPTP := hTCPTP
       hSCPTP := hSCPTP }
-  letI : ∀ i, NeZero (h.dim₁ i) := fun i ↦ ⟨(h.hBNT₁.blocks_dim_pos i).ne'⟩
-  letI : ∀ j, NeZero (h.dim₂ j) := fun j ↦ ⟨(h.hBNT₂.blocks_dim_pos j).ne'⟩
+  let : ∀ i, NeZero (h.dim₁ i) := fun i ↦ ⟨(h.hBNT₁.blocks_dim_pos i).ne'⟩
+  let : ∀ j, NeZero (h.dim₂ j) := fun j ↦ ⟨(h.hBNT₂.blocks_dim_pos j).ne'⟩
   have hTbar : Matrix.IsKrausDirectSumMap h.Tbar := by
     exact transportedVerticalSectorT_isKrausDirectSumMap
       h.dim₁ h.mult₁ h.weight₁ h.dim₂ h.mult₂ h.hMult₁ h.hWeight₁

@@ -63,14 +63,14 @@ theorem mpvOverlap_tendsto_zero_of_mixedTransferSpectralRadius_lt_one
   classical
   let Φ : (V →ₗ[ℂ] V) ≃ₐ[ℂ] (V →L[ℂ] V) := Module.End.toContinuousLinearMap V
   let F' : V →L[ℂ] V := Φ (mixedTransferMap₂ (d := d) (D₁ := D₁) (D₂ := D₂) A B)
-  letI : NormedAddCommGroup (V →L[ℂ] V) := ContinuousLinearMap.toNormedAddCommGroup
-  letI : SeminormedRing (V →L[ℂ] V) := ContinuousLinearMap.toSeminormedRing
-  letI : NormedRing (V →L[ℂ] V) := ContinuousLinearMap.toNormedRing
-  letI : NormedSpace ℂ (V →L[ℂ] V) := ContinuousLinearMap.toNormedSpace
-  letI : NormedAlgebra ℂ (V →L[ℂ] V) := ContinuousLinearMap.toNormedAlgebra
-  haveI : FiniteDimensional ℂ (V →L[ℂ] V) := Φ.toLinearEquiv.finiteDimensional
+  let : NormedAddCommGroup (V →L[ℂ] V) := ContinuousLinearMap.toNormedAddCommGroup
+  let : SeminormedRing (V →L[ℂ] V) := ContinuousLinearMap.toSeminormedRing
+  let : NormedRing (V →L[ℂ] V) := ContinuousLinearMap.toNormedRing
+  let : NormedSpace ℂ (V →L[ℂ] V) := ContinuousLinearMap.toNormedSpace
+  let : NormedAlgebra ℂ (V →L[ℂ] V) := ContinuousLinearMap.toNormedAlgebra
+  have : FiniteDimensional ℂ (V →L[ℂ] V) := Φ.toLinearEquiv.finiteDimensional
   have hComplete : CompleteSpace (V →L[ℂ] V) := FiniteDimensional.complete ℂ (V →L[ℂ] V)
-  letI : CompleteSpace (V →L[ℂ] V) := hComplete
+  let : CompleteSpace (V →L[ℂ] V) := hComplete
   have hSpectF : spectralRadius ℂ F' < 1 := by
     change spectralRadius ℂ
       (((Module.End.toContinuousLinearMap V)
@@ -94,7 +94,7 @@ theorem mpvOverlap_tendsto_zero_of_mixedTransferSpectralRadius_lt_one
     -- `Φ` preserves powers; `((Φ M : V →L[ℂ] V) : V →ₗ[ℂ] V) = M` by definition.
     have hpow : (F' ^ n) =
         Φ ((mixedTransferMap₂ (d := d) (D₁ := D₁) (D₂ := D₂) A B) ^ n) := by
-      simp [F', Φ]
+      exact (map_pow Φ (mixedTransferMap₂ A B) n).symm
     -- Pass to underlying linear maps.
     have hlin :
         ((F' ^ n : V →L[ℂ] V) : V →ₗ[ℂ] V) =

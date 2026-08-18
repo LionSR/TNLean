@@ -126,7 +126,7 @@ theorem insertedTensor_firstSiteActionOnBlock_blockTensor
   · intro w hw
     simp only [Fin.consEquiv_apply, firstSiteActionOnBlock,
       decodeBlock_decodeBlockEquiv_symm, Fin.cons_zero, Fin.cons_succ]
-    rw [if_neg]
+    rw [ite_eq_right]
     · simp
     · exact fun h => hw h.symm
 

@@ -227,22 +227,22 @@ lemma stringOrderBoundaryParam_tendsto_zero_of_spectralRadius_lt_one
       Filter.atTop (nhds 0) := by
   let F' : Matrix (Fin D) (Fin D) ℂ →L[ℂ] Matrix (Fin D) (Fin D) ℂ :=
     (Module.End.toContinuousLinearMap (Matrix (Fin D) (Fin D) ℂ)) (twistedTransferMap A u)
-  letI : NormedAddCommGroup
+  let : NormedAddCommGroup
       (Matrix (Fin D) (Fin D) ℂ →L[ℂ] Matrix (Fin D) (Fin D) ℂ) :=
     ContinuousLinearMap.toNormedAddCommGroup
-  letI : SeminormedRing
+  let : SeminormedRing
       (Matrix (Fin D) (Fin D) ℂ →L[ℂ] Matrix (Fin D) (Fin D) ℂ) :=
     ContinuousLinearMap.toSeminormedRing
-  letI : NormedRing
+  let : NormedRing
       (Matrix (Fin D) (Fin D) ℂ →L[ℂ] Matrix (Fin D) (Fin D) ℂ) :=
     ContinuousLinearMap.toNormedRing
-  letI : NormedSpace ℂ
+  let : NormedSpace ℂ
       (Matrix (Fin D) (Fin D) ℂ →L[ℂ] Matrix (Fin D) (Fin D) ℂ) :=
     ContinuousLinearMap.toNormedSpace
-  letI : NormedAlgebra ℂ
+  let : NormedAlgebra ℂ
       (Matrix (Fin D) (Fin D) ℂ →L[ℂ] Matrix (Fin D) (Fin D) ℂ) :=
     ContinuousLinearMap.toNormedAlgebra
-  haveI : FiniteDimensional ℂ
+  have : FiniteDimensional ℂ
       (Matrix (Fin D) (Fin D) ℂ →L[ℂ] Matrix (Fin D) (Fin D) ℂ) :=
     (Module.End.toContinuousLinearMap
       (Matrix (Fin D) (Fin D) ℂ)).toLinearEquiv.finiteDimensional
@@ -250,7 +250,7 @@ lemma stringOrderBoundaryParam_tendsto_zero_of_spectralRadius_lt_one
       (Matrix (Fin D) (Fin D) ℂ →L[ℂ] Matrix (Fin D) (Fin D) ℂ) :=
     FiniteDimensional.complete ℂ
       (Matrix (Fin D) (Fin D) ℂ →L[ℂ] Matrix (Fin D) (Fin D) ℂ)
-  letI : CompleteSpace
+  let : CompleteSpace
       (Matrix (Fin D) (Fin D) ℂ →L[ℂ] Matrix (Fin D) (Fin D) ℂ) := hComplete
   have hsrF : spectralRadius ℂ F' < 1 := by
     change spectralRadius ℂ

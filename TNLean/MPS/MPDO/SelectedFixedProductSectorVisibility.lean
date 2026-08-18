@@ -306,7 +306,7 @@ theorem exists_changePhysicalBasis_apply_ne_zero_of_isCyclicActiveSector
     F.exists_cyclicNeighboringProduct_diag_ne_zero_of_isCyclicActiveSector
       hpos hq
   subst q
-  letI : NeZero N := hNinst
+  let : NeZero N := hNinst
   let s := (F.sectorCoordinateChainEquiv N).symm ⟨k, z⟩
   have hselected :
       mpo F.sectorCoordinateTensor N s s ≠ 0 := by

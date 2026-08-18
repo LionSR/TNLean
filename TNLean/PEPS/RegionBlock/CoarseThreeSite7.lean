@@ -283,6 +283,9 @@ theorem edgeInsertedCoeff_coarseTensor_eq_threeRegionSum
                 (fun ie => overrideEdge (G := coarseGraph) (F.frame.coarseTensor) coarseEdgeRB
                   ηL y ie.1)) (coarseProj F.frame.blue (s 1)) := by
   classical
+  let M' : Matrix (Fin ((F.frame.coarseTensor).bondDim coarseEdgeRB))
+      (Fin ((F.frame.coarseTensor).bondDim coarseEdgeRB)) ℂ := fun i j => M i j
+  change edgeInsertedCoeff (G := coarseGraph) F.frame.coarseTensor coarseEdgeRB s M' = _
   rw [edgeInsertedCoeff_eq_pairSum]
   refine Finset.sum_congr rfl (fun ηL _ => Finset.sum_congr rfl (fun y _ => ?_))
   -- The coarse super-site components are the three original blocked-region weights.
@@ -368,9 +371,20 @@ theorem legEquivBlue_overrideEdge_apply
         (F.bondModel coarseEdgeBC (ηL coarseEdgeBC)
           ⟨b.1, (F.frame.isCrossingEdge_red_blue_or_blue_complement hP b.2).resolve_left hb⟩ :
           Fin (A.bondDim b.1)) := by
+  let y' : Fin ((F.frame.coarseTensor).bondDim coarseEdgeRB) := ⟨y.1, y.2⟩
+  let η' : VirtualConfig F.frame.coarseTensor :=
+    overrideEdge (G := coarseGraph) F.frame.coarseTensor coarseEdgeRB ηL y'
+  change F.frame.legEquivBlue (fun ie => η' ie.1) b = _
   rw [F.legEquivBlue_apply_eq hP _ b]
-  simp only [overrideEdge, Function.update_self,
-    Function.update_of_ne (show coarseEdgeBC ≠ coarseEdgeRB by decide)]
+  by_cases hb : IsCrossingEdge (G := G) A F.frame.red F.frame.blue b.1
+  · rw [dite_eq_left hb, dite_eq_left hb]
+    have hy : η' coarseEdgeRB = y' :=
+      overrideEdge_edge (G := coarseGraph) F.frame.coarseTensor coarseEdgeRB ηL y'
+    exact congrFun (congrArg (F.bondModel coarseEdgeRB) hy) ⟨b.1, hb⟩
+  · rw [dite_eq_right hb, dite_eq_right hb]
+    have hη : η' coarseEdgeBC = ηL coarseEdgeBC :=
+      overrideEdge_ne (G := coarseGraph) F.frame.coarseTensor coarseEdgeRB ηL y' (by decide)
+    exact congrFun (congrArg (F.bondModel coarseEdgeBC) hη) _
 
 /-! ### The bond-model-conjugated matrix on the red-to-blue crossing bundle
 
@@ -407,7 +421,9 @@ theorem bondModelMatrix_bondModel (F : CoherentCoarseBlockingFrame (G := G) (d :
     (a b : Fin (F.frame.coarseBondDim coarseEdgeRB)) :
     bondModelMatrix (G := G) F M (F.bondModel coarseEdgeRB a) (F.bondModel coarseEdgeRB b) =
       M a b := by
-  rw [bondModelMatrix_apply, Equiv.symm_apply_apply, Equiv.symm_apply_apply]
+  change M ((F.bondModel coarseEdgeRB).symm (F.bondModel coarseEdgeRB a))
+      ((F.bondModel coarseEdgeRB).symm (F.bondModel coarseEdgeRB b)) = M a b
+  rw [Equiv.symm_apply_apply, Equiv.symm_apply_apply]
 
 /-! ### The `r-b` super-bond value read from a blue crossing label
 
@@ -429,7 +445,10 @@ crossing label. -/
     (ζb : VirtualConfig A) :
     F.bondModel coarseEdgeRB (blueRBIndex (G := G) F ζb) =
       (fun g => ζb g.1 : CrossingConfig (G := G) A F.frame.red F.frame.blue) := by
-  rw [blueRBIndex, Equiv.apply_symm_apply]
+  let z : CrossingConfig (G := G) A (F.edgeRegions coarseEdgeRB).1
+      (F.edgeRegions coarseEdgeRB).2 := fun g => ζb g.1
+  change F.bondModel coarseEdgeRB ((F.bondModel coarseEdgeRB).symm z) = z
+  exact Equiv.apply_symm_apply _ z
 
 /-! ### The blue-override boundary recovery
 
@@ -457,13 +476,13 @@ theorem legEquivBlue_overrideEdge_eq_of_bondModel
   funext b
   rw [legEquivBlue_overrideEdge_apply F hP ηL y b]
   by_cases hb : IsCrossingEdge (G := G) A F.frame.red F.frame.blue b.1
-  · rw [dif_pos hb]
+  · rw [dite_eq_left hb]
     have := congrFun hrb ⟨b.1, hb⟩; rw [this]; rfl
-  · rw [dif_neg hb]
+  · rw [dite_eq_right hb]
     have hc : IsCrossingEdge (G := G) A F.frame.blue F.frame.complement b.1 :=
       (F.frame.isCrossingEdge_red_blue_or_blue_complement hP b.2).resolve_left hb
-    have := congrFun hbc ⟨b.1, hc⟩
-    rw [crossingLabel_apply] at this; rw [this]; rfl
+    have this := congrFun hbc ⟨b.1, hc⟩
+    exact this
 
 /-! ### The constraint set of the M-coupled descent
 
@@ -536,7 +555,7 @@ theorem pairConfig_constraint_set (F : CoherentCoarseBlockingFrame (G := G) (d :
             regionBoundaryLabel (G := G) A F.frame.complement ζc)) =
       if CrossTripleAgreesAwayRB F ζr ζb ζc then {pairToEtaY (G := G) F ζr ζc ζb} else ∅ := by
   by_cases hag : CrossTripleAgreesAwayRB F ζr ζb ζc
-  · rw [if_pos hag]
+  · rw [ite_eq_left hag]
     obtain ⟨hrc, hbc⟩ := hag
     ext p
     simp only [Finset.mem_filter, Finset.mem_univ, true_and, Finset.mem_singleton]
@@ -552,17 +571,25 @@ theorem pairConfig_constraint_set (F : CoherentCoarseBlockingFrame (G := G) (d :
           rw [bondModel_bc_eq_of_legEquivComplement_eq F hP p.1 ζc hc, tripleToEta_bc]; rfl
       have hy : p.2 = blueRBIndex (G := G) F ζb := by
         apply (F.bondModel coarseEdgeRB).injective
-        have hrbBlue := bondModel_rb_eq_of_legEquivBlue_eq F hP
-          (overrideEdge (G := coarseGraph) (F.frame.coarseTensor) coarseEdgeRB p.1 p.2) ζb hb
-        simp only [overrideEdge, Function.update_self] at hrbBlue
-        rw [bondModel_blueRBIndex, hrbBlue]
+        let y' : Fin ((F.frame.coarseTensor).bondDim coarseEdgeRB) := ⟨p.2.1, p.2.2⟩
+        let η' : VirtualConfig F.frame.coarseTensor :=
+          overrideEdge (G := coarseGraph) F.frame.coarseTensor coarseEdgeRB p.1 y'
+        have hb' : F.frame.legEquivBlue (fun ie => η' ie.1) =
+            regionBoundaryLabel (G := G) A F.frame.blue ζb := hb
+        have hrbBlue := bondModel_rb_eq_of_legEquivBlue_eq F hP η' ζb hb'
+        have hy' : η' coarseEdgeRB = y' :=
+          overrideEdge_edge (G := coarseGraph) F.frame.coarseTensor coarseEdgeRB p.1 y'
+        have hrbBlue' : F.bondModel coarseEdgeRB y' =
+            (fun g => ζb g.1 : CrossingConfig (G := G) A F.frame.red F.frame.blue) :=
+          (congrArg (F.bondModel coarseEdgeRB) hy').symm.trans hrbBlue
+        exact hrbBlue'.trans (bondModel_blueRBIndex F ζb).symm
       exact Prod.ext hηL hy
     · rintro rfl
       refine ⟨?_, ?_, ?_⟩
       · exact legEquivRed_pairToEtaY F hP ζr ζc ζb
       · exact legEquivBlue_override_pairToEtaY F hP ζr ζc ζb hbc
       · exact legEquivComplement_pairToEtaY F hP ζr ζc ζb hrc
-  · rw [if_neg hag]
+  · rw [ite_eq_right hag]
     ext p
     simp only [Finset.mem_filter, Finset.mem_univ, true_and, Finset.notMem_empty, iff_false]
     rintro ⟨hr, hb, hc⟩
@@ -570,11 +597,19 @@ theorem pairConfig_constraint_set (F : CoherentCoarseBlockingFrame (G := G) (d :
     refine ⟨?_, ?_⟩
     · rw [← bondModel_rc_eq_of_legEquivRed_eq F hP p.1 ζr hr,
         bondModel_rc_eq_of_legEquivComplement_eq F hP p.1 ζc hc]
-    · have hbcBlue := bondModel_bc_eq_of_legEquivBlue_eq F hP
-        (overrideEdge (G := coarseGraph) (F.frame.coarseTensor) coarseEdgeRB p.1 p.2) ζb hb
-      simp only [overrideEdge,
-        Function.update_of_ne (show coarseEdgeBC ≠ coarseEdgeRB by decide)] at hbcBlue
-      rw [← hbcBlue, bondModel_bc_eq_of_legEquivComplement_eq F hP p.1 ζc hc]
+    · let y' : Fin ((F.frame.coarseTensor).bondDim coarseEdgeRB) := ⟨p.2.1, p.2.2⟩
+      let η' : VirtualConfig F.frame.coarseTensor :=
+        overrideEdge (G := coarseGraph) F.frame.coarseTensor coarseEdgeRB p.1 y'
+      have hb' : F.frame.legEquivBlue (fun ie => η' ie.1) =
+          regionBoundaryLabel (G := G) A F.frame.blue ζb := hb
+      have hbcBlue := bondModel_bc_eq_of_legEquivBlue_eq F hP η' ζb hb'
+      have hη' : η' coarseEdgeBC = p.1 coarseEdgeBC :=
+        overrideEdge_ne (G := coarseGraph) F.frame.coarseTensor coarseEdgeRB p.1 y' (by decide)
+      have hbcBlue' : F.bondModel coarseEdgeBC (p.1 coarseEdgeBC) =
+          crossingLabel (G := G) A F.frame.blue F.frame.complement ζb :=
+        (congrArg (F.bondModel coarseEdgeBC) hη').symm.trans hbcBlue
+      exact hbcBlue'.symm.trans
+        (bondModel_bc_eq_of_legEquivComplement_eq F hP p.1 ζc hc)
 
 /-! ### The relaxed-triple reindexing of the M-coupled descent
 
@@ -667,8 +702,8 @@ theorem perPair_threeRegionProduct_eq
           overrideEdge (G := coarseGraph) (F.frame.coarseTensor) coarseEdgeRB ηL y ie.1)
     · by_cases hc : regionBoundaryLabel (G := G) A F.frame.complement ζc =
           F.frame.legEquivComplement (fun ie => ηL ie.1)
-      · rw [if_pos hr, if_pos hb, if_pos hc,
-          if_pos (show F.frame.legEquivRed (fun ie => ηL ie.1) =
+      · rw [ite_eq_left hr, ite_eq_left hb, ite_eq_left hc,
+          ite_eq_left (show F.frame.legEquivRed (fun ie => ηL ie.1) =
                 regionBoundaryLabel (G := G) A F.frame.red ζr ∧
               F.frame.legEquivBlue (fun ie =>
                   overrideEdge (G := coarseGraph) (F.frame.coarseTensor) coarseEdgeRB ηL y ie.1) =
@@ -676,17 +711,17 @@ theorem perPair_threeRegionProduct_eq
               F.frame.legEquivComplement (fun ie => ηL ie.1) =
                 regionBoundaryLabel (G := G) A F.frame.complement ζc
             from ⟨hr.symm, hb.symm, hc.symm⟩)]
-      · rw [if_neg hc, mul_zero, zero_mul,
-          if_neg (show ¬ (_ ∧ _ ∧ F.frame.legEquivComplement (fun ie => ηL ie.1) =
+      · rw [ite_eq_right hc, mul_zero, zero_mul,
+          ite_eq_right (show ¬ (_ ∧ _ ∧ F.frame.legEquivComplement (fun ie => ηL ie.1) =
               regionBoundaryLabel (G := G) A F.frame.complement ζc)
             from fun h => hc h.2.2.symm)]
-    · rw [if_neg hb, mul_zero,
-        if_neg (show ¬ (_ ∧ F.frame.legEquivBlue (fun ie =>
+    · rw [ite_eq_right hb, mul_zero,
+        ite_eq_right (show ¬ (_ ∧ F.frame.legEquivBlue (fun ie =>
               overrideEdge (G := coarseGraph) (F.frame.coarseTensor) coarseEdgeRB ηL y ie.1) =
               regionBoundaryLabel (G := G) A F.frame.blue ζb ∧ _)
           from fun h => hb h.2.1.symm)]
-  · rw [if_neg hr, mul_zero, zero_mul, zero_mul,
-      if_neg (show ¬ (F.frame.legEquivRed (fun ie => ηL ie.1) =
+  · rw [ite_eq_right hr, mul_zero, zero_mul, zero_mul,
+      ite_eq_right (show ¬ (F.frame.legEquivRed (fun ie => ηL ie.1) =
             regionBoundaryLabel (G := G) A F.frame.red ζr ∧ _)
         from fun h => hr h.1.symm)]
 
@@ -762,7 +797,7 @@ theorem mCoupledThreeRegionSum_eq_relaxedTripleSum
   dsimp only
   -- The innermost pair sum collapses to the crossing-agreement selector.
   by_cases hag : CrossTripleAgreesAwayRB F ζr ζb ζc
-  · rw [if_pos hag, ← Finset.sum_filter,
+  · rw [ite_eq_left hag, ← Finset.sum_filter,
       show (Finset.univ.filter (fun p : VirtualConfig (F.frame.coarseTensor) ×
           Fin (F.frame.coarseBondDim coarseEdgeRB) =>
           F.frame.legEquivRed (fun ie => p.1 ie.1) =
@@ -773,7 +808,7 @@ theorem mCoupledThreeRegionSum_eq_relaxedTripleSum
             F.frame.legEquivComplement (fun ie => p.1 ie.1) =
               regionBoundaryLabel (G := G) A F.frame.complement ζc)) =
         {pairToEtaY (G := G) F ζr ζc ζb} from by
-        rw [pairConfig_constraint_set F hP ζr ζb ζc, if_pos hag],
+        rw [pairConfig_constraint_set F hP ζr ζb ζc, ite_eq_left hag],
       Finset.sum_singleton]
     -- At the realizing pair, the inserted matrix factor is the conjugated matrix at the
     -- two crossing labels.
@@ -784,8 +819,17 @@ theorem mCoupledThreeRegionSum_eq_relaxedTripleSum
         bondModelMatrix (G := G) F M
             (crossingLabel (G := G) A F.frame.red F.frame.blue ζr)
             (fun g => ζb g.1 : CrossingConfig (G := G) A F.frame.red F.frame.blue) from by
-      rw [← bondModel_blueRBIndex F ζb, ← tripleToEta_rb F ζr ζc, bondModelMatrix_bondModel]]
-  · rw [if_neg hag, ← Finset.sum_filter,
+      calc
+        M (tripleToEta F ζr ζc coarseEdgeRB) (blueRBIndex (G := G) F ζb) =
+            bondModelMatrix (G := G) F M
+              (F.bondModel coarseEdgeRB (tripleToEta F ζr ζc coarseEdgeRB))
+              (F.bondModel coarseEdgeRB (blueRBIndex (G := G) F ζb)) :=
+          (bondModelMatrix_bondModel F M _ _).symm
+        _ = bondModelMatrix (G := G) F M
+              (crossingLabel (G := G) A F.frame.red F.frame.blue ζr)
+              (fun g => ζb g.1 : CrossingConfig (G := G) A F.frame.red F.frame.blue) := by
+          rw [tripleToEta_rb, bondModel_blueRBIndex]]
+  · rw [ite_eq_right hag, ← Finset.sum_filter,
       show (Finset.univ.filter (fun p : VirtualConfig (F.frame.coarseTensor) ×
           Fin (F.frame.coarseBondDim coarseEdgeRB) =>
           F.frame.legEquivRed (fun ie => p.1 ie.1) =
@@ -795,7 +839,7 @@ theorem mCoupledThreeRegionSum_eq_relaxedTripleSum
               regionBoundaryLabel (G := G) A F.frame.blue ζb ∧
             F.frame.legEquivComplement (fun ie => p.1 ie.1) =
               regionBoundaryLabel (G := G) A F.frame.complement ζc)) = ∅ from by
-        rw [pairConfig_constraint_set F hP ζr ζb ζc, if_neg hag],
+        rw [pairConfig_constraint_set F hP ζr ζb ζc, ite_eq_right hag],
       Finset.sum_empty]
 
 end PEPS

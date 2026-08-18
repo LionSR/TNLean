@@ -32,10 +32,10 @@ theorem brouwer_fixedPoint_densityMatrices
     (hf_cont : ContinuousOn f (densityMatrices D))
     (hf_map : Set.MapsTo f (densityMatrices D) (densityMatrices D)) :
     ∃ ρ ∈ densityMatrices D, f ρ = ρ := by
-  letI : NormedAddCommGroup (Matrix (Fin D) (Fin D) ℂ) := Matrix.normedAddCommGroup
-  letI : NormedSpace ℝ (Matrix (Fin D) (Fin D) ℂ) := Matrix.normedSpace
-  letI : FiniteDimensional ℂ (Matrix (Fin D) (Fin D) ℂ) := Matrix.finiteDimensional
-  letI : FiniteDimensional ℝ (Matrix (Fin D) (Fin D) ℂ) :=
+  let : NormedAddCommGroup (Matrix (Fin D) (Fin D) ℂ) := Matrix.normedAddCommGroup
+  let : NormedSpace ℝ (Matrix (Fin D) (Fin D) ℂ) := Matrix.normedSpace
+  let : FiniteDimensional ℂ (Matrix (Fin D) (Fin D) ℂ) := Matrix.finiteDimensional
+  let : FiniteDimensional ℝ (Matrix (Fin D) (Fin D) ℂ) :=
     FiniteDimensional.complexToReal _
   have hK_comp' : IsCompact (densityMatrices D) := by
     simpa using densityMatrices_isCompact (D := D)

@@ -143,7 +143,7 @@ lemma add_offset_mod_eq {a b N : ℕ} (ha : a < N) (hb : b < N) :
   unfold extractWindow replaceWindow
   have key : ((i.val + j) % N + N - i.val) % N = j :=
     offset_mod_eq i.isLt (Nat.lt_of_lt_of_le hj hLN)
-  rw [dif_pos (show ((i.val + j) % N + N - i.val) % N < L by rw [key]; exact hj)]
+  rw [dite_eq_left (show ((i.val + j) % N + N - i.val) % N < L by rw [key]; exact hj)]
   exact congr_arg τ (Fin.ext key)
 
 /-- Replacing a window by the values extracted from the same configuration leaves
@@ -159,10 +159,10 @@ that configuration unchanged. -/
     rw [hoff]
     exact Nat.mod_lt _ hN
   by_cases hoffset : offset < L
-  · rw [dif_pos hoffset]
+  · rw [dite_eq_left hoffset]
     have key : (i.val + offset) % N = k := add_offset_mod_eq i.isLt hk
     exact congr_arg σ (Fin.ext key)
-  · rw [dif_neg hoffset]
+  · rw [dite_eq_right hoffset]
 
 /-- Replacing the same cyclic window twice is the same as keeping only the
 second replacement. -/

@@ -71,7 +71,7 @@ theorem FlatBlockedBNTComparison.activeCoefficient_mul_phase_pos_of_sectorCompre
   let Vref := C.referenceInclusion mult₂ hMult₂ U₂ j
   let c := S.flatCoefficient j * C.phase j
   let c₀ := weight₂ (C.label j) ⟨0, hMult₂ (C.label j)⟩
-  letI : NeZero (S.flatDim j) := ⟨(S.flatDim_pos j).ne'⟩
+  let : NeZero (S.flatDim j) := ⟨(S.flatDim_pos j).ne'⟩
   have hA : MPSTensor.IsNormalTensor A :=
     (MPSTensor.isNormalTensor_cast_iff (C.dim_eq j) (A₂ (C.label j))).2
       (hNormal₂ (C.label j))
@@ -89,17 +89,19 @@ theorem FlatBlockedBNTComparison.activeCoefficient_mul_phase_pos_of_sectorCompre
           (Fin (S.flatDim j)) ℂ)) =
         Vactᴴ * verticalTensor (blockTwo M) ab * Vact := by
     intro ab
-    calc
-      c • ((C.gauge j : Matrix (Fin (S.flatDim j))
+    have hrewrite :
+        c • ((C.gauge j : Matrix (Fin (S.flatDim j))
             (Fin (S.flatDim j)) ℂ) * A ab *
           (↑((C.gauge j)⁻¹) : Matrix (Fin (S.flatDim j))
             (Fin (S.flatDim j)) ℂ)) =
-        S.flatCoefficient j • S.flatBlock j ab := by
-          rw [C.block_eq j ab]
-          simp only [c, A, smul_smul]
-      _ = Vactᴴ * verticalTensor (blockTwo M) ab * Vact := by
-        change S.coefficient x.1 x.2 • S.block x.1 x.2 ab = _
-        exact S.ambient_compression M U₁ hU₁ hReconstruct₁ x ab
+          S.flatCoefficient j • S.flatBlock j ab := by
+      rw [C.block_eq j ab]
+      simp only [c, A, smul_smul]
+    have hambient : S.flatCoefficient j • S.flatBlock j ab =
+        Vactᴴ * verticalTensor (blockTwo M) ab * Vact := by
+      change S.coefficient x.1 x.2 • S.block x.1 x.2 ab = _
+      exact S.ambient_compression M U₁ hU₁ hReconstruct₁ x ab
+    exact hrewrite.trans hambient
   have hReferenceCorner : ∀ ab, c₀ • A ab =
       Vrefᴴ * verticalTensor (blockTwo M) ab * Vref := by
     intro ab
@@ -203,7 +205,7 @@ theorem FlatBlockedBNTComparison.exists_unitaryNormalization
   let Vref := C.referenceInclusion mult₂ hMult₂ U₂ j
   let c := S.flatCoefficient j * C.phase j
   let c₀ := weight₂ (C.label j) ⟨0, hMult₂ (C.label j)⟩
-  letI : NeZero (S.flatDim j) := ⟨(S.flatDim_pos j).ne'⟩
+  let : NeZero (S.flatDim j) := ⟨(S.flatDim_pos j).ne'⟩
   have hA : MPSTensor.IsNormalTensor A :=
     (MPSTensor.isNormalTensor_cast_iff (C.dim_eq j) (A₂ (C.label j))).2
       (hNormal₂ (C.label j))
@@ -220,17 +222,19 @@ theorem FlatBlockedBNTComparison.exists_unitaryNormalization
             (Fin (S.flatDim j)) ℂ)) := by
     intro ab
     symm
-    calc
-      c • ((C.gauge j : Matrix (Fin (S.flatDim j))
+    have hrewrite :
+        c • ((C.gauge j : Matrix (Fin (S.flatDim j))
             (Fin (S.flatDim j)) ℂ) * A ab *
           (↑((C.gauge j)⁻¹) : Matrix (Fin (S.flatDim j))
             (Fin (S.flatDim j)) ℂ)) =
-        S.flatCoefficient j • S.flatBlock j ab := by
-          rw [C.block_eq j ab]
-          simp only [c, A, smul_smul]
-      _ = Vactᴴ * verticalTensor (blockTwo M) ab * Vact := by
-        change S.coefficient x.1 x.2 • S.block x.1 x.2 ab = _
-        exact S.ambient_compression M U₁ hU₁ hReconstruct₁ x ab
+          S.flatCoefficient j • S.flatBlock j ab := by
+      rw [C.block_eq j ab]
+      simp only [c, A, smul_smul]
+    have hambient : S.flatCoefficient j • S.flatBlock j ab =
+        Vactᴴ * verticalTensor (blockTwo M) ab * Vact := by
+      change S.coefficient x.1 x.2 • S.block x.1 x.2 ab = _
+      exact S.ambient_compression M U₁ hU₁ hReconstruct₁ x ab
+    exact hrewrite.trans hambient
   have hReferenceCorner : ∀ ab,
       Vrefᴴ * verticalTensor (blockTwo M) ab * Vref = c₀ • A ab := by
     intro ab

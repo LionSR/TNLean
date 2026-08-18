@@ -57,7 +57,7 @@ theorem reductionMap_apply (D k : ℕ) (X : Matrix (Fin D) (Fin D) ℂ) :
 /-- The reduction map \(T_1(X)=\operatorname{tr}(X)I-X\) is positive. -/
 theorem reductionMap_one_isPositiveMap {D : ℕ} [NeZero D] :
     IsPositiveMap (reductionMap D 1) := by
-  haveI : Nonempty (Fin D) := Fin.pos_iff_nonempty.mp (Nat.pos_of_ne_zero (NeZero.ne D))
+  have : Nonempty (Fin D) := Fin.pos_iff_nonempty.mp (Nat.pos_of_ne_zero (NeZero.ne D))
   intro X hX
   simpa [reductionMap] using
     (Matrix.PosSemidef.trace_smul_one_sub_self_posSemidef hX)

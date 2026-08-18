@@ -135,7 +135,7 @@ theorem directSumSectorRankOne_apply (j : Fin r)
       simp only [Matrix.smul_single, smul_eq_mul, Matrix.sum_apply,
         Matrix.single_apply, Equiv.apply_eq_iff_eq, Sigma.mk.injEq, heq_iff_eq]
       simp only [ite_and, Finset.sum_ite_irrel, Finset.sum_ite_eq',
-        Finset.mem_univ, if_true, Finset.sum_const_zero]
+        Finset.mem_univ, ite_true, Finset.sum_const_zero]
       calc
         (∑ e, ∑ b, l e b * X (finSigmaFinEquiv ⟨j, b⟩)
             (finSigmaFinEquiv ⟨j, e⟩)) * R a c =
@@ -268,7 +268,7 @@ theorem not_isPositiveGapPhysicalCID_basisDirectSum_of_basis_spectral_pair
     (hlr : Matrix.trace (l * r) = 1) :
     ¬ IsPositiveGapPhysicalCID (directSumTensor P.basis) := by
   classical
-  letI : NeZero (P.basisDim j) := ⟨(hCF.basis_dim_pos j).ne'⟩
+  let : NeZero (P.basisDim j) := ⟨(hCF.basis_dim_pos j).ne'⟩
   let E := transferMap (P.basis j)
   have hCh : IsChannel E :=
     transferMap_isChannel (P.basis j) (hCF.basis_left_canonical j)
@@ -373,7 +373,7 @@ theorem isTransferIdempotent_basisDirectSum_of_isPositiveGapBNTZCL_of_spectral_p
           Matrix.trace (l * r) = 1)
     (hZCL : IsPositiveGapBNTZCL (directSumTensor P.basis) P.basis) :
     IsTransferIdempotent (directSumTensor P.basis) := by
-  letI : ∀ j : Fin P.basisCount, NeZero (P.basisDim j) :=
+  let : ∀ j : Fin P.basisCount, NeZero (P.basisDim j) :=
     fun j ↦ ⟨(hCF.basis_dim_pos j).ne'⟩
   apply (isTransferIdempotent_directSumTensor_iff_pairwise_mixedTransferMap₂_isIdempotentElem
     P.basis).2
@@ -412,7 +412,7 @@ theorem isPositiveGapBNTZCL_basisDirectSum_iff_isTransferIdempotent_of_spectral_
   · exact hCF.isTransferIdempotent_basisDirectSum_of_isPositiveGapBNTZCL_of_spectral_pair
       hspectral
   · intro hRFP
-    letI : ∀ j : Fin P.basisCount, NeZero (P.basisDim j) :=
+    let : ∀ j : Fin P.basisCount, NeZero (P.basisDim j) :=
       fun j ↦ ⟨(hCF.basis_dim_pos j).ne'⟩
     apply isPositiveGapBNTZCL_of_isTransferIdempotent_directSum P.basis
     · exact hCF.isCPSVBasisOfNormalTensors_basisDirectSum
@@ -470,7 +470,7 @@ theorem exists_basis_physicalObservables_expectation_eq_trace_mul_transferMap_po
         physicalTwoPointExpectation (directSumTensor P.basis) L L O₁ O₂ n₁ n₂ =
           Matrix.trace (u * ((transferMap (P.basis j)) ^ n₁) v) := by
   classical
-  letI : NeZero (P.basisDim j) := ⟨(hCF.basis_dim_pos j).ne'⟩
+  let : NeZero (P.basisDim j) := ⟨(hCF.basis_dim_pos j).ne'⟩
   let E := transferMap (P.basis j)
   have hCh : IsChannel E :=
     transferMap_isChannel (P.basis j) (hCF.basis_left_canonical j)
@@ -562,7 +562,7 @@ theorem isTransferIdempotent_basisDirectSum_of_isPositiveGapBNTZCL
     (hZCL : IsPositiveGapBNTZCL (directSumTensor P.basis) P.basis) :
     IsTransferIdempotent (directSumTensor P.basis) := by
   classical
-  letI : ∀ j : Fin P.basisCount, NeZero (P.basisDim j) :=
+  let : ∀ j : Fin P.basisCount, NeZero (P.basisDim j) :=
     fun j ↦ ⟨(hCF.basis_dim_pos j).ne'⟩
   apply (isTransferIdempotent_directSumTensor_iff_pairwise_mixedTransferMap₂_isIdempotentElem
     P.basis).2
@@ -601,7 +601,7 @@ theorem isPositiveGapBNTZCL_basisDirectSum_iff_isTransferIdempotent
   constructor
   · exact hCF.isTransferIdempotent_basisDirectSum_of_isPositiveGapBNTZCL
   · intro hRFP
-    letI : ∀ j : Fin P.basisCount, NeZero (P.basisDim j) :=
+    let : ∀ j : Fin P.basisCount, NeZero (P.basisDim j) :=
       fun j ↦ ⟨(hCF.basis_dim_pos j).ne'⟩
     exact isPositiveGapBNTZCL_of_isTransferIdempotent_directSum P.basis
       hCF.isCPSVBasisOfNormalTensors_basisDirectSum hCF.basis_irreducible

@@ -104,9 +104,9 @@ theorem injective_of_ker_all [NeZero D₂]
       simp only [Matrix.mulVec, Matrix.vecMulVec, Matrix.of_apply, dotProduct]
       conv_lhs => arg 2; ext j; rw [mul_assoc]
       rw [Finset.sum_eq_single k]
-      · simp only [c, if_true, inv_mul_cancel₀ hk, mul_one]
+      · simp only [c, ite_true, inv_mul_cancel₀ hk, mul_one]
       · intro j _ hjk
-        simp only [c, if_neg hjk, zero_mul, mul_zero]
+        simp only [c, ite_eq_right hjk, zero_mul, mul_zero]
       · intro hk_abs
         exact absurd (Finset.mem_univ k) hk_abs
     rw [← hMv]
@@ -117,9 +117,9 @@ theorem injective_of_ker_all [NeZero D₂]
     have : (X *ᵥ (fun k => if k = j then 1 else 0)) i = X i j := by
       simp only [Matrix.mulVec, dotProduct]
       rw [Finset.sum_eq_single j]
-      · simp only [if_true, mul_one]
+      · simp only [ite_true, mul_one]
       · intro b _ hbj
-        simp only [if_neg hbj, mul_zero]
+        simp only [ite_eq_right hbj, mul_zero]
       · intro hj
         exact absurd (Finset.mem_univ j) hj
     rw [show (0 : Matrix (Fin D₁) (Fin D₂) ℂ) i j = 0 from rfl]

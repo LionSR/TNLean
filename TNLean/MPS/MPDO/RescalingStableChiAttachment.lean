@@ -136,7 +136,7 @@ lemma sum_ite_chainEmbed_mul_of_not_chainOK {N : ℕ} {p : Fin N → Fin 4} (hp 
     (∑ a : Fin N → Fin 2, (if p = chainEmbed N a then (1 : ℂ) else 0) * g a) = 0 := by
   refine Finset.sum_eq_zero fun a _ => ?_
   have hpa : p ≠ chainEmbed N a := fun h => hp (h ▸ chainOK_chainEmbed N a)
-  rw [if_neg hpa, zero_mul]
+  rw [ite_eq_right hpa, zero_mul]
 
 /-- Mirrored form of `sum_ite_chainEmbed_mul_of_chainOK` with the indicator
 on the right of the product. -/
@@ -168,7 +168,7 @@ theorem B_transpose_mul_B (N : ℕ) :
   simp only [hcollapse]
   rw [Finset.sum_ite_eq' (Finset.univ : Finset (Fin N → Fin 4)) (chainEmbed N a)
     (fun p => if p = chainEmbed N a' then (1 : ℂ) else 0)]
-  simp only [Finset.mem_univ, if_true]
+  simp only [Finset.mem_univ, ite_true]
   by_cases h : a = a'
   · simp [h]
   · have hc : chainEmbed N a ≠ chainEmbed N a' := fun hh => h ((chainEmbed_injective N) hh)
@@ -180,23 +180,23 @@ lemma B_mul_wN_mul_transpose_apply (N : ℕ) (p q : Fin N → Fin 4) :
     (B N * wN N * (B N)ᵀ) p q = chainIndicator N p q * wN N (φ N p) (φ N q) := by
   simp only [Matrix.mul_apply, Matrix.transpose_apply, B, Matrix.of_apply, chainIndicator]
   by_cases hp : ChainOK N p <;> by_cases hq : ChainOK N q
-  · simp only [hp, hq, and_self, if_true]
+  · simp only [hp, hq, and_self, ite_true]
     have step1 : ∀ x : Fin N → Fin 2,
         (∑ x_1, (if p = chainEmbed N x_1 then (1 : ℂ) else 0) * wN N x_1 x) = wN N (φ N p) x :=
       fun x => sum_ite_chainEmbed_mul_of_chainOK hp (fun x_1 => wN N x_1 x)
     simp only [step1]
     rw [one_mul]
     exact sum_mul_ite_chainEmbed_of_chainOK hq (fun x => wN N (φ N p) x)
-  · simp only [hp, hq, and_false, if_false]
+  · simp only [hp, hq, and_false, ite_false]
     rw [zero_mul]
     refine Finset.sum_eq_zero fun x _ => ?_
     have hqx : q ≠ chainEmbed N x := fun h => hq (h ▸ chainOK_chainEmbed N x)
-    rw [if_neg hqx, mul_zero]
-  · simp only [hp, false_and, if_false]
+    rw [ite_eq_right hqx, mul_zero]
+  · simp only [hp, false_and, ite_false]
     rw [zero_mul]
     refine Finset.sum_eq_zero fun x _ => ?_
     rw [sum_ite_chainEmbed_mul_of_not_chainOK hp (fun x_1 => wN N x_1 x), zero_mul]
-  · simp only [hp, false_and, if_false]
+  · simp only [hp, false_and, ite_false]
     rw [zero_mul]
     refine Finset.sum_eq_zero fun x _ => ?_
     rw [sum_ite_chainEmbed_mul_of_not_chainOK hp (fun x_1 => wN N x_1 x), zero_mul]

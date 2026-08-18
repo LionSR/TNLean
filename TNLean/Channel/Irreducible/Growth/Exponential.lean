@@ -7,6 +7,7 @@ import TNLean.Algebra.MatrixAux
 import TNLean.Channel.Irreducible.Growth.KernelDescent
 import TNLean.Channel.Semigroup.ReducibleQDS.GeneratorCompression
 import Mathlib.Analysis.Normed.Algebra.Exponential
+import Mathlib.Analysis.Matrix.Order
 
 /-!
 # Exponential condition for irreducible CP maps
@@ -127,7 +128,7 @@ private theorem tsum_posDef_of_posDef_initial_segment
         Filter.Tendsto (fun N : ℕ => ∑ k ∈ Finset.range N, term (k + D))
           Filter.atTop (nhds (∑' n : ℕ, term (n + D))) :=
       (Summable.hasSum_iff_tendsto_nat htail_summable).1 htail_summable.hasSum
-    exact isClosed_posSemidef.mem_of_tendsto htail_tendsto
+    exact Matrix.posSemidef_is_closed.mem_of_tendsto htail_tendsto
       (Filter.Eventually.of_forall hpartial_tail)
   have hsplit :
       (∑' n : ℕ, term n) =

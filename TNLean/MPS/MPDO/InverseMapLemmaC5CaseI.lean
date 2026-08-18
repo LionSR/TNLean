@@ -57,7 +57,7 @@ theorem exists_rephased_inverseMap_caseI_rank_one_coefficients_witnesses
           (∀ k h, F.activeSectorTraceMatrix p k h = a k * b h) ∧
             (∑ k, a k * b k) = 1 ∧
               (∀ k h, p k = 0 ∨ p h = 0 → F.neighboringOperator k h = 0) := by
-  letI : NeZero D := ⟨hK_normal.bondDim_ne_zero⟩
+  let : NeZero D := ⟨hK_normal.bondDim_ne_zero⟩
   obtain ⟨hη⟩ := exists_etaStructure_reducedBlockState_of_isSAL K hSAL
   obtain ⟨beta, alpha, hm⟩ :=
     exists_normalizedFourSiteTail_entry_ne_zero
@@ -70,7 +70,7 @@ theorem exists_rephased_inverseMap_caseI_rank_one_coefficients_witnesses
       K hK (normalizedFourSiteTail K)
         (isThreeSiteClosure_reducedBlockState K) hη alpha beta hm
           (Classical.choose hSAL)
-  letI : Nonempty ((F.rephase z).ActiveSector hη.p) := hne
+  let : Nonempty ((F.rephase z).ActiveSector hη.p) := hne
   obtain ⟨a, b, hab, hsum⟩ :=
     activeSectorTraceMatrix_rank_one_coefficients_of_literal_ZCL
       K (F.rephase z) hη.p hpos hspan hnonzero htriangle hZCL_sq hinactive hK_normal

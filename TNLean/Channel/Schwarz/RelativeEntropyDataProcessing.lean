@@ -139,7 +139,7 @@ theorem convexOn_quantumRelativeEntropy_index :
       = posDefSetN N ×ˢ posDefSetN N := by
     ext p
     simp only [Set.mem_preimage, Set.mem_prod, LinearMap.coe_toAffineMap, hΦ_apply, posDefSet,
-      posDefSetN, Set.mem_setOf_eq]
+      posDefSetN, Set.mem_ofPred_eq]
     rw [posDef_submatrix_equiv_iff e, posDef_submatrix_equiv_iff e]
   rw [hpre] at hcomp
   refine hcomp.congr ?_
@@ -200,10 +200,10 @@ theorem qform_partialTraceRight_split (σ : Matrix (α × β) (α × β) ℂ) (w
     rw [Finset.sum_eq_single c]
     · rw [mulVec_liftVec_apply, Finset.mul_sum]
       refine Finset.sum_congr rfl fun s₂ _ => ?_
-      simp only [Pi.star_apply, liftVec, if_true]
+      simp only [Pi.star_apply, liftVec, ite_true]
       ring
     · intro c₁ _ hc₁
-      simp only [Pi.star_apply, liftVec, if_neg hc₁, star_zero, zero_mul]
+      simp only [Pi.star_apply, liftVec, ite_eq_right hc₁, star_zero, zero_mul]
     · intro h; exact absurd (Finset.mem_univ c) h
   rw [Finset.sum_congr rfl fun c (_ : c ∈ Finset.univ) => hRHS c]
   have hLHS : star w ⬝ᵥ (partialTraceRight σ).mulVec w
@@ -464,7 +464,7 @@ theorem partialTraceRight_regPerturbAffine {α β : Type*} [Fintype β]
   simp only [Matrix.smul_apply, smul_eq_mul, Matrix.one_apply]
   by_cases hij : i = j
   · subst hij
-    simp only [if_true, mul_one, Complex.real_smul, Complex.ofReal_mul]
+    simp only [ite_true, mul_one, Complex.real_smul, Complex.ofReal_mul]
     push_cast; ring
   · simp [hij]
 
@@ -517,7 +517,7 @@ theorem quantumRelativeEntropy_partialTraceRight_le_support
     have hempty' : ∀ A B : Matrix (Fin 0) (Fin 0) ℂ, quantumRelativeEntropy A B = 0 := by
       intro A B; rw [quantumRelativeEntropy]; simp [Matrix.trace, Finset.univ_eq_empty]
     rw [hempty' _ _, hempty _ _]
-  haveI : NeZero dS := ⟨hdS0⟩
+  have : NeZero dS := ⟨hdS0⟩
   set Nsc : ℕ := Fintype.card (Fin dS × ZMod dC) with hNsc
   have hNsc_pos : (0 : ℝ) < Nsc := by rw [hNsc]; exact_mod_cast Fintype.card_pos
   have hdC_pos : (0 : ℝ) < Fintype.card (ZMod dC) := by

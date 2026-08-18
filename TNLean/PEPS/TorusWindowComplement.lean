@@ -63,10 +63,10 @@ theorem zmod_val_sub_eq_ite (n : ℕ) [NeZero n] (u v : ZMod n) :
   rw [sub_eq_add_neg, ZMod.val_add, ZMod.neg_val]
   by_cases hv0 : v = 0
   · have hvv : v.val = 0 := by rw [hv0, ZMod.val_zero]
-    rw [if_pos hv0, hvv, if_pos (Nat.zero_le _)]
+    rw [ite_eq_left hv0, hvv, ite_eq_left (Nat.zero_le _)]
     simp only [Nat.sub_zero, Nat.add_zero]
     rw [Nat.mod_eq_of_lt hu]
-  · rw [if_neg hv0]
+  · rw [ite_eq_right hv0]
     have hvval : 0 < v.val := by
       rcases Nat.eq_zero_or_pos v.val with h | h
       · exact absurd ((ZMod.val_eq_zero v).mp h) hv0
@@ -130,7 +130,7 @@ theorem torusArcRectangle_eq_torusContiguousRectangle
   · rintro ⟨h1, h2⟩
     split_ifs at h1 h2 <;> omega
   · rintro ⟨ha, hb, hc, hd⟩
-    rw [if_pos (by omega), if_pos (by omega)]; omega
+    rw [ite_eq_left (by omega), ite_eq_left (by omega)]; omega
 
 /-! ### Sliding-window tiling of a cyclic rectangle -/
 
@@ -258,7 +258,7 @@ theorem horizontalAdjacentWindows_union {L K : ℕ} (hL : 0 < L) (hw : 1 < width
     by_cases hc : (v.1 - s.1).val < L
     · exact Or.inl ⟨hc, h2⟩
     · refine Or.inr ⟨?_, h2⟩
-      rw [if_neg (by omega : ¬ (v.1 - s.1).val < 1)]; omega
+      rw [ite_eq_right (by omega : ¬ (v.1 - s.1).val < 1)]; omega
 
 /-- The union of two vertically consecutive windows (offset by one row) is the
 single `L × (K + 1)` cyclic rectangle.
@@ -285,7 +285,7 @@ theorem verticalAdjacentWindows_union {L K : ℕ} (hK : 0 < K) (hh : 1 < height)
     by_cases hc : (v.2 - s.2).val < K
     · exact Or.inl ⟨h1, hc⟩
     · refine Or.inr ⟨h1, ?_⟩
-      rw [if_neg (by omega : ¬ (v.2 - s.2).val < 1)]; omega
+      rw [ite_eq_right (by omega : ¬ (v.2 - s.2).val < 1)]; omega
 
 namespace NormalTorusArcWindowInjectivityHypotheses
 
@@ -356,11 +356,11 @@ theorem compl_torusArcRectangle (s : TorusVertex width height) (w h : ℕ)
     by_cases hxin : (v.1 - s.1).val < w
     · refine Or.inr ⟨hxin, ?_⟩
       have hyout : h ≤ (v.2 - s.2).val := hv hxin
-      rw [hsy, if_neg (by omega)]; omega
+      rw [hsy, ite_eq_right (by omega)]; omega
     · refine Or.inl ⟨?_, hy⟩
-      rw [hsx, if_neg hxin]; omega
+      rw [hsx, ite_eq_right hxin]; omega
   · rintro (⟨hxb, _⟩ | ⟨hxin, hyb⟩) hxin'
-    · rw [hsx, if_pos hxin'] at hxb; omega
+    · rw [hsx, ite_eq_left hxin'] at hxb; omega
     · rw [hsy] at hyb
       split_ifs at hyb with hyin <;> omega
 

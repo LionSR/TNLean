@@ -79,7 +79,7 @@ theorem eventuallyRepresentativeWordTupleSpan_of_basis_injective
     (hInj : ∀ j, IsInjective (P.basis j)) :
     P.EventuallyRepresentativeWordTupleSpan := by
   classical
-  letI : ∀ j : Fin P.basisCount, NeZero (P.basisDim j) :=
+  let : ∀ j : Fin P.basisCount, NeZero (P.basisDim j) :=
     fun j ↦ ⟨(hCF.basis_dim_pos j).ne'⟩
   have hBlkPos : ∀ (j : Fin P.basisCount) (n : ℕ), 0 < n →
       IsNBlkInjective (P.basis j) n := by
@@ -129,7 +129,7 @@ theorem eventuallyRepresentativeWordTupleSpan_blockTensor
     (hInj : ∀ j, IsInjective (MPSTensor.blockTensor (P.basis j) p)) :
     (P.blockTensor p).EventuallyRepresentativeWordTupleSpan := by
   classical
-  letI : ∀ j : Fin P.basisCount, NeZero (P.basisDim j) :=
+  let : ∀ j : Fin P.basisCount, NeZero (P.basisDim j) :=
     fun j ↦ ⟨(hCF.basis_dim_pos j).ne'⟩
   have hAtP : ∀ j : Fin P.basisCount, IsNBlkInjective (P.basis j) p := by
     intro j
@@ -217,7 +217,7 @@ theorem eventuallyRepresentativeWordTupleSpan
     (hCF : IsBNTCanonicalForm P) :
     P.EventuallyRepresentativeWordTupleSpan := by
   classical
-  letI : ∀ j : Fin P.basisCount, NeZero (P.basisDim j) :=
+  let : ∀ j : Fin P.basisCount, NeZero (P.basisDim j) :=
     fun j ↦ ⟨(hCF.basis_dim_pos j).ne'⟩
   obtain ⟨p, hp, hAtP⟩ := hCF.exists_common_basis_isNBlkInjective
   have hAtLeastP : ∀ (j : Fin P.basisCount) (n : ℕ), p ≤ n →

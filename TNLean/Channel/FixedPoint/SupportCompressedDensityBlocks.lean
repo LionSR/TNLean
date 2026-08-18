@@ -232,8 +232,8 @@ theorem IsPositiveMap.exists_block_densities_of_maximalSupportCompression
       Equiv.symm_comp_self, Matrix.submatrix_id_id] using hprincipal
   have hσ : ∀ k, (σ k).PosDef := by
     intro k
-    letI : Nonempty (Fin (m k)) := Fin.pos_iff_nonempty.mp (hm k)
-    letI : Nonempty (Fin (d k)) := Fin.pos_iff_nonempty.mp (hd k)
+    let : Nonempty (Fin (m k)) := Fin.pos_iff_nonempty.mp (hm k)
+    let : Nonempty (Fin (d k)) := Fin.pos_iff_nonempty.mp (hd k)
     have hblock : (σ k ⊗ₖ X k).PosDef := by
       have hprincipal := hblockDiagonal.submatrix
         (e := fun i ↦ ⟨k, i⟩)

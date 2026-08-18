@@ -91,7 +91,17 @@ private theorem traceC_stinespring_eq_tensorMapId_swap
   refine Finset.sum_congr rfl fun i _ => ?_
   refine Finset.sum_congr rfl fun a _ => ?_
   rw [Finset.sum_eq_single y]
-  · simp
+  · congr 1
+    · simp only [Equiv.prodComm_symm, Equiv.prodComm_apply, Prod.swap_prod_mk,
+        stinespringV_apply]
+      refine Finset.sum_congr rfl fun a' _ => ?_
+      rw [Finset.sum_eq_single x]
+      · simp
+      · intro z _ hzx
+        simp [Ne.symm hzx]
+      · simp
+    · simp only [Equiv.prodComm_symm, Equiv.prodComm_apply, Prod.swap_prod_mk,
+        stinespringV_apply, ite_true, mul_one]
   · intro z _ hzy
     simp [Ne.symm hzy]
   · simp
@@ -114,27 +124,48 @@ private theorem traceA_localStinespring_eq_sandwich
   simp only [Matrix.traceA_ABC, Matrix.submatrix_apply, localStinespringV,
     Matrix.kroneckerMap_apply, Matrix.mul_apply, Matrix.conjTranspose_apply,
     Matrix.traceRight_apply, Matrix.one_apply, Fintype.sum_prod_type]
-  simp only [Equiv.prodComm_symm, Equiv.prodComm_apply, Prod.swap_prod_mk,
-    mul_ite, mul_one, mul_zero, ite_mul, zero_mul, sum_ite_eq, mem_univ,
-    ↓reduceIte, RCLike.star_def]
-  have hcollapse (a : Fin dIn) (x : Fin dR) :
-      (∑ z : Fin dR,
-          (∑ a' : Fin dIn, V (b, i) a' * ρ (a', x) (a, z)) *
-            (starRingEnd ℂ) (if x = z then V (c, j) a else 0)) =
-        (∑ a' : Fin dIn, V (b, i) a' * ρ (a', x) (a, x)) *
-          (starRingEnd ℂ) (V (c, j) a) := by
+  simp only [Equiv.prodComm_symm, Equiv.prodComm_apply, Prod.swap_prod_mk]
+  have hinner (a' a : Fin dIn) (x z : Fin dR) :
+      (∑ x' : Fin dR, (V (b, i) a' * if x = x' then 1 else 0) *
+        ρ (a', x') (a, z)) = V (b, i) a' * ρ (a', x) (a, z) := by
     rw [Finset.sum_eq_single x]
+    · rw [ite_eq_left rfl, mul_one]
+    · intro x' _ hx'
+      rw [ite_eq_right (Ne.symm hx'), mul_zero, zero_mul]
     · simp
+  have houter (a : Fin dIn) (x : Fin dR) :
+      (∑ z : Fin dR, (∑ a' : Fin dIn, V (b, i) a' * ρ (a', x) (a, z)) *
+        star (V (c, j) a * if x = z then 1 else 0)) =
+      (∑ a' : Fin dIn, V (b, i) a' * ρ (a', x) (a, x)) * star (V (c, j) a) := by
+    rw [Finset.sum_eq_single x]
+    · rw [ite_eq_left rfl, mul_one]
     · intro z _ hzx
-      simp [Ne.symm hzx]
+      rw [ite_eq_right (Ne.symm hzx), mul_zero, star_zero, mul_zero]
     · simp
-  conv_lhs => rw [Finset.sum_comm]
-  rw [Finset.sum_congr rfl fun a _ =>
-    Finset.sum_congr rfl fun x _ => hcollapse a x]
-  simp_rw [Finset.sum_mul, Finset.mul_sum]
-  refine Finset.sum_congr rfl fun _ _ => ?_
-  rw [Finset.sum_comm]
-  simp_rw [Finset.sum_mul]
+  calc
+    _ = ∑ x : Fin dR, ∑ a : Fin dIn, ∑ z : Fin dR,
+        (∑ a' : Fin dIn, V (b, i) a' * ρ (a', x) (a, z)) *
+          star (V (c, j) a * if x = z then 1 else 0) := by
+      refine Finset.sum_congr (M := ℂ)
+        (s₁ := (Finset.univ : Finset (Fin dR))) rfl fun x _ => ?_
+      refine Finset.sum_congr (M := ℂ)
+        (s₁ := (Finset.univ : Finset (Fin dIn))) rfl fun a _ => ?_
+      refine Finset.sum_congr (M := ℂ)
+        (s₁ := (Finset.univ : Finset (Fin dR))) rfl fun z _ => ?_
+      congr 1
+      exact Finset.sum_congr rfl fun a' _ => hinner a' a x z
+    _ = ∑ x : Fin dR, ∑ a : Fin dIn,
+        (∑ a' : Fin dIn, V (b, i) a' * ρ (a', x) (a, x)) *
+          star (V (c, j) a) := by
+      refine Finset.sum_congr rfl fun x _ => ?_
+      exact Finset.sum_congr rfl fun a _ => houter a x
+    _ = _ := by
+      simp_rw [Finset.sum_mul, Finset.mul_sum]
+      rw [Finset.sum_comm]
+      refine Finset.sum_congr (M := ℂ)
+        (s₁ := (Finset.univ : Finset (Fin dIn))) rfl fun _ _ => ?_
+      simp_rw [Finset.sum_mul]
+      rw [Finset.sum_comm]
 
 /-- A trace-preserving map on the first factor leaves the second marginal
 unchanged. -/

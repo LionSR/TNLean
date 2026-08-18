@@ -202,20 +202,20 @@ theorem torusAbsorbedGauge_unique_scalar_of_region
   · refine ⟨c, ?_⟩
     have hZ : absorbedBoundaryGauge (G := torusGraph width height) B R f (X f.1) =
         glTranspose (X f.1) := by
-      unfold absorbedBoundaryGauge; rw [if_pos hmem]
+      unfold absorbedBoundaryGauge; rw [ite_eq_left hmem]
     have hZ' : absorbedBoundaryGauge (G := torusGraph width height) B R f (X' f.1) =
         glTranspose (X' f.1) := by
-      unfold absorbedBoundaryGauge; rw [if_pos hmem]
+      unfold absorbedBoundaryGauge; rw [ite_eq_left hmem]
     rw [hZ, hZ', glTranspose_coe, glTranspose_coe] at hc
     have htr := congrArg Matrix.transpose hc
     rwa [Matrix.transpose_transpose, Matrix.transpose_smul, Matrix.transpose_transpose] at htr
   · refine ⟨c⁻¹, ?_⟩
     have hZ : absorbedBoundaryGauge (G := torusGraph width height) B R f (X f.1) =
         (X f.1)⁻¹ := by
-      unfold absorbedBoundaryGauge; rw [if_neg hmem]
+      unfold absorbedBoundaryGauge; rw [ite_eq_right hmem]
     have hZ' : absorbedBoundaryGauge (G := torusGraph width height) B R f (X' f.1) =
         (X' f.1)⁻¹ := by
-      unfold absorbedBoundaryGauge; rw [if_neg hmem]
+      unfold absorbedBoundaryGauge; rw [ite_eq_right hmem]
     rw [hZ, hZ'] at hc
     have hinv := gl_inv_coe_smul (W := (X f.1)⁻¹) (W' := (X' f.1)⁻¹) hc
     rwa [inv_inv, inv_inv] at hinv
@@ -499,14 +499,14 @@ theorem torusCovariantAbsorbedGauge_unique_classScalar
     have hX'e := hX'cov a b (torusHorizontalReferenceEdge xhStart yhStart) hbde.symm
     constructor
     · intro hintr
-      rw [hX'e, hXe, if_pos (hiff.mpr hintr), if_pos (hiff.mpr hintr), glReindex_coe,
+      rw [hX'e, hXe, ite_eq_left (hiff.mpr hintr), ite_eq_left (hiff.mpr hintr), glReindex_coe,
         glReindex_coe, hch, map_smul]
     · intro hintr
       have hcond : ¬((Edge.map (translate a b) (torusHorizontalReferenceEdge (width := width)
           (height := height) xhStart yhStart)).1.1 =
           translate a b (torusHorizontalReferenceEdge (width := width) (height := height)
             xhStart yhStart).1.1) := fun hcon => hintr (hiff.mp hcon)
-      rw [hX'e, hXe, if_neg hcond, if_neg hcond, glReindex_coe, glReindex_coe]
+      rw [hX'e, hXe, ite_eq_right hcond, ite_eq_right hcond, glReindex_coe, glReindex_coe]
       have htr : (glTranspose (X' (torusHorizontalReferenceEdge xhStart yhStart)) :
           Matrix (Fin (B.bondDim (torusHorizontalReferenceEdge xhStart yhStart)))
             (Fin (B.bondDim (torusHorizontalReferenceEdge xhStart yhStart))) ℂ) =
@@ -556,14 +556,14 @@ theorem torusCovariantAbsorbedGauge_unique_classScalar
     have hX'e := hX'cov a b (torusVerticalReferenceEdge xhStart yhStart) hbde.symm
     constructor
     · intro hintr
-      rw [hX'e, hXe, if_pos (hiff.mpr hintr), if_pos (hiff.mpr hintr), glReindex_coe,
+      rw [hX'e, hXe, ite_eq_left (hiff.mpr hintr), ite_eq_left (hiff.mpr hintr), glReindex_coe,
         glReindex_coe, hcv, map_smul]
     · intro hintr
       have hcond : ¬((Edge.map (translate a b) (torusVerticalReferenceEdge (width := width)
           (height := height) xhStart yhStart)).1.1 =
           translate a b (torusVerticalReferenceEdge (width := width) (height := height)
             xhStart yhStart).1.1) := fun hcon => hintr (hiff.mp hcon)
-      rw [hX'e, hXe, if_neg hcond, if_neg hcond, glReindex_coe, glReindex_coe]
+      rw [hX'e, hXe, ite_eq_right hcond, ite_eq_right hcond, glReindex_coe, glReindex_coe]
       have htr : (glTranspose (X' (torusVerticalReferenceEdge xhStart yhStart)) :
           Matrix (Fin (B.bondDim (torusVerticalReferenceEdge xhStart yhStart)))
             (Fin (B.bondDim (torusVerticalReferenceEdge xhStart yhStart))) ℂ) =
@@ -608,6 +608,10 @@ theorem edgeInsertedCoeff_eq_pow_card_mul_reindexTensor (A C : Tensor G d)
       lam ^ (Fintype.card V) *
         edgeInsertedCoeff (G := G) (reindexTensor (G := G) C hbd) e σ N := by
   classical
+  let N' : Matrix (Fin ((reindexTensor (G := G) C hbd).bondDim e))
+      (Fin ((reindexTensor (G := G) C hbd).bondDim e)) ℂ := fun i j => N i j
+  change edgeInsertedCoeff (G := G) A e σ N =
+    lam ^ Fintype.card V * edgeInsertedCoeff (G := G) (reindexTensor (G := G) C hbd) e σ N'
   rw [edgeInsertedCoeff_eq_doubled, edgeInsertedCoeff_eq_doubled, Finset.mul_sum]
   refine Fintype.sum_equiv (Equiv.refl _) _ _ (fun x => ?_)
   simp only [Equiv.refl_apply]

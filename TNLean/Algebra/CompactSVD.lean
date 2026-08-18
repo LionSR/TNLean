@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import Mathlib.Analysis.InnerProductSpace.GramMatrix
 import Mathlib.Analysis.InnerProductSpace.PiL2
 import Mathlib.Analysis.Matrix.PosDef
 import Mathlib.Analysis.Matrix.Spectrum
@@ -40,21 +41,6 @@ spectral-decomposition argument used for the Schmidt decomposition in
 open scoped Matrix InnerProductSpace ComplexOrder
 
 namespace Matrix
-
-private theorem compact_conjTranspose_mul_eq_one_of_orthonormal
-    {ι : Type*} [DecidableEq ι] {d : ℕ} {φ : ι → Fin d}
-    (hφ : Function.Injective φ)
-    (g : OrthonormalBasis (Fin d) ℂ (EuclideanSpace ℂ (Fin d))) :
-    (Matrix.of fun a j ↦ g (φ j) a)ᴴ * (Matrix.of fun a j ↦ g (φ j) a) = 1 := by
-  ext j k
-  have hinner : ∑ a : Fin d, star (g (φ j) a) * g (φ k) a = ⟪g (φ j), g (φ k)⟫_ℂ := by
-    rw [EuclideanSpace.inner_eq_star_dotProduct]
-    simp only [dotProduct]
-    refine Finset.sum_congr rfl fun a _ ↦ ?_
-    rw [Pi.star_apply, mul_comm]
-  simp only [Matrix.mul_apply, Matrix.conjTranspose_apply, Matrix.of_apply, Matrix.one_apply]
-  rw [hinner, orthonormal_iff_ite.mp g.orthonormal (φ j) (φ k)]
-  simp only [hφ.eq_iff]
 
 variable {m n : ℕ} (M : Matrix (Fin m) (Fin n) ℂ)
 
@@ -197,7 +183,7 @@ theorem exists_compactSVD : Nonempty (CompactSVD M) := by
     rw [hinner, hgram]
     by_cases hij : i = j
     · subst j
-      rw [if_pos rfl, if_pos rfl]
+      rw [ite_eq_left rfl, ite_eq_left rfl]
       have hsne : (s i : ℂ) ≠ 0 := Complex.ofReal_ne_zero.mpr (hspos i).ne'
       have hsquare : (s i : ℂ) ^ 2 = (lam (q i).1 : ℂ) := by
         rw [show s i = Real.sqrt (lam (q i).1) by rfl, ← Complex.ofReal_pow,
@@ -207,7 +193,7 @@ theorem exists_compactSVD : Nonempty (CompactSVD M) := by
     · have hqne : (q j).1 ≠ (q i).1 := by
         intro h
         exact hij (q.injective (Subtype.ext h.symm))
-      rw [if_neg hqne, if_neg hij, mul_zero]
+      rw [ite_eq_right hqne, ite_eq_right hij, mul_zero]
   let E : Matrix (Fin m) (Fin M.rank) ℂ := Matrix.of fun a i ↦ e (leftIndex i) a
   let V : Matrix (Fin M.rank) (Fin m) ℂ := Eᴴ
   let F : Matrix (Fin n) (Fin M.rank) ℂ := Matrix.of fun b i ↦ v i b
@@ -243,7 +229,7 @@ theorem exists_compactSVD : Nonempty (CompactSVD M) := by
   have hwzero : ∀ j, lam j = 0 → w j = 0 := by
     intro j hj
     have hjj := hgram j j
-    rw [if_pos rfl, hj, Complex.ofReal_zero] at hjj
+    rw [ite_eq_left rfl, hj, Complex.ofReal_zero] at hjj
     exact inner_self_eq_zero.mp hjj
   have hfactor : M = Vᴴ * Matrix.diagonal (fun i ↦ (s i : ℂ)) * U := by
     ext a b
@@ -263,7 +249,7 @@ theorem exists_compactSVD : Nonempty (CompactSVD M) := by
       (fun j ↦ by simp)).trans ?_
     simp only [V, U, E, F, Matrix.mul_apply, Matrix.diagonal_apply,
       Matrix.conjTranspose_conjTranspose, Matrix.transpose_apply, Matrix.of_apply, mul_ite,
-      mul_zero, Finset.sum_ite_eq', Finset.mem_univ, if_true, leftIndex]
+      mul_zero, Finset.sum_ite_eq', Finset.mem_univ, ite_true, leftIndex]
     apply Finset.sum_congr rfl
     intro i _
     have hsne : (s i : ℂ) ≠ 0 := Complex.ofReal_ne_zero.mpr (hspos i).ne'
@@ -273,7 +259,14 @@ theorem exists_compactSVD : Nonempty (CompactSVD M) := by
     field_simp
   have hV : V * Vᴴ = 1 := by
     rw [show V = Eᴴ by rfl, Matrix.conjTranspose_conjTranspose]
-    exact compact_conjTranspose_mul_eq_one_of_orthonormal hleft e
+    calc
+      Eᴴ * E = Matrix.gram ℂ (fun i ↦ e (leftIndex i)) := by
+        rw [show E = Matrix.of (fun a i ↦ e (leftIndex i) a) by rfl]
+        simpa only [EuclideanSpace.basisFun_repr] using
+          (Matrix.gram_eq_conjTranspose_mul
+            (EuclideanSpace.basisFun (Fin m) ℂ) (fun i ↦ e (leftIndex i))).symm
+      _ = 1 := Matrix.gram_eq_one_iff_orthonormal.mpr
+        (e.orthonormal.comp _ hleft)
   have hU : U * Uᴴ = 1 := by
     ext i j
     have hinner : ∑ b : Fin n, v i b * star (v j b) = ⟪v j, v i⟫_ℂ := by

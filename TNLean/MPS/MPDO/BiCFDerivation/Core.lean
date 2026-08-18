@@ -695,7 +695,7 @@ theorem exists_pairCumulativeWordTupleSpanTop_of_pairAllWordsSpanTop {D₁ D₂ 
     | smul a x _ hx =>
         rcases hx with ⟨Sx, hSx⟩
         exact ⟨Sx, Submodule.smul_mem _ a hSx⟩
-  haveI : IsNoetherian ℂ V := isNoetherian_of_isNoetherianRing_of_finite ℂ V
+  have : IsNoetherian ℂ V := isNoetherian_of_isNoetherianRing_of_finite ℂ V
   let f : ℕ →o Submodule ℂ V :=
     ⟨fun S => pairCumulativeSpan A B S, fun _ _ hST => pairCumulativeSpan_mono A B hST⟩
   obtain ⟨S₀, hstab⟩ := (monotone_stabilizes_iff_noetherian.mpr ‹IsNoetherian ℂ V›) f

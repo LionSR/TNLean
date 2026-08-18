@@ -217,9 +217,9 @@ theorem regionBoundaryLabel_eq_boundaryLabelOfInsert (A : Tensor G d) (R : Finse
   funext g
   rw [regionBoundaryLabel_apply, boundaryLabelOfInsert]
   by_cases hgv : g.1.1.1 = v ∨ g.1.1.2 = v
-  · rw [dif_pos hgv]
+  · rw [dite_eq_left hgv]
     exact congrFun hη ⟨g.1, hgv⟩
-  · rw [dif_neg hgv]
+  · rw [dite_eq_right hgv]
     have := congrFun hμ ⟨g.1, isRegionBoundaryEdge_insert_of_not_incident (G := G) R hv g.2
       ⟨fun h => hgv (Or.inl h), fun h => hgv (Or.inr h)⟩⟩
     rw [regionBoundaryLabel_apply] at this

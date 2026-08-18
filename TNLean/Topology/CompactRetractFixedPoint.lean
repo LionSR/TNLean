@@ -79,10 +79,10 @@ theorem fixedPoint_of_compact_retract
     (hf_maps : Set.MapsTo f K K) :
     ∃ x ∈ K, f x = x := by
   by_cases hdim : Module.finrank ℝ E = 0
-  · haveI : Subsingleton E := Module.finrank_zero_iff.mp hdim
+  · have : Subsingleton E := Module.finrank_zero_iff.mp hdim
     refine ⟨r 0, hr_maps (by simp), ?_⟩
     simpa using (Subsingleton.elim (f (r 0)) (r 0))
-  · letI : NeZero (Module.finrank ℝ E) := ⟨hdim⟩
+  · let : NeZero (Module.finrank ℝ E) := ⟨hdim⟩
     let e : E ≃L[ℝ] (Fin (Module.finrank ℝ E) → ℝ) :=
       ContinuousLinearEquiv.ofFinrankEq (by simp)
     let K' : Set (Fin (Module.finrank ℝ E) → ℝ) := e '' K

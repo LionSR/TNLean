@@ -258,16 +258,16 @@ theorem twoBlockInsertedCoeff_matrixUnit
   refine Finset.sum_congr rfl ?_
   intro μ _
   by_cases hμ : μ b = p
-  · rw [if_pos hμ]
+  · rw [ite_eq_left hμ]
     rw [Finset.sum_eq_single (Function.update μ b q)]
     · have hsame : SameAwayFromBond b μ (Function.update μ b q) := by
         intro c hc
         rw [Function.update_of_ne hc]
-      rw [if_pos hsame]
+      rw [ite_eq_left hsame]
       simp [matrixUnit, Matrix.single, hμ, Function.update_self]
     · intro ν' _ hν'
       by_cases hsame : SameAwayFromBond b μ ν'
-      · rw [if_pos hsame]
+      · rw [ite_eq_left hsame]
         have hνb : ν' b ≠ q := by
           intro hb
           apply hν'
@@ -277,22 +277,22 @@ theorem twoBlockInsertedCoeff_matrixUnit
           · rw [Function.update_of_ne hcb]; exact (hsame c hcb).symm
         have hz : matrixUnit p q (μ b) (ν' b) = 0 := by
           simp only [matrixUnit, Matrix.single]
-          rw [Matrix.of_apply, if_neg]
+          rw [Matrix.of_apply, ite_eq_right]
           rintro ⟨-, hq⟩; exact hνb hq.symm
         rw [hz]; ring
-      · rw [if_neg hsame]; ring
+      · rw [ite_eq_right hsame]; ring
     · intro h; exact absurd (Finset.mem_univ _) h
-  · rw [if_neg hμ]
+  · rw [ite_eq_right hμ]
     apply Finset.sum_eq_zero
     intro ν' _
     by_cases hsame : SameAwayFromBond b μ ν'
-    · rw [if_pos hsame]
+    · rw [ite_eq_left hsame]
       have hz : matrixUnit p q (μ b) (ν' b) = 0 := by
         simp only [matrixUnit, Matrix.single]
-        rw [Matrix.of_apply, if_neg]
+        rw [Matrix.of_apply, ite_eq_right]
         rintro ⟨hp, -⟩; exact hμ hp.symm
       rw [hz]; ring
-    · rw [if_neg hsame]; ring
+    · rw [ite_eq_right hsame]; ring
 
 /-- If there is only one shared bond, then a matrix insertion supported at one
 matrix entry extracts the corresponding pointwise product.
@@ -361,7 +361,7 @@ theorem two_injective_tensor_insertion_comparison_singletonBond
     TwoBlockReciprocalScalarProportional A₁ B₁ A₂ B₂ := by
   classical
   by_cases hcfg : Nonempty (SharedBondConfig bondDim)
-  · letI : Nonempty (SharedBondConfig bondDim) := hcfg
+  · let : Nonempty (SharedBondConfig bondDim) := hcfg
     refine
       twoBlockReciprocalScalarProportional_of_pointwise_mul_eq A₁ B₁ A₂ B₂ hA₁ hA₂ ?_
     intro η₁ η₂ μ ν σ₁ σ₂
@@ -450,7 +450,7 @@ theorem twoBlockInsertedCoeff_one
     simp [hsame]
   · intro ν' _ hν'
     by_cases hsame : SameAwayFromBond b μ ν'
-    · rw [if_pos hsame]
+    · rw [ite_eq_left hsame]
       have hb : μ b ≠ ν' b := by
         intro hb
         apply hν'
@@ -459,7 +459,7 @@ theorem twoBlockInsertedCoeff_one
         · subst hcb; exact hb.symm
         · exact (hsame c hcb).symm
       simp [hb]
-    · rw [if_neg hsame]; ring
+    · rw [ite_eq_right hsame]; ring
   · intro h; exact absurd (Finset.mem_univ _) h
 
 open scoped Classical in
@@ -507,8 +507,8 @@ theorem IsTwoBlockInjective.config_linearIndependent
     LinearIndependent ℂ
       (fun μ : SharedBondConfig bondDim => fun p : External × Physical => A p.1 μ p.2) := by
   classical
-  letI := Fintype.ofFinite Bond
-  letI (b : Bond) := Fintype.ofFinite (bondDim b)
+  let := Fintype.ofFinite Bond
+  let (b : Bond) := Fintype.ofFinite (bondDim b)
   rw [Fintype.linearIndependent_iff]
   intro c hc μ₀
   let η₀ : External := Classical.arbitrary External
@@ -599,7 +599,7 @@ theorem gauge_eq1
   simp only [map_smul, smul_eq_mul] at happ
   rw [Finset.sum_congr rfl (fun μ _ => by rw [hψ μ₀ μ])] at happ
   simp only [mul_ite, mul_one, mul_zero,
-    Finset.sum_ite_eq' Finset.univ μ₀ (fun μ => a μ p1), Finset.mem_univ, if_true] at happ
+    Finset.sum_ite_eq' Finset.univ μ₀ (fun μ => a μ p1), Finset.mem_univ, ite_true] at happ
   rw [happ]
   refine Finset.sum_congr rfl ?_
   intro ν _
@@ -649,7 +649,7 @@ theorem gauge_eq2
   have happ := congrArg (χ ν₀) hcomb
   rw [map_sum, map_sum] at happ
   simp only [map_smul, smul_eq_mul, hχ ν₀, mul_ite, mul_one, mul_zero,
-    Finset.sum_ite_eq' Finset.univ ν₀, Finset.mem_univ, if_true] at happ
+    Finset.sum_ite_eq' Finset.univ ν₀, Finset.mem_univ, ite_true] at happ
   rw [happ]
 
 omit [Fintype Bond] [(b : Bond) → Fintype (bondDim b)] in
@@ -691,7 +691,7 @@ theorem gauge_inv
     funext p1
     rw [Finset.sum_apply]
     simp only [Pi.smul_apply, smul_eq_mul, ite_mul, one_mul, zero_mul,
-      Finset.sum_ite_eq' Finset.univ μ₀, Finset.mem_univ, if_true]
+      Finset.sum_ite_eq' Finset.univ μ₀, Finset.mem_univ, ite_true]
   have hdiff : (∑ κ : K,
       ((∑ ν : K, g μ₀ ν * g' ν κ) - (if κ = μ₀ then (1:ℂ) else 0)) •
         (a κ : V1 → ℂ)) = 0 := by
@@ -712,7 +712,7 @@ theorem gauge_inv
   rw [this]
   by_cases h : μ₀ = κ₀
   · subst h; simp
-  · rw [if_neg (fun hk => h hk.symm), if_neg h]
+  · rw [ite_eq_right (fun hk => h hk.symm), ite_eq_right h]
 
 open scoped Classical in
 /-- **Bond gauge from the full contraction (operator-Schmidt uniqueness).**
@@ -781,8 +781,9 @@ theorem exists_bondGauge_of_fullContraction
     (a := fun μ p => A₁ p.1 μ p.2)
     (b := fun ν p => B₁ p.1 ν p.2) (g := g) (g' := g') hA₁c hg1 hg1'
   refine ⟨g, g', ?_, ?_, ?_⟩
-  · ext μ κ
-    rw [Matrix.mul_apply, Matrix.one_apply]
+  · apply Matrix.ext
+    intro μ κ
+    change (∑ ν, g μ ν * g' ν κ) = if μ = κ then 1 else 0
     exact hinv μ κ
   · intro η₁ μ σ₁
     have := hg1 μ (η₁, σ₁)

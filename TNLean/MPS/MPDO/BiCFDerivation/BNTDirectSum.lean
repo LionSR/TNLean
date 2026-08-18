@@ -498,7 +498,7 @@ theorem exists_basis_wordTupleSpanTop_le_three_totalDim_pow_five
       have hCountPos : 0 < P.basisCount :=
         lt_of_le_of_lt (Nat.zero_le j₀) j₀.isLt
       omega
-    letI : ∀ j : Fin P.basisCount, NeZero (P.basisDim j) :=
+    let : ∀ j : Fin P.basisCount, NeZero (P.basisDim j) :=
       fun j ↦ ⟨(hCF.basis_dim_pos j).ne'⟩
     have hBlk1 : ∀ j : Fin P.basisCount,
         IsNBlkInjective (P.basis j) (P.totalDim ^ 4 + 1) := by

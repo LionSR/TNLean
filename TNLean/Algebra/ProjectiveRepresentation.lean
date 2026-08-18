@@ -98,7 +98,7 @@ lemma mul_assoc_right_scalar (g h k : G) :
 /-- Scalar cancellation on an invertible matrix (requires a nonempty index set). -/
 lemma smul_eq_smul_cancel {a b : ℂ} {M : Matrix (Fin D) (Fin D) ℂ}
     (hD : 0 < D) (hM : IsUnit M) (h : a • M = b • M) : a = b := by
-  haveI : Nonempty (Fin D) := ⟨⟨0, hD⟩⟩
+  have : Nonempty (Fin D) := ⟨⟨0, hD⟩⟩
   exact smul_left_injective ℂ hM.ne_zero h
 
 /-- Associativity forces the cocycle condition (for `D > 0`). -/

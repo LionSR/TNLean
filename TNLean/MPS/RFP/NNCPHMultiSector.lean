@@ -395,8 +395,8 @@ theorem rfp_hasParentHamiltonianGroundSpaceSpanning_basisDirectSum
       exact Fin.elim0 (σ ⟨0, by omega⟩)
     subst ψ
     simp
-  · letI : NeZero d := ⟨hd⟩
-    letI : ∀ j : Fin P.basisCount, NeZero (P.basisDim j) :=
+  · let : NeZero d := ⟨hd⟩
+    let : ∀ j : Fin P.basisCount, NeZero (P.basisDim j) :=
       fun j ↦ ⟨(hCF.basis_dim_pos j).ne'⟩
     have hnormal : ∀ j : Fin P.basisCount, IsNormal (P.basis j) :=
       hCF.basis_isNormal
@@ -442,7 +442,7 @@ theorem isTransferIdempotent_basisDirectSum_isPositiveGapBNTZCL
     (hCF : IsBNTCanonicalForm P)
     (hRFP : IsTransferIdempotent (directSumTensor P.basis)) :
     IsPositiveGapBNTZCL (directSumTensor P.basis) P.basis := by
-  letI : ∀ j : Fin P.basisCount, NeZero (P.basisDim j) :=
+  let : ∀ j : Fin P.basisCount, NeZero (P.basisDim j) :=
     fun j ↦ ⟨(hCF.basis_dim_pos j).ne'⟩
   exact isPositiveGapBNTZCL_of_isTransferIdempotent_directSum P.basis
     hCF.isCPSVBasisOfNormalTensors_basisDirectSum

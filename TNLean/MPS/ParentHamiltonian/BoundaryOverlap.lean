@@ -99,17 +99,17 @@ theorem adjacent_cyclicRestrictₗ_witness_overlap_common_background
   have hleft :
       (if (k.val + N - i.val) % N = 0 then ρ i else ρ k) = ρ k := by
     by_cases hzero : (k.val + N - i.val) % N = 0
-    · rw [if_pos hzero]
+    · rw [ite_eq_left hzero]
       have hk : k = i := by
         have hk' := eq_cyclic_site_of_offset_eq (N := N) hN (i := i) (k := k) hzero
         simpa [Nat.mod_eq_of_lt i.isLt] using hk'
       rw [hk]
-    · rw [if_neg hzero]
+    · rw [ite_eq_right hzero]
   have hright :
       (if (k.val + N - (cyclicForwardSite i 1).val) % N = L then
           ρ (cyclicForwardSite i (L + 1)) else ρ k) = ρ k := by
     by_cases hlast : (k.val + N - (cyclicForwardSite i 1).val) % N = L
-    · rw [if_pos hlast]
+    · rw [ite_eq_left hlast]
       have hkStep : k = cyclicForwardSite (cyclicForwardSite i 1) L := by
         have hk' := eq_cyclic_site_of_offset_eq (N := N) hN
           (i := cyclicForwardSite i 1) (k := k) (r := L) hlast
@@ -120,7 +120,7 @@ theorem adjacent_cyclicRestrictₗ_witness_overlap_common_background
           _ = cyclicForwardSite i (1 + L) := by rw [cyclicForwardSite_forwardSite]
           _ = cyclicForwardSite i (L + 1) := by congr 1; omega
       rw [hk]
-    · rw [if_neg hlast]
+    · rw [ite_eq_right hlast]
   rw [hleft, hright]
 
 /-- A finite chain of adjacent matrix identities gives a single word-product

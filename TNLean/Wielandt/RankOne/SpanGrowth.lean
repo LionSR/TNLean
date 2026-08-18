@@ -105,8 +105,7 @@ theorem ker_restrict_range_pow_eq_bot (f : End ℂ (Fin D → ℂ)) :
     have hdisj : Disjoint (LinearMap.range (f ^ D)) (LinearMap.ker f) :=
       (disjoint_ker_range_pow (D := D) f).symm
     exact (Submodule.disjoint_iff_comap_eq_bot).1 hdisj
-  -- Now rewrite `ker (restrict ...)`.
-  simpa [LinearMap.ker_restrict] using hker
+  exact (LinearMap.ker_restrict (mapsTo_range_pow (D := D) f)).trans hker
 
 /-- **Key consequence**: `f` restricts to an automorphism of `range (f^D)`.
 

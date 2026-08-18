@@ -121,7 +121,7 @@ theorem list_prod_eq_zero_of_forall_isNilpotent
       change IsNilpotent (a : Module.End K V)
       have ha : (a : Module.End K V) ∈ A := a.property
       exact hnil (⟨a, ha⟩ : A)
-  letI : LieModule.IsNilpotent L V := hLieNil
+  let : LieModule.IsNilpotent L V := hLieNil
   have hmem (v : V) : l.prod v ∈ LieModule.lowerCentralSeries K L V l.length := by
     clear hlen
     induction l with

@@ -121,8 +121,8 @@ private lemma exists_nondecaying_overlap_of_nonzeroProportionalDecompositions
     · obtain ⟨α, hα⟩ := mpvState_eq_smul_of_hetRepeatedBlocks hRep
       exact ⟨k, α, hα⟩
   choose kOf αOf hStateOf using hScalar
-  letI : Fintype {j : Fin rA // j ∈ T} := Subtype.fintype (fun j ↦ j ∈ T)
-  letI : Fintype {j : Fin rA // j ∉ T} := Subtype.fintype (fun j ↦ j ∉ T)
+  let : Fintype {j : Fin rA // j ∈ T} := Subtype.fintype (fun j ↦ j ∈ T)
+  let : Fintype {j : Fin rA // j ∉ T} := Subtype.fintype (fun j ↦ j ∉ T)
   let dimC : Sum {j : Fin rA // j ∈ T} (Fin rB) → ℕ :=
     Sum.elim (fun j ↦ dimA j.1) dimB
   let C : (x : Sum {j : Fin rA // j ∈ T} (Fin rB)) → MPSTensor d (dimC x) :=
@@ -142,7 +142,7 @@ private lemma exists_nondecaying_overlap_of_nonzeroProportionalDecompositions
   have hpB : 0 < pB := Finset.prod_pos fun k _ ↦ (hPerB k).period_pos
   have hp : 0 < p := by
     exact Nat.mul_pos hpA hpB
-  letI : NeZero p := ⟨hp.ne'⟩
+  let : NeZero p := ⟨hp.ne'⟩
   have hDivC : ∀ x, periodC x ∣ p := by
     intro x
     cases x with
@@ -297,8 +297,8 @@ theorem PeriodicOverlapHypothesis.ofSectorDecompositions
     (hProp : NonzeroProportionalMPV₂ P.toTensor Q.toTensor) :
     PeriodicOverlapHypothesis P.basis Q.basis := by
   classical
-  letI : ∀ j, NeZero (P.basisDim j) := fun j ↦ ⟨(hPerP j).bondDim_ne_zero⟩
-  letI : ∀ k, NeZero (Q.basisDim k) := fun k ↦ ⟨(hPerQ k).bondDim_ne_zero⟩
+  let : ∀ j, NeZero (P.basisDim j) := fun j ↦ ⟨(hPerP j).bondDim_ne_zero⟩
+  let : ∀ k, NeZero (Q.basisDim k) := fun k ↦ ⟨(hPerQ k).bondDim_ne_zero⟩
   have hExP : ∀ j₀ : Fin P.basisCount, ∃ k₀ : Fin Q.basisCount,
       ¬ Tendsto (fun N ↦ mpvOverlap (d := d) (P.basis j₀) (Q.basis k₀) N)
         atTop (nhds 0) := fun j₀ ↦
@@ -426,8 +426,8 @@ theorem PeriodicOverlapHypothesis.ofIsIrreducibleForm
     (hProp : NonzeroProportionalMPV₂ A B) :
     PeriodicOverlapHypothesis hA.blocks hB.blocks := by
   classical
-  letI : ∀ j, NeZero (hA.dim j) := fun j ↦ ⟨(hA.periodic j).bondDim_ne_zero⟩
-  letI : ∀ k, NeZero (hB.dim k) := fun k ↦ ⟨(hB.periodic k).bondDim_ne_zero⟩
+  let : ∀ j, NeZero (hA.dim j) := fun j ↦ ⟨(hA.periodic j).bondDim_ne_zero⟩
+  let : ∀ k, NeZero (hB.dim k) := fun k ↦ ⟨(hB.periodic k).bondDim_ne_zero⟩
   have hμA : ∀ j, hA.μ j ≠ 0 := by
     intro j hzero
     simpa [hzero] using (hA.weight_pos j).1

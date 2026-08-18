@@ -111,7 +111,7 @@ lemma evalWord_wTensor (w : List (Fin 2)) :
     | 1 =>
       -- head is `1`: `A^1 = raising`, the count increases by one.
       rw [show wTensor 1 = raising from rfl]
-      simp only [Fin.isValue, beq_self_eq_true, if_true]
+      simp only [Fin.isValue, beq_self_eq_true, ite_true]
       rcases hc : w.count 1 with _ | _ | k
       · exact mul_one raising
       · exact raising_mul_raising
@@ -173,14 +173,14 @@ def excitedAt (N : ℕ) (k : Fin N) : Cfg 2 N := fun j => if j = k then 1 else 0
 amplitude is `1`. -/
 theorem wState_three_excitedAt (k : Fin 3) :
     openState wLeftBoundary wRightBoundary wTensor 3 (excitedAt 3 k) = 1 := by
-  rw [wTensor_openState_eq_wIndicator, wIndicator_apply, if_pos]
+  rw [wTensor_openState_eq_wIndicator, wIndicator_apply, ite_eq_left]
   fin_cases k <;> decide
 
 /-- The all-zero configuration has no excitation, so its W-state amplitude is
 `0`: the W state has no vacuum component. -/
 theorem wState_three_vacuum :
     openState wLeftBoundary wRightBoundary wTensor 3 (fun _ => 0) = 0 := by
-  rw [wTensor_openState_eq_wIndicator, wIndicator_apply, if_neg]
+  rw [wTensor_openState_eq_wIndicator, wIndicator_apply, ite_eq_right]
   decide
 
 /-- A two-excitation configuration receives amplitude `0`: the W state has no
@@ -188,7 +188,7 @@ multiply-excited component. -/
 theorem wState_three_double :
     openState wLeftBoundary wRightBoundary wTensor 3
         (fun j => if j = 0 then 1 else if j = 1 then 1 else 0) = 0 := by
-  rw [wTensor_openState_eq_wIndicator, wIndicator_apply, if_neg]
+  rw [wTensor_openState_eq_wIndicator, wIndicator_apply, ite_eq_right]
   decide
 
 end MPSTensor

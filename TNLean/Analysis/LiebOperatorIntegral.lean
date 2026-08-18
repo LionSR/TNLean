@@ -5,7 +5,6 @@ Authors: Sirui Lu
 -/
 import TNLean.Analysis.CfcConjugation
 import TNLean.Analysis.LiebScalarIntegral
-import TNLean.Analysis.MatrixOrderTopology
 import TNLean.Analysis.TraceCFC
 import Mathlib.Analysis.CStarAlgebra.Matrix
 import Mathlib.Analysis.SpecialFunctions.ContinuousFunctionalCalculus.Rpow.Basic
@@ -58,12 +57,6 @@ namespace Matrix
 
 variable {n : Type*} [Fintype n] [DecidableEq n]
 
-/-- `Matrix.matrixCStarAlgebra` (`TNLean.Analysis.MatrixOrderTopology`), registered as a
-`local instance` so the `L²`-operator norm does not leak onto `Matrix n n ℂ` for transitive
-importers (see `Mathlib/Analysis/CStarAlgebra/Matrix.lean`). -/
-noncomputable local instance : CStarAlgebra (Matrix n n ℂ) := Matrix.matrixCStarAlgebra
-
-
 omit [Fintype n] in
 /-- A real-valued diagonal matrix with positive entries is positive definite. -/
 private lemma posDef_ofReal_diagonal {g : n → ℝ} (hg : ∀ i, 0 < g i) :
@@ -90,8 +83,9 @@ lemma integral_entry {X : Type*} [MeasurableSpace X] {μ : MeasureTheory.Measure
   have hcle : Continuous (Matrix.entryLinearMap ℂ ℂ i j) :=
     LinearMap.continuous_of_finiteDimensional _
   let L : Matrix m k ℂ →L[ℂ] ℂ := ⟨Matrix.entryLinearMap ℂ ℂ i j, hcle⟩
-  have := (L.integral_comp_comm hF).symm
-  simpa [L, Matrix.entryLinearMap] using this
+  have hcomm := (L.integral_comp_comm hF).symm
+  change L (∫ x, F x ∂μ) = ∫ x, L (F x) ∂μ
+  exact hcomm
 
 /-- The resolvent integrand of the diagonal Lieb pair is the diagonal matrix of the
 scalar Lieb integrands. -/
@@ -323,7 +317,7 @@ theorem superop_lieb_integral_rep {D : ℕ} {s : ℝ} (hs : s ∈ Set.Ioo (0 : �
   have hVstarV : star V * V = 1 := Unitary.star_mul_self_of_mem hVunit
   have hVVstar : V * star V = 1 := Unitary.mul_star_self_of_mem hVunit
   have hVinv : star V = V⁻¹ := (Matrix.inv_eq_left_inv hVstarV).symm
-  letI : Invertible V := ⟨star V, hVstarV, hVVstar⟩
+  let : Invertible V := ⟨star V, hVstarV, hVVstar⟩
   -- The conjugation `M ↦ V M V^†` as a continuous linear map.
   set Φ : Matrix (Fin D × Fin D) (Fin D × Fin D) ℂ →L[ℂ]
       Matrix (Fin D × Fin D) (Fin D × Fin D) ℂ :=

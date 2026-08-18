@@ -283,7 +283,7 @@ theorem cumulativeSpan_finrank_strict_mono (A : MPSTensor d D)
     (h : cumulativeSpan A n < cumulativeSpan A (n + 1)) :
     Module.finrank ℂ (cumulativeSpan A n) <
     Module.finrank ℂ (cumulativeSpan A (n + 1)) := by
-  haveI : FiniteDimensional ℂ ↥(cumulativeSpan A (n + 1)) :=
+  have : FiniteDimensional ℂ ↥(cumulativeSpan A (n + 1)) :=
     FiniteDimensional.finiteDimensional_submodule _
   exact Submodule.finrank_lt_finrank_of_lt h
 

@@ -179,12 +179,16 @@ def leftFiberOpenEdgeEquiv (F : PhysicalSectorFactorization K) {A : ℕ}
           rintro ⟨l, z⟩
           apply Prod.ext
           · apply Fin.ext
-            simp
+            rfl
           · funext i
             apply Prod.ext
             · rfl
             · apply Fin.ext
-              cases i using Fin.lastCases <;> simp }
+              cases i using Fin.lastCases with
+              | last => simp only [Fin.lastCases_last]
+              | cast i =>
+                  simp only [Fin.lastCases_castSucc]
+                  exact congrArg Fin.val (Fin.cases_succ i) }
 
 /-- Open-edge indices to the right of a distinguished initial site.
 
@@ -239,12 +243,16 @@ def rightFiberOpenEdgeEquiv (F : PhysicalSectorFactorization K) {C : ℕ}
           rintro ⟨r, x⟩
           apply Prod.ext
           · apply Fin.ext
-            simp
+            rfl
           · funext i
             apply Prod.ext
             · rfl
             · apply Fin.ext
-              cases i using Fin.lastCases <;> simp
+              cases i using Fin.lastCases with
+              | last => simp only [Fin.lastCases_last]
+              | cast i =>
+                  simp only [Fin.lastCases_castSucc]
+                  exact congrArg Fin.val (Fin.cases_succ i)
         right_inv := by
           rintro ⟨z, r⟩
           apply Prod.ext
@@ -709,7 +717,8 @@ retained left path. See
     (F : PhysicalSectorFactorization K) {A : ℕ}
     (k : Fin (A + 2) → Fin F.sectorCount) (z : F.LeftOpenEdgeIndex k) :
     (((F.leftFiberOpenEdgeEquiv k).symm z).1 0).1 = z.1 := by
-  simp [leftFiberOpenEdgeEquiv]
+  apply Fin.ext
+  rfl
 
 /-- Before the last site of a left path, the right endpoint of an edge is the
 next left site coordinate.
@@ -726,7 +735,8 @@ left-path coordinates. See
     (z : F.LeftOpenEdgeIndex k) (i : Fin A) :
     (((F.leftFiberOpenEdgeEquiv k).symm z).1 i.succ).1 =
       (z.2 i.castSucc).2 := by
-  simp [leftFiberOpenEdgeEquiv]
+  apply Fin.ext
+  rfl
 
 /-- At the last site of a left path, the right endpoint of the final edge is
 the middle-left boundary coordinate.

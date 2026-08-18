@@ -59,15 +59,15 @@ private lemma conjugate_blockDiagConst_apply (k : ℕ) (W : Matrix (Fin D) (Fin 
     (blockDiagConst k W * M * star (blockDiagConst k W)) a b
       = CStarMatrix.ofMatrix W * M a b * star (CStarMatrix.ofMatrix W) := by
   classical
-  simp only [CStarMatrix.mul_apply, CStarMatrix.star_apply, blockDiagConst,
-    Matrix.diagonal_apply, ite_mul, zero_mul, Finset.sum_ite_eq, Finset.mem_univ,
-    if_true]
+  change (∑ x, (∑ y, (if a = y then CStarMatrix.ofMatrix W else 0) * M y x) *
+      star (if b = x then CStarMatrix.ofMatrix W else 0)) =
+    CStarMatrix.ofMatrix W * M a b * star (CStarMatrix.ofMatrix W)
+  simp only [ite_mul, zero_mul, Finset.sum_ite_eq, Finset.mem_univ, ite_true]
   rw [Finset.sum_eq_single b]
   · simp
   · intro x _ hx
     simp [Ne.symm hx]
-  · intro hb
-    exact False.elim (hb (Finset.mem_univ b))
+  · simp
 
 /-- A linear self-map of `M_D(ℂ)`, identified with a linear self-map of the
 C⋆-algebra `CStarMatrix (Fin D) (Fin D) ℂ` (the two types are definitionally
@@ -94,8 +94,11 @@ private lemma map_eq_sum_conjugate
         ∑ i, CStarMatrix.ofMatrix (K i) * X * star (CStarMatrix.ofMatrix (K i)) := by
     apply CStarMatrix.ext
     intro a b
-    rw [CStarMatrix.map_apply, CStarMatrix.map_apply, cstarMap_apply, hK]
-    rfl
+    rw [CStarMatrix.map_apply, CStarMatrix.map_apply, cstarMap_apply]
+    have hEntry := hK (M a b)
+    change E (M a b) =
+      ∑ i, CStarMatrix.ofMatrix (K i) * M a b * star (CStarMatrix.ofMatrix (K i))
+    exact hEntry
   rw [hmap]
   apply CStarMatrix.ext
   intro a b

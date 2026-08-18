@@ -74,7 +74,7 @@ theorem supportRightProj_mul_supportLeftRightSupportProj_eq
   have hres : res.PosDef := by
     simpa only [res, Bplus] using
       supportRelativeModular_resolvent_posDef hA hB ht
-  letI : Invertible res := hres.isUnit.invertible
+  let : Invertible res := hres.isUnit.invertible
   have hSP : S * P = C * res := by
     simpa only [S, P, C, res, Bplus] using
       supportLeftRightSuperoperator_mul_supportProj_eq (A := A) hB t
@@ -167,7 +167,7 @@ theorem supportLeftRightSupportInv_mulVec_sourceB_eq_projected_relativeModular
   have hres : res.PosDef := by
     simpa only [res, delta, Bplus] using
       supportRelativeModular_resolvent_posDef hA hB ht
-  letI : Invertible res := hres.isUnit.invertible
+  let : Invertible res := hres.isUnit.invertible
   have hSP : S * P = C * res := by
     simpa only [S, P, C, res, delta, Bplus] using
       supportLeftRightSuperoperator_mul_supportProj_eq (A := A) hB t

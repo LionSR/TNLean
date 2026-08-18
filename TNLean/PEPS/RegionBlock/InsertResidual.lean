@@ -308,7 +308,7 @@ theorem insertOverwrite_eq_of_regionIncident (A : Tensor G d) (R : Finset V) {v 
     (μ : RegionBoundaryConfig (G := G) A (insert v R)) (ζ : VirtualConfig A)
     {e : Edge G} (hinc : IsRegionIncidentEdge (G := G) R e) :
     insertOverwrite (G := G) A R μ ζ e = ζ e := by
-  rw [insertOverwrite, dif_neg]
+  rw [insertOverwrite, dite_eq_right]
   rintro ⟨_, hni⟩
   exact hni hinc
 
@@ -335,10 +335,10 @@ theorem insertOverwrite_mem_residualFilter (A : Tensor G d) (R : Finset V) {v : 
       obtain ⟨hRb, hnv⟩ :=
         isRegionBoundaryEdge_of_insert_regionIncident (G := G) R hv g.2 hinc
       have := congrFun hζbridge ⟨g.1, hRb⟩
-      rw [regionBoundaryLabel_apply, boundaryLabelOfInsert, dif_neg hnv] at this
+      rw [regionBoundaryLabel_apply, boundaryLabelOfInsert, dite_eq_right hnv] at this
       rw [this]
     · -- non-`R`-incident boundary edge of `insert v R`: a mult-edge, overwrite reads `μ`.
-      rw [insertOverwrite, dif_pos ⟨g.2, hinc⟩]
+      rw [insertOverwrite, dite_eq_left ⟨g.2, hinc⟩]
   · -- `v`-incident label is `η`.
     funext ie
     by_cases hinc : IsRegionIncidentEdge (G := G) R ie.1
@@ -357,13 +357,13 @@ theorem insertOverwrite_mem_residualFilter (A : Tensor G d) (R : Finset V) {v : 
           · exact Or.inl ⟨h, h2⟩
           · exact absurd h h2
       have hbr := congrFun hζbridge ⟨ie.1, hb⟩
-      rw [regionBoundaryLabel_apply, boundaryLabelOfInsert, dif_pos ie.2] at hbr
+      rw [regionBoundaryLabel_apply, boundaryLabelOfInsert, dite_eq_left ie.2] at hbr
       -- `boundaryLabelOfInsert` reads `η` at the `v`-incident edge.
       rw [hbr]
     · -- `v`-incident, non-`R`-incident: a mult-edge, overwrite reads `μ`; consistency gives `η`.
       have hb : IsRegionBoundaryEdge (G := G) (insert v R) ie.1 :=
         isRegionBoundaryEdge_insert_of_vIncident_not_regionIncident (G := G) R ie.2 hinc
-      rw [insertOverwrite, dif_pos ⟨hb, hinc⟩]
+      rw [insertOverwrite, dite_eq_left ⟨hb, hinc⟩]
       exact hcons ⟨ie.1, hb⟩ ie.2
 
 /-- Reconstruct a configuration in the bridge-filter fiber over a residual configuration
@@ -411,22 +411,22 @@ theorem insertFiber_card (A : Tensor G d) (R : Finset V) {v : V} (hv : v ∉ R)
         rw [regionBoundaryLabel_apply, insertFiberConfig]
         have hginc : IsRegionIncidentEdge (G := G) R g.1 :=
           isRegionBoundaryEdge_touches (G := G) R g.2
-        rw [dif_neg (fun hc => hc.2 hginc)]
+        rw [dite_eq_right (fun hc => hc.2 hginc)]
         rw [boundaryLabelOfInsert]
         by_cases hgv : g.1.1.1 = v ∨ g.1.1.2 = v
-        · rw [dif_pos hgv, ← hζ'.2]
-        · rw [dif_neg hgv, ← hζ'.1, regionBoundaryLabel_apply]
+        · rw [dite_eq_left hgv, ← hζ'.2]
+        · rw [dite_eq_right hgv, ← hζ'.1, regionBoundaryLabel_apply]
       · -- The reconstruction overwrites to `ζ'`.
         funext e
         rw [insertOverwrite, insertFiberConfig]
         by_cases he : IsRegionBoundaryEdge (G := G) (insert v R) e ∧
             ¬ IsRegionIncidentEdge (G := G) R e
-        · rw [dif_pos he]
+        · rw [dite_eq_left he]
           -- mult-edge: overwrite reads `μ`, which equals `ζ' e` since `ζ'` has boundary label `μ`.
           have := congrFun hζ'.1 ⟨e, he.1⟩
           rw [regionBoundaryLabel_apply] at this
           rw [this]
-        · rw [dif_neg he, dif_neg he]
+        · rw [dite_eq_right he, dite_eq_right he]
     · -- Reconstructing from the legs of a fiber config recovers the config.
       intro ζ hζ
       simp only [Finset.mem_coe, Finset.mem_filter, Finset.mem_univ, true_and] at hζ
@@ -435,16 +435,16 @@ theorem insertFiber_card (A : Tensor G d) (R : Finset V) {v : V} (hv : v ∉ R)
       simp only [insertFiberConfig, insertOuterLegs]
       by_cases he : IsRegionBoundaryEdge (G := G) (insert v R) e ∧
           ¬ IsRegionIncidentEdge (G := G) R e
-      · rw [dif_pos he]
-      · rw [dif_neg he]
+      · rw [dite_eq_left he]
+      · rw [dite_eq_right he]
         -- off the mult-edges the overwrite is the identity, so `ζ' e = ζ e`.
         have := congrFun hover e
-        rw [insertOverwrite, dif_neg he] at this
+        rw [insertOverwrite, dite_eq_right he] at this
         exact this.symm
     · -- Reading the legs of a reconstruction recovers them.
       intro h _
       funext e
-      simp only [insertOuterLegs, insertFiberConfig, dif_pos e.2]
+      simp only [insertOuterLegs, insertFiberConfig, dite_eq_left e.2]
   · rw [Finset.card_univ, Fintype.card_pi]
     simp only [Fintype.card_fin]
     rw [insertOuterBondProd,
@@ -605,9 +605,9 @@ theorem insertOuterBondProd_smul_insertResidual_eq (A : Tensor G d) (R : Finset 
       else 0 := by
   classical
   by_cases hcons : InsertConsistent (G := G) A R μ η
-  · rw [if_pos hcons,
+  · rw [ite_eq_left hcons,
       regionBlockedWeight_bridge_eq_smul_insertResidual (G := G) A R hv μ σ η hcons]
-  · rw [if_neg hcons]
+  · rw [ite_eq_right hcons]
     rw [InsertConsistent] at hcons
     push Not at hcons
     obtain ⟨g, hgv, hne⟩ := hcons

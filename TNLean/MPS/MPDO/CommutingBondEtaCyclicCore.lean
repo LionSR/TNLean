@@ -449,13 +449,13 @@ theorem reindex_embedLocalOperator_etaPairBond {K N : ℕ} [NeZero N]
             exact (Prod.ext_iff.mp hedge).1
     by_cases he : ∀ n : Fin N, n ≠ i → x n = y n
     · obtain ⟨ha, hb⟩ := hcondition.mpr he
-      rw [if_pos ha]
+      rw [ite_eq_left ha]
       simp only [Prod.ext_iff] at hb
-      rw [if_pos hb.1, if_pos hb.2, one_mul, mul_one]
+      rw [ite_eq_left hb.1, ite_eq_left hb.2, one_mul, mul_one]
       rw [Finset.prod_eq_single i]
-      · rw [if_pos rfl, hxedge i, hyedge i]
+      · rw [ite_eq_left rfl, hxedge i, hyedge i]
       · intro n _ hni
-        rw [if_neg hni, if_pos (he n hni)]
+        rw [ite_eq_right hni, ite_eq_left (he n hni)]
       · simp
     · have hnot : ¬ (AgreesOutsideWindow 2 hN i
             (fun n ↦ e ⟨k n, sx n⟩) (fun n ↦ e ⟨k n, sy n⟩) ∧
@@ -471,15 +471,15 @@ theorem reindex_embedLocalOperator_etaPairBond {K N : ℕ} [NeZero N]
       rw [hprod]
       by_cases ha : AgreesOutsideWindow 2 hN i
           (fun n ↦ e ⟨k n, sx n⟩) (fun n ↦ e ⟨k n, sy n⟩)
-      · rw [if_pos ha]
+      · rw [ite_eq_left ha]
         have hb : ((sx i).2, (sx (i + 1)).1) ≠
             ((sy i).2, (sy (i + 1)).1) := fun hb ↦ hnot ⟨ha, hb⟩
         by_cases hbL : (sx i).2 = (sy i).2
         · have hbR : (sx (i + 1)).1 ≠ (sy (i + 1)).1 :=
             fun hbR ↦ hb (Prod.ext hbL hbR)
-          rw [if_pos hbL, if_neg hbR, mul_zero]
-        · rw [if_neg hbL, zero_mul, zero_mul]
-      · rw [if_neg ha]
+          rw [ite_eq_left hbL, ite_eq_right hbR, mul_zero]
+        · rw [ite_eq_right hbL, zero_mul, zero_mul]
+      · rw [ite_eq_right ha]
   · rw [Matrix.blockDiagonal'_apply_ne _ _ _ hkh]
     let sx := (Matrix.etaFixedSectorCyclicEdgeEquiv dl dr k).symm x
     let ty := (Matrix.etaFixedSectorCyclicEdgeEquiv dl dr h).symm y
@@ -505,7 +505,7 @@ theorem reindex_embedLocalOperator_etaPairBond {K N : ℕ} [NeZero N]
     rw [hi0, hi1]
     by_cases ha : AgreesOutsideWindow 2 hN i
         (fun n ↦ e ⟨k n, sx n⟩) (fun n ↦ e ⟨h n, ty n⟩)
-    · rw [if_pos ha]
+    · rw [ite_eq_left ha]
       have hpairs : (k i, k (i + 1)) ≠ (h i, h (i + 1)) := by
         intro hp
         apply hkh
@@ -531,7 +531,7 @@ theorem reindex_embedLocalOperator_etaPairBond {K N : ℕ} [NeZero N]
           (((ty i).2, ((ty i).1, (ty (i + 1)).2)), (ty (i + 1)).1)⟩
       simpa [Matrix.reindex_apply, Matrix.etaPairSpatialBlockEquiv,
         Matrix.blockDiagonal'_apply_ne _ _ _ hpairs] using hentry
-    · rw [if_neg ha]
+    · rw [ite_eq_right ha]
 
 /-- Two translated bonds commute whenever their common two-site matrix has a
 neighboring-operator decomposition.  This is the local-to-global commutation

@@ -91,10 +91,10 @@ lemma infimum_is_attained
     refine ⟨1, 1, Matrix.det_one, Matrix.det_one, ?_⟩
     intro T₁ T₂ _ _
     simp [Matrix.trace, Matrix.diag]
-  haveI : Nonempty (Fin d₁) := ⟨⟨0, hD₁⟩⟩
-  haveI : Nonempty (Fin d₂) := ⟨⟨0, hD₂⟩⟩
-  haveI : Nonempty (Fin d₂ × Fin d₁) := ⟨(⟨0, hD₂⟩, ⟨0, hD₁⟩)⟩
-  haveI : ProperSpace
+  have : Nonempty (Fin d₁) := ⟨⟨0, hD₁⟩⟩
+  have : Nonempty (Fin d₂) := ⟨⟨0, hD₂⟩⟩
+  have : Nonempty (Fin d₂ × Fin d₁) := ⟨(⟨0, hD₂⟩, ⟨0, hD₁⟩)⟩
+  have : ProperSpace
       (Matrix (Fin d₁) (Fin d₁) ℂ × Matrix (Fin d₂) (Fin d₂) ℂ) :=
     FiniteDimensional.proper_rclike ℂ _
   -- The functional to minimise, as a function of the pair `(S₁, S₂)`.
@@ -189,30 +189,30 @@ lemma infimum_is_attained
       isClosed_le (continuous_norm.comp continuous_snd) continuous_const
     have hset : Kc = {p | p.1.det = 1} ∩ {p | p.2.det = 1} ∩
         {p | ‖p.1‖ ≤ C₁} ∩ {p | ‖p.2‖ ≤ C₂} := by
-      rw [hKc]; ext p; simp only [Set.mem_inter_iff, Set.mem_setOf_eq]; tauto
+      rw [hKc]; ext p; simp only [Set.mem_inter_iff, Set.mem_ofPred_eq]; tauto
     rw [hset]; exact ((c1.inter c2).inter c3).inter c4
   have hbdd : Bornology.IsBounded Kc := by
     refine (Metric.isBounded_closedBall (x := (0 : Matrix (Fin d₁) (Fin d₁) ℂ ×
       Matrix (Fin d₂) (Fin d₂) ℂ)) (r := max C₁ C₂)).subset ?_
     intro p hp
-    rw [hKc, Set.mem_setOf_eq] at hp
+    rw [hKc, Set.mem_ofPred_eq] at hp
     rw [Metric.mem_closedBall]
     calc dist p 0 = max (dist p.1 0) (dist p.2 0) := Prod.dist_eq
       _ = max ‖p.1‖ ‖p.2‖ := by rw [dist_zero_right, dist_zero_right]
       _ ≤ max C₁ C₂ := max_le_max hp.2.2.1 hp.2.2.2
   have hKcompact : IsCompact Kc := Metric.isCompact_of_isClosed_isBounded hclosed hbdd
   have h11mem : (1, 1) ∈ Kc := by
-    rw [hKc, Set.mem_setOf_eq]
+    rw [hKc, Set.mem_ofPred_eq]
     obtain ⟨hc1, hc2⟩ := hbound 1 1 Matrix.det_one Matrix.det_one (le_of_eq hB.symm)
     exact ⟨Matrix.det_one, Matrix.det_one, hc1, hc2⟩
   obtain ⟨pmin, hpmin_mem, hpmin_min⟩ :=
     hKcompact.exists_isMinOn ⟨(1, 1), h11mem⟩ hgcont.continuousOn
-  rw [hKc, Set.mem_setOf_eq] at hpmin_mem
+  rw [hKc, Set.mem_ofPred_eq] at hpmin_mem
   refine ⟨pmin.1, pmin.2, hpmin_mem.1, hpmin_mem.2.1, ?_⟩
   intro T₁ T₂ hT₁ hT₂
   by_cases hcase : g (T₁, T₂) ≤ B
   · have hmem : (T₁, T₂) ∈ Kc := by
-      rw [hKc, Set.mem_setOf_eq]
+      rw [hKc, Set.mem_ofPred_eq]
       obtain ⟨hc1, hc2⟩ := hbound T₁ T₂ hT₁ hT₂ hcase
       exact ⟨hT₁, hT₂, hc1, hc2⟩
     exact isMinOn_iff.mp hpmin_min (T₁, T₂) hmem

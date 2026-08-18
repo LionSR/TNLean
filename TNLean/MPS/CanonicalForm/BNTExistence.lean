@@ -39,7 +39,7 @@ theorem CPSVCanonicalFormData.exists_isCPSVBasisOfNormalTensors
         (∀ j, 0 < dimB j) ∧
         IsCPSVBasisOfNormalTensors A (fun j ↦ ⟨dimB j, basis j⟩) := by
   classical
-  letI : ∀ k, NeZero (data.dim k) :=
+  let : ∀ k, NeZero (data.dim k) :=
     fun k ↦ ⟨Nat.ne_of_gt (data.dim_pos k)⟩
   let Active := {k : Fin data.r // data.weights k ≠ 0}
   let activeEquiv : Fin (Fintype.card Active) ≃ Active :=
@@ -55,7 +55,7 @@ theorem CPSVCanonicalFormData.exists_isCPSVBasisOfNormalTensors
   have hdimB : ∀ j, 0 < dimB j := by
     intro j
     exact data.dim_pos (activeEquiv (classes.repr j))
-  letI : ∀ j, NeZero (dimB j) := fun j ↦ ⟨Nat.ne_of_gt (hdimB j)⟩
+  let : ∀ j, NeZero (dimB j) := fun j ↦ ⟨Nat.ne_of_gt (hdimB j)⟩
   refine ⟨classes.g, dimB, basis, hdimB, ?_⟩
   apply (data.isCPSVBasisOfNormalTensors_iff_covered_and_minimal basis).2
   refine ⟨?_, ?_, ?_⟩

@@ -132,7 +132,7 @@ theorem eigenvalue_norm_le_one₂ [NeZero D₁] [NeZero D₂]
   by_contra h_gt; push Not at h_gt
   have h_pos : 0 < frobSq v := by
     rw [frobSq]
-    letI : NormedAddCommGroup (Matrix (Fin D₁) (Fin D₂) ℂ) :=
+    let : NormedAddCommGroup (Matrix (Fin D₁) (Fin D₂) ℂ) :=
       Matrix.frobeniusNormedAddCommGroup
     exact sq_pos_of_ne_zero (norm_ne_zero_iff.mpr hv_ne)
   have h_bound : ∀ n : ℕ, ‖μ‖ ^ (2 * n) ≤ (D₁ : ℝ) ^ 2 := fun n => by
@@ -165,8 +165,8 @@ theorem spectralRadius_mixedTransfer₂_le_one
       have : Subsingleton (Matrix (Fin D₁) (Fin 0) ℂ →L[ℂ] Matrix (Fin D₁) (Fin 0) ℂ) :=
         ContinuousLinearMap.uniqueOfLeft.instSubsingleton
       rw [spectrum.SpectralRadius.of_subsingleton]; exact zero_le
-    · haveI : NeZero D₁ := ⟨hD₁⟩
-      haveI : NeZero D₂ := ⟨hD₂⟩
+    · have : NeZero D₁ := ⟨hD₁⟩
+      have : NeZero D₂ := ⟨hD₂⟩
       have h_spec := AlgEquiv.spectrum_eq (Module.End.toContinuousLinearMap
         (Matrix (Fin D₁) (Fin D₂) ℂ)) (mixedTransferMap₂ A B)
       apply iSup₂_le; intro k hk
@@ -194,15 +194,15 @@ theorem mixedTransferMap₂_pow_tendsto_zero_of_spectralRadius_lt_one
   let V := Matrix (Fin D₁) (Fin D₂) ℂ
   let Φ : (V →ₗ[ℂ] V) ≃ₐ[ℂ] (V →L[ℂ] V) := Module.End.toContinuousLinearMap V
   let F : V →L[ℂ] V := Φ (mixedTransferMap₂ A B)
-  letI : NormedAddCommGroup (V →L[ℂ] V) := ContinuousLinearMap.toNormedAddCommGroup
-  letI : SeminormedRing (V →L[ℂ] V) := ContinuousLinearMap.toSeminormedRing
-  letI : NormedRing (V →L[ℂ] V) := ContinuousLinearMap.toNormedRing
-  letI : NormedSpace ℂ (V →L[ℂ] V) := ContinuousLinearMap.toNormedSpace
-  letI : NormedAlgebra ℂ (V →L[ℂ] V) := ContinuousLinearMap.toNormedAlgebra
-  haveI : FiniteDimensional ℂ (V →L[ℂ] V) := Φ.toLinearEquiv.finiteDimensional
+  let : NormedAddCommGroup (V →L[ℂ] V) := ContinuousLinearMap.toNormedAddCommGroup
+  let : SeminormedRing (V →L[ℂ] V) := ContinuousLinearMap.toSeminormedRing
+  let : NormedRing (V →L[ℂ] V) := ContinuousLinearMap.toNormedRing
+  let : NormedSpace ℂ (V →L[ℂ] V) := ContinuousLinearMap.toNormedSpace
+  let : NormedAlgebra ℂ (V →L[ℂ] V) := ContinuousLinearMap.toNormedAlgebra
+  have : FiniteDimensional ℂ (V →L[ℂ] V) := Φ.toLinearEquiv.finiteDimensional
   have hComplete : CompleteSpace (V →L[ℂ] V) :=
     FiniteDimensional.complete ℂ (V →L[ℂ] V)
-  letI : CompleteSpace (V →L[ℂ] V) := hComplete
+  let : CompleteSpace (V →L[ℂ] V) := hComplete
   have hSpectralRadius : spectralRadius ℂ F < 1 := by
     change spectralRadius ℂ
       (((Module.End.toContinuousLinearMap (Matrix (Fin D₁) (Fin D₂) ℂ))
@@ -222,7 +222,7 @@ theorem mixedTransferMap₂_pow_tendsto_zero_of_spectralRadius_lt_one
     intro n
     have hPow :
         (F ^ n : V →L[ℂ] V) = Φ ((mixedTransferMap₂ A B) ^ n) := by
-      simp [V, Φ, F, map_pow]
+      exact (map_pow Φ (mixedTransferMap₂ A B) n).symm
     rw [hPow]
     rfl
   exact hEval.congr hApply

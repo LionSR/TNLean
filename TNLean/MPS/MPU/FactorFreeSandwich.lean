@@ -63,11 +63,15 @@ theorem doubledVirtualContraction_vecMulVec (W : MPOTensor d D)
         (fun e b ↦ rho (finProdFinEquiv (b, e))) := by
   classical
   ext i j a b
-  simp only [doubledVirtualContraction_apply, Matrix.vecMulVec_apply,
-    virtualSandwich_apply, Matrix.mul_apply, Finset.sum_mul]
+  simp only [doubledVirtualContraction_apply, Matrix.vecMulVec_apply]
   rw [Finset.sum_comm]
   apply Finset.sum_congr rfl
   intro e _
+  change (∑ c : Fin D,
+      rho (finProdFinEquiv (b, e)) * Phi (finProdFinEquiv (c, a)) * W i j c e) =
+    (∑ c : Fin D, Phi (finProdFinEquiv (c, a)) * W i j c e) *
+      rho (finProdFinEquiv (b, e))
+  rw [Finset.sum_mul]
   apply Finset.sum_congr rfl
   intro c _
   ring

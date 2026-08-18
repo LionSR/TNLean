@@ -460,7 +460,10 @@ theorem edgeRightInsertionOp_realizes_edgeTransferMatrix
     localVirtualOpOfPhysicalOpAt_eq_of_realizes B hvB O₂
       (localIncidentMatrixOp B (edgeRightIncident (G := G) e) Y) hYright
   have hYeq : edgeTransferMatrix A B e hvA hvB hposB X = Y := by
-    rw [edgeTransferMatrix, ← hO₂def, hpull, incidentMatrixOfLocalOp_localIncidentMatrixOp]
+    rw [edgeTransferMatrix, ← hO₂def, hpull]
+    exact incidentMatrixOfLocalOp_localIncidentMatrixOp B
+      (edgeRightIncident (G := G) e)
+      (edgeIncidentReferenceResidual B (edgeRightIncident (G := G) e) hposB) Y
   rw [hYeq]
   exact hYright
 

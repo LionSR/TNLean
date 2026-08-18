@@ -162,8 +162,8 @@ theorem vecMul_vec_one_transferMatrix_eq_of_trace_preserving
   change Matrix.trace (Matrix.single k l 1) = if k = l then 1 else 0
   by_cases hkl : k = l
   · subst l
-    rw [if_pos rfl, Matrix.trace_single_eq_same]
-  · rw [if_neg hkl, Matrix.trace_single_eq_of_ne (i := k) (j := l) (c := (1 : ℂ)) hkl]
+    rw [ite_eq_left rfl, Matrix.trace_single_eq_same]
+  · rw [ite_eq_right hkl, Matrix.trace_single_eq_of_ne (i := k) (j := l) (c := (1 : ℂ)) hkl]
 
 /-- **Key property**: the transfer matrix faithfully represents `T`:
 `(T̂ *ᵥ vec(ρ)) = vec(T(ρ))`.
@@ -344,8 +344,8 @@ theorem transferMatrix_tp_iff
     change Matrix.trace (T (Matrix.single k l 1)) = _
     rw [htp]
     by_cases hkl : k = l
-    · subst hkl; rw [if_pos rfl]; exact Matrix.trace_single_eq_same k (1 : ℂ)
-    · rw [Matrix.trace_single_eq_of_ne k l (1 : ℂ) hkl, if_neg hkl]
+    · subst hkl; rw [ite_eq_left rfl]; exact Matrix.trace_single_eq_same k (1 : ℂ)
+    · rw [Matrix.trace_single_eq_of_ne k l (1 : ℂ) hkl, ite_eq_right hkl]
   · intro h X
     have key : ∀ k l : Fin D,
         Matrix.trace (T (Matrix.single k l 1)) =
@@ -355,8 +355,8 @@ theorem transferMatrix_tp_iff
       · change ∑ i, (T (Matrix.single k l 1)) i i = _
         have := h k l; simp only [transferMatrix_apply] at this; exact this
       · by_cases hkl : k = l
-        · subst hkl; rw [if_pos rfl]; exact (Matrix.trace_single_eq_same k (1 : ℂ)).symm
-        · rw [if_neg hkl, Matrix.trace_single_eq_of_ne k l (1 : ℂ) hkl]
+        · subst hkl; rw [ite_eq_left rfl]; exact (Matrix.trace_single_eq_same k (1 : ℂ)).symm
+        · rw [ite_eq_right hkl, Matrix.trace_single_eq_of_ne k l (1 : ℂ) hkl]
     calc Matrix.trace (T X)
         = Matrix.trace (T (∑ k, ∑ l, X k l • Matrix.single k l 1)) := by
             conv_lhs =>

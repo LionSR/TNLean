@@ -315,7 +315,7 @@ theorem mpvPhaseClassData_dim_eq_of_tp_primitive_irr
       dim ((mpvPhaseClassData blocks).enum j q) =
         dim ((mpvPhaseClassData blocks).repr j) := by
   classical
-  haveI : ∀ k, NeZero (dim k) := fun k => ⟨(hDim k).ne'⟩
+  have : ∀ k, NeZero (dim k) := fun k => ⟨(hDim k).ne'⟩
   let classes := mpvPhaseClassData (d := d) blocks
   intro j q
   have hEq :
@@ -378,7 +378,7 @@ theorem isBNTCanonicalForm_collapsedBntSectorDecomp_of_tp_primitive_irr_blocks
     IsBNTCanonicalForm (collapsedBntSectorDecomp (d := d) μ blocks hμne) := by
   classical
   -- Promote `0 < dim k` to a `NeZero (dim k)` typeclass instance.
-  haveI : ∀ k, NeZero (dim k) := fun k => ⟨(hDim k).ne'⟩
+  have : ∀ k, NeZero (dim k) := fun k => ⟨(hDim k).ne'⟩
   set classes := mpvPhaseClassData (d := d) blocks with hclasses
   -- Concrete sector decomposition from phase-class representatives.
   set P := collapsedBntSectorDecomp (d := d) μ blocks hμne with hP

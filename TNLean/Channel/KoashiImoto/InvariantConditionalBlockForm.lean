@@ -122,7 +122,7 @@ theorem exists_normalizedConditionalSliceBlockForm_preservingBlockAction_jointSu
   dsimp only
   obtain ⟨hμnonempty, hμpos, hμtrace, F, hFmap⟩ :=
     exists_preservingKrausFamily_normalizedConditionalSlice ρ_ABC hρ_dm hSSA
-  letI : Nonempty (ActiveConditionalEffectIndex (traceC_ABC ρ_ABC)) := hμnonempty
+  let : Nonempty (ActiveConditionalEffectIndex (traceC_ABC ρ_ABC)) := hμnonempty
   obtain ⟨n, V, hV, hVrange, hrec, K, d, m, e, U, σ, q, τ, hU, hd, hm,
       hσpos, hσtrace, hqnonneg, hqsum, hτpos, hτtrace, hfamily, hpres,
       haction⟩ :=

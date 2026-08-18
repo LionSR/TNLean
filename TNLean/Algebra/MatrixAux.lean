@@ -198,7 +198,7 @@ lemma nonempty_of_trace_eq_one {α : Type*} [Fintype α]
     (ρ : Matrix α α ℂ) (hρ : ρ.trace = 1) : Nonempty α := by
   classical
   by_contra h
-  haveI : IsEmpty α := not_nonempty_iff.mp h
+  have : IsEmpty α := not_nonempty_iff.mp h
   have hzero : ρ.trace = 0 := by
     rw [Matrix.trace]
     simp

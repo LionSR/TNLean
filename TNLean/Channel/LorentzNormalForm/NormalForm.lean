@@ -70,7 +70,7 @@ theorem exists_normal_form_generic
   · subst hD0
     exact ⟨SLFiltering.id 0, SLFiltering.id 0,
       ⟨0, Subsingleton.elim _ _⟩, ⟨0, Subsingleton.elim _ _⟩⟩
-  haveI : NeZero D := ⟨hDpos.ne'⟩
+  have : NeZero D := ⟨hDpos.ne'⟩
   obtain ⟨S₁, S₂, hS₁det, hS₂det, hmin⟩ :=
     infimum_is_attained (τ := choiMatrix T) _hFullRank
   let Φ₁ : SLFiltering D :=

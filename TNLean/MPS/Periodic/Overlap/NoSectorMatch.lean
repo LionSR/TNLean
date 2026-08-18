@@ -70,7 +70,7 @@ lemma sectorBlocked_isNormal_of_isPeriodic
     (hCyclic : IsCyclicSectorDecomp A blocks)
     (u : Fin m) (hNonzero : dim u ≠ 0) :
     IsNormal (blocks u) := by
-  haveI : NeZero (dim u) := ⟨hNonzero⟩
+  have : NeZero (dim u) := ⟨hNonzero⟩
   obtain ⟨hPrim, hIrr⟩ :=
     primitive_and_irreducible_sectorBlocks_of_cyclicDecomp
       A hP blocks hBlocks_lc hBlocks_mpv hCyclic u hNonzero
@@ -311,8 +311,8 @@ private lemma exists_sector_match_of_blockedGaugePhaseEquiv_cyclicDecomp
   obtain ⟨u, v, hNondecay⟩ :=
     exists_nondecaying_sectorOverlap_of_blockedGaugePhaseEquiv_cyclicDecomp
       A B hA hB blocksA blocksB hA_mpv hB_mpv hGPE_block
-  haveI : NeZero (dimA u) := ⟨hNondegA u⟩
-  haveI : NeZero (dimB v) := ⟨hNondegB v⟩
+  have : NeZero (dimA u) := ⟨hNondegA u⟩
+  have : NeZero (dimB v) := ⟨hNondegB v⟩
   have hA_irr : IsIrreducibleTensor (blocksA u) :=
     (primitive_and_irreducible_sectorBlocks_of_cyclicDecomp
       A hA blocksA hA_blocks_lc hA_mpv hA_cyclic u (hNondegA u)).2

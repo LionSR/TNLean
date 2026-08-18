@@ -84,7 +84,7 @@ verification follows from the window-level membership calculation. -/
 theorem mpv_mem_chainGroundSpace (A : MPSTensor d D) (L N : ℕ)
     (hN : 0 < N) (hLN : L ≤ N) :
     (mpv A : NSiteSpace d N) ∈ chainGroundSpace A L N := by
-  rw [chainGroundSpace, dif_pos ⟨hN, hLN⟩]
+  rw [chainGroundSpace, dite_eq_left ⟨hN, hLN⟩]
   simp only [Submodule.mem_iInf, Submodule.mem_comap]
   intro i τ
   have hrestrict :
@@ -107,7 +107,7 @@ theorem isFrustrationFree_of_mem_chainGroundSpace (A : MPSTensor d D)
     {L N : ℕ} (hN : 0 < N) (hLN : L ≤ N)
     {ψ : NSiteSpace d N} (hψ : ψ ∈ chainGroundSpace A L N) :
     IsFrustrationFree A L N ψ := by
-  rw [chainGroundSpace, dif_pos ⟨hN, hLN⟩] at hψ
+  rw [chainGroundSpace, dite_eq_left ⟨hN, hLN⟩] at hψ
   simp only [Submodule.mem_iInf, Submodule.mem_comap] at hψ
   intro i
   ext σ
@@ -137,7 +137,7 @@ theorem chainGroundSpace_window_witnesses (A : MPSTensor d D)
     ∃ YAt : (i : Fin N) → (Fin N → Fin d) → Matrix (Fin D) (Fin D) ℂ,
       ∀ (i : Fin N) (τ : Fin N → Fin d),
         cyclicRestrictₗ hN L i τ ψ = groundSpaceMap A L (YAt i τ) := by
-  rw [chainGroundSpace, dif_pos ⟨hN, hLN⟩] at hψ
+  rw [chainGroundSpace, dite_eq_left ⟨hN, hLN⟩] at hψ
   simp only [Submodule.mem_iInf, Submodule.mem_comap] at hψ
   have hLocal : ∀ (i : Fin N) (τ : Fin N → Fin d),
       ∃ Y : Matrix (Fin D) (Fin D) ℂ,
@@ -156,9 +156,9 @@ theorem chainGroundSpace_le_chainGroundSpace_succ (A : MPSTensor d D)
     {L N : ℕ} (hN : 0 < N) (hLN : L + 1 ≤ N) :
     chainGroundSpace A (L + 1) N ≤ chainGroundSpace A L N := by
   intro ψ hψ
-  rw [chainGroundSpace, dif_pos ⟨hN, hLN⟩] at hψ
+  rw [chainGroundSpace, dite_eq_left ⟨hN, hLN⟩] at hψ
   simp only [Submodule.mem_iInf, Submodule.mem_comap] at hψ
-  rw [chainGroundSpace, dif_pos ⟨hN, show L ≤ N from by omega⟩]
+  rw [chainGroundSpace, dite_eq_left ⟨hN, show L ≤ N from by omega⟩]
   simp only [Submodule.mem_iInf, Submodule.mem_comap]
   intro i τ
   let peeled : Fin N := ⟨(i.val + L) % N, Nat.mod_lt _ hN⟩
@@ -171,8 +171,8 @@ theorem chainGroundSpace_le_chainGroundSpace_succ (A : MPSTensor d D)
     ext k
     simp only [cyclicCfg]
     by_cases hsmall : (k.val + N - i.val) % N < L
-    · rw [dif_pos hsmall, dif_pos hsmall]
-    · rw [dif_neg hsmall, dif_neg hsmall]
+    · rw [dite_eq_left hsmall, dite_eq_left hsmall]
+    · rw [dite_eq_right hsmall, dite_eq_right hsmall]
       by_cases hlast : (k.val + N - i.val) % N = L
       · have hk : k = peeled :=
           eq_cyclic_site_of_offset_eq hN hlast

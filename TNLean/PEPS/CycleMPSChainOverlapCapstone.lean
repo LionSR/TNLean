@@ -112,7 +112,7 @@ private theorem exists_arcEval_ne_zero [NeZero n] {A : MPSChainTensor d D n}
       (Set.range fun ρ : Fin m → Fin d => arcEval A s (List.ofFn ρ)) :=
     hspan ▸ Submodule.mem_top
   obtain ⟨c, hc⟩ := Submodule.mem_span_range_iff_exists_fun ℂ |>.mp h1
-  haveI : Nonempty (Fin D) := ⟨⟨0, hD⟩⟩
+  have : Nonempty (Fin D) := ⟨⟨0, hD⟩⟩
   apply (show (1 : Matrix (Fin D) (Fin D) ℂ) ≠ 0 from one_ne_zero)
   rw [← hc]
   exact Finset.sum_eq_zero fun ρ _ => by rw [hall ρ, smul_zero]
@@ -355,7 +355,7 @@ private theorem exists_window_covariance [NeZero n] {A B : MPSChainTensor d D n}
     rw [← hc, Matrix.scalar_apply, Matrix.smul_one_eq_diagonal]
   have hc0 : c ≠ 0 := by
     intro h0
-    haveI : Nonempty (Fin D) := ⟨⟨0, hD⟩⟩
+    have : Nonempty (Fin D) := ⟨⟨0, hD⟩⟩
     apply (show (1 : Matrix (Fin D) (Fin D) ℂ) ≠ 0 from one_ne_zero)
     have hzero : ((Xu : (Matrix (Fin D) (Fin D) ℂ)ˣ) : Matrix (Fin D) (Fin D) ℂ) *
         (Z (p + m) : Matrix (Fin D) (Fin D) ℂ) = 0 := by
@@ -752,7 +752,7 @@ theorem fundamentalTheorem_injectiveMPSChain_gauge_unique {n d D : ℕ} [NeZero 
     ∃ c : ℂˣ, ∀ k : Fin n, (Z' k : Matrix (Fin D) (Fin D) ℂ) =
       (c : ℂ) • (Z k : Matrix (Fin D) (Fin D) ℂ) := by
   classical
-  letI : Nonempty (Fin D) := ⟨⟨0, hD⟩⟩
+  let : Nonempty (Fin D) := ⟨⟨0, hD⟩⟩
   let C : Fin n → GL (Fin D) ℂ := fun k => (Z k)⁻¹ * Z' k
   have hinter : ∀ (k : Fin n) (i : Fin d),
       (C k : Matrix (Fin D) (Fin D) ℂ) * A k i =

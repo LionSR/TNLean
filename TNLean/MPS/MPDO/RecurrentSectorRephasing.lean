@@ -50,7 +50,7 @@ private theorem exists_circle_smul_posSemidef_of_sectorEdge
     ∃ u : Circle, (((u : Circle) : ℂ) • eta k h).PosSemidef := by
   obtain ⟨w⟩ := (sectorReaches_iff_directedWalkReaches eta h k).mp (hrec k h hkh)
   let q := TNLean.Algebra.DirectedWalk.closedConsVertices (IsSectorEdge eta) hkh w
-  haveI : NeZero (TNLean.Algebra.DirectedWalk.edgeCount (IsSectorEdge eta) w + 1) :=
+  have : NeZero (TNLean.Algebra.DirectedWalk.edgeCount (IsSectorEdge eta) w + 1) :=
     ⟨by omega⟩
   have hne : ∀ n, eta (q n) (q (n + 1)) ≠ 0 := by
     intro n
@@ -102,7 +102,7 @@ theorem exists_vertexPhase_smul_posSemidef
   have hκpos : ∀ k h, (((κ k h : Circle) : ℂ) • eta k h).PosSemidef := by
     intro k h
     by_cases hkh : IsSectorEdge eta k h
-    · simpa only [κ, dif_pos hkh] using Classical.choose_spec (hedge hkh)
+    · simpa only [κ, dite_eq_left hkh] using Classical.choose_spec (hedge hkh)
     · exact smul_posSemidef_of_not_sectorEdge eta _ hkh
   have hclosed : ∀ (a : Fin hη.m)
       (w : TNLean.Algebra.DirectedWalk (IsSectorEdge eta) a a),
@@ -113,7 +113,7 @@ theorem exists_vertexPhase_smul_posSemidef
     | @cons a b _ hab w =>
         let q := TNLean.Algebra.DirectedWalk.closedConsVertices
           (IsSectorEdge eta) hab w
-        haveI : NeZero (TNLean.Algebra.DirectedWalk.edgeCount (IsSectorEdge eta) w + 1) :=
+        have : NeZero (TNLean.Algebra.DirectedWalk.edgeCount (IsSectorEdge eta) w + 1) :=
           ⟨by omega⟩
         have hne : ∀ n, eta (q n) (q (n + 1)) ≠ 0 := by
           intro n
@@ -192,10 +192,18 @@ theorem exists_rephased_inverseMapPhysicalSectorFactorization
     rw [heta]
     exact hpos
   obtain ⟨z, hz⟩ := exists_vertexPhase_smul_posSemidef hη _ hcyc hrec
-  refine ⟨F.rephase z, fun k h ↦ ?_⟩
-  rw [F.rephase_neighboringOperator]
-  rw [inverseMapPhysicalSectorFactorization_neighboringOperator_eq_sectorEta]
-  exact hz k h
+  let zF : Fin F.sectorCount → Circle := fun k => z k
+  have hzF (k h : Fin F.sectorCount) :
+      (↑((zF k)⁻¹ * zF h) • K.sectorEta hK hη R α₁ β₃ k h).PosSemidef :=
+    hz k h
+  have hneighbor (k h : Fin F.sectorCount) :
+      F.neighboringOperator k h = K.sectorEta hK hη R α₁ β₃ k h := by
+    exact inverseMapPhysicalSectorFactorization_neighboringOperator_eq_sectorEta
+      K hK R hρ hη α₁ β₃ hm k h
+  refine ⟨F.rephase zF, fun k h ↦ ?_⟩
+  change Fin F.sectorCount at k h
+  rw [F.rephase_neighboringOperator, hneighbor]
+  exact hzF k h
 
 /-- **Eta-local structure under recurrent inverse-map support.** An injective
 MPDO with recurrent nonzero inverse-map sector support admits the positive

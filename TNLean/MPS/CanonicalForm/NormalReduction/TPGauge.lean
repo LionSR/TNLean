@@ -212,7 +212,7 @@ theorem exists_pgvwc07_unital_dualDiag_data_of_irreducible
     isIrreducibleTensor_of_isIrreducibleAction (d := d) (D := D) B hActionB
   have hB_unital_map : transferMap (d := d) (D := D) B 1 = 1 := by
     simpa [transferMap_apply, Matrix.mul_one] using hB_unital
-  haveI : Nonempty (Fin D) := ⟨⟨0, NeZero.pos D⟩⟩
+  have : Nonempty (Fin D) := ⟨⟨0, NeZero.pos D⟩⟩
   have hScalar :
       ∀ X : Matrix (Fin D) (Fin D) ℂ,
         transferMap (d := d) (D := D) B X = X →
@@ -459,7 +459,7 @@ theorem exists_pgvwc07_unital_dualDiag_blockwise
               (∑ i : Fin d, C i * (C i)ᴴ = 1) ∧
               transferMap (d := d) (D := dim0 k) (fun i => (C i)ᴴ) Λ = Λ) := by
     intro k
-    letI : NeZero (dim0 k) :=
+    let : NeZero (dim0 k) :=
       ⟨bond_dim_ne_zero_of_exists_nonzero
         (d := d) (D := dim0 k) (blocks0 k) (hNonzero0 k)⟩
     exact exists_pgvwc07_unital_dualDiag_data_of_irreducible
@@ -555,7 +555,7 @@ theorem exists_tp_gauge_blockwise
           GaugeEquiv (d := d) (D := dim0 k)
             (fun i => (↑((Real.sqrt r)⁻¹) : ℂ) • blocks0 k i) B := by
     intro k
-    letI : NeZero (dim0 k) :=
+    let : NeZero (dim0 k) :=
       ⟨bond_dim_ne_zero_of_exists_nonzero
         (d := d) (D := dim0 k) (blocks0 k) (hNonzero0 k)⟩
     exact
@@ -574,7 +574,7 @@ theorem exists_tp_gauge_blockwise
     gauge_blockwise_shared A blocks0 hSame0 hNonzero0 blocks1 r1 hrpos1 hSameGauge
   have hIrr1 : ∀ k : Fin r0, IsIrreducibleTensor (blocks1 k) := by
     intro k
-    letI : NeZero (dim0 k) :=
+    let : NeZero (dim0 k) :=
       ⟨bond_dim_ne_zero_of_exists_nonzero
         (d := d) (D := dim0 k) (blocks0 k) (hNonzero0 k)⟩
     let c : ℂ := (↑((Real.sqrt (r1 k))⁻¹) : ℂ)

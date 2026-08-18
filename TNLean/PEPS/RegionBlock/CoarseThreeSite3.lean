@@ -386,11 +386,11 @@ theorem legEquivRed_apply_eq (hP : F.frame.IsPartition)
           ⟨b.1, (F.frame.isCrossingEdge_red_blue_or_red_complement hP b.2).resolve_left hb⟩ :
           Fin (A.bondDim b.1)) := by
   by_cases hb : IsCrossingEdge (G := G) A F.frame.red F.frame.blue b.1
-  · rw [dif_pos hb]
+  · rw [dite_eq_left hb]
     have := F.legEquivRed_eq_bondModel_rb η b.1 hb
     -- `⟨b.1, hb.1⟩ = b` as subtype elements (same edge, proof-irrelevant membership).
     simpa using this
-  · rw [dif_neg hb]
+  · rw [dite_eq_right hb]
     have hc : IsCrossingEdge (G := G) A F.frame.red F.frame.complement b.1 :=
       (F.frame.isCrossingEdge_red_blue_or_red_complement hP b.2).resolve_left hb
     have := F.legEquivRed_eq_bondModel_rc η b.1 hc
@@ -411,10 +411,10 @@ theorem legEquivBlue_apply_eq (hP : F.frame.IsPartition)
           ⟨b.1, (F.frame.isCrossingEdge_red_blue_or_blue_complement hP b.2).resolve_left hb⟩ :
           Fin (A.bondDim b.1)) := by
   by_cases hb : IsCrossingEdge (G := G) A F.frame.red F.frame.blue b.1
-  · rw [dif_pos hb]
+  · rw [dite_eq_left hb]
     have := F.legEquivBlue_eq_bondModel_rb η b.1 hb
     simpa using this
-  · rw [dif_neg hb]
+  · rw [dite_eq_right hb]
     have hc : IsCrossingEdge (G := G) A F.frame.blue F.frame.complement b.1 :=
       (F.frame.isCrossingEdge_red_blue_or_blue_complement hP b.2).resolve_left hb
     have := F.legEquivBlue_eq_bondModel_bc η b.1 hc
@@ -436,10 +436,10 @@ theorem legEquivComplement_apply_eq (hP : F.frame.IsPartition)
             b.2).resolve_left hb⟩ :
           Fin (A.bondDim b.1)) := by
   by_cases hb : IsCrossingEdge (G := G) A F.frame.red F.frame.complement b.1
-  · rw [dif_pos hb]
+  · rw [dite_eq_left hb]
     have := F.legEquivComplement_eq_bondModel_rc η b.1 hb
     simpa using this
-  · rw [dif_neg hb]
+  · rw [dite_eq_right hb]
     have hc : IsCrossingEdge (G := G) A F.frame.blue F.frame.complement b.1 :=
       (F.frame.isCrossingEdge_red_complement_or_blue_complement hP b.2).resolve_left hb
     have := F.legEquivComplement_eq_bondModel_bc η b.1 hc

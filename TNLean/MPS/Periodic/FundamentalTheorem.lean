@@ -248,8 +248,8 @@ theorem PeriodicOverlapHypothesis.ofIsPeriodic
   exists_nondecaying_B := hExB
   hetRepeatedBlocks_of_nondecaying := by
     intro j k hnd
-    haveI : NeZero (dimA j) := ⟨(hPerA j).bondDim_ne_zero⟩
-    haveI : NeZero (dimB k) := ⟨(hPerB k).bondDim_ne_zero⟩
+    have : NeZero (dimA j) := ⟨(hPerA j).bondDim_ne_zero⟩
+    have : NeZero (dimB k) := ⟨(hPerB k).bondDim_ne_zero⟩
     rcases periodicOverlapDichotomy (A j) (B k) (hPerA j) (hPerB k) with hdecay | hrep
     · exact absurd hdecay hnd
     · exact hrep

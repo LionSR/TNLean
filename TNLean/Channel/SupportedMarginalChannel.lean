@@ -90,11 +90,14 @@ noncomputable def supportedMarginalInputScaling (p : α → ℝ) :
   toFun X i j := marginalInvSqrt p i * X i j * marginalInvSqrt p j
   map_add' X Y := by
     ext i j
-    simp only [Matrix.add_apply]
+    change marginalInvSqrt p i * (X i j + Y i j) * marginalInvSqrt p j =
+      marginalInvSqrt p i * X i j * marginalInvSqrt p j +
+        marginalInvSqrt p i * Y i j * marginalInvSqrt p j
     ring
   map_smul' c X := by
     ext i j
-    simp only [Matrix.smul_apply, smul_eq_mul, RingHom.id_apply]
+    change marginalInvSqrt p i * (c * X i j) * marginalInvSqrt p j =
+      c * (marginalInvSqrt p i * X i j * marginalInvSqrt p j)
     ring
 
 /-- The supported-marginal map associated with a bipartite operator in an
@@ -127,8 +130,9 @@ theorem supportedMarginalInputScaling_surjective (p : α → ℝ)
   intro X
   refine ⟨fun i j ↦ (Real.sqrt (p i) : ℂ) * X i j * (Real.sqrt (p j) : ℂ), ?_⟩
   ext i j
-  simp only [supportedMarginalInputScaling, marginalInvSqrt, LinearMap.coe_mk,
-    AddHom.coe_mk]
+  change ((Real.sqrt (p i) : ℂ)⁻¹ *
+      ((Real.sqrt (p i) : ℂ) * X i j * (Real.sqrt (p j) : ℂ)) *
+        (Real.sqrt (p j) : ℂ)⁻¹) = X i j
   have hi : (Real.sqrt (p i) : ℂ) ≠ 0 := by
     exact_mod_cast ne_of_gt (Real.sqrt_pos.2 (hp i))
   have hj : (Real.sqrt (p j) : ℂ) ≠ 0 := by
@@ -215,7 +219,7 @@ theorem supportedMarginalMap_diagonal
   apply Finset.sum_congr rfl
   intro i _
   rw [Finset.sum_eq_single i]
-  · simp only [Matrix.diagonal_apply, if_pos, marginalInvSqrt]
+  · simp only [Matrix.diagonal_apply, ite_eq_left, marginalInvSqrt]
     have hi : (Real.sqrt (p i) : ℂ) ≠ 0 := by
       exact_mod_cast ne_of_gt (Real.sqrt_pos.2 (hp i))
     have hsq : (Real.sqrt (p i) : ℂ) * (Real.sqrt (p i) : ℂ) = (p i : ℂ) := by
@@ -240,20 +244,20 @@ theorem supportedMarginalMap_isKrausCP
   intro X
   ext b c
   simp only [supportedMarginalMap_apply, Matrix.sum_apply, Matrix.smul_apply,
-    smul_eq_mul, operatorBlock, Matrix.mul_apply, Matrix.conjTranspose_apply]
+    smul_eq_mul, operatorBlock, Matrix.mul_apply]
   rw [hρeq]
   simp only [Matrix.sum_apply, Matrix.vecMulVec_apply, Pi.star_apply]
   have hstar (t : Fin r) (i : α) (d : β) :
       star (marginalInvSqrt p i * v t (i, d)) =
         marginalInvSqrt p i * star (v t (i, d)) := by
-    simp
-  simp_rw [hstar]
+    rw [star_mul, star_marginalInvSqrt, mul_comm]
   rw [Fintype.sum_prod_type]
   change (∑ i, ∑ j,
       marginalInvSqrt p i * X i j * marginalInvSqrt p j *
         ∑ t, v t (i, b) * star (v t (j, c))) =
     ∑ t, ∑ j, (∑ i, marginalInvSqrt p i * v t (i, b) * X i j) *
-      (marginalInvSqrt p j * star (v t (j, c)))
+      star (marginalInvSqrt p j * v t (j, c))
+  simp_rw [hstar]
   simp_rw [Finset.mul_sum, Finset.sum_mul]
   have sum_rotate (f : α → α → Fin r → ℂ) :
       (∑ i, ∑ j, ∑ t, f i j t) = ∑ t, ∑ j, ∑ i, f i j t := by

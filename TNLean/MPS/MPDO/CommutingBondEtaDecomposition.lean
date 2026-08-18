@@ -178,7 +178,7 @@ theorem exists_positive_etaPair_decomposition_of_overlappingLifts_commute
       Matrix.star_eq_conjTranspose, Matrix.conjTranspose_kronecker,
       Matrix.conjTranspose_one, Fintype.sum_prod_type]
     simp only [mul_ite, ite_mul, mul_one, mul_zero, zero_mul,
-      Finset.sum_ite_eq, Finset.sum_ite_eq', Finset.mem_univ, if_true]
+      Finset.sum_ite_eq, Finset.sum_ite_eq', Finset.mem_univ, ite_true]
     simp_rw [hR_entry_ne _ _ h h' hh]
     simp only [mul_zero, zero_mul, Finset.sum_const_zero]
   have hB'_left_sector_ne (q q' h h' : Fin K) (hq : q ≠ q')
@@ -208,7 +208,7 @@ theorem exists_positive_etaPair_decomposition_of_overlappingLifts_commute
       Matrix.star_eq_conjTranspose, Matrix.conjTranspose_kronecker,
       Matrix.conjTranspose_one, Fintype.sum_prod_type]
     simp only [mul_ite, ite_mul, mul_one, mul_zero, zero_mul,
-      Finset.sum_ite_eq, Finset.sum_ite_eq', Finset.mem_univ, if_true]
+      Finset.sum_ite_eq, Finset.sum_ite_eq', Finset.mem_univ, ite_true]
     simp_rw [hR_entry]
     simp [Matrix.one_apply]
   have hB'_from_S (q h h' : Fin K)

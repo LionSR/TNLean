@@ -183,13 +183,13 @@ theorem regionInsertedCoeff_identity_eq_doubleSum (A : Tensor G d) (R : Finset V
     rw [Finset.sum_comm]
     refine Finset.sum_congr rfl (fun ζ _ => ?_)
     rw [Finset.sum_eq_single (regionBoundaryLabel (G := G) A R ζ)]
-    · rw [if_pos rfl]
+    · rw [ite_eq_left rfl]
       refine Finset.sum_congr rfl (fun ξ _ => ?_)
       by_cases heq : regionBoundaryLabel (G := G) A R ζ = regionBoundaryLabel (G := G) A R ξ
-      · rw [if_pos heq.symm, if_pos heq]
-      · rw [if_neg (fun h => heq h.symm), if_neg heq]
+      · rw [ite_eq_left heq.symm, ite_eq_left heq]
+      · rw [ite_eq_right (fun h => heq h.symm), ite_eq_right heq]
     · intro μ _ hμ
-      rw [if_neg (fun h => hμ h.symm)]
+      rw [ite_eq_right (fun h => hμ h.symm)]
     · intro h; exact absurd (Finset.mem_univ _) h
   · -- The complement filter matches the region filter after the boundary-edge identification,
     -- and the product of sums is the doubled sum.
@@ -289,7 +289,7 @@ theorem regionFiber_card (A : Tensor G d) (R : Finset V) (η : VirtualConfig A) 
       · -- The reconstructed pair agrees on every boundary edge.
         funext f
         simp only [regionBoundaryLabel_apply, regionFiberPair]
-        rw [dif_pos (incident_of_boundary (G := G) R f.2), dif_pos f.2]
+        rw [dite_eq_left (incident_of_boundary (G := G) R f.2), dite_eq_left f.2]
       · -- The reconstructed pair merges back to `η`.
         funext e
         by_cases hinc : IsRegionIncidentEdge (G := G) R e
@@ -310,26 +310,26 @@ theorem regionFiber_card (A : Tensor G d) (R : Finset V) (η : VirtualConfig A) 
         funext e
         simp only [regionFiberPair, regionFiberLegs]
         by_cases hinc : IsRegionIncidentEdge (G := G) R e
-        · rw [dif_pos hinc]
+        · rw [dite_eq_left hinc]
           have := hmerge' e
           rw [regionMerge_of_incident (G := G) A R p hinc] at this
           exact this.symm
-        · rw [dif_neg hinc, if_neg hinc]
+        · rw [dite_eq_right hinc, ite_eq_right hinc]
       · -- Second configuration.
         funext e
         simp only [regionFiberPair, regionFiberLegs]
         by_cases hb : IsRegionBoundaryEdge (G := G) R e
-        · rw [dif_pos hb]
+        · rw [dite_eq_left hb]
           -- On a boundary edge the agreement and the merge identity force `p.2 e = η e`.
           have hinc := incident_of_boundary (G := G) R hb
           have h1 := hmerge' e
           rw [regionMerge_of_incident (G := G) A R p hinc] at h1
           have h2 := hagree' ⟨e, hb⟩
           rw [← h1, h2]
-        · rw [dif_neg hb]
+        · rw [dite_eq_right hb]
           by_cases hinc : IsRegionIncidentEdge (G := G) R e
-          · rw [dif_pos hinc, if_pos hinc]
-          · rw [dif_neg hinc]
+          · rw [dite_eq_left hinc, ite_eq_left hinc]
+          · rw [dite_eq_right hinc]
             have := hmerge' e
             rw [regionMerge_of_not_incident (G := G) A R p hinc] at this
             exact this.symm
@@ -338,8 +338,8 @@ theorem regionFiber_card (A : Tensor G d) (R : Finset V) (η : VirtualConfig A) 
       funext e
       simp only [regionFiberLegs, regionFiberPair]
       by_cases hinc : IsRegionIncidentEdge (G := G) R e.1
-      · rw [if_pos hinc, dif_neg e.2, dif_pos hinc]
-      · rw [if_neg hinc, dif_neg hinc]
+      · rw [ite_eq_left hinc, dite_eq_right e.2, dite_eq_left hinc]
+      · rw [ite_eq_right hinc, dite_eq_right hinc]
   · -- The free-index configuration set has the bond-dimension product as its size.
     rw [Finset.card_univ, Fintype.card_pi]
     simp only [Fintype.card_fin]

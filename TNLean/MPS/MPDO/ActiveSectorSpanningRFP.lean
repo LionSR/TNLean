@@ -165,7 +165,7 @@ private lemma physClose2_tensor_diagonal (X : Matrix (Fin 2) (Fin 2) ℂ)
         physClose1 tensor X (pairLabel p) (pairLabel p) := by
   obtain ⟨i, j⟩ := p
   rw [physClose2_apply, physClose1_apply]
-  simp only [tensor, if_pos]
+  simp only [tensor, ite_eq_left]
   rw [sectorMatrix_mul, Matrix.smul_mul, Matrix.trace_smul]
   rfl
 
@@ -194,7 +194,7 @@ private lemma coarseningMap_physClose2 (X : Matrix (Fin 2) (Fin 2) ℂ) :
       by_cases hp : pairLabel p = k <;> simp [hp]
     rw [hreplace, ← Finset.sum_mul, refinement_weight_fiber_sum, one_mul]
   · rw [physClose1_apply]
-    rw [tensor, if_neg hkl]
+    rw [tensor, ite_eq_right hkl]
     simp only [Matrix.zero_mul, Matrix.trace_zero]
     apply Finset.sum_eq_zero
     intro p _
@@ -211,9 +211,9 @@ private lemma physClose2_tensor_of_ne (X : Matrix (Fin 2) (Fin 2) ℂ)
   · have hsecond : p.2 ≠ q.2 := by
       intro h
       exact hpq (Prod.ext hfirst h)
-    rw [tensor, if_pos hfirst, tensor, if_neg hsecond, Matrix.mul_zero,
+    rw [tensor, ite_eq_left hfirst, tensor, ite_eq_right hsecond, Matrix.mul_zero,
       Matrix.zero_mul, Matrix.trace_zero]
-  · rw [tensor, if_neg hfirst, Matrix.zero_mul, Matrix.zero_mul,
+  · rw [tensor, ite_eq_right hfirst, Matrix.zero_mul, Matrix.zero_mul,
       Matrix.trace_zero]
 
 private lemma refinementMap_physClose1 (X : Matrix (Fin 2) (Fin 2) ℂ) :

@@ -72,7 +72,7 @@ The identity is `X (X + Y)⁻¹ X + X (X + Y)⁻¹ Y = X (X + Y)⁻¹ (X + Y) = 
 whenever `X + Y` is invertible. -/
 lemma parallel_sum_eq_sub {X Y : Matrix n n ℂ} (hXY : (X + Y).PosDef) :
     X * (X + Y)⁻¹ * Y = X - X * (X + Y)⁻¹ * X := by
-  letI : Invertible (X + Y) := hXY.isUnit.invertible
+  let : Invertible (X + Y) := hXY.isUnit.invertible
   have hsplit : X * (X + Y)⁻¹ * X + X * (X + Y)⁻¹ * Y = X := by
     rw [mul_assoc, mul_assoc, ← Matrix.mul_add, ← Matrix.mul_add,
       Matrix.inv_mul_of_invertible, Matrix.mul_one]
@@ -83,7 +83,7 @@ sum is positive semidefinite: its Schur complement against the `(2,2)` block `X 
 is `(X - Z) - X (X + Y)⁻¹ X = 0`. -/
 lemma posSemidef_parallel_sum_block {X Y : Matrix n n ℂ} (hX : X.PosDef) (hXY : (X + Y).PosDef) :
     (Matrix.fromBlocks (X - X * (X + Y)⁻¹ * Y) X X (X + Y)).PosSemidef := by
-  letI : Invertible (X + Y) := hXY.isUnit.invertible
+  let : Invertible (X + Y) := hXY.isUnit.invertible
   have hXH : Xᴴ = X := hX.isHermitian.eq
   have hblock := (Matrix.PosDef.fromBlocks₂₂ (A := X - X * (X + Y)⁻¹ * Y) (B := X) hXY).mpr
   rw [hXH] at hblock
@@ -145,7 +145,7 @@ theorem parallel_sum_concave {X₁ X₂ Y₁ Y₂ : Matrix n n ℂ}
     rw [← hcomb]
     exact (hB₁.smul hθ0).add (hB₂.smul hθ1')
   -- Reading off the Schur complement of the `(2,2)` block `Xb + Yb` at the averaged point.
-  letI : Invertible (Xb + Yb) := hXYb.isUnit.invertible
+  let : Invertible (Xb + Yb) := hXYb.isUnit.invertible
   have hXbH : Xbᴴ = Xb := hXbpd.isHermitian.eq
   have hSchur := (Matrix.PosDef.fromBlocks₂₂ (A := Xb - Zb) (B := Xb) hXYb).mp
   rw [hXbH] at hSchur

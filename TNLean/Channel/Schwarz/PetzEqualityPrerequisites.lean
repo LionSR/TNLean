@@ -331,7 +331,7 @@ private lemma resolvent_residual_expand (S : Matrix n n ℂ) (hS : S.PosDef)
     dotProduct (star (b - S *ᵥ x)) (S⁻¹ *ᵥ (b - S *ᵥ x)) =
       dotProduct (star b) (S⁻¹ *ᵥ b) - dotProduct (star b) x -
         dotProduct (star x) b + dotProduct (star x) (S *ᵥ x) := by
-  letI : Invertible S := hS.isUnit.invertible
+  let : Invertible S := hS.isUnit.invertible
   have hinv (y : n → ℂ) : S⁻¹ *ᵥ (S *ᵥ y) = y := by
     rw [mulVec_mulVec, inv_mul_of_invertible, one_mulVec]
   have hinv' (y : n → ℂ) : S *ᵥ (S⁻¹ *ᵥ y) = y := by
@@ -360,7 +360,7 @@ private theorem resolvent_residual_identity
   let x : n → ℂ := Sbar⁻¹ *ᵥ bbar
   have hSbar : Sbar.PosDef := by
     exact Matrix.posDef_sum Finset.univ_nonempty (fun i _ ↦ hS i)
-  letI : Invertible Sbar := hSbar.isUnit.invertible
+  let : Invertible Sbar := hSbar.isUnit.invertible
   have hx : Sbar *ᵥ x = bbar := by
     simp only [x, mulVec_mulVec, mul_inv_of_invertible, one_mulVec]
   have hsumStarB : ∑ i, star (b i) = star bbar := by
@@ -406,8 +406,8 @@ private lemma sqrt_inv_mulVec_normSq (S : Matrix n n ℂ) (hS : S.PosDef)
     rw [CFC.isUnit_sqrt_iff_isStrictlyPositive,
       Matrix.isStrictlyPositive_iff_posDef]
     exact hS
-  letI : Invertible Q := hQunit.invertible
-  letI : Invertible S := hS.isUnit.invertible
+  let : Invertible Q := hQunit.invertible
+  let : Invertible S := hS.isUnit.invertible
   have hQherm : Q.IsHermitian := by
     change Qᴴ = Q
     simpa only [Q, star_eq_conjTranspose] using
@@ -440,7 +440,7 @@ private lemma sqrt_defect_eq_sqrt_inv_residual
     rw [CFC.isUnit_sqrt_iff_isStrictlyPositive,
       Matrix.isStrictlyPositive_iff_posDef]
     exact hS
-  letI : Invertible Q := hQunit.invertible
+  let : Invertible Q := hQunit.invertible
   have hQQ : Q * Q = S := by
     simpa [Q] using CFC.sqrt_mul_sqrt_self S hS.posSemidef.nonneg
   change Q⁻¹ *ᵥ b - Q *ᵥ x = Q⁻¹ *ᵥ (b - S *ᵥ x)
@@ -524,8 +524,8 @@ private theorem resolvent_eq_of_sqrt_defect_sum_eq_zero
     rw [CFC.isUnit_sqrt_iff_isStrictlyPositive,
       Matrix.isStrictlyPositive_iff_posDef]
     exact hS i
-  letI : Invertible Q := hQunit.invertible
-  letI : Invertible (S i) := (hS i).isUnit.invertible
+  let : Invertible Q := hQunit.invertible
+  let : Invertible (S i) := (hS i).isUnit.invertible
   have hresInv : Q⁻¹ *ᵥ (b i - S i *ᵥ x) = 0 := by
     rw [← sqrt_defect_eq_sqrt_inv_residual (S i) (hS i) (b i) x]
     exact hm

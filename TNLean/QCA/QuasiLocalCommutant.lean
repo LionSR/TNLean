@@ -31,8 +31,11 @@ private lemma reindex_one_kronecker_eq_localInclusion_sdiff {d : ℕ} [NeZero d]
       ((1 : Matrix (Config d Λ) (Config d Λ) ℂ) ⊗ₖ B) =
       localInclusion (d := d) (Finset.sdiff_subset : Δ \ Λ ⊆ Δ) B := by
   ext x y
-  simp only [Matrix.reindex_apply, Matrix.submatrix_apply, Equiv.symm_symm,
-    Matrix.kroneckerMap_apply, Matrix.one_apply, localInclusion_apply]
+  change (if (Config.splitEquiv h x).1 = (Config.splitEquiv h y).1 then 1 else 0) *
+      B (Config.splitEquiv h x).2 (Config.splitEquiv h y).2 =
+    B (Config.restrict Finset.sdiff_subset x) (Config.restrict Finset.sdiff_subset y) *
+      if (Config.splitEquiv Finset.sdiff_subset x).2 =
+        (Config.splitEquiv Finset.sdiff_subset y).2 then 1 else 0
   have hrx : Config.restrict (Finset.sdiff_subset : Δ \ Λ ⊆ Δ) x =
       (Config.splitEquiv h x).2 := by
     funext i
@@ -56,7 +59,8 @@ private lemma reindex_one_kronecker_eq_localInclusion_sdiff {d : ℕ} [NeZero d]
       funext i
       exact congrFun hxy ⟨i, Finset.mem_sdiff.mpr ⟨h i.2,
         fun hi ↦ (Finset.mem_sdiff.mp hi).2 i.2⟩⟩
-  simp only [hp]
+  exact congrArg (fun z : ℂ => B (Config.splitEquiv h x).2 (Config.splitEquiv h y).2 * z)
+    (if_congr hp rfl rfl)
 
 private lemma reindex_kronecker_one_eq_localInclusion {d : ℕ} [NeZero d]
     {Λ Δ : Finset ℤ} (h : Λ ⊆ Δ) (B : LocalAlgebra d Λ) :
@@ -64,9 +68,11 @@ private lemma reindex_kronecker_one_eq_localInclusion {d : ℕ} [NeZero d]
       (B ⊗ₖ (1 : Matrix (Config d (Δ \ Λ)) (Config d (Δ \ Λ)) ℂ)) =
       localInclusion (d := d) h B := by
   ext x y
-  simp only [Matrix.reindex_apply, Matrix.submatrix_apply, Equiv.symm_symm,
-    Matrix.kroneckerMap_apply, Matrix.one_apply, localInclusion_apply,
-    Config.splitEquiv_apply_fst]
+  change B (Config.restrict h x) (Config.restrict h y) *
+      (if (Config.splitEquiv h x).2 = (Config.splitEquiv h y).2 then 1 else 0) =
+    B (Config.restrict h x) (Config.restrict h y) *
+      if (Config.splitEquiv h x).2 = (Config.splitEquiv h y).2 then 1 else 0
+  rfl
 
 /-- A quasi-local observable has exact support in a finite region if and only if it commutes with
 all observables supported in finite regions disjoint from that region.
@@ -98,7 +104,7 @@ theorem quasiLocalSupportedIn_iff_commute_disjoint {d : ℕ} [NeZero d]
     let S := Config d Λ
     let C := Config d (Δ \ Λ)
     let dC := Fintype.card C
-    letI : NeZero dC := ⟨by simp [dC, Fintype.card_ne_zero (α := C)]⟩
+    let : NeZero dC := ⟨by simp [dC, Fintype.card_ne_zero (α := C)]⟩
     let eC : C ≃ ZMod dC := (Fintype.equivFin C).trans (ZMod.finEquiv dC).toEquiv
     let ζ : ℂ := Complex.exp (2 * Real.pi * Complex.I / dC)
     have hζ : IsPrimitiveRoot ζ dC := Complex.isPrimitiveRoot_exp dC (NeZero.ne dC)

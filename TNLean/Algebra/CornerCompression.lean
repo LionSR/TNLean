@@ -43,7 +43,7 @@ abbrev MatrixEnd (D : ℕ) := MatrixAlg D →ₗ[ℂ] MatrixAlg D
 algebra. -/
 def cornerSubmodule {D : ℕ} (P : MatrixAlg D) : Submodule ℂ (MatrixAlg D) where
   carrier := {X | P * X * P = X}
-  zero_mem' := by simp only [Set.mem_setOf_eq, mul_zero, zero_mul]
+  zero_mem' := by simp only [Set.mem_ofPred_eq, mul_zero, zero_mul]
   add_mem' {X Y} hX hY := by
     have hX' : P * X * P = X := by simpa using hX
     have hY' : P * Y * P = Y := by simpa using hY

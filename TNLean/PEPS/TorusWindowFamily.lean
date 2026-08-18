@@ -228,8 +228,8 @@ theorem mem_staircaseWindow {L K j : ℕ} (hxw : 2 * L ≤ width) (hyh : 2 * K �
     refine ⟨⟨?_, ?_⟩, ⟨?_, ?_⟩⟩ <;> (split_ifs at hx hy with hcx hcy <;> omega)
   · rintro ⟨⟨hx0, hx1⟩, ⟨hy0, hy1⟩⟩
     refine ⟨?_, ?_⟩
-    · rw [if_neg (by omega)]; omega
-    · rw [if_neg (by omega)]; omega
+    · rw [ite_eq_right (by omega)]; omega
+    · rw [ite_eq_right (by omega)]; omega
 
 /-! ### The subset nesting `W_j ⊆ U_j ⊆ P`
 
@@ -273,7 +273,7 @@ theorem staircaseWindow_subset_patch {L K j : ℕ} (hK : 0 < K)
     left
     rw [show ((K - 1 : ℕ) : ZMod height) = ((K - 1 : ℕ) : ZMod height) from rfl,
       zmod_val_sub_shift height v.2 s.2 (K - 1) (by omega)]
-    rw [if_neg (by omega)]
+    rw [ite_eq_right (by omega)]
     refine ⟨by omega, by omega⟩
   · -- Descending arm: the vertical band, column offset `0`.
     right
@@ -330,8 +330,8 @@ theorem biUnion_staircaseWindow_eq_patch {L K : ℕ} (hL : 0 < L) (hK : 0 < K)
     · -- Horizontal band: a sliding window `W_j`, `j = L - min (v.1 - s.1).val L`.
       rw [zmod_val_sub_shift height v.2 s.2 (K - 1) (by omega)] at hcy
       have hnw : ¬ (v.2 - s.2).val < K - 1 := by
-        intro h; rw [if_pos h] at hcy; omega
-      rw [if_neg hnw] at hcy
+        intro h; rw [ite_eq_left h] at hcy; omega
+      rw [ite_eq_right hnw] at hcy
       refine ⟨L - min (v.1 - s.1).val L, by omega, ?_⟩
       rw [mem_staircaseWindow hxw hyh]
       have hcol : L - (L - min (v.1 - s.1).val L) = min (v.1 - s.1).val L := by omega

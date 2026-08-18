@@ -165,7 +165,7 @@ theorem exists_adapted_orthonormalBasis :
             Matrix.toEuclideanLin A (b ⟨k, (i, j)⟩) = ∑ j', B k j' j • b ⟨k, (i, j')⟩ := by
   classical
   obtain ⟨C, hCfin, hCpair, hCsup, hC, hCcross⟩ := S.exists_orthogonal_isotypic_decomposition
-  haveI : Fintype ↥C := hCfin.fintype
+  have : Fintype ↥C := hCfin.fintype
   -- Each component carries an adapted orthonormal family with positive dimensions whose rows
   -- span irreducible subspaces contained in the component.
   have key : ∀ c ∈ C, ∃ (d m : ℕ) (f : Fin m × Fin d → EuclideanSpace ℂ n),

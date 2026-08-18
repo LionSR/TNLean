@@ -200,7 +200,7 @@ zero. -/
 theorem PosSemidef.eq_zero_of_neg_posSemidef
     {n : Type*} [Finite n] {X : Matrix n n ℂ}
     (hX : X.PosSemidef) (hX' : (-X).PosSemidef) : X = 0 := by
-  letI := Fintype.ofFinite n
+  let := Fintype.ofFinite n
   refine eq_zero_of_forall_star_dotProduct_mulVec_eq_zero fun x => ?_
   have h1 := hX.dotProduct_mulVec_nonneg x
   have h2 := hX'.dotProduct_mulVec_nonneg x
@@ -216,7 +216,7 @@ theorem exists_pos_real_smul_eq_of_smul_posSemidef
     {c₁ c₂ : ℂ} (h₁ : (c₁ • M).PosSemidef) (h₂ : (c₂ • M).PosSemidef)
     (hc₁ : c₁ ≠ 0) (hc₂ : c₂ ≠ 0) :
     ∃ t : ℝ, 0 < t ∧ c₁ = (t : ℂ) * c₂ := by
-  letI := Fintype.ofFinite n
+  let := Fintype.ofFinite n
   classical
   -- A nonzero scalar multiple of a nonzero matrix cannot vanish.
   have hscalar : ∀ (X : Matrix n n ℂ), X ≠ 0 → ∀ k : ℂ, k • X = 0 → k = 0 := by
@@ -401,7 +401,7 @@ theorem exists_pi_smul_posSemidef_of_finKronecker_posSemidef :
   | succ N hN ih =>
     intro α _ A hA hAne
     classical
-    haveI : NeZero N := ⟨by omega⟩
+    have : NeZero N := ⟨by omega⟩
     have hsplit : (finKronecker A).submatrix (Fin.consEquiv α) (Fin.consEquiv α) =
         (A 0) ⊗ₖ (finKronecker (Fin.tail A)) := by
       ext p q

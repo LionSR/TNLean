@@ -67,7 +67,7 @@ theorem cycleWeightSum_edgeWeight_eq (F : BeigiSectorGraphData A)
       ∑ c : F.OrderedCycle N,
         ∏ n : Fin N, F.edgeWeight (c.1 n) (c.1 (n + 1)) := by
   classical
-  letI : NeZero N := ⟨Nat.ne_of_gt hN⟩
+  let : NeZero N := ⟨Nat.ne_of_gt hN⟩
   let weight : (Fin N → Fin F.sectorCount) → ℕ := fun k ↦
     ∏ n : Fin N, F.edgeWeight (k n) (k (n + 1))
   let cycle : (Fin N → Fin F.sectorCount) → Prop := fun k ↦
@@ -122,7 +122,7 @@ theorem parentHamiltonianGroundSpaceES_finrank_eq_card_loop
     Module.finrank ℂ (parentHamiltonianGroundSpaceES A 2 N) =
       Fintype.card (Loop F.edgeWeight) := by
   have hNpos : 0 < N := by omega
-  letI : NeZero N := ⟨Nat.ne_of_gt hNpos⟩
+  let : NeZero N := ⟨Nat.ne_of_gt hNpos⟩
   have hconst := F.hasEventuallyConstantCycleWeightSum_of_parentGroundSpace hparent
   calc
     Module.finrank ℂ (parentHamiltonianGroundSpaceES A 2 N) =

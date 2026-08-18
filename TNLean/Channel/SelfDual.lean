@@ -71,7 +71,7 @@ def HilbertSchmidtOrthonormal {ι : Type*} [DecidableEq ι]
 
 namespace HilbertSchmidtOrthonormal
 
-variable {ι : Type*} [Fintype ι] [DecidableEq ι]
+variable {ι : Type*} [Finite ι] [DecidableEq ι]
 variable {σ : Module.Basis ι ℂ (Matrix (Fin D) (Fin D) ℂ)}
 
 /-- In a Hilbert-Schmidt orthonormal basis the coordinates of $X$ are the pairings
@@ -79,6 +79,7 @@ variable {σ : Module.Basis ι ℂ (Matrix (Fin D) (Fin D) ℂ)}
 theorem repr_apply (hσ : HilbertSchmidtOrthonormal (σ ·))
     (X : Matrix (Fin D) (Fin D) ℂ) (α : ι) :
     σ.repr X α = Matrix.trace ((σ α)ᴴ * X) := by
+  let _ := Fintype.ofFinite ι
   conv_rhs => rw [← σ.sum_repr X]
   rw [Matrix.mul_sum, Matrix.trace_sum]
   simp_rw [Matrix.mul_smul, Matrix.trace_smul, hσ α, smul_eq_mul, mul_ite,
@@ -141,7 +142,7 @@ theorem transferMatrixOfBasis_conjTranspose {ι : Type*}
 basis element gives \(\operatorname{tr}[\sigma_\alpha^\dagger (T - S)(\sigma_\beta)]
 = 0\), and nondegeneracy of the Hilbert-Schmidt pairing forces
 \((T - S)(\sigma_\beta) = 0\) on a basis. -/
-private theorem transferMatrixOfBasis_injective {ι : Type*} [Fintype ι] [DecidableEq ι]
+private theorem transferMatrixOfBasis_injective {ι : Type*} [Finite ι] [DecidableEq ι]
     {σ : Module.Basis ι ℂ (Matrix (Fin D) (Fin D) ℂ)}
     (hσ : HilbertSchmidtOrthonormal (σ ·)) :
     Function.Injective (transferMatrixOfBasis (D := D) (σ ·)) := by
@@ -156,13 +157,13 @@ private theorem transferMatrixOfBasis_injective {ι : Type*} [Fintype ι] [Decid
 /-- **Wolf Proposition 2.6, conditions 1 and 2**: for a Hermiticity-preserving map the
 transfer matrix in a Hilbert-Schmidt orthonormal basis used on both sides is
 Hermitian exactly when the map equals its dual. -/
-theorem transferMatrixOfBasis_isHermitian_iff {ι : Type*} [Fintype ι] [DecidableEq ι]
+theorem transferMatrixOfBasis_isHermitian_iff {ι : Type*} [Finite ι] [DecidableEq ι]
     {σ : Module.Basis ι ℂ (Matrix (Fin D) (Fin D) ℂ)}
     (hσ : HilbertSchmidtOrthonormal (σ ·))
     {T : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ}
     (hHP : ∀ X, T Xᴴ = (T X)ᴴ) :
     (transferMatrixOfBasis (σ ·) T).IsHermitian ↔ Matrix.traceAdjointMap T = T := by
-  show (transferMatrixOfBasis (σ ·) T)ᴴ = transferMatrixOfBasis (σ ·) T ↔ _
+  change (transferMatrixOfBasis (σ ·) T)ᴴ = transferMatrixOfBasis (σ ·) T ↔ _
   rw [transferMatrixOfBasis_conjTranspose (σ ·) T hHP]
   exact ⟨fun h => transferMatrixOfBasis_injective hσ h, fun h => by rw [h]⟩
 
@@ -231,8 +232,10 @@ theorem exists_hermitian_kraus_of_self_dual {r : ℕ}
     fun b b' => if b then (if b' then -Complex.I else Complex.I) else 1 with hW
   have hWunit : Wᴴ * W = (2 : ℂ) • (1 : Matrix Bool Bool ℂ) := by
     ext b b'
+    change (∑ x : Bool, star (W x b) * W x b') =
+      (2 : ℂ) * (if b = b' then 1 else 0)
     cases b <;> cases b' <;>
-      simp [hW, Matrix.mul_apply, Matrix.conjTranspose_apply, Complex.I_mul_I] <;>
+      simp [hW, Complex.I_mul_I] <;>
       norm_num
   set U : Matrix (Fin r × Bool) (Fin r × Bool) ℂ :=
     (1 : Matrix (Fin r) (Fin r) ℂ) ⊗ₖ (c • W) with hU
@@ -254,7 +257,7 @@ theorem exists_hermitian_kraus_of_self_dual {r : ℕ}
     simp only [hU, Matrix.kroneckerMap_apply, Matrix.one_apply, Matrix.smul_apply,
       smul_eq_mul, ite_mul, one_mul, zero_mul, ite_smul, zero_smul,
       Fintype.sum_prod_type, Fintype.sum_bool, Finset.sum_add_distrib,
-      Finset.sum_ite_eq, Finset.mem_univ, if_true]
+      Finset.sum_ite_eq, Finset.mem_univ, ite_true]
   have hBfalse : ∀ i : Fin r, B (i, false) = ((2 : ℂ)⁻¹) • (K i + (K i)ᴴ) := by
     intro i
     have hW1 : W false true = 1 := by simp [hW]
@@ -322,7 +325,7 @@ $T : M_d(\mathbb C) \to M_d(\mathbb C)$ the following are equivalent.
    in one Hilbert-Schmidt orthonormal basis $\sigma$ used on both sides is
    Hermitian.
 3. $T$ admits a family of Hermitian Kraus operators. -/
-theorem self_dual_tfae {ι : Type*} [Fintype ι] [DecidableEq ι]
+theorem self_dual_tfae {ι : Type*} [Finite ι] [DecidableEq ι]
     {T : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ}
     (hT : IsCPMap T)
     {σ : Module.Basis ι ℂ (Matrix (Fin D) (Fin D) ℂ)}
@@ -373,6 +376,6 @@ theorem transferMatrix_isHermitian_iff_traceAdjointMap_eq_self
     {T : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ}
     (hT : IsCPMap T) :
     (transferMatrix T).IsHermitian ↔ Matrix.traceAdjointMap T = T := by
-  show (transferMatrix T)ᴴ = transferMatrix T ↔ _
+  change (transferMatrix T)ᴴ = transferMatrix T ↔ _
   rw [transferMatrix_conjTranspose_eq_traceAdjointMap T hT.map_conjTranspose]
   exact ⟨fun h => transferMatrix_injective h, fun h => by rw [h]⟩

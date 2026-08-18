@@ -318,7 +318,7 @@ theorem regionBlockedWeight_reindexTensor (B : Tensor G d) {bd : Edge G → ℕ}
     change (((finCongr (by simpa [reindexTensor_bondDim] using congr_fun h f.1)).symm
       (ζ f.1) : Fin ((reindexTensor (G := G) B h).bondDim f.1)) : ℕ) = (bdry f : ℕ)
     rw [finCongr_symm_apply_coe]
-    simpa using congrArg Fin.val hf
+    exact (congrArg Fin.val hf).trans (Fin.val_cast _ _)
   · -- Left inverse.
     intro ζ _
     exact φ.left_inv ζ
@@ -328,8 +328,7 @@ theorem regionBlockedWeight_reindexTensor (B : Tensor G d) {bd : Edge G → ℕ}
   · -- Matching summand: products of casts agree.
     intro ζ _
     refine Finset.prod_congr rfl fun w _ => ?_
-    rw [reindexTensor_component]
-    congr 1
+    rfl
 
 open scoped Classical in
 /-- `regionInsertedCoeff` transports along a bond-dimension reindex by conjugating
@@ -346,7 +345,7 @@ theorem regionInsertedCoeff_reindexTensor (B : Tensor G d) {bd : Edge G → ℕ}
       regionInsertedCoeff (G := G) B R f
         (Matrix.reindexAlgEquiv ℂ ℂ (finCongr (congr_fun h f.1)) N) σ τ := by
   classical
-  rw [regionInsertedCoeff_eq, regionInsertedCoeff_eq]
+  unfold regionInsertedCoeff
   -- Reindex both boundary-configuration sums by casting every bond.
   refine Fintype.sum_equiv
     (Equiv.piCongrRight

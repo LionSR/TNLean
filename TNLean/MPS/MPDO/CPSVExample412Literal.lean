@@ -91,7 +91,7 @@ private lemma prod_M_diagonal :
       fin_cases a <;> fin_cases b <;> simp [configurationSign]
   | succ N ih =>
       intro σ
-      rw [List.ofFn_succ, List.prod_cons, M, if_pos rfl,
+      rw [List.ofFn_succ, List.prod_cons, M, ite_eq_left rfl,
         ih (fun i => σ i.succ), Matrix.diagonal_mul_diagonal]
       ext a b
       fin_cases a <;> fin_cases b <;>
@@ -242,7 +242,7 @@ private lemma reducedBlockState_M_apply {N L : ℕ} (hL : L ≤ N) (hN : 0 < N)
   by_cases huv : u = v
   · subst v
     simp only [Matrix.smul_apply, smul_eq_mul, Matrix.diagonal_apply_eq]
-    rw [if_true]
+    rw [ite_true]
     simp_rw [mul_add]
     rw [Finset.sum_add_distrib]
     congr 1
@@ -270,7 +270,7 @@ private lemma reducedBlockState_M_apply {N L : ℕ} (hL : L ≤ N) (hN : 0 < N)
       have hi := congrFun heq (Fin.cast hNK.symm (Fin.castAdd K i))
       simpa [Fin.append_left] using hi
     simp only [Matrix.smul_apply, smul_eq_mul]
-    rw [if_neg huv]
+    rw [ite_eq_right huv]
     apply Finset.sum_eq_zero
     intro w _
     rw [hterm w, mul_zero]
@@ -291,7 +291,7 @@ theorem reducedBlockState_M_eq_scaled_one {N L : ℕ}
   rw [reducedBlockState_M_apply hL (by omega) u v]
   by_cases huv : u = v
   · subst v
-    rw [if_pos rfl, sum_configurationSign_eq_zero (Nat.sub_pos_of_lt hLN)]
+    rw [ite_eq_left rfl, sum_configurationSign_eq_zero (Nat.sub_pos_of_lt hLN)]
     simp only [mul_zero, add_zero, Matrix.smul_apply, smul_eq_mul,
       Matrix.one_apply_eq]
     simp only [mul_one, inv_pow]
@@ -299,7 +299,7 @@ theorem reducedBlockState_M_eq_scaled_one {N L : ℕ}
     rw [← pow_add]
     congr 1
     omega
-  · rw [if_neg huv, Matrix.smul_apply, smul_eq_mul, Matrix.one_apply_ne huv, mul_zero]
+  · rw [ite_eq_right huv, Matrix.smul_apply, smul_eq_mul, Matrix.one_apply_ne huv, mul_zero]
 
 /-- The source's one-site-loss statement in its literal normalization:
 a one-site partial trace of $\rho^{(L+1)}(M)$ is proportional to the identity.

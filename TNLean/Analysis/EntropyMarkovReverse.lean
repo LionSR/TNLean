@@ -61,14 +61,14 @@ theorem liftB_mul_apply (U_B : Matrix (Fin dB) (Fin dB) ℂ)
   · rw [Fintype.sum_prod_type]
     refine Finset.sum_congr rfl fun β _ => ?_
     rw [Finset.sum_eq_single c ?_ ?_]
-    · rw [liftB_apply, if_pos rfl, if_pos rfl, one_mul, mul_one]
+    · rw [liftB_apply, ite_eq_left rfl, ite_eq_left rfl, one_mul, mul_one]
     · intro c'' _ hc''
-      rw [liftB_apply, if_neg (Ne.symm hc''), mul_zero, zero_mul]
+      rw [liftB_apply, ite_eq_right (Ne.symm hc''), mul_zero, zero_mul]
     · intro h; exact absurd (Finset.mem_univ c) h
   · intro a'' _ ha''
     refine Finset.sum_eq_zero fun bc _ => ?_
     obtain ⟨β, γ⟩ := bc
-    rw [liftB_apply, if_neg (Ne.symm ha''), zero_mul, zero_mul, zero_mul]
+    rw [liftB_apply, ite_eq_right (Ne.symm ha''), zero_mul, zero_mul, zero_mul]
   · intro h; exact absurd (Finset.mem_univ a) h
 
 /-- Entry formula for `X * (liftB U_B)ᴴ`. -/
@@ -83,16 +83,16 @@ theorem mul_liftB_conjTranspose_apply (U_B : Matrix (Fin dB) (Fin dB) ℂ)
   · rw [Fintype.sum_prod_type]
     refine Finset.sum_congr rfl fun β' _ => ?_
     rw [Finset.sum_eq_single c' ?_ ?_]
-    · rw [Matrix.conjTranspose_apply, liftB_apply, if_pos rfl, if_pos rfl,
+    · rw [Matrix.conjTranspose_apply, liftB_apply, ite_eq_left rfl, ite_eq_left rfl,
         one_mul, mul_one, Complex.star_def]
     · intro c'' _ hc''
-      rw [Matrix.conjTranspose_apply, liftB_apply, if_neg (Ne.symm hc''), mul_zero]
+      rw [Matrix.conjTranspose_apply, liftB_apply, ite_eq_right (Ne.symm hc''), mul_zero]
       simp
     · intro h; exact absurd (Finset.mem_univ c') h
   · intro a'' _ ha''
     refine Finset.sum_eq_zero fun bc _ => ?_
     obtain ⟨β', γ⟩ := bc
-    rw [Matrix.conjTranspose_apply, liftB_apply, if_neg (Ne.symm ha''), zero_mul]
+    rw [Matrix.conjTranspose_apply, liftB_apply, ite_eq_right (Ne.symm ha''), zero_mul]
     simp
   · intro h; exact absurd (Finset.mem_univ a') h
 
@@ -224,7 +224,7 @@ theorem traceAC_blockState_submatrix
   simp only [blockState_apply]
   by_cases hj : j₁ = j₂
   · subst hj
-    simp only [dif_pos, cast_eq]
+    simp only [dite_eq_left, cast_eq]
     rw [Matrix.smul_apply, Matrix.kroneckerMap_apply, smul_eq_mul,
       Matrix.traceLeft_apply, Matrix.traceRight_apply]
     rw [show (p j₁ : ℂ) * ((∑ x : Fin dA, ρ_left j₁ (x, l₁) (x, l₂))
@@ -237,7 +237,7 @@ theorem traceAC_blockState_submatrix
       rw [Finset.mul_sum, Finset.mul_sum]
       refine Finset.sum_congr rfl fun x_1 _ => ?_
       ring]
-  · simp only [dif_neg hj, Finset.sum_const_zero]
+  · simp only [dite_eq_right hj, Finset.sum_const_zero]
 
 /-! ## Entry formulas for `1_A ⊗ U_B` and `U_B ⊗ 1_C` -/
 
@@ -257,10 +257,10 @@ theorem liftAB_mul_apply (U_B : Matrix (Fin dB) (Fin dB) ℂ)
   rw [Matrix.mul_apply, Fintype.sum_prod_type]
   rw [Finset.sum_eq_single a ?_ ?_]
   · refine Finset.sum_congr rfl fun β _ => ?_
-    rw [liftAB_apply, if_pos rfl, one_mul]
+    rw [liftAB_apply, ite_eq_left rfl, one_mul]
   · intro a'' _ ha''
     refine Finset.sum_eq_zero fun β _ => ?_
-    rw [liftAB_apply, if_neg (Ne.symm ha''), zero_mul, zero_mul]
+    rw [liftAB_apply, ite_eq_right (Ne.symm ha''), zero_mul, zero_mul]
   · intro h; exact absurd (Finset.mem_univ a) h
 
 /-- Entry formula for `X * (1_A ⊗ U_B)ᴴ`. -/
@@ -273,10 +273,10 @@ theorem mul_liftAB_conjTranspose_apply (U_B : Matrix (Fin dB) (Fin dB) ℂ)
   rw [Matrix.mul_apply, Fintype.sum_prod_type]
   rw [Finset.sum_eq_single a' ?_ ?_]
   · refine Finset.sum_congr rfl fun β' _ => ?_
-    rw [Matrix.conjTranspose_apply, liftAB_apply, if_pos rfl, one_mul, Complex.star_def]
+    rw [Matrix.conjTranspose_apply, liftAB_apply, ite_eq_left rfl, one_mul, Complex.star_def]
   · intro a'' _ ha''
     refine Finset.sum_eq_zero fun β' _ => ?_
-    rw [Matrix.conjTranspose_apply, liftAB_apply, if_neg (Ne.symm ha''), zero_mul]
+    rw [Matrix.conjTranspose_apply, liftAB_apply, ite_eq_right (Ne.symm ha''), zero_mul]
     simp
   · intro h; exact absurd (Finset.mem_univ a') h
 
@@ -314,9 +314,9 @@ theorem liftBC_mul_apply (U_B : Matrix (Fin dB) (Fin dB) ℂ)
   rw [Matrix.mul_apply, Fintype.sum_prod_type]
   refine Finset.sum_congr rfl fun β _ => ?_
   rw [Finset.sum_eq_single c ?_ ?_]
-  · rw [liftBC_apply, if_pos rfl, mul_one]
+  · rw [liftBC_apply, ite_eq_left rfl, mul_one]
   · intro c'' _ hc''
-    rw [liftBC_apply, if_neg (Ne.symm hc''), mul_zero, zero_mul]
+    rw [liftBC_apply, ite_eq_right (Ne.symm hc''), mul_zero, zero_mul]
   · intro h; exact absurd (Finset.mem_univ c) h
 
 /-- Entry formula for `X * (U_B ⊗ 1_C)ᴴ`. -/
@@ -329,9 +329,9 @@ theorem mul_liftBC_conjTranspose_apply (U_B : Matrix (Fin dB) (Fin dB) ℂ)
   rw [Matrix.mul_apply, Fintype.sum_prod_type]
   refine Finset.sum_congr rfl fun β' _ => ?_
   rw [Finset.sum_eq_single c' ?_ ?_]
-  · rw [Matrix.conjTranspose_apply, liftBC_apply, if_pos rfl, mul_one, Complex.star_def]
+  · rw [Matrix.conjTranspose_apply, liftBC_apply, ite_eq_left rfl, mul_one, Complex.star_def]
   · intro c'' _ hc''
-    rw [Matrix.conjTranspose_apply, liftBC_apply, if_neg (Ne.symm hc''), mul_zero]
+    rw [Matrix.conjTranspose_apply, liftBC_apply, ite_eq_right (Ne.symm hc''), mul_zero]
     simp
   · intro h; exact absurd (Finset.mem_univ c') h
 
@@ -469,7 +469,7 @@ theorem traceC_blockState_submatrix
   simp only [blockState_apply]
   by_cases hj : j₁ = j₂
   · subst hj
-    simp only [dif_pos, cast_eq]
+    simp only [dite_eq_left, cast_eq]
     rw [Matrix.smul_apply, Matrix.kroneckerMap_apply, smul_eq_mul, Matrix.traceRight_apply]
     rw [show (p j₁ : ℂ) * (ρ_left j₁ (a₁, l₁) (a₂, l₂)
           * ∑ x : Fin dC, ρ_right j₁ (r₁, x) (r₂, x))
@@ -479,7 +479,7 @@ theorem traceC_blockState_submatrix
       rw [Finset.mul_sum, Finset.mul_sum]
       refine Finset.sum_congr rfl fun c _ => ?_
       ring]
-  · simp only [dif_neg hj, Finset.sum_const_zero]
+  · simp only [dite_eq_right hj, Finset.sum_const_zero]
 
 /-- `traceA` of the reindexed blockState equals a reindexing (via `aEquiv`) of the
 block-diagonal of weighted Kronecker products with the A-traced left components. -/
@@ -509,7 +509,7 @@ theorem traceA_blockState_submatrix
   simp only [blockState_apply]
   by_cases hj : j₁ = j₂
   · subst hj
-    simp only [dif_pos, cast_eq]
+    simp only [dite_eq_left, cast_eq]
     rw [Matrix.smul_apply, Matrix.kroneckerMap_apply, smul_eq_mul, Matrix.traceLeft_apply]
     rw [show (p j₁ : ℂ) * ((∑ x : Fin dA, ρ_left j₁ (x, l₁) (x, l₂))
           * ρ_right j₁ (r₁, c₁) (r₂, c₂))
@@ -519,7 +519,7 @@ theorem traceA_blockState_submatrix
       rw [Finset.sum_mul, Finset.mul_sum]
       refine Finset.sum_congr rfl fun a _ => ?_
       ring]
-  · simp only [dif_neg hj, Finset.sum_const_zero]
+  · simp only [dite_eq_right hj, Finset.sum_const_zero]
 
 end HayashiMarkov
 

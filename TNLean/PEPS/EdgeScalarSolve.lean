@@ -84,8 +84,9 @@ omit [DecidableRel G.Adj] in
 theorem prod_incVertex_endpoint (s : Edge G → ℂˣ) (e : Edge G) :
     (∏ x : incVertex (G := G) e, (if e.1.1 = x.1 then s e else (s e)⁻¹)) = 1 := by
   have hne : (e.1.1 : V) ≠ e.1.2 := ne_of_lt e.2.1
-  have huniv : (Finset.univ : Finset (incVertex (G := G) e)) =
-        {⟨e.1.1, Or.inl rfl⟩, ⟨e.1.2, Or.inr rfl⟩} := by
+  let x₁ : incVertex (G := G) e := ⟨e.1.1, Or.inl rfl⟩
+  let x₂ : incVertex (G := G) e := ⟨e.1.2, Or.inr rfl⟩
+  have huniv : (Finset.univ : Finset (incVertex (G := G) e)) = {x₁, x₂} := by
     ext x
     simp only [Finset.mem_univ, Finset.mem_insert, Finset.mem_singleton, true_iff]
     rcases x.2 with h | h
@@ -94,7 +95,7 @@ theorem prod_incVertex_endpoint (s : Edge G → ℂˣ) (e : Edge G) :
   rw [huniv,
     Finset.prod_insert
       (by rw [Finset.mem_singleton]; exact fun h => hne (congrArg Subtype.val h)),
-    Finset.prod_singleton, if_pos rfl, if_neg hne, mul_inv_cancel]
+    Finset.prod_singleton, ite_eq_left rfl, ite_eq_right hne, mul_inv_cancel]
 
 /-- **Necessity of the product-one condition.** For any edge-scalar family, the
 product of the oriented incidences over all vertices is `1`. -/
@@ -192,8 +193,8 @@ theorem edgeScalarUnit_incEquiv (v₀ : V) (w : (↑({v₀}ᶜ : Set V)))
   unfold edgeScalarUnit
   rw [hlift, hs]
   by_cases h : ie.1.1.1 = w
-  · rw [if_pos h, if_pos (hcond.mpr h)]
-  · rw [if_neg h, if_neg (fun hh => h (hcond.mp hh))]
+  · rw [ite_eq_left h, ite_eq_left (hcond.mpr h)]
+  · rw [ite_eq_right h, ite_eq_right (fun hh => h (hcond.mp hh))]
 
 /-- The product of oriented endpoint contributions over the `v₀`-avoiding
 incident edges of `w` equals the oriented incidence of `s'` in the
@@ -370,10 +371,10 @@ theorem unit_at_v0 (v₀ w₀ : V) (hadj : G.Adj v₀ w₀) (t : V → ℂˣ) (s
   rcases lt_or_gt_of_ne hne with h | h
   · have hl : (edge0 (G := G) v₀ w₀ hadj).1.1 = v₀ := by
       change min v₀ w₀ = v₀; exact min_eq_left h.le
-    rw [if_pos hl, if_pos h]
+    rw [ite_eq_left hl, ite_eq_left h]
   · have hl : ¬ (edge0 (G := G) v₀ w₀ hadj).1.1 = v₀ := by
       change ¬ min v₀ w₀ = v₀; rw [min_eq_right h.le]; exact ne_of_lt h
-    rw [if_neg hl, if_neg (not_lt.mpr h.le), inv_inv]
+    rw [ite_eq_right hl, ite_eq_right (not_lt.mpr h.le), inv_inv]
 
 omit [Fintype V] [DecidableRel G.Adj] in
 /-- When `s` carries the chosen scalar `t v₀^{±}` on the edge `{v₀, w₀}`, the
@@ -388,10 +389,10 @@ theorem unit_at_w0 (v₀ w₀ : V) (hadj : G.Adj v₀ w₀) (t : V → ℂˣ) (s
   rcases lt_or_gt_of_ne hne with h | h
   · have hl : ¬ (edge0 (G := G) v₀ w₀ hadj).1.1 = w₀ := by
       change ¬ min v₀ w₀ = w₀; rw [min_eq_left h.le]; exact ne_of_lt h
-    rw [if_neg hl, if_pos h]
+    rw [ite_eq_right hl, ite_eq_left h]
   · have hl : (edge0 (G := G) v₀ w₀ hadj).1.1 = w₀ := by
       change min v₀ w₀ = w₀; exact min_eq_right h.le
-    rw [if_pos hl, if_neg (not_lt.mpr h.le)]
+    rw [ite_eq_left hl, ite_eq_right (not_lt.mpr h.le)]
 
 /-! ### Existence: solving the oriented incidence equation -/
 
@@ -434,11 +435,11 @@ theorem exists_edgeScalars_aux : ∀ (n : ℕ),
           rw [← Finset.mul_prod_erase Finset.univ t' (Finset.mem_univ W₀),
               ← Finset.mul_prod_erase Finset.univ (fun w : (↑({v₀}ᶜ : Set V)) => t (w : V))
                 (Finset.mem_univ W₀)]
-          have hW₀val : t' W₀ = t (W₀ : V) * t v₀ := by rw [ht'val, if_pos rfl, hW₀]
+          have hW₀val : t' W₀ = t (W₀ : V) * t v₀ := by rw [ht'val, ite_eq_left rfl, hW₀]
           have herase : (∏ w ∈ Finset.univ.erase W₀, t' w)
               = ∏ w ∈ Finset.univ.erase W₀, t (w : V) :=
             Finset.prod_congr rfl fun w hw => by
-              rw [ht'val, if_neg (Finset.ne_of_mem_erase hw)]
+              rw [ht'val, ite_eq_right (Finset.ne_of_mem_erase hw)]
           rw [hW₀val, herase, mul_assoc, mul_comm (t v₀), ← mul_assoc]
         rw [stepA]
         have stepB : (∏ w : (↑({v₀}ᶜ : Set V)), t (w : V))
@@ -463,23 +464,23 @@ theorem exists_edgeScalars_aux : ∀ (n : ℕ),
         intro e'
         have h1 : (liftEdge (G := G) v₀ e').1.1 ≠ v₀ := liftEdge_ne_fst (G := G) v₀ e'
         have h2 : (liftEdge (G := G) v₀ e').1.2 ≠ v₀ := liftEdge_ne_snd (G := G) v₀ e'
-        rw [hsdef]; simp only []; rw [dif_pos ⟨h1, h2⟩]; congr 1
+        rw [hsdef]; simp only []; rw [dite_eq_left ⟨h1, h2⟩]; congr 1
       -- `s` is `1` on every `v₀`-incident edge other than `{v₀, w₀}`.
       have hs_one : ∀ e : Edge G, v0Inc (G := G) v₀ e →
           e.1 ≠ (min v₀ w₀, max v₀ w₀) → s e = 1 := by
         intro e hv0 hne
         rw [hsdef]; simp only []
-        rw [dif_neg (by rintro ⟨ha, hb⟩; rcases hv0 with h | h; exacts [ha h, hb h]),
-          if_neg hne]
+        rw [dite_eq_right (by rintro ⟨ha, hb⟩; rcases hv0 with h | h; exacts [ha h, hb h]),
+          ite_eq_right hne]
       -- `s` on the chosen edge.
       have hs0 : s (edge0 (G := G) v₀ w₀ hadj)
           = (if v₀ < w₀ then t v₀ else (t v₀)⁻¹) := by
         rw [hsdef]; simp only []
-        rw [dif_neg (by
+        rw [dite_eq_right (by
           rintro ⟨ha, hb⟩
           rcases edge0_v0Inc (G := G) v₀ w₀ hadj with h | h
           exacts [ha h, hb h]),
-          if_pos (show (edge0 (G := G) v₀ w₀ hadj).1 = (min v₀ w₀, max v₀ w₀) from rfl)]
+          ite_eq_left (show (edge0 (G := G) v₀ w₀ hadj).1 = (min v₀ w₀, max v₀ w₀) from rfl)]
       refine ⟨s, fun v => ?_⟩
       by_cases hv : v = v₀
       · -- The chosen vertex `v₀`.
@@ -498,10 +499,10 @@ theorem exists_edgeScalars_aux : ∀ (n : ℕ),
           have hsplit := v0Inc_prod_w0 (G := G) v₀ w₀ hadj hw₀ne s
           rw [hvw₀] at *
           rw [hsplit, unit_at_w0 (G := G) v₀ w₀ hadj t s hs0 (edge0_inc_w0 (G := G) v₀ w₀ hadj)]
-          rw [ht'val, if_pos hwW₀]
+          rw [ht'val, ite_eq_left hwW₀]
           rw [mul_comm, mul_assoc, mul_inv_cancel, mul_one]
         · rw [v0Inc_prod_ne (G := G) v₀ w₀ v hv hvw₀ s hs_one, one_mul]
-          rw [ht'val, if_neg (by rw [hwdef]; intro hc; exact hvw₀ (congrArg Subtype.val hc))]
+          rw [ht'val, ite_eq_right (by rw [hwdef]; intro hc; exact hvw₀ (congrArg Subtype.val hc))]
 
 /-- **Edge-scalar solve on a connected graph.** For a connected simple graph and
 any vertex-scalar family `t : V → ℂˣ` whose product over all vertices is `1`,

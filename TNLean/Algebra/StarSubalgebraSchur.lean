@@ -122,7 +122,7 @@ theorem exists_eq_smul_of_commute_of_irreducible
   -- `f` restricts to an operator on the irreducible piece `p`.
   have hmaps : ∀ x ∈ p, f x ∈ p :=
     (Module.End.mem_invtSubmodule_iff_forall_mem_of_mem (f := f)).mp hf
-  haveI hpnt : Nontrivial p := Submodule.nontrivial_iff_ne_bot.mpr hpne
+  have hpnt : Nontrivial p := Submodule.nontrivial_iff_ne_bot.mpr hpne
   -- Over `ℂ` the restricted operator has an eigenvalue, hence an eigenvector inside `p`.
   obtain ⟨c, hc⟩ := Module.End.exists_eigenvalue (f.restrict hmaps)
   obtain ⟨w, hw_mem, hw_ne⟩ := hc.exists_hasEigenvector

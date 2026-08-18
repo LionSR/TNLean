@@ -503,7 +503,7 @@ private theorem cyclicActiveSectorTraceMatrix_isIrreducible_of_reflTransGen
         (fun a b : F.CyclicActiveSector ↦ F.neighboringOperator a b ≠ 0) q h) :
     Matrix.IsIrreducible F.cyclicActiveSectorTraceMatrix := by
   classical
-  letI : Quiver F.CyclicActiveSector :=
+  let : Quiver F.CyclicActiveSector :=
     Matrix.toQuiver F.cyclicActiveSectorTraceMatrix
   refine ⟨F.activeSectorTraceMatrix_nonneg F.cyclicActiveWeight hpos, ?_⟩
   have hconnected : Quiver.IsStronglyConnected F.CyclicActiveSector := by
@@ -856,7 +856,7 @@ theorem exists_pos_trace_mpo_selectedFixedProduct_of_isSourceZCL
     data.bondData.fixedProductTensorDataPhysicalSectorFactorization
   let U := F.physicalCoordinateMatrix
   let M := PhysicalSectorFactorization.changePhysicalBasis U K
-  letI : NeZero N := ⟨by omega⟩
+  let : NeZero N := ⟨by omega⟩
   have hpos : ∀ q h, (F.neighboringOperator q h).PosSemidef :=
     data.bondData.fixedProductTensorDataPhysicalSectorFactorization_neighboring_pos
   obtain ⟨c, _, hclosed⟩ :=

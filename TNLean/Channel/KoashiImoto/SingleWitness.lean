@@ -85,7 +85,7 @@ theorem exists_preservingKrausFamily_adjointFixedPointsStarSubalgebra_eq
       adjointFixedPointsStarSubalgebra F₀.Kfam F₀.isPreserving.1 hρbar F₀.map_commonAverage
         = commonInvariantStarSubalgebra ρ hρbar := by
   obtain ⟨S, hS, hSeq⟩ := exists_finset_preservingKrausFamily_iInf_eq ρ hρbar
-  haveI : NeZero S.card := ⟨hS.card_pos.ne'⟩
+  have : NeZero S.card := ⟨hS.card_pos.ne'⟩
   refine ⟨averagedPreservingKrausFamily (fun k => (S.equivFin.symm k : PreservingKrausFamily ρ)),
     ?_⟩
   rw [adjointFixedPointsStarSubalgebra_averaged_eq_iInf]

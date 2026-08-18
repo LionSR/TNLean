@@ -98,9 +98,9 @@ private lemma sum_powers_fin_of_pow_eq_one (x : ℂ) (hxpow : x ^ m = 1) :
     ∑ k : Fin m, x ^ (k : ℕ) = if x = 1 then (m : ℂ) else 0 := by
   by_cases hx : x = 1
   · subst hx
-    rw [if_pos rfl, Fin.sum_univ_eq_sum_range]
+    rw [ite_eq_left rfl, Fin.sum_univ_eq_sum_range]
     simp only [one_pow, sum_const, card_range, nsmul_eq_mul, mul_one]
-  · rw [if_neg hx, Fin.sum_univ_eq_sum_range]
+  · rw [ite_eq_right hx, Fin.sum_univ_eq_sum_range]
     have hmul : (Finset.sum (Finset.range m) fun i => x ^ i) * (x - 1) = 0 := by
       simpa [hxpow] using (geom_sum_mul x m)
     exact (mul_eq_zero.mp hmul).resolve_right (sub_ne_zero.mpr hx)
@@ -137,7 +137,7 @@ private lemma coeff_sum_proj_of_primitiveRoot {γ : ℂ} (hγprim : IsPrimitiveR
         (hγinv_prim.pow_eq_one_iff_dvd j).mp (by
           simpa [star_eq_inv_of_primitiveRoot (m := m) hγprim] using hpow)
       exact hj0 (Nat.eq_zero_of_dvd_of_lt hdvd hj)
-    rw [if_neg hne, if_neg hj0]
+    rw [ite_eq_right hne, ite_eq_right hj0]
 
 /-- Convert the spectral reconstruction coefficients to a finite geometric sum. -/
 private lemma cyclic_projection_step1_coeff_sum_spec_geometric {γ : ℂ}
@@ -199,7 +199,7 @@ private lemma coeff_sum_spec_of_primitiveRoot {γ : ℂ} (hγprim : IsPrimitiveR
             γ ^ cyclicOneIdx (m := m) * (star γ) ^ cyclicOneIdx (m := m) := by
           rw [pow_oneIdx_of_primitiveRoot (m := m) hγprim]
         _ = 1 := pow_mul_star_pow_of_primitiveRoot (m := m) hγprim (cyclicOneIdx (m := m))
-    rw [if_pos hx, if_pos rfl]
+    rw [ite_eq_left hx, ite_eq_left rfl]
   · have hne : γ * (star γ) ^ j ≠ 1 := by
       intro hx
       have hpoweq : γ ^ cyclicOneIdx (m := m) = γ ^ j := by
@@ -214,7 +214,7 @@ private lemma coeff_sum_spec_of_primitiveRoot {γ : ℂ} (hγprim : IsPrimitiveR
       have hidxeq : cyclicOneIdx (m := m) = j :=
         hγprim.injOn_pow honeIdx_mem (by simp only [coe_range, Set.mem_Iio, hj]) hpoweq
       exact hjeq hidxeq.symm
-    rw [if_neg hne, if_neg hjeq]
+    rw [ite_eq_right hne, ite_eq_right hjeq]
 
 /-- Multiplying by `γ` shifts the conjugate phase by one cyclic step. -/
 private lemma base_cyclic_of_primitiveRoot {γ : ℂ} (hγprim : IsPrimitiveRoot γ m)
@@ -629,7 +629,7 @@ private lemma unitary_eq_sum_cyclicProjection {γ : ℂ} (hγprim : IsPrimitiveR
             have hif : (if j = cyclicOneIdx (m := m) then (m : ℂ) else 0) = 0 := by
               by_cases hjeq : j = cyclicOneIdx (m := m)
               · exact (hj0 hjeq).elim
-              · exact if_neg hjeq
+              · exact ite_eq_right hjeq
             rw [hif]
             simp only [zero_smul]
           · intro hnot

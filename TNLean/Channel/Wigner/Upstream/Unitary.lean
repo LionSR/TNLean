@@ -69,7 +69,7 @@ the conjugate transpose. Euclidean (`PiLp 2`) companion to Mathlib's
 `Matrix.UnitaryGroup.toLinearEquiv` (which is for `Fin N → ℂ`). -/
 noncomputable def toEuclideanLinearEquiv (A : Matrix.unitaryGroup (Fin N) ℂ) :
     EuclideanSpace ℂ (Fin N) ≃ₗ[ℂ] EuclideanSpace ℂ (Fin N) :=
-  LinearEquiv.ofLinear
+  LinearEquiv.ofLinearMap
     (Matrix.toEuclideanLin (A.val : Matrix (Fin N) (Fin N) ℂ))
     (Matrix.toEuclideanLin (star A.val : Matrix (Fin N) (Fin N) ℂ))
     (by

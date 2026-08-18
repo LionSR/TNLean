@@ -5,7 +5,6 @@ Authors: Sirui Lu
 -/
 import TNLean.Channel.MaximalOverlap
 import TNLean.Channel.Schwarz.ChoiCompression
-import TNLean.Algebra.MatrixRankBaseChange
 
 /-!
 # The map `T_η` and strictness of the n-positivity chain
@@ -310,7 +309,8 @@ theorem normSq_omega_overlap_le [NeZero D] {k : ℕ} (hk1 : 1 ≤ k) (hk : k < D
       rw [HasSchmidtRankLE, schmidtRank] at hrank ⊢
       rw [hφ, show schmidtCoeffMatrix ((s : ℂ)⁻¹ • ψ)
           = (s : ℂ)⁻¹ • schmidtCoeffMatrix ψ from rfl,
-        rank_smul_of_ne_zero (by simp [ne_of_gt hspos])]
+        Matrix.rank_smul_of_mem_nonZeroDivisors (schmidtCoeffMatrix ψ)
+          (mem_nonZeroDivisors_of_ne_zero (by simp [ne_of_gt hspos]))]
       exact hrank
     -- The maximal-overlap bound for the normalized `φ` (Wolf Lemma 3.1).
     have hΩnorm : star (omegaVec D) ⬝ᵥ (omegaVec D) = 1 := by

@@ -44,6 +44,8 @@ open scoped Matrix BigOperators ComplexOrder
 
 namespace MPOTensor.ActiveSectorSpanningCounterexample
 
+attribute [local instance] Classical.decEq Classical.propDecidable
+
 /-- The closed left-sector vectors. -/
 noncomputable def leftPairing : Matrix (Fin 2) (Fin 4) ℂ :=
   !![1 / 4, 1 / 4, 1 / 4, 1 / 4;
@@ -102,8 +104,10 @@ lemma sectorMatrix_span_eq_top : Submodule.span ℂ (Set.range sectorMatrix) = �
     X 0 0 - 8 * X 0 1 - (1 / 4) * X 1 0 + 2 * X 1 1]
   have hsum : X = ∑ k, c k • sectorMatrix k := by
     ext i j
+    change X i j = ∑ k : Fin 4, c k * sectorMatrix k i j
     fin_cases i <;> fin_cases j <;>
-      simp [c, sectorMatrix, leftPairing, rightPairing, Fin.sum_univ_four] <;> ring
+      simp [c, sectorMatrix, leftPairing, rightPairing, Fin.sum_univ_four] <;>
+      ring_nf
   rw [hsum]
   exact Submodule.sum_mem _ fun k _ =>
     Submodule.smul_mem _ _ (Submodule.subset_span (Set.mem_range_self k))
@@ -123,9 +127,9 @@ lemma tensor_isInjective : tensor.IsInjective := by
 
 lemma physTraceTransfer_tensor : physTraceTransfer tensor = leftPairing * rightPairing := by
   ext i j
-  fin_cases i <;> fin_cases j <;>
-    simp [physTraceTransfer, tensor, sectorMatrix, leftPairing, rightPairing,
-      Fin.sum_univ_four, Matrix.mul_apply]
+  change (∑ k : Fin 4, leftPairing i k * rightPairing k j) =
+    ∑ k : Fin 4, leftPairing i k * rightPairing k j
+  rfl
 
 lemma physTraceTransfer_tensor_idempotent :
     physTraceTransfer tensor * physTraceTransfer tensor = physTraceTransfer tensor := by
@@ -246,10 +250,8 @@ lemma reindex_activeSectorTraceMatrix :
   simp only [Matrix.reindex_apply, Matrix.map_apply]
   change (factorization.neighboringOperator k h).trace.re = ((rightPairing * leftPairing) k h).re
   rw [neighboringOperator_eq]
-  have hcard : Fintype.card (factorization.NeighborIndex k h) = 1 := by
-    change Fintype.card (Fin 1 × Fin 1) = 1
-    simp
-  simp [Matrix.trace, hcard]
+  change (∑ _ : Fin 1 × Fin 1, (rightPairing * leftPairing) k h).re = _
+  simp
 
 /-- The active-sector trace matrix is not idempotent. -/
 lemma activeSectorTraceMatrix_ne_idempotent :

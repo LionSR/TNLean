@@ -789,7 +789,7 @@ theorem mpo_R_entry_formula {N : ℕ} (hN : 0 < N) (p q : Fin N → Fin 4) :
       chainIndicator (n + 1) p q * wN (n + 1) (φ (n + 1) p) (φ (n + 1) q) := by
     by_cases hChain : ChainOK (n + 1) p ∧ ChainOK (n + 1) q
     · have hall : ∀ i : Fin (n + 1), g i = wMat (bondBit2 (p i)) (bondBit2 (q i)) := fun i => by
-        rw [hgterm, if_pos ⟨hChain.1 i, hChain.2 i⟩]
+        rw [hgterm, ite_eq_left ⟨hChain.1 i, hChain.2 i⟩]
       have hprodeq : (∏ i : Fin (n + 1), g i) =
           ∏ i : Fin (n + 1), wMat (bondBit2 (p i)) (bondBit2 (q i)) :=
         Finset.prod_congr rfl fun i _ => hall i
@@ -817,12 +817,12 @@ theorem mpo_R_entry_formula {N : ℕ} (hN : 0 < N) (p q : Fin N → Fin 4) :
         push Not at hp
         obtain ⟨i0, hi0⟩ := hp
         exact Finset.prod_eq_zero (Finset.mem_univ i0)
-          (by rw [hgterm, if_neg (fun h => hi0 h.1)])
+          (by rw [hgterm, ite_eq_right (fun h => hi0 h.1)])
       · unfold ChainOK at hq
         push Not at hq
         obtain ⟨i0, hi0⟩ := hq
         exact Finset.prod_eq_zero (Finset.mem_univ i0)
-          (by rw [hgterm, if_neg (fun h => hi0 h.2)])
+          (by rw [hgterm, ite_eq_right (fun h => hi0 h.2)])
   rw [hmain, pow_succ]
   ring
 

@@ -382,9 +382,9 @@ private lemma permMatrix_apply' {n : Type*} [DecidableEq n] (σ : Equiv.Perm n)
   rw [Equiv.Perm.permMatrix]
   by_cases h : j = σ i
   · subst h
-    rw [if_pos rfl, PEquiv.toMatrix_apply, Equiv.toPEquiv_apply]
+    rw [ite_eq_left rfl, PEquiv.toMatrix_apply, Equiv.toPEquiv_apply]
     simp
-  · rw [if_neg h, PEquiv.toMatrix_apply, Equiv.toPEquiv_apply]
+  · rw [ite_eq_right h, PEquiv.toMatrix_apply, Equiv.toPEquiv_apply]
     simp only [Option.mem_def, Option.some.injEq, ite_eq_right_iff,
       one_ne_zero, imp_false]
     exact fun heq => h heq.symm

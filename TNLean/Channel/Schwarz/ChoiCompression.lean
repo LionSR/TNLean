@@ -6,7 +6,6 @@ Authors: Sirui Lu
 import TNLean.Channel.SchmidtRank
 import TNLean.Channel.Schwarz.PositiveOnAbelian.Basic
 import TNLean.Channel.Schwarz.TwoPositive
-import TNLean.Algebra.MatrixRankBaseChange
 import Mathlib.Analysis.InnerProductSpace.Positive
 import Mathlib.Analysis.InnerProductSpace.Projection.Basic
 import Mathlib.Analysis.InnerProductSpace.PiL2
@@ -173,7 +172,7 @@ theorem exists_mul_conjTranspose_of_isHermitian_idempotent_rank
     · exact (Matrix.isSymmetric_toEuclideanLin_iff (A := P)).mpr hP
   obtain ⟨horth, hp_eq⟩ :=
     LinearMap.isSymmetricProjection_iff_eq_coe_starProjection_range.mp hp
-  letI : (LinearMap.range p).HasOrthogonalProjection := horth
+  let : (LinearMap.range p).HasOrthogonalProjection := horth
   have hrange : Module.finrank ℂ (LinearMap.range p) = k := by
     have hrank_range0 :
         P.rank = Module.finrank ℂ (LinearMap.range
@@ -194,9 +193,14 @@ theorem exists_mul_conjTranspose_of_isHermitian_idempotent_rank
   refine ⟨V, ?_⟩
   apply Matrix.toEuclideanLin.injective
   have hVV : V * Vᴴ = ∑ j : Fin k, Matrix.vecMulVec (b j : E) (star (b j : E)) := by
-    dsimp [V]
     ext a c
-    simp [Matrix.mul_apply, Matrix.conjTranspose_apply, Matrix.sum_apply, Matrix.vecMulVec]
+    calc
+      (V * Vᴴ) a c = ∑ j, V a j * star (V c j) := by
+        rw [Matrix.mul_apply]
+        rfl
+      _ = (∑ j : Fin k, Matrix.vecMulVec (b j : E) (star (b j : E))) a c := by
+        rw [Matrix.sum_apply]
+        rfl
   have hsum_rankOne :
       Matrix.toEuclideanLin (V * Vᴴ) =
         ∑ j : Fin k, (InnerProductSpace.rankOne ℂ (b j : E) (b j : E) : E →ₗ[ℂ] E) := by
@@ -264,7 +268,7 @@ theorem exists_isHermitian_idempotent_rank_mul_eq_self
   have hkE : k ≤ Module.finrank ℂ (EuclideanSpace ℂ (Fin D)) := by
     simpa using hkD
   obtain ⟨U, hWU, hUfin⟩ := Submodule.exists_le_finrank_eq W hWfin hkE
-  letI : U.HasOrthogonalProjection := inferInstance
+  let : U.HasOrthogonalProjection := inferInstance
   let p : EuclideanSpace ℂ (Fin D) →ₗ[ℂ] EuclideanSpace ℂ (Fin D) :=
     (U.starProjection : EuclideanSpace ℂ (Fin D) →ₗ[ℂ] EuclideanSpace ℂ (Fin D))
   let P : Matrix (Fin D) (Fin D) ℂ := Matrix.toEuclideanLin.symm p
@@ -354,7 +358,7 @@ theorem rightTensorMatrix_mul_conjTranspose_eq_conjTranspose_mul_self
   by_cases hij : i = j
   · subst j
     simp only [rightTensorMatrix, Matrix.of_apply, Matrix.mul_apply, Matrix.conjTranspose_apply,
-      if_true]
+      ite_true]
     rw [Fintype.sum_prod_type]
     simp [mul_comm]
   · simp only [rightTensorMatrix, Matrix.of_apply, Matrix.mul_apply, Matrix.conjTranspose_apply]
@@ -511,7 +515,8 @@ theorem compressedOmegaVector_schmidtRank_eq_rank [NeZero D]
     ext i p
     simp [Matrix.schmidtCoeffMatrix, compressedOmegaVector, c]
   rw [Matrix.schmidtRank, hcoeff]
-  exact Matrix.rank_smul_of_ne_zero hc_ne X
+  exact Matrix.rank_smul_of_mem_nonZeroDivisors X
+    (mem_nonZeroDivisors_of_ne_zero hc_ne)
 
 /-- The vector obtained by applying a `D × k` matrix on the right tensor factor
 of the maximally entangled vector has Schmidt rank at most `k`. -/

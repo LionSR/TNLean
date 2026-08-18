@@ -125,7 +125,7 @@ theorem hasGSNNCHForm_of_bntLayerOrthogonal_of_physicalSectorFactorization
     exact S.mpo_eq_sum_coeff_basisMPOTensor M hM (by omega) u v
   have hSectorNe : ∀ s, mpo (K s) N ≠ 0 := by
     intro s hzero
-    letI : NeZero (S.basisDim s) := ⟨Nat.ne_of_gt (hBasisDim s)⟩
+    let : NeZero (S.basisDim s) := ⟨Nat.ne_of_gt (hBasisDim s)⟩
     have hmpv : (MPSTensor.mpv (K s).toMPSTensor :
         MPSTensor.NSiteSpace (d * d) N) ≠ 0 := by
       apply MPSTensor.mpv_ne_zero_of_isNBlkInjective

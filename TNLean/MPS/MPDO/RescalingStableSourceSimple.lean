@@ -58,10 +58,16 @@ theorem toMPSTensor_blockTensor_R_one :
     (MPOTensor.blockTensor R 1).toMPSTensor =
       MPSTensor.reindexPhysical oneSiteDoubledEquiv R.toMPSTensor := by
   funext ij
-  simp [MPSTensor.reindexPhysical, MPOTensor.toMPSTensor,
-    MPOTensor.blockTensor_apply, MPSTensor.wordOfBlock_one,
-    MPOTensor.evalWord, oneSiteDoubledEquiv]
-  rw [MPSTensor.finProdFinEquiv_divNat, MPSTensor.finProdFinEquiv_modNat]
+  change
+    R (MPSTensor.singleBlockEquiv 4 ij.divNat)
+        (MPSTensor.singleBlockEquiv 4 ij.modNat) * 1 =
+      R (finProdFinEquiv
+          (MPSTensor.singleBlockEquiv 4 ij.divNat,
+            MPSTensor.singleBlockEquiv 4 ij.modNat)).divNat
+        (finProdFinEquiv
+          (MPSTensor.singleBlockEquiv 4 ij.divNat,
+            MPSTensor.singleBlockEquiv 4 ij.modNat)).modNat
+  rw [mul_one, MPSTensor.finProdFinEquiv_divNat, MPSTensor.finProdFinEquiv_modNat]
 
 private theorem R_mpo_ne_zero (N : ℕ) (hN : 0 < N) : mpo R N ≠ 0 := by
   intro hzero

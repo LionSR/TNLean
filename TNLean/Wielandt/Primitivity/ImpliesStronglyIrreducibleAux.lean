@@ -290,7 +290,7 @@ theorem posSemidef_pow_fixedPoint_unique_of_isPrimitivePaper
   -- Step 2: Handle trivial dimension case
   by_cases hD : D = 0
   · exact ⟨1, by ext i; exact (Fin.elim0 (hD ▸ i))⟩
-  · haveI : Nonempty (Fin D) := ⟨⟨0, Nat.pos_of_ne_zero hD⟩⟩
+  · have : Nonempty (Fin D) := ⟨⟨0, Nat.pos_of_ne_zero hD⟩⟩
     -- Step 3: Critical scalar — find c₀ > 0 with τ = σ - c₀ • ρ PSD but not PosDef
     obtain ⟨c₀, _, hτ_psd, hτ_not_pd⟩ := exists_critical_scalar hρ_pd hσ_pd
     set τ := σ - (↑c₀ : ℂ) • ρ with hτ_def
@@ -418,7 +418,7 @@ theorem hermitian_pow_fixedPoint_eq_zero_of_trace_eq_zero_of_isPrimitivePaper [N
   have hρ₀_pd :=
     posDef_fixedPoint_of_pow_of_isPrimitivePaper A hq hρ₀_psd hρ₀_ne hp hρ₀_pow_fix
   -- Step 4: trace(ρ₀) ≠ 0
-  haveI : Nonempty (Fin D) := ⟨⟨0, hDpos⟩⟩
+  have : Nonempty (Fin D) := ⟨⟨0, hDpos⟩⟩
   have hρ₀_tr : Matrix.trace ρ₀ ≠ 0 := by
     intro htr0
     exact hρ₀_ne ((Matrix.PosSemidef.trace_eq_zero_iff hρ₀_psd).mp htr0)

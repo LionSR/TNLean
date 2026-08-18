@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import Mathlib.Analysis.CStarAlgebra.Matrix
 import Mathlib.Analysis.SpecialFunctions.ContinuousFunctionalCalculus.Rpow.Basic
 import TNLean.Algebra.MatrixAux
 import TNLean.Algebra.FrobeniusHilbert
@@ -79,19 +80,6 @@ variable {D : ℕ}
 local notation "Mat" => Matrix (Fin D) (Fin D) ℂ
 
 open scoped Matrix.Norms.L2Operator
-
-private local instance instRenyiTwoNormedRing : NormedRing Mat :=
-  Matrix.instL2OpNormedRing
-private local instance instRenyiTwoNormedAlgebra : NormedAlgebra ℂ Mat :=
-  Matrix.instL2OpNormedAlgebra
-private local instance instRenyiTwoCStarRing : CStarRing Mat :=
-  Matrix.instCStarRing
-private local instance instRenyiTwoPartialOrder : PartialOrder Mat :=
-  Matrix.instPartialOrder
-private local instance instRenyiTwoStarOrderedRing : StarOrderedRing Mat :=
-  Matrix.instStarOrderedRing
-private local instance instRenyiTwoCStarAlgebra : CStarAlgebra Mat :=
-  CStarAlgebra.mk
 
 namespace Matrix.PosSemidef
 

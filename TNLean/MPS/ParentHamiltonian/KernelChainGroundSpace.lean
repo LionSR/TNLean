@@ -33,7 +33,7 @@ theorem ker_parentHamiltonian_le_chainGroundSpace
     (A : MPSTensor d D) {L N : ℕ} (hN : 0 < N) (hLN : L ≤ N) :
     LinearMap.ker (parentHamiltonian A L N) ≤ chainGroundSpace A L N := by
   intro ψ hψ
-  rw [chainGroundSpace, dif_pos ⟨hN, hLN⟩]
+  rw [chainGroundSpace, dite_eq_left ⟨hN, hLN⟩]
   simp only [Submodule.mem_iInf, Submodule.mem_comap]
   intro i τ
   let eN := WithLp.linearEquiv 2 ℂ (NSiteSpace d N)

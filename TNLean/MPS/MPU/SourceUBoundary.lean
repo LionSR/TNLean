@@ -75,7 +75,7 @@ theorem sourceU_boundary_sandwich
   have h₁ := sourceX₁_weighted_isometry_apply U ρ hρ r' r
   simp only [sourceWeight, Matrix.kronecker_apply, Matrix.one_apply, mul_ite,
     mul_one, mul_zero, ite_mul, zero_mul, Finset.sum_ite_eq',
-    Finset.mem_univ, if_true, Fintype.sum_prod_type] at h₁
+    Finset.mem_univ, ite_true, Fintype.sum_prod_type] at h₁
   rw [Finset.sum_comm] at h₁
   have h₁' :
       (∑ j : Fin d, ∑ α : Fin D,

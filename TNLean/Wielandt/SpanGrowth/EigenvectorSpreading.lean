@@ -202,7 +202,7 @@ theorem cumulativeVectorSpan_finrank_strict_mono (A : MPSTensor d D) (φ : Fin D
     (h : cumulativeVectorSpan A φ n < cumulativeVectorSpan A φ (n + 1)) :
     Module.finrank ℂ (cumulativeVectorSpan A φ n) <
     Module.finrank ℂ (cumulativeVectorSpan A φ (n + 1)) := by
-  haveI : FiniteDimensional ℂ ↥(cumulativeVectorSpan A φ (n + 1)) :=
+  have : FiniteDimensional ℂ ↥(cumulativeVectorSpan A φ (n + 1)) :=
     FiniteDimensional.finiteDimensional_submodule _
   exact Submodule.finrank_lt_finrank_of_lt h
 
@@ -287,7 +287,7 @@ theorem cumulativeVectorSpan_finrank_pos (A : MPSTensor d D)
   have hne : cumulativeVectorSpan A φ 0 ≠ ⊥ := by
     rw [Submodule.ne_bot_iff]
     exact ⟨φ, phi_mem_cumulativeVectorSpan A φ 0, hφ⟩
-  haveI : FiniteDimensional ℂ ↥(cumulativeVectorSpan A φ 0) :=
+  have : FiniteDimensional ℂ ↥(cumulativeVectorSpan A φ 0) :=
     FiniteDimensional.finiteDimensional_submodule _
   rw [Nat.pos_iff_ne_zero]
   intro h0

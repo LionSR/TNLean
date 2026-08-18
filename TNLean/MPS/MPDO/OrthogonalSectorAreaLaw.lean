@@ -64,8 +64,8 @@ private theorem firstSiteMatrix_mul_embed_twoSiteSectorProjection_zero
       exact (hcons x k hk).symm
   by_cases hAgree :
       AgreesOutsideWindow (d := d) 2 (by omega) (0 : Fin (n + 1)) σ τ
-  · simp_rw [if_pos ((hagree _).mpr hAgree)]
-    rw [if_pos hAgree]
+  · simp_rw [ite_eq_left ((hagree _).mpr hAgree)]
+    rw [ite_eq_left hAgree]
     simp only [twoSiteSectorProjection, MPSTensor.extractWindow,
       finTwoArrowEquiv, Matrix.reindex_apply]
     let i₁ : Fin (n + 1) :=
@@ -94,8 +94,8 @@ private theorem firstSiteMatrix_mul_embed_twoSiteSectorProjection_zero
         ring
       _ = P (σ 0) (τ 0) * P (σ i₁) (τ i₁) := by
         rw [← Matrix.mul_apply, hP]
-  · simp_rw [if_neg ((hagree _).not.mpr hAgree)]
-    rw [if_neg hAgree]
+  · simp_rw [ite_eq_right ((hagree _).not.mpr hAgree)]
+    rw [ite_eq_right hAgree]
     simp
 
 private theorem ProportionalOrthogonalCommutingSectorFamily.firstSiteMatrix_mul_mpo

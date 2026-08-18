@@ -92,7 +92,7 @@ theorem padSecondFactor_cornerEmbed (h : d' ≤ d) (ψ : Fin d × Fin d' → ℂ
   | mk i j =>
     have hj : ((Fin.castLE h j : Fin d) : ℕ) < d' := by simp [Fin.castLE]
     have hidx : (⟨((Fin.castLE h j : Fin d) : ℕ), hj⟩ : Fin d') = j := Fin.ext rfl
-    simp only [cornerEmbed, padSecondFactor, hj, dif_pos, hidx]
+    simp only [cornerEmbed, padSecondFactor, hj, dite_eq_left, hidx]
 
 /-- Padding the second factor by zeros preserves the Schmidt-rank bound: the
 padded coefficient matrix is the original coefficient matrix right-multiplied by a
@@ -109,15 +109,17 @@ theorem hasSchmidtRankLE_padSecondFactor {n : ℕ}
     with hE
   have hfactor : schmidtCoeffMatrix (padSecondFactor ψ) = M * E := by
     ext i j
-    simp only [schmidtCoeffMatrix_apply, padSecondFactor, Matrix.mul_apply, hM, hE]
+    change (if hj : (j : ℕ) < d' then ψ (i, ⟨(j : ℕ), hj⟩) else 0) =
+      ∑ k, M i k * E k j
+    rw [hM, hE]
     by_cases hj : (j : ℕ) < d'
-    · simp only [hj, dif_pos]
+    · simp only [hj, dite_eq_left]
       rw [Finset.sum_eq_single (⟨(j : ℕ), hj⟩ : Fin d')]
       · simp
       · intro b _ hb
-        simp [if_neg hb]
+        simp [ite_eq_right hb]
       · intro hb; exact absurd (Finset.mem_univ _) hb
-    · simp only [hj, dif_neg, not_false_iff]
+    · simp only [hj, dite_eq_right, not_false_iff]
       symm
       apply Finset.sum_eq_zero
       intro k _
@@ -259,7 +261,7 @@ theorem posSemidef_of_submatrix_corner {α β : Type*} [Finite α] [Finite β]
   have huExtg : ∀ (k : Fin m) (a : α), uExt k (g a) = u k a := by
     intro k a
     have hex : ∃ a', g a' = g a := ⟨a, rfl⟩
-    simp only [huExt, hex, dif_pos]
+    simp only [huExt, hex, dite_eq_left]
     rw [hg hex.choose_spec]
   have huExtoff : ∀ (k : Fin m) (b : β), (∀ a, g a ≠ b) → uExt k b = 0 := by
     intro k b hb
@@ -308,7 +310,7 @@ theorem padFirstFactor_cornerEmbedFirst (h : d ≤ d') (ψ : Fin d × Fin d' →
   | mk i j =>
     have hi : ((Fin.castLE h i : Fin d') : ℕ) < d := by simp [Fin.castLE]
     have hidx : (⟨((Fin.castLE h i : Fin d') : ℕ), hi⟩ : Fin d) = i := Fin.ext rfl
-    simp only [cornerEmbedFirst, padFirstFactor, hi, dif_pos, hidx]
+    simp only [cornerEmbedFirst, padFirstFactor, hi, dite_eq_left, hidx]
 
 /-- Padding the first factor by zeros preserves the Schmidt-rank bound: the padded
 coefficient matrix is the original coefficient matrix left-multiplied by a
@@ -325,15 +327,17 @@ theorem hasSchmidtRankLE_padFirstFactor {n : ℕ}
     with hF
   have hfactor : schmidtCoeffMatrix (padFirstFactor ψ) = F * M := by
     ext i j
-    simp only [schmidtCoeffMatrix_apply, padFirstFactor, Matrix.mul_apply, hM, hF]
+    change (if hi : (i : ℕ) < d then ψ (⟨(i : ℕ), hi⟩, j) else 0) =
+      ∑ k, F i k * M k j
+    rw [hF, hM]
     by_cases hi : (i : ℕ) < d
-    · simp only [hi, dif_pos]
+    · simp only [hi, dite_eq_left]
       rw [Finset.sum_eq_single (⟨(i : ℕ), hi⟩ : Fin d)]
       · simp
       · intro b _ hb
-        simp [if_neg hb]
+        simp [ite_eq_right hb]
       · intro hb; exact absurd (Finset.mem_univ _) hb
-    · simp only [hi, dif_neg, not_false_iff]
+    · simp only [hi, dite_eq_right, not_false_iff]
       symm
       apply Finset.sum_eq_zero
       intro k _
@@ -445,7 +449,7 @@ theorem isNPositiveMap_cornerExtendMap (h : d ≤ d') {n : ℕ}
       ext a b
       simp only [Matrix.submatrix_apply, hX', Matrix.of_apply, hg]
     simp only [Matrix.submatrix_apply, hY, Matrix.of_apply, cornerExtendMap_apply, hg,
-      hi, dif_pos, hj, hidx_i, hidx_j]
+      hi, dite_eq_left, hj, hidx_i, hidx_j]
     rw [harg]
   -- That corner is positive semidefinite by `n`-positivity of `T` on a PSD input.
   have hX'psd : X'.PosSemidef := hX.submatrix g
@@ -491,7 +495,7 @@ theorem tensorMapId_padFirstFactor_submatrix (h : d ≤ d')
     have hb : padFirstFactor (ψ k) (Fin.castLE h b, j₂) = ψ k (b, j₂) :=
       padFirstFactor_cornerEmbedFirst h (ψ k) (b, j₂)
     rw [ha, hb]
-  simp only [hi, dif_pos, hj, hslice, hidx_i, hidx_j]
+  simp only [hi, dite_eq_left, hj, hslice, hidx_i, hidx_j]
 
 /-- **Positive maps and entanglement, only-if direction, pure-state step, second
 factor larger** (Wolf §3.2, Prop 3.4).  For a pure state `|ψ⟩⟨ψ|` on

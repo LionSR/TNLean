@@ -150,7 +150,6 @@ lemma quasiLocalTranslation_symm (d : ℕ) [NeZero d] (a : ℤ) :
   apply StarAlgEquiv.ext
   intro A
   apply (quasiLocalTranslation d a).symm_apply_eq.mpr
-  change A = quasiLocalTranslation d a (quasiLocalTranslation d (-a) A)
   rw [← StarAlgEquiv.trans_apply, quasiLocalTranslation_add, neg_add_cancel,
     quasiLocalTranslation_zero]
   rfl

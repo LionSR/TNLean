@@ -84,7 +84,7 @@ private theorem exists_inverseCorner_eq_kronecker_one (a b c d : Λ) :
         rw [leftTripleDirectSumLetter, leftFinalRow,
           Matrix.blockDiagonal'_apply_eq]
         simp only [kroneckerMap_apply, Matrix.one_apply,
-          if_neg (Ne.symm hq), zero_mul])
+          ite_eq_right (Ne.symm hq), zero_mul])
       (fun h => absurd (Finset.mem_univ mL) h)]
     simp [leftTripleDirectSumLetter, leftFinalRow, rightFinalRow,
       Matrix.blockDiagonal'_apply_eq]

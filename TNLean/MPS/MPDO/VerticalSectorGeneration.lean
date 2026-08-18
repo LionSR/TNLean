@@ -50,7 +50,7 @@ theorem contractBondMatrix_single_transpose
   · simp
   · intro x hx
     simp only [Matrix.single_apply, ite_smul, one_smul, zero_smul]
-    rw [if_neg]
+    rw [ite_eq_right]
     intro h
     apply hx
     calc

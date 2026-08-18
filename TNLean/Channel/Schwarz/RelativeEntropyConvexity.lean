@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.Analysis.KleinInequality
 import TNLean.Channel.Schwarz.AndoLieb
+import Mathlib.Analysis.CStarAlgebra.Matrix
 
 /-!
 # Joint convexity of the quantum relative entropy
@@ -124,19 +125,6 @@ variable {D : ℕ}
 
 local notation "Mat" => Matrix (Fin D) (Fin D) ℂ
 
-private local instance instRECNormedRing : NormedRing Mat :=
-  Matrix.instL2OpNormedRing
-private local instance instRECNormedAlgebra : NormedAlgebra ℂ Mat :=
-  Matrix.instL2OpNormedAlgebra
-private local instance instRECCStarRing : CStarRing Mat :=
-  Matrix.instCStarRing
-private local instance instRECPartialOrder : PartialOrder Mat :=
-  Matrix.instPartialOrder
-private local instance instRECStarOrderedRing : StarOrderedRing Mat :=
-  Matrix.instStarOrderedRing
-private local instance instRECCStarAlgebra : CStarAlgebra Mat :=
-  CStarAlgebra.mk
-
 /-- The set of positive definite matrices, the faithful domain of the quantum
 relative entropy. -/
 def posDefSet : Set Mat := {A : Mat | A.PosDef}
@@ -187,7 +175,7 @@ theorem concaveOn_re_trace_rpow_mul
   refine ⟨(convex_posDefSet).prod (convex_posDefSet), fun x hx y hy a b ha hb hab => ?_⟩
   obtain ⟨hxA, hxB⟩ := Set.mem_prod.mp hx
   obtain ⟨hyA, hyB⟩ := Set.mem_prod.mp hy
-  simp only [posDefSet, Set.mem_setOf_eq] at hxA hxB hyA hyB
+  simp only [posDefSet, Set.mem_ofPred_eq] at hxA hxB hyA hyB
   -- Reduce the boundary points \(a = 0\) / \(b = 0\) to reflexivity.
   rcases eq_or_lt_of_le ha with ha0 | ha0
   · subst ha0
@@ -406,7 +394,7 @@ The proof is the Lindblad/Uhlmann route: the approximant $g_s$ is jointly convex
 for each $s \in [0, 1)$ (`convexOn_relativeEntropyApprox`, applying Lieb's
 concavity), and converges pointwise to $D$ as $s \to 1^-$
 (`tendsto_relativeEntropyApprox`). The pointwise limit of convex functions is
-convex (`isClosed_setOf_convexOn`), after extending both the approximants and
+convex (`isClosed_setOfPred_convexOn`), after extending both the approximants and
 the limit by $0$ outside the positive definite domain so the convergence holds at
 every point.
 
@@ -426,7 +414,7 @@ theorem convexOn_quantumRelativeEntropy :
   set g : (Mat × Mat) → ℝ :=
     fun p => if p ∈ S then quantumRelativeEntropy p.1 p.2 else 0 with hg
   have hgS : Set.EqOn g (fun p : Mat × Mat => quantumRelativeEntropy p.1 p.2) S := by
-    intro p hp; simp only [hg, hp, if_true]
+    intro p hp; simp only [hg, hp, ite_true]
   -- It suffices to show `g` is convex; congruence on `S` gives the result.
   refine ConvexOn.congr ?_ hgS
   -- The pointwise limit of the extended approximants is `g`.
@@ -435,10 +423,10 @@ theorem convexOn_quantumRelativeEntropy :
     intro p
     by_cases hp : p ∈ S
     · have hpd : p.1.PosDef ∧ p.2.PosDef := Set.mem_prod.mp hp
-      simp only [hF, hg, hp, if_true]
+      simp only [hF, hg, hp, ite_true]
       have := tendsto_relativeEntropyApprox hpd.1 hpd.2
       simpa using this
-    · simp only [hF, hg, hp, if_false, tendsto_const_nhds]
+    · simp only [hF, hg, hp, ite_false, tendsto_const_nhds]
   -- Each extended approximant is convex, eventually as \(s \to 1^-\).
   have hconv : ∀ᶠ s in 𝓝[<] (1 : ℝ), F s ∈ {f : (Mat × Mat) → ℝ | ConvexOn ℝ S f} := by
     have hmem : ∀ᶠ s in 𝓝[<] (1 : ℝ), 0 ≤ s := by
@@ -452,9 +440,9 @@ theorem convexOn_quantumRelativeEntropy :
     -- `relativeEntropyApprox`; extend convexity by congruence.
     refine (convexOn_relativeEntropyApprox hsico).congr (fun p hp => ?_)
     have hpS : p ∈ S := hp
-    simp only [hF, if_pos hpS]
+    simp only [hF, ite_eq_left hpS]
   -- The set of convex functions is closed; apply `mem_of_tendsto`.
-  exact isClosed_setOf_convexOn.mem_of_tendsto htends hconv
+  exact isClosed_setOfPred_convexOn.mem_of_tendsto htends hconv
 
 /-! ## Joint convexity on the singular support domain
 

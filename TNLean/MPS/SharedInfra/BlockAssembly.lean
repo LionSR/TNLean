@@ -199,7 +199,9 @@ theorem toTensorFromBlocks_eq_reindex_of_equiv
       finSigmaFinEquiv.symm (finSigmaFinEquiv ⟨k, m⟩) = ⟨k, m⟩ :=
     finSigmaFinEquiv.symm_apply_apply ⟨k, m⟩
   rw [hfin kx mx, hfin ky my]
-  dsimp only
+  change Matrix.blockDiagonal' (fun k : Fin r => μ k • A k i) ⟨kx, mx⟩ ⟨ky, my⟩ =
+    Matrix.blockDiagonal' (fun k : Fin r' => μ' k • B k i)
+      ⟨e kx, finCongr (hDim kx) mx⟩ ⟨e ky, finCongr (hDim ky) my⟩
   by_cases hk : kx = ky
   · subst ky
     rw [Matrix.blockDiagonal'_apply_eq, Matrix.blockDiagonal'_apply_eq]

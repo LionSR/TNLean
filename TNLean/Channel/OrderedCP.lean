@@ -152,14 +152,14 @@ theorem Matrix.blockTopRows_conjTranspose_mul_apply (r s : ℕ)
       · intro b _ hb; simp [hb]
       · intro hj'; exact absurd (Finset.mem_univ jFin) hj'
     · have hrhs : ¬ (j = j' ∧ (j : ℕ) < r) := fun ⟨h, _⟩ => hjeq h
-      rw [if_neg hrhs]
+      rw [ite_eq_right hrhs]
       apply Finset.sum_eq_zero
       intro k _
       split_ifs with h
       · exact absurd (h.1.trans h.2.symm) hjeq
       · rfl
   · have hrhs : ¬ (j = j' ∧ (j : ℕ) < r) := fun ⟨_, h⟩ => hjr h
-    rw [if_neg hrhs]
+    rw [ite_eq_right hrhs]
     apply Finset.sum_eq_zero
     intro k _
     have hk : j ≠ Fin.castAdd s k := by
@@ -197,7 +197,7 @@ theorem Matrix.blockTopRows_conjTranspose_mul_le_one (r s : ℕ) :
       simp only [Pi.sub_apply, Matrix.mulVec, dotProduct]
       simp_rw [Matrix.blockTopRows_conjTranspose_mul_apply]
       by_cases hjr : (j : ℕ) < r
-      · rw [if_pos hjr]
+      · rw [ite_eq_left hjr]
         have hsum : ∑ j' : Fin (r + s),
             (if j = j' ∧ (j : ℕ) < r then (1 : ℂ) else 0) * x j' = x j := by
           rw [Finset.sum_eq_single j]
@@ -207,7 +207,7 @@ theorem Matrix.blockTopRows_conjTranspose_mul_le_one (r s : ℕ) :
             simp [this]
           · intro hj; exact absurd (Finset.mem_univ j) hj
         rw [hsum, sub_self]
-      · rw [if_neg hjr]
+      · rw [ite_eq_right hjr]
         have hsum : ∑ j' : Fin (r + s),
             (if j = j' ∧ (j : ℕ) < r then (1 : ℂ) else 0) * x j' = 0 := by
           apply Finset.sum_eq_zero
@@ -221,7 +221,7 @@ theorem Matrix.blockTopRows_conjTranspose_mul_le_one (r s : ℕ) :
     rw [hmul]
     by_cases hjr : (j : ℕ) < r
     · simp [hjr]
-    · simp only [hjr, if_false]
+    · simp only [hjr, ite_false]
       change 0 ≤ star (x j) * x j
       have hsq : star (x j) * x j = ((‖x j‖ : ℝ) ^ 2 : ℂ) := by
         simpa [Complex.star_def, Complex.normSq_eq_norm_sq] using

@@ -392,13 +392,13 @@ theorem hostMergeFiber_card (F : CoherentCoarseBlockingFrame (G := G) (d := d) A
       have hc : IsRegionIncidentEdge (G := G) F.frame.complement g :=
         isRegionIncidentEdge_complement_of_crossing_bc F hg
       simp only [hostFiberPair]
-      rw [dif_pos hc, dif_pos hg, dif_pos hc]
+      rw [dite_eq_left hc, dite_eq_left hg, dite_eq_left hc]
     · -- The reconstruction merges back to `η`.
       funext e
       simp only [hostFiberPair]
       by_cases hc : IsRegionIncidentEdge (G := G) F.frame.complement e
-      · rw [hostMerge_complement F hc, dif_pos hc]
-      · rw [hostMerge_not_complement F hc, dif_neg hc]
+      · rw [hostMerge_complement F hc, dite_eq_left hc]
+      · rw [hostMerge_not_complement F hc, dite_eq_right hc]
   · -- Reconstructing from the free indices of a fiber pair recovers the pair.
     intro p hp
     simp only [Finset.mem_coe, Finset.mem_filter, Finset.mem_univ, true_and] at hp
@@ -410,15 +410,15 @@ theorem hostMergeFiber_card (F : CoherentCoarseBlockingFrame (G := G) (d := d) A
       funext e
       simp only [hostFiberPair, hostFiberLegs]
       by_cases hc : IsRegionIncidentEdge (G := G) F.frame.complement e
-      · rw [dif_pos hc]
+      · rw [dite_eq_left hc]
         by_cases hbc : IsCrossingEdge (G := G) A F.frame.blue F.frame.complement e
         · -- On a blue-to-complement crossing the agreement and merge force `p.1 e = η e`.
-          rw [dif_pos hbc]
+          rw [dite_eq_left hbc]
           have h1 := hmerge' e
           rw [hostMerge_complement F hc] at h1
           rw [hagree e hbc, h1]
-        · rw [dif_neg hbc]
-      · rw [dif_neg hc]
+        · rw [dite_eq_right hbc]
+      · rw [dite_eq_right hc]
         have := hmerge' e
         rw [hostMerge_not_complement F hc] at this
         exact this.symm
@@ -426,22 +426,22 @@ theorem hostMergeFiber_card (F : CoherentCoarseBlockingFrame (G := G) (d := d) A
       funext e
       simp only [hostFiberPair, hostFiberLegs]
       by_cases hc : IsRegionIncidentEdge (G := G) F.frame.complement e
-      · rw [dif_pos hc]
+      · rw [dite_eq_left hc]
         have := hmerge' e
         rw [hostMerge_complement F hc] at this
         exact this.symm
-      · rw [dif_neg hc]
+      · rw [dite_eq_right hc]
   · -- Reading the free indices of a reconstruction recovers them.
     intro legs _
     obtain ⟨lc, lb⟩ := legs
     refine Prod.ext ?_ ?_
     · funext e
       simp only [hostFiberLegs, hostFiberPair]
-      rw [dif_neg e.2]
+      rw [dite_eq_right e.2]
     · funext e
       simp only [hostFiberLegs, hostFiberPair]
       obtain ⟨hc, hbc⟩ := e.2
-      rw [dif_pos hc, dif_neg hbc]
+      rw [dite_eq_left hc, dite_eq_right hbc]
 
 /-! ### The host-merge fiberwise collapse
 

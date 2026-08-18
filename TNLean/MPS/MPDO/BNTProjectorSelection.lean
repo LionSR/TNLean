@@ -280,7 +280,7 @@ theorem bntSectorProjection_mul_physicalSlice_self
       intro k _
       by_cases hk : bntSectorLabel hC hρ hη hR k = s
       · simp [hk]
-      · rw [if_neg hk, Matrix.zero_mul]
+      · rw [ite_eq_right hk, Matrix.zero_mul]
         symm
         exact sectorProjection_mul_physicalSlice_eq_zero_of_ne_label
           hC hρ hη hR k s (Ne.symm hk) β α
@@ -333,7 +333,7 @@ theorem physicalSlice_mul_bntSectorProjection_self
       intro k _
       by_cases hk : bntSectorLabel hC hρ hη hR k = s
       · simp [hk]
-      · rw [if_neg hk, Matrix.mul_zero]
+      · rw [ite_eq_right hk, Matrix.mul_zero]
         symm
         exact physicalSlice_mul_sectorProjection_eq_zero_of_ne_label
           hC hρ hη hR k s (Ne.symm hk) β α
@@ -405,7 +405,7 @@ theorem bntSectorProjection_mul_physicalSlice_mul_eq_zero
   intro l _
   by_cases hks : bntSectorLabel hC hρ hη hR k = s
   · by_cases hlt : bntSectorLabel hC hρ hη hR l = t
-    · simp only [hks, hlt, if_pos]
+    · simp only [hks, hlt, ite_eq_left]
       by_cases hkl : (k : Fin hη.m) = l
       · have hsub : k = l := Subtype.ext hkl
         subst l
@@ -476,11 +476,11 @@ theorem changePhysicalBasis_bntSectorProjection_basis
   rw [hP.1.eq]
   by_cases hsi : s = i
   · subst s
-    rw [if_pos rfl]
+    rw [ite_eq_left rfl]
     exact Matrix.ext_iff.mpr
       (bntSectorProjection_mul_physicalSlice_mul_self
         hC hρ hη hR i β α) a b
-  · rw [if_neg hsi]
+  · rw [ite_eq_right hsi]
     have hzero := bntSectorProjection_mul_physicalSlice_mul_eq_zero
       hC hρ hη hR i s s (Or.inr fun his ↦ hsi his.symm) β α
     exact Matrix.ext_iff.mpr hzero a b
@@ -664,7 +664,7 @@ theorem singleKrausMap_sitewise_bntSectorProjection_mpo
   simp_rw [singleKrausMap_sitewise_bntSectorProjection_mpo_basis
     hC hρ hη hR hN]
   rw [Finset.sum_eq_single s]
-  · simp only [if_true]
+  · simp only [ite_true]
     ext u v
     simp only [Matrix.smul_apply, smul_eq_mul]
     rw [S.coeff_eq_copies_mul_commonWeight_pow hWeight,

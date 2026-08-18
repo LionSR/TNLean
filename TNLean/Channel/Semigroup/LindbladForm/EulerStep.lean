@@ -9,6 +9,7 @@ import TNLean.Channel.Semigroup.LindbladForm.ChoiCCP
 import TNLean.Channel.Semigroup.CPClosure
 import TNLean.Channel.Semigroup.ProductFormula
 import Mathlib.Analysis.Calculus.MeanValue
+import Mathlib.Analysis.Matrix.Order
 
 /-!
 # Lindblad Form — Euler Step Approximation (Wolf Proposition 7.3)
@@ -81,9 +82,9 @@ theorem cp_semigroup_implies_ccp_generator
     refine ⟨G, ?_⟩
     ext ρ i j
     exact i.elim0
-  · haveI : NeZero D := ⟨hD⟩
-    letI : NormedAddCommGroup (MatChoi D) := Matrix.linftyOpNormedAddCommGroup
-    letI : NormedSpace ℝ (MatChoi D) := Matrix.linftyOpNormedSpace
+  · have : NeZero D := ⟨hD⟩
+    let : NormedAddCommGroup (MatChoi D) := Matrix.linftyOpNormedAddCommGroup
+    let : NormedSpace ℝ (MatChoi D) := Matrix.linftyOpNormedSpace
     let L_CLM : Matrix (Fin D) (Fin D) ℂ →L[ℂ] Matrix (Fin D) (Fin D) ℂ :=
       (Module.End.toContinuousLinearMap (Matrix (Fin D) (Fin D) ℂ)) L
     let P : MatChoi D := 1 - Matrix.omegaProj D
@@ -187,8 +188,8 @@ theorem cp_semigroup_implies_ccp_generator
         simpa using hscaledC
       simpa [slope, hgp0] using hscaled
     have hproj_psd : (ChoiJamiolkowski.projectedChoiMatrix L).PosSemidef := by
-      haveI : (nhdsWithin (0 : ℝ) (Set.Ioi 0)).NeBot := nhdsWithin_Ioi_neBot le_rfl
-      exact matrix_isClosed_posSemidef.mem_of_tendsto hgp_slope hslope_proj_psd
+      have : (nhdsWithin (0 : ℝ) (Set.Ioi 0)).NeBot := nhdsWithin_Ioi_neBot le_rfl
+      exact Matrix.posSemidef_is_closed.mem_of_tendsto hgp_slope hslope_proj_psd
     have hclosed_herm : IsClosed {X : MatChoi D | X.IsHermitian} := by
       change IsClosed {X : MatChoi D | star X = X}
       exact isClosed_eq continuous_star continuous_id
@@ -212,7 +213,7 @@ theorem cp_semigroup_implies_ccp_generator
         IsSelfAdjoint.smul (IsSelfAdjoint.of_nonneg hscale) hdiff
       simpa [slope] using hsmul_herm
     have hchoi_herm : (ChoiJamiolkowski.choiMatrix L).IsHermitian := by
-      haveI : (nhdsWithin (0 : ℝ) (Set.Ioi 0)).NeBot := nhdsWithin_Ioi_neBot le_rfl
+      have : (nhdsWithin (0 : ℝ) (Set.Ioi 0)).NeBot := nhdsWithin_Ioi_neBot le_rfl
       exact hclosed_herm.mem_of_tendsto hg_slope hslope_choi_herm
     have hpres :
         ∀ B : Matrix (Fin D) (Fin D) ℂ, L (Bᴴ) = (L B)ᴴ :=
@@ -310,8 +311,9 @@ private theorem norm_expSemigroupCLM_sub_one_add_smul_le [NeZero D]
     ‖NormedSpace.exp ((s : ℂ) • A) - 1 - (s : ℂ) • A‖ ≤
         ‖((s : ℂ) • A)‖ ^ 2 * Real.exp ‖((s : ℂ) • A)‖ := hrem
     _ = s ^ 2 * ‖A‖ ^ 2 * Real.exp (s * ‖A‖) := by
-        simp [norm_smul, Real.norm_eq_abs, abs_of_nonneg hs, pow_two,
-          mul_assoc, mul_left_comm, mul_comm]
+        rw [show ‖((s : ℂ) • A)‖ = s * ‖A‖ by
+          exact norm_smul_of_nonneg hs A]
+        ring
 
 private theorem norm_eulerStep_sub_expSemigroupCLM_le [NeZero D]
     (G : GeneratorDecomp D) {s : ℝ} (hs : 0 ≤ s) :
@@ -352,7 +354,9 @@ private theorem norm_eulerStep_sub_expSemigroupCLM_le [NeZero D]
           (‖(endEquiv (D := D)) G.toLinearMap‖ ^ 2 *
               Real.exp (s * ‖(endEquiv (D := D)) G.toLinearMap‖) +
             ‖(endEquiv (D := D)) (quadMap G)‖) := by
-          rw [norm_smul, Complex.norm_real, Real.norm_eq_abs, abs_of_nonneg (sq_nonneg s)]
+          rw [show ‖((s ^ 2 : ℝ) : ℂ) • (endEquiv (D := D)) (quadMap G)‖ =
+            s ^ 2 * ‖(endEquiv (D := D)) (quadMap G)‖ by
+              exact norm_smul_of_nonneg (sq_nonneg s) _]
           ring
 
 private theorem norm_eulerStep_toCLM_le [NeZero D]
@@ -377,8 +381,13 @@ private theorem norm_eulerStep_toCLM_le [NeZero D]
             exact norm_add_le _ _
       _ = 1 + s * ‖(endEquiv (D := D)) G.toLinearMap‖ +
             s ^ 2 * ‖(endEquiv (D := D)) (quadMap G)‖ := by
-            rw [norm_one, norm_smul, Complex.norm_real, Real.norm_eq_abs, abs_of_nonneg hs,
-              norm_smul, Complex.norm_real, Real.norm_eq_abs, abs_of_nonneg (sq_nonneg s)]
+            rw [norm_one,
+              show ‖(s : ℂ) • (endEquiv (D := D)) G.toLinearMap‖ =
+                s * ‖(endEquiv (D := D)) G.toLinearMap‖ by
+                  exact norm_smul_of_nonneg hs _,
+              show ‖((s ^ 2 : ℝ) : ℂ) • (endEquiv (D := D)) (quadMap G)‖ =
+                s ^ 2 * ‖(endEquiv (D := D)) (quadMap G)‖ by
+                  exact norm_smul_of_nonneg (sq_nonneg s) _]
   have hsq_le :
       s ^ 2 * ‖(endEquiv (D := D)) (quadMap G)‖ ≤
         s * (T * ‖(endEquiv (D := D)) (quadMap G)‖) := by
@@ -412,7 +421,7 @@ private theorem generatorDecomp_cp_semigroup (G : GeneratorDecomp D) :
   by_cases hD : D = 0
   · subst hD
     exact isCPMap_finZero _
-  · haveI : NeZero D := ⟨hD⟩
+  · have : NeZero D := ⟨hD⟩
     let approx : ℕ → Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ :=
       fun n => (eulerStep G (t / (n + 1))) ^ (n + 1)
     have happrox_cp : ∀ n : ℕ, IsCPMap (approx n) := by

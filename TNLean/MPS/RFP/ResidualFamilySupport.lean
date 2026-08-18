@@ -62,10 +62,10 @@ private theorem IsResidualIsometryFamily.residual_entry_gram
     _ = if (⟨k, (c, e)⟩ : BlockEntryIndex dim) = ⟨j, (a, b)⟩ then 1 else 0 := hGram
     _ = if (⟨j, (a, b)⟩ : BlockEntryIndex dim) = ⟨k, (c, e)⟩ then 1 else 0 := by
       by_cases h : (⟨j, (a, b)⟩ : BlockEntryIndex dim) = ⟨k, (c, e)⟩
-      · rw [if_pos h, if_pos h.symm]
+      · rw [ite_eq_left h, ite_eq_left h.symm]
       · have hk : (⟨k, (c, e)⟩ : BlockEntryIndex dim) ≠ ⟨j, (a, b)⟩ :=
           fun hk ↦ h hk.symm
-        rw [if_neg h, if_neg hk]
+        rw [ite_eq_right h, ite_eq_right hk]
 
 /-- The cross-sector residual-isometry equations say that the common physical
 matrix is an isometry on `BlockEntryIndex dim`.

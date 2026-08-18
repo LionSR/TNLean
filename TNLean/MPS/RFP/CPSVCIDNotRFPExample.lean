@@ -84,29 +84,33 @@ private theorem cpsvExample34_component_evalWord (a : Fin 2) (w : List (Fin 2)) 
   have hInt : ∀ i : Fin 2, cpsvExample34Tensor i * V = V * B i := by
     intro i
     ext b c
+    simp only [Matrix.mul_apply, Fin.sum_univ_two, Fin.sum_univ_one]
     fin_cases a <;> fin_cases i <;> fin_cases b <;> fin_cases c <;>
-      simp [B, V, cpsvExample34Tensor, Matrix.mul_apply]
+      simp [B, V, cpsvExample34Tensor]
   have hw := evalWord_intertwine cpsvExample34Tensor B V hInt w
   rw [cpsvExample34_evalWord] at hw
   ext x y
   fin_cases x
   fin_cases y
   have haa := congrFun (congrFun hw a) 0
-  simpa [B, V, Matrix.mul_apply, Fin.sum_univ_two] using haa.symm
+  change (∑ k : Fin 2, Matrix.diagonal (cpsvExample34WordDiag w) a k * V k 0) =
+    ∑ k : Fin 1, V a k * evalWord B w k 0 at haa
+  rw [Fin.sum_univ_two, Fin.sum_univ_one] at haa
+  fin_cases a <;> simpa [B, V] using haa.symm
 
 private theorem cpsvExample34ZeroTensor_mpv {N : ℕ} (σ : Fin N → Fin 2) :
     mpv cpsvExample34ZeroTensor σ = if ∀ k, σ k = 0 then 1 else 0 := by
   rw [mpv, coeff]
   change Matrix.trace (evalWord (fun i _ _ => cpsvExample34Tensor i 0 0) (List.ofFn σ)) = _
-  rw [cpsvExample34_component_evalWord]
-  simp [Matrix.trace, cpsvExample34WordDiag, cpsvExample34_forall_ofFn_zero_iff]
+  rw [Matrix.trace_fin_one, cpsvExample34_component_evalWord]
+  simp [cpsvExample34WordDiag, cpsvExample34_forall_ofFn_zero_iff]
 
 private theorem cpsvExample34PlusTensor_mpv {N : ℕ} (σ : Fin N → Fin 2) :
     mpv cpsvExample34PlusTensor σ = cpsvExample34InvSqrtTwo ^ N := by
   rw [mpv, coeff]
   change Matrix.trace (evalWord (fun i _ _ => cpsvExample34Tensor i 1 1) (List.ofFn σ)) = _
-  rw [cpsvExample34_component_evalWord]
-  simp [Matrix.trace, cpsvExample34WordDiag]
+  rw [Matrix.trace_fin_one, cpsvExample34_component_evalWord]
+  simp [cpsvExample34WordDiag]
 
 /-- The exact positive-length amplitude formula in CPSV16, Example 3.4.
 For a nonempty configuration $\sigma$, the first summand is the amplitude of

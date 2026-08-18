@@ -45,7 +45,7 @@ theorem isSAL_of_isSourceZCL (F : PhysicalSectorFactorization K) [NeZero D]
     (hZCL : K.IsSourceZCL) : IsSAL K := by
   have hMpdo : IsMPDO F.sectorCoordinateTensor := by
     intro N hN
-    letI : NeZero N := ⟨ne_of_gt hN⟩
+    let : NeZero N := ⟨ne_of_gt hN⟩
     exact F.mpo_sectorCoordinateTensor_posSemidef hpos
   have htrace : ∀ N, 0 < N → Matrix.trace
       (mpo F.sectorCoordinateTensor N) ≠ 0 := by

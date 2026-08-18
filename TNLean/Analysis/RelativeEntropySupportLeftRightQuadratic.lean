@@ -66,7 +66,7 @@ theorem supportLeftRightSuperoperator_posSemidef
     (hA : A.PosSemidef) (hB : B.PosSemidef)
     {t : ℝ} (ht : 0 ≤ t) :
     (supportLeftRightSuperoperator A B t).PosSemidef := by
-  letI := Fintype.ofFinite n
+  let := Fintype.ofFinite n
   have hI : (1 : Matrix n n ℂ).PosSemidef := Matrix.PosSemidef.one
   exact (hA.kronecker hI).add ((hI.kronecker hB.transpose).smul ht)
 
@@ -90,7 +90,7 @@ theorem supportLeftRightSupportInv_eq
     {t : ℝ} (ht : 0 ≤ t) :
     supportLeftRightSupportInv hA hB t =
       (supportLeftRightSuperoperator_posSemidef hA hB ht).supportInv := by
-  simp only [supportLeftRightSupportInv, dif_pos ht]
+  simp only [supportLeftRightSupportInv, dite_eq_left ht]
 
 /-- The source-\(A\) quadratic form on the support of \(B\). Its source vector
 is \(\operatorname{vec}((A P_B)^{\mathsf T})\), so zero eigenvalues of \(B\)
@@ -178,17 +178,39 @@ theorem supportLeftRight_sourceA_solution
       (α i / (α i + t * β j) : ℂ) * W i j
     else 0
   let X : Matrix n n ℂ := UA * Y * star UB
-  have hcore : Dα * Y + t • (Y * Dβ) = Dα * W * Qβ := by
+  have hDαY : Dα * Y = fun i j => (α i : ℂ) * Y i j := by
     ext i j
-    simp only [Dα, Dβ, Qβ, Y, Matrix.diagonal_mul, Matrix.mul_diagonal,
-      Matrix.add_apply, Matrix.smul_apply, Complex.real_smul]
+    simp only [Dα, Matrix.diagonal_mul]
+  have hYDβ : Y * Dβ = fun i j => Y i j * (β j : ℂ) := by
+    ext i j
+    simp only [Dβ, Matrix.mul_diagonal]
+  have hDαWQβ : Dα * W * Qβ = fun i j =>
+      (α i : ℂ) * W i j * if 0 < β j then 1 else 0 := by
+    ext i j
+    rw [Matrix.mul_diagonal]
+    simp only [Dα, Matrix.diagonal_mul]
+  have hLhs : Dα * Y + t • (Y * Dβ) = fun i j =>
+      (α i : ℂ) * Y i j + t * (Y i j * (β j : ℂ)) := by
+    rw [hDαY, hYDβ]
+    ext i j
+    rfl
+  have hcore : Dα * Y + t • (Y * Dβ) = Dα * W * Qβ := by
+    rw [hLhs, hDαWQβ]
+    ext i j
+    simp only [Y]
     by_cases hβ : 0 < β j
-    · simp only [hβ, if_true]
+    · simp only [hβ, ite_true, mul_one]
       have hden : (α i : ℂ) + t * β j ≠ 0 := by
         exact_mod_cast
           (ne_of_gt (add_pos_of_nonneg_of_pos
             (hA.eigenvalues_nonneg i) (mul_pos ht hβ)))
-      field_simp
+      rw [div_eq_mul_inv]
+      calc
+        (α i : ℂ) * (((α i : ℂ) * ((α i : ℂ) + t * β j)⁻¹) * W i j) +
+            t * ((((α i : ℂ) * ((α i : ℂ) + t * β j)⁻¹) * W i j) * β j) =
+            (α i : ℂ) * W i j *
+              (((α i : ℂ) + t * β j) * ((α i : ℂ) + t * β j)⁻¹) := by ring
+        _ = (α i : ℂ) * W i j := by rw [mul_inv_cancel₀ hden, mul_one]
     · have hβzero : β j = 0 :=
         le_antisymm (not_lt.mp hβ) (hB.eigenvalues_nonneg j)
       simp [hβzero]
@@ -258,12 +280,26 @@ private lemma spectral_support_sourceB_solution
       (β j / (α i + t * β j) : ℂ) * W i j
     else 0
   let X : Matrix n n ℂ := UA * Y * star UB
-  have hcore : Dα * Y + t • (Y * Dβ) = W * Dβ := by
+  have hDαY : Dα * Y = fun i j => (α i : ℂ) * Y i j := by
     ext i j
-    simp only [Dα, Dβ, Y, Matrix.diagonal_mul, Matrix.mul_diagonal,
-      Matrix.add_apply, Matrix.smul_apply, Complex.real_smul]
+    simp only [Dα, Matrix.diagonal_mul]
+  have hYDβ : Y * Dβ = fun i j => Y i j * (β j : ℂ) := by
+    ext i j
+    simp only [Dβ, Matrix.mul_diagonal]
+  have hWDβ : W * Dβ = fun i j => W i j * (β j : ℂ) := by
+    ext i j
+    simp only [Dβ, Matrix.mul_diagonal]
+  have hLhs : Dα * Y + t • (Y * Dβ) = fun i j =>
+      (α i : ℂ) * Y i j + t * (Y i j * (β j : ℂ)) := by
+    rw [hDαY, hYDβ]
+    ext i j
+    rfl
+  have hcore : Dα * Y + t • (Y * Dβ) = W * Dβ := by
+    rw [hLhs, hWDβ]
+    ext i j
+    simp only [Y]
     by_cases hβ : 0 < β j
-    · simp only [hβ, if_true]
+    · simp only [hβ, ite_true]
       have hden : (α i : ℂ) + t * β j ≠ 0 := by
         exact_mod_cast
           (ne_of_gt (add_pos_of_nonneg_of_pos
@@ -392,15 +428,29 @@ private lemma spectral_support_sourceA_pairing
     ext i j
     simp only [Dα, Z, Matrix.diagonal_mul]
   rw [Matrix.mul_assoc (star W) Dα Y, hDY]
-  have hQ : Qβ * (star W * Z) =
-      fun i j =>
-        (if 0 < β i then (1 : ℂ) else 0) *
-          (star W * Z) i j := by
+  have hStarWZ : star W * Z =
+      fun i j => ∑ x, star (W x i) * Z x j := by
     ext i j
-    simp only [Qβ, Matrix.diagonal_mul]
+    rw [Matrix.mul_apply]
+    apply Finset.sum_congr rfl
+    intro x _
+    rw [Matrix.star_apply]
+  have hQ : Qβ * (star W * Z) = fun i j =>
+      (if 0 < β i then (1 : ℂ) else 0) * ∑ x, star (W x i) * Z x j := by
+    ext i j
+    rw [show (Qβ * (star W * Z)) i j =
+      (if 0 < β i then (1 : ℂ) else 0) * (star W * Z) i j by
+        exact Matrix.diagonal_mul _ _ _ _]
+    rw [hStarWZ]
   rw [hQ]
-  simp only [Matrix.trace, Matrix.diag_apply, Matrix.mul_apply, Z, Y,
-    Matrix.star_apply, Complex.star_def, Complex.re_sum]
+  have hTrace : Matrix.trace
+      (fun i j => (if 0 < β i then (1 : ℂ) else 0) *
+        ∑ x, star (W x i) * Z x j : Matrix n n ℂ) =
+      ∑ j, (if 0 < β j then (1 : ℂ) else 0) *
+        ∑ x, star (W x j) * Z x j := by
+    rfl
+  rw [hTrace]
+  simp only [Z, Y, Complex.re_sum]
   rw [Finset.sum_comm]
   apply Finset.sum_congr rfl
   intro j _
@@ -409,14 +459,9 @@ private lemma spectral_support_sourceA_pairing
       α i ^ 2 / (α i + t * β j) * Complex.normSq (W i j)
     else 0
   by_cases hβ : 0 < β j
-  · simp only [hβ, if_true, one_mul, Complex.re_sum]
+  · simp only [hβ, ite_true, one_mul, Complex.re_sum]
     apply Finset.sum_congr rfl
     intro i _
-    change
-      (star (W i j) *
-        ((α i : ℂ) *
-          (((α i : ℂ) / ((α i : ℂ) + t * β j)) * W i j))).re =
-        α i ^ 2 / (α i + t * β j) * Complex.normSq (W i j)
     have hnorm : star (W i j) * W i j =
         (Complex.normSq (W i j) : ℂ) := by
       rw [Complex.star_def, ← Complex.normSq_eq_conj_mul_self]
@@ -489,13 +534,26 @@ private lemma spectral_support_sourceB_pairing
   simp only [Matrix.mul_assoc]
   rw [hUB, Matrix.mul_one]
   rw [← Matrix.mul_assoc (star UB) UA Y, ← hstarW]
-  have hD : Dβ * (star W * Y) =
-      fun i j => (β i : ℂ) * (star W * Y) i j := by
+  have hStarWY : star W * Y =
+      fun i j => ∑ x, star (W x i) * Y x j := by
     ext i j
-    simp only [Dβ, Matrix.diagonal_mul]
+    rw [Matrix.mul_apply]
+    apply Finset.sum_congr rfl
+    intro x _
+    rw [Matrix.star_apply]
+  have hD : Dβ * (star W * Y) =
+      fun i j => (β i : ℂ) * ∑ x, star (W x i) * Y x j := by
+    ext i j
+    rw [show (Dβ * (star W * Y)) i j = (β i : ℂ) * (star W * Y) i j by
+      exact Matrix.diagonal_mul _ _ _ _]
+    rw [hStarWY]
   rw [hD]
-  simp only [Matrix.trace, Matrix.diag_apply, Matrix.mul_apply, Y,
-    Matrix.star_apply, Complex.star_def, Complex.re_sum]
+  have hTrace : Matrix.trace
+      (fun i j => (β i : ℂ) * ∑ x, star (W x i) * Y x j : Matrix n n ℂ) =
+      ∑ j, (β j : ℂ) * ∑ x, star (W x j) * Y x j := by
+    rfl
+  rw [hTrace]
+  simp only [Y, Complex.re_sum]
   rw [Finset.sum_comm]
   apply Finset.sum_congr rfl
   intro j _
@@ -504,7 +562,7 @@ private lemma spectral_support_sourceB_pairing
       β j ^ 2 / (α i + t * β j) * Complex.normSq (W i j)
     else 0
   by_cases hβ : 0 < β j
-  · simp only [hβ, if_true]
+  · simp only [hβ, ite_true]
     rw [Finset.mul_sum, Complex.re_sum]
     apply Finset.sum_congr rfl
     intro i _
@@ -729,7 +787,7 @@ theorem supportRelativeEntropyLeftRightIntegrand_eq_spectral
   apply Finset.sum_congr rfl
   intro j _
   by_cases hβ : 0 < β j
-  · simp only [hβ, if_true, relativeEntropyScalar]
+  · simp only [hβ, ite_true, relativeEntropyScalar]
     ring
   · have hβzero : β j = 0 :=
       le_antisymm (not_lt.mp hβ) (hB.eigenvalues_nonneg j)
@@ -759,7 +817,7 @@ theorem supportRelativeEntropySpectralIntegrand_continuousOn
   apply continuousOn_finsetSum Finset.univ
   intro j _
   by_cases hβ : 0 < hB.isHermitian.eigenvalues j
-  · simp only [hβ, if_true]
+  · simp only [hβ, ite_true]
     intro t ht
     have ht0 : 0 < t := ht
     have hden :
@@ -771,7 +829,7 @@ theorem supportRelativeEntropySpectralIntegrand_continuousOn
     apply ContinuousAt.continuousWithinAt
     unfold relativeEntropyScalar
     fun_prop
-  · simp only [hβ, if_false]
+  · simp only [hβ, ite_false]
     exact continuousOn_const
 
 /-- The support-domain left-right quadratic integrand is continuous on

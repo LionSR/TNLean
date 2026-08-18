@@ -93,7 +93,7 @@ private lemma algebraicLocalTranslation_zero_rep (d : ℕ) (Λ : Finset ℤ)
   have hcomp : (Config.splitEquiv h x).2 = (Config.splitEquiv h y).2 := by
     funext i
     exact False.elim ((Finset.mem_sdiff.mp i.2).2 (by simpa using i.2))
-  rw [if_pos hcomp, mul_one]
+  rw [ite_eq_left hcomp, mul_one]
   let x₀ := (Config.translation d 0 Λ).symm (Config.restrict h x)
   let y₀ := (Config.translation d 0 Λ).symm (Config.restrict h y)
   change localTranslation d 0 Λ A (Config.restrict h x) (Config.restrict h y) = A x y
@@ -135,7 +135,7 @@ private lemma algebraicLocalTranslation_add_rep (d : ℕ) (a b : ℤ) (Λ : Fins
       simp only [mem_translateRegion] at hi ⊢
       ring_nf at hi ⊢
       exact hi))
-  rw [if_pos hcomp, mul_one]
+  rw [ite_eq_left hcomp, mul_one]
   let x₀ := (Config.translation d (a + b) Λ).symm x
   let y₀ := (Config.translation d (a + b) Λ).symm y
   have hx : Config.restrict h x =

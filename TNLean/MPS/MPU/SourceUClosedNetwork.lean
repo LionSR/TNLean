@@ -125,7 +125,7 @@ theorem sourceU_gram_apply_eq_closed_output_letter
   intro δ _
   simp only [Matrix.mul_apply, Matrix.conjTranspose_apply, sourceWeight,
     Matrix.kronecker_apply, Matrix.one_apply, mul_ite, mul_one, mul_zero,
-    Finset.sum_ite_eq', Finset.mem_univ, if_true, Fintype.sum_prod_type,
+    Finset.sum_ite_eq', Finset.mem_univ, ite_true, Fintype.sum_prod_type,
     sourceCutM₁_apply,
     doubleLayerTensor_physicalAdjointTensor_apply]
   simp_rw [Finset.sum_mul, Finset.mul_sum]

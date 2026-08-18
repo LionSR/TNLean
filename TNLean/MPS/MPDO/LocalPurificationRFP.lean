@@ -187,13 +187,14 @@ lemma witnessM_entry (i j : Fin 2) :
     intro a b c
     by_cases hac : a = c
     · by_cases hbc : b = c
-      · rw [if_pos ⟨hac, hbc⟩]
-        simp only [witnessAmplitude, if_pos hac, if_pos hbc, map_inv₀, Complex.conj_ofReal]
+      · rw [ite_eq_left ⟨hac, hbc⟩]
+        simp only [witnessAmplitude, ite_eq_left hac, ite_eq_left hbc, map_inv₀,
+          Complex.conj_ofReal]
         exact sqrt2_inv_mul_self
-      · rw [if_neg (fun h => hbc h.2)]
-        simp only [witnessAmplitude, if_neg hbc, map_zero, mul_zero]
-    · rw [if_neg (fun h => hac h.1)]
-      simp only [witnessAmplitude, if_neg hac, zero_mul]
+      · rw [ite_eq_right (fun h => hbc h.2)]
+        simp only [witnessAmplitude, ite_eq_right hbc, map_zero, mul_zero]
+    · rw [ite_eq_right (fun h => hac h.1)]
+      simp only [witnessAmplitude, ite_eq_right hac, zero_mul]
   simp only [witnessM, Matrix.submatrix_apply, witnessA, Fin.sum_univ_two]
   fin_cases i <;> fin_cases j <;> simp [amp_mul_conj]
 
@@ -257,7 +258,7 @@ lemma physTraceTransfer_witnessM : physTraceTransfer witnessM = 1 := by
   have hentry : physTraceTransfer witnessM 0 0 = 1 := by
     rw [show physTraceTransfer witnessM = ∑ i : Fin 2, witnessM i i from rfl,
       Matrix.sum_apply, Fin.sum_univ_two, witnessM_entry, witnessM_entry,
-      if_pos rfl, if_pos rfl]
+      ite_eq_left rfl, ite_eq_left rfl]
     norm_num
   ext a b
   obtain rfl : a = 0 := Subsingleton.elim a 0

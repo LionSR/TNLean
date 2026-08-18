@@ -567,7 +567,7 @@ the Dyson–Phillips series `∑ₙ T'⁽ⁿ⁾(t)` equals the perturbed semigro
 This completes the Dyson–Phillips expansion for matrix semigroups. -/
 theorem dyson_series_eq (L L' : MatrixCLM (Fin D)) {t : ℝ} (ht : 0 ≤ t) :
     HasSum (fun n => dysonTerm L L' t n) (expSemigroupCLM L' t) := by
-  letI hSeminormed : SeminormedAddCommGroup (MatrixCLM (Fin D)) :=
+  let hSeminormed : SeminormedAddCommGroup (MatrixCLM (Fin D)) :=
     ContinuousLinearMap.toNormedAddCommGroup.toSeminormedAddCommGroup
   change @HasSum (MatrixCLM (Fin D)) ℕ hSeminormed.toAddCommMonoid
     PseudoMetricSpace.toUniformSpace.toTopologicalSpace

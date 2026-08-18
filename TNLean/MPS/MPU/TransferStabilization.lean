@@ -144,11 +144,11 @@ theorem IsMPU.normalized_transfer_power_eq_vecMulVec_of_reduced_cfii
     fun N hN => hU.trace_transferMatrix_normalizedFlattening_pow_eq_one hN
   have hcard : Fintype.card base.Active = 1 :=
     base.card_active_eq_one_of_shifted_transfer_trace htrace
-  letI : Unique base.Active :=
+  let : Unique base.Active :=
     Classical.choice (Fintype.card_eq_one_iff_nonempty_unique.mp hcard)
   let k : base.Active := default
   obtain ⟨Λ₀, hΛ₀pd, hΛ₀diag, hΛ₀fix⟩ := cfii.blocks_fixed_point k.1
-  letI : Nonempty (Fin (cfii.dim k.1)) := Fin.pos_iff_nonempty.mp (cfii.dim_pos k.1)
+  let : Nonempty (Fin (cfii.dim k.1)) := Fin.pos_iff_nonempty.mp (cfii.dim_pos k.1)
   let Λ : Matrix (Fin (cfii.dim k.1)) (Fin (cfii.dim k.1)) ℂ :=
     (Matrix.trace Λ₀)⁻¹ • Λ₀
   have hΛtrace_pos : 0 < Matrix.trace Λ₀ := hΛ₀pd.trace_pos

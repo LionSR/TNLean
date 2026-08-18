@@ -162,7 +162,7 @@ theorem sectorCoordinateTensor_isMPDO_of_neighboringOperator_pos
     (hpos : ∀ k h, (F.neighboringOperator k h).PosSemidef) :
     IsMPDO F.sectorCoordinateTensor := by
   intro N hN
-  letI : NeZero N := ⟨Nat.ne_of_gt hN⟩
+  let : NeZero N := ⟨Nat.ne_of_gt hN⟩
   exact F.mpo_sectorCoordinateTensor_posSemidef hpos
 
 /-- The full left-right product family in every sector is closed under

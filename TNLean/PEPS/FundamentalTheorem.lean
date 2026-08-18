@@ -154,7 +154,7 @@ theorem piProductKernel_mul {ι : Type*} [Fintype ι] [DecidableEq ι] {n : ι �
   rw [Fintype.prod_boole, Matrix.one_apply]
   by_cases h : η = ξ
   · subst h; simp
-  · rw [if_neg h, if_neg (fun hall => h (funext hall))]
+  · rw [ite_eq_right h, ite_eq_right (fun hall => h (funext hall))]
 
 /-- The per-leg product kernel built from per-leg invertible matrices is
 invertible, with inverse the product kernel of the per-leg inverses. -/
@@ -183,9 +183,9 @@ theorem edgeGaugeAt_mul_inv (B : Tensor G d) (Z : (e : Edge G) → GL (Fin (B.bo
     edgeGaugeAt B Z v ie * edgeGaugeAtInv (G := G) B Z v ie = 1 := by
   unfold edgeGaugeAt edgeGaugeAtInv
   by_cases h : ie.1.1.1 = v
-  · simp only [if_pos h]
+  · simp only [ite_eq_left h]
     rw [← Units.val_mul, mul_inv_cancel, Units.val_one]
-  · simp only [if_neg h]
+  · simp only [ite_eq_right h]
     rw [← Matrix.transpose_mul, ← Units.val_mul, mul_inv_cancel, Units.val_one,
       Matrix.transpose_one]
 
@@ -196,9 +196,9 @@ theorem edgeGaugeAtInv_mul (B : Tensor G d) (Z : (e : Edge G) → GL (Fin (B.bon
     edgeGaugeAtInv (G := G) B Z v ie * edgeGaugeAt B Z v ie = 1 := by
   unfold edgeGaugeAt edgeGaugeAtInv
   by_cases h : ie.1.1.1 = v
-  · simp only [if_pos h]
+  · simp only [ite_eq_left h]
     rw [← Units.val_mul, inv_mul_cancel, Units.val_one]
-  · simp only [if_neg h]
+  · simp only [ite_eq_right h]
     rw [← Matrix.transpose_mul, ← Units.val_mul, inv_mul_cancel, Units.val_one,
       Matrix.transpose_one]
 
@@ -218,7 +218,8 @@ theorem isVertexInjective_absorbEdgeGauges (B : Tensor G d)
   intro v
   have hcomp : (absorbEdgeGauges B Z).component v =
       fun η => fun σ => gaugeVertex B Z v η σ := by
-    funext η σ; rw [absorbEdgeGauges_component]
+    funext η σ
+    rfl
   rw [hcomp]
   set K : Matrix (LocalVirtualConfig B v) (LocalVirtualConfig B v) ℂ :=
     Matrix.of (fun η η' => ∏ ie : IncidentEdge G v,
@@ -261,31 +262,40 @@ theorem post_absorption_edge_insertion_equality (A B : Tensor G d)
   classical
   obtain ⟨X, hX⟩ := exists_edgeGaugeFamily A B hA hB hAB hDim hpos
   choose Φ hΦcoeff hΦconj using hX
-  refine ⟨fun e => glReindex (congr_fun hDim e) (glTranspose (X e)), ?_, ?_⟩
-  · exact hDim
+  let Z : (e : Edge G) → GL (Fin (B.bondDim e)) ℂ :=
+    fun e => glReindex (congr_fun hDim e) (glTranspose (X e))
+  refine ⟨Z, hDim, ?_⟩
   intro e σ M
   simp only [absorbEdgeGauges]
-  rw [hΦcoeff e σ M, hΦconj e M, edgeInsertedCoeff_applyGauge]
-  congr 1
+  rw [hΦcoeff e σ M, hΦconj e M]
   have hZt :
-      (↑(glReindex (congr_fun hDim e) (glTranspose (X e))) :
-          Matrix (Fin (B.bondDim e)) (Fin (B.bondDim e)) ℂ)ᵀ =
+      (↑(Z e) : Matrix (Fin (B.bondDim e)) (Fin (B.bondDim e)) ℂ)ᵀ =
         Matrix.reindexAlgEquiv ℂ ℂ (finCongr (congr_fun hDim e))
           (↑(X e) : Matrix (Fin (A.bondDim e)) (Fin (A.bondDim e)) ℂ) := by
+    simp only [Z]
     rw [glReindex_coe, glTranspose_coe]
     simp only [Matrix.coe_reindexAlgEquiv, Matrix.transpose_reindex,
       Matrix.transpose_transpose]
   have hZit :
-      ((↑(glReindex (congr_fun hDim e) (glTranspose (X e))) :
-          Matrix (Fin (B.bondDim e)) (Fin (B.bondDim e)) ℂ)⁻¹)ᵀ =
+      ((↑(Z e) : Matrix (Fin (B.bondDim e)) (Fin (B.bondDim e)) ℂ)⁻¹)ᵀ =
         Matrix.reindexAlgEquiv ℂ ℂ (finCongr (congr_fun hDim e))
-    (↑(X e)⁻¹ : Matrix (Fin (A.bondDim e)) (Fin (A.bondDim e)) ℂ) := by
+          (↑(X e)⁻¹ : Matrix (Fin (A.bondDim e)) (Fin (A.bondDim e)) ℂ) := by
+    simp only [Z]
     rw [← Matrix.GeneralLinearGroup.coe_inv, ← map_inv, glReindex_coe,
       glTranspose_inv_coe]
     simp only [Matrix.coe_reindexAlgEquiv, Matrix.transpose_reindex,
       Matrix.transpose_transpose]
-  rw [hZt, hZit, map_mul, map_mul]
-  rfl
+  have hMatrix :
+      (↑(Z e) : Matrix (Fin (B.bondDim e)) (Fin (B.bondDim e)) ℂ)ᵀ *
+          Matrix.reindexAlgEquiv ℂ ℂ (finCongr (congr_fun hDim e)) M *
+          ((↑(Z e) : Matrix (Fin (B.bondDim e)) (Fin (B.bondDim e)) ℂ)⁻¹)ᵀ =
+        Matrix.reindexAlgEquiv ℂ ℂ (finCongr (congr_fun hDim e))
+          ((↑(X e) : Matrix (Fin (A.bondDim e)) (Fin (A.bondDim e)) ℂ) * M *
+            (↑(X e)⁻¹ : Matrix (Fin (A.bondDim e)) (Fin (A.bondDim e)) ℂ)) := by
+    rw [hZt, hZit, map_mul, map_mul]
+  rw [← hMatrix]
+  exact (edgeInsertedCoeff_applyGauge B Z e σ
+    (Matrix.reindexAlgEquiv ℂ ℂ (finCongr (congr_fun hDim e)) M)).symm
 
 omit [Fintype V] in
 /-- Reindexing a PEPS tensor along a bond-dimension equality preserves vertex
@@ -437,10 +447,10 @@ theorem edgeGaugeAt_globalGauge (A B : Tensor G d) (hbd : A.bondDim = B.bondDim)
           (edgeGaugeAtInv (G := G) B Z v ie) := by
   unfold edgeGaugeAt edgeGaugeAtInv globalGauge edgeScalarUnit
   by_cases h : ie.1.1.1 = v
-  · simp only [if_pos h]
+  · simp only [ite_eq_left h]
     rw [Units.val_mul, Matrix.GeneralLinearGroup.coe_scalar, glReindex_coe,
       Matrix.scalar_apply, ← Matrix.smul_eq_diagonal_mul]
-  · simp only [if_neg h]
+  · simp only [ite_eq_right h]
     have hdet : IsUnit (Matrix.reindexAlgEquiv ℂ ℂ (finCongr (congr_fun hbd ie.1).symm)
         (↑((Z ie.1)⁻¹) : Matrix (Fin (B.bondDim ie.1)) (Fin (B.bondDim ie.1)) ℂ)).det := by
       rw [← glReindex_coe]
