@@ -432,6 +432,28 @@ noncomputable def c3CenteredVirtualResidualES [NeZero D]
     Kinftail.comp ((tailVirtualMapES A K).comp
       (Iinf.comp ((leftVirtualMapES A 1).adjoint.comp Kinfleft)))
 
+private theorem c3CenteredVirtualResidualES_eq_wholeIncrementCenteredResidualES
+    [NeZero D] (A : MPSTensor d D) (K l : ℕ)
+    (ρ : Matrix (Fin D) (Fin D) ℂ) (hρ : ρ.PosDef) :
+    c3CenteredVirtualResidualES A K l ρ hρ =
+      wholeIncrementCenteredResidualES A K l 1 ρ (ne_of_gt hρ.trace_pos)  := by
+  rw [c3CenteredVirtualResidualES, wholeIncrementCenteredResidualES,
+    reassocTailBoundaryMapES_one]
+  congr 1
+  apply ContinuousLinearMap.ext
+  intro y
+  apply ext_inner_left ℂ
+  intro x
+  rw [inner_limitingMixedGramIntertwining A K ρ hρ x y]
+  rw [ContinuousLinearMap.comp_apply, ContinuousLinearMap.comp_apply,
+    ContinuousLinearMap.adjoint_inner_right, inner_boundaryFiberwiseMap]
+  simp only [boundaryFamilyFiber_eq_frobeniusEquivEuclidean,
+    boundaryFamilyEquiv_wholeIncrementLeftOverlapFactorES_apply,
+    boundaryFamilyEquiv_wholeIncrementRightOverlapFactorES_apply,
+    Matrix.gramReshuffle_fixedPointProj_frobeniusEquivEuclidean_apply,
+    Fintype.sum_prod_type]
+
+
 /-- The centered overlap residual factors exactly through the length-\(l\) Gram
 error on the common direct sum. -/
 theorem c3_centeredVirtualResidualES_eq_overlapFactors [NeZero D]
@@ -444,20 +466,10 @@ theorem c3_centeredVirtualResidualES_eq_overlapFactors [NeZero D]
         ((boundaryFiberwiseMap (D := D) (Cfg d K × Cfg d 1)
           (groundSpaceGram A l - Kinf)).comp
             (c3RightOverlapFactorES A K)) := by
-  dsimp only
-  apply ContinuousLinearMap.ext
-  intro y
-  apply ext_inner_left ℂ
-  intro x
-  simp only [c3CenteredVirtualResidualES]
-  rw [inner_c3_centeredVirtualResidual_eq_gramError A K l ρ hρ x y]
-  rw [ContinuousLinearMap.comp_apply, ContinuousLinearMap.comp_apply,
-    ContinuousLinearMap.adjoint_inner_right,
-    inner_boundaryFiberwiseMap]
-  simp only [boundaryFamilyFiber_eq_frobeniusEquivEuclidean,
-    boundaryFamilyEquiv_c3LeftOverlapFactorES_apply,
-    boundaryFamilyEquiv_c3RightOverlapFactorES_apply,
-    Fintype.sum_prod_type]
+  rw [c3CenteredVirtualResidualES_eq_wholeIncrementCenteredResidualES]
+  simpa only [c3LeftOverlapFactorES, c3RightOverlapFactorES] using
+    wholeIncrementCenteredResidualES_eq_overlapFactors
+      A K l 1 ρ (ne_of_gt hρ.trace_pos)
 
 /-- Operator-norm bound for the exact centered overlap factorization. -/
 theorem c3_centeredVirtualResidualES_norm_le [NeZero D]
@@ -468,44 +480,9 @@ theorem c3_centeredVirtualResidualES_norm_le [NeZero D]
     ‖c3CenteredVirtualResidualES A K l ρ hρ‖ ≤
       ‖leftVirtualMapES A 1‖ * ‖groundSpaceGram A l - Kinf‖ *
         ‖tailVirtualMapES A K‖ := by
-  dsimp only
-  rw [c3_centeredVirtualResidualES_eq_overlapFactors A K l ρ hρ]
-  calc
-    _ ≤ ‖(c3LeftOverlapFactorES A K).adjoint‖ *
-        ‖boundaryFiberwiseMap (D := D) (Cfg d K × Cfg d 1)
-          (groundSpaceGram A l -
-            Matrix.gramReshuffle (fixedPointProj ρ (ne_of_gt hρ.trace_pos)))‖ *
-          ‖c3RightOverlapFactorES A K‖ := by
-      calc
-        _ ≤ ‖(c3LeftOverlapFactorES A K).adjoint‖ *
-            ‖(boundaryFiberwiseMap (D := D) (Cfg d K × Cfg d 1)
-              (groundSpaceGram A l - Matrix.gramReshuffle
-                (fixedPointProj ρ (ne_of_gt hρ.trace_pos)))).comp
-                (c3RightOverlapFactorES A K)‖ :=
-          ContinuousLinearMap.opNorm_comp_le _ _
-        _ ≤ ‖(c3LeftOverlapFactorES A K).adjoint‖ *
-            (‖boundaryFiberwiseMap (D := D) (Cfg d K × Cfg d 1)
-              (groundSpaceGram A l - Matrix.gramReshuffle
-                (fixedPointProj ρ (ne_of_gt hρ.trace_pos)))‖ *
-              ‖c3RightOverlapFactorES A K‖) := by
-          gcongr
-          exact ContinuousLinearMap.opNorm_comp_le _ _
-        _ = _ := by ring
-    _ = ‖c3LeftOverlapFactorES A K‖ *
-        ‖boundaryFiberwiseMap (D := D) (Cfg d K × Cfg d 1)
-          (groundSpaceGram A l -
-            Matrix.gramReshuffle (fixedPointProj ρ (ne_of_gt hρ.trace_pos)))‖ *
-          ‖c3RightOverlapFactorES A K‖ := by
-      rw [LinearIsometryEquiv.norm_map
-        (ContinuousLinearMap.adjoint (𝕜 := ℂ))]
-    _ ≤ ‖leftVirtualMapES A 1‖ *
-        ‖groundSpaceGram A l -
-          Matrix.gramReshuffle (fixedPointProj ρ (ne_of_gt hρ.trace_pos))‖ *
-          ‖tailVirtualMapES A K‖ := by
-      gcongr
-      · exact c3LeftOverlapFactorES_norm_le A K
-      · exact norm_boundaryFiberwiseMap_le _ _
-      · exact c3RightOverlapFactorES_norm_le A K
+  rw [c3CenteredVirtualResidualES_eq_wholeIncrementCenteredResidualES]
+  simpa using wholeIncrementCenteredResidualES_norm_le
+    A K l 1 ρ (ne_of_gt hρ.trace_pos)
 
 /-- For a primitive MPS tensor with a positive-definite fixed point, the
 squared norm of the centered overlap residual decays geometrically in the
@@ -520,35 +497,26 @@ theorem IsPrimitiveMPS.c3_centeredVirtualResidualES_norm_sq_le_geometric
   obtain ⟨C_G, r, hC_G, hr_pos, hr_lt_one, hGram⟩ :=
     hP.groundSpaceGram_sub_fixedPointProj_norm_sq_le_geometric
   obtain ⟨C_T, hC_T, hTail⟩ := hP.tailVirtualMapES_norm_uniform
-  refine ⟨C_G * C_T * (‖leftVirtualMapES A 1‖ + 1), r, by positivity,
-    hr_pos, hr_lt_one, ?_⟩
+  refine ⟨C_G * C_T, r, mul_pos hC_G hC_T, hr_pos, hr_lt_one, ?_⟩
   intro K l hl
   let Kinf := Matrix.gramReshuffle
     (fixedPointProj ρ (ne_of_gt hρ.trace_pos))
   have hCenter : ‖c3CenteredVirtualResidualES A K l ρ hρ‖ ≤
-      ‖leftVirtualMapES A 1‖ * ‖groundSpaceGram A l - Kinf‖ *
-        ‖tailVirtualMapES A K‖ := by
-    simpa only [Kinf] using c3_centeredVirtualResidualES_norm_le A K l ρ hρ
+      ‖groundSpaceGram A l - Kinf‖ * ‖tailVirtualMapES A K‖ := by
+    rw [c3CenteredVirtualResidualES_eq_wholeIncrementCenteredResidualES]
+    simpa only [Kinf] using hP.wholeIncrementCenteredResidualES_norm_le hρ K l 1
   have hGram' : ‖groundSpaceGram A l - Kinf‖ ^ 2 ≤
       (D : ℝ) ^ 3 * (C_G * r ^ l) ^ 2 := by
     simpa only [Kinf] using hGram l hl
-  have hLeft : ‖leftVirtualMapES A 1‖ ^ 2 ≤
-      (‖leftVirtualMapES A 1‖ + 1) ^ 2 := by
-    exact (sq_le_sq₀ (norm_nonneg _)
-      (by positivity : 0 ≤ ‖leftVirtualMapES A 1‖ + 1)).mpr (by linarith)
   have hTail' : ‖tailVirtualMapES A K‖ ^ 2 ≤ C_T ^ 2 := by
     exact (sq_le_sq₀ (norm_nonneg _) hC_T.le).mpr (hTail K)
   calc
     ‖c3CenteredVirtualResidualES A K l ρ hρ‖ ^ 2 ≤
-        (‖leftVirtualMapES A 1‖ * ‖groundSpaceGram A l - Kinf‖ *
-          ‖tailVirtualMapES A K‖) ^ 2 :=
+        (‖groundSpaceGram A l - Kinf‖ * ‖tailVirtualMapES A K‖) ^ 2 :=
       (sq_le_sq₀ (norm_nonneg _) (by positivity)).mpr hCenter
-    _ = ‖leftVirtualMapES A 1‖ ^ 2 *
-        ‖groundSpaceGram A l - Kinf‖ ^ 2 * ‖tailVirtualMapES A K‖ ^ 2 := by ring
-    _ ≤ (‖leftVirtualMapES A 1‖ + 1) ^ 2 *
-        ((D : ℝ) ^ 3 * (C_G * r ^ l) ^ 2) * C_T ^ 2 := by
+    _ = ‖groundSpaceGram A l - Kinf‖ ^ 2 * ‖tailVirtualMapES A K‖ ^ 2 := by ring
+    _ ≤ ((D : ℝ) ^ 3 * (C_G * r ^ l) ^ 2) * C_T ^ 2 := by
       gcongr
-    _ = (D : ℝ) ^ 3 *
-        (C_G * C_T * (‖leftVirtualMapES A 1‖ + 1) * r ^ l) ^ 2 := by ring
+    _ = (D : ℝ) ^ 3 * (C_G * C_T * r ^ l) ^ 2 := by ring
 
 end MPSTensor
