@@ -6,6 +6,7 @@ Authors: TNLean contributors
 import TNLean.Algebra.MatrixOperatorSpace
 import TNLean.Channel.Peripheral.Spectrum
 import TNLean.Channel.Peripheral.UnitalKraus
+import TNLean.Channel.Schwarz.Basic
 import Mathlib.Analysis.InnerProductSpace.Adjoint
 import Mathlib.LinearAlgebra.Eigenspace.Charpoly
 
@@ -42,7 +43,7 @@ gives the spectral-radius bound for trace-preserving Kraus maps.
   Section 6.2][Wolf2012QChannels]
 -/
 
-open scoped Matrix ComplexOrder MatrixOrder BigOperators NNReal ENNReal TNOperatorSpace
+open scoped Matrix ComplexOrder MatrixOrder BigOperators NNReal ENNReal
 open Matrix Finset Complex
 
 section AdjointEigenvalues
@@ -294,7 +295,7 @@ theorem eigenvalue_norm_le_one_of_isTP
   classical
   -- The conjugate-transposed family is unital.
   have hUnital : IsUnital (fun i => (K i)ᴴ) := by
-    simpa only [IsUnital, Matrix.conjTranspose_conjTranspose] using hTP
+    simpa only [IsUnital, IsTP, Matrix.conjTranspose_conjTranspose] using hTP
   have hOne : mapLM (fun i => (K i)ᴴ) (1 : Mat) = 1 := by
     simpa only [mapLM_apply] using map_one_of_isUnital (fun i => (K i)ᴴ) hUnital
   have hKrausCP : IsKrausCP (mapLM fun i => (K i)ᴴ) :=
@@ -306,6 +307,10 @@ theorem eigenvalue_norm_le_one_of_isTP
   have hBound : ‖star μ‖ ≤ 1 :=
     hKrausCP.eigenvalue_norm_le_one_of_map_one_eq_one hOne (star μ) hEigAdj
   simpa only [RCLike.star_def, RCLike.norm_conj] using hBound
+
+section OperatorSpace
+
+open scoped TNOperatorSpace
 
 /-- A trace-preserving finite Kraus map has spectral radius at most one. -/
 theorem spectralRadius_mapLM_le_one_of_isTP
@@ -325,5 +330,7 @@ theorem spectralRadius_mapLM_le_one_of_isTP
     Module.End.hasEigenvalue_iff_mem_spectrum.mpr hμE
   have hBound : ‖μ‖ ≤ 1 := eigenvalue_norm_le_one_of_isTP K hTP μ hEig
   exact_mod_cast hBound
+
+end OperatorSpace
 
 end Kraus
