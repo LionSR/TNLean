@@ -4,7 +4,6 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.Analysis.MatrixReducedProjection
-import TNLean.Analysis.MatrixSqrt
 import TNLean.MPS.MPU.VirtualSandwich
 
 open scoped ComplexOrder
@@ -125,15 +124,6 @@ theorem exists_units_for_hat_reducedProjection
       X * L = hL.supportProj ∧ R * Z = hR.supportProj ∧
       hL.supportProj * hR.supportProj * Y =
         Matrix.reducedProjection hL.supportProj hR.supportProj := by
-  have hP : IsOrthogonalProjection hL.supportProj :=
-    hL.isOrthogonalProjection_supportProj
-  obtain ⟨Y, hY, hTQY⟩ := Matrix.exists_reducedProjection_rightFactor
-    (P := hL.supportProj) (Q := hR.supportProj) hP
-  have hPQY : hL.supportProj * hR.supportProj * Y =
-      Matrix.reducedProjection hL.supportProj hR.supportProj := by
-    rw [← Matrix.reducedProjection_mul_second hP, hTQY]
-  exact ⟨hL.supportInvExtension, hR.supportInvExtension, Y,
-    hL.isUnit_supportInvExtension, hR.isUnit_supportInvExtension, hY,
-    hL.supportInvExtension_mul_self, hR.self_mul_supportInvExtension, hPQY⟩
+  exact Matrix.exists_units_supportInvExtension_reducedProjection_rightFactor hL hR
 
 end MPOTensor
