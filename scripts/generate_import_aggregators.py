@@ -37,6 +37,19 @@ GENERATED_NOTICE = (
     "-- Import architecture: docs/import_structure.md.\n"
 )
 EXCLUDED_TOP_LEVEL_DIRECTORIES = frozenset({"Archive"})
+# Narrow, reviewable exceptions to the rule that handwritten imports do not count
+# toward generated manifest coverage. Each generated aggregator may delegate the
+# listed production modules to a directly imported handwritten sub-aggregator.
+HANDWRITTEN_IMPORT_OWNERSHIP = {
+    "TNLean.MPS.ParentHamiltonian": {
+        "TNLean.MPS.ParentHamiltonian.Martingale": frozenset(
+            {
+                "TNLean.MPS.ParentHamiltonian.BlockedGroundSpaceTransport",
+                "TNLean.MPS.ParentHamiltonian.LocalSupportTransport",
+            }
+        )
+    }
+}
 
 
 def generated_notice(module: str) -> str:
@@ -82,6 +95,17 @@ def is_generated(path: Path, source_root: Path) -> bool:
 def module_name(path: Path, repository_root: Path) -> str:
     """Convert a repository-relative Lean source path to its module name."""
     return ".".join(path.relative_to(repository_root).with_suffix("").parts)
+
+
+def delegated_modules(aggregator: str, direct_imports: set[str]) -> set[str]:
+    """Return modules explicitly owned by directly imported handwritten aggregators."""
+    ownership = HANDWRITTEN_IMPORT_OWNERSHIP.get(aggregator, {})
+    return {
+        module
+        for owner, modules in ownership.items()
+        if owner in direct_imports
+        for module in modules
+    }
 
 
 def is_excluded(path: Path, source_root: Path) -> bool:
@@ -165,9 +189,11 @@ def build_expected_files(repository_root: Path) -> tuple[dict[Path, str], list[P
             imports.update(frontier(child))
         target = aggregator_path(directory, source_root, repository_root)
         imports.discard(target)
-        names = sorted(module_name(path, repository_root) for path in imports)
-        body = "".join(f"import {name}\n" for name in names)
-        expected[target] = f"{generated_notice(module_name(target, repository_root))}\n{body}"
+        target_module = module_name(target, repository_root)
+        names = {module_name(path, repository_root) for path in imports}
+        names -= delegated_modules(target_module, names)
+        body = "".join(f"import {name}\n" for name in sorted(names))
+        expected[target] = f"{generated_notice(target_module)}\n{body}"
 
     return expected, sources
 
@@ -204,7 +230,9 @@ def check_manifest_coverage(
         if current in visited_aggregators:
             continue
         visited_aggregators.add(current)
-        for imported in generated_imports.get(current, ()):
+        direct_imports = generated_imports.get(current, set())
+        represented.update(delegated_modules(current, direct_imports) & production_modules)
+        for imported in direct_imports:
             if imported in production_modules:
                 represented.add(imported)
             if imported in generated_imports:
