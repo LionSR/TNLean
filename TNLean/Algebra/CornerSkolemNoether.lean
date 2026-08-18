@@ -206,7 +206,7 @@ theorem exists_partial_isometry_implementing_corner_linearEquiv
       have hfXzero : (f X).1 = 0 := by simpa [hPzero] using (f X).2.symm
       simp [hXzero, hfXzero]
   | succ n =>
-      obtain ⟨W, hW⟩ := exists_unitary_conj_of_starAlgEquiv_matrix gEquiv
+      obtain ⟨W, hW⟩ := Matrix.exists_unitary_conj_of_starAlgEquiv_matrix gEquiv
       have hVP_iso : VPᴴ * VP = 1 :=
         cornerCompressionIsometry_conjTranspose_mul UP eSTP eSP hUPstarUP
       have hVQ_iso : VQᴴ * VQ = 1 :=

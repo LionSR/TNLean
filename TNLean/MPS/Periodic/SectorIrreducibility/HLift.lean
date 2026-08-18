@@ -91,7 +91,8 @@ theorem hProjStep_of_sectorFixedPointAlgebraRigidity
 sector is a scalar multiple of the corresponding sector projection.
 
 The orbit sum `∑ l, T^[l](X)` is `T`-fixed, hence scalar by
-`fixed_eq_scalar_of_irreducible_unital`; compressing that scalar orbit sum back to the original
+`Kraus.fixed_eq_scalar_of_irreducible_unital`; compressing that scalar orbit sum back to the
+original
 sector recovers `X`. -/
 private theorem sector_supported_pow_fixed_eq_smul_projection
     [NeZero D] [NeZero m]
@@ -130,7 +131,7 @@ private theorem sector_supported_pow_fixed_eq_smul_projection
         orbitSumProjection (D := D) (m := m) T X :=
     orbitSumProjection_fixed_of_pow_fix (T := T) (Q := X) (m := m) (by simpa [T] using hXfix)
   obtain ⟨c, hOrbitScalar⟩ :=
-    fixed_eq_scalar_of_irreducible_unital
+    Kraus.fixed_eq_scalar_of_irreducible_unital
       (K := K) hUnital hIrrAdj (orbitSumProjection (D := D) (m := m) T X)
       (by simpa [T, K] using hOrbitFix)
   have hRecover :

@@ -247,7 +247,7 @@ private lemma exists_nondecaying_overlap_of_nonzeroProportionalDecompositions
         cases x <;> rfl
       rw [← hFamily]
       exact hLIN
-    exact coefficient_eq_zero_of_sum_eq_of_complement_smul
+    exact Fintype.coefficient_eq_zero_of_sum_eq_of_complement_smul
       (T := T)
       (a := coeffA (p * N))
       (u := fun j ↦ mpvState (d := d) (A j) (p * N))

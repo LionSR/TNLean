@@ -132,7 +132,7 @@ theorem sum_castLE_extend_zero {r s : ℕ} {β : Type*} [AddCommMonoid β]
 
 end Fin
 
-namespace MPSTensor
+namespace Fintype
 
 /-- Re-index a sum over a finite family by collecting coefficients in the fibres
 of a finite map. -/
@@ -227,4 +227,4 @@ lemma coefficient_eq_zero_of_sum_eq_of_complement_smul
     Fintype.linearIndependent_iff.mp hLI coefficient hZero (Sum.inl ⟨i₀, hi₀⟩)
   simpa [coefficient] using hCoefficient
 
-end MPSTensor
+end Fintype

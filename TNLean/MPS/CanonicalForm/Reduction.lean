@@ -124,8 +124,8 @@ theorem isIrreducibleTensor_smul_conj (B : MPSTensor d D)
     exact hXdet.star
   set Y : Matrix (Fin D) (Fin D) ℂ := X * P with hY
   set π : Matrix (Fin D) (Fin D) ℂ :=
-    supportProj (D := D) (Y * Yᴴ) (Matrix.posSemidef_self_mul_conjTranspose Y) with hπ
-  refine ⟨π, isOrthogonalProjection_supportProj (D := D) (ρ := Y * Yᴴ)
+    Matrix.supportProj (D := D) (Y * Yᴴ) (Matrix.posSemidef_self_mul_conjTranspose Y) with hπ
+  refine ⟨π, Matrix.isOrthogonalProjection_supportProj (D := D) (ρ := Y * Yᴴ)
     (hρ := Matrix.posSemidef_self_mul_conjTranspose Y), ?_, ?_, ?_⟩
   · -- `π ≠ 0` because `Y ≠ 0`.
     have hYne : Y ≠ 0 := by
@@ -135,7 +135,7 @@ theorem isIrreducibleTensor_smul_conj (B : MPSTensor d D)
         _ = 0 := by rw [← hY, h0, Matrix.mul_zero]
     have hSne : Y * Yᴴ ≠ 0 := fun h0 =>
       hYne (Matrix.self_mul_conjTranspose_eq_zero.mp h0)
-    exact supportProj_ne_zero_of_ne_zero (Y * Yᴴ)
+    exact Matrix.supportProj_ne_zero_of_ne_zero (Y * Yᴴ)
       (Matrix.posSemidef_self_mul_conjTranspose Y) hSne
   · -- `π ≠ 1`: a nonzero vector in the kernel of `P` transports to the
     -- kernel of `Y * Yᴴ`, hence of `π`.
@@ -172,7 +172,7 @@ theorem isIrreducibleTensor_smul_conj (B : MPSTensor d D)
       rw [hYY, ← Matrix.mulVec_mulVec, ← Matrix.mulVec_mulVec, hXHv, hPw,
         Matrix.mulVec_zero]
     have hπv : π *ᵥ v = 0 :=
-      supportProj_mulVec_eq_zero_of_mulVec_eq_zero (Y * Yᴴ)
+      Matrix.supportProj_mulVec_eq_zero_of_mulVec_eq_zero (Y * Yᴴ)
         (Matrix.posSemidef_self_mul_conjTranspose Y) v hSv
     intro h1
     apply hvne
@@ -201,7 +201,7 @@ theorem isIrreducibleTensor_smul_conj (B : MPSTensor d D)
         _ = X * (X⁻¹ * B u * X * P) := by simp only [Matrix.mul_assoc]
         _ = X * (P * (X⁻¹ * B u * X * P)) := by rw [← hinv']
         _ = Y * (X⁻¹ * B u * X * P) := by rw [hY]; simp only [Matrix.mul_assoc]
-    exact one_sub_supportProj_mul_mul_supportProj_eq_zero Y hGB
+    exact Matrix.one_sub_supportProj_mul_mul_supportProj_eq_zero Y hGB
 
 
 /-! ## Auxiliary lemmas about casts and MPVs -/

@@ -29,9 +29,9 @@ Kraus families.
 -/
 
 open scoped Matrix ComplexOrder MatrixOrder BigOperators
-open Matrix Finset Complex
+open Matrix Finset Complex MPSTensor
 
-namespace MPSTensor
+namespace Kraus
 
 private theorem hermitian_fixed_eq_scalar_of_irreducible_unital
     {r D : ℕ} [NeZero D]
@@ -100,7 +100,7 @@ theorem fixed_eq_scalar_of_irreducible_unital
     calc
       transferMap (d := r) (D := D) K (Complex.I • (X - Xᴴ))
           = Complex.I • transferMap (d := r) (D := D) K (X - Xᴴ) := by
-              simp only [map_smul, transferMap_apply]
+              simp only [_root_.map_smul, transferMap_apply]
       _ = Complex.I • (transferMap (d := r) (D := D) K X - transferMap (d := r) (D := D) K Xᴴ) := by
               simpa using congrArg (fun M => Complex.I • M)
                 ((transferMap (d := r) (D := D) K).map_sub X Xᴴ)
@@ -277,7 +277,7 @@ theorem exists_peripheral_unitary_of_irreducible_schwarz
             simp only [hscalar, one_smul]⟩, ?_⟩
   calc
     transferMap (d := r) (D := D) K (a⁻¹ • X) = a⁻¹ • transferMap (d := r) (D := D) K X := by
-          simp only [map_smul, transferMap_apply]
+          simp only [_root_.map_smul, transferMap_apply]
     _ = a⁻¹ • (γ • X) := by rw [hEig_transfer]
     _ = γ • (a⁻¹ • X) := by simp only [smul_smul, mul_comm]
 
@@ -397,7 +397,7 @@ theorem exists_normalized_peripheral_unitary_of_irreducible_schwarz
   · calc
       transferMap (d := r) (D := D) K (β • (U : MatrixAlg D))
           = β • transferMap (d := r) (D := D) K (U : MatrixAlg D) := by
-              simp only [map_smul, transferMap_apply]
+              simp only [_root_.map_smul, transferMap_apply]
       _ = β • (γ • (U : MatrixAlg D)) := by rw [hU]
       _ = γ • (β • (U : MatrixAlg D)) := by simp only [smul_smul, mul_comm]
   · calc
@@ -413,4 +413,4 @@ theorem exists_normalized_peripheral_unitary_of_irreducible_schwarz
 
 end PeripheralUnitary
 
-end MPSTensor
+end Kraus

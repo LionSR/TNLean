@@ -78,17 +78,17 @@ theorem exists_blockEquiv_dim_eq_of_starAlgEquiv_pi_matrix
       (∀ j, Matrix (Fin (e j)) (Fin (e j)) ℂ)) :
     ∃ σ : ι ≃ κ,
       (∀ i, T.toRingEquiv.mapTwoSidedIdeal
-        (MPSTensor.blockIdeal (fun k ↦ Matrix (Fin (d k)) (Fin (d k)) ℂ) i) =
-          MPSTensor.blockIdeal (fun k ↦ Matrix (Fin (e k)) (Fin (e k)) ℂ) (σ i)) ∧
+        (Matrix.blockIdeal (fun k ↦ Matrix (Fin (d k)) (Fin (d k)) ℂ) i) =
+          Matrix.blockIdeal (fun k ↦ Matrix (Fin (e k)) (Fin (e k)) ℂ) (σ i)) ∧
       ∀ i, d i = e (σ i) := by
   classical
   obtain ⟨σ, hσ⟩ :=
-    MPSTensor.exists_blockEquiv_of_ringEquiv_pi_simple T.toRingEquiv
+    Matrix.exists_blockEquiv_of_ringEquiv_pi_simple T.toRingEquiv
   refine ⟨σ, hσ, ?_⟩
   intro i
   let φ := blockComponentLinearMap T σ i
   have hφBij : Function.Bijective φ := by
-    exact MPSTensor.blockComponentMap_bijective T.toRingEquiv σ hσ i
+    exact Matrix.blockComponentMap_bijective T.toRingEquiv σ hσ i
   have hfinrank := (LinearEquiv.ofBijective φ hφBij).finrank_eq
   rw [Module.finrank_matrix, Module.finrank_matrix] at hfinrank
   simp only [Module.finrank_self, Fintype.card_fin, mul_one] at hfinrank
@@ -107,8 +107,8 @@ theorem exists_blockEquiv_dim_eq_unitary_of_starAlgEquiv_pi_matrix
       (∀ j, Matrix (Fin (e j)) (Fin (e j)) ℂ)) :
     ∃ sigma : ι ≃ κ, ∃ hDim : ∀ i, d i = e (sigma i),
       (∀ i, T.toRingEquiv.mapTwoSidedIdeal
-        (MPSTensor.blockIdeal (fun k ↦ Matrix (Fin (d k)) (Fin (d k)) ℂ) i) =
-          MPSTensor.blockIdeal
+        (Matrix.blockIdeal (fun k ↦ Matrix (Fin (d k)) (Fin (d k)) ℂ) i) =
+          Matrix.blockIdeal
             (fun k ↦ Matrix (Fin (e k)) (Fin (e k)) ℂ) (sigma i)) ∧
       ∃ U : ∀ i, Matrix.unitaryGroup (Fin (e (sigma i))) ℂ,
         ∀ (i : ι) (M : Matrix (Fin (d i)) (Fin (d i)) ℂ),
@@ -119,7 +119,7 @@ theorem exists_blockEquiv_dim_eq_unitary_of_starAlgEquiv_pi_matrix
   obtain ⟨sigma, hsigma, hDim⟩ :=
     exists_blockEquiv_dim_eq_of_starAlgEquiv_pi_matrix T
   exact ⟨sigma, hDim, hsigma,
-    MPSTensor.exists_unitary_block_implementers_of_starAlgEquiv_pi_matrix
+    Matrix.exists_unitary_block_implementers_of_starAlgEquiv_pi_matrix
       T sigma hsigma hDim⟩
 
 /-- A star-algebra equivalence whose action on its matched simple summands is
@@ -133,8 +133,8 @@ theorem isTracePreservingBetweenDirectSums_of_unitary_block_implementers
       (∀ j, Matrix (Fin (e j)) (Fin (e j)) ℂ))
     (sigma : ι ≃ κ)
     (hsigma : ∀ i, T.toRingEquiv.mapTwoSidedIdeal
-      (MPSTensor.blockIdeal (fun k ↦ Matrix (Fin (d k)) (Fin (d k)) ℂ) i) =
-        MPSTensor.blockIdeal
+      (Matrix.blockIdeal (fun k ↦ Matrix (Fin (d k)) (Fin (d k)) ℂ) i) =
+        Matrix.blockIdeal
           (fun k ↦ Matrix (Fin (e k)) (Fin (e k)) ℂ) (sigma i))
     (hDim : ∀ i, d i = e (sigma i))
     (U : ∀ i, Matrix.unitaryGroup (Fin (e (sigma i))) ℂ)
@@ -161,7 +161,7 @@ theorem isTracePreservingBetweenDirectSums_of_unitary_block_implementers
         _ = M.trace := Matrix.trace_reindex (finCongr (hDim i)) M
     · intro j _ hj
       have hzero : T (Pi.single i M) j = 0 := by
-        exact MPSTensor.ringEquiv_maps_single_support_between
+        exact Matrix.ringEquiv_maps_single_support_between
           T.toRingEquiv sigma hsigma M j hj
       rw [hzero, Matrix.trace_zero]
     · intro hnot
@@ -206,8 +206,8 @@ theorem exists_blockEquiv_dim_eq_of_mutual_inverse_kraus_direct_sum_maps
     let E := (directSumTraceAdjointStarAlgEquiv T S hT hS hTTP hSTP hST hTS).symm
     ∃ σ : ι ≃ κ,
       (∀ i, E.toRingEquiv.mapTwoSidedIdeal
-        (MPSTensor.blockIdeal (fun k ↦ Matrix (Fin (d k)) (Fin (d k)) ℂ) i) =
-          MPSTensor.blockIdeal (fun k ↦ Matrix (Fin (e k)) (Fin (e k)) ℂ) (σ i)) ∧
+        (Matrix.blockIdeal (fun k ↦ Matrix (Fin (d k)) (Fin (d k)) ℂ) i) =
+          Matrix.blockIdeal (fun k ↦ Matrix (Fin (e k)) (Fin (e k)) ℂ) (σ i)) ∧
       ∀ i, d i = e (σ i) := by
   exact exists_blockEquiv_dim_eq_of_starAlgEquiv_pi_matrix
     (directSumTraceAdjointStarAlgEquiv T S hT hS hTTP hSTP hST hTS).symm
@@ -232,8 +232,8 @@ theorem exists_blockEquiv_dim_eq_unitary_of_mutual_inverse_kraus_direct_sum_maps
     let E := (directSumTraceAdjointStarAlgEquiv T S hT hS hTTP hSTP hST hTS).symm
     ∃ sigma : ι ≃ κ, ∃ hDim : ∀ i, d i = e (sigma i),
       (∀ i, E.toRingEquiv.mapTwoSidedIdeal
-        (MPSTensor.blockIdeal (fun k ↦ Matrix (Fin (d k)) (Fin (d k)) ℂ) i) =
-          MPSTensor.blockIdeal
+        (Matrix.blockIdeal (fun k ↦ Matrix (Fin (d k)) (Fin (d k)) ℂ) i) =
+          Matrix.blockIdeal
             (fun k ↦ Matrix (Fin (e k)) (Fin (e k)) ℂ) (sigma i)) ∧
       ∃ U : ∀ i, Matrix.unitaryGroup (Fin (e (sigma i))) ℂ,
         ∀ (i : ι) (M : Matrix (Fin (d i)) (Fin (d i)) ℂ),
@@ -312,7 +312,7 @@ theorem exists_blockEquiv_dim_eq_unitary_forward_of_mutual_inverse_kraus_direct_
     · subst j
       rw [Pi.single_eq_same, hU]
     · have hzero : E (Pi.single i M) j = 0 := by
-        exact MPSTensor.ringEquiv_maps_single_support_between
+        exact Matrix.ringEquiv_maps_single_support_between
           E.toRingEquiv sigma hsigma M j hj
       rw [hzero, Pi.single_eq_of_ne hj]
   have hSinverse (i : ι)
@@ -340,7 +340,7 @@ theorem exists_blockEquiv_dim_eq_unitary_forward_of_mutual_inverse_kraus_direct_
             simp only [mul_assoc]
           _ = N := by rw [hVright, one_mul, mul_one]
       · have hzero : E (Pi.single i X) j = 0 := by
-          exact MPSTensor.ringEquiv_maps_single_support_between
+          exact Matrix.ringEquiv_maps_single_support_between
             E.toRingEquiv sigma hsigma X j hj
         rw [hzero, Pi.single_eq_of_ne hj]
     have hEsm : E.symm (Pi.single (sigma i) N) = Pi.single i X := by

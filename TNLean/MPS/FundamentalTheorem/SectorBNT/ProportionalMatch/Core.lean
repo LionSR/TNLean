@@ -151,7 +151,7 @@ lemma exists_nondecaying_overlap_exact_of_eventuallyProportional
         _ = ∑ k : Fin Q.basisCount, (c * Q.coeff N k) •
             mpvState (d := d) (Q.basis k) N := by
               simp [Finset.smul_sum, smul_smul]
-    exact coefficient_eq_zero_of_sum_eq_of_complement_smul
+    exact Fintype.coefficient_eq_zero_of_sum_eq_of_complement_smul
       (T := T) (a := fun j => P.coeff N j)
       (u := fun j => mpvState (d := d) (P.basis j) N)
       (b := fun k => c * Q.coeff N k)
