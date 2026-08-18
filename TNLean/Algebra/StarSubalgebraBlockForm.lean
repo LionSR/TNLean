@@ -75,7 +75,7 @@ theorem mem_of_forall_comm {T : Matrix n n ℂ}
     simpa only [LinearMap.restrictScalars_apply] using
       (hT (LinearMap.restrictScalars ℂ g) hg v).symm
   -- Package the operator as an endomorphism over the commutant and apply Jacobson density.
-  haveI : IsSemisimpleModule ↥S (EuclideanSpace ℂ n) := S.isSemisimpleModule_euclideanSpace
+  have : IsSemisimpleModule ↥S (EuclideanSpace ℂ n) := S.isSemisimpleModule_euclideanSpace
   let f : Module.End (Module.End ↥S (EuclideanSpace ℂ n)) (EuclideanSpace ℂ n) :=
     { toFun := Matrix.toEuclideanLin T
       map_add' := map_add _
@@ -228,7 +228,7 @@ private theorem exists_commutant_coeff
     have hcoeff := congrArg (fun v => ⟪b ⟨k, (i, j')⟩, v⟫_ℂ) hx
     simpa only [inner_sum, inner_smul_right, horth, Sigma.mk.inj_iff, heq_eq_eq,
       Prod.mk.injEq, true_and, mul_ite, mul_one, mul_zero, Finset.sum_ite_eq,
-      Finset.mem_univ, if_true] using hcoeff
+      Finset.mem_univ, ite_true] using hcoeff
   -- Across components the matrix of `g` vanishes: a nonzero entry would produce a nonzero
   -- intertwiner between rows of different types.
   have hacross : ∀ (k k' : Fin K), k ≠ k' → ∀ (i : Fin (m k)) (i' : Fin (m k'))
@@ -246,7 +246,7 @@ private theorem exists_commutant_coeff
       have hcoeff := congrArg (fun v => ⟪b ⟨k', (i', j')⟩, v⟫_ℂ) h0
       simp only [inner_sum, inner_smul_right, horth, Sigma.mk.inj_iff, heq_eq_eq,
         Prod.mk.injEq, true_and, mul_ite, mul_one, mul_zero, Finset.sum_ite_eq,
-        Finset.mem_univ, if_true, inner_zero_right] at hcoeff
+        Finset.mem_univ, ite_true, inner_zero_right] at hcoeff
       exact hne hcoeff
   -- Expand `g` on the basis and collect the coefficients.
   choose γ hγ using hwithin
@@ -261,7 +261,7 @@ private theorem exists_commutant_coeff
   simp only [Fintype.sum_prod_type]
   rw [Finset.sum_eq_single_of_mem k (Finset.mem_univ k) houter]
   refine Finset.sum_congr rfl fun i' _ => ?_
-  simp only [hγ, ite_smul, zero_smul, Finset.sum_ite_eq', Finset.mem_univ, if_true]
+  simp only [hγ, ite_smul, zero_smul, Finset.sum_ite_eq', Finset.mem_univ, ite_true]
 
 /-- **Complementary spatial actions of a star-subalgebra and its commutant.** Let `S` be a
 star-subalgebra of complex matrices. There is an orthonormal basis

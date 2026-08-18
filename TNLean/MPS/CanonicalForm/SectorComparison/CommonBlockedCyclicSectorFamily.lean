@@ -154,7 +154,7 @@ private theorem commonSectorBlock_structural (F : CommonBlockedCyclicSectorFamil
       (transferMap (d := blockPhysDim d F.p) (D := F.sectorDim k s)
         (F.commonSectorBlock k s)) ∧
     IsIrreducibleTensor (F.commonSectorBlock k s) := by
-  haveI : NeZero (F.sectorDim k s) := ⟨Nat.ne_of_gt (F.sector_dim_pos k s)⟩
+  have : NeZero (F.sectorDim k s) := ⟨Nat.ne_of_gt (F.sector_dim_pos k s)⟩
   have hExtra := tp_primitive_irreducible_extra_blocking
     (d := blockPhysDim d (F.period k)) (D := F.sectorDim k s)
     (A := F.sectorBlocks k s) (F.sector_tp k s) (F.sector_primitive k s)

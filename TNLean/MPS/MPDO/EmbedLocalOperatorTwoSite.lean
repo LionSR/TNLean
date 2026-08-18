@@ -82,7 +82,7 @@ theorem reindex_embedLocalOperator_two_zero
         _root_.finTwoArrowEquiv]
   simp only [Matrix.reindex_apply, Matrix.submatrix_apply,
     embedLocalOperator_apply]
-  rw [if_pos hAgree]
+  rw [ite_eq_left hAgree]
   simp only [Fin.isValue, finTwoArrowEquiv_symm_apply]
   congr 1 <;> funext j <;> fin_cases j <;> rfl
 
@@ -107,7 +107,7 @@ theorem reindex_embedLocalOperator_two_one
         _root_.finTwoArrowEquiv]
   simp only [Matrix.reindex_apply, Matrix.submatrix_apply,
     embedLocalOperator_apply]
-  rw [if_pos hAgree]
+  rw [ite_eq_left hAgree]
   simp only [Fin.isValue, finTwoArrowEquiv_symm_apply]
   congr 1 <;> funext j <;> fin_cases j <;> rfl
 

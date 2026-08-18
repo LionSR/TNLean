@@ -242,7 +242,7 @@ theorem regionInsertedCoeff_eq_compl (A : Tensor G d) (R : Finset V)
   set f' := regionBoundaryEdgeToCompl (G := G) R f with hf'
   set E := regionComplementBoundaryConfigEquiv (G := G) A R with hE
   set sigt := regionDoubleComplPhysicalConfig (V := V) (d := d) R σ with hsigt
-  rw [regionInsertedCoeff_eq, regionInsertedCoeff_eq]
+  unfold regionInsertedCoeff
   -- The complement-side double sum, reindexed over `(μ_R, ν_R)` via `E × E`.
   rw [show (∑ μ' : RegionBoundaryConfig (G := G) A (Finset.univ \ R),
         ∑ ν' : RegionBoundaryConfig (G := G) A (Finset.univ \ R),
@@ -270,9 +270,9 @@ theorem regionInsertedCoeff_eq_compl (A : Tensor G d) (R : Finset V)
       rw [hf', sameAwayFromBond_complementBoundaryConfig A R f ν_R μ_R]
       exact ⟨fun h c hc => (h c hc).symm, fun h c hc => (h c hc).symm⟩
     by_cases hsame : SameAwayFromBond f μ_R ν_R
-    · rw [if_pos hsame, if_pos (hpred.mpr hsame), Matrix.transpose_apply]
+    · rw [ite_eq_left hsame, ite_eq_left (hpred.mpr hsame), Matrix.transpose_apply]
       ring
-    · rw [if_neg hsame, if_neg (fun h => hsame (hpred.mp h))]
+    · rw [ite_eq_right hsame, ite_eq_right (fun h => hsame (hpred.mp h))]
       ring
   · -- Reindex the double sum by `E` on both indices.
     rw [← Fintype.sum_equiv E

@@ -97,7 +97,7 @@ theorem tensor_isMPU : IsMPU tensor := by
     ext sigma tau
     have hst : sigma = tau := Subsingleton.elim _ _
     subst tau
-    rw [mpo_apply, mpoMatrixEntry, Matrix.one_apply, if_pos rfl]
+    rw [mpo_apply, mpoMatrixEntry, Matrix.one_apply, ite_eq_left rfl]
     rw [evalWord_eq_bondMatrix]
     · exact trace_bondMatrix
     · simp

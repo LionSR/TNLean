@@ -105,14 +105,13 @@ theorem ambientHayashiFinMiddleEquiv_apply
         (ambientMarkovMiddleBlockEquiv e₀ e
           ⟨finSumFinEquiv.symm k, (u, v)⟩) =
       ⟨k, (v, u)⟩ := by
-  simp only [ambientHayashiFinMiddleEquiv, Equiv.trans_apply,
-    ambientHayashiMiddleEquiv_apply]
+  simp only [ambientHayashiFinMiddleEquiv]
   apply (Equiv.symm_apply_eq (Equiv.sigmaCongrLeft
     (β := fun s =>
       Fin (ambientMarkovConditionalDim d s) ×
         Fin (ambientMarkovCommonDim m s))
     finSumFinEquiv.symm)).2
-  rfl
+  exact ambientHayashiMiddleEquiv_apply e₀ e (finSumFinEquiv.symm k) u v
 
 /-- The tripartite sector equivalence agrees pointwise with the Hayashi
 reassociation after the middle subsystem is decomposed in HJPW factor order.
@@ -256,7 +255,7 @@ theorem exists_markovTripartiteBlockForm
         exact hρ_dm.2)
     Nonempty (MarkovTripartiteBlockForm ρ_ABC hρ_dm) := by
   classical
-  letI : Nonempty (ActiveConditionalEffectIndex (traceC_ABC ρ_ABC)) :=
+  let : Nonempty (ActiveConditionalEffectIndex (traceC_ABC ρ_ABC)) :=
     activeConditionalEffectIndex_nonempty (traceC_ABC ρ_ABC) (by
       rw [← trace_eq_trace_traceC_ABC]
       exact hρ_dm.2)

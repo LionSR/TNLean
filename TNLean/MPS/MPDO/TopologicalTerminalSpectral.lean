@@ -141,7 +141,7 @@ theorem terminalEigenProjectionFamily_isOrthogonalProjection
   · subst γ
     simpa [terminalEigenProjectionFamily] using
       H.terminalEigenProjection_isOrthogonalProjection hM s
-  · simp only [terminalEigenProjectionFamily, dif_neg hγ]
+  · simp only [terminalEigenProjectionFamily, dite_eq_right hγ]
     exact ⟨Matrix.isHermitian_zero, by simp⟩
 
 /-- Terminal families attached to distinct spectral indices multiply to zero.
@@ -280,6 +280,18 @@ theorem recursiveTerminalEigenProjectorQ_mul_eq_zero
     H.recursiveTerminalEigenProjectorQ hM p s *
         H.recursiveTerminalEigenProjectorQ hM p t = 0 := by
   unfold recursiveTerminalEigenProjectorQ
+  let Ps : (γ : Fin H.labelCount) →
+      Matrix (Fin (H.toBNTFusionCoisometryFamily.bondDim γ))
+        (Fin (H.toBNTFusionCoisometryFamily.bondDim γ)) ℂ :=
+    H.terminalEigenProjectionFamily hM s
+  let Pt : (γ : Fin H.labelCount) →
+      Matrix (Fin (H.toBNTFusionCoisometryFamily.bondDim γ))
+        (Fin (H.toBNTFusionCoisometryFamily.bondDim γ)) ℂ :=
+    H.terminalEigenProjectionFamily hM t
+  change H.toBNTFusionCoisometryFamily.recursiveProjectorQ Ps (p 0).1
+      (H.reverseAppendedLabels p) *
+    H.toBNTFusionCoisometryFamily.recursiveProjectorQ Pt (p 0).1
+      (H.reverseAppendedLabels p) = 0
   rw [
     H.toBNTFusionCoisometryFamily.recursiveProjectorQ_eq_unweighted
       (BNTLabelCoefficientFamily.ofChi H.chi)
@@ -437,6 +449,19 @@ theorem sum_terminalEigenvalue_smul_recursiveTerminalEigenProjectorQ
           H.recursiveTerminalEigenProjectorQ hM p s =
       H.verticalCopyChainProjectorQ p := by
   unfold recursiveTerminalEigenProjectorQ verticalCopyChainProjectorQ
+  let P (s : H.TerminalSpectralIndex) : (γ : Fin H.labelCount) →
+      Matrix (Fin (H.toBNTFusionCoisometryFamily.bondDim γ))
+        (Fin (H.toBNTFusionCoisometryFamily.bondDim γ)) ℂ :=
+    H.terminalEigenProjectionFamily hM s
+  let Ptot : (γ : Fin H.labelCount) →
+      Matrix (Fin (H.toBNTFusionCoisometryFamily.bondDim γ))
+        (Fin (H.toBNTFusionCoisometryFamily.bondDim γ)) ℂ :=
+    fun γ ↦ (verticalBNTMPO (H.tensor γ)).physTraceTransfer
+  change (∑ s : H.TerminalSpectralIndex, (H.terminalEigenvalue hM s : ℂ) •
+      H.toBNTFusionCoisometryFamily.recursiveProjectorQ (P s) (p 0).1
+        (H.reverseAppendedLabels p)) =
+    H.toBNTFusionCoisometryFamily.recursiveProjectorQ Ptot (p 0).1
+      (H.reverseAppendedLabels p)
   rw [sum_smul_recursiveProjectorQ]
   congr 2
   funext γ

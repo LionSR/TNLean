@@ -208,8 +208,8 @@ theorem transportBlockingDataAlong_redBlue (A : Tensor G d) (φ : G ≃g G') {e 
   classical
   unfold transportBlockingDataAlong
   by_cases hord : (Edge.map φ e).1.1 = φ e.1.1
-  · rw [dif_pos hord]; exact Or.inl ⟨rfl, rfl⟩
-  · rw [dif_neg hord]; exact Or.inr ⟨rfl, rfl⟩
+  · rw [dite_eq_left hord]; exact Or.inl ⟨rfl, rfl⟩
+  · rw [dite_eq_right hord]; exact Or.inr ⟨rfl, rfl⟩
 
 /-- The transported datum's complement block is the image of the original complement block, on
 both endpoint-order branches.  The endpoint-order flip exchanges only the red and blue blocks; the
@@ -222,8 +222,8 @@ theorem transportBlockingDataAlong_complement (A : Tensor G d) (φ : G ≃g G') 
   classical
   unfold transportBlockingDataAlong
   by_cases hord : (Edge.map φ e).1.1 = φ e.1.1
-  · rw [dif_pos hord]
-  · rw [dif_neg hord]
+  · rw [dite_eq_left hord]
+  · rw [dite_eq_right hord]
 
 /-- **Orientation-free red/blue host injectivity of the transported datum.**
 

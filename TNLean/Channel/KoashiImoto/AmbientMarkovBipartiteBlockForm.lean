@@ -429,26 +429,43 @@ private theorem reindex_fromBlocks_support_eq_ambientBlockForm
   rcases y' with ⟨j', u', a', v'⟩
   rcases j with j | j <;> rcases j' with j' | j'
   · change Fin 1 at u v u' v'
+    simp only [g, Matrix.reindex_apply, Matrix.submatrix_apply]
+    rw [ambientMarkovBipartiteBlockEquiv_apply_complement e₀ e j u a v,
+      ambientMarkovBipartiteBlockEquiv_apply_complement e₀ e j' u' a' v',
+      markovBipartiteComplementEquiv_symm_apply_complement e₀ a j,
+      markovBipartiteComplementEquiv_symm_apply_complement e₀ a' j']
     fin_cases u
     fin_cases v
     fin_cases u'
     fin_cases v'
-    simp [g, ambientMarkovCommonState,
-      ambientConditionalFactor, Matrix.blockDiagonal'_apply]
+    simp [ambientMarkovCommonState, ambientConditionalFactor,
+      Matrix.fromBlocks_apply₁₁, Matrix.blockDiagonal'_apply]
   · change Fin 1 at u v
     change Fin (m j') at u'
     change Fin (d j') at v'
+    simp only [g, Matrix.reindex_apply, Matrix.submatrix_apply]
+    rw [ambientMarkovBipartiteBlockEquiv_apply_complement e₀ e j u a v,
+      markovBipartiteComplementEquiv_symm_apply_complement e₀ a j,
+      ambientMarkovBipartiteBlockEquiv_apply_support e₀ e j' u' a' v',
+      markovBipartiteComplementEquiv_symm_apply_support e₀ a'
+        (e ⟨j', (u', v')⟩)]
     fin_cases u
     fin_cases v
-    simp [g, ambientMarkovCommonState,
-      ambientConditionalFactor, Matrix.blockDiagonal'_apply]
+    simp [ambientMarkovCommonState, ambientConditionalFactor,
+      Matrix.fromBlocks_apply₁₂, Matrix.blockDiagonal'_apply]
   · change Fin (m j) at u
     change Fin (d j) at v
     change Fin 1 at u' v'
+    simp only [g, Matrix.reindex_apply, Matrix.submatrix_apply]
+    rw [ambientMarkovBipartiteBlockEquiv_apply_support e₀ e j u a v,
+      markovBipartiteComplementEquiv_symm_apply_support e₀ a
+        (e ⟨j, (u, v)⟩),
+      ambientMarkovBipartiteBlockEquiv_apply_complement e₀ e j' u' a' v',
+      markovBipartiteComplementEquiv_symm_apply_complement e₀ a' j']
     fin_cases u'
     fin_cases v'
-    simp [g, ambientMarkovCommonState,
-      ambientConditionalFactor, Matrix.blockDiagonal'_apply]
+    simp [ambientMarkovCommonState, ambientConditionalFactor,
+      Matrix.fromBlocks_apply₂₁, Matrix.blockDiagonal'_apply]
   · change Fin (m j) at u
     change Fin (d j) at v
     change Fin (m j') at u'
@@ -551,7 +568,7 @@ theorem exists_ambientMarkovBipartiteBlockForm
     Nonempty
       (AmbientMarkovBipartiteBlockForm ρ_ABC hρ_dm) := by
   classical
-  letI : Nonempty (ActiveConditionalEffectIndex (traceC_ABC ρ_ABC)) :=
+  let : Nonempty (ActiveConditionalEffectIndex (traceC_ABC ρ_ABC)) :=
     activeConditionalEffectIndex_nonempty (traceC_ABC ρ_ABC) (by
       rw [← trace_eq_trace_traceC_ABC]
       exact hρ_dm.2)

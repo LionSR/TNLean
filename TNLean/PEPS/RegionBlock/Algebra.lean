@@ -237,7 +237,7 @@ theorem regionInsertedCoeff_eq_zero_imp (A : Tensor G d) (R : Finset V)
   have hμ0f : μ0 f = p := by rw [hμ0, Function.update_self]
   have hν0f : ν0 f = q := by rw [hν0, Function.update_self]
   have hz := hstep2 ν0 μ0
-  rw [if_pos hsame, hμ0f, hν0f] at hz
+  rw [ite_eq_left hsame, hμ0f, hν0f] at hz
   exact hz
 
 /-- **Injectivity of the region-inserted coefficient in the inserted matrix.**

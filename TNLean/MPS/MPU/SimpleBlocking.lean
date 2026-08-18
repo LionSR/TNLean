@@ -170,9 +170,9 @@ private theorem entry_eq_diagonal_add_residual
   rw [residualSlice, contractPhysical_single]
   by_cases hij : i = j
   · subst j
-    rw [if_pos rfl, Matrix.trace_single_eq_same]
+    rw [ite_eq_left rfl, Matrix.trace_single_eq_same]
     simp
-  · rw [if_neg hij, Matrix.trace_single_eq_of_ne j i (1 : ℂ) (Ne.symm hij)]
+  · rw [ite_eq_right hij, Matrix.trace_single_eq_of_ne j i (1 : ℂ) (Ne.symm hij)]
     simp
 
 private theorem pow_eq_self_of_pos_local {m : Type*} [Fintype m] [DecidableEq m]
@@ -425,11 +425,11 @@ theorem IsMPU.simple1_of_simple2_supplied {U : MPOTensor d D} (hU : IsMPU U)
   have hx2 : x ^ 2 = if i = j then 1 else 0 := hpower 2 (by omega) i j
   have hx3 : x ^ 3 = if i = j then 1 else 0 := hpower 3 (by omega) i j
   by_cases hij : i = j
-  · rw [if_pos hij] at hx2 hx3 ⊢
+  · rw [ite_eq_left hij] at hx2 hx3 ⊢
     have hx3' : x ^ 2 * x = 1 := by simpa [pow_succ] using hx3
     rw [hx2, one_mul] at hx3'
     exact hx3'
-  · rw [if_neg hij] at hx2 hx3 ⊢
+  · rw [ite_eq_right hij] at hx2 hx3 ⊢
     exact sq_eq_zero_iff.mp hx2
 
 /-- For an MPU, witnesses satisfying `simple2` automatically satisfy
@@ -482,7 +482,7 @@ theorem IsMPUSimple.blockTensor {U : MPOTensor d D} (hU : IsMPUSimple U)
     by_cases hIJ : I = J
     · subst J
       simp
-    · rw [if_neg hIJ]
+    · rw [ite_eq_right hIJ]
       have hpoint : ∃ k : Fin L,
           MPSTensor.decodeBlock d L I k ≠ MPSTensor.decodeBlock d L J k := by
         by_contra h
@@ -842,7 +842,7 @@ theorem IsMPU.exists_blockTensor_isMPUSimple_of_one_lt
     change normalizedDiagonal (doubleLayerTensor (MPOTensor.blockTensor U J)) = _
     rw [hU.normalizedDiagonal_doubleLayerTensor_blockTensor_eq_vecMulVec hD]
     rfl
-  letI : NeZero (MPSTensor.blockPhysDim d J) := ⟨by
+  let : NeZero (MPSTensor.blockPhysDim d J) := ⟨by
     rw [MPSTensor.blockPhysDim_eq_pow]
     exact pow_ne_zero J (NeZero.ne d)⟩
   have hsimpleIterated : IsMPUSimple (MPOTensor.blockTensor V (D * D)) :=

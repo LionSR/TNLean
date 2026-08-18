@@ -661,10 +661,10 @@ theorem subdirect_matrix_pair_eq_top_of_dim_ne {D₁ D₂ : ℕ} [NeZero D₁] [
     (hdim : D₁ ≠ D₂) :
     S = ⊤ := by
   classical
-  haveI : Nonempty (Fin D₁) := Fin.pos_iff_nonempty.mp (Nat.pos_of_neZero D₁)
-  haveI : Nonempty (Fin D₂) := Fin.pos_iff_nonempty.mp (Nat.pos_of_neZero D₂)
-  haveI : IsSimpleRing (MatD D₁) := IsSimpleRing.matrix (Fin D₁) ℂ
-  haveI : IsSimpleRing (MatD D₂) := IsSimpleRing.matrix (Fin D₂) ℂ
+  have : Nonempty (Fin D₁) := Fin.pos_iff_nonempty.mp (Nat.pos_of_neZero D₁)
+  have : Nonempty (Fin D₂) := Fin.pos_iff_nonempty.mp (Nat.pos_of_neZero D₂)
+  have : IsSimpleRing (MatD D₁) := IsSimpleRing.matrix (Fin D₁) ℂ
+  have : IsSimpleRing (MatD D₂) := IsSimpleRing.matrix (Fin D₂) ℂ
   rcases eq_bot_or_eq_top (leftAxisIdealHetero S hfst) with hleft | hleft
   · rcases eq_bot_or_eq_top (rightAxisIdealHetero S hsnd) with hright | hright
     · exact False.elim
@@ -756,8 +756,8 @@ theorem subdirect_matrix_pair_eq_top_or_eq_graph_algEquiv {D : ℕ} [NeZero D]
           AlgHom.range
             ((AlgHom.id ℂ (MatD D)).prod (φ : MatD D →ₐ[ℂ] MatD D)) := by
   classical
-  haveI : Nonempty (Fin D) := Fin.pos_iff_nonempty.mp (Nat.pos_of_neZero D)
-  haveI : IsSimpleRing (MatD D) := IsSimpleRing.matrix (Fin D) ℂ
+  have : Nonempty (Fin D) := Fin.pos_iff_nonempty.mp (Nat.pos_of_neZero D)
+  have : IsSimpleRing (MatD D) := IsSimpleRing.matrix (Fin D) ℂ
   rcases eq_bot_or_eq_top (leftAxisIdeal S hfst) with hleft | hleft
   · rcases eq_bot_or_eq_top (rightAxisIdeal S hsnd) with hright | hright
     · exact Or.inr

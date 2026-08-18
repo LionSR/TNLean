@@ -56,7 +56,7 @@ theorem openParentHamiltonianES_self_eq_parentInteractionES (A : MPSTensor d D)
     {L : ℕ} (hL : 0 < L) :
     openParentHamiltonianES A L L = parentInteractionES A L := by
   let i : NonwrappingStart L L := ⟨⟨0, hL⟩, by simp⟩
-  letI : Subsingleton (NonwrappingStart L L) :=
+  let : Subsingleton (NonwrappingStart L L) :=
     ⟨fun j k => by
       apply Subtype.ext
       apply Fin.ext

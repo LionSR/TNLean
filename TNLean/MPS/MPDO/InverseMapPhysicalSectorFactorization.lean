@@ -83,12 +83,11 @@ theorem inverseMapPhysicalSectorFactorization_neighboringOperator_eq_sectorEta
     (k h : Fin hη.m) :
     (inverseMapPhysicalSectorFactorization K hK R hρ hη α₁ β₃ hm).neighboringOperator k h =
       sectorEta K hK hη R α₁ β₃ k h := by
+  unfold PhysicalSectorFactorization.neighboringOperator
+  dsimp only [inverseMapPhysicalSectorFactorization]
   ext ⟨xR, xL⟩ ⟨yR, yL⟩
-  change (∑ gamma : Fin D,
-      sectorTensorR K hK hη β₃ k gamma xR yR *
-        sectorTensorL K hK hη R α₁ β₃ h gamma xL yL) = _
   rw [sectorEta, Matrix.sum_apply]
-  simp only [Matrix.kroneckerMap_apply]
+  rfl
 
 /-- An injective MPO tensor satisfying SAL admits the raw physical-sector
 factorization obtained from the four-site Hayashi decomposition.

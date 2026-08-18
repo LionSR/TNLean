@@ -126,8 +126,8 @@ private theorem linearIndependent_ambientBlockCorners
     intro l
     by_cases hlk : l = k
     · subst l
-      rw [if_pos rfl, data.ambientBlockCompression_self]
-    · rw [if_neg hlk]
+      rw [ite_eq_left rfl, data.ambientBlockCompression_self]
+    · rw [ite_eq_right hlk]
       exact data.ambientBlockCompression_eq_zero_of_ne
         (k := k.1) (l := l.1) (fun h => hlk (Subtype.ext h.symm)) (X l)
   simp_rw [hterm] at hcompressed
@@ -306,7 +306,7 @@ theorem card_active_eq_one_of_shifted_transfer_trace
   classical
   have hactive : Nonempty data.Active := by
     by_contra hempty
-    haveI : IsEmpty data.Active := not_nonempty_iff.mp hempty
+    have : IsEmpty data.Active := not_nonempty_iff.mp hempty
     have hweight : ∀ k : Fin data.r, data.weights k = 0 := by
       intro k
       by_contra hk
@@ -349,18 +349,18 @@ theorem card_active_eq_one_of_shifted_transfer_trace
           data.ambientActiveVector k
         rw [hfix, hfix]
       rw [hpow, one_smul]⟩
-  let vecLM : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] (Fin D × Fin D → ℂ) := {
-    toFun := Matrix.vec
-    map_add' := by intros; rfl
-    map_smul' := by intros; rfl }
-  have hvecKer : LinearMap.ker vecLM = ⊥ := by
-    rw [LinearMap.ker_eq_bot']
-    intro X hX
-    exact Matrix.vec_inj.mp hX
   have hLIvec : LinearIndependent ℂ
       (fun k : data.Active => (data.ambientActiveVector k).vec) := by
-    simpa [vecLM, Function.comp_def] using
-      data.linearIndependent_ambientActiveVector.map' vecLM hvecKer
+    rw [Fintype.linearIndependent_iff]
+    intro c hsum k
+    apply Fintype.linearIndependent_iff.mp
+      data.linearIndependent_ambientActiveVector c _ k
+    exact Matrix.vec_inj.mp (by
+      funext x
+      have hx := congrFun hsum x
+      simpa only [Matrix.vec, Matrix.of_apply, Matrix.sum_apply, Matrix.smul_apply,
+        Matrix.zero_apply, Finset.sum_apply, Pi.smul_apply, smul_eq_mul,
+        Pi.zero_apply] using hx)
   have hLIv : LinearIndependent ℂ v := by
     rw [Fintype.linearIndependent_iff]
     intro c hsum k

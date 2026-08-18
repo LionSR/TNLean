@@ -456,7 +456,7 @@ theorem trace_eq_trace_sq_of_pairing_idempotent
     Matrix.trace T = Matrix.trace (T * T) := by
   classical
   set W : Submodule ℝ V := Submodule.span ℝ (Set.range l) with hW
-  haveI hWfin : Module.Finite ℝ W := Module.Finite.span_of_finite ℝ (Set.finite_range l)
+  have hWfin : Module.Finite ℝ W := Module.Finite.span_of_finite ℝ (Set.finite_range l)
   set Lfull : (Fin n → ℝ) →ₗ[ℝ] V := Fintype.linearCombination ℝ l with hLfull
   have hLmem : ∀ x, Lfull x ∈ W := by
     intro x

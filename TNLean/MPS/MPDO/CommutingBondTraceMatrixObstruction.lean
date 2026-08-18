@@ -180,8 +180,20 @@ lemma oneSector_neighboringOperator_eq
     Fin.default_eq_zero, Fin.isValue, Finset.sum_singleton]
   fin_cases x₁
   fin_cases y₁
-  simp only [oneSectorFactorization, Matrix.one_apply, Matrix.diagonal_apply]
-  simp only [if_true, one_mul, Prod.mk.injEq, true_and]
+  simp only [oneSectorFactorization, Matrix.one_apply]
+  by_cases hxy : x₂ = y₂
+  · subst y₂
+    rw [ite_eq_left True.intro, one_mul]
+    exact ((Matrix.diagonal_apply sectorWeight x₂ x₂).trans (ite_eq_left rfl)).trans
+      ((Matrix.diagonal_apply (fun x : Fin 1 × Fin 2 => sectorWeight x.2)
+        (⟨0, x₂⟩ : Fin 1 × Fin 2) ⟨0, x₂⟩).trans (ite_eq_left rfl)).symm
+  · rw [ite_eq_left True.intro, one_mul]
+    have hpair : (⟨0, x₂⟩ : Fin 1 × Fin 2) ≠ ⟨0, y₂⟩ := by
+      intro hp
+      exact hxy (congrArg Prod.snd hp)
+    exact ((Matrix.diagonal_apply sectorWeight x₂ y₂).trans (ite_eq_right hxy)).trans
+      ((Matrix.diagonal_apply (fun x : Fin 1 × Fin 2 => sectorWeight x.2)
+        (⟨0, x₂⟩ : Fin 1 × Fin 2) ⟨0, y₂⟩).trans (ite_eq_right hpair)).symm
 
 /-- Every neighboring operator in the one-sector factorization is positive
 semidefinite.
@@ -201,12 +213,16 @@ lemma oneSector_neighboringOperator_posSemidef
 
 Source: arXiv:1606.00608, Appendix C.2, line 1613. -/
 lemma oneSectorTraceMatrix_eq : oneSectorTraceMatrix = 1 := by
+  have htrace :
+      (Matrix.trace (Matrix.diagonal (fun x : Fin 1 × Fin 2 => sectorWeight x.2))).re = 1 := by
+    rw [Matrix.trace_diagonal, Fintype.sum_prod_type]
+    simp [sectorWeight]
   ext k h
-  fin_cases k
-  fin_cases h
-  rw [oneSectorTraceMatrix, oneSector_neighboringOperator_eq]
-  norm_num [Matrix.trace, sectorWeight]
-  decide
+  have hone : (1 : Matrix (Fin 1) (Fin 1) ℝ) k h = 1 := by
+    rw [Matrix.one_apply, ite_eq_left (Subsingleton.elim k h)]
+  unfold oneSectorTraceMatrix
+  rw [oneSector_neighboringOperator_eq k h]
+  exact htrace.trans hone.symm
 
 /-- The trace matrix of the one-sector factorization is primitive.
 

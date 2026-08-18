@@ -318,7 +318,7 @@ theorem transportedAbsorbedGauge_translate_pair
     have hQ : (boundaryEdgeMap (translate a' b') R f).1.1.1 =
         translate c g (boundaryEdgeMap (translate a b) R f).1.1.1 := by
       rw [hPiff'.mp hP', hPiff.mp hP, hsu]
-    rw [if_pos hP, if_pos hP', if_pos hQ, hZrel, glTranspose_glReindex]
+    rw [ite_eq_left hP, ite_eq_left hP', ite_eq_left hQ, hZrel, glTranspose_glReindex]
   · -- Order preserved at `(a, b)`, swapped at `(a', b')`: the connecting translation swaps.
     have hQ : ¬((boundaryEdgeMap (translate a' b') R f).1.1.1 =
         translate c g (boundaryEdgeMap (translate a b) R f).1.1.1) := by
@@ -329,7 +329,8 @@ theorem transportedAbsorbedGauge_translate_pair
       rw [hfst', hPiff.mp hP, hsu]
       intro hcon
       exact hne ((translate a' b').toEquiv.injective hcon).symm
-    rw [if_pos hP, if_neg hP', if_neg hQ, hZrel, ← map_inv, glTranspose_glTranspose]
+    rw [ite_eq_left hP, ite_eq_right hP', ite_eq_right hQ, hZrel, ← map_inv,
+      glTranspose_glTranspose]
   · -- Order swapped at `(a, b)`, preserved at `(a', b')`: the connecting translation swaps.
     have hQ : ¬((boundaryEdgeMap (translate a' b') R f).1.1.1 =
         translate c g (boundaryEdgeMap (translate a b) R f).1.1.1) := by
@@ -339,7 +340,8 @@ theorem transportedAbsorbedGauge_translate_pair
       rw [hfst, hPiff'.mp hP', hsv]
       intro hcon
       exact hne ((translate a' b').toEquiv.injective hcon)
-    rw [if_neg hP, if_pos hP', if_neg hQ, hZrel, glTranspose_glReindex, glTranspose_inv,
+    rw [ite_eq_right hP, ite_eq_left hP', ite_eq_right hQ, hZrel,
+      glTranspose_glReindex, glTranspose_inv,
       inv_inv]
   · -- Both orders swapped: the connecting translation preserves the order.
     have hQ : (boundaryEdgeMap (translate a' b') R f).1.1.1 =
@@ -352,7 +354,7 @@ theorem transportedAbsorbedGauge_translate_pair
         (boundaryEdgeMap_translate_fst_or R f a' b').resolve_left (fun hcon => hP' (by
           rw [hPiff']; exact hcon))
       rw [hfst, hfst', hsv]
-    rw [if_neg hP, if_neg hP', if_pos hQ, hZrel, ← map_inv]
+    rw [ite_eq_right hP, ite_eq_right hP', ite_eq_left hQ, hZrel, ← map_inv]
 
 /-! ### Translation-covariant gauge families -/
 

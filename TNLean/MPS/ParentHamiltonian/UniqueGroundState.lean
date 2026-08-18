@@ -112,7 +112,7 @@ theorem contiguous_mem_groundSpace_of_isNBlkInjective
     (hwindow : ∀ (s : ℕ) (hs : s + (L₀ + 1) ≤ N) (τ : Fin N → Fin d),
       contiguousRestrictₗ s (L₀ + 1) hs τ ψ ∈ groundSpace A (L₀ + 1)) :
     ψ ∈ groundSpace A N := by
-  haveI : NeZero d := neZero_d_of_isNBlkInjective hInj hL₀
+  have : NeZero d := neZero_d_of_isNBlkInjective hInj hL₀
   have hd : 0 < d := Nat.pos_of_ne_zero (NeZero.ne d)
   let τ₀ : Fin N → Fin d := fun _ => ⟨0, hd⟩
   have claim : ∀ K : ℕ, ∀ (s : ℕ) (hs : s + (K + L₀ + 1) ≤ N)
@@ -156,7 +156,7 @@ theorem contiguous_mem_groundSpace_of_isNBlkInjective
     congr 1
     ext k
     simp only [contiguousCfg]
-    rw [dif_pos (show 0 ≤ k.val ∧ k.val < 0 + (N - (L₀ + 1) + L₀ + 1) by omega)]
+    rw [dite_eq_left (show 0 ≤ k.val ∧ k.val < 0 + (N - (L₀ + 1) + L₀ + 1) by omega)]
     congr 1
   rwa [hfull] at hmemN
 
@@ -176,7 +176,7 @@ theorem chainGroundSpace_le_groundSpace_of_isNBlkInjective
   have hL₀N : L₀ + 1 ≤ N := by omega
   have hψred : ψ ∈ chainGroundSpace A (L₀ + 1) N :=
     chainGroundSpace_le_chainGroundSpace_of_le (A := A) hN (by omega : L₀ + 1 ≤ L) hLN hψ
-  rw [chainGroundSpace, dif_pos ⟨hN, hL₀N⟩] at hψred
+  rw [chainGroundSpace, dite_eq_left ⟨hN, hL₀N⟩] at hψred
   simp only [Submodule.mem_iInf, Submodule.mem_comap] at hψred
   apply contiguous_mem_groundSpace_of_isNBlkInjective hInj hL₀ hL₀N
   intro s hs τ
@@ -353,11 +353,11 @@ theorem chainGroundSpace_eq_mpvSubmodule {A : MPSTensor d D} [NeZero D]
     (hA : IsInjective A) {L N : ℕ} (hN : 2 ≤ N) (hL : 1 < L) (hLN : L ≤ N) :
     chainGroundSpace A L N = mpvSubmodule A N := by
   have hN0 : 0 < N := by omega
-  haveI : NeZero d := neZero_d_of_isInjective hA
+  have : NeZero d := neZero_d_of_isInjective hA
   apply le_antisymm
   · -- ⊆ direction: chainGroundSpace ≤ mpvSubmodule
     intro ψ hψ
-    rw [chainGroundSpace, dif_pos ⟨hN0, hLN⟩] at hψ
+    rw [chainGroundSpace, dite_eq_left ⟨hN0, hLN⟩] at hψ
     simp only [Submodule.mem_iInf, Submodule.mem_comap] at hψ
     -- Step 1: ψ ∈ groundSpace A N (via non-wrapping windows)
     have hψGS : ψ ∈ groundSpace A N := by
@@ -436,7 +436,7 @@ theorem chainGroundSpace_wrapped_boundary_compatibilities_of_isNBlkInjective
   have hψred : groundSpaceMap A (M + 1) X ∈ chainGroundSpace A (L₀ + 1) (M + 1) :=
     chainGroundSpace_le_chainGroundSpace_of_le (A := A) hN0
       (by omega : L₀ + 1 ≤ L) hLN hψmap
-  rw [chainGroundSpace, dif_pos ⟨hN0, hL₀N⟩] at hψred
+  rw [chainGroundSpace, dite_eq_left ⟨hN0, hL₀N⟩] at hψred
   simp only [Submodule.mem_iInf, Submodule.mem_comap] at hψred
   have hGSAt : ∀ (i : Fin (M + 1)) (τ : Fin (M + 1) → Fin d),
       ∃ Y : Matrix (Fin D) (Fin D) ℂ,
@@ -608,7 +608,7 @@ theorem chainGroundSpace_le_mpvSubmodule_of_isNBlkInjective_of_wrapped_witness_c
     chainGroundSpace_le_groundSpace_of_isNBlkInjective hInj hL₀ (by omega : 0 < N) hL hLN hψ
   rw [groundSpace, LinearMap.mem_range] at hψGS
   obtain ⟨X, hX⟩ := hψGS
-  haveI : NeZero d := neZero_d_of_isNBlkInjective hInj hL₀
+  have : NeZero d := neZero_d_of_isNBlkInjective hInj hL₀
   let η : Fin d := ⟨0, Nat.pos_of_ne_zero (NeZero.ne d)⟩
   obtain ⟨Ywrap, Ymirror, hWrap, hMirror⟩ :=
     chainGroundSpace_wrapped_boundary_compatibilities_of_isNBlkInjective
@@ -901,7 +901,7 @@ theorem chainGroundSpace_le_mpvSubmodule_of_normal_range_reduction
     chainGroundSpace_le_groundSpace_of_isNBlkInjective hInj hL₀ hNpos hL hLN hψ
   rw [groundSpace, LinearMap.mem_range] at hψGS
   obtain ⟨X, hX⟩ := hψGS
-  haveI : NeZero d := neZero_d_of_isNBlkInjective hInj hL₀
+  have : NeZero d := neZero_d_of_isNBlkInjective hInj hL₀
   let η : Fin d := ⟨0, Nat.pos_of_ne_zero (NeZero.ne d)⟩
   obtain ⟨Ywrap, Ymirror, hWrap, hMirror⟩ :=
     chainGroundSpace_wrapped_boundary_compatibilities_of_isNBlkInjective

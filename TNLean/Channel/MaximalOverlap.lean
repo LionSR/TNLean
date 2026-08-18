@@ -7,7 +7,6 @@ import TNLean.Analysis.KyFanNorm
 import TNLean.Algebra.PosSemidefSupport
 import TNLean.Channel.SchmidtRank
 import TNLean.Channel.PartialTrace
-import TNLean.Algebra.MatrixRankBaseChange
 import Mathlib.Analysis.InnerProductSpace.PiL2
 import Mathlib.Analysis.Matrix.Spectrum
 
@@ -102,7 +101,7 @@ theorem zero_lt_kyFanNorm_one (hA : A.PosSemidef) (hcard : 0 < Fintype.card n)
     intro i hi
     rw [Finset.mem_range] at hi
     rw [Matrix.IsHermitian.descEigenvalue, Matrix.IsHermitian.descEigenvalue,
-      dif_pos hi, dif_pos hcard]
+      dite_eq_left hi, dite_eq_left hcard]
     exact hA.isHermitian.eigenvalues₀_antitone (by simp)
   have hbound : (A.trace).re ≤ (Fintype.card n : ℝ) * hA.isHermitian.descEigenvalue 0 := by
     rw [← hsum]
@@ -257,7 +256,8 @@ theorem exists_normSq_trace_conjTranspose_mul_eq_kyFanNorm (C : Matrix m n ℂ) 
     rw [show (c * c * s : ℝ) = c ^ 2 * s by ring, hc, div_pow, one_pow, Real.sq_sqrt hpos.le]
     field_simp
   · -- `rank B = rank(P C) ≤ rank P = k`.
-    rw [hB, Matrix.rank_smul_of_ne_zero (by exact_mod_cast ne_of_gt hc_pos)]
+    rw [hB, Matrix.rank_smul_of_mem_nonZeroDivisors (P * C)
+      (mem_nonZeroDivisors_of_ne_zero (by exact_mod_cast ne_of_gt hc_pos))]
     have hrank_le : ((P * C).rank : ℝ) ≤ (k : ℝ) := by
       calc ((P * C).rank : ℝ) ≤ (P.rank : ℝ) := by exact_mod_cast Matrix.rank_mul_le_left P C
         _ = (P.trace).re := hPh.rank_eq_trace_re_of_idem hPi

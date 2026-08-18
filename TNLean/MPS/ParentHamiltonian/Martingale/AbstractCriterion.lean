@@ -73,10 +73,10 @@ theorem spectralGap_of_martingale_of_finiteDimensional {E : Type*} [NormedAddCom
     have key := hOpIneq (b i)
     rw [hHb i] at key
     have e1 : (⟪((μ i : ℂ)) • b i, b i⟫_ℂ).re = μ i := by
-      rw [inner_smul_left, hbb i i, if_pos rfl, mul_one, Complex.conj_ofReal,
+      rw [inner_smul_left, hbb i i, ite_eq_left rfl, mul_one, Complex.conj_ofReal,
           Complex.ofReal_re]
     have e2 : (⟪((μ i : ℂ)) • b i, ((μ i : ℂ)) • b i⟫_ℂ).re = μ i * μ i := by
-      rw [inner_smul_left, inner_smul_right, hbb i i, if_pos rfl, mul_one,
+      rw [inner_smul_left, inner_smul_right, hbb i i, ite_eq_left rfl, mul_one,
           Complex.conj_ofReal, ← Complex.ofReal_mul, Complex.ofReal_re]
     rw [e1, e2] at key
     exact key

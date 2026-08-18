@@ -60,7 +60,7 @@ lemma choiMatrix_tracePrepareMap (d d' : ℕ)
   · subst hd
     ext ⟨a, i⟩ ⟨b, j⟩
     exact Fin.elim0 i
-  · haveI : NeZero d := ⟨hd⟩
+  · have : NeZero d := ⟨hd⟩
     have hdpos : 0 < d := Nat.pos_of_ne_zero hd
     ext ⟨a, i⟩ ⟨b, j⟩
     calc
@@ -128,7 +128,7 @@ theorem traceNorm_map_sub_map_le_of_choi_domination
     have hzero : (ρ₁ : Matrix (Fin 0) (Fin 0) ℂ).trace = (0 : ℂ) := by simp
     rw [hzero] at h₁tr
     norm_num at h₁tr
-  · haveI : NeZero D := ⟨hD⟩
+  · have : NeZero D := ⟨hD⟩
     -- Step 1: construct T' = tracePrepareMap Y
     set T' := tracePrepareMap (α := Fin D) Y with hT'_def
     -- T' is trace-preserving (since tr Y = 1)

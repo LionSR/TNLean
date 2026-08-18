@@ -237,7 +237,7 @@ private theorem corollary312CandidateFamily_no_residual_decomposition :
       (isUnit_iff_ne_zero.mpr (hXdet j))
     have hxx := congrFun (congrFun hmul (0 : Fin 1)) (0 : Fin 1)
     simp only [Matrix.mul_apply, Finset.univ_unique, Fin.default_eq_zero,
-      Fin.isValue, Finset.sum_singleton, Matrix.one_apply, if_pos] at hxx
+      Fin.isValue, Finset.sum_singleton, Matrix.one_apply, ite_eq_left] at hxx
     calc
       U j i 0 0 = (X j 0 0 * (X j)⁻¹ 0 0) * U j i 0 0 := by rw [hxx, one_mul]
       _ = X j 0 0 * U j i 0 0 * (X j)⁻¹ 0 0 := by ring

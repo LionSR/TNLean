@@ -233,7 +233,7 @@ theorem mem_adjointKernel_of_mem_commutant (F : LindbladForm D) {A : Mat}
     (hA : A ∈ F.commutant) :
     A ∈ F.adjointKernel := by
   rcases hA with ⟨hH, hL⟩
-  rw [adjointKernel, Set.mem_setOf_eq, toAdjointLinearMap_apply]
+  rw [adjointKernel, Set.mem_ofPred_eq, toAdjointLinearMap_apply]
   have hHterm : Complex.I • (F.H * A - A * F.H) = 0 := by
     rw [← hH]
     simp only [sub_self, smul_zero]

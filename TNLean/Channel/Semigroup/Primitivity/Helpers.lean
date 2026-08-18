@@ -74,18 +74,18 @@ theorem expSemigroup_apply_eigenvector
     (L : Mat →ₗ[ℂ] Mat) (X : Mat) (μ : ℂ)
     (hX : L X = μ • X) (t : ℝ) :
     expSemigroup L t X = Complex.exp ((t : ℂ) * μ) • X := by
-  letI : NormedSpace ℝ ℂ := NormedAlgebra.toNormedSpace ℂ
-  letI : ContinuousSMul ℝ ℂ :=
+  let : NormedSpace ℝ ℂ := NormedAlgebra.toNormedSpace ℂ
+  let : ContinuousSMul ℝ ℂ :=
     show ContinuousSMul ℝ (RestrictScalars ℝ ℂ ℂ) from inferInstance
-  letI : AddCommGroup Mat := Matrix.linftyOpNormedAddCommGroup.toAddCommGroup
-  letI : NormedAddCommGroup Mat := Matrix.linftyOpNormedAddCommGroup
-  letI : Module ℝ Mat :=
+  let : AddCommGroup Mat := Matrix.linftyOpNormedAddCommGroup.toAddCommGroup
+  let : NormedAddCommGroup Mat := Matrix.linftyOpNormedAddCommGroup
+  let : Module ℝ Mat :=
     (TNOperatorSpace.instNormedSpaceRealMatrixComplex_tNLean (Fin D)).toModule
-  letI : TopologicalSpace Mat := PseudoMetricSpace.toUniformSpace.toTopologicalSpace
-  letI : NormedSpace ℝ Mat :=
+  let : TopologicalSpace Mat := PseudoMetricSpace.toUniformSpace.toTopologicalSpace
+  let : NormedSpace ℝ Mat :=
     TNOperatorSpace.instNormedSpaceRealMatrixComplex_tNLean (Fin D)
-  letI : ContinuousSMul ℝ Mat := inferInstance
-  letI : IsScalarTower ℝ ℂ Mat := by infer_instance
+  let : ContinuousSMul ℝ Mat := inferInstance
+  let : IsScalarTower ℝ ℂ Mat := by infer_instance
   let c : ℝ → ℂ := fun u => Complex.exp (-((u : ℂ) * μ))
   let g : ℝ → Matrix (Fin D) (Fin D) ℂ := fun u => expSemigroup L u X
   let f : ℝ → Matrix (Fin D) (Fin D) ℂ := c • g
@@ -163,7 +163,7 @@ theorem peripheral_card_le_finrank [NeZero D]
     (peripheralEigenvalues_finite E).toFinset.card ≤ Module.finrank ℂ Mat := by
   classical
   let hfin := peripheralEigenvalues_finite E
-  letI : Fintype ↥(peripheralEigenvalues E) := Set.Finite.fintype hfin
+  let : Fintype ↥(peripheralEigenvalues E) := Set.Finite.fintype hfin
   let xs : ↥(peripheralEigenvalues E) → Mat :=
     fun μ => Classical.choose (μ.2.1.exists_hasEigenvector)
   have hxs : ∀ μ : ↥(peripheralEigenvalues E), Module.End.HasEigenvector E (μ : ℂ) (xs μ) := by
@@ -187,7 +187,7 @@ theorem bounded_root_of_peripheral_closed_powers [NeZero D]
   classical
   let N := Module.finrank ℂ Mat
   let hfin := peripheralEigenvalues_finite E
-  letI : Fintype ↥(peripheralEigenvalues E) := Set.Finite.fintype hfin
+  let : Fintype ↥(peripheralEigenvalues E) := Set.Finite.fintype hfin
   let f : Fin (N + 1) → ↥(peripheralEigenvalues E) :=
     fun n => ⟨μ ^ (n : ℕ), hclosed n⟩
   have hnotinj : ¬ Function.Injective f := by
@@ -377,13 +377,13 @@ theorem spectralRadius_lt_one_of_eigenvalues_lt_one [NeZero D]
     (hF : ∀ ν : ℂ, Module.End.HasEigenvalue F ν → ‖ν‖ < 1) :
     spectralRadius ℂ ((Module.End.toContinuousLinearMap Mat) F) < 1 := by
   let Φ : (Mat →ₗ[ℂ] Mat) ≃ₐ[ℂ] (Mat →L[ℂ] Mat) := Module.End.toContinuousLinearMap Mat
-  haveI : Nontrivial (Mat →L[ℂ] Mat) := ContinuousLinearMap.instNontrivialId
+  have : Nontrivial (Mat →L[ℂ] Mat) := ContinuousLinearMap.instNontrivialId
   let hFinite : FiniteDimensional ℂ (Mat →L[ℂ] Mat) :=
     (endEquiv (D := D)).toLinearEquiv.finiteDimensional
   have hF_nonempty : (spectrum ℂ (Φ F)).Nonempty :=
     spectrum.nonempty_of_isAlgClosed_of_finiteDimensional ℂ (Φ F)
   have hcompact : IsCompact (spectrum ℂ (Φ F)) := by
-    letI : FiniteDimensional ℂ (Mat →L[ℂ] Mat) := hFinite
+    let : FiniteDimensional ℂ (Mat →L[ℂ] Mat) := hFinite
     let hComplete : CompleteSpace (Mat →L[ℂ] Mat) := FiniteDimensional.complete ℂ (Mat →L[ℂ] Mat)
     exact @spectrum.isCompact ℂ (Mat →L[ℂ] Mat)
       inferInstance inferInstance inferInstance hComplete inferInstance (Φ F)

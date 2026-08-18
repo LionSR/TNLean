@@ -124,7 +124,7 @@ theorem isCompl_peripheralSubspace_nonPeripheralSubspace (f : Module.End ℂ V) 
     have hU : peripheralEigenvalues f ∪ {μ | f.HasEigenvalue μ ∧ ‖μ‖ ≠ 1} =
         {μ | f.HasEigenvalue μ} := by
       ext μ
-      simp only [peripheralEigenvalues, Set.mem_union, Set.mem_setOf_eq]
+      simp only [peripheralEigenvalues, Set.mem_union, Set.mem_ofPred_eq]
       constructor
       · rintro (⟨h, -⟩ | ⟨h, -⟩) <;> exact h
       · intro h

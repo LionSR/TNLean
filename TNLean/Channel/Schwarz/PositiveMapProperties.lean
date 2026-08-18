@@ -5,7 +5,6 @@ Authors: TNLean contributors
 -/
 import TNLean.Algebra.KroneckerFactorPositivity
 import TNLean.Algebra.MatrixOperatorSpace
-import TNLean.Analysis.MatrixOrderTopology
 import TNLean.Channel.Basic
 import Mathlib.Analysis.CStarAlgebra.Matrix
 import Mathlib.Analysis.CStarAlgebra.ContinuousFunctionalCalculus.Unital
@@ -29,12 +28,8 @@ The spectrum theorem is stated for `spectrum ℝ A`, which is the natural spectr
 for Hermitian complex matrices in Mathlib.
 -/
 
-open scoped Matrix ComplexOrder MatrixOrder TNOperatorSpace
+open scoped Matrix ComplexOrder MatrixOrder Matrix.Norms.L2Operator TNOperatorSpace
 open Matrix
-
-attribute [local instance] Matrix.instL2OpNormedAddCommGroup
-attribute [local instance] Matrix.instL2OpNormedRing
-attribute [local instance] Matrix.instL2OpNormedAlgebra
 
 variable {D : ℕ}
 
@@ -46,8 +41,8 @@ theorem IsPositiveMap.map_le_map
     {T : Matrix n n ℂ →ₗ[ℂ] Matrix m m ℂ} {A B : Matrix n n ℂ}
     (hT : IsPositiveMap T) (hAB : A ≤ B) : T A ≤ T B := by
   classical
-  letI := Fintype.ofFinite m
-  letI := Fintype.ofFinite n
+  let := Fintype.ofFinite m
+  let := Fintype.ofFinite n
   exact hT.toPositiveLinearMap.monotone hAB
 
 /-- Positive maps preserve adjoints. -/
@@ -56,12 +51,10 @@ theorem IsPositiveMap.map_conjTranspose
     {T : Matrix n n ℂ →ₗ[ℂ] Matrix m m ℂ} (hT : IsPositiveMap T) (A : Matrix n n ℂ) :
     T Aᴴ = (T A)ᴴ := by
   classical
-  letI := Fintype.ofFinite m
-  letI := Fintype.ofFinite n
-  letI := Classical.decEq m
-  letI := Classical.decEq n
-  letI : CStarAlgebra (Matrix m m ℂ) := Matrix.matrixCStarAlgebra
-  letI : CStarAlgebra (Matrix n n ℂ) := Matrix.matrixCStarAlgebra
+  let := Fintype.ofFinite m
+  let := Fintype.ofFinite n
+  let := Classical.decEq m
+  let := Classical.decEq n
   change hT.toPositiveLinearMap Aᴴ = (hT.toPositiveLinearMap A)ᴴ
   simpa [Matrix.star_eq_conjTranspose] using map_star hT.toPositiveLinearMap A
 
@@ -84,7 +77,7 @@ private theorem IsPositiveMap.map_projection_mul_eq_zero
     (hTP : T P = 0) (A : Matrix n n ℂ) :
     T (P * A) = 0 := by
   classical
-  letI := Fintype.ofFinite m
+  let := Fintype.ofFinite m
   apply Matrix.eq_zero_of_forall_star_dotProduct_mulVec_eq_zero
   intro x
   let b : ℂ := star x ⬝ᵥ T (P * A) *ᵥ x
@@ -154,10 +147,8 @@ theorem Matrix.PosSemidef.fromBlocks_diag
     (hA : A.PosSemidef) (hB : B.PosSemidef) :
     (Matrix.fromBlocks A 0 0 B : Matrix (m ⊕ o) (m ⊕ o) ℂ).PosSemidef := by
   classical
-  letI := Fintype.ofFinite m
-  letI := Fintype.ofFinite o
-  letI : CStarAlgebra (Matrix m m ℂ) := Matrix.matrixCStarAlgebra
-  letI : CStarAlgebra (Matrix o o ℂ) := Matrix.matrixCStarAlgebra
+  let := Fintype.ofFinite m
+  let := Fintype.ofFinite o
   obtain ⟨CA, hCA⟩ := CStarAlgebra.nonneg_iff_eq_mul_star_self.mp
     ((Matrix.nonneg_iff_posSemidef).mpr hA)
   obtain ⟨CB, hCB⟩ := CStarAlgebra.nonneg_iff_eq_mul_star_self.mp

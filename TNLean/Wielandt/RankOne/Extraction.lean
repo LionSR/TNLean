@@ -71,8 +71,7 @@ private lemma coe_pow_restrict
                 simp [pow_succ, Module.End.mul_apply]
         _ = (f ^ n) ((f.restrict hf) x) := by
               simpa using (ih ((f.restrict hf) x))
-        _ = (f ^ n) (f x) := by
-              simp [LinearMap.restrict_apply]
+        _ = (f ^ n) (f x) := rfl
         _ = (f ^ (n + 1)) x := by
               simp [pow_succ, Module.End.mul_apply]
 

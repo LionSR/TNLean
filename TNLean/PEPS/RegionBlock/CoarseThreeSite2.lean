@@ -366,6 +366,15 @@ theorem stateCoeff_coarseTensor_eq_threeRegionSum (s : Fin 3 → Fin (coarseDim 
   rw [stateCoeff]
   refine Finset.sum_congr rfl (fun η _ => ?_)
   rw [Fin.prod_univ_three]
+  let legsRed : (ie : IncidentEdge coarseGraph 0) → Fin (F.coarseBondDim ie.1) :=
+    fun ie => η ie.1
+  let legsBlue : (ie : IncidentEdge coarseGraph 1) → Fin (F.coarseBondDim ie.1) :=
+    fun ie => η ie.1
+  let legsComplement : (ie : IncidentEdge coarseGraph 2) → Fin (F.coarseBondDim ie.1) :=
+    fun ie => η ie.1
+  change F.coarseTensor.component 0 legsRed (s 0) *
+      F.coarseTensor.component 1 legsBlue (s 1) *
+      F.coarseTensor.component 2 legsComplement (s 2) = _
   rw [F.coarseTensor_component_red, F.coarseTensor_component_blue,
     F.coarseTensor_component_complement]
 

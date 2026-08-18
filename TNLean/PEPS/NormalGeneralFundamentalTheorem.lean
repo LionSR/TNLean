@@ -283,17 +283,17 @@ theorem absorbedGauge_unique_scalar_of_region
   by_cases hmem : f.1.1.1 ∈ R
   · refine ⟨c, ?_⟩
     have hZ : absorbedBoundaryGauge (G := G) B R f (X f.1) = glTranspose (X f.1) := by
-      unfold absorbedBoundaryGauge; rw [if_pos hmem]
+      unfold absorbedBoundaryGauge; rw [ite_eq_left hmem]
     have hZ' : absorbedBoundaryGauge (G := G) B R f (X' f.1) = glTranspose (X' f.1) := by
-      unfold absorbedBoundaryGauge; rw [if_pos hmem]
+      unfold absorbedBoundaryGauge; rw [ite_eq_left hmem]
     rw [hZ, hZ', glTranspose_coe, glTranspose_coe] at hc
     have htr := congrArg Matrix.transpose hc
     rwa [Matrix.transpose_transpose, Matrix.transpose_smul, Matrix.transpose_transpose] at htr
   · refine ⟨c⁻¹, ?_⟩
     have hZ : absorbedBoundaryGauge (G := G) B R f (X f.1) = (X f.1)⁻¹ := by
-      unfold absorbedBoundaryGauge; rw [if_neg hmem]
+      unfold absorbedBoundaryGauge; rw [ite_eq_right hmem]
     have hZ' : absorbedBoundaryGauge (G := G) B R f (X' f.1) = (X' f.1)⁻¹ := by
-      unfold absorbedBoundaryGauge; rw [if_neg hmem]
+      unfold absorbedBoundaryGauge; rw [ite_eq_right hmem]
     rw [hZ, hZ'] at hc
     have hinv := gl_inv_coe_smul (W := (X f.1)⁻¹) (W' := (X' f.1)⁻¹) hc
     rwa [inv_inv, inv_inv] at hinv

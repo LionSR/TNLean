@@ -207,7 +207,7 @@ theorem regionBoundaryLabel_inter_p0OuterGlue {R₁ R₂ : Finset V} (q₁ q₂ 
   classical
   funext f
   rw [regionBoundaryLabel_apply, regionBoundaryLabel_apply, p0OuterGlue,
-    if_neg (fun hp0 => not_isRegionBoundaryEdge_inter_of_p0Outer (G := G) hp0 f.2)]
+    ite_eq_right (fun hp0 => not_isRegionBoundaryEdge_inter_of_p0Outer (G := G) hp0 f.2)]
 
 omit [Fintype V] in
 /-- The glued configuration agrees with `q₂` on the difference `R₂ \ R₁` boundary label. -/
@@ -217,7 +217,7 @@ theorem regionBoundaryLabel_sdiff_p0OuterGlue {R₁ R₂ : Finset V} (q₁ q₂ 
   classical
   funext f
   rw [regionBoundaryLabel_apply, regionBoundaryLabel_apply, p0OuterGlue,
-    if_neg (fun hp0 => not_isRegionBoundaryEdge_sdiff_of_p0Outer (G := G) hp0 f.2)]
+    ite_eq_right (fun hp0 => not_isRegionBoundaryEdge_sdiff_of_p0Outer (G := G) hp0 f.2)]
 
 omit [Fintype V] in
 /-- The glued configuration carries the union host label `bdry`, provided `q₁` carries it and
@@ -233,9 +233,9 @@ theorem regionBoundaryLabel_union_p0OuterGlue {R₁ R₂ : Finset V} (q₁ q₂ 
   funext f
   rw [regionBoundaryLabel_apply, p0OuterGlue]
   by_cases hp0 : IsP0OuterEdge (G := G) R₁ R₂ f.1
-  · rw [if_pos hp0]
+  · rw [ite_eq_left hp0]
     have := congrFun h1 f; rwa [regionBoundaryLabel_apply] at this
-  · rw [if_neg hp0]
+  · rw [ite_eq_right hp0]
     have hR₂edge := isRegionBoundaryEdge_R₂_of_unionBoundary_not_p0Outer (G := G) f.2 hp0
     have hq := congrFun hR₂ ⟨f.1, hR₂edge⟩
     rw [regionBoundaryLabel_apply, regionBoundaryLabel_apply] at hq
@@ -323,11 +323,11 @@ theorem sum_hostGlue_mul_rightIndicator_eq {R₁ R₂ : Finset V}
       regionBoundaryLabel (G := G) A (R₁ ∪ R₂) q = bdry ∧
         regionBoundaryLabel (G := G) A (R₁ ∩ R₂) q = β ∧
           regionBoundaryLabel (G := G) A (R₂ \ R₁) q = bc'
-  · rw [if_pos hbig]
+  · rw [ite_eq_left hbig]
     obtain ⟨q, hqu, hqi, hqs⟩ := hbig
     -- The unique `R₂` label realizing both halves is the `R₂` label of `q`.
     rw [Finset.sum_eq_single (regionBoundaryLabel (G := G) A R₂ q)]
-    · rw [if_pos ⟨q, hqu, rfl⟩, if_pos ⟨q, rfl, hqi, hqs⟩, mul_one]
+    · rw [ite_eq_left ⟨q, hqu, rfl⟩, ite_eq_left ⟨q, rfl, hqi, hqs⟩, mul_one]
     · intro b₂ _ hne
       -- Any `b₂ ≠ lab_{R₂} q` cannot realize both: the right half forces `b₂ = lab_{R₂}`.
       by_cases hr : ∃ q₂ : VirtualConfig A,
@@ -342,9 +342,9 @@ theorem sum_hostGlue_mul_rightIndicator_eq {R₁ R₂ : Finset V}
         rw [← hq₂r]
         exact regionBoundaryLabel_R₂_eq_of_inter_sdiff (G := G) (hq₂i.trans hqi.symm)
           (hq₂s.trans hqs.symm)
-      · rw [if_neg hr, mul_zero]
+      · rw [ite_eq_right hr, mul_zero]
     · intro h; exact absurd (Finset.mem_univ _) h
-  · rw [if_neg hbig]
+  · rw [ite_eq_right hbig]
     refine Finset.sum_eq_zero (fun b₂ _ => ?_)
     by_cases hg : ∃ q₁ : VirtualConfig A,
         regionBoundaryLabel (G := G) A (R₁ ∪ R₂) q₁ = bdry ∧
@@ -363,8 +363,8 @@ theorem sum_hostGlue_mul_rightIndicator_eq {R₁ R₂ : Finset V}
             (by rw [hq₂r, hq₁r])
         · rw [regionBoundaryLabel_inter_p0OuterGlue]; exact hq₂i
         · rw [regionBoundaryLabel_sdiff_p0OuterGlue]; exact hq₂s
-      · rw [if_neg hr, mul_zero]
-    · rw [if_neg hg, zero_mul]
+      · rw [ite_eq_right hr, mul_zero]
+    · rw [ite_eq_right hg, zero_mul]
 
 /-! ### Gluing along the overlap-crossing edges
 
@@ -428,7 +428,7 @@ theorem regionBoundaryLabel_union_interCrossGlue {R₁ R₂ : Finset V} (q₁ q�
   classical
   funext f
   rw [regionBoundaryLabel_apply, regionBoundaryLabel_apply, interCrossGlue,
-    if_neg (fun hc => not_isRegionBoundaryEdge_union_of_overlapCrossing' (G := G) hc f.2)]
+    ite_eq_right (fun hc => not_isRegionBoundaryEdge_union_of_overlapCrossing' (G := G) hc f.2)]
 
 omit [Fintype V] in
 /-- The overlap-crossing glue keeps `q₂`'s difference label. -/
@@ -438,7 +438,7 @@ theorem regionBoundaryLabel_sdiff_interCrossGlue {R₁ R₂ : Finset V} (q₁ q�
   classical
   funext f
   rw [regionBoundaryLabel_apply, regionBoundaryLabel_apply, interCrossGlue,
-    if_neg (fun hc => not_isRegionBoundaryEdge_sdiff_of_overlapCrossing (G := G) hc f.2)]
+    ite_eq_right (fun hc => not_isRegionBoundaryEdge_sdiff_of_overlapCrossing (G := G) hc f.2)]
 
 omit [Fintype V] in
 /-- The overlap-crossing glue carries the overlap label `β`, provided `q₁` carries it and
@@ -454,9 +454,9 @@ theorem regionBoundaryLabel_inter_interCrossGlue {R₁ R₂ : Finset V} (q₁ q�
   funext f
   rw [regionBoundaryLabel_apply, interCrossGlue]
   by_cases hc : IsOverlapCrossingEdge (G := G) R₁ R₂ f.1
-  · rw [if_pos hc]
+  · rw [ite_eq_left hc]
     have := congrFun h1 f; rwa [regionBoundaryLabel_apply] at this
-  · rw [if_neg hc]
+  · rw [ite_eq_right hc]
     -- `f` is an overlap boundary edge, not crossing, hence an `R₁` boundary edge.
     have hR₁edge : IsRegionBoundaryEdge (G := G) R₁ f.1 := by
       by_contra hn
@@ -543,11 +543,11 @@ theorem sum_interGlue_mul_leftIndicator_eq {R₁ R₂ : Finset V}
       regionBoundaryLabel (G := G) A (R₁ ∪ R₂) q = bdry ∧
         regionBoundaryLabel (G := G) A (R₁ ∩ R₂) q = β ∧
           regionBoundaryLabel (G := G) A (R₂ \ R₁) q = bc'
-  · rw [if_pos hbig]
+  · rw [ite_eq_left hbig]
     obtain ⟨q, hqu, hqi, hqs⟩ := hbig
     -- The unique `R₁` label realizing both halves is the `R₁` label of `q`.
     rw [Finset.sum_eq_single (regionBoundaryLabel (G := G) A R₁ q)]
-    · rw [if_pos ⟨q, rfl, hqi⟩, if_pos ⟨q, hqu, rfl, hqs⟩, mul_one]
+    · rw [ite_eq_left ⟨q, rfl, hqi⟩, ite_eq_left ⟨q, hqu, rfl, hqs⟩, mul_one]
     · intro β₁ _ hne
       by_cases hl : ∃ q₂ : VirtualConfig A,
           regionBoundaryLabel (G := G) A (R₁ ∪ R₂) q₂ = bdry ∧
@@ -559,9 +559,9 @@ theorem sum_interGlue_mul_leftIndicator_eq {R₁ R₂ : Finset V}
         rw [← hq₂r]
         exact regionBoundaryLabel_R₁_eq_of_union_sdiff (G := G) (hq₂u.trans hqu.symm)
           (hq₂s.trans hqs.symm)
-      · rw [if_neg hl, mul_zero]
+      · rw [ite_eq_right hl, mul_zero]
     · intro h; exact absurd (Finset.mem_univ _) h
-  · rw [if_neg hbig]
+  · rw [ite_eq_right hbig]
     refine Finset.sum_eq_zero (fun β₁ _ => ?_)
     by_cases hg : ∃ q₁ : VirtualConfig A,
         regionBoundaryLabel (G := G) A R₁ q₁ = β₁ ∧
@@ -579,8 +579,8 @@ theorem sum_interGlue_mul_leftIndicator_eq {R₁ R₂ : Finset V}
         · exact regionBoundaryLabel_inter_interCrossGlue (G := G) q₁ q₂ hq₁i
             (by rw [hq₂r, hq₁r])
         · rw [regionBoundaryLabel_sdiff_interCrossGlue]; exact hq₂s
-      · rw [if_neg hl, mul_zero]
-    · rw [if_neg hg, zero_mul]
+      · rw [ite_eq_right hl, mul_zero]
+    · rw [ite_eq_right hg, zero_mul]
 
 /-! ### The `P₀`-outer bridge
 

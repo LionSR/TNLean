@@ -204,16 +204,16 @@ theorem exists_cyclic_sector_decomp_with_letter_and_isometry_after_blocking_of_i
       (∀ k, V k * (V k)ᴴ = P k) ∧
       (∀ k (X : Matrix (Fin (dim k)) (Fin (dim k)) ℂ),
         (φ k X).1 = V k * X * (V k)ᴴ) := by
-  letI : NeZero m := ⟨Nat.ne_of_gt hP.period_pos⟩
+  let : NeZero m := ⟨Nat.ne_of_gt hP.period_pos⟩
   obtain ⟨K, h_unitalK, hIrrK, ρ, hρ_pd, h_adjfix, rfl⟩ :=
     conjTranspose_kraus_setup A hP.leftCanonical hP.irreducible
   obtain ⟨ω, hωprim⟩ := hP.primitiveRoot
   have hM : (1 : Matrix (Fin D) (Fin D) ℂ).PosDef := Matrix.PosDef.one
-  letI : NormedAddCommGroup (Matrix (Fin D) (Fin D) ℂ) :=
+  let : NormedAddCommGroup (Matrix (Fin D) (Fin D) ℂ) :=
     Matrix.toMatrixNormedAddCommGroup (n := Fin D) (𝕜 := ℂ) 1 hM
-  letI : SeminormedAddCommGroup (Matrix (Fin D) (Fin D) ℂ) :=
+  let : SeminormedAddCommGroup (Matrix (Fin D) (Fin D) ℂ) :=
     Matrix.toMatrixSeminormedAddCommGroup (n := Fin D) (𝕜 := ℂ) 1 hM.posSemidef
-  letI : InnerProductSpace ℂ (Matrix (Fin D) (Fin D) ℂ) :=
+  let : InnerProductSpace ℂ (Matrix (Fin D) (Fin D) ℂ) :=
     Matrix.toMatrixInnerProductSpace (n := Fin D) (𝕜 := ℂ) 1 hM.posSemidef
   have hAdj :
       transferMap (d := d) (D := D) (fun i => (A i)ᴴ) =
@@ -451,11 +451,11 @@ private lemma cornerRestriction_primitive_and_irreducible_of_cyclicDecomp
         (K := K) (hMulDomain k) X
   obtain ⟨ω, hωprim⟩ := hP.primitiveRoot
   have hM : (1 : MatrixAlg D).PosDef := Matrix.PosDef.one
-  letI : NormedAddCommGroup (MatrixAlg D) :=
+  let : NormedAddCommGroup (MatrixAlg D) :=
     Matrix.toMatrixNormedAddCommGroup (n := Fin D) (𝕜 := ℂ) 1 hM
-  letI : SeminormedAddCommGroup (MatrixAlg D) :=
+  let : SeminormedAddCommGroup (MatrixAlg D) :=
     Matrix.toMatrixSeminormedAddCommGroup (n := Fin D) (𝕜 := ℂ) 1 hM.posSemidef
-  letI : InnerProductSpace ℂ (MatrixAlg D) :=
+  let : InnerProductSpace ℂ (MatrixAlg D) :=
     Matrix.toMatrixInnerProductSpace (n := Fin D) (𝕜 := ℂ) 1 hM.posSemidef
   have hAdj :
       T = (transferMap (d := d) (D := D) A).adjoint := by
@@ -583,7 +583,7 @@ private lemma compressedSector_adjointTransferMap_cornerBridge_of_cyclicDecomp
       IsIrreducibleMap
         (transferMap (d := blockPhysDim d m) (D := dim u)
           (fun i => (blocks u i)ᴴ)) := by
-  haveI : NeZero (dim u) := ⟨hNonzero⟩
+  have : NeZero (dim u) := ⟨hNonzero⟩
   let T : MatrixEnd D :=
     (transferMap (d := d) (D := D) (fun i => (A i)ᴴ)) ^ m
   have hT :
@@ -662,15 +662,15 @@ lemma primitive_and_irreducible_sectorBlocks_of_cyclicDecomp
   obtain ⟨hPrimAdj, hIrrAdj⟩ :=
     adjointTransferMap_primitive_and_irreducible_sectorBlock_of_cyclicDecomp
       A hP blocks hBlocks_lc hBlocks_mpv hCyclic u hNonzero
-  haveI : NeZero (dim u) := ⟨hNonzero⟩
+  have : NeZero (dim u) := ⟨hNonzero⟩
   have hM : (1 : Matrix (Fin (dim u)) (Fin (dim u)) ℂ).PosDef := by
     classical
     simpa only using (Matrix.PosDef.one (n := Fin (dim u)) (R := ℂ))
-  letI : NormedAddCommGroup (Matrix (Fin (dim u)) (Fin (dim u)) ℂ) :=
+  let : NormedAddCommGroup (Matrix (Fin (dim u)) (Fin (dim u)) ℂ) :=
     Matrix.toMatrixNormedAddCommGroup (n := Fin (dim u)) (𝕜 := ℂ) 1 hM
-  letI : SeminormedAddCommGroup (Matrix (Fin (dim u)) (Fin (dim u)) ℂ) :=
+  let : SeminormedAddCommGroup (Matrix (Fin (dim u)) (Fin (dim u)) ℂ) :=
     Matrix.toMatrixSeminormedAddCommGroup (n := Fin (dim u)) (𝕜 := ℂ) 1 hM.posSemidef
-  letI : InnerProductSpace ℂ (Matrix (Fin (dim u)) (Fin (dim u)) ℂ) :=
+  let : InnerProductSpace ℂ (Matrix (Fin (dim u)) (Fin (dim u)) ℂ) :=
     Matrix.toMatrixInnerProductSpace (n := Fin (dim u)) (𝕜 := ℂ) 1 hM.posSemidef
   have hAdj :
       transferMap (d := blockPhysDim d m) (D := dim u) (fun i => (blocks u i)ᴴ) =

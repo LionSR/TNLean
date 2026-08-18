@@ -53,14 +53,14 @@ omit [Fintype V] in
 /-- On a pair already in order (`u < v`), `Edge.ofAdj` keeps the endpoints as given. -/
 theorem Edge.ofAdj_of_lt {G : SimpleGraph V} {u v : V} (h : G.Adj u v) (huv : u < v) :
     Edge.ofAdj h = ⟨(u, v), huv, h⟩ := by
-  rw [Edge.ofAdj, dif_pos huv]
+  rw [Edge.ofAdj, dite_eq_left huv]
 
 omit [Fintype V] in
 /-- On a pair in reverse order (`v < u`), `Edge.ofAdj` swaps the endpoints. -/
 theorem Edge.ofAdj_of_gt {G : SimpleGraph V} {u v : V} (h : G.Adj u v) (hvu : v < u) :
     Edge.ofAdj h =
       ⟨(v, u), hvu, h.symm⟩ := by
-  rw [Edge.ofAdj, dif_neg (not_lt.mpr hvu.le)]
+  rw [Edge.ofAdj, dite_eq_right (not_lt.mpr hvu.le)]
 
 omit [Fintype V] in
 /-- The unordered endpoint set of `Edge.ofAdj h` is `{u, v}`: its two endpoints are

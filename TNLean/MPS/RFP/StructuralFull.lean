@@ -145,7 +145,7 @@ theorem rfp_nt_structural_full_sqSum (A : MPSTensor d D) [NeZero D]
     ext i j
     by_cases hij : i = j
     · subst hij
-      rw [Matrix.diagonal_apply, if_pos rfl]
+      rw [Matrix.diagonal_apply, ite_eq_left rfl]
     · simpa [hij] using hρ_diag hij
   have hρdiag_pos : ∀ k : Fin D, 0 < ρ k k := by
     have hdiag_pd : (Matrix.diagonal (fun k => ρ k k) : Mat).PosDef := by
@@ -850,7 +850,7 @@ theorem unitPairIsometry_transfer (U : MPSTensor d D)
         simp_rw [inner]
     _ = Matrix.trace Z * (if x = y then 1 else 0) := by
         by_cases hxy : x = y
-        · rw [if_pos hxy, mul_one]
+        · rw [ite_eq_left hxy, mul_one]
           have hcond : ∀ k j : Fin D,
               (if x = y ∧ k = j then (1 : ℂ) else 0) = if k = j then 1 else 0 :=
             fun k j => by by_cases hkj : k = j <;> simp [hxy, hkj]
@@ -859,9 +859,9 @@ theorem unitPairIsometry_transfer (U : MPSTensor d D)
           refine Finset.sum_congr rfl fun j _ => ?_
           rw [Matrix.diag_apply]
           exact Fintype.sum_ite_eq' j (fun k => Z k j)
-        · rw [if_neg hxy, mul_zero]
+        · rw [ite_eq_right hxy, mul_zero]
           refine Finset.sum_eq_zero fun j _ => Finset.sum_eq_zero fun k _ => ?_
-          rw [if_neg (fun h => hxy h.1), mul_zero]
+          rw [ite_eq_right (fun h => hxy h.1), mul_zero]
 
 /-- **Backward direction of the structural characterization of pure-state
 renormalization fixed points** (arXiv:1606.00608, Theorem charact-MPS,

@@ -126,7 +126,7 @@ private theorem reindex_directSumDiagonalEmbedding_list_prod
     Matrix.reindex e e (Matrix.directSumDiagonalEmbedding A.prod) =
       (A.map fun X ↦
         Matrix.reindex e e (Matrix.directSumDiagonalEmbedding X)).prod := by
-  letI := Fintype.ofFinite ι
+  let := Fintype.ofFinite ι
   induction A with
   | nil =>
       simp only [List.prod_nil, List.map_nil]

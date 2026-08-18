@@ -81,7 +81,11 @@ theorem activeSectorTraceMatrix_normalized_relations_of_isSourceZCL
       F.leftTensor F.rightTensor hfactor]
     ext beta alpha
     simp only [MPOTensor.closedSectorPairingOperator, Matrix.sum_apply,
-      Matrix.vecMulVec_apply, Matrix.mul_apply, L, Q]
+      Matrix.vecMulVec_apply]
+    change (∑ c : Fin F.sectorCount,
+      (F.leftTensor c beta).trace * (F.rightTensor c alpha).trace) =
+        ∑ a : F.ActiveSector p,
+          (F.leftTensor a beta).trace * (F.rightTensor a alpha).trace
     rw [← Finset.sum_subtype (Finset.univ.filter (fun k ↦ p k ≠ 0)) (by simp)
       (fun k ↦ (F.leftTensor k beta).trace * (F.rightTensor k alpha).trace)]
     rw [Finset.sum_filter]
@@ -89,13 +93,13 @@ theorem activeSectorTraceMatrix_normalized_relations_of_isSourceZCL
     intro k _
     by_cases hk : p k ≠ 0
     · simp [hk]
-    · rw [if_neg hk, hinactive k (not_ne_iff.mp hk) beta, Matrix.trace_zero, zero_mul]
+    · rw [ite_eq_right hk, hinactive k (not_ne_iff.mp hk) beta, Matrix.trace_zero, zero_mul]
   have hrect : IsIdempotentElem (((lam : ℂ)⁻¹ • L) * Q) := by
     simpa only [Matrix.smul_mul, ← hphys] using hidem
   let TC : Matrix (F.ActiveSector p) (F.ActiveSector p) ℂ := Q * L
   have hTC : TC = Matrix.map (F.activeSectorTraceMatrix p) Complex.ofReal := by
     ext k h
-    simp only [TC, Matrix.mul_apply, Q, L, Matrix.map_apply]
+    simp only [TC, Q, L, Matrix.map_apply]
     change (∑ j, (F.rightTensor (k : Fin F.sectorCount) j).trace *
       (F.leftTensor (h : Fin F.sectorCount) j).trace) =
         ((F.neighboringOperator k h).trace.re : ℂ)

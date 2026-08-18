@@ -165,14 +165,14 @@ theorem naimarkProjection_mul_self (i : Fin n) :
         simp [Ne.symm ha'a]
       · intro h; exact absurd (Finset.mem_univ a) h
     · have hfalse : ¬(a = c ∧ b = i ∧ d = i) := fun ⟨_, _, h⟩ => hdi h
-      rw [if_neg hfalse]
+      rw [ite_eq_right hfalse]
       refine Finset.sum_eq_zero fun a' _ => ?_
       refine Finset.sum_eq_zero fun b' _ => ?_
       by_cases hb'i : b' = i
       · simp [hb'i, hdi]
       · simp [hb'i]
   · have hfalse : ¬(a = c ∧ b = i ∧ d = i) := fun ⟨_, h, _⟩ => hbi h
-    rw [if_neg hfalse]
+    rw [ite_eq_right hfalse]
     refine Finset.sum_eq_zero fun a' _ => ?_
     refine Finset.sum_eq_zero fun b' _ => ?_
     simp [hbi]
@@ -260,7 +260,7 @@ theorem naimark_recovers_povm (i : Fin n) :
           (if p1 = q1 ∧ p2 = i ∧ q2 = i then (1 : ℂ) else 0)) = 0 := by
       refine Finset.sum_eq_zero fun p1 _ => ?_
       refine Finset.sum_eq_zero fun p2 _ => ?_
-      rw [if_neg (fun h => hq2 h.2.2)]
+      rw [ite_eq_right (fun h => hq2 h.2.2)]
       ring
     rw [hinner, zero_mul]
   · intro h; exact absurd (Finset.mem_univ i) h

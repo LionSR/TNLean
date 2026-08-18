@@ -101,27 +101,27 @@ def cycleEdgeBlue (L : ℕ) (e : Edge (SimpleGraph.cycleGraph n)) : Finset (Fin 
 first. -/
 theorem cycleEdgeRed_of_succ {L : ℕ} {e : Edge (SimpleGraph.cycleGraph n)}
     (hsucc : e.1.1 + 1 = e.1.2) :
-    cycleEdgeRed L e = cycleArcTo e.1.1 L := if_pos hsucc
+    cycleEdgeRed L e = cycleArcTo e.1.1 L := ite_eq_left hsucc
 
 /-- The blue block when the second endpoint is the cyclic successor of the
 first. -/
 theorem cycleEdgeBlue_of_succ {L : ℕ} {e : Edge (SimpleGraph.cycleGraph n)}
     (hsucc : e.1.1 + 1 = e.1.2) :
     cycleEdgeBlue L e = cycleArcFrom (e.1.1 + 1) L :=
-  (if_pos hsucc).trans (congrArg (fun a => cycleArcFrom a L) hsucc.symm)
+  (ite_eq_left hsucc).trans (congrArg (fun a => cycleArcFrom a L) hsucc.symm)
 
 /-- The red block when the first endpoint is the cyclic successor of the
 second. -/
 theorem cycleEdgeRed_of_succ' {L : ℕ} {e : Edge (SimpleGraph.cycleGraph n)}
     (hsucc : ¬e.1.1 + 1 = e.1.2) (hsucc2 : e.1.2 + 1 = e.1.1) :
     cycleEdgeRed L e = cycleArcFrom (e.1.2 + 1) L :=
-  (if_neg hsucc).trans (congrArg (fun a => cycleArcFrom a L) hsucc2.symm)
+  (ite_eq_right hsucc).trans (congrArg (fun a => cycleArcFrom a L) hsucc2.symm)
 
 /-- The blue block when the first endpoint is the cyclic successor of the
 second. -/
 theorem cycleEdgeBlue_of_succ' {L : ℕ} {e : Edge (SimpleGraph.cycleGraph n)}
     (hsucc : ¬e.1.1 + 1 = e.1.2) :
-    cycleEdgeBlue L e = cycleArcTo e.1.2 L := if_neg hsucc
+    cycleEdgeBlue L e = cycleArcTo e.1.2 L := ite_eq_right hsucc
 
 /-- The first endpoint of an edge lies in its red block. -/
 theorem left_mem_cycleEdgeRed {L : ℕ} (hL : 0 < L) (e : Edge (SimpleGraph.cycleGraph n)) :

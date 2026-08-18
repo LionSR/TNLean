@@ -52,13 +52,13 @@ private lemma exists_eigenvalue_nnnorm_eq_spectralRadius [NeZero D₁] [NeZero D
   let V := Matrix (Fin D₁) (Fin D₂) ℂ
   let Φ : (V →ₗ[ℂ] V) ≃ₐ[ℂ] (V →L[ℂ] V) := Module.End.toContinuousLinearMap V
   let F' : V →L[ℂ] V := Φ F
-  letI : NormedAddCommGroup (V →L[ℂ] V) := ContinuousLinearMap.toNormedAddCommGroup
-  letI : SeminormedRing (V →L[ℂ] V) := ContinuousLinearMap.toSeminormedRing
-  letI : NormedRing (V →L[ℂ] V) := ContinuousLinearMap.toNormedRing
-  letI : NormedSpace ℂ (V →L[ℂ] V) := ContinuousLinearMap.toNormedSpace
-  letI : NormedAlgebra ℂ (V →L[ℂ] V) := ContinuousLinearMap.toNormedAlgebra
-  haveI : FiniteDimensional ℂ (V →L[ℂ] V) := Φ.toLinearEquiv.finiteDimensional
-  letI : CompleteSpace (V →L[ℂ] V) := FiniteDimensional.complete ℂ (V →L[ℂ] V)
+  let : NormedAddCommGroup (V →L[ℂ] V) := ContinuousLinearMap.toNormedAddCommGroup
+  let : SeminormedRing (V →L[ℂ] V) := ContinuousLinearMap.toSeminormedRing
+  let : NormedRing (V →L[ℂ] V) := ContinuousLinearMap.toNormedRing
+  let : NormedSpace ℂ (V →L[ℂ] V) := ContinuousLinearMap.toNormedSpace
+  let : NormedAlgebra ℂ (V →L[ℂ] V) := ContinuousLinearMap.toNormedAlgebra
+  have : FiniteDimensional ℂ (V →L[ℂ] V) := Φ.toLinearEquiv.finiteDimensional
+  let : CompleteSpace (V →L[ℂ] V) := FiniteDimensional.complete ℂ (V →L[ℂ] V)
   obtain ⟨μ, hμ_spec, hμ_norm⟩ :=
     @spectrum.exists_nnnorm_eq_spectralRadius_of_nonempty ℂ _ _
       (ContinuousLinearMap.toNormedRing : NormedRing (V →L[ℂ] V))
@@ -218,7 +218,7 @@ theorem modulus_one_eigenvalue_implies_gauge_of_irreducible_TP
     GaugePhaseEquiv A B := by
   rcases eq_or_ne D 0 with rfl | hD
   · exact ⟨1, 1, one_ne_zero, fun i => by ext a; exact a.elim0⟩
-  haveI : NeZero D := ⟨hD⟩
+  have : NeZero D := ⟨hD⟩
   obtain ⟨μ, hμ_ev, hμ_norm⟩ :=
     exists_eigenvalue_nnnorm_eq_spectralRadius (mixedTransferMap A B)
   obtain ⟨X, hX_mem, hX_ne⟩ := hμ_ev.exists_hasEigenvector

@@ -101,7 +101,6 @@ theorem pow_apply_eq_sum_path_indicator (S : Matrix n n R) :
         (if v 0 = a then (if v (Fin.last N) = c then
           (∏ i : Fin N, S (v i.castSucc) (v i.succ)) * S c b else 0) else 0) from
       fun v c => by by_cases h : v 0 = a <;> simp [h]]
-    conv_lhs => simp only [Fintype.sum_ite_eq]
     rw [← Equiv.sum_comp (Fin.snocEquiv (fun _ : Fin (N + 2) => n))]
     rw [Fintype.sum_prod_type]
     conv_rhs =>
@@ -139,7 +138,7 @@ theorem trace_pow_eq_sum_cyclic_product (S : Matrix n n R) {N : ℕ} [NeZero N] 
         (∏ i : Fin (M + 1), S (v i.castSucc) (v i.succ)) else 0 := by
     intro v
     by_cases h : v 0 = v (Fin.last (M + 1))
-    · rw [if_pos h]
+    · rw [ite_eq_left h]
       have hswap : (fun a => if v 0 = a ∧ v (Fin.last (M + 1)) = a then
           (∏ i : Fin (M + 1), S (v i.castSucc) (v i.succ)) else (0 : R)) =
         (fun a => if v 0 = a then (if v (Fin.last (M + 1)) = a then
@@ -147,10 +146,10 @@ theorem trace_pow_eq_sum_cyclic_product (S : Matrix n n R) {N : ℕ} [NeZero N] 
         funext (fun a => by by_cases ha : v 0 = a <;> simp [ha])
       rw [hswap]
       simp [h]
-    · rw [if_neg h]
+    · rw [ite_eq_right h]
       apply Finset.sum_eq_zero
       intro a _
-      rw [if_neg]
+      rw [ite_eq_right]
       rintro ⟨ha1, ha2⟩
       exact h (ha1.trans ha2.symm)
   simp_rw [hcollapseA]

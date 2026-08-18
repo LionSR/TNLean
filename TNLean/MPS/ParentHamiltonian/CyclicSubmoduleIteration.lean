@@ -40,7 +40,7 @@ theorem chainGroundSpace_le_of_local_le_restriction_intersection_submodules
         (⨅ a : Fin d, (S M).comap (restrictFirstₗ a))) = S (M + 1)) :
     chainGroundSpace A L N ≤ S N := by
   intro ψ hψ
-  rw [chainGroundSpace, dif_pos ⟨hN, hLN⟩] at hψ
+  rw [chainGroundSpace, dite_eq_left ⟨hN, hLN⟩] at hψ
   simp only [Submodule.mem_iInf, Submodule.mem_comap] at hψ
   apply contiguous_mem_of_restriction_intersection_submodules S hL hLN hstep
   intro s hs τ

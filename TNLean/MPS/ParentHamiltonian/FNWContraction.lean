@@ -503,12 +503,14 @@ theorem IsPrimitiveMPS.wholeIncrement_groundProjection_defect_le_geometric
           q * ‖Iinf‖ * (M * C_T * 1 * (g * r ^ L)) =
               q * ((‖Iinf‖ * C_T * g * M) * r ^ L) := by ring
           _ ≤ q * (base * r ^ L) := hTerm M hM_le
+  let hReassocTail : Function.Injective (reassocTailBoundaryMapES A K L Q) := by
+    rw [reassocTailBoundaryMapES]
+    exact (physicalReassocES (d := d) K L Q).injective.comp
+      (tailBoundaryMapES_injective_of_groundSpaceMapES_injective
+        A K (L + Q) hLocalTail)
   have hInjectiveDefect :
       ‖(ContinuousLinearMap.injectiveRangeProjector
-          (reassocTailBoundaryMapES A K L Q)
-            ((physicalReassocES (d := d) K L Q).injective.comp
-              (tailBoundaryMapES_injective_of_groundSpaceMapES_injective
-                A K (L + Q) hLocalTail))).comp
+          (reassocTailBoundaryMapES A K L Q) hReassocTail).comp
           (ContinuousLinearMap.injectiveRangeProjector
             (leftBoundaryMapES A (K + L) Q)
               (leftBoundaryMapES_injective_of_groundSpaceMapES_injective
@@ -527,6 +529,15 @@ theorem IsPrimitiveMPS.wholeIncrement_groundProjection_defect_le_geometric
   simpa only [ContinuousLinearMap.injectiveRangeProjector_eq_starProjection,
     range_groundSpaceMapES, q] using hInjectiveDefect
 
+private theorem groundSpaceESHasOrthogonalProjection
+    (A : MPSTensor d D) (N : ℕ) : (groundSpaceES A N).HasOrthogonalProjection := by
+  let : CompleteSpace (groundSpaceES A N) := FiniteDimensional.complete ℂ _
+  exact Submodule.HasOrthogonalProjection.ofCompleteSpace _
+
+attribute [local instance] groundSpaceESHasOrthogonalProjection
+
+set_option maxHeartbeats 800000 in
+-- The four-term C3 operator-norm assembly requires extra elaboration budget.
 /-- A spectator-uniform geometric-over-denominator estimate for the open-chain
 C3 projector defect. The constants are reconstructed from the limiting Gram
 metric, geometric Gram convergence, and uniform virtual-word bounds. -/

@@ -143,7 +143,7 @@ private theorem doubledTensor_isRFPViaTS_of_hasPhysicalBlockingIsometry
       · exact Subsingleton.elim _ _
     exact ⟨S, T, hS, hT, fun _ ↦ Subsingleton.elim _ _,
       fun _ ↦ Subsingleton.elim _ _⟩
-  · letI : NeZero d := ⟨hd⟩
+  · let : NeZero d := ⟨hd⟩
     let P : Matrix (Fin d × Fin d) (Fin d × Fin d) ℂ := V * Vᴴ
     let S := Matrix.supportCompletion (singleKrausMap Vᴴ) P
       (Matrix.faithfulDensity (Fin d))

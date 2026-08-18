@@ -94,7 +94,7 @@ instance : IsEmpty (LocalVirtualConfig a3 (0 : V3)) := by
 
 /-- f3 is an other-incident edge of vertex 0 relative to the distinguished edge. -/
 def f3other : OtherIncidentEdge (G := g3) (0 : V3) (edgeLeftIncident (G := g3) e3) :=
-  ⟨f3incident, by decide⟩
+  ⟨f3incident, fun h => f3_ne_e3 (congrArg (fun ie => ie.1) h)⟩
 
 /-- Left residual config is empty (it includes the f3-coordinate of bond 0). -/
 instance : IsEmpty (ResidualLocalConfig a3 (edgeLeftIncident (G := g3) e3)) := by
@@ -122,7 +122,7 @@ theorem right_config_unique :
   intro a b
   funext ie
   have h1 : a3.bondDim ie.1 = 1 := bond_dim_incident_one ie
-  haveI : Subsingleton (Fin (a3.bondDim ie.1)) := by rw [h1]; infer_instance
+  have : Subsingleton (Fin (a3.bondDim ie.1)) := by rw [h1]; infer_instance
   apply Subsingleton.elim
 
 /-- `a3.component 1 η = ![1,0]` for every (the unique) config `η`. -/
@@ -270,8 +270,16 @@ theorem physical_to_virtual_insertion_statement_false :
   rw [local_tensor_map_one_single] at hr
   have h1 := congrFun hr 1
   rw [o2bad_apply_e0] at h1
-  rw [local_tensor_map_one_apply_one] at h1
-  simp at h1
+  have hzero := local_tensor_map_one_apply_one
+    ((localIncidentMatrixOp a3 (edgeRightIncident (G := g3) e3) M) (Pi.single η₀ 1))
+  have hone_zero : (1 : ℂ) = 0 := by
+    calc
+      1 = (![0, 1] : Fin 2 → ℂ) 1 := rfl
+      _ = (localTensorMap a3 1
+          ((localIncidentMatrixOp a3 (edgeRightIncident (G := g3) e3) M)
+            (Pi.single η₀ 1))) 1 := h1
+      _ = 0 := hzero
+  exact one_ne_zero hone_zero
 
 end PhysicalToVirtualCounterexample
 end PEPS

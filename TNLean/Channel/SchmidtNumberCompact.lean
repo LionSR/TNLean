@@ -6,7 +6,6 @@ Authors: Sirui Lu
 import TNLean.Channel.SchmidtNumber
 import TNLean.Algebra.MatrixRankClosed
 import TNLean.Analysis.ConvexHullCompact
-import TNLean.Algebra.MatrixRankBaseChange
 
 /-!
 # Compactness of the Schmidt-number state set
@@ -89,7 +88,7 @@ theorem isClosed_setOf_hasSchmidtRankLE (n : ℕ) :
         = (fun ψ => schmidtCoeffMatrix ψ) ⁻¹'
             {A : Matrix (Fin d) (Fin d') ℂ | A.rank ≤ n} := by
     ext ψ
-    simp only [Set.mem_setOf_eq, Set.mem_preimage, HasSchmidtRankLE, schmidtRank]
+    simp only [Set.mem_ofPred_eq, Set.mem_preimage, HasSchmidtRankLE, schmidtRank]
   rw [hpre]
   exact (isClosed_setOf_rank_le n).preimage continuous_schmidtCoeffMatrix
 
@@ -207,7 +206,7 @@ theorem convex_setOf_hasSchmidtNumberLE_trace_one (n : ℕ) :
   have hconvex_hyper :
       Convex ℝ {ρ : Matrix (Fin d × Fin d') (Fin d × Fin d') ℂ | ρ.trace = 1} := by
     intro x hx y hy a b ha hb hab
-    simp only [Set.mem_setOf_eq] at hx hy ⊢
+    simp only [Set.mem_ofPred_eq] at hx hy ⊢
     rw [Matrix.trace_add, Matrix.trace_smul, Matrix.trace_smul, hx, hy,
       Complex.real_smul, Complex.real_smul, mul_one, mul_one, ← Complex.ofReal_add, hab,
       Complex.ofReal_one]
@@ -272,7 +271,8 @@ theorem exists_unit_smul_euclideanProj_eq {n : ℕ} {ψ : Fin d × Fin d' → �
     have hcoeff : schmidtCoeffMatrix ((Real.sqrt (s ^ 2) : ℂ)⁻¹ • ψ)
         = (Real.sqrt (s ^ 2) : ℂ)⁻¹ • schmidtCoeffMatrix ψ := by
       ext p q; simp [schmidtCoeffMatrix]
-    rw [hcoeff, rank_smul_of_ne_zero hc]
+    rw [hcoeff, Matrix.rank_smul_of_mem_nonZeroDivisors (schmidtCoeffMatrix ψ)
+      (mem_nonZeroDivisors_of_ne_zero hc)]
     exact hψrank
   · -- The squared norm scales the normalized projector back to `|ψ⟩⟨ψ|`.
     have hofLp : WithLp.ofLp ((Real.sqrt (s ^ 2))⁻¹ • ψE)

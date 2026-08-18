@@ -162,7 +162,7 @@ private theorem loopCyclicProduct_etaCyclicEdgeEquiv_symm_constant
     intro n
     rw [Matrix.etaCyclicEdgeEquiv_symm_apply]
     simp
-  rw [dif_pos hsector]
+  rw [dite_eq_left hsector]
   have hsite (m : Fin N) :
       F.sectorEquiv.symm
           ((Matrix.etaCyclicEdgeEquiv F.leftDim F.rightDim F.sectorEquiv).symm
@@ -197,7 +197,7 @@ private theorem loopCyclicProduct_etaCyclicEdgeEquiv_symm_of_ne
         ((Matrix.etaCyclicEdgeEquiv F.leftDim F.rightDim F.sectorEquiv).symm
           ⟨k, x⟩) = 0 := by
   unfold loopCyclicProduct
-  rw [dif_neg]
+  rw [dite_eq_right]
   intro hsector
   apply hk
   funext n
@@ -258,11 +258,11 @@ theorem loopCyclicProduct_inner_eq_zero_of_ne
       exact (hl 0).symm.trans (hm 0)
     have hmzero : F.loopCyclicProduct m s = 0 := by
       unfold loopCyclicProduct
-      rw [dif_neg hm]
+      rw [dite_eq_right hm]
     rw [hmzero, zero_mul]
   · have hlzero : F.loopCyclicProduct l s = 0 := by
       unfold loopCyclicProduct
-      rw [dif_neg hl]
+      rw [dite_eq_right hl]
     rw [Pi.star_apply, hlzero, star_zero, mul_zero]
 
 private theorem blockGroundProduct_mulVec_loopCyclicProduct
@@ -497,7 +497,7 @@ theorem loopProductState_mem_ker_parentHamiltonian
     {N : ℕ} (hN : 2 ≤ N) :
     letI : NeZero N := ⟨by omega⟩
     F.loopProductState l ∈ LinearMap.ker (parentHamiltonian A 2 N) := by
-  letI : NeZero N := ⟨by omega⟩
+  let : NeZero N := ⟨by omega⟩
   exact F.mem_ker_parentHamiltonian_of_groundBondProduct_mulVec_eq_self hN
     (F.loopProductState l) (F.groundBondProduct_mulVec_loopProductState l hN)
 
@@ -518,7 +518,7 @@ theorem loopProductState_mem_parentHamiltonianGroundSpaceES
     {N : ℕ} (hN : 2 ≤ N) :
     letI : NeZero N := ⟨by omega⟩
     F.loopProductStateES l ∈ parentHamiltonianGroundSpaceES A 2 N := by
-  letI : NeZero N := ⟨by omega⟩
+  let : NeZero N := ⟨by omega⟩
   rw [loopProductStateES, parentHamiltonianGroundSpaceES, Submodule.mem_map]
   exact ⟨F.loopProductState l, F.loopProductState_mem_ker_parentHamiltonian l hN, rfl⟩
 
@@ -530,7 +530,7 @@ private theorem span_loopProductStateES_eq_parentHamiltonianGroundSpaceES_of_fin
     Submodule.span ℂ
       (Set.range (fun l : Loop F.edgeWeight ↦ F.loopProductStateES l)) =
       parentHamiltonianGroundSpaceES A 2 N := by
-  letI : NeZero N := ⟨by omega⟩
+  let : NeZero N := ⟨by omega⟩
   apply Submodule.eq_of_le_of_finrank_eq
   · rw [Submodule.span_le]
     rintro _ ⟨l, rfl⟩
@@ -599,13 +599,13 @@ theorem mpv_loopCoordinateTensor (F : BeigiSectorGraphData A)
   rw [mpv, coeff, trace_evalWord_eq_sum_cyclic]
   unfold loopCyclicProduct
   by_cases hsector : ∀ n, (F.sectorEquiv.symm (s n)).1 = l.1
-  · rw [dif_pos hsector]
+  · rw [dite_eq_left hsector]
     let g : Fin N → Fin (F.leftDim l.1) := F.loopLeftIndex l s hsector
     rw [Finset.sum_eq_single g]
     · apply Finset.prod_congr rfl
       intro n _
       simp only [loopCoordinateTensor, hsector n, ↓reduceDIte, g]
-      rw [if_pos (by rfl)]
+      rw [ite_eq_left (by rfl)]
       simp only [loopRightIndex]
     · intro b _ hb
       have hdiff : ∃ n, b n ≠ g n := by
@@ -616,9 +616,9 @@ theorem mpv_loopCoordinateTensor (F : BeigiSectorGraphData A)
       obtain ⟨n, hn⟩ := hdiff
       rw [Finset.prod_eq_zero (Finset.mem_univ n)]
       simp only [loopCoordinateTensor, hsector n, ↓reduceDIte]
-      rw [if_neg (by simpa only [g, loopLeftIndex] using hn)]
+      rw [ite_eq_right (by simpa only [g, loopLeftIndex] using hn)]
     · simp
-  · rw [dif_neg hsector]
+  · rw [dite_eq_right hsector]
     apply Finset.sum_eq_zero
     intro g _
     simp only [not_forall] at hsector

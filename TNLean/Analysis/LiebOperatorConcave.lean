@@ -133,7 +133,7 @@ theorem superop_lieb_integrand_integrable {s : ℝ} (hs : s ∈ Set.Ioo (0 : ℝ
   have hVstarV : star V * V = 1 := Unitary.star_mul_self_of_mem hVunit
   have hVVstar : V * star V = 1 := Unitary.mul_star_self_of_mem hVunit
   have hVinv : star V = V⁻¹ := (Matrix.inv_eq_left_inv hVstarV).symm
-  letI : Invertible V := ⟨star V, hVstarV, hVVstar⟩
+  let : Invertible V := ⟨star V, hVstarV, hVVstar⟩
   -- The conjugation `M ↦ V M V^†` as a continuous linear map.
   set Φ : Matrix (Fin D × Fin D) (Fin D × Fin D) ℂ →L[ℂ]
       Matrix (Fin D × Fin D) (Fin D × Fin D) ℂ :=

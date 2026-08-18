@@ -86,7 +86,7 @@ theorem neighborIndex_nonempty_of_mul_ne_zero
     (hactive : H.a k * H.b h ≠ 0) :
     Nonempty (NeighborIndex F k h) := by
   by_contra hempty
-  haveI : IsEmpty (NeighborIndex F k h) := not_nonempty_iff.mp hempty
+  have : IsEmpty (NeighborIndex F k h) := not_nonempty_iff.mp hempty
   have htrace : (F.neighboringOperator k h).trace = 0 := by
     simp [Matrix.trace]
   rw [H.trace_neighboringOperator] at htrace
@@ -178,7 +178,7 @@ theorem completedNeighboringDensity_pos
   rw [completedNeighboringDensity]
   split_ifs
   · exact H.normalizedNeighboringDensity_pos k h
-  · letI := hindex k h
+  · let := hindex k h
     exact (inactiveNeighboringDensity_posDef (F := F) k h).posSemidef
 
 /-- Every completed neighboring density has trace one. -/
@@ -190,7 +190,7 @@ theorem trace_completedNeighboringDensity
   rw [completedNeighboringDensity]
   split_ifs with hactive
   · exact H.trace_normalizedNeighboringDensity k h hactive
-  · letI := hindex k h
+  · let := hindex k h
     exact inactiveNeighboringDensity_trace (F := F) k h
 
 /-- On an active pair, the completed density is the normalized neighboring

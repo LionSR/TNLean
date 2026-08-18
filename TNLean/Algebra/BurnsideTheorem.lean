@@ -87,13 +87,13 @@ theorem burnside_matrix [NeZero D]
   -- Image of the generated matrix algebra inside `End(V)`.
   let R : Subalgebra ℂ (Module.End ℂ V) := (algSpan A).map φ
   -- `End(V)` acts on `V` by evaluation, and we restrict this action to the subalgebra `R`.
-  letI : Module (Module.End ℂ V) V := Module.End.applyModule
-  letI : Module R V :=
+  let : Module (Module.End ℂ V) V := Module.End.applyModule
+  let : Module R V :=
     Subalgebra.moduleLeft (R := ℂ) (A := Module.End ℂ V) (α := V) R
   -- Scalar tower `ℂ → R → V` for the evaluation action.
   -- Needed for `Submodule.restrictScalars` and for Schur's lemma.
   -- (Typeclass inference times out otherwise.)
-  letI : IsScalarTower ℂ R V := by
+  let : IsScalarTower ℂ R V := by
     refine ⟨?_⟩
     intro c r v
     -- Do not let simp use `smul_assoc` here: it would request this very instance.
@@ -101,7 +101,7 @@ theorem burnside_matrix [NeZero D]
       LinearMap.smul_apply]
   -- The `R`-action commutes with scalar multiplication by `ℂ` since elements of `R` are
   -- `ℂ`-linear endomorphisms.
-  letI : SMulCommClass R ℂ V := by
+  let : SMulCommClass R ℂ V := by
     refine ⟨?_⟩
     intro r c v
     -- `r` is `ℂ`-linear, hence `r (c • v) = c • r v`.
@@ -110,7 +110,7 @@ theorem burnside_matrix [NeZero D]
     refine (Subalgebra.mem_map).2 ?_
     exact ⟨A i, algSpan_mem A i, rfl⟩
   -- Step 1: irreducibility ⇒ `V` is a simple `R`-module.
-  haveI : IsSimpleModule R V := by
+  have : IsSimpleModule R V := by
     refine (isSimpleModule_iff R V).2 ?_
     refine IsSimpleOrder.mk (α := Submodule R V) ?_
     intro W
@@ -137,11 +137,11 @@ theorem burnside_matrix [NeZero D]
   have hAlgSurj : Function.Surjective (algebraMap ℂ (Module.End R V)) := hSchur.2
   -- Step 3: Jacobson density ⇒ surjectivity of the action map.
   -- First show `V` is finite over its commutant `Module.End R V`.
-  haveI : Module.Finite (Module.End R V) V := by
+  have : Module.Finite (Module.End R V) V := by
     -- `V` is finite as an `ℂ`-module (finite basis), and Schur gives a surjective ring map
     -- `ℂ → Module.End R V`. Transport finiteness along this surjection.
-    haveI : Module.Finite ℂ V := Module.Finite.of_basis (Pi.basisFun ℂ (Fin D))
-    haveI : RingHomSurjective (algebraMap ℂ (Module.End R V)) :=
+    have : Module.Finite ℂ V := Module.Finite.of_basis (Pi.basisFun ℂ (Fin D))
+    have : RingHomSurjective (algebraMap ℂ (Module.End R V)) :=
       RingHomSurjective.mk hAlgSurj
     let f : V →ₛₗ[algebraMap ℂ (Module.End R V)] V :=
       LinearMap.mk (toAddHom := AddMonoidHom.id V) (map_smul' := by
@@ -154,7 +154,7 @@ theorem burnside_matrix [NeZero D]
     exact Module.Finite.of_surjective (f := f) hf
   -- Help typeclass inference for `Module.toModuleEnd`: endomorphisms in `Module.End R V`
   -- commute with the `R`-action on `V` by `R`-linearity.
-  letI : SMulCommClass R (Module.End R V) V := by
+  let : SMulCommClass R (Module.End R V) V := by
     refine ⟨?_⟩
     intro r f v
     -- `f` is `R`-linear, so `f (r • v) = r • f v`.

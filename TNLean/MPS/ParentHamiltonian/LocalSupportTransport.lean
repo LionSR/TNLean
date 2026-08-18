@@ -166,7 +166,7 @@ private theorem replaceWindow_three_replaceWindow_two_right
     have hshift : ¬((i.val + N - (cyclicForwardSite i 1).val) % N < 2) := by
       rw [hshift_eq]
       omega
-    rw [dif_pos (by omega : (i.val + N - i.val) % N < 3), dif_neg hshift]
+    rw [dite_eq_left (by omega : (i.val + N - i.val) % N < 3), dite_eq_right hshift]
     simp
   · let r := (k.val + N - i.val) % N
     have hrpos : 0 < r := Nat.pos_of_ne_zero hzero
@@ -189,7 +189,7 @@ private theorem replaceWindow_three_replaceWindow_two_right
           (k.val + N - (cyclicForwardSite i 1).val) % N < 2 := by
         rw [hshift_eq]
         omega
-      rw [dif_pos hsmall, dif_pos hshiftSmall]
+      rw [dite_eq_left hsmall, dite_eq_left hshiftSmall]
       have hr : r = 1 ∨ r = 2 := by
         change r < 3 at hsmall
         omega
@@ -208,7 +208,7 @@ private theorem replaceWindow_three_replaceWindow_two_right
           ¬((k.val + N - (cyclicForwardSite i 1).val) % N < 2) := by
         rw [hshift_eq]
         omega
-      rw [dif_neg hsmall, dif_neg hshiftLarge]
+      rw [dite_eq_right hsmall, dite_eq_right hshiftLarge]
       simp [hsmall]
 
 /-! ### Restriction intertwiners -/
@@ -313,7 +313,7 @@ private theorem cyclicCfg_cyclicWindowCfgEquiv {N : ℕ} (hN : 3 ≤ N) [NeZero 
   funext k
   simp only [cyclicCfg]
   by_cases hk : (k.val + N - i.val) % N < 3
-  · rw [dif_pos hk]
+  · rw [dite_eq_left hk]
     let r : Fin 3 := ⟨(k.val + N - i.val) % N, hk⟩
     have hki : k = cyclicForwardSite i r.val := by
       simpa [cyclicForwardSite, r] using
@@ -322,7 +322,7 @@ private theorem cyclicCfg_cyclicWindowCfgEquiv {N : ℕ} (hN : 3 ≤ N) [NeZero 
     rw [hleft]
     rw [hki]
     exact cyclicWindowCfgEquiv_apply_window hN i σ τ r |>.symm
-  · rw [dif_neg hk]
+  · rw [dite_eq_right hk]
     let x := (cyclicWindowIndexEquiv 3 N hN i).symm k
     have hkx : cyclicWindowIndexEquiv 3 N hN i x = k := by simp [x]
     rcases x with r | r

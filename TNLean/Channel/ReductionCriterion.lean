@@ -114,7 +114,7 @@ with equality at $\eta = k$. The top index $k = D$ is the completely positive
 endpoint, handled through the dimension-indexed threshold. -/
 theorem reductionMap_isNPositiveMap {k : ℕ} (hk1 : 1 ≤ k) (hk : k ≤ D) :
     IsNPositiveMap k (reductionMap D k) := by
-  haveI : NeZero D := ⟨by omega⟩
+  have : NeZero D := ⟨by omega⟩
   rw [reductionMap_eq_tEta]
   have hη : (0 : ℝ) < (k : ℝ) := by
     have : (1 : ℝ) ≤ (k : ℝ) := by exact_mod_cast hk1
@@ -131,7 +131,7 @@ $k$-positive: it equals the parametric map $T_\eta$ at $\eta = k$, and $T_\eta$
 is $(k+1)$-positive only when $\eta \ge k+1$, which fails at $\eta = k$. -/
 theorem reductionMap_not_isNPositiveMap_succ {k : ℕ} (hk1 : 1 ≤ k) (hk : k < D) :
     ¬ IsNPositiveMap (k + 1) (reductionMap D k) := by
-  haveI : NeZero D := ⟨by omega⟩
+  have : NeZero D := ⟨by omega⟩
   rw [reductionMap_eq_tEta]
   have hη : (0 : ℝ) < (k : ℝ) := by
     have : (1 : ℝ) ≤ (k : ℝ) := by exact_mod_cast hk1

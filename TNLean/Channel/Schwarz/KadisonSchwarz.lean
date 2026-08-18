@@ -151,7 +151,7 @@ theorem kadison_schwarz (K : Fin d → Matrix (Fin D) (Fin D) ℂ)
       (Matrix.fromBlocks (krausMap K (Xᴴ * X)) ((krausMap K X)ᴴ)
         ((krausMap K X)ᴴᴴ) (1 : Matrix (Fin D) (Fin D) ℂ)).PosSemidef := by
     rw [conjTranspose_conjTranspose, ← h_block_eq]; exact h_sum_psd
-  haveI : Invertible (1 : Matrix (Fin D) (Fin D) ℂ) := invertibleOne
+  have : Invertible (1 : Matrix (Fin D) (Fin D) ℂ) := invertibleOne
   simpa [inv_one, Matrix.mul_assoc, conjTranspose_conjTranspose] using
     (Matrix.PosDef.fromBlocks₂₂ (A := krausMap K (Xᴴ * X)) (B := (krausMap K X)ᴴ)
       (D := (1 : Matrix (Fin D) (Fin D) ℂ)) Matrix.PosDef.one).1 h_block_psd

@@ -356,7 +356,7 @@ theorem rel_entropy_eval_support [NeZero dA] [Nonempty R]
       Matrix.add_apply, Matrix.one_apply, smul_eq_mul, Complex.real_smul, Complex.ofReal_mul,
       Complex.ofReal_inv, Complex.ofReal_natCast, Prod.ext_iff]
     by_cases h1 : p.1 = q.1 <;> by_cases h2 : p.2 = q.2 <;>
-      simp only [h1, h2, if_true, if_false, and_true, and_false, mul_one, mul_zero,
+      simp only [h1, h2, ite_true, ite_false, and_true, and_false, mul_one, mul_zero,
         zero_mul, add_zero] <;> push_cast <;> ring
   -- cross-term limit on σ: the one-sided affine limit
   have hlim_lhs : Filter.Tendsto
@@ -576,11 +576,11 @@ theorem supportProj_eq_cfc_recip_mul {ρR : Matrix R R ℂ} (hρR : ρR.IsHermit
   simp only [Matrix.diagonal_apply, Function.comp_apply]
   by_cases hij : i = j
   · subst hij
-    simp only [if_true]
+    simp only [ite_true]
     by_cases hxi : hρR.eigenvalues i = 0
-    · rw [if_neg (by simp [hxi]), if_neg (by simp [hxi])]
+    · rw [ite_eq_right (by simp [hxi]), ite_eq_right (by simp [hxi])]
       simp
-    · rw [if_pos (by simp [hxi]), if_pos hxi, inv_mul_cancel₀ hxi]
+    · rw [ite_eq_left (by simp [hxi]), ite_eq_left hxi, inv_mul_cancel₀ hxi]
       norm_num
   · simp [hij]
 

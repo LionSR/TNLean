@@ -92,18 +92,18 @@ theorem inclusion_isometry : inclusionᴴ * inclusion = 1 := by
     · simp
     · intro i hik
       simp only [Matrix.conjTranspose_apply, inclusion_apply]
-      rw [if_neg hik]
+      rw [ite_eq_right hik]
       simp
-  · simp only [Matrix.one_apply, if_neg hkh]
+  · simp only [Matrix.one_apply, ite_eq_right hkh]
     have hemb : siteEmbedding k ≠ siteEmbedding h := fun h' ↦
       hkh (siteEmbedding_injective h')
     apply Finset.sum_eq_zero
     intro i _
     simp only [Matrix.conjTranspose_apply, inclusion_apply]
     by_cases hik : i = siteEmbedding k
-    · rw [if_pos hik, if_neg (hik ▸ hemb)]
+    · rw [ite_eq_left hik, ite_eq_right (hik ▸ hemb)]
       simp
-    · rw [if_neg hik]
+    · rw [ite_eq_right hik]
       simp
 
 /-- The source-facing ambient tensor, obtained by isometrically including the

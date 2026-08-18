@@ -174,7 +174,7 @@ theorem exists_identity_traceless_basis {d : ℕ} [NeZero d] :
   have htr : tr (1 : Matrix (Fin d) (Fin d) ℂ) ≠ 0 := by
     simp [tr, traceLinearMap_apply, trace_one, Fintype.card_fin, NeZero.ne d]
   obtain ⟨s, b, e, he, hcoord⟩ := exists_basis_of_pairing_ne_zero htr
-  letI : Fintype s := FiniteDimensional.fintypeBasisIndex b
+  let : Fintype s := FiniteDimensional.fintypeBasisIndex b
   have hcard : Fintype.card s = d * d := by
     rw [← Module.finrank_eq_card_basis b, Module.finrank_matrix]
     simp
@@ -191,7 +191,7 @@ theorem exists_identity_traceless_basis {d : ℕ} [NeZero d] :
     have h := congrArg (fun f : Matrix (Fin d) (Fin d) ℂ →ₗ[ℂ] ℂ ↦
       f (b (es.symm a))) hcoord
     simp only [LinearMap.smul_apply, smul_eq_mul, Module.Basis.coord_apply,
-      Module.Basis.repr_self, Finsupp.single_apply, if_neg hne] at h
+      Module.Basis.repr_self, Finsupp.single_apply, ite_eq_right hne] at h
     simpa [b', tr, traceLinearMap_apply] using h
 
 /-- Projection of a finite matrix onto the traceless hyperplane along the identity. -/
@@ -254,10 +254,11 @@ theorem trace_traceAdjointMap_mul {n m : Type*} [Fintype n] [Fintype m]
 
 /-- Entries of the trace-pairing adjoint: E*(ρ)ᵢⱼ = tr(ρ E(Eⱼᵢ)) with Eⱼᵢ the
 matrix unit. -/
-theorem traceAdjointMap_apply_apply {n m : Type*} [Fintype n] [Fintype m]
+theorem traceAdjointMap_apply_apply {n m : Type*} [Finite n] [Fintype m]
     [DecidableEq n] (E : Matrix n n ℂ →ₗ[ℂ] Matrix m m ℂ)
     (ρ : Matrix m m ℂ) (i j : n) :
     traceAdjointMap E ρ i j = Matrix.trace (ρ * E (Matrix.single j i 1)) := by
+  let := Fintype.ofFinite n
   have hsingle := Matrix.trace_mul_single (traceAdjointMap E ρ) j i (1 : ℂ)
   rw [trace_traceAdjointMap_mul] at hsingle
   simpa using hsingle.symm
@@ -300,7 +301,7 @@ theorem traceAdjointMap_comp
     (F : Matrix m m ℂ →ₗ[ℂ] Matrix k k ℂ) :
     traceAdjointMap (F.comp E) =
       (traceAdjointMap E).comp (traceAdjointMap F) := by
-  letI := Fintype.ofFinite n
+  let := Fintype.ofFinite n
   apply LinearMap.ext
   intro X
   apply Matrix.ext_iff_trace_mul_right.mpr

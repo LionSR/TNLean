@@ -82,30 +82,34 @@ theorem charpoly_add_pureStateMatrix_of_two_le (hd : 2 ≤ d)
   have hAB : A * B = pureStateMatrix p + pureStateMatrix q := by
     rw [← p.mk_rep, ← q.mk_rep, pureStateMatrix_mk, pureStateMatrix_mk]
     ext i j
-    simp [A, B, Matrix.mul_apply, Fin.sum_univ_two, normalizedPureStateMatrix, vp, vq,
-      ap, aq, Matrix.vecMulVec_apply, Pi.star_apply]
-    ring
+    calc
+      (A * B) i j = ∑ k : Fin 2, A i k * B k j := rfl
+      _ = ap⁻¹ * vp i * star (vp j) + aq⁻¹ * vq i * star (vq j) := by
+        rw [Fin.sum_univ_two]
+        simp only [A, B, Matrix.cons_val_zero, Matrix.cons_val_one]
+        ring
+      _ = (normalizedPureStateMatrix p.rep + normalizedPureStateMatrix q.rep) i j := by
+        simp [normalizedPureStateMatrix, vp, vq, ap, aq, Matrix.vecMulVec_apply, Pi.star_apply]
+        ring
   have h00 : (B * A) 0 0 = 1 := by
-    simp only [A, B, Matrix.mul_apply, Matrix.cons_val_zero, ap, vp]
+    simp only [A, B, ap, vp]
     calc
       ∑ x, ap⁻¹ * star (vp x) * vp x = ap⁻¹ * ∑ x, star (vp x) * vp x :=
         Fintype.sum_mul_mul_eq_mul_sum_mul ap⁻¹ (star vp) vp
       _ = ap⁻¹ * ap := rfl
       _ = 1 := inv_mul_cancel₀ hap
   have h11 : (B * A) 1 1 = 1 := by
-    simp only [A, B, Matrix.mul_apply, Matrix.cons_val_zero, Matrix.cons_val_one, aq, vq]
+    simp only [A, B, aq, vq]
     calc
       ∑ x, aq⁻¹ * star (vq x) * vq x = aq⁻¹ * ∑ x, star (vq x) * vq x :=
         Fintype.sum_mul_mul_eq_mul_sum_mul aq⁻¹ (star vq) vq
       _ = aq⁻¹ * aq := rfl
       _ = 1 := inv_mul_cancel₀ haq
   have h01 : (B * A) 0 1 = ap⁻¹ * (star vp ⬝ᵥ vq) := by
-    simp only [A, B, Matrix.mul_apply, Matrix.cons_val_zero, Matrix.cons_val_one, dotProduct,
-      Pi.star_apply]
+    simp only [A, B, dotProduct, Pi.star_apply]
     exact Fintype.sum_mul_mul_eq_mul_sum_mul ap⁻¹ (star vp) vq
   have h10 : (B * A) 1 0 = aq⁻¹ * (star vq ⬝ᵥ vp) := by
-    simp only [A, B, Matrix.mul_apply, Matrix.cons_val_zero, Matrix.cons_val_one, dotProduct,
-      Pi.star_apply]
+    simp only [A, B, dotProduct, Pi.star_apply]
     exact Fintype.sum_mul_mul_eq_mul_sum_mul aq⁻¹ (star vq) vp
   have htr : (B * A).trace = 2 := by
     rw [Matrix.trace_fin_two, h00, h11]

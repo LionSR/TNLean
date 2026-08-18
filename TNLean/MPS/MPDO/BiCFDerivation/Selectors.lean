@@ -260,7 +260,7 @@ theorem wordTupleSpanTop_mul_pred_of_forall_pairWordTupleSpanTop
     (hPair : ∀ k j : Fin r, j ≠ k → PairWordTupleSpanTop (A k) (A j) S) :
     WordTupleSpanTop A ((r - 1) * S) := by
   classical
-  letI : Nontrivial (Fin r) := Fin.nontrivial_iff_two_le.mpr hr
+  let : Nontrivial (Fin r) := Fin.nontrivial_iff_two_le.mpr hr
   unfold WordTupleSpanTop
   apply top_unique
   intro X _

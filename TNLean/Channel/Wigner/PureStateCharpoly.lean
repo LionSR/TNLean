@@ -38,7 +38,7 @@ theorem exists_pureStateMatrix_eq_of_isHermitian_charpoly_eq
   let oneFin : Matrix (Fin d) (Fin d) ℂ := 1
   have hconj : ∃ U : Matrix (Fin d) (Fin d) ℂ,
       U * star U = oneFin ∧ A = U * pureStateMatrix p * star U := by
-    letI : DecidableEq (Fin d) := Classical.decEq (Fin d)
+    let : DecidableEq (Fin d) := Classical.decEq (Fin d)
     have hcharpoly' : (pureStateMatrix p).charpoly = A.charpoly :=
       (hP.eigenvalues_eq_eigenvalues_iff hA).mp heigenvalues
     rcases Matrix.IsHermitian.exists_unitary_conj_of_charpoly_eq hP hA hcharpoly' with

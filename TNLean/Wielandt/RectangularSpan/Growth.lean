@@ -132,9 +132,9 @@ theorem rectSpanLeftStep_surjective_of_finrank_eq (n : ℕ)
     (hfin : finrank ℂ (rectSpan ((A i₀) ^ D) A n) =
             finrank ℂ (rectSpan ((A i₀) ^ D) A (n + 1))) :
     Function.Surjective (rectSpanLeftStep A i₀ n) := by
-  haveI : FiniteDimensional ℂ (rectSpan ((A i₀) ^ D) A n) :=
+  have : FiniteDimensional ℂ (rectSpan ((A i₀) ^ D) A n) :=
     FiniteDimensional.finiteDimensional_submodule _
-  haveI : FiniteDimensional ℂ (rectSpan ((A i₀) ^ D) A (n + 1)) :=
+  have : FiniteDimensional ℂ (rectSpan ((A i₀) ^ D) A (n + 1)) :=
     FiniteDimensional.finiteDimensional_submodule _
   exact (LinearMap.injective_iff_surjective_of_finrank_eq_finrank hfin).mp
     (rectSpanLeftStep_injective A i₀ n)
@@ -190,7 +190,7 @@ theorem rectSpan_eq_range_of_finrank_eq_range
     (hfin : finrank ℂ (rectSpan P A n) =
             finrank ℂ (LinearMap.range (LinearMap.mulLeft ℂ P))) :
     rectSpan P A n = LinearMap.range (LinearMap.mulLeft ℂ P) := by
-  haveI : FiniteDimensional ℂ (LinearMap.range (LinearMap.mulLeft ℂ P)) :=
+  have : FiniteDimensional ℂ (LinearMap.range (LinearMap.mulLeft ℂ P)) :=
     FiniteDimensional.finiteDimensional_submodule _
   exact Submodule.eq_of_le_of_finrank_eq (rectSpan_le_range P A n) hfin
 

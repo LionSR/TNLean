@@ -242,11 +242,6 @@ section Diagonal
 
 variable {n : Type*} [Fintype n] [DecidableEq n]
 
-/-- The `C⋆`-algebra structure on matrices from the `L²`-operator norm, used
-locally to identify the abstract continuous functional calculus on a diagonal
-matrix. -/
-noncomputable local instance diagonalMatrixCStarAlgebra : CStarAlgebra (Matrix n n ℂ) where
-
 /-- The real spectrum of a real-valued diagonal matrix is the range of its diagonal. -/
 private lemma spectrum_real_ofReal_diagonal (g : n → ℝ) :
     spectrum ℝ (diagonal (fun i => (g i : ℂ))) = Set.range g := by
@@ -310,17 +305,18 @@ theorem cfc_diagonal (g : n → ℝ) (f : ℝ → ℝ)
   have hid : diagonalCfcAux g ((ContinuousMap.id ℝ).restrict (spectrum ℝ D)) = D := by
     ext i j
     rcases eq_or_ne i j with rfl | hij
-    · simp only [diagonalCfcAux, ContinuousMap.restrict_apply, ContinuousMap.id_apply,
-        StarAlgHom.coe_mk', AlgHom.coe_mk, RingHom.coe_mk, MonoidHom.coe_mk, OneHom.coe_mk,
-        diagonal_apply_eq, hD]
-    · simp only [diagonalCfcAux, StarAlgHom.coe_mk', AlgHom.coe_mk, RingHom.coe_mk,
-        MonoidHom.coe_mk, OneHom.coe_mk, diagonal_apply_ne _ hij, hD]
+    · change diagonal (fun k => (g k : ℂ)) i i = D i i
+      rw [diagonal_apply_eq, hD, diagonal_apply_eq]
+    · change diagonal (fun k => (g k : ℂ)) i j = D i j
+      rw [diagonal_apply_ne _ hij, hD, diagonal_apply_ne _ hij]
   have hHom := cfcHom_eq_of_continuous_of_map_id (a := D) hsa (diagonalCfcAux g) hcont hid
   rw [cfc_apply f D hsa hfspec, hHom]
   ext i j
   rcases eq_or_ne i j with rfl | hij
-  · simp [diagonalCfcAux, diagonal_apply_eq]
-  · simp [diagonalCfcAux, diagonal_apply_ne _ hij]
+  · change diagonal (fun k => (f (g k) : ℂ)) i i = diagonal (fun k => (f (g k) : ℂ)) i i
+    rfl
+  · change diagonal (fun k => (f (g k) : ℂ)) i j = diagonal (fun k => (f (g k) : ℂ)) i j
+    rfl
 
 end Diagonal
 

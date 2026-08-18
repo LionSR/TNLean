@@ -95,9 +95,9 @@ theorem twoBlockInsertedCoeff_swap
   have hsym : SameAwayFromBond b ν μ ↔ SameAwayFromBond b μ ν :=
     ⟨fun h c hc => (h c hc).symm, fun h c hc => (h c hc).symm⟩
   by_cases hsame : SameAwayFromBond b μ ν
-  · rw [if_pos hsame, if_pos (hsym.mpr hsame), Matrix.transpose_apply]
+  · rw [ite_eq_left hsame, ite_eq_left (hsym.mpr hsame), Matrix.transpose_apply]
     ring
-  · rw [if_neg hsame, if_neg (fun h => hsame (hsym.mp h)), zero_mul, zero_mul, zero_mul]
+  · rw [ite_eq_right hsame, ite_eq_right (fun h => hsame (hsym.mp h)), zero_mul, zero_mul, zero_mul]
 
 end TwoBlockSwap
 
@@ -140,13 +140,23 @@ theorem hform_of_isIncidentMatrixForm (A B : Tensor G d) (R : Finset V)
       localIncidentMatrixOp B (regionBoundaryEdgeInIncident (G := G) R f)
         (regionTransferMatrix (G := G) A B R f hvA hvB hposB M).transpose := by
   classical
-  set inc := regionBoundaryEdgeInIncident (G := G) R f with hinc
   set W := localVirtualOpOfPhysicalOpAt B hvB
     (regionInsertionOp (G := G) A R f hvA M.transpose) with hW
   -- The read-off recovers `P` from the incident-matrix form of `W`.
+  let Q : Matrix (Fin (B.bondDim f.1)) (Fin (B.bondDim f.1)) ℂ :=
+    incidentMatrixOfLocalOp B (regionBoundaryEdgeInIncident (G := G) R f)
+      (edgeIncidentReferenceResidual B
+        (regionBoundaryEdgeInIncident (G := G) R f) hposB) W
+  have hQP : Q = P := by
+    unfold Q
+    rw [hP]
+    exact incidentMatrixOfLocalOp_localIncidentMatrixOp B
+      (regionBoundaryEdgeInIncident (G := G) R f)
+      (edgeIncidentReferenceResidual B
+        (regionBoundaryEdgeInIncident (G := G) R f) hposB) P
   have hread : (regionTransferMatrix (G := G) A B R f hvA hvB hposB M).transpose = P := by
-    rw [regionTransferMatrix, Matrix.transpose_transpose, ← hW, hP,
-      incidentMatrixOfLocalOp_localIncidentMatrixOp]
+    change Q.transpose.transpose = P
+    exact (Matrix.transpose_transpose Q).trans hQP
   rw [hread, hP]
 
 /-! ### Complement-side reading of the region-inserted coefficient

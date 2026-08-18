@@ -57,7 +57,7 @@ theorem IsCPSVBasisOfNormalTensors.exists_positive_wordTupleSpanTop_le_three_cap
     exact (Finset.single_le_sum (fun k _ => Nat.zero_le (dim k))
       (Finset.mem_univ j)).trans hDim
   have hK4pos : 0 < K ^ 4 := Nat.pow_pos hK
-  letI : ∀ j : Fin g, NeZero (dim j) := fun j => ⟨(hdimPos j).ne'⟩
+  let : ∀ j : Fin g, NeZero (dim j) := fun j => ⟨(hdimPos j).ne'⟩
   choose σ _hσ _hσfix hTP hGauge hPrim hIrr using
     fun j => (hBNT.blocks_normal j).exists_tpGauge
   let prepared : (j : Fin g) → MPSTensor d (dim j) :=
@@ -160,7 +160,7 @@ theorem CPSVCanonicalFormData.sum_activeRepresentative_dim_le
     have hEnum : data.activePhaseClasses.enum j
         ⟨0, data.activePhaseClasses.copies_pos j⟩ =
         data.activePhaseClasses.repr j := by
-      simp [CPSVCanonicalFormData.activePhaseClasses]
+      exact mpvPhaseClassData_enum_zero_eq_repr data.activeBlocks j
     change ((data.activeEquiv
       (data.activePhaseClasses.enum j
         ⟨0, data.activePhaseClasses.copies_pos j⟩) : data.Active) : Fin data.r) =

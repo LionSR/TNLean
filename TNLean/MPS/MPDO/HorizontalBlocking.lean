@@ -53,8 +53,6 @@ theorem IsHorizontalCF.blockTwo {M : MPOTensor d D}
   refine ⟨by rfl, ?_⟩
   simp only [S', MPSTensor.SectorDecomposition.reindexPhysical_totalCopies,
     MPSTensor.SectorDecomposition.blockTensor_totalCopies,
-    MPSTensor.SectorDecomposition.reindexPhysical_flatDim,
-    MPSTensor.SectorDecomposition.blockTensor_flatDim,
     MPSTensor.SectorDecomposition.reindexPhysical_toTensor,
     MPSTensor.reindexPhysical]
   rw [← MPSTensor.SectorDecomposition.blockTensor_toTensor]

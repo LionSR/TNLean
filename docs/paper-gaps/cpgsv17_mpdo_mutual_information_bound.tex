@@ -556,9 +556,9 @@ The rank factorization is formalized.
 The information-versus-rank theorem of Riazanov--Vyalyi is formalized by
 \leanid{Entropy.classicalMutualInformation_le_log_rank} in
 \doclink{TNLean/Entropy/ClassicalMutualInformation}.  Real scalar normalization
-preserves rank by \leanid{Matrix.rank_smul_of_ne_zero}, while faithful
-scalar extension preserves matrix rank by \leanid{Matrix.rank_map_algebraMap};
-both are in \doclink{TNLean/Algebra/MatrixRankBaseChange}.  The resulting
+preserves rank by \leanid{Matrix.rank_smul_of_mem_nonZeroDivisors}.  Faithful
+scalar extension preserves matrix rank by \leanid{Matrix.rank_map_algebraMap}
+in \doclink{TNLean/Algebra/MatrixRankBaseChange}.  The resulting
 finite-chain estimate
 \leanid{MPOTensor.diagonalCut_classicalMutualInformation_le_two_log} is in
 \doclink{TNLean/MPS/MPDO/DiagonalCutRank}.  The estimate assumes a real

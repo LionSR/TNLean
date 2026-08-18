@@ -237,10 +237,10 @@ theorem assembleRegionσ_update (R : Finset V)
   · rw [Function.update_of_ne hw]
     unfold assembleRegionσ
     by_cases hwR : w ∈ R
-    · rw [dif_pos hwR, dif_pos hwR, Function.update_of_ne]
+    · rw [dite_eq_left hwR, dite_eq_left hwR, Function.update_of_ne]
       intro hc
       exact hw (congrArg Subtype.val hc)
-    · rw [dif_neg hwR, dif_neg hwR]
+    · rw [dite_eq_right hwR, dite_eq_right hwR]
 
 open scoped Classical in
 /-- The coefficient function on local virtual configurations at the in-region

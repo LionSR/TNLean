@@ -78,7 +78,7 @@ private theorem not_isNontrivialProjection_of_eq_smul_one
   by_cases hD : D = 0
   · subst hD
     exact hP_nt.2.1 (Subsingleton.elim _ _)
-  · haveI : NeZero D := ⟨hD⟩
+  · have : NeZero D := ⟨hD⟩
     have hIdem : (c • (1 : Mat)) * (c • (1 : Mat)) = c • (1 : Mat) := by
       simpa [hP] using hP_nt.1.2
     have hc : c * c = c := by
@@ -265,8 +265,8 @@ private theorem exists_lindblad_form_rank_le_finrank
   -- m = finrank V
   set m := Module.finrank ℂ V
   -- Get a basis of V indexed by Fin m
-  haveI : Module.Finite ℂ V := inferInstance
-  haveI : Module.Free ℂ V := Module.Free.of_divisionRing ℂ V
+  have : Module.Finite ℂ V := inferInstance
+  have : Module.Free ℂ V := Module.Free.of_divisionRing ℂ V
   let e := Module.finBasis ℂ V
   -- Coordinate matrix: α_{jk} = (e.repr ⟨G.L j, hV j⟩) k
   let α : Matrix (Fin G.r) (Fin m) ℂ := fun j k => (e.repr ⟨G.L j, hV j⟩) k
@@ -370,7 +370,7 @@ private theorem finrank_traceless_submodule
     (hD : D ≠ 0) :
     Module.finrank ℂ
       (LinearMap.ker (Matrix.traceLinearMap (Fin D) ℂ ℂ)) = D * D - 1 := by
-  haveI : NeZero D := ⟨hD⟩
+  have : NeZero D := ⟨hD⟩
   let τ : Mat →ₗ[ℂ] ℂ := Matrix.traceLinearMap (Fin D) ℂ ℂ
   have hfin_mat : Module.finrank ℂ Mat = D * D := by
     simp [Module.finrank_matrix, Fintype.card_fin]
@@ -640,7 +640,7 @@ private theorem finrank_traceless_blockUT_add_D_le
   set K_τ := LinearMap.ker τ
   by_cases hD : D = 0
   · subst hD; exact absurd (Subsingleton.elim P 0) hP.2.1
-  haveI : NeZero D := ⟨hD⟩
+  have : NeZero D := ⟨hD⟩
   have hD_ne : (D : ℂ) ≠ 0 := Nat.cast_ne_zero.mpr hD
   have hfin_mat : Module.finrank ℂ Mat = D * D := by
     simp [Module.finrank_matrix, Fintype.card_fin]
@@ -706,7 +706,7 @@ private theorem exists_traceless_blockUT_lindblad_form
   -- D > 0 from nontrivial projection
   by_cases hD : D = 0
   · subst hD; exact absurd (Subsingleton.elim P 0) hP.2.1
-  haveI : NeZero D := ⟨hD⟩
+  have : NeZero D := ⟨hD⟩
   -- Get traceless shifts: c_j = -trace(L_j)/D
   obtain ⟨c, hc⟩ := exists_traceless_kraus_shift G.L
   -- Shifted operators L'_j = G.L j + c_j · I

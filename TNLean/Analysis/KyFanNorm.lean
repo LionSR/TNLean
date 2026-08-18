@@ -289,10 +289,10 @@ theorem exists_isProj_trace_eq_kyFanNorm (hA : A.IsHermitian) (k : ℕ) :
         rw [hS]
         refine Finset.card_nbij' (fun i => e.symm i) (fun x => e x) ?_ ?_ ?_ ?_
         · intro i hi
-          simp only [Finset.coe_filter, Finset.mem_univ, true_and, Set.mem_setOf_eq] at hi ⊢
+          simp only [Finset.coe_filter, Finset.mem_univ, true_and, Set.mem_ofPred_eq] at hi ⊢
           exact hi
         · intro x hx
-          simp only [Finset.coe_filter, Finset.mem_univ, true_and, Set.mem_setOf_eq] at hx ⊢
+          simp only [Finset.coe_filter, Finset.mem_univ, true_and, Set.mem_ofPred_eq] at hx ⊢
           simpa using hx
         · intro i _; simp
         · intro x _; simp
@@ -321,8 +321,8 @@ theorem exists_isProj_trace_eq_kyFanNorm (hA : A.IsHermitian) (k : ℕ) :
     have hev : hA.eigenvalues (e x) = hA.eigenvalues₀ x := by
       simp [Matrix.IsHermitian.eigenvalues, he]
     by_cases hx : (x : ℕ) < k
-    · rw [if_pos (hmem.mpr hx), if_pos hx, one_mul, hev]; simp
-    · rw [if_neg (fun hc => hx (hmem.mp hc)), if_neg hx, zero_mul, Complex.zero_re]
+    · rw [ite_eq_left (hmem.mpr hx), ite_eq_left hx, one_mul, hev]; simp
+    · rw [ite_eq_right (fun hc => hx (hmem.mp hc)), ite_eq_right hx, zero_mul, Complex.zero_re]
 
 /-! ### The upper-bound half of the Ky-Fan maximum principle
 
@@ -418,7 +418,7 @@ theorem trace_mul_re_le_kyFanNorm (hA : A.IsHermitian) {k : ℕ} (hk : k < Finty
     rw [Finset.sum_range fun j => hA.descEigenvalue j * W j]
     refine Finset.sum_congr rfl fun x _ => ?_
     rw [hev x, hWdef, descEigenvalue]
-    simp only [Fin.is_lt, dif_pos, Fin.eta]
+    simp only [Fin.is_lt, dite_eq_left, Fin.eta]
     ring
   rw [trace_mul_re_eq_sum_eigenbasis hA P, hLHS]
   have hwle : ∀ j, W j ≤ 1 := by
@@ -432,7 +432,7 @@ theorem trace_mul_re_le_kyFanNorm (hA : A.IsHermitian) {k : ℕ} (hk : k < Finty
   have hwsum : ∑ j ∈ Finset.range (Fintype.card n), W j = (k : ℝ) := by
     rw [hWdef, Finset.sum_range
       fun j => if h : j < Fintype.card n then (Q (e ⟨j, h⟩) (e ⟨j, h⟩)).re else 0]
-    simp only [Fin.is_lt, dif_pos, Fin.eta]
+    simp only [Fin.is_lt, dite_eq_left, Fin.eta]
     rw [Equiv.sum_comp e (fun i => (Q i i).re)]
     have htr : (∑ i, Q i i) = Matrix.trace Q := by
       rw [Matrix.trace]; rfl
@@ -441,7 +441,7 @@ theorem trace_mul_re_le_kyFanNorm (hA : A.IsHermitian) {k : ℕ} (hk : k < Finty
   have hμanti : ∀ i j, i ≤ j → j < Fintype.card n →
       hA.descEigenvalue j ≤ hA.descEigenvalue i := by
     intro i j hij hjN
-    rw [descEigenvalue, descEigenvalue, dif_pos (lt_of_le_of_lt hij hjN), dif_pos hjN]
+    rw [descEigenvalue, descEigenvalue, dite_eq_left (lt_of_le_of_lt hij hjN), dite_eq_left hjN]
     exact hA.eigenvalues₀_antitone (by exact_mod_cast hij)
   have hbound := sum_mul_weight_le_sum_top (Fintype.card n) k
     (fun j => hA.descEigenvalue j) W hμanti hwge hwle hwsum hk

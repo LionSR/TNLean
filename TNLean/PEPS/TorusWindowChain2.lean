@@ -155,11 +155,23 @@ theorem nestedComplPhysical_restrict {R S : Finset V} (hRS : R ⊆ S) (cfg : V �
         (restrictRegionσ (V := V) (d := d) (S \ R) cfg)
         (restrictRegionσ (V := V) (d := d) (Finset.univ \ S) cfg) =
       restrictRegionσ (V := V) (d := d) (Finset.univ \ R) cfg := by
+  let σblue : RegionPhysicalConfig (V := V) (d := d)
+      (nestedThreeBlockGeometry (V := V) hRS).blue := fun w => cfg w.1
+  let σcompl : RegionPhysicalConfig (V := V) (d := d)
+      (nestedThreeBlockGeometry (V := V) hRS).complement := fun w => cfg w.1
+  let σhost : RegionPhysicalConfig (V := V) (d := d)
+      (Finset.univ \ (nestedThreeBlockGeometry (V := V) hRS).red) := fun w => cfg w.1
+  change (nestedThreeBlockGeometry (V := V) hRS).complPhysical σblue σcompl = σhost
   funext w
-  rw [ThreeBlockGeometry.complPhysical]
   by_cases hb : w.1 ∈ (nestedThreeBlockGeometry (V := V) hRS).blue
-  · rw [dif_pos hb, restrictRegionσ_apply, restrictRegionσ_apply]
-  · rw [dif_neg hb, restrictRegionσ_apply, restrictRegionσ_apply]
+  · rw [(nestedThreeBlockGeometry (V := V) hRS).complPhysical_apply_blue σblue σcompl w hb]
+  · have hw_not_R : w.1 ∉ R := (Finset.mem_sdiff.mp w.2).2
+    have hw_not_S : w.1 ∉ S := fun hwS =>
+      hb (Finset.mem_sdiff.mpr ⟨hwS, hw_not_R⟩)
+    have hc : w.1 ∈ (nestedThreeBlockGeometry (V := V) hRS).complement :=
+      Finset.mem_sdiff.mpr ⟨Finset.mem_univ _, hw_not_S⟩
+    rw [(nestedThreeBlockGeometry (V := V) hRS).complPhysical_apply_not_blue
+      σblue σcompl w hb hc]
 
 /-- The restriction of a physical configuration on `S` to a sub-region `R ⊆ S`. -/
 def restrictSubRegionσ {R S : Finset V} (hRS : R ⊆ S)

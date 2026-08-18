@@ -46,7 +46,7 @@ raw weighted repeated-copy tensor of arXiv:1606.00608, eq. `II_CF1`; see
 theorem isCPSVCanonicalForm_basisDirectSum
     (hCF : IsBNTCanonicalForm P) :
     IsCPSVCanonicalForm (directSumTensor P.basis) := by
-  letI : ∀ j : Fin P.basisCount, NeZero (P.basisDim j) :=
+  let : ∀ j : Fin P.basisCount, NeZero (P.basisDim j) :=
     fun j ↦ ⟨(hCF.basis_dim_pos j).ne'⟩
   rw [← toTensorFromBlocks_one_eq_directSumTensor P.basis]
   exact
@@ -74,7 +74,7 @@ theorem isCPSVBasisOfNormalTensors_basisDirectSum
     (hCF : IsBNTCanonicalForm P) :
     IsCPSVBasisOfNormalTensors (directSumTensor P.basis)
       (fun j => ⟨P.basisDim j, P.basis j⟩) := by
-  letI : ∀ j : Fin P.basisCount, NeZero (P.basisDim j) :=
+  let : ∀ j : Fin P.basisCount, NeZero (P.basisDim j) :=
     fun j ↦ ⟨(hCF.basis_dim_pos j).ne'⟩
   refine {
     blocks_normal := fun j ↦
@@ -93,7 +93,7 @@ multiplicity-one, unit-weight direct sum. -/
 theorem isBNT_basisDirectSum
     (hCF : IsBNTCanonicalForm P) :
     IsBNT (directSumTensor P.basis) P.basisCount P.basisDim P.basis := by
-  letI : ∀ j : Fin P.basisCount, NeZero (P.basisDim j) :=
+  let : ∀ j : Fin P.basisCount, NeZero (P.basisDim j) :=
     fun j ↦ ⟨(hCF.basis_dim_pos j).ne'⟩
   exact hCF.isCPSVBasisOfNormalTensors_basisDirectSum.isBNT
 

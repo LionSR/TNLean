@@ -20,7 +20,7 @@ in Proposition 4.5 of arXiv:1606.00608.  Combined with Theorem 4.1 of
 arXiv:1704.06507, it gives the stronger classical estimate
 $I(X:Y) \leq 2\log D$.  The information-versus-rank theorem is formalized in
 `TNLean.Entropy.ClassicalMutualInformation`; rank invariance under scalar
-normalization and scalar extension is proved in
+normalization is supplied by Mathlib, while scalar extension is proved in
 `TNLean.Algebra.MatrixRankBaseChange`.
 
 ## Main definitions
@@ -66,7 +66,9 @@ private theorem rank_traceMulMatrix_le
   let Y : Matrix (Fin D × Fin D) c ℂ := fun ab y ↦ B y ab.2 ab.1
   have hfactor : traceMulMatrix A B = X * Y := by
     ext x y
-    simp [traceMulMatrix, X, Y, Matrix.mul_apply, Matrix.trace, Fintype.sum_prod_type]
+    change (∑ i, ∑ j, A x i j * B y j i) =
+      ∑ ab : Fin D × Fin D, A x ab.1 ab.2 * B y ab.2 ab.1
+    rw [Fintype.sum_prod_type]
   rw [hfactor]
   refine (Matrix.rank_mul_le_left X Y).trans ?_
   simpa using Matrix.rank_le_card_width X
@@ -132,7 +134,8 @@ theorem diagonalCut_classicalMutualInformation_le_two_log [NeZero D]
     Entropy.classicalMutualInformation P ≤ 2 * Real.log D := by
   have hD : (D : ℝ) ≠ 0 := by exact_mod_cast NeZero.ne D
   have hPrank : P.rank = W.rank := by
-    rw [hnorm, Matrix.rank_smul_of_ne_zero (inv_ne_zero hZ.ne')]
+    rw [hnorm, Matrix.rank_smul_of_mem_nonZeroDivisors W
+      (mem_nonZeroDivisors_of_ne_zero (inv_ne_zero hZ.ne'))]
   have hmap : W.map (algebraMap ℝ ℂ) = W.map Complex.ofReal := rfl
   have hWrank : W.rank ≤ D * D := by
     rw [← Matrix.rank_map_algebraMap (L := ℂ) W, hmap, hcut]

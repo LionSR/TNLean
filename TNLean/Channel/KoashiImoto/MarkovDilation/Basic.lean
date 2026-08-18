@@ -303,7 +303,7 @@ theorem MarkovDilation.reindex_blockDiagonal'_mem_unitary
     (hU : ∀ i, U i ∈ Matrix.unitaryGroup (D i) ℂ) :
     Matrix.reindex e e (Matrix.blockDiagonal' U) ∈
       Matrix.unitaryGroup N ℂ := by
-  letI := Fintype.ofFinite I
+  let := Fintype.ofFinite I
   rw [Matrix.mem_unitaryGroup_iff, Matrix.star_eq_conjTranspose]
   have hstar :
       (Matrix.reindex e e (Matrix.blockDiagonal' U))ᴴ =

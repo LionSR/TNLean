@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.Analysis.SandwichedRenyiTwo
+import Mathlib.Analysis.CStarAlgebra.Matrix
 
 /-!
 # The sandwiched Rényi trace functional
@@ -65,19 +66,6 @@ variable {D : ℕ}
 local notation "Mat" => Matrix (Fin D) (Fin D) ℂ
 
 open scoped Matrix.Norms.L2Operator
-
-private local instance instRenyiNormedRing : NormedRing Mat :=
-  Matrix.instL2OpNormedRing
-private local instance instRenyiNormedAlgebra : NormedAlgebra ℂ Mat :=
-  Matrix.instL2OpNormedAlgebra
-private local instance instRenyiCStarRing : CStarRing Mat :=
-  Matrix.instCStarRing
-private local instance instRenyiPartialOrder : PartialOrder Mat :=
-  Matrix.instPartialOrder
-private local instance instRenyiStarOrderedRing : StarOrderedRing Mat :=
-  Matrix.instStarOrderedRing
-private local instance instRenyiCStarAlgebra : CStarAlgebra Mat :=
-  CStarAlgebra.mk
 
 /-- The total sandwiched Rényi trace functional
 \[

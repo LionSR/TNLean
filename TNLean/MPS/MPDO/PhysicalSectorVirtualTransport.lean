@@ -171,10 +171,17 @@ Source context: arXiv:1606.00608, Section 2.3, equation `II_Aiplusk1`, lines
     (F.ofVirtualMatrices X Y hTransport).neighboringOperator k h =
       F.neighboringOperatorWithMatrix k h (Y * X) := by
   classical
+  unfold neighboringOperator neighboringOperatorWithMatrix
+  dsimp only [ofVirtualMatrices]
   ext x y
-  simp only [neighboringOperator_apply, ofVirtualMatrices,
-    neighboringOperatorWithMatrix_apply, Matrix.sum_apply, Matrix.smul_apply,
-    smul_eq_mul, Matrix.mul_apply]
+  simp only [Matrix.of_apply, Matrix.sum_apply, Matrix.smul_apply, smul_eq_mul,
+    Matrix.mul_apply]
+  change (∑ a : Fin E,
+      (∑ delta : Fin D, Y delta a * F.rightTensor k delta x.1 y.1) *
+        ∑ gamma : Fin D, X a gamma * F.leftTensor h gamma x.2 y.2) =
+    ∑ delta : Fin D, ∑ gamma : Fin D,
+      (∑ a : Fin E, Y delta a * X a gamma) *
+        F.rightTensor k delta x.1 y.1 * F.leftTensor h gamma x.2 y.2
   simp_rw [Finset.sum_mul, Finset.mul_sum]
   rw [Finset.sum_comm]
   apply Finset.sum_congr rfl

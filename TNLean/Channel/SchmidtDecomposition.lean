@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.Channel.SchmidtRank
+import Mathlib.Analysis.InnerProductSpace.GramMatrix
 import Mathlib.Analysis.InnerProductSpace.PiL2
 import Mathlib.Analysis.Matrix.PosDef
 import Mathlib.Analysis.Matrix.Spectrum
@@ -59,31 +60,6 @@ namespace Matrix
 
 variable {dA dB : ℕ}
 
-/-- The columns of the matrix `fun a j ↦ g (φ j) a` are orthonormal when `g` is
-an orthonormal basis and `φ` is injective, so the matrix is an isometry. -/
-theorem conjTranspose_mul_eq_one_of_orthonormal {ι : Type*} [DecidableEq ι]
-    {d : ℕ} {φ : ι → Fin d} (hφ : Function.Injective φ)
-    (g : OrthonormalBasis (Fin d) ℂ (EuclideanSpace ℂ (Fin d))) :
-    (Matrix.of fun a j ↦ g (φ j) a)ᴴ * (Matrix.of fun a j ↦ g (φ j) a) = 1 := by
-  ext j k
-  have hinner : ∑ a : Fin d, star (g (φ j) a) * g (φ k) a = ⟪g (φ j), g (φ k)⟫_ℂ := by
-    rw [EuclideanSpace.inner_eq_star_dotProduct]
-    simp only [dotProduct]
-    refine Finset.sum_congr rfl fun a _ ↦ ?_
-    rw [Pi.star_apply, mul_comm]
-  simp only [Matrix.mul_apply, Matrix.conjTranspose_apply, Matrix.of_apply, Matrix.one_apply]
-  rw [hinner, orthonormal_iff_ite.mp g.orthonormal (φ j) (φ k)]
-  simp only [hφ.eq_iff]
-
-/-- The transpose of a matrix with orthonormal columns is an isometry on the
-left: `Mᵀ * Mᵀᴴ = 1`. -/
-theorem transpose_mul_conjTranspose_eq_one_of_orthonormal {ι : Type*}
-    [DecidableEq ι] {d : ℕ} {φ : ι → Fin d} (hφ : Function.Injective φ)
-    (g : OrthonormalBasis (Fin d) ℂ (EuclideanSpace ℂ (Fin d))) :
-    (Matrix.of fun a j ↦ g (φ j) a)ᵀ * ((Matrix.of fun a j ↦ g (φ j) a)ᵀ)ᴴ = 1 := by
-  simpa [Matrix.conjTranspose_transpose_eq_transpose_conjTranspose, Matrix.transpose_mul]
-    using congrArg Matrix.transpose (conjTranspose_mul_eq_one_of_orthonormal hφ g)
-
 /-- **Schmidt decomposition when the left factor is the smaller one.**
 For `dA ≤ dB`, every `ψ : Fin dA × Fin dB → ℂ` decomposes as
 `ψ (a, b) = ∑ j, √(λ j) * e j a * f j b` with orthonormal bases `e` of
@@ -127,29 +103,29 @@ theorem exists_schmidtDecomposition_of_le (h : dA ≤ dB) (ψ : Fin dA × Fin dB
   set lamP : Fin dB → ℝ := fun k ↦ if hk : k.val < dA then lam ⟨k.val, hk⟩ else 0 with hlamP
   set wP : Fin dB → EuclideanSpace ℂ (Fin dB) :=
     fun k ↦ if hk : k.val < dA then w ⟨k.val, hk⟩ else 0 with hwP
-  have hlamP_cast : ∀ j : Fin dA, lamP (j.castLE h) = lam j := fun j ↦ dif_pos j.isLt
-  have hwP_cast : ∀ j : Fin dA, wP (j.castLE h) = w j := fun j ↦ dif_pos j.isLt
+  have hlamP_cast : ∀ j : Fin dA, lamP (j.castLE h) = lam j := fun j ↦ dite_eq_left j.isLt
+  have hwP_cast : ∀ j : Fin dA, wP (j.castLE h) = w j := fun j ↦ dite_eq_left j.isLt
   -- the conjugated normalized images, extended by zero outside the support
   set v : Fin dB → EuclideanSpace ℂ (Fin dB) :=
     fun k ↦ WithLp.toLp 2 (star ((Real.sqrt (lamP k) : ℂ)⁻¹ • ⇑(wP k))) with hv
   set s : Set (Fin dB) := {k | lamP k ≠ 0} with hs
-  have hvortho : Orthonormal ℂ (s.restrict v) := by
+  have hvortho : Orthonormal ℂ (s.domRestrict v) := by
     rw [orthonormal_iff_ite]
     rintro ⟨k, hks⟩ ⟨l, hls⟩
     have hks' : lamP k ≠ 0 := hks
     have hls' : lamP l ≠ 0 := hls
     have hk : k.val < dA := by
       by_contra hc
-      exact hks' (dif_neg hc)
+      exact hks' (dite_eq_right hc)
     have hl : l.val < dA := by
       by_contra hc
-      exact hls' (dif_neg hc)
-    have hlamk : lamP k = lam ⟨k.val, hk⟩ := dif_pos hk
-    have hlaml : lamP l = lam ⟨l.val, hl⟩ := dif_pos hl
+      exact hls' (dite_eq_right hc)
+    have hlamk : lamP k = lam ⟨k.val, hk⟩ := dite_eq_left hk
+    have hlaml : lamP l = lam ⟨l.val, hl⟩ := dite_eq_left hl
     have hlamk0 : lam ⟨k.val, hk⟩ ≠ 0 := by rw [← hlamk]; exact hks'
     have hlaml0 : lam ⟨l.val, hl⟩ ≠ 0 := by rw [← hlaml]; exact hls'
-    have hwk : wP k = w ⟨k.val, hk⟩ := dif_pos hk
-    have hwl : wP l = w ⟨l.val, hl⟩ := dif_pos hl
+    have hwk : wP k = w ⟨k.val, hk⟩ := dite_eq_left hk
+    have hwl : wP l = w ⟨l.val, hl⟩ := dite_eq_left hl
     have hsr : ∀ x : ℝ, star ((x : ℂ)) = (x : ℂ) := fun x ↦ by
       rw [Complex.star_def, Complex.conj_ofReal]
     have hinner : ⟪v k, v l⟫_ℂ =
@@ -162,7 +138,7 @@ theorem exists_schmidtDecomposition_of_le (h : dA ≤ dB) (ψ : Fin dA × Fin dB
     change ⟪v k, v l⟫_ℂ = _
     rw [hinner, hgram]
     rcases eq_or_ne k l with rfl | hkl
-    · rw [if_pos rfl, if_pos rfl]
+    · rw [ite_eq_left rfl, ite_eq_left rfl]
       have hpos : (0:ℝ) < lam ⟨k.val, hl⟩ := (hlam0 _).lt_of_ne (Ne.symm hlaml0)
       have hne : (Real.sqrt (lam ⟨k.val, hl⟩) : ℂ) ≠ 0 :=
         Complex.ofReal_ne_zero.mpr (Real.sqrt_pos.mpr hpos).ne'
@@ -173,7 +149,7 @@ theorem exists_schmidtDecomposition_of_le (h : dA ≤ dB) (ψ : Fin dA × Fin dB
     · have hlk : (⟨l.val, hl⟩ : Fin dA) ≠ ⟨k.val, hk⟩ := by
         intro hll
         exact hkl (Fin.ext (Fin.ext_iff.mp hll).symm)
-      rw [if_neg hlk, if_neg (by simpa [Subtype.ext_iff] using hkl), mul_zero]
+      rw [ite_eq_right hlk, ite_eq_right (by simpa [Subtype.ext_iff] using hkl), mul_zero]
   -- extend the conjugated normalized images to an orthonormal basis of `ℂ^dB`
   obtain ⟨f, hf⟩ :=
     hvortho.exists_orthonormalBasis_extension_of_card_eq finrank_euclideanSpace
@@ -192,7 +168,7 @@ theorem exists_schmidtDecomposition_of_le (h : dA ≤ dB) (ψ : Fin dA × Fin dB
     by_cases hj : lam j = 0
     · have hwj : w j = 0 := by
         have hjj := hgram j j
-        rw [if_pos rfl, hj, Complex.ofReal_zero] at hjj
+        rw [ite_eq_left rfl, hj, Complex.ofReal_zero] at hjj
         exact inner_self_eq_zero.mp hjj
       rw [hwj]
       simp [hj]
@@ -344,12 +320,33 @@ theorem IsSchmidtDecomposition.schmidtRank_eq_card_ne_zero {dA dB : ℕ}
       Matrix.of_apply, mul_ite, mul_zero, Finset.sum_ite_eq']
     apply Finset.sum_congr rfl
     intro j _
-    rw [if_pos (Finset.mem_univ j)]
+    rw [ite_eq_left (Finset.mem_univ j)]
     ring
-  have hE1 : Eᴴ * E = 1 :=
-    conjTranspose_mul_eq_one_of_orthonormal (Fin.castLE_injective _) e
-  have hF1 : Fᵀ * Fᵀᴴ = 1 :=
-    transpose_mul_conjTranspose_eq_one_of_orthonormal (Fin.castLE_injective _) f
+  have hE1 : Eᴴ * E = 1 := by
+    calc
+      Eᴴ * E = Matrix.gram ℂ
+          (fun j : Fin (min dA dB) ↦ e (j.castLE (min_le_left dA dB))) := by
+        rw [hE]
+        simpa only [EuclideanSpace.basisFun_repr] using
+          (Matrix.gram_eq_conjTranspose_mul
+            (EuclideanSpace.basisFun (Fin dA) ℂ)
+            (fun j : Fin (min dA dB) ↦ e (j.castLE (min_le_left dA dB)))).symm
+      _ = 1 := Matrix.gram_eq_one_iff_orthonormal.mpr
+        (e.orthonormal.comp _ (Fin.castLE_injective _))
+  have hFcol : Fᴴ * F = 1 := by
+    calc
+      Fᴴ * F = Matrix.gram ℂ
+          (fun j : Fin (min dA dB) ↦ f (j.castLE (min_le_right dA dB))) := by
+        rw [hF]
+        simpa only [EuclideanSpace.basisFun_repr] using
+          (Matrix.gram_eq_conjTranspose_mul
+            (EuclideanSpace.basisFun (Fin dB) ℂ)
+            (fun j : Fin (min dA dB) ↦ f (j.castLE (min_le_right dA dB)))).symm
+      _ = 1 := Matrix.gram_eq_one_iff_orthonormal.mpr
+        (f.orthonormal.comp _ (Fin.castLE_injective _))
+  have hF1 : Fᵀ * Fᵀᴴ = 1 := by
+    simpa [Matrix.conjTranspose_transpose_eq_transpose_conjTranspose, Matrix.transpose_mul]
+      using congrArg Matrix.transpose hFcol
   have hsr : ∀ j, star (σ j) = σ j := fun j ↦ by
     rw [hσ, Complex.star_def, Complex.conj_ofReal]
   -- `C * Cᴴ = E * diagonal λ * Eᴴ`

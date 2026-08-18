@@ -81,8 +81,8 @@ lemma sameMPV₂_trivialSectorDecomp {r : ℕ} {dim : Fin r → ℕ}
     _ = ∑ j : Fin r, (μ j) ^ N * mpv (blocks j) σ := by
           refine Finset.sum_congr rfl fun j _ => ?_
           have hcoeff : P.coeff N j = (μ j) ^ N := by
-            simp [P, trivialSectorDecomp, SectorDecomposition.coeff,
-              SectorWeightData.coeff]
+            change (∑ _q : Fin 1, μ j ^ N) = μ j ^ N
+            exact Fin.sum_univ_one (fun _q : Fin 1 => μ j ^ N)
           rw [hcoeff]
           rfl
     _ = mpv (toTensorFromBlocks (d := d) (μ := μ) blocks) σ := by

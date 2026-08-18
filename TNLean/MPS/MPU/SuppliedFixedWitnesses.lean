@@ -29,7 +29,7 @@ private theorem normalizedDiagonal_eq_smul_sum_diagonal
     normalizedDiagonal W = ((d : ℂ)⁻¹) • ∑ q : Fin d, W q q := by
   classical
   simp only [normalizedDiagonal, contractPhysical, Matrix.one_apply, ite_smul,
-    one_smul, zero_smul, Finset.sum_ite_eq', Finset.mem_univ, if_true]
+    one_smul, zero_smul, Finset.sum_ite_eq', Finset.mem_univ, ite_true]
 
 private theorem simple_letter_mul_normalizedDiagonal_mul_letter
     [NeZero d] {W : MPOTensor d D} (hW : IsMPUSimple W)

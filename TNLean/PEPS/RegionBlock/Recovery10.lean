@@ -344,9 +344,9 @@ theorem regionRowB_mem_range (A B : Tensor G d) (R : Finset V)
     · funext σ
       rw [Finset.sum_apply]
       rw [Finset.sum_eq_single σ]
-      · rw [Pi.smul_apply, if_pos rfl, smul_eq_mul, mul_one]
+      · rw [Pi.smul_apply, ite_eq_left rfl, smul_eq_mul, mul_one]
       · intro σ'' _ hne
-        rw [Pi.smul_apply, if_neg (Ne.symm hne), smul_zero]
+        rw [Pi.smul_apply, ite_eq_right (Ne.symm hne), smul_zero]
       · intro hσ; exact absurd (Finset.mem_univ σ) hσ
   rw [hexpand]
   refine Submodule.sum_mem _ (fun σ' _ => ?_)

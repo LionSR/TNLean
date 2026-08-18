@@ -238,7 +238,7 @@ theorem hasKrausCard_choiRank_of_cp
     have hrank : choiRank T = 0 :=
       Nat.le_zero.mp (choiRank_le_of_hasKrausCard h0)
     rw [hrank]; exact h0
-  · haveI : NeZero d := ⟨hd⟩
+  · have : NeZero d := ⟨hd⟩
     have hτpsd : (ChoiRectangular.choiMatrix T).PosSemidef :=
       (ChoiRectangular.isKrausCP_iff_choiMatrix_posSemidef (T := T)).mp hT
     let hτ : (ChoiRectangular.choiMatrix T).IsHermitian := hτpsd.1

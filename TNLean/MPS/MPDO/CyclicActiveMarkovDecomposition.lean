@@ -574,8 +574,8 @@ theorem exists_hayashiMarkovDecomposition_selectedPhysicalCut_of_isSourceZCL
   have hTtwo : ∀ q h, 0 < (F.cyclicActiveSectorTraceMatrix ^ 2) q h :=
     F.cyclicActiveSectorTraceMatrix_pow_two_pos_of_adjacent_marginals
       hpos hreach hmarg htrace
-  letI : NeZero D := ⟨hZCL.bondDim_ne_zero⟩
-  letI : Nonempty F.CyclicActiveSector := by
+  let : NeZero D := ⟨hZCL.bondDim_ne_zero⟩
+  let : Nonempty F.CyclicActiveSector := by
     obtain ⟨c₂, _, h₂⟩ :=
       data.exists_positive_scalar_mpo_changePhysicalBasis_eq_smul_selected 2 (by omega)
     have hspan :=
@@ -583,7 +583,7 @@ theorem exists_hayashiMarkovDecomposition_selectedPhysicalCut_of_isSourceZCL
     cases isEmpty_or_nonempty F.CyclicActiveSector with
     | inr hnonempty => exact hnonempty
     | inl hempty =>
-        letI : IsEmpty F.CyclicActiveSector := hempty
+        let : IsEmpty F.CyclicActiveSector := hempty
         have hbot :
             Submodule.span ℂ
                 (Set.range (F.cyclicActiveOriginalOneSiteMatrixFamily K)) =

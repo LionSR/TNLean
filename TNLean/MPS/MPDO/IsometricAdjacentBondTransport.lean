@@ -314,7 +314,7 @@ private theorem reindex_embedLocalOperator_three_zero
   · have ha := hAgree.mpr h
     simp only [Fin.isValue, Matrix.reindex_apply, Matrix.submatrix_apply,
       embedLocalOperator_apply]
-    rw [if_pos ha]
+    rw [ite_eq_left ha]
     simp only [leftPairMatrix]
     rw [hσ, hτ]
     change
@@ -323,17 +323,17 @@ private theorem reindex_embedLocalOperator_three_zero
         B ((_root_.finTwoArrowEquiv (Fin e)).symm (σ.1, σ.2.1))
             ((_root_.finTwoArrowEquiv (Fin e)).symm (τ.1, τ.2.1)) *
           (if σ.2.2 = τ.2.2 then 1 else 0)
-    rw [if_pos h.symm, mul_one]
+    rw [ite_eq_left h.symm, mul_one]
   · have ha : ¬ AgreesOutsideWindow (d := e) 2 (by decide) (0 : Fin 3)
         ((_root_.finThreeArrowEquiv (Fin e)).symm σ)
         ((_root_.finThreeArrowEquiv (Fin e)).symm τ) :=
       fun ha ↦ h (hAgree.mp ha)
     simp only [Fin.isValue, Matrix.reindex_apply, Matrix.submatrix_apply,
       embedLocalOperator_apply]
-    rw [if_neg ha]
+    rw [ite_eq_right ha]
     simp only [leftPairMatrix]
     change 0 = B _ _ * (if σ.2.2 = τ.2.2 then 1 else 0)
-    rw [if_neg (fun hs ↦ h hs.symm), mul_zero]
+    rw [ite_eq_right (fun hs ↦ h hs.symm), mul_zero]
 
 private theorem reindex_embedLocalOperator_three_one
     (B : Matrix (Fin 2 → Fin e) (Fin 2 → Fin e) ℂ) :
@@ -361,21 +361,21 @@ private theorem reindex_embedLocalOperator_three_one
   · have ha := hAgree.mpr h
     simp only [Fin.isValue, Matrix.reindex_apply, Matrix.submatrix_apply,
       embedLocalOperator_apply]
-    rw [if_pos ha]
+    rw [ite_eq_left ha]
     rw [hσ, hτ]
     change B _ _ = (if σ.1 = τ.1 then 1 else 0) * B _ _
-    rw [if_pos h.symm, one_mul]
+    rw [ite_eq_left h.symm, one_mul]
   · have ha : ¬ AgreesOutsideWindow (d := e) 2 (by decide) (1 : Fin 3)
         ((_root_.finThreeArrowEquiv (Fin e)).symm σ)
         ((_root_.finThreeArrowEquiv (Fin e)).symm τ) :=
       fun ha ↦ h (hAgree.mp ha)
     simp only [Fin.isValue, Matrix.reindex_apply, Matrix.submatrix_apply,
       embedLocalOperator_apply]
-    rw [if_neg ha]
+    rw [ite_eq_right ha]
     simp only [rightPairMatrix, Matrix.kroneckerMap_apply,
       Matrix.one_apply]
     change 0 = (if σ.1 = τ.1 then 1 else 0) * B _ _
-    rw [if_neg (fun hs ↦ h hs.symm), zero_mul]
+    rw [ite_eq_right (fun hs ↦ h hs.symm), zero_mul]
 
 /-- On a two-site periodic chain, isometric conjugation carries the product
 of the two oppositely oriented restricted bonds to the product of their

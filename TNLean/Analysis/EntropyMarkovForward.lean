@@ -248,7 +248,7 @@ theorem hayashi_ssa_equality_characterization_forward
       Nonempty (HayashiMarkovDecomposition ρ_ABC) := by
   classical
   intro hSSA
-  letI : Nonempty (ActiveConditionalEffectIndex (traceC_ABC ρ_ABC)) :=
+  let : Nonempty (ActiveConditionalEffectIndex (traceC_ABC ρ_ABC)) :=
     activeConditionalEffectIndex_nonempty (traceC_ABC ρ_ABC) (by
       rw [← trace_eq_trace_traceC_ABC]
       exact hρ_dm.2)
@@ -325,7 +325,7 @@ theorem hayashi_ssa_equality_characterization_forward
     by_cases hk : k = k'
     · subst k'
       simp only [Matrix.blockDiagonal'_apply_eq]
-      simp only [dif_pos trivial, p, ρ_left, ρ_right,
+      simp only [dite_eq_left trivial, p, ρ_left, ρ_right,
         hayashiSectorProbability, hayashiLeftBlockState,
         hayashiRightBlockState]
       have hfactor := ambientSector_factor_normalized D
@@ -339,6 +339,6 @@ theorem hayashi_ssa_equality_characterization_forward
       · rfl
       · exact mul_assoc _ _ _
     · simp only [Matrix.blockDiagonal'_apply_ne _ _ _
-        (fun h => hk (finSumFinEquiv.symm.injective h)), dif_neg hk]
+        (fun h => hk (finSumFinEquiv.symm.injective h)), dite_eq_right hk]
 
 end Matrix

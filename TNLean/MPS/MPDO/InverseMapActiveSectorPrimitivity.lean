@@ -45,7 +45,7 @@ theorem zeroWeightReparameterized_sectorVirtualMatrix_eq_zero
     (zeroWeightReparameterizedInverseMapPhysicalSectorFactorization
       K hK R hρ hη alpha beta hm).sectorVirtualMatrix k x y = 0 := by
   ext gamma delta
-  rw [PhysicalSectorFactorization.sectorVirtualMatrix]
+  unfold PhysicalSectorFactorization.sectorVirtualMatrix
   have hleft :
       (zeroWeightReparameterizedInverseMapPhysicalSectorFactorization
         K hK R hρ hη alpha beta hm).leftTensor k gamma = 0 := by
@@ -78,19 +78,19 @@ theorem rephase_zeroWeightReparameterized_neighboringOperator_eq_zero_of_inciden
   let F := zeroWeightReparameterizedInverseMapPhysicalSectorFactorization
     K hK R hρ hη alpha beta hm
   change (F.rephase z).neighboringOperator k h = 0
-  rw [F.rephase_neighboringOperator]
-  suffices hvanish : F.neighboringOperator k h = 0 by
+  have hvanish : F.neighboringOperator k h = 0 := by
+    rcases hzero with hk | hh
+    · rw [zeroWeightReparameterizedInverseMapPhysicalSectorFactorization_neighboringOperator,
+        ite_eq_right (not_ne_iff.mpr hk)]
+      rfl
+    · rw [zeroWeightReparameterizedInverseMapPhysicalSectorFactorization_neighboringOperator]
+      split
+      · exact sectorEta_eq_zero_of_target_weight_eq_zero
+          K hK hη R alpha beta k h hh
+      · rfl
+  have hscaled : ((((z k)⁻¹ * z h : Circle) : ℂ) • F.neighboringOperator k h) = 0 := by
     rw [hvanish, smul_zero]
-    rfl
-  rcases hzero with hk | hh
-  · rw [zeroWeightReparameterizedInverseMapPhysicalSectorFactorization_neighboringOperator,
-      if_neg (not_ne_iff.mpr hk)]
-    rfl
-  · rw [zeroWeightReparameterizedInverseMapPhysicalSectorFactorization_neighboringOperator]
-    split
-    · exact sectorEta_eq_zero_of_target_weight_eq_zero
-        K hK hη R alpha beta k h hh
-    · rfl
+  exact Eq.mpr (congrArg (fun A => A = 0) (F.rephase_neighboringOperator z k h)) hscaled
 
 /-- The source inverse-map factorization admits a coherent rephasing retaining the
 active-sector witnesses used to prove primitivity and the Case-I coefficient equations.
@@ -160,7 +160,10 @@ theorem exists_rephased_inverseMap_activeSectorTraceMatrix_primitivity_witnesses
       (F.rephase z).activeSectorOneSiteMatrixFamily hη.p =
         F.activeSectorOneSiteMatrixFamily hη.p := by
     funext q
-    simp [PhysicalSectorFactorization.activeSectorOneSiteMatrixFamily]
+    unfold PhysicalSectorFactorization.activeSectorOneSiteMatrixFamily
+    exact ((F.rephase z).oneSiteSectorMatrix_eq_sectorVirtualMatrix q.1.1 q.2.1 q.2.2).trans
+      ((F.rephase_sectorVirtualMatrix z q.1.1 q.2.1 q.2.2).trans
+        (F.oneSiteSectorMatrix_eq_sectorVirtualMatrix q.1.1 q.2.1 q.2.2).symm)
   have hspan : Submodule.span ℂ
       (Set.range ((F.rephase z).activeSectorOneSiteMatrixFamily hη.p)) = ⊤ := by
     rw [hfamily]
@@ -171,7 +174,8 @@ theorem exists_rephased_inverseMap_activeSectorTraceMatrix_primitivity_witnesses
     intro k
     obtain ⟨x, y, hxy⟩ := exists_active_sectorVirtualMatrix_ne_zero
       K hK R hρ hη alpha beta hm k.1 k.property
-    exact ⟨x, y, by simpa using hxy⟩
+    refine ⟨x, y, fun hz => ?_⟩
+    exact hxy ((F.rephase_sectorVirtualMatrix z k.1 x y).symm.trans hz)
   have hedgeNonzero : ∀ {k h}, F.neighboringOperator k h ≠ 0 →
       (∃ x y : F.SectorIndex k, F.sectorVirtualMatrix k x y ≠ 0) ∧
         ∃ x y : F.SectorIndex h, F.sectorVirtualMatrix h x y ≠ 0 := by
@@ -217,6 +221,7 @@ theorem exists_rephased_inverseMap_activeSectorTraceMatrix_primitivity_witnesses
     exact ⟨⟨k, hk⟩⟩
   exact ⟨z, hpos, hspan, hnonzero, htriangle, hinactive, hne⟩
 
+open scoped Classical in
 /-- The source inverse-map factorization admits a coherent rephasing whose
 active trace matrix is primitive.
 
@@ -241,6 +246,7 @@ theorem exists_rephased_inverseMap_activeSectorTraceMatrix_isPrimitive
     ∃ z : Fin F.sectorCount → Circle,
       (∀ k h, ((F.rephase z).neighboringOperator k h).PosSemidef) ∧
         Matrix.IsPrimitive ((F.rephase z).activeSectorTraceMatrix hη.p) := by
+  classical
   let F := zeroWeightReparameterizedInverseMapPhysicalSectorFactorization
     K hK R hρ hη alpha beta hm
   obtain ⟨z, hpos, hspan, hnonzero, htriangle, _, _⟩ :=

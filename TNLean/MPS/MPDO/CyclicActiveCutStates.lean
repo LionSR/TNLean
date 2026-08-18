@@ -20,6 +20,8 @@ open scoped Matrix BigOperators ComplexOrder Kronecker
 
 namespace MPOTensor.PhysicalSectorFactorization
 
+attribute [local instance] Classical.decEq Classical.propDecidable
+
 universe u
 
 variable {d D : ℕ} {K : MPOTensor d D}
@@ -86,13 +88,25 @@ theorem cyclicActiveLeftOpenBlock_posSemidef
     (F.cyclicActiveLeftOpenBlock lam b k).PosSemidef := by
   classical
   by_cases hk : F.IsCyclicActiveRetainedWord k
-  · rw [cyclicActiveLeftOpenBlock, dif_pos hk]
+  · let P : Matrix (F.LeftOpenEdgeIndex k) (F.LeftOpenEdgeIndex k) ℂ := by
+      exact ((lam : ℂ) ^ 2) •
+        (F.cyclicActiveLeftBoundary b ((F.cyclicActiveRetainedWord hk) 0) ⊗ₖ
+          Matrix.finKronecker (fun i : Fin A ↦
+            F.neighboringOperator (k i.castSucc) (k i.succ)))
+    have hblock : F.cyclicActiveLeftOpenBlock lam b k = P := by
+      ext x y
+      simp [cyclicActiveLeftOpenBlock, P, hk]
+    rw [hblock]
+    unfold P
     apply Matrix.PosSemidef.smul
     · exact (F.cyclicActiveLeftBoundary_posSemidef hpos b hb _).kronecker
         (Matrix.finKronecker_posSemidef _ fun i ↦ hpos _ _)
     · have hs : 0 ≤ lam ^ 2 := sq_nonneg lam
       exact_mod_cast hs
-  · rw [cyclicActiveLeftOpenBlock, dif_neg hk]
+  · have hblock : F.cyclicActiveLeftOpenBlock lam b k = 0 := by
+      ext x y
+      simp [cyclicActiveLeftOpenBlock, hk]
+    rw [hblock]
     exact Matrix.PosSemidef.zero
 
 /-- The right open-chain factor is positive semidefinite when the neighbouring
@@ -112,10 +126,12 @@ theorem cyclicActiveRightOpenBlock_posSemidef
     (F.cyclicActiveRightOpenBlock a k).PosSemidef := by
   classical
   by_cases hk : F.IsCyclicActiveRetainedWord k
-  · rw [cyclicActiveRightOpenBlock, dif_pos hk]
+  · unfold cyclicActiveRightOpenBlock
+    simp only [dite_eq_left hk]
     exact (Matrix.finKronecker_posSemidef _ fun i ↦ hpos _ _).kronecker
       (F.cyclicActiveRightBoundary_posSemidef hpos a ha _)
-  · rw [cyclicActiveRightOpenBlock, dif_neg hk]
+  · unfold cyclicActiveRightOpenBlock
+    simp only [dite_eq_right hk]
     exact Matrix.PosSemidef.zero
 
 /-- The left path factor on the standard `A ⊗ B_jᴸ` coordinates.
@@ -210,7 +226,7 @@ theorem trace_mpo_sectorCoordinateTensor_pos_of_isSourceZCL
     (hpos : ∀ q h, (F.neighboringOperator q h).PosSemidef)
     (hZCL : K.IsSourceZCL) {N : ℕ} (hN : 0 < N) :
     0 < Matrix.trace (mpo F.sectorCoordinateTensor N) := by
-  letI : NeZero N := ⟨ne_of_gt hN⟩
+  let : NeZero N := ⟨ne_of_gt hN⟩
   have hpsd := F.mpo_sectorCoordinateTensor_posSemidef hpos (N := N)
   have htrace : Matrix.trace (mpo F.sectorCoordinateTensor N) ≠ 0 := by
     rw [F.sectorCoordinateTensor_eq_changePhysicalBasis,
@@ -456,7 +472,7 @@ theorem retainedCutEquiv_symm_left_fiber_heq
           ((F.retainedCutEquiv A C).symm ⟨j, (l, r)⟩).2 ⟨i, by omega⟩) ≍
         (F.sectorCoordinateChainEquiv (A + C + 1) xG).2 ⟨i, by omega⟩ := by
     apply heq_of_eq
-    convert hG using 1 <;> simp [retainedCutEquiv, xG, sG, eG]; rfl
+    (convert hG using 1; simp [retainedCutEquiv, xG, sG, eG]); rfl
   dsimp only
   refine hG'.trans ?_
   have hL :
@@ -482,8 +498,8 @@ theorem retainedCutEquiv_symm_left_fiber_heq
       simpa [eL] using eq_of_heq hL1heq
     have hL2 := congrFun (congrArg Prod.fst hL1) i
     apply heq_of_eq
-    convert hL2 using 1 <;>
-      simp [leftSectorOpenEdgeEquiv, xL, sL, tL, eL] <;> rfl
+    (convert hL2 using 1;
+      simp [leftSectorOpenEdgeEquiv, xL, sL, tL, eL]); rfl
   refine (F.sectorCoordinateChainEquiv_apply_snd_heq (A + C + 1) xG
     ⟨i, by omega⟩).trans ?_
   refine HEq.trans ?_ hL.symm
@@ -545,7 +561,7 @@ theorem retainedCutEquiv_symm_right_fiber_heq
         (F.sectorCoordinateChainEquiv (A + C + 1) xG).2
           ⟨A + 1 + i, by omega⟩ := by
     apply heq_of_eq
-    convert hG using 1 <;> simp [retainedCutEquiv, xG, sG, eG]; rfl
+    (convert hG using 1; simp [retainedCutEquiv, xG, sG, eG]); rfl
   dsimp only
   refine hG'.trans ?_
   have hR :
@@ -571,8 +587,8 @@ theorem retainedCutEquiv_symm_right_fiber_heq
       simpa [eR] using eq_of_heq hR1heq
     have hR2 := congrFun (congrArg Prod.snd hR1) i
     apply heq_of_eq
-    convert hR2 using 1 <;>
-      simp [rightSectorOpenEdgeEquiv, xR, sR, tR, eR] <;> rfl
+    (convert hR2 using 1;
+      simp [rightSectorOpenEdgeEquiv, xR, sR, tR, eR]); rfl
   refine (F.sectorCoordinateChainEquiv_apply_snd_heq (A + C + 1) xG
     ⟨A + 1 + i, by omega⟩).trans ?_
   refine HEq.trans ?_ hR.symm
@@ -631,7 +647,7 @@ theorem retainedCutEquiv_symm_middle_fiber_heq
         (F.sectorCoordinateChainEquiv (A + C + 1) xG).2
           ⟨A, by omega⟩ := by
     apply heq_of_eq
-    convert hG using 1 <;> simp [retainedCutEquiv, xG, sG, eG]; rfl
+    (convert hG using 1; simp [retainedCutEquiv, xG, sG, eG]); rfl
   dsimp only
   refine hG'.trans ?_
   refine (F.sectorCoordinateChainEquiv_apply_snd_heq (A + C + 1) xG

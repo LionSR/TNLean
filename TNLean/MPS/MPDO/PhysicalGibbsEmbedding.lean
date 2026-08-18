@@ -151,13 +151,13 @@ theorem embedLocalOperator_twoSite_first
     Matrix.one_apply]
   by_cases hOne : AgreesOutsideWindow (d := d) 1 (by omega) i σ τ
   · obtain ⟨hTwo, hj⟩ := hAgree.mp hOne
-    rw [if_pos hTwo, if_pos hOne, if_pos hj.symm, mul_one]
+    rw [ite_eq_left hTwo, ite_eq_left hOne, ite_eq_left hj.symm, mul_one]
   · by_cases hTwo : AgreesOutsideWindow (d := d) 2 hN i σ τ
     · have hne : σ j ≠ τ j := by
         intro hj
         exact hOne (hAgree.mpr ⟨hTwo, hj.symm⟩)
-      rw [if_pos hTwo, if_neg hOne, if_neg hne, mul_zero]
-    · rw [if_neg hTwo, if_neg hOne]
+      rw [ite_eq_left hTwo, ite_eq_right hOne, ite_eq_right hne, mul_zero]
+    · rw [ite_eq_right hTwo, ite_eq_right hOne]
 
 /-- Embedding a local zero operator gives the zero chain operator. -/
 @[simp]
@@ -271,7 +271,7 @@ private theorem sitewiseMatrixFamily_mulSingle
     simp [MPSTensor.extractWindow, Nat.mod_eq_of_lt i.isLt]
   rw [hσ, hτ]
   by_cases hAgree : AgreesOutsideWindow (d := d) 1 hN i σ τ
-  · rw [if_pos hAgree]
+  · rw [ite_eq_left hAgree]
     let S : Fin N → Matrix (Fin d) (Fin d) ℂ := Pi.mulSingle i A
     change (∏ n, S n (σ n) (τ n)) = A (σ i) (τ i)
     calc
@@ -280,7 +280,7 @@ private theorem sitewiseMatrixFamily_mulSingle
         · intro q _ hqi
           rw [show S q = 1 by
             simp only [S, Pi.mulSingle_eq_of_ne hqi],
-            Matrix.one_apply, if_pos]
+            Matrix.one_apply, ite_eq_left]
           rw [agreesOutsideWindow_iff] at hAgree
           exact (hAgree q (fun hq ↦ hqi (by
             have hqOffset : (q.val + N - i.val) % N = 0 := by omega
@@ -291,7 +291,7 @@ private theorem sitewiseMatrixFamily_mulSingle
           exact (hi (Finset.mem_univ i)).elim
       _ = A (σ i) (τ i) := by
         rw [show S i = A by simp only [S, Pi.mulSingle_eq_same]]
-  · rw [if_neg hAgree]
+  · rw [ite_eq_right hAgree]
     rw [agreesOutsideWindow_iff] at hAgree
     push Not at hAgree
     obtain ⟨q, hqOutside, hq⟩ := hAgree
@@ -300,7 +300,7 @@ private theorem sitewiseMatrixFamily_mulSingle
       intro hqi
       subst q
       simp at hqOutside
-    rw [Pi.mulSingle_eq_of_ne hqi, Matrix.one_apply, if_neg]
+    rw [Pi.mulSingle_eq_of_ne hqi, Matrix.one_apply, ite_eq_right]
     exact fun h ↦ hq h.symm
 
 /-- Periodic embeddings of one-site operators commute at every pair of

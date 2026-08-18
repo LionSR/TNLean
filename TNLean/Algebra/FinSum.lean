@@ -83,7 +83,7 @@ theorem sum_piFin_castLE_extend_zero {ι β : Type*} [Fintype ι] [DecidableEq �
       · ext z
         simp [p]
       intro z _
-      rw [dif_pos z.2]
+      rw [dite_eq_left z.2]
       congr
     _ = ∑ y : (i : ι) → Fin (s i),
           if hlt : ∀ i, (y i).val < r i then
@@ -175,8 +175,8 @@ lemma coefficient_eq_zero_of_sum_eq_of_complement_smul
     {i₀ : ι} (hi₀ : i₀ ∈ T) :
     a i₀ = 0 := by
   classical
-  letI : Fintype {i : ι // i ∈ T} := Subtype.fintype (fun i => i ∈ T)
-  letI : Fintype {i : ι // i ∉ T} := Subtype.fintype (fun i => i ∉ T)
+  let : Fintype {i : ι // i ∈ T} := Subtype.fintype (fun i => i ∈ T)
+  let : Fintype {i : ι // i ∉ T} := Subtype.fintype (fun i => i ∉ T)
   let aggregate : κ → R := fun k =>
     ∑ i : {i : ι // i ∉ T}, if kOf i = k then a i.1 * α i else 0
   let coefficient : Sum {i : ι // i ∈ T} κ → R :=

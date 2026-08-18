@@ -90,7 +90,7 @@ theorem IsCPSVBasisOfNormalTensors.isBNT
     IsBNT A g dim B := by
   refine ⟨?_, hBNT.spans_mpv, hBNT.eventually_li⟩
   intro j
-  letI : NeZero (dim j) := ⟨(hBNT.blocks_dim_pos j).ne'⟩
+  let : NeZero (dim j) := ⟨(hBNT.blocks_dim_pos j).ne'⟩
   exact (hBNT.blocks_normal j).isNormal
 
 /-- Transport an algebraic BNT from `A` to a tensor `A'` with the same

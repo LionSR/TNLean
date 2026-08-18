@@ -892,7 +892,7 @@ theorem spectralGap_of_martingale_anticommutator_rowCol
     (∀ v, γ * (⟪(∑ i, P i) v, v⟫_ℂ).re ≤ (⟪(∑ i, P i) v, (∑ i, P i) v⟫_ℂ).re) ∧
     ∀ v ∈ (LinearMap.ker (∑ i, P i))ᗮ, γ * ‖v‖ ≤ ‖(∑ i, P i) v‖ := by
   let oldDecEq : DecidableEq ι := inferInstance
-  letI : DecidableEq ι := Classical.decEq ι
+  let : DecidableEq ι := Classical.decEq ι
   have erase_eq (i : ι) :
       @Finset.erase ι oldDecEq Finset.univ i = Finset.univ.erase i := by
     ext j

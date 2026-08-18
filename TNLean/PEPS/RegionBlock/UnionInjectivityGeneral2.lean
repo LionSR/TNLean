@@ -156,8 +156,8 @@ theorem ThreeBlockGeometry.regionBoundaryLabel_host_eq_hostLabelFrom
   rw [regionBoundaryLabel_apply, hostLabelFrom]
   by_cases hb : (f.1.1.1 ∈ Finset.univ \ g.red ∧ f.1.1.1 ∈ g.blue) ∨
       (f.1.1.2 ∈ Finset.univ \ g.red ∧ f.1.1.2 ∈ g.blue)
-  · rw [dif_pos hb, regionBoundaryLabel_apply]
-  · rw [dif_neg hb, regionBoundaryLabel_apply]
+  · rw [dite_eq_left hb, regionBoundaryLabel_apply]
+  · rw [dite_eq_right hb, regionBoundaryLabel_apply]
 
 /-! ### The blue inversion of the host annihilation
 
@@ -395,28 +395,28 @@ theorem ThreeBlockGeometry.blueRedCrossing_fiber_card
         by_cases hcross : g.IsBlueRedCrossingEdge A f.1
         · exact absurd (incident_of_boundary (G := G) g.complement f.2)
             (g.not_isRegionIncidentEdge_complement_of_blueRedCrossing hcross)
-        · rw [dif_neg hcross]
+        · rw [dite_eq_right hcross]
           have := congrFun hq f
           rwa [regionBoundaryLabel_apply] at this
       · -- Projecting the reconstruction recovers `q`: off the crossing it is `q`, and on
         -- the crossing the projection reads `q₀`, which `q` matches.
         funext eg
         by_cases hcross : g.IsBlueRedCrossingEdge A eg
-        · rw [if_pos hcross]; exact (hq0cross eg hcross).symm
-        · rw [if_neg hcross, dif_neg hcross]
+        · rw [ite_eq_left hcross]; exact (hq0cross eg hcross).symm
+        · rw [ite_eq_right hcross, dite_eq_right hcross]
     · -- Reconstructing from the crossing legs of a fiber element recovers it.
       intro ζ hζ
       simp only [Finset.mem_coe, Finset.mem_filter, Finset.mem_univ, true_and] at hζ
       obtain ⟨_, hproj⟩ := hζ
       funext eg
       by_cases hcross : g.IsBlueRedCrossingEdge A eg
-      · simp only [hcross, dif_pos]
-      · simp only [hcross, dif_neg, not_false_iff]
-        have := congrFun hproj eg; rw [if_neg hcross] at this; exact this.symm
+      · simp only [hcross, dite_eq_left]
+      · simp only [hcross, dite_eq_right, not_false_iff]
+        have := congrFun hproj eg; rw [ite_eq_right hcross] at this; exact this.symm
     · -- Reading the crossing legs of a reconstruction recovers them.
       intro h _
       funext eg
-      simp only [eg.2, dif_pos]
+      simp only [eg.2, dite_eq_left]
   · rw [Finset.card_univ, Fintype.card_pi]
     simp only [Fintype.card_fin]
     rw [blueRedCrossingBondProd,
@@ -526,8 +526,8 @@ theorem ThreeBlockGeometry.regionBlockedWeight_complement_eq_smul_constrained
       rw [regionBoundaryLabel_apply, hproj]
       simp only
       by_cases hcross : g.IsBlueRedCrossingEdge A f.1
-      · rw [if_pos hcross]; exact congrFun hq0host f
-      · rw [if_neg hcross]
+      · rw [ite_eq_left hcross]; exact congrFun hq0host f
+      · rw [ite_eq_right hcross]
         -- `f` is a host boundary edge, not crossing, so a complement boundary edge.
         have hcompl := g.isComplBoundary_of_hostBoundary_not_crossing f.2 hcross
         rw [hagree_compl ζ hζ.2 f.1 hcompl]
@@ -537,8 +537,8 @@ theorem ThreeBlockGeometry.regionBlockedWeight_complement_eq_smul_constrained
       rw [regionBoundaryLabel_apply, hproj]
       simp only
       by_cases hcross : g.IsBlueRedCrossingEdge A f.1
-      · rw [if_pos hcross]; exact congrFun hq0blue f
-      · rw [if_neg hcross]
+      · rw [ite_eq_left hcross]; exact congrFun hq0blue f
+      · rw [ite_eq_right hcross]
         -- A blue boundary edge that is not a crossing edge is a complement boundary edge:
         -- its blue-side endpoint's neighbour lies in the complement, not red.
         have hred : ¬ IsRegionBoundaryEdge (G := G) g.red f.1 := fun hr => hcross ⟨hr, f.2⟩
@@ -582,7 +582,7 @@ theorem ThreeBlockGeometry.regionBlockedWeight_complement_eq_smul_constrained
       by_cases hcross : g.IsBlueRedCrossingEdge A f.1
       · exact absurd (incident_of_boundary (G := G) g.complement f.2)
           (g.not_isRegionIncidentEdge_complement_of_blueRedCrossing hcross)
-      · rw [if_neg hcross]
+      · rw [ite_eq_right hcross]
         have := congrFun hζ.2 f; rwa [regionBoundaryLabel_apply] at this
   -- Group the complement-labelled sum fiberwise over the projection.
   rw [← Finset.sum_fiberwise_of_maps_to hmaps
@@ -600,7 +600,7 @@ theorem ThreeBlockGeometry.regionBlockedWeight_complement_eq_smul_constrained
       refine g.complProd_overwrite_blueRedCrossing_eq σcompl ζ q
         (fun eg hg => ?_)
       have := congrFun hζ.2 eg
-      rw [hproj] at this; simp only at this; rwa [if_neg hg] at this)]
+      rw [hproj] at this; simp only at this; rwa [ite_eq_right hg] at this)]
   rw [Finset.sum_const]
   -- `q` and `q₀` agree on the red/blue crossing edges, which are host boundary edges
   -- where both carry the host label `bdry`.
@@ -688,10 +688,10 @@ theorem ThreeBlockGeometry.blueRedCrossingBondProd_smul_threeBlockComplCoeff_eq
         regionBoundaryLabel (G := G) A g.blue q = bβ ∧
           regionBoundaryLabel (G := G) A g.complement q = bc'
   · obtain ⟨q₀, hq0host, hq0blue, hq0compl⟩ := hex
-    rw [if_pos ⟨q₀, hq0host, hq0blue, hq0compl⟩, one_smul,
+    rw [ite_eq_left ⟨q₀, hq0host, hq0blue, hq0compl⟩, one_smul,
       g.regionBlockedWeight_complement_eq_smul_constrained bdry bβ bc'
         σcompl q₀ hq0host hq0blue hq0compl, Nat.cast_smul_eq_nsmul]
-  · rw [if_neg hex, zero_smul]
+  · rw [ite_eq_right hex, zero_smul]
     -- No configuration carries the three labels: the constrained sum is empty.
     rw [Finset.filter_eq_empty_iff.mpr (fun q _ => ?_), Finset.sum_empty, smul_zero]
     rintro ⟨hh, hb, hc⟩
@@ -719,7 +719,7 @@ theorem ThreeBlockGeometry.exists_regionBoundaryLabel_host_eq
       bdry ⟨eg, hg⟩
     else ⟨0, hpos eg⟩, ?_⟩
   funext f
-  rw [regionBoundaryLabel_apply, dif_pos f.2]
+  rw [regionBoundaryLabel_apply, dite_eq_left f.2]
 
 /-! ### The union of the blue and complement blocks is injective
 
@@ -837,12 +837,12 @@ theorem ThreeBlockGeometry.regionBlockedTensorInjective_union
   simp only [Pi.zero_apply] at hq0
   -- The indicator selects the single host residual `host q = bdry`.
   rw [Finset.sum_eq_single (regionBoundaryLabel (G := G) A (Finset.univ \ g.red) q)] at hq0
-  · rw [if_pos ⟨q, rfl, rfl, rfl⟩, smul_eq_mul, mul_one] at hq0
+  · rw [ite_eq_left ⟨q, rfl, rfl, rfl⟩, smul_eq_mul, mul_one] at hq0
     rw [← hq]; exact hq0
   · intro bdry' _ hne
     -- Any global configuration realizing the blue and complement labels of `q` has host
     -- residual `host q`, so the indicator at `bdry' ≠ host q` is zero.
-    rw [if_neg ?_, smul_zero]
+    rw [ite_eq_right ?_, smul_zero]
     rintro ⟨q', hh', hb', hc'⟩
     apply hne
     have e1 := g.regionBoundaryLabel_host_eq_hostLabelFrom q'

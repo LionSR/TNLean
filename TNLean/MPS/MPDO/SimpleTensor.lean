@@ -87,8 +87,8 @@ theorem doubledPhysTraceTransfer_toTensor (S : MPSTensor.SectorDecomposition (d 
     MPSTensor.toTensorFromBlocks, Matrix.sum_apply, Matrix.reindex_apply,
     Matrix.submatrix_apply, Matrix.blockDiagonal'_apply]
   by_cases h : (finSigmaFinEquiv.symm a).1 = (finSigmaFinEquiv.symm b).1
-  · simp only [dif_pos h, Matrix.smul_apply, Matrix.sum_apply, smul_eq_mul, Finset.mul_sum]
-  · simp only [dif_neg h, Finset.sum_const_zero]
+  · simp only [dite_eq_left h, Matrix.smul_apply, Matrix.sum_apply, smul_eq_mul, Finset.mul_sum]
+  · simp only [dite_eq_right h, Finset.sum_const_zero]
 
 /-- **Simple MPO tensor in the chosen canonical form** (arXiv:1606.00608,
 lines 815--822).  The source

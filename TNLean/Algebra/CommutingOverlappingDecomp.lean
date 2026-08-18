@@ -413,8 +413,9 @@ theorem exists_unitary_blockActions_of_overlappingLifts_commute
       toMatrix_eq_leftBlockDiagonal_of_action basis _ (B i i') (hB i i')]
     simp only [Matrix.reindex_apply]
     rcases eq_or_ne q q' with rfl | hqq
-    · simp [R, Matrix.blockDiagonal'_apply_eq,
-        Matrix.kroneckerMap_apply, Matrix.one_apply]
+    · simp only [Matrix.submatrix_apply, Equiv.symm_apply_apply,
+        Matrix.blockDiagonal'_apply_eq, Matrix.kroneckerMap_apply]
+      simp [R, Matrix.one_apply, mul_comm]
     · simp [R, Matrix.blockDiagonal'_apply_ne _ _ _ hqq]
   have hYblock : Matrix.reindex (rightSpatialBlockEquiv e).symm
           (rightSpatialBlockEquiv e).symm
@@ -430,8 +431,9 @@ theorem exists_unitary_blockActions_of_overlappingLifts_commute
       toMatrix_eq_rightBlockDiagonal_of_action basis _ (C k k') (hC k k')]
     simp only [Matrix.reindex_apply]
     rcases eq_or_ne q q' with rfl | hqq
-    · simp [S, Matrix.blockDiagonal'_apply_eq,
-        Matrix.kroneckerMap_apply, Matrix.one_apply]
+    · simp only [Matrix.submatrix_apply, Equiv.symm_apply_apply,
+        Matrix.blockDiagonal'_apply_eq, Matrix.kroneckerMap_apply]
+      simp [S, Matrix.one_apply]
     · simp [S, Matrix.blockDiagonal'_apply_ne _ _ _ hqq]
   refine ⟨K, d, m, e, U, R, S, hU, hd, hm, ?_, ?_, hXblock, hYblock⟩
   · intro q
@@ -446,9 +448,21 @@ theorem exists_unitary_blockActions_of_overlappingLifts_commute
     have hPulled := hConj'.reindex (leftSpatialBlockEquiv e).symm
     have hEntry := hPulled.apply ⟨q, ((i', s'), r)⟩ ⟨q, ((i, s), r)⟩
     rw [hXblock] at hEntry
-    simpa [R,
-      Matrix.blockDiagonal'_apply_eq, Matrix.kroneckerMap_apply,
-      Matrix.one_apply] using hEntry
+    simp only [Matrix.blockDiagonal'_apply_eq] at hEntry
+    have hleft := Matrix.kroneckerMap_apply (fun x y : ℂ ↦ x * y)
+      (fun x y ↦ B x.1 y.1 q x.2 y.2) (1 : Matrix (Fin (m q)) (Fin (m q)) ℂ)
+      ((i, s), r) ((i', s'), r)
+    have hright := Matrix.kroneckerMap_apply (fun x y : ℂ ↦ x * y)
+      (fun x y ↦ B x.1 y.1 q x.2 y.2) (1 : Matrix (Fin (m q)) (Fin (m q)) ℂ)
+      ((i', s'), r) ((i, s), r)
+    calc
+      star (R q (i, s) (i', s')) = star (Matrix.kroneckerMap (fun x y : ℂ ↦ x * y)
+          (fun x y ↦ B x.1 y.1 q x.2 y.2) 1 ((i, s), r) ((i', s'), r)) := by
+        simpa [R, Matrix.one_apply] using congrArg star hleft.symm
+      _ = Matrix.kroneckerMap (fun x y : ℂ ↦ x * y)
+          (fun x y ↦ B x.1 y.1 q x.2 y.2) 1 ((i', s'), r) ((i, s), r) := hEntry
+      _ = R q (i', s') (i, s) := by
+        simpa [R, Matrix.one_apply] using hright
   · intro q
     apply Matrix.IsHermitian.ext
     rintro ⟨r', k'⟩ ⟨r, k⟩
@@ -461,9 +475,21 @@ theorem exists_unitary_blockActions_of_overlappingLifts_commute
     have hPulled := hConj'.reindex (rightSpatialBlockEquiv e).symm
     have hEntry := hPulled.apply ⟨q, (s, (r', k'))⟩ ⟨q, (s, (r, k))⟩
     rw [hYblock] at hEntry
-    simpa [S,
-      Matrix.blockDiagonal'_apply_eq, Matrix.kroneckerMap_apply,
-      Matrix.one_apply] using hEntry
+    simp only [Matrix.blockDiagonal'_apply_eq] at hEntry
+    have hleft := Matrix.kroneckerMap_apply (fun x y : ℂ ↦ x * y)
+      (1 : Matrix (Fin (d q)) (Fin (d q)) ℂ)
+      (fun x y ↦ C x.2 y.2 q x.1 y.1) (s, r, k) (s, r', k')
+    have hright := Matrix.kroneckerMap_apply (fun x y : ℂ ↦ x * y)
+      (1 : Matrix (Fin (d q)) (Fin (d q)) ℂ)
+      (fun x y ↦ C x.2 y.2 q x.1 y.1) (s, r', k') (s, r, k)
+    calc
+      star (S q (r, k) (r', k')) = star (Matrix.kroneckerMap (fun x y : ℂ ↦ x * y) 1
+          (fun x y ↦ C x.2 y.2 q x.1 y.1) (s, r, k) (s, r', k')) := by
+        simpa [S, Matrix.one_apply] using congrArg star hleft.symm
+      _ = Matrix.kroneckerMap (fun x y : ℂ ↦ x * y) 1
+          (fun x y ↦ C x.2 y.2 q x.1 y.1) (s, r', k') (s, r, k) := hEntry
+      _ = S q (r', k') (r, k) := by
+        simpa [S, Matrix.one_apply] using hright
 
 /-- **Beigi's block-sum equalities for the original overlapping operators.** Let
 $X_{AB}$ and $Y_{BC}$ be Hermitian, and suppose that their natural three-factor lifts

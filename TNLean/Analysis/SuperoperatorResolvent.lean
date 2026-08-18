@@ -61,9 +61,9 @@ lemma inv_le_inv_of_le {A B : Matrix n n ℂ}
     B⁻¹ ≤ A⁻¹ := by
   have hsub : (B - A).PosSemidef := Matrix.le_iff.mp hle
   have hAinv : A⁻¹.PosDef := hA.inv
-  letI : Invertible A := hA.isUnit.invertible
-  letI : Invertible A⁻¹ := hAinv.isUnit.invertible
-  letI : Invertible B := hB.isUnit.invertible
+  let : Invertible A := hA.isUnit.invertible
+  let : Invertible A⁻¹ := hAinv.isUnit.invertible
+  let : Invertible B := hB.isUnit.invertible
   -- The block matrix `[[A⁻¹, 1], [1, B]]` is positive semidefinite, since the
   -- Schur complement of its `(1, 1)` block is `B - (A⁻¹)⁻¹ = B - A ≥ 0`.
   have hinvinv : (A⁻¹)⁻¹ = A := Matrix.inv_inv_of_invertible A

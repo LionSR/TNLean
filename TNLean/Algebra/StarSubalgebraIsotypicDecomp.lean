@@ -108,7 +108,7 @@ theorem exists_orthogonal_isotypic_decomposition :
   have hcls_eq : ∀ p ∈ D, ∀ p' ∈ D, S.SameIsotype p p' → cls p = cls p' := by
     intro p hp p' hp' hsame
     ext q
-    simp only [hcls, Set.mem_setOf_eq]
+    simp only [hcls, Set.mem_ofPred_eq]
     refine and_congr_right fun hqD => ⟨fun hpq => ?_, fun hp'q => ?_⟩
     · exact S.sameIsotype_trans (hDirr p' hp') (hDirr p hp) (hDirr q hqD)
         (S.sameIsotype_symm (hDirr p hp) (hDirr p' hp') hsame) hpq

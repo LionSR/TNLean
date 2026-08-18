@@ -475,7 +475,7 @@ theorem virtualUnitary_of_gaugePhaseEquiv_twisted
     intro i
     ext a
     exact Fin.elim0 a
-  haveI : NeZero D := ⟨hD⟩
+  have : NeZero D := ⟨hD⟩
   let B : MPSTensor d D := twistedMixedCompanion A u
   obtain ⟨Xgl, ζ, hζ, hX⟩ := hGauge
   let X : Matrix (Fin D) (Fin D) ℂ := (Xgl : Matrix (Fin D) (Fin D) ℂ)
@@ -694,7 +694,7 @@ theorem boundaryState_invariant_of_virtualUnitary
   rcases eq_or_ne D 0 with hD | hD
   · subst hD
     simp at hΛtr
-  haveI : NeZero D := ⟨hD⟩
+  have : NeZero D := ⟨hD⟩
   let B : MPSTensor d D := twistedMixedCompanion A u
   have hμ_ne : μ ≠ 0 := Complex.ne_zero_of_norm_eq_one hμ
   have hμ_sq : star μ * μ = 1 := by

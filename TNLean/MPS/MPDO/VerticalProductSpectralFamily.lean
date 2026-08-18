@@ -488,7 +488,7 @@ theorem exists_blockedBNT_gaugePhase_of_flatBlock
             (cast (congr_arg (MPSTensor (D * D)) hdim) (A₂ γ)) ab *
               (↑(X⁻¹) : Matrix (Fin (S.flatDim j))
                 (Fin (S.flatDim j)) ℂ)) := by
-  letI : ∀ j, NeZero (S.flatDim j) := fun j ↦
+  let : ∀ j, NeZero (S.flatDim j) := fun j ↦
     ⟨(S.flatDim_pos j).ne'⟩
   have hsquare := verticalTensor_blockTwo_squared_coisometry_reconstruction
     M (verticalAssembledTensor dim mult weight B) U hU hReconstruct

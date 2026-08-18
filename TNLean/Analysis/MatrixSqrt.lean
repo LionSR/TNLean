@@ -7,6 +7,7 @@ import TNLean.Algebra.PosSemidefSupport
 import TNLean.Analysis.CfcKronecker
 import TNLean.Analysis.TraceCFC
 import Mathlib.Analysis.CStarAlgebra.ContinuousFunctionalCalculus.Order
+import Mathlib.Analysis.CStarAlgebra.Matrix
 import Mathlib.Analysis.Matrix.Order
 import Mathlib.Analysis.Matrix.PosDef
 import Mathlib.Analysis.SpecialFunctions.ContinuousFunctionalCalculus.ExpLog.Basic
@@ -58,7 +59,7 @@ theory development.
   evaluation of a support-inverse pairing from any solution.
 -/
 
-open scoped Matrix ComplexOrder MatrixOrder Kronecker
+open scoped Matrix ComplexOrder MatrixOrder Kronecker Matrix.Norms.L2Operator
 
 namespace Matrix
 
@@ -111,19 +112,6 @@ theorem PosDef.isUnit_det_cfc_sqrt
     ((CFC.isUnit_sqrt_iff ρ hρ.posSemidef.nonneg).2 hρ.isUnit)
 
 variable {n : Type*} [Fintype n] [DecidableEq n]
-
-noncomputable local instance cfcLogNormedRing : NormedRing (Matrix n n ℂ) :=
-  Matrix.instL2OpNormedRing
-noncomputable local instance cfcLogNormedAlgebra : NormedAlgebra ℂ (Matrix n n ℂ) :=
-  Matrix.instL2OpNormedAlgebra
-noncomputable local instance cfcLogCStarRing : CStarRing (Matrix n n ℂ) :=
-  Matrix.instCStarRing
-noncomputable local instance cfcLogPartialOrder : PartialOrder (Matrix n n ℂ) :=
-  Matrix.instPartialOrder
-noncomputable local instance cfcLogStarOrderedRing : StarOrderedRing (Matrix n n ℂ) :=
-  Matrix.instStarOrderedRing
-noncomputable local instance cfcLogCStarAlgebra : CStarAlgebra (Matrix n n ℂ) :=
-  CStarAlgebra.mk
 
 /-- The Hermitian functional-calculus square root of a positive-semidefinite
 matrix is Hermitian. -/
@@ -394,7 +382,7 @@ theorem PosDef.supportInvSqrt_eq_inv_sqrt {ρ : Matrix n n ℂ}
   apply cfc_congr
   intro x hx
   dsimp only
-  rw [if_pos]
+  rw [ite_eq_left]
   intro hxzero
   subst x
   simpa using hspectrum 0 hx
@@ -420,7 +408,7 @@ theorem PosSemidef.supportInvSqrt_smul {ρ : Matrix n n ℂ}
     simp only [smul_eq_mul]
     by_cases hx : x = 0
     · simp [hx]
-    · rw [if_pos (mul_ne_zero hc.ne' hx), if_pos hx, Real.sqrt_mul hc.le,
+    · rw [ite_eq_left (mul_ne_zero hc.ne' hx), ite_eq_left hx, Real.sqrt_mul hc.le,
         mul_inv]
   rw [hfun, cfc_smul (p := IsSelfAdjoint) (Real.sqrt c)⁻¹
     (fun x : ℝ ↦ if x ≠ 0 then (Real.sqrt x)⁻¹ else 0) ρ
@@ -446,7 +434,7 @@ theorem PosSemidef.supportInvSqrt_kronecker
   · simp [hx0]
   by_cases hy0 : y = 0
   · simp [hy0]
-  rw [if_pos (mul_ne_zero hx0 hy0), if_pos hx0, if_pos hy0, Real.sqrt_mul hx,
+  rw [ite_eq_left (mul_ne_zero hx0 hy0), ite_eq_left hx0, ite_eq_left hy0, Real.sqrt_mul hx,
     mul_inv]
 
 -- Keep the two unital specializations below on the direct embedding lemmas: this avoids
@@ -932,8 +920,8 @@ theorem PosSemidef.blockDiagonal'
     (A : ∀ i, Matrix (m i) (m i) ℂ) (hA : ∀ i, (A i).PosSemidef) :
     (Matrix.blockDiagonal' A).PosSemidef := by
   classical
-  letI := Fintype.ofFinite p
-  letI (i : p) := Fintype.ofFinite (m i)
+  let := Fintype.ofFinite p
+  let (i : p) := Fintype.ofFinite (m i)
   let B : ∀ i, Matrix (m i) (m i) ℂ :=
     fun i ↦ (hA i).isHermitian.cfc Real.sqrt
   have hBherm (i) : (B i).IsHermitian := (hA i).cfc_sqrt_isHermitian

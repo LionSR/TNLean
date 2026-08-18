@@ -91,7 +91,7 @@ theorem contiguousRestrictₗ_groundSpaceMap_mem_groundSpace
       simp only [List.getElem_ofFn]
       by_cases hkLeft : k < s
       · have hkNotWin : ¬(s ≤ k ∧ k < s + L) := by omega
-        rw [contiguousCfg, dif_neg hkNotWin]
+        rw [contiguousCfg, dite_eq_right hkNotWin]
         rw [List.getElem_append_left]
         · rw [List.getElem_append_left]
           · have hkLeftWord : k < leftWord.length := by
@@ -103,7 +103,7 @@ theorem contiguousRestrictₗ_groundSpaceMap_mem_groundSpace
             (show k < s + L by omega)
       · by_cases hkWin : k < s + L
         · have hwin : s ≤ k ∧ k < s + L := by omega
-          rw [contiguousCfg, dif_pos hwin]
+          rw [contiguousCfg, dite_eq_left hwin]
           rw [List.getElem_append_left]
           · rw [List.getElem_append_right]
             · rw [List.getElem_ofFn]
@@ -115,7 +115,7 @@ theorem contiguousRestrictₗ_groundSpaceMap_mem_groundSpace
           · simpa only [leftWord, List.length_append, List.length_ofFn] using hkWin
         · have hkRight : s + L ≤ k := by omega
           have hkNotWin : ¬(s ≤ k ∧ k < s + L) := by omega
-          rw [contiguousCfg, dif_neg hkNotWin]
+          rw [contiguousCfg, dite_eq_right hkNotWin]
           rw [List.getElem_append_right]
           · have hRightIndex :
                 k - (leftWord ++ List.ofFn σ).length < rightWord.length := by
@@ -162,20 +162,20 @@ theorem contiguousRestrictₗ_restrictLast {N : ℕ} (s M : ℕ) (hsM1 : s + (M 
   simp only [contiguousCfg]
   by_cases hwin : s ≤ k ∧ k < s + M
   · -- k is in the smaller window [s, s+M)
-    rw [dif_pos (show s ≤ k ∧ k < s + (M + 1) from by omega), dif_pos hwin]
+    rw [dite_eq_left (show s ≤ k ∧ k < s + (M + 1) from by omega), dite_eq_left hwin]
     have hcast : (⟨k - s, by omega⟩ : Fin (M + 1)) =
         Fin.castSucc (⟨k - s, by omega⟩ : Fin M) := by
       ext; simp [Fin.castSucc]
     rw [hcast, Fin.snoc_castSucc]
   · by_cases hbdy : k = s + M
     · -- k is at position s+M (the site being peeled off)
-      rw [dif_pos (show s ≤ k ∧ k < s + (M + 1) from by omega), dif_neg hwin]
+      rw [dite_eq_left (show s ≤ k ∧ k < s + (M + 1) from by omega), dite_eq_right hwin]
       have hlast : (⟨k - s, by omega⟩ : Fin (M + 1)) = Fin.last M := by
         ext; simp [Fin.last]; omega
       rw [hlast, Fin.snoc_last]
       simp [Function.update, hbdy]
     · -- k is outside both windows
-      rw [dif_neg (show ¬(s ≤ k ∧ k < s + (M + 1)) from by omega), dif_neg hwin]
+      rw [dite_eq_right (show ¬(s ≤ k ∧ k < s + (M + 1)) from by omega), dite_eq_right hwin]
       simp [Function.update, show ¬(k = s + M) from hbdy]
 
 /-- Restricting the first site of a contiguous \((M+1)\)-block peels off
@@ -190,20 +190,20 @@ theorem contiguousRestrictₗ_restrictFirst {N : ℕ} (s M : ℕ) (hsM1 : s + (M
   simp only [contiguousCfg]
   by_cases hwin : s + 1 ≤ k ∧ k < s + 1 + M
   · -- k is in the shifted window [s+1, s+1+M)
-    rw [dif_pos (show s ≤ k ∧ k < s + (M + 1) from by omega), dif_pos hwin]
+    rw [dite_eq_left (show s ≤ k ∧ k < s + (M + 1) from by omega), dite_eq_left hwin]
     have hsucc : (⟨k - s, by omega⟩ : Fin (M + 1)) =
         Fin.succ (⟨k - (s + 1), by omega⟩ : Fin M) := by
       ext; simp; omega
     rw [hsucc, Fin.cons_succ]
   · by_cases hbdy : k = s
     · -- k is at position s (the site being peeled off)
-      rw [dif_pos (show s ≤ k ∧ k < s + (M + 1) from by omega), dif_neg hwin]
+      rw [dite_eq_left (show s ≤ k ∧ k < s + (M + 1) from by omega), dite_eq_right hwin]
       have hzero : (⟨k - s, by omega⟩ : Fin (M + 1)) = 0 := by
         ext; simp; omega
       rw [hzero, Fin.cons_zero]
       simp [Function.update, hbdy]
     · -- k is outside both windows
-      rw [dif_neg (show ¬(s ≤ k ∧ k < s + (M + 1)) from by omega), dif_neg hwin]
+      rw [dite_eq_right (show ¬(s ≤ k ∧ k < s + (M + 1)) from by omega), dite_eq_right hwin]
       simp [Function.update, show ¬(k = s) from hbdy]
 
 /-! ### Iterated intersection: non-wrapping windows → open-chain membership -/
@@ -672,8 +672,8 @@ theorem cyclicRestrictₗ_congr_outside {N L : ℕ} (hN : 0 < N) (i : Fin N)
   ext k
   simp only [cyclicCfg]
   by_cases hwin : (k.val + N - i.val) % N < L
-  · rw [dif_pos hwin, dif_pos hwin]
-  · rw [dif_neg hwin, dif_neg hwin, hτ k hwin]
+  · rw [dite_eq_left hwin, dite_eq_left hwin]
+  · rw [dite_eq_right hwin, dite_eq_right hwin, hτ k hwin]
 
 /-- Filling the selected cyclic interval in the outside configuration does not
 change the corresponding cyclic restriction. -/
@@ -702,7 +702,7 @@ theorem cyclicCfg_cyclicForwardSite {N L : ℕ} (hN : 0 < N) (hLN : L ≤ N)
         by rw [hoff]; exact r.isLt⟩ : Fin L) = r := by
     ext
     exact hoff
-  rw [dif_pos (by rw [hoff]; exact r.isLt), hidx]
+  rw [dite_eq_left (by rw [hoff]; exact r.isLt), hidx]
 
 /-- Restricting the final site of a cyclic \((L + 1)\)-window peels off the site with
 cyclic offset \(L\) and stores its value in the outside configuration. -/
@@ -717,13 +717,13 @@ theorem cyclicRestrictₗ_restrictLast {N L : ℕ} (hN : 0 < N)
   ext k
   simp only [cyclicCfg]
   by_cases hsmall : (k.val + N - i.val) % N < L
-  · rw [dif_pos (Nat.lt_trans hsmall (Nat.lt_succ_self L)), dif_pos hsmall]
+  · rw [dite_eq_left (Nat.lt_trans hsmall (Nat.lt_succ_self L)), dite_eq_left hsmall]
     simp [Fin.snoc, hsmall]
-  · rw [dif_neg hsmall]
+  · rw [dite_eq_right hsmall]
     by_cases hlast : (k.val + N - i.val) % N = L
-    · rw [dif_pos (by omega : (k.val + N - i.val) % N < L + 1)]
+    · rw [dite_eq_left (by omega : (k.val + N - i.val) % N < L + 1)]
       simp [Fin.snoc, hlast]
-    · rw [dif_neg (by omega : ¬((k.val + N - i.val) % N < L + 1))]
+    · rw [dite_eq_right (by omega : ¬((k.val + N - i.val) % N < L + 1))]
       simp [hlast]
 
 /-- Restricting the first site of a non-repeating cyclic \((L + 1)\)-window peels
@@ -749,7 +749,7 @@ theorem cyclicRestrictₗ_restrictFirst {N L : ℕ} (hN : 0 < N) (hLN : L + 1 �
     have hshift : ¬((i.val + N - (cyclicForwardSite i 1).val) % N < L) := by
       rw [hshift_eq]
       omega
-    rw [dif_pos (by omega : (i.val + N - i.val) % N < L + 1), dif_neg hshift]
+    rw [dite_eq_left (by omega : (i.val + N - i.val) % N < L + 1), dite_eq_right hshift]
     simp
   · let r := (k.val + N - i.val) % N
     have hrpos : 0 < r := Nat.pos_of_ne_zero hzero
@@ -771,7 +771,7 @@ theorem cyclicRestrictₗ_restrictFirst {N L : ℕ} (hN : 0 < N) (hLN : L + 1 �
     · have hshiftSmall : (k.val + N - (cyclicForwardSite i 1).val) % N < L := by
         rw [hshift_eq]
         omega
-      rw [dif_pos hsmall, dif_pos hshiftSmall]
+      rw [dite_eq_left hsmall, dite_eq_left hshiftSmall]
       have hidx :
           (⟨(k.val + N - i.val) % N, hsmall⟩ : Fin (L + 1)) =
             Fin.succ
@@ -784,7 +784,7 @@ theorem cyclicRestrictₗ_restrictFirst {N L : ℕ} (hN : 0 < N) (hLN : L + 1 �
     · have hshiftLarge : ¬((k.val + N - (cyclicForwardSite i 1).val) % N < L) := by
         rw [hshift_eq]
         omega
-      rw [dif_neg hsmall, dif_neg hshiftLarge]
+      rw [dite_eq_right hsmall, dite_eq_right hshiftLarge]
       simp [hzero]
 
 /-- For a non-wrapping window (\(i + L ≤ N\)), the cyclic config agrees with
@@ -803,7 +803,7 @@ theorem cyclicCfg_eq_contiguousCfg {N : ℕ} (hN : 0 < N) {L : ℕ} (hLN : L ≤
       rw [this, Nat.add_mod_right]
       exact Nat.mod_eq_of_lt (by omega)
     have hlt : (k + N - i.val) % N < L := by omega
-    rw [dif_pos hlt, dif_pos h]
+    rw [dite_eq_left hlt, dite_eq_left h]
     congr 1; ext; simp [hoff]
   · -- k is outside
     have hh : ¬(i.val ≤ k ∧ k < i.val + L) := h
@@ -832,7 +832,7 @@ theorem cyclicCfg_eq_contiguousCfg {N : ℕ} (hN : 0 < N) {L : ℕ} (hLN : L ≤
           rw [this, Nat.add_mod_right]
           exact Nat.mod_eq_of_lt (by omega)
         omega
-    rw [dif_neg hoff_ge, dif_neg hh]
+    rw [dite_eq_right hoff_ge, dite_eq_right hh]
 
 /-- The non-wrapping window condition from the cyclic definition implies
 the contiguous window condition. -/

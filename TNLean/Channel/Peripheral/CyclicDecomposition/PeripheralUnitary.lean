@@ -42,7 +42,7 @@ private theorem hermitian_fixed_eq_scalar_of_irreducible_unital
     (hfix : transferMap (d := r) (D := D) K H = H) :
     ∃ c : ℂ, H = c • 1 := by
   classical
-  haveI : Nonempty (Fin D) := ⟨⟨0, NeZero.pos D⟩⟩
+  have : Nonempty (Fin D) := ⟨⟨0, NeZero.pos D⟩⟩
   set c0 : ℝ := minEigenvalue hH
   have hshift_psd : (H - (c0 : ℂ) • 1).PosSemidef :=
     sub_minEigenvalue_smul_one_posSemidef hH
@@ -178,7 +178,7 @@ theorem exists_peripheral_unitary_of_irreducible_schwarz
     ∃ U : Matrix.unitaryGroup (Fin D) ℂ,
       transferMap (d := r) (D := D) K (U : MatrixAlg D) = γ • (U : MatrixAlg D) := by
   classical
-  haveI : Nonempty (Fin D) := ⟨⟨0, NeZero.pos D⟩⟩
+  have : Nonempty (Fin D) := ⟨⟨0, NeZero.pos D⟩⟩
   rcases hγ with ⟨hγ_eig, hγ_norm⟩
   rcases hγ_eig.exists_hasEigenvector with ⟨X, hX_eigvec⟩
   have hX_mem : X ∈ Module.End.eigenspace (transferMap (d := r) (D := D) K) γ :=
@@ -335,7 +335,7 @@ theorem exists_normalized_peripheral_unitary_of_irreducible_schwarz
       transferMap (d := r) (D := D) K (U : MatrixAlg D) = γ • (U : MatrixAlg D) ∧
       ((U : MatrixAlg D) ^ m = 1) := by
   classical
-  haveI : Nonempty (Fin D) := ⟨⟨0, NeZero.pos D⟩⟩
+  have : Nonempty (Fin D) := ⟨⟨0, NeZero.pos D⟩⟩
   obtain ⟨U, hU⟩ :=
     exists_peripheral_unitary_of_irreducible_schwarz
       (K := K) hUnital ρ hρ hρfix hIrr hγ

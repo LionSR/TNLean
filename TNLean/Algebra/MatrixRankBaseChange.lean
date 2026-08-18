@@ -7,15 +7,12 @@ import Mathlib.LinearAlgebra.LinearIndependent.BaseChange
 import Mathlib.LinearAlgebra.Matrix.Rank
 
 /-!
-# Matrix rank under scalar multiplication and scalar extension
+# Matrix rank under scalar extension
 
-This file collects general rank invariance results for finite matrices.  It has
-only the linear-algebra imports needed by its consumers.
+This file proves rank invariance for finite matrices under scalar extension.
 
 ## Main results
 
-* `Matrix.rank_smul_of_ne_zero`: multiplying a finite matrix over a field by a
-  nonzero scalar preserves its rank.
 * `Matrix.rank_map_algebraMap`: extending scalars along a faithful field
   extension preserves the rank of a finite matrix.
 -/
@@ -25,19 +22,6 @@ open Matrix Module Submodule Set
 namespace Matrix
 
 variable {K m n : Type*} [Field K] [Fintype n]
-
-/-- Multiplication by a nonzero field scalar does not change matrix rank. -/
-theorem rank_smul_of_ne_zero {a : K} (ha : a ≠ 0) (A : Matrix m n K) :
-    (a • A).rank = A.rank := by
-  have hrange :
-      LinearMap.range (a • A).mulVecLin = LinearMap.range A.mulVecLin := by
-    ext v
-    constructor
-    · rintro ⟨x, rfl⟩
-      exact ⟨a • x, by simp⟩
-    · rintro ⟨x, rfl⟩
-      exact ⟨a⁻¹ • x, by simp [ha]⟩
-  rw [Matrix.rank, Matrix.rank, hrange]
 
 variable [Finite m]
 

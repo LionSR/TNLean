@@ -230,7 +230,7 @@ theorem bntMarkovBlockNonzero_eq_of_probability_ne_zero
     Matrix.exists_entry_ne_zero_of_ne_zero _ (hR s)
   have hsame_s := isMPOBlockLeftInverse_bnt_markov_key_formula hC hρ hη
     (⟨s, α1s, βs⟩) (⟨s, αs, β3s⟩) k k ls rs ls' rs'
-  simp only [dif_pos trivial] at hsame_s
+  simp only [dite_eq_left trivial] at hsame_s
   change
     (hη.p k : ℂ) *
         bntMarkovLeftFactor C hη (⟨s, α1s, βs⟩) k ls ls' *
@@ -255,7 +255,7 @@ theorem bntMarkovBlockNonzero_eq_of_probability_ne_zero
     Matrix.exists_entry_ne_zero_of_ne_zero _ (hR t)
   have hmixed := isMPOBlockLeftInverse_bnt_markov_key_formula hC hρ hη
     (⟨s, α1s, βs⟩) (⟨t, αt, β3t⟩) k k ls rt ls' rt'
-  simp only [dif_pos trivial, dif_neg hst] at hmixed
+  simp only [dite_eq_left trivial, dite_eq_right hst] at hmixed
   have hright_t :
       bntMarkovRightFactor C hη (⟨t, αt, β3t⟩) k rt rt' = 0 := by
     rcases mul_eq_zero.mp hmixed with hp_left_zero | hright_zero
@@ -264,7 +264,7 @@ theorem bntMarkovBlockNonzero_eq_of_probability_ne_zero
     · exact hright_zero
   have hsame_t := isMPOBlockLeftInverse_bnt_markov_key_formula hC hρ hη
     (⟨t, α1t, βt⟩) (⟨t, αt, β3t⟩) k k lt rt lt' rt'
-  simp only [dif_pos trivial] at hsame_t
+  simp only [dite_eq_left trivial] at hsame_t
   change
     (hη.p k : ℂ) *
         bntMarkovLeftFactor C hη (⟨t, α1t, βt⟩) k lt lt' *
@@ -416,7 +416,7 @@ theorem bntSectorProjection_isOrthogonal
   · intro k l hkl
     by_cases hk : bntSectorLabel hC hρ hη hR k = s
     · by_cases hl : bntSectorLabel hC hρ hη hR l = s
-      · simp only [hk, hl, if_pos]
+      · simp only [hk, hl, ite_eq_left]
         exact hη.sectorProjection_mul_eq_zero fun hco ↦
           hkl (Subtype.ext hco)
       · simp [hl]
@@ -446,7 +446,7 @@ theorem bntSectorProjection_mul_eq_zero
   intro l _
   by_cases hk : bntSectorLabel hC hρ hη hR k = s
   · by_cases hl : bntSectorLabel hC hρ hη hR l = t
-    · simp only [hk, hl, if_pos]
+    · simp only [hk, hl, ite_eq_left]
       apply hη.sectorProjection_mul_eq_zero
       intro hkl
       apply hst

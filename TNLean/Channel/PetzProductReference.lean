@@ -83,9 +83,9 @@ theorem productTensorReference_posSemidef
     (hA : ρA.PosSemidef) (hBC : ρBC.PosSemidef) :
     (productTensorReference ρA ρBC).PosSemidef := by
   classical
-  letI := Fintype.ofFinite A
-  letI := Fintype.ofFinite B
-  letI := Fintype.ofFinite C
+  let := Fintype.ofFinite A
+  let := Fintype.ofFinite B
+  let := Fintype.ofFinite C
   exact (hA.kronecker hBC).submatrix _
 
 omit [Fintype A] [DecidableEq A] [Fintype B] [DecidableEq B] [DecidableEq C] in
@@ -388,8 +388,8 @@ theorem maximallyMixedTensorReference_posSemidef
     {ρ : Matrix (B × C) (B × C) ℂ} (hρ : ρ.PosSemidef) :
     (maximallyMixedTensorReference (dA := dA) ρ).PosSemidef := by
   classical
-  letI := Fintype.ofFinite B
-  letI := Fintype.ofFinite C
+  let := Fintype.ofFinite B
+  let := Fintype.ofFinite C
   exact (maximallyMixedOn_posDef (dA := dA)).posSemidef.kronecker hρ
     |>.submatrix _
 
@@ -601,7 +601,7 @@ theorem supportProj_partialTraceRight_maximallyMixedTensorReference
   simp only [Matrix.smul_apply, Matrix.kroneckerMap_apply, one_apply,
     smul_eq_mul]
   by_cases hij : i.1 = j.1
-  · simp only [hij, if_pos, Complex.real_smul]
+  · simp only [hij, ite_eq_left, Complex.real_smul]
     rw [mul_one, one_mul]
     change (((Real.sqrt ((dA : ℝ)⁻¹))⁻¹ : ℝ) : ℂ) *
       ((((Real.sqrt ((dA : ℝ)⁻¹))⁻¹ : ℝ) : ℂ) *

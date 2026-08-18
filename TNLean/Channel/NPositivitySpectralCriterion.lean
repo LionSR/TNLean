@@ -249,9 +249,9 @@ theorem star_eigenvector_dotProduct_eigenvector (hτ : τ.IsHermitian) (i j : N)
 theorem rayleigh_eigenvector_re (hτ : τ.IsHermitian) (j : N) :
     (star (hτ.eigenvector j) ⬝ᵥ (τ *ᵥ hτ.eigenvector j)).re = hτ.eigenvalues j := by
   rw [hτ.rayleigh_re (hτ.eigenvector j), Finset.sum_eq_single j]
-  · rw [hτ.star_eigenvector_dotProduct_eigenvector j j, if_pos rfl]; simp
+  · rw [hτ.star_eigenvector_dotProduct_eigenvector j j, ite_eq_left rfl]; simp
   · intro i _ hij
-    rw [hτ.star_eigenvector_dotProduct_eigenvector i j, if_neg hij]; simp
+    rw [hτ.star_eigenvector_dotProduct_eigenvector i j, ite_eq_right hij]; simp
   · intro h; exact absurd (Finset.mem_univ j) h
 
 /-- **Rayleigh lower bound at the top Schmidt-rank index n = D'.**  At the top
@@ -353,7 +353,7 @@ theorem IsHermitian.kyFanNorm_reducedEigDensity_eq_one {τ : Matrix (m × n) (m 
     simp only [Matrix.IsHermitian.kyFanNorm, Matrix.IsHermitian.descEigenvalue]
     refine (Finset.sum_subset (Finset.range_subset_range.2 hk) fun x _ hx => ?_).symm
     rw [Finset.mem_range] at hx
-    exact dif_neg hx
+    exact dite_eq_right hx
   rw [hstab, Matrix.IsHermitian.kyFanNorm_card_eq_trace_re, hτ.trace_reducedEigDensity i,
     Complex.one_re]
 

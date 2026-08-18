@@ -44,7 +44,7 @@ This correction is documented in
 theorem IsNormalTensor.isTransferIdempotent_iff_isIsometryCanonicalForm
     {A : MPSTensor d D} (hNT : IsNormalTensor A) :
     IsTransferIdempotent A ↔ IsIsometryCanonicalForm A := by
-  letI : NeZero D := ⟨hNT.bondDim_ne_zero⟩
+  let : NeZero D := ⟨hNT.bondDim_ne_zero⟩
   constructor
   · intro hRFP
     obtain ⟨σ, _hσ, _hσfix, hLeft, hGauge, _hPrim, _hIrr⟩ := hNT.exists_tpGauge

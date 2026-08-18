@@ -354,7 +354,7 @@ theorem overlap_intertwines_diagonal {p q : n → ℝ} {W : Matrix n n ℂ}
   ext i j
   rw [Matrix.mul_apply, Matrix.mul_apply]
   simp only [Matrix.diagonal_apply, mul_ite, mul_zero, ite_mul, zero_mul,
-    Finset.sum_ite_eq, Finset.sum_ite_eq', Finset.mem_univ, if_true]
+    Finset.sum_ite_eq, Finset.sum_ite_eq', Finset.mem_univ, ite_true]
   by_cases hWij : W i j = 0
   · rw [hWij]; ring
   · rw [hmatch i j hWij]; ring

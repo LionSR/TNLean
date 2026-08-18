@@ -7,7 +7,6 @@ import TNLean.Channel.NPositivityChainStrict
 import TNLean.Channel.ReductionCriterion
 import TNLean.Channel.Separable
 import TNLean.Channel.Schwarz.ChoiCompression
-import TNLean.Algebra.MatrixRankBaseChange
 
 /-!
 # The Schmidt number and the full reduction criterion
@@ -210,7 +209,8 @@ theorem HasSchmidtNumberLE.smul {n : ℕ}
     rcases eq_or_ne (Real.sqrt a : ℂ) 0 with hc | hc
     · rw [hc, zero_smul, Matrix.rank_zero]
       exact Nat.zero_le _
-    · exact (rank_smul_of_ne_zero hc (schmidtCoeffMatrix (ψ i))).le
+    · exact (Matrix.rank_smul_of_mem_nonZeroDivisors (schmidtCoeffMatrix (ψ i))
+      (mem_nonZeroDivisors_of_ne_zero hc)).le
   · -- The `√a` factors combine to `a` and pull out of the sum.
     rw [Finset.smul_sum]
     refine Finset.sum_congr rfl fun i _ => ?_

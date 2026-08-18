@@ -198,7 +198,7 @@ theorem exists_mem_unitaryGroup_trace_conjTranspose_mul_eq (A : Matrix (Fin D) (
   set s : Set (Fin D) := {i | lam i ≠ 0} with hs
   set f : Fin D → EuclideanSpace ℂ (Fin D) :=
     fun i ↦ ((Real.sqrt (lam i) : ℂ))⁻¹ • g i with hf
-  have hforth : Orthonormal ℂ (s.restrict f) := by
+  have hforth : Orthonormal ℂ (s.domRestrict f) := by
     rw [orthonormal_iff_ite]
     rintro ⟨i, hi⟩ ⟨j, hj⟩
     have hinner : ⟪f i, f j⟫_ℂ =
@@ -213,10 +213,10 @@ theorem exists_mem_unitaryGroup_trace_conjTranspose_mul_eq (A : Matrix (Fin D) (
     · have hlpos : 0 < lam i := (hlam0 i).lt_of_ne (Ne.symm hi)
       have hsne : (Real.sqrt (lam i) : ℂ) ≠ 0 := by
         exact_mod_cast (Real.sqrt_pos.mpr hlpos).ne'
-      rw [if_pos rfl, if_pos rfl, map_inv₀, Complex.conj_ofReal]
+      rw [ite_eq_left rfl, ite_eq_left rfl, map_inv₀, Complex.conj_ofReal]
       field_simp
       exact_mod_cast (Real.sq_sqrt (hlam0 i)).symm
-    · rw [if_neg hij, if_neg (by simpa [Subtype.ext_iff] using hij), mul_zero]
+    · rw [ite_eq_right hij, ite_eq_right (by simpa [Subtype.ext_iff] using hij), mul_zero]
   -- extend to an orthonormal basis
   obtain ⟨b, hb⟩ := hforth.exists_orthonormalBasis_extension_of_card_eq
     (by simp [finrank_euclideanSpace])
@@ -237,13 +237,13 @@ theorem exists_mem_unitaryGroup_trace_conjTranspose_mul_eq (A : Matrix (Fin D) (
     by_cases hi : lam i ≠ 0
     · rw [hb i hi, hf]
       simp only [inner_smul_right]
-      rw [hgg i i, if_pos rfl, ← Complex.ofReal_inv, ← Complex.ofReal_mul]
+      rw [hgg i i, ite_eq_left rfl, ← Complex.ofReal_inv, ← Complex.ofReal_mul]
       norm_cast
       rw [inv_mul_eq_div, Real.div_sqrt]
     · simp only [ne_eq, not_not] at hi
       have hg0 : g i = 0 := by
         have h := hgg i i
-        rw [if_pos rfl, hi, Complex.ofReal_zero] at h
+        rw [ite_eq_left rfl, hi, Complex.ofReal_zero] at h
         exact inner_self_eq_zero.mp h
       rw [hg0, inner_zero_left, hi, Real.sqrt_zero, Complex.ofReal_zero]
   have htr : (Aᴴ * (W * Vᴴ)).trace = ((A * V)ᴴ * W).trace := by

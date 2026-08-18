@@ -588,9 +588,8 @@ theorem tripleFusionComparison_finalSector_submatrix_eq_zero
         Cblock * (Fam.tensor ε').toMPSTensor ij := by
     intro ij
     ext b b'
-    simpa [Cblock, C, Matrix.mul_apply] using
-      Fam.tripleFusionComparison_final_entry_intertwines_of_lengthIndependent
-        c hχ hLI α β γ ε ε' δL δR μL νL μR νR b b' ij
+    exact Fam.tripleFusionComparison_final_entry_intertwines_of_lengthIndependent
+      c hχ hLI α β γ ε ε' δL δR μL νL μR νR b b' ij
   obtain ⟨coeff, hSelf, hOther⟩ := hSel ε
   have hZero := rectangularIntertwiner_eq_zero_of_selectorWords
     (Fam.tensor ε).toMPSTensor (Fam.tensor ε').toMPSTensor Cblock hLetter

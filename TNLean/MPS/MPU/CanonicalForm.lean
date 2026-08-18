@@ -163,7 +163,7 @@ theorem isIrreducibleTensor_of_active_dim_eq
   have hkval : k.val = 0 := by
     let z : Fin data.r := ⟨0, Nat.zero_lt_of_lt k.isLt⟩
     exact congrArg Fin.val (huniq z).symm
-  letI : IsEmpty (Fin k) := ⟨fun x =>
+  let : IsEmpty (Fin k) := ⟨fun x =>
     (Nat.not_lt_zero x.val (by simpa [hkval] using x.isLt)).elim⟩
   let eTotal : Fin (∑ j : Fin data.r, data.dim j) ≃ Fin D := finCongr hsum
   let eBlock : Fin (data.dim k) ≃ Fin D := finCongr hDim
@@ -261,7 +261,7 @@ theorem active_dim_eq_of_card_active_eq_one_of_fullActiveSupport
     (hfull : data.HasFullActiveSupport) (k : data.Active) :
     data.dim k.1 = D := by
   classical
-  letI : Unique data.Active :=
+  let : Unique data.Active :=
     Classical.choice (Fintype.card_eq_one_iff_nonempty_unique.mp hcard)
   have hk : k = default := Subsingleton.elim _ _
   have hsum : (∑ j : data.Active, data.dim j.1) = data.dim k.1 := by
@@ -296,7 +296,7 @@ theorem isIrreducibleTensor_of_card_active_eq_one_of_fullActiveSupport
     (data : CPSVCanonicalFormData A) (hcard : Fintype.card data.Active = 1)
     (hfull : data.HasFullActiveSupport) : IsIrreducibleTensor A := by
   classical
-  letI : Unique data.Active :=
+  let : Unique data.Active :=
     Classical.choice (Fintype.card_eq_one_iff_nonempty_unique.mp hcard)
   let k : data.Active := default
   apply data.isIrreducibleTensor_of_active_dim_eq k.1 k.2

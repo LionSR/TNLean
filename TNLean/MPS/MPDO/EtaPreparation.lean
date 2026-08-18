@@ -76,7 +76,7 @@ lemma dL_nonempty (hη : EtaStructure rhoABC) (k : Fin hη.m) :
 lemma sector_nonempty (hη : EtaStructure rhoABC) : Nonempty (Fin hη.m) := by
   classical
   by_contra h
-  haveI : IsEmpty (Fin hη.m) := not_nonempty_iff.mp h
+  have : IsEmpty (Fin hη.m) := not_nonempty_iff.mp h
   have hzero : ∑ k : Fin hη.m, hη.p k = 0 := by simp
   have hsum := hη.hp_sum
   rw [hzero] at hsum
@@ -85,8 +85,8 @@ lemma sector_nonempty (hη : EtaStructure rhoABC) : Nonempty (Fin hη.m) := by
 /-- The neighboring-operator space is nonempty for every sector pair. -/
 lemma etaIndex_nonempty (hη : EtaStructure rhoABC) (k h : Fin hη.m) :
     Nonempty (EtaIndex (hη := hη) k h) := by
-  letI := dR_nonempty hη k
-  letI := dL_nonempty hη h
+  let := dR_nonempty hη k
+  let := dL_nonempty hη h
   infer_instance
 
 /-- The direct-sum neighboring-operator space is nonempty for every sector
@@ -94,10 +94,10 @@ pair. -/
 lemma omegaIndex_nonempty (hη : EtaStructure rhoABC) (k h : Fin hη.m) :
     Nonempty (OmegaIndex (hη := hη) k h) := by
   rcases sector_nonempty hη with ⟨l⟩
-  letI := dR_nonempty hη k
-  letI := dL_nonempty hη l
-  letI := dR_nonempty hη l
-  letI := dL_nonempty hη h
+  let := dR_nonempty hη k
+  let := dL_nonempty hη l
+  let := dR_nonempty hη l
+  let := dL_nonempty hη h
   exact (inferInstance : Nonempty
     ((Fin (hη.dR k) × Fin (hη.dL l)) ×
       (Fin (hη.dR l) × Fin (hη.dL h)))).map (Sigma.mk l)

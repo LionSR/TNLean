@@ -276,7 +276,7 @@ omit [Fintype V] [DecidableRel G.Adj] in
     (σQ : RegionPhysicalConfig (V := V) (d := d) (S \ R)) :
     restrictSubRegionσ (V := V) (d := d) hRS (assembleSubRegionσ (V := V) σR σQ) = σR := by
   funext w
-  rw [restrictSubRegionσ, assembleSubRegionσ, dif_pos w.2]
+  rw [restrictSubRegionσ, assembleSubRegionσ, dite_eq_left w.2]
 
 omit [Fintype V] [DecidableRel G.Adj] in
 /-- Restricting the assembled configuration to the added block `S \ R` recovers the
@@ -290,7 +290,7 @@ the corner extension carries. -/
         (assembleSubRegionσ (V := V) σR σQ) = σQ := by
   funext w
   have hnotR : w.1 ∉ R := (Finset.mem_sdiff.mp w.2).2
-  rw [restrictSubRegionσ, assembleSubRegionσ, dif_neg hnotR]
+  rw [restrictSubRegionσ, assembleSubRegionσ, dite_eq_right hnotR]
 
 /-! ### The kernel triviality of the corner extension from injectivity of the added block
 
@@ -361,7 +361,7 @@ theorem blueCoeff_combination_eq_zero_of_extendInsert_zero {R S : Finset V} (hRS
         (assembleSubRegionσ (V := V) σR σblue) = σblue := by
     intro hQS; funext w
     have hnotR : w.1 ∉ R := (Finset.mem_sdiff.mp w.2).2
-    rw [restrictSubRegionσ, assembleSubRegionσ, dif_neg hnotR]
+    rw [restrictSubRegionσ, assembleSubRegionσ, dite_eq_right hnotR]
   rw [hlegR]
   congr 2
   exact (hlegQ _).symm
@@ -497,12 +497,12 @@ theorem extendInsert_kernel_trivial_of_addedInjective {R S : Finset V} (hRS : R 
   have hq0 := hrow (regionBoundaryLabel (G := G) A g.blue q)
     (regionBoundaryLabel (G := G) A g.complement q)
   rw [Finset.sum_eq_single (regionBoundaryLabel (G := G) A (Finset.univ \ g.red) q)] at hq0
-  · rw [if_pos ⟨q, rfl, rfl, rfl⟩, smul_eq_mul, mul_one] at hq0
+  · rw [ite_eq_left ⟨q, rfl, rfl, rfl⟩, smul_eq_mul, mul_one] at hq0
     rw [hq] at hq0; exact hq0
   · intro bdry' _ hne
     -- Any global configuration realizing `q`'s blue and complement labels has host residual
     -- `host q`, so the indicator at `bdry' ≠ host q` is zero.
-    rw [if_neg ?_, smul_zero]
+    rw [ite_eq_right ?_, smul_zero]
     rintro ⟨q', hh', hc', hb'⟩
     apply hne
     have e1 := g.regionBoundaryLabel_host_eq_hostLabelFrom q'
@@ -590,7 +590,7 @@ theorem horizontalStaircaseEndPair_disjoint_completedCorner {L K : ℕ}
   · rw [horizontalStaircaseLeftWindow, mem_torusArcRectangle] at hvL
     obtain ⟨_, hvLy⟩ := hvL
     -- The left window has row distance `< K`; the completed corner's wraps and reaches `K`.
-    rw [if_pos (by omega : (v.2 - s.2).val < K)] at hvCy
+    rw [ite_eq_left (by omega : (v.2 - s.2).val < K)] at hvCy
     omega
   · rw [horizontalStaircaseRightWindow, mem_torusArcRectangle] at hvR
     obtain ⟨hvRx, _⟩ := hvR
@@ -598,7 +598,7 @@ theorem horizontalStaircaseEndPair_disjoint_completedCorner {L K : ℕ}
     rw [show (L : ZMod width) = ((L : ℕ) : ZMod width) by norm_cast,
       zmod_val_sub_shift width v.1 s.1 L (by omega)] at hvRx
     have hdx := ZMod.val_lt (v.1 - s.1)
-    rw [if_pos (by omega : (v.1 - s.1).val < L)] at hvRx
+    rw [ite_eq_left (by omega : (v.1 - s.1).val < L)] at hvRx
     omega
 
 omit [Fact (1 < width)] [Fact (1 < height)] in

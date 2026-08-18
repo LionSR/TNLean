@@ -119,14 +119,14 @@ surjective. -/
 theorem coarseProj_surjective (hd : 0 < d) (R : Finset V) :
     Function.Surjective (coarseProj (V := V) (d := d) R) := by
   classical
-  haveI : Nonempty (Fin d) := ⟨⟨0, hd⟩⟩
+  have : Nonempty (Fin d) := ⟨⟨0, hd⟩⟩
   intro τ
   obtain ⟨σ, hσ⟩ :=
     coarseDecode_surjective (V := V) (d := d)
       (fun v => if hv : v ∈ R then τ ⟨v, hv⟩ else Classical.arbitrary _)
   refine ⟨σ, ?_⟩
   funext w
-  simp only [coarseProj, hσ, w.2, dif_pos]
+  simp only [coarseProj, hσ, w.2, dite_eq_left]
 
 /-! ### The coarse blocking frame
 
@@ -273,8 +273,7 @@ theorem coarseTensor_component_eq (v : Fin 3) :
         ((regionBlockedTensorFamily (G := G) A (F.regionOf v)) ∘ F.legEquiv v) := by
   funext legs
   funext p
-  simp only [coarseTensor_component, Function.comp_apply, LinearMap.funLeft_apply,
-    regionBlockedTensorFamily]
+  rfl
 
 /-- **Vertex injectivity of the coarse tensor.** The component family at every
 coarse super-site is linearly independent, inherited from the blocked-region

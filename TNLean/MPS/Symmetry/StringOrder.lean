@@ -84,7 +84,7 @@ theorem twistedTransfer_spectralRadius_le_one
     apply hV
     ext i j
     exact Fin.elim0 i
-  haveI : NeZero D := ⟨Nat.ne_of_gt hDpos⟩
+  have : NeZero D := ⟨Nat.ne_of_gt hDpos⟩
   let setup := twistedTPGaugeSetup (A := A) hA u hu hNorm
   have hHas : Module.End.HasEigenvalue
       (mixedTransferMap setup.A' setup.B') ev :=
@@ -115,7 +115,7 @@ theorem twistedTransfer_modulus_one_implies_gaugePhase
     apply hV
     ext i j
     exact Fin.elim0 i
-  haveI : NeZero D := ⟨Nat.ne_of_gt hDpos⟩
+  have : NeZero D := ⟨Nat.ne_of_gt hDpos⟩
   let setup := twistedTPGaugeSetup (A := A) hA u hu hNorm
   have hHas : Module.End.HasEigenvalue (mixedTransferMap setup.A' setup.B') ev :=
     twistedTPGaugeSetup_hasEigenvalue
@@ -161,7 +161,7 @@ theorem gaugePhaseEquiv_twisted_of_hasStringOrder
   rcases eq_or_ne D 0 with hD | hD
   · subst hD
     exact ⟨1, 1, one_ne_zero, fun i => by ext a; exact Fin.elim0 a⟩
-  haveI : NeZero D := ⟨hD⟩
+  have : NeZero D := ⟨hD⟩
   let V := Matrix (Fin D) (Fin D) ℂ
   let Φ : (V →ₗ[ℂ] V) ≃ₐ[ℂ] (V →L[ℂ] V) := Module.End.toContinuousLinearMap V
   let F' : Matrix (Fin D) (Fin D) ℂ →L[ℂ] Matrix (Fin D) (Fin D) ℂ :=
@@ -180,11 +180,11 @@ theorem gaugePhaseEquiv_twisted_of_hasStringOrder
       exact hnot0 (stringOrderBoundaryParam_tendsto_zero_of_spectralRadius_lt_one
         A u Λ X Y hlt')
     exact le_of_not_gt hsr_not_lt
-  haveI : Nontrivial V := by
-    haveI : Nonempty (Fin D) := ⟨⟨0, NeZero.pos D⟩⟩
+  have : Nontrivial V := by
+    have : Nonempty (Fin D) := ⟨⟨0, NeZero.pos D⟩⟩
     exact Matrix.nonempty
-  haveI : Nontrivial (V →L[ℂ] V) := ContinuousLinearMap.instNontrivialId
-  haveI : FiniteDimensional ℂ (V →L[ℂ] V) := Φ.toLinearEquiv.finiteDimensional
+  have : Nontrivial (V →L[ℂ] V) := ContinuousLinearMap.instNontrivialId
+  have : FiniteDimensional ℂ (V →L[ℂ] V) := Φ.toLinearEquiv.finiteDimensional
   have hF'_nonempty : (spectrum ℂ F').Nonempty :=
     spectrum.nonempty_of_isAlgClosed_of_finiteDimensional ℂ F'
   have hcompact : IsCompact (spectrum ℂ F') := by
@@ -519,7 +519,7 @@ theorem hasStringOrder_of_symmetric_injective
   -- Step 3: V is nonzero (it's invertible); handle D = 0 vacuously
   rcases eq_or_ne D 0 with hD | hD
   · subst hD; simp at hΛtr
-  haveI : NeZero D := ⟨hD⟩
+  have : NeZero D := ⟨hD⟩
   have hV_ne : V ≠ 0 := by
     intro hV0
     have h1 : V * (((ρ.X (g⁻¹))⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ) = 1 := by

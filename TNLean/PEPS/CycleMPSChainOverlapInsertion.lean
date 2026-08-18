@@ -578,7 +578,7 @@ theorem exists_conjugation_of_sameState [NeZero n] {L : ℕ} (hL : 0 < L)
     rwa [show p + (n - L) + L = p + n by omega, arcEval_add_n,
       arcEval_add_n] at h
   -- `Φ` is unital, hence nonzero, hence an automorphism, hence inner.
-  haveI : NeZero D := NeZero.of_pos hD
+  have : NeZero D := NeZero.of_pos hD
   have hΦne : Φ ≠ 0 := MPSTensor.linearMap_ne_zero_of_map_one Φ hΦone
   obtain ⟨P, hΦP⟩ := MPSTensor.exists_inner_of_linear_mul_endomorphism Φ hΦmul hΦne
   -- Strip the insertions: the arc products are conjugate.

@@ -7,6 +7,7 @@ import TNLean.Analysis.MeanErgodic
 import TNLean.Analysis.OperatorNormConvergence
 import TNLean.Channel.Basic
 import TNLean.Channel.Semigroup.CPClosure
+import Mathlib.Analysis.Matrix.Order
 
 /-!
 # Positive trace-nonincreasing mean-ergodic projections
@@ -255,7 +256,7 @@ theorem IsPositiveMap.meanErgodicProjection_isPositiveMap
     intro n
     rw [birkhoffAverage, birkhoffSum]
     exact (Matrix.posSemidef_sum _ fun k _ ↦ hiter_pos k).smul (by positivity)
-  exact isClosed_posSemidef.mem_of_tendsto
+  exact Matrix.posSemidef_is_closed.mem_of_tendsto
     (hbounded.tendsto_birkhoffAverage_meanErgodicProjection X)
     (Filter.Eventually.of_forall havg_pos)
 
@@ -367,7 +368,7 @@ theorem IsCPMap.meanErgodicProjection_isCPMap
   classical
   rcases Nat.eq_zero_or_pos D with rfl | hD
   · exact isCPMap_finZero _
-  haveI : NeZero D := ⟨hD.ne'⟩
+  have : NeZero D := ⟨hD.ne'⟩
   set S : ℕ → Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ :=
     fun N ↦ (((N : ℝ)⁻¹ : ℝ) : ℂ) • ∑ n ∈ Finset.range N, T ^ n with hSdef
   have hScp : ∀ N, IsCPMap (S N) := fun N ↦

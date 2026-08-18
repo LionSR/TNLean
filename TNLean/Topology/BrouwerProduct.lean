@@ -36,7 +36,7 @@ theorem exists_fixedPoint_unitCube
     (I : Type*) [Finite I] [Inhabited I] [LinearOrder I]
     (f : UnitCube I → UnitCube I) (hf : Continuous f) :
     ∃ x : UnitCube I, f x = x := by
-  letI := Fintype.ofFinite I
+  let := Fintype.ofFinite I
   let e : UnitCube I ≃ₜ ProductSimplices (fun _ : I => (2 : ℕ+)) :=
     unitCubeHomeomorphProductSimplices I
   let g : ProductSimplices (fun _ : I => (2 : ℕ+)) → ProductSimplices (fun _ : I => (2 : ℕ+)) :=
@@ -51,7 +51,7 @@ theorem exists_fixedPoint_closedCube
     (I : Type*) [Finite I] [Inhabited I] [LinearOrder I] {R : ℝ} (hR : 0 < R)
     (f : ClosedCube I R → ClosedCube I R) (hf : Continuous f) :
     ∃ x : ClosedCube I R, f x = x := by
-  letI := Fintype.ofFinite I
+  let := Fintype.ofFinite I
   let e : ClosedCube I R ≃ₜ UnitCube I := closedCubeHomeomorphUnitCube I hR
   let g : UnitCube I → UnitCube I := e ∘ f ∘ e.symm
   have hg : Continuous g := e.continuous.comp (hf.comp e.symm.continuous)

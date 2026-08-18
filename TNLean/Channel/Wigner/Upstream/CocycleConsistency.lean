@@ -327,7 +327,7 @@ lemma add3_basis_norm_sq
     ‖(b i₀ + b i + b j : EuclideanSpace ℂ (Fin N))‖ ^ 2 = 3 := by
   have hperp : (inner ℂ (b i₀ + b i : EuclideanSpace ℂ (Fin N)) (b j) : ℂ) = 0 := by
     rw [inner_add_left, orthonormal_iff_ite.mp b.orthonormal i₀ j,
-        orthonormal_iff_ite.mp b.orthonormal i j, if_neg h0j, if_neg hij, add_zero]
+        orthonormal_iff_ite.mp b.orthonormal i j, ite_eq_right h0j, ite_eq_right hij, add_zero]
   have h3 := norm_add_sq_eq_norm_sq_add_norm_sq_of_inner_eq_zero (b i₀ + b i) (b j) hperp
   rw [pow_two, h3]
   have e1 : ‖(b i₀ + b i : EuclideanSpace ℂ (Fin N))‖
@@ -421,12 +421,16 @@ theorem diagReducedMap_fixes_three_level
         orthonormal_iff_ite.mp b.orthonormal k i₀,
         orthonormal_iff_ite.mp b.orthonormal k i,
         orthonormal_iff_ite.mp b.orthonormal k j]
-  have hwi0 : b.repr w i₀ = 1 := by rw [hwk i₀, if_pos rfl, if_neg h0i, if_neg h0j]; ring
-  have hwi : b.repr w i = 1 := by rw [hwk i, if_neg (Ne.symm h0i), if_pos rfl, if_neg hij]; ring
+  have hwi0 : b.repr w i₀ = 1 := by
+    rw [hwk i₀, ite_eq_left rfl, ite_eq_right h0i, ite_eq_right h0j]
+    ring
+  have hwi : b.repr w i = 1 := by
+    rw [hwk i, ite_eq_right (Ne.symm h0i), ite_eq_left rfl, ite_eq_right hij]
+    ring
   have hwj : b.repr w j = 1 := by
-    rw [hwk j, if_neg (Ne.symm h0j), if_neg (Ne.symm hij), if_pos rfl]; ring
+    rw [hwk j, ite_eq_right (Ne.symm h0j), ite_eq_right (Ne.symm hij), ite_eq_left rfl]; ring
   have hwzero : ∀ k, k ≠ i₀ → k ≠ i → k ≠ j → b.repr w k = 0 := by
-    intro k hk0 hki hkj; rw [hwk k, if_neg hk0, if_neg hki, if_neg hkj]; ring
+    intro k hk0 hki hkj; rw [hwk k, ite_eq_right hk0, ite_eq_right hki, ite_eq_right hkj]; ring
   set φ := (diagReducedMap hf b i₀ (Projectivization.mk ℂ w hwne)).rep with hφ_def
   have hφne : φ ≠ 0 := Projectivization.rep_nonzero _
   have hφpos : (0 : ℝ) < ‖φ‖ ^ 2 := pow_pos (norm_pos_iff.mpr hφne) 2
@@ -535,11 +539,11 @@ theorem diagReducedMap_fixes_two_level_general
     intro k
     rw [hw_def, b.repr_apply_apply, inner_add_right,
         orthonormal_iff_ite.mp b.orthonormal k i, orthonormal_iff_ite.mp b.orthonormal k j]
-  have hwi : b.repr w i = 1 := by rw [hwk i, if_pos rfl, if_neg hij]; ring
-  have hwj : b.repr w j = 1 := by rw [hwk j, if_neg (Ne.symm hij), if_pos rfl]; ring
-  have hwi0 : b.repr w i₀ = 0 := by rw [hwk i₀, if_neg h0i, if_neg h0j]; ring
+  have hwi : b.repr w i = 1 := by rw [hwk i, ite_eq_left rfl, ite_eq_right hij]; ring
+  have hwj : b.repr w j = 1 := by rw [hwk j, ite_eq_right (Ne.symm hij), ite_eq_left rfl]; ring
+  have hwi0 : b.repr w i₀ = 0 := by rw [hwk i₀, ite_eq_right h0i, ite_eq_right h0j]; ring
   have hwzero : ∀ k, k ≠ i → k ≠ j → b.repr w k = 0 := by
-    intro k hki hkj; rw [hwk k, if_neg hki, if_neg hkj]; ring
+    intro k hki hkj; rw [hwk k, ite_eq_right hki, ite_eq_right hkj]; ring
   set φ := (diagReducedMap hf b i₀ (Projectivization.mk ℂ w hwne)).rep with hφ_def
   have hφne : φ ≠ 0 := Projectivization.rep_nonzero _
   have hφpos : (0 : ℝ) < ‖φ‖ ^ 2 := pow_pos (norm_pos_iff.mpr hφne) 2

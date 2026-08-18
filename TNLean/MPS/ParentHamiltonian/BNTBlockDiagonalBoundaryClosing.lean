@@ -460,7 +460,7 @@ theorem
         ⨆ j : Fin r, chainGroundSpace (A j) L N :=
     chainGroundSpace_toTensorFromBlocks_le_iSup_of_blockDiagonal_boundary_groundSpaceMap
       μ A (fun ψ hψ ↦
-        exists_blockDiagonal_boundary_chainGroundSpace_of_global_cut_bnt_c1_pgvwc07_of_dualFixedPoint
+      exists_blockDiagonal_boundary_chainGroundSpace_of_global_cut_bnt_c1_pgvwc07_of_dualFixedPoint
           μ A hr hμ hIrr hBlocks Λ hΛ hDualFixed hBlk hL₀ hUnital
             hRange hNlarge hψ)
   refine ⟨?_, ?_⟩

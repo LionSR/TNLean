@@ -31,7 +31,8 @@ namespace MPSTensor
 /-- Every element of `Multiplicative (ZMod 2)` is either `1` or `ofAdd 1`. -/
 lemma zmod2_cases (g : Multiplicative (ZMod 2)) :
     g = 1 ∨ g = Multiplicative.ofAdd 1 := by
-  fin_cases g <;> simp [Multiplicative.ext_iff] <;> tauto
+  revert g
+  decide
 
 lemma zmod2_one_add_one : (1 : ZMod 2) + 1 = 0 := by decide
 

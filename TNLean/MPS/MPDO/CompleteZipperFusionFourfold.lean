@@ -271,7 +271,7 @@ private theorem rightFourfoldSynthesis_eq_stages (a b c d e : Λ) :
   rw [Finset.sum_eq_single j
     (fun x _ hx => by simp [hx])
     (fun h => absurd (Finset.mem_univ j) h)]
-  simp only [true_and, if_true, heq_eq_eq]
+  simp only [true_and, ite_true, heq_eq_eq]
   rw [Finset.sum_eq_single gamma
     (fun x _ hx => by simp [hx])
     (fun h => absurd (Finset.mem_univ gamma) h)]
@@ -279,7 +279,7 @@ private theorem rightFourfoldSynthesis_eq_stages (a b c d e : Λ) :
   rw [Finset.sum_eq_single delta
     (fun x _ hx => by simp [hx])
     (fun h => absurd (Finset.mem_univ delta) h)]
-  simp only [if_true, Finset.sum_mul]
+  simp only [ite_true, Finset.sum_mul]
   rw [Finset.sum_comm]
 
 private theorem rightFourfoldAnalysis_eq_stages (a b c d e : Λ) :
@@ -309,7 +309,7 @@ private theorem rightFourfoldAnalysis_eq_stages (a b c d e : Λ) :
   rw [Finset.sum_eq_single delta
     (fun x _ hx => by simp [Ne.symm hx])
     (fun h => absurd (Finset.mem_univ delta) h)]
-  simp only [if_true, Finset.mul_sum, mul_assoc]
+  simp only [ite_true, Finset.mul_sum, mul_assoc]
 
 private theorem rightFourfoldFirstAnalysis_mul_synthesis (a b c d : Λ) :
     Fus.rightFourfoldFirstAnalysis a b c d *

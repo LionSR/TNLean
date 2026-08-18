@@ -130,8 +130,8 @@ theorem projectorClosure_and_noPeriodicVectors_block_of_reindex_eq_blockDiagonal
     (hPer : HasNoPeriodicVectors A) (k : ι) :
     HasInvariantProjectorClosure (B k) ∧ HasNoPeriodicVectors (B k) := by
   classical
-  letI := Fintype.ofFinite ι
-  letI (l : ι) := Fintype.ofFinite (blockIndex l)
+  let := Fintype.ofFinite ι
+  let (l : ι) := Fintype.ofFinite (blockIndex l)
   let E := Matrix.sigmaBlockInclusion blockIndex k
   let V : Matrix (Fin D) (Fin (dim k)) ℂ :=
     E.submatrix e (blockEquiv k)
@@ -399,7 +399,7 @@ theorem exists_normalTensor_blockDecomp_with_isometry_of_hasInvariantProjectorCl
         ρ.PosDef ∧ 0 < t ∧
         transferMap (d := d) (D := dim₀ k) (blocks₀ k) ρ = (t : ℂ) • ρ := by
     intro k hk
-    haveI : NeZero (dim₀ k) := ⟨(hpos k).ne'⟩
+    have : NeZero (dim₀ k) := ⟨(hpos k).ne'⟩
     exact exists_posDef_transferMap_eigenvector_of_irreducible (blocks₀ k) (hirr k) hk
   choose ρf tf hρf htf hEigf using hPF
   let κ := {k : Fin r₀ // ∃ i, blocks₀ k i ≠ 0}
@@ -421,7 +421,7 @@ theorem exists_normalTensor_blockDecomp_with_isometry_of_hasInvariantProjectorCl
     fun j => hpos (e j).1, fun j => hμpos (e j), ?_,
     fun j => hiso (e j).1, ?_, ?_, ?_, ?_, ?_, ?_, ?_⟩
   · intro j
-    haveI : NeZero (dim₀ (e j).1) := ⟨(hpos (e j).1).ne'⟩
+    have : NeZero (dim₀ (e j).1) := ⟨(hpos (e j).1).ne'⟩
     exact isNormalTensor_invSqrt_smul_of_unique_peripheral
       (blocks₀ (e j).1) (hirr (e j).1)
       (ρf (e j).1 (e j).2) (tf (e j).1 (e j).2)

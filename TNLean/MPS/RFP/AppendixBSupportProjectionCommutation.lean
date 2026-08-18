@@ -394,11 +394,11 @@ theorem AppendixBStructuralData.transportedTwoSiteBondProjection_eq_support
       hStruct.twoSiteBasicSupportProjection := by
   cases isEmpty_or_nonempty (Fin D) with
   | inr hnonempty =>
-      letI : Nonempty (Fin D) := hnonempty
+      let : Nonempty (Fin D) := hnonempty
       exact hStruct.transportedTwoSiteBondProjection_eq_support_of_ne
         hStruct.virtualBondNormSq_ne_zero
   | inl hempty =>
-      letI : IsEmpty (Fin D) := hempty
+      let : IsEmpty (Fin D) := hempty
       have hInsertion : hStruct.twoSiteBondInsertion = 0 := by
         apply LinearMap.ext
         intro v

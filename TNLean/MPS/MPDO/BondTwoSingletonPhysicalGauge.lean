@@ -388,7 +388,7 @@ private theorem gaugeDeformedBaseMPO_toMPSTensor_apply
       norm_num [toMPSTensor, ketLeftMul, braRightMul, baseMPO, gaugeMatrix,
         gaugeDeformedSymbolCoefficient, Matrix.single, Fin.modNat, Fin.divNat] <;>
         simp_all
-  · simp only [if_neg hxy]
+  · simp only [ite_eq_right hxy]
     simp [toMPSTensor, ketLeftMul, braRightMul, baseMPO, Matrix.single]
     aesop
 

@@ -81,8 +81,8 @@ private theorem sum_regionBoundary_fiber (A : Tensor G d) (R : Finset V)
   rw [Finset.sum_comm]
   refine Finset.sum_congr rfl (fun ζ _ => ?_)
   rw [Finset.sum_eq_single (regionBoundaryLabel (G := G) A R ζ)]
-  · rw [if_pos rfl]
-  · intro μ _ hμ; rw [if_neg (fun h => hμ h.symm)]
+  · rw [ite_eq_left rfl]
+  · intro μ _ hμ; rw [ite_eq_right (fun h => hμ h.symm)]
   · intro h; exact absurd (Finset.mem_univ _) h
 
 open scoped Classical in
@@ -154,13 +154,17 @@ theorem regionInsertedCoeff_eq_doubleSum (A : Tensor G d) (R : Finset V)
     · -- Now `(ζ, ξ)` against the agreeing-off-`f` filter; the predicate matches.
       -- Convert the right-hand filtered pair sum into the `(ζ, ξ)` double sum.
       rw [Finset.sum_filter, Fintype.sum_prod_type]
-      simp only [SameAwayFromBond, regionBoundaryLabel_apply]
+      simp only [regionBoundaryLabel_apply]
       refine Finset.sum_congr rfl (fun ζ _ => ?_)
       refine Finset.sum_congr rfl (fun ξ _ => ?_)
-      by_cases hsame : ∀ c : {c : Edge G // IsRegionBoundaryEdge (G := G) R c}, c ≠ f →
-          ζ c.1 = ξ c.1
-      · rw [if_pos hsame, if_pos hsame]
-      · rw [if_neg hsame, if_neg hsame, zero_mul, zero_mul]
+      by_cases hsame : SameAwayFromBond f (regionBoundaryLabel (G := G) A R ζ)
+          (regionBoundaryLabel (G := G) A R ξ)
+      · rw [ite_eq_left hsame]
+        exact (ite_eq_left (show ∀ c : {c : Edge G // IsRegionBoundaryEdge (G := G) R c},
+          c ≠ f → ζ c.1 = ξ c.1 from hsame)).symm
+      · rw [ite_eq_right hsame, zero_mul, zero_mul]
+        exact (ite_eq_right (show ¬∀ c : {c : Edge G // IsRegionBoundaryEdge (G := G) R c},
+          c ≠ f → ζ c.1 = ξ c.1 from hsame)).symm
     · -- Carry out the (μ, ν) collapse using the boundary-fiber lemma twice. First swap
       -- the `ν`-sum inside the `ζ`-filtered sum so that `(μ, ζ)` are adjacent.
       rw [show (∑ μ : RegionBoundaryConfig (G := G) A R,
@@ -422,16 +426,16 @@ theorem pairOuter_isConsistentOff (B : Tensor G d) (R : Finset V)
   intro g hg
   rw [pairOuter, pairOuter]
   by_cases h1 : g.1.1 ∈ R <;> by_cases h2 : g.1.2 ∈ R
-  · simp only [edgeLeftIncident, edgeRightIncident, h1, h2, if_true]
+  · simp only [edgeLeftIncident, edgeRightIncident, h1, h2, ite_true]
   · have hb : IsRegionBoundaryEdge (G := G) R g := Or.inl ⟨h1, h2⟩
     have : p.1 g = p.2 g := hp ⟨g, hb⟩ (fun h => hg (congrArg Subtype.val h))
-    simp only [edgeLeftIncident, edgeRightIncident, h1, h2, if_true, if_false]
+    simp only [edgeLeftIncident, edgeRightIncident, h1, h2, ite_true, ite_false]
     exact this
   · have hb : IsRegionBoundaryEdge (G := G) R g := Or.inr ⟨h1, h2⟩
     have : p.1 g = p.2 g := hp ⟨g, hb⟩ (fun h => hg (congrArg Subtype.val h))
-    simp only [edgeLeftIncident, edgeRightIncident, h1, h2, if_true, if_false]
+    simp only [edgeLeftIncident, edgeRightIncident, h1, h2, ite_true, ite_false]
     exact this.symm
-  · simp only [edgeLeftIncident, edgeRightIncident, h1, h2, if_false]
+  · simp only [edgeLeftIncident, edgeRightIncident, h1, h2, ite_false]
 
 open scoped Classical in
 /-- The gauged region-inserted coefficient as an inner/outer double sum.  Summing over the
@@ -521,12 +525,10 @@ theorem pairOuterReadFst_eq (B : Tensor G d) (R : Finset V)
   -- `v` is `e.1.1` or `e.1.2`.
   rcases hinc with hL | hR
   · subst hL
-    rw [pairOuterReadFst, dif_pos hv]
-    rfl
+    exact dite_eq_left hv
   · subst hR
     by_cases h1 : e.1.1 ∈ R
     · -- both endpoints in R; e is not boundary; if e ≠ f, consistency gives equality.
-      rw [pairOuterReadFst, dif_pos h1]
       by_cases hef : e = f.1
       · -- e = f but both endpoints in R contradicts f being a boundary edge.
         exfalso
@@ -535,9 +537,8 @@ theorem pairOuterReadFst_eq (B : Tensor G d) (R : Finset V)
         rcases hb with ⟨_, h2⟩ | ⟨h1', _⟩
         · exact h2 (by exact ‹e.1.2 ∈ R›)
         · exact h1' h1
-      · exact hξ e hef
-    · rw [pairOuterReadFst, dif_neg h1]
-      rfl
+      · exact (dite_eq_left h1).trans (hξ e hef)
+    · exact dite_eq_right h1
 
 omit [Fintype V] in
 /-- Reading `ξ` at the complement endpoint of an edge incident to a vertex `v ∉ R`, when `ξ`
@@ -550,14 +551,11 @@ theorem pairOuterReadSnd_eq (B : Tensor G d) (R : Finset V)
   obtain ⟨e, hinc⟩ := ie
   rcases hinc with hL | hR
   · subst hL
-    rw [pairOuterReadSnd, dif_neg hv]
-    rfl
+    exact dite_eq_right hv
   · subst hR
     by_cases h1 : e.1.1 ∈ R
-    · rw [pairOuterReadSnd, dif_pos h1]
-      rfl
+    · exact dite_eq_left h1
     · -- both endpoints not in R; e not boundary; if e ≠ f consistency gives equality.
-      rw [pairOuterReadSnd, dif_neg h1]
       by_cases hef : e = f.1
       · exfalso
         have hb := f.2
@@ -565,7 +563,7 @@ theorem pairOuterReadSnd_eq (B : Tensor G d) (R : Finset V)
         rcases hb with ⟨h1', _⟩ | ⟨_, h2⟩
         · exact h1 h1'
         · exact hv h2
-      · exact hξ e hef
+      · exact (dite_eq_right h1).trans (hξ e hef)
 
 omit [Fintype V] in
 /-- The rebuilt pair's `pairOuter` recovers `ξ` (when `ξ` is consistent off `f`). -/
@@ -578,19 +576,19 @@ theorem pairOuter_pairOuterFiberPair (B : Tensor G d) (R : Finset V)
   funext v ie
   rw [pairOuter]
   by_cases hv : v ∈ R
-  · rw [if_pos hv]
+  · rw [ite_eq_left hv]
     -- first component: edge ie.1 is R-incident (v ∈ R is an endpoint), reads pairOuterReadFst.
     have hinc : IsRegionIncidentEdge (G := G) R ie.1 := by
       rcases ie.2 with hie | hie
       · exact Or.inl (by rw [hie]; exact hv)
       · exact Or.inr (by rw [hie]; exact hv)
-    simp only [pairOuterFiberPair, dif_pos hinc]
+    simp only [pairOuterFiberPair, dite_eq_left hinc]
     exact pairOuterReadFst_eq (G := G) B R f ξ hξ hv ie
-  · rw [if_neg hv]
+  · rw [ite_eq_right hv]
     -- second component.
     simp only [pairOuterFiberPair]
     by_cases hb : IsRegionBoundaryEdge (G := G) R ie.1
-    · rw [dif_pos hb]
+    · rw [dite_eq_left hb]
       exact pairOuterReadSnd_eq (G := G) B R f ξ hξ hv ie
     · by_cases hinc : IsRegionIncidentEdge (G := G) R ie.1
       · -- ie.1 R-incident but v ∉ R, so the other endpoint ∈ R, hence ie.1 is boundary: contra hb.
@@ -608,7 +606,7 @@ theorem pairOuter_pairOuterFiberPair (B : Tensor G d) (R : Finset V)
           rcases hinc with h1 | h2
           · exact Or.inl ⟨h1, hv2⟩
           · exact absurd h2 hv2
-      · rw [dif_neg hb, dif_neg hinc]
+      · rw [dite_eq_right hb, dite_eq_right hinc]
         exact pairOuterReadSnd_eq (G := G) B R f ξ hξ hv ie
 
 open scoped Classical in
@@ -638,13 +636,24 @@ theorem pairOuterFiber_card (B : Tensor G d) (R : Finset V)
       have hcb : IsRegionBoundaryEdge (G := G) R c.1 := c.2
       have hcinc : IsRegionIncidentEdge (G := G) R c.1 :=
         isRegionBoundaryEdge_touches (G := G) R hcb
-      simp only [pairOuterFiberPair, dif_pos hcinc, dif_pos hcb]
+      simp only [pairOuterFiberPair, dite_eq_left hcinc, dite_eq_left hcb]
       -- read-fst = read-snd on a boundary edge ≠ f, by consistency.
       have hcf : c.1 ≠ f.1 := fun h => hc (Subtype.ext h)
-      rw [pairOuterReadFst, pairOuterReadSnd]
       by_cases h1 : c.1.1.1 ∈ R
-      · simp only [dif_pos h1]; exact hξ c.1 hcf
-      · simp only [dif_neg h1]; exact (hξ c.1 hcf).symm
+      · have h2 : c.1.1.2 ∉ R := by
+          rcases hcb with ⟨_, h2⟩ | ⟨h1', _⟩
+          · exact h2
+          · contradiction
+        exact (pairOuterReadFst_eq B R f ξ hξ h1 (edgeLeftIncident c.1)).trans
+          ((hξ c.1 hcf).trans
+            (pairOuterReadSnd_eq B R f ξ hξ h2 (edgeRightIncident c.1)).symm)
+      · have h2 : c.1.1.2 ∈ R := by
+          rcases hcb with ⟨h1', _⟩ | ⟨_, h2⟩
+          · contradiction
+          · exact h2
+        exact (pairOuterReadFst_eq B R f ξ hξ h2 (edgeRightIncident c.1)).trans
+          ((hξ c.1 hcf).symm.trans
+            (pairOuterReadSnd_eq B R f ξ hξ h1 (edgeLeftIncident c.1)).symm)
     · -- Reconstructing from the fiber legs of a fiber pair recovers the pair.
       intro p hp
       simp only [Finset.mem_coe, Finset.mem_filter, Finset.mem_univ, true_and] at hp
@@ -653,23 +662,24 @@ theorem pairOuterFiber_card (B : Tensor G d) (R : Finset V)
       · funext e
         simp only [pairOuterFiberPair, regionFiberLegs]
         by_cases hinc : IsRegionIncidentEdge (G := G) R e
-        · rw [dif_pos hinc]
+        · rw [dite_eq_left hinc]
           -- pairOuterReadFst ξ e = p.1 e because pairOuter p = ξ and e is R-incident.
           subst hmerge
-          rw [pairOuterReadFst]
           by_cases h1 : e.1.1 ∈ R
-          · simp only [dif_pos h1, pairOuter, edgeLeftIncident, if_pos h1]
+          · exact (pairOuterReadFst_eq B R f (pairOuter B R p) hξ h1
+              (edgeLeftIncident e)).trans (ite_eq_left h1)
           · -- e R-incident, e.1.1 ∉ R, so e.1.2 ∈ R.
             have h2 : e.1.2 ∈ R := by
               rcases hinc with h | h
               · exact absurd h h1
               · exact h
-            simp only [dif_neg h1, pairOuter, edgeRightIncident, if_pos h2]
-        · rw [dif_neg hinc, if_neg hinc]
+            exact (pairOuterReadFst_eq B R f (pairOuter B R p) hξ h2
+              (edgeRightIncident e)).trans (ite_eq_left h2)
+        · rw [dite_eq_right hinc, ite_eq_right hinc]
       · funext e
         simp only [pairOuterFiberPair, regionFiberLegs]
         by_cases hb : IsRegionBoundaryEdge (G := G) R e
-        · rw [dif_pos hb]
+        · rw [dite_eq_left hb]
           -- boundary edge: pairOuterReadSnd ξ e = p.2 e.
           subst hmerge
           rw [pairOuterReadSnd]
@@ -679,18 +689,18 @@ theorem pairOuterFiber_card (B : Tensor G d) (R : Finset V)
               rcases hb with ⟨_, hr⟩ | ⟨hl, _⟩
               · exact hr
               · exact absurd h1 hl
-            simp only [dif_pos h1, pairOuter, edgeRightIncident, if_neg h2]
+            exact (dite_eq_left h1).trans (ite_eq_right h2)
           · -- e.1.1 ∉ R; boundary ⇒ e.1.2 ∈ R, so the left endpoint is the complement side.
-            simp only [dif_neg h1, pairOuter, edgeLeftIncident, if_neg h1]
-        · rw [dif_neg hb]
+            exact (dite_eq_right h1).trans (ite_eq_right h1)
+        · rw [dite_eq_right hb]
           by_cases hinc : IsRegionIncidentEdge (G := G) R e
-          · rw [dif_pos hinc, if_pos hinc]
-          · rw [dif_neg hinc]
+          · rw [dite_eq_left hinc, ite_eq_left hinc]
+          · rw [dite_eq_right hinc]
             -- e not incident: pairOuterReadSnd ξ e = p.2 e.
             subst hmerge
             rw [pairOuterReadSnd]
             have h1 : e.1.1 ∉ R := fun h => hinc (Or.inl h)
-            simp only [dif_neg h1, pairOuter, edgeLeftIncident, if_neg h1]
+            exact (dite_eq_right h1).trans (ite_eq_right h1)
     · -- Reading the fiber legs of a reconstruction recovers them.
       intro h _
       funext e
@@ -698,9 +708,9 @@ theorem pairOuterFiber_card (B : Tensor G d) (R : Finset V)
       have hb : ¬ IsRegionBoundaryEdge (G := G) R e.1 := e.2
       by_cases hinc : IsRegionIncidentEdge (G := G) R e.1
       · -- R-incident non-boundary edge: legs read the second component, which is `h e`.
-        rw [if_pos hinc, dif_neg hb, dif_pos hinc]
+        rw [ite_eq_left hinc, dite_eq_right hb, dite_eq_left hinc]
       · -- non-incident edge: legs read the first component, which is `h e`.
-        rw [if_neg hinc, dif_neg hinc]
+        rw [ite_eq_right hinc, dite_eq_right hinc]
   · rw [Finset.card_univ, Fintype.card_pi]
     simp only [Fintype.card_fin]
     rw [regionInteriorBondProd,
@@ -803,42 +813,82 @@ theorem regionInsertedCoeff_eq_smul_edgeInsertedCoeff (B : Tensor G d) (R : Fins
           N (pairOuterReadFst (G := G) B R ξ f.1) (pairOuterReadSnd (G := G) B R ξ f.1) *
             ∏ v : V, B.component v (ξ v)
               (assembleRegionσ (V := V) (d := d) R σ τ v)) (pairOuter (G := G) B R p) from ?_]
-  · rw [sum_pairOuter_fiber_collapse B R f (fun ξ : OpenLocalConfig (G := G) B =>
+  · refine (sum_pairOuter_fiber_collapse B R f
+      (fun ξ : OpenLocalConfig (G := G) B =>
         N (pairOuterReadFst (G := G) B R ξ f.1) (pairOuterReadSnd (G := G) B R ξ f.1) *
           ∏ v : V, B.component v (ξ v)
-            (assembleRegionσ (V := V) (d := d) R σ τ v))]
+            (assembleRegionσ (V := V) (d := d) R σ τ v))).trans ?_
     congr 1
-    -- The consistent-off-`f` sum is the edge-inserted coefficient (deltas collapse).
-    rw [edgeInsertedCoeff_eq_sum_local B f.1 (assembleRegionσ (V := V) (d := d) R σ τ)
-      (regionEdgeOrient (G := G) B R f N)]
-    -- Restrict to consistent-off-`f` configs on both sides and match summands.
-    rw [← Finset.sum_filter_add_sum_filter_not
-      (Finset.univ : Finset (OpenLocalConfig (G := G) B))
-      (fun ξ => IsConsistentOff (G := G) B f.1 ξ)]
-    rw [show (∑ ξ ∈ Finset.univ.filter (fun ξ : OpenLocalConfig (G := G) B =>
-          ¬ IsConsistentOff (G := G) B f.1 ξ),
-        (∏ c : {c : Edge G // c ≠ f.1},
-          if ξ c.1.1.1 (edgeLeftIncident (G := G) c.1) =
-              ξ c.1.1.2 (edgeRightIncident (G := G) c.1) then (1 : ℂ) else 0) *
-          (regionEdgeOrient (G := G) B R f N)
-            (ξ f.1.1.1 (edgeLeftIncident (G := G) f.1))
-            (ξ f.1.1.2 (edgeRightIncident (G := G) f.1)) *
-          ∏ v : V, B.component v (ξ v) (assembleRegionσ (V := V) (d := d) R σ τ v)) = 0 from ?_,
-      add_zero]
-    · -- On consistent-off-`f` configs the deltas are 1 and the orientation matches.
-      refine Finset.sum_congr rfl (fun ξ hξ => ?_)
-      rw [Finset.mem_filter] at hξ
-      rw [prod_off_delta_eq, if_pos hξ.2, one_mul]
-      congr 1
-      -- `N (readFst)(readSnd) = orient (ξ@L)(ξ@R)`.
-      rw [regionEdgeOrient, pairOuterReadFst, pairOuterReadSnd]
-      by_cases h1 : f.1.1.1 ∈ R
-      · simp only [dif_pos h1, if_pos h1]
-      · simp only [dif_neg h1, if_neg h1, Matrix.transpose_apply]
-    · -- Inconsistent-off-`f` configs contribute zero.
-      refine Finset.sum_eq_zero (fun ξ hξ => ?_)
-      rw [Finset.mem_filter] at hξ
-      rw [prod_off_delta_eq, if_neg hξ.2, zero_mul, zero_mul]
+    set H : OpenLocalConfig (G := G) B → ℂ := fun ξ =>
+      (regionEdgeOrient (G := G) B R f N)
+          (ξ f.1.1.1 (edgeLeftIncident (G := G) f.1))
+          (ξ f.1.1.2 (edgeRightIncident (G := G) f.1)) *
+        ∏ v : V, B.component v (ξ v)
+          (assembleRegionσ (V := V) (d := d) R σ τ v) with hH
+    have hcollapse :
+        edgeInsertedCoeff (G := G) B f.1
+            (assembleRegionσ (V := V) (d := d) R σ τ)
+            (regionEdgeOrient (G := G) B R f N) =
+          ∑ ξ : {ξ : OpenLocalConfig (G := G) B //
+            IsConsistentOff (G := G) B f.1 ξ}, H ξ.1 := by
+      rw [edgeInsertedCoeff_eq_sum_local]
+      calc
+        _ = ∑ ξ : OpenLocalConfig (G := G) B,
+              if IsConsistentOff (G := G) B f.1 ξ then H ξ else 0 := by
+            refine Finset.sum_congr rfl ?_
+            intro ξ _
+            rw [prod_off_delta_eq]
+            by_cases h : IsConsistentOff (G := G) B f.1 ξ <;> simp [h, hH]
+        _ = ∑ ξ : {ξ : OpenLocalConfig (G := G) B //
+              IsConsistentOff (G := G) B f.1 ξ}, H ξ.1 := by
+            rw [Finset.sum_ite]
+            simp only [Finset.sum_const_zero, add_zero]
+            rw [← Finset.sum_subtype_eq_sum_filter
+              (s := (Finset.univ : Finset (OpenLocalConfig (G := G) B)))
+              (f := H) (p := IsConsistentOff (G := G) B f.1)]
+            simp
+    rw [hcollapse]
+    have hHfilter :
+        (∑ ξ ∈ Finset.univ.filter
+            (fun ξ : OpenLocalConfig (G := G) B =>
+              IsConsistentOff (G := G) B f.1 ξ), H ξ) =
+          ∑ ξ : {ξ : OpenLocalConfig (G := G) B //
+            IsConsistentOff (G := G) B f.1 ξ}, H ξ.1 := by
+      rw [← Finset.sum_subtype_eq_sum_filter
+        (s := (Finset.univ : Finset (OpenLocalConfig (G := G) B)))
+        (f := H) (p := IsConsistentOff (G := G) B f.1)]
+      simp
+    refine Eq.trans ?_ hHfilter
+    refine Finset.sum_congr rfl (fun ξ hξmem => ?_)
+    have hξ : IsConsistentOff (G := G) B f.1 ξ := (Finset.mem_filter.mp hξmem).2
+    simp only [H]
+    congr 1
+    by_cases h1 : f.1.1.1 ∈ R
+    · have h2 : f.1.1.2 ∉ R := by
+        rcases f.2 with ⟨_, hr⟩ | ⟨hl, _⟩
+        · exact hr
+        · contradiction
+      have hf := pairOuterReadFst_eq B R f ξ hξ h1 (edgeLeftIncident f.1)
+      have hs := pairOuterReadSnd_eq B R f ξ hξ h2 (edgeRightIncident f.1)
+      have hN := congrArg₂ N hf hs
+      have horient : regionEdgeOrient (G := G) B R f N = N := ite_eq_left h1
+      exact hN.trans (congrArg (fun M => M
+        (ξ f.1.1.1 (edgeLeftIncident f.1))
+        (ξ f.1.1.2 (edgeRightIncident f.1))) horient).symm
+    · have h2 : f.1.1.2 ∈ R := by
+        rcases f.2 with ⟨hl, _⟩ | ⟨_, hr⟩
+        · contradiction
+        · exact hr
+      have hf := pairOuterReadFst_eq B R f ξ hξ h2 (edgeRightIncident f.1)
+      have hs := pairOuterReadSnd_eq B R f ξ hξ h1 (edgeLeftIncident f.1)
+      have hN := congrArg₂ N hf hs
+      have horient : regionEdgeOrient (G := G) B R f N = Nᵀ := ite_eq_right h1
+      exact hN.trans ((Matrix.transpose_apply N
+        (ξ f.1.1.1 (edgeLeftIncident f.1))
+        (ξ f.1.1.2 (edgeRightIncident f.1))).symm.trans
+          (congrArg (fun M => M
+            (ξ f.1.1.1 (edgeLeftIncident f.1))
+            (ξ f.1.1.2 (edgeRightIncident f.1))) horient).symm)
   · -- The summand rewrite: `N (p.1 f)(p.2 f) = N (readFst (pairOuter p))(readSnd (pairOuter p))`.
     refine Finset.sum_congr rfl (fun p hp => ?_)
     rw [Finset.mem_filter] at hp
@@ -846,25 +896,31 @@ theorem regionInsertedCoeff_eq_smul_edgeInsertedCoeff (B : Tensor G d) (R : Fins
     simp only
     congr 2
     · -- `pairOuterReadFst (pairOuter p) f = p.1 f`.
-      rw [pairOuterReadFst, pairOuter, pairOuter]
       by_cases h1 : f.1.1.1 ∈ R
-      · simp only [dif_pos h1, edgeLeftIncident, if_pos h1]
+      · exact (ite_eq_left h1).symm.trans
+          (pairOuterReadFst_eq B R f (pairOuter B R p) hcons h1
+            (edgeLeftIncident f.1)).symm
       · -- f.1.1 ∉ R, boundary ⇒ f.1.2 ∈ R; readFst reads the right (in-region) endpoint = p.1 f.
         have h2 : f.1.1.2 ∈ R := by
           rcases f.2 with ⟨hl, _⟩ | ⟨_, hr⟩
           · exact absurd hl h1
           · exact hr
-        simp only [dif_neg h1, edgeRightIncident, if_pos h2]
+        exact (ite_eq_left h2).symm.trans
+          (pairOuterReadFst_eq B R f (pairOuter B R p) hcons h2
+            (edgeRightIncident f.1)).symm
     · -- `pairOuterReadSnd (pairOuter p) f = p.2 f`.
-      rw [pairOuterReadSnd, pairOuter, pairOuter]
       by_cases h1 : f.1.1.1 ∈ R
       · -- f.1.1 ∈ R, boundary ⇒ f.1.2 ∉ R; readSnd reads the right (complement) endpoint = p.2 f.
         have h2 : f.1.1.2 ∉ R := by
           rcases f.2 with ⟨_, hr⟩ | ⟨hl, _⟩
           · exact hr
           · exact absurd h1 hl
-        simp only [dif_pos h1, edgeRightIncident, if_neg h2]
-      · simp only [dif_neg h1, edgeLeftIncident, if_neg h1]
+        exact (ite_eq_right h2).symm.trans
+          (pairOuterReadSnd_eq B R f (pairOuter B R p) hcons h2
+            (edgeRightIncident f.1)).symm
+      · exact (ite_eq_right h1).symm.trans
+          (pairOuterReadSnd_eq B R f (pairOuter B R p) hcons h1
+            (edgeLeftIncident f.1)).symm
 
 /-- `regionEdgeOrient` does not depend on the tensor's components, only on the region and the
 boundary edge. -/
@@ -882,8 +938,8 @@ theorem regionEdgeOrient_regionEdgeOrient (B : Tensor G d) (R : Finset V)
     regionEdgeOrient (G := G) B R f (regionEdgeOrient (G := G) B R f N) = N := by
   rw [regionEdgeOrient, regionEdgeOrient]
   by_cases h1 : f.1.1.1 ∈ R
-  · simp only [if_pos h1]
-  · simp only [if_neg h1, Matrix.transpose_transpose]
+  · simp only [ite_eq_left h1]
+  · simp only [ite_eq_right h1, Matrix.transpose_transpose]
 
 /-- **The edgewise region gauge-absorption equality.** Applying an oriented edge-gauge family `Z`
 to a PEPS tensor and inserting `M` on a boundary edge `f` of `R` equals inserting, on the

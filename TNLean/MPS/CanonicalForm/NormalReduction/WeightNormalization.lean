@@ -56,7 +56,7 @@ theorem PGVWC07PositiveLengthWitness.exists_weight_normalization
           (scale : ℂ) ^ N *
             mpv (toTensorFromBlocks (d := d) (μ := ν) W.blocks) σ) := by
   classical
-  letI : Nonempty (Fin W.r) := ⟨⟨0, hr⟩⟩
+  let : Nonempty (Fin W.r) := ⟨⟨0, hr⟩⟩
   let a : Fin W.r → ℝ := fun k => Classical.choose (W.weight_pos k)
   have ha_pos : ∀ k, 0 < a k := by
     intro k
@@ -137,7 +137,7 @@ theorem PGVWC07PositiveLengthWitness.block_count_pos_of_exists_ne_zero_mpv
   have hr0 : W.r = 0 := Nat.eq_zero_of_not_pos hnot
   have hblock :
       mpv (toTensorFromBlocks (d := d) (μ := W.weights) W.blocks) σ = 0 := by
-    haveI : IsEmpty (Fin W.r) := by
+    have : IsEmpty (Fin W.r) := by
       rw [hr0]
       infer_instance
     rw [mpv_toTensorFromBlocks_eq_sum]

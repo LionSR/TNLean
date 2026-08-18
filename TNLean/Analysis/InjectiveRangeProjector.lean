@@ -83,12 +83,12 @@ theorem norm_inverseGram_le_of_norm_one_sub_adjoint_comp_self_le
     ‖inverseGram T hT‖ ≤ (1 - a)⁻¹ := by
   cases subsingleton_or_nontrivial E with
   | inl hE =>
-      letI : Subsingleton E := hE
+      let : Subsingleton E := hE
       have hzero : inverseGram T hT = 0 := Subsingleton.elim _ _
       rw [hzero, norm_zero]
       exact inv_nonneg.mpr (sub_nonneg.mpr ha_lt_one.le)
   | inr hE =>
-      letI : Nontrivial E := hE
+      let : Nontrivial E := hE
       rw [inverseGram_eq_ringInverse]
       simpa only [sub_sub_cancel] using
         NormedRing.norm_inverse_one_sub_le (1 - T.adjoint.comp T) ha ha_lt_one
@@ -120,7 +120,8 @@ theorem inverseGram_isSymmetric (T : E →L[𝕜] F) (hT : Function.Injective T)
           _ = x := by rw [h_right_inv, ContinuousLinearMap.id_apply]
       rw [hx]
 
-/-- The norm identity \(\lVert T \circ (T^\dagger T)^{-1}\rVert = \sqrt{\lVert(T^\dagger T)^{-1}\rVert}\)
+/-- The norm identity
+\(\lVert T \circ (T^\dagger T)^{-1}\rVert = \sqrt{\lVert(T^\dagger T)^{-1}\rVert}\)
 for an injective map \(T\) with finite-dimensional domain. -/
 theorem norm_T_comp_inverseGram_eq_sqrt (T : E →L[𝕜] F) (hT : Function.Injective T) :
     ‖T.comp (inverseGram T hT)‖ = Real.sqrt ‖inverseGram T hT‖ := by
@@ -147,7 +148,8 @@ theorem norm_T_comp_inverseGram_eq_sqrt (T : E →L[𝕜] F) (hT : Function.Inje
     ‖S‖ = Real.sqrt (‖S‖ ^ 2) := by rw [Real.sqrt_sq h_nonneg]
     _ = Real.sqrt ‖inverseGram T hT‖ := by rw [h_sq]
 
-/-- The norm identity \(\lVert(T^\dagger T)^{-1} \circ T^\dagger\rVert = \sqrt{\lVert(T^\dagger T)^{-1}\rVert}\)
+/-- The norm identity
+\(\lVert(T^\dagger T)^{-1} \circ T^\dagger\rVert = \sqrt{\lVert(T^\dagger T)^{-1}\rVert}\)
 for an injective map \(T\) with finite-dimensional domain. -/
 theorem norm_inverseGram_comp_adjoint_eq_sqrt (T : E →L[𝕜] F) (hT : Function.Injective T) :
     ‖(inverseGram T hT).comp T.adjoint‖ = Real.sqrt ‖inverseGram T hT‖ := by

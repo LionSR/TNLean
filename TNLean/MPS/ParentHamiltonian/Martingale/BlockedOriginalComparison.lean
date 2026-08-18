@@ -154,7 +154,7 @@ private theorem replaceWindow_blockedConfigEquiv_aligned
           rw [← Nat.succ_mul]
           exact Nat.mul_le_mul_right p h
   by_cases hqwin : (q.val + N - i.val) % N < 2
-  · rw [dif_pos hqwin, dif_pos (hwindow.mpr hqwin)]
+  · rw [dite_eq_left hqwin, dite_eq_left (hwindow.mpr hqwin)]
     change decodeBlock d p
         (τ (finProdFinEquiv.symm
           (⟨(k.val + N * p - i.val * p) % (N * p), hwindow.mpr hqwin⟩ :
@@ -184,7 +184,7 @@ private theorem replaceWindow_blockedConfigEquiv_aligned
         change ((k.val + N * p - i.val * p) % (N * p)) % p = r.val
         rw [hoff, Nat.mul_add_mod_self_right, Nat.mod_eq_of_lt r.isLt]
     rw [hidx]
-  · rw [dif_neg hqwin, dif_neg (not_congr hwindow |>.mpr hqwin)]
+  · rw [dite_eq_right hqwin, dite_eq_right (not_congr hwindow |>.mpr hqwin)]
 
 /-- Restricting an original-site state to a whole aligned \(2p\) window and
 then regrouping it into two blocks agrees with first regrouping the full chain

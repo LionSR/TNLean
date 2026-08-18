@@ -164,9 +164,9 @@ lemma IsHermitian.posPartSupportProj_mul_self {A : Matrix n n ℂ}
         congr 1
         funext x
         by_cases hx : 0 < x
-        · rw [if_pos hx, one_mul, id_eq, eq_comm]
+        · rw [ite_eq_left hx, one_mul, id_eq, eq_comm]
           exact posPart_eq_self.mpr hx.le
-        · rw [if_neg hx, zero_mul, eq_comm]
+        · rw [ite_eq_right hx, zero_mul, eq_comm]
           exact posPart_eq_zero.mpr (not_lt.mp hx)
     _ = A⁺ := hA.posPart_eq_cfc.symm
 

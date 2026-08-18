@@ -85,7 +85,7 @@ theorem norm_eq_one_and_isTransferIdempotent_of_isNormalTensor_smul
     (c : ℂ) (hc : c ≠ 0)
     (hRFP : IsTransferIdempotent (fun i => c • A i)) :
     ‖c‖ = 1 ∧ IsTransferIdempotent A := by
-  letI : NeZero R := ⟨hA.bondDim_ne_zero⟩
+  let : NeZero R := ⟨hA.bondDim_ne_zero⟩
   let E := transferMap A
   let Eclm := (Module.End.toContinuousLinearMap (Matrix (Fin R) (Fin R) ℂ)) E
   let q := c * starRingEnd ℂ c
@@ -170,7 +170,7 @@ theorem active_weight_norm_one_and_block_rfp
     (data : CPSVCanonicalFormData A) (hRFP : IsTransferIdempotent A)
     (k : data.Active) :
     ‖data.weights k‖ = 1 ∧ IsTransferIdempotent (data.blocks k) := by
-  letI : ∀ j : Fin data.r, NeZero (data.dim j) :=
+  let : ∀ j : Fin data.r, NeZero (data.dim j) :=
     fun j => ⟨Nat.ne_of_gt (data.dim_pos j)⟩
   let scaledBlocks : (j : Fin data.r) → MPSTensor _ (data.dim j) :=
     fun j i => data.weights j • data.blocks j i
@@ -229,9 +229,9 @@ theorem exists_residualIsometryFamily_of_isTransferIdempotent
     fun j => data.weights (data.activeRepresentativeIndex j)
   let C : (j : Fin data.activePhaseClasses.g) → MPSTensor d (repDim j) :=
     fun j i => μ j • B j i
-  letI : ∀ k : Fin data.r, NeZero (data.dim k) :=
+  let : ∀ k : Fin data.r, NeZero (data.dim k) :=
     fun k => ⟨Nat.ne_of_gt (data.dim_pos k)⟩
-  letI : ∀ j : Fin data.activePhaseClasses.g, NeZero (repDim j) :=
+  let : ∀ j : Fin data.activePhaseClasses.g, NeZero (repDim j) :=
     fun j => ⟨Nat.ne_of_gt (data.dim_pos (data.activeRepresentativeIndex j))⟩
   have hActive : ∀ j, ‖μ j‖ = 1 ∧ IsTransferIdempotent (B j) := fun j =>
     data.active_weight_norm_one_and_block_rfp hRFP (data.activeRepresentativeIndex j)

@@ -228,7 +228,7 @@ theorem of_peripheral_primitive
     IsCanonicalForm μ A := by
   refine ⟨hInj, hLeft, hμ_antitone, hμ_ne_zero, hDim, ?_⟩
   intro k
-  letI : NeZero (dim k) := ⟨Nat.ne_of_gt (hDim k)⟩
+  let : NeZero (dim k) := ⟨Nat.ne_of_gt (hDim k)⟩
   exact
     MPSTensor.overlap_tendsto_one_of_peripheralPrimitive
       (A := A k) (hInj k) (hLeft k) (hPrim k)
@@ -325,7 +325,7 @@ theorem overlap_tendsto_one
     (hNCF : IsNormalCanonicalForm μ A) (k : Fin r) :
     Filter.Tendsto (fun N => mpvOverlap (d := d) (A k) (A k) N)
       Filter.atTop (nhds (1 : ℂ)) := by
-  letI : NeZero (dim k) := ⟨Nat.ne_of_gt (hNCF.dim_pos k)⟩
+  let : NeZero (dim k) := ⟨Nat.ne_of_gt (hNCF.dim_pos k)⟩
   simpa using
     MPSTensor.overlap_tendsto_one_of_peripheralPrimitive_of_irreducible
       (A := A k)

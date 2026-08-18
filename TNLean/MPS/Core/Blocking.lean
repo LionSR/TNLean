@@ -135,7 +135,7 @@ lemma blockKron_one (L : ℕ) :
   simp only [blockKron, Matrix.one_apply]
   by_cases hIJ : I = J
   · simp [hIJ]
-  · rw [if_neg hIJ]
+  · rw [ite_eq_right hIJ]
     -- Some site differs, contributing a zero factor.
     have : ∃ k : Fin L, decodeBlock d L I k ≠ decodeBlock d L J k := by
       by_contra hcon

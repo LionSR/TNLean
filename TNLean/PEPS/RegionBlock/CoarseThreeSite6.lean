@@ -182,8 +182,8 @@ theorem redBundleInsertedCoeff_add (A : Tensor G d) (red blue : Finset V)
   rw [← Finset.sum_add_distrib]
   refine Finset.sum_congr rfl (fun ν _ => ?_)
   by_cases h : SameAwayFromRBBundle (G := G) A red blue μ ν
-  · simp only [if_pos h, Matrix.add_apply]; ring
-  · simp only [if_neg h]; ring
+  · simp only [ite_eq_left h, Matrix.add_apply]; ring
+  · simp only [ite_eq_right h]; ring
 
 /-- The whole-bundle red inserted coefficient is homogeneous in the inserted matrix. -/
 theorem redBundleInsertedCoeff_smul (A : Tensor G d) (red blue : Finset V) (c : ℂ)
@@ -199,8 +199,8 @@ theorem redBundleInsertedCoeff_smul (A : Tensor G d) (red blue : Finset V) (c : 
   rw [Finset.mul_sum]
   refine Finset.sum_congr rfl (fun ν _ => ?_)
   by_cases h : SameAwayFromRBBundle (G := G) A red blue μ ν
-  · simp only [if_pos h, Matrix.smul_apply, smul_eq_mul]; ring
-  · simp only [if_neg h]; ring
+  · simp only [ite_eq_left h, Matrix.smul_apply, smul_eq_mul]; ring
+  · simp only [ite_eq_right h]; ring
 
 end PEPS
 end TNLean

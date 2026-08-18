@@ -113,7 +113,7 @@ theorem exists_positiveFusionDecomposition_of_unitaryBlockEquiv_of_cpsvCanonical
   classical
   obtain ⟨R⟩ := hCanonical.exists_retainedProductSpectralFamily
     dim₁ mult₁ weight₁ A₁ U₁ hU₁ hReconstruct₁ hM
-  letI : ∀ γ, NeZero (dim₂ γ) := fun γ ↦
+  let : ∀ γ, NeZero (dim₂ γ) := fun γ ↦
     ⟨(hBNT₂.blocks_dim_pos γ).ne'⟩
   obtain ⟨C⟩ := R.exists_flatBlockedBNTComparison
     M U₁ hU₁ hReconstruct₁ dim₂ A₂ hBNT₂

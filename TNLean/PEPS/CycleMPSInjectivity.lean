@@ -251,8 +251,8 @@ theorem regionBlockedWeight_cycleTensorOfMPS (hn : 3 ≤ n) {L : ℕ} (hL : 0 < 
           (bdry (arcLeftBoundary hn hL hLn s)) (bdry (arcRightBoundary hn hL hLn s)) := by
   have h1 : ((1 : Fin n) : ℕ) = 1 := val_one_of_two_le (by omega)
   have hs := s.isLt
-  set a := bdry (arcLeftBoundary hn hL hLn s) with ha
-  set b := bdry (arcRightBoundary hn hL hLn s) with hb
+  set a : Fin D := bdry (arcLeftBoundary hn hL hLn s) with ha
+  set b : Fin D := bdry (arcRightBoundary hn hL hLn s) with hb
   set x := arcWord hLn s τ with hx
   -- Pointwise bond relabelling under the translation by `s - 1`.
   have hshift0 : s - 1 + (⟨(0 : Fin (L + 1)).val, by omega⟩ : Fin n) = s - 1 := by
@@ -288,8 +288,8 @@ theorem regionBlockedWeight_cycleTensorOfMPS (hn : 3 ≤ n) {L : ℕ} (hL : 0 < 
           else 0 := by
         rw [regionBlockedWeight, Finset.sum_filter]
     _ = ∑ ζ : VirtualConfig (cycleTensorOfMPS hn A),
-          if ζ (cycleSuccEdge hn (s - 1)) = a ∧
-              ζ (cycleSuccEdge hn (arcLastSite hL hLn s)) = b then
+          if (show Fin D from ζ (cycleSuccEdge hn (s - 1))) = a ∧
+              (show Fin D from ζ (cycleSuccEdge hn (arcLastSite hL hLn s))) = b then
             ∏ w : {w : Fin n // w ∈ cycleArcFrom s L},
               (cycleTensorOfMPS hn A).component w.1 (fun ie => ζ ie.1) (τ w)
           else 0 := by
@@ -342,7 +342,7 @@ theorem regionBlockedWeight_cycleTensorOfMPS (hn : 3 ≤ n) {L : ℕ} (hL : 0 < 
             ∏ j : Fin L, A (x j) (ρ j.castSucc) (ρ j.succ) else 0)
     _ = (D : ℂ) ^ (n - (L + 1)) *
           MPSTensor.evalWord A (List.ofFn x) a b := by
-        rw [← Finset.mul_sum, MPSTensor.evalWord_ofFn_apply A L x a b]
+        rw [MPSTensor.evalWord_ofFn_apply A L x a b, Finset.mul_sum]
 
 end BlockedWeight
 
@@ -416,12 +416,12 @@ def arcBoundaryConfig (hn : 3 ≤ n) {L : ℕ} (hL : 0 < L) (hLn : L < n)
 @[simp] theorem arcBoundaryConfig_left (hn : 3 ≤ n) {L : ℕ} (hL : 0 < L) (hLn : L < n)
     (A : MPSTensor d D) (s : Fin n) (a b : Fin D) :
     arcBoundaryConfig hn hL hLn A s a b (arcLeftBoundary hn hL hLn s) = a :=
-  if_pos rfl
+  ite_eq_left rfl
 
 @[simp] theorem arcBoundaryConfig_right (hn : 3 ≤ n) {L : ℕ} (hL : 0 < L) (hLn : L < n)
     (A : MPSTensor d D) (s : Fin n) (a b : Fin D) :
     arcBoundaryConfig hn hL hLn A s a b (arcRightBoundary hn hL hLn s) = b :=
-  if_neg (arcRightBoundary_ne_leftBoundary hn hL hLn s)
+  ite_eq_right (arcRightBoundary_ne_leftBoundary hn hL hLn s)
 
 /-- A boundary assignment of the arc is determined by its two bond values. -/
 theorem arcBoundaryConfig_recon (hn : 3 ≤ n) {L : ℕ} (hL : 0 < L) (hLn : L < n)

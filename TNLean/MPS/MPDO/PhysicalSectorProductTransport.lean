@@ -516,7 +516,7 @@ theorem mpo_eq_product_physicalBond
   by_cases htwo : N = 2
   · subst N
     exact F.mpo_two_eq_product_physicalBond
-  · letI : NeZero N := ⟨by omega⟩
+  · let : NeZero N := ⟨by omega⟩
     exact F.mpo_eq_product_physicalBond_of_three_le (by omega)
 
 /-- The positive scalar in the physical-sector product realization may be

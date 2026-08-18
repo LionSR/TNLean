@@ -261,14 +261,14 @@ theorem exists_displaced_invariant_projector_of_periodic_vector
     obtain ⟨X, hX⟩ := hμ.exists_hasEigenvector
     have hXne : X ≠ 0 := (Module.End.hasEigenvector_iff.mp hX).2
     exact hXne (Matrix.ext fun i _ => i.elim0)
-  haveI : NeZero n := ⟨hn⟩
+  have : NeZero n := ⟨hn⟩
   -- The unital gauge of the corner and its Wolf Theorem 6.6 data.
   set K : MPSTensor (D * D) n := MPSTensor.spectralUnitalGauge B rad ρ with hK
   obtain ⟨hUnital, hIrrK, hIrrMap, σ, hσ, hσfix⟩ :=
     MPSTensor.spectralUnitalGauge_schwarz_setup B hirr ρ rad hρ hrad hfix
   obtain ⟨m, γ, hm_pos, hγprim, hset⟩ :=
     PeripheralSpectrum.peripheral_eigenvalues_cyclic_structure K hUnital σ hσ hσfix hIrrMap
-  haveI : NeZero m := ⟨hm_pos.ne'⟩
+  have : NeZero m := ⟨hm_pos.ne'⟩
   -- `μ / r` is a peripheral eigenvalue of the gauged transfer map, and it is
   -- not `1`, so the peripheral cyclic group has order at least two.
   have hradC : (rad : ℂ) ≠ 0 := by exact_mod_cast hrad.ne'

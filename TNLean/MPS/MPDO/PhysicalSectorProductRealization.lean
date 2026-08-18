@@ -245,13 +245,24 @@ private theorem reindex_mpo_sectorCoordinateTensor_sectorEdgeChainEquiv
         ⟨k, (F.cyclicEdgeEquiv k).symm x⟩
         ⟨h, (F.cyclicEdgeEquiv h).symm y⟩ = _
   rw [hfull]
+  let S := fun q : Fin N → Fin F.sectorCount ↦ F.cyclicNeighboringProduct q
+  let T := fun (q : Fin N → Fin F.sectorCount)
+      (x y : (n : Fin N) → F.NeighborIndex (q n) (q (n + 1))) ↦
+    ∏ n : Fin N, F.neighboringOperator (q n) (q (n + 1)) (x n) (y n)
+  change Matrix.blockDiagonal' S
+      ⟨k, (F.cyclicEdgeEquiv k).symm x⟩
+      ⟨h, (F.cyclicEdgeEquiv h).symm y⟩ =
+    Matrix.blockDiagonal' T ⟨k, x⟩ ⟨h, y⟩
   by_cases hkh : k = h
   · subst h
-    rw [Matrix.blockDiagonal'_apply_eq, Matrix.blockDiagonal'_apply_eq]
-    exact congrFun (congrFun
+    have hcyclic := congrFun (congrFun
       (F.reindex_cyclicNeighboringProduct_cyclicEdgeEquiv k) x) y
-  · rw [Matrix.blockDiagonal'_apply_ne _ _ _ hkh,
-      Matrix.blockDiagonal'_apply_ne _ _ _ hkh]
+    exact (Matrix.blockDiagonal'_apply_eq S k
+      ((F.cyclicEdgeEquiv k).symm x) ((F.cyclicEdgeEquiv k).symm y)).trans
+        (hcyclic.trans (Matrix.blockDiagonal'_apply_eq T k x y).symm)
+  · exact (Matrix.blockDiagonal'_apply_ne S
+      ((F.cyclicEdgeEquiv k).symm x) ((F.cyclicEdgeEquiv h).symm y) hkh).trans
+        (Matrix.blockDiagonal'_apply_ne T x y hkh).symm
 
 /-- Positivity of all neighbouring blocks makes every positive-length
 sector-coordinate periodic operator positive semidefinite. -/
@@ -290,7 +301,7 @@ theorem isMPDO_of_neighboringOperator_pos
     F.physicalCoordinateMatrix F.physicalCoordinateMatrix_isometry K
   rw [← F.sectorCoordinateTensor_eq_changePhysicalBasis]
   intro N hN
-  letI : NeZero N := ⟨Nat.ne_of_gt hN⟩
+  let : NeZero N := ⟨Nat.ne_of_gt hN⟩
   exact F.mpo_sectorCoordinateTensor_posSemidef hpos
 
 /-- The sector-coordinate bond indexed by two-site configurations. -/

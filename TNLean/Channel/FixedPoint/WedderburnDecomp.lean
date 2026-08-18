@@ -97,9 +97,9 @@ abbrev FixedPointAlgebra
 /-- Every finite-dimensional `*`-subalgebra of `M_D(ℂ)` is a semisimple ring. -/
 theorem starSubalgebra_isSemisimpleRing (S : StarSubalgebra ℂ Mat) :
     IsSemisimpleRing S := by
-  letI : FiniteDimensional ℂ S :=
+  let : FiniteDimensional ℂ S :=
     FiniteDimensional.finiteDimensional_subalgebra S.toSubalgebra
-  haveI : IsArtinianRing S := IsArtinianRing.of_finite ℂ S
+  have : IsArtinianRing S := IsArtinianRing.of_finite ℂ S
   rw [IsArtinianRing.isSemisimpleRing_iff_jacobson]
   apply eq_bot_iff.mpr
   intro x hx
@@ -257,8 +257,8 @@ theorem starSubalgebra_hasWedderburnBlockDecomp
     (S : StarSubalgebra ℂ Mat) :
     Nonempty (IsWedderburnBlockDecomp S) := by
   classical
-  letI : IsSemisimpleRing S := starSubalgebra_isSemisimpleRing S
-  letI : FiniteDimensional ℂ S :=
+  let : IsSemisimpleRing S := starSubalgebra_isSemisimpleRing S
+  let : FiniteDimensional ℂ S :=
     FiniteDimensional.finiteDimensional_subalgebra S.toSubalgebra
   rcases IsSemisimpleRing.exists_algEquiv_pi_matrix_of_isAlgClosed ℂ S with
     ⟨n, blockDim, hblockDim, ⟨e⟩⟩

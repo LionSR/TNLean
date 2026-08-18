@@ -96,7 +96,7 @@ theorem sourceY₁_gram_eq_weighted_sourceCutM₁_gram
   have hentry := congrArg (fun M ↦ M (p, a) (q, b)) hgram
   simp only [Matrix.mul_apply, Matrix.conjTranspose_apply, sourceWeight,
     Matrix.kronecker_apply, Matrix.one_apply, mul_ite, mul_one, mul_zero,
-    Finset.sum_ite_eq', Finset.mem_univ, if_true, sourceCutM₁_apply,
+    Finset.sum_ite_eq', Finset.mem_univ, ite_true, sourceCutM₁_apply,
     Fintype.sum_prod_type] at hentry
   simp_rw [Finset.sum_mul] at hentry
   conv_rhs at hentry => arg 2; ext j; rw [Finset.sum_comm]
@@ -172,7 +172,7 @@ theorem doubleLayerTensor_rankOne_mul_apply_four_u
       kroneckerMap_apply, physicalAdjointTensor_apply, RCLike.star_def,
       ite_mul, one_mul, zero_mul]
     rw [Fintype.sum_prod_type]
-    simp_rw [Finset.sum_ite_eq', Finset.mem_univ, if_true]
+    simp_rw [Finset.sum_ite_eq', Finset.mem_univ, ite_true]
   change (doubleLayerTensor U p.1 q.1 * Matrix.vecMulVec ρ' Φ' *
       doubleLayerTensor U p.2 q.2)
       (finProdFinEquiv (a.1, b.1)) (finProdFinEquiv (a.2, b.2)) = _

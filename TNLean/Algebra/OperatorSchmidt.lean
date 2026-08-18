@@ -90,9 +90,14 @@ arXiv:1903.05373, definition preceding Theorem 1. -/
 theorem range_operatorSchmidtMap_eq_operatorBlockSpan
     (ρ : Matrix (m × n) (m × n) R) :
     LinearMap.range (operatorSchmidtMap ρ) = operatorBlockSpan ρ := by
-  rw [operatorSchmidtMap, LinearMap.range_comp, LinearEquiv.range, Submodule.map_top]
-  rw [Fintype.range_linearCombination]
-  rw [operatorBlockSpan]
+  calc
+    LinearMap.range (operatorSchmidtMap ρ) =
+        LinearMap.range (Fintype.linearCombination R fun ij : m × m ↦
+          operatorBlock ρ ij.1 ij.2) := by
+      exact LinearMap.range_comp_of_range_eq_top _
+        (LinearEquiv.range (LinearEquiv.curry R R m m).symm)
+    _ = operatorBlockSpan ρ := by
+      rw [Fintype.range_linearCombination, operatorBlockSpan]
 
 end Semiring
 
@@ -138,7 +143,7 @@ theorem operatorSchmidtRank_le_of_hasOperatorSchmidtDecomposition
     (hρ : HasOperatorSchmidtDecomposition ρ r) :
     operatorSchmidtRank ρ ≤ r := by
   classical
-  letI := Fintype.ofFinite n
+  let := Fintype.ofFinite n
   obtain ⟨A, B, hρ⟩ := hρ
   rw [operatorSchmidtRank_eq_finrank_operatorBlockSpan]
   calc
@@ -166,7 +171,7 @@ theorem hasOperatorSchmidtDecomposition_operatorSchmidtRank
     HasOperatorSchmidtDecomposition ρ (operatorSchmidtRank ρ) := by
   rw [operatorSchmidtRank_eq_finrank_operatorBlockSpan]
   classical
-  letI := Fintype.ofFinite n
+  let := Fintype.ofFinite n
   let S : Submodule ℂ (Matrix n n ℂ) := operatorBlockSpan ρ
   let b := Module.finBasis ℂ S
   have hblock (i j : m) : operatorBlock ρ i j ∈ S := by
@@ -174,7 +179,7 @@ theorem hasOperatorSchmidtDecomposition_operatorSchmidtRank
   refine ⟨fun t i j ↦ b.repr ⟨operatorBlock ρ i j, hblock i j⟩ t,
     fun t ↦ b t, ?_⟩
   ext ⟨i, k⟩ ⟨j, l⟩
-  simp only [Matrix.sum_apply, Matrix.kroneckerMap_apply]
+  simp only [Matrix.sum_apply]
   change operatorBlock ρ i j k l =
     ∑ t, b.repr ⟨operatorBlock ρ i j, hblock i j⟩ t * (b t : Matrix n n ℂ) k l
   have hrepr := congrArg (fun X : S ↦ (X : Matrix n n ℂ))
@@ -224,7 +229,7 @@ theorem operatorSchmidtRank_local_mul_le
     (X : Matrix (m' × n') (m' × n') ℂ) :
     operatorSchmidtRank ((L₁ ⊗ₖ L₂) * X * (R₁ ⊗ₖ R₂)) ≤
       operatorSchmidtRank X := by
-  letI := Fintype.ofFinite n
+  let := Fintype.ofFinite n
   obtain ⟨A, B, hX⟩ := hasOperatorSchmidtDecomposition_operatorSchmidtRank X
   apply operatorSchmidtRank_le_of_hasOperatorSchmidtDecomposition
   refine ⟨fun t ↦ L₁ * A t * R₁, fun t ↦ L₂ * B t * R₂, ?_⟩

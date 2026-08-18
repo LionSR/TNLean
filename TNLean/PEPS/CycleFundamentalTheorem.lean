@@ -123,7 +123,7 @@ theorem fundamentalTheorem_normalMPS_cycle {n L d : ℕ}
     (hposA : ∀ g : Edge (SimpleGraph.cycleGraph n), 0 < A.bondDim g)
     (hposB : ∀ g : Edge (SimpleGraph.cycleGraph n), 0 < B.bondDim g) :
     GaugeEquiv A B := by
-  haveI : NeZero n := ⟨by omega⟩
+  have : NeZero n := ⟨by omega⟩
   have hU := regionInjectivityUnionClosure_pair
     (regionInjectivityUnionClosure_of_overlap A hposA)
     (regionInjectivityUnionClosure_of_overlap B hposB)
@@ -174,7 +174,7 @@ theorem fundamentalTheorem_normalMPS_cycle_gauge_unique {n L d : ℕ}
     (e : Edge (SimpleGraph.cycleGraph n)) :
     ∃ c : ℂˣ, (X' e : Matrix (Fin (A.bondDim e)) (Fin (A.bondDim e)) ℂ) =
       (c : ℂ) • (X e : Matrix (Fin (A.bondDim e)) (Fin (A.bondDim e)) ℂ) := by
-  haveI : NeZero n := ⟨by omega⟩
+  have : NeZero n := ⟨by omega⟩
   have hU := regionInjectivityUnionClosure_pair
     (regionInjectivityUnionClosure_of_overlap A hposA)
     (regionInjectivityUnionClosure_of_overlap B hposB)

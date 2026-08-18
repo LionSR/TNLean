@@ -101,7 +101,7 @@ noncomputable def CyclicEdgeWeightForm.toFixedProductTensorData
   tensor := cyclicEdgeWeightTensor form.weight
   mpo_eq_product := by
     intro N hN
-    letI : NeZero N := ⟨by omega⟩
+    let : NeZero N := ⟨by omega⟩
     ext sigma tau
     rw [mpo_cyclicEdgeWeightTensor]
     exact (form.product_apply N hN sigma tau).symm
@@ -200,7 +200,7 @@ theorem exists_unit_phase_power_mpo_eq_product_of_normal_smul
       (fun i ↦ (s : ℂ) • repr.tensor.toMPSTensor i)) :
     ∃ ζ : ℂ, ‖ζ‖ = 1 ∧ ∀ (N : ℕ) (hN : 2 ≤ N),
       mpo M N = ((ζ * (s : ℂ)) ^ N) • (data.bondData.toCommutingFormData hN).product := by
-  letI : NeZero repr.bondDim := ⟨Nat.ne_of_gt repr.bondDim_pos⟩
+  let : NeZero repr.bondDim := ⟨Nat.ne_of_gt repr.bondDim_pos⟩
   have hsℂ : (s : ℂ) ≠ 0 := by
     exact_mod_cast ne_of_gt hs
   have hProp : MPSTensor.EventuallyNonzeroProportionalMPV₂ M.toMPSTensor

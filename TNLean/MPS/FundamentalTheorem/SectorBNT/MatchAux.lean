@@ -30,8 +30,8 @@ lemma dim_and_gaugePhase_of_nondecaying_overlap
       mpvOverlap (d := d) (P.basis j) (Q.basis k) N) atTop (𝓝 0)) :
     ∃ h : P.basisDim j = Q.basisDim k,
       GaugePhaseEquiv (cast (congr_arg (MPSTensor d) h) (P.basis j)) (Q.basis k) := by
-  haveI hjdim : NeZero (P.basisDim j) := ⟨(hP.basis_dim_pos j).ne'⟩
-  haveI hkdim : NeZero (Q.basisDim k) := ⟨(hQ.basis_dim_pos k).ne'⟩
+  have hjdim : NeZero (P.basisDim j) := ⟨(hP.basis_dim_pos j).ne'⟩
+  have hkdim : NeZero (Q.basisDim k) := ⟨(hQ.basis_dim_pos k).ne'⟩
   have hDim : P.basisDim j = Q.basisDim k := by
     by_contra hne
     exact hnd <|

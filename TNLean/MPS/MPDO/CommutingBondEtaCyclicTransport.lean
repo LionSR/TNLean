@@ -66,7 +66,7 @@ theorem EtaLocalStructureData.exists_positive_cyclic_eta_block_decomposition
     data.exists_positive_eta_pairBond_decomposition
   refine ⟨K, dl, dr, e, U, η, hU, hdl, hdr, hη, ?_⟩
   intro N hN
-  letI : NeZero N := ⟨by omega⟩
+  let : NeZero N := ⟨by omega⟩
   obtain ⟨c, hc, hreal⟩ := data.exists_positive_scalar_mpo_eq_product N hN
   refine ⟨c, hc, ?_⟩
   have hUco : U * Uᴴ = 1 := by

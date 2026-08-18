@@ -90,8 +90,8 @@ lemma cross_overlap_basis_tendsto_zero
     (h : IsBNTCanonicalForm P) {j k : Fin P.basisCount} (hjk : j ≠ k) :
     Tendsto (fun N : ℕ => mpvOverlap (d := d) (P.basis j) (P.basis k) N)
       atTop (𝓝 0) := by
-  haveI hjpos : NeZero (P.basisDim j) := ⟨(h.basis_dim_pos j).ne'⟩
-  haveI hkpos : NeZero (P.basisDim k) := ⟨(h.basis_dim_pos k).ne'⟩
+  have hjpos : NeZero (P.basisDim j) := ⟨(h.basis_dim_pos j).ne'⟩
+  have hkpos : NeZero (P.basisDim k) := ⟨(h.basis_dim_pos k).ne'⟩
   by_cases hdim : P.basisDim j = P.basisDim k
   · exact mpvOverlap_tendsto_zero_of_not_gaugePhaseEquiv_cast_left_of_irreducible_TP
       (hdim := hdim) (A := P.basis j) (B := P.basis k)

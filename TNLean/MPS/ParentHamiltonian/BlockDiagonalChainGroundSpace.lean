@@ -38,7 +38,7 @@ theorem chainGroundSpace_block_le_toTensorFromBlocks
       chainGroundSpace (toTensorFromBlocks (d := d) (μ := μ) A) L N := by
   classical
   intro ψ hψ
-  rw [chainGroundSpace, dif_pos ⟨hN, hLN⟩] at hψ ⊢
+  rw [chainGroundSpace, dite_eq_left ⟨hN, hLN⟩] at hψ ⊢
   simp only [Submodule.mem_iInf, Submodule.mem_comap] at hψ ⊢
   intro i τ
   have hlocal : groundSpace (A j) L ≤

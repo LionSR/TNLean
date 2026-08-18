@@ -98,21 +98,27 @@ def crossingTripleEquiv (F : CoherentCoarseBlockingFrame (G := G) (d := d) A) :
     funext f
     dsimp only
     rcases coarse_edge_cases f with h | h | h <;> subst h
-    · rw [dif_pos rfl]; exact (F.bondModel coarseEdgeRB).symm_apply_apply _
-    · rw [dif_neg (by decide), dif_pos rfl]
+    · rw [dite_eq_left rfl]; exact (F.bondModel coarseEdgeRB).symm_apply_apply _
+    · rw [dite_eq_right (by decide), dite_eq_left rfl]
       exact (F.bondModel coarseEdgeRC).symm_apply_apply _
-    · rw [dif_neg (by decide), dif_neg (by decide), dif_pos rfl]
+    · rw [dite_eq_right (by decide), dite_eq_right (by decide), dite_eq_left rfl]
       exact (F.bondModel coarseEdgeBC).symm_apply_apply _
   right_inv t := by
     obtain ⟨a, b, c⟩ := t
     refine Prod.ext ?_ (Prod.ext ?_ ?_)
-    · dsimp only; rw [dif_pos rfl]; exact (F.bondModel coarseEdgeRB).apply_symm_apply _
-    · dsimp only; rw [dif_neg (show coarseEdgeRC ≠ coarseEdgeRB by decide), dif_pos rfl]
-      exact (F.bondModel coarseEdgeRC).apply_symm_apply _
     · dsimp only
-      rw [dif_neg (show coarseEdgeBC ≠ coarseEdgeRB by decide),
-        dif_neg (show coarseEdgeBC ≠ coarseEdgeRC by decide), dif_pos rfl]
-      exact (F.bondModel coarseEdgeBC).apply_symm_apply _
+      refine (congrArg (F.bondModel coarseEdgeRB) ?_).trans
+        ((F.bondModel coarseEdgeRB).apply_symm_apply a)
+      exact dite_eq_left rfl
+    · dsimp only
+      refine (congrArg (F.bondModel coarseEdgeRC) ?_).trans
+        ((F.bondModel coarseEdgeRC).apply_symm_apply b)
+      exact (dite_eq_right (show coarseEdgeRC ≠ coarseEdgeRB by decide)).trans (dite_eq_left rfl)
+    · dsimp only
+      refine (congrArg (F.bondModel coarseEdgeBC) ?_).trans
+        ((F.bondModel coarseEdgeBC).apply_symm_apply c)
+      exact (dite_eq_right (show coarseEdgeBC ≠ coarseEdgeRB by decide)).trans
+        ((dite_eq_right (show coarseEdgeBC ≠ coarseEdgeRC by decide)).trans (dite_eq_left rfl))
 
 @[simp] theorem crossingTripleEquiv_apply (F : CoherentCoarseBlockingFrame (G := G) (d := d) A)
     (η : VirtualConfig (F.frame.coarseTensor)) :
@@ -189,9 +195,9 @@ theorem bondModel_rb_eq_of_legEquivRed_eq (hP : F.frame.IsPartition)
   have hcross : IsCrossingEdge (G := G) A F.frame.red F.frame.blue g.1 := g.2
   have hbdry : IsRegionBoundaryEdge (G := G) F.frame.red g.1 := hcross.1
   have hkey := congrFun h ⟨g.1, hbdry⟩
-  rw [F.legEquivRed_apply_eq hP η ⟨g.1, hbdry⟩, dif_pos hcross] at hkey
+  rw [F.legEquivRed_apply_eq hP η ⟨g.1, hbdry⟩, dite_eq_left hcross] at hkey
   simp only [regionBoundaryLabel_apply] at hkey
-  rw [crossingLabel]; exact hkey
+  exact hkey
 
 /-- **Red boundary match, `r-c` super-bond.** -/
 theorem bondModel_rc_eq_of_legEquivRed_eq (hP : F.frame.IsPartition)
@@ -207,9 +213,9 @@ theorem bondModel_rc_eq_of_legEquivRed_eq (hP : F.frame.IsPartition)
     not_crossing_of_crossing_disjoint (A := A) hP.red_disjoint_blue
       hP.red_disjoint_complement hP.blue_disjoint_complement hcross
   have hkey := congrFun h ⟨g.1, hbdry⟩
-  rw [F.legEquivRed_apply_eq hP η ⟨g.1, hbdry⟩, dif_neg hnb] at hkey
+  rw [F.legEquivRed_apply_eq hP η ⟨g.1, hbdry⟩, dite_eq_right hnb] at hkey
   simp only [regionBoundaryLabel_apply] at hkey
-  rw [crossingLabel]; exact hkey
+  exact hkey
 
 /-- **Blue boundary match, `r-b` super-bond.** -/
 theorem bondModel_rb_eq_of_legEquivBlue_eq (hP : F.frame.IsPartition)
@@ -222,7 +228,7 @@ theorem bondModel_rb_eq_of_legEquivBlue_eq (hP : F.frame.IsPartition)
   have hcross : IsCrossingEdge (G := G) A F.frame.red F.frame.blue g.1 := g.2
   have hbdry : IsRegionBoundaryEdge (G := G) F.frame.blue g.1 := hcross.2
   have hkey := congrFun h ⟨g.1, hbdry⟩
-  rw [F.legEquivBlue_apply_eq hP η ⟨g.1, hbdry⟩, dif_pos hcross] at hkey
+  rw [F.legEquivBlue_apply_eq hP η ⟨g.1, hbdry⟩, dite_eq_left hcross] at hkey
   simp only [regionBoundaryLabel_apply] at hkey
   exact hkey
 
@@ -240,9 +246,9 @@ theorem bondModel_bc_eq_of_legEquivBlue_eq (hP : F.frame.IsPartition)
     not_crossing_of_crossing_disjoint (A := A) hP.red_disjoint_blue.symm
       hP.blue_disjoint_complement hP.red_disjoint_complement hcross hbad.symm
   have hkey := congrFun h ⟨g.1, hbdry⟩
-  rw [F.legEquivBlue_apply_eq hP η ⟨g.1, hbdry⟩, dif_neg hnb] at hkey
+  rw [F.legEquivBlue_apply_eq hP η ⟨g.1, hbdry⟩, dite_eq_right hnb] at hkey
   simp only [regionBoundaryLabel_apply] at hkey
-  rw [crossingLabel]; exact hkey
+  exact hkey
 
 /-- **Complement boundary match, `r-c` super-bond.** -/
 theorem bondModel_rc_eq_of_legEquivComplement_eq (hP : F.frame.IsPartition)
@@ -255,7 +261,7 @@ theorem bondModel_rc_eq_of_legEquivComplement_eq (hP : F.frame.IsPartition)
   have hcross : IsCrossingEdge (G := G) A F.frame.red F.frame.complement g.1 := g.2
   have hbdry : IsRegionBoundaryEdge (G := G) F.frame.complement g.1 := hcross.2
   have hkey := congrFun h ⟨g.1, hbdry⟩
-  rw [F.legEquivComplement_apply_eq hP η ⟨g.1, hbdry⟩, dif_pos hcross] at hkey
+  rw [F.legEquivComplement_apply_eq hP η ⟨g.1, hbdry⟩, dite_eq_left hcross] at hkey
   simp only [regionBoundaryLabel_apply] at hkey
   exact hkey
 
@@ -273,7 +279,7 @@ theorem bondModel_bc_eq_of_legEquivComplement_eq (hP : F.frame.IsPartition)
     not_crossing_of_crossing_disjoint (A := A) hP.red_disjoint_complement.symm
       hP.blue_disjoint_complement.symm hP.red_disjoint_blue hcross.symm hbad.symm
   have hkey := congrFun h ⟨g.1, hbdry⟩
-  rw [F.legEquivComplement_apply_eq hP η ⟨g.1, hbdry⟩, dif_neg hnr] at hkey
+  rw [F.legEquivComplement_apply_eq hP η ⟨g.1, hbdry⟩, dite_eq_right hnr] at hkey
   simp only [regionBoundaryLabel_apply] at hkey
   exact hkey
 
@@ -298,14 +304,12 @@ theorem legEquivRed_eq_of_bondModel (hP : F.frame.IsPartition)
   funext b
   rw [F.legEquivRed_apply_eq hP η b]
   by_cases hb : IsCrossingEdge (G := G) A F.frame.red F.frame.blue b.1
-  · rw [dif_pos hb]
-    have := congrFun hrb ⟨b.1, hb⟩
-    rw [crossingLabel_apply] at this; rw [this]; rfl
-  · rw [dif_neg hb]
+  · rw [dite_eq_left hb]
+    exact congrFun hrb ⟨b.1, hb⟩
+  · rw [dite_eq_right hb]
     have hc : IsCrossingEdge (G := G) A F.frame.red F.frame.complement b.1 :=
       (F.frame.isCrossingEdge_red_blue_or_red_complement hP b.2).resolve_left hb
-    have := congrFun hrc ⟨b.1, hc⟩
-    rw [crossingLabel_apply] at this; rw [this]; rfl
+    exact congrFun hrc ⟨b.1, hc⟩
 
 /-- **Blue boundary recovery.** -/
 theorem legEquivBlue_eq_of_bondModel (hP : F.frame.IsPartition)
@@ -319,13 +323,12 @@ theorem legEquivBlue_eq_of_bondModel (hP : F.frame.IsPartition)
   funext b
   rw [F.legEquivBlue_apply_eq hP η b]
   by_cases hb : IsCrossingEdge (G := G) A F.frame.red F.frame.blue b.1
-  · rw [dif_pos hb]
-    have := congrFun hrb ⟨b.1, hb⟩; rw [this]; rfl
-  · rw [dif_neg hb]
+  · rw [dite_eq_left hb]
+    exact congrFun hrb ⟨b.1, hb⟩
+  · rw [dite_eq_right hb]
     have hc : IsCrossingEdge (G := G) A F.frame.blue F.frame.complement b.1 :=
       (F.frame.isCrossingEdge_red_blue_or_blue_complement hP b.2).resolve_left hb
-    have := congrFun hbc ⟨b.1, hc⟩
-    rw [crossingLabel_apply] at this; rw [this]; rfl
+    exact congrFun hbc ⟨b.1, hc⟩
 
 /-- **Complement boundary recovery.** -/
 theorem legEquivComplement_eq_of_bondModel (hP : F.frame.IsPartition)
@@ -339,9 +342,9 @@ theorem legEquivComplement_eq_of_bondModel (hP : F.frame.IsPartition)
   funext b
   rw [F.legEquivComplement_apply_eq hP η b]
   by_cases hb : IsCrossingEdge (G := G) A F.frame.red F.frame.complement b.1
-  · rw [dif_pos hb]
+  · rw [dite_eq_left hb]
     have := congrFun hrc ⟨b.1, hb⟩; rw [this]; rfl
-  · rw [dif_neg hb]
+  · rw [dite_eq_right hb]
     have hc : IsCrossingEdge (G := G) A F.frame.blue F.frame.complement b.1 :=
       (F.frame.isCrossingEdge_red_complement_or_blue_complement hP b.2).resolve_left hb
     have := congrFun hbc ⟨b.1, hc⟩
@@ -433,7 +436,7 @@ theorem coarseConfig_constraint_set (F : CoherentCoarseBlockingFrame (G := G) (d
             regionBoundaryLabel (G := G) A F.frame.complement ζc)) =
       if TripleAgrees F ζr ζb ζc then {tripleToEta F ζr ζb} else ∅ := by
   by_cases hag : TripleAgrees F ζr ζb ζc
-  · rw [if_pos hag]
+  · rw [ite_eq_left hag]
     obtain ⟨hab, hac, hbc⟩ := hag
     ext η
     simp only [Finset.mem_filter, Finset.mem_univ, true_and, Finset.mem_singleton]
@@ -455,7 +458,7 @@ theorem coarseConfig_constraint_set (F : CoherentCoarseBlockingFrame (G := G) (d
       · refine legEquivComplement_eq_of_bondModel F hP _ ζc ?_ ?_
         · rw [tripleToEta_rc]; exact hac
         · rw [tripleToEta_bc]; exact hbc
-  · rw [if_neg hag]
+  · rw [ite_eq_right hag]
     ext η
     simp only [Finset.mem_filter, Finset.mem_univ, true_and, Finset.notMem_empty, iff_false]
     rintro ⟨hr, hb, hc⟩
@@ -637,8 +640,8 @@ theorem threeRegionSum_eq_agreeingTripleSum
     intro ζr ζb ζc
     rw [← Finset.sum_filter, coarseConfig_constraint_set F hP ζr ζb ζc]
     by_cases hag : TripleAgrees F ζr ζb ζc
-    · rw [if_pos hag, if_pos hag, Finset.sum_singleton]
-    · rw [if_neg hag, if_neg hag, Finset.sum_empty]
+    · rw [ite_eq_left hag, ite_eq_left hag, Finset.sum_singleton]
+    · rw [ite_eq_right hag, ite_eq_right hag, Finset.sum_empty]
   simp_rw [hcollapse]
   -- Reassemble the three sums as a selector sum over triples, then drop the selector.
   rw [Finset.sum_filter, Fintype.sum_prod_type]

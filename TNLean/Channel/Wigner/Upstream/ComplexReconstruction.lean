@@ -93,7 +93,7 @@ lemma Iadd_basis_norm_sq
     {i j : Fin N} (hij : i ≠ j) :
     ‖(b i + Complex.I • b j : EuclideanSpace ℂ (Fin N))‖ ^ 2 = 2 := by
   have hperp : (inner ℂ (b i) (Complex.I • b j) : ℂ) = 0 := by
-    rw [inner_smul_right, orthonormal_iff_ite.mp b.orthonormal i j, if_neg hij, mul_zero]
+    rw [inner_smul_right, orthonormal_iff_ite.mp b.orthonormal i j, ite_eq_right hij, mul_zero]
   rw [sq, norm_add_sq_eq_norm_sq_add_norm_sq_of_inner_eq_zero (b i) (Complex.I • b j) hperp,
       b.orthonormal.norm_eq_one i, norm_smul, Complex.norm_I, one_mul,
       b.orthonormal.norm_eq_one j]
@@ -185,7 +185,7 @@ lemma subI_basis_norm_sq
     ‖(b i - Complex.I • b j : EuclideanSpace ℂ (Fin N))‖ ^ 2 = 2 := by
   have hperp : (inner ℂ (b i) (-(Complex.I • b j)) : ℂ) = 0 := by
     rw [inner_neg_right, inner_smul_right, orthonormal_iff_ite.mp b.orthonormal i j,
-        if_neg hij, mul_zero, neg_zero]
+        ite_eq_right hij, mul_zero, neg_zero]
   rw [sub_eq_add_neg, sq,
       norm_add_sq_eq_norm_sq_add_norm_sq_of_inner_eq_zero (b i) (-(Complex.I • b j)) hperp,
       b.orthonormal.norm_eq_one i, norm_neg, norm_smul, Complex.norm_I, one_mul,
@@ -385,9 +385,9 @@ lemma repr_bConjVec
   rw [b.repr_apply_apply]
   unfold bConjVec
   rw [inner_sum, Finset.sum_eq_single k]
-  · rw [inner_smul_right, orthonormal_iff_ite.mp b.orthonormal k k, if_pos rfl, mul_one]
+  · rw [inner_smul_right, orthonormal_iff_ite.mp b.orthonormal k k, ite_eq_left rfl, mul_one]
   · intro j _ hjk
-    rw [inner_smul_right, orthonormal_iff_ite.mp b.orthonormal k j, if_neg (Ne.symm hjk),
+    rw [inner_smul_right, orthonormal_iff_ite.mp b.orthonormal k j, ite_eq_right (Ne.symm hjk),
         mul_zero]
   · intro h; exact absurd (Finset.mem_univ k) h
 
@@ -556,17 +556,17 @@ theorem diagReducedMap_complex_probe
   -- coordinates of `w`
   have hw_i0 : b.repr w i₀ = 1 := by
     rw [hw, b.repr_apply_apply, inner_add_right, inner_smul_right,
-        orthonormal_iff_ite.mp b.orthonormal i₀ i₀, if_pos rfl,
-        orthonormal_iff_ite.mp b.orthonormal i₀ i, if_neg hii, mul_zero, add_zero]
+        orthonormal_iff_ite.mp b.orthonormal i₀ i₀, ite_eq_left rfl,
+        orthonormal_iff_ite.mp b.orthonormal i₀ i, ite_eq_right hii, mul_zero, add_zero]
   have hw_i : b.repr w i = Complex.I := by
     rw [hw, b.repr_apply_apply, inner_add_right, inner_smul_right,
-        orthonormal_iff_ite.mp b.orthonormal i i₀, if_neg (Ne.symm hii),
-        orthonormal_iff_ite.mp b.orthonormal i i, if_pos rfl, mul_one, zero_add]
+        orthonormal_iff_ite.mp b.orthonormal i i₀, ite_eq_right (Ne.symm hii),
+        orthonormal_iff_ite.mp b.orthonormal i i, ite_eq_left rfl, mul_one, zero_add]
   have hw_zero : ∀ k, k ≠ i₀ → k ≠ i → b.repr w k = 0 := by
     intro k hk0 hki
     rw [hw, b.repr_apply_apply, inner_add_right, inner_smul_right,
-        orthonormal_iff_ite.mp b.orthonormal k i₀, if_neg hk0,
-        orthonormal_iff_ite.mp b.orthonormal k i, if_neg hki, mul_zero, add_zero]
+        orthonormal_iff_ite.mp b.orthonormal k i₀, ite_eq_right hk0,
+        orthonormal_iff_ite.mp b.orthonormal k i, ite_eq_right hki, mul_zero, add_zero]
   set φ := (diagReducedMap hf b i₀ (Projectivization.mk ℂ w hwne)).rep with hφ
   have hφne : φ ≠ 0 := Projectivization.rep_nonzero _
   have hφpos : (0 : ℝ) < ‖φ‖ ^ 2 := pow_pos (norm_pos_iff.mpr hφne) 2
@@ -743,17 +743,17 @@ theorem diagReducedMap_complex_probe_general
   have hwnorm : ‖w‖ ^ 2 = 2 := Iadd_basis_norm_sq b hij
   have hw_i : b.repr w i = 1 := by
     rw [hw, b.repr_apply_apply, inner_add_right, inner_smul_right,
-        orthonormal_iff_ite.mp b.orthonormal i i, if_pos rfl,
-        orthonormal_iff_ite.mp b.orthonormal i j, if_neg hij, mul_zero, add_zero]
+        orthonormal_iff_ite.mp b.orthonormal i i, ite_eq_left rfl,
+        orthonormal_iff_ite.mp b.orthonormal i j, ite_eq_right hij, mul_zero, add_zero]
   have hw_j : b.repr w j = Complex.I := by
     rw [hw, b.repr_apply_apply, inner_add_right, inner_smul_right,
-        orthonormal_iff_ite.mp b.orthonormal j i, if_neg (Ne.symm hij),
-        orthonormal_iff_ite.mp b.orthonormal j j, if_pos rfl, mul_one, zero_add]
+        orthonormal_iff_ite.mp b.orthonormal j i, ite_eq_right (Ne.symm hij),
+        orthonormal_iff_ite.mp b.orthonormal j j, ite_eq_left rfl, mul_one, zero_add]
   have hw_zero : ∀ k, k ≠ i → k ≠ j → b.repr w k = 0 := by
     intro k hki hkj
     rw [hw, b.repr_apply_apply, inner_add_right, inner_smul_right,
-        orthonormal_iff_ite.mp b.orthonormal k i, if_neg hki,
-        orthonormal_iff_ite.mp b.orthonormal k j, if_neg hkj, mul_zero, add_zero]
+        orthonormal_iff_ite.mp b.orthonormal k i, ite_eq_right hki,
+        orthonormal_iff_ite.mp b.orthonormal k j, ite_eq_right hkj, mul_zero, add_zero]
   set φ := (diagReducedMap hf b i₀ (Projectivization.mk ℂ w hwne)).rep with hφ
   have hφne : φ ≠ 0 := Projectivization.rep_nonzero _
   have hφpos : (0 : ℝ) < ‖φ‖ ^ 2 := pow_pos (norm_pos_iff.mpr hφne) 2

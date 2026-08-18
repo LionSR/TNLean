@@ -91,7 +91,7 @@ theorem cyclicRestrictₗ_wrappedMiddleBackground_eq_of_complement_eq
     apply hkout
     rw [hoff]
     omega
-  rw [wrappedMiddleBackground, dif_pos ⟨hkL, hk_lt_last⟩]
+  rw [wrappedMiddleBackground, dite_eq_left ⟨hkL, hk_lt_last⟩]
   let r : Fin (M + 1 - (L₀ + 1)) := ⟨k.val - L₀, by omega⟩
   have hrho := hρ r
   have hsite : (⟨r.val + L₀, by omega⟩ : Fin (M + 1)) = k := by
@@ -195,7 +195,7 @@ theorem cyclicRestrictₗ_mirrorMiddleBackground_eq_of_complement_eq
     rw [hsplit, Nat.add_mod_left]
     rw [Nat.mod_eq_of_lt (by omega : k.val + L₀ - (M + 1) < M + 1)]
     omega
-  rw [mirrorMiddleBackground, dif_pos ⟨hk_pos, hk_lt⟩]
+  rw [mirrorMiddleBackground, dite_eq_left ⟨hk_pos, hk_lt⟩]
   let r : Fin (M + 1 - (L₀ + 1)) := ⟨k.val - 1, by omega⟩
   have hrho := hρ r
   have hsite : (⟨r.val + 1, by omega⟩ : Fin (M + 1)) = k := by

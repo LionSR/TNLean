@@ -86,7 +86,7 @@ theorem exists_constant_injectiveMPS_of_cyclicShiftInvariantState
     (hA : IsInjective A) (hTI : IsCyclicShiftInvariantState A) :
     ∃ B : MPSTensor d D, MPSTensor.IsInjective B ∧ SameState A (fun _ : Fin n => B) := by
   have hn0 : 0 < n := by omega
-  haveI : Nonempty (Fin D) := ⟨⟨0, hD⟩⟩
+  have : Nonempty (Fin D) := ⟨⟨0, hD⟩⟩
   -- The cyclic-shift comparison: one invertible gauge per bond.
   obtain ⟨Z, hZ0⟩ := fundamentalTheorem_injectiveMPSChain_cyclicShift hn hD A hA hTI
   have hZ : ∀ (k : Fin n) (i : Fin d), A (cyclicSucc k) i =

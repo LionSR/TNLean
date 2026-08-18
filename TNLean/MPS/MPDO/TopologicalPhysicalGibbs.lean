@@ -405,13 +405,13 @@ theorem sitewiseRetainedMultiplicityOperator_eq_topologicalMultiplicityWeightFac
   by_cases hxy : x = y
   · subst y
     simp
-  · rw [if_neg hxy]
+  · rw [ite_eq_right hxy]
     have hcoord : ∃ n, x n ≠ y n := by
       simpa only [not_forall, not_not] using
         (not_congr funext_iff).mp hxy
     obtain ⟨n, hn⟩ := hcoord
     apply Finset.prod_eq_zero (Finset.mem_univ n)
-    rw [if_neg hn]
+    rw [ite_eq_right hn]
 
 /-- Every transported `Fin d`-indexed ambient physical projector commutes
 with the ambient physical Gibbs factor.

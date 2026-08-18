@@ -114,7 +114,7 @@ theorem IsOrthogonalProjection.exists_range_isometry
       simpa [Matrix.diagonal_mul_diagonal] using hdiag_idem
     exact IsIdempotentElem.iff_eq_zero_or_one.mp (congrFun hfun j)
   let p : Fin D → Prop := fun j ↦ f j = 1
-  haveI : DecidablePred p := fun _ ↦ inferInstance
+  have : DecidablePred p := fun _ ↦ inferInstance
   let S := {j : Fin D // p j}
   let n := Fintype.card S
   let eS : S ≃ Fin n := Fintype.equivFin S
@@ -130,8 +130,16 @@ theorem IsOrthogonalProjection.exists_range_isometry
       · intro h
         subst k
         rfl
-    simpa [V, Matrix.mul_apply, Matrix.conjTranspose_apply, Matrix.one_apply, heq]
-      using hentry
+    change (∑ i : Fin D, starRingEnd ℂ (Umat i ↑(eS.symm j)) *
+      Umat i ↑(eS.symm k)) =
+        if (eS.symm j).1 = (eS.symm k).1 then 1 else 0 at hentry
+    change (∑ i : Fin D, starRingEnd ℂ (Umat i ↑(eS.symm j)) *
+      Umat i ↑(eS.symm k)) = if j = k then 1 else 0
+    by_cases hjk : j = k
+    · subst k
+      simpa using hentry
+    · have hval : (eS.symm j).1 ≠ (eS.symm k).1 := fun h ↦ hjk (heq.mp h)
+      simpa [hjk, hval] using hentry
   · have hPdecomp : P = Umat * Matrix.diagonal f * Umatᴴ := by
       calc
         P = (Umat * Umatᴴ) * P * (Umat * Umatᴴ) := by rw [hUU]; simp
@@ -218,7 +226,7 @@ theorem orthogonalProjection_mul_eq_zero_of_sum_eq_one {m : ℕ}
     intro j
     by_cases hj : j = k
     · simp [hB, hj]
-    · simp only [hB, hj, if_false]
+    · simp only [hB, hj, ite_false]
       rw [Matrix.conjTranspose_mul, (hproj j).1.eq, (hproj k).1.eq]
       calc P k * P j * (P j * P k)
           = P k * (P j * P j) * P k := by simp only [Matrix.mul_assoc]
@@ -247,7 +255,7 @@ theorem orthogonalProjection_mul_eq_zero_of_sum_eq_one {m : ℕ}
           (Finset.sum_erase Finset.univ (by simp)).symm
       _ = ∑ j ∈ Finset.univ.erase k, P k * P j * P k :=
           Finset.sum_congr rfl fun j hj => by
-            rw [if_neg (Finset.mem_erase.mp hj).1]
+            rw [ite_eq_right (Finset.mem_erase.mp hj).1]
       _ = 0 := hzero
   have hBl := hBzero l
   rw [hB] at hBl

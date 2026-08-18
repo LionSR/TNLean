@@ -108,7 +108,7 @@ private lemma diagonalWeight_eq {N : ℕ} (hN : 0 < N) (σ : Fin N → Fin 2) :
   by_cases hzero : ∀ k, σ k = 0
   · simp [hzero, Fin.sum_univ_three, virtualWeight, hN.ne']
   · by_cases hone : ∀ k, σ k = 1
-    · letI : Nonempty (Fin N) := ⟨⟨0, hN⟩⟩
+    · let : Nonempty (Fin N) := ⟨⟨0, hN⟩⟩
       simp [hone, Fin.sum_univ_three, virtualWeight, hN.ne']
     · push Not at hzero hone
       obtain ⟨kzero, hkzero⟩ := hzero
@@ -126,8 +126,8 @@ private lemma diagonalWeight_eq {N : ℕ} (hN : 0 < N) (σ : Fin N → Fin 2) :
       have h2 : ∏ k, virtualWeight 2 (σ k) (σ k) = 0 := by
         apply Finset.prod_eq_zero (Finset.mem_univ kone)
         simp [virtualWeight, hσkone]
-      rw [if_neg (not_forall.mpr ⟨kzero, hkzero⟩),
-        if_neg (not_forall.mpr ⟨kone, hkone⟩)]
+      rw [ite_eq_right (not_forall.mpr ⟨kzero, hkzero⟩),
+        ite_eq_right (not_forall.mpr ⟨kone, hkone⟩)]
       simp [Fin.sum_univ_three, h0, h1, h2]
 
 /-- The finite-chain operator has support only on the two constant
@@ -259,7 +259,7 @@ private theorem reducedBlockState_one_zero_zero (K : ℕ) :
       reindexed_ne_one (funext h)
     rw [show (blockReindexEquiv 2 (K + 1) 1 (by omega)).symm
         (Fin.append zeroSite x) = e (Fin.append zeroSite x) from rfl]
-    simp only [if_neg hnotzero, if_neg hnotone, mul_zero]
+    simp only [ite_eq_right hnotzero, ite_eq_right hnotone, mul_zero]
 
 /-- The all-zero entry of the one-site reduced state is one at odd total
 lengths.
@@ -372,7 +372,7 @@ private lemma reducedBlockState_eq_diagonal_of_odd {N L : ℕ} (hN : Odd N)
       Matrix.diagonal_apply_eq, oddWeight, forall_append_comp_cast_iff]
     by_cases hu0 : ∀ k, u k = 0
     · have hu0eq : (∀ k, u k = 0) = True := propext (iff_true_intro hu0)
-      rw [if_pos hu0]
+      rw [ite_eq_left hu0]
       simp only [hu0eq, true_and]
       rw [Fintype.sum_eq_single (fun _ ↦ 0)]
       · simp
@@ -380,7 +380,7 @@ private lemma reducedBlockState_eq_diagonal_of_odd {N L : ℕ} (hN : Odd N)
         have hnotzero : ¬∀ k, w k = 0 := fun h ↦ hw (funext h)
         simp [hnotzero]
     · have hu0eq : (∀ k, u k = 0) = False := propext (iff_false_intro hu0)
-      rw [if_neg hu0]
+      rw [ite_eq_right hu0]
       apply Finset.sum_eq_zero
       intro w _
       simp [hu0eq]
@@ -414,8 +414,8 @@ private lemma reducedBlockState_eq_diagonal_of_even {N L : ℕ} (hN : Even N)
         norm_num at h01
       have hu0eq : (∀ k, u k = 0) = True := propext (iff_true_intro hu0)
       have hu1eq : (∀ k, u k = 1) = False := propext (iff_false_intro hu1)
-      rw [if_pos hu0]
-      simp only [hu0eq, hu1eq, true_and, false_and, if_false]
+      rw [ite_eq_left hu0]
+      simp only [hu0eq, hu1eq, true_and, false_and, ite_false]
       rw [Fintype.sum_eq_single (fun _ ↦ 0)]
       · simp
       · intro w hw
@@ -424,8 +424,8 @@ private lemma reducedBlockState_eq_diagonal_of_even {N L : ℕ} (hN : Even N)
     · by_cases hu1 : ∀ k, u k = 1
       · have hu0eq : (∀ k, u k = 0) = False := propext (iff_false_intro hu0)
         have hu1eq : (∀ k, u k = 1) = True := propext (iff_true_intro hu1)
-        rw [if_neg hu0, if_pos hu1]
-        simp only [hu0eq, hu1eq, false_and, true_and, if_false]
+        rw [ite_eq_right hu0, ite_eq_left hu1]
+        simp only [hu0eq, hu1eq, false_and, true_and, ite_false]
         rw [Fintype.sum_eq_single (fun _ ↦ 1)]
         · simp
         · intro w hw
@@ -433,7 +433,7 @@ private lemma reducedBlockState_eq_diagonal_of_even {N L : ℕ} (hN : Even N)
           simp [hnotone]
       · have hu0eq : (∀ k, u k = 0) = False := propext (iff_false_intro hu0)
         have hu1eq : (∀ k, u k = 1) = False := propext (iff_false_intro hu1)
-        rw [if_neg hu0, if_neg hu1]
+        rw [ite_eq_right hu0, ite_eq_right hu1]
         apply Finset.sum_eq_zero
         intro w _
         simp [hu0eq, hu1eq]
@@ -535,7 +535,7 @@ private lemma vonNeumannEntropy_evenWeight {N : ℕ} (hNpos : 0 < N)
     norm_num [f, evenWeight, zeroConfig]
   have hfone : f oneConfig = Real.negMulLog (2 / 3) := by
     simp only [f, evenWeight, oneConfig]
-    rw [if_neg]
+    rw [ite_eq_right]
     · norm_num
     · intro h
       have := h ⟨0, hNpos⟩

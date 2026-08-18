@@ -111,8 +111,8 @@ lemma physClose2_R_entry (X : Matrix (Fin 4) (Fin 4) ℂ) (i1 i2 j1 j2 : Fin 4) 
     dotProduct_A_col _ _ _ _
   rw [hdot]
   by_cases h : gate i1 i2 ∧ gate j1 j2
-  · rw [if_pos h]; ring
-  · rw [if_neg h]; ring
+  · rw [ite_eq_left h]; ring
+  · rw [ite_eq_right h]; ring
 
 /-! ### The Walsh–Hadamard eigenbasis of `wMat`, reused as Kraus data -/
 
@@ -188,7 +188,7 @@ lemma refineKraus_apply_conj_mul (s : Fin 2) (pq : Fin 4 × Fin 4) (k : Fin 4) :
       else 0 := by
   simp only [refineKraus, Matrix.of_apply]
   by_cases h : gate pq.1 pq.2 ∧ combine pq.1 pq.2 = k
-  · simp only [if_pos h, star_mul', refineAmp_star, eigVecs_star]
+  · simp only [ite_eq_left h, star_mul', refineAmp_star, eigVecs_star]
     ring
   · simp [h]
 
@@ -232,8 +232,8 @@ lemma refineKraus_resolution :
     · have h2 : ¬ (gate pq.1 pq.2 ∧ combine pq.1 pq.2 = k') := by
         rintro ⟨_, hc⟩
         exact hkk' (h1.2.symm.trans hc)
-      rw [if_pos h1, if_neg h2, mul_zero]
-    · rw [if_neg h1, star_zero, zero_mul]
+      rw [ite_eq_left h1, ite_eq_right h2, mul_zero]
+    · rw [ite_eq_right h1, star_zero, zero_mul]
 
 /-- **`refineMap` is trace-preserving completely positive.** -/
 theorem refineMap_isKrausCPTP : IsKrausCPTP refineMap :=
@@ -266,17 +266,17 @@ theorem refineMap_physClose1 (X : Matrix (Fin 4) (Fin 4) ℂ) :
         · simp [refineKraus, h.1]
         · intro l _ hl
           simp only [refineKraus, Matrix.of_apply]
-          rw [if_neg (fun hc => hl hc.2.symm)]
+          rw [ite_eq_right (fun hc => hl hc.2.symm)]
           ring
         · simp
       simp_rw [hl]
       rw [Finset.sum_eq_single (combine j1 j2)]
-      · simp only [refineKraus, Matrix.of_apply, h.2, true_and, if_true, star_mul',
+      · simp only [refineKraus, Matrix.of_apply, h.2, true_and, ite_true, star_mul',
           refineAmp_star, eigVecs_star]
         ring
       · intro k _ hk
         simp only [refineKraus, Matrix.of_apply]
-        rw [if_neg (fun hc => hk hc.2.symm), star_zero, mul_zero]
+        rw [ite_eq_right (fun hc => hk hc.2.symm), star_zero, mul_zero]
       · simp
     rw [Finset.sum_congr rfl fun s _ => hstep s, ← Finset.sum_mul]
     have hcomb :
@@ -298,8 +298,8 @@ theorem refineMap_physClose1 (X : Matrix (Fin 4) (Fin 4) ℂ) :
       simp_rw [hrw]
       rw [← Finset.mul_sum, wMat_eigen_reconstruction]
       ring
-    rw [hcomb, if_pos h]
-  · rw [if_neg h, mul_zero, zero_mul]
+    rw [hcomb, ite_eq_left h]
+  · rw [ite_eq_right h, mul_zero, zero_mul]
     apply Finset.sum_eq_zero
     intro s _
     apply Finset.sum_eq_zero
@@ -310,10 +310,10 @@ theorem refineMap_physClose1 (X : Matrix (Fin 4) (Fin 4) ℂ) :
       apply Finset.sum_eq_zero
       intro l _
       simp only [refineKraus, Matrix.of_apply]
-      rw [if_neg (fun hc => h1 hc.1), zero_mul]
+      rw [ite_eq_right (fun hc => h1 hc.1), zero_mul]
     · apply mul_eq_zero_of_right
       simp only [refineKraus, Matrix.of_apply]
-      rw [if_neg (fun hc => h2 hc.1), star_zero]
+      rw [ite_eq_right (fun hc => h2 hc.1), star_zero]
 
 /-! ### The coarse-graining map `S`: two-site to one-site physical operators -/
 
@@ -430,45 +430,45 @@ lemma coarseKraus_resolution :
         else 0 := by
     intro s
     by_cases h : gate pq.1 pq.2 ∧ gate pq'.1 pq'.2 ∧ combine pq.1 pq.2 = combine pq'.1 pq'.2
-    · rw [if_pos h]
+    · rw [ite_eq_left h]
       have e1 : coarseKrausGated s (combine pq.1 pq.2) pq =
           (coarseAmp : ℂ) * eigVecs s (bondBit2 pq.1) := by
         simp [coarseKrausGated, Matrix.of_apply, h.1]
       have e2 : coarseKrausGated s (combine pq.1 pq.2) pq' =
           (coarseAmp : ℂ) * eigVecs s (bondBit2 pq'.1) := by
         simp only [coarseKrausGated, Matrix.of_apply]
-        exact if_pos ⟨h.2.1, h.2.2.symm⟩
+        exact ite_eq_left ⟨h.2.1, h.2.2.symm⟩
       rw [Finset.sum_eq_single (combine pq.1 pq.2)]
       · rw [e1, e2, star_mul', eigVecs_star, coarseAmp_star]; ring
       · intro k _ hk
         have e : coarseKrausGated s k pq = 0 := by
           simp only [coarseKrausGated, Matrix.of_apply]
-          exact if_neg (fun hcond => hk hcond.2.symm)
+          exact ite_eq_right (fun hcond => hk hcond.2.symm)
         rw [e]; simp
       · simp
-    · rw [if_neg h]
+    · rw [ite_eq_right h]
       apply Finset.sum_eq_zero
       intro k _
       rw [not_and_or, not_and_or] at h
       rcases h with h1 | h1 | h1
       · have e : coarseKrausGated s k pq = 0 := by
           simp only [coarseKrausGated, Matrix.of_apply]
-          exact if_neg (fun hcond => h1 hcond.1)
+          exact ite_eq_right (fun hcond => h1 hcond.1)
         rw [e]; simp
       · have e : coarseKrausGated s k pq' = 0 := by
           simp only [coarseKrausGated, Matrix.of_apply]
-          exact if_neg (fun hcond => h1 hcond.1)
+          exact ite_eq_right (fun hcond => h1 hcond.1)
         rw [e]; simp
       · by_cases hpk : gate pq.1 pq.2 ∧ combine pq.1 pq.2 = k
         · have hpk' : ¬ (gate pq'.1 pq'.2 ∧ combine pq'.1 pq'.2 = k) := by
             rintro ⟨_, hc⟩; exact h1 (hpk.2.trans hc.symm)
           have e : coarseKrausGated s k pq' = 0 := by
             simp only [coarseKrausGated, Matrix.of_apply]
-            exact if_neg hpk'
+            exact ite_eq_right hpk'
           rw [e]; simp
         · have e : coarseKrausGated s k pq = 0 := by
             simp only [coarseKrausGated, Matrix.of_apply]
-            exact if_neg hpk
+            exact ite_eq_right hpk
           rw [e]; simp
   -- The ungated contribution at a fixed label `t`, as a sum over the domain `Fin 4`.
   have hungated_term : ∀ t : Fin 2,
@@ -480,23 +480,23 @@ lemma coarseKraus_resolution :
     by_cases h : ¬ gate pq.1 pq.2 ∧ ¬ gate pq'.1 pq'.2 ∧ bondBit2 pq.1 = t ∧
         bondBit2 pq'.1 = t ∧
         combine pq.1 pq.2 = combine pq'.1 pq'.2
-    · rw [if_pos h]
+    · rw [ite_eq_left h]
       obtain ⟨hg1, hg2, hb1, hb2, hc⟩ := h
       have e1 : coarseKrausUngated t (combine pq.1 pq.2) pq = 1 := by
         simp only [coarseKrausUngated, Matrix.of_apply]
-        exact if_pos ⟨hg1, trivial, hb1⟩
+        exact ite_eq_left ⟨hg1, trivial, hb1⟩
       have e2 : coarseKrausUngated t (combine pq.1 pq.2) pq' = 1 := by
         simp only [coarseKrausUngated, Matrix.of_apply]
-        exact if_pos ⟨hg2, hc.symm, hb2⟩
+        exact ite_eq_left ⟨hg2, hc.symm, hb2⟩
       rw [Finset.sum_eq_single (combine pq.1 pq.2)]
       · rw [e1, e2]; simp
       · intro k _ hk
         have e : coarseKrausUngated t k pq = 0 := by
           simp only [coarseKrausUngated, Matrix.of_apply]
-          exact if_neg (fun hcond => hk hcond.2.1.symm)
+          exact ite_eq_right (fun hcond => hk hcond.2.1.symm)
         rw [e]; simp
       · simp
-    · rw [if_neg h]
+    · rw [ite_eq_right h]
       apply Finset.sum_eq_zero
       intro k _
       by_cases hpk : ¬ gate pq.1 pq.2 ∧ combine pq.1 pq.2 = k ∧ bondBit2 pq.1 = t
@@ -507,16 +507,16 @@ lemma coarseKraus_resolution :
           exact h ⟨hpk.1, hg', hpk.2.2, hb', hpk.2.1.trans hc'.symm⟩
         have e : coarseKrausUngated t k pq' = 0 := by
           simp only [coarseKrausUngated, Matrix.of_apply]
-          exact if_neg hpk'
+          exact ite_eq_right hpk'
         rw [e]; simp
       · have e : coarseKrausUngated t k pq = 0 := by
           simp only [coarseKrausUngated, Matrix.of_apply]
-          exact if_neg hpk
+          exact ite_eq_right hpk
         rw [e]; simp
   simp only [hgated_term, hungated_term, Fin.sum_univ_two]
   by_cases heq : pq = pq'
   · subst heq
-    rw [if_pos rfl]
+    rw [ite_eq_left rfl]
     by_cases hg : gate pq.1 pq.2
     · have hCg : gate pq.1 pq.2 ∧ gate pq.1 pq.2 ∧ combine pq.1 pq.2 = combine pq.1 pq.2 :=
         ⟨hg, hg, rfl⟩
@@ -528,7 +528,7 @@ lemma coarseKraus_resolution :
           ¬ (¬ gate pq.1 pq.2 ∧ ¬ gate pq.1 pq.2 ∧ bondBit2 pq.1 = (1 : Fin 2) ∧
             bondBit2 pq.1 = (1 : Fin 2) ∧ combine pq.1 pq.2 = combine pq.1 pq.2) :=
         fun hc => hc.1 hg
-      rw [if_pos hCg, if_pos hCg, if_neg hCu0, if_neg hCu1]
+      rw [ite_eq_left hCg, ite_eq_left hCg, ite_eq_right hCu0, ite_eq_right hCu1]
       have hsum :
           (eigVecs 0 (bondBit2 pq.1)) ^ 2 + (eigVecs 1 (bondBit2 pq.1)) ^ 2 =
             (2 : ℂ) := by
@@ -545,7 +545,7 @@ lemma coarseKraus_resolution :
       rw [step, hsum, hamp]; norm_num
     · have hCg : ¬ (gate pq.1 pq.2 ∧ gate pq.1 pq.2 ∧ combine pq.1 pq.2 = combine pq.1 pq.2) :=
         fun hc => hg hc.1
-      rw [if_neg hCg, if_neg hCg]
+      rw [ite_eq_right hCg, ite_eq_right hCg]
       by_cases hb : bondBit2 pq.1 = (0 : Fin 2)
       · have hCu0 : ¬ gate pq.1 pq.2 ∧ ¬ gate pq.1 pq.2 ∧ bondBit2 pq.1 = (0 : Fin 2) ∧
             bondBit2 pq.1 = (0 : Fin 2) ∧ combine pq.1 pq.2 = combine pq.1 pq.2 :=
@@ -554,7 +554,7 @@ lemma coarseKraus_resolution :
             bondBit2 pq.1 = (1 : Fin 2) ∧ combine pq.1 pq.2 = combine pq.1 pq.2) := by
           rintro ⟨_, _, hb1, _, _⟩
           rw [hb] at hb1; exact absurd hb1 (by decide)
-        rw [if_pos hCu0, if_neg hCu1]; norm_num
+        rw [ite_eq_left hCu0, ite_eq_right hCu1]; norm_num
       · have hb1 : bondBit2 pq.1 = (1 : Fin 2) := by omega
         have hCu1 : ¬ gate pq.1 pq.2 ∧ ¬ gate pq.1 pq.2 ∧ bondBit2 pq.1 = (1 : Fin 2) ∧
             bondBit2 pq.1 = (1 : Fin 2) ∧ combine pq.1 pq.2 = combine pq.1 pq.2 :=
@@ -563,8 +563,8 @@ lemma coarseKraus_resolution :
             bondBit2 pq.1 = (0 : Fin 2) ∧ combine pq.1 pq.2 = combine pq.1 pq.2) := by
           rintro ⟨_, _, hb0, _, _⟩
           exact hb hb0
-        rw [if_neg hCu0, if_pos hCu1]; norm_num
-  · rw [if_neg heq]
+        rw [ite_eq_right hCu0, ite_eq_left hCu1]; norm_num
+  · rw [ite_eq_right heq]
     by_cases hg : gate pq.1 pq.2
     · by_cases hg' : gate pq'.1 pq'.2
       · by_cases hc : combine pq.1 pq.2 = combine pq'.1 pq'.2
@@ -582,7 +582,7 @@ lemma coarseKraus_resolution :
                 bondBit2 pq.1 = (1 : Fin 2) ∧
               bondBit2 pq'.1 = (1 : Fin 2) ∧ combine pq.1 pq.2 = combine pq'.1 pq'.2) :=
             fun hcon => hcon.1 hg
-          rw [if_pos hCg, if_pos hCg, if_neg hCu0, if_neg hCu1]
+          rw [ite_eq_left hCg, ite_eq_left hCg, ite_eq_right hCu0, ite_eq_right hCu1]
           have hbne : bondBit2 pq.1 ≠ bondBit2 pq'.1 :=
             bondBit2_ne_of_gate_combine_eq hg hg' hc heq
           have step :
@@ -607,7 +607,7 @@ lemma coarseKraus_resolution :
                 bondBit2 pq.1 = (1 : Fin 2) ∧
               bondBit2 pq'.1 = (1 : Fin 2) ∧ combine pq.1 pq.2 = combine pq'.1 pq'.2) :=
             fun hcon => hcon.1 hg
-          rw [if_neg hCg, if_neg hCg, if_neg hCu0, if_neg hCu1]; norm_num
+          rw [ite_eq_right hCg, ite_eq_right hCg, ite_eq_right hCu0, ite_eq_right hCu1]; norm_num
       · have hCg : ¬ (gate pq.1 pq.2 ∧ gate pq'.1 pq'.2 ∧
             combine pq.1 pq.2 = combine pq'.1 pq'.2) := fun hcon => hg' hcon.2.1
         have hCu0 :
@@ -620,7 +620,7 @@ lemma coarseKraus_resolution :
               bondBit2 pq.1 = (1 : Fin 2) ∧
             bondBit2 pq'.1 = (1 : Fin 2) ∧ combine pq.1 pq.2 = combine pq'.1 pq'.2) :=
           fun hcon => hcon.1 hg
-        rw [if_neg hCg, if_neg hCg, if_neg hCu0, if_neg hCu1]; norm_num
+        rw [ite_eq_right hCg, ite_eq_right hCg, ite_eq_right hCu0, ite_eq_right hCu1]; norm_num
     · have hCg : ¬ (gate pq.1 pq.2 ∧ gate pq'.1 pq'.2 ∧
           combine pq.1 pq.2 = combine pq'.1 pq'.2) := fun hcon => hg hcon.1
       have hCu0 :
@@ -635,7 +635,7 @@ lemma coarseKraus_resolution :
           bondBit2 pq'.1 = (1 : Fin 2) ∧ combine pq.1 pq.2 = combine pq'.1 pq'.2) := by
         rintro ⟨hg1, hg1', hb1, hb1', hceq⟩
         exact heq (eq_of_ungated_combine_bondBit2 hg1 hg1' hceq (hb1.trans hb1'.symm))
-      rw [if_neg hCg, if_neg hCg, if_neg hCu0, if_neg hCu1]; norm_num
+      rw [ite_eq_right hCg, ite_eq_right hCg, ite_eq_right hCu0, ite_eq_right hCu1]; norm_num
 
 /-- **`coarseMap` is trace-preserving completely positive.** -/
 theorem coarseMap_isKrausCPTP : IsKrausCPTP coarseMap :=
@@ -666,12 +666,13 @@ theorem coarseMap_physClose2 (X : Matrix (Fin 4) (Fin 4) ℂ) :
       intro p _
       by_cases hp : ¬ gate p.1 p.2 ∧ combine p.1 p.2 = i ∧ bondBit2 p.1 = t
       · have hz : physClose2 R X p q = 0 := by
-          rw [physClose2_R_entry, if_neg (fun hcon : gate p.1 p.2 ∧ gate q.1 q.2 => hp.1 hcon.1)]
+          rw [physClose2_R_entry,
+            ite_eq_right (fun hcon : gate p.1 p.2 ∧ gate q.1 q.2 => hp.1 hcon.1)]
           ring
         rw [hz, mul_zero]
       · have e : coarseKrausUngated t i p = 0 := by
           simp only [coarseKrausUngated, Matrix.of_apply]
-          exact if_neg hp
+          exact ite_eq_right hp
         rw [e, zero_mul]
     rw [hinner]; simp
   have hungated_sum_zero :
@@ -692,7 +693,7 @@ theorem coarseMap_physClose2 (X : Matrix (Fin 4) (Fin 4) ℂ) :
           else 0) := by
     intro s q
     by_cases hq : gate q.1 q.2
-    · rw [if_pos hq]
+    · rw [ite_eq_left hq]
       have hcongr : (∑ p : Fin 4 × Fin 4, coarseKrausGated s i p * physClose2 R X p q) =
           ∑ p : Fin 4 × Fin 4, if gate p.1 p.2 ∧ combine p.1 p.2 = i then
               (coarseAmp : ℂ) * (25 / 32 : ℂ) * physClose1 R X i (combine q.1 q.2) *
@@ -701,38 +702,38 @@ theorem coarseMap_physClose2 (X : Matrix (Fin 4) (Fin 4) ℂ) :
         apply Finset.sum_congr rfl
         intro p _
         by_cases hp : gate p.1 p.2 ∧ combine p.1 p.2 = i
-        · rw [if_pos hp]
+        · rw [ite_eq_left hp]
           have e : coarseKrausGated s i p = (coarseAmp : ℂ) * eigVecs s (bondBit2 p.1) := by
             simp only [coarseKrausGated, Matrix.of_apply]
-            exact if_pos hp
+            exact ite_eq_left hp
           have c1 :
               (if gate p.1 p.2 ∧ gate q.1 q.2 then
                 wMat (bondBit2 p.1) (bondBit2 q.1) else 0) =
-              wMat (bondBit2 p.1) (bondBit2 q.1) := if_pos ⟨hp.1, hq⟩
+              wMat (bondBit2 p.1) (bondBit2 q.1) := ite_eq_left ⟨hp.1, hq⟩
           rw [e, physClose2_R_entry, hp.2, c1]; ring
-        · rw [if_neg hp]
+        · rw [ite_eq_right hp]
           have e : coarseKrausGated s i p = 0 := by
             simp only [coarseKrausGated, Matrix.of_apply]
-            exact if_neg hp
+            exact ite_eq_right hp
           rw [e, zero_mul]
       rw [hcongr, gated_combine_fiber_sum i (fun b => (coarseAmp : ℂ) * (25 / 32 : ℂ) *
           physClose1 R X i (combine q.1 q.2) * (eigVecs s b * wMat b (bondBit2 q.1)))]
       ring
-    · rw [if_neg hq]
+    · rw [ite_eq_right hq]
       apply Finset.sum_eq_zero
       intro p _
       by_cases hp : gate p.1 p.2 ∧ combine p.1 p.2 = i
       · have e : coarseKrausGated s i p = (coarseAmp : ℂ) * eigVecs s (bondBit2 p.1) := by
           simp only [coarseKrausGated, Matrix.of_apply]
-          exact if_pos hp
+          exact ite_eq_left hp
         have c1 :
             (if gate p.1 p.2 ∧ gate q.1 q.2 then
               wMat (bondBit2 p.1) (bondBit2 q.1) else 0) = 0 :=
-          if_neg (fun hcon => hq hcon.2)
+          ite_eq_right (fun hcon => hq hcon.2)
         rw [e, physClose2_R_entry, c1]; ring
       · have e : coarseKrausGated s i p = 0 := by
           simp only [coarseKrausGated, Matrix.of_apply]
-          exact if_neg hp
+          exact ite_eq_right hp
         rw [e, zero_mul]
   have houter : ∀ s : Fin 2,
       (∑ q : Fin 4 × Fin 4, (∑ p : Fin 4 × Fin 4,
@@ -752,20 +753,20 @@ theorem coarseMap_physClose2 (X : Matrix (Fin 4) (Fin 4) ℂ) :
       intro q _
       rw [hinner]
       by_cases hqj : gate q.1 q.2 ∧ combine q.1 q.2 = j
-      · rw [if_pos hqj.1, if_pos hqj, hqj.2]
+      · rw [ite_eq_left hqj.1, ite_eq_left hqj, hqj.2]
         have e : coarseKrausGated s j q = (coarseAmp : ℂ) * eigVecs s (bondBit2 q.1) := by
           simp only [coarseKrausGated, Matrix.of_apply]
-          exact if_pos hqj
+          exact ite_eq_left hqj
         rw [e, star_mul', eigVecs_star, coarseAmp_star]
         ring
       · by_cases hq : gate q.1 q.2
         · have hqne : combine q.1 q.2 ≠ j := fun hcon => hqj ⟨hq, hcon⟩
-          rw [if_pos hq, if_neg hqj]
+          rw [ite_eq_left hq, ite_eq_right hqj]
           have e : coarseKrausGated s j q = 0 := by
             simp only [coarseKrausGated, Matrix.of_apply]
-            exact if_neg (fun hcon => hqne hcon.2)
+            exact ite_eq_right (fun hcon => hqne hcon.2)
           rw [e]; simp
-        · rw [if_neg hq, if_neg hqj]; simp
+        · rw [ite_eq_right hq, ite_eq_right hqj]; simp
     rw [hcongr, gated_combine_fiber_sum j (fun b => (coarseAmp : ℂ) ^ 2 * (25 / 32 : ℂ) *
         physClose1 R X i j * (eigVecs s 0 * wMat 0 b + eigVecs s 1 * wMat 1 b) * eigVecs s b)]
     ring

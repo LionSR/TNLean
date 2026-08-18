@@ -128,9 +128,9 @@ theorem reducedMap_two_level_normal_form
         orthonormal_iff_ite.mp b.orthonormal j i₀,
         orthonormal_iff_ite.mp b.orthonormal j i]
   have hwi0 : b.repr (b i₀ + b i) i₀ = 1 := by
-    rw [hwj i₀, if_pos rfl, if_neg hij, add_zero]
+    rw [hwj i₀, ite_eq_left rfl, ite_eq_right hij, add_zero]
   have hwi : b.repr (b i₀ + b i) i = 1 := by
-    rw [hwj i, if_neg (Ne.symm hij), if_pos rfl, zero_add]
+    rw [hwj i, ite_eq_right (Ne.symm hij), ite_eq_left rfl, zero_add]
   have hwnorm : ‖(b i₀ + b i : EuclideanSpace ℂ (Fin N))‖ ^ 2 = 2 := by
     rw [sq, norm_add_sq_eq_norm_sq_add_norm_sq_of_inner_eq_zero (b i₀) (b i)
           (b.orthonormal.2 hij), b.orthonormal.norm_eq_one i₀,
@@ -152,7 +152,7 @@ theorem reducedMap_two_level_normal_form
   have hsupp : ∀ j, j ≠ i₀ → j ≠ i → b.repr φ j = 0 := by
     intro j hj0 hji
     have hz : ‖b.repr φ j‖ ^ 2 / ‖φ‖ ^ 2 = 0 := by
-      rw [hmodj j, hwj j, if_neg hj0, if_neg hji, add_zero, norm_zero]
+      rw [hmodj j, hwj j, ite_eq_right hj0, ite_eq_right hji, add_zero, norm_zero]
       norm_num
     have hsq : ‖b.repr φ j‖ ^ 2 = 0 := by
       rcases div_eq_zero_iff.mp hz with h | h
@@ -223,7 +223,7 @@ lemma scaled_orthonormal
   rw [inner_smul_left, inner_smul_right, orthonormal_iff_ite.mp b.orthonormal i j]
   rcases eq_or_ne i j with h | h
   · subst h
-    simp only [if_true, mul_one]
+    simp only [ite_true, mul_one]
     rw [RCLike.conj_mul, hε i]; norm_num
   · simp [h]
 
@@ -303,7 +303,7 @@ lemma twoLevelPhase_self
     (hf : TransProbPreserving f)
     (b : OrthonormalBasis (Fin N) ℂ (EuclideanSpace ℂ (Fin N))) (i₀ : Fin N) :
     twoLevelPhase hf b i₀ i₀ = 1 := by
-  unfold twoLevelPhase; rw [dif_pos rfl]
+  unfold twoLevelPhase; rw [dite_eq_left rfl]
 
 /-- Every extracted phase is unit modulus: `‖twoLevelPhase hf b i₀ j‖ = 1`
 (anchor `‖1‖ = 1`; off-anchor from the Stage-2 `choose_spec`). -/
@@ -313,8 +313,8 @@ lemma twoLevelPhase_norm
     ‖twoLevelPhase hf b i₀ j‖ = 1 := by
   unfold twoLevelPhase
   rcases eq_or_ne j i₀ with h | h
-  · rw [dif_pos h, norm_one]
-  · rw [dif_neg h]
+  · rw [dite_eq_left h, norm_one]
+  · rw [dite_eq_right h]
     obtain ⟨_, hnorm, _⟩ :=
       Classical.choose_spec
         (reducedMap_two_level_normal_form hf b (i₀ := i₀) (i := j) (Ne.symm h))
@@ -375,7 +375,7 @@ theorem diagReducedMap_fixes_two_level
     Classical.choose_spec (reducedMap_two_level_normal_form hf b (i₀ := i₀) (i := i) hij)
   have hci : twoLevelPhase hf b i₀ i
       = Classical.choose (reducedMap_two_level_normal_form hf b (i₀ := i₀) (i := i) hij) := by
-    rw [twoLevelPhase, dif_neg (Ne.symm hij)]
+    rw [twoLevelPhase, dite_eq_right (Ne.symm hij)]
   set c := Classical.choose
     (reducedMap_two_level_normal_form hf b (i₀ := i₀) (i := i) hij) with hc
   have hcne : c ≠ 0 := by rw [← norm_ne_zero_iff, hnorm]; norm_num

@@ -195,11 +195,11 @@ theorem mpo_M_apply {N : ℕ} [NeZero N] (σ τ : Fin N → Fin 2) :
   by_cases hστ : σ = τ
   · subst τ
     simp only [edgeWeight, cycleWeight, true_and, ↓reduceIte]
-  · rw [if_neg hστ]
+  · rw [ite_eq_right hστ]
     obtain ⟨n, hn⟩ := Function.ne_iff.mp hστ
     apply Finset.prod_eq_zero (Finset.mem_univ n)
     simp only [edgeWeight]
-    rw [if_neg]
+    rw [ite_eq_right]
     exact fun hdiag ↦ hn hdiag.1
 
 /-- The diagonal MPO matrix formula, as an equality of matrices.
@@ -272,7 +272,7 @@ private theorem cycleWeight_append_eq_internal_mul_complement {L R : ℕ}
     letI : NeZero (L + R) := ⟨by omega⟩
     cycleWeight (Fin.append x w) =
       internalEdgeProduct x * complementPathWeight (lastLabel hL x) (firstLabel hL x) w := by
-  letI : NeZero (L + R) := ⟨by omega⟩
+  let : NeZero (L + R) := ⟨by omega⟩
   unfold cycleWeight internalEdgeProduct
   let q : Fin (L + R) → Fin 2 := Fin.append x w
   have hsplit : L + R = (L - 1) + (R + 1) := by omega
@@ -477,10 +477,10 @@ theorem internalEdgeProduct_eq {L : ℕ} (x : Fin L → Fin 2) :
   | more L ih0 ih1 =>
       rw [internalEdgeProduct_more, internalTransitionCount, ih1]
       by_cases h : x 0 = x 1
-      · rw [if_pos h, h]
+      · rw [ite_eq_left h, h]
         have hx : x 1 = 0 ∨ x 1 = 1 := by omega
         rcases hx with hx | hx <;> simp [hx, weightMatrix]
-      · rw [if_neg h]
+      · rw [ite_eq_right h]
         have hx0 : x 0 = 0 ∨ x 0 = 1 := by omega
         have hx1 : x 1 = 0 ∨ x 1 = 1 := by omega
         rcases hx0 with hx0 | hx0 <;> rcases hx1 with hx1 | hx1 <;>
@@ -504,7 +504,7 @@ theorem reducedBlockState_apply_eq_internal_mul_pow {N L : ℕ} [NeZero N] (hL :
   · subst y
     simp only [↓reduceIte]
     rw [← Finset.mul_sum]
-    letI : NeZero (L + (L + K - L)) := ⟨by omega⟩
+    let : NeZero (L + (L + K - L)) := ⟨by omega⟩
     have htotal : L + K = L + (L + K - L) := by omega
     have hcastsum :
         (∑ i : Fin (L + K - L) → Fin 2,
@@ -536,10 +536,10 @@ theorem reducedBlockState_apply_eq_internal_mul_pow {N L : ℕ} [NeZero N] (hL :
     rw [htrace]
     simp only [div_eq_mul_inv]
     ring
-  · rw [if_neg hxy]
+  · rw [ite_eq_right hxy]
     apply Finset.sum_eq_zero
     intro w _
-    rw [if_neg]
+    rw [ite_eq_right]
     · ring
     intro h
     apply hxy
@@ -557,7 +557,7 @@ private theorem neg_one_pow_internalTransitionCount {L : ℕ} (hL : 1 ≤ L)
   | zero => omega
   | one =>
       simp only [internalTransitionCount, pow_zero]
-      rw [if_pos]
+      rw [ite_eq_left]
       congr
   | more L ih0 ih1 =>
       rw [internalTransitionCount]
@@ -567,8 +567,8 @@ private theorem neg_one_pow_internalTransitionCount {L : ℕ} (hL : 1 ≤ L)
           (if x ⟨L + 1, by omega⟩ = x 1 then 1 else -1) =
         if x ⟨L + 1, by omega⟩ = x 0 then 1 else -1
       by_cases h01 : x 0 = x 1
-      · rw [if_pos h01, pow_zero, one_mul, h01]
-      · rw [if_neg h01, pow_one]
+      · rw [ite_eq_left h01, pow_zero, one_mul, h01]
+      · rw [ite_eq_right h01, pow_one]
         have hx0 : x 0 = 0 ∨ x 0 = 1 := by omega
         have hx1 : x 1 = 0 ∨ x 1 = 1 := by omega
         have hxlast : x ⟨L + 1, by omega⟩ = 0 ∨ x ⟨L + 1, by omega⟩ = 1 := by omega

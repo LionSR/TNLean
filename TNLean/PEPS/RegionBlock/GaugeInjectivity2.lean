@@ -5,6 +5,8 @@ Authors: TNLean contributors
 -/
 import TNLean.PEPS.RegionBlock.GaugeInjectivity
 
+import Mathlib.LinearAlgebra.Matrix.Nondegenerate
+
 /-!
 # A gauge preserves blocked-region linear independence
 
@@ -17,9 +19,8 @@ From the global-configuration form of the gauged blocked-region weight
 region `R` is the blocked tensor of `B` mixed by the boundary coupling matrix, the product over
 the boundary edges of the surviving boundary gauges (`regionBlockedWeight_applyGauge`).  The
 coupling matrix is invertible — its inverse is the product of the per-edge inverse gauges
-(`sum_regionBoundaryCoupling_mul_inv`) — so linear independence transfers
-(`linearIndependent_sum_smul`), giving the main result
-`regionBlockedTensorInjective_applyGauge`: a gauge preserves blocked-region linear
+(`sum_regionBoundaryCoupling_mul_inv`) — so linear independence transfers, giving the main
+result `regionBlockedTensorInjective_applyGauge`: a gauge preserves blocked-region linear
 independence.
 
 ## References
@@ -56,9 +57,9 @@ private theorem sum_regionBoundary_fiber (B : Tensor G d) (R : Finset V)
   rw [Finset.sum_comm]
   refine Finset.sum_congr rfl (fun ζ _ => ?_)
   rw [Finset.sum_eq_single (regionBoundaryLabel (G := G) B R ζ)]
-  · rw [if_pos rfl]
+  · rw [ite_eq_left rfl]
   · intro μ _ hμ
-    rw [if_neg (fun h => hμ h.symm)]
+    rw [ite_eq_right (fun h => hμ h.symm)]
   · intro h
     exact absurd (Finset.mem_univ _) h
 
@@ -129,9 +130,9 @@ theorem regionBoundaryGaugeInv_mul (B : Tensor G d)
     regionBoundaryGaugeInv (G := G) B X R f * regionBoundaryGauge (G := G) B X R f = 1 := by
   rw [regionBoundaryGauge, regionBoundaryGaugeInv]
   by_cases h : f.1.1.1 ∈ R
-  · rw [if_pos h, if_pos h]
+  · rw [ite_eq_left h, ite_eq_left h]
     simp
-  · rw [if_neg h, if_neg h, ← Matrix.transpose_mul]
+  · rw [ite_eq_right h, ite_eq_right h, ← Matrix.transpose_mul]
     simp
 
 open scoped Classical in
@@ -184,59 +185,6 @@ theorem sum_regionBoundaryCoupling_mul_inv (B : Tensor G d)
         rw [Fintype.prod_boole]
         exact if_congr funext_iff.symm rfl rfl
 
-/-! ### Transfer of linear independence -/
-
-/-- Mixing a linearly independent family of vectors by a square matrix with a right inverse
-preserves linear independence: a vanishing combination of the mixed family yields, by linear
-independence, the vanishing of the mixed coefficients, and contracting with the right inverse
-recovers each original coefficient. -/
-theorem linearIndependent_sum_smul {ι : Type*} [Fintype ι] [DecidableEq ι]
-    {W : Type*} [AddCommGroup W] [Module ℂ W] {v v' : ι → W} {K K' : ι → ι → ℂ}
-    (hv : LinearIndependent ℂ v)
-    (hKK' : ∀ b c : ι, (∑ b' : ι, K b b' * K' b' c) = if b = c then 1 else 0)
-    (hv' : ∀ b : ι, v' b = ∑ b' : ι, K b b' • v b') :
-    LinearIndependent ℂ v' := by
-  classical
-  rw [Fintype.linearIndependent_iff]
-  intro g hg
-  -- The mixed coefficients annihilate the original family.
-  have hcoef : ∀ b' : ι, (∑ b : ι, g b * K b b') = 0 := by
-    have h0 : (∑ b' : ι, (∑ b : ι, g b * K b b') • v b') = 0 := by
-      calc
-        (∑ b' : ι, (∑ b : ι, g b * K b b') • v b')
-          = ∑ b' : ι, ∑ b : ι, (g b * K b b') • v b' := by
-            refine Finset.sum_congr rfl fun b' _ => ?_
-            rw [Finset.sum_smul]
-        _ = ∑ b : ι, ∑ b' : ι, (g b * K b b') • v b' := Finset.sum_comm
-        _ = ∑ b : ι, g b • v' b := by
-            refine Finset.sum_congr rfl fun b _ => ?_
-            rw [hv' b, Finset.smul_sum]
-            refine Finset.sum_congr rfl fun b' _ => ?_
-            rw [smul_smul]
-        _ = 0 := hg
-    exact Fintype.linearIndependent_iff.mp hv _ h0
-  -- Contract with the right inverse to recover each coefficient.
-  intro b
-  calc
-    g b = ∑ c : ι, g c * if c = b then 1 else 0 := by
-        rw [Finset.sum_congr rfl (fun c _ => by rw [mul_ite, mul_one, mul_zero]),
-          Finset.sum_ite_eq' Finset.univ b g, if_pos (Finset.mem_univ b)]
-    _ = ∑ c : ι, g c * ∑ b' : ι, K c b' * K' b' b := by
-        refine Finset.sum_congr rfl fun c _ => ?_
-        rw [hKK' c b]
-    _ = ∑ c : ι, ∑ b' : ι, g c * (K c b' * K' b' b) := by
-        refine Finset.sum_congr rfl fun c _ => ?_
-        rw [Finset.mul_sum]
-    _ = ∑ b' : ι, ∑ c : ι, g c * (K c b' * K' b' b) := Finset.sum_comm
-    _ = ∑ b' : ι, (∑ c : ι, g c * K c b') * K' b' b := by
-        refine Finset.sum_congr rfl fun b' _ => ?_
-        rw [Finset.sum_mul]
-        refine Finset.sum_congr rfl fun c _ => ?_
-        ring
-    _ = 0 := by
-        refine Finset.sum_eq_zero fun b' _ => ?_
-        rw [hcoef b', zero_mul]
-
 /-! ### The main result -/
 
 /-- **A gauge preserves blocked-region linear independence.**  If the blocked tensor of `B`
@@ -256,20 +204,32 @@ theorem regionBlockedTensorInjective_applyGauge (B : Tensor G d)
     RegionBlockedTensorInjective (G := G) (applyGauge B X) R := by
   classical
   rw [RegionBlockedTensorInjective] at hB ⊢
-  refine linearIndependent_sum_smul (v := regionBlockedTensorFamily (G := G) B R)
-    (K := fun b b' => ∏ f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f},
-      regionBoundaryGauge (G := G) B X R f (b f) (b' f))
-    (K' := fun b b' => ∏ f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f},
-      regionBoundaryGaugeInv (G := G) B X R f (b f) (b' f))
-    hB (sum_regionBoundaryCoupling_mul_inv (G := G) B X R) ?_
-  intro b
-  funext τ
-  rw [show regionBlockedTensorFamily (G := G) (applyGauge B X) R b τ =
-      regionBlockedWeight (G := G) (applyGauge B X) R b τ from rfl]
-  rw [regionBlockedWeight_applyGauge (G := G) B X R b τ, Finset.sum_apply]
-  refine Finset.sum_congr rfl fun b' _ => ?_
-  rw [Pi.smul_apply, smul_eq_mul]
-  rfl
+  let K : Matrix (RegionBoundaryConfig (G := G) B R) (RegionBoundaryConfig (G := G) B R) ℂ :=
+    fun b b' => ∏ f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f},
+      regionBoundaryGauge (G := G) B X R f (b f) (b' f)
+  let K' : Matrix (RegionBoundaryConfig (G := G) B R) (RegionBoundaryConfig (G := G) B R) ℂ :=
+    fun b b' => ∏ f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f},
+      regionBoundaryGaugeInv (G := G) B X R f (b f) (b' f)
+  have hKK' : K * K' = 1 := by
+    ext b c
+    rw [Matrix.mul_apply, Matrix.one_apply]
+    exact sum_regionBoundaryCoupling_mul_inv (G := G) B X R b c
+  have hK : K.Nondegenerate := by
+    apply Matrix.nondegenerate_of_det_ne_zero
+    intro hdet
+    have hzero : (0 : ℂ) = 1 := by
+      simpa [Matrix.det_mul, hdet] using congr_arg Matrix.det hKK'
+    exact zero_ne_one hzero
+  rw [show regionBlockedTensorFamily (G := G) (applyGauge B X) R = fun b =>
+      ∑ b', K b b' • regionBlockedTensorFamily (G := G) B R b' from funext fun b => by
+    funext τ
+    rw [show regionBlockedTensorFamily (G := G) (applyGauge B X) R b τ =
+        regionBlockedWeight (G := G) (applyGauge B X) R b τ from rfl]
+    rw [regionBlockedWeight_applyGauge (G := G) B X R b τ, Finset.sum_apply]
+    refine Finset.sum_congr rfl fun b' _ => ?_
+    rw [Pi.smul_apply, smul_eq_mul]
+    rfl]
+  exact hB.sum_smul_of_nondegenerate hK
 
 end PEPS
 end TNLean
