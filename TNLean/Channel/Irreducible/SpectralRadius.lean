@@ -236,8 +236,7 @@ theorem spectralRadius_eq_of_posDef_eigenvector_of_irreducible_cp
     simp_rw [hstar_d, hd_sq]
     rw [← Finset.smul_sum]
     have hsum : ∑ i : Fin n, (K i)ᴴ * σ * ((K i)ᴴ)ᴴ =
-        Kraus.mapLM (fun i => (K i)ᴴ) σ := by
-      simp [Kraus.mapLM_apply, Kraus.map_apply]
+        Kraus.mapLM (fun i => (K i)ᴴ) σ := rfl
     rw [hsum, hσ_eig, ← hr_eq_t, smul_smul, inv_mul_cancel₀, one_smul]
     exact_mod_cast hr.ne'
   set B : Fin n → Matrix (Fin D) (Fin D) ℂ := Kraus.tpGauge A' σ with hB_def
@@ -275,7 +274,7 @@ theorem spectralRadius_eq_of_posDef_eigenvector_of_irreducible_cp
             simp only [← Matrix.sum_mul, ← Matrix.mul_sum]
       _ = (↑r : ℂ)⁻¹ • (S * E (S⁻¹ * X * S⁻¹) * S) := by
             rw [hE_eq]
-            simp [Kraus.mapLM_apply, Kraus.map_apply]
+            rfl
       _ = ((↑r : ℂ)⁻¹ • similarityMap (D := D) S⁻¹ E) X := by
             rw [LinearMap.smul_apply, hsim_apply]
   set E' : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ :=

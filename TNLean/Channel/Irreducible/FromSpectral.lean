@@ -407,8 +407,7 @@ theorem isIrreducibleMap_of_hasSpectralProperties
     simp_rw [hstar_d, hd_sq]
     rw [← Finset.smul_sum]
     have hsum : ∑ i : Fin n, (K i)ᴴ * σ * ((K i)ᴴ)ᴴ =
-        Kraus.mapLM (fun i => (K i)ᴴ) σ := by
-      simp [Kraus.mapLM_apply, Kraus.map_apply]
+        Kraus.mapLM (fun i => (K i)ᴴ) σ := rfl
     rw [hsum, hσ_eig, smul_smul, inv_mul_cancel₀, one_smul]
     exact_mod_cast hr.ne'
   set B : Fin n → Matrix (Fin D) (Fin D) ℂ := Kraus.tpGauge A' σ with hB_def
@@ -444,7 +443,7 @@ theorem isIrreducibleMap_of_hasSpectralProperties
             simp only [← Matrix.sum_mul, ← Matrix.mul_sum]
       _ = (↑r : ℂ)⁻¹ • (S * E (S⁻¹ * X * S⁻¹) * S) := by
             rw [hE_eq]
-            simp [Kraus.mapLM_apply, Kraus.map_apply]
+            rfl
       _ = ((↑r : ℂ)⁻¹ • similarityMap (D := D) S⁻¹ E) X := by
             simp [similarityMap, hS_inv_inv, hS_inv_herm, Matrix.mul_assoc]
   set E' : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ :=
