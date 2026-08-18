@@ -8,9 +8,11 @@ Authors: TNLean contributors
 -- Import architecture: docs/import_structure.md.
 -- Generated aggregator module: TNLean.Channel.Irreducible
 
+import TNLean.Channel.Irreducible.AdjointFamily
 import TNLean.Channel.Irreducible.Basic
 import TNLean.Channel.Irreducible.Ergodicity
 import TNLean.Channel.Irreducible.FixedPoint
+import TNLean.Channel.Irreducible.FixedPointUniqueness
 import TNLean.Channel.Irreducible.FromSpectral
 import TNLean.Channel.Irreducible.Growth
 import TNLean.Channel.Irreducible.Growth.Exponential
