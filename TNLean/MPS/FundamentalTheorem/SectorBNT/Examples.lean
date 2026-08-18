@@ -7,9 +7,11 @@ import TNLean.MPS.FundamentalTheorem.SectorBNT.EqualModulus
 import TNLean.MPS.FundamentalTheorem.SectorBNT.SingleSector
 
 /-!
-# Concrete BNT canonical forms
+# Concrete tensors and BNT canonical forms
 
-These examples present one-sector BNT canonical forms built from a normal block
+The scalar unit tensor and diagonal phase-flip tensor below are elementary examples
+used by several MPS constructions. The remaining examples present one-sector BNT
+canonical forms built from a normal block
 `C`. The single-copy construction is provided by `singleSectorDecomposition`;
 the remaining examples illustrate nontrivial copy weights.
 
@@ -28,6 +30,15 @@ open scoped Matrix BigOperators
 open Filter Topology
 
 namespace MPSTensor
+
+/-! ## Elementary tensors -/
+
+/-- The one-letter bond-dimension-one tensor whose sole matrix is `1`. -/
+def scalarUnitTensor : MPSTensor 1 1 := fun _ => 1
+
+/-- The one-letter bond-dimension-two tensor whose sole matrix is `diag(1, -1)`. -/
+def phaseFlipTensor : MPSTensor 1 2 := fun _ => !![1, 0; 0, -1]
+
 namespace SectorBNT.Examples
 
 variable {d D : ℕ}
