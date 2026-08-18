@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.Algebra.OrthogonalProjection
+import TNLean.Analysis.MatrixSqrt
 import TNLean.Analysis.TraceNormAbs
 import TNLean.Analysis.TwoProjectionReducedProjection
 
@@ -15,6 +16,8 @@ standard finite-dimensional complex Euclidean space as a square matrix. For orth
 projection matrices, it transfers the projection identities, transversality, and invertible
 right factor from `LinearMap.IsSymmetricProjection.reducedProjection`.
 -/
+
+open scoped ComplexOrder
 
 namespace Matrix
 
@@ -121,5 +124,28 @@ theorem exists_reducedProjection_rightFactor
   · apply Matrix.toEuclideanLin.injective
     rw [toEuclideanLin_mul, toEuclideanLin_mul]
     simpa [T, Y] using he
+
+/-- Positive-semidefinite matrices supply invertible support-inverse extensions and an
+invertible right factor for the reduced projection of their support projections.
+
+Source: `Papers/1703.09188/paper_v2.tex:786-804`, the invertible outer factors
+X, Z, Y with X L = P, R Z = Q, and P Q Y = the reduced projection. -/
+theorem exists_units_supportInvExtension_reducedProjection_rightFactor
+    {L R : Matrix (Fin D) (Fin D) ℂ} (hL : L.PosSemidef) (hR : R.PosSemidef) :
+    ∃ X Z Y : Matrix (Fin D) (Fin D) ℂ,
+      IsUnit X ∧ IsUnit Z ∧ IsUnit Y ∧
+      X * L = hL.supportProj ∧ R * Z = hR.supportProj ∧
+      hL.supportProj * hR.supportProj * Y =
+        reducedProjection hL.supportProj hR.supportProj := by
+  have hP : IsOrthogonalProjection hL.supportProj :=
+    hL.isOrthogonalProjection_supportProj
+  obtain ⟨Y, hY, hTQY⟩ := exists_reducedProjection_rightFactor
+    (P := hL.supportProj) (Q := hR.supportProj) hP
+  have hPQY : hL.supportProj * hR.supportProj * Y =
+      reducedProjection hL.supportProj hR.supportProj := by
+    rw [← reducedProjection_mul_second hP, hTQY]
+  exact ⟨hL.supportInvExtension, hR.supportInvExtension, Y,
+    hL.isUnit_supportInvExtension, hR.isUnit_supportInvExtension, hY,
+    hL.supportInvExtension_mul_self, hR.self_mul_supportInvExtension, hPQY⟩
 
 end Matrix
