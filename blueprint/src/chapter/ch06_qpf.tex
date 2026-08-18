@@ -354,20 +354,20 @@ and~\cite{Evans1978Spectral}.
 
 \section{Uniqueness}
 
-\begin{theorem}[Irreducible fixed-point uniqueness]
-    \label{thm:psd_fp_unique_irred}
-    \lean{MPSTensor.posSemidef_fixedPoint_unique_of_irreducible}
+\begin{theorem}[Irreducible fixed-point uniqueness --- CP version]
+    \label{thm:psd_fp_unique_irred_cp}
+    \lean{posSemidef_fixedPoint_unique_of_irreducible_cp}
     \leanok
-    \uses{def:irreducible_cp, def:transfer_map}
-    Let $A$ be an MPS tensor whose transfer map is irreducible. If
-    $\rho,\sigma\geq0$ are fixed points of $\E_A$ and $\rho\neq0$, then
+    \uses{def:cp_map, def:irreducible_cp}
+    Let $E$ be a completely positive irreducible map on $\MN{D}$. If
+    $\rho,\sigma\geq0$ are fixed points of $E$ and $\rho\neq0$, then
     $\sigma=c\rho$ for some $c\in\C$.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:transfer_psd_fp_pd_irred}
+    \uses{thm:psd_fp_pd_irred}
     If $\sigma=0$, take $c=0$. Otherwise,
-    Theorem~\ref{thm:transfer_psd_fp_pd_irred} makes both $\rho$ and $\sigma$
+    Theorem~\ref{thm:psd_fp_pd_irred} makes both $\rho$ and $\sigma$
     positive definite. Write $\rho=SS^\dagger$ and set
     \begin{align}
         H
@@ -385,10 +385,26 @@ and~\cite{Evans1978Spectral}.
     \end{align}
     so $\tau$ is positive semidefinite and singular. Linearity makes $\tau$
     a fixed point. If $\tau\neq0$,
-    Theorem~\ref{thm:transfer_psd_fp_pd_irred} would make it positive
+    Theorem~\ref{thm:psd_fp_pd_irred} would make it positive
     definite, a contradiction. Thus $\tau=0$ and $\sigma=c_0\rho$.
     This is the minimal-eigenvalue mechanism of
     \cite[Theorem~6.3(2)--(3)]{Wolf2012Quantum}.
+\end{proof}
+
+\begin{theorem}[Irreducible fixed-point uniqueness]
+    \label{thm:psd_fp_unique_irred}
+    \lean{MPSTensor.posSemidef_fixedPoint_unique_of_irreducible}
+    \leanok
+    \uses{def:irreducible_cp, def:transfer_map}
+    Let $A$ be an MPS tensor whose transfer map is irreducible. If
+    $\rho,\sigma\geq0$ are fixed points of $\E_A$ and $\rho\neq0$, then
+    $\sigma=c\rho$ for some $c\in\C$.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:transfer_cp, thm:psd_fp_unique_irred_cp}
+    The transfer map is completely positive, so
+    Theorem~\ref{thm:psd_fp_unique_irred_cp} applies.
 \end{proof}
 
 \begin{theorem}[Uniqueness of PSD fixed point]

@@ -57,40 +57,15 @@ variable {d D : ℕ}
 /-- The invariance condition for a projection `P` under the transfer map
 implies `(1 - P) * A i * P = 0` for every Kraus operator.
 
-This is re-proved here (the version in `CPPrimitive.lean` is `private`). -/
+This is the transfer-map form of `Kraus.invariance_implies_lowerZero`. -/
 lemma invariance_implies_lowerZero
     (A : MPSTensor d D) (P : Matrix (Fin D) (Fin D) ℂ)
     (hProj : IsOrthogonalProjection P)
     (hInv : ∀ X, P * transferMap (d := d) (D := D) A (P * X * P) * P =
                   transferMap (d := d) (D := D) A (P * X * P)) :
     ∀ i : Fin d, (1 - P) * A i * P = 0 := by
-  -- (1 - P) * P = 0 from the projection property
-  have h1P : (1 - P) * P = 0 := IsIdempotentElem.one_sub_mul_self hProj.2
-  -- (1-P) * E(PXP) = 0 for all X
-  have h_vanish : ∀ X, (1 - P) * transferMap (d := d) (D := D) A (P * X * P) = 0 := by
-    intro X
-    rw [← hInv X, show (1 - P) * (P * _ * P) = ((1 - P) * P) * _ * P from by noncomm_ring,
-      h1P]; noncomm_ring
-  -- Specialise to X = 1: (1-P) * E(P) = 0
-  have h_EP : (1 - P) * transferMap (d := d) (D := D) A P = 0 := by
-    have := h_vanish 1; rwa [mul_one, hProj.2] at this
-  -- Show ∑ᵢ Bᵢ * Bᵢᴴ = 0 where Bᵢ = (1-P)*Aᵢ*P
-  have hPH := hProj.1.eq
-  have h1PH : (1 - P)ᴴ = 1 - P := by
-    rw [Matrix.conjTranspose_sub, Matrix.conjTranspose_one, hPH]
-  have h_sum_zero : ∑ i : Fin d, ((1 - P) * A i * P) * ((1 - P) * A i * P)ᴴ = 0 := by
-    have key : ∀ i : Fin d,
-        ((1 - P) * A i * P) * ((1 - P) * A i * P)ᴴ =
-        (1 - P) * (A i * P * (A i)ᴴ) * (1 - P) := by
-      intro i
-      rw [Matrix.conjTranspose_mul, Matrix.conjTranspose_mul, hPH, h1PH,
-        show (1 - P) * A i * P * (P * ((A i)ᴴ * (1 - P))) =
-          (1 - P) * A i * (P * P) * (A i)ᴴ * (1 - P) from by noncomm_ring,
-        hProj.2]; noncomm_ring
-    simp_rw [key, ← Finset.sum_mul, ← Finset.mul_sum]
-    rw [show ∑ i : Fin d, A i * P * (A i)ᴴ = transferMap (d := d) (D := D) A P from by
-      rw [transferMap_apply], h_EP, zero_mul]
-  exact Matrix.eq_zero_of_sum_mul_conjTranspose_eq_zero _ h_sum_zero
+  refine Kraus.invariance_implies_lowerZero A P hProj fun X => ?_
+  simpa only [transferMap_apply, Kraus.map_apply] using hInv X
 
 /-- **Irreducible tensor ⇒ irreducible CP map.**
 

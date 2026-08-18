@@ -22,6 +22,8 @@ channel layer. They specialize directly to MPS transfer maps.
 
 * `Kraus.lowerZero_of_posSemidef_fixedPoint`: support invariance for a
   positive-semidefinite fixed point.
+* `Kraus.invariance_implies_lowerZero`: invariance of the compressed corner
+  forces the block upper triangular condition.
 * `Kraus.lowerZero_implies_invariance`: preservation of the corresponding
   matrix corner.
 * `Kraus.invariantCompression_of_supportProj_fixed_by_cpMap`: invariant support
@@ -120,6 +122,35 @@ theorem lowerZero_of_posSemidef_fixedPoint
     simpa using ker_invariant_under_adjoint K ρ hρ_psd hρ_fix
       ((1 - P) *ᵥ v) hker i
   simpa [P] using And.intro hP_proj h_complement_zero
+
+/-- Invariance of the compressed corner under a Kraus map forces the family to be
+block upper triangular with respect to the projection: `(1 - P) * K i * P = 0`. -/
+theorem invariance_implies_lowerZero
+    (K : Fin d → Mat) (P : Mat) (hProj : IsOrthogonalProjection P)
+    (hInv : ∀ X, P * map K (P * X * P) * P = map K (P * X * P)) :
+    ∀ i : Fin d, (1 - P) * K i * P = 0 := by
+  have h1P : (1 - P) * P = 0 := IsIdempotentElem.one_sub_mul_self hProj.2
+  have h_vanish : ∀ X, (1 - P) * map K (P * X * P) = 0 := by
+    intro X
+    rw [← hInv X, show (1 - P) * (P * _ * P) = ((1 - P) * P) * _ * P from by noncomm_ring,
+      h1P]; noncomm_ring
+  have h_EP : (1 - P) * map K P = 0 := by
+    have := h_vanish 1; rwa [mul_one, hProj.2] at this
+  have hPH := hProj.1.eq
+  have h1PH : (1 - P)ᴴ = 1 - P := by
+    rw [Matrix.conjTranspose_sub, Matrix.conjTranspose_one, hPH]
+  have h_sum_zero : ∑ i : Fin d, ((1 - P) * K i * P) * ((1 - P) * K i * P)ᴴ = 0 := by
+    have key : ∀ i : Fin d,
+        ((1 - P) * K i * P) * ((1 - P) * K i * P)ᴴ =
+        (1 - P) * (K i * P * (K i)ᴴ) * (1 - P) := by
+      intro i
+      rw [Matrix.conjTranspose_mul, Matrix.conjTranspose_mul, hPH, h1PH,
+        show (1 - P) * K i * P * (P * ((K i)ᴴ * (1 - P))) =
+          (1 - P) * K i * (P * P) * (K i)ᴴ * (1 - P) from by noncomm_ring,
+        hProj.2]; noncomm_ring
+    simp_rw [key, ← Finset.sum_mul, ← Finset.mul_sum]
+    rw [show ∑ i : Fin d, K i * P * (K i)ᴴ = map K P from (map_apply K P).symm, h_EP, zero_mul]
+  exact Matrix.eq_zero_of_sum_mul_conjTranspose_eq_zero _ h_sum_zero
 
 /-- A Kraus family that is block upper triangular with respect to an orthogonal
 projection preserves the corresponding matrix corner. -/
