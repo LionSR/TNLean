@@ -1502,6 +1502,30 @@ spectral split → block extraction → MPV calculation → strict bounds
   $\delta_{\mathrm{cyclicForwardSite}\,i\,r}(i)
   = (N - (r \bmod N)) \bmod N$.
 
+### eventual near-spectral-radius geometric bound — candidate
+- **Pattern:** from `spectralRadius ℂ a < r`, derive
+  `∀ᶠ n in Filter.atTop, ‖a ^ n‖₊ < r ^ n` by combining Gelfand's formula
+  `spectrum.pow_nnnorm_pow_one_div_tendsto_nhds_spectralRadius` with
+  `filter_upwards` on `gelfand.eventually (eventually_lt_nhds hr)` and
+  `Filter.eventually_gt_atTop 0`, then clearing the `n`-th root via
+  `ENNReal.rpow_inv_lt_iff` and `ENNReal.rpow_natCast`.
+- **Seen:** 2 occurrences: `have hev` in
+  `MPSTensor.geometric_bound_of_spectralRadius_lt_one`
+  (`TNLean/Spectral/TransferOperatorGapCommon.lean:131-138`) and `have hev2` in
+  `pow_tendsto_zero_of_spectralRadius_lt_one`
+  (`TNLean/Analysis/SpectralRadiusPowerDecay.lean:29-35`), the latter after the
+  layer-0 relocation of the second theorem (PR #6570).
+- **Abstraction (proposed):** an `eventually_nnnorm_pow_lt_pow_of_spectralRadius_lt`
+  lemma in `TNLean/Analysis/SpectralRadiusPowerDecay.lean`, taking
+  `{A : Type*} [NormedRing A] [CompleteSpace A] [NormedAlgebra ℂ A] (a : A) {r : ℝ≥0}
+  (hr : spectralRadius ℂ a < r)` and returning the eventual bound; both current
+  call sites would discharge their local `have` block with one application
+  (the `TransferOperatorGapCommon.lean` site at `A := V →L[ℂ] V`).
+- **Notes:** below the rule-of-three threshold (two occurrences). The two copies
+  now sit in different files and layers (layer 0 `Analysis` and layer 2c
+  `Spectral`) after the relocation, so promote on the next independent
+  occurrence rather than adding a cross-layer dependency for two call sites.
+
 ---
 
 ## Rejected
