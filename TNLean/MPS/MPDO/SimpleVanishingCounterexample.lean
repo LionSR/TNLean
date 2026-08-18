@@ -5,7 +5,6 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.FundamentalTheorem.SectorBNT.Examples
 import TNLean.MPS.MPDO.SourceSimpleTensor
-import TNLean.MPS.RFP.PhaseMultiplicityCounterexample
 
 /-!
 # Normalized simplicity with a vanishing positive-length MPO

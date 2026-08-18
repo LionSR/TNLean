@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.CanonicalForm.Definitions
+import TNLean.MPS.FundamentalTheorem.SectorBNT.Examples
 import TNLean.MPS.RFP.StructuralFull
 
 /-!
@@ -30,9 +31,6 @@ open scoped Matrix BigOperators
 
 namespace MPSTensor
 
-/-- The one-dimensional representative normal tensor in the counterexample. -/
-def scalarUnitTensor : MPSTensor 1 1 := fun _ => 1
-
 private theorem scalarUnitTensor_transferMap :
     transferMap scalarUnitTensor = LinearMap.id := by
   apply LinearMap.ext
@@ -54,9 +52,6 @@ theorem scalarUnitTensor_isNormalTensor :
 def signPhase : Fin 2 → ℂ
   | 0 => 1
   | 1 => -1
-
-/-- Two phase copies of `scalarUnitTensor`, assembled on the bond direct sum. -/
-def phaseFlipTensor : MPSTensor 1 2 := fun _ => !![1, 0; 0, -1]
 
 /-- Both copy coefficients have unit modulus. -/
 lemma norm_signPhase (q : Fin 2) : ‖signPhase q‖ = 1 := by
