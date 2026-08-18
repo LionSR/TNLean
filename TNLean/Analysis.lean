@@ -58,6 +58,7 @@ import TNLean.Analysis.SandwichedRenyi
 import TNLean.Analysis.SandwichedRenyiTwo
 import TNLean.Analysis.SchattenNorm
 import TNLean.Analysis.SpectralQuadraticForm
+import TNLean.Analysis.SpectralRadius
 import TNLean.Analysis.SuperoperatorResolvent
 import TNLean.Analysis.SupportCompressedEntropy
 import TNLean.Analysis.SupportCompression

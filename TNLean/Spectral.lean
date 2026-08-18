@@ -17,7 +17,6 @@ import TNLean.Spectral.MPVOverlapTrace
 import TNLean.Spectral.MixedTransfer
 import TNLean.Spectral.PrimitiveOverlap
 import TNLean.Spectral.QuantitativeGap
-import TNLean.Spectral.Radius
 import TNLean.Spectral.TraceExpansion
 import TNLean.Spectral.TransferOperatorGap
 import TNLean.Spectral.TransferOperatorGapCommon

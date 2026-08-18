@@ -8,10 +8,10 @@ import TNLean.Algebra.MatrixOperatorSpace
 import TNLean.Channel.Irreducible.KrausSetup
 import TNLean.Channel.Irreducible.PerronFrobenius
 import TNLean.Channel.Irreducible.Similarity
+import TNLean.Channel.KrausGauge
+import TNLean.Channel.Peripheral.AdjointSpectrum
 import TNLean.Channel.Peripheral.Conjugation
-import TNLean.MPS.Core.TPGauge
-import TNLean.Spectral.Radius
-import TNLean.Spectral.TransferOperatorGap
+import TNLean.Analysis.SpectralRadius
 import Mathlib.Algebra.Module.Equiv.Basic
 
 /-!
@@ -168,7 +168,7 @@ theorem spectralRadius_eq_of_posDef_eigenvector_of_irreducible_cp
   let hSetup := irreducibleCPKrausSetup (D := D) E hCP hIrr
   let n := hSetup.n
   let K := hSetup.K
-  have hE_eq : E = MPSTensor.transferMap (d := n) (D := D) K := hSetup.map_eq
+  have hE_eq : E = Kraus.mapLM K := hSetup.map_eq
   have hρ_ne : ρ ≠ 0 := (Matrix.PosDef.isUnit hρ_pd).ne_zero
   have hE_ne : E ≠ 0 := by
     intro hE0
@@ -180,8 +180,8 @@ theorem spectralRadius_eq_of_posDef_eigenvector_of_irreducible_cp
     hSetup.exists_posDef_adjoint_eigenvector hE_ne
   have htrace : ∀ X : Matrix (Fin D) (Fin D) ℂ,
       Matrix.trace (σ * E X) =
-        Matrix.trace (MPSTensor.transferMap (d := n) (D := D) (fun i => (K i)ᴴ) σ * X) :=
-    fun X => Kraus.trace_mul_transferMap_adjoint K hE_eq σ X
+        Matrix.trace (Kraus.mapLM (fun i => (K i)ᴴ) σ * X) :=
+    fun X => Kraus.trace_mul_mapLM_adjoint K hE_eq σ X
   have htr_ne : Matrix.trace (σ * ρ) ≠ 0 := by
     intro htr_zero
     exact hρ_ne
@@ -192,8 +192,7 @@ theorem spectralRadius_eq_of_posDef_eigenvector_of_irreducible_cp
           = Matrix.trace (σ * ((r : ℂ) • ρ)) := by
               rw [Matrix.mul_smul, Matrix.trace_smul, smul_eq_mul]
       _ = Matrix.trace (σ * E ρ) := by rw [hEig]
-      _ = Matrix.trace
-            (MPSTensor.transferMap (d := n) (D := D) (fun i => (K i)ᴴ) σ * ρ) :=
+      _ = Matrix.trace (Kraus.mapLM (fun i => (K i)ᴴ) σ * ρ) :=
             htrace ρ
       _ = Matrix.trace (((t : ℂ) • σ) * ρ) := by rw [hσ_eig]
       _ = (t : ℂ) * Matrix.trace (σ * ρ) := by
@@ -212,9 +211,9 @@ theorem spectralRadius_eq_of_posDef_eigenvector_of_irreducible_cp
     rw [hd_def, ← Complex.ofReal_mul, hcc, Complex.ofReal_inv]
   set S : Matrix (Fin D) (Fin D) ℂ := CFC.sqrt σ with hS_def
   have hS_herm : Sᴴ = S := by
-    simpa [hS_def] using MPSTensor.conjTranspose_cfc_sqrt (D := D) σ
+    simpa [hS_def] using Matrix.conjTranspose_cfc_sqrt (ρ := σ)
   have hS_det : IsUnit S.det := by
-    simpa [hS_def] using MPSTensor.isUnit_det_cfc_sqrt_of_posDef (D := D) σ hσ_pd
+    simpa [hS_def] using hσ_pd.isUnit_det_cfc_sqrt
   have hS_inv_mul : S⁻¹ * S = 1 := Matrix.nonsing_inv_mul S hS_det
   have hS_mul_inv : S * S⁻¹ = 1 := Matrix.mul_nonsing_inv S hS_det
   have hσ_nonneg : (0 : Matrix (Fin D) (Fin D) ℂ) ≤ σ := hσ_pd.posSemidef.nonneg
@@ -230,21 +229,21 @@ theorem spectralRadius_eq_of_posDef_eigenvector_of_irreducible_cp
         S * E (S⁻¹ * X * S⁻¹) * S := by
     simp only [similarityMap, hS_inv_inv, hS_inv_herm]
     rfl
-  set A' : MPSTensor n D := fun i => d • K i with hA'_def
-  have hA'_fix : MPSTensor.transferMap (d := n) (D := D) (fun i => (A' i)ᴴ) σ = σ := by
-    simp only [hA'_def, MPSTensor.transferMap_apply, Matrix.conjTranspose_smul,
+  set A' : Fin n → Matrix (Fin D) (Fin D) ℂ := fun i => d • K i with hA'_def
+  have hA'_fix : Kraus.map (fun i => (A' i)ᴴ) σ = σ := by
+    simp only [hA'_def, Kraus.map_apply, Matrix.conjTranspose_smul,
       Matrix.smul_mul, Matrix.mul_smul, smul_smul, star_star]
     simp_rw [hstar_d, hd_sq]
     rw [← Finset.smul_sum]
     have hsum : ∑ i : Fin n, (K i)ᴴ * σ * ((K i)ᴴ)ᴴ =
-        MPSTensor.transferMap (d := n) (D := D) (fun i => (K i)ᴴ) σ := by
-      simp [MPSTensor.transferMap_apply]
+        Kraus.mapLM (fun i => (K i)ᴴ) σ := by
+      simp [Kraus.mapLM_apply, Kraus.map_apply]
     rw [hsum, hσ_eig, ← hr_eq_t, smul_smul, inv_mul_cancel₀, one_smul]
     exact_mod_cast hr.ne'
-  set B : MPSTensor n D := MPSTensor.tpGauge (d := n) (D := D) A' σ with hB_def
-  have hB_tp : ∑ i : Fin n, (B i)ᴴ * B i = 1 :=
-    MPSTensor.tpGauge_isTP_of_transferMap_conjTranspose_fixedPoint A' σ hσ_pd hA'_fix
-  have hB_eq : MPSTensor.transferMap (d := n) (D := D) B =
+  set B : Fin n → Matrix (Fin D) (Fin D) ℂ := Kraus.tpGauge A' σ with hB_def
+  have hB_tp : Kraus.IsTP B :=
+    Kraus.tpGauge_isTP_of_map_conjTranspose_fixedPoint A' σ hσ_pd hA'_fix
+  have hB_eq : Kraus.mapLM B =
       (↑r : ℂ)⁻¹ • similarityMap (D := D) S⁻¹ E := by
     apply LinearMap.ext
     intro X
@@ -257,13 +256,13 @@ theorem spectralRadius_eq_of_posDef_eigenvector_of_irreducible_cp
         Matrix.smul_mul, Matrix.mul_smul]
       rw [smul_smul, hd_sq]
     calc
-      MPSTensor.transferMap (d := n) (D := D) B X
+      Kraus.mapLM B X
           = ∑ i : Fin n,
               (S * (d • K i) * S⁻¹) * X * (S * (d • K i) * S⁻¹)ᴴ := by
                 subst B
                 subst A'
                 subst S
-                simp [MPSTensor.transferMap_apply, MPSTensor.tpGauge]
+                simp [Kraus.mapLM_apply, Kraus.map_apply, Kraus.tpGauge]
       _ = ∑ i : Fin n,
               (↑r : ℂ)⁻¹ • (S * (K i * (S⁻¹ * X * S⁻¹) * (K i)ᴴ) * S) := by
             refine Finset.sum_congr rfl ?_
@@ -276,15 +275,13 @@ theorem spectralRadius_eq_of_posDef_eigenvector_of_irreducible_cp
             simp only [← Matrix.sum_mul, ← Matrix.mul_sum]
       _ = (↑r : ℂ)⁻¹ • (S * E (S⁻¹ * X * S⁻¹) * S) := by
             rw [hE_eq]
-            simp [MPSTensor.transferMap_apply]
+            simp [Kraus.mapLM_apply, Kraus.map_apply]
       _ = ((↑r : ℂ)⁻¹ • similarityMap (D := D) S⁻¹ E) X := by
             rw [LinearMap.smul_apply, hsim_apply]
   set E' : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ :=
     (↑r : ℂ)⁻¹ • similarityMap (D := D) S⁻¹ E with hE'_def
-  -- The TP-normalized map has spectral radius `≤ 1`. In the formal proof we
-  -- invoke `MPSTensor.spectralRadius_mixedTransfer_le_one`; conceptually this is
-  -- the usual trace-preserving bound, since `trace ((E'^n) X) = trace X` for all
-  -- `n`, while the transformed fixed point will supply the matching lower bound.
+  -- The TP-normalized map has spectral radius `≤ 1`: the usual trace-preserving
+  -- bound, while the transformed fixed point will supply the matching lower bound.
   have hrad'_le : spectralRadius ℂ
       ((Module.End.toContinuousLinearMap (Matrix (Fin D) (Fin D) ℂ)) E') ≤ 1 := by
     calc
@@ -292,11 +289,9 @@ theorem spectralRadius_eq_of_posDef_eigenvector_of_irreducible_cp
           ((Module.End.toContinuousLinearMap (Matrix (Fin D) (Fin D) ℂ)) E')
           = spectralRadius ℂ
               ((Module.End.toContinuousLinearMap (Matrix (Fin D) (Fin D) ℂ))
-                (MPSTensor.transferMap (d := n) (D := D) B)) := by
+                (Kraus.mapLM B)) := by
                   rw [← hB_eq]
-      _ = MPSTensor.mixedTransferSpectralRadius B B := by
-            rw [MPSTensor.mixedTransferSpectralRadius_eq, MPSTensor.mixedTransferMap_self]
-      _ ≤ 1 := MPSTensor.spectralRadius_mixedTransfer_le_one B B hB_tp hB_tp
+      _ ≤ 1 := Kraus.spectralRadius_mapLM_le_one_of_isTP B hB_tp
   have hY_eig : E' (S * ρ * S) = S * ρ * S := by
     calc
       E' (S * ρ * S)
