@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.Channel.PerronFrobenius.Existence
 import TNLean.MPS.Core.TransferChannel
+import TNLean.MPS.Irreducible.PerronGauge
 
 /-!
 # Shared Kraus setup for irreducible CP maps

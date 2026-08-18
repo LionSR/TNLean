@@ -7,6 +7,7 @@ import TNLean.Algebra.ComplexPhasePositivity
 import TNLean.Channel.Irreducible.SpectralRadius
 import TNLean.MPS.CanonicalForm.Definitions
 import TNLean.MPS.Core.TransferChannel
+import TNLean.MPS.Irreducible.PerronGauge
 import TNLean.MPS.CanonicalForm.PhaseCover
 import TNLean.MPS.CanonicalForm.ProjectorClosureSpectral
 import TNLean.MPS.CanonicalForm.SectorComparison.NormalityChain
