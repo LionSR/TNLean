@@ -126,7 +126,10 @@ theorem exists_reducedProjection_rightFactor
     simpa [T, Y] using he
 
 /-- Positive-semidefinite matrices supply invertible support-inverse extensions and an
-invertible right factor for the reduced projection of their support projections. -/
+invertible right factor for the reduced projection of their support projections.
+
+Source: `Papers/1703.09188/paper_v2.tex:786-804`, the invertible outer factors
+X, Z, Y with X L = P, R Z = Q, and P Q Y = the reduced projection. -/
 theorem exists_units_supportInvExtension_reducedProjection_rightFactor
     {L R : Matrix (Fin D) (Fin D) ℂ} (hL : L.PosSemidef) (hR : R.PosSemidef) :
     ∃ X Z Y : Matrix (Fin D) (Fin D) ℂ,
