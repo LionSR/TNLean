@@ -38,6 +38,7 @@ import TNLean.Channel.KoashiImoto
 import TNLean.Channel.KrausCPTP
 import TNLean.Channel.KrausCornerCompression
 import TNLean.Channel.KrausFreedom
+import TNLean.Channel.KrausGauge
 import TNLean.Channel.KrausMap
 import TNLean.Channel.KrausRank
 import TNLean.Channel.KrausRectangular

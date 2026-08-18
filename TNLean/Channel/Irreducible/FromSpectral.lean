@@ -148,8 +148,8 @@ positive eigenvalue is proportional to `ρ`. -/
 structure SpectralProperties
     (E : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ) where
   n : ℕ
-  K : MPSTensor n D
-  map_eq : E = MPSTensor.transferMap (d := n) (D := D) K
+  K : Fin n → Matrix (Fin D) (Fin D) ℂ
+  map_eq : E = Kraus.mapLM K
   ρ : Matrix (Fin D) (Fin D) ℂ
   σ : Matrix (Fin D) (Fin D) ℂ
   r : ℝ
@@ -157,7 +157,7 @@ structure SpectralProperties
   σ_posDef : σ.PosDef
   hr_pos : 0 < r
   right_eig : E ρ = (r : ℂ) • ρ
-  left_eig : MPSTensor.transferMap (d := n) (D := D) (fun i => (K i)ᴴ) σ = (r : ℂ) • σ
+  left_eig : Kraus.mapLM (fun i => (K i)ᴴ) σ = (r : ℂ) • σ
   unique_psd_eigenvector :
     ∀ τ : Matrix (Fin D) (Fin D) ℂ,
       τ.PosSemidef → E τ = (r : ℂ) • τ → ∃ c : ℂ, τ = c • ρ
@@ -193,13 +193,13 @@ theorem hasSpectralProperties_of_irreducible_cp
   let hSetup := irreducibleCPKrausSetup (D := D) E hCP hIrr
   let n := hSetup.n
   let K := hSetup.K
-  have hE_eq : E = MPSTensor.transferMap (d := n) (D := D) K := hSetup.map_eq
+  have hE_eq : E = Kraus.mapLM K := hSetup.map_eq
   obtain ⟨σ, t, hσ_pd, ht, hσ_eig⟩ :=
     hSetup.exists_posDef_adjoint_eigenvector hE
   have htrace : ∀ X : Matrix (Fin D) (Fin D) ℂ,
       Matrix.trace (σ * E X) =
-        Matrix.trace (MPSTensor.transferMap (d := n) (D := D) (fun i => (K i)ᴴ) σ * X) :=
-    fun X => Kraus.trace_mul_transferMap_adjoint K hE_eq σ X
+        Matrix.trace (Kraus.mapLM (fun i => (K i)ᴴ) σ * X) :=
+    fun X => Kraus.trace_mul_mapLM_adjoint K hE_eq σ X
   have htr_ne : Matrix.trace (σ * ρ) ≠ 0 := by
     intro htr_zero
     exact hρ_ne
@@ -211,7 +211,7 @@ theorem hasSpectralProperties_of_irreducible_cp
               rw [Matrix.mul_smul, Matrix.trace_smul, smul_eq_mul]
       _ = Matrix.trace (σ * E ρ) := by rw [hρ_eig]
       _ = Matrix.trace
-            (MPSTensor.transferMap (d := n) (D := D) (fun i => (K i)ᴴ) σ * ρ) :=
+            (Kraus.mapLM (fun i => (K i)ᴴ) σ * ρ) :=
             htrace ρ
       _ = Matrix.trace (((t : ℂ) • σ) * ρ) := by rw [hσ_eig]
       _ = (t : ℂ) * Matrix.trace (σ * ρ) := by
@@ -387,9 +387,9 @@ theorem isIrreducibleMap_of_hasSpectralProperties
     rw [hd_def, ← Complex.ofReal_mul, hcc, Complex.ofReal_inv]
   set S : Matrix (Fin D) (Fin D) ℂ := CFC.sqrt σ with hS_def
   have hS_herm : Sᴴ = S := by
-    simpa [hS_def] using MPSTensor.conjTranspose_cfc_sqrt (D := D) σ
+    simpa [hS_def] using Matrix.conjTranspose_cfc_sqrt (ρ := σ)
   have hS_det : IsUnit S.det := by
-    simpa [hS_def] using MPSTensor.isUnit_det_cfc_sqrt_of_posDef (D := D) σ hσ_pd
+    simpa [hS_def] using hσ_pd.isUnit_det_cfc_sqrt
   have hS_inv_mul : S⁻¹ * S = 1 := Matrix.nonsing_inv_mul S hS_det
   have hS_mul_inv : S * S⁻¹ = 1 := Matrix.mul_nonsing_inv S hS_det
   have hσ_nonneg : (0 : Matrix (Fin D) (Fin D) ℂ) ≤ σ := hσ_pd.posSemidef.nonneg
@@ -400,21 +400,21 @@ theorem isIrreducibleMap_of_hasSpectralProperties
     exact Matrix.inv_inv_of_invertible S
   have hS_inv_herm : (S⁻¹)ᴴ = S⁻¹ := by
     simpa [hS_herm] using Matrix.conjTranspose_nonsing_inv S
-  set A' : MPSTensor n D := fun i => d • K i with hA'_def
-  have hA'_fix : MPSTensor.transferMap (d := n) (D := D) (fun i => (A' i)ᴴ) σ = σ := by
-    simp only [hA'_def, MPSTensor.transferMap_apply, Matrix.conjTranspose_smul,
+  set A' : Fin n → Matrix (Fin D) (Fin D) ℂ := fun i => d • K i with hA'_def
+  have hA'_fix : Kraus.map (fun i => (A' i)ᴴ) σ = σ := by
+    simp only [hA'_def, Kraus.map_apply, Matrix.conjTranspose_smul,
       Matrix.smul_mul, Matrix.mul_smul, smul_smul, star_star]
     simp_rw [hstar_d, hd_sq]
     rw [← Finset.smul_sum]
     have hsum : ∑ i : Fin n, (K i)ᴴ * σ * ((K i)ᴴ)ᴴ =
-        MPSTensor.transferMap (d := n) (D := D) (fun i => (K i)ᴴ) σ := by
-      simp [MPSTensor.transferMap_apply]
+        Kraus.mapLM (fun i => (K i)ᴴ) σ := by
+      simp [Kraus.mapLM_apply, Kraus.map_apply]
     rw [hsum, hσ_eig, smul_smul, inv_mul_cancel₀, one_smul]
     exact_mod_cast hr.ne'
-  set B : MPSTensor n D := MPSTensor.tpGauge (d := n) (D := D) A' σ with hB_def
-  have hB_tp : ∑ i : Fin n, (B i)ᴴ * B i = 1 :=
-    MPSTensor.tpGauge_isTP_of_transferMap_conjTranspose_fixedPoint A' σ hσ_pd hA'_fix
-  have hB_eq : MPSTensor.transferMap (d := n) (D := D) B =
+  set B : Fin n → Matrix (Fin D) (Fin D) ℂ := Kraus.tpGauge A' σ with hB_def
+  have hB_tp : Kraus.IsTP B :=
+    Kraus.tpGauge_isTP_of_map_conjTranspose_fixedPoint A' σ hσ_pd hA'_fix
+  have hB_eq : Kraus.mapLM B =
       (↑r : ℂ)⁻¹ • similarityMap (D := D) S⁻¹ E := by
     apply LinearMap.ext
     intro X
@@ -427,11 +427,11 @@ theorem isIrreducibleMap_of_hasSpectralProperties
         Matrix.smul_mul, Matrix.mul_smul]
       rw [smul_smul, hd_sq]
     calc
-      MPSTensor.transferMap (d := n) (D := D) B X
+      Kraus.mapLM B X
           = ∑ i : Fin n,
               (S * (d • K i) * S⁻¹) * X * (S * (d • K i) * S⁻¹)ᴴ := by
                 subst B
-                simp [MPSTensor.transferMap_apply, MPSTensor.tpGauge, hA'_def, hS_def]
+                simp [Kraus.mapLM_apply, Kraus.map_apply, Kraus.tpGauge, hA'_def, hS_def]
       _ = ∑ i : Fin n,
               (↑r : ℂ)⁻¹ • (S * (K i * (S⁻¹ * X * S⁻¹) * (K i)ᴴ) * S) := by
             refine Finset.sum_congr rfl ?_
@@ -444,14 +444,14 @@ theorem isIrreducibleMap_of_hasSpectralProperties
             simp only [← Matrix.sum_mul, ← Matrix.mul_sum]
       _ = (↑r : ℂ)⁻¹ • (S * E (S⁻¹ * X * S⁻¹) * S) := by
             rw [hE_eq]
-            simp [MPSTensor.transferMap_apply]
+            simp [Kraus.mapLM_apply, Kraus.map_apply]
       _ = ((↑r : ℂ)⁻¹ • similarityMap (D := D) S⁻¹ E) X := by
             simp [similarityMap, hS_inv_inv, hS_inv_herm, Matrix.mul_assoc]
   set E' : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ :=
     (↑r : ℂ)⁻¹ • similarityMap (D := D) S⁻¹ E with hE'_def
   have hE'_channel : IsChannel E' := by
     rw [← hB_eq]
-    exact MPSTensor.transferMap_isChannel B hB_tp
+    exact Kraus.isChannel_mapLM B hB_tp
   have hS_vecMul_inj : Function.Injective fun v : Fin D → ℂ => Matrix.vecMul v S := by
     intro v w hvw
     have h' := congrArg (fun x => Matrix.vecMul x S⁻¹) hvw
