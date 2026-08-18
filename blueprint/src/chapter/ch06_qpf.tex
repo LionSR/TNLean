@@ -782,30 +782,15 @@ The TP-gauge application follows~\cite[Appendix~A]{Cirac2016MPDO_arXiv}.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:pf_eigenvector_existence, thm:irred_map_smul,
-        thm:adjoint_transfer_ne_zero, thm:transfer_psd_fp_pd_irred}
-    By Theorem~\ref{thm:adjoint_transfer_ne_zero},
-    $\E_A^\dagger \neq 0$.
-    Since $\E_A^\dagger(X) = \sum_i (A^i)^\dagger X A^i$ is a
-    Kraus map, it is positive. Irreducibility of $A$ transfers to the
-    adjoint transfer map. More precisely, if $P$ is invariant for
-    $\E_A$, so that $(\Id-P)K_iP=0$ for all Kraus operators $K_i$, then
-    taking adjoints gives $PK_i^\dagger(\Id-P)=0$, which means $\Id-P$
-    is invariant for $\E_A^\dagger$. Hence $\E_A$
-    is irreducible if and only if $\E_A^\dagger$ is irreducible, and
-    together with $\E_A^\dagger \neq 0$ this implies
-    $\E_A^\dagger(\tau) \neq 0$ for every nonzero positive semidefinite
-    matrix $\tau$.
-    Hence Theorem~\ref{thm:pf_eigenvector_existence} applies to
-    $\E_A^\dagger$, giving $\sigma_0 \ge 0$, $\sigma_0\neq0$, and $r > 0$
-    with $\E_A^\dagger(\sigma_0) = r\sigma_0$.
-    Set $T^i = r^{-1/2}(A^i)^\dagger$.
-    Then $\E_T(\sigma_0) = \sigma_0$, and $\E_T$ is irreducible
-    by Theorem~\ref{thm:irred_map_smul}, since irreducibility of $\E_A$
-    transfers to the adjoint and is preserved under scaling.
-    Since $\E_T$ is irreducible with a positive semidefinite fixed point,
-    Theorem~\ref{thm:transfer_psd_fp_pd_irred} gives that $\sigma_0$ is positive
-    definite.
+    \uses{thm:kraus_posdef_adjoint_eigenvector, thm:kraus_map_eq_transfer_map,
+        def:irreducible_tensor}
+    Since $\mathcal K_A = \E_A$
+    (Theorem~\ref{thm:kraus_map_eq_transfer_map}), the family $A$ is
+    irreducible if and only if its Kraus map is, and applying
+    Theorem~\ref{thm:kraus_posdef_adjoint_eigenvector} to $K_i = A^i$ gives
+    a positive definite $\sigma$ and a positive real $r > 0$ with
+    $\sum_i (A^i)^\dagger \sigma A^i = r\sigma$, i.e.
+    $\E_A^\dagger(\sigma) = r\sigma$.
 \end{proof}
 
 \begin{theorem}[TP-gauge existence for irreducible tensors]%

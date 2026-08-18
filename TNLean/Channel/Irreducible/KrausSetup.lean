@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.Channel.PerronFrobenius.Existence
 import TNLean.MPS.Core.TransferChannel
-import TNLean.MPS.Irreducible.PerronGauge
+import TNLean.MPS.Irreducible.FormII
 
 /-!
 # Shared Kraus setup for irreducible CP maps
@@ -110,9 +110,12 @@ theorem exists_posDef_adjoint_eigenvector
     ∃ (σ : Matrix (Fin D) (Fin D) ℂ) (r : ℝ),
       σ.PosDef ∧ 0 < r ∧
       MPSTensor.transferMap (d := hSetup.n) (D := D)
-        (fun i => (hSetup.K i)ᴴ) σ = (r : ℂ) • σ :=
-  MPSTensor.exists_posDef_adjoint_eigenvector
-    (d := hSetup.n) (D := D) hSetup.K hSetup.irreducible
-    (hSetup.exists_nonzero_kraus hE)
+        (fun i => (hSetup.K i)ᴴ) σ = (r : ℂ) • σ := by
+  obtain ⟨σ, r, hpd, hr, heig⟩ :=
+    Kraus.exists_posDef_adjoint_eigenvector (K := hSetup.K)
+      (Kraus.isIrreducibleMap_mapLM_of_transferMap _
+        (MPSTensor.isIrreducibleCP_transferMap_of_isIrreducibleTensor _ hSetup.irreducible))
+      (hSetup.exists_nonzero_kraus hE)
+  exact ⟨σ, r, hpd, hr, by rwa [Kraus.mapLM_eq_transferMap] at heig⟩
 
 end IrreducibleCPKrausSetup

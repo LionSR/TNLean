@@ -4,9 +4,8 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.Channel.PerronFrobenius.Normalization
-import TNLean.Channel.Irreducible.Scaling
 import TNLean.Channel.Irreducible.AdjointFamily
-import TNLean.Channel.Irreducible.FixedPoint
+import TNLean.Channel.Irreducible.Growth.OneStep
 import TNLean.Channel.KrausMap
 import TNLean.Algebra.MatrixAux
 import TNLean.Axioms.BrouwerFixedPoint
@@ -18,8 +17,9 @@ This module provides the **existence** of a positive semidefinite eigenvector fo
 a nonzero positive map on `M_D(ℂ)`, and derives from it a PosDef eigenvector of
 the adjoint Kraus map of an irreducible Kraus family.
 
-The transfer-map specializations for MPS tensors (TP and unital gauge data of an
-irreducible tensor) live in `TNLean.MPS.Irreducible.PerronGauge`.
+The transfer-map specializations for MPS tensors (the trace-preserving and
+unital gauge normalizations of an irreducible tensor) live in
+`TNLean.MPS.Irreducible.PerronGauge`.
 
 ## Brouwer fixed-point theorem on density matrices
 
@@ -220,42 +220,10 @@ theorem exists_posDef_adjoint_eigenvector
     exists_posSemidef_eigenvector
       (E := mapLM fun i => (K i)ᴴ)
       hcp.isPositiveMap (hNZ := hNZ)
-  -- Step 5: Upgrade PSD → PosDef.
-  -- Define the rescaled family T i = (1/√r) • (K i)ᴴ so that mapLM T σ = σ.
-  set c := (Real.sqrt r)⁻¹ with hc_def
-  set T : Fin d → Matrix (Fin D) (Fin D) ℂ := fun i => (c : ℂ) • (K i)ᴴ
-  -- Auxiliary lemma: star of a real-coerced scalar is itself.
-  have hstar_c : star (↑c : ℂ) = (↑c : ℂ) := by
-    rw [RCLike.star_def, Complex.conj_ofReal]
-  -- Key scalar identity: c * c = r⁻¹ in ℂ.
-  have hcc : (c : ℝ) * c = r⁻¹ := by
-    rw [hc_def, ← sq, inv_pow, Real.sq_sqrt hr_pos.le]
-  have hc_sq : (↑c : ℂ) * (↑c : ℂ) = (↑r : ℂ)⁻¹ := by
-    rw [← Complex.ofReal_mul, hcc, Complex.ofReal_inv]
-  -- Verify mapLM T σ = σ.
-  have hT_fix : mapLM T σ = σ := by
-    simp only [T, mapLM_apply, map_apply, Matrix.conjTranspose_smul, Matrix.smul_mul,
-      Matrix.mul_smul, smul_smul]
-    simp_rw [hstar_c, hc_sq]
-    rw [← Finset.smul_sum]
-    have h_sum : ∑ i : Fin d, (K i)ᴴ * σ * ((K i)ᴴ)ᴴ =
-        mapLM (fun i => (K i)ᴴ) σ := by
-      simp [mapLM_apply, map_apply]
-    rw [h_sum, hσ_eig, smul_smul, inv_mul_cancel₀, one_smul]
-    exact_mod_cast hr_pos.ne'
-  -- Verify IsIrreducibleMap (mapLM T) via mapLM T = (1/r) • mapLM (fun i => (K i)ᴴ).
-  have hT_eq : mapLM T = (r : ℂ)⁻¹ • mapLM fun i => (K i)ᴴ := by
-    ext X
-    simp only [T, mapLM_apply, map_apply, Matrix.conjTranspose_smul, Matrix.smul_mul,
-      Matrix.mul_smul, smul_smul, LinearMap.smul_apply]
-    simp_rw [hstar_c, hc_sq, ← Finset.smul_sum]
-  have hIrr_T : IsIrreducibleMap (mapLM T) := by
-    rw [hT_eq]
-    exact isIrreducibleMap_smul (inv_ne_zero (by exact_mod_cast hr_pos.ne')) hIrrAdj
-  -- Apply the PSD → PosDef upgrade.
+  -- Step 5: Upgrade PSD → PosDef (Wolf Theorem 6.3(2)).
   have hσ_pd : σ.PosDef :=
-    posDef_of_posSemidef_fixedPoint_irreducible_cp _ (isCPMap_mapLM T)
-      hIrr_T σ hσ_psd hσ_ne hT_fix
+    posDef_of_ker_subset_irreducible_cp _ hcp hIrrAdj σ hσ_psd hσ_ne
+      (fun v hv => by rw [hσ_eig, Matrix.smul_mulVec, hv, smul_zero])
   exact ⟨σ, r, hσ_pd, hr_pos, hσ_eig⟩
 
 end Kraus

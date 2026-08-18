@@ -266,19 +266,60 @@ outer square-root factors yields
     \label{thm:adjoint_transfer_ne_zero}
     \lean{Kraus.mapLM_ne_zero_of_exists_ne_zero}
     \leanok
-    \uses{def:transfer_map}
-    If some Kraus operator $K^i \neq 0$, then the Kraus map
-    $X \mapsto \sum_i K^i X (K^i)^\dagger$ is nonzero. Applied to the
-    conjugate-transposed family, the adjoint transfer
-    map $\E_A^\dagger(X) = \sum_i (A^i)^\dagger X A^i$ of a tensor with some
-    $A^i \neq 0$ is nonzero.
+    \uses{def:kraus_map}
+    If some Kraus operator $K_i \neq 0$, then the Kraus map
+    $X \mapsto \sum_i K_i X K_i^\dagger$ is nonzero.
 \end{theorem}
 
 \begin{proof}\leanok
     If the map vanishes, evaluating at $\Id$ gives
-    $\sum_i K^i (K^i)^\dagger = 0$.
-    Since each summand $K^i (K^i)^\dagger$ is positive semidefinite,
-    each $K^i (K^i)^\dagger = 0$ and hence each $K^i = 0$.
+    $\sum_i K_i K_i^\dagger = 0$.
+    Since each summand $K_i K_i^\dagger$ is positive semidefinite,
+    each $K_i K_i^\dagger = 0$ and hence each $K_i = 0$.
+    Applying this to $K_i = (A^i)^\dagger$ and using
+    $A^i \neq 0 \iff (A^i)^\dagger \neq 0$ shows that the adjoint transfer
+    map $\E_A^\dagger(X) = \sum_i (A^i)^\dagger X A^i$ of a tensor with some
+    $A^i \neq 0$ is nonzero.
+\end{proof}
+
+\begin{theorem}[Positive-definite adjoint eigenvector for irreducible Kraus families]%
+    \label{thm:kraus_posdef_adjoint_eigenvector}
+    \lean{Kraus.exists_posDef_adjoint_eigenvector}
+    \leanok
+    \uses{def:kraus_map, def:irreducible_cp}
+    Let $\{K_i\}_{i=0}^{d-1}$ be a family with $D > 0$ and some
+    $K_i \neq 0$, whose Kraus map $\mathcal K_K$ is irreducible. Then there
+    exist a positive definite matrix~$\sigma$ and a positive real $r > 0$
+    such that
+    \begin{align}
+        \sum_i K_i^\dagger \sigma K_i
+         & = r\sigma.
+        \notag
+    \end{align}
+
+    This combines the eigenvector-existence part of
+    \cite[Theorem~6.5]{Wolf2012Quantum} with the irreducible upgrade to
+    positive definiteness (\cite[Theorem~6.3(2)]{Wolf2012Quantum}).
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:pf_eigenvector_existence, thm:adjoint_transfer_ne_zero,
+        thm:kernel_inclusion_pd_irred}
+    The conjugate-transposed family $\{K_i^\dagger\}$ has the same Kraus map
+    as the adjoint of $\mathcal K_K$, so it is completely positive, and by
+    Theorem~\ref{thm:adjoint_transfer_ne_zero} it is nonzero. Irreducibility
+    of $\mathcal K_K$ transfers to $\{K_i^\dagger\}$: if $P$ is invariant for
+    $\mathcal K_K$, so that $(\Id-P)K_iP=0$ for all $i$, then taking adjoints
+    gives $PK_i^\dagger(\Id-P)=0$, which means $\Id-P$ is invariant for the
+    Kraus map of $\{K_i^\dagger\}$. Hence the Kraus map of $\{K_i^\dagger\}$
+    does not annihilate any nonzero positive semidefinite matrix, and
+    Theorem~\ref{thm:pf_eigenvector_existence} applies, giving
+    $\sigma \ge 0$, $\sigma \neq 0$, and $r > 0$ with
+    $\sum_i K_i^\dagger \sigma K_i = r\sigma$. Since
+    $\ker\sigma \subseteq \ker\bigl(\sum_i K_i^\dagger \sigma K_i\bigr)$
+    follows immediately from this eigenvector equation,
+    Theorem~\ref{thm:kernel_inclusion_pd_irred} gives that $\sigma$ is
+    positive definite.
 \end{proof}
 
 \begin{theorem}[Real spectral-radius identity]

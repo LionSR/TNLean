@@ -9,7 +9,7 @@ import TNLean.MPS.Core.TPGauge
 import TNLean.MPS.Irreducible.Adjoint
 
 /-!
-# Perron–Frobenius gauge data for irreducible MPS tensors
+# Perron–Frobenius gauges for irreducible MPS tensors
 
 The Perron–Frobenius eigenvector of the adjoint transfer map of an irreducible
 MPS tensor gives the standard trace-preserving and unital gauge normalizations.
@@ -42,7 +42,7 @@ variable {d D : ℕ}
 
 namespace MPSTensor
 
-/-- **PosDef fixed point of the adjoint transfer map (after rescaling)**
+/-- **PosDef eigenvector of the adjoint transfer map**
 (combines Wolf Theorem 6.5 for existence with Wolf Theorem 6.3(2) for positive
 definiteness).
 
