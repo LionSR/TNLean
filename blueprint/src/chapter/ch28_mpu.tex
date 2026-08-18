@@ -5797,9 +5797,10 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
   \uses{def:mpo_family,def:support_proj,def:mpu_virtual_sandwich,
     def:mpu_matrix_reduced_projection,def:mpu_right_rank,def:mpu_left_rank,
     def:mpu_ambient_support_inverse_extension}
-  Let $W=(W^{ij})$ be an MPO tensor, let $P$ be an orthogonal projection,
-  let $Q$ be a square matrix of the same size, and set $\widetilde P$ equal
-  to their reduced projection.
+  Let $W=(W^{ij})$ be an MPO tensor, let $L$, $R$, $X$, $Z$, $Y$ be square
+  matrices of the same size, let $P$ be an orthogonal projection, let $Q$
+  be a square matrix of the same size, and set $\widetilde P$ equal to
+  their reduced projection.
   Assume, letter by letter, $W^{ij}P=W^{ij}=QW^{ij}$. Set
   $\widehat W^{ij}=LW^{ij}R$ and
   $\widetilde W^{ij}=\widetilde P W^{ij}\widetilde P$. If $X,Z,Y$ satisfy
@@ -5840,8 +5841,13 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     thm:mpu_ambient_support_inverse_extension}
   Expanding each virtual sandwich and using $XL=P$ and $RZ=Q$ gives
   (\ref{eq:mpu_reduced_hat_chain_pwqy}). The absorptions
-  $QW^{ij}=W^{ij}=W^{ij}P$ insert $Q$ on the left and $P$ on the right, which
-  gives (\ref{eq:mpu_reduced_hat_chain_pqwpqy}). Since
+  $QW^{ij}=W^{ij}=W^{ij}P$ give, letter by letter,
+  \begin{align}
+    PW^{ij}QY
+    &=P(QW^{ij})QY=PQ(W^{ij}P)QY=PQW^{ij}PQY,
+    \notag
+  \end{align}
+  which is (\ref{eq:mpu_reduced_hat_chain_pqwpqy}). Since
   $\widetilde P Q=PQ$ and $PQY=\widetilde P$,
   \begin{align}
     PQW^{ij}PQY
