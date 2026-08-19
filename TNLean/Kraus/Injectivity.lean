@@ -10,13 +10,13 @@ import TNLean.Kraus.Word
 
 This file carries the word-evaluation layer of the channel side: algebraic
 injectivity, block injectivity, and normality of a finite Kraus family, and
-their elementary consequences. It is part of issue #6560's extraction of a
+their elementary consequences. It is part of the extraction of a
 Kraus-family-only library out of `TNLean`'s matrix-product-state development.
 
-**Pending:** these declarations keep `namespace MPSTensor` for this PR
-(issue #6560 phase 1b, PR-W1a). The rename to `namespace Kraus` is deferred
-to a dedicated mechanical sweep across the ~429 files that reference this
-vocabulary repo-wide; see `TNLean/Kraus/Word.lean`'s module docstring.
+**Pending:** these declarations keep `namespace MPSTensor` for now. The
+rename to `namespace Kraus` is deferred to a dedicated mechanical sweep
+across the ~429 files that reference this vocabulary; see
+`TNLean/Kraus/Word.lean`'s module docstring.
 
 ## Main declarations
 

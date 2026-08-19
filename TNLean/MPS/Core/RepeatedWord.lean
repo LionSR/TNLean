@@ -10,8 +10,8 @@ import TNLean.Kraus.Blocking
 # Repeated words
 
 `evalWord_replicate`, the elementary identity for evaluating a tensor on a
-`List.replicate`-built word, now lives in `TNLean/Kraus/Blocking.lean` (issue
-#6560 phase 1b, PR-W1a), alongside the rest of the physical-blocking
+`List.replicate`-built word, now lives in `TNLean/Kraus/Blocking.lean`,
+alongside the rest of the physical-blocking
 word-evaluation layer. This file keeps the one matrix-product-vector
 consequence, `mpv_const_eq_trace_pow`, which packages that identity as an
 `mpv` statement.

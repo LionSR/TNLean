@@ -17,13 +17,13 @@ generalization of `MPSTensor.evalWord` to matrices indexed by an arbitrary
 finite type (in particular, the `Σ`-type indices produced by
 `Matrix.blockDiagonal'`), together with the block-diagonal compatibility
 lemmas and the bridge back to the canonical `Fin D`-indexed `evalWord`. It is
-part of issue #6560's extraction of a Kraus-family-only library out of
+part of the extraction of a Kraus-family-only library out of
 `TNLean`'s matrix-product-state development.
 
 **Pending:** `evalWord_aux_eq` and `evalWord_reindex` keep `namespace
-MPSTensor` for this PR (issue #6560 phase 1b, PR-W1a). The rename to
-`namespace Kraus` is deferred to a dedicated mechanical sweep across the
-~429 files that reference this vocabulary repo-wide; see
+MPSTensor` for now. The rename to `namespace Kraus` is deferred to a
+dedicated mechanical sweep across the ~429 files that reference this
+vocabulary; see
 `TNLean/Kraus/Word.lean`'s module docstring.
 -/
 

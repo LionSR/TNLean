@@ -16,16 +16,15 @@ its multiplicativity and intertwining lemmas, physical reindexing, and the
 trace/similarity-invariance fact used to build the MPV coefficient. It also
 carries the `MPSTensor` abbrev itself, so that `TNLean/MPS/Defs.lean` and
 every other Kraus module can obtain the abbrev by importing this file without
-a dependency cycle. It is part of issue #6560's extraction of a
+a dependency cycle. It is part of the extraction of a
 Kraus-family-only library out of `TNLean`'s matrix-product-state
 development.
 
-**Pending:** these declarations keep `namespace MPSTensor` for this PR
-(issue #6560 phase 1b, PR-W1a). The rename to `namespace Kraus`, which
-matches the vocabulary already used under `TNLean/Channel/`, is deferred to a
-dedicated mechanical sweep across the ~429 files that reference this
-vocabulary repo-wide (word layer and `Wielandt/` together), tracked in
-issue #6560. Declarations here use the `MPSTensor` abbrev, not the raw
+**Pending:** these declarations keep `namespace MPSTensor` for now. The
+rename to `namespace Kraus`, which matches the vocabulary already used under
+`TNLean/Channel/`, is deferred to a dedicated mechanical sweep across the
+~429 files that reference this vocabulary (word layer and `Wielandt/`
+together). Declarations here use the `MPSTensor` abbrev, not the raw
 function type, precisely so that this sweep does not also have to repair the
 generalized-field-notation call sites (`A.evalWord`, `hA.isNormal`, …) that
 rely on `MPSTensor` being the head symbol of the argument type.

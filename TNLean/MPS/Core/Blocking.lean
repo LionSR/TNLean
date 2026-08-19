@@ -12,7 +12,7 @@ import TNLean.Kraus.Blocking
 The word-evaluation content of physical blocking (`blockPhysDim`, `wordOfBlock`,
 `blockTensor`, `blockKron`, `evalWord_blockTensor`, canonical-normalization
 propagation, `leftCanonical_blockTensor`) now lives in
-`TNLean/Kraus/Blocking.lean` (issue #6560 phase 1b, PR-W1a). This file keeps
+`TNLean/Kraus/Blocking.lean`. This file keeps
 the surviving matrix-product-vector bridge lemmas that transport `mpv`/`SameMPV`
 through physical blocking. `mpv_blockTensor_eq_mpv` was also a bridge lemma
 here; it had zero call sites (repo-wide, including generalized field notation)

@@ -13,7 +13,7 @@ This file carries the word-evaluation layer of the channel side:
 `HasInvariantProj` and `IsIrreducibleTensor`, the predicates used by the
 canonical-form iterated block-decomposition argument to detect a nontrivial
 invariant orthogonal projection for a finite Kraus family. It is part of
-issue #6560's extraction of a Kraus-family-only library out of `TNLean`'s
+the extraction of a Kraus-family-only library out of `TNLean`'s
 matrix-product-state development.
 
 The consequences of these predicates (rescaling and conjugation invariance,
@@ -21,10 +21,10 @@ the cast lemmas, and the iterated block-decomposition capstone
 `exists_irreducible_blockDecomp`) stay on the matrix-product-state side, in
 `TNLean/MPS/CanonicalForm/Reduction.lean`.
 
-**Pending:** these declarations keep `namespace MPSTensor` for this PR
-(issue #6560 phase 1b, PR-W1a). The rename to `namespace Kraus` is deferred
-to a dedicated mechanical sweep across the ~429 files that reference this
-vocabulary repo-wide; see `TNLean/Kraus/Word.lean`'s module docstring.
+**Pending:** these declarations keep `namespace MPSTensor` for now. The
+rename to `namespace Kraus` is deferred to a dedicated mechanical sweep
+across the ~429 files that reference this vocabulary; see
+`TNLean/Kraus/Word.lean`'s module docstring.
 
 ## Main declarations
 

@@ -64,7 +64,7 @@ variable {d D : ℕ}
 /-! ## Irreducibility definitions
 
 `HasInvariantProj` and `IsIrreducibleTensor` now live in
-`TNLean/Kraus/InvariantProjection.lean` (issue #6560 phase 1b, PR-W1a). -/
+`TNLean/Kraus/InvariantProjection.lean`. -/
 
 /-- Nonzero scalar rescaling preserves tensor irreducibility. -/
 theorem isIrreducibleTensor_smul

@@ -19,7 +19,7 @@ block-diagonal MPS tensors with injective blocks, and constructs the
 associated tensor `CanonicalForm.toTensor`. The generic Σ-type
 `evalWord`/`blockDiagonal'`-compatibility infrastructure this used to carry
 (lines 69–149 of the pre-split file) now lives in
-`TNLean/Kraus/MultiBlockWord.lean` (issue #6560 phase 1b, PR-W1a).
+`TNLean/Kraus/MultiBlockWord.lean`.
 -/
 
 open scoped Matrix BigOperators

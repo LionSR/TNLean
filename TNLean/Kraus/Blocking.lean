@@ -20,8 +20,8 @@ This file carries the word-evaluation layer of the channel side: physical
 blocking of a finite Kraus family via `blockPhysDim`, `wordOfBlock`, and
 `blockTensor`; the Kronecker-power lift `blockKron` of a physical-index
 operator through blocking; and the propagation of left/right-canonical
-normalization and block injectivity through blocking. It is part of issue
-#6560's extraction of a Kraus-family-only library out of `TNLean`'s
+normalization and block injectivity through blocking. It is part of the
+extraction of a Kraus-family-only library out of `TNLean`'s
 matrix-product-state development.
 
 Also carries `evalWord_replicate` (evaluation on a `List.replicate`-built
@@ -36,10 +36,10 @@ and `SameMPV.blockTensor`) stay on the matrix-product-state side, in
 generalized field notation) and was deleted rather than carried across the
 split.
 
-**Pending:** these declarations keep `namespace MPSTensor` for this PR
-(issue #6560 phase 1b, PR-W1a). The rename to `namespace Kraus` is deferred
-to a dedicated mechanical sweep across the ~429 files that reference this
-vocabulary repo-wide; see `TNLean/Kraus/Word.lean`'s module docstring.
+**Pending:** these declarations keep `namespace MPSTensor` for now. The
+rename to `namespace Kraus` is deferred to a dedicated mechanical sweep
+across the ~429 files that reference this vocabulary; see
+`TNLean/Kraus/Word.lean`'s module docstring.
 
 ## Main definitions
 
