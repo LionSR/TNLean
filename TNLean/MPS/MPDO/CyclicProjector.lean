@@ -267,8 +267,11 @@ theorem exists_displaced_invariant_projector_of_periodic_vector
   set K : MPSTensor (D * D) n := MPSTensor.spectralUnitalGauge B rad ρ with hK
   obtain ⟨hUnital, hIrrK, hIrrMap, σ, hσ, hσfix⟩ :=
     MPSTensor.spectralUnitalGauge_schwarz_setup B hirr ρ rad hρ hrad hfix
+  have hIrrMapLM : IsIrreducibleMap (Kraus.mapLM K) := by
+    rw [Kraus.mapLM_eq_transferMap]; exact hIrrMap
   obtain ⟨m, γ, hm_pos, hγprim, hset⟩ :=
-    PeripheralSpectrum.peripheral_eigenvalues_cyclic_structure K hUnital σ hσ hσfix hIrrMap
+    PeripheralSpectrum.peripheral_eigenvalues_cyclic_structure K hUnital σ hσ hσfix hIrrMapLM
+  rw [Kraus.mapLM_eq_transferMap] at hset
   have : NeZero m := ⟨hm_pos.ne'⟩
   -- `μ / r` is a peripheral eigenvalue of the gauged transfer map, and it is
   -- not `1`, so the peripheral cyclic group has order at least two.
@@ -300,13 +303,14 @@ theorem exists_displaced_invariant_projector_of_periodic_vector
     rw [hset]
     ext z
     simp [Set.mem_range, eq_comm]
-  obtain ⟨U, P, _, _, _, hPproj, hPsum, _, hcyclic⟩ :=
+  have hperiphLM : peripheralEigenvalues (Kraus.mapLM K) =
+      Set.range (fun j : Fin m => γ ^ (j : ℕ)) := by
+    rw [Kraus.mapLM_eq_transferMap]; exact hperiph
+  obtain ⟨U, P, _, _, _, hPproj, hPsum, _, hcyclicLM⟩ :=
     Kraus.exists_cyclic_decomposition_of_irreducible_schwarz
-      (K := K) hUnital σ hσ hσfix hIrrMap hγprim hperiph
-  -- The cyclic action in finite-Kraus-map notation.
-  have hcyclicLM : ∀ k : Fin m, Kraus.mapLM K (P (k + 1)) = P k := fun k => by
-    rw [Kraus.mapLM_eq_transferMap]
-    exact hcyclic k
+      (K := K) hUnital σ hσ hσfix hIrrMapLM hγprim hperiphLM
+  have hcyclic : ∀ k : Fin m, MPSTensor.transferMap (d := D * D) (D := n) K (P (k + 1)) = P k :=
+    fun k => by rw [← Kraus.mapLM_eq_transferMap]; exact hcyclicLM k
   -- Notation for the square root of the eigenvector and the scaling factor.
   set S : Matrix (Fin n) (Fin n) ℂ := CFC.sqrt ρ with hS
   have hSdet : IsUnit S.det := MPSTensor.isUnit_det_cfc_sqrt_of_posDef ρ hρ

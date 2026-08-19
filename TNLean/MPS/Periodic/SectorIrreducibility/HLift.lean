@@ -126,13 +126,15 @@ private theorem sector_supported_pow_fixed_eq_smul_projection
   let K : Fin d → MatrixAlg D := fun i => (A i)ᴴ
   have hUnital : KadisonSchwarz.IsUnitalKraus (d := d) (D := D) K := by
     simpa [KadisonSchwarz.IsUnitalKraus, K] using hTP
+  have hIrrAdjLM : IsIrreducibleMap (Kraus.mapLM K) := by
+    rw [Kraus.mapLM_eq_transferMap]; exact hIrrAdj
   have hOrbitFix :
       T (orbitSumProjection (D := D) (m := m) T X) =
         orbitSumProjection (D := D) (m := m) T X :=
     orbitSumProjection_fixed_of_pow_fix (T := T) (Q := X) (m := m) (by simpa [T] using hXfix)
   obtain ⟨c, hOrbitScalar⟩ :=
     Kraus.fixed_eq_scalar_of_irreducible_unital
-      (K := K) hUnital hIrrAdj (orbitSumProjection (D := D) (m := m) T X)
+      (K := K) hUnital hIrrAdjLM (orbitSumProjection (D := D) (m := m) T X)
       (by simpa [T, K] using hOrbitFix)
   have hRecover :
       P k * orbitSumProjection (D := D) (m := m) T X * P k = X :=

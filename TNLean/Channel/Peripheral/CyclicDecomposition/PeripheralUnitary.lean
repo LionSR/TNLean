@@ -4,15 +4,14 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.Channel.Irreducible.FixedPointUniqueness
+import TNLean.Channel.KrausMap
 import TNLean.Channel.Peripheral.CyclicDecomposition.Basic
 import TNLean.Channel.Schwarz.MultiplicativeDomainPowers
-import TNLean.MPS.Core.CPPrimitive
 
 /-!
 # Peripheral unitaries for irreducible Schwarz maps
 
-This file develops the first part of Wolf Theorem 6.6 for transfer maps of
-Kraus families.
+This file develops the first part of Wolf Theorem 6.6 for finite Kraus maps.
 
 ## Main statements
 
@@ -32,7 +31,6 @@ Kraus families.
 
 open scoped Matrix ComplexOrder MatrixOrder BigOperators
 open Matrix Finset Complex
-open MPSTensor (transferMap transferMap_apply transferMap_isCPMap)
 
 namespace Kraus
 
@@ -40,32 +38,32 @@ private theorem hermitian_fixed_eq_scalar_of_irreducible_unital
     {r D : ℕ} [NeZero D]
     (K : Fin r → MatrixAlg D)
     (hUnital : KadisonSchwarz.IsUnitalKraus (d := r) (D := D) K)
-    (hIrr : IsIrreducibleMap (transferMap (d := r) (D := D) K))
+    (hIrr : IsIrreducibleMap (mapLM K))
     (H : MatrixAlg D) (hH : H.IsHermitian)
-    (hfix : transferMap (d := r) (D := D) K H = H) :
+    (hfix : mapLM K H = H) :
     ∃ c : ℂ, H = c • 1 := by
   classical
   have : Nonempty (Fin D) := ⟨⟨0, NeZero.pos D⟩⟩
   set c0 : ℝ := minEigenvalue hH
   have hshift_psd : (H - (c0 : ℂ) • 1).PosSemidef :=
     sub_minEigenvalue_smul_one_posSemidef hH
-  have hone_fix : transferMap (d := r) (D := D) K (1 : MatrixAlg D) = 1 := by
-    simpa [MPSTensor.transferMap_apply, KadisonSchwarz.krausMap,
+  have hone_fix : mapLM K (1 : MatrixAlg D) = 1 := by
+    simpa [mapLM_apply, map_apply, KadisonSchwarz.krausMap,
       KadisonSchwarz.IsUnitalKraus] using hUnital
   have hshift_fix :
-      transferMap (d := r) (D := D) K (H - (c0 : ℂ) • 1) = H - (c0 : ℂ) • 1 := by
+      mapLM K (H - (c0 : ℂ) • 1) = H - (c0 : ℂ) • 1 := by
     calc
-      transferMap (d := r) (D := D) K (H - (c0 : ℂ) • 1)
-          = transferMap (d := r) (D := D) K H -
-              transferMap (d := r) (D := D) K ((c0 : ℂ) • (1 : MatrixAlg D)) := by
+      mapLM K (H - (c0 : ℂ) • 1)
+          = mapLM K H -
+              mapLM K ((c0 : ℂ) • (1 : MatrixAlg D)) := by
               rw [LinearMap.map_sub]
-      _ = transferMap (d := r) (D := D) K H -
-            (c0 : ℂ) • transferMap (d := r) (D := D) K 1 := by
+      _ = mapLM K H -
+            (c0 : ℂ) • mapLM K 1 := by
               rw [LinearMap.map_smul]
       _ = H - (c0 : ℂ) • 1 := by simp only [hfix, hone_fix, Complex.coe_smul]
   have hone_psd : (1 : MatrixAlg D).PosSemidef := Matrix.PosSemidef.one
-  rcases posSemidef_fixedPoint_unique_of_irreducible_cp (transferMap (d := r) (D := D) K)
-      (transferMap_isCPMap K) hIrr
+  rcases posSemidef_fixedPoint_unique_of_irreducible_cp (mapLM K)
+      (isCPMap_mapLM K) hIrr
       (1 : MatrixAlg D) (H - (c0 : ℂ) • 1) hone_psd one_ne_zero hshift_psd hone_fix hshift_fix with
     ⟨d, hd⟩
   refine ⟨d + c0, ?_⟩
@@ -80,34 +78,34 @@ theorem fixed_eq_scalar_of_irreducible_unital
     {r D : ℕ} [NeZero D]
     (K : Fin r → MatrixAlg D)
     (hUnital : KadisonSchwarz.IsUnitalKraus (d := r) (D := D) K)
-    (hIrr : IsIrreducibleMap (transferMap (d := r) (D := D) K))
+    (hIrr : IsIrreducibleMap (mapLM K))
     (X : MatrixAlg D)
-    (hfix : transferMap (d := r) (D := D) K X = X) :
+    (hfix : mapLM K X = X) :
     ∃ c : ℂ, X = c • 1 := by
   have hfix_map : Kraus.map K X = X := by
-    simpa [Kraus.map, MPSTensor.transferMap_apply] using hfix
+    simpa [Kraus.map, mapLM_apply, map_apply] using hfix
   have hfix_star_map : Kraus.map K Xᴴ = Xᴴ := by
     calc
       Kraus.map K Xᴴ = (Kraus.map K X)ᴴ := by
         simpa using (Kraus.map_conjTranspose K X).symm
       _ = Xᴴ := by rw [hfix_map]
-  have hfix_star : transferMap (d := r) (D := D) K Xᴴ = Xᴴ := by
-    simpa [Kraus.map, MPSTensor.transferMap_apply] using hfix_star_map
-  have hHerm_fix : transferMap (d := r) (D := D) K (X + Xᴴ) = X + Xᴴ := by
+  have hfix_star : mapLM K Xᴴ = Xᴴ := by
+    simpa [Kraus.map, mapLM_apply, map_apply] using hfix_star_map
+  have hHerm_fix : mapLM K (X + Xᴴ) = X + Xᴴ := by
     calc
-      transferMap (d := r) (D := D) K (X + Xᴴ)
-          = transferMap (d := r) (D := D) K X + transferMap (d := r) (D := D) K Xᴴ := by
-              simpa using (transferMap (d := r) (D := D) K).map_add X Xᴴ
+      mapLM K (X + Xᴴ)
+          = mapLM K X + mapLM K Xᴴ := by
+              simpa using (mapLM K).map_add X Xᴴ
       _ = X + Xᴴ := by simp only [hfix, hfix_star]
   have hSkew_fix :
-      transferMap (d := r) (D := D) K (Complex.I • (X - Xᴴ)) = Complex.I • (X - Xᴴ) := by
+      mapLM K (Complex.I • (X - Xᴴ)) = Complex.I • (X - Xᴴ) := by
     calc
-      transferMap (d := r) (D := D) K (Complex.I • (X - Xᴴ))
-          = Complex.I • transferMap (d := r) (D := D) K (X - Xᴴ) := by
-              simp only [_root_.map_smul, transferMap_apply]
-      _ = Complex.I • (transferMap (d := r) (D := D) K X - transferMap (d := r) (D := D) K Xᴴ) := by
+      mapLM K (Complex.I • (X - Xᴴ))
+          = Complex.I • mapLM K (X - Xᴴ) := by
+              simp only [_root_.map_smul, mapLM_apply]
+      _ = Complex.I • (mapLM K X - mapLM K Xᴴ) := by
               simpa using congrArg (fun M => Complex.I • M)
-                ((transferMap (d := r) (D := D) K).map_sub X Xᴴ)
+                ((mapLM K).map_sub X Xᴴ)
       _ = Complex.I • (X - Xᴴ) := by simp only [hfix, hfix_star]
   have hHerm_herm : (X + Xᴴ).IsHermitian := by
     simp only [IsHermitian, conjTranspose_add, conjTranspose_conjTranspose, add_comm]
@@ -164,11 +162,11 @@ theorem fixed_eq_scalar_of_irreducible_unital
 
 section PeripheralUnitary
 
-/-- A peripheral eigenvalue of an irreducible unital Schwarz transfer map admits a unitary
+/-- A peripheral eigenvalue of an irreducible unital Schwarz map admits a unitary
 matrix eigenvector.
 
 This is the unitary part of Wolf Theorem 6.6. The formulation is stated for
-transfer maps of Kraus families because the available Kadison--Schwarz /
+finite Kraus maps because the available Kadison--Schwarz /
 multiplicative-domain interface is implemented at that level. -/
 theorem exists_peripheral_unitary_of_irreducible_schwarz
     {r D : ℕ} [NeZero D]
@@ -176,22 +174,22 @@ theorem exists_peripheral_unitary_of_irreducible_schwarz
     (hUnital : KadisonSchwarz.IsUnitalKraus (d := r) (D := D) K)
     (ρ : MatrixAlg D) (hρ : ρ.PosDef)
     (hρfix : Kraus.adjointMap K ρ = ρ)
-    (hIrr : IsIrreducibleMap (transferMap (d := r) (D := D) K))
+    (hIrr : IsIrreducibleMap (mapLM K))
     {γ : ℂ}
-    (hγ : γ ∈ peripheralEigenvalues (transferMap (d := r) (D := D) K)) :
+    (hγ : γ ∈ peripheralEigenvalues (mapLM K)) :
     ∃ U : Matrix.unitaryGroup (Fin D) ℂ,
-      transferMap (d := r) (D := D) K (U : MatrixAlg D) = γ • (U : MatrixAlg D) := by
+      mapLM K (U : MatrixAlg D) = γ • (U : MatrixAlg D) := by
   classical
   have : Nonempty (Fin D) := ⟨⟨0, NeZero.pos D⟩⟩
   rcases hγ with ⟨hγ_eig, hγ_norm⟩
   rcases hγ_eig.exists_hasEigenvector with ⟨X, hX_eigvec⟩
-  have hX_mem : X ∈ Module.End.eigenspace (transferMap (d := r) (D := D) K) γ :=
+  have hX_mem : X ∈ Module.End.eigenspace (mapLM K) γ :=
     (Module.End.hasEigenvector_iff.mp hX_eigvec).1
   have hX_ne : X ≠ 0 := (Module.End.hasEigenvector_iff.mp hX_eigvec).2
-  have hEig_transfer : transferMap (d := r) (D := D) K X = γ • X :=
+  have hEig_transfer : mapLM K X = γ • X :=
     (Module.End.mem_eigenspace_iff).1 hX_mem
   have hEig_map : Kraus.map K X = γ • X := by
-    simpa [Kraus.map, MPSTensor.transferMap_apply] using hEig_transfer
+    simpa [Kraus.map, mapLM_apply, map_apply] using hEig_transfer
   have hUnital' : Kraus.IsUnital K := by
     simpa [Kraus.IsUnital, KadisonSchwarz.IsUnitalKraus] using hUnital
   have hKS_map :
@@ -212,8 +210,8 @@ theorem exists_peripheral_unitary_of_irreducible_schwarz
               Algebra.smul_mul_assoc, smul_smul, mul_comm
             ]
       _ = Xᴴ * X := by simp only [hγ_starRing_mul, one_smul]
-  have hXX_fix : transferMap (d := r) (D := D) K (Xᴴ * X) = Xᴴ * X := by
-    simpa [Kraus.map, MPSTensor.transferMap_apply] using hXX_fix_map
+  have hXX_fix : mapLM K (Xᴴ * X) = Xᴴ * X := by
+    simpa [Kraus.map, mapLM_apply, map_apply] using hXX_fix_map
   have hXX_psd : (Xᴴ * X).PosSemidef := by
     simpa using Matrix.posSemidef_conjTranspose_mul_self X
   have hXX_ne : Xᴴ * X ≠ 0 := by
@@ -221,11 +219,11 @@ theorem exists_peripheral_unitary_of_irreducible_schwarz
     apply hX_ne
     exact Matrix.conjTranspose_mul_self_eq_zero.mp h
   have hone_psd : (1 : MatrixAlg D).PosSemidef := Matrix.PosSemidef.one
-  have hone_fix : transferMap (d := r) (D := D) K (1 : MatrixAlg D) = 1 := by
-    simpa [MPSTensor.transferMap_apply, KadisonSchwarz.krausMap,
+  have hone_fix : mapLM K (1 : MatrixAlg D) = 1 := by
+    simpa [mapLM_apply, map_apply, KadisonSchwarz.krausMap,
       KadisonSchwarz.IsUnitalKraus] using hUnital
-  rcases posSemidef_fixedPoint_unique_of_irreducible_cp (transferMap (d := r) (D := D) K)
-      (transferMap_isCPMap K) hIrr
+  rcases posSemidef_fixedPoint_unique_of_irreducible_cp (mapLM K)
+      (isCPMap_mapLM K) hIrr
       (1 : MatrixAlg D) (Xᴴ * X) hone_psd one_ne_zero hXX_psd hone_fix hXX_fix with ⟨c, hXX_scalar⟩
   have hc_ne0 : c ≠ 0 := by
     intro hc0
@@ -281,8 +279,8 @@ theorem exists_peripheral_unitary_of_irreducible_schwarz
                 _ = 1 := by field_simp [ha_ne0]
             simp only [hscalar, one_smul]⟩, ?_⟩
   calc
-    transferMap (d := r) (D := D) K (a⁻¹ • X) = a⁻¹ • transferMap (d := r) (D := D) K X := by
-          simp only [_root_.map_smul, transferMap_apply]
+    mapLM K (a⁻¹ • X) = a⁻¹ • mapLM K X := by
+          simp only [_root_.map_smul, mapLM_apply]
     _ = a⁻¹ • (γ • X) := by rw [hEig_transfer]
     _ = γ • (a⁻¹ • X) := by simp only [smul_smul, mul_comm]
 
@@ -294,19 +292,19 @@ theorem map_powers_of_peripheral_unitary
     (ρ : MatrixAlg D) (hρ : ρ.PosDef)
     (hρfix : Kraus.adjointMap K ρ = ρ)
     {γ : ℂ}
-    (hγ : γ ∈ peripheralEigenvalues (transferMap (d := r) (D := D) K))
+    (hγ : γ ∈ peripheralEigenvalues (mapLM K))
     (U : Matrix.unitaryGroup (Fin D) ℂ)
-    (hU : transferMap (d := r) (D := D) K (U : MatrixAlg D) = γ • (U : MatrixAlg D)) :
+    (hU : mapLM K (U : MatrixAlg D) = γ • (U : MatrixAlg D)) :
     ∀ k : ℕ,
-      transferMap (d := r) (D := D) K ((U : MatrixAlg D) ^ k) =
+      mapLM K ((U : MatrixAlg D) ^ k) =
         γ ^ k • ((U : MatrixAlg D) ^ k) := by
   intro k
   have hγnorm : ‖γ‖ = 1 := hγ.2
   have hU_map : Kraus.map K (U : MatrixAlg D) = γ • (U : MatrixAlg D) := by
-    simpa [Kraus.map, MPSTensor.transferMap_apply] using hU
+    simpa [Kraus.map, mapLM_apply, map_apply] using hU
   have hU_kraus : KadisonSchwarz.krausMap (d := r) (D := D) K (U : MatrixAlg D) =
       γ • (U : MatrixAlg D) := by
-    simpa [KadisonSchwarz.krausMap, MPSTensor.transferMap_apply] using hU
+    simpa [KadisonSchwarz.krausMap, mapLM_apply, map_apply] using hU
   have hUnital' : Kraus.IsUnital K := by
     simpa [Kraus.IsUnital, KadisonSchwarz.IsUnitalKraus] using hUnital
   have hKS_map :
@@ -324,7 +322,7 @@ theorem map_powers_of_peripheral_unitary
         γ ^ k • ((U : MatrixAlg D) ^ k) :=
     KadisonSchwarz.krausMap_pow_of_ks_equality
       (K := K) hUnital (U : MatrixAlg D) γ hU_kraus hKS_kraus k
-  simpa [KadisonSchwarz.krausMap, MPSTensor.transferMap_apply] using hpow_kraus
+  simpa [KadisonSchwarz.krausMap, mapLM_apply, map_apply] using hpow_kraus
 
 /-- A generator of the peripheral cycle can be normalized to have exact order `m`. -/
 theorem exists_normalized_peripheral_unitary_of_irreducible_schwarz
@@ -333,11 +331,11 @@ theorem exists_normalized_peripheral_unitary_of_irreducible_schwarz
     (hUnital : KadisonSchwarz.IsUnitalKraus (d := r) (D := D) K)
     (ρ : MatrixAlg D) (hρ : ρ.PosDef)
     (hρfix : Kraus.adjointMap K ρ = ρ)
-    (hIrr : IsIrreducibleMap (transferMap (d := r) (D := D) K))
+    (hIrr : IsIrreducibleMap (mapLM K))
     {γ : ℂ} (hγprim : IsPrimitiveRoot γ m)
-    (hγ : γ ∈ peripheralEigenvalues (transferMap (d := r) (D := D) K)) :
+    (hγ : γ ∈ peripheralEigenvalues (mapLM K)) :
     ∃ U : Matrix.unitaryGroup (Fin D) ℂ,
-      transferMap (d := r) (D := D) K (U : MatrixAlg D) = γ • (U : MatrixAlg D) ∧
+      mapLM K (U : MatrixAlg D) = γ • (U : MatrixAlg D) ∧
       ((U : MatrixAlg D) ^ m = 1) := by
   classical
   have : Nonempty (Fin D) := ⟨⟨0, NeZero.pos D⟩⟩
@@ -346,14 +344,14 @@ theorem exists_normalized_peripheral_unitary_of_irreducible_schwarz
       (K := K) hUnital ρ hρ hρfix hIrr hγ
   have hPow :
       ∀ k : ℕ,
-        transferMap (d := r) (D := D) K ((U : MatrixAlg D) ^ k) =
+        mapLM K ((U : MatrixAlg D) ^ k) =
           γ ^ k • ((U : MatrixAlg D) ^ k) :=
     map_powers_of_peripheral_unitary
       (K := K) hUnital ρ hρ hρfix hγ U hU
   have hUm_fix :
-      transferMap (d := r) (D := D) K ((U : MatrixAlg D) ^ m) = (U : MatrixAlg D) ^ m := by
+      mapLM K ((U : MatrixAlg D) ^ m) = (U : MatrixAlg D) ^ m := by
     calc
-      transferMap (d := r) (D := D) K ((U : MatrixAlg D) ^ m)
+      mapLM K ((U : MatrixAlg D) ^ m)
           = γ ^ m • ((U : MatrixAlg D) ^ m) := hPow m
       _ = (U : MatrixAlg D) ^ m := by simp only [hγprim.pow_eq_one, one_smul]
   rcases fixed_eq_scalar_of_irreducible_unital
@@ -400,9 +398,9 @@ theorem exists_normalized_peripheral_unitary_of_irreducible_schwarz
             ]
       _ = 1 := by rw [hβ_starRing_mul, hU_star_mul]; simp only [one_smul]⟩, ?_, ?_⟩
   · calc
-      transferMap (d := r) (D := D) K (β • (U : MatrixAlg D))
-          = β • transferMap (d := r) (D := D) K (U : MatrixAlg D) := by
-              simp only [_root_.map_smul, transferMap_apply]
+      mapLM K (β • (U : MatrixAlg D))
+          = β • mapLM K (U : MatrixAlg D) := by
+              simp only [_root_.map_smul, mapLM_apply]
       _ = β • (γ • (U : MatrixAlg D)) := by rw [hU]
       _ = γ • (β • (U : MatrixAlg D)) := by simp only [smul_smul, mul_comm]
   · calc

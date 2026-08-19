@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import TNLean.MPS.Core.TransferChannel
 import TNLean.MPS.Irreducible.FormII
 import TNLean.Channel.Peripheral.CyclicDecomposition.PeripheralUnitary
 
@@ -53,7 +54,10 @@ theorem fixed_eq_scalar_of_isIrreducibleTensor_unital
   have hUnitalKraus : KadisonSchwarz.IsUnitalKraus (d := d) (D := D) A := by
     simpa [transferMap_apply, Matrix.mul_one, KadisonSchwarz.IsUnitalKraus]
       using hUnital
-  exact Kraus.fixed_eq_scalar_of_irreducible_unital A hUnitalKraus
-    (isIrreducibleCP_transferMap_of_isIrreducibleTensor A hIrr) X hfix
+  have hIrrMap : IsIrreducibleMap (Kraus.mapLM A) := by
+    rw [Kraus.mapLM_eq_transferMap]
+    exact isIrreducibleCP_transferMap_of_isIrreducibleTensor A hIrr
+  have hfix_map : Kraus.mapLM A X = X := by rw [Kraus.mapLM_eq_transferMap]; exact hfix
+  exact Kraus.fixed_eq_scalar_of_irreducible_unital A hUnitalKraus hIrrMap X hfix_map
 
 end MPSTensor
