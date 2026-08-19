@@ -1502,6 +1502,7 @@ spectral split → block extraction → MPV calculation → strict bounds
   $\delta_{\mathrm{cyclicForwardSite}\,i\,r}(i)
   = (N - (r \bmod N)) \bmod N$.
 
+<<<<<<< HEAD
 ### eventual near-spectral-radius geometric bound — candidate
 - **Pattern:** from `spectralRadius ℂ a < r`, derive
   `∀ᶠ n in Filter.atTop, ‖a ^ n‖₊ < r ^ n` by combining Gelfand's formula
@@ -1527,6 +1528,21 @@ spectral split → block extraction → MPV calculation → strict bounds
   relocation, so extracting the shared step there would add no new import
   edge — the deferral rests on the occurrence count alone, not on any
   cross-layer dependency cost.
+=======
+### star preserves the complex norm — candidate
+- **Pattern:** `simpa only [RCLike.star_def, RCLike.norm_conj]` to close a goal of the
+  form `‖star μ‖ = 1` or `‖star μ‖ ≤ 1` from `‖μ‖ = 1` or `‖μ‖ ≤ 1`.
+- **Seen:** 5 occurrences in `TNLean/Channel/Peripheral/AdjointSpectrum.lean` before
+  the 2026-08 adjoint-spectrum cleanup, 3 of them newly written in that PR.
+- **Abstraction (proposed):** Mathlib's `norm_star : ‖star a‖ = ‖a‖` (a `simp` lemma on
+  any `NormedStarGroup`, and `ℂ` is one) closes each of these directly; no new TNLean
+  declaration is needed, only the call-site substitution.
+- **Notes:** all five occurrences in `AdjointSpectrum.lean` were replaced by `norm_star`
+  in the same cleanup. Two further call sites of the two-lemma idiom remain outside this
+  file's scope, `TNLean/MPS/RFP/CPSVCanonicalForm.lean:124` and
+  `TNLean/Channel/Determinant/HeisenbergDual.lean:103`; a follow-up sweep can retire this
+  candidate once those are also converted to `norm_star`.
+>>>>>>> 77b825637 (fix(channel/peripheral): relocate TP Kraus bounds and fix blueprint uses)
 
 ---
 
@@ -1584,20 +1600,6 @@ spectral split → block extraction → MPV calculation → strict bounds
   84-line proof body.
 - **Notes:** below the rule-of-three threshold; the duplication predates the PR
   that first noticed it (#6561) and both proofs are otherwise correct.
-
-### star preserves the complex norm — candidate
-- **Pattern:** `simpa only [RCLike.star_def, RCLike.norm_conj]` to close a goal of the
-  form `‖star μ‖ = 1` or `‖star μ‖ ≤ 1` from `‖μ‖ = 1` or `‖μ‖ ≤ 1`.
-- **Seen:** 5 occurrences in `TNLean/Channel/Peripheral/AdjointSpectrum.lean` before
-  the 2026-08 adjoint-spectrum cleanup, 3 of them newly written in that PR.
-- **Abstraction (proposed):** Mathlib's `norm_star : ‖star a‖ = ‖a‖` (a `simp` lemma on
-  any `NormedStarGroup`, and `ℂ` is one) closes each of these directly; no new TNLean
-  declaration is needed, only the call-site substitution.
-- **Notes:** all five occurrences in `AdjointSpectrum.lean` were replaced by `norm_star`
-  in the same cleanup. Two further call sites of the two-lemma idiom remain outside this
-  file's scope, `TNLean/MPS/RFP/CPSVCanonicalForm.lean:124` and
-  `TNLean/Channel/Determinant/HeisenbergDual.lean:103`; a follow-up sweep can retire this
-  candidate once those are also converted to `norm_star`.
 
 ## Retired
 

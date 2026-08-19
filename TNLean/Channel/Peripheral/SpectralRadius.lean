@@ -3,7 +3,9 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import TNLean.Algebra.MatrixOperatorSpace
 import TNLean.Channel.Determinant.Bound
+import TNLean.Channel.KrausMap
 import TNLean.Channel.PerronFrobenius.Existence
 import Mathlib.Analysis.Normed.Algebra.Spectrum
 import Mathlib.Topology.Algebra.Module.FiniteDimension
@@ -32,10 +34,12 @@ positive maps relies on the Russo--Dye theorem and is documented in
 * `spectralRadius_le_one_of_forall_eigenvalue_norm_le_one`: the norm-agnostic
   step transporting a pointwise eigenvalue bound to a spectral-radius bound,
   shared by every operator-norm choice used for this map.
+* `Kraus.eigenvalue_norm_le_one_of_isTP`, `Kraus.spectralRadius_mapLM_le_one_of_isTP`:
+  eigenvalue and spectral-radius bounds for trace-preserving Kraus maps.
 
 ## References
 
-* [M. Wolf, *Quantum Channels & Operations: Guided Tour*, Proposition 6.1][Wolf2012QChannels]
+* [M. Wolf, *Quantum Channels & Operations: Guided Tour*, Proposition 6.1][Wolf2012Quantum]
 -/
 
 open scoped Matrix ComplexOrder
@@ -110,3 +114,51 @@ theorem spectralRadius_le_one_of_forall_eigenvalue_norm_le_one
   have hμE : μ ∈ spectrum ℂ E := hSpec ▸ hμ
   have hEig : Module.End.HasEigenvalue E μ := Module.End.hasEigenvalue_iff_mem_spectrum.mpr hμE
   exact_mod_cast h μ hEig
+
+/-!
+## Spectral-radius bound for trace-preserving Kraus maps
+
+A trace-preserving finite Kraus map has all eigenvalues in the closed unit
+disk: it is a completely positive trace-preserving map, so
+`IsPositiveMap.eigenvalue_norm_le_one_of_tracePreserving` applies once the
+trivial zero-dimensional case is discharged separately.
+-/
+
+namespace Kraus
+
+variable {d D : ℕ}
+
+local notation "Mat" => Matrix (Fin D) (Fin D) ℂ
+
+/-- Every eigenvalue of a trace-preserving finite Kraus map has modulus at most one.
+
+This is the trace-preserving form of the spectral bound in Wolf, Proposition 6.1,
+obtained from the positive-map bound after discharging the trivial
+zero-dimensional case. -/
+theorem eigenvalue_norm_le_one_of_isTP
+    (K : Fin d → Mat) (hTP : IsTP K)
+    (μ : ℂ) (hμ : Module.End.HasEigenvalue (mapLM K) μ) :
+    ‖μ‖ ≤ 1 := by
+  rcases eq_or_ne D 0 with hD0 | hD0
+  · subst hD0
+    obtain ⟨v, hv, hvne⟩ := hμ.exists_hasEigenvector
+    exact absurd (Subsingleton.elim v 0) hvne
+  · have : NeZero D := ⟨hD0⟩
+    exact (isCPMap_mapLM K).isPositiveMap.eigenvalue_norm_le_one_of_tracePreserving
+      (isTracePreservingMap_mapLM_of_isTP K hTP) μ hμ
+
+section OperatorSpace
+
+open scoped TNOperatorSpace
+
+/-- A trace-preserving finite Kraus map has spectral radius at most one. -/
+theorem spectralRadius_mapLM_le_one_of_isTP
+    (K : Fin d → Mat) (hTP : IsTP K) :
+    spectralRadius ℂ
+      ((Module.End.toContinuousLinearMap (Matrix (Fin D) (Fin D) ℂ)) (mapLM K)) ≤ 1 :=
+  spectralRadius_le_one_of_forall_eigenvalue_norm_le_one (mapLM K)
+    (fun μ hμ ↦ eigenvalue_norm_le_one_of_isTP K hTP μ hμ)
+
+end OperatorSpace
+
+end Kraus

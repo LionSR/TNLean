@@ -20,9 +20,15 @@ content.
   conjugate transpose is the coefficient-wise complex conjugate.
 * `Module.End.hasEigenvalue_adjoint_iff`: eigenvalues of the adjoint are
   complex conjugates.
+
+Both statements are plausible Mathlib upstream candidates: Mathlib has
+`Matrix.charpoly_transpose` but no conjugate-transpose version, and its
+adjoint-spectrum analogue, `Module.End.spectrum_intrinsicStar`, is about the
+intrinsic star of a `StarModule` rather than the inner-product adjoint, so it
+does not subsume `hasEigenvalue_adjoint_iff`.
 -/
 
-open scoped ComplexConjugate Matrix
+open scoped Matrix
 
 namespace Matrix
 
