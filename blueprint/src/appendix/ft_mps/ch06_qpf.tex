@@ -282,6 +282,19 @@ outer square-root factors yields
     $A^i \neq 0$ is nonzero.
 \end{proof}
 
+\begin{theorem}[Kraus maps are completely positive]%
+    \label{thm:kraus_map_cp}
+    \lean{Kraus.isCPMap_mapLM}
+    \leanok
+    \uses{def:kraus_map}
+    The Kraus map of a finite matrix family $\{K_i\}_{i=0}^{d-1}$ is
+    completely positive.
+\end{theorem}
+
+\begin{proof}\leanok
+    The family $\{K_i\}$ itself is a Kraus representation of the map.
+\end{proof}
+
 \begin{theorem}[Irreducibility passes to the conjugate-transposed Kraus family]%
     \label{thm:kraus_conjTranspose_irreducible}
     \lean{Kraus.isIrreducibleMap_mapLM_conjTranspose}
@@ -292,9 +305,12 @@ outer square-root factors yields
 \end{theorem}
 
 \begin{proof}\leanok
+    \uses{thm:kraus_lower_zero_invariant_compression}
     If $P$ is invariant for the Kraus map of $\{K_i^\dagger\}$, so that
     $(\Id-P)K_i^\dagger P=0$ for all $i$, then taking adjoints gives
-    $PK_i(\Id-P)=0$, which means $\Id-P$ is invariant for $\mathcal K_K$.
+    $PK_i(\Id-P)=0$; by
+    Theorem~\ref{thm:kraus_lower_zero_invariant_compression}, $\Id-P$ is
+    invariant for $\mathcal K_K$.
     Irreducibility of $\mathcal K_K$ forces $\Id-P \in \{0,\Id\}$, hence
     $P \in \{0,\Id\}$, so the Kraus map of $\{K_i^\dagger\}$ is irreducible.
 \end{proof}
@@ -321,9 +337,11 @@ outer square-root factors yields
 
 \begin{proof}\leanok
     \uses{thm:pf_eigenvector_existence, thm:adjoint_transfer_ne_zero,
-        thm:kernel_inclusion_pd_irred, thm:kraus_conjTranspose_irreducible}
+        thm:kernel_inclusion_pd_irred, thm:kraus_conjTranspose_irreducible,
+        thm:kraus_map_cp}
     The conjugate-transposed family $\{K_i^\dagger\}$ has the same Kraus map
-    as the adjoint of $\mathcal K_K$, so it is completely positive, and by
+    as the adjoint of $\mathcal K_K$, so it is completely positive
+    (Theorem~\ref{thm:kraus_map_cp}), and by
     Theorem~\ref{thm:adjoint_transfer_ne_zero} it is nonzero. By
     Theorem~\ref{thm:kraus_conjTranspose_irreducible}, its Kraus map is
     irreducible, so it does not annihilate any nonzero positive semidefinite
