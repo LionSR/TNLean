@@ -28,7 +28,8 @@ adjoint. See `docs/paper-gaps/wolf_thm6_6_kraus_scope.tex`.
 -/
 
 open scoped Matrix ComplexOrder MatrixOrder BigOperators
-open Matrix Finset Complex MPSTensor
+open Matrix Finset Complex
+open MPSTensor (transferMap)
 
 namespace Kraus
 

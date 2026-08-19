@@ -29,7 +29,8 @@ Kraus families.
 -/
 
 open scoped Matrix ComplexOrder MatrixOrder BigOperators
-open Matrix Finset Complex MPSTensor
+open Matrix Finset Complex
+open MPSTensor (transferMap transferMap_apply posSemidef_fixedPoint_unique_of_irreducible)
 
 namespace Kraus
 
