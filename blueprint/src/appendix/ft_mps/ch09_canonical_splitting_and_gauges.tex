@@ -143,39 +143,10 @@ The results below turn reducing projections into support isometries, compress te
     satisfies (\ref{eq:canonical_projection_isometry}).
 \end{proof}
 
-\begin{lemma}[Rectangular Gram equality gives a unitary]
-    \label{lem:exists_unitary_mul_eq_of_gram_eq}
-    \lean{Matrix.exists_unitary_mul_eq_of_conjTranspose_mul_eq}
-    \leanok
-    \uses{}
-    Let $A,B:\C^n\to\C^m$ be linear maps with
-    $B^\dagger B=A^\dagger A$. Then there is a unitary
-    $U$ on $\C^m$ such that $B=UA$.
-\end{lemma}
-
-\begin{proof}
-    \leanok
-    Let $\mathcal R_A=\operatorname{ran}A$ and
-    $\mathcal R_B=\operatorname{ran}B$. Define
-    $V:\mathcal R_A\to\mathcal R_B$ by $V(Ax)=Bx$. This is well defined:
-    if $Ax=Ay$, then
-    \begin{align}
-        \lVert B(x-y)\rVert^2
-         & =\langle x-y,B^\dagger B(x-y)\rangle
-        =\langle x-y,A^\dagger A(x-y)\rangle
-        =\lVert A(x-y)\rVert^2=0.
-        \notag
-    \end{align}
-    The same calculation, with two vectors and polarization, gives
-    $\langle V(Ax),V(Ay)\rangle=\langle Ax,Ay\rangle$. Thus $V$ is an
-    isometry onto $\mathcal R_B$. In particular,
-    $\dim\mathcal R_A=\dim\mathcal R_B$, so their orthogonal complements
-    in $\C^m$ have equal dimension. Choose a unitary
-    $V^\perp:\mathcal R_A^\perp\to\mathcal R_B^\perp$ and set
-    $U=V\oplus V^\perp$ with respect to the two orthogonal decompositions of
-    $\C^m$. Then $U$ is unitary and $UAx=Bx$ for every $x\in\C^n$; hence
-    $B=UA$.
-\end{proof}
+The rectangular Gram-equality criterion that turns $B^\dagger B=A^\dagger A$
+into a unitary $U$ with $B=UA$ is a generic algebra fact, proved as
+Lemma~\ref{lem:exists_unitary_mul_eq_of_gram_eq} in
+Appendix~\ref{ch:channel_asymptotics_supporting_results}.
 
 \begin{lemma}[Corner tensors inherit projector closure]
     \label{lem:projector_closure_corner}
