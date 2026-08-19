@@ -58,7 +58,7 @@ open scoped Matrix
 
 namespace MPSTensor
 
-variable {d D : ℕ}
+variable {d D L : ℕ}
 
 /-- Blocked physical dimension: the number of length-`L` words over an alphabet of size `d`.
 
