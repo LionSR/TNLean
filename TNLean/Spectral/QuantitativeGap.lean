@@ -19,8 +19,8 @@ a lower bound on `1 - ρ`).
 
 ## Building blocks (already formalized elsewhere)
 
-* `MPSTensor.geometric_bound_of_spectralRadius_lt_one` in
-  `Spectral/TransferOperatorGapCommon.lean` — a uniform geometric operator-norm
+* `geometric_bound_of_spectralRadius_lt_one` in
+  `Analysis/SpectralRadiusPowerDecay.lean` — a uniform geometric operator-norm
   bound when spectral radius < 1
 * `compl_eigenvalue_norm_lt_one_of_primitive` in `Peripheral/Spectrum.lean` —
   primitive channels have a complementary transfer-map gap
@@ -134,7 +134,7 @@ private theorem geometric_apply_bound_of_spectralRadius_lt_one
     (hT : spectralRadius ℂ T < 1) :
     ∃ C r : ℝ, 0 < C ∧ 0 < r ∧ r < 1 ∧
       ∀ n : ℕ, ∀ x : V, ‖(T ^ n) x‖ ≤ C * r ^ n * ‖x‖ := by
-  rcases geometric_bound_of_spectralRadius_lt_one T hT with
+  rcases _root_.geometric_bound_of_spectralRadius_lt_one T hT with
     ⟨C, r, hC, hr_pos, hr_lt_one, hpow⟩
   refine ⟨C, r, hC, hr_pos, hr_lt_one, ?_⟩
   intro n x
@@ -269,8 +269,8 @@ primitivity.
 Traceless matrices lie in `ker(P) = range(E - P)`, where `E - P` has spectral
 radius < 1, so their iterates decay geometrically. The bound is the pointwise
 form `geometric_apply_bound_of_spectralRadius_lt_one` of
-`MPSTensor.geometric_bound_of_spectralRadius_lt_one` in
-`Spectral/TransferOperatorGapCommon.lean`. -/
+`geometric_bound_of_spectralRadius_lt_one` in
+`Analysis/SpectralRadiusPowerDecay.lean`. -/
 theorem correlation_length_bound [NeZero D]
     (A : MPSTensor d D)
     (hNorm : ∑ i : Fin d, (A i)ᴴ * A i = 1)

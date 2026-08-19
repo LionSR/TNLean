@@ -529,8 +529,6 @@ private lemma mixedTransferMap₂_eq_zero_of_isIdempotentElem
   let : NormedRing (V →L[ℂ] V) := ContinuousLinearMap.toNormedRing
   let : NormedSpace ℂ (V →L[ℂ] V) := ContinuousLinearMap.toNormedSpace
   let : NormedAlgebra ℂ (V →L[ℂ] V) := ContinuousLinearMap.toNormedAlgebra
-  have : FiniteDimensional ℂ (V →L[ℂ] V) := Φ.toLinearEquiv.finiteDimensional
-  have hComplete : CompleteSpace (V →L[ℂ] V) := FiniteDimensional.complete ℂ _
   have hSpectF : spectralRadius ℂ F' < 1 := by
     change spectralRadius ℂ
       (((Module.End.toContinuousLinearMap V)
@@ -539,8 +537,8 @@ private lemma mixedTransferMap₂_eq_zero_of_isIdempotentElem
     exact hsr
   have hidem' : IsIdempotentElem F' := hidem.map Φ
   have hF'0 : F' = 0 :=
-    @IsIdempotentElem.eq_zero_of_spectralRadius_lt_one (V →L[ℂ] V)
-      (ContinuousLinearMap.toNormedRing : NormedRing (V →L[ℂ] V)) hComplete
+    @_root_.IsIdempotentElem.eq_zero_of_spectralRadius_lt_one (V →L[ℂ] V)
+      (ContinuousLinearMap.toNormedRing : NormedRing (V →L[ℂ] V))
       (ContinuousLinearMap.toNormedAlgebra : NormedAlgebra ℂ (V →L[ℂ] V)) F' hidem' hSpectF
   have hF0 : Φ (mixedTransferMap₂ A B) = Φ 0 := by rw [map_zero]; exact hF'0
   exact Φ.injective hF0

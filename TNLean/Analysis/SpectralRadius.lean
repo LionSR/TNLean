@@ -78,4 +78,13 @@ theorem spectralRadius_eq_one_of_ne_zero
     simpa using (@le_iSup₂ ENNReal ℂ (· ∈ spectrum ℂ a) _
       (fun z _ => (‖z‖₊ : ENNReal)) 1 hone)
 
+/-- An idempotent with spectral radius below one is zero. -/
+theorem eq_zero_of_spectralRadius_lt_one
+    {A : Type*} [NormedRing A] [NormedAlgebra ℂ A]
+    {a : A} (ha : IsIdempotentElem a) (h : spectralRadius ℂ a < 1) :
+    a = 0 := by
+  by_contra ha_ne
+  rw [ha.spectralRadius_eq_one_of_ne_zero ha_ne] at h
+  exact (lt_irrefl 1) h
+
 end IsIdempotentElem

@@ -147,7 +147,7 @@ theorem IsPrimitiveMPS.tailVirtualMapES_norm_four_pow_uniform
     convert hP.complementary_transfer_map_gap using 1
     congr 2
   obtain ⟨C, r, hC, hr_pos, hr_lt_one, hgeom⟩ :=
-    geometric_bound_of_spectralRadius_lt_one T hgap
+    _root_.geometric_bound_of_spectralRadius_lt_one T hgap
   let B := ‖P 1‖ + C * ‖(1 : Matrix (Fin D) (Fin D) ℂ)‖
   let Q := (D : ℝ) * (‖(1 : Matrix (Fin D) (Fin D) ℂ)‖ ^ 2 + B ^ 2) + 1
   have hD : 0 ≤ (D : ℝ) := Nat.cast_nonneg D

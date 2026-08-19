@@ -1510,23 +1510,20 @@ spectral split → block extraction → MPV calculation → strict bounds
   `Filter.eventually_gt_atTop 0`, then clearing the `n`-th root via
   `ENNReal.rpow_inv_lt_iff` and `ENNReal.rpow_natCast`.
 - **Seen:** 2 occurrences: `have hev` in
-  `MPSTensor.geometric_bound_of_spectralRadius_lt_one`
-  (`TNLean/Spectral/TransferOperatorGapCommon.lean:131-138`) and `have hev` in
-  `pow_tendsto_zero_of_spectralRadius_lt_one`
-  (`TNLean/Analysis/SpectralRadiusPowerDecay.lean:31-37`), the latter after the
-  layer-0 relocation of the second theorem (PR #6570).
+  `geometric_bound_of_spectralRadius_lt_one` and `have hev` in
+  `pow_tendsto_zero_of_spectralRadius_lt_one`, both in
+  `TNLean/Analysis/SpectralRadiusPowerDecay.lean`, after their layer-0
+  relocations (PR #6570 and issue #6585).
 - **Abstraction (proposed):** an `eventually_nnnorm_pow_lt_pow_of_spectralRadius_lt`
   lemma in `TNLean/Analysis/SpectralRadiusPowerDecay.lean`, taking
   `{A : Type*} [NormedRing A] [CompleteSpace A] [NormedAlgebra ℂ A] (a : A) {r : ℝ≥0}
   (hr : spectralRadius ℂ a < r)` and returning the eventual bound; both current
   call sites would discharge their local `have` block with one application
-  (the `TransferOperatorGapCommon.lean` site at `A := V →L[ℂ] V`).
+  (the geometric-bound site at `A := V →L[ℂ] V`).
 - **Notes:** below the rule-of-three threshold (two occurrences); promote on
-  the next independent occurrence. `TNLean/Spectral/TransferOperatorGapCommon.lean`
-  already imports `TNLean.Analysis.SpectralRadiusPowerDecay` as of this
-  relocation, so extracting the shared step there would add no new import
-  edge — the deferral rests on the occurrence count alone, not on any
-  cross-layer dependency cost.
+  the next independent occurrence. Both current occurrences are already in
+  `TNLean/Analysis/SpectralRadiusPowerDecay.lean`, so the deferral rests on the
+  occurrence count alone, not on any import cost.
 ### star preserves the complex norm — candidate
 - **Pattern:** `simpa only [RCLike.star_def, RCLike.norm_conj]` to close a goal of the
   form `‖star μ‖ = 1` or `‖star μ‖ ≤ 1` from `‖μ‖ = 1` or `‖μ‖ ≤ 1`.
