@@ -1521,10 +1521,12 @@ spectral split → block extraction → MPV calculation → strict bounds
   (hr : spectralRadius ℂ a < r)` and returning the eventual bound; both current
   call sites would discharge their local `have` block with one application
   (the `TransferOperatorGapCommon.lean` site at `A := V →L[ℂ] V`).
-- **Notes:** below the rule-of-three threshold (two occurrences). The two copies
-  now sit in different files and layers (layer 0 `Analysis` and layer 2c
-  `Spectral`) after the relocation, so promote on the next independent
-  occurrence rather than adding a cross-layer dependency for two call sites.
+- **Notes:** below the rule-of-three threshold (two occurrences); promote on
+  the next independent occurrence. `TNLean/Spectral/TransferOperatorGapCommon.lean`
+  already imports `TNLean.Analysis.SpectralRadiusPowerDecay` as of this
+  relocation, so extracting the shared step there would add no new import
+  edge — the deferral rests on the occurrence count alone, not on any
+  cross-layer dependency cost.
 
 ---
 
