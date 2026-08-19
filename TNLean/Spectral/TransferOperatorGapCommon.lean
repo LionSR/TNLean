@@ -13,7 +13,7 @@ import TNLean.Spectral.FrobeniusNorm
 
 Dimension-independent eigenvector iteration, trace-preserving word sums, and
 Frobenius-square identities used by both square and rectangular mixed-transfer
-gap theorems. Deprecated aliases preserve the former `MPSTensor` names of the
+gap theorems. Compatibility aliases preserve the former `MPSTensor` names of the
 general spectral-radius results now in `TNLean.Analysis`.
 
 ## Main results
@@ -112,7 +112,7 @@ lemma sum_frobSq_words (K : MPSTensor d D) (hK : ∑ i : Fin d, (K i)ᴴ * K i =
   rw [← Complex.re_sum, ← Matrix.trace_sum, word_conjTranspose_mul_sum K hK n]
   simp [Matrix.trace_one, Fintype.card_fin]
 
-/-! ### Deprecated spectral-radius aliases -/
+/-! ### Compatibility aliases for spectral-radius results -/
 
 @[deprecated _root_.geometric_bound_of_spectralRadius_lt_one (since := "2026-08-19")]
 alias geometric_bound_of_spectralRadius_lt_one :=
