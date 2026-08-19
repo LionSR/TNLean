@@ -53,17 +53,11 @@ FORBIDDEN_PREFIXES: tuple[str, ...] = (
 
 NAMESPACE_MPSTENSOR_RE = re.compile(r"(?m)^[ \t]*namespace\s+MPSTensor\b")
 
-# Shrinking-only ratchet (see scripts/check_numbered_lean_files.py). Seeded
-# with the offender found by
-# `rg -l "namespace MPSTensor" TNLean/Channel TNLean/Entropy` when this
-# checker was introduced. New entries are rejected; existing entries are
-# expected to be cleared by the in-flight edge-cutting PRs tracked under
-# ISSUE_CITATION.
-NAMESPACE_ALLOWLIST: frozenset[str] = frozenset(
-    {
-        "TNLean/Channel/PerronFrobenius/Existence.lean",
-    }
-)
+# Shrinking-only ratchet (see scripts/check_numbered_lean_files.py). The
+# boundary directories carry no `namespace MPSTensor` declarations today, so
+# the allowlist is empty; the ratchet rejects any new entry, keeping the
+# QIC-bound set free of tensor-network namespaces.
+NAMESPACE_ALLOWLIST: frozenset[str] = frozenset()
 
 
 def _forbidden_module(module: str) -> bool:
