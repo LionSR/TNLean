@@ -1,0 +1,16 @@
+# Foundation modules assigned to the extracted quantum-channel library
+# (QICLean; see issue LionSR/TNLean#6560, Phase 3). Each entry is a
+# repository-relative Lean file path, one per line; blank lines and lines
+# starting with `#` are ignored.
+#
+# This manifest is the future single source of truth for the extraction
+# file list. Until the layer-0 foundation modules (Algebra/, Analysis/,
+# Topology/, Axioms/ files that only the channel/entropy layer depends on)
+# are identified and assigned here, this file stays empty: today the
+# channel/tensor-network boundary is enforced only for TNLean/Channel/,
+# TNLean/Entropy/, and TNLean/Kraus/, checked directly by directory in
+# scripts/check_import_direction.py.
+#
+# scripts/check_import_direction.py additionally enforces that every entry
+# below names a file that still exists (a stale-entry check), so this
+# manifest cannot silently drift from the tree as files move or get renamed.
