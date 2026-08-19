@@ -21,6 +21,8 @@ $E(X) = \sum_i K_i X K_i^\dagger$ with positivity, complete positivity, and trac
 * `Kraus.isChannel_mapLM`: a trace-preserving finite Kraus family defines a channel.
 * `Kraus.mapLM_ne_zero_of_exists_ne_zero`: a finite Kraus map with a nonzero
   Kraus operator is nonzero.
+* `Kraus.trace_mul_mapLM_adjoint`: the trace-adjoint identity for a linear map
+  presented as a finite Kraus map.
 -/
 
 open scoped Matrix ComplexOrder MatrixOrder BigOperators
@@ -67,5 +69,18 @@ theorem mapLM_ne_zero_of_exists_ne_zero
     rw [h]; simp
   simp only [mapLM_apply, map_apply, Matrix.mul_one] at h1
   exact hi (Matrix.eq_zero_of_sum_mul_conjTranspose_eq_zero K h1 i)
+
+/-- The trace-adjoint identity for a linear map presented as a finite Kraus map. -/
+theorem trace_mul_mapLM_adjoint
+    {n : ℕ} (K : Fin n → Mat)
+    {E : Mat →ₗ[ℂ] Mat}
+    (hE_eq : E = mapLM K)
+    (ρ X : Mat) :
+    Matrix.trace (ρ * E X) =
+      Matrix.trace (mapLM (fun i => (K i)ᴴ) ρ * X) := by
+  rw [hE_eq]
+  simpa only [mapLM_apply, map_apply, adjointMap_apply,
+    Matrix.conjTranspose_conjTranspose] using
+    (trace_mul_map_eq_trace_adjointMap_mul (K := K) ρ X)
 
 end Kraus

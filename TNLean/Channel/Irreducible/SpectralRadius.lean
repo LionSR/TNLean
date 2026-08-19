@@ -12,6 +12,7 @@ import TNLean.Channel.Irreducible.Similarity
 import TNLean.Channel.KrausGauge
 import TNLean.Channel.Peripheral.AdjointSpectrum
 import TNLean.Channel.Peripheral.Conjugation
+import TNLean.Channel.Peripheral.SpectralRadius
 import Mathlib.Algebra.Module.Equiv.Basic
 
 /-!
