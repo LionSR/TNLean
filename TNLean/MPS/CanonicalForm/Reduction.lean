@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.Structure.InvariantSubspaceDecomp
 import TNLean.Algebra.PosSemidefSupport
+import TNLean.Kraus.InvariantProjection
 
 /-!
 # Iterated invariant-projection splitting: irreducible block decomposition
@@ -60,20 +61,10 @@ namespace MPSTensor
 
 variable {d D : ℕ}
 
-/-! ## Irreducibility definitions -/
+/-! ## Irreducibility definitions
 
-/-- `HasInvariantProj A` holds if there is a *nontrivial* invariant orthogonal projection for `A`:
-a Hermitian idempotent `P` with `P ≠ 0`, `P ≠ 1`, and `(1 - P) * A i * P = 0` for every `i`.
-
-This is the negation of "irreducible with respect to invariant subspaces". -/
-def HasInvariantProj (A : MPSTensor d D) : Prop :=
-  ∃ P : Matrix (Fin D) (Fin D) ℂ,
-    IsOrthogonalProjection P ∧ P ≠ 0 ∧ P ≠ 1 ∧ (∀ i : Fin d, (1 - P) * A i * P = 0)
-
-/-- `IsIrreducibleTensor A` holds if `A` admits no nontrivial invariant orthogonal projection.
-This is the "irreducible" condition used in the canonical-form reduction. -/
-def IsIrreducibleTensor (A : MPSTensor d D) : Prop :=
-  ¬ HasInvariantProj A
+`HasInvariantProj` and `IsIrreducibleTensor` now live in
+`TNLean/Kraus/InvariantProjection.lean` (issue #6560 phase 1b, PR-W1a). -/
 
 /-- Nonzero scalar rescaling preserves tensor irreducibility. -/
 theorem isIrreducibleTensor_smul
