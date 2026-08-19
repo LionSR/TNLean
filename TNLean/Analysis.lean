@@ -25,6 +25,7 @@ import TNLean.Analysis.EntropyMarkovForward
 import TNLean.Analysis.EntropyMarkovReverse
 import TNLean.Analysis.EntropyReindex
 import TNLean.Analysis.FiniteRangeKnabe
+import TNLean.Analysis.FittingDecomposition
 import TNLean.Analysis.HayashiMarkovStructure
 import TNLean.Analysis.IdempotentEndomorphism
 import TNLean.Analysis.InjectiveRangeProjector
