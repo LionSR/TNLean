@@ -20,7 +20,8 @@ It records the sections of Wolf Chapter 6 whose formalization lives in the
 tensor-network layer (`TNLean.Wielandt.*`, `TNLean.QPF.*`, `TNLean.MPS.*`,
 `TNLean.Spectral.*`): the Kraus-span primitivity characterizations, the
 quantum Wielandt inequality, the unique-fixed-point theorem for tensors with
-eventually full Kraus rank, and the quantum Perron–Frobenius assembly.
+eventually full Kraus rank, and the assembled quantum Perron–Frobenius
+theorem.
 
 The channel-level sections of the index are in
 `TNLean.Channel.WolfChapter6Index`; that module contains the entries whose

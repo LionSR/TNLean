@@ -54,8 +54,8 @@ This module covers the sections of Wolf Chapter 6 whose formalization lives in
 the quantum-channel layer.  The sections formalized in the tensor-network layer
 — the Kraus-span primitivity characterizations (Theorem 6.8), the quantum
 Wielandt inequality (Theorem 6.9), the unique-fixed-point theorem for tensors
-with eventually full Kraus rank (Theorem 6.15), and the quantum
-Perron–Frobenius assembly — are indexed in
+with eventually full Kraus rank (Theorem 6.15), and the assembled quantum
+Perron–Frobenius theorem — are indexed in
 `TNLean.Wielandt.WolfChapter6TNIndex`.
 
 ---
