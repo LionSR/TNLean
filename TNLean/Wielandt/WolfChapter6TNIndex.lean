@@ -25,8 +25,10 @@ theorem.
 
 The channel-level sections of the index are in
 `TNLean.Channel.WolfChapter6Index`; that module contains the entries whose
-formalization lives in the quantum-channel layer and does not depend on the
-tensor-network layer.
+formalization lives in the quantum-channel layer and does not directly import
+the tensor-network layer. A residual transitive dependence remains through the
+Perron--Frobenius modules while the decoupling of the channel layer is in
+progress.
 
 No new proofs are introduced here; this is a documentation-only index module.
 
