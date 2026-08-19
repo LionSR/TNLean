@@ -44,16 +44,16 @@ theorem support_proj_fixed
     {E : Mat →ₗ[ℂ] Mat} (hE : IsChannel E) {ρ : Mat}
     (hρ_psd : ρ.PosSemidef) (hρ_fix : E ρ = ρ) :
     ∀ X : Mat,
-      MPSTensor.supportProj (D := D) ρ hρ_psd *
-        E (MPSTensor.supportProj (D := D) ρ hρ_psd * X *
-          MPSTensor.supportProj (D := D) ρ hρ_psd) *
-        MPSTensor.supportProj (D := D) ρ hρ_psd =
-      E (MPSTensor.supportProj (D := D) ρ hρ_psd * X *
-        MPSTensor.supportProj (D := D) ρ hρ_psd) := by
+      Matrix.supportProj (D := D) ρ hρ_psd *
+        E (Matrix.supportProj (D := D) ρ hρ_psd * X *
+          Matrix.supportProj (D := D) ρ hρ_psd) *
+        Matrix.supportProj (D := D) ρ hρ_psd =
+      E (Matrix.supportProj (D := D) ρ hρ_psd * X *
+        Matrix.supportProj (D := D) ρ hρ_psd) := by
   have hInv :=
     Kraus.invariantCompression_of_supportProj_fixed_by_cpMap hE.cp hρ_psd hρ_fix
   intro X
-  simpa [Kraus.stationaryProj, MPSTensor.supportProj] using hInv.2 X
+  simpa [Kraus.stationaryProj, Matrix.supportProj] using hInv.2 X
 
 /-- Chosen stationary state of an irreducible channel. -/
 noncomputable def stationaryState
@@ -86,7 +86,7 @@ channel. -/
 noncomputable def stationarySupport
     (E : Mat →ₗ[ℂ] Mat) (hE : IsChannel E)
     (hIrr : IsIrreducibleMap E) (hD : 0 < D) : Mat :=
-  MPSTensor.supportProj (D := D)
+  Matrix.supportProj (D := D)
     (stationaryState E hE hIrr hD)
     (stationaryState_spec (E := E) hE hIrr hD).1.1
 
@@ -95,7 +95,7 @@ lemma stationarySupport_isOrthogonalProjection
     (hIrr : IsIrreducibleMap E) (hD : 0 < D) :
     IsOrthogonalProjection (stationarySupport E hE hIrr hD) := by
   simpa [stationarySupport] using
-    (MPSTensor.isOrthogonalProjection_supportProj (D := D)
+    (Matrix.isOrthogonalProjection_supportProj (D := D)
       (ρ := stationaryState E hE hIrr hD)
       (hρ := (stationaryState_spec (E := E) hE hIrr hD).1.1))
 
@@ -146,7 +146,7 @@ theorem stationarySupport_eq_one
       stationaryState_ne_zero (E := E) hE hIrr hD
     have hP_ne : P ≠ 0 := by
       simpa [P, stationarySupport] using
-        (MPSTensor.supportProj_ne_zero_of_ne_zero
+        (Matrix.supportProj_ne_zero_of_ne_zero
           (ρ := stationaryState E hE hIrr hD) hρ_psd hρ_ne)
     exact hP_ne hP0
   · simpa [P] using hP1

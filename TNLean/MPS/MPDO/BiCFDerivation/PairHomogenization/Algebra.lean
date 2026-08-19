@@ -259,7 +259,7 @@ theorem gaugePhaseEquiv_of_pairAlgSpan_eq_graph_algEquiv
     have hsnd : φ M = B i := by
       simpa using congrArg Prod.snd hM
     simpa [hfst] using hsnd.symm
-  rcases skolemNoether_matrix φ with ⟨X, hX⟩
+  rcases Matrix.skolemNoether_matrix φ with ⟨X, hX⟩
   exact GaugeEquiv.toGaugePhaseEquiv ⟨X, fun i => by
     rw [hGraph i, hX (A i)]⟩
 

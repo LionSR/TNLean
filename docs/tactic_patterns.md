@@ -364,7 +364,7 @@ abstracted — record why, so it is not re-proposed).
   `TNLean/MPS/CanonicalForm/BNTCharacterization.lean`,
   `TNLean/MPS/FundamentalTheorem/SectorBNT/ProportionalMatch/Core.lean`, and
   `TNLean/MPS/Periodic/ProportionalOverlap.lean` (2026-08-02).
-- **Abstraction:** `MPSTensor.coefficient_eq_zero_of_sum_eq_of_complement_smul`
+- **Abstraction:** `LinearIndependent.coefficient_eq_zero_of_sum_eq_of_complement_smul`
   in `TNLean/Algebra/FinSum.lean`.
 - **Notes:** the lemma is polymorphic over the scalar ring and module. The first
   two callers now retain only their decomposition-specific total-sum and
@@ -1020,11 +1020,11 @@ abstracted — record why, so it is not re-proposed).
   `forward_det_one_implies_unitaryChannel`
   (`Channel/Determinant/UnitaryCharacterization.lean`). Two sites also
   duplicated a 5–6-line unital⇒nonzero inline proof.
-- **Reuse:** `MPSTensor.exists_inner_of_linear_mul_endomorphism` relocated from
+- **Reuse:** `Matrix.exists_inner_of_linear_mul_endomorphism` relocated from
   `FundamentalTheorem/Basic.lean` to `Algebra/SkolemNoether.lean` beside its
   three ingredients; all three sites now obtain the gauge matrix in one
   `obtain`, and the unital⇒nonzero duplications use the new
-  `MPSTensor.linearMap_ne_zero_of_map_one` (`T 1 = 1 → T ≠ 0`).
+  `Matrix.linearMap_ne_zero_of_map_one` (`T 1 = 1 → T ≠ 0`).
   `Chain/AlgebraIsomorphism.lean` now imports `Algebra.SkolemNoether` directly
   (its `FundamentalTheorem.Basic` import existed solely for the lemma).
 - **Result:** 5 files changed, 51 insertions against 64 deletions (13 lines

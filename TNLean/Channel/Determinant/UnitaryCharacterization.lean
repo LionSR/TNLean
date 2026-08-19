@@ -191,9 +191,9 @@ private theorem forward_det_one_implies_unitaryChannel [NeZero d]
   -- Td is multiplicative
   have hMul :=
     ChannelDeterminant.Internal.heisenberg_dual_multiplicative hT hdet hall K hK hK_tp Td hTd_def
-  have hTd_ne : Td ≠ 0 := MPSTensor.linearMap_ne_zero_of_map_one Td hTd_one
+  have hTd_ne : Td ≠ 0 := Matrix.linearMap_ne_zero_of_map_one Td hTd_one
   -- Skolem–Noether: Td(X) = PXP⁻¹ (nonzero multiplicative endomorphisms are inner)
-  obtain ⟨P, hP⟩ := MPSTensor.exists_inner_of_linear_mul_endomorphism Td hMul hTd_ne
+  obtain ⟨P, hP⟩ := Matrix.exists_inner_of_linear_mul_endomorphism Td hMul hTd_ne
   -- Key identities for P
   have hPinvP : (↑(P⁻¹ : GL (Fin d) ℂ) : MatrixAlg d) * (↑P : MatrixAlg d) = 1 := by
     have : (P⁻¹ * P : GL (Fin d) ℂ) = 1 := inv_mul_cancel _

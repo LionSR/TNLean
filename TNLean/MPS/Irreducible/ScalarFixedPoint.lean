@@ -37,7 +37,7 @@ PGVWC07 Theorem `Th:TIcanonical`, lines 816--826: after all invariant
 subspace splittings have been exhausted, a further non-scalar fixed point
 would give another split, so the fixed-point space of the unital block is the
 scalar line.  The channel-theoretic input is Wolf Theorem 6.6, formalized as
-`fixed_eq_scalar_of_irreducible_unital`. -/
+`Kraus.fixed_eq_scalar_of_irreducible_unital`. -/
 theorem fixed_eq_scalar_of_isIrreducibleTensor_unital
     {d D : ℕ} [Nonempty (Fin D)]
     (A : MPSTensor d D)
@@ -53,7 +53,7 @@ theorem fixed_eq_scalar_of_isIrreducibleTensor_unital
   have hUnitalKraus : KadisonSchwarz.IsUnitalKraus (d := d) (D := D) A := by
     simpa [transferMap_apply, Matrix.mul_one, KadisonSchwarz.IsUnitalKraus]
       using hUnital
-  exact fixed_eq_scalar_of_irreducible_unital A hUnitalKraus
+  exact Kraus.fixed_eq_scalar_of_irreducible_unital A hUnitalKraus
     (isIrreducibleCP_transferMap_of_isIrreducibleTensor A hIrr) X hfix
 
 end MPSTensor

@@ -27,7 +27,7 @@ Skolem--Noether then realizes it as conjugation by a unitary matrix.
 
 open scoped Matrix
 
-namespace MPSTensor
+namespace Matrix
 
 /-- A positive algebra automorphism of a nonzero full complex matrix algebra
 is implemented by unitary conjugation.
@@ -88,4 +88,4 @@ theorem exists_unitary_conj_of_positive_bijective_multiplicative_matrix_linearMa
   obtain ⟨U, hU⟩ := exists_unitary_conj_of_positive_algEquiv_matrix f hfPos
   exact ⟨U, hU⟩
 
-end MPSTensor
+end Matrix

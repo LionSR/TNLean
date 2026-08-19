@@ -31,12 +31,12 @@ theorem matrixAlgEquiv_inner_of_fin {D E : ℕ}
             Matrix.reindexAlgEquiv ℂ ℂ (finCongr h) M *
             ((X⁻¹ : GL (Fin E) ℂ) : Matrix (Fin E) (Fin E) ℂ) := by
   classical
-  have hDE : D = E := matrixAlgEquiv_fin_eq φ
+  have hDE : D = E := Matrix.matrixAlgEquiv_fin_eq φ
   let e : Matrix (Fin D) (Fin D) ℂ ≃ₐ[ℂ] Matrix (Fin E) (Fin E) ℂ :=
     Matrix.reindexAlgEquiv ℂ ℂ (finCongr hDE)
   let f : Matrix (Fin E) (Fin E) ℂ ≃ₐ[ℂ] Matrix (Fin E) (Fin E) ℂ :=
     e.symm.trans φ
-  obtain ⟨X, hX⟩ := skolemNoether_matrix (f := f)
+  obtain ⟨X, hX⟩ := Matrix.skolemNoether_matrix (f := f)
   refine ⟨hDE, X, ?_⟩
   intro M
   calc φ M

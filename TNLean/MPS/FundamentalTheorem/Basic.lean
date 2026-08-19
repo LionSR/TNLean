@@ -56,7 +56,7 @@ theorem fundamentalTheorem_singleBlock {A B : MPSTensor d D}
       rcases linearExtension_exists_unique hA hAB with ⟨T, hT, -⟩
       -- Multiplicativity + nonzero → inner by the packaged gauge ladder.
       have hMul := linearExtension_mul hA hAB hT
-      obtain ⟨X, hX⟩ := exists_inner_of_linear_mul_endomorphism T hMul
+      obtain ⟨X, hX⟩ := Matrix.exists_inner_of_linear_mul_endomorphism T hMul
         (linearExtension_nonzero hA hAB hT)
       refine ⟨X, fun i => ?_⟩
       -- `B i = T (A i) = X * A i * X⁻¹`.
