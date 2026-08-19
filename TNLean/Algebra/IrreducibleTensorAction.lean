@@ -11,7 +11,7 @@ import Mathlib.Analysis.Matrix.Hermitian
 
 This file closes the missing direction
 
-`IsIrreducibleTensor A → IsIrreducibleAction A`.
+`IsIrreducibleTensor A → Matrix.IsIrreducibleAction A`.
 
 The key idea is classical: if `W ≤ ℂ^D` is a nontrivial invariant subspace, then the orthogonal
 projection onto `W` (in the finite-dimensional Hilbert space `EuclideanSpace ℂ (Fin D)`) is a
@@ -27,14 +27,14 @@ variable {d D : ℕ}
 
 noncomputable section
 
-/-- `IsIrreducibleTensor` implies `IsIrreducibleAction`.
+/-- `IsIrreducibleTensor` implies `Matrix.IsIrreducibleAction`.
 
 If a nontrivial `A`-invariant submodule `W` existed, its orthogonal projection would give a
 nontrivial invariant orthogonal projection matrix, contradicting `IsIrreducibleTensor`. -/
 lemma isIrreducibleAction_of_isIrreducibleTensor
     {d D : ℕ} (A : MPSTensor d D)
     (hIrrT : IsIrreducibleTensor (d := d) (D := D) A) :
-    IsIrreducibleAction (d := d) (D := D) A := by
+    Matrix.IsIrreducibleAction (d := d) (D := D) A := by
   classical
   intro W hW
   -- Assume `W` is a nontrivial proper invariant submodule; derive a contradiction.
