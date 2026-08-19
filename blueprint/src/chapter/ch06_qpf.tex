@@ -600,7 +600,10 @@ and~\cite{Evans1978Spectral}.
 \end{theorem}
 
 \begin{proof}\leanok
-    Conjugating each summand gives
+    \uses{thm:kraus_tp_gauge_from_adjoint_fixed}
+    This is the specialization $K_i = A^i$ of
+    Theorem~\ref{thm:kraus_tp_gauge_from_adjoint_fixed}. Conjugating each
+    summand gives
     $(SA^iS^{-1})^\dagger(SA^iS^{-1})
         =(S^\dagger)^{-1}(A^i)^\dagger\sigma A^iS^{-1}$.
     The adjoint fixed-point substitution leaves

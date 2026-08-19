@@ -5,13 +5,13 @@ Authors: TNLean contributors
 -/
 import TNLean.Algebra.MatrixCongruence
 import TNLean.Algebra.MatrixOperatorSpace
+import TNLean.Analysis.SpectralRadius
 import TNLean.Channel.Irreducible.KrausSetup
 import TNLean.Channel.Irreducible.PerronFrobenius
 import TNLean.Channel.Irreducible.Similarity
 import TNLean.Channel.KrausGauge
 import TNLean.Channel.Peripheral.AdjointSpectrum
 import TNLean.Channel.Peripheral.Conjugation
-import TNLean.Analysis.SpectralRadius
 import Mathlib.Algebra.Module.Equiv.Basic
 
 /-!
@@ -36,8 +36,8 @@ for irreducible completely positive maps on `M_D(ℂ)`.
 
 The proof uses a TP-gauge reduction. Starting from a positive-definite right
  eigenvector, we build a positive-definite adjoint eigenvector, rescale and gauge
- the Kraus family to a trace-preserving one, use the existing transfer-operator gap bound
- to obtain spectral radius `1` in the gauged setting, and then undo the scalar
+ the Kraus family to a trace-preserving one, use the trace-preserving spectral-radius
+ bound to obtain spectral radius `1` in the gauged setting, and then undo the scalar
  rescaling and similarity.
 
 ## References
@@ -267,7 +267,8 @@ theorem spectralRadius_eq_of_posDef_eigenvector_of_irreducible_cp
             refine Finset.sum_congr rfl ?_
             intro i _
             exact hterm i
-      _ = (↑r : ℂ)⁻¹ • ∑ i : Fin n, S * (K i * (S⁻¹ * X * S⁻¹) * (K i)ᴴ) * S := by
+      _ = (↑r : ℂ)⁻¹ •
+            ∑ i : Fin n, S * (K i * (S⁻¹ * X * S⁻¹) * (K i)ᴴ) * S := by
             rw [← Finset.smul_sum]
       _ = (↑r : ℂ)⁻¹ •
             (S * (∑ i : Fin n, K i * (S⁻¹ * X * S⁻¹) * (K i)ᴴ) * S) := by

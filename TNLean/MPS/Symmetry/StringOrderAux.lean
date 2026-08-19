@@ -70,7 +70,7 @@ lemma transferMap_tpGauge_eq_similarityMap
     calc
       transferMap (tpGauge (d := d) (D := D) A σ) X
           = ∑ i : Fin d, (S * A i * S⁻¹) * X * (S * A i * S⁻¹)ᴴ := by
-              simp [transferMap_apply, tpGauge, S]
+              simp [transferMap_apply, tpGauge, Kraus.tpGauge, S]
       _ = ∑ i : Fin d, S * (A i * (S⁻¹ * X * S⁻¹ * (A i)ᴴ)) * S := by
             refine Finset.sum_congr rfl ?_
             intro x _
@@ -302,10 +302,10 @@ theorem twistedTPGaugeSetup_hasEigenvalue [NeZero D]
             setup.S * (A i * V * (setup.B i)ᴴ) * setup.Sᴴ := by
       intro i
       have hAeq : setup.A' i = setup.S * A i * setup.S⁻¹ := by
-        rw [setup.hA'_def, tpGauge, setup.hS_def]
+        rw [setup.hA'_def, tpGauge, Kraus.tpGauge, setup.hS_def]
       have hBstar : (setup.B' i)ᴴ = setup.S⁻¹ * (setup.B i)ᴴ * setup.S := by
         have hB'eq : setup.B' i = setup.S * setup.B i * setup.S⁻¹ := by
-          rw [setup.hB'_def, tpGauge, setup.hS_def]
+          rw [setup.hB'_def, tpGauge, Kraus.tpGauge, setup.hS_def]
         calc (setup.B' i)ᴴ
             = (setup.S⁻¹)ᴴ * (setup.B i)ᴴ * setup.Sᴴ := by
                   rw [hB'eq]; simp [Matrix.conjTranspose_mul, Matrix.mul_assoc]

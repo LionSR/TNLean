@@ -16,8 +16,10 @@ import Mathlib.LinearAlgebra.Matrix.NonsingularInverse
 A positive definite fixed point of the adjoint Kraus map gives the standard
 trace-preserving gauge normalization `K i ↦ ρ^{1/2} K i ρ^{-1/2}`.
 
-The MPS transfer-map specialization (together with the unital gauge and the
-gauge-equivalence statements) lives in `TNLean.MPS.Core.TPGauge`.
+`TNLean.MPS.Core.TPGauge` restates this construction in transfer-map notation
+(since `MPSTensor d D` is definitionally a finite matrix family, the two
+constructions coincide) and adds the unital gauge and the gauge-equivalence
+statements.
 
 ## Main declarations
 
@@ -32,7 +34,6 @@ gauge-equivalence statements) lives in `TNLean.MPS.Core.TPGauge`.
 -/
 
 open scoped Matrix ComplexOrder MatrixOrder BigOperators
-open Matrix Finset
 
 namespace Kraus
 
@@ -77,7 +78,8 @@ theorem tpGauge_isTP_of_map_conjTranspose_fixedPoint
   have hStinv_mul : (Sᴴ)⁻¹ * Sᴴ = 1 := Matrix.nonsing_inv_mul Sᴴ hdetT
   -- Rewrite each summand.
   have h_term : ∀ i : Fin d,
-      (S * K i * S⁻¹)ᴴ * (S * K i * S⁻¹) = (Sᴴ)⁻¹ * ((K i)ᴴ * ρ * K i) * S⁻¹ := by
+      (S * K i * S⁻¹)ᴴ * (S * K i * S⁻¹) =
+        (Sᴴ)⁻¹ * ((K i)ᴴ * ρ * K i) * S⁻¹ := by
     intro i
     rw [Matrix.conjTranspose_mul, Matrix.conjTranspose_mul, Matrix.conjTranspose_nonsing_inv]
     simp [Matrix.mul_assoc, ← hStS]
