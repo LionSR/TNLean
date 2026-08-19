@@ -300,7 +300,7 @@ theorem exists_displaced_invariant_projector_of_periodic_vector
     ext z
     simp [Set.mem_range, eq_comm]
   obtain ⟨U, P, _, _, _, hPproj, hPsum, _, hcyclic⟩ :=
-    MPSTensor.exists_cyclic_decomposition_of_irreducible_schwarz
+    Kraus.exists_cyclic_decomposition_of_irreducible_schwarz
       (K := K) hUnital σ hσ hσfix hIrrMap hγprim hperiph
   -- Notation for the square root of the eigenvector and the scaling factor.
   set S : Matrix (Fin n) (Fin n) ℂ := CFC.sqrt ρ with hS
@@ -359,9 +359,9 @@ theorem exists_displaced_invariant_projector_of_periodic_vector
   -- cyclic sector `V S · ran (P 0)`.
   set Y : Matrix (Fin d) (Fin n) ℂ := V * S * P 0 with hY
   set π : Matrix (Fin d) (Fin d) ℂ :=
-    MPSTensor.supportProj (Y * Yᴴ) (Matrix.posSemidef_self_mul_conjTranspose Y) with hπ
+    Matrix.supportProj (Y * Yᴴ) (Matrix.posSemidef_self_mul_conjTranspose Y) with hπ
   have hπproj : IsOrthogonalProjection π :=
-    MPSTensor.isOrthogonalProjection_supportProj (ρ := Y * Yᴴ)
+    Matrix.isOrthogonalProjection_supportProj (ρ := Y * Yᴴ)
       (hρ := Matrix.posSemidef_self_mul_conjTranspose Y)
   have hQproj : IsOrthogonalProjection (1 - π) := hπproj.one_sub
   -- Left cancellation of `V * S`.
@@ -408,7 +408,7 @@ theorem exists_displaced_invariant_projector_of_periodic_vector
         _ = Y * ((c⁻¹ ^ w.length) • MPSTensor.evalWord K w) := by
             rw [Matrix.mul_smul]
     have hinv0 : (1 - π) * MPSTensor.evalWord (verticalTensor M) w * π = 0 :=
-      MPSTensor.one_sub_supportProj_mul_mul_supportProj_eq_zero Y hAY
+      Matrix.one_sub_supportProj_mul_mul_supportProj_eq_zero Y hAY
     calc (1 - π) * MPSTensor.evalWord (verticalTensor M) w
         = (1 - π) * MPSTensor.evalWord (verticalTensor M) w * 1 := by
           rw [Matrix.mul_one]
@@ -454,7 +454,7 @@ theorem exists_displaced_invariant_projector_of_periodic_vector
               rw [Matrix.smul_mul]; simp only [Matrix.mul_assoc]
           _ = c⁻¹ • (V * S * (P (0 - 1) * K v)) := by rw [hKv0]
       -- `π` fixes `Y` and absorbs the letter action.
-      have hπY : π * Y = Y := MPSTensor.supportProj_mul_left_eq_self Y
+      have hπY : π * Y = Y := Matrix.supportProj_mul_left_eq_self Y
       have hfix' : π * (verticalTensor M v * Y) = verticalTensor M v * Y := by
         have hAπ : verticalTensor M v * π = π * (verticalTensor M v * π) := by
           have h0 := hletter v
@@ -471,7 +471,7 @@ theorem exists_displaced_invariant_projector_of_periodic_vector
           _ = verticalTensor M v * π * Y := by rw [← hAπ]
           _ = verticalTensor M v * Y := by rw [Matrix.mul_assoc, hπY]
       -- Express the fixed equation through the support factorization.
-      obtain ⟨W, hW⟩ := MPSTensor.exists_supportProj_eq_mul (Y * Yᴴ)
+      obtain ⟨W, hW⟩ := Matrix.exists_supportProj_eq_mul (Y * Yᴴ)
         (Matrix.posSemidef_self_mul_conjTranspose Y)
       have hππ : π = Y * (Yᴴ * W) := by rw [hπ, hW, Matrix.mul_assoc]
       have hZ : V * S * (P (0 - 1) * K v) =

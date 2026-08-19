@@ -33,7 +33,7 @@ This file provides the "abstract algebra" ingredients for the Fundamental Theore
 
 open scoped Matrix
 
-namespace MPSTensor
+namespace Matrix
 
 variable {d D : ℕ}
 
@@ -181,4 +181,4 @@ theorem exists_inner_of_linear_mul_endomorphism
   change f M = _
   exact hX M
 
-end MPSTensor
+end Matrix

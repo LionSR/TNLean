@@ -106,7 +106,7 @@ theorem virtual_bond_gauge [NeZero D]
       rw [← hT i, hT0]; simp
     exact trace_ne_zero_of_injective hCA hEq hCBzero
   -- Simplicity and Skolem--Noether identify `T` as an inner automorphism.
-  obtain ⟨W, hTM⟩ := exists_inner_of_linear_mul_endomorphism T hMul hNz
+  obtain ⟨W, hTM⟩ := Matrix.exists_inner_of_linear_mul_endomorphism T hMul hNz
   -- trace(T(M)) = trace(M) since conjugation preserves trace.
   have hTr : ∀ M, Matrix.trace (T M) = Matrix.trace M := by
     intro M; rw [hTM M]; exact trace_conj_eq W M

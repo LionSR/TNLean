@@ -35,7 +35,7 @@ The supporting modules are:
 
 ## Main statements
 
-* `exists_cyclic_decomposition_of_irreducible_schwarz`
+* `Kraus.exists_cyclic_decomposition_of_irreducible_schwarz`
 * `kraus_mul_cyclicProj`
 * `preserves_corner_pow_of_cyclic_decomp`
 * `isIrreducible_restriction_of_cyclic_decomp`

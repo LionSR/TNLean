@@ -108,7 +108,7 @@ theorem perBlockLinearExtension_bijective
     (hSame : ∀ k, SameMPV (A k) (B k))
     (k : Fin r) :
     Function.Bijective (perBlockLinearExtension A B hA hSame k) :=
-  linear_mul_endomorphism_bijective _ (perBlockLinearExtension_mul A B hA hSame k)
+  Matrix.linear_mul_endomorphism_bijective _ (perBlockLinearExtension_mul A B hA hSame k)
     (perBlockLinearExtension_nonzero A B hA hSame k)
 
 /-- Per-block T maps 1 to 1. -/

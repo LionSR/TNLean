@@ -20,8 +20,9 @@ Wolf--Perez-Garcia, arXiv:1005.4545, Theorem 8, source lines 322--324.
 -/
 
 open scoped Matrix ComplexOrder
+open TwoSidedIdeal (blockIdeal blockComponentMap_bijective)
 
-namespace MPSTensor
+namespace Matrix
 
 /-- A star-algebra automorphism of a nonzero full complex matrix algebra is
 implemented by unitary conjugation.
@@ -255,4 +256,4 @@ theorem exists_unitary_block_implementers_of_starAlgEquiv_pi_matrix
 
 end PairedBlocks
 
-end MPSTensor
+end Matrix

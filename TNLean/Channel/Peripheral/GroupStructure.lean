@@ -33,7 +33,7 @@ The proof combines three ingredients that already exist:
 
 3. **Peripheral unitaries and cyclic projections** — proved in
    `Channel/Peripheral/CyclicDecomposition.lean` via
-   `exists_peripheral_unitary_of_irreducible_schwarz` and
+   `Kraus.exists_peripheral_unitary_of_irreducible_schwarz` and
    `exists_cyclic_projections_of_peripheral_unitary`
 
 ## Main results
@@ -179,7 +179,7 @@ private lemma period_dvd_dim_of_cyclic_projections
 
 /-- **Peripheral eigenvalues are closed under multiplication.**
 
-Follows from `exists_peripheral_unitary_of_irreducible_schwarz`: peripheral
+Follows from `Kraus.exists_peripheral_unitary_of_irreducible_schwarz`: peripheral
 eigenvalues have unitary eigenvectors, and the multiplicative domain property
 gives `E(U_α U_β) = E(U_α) E(U_β) = αβ · U_α U_β`. -/
 theorem peripheral_eigenvalues_closed_under_mul
@@ -194,9 +194,9 @@ theorem peripheral_eigenvalues_closed_under_mul
     (hβ : β ∈ peripheralEigenvalues (MPSTensor.transferMap (d := r) (D := D) K)) :
     (α * β) ∈ peripheralEigenvalues (MPSTensor.transferMap (d := r) (D := D) K) := by
   -- Get unitary eigenvectors U_α and U_β from CyclicDecomposition.
-  obtain ⟨Uα, hUα⟩ := MPSTensor.exists_peripheral_unitary_of_irreducible_schwarz
+  obtain ⟨Uα, hUα⟩ := Kraus.exists_peripheral_unitary_of_irreducible_schwarz
     K hUnital ρ hρ hρfix hIrr hα
-  obtain ⟨Uβ, hUβ⟩ := MPSTensor.exists_peripheral_unitary_of_irreducible_schwarz
+  obtain ⟨Uβ, hUβ⟩ := Kraus.exists_peripheral_unitary_of_irreducible_schwarz
     K hUnital ρ hρ hρfix hIrr hβ
   constructor
   · -- HasEigenvalue for α * β: product of unitaries is nonzero, and
@@ -269,7 +269,7 @@ theorem peripheral_eigenvalues_closed_under_inv
     α⁻¹ ∈ peripheralEigenvalues (MPSTensor.transferMap (d := r) (D := D) K) := by
   constructor
   · -- HasEigenvalue for α⁻¹: Uα† is the eigenvector
-    obtain ⟨Uα, hUα⟩ := MPSTensor.exists_peripheral_unitary_of_irreducible_schwarz
+    obtain ⟨Uα, hUα⟩ := Kraus.exists_peripheral_unitary_of_irreducible_schwarz
       K hUnital ρ hρ hρfix hIrr hα
     -- E(Uα†) = (E(Uα))† = (α · Uα)† = α' · Uα† = α⁻¹ · Uα†
     have hUα_map : Kraus.map K (Uα : MatrixAlg D) = α • (Uα : MatrixAlg D) := by
@@ -490,14 +490,14 @@ theorem peripheral_eigenvalues_form_cyclic_group
     have : NeZero m := ⟨by omega⟩
     -- Get cyclic decomposition: m orthogonal projections summing to identity
     obtain ⟨U, P, _, _, hUm, hPproj, hPsum, _, hcyclic⟩ :=
-      MPSTensor.exists_cyclic_decomposition_of_irreducible_schwarz
+      Kraus.exists_cyclic_decomposition_of_irreducible_schwarz
         K hUnital ρ hρ hρfix hIrr hγ_prim hperiph_range
     exact period_dvd_dim_of_cyclic_projections K hTP P hPproj hPsum hcyclic
   exact ⟨m, γ, hm_pos, hγ_prim, hm_dvd, hset_eq⟩
 
 /-- **Each peripheral eigenvalue has multiplicity 1** (Wolf Theorem 6.6).
 
-Follows from `fixed_eq_scalar_of_irreducible_unital` in
+Follows from `Kraus.fixed_eq_scalar_of_irreducible_unital` in
 `CyclicDecomposition.lean`: if `E(X) = X` with `E` irreducible and unital,
 then `X = c · I`. Applied to `E^m` restricted to a cyclic sector, this
 forces one-dimensional eigenspaces.
@@ -519,7 +519,7 @@ theorem peripheral_eigenvalue_multiplicity_one
       (Module.End.eigenspace (MPSTensor.transferMap (d := r) (D := D) K) γ) = 1 := by
   classical
   set E := MPSTensor.transferMap (d := r) (D := D) K
-  obtain ⟨U, hU_eig⟩ := MPSTensor.exists_peripheral_unitary_of_irreducible_schwarz
+  obtain ⟨U, hU_eig⟩ := Kraus.exists_peripheral_unitary_of_irreducible_schwarz
     K hUnital ρ hρ hρfix hIrr hγ
   have hU_ne : (U : MatrixAlg D) ≠ 0 := by
     intro hU0
@@ -573,7 +573,7 @@ theorem peripheral_eigenvalue_multiplicity_one
               have hγ_ne : γ ≠ 0 :=
                 Complex.ne_zero_of_norm_eq_one hγ.2
               simp [hγ_ne]
-    obtain ⟨c, hc⟩ := MPSTensor.fixed_eq_scalar_of_irreducible_unital
+    obtain ⟨c, hc⟩ := Kraus.fixed_eq_scalar_of_irreducible_unital
       (K := K) hUnital hIrr (X * (U : MatrixAlg D)ᴴ) hXU_fix
     have hX_eq : X = c • (U : MatrixAlg D) := by
       have hstar := Matrix.UnitaryGroup.star_mul_self U
@@ -629,7 +629,7 @@ theorem channel_period_divides_dim
       Set.range (fun j : Fin m => γ ^ (j : ℕ)) := by
     rw [hgen]; ext x; simp [Set.mem_range, eq_comm]
   obtain ⟨U, P, _, _, hUm, hPproj, hPsum, _, hcyclic⟩ :=
-    MPSTensor.exists_cyclic_decomposition_of_irreducible_schwarz
+    Kraus.exists_cyclic_decomposition_of_irreducible_schwarz
       K hUnital ρ hρ hρfix hIrr hγprim hperiph_range
   exact period_dvd_dim_of_cyclic_projections K hTP P hPproj hPsum hcyclic
 

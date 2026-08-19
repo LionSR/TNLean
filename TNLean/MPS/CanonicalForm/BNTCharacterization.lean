@@ -225,7 +225,7 @@ theorem SectorDecomposition.exists_phase_match_of_isCPSVBasisOfNormalTensors
             mpvState (d := d) (P.basis j) N) =
           ∑ k : Fin g, cB k • mpvState (d := d) (B k) N :=
       hPstate.symm.trans hBstate
-    exact coefficient_eq_zero_of_sum_eq_of_complement_smul
+    exact LinearIndependent.coefficient_eq_zero_of_sum_eq_of_complement_smul
       (T := T) (a := fun j => P.coeff N j)
       (u := fun j => mpvState (d := d) (P.basis j) N)
       (b := cB) (v := fun k => mpvState (d := d) (B k) N)
@@ -367,7 +367,7 @@ private theorem isCPSVBasisOfNormalTensors_iff_active_blocks_covered_and_minimal
         ring
       _ = ∑ j : Fin g, c j * mpv (basis j) σ := by
         have hGroup :=
-          sum_fiber_smul (φ := jOf)
+          Fintype.sum_fiber_smul (φ := jOf)
             (a := fun k : Fin r => (μ k * ζ k) ^ N)
             (v := fun j : Fin g => mpvState (d := d) (basis j) N)
         have hComponent := congrArg (fun v : MPVSpace d N => v σ) hGroup

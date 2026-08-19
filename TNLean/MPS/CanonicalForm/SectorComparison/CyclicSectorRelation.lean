@@ -204,7 +204,7 @@ theorem exists_cyclic_sector_decomp_after_blocking_with_letter_and_isometry
   have hUnital : IsUnitalKraus (d := d) (D := D) K := by
     simpa [IsUnitalKraus, K] using hTP
   obtain ⟨U, P, hU, hPow, hUm, hPproj, hPsum, hUspec, hcyclic⟩ :=
-    MPSTensor.exists_cyclic_decomposition_of_irreducible_schwarz
+    Kraus.exists_cyclic_decomposition_of_irreducible_schwarz
       (K := K) hUnital ρ hρ hρfix hIrrMap hγprim hperiph
   -- Step 2: (E†)^m fixes each P_k
   have hPow_fix : ∀ k : Fin m,

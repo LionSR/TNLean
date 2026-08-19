@@ -417,10 +417,6 @@ theorem supportProj_mul_conjTranspose_mul_self (B : Matrix m n ℂ) :
   rw [Matrix.sub_mul, Matrix.one_mul, sub_eq_zero] at hPB
   exact hPB.symm
 
-end Matrix
-
-namespace MPSTensor
-
 variable {D : ℕ}
 
 /-- The `Fin`-indexed support projection of a positive-semidefinite matrix. -/
@@ -483,4 +479,4 @@ theorem one_sub_supportProj_mul_mul_supportProj_eq_zero {k : ℕ}
     _ = ((1 - π) * Y) * (G * (Yᴴ * W)) := by rw [hAY]; simp only [Matrix.mul_assoc]
     _ = 0 := by rw [hY, Matrix.zero_mul]
 
-end MPSTensor
+end Matrix

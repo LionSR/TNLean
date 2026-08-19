@@ -786,7 +786,7 @@ theorem activePhysicalSupportProj_eq_physicalSupportProj
   have hQHerm : Q.IsHermitian :=
     F.isOrthogonalProjection_activePhysicalSupportProj.1
   have hSHerm : S.IsHermitian :=
-    (MPSTensor.isOrthogonalProjection_supportProj
+    (Matrix.isOrthogonalProjection_supportProj
       (physicalSliceColumns K * (physicalSliceColumns K)ᴴ)
       (Matrix.posSemidef_self_mul_conjTranspose
         (physicalSliceColumns K))).1
