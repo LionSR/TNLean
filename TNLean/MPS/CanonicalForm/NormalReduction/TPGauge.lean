@@ -595,7 +595,7 @@ theorem exists_tp_gauge_blockwise
     have hEq :
         blocks1 k = tpGauge (d := d) (D := dim0 k) (fun i => c • blocks0 k i) (σ1 k) := by
       funext i
-      simpa [tpGauge, c] using hform1 k i
+      simpa [tpGauge, Kraus.tpGauge, c] using hform1 k i
     simpa [hEq] using hIrr_gauge
   exact ⟨μ1, blocks1, hSame1, hIrr1, hLeft1, hμne1, hDim1⟩
 
