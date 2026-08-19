@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.Wielandt.SpanGrowth.VectorToMatrixSpan
-import TNLean.Wielandt.FittingDecomposition
+import TNLean.Analysis.FittingDecomposition
 
 import Mathlib.Analysis.Complex.Polynomial.Basic
 import Mathlib.LinearAlgebra.Matrix.ToLin
