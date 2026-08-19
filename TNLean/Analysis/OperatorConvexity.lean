@@ -20,7 +20,7 @@ This module proves the trace convexity and concavity of the map
 * `trace_rpow_concave` — for `p ∈ [0, 1]`, the map is **concave**.
 * `trace_rpow_convex` — for `p ∈ [1, 2]`, the map is **convex**.
 
-Both statements were previously axiomatized in `TNLean.Axioms.OperatorConvexity`
+Both statements were previously axiomatized in `TNLean.Analysis.LiebConcavity`
 (as `trace_rpow_concave_axiom` / `trace_rpow_convex_axiom`); this module
 discharges them using the matrix-analysis lemmas
 `Matrix.IsHermitian.trace_cfc_eq_sum_re` (from `TNLean/Analysis/TraceCFC.lean`)

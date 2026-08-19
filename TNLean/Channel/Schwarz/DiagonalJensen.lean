@@ -38,9 +38,9 @@ computation gives
 so the scalar Jensen inequality `ConvexOn.map_sum_le` applied to the
 weights `p` and points `λ` yields the conclusion.
 
-This auxiliary lemma is a prerequisite for the trace convexity axioms
-`trace_rpow_concave_axiom` and `trace_rpow_convex_axiom` in
-`TNLean.Axioms.OperatorConvexity`.
+This auxiliary lemma is a prerequisite for the trace convexity theorems
+`trace_rpow_concave` and `trace_rpow_convex` in
+`TNLean.Analysis.OperatorConvexity`.
 
 ## References
 

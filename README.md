@@ -174,7 +174,6 @@ Archive policy. The source is grouped as follows.
 | Path | Contents |
 |---|---|
 | `TNLean/Algebra`, `TNLean/Analysis`, `TNLean/Topology` | Linear algebra of matrices: traces, Gram matrices, Frobenius norms, Skolem-Noether, and convergence and fixed-point results. |
-| `TNLean/Axioms` | The few results still assumed as axioms, isolated in dedicated modules so the assumption boundary stays auditable (the `axioms` badge counts them). |
 | `TNLean/Entropy` | Von Neumann entropy, strong subadditivity, mutual information, and quantum Markov chains. |
 | `TNLean/Channel` | Quantum channels: representations, Schwarz theory, fixed points, irreducibility, peripheral spectra, and semigroups. |
 | `TNLean/QPF`, `TNLean/Spectral` | Perron-Frobenius theory, spectral gaps, and correlation-decay estimates. |

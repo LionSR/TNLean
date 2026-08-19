@@ -26,7 +26,7 @@ fractional product.
 
 This is the analytic content of the Lieb concavity theorem (Lieb 1973, Carlen Lemma 2.8),
 the input that eliminates the sanctioned Lieb concavity statement in
-`TNLean/Axioms/OperatorConvexity.lean`.
+`TNLean/Analysis/LiebConcavity.lean`.
 
 ## Main results
 

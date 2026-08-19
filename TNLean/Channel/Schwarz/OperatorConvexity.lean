@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.Axioms.OperatorConvexity
+import TNLean.Analysis.LiebConcavity
 import Mathlib.Analysis.CStarAlgebra.Matrix
 import Mathlib.Analysis.Matrix.Order
 import Mathlib.Analysis.SpecialFunctions.ContinuousFunctionalCalculus.Rpow.Order
@@ -39,11 +39,11 @@ subunitality, because `log` is unbounded below.
 ### Status
 
 The three Jensen wrappers below are proved from the boundary declarations in
-`TNLean.Axioms.OperatorConvexity`.  The concave real-power theorem is proved
+`TNLean.Analysis.LiebConcavity`.  The concave real-power theorem is proved
 there by the finite-POVM / compression integrand route, and the logarithmic
 theorem is proved from it by taking the right limit `p → 0+` in
-`(A ^ p - 1) / p`.  The convex real-power wrapper still rests on the remaining
-positive-map Jensen axiom.
+`(A ^ p - 1) / p`.  The convex real-power wrapper is proved from the boundary
+declaration `posMap_rpow_convex_jensen` in the same module.
 
 These are consumed by the Corollary 5.2 proofs in `OperatorMonotone.lean`.
 
@@ -77,7 +77,7 @@ This follows from operator concavity of `x ↦ x ^ p` on `[0, ∞)` for
 `p ∈ [0, 1]`, combined with the concave version of the operator Jensen
 inequality for positive subunital maps.
 
-Proved from `posMap_rpow_concave_jensen` in `TNLean.Axioms.OperatorConvexity`. -/
+Proved from `posMap_rpow_concave_jensen` in `TNLean.Analysis.LiebConcavity`. -/
 theorem IsPositiveMap.rpow_concave_jensen
     {T : Mat →ₗ[ℂ] Mat} (hT : IsPositiveMap T) (hSub : T 1 ≤ (1 : Mat))
     {p : ℝ} (hp : p ∈ Set.Icc (0 : ℝ) 1) {A : Mat} (hA : 0 ≤ A) :
@@ -94,7 +94,7 @@ This follows from operator convexity of `x ↦ x ^ p` on `[0, ∞)` for
 `p ∈ [1, 2]`, combined with the convex version of the operator Jensen
 inequality for positive subunital maps.
 
-Proved from `posMap_rpow_convex_jensen` in `TNLean.Axioms.OperatorConvexity`. -/
+Proved from `posMap_rpow_convex_jensen` in `TNLean.Analysis.LiebConcavity`. -/
 theorem IsPositiveMap.rpow_convex_jensen
     {T : Mat →ₗ[ℂ] Mat} (hT : IsPositiveMap T) (hSub : T 1 ≤ (1 : Mat))
     {p : ℝ} (hp : p ∈ Set.Icc (1 : ℝ) 2) {A : Mat} (hA : 0 ≤ A) :
@@ -111,7 +111,7 @@ for positive subunital maps. Note: unlike the `rpow` variants, the `log`
 Jensen inequality requires unitality (`T 1 = 1`), not merely subunitality
 (`T 1 ≤ 1`).
 
-Proved from `posMap_log_concave_jensen` in `TNLean.Axioms.OperatorConvexity`. -/
+Proved from `posMap_log_concave_jensen` in `TNLean.Analysis.LiebConcavity`. -/
 theorem IsPositiveMap.log_concave_jensen
     {T : Mat →ₗ[ℂ] Mat} (hT : IsPositiveMap T) (hUnit : T 1 = (1 : Mat))
     {A : Mat} (hA : A.PosDef) :

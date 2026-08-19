@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.Axioms.OperatorConvexity
+import TNLean.Analysis.LiebConcavity
 import TNLean.Algebra.MatrixAux
 import Mathlib.Analysis.CStarAlgebra.Matrix
 
@@ -11,7 +11,7 @@ import Mathlib.Analysis.CStarAlgebra.Matrix
 # Lieb concavity on the sub-boundary region
 
 The boundary case of the Ando--Lieb concavity theorem is proved in
-`TNLean.Axioms.OperatorConvexity` as `lieb_concavity_psd`: for `s ∈ [0, 1]` and
+`TNLean.Analysis.LiebConcavity` as `lieb_concavity_psd`: for `s ∈ [0, 1]` and
 positive-semidefinite `A₁, A₂, B₁, B₂`, the map `(A, B) ↦ Re Tr(K† Aˢ K B^{1-s})`
 is jointly concave.  That is the full Ando--Lieb theorem (Wolf Theorem 5.15) on the
 boundary line `x + y = 1`, with `x = s`, `y = 1 − s`.

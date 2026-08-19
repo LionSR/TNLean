@@ -11,7 +11,7 @@ import Mathlib.LinearAlgebra.Matrix.PosDef
 
 This module records foundational matrix-order infrastructure toward eliminating
 the deepest sanctioned assumption of the development, the Lieb concavity theorem
-(`lieb_concavity_axiom` in `TNLean/Axioms/OperatorConvexity.lean`). The route
+(`lieb_concavity_posDef` in `TNLean/Analysis/LiebConcavity.lean`). The route
 reduces Lieb's joint concavity of `(A, B) ↦ Tr(K† A^s K B^{1-s})` to a
 single-variable problem on the commuting left and right multiplication
 superoperators `L_A` and `R_B`, using the integral representation
@@ -115,7 +115,7 @@ multiplication superoperators is antitone in `(A, B)`:
 `(A₂ ⊗ₖ 1 + t • (1 ⊗ₖ B₂ᵀ))⁻¹ ≤ (A₁ ⊗ₖ 1 + t • (1 ⊗ₖ B₁ᵀ))⁻¹`.
 
 This is the foundational matrix-order step toward eliminating the Lieb concavity
-assumption `lieb_concavity_axiom`: it is the resolvent monotonicity input of the
+assumption `lieb_concavity_posDef`: it is the resolvent monotonicity input of the
 integral-representation route through the commuting `L_A`, `R_B`
 superoperators. -/
 lemma superop_resolvent_antitone
