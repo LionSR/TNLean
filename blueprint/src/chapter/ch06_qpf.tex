@@ -211,6 +211,38 @@ and~\cite{Evans1978Spectral}.
     identity.
 \end{proof}
 
+\begin{theorem}[Invariant compression implies vanishing lower corners]
+    \label{thm:kraus_invariant_compression_lower_zero}
+    \lean{Kraus.invariance_implies_lowerZero}
+    \leanok
+    \uses{def:kraus_map}
+    Let $K$ be a finite matrix family with Kraus map $E$, and let $Q$ be an
+    orthogonal projection. If
+    \begin{align}
+        Q E(QXQ)Q
+         & =E(QXQ)
+        \notag
+    \end{align}
+    for every $X\in\MN{D}$, then $(\Id-Q)K_iQ=0$ for every $i$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Set $M_i=(\Id-Q)K_iQ$. Multiplying the compression identity by $\Id-Q$
+    on the left gives the first equality below. Taking $X=\Id$, multiplying on
+    the right by $\Id-Q$, and expanding the Kraus sum gives the second:
+    \begin{align}
+        (\Id-Q)E(QXQ)
+         & =0,
+        \notag\\
+        (\Id-Q)E(Q)(\Id-Q)
+         & =\sum_i M_iM_i^\dagger=0.
+        \notag
+    \end{align}
+    Each matrix $M_iM_i^\dagger$ is positive semidefinite. Hence every term in
+    the vanishing sum is zero, and therefore $M_i=0$ for every $i$.
+\end{proof}
+
 \begin{theorem}[Invariant support compression for a CP fixed point]
     \label{thm:cp_fixed_support_invariant}
     \lean{Kraus.invariantCompression_of_supportProj_fixed_by_cpMap}
@@ -588,6 +620,7 @@ and~\cite{Evans1978Spectral}.
 \end{definition}
 
 \begin{theorem}[Left-canonical (trace-preserving) gauge]\label{thm:left_canonical_gauge}
+    \lean{Kraus.gauged_isTP_of_map_conjTranspose_fixedPoint}
     \lean{gauged_tracePreserving}
     \uses{def:tp_kraus}
     \leanok

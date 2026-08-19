@@ -189,7 +189,8 @@
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{lem:trace_mul_map_eq_trace_adjointMap_mul}
+    \uses{lem:trace_mul_map_eq_trace_adjointMap_mul,
+        thm:kraus_map_eq_transfer_map}
     Apply Lemma~\ref{lem:trace_mul_map_eq_trace_adjointMap_mul} to the Kraus
     map determined by $(K_i)_i$. Identifying this Kraus map and its adjoint
     with the corresponding transfer maps gives the stated identity.
