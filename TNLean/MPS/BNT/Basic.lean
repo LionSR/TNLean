@@ -94,7 +94,7 @@ Gram matrix, then the MPV states `mpvState (A j) N` are eventually linearly
 independent.
 
 This is the finite-index formulation of
-`MPSTensor.eventually_linearIndependent_of_gram_tendsto_id`.
+`Matrix.eventually_linearIndependent_of_gram_tendsto_id`.
 -/
 lemma eventually_linearIndependent_of_finite_overlap_tendsto_orthonormal
     {d : ℕ} {ι : Type*} [Finite ι] {dim : ι → ℕ}
@@ -138,7 +138,7 @@ lemma eventually_linearIndependent_of_finite_overlap_tendsto_orthonormal
       rw [lp.inner_single_left, lp.single_apply_self]
   -- Apply the Gram-matrix criterion in the fixed inner product space `V`.
   have hLI_emb : ∀ᶠ N in atTop, LinearIndependent ℂ (fun j : ι => v j N) :=
-    MPSTensor.eventually_linearIndependent_of_gram_tendsto_id (v := v) hGram
+    Matrix.eventually_linearIndependent_of_gram_tendsto_id (v := v) hGram
   -- Pull back linear independence along the linear map `lp.lsingle 2 N`.
   refine hLI_emb.mono ?_
   intro N hN

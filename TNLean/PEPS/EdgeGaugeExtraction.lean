@@ -42,7 +42,7 @@ theorem edgeGaugeFromInsertionAlgebraIsomorphism (A B : Tensor G d) (e : Edge G)
               Matrix.reindexAlgEquiv ℂ ℂ (finCongr hEdge) X *
               ((Z⁻¹ : GL (Fin (B.bondDim e)) ℂ) :
                 Matrix (Fin (B.bondDim e)) (Fin (B.bondDim e)) ℂ) :=
-  MPSTensor.matrixAlgEquiv_inner_of_fin φ
+  Matrix.matrixAlgEquiv_inner_of_fin φ
 
 end PEPS
 end TNLean

@@ -14,7 +14,7 @@ identifying their matrix sizes.
 
 open scoped Matrix
 
-namespace MPSTensor
+namespace Matrix
 
 /-- An algebra isomorphism between full matrix algebras is conjugation by an
 invertible matrix after the matrix sizes are identified.
@@ -49,4 +49,4 @@ theorem matrixAlgEquiv_inner_of_fin {D E : ℕ}
           Matrix.reindexAlgEquiv ℂ ℂ (finCongr hDE) M *
           ((X⁻¹ : GL (Fin E) ℂ) : Matrix (Fin E) (Fin E) ℂ) := by rfl
 
-end MPSTensor
+end Matrix

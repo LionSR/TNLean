@@ -25,7 +25,7 @@ MPS paper arXiv:1708.00029.
 open scoped BigOperators InnerProductSpace
 open Filter
 
-namespace MPSTensor
+namespace Matrix
 
 /--
 **Generalized Gram-matrix criterion**: eventual linear independence from
@@ -78,4 +78,4 @@ theorem eventually_linearIndependent_of_gram_tendsto_id
   exact eventually_linearIndependent_of_gram_tendsto_nondegenerate v 1
     (by simp) (fun i j => by simpa [Matrix.one_apply] using h i j)
 
-end MPSTensor
+end Matrix

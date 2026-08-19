@@ -20,7 +20,7 @@ an aperiodicity condition, closing the gap between `cumulativeSpan A N = ⊤`
 ## Key insight: aperiodicity via `1 ∈ wordSpan A 1`
 
 **Without aperiodicity, the implication is false.** Counterexample: `A₁ = e₁₂`,
-`A₂ = e₂₁` generates `M₂(ℂ)` as an algebra (`algSpan = ⊤`), but `wordSpan A n`
+`A₂ = e₂₁` generates `M₂(ℂ)` as an algebra (`Matrix.algSpan A = ⊤`), but `wordSpan A n`
 alternates between `span{e₁₁, e₂₂}` (even n ≥ 2) and `span{e₁₂, e₂₁}` (odd n),
 so no single level reaches `⊤`. The **period** of this tensor is 2.
 
@@ -48,7 +48,7 @@ supplied by strong irreducibility, i.e. peripheral spectrum `{1}`.
   If `cumulativeSpan A N = ⊤` and `1 ∈ wordSpan A 1`, then `IsNormal A`.
 
 * `isNormal_of_algSpan_eq_top_of_aperiodic`:
-  If `algSpan A = ⊤` and `1 ∈ wordSpan A 1`, then `IsNormal A`.
+  If `Matrix.algSpan A = ⊤` and `1 ∈ wordSpan A 1`, then `IsNormal A`.
 
 ## References
 
@@ -246,13 +246,13 @@ theorem isNormal_of_cumulativeSpan_eq_top_of_aperiodic
   rw [← cumulativeSpan_eq_wordSpan_of_one_mem_wordSpan_one A hone]
   exact eq_top_iff.mpr (hcs.ge.trans (cumulativeSpan_mono A N))
 
-/-- If `algSpan A = ⊤` and `1 ∈ wordSpan A 1` (aperiodicity), then `IsNormal A`.
+/-- If `Matrix.algSpan A = ⊤` and `1 ∈ wordSpan A 1` (aperiodicity), then `IsNormal A`.
 
 Combines the Noetherian chain stabilization for the algebra span with the
 aperiodicity condition. -/
 theorem isNormal_of_algSpan_eq_top_of_aperiodic
     (A : MPSTensor d D)
-    (halg : algSpan A = ⊤)
+    (halg : Matrix.algSpan A = ⊤)
     (hone : (1 : Matrix (Fin D) (Fin D) ℂ) ∈ wordSpan A 1) :
     IsNormal A := by
   obtain ⟨N, hN⟩ := exists_cumulativeSpan_eq_top_of_algSpan_eq_top A halg

@@ -22,9 +22,9 @@ theorem, equivalently Jacobson's density theorem.
 
 ## Main definitions
 
-* `MPSTensor.algSpan A`: the unital subalgebra `Algebra.adjoin ℂ (Set.range A)`.
-* `MPSTensor.IsInvariantSubmodule A W`: `W ≤ (Fin D → ℂ)` is invariant under all `A i`.
-* `MPSTensor.IsIrreducibleAction A`: no nontrivial invariant submodule.
+* `Matrix.algSpan A`: the unital subalgebra `Algebra.adjoin ℂ (Set.range A)`.
+* `Matrix.IsInvariantSubmodule A W`: `W ≤ (Fin D → ℂ)` is invariant under all `A i`.
+* `Matrix.IsIrreducibleAction A`: no nontrivial invariant submodule.
 
 ## Main results
 
