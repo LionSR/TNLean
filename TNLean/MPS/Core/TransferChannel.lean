@@ -57,7 +57,9 @@ theorem isChannel_transferMap (K : Fin d → Mat) (h_tp : IsTP K) :
 
 end Kraus
 
-/-- The adjoint trace-pairing identity in MPS transfer-map notation. -/
+/-- The adjoint trace-pairing identity in MPS transfer-map notation.
+
+This is the transfer-map form of `Kraus.trace_mul_mapLM_adjoint`. -/
 lemma trace_mul_transferMap_adjoint
     {n : ℕ}
     (K : MPSTensor n D)
@@ -66,7 +68,6 @@ lemma trace_mul_transferMap_adjoint
     (ρ X : Matrix (Fin D) (Fin D) ℂ) :
     Matrix.trace (ρ * E X) =
       Matrix.trace (MPSTensor.transferMap (d := n) (D := D) (fun i => (K i)ᴴ) ρ * X) := by
-  rw [hE_eq]
-  simpa only [Kraus.map, Kraus.adjointMap, MPSTensor.transferMap_apply,
-    Matrix.conjTranspose_conjTranspose] using
-      (Kraus.trace_mul_map_eq_trace_adjointMap_mul (K := K) ρ X)
+  simpa only [Kraus.mapLM_eq_transferMap] using
+    Kraus.trace_mul_mapLM_adjoint (K := K)
+      (hE_eq := by rw [hE_eq, Kraus.mapLM_eq_transferMap]) ρ X

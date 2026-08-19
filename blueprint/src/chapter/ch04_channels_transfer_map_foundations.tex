@@ -175,12 +175,12 @@
     $\{A^i\}$.
 \end{proof}
 
-\begin{lemma}[Trace adjointness of transfer maps]
+\begin{lemma}[Trace adjointness of Kraus and transfer maps]
     \label{lem:trace_mul_transfer_map_adjoint}
     \lean{trace_mul_transferMap_adjoint}
-    \lean{Kraus.trace_mul_transferMap_adjoint}
+    \lean{Kraus.trace_mul_mapLM_adjoint}
     \leanok
-    \uses{def:transfer_map}
+    \uses{def:kraus_map, def:transfer_map}
     For matrices $\rho$ and $X$ and a finite family $(K_i)_i$,
     \begin{align}
         \tr\!\left(\rho\sum_i K_iXK_i^\dagger\right)

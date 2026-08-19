@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.Analysis.MatrixSqrt
+import TNLean.Channel.KrausGauge
 import TNLean.MPS.Core.Transfer
 
 import Mathlib.Analysis.CStarAlgebra.ContinuousFunctionalCalculus.Basic
@@ -64,9 +65,13 @@ lemma isUnit_det_cfc_sqrt_of_posDef (ρ : Matrix (Fin D) (Fin D) ℂ) (hρ : ρ.
 /-- Gauge-transformed tensor `B i = ρ^{1/2} A i ρ^{-1/2}`.
 
 We implement `ρ^{1/2}` as `CFC.sqrt ρ`.
-(For `ρ` positive definite, this is invertible.) -/
+(For `ρ` positive definite, this is invertible.)
+
+This is the transfer-map form of `Kraus.tpGauge`: since `MPSTensor d D` is
+definitionally `Fin d → Matrix (Fin D) (Fin D) ℂ`, the two are the same
+construction. -/
 noncomputable def tpGauge (A : MPSTensor d D) (ρ : Matrix (Fin D) (Fin D) ℂ) : MPSTensor d D :=
-  fun i => (CFC.sqrt ρ) * A i * (CFC.sqrt ρ)⁻¹
+  Kraus.tpGauge A ρ
 
 /-- **TP normalisation from an adjoint fixed point.**
 
@@ -75,50 +80,17 @@ Assume `ρ` is positive definite and fixed by the adjoint transfer map
 Then the gauged tensor `tpGauge A ρ` satisfies the trace-preserving condition
 `∑ i, (B i)ᴴ * (B i) = I`.
 
-This is the standard “left-canonical” gauge construction for MPS. -/
+This is the standard “left-canonical” gauge construction for MPS, derived from
+`Kraus.tpGauge_isTP_of_map_conjTranspose_fixedPoint` by unfolding `transferMap`
+and `Kraus.map` (`MPSTensor d D` is definitionally a finite matrix family, so
+the two coincide). -/
 theorem tpGauge_isTP_of_transferMap_conjTranspose_fixedPoint
     (A : MPSTensor d D) (ρ : Matrix (Fin D) (Fin D) ℂ)
     (hρ : ρ.PosDef)
     (hfix : transferMap (d := d) (D := D) (fun i => (A i)ᴴ) ρ = ρ) :
-    ∑ i : Fin d, (tpGauge (d := d) (D := D) A ρ i)ᴴ * tpGauge (d := d) (D := D) A ρ i = 1 := by
-  classical
-  -- Notation.
-  set S : Matrix (Fin D) (Fin D) ℂ := CFC.sqrt ρ
-  have hS_mul : S * S = ρ := by
-    simpa [S] using cfc_sqrt_mul_self_of_posDef (D := D) ρ hρ
-  have hS_herm : Sᴴ = S := by
-    simpa [S] using conjTranspose_cfc_sqrt (D := D) ρ
-  have hStS : Sᴴ * S = ρ := by
-    simpa [hS_herm] using hS_mul
-  -- Invertibility facts (in the `Matrix` ring inverse sense).
-  have hdet : IsUnit S.det := by
-    simpa [S] using isUnit_det_cfc_sqrt_of_posDef (D := D) ρ hρ
-  have hSmul_inv : S * S⁻¹ = 1 := Matrix.mul_nonsing_inv S hdet
-  have hdetT : IsUnit (Sᴴ.det) := by
-    -- `det(Sᴴ) = star(det S)`.
-    simpa [Matrix.det_conjTranspose] using (IsUnit.star hdet)
-  have hStinv_mul : (Sᴴ)⁻¹ * Sᴴ = 1 := Matrix.nonsing_inv_mul Sᴴ hdetT
-  -- Rewrite each summand.
-  have h_term : ∀ i : Fin d,
-      (S * A i * S⁻¹)ᴴ * (S * A i * S⁻¹) = (Sᴴ)⁻¹ * ((A i)ᴴ * ρ * A i) * S⁻¹ := by
-    intro i
-    -- Expand the conjugate transpose and use `Sᴴ * S = ρ`.
-    rw [Matrix.conjTranspose_mul, Matrix.conjTranspose_mul, Matrix.conjTranspose_nonsing_inv]
-    -- Goal is now a reassociation; `simp` proves the required matrix identity.
-    simp [Matrix.mul_assoc, ← hStS]
-  -- Identify the adjoint fixed point equation as a sum.
-  have h_sum_eq : ∑ i : Fin d, (A i)ᴴ * ρ * A i = ρ := by
-    -- `transferMap (fun i => (A i)ᴴ) ρ = ∑ i, (A i)ᴴ * ρ * A i`.
-    simpa [transferMap_apply, Matrix.mul_assoc] using hfix
-  -- Compute the TP normalisation.
-  change (∑ i : Fin d, (S * A i * S⁻¹)ᴴ * (S * A i * S⁻¹)) = 1
-  simp_rw [h_term]
-  -- Factor out `Sᴴ⁻¹` on the left and `S⁻¹` on the right.
-  -- Then use the fixed point equation and cancel.
-  rw [← Finset.sum_mul, ← Finset.mul_sum, h_sum_eq, ← hStS]
-  -- Now the goal is purely matrix algebra.
-  -- (Sᴴ)⁻¹ * (Sᴴ * S) * S⁻¹ = ((Sᴴ)⁻¹ * Sᴴ) * (S * S⁻¹) = 1.
-  simp [Matrix.mul_assoc, hStinv_mul, hSmul_inv]
+    ∑ i : Fin d, (tpGauge (d := d) (D := D) A ρ i)ᴴ * tpGauge (d := d) (D := D) A ρ i = 1 :=
+  Kraus.tpGauge_isTP_of_map_conjTranspose_fixedPoint A ρ hρ (by
+    simpa [Kraus.map_apply, MPSTensor.transferMap_apply] using hfix)
 
 /-- The gauge-transformed tensor `tpGauge A ρ` is gauge-equivalent to `A`
 (hence has the same MPV). -/
@@ -134,7 +106,7 @@ theorem gaugeEquiv_tpGauge (A : MPSTensor d D) (ρ : Matrix (Fin D) (Fin D) ℂ)
   refine ⟨X, ?_⟩
   intro i
   -- `X⁻¹` coerces to the (nonsingular) matrix inverse.
-  simp [tpGauge, X]
+  simp [tpGauge, Kraus.tpGauge, X]
 
 /-- **MPV invariance** under the TP gauge transform `tpGauge`.
 

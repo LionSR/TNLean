@@ -243,10 +243,11 @@ theorem peripheral_powers_closed_of_irreducible_channel_with_fixed [NeZero D]
     kraus_sum_conjTranspose_mul_of_tp K E hK hE.tp
   -- ── Step 2: Square root S = CFC.sqrt σ ──
   let S : Mat := CFC.sqrt σ
-  have hS_herm : Sᴴ = S := MPSTensor.conjTranspose_cfc_sqrt (D := D) σ
-  have hS_sq : S * S = σ := MPSTensor.cfc_sqrt_mul_self_of_posDef (D := D) σ hσ_pd
+  have hS_herm : Sᴴ = S := Matrix.conjTranspose_cfc_sqrt (ρ := σ)
+  have hS_sq : S * S = σ := by
+    simpa using CFC.sqrt_mul_sqrt_self σ hσ_pd.posSemidef.nonneg
   have hS_det : S.det ≠ 0 :=
-    (MPSTensor.isUnit_det_cfc_sqrt_of_posDef (D := D) σ hσ_pd).ne_zero
+    hσ_pd.isUnit_det_cfc_sqrt.ne_zero
   have hSmul : S * S⁻¹ = 1 := Matrix.mul_nonsing_inv S (Ne.isUnit hS_det)
   have hSinv : S⁻¹ * S = 1 := Matrix.nonsing_inv_mul S (Ne.isUnit hS_det)
   have hSinv_herm : (S⁻¹)ᴴ = S⁻¹ := by

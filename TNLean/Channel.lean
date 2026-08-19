@@ -32,12 +32,14 @@ import TNLean.Channel.EnsembleEquivalence
 import TNLean.Channel.EntanglementWitness
 import TNLean.Channel.FaithfulMarginalWhitenedChoi
 import TNLean.Channel.FixedPoint
+import TNLean.Channel.GaugeConjugation
 import TNLean.Channel.InformationallyCompleteEffects
 import TNLean.Channel.Irreducible
 import TNLean.Channel.KoashiImoto
 import TNLean.Channel.KrausCPTP
 import TNLean.Channel.KrausCornerCompression
 import TNLean.Channel.KrausFreedom
+import TNLean.Channel.KrausGauge
 import TNLean.Channel.KrausMap
 import TNLean.Channel.KrausRank
 import TNLean.Channel.KrausRectangular

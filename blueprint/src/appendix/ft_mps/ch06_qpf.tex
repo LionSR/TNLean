@@ -195,6 +195,36 @@ outer square-root factors yields
     \notag
 \end{align}
 
+\begin{theorem}[Trace-preserving gauge from an adjoint fixed point, Kraus form]%
+    \label{thm:kraus_tp_gauge_from_adjoint_fixed}
+    \lean{Kraus.tpGauge_isTP_of_map_conjTranspose_fixedPoint}
+    \leanok
+    \uses{def:kraus_map}
+    Let $\{K_i\}_{i=0}^{d-1}$ be a finite Kraus family and let $\rho$ be
+    positive definite with $\sum_i K_i^\dagger \rho K_i = \rho$. Define the
+    gauged family $B_i = \rho^{1/2} K_i \rho^{-1/2}$. Then $B$ is
+    trace-preserving: $\sum_i B_i^\dagger B_i = \Id$.
+\end{theorem}
+
+\begin{proof}\leanok
+    Self-adjointness of $\rho^{1/2}$ gives
+    \begin{align}
+        B_i^\dagger B_i
+         & =\rho^{-1/2}K_i^\dagger\rho^{1/2}\rho^{1/2}K_i\rho^{-1/2}
+          =\rho^{-1/2}K_i^\dagger\rho K_i\rho^{-1/2}.
+        \notag
+    \end{align}
+    Summing, substituting the adjoint fixed-point equation, and cancelling the
+    outer square-root factors yields
+    \begin{align}
+        \sum_iB_i^\dagger B_i
+         & =\rho^{-1/2}\Big(\sum_iK_i^\dagger\rho K_i\Big)\rho^{-1/2}
+          =\rho^{-1/2}\rho\rho^{-1/2}
+          =\Id.
+        \notag
+    \end{align}
+\end{proof}
+
 \begin{lemma}[Square-root trace-preserving gauge is a gauge equivalence]%
     \label{lem:tp_gauge_equiv}
     \lean{MPSTensor.gaugeEquiv_tpGauge}
