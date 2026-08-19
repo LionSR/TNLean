@@ -6,6 +6,7 @@ Authors: TNLean contributors
 import TNLean.Algebra.DependentBlockDiagonal
 import TNLean.MPS.CanonicalForm.ProjectorClosureDecomposition
 import TNLean.MPS.CanonicalForm.Definitions
+import TNLean.MPS.Core.TransferChannel
 import TNLean.MPS.SharedInfra.Scaling
 import TNLean.MPS.Irreducible.FormII
 import TNLean.Channel.Irreducible.PerronFrobenius
@@ -258,12 +259,8 @@ theorem exists_posDef_transferMap_eigenvector_of_irreducible {n : ℕ} [NeZero n
     ∃ (ρ : Matrix (Fin n) (Fin n) ℂ) (r : ℝ),
       ρ.PosDef ∧ 0 < r ∧ transferMap (d := d) (D := n) B ρ = (r : ℂ) • ρ := by
   have hne : transferMap (d := d) (D := n) B ≠ 0 := by
-    intro h0
-    obtain ⟨i, hi⟩ := hB
-    have h1 : transferMap (d := d) (D := n) B 1 = 0 := by rw [h0]; simp
-    rw [transferMap_apply] at h1
-    simp only [Matrix.mul_one] at h1
-    exact hi (Matrix.eq_zero_of_sum_mul_conjTranspose_eq_zero (fun j => B j) h1 i)
+    simpa only [Kraus.mapLM_eq_transferMap] using
+      Kraus.mapLM_ne_zero_of_exists_ne_zero B hB
   obtain ⟨ρ, r, hρ, hr, hEig⟩ :=
     exists_posDef_eigenvector_of_irreducible_cp (transferMap (d := d) (D := n) B)
       (transferMap_isCPMap B)

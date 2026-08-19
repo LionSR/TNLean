@@ -1565,20 +1565,19 @@ spectral split → block extraction → MPV calculation → strict bounds
   orthogonality. This removes seven local constructions/proofs and reduces the
   theorem proof from 387 to 346 lines (41 lines net), with no new declaration.
 
-### nonzero Kraus map via evaluation at the identity — candidate
+### nonzero Kraus map via evaluation at the identity — resolved
 - **Pattern:** show a finite Kraus map is nonzero by evaluating at `1`, reducing to
   `∑ᵢ Kᵢ Kᵢᴴ = 0`, and concluding each `Kᵢ = 0` from positive semidefiniteness of the
   summands via `Matrix.eq_zero_of_sum_mul_conjTranspose_eq_zero`.
-- **Seen:** 2 occurrences — the packaged `Kraus.mapLM_ne_zero_of_exists_ne_zero`
-  (`TNLean/Channel/KrausMap.lean`) and the still-inlined six-line copy inside
+- **Seen:** the generic proof in `Kraus.mapLM_ne_zero_of_exists_ne_zero`
+  (`TNLean/Channel/KrausMap.lean`) and one former inline duplicate in
   `MPSTensor.exists_posDef_transferMap_eigenvector_of_irreducible`
-  (`TNLean/MPS/CanonicalForm/ProjectorClosureSpectral.lean:270-277`), noted in the
-  2026-08 Perron–Frobenius gauge-split review.
-- **Abstraction (proposed):** replace the inlined copy with
-  `Kraus.mapLM_ne_zero_of_exists_ne_zero _ hB` composed with
+  (`TNLean/MPS/CanonicalForm/ProjectorClosureSpectral.lean`).
+- **Reuse:** the transfer-map theorem now applies
+  `Kraus.mapLM_ne_zero_of_exists_ne_zero B hB` and rewrites the result with
   `Kraus.mapLM_eq_transferMap`.
-- **Notes:** below the rule-of-three threshold; revisit if a third inline copy
-  appears.
+- **Result:** the inline evaluation-at-identity proof is removed; no duplicate
+  implementation remains.
 
 ### irreducibility transfer to the conjugate-transposed family — candidate
 - **Pattern:** prove that irreducibility passes to the conjugate-transposed Kraus
