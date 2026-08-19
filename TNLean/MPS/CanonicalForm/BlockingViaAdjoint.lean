@@ -12,7 +12,7 @@ import TNLean.Channel.Peripheral.PeriodicityRemoval
 import Mathlib.Analysis.InnerProductSpace.Adjoint
 
 /-!
-## Frobenius adjoint of the transfer map
+# Periodicity removal by blocking
 
 The general adjoint-eigenvalue and primitivity lemmas live in
 `TNLean.Channel.Peripheral.AdjointSpectrum`. This file specializes them to
@@ -51,50 +51,16 @@ local instance : InnerProductSpace ℂ (Matrix (Fin D) (Fin D) ℂ) :=
     (Matrix.PosDef.one (n := Fin D) (R := ℂ)).posSemidef
 
 /-- The adjoint of `transferMap A` (Frobenius inner product) is the transfer map of the
-conjugate-transposed Kraus family. -/
+conjugate-transposed Kraus family.
+
+This is the transfer-map specialization of `Kraus.mapLM_conjTranspose_eq_adjoint`, obtained
+by rewriting along `Kraus.mapLM_eq_transferMap` (both files install the same Frobenius
+`NormedAddCommGroup`/`InnerProductSpace` instances on `Matrix (Fin D) (Fin D) ℂ`). -/
 lemma transferMap_conjTranspose_eq_adjoint (A : MPSTensor d D) :
     transferMap (d := d) (D := D) (fun i => (A i)ᴴ) =
       (transferMap (d := d) (D := D) A).adjoint := by
-  classical
-  let K : Fin d → Matrix (Fin D) (Fin D) ℂ := fun i => (A i)ᴴ
-  refine (LinearMap.eq_adjoint_iff (A := transferMap (d := d) (D := D) K)
-      (B := transferMap (d := d) (D := D) A)).2 ?_
-  intro X Y
-  -- Reduce to a trace identity using the definition of the Frobenius inner product.
-  change Matrix.trace (Y * (1 : Matrix (Fin D) (Fin D) ℂ) *
-      (transferMap (d := d) (D := D) K X)ᴴ) =
-    Matrix.trace (transferMap (d := d) (D := D) A Y *
-      (1 : Matrix (Fin D) (Fin D) ℂ) * Xᴴ)
-  simp only [mul_one]
-  -- Rewrite the conjugate transpose of a Kraus map.
-  have hconj : (transferMap (d := d) (D := D) K X)ᴴ = transferMap (d := d) (D := D) K (Xᴴ) := by
-    classical
-    simpa only [transferMap_apply, Kraus.map] using (Kraus.map_conjTranspose (K := K) X)
-  -- Weighted trace identity for Kraus maps.
-  have htrace :
-      Matrix.trace (Y * transferMap (d := d) (D := D) K (Xᴴ)) =
-        Matrix.trace (Kraus.adjointMap K Y * Xᴴ) := by
-    classical
-    simpa only [transferMap_apply, conjTranspose_conjTranspose, Kraus.adjointMap_apply,
-      Kraus.map] using
-      (Kraus.trace_mul_map_eq_trace_adjointMap_mul (K := K) Y (Xᴴ))
-  -- The adjoint Kraus map of `K i = (A i)ᴴ` is `transferMap A`.
-  have hadj : Kraus.adjointMap K Y = transferMap (d := d) (D := D) A Y := by
-    classical
-    simp [Kraus.adjointMap, K, MPSTensor.transferMap_apply, Matrix.conjTranspose_conjTranspose,
-      Matrix.mul_assoc]
-  -- Assemble.
-  calc
-    Matrix.trace (Y * (transferMap (d := d) (D := D) K X)ᴴ)
-        = Matrix.trace (Y * transferMap (d := d) (D := D) K (Xᴴ)) := by
-            -- Rewrite using `((E X)ᴴ = E (Xᴴ))`.
-            -- We again keep `transferMap` opaque to avoid unfolding it under `simp`.
-            simpa only using
-              congrArg (fun Z => Matrix.trace (Y * Z)) hconj
-      _ = Matrix.trace (Kraus.adjointMap K Y * Xᴴ) := by
-            simpa only [transferMap_apply, Kraus.adjointMap_apply] using htrace
-      _ = Matrix.trace (transferMap (d := d) (D := D) A Y * Xᴴ) := by
-            rw [hadj]
+  simpa only [Kraus.mapLM_eq_transferMap] using
+    Kraus.mapLM_conjTranspose_eq_adjoint (K := A)
 
 /-- The Frobenius adjoint of `transferMap A` is the Kraus adjoint map of `A`,
 viewed as a linear map. This is the linear-map form of
@@ -219,7 +185,7 @@ theorem exists_blockTensor_isPrimitive_of_TP_of_isIrreducibleTensor
     -- Rearrange to match the goal.
     simpa only using hpow.symm
   have hprim_adj : _root_.IsPrimitive (((transferMap (d := d) (D := D) A) ^ p).adjoint) := by
-    rw [isPrimitive_iff]
+    rw [_root_.isPrimitive_iff]
     -- `hprim_pow_adj` is exactly the peripheral eigenvalue statement.
     simpa only [hpow_adj] using hprim_pow_adj
   have hprim_pow : _root_.IsPrimitive ((transferMap (d := d) (D := D) A) ^ p) :=

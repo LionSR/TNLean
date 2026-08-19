@@ -85,11 +85,12 @@ through its own period agrees with the directly $p$-blocked block.
     \label{thm:primitive_adjoint_equiv}
     \lean{IsPrimitive.adjoint_iff}\leanok
     \uses{def:primitive_channel}
-    Let $\E$ be a finite-dimensional completely positive map. Then $\E$ is
-    primitive if and only if its Frobenius adjoint $\E^\dagger$ is primitive.
-    Equivalently, the eigenvalues $\lambda$ of $\E$ with $|\lambda|=1$ form
-    the singleton $\{1\}$ if and only if the same holds for $\E^\dagger$,
-    because adjunction sends every eigenvalue to its complex conjugate.
+    Let $E$ be a linear endomorphism of a finite-dimensional complex inner
+    product space. Then $E$ is primitive if and only if its adjoint
+    $E^\dagger$ is primitive. Equivalently, the eigenvalues $\lambda$ of $E$
+    with $|\lambda|=1$ form the singleton $\{1\}$ if and only if the same
+    holds for $E^\dagger$, because adjunction sends every eigenvalue to its
+    complex conjugate.
 \end{lemma}
 
 \begin{lemma}[Primitivity under blocking by a multiple]%

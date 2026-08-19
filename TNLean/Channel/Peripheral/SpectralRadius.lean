@@ -5,6 +5,8 @@ Authors: TNLean contributors
 -/
 import TNLean.Channel.Determinant.Bound
 import TNLean.Channel.PerronFrobenius.Existence
+import Mathlib.Analysis.Normed.Algebra.Spectrum
+import Mathlib.Topology.Algebra.Module.FiniteDimension
 
 /-!
 # Spectral radius of positive maps — Wolf Proposition 6.1
@@ -27,6 +29,9 @@ positive maps relies on the Russo--Dye theorem and is documented in
 
 * `IsPositiveMap.eigenvalue_one_exists_of_tracePreserving`:
   nonzero PSD fixed point for positive trace-preserving maps.
+* `spectralRadius_le_one_of_forall_eigenvalue_norm_le_one`: the norm-agnostic
+  step transporting a pointwise eigenvalue bound to a spectral-radius bound,
+  shared by every operator-norm choice used for this map.
 
 ## References
 
@@ -85,3 +90,23 @@ theorem eigenvalue_one_exists_of_tracePreserving
   simpa [hr_one, one_smul] using h_eig
 
 end IsPositiveMap
+
+/-- If every eigenvalue of a linear endomorphism of a finite-dimensional complex normed space
+has modulus at most one, then its spectral radius (computed after transport to the induced
+continuous linear map) is at most one.
+
+This is the norm-agnostic step of Wolf Proposition 6.1's spectral-radius conclusion: only the
+algebraic fact `spectrum = eigenvalues` and the identification of `spectrum` along the
+`AlgEquiv` to continuous linear maps are used, so the same argument serves any choice of
+operator norm on `V`. -/
+theorem spectralRadius_le_one_of_forall_eigenvalue_norm_le_one
+    {V : Type*} [NormedAddCommGroup V] [NormedSpace ℂ V] [FiniteDimensional ℂ V]
+    (E : V →ₗ[ℂ] V) (h : ∀ μ, Module.End.HasEigenvalue E μ → ‖μ‖ ≤ 1) :
+    spectralRadius ℂ (Module.End.toContinuousLinearMap V E) ≤ 1 := by
+  have hSpec : spectrum ℂ (Module.End.toContinuousLinearMap V E) = spectrum ℂ E :=
+    AlgEquiv.spectrum_eq (Module.End.toContinuousLinearMap V) E
+  rw [spectralRadius]
+  refine iSup₂_le fun μ hμ ↦ ?_
+  have hμE : μ ∈ spectrum ℂ E := hSpec ▸ hμ
+  have hEig : Module.End.HasEigenvalue E μ := Module.End.hasEigenvalue_iff_mem_spectrum.mpr hμE
+  exact_mod_cast h μ hEig
