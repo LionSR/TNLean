@@ -6,7 +6,7 @@ Authors: TNLean contributors
 import TNLean.Algebra.ComplexPhasePositivity
 import TNLean.MPS.CanonicalForm.Reduction
 import TNLean.MPS.Periodic.Defs
-import TNLean.Spectral.Radius
+import TNLean.Analysis.SpectralRadius
 
 /-!
 # Shared scaling lemmas for MPS tensors

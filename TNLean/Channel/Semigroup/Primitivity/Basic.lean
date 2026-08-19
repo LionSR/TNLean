@@ -40,8 +40,9 @@ density at the irreducible time with a primitive positive fractional slice.
 **Step B**: `T_t` irreducible + channel → peripheral eigenvalues of `T_t` are roots
 of unity (Wolf Theorem 6.6). This channel-level result is available as
 `peripheral_isRootOfUnity_of_irreducible_channel`, proved by choosing a Kraus
-representation, converting to an irreducible tensor, and applying the existing
-blocking-periodicity theorem.
+representation, reading trace preservation `∑ᵢ Kᵢ† Kᵢ = 1` as unitality of the
+conjugate-transposed family, and applying the roots-of-unity theorem for
+irreducible unital Kraus maps with a positive definite adjoint fixed point.
 
 **Step C**: For an irreducible channel `T_t` with period `p` (i.e., `μ^p = 1` for
 peripheral `μ`), the eigenvector `V` with `T_t V = μ V` satisfies
