@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.Algebra.ComplexPhasePositivity
 import TNLean.Channel.FixedPoint.CanonicalGauge
+import TNLean.Channel.KrausMap
 import TNLean.Channel.Semigroup.Primitivity.Basic
 
 open scoped Matrix ComplexOrder MatrixOrder BigOperators NNReal TNOperatorSpace
@@ -236,11 +237,7 @@ theorem peripheral_powers_closed_of_irreducible_channel_with_fixed [NeZero D]
     ∀ n : ℕ, μ ^ n ∈ peripheralEigenvalues E := by
   classical
   -- ── Step 1: Kraus representation ──
-  obtain ⟨r, K, hK⟩ := hE.cp
-  have hE_eq : E = Kraus.mapLM K :=
-    LinearMap.ext fun X => by simpa [Kraus.mapLM_apply, Kraus.map_apply] using hK X
-  have hK_tp : ∑ i : Fin r, (K i)ᴴ * K i = 1 :=
-    kraus_sum_conjTranspose_mul_of_tp K E hK hE.tp
+  obtain ⟨r, K, hE_eq, hK_tp⟩ := hE.exists_kraus_map_eq_and_normalized
   -- ── Step 2: Square root S = CFC.sqrt σ ──
   let S : Mat := CFC.sqrt σ
   have hS_herm : Sᴴ = S := Matrix.conjTranspose_cfc_sqrt (ρ := σ)
