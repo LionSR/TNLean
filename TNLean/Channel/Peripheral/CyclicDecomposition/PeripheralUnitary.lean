@@ -3,9 +3,10 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import TNLean.Channel.Irreducible.FixedPointUniqueness
 import TNLean.Channel.Peripheral.CyclicDecomposition.Basic
 import TNLean.Channel.Schwarz.MultiplicativeDomainPowers
-import TNLean.QPF.Uniqueness
+import TNLean.MPS.Core.CPPrimitive
 
 /-!
 # Peripheral unitaries for irreducible Schwarz maps
@@ -31,7 +32,7 @@ Kraus families.
 
 open scoped Matrix ComplexOrder MatrixOrder BigOperators
 open Matrix Finset Complex
-open MPSTensor (transferMap transferMap_apply posSemidef_fixedPoint_unique_of_irreducible)
+open MPSTensor (transferMap transferMap_apply transferMap_isCPMap)
 
 namespace Kraus
 
@@ -63,7 +64,8 @@ private theorem hermitian_fixed_eq_scalar_of_irreducible_unital
               rw [LinearMap.map_smul]
       _ = H - (c0 : ℂ) • 1 := by simp only [hfix, hone_fix, Complex.coe_smul]
   have hone_psd : (1 : MatrixAlg D).PosSemidef := Matrix.PosSemidef.one
-  rcases posSemidef_fixedPoint_unique_of_irreducible (A := K) hIrr
+  rcases posSemidef_fixedPoint_unique_of_irreducible_cp (transferMap (d := r) (D := D) K)
+      (transferMap_isCPMap K) hIrr
       (1 : MatrixAlg D) (H - (c0 : ℂ) • 1) hone_psd one_ne_zero hshift_psd hone_fix hshift_fix with
     ⟨d, hd⟩
   refine ⟨d + c0, ?_⟩
@@ -222,7 +224,8 @@ theorem exists_peripheral_unitary_of_irreducible_schwarz
   have hone_fix : transferMap (d := r) (D := D) K (1 : MatrixAlg D) = 1 := by
     simpa [MPSTensor.transferMap_apply, KadisonSchwarz.krausMap,
       KadisonSchwarz.IsUnitalKraus] using hUnital
-  rcases posSemidef_fixedPoint_unique_of_irreducible (A := K) hIrr
+  rcases posSemidef_fixedPoint_unique_of_irreducible_cp (transferMap (d := r) (D := D) K)
+      (transferMap_isCPMap K) hIrr
       (1 : MatrixAlg D) (Xᴴ * X) hone_psd one_ne_zero hXX_psd hone_fix hXX_fix with ⟨c, hXX_scalar⟩
   have hc_ne0 : c ≠ 0 := by
     intro hc0
