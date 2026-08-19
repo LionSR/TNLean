@@ -210,10 +210,10 @@ theorem gauged_intertwining_core
   let X' : Matrix (Fin D₁) (Fin D₂) ℂ := gaugeEigenvector SA SB X
   have hA'unital : ∑ i : Fin d, A' i * (A' i)ᴴ = 1 := by
     simpa [A', gaugeTensor] using
-      gauged_unital A SA ρA hSA_det hSA_mul hρA_fix
+      gauged_unital A SA ρA hSA_det hSA_mul (by simpa [Kraus.map_apply] using hρA_fix)
   have hB'unital : ∑ i : Fin d, B' i * (B' i)ᴴ = 1 := by
     simpa [B', gaugeTensor] using
-      gauged_unital B SB ρB hSB_det hSB_mul hρB_fix
+      gauged_unital B SB ρB hSB_det hSB_mul (by simpa [Kraus.map_apply] using hρB_fix)
   have hX'ne : X' ≠ 0 := by
     intro h0
     apply hX
