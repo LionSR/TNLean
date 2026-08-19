@@ -292,9 +292,11 @@ outer square-root factors yields
 \end{theorem}
 
 \begin{proof}\leanok
-    If $P$ is invariant for $\mathcal K_K$, so that $(\Id-P)K_iP=0$ for all
-    $i$, then taking adjoints gives $PK_i^\dagger(\Id-P)=0$, which means
-    $\Id-P$ is invariant for the Kraus map of $\{K_i^\dagger\}$.
+    If $P$ is invariant for the Kraus map of $\{K_i^\dagger\}$, so that
+    $(\Id-P)K_i^\dagger P=0$ for all $i$, then taking adjoints gives
+    $PK_i(\Id-P)=0$, which means $\Id-P$ is invariant for $\mathcal K_K$.
+    Irreducibility of $\mathcal K_K$ forces $\Id-P \in \{0,\Id\}$, hence
+    $P \in \{0,\Id\}$, so the Kraus map of $\{K_i^\dagger\}$ is irreducible.
 \end{proof}
 
 \begin{theorem}[Positive-definite adjoint eigenvector for irreducible Kraus families]%

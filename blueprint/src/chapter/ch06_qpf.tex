@@ -773,8 +773,14 @@ The TP-gauge application follows~\cite[Appendix~A]{Cirac2016MPDO_arXiv}.
 \end{theorem}
 
 \begin{proof}\leanok
-    An invariant projection for $\E_A$ is exactly an invariant projection
-    for the matrices $A^i$, so the two irreducibility notions coincide.
+    If $P$ is a nontrivial invariant projection for $\E_A$, then
+    \begin{align}
+        (\Id-P)A^iP
+         & = 0
+        \notag
+    \end{align}
+    for every $i$, which is exactly a nontrivial invariant projection for
+    the family $\{A^i\}$, contradicting irreducibility of $A$.
 \end{proof}
 
 \begin{theorem}[Positive-definite adjoint eigenvector for irreducible tensors]%
