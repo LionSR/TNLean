@@ -20,7 +20,7 @@ an aperiodicity condition, closing the gap between `cumulativeSpan A N = ⊤`
 ## Key insight: aperiodicity via `1 ∈ wordSpan A 1`
 
 **Without aperiodicity, the implication is false.** Counterexample: `A₁ = e₁₂`,
-`A₂ = e₂₁` generates `M₂(ℂ)` as an algebra (`Matrix.algSpan = ⊤`), but `wordSpan A n`
+`A₂ = e₂₁` generates `M₂(ℂ)` as an algebra (`Matrix.algSpan A = ⊤`), but `wordSpan A n`
 alternates between `span{e₁₁, e₂₂}` (even n ≥ 2) and `span{e₁₂, e₂₁}` (odd n),
 so no single level reaches `⊤`. The **period** of this tensor is 2.
 
