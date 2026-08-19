@@ -281,8 +281,10 @@ theorem spectralRadius_eq_of_posDef_eigenvector_of_irreducible_cp
             rw [LinearMap.smul_apply, hsim_apply]
   set E' : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ :=
     (↑r : ℂ)⁻¹ • similarityMap (D := D) S⁻¹ E with hE'_def
-  -- The TP-normalized map has spectral radius `≤ 1`: the usual trace-preserving
-  -- bound, while the transformed fixed point will supply the matching lower bound.
+  -- The TP-normalized map has spectral radius `≤ 1`: `B` is trace-preserving, so
+  -- `mapLM B X = μ • X` with `X ≠ 0` gives `‖μ‖ ≤ 1` for every eigenvalue
+  -- (`Kraus.eigenvalue_norm_le_one_of_isTP`), hence the same bound on the spectral
+  -- radius; the transformed fixed point will supply the matching lower bound.
   have hrad'_le : spectralRadius ℂ
       ((Module.End.toContinuousLinearMap (Matrix (Fin D) (Fin D) ℂ)) E') ≤ 1 := by
     calc

@@ -207,8 +207,22 @@ outer square-root factors yields
 \end{theorem}
 
 \begin{proof}\leanok
-    Identical to the calculation above for the square-root gauge
-    (\ref{eq:qpf_tp_gauge}), with $A^i$ replaced by $K_i$.
+    Self-adjointness of $\rho^{1/2}$ gives
+    \begin{align}
+        B_i^\dagger B_i
+         & =\rho^{-1/2}K_i^\dagger\rho^{1/2}\rho^{1/2}K_i\rho^{-1/2}
+          =\rho^{-1/2}K_i^\dagger\rho K_i\rho^{-1/2}.
+        \notag
+    \end{align}
+    Summing, substituting the adjoint fixed-point equation, and cancelling the
+    outer square-root factors yields
+    \begin{align}
+        \sum_iB_i^\dagger B_i
+         & =\rho^{-1/2}\Big(\sum_iK_i^\dagger\rho K_i\Big)\rho^{-1/2}
+          =\rho^{-1/2}\rho\rho^{-1/2}
+          =\Id.
+        \notag
+    \end{align}
 \end{proof}
 
 \begin{lemma}[Square-root trace-preserving gauge is a gauge equivalence]%

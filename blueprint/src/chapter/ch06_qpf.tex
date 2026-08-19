@@ -482,11 +482,12 @@ and~\cite{Evans1978Spectral}.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:irred_map_smul, thm:psd_fp_unique_irred}
+    \uses{thm:irred_map_smul, thm:psd_fp_unique_irred_cp}
     Choose Kraus operators for $E$ and rescale each by $r^{-1/2}$. Their
     transfer map is $r^{-1}E$, so both $\rho$ and $\sigma$ are fixed points.
-    The rescaled map remains irreducible, and
-    Theorem~\ref{thm:psd_fp_unique_irred} gives the claimed proportionality.
+    The rescaled map remains irreducible and completely positive, and
+    Theorem~\ref{thm:psd_fp_unique_irred_cp} gives the claimed
+    proportionality.
 \end{proof}
 
 \section{Existence and the Perron--Frobenius theorem}
@@ -600,10 +601,7 @@ and~\cite{Evans1978Spectral}.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:kraus_tp_gauge_from_adjoint_fixed}
-    This is the specialization $K_i = A^i$ of
-    Theorem~\ref{thm:kraus_tp_gauge_from_adjoint_fixed}. Conjugating each
-    summand gives
+    Conjugating each summand gives
     $(SA^iS^{-1})^\dagger(SA^iS^{-1})
         =(S^\dagger)^{-1}(A^i)^\dagger\sigma A^iS^{-1}$.
     The adjoint fixed-point substitution leaves
@@ -630,7 +628,10 @@ and~\cite{Evans1978Spectral}.
 \end{theorem}
 
 \begin{proof}\leanok
-    Each conjugated summand is
+    \uses{thm:kraus_tp_gauge_from_adjoint_fixed}
+    This is the specialization $K_i = A^i$ of
+    Theorem~\ref{thm:kraus_tp_gauge_from_adjoint_fixed}. Each conjugated
+    summand is
     $(B^i)^\dagger B^i
         =\sigma^{-1/2}(A^i)^\dagger\sigma A^i\sigma^{-1/2}$.
     Substituting $\sum_i(A^i)^\dagger\sigma A^i=\sigma$ and cancelling
@@ -931,7 +932,7 @@ The TP-gauge application follows~\cite[Appendix~A]{Cirac2016MPDO_arXiv}.
 \begin{proof}
     \leanok
     \uses{thm:posDef_adjoint_eigenvector,
-        thm:tp_gauge_from_adjoint_fixed, thm:spectral_radius_le_one}
+        thm:kraus_tp_gauge_from_adjoint_fixed, thm:kraus_tp_spectral_radius_bound}
     Choose Kraus operators $\{K_i\}$ for $E$. Regarded as an MPS tensor,
     they have transfer map $E$, and irreducibility of $E$ is precisely
     irreducibility of this tensor. Theorem~\ref{thm:posDef_adjoint_eigenvector}
@@ -946,10 +947,11 @@ The TP-gauge application follows~\cite[Appendix~A]{Cirac2016MPDO_arXiv}.
     \end{align}
     Since $\tr(\sigma\rho)>0$, one has $t=r$. Rescale by $r^{-1}$ and
     conjugate by $\sigma^{1/2}$ as in
-    Theorem~\ref{thm:tp_gauge_from_adjoint_fixed}; this produces a
+    Theorem~\ref{thm:kraus_tp_gauge_from_adjoint_fixed}; this produces a
     trace-preserving Kraus map $F$ similar to $r^{-1}E$.
-    The transfer-operator contraction
-    (Theorem~\ref{thm:spectral_radius_le_one}) gives $\rho_{\spec}(F)\leq1$.
+    The trace-preserving spectral-radius bound
+    (Theorem~\ref{thm:kraus_tp_spectral_radius_bound}) gives
+    $\rho_{\spec}(F)\leq1$.
     The conjugate of $\rho$ is a nonzero fixed point of $F$, so $1$ is an
     eigenvalue and $\rho_{\spec}(F)\geq1$. Hence
     $\rho_{\spec}(F)=1$. Similarity preserves the spectrum, and undoing the

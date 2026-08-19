@@ -6,7 +6,6 @@ Authors: TNLean contributors
 import TNLean.Analysis.MatrixSqrt
 import TNLean.Channel.KrausGauge
 import TNLean.MPS.Core.Transfer
-import TNLean.MPS.Core.TransferChannel
 
 import Mathlib.Analysis.CStarAlgebra.ContinuousFunctionalCalculus.Basic
 import Mathlib.Analysis.Matrix.Order
@@ -82,8 +81,9 @@ Then the gauged tensor `tpGauge A ρ` satisfies the trace-preserving condition
 `∑ i, (B i)ᴴ * (B i) = I`.
 
 This is the standard “left-canonical” gauge construction for MPS, derived from
-`Kraus.tpGauge_isTP_of_map_conjTranspose_fixedPoint` via
-`Kraus.mapLM_eq_transferMap`. -/
+`Kraus.tpGauge_isTP_of_map_conjTranspose_fixedPoint` by unfolding `transferMap`
+and `Kraus.map` (`MPSTensor d D` is definitionally a finite matrix family, so
+the two coincide). -/
 theorem tpGauge_isTP_of_transferMap_conjTranspose_fixedPoint
     (A : MPSTensor d D) (ρ : Matrix (Fin D) (Fin D) ℂ)
     (hρ : ρ.PosDef)
