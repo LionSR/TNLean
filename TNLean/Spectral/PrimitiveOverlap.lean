@@ -116,7 +116,7 @@ theorem linearMap_trace_pow_tendsto_one_of_spectralRadius_compl_lt_one
   have hNpow_clm : Filter.Tendsto (fun n => (Φ N) ^ n) Filter.atTop (nhds 0) :=
     by
       exact
-        @pow_tendsto_zero_of_spectralRadius_lt_one (V →L[ℂ] V)
+        @_root_.pow_tendsto_zero_of_spectralRadius_lt_one (V →L[ℂ] V)
           (ContinuousLinearMap.toNormedRing : NormedRing (V →L[ℂ] V))
           hComplete
           (ContinuousLinearMap.toNormedAlgebra : NormedAlgebra ℂ (V →L[ℂ] V)) (Φ N)

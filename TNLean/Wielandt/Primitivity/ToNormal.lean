@@ -138,7 +138,7 @@ theorem IsPrimitiveMPS.complement_pow_tendsto_zero
     let Ê := Φ (transferMap (d := d) (D := D) A -
       fixedPointProj (D := D) ρ hP.trace_ne_zero)
     Tendsto (fun n => Ê ^ n) atTop (nhds 0) :=
-  pow_tendsto_zero_of_spectralRadius_lt_one _ hP.complementary_transfer_map_gap
+  _root_.pow_tendsto_zero_of_spectralRadius_lt_one _ hP.complementary_transfer_map_gap
 
 /-! ## Part 2: Transfer map structure -/
 

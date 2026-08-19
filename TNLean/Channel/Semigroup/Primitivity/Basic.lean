@@ -13,7 +13,6 @@ import TNLean.Channel.Peripheral.PeriodicityRemoval
 import TNLean.Channel.Peripheral.ClosureFixedPointKraus
 import TNLean.Channel.FixedPoint.Cesaro
 import TNLean.Channel.Primitive
-import TNLean.Spectral.TransferOperatorGap
 import Mathlib.Analysis.Calculus.Deriv.Mul
 import Mathlib.NumberTheory.Real.Irrational
 
