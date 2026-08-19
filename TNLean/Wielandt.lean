@@ -8,7 +8,6 @@ Authors: TNLean contributors
 -- Import architecture: docs/import_structure.md.
 -- Generated aggregator module: TNLean.Wielandt
 
-import TNLean.Wielandt.FittingDecomposition
 import TNLean.Wielandt.Inequality
 import TNLean.Wielandt.Primitivity
 import TNLean.Wielandt.RankOne
