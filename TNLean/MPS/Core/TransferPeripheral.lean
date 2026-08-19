@@ -139,6 +139,42 @@ theorem peripheralEigenvalues_eq_range_primitiveRoot {d D : ℕ} [NeZero D]
   exact Kraus.peripheralEigenvalues_eq_range_primitiveRoot
     K h_unital ρ hρ hfix hIrr'
 
+/-- Deprecated alias of `Kraus.one_sub_mul_kraus_mul_eq_zero_of_mapLM_proj`, restated over the
+MPS transfer map instead of the finite Kraus map. -/
+@[deprecated Kraus.one_sub_mul_kraus_mul_eq_zero_of_mapLM_proj (since := "2026-08-19")]
+theorem one_sub_mul_kraus_mul_eq_zero_of_transferMap_proj
+    {r n : ℕ} (K : Fin r → MatrixAlg n) {P P' : MatrixAlg n}
+    (hP : IsOrthogonalProjection P) (hP' : IsOrthogonalProjection P')
+    (hmap : transferMap (d := r) (D := n) K P' = P) :
+    ∀ v, (1 - P) * K v * P' = 0 := by
+  have hmap' : Kraus.mapLM K P' = P := by rw [Kraus.mapLM_eq_transferMap]; exact hmap
+  exact Kraus.one_sub_mul_kraus_mul_eq_zero_of_mapLM_proj K hP hP' hmap'
+
+/-- Deprecated alias of `Kraus.kraus_mul_cyclicProj`, restated over the MPS transfer map instead
+of the finite Kraus map. -/
+@[deprecated Kraus.kraus_mul_cyclicProj (since := "2026-08-19")]
+theorem kraus_mul_cyclicProj
+    {r n m : ℕ} [NeZero m] (K : Fin r → MatrixAlg n) (P : Fin m → MatrixAlg n)
+    (hproj : ∀ k, IsOrthogonalProjection (P k))
+    (hsum : ∑ k : Fin m, P k = 1)
+    (hcyclic : ∀ k : Fin m, transferMap (d := r) (D := n) K (P (k + 1)) = P k) :
+    ∀ (v : Fin r) (k : Fin m), K v * P (k + 1) = P k * K v := by
+  have hcyclic' : ∀ k : Fin m, Kraus.mapLM K (P (k + 1)) = P k := fun k => by
+    rw [Kraus.mapLM_eq_transferMap]; exact hcyclic k
+  exact Kraus.kraus_mul_cyclicProj K P hproj hsum hcyclic'
+
+/-- Deprecated alias of `Kraus.cyclicProj_ne_zero`, restated over the MPS transfer map instead of
+the finite Kraus map. -/
+@[deprecated Kraus.cyclicProj_ne_zero (since := "2026-08-19")]
+theorem cyclicProj_ne_zero
+    {r n m : ℕ} [NeZero m] [NeZero n] (K : Fin r → MatrixAlg n) (P : Fin m → MatrixAlg n)
+    (hsum : ∑ k : Fin m, P k = 1)
+    (hcyclic : ∀ k : Fin m, transferMap (d := r) (D := n) K (P (k + 1)) = P k) :
+    ∀ k : Fin m, P k ≠ 0 := by
+  have hcyclic' : ∀ k : Fin m, Kraus.mapLM K (P (k + 1)) = P k := fun k => by
+    rw [Kraus.mapLM_eq_transferMap]; exact hcyclic k
+  exact Kraus.cyclicProj_ne_zero K P hsum hcyclic'
+
 /-- **Word-level cyclic shift**: a word $A^w=K_{w_1}\cdots K_{w_\ell}$ of
 length $\ell$ moves each cyclic projection back by $\ell$ steps,
 $A^wP_k=P_{k-\ell}A^w$.  In particular a word of length $m$ commutes with

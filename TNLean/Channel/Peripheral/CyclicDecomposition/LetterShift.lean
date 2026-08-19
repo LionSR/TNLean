@@ -52,7 +52,7 @@ namespace Kraus
 
 variable {r n m : ℕ}
 
-/-- **Kraus operators respect a mapped projection pair.**  If the Kraus map of
+/-- **Kraus operators intertwine a mapped projection pair.**  If the Kraus map of
 the family `K` sends the orthogonal projection `P'` to the orthogonal
 projection `P`, then each Kraus operator maps the range of `P'` into the
 range of `P`: `(1 - P) * K v * P' = 0`.
