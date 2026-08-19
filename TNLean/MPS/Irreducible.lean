@@ -12,4 +12,5 @@ import TNLean.MPS.Irreducible.Adjoint
 import TNLean.MPS.Irreducible.FixedPointProjection
 import TNLean.MPS.Irreducible.FormII
 import TNLean.MPS.Irreducible.PeriodicBlocking
+import TNLean.MPS.Irreducible.PerronGauge
 import TNLean.MPS.Irreducible.ScalarFixedPoint

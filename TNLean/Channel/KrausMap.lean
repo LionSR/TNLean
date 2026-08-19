@@ -19,6 +19,8 @@ $E(X) = \sum_i K_i X K_i^\dagger$ with positivity, complete positivity, and trac
 * `Kraus.isTracePreservingMap_mapLM_of_isTP`: the Kraus normalization implies trace
   preservation.
 * `Kraus.isChannel_mapLM`: a trace-preserving finite Kraus family defines a channel.
+* `Kraus.mapLM_ne_zero_of_exists_ne_zero`: a finite Kraus map with a nonzero
+  Kraus operator is nonzero.
 -/
 
 open scoped Matrix ComplexOrder MatrixOrder BigOperators
@@ -54,5 +56,16 @@ theorem isTracePreservingMap_mapLM_of_isTP (K : Fin d → Mat) (h_tp : IsTP K) :
 /-- A trace-preserving finite Kraus family defines a quantum channel. -/
 theorem isChannel_mapLM (K : Fin d → Mat) (h_tp : IsTP K) : IsChannel (mapLM K) :=
   ⟨isCPMap_mapLM K, isTracePreservingMap_mapLM_of_isTP K h_tp⟩
+
+/-- A finite Kraus map with a nonzero Kraus operator is nonzero. -/
+theorem mapLM_ne_zero_of_exists_ne_zero
+    (K : Fin d → Mat) (hK : ∃ i, K i ≠ 0) :
+    mapLM K ≠ 0 := by
+  intro h
+  obtain ⟨i, hi⟩ := hK
+  have h1 : mapLM K (1 : Mat) = 0 := by
+    rw [h]; simp
+  simp only [mapLM_apply, map_apply, Matrix.mul_one] at h1
+  exact hi (Matrix.eq_zero_of_sum_mul_conjTranspose_eq_zero K h1 i)
 
 end Kraus

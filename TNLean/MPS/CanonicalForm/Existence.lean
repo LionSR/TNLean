@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.CanonicalForm.Reduction
-import TNLean.Channel.PerronFrobenius.Existence
+import TNLean.MPS.Irreducible.PerronGauge
 import TNLean.MPS.Irreducible.FormII
 import TNLean.MPS.Overlap.PeripheralToTransferMapGap
 import TNLean.Wielandt.Primitivity.StronglyIrreducibleToFullRank
