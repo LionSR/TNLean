@@ -203,9 +203,16 @@ theorem exists_cyclic_sector_decomp_after_blocking_with_letter_and_isometry
   let K : Fin d → MatrixAlg D := fun i => (A i)ᴴ
   have hUnital : IsUnitalKraus (d := d) (D := D) K := by
     simpa [IsUnitalKraus, K] using hTP
-  obtain ⟨U, P, hU, hPow, hUm, hPproj, hPsum, hUspec, hcyclic⟩ :=
+  have hIrrMap' : IsIrreducibleMap (Kraus.mapLM K) := by
+    rw [Kraus.mapLM_eq_transferMap]; exact hIrrMap
+  have hperiph' : peripheralEigenvalues (Kraus.mapLM K) =
+      Set.range (fun j : Fin m => γ ^ (j : ℕ)) := by
+    rw [Kraus.mapLM_eq_transferMap]; exact hperiph
+  obtain ⟨U, P, hU, hPow, hUm, hPproj, hPsum, hUspec, hcyclic'⟩ :=
     Kraus.exists_cyclic_decomposition_of_irreducible_schwarz
-      (K := K) hUnital ρ hρ hρfix hIrrMap hγprim hperiph
+      (K := K) hUnital ρ hρ hρfix hIrrMap' hγprim hperiph'
+  have hcyclic : ∀ k, transferMap (d := d) (D := D) K (P (k + 1)) = P k := by
+    intro k; rw [← Kraus.mapLM_eq_transferMap]; exact hcyclic' k
   -- Step 2: (E†)^m fixes each P_k
   have hPow_fix : ∀ k : Fin m,
       ((transferMap (d := d) (D := D) K) ^ m) (P k) = P k :=

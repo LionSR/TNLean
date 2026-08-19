@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.Channel.KrausCornerCompression
 import TNLean.Channel.Peripheral.CyclicDecomposition
+import TNLean.MPS.Core.Transfer
 
 /-!
 # Compression to cyclic sectors

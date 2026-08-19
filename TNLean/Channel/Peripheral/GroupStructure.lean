@@ -141,13 +141,13 @@ private lemma period_dvd_dim_of_cyclic_projections
     (P : Fin m → MatrixAlg D)
     (hPproj : ∀ k, IsOrthogonalProjection (P k))
     (hPsum : ∑ k, P k = 1)
-    (hcyclic : ∀ k, MPSTensor.transferMap (d := r) (D := D) K (P (k + 1)) = P k) :
+    (hcyclic : ∀ k, Kraus.mapLM K (P (k + 1)) = P k) :
     m ∣ D := by
-  set E := MPSTensor.transferMap (d := r) (D := D) K
+  set E := Kraus.mapLM K
   have htrace_pres :
       ∀ X : MatrixAlg D, Matrix.trace (E X) = Matrix.trace X := by
     intro X
-    simpa [E, MPSTensor.transferMap_apply, KadisonSchwarz.krausMap] using
+    simpa [E, Kraus.mapLM_apply, Kraus.map_apply, KadisonSchwarz.krausMap] using
       (KadisonSchwarz.trace_krausMap_of_tp (D := D) K hTP X)
   have htrace_step : ∀ k : Fin m, Matrix.trace (P k) = Matrix.trace (P (k + 1)) := by
     intro k
@@ -188,11 +188,11 @@ theorem peripheral_eigenvalues_closed_under_mul
     (hUnital : KadisonSchwarz.IsUnitalKraus (d := r) (D := D) K)
     (ρ : MatrixAlg D) (hρ : ρ.PosDef)
     (hρfix : Kraus.adjointMap K ρ = ρ)
-    (hIrr : IsIrreducibleMap (MPSTensor.transferMap (d := r) (D := D) K))
+    (hIrr : IsIrreducibleMap (Kraus.mapLM K))
     {α β : ℂ}
-    (hα : α ∈ peripheralEigenvalues (MPSTensor.transferMap (d := r) (D := D) K))
-    (hβ : β ∈ peripheralEigenvalues (MPSTensor.transferMap (d := r) (D := D) K)) :
-    (α * β) ∈ peripheralEigenvalues (MPSTensor.transferMap (d := r) (D := D) K) := by
+    (hα : α ∈ peripheralEigenvalues (Kraus.mapLM K))
+    (hβ : β ∈ peripheralEigenvalues (Kraus.mapLM K)) :
+    (α * β) ∈ peripheralEigenvalues (Kraus.mapLM K) := by
   -- Get unitary eigenvectors U_α and U_β from CyclicDecomposition.
   obtain ⟨Uα, hUα⟩ := Kraus.exists_peripheral_unitary_of_irreducible_schwarz
     K hUnital ρ hρ hρfix hIrr hα
@@ -205,7 +205,7 @@ theorem peripheral_eigenvalues_closed_under_mul
       simpa [Kraus.IsUnital, KadisonSchwarz.IsUnitalKraus] using hUnital
     -- Convert eigenvector eq for Uβ to Kraus.map, then get KS equality
     have hUβ_map : Kraus.map K (Uβ : MatrixAlg D) = β • (Uβ : MatrixAlg D) := by
-      simpa [Kraus.map, MPSTensor.transferMap_apply] using hUβ
+      simpa [Kraus.map, Kraus.mapLM_apply, Kraus.map_apply] using hUβ
     have hKSβ_map :=
       Kraus.ks_equality_of_peripheral_eigenvector_of_fixedPoint
         K hUnital' hρ hρfix _ β hUβ_map hβ.2
@@ -222,17 +222,17 @@ theorem peripheral_eigenvalues_closed_under_mul
     -- Compute: E(Uα) · E(Uβ) = (α · Uα)(β · Uβ) = αβ · (Uα · Uβ)
     have hUα_kraus : KadisonSchwarz.krausMap K (Uα : MatrixAlg D) =
         α • (Uα : MatrixAlg D) := by
-      simpa [KadisonSchwarz.krausMap, MPSTensor.transferMap_apply] using hUα
+      simpa [KadisonSchwarz.krausMap, Kraus.mapLM_apply, Kraus.map_apply] using hUα
     have hUβ_kraus : KadisonSchwarz.krausMap K (Uβ : MatrixAlg D) =
         β • (Uβ : MatrixAlg D) := by
-      simpa [KadisonSchwarz.krausMap, MPSTensor.transferMap_apply] using hUβ
-    have hprod_transfer : MPSTensor.transferMap (d := r) (D := D) K
+      simpa [KadisonSchwarz.krausMap, Kraus.mapLM_apply, Kraus.map_apply] using hUβ
+    have hprod_transfer : Kraus.mapLM K
         ((Uα : MatrixAlg D) * (Uβ : MatrixAlg D)) =
         (α * β) • ((Uα : MatrixAlg D) * (Uβ : MatrixAlg D)) := by
       have : KadisonSchwarz.krausMap K ((Uα : MatrixAlg D) * (Uβ : MatrixAlg D)) =
           (α * β) • ((Uα : MatrixAlg D) * (Uβ : MatrixAlg D)) := by
         rw [hprod_kraus, hUα_kraus, hUβ_kraus, smul_mul_assoc, mul_smul_comm, smul_smul]
-      simpa [KadisonSchwarz.krausMap, MPSTensor.transferMap_apply] using this
+      simpa [KadisonSchwarz.krausMap, Kraus.mapLM_apply, Kraus.map_apply] using this
     -- Product of unitaries is nonzero (left-cancel by Uα†)
     have hprod_ne : (Uα : MatrixAlg D) * (Uβ : MatrixAlg D) ≠ 0 := by
       intro h
@@ -263,17 +263,17 @@ theorem peripheral_eigenvalues_closed_under_inv
     (hUnital : KadisonSchwarz.IsUnitalKraus (d := r) (D := D) K)
     (ρ : MatrixAlg D) (hρ : ρ.PosDef)
     (hρfix : Kraus.adjointMap K ρ = ρ)
-    (hIrr : IsIrreducibleMap (MPSTensor.transferMap (d := r) (D := D) K))
+    (hIrr : IsIrreducibleMap (Kraus.mapLM K))
     {α : ℂ}
-    (hα : α ∈ peripheralEigenvalues (MPSTensor.transferMap (d := r) (D := D) K)) :
-    α⁻¹ ∈ peripheralEigenvalues (MPSTensor.transferMap (d := r) (D := D) K) := by
+    (hα : α ∈ peripheralEigenvalues (Kraus.mapLM K)) :
+    α⁻¹ ∈ peripheralEigenvalues (Kraus.mapLM K) := by
   constructor
   · -- HasEigenvalue for α⁻¹: Uα† is the eigenvector
     obtain ⟨Uα, hUα⟩ := Kraus.exists_peripheral_unitary_of_irreducible_schwarz
       K hUnital ρ hρ hρfix hIrr hα
     -- E(Uα†) = (E(Uα))† = (α · Uα)† = α' · Uα† = α⁻¹ · Uα†
     have hUα_map : Kraus.map K (Uα : MatrixAlg D) = α • (Uα : MatrixAlg D) := by
-      simpa [Kraus.map, MPSTensor.transferMap_apply] using hUα
+      simpa [Kraus.map, Kraus.mapLM_apply, Kraus.map_apply] using hUα
     -- α' = α⁻¹ when |α| = 1
     have hconj_eq_inv : starRingEnd ℂ α = α⁻¹ :=
       (Complex.inv_eq_conj hα.2).symm
@@ -281,9 +281,9 @@ theorem peripheral_eigenvalues_closed_under_inv
         α⁻¹ • (Uα : MatrixAlg D)ᴴ := by
       rw [← Kraus.map_conjTranspose, hUα_map, conjTranspose_smul]
       simp only [Complex.star_def, hconj_eq_inv]
-    have hconj_transfer : MPSTensor.transferMap (d := r) (D := D) K (Uα : MatrixAlg D)ᴴ =
+    have hconj_transfer : Kraus.mapLM K (Uα : MatrixAlg D)ᴴ =
         α⁻¹ • (Uα : MatrixAlg D)ᴴ := by
-      simpa [Kraus.map, MPSTensor.transferMap_apply] using hmap_conj
+      simpa [Kraus.map, Kraus.mapLM_apply, Kraus.map_apply] using hmap_conj
     -- Uα† is nonzero
     have hUα_conj_ne : (Uα : MatrixAlg D)ᴴ ≠ 0 := by
       intro h
@@ -325,17 +325,17 @@ theorem peripheral_eigenvalues_cyclic_structure
     (hUnital : KadisonSchwarz.IsUnitalKraus (d := r) (D := D) K)
     (ρ : MatrixAlg D) (hρ : ρ.PosDef)
     (hρfix : Kraus.adjointMap K ρ = ρ)
-    (hIrr : IsIrreducibleMap (MPSTensor.transferMap (d := r) (D := D) K)) :
+    (hIrr : IsIrreducibleMap (Kraus.mapLM K)) :
     ∃ (m : ℕ) (γ : ℂ),
       0 < m ∧
       IsPrimitiveRoot γ m ∧
-      peripheralEigenvalues (MPSTensor.transferMap (d := r) (D := D) K) =
+      peripheralEigenvalues (Kraus.mapLM K) =
         {z : ℂ | ∃ k : Fin m, z = γ ^ (k : ℕ)} := by
   classical
-  set E := MPSTensor.transferMap (d := r) (D := D) K with hE_def
+  set E := Kraus.mapLM K with hE_def
   -- E is unital: E(1) = 1
   have hE_unital : E 1 = 1 := by
-    simp only [hE_def, MPSTensor.transferMap_apply]
+    simp only [hE_def, Kraus.mapLM_apply, Kraus.map_apply]
     exact KadisonSchwarz.krausMap_one_of_unital K hUnital
   -- 1 is a peripheral eigenvalue (since E(1) = 1 and 1 ≠ 0)
   have hone_mem : (1 : ℂ) ∈ peripheralEigenvalues E :=
@@ -465,26 +465,26 @@ theorem peripheral_eigenvalues_form_cyclic_group
     (hTP : KadisonSchwarz.IsTPKraus (d := r) (D := D) K)
     (ρ : MatrixAlg D) (hρ : ρ.PosDef)
     (hρfix : Kraus.adjointMap K ρ = ρ)
-    (hIrr : IsIrreducibleMap (MPSTensor.transferMap (d := r) (D := D) K)) :
+    (hIrr : IsIrreducibleMap (Kraus.mapLM K)) :
     ∃ (m : ℕ) (γ : ℂ),
       0 < m ∧
       IsPrimitiveRoot γ m ∧
       m ∣ D ∧
-      peripheralEigenvalues (MPSTensor.transferMap (d := r) (D := D) K) =
+      peripheralEigenvalues (Kraus.mapLM K) =
         {z : ℂ | ∃ k : Fin m, z = γ ^ (k : ℕ)} := by
   obtain ⟨m, γ, hm_pos, hγ_prim, hset_eq⟩ :=
     peripheral_eigenvalues_cyclic_structure K hUnital ρ hρ hρfix hIrr
   -- m ∣ D via cyclic decomposition
   have hm_dvd : m ∣ D := by
     -- γ is a peripheral eigenvalue (it's γ^1)
-    have hγ_mem : γ ∈ peripheralEigenvalues (MPSTensor.transferMap (d := r) (D := D) K) := by
+    have hγ_mem : γ ∈ peripheralEigenvalues (Kraus.mapLM K) := by
       rw [hset_eq]
       by_cases hm1 : m = 1
       · have hγ1 : γ = 1 := by have := hγ_prim.pow_eq_one; rw [hm1] at this; simpa using this
         exact ⟨⟨0, by omega⟩, by simp [hγ1]⟩
       · exact ⟨⟨1, by omega⟩, by simp⟩
     -- Convert set representation to Set.range form
-    have hperiph_range : peripheralEigenvalues (MPSTensor.transferMap (d := r) (D := D) K) =
+    have hperiph_range : peripheralEigenvalues (Kraus.mapLM K) =
         Set.range (fun j : Fin m => γ ^ (j : ℕ)) := by
       rw [hset_eq]; ext x; simp [Set.mem_range, eq_comm]
     have : NeZero m := ⟨by omega⟩
@@ -512,13 +512,13 @@ theorem peripheral_eigenvalue_multiplicity_one
     (hUnital : KadisonSchwarz.IsUnitalKraus (d := r) (D := D) K)
     (ρ : MatrixAlg D) (hρ : ρ.PosDef)
     (hρfix : Kraus.adjointMap K ρ = ρ)
-    (hIrr : IsIrreducibleMap (MPSTensor.transferMap (d := r) (D := D) K))
+    (hIrr : IsIrreducibleMap (Kraus.mapLM K))
     {γ : ℂ}
-    (hγ : γ ∈ peripheralEigenvalues (MPSTensor.transferMap (d := r) (D := D) K)) :
+    (hγ : γ ∈ peripheralEigenvalues (Kraus.mapLM K)) :
     Module.finrank ℂ
-      (Module.End.eigenspace (MPSTensor.transferMap (d := r) (D := D) K) γ) = 1 := by
+      (Module.End.eigenspace (Kraus.mapLM K) γ) = 1 := by
   classical
-  set E := MPSTensor.transferMap (d := r) (D := D) K
+  set E := Kraus.mapLM K
   obtain ⟨U, hU_eig⟩ := Kraus.exists_peripheral_unitary_of_irreducible_schwarz
     K hUnital ρ hρ hρfix hIrr hγ
   have hU_ne : (U : MatrixAlg D) ≠ 0 := by
@@ -533,7 +533,7 @@ theorem peripheral_eigenvalue_multiplicity_one
     intro X hX
     have hX_eig : E X = γ • X := Module.End.mem_eigenspace_iff.mp hX
     have hU_map : Kraus.map K (U : MatrixAlg D) = γ • (U : MatrixAlg D) := by
-      simpa [Kraus.map, E, MPSTensor.transferMap_apply] using hU_eig
+      simpa [Kraus.map, E, Kraus.mapLM_apply, Kraus.map_apply] using hU_eig
     have hγ_inv : (starRingEnd ℂ) γ = γ⁻¹ := (Complex.inv_eq_conj hγ.2).symm
     have hUstar_map : Kraus.map K ((U : MatrixAlg D)ᴴ) = γ⁻¹ • ((U : MatrixAlg D)ᴴ) := by
       rw [← Kraus.map_conjTranspose, hU_map, conjTranspose_smul]
@@ -560,12 +560,13 @@ theorem peripheral_eigenvalue_multiplicity_one
       KadisonSchwarz.multiplicative_domain_right K hUnital
         ((U : MatrixAlg D)ᴴ) hKS_Ustar X
     have hUstar_eig : E ((U : MatrixAlg D)ᴴ) = γ⁻¹ • ((U : MatrixAlg D)ᴴ) := by
-      simpa [E, Kraus.map, MPSTensor.transferMap_apply] using hUstar_map
+      simpa [E, Kraus.map, Kraus.mapLM_apply, Kraus.map_apply] using hUstar_map
     have hXU_fix : E (X * (U : MatrixAlg D)ᴴ) = X * (U : MatrixAlg D)ᴴ := by
       calc
         E (X * (U : MatrixAlg D)ᴴ)
             = E X * E ((U : MatrixAlg D)ᴴ) := by
-                simpa [E, MPSTensor.transferMap_apply, KadisonSchwarz.krausMap] using hmul_map
+                simpa [E, Kraus.mapLM_apply, Kraus.map_apply, KadisonSchwarz.krausMap]
+                  using hmul_map
         _ = (γ • X) * (γ⁻¹ • ((U : MatrixAlg D)ᴴ)) := by rw [hX_eig, hUstar_eig]
         _ = ((γ * γ⁻¹ : ℂ)) • (X * (U : MatrixAlg D)ᴴ) := by
               rw [smul_mul_assoc, mul_smul_comm, smul_smul]
@@ -615,15 +616,15 @@ theorem channel_period_divides_dim
     (hTP : KadisonSchwarz.IsTPKraus (d := r) (D := D) K)
     (ρ : MatrixAlg D) (hρ : ρ.PosDef)
     (hρfix : Kraus.adjointMap K ρ = ρ)
-    (hIrr : IsIrreducibleMap (MPSTensor.transferMap (d := r) (D := D) K))
+    (hIrr : IsIrreducibleMap (Kraus.mapLM K))
     {m : ℕ} {γ : ℂ} (hm : 0 < m)
     (hγprim : IsPrimitiveRoot γ m)
-    (_hγ : γ ∈ peripheralEigenvalues (MPSTensor.transferMap (d := r) (D := D) K))
-    (hgen : peripheralEigenvalues (MPSTensor.transferMap (d := r) (D := D) K) =
+    (_hγ : γ ∈ peripheralEigenvalues (Kraus.mapLM K))
+    (hgen : peripheralEigenvalues (Kraus.mapLM K) =
       {z : ℂ | ∃ k : Fin m, z = γ ^ (k : ℕ)}) :
     m ∣ D := by
   -- Get cyclic decomposition
-  set E := MPSTensor.transferMap (d := r) (D := D) K
+  set E := Kraus.mapLM K
   have : NeZero m := ⟨by omega⟩
   have hperiph_range : peripheralEigenvalues E =
       Set.range (fun j : Fin m => γ ^ (j : ℕ)) := by

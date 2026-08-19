@@ -396,12 +396,14 @@ private theorem exists_cyclic_sector_decomp_with_peripheral_data_of_TP_of_irredu
         (∀ k, dim k ≠ 0) := by
   obtain ⟨K, h_unitalK, hIrrK, ρ, hρ_pd, h_adjfix, rfl⟩ :=
     conjTranspose_kraus_setup A hTP hIrr
+  have hIrrKLM : IsIrreducibleMap (Kraus.mapLM (fun i => (A i)ᴴ)) := by
+    rw [Kraus.mapLM_eq_transferMap]; exact hIrrK
   obtain ⟨m, γ, hm_pos, hγ_prim, hperiph_set⟩ :=
-    PeripheralSpectrum.peripheral_eigenvalues_cyclic_structure _ h_unitalK ρ hρ_pd h_adjfix hIrrK
+    PeripheralSpectrum.peripheral_eigenvalues_cyclic_structure _ h_unitalK ρ hρ_pd h_adjfix hIrrKLM
   have hperiph_range :
       peripheralEigenvalues (transferMap (d := d) (D := D) (fun i => (A i)ᴴ)) =
         Set.range (fun j : Fin m => γ ^ (j : ℕ)) := by
-    rw [hperiph_set]
+    rw [← Kraus.mapLM_eq_transferMap, hperiph_set]
     ext x
     simp [Set.mem_range, eq_comm]
   let hne : NeZero m := ⟨Nat.ne_of_gt hm_pos⟩
