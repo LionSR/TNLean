@@ -15,8 +15,8 @@ import Mathlib.LinearAlgebra.Matrix.Reindex
 This file carries the word-evaluation layer of the channel side: a
 generalization of `MPSTensor.evalWord` to matrices indexed by an arbitrary
 finite type (in particular, the `Σ`-type indices produced by
-`Matrix.blockDiagonal'`), together with the block-diagonal compatibility
-lemmas and the bridge back to the canonical `Fin D`-indexed `evalWord`. It is
+`Matrix.blockDiagonal'`), together with compatibility lemmas identifying it
+with the canonical `Fin D`-indexed `evalWord`. It is
 part of the extraction of a Kraus-family-only library out of
 `TNLean`'s matrix-product-state development.
 

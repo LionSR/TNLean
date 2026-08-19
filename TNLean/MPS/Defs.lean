@@ -15,14 +15,13 @@ import TNLean.Kraus.Injectivity
 # Basic definitions for matrix product state tensors
 
 This file contains the core definitions used throughout the MPS development:
-MPV coefficients, gauge equivalence, and the WORD-to-STATE bridge lemmas
-connecting them to word evaluation, injectivity, and normality. The
-`MPSTensor` abbrev itself, together with word evaluation, injectivity, block
-injectivity, and normality, now live in `TNLean/Kraus/Word.lean` and
-`TNLean/Kraus/Injectivity.lean`; this file
-imports them and keeps only the matrix-product-vector vocabulary and the
-gauge-invariance bridge lemmas for `evalWord`, `SameMPV`, and eventual block
-injectivity.
+MPV coefficients, gauge equivalence, and the word-to-state lemmas connecting
+them to word evaluation, injectivity, and normality. The `MPSTensor` abbrev
+itself, together with word evaluation, injectivity, block injectivity, and
+normality, now live in `TNLean/Kraus/Word.lean` and
+`TNLean/Kraus/Injectivity.lean`; this file imports them and keeps only the
+matrix-product-vector vocabulary and the gauge-invariance lemmas for
+`evalWord`, `SameMPV`, and eventual block injectivity.
 
 ## Main declarations
 
