@@ -19,8 +19,9 @@ a lower bound on `1 - ρ`).
 
 ## Building blocks (already formalized elsewhere)
 
-* `pow_tendsto_zero_of_spectralRadius_lt_one` in `Spectral/TransferOperatorGap.lean` —
-  exponential convergence to zero when spectral radius < 1
+* `MPSTensor.geometric_bound_of_spectralRadius_lt_one` in
+  `Spectral/TransferOperatorGapCommon.lean` — a uniform geometric operator-norm
+  bound when spectral radius < 1
 * `compl_eigenvalue_norm_lt_one_of_primitive` in `Peripheral/Spectrum.lean` —
   primitive channels have a complementary transfer-map gap
 * `cumulativeSpan_eq_top` in `Wielandt/SpanGrowth/NonzeroTraceProduct.lean` —
@@ -265,9 +266,11 @@ exponentially under the transfer map iteration. The rate is determined by
 the complementary transfer-map gap, which exists because injectivity implies
 primitivity.
 
-This uses `pow_tendsto_zero_of_spectralRadius_lt_one` from
-`Spectral/TransferOperatorGap.lean` directly — traceless matrices lie in
-`ker(P) = range(E - P)`, where `E - P` has spectral radius < 1. -/
+Traceless matrices lie in `ker(P) = range(E - P)`, where `E - P` has spectral
+radius < 1, so their iterates decay geometrically. The bound is the pointwise
+form `geometric_apply_bound_of_spectralRadius_lt_one` of
+`MPSTensor.geometric_bound_of_spectralRadius_lt_one` in
+`Spectral/TransferOperatorGapCommon.lean`. -/
 theorem correlation_length_bound [NeZero D]
     (A : MPSTensor d D)
     (hNorm : ∑ i : Fin d, (A i)ᴴ * A i = 1)

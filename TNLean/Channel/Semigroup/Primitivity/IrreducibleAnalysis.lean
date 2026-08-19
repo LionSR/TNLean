@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import TNLean.Analysis.SpectralRadiusPowerDecay
 import TNLean.Channel.Semigroup.Primitivity.Helpers
 import TNLean.Channel.Irreducible.FromSpectral
 import TNLean.Channel.Peripheral.IrreducibleChannel
@@ -37,7 +38,7 @@ theorem primitive_channel_pow_tendsto_zero_of_trace_zero [NeZero D]
   have hpow0 : Filter.Tendsto
       (fun n : ℕ => ((Module.End.toContinuousLinearMap Mat) (E - P)) ^ n)
       Filter.atTop (nhds 0) :=
-    MPSTensor.pow_tendsto_zero_of_spectralRadius_lt_one _ hsr_lt
+    pow_tendsto_zero_of_spectralRadius_lt_one _ hsr_lt
   have hNpow0 : Filter.Tendsto (fun n : ℕ => ((E - P) ^ n) X) Filter.atTop (nhds 0) := by
     have hEval : Continuous (fun A : Mat →L[ℂ] Mat => A X) :=
       (ContinuousLinearMap.apply ℂ Mat X).continuous

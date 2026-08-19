@@ -210,7 +210,7 @@ theorem mixedTransferMap₂_pow_tendsto_zero_of_spectralRadius_lt_one
           Matrix (Fin D₁) (Fin D₂) ℂ →L[ℂ] Matrix (Fin D₁) (Fin D₂) ℂ) < 1
     simpa only [mixedTransferSpectralRadius₂] using h
   have hF : Filter.Tendsto (fun n => F ^ n) Filter.atTop (nhds 0) :=
-    @pow_tendsto_zero_of_spectralRadius_lt_one (V →L[ℂ] V)
+    @_root_.pow_tendsto_zero_of_spectralRadius_lt_one (V →L[ℂ] V)
       (ContinuousLinearMap.toNormedRing : NormedRing (V →L[ℂ] V)) hComplete
       (ContinuousLinearMap.toNormedAlgebra : NormedAlgebra ℂ (V →L[ℂ] V))
       F hSpectralRadius
