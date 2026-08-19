@@ -42,8 +42,8 @@ The three Jensen wrappers below are proved from the boundary declarations in
 `TNLean.Analysis.LiebConcavity`.  The concave real-power theorem is proved
 there by the finite-POVM / compression integrand route, and the logarithmic
 theorem is proved from it by taking the right limit `p → 0+` in
-`(A ^ p - 1) / p`.  The convex real-power wrapper still rests on the remaining
-positive-map Jensen axiom.
+`(A ^ p - 1) / p`.  The convex real-power wrapper is proved from the boundary
+declaration `posMap_rpow_convex_jensen` in the same module.
 
 These are consumed by the Corollary 5.2 proofs in `OperatorMonotone.lean`.
 

@@ -28,7 +28,7 @@ fixed-point theorem applied to the normalization map
 `ρ ↦ E(ρ) / tr(E(ρ))` on the compact convex set of density matrices.
 
 The required density-matrix Brouwer theorem is proved in
-`TNLean.Axioms.BrouwerFixedPoint`.
+`TNLean.Channel.FixedPoint.BrouwerDensityMatrices`.
 
 ## Main results
 

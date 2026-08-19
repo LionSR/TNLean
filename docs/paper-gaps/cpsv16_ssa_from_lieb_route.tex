@@ -39,12 +39,13 @@ $S(\rho) = \sum_i \eta(\lambda_i)$, $\eta(x) = -x\log x$, of
 \doclink{TNLean/Analysis/Entropy}.}
 The derivation rests on the operator-concavity input that the same development
 already isolates for the Ando--Lieb theory, namely Lieb's joint concavity
-theorem.\footnote{Lieb concavity is the axiom
+theorem.\footnote{Lieb concavity is the theorem
 \leanid{lieb_concavity_posDef} in \doclink{TNLean/Analysis/LiebConcavity}
 (\path{TNLean/Analysis/LiebConcavity.lean}), consumed by
 \leanid{lieb_concavity} in \doclink{TNLean/Channel/Schwarz/AndoLieb}.}
-The only entropy-side axiom in the closure of
-\leanid{strong_subadditivity_general} is therefore \leanid{lieb_concavity_posDef}.
+The only entropy-side dependency in the closure of
+\leanid{strong_subadditivity_general}, formerly the axiom, is now the proved
+theorem \leanid{lieb_concavity_posDef}.
 This note records the mathematical route that connects the two, layer by layer.
 
 \section{The point at issue}
@@ -100,7 +101,7 @@ the following.
     the step that consumes Lieb's joint concavity theorem: the concavity of
     $(A,B)\mapsto \tr\!\bigl(K^{\dagger} A^{s} K B^{1-s}\bigr)$ for
     $s\in[0,1]$ yields, in the limit governing the derivative at $s=1$, the
-    convexity of the relative entropy. The present formal Lieb axiom is stated
+    convexity of the relative entropy. The present formal Lieb theorem is stated
     for positive definite inputs, whereas the relative-entropy domain in layer
     (2) allows singular reference states provided
     $\ker\sigma\subseteq\ker\rho$. Therefore this layer also needs the standard
@@ -205,7 +206,7 @@ the following.
 The mathematical question is therefore not whether~\eqref{eq:ssa} is true --- it
 is a theorem of Lieb and Ruskai --- but which of the layers (2)--(6) must be
 built so that the standalone axiom can be deleted and replaced by a proof whose
-only entropy-side input is the Lieb-concavity axiom already present.
+only entropy-side input is the Lieb-concavity theorem already present.
 
 \section{The elimination route}
 
@@ -374,9 +375,10 @@ in place. Concretely:
     \leanid{rel_entropy_eval_support}, which regularizes the reduced state through
     the affine perturbation $(1+d_R\varepsilon)^{-1}(\rho_R+\varepsilon\mathbf 1)$
     and passes to the limit, the tensor logarithm split being unavailable for a
-    singular reference. Its only entropy-side axiom is the Lieb-concavity axiom, so
-    this theorem discharges the content of the standalone strong subadditivity
-    axiom on the full density-matrix domain.
+    singular reference. Its only entropy-side dependency, formerly the axiom, is
+    now the proved theorem \leanid{lieb_concavity_posDef}, so this theorem
+    discharges the content of the standalone strong subadditivity axiom on the
+    full density-matrix domain.
 \end{itemize}
 
 \paragraph{Current formal status.} Layers (1)--(6) are formalized, with layers
@@ -407,7 +409,8 @@ The layer-(6) instantiation is formalized on the full density-matrix domain. The
 positive-definite case (\leanid{strong_subadditivity_posDef}) is the base case,
 and the singular-reference extension to every positive semidefinite unit-trace
 $\rho_{ABC}$ is \leanid{strong_subadditivity_general}, whose only entropy-side
-axiom is the Lieb-concavity axiom. The marginal support lemma places the singular
+dependency, formerly the axiom, is now the proved theorem
+\leanid{lieb_concavity_posDef}. The marginal support lemma places the singular
 reference state $(\mathbf 1_A/d_A)\otimes\rho_{BC}$ in the layer-(2) domain through
 the kernel projection of $\rho_{BC}$; the two relative entropies evaluate to the
 displayed entropy differences by the singular-reference evaluation
@@ -419,7 +422,8 @@ exactly the hypotheses of the standalone axiom \leanid{strong_subadditivity}, it
 discharges the content of that axiom on the full density-matrix domain.
 
 The inequality is now a theorem on the full density-matrix domain whose only
-entropy-side axiom on this route is the Lieb-concavity axiom; the standalone axiom
+entropy-side dependency on this route, formerly the axiom, is now the proved
+theorem \leanid{lieb_concavity_posDef}; the standalone axiom
 can be removed and its consumers redirected to the derived theorem.
 The downstream consumers in the stable entropy interface
 \footnote{The stable interface re-exports the inequality from
@@ -431,8 +435,9 @@ justification changes from axiom to theorem.
 \section{Verdict}
 
 The strong-subadditivity inequality is now a theorem connected to the
-Lieb-concavity axiom available in the same repository; the former standalone
-axiom has been removed. The elimination route is the classical relative-entropy
+Lieb-concavity theorem (formerly asserted as an axiom, now proved as
+\leanid{lieb_concavity_posDef}) available in the same repository; the former
+standalone axiom has been removed. The elimination route is the classical relative-entropy
 chain: entropy bridge,
 definition of relative entropy, Klein's inequality, joint convexity (the step
 consuming Lieb concavity), data-processing under the partial trace, and final
@@ -442,7 +447,7 @@ latter on the full support domain $\ker\sigma\subseteq\ker\rho$,
 the same full support domain: the positive-definite base case
 (\leanid{convexOn_quantumRelativeEntropy}) is extended to
 $\ker\sigma\subseteq\ker\rho$ by \leanid{convexOn_quantumRelativeEntropy_support}
-through the both-arguments regularization, so the Lieb-concavity axiom is now
+through the both-arguments regularization, so the Lieb-concavity theorem is now
 connected to the joint convexity of the relative entropy on the full support
 domain. Layer (5), data-processing, is formalized on the full support domain: the
 positive-definite case (\leanid{quantumRelativeEntropy_partialTraceRight_le})
@@ -465,8 +470,9 @@ unit-trace $\rho_{ABC}$ is \leanid{strong_subadditivity_general}, which places t
 singular reference state in the layer-(2) domain through the marginal support lemma
 and evaluates the two relative entropies by the singular-reference evaluation
 \leanid{rel_entropy_eval_support}. The inequality is therefore a theorem on the
-full density-matrix domain whose only entropy-side axiom is the Lieb-concavity
-axiom, and it carries exactly the hypotheses of the former standalone axiom, so
+full density-matrix domain whose only entropy-side dependency, formerly the
+axiom, is now the proved theorem \leanid{lieb_concavity_posDef}, and it carries
+exactly the hypotheses of the former standalone axiom, so
 that axiom has been removed and its single re-export
 \leanid{Entropy.strongSubadditivity} redirected to the derived theorem.
 

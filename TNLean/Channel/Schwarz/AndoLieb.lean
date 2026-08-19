@@ -35,9 +35,10 @@ convexity/concavity consequences for matrix power functions.
   `TNLean.Analysis.OperatorConvexity` using the spectral theorem and the
   scalar Jensen inequality. This file restates them in the present file,
   for downstream use.
-* `lieb_concavity` is still derived from `lieb_concavity_posDef` in
-  `TNLean.Analysis.LiebConcavity`, pending the integral-representation
-  formalization in Mathlib.
+* `lieb_concavity` is derived from `lieb_concavity_posDef` in
+  `TNLean.Analysis.LiebConcavity`, which is proved via the locally
+  formalized operator integral representation `Matrix.superop_lieb_concave`
+  in `TNLean.Analysis.LiebOperatorConcave`.
 * The three downstream corollaries (`lieb_concavity_id`,
   `lieb_concavity_in_fst`, `lieb_concavity_in_snd`) are specializations of
   `lieb_concavity` and add no new axioms.
