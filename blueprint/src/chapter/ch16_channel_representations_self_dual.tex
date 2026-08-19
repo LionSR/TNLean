@@ -39,6 +39,22 @@ assumed Hermitian.
     which is \cite[Equation~(2.20)]{Wolf2012Quantum} with $F_\alpha=G_\alpha$.
 \end{definition}
 
+\begin{definition}[Transfer matrix of a matrix endomorphism]
+    \label{def:mpu_transfer_matrix}
+    \lean{transferMatrix}
+    \leanok
+    Let $E_{k\ell}$ denote the matrix unit with its only nonzero entry in
+    row $k$ and column $\ell$.  The transfer matrix $\widehat T$ is the
+    matrix indexed by pairs of bond indices with entries
+    \begin{align}
+        \widehat T_{(j,i),(\ell,k)}
+        &:=(T(E_{k\ell}))_{ij}.
+    \end{align}
+    Equivalently, this is the matrix of $T$ under the column-stacking
+    identification $M_D(\mathbb C)\cong\mathbb C^{D^2}$: the matrix-units
+    special case of Definition~\ref{def:transfer_matrix_of_basis}.
+\end{definition}
+
 \begin{lemma}[Coordinates in a Hilbert--Schmidt orthonormal basis]
     \label{lem:hilbert_schmidt_orthonormal_coordinates}
     \lean{HilbertSchmidtOrthonormal.repr_apply,

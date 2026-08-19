@@ -374,20 +374,13 @@ section.
     Theorem~\ref{thm:mpdo_rectangular_kraus_map_cptp} applies.
 \end{proof}
 
-\begin{definition}[State-preparation map]
-    \label{def:mpdo_state_preparation_map}
-    \lean{Matrix.preparationMap}
-    \leanok
-    Let $\rho$ be a matrix on a finite-dimensional space $B$. The
-    state-preparation map from matrices on $A$ to matrices on $A\otimes B$ is
-    \begin{align}
-        \mathcal P_\rho(X)&=X\otimes\rho.
-        \notag
-    \end{align}
-    This is the elementary preparation operation used in the maps
-    $\mathcal T_1$ and $\mathcal S_1$ of
-    \cite[Appendix~C.2, lines~1527--1533 and~1551--1555]{Cirac2016MPDO_arXiv}.
-\end{definition}
+The state-preparation map $\mathcal P_\rho(X)=X\otimes\rho$ from matrices on
+$A$ to matrices on $A\otimes B$, the elementary preparation operation used
+in the maps $\mathcal T_1$ and $\mathcal S_1$ of
+\cite[Appendix~C.2, lines~1527--1533 and~1551--1555]{Cirac2016MPDO_arXiv},
+is a fully generic construction with no MPDO-specific content, stated as
+Definition~\ref{def:mpdo_state_preparation_map} in
+Chapter~\ref{ch:aux_channel_theory}.
 
 \begin{definition}[Preparation Kraus operators]
     \label{def:mpdo_state_preparation_kraus}
