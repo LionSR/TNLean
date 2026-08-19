@@ -1502,7 +1502,6 @@ spectral split → block extraction → MPV calculation → strict bounds
   $\delta_{\mathrm{cyclicForwardSite}\,i\,r}(i)
   = (N - (r \bmod N)) \bmod N$.
 
-<<<<<<< HEAD
 ### eventual near-spectral-radius geometric bound — candidate
 - **Pattern:** from `spectralRadius ℂ a < r`, derive
   `∀ᶠ n in Filter.atTop, ‖a ^ n‖₊ < r ^ n` by combining Gelfand's formula
@@ -1528,7 +1527,6 @@ spectral split → block extraction → MPV calculation → strict bounds
   relocation, so extracting the shared step there would add no new import
   edge — the deferral rests on the occurrence count alone, not on any
   cross-layer dependency cost.
-=======
 ### star preserves the complex norm — candidate
 - **Pattern:** `simpa only [RCLike.star_def, RCLike.norm_conj]` to close a goal of the
   form `‖star μ‖ = 1` or `‖star μ‖ ≤ 1` from `‖μ‖ = 1` or `‖μ‖ ≤ 1`.
@@ -1542,7 +1540,6 @@ spectral split → block extraction → MPV calculation → strict bounds
   file's scope, `TNLean/MPS/RFP/CPSVCanonicalForm.lean:124` and
   `TNLean/Channel/Determinant/HeisenbergDual.lean:103`; a follow-up sweep can retire this
   candidate once those are also converted to `norm_star`.
->>>>>>> 77b825637 (fix(channel/peripheral): relocate TP Kraus bounds and fix blueprint uses)
 
 ---
 
