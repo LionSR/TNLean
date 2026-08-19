@@ -343,7 +343,7 @@ Throughout this section, assume $D_k \ge 1$ for every block~$k$.
 \subsection{Block permutation algebra}
 
 \begin{definition}[Block ideal]\label{def:block_ideal}
-    \lean{Matrix.blockIdeal}
+    \lean{TwoSidedIdeal.blockIdeal}
     \leanok
     Let $\{R_k\}_{k=0}^{r-1}$ be simple rings.
     The $k$-th \emph{block ideal} in $\prod_{j=0}^{r-1} R_j$ is
@@ -356,7 +356,7 @@ Throughout this section, assume $D_k \ge 1$ for every block~$k$.
 \end{definition}
 
 \begin{theorem}[Each block ideal is an atom]\label{thm:block_ideal_atom}
-    \lean{Matrix.isAtom_blockIdeal}
+    \lean{TwoSidedIdeal.isAtom_blockIdeal}
     \leanok
     \uses{def:block_ideal}
     Each block ideal $I_k$ is an atom in the lattice of two-sided ideals of
@@ -373,8 +373,8 @@ Throughout this section, assume $D_k \ge 1$ for every block~$k$.
 \end{proof}
 
 \begin{theorem}[Ring isomorphisms match block ideals]\label{thm:ring_perm}
-    \lean{Matrix.exists_blockEquiv_of_ringEquiv_pi_simple}
-    \lean{Matrix.ringEquiv_pi_simple_permutes_blockIdeals}
+    \lean{TwoSidedIdeal.exists_blockEquiv_of_ringEquiv_pi_simple}
+    \lean{TwoSidedIdeal.ringEquiv_pi_simple_permutes_blockIdeals}
     \leanok
     \uses{def:block_ideal}
     Let $\{R_i\}_{i\in I}$ and $\{S_j\}_{j\in J}$ be two finite families of
@@ -396,15 +396,15 @@ Throughout this section, assume $D_k \ge 1$ for every block~$k$.
 \end{proof}
 
 \begin{theorem}[Paired component maps are bijections]\label{thm:component_map_bijective}
-    \lean{Matrix.mem_blockIdeal_iff}
-    \lean{Matrix.pi_single_mem_blockIdeal}
-    \lean{Matrix.blockComponentMap}
-    \lean{Matrix.ringEquiv_maps_single_support_between}
+    \lean{TwoSidedIdeal.mem_blockIdeal_iff}
+    \lean{TwoSidedIdeal.pi_single_mem_blockIdeal}
+    \lean{TwoSidedIdeal.blockComponentMap}
+    \lean{TwoSidedIdeal.ringEquiv_maps_single_support_between}
     \lean{MPSTensor.ringEquiv_maps_single_support}
-    \lean{Matrix.ringEquiv_symm_maps_blockIdeal_between}
-    \lean{Matrix.blockComponentMap_injective}
-    \lean{Matrix.blockComponentMap_surjective}
-    \lean{Matrix.blockComponentMap_bijective}
+    \lean{TwoSidedIdeal.ringEquiv_symm_maps_blockIdeal_between}
+    \lean{TwoSidedIdeal.blockComponentMap_injective}
+    \lean{TwoSidedIdeal.blockComponentMap_surjective}
+    \lean{TwoSidedIdeal.blockComponentMap_bijective}
     \lean{MPSTensor.componentMap_surjective}
     \lean{MPSTensor.componentMap_bijective}
     \leanok

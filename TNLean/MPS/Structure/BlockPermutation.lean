@@ -31,15 +31,15 @@ Technical note on the two-level algebraic structure:
 
 ## Main results
 
-* `Matrix.mem_blockIdeal_iff` — block ideal membership characterisation
+* `TwoSidedIdeal.mem_blockIdeal_iff` — block ideal membership characterisation
 * `componentMap` — the per-block map extracted from T
 * `algEquiv_pi_matrix_decomposition` — the main decomposition theorem
 -/
 
 open scoped Matrix
-open Matrix (blockIdeal blockComponentMap blockComponentMap_surjective
-  ringEquiv_maps_single_support_between ringEquiv_pi_simple_permutes_blockIdeals
-  skolemNoether_matrix)
+open TwoSidedIdeal (blockIdeal blockComponentMap blockComponentMap_surjective
+  ringEquiv_maps_single_support_between ringEquiv_pi_simple_permutes_blockIdeals)
+open Matrix (skolemNoether_matrix)
 
 namespace MPSTensor
 

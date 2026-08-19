@@ -20,6 +20,7 @@ Wolf--Perez-Garcia, arXiv:1005.4545, Theorem 8, source lines 322--324.
 -/
 
 open scoped Matrix ComplexOrder
+open TwoSidedIdeal (blockIdeal blockComponentMap_bijective)
 
 namespace Matrix
 

@@ -225,7 +225,7 @@ theorem SectorDecomposition.exists_phase_match_of_isCPSVBasisOfNormalTensors
             mpvState (d := d) (P.basis j) N) =
           ∑ k : Fin g, cB k • mpvState (d := d) (B k) N :=
       hPstate.symm.trans hBstate
-    exact Fintype.coefficient_eq_zero_of_sum_eq_of_complement_smul
+    exact LinearIndependent.coefficient_eq_zero_of_sum_eq_of_complement_smul
       (T := T) (a := fun j => P.coeff N j)
       (u := fun j => mpvState (d := d) (P.basis j) N)
       (b := cB) (v := fun k => mpvState (d := d) (B k) N)

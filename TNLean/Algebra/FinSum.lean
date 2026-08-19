@@ -94,6 +94,29 @@ theorem sum_piFin_castLE_extend_zero {ι β : Type*} [Fintype ι] [DecidableEq �
       intro y _
       by_cases hlt : p y <;> simp [p, hlt]
 
+/-- Re-index a sum over a finite family by collecting coefficients in the fibres
+of a finite map. -/
+lemma sum_fiber_smul
+    {R ι κ V : Type*} [Semiring R] [Fintype ι] [Fintype κ] [DecidableEq κ]
+    [AddCommMonoid V] [Module R V]
+    (φ : ι → κ) (a : ι → R) (v : κ → V) :
+    (∑ i : ι, a i • v (φ i)) =
+      ∑ k : κ, (∑ i : ι, if φ i = k then a i else 0) • v k := by
+  classical
+  calc
+    (∑ i : ι, a i • v (φ i)) =
+        ∑ k : κ, ∑ i with φ i = k, a i • v (φ i) := by
+      symm
+      simpa only [Finset.mem_univ, Finset.filter_true] using
+        Finset.sum_fiberwise_eq_sum_filter
+          (Finset.univ : Finset ι) (Finset.univ : Finset κ) φ
+          (fun i => a i • v (φ i))
+    _ = ∑ k : κ, (∑ i : ι, if φ i = k then a i else 0) • v k := by
+      refine Finset.sum_congr rfl fun k _ => ?_
+      rw [Finset.sum_smul, Finset.sum_filter]
+      refine Finset.sum_congr rfl fun i _ => ?_
+      by_cases h : φ i = k <;> simp only [h, ↓reduceIte, zero_smul]
+
 end Fintype
 
 namespace Fin
@@ -132,30 +155,7 @@ theorem sum_castLE_extend_zero {r s : ℕ} {β : Type*} [AddCommMonoid β]
 
 end Fin
 
-namespace Fintype
-
-/-- Re-index a sum over a finite family by collecting coefficients in the fibres
-of a finite map. -/
-lemma sum_fiber_smul
-    {R ι κ V : Type*} [Semiring R] [Fintype ι] [Fintype κ] [DecidableEq κ]
-    [AddCommMonoid V] [Module R V]
-    (φ : ι → κ) (a : ι → R) (v : κ → V) :
-    (∑ i : ι, a i • v (φ i)) =
-      ∑ k : κ, (∑ i : ι, if φ i = k then a i else 0) • v k := by
-  classical
-  calc
-    (∑ i : ι, a i • v (φ i)) =
-        ∑ k : κ, ∑ i with φ i = k, a i • v (φ i) := by
-      symm
-      simpa only [Finset.mem_univ, Finset.filter_true] using
-        Finset.sum_fiberwise_eq_sum_filter
-          (Finset.univ : Finset ι) (Finset.univ : Finset κ) φ
-          (fun i => a i • v (φ i))
-    _ = ∑ k : κ, (∑ i : ι, if φ i = k then a i else 0) • v k := by
-      refine Finset.sum_congr rfl fun k _ => ?_
-      rw [Finset.sum_smul, Finset.sum_filter]
-      refine Finset.sum_congr rfl fun i _ => ?_
-      by_cases h : φ i = k <;> simp only [h, ↓reduceIte, zero_smul]
+namespace LinearIndependent
 
 /-- If one part of a finite vector family is replaced by scalar multiples of a
 second family, equality of the two total sums isolates every coefficient in
@@ -197,7 +197,7 @@ lemma coefficient_eq_zero_of_sum_eq_of_complement_smul
       (∑ i : {i : ι // i ∉ T}, (a i.1 * α i) • v (kOf i)) =
         ∑ k : κ, aggregate k • v k := by
     simpa [aggregate] using
-      (sum_fiber_smul (φ := kOf) (a := fun i => a i.1 * α i) (v := v))
+      (Fintype.sum_fiber_smul (φ := kOf) (a := fun i => a i.1 * α i) (v := v))
   have hMain :
       (∑ i : {i : ι // i ∈ T}, a i.1 • u i.1) +
           (∑ k : κ, aggregate k • v k) =
@@ -227,4 +227,4 @@ lemma coefficient_eq_zero_of_sum_eq_of_complement_smul
     Fintype.linearIndependent_iff.mp hLI coefficient hZero (Sum.inl ⟨i₀, hi₀⟩)
   simpa [coefficient] using hCoefficient
 
-end Fintype
+end LinearIndependent

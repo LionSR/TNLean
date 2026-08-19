@@ -21,7 +21,7 @@ As a consequence, any ring automorphism of `∀ i, R i` permutes these atoms, yi
 of the index type.
 -/
 
-namespace Matrix
+namespace TwoSidedIdeal
 
 section PiTwoSidedIdeals
 
@@ -320,4 +320,4 @@ theorem blockComponentMap_bijective
 
 end BlockComponentMap
 
-end Matrix
+end TwoSidedIdeal

@@ -417,10 +417,6 @@ theorem supportProj_mul_conjTranspose_mul_self (B : Matrix m n ℂ) :
   rw [Matrix.sub_mul, Matrix.one_mul, sub_eq_zero] at hPB
   exact hPB.symm
 
-end Matrix
-
-namespace Matrix
-
 variable {D : ℕ}
 
 /-- The `Fin`-indexed support projection of a positive-semidefinite matrix. -/
