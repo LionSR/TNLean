@@ -25,7 +25,7 @@ See `docs/paper-gaps/wolf_thm6_6_kraus_scope.tex`.
 The proof combines three ingredients that already exist:
 
 1. **Peripheral eigenvalues are roots of unity** — proved in
-   `Channel/Peripheral/ClosureFixedPoint.lean` as
+   `Channel/Peripheral/ClosureFixedPointKraus.lean` as
    `peripheral_isRootOfUnity_of_irreducible_unital_of_adjoint_fixedPoint`
 
 2. **Finite subgroups of `ℂ*` consisting of roots of unity are cyclic** —

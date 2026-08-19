@@ -12,19 +12,19 @@ For an irreducible map with nontrivial peripheral spectrum, Wolf Theorem 6.6
 produces orthogonal projections $P_0,\dots,P_{m-1}$ summing to the identity
 and permuted by the map, $\mathcal E(P_{k+1}) = P_k$.  This file derives the
 letter-level consequence: each Kraus operator of $\mathcal E$ intertwines
-consecutive projections, $K_v P_{k+1} = P_k K_v$, so a word of length $\ell$
-shifts every projection by $\ell$ steps and a word of length $m$ commutes
-with each projection.
+consecutive projections, $K_v P_{k+1} = P_k K_v$.
 
 ## Main statements
 
-* `one_sub_mul_kraus_mul_eq_zero_of_transferMap_proj` — each Kraus operator
+* `one_sub_mul_kraus_mul_eq_zero_of_mapLM_proj` — each Kraus operator
   maps the range of `P'` into the range of `P` when the map sends `P'` to `P`.
 * `kraus_mul_cyclicProj` — the letter-level cyclic shift
   $K_vP_{k+1}=P_kK_v$.
-* `evalWord_mul_cyclicProj` — the word-level shift
-  $A^wP_k=P_{k-\ell}A^w$ for words of length $\ell$.
 * `cyclicProj_ne_zero` — no cyclic projection vanishes.
+
+The word-level consequence for matrix-product words,
+`evalWord_mul_cyclicProj`, is stated in transfer-map form in
+`TNLean/MPS/Core/TransferPeripheral.lean`.
 
 The mutual orthogonality of projections summing to the identity is
 `orthogonalProjection_mul_eq_zero_of_sum_eq_one` in
@@ -45,25 +45,25 @@ identity and the gauged family is unital.
 * [M. Wolf, *Quantum Channels & Operations: Guided Tour*, Theorem 6.6]
 -/
 
-open scoped Matrix ComplexOrder MatrixOrder BigOperators Fin.NatCast
+open scoped Matrix ComplexOrder MatrixOrder BigOperators
 open Matrix Finset Complex
 
-namespace MPSTensor
+namespace Kraus
 
 variable {r n m : ℕ}
 
-/-- **Kraus operators respect a transfer-mapped projection pair.**  If the
-transfer map of the Kraus family `K` sends the orthogonal projection `P'` to
-the orthogonal projection `P`, then each Kraus operator maps the range of
-`P'` into the range of `P`: `(1 - P) * K v * P' = 0`.
+/-- **Kraus operators respect a mapped projection pair.**  If the Kraus map of
+the family `K` sends the orthogonal projection `P'` to the orthogonal
+projection `P`, then each Kraus operator maps the range of `P'` into the
+range of `P`: `(1 - P) * K v * P' = 0`.
 
 This is the letter-level step in the proof of Wolf Theorem 6.6: compressing
 $\sum_v K_v P' K_v^\dagger = P$ by $1-P$ exhibits a vanishing sum of positive
 semidefinite matrices, so each summand vanishes. -/
-theorem one_sub_mul_kraus_mul_eq_zero_of_transferMap_proj
+theorem one_sub_mul_kraus_mul_eq_zero_of_mapLM_proj
     (K : Fin r → MatrixAlg n) {P P' : MatrixAlg n}
     (hP : IsOrthogonalProjection P) (hP' : IsOrthogonalProjection P')
-    (hmap : transferMap (d := r) (D := n) K P' = P) :
+    (hmap : mapLM K P' = P) :
     ∀ v, (1 - P) * K v * P' = 0 := by
   classical
   set T : Fin r → MatrixAlg n := fun w => (1 - P) * K w * P' with hT
@@ -88,14 +88,14 @@ theorem one_sub_mul_kraus_mul_eq_zero_of_transferMap_proj
           exact Finset.sum_congr rfl fun w _ => hexp w
       _ = (1 - P) * P * (1 - P) := by
           rw [show ∑ w : Fin r, K w * P' * (K w)ᴴ = P from by
-            simpa [transferMap_apply] using hmap]
+            simpa [mapLM_apply, map_apply] using hmap]
       _ = 0 := by rw [h1PP, Matrix.zero_mul]
   exact Matrix.eq_zero_of_sum_mul_conjTranspose_eq_zero T hsum
 
 variable [NeZero m]
 
 /-- **Letter-level cyclic shift** (Wolf Theorem 6.6).  For a cyclic family of
-orthogonal projections summing to the identity and permuted by the transfer
+orthogonal projections summing to the identity and permuted by the Kraus
 map, $\mathcal E(P_{k+1})=P_k$, each Kraus operator intertwines consecutive
 projections: $K_vP_{k+1}=P_kK_v$.
 
@@ -107,13 +107,13 @@ theorem kraus_mul_cyclicProj
     (K : Fin r → MatrixAlg n) (P : Fin m → MatrixAlg n)
     (hproj : ∀ k, IsOrthogonalProjection (P k))
     (hsum : ∑ k : Fin m, P k = 1)
-    (hcyclic : ∀ k : Fin m, transferMap (d := r) (D := n) K (P (k + 1)) = P k) :
+    (hcyclic : ∀ k : Fin m, mapLM K (P (k + 1)) = P k) :
     ∀ (v : Fin r) (k : Fin m), K v * P (k + 1) = P k * K v := by
   intro v k
   -- One-sided containment for every consecutive pair.
   have hinto : ∀ j : Fin m, K v * P (j + 1) = P j * (K v * P (j + 1)) := by
     intro j
-    have h := one_sub_mul_kraus_mul_eq_zero_of_transferMap_proj K
+    have h := one_sub_mul_kraus_mul_eq_zero_of_mapLM_proj K
       (hproj j) (hproj (j + 1)) (hcyclic j) v
     have h' : K v * P (j + 1) - P j * (K v * P (j + 1)) = 0 := by
       calc K v * P (j + 1) - P j * (K v * P (j + 1))
@@ -141,40 +141,6 @@ theorem kraus_mul_cyclicProj
     (fun h => absurd (Finset.mem_univ k) h)]
   exact hinto k
 
-/-- **Word-level cyclic shift**: a word $A^w=K_{w_1}\cdots K_{w_\ell}$ of
-length $\ell$ moves each cyclic projection back by $\ell$ steps,
-$A^wP_k=P_{k-\ell}A^w$.  In particular a word of length $m$ commutes with
-every cyclic projection. -/
-theorem evalWord_mul_cyclicProj
-    (K : Fin r → MatrixAlg n) (P : Fin m → MatrixAlg n)
-    (hproj : ∀ k, IsOrthogonalProjection (P k))
-    (hsum : ∑ k : Fin m, P k = 1)
-    (hcyclic : ∀ k : Fin m, transferMap (d := r) (D := n) K (P (k + 1)) = P k) :
-    ∀ (w : List (Fin r)) (k : Fin m),
-      evalWord K w * P k = P (k - (w.length : Fin m)) * evalWord K w := by
-  intro w
-  induction w with
-  | nil =>
-    intro k
-    simp
-  | cons v w ih =>
-    intro k
-    have hstep : K v * P (k - (w.length : Fin m)) =
-        P (k - (w.length : Fin m) - 1) * K v := by
-      have := kraus_mul_cyclicProj K P hproj hsum hcyclic v (k - (w.length : Fin m) - 1)
-      rwa [sub_add_cancel] at this
-    calc evalWord K (v :: w) * P k
-        = K v * (evalWord K w * P k) := by rw [evalWord_cons, Matrix.mul_assoc]
-      _ = K v * (P (k - (w.length : Fin m)) * evalWord K w) := by rw [ih k]
-      _ = (K v * P (k - (w.length : Fin m))) * evalWord K w := by
-          rw [Matrix.mul_assoc]
-      _ = P (k - (w.length : Fin m) - 1) * (K v * evalWord K w) := by
-          rw [hstep, Matrix.mul_assoc]
-      _ = P (k - ((v :: w).length : Fin m)) * evalWord K (v :: w) := by
-          rw [evalWord_cons]
-          congr 2
-          rw [List.length_cons, Nat.cast_add, Nat.cast_one, sub_sub]
-
 /-- **No cyclic projection vanishes.**  If one projection of a cyclic family
 summing to the identity vanished, the cyclic action `E(P (k+1)) = P k` would
 propagate the vanishing to every projection, contradicting the resolution of
@@ -182,7 +148,7 @@ the identity. -/
 theorem cyclicProj_ne_zero [NeZero n]
     (K : Fin r → MatrixAlg n) (P : Fin m → MatrixAlg n)
     (hsum : ∑ k : Fin m, P k = 1)
-    (hcyclic : ∀ k : Fin m, transferMap (d := r) (D := n) K (P (k + 1)) = P k) :
+    (hcyclic : ∀ k : Fin m, mapLM K (P (k + 1)) = P k) :
     ∀ k : Fin m, P k ≠ 0 := by
   by_contra! h
   obtain ⟨k₀, hk₀⟩ := h
@@ -219,4 +185,4 @@ theorem cyclicProj_ne_zero [NeZero n]
   exact one_ne_zero (α := ℂ) (by
     simpa using congrFun (congrFun hzero ⟨0, NeZero.pos n⟩) ⟨0, NeZero.pos n⟩)
 
-end MPSTensor
+end Kraus

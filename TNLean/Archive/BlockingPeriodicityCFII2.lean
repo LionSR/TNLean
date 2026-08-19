@@ -6,7 +6,7 @@ Authors: TNLean contributors
 import TNLean.MPS.Irreducible.FormII
 import TNLean.MPS.Core.BlockingTransfer
 import TNLean.MPS.Irreducible.FixedPointProjection
-import TNLean.Channel.Peripheral.ClosureFixedPoint
+import TNLean.MPS.Core.TransferPeripheral
 import TNLean.Channel.Peripheral.PeriodicityRemoval
 import TNLean.Channel.Peripheral.Conjugation
 
