@@ -122,7 +122,7 @@ lemma mapLM_conjTranspose_eq_adjoint (K : Fin d → Mat) :
     simpa only [mapLM_apply] using
       (trace_mul_map_eq_trace_adjointMap_mul (K := fun i => (K i)ᴴ) Y (Xᴴ))
   have hadj : adjointMap (fun i => (K i)ᴴ) Y = mapLM K Y := by
-    simp [adjointMap, mapLM_apply, map, Matrix.conjTranspose_conjTranspose]
+    rw [mapLM_apply, adjointMap_conjTranspose_eq_map]
   calc
     Matrix.trace (Y * (mapLM (fun i => (K i)ᴴ) X)ᴴ)
         = Matrix.trace (Y * mapLM (fun i => (K i)ᴴ) (Xᴴ)) := by
