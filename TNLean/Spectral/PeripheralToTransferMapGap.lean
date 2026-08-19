@@ -49,13 +49,13 @@ The formal Lean declaration:
 
 > `IsChannel.posSemidef_parts_of_hermitian_fixedPoint` from
 > `TNLean.Channel.FixedPoint.Cesaro` supplies the PSD decomposition used in
-> `transferMap_hermitian_fixedPoint_eq_zero_of_trace_eq_zero` (line 93).
+> `transferMap_hermitian_fixedPoint_eq_zero_of_trace_eq_zero`.
 > This is the Wolf Proposition 6.8 formalization consumed by the
 > peripheral-to-complementary-gap connection.
 -/
 
-open scoped Matrix ComplexOrder BigOperators NNReal ENNReal
-open Matrix Filter
+open scoped Matrix ComplexOrder BigOperators
+open Matrix
 
 namespace MPSTensor
 

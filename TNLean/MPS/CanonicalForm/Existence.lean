@@ -117,7 +117,7 @@ completely positive maps (Wolf Chapter 6), formalized in
 > tensor left-canonical.
 
 The complementary transfer-map gap connection to peripheral primitivity is supplied by
-`TNLean.MPS.Overlap.PeripheralToTransferMapGap` (Wolf Proposition 6.8).
+`TNLean.Spectral.PeripheralToTransferMapGap` (Wolf Proposition 6.8).
 -/
 open scoped Matrix BigOperators ComplexOrder MatrixOrder
 open Filter

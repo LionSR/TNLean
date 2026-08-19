@@ -23,12 +23,10 @@ Both are immediate corollaries of `MPSTensor.HasPrimitiveFixedPoint.overlap_tend
 established in `TNLean.Spectral.PeripheralToTransferMapGap`.
 -/
 
-open scoped Matrix ComplexOrder BigOperators NNReal ENNReal
-open Matrix Filter
+open scoped Matrix BigOperators
+open Filter
 
 namespace MPSTensor
-
-variable {d D : ℕ}
 
 /-- Peripheral primitivity implies the self-overlap converges to 1. -/
 theorem overlap_tendsto_one_of_peripheralPrimitive
