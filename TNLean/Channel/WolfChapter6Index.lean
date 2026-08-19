@@ -35,8 +35,6 @@ import TNLean.Channel.Irreducible.FromSpectral
 import TNLean.Channel.Peripheral.Spectrum
 import TNLean.Channel.PerronFrobenius.Existence
 import TNLean.Channel.Irreducible.Similarity
-import TNLean.QPF.Assembly
-import TNLean.Wielandt.Primitivity.Equivalence
 import TNLean.Channel.WolfChapter6Wrappers
 
 /-!
@@ -51,6 +49,14 @@ Each entry lists the Wolf result, its status (fully formalized / partially
 formalized / not yet formalized), and the Lean declaration(s) that correspond.
 
 No new proofs are introduced here; this is a documentation-only index module.
+
+This module covers the sections of Wolf Chapter 6 whose formalization lives in
+the quantum-channel layer.  The sections formalized in the tensor-network layer
+— the Kraus-span primitivity characterizations (Theorem 6.8), the quantum
+Wielandt inequality (Theorem 6.9), the unique-fixed-point theorem for tensors
+with eventually full Kraus rank (Theorem 6.15), and the quantum
+Perron–Frobenius assembly — are indexed in
+`TNLean.Wielandt.WolfChapter6TNIndex`.
 
 ---
 
@@ -133,11 +139,8 @@ Channel-level (general irreducible CP maps):
 * `exists_posDef_eigenvector_of_irreducible_cp`: ∃ PosDef eigenvector with `r > 0`
 * `posSemidef_eigenvector_unique_of_irreducible_cp`: uniqueness up to scalar
 
-MPS/QPF-level (transfer maps):
-* `posSemidef_fixedPoint_isPosDef` — `TNLean.QPF.PosDef`
-* `posSemidef_fixedPoint_isPosDef_of_irreducible`
-* `posSemidef_fixedPoint_unique` — `TNLean.QPF.Uniqueness`
-* `posSemidef_fixedPoint_unique_of_irreducible`
+The transfer-map specializations of these fixed-point consequences are indexed
+in `TNLean.Wielandt.WolfChapter6TNIndex`.
 
 **Item 3** (uniqueness of positive eigenvalue):
 * `eigenvalue_unique_of_irreducible_cp` — `TNLean.Channel.Irreducible.PerronFrobenius`
@@ -232,35 +235,18 @@ The abstract positive unital Schwarz-map theorem remains open; see
 * `IsPrimitive` — `TNLean.Channel.Peripheral.Spectrum`
 * `isPrimitive_of_compl_eigenvalues_lt_one` / `compl_eigenvalue_norm_lt_one_of_primitive`
 
-Other items: PARTIALLY via transfer-operator gap formalization in `TNLean.Spectral.*`.
+Other items: PARTIALLY via the transfer-operator gap formalization on the
+tensor-network side; see `TNLean.Wielandt.WolfChapter6TNIndex`.
 
 ### Wolf Theorem 6.8 (CP primitive maps, Kraus span characterizations)
 
-* `IsPrimitivePaper` — `TNLean.Wielandt.Primitivity.Definitions`
-  (item 3: `Kₘ = M_d(ℂ)` for `m ≥ q`)
-* Pairwise equivalences from Proposition 3:
-  * `primitivePaper_iff_hasEventuallyFullKrausRank` / `primitivePaper_iff_stronglyIrreducible`
-    (in `TNLean.Wielandt.Primitivity.Equivalence`)
-  * `hasEventuallyFullKrausRank_iff_isNormal`
-    (in `TNLean.Wielandt.Primitivity.Definitions`)
-* Formulated Wolf-facing formulations:
-  * `wolf_theorem_6_8_kraus_span`
-  * `wolf_theorem_6_8_conjunction`
-  (in `TNLean.Wielandt.Primitivity.Equivalence`)
+Formalized in the tensor-network layer; indexed in
+`TNLean.Wielandt.WolfChapter6TNIndex`.
 
 ### Wolf Theorem 6.9 (Quantum Wielandt inequality)
 
-Current formal statements live in `TNLean.Wielandt.Inequality.Bounds`:
-* `qIndex_le_iIndex_of_isPrimitivePaper`
-* `wordSpan_eq_top_of_isPrimitivePaper_of_isUnit` /
-  `iIndex_le_of_isPrimitivePaper_of_isUnit`
-* `wordSpan_eq_top_of_isPrimitivePaper_of_noninvertible_eigenvector` /
-  `iIndex_le_sq_of_noninvertible_eigenvector`
-
-The positive-definite primitive-to-normal theorem is
-`MPSTensor.isNormal_of_isPrimitiveMPS_with_posDef` in
-`TNLean.Wielandt.Primitivity.StronglyIrreducibleToFullRank`; it is not the
-Wielandt index bound itself.
+Formalized in the tensor-network layer; indexed in
+`TNLean.Wielandt.WolfChapter6TNIndex`.
 
 ---
 
@@ -642,23 +628,8 @@ explicit density-block formula is developed in
 
 ### Wolf Theorem 6.15 (Unique fixed point from full Kraus-word span) — FORMALIZED
 
-* `MPSTensor.wolf_theorem_6_15` (`TNLean.Wielandt.Primitivity.Equivalence`) —
-  for a normalized MPS tensor `A` (`∑ᵢ Aᵢ† Aᵢ = 1`) with eventually full Kraus
-  rank (homogeneous words of some fixed length in the Kraus operators span the
-  full matrix algebra), there exists a unique positive definite density matrix
-  `ρ` such that every fixed point of the transfer map `E_A` is a scalar
-  multiple of `ρ`.
-
-The proof routes through Proposition 3:
-`MPSTensor.isStronglyIrreduciblePaper_of_hasEventuallyFullKrausRank` turns the
-span hypothesis into strong irreducibility, then
-`MPSTensor.isPrimitiveMPS_of_isStronglyIrreduciblePaper` supplies a
-positive-definite fixed point together with peripheral primitivity and
-irreducibility of `E_A`; the complementary transfer-map gap around that fixed
-point (`MPSTensor.IsPrimitiveMPS.fixedPoint_unique`) then forces every fixed
-point to be a scalar multiple of it. This differs from the source's own `T^n`
-/ Corollary 6.5 argument but reuses only already-formalized Wolf Chapter 6
-machinery (Proposition 3).
+Formalized in the tensor-network layer; indexed in
+`TNLean.Wielandt.WolfChapter6TNIndex`.
 
 ---
 
@@ -727,8 +698,6 @@ clause 3.
 
 ## The quantum Perron–Frobenius theorem
 
-* `quantum_perron_frobenius` — `TNLean.QPF.Assembly`
-  Combines existence + positive definiteness + uniqueness (Wolf Theorem 6.3).
-
-* `injective_transfer_unique_fixed_point'` — same, without `0 < D` hypothesis.
+The assembled quantum Perron–Frobenius theorem for transfer maps lives in the
+tensor-network layer; it is indexed in `TNLean.Wielandt.WolfChapter6TNIndex`.
 -/

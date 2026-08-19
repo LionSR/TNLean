@@ -14,3 +14,4 @@ import TNLean.Wielandt.Primitivity
 import TNLean.Wielandt.RankOne
 import TNLean.Wielandt.RectangularSpan
 import TNLean.Wielandt.SpanGrowth
+import TNLean.Wielandt.WolfChapter6TNIndex
