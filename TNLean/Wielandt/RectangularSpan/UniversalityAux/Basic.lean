@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.Wielandt.RectangularSpan.Growth
-import TNLean.MPS.Core.RepeatedWord
+import TNLean.Kraus.Blocking
 
 /-!
 # Rectangular span universality auxiliary lemmas: rank-one and eigenvector parts
