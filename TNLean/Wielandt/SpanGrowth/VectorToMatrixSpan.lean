@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.Wielandt.SpanGrowth.EigenvectorSpreading
-import TNLean.MPS.Core.Blocking
+import TNLean.Kraus.Blocking
 
 import Mathlib.Algebra.Algebra.Operations
 import Mathlib.Data.Matrix.Basis
