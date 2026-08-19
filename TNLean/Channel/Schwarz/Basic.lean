@@ -59,6 +59,13 @@ omit [DecidableEq n] in
 lemma adjointMap_apply (K : ι → Matrix n n ℂ) (X : Matrix n n ℂ) :
     adjointMap K X = ∑ i : ι, (K i)ᴴ * X * K i := rfl
 
+omit [DecidableEq n] in
+/-- The adjoint Kraus map of the conjugate-transposed family is the Kraus map of the
+original family. -/
+@[simp] theorem adjointMap_conjTranspose_eq_map (K : ι → Matrix n n ℂ) (X : Matrix n n ℂ) :
+    adjointMap (fun i => (K i)ᴴ) X = map K X := by
+  simp [adjointMap, map, Matrix.conjTranspose_conjTranspose]
+
 /-- The adjoint Kraus map as a `ℂ`-linear map: `adjointMapLM K X = ∑ᵢ Kᵢ† X Kᵢ`. -/
 noncomputable def adjointMapLM (K : ι → Matrix n n ℂ) : Matrix n n ℂ →ₗ[ℂ] Matrix n n ℂ where
   toFun := adjointMap K

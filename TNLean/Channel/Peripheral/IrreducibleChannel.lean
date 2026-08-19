@@ -17,8 +17,8 @@ import TNLean.Channel.Determinant.Bound
 /-!
 # Channel-level formulations for peripheral spectrum and primitivity
 
-This file collects the general channel-level consequences of the MPS-specific
-peripheral-spectrum theory from Wolf Chapter 6.
+This file collects the general channel-level results on the peripheral
+spectrum from Wolf Chapter 6.
 
 ## Main results
 
@@ -31,10 +31,10 @@ peripheral-spectrum theory from Wolf Chapter 6.
 * `compl_eigenvalue_norm_lt_one_of_primitive_of_irreducible_channel`:
   primitive irreducible channels have a strict complementary transfer-map gap
 
-The proofs reduce general channels to finite Kraus maps: trace preservation
-makes the conjugate-transposed family unital, the irreducible fixed point is
-positive definite, and the unital roots-of-unity theorem transports back
-across the adjoint.
+The roots-of-unity proof reduces the channel to a finite Kraus family:
+trace preservation makes the conjugate-transposed family unital, the fixed
+point of an irreducible channel is positive definite, and the unital
+roots-of-unity theorem transports back across the adjoint.
 -/
 
 open scoped Matrix ComplexOrder MatrixOrder BigOperators NNReal ENNReal
@@ -144,12 +144,22 @@ theorem fixedPoint_eq_zero_of_trace_eq_zero_of_irreducible_channel
 
 /-- Peripheral eigenvalues of an irreducible channel are roots of unity.
 
-Choose a Kraus representation `E = Kraus.mapLM K`. Trace preservation makes the
-conjugate-transposed family unital, the irreducible channel has a positive
-definite fixed point, and that fixed point is an adjoint fixed point of the
-conjugate-transposed family. The unital roots-of-unity theorem (Wolf Theorem
-6.6(1)) applies there, and peripheral eigenvalues transport back across the
-adjoint as complex conjugates. -/
+Choose a Kraus representation `E X = ∑ i, K i * X * (K i)ᴴ`. Trace preservation
+is the identity `∑ i, (K i)ᴴ * K i = 1`, which is exactly unitality of the
+conjugate-transposed family `L i = (K i)ᴴ`. Irreducibility makes the fixed
+point `ρ` positive definite, and `∑ i, K i * ρ * (K i)ᴴ = E ρ = ρ` says that `ρ`
+is a fixed point of the adjoint of the Kraus map of `L`. The roots-of-unity
+theorem for irreducible unital Kraus maps with a positive definite adjoint
+fixed point (the completely positive specialization of Wolf Theorem 6.6(1))
+applies to `L`, and the peripheral eigenvalues of the two maps are related by
+conjugation, so `star μ ^ p = 1` gives `μ ^ p = 1`.
+
+**Scope restriction (complete positivity):** Wolf Theorem 6.6(1) assumes an
+irreducible positive unital Schwarz map and concludes that the peripheral
+spectrum is exactly a cyclic group of order `m ≤ d²`; this declaration assumes
+complete positivity (via `IsChannel`) and concludes only that each peripheral
+eigenvalue is *some* root of unity. See
+`docs/paper-gaps/wolf_thm6_6_kraus_scope.tex`. -/
 theorem peripheral_isRootOfUnity_of_irreducible_channel [NeZero D]
     (E : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ)
     (hE : IsChannel E) (hIrr : IsIrreducibleMap E) :
@@ -165,8 +175,8 @@ theorem peripheral_isRootOfUnity_of_irreducible_channel [NeZero D]
   have hK_tp : ∑ i : Fin r, (K i)ᴴ * K i = 1 :=
     kraus_sum_conjTranspose_mul_of_tp K E hK hE.tp
   -- The conjugate-transposed family is unital.
-  have hL_unital : KadisonSchwarz.IsUnitalKraus (d := r) (D := D) (fun i => (K i)ᴴ) := by
-    simpa [KadisonSchwarz.IsUnitalKraus, Matrix.conjTranspose_conjTranspose] using hK_tp
+  have hL_unital : KadisonSchwarz.IsUnitalKraus (d := r) (D := D) (fun i => (K i)ᴴ) :=
+    KadisonSchwarz.isUnitalKraus_conjTranspose (K := K) hK_tp
   -- The irreducible channel has a positive definite fixed point, which is an
   -- adjoint fixed point of the conjugate-transposed family.
   obtain ⟨ρ, hρ_psd, hρ_ne, hρ_fix⟩ :=
@@ -174,11 +184,7 @@ theorem peripheral_isRootOfUnity_of_irreducible_channel [NeZero D]
   have hρ_pd : ρ.PosDef :=
     posDef_of_posSemidef_fixedPoint_irreducible_cp E hE.cp hIrr ρ hρ_psd hρ_ne hρ_fix
   have hfixL : Kraus.adjointMap (fun i => (K i)ᴴ) ρ = ρ := by
-    have hEρ : Kraus.adjointMap (fun i => (K i)ᴴ) ρ = E ρ := by
-      rw [hE_eq]
-      simp [Kraus.adjointMap_apply, Kraus.mapLM_apply, Kraus.map_apply,
-        Matrix.conjTranspose_conjTranspose]
-    rw [hEρ, hρ_fix]
+    rw [Kraus.adjointMap_conjTranspose_eq_map, ← Kraus.mapLM_apply, ← hE_eq, hρ_fix]
   have hIrrL : IsIrreducibleMap (Kraus.mapLM fun i => (K i)ᴴ) :=
     Kraus.isIrreducibleMap_mapLM_conjTranspose K hIrrK
   -- Transport the peripheral eigenvalue across the adjoint and back.
@@ -192,8 +198,7 @@ theorem peripheral_isRootOfUnity_of_irreducible_channel [NeZero D]
     Kraus.peripheral_isRootOfUnity_of_irreducible_unital_of_adjoint_fixedPoint
       (fun i => (K i)ᴴ) hL_unital ρ hρ_pd hfixL hIrrL (star μ) hstar
   refine ⟨p, hp_pos, ?_⟩
-  have h := congrArg star hpow
-  simpa using h
+  simpa using congrArg star hpow
 
 /-- Channel-level formulation for `compl_eigenvalue_norm_lt_one_of_primitive`.
 
