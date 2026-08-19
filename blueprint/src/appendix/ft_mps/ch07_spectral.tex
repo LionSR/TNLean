@@ -573,14 +573,14 @@ projections, and tracking how the channel shifts the resulting corners.
     \label{lem:irreducible_unital_fixed_points_scalar}
     \lean{Kraus.fixed_eq_scalar_of_irreducible_unital}
     \leanok
-    \uses{thm:psd_fp_unique_irred}
+    \uses{thm:psd_fp_unique_irred_cp}
     If $E$ is irreducible and unital, then every fixed point of $E$ is a
     scalar multiple of $\Id$.
 \end{lemma}
 
 \begin{proof}
     \leanok
-    \uses{thm:psd_fp_unique_irred}
+    \uses{thm:psd_fp_unique_irred_cp}
     If $E(X)=X$, then the Hermitian matrices
     $X+X^\dagger$ and $\mathrm{i}(X-X^\dagger)$ are also fixed by $E$.
     The positive-semidefinite fixed-point uniqueness theorem gives
@@ -594,7 +594,7 @@ projections, and tracking how the channel shifts the resulting corners.
     \lean{Kraus.exists_peripheral_unitary_of_irreducible_schwarz}
     \leanok
     \uses{thm:ks_equality_of_peripheral_eigenvector_of_fixedPoint,
-        thm:psd_fp_unique_irred}
+        thm:psd_fp_unique_irred_cp}
     For an irreducible unital Schwarz map with faithful adjoint fixed point,
     each peripheral eigenvalue admits a unitary eigenvector.
 \end{lemma}
