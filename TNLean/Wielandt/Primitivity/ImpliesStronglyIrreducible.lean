@@ -7,7 +7,6 @@ import TNLean.Wielandt.Primitivity.Definitions
 import TNLean.Wielandt.Primitivity.Normal
 import TNLean.MPS.CanonicalForm.Reduction
 import TNLean.MPS.Overlap.PeripheralToTransferMapGap
-import TNLean.MPS.CanonicalForm.BlockingViaAdjoint
 import Mathlib.Analysis.InnerProductSpace.Positive
 import Mathlib.Analysis.Matrix.Spectrum
 
