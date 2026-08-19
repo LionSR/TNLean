@@ -3,8 +3,12 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import TNLean.Algebra.MatrixOperatorSpace
 import TNLean.Channel.Determinant.Bound
+import TNLean.Channel.KrausMap
 import TNLean.Channel.PerronFrobenius.Existence
+import Mathlib.Analysis.Normed.Algebra.Spectrum
+import Mathlib.Topology.Algebra.Module.FiniteDimension
 
 /-!
 # Spectral radius of positive maps — Wolf Proposition 6.1
@@ -27,10 +31,15 @@ positive maps relies on the Russo--Dye theorem and is documented in
 
 * `IsPositiveMap.eigenvalue_one_exists_of_tracePreserving`:
   nonzero PSD fixed point for positive trace-preserving maps.
+* `spectralRadius_le_one_of_forall_eigenvalue_norm_le_one`: the norm-agnostic
+  step transporting a pointwise eigenvalue bound to a spectral-radius bound,
+  shared by every operator-norm choice used for this map.
+* `Kraus.eigenvalue_norm_le_one_of_isTP`, `Kraus.spectralRadius_mapLM_le_one_of_isTP`:
+  eigenvalue and spectral-radius bounds for trace-preserving Kraus maps.
 
 ## References
 
-* [M. Wolf, *Quantum Channels & Operations: Guided Tour*, Proposition 6.1][Wolf2012QChannels]
+* [M. Wolf, *Quantum Channels & Operations: Guided Tour*, Proposition 6.1][Wolf2012Quantum]
 -/
 
 open scoped Matrix ComplexOrder
@@ -85,3 +94,71 @@ theorem eigenvalue_one_exists_of_tracePreserving
   simpa [hr_one, one_smul] using h_eig
 
 end IsPositiveMap
+
+/-- If every eigenvalue of a linear endomorphism of a finite-dimensional complex normed space
+has modulus at most one, then its spectral radius (computed after transport to the induced
+continuous linear map) is at most one.
+
+This is the norm-agnostic step of Wolf Proposition 6.1's spectral-radius conclusion: only the
+algebraic fact `spectrum = eigenvalues` and the identification of `spectrum` along the
+`AlgEquiv` to continuous linear maps are used, so the same argument serves any choice of
+operator norm on `V`. -/
+theorem spectralRadius_le_one_of_forall_eigenvalue_norm_le_one
+    {V : Type*} [NormedAddCommGroup V] [NormedSpace ℂ V] [FiniteDimensional ℂ V]
+    (E : V →ₗ[ℂ] V) (h : ∀ μ, Module.End.HasEigenvalue E μ → ‖μ‖ ≤ 1) :
+    spectralRadius ℂ (Module.End.toContinuousLinearMap V E) ≤ 1 := by
+  have hSpec : spectrum ℂ (Module.End.toContinuousLinearMap V E) = spectrum ℂ E :=
+    AlgEquiv.spectrum_eq (Module.End.toContinuousLinearMap V) E
+  rw [spectralRadius]
+  refine iSup₂_le fun μ hμ ↦ ?_
+  have hμE : μ ∈ spectrum ℂ E := hSpec ▸ hμ
+  have hEig : Module.End.HasEigenvalue E μ := Module.End.hasEigenvalue_iff_mem_spectrum.mpr hμE
+  exact_mod_cast h μ hEig
+
+/-!
+## Spectral-radius bound for trace-preserving Kraus maps
+
+A trace-preserving finite Kraus map has all eigenvalues in the closed unit
+disk: it is a completely positive trace-preserving map, so
+`IsPositiveMap.eigenvalue_norm_le_one_of_tracePreserving` applies once the
+trivial zero-dimensional case is discharged separately.
+-/
+
+namespace Kraus
+
+variable {d D : ℕ}
+
+local notation "Mat" => Matrix (Fin D) (Fin D) ℂ
+
+/-- Every eigenvalue of a trace-preserving finite Kraus map has modulus at most one.
+
+This is the trace-preserving form of the spectral bound in Wolf, Proposition 6.1,
+obtained from the positive-map bound after discharging the trivial
+zero-dimensional case. -/
+theorem eigenvalue_norm_le_one_of_isTP
+    (K : Fin d → Mat) (hTP : IsTP K)
+    (μ : ℂ) (hμ : Module.End.HasEigenvalue (mapLM K) μ) :
+    ‖μ‖ ≤ 1 := by
+  rcases eq_or_ne D 0 with hD0 | hD0
+  · subst hD0
+    obtain ⟨v, hv, hvne⟩ := hμ.exists_hasEigenvector
+    exact absurd (Subsingleton.elim v 0) hvne
+  · have : NeZero D := ⟨hD0⟩
+    exact (isCPMap_mapLM K).isPositiveMap.eigenvalue_norm_le_one_of_tracePreserving
+      (isTracePreservingMap_mapLM_of_isTP K hTP) μ hμ
+
+section OperatorSpace
+
+open scoped TNOperatorSpace
+
+/-- A trace-preserving finite Kraus map has spectral radius at most one. -/
+theorem spectralRadius_mapLM_le_one_of_isTP
+    (K : Fin d → Mat) (hTP : IsTP K) :
+    spectralRadius ℂ
+      ((Module.End.toContinuousLinearMap (Matrix (Fin D) (Fin D) ℂ)) (mapLM K)) ≤ 1 :=
+  spectralRadius_le_one_of_forall_eigenvalue_norm_le_one (mapLM K)
+    (fun μ hμ ↦ eigenvalue_norm_le_one_of_isTP K hTP μ hμ)
+
+end OperatorSpace
+
+end Kraus
