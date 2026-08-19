@@ -172,6 +172,9 @@ theorem geometric_bound_of_spectralRadius_lt_one
       _ ≤ C * (r : ℝ) ^ n := by
         gcongr
 
+@[deprecated _root_.pow_tendsto_zero_of_spectralRadius_lt_one (since := "2026-08-19")]
+alias pow_tendsto_zero_of_spectralRadius_lt_one := _root_.pow_tendsto_zero_of_spectralRadius_lt_one
+
 /-- **An idempotent with spectral radius below one is zero.** In a complex Banach
 algebra, the powers of such an element converge to `0` while every positive power
 equals the element itself. -/
@@ -179,7 +182,7 @@ theorem IsIdempotentElem.eq_zero_of_spectralRadius_lt_one
     {A : Type*} [NormedRing A] [CompleteSpace A] [NormedAlgebra ℂ A]
     {a : A} (ha : IsIdempotentElem a) (h : spectralRadius ℂ a < 1) :
     a = 0 := by
-  have hpow := pow_tendsto_zero_of_spectralRadius_lt_one a h
+  have hpow := _root_.pow_tendsto_zero_of_spectralRadius_lt_one a h
   have hshift : Filter.Tendsto (fun n => a ^ (n + 1)) Filter.atTop (nhds 0) :=
     hpow.comp (Filter.tendsto_add_atTop_nat 1)
   have hconst : Filter.Tendsto (fun n => a ^ (n + 1)) Filter.atTop (nhds a) := by

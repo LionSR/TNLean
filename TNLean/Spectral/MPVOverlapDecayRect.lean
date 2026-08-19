@@ -77,7 +77,7 @@ theorem mpvOverlap_tendsto_zero_of_mixedTransferSpectralRadius_lt_one
         (mixedTransferMap₂ (d := d) (D₁ := D₁) (D₂ := D₂) A B)) : V →L[ℂ] V) < 1
     simpa only [] using hSpect
   have hpow0 : Tendsto (fun n => F' ^ n) atTop (nhds 0) :=
-    @pow_tendsto_zero_of_spectralRadius_lt_one (V →L[ℂ] V)
+    @_root_.pow_tendsto_zero_of_spectralRadius_lt_one (V →L[ℂ] V)
       (ContinuousLinearMap.toNormedRing : NormedRing (V →L[ℂ] V)) hComplete
       (ContinuousLinearMap.toNormedAlgebra : NormedAlgebra ℂ (V →L[ℂ] V)) F' hSpectF
   have htr0 :

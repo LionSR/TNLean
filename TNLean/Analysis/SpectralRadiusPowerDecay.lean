@@ -4,7 +4,9 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import Mathlib.Analysis.Normed.Algebra.GelfandFormula
-import Mathlib.Analysis.SpecificLimits.Normed
+import Mathlib.Analysis.Normed.Group.Continuity
+import Mathlib.Analysis.SpecialFunctions.Pow.NNReal
+import Mathlib.Analysis.SpecificLimits.Basic
 
 /-!
 # Power decay below spectral radius one
@@ -26,7 +28,7 @@ theorem pow_tendsto_zero_of_spectralRadius_lt_one
     Filter.Tendsto (fun n => a ^ n) Filter.atTop (nhds 0) := by
   obtain ⟨r, hr_above, hr_below⟩ := ENNReal.lt_iff_exists_nnreal_btwn.mp h
   have hr_lt_one : r < 1 := ENNReal.coe_lt_coe.mp (by rwa [ENNReal.coe_one])
-  have hev2 : ∀ᶠ n in Filter.atTop, ‖a ^ n‖₊ < r ^ n := by
+  have hev : ∀ᶠ n in Filter.atTop, ‖a ^ n‖₊ < r ^ n := by
     have gelfand := spectrum.pow_nnnorm_pow_one_div_tendsto_nhds_spectralRadius a
     filter_upwards [gelfand.eventually (eventually_lt_nhds hr_above),
       Filter.eventually_gt_atTop 0] with n hn hn_pos
@@ -34,6 +36,6 @@ theorem pow_tendsto_zero_of_spectralRadius_lt_one
     rw [ENNReal.rpow_natCast] at hn
     exact_mod_cast hn
   apply squeeze_zero_norm' (a := fun n => (r : ℝ) ^ n)
-  · filter_upwards [hev2] with n hn
+  · filter_upwards [hev] with n hn
     rw [← coe_nnnorm, ← NNReal.coe_pow]; exact_mod_cast hn.le
   · exact tendsto_pow_atTop_nhds_zero_of_lt_one r.coe_nonneg (by exact_mod_cast hr_lt_one)

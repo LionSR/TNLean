@@ -1511,9 +1511,9 @@ spectral split → block extraction → MPV calculation → strict bounds
   `ENNReal.rpow_inv_lt_iff` and `ENNReal.rpow_natCast`.
 - **Seen:** 2 occurrences: `have hev` in
   `MPSTensor.geometric_bound_of_spectralRadius_lt_one`
-  (`TNLean/Spectral/TransferOperatorGapCommon.lean:131-138`) and `have hev2` in
+  (`TNLean/Spectral/TransferOperatorGapCommon.lean:131-138`) and `have hev` in
   `pow_tendsto_zero_of_spectralRadius_lt_one`
-  (`TNLean/Analysis/SpectralRadiusPowerDecay.lean:29-35`), the latter after the
+  (`TNLean/Analysis/SpectralRadiusPowerDecay.lean:31-37`), the latter after the
   layer-0 relocation of the second theorem (PR #6570).
 - **Abstraction (proposed):** an `eventually_nnnorm_pow_lt_pow_of_spectralRadius_lt`
   lemma in `TNLean/Analysis/SpectralRadiusPowerDecay.lean`, taking

@@ -259,7 +259,7 @@ lemma stringOrderBoundaryParam_tendsto_zero_of_spectralRadius_lt_one
           Matrix (Fin D) (Fin D) ℂ →L[ℂ] Matrix (Fin D) (Fin D) ℂ) < 1
     simpa using hsr
   have hpow : Filter.Tendsto (fun L => F' ^ L) Filter.atTop (nhds 0) :=
-    @pow_tendsto_zero_of_spectralRadius_lt_one
+    @_root_.pow_tendsto_zero_of_spectralRadius_lt_one
       (Matrix (Fin D) (Fin D) ℂ →L[ℂ] Matrix (Fin D) (Fin D) ℂ)
       ContinuousLinearMap.toNormedRing hComplete ContinuousLinearMap.toNormedAlgebra F' hsrF
   have hIter0 :
