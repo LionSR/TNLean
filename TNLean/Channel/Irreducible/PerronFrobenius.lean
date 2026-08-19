@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.Channel.Irreducible.Growth
 import TNLean.Channel.Irreducible.KrausSetup
+import TNLean.Channel.Irreducible.Scaling
 import TNLean.QPF.Uniqueness
 
 /-!

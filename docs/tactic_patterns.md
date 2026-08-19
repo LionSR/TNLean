@@ -1555,6 +1555,36 @@ spectral split → block extraction → MPV calculation → strict bounds
   orthogonality. This removes seven local constructions/proofs and reduces the
   theorem proof from 387 to 346 lines (41 lines net), with no new declaration.
 
+### nonzero Kraus map via evaluation at the identity — candidate
+- **Pattern:** show a finite Kraus map is nonzero by evaluating at `1`, reducing to
+  `∑ᵢ Kᵢ Kᵢᴴ = 0`, and concluding each `Kᵢ = 0` from positive semidefiniteness of the
+  summands via `Matrix.eq_zero_of_sum_mul_conjTranspose_eq_zero`.
+- **Seen:** 2 occurrences — the packaged `Kraus.mapLM_ne_zero_of_exists_ne_zero`
+  (`TNLean/Channel/KrausMap.lean`) and the still-inlined six-line copy inside
+  `MPSTensor.exists_posDef_transferMap_eigenvector_of_irreducible`
+  (`TNLean/MPS/CanonicalForm/ProjectorClosureSpectral.lean:270-277`), noted in the
+  2026-08 Perron–Frobenius gauge-split review.
+- **Abstraction (proposed):** replace the inlined copy with
+  `Kraus.mapLM_ne_zero_of_exists_ne_zero _ hB` composed with
+  `Kraus.mapLM_eq_transferMap`.
+- **Notes:** below the rule-of-three threshold; revisit if a third inline copy
+  appears.
+
+### irreducibility transfer to the conjugate-transposed family — candidate
+- **Pattern:** prove that irreducibility passes to the conjugate-transposed Kraus
+  family by taking adjoints of the invariant-projection equation
+  `(1-P) Kᵢ P = 0` to get `P Kᵢᴴ (1-P) = 0`.
+- **Seen:** 2 occurrences — `Kraus.isIrreducibleMap_mapLM_conjTranspose`
+  (`TNLean/Channel/Irreducible/AdjointFamily.lean:41-68`) and
+  `MPSTensor.isIrreducibleCP_transferMap_conjTranspose_of_isIrreducibleTensor`
+  (`TNLean/MPS/Irreducible/Adjoint.lean:39-83`), noted in the 2026-08
+  Perron–Frobenius gauge-split review.
+- **Abstraction (proposed):** derive the `MPSTensor` version as a two-line corollary
+  of the `Kraus` version via `Kraus.mapLM_eq_transferMap`, deleting the duplicated
+  84-line proof body.
+- **Notes:** below the rule-of-three threshold; the duplication predates the PR
+  that first noticed it (#6561) and both proofs are otherwise correct.
+
 ## Retired
 
 ### block_words — retired
