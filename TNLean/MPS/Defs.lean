@@ -19,7 +19,7 @@ MPV coefficients, gauge equivalence, and the WORD-to-STATE bridge lemmas
 connecting them to word evaluation, injectivity, and normality. The
 `MPSTensor` abbrev itself, together with word evaluation, injectivity, block
 injectivity, and normality, now live in `TNLean/Kraus/Word.lean` and
-`TNLean/Kraus/Injectivity.lean` (issue #6560 phase 1b, PR-W1a); this file
+`TNLean/Kraus/Injectivity.lean`; this file
 imports them and keeps only the matrix-product-vector vocabulary and the
 gauge-invariance bridge lemmas for `evalWord`, `SameMPV`, and eventual block
 injectivity.
