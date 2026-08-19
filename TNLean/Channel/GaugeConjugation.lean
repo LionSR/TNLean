@@ -16,7 +16,6 @@ in `TNLean.Channel.KrausGauge`.
 -/
 
 open scoped Matrix ComplexOrder MatrixOrder BigOperators
-open Matrix Finset
 
 namespace Kraus
 
