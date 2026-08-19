@@ -130,8 +130,7 @@ private theorem transferMap_hermitian_fixedPoint_eq_zero_of_trace_eq_zero
       simpa only [sub_smul, trace_sub, trace_smul, smul_eq_mul] using this
     -- trace((c₁ - c₂)•ρ) = (c₁ - c₂) * trace ρ
     have hmul : (c₁ - c₂) * Matrix.trace ρ = 0 := by
-      -- convert htrace
-      simpa only [mul_eq_zero, trace_smul, smul_eq_mul] using htrace
+      simpa only [trace_smul, smul_eq_mul] using htrace
     -- cancel trace ρ
     have : c₁ - c₂ = 0 := (mul_eq_zero.mp hmul).resolve_right htrρ
     exact sub_eq_zero.mp this
@@ -188,8 +187,7 @@ private theorem transferMap_fixedPoint_eq_zero_of_trace_eq_zero_of_hermitian_zer
   have hXherm : X = Xᴴ := by
     have h' : X - Xᴴ = 0 := by
       have : Complex.I • (X - Xᴴ) = 0 := by
-        simpa only [Y₂, isUnit_iff_ne_zero, ne_eq, Complex.I_ne_zero, not_false_eq_true,
-          IsUnit.smul_eq_zero] using hY₂_zero
+        simpa only [Y₂] using hY₂_zero
       exact (smul_eq_zero.mp this).resolve_left (by simp)
     simpa only [sub_eq_zero] using h'
   have h2X : (2 : ℂ) • X = 0 := by
