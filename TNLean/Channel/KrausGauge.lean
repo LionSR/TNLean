@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.Analysis.MatrixSqrt
+import TNLean.Channel.GaugeConjugation
 import TNLean.Channel.Schwarz.Basic
 
 import Mathlib.Analysis.CStarAlgebra.ContinuousFunctionalCalculus.Basic
@@ -54,42 +55,18 @@ Assume `ρ` is positive definite and fixed by the conjugate-transposed Kraus map
 `X ↦ ∑ i, (K i)ᴴ * X * K i`. Then the gauged family `tpGauge K ρ` is trace
 preserving: `∑ i, (B i)ᴴ * B i = I`.
 
-This is the standard "left-canonical" gauge construction. -/
+This is the standard "left-canonical" gauge construction, the specialization
+`S = ρ^{1/2}` of `gauged_isTP_of_map_conjTranspose_fixedPoint`. -/
 theorem tpGauge_isTP_of_map_conjTranspose_fixedPoint
     (K : Fin d → Mat) (ρ : Mat)
     (hρ : ρ.PosDef)
     (hfix : map (fun i => (K i)ᴴ) ρ = ρ) :
     IsTP (tpGauge K ρ) := by
-  classical
-  -- Notation.
-  set S : Mat := CFC.sqrt ρ
-  have hS_mul : S * S = ρ := by
-    simpa [S] using CFC.sqrt_mul_sqrt_self ρ hρ.posSemidef.nonneg
-  have hS_herm : Sᴴ = S := by
-    simpa [S] using Matrix.conjTranspose_cfc_sqrt (ρ := ρ)
-  have hStS : Sᴴ * S = ρ := by
-    simpa [hS_herm] using hS_mul
-  -- Invertibility facts (in the `Matrix` ring inverse sense).
-  have hdet : IsUnit S.det := by
-    simpa [S] using hρ.isUnit_det_cfc_sqrt
-  have hSmul_inv : S * S⁻¹ = 1 := Matrix.mul_nonsing_inv S hdet
-  have hdetT : IsUnit (Sᴴ.det) := by
-    simpa [Matrix.det_conjTranspose] using (IsUnit.star hdet)
-  have hStinv_mul : (Sᴴ)⁻¹ * Sᴴ = 1 := Matrix.nonsing_inv_mul Sᴴ hdetT
-  -- Rewrite each summand.
-  have h_term : ∀ i : Fin d,
-      (S * K i * S⁻¹)ᴴ * (S * K i * S⁻¹) =
-        (Sᴴ)⁻¹ * ((K i)ᴴ * ρ * K i) * S⁻¹ := by
-    intro i
-    rw [Matrix.conjTranspose_mul, Matrix.conjTranspose_mul, Matrix.conjTranspose_nonsing_inv]
-    simp [Matrix.mul_assoc, ← hStS]
-  -- Identify the adjoint fixed point equation as a sum.
-  have h_sum_eq : ∑ i : Fin d, (K i)ᴴ * ρ * K i = ρ := by
-    simpa [map_apply, Matrix.mul_assoc] using hfix
-  -- Compute the TP normalisation.
-  change (∑ i : Fin d, (S * K i * S⁻¹)ᴴ * (S * K i * S⁻¹)) = 1
-  simp_rw [h_term]
-  rw [← Finset.sum_mul, ← Finset.mul_sum, h_sum_eq, ← hStS]
-  simp [Matrix.mul_assoc, hStinv_mul, hSmul_inv]
+  have hS_herm : (CFC.sqrt ρ)ᴴ = CFC.sqrt ρ := Matrix.conjTranspose_cfc_sqrt (ρ := ρ)
+  have hStS : (CFC.sqrt ρ)ᴴ * CFC.sqrt ρ = ρ := by
+    rw [hS_herm]
+    simpa using CFC.sqrt_mul_sqrt_self ρ hρ.posSemidef.nonneg
+  exact gauged_isTP_of_map_conjTranspose_fixedPoint K (CFC.sqrt ρ) ρ
+    hρ.isUnit_det_cfc_sqrt hStS hfix
 
 end Kraus
