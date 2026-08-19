@@ -51,21 +51,26 @@ There are no sanctioned axiom declarations in this repository. Any new
 
 Historically, `hayashi_ssa_equality_characterization_forward` in
 `TNLean/Axioms/Entropy.lean` was sanctioned for issue #632 / gate #236. It is
-now a theorem proved in `TNLean/Analysis/EntropyMarkovForward.lean`; the module
-under `TNLean/Axioms/` retains the established public name only for
-compatibility. The reverse direction is proved in
+now a theorem proved in `TNLean/Analysis/EntropyMarkovForward.lean`; the
+compatibility module was relocated to
+`TNLean/Entropy/SSAEqualityCharacterization.lean`, which retains the
+established public name. The reverse direction is proved in
 `TNLean/Analysis/EntropyMarkovReverse.lean`, and the biconditional combines the
 two proved implications.
 
-`TNLean/Axioms/OperatorConvexity.lean` no longer declares any axioms: the operator
+`TNLean/Analysis/LiebConcavity.lean` (formerly
+`TNLean/Axioms/OperatorConvexity.lean`) declares no axioms: the operator
 Jensen inequalities for the concave real power, convex real power, and logarithm
 (`posMap_rpow_concave_jensen`, `posMap_rpow_convex_jensen`,
-`posMap_log_concave_jensen`) and Lieb's concavity theorem (`lieb_concavity_axiom`)
+`posMap_log_concave_jensen`) and Lieb's concavity theorem (`lieb_concavity_posDef`)
 are all proved there, the former three from the Loewner integral representation of
 the power function and the last from the operator integral representation of the
 fractional product together with the vectorization isometry. The former
 `trace_rpow_concave_axiom` / `trace_rpow_convex_axiom` were discharged earlier; see
-`TNLean/Analysis/OperatorConvexity.lean`.
+`TNLean/Analysis/OperatorConvexity.lean`. The `TNLean/Axioms/` directory held
+only proved theorems and was dissolved: its four modules were relocated to
+their subject homes and the `_axiom` suffix was dropped from the one
+declaration name that still carried it.
 
 ### Circular reasoning
 

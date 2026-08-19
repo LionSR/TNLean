@@ -703,7 +703,7 @@ abstracted — record why, so it is not re-proposed).
   uses the Analysis declaration directly.
 
 ### Transpose covariance of the continuous functional calculus
-- **Pattern:** `TNLean/Axioms/OperatorConvexity.lean` carried a private copy of
+- **Pattern:** `TNLean/Analysis/LiebConcavity.lean` carried a private copy of
   the conjugation star-algebra homomorphism and its functional-calculus
   covariance proof solely to commute real powers with transpose.
 - **Reuse:** `Matrix.cfc_transpose` in `TNLean/Analysis/CfcConjugation.lean`

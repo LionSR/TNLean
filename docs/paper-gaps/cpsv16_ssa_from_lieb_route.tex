@@ -32,7 +32,7 @@ The inequality~\eqref{eq:ssa} was previously asserted as a standalone axiom and
 has now been discharged: it is the theorem \leanid{strong_subadditivity_general}
 in \doclink{TNLean/Channel/Schwarz/StrongSubadditivityPosDef}, derived from Lieb
 concavity along the route recorded below, and the former axiom has been removed
-from \doclink{TNLean/Axioms/Entropy} with its single re-export
+from \doclink{TNLean/Entropy/SSAEqualityCharacterization} with its single re-export
 \leanid{Entropy.strongSubadditivity} redirected to the derived
 theorem.\footnote{The entropy is the eigenvalue-based
 $S(\rho) = \sum_i \eta(\lambda_i)$, $\eta(x) = -x\log x$, of
@@ -40,11 +40,11 @@ $S(\rho) = \sum_i \eta(\lambda_i)$, $\eta(x) = -x\log x$, of
 The derivation rests on the operator-concavity input that the same development
 already isolates for the Ando--Lieb theory, namely Lieb's joint concavity
 theorem.\footnote{Lieb concavity is the axiom
-\leanid{lieb_concavity_axiom} in \doclink{TNLean/Axioms/OperatorConvexity}
-(\path{TNLean/Axioms/OperatorConvexity.lean}), consumed by
+\leanid{lieb_concavity_posDef} in \doclink{TNLean/Analysis/LiebConcavity}
+(\path{TNLean/Analysis/LiebConcavity.lean}), consumed by
 \leanid{lieb_concavity} in \doclink{TNLean/Channel/Schwarz/AndoLieb}.}
 The only entropy-side axiom in the closure of
-\leanid{strong_subadditivity_general} is therefore \leanid{lieb_concavity_axiom}.
+\leanid{strong_subadditivity_general} is therefore \leanid{lieb_concavity_posDef}.
 This note records the mathematical route that connects the two, layer by layer.
 
 \section{The point at issue}
@@ -224,7 +224,7 @@ in place. Concretely:
     (\leanid{quantumRelativeEntropy_nonneg_general}), via the full-rank eigenbasis
     reduction and scalar Gibbs inequality together with the support-respecting
     regularization, rather than operator monotonicity of the logarithm.
-  \item Layer (4) is the single consumer of \leanid{lieb_concavity_axiom}: joint
+  \item Layer (4) is the single consumer of \leanid{lieb_concavity_posDef}: joint
     convexity of $D$ is the entropy-theoretic content of Lieb's theorem. This
     layer is now formalized on the positive-definite domain:
     \leanid{convexOn_quantumRelativeEntropy} in
@@ -235,7 +235,7 @@ in place. Concretely:
     $g_s(\rho,\sigma) = (\tr\rho
     - \operatorname{Re}\tr(\rho^s\sigma^{1-s}))/(1-s)$: each $g_s$ is jointly
     convex for $s\in[0,1)$ (\leanid{convexOn_relativeEntropyApprox}, the
-    consumer of \leanid{lieb_concavity_axiom}) and converges pointwise to $D$ as
+    consumer of \leanid{lieb_concavity_posDef}) and converges pointwise to $D$ as
     $s\to1^-$ (\leanid{tendsto_relativeEntropyApprox}), and the pointwise limit
     of convex functions is convex. The two-calculus trace double-sum identity
     \leanid{re_trace_cfc_mul_cfc_eq_double_sum} underlying the limit consumes no

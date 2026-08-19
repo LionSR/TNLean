@@ -90,7 +90,7 @@ The core `grind` tactic (congruence closure, E-matching over annotated
 lemmas, case splitting, linear-arithmetic and commutative-ring solvers) is
 available on this toolchain and already used in the codebase
 (`TNLean/Channel/Schwarz/OperatorJensenAux.lean`,
-`TNLean/Axioms/OperatorConvexity.lean`) — chiefly as a side-condition
+`TNLean/Analysis/LiebConcavity.lean`) — chiefly as a side-condition
 discharger, e.g. `fun_prop (disch := grind)` and spectrum-membership
 arithmetic. It produces ordinary kernel-checked proofs, so none of the
 `docs/PROOF_INTEGRITY.md` blocker concerns apply (it is *not* in the

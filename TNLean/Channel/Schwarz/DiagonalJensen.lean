@@ -40,7 +40,7 @@ weights `p` and points `λ` yields the conclusion.
 
 This auxiliary lemma is a prerequisite for the trace convexity axioms
 `trace_rpow_concave_axiom` and `trace_rpow_convex_axiom` in
-`TNLean.Axioms.OperatorConvexity`.
+`TNLean.Analysis.LiebConcavity`.
 
 ## References
 

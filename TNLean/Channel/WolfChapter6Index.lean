@@ -198,7 +198,7 @@ In `TNLean.Channel.Irreducible.FromSpectral`:
 * Paper-gap: `docs/paper-gaps/wolf_ch6_spectral_radius_eigenvalue.tex`
 
 Uses Brouwer's fixed-point theorem on density matrices (proved in
-`TNLean.Axioms.BrouwerFixedPoint`).
+`TNLean.Channel.FixedPoint.BrouwerDensityMatrices`).
 
 ### Wolf Proposition 6.6 (Similarity preserving irreducibility) — FORMALIZED
 
@@ -316,7 +316,7 @@ In `TNLean.Channel.FixedPoint.Algebra`:
 
 ### Wolf Theorem 6.10 (Brouwer's fixed point theorem)
 
-* `brouwer_fixedPoint_densityMatrices` — `TNLean.Axioms.BrouwerFixedPoint`
+* `brouwer_fixedPoint_densityMatrices` — `TNLean.Channel.FixedPoint.BrouwerDensityMatrices`
   (density-matrix specialization; kernel-checked).
 * `Brouwer (vendored Gametheory library)` — exact import citation: Brouwer for the
   standard simplex (LionSR/Brouwer library).

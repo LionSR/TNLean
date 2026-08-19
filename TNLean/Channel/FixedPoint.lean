@@ -11,6 +11,7 @@ Authors: TNLean contributors
 import TNLean.Channel.FixedPoint.AbstractAlgebra
 import TNLean.Channel.FixedPoint.Algebra
 import TNLean.Channel.FixedPoint.BlockForm
+import TNLean.Channel.FixedPoint.BrouwerDensityMatrices
 import TNLean.Channel.FixedPoint.CanonicalGauge
 import TNLean.Channel.FixedPoint.Cesaro
 import TNLean.Channel.FixedPoint.ChoiEffros

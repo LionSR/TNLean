@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.Axioms.OperatorConvexity
+import TNLean.Analysis.LiebConcavity
 import TNLean.Analysis.OperatorConvexity
 import Mathlib.Analysis.CStarAlgebra.Matrix
 import Mathlib.Analysis.Matrix.Order
@@ -35,8 +35,8 @@ convexity/concavity consequences for matrix power functions.
   `TNLean.Analysis.OperatorConvexity` using the spectral theorem and the
   scalar Jensen inequality. This file restates them in the present file,
   for downstream use.
-* `lieb_concavity` is still derived from `lieb_concavity_axiom` in
-  `TNLean.Axioms.OperatorConvexity`, pending the integral-representation
+* `lieb_concavity` is still derived from `lieb_concavity_posDef` in
+  `TNLean.Analysis.LiebConcavity`, pending the integral-representation
   formalization in Mathlib.
 * The three downstream corollaries (`lieb_concavity_id`,
   `lieb_concavity_in_fst`, `lieb_concavity_in_snd`) are specializations of
@@ -103,7 +103,7 @@ For `s ∈ [0, 1]`, any matrix `K`, and PD matrices `A₁, A₂, B₁, B₂`:
 
 This is equivalent to joint concavity of `(A, B) ↦ Re Tr(K† A^s K B^{1−s})`.
 
-Proved from `lieb_concavity_axiom` in `TNLean.Axioms.OperatorConvexity`. -/
+Proved from `lieb_concavity_posDef` in `TNLean.Analysis.LiebConcavity`. -/
 theorem lieb_concavity
     {s : ℝ} (hs : s ∈ Set.Icc (0 : ℝ) 1)
     {A₁ A₂ B₁ B₂ K : Mat}
@@ -114,7 +114,7 @@ theorem lieb_concavity
       (1 - t) * (trace (Kᴴ * A₂ ^ s * K * B₂ ^ (1 - s))).re ≤
     (trace (Kᴴ * (t • A₁ + (1 - t) • A₂) ^ s * K *
       (t • B₁ + (1 - t) • B₂) ^ (1 - s))).re :=
-  lieb_concavity_axiom hs hA₁ hA₂ hB₁ hB₂ ht
+  lieb_concavity_posDef hs hA₁ hA₂ hB₁ hB₂ ht
 
 /-- **Lieb concavity, `K = 1` special case** (Lieb 1973).
 

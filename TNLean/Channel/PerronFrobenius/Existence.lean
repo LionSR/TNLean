@@ -8,7 +8,7 @@ import TNLean.Channel.Irreducible.AdjointFamily
 import TNLean.Channel.Irreducible.Growth.OneStep
 import TNLean.Channel.KrausMap
 import TNLean.Algebra.MatrixAux
-import TNLean.Axioms.BrouwerFixedPoint
+import TNLean.Channel.FixedPoint.BrouwerDensityMatrices
 
 /-!
 # Perron–Frobenius eigenvector existence for CP maps
