@@ -931,11 +931,11 @@ The TP-gauge application follows~\cite[Appendix~A]{Cirac2016MPDO_arXiv}.
 
 \begin{proof}
     \leanok
-    \uses{thm:posDef_adjoint_eigenvector,
+    \uses{thm:kraus_posdef_adjoint_eigenvector,
         thm:kraus_tp_gauge_from_adjoint_fixed, thm:kraus_tp_spectral_radius_bound}
-    Choose Kraus operators $\{K_i\}$ for $E$. Regarded as an MPS tensor,
-    they have transfer map $E$, and irreducibility of $E$ is precisely
-    irreducibility of this tensor. Theorem~\ref{thm:posDef_adjoint_eigenvector}
+    Choose Kraus operators $\{K_i\}$ for $E$; their Kraus map is $E$, so it
+    is irreducible.
+    Theorem~\ref{thm:kraus_posdef_adjoint_eigenvector}
     therefore gives a positive definite matrix $\sigma>0$ and $t>0$ such that
     $E^\dagger(\sigma)=t\sigma$. The weighted trace pairing with $\rho$ gives
     \begin{align}
