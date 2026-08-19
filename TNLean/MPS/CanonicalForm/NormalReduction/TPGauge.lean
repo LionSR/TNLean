@@ -98,15 +98,15 @@ structure PGVWC07PositiveLengthWitness (A : MPSTensor d D) where
 private theorem isIrreducibleAction_gaugeEquiv
     {D : ℕ} {A B : MPSTensor d D}
     (hGauge : GaugeEquiv (d := d) (D := D) A B)
-    (hIrr : IsIrreducibleAction (d := d) (D := D) A) :
-    IsIrreducibleAction (d := d) (D := D) B := by
+    (hIrr : Matrix.IsIrreducibleAction (d := d) (D := D) A) :
+    Matrix.IsIrreducibleAction (d := d) (D := D) B := by
   classical
   rcases hGauge with ⟨X, hX⟩
   let T : (Fin D → ℂ) ≃ₗ[ℂ] (Fin D → ℂ) :=
     (Matrix.GeneralLinearGroup.toLin X).toLinearEquiv
   intro W hW
   let W' : Submodule ℂ (Fin D → ℂ) := W.map T.symm.toLinearMap
-  have hW' : IsInvariantSubmodule (d := d) (D := D) A W' := by
+  have hW' : Matrix.IsInvariantSubmodule (d := d) (D := D) A W' := by
     intro i v hv
     rcases (Submodule.mem_map).1 hv with ⟨u, huW, rfl⟩
     refine (Submodule.mem_map).2 ?_
@@ -136,12 +136,12 @@ private theorem isIrreducibleTensor_tpGauge_of_isIrreducibleTensor
     (hσ : σ.PosDef)
     (hIrr : IsIrreducibleTensor (d := d) (D := D) A) :
     IsIrreducibleTensor (d := d) (D := D) (tpGauge (d := d) (D := D) A σ) := by
-  have hAction : IsIrreducibleAction (d := d) (D := D) A :=
+  have hAction : Matrix.IsIrreducibleAction (d := d) (D := D) A :=
     isIrreducibleAction_of_isIrreducibleTensor (d := d) (D := D) A hIrr
   have hGauge : GaugeEquiv (d := d) (D := D) A (tpGauge (d := d) (D := D) A σ) :=
     gaugeEquiv_tpGauge (d := d) (D := D) A σ hσ
   have hActionGauge :
-      IsIrreducibleAction (d := d) (D := D) (tpGauge (d := d) (D := D) A σ) :=
+      Matrix.IsIrreducibleAction (d := d) (D := D) (tpGauge (d := d) (D := D) A σ) :=
     isIrreducibleAction_gaugeEquiv (d := d) (D := D) hGauge hAction
   exact
     isIrreducibleTensor_of_isIrreducibleAction
@@ -203,10 +203,10 @@ theorem exists_pgvwc07_unital_dualDiag_data_of_irreducible
       IsIrreducibleTensor (d := d) (D := D) (fun i => c • A i) :=
     isIrreducibleTensor_smul (d := d) (D := D) hc_ne A hIrr
   have hActionScaled :
-      IsIrreducibleAction (d := d) (D := D) (fun i => c • A i) :=
+      Matrix.IsIrreducibleAction (d := d) (D := D) (fun i => c • A i) :=
     isIrreducibleAction_of_isIrreducibleTensor
       (d := d) (D := D) (fun i => c • A i) hIrr_scaled
-  have hActionB : IsIrreducibleAction (d := d) (D := D) B :=
+  have hActionB : Matrix.IsIrreducibleAction (d := d) (D := D) B :=
     isIrreducibleAction_gaugeEquiv (d := d) (D := D) hGauge hActionScaled
   have hIrrB : IsIrreducibleTensor (d := d) (D := D) B :=
     isIrreducibleTensor_of_isIrreducibleAction (d := d) (D := D) B hActionB

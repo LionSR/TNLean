@@ -21,7 +21,7 @@ ambient partial isometry.
 
 open scoped Matrix ComplexOrder
 
-namespace MPSTensor
+namespace Matrix
 
 /-- A unitary conjugation between two compressed matrix algebras extends to an
 ambient partial isometry, and conjugation by this partial isometry transports
@@ -250,4 +250,4 @@ theorem exists_partial_isometry_implementing_corner_linearEquiv
         rw [hφQM, LinearEquiv.apply_symm_apply]
       rw [congrArg Subtype.val hfX, hTransport M, congrArg Subtype.val hφQM]
 
-end MPSTensor
+end Matrix
