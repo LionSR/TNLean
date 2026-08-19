@@ -46,7 +46,7 @@ theorem groundSpaceGram_sub_fixedPointProj_norm_sq_le_geometric
         (D : ℝ) ^ 3 * (C * r ^ n) ^ 2 := by
   let N := transferMap A - fixedPointProj ρ htr
   let T := (Module.End.toContinuousLinearMap (Matrix (Fin D) (Fin D) ℂ)) N
-  rcases geometric_bound_of_spectralRadius_lt_one T (by simpa [T, N] using hgap) with
+  rcases _root_.geometric_bound_of_spectralRadius_lt_one T (by simpa [T, N] using hgap) with
     ⟨C, r, hC, hr_pos, hr_lt_one, hbound⟩
   refine ⟨C, r, hC, hr_pos, hr_lt_one, ?_⟩
   intro n hn
