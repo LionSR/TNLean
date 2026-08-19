@@ -79,7 +79,6 @@ import TNLean.Channel.PositiveConditionalExpectationDirectSum
 import TNLean.Channel.PositiveExamples
 import TNLean.Channel.PositiveFunctional
 import TNLean.Channel.PositiveMapDetection
-import TNLean.Channel.PositiveSkolemNoether
 import TNLean.Channel.Primitive
 import TNLean.Channel.QuantumSteering
 import TNLean.Channel.RadonNikodym
