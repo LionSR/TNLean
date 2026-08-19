@@ -230,10 +230,14 @@ def _allowlist_from_source(source: str, variable_name: str) -> frozenset[str]:
             not isinstance(value, ast.Call)
             or not isinstance(value.func, ast.Name)
             or value.func.id != "frozenset"
-            or len(value.args) != 1
+            or len(value.args) > 1
             or value.keywords
         ):
             raise ValueError(f"{variable_name} must be a literal frozenset")
+        # Python has no empty-set literal, so an emptied allowlist is written
+        # as the zero-argument call `frozenset()`.
+        if not value.args:
+            return frozenset()
         parsed = ast.literal_eval(value.args[0])
         if not isinstance(parsed, set) or not all(isinstance(entry, str) for entry in parsed):
             raise ValueError(f"{variable_name} must contain only literal paths")

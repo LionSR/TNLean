@@ -302,6 +302,20 @@ class MergeBaseAllowlistTests(unittest.TestCase):
                 for error in errors)
         )
 
+    def test_emptied_allowlist_at_base_parses_as_empty(self) -> None:
+        # Python has no empty-set literal, so a fully cleared allowlist is
+        # written as the zero-argument call `frozenset()`; the baseline
+        # parser must accept that form once it reaches the merge base.
+        self._write_checker("")
+        self._commit("cleared allowlist baseline")
+        base_ref = subprocess.run(
+            ["git", "-C", str(self.root), "rev-parse", "HEAD"],
+            check=True, stdout=subprocess.PIPE, text=True,
+        ).stdout.strip()
+
+        baseline = guard._namespace_allowlist_at_merge_base(self.root, base_ref)
+        self.assertEqual(baseline, frozenset())
+
 
 if __name__ == "__main__":
     unittest.main()
