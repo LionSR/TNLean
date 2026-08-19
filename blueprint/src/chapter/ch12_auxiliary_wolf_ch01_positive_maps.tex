@@ -157,6 +157,126 @@ range, or its adjoint's range, is commutative.
     Lemma~\ref{lem:cp_from_positivity_commutative_domain}.
 \end{proof}
 
+\section{Partial trace over subsystems}
+
+The following support-projector absorption theorems and the partial trace
+over the left factor of a bipartite space are generic bipartite-operator
+facts, with no tensor-network content; they are relocated here from the
+parent-Hamiltonian marginal-support chapter, whose own tripartite-lift
+content (Chapter~\ref{ch:parent_hamiltonian}) cites them across the chapter
+boundary.
+
+\begin{theorem}[Left absorption by the marginal support projector]
+    \label{thm:marginal_support_left_absorption}
+    \lean{Matrix.PosSemidef.leftKroneckerEmbed_supportProj_mul_self}
+    \leanok
+    \uses{lem:trace_lift_left_factor_mul}
+    Let $\rho$ be positive semidefinite on $H_L\otimes H_R$, and let $P_L$ be
+    the orthogonal projector onto the support of $\tr_R\rho$. Then
+    $(P_L\otimes\Id_R)\rho=\rho$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Set $Q_L=\Id_L-P_L$. Since $Q_L\tr_R\rho=0$, the adjoint identity gives
+    \begin{align}
+        \tr((Q_L\otimes\Id_R)\rho)
+        &=\tr(Q_L\tr_R\rho) =0.
+        \notag
+    \end{align}
+    Positivity of $\rho$ then implies
+    $(Q_L\otimes\Id_R)\rho=0$. Finally,
+    $\Id_{L\otimes R}-(Q_L\otimes\Id_R)=P_L\otimes\Id_R$ gives the claim.
+\end{proof}
+
+\begin{theorem}[Right absorption by the marginal support projector]
+    \label{thm:marginal_support_right_absorption}
+    \lean{Matrix.PosSemidef.mul_leftKroneckerEmbed_supportProj_self}
+    \leanok
+    \uses{thm:marginal_support_left_absorption}
+    Under the same assumptions,
+    $\rho(P_L\otimes\Id_R)=\rho$.
+    For $H_L=H_A\otimes H_X$ and $H_R=H_B$, the two absorption identities are
+    precisely the $P_{AX}$ support-projector identities in
+    \cite[Appendix~D.2, lines 2228--2235]{Cirac2016MPDO_arXiv}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Apply $(\cdot)^\dagger$ to the left absorption identity. Since
+    $\rho^\dagger=\rho$ and
+    $(P_L\otimes\Id_R)^\dagger=P_L\otimes\Id_R$,
+    \begin{align}
+        \rho(P_L\otimes\Id_R)
+        &=[(P_L\otimes\Id_R)\rho]^\dagger =\rho^\dagger =\rho.
+        \notag
+    \end{align}
+\end{proof}
+
+\begin{definition}[Partial trace over the left factor]
+    \label{def:partial_trace_left}
+    \lean{Matrix.partialTraceLeft, Matrix.partialTraceLeft_apply}
+    \leanok
+    For an operator $\rho$ on $H_L\otimes H_R$, define
+    $(\tr_L\rho)_{r,s}:=\sum_l\rho_{(l,r),(l,s)}$.
+\end{definition}
+
+\begin{theorem}[Left absorption by the right marginal support]
+    \label{thm:right_marginal_support_left_absorption}
+    \lean{Matrix.PosSemidef.rightKroneckerEmbed_supportProj_mul_self}
+    \leanok
+    \uses{thm:partial_trace_left_pos,lem:trace_lift_right_factor_mul}
+    Let $\rho$ be positive semidefinite. If $P_R$ is the support projector of
+    $\tr_L\rho$, then
+    $(\Id_L\otimes P_R)\rho=\rho$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Set $Q=\Id_R-P_R$. The preceding trace identity gives
+    \begin{align}
+        \tr((\Id_L\otimes Q)\rho)
+        &=\tr(Q\tr_L\rho) =0,
+        \notag
+    \end{align}
+    since $P_R$ is the support projector of $\tr_L\rho$. Positivity of
+    $\rho$ then gives $(\Id_L\otimes Q)\rho=0$, and hence
+    $(\Id_L\otimes P_R)\rho=\rho$.
+\end{proof}
+
+\begin{theorem}[Right absorption by the right marginal support]
+    \label{thm:right_marginal_support_right_absorption}
+    \lean{Matrix.PosSemidef.mul_rightKroneckerEmbed_supportProj_self}
+    \leanok
+    \uses{thm:right_marginal_support_left_absorption}
+    Under the same assumptions,
+    $\rho(\Id_L\otimes P_R)=\rho$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Take adjoints in the left absorption identity.
+\end{proof}
+
+\begin{definition}[State-preparation map]
+    \label{def:mpdo_state_preparation_map}
+    \lean{Matrix.preparationMap}
+    \leanok
+    Let $\rho$ be a matrix on a finite-dimensional space $B$. The
+    state-preparation map from matrices on $A$ to matrices on $A\otimes B$ is
+    \begin{align}
+        \mathcal P_\rho(X)&=X\otimes\rho.
+        \notag
+    \end{align}
+    This is the elementary preparation operation used in the maps
+    $\mathcal T_1$ and $\mathcal S_1$ of
+    \cite[Appendix~C.2, lines~1527--1533 and~1551--1555]{Cirac2016MPDO_arXiv}.
+    It is relocated here from the MPDO renormalization chapter
+    (Chapter~\ref{ch:mpdo_rfp}), whose Kraus-action and
+    conditional-expectation consequences for the density-operator setting
+    cite it across the chapter boundary.
+\end{definition}
+
 \section{Extending completely positive maps from operator systems}
 
 An \emph{operator system} inside a finite-dimensional $C^*$-algebra is a
