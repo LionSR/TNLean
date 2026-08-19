@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.Core.BlockingTransfer
 import TNLean.MPS.Irreducible.Adjoint
-import TNLean.Channel.Peripheral.ClosureFixedPoint
+import TNLean.MPS.Core.TransferPeripheral
 import TNLean.Channel.Peripheral.PeriodicityRemoval
 
 import Mathlib.Analysis.InnerProductSpace.Adjoint

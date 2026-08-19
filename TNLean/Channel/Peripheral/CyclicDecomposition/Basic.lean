@@ -5,10 +5,8 @@ Authors: TNLean contributors
 -/
 import TNLean.Algebra.CornerCompression
 import TNLean.Channel.Peripheral.Spectrum
-import TNLean.Channel.Peripheral.ClosureFixedPoint
 import TNLean.Channel.Peripheral.PeriodicityRemoval
 import TNLean.Channel.Schwarz.Basic
-import TNLean.QPF.Uniqueness
 import Mathlib.RingTheory.RootsOfUnity.PrimitiveRoots
 
 /-!

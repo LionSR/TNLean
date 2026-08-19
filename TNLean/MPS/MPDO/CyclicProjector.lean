@@ -7,6 +7,7 @@ import TNLean.MPS.MPDO.StackedLayers
 import TNLean.MPS.CanonicalForm.Reduction
 import TNLean.Channel.Peripheral.CyclicDecomposition.Decomposition
 import TNLean.Channel.Peripheral.CyclicDecomposition.LetterShift
+import TNLean.MPS.Core.TransferPeripheral
 import TNLean.Channel.Peripheral.GroupStructure
 import TNLean.MPS.Core.TPGauge
 import TNLean.MPS.Core.CPPrimitive
@@ -302,6 +303,10 @@ theorem exists_displaced_invariant_projector_of_periodic_vector
   obtain ⟨U, P, _, _, _, hPproj, hPsum, _, hcyclic⟩ :=
     Kraus.exists_cyclic_decomposition_of_irreducible_schwarz
       (K := K) hUnital σ hσ hσfix hIrrMap hγprim hperiph
+  -- The cyclic action in finite-Kraus-map notation.
+  have hcyclicLM : ∀ k : Fin m, Kraus.mapLM K (P (k + 1)) = P k := fun k => by
+    rw [Kraus.mapLM_eq_transferMap]
+    exact hcyclic k
   -- Notation for the square root of the eigenvector and the scaling factor.
   set S : Matrix (Fin n) (Fin n) ℂ := CFC.sqrt ρ with hS
   have hSdet : IsUnit S.det := MPSTensor.isUnit_det_cfc_sqrt_of_posDef ρ hρ
@@ -439,7 +444,7 @@ theorem exists_displaced_invariant_projector_of_periodic_vector
       intro v
       -- Single-letter action on `Y`.
       have hKv0 : K v * P 0 = P (0 - 1) * K v := by
-        have := MPSTensor.kraus_mul_cyclicProj K P hPproj hPsum hcyclic v (0 - 1)
+        have := Kraus.kraus_mul_cyclicProj K P hPproj hPsum hcyclicLM v (0 - 1)
         rwa [sub_add_cancel] at this
       have hsingle : verticalTensor M v * Y =
           c⁻¹ • (V * S * (P (0 - 1) * K v)) := by
@@ -501,13 +506,13 @@ theorem exists_displaced_invariant_projector_of_periodic_vector
       rw [MPSTensor.transferMap_apply]
       refine Finset.sum_eq_zero fun v _ => ?_
       have hKv0 : K v * P 0 = P (0 - 1) * K v := by
-        have := MPSTensor.kraus_mul_cyclicProj K P hPproj hPsum hcyclic v (0 - 1)
+        have := Kraus.kraus_mul_cyclicProj K P hPproj hPsum hcyclicLM v (0 - 1)
         rwa [sub_add_cancel] at this
       rw [hKv0, hPK v, Matrix.zero_mul]
     have hP1 : P (0 - 1) = 0 := by
       have := hcyclic (0 - 1)
       rwa [sub_add_cancel, hmap0, eq_comm] at this
-    exact MPSTensor.cyclicProj_ne_zero K P hPsum hcyclic (0 - 1) hP1
+    exact Kraus.cyclicProj_ne_zero K P hPsum hcyclicLM (0 - 1) hP1
 
 /-- **Hypothesis** (arXiv:1606.00608, lines 1888--1891, resting on the
 canonical-form input of lines 1874--1887): an orthogonal projector on the
