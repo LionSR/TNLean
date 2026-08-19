@@ -15,6 +15,7 @@ import TNLean.Entropy.MutualInformationBasic
 import TNLean.Entropy.MutualInformationDataProcessing
 import TNLean.Entropy.MutualInformationOperatorSchmidt
 import TNLean.Entropy.ProductMarginals
+import TNLean.Entropy.SSAEqualityCharacterization
 import TNLean.Entropy.StrongSubadditivity
 import TNLean.Entropy.TripartiteTrace
 import TNLean.Entropy.VonNeumann

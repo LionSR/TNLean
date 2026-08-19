@@ -8,7 +8,7 @@ import TNLean.Channel.Irreducible.AdjointFamily
 import TNLean.Channel.Irreducible.Growth.OneStep
 import TNLean.Channel.KrausMap
 import TNLean.Algebra.MatrixAux
-import TNLean.Axioms.BrouwerFixedPoint
+import TNLean.Channel.FixedPoint.BrouwerDensityMatrices
 
 /-!
 # Perron–Frobenius eigenvector existence for CP maps
@@ -28,7 +28,7 @@ fixed-point theorem applied to the normalization map
 `ρ ↦ E(ρ) / tr(E(ρ))` on the compact convex set of density matrices.
 
 The required density-matrix Brouwer theorem is proved in
-`TNLean.Axioms.BrouwerFixedPoint`.
+`TNLean.Channel.FixedPoint.BrouwerDensityMatrices`.
 
 ## Main results
 

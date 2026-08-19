@@ -32,10 +32,12 @@ import TNLean.Analysis.IsometricCompression
 import TNLean.Analysis.JordanBlockPower
 import TNLean.Analysis.KleinInequality
 import TNLean.Analysis.KyFanNorm
+import TNLean.Analysis.LiebConcavity
 import TNLean.Analysis.LiebIntegrandConcave
 import TNLean.Analysis.LiebOperatorConcave
 import TNLean.Analysis.LiebOperatorIntegral
 import TNLean.Analysis.LiebScalarIntegral
+import TNLean.Analysis.LiebSubBoundary
 import TNLean.Analysis.MarginalSupport
 import TNLean.Analysis.MatrixFamilySupport
 import TNLean.Analysis.MatrixReducedProjection

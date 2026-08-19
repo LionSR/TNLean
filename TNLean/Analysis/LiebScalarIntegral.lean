@@ -15,8 +15,8 @@ This file proves the scalar real-analysis identity
 \(a^s b^{1-s} = \frac{\sin(\pi s)}{\pi}\int_0^\infty t^{s-1}\,\frac{ab}{a+tb}\,dt\)
 for \(a, b > 0\) and \(s \in (0,1)\).
 
-It is the analytic prerequisite for eliminating the sanctioned `lieb_concavity_axiom`
-in `TNLean/Axioms/OperatorConvexity.lean`. The operator integral representation
+It is the analytic prerequisite for eliminating the sanctioned `lieb_concavity_posDef`
+in `TNLean/Analysis/LiebConcavity.lean`. The operator integral representation
 \(A^s B^{1-s} = \frac{\sin(\pi s)}{\pi}\int_0^\infty t^{s-1} A (A + tB)^{-1} B\, dt\)
 follows entrywise from this scalar identity once \(A \otimes 1\) and \(1 \otimes B^{T}\)
 are simultaneously diagonalized through the tensor eigenbasis.
@@ -247,7 +247,7 @@ open Real in
 \(a^s b^{1-s} = \frac{\sin(\pi s)}{\pi}\int_0^\infty t^{s-1}\,\frac{ab}{a+tb}\,dt\).
 
 This is the scalar real-analysis prerequisite for eliminating the sanctioned
-`lieb_concavity_axiom`: the operator integral representation follows entrywise
+`lieb_concavity_posDef`: the operator integral representation follows entrywise
 from this identity once the commuting operators \(A \otimes 1\) and \(1 \otimes B^{T}\)
 are simultaneously diagonalized. -/
 theorem rpow_mul_rpow_one_sub_eq_integral {a b s : ℝ}

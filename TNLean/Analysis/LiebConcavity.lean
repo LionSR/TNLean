@@ -56,7 +56,7 @@ The following results are standard in matrix analysis and are all proved here:
 * `posMap_rpow_concave_jensen` — Jensen inequality for concave `rpow`.
 * `posMap_rpow_convex_jensen` — Jensen inequality for convex `rpow`.
 * `posMap_log_concave_jensen` — Jensen inequality for concave `log`.
-* `lieb_concavity_axiom` — Lieb concavity theorem (joint concavity of
+* `lieb_concavity_posDef` — Lieb concavity theorem (joint concavity of
   `(A, B) ↦ Re Tr(K† A^s K B^{1-s})`).
 
 The trace concavity/convexity statements for `A ↦ Re Tr(A^p)` that used to
@@ -106,7 +106,7 @@ The remaining Mathlib or local formalization gaps are:
   `TNLean.OperatorJensen.positiveMap_rpowIntegrand₁₂_jensen`.
 * Lieb concavity integral representation: absent from Mathlib, but formalized
   locally as `Matrix.superop_lieb_concave` in
-  `TNLean.Analysis.LiebOperatorConcave`, from which `lieb_concavity_axiom` below
+  `TNLean.Analysis.LiebOperatorConcave`, from which `lieb_concavity_posDef` below
   is derived by the vectorization argument.
 
 ## Proof plan
@@ -658,7 +658,7 @@ positive-definite, boundary-line (`x + y = 1`) case. Documented in
 References:
 * Lieb, *Convex trace functions*, Adv. Math. 11, 1973
 * Ando, *Concavity of certain maps on positive definite matrices*, 1979 -/
-theorem lieb_concavity_axiom
+theorem lieb_concavity_posDef
     {s : ℝ} (hs : s ∈ Set.Icc (0 : ℝ) 1)
     {A₁ A₂ B₁ B₂ K : Mat}
     (hA₁ : A₁.PosDef) (hA₂ : A₂.PosDef)
@@ -795,10 +795,10 @@ Wolf Theorem 5.15 on the boundary line `x + y = 1`).
 
 For `s ∈ [0, 1]`, any matrix `K`, and positive-*semidefinite* matrices `A₁, A₂, B₁, B₂`,
 the map `(A, B) ↦ Re Tr(K† A^s K B^{1−s})` is jointly concave.  This lifts the
-positive-definiteness restriction of `lieb_concavity_axiom`: it is the full Ando–Lieb
+positive-definiteness restriction of `lieb_concavity_posDef`: it is the full Ando–Lieb
 theorem (Wolf Thm 5.15) on the boundary line `x + y = 1`, with `x = s`, `y = 1 − s`.
 
-The interior case `s ∈ (0, 1)` follows from `lieb_concavity_axiom` by regularization.
+The interior case `s ∈ (0, 1)` follows from `lieb_concavity_posDef` by regularization.
 For `ε > 0` each input is replaced by the positive-definite matrix `Aᵢ + ε • 1`; the
 positive-definite inequality holds for every `ε`, and the limit `ε → 0⁺` recovers the
 semidefinite statement because `x ↦ x^s` is continuous at `0` for `s ∈ (0, 1)`, so each
@@ -847,7 +847,7 @@ theorem lieb_concavity_psd
         filter_upwards [self_mem_nhdsWithin] with ε hε
         have hone : ((ε : ℝ) • (1 : Mat)).PosDef := Matrix.PosDef.one.smul hε
         have hpd :=
-          lieb_concavity_axiom (s := s) hs (A₁ := A₁ + ε • (1:Mat))
+          lieb_concavity_posDef (s := s) hs (A₁ := A₁ + ε • (1:Mat))
             (A₂ := A₂ + ε • (1:Mat)) (B₁ := B₁ + ε • (1:Mat)) (B₂ := B₂ + ε • (1:Mat)) (K := K)
             (Matrix.PosDef.posSemidef_add hA₁ hone) (Matrix.PosDef.posSemidef_add hA₂ hone)
             (Matrix.PosDef.posSemidef_add hB₁ hone) (Matrix.PosDef.posSemidef_add hB₂ hone)

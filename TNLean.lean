@@ -10,7 +10,6 @@ Authors: TNLean contributors
 
 import TNLean.Algebra
 import TNLean.Analysis
-import TNLean.Axioms
 import TNLean.Channel
 import TNLean.Entropy
 import TNLean.MPS

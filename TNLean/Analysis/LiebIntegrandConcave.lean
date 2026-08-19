@@ -10,8 +10,8 @@ import TNLean.Analysis.SuperoperatorResolvent
 
 This module records the joint Loewner-concavity of the resolvent integrand of the
 operator Lieb integral representation, the matrix-order fact that completes the
-analytic input toward proving the Lieb concavity theorem (`lieb_concavity_axiom` in
-`TNLean/Axioms/OperatorConvexity.lean`).
+analytic input toward proving the Lieb concavity theorem (`lieb_concavity_posDef` in
+`TNLean/Analysis/LiebConcavity.lean`).
 
 On the Kronecker model space the commuting left and right multiplication
 superoperators act as `Â = A ⊗ₖ 1` and `B̂ = 1 ⊗ₖ Bᵀ`, both positive definite for
@@ -174,7 +174,7 @@ of `Â` and `B̂` in `A` and `B`.
 
 This is the matrix-order input that, together with the integral representation
 `superop_lieb_integral_rep`, yields the joint concavity of `Â^s B̂^{1-s}`, the
-content of the Lieb concavity theorem (`lieb_concavity_axiom`). -/
+content of the Lieb concavity theorem (`lieb_concavity_posDef`). -/
 theorem superop_resolvent_integrand_concave {t : ℝ} (ht : 0 < t)
     {A₁ A₂ B₁ B₂ : Matrix (Fin D) (Fin D) ℂ}
     (hA₁ : A₁.PosDef) (hA₂ : A₂.PosDef) (hB₁ : B₁.PosDef) (hB₂ : B₂.PosDef)

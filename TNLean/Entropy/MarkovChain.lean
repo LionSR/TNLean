@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.Axioms.Entropy
+import TNLean.Entropy.SSAEqualityCharacterization
 import TNLean.Analysis.EntropyMarkovReverse
 import TNLean.Channel.PartialTrace
 
@@ -12,7 +12,7 @@ import TNLean.Channel.PartialTrace
 
 This module states the proved theorem
 `_root_.hayashi_ssa_equality_characterization` from
-`TNLean/Axioms/Entropy.lean` in the `Entropy` namespace.
+`TNLean.Entropy.SSAEqualityCharacterization` in the `Entropy` namespace.
 
 For a tripartite density matrix `ρ_ABC`, equality in strong subadditivity,
 
