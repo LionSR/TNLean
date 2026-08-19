@@ -36,8 +36,6 @@ The required density-matrix Brouwer theorem is proved in
   (with nonvanishing hypothesis, eigenvalue `r > 0`)
 * `exists_posSemidef_eigenvector_general`: PSD eigenvector existence for *any*
   positive map (no nonvanishing hypothesis, eigenvalue `r ≥ 0`)
-* `Kraus.mapLM_ne_zero_of_exists_ne_zero`:
-    a finite Kraus map with a nonzero Kraus operator is nonzero
 * `Kraus.exists_posDef_adjoint_eigenvector`:
     PosDef eigenvector for the adjoint Kraus map of an irreducible family
 
@@ -166,17 +164,6 @@ theorem exists_posSemidef_eigenvector_general
 /-! ## Application to Kraus families -/
 
 namespace Kraus
-
-/-- A finite Kraus map with a nonzero Kraus operator is nonzero. -/
-theorem mapLM_ne_zero_of_exists_ne_zero
-    (K : Fin d → Matrix (Fin D) (Fin D) ℂ) (hK : ∃ i, K i ≠ 0) :
-    mapLM K ≠ 0 := by
-  intro h
-  obtain ⟨i, hi⟩ := hK
-  have h1 : mapLM K (1 : Matrix (Fin D) (Fin D) ℂ) = 0 := by
-    rw [h]; simp
-  simp only [mapLM_apply, map_apply, Matrix.mul_one] at h1
-  exact hi (Matrix.eq_zero_of_sum_mul_conjTranspose_eq_zero K h1 i)
 
 /-- **PosDef eigenvector of the adjoint Kraus map**
 (combines Wolf Theorem 6.5 for existence with Wolf Theorem 6.3(2) for positive

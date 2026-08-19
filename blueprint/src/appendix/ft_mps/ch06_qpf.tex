@@ -282,6 +282,21 @@ outer square-root factors yields
     $A^i \neq 0$ is nonzero.
 \end{proof}
 
+\begin{theorem}[Irreducibility passes to the conjugate-transposed Kraus family]%
+    \label{thm:kraus_conjTranspose_irreducible}
+    \lean{Kraus.isIrreducibleMap_mapLM_conjTranspose}
+    \leanok
+    \uses{def:kraus_map, def:irreducible_cp}
+    If the Kraus map of $\{K_i\}_{i=0}^{d-1}$ is irreducible, then so is the
+    Kraus map of the conjugate-transposed family $\{K_i^\dagger\}$.
+\end{theorem}
+
+\begin{proof}\leanok
+    If $P$ is invariant for $\mathcal K_K$, so that $(\Id-P)K_iP=0$ for all
+    $i$, then taking adjoints gives $PK_i^\dagger(\Id-P)=0$, which means
+    $\Id-P$ is invariant for the Kraus map of $\{K_i^\dagger\}$.
+\end{proof}
+
 \begin{theorem}[Positive-definite adjoint eigenvector for irreducible Kraus families]%
     \label{thm:kraus_posdef_adjoint_eigenvector}
     \lean{Kraus.exists_posDef_adjoint_eigenvector}
@@ -304,15 +319,13 @@ outer square-root factors yields
 
 \begin{proof}\leanok
     \uses{thm:pf_eigenvector_existence, thm:adjoint_transfer_ne_zero,
-        thm:kernel_inclusion_pd_irred}
+        thm:kernel_inclusion_pd_irred, thm:kraus_conjTranspose_irreducible}
     The conjugate-transposed family $\{K_i^\dagger\}$ has the same Kraus map
     as the adjoint of $\mathcal K_K$, so it is completely positive, and by
-    Theorem~\ref{thm:adjoint_transfer_ne_zero} it is nonzero. Irreducibility
-    of $\mathcal K_K$ transfers to $\{K_i^\dagger\}$: if $P$ is invariant for
-    $\mathcal K_K$, so that $(\Id-P)K_iP=0$ for all $i$, then taking adjoints
-    gives $PK_i^\dagger(\Id-P)=0$, which means $\Id-P$ is invariant for the
-    Kraus map of $\{K_i^\dagger\}$. Hence the Kraus map of $\{K_i^\dagger\}$
-    does not annihilate any nonzero positive semidefinite matrix, and
+    Theorem~\ref{thm:adjoint_transfer_ne_zero} it is nonzero. By
+    Theorem~\ref{thm:kraus_conjTranspose_irreducible}, its Kraus map is
+    irreducible, so it does not annihilate any nonzero positive semidefinite
+    matrix, and
     Theorem~\ref{thm:pf_eigenvector_existence} applies, giving
     $\sigma \ge 0$, $\sigma \neq 0$, and $r > 0$ with
     $\sum_i K_i^\dagger \sigma K_i = r\sigma$. Since

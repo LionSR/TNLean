@@ -763,6 +763,20 @@ The TP-gauge application follows~\cite[Appendix~A]{Cirac2016MPDO_arXiv}.
     Theorem~\ref{thm:pf_eigenvector_existence_general}.
 \end{proof}
 
+\begin{theorem}[Irreducibility of the transfer map of an irreducible tensor]%
+    \label{thm:transfer_map_irreducible_of_tensor}
+    \lean{MPSTensor.isIrreducibleCP_transferMap_of_isIrreducibleTensor}
+    \leanok
+    \uses{def:irreducible_tensor, def:transfer_map, def:irreducible_cp}
+    If an MPS tensor $A$ is irreducible, then its transfer map $\E_A$ is
+    irreducible.
+\end{theorem}
+
+\begin{proof}\leanok
+    An invariant projection for $\E_A$ is exactly an invariant projection
+    for the matrices $A^i$, so the two irreducibility notions coincide.
+\end{proof}
+
 \begin{theorem}[Positive-definite adjoint eigenvector for irreducible tensors]%
     \label{thm:posDef_adjoint_eigenvector}
     \lean{MPSTensor.exists_posDef_adjoint_eigenvector}
@@ -783,10 +797,11 @@ The TP-gauge application follows~\cite[Appendix~A]{Cirac2016MPDO_arXiv}.
 
 \begin{proof}\leanok
     \uses{thm:kraus_posdef_adjoint_eigenvector, thm:kraus_map_eq_transfer_map,
-        def:irreducible_tensor}
-    Since $\mathcal K_A = \E_A$
-    (Theorem~\ref{thm:kraus_map_eq_transfer_map}), the family $A$ is
-    irreducible if and only if its Kraus map is, and applying
+        thm:transfer_map_irreducible_of_tensor}
+    By Theorem~\ref{thm:transfer_map_irreducible_of_tensor}, $\E_A$ is
+    irreducible, and since $\mathcal K_A = \E_A$
+    (Theorem~\ref{thm:kraus_map_eq_transfer_map}), its Kraus map $\mathcal K_A$ is
+    irreducible too. Applying
     Theorem~\ref{thm:kraus_posdef_adjoint_eigenvector} to $K_i = A^i$ gives
     a positive definite $\sigma$ and a positive real $r > 0$ with
     $\sum_i (A^i)^\dagger \sigma A^i = r\sigma$, i.e.

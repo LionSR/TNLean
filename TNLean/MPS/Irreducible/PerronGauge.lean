@@ -36,7 +36,6 @@ specializations and combines them with the explicit gauge constructions from
 -/
 
 open scoped Matrix ComplexOrder MatrixOrder BigOperators
-open Matrix Finset
 
 variable {d D : ℕ}
 
@@ -59,11 +58,10 @@ theorem exists_posDef_adjoint_eigenvector
     ∃ (σ : Matrix (Fin D) (Fin D) ℂ) (r : ℝ),
       σ.PosDef ∧ 0 < r ∧
       transferMap (d := d) (D := D) (fun i => (A i)ᴴ) σ = (r : ℂ) • σ := by
-  have hIrrMap : IsIrreducibleMap (Kraus.mapLM A) := by
-    rw [Kraus.mapLM_eq_transferMap]
-    exact isIrreducibleCP_transferMap_of_isIrreducibleTensor A hIrr
   obtain ⟨σ, r, hσ_pd, hr_pos, hσ_eig⟩ :=
-    Kraus.exists_posDef_adjoint_eigenvector (K := A) hIrrMap hA
+    Kraus.exists_posDef_adjoint_eigenvector (K := A)
+      (Kraus.isIrreducibleMap_mapLM_of_transferMap _
+        (isIrreducibleCP_transferMap_of_isIrreducibleTensor A hIrr)) hA
   refine ⟨σ, r, hσ_pd, hr_pos, ?_⟩
   rwa [Kraus.mapLM_eq_transferMap] at hσ_eig
 
