@@ -59,6 +59,65 @@
     to channels.
 \end{definition}
 
+\begin{theorem}[Eigenvalue bound for a trace-preserving Kraus map]%
+    \label{thm:kraus_tp_eigenvalue_bound}
+    \lean{Kraus.eigenvalue_norm_le_one_of_isTP}
+    \leanok
+    \uses{def:kraus_map, def:tp_kraus}
+    Let $\{K_i\}_{i=0}^{d-1}$ be matrices in $\MN{D}$ with
+    $\sum_{i=0}^{d-1}K_i^\dagger K_i=\Id$, and let
+    \begin{align}
+        \mathcal K_K(X)
+         & =\sum_{i=0}^{d-1}K_iXK_i^\dagger
+        \notag
+    \end{align}
+    be the associated Kraus map. Every eigenvalue $\mu$ of $\mathcal K_K$
+    satisfies $|\mu| \le 1$.
+    This is the trace-preserving specialization of
+    \cite[Proposition~6.1]{Wolf2012Quantum}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:positive_tp_eigenvalue_disk}
+    Trace preservation of $\mathcal K_K$ is the cyclicity computation
+    \begin{align}
+        \tr(\mathcal K_K(X))
+         & =\sum_{i=0}^{d-1}\tr(K_iXK_i^\dagger)
+          =\tr\Big(\Big(\sum_{i=0}^{d-1}K_i^\dagger K_i\Big)X\Big)
+          =\tr(X),
+        \notag
+    \end{align}
+    and $\mathcal K_K$ is completely positive by
+    Definition~\ref{def:kraus_map}. For $D\geq1$,
+    Theorem~\ref{thm:positive_tp_eigenvalue_disk} therefore gives
+    $|\mu|\leq1$. For $D=0$ the algebra $\MN{0}$ is trivial, so
+    $\mathcal K_K$ has no eigenvector and the bound is vacuous.
+\end{proof}
+
+\begin{theorem}[Spectral-radius bound for a trace-preserving Kraus map]%
+    \label{thm:kraus_tp_spectral_radius_bound}
+    \lean{Kraus.spectralRadius_mapLM_le_one_of_isTP}
+    \lean{spectralRadius_le_one_of_forall_eigenvalue_norm_le_one}
+    \leanok
+    \uses{def:kraus_map, def:tp_kraus}
+    Let $\{K_i\}_{i=0}^{d-1}$ be a trace-preserving Kraus family on $\MN{D}$.
+    The spectral radius of its Kraus map $\mathcal K_K$ is at most $1$.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:kraus_tp_eigenvalue_bound}
+    The spectral radius is the supremum of the moduli of the spectral
+    values,
+    \begin{align}
+        \varrho(\mathcal K_K)
+         & =\sup_{\mu\in\operatorname{spec}(\mathcal K_K)}|\mu|,
+        \notag
+    \end{align}
+    and on the finite-dimensional space $\MN{D}$ the spectral values are
+    exactly the eigenvalues. Theorem~\ref{thm:kraus_tp_eigenvalue_bound}
+    bounds each of them by $1$.
+\end{proof}
+
 \section{Fixed-point projection}
 
 \begin{definition}[Fixed-point projection]\label{def:fixed_point_proj}

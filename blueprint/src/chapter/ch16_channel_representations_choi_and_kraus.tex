@@ -187,6 +187,7 @@ partial traces.
 \begin{theorem}[Spectral bound for a vectorized unital Kraus map]
     \label{thm:unital_kraus_frobenius_spectral_radius}
     \lean{IsKrausCP.spectralRadius_frobeniusEuclideanMap_le_one_of_map_one_eq_one}
+    \lean{spectralRadius_le_one_of_forall_eigenvalue_norm_le_one}
     \leanok
     \uses{thm:unital_kraus_eigenvalue_bound,
         def:frobenius_superoperator_transport}
@@ -200,8 +201,9 @@ partial traces.
     \uses{thm:unital_kraus_eigenvalue_bound,
         def:frobenius_superoperator_transport}
     A unital completely positive map is contractive in the matrix operator
-    norm, so every eigenvalue has modulus at most one.  Similarity under
-    Frobenius vectorization preserves the spectrum.
+    norm, so every eigenvalue has modulus at most one.  The spectral radius
+    is the supremum of the eigenvalue moduli, so it is at most one as well,
+    and similarity under Frobenius vectorization preserves the spectrum.
 \end{proof}
 
 \begin{definition}[Full-support weighted channel map]

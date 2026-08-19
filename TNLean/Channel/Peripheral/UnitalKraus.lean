@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.Algebra.FrobeniusHilbert
 import TNLean.Channel.KrausCPTP
+import TNLean.Channel.Peripheral.SpectralRadius
 import TNLean.Channel.Schwarz.PositiveMapProperties
 import Mathlib.Analysis.CStarAlgebra.ContinuousFunctionalCalculus.Order
 import Mathlib.Analysis.Normed.Operator.NormedSpace
@@ -99,21 +100,13 @@ theorem IsKrausCP.spectralRadius_frobeniusEuclideanMap_le_one_of_map_one_eq_one
         (Matrix.frobeniusEuclideanMap E)) ≤ 1 := by
   let V := EuclideanSpace ℂ (α × α)
   let Ê : V →ₗ[ℂ] V := Matrix.frobeniusEuclideanMap E
-  let Φ : (V →ₗ[ℂ] V) ≃ₐ[ℂ] (V →L[ℂ] V) :=
-    Module.End.toContinuousLinearMap V
-  have hSpecCLM : spectrum ℂ (Φ Ê) = spectrum ℂ Ê :=
-    AlgEquiv.spectrum_eq Φ Ê
   have hSpecFrob : spectrum ℂ Ê = spectrum ℂ E := by
     dsimp only [Ê]
     rw [Matrix.frobeniusEuclideanMap_eq_conj]
     exact AlgEquiv.spectrum_eq
       ((Matrix.frobeniusEquivEuclidean α α).toLinearEquiv.conjAlgEquiv ℂ) E
-  change spectralRadius ℂ (Φ Ê) ≤ 1
-  rw [spectralRadius]
-  refine iSup₂_le fun μ hμ ↦ ?_
-  have hμE : μ ∈ spectrum ℂ E := hSpecFrob ▸ (hSpecCLM ▸ hμ)
-  have hEig : Module.End.HasEigenvalue E μ :=
-    Module.End.hasEigenvalue_iff_mem_spectrum.mpr hμE
-  have hBound : ‖μ‖ ≤ 1 :=
-    hE.eigenvalue_norm_le_one_of_map_one_eq_one hOne μ hEig
-  exact_mod_cast hBound
+  refine spectralRadius_le_one_of_forall_eigenvalue_norm_le_one Ê fun μ hμ ↦ ?_
+  have hμE : μ ∈ spectrum ℂ E :=
+    hSpecFrob ▸ Module.End.hasEigenvalue_iff_mem_spectrum.mp hμ
+  exact hE.eigenvalue_norm_le_one_of_map_one_eq_one hOne μ
+    (Module.End.hasEigenvalue_iff_mem_spectrum.mpr hμE)
