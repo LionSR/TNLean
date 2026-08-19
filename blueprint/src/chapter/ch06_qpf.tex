@@ -803,11 +803,12 @@ The TP-gauge application follows~\cite[Appendix~A]{Cirac2016MPDO_arXiv}.
 
 \begin{proof}\leanok
     \uses{thm:kraus_posdef_adjoint_eigenvector, thm:kraus_map_eq_transfer_map,
+        thm:kraus_map_irreducible_of_transfer_map,
         thm:transfer_map_irreducible_of_tensor}
     By Theorem~\ref{thm:transfer_map_irreducible_of_tensor}, $\E_A$ is
     irreducible, and since $\mathcal K_A = \E_A$
     (Theorem~\ref{thm:kraus_map_eq_transfer_map}), its Kraus map $\mathcal K_A$ is
-    irreducible too. Applying
+    irreducible too (Theorem~\ref{thm:kraus_map_irreducible_of_transfer_map}). Applying
     Theorem~\ref{thm:kraus_posdef_adjoint_eigenvector} to $K_i = A^i$ gives
     a positive definite $\sigma$ and a positive real $r > 0$ with
     $\sum_i (A^i)^\dagger \sigma A^i = r\sigma$, i.e.
