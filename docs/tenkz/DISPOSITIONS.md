@@ -62,7 +62,7 @@ separate public-surface occurrence and therefore appears separately.
 | Source | Preserve | Codemod | Redraw |
 |---|---|---|---|
 | `ch02_mps.tex` | L25, 56, 176, 208, 281, 865, 995 `tenkz` → `P-grid` | — | — |
-| `ch03_single.tex` | L252 `tenkz` → `P-grid` | — | — |
+| `ch03_single.tex` | L243 `tenkz` → `P-grid` | — | — |
 | `ch04_channels_choi_foundations.tex` | L87 `tenkz` → `P-grid` | — | — |
 | `ch11_fundamental_theorem_core.tex` | L42, 46 `tenkz` → `P-grid` | — | — |
 | `ch12_symmetry_string_order.tex` | L41, 80, 362, 367, 398, 404, 449, 455, 488, 493, 531, 537, 842, 847 `tenkz` → `P-grid` | — | — |
@@ -85,7 +85,7 @@ separate public-surface occurrence and therefore appears separately.
 | `ch21_mpdo_rfp_fusion_isometries_fixed_final_comparison.tex` | — | L572, 577 `tntree` → `C-tree` | — |
 | `ch21_mpdo_rfp_fusion_isometries_foundations.tex` | L363, 373, 608, 617, 629, 638, 650, 655 `tenkz` → `P-grid` | — | — |
 | `ch21_mpdo_rfp_fusion_isometries_product_laws.tex` | L45, 61, 65, 491 `tenkz` → `P-grid` | L603, 605 `tntree` → `C-tree` | — |
-| `ch21_mpdo_rfp_renormalization.tex` | L616, 619, 622, 625 `tenkz` → `P-grid` | — | — |
+| `ch21_mpdo_rfp_renormalization.tex` | L609, 612, 615, 618 `tenkz` → `P-grid` | — | — |
 | `ch21_mpdo_rfp_simple_local_closed_sector_contractions.tex` | L282, 288 `tenkz` → `P-grid` | — | — |
 | `ch21_mpdo_rfp_simple_local_inverse_map_factorization.tex` | L44, 49, 53, 70, 78, 130, 265, 270, 275, 282, 287, 486, 704, 710, 714 `tenkz` → `P-grid` | — | — |
 | `ch21_mpdo_rfp_simple_local_neighboring_bond_contractions.tex` | L793, 806, 814, 821, 895, 902 `tenkz` → `P-grid` | — | — |
