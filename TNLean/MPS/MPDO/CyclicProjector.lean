@@ -368,10 +368,9 @@ theorem exists_displaced_invariant_projector_of_periodic_vector
   -- cyclic sector `V S · ran (P 0)`.
   set Y : Matrix (Fin d) (Fin n) ℂ := V * S * P 0 with hY
   set π : Matrix (Fin d) (Fin d) ℂ :=
-    Matrix.supportProj (Y * Yᴴ) (Matrix.posSemidef_self_mul_conjTranspose Y) with hπ
+    (Matrix.posSemidef_self_mul_conjTranspose Y).supportProj with hπ
   have hπproj : IsOrthogonalProjection π :=
-    Matrix.isOrthogonalProjection_supportProj (ρ := Y * Yᴴ)
-      (hρ := Matrix.posSemidef_self_mul_conjTranspose Y)
+    (Matrix.posSemidef_self_mul_conjTranspose Y).isOrthogonalProjection_supportProj
   have hQproj : IsOrthogonalProjection (1 - π) := hπproj.one_sub
   -- Left cancellation of `V * S`.
   have hVScancel : ∀ {Z Z' : Matrix (Fin n) (Fin n) ℂ},
@@ -463,7 +462,7 @@ theorem exists_displaced_invariant_projector_of_periodic_vector
               rw [Matrix.smul_mul]; simp only [Matrix.mul_assoc]
           _ = c⁻¹ • (V * S * (P (0 - 1) * K v)) := by rw [hKv0]
       -- `π` fixes `Y` and absorbs the letter action.
-      have hπY : π * Y = Y := Matrix.supportProj_mul_left_eq_self Y
+      have hπY : π * Y = Y := Matrix.supportProj_mul_conjTranspose_mul_self Y
       have hfix' : π * (verticalTensor M v * Y) = verticalTensor M v * Y := by
         have hAπ : verticalTensor M v * π = π * (verticalTensor M v * π) := by
           have h0 := hletter v
@@ -480,8 +479,7 @@ theorem exists_displaced_invariant_projector_of_periodic_vector
           _ = verticalTensor M v * π * Y := by rw [← hAπ]
           _ = verticalTensor M v * Y := by rw [Matrix.mul_assoc, hπY]
       -- Express the fixed equation through the support factorization.
-      obtain ⟨W, hW⟩ := Matrix.exists_supportProj_eq_mul (Y * Yᴴ)
-        (Matrix.posSemidef_self_mul_conjTranspose Y)
+      obtain ⟨W, hW⟩ := (Matrix.posSemidef_self_mul_conjTranspose Y).exists_supportProj_eq_mul
       have hππ : π = Y * (Yᴴ * W) := by rw [hπ, hW, Matrix.mul_assoc]
       have hZ : V * S * (P (0 - 1) * K v) =
           V * S * (P 0 * (Yᴴ * W * (V * S * (P (0 - 1) * K v)))) := by

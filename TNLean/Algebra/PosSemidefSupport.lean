@@ -417,62 +417,19 @@ theorem supportProj_mul_conjTranspose_mul_self (B : Matrix m n ℂ) :
   rw [Matrix.sub_mul, Matrix.one_mul, sub_eq_zero] at hPB
   exact hPB.symm
 
-variable {D : ℕ}
-
-/-- The `Fin`-indexed support projection of a positive-semidefinite matrix. -/
-noncomputable def supportProj (ρ : Matrix (Fin D) (Fin D) ℂ) (hρ : ρ.PosSemidef) :
-    Matrix (Fin D) (Fin D) ℂ := hρ.supportProj
-
-/-- The `Fin`-indexed support projection is orthogonal. -/
-theorem isOrthogonalProjection_supportProj (ρ : Matrix (Fin D) (Fin D) ℂ)
-    (hρ : ρ.PosSemidef) : IsOrthogonalProjection (supportProj ρ hρ) :=
-  hρ.isOrthogonalProjection_supportProj
-
-/-- The `Fin`-indexed support projection absorbs its matrix on the left. -/
-theorem supportProj_mul (ρ : Matrix (Fin D) (Fin D) ℂ) (hρ : ρ.PosSemidef) :
-    supportProj ρ hρ * ρ = ρ := hρ.supportProj_mul_self
-
-/-- The `Fin`-indexed support projection absorbs its matrix on the right. -/
-theorem mul_supportProj (ρ : Matrix (Fin D) (Fin D) ℂ) (hρ : ρ.PosSemidef) :
-    ρ * supportProj ρ hρ = ρ := hρ.mul_supportProj_self
-
-/-- The `Fin`-indexed support projection vanishes on the kernel of its matrix. -/
-theorem supportProj_mulVec_eq_zero_of_mulVec_eq_zero
-    (ρ : Matrix (Fin D) (Fin D) ℂ) (hρ : ρ.PosSemidef)
-    (v : Fin D → ℂ) (hv : ρ *ᵥ v = 0) : supportProj ρ hρ *ᵥ v = 0 :=
-  hρ.supportProj_mulVec_eq_zero_of_mulVec_eq_zero v hv
-
-/-- The `Fin`-indexed support projection factors through its matrix. -/
-theorem exists_supportProj_eq_mul (ρ : Matrix (Fin D) (Fin D) ℂ) (hρ : ρ.PosSemidef) :
-    ∃ W : Matrix (Fin D) (Fin D) ℂ, supportProj ρ hρ = ρ * W :=
-  hρ.exists_supportProj_eq_mul
-
-/-- The support projection of a nonzero `Fin`-indexed matrix is nonzero. -/
-theorem supportProj_ne_zero_of_ne_zero
-    (ρ : Matrix (Fin D) (Fin D) ℂ) (hρ : ρ.PosSemidef) (hne : ρ ≠ 0) :
-    supportProj ρ hρ ≠ 0 := hρ.supportProj_ne_zero_of_ne_zero hne
-
-/-- The support projection of a non-positive-definite `Fin`-indexed matrix is not one. -/
-theorem supportProj_ne_one_of_not_posDef
-    (ρ : Matrix (Fin D) (Fin D) ℂ) (hρ : ρ.PosSemidef) (hnotPD : ¬ ρ.PosDef) :
-    supportProj ρ hρ ≠ 1 := hρ.supportProj_ne_one_of_not_posDef hnotPD
-
-/-- The support projection of `Y Yᴴ` fixes `Y`. -/
-theorem supportProj_mul_left_eq_self {k : ℕ} (Y : Matrix (Fin D) (Fin k) ℂ) :
-    supportProj (Y * Yᴴ) (Matrix.posSemidef_self_mul_conjTranspose Y) * Y = Y :=
-  Matrix.supportProj_mul_conjTranspose_mul_self Y
-
+omit [DecidableEq n] in
 /-- Range invariance passes from a spanning matrix to its support projection. -/
-theorem one_sub_supportProj_mul_mul_supportProj_eq_zero {k : ℕ}
-    (Y : Matrix (Fin D) (Fin k) ℂ) {A : Matrix (Fin D) (Fin D) ℂ}
-    {G : Matrix (Fin k) (Fin k) ℂ} (hAY : A * Y = Y * G) :
-    (1 - supportProj (Y * Yᴴ) (Matrix.posSemidef_self_mul_conjTranspose Y)) * A *
-      supportProj (Y * Yᴴ) (Matrix.posSemidef_self_mul_conjTranspose Y) = 0 := by
-  obtain ⟨W, hW⟩ :=
-    exists_supportProj_eq_mul (Y * Yᴴ) (Matrix.posSemidef_self_mul_conjTranspose Y)
-  set π := supportProj (Y * Yᴴ) (Matrix.posSemidef_self_mul_conjTranspose Y)
+theorem one_sub_supportProj_mul_mul_supportProj_eq_zero
+    (Y : Matrix m n ℂ) {A : Matrix m m ℂ} {G : Matrix n n ℂ} (hAY : A * Y = Y * G) :
+    (1 - (posSemidef_self_mul_conjTranspose Y).supportProj) * A *
+      (posSemidef_self_mul_conjTranspose Y).supportProj = 0 := by
+  let hYY := posSemidef_self_mul_conjTranspose Y
+  obtain ⟨W, hW⟩ := hYY.exists_supportProj_eq_mul
+  set π := hYY.supportProj
   have hY : (1 - π) * Y = 0 := by
-    rw [Matrix.sub_mul, Matrix.one_mul, supportProj_mul_left_eq_self Y, sub_self]
+    rw [Matrix.sub_mul, Matrix.one_mul]
+    change Y - (isHermitian_mul_conjTranspose_self Y).supportProj * Y = 0
+    rw [supportProj_mul_conjTranspose_mul_self, sub_self]
   calc
     (1 - π) * A * π = (1 - π) * A * (Y * Yᴴ * W) := by rw [← hW]
     _ = (1 - π) * (A * Y) * (Yᴴ * W) := by simp only [Matrix.mul_assoc]
