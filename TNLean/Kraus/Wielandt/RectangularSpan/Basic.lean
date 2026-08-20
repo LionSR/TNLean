@@ -62,7 +62,7 @@ theorem rectSpan_le_wordSpan
 /-! ## Transposed word spans -/
 
 /-- Transposing a word product reverses the word. -/
-private theorem evalWord_transpose
+theorem evalWord_transpose
     (K : Fin d → Matrix (Fin D) (Fin D) ℂ) :
     ∀ w : List (Fin d),
       (MPSTensor.evalWord K w)ᵀ =
