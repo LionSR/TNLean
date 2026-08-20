@@ -554,6 +554,56 @@
     sum of diagonal copy blocks depends on $N$.
 \end{proof}
 
+\begin{theorem}[Conditional assembly of absorbed BNT channels]
+    \label{thm:mpdo_absorbed_bnt_channel_assembly}
+    \lean{MPOTensor.blockTwo_isRFPViaTS_of_commonWeightAbsorbedBNTChannels}
+    \leanok
+    \uses{def:is_rfp_via_ts, def:mpdo_two_site_blocking,
+        def:mpdo_common_sector_weight_absorption,
+        thm:mpdo_absorbed_representative_boundary_decomposition,
+        thm:mpdo_projective_resolution_channel_cptp}
+    Let $K$ be exactly gauge equivalent, by an invertible virtual matrix $G$,
+    to a canonical BNT sum. Suppose that the repeated-copy weights agree
+    within each fixed representative and have been absorbed into tensors
+    $(\mathcal K_s)_s$. Let $(P_s)_s$ be orthogonal projections on the
+    one-site physical space such that
+    \begin{align}
+      \sum_s P_s&=I, & P_sP_t&=0\quad(s\ne t),
+      \notag\\
+      P_s\widetilde{\mathcal K}_s
+        &=\widetilde{\mathcal K}_s
+        =\widetilde{\mathcal K}_sP_s .
+      \notag
+    \end{align}
+    If every blocked representative $\mathcal K_s^{[2]}$ is a
+    renormalization fixed point via trace-preserving completely positive maps,
+    then $K^{[2]}$ is also such a renormalization fixed point.
+
+    The global maps first measure the outer sector on the first original site
+    of the blocked input. On one blocked site the corresponding projection is
+    $P_s\otimes I$; on two blocked sites it acts on the first original site
+    and as the identity on the remaining three. For every virtual boundary
+    $X$, the boundary supplied to sector $s$ is the sum of the diagonal copy
+    blocks of $G^{-1}XG$ over that representative. The same boundary is used
+    in the length-two and length-four identities. This is the conditional
+    assembly underlying \cite[Appendix~C.2, lines~1646--1665 and
+    1810--1825]{Cirac2016MPDO_arXiv}; it is not the printed implication
+    (iv)$\Rightarrow$(v) of Theorem~4.9.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpdo_absorbed_representative_boundary_decomposition,
+        thm:mpdo_projective_resolution_channel_cptp}
+    At each of the two closure lengths, expand the arbitrary-boundary closure
+    as the sum of the absorbed-representative closures. Compression by the
+    first-site projection annihilates every summand except the matching one,
+    by two-sided physical support and $P_sP_t=0$ for $s\ne t$. Apply the
+    corresponding representative channel to this surviving term and sum over
+    $s$. The projective resolution makes both assembled maps trace-preserving
+    and completely positive. The two resulting sums are respectively the
+    length-two and length-four closures of $K$ with the original boundary.
+\end{proof}
+
 \begin{theorem}[Blocking channels after common-weight absorption]
     \label{thm:mpdo_sal_zcl_blocking_channels}
     \notready
@@ -580,8 +630,9 @@
     common value into each representative. The proof at lines~1815--1816 then
     projects onto the mutually orthogonal outer physical sectors and invokes
     the one-representative channel construction. Thus a faithful proof must
-    supply one blocked channel pair for every absorbed representative and
-    combine those pairs through the outer physical projections.
+    supply one blocked channel pair for every absorbed representative. Their
+    combination through the outer physical projections is
+    Theorem~\ref{thm:mpdo_absorbed_bnt_channel_assembly}.
 \end{theorem}
 
 % Correct equation, not a figure: the cited source draws the two-to-three
