@@ -550,22 +550,17 @@ matrices, and let $\E_K$ be its Kraus map.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:blocking_primitivity}
+    \uses{thm:kraus_posdef_fixed_point_from_tp_spreading,
+        thm:kraus_primitive_from_tp_spreading,
+        thm:kraus_irreducible_from_spreading}
     If $S_i(A)=\MN{D}$ and $\varphi\neq0$, then
     $S_i(A)\varphi=\C^D$, proving (2)$\Rightarrow$(1).
-    For (1)$\Rightarrow$(3), first obtain a nonzero positive fixed point
-    $\rho$. The spreading condition makes $\rho$ positive definite and makes
-    the tensor irreducible. The blocking-periodicity theorem then gives
-    $p>0$ such that $\E_A^p$ is primitive. If
-    $\E_A(X)=\lambda X$ with $|\lambda|=1$, then
-    $\E_A^p(X)=\lambda^pX$; uniqueness of the peripheral eigenvalue of the
-    primitive power gives $\lambda^p=1$. If $\lambda\neq1$, the eigenvector
-    yields a nonzero trace-zero Hermitian matrix $H$ fixed by $\E_A^p$.
-    Decompose $H=Q_1-Q_2$ into positive semidefinite $\E_A^p$-fixed parts.
-    Paper primitivity makes every nonzero positive fixed point of the power
-    proportional to $\rho$, while $\tr(H)=0$ makes the two proportionality
-    constants equal. Hence $H=0$, a contradiction. Thus every peripheral
-    eigenvalue equals $1$, and $\E_A$ is strongly irreducible.
+    For (1)$\Rightarrow$(3), regard the matrices of $A$ as a finite Kraus
+    family. Theorems~\ref{thm:kraus_posdef_fixed_point_from_tp_spreading}
+    and~\ref{thm:kraus_primitive_from_tp_spreading} give a positive-definite
+    fixed point and show that $1$ is the only peripheral eigenvalue.
+    Theorem~\ref{thm:kraus_irreducible_from_spreading} gives irreducibility.
+    Together these facts say that $\E_A$ is strongly irreducible.
 
     For (3)$\Rightarrow$(2), write
     $\E_A^m=P_\rho+(\E_A-P_\rho)^m$. The complementary powers tend to zero.
