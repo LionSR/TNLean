@@ -3,8 +3,8 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import TNLean.Kraus.Wielandt.Primitivity.EasyDirections
 import TNLean.Wielandt.Primitivity.Definitions
-import TNLean.Wielandt.SpanGrowth.VectorToMatrixSpan
 
 /-!
 # Primitive equivalences — easy directions (Proposition 3)
@@ -71,25 +71,8 @@ theorem vectorSpreadSpan_eq_top_of_wordSpan_eq_top
     (A : MPSTensor d D) {N : ℕ}
     (htop : wordSpan A N = ⊤)
     (φ : Fin D → ℂ) (hφ : φ ≠ 0) :
-    vectorSpreadSpan A φ N = ⊤ := by
-  -- The image of wordSpan A N under (· *ᵥ φ) is vectorSpreadSpan A φ N
-  rw [← map_wordSpan_eq_vectorSpreadSpan A φ N, htop, Submodule.map_top]
-  -- It suffices to show that (· *ᵥ φ) is surjective
-  rw [LinearMap.range_eq_top]
-  intro v
-  -- Since φ ≠ 0, there exists k with φ k ≠ 0
-  obtain ⟨k, hk⟩ : ∃ k : Fin D, φ k ≠ 0 := by
-    by_contra hall
-    push Not at hall
-    exact hφ (funext fun i => hall i)
-  -- Construct M with M *ᵥ φ = v
-  refine ⟨∑ j, Matrix.single j k (v j * (φ k)⁻¹), ?_⟩
-  change (∑ j, Matrix.single j k (v j * (φ k)⁻¹)) *ᵥ φ = v
-  simp only [Matrix.sum_mulVec, Matrix.single_mulVec]
-  ext j
-  simp only [Finset.sum_apply, Function.update_apply, Pi.zero_apply]
-  simp only [Finset.sum_ite_eq, Finset.mem_univ, ite_true]
-  field_simp
+    vectorSpreadSpan A φ N = ⊤ :=
+  Kraus.vectorSpreadSpan_eq_top_of_wordSpan_eq_top A htop φ hφ
 
 /-! ## (b)→(a): Eventually full Kraus rank implies paper-primitivity -/
 
