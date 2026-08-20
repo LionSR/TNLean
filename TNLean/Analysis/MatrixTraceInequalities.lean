@@ -14,11 +14,11 @@ import TNLean.Algebra.PerronFrobenius.RankOne
 
 This module records finite-dimensional matrix trace inequalities used in
 Wolf's discussion of Lorentz cones for positive maps. The first result is the
-forward implication in Wolf, Chapter 3, Proposition 3.9: if `A ≥ 0`, then
+forward implication in Wolf, Chapter 3, Proposition 3.7: if `A ≥ 0`, then
 `tr(A^2) ≤ tr(A)^2`.
 
 The converse recorded here is the trace-nonnegative form.  The printed squared
-condition in Wolf, Chapter 3, Proposition 3.9 needs this sign condition; a
+condition in Wolf, Chapter 3, Proposition 3.7 needs this sign condition; a
 negative scalar matrix satisfies the squared inequality but is not positive
 semidefinite.
 
@@ -86,7 +86,7 @@ private lemma ofReal_sq_re (r : ℝ) : Complex.re ((r : ℂ) ^ 2) = r ^ 2 := by
       congrArg Complex.re hpow
     _ = r ^ 2 := Complex.ofReal_re _
 
-/-- Wolf Chapter 3, Proposition 3.9, forward implication.
+/-- Wolf Chapter 3, Proposition 3.7, forward implication.
 
 If `A` is positive semidefinite, then the real trace of `A ^ 2` is bounded by
 the square of the real trace of `A`. In eigenvalues this is
@@ -113,7 +113,7 @@ theorem PosSemidef.trace_sq_re_le_trace_re_sq
       rw [hlam]
       exact hA.eigenvalues_nonneg i)
 
-/-- Wolf Chapter 3, Proposition 3.9, trace-nonnegative converse.
+/-- Wolf Chapter 3, Proposition 3.7, trace-nonnegative converse.
 
 Let `A` be Hermitian with nonnegative real trace. If
 `(d - 1) Re tr(A ^ 2) ≤ (Re tr A)^2`, then `A` is positive semidefinite.
