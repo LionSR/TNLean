@@ -458,6 +458,22 @@ See Theorem~\ref{thm:tn}.
         ):
             boundary_report(self.root)
 
+    def test_rejects_wrapper_spanning_two_fully_covered_items(self) -> None:
+        self.write_blueprint(
+            r"""\begin{samepage}\begin{theorem}\label{thm:qic}
+\lean{Kraus.moved}
+\end{theorem}
+\begin{theorem}\label{thm:tn}
+\lean{MPSTensor.staying}
+\end{theorem}\end{samepage}
+"""
+        )
+        with self.assertRaisesRegex(
+            ValueError,
+            r"environment at src/chapter/ch01.tex:1-6 contains theorem-like item lines",
+        ):
+            boundary_report(self.root)
+
     def test_rejects_unbalanced_non_item_environment(self) -> None:
         self.write_blueprint(
             r"""\begin{theorem}\label{thm:qic}
