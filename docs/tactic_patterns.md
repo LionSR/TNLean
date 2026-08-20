@@ -1068,6 +1068,15 @@ abstracted — record why, so it is not re-proposed).
   `regionBlockedTensorInjective_compl_red` stops passing them.
   `UnionInjectivity.lean` is now 133 lines (net −110 on the follow-up).
 
+### Irreducibility transfer to the conjugate-transposed family
+- **Pattern:** the MPS transfer-map proofs repeated the invariant-projection
+  argument already proved for finite Kraus maps.
+- **Reuse:** both MPS directions now combine the Form II tensor/map conversion
+  lemmas with `Kraus.isIrreducibleMap_mapLM_conjTranspose` and its `iff`
+  companion through `Kraus.mapLM_eq_transferMap`.
+- **Result:** the two public MPS declarations retain their statements while their
+  duplicated conjugate-transpose projection arguments are removed.
+
 ---
 
 ## Candidates
@@ -1578,21 +1587,6 @@ spectral split → block extraction → MPV calculation → strict bounds
   `Kraus.mapLM_eq_transferMap`.
 - **Result:** the inline evaluation-at-identity proof is removed; no duplicate
   implementation remains.
-
-### irreducibility transfer to the conjugate-transposed family — candidate
-- **Pattern:** prove that irreducibility passes to the conjugate-transposed Kraus
-  family by taking adjoints of the invariant-projection equation
-  `(1-P) Kᵢ P = 0` to get `P Kᵢᴴ (1-P) = 0`.
-- **Seen:** 2 occurrences — `Kraus.isIrreducibleMap_mapLM_conjTranspose`
-  (`TNLean/Channel/Irreducible/AdjointFamily.lean:41-68`) and
-  `MPSTensor.isIrreducibleCP_transferMap_conjTranspose_of_isIrreducibleTensor`
-  (`TNLean/MPS/Irreducible/Adjoint.lean:39-83`), noted in the 2026-08
-  Perron–Frobenius gauge-split review.
-- **Abstraction (proposed):** derive the `MPSTensor` version as a two-line corollary
-  of the `Kraus` version via `Kraus.mapLM_eq_transferMap`, deleting the duplicated
-  84-line proof body.
-- **Notes:** below the rule-of-three threshold; the duplication predates the PR
-  that first noticed it (#6561) and both proofs are otherwise correct.
 
 ## Retired
 
