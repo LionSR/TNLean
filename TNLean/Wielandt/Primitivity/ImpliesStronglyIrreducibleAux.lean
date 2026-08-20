@@ -6,9 +6,9 @@ Authors: TNLean contributors
 import TNLean.Algebra.EigenspaceMap
 import TNLean.Channel.Irreducible.FixedPointUniqueness
 import TNLean.Kraus.Wielandt.Primitivity.VectorSpreadToPrimitive
-import TNLean.Wielandt.Primitivity.ImpliesStronglyIrreducible
 import TNLean.MPS.CanonicalForm.BlockingViaAdjoint
 import TNLean.MPS.Core.TransferChannel
+import TNLean.Wielandt.Primitivity.ImpliesStronglyIrreducible
 
 /-!
 # Proposition 3, (a) → (c): Spectral perturbation and conclusion
@@ -270,9 +270,13 @@ theorem posSemidef_pow_fixedPoint_unique_of_isPrimitivePaper
     (hρ_fix : ((transferMap (d := d) (D := D) A) ^ p) ρ = ρ)
     (hσ_fix : ((transferMap (d := d) (D := D) A) ^ p) σ = σ) :
     ∃ c : ℂ, σ = c • ρ := by
+  have hρ_fix' : ((Kraus.mapLM A) ^ p) ρ = ρ := by
+    simpa only [Kraus.mapLM_eq_transferMap] using hρ_fix
+  have hσ_fix' : ((Kraus.mapLM A) ^ p) σ = σ := by
+    simpa only [Kraus.mapLM_eq_transferMap] using hσ_fix
   simpa only [Kraus.mapLM_eq_transferMap] using
     Kraus.posSemidef_pow_fixedPoint_unique
-      A hq ρ σ hρ_psd hρ_ne hσ_psd hσ_ne hp hρ_fix hσ_fix
+      A hq ρ σ hρ_psd hρ_ne hσ_psd hσ_ne hp hρ_fix' hσ_fix'
 
 end Uniqueness
 
