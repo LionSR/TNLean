@@ -682,6 +682,16 @@
 \end{theorem}
 
 \begin{proof}\leanok
+    \uses{thm:mpdo_absorbed_representative_boundary_decomposition,
+        thm:mpdo_absorbed_bnt_channel_assembly,
+        thm:matrix_support_completion_cptp}
+    If the one-site physical space has dimension zero, all of its endomorphisms
+    are equal. Hence $\sum_sP_s=I$, and
+    Theorem~\ref{thm:mpdo_absorbed_bnt_channel_assembly} applies directly.
+    Assume from now on that the physical dimension is positive; fixed basis
+    vectors then give normalized rank-one density matrices on the two output
+    spaces.
+
     Let $Q=\sum_sP_s$. Pairwise orthogonality makes $Q$ an orthogonal
     projection. Two-sided support of each absorbed representative implies
     that the length-two and length-four closures of the complete tensor are
@@ -690,8 +700,8 @@
     On the active corner, sum the representative channels after compression
     by the corresponding first-site projections. Each sum is completely
     positive and preserves exactly the trace selected by $Q$. Complete it on
-    the orthogonal input complement by measuring $I-Q$ and preparing any
-    fixed density matrix in the output space. The resulting map is
+    the orthogonal input complement by measuring $I-Q$ and preparing the
+    fixed density matrix in the corresponding output space. The resulting map is
     trace-preserving and completely positive. Its complementary term vanishes
     on the supported closure, so the two channel equations reduce to those of
     the active sum and hence to the representative equations.
