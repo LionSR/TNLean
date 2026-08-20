@@ -125,7 +125,10 @@ uses \texttt{MPOTensor.physTraceTransfer\_sq\_of\_isRFPViaTS} together with
 \texttt{MPOTensor.isSAL\_of\_isRFPViaTS}. The corresponding
 \texttt{IsSourceZCL} conjunction is again convenience-only. Positivity by
 itself admits the zero tensor, so the trace condition cannot be omitted. The
-PRFP equivalence and the reverse implications in Theorem~4.9 remain open.
+PRFP equivalence remains open. In Theorem~4.9, the literal implication
+(iv)$\Rightarrow$(v) is now refuted by the unequal repeated-copy example
+described below, while the source (ii)$\Rightarrow$(v) channel route remains a
+missing statement after the ZCL-derived common-weight reduction.
 
 \paragraph{Amendment for the fixed-tensor implication in Theorem~4.9.}
 Option~1 is scale-invariant at the level of the generated state family, but it
@@ -146,8 +149,14 @@ at source line~1660 is performed only after literal ZCL has been assumed and
 does not transport literal ZCL or the renormalization maps across the rescaling.
 Thus Option~1 is the scale-invariant interpretation used by TNLean, whereas the
 paper's fixed representative still carries a separate literal diagrammatic
-condition. Neither representative currently settles the exact conjunction of
-that condition with the global BNT normalization in Theorem~4.9.
+condition. Neither of these four-sector representatives settles the exact
+(ii)$\Rightarrow$(v) route. A separate scalar BNT presentation with raw copy
+weights $1$ and $1/2$ does satisfy the global normalization and every clause of
+condition~(iv), while its two-site blocking fails Definition~4.1. This
+kernel-checked counterexample is
+\texttt{MPOTensor.CaseIIAbsorptionCounterexample.%
+printed\_theorem49\_iv\_to\_v\_is\_false} and refutes the literal
+(iv)$\Rightarrow$(v).
 
 \section{The scale-invariant repaired interpretation and its consequences}
 
@@ -246,16 +255,25 @@ composes the two physical channels of Proposition~C.7 twice, as observed at
 source lines~1821--1825, and transports them back to the original physical
 coordinates.
 
-The remaining obligations are genuinely all-sector. First, the Case-II
-argument still needs a replacement for the false claim that coefficient
-absorption preserves normality; this is analyzed in
-\path{docs/paper-gaps/cpgsv17_pf_rank_one.tex}. Second, Theorem~4.9(iv) gives
-the factorization separately for every BNT element. The corresponding channel
-pairs must still be combined, using the mutually orthogonal outer physical
-supports, into a single pair of trace-preserving completely positive maps.
-These are recorded by the two source-faithful \texttt{\string\notready} nodes
-for the all-sector structure and the blocking channels. Thus the earlier
-unfaithful theorem has been removed rather than renamed, and the surviving
-gap is neither a doubled-index bridge nor a change of terminology.
+The remaining obligations belong to the stronger route from condition~(ii).
+First, the Case-II argument still needs a replacement for the false claim that
+coefficient absorption preserves normality; this is the \emph{missing
+statement} in the (ii)$\Rightarrow$(iv) node and is analyzed in
+\path{docs/paper-gaps/cpgsv17_pf_rank_one.tex}. Second, the earlier Case-II
+argument at lines~1646--1665 uses literal ZCL to make repeated-copy weights
+independent of the copy label and absorb their common value. After that
+normalization, the Proposition~C.7 channel pairs must still be combined, using
+the mutually orthogonal outer physical supports, into a single pair of
+trace-preserving completely positive maps. This is the \emph{missing
+statement} in the (ii)$\Rightarrow$(v) node.
+
+By contrast, the raw implication (iv)$\Rightarrow$(v) is not a remaining
+assembly problem: it is a refuted \emph{unfaithful statement}, and treating the
+one-factorization result as though outer-sector assembly would prove it is
+\emph{proof-path drift}. The hidden use of ZCL in the proof of
+\texttt{prop3to4}, through \texttt{lemmus}, is a separate instance of the same
+proof-path drift. The former doubled-index theorem has been removed rather
+than renamed, and none of these surviving gaps is a doubled-index bridge or a
+change of terminology.
 
 \end{document}

@@ -138,7 +138,7 @@ the printed statement.
 | Corollary 3.12 | `cor:cpsv_iii_cor3_status` | active phase-class residual-isometry results in Chapter 26 |
 | Theorem 4.4 | `thm:cpsv_theorem44_printed_status` | local purification equivalences and global counterexamples in Chapter 21 |
 | Proposition 4.5 | `thm:cpsv_prop45_printed_status` | monotonicity and finite-chain bounds; parity counterexample to the limit |
-| Theorem 4.9 | `thm:cpsv_theorem49_printed_status` | completed implications plus the two preserved Case-II not-ready nodes; the latter record both the false absorbed-normality route and the missing outer-BNT channel assembly |
+| Theorem 4.9 | `thm:cpsv_theorem49_printed_status`; `thm:mpdo_theorem49_iv_to_v_counterexample` | completed implications; literal (iv)$\Rightarrow$(v) refuted by the exact repeated-copy capstone; the two preserved not-ready nodes record the viable source (ii)$\Rightarrow$(iv) and (ii)$\Rightarrow$(v) routes |
 | Theorem 4.14 | `thm:cpsv_theorem414_printed_status` | algebra equivalence and corrected active-support fusion equivalence |
 | Lemma A.5 | `lem:cpsv_power_sum_printed_status` | `thm:bounded_power_sum_multiset` |
 | Corollary A.6 | `cor:cpsv_corollary_a6_printed_status` | active nonzero unitary refinements in Chapter 11 |
@@ -179,11 +179,18 @@ nodes `thm:mpdo_sal_zcl_bnt_sector_structure` and
   positive-length global equations do not detect nilpotent hidden sectors.
 - Proposition 4.5 is complete for monotonicity and finite-chain bounds, but its
   unrestricted thermodynamic-limit clause is false.
-- Theorem 4.9 still has the all-sector Case-II normality obstruction after
-  coefficient absorption (#5996). It also lacks the projector-controlled
-  assembly of the separate channel pairs supplied for the outer BNT elements
-  (#6632). The existing two `\notready` nodes record these distinct downstream
-  obligations.
+- Theorem 4.9(iv)$\Rightarrow$(v) is refuted by the scalar BNT presentation
+  with raw copy weights $1$ and $1/2$: explicit component witnesses establish
+  all standing hypotheses, condition (iv), and MPDO positivity of the blocked
+  tensor, but Definition 4.1 for that block would force
+  $1+2^{-4}=1+2^{-2}$. This is an unfaithful statement, not an unfinished
+  outer-sector assembly. The viable route from condition (ii) still has the
+  all-sector normality obstruction after coefficient absorption (#5996) and
+  the projector-controlled assembly after ZCL-derived common-weight absorption
+  (#6632). The two `\notready` nodes record these source (ii)-routes. The
+  printed proof of `prop3to4` has separate proof-path drift because it invokes
+  the ZCL lemma `lemmus` although its displayed statement assumes only
+  condition-(iv) data; the completed Lean proof avoids that hidden hypothesis.
 - Theorem 4.14 is complete for the algebra clause and for the corrected
   active-support fusion clause.  This is not the unrestricted printed fusion
   statement.

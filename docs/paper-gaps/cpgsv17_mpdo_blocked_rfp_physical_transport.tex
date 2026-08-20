@@ -21,9 +21,20 @@ $\mathcal S$ from one supplied physical-sector factorization; see
 {Cirac2016MPDO_arXiv}.  The observation at lines~1821--1825 composes each
 channel with an overlapping copy to obtain $\mathcal T^2$ and
 $\mathcal S^2$ for the two-site blocking.  These formulas are local to one
-factorization.  Theorem~4.9 concerns a tensor with a complete BNT
-decomposition and therefore additionally requires the local channel pairs to
-be combined along the mutually orthogonal outer physical supports.
+factorization of the whole input tensor. Condition~(iv) of Theorem~4.9 instead
+supplies a factorization for each BNT representative and does not constrain
+its raw repeated-copy weights. The scalar presentation with weights $1$ and
+$1/2$ satisfies condition~(iv) but its two-site block fails Definition~4.1.
+Thus the one-factor transport theorem is a conditional helper and cannot be
+extended to the refuted literal (iv)$\Rightarrow$(v) implication merely by
+combining outer physical supports.
+
+The outer-support construction remains relevant to the viable source
+proposition \texttt{prop2to5}, which starts from condition~(ii). In the earlier
+Case-II derivation, literal ZCL makes repeated-copy weights independent of the
+copy label and their common value is absorbed. Only after that normalization
+must the Proposition~\texttt{3to5} channel pairs be combined along the
+mutually orthogonal outer physical supports.
 
 The sector-coordinate theorem
 \path{NeighboringTraceFactorization.blockTwo_sectorCoordinateTensor_isRFPViaTS}
@@ -66,10 +77,11 @@ the original physical matrix spaces, and proves
 \]
 under the same neighboring-operator trace-factorization hypothesis.  This
 discharges the physical-coordinate transport gap for one supplied
-factorization.  It does not construct the projector-controlled direct sum of
-channels associated with all BNT elements, so it does not by itself represent
-the full implication to condition~(v) in Theorem~4.9.  That distinct
-all-sector obligation is documented in
+whole-tensor factorization. It does not prove the raw
+(iv)$\Rightarrow$(v) implication, which is false. For the source
+(ii)$\Rightarrow$(v) route after ZCL-derived common-weight absorption, it
+supplies the per-factor channel pair whose projector-controlled all-BNT
+assembly remains a missing statement. That obligation is documented in
 \path{docs/paper-gaps/cpgsv17_pf_rank_one.tex} and tracked in issue~\#6632.
 
 \bibliographystyle{alpha}

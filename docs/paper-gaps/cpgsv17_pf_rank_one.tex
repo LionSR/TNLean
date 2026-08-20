@@ -636,17 +636,19 @@ Both the strong area law and TNLean's up-to-scalar predicate are unchanged by
 multiplying the tensor by $4/\sqrt5$, but the paper's diagram is not. Hence $A$
 is a counterexample only to the broadened implication obtained by replacing
 the literal diagram with \leanid{MPOTensor.IsSourceZCL}; it is not an
-unqualified counterexample to Theorem~4.9.
+unqualified counterexample to Theorem~4.9. This statement concerns the
+four-sector witness $A$ only; the scalar repeated-copy counterexample below is
+an exact counterexample to the printed (iv)$\Rightarrow$(v) implication.
 
 The scalar identities, the raw renormalization maps, and the failure of
-Definition~4.1 for $A^{[2]}$ are kernel-checked. The exact source boundary
-remains unsettled: $\mathcal K$ satisfies literal ZCL but not the global
-unit-weight convention, while $A$ satisfies the global convention but not
-literal ZCL. Resolving Theorem~4.9 requires either a representative satisfying
-both normalizations or a source-faithful explanation of how the two
-normalizations are meant to coexist. Packaging the normality, singleton BNT,
-biCF, simplicity, and SAL facts for $A$ remains useful, but cannot turn its
-up-to-scalar ZCL relation into the paper's literal diagram.
+Definition~4.1 for $A^{[2]}$ are kernel-checked. This example leaves the
+source (ii)$\Rightarrow$(v) boundary unsettled: $\mathcal K$ satisfies literal
+ZCL but not the global unit-weight convention, while $A$ satisfies the global
+convention but not literal ZCL. Packaging the normality, singleton BNT, biCF,
+simplicity, and SAL facts for $A$ remains useful, but cannot turn its
+up-to-scalar ZCL relation into the paper's literal diagram. The distinct raw
+copy example below settles (iv)$\Rightarrow$(v) without asserting
+condition~(ii).
 
 \section{A positive-semidefinite route}
 
@@ -891,12 +893,31 @@ printed_absorbed_normality_step_is_false}.  Its normal representatives have
 disjoint doubled-physical support, its global weights are
 $(1/\sqrt2,1)$, its ambient physical-trace transfer is literally idempotent,
 and its first absorbed representative has transfer spectral radius $1/2$ and
-is not normal.  The current declaration does not yet package biCF, simplicity,
-MPDO positivity, and SAL through the high-level Case-II interfaces.  That
-packaging is residual work; the counterexample already decides the scalar
-normality inference itself.  Propositions `prop2to3` and `prop2to5`, and the
-final Theorem~4.9 implications depending on them, remain not ready rather than
-being refuted by this slice. For the rescaling-stable example, the
+is not normal. This first construction decides the scalar normality inference
+used in Proposition~\texttt{prop2to3}; it is not the counterexample to the
+literal implication (iv)$\Rightarrow$(v).
+
+That implication is separately refuted by the one-representative,
+two-copy construction
+\leanid{MPOTensor.CaseIIAbsorptionCounterexample.%
+printed_theorem49_iv_to_v_is_false}. Its raw copy weights are $1$ and $1/2$.
+The capstone packages the exact BNT canonical assembly and global unit-weight
+condition, MPDO positivity, nonnilpotence of the sole BNT representative,
+simultaneous one-letter span, representative MPDO positivity, the
+distinct-layer equation, the physical-sector factorization, and the positive
+rank-one neighboring-trace data. Thus every printed standing hypothesis and
+all of condition~(iv) have explicit component witnesses. The two-site block
+also generates MPDOs. Nevertheless it fails
+Definition~4.1: transfer idempotence would equate the traces $1+2^{-4}$ and
+$1+2^{-2}$. The literal implication is therefore an \emph{unfaithful
+statement}; the attempt to regard outer-BNT assembly as its only unfinished
+step is \emph{proof-path drift}.
+
+Proposition~\texttt{prop2to5} remains a viable missing statement because it
+starts from condition~(ii). The earlier Case-II argument at source
+lines~1646--1665 uses literal ZCL to make repeated-copy weights independent of
+the copy label and absorb their common value before the short proof of
+\texttt{prop2to5} invokes Proposition~C.7. For the rescaling-stable example, the
 separate explicit vertical identification is complete in
 \leanid{MPOTensor.RescalingStableLengthDependentRFP.R_oneLabelBNTAlgebraTensorClause};
 it does not supply sectorwise normality and is not used in this descent
@@ -918,20 +939,25 @@ tensors.  The orientation is the convention of
 \leanid{MPOTensor.PhysicalSectorFactorization}, rather than an identification
 with a separately drawn graphical orientation in the source.
 
-This one-factorization result does not by itself prove the full implication
-Theorem~4.9(iv)$\Rightarrow$(v). Condition~(iv) supplies a separate physical
-factorization for each outer BNT element, together with mutually orthogonal
-outer physical supports. Proposition~C.7 constructs a channel pair within one
-such factorization. The formal development does not yet combine the resulting
-family into one trace-preserving completely positive coarse-graining map and
-one refinement map for the whole BNT sum. A direct concatenation of the inner
-sector labels is not valid: cross-BNT neighboring operators vanish by support
-orthogonality, while a single global rank-one equation
+This one-factorization result is a \emph{conditional helper}. It assumes a
+neighboring trace factorization of the whole tensor to which the channels are
+applied. Condition~(iv) instead supplies a separate physical factorization for
+each BNT representative and leaves its raw repeated-copy weights unconstrained.
+The scalar two-copy example above shows that no direct-sum construction can
+turn these hypotheses alone into conclusion~(v).
+
+The projector-controlled construction remains relevant to
+Proposition~\texttt{prop2to5}, hence to the viable source implication
+(ii)$\Rightarrow$(v). After ZCL has forced common copy weights and those values
+have been absorbed, Proposition~C.7 constructs a channel pair within each
+outer BNT factorization. A direct concatenation of the inner sector labels is
+not valid: cross-BNT neighboring operators vanish by support orthogonality,
+while a single global rank-one equation
 $\operatorname{tr}(\eta_{k,h})=a_kb_h$ would generally make cross terms
 nonzero. The missing construction must instead use the outer support
-projectors to control a direct sum of channel pairs. This is a separate
-all-sector obligation in addition to the Case-II factorization problem; it is
-tracked in \ghissue{6632}.
+projectors to control a direct sum of channel pairs. This all-sector missing
+statement is tracked in \ghissue{6632}, retargeted from the refuted raw
+(iv)$\Rightarrow$(v) reading.
 
 The all-cut Markov proof and the source-selected inverse-map calculation show
 that the raw four-sector tensor satisfies the displayed SAL, literal ZCL, and
@@ -954,8 +980,10 @@ scale-invariant \leanid{MPOTensor.IsSourceZCL} relation, while $A^{[2]}$ fails
 the literal idempotence forced by conclusion~(v). The normalized representative
 therefore refutes the broadened implication using that up-to-scalar predicate,
 but it is not an unqualified counterexample to Theorem~4.9 because it fails the
-paper's literal ZCL diagram. The exact source implication remains open at this
-normalization boundary.
+paper's literal ZCL diagram. Independently, the repeated-copy capstone above
+refutes the exact printed implication (iv)$\Rightarrow$(v). The source
+(ii)$\Rightarrow$(v) route remains open at the common-weight absorption and
+projector-controlled assembly boundary.
 
 \bibliographystyle{alpha}
 \bibliography{references}

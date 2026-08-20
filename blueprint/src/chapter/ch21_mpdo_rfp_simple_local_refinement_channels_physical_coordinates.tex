@@ -390,10 +390,11 @@
 % sector-coordinate tensor, not yet the original tensor. Documented in
 % docs/paper-gaps/cpgsv17_mpdo_blocked_rfp_physical_transport.tex.
 % **Scope restriction (single supplied factorization):** this theorem assumes
-% one neighboring trace factorization. Theorem 4.9(iv) supplies such data
-% separately for every outer BNT element, but the projector-controlled channel
-% assembly is not yet formalized. Documented in
-% docs/paper-gaps/cpgsv17_pf_rank_one.tex and tracked in issue #6632.
+% one neighboring trace factorization of the whole tensor to which it is
+% applied. Theorem 4.9(iv) supplies such data only for each BNT representative,
+% and does not control unequal raw repeated-copy weights. Thus this conditional
+% helper does not imply the printed (iv)=>(v), which is refuted. Documented in
+% docs/paper-gaps/cpgsv17_pf_rank_one.tex.
 \begin{theorem}[Blocked sector-coordinate tensor is a renormalization fixed point]
     \label{thm:mpdo_blocked_sector_coordinate_tensor_is_rfp_via_ts}
     \lean{MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.blockTwo_sectorCoordinateTensor_isRFPViaTS}
@@ -436,11 +437,12 @@
 % channel observation directly. Documented in
 % docs/paper-gaps/cpgsv17_mpdo_theorem_4_9_implication_label.tex.
 % **Scope restriction (single supplied factorization):** the theorem starts
-% from one neighboring trace factorization, including the rank-one identity
-% tr(eta_{k,h}) = a_k b_h. Theorem 4.9(iv) supplies this data separately for
-% each outer BNT element; the controlled assembly of those channels is not yet
-% formalized. Documented in docs/paper-gaps/cpgsv17_pf_rank_one.tex and tracked
-% in issue #6632.
+% from one neighboring trace factorization of its full input tensor, including
+% the rank-one identity tr(eta_{k,h}) = a_k b_h. Theorem 4.9(iv) supplies this
+% data only for each BNT representative and leaves raw repeated-copy weights
+% unconstrained. The printed (iv)=>(v) is therefore not an all-sector extension
+% of this theorem and is refuted. Documented in
+% docs/paper-gaps/cpgsv17_pf_rank_one.tex.
 \begin{theorem}[Conditional two-site blocking theorem from neighboring trace factorization]
     \label{thm:mpdo_blocked_original_tensor_is_rfp_via_ts}
     \lean{MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.blockTwo_isRFPViaTS}
@@ -456,10 +458,15 @@
     $\mathcal K^{[2]}$ is a renormalization fixed point in the sense of
     Definition~\ref{def:is_rfp_via_ts}. This is the conditional channel
     construction of \cite[Proposition~C.7]{Cirac2016MPDO_arXiv} for one
-    supplied factorization. The all-BNT implication
-    \cite[Theorem~4.9, (iv)$\Rightarrow$(v)]{Cirac2016MPDO_arXiv} additionally
-    requires the channels to be assembled along the mutually orthogonal outer
-    physical supports.
+    supplied factorization. It does not extend to the printed all-BNT
+    implication \cite[Theorem~4.9, (iv)$\Rightarrow$(v)]
+      {Cirac2016MPDO_arXiv}: condition~(iv) constrains each BNT representative
+    but not its raw repeated-copy weights, and that implication is refuted by
+    Theorem~\ref{thm:mpdo_theorem49_iv_to_v_counterexample}. After condition
+    (ii) has forced equal copy weights and their common values have been
+    absorbed, these one-factorization channels become inputs to the
+    projector-controlled assembly used by the viable implication
+    (ii)$\Rightarrow$(v).
 \end{theorem}
 
 \begin{proof}\leanok
@@ -473,21 +480,24 @@
     $\mathcal K^{[2]}$.
 \end{proof}
 
-% **All-sector Case-II boundary:**
+% **All-sector Case-II boundary for the viable (ii)=>(v) route:**
 % Positivity, SAL, and literal ZCL descend to every absorbed BNT representative.
 % The printed absorbed-normality bridge is refuted; an alternative all-sector
 % structural factorization is still required.
 % The conditional blocking theorem
 % thm:mpdo_blocked_original_tensor_is_rfp_via_ts instead assumes one
-% neighboring trace factorization. Even after such factorizations are obtained
-% for every BNT element, the outer-sector channel assembly remains open.
-% Documented in docs/paper-gaps/cpgsv17_pf_rank_one.tex.
+% neighboring trace factorization. After ZCL-derived equal-copy-weight
+% absorption, the outer-sector channel assembly remains a missing statement.
+% The raw implication (iv)=>(v) is separately refuted. Documented in
+% docs/paper-gaps/cpgsv17_pf_rank_one.tex; issue #6632 is retargeted to this
+% projector-controlled assembly for (ii)=>(v).
 \begin{theorem}[Blocking channels from SAL and ZCL (all-sector Case-II boundary)]
     \label{thm:mpdo_sal_zcl_blocking_channels}
     \notready
     \uses{def:is_sal, def:mpo_physical_trace_transfer, def:is_rfp_via_ts,
         def:mpdo_two_site_blocking,
-        thm:mpdo_sal_zcl_bnt_sector_structure}
+        thm:mpdo_sal_zcl_bnt_sector_structure,
+        thm:mpdo_theorem49_iv_to_v_counterexample}
     Let $K$ be a simple tensor in block-injective canonical form (biCF),
     equipped with a basis-of-normal-tensors decomposition and satisfying the
     strong area law and literal zero correlation length,
@@ -503,8 +513,14 @@
     \cite[Theorem~4.9 and Appendix~C.2, lines~1810--1825]
       {Cirac2016MPDO_arXiv}. The separate standing biCF and BNT hypotheses are
     imposed at lines~849--850 and restated at line~1628 of the same source.
-    The printed proof of implication (ii)$\Rightarrow$(v) refers back to the
-    construction of Proposition~C.7 after projection to each local sector.
+    This is not the literal implication (iv)$\Rightarrow$(v), which is
+    refuted by Theorem~\ref{thm:mpdo_theorem49_iv_to_v_counterexample}: that
+    example does not satisfy condition~(ii), since its physical-trace transfer
+    is not idempotent. The printed proof of implication
+    (ii)$\Rightarrow$(v) first uses zero correlation length at lines
+    1646--1665 to make repeated-copy weights independent of the copy label and
+    to absorb their common value. It then refers back to the construction of
+    Proposition~C.7 after projection to each local sector.
     The analytic hypotheses on every absorbed BNT representative are
     complete: each is injective, positive on every nonempty chain, saturates
     the area law, and retains literal physical-trace idempotence. The remaining
@@ -515,11 +531,11 @@
     C.7 then gives two channels for each BNT element. A second missing step is
     to combine these channels, using the mutually orthogonal outer physical
     supports, into single trace-preserving completely positive maps for $K$.
-    The explicit bond-one counterexample to absorbed normality does not
-    contradict this final statement; it invalidates only the printed route to
-    its structural input. Deriving the channels from SAL and literal zero
-    correlation length therefore requires a replacement for that structural
-    step.
+    The explicit absorbed-normality counterexample does not contradict this
+    source (ii)$\Rightarrow$(v) statement; it invalidates only the printed
+    route to its structural input. Deriving the channels from SAL and literal
+    zero correlation length therefore requires a replacement for that
+    structural step and the projector-controlled assembly.
 \end{theorem}
 
 % Correct equation, not a figure: the cited source draws the two-to-three
