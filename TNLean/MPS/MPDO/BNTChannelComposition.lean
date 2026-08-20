@@ -174,7 +174,7 @@ theorem firstSiteMatrix_mul_physCloseN_eq_zero_of_mul_physicalSlice_eq_zero
     simp only [Matrix.sum_apply, Matrix.smul_apply, smul_eq_mul, Matrix.zero_apply]
     simpa [physicalSlice, Matrix.mul_apply] using
       congrFun (congrFun (hP β α) (σ 0)) (τ 0)
-  rw [hTensor, Matrix.zero_mul, Matrix.trace_zero]
+  simp [hTensor]
 
 /-- Right support of every physical slice implies right support of every
 arbitrary-boundary physical closure on the first site.
