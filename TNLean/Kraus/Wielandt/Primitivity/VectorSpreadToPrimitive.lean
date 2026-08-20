@@ -30,6 +30,10 @@ Pérez-García, Wolf, and Cirac, arXiv:0909.5347.
 
 ## Main declarations
 
+* `Kraus.exists_hermitian_ne_zero_trace_zero_pow_fixedPoint`
+* `Kraus.posSemidef_pow_fixedPoint_unique`
+* `Kraus.isChannel_pow`
+* `Kraus.hermitian_pow_fixedPoint_eq_zero`
 * `Kraus.exists_posDef_fixedPoint_of_isTP_of_vectorSpreadSpan_eq_top`
 * `Kraus.isPrimitive_mapLM_of_isTP_of_vectorSpreadSpan_eq_top`
 -/
@@ -43,7 +47,9 @@ variable {d D : ℕ}
 
 local notation "Mat" => Matrix (Fin D) (Fin D) ℂ
 
-private lemma conjTranspose_eigenvector
+/-- A positive map sends the conjugate transpose of an eigenvector to the
+conjugate transpose with the conjugate eigenvalue. -/
+theorem conjTranspose_eigenvector
     (E : Mat →ₗ[ℂ] Mat) (hE : IsPositiveMap E)
     {X : Mat} {μ : ℂ} (hEig : E X = μ • X) :
     E Xᴴ = star μ • Xᴴ := by
@@ -52,14 +58,18 @@ private lemma conjTranspose_eigenvector
     _ = (μ • X)ᴴ := by rw [hEig]
     _ = star μ • Xᴴ := Matrix.conjTranspose_smul μ X
 
-private lemma pow_eigenvector_of_root
+/-- An eigenvector whose eigenvalue has finite order is fixed by the
+corresponding power of the map. -/
+theorem pow_eigenvector_of_root
     (E : Mat →ₗ[ℂ] Mat) {X : Mat} {μ : ℂ} (hEig : E X = μ • X)
     {p : ℕ} (hroot : μ ^ p = 1) :
     (E ^ p) X = X := by
   rw [Module.End.pow_apply_of_mem_eigenspace
     (Module.End.mem_eigenspace_iff.mpr hEig) p, hroot, one_smul]
 
-private lemma pow_conjTranspose_eigenvector_of_root
+/-- The conjugate transpose of a finite-order eigenvector is fixed by the
+corresponding power of a positive map. -/
+theorem pow_conjTranspose_eigenvector_of_root
     (E : Mat →ₗ[ℂ] Mat) (hE : IsPositiveMap E)
     {X : Mat} {μ : ℂ} (hEig : E X = μ • X)
     {p : ℕ} (hroot : μ ^ p = 1) :
@@ -94,7 +104,8 @@ private lemma hermitianParts_not_both_zero {X : Mat} (hX_ne : X ≠ 0) :
     rwa [hX_self] at h₁
   exact (smul_eq_zero.mp htwo).resolve_left two_ne_zero
 
-private lemma trace_eigenvector_eq_zero
+/-- A nontrivial eigenvector of a trace-preserving map has trace zero. -/
+theorem trace_eigenvector_eq_zero
     (E : Mat →ₗ[ℂ] Mat) (hTP : IsTracePreservingMap E)
     {X : Mat} {μ : ℂ} (hEig : E X = μ • X) (hμ_ne : μ ≠ 1) :
     Matrix.trace X = 0 := by
@@ -106,7 +117,9 @@ private lemma trace_eigenvector_eq_zero
   have hmul : (μ - 1) * Matrix.trace X = 0 := by linear_combination htrace
   exact (mul_eq_zero.mp hmul).resolve_left (sub_ne_zero.mpr hμ_ne)
 
-private lemma exists_hermitian_ne_zero_trace_zero_pow_fixedPoint
+/-- A nontrivial finite-order eigenvector of a channel yields a nonzero
+Hermitian trace-zero fixed point of the corresponding power. -/
+theorem exists_hermitian_ne_zero_trace_zero_pow_fixedPoint
     (E : Mat →ₗ[ℂ] Mat) (hCh : IsChannel E)
     {X : Mat} {μ : ℂ} (hEig : E X = μ • X)
     (hX_ne : X ≠ 0) (hμ_ne : μ ≠ 1) {p : ℕ} (hroot : μ ^ p = 1) :
@@ -126,7 +139,9 @@ private lemma exists_hermitian_ne_zero_trace_zero_pow_fixedPoint
       pow_conjTranspose_eigenvector_of_root E hCh.cp.isPositiveMap hEig hroot,
       pow_eigenvector_of_root E hEig hroot]
 
-private lemma posSemidef_pow_fixedPoint_unique
+/-- Fixed-length full vector spreading makes the nonzero positive-semidefinite
+fixed points of every positive power proportional. -/
+theorem posSemidef_pow_fixedPoint_unique
     (K : Fin d → Mat) {q : ℕ}
     (hq : ∀ φ : Fin D → ℂ, φ ≠ 0 → vectorSpreadSpan K φ q = ⊤)
     (ρ σ : Mat) (hρ : ρ.PosSemidef) (hρ_ne : ρ ≠ 0)
@@ -143,7 +158,8 @@ private lemma posSemidef_pow_fixedPoint_unique
       posDef_pow_fixedPoint_of_vectorSpreadSpan_eq_top
         K hq hτ hτ_ne hp hτ_fix
 
-private lemma isChannel_pow (E : Mat →ₗ[ℂ] Mat) (hE : IsChannel E) (p : ℕ) :
+/-- Every natural power of a channel is a channel. -/
+theorem isChannel_pow (E : Mat →ₗ[ℂ] Mat) (hE : IsChannel E) (p : ℕ) :
     IsChannel (E ^ p) := by
   refine ⟨hE.cp.pow p, ?_⟩
   intro X
@@ -153,7 +169,9 @@ private lemma isChannel_pow (E : Mat →ₗ[ℂ] Mat) (hE : IsChannel E) (p : �
       rw [pow_succ, Module.End.mul_apply, ih]
       exact hE.tp X
 
-private lemma hermitian_pow_fixedPoint_eq_zero [NeZero D]
+/-- Under fixed-length full vector spreading, every Hermitian trace-zero fixed
+point of a positive power of the Kraus map vanishes. -/
+theorem hermitian_pow_fixedPoint_eq_zero [NeZero D]
     (K : Fin d → Mat) (hTP : IsTP K) {q : ℕ}
     (hq : ∀ φ : Fin D → ℂ, φ ≠ 0 → vectorSpreadSpan K φ q = ⊤)
     {H : Mat} (hH_herm : H.IsHermitian) (hH_tr : H.trace = 0)
