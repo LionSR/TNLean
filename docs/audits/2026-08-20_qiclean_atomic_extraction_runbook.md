@@ -31,12 +31,12 @@ The freeze commit must contain these deterministic artifacts:
 3. `namespace-decisions.csv`, with one row for every entry in
    `mover-report.json`'s `namespaced_declarations` list;
 4. `scripts/qic_blueprint_label_dispositions.csv`, with one row for every
-   labelled theorem-like blueprint environment that has no `\lean{}` tag;
+   theorem-like blueprint environment that has no `\lean{}` tag;
 5. `blueprint-files.txt`, the sorted list of blueprint files copied to QICLean;
 6. `qic-support-paths.txt`, the sorted list of TNLean scripts, documentation,
    notes, license, homepage, and docbuild paths copied with history;
 7. `tn-interface-labels.txt`, the sorted set of QIC labels reached by a
-   TN-to-QIC `\uses` edge.
+   TN-to-QIC `\uses`, `\ref`, or `\eqref` edge.
 
 Every namespace row has the columns
 `source,line,old_fqn,action,new_fqn`. `action` is exactly `keep`, `rename`, or
@@ -44,9 +44,10 @@ Every namespace row has the columns
 file is split before the freeze. Every `rename` row has a nonempty `new_fqn`.
 
 Every blueprint disposition row has the columns
-`label,source,environment,disposition,reason`. `label` is the first label in the
-environment, `disposition` is exactly `qic` or `tn`, and `source` and
-`environment` verify that the row still names the intended item. Additional
+`item_id,source,environment,disposition,reason`. `item_id` is the first label in
+the environment, or `@source:line` when no label exists. `disposition` is
+exactly `qic` or `tn`, and `source` and `environment` verify that the row still
+names the intended item. Additional
 labels in the same environment inherit this disposition. The report rejects
 missing, duplicate, stale, or mismatched rows.
 
@@ -101,10 +102,10 @@ Stop unless all of the following hold:
   import failure;
 - the mover report's source is exactly `TN_SOURCE_SHA`;
 - every namespaced declaration has one namespace decision;
-- every labelled theorem-like environment without a `\lean{}` tag has exactly
-  one row in `scripts/qic_blueprint_label_dispositions.csv`;
+- every theorem-like environment without a `\lean{}` tag has exactly one row in
+  `scripts/qic_blueprint_label_dispositions.csv`;
 - the blueprint report has zero `mixed` or `unresolved` items and zero
-  `qic_to_tn` or `unclassified` edges;
+  `qic_to_tn` or `unclassified` dependency or reference edges;
 - mixed physical files are listed explicitly and contain no mixed item;
 - every `tn_to_qic_interface_edges` target occurs in
   `tn-interface-labels.txt`, and that file contains no other label;
@@ -120,7 +121,7 @@ The blueprint report is deliberately conservative. An item tagged by both a
 moved and a staying declaration is `mixed` and blocks the freeze. A physical
 file containing separate QIC and TN items is allowed because it is copied with
 history and split at item level after the filtered history is merged. An
-unclassified `\uses` endpoint or an incomplete manual ledger blocks the freeze.
+unclassified dependency endpoint or an incomplete manual ledger blocks the freeze.
 
 For that later split, one item starts with the complete theorem-like
 environment and extends through the next complete proof environment, including

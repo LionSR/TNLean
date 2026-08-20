@@ -42,6 +42,15 @@ def:tp_kraus
 def:trace_preserving
 def:vector_spread_span
 def:von_neumann_entropy
+eq:channel_kraus_representation
+eq:channel_power_decomp
+eq:gram_reshuffle_single
+eq:mpu_reduced_projection_coordinate_identities
+eq:mpu_reduced_projection_transversality
+eq:spec_commutant_action
+eq:spec_subalgebra_action
+eq:spectral_kraus_cyclic_shift
+eq:spectral_trace_expansion
 lem:amplified_center_scalar
 lem:anticommutator_projection_rowsum_reduction
 lem:center_scalar
@@ -105,6 +114,7 @@ thm:eigenvector_from_trace
 thm:entropy_le_log_rank
 thm:entropy_nonneg
 thm:entropy_pairwise_annihilating_support
+thm:entropy_petz_product_tensor
 thm:entropy_smul
 thm:entropy_ssa_equality_quantum_markov
 thm:entropy_strong_subadditivity
@@ -114,6 +124,7 @@ thm:geometric_bound_of_spectral_radius_lt_one
 thm:gram_reshuffle_matrix_norm_sq
 thm:gram_reshuffle_single
 thm:gram_reshuffle_sub
+thm:hayashi_ssa_equality_characterization
 thm:hayashi_ssa_equality_reverse
 thm:hermitian_opposite_corner_zero
 thm:idempotent_spectral_radius_one
@@ -189,6 +200,7 @@ thm:newton_girard
 thm:nilpotent_pow_bound
 thm:normalize_scalar_gram_matrix
 thm:normalized_conjugation_of_scalar_gram
+thm:operator_schmidt_coefficient_space
 thm:operator_schmidt_rank_pos
 thm:orthogonal_projection_star_projection_channel
 thm:peripheral_finite

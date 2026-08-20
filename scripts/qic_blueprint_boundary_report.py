@@ -40,8 +40,9 @@ PROOF_END_RE = re.compile(r"\\end\{proof\}")
 LABEL_RE = re.compile(r"\\label\{([^}]+)\}")
 LEAN_RE = re.compile(r"\\lean\{([^}]*)\}", re.DOTALL)
 USES_RE = re.compile(r"\\uses\{([^}]*)\}", re.DOTALL)
+REFERENCE_RE = re.compile(r"\\(?:ref|eqref)\{([^}]+)\}")
 INPUT_RE = re.compile(r"(?m)^[ \t]*\\input\{([^}]+)\}")
-LEDGER_COLUMNS = ("label", "source", "environment", "disposition", "reason")
+LEDGER_COLUMNS = ("item_id", "source", "environment", "disposition", "reason")
 DEFAULT_LEDGER = Path("scripts/qic_blueprint_label_dispositions.csv")
 BLUEPRINT_ROOT_SUPPORT = (
     Path("blueprint/.chktexrc"),
@@ -86,10 +87,16 @@ class BlueprintEnvironment:
     labels: tuple[str, ...]
     declarations: tuple[str, ...]
     uses: tuple[str, ...]
+    references: tuple[str, ...]
 
     @property
     def primary_label(self) -> str | None:
         return self.labels[0] if self.labels else None
+
+    @property
+    def identifier(self) -> str:
+        """Return the label or frozen source-line key that identifies this item."""
+        return self.primary_label or f"@{self.file}:{self.line}"
 
 
 def blueprint_environments(blueprint_src: Path) -> list[BlueprintEnvironment]:
@@ -163,6 +170,7 @@ def blueprint_environments(blueprint_src: Path) -> list[BlueprintEnvironment]:
             uses: list[str] = []
             for payload in USES_RE.findall(body):
                 uses.extend(_split_comma_payload(payload))
+            references = tuple(sorted(set(REFERENCE_RE.findall(body))))
             records.append(
                 BlueprintEnvironment(
                     environment=str(statement["environment"]),
@@ -172,6 +180,7 @@ def blueprint_environments(blueprint_src: Path) -> list[BlueprintEnvironment]:
                     labels=labels,
                     declarations=tuple(sorted(set(declarations))),
                     uses=tuple(sorted(set(uses))),
+                    references=references,
                 )
             )
     return sorted(records, key=lambda item: (item.file, item.line, item.primary_label or ""))
@@ -205,7 +214,7 @@ def source_sha(root: Path) -> str:
 
 
 def read_disposition_ledger(path: Path) -> dict[str, dict[str, str]]:
-    r"""Read the explicit disposition of every labelled item without ``\lean``."""
+    r"""Read the explicit disposition of every item without ``\lean``."""
     try:
         with path.open(newline="", encoding="utf-8") as handle:
             reader = csv.DictReader(handle)
@@ -214,11 +223,11 @@ def read_disposition_ledger(path: Path) -> dict[str, dict[str, str]]:
             rows: dict[str, dict[str, str]] = {}
             for line_no, raw in enumerate(reader, start=2):
                 row = {key: (raw.get(key) or "").strip() for key in LEDGER_COLUMNS}
-                label = row["label"]
-                if not label:
-                    raise ValueError(f"{path}:{line_no}: empty label")
-                if label in rows:
-                    raise ValueError(f"{path}:{line_no}: duplicate label {label}")
+                item_id = row["item_id"]
+                if not item_id:
+                    raise ValueError(f"{path}:{line_no}: empty item_id")
+                if item_id in rows:
+                    raise ValueError(f"{path}:{line_no}: duplicate item_id {item_id}")
                 if row["disposition"] not in {"qic", "tn"}:
                     raise ValueError(f"{path}:{line_no}: disposition must be qic or tn")
                 if row["environment"] not in ENVIRONMENTS:
@@ -228,7 +237,7 @@ def read_disposition_ledger(path: Path) -> dict[str, dict[str, str]]:
                 if not row["source"] or not row["reason"]:
                     raise ValueError(f"{path}:{line_no}: source and reason must be nonempty")
                 row["source"] = normalized_relative_path(row["source"])
-                rows[label] = row
+                rows[item_id] = row
     except OSError as error:
         raise ValueError(f"cannot read disposition ledger {path}: {error}") from error
     return rows
@@ -263,15 +272,16 @@ def _classify_environments(
 
     items: list[dict[str, object]] = []
     disposition_by_label: dict[str, str] = {}
-    used_manual_labels: set[str] = set()
+    used_manual_item_ids: set[str] = set()
     for environment in environments:
         sources: list[str] = []
         unresolved: list[str] = []
         moving: list[bool] = []
+        identifier = environment.identifier
         if environment.declarations:
-            if environment.primary_label in ledger:
+            if identifier in ledger:
                 raise ValueError(
-                    f"{environment.primary_label}: tagged item must not have a manual disposition"
+                    f"{identifier}: tagged item must not have a manual disposition"
                 )
             for name in environment.declarations:
                 declaration = lean_decls.get(name)
@@ -290,34 +300,32 @@ def _classify_environments(
             else:
                 disposition = "tn"
             disposition_source = "lean"
-        elif environment.primary_label is not None:
-            row = ledger.get(environment.primary_label)
+        else:
+            row = ledger.get(identifier)
             if row is None:
                 raise ValueError(
-                    f"missing manual disposition for {environment.primary_label} "
+                    f"missing manual disposition for {identifier} "
                     f"at {environment.file}:{environment.line}"
                 )
             if row["source"] != environment.file:
                 raise ValueError(
-                    f"{environment.primary_label}: ledger source {row['source']} "
+                    f"{identifier}: ledger source {row['source']} "
                     f"does not match {environment.file}"
                 )
             if row["environment"] != environment.environment:
                 raise ValueError(
-                    f"{environment.primary_label}: ledger environment "
+                    f"{identifier}: ledger environment "
                     f"{row['environment']} does not match {environment.environment}"
                 )
             disposition = row["disposition"]
             disposition_source = "manual"
-            used_manual_labels.add(environment.primary_label)
-        else:
-            continue
+            used_manual_item_ids.add(identifier)
 
         item = {
             "file": environment.file,
             "line": environment.line,
             "end_line": environment.end_line,
-            "label": environment.primary_label,
+            "label": identifier,
             "labels": list(environment.labels),
             "environment": environment.environment,
             "declarations": list(environment.declarations),
@@ -327,26 +335,28 @@ def _classify_environments(
             "disposition_source": disposition_source,
         }
         items.append(item)
+        disposition_by_label[identifier] = disposition
         for label in environment.labels:
             disposition_by_label[label] = disposition
 
-    stale = sorted(set(ledger) - used_manual_labels)
+    stale = sorted(set(ledger) - used_manual_item_ids)
     if stale:
-        raise ValueError("stale manual disposition labels: " + ", ".join(stale))
+        raise ValueError("stale manual disposition item_ids: " + ", ".join(stale))
     return items, disposition_by_label
 
 
-def _uses_edges(
+def _dependency_edges(
     environments: list[BlueprintEnvironment],
     disposition_by_label: dict[str, str],
+    attribute: str,
 ) -> list[dict[str, object]]:
     edges: list[dict[str, object]] = []
     for record in environments:
-        source_label = record.primary_label
-        if source_label is None:
-            continue
+        source_label = record.identifier
         source_disposition = disposition_by_label.get(source_label, "unclassified")
-        for target_label in record.uses:
+        for target_label in getattr(record, attribute):
+            if attribute == "references" and target_label not in disposition_by_label:
+                continue
             target_disposition = disposition_by_label.get(target_label, "unclassified")
             if source_disposition == target_disposition:
                 direction = "internal"
@@ -371,6 +381,20 @@ def _uses_edges(
         edges,
         key=lambda item: (item["source"], item["target"], item["file"], item["line"]),
     )
+
+
+def _uses_edges(
+    environments: list[BlueprintEnvironment],
+    disposition_by_label: dict[str, str],
+) -> list[dict[str, object]]:
+    return _dependency_edges(environments, disposition_by_label, "uses")
+
+
+def _reference_edges(
+    environments: list[BlueprintEnvironment],
+    disposition_by_label: dict[str, str],
+) -> list[dict[str, object]]:
+    return _dependency_edges(environments, disposition_by_label, "references")
 
 
 def _resolve_input(source: Path, payload: str, blueprint_src: Path) -> Path | None:
@@ -423,11 +447,12 @@ def blueprint_file_manifest(root: Path, items: list[dict[str, object]]) -> list[
     return sorted(path.relative_to(root).as_posix() for path in selected)
 
 
-def tn_interface_labels(edges: list[dict[str, object]]) -> list[str]:
-    """Return the direct QIC labels used by staying TN blueprint items."""
+def tn_interface_labels(*edge_sets: list[dict[str, object]]) -> list[str]:
+    """Return QIC labels used or referenced by staying TN blueprint items."""
     return sorted(
         {
             str(edge["target"])
+            for edges in edge_sets
             for edge in edges
             if edge["direction"] == "tn_to_qic"
         }
@@ -446,9 +471,11 @@ def boundary_report(root: Path, ledger_path: Path | None = None) -> dict[str, ob
     ledger = read_disposition_ledger(ledger_file)
     items, disposition_by_label = _classify_environments(root, environments, ledger)
     edges = _uses_edges(environments, disposition_by_label)
+    reference_edges = _reference_edges(environments, disposition_by_label)
 
     item_counts = Counter(str(item["disposition"]) for item in items)
     edge_counts = Counter(str(edge["direction"]) for edge in edges)
+    reference_edge_counts = Counter(str(edge["direction"]) for edge in reference_edges)
     dispositions_by_file: dict[str, set[str]] = {}
     for item in items:
         dispositions_by_file.setdefault(str(item["file"]), set()).add(
@@ -459,30 +486,39 @@ def boundary_report(root: Path, ledger_path: Path | None = None) -> dict[str, ob
         for file, dispositions in dispositions_by_file.items()
         if {"qic", "tn"} <= dispositions
     )
-    interface_labels = tn_interface_labels(edges)
+    interface_labels = tn_interface_labels(edges, reference_edges)
     blueprint_files = blueprint_file_manifest(root, items)
     try:
         ledger_display = ledger_file.relative_to(root).as_posix()
     except ValueError:
         ledger_display = ledger_file.as_posix()
     return {
-        "schema_version": 2,
+        "schema_version": 3,
         "source_sha": source_sha(root),
         "disposition_ledger": ledger_display,
         "mover_path_count": len(movers),
+        "environment_count": len(environments),
         "labelled_environment_count": sum(bool(item.labels) for item in environments),
+        "unlabelled_environment_count": sum(not item.labels for item in environments),
         "manual_disposition_count": len(ledger),
         "item_counts": dict(sorted(item_counts.items())),
         "edge_counts": dict(sorted(edge_counts.items())),
+        "reference_edge_counts": dict(sorted(reference_edge_counts.items())),
         "mixed_physical_file_count": len(mixed_files),
         "mixed_physical_files": mixed_files,
         "blueprint_file_count": len(blueprint_files),
         "tn_interface_label_count": len(interface_labels),
         "items": items,
         "uses_edges": edges,
+        "reference_edges": reference_edges,
         "qic_to_tn_uses_edges": [edge for edge in edges if edge["direction"] == "qic_to_tn"],
+        "qic_to_tn_reference_edges": [
+            edge for edge in reference_edges if edge["direction"] == "qic_to_tn"
+        ],
         "tn_to_qic_interface_edges": [
-            edge for edge in edges if edge["direction"] == "tn_to_qic"
+            edge
+            for edge in [*edges, *reference_edges]
+            if edge["direction"] == "tn_to_qic"
         ],
         "blueprint_files": blueprint_files,
         "tn_interface_labels": interface_labels,
@@ -518,9 +554,11 @@ def main() -> int:
         for disposition in ("mixed", "unresolved"):
             if report["item_counts"].get(disposition, 0):
                 raise ValueError(f"{disposition} blueprint items remain")
-        if report["qic_to_tn_uses_edges"]:
+        if report["qic_to_tn_uses_edges"] or report["qic_to_tn_reference_edges"]:
             raise ValueError("QIC-to-TN blueprint dependencies remain")
-        if report["edge_counts"].get("unclassified", 0):
+        if report["edge_counts"].get("unclassified", 0) or report[
+            "reference_edge_counts"
+        ].get("unclassified", 0):
             raise ValueError("unclassified blueprint dependencies remain")
     except (OSError, subprocess.CalledProcessError, ValueError) as error:
         print(f"::error title=QIC blueprint boundary report failed::{error}")

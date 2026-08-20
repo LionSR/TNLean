@@ -175,7 +175,7 @@ Body.
 \end{remark}
 \begin{proof}
 \uses{eq:qic}
-Proof.
+See Equation~\eqref{eq:qic}.
 \end{proof}
 """
         )
@@ -193,6 +193,7 @@ Proof.
         report = boundary_report(self.root)
         self.assertEqual(report["item_counts"], {"qic": 1, "tn": 1})
         self.assertEqual(report["edge_counts"], {"tn_to_qic": 1})
+        self.assertEqual(report["reference_edge_counts"], {"tn_to_qic": 1})
         self.assertEqual(report["tn_interface_labels"], ["eq:qic"])
         qic_item = next(item for item in report["items"] if item["label"] == "thm:qic")
         self.assertEqual(qic_item["labels"], ["thm:qic", "eq:qic"])
@@ -231,7 +232,7 @@ Body.
             + "\nrem:manual,src/chapter/ch01.tex,remark,tn,reason\n"
             + "rem:manual,src/chapter/ch01.tex,remark,tn,reason\n"
         )
-        with self.assertRaisesRegex(ValueError, "duplicate label"):
+        with self.assertRaisesRegex(ValueError, "duplicate item_id"):
             read_disposition_ledger(self.ledger)
 
         self.write_ledger(
@@ -239,6 +240,26 @@ Body.
         )
         with self.assertRaisesRegex(ValueError, "disposition must be qic or tn"):
             read_disposition_ledger(self.ledger)
+
+    @patch("qic_blueprint_boundary_report.source_sha", return_value="a" * 40)
+    def test_unlabelled_item_requires_source_line_disposition(self, _source_sha) -> None:
+        self.write_blueprint(
+            r"""\begin{remark}
+Body.
+\end{remark}
+"""
+        )
+        identifier = "@src/chapter/ch01.tex:1"
+        with self.assertRaisesRegex(ValueError, f"missing manual disposition for {identifier}"):
+            boundary_report(self.root)
+        self.write_ledger(
+            [(identifier, "src/chapter/ch01.tex", "remark", "tn", "tensor-network remark")]
+        )
+        report = boundary_report(self.root)
+        self.assertEqual(report["environment_count"], 1)
+        self.assertEqual(report["unlabelled_environment_count"], 1)
+        self.assertEqual(report["item_counts"], {"tn": 1})
+        self.assertEqual(report["items"][0]["label"], identifier)
 
     def test_rejects_duplicate_label_within_one_environment(self) -> None:
         self.write_blueprint(
