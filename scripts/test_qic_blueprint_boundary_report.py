@@ -9,7 +9,11 @@ import tempfile
 import unittest
 from unittest.mock import patch
 
-from qic_blueprint_boundary_report import boundary_report, environment_uses
+from qic_blueprint_boundary_report import (
+    boundary_report,
+    environment_uses,
+    normalized_relative_path,
+)
 
 
 class QICBlueprintBoundaryReportTests(unittest.TestCase):
@@ -34,6 +38,12 @@ class QICBlueprintBoundaryReportTests(unittest.TestCase):
 
     def write_blueprint(self, text: str) -> None:
         (self.root / "blueprint" / "src" / "chapter" / "ch01.tex").write_text(text)
+
+    def test_normalized_relative_path_accepts_windows_separators(self) -> None:
+        self.assertEqual(
+            normalized_relative_path(r"TNLean\Channel\Basic.lean"),
+            "TNLean/Channel/Basic.lean",
+        )
 
     def test_environment_uses_parses_multiline_payload(self) -> None:
         self.write_blueprint(
@@ -96,7 +106,10 @@ Body.
             [(edge["source"], edge["target"]) for edge in report["tn_to_qic_interface_edges"]],
             [("thm:tn", "thm:qic")],
         )
-        self.assertEqual(json.dumps(report, sort_keys=True), json.dumps(second_report, sort_keys=True))
+        self.assertEqual(
+            json.dumps(report, sort_keys=True),
+            json.dumps(second_report, sort_keys=True),
+        )
 
 
 if __name__ == "__main__":
