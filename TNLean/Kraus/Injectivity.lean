@@ -84,6 +84,12 @@ We index the blocked tensors by `σ : Fin N → Fin d`, i.e. words of length `N`
 def IsNBlkInjective (A : MPSTensor d D) (N : ℕ) : Prop :=
   Kraus.wordSpan A N = (⊤ : Submodule ℂ (Matrix (Fin D) (Fin D) ℂ))
 
+/-- The literal-span form of block injectivity, for proofs that act on the generators. -/
+theorem IsNBlkInjective.span_eq_top {A : MPSTensor d D} {N : ℕ}
+    (hA : IsNBlkInjective A N) :
+    Submodule.span ℂ (Set.range fun σ : Fin N → Fin d => evalWord A (List.ofFn σ)) = ⊤ := by
+  simpa only [IsNBlkInjective, Kraus.wordSpan] using hA
+
 /-- Normality means eventual block injectivity at a positive length:
 there exists `N ≥ 1` such that the tensor is `N`-block-injective.
 

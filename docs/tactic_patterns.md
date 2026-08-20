@@ -517,6 +517,15 @@ abstracted — record why, so it is not re-proposed).
   caller now uses one `obtain`; the refactor has a net Lean-source delta of
   6 lines (22 added, 16 removed).
 
+### Literal-span form of block injectivity
+- **Pattern:** recover the span of fixed-length word generators as `⊤` from an
+  `IsNBlkInjective` hypothesis after the predicate was single-sourced through
+  `Kraus.wordSpan`.
+- **Reuse:** `MPSTensor.IsNBlkInjective.span_eq_top` in
+  `TNLean/Kraus/Injectivity.lean` supplies the literal span equality.
+- **Call sites:** the odd- and even-length Majumdar-Ghosh obstructions and the
+  diagonal-restriction non-normality counterexample.
+
 ### Euclidean linear-map multiplicativity
 - **Pattern:** prove that `Matrix.toEuclideanLin (A * B)` is the composition of the
   Euclidean linear maps represented by `A` and `B` by expanding both sides through
