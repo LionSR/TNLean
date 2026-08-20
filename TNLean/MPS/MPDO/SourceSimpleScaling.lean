@@ -28,7 +28,7 @@ chain length `N`, the closed operator is multiplied by `c ^ N`, not by
 * `MPOTensor.isSourceSimple_smul_ofReal_iff`: source simplicity is invariant
   under strictly positive real rescaling, with the same active representatives.
 * `MPOTensor.isNonvanishingSourceSimple_smul_ofReal_iff`: the strengthened
-  nonvanishing interface is invariant under strictly positive real rescaling.
+  nonvanishing predicate is invariant under strictly positive real rescaling.
 
 ## References
 

@@ -121,7 +121,7 @@ is deliberately source-faithful.
 
 The unqualified canonical predicate is the generic transfer-map predicate
 `_root_.IsPrimitive`. The MPS predicates below retain distinct source or proof
-interfaces.
+normalizations.
 
 ### `_root_.IsPrimitive`
 
@@ -498,16 +498,19 @@ model different levels of data and different sources.
   scalar rescaling; see
   `docs/paper-gaps/cpsv16_unit_weight_rfp_scale_tension.tex`.
 - `MPOTensor.IsSourceSimple` in `TNLean/MPS/MPDO/SourceSimpleTensor.lean`
-  is the normalization-free source predicate reflecting the active
-  canonical-block convention at lines 217--246 and Definition 4.7 at lines
+  is the normalization-free predicate for the documented active
+  canonical-block reading of lines 217--246 and Definition 4.7 at lines
   815--822 of arXiv:1606.00608. It existentially chooses a positive physical
   blocking whose doubled-index tensor has an active sector presentation by a
   basis of normal tensors with nonnilpotent physical-trace transfers. Every
-  displayed copy has nonzero weight, so dormant candidates are absent. The
-  theorem `MPOTensor.IsSourceSimple.exists_mpo_ne_zero` derives a nonzero closed
-  MPO at some positive length from the active presentation; this is not an
-  additional defining assumption. Nonnilpotency is independent of the chosen
-  active presentation by `MPOTensor.activeBNT_basis_not_isNilpotent_iff`.
+  representative has a positive number of copies and every copy has nonzero
+  weight, so dormant candidates are absent. This active qualification corrects
+  the false unrestricted BNT uniqueness claim; see
+  `docs/paper-gaps/cpsv16_bnt_uniqueness_zero_coefficient.tex`. The theorem
+  `MPOTensor.IsSourceSimple.exists_mpo_ne_zero` derives a nonzero closed MPO at
+  some positive length from the active presentation; this is not an additional
+  defining assumption. Nonnilpotency is independent of the chosen active
+  presentation by `MPOTensor.activeBNT_basis_not_isNilpotent_iff`.
 - `MPOTensor.IsNonvanishingSourceSimple` strengthens source simplicity by
   requiring $\rho_N(M)\ne0$ for every $N>0$. Normalized simplicity implies
   source simplicity unconditionally through
@@ -519,7 +522,8 @@ model different levels of data and different sources.
   `TNLean/MPS/MPDO/SimpleVanishingCounterexample.lean` satisfies
   $\rho_N(M)=(1+(-1)^N)I$. It is normalized-simple and source-simple, but it is
   not nonvanishing source-simple because $\rho_1(M)=0$. This does not refute
-  Definition 4.7 and is not an RFP or BNT-coefficient-rigidity claim.
+  the documented active canonical-block reading of Definition 4.7 and is not
+  an RFP or BNT-coefficient-rigidity claim.
 - Scalar rescaling of a closed length-$N$ MPO obeys
   $\rho_N(cM)=c^N\rho_N(M)$ by `MPOTensor.mpo_smul`, not a
   $|c|^{2N}$ law. Accordingly, `MPOTensor.isMPDO_smul_ofReal_iff`,

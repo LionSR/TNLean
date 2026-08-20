@@ -78,13 +78,16 @@ For MPDO renormalization fixed points:
   `TNLean/MPS/MPDO/CPSVBNTTheoremEquivalence.lean`. The unrestricted printed
   statement (iii), including inactive product sectors, is not claimed.
 - `cpsv16_simple_tensor_nilpotency.tex` identifies the source's nilpotent BNT
-  elements with nilpotent physical-trace transfer matrices. The exact
-  source-facing predicate is `MPOTensor.IsSourceSimple`: it existentially
-  chooses a positive physical blocking and an active BNT sector presentation
-  whose representative physical-trace transfers are all nonnilpotent. Nonzero
-  copy weights exclude dormant candidates. Positive-length nontriviality is
-  derived from this presentation, while isolated vanishing lengths remain
-  possible. The separate predicate
+  elements with nilpotent physical-trace transfer matrices. The documented
+  active canonical-block reading is `MPOTensor.IsSourceSimple`: it
+  existentially chooses a positive physical blocking and an active BNT sector
+  presentation whose representative physical-trace transfers are all
+  nonnilpotent. Every representative has a positive number of copies and every
+  copy has nonzero weight, so dormant candidates are absent. This is the local
+  correction recorded in `cpsv16_bnt_uniqueness_zero_coefficient.tex`, not the
+  unrestricted literal-BNT reading. Positive-length nontriviality is derived
+  from this presentation, while isolated vanishing lengths remain possible.
+  The separate predicate
   `MPOTensor.IsNonvanishingSourceSimple` adds nonvanishing of every
   positive-length generated MPO.
 - `cpsv16_unit_weight_rfp_scale_tension.tex` records the tension between the
@@ -212,7 +215,12 @@ For the non-periodic MPS Fundamental Theorem background:
   unrelated normal tensor may be adjoined with coefficient identically zero.
   It gives a bond-dimension-one, two-symbol counterexample and identifies
   converse coverage of candidates by active canonical-form blocks as the
-  missing condition for a restricted uniqueness theorem.
+  missing condition for one restricted uniqueness theorem. It also records the
+  active-presentation restriction used for the documented reading of
+  Definition 4.7: every representative has a positive number of copies, every
+  copy weight is nonzero, and eventual linear independence gives a bijective
+  gauge-phase matching. Neither restriction validates the unrestricted source
+  sentence.
 - `canonical_bnt_ft_theorem_surface.tex` separates paper-level theorem
   statements from auxiliary formal declarations.
 - `nonperiodic_mps_bnt_comparison_inputs.tex` compares the current

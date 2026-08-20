@@ -371,18 +371,22 @@ single family.
     \leanok
     \uses{def:sector_weight_data, def:nt_cpsv, def:same_mpv2_pos}
     An \emph{active BNT sector presentation} of a tensor $A$ is a nonempty
-    sector decomposition $P$ such that every copy has positive multiplicity
-    and nonzero weight, every representative $C_j$ is normal, the
-    representative matrix product vectors are eventually linearly
-    independent, and
+    sector decomposition $P$ such that every representative has a positive
+    number of copies, every copy has nonzero weight, every representative
+    $C_j$ is normal, the representative matrix product vectors are eventually
+    linearly independent, and, for every $N>0$,
     \begin{align}
-        V^{(N)}(A)&=V^{(N)}(P) &&(N>0).
+        V^{(N)}(A)&=V^{(N)}(P).
         \label{eq:cpsv_active_bnt_sector_presentation}
     \end{align}
-    This is the active form of the canonical normalization at
-    \cite[lines~217--246]{Cirac2016MPDO_arXiv}: dormant listed candidates are
-    not members of the basis, whereas repeated nonzero copies and their
-    weights remain explicit.
+    This records the nonzero canonical summands constructed at
+    \cite[lines~217--246]{Cirac2016MPDO_arXiv}: dormant candidates are absent,
+    whereas repeated nonzero copies and their weights remain explicit. The
+    condition is stronger than the literal BNT definition, which permits the
+    zero-coefficient candidate of
+    Theorem~\ref{thm:cpsv_bnt_uniqueness_counterexample}.
+    % Local fix (dormant BNT candidates): documented in
+    % docs/paper-gaps/cpsv16_bnt_uniqueness_zero_coefficient.tex.
 \end{definition}
 
 \begin{theorem}[Uniqueness of active BNT presentations]
@@ -390,20 +394,31 @@ single family.
     \lean{MPSTensor.IsActiveCPSVBasisOfNormalTensors.%
         equiv_of_sameMPV₂Pos}
     \leanok
-    \uses{def:cpsv_active_bnt_sector_presentation,
-        thm:cpsv_bnt_characterization}
+    \uses{def:cpsv_active_bnt_sector_presentation, def:same_mpv2_pos}
     Two active BNT presentations of the same positive-length matrix product
     vector family have equally many representatives. After a permutation,
     corresponding representatives have equal bond dimension and are related
     by an invertible gauge and a unit-modulus phase.
+
+    Only active presentations are compared. The conclusion is false for
+    arbitrary literal BNTs by
+    Theorem~\ref{thm:cpsv_bnt_uniqueness_counterexample}.
+    % Scope restriction (active presentations): documented in
+    % docs/paper-gaps/cpsv16_bnt_uniqueness_zero_coefficient.tex.
 \end{theorem}
 
 \begin{proof}\leanok
-    Proposition~2.7 matches every representative of either presentation with
-    one in the other. Eventual linear independence makes both matching maps
-    injective. Since the two index sets are finite, they have equal cardinality,
-    and either matching map is a bijection. Normal-tensor gauge rigidity gives
-    the asserted gauge-phase relation for each matched pair.
+    \uses{thm:cpsv_bnt_characterization,
+        thm:cpsv_bnt_blocks_not_gaugePhaseEquiv,
+        thm:cpsv_normal_mpv_phase_gauge}
+    Apply Theorem~\ref{thm:cpsv_bnt_characterization} first to the
+    nonzero-weight direct-sum tensor of the first presentation, using the
+    representatives of the second as a BNT, and then with the presentations
+    interchanged. This gives a matching map in each direction. Eventual linear
+    independence excludes gauge-phase-equivalent distinct representatives, so
+    both maps are injective. Since the index sets are finite, they have equal
+    cardinality, and either matching map is a bijection. Normal-tensor gauge
+    rigidity gives the asserted gauge-phase relation for each matched pair.
 \end{proof}
 
 % Source anchors: CPSV16 lines 265--301, 317--345, and Appendix C.3,
@@ -473,7 +488,9 @@ single family.
 
 \begin{proof}\leanok
     \uses{thm:cpsv_canonical_form_active_bnt_refinement,
-        thm:cpsv_bnt_blocked_simultaneous_span, lem:paper_decomp_formula}
+        thm:cpsv_bnt_blocked_simultaneous_span,
+        thm:coisometry_reconstruction_same_mpv_pos,
+        thm:gauge_invariance, lem:paper_decomp_formula}
     The active class-copy equivalence reindexes the nonzero listed blocks.
     (\ref{eq:cpsv_active_representative_weight}) combines the original
     coefficient with the unit phase relating its block to $C_j$; both factors

@@ -40,18 +40,28 @@ variable {d D : ℕ} {A : MPSTensor d D}
 
 The tensor is represented at every positive length by a nonempty sector decomposition.  Every
 representative is normal, the representative matrix-product vectors are eventually linearly
-independent, and every displayed copy has positive multiplicity and nonzero weight by the
-definition of `SectorDecomposition`.
+independent, every representative has a positive number of copies, and every displayed copy
+has nonzero weight by the definition of `SectorDecomposition`.
 
 This records the canonical-form construction in which only nonzero summands are retained.  It
 does not impose the separate modulus normalization of line 246.
+
+**Local fix (dormant BNT candidates):** The literal BNT definition at lines 271--274 permits
+adjoining a normal tensor with coefficient identically zero, contrary to the unrestricted
+uniqueness sentence at line 1148.  Requiring nonzero copy weights records the active
+canonical-block construction of lines 217--246.  This deviation is documented in
+`docs/paper-gaps/cpsv16_bnt_uniqueness_zero_coefficient.tex`.
 
 Source: arXiv:1606.00608, lines 217--246, 265--301, and 1135--1148. -/
 structure IsActiveCPSVBasisOfNormalTensors {D' : ℕ} (A : MPSTensor d D')
     (P : SectorDecomposition d) : Prop where
   /-- At least one active normal representative occurs.
 
-  Source: arXiv:1606.00608, lines 217--225. -/
+  **Boundary condition (nonzero family):** This retains only the nonemptiness implied by the
+  paper's convention that at least one canonical weight has modulus one; no modulus
+  normalization is imposed here.
+
+  Source: arXiv:1606.00608, lines 217--246. -/
   basisCount_pos : 0 < P.basisCount
   /-- The active sector presentation gives the same positive-length matrix-product vectors.
 
@@ -152,6 +162,11 @@ representatives up to a bijection and gauge phases.
 
 This is the activity-qualified form of the uniqueness sentence following CPSV16
 Proposition 2.7.  The nonzero copy weights exclude dormant candidates.
+
+**Scope restriction (active presentations):** The unrestricted uniqueness sentence at line
+1148 is false for the literal BNT definition.  This theorem compares only presentations in
+which every representative occurs through nonzero copy weights.  See
+`docs/paper-gaps/cpsv16_bnt_uniqueness_zero_coefficient.tex`.
 
 Source: arXiv:1606.00608, Proposition 2.7 and Appendix A, lines 1135--1148 and 1182. -/
 theorem equiv_of_sameMPV₂Pos

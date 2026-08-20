@@ -1101,9 +1101,7 @@
     \lean{MPOTensor.RescalingStableLengthDependentRFP.R_isSourceSimple}
     \leanok
     \uses{def:mpdo_source_simple_tensor,
-        thm:mpdo_bnt_label_rescaling_stable_ismpdo,
-        thm:mpdo_bnt_label_rescaling_stable_cf,
-        thm:mpdo_bnt_label_rescaling_stable_non_nilpotent}
+        thm:mpdo_bnt_label_rescaling_stable_length_dependence}
     The dimer tensor $R$ is source-simple. The positive blocking length is
     $L=1$. After the canonical relabeling of the doubled physical alphabet,
     the active basis of normal tensors has one member, namely the retained
@@ -1111,7 +1109,8 @@
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:mpdo_bnt_label_rescaling_stable_ismpdo,
+    \uses{thm:cpsv_active_representative_sector_decomposition,
+        thm:mpdo_bnt_label_rescaling_stable_ismpdo,
         thm:mpdo_bnt_label_rescaling_stable_cf,
         thm:mpdo_bnt_label_rescaling_stable_non_nilpotent}
     Theorem~\ref{thm:mpdo_bnt_label_rescaling_stable_ismpdo} gives the MPDO
@@ -1129,8 +1128,7 @@
         R_isNonvanishingSourceSimple}
     \leanok
     \uses{def:mpdo_nonvanishing_source_simple_tensor,
-        thm:mpdo_bnt_label_rescaling_stable_source_simple,
-        thm:mpdo_bnt_label_rescaling_stable_ismpdo}
+        thm:mpdo_bnt_label_rescaling_stable_length_dependence}
     The dimer tensor $R$ is nonvanishing source-simple.
 \end{theorem}
 
@@ -1158,13 +1156,16 @@
         MPOTensor.RescalingStableLengthDependentRFP.%
         R_not_isSimple}
     \leanok
-    \uses{thm:mpdo_bnt_label_rescaling_stable_nonvanishing_source_simple,
-        thm:mpdo_bnt_label_rescaling_stable_not_simple}
+    \uses{def:mpdo_nonvanishing_source_simple_tensor,
+        def:mpdo_simple_tensor,
+        thm:mpdo_bnt_label_rescaling_stable_length_dependence}
     The dimer tensor $R$ is nonvanishing source-simple, and hence source-simple,
     but it does not satisfy normalized fixed-representative simplicity.
 \end{theorem}
 
 \begin{proof}\leanok
+    \uses{thm:mpdo_bnt_label_rescaling_stable_nonvanishing_source_simple,
+        thm:mpdo_bnt_label_rescaling_stable_not_simple}
     Combine
     Theorem~\ref{thm:mpdo_bnt_label_rescaling_stable_nonvanishing_source_simple}
     with Theorem~\ref{thm:mpdo_bnt_label_rescaling_stable_not_simple}.

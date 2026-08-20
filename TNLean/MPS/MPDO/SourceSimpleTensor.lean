@@ -7,26 +7,30 @@ import TNLean.MPS.CanonicalForm.ActiveBNTRefinement
 import TNLean.MPS.MPDO.SimpleTensor
 
 /-!
-# Normalization-free Definition 4.7 simplicity
+# Active canonical-block reading of Definition 4.7 simplicity
 
-This module records the source-facing simplicity condition of arXiv:1606.00608,
-Definition 4.7. After a positive physical blocking, the doubled-index tensor
-must admit an active sector presentation by a basis of normal tensors, and the
-ket-against-bra contraction of every representative must be nonnilpotent. The
-source definition does not require every positive-length generated MPO to be
-nonzero and excludes the separate line-246 unit-weight normalization. The
-active presentation implies positive-length nontriviality; the strengthened
-all-length nonvanishing interface is recorded separately.
+This module records the intended active canonical-block reading of
+arXiv:1606.00608, Definition 4.7. After a positive physical blocking, the
+doubled-index tensor must admit an active sector presentation by a basis of
+normal tensors, and the ket-against-bra contraction of every representative
+must be nonnilpotent. The definition does not require every positive-length
+generated MPO to be nonzero and excludes the separate line-246 unit-weight
+normalization. The active presentation implies positive-length nontriviality;
+the stronger all-length nonvanishing predicate is recorded separately.
+
+The literal BNT definition permits dormant candidates and does not support the
+unrestricted uniqueness sentence used by the paper. The active qualification is
+documented in `docs/paper-gaps/cpsv16_bnt_uniqueness_zero_coefficient.tex`.
 
 ## Main results
 
-* `MPOTensor.IsSourceSimple`: normalization-free Definition 4.7 simplicity.
+* `MPOTensor.IsSourceSimple`: the active canonical-block reading of Definition 4.7.
 * `MPOTensor.IsNonvanishingSourceSimple`: source simplicity together with
   positive-length nonvanishing.
 * `MPOTensor.IsSimple.isSourceSimple`: normalized simplicity implies source
   simplicity unconditionally.
 * `MPOTensor.IsSimple.isNonvanishingSourceSimple`: normalized simplicity implies
-  the strengthened interface under positive-length nonvanishing.
+  the strengthened predicate under positive-length nonvanishing.
 
 ## References
 
@@ -45,6 +49,11 @@ presentation.
 The active BNT uniqueness theorem matches representatives by permutation, equal bond
 dimension, gauge, and phase.  Similarity, nonzero scalar multiplication, and the resulting
 dimension identification preserve nilpotency of the physical-trace transfer.
+
+**Scope restriction (active presentations):** This theorem does not compare arbitrary literal
+BNT witnesses, whose cardinalities can differ after a dormant candidate is adjoined.  It uses
+the active uniqueness theorem documented in
+`docs/paper-gaps/cpsv16_bnt_uniqueness_zero_coefficient.tex`.
 
 Source: arXiv:1606.00608, Definition 4.7, lines 815--822, and Proposition 2.7,
 lines 1135--1148. -/
@@ -81,16 +90,22 @@ theorem activeBNT_basis_not_isNilpotent_iff
       ((isNilpotent_doubledPhysTraceTransfer_iff_of_gaugePhaseEquiv
         hGauge.toGaugePhaseEquiv).mp hCastNil)
 
-/-- **Normalization-free Definition 4.7 simplicity.** A tensor is source-simple
+/-- **Active canonical-block reading of Definition 4.7 simplicity.** A tensor is source-simple
 when it generates an MPDO and, after some positive physical blocking, its doubled-index
 tensor has an active sector presentation by a basis of normal tensors whose ket-against-bra
 contractions are all nonnilpotent.
 
-Every copy in the presentation has nonzero weight, and distinct representatives are eventually
-linearly independent.  Thus dormant candidate blocks are absent and positive-length
-nontriviality follows rather than being postulated.  The predicate excludes the separate
-line-246 unit-weight normalization and makes no claim that every positive blocking has such a
-witness.
+Every representative has a positive number of copies, every copy has nonzero weight, and
+distinct representatives are eventually linearly independent.  Thus dormant candidate blocks
+are absent and positive-length nontriviality follows rather than being postulated.  The
+predicate excludes the separate line-246 unit-weight normalization and makes no claim that
+every positive blocking has such a witness.
+
+**Local fix (dormant BNT candidates):** Definition 4.7 relies on the paper's unrestricted BNT
+uniqueness sentence, but the literal BNT definition permits adjoining a normal tensor with
+coefficient identically zero.  The active sector presentation follows the intended nonzero
+canonical-block construction instead.  See
+`docs/paper-gaps/cpsv16_bnt_uniqueness_zero_coefficient.tex`.
 
 Source: arXiv:1606.00608, canonical-block convention at lines 217--246 and
 Definition 4.7, lines 815--822. -/
@@ -107,11 +122,11 @@ def IsSourceSimple (M : MPOTensor d D) : Prop :=
 /-- Source simplicity strengthened by nonvanishing of every positive-length
 closed MPO. This condition is not part of CPSV16 Definition 4.7.
 
-Source predicate: arXiv:1606.00608, Definition 4.7, lines 815--822. -/
+Underlying source passage: arXiv:1606.00608, Definition 4.7, lines 815--822. -/
 def IsNonvanishingSourceSimple (M : MPOTensor d D) : Prop :=
   IsSourceSimple M ∧ ∀ N : ℕ, 0 < N → mpo M N ≠ 0
 
-/-- The strengthened nonvanishing interface implies source simplicity. -/
+/-- The strengthened nonvanishing predicate implies source simplicity. -/
 theorem IsNonvanishingSourceSimple.isSourceSimple {M : MPOTensor d D}
     (hM : IsNonvanishingSourceSimple M) : IsSourceSimple M :=
   hM.1
@@ -144,7 +159,7 @@ theorem IsSourceSimple.exists_mpo_ne_zero {M : MPOTensor d D}
   rw [mpo_blockTensor_eq_reindex, hZero]
   simp
 
-/-- The strengthened interface supplies nonvanishing at every positive length. -/
+/-- The strengthened predicate supplies nonvanishing at every positive length. -/
 theorem IsNonvanishingSourceSimple.mpo_ne_zero {M : MPOTensor d D}
     (hM : IsNonvanishingSourceSimple M) (N : ℕ) (hN : 0 < N) : mpo M N ≠ 0 :=
   hM.2 N hN
@@ -158,7 +173,7 @@ blocked MPO tensor.  The nonnilpotency clause is unchanged because the represent
 themselves are unchanged.
 
 Source: arXiv:1606.00608, Definition 4.7, lines 815--822, together with the
-normalized fixed-representative interface of lines 238--246. -/
+normalized sector decomposition at lines 238--246. -/
 theorem IsSimple.isSourceSimple {M : MPOTensor d D} (hM : IsSimple M) :
     IsSourceSimple M := by
   classical
@@ -178,7 +193,7 @@ theorem IsSimple.isSourceSimple {M : MPOTensor d D} (hM : IsSimple M) :
     exact MPSTensor.isNormalTensor_of_isNormal_leftCanonical (S.basis j)
       (hCF.basis_isNormal j) (hCF.basis_left_canonical j)
 
-/-- Normalized simplicity implies the strengthened nonvanishing source interface
+/-- Normalized simplicity implies the strengthened nonvanishing source predicate
 when every positive-length closed MPO is nonzero.
 
 The nonvanishing assumption is additional to CPSV16 Definition 4.7. -/

@@ -29,8 +29,8 @@ No vertical coefficient comparison is used.
   BNT horizontal canonical form.
 * `R_not_isSimple` — the dimer tensor is not simple for the normalized
   fixed-representative predicate.
-* `R_isSourceSimple_and_not_isSimple` — the normalization-free Definition 4.7
-  verdict and normalized fixed-representative verdict stated side by side.
+* `R_isSourceSimple_and_not_isSimple` — the active canonical-block reading of
+  Definition 4.7 and the normalized fixed-representative verdict side by side.
 
 The obstruction combines the source normalization at arXiv:1606.00608, line
 246 with the positive blocking in the definition of simplicity at lines
@@ -137,9 +137,9 @@ theorem R_not_isSimple : ¬ MPOTensor.IsSimple R := by
   obtain ⟨_hMPDO, L, hL, hCanonical⟩ := hSimple
   exact blockTensor_R_not_isHorizontalCF L hL hCanonical.isHorizontalCF
 
-/-- The dimer tensor receives opposite verdicts from the two simplicity
-interfaces: it satisfies normalization-free Definition 4.7 simplicity, while it
-fails the normalized fixed-representative predicate `MPOTensor.IsSimple`.
+/-- The dimer tensor receives opposite verdicts from the two simplicity predicates: it
+satisfies the active canonical-block reading of Definition 4.7, while it fails the normalized
+fixed-representative predicate `MPOTensor.IsSimple`.
 
 The first verdict uses the existential one-site active BNT presentation and does not assert
 simplicity at every positive blocking. The second is the line-246 normalization obstruction

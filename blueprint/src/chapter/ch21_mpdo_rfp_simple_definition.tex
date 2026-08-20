@@ -64,8 +64,8 @@
     \end{align}
 \end{proof}
 
-\begin{lemma}[Gauge-phase invariance of nilpotent physical trace]
-    \label{lem:mpdo_doubled_phys_trace_nilpotent_gauge_phase}
+\begin{theorem}[Gauge-phase invariance of nilpotent physical trace]
+    \label{thm:mpdo_doubled_phys_trace_nilpotent_gauge_phase}
     \lean{MPOTensor.%
         isNilpotent_doubledPhysTraceTransfer_of_gaugePhaseEquiv}
     \lean{MPOTensor.%
@@ -77,7 +77,7 @@
     nonzero phase, then the physical-trace transfer of one is nilpotent if and
     only if that of the other is nilpotent. Identifying equal bond dimensions
     does not alter this condition.
-\end{lemma}
+\end{theorem}
 
 \begin{proof}\leanok
     The physical-trace transfer transforms by the same nonzero phase and
@@ -91,17 +91,24 @@
     \lean{MPOTensor.activeBNT_basis_not_isNilpotent_iff}
     \leanok
     \uses{def:cpsv_active_bnt_sector_presentation,
-        thm:cpsv_active_bnt_presentation_uniqueness,
-        lem:mpdo_doubled_phys_trace_nilpotent_gauge_phase}
+        def:mpdo_doubled_phys_trace_transfer}
     Let $P$ and $Q$ be active BNT sector presentations of the same
     doubled-index tensor. Every representative of $P$ has non-nilpotent
     physical-trace transfer if and only if every representative of $Q$ does.
+
+    Arbitrary literal BNT witnesses need not have the same cardinality; this
+    statement applies only after excluding dormant candidates as in
+    Definition~\ref{def:cpsv_active_bnt_sector_presentation}.
+    % Scope restriction (active presentations): documented in
+    % docs/paper-gaps/cpsv16_bnt_uniqueness_zero_coefficient.tex.
 \end{theorem}
 
 \begin{proof}\leanok
+    \uses{thm:cpsv_active_bnt_presentation_uniqueness,
+        thm:mpdo_doubled_phys_trace_nilpotent_gauge_phase}
     Match the representatives by
     Theorem~\ref{thm:cpsv_active_bnt_presentation_uniqueness}, then apply
-    Lemma~\ref{lem:mpdo_doubled_phys_trace_nilpotent_gauge_phase} to each
+    Theorem~\ref{thm:mpdo_doubled_phys_trace_nilpotent_gauge_phase} to each
     matched pair.
 \end{proof}
 
@@ -111,8 +118,7 @@
     \leanok
     \uses{def:mpdo, def:mpdo_physical_blocking,
         def:cpsv_active_bnt_sector_presentation,
-        def:mpdo_doubled_phys_trace_transfer,
-        thm:mpdo_active_bnt_nonnilpotency_independent}
+        def:mpdo_doubled_phys_trace_transfer}
     A tensor generating MPDOs is \emph{source-simple} if there is a positive
     physical blocking length $L$ such that the doubled-index tensor of the
     $L$-site blocking has an active BNT sector presentation $P$ for which every
@@ -122,28 +128,37 @@
     \cite[lines~217--246]{Cirac2016MPDO_arXiv} together with the simplicity
     condition of \cite[lines~815--822]{Cirac2016MPDO_arXiv}.
 
-    Every displayed copy in $P$ has nonzero weight, so dormant candidates are
-    absent. The blocking length is existential, and presentation independence
-    follows from
+    Every representative in $P$ has a positive number of copies, and every
+    copy has nonzero weight, so dormant candidates are absent. The blocking
+    length is existential, and presentation independence follows from
     Theorem~\ref{thm:mpdo_active_bnt_nonnilpotency_independent}. The definition
     omits the global unit-weight normalization of
     \cite[line~246]{Cirac2016MPDO_arXiv} and does not require a normalized
     horizontal canonical-form witness.
+
+    The literal BNT definition permits adjoining a normal tensor with
+    coefficient identically zero. The active condition instead follows the
+    nonzero canonical-block construction preceding Definition~4.7.
+    % Local fix (dormant BNT candidates): documented in
+    % docs/paper-gaps/cpsv16_bnt_uniqueness_zero_coefficient.tex.
 \end{definition}
 
-\begin{lemma}[Source simplicity implies positive-length nontriviality]
-    \label{lem:mpdo_source_simple_exists_nonzero}
+\begin{theorem}[Source simplicity implies positive-length nontriviality]
+    \label{thm:mpdo_source_simple_exists_nonzero}
     \lean{MPOTensor.IsSourceSimple.exists_mpo_ne_zero}
     \leanok
-    \uses{def:mpdo_source_simple_tensor, def:mpo_family,
-        thm:mpdo_closed_chain_physical_blocking}
+    \uses{def:mpdo_source_simple_tensor, def:mpo_family}
     If $M$ is source-simple, then $\rho^{(N)}(M)\ne0$ for some $N>0$.
-\end{lemma}
+\end{theorem}
 
 \begin{proof}\leanok
-    Choose a representative and a copy over it. Its copy weights are nonzero,
-    so its power-sum coefficient cannot vanish at every sufficiently large
-    length. At a large length where this coefficient is nonzero, eventual
+    \uses{def:cpsv_active_bnt_sector_presentation,
+        lem:mpdo_three_first_site_contraction_coefficients,
+        thm:mpdo_closed_chain_physical_blocking}
+    Choose a representative and one of its copies. Every copy weight over that
+    representative is nonzero, so its power-sum coefficient cannot vanish at
+    every sufficiently large length. At a large length where this coefficient
+    is nonzero, eventual
     linear independence of the BNT representatives makes the blocked matrix
     product vector nonzero. The closed-chain blocking identity then gives a
     nonzero unblocked MPO at a positive length.
@@ -183,8 +198,8 @@
 
 \begin{theorem}[Scaling an active BNT presentation]
     \label{thm:mpdo_cpsv_bnt_scalar_scaling}
-    \lean{MPSTensor.SectorDecomposition.scaleWeights,
-        MPSTensor.IsActiveCPSVBasisOfNormalTensors.smul_left}
+    \lean{MPSTensor.IsActiveCPSVBasisOfNormalTensors.smul_left}
+    \lean{MPSTensor.SectorDecomposition.scaleWeights}
     \lean{MPSTensor.SectorDecomposition.scaleWeights_basisCount,
         MPSTensor.SectorDecomposition.scaleWeights_basisDim,
         MPSTensor.SectorDecomposition.scaleWeights_basis}
@@ -200,7 +215,7 @@
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{lem:mpv_smul}
+    \uses{lem:mpv_smul, lem:mpv_to_tensor_from_blocks_weight_mul_left}
     The new copy weights remain nonzero. Normality and eventual linear
     independence of the representatives are unchanged, and both total matrix
     product vectors acquire the common factor $c^N$ at length $N$.
@@ -445,13 +460,14 @@
     \lean{MPOTensor.IsSimple.isNonvanishingSourceSimple}
     \leanok
     \uses{def:mpdo_nonvanishing_source_simple_tensor,
-        thm:mpdo_simple_implies_source_simple}
+        def:mpdo_simple_tensor}
     Let $M$ satisfy normalized fixed-representative simplicity. If
     $\rho^{(N)}(M)\ne0$ for every $N>0$, then $M$ is nonvanishing
     source-simple.
 \end{theorem}
 
 \begin{proof}\leanok
+    \uses{thm:mpdo_simple_implies_source_simple}
     Combine Theorem~\ref{thm:mpdo_simple_implies_source_simple} with the stated
     positive-length nonvanishing hypothesis.
 \end{proof}
@@ -470,8 +486,7 @@
     \leanok
     \uses{def:mpdo_source_simple_tensor,
         def:mpdo_nonvanishing_source_simple_tensor,
-        def:mpdo_simple_tensor,
-        thm:mpdo_simple_implies_source_simple}
+        def:mpdo_simple_tensor}
     There is a one-letter bond-two tensor $M$ such that, for every $N\geq0$,
     \begin{align}
         \rho^{(N)}(M)&=\bigl(1+(-1)^N\bigr)I.
@@ -482,6 +497,7 @@
 \end{theorem}
 
 \begin{proof}\leanok
+    \uses{thm:mpdo_simple_implies_source_simple}
     The sole local virtual matrix is $Z=\operatorname{diag}(1,-1)$, and
     \begin{align}
         Z^2&=I,
