@@ -165,55 +165,6 @@ private theorem BlockedTensorRangeData.rankOne_mem_wordSpan_of_wordSpan_eq_top
 
 end LinearAlgebraLemmas
 
-/-! ## Nonzero-trace word extraction from a full word span -/
-
-section NonzeroTraceExtraction
-
-/-- If `wordSpan A N = ⊤` and `[NeZero D]`, then there exists a word function
-`σ : Fin N → Fin d` such that `tr(evalWord A (List.ofFn σ)) ≠ 0`.
-
-This follows because `I ∈ wordSpan A N = ⊤`, `tr(I) = D ≠ 0`, and trace is linear:
-if all generators had zero trace, everything in the span would too. -/
-theorem exists_nonzero_trace_word_of_wordSpan_eq_top [NeZero D]
-    (A : MPSTensor d D) {N : ℕ} (htop : wordSpan A N = ⊤) :
-    ∃ σ : Fin N → Fin d, (evalWord A (List.ofFn σ)).trace ≠ 0 := by
-  by_contra hall
-  push Not at hall
-  have hall' : ∀ σ : Fin N → Fin d, (evalWord A (List.ofFn σ)).trace = 0 := hall
-  have hI : (1 : Matrix (Fin D) (Fin D) ℂ) ∈ wordSpan A N := htop ▸ Submodule.mem_top
-  -- The trace linear map kills all generators, hence kills the span
-  set trMap : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] ℂ := Matrix.traceLinearMap (Fin D) ℂ ℂ
-  have hgen : ∀ M ∈ (Set.range fun σ : Fin N → Fin d => evalWord A (List.ofFn σ)),
-      trMap M = 0 := by
-    rintro M ⟨σ, rfl⟩
-    exact hall' σ
-  have hker : wordSpan A N ≤ LinearMap.ker trMap := by
-    apply Submodule.span_le.mpr
-    intro M hM
-    exact LinearMap.mem_ker.mpr (hgen M hM)
-  have hzero : ∀ M ∈ wordSpan A N, M.trace = 0 := by
-    intro M hM
-    have := hker hM
-    exact LinearMap.mem_ker.mp this
-  have htrI : (1 : Matrix (Fin D) (Fin D) ℂ).trace ≠ 0 := by
-    simp only [Matrix.trace_one, Fintype.card_fin, ne_eq, Nat.cast_eq_zero]
-    exact_mod_cast NeZero.ne D
-  exact htrI (hzero 1 hI)
-
-/-- If `wordSpan A N = ⊤` and `[NeZero D]`, then there exists a word function
-`σ : Fin N → Fin d` with `evalWord A (List.ofFn σ)` having a nonzero eigenvalue
-and eigenvector. -/
-theorem exists_eigenvector_of_wordSpan_eq_top [NeZero D]
-    (A : MPSTensor d D) {N : ℕ} (htop : wordSpan A N = ⊤) :
-    ∃ (σ : Fin N → Fin d) (μ : ℂ) (φ : Fin D → ℂ),
-      μ ≠ 0 ∧ φ ≠ 0 ∧
-      evalWord A (List.ofFn σ) *ᵥ φ = μ • φ := by
-  obtain ⟨σ, hσ⟩ := exists_nonzero_trace_word_of_wordSpan_eq_top A htop
-  obtain ⟨μ, φ, hμ, hφ, heig⟩ := exists_eigenvector_of_trace_ne_zero _ hσ
-  exact ⟨σ, μ, φ, hμ, hφ, heig⟩
-
-end NonzeroTraceExtraction
-
 /-! ## Main rank-one extraction -/
 
 section RankOneExtraction

@@ -10,4 +10,5 @@ Authors: TNLean contributors
 
 import TNLean.Kraus.Wielandt.RankOne.BoundedWord
 import TNLean.Kraus.Wielandt.RankOne.Element
+import TNLean.Kraus.Wielandt.RankOne.Extraction
 import TNLean.Kraus.Wielandt.RankOne.Products
