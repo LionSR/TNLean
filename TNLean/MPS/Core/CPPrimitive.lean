@@ -3,7 +3,7 @@ Copyright (c) 2025 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.MPS.Core.Transfer
+import TNLean.MPS.Core.TransferChannel
 import TNLean.Algebra.MatrixAux
 import TNLean.Channel.Irreducible.Basic
 import TNLean.Channel.Schwarz.KadisonSchwarz
@@ -107,11 +107,8 @@ is a quantum channel: completely positive and trace-preserving. -/
 theorem transferMap_isChannel
     (A : MPSTensor d D)
     (hNorm : ∑ i : Fin d, (A i)ᴴ * A i = 1) :
-    IsChannel (MPSTensor.transferMap (d := d) (D := D) A) := by
-  refine ⟨transferMap_isCPMap A, fun X => ?_⟩
-  simp only [transferMap_apply, Matrix.trace_sum]
-  conv_lhs => arg 2; ext i; rw [Matrix.trace_mul_cycle]
-  rw [← Matrix.trace_sum, ← Finset.sum_mul, hNorm, one_mul]
+    IsChannel (MPSTensor.transferMap (d := d) (D := D) A) :=
+  Kraus.isChannel_transferMap A hNorm
 
 /-! ### Iterated transfer map
 
