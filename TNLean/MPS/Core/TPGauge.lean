@@ -96,7 +96,7 @@ theorem tpGauge_isTP_of_transferMap_conjTranspose_fixedPoint
 
 Assume `ρ` is positive definite and
 `E_A†(ρ) = rρ` for a positive real number `r`. Then applying `tpGauge` after
-rescaling `A` by `r⁻¹ᐟ²` gives a trace-preserving tensor. -/
+rescaling `A` by `r^{-1/2}` gives a trace-preserving tensor. -/
 theorem tpGauge_isTP_of_transferMap_conjTranspose_eigenvector
     (A : MPSTensor d D) (ρ : Matrix (Fin D) (Fin D) ℂ) (r : ℝ)
     (hρ : ρ.PosDef)
