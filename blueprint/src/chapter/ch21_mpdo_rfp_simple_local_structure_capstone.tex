@@ -1067,7 +1067,7 @@ This is the calculation in
 % Entropy corrections: docs/paper-gaps/cpsv16_examples_4_10_4_11_entropy.tex.
 % Example 4.11's literal finite periodic family is now proved to fail both SAL
 % and source-facing ZCL. Example 4.12's normalized channel equations are proved;
-% its full GSNNCH exclusion remains open.
+% its four-cycle Markov implication and full GSNNCH exclusion are also proved.
 \begin{theorem}[Printed mixed-state separation examples]
     \label{thm:cpsv_examples410_412_status}
     \notready
@@ -1078,6 +1078,7 @@ This is the calculation in
         thm:cpsv_example412_literal_sal,
         thm:cpsv_example412_literal_zcl_rfp_gap,
         thm:cpsv_example412_four_cycle_ssa_defect,
+        thm:cpsv_example412_not_gsnnch,
         thm:cpsv_example412_normalized_rfp_maps}
     The three examples in
     \cite[Examples~4.10--4.12, lines~897--942]{Cirac2016MPDO_arXiv} assert the
@@ -1136,8 +1137,12 @@ This is the calculation in
     weights of modulus $1/\sqrt{2}$, however, so this conclusion does not
     supply the line-246 unit-weight canonical convention assumed by
     Definition~4.1. The claimed exclusion from the full GSNNCH class also
-    remains open; comparing parity at different chain lengths is insufficient
-    because its commuting realization may depend on $N$.
+    holds. Indeed, every four-site state with the sector decomposition of
+    Definition~4.8 admits a quantum Markov decomposition for the tripartition
+    above and therefore satisfies equality in strong subadditivity. This
+    contradicts the strict entropy calculation. The argument uses only the
+    four-site member of the normalized family and so does not compare
+    commuting realizations at different chain lengths.
 \end{theorem}
 
 % CPSV16 Example 4.11, lines 907--924.
@@ -1806,6 +1811,113 @@ This is the calculation in
     entropy is $8[-(1/8)\log(1/8)]=3\log 2$.  The three maximally mixed
     marginals have the displayed entropies, and $\log 2>0$ gives the strict
     inequality.
+\end{proof}
+
+% Project-derived consequence of Beigi's spatial decomposition and the HJPW
+% quantum Markov direct-sum form.
+\begin{theorem}[Positive commuting overlapping products are quantum Markov]
+    \label{thm:positive_commuting_overlapping_product_markov}
+    \lean{Matrix.exists_quantumMarkovDecomposition_of_positive_overlapping_product}
+    \leanok
+    \uses{def:entropy_quantum_markov_decomposition}
+    Let $\rho_{ABC}$ be a trace-one operator, and let $X_{AB}$ and $Y_{BC}$
+    be positive semidefinite operators. Suppose that their natural lifts to
+    $ABC$ commute and that, after the natural reassociation of the three
+    tensor factors,
+    \begin{align}
+        \rho_{ABC}=(X_{AB}\otimes I_C)(I_A\otimes Y_{BC}).
+        \notag
+    \end{align}
+    Then $\rho_{ABC}$ admits a quantum Markov decomposition on $B$.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{def:entropy_quantum_markov_decomposition,
+        thm:commuting_overlapping_unitary_block_actions}
+    The spatial decomposition
+    \cite[Lemma~2.1]{Beigi2012Classification} gives a unitary decomposition
+    $B=\bigoplus_q B_q^L\otimes B_q^R$ in which the two overlapping actions
+    have the forms $R_q\otimes I_{B_q^R}$ and
+    $I_{B_q^L}\otimes S_q$. Compression of the original positive operators
+    shows that every $R_q$ and $S_q$ is positive semidefinite. Normalize the
+    two factors in each summand and take
+    $p_q=\operatorname{tr}(R_q)\operatorname{tr}(S_q)$. The factorization and
+    the trace-one hypothesis imply $\sum_q p_q=1$; zero factors give
+    zero-weight summands. Thus the transformed state is the direct sum
+    $\bigoplus_q p_q\,\widehat R_q\otimes\widehat S_q$, which is the quantum
+    Markov form of \cite[Theorem~6]{Hayden2004Structure}.
+\end{proof}
+
+% Derived four-site consequence of CPSV16 Definition 4.8, lines 829--850.
+% Issue #6072: the missing and unlinked statement is now proved. The former
+% route through Proposition prop4to2 had proof-path drift and is not used.
+\begin{theorem}[Four-cycle GSNNCH states are quantum Markov]
+    \label{thm:mpdo_gsnnch_four_cycle_markov}
+    \lean{MPOTensor.fourCycleTripartiteEquiv,
+        MPOTensor.fourCycleTripartiteState,
+        MPOTensor.fourCycleTripartiteState_posSemidef,
+        MPOTensor.nonempty_quantumMarkovDecomposition_fourCycle_of_isGSNNCHAt,
+        MPOTensor.isSSAEquality_fourCycle_of_isGSNNCHAt}
+    \leanok
+    \uses{def:mpdo_source_gsnnch,
+        def:entropy_quantum_markov_decomposition,
+        thm:hayashi_ssa_equality_reverse}
+    Let $\rho$ be a positive semidefinite trace-one operator on four
+    $d$-dimensional sites, and suppose that $\rho$ has the sector
+    decomposition of Definition~4.8. Regroup the sites as
+    $A=\{0\}$, $B=\{1,3\}$, and $C=\{2\}$. Then the resulting tripartite
+    state admits a quantum Markov decomposition on $B$. Consequently,
+    \begin{align}
+        S(ABC)+S(B)=S(AB)+S(BC).
+        \notag
+    \end{align}
+\end{theorem}
+\begin{proof}\leanok
+    \uses{def:mpdo_source_gsnnch,
+        def:entropy_quantum_markov_decomposition,
+        thm:positive_commuting_overlapping_product_markov,
+        thm:hayashi_ssa_equality_reverse}
+    Write $B_j^{(x)}$ for the four translated bonds in sector $x$, $n_x$
+    for its multiplicity, and $c>0$ for the common normalization. Set
+    \begin{align}
+        L&=c\sum_x n_x B_3^{(x)}B_0^{(x)},
+        &R&=\sum_x B_1^{(x)}B_2^{(x)}.
+        \notag
+    \end{align}
+    Orthogonality of the one-site sector projections makes each cross-sector
+    term in $LR$ vanish. Within one sector the translated bonds
+    commute, so $(B_3^{(x)}B_0^{(x)})(B_1^{(x)}B_2^{(x)})$ is the sector
+    product in Definition~4.8. Hence $LR=\rho$. Both $L$ and $R$ are positive
+    semidefinite; since $LR=\rho$ is Hermitian, also $RL=LR$.
+
+    In the displayed tripartition, $L=X_{AB}\otimes I_C$ and
+    $R=I_A\otimes Y_{BC}$ for positive semidefinite $X_{AB}$ and $Y_{BC}$.
+    The preceding theorem therefore gives a quantum Markov decomposition of
+    $\rho$ on $B$. Its direct-sum product form gives the asserted entropy
+    equality.
+\end{proof}
+
+% CPSV16 Example 4.12, lines 932--938.
+% Issue #6045: the formerly missing statement is now proved.
+\begin{theorem}[Example 4.12 is not GSNNCH]
+    \label{thm:cpsv_example412_not_gsnnch}
+    \lean{MPOTensor.CPSVExample412Literal.fourCycleTripartiteState_eq_generic,
+        MPOTensor.CPSVExample412Literal.M_not_isGSNNCH}
+    \leanok
+    \uses{def:cpsv_example412_literal_tensor,
+        thm:cpsv_example412_four_cycle_ssa_defect,
+        thm:mpdo_gsnnch_four_cycle_markov}
+    The tensor $M$ printed in Example~4.12 does not satisfy the GSNNCH
+    condition of Definition~4.8 for its normalized density-operator family.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:cpsv_example412_four_cycle_ssa_defect,
+        thm:mpdo_gsnnch_four_cycle_markov}
+    If $M$ were GSNNCH, its normalized four-site state would satisfy the
+    hypotheses of the preceding theorem and hence equality in strong
+    subadditivity for $A=\{0\}$, $B=\{1,3\}$, $C=\{2\}$. The generic
+    regrouping agrees exactly with the binary coordinates used in the entropy
+    calculation. The strict inequality proved above is therefore a
+    contradiction.
 \end{proof}
 
 \begin{theorem}[Scale-two transfer relation and the literal ZCL--RFP obstruction]
