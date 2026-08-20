@@ -99,11 +99,9 @@ theorem wordSpan_le_wordSpan_blockTensor (A : MPSTensor d D) (L n : ℕ) :
     have hσ : List.ofFn σ = [] := by
       apply List.eq_nil_of_length_eq_zero
       simp [hempty]
-    rw [hσ]; simp only [evalWord]
-    have : (1 : Matrix (Fin D) (Fin D) ℂ) = evalWord (blockTensor (d := d) (D := D) A L) [] := by
-      simp [evalWord]
-    rw [this]
-    exact evalWord_mem_wordSpan _ []
+    rw [hσ]
+    simpa only [Kraus.evalWord, List.length_nil] using
+      (evalWord_mem_wordSpan (blockTensor (d := d) (D := D) A L) [])
   | succ n ih =>
     intro σ
     -- Factor the word into first block + rest
@@ -117,7 +115,7 @@ theorem wordSpan_le_wordSpan_blockTensor (A : MPSTensor d D) (L n : ℕ) :
     have hfirst : evalWord A (List.ofFn σ₀) ∈ wordSpan B 1 := by
       rw [hfirst_eq]
       apply Submodule.subset_span
-      exact ⟨fun _ => σ₀_enc, by simp [evalWord]⟩
+      exact ⟨fun _ => σ₀_enc, by simp [Kraus.evalWord]⟩
     -- Second factor: in wordSpan B n by induction
     have hsecond : evalWord A (List.ofFn σ') ∈ wordSpan B n := ih σ'
     -- Product is in wordSpan B (1 + n) = wordSpan B (n + 1)

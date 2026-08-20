@@ -74,7 +74,7 @@ noncomputable def reindexPhysical {A : MPSTensor d₂ D}
   coisometric := data.coisometric
   reconstruct := by
     intro i
-    simpa [MPSTensor.reindexPhysical, toTensorFromBlocks] using data.reconstruct (e i)
+    simpa [Kraus.reindexPhysical, toTensorFromBlocks] using data.reconstruct (e i)
 
 end CPSVCanonicalFormData
 

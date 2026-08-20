@@ -306,7 +306,7 @@ theorem normalizedFlattening_tensorPhysicalId (U : MPOTensor d D)
       (finProdFinEquiv (finProdFinEquiv (i, a), finProdFinEquiv (j, b))) =
         normalizedDiagonalLift U.normalizedFlattening x
           (finProdFinEquiv (finProdFinEquiv (i, j), finProdFinEquiv (a, b))) by
-      simp [MPSTensor.reindexPhysical]]
+      simp [Kraus.reindexPhysical]]
   ext β α
   simp only [Matrix.smul_apply]
   rw [tensorPhysicalId_apply, normalizedDiagonalLift_apply,

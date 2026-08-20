@@ -125,7 +125,7 @@ variable {d D : ℕ}
 
 /-- **The D-th power of a Kraus operator lies in wordSpan K D.**
 
-The matrix `(K i₀)^D` equals `evalWord K [i₀, …, i₀]` (D copies), which is a
+The matrix `(K i₀)^D` equals `Kraus.evalWord K [i₀, …, i₀]` (D copies), which is a
 word of length `D`. Hence it lies in `wordSpan K D` by definition.
 
 This is the "power membership" ingredient needed by

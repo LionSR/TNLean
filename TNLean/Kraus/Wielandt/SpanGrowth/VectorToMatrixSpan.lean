@@ -59,13 +59,13 @@ theorem map_wordSpan_eq_vectorSpreadSpan
   -- Rewrite the RHS as an image of a range (so both sides match).
   -- (`Set.range (g ∘ f) = g '' Set.range f`)
   have hrange :
-      (Set.range fun σ : Fin n → Fin d => MPSTensor.evalWord K (List.ofFn σ) *ᵥ φ) =
+      (Set.range fun σ : Fin n → Fin d => Kraus.evalWord K (List.ofFn σ) *ᵥ φ) =
         (fun M : Matrix (Fin D) (Fin D) ℂ => M *ᵥ φ) ''
-          (Set.range fun σ : Fin n → Fin d => MPSTensor.evalWord K (List.ofFn σ)) := by
+          (Set.range fun σ : Fin n → Fin d => Kraus.evalWord K (List.ofFn σ)) := by
     ext v
     constructor
     · rintro ⟨σ, rfl⟩
-      exact ⟨MPSTensor.evalWord K (List.ofFn σ), ⟨σ, rfl⟩, rfl⟩
+      exact ⟨Kraus.evalWord K (List.ofFn σ), ⟨σ, rfl⟩, rfl⟩
     · rintro ⟨M, ⟨σ, rfl⟩, rfl⟩
       exact ⟨σ, rfl⟩
   -- Finish by rewriting.
@@ -146,19 +146,19 @@ theorem cumulativeVectorSpan_le_vectorSpreadSpan_of_eigenvector
     have : w.length + (n - w.length) = n := Nat.add_sub_of_le hw
     simp [w', k, List.length_append, this]
   -- Compute the padded action on `φ`.
-  have hrep : MPSTensor.evalWord K (List.replicate k i₀) *ᵥ φ = μ ^ k • φ := by
+  have hrep : Kraus.evalWord K (List.replicate k i₀) *ᵥ φ = μ ^ k • φ := by
     induction k with
     | zero =>
       simp
     | succ k ih =>
       -- `replicate (k+1) i₀ = i₀ :: replicate k i₀`.
       calc
-        MPSTensor.evalWord K (List.replicate (k + 1) i₀) *ᵥ φ
-            = (K i₀ * MPSTensor.evalWord K (List.replicate k i₀)) *ᵥ φ := by
+        Kraus.evalWord K (List.replicate (k + 1) i₀) *ᵥ φ
+            = (K i₀ * Kraus.evalWord K (List.replicate k i₀)) *ᵥ φ := by
                 simp [List.replicate_succ]
-        _ = K i₀ *ᵥ (MPSTensor.evalWord K (List.replicate k i₀) *ᵥ φ) := by
+        _ = K i₀ *ᵥ (Kraus.evalWord K (List.replicate k i₀) *ᵥ φ) := by
               exact (Matrix.mulVec_mulVec φ (K i₀)
-                (MPSTensor.evalWord K (List.replicate k i₀))).symm
+                (Kraus.evalWord K (List.replicate k i₀))).symm
         _ = K i₀ *ᵥ (μ ^ k • φ) := by
               simp [ih]
         _ = μ ^ k • (K i₀ *ᵥ φ) := by
@@ -168,39 +168,39 @@ theorem cumulativeVectorSpan_le_vectorSpreadSpan_of_eigenvector
         _ = μ ^ (k + 1) • φ := by
               simp [pow_succ, smul_smul]
   have hpad :
-      MPSTensor.evalWord K w' *ᵥ φ = μ ^ k • (MPSTensor.evalWord K w *ᵥ φ) := by
+      Kraus.evalWord K w' *ᵥ φ = μ ^ k • (Kraus.evalWord K w *ᵥ φ) := by
     -- Use `evalWord_append` and then apply the eigenvector scaling lemma.
     calc
-      MPSTensor.evalWord K w' *ᵥ φ
-          = (MPSTensor.evalWord K w *
-              MPSTensor.evalWord K (List.replicate k i₀)) *ᵥ φ := by
-            simp [w', MPSTensor.evalWord_append]
-      _ = MPSTensor.evalWord K w *ᵥ
-          (MPSTensor.evalWord K (List.replicate k i₀) *ᵥ φ) := by
-            exact (Matrix.mulVec_mulVec φ (MPSTensor.evalWord K w)
-              (MPSTensor.evalWord K (List.replicate k i₀))).symm
-      _ = MPSTensor.evalWord K w *ᵥ (μ ^ k • φ) := by
+      Kraus.evalWord K w' *ᵥ φ
+          = (Kraus.evalWord K w *
+              Kraus.evalWord K (List.replicate k i₀)) *ᵥ φ := by
+            simp [w', Kraus.evalWord_append]
+      _ = Kraus.evalWord K w *ᵥ
+          (Kraus.evalWord K (List.replicate k i₀) *ᵥ φ) := by
+            exact (Matrix.mulVec_mulVec φ (Kraus.evalWord K w)
+              (Kraus.evalWord K (List.replicate k i₀))).symm
+      _ = Kraus.evalWord K w *ᵥ (μ ^ k • φ) := by
             simp [hrep]
-      _ = μ ^ k • (MPSTensor.evalWord K w *ᵥ φ) := by
+      _ = μ ^ k • (Kraus.evalWord K w *ᵥ φ) := by
             simp [Matrix.mulVec_smul]
   -- The padded vector lies in the fixed-length span.
-  have hmem' : MPSTensor.evalWord K w' *ᵥ φ ∈ vectorSpreadSpan K φ n := by
+  have hmem' : Kraus.evalWord K w' *ᵥ φ ∈ vectorSpreadSpan K φ n := by
     -- It is a generator at length `n`.
     have := evalWord_mulVec_mem_vectorSpreadSpan (K := K) (φ := φ) w'
     simpa [hw'] using this
-  -- Rescale by `(μ^k)⁻¹` to get back `MPSTensor.evalWord K w *ᵥ φ`.
+  -- Rescale by `(μ^k)⁻¹` to get back `Kraus.evalWord K w *ᵥ φ`.
   have hk0 : μ ^ k ≠ 0 := by
     exact pow_ne_zero _ hμ
-  have : (μ ^ k)⁻¹ • (MPSTensor.evalWord K w' *ᵥ φ) = MPSTensor.evalWord K w *ᵥ φ := by
-    -- From `hpad : MPSTensor.evalWord w' * φ = μ^k • MPSTensor.evalWord w * φ`.
+  have : (μ ^ k)⁻¹ • (Kraus.evalWord K w' *ᵥ φ) = Kraus.evalWord K w *ᵥ φ := by
+    -- From `hpad : Kraus.evalWord w' * φ = μ^k • Kraus.evalWord w * φ`.
     -- Multiply by `(μ^k)⁻¹`.
     calc
-      (μ ^ k)⁻¹ • (MPSTensor.evalWord K w' *ᵥ φ)
-          = (μ ^ k)⁻¹ • (μ ^ k • (MPSTensor.evalWord K w *ᵥ φ)) := by
+      (μ ^ k)⁻¹ • (Kraus.evalWord K w' *ᵥ φ)
+          = (μ ^ k)⁻¹ • (μ ^ k • (Kraus.evalWord K w *ᵥ φ)) := by
               simp [hpad]
-      _ = ((μ ^ k)⁻¹ * μ ^ k) • (MPSTensor.evalWord K w *ᵥ φ) := by
+      _ = ((μ ^ k)⁻¹ * μ ^ k) • (Kraus.evalWord K w *ᵥ φ) := by
             simp [smul_smul]
-      _ = MPSTensor.evalWord K w *ᵥ φ := by
+      _ = Kraus.evalWord K w *ᵥ φ := by
             simp [inv_mul_cancel₀ hk0]
   -- Conclude by closure under scalar multiplication.
   -- (`vectorSpreadSpan` is a submodule.)

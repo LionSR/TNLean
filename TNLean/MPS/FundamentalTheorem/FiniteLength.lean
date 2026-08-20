@@ -120,7 +120,8 @@ theorem wordSpan_eq_top_of_isInjective
         simp only [Algebra.mul_smul_comm, evalWord_append, evalWord_cons,
           evalWord_nil, mul_one]
       dsimp only
-      rw [key]
+      rw [show Kraus.evalWord A (List.ofFn σ) =
+          ∑ i, c i • Kraus.evalWord A (List.ofFn σ ++ [i]) from key]
       exact Submodule.sum_mem _ fun i _ =>
         Submodule.smul_mem _ _ (by
           have := evalWord_mem_wordSpan A (List.ofFn σ ++ [i])

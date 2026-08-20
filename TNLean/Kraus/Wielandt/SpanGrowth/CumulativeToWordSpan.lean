@@ -30,7 +30,7 @@ variable {d D : ℕ}
 theorem exists_nonzero_trace_word_of_cumulativeSpan_eq_top [NeZero D]
     (K : Fin d → Matrix (Fin D) (Fin D) ℂ) {N : ℕ}
     (hcs : cumulativeSpan K N = ⊤) :
-    ∃ w : List (Fin d), w.length ≤ N ∧ Matrix.trace (MPSTensor.evalWord K w) ≠ 0 := by
+    ∃ w : List (Fin d), w.length ≤ N ∧ Matrix.trace (Kraus.evalWord K w) ≠ 0 := by
   by_contra hall
   push Not at hall
   set trMap : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] ℂ :=
@@ -57,7 +57,7 @@ theorem exists_eigenvector_of_cumulativeSpan_eq_top [NeZero D]
     (hcs : cumulativeSpan K N = ⊤) :
     ∃ (w : List (Fin d)) (μ : ℂ) (φ : Fin D → ℂ),
       w.length ≤ N ∧ μ ≠ 0 ∧ φ ≠ 0 ∧
-      MPSTensor.evalWord K w *ᵥ φ = μ • φ := by
+      Kraus.evalWord K w *ᵥ φ = μ • φ := by
   obtain ⟨w, hw, htr⟩ := exists_nonzero_trace_word_of_cumulativeSpan_eq_top K hcs
   obtain ⟨μ, φ, hμ, hφ, heig⟩ :=
     _root_.exists_eigenvector_of_trace_ne_zero _ htr
@@ -123,7 +123,7 @@ theorem wordSpan_succ_eq_top_of_unital_of_wordSpan_eq_top
   rw [hdecomp]
   refine Submodule.sum_mem _ fun a _ => ?_
   have hLeft : K a ∈ wordSpan K 1 := by
-    simpa [MPSTensor.evalWord] using
+    simpa [Kraus.evalWord] using
       evalWord_mem_wordSpan K ([a] : List (Fin d))
   have hRight : (K a)ᴴ * X ∈ wordSpan K n := by
     rw [hTop]

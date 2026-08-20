@@ -662,8 +662,8 @@ private theorem dim_eq_of_modulus_one_mixedMapLM_eigenvector
     exists_posSemidef_fixedPoint_gauge_of_irreducible_TP A hA_irr hA_tp
   obtain ⟨ρB, SB, hρB_psd, hρB_ne, hρB_fix, hSB_det, hSB_u, hSB_mul⟩ :=
     exists_posSemidef_fixedPoint_gauge_of_irreducible_TP B hB_irr hB_tp
-  let A' : MPSTensor d D₁ := gaugeFamily SA A
-  let B' : MPSTensor d D₂ := gaugeFamily SB B
+  let A' : Fin d → Matrix (Fin D₁) (Fin D₁) ℂ := gaugeFamily SA A
+  let B' : Fin d → Matrix (Fin D₂) (Fin D₂) ℂ := gaugeFamily SB B
   let X' : Matrix (Fin D₁) (Fin D₂) ℂ := gaugeMixedEigenvector SA SB X
   obtain ⟨hA'unital, hB'unital, hX'ne, hInter1, hInter2⟩ :=
     gauged_rectangular_intertwiner_properties
