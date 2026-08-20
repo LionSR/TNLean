@@ -25,8 +25,7 @@ variable {d D : ℕ}
 /-- The span of all products of exactly `n` matrices from `A`. -/
 def wordSpan (A : MPSTensor d D) (n : ℕ) :
     Submodule ℂ (Matrix (Fin D) (Fin D) ℂ) :=
-  Submodule.span ℂ (Set.range fun σ : Fin n → Fin d =>
-    evalWord A (List.ofFn σ))
+  Kraus.wordSpan A n
 
 /-- Every evaluated word belongs to the exact span at its length. -/
 theorem evalWord_mem_wordSpan (A : MPSTensor d D) (w : List (Fin d)) :
@@ -53,8 +52,7 @@ theorem wordSpan_succ_eq_mul_left (A : MPSTensor d D) (n : ℕ) :
 /-- The span of all products of at most `n` matrices from `A`. -/
 def cumulativeSpan (A : MPSTensor d D) (n : ℕ) :
     Submodule ℂ (Matrix (Fin D) (Fin D) ℂ) :=
-  Submodule.span ℂ
-    {X | ∃ w : List (Fin d), w.length ≤ n ∧ X = evalWord A w}
+  Kraus.cumulativeSpan A n
 
 /-- Every word of length at most `n` belongs to the cumulative span. -/
 theorem mem_cumulativeSpan_generator (A : MPSTensor d D) {n : ℕ}
