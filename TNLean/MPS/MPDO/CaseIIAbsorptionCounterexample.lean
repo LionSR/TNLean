@@ -162,11 +162,19 @@ private theorem basis_not_gaugePhaseEquiv :
   · change ¬ MPSTensor.GaugePhaseEquiv (basis 0) (basis 1)
     rintro ⟨X, ζ, hζ, hX⟩
     have h := congrFun (congrFun (hX 8) 0) 0
-    simp [basis, firstBasisTensor, secondBasisTensor] at h
+    simp only [basis, Fin.isValue, one_ne_zero, ↓reduceIte, secondBasisTensor,
+      Nat.reduceMul, Matrix.one_apply_eq, firstBasisTensor, Fin.reduceEq,
+      or_self, mul_zero, Matrix.coe_units_inv, Matrix.inv_subsingleton,
+      Ring.inverse_eq_inv', zero_mul, Matrix.smul_apply, Matrix.zero_apply,
+      smul_eq_mul] at h
   · change ¬ MPSTensor.GaugePhaseEquiv (basis 1) (basis 0)
     rintro ⟨X, ζ, hζ, hX⟩
     have h := congrFun (congrFun (hX 0) 0) 0
-    simp [basis, firstBasisTensor, secondBasisTensor] at h
+    simp only [basis, Fin.isValue, ↓reduceIte, firstBasisTensor, Nat.reduceMul,
+      Fin.reduceEq, or_false, Matrix.of_apply, one_ne_zero, secondBasisTensor,
+      mul_zero, Matrix.coe_units_inv, Matrix.inv_subsingleton,
+      Ring.inverse_eq_inv', zero_mul, Matrix.smul_apply, Matrix.zero_apply,
+      smul_eq_mul] at h
     exact invSqrtTwo_ne_zero h
   · exact absurd rfl hjk
 
@@ -192,8 +200,16 @@ theorem sectors_isBNTCanonicalForm :
         fin_cases b
         simp only [Matrix.sum_apply, Matrix.mul_apply, Fin.sum_univ_one,
           Matrix.conjTranspose_apply]
-        simp [firstBasisTensor, Fin.sum_univ_succ]
-        rw [star_invSqrtTwo, invSqrtTwo_mul_self]
+        simp only [Nat.reduceMul, Fin.isValue, Fin.zero_eta, RCLike.star_def,
+          Matrix.one_apply_eq]
+        have hsum :
+            (∑ x : Fin (3 * 3),
+              starRingEnd ℂ (firstBasisTensor x 0 0) *
+                firstBasisTensor x 0 0) =
+              starRingEnd ℂ invSqrtTwo * invSqrtTwo +
+                starRingEnd ℂ invSqrtTwo * invSqrtTwo := by
+          simp [firstBasisTensor, Fin.sum_univ_succ]
+        rw [hsum, star_invSqrtTwo, invSqrtTwo_mul_self]
         ring
       · change MPSTensor.IsLeftCanonical secondBasisTensor
         rw [MPSTensor.IsLeftCanonical]
@@ -383,6 +399,82 @@ theorem ambient_toMPSTensor_eq_sectors_toTensor :
     MPSTensor.finProdFinEquiv_modNat i j]
   rw [sectors_toTensor_eq_diagonal]
   exact ambient_eq_weighted_basis_blocks i j
+
+/-- The ambient MPO is in normalized BNT-refined horizontal form, with the
+displayed sector decomposition and identity gauge on both bond-one blocks.
+
+**Scope restriction (BNT-refined horizontal form):** this is the project's
+normalized refinement of the literal CPSV canonical form; see
+`docs/paper-gaps/cpgsv17_vertical_cf_grouping.tex`.
+
+Source: arXiv:1606.00608, canonical form at lines 237--246 and the BNT
+decomposition `eq:II_ABasicTensors` at lines 271--301. -/
+theorem ambient_isHorizontalCF : MPOTensor.IsHorizontalCF ambient := by
+  refine ⟨sectors, sectors_isBNTCanonicalForm, ?_⟩
+  have hTotal : sectors.totalDim = 2 := by
+    change (∑ _ : Fin 2, 1) = 2
+    simp
+  let X : (s : Fin sectors.totalCopies) →
+      GL (Fin (sectors.flatDim s)) ℂ := fun _ => 1
+  refine ⟨hTotal, X, ?_⟩
+  have hGauge : MPSTensor.globalGaugeOfBlocks X = 1 := by
+    change Units.map _ (Units.map _ ((MulEquiv.piUnits).symm X)) = 1
+    rw [show X = 1 by rfl]
+    simp
+  intro p
+  rw [ambient_toMPSTensor_eq_sectors_toTensor]
+  simp only [hGauge, Units.val_one, inv_one, one_mul, mul_one]
+  exact (cast_eq _ _).symm
+
+/-- The doubled physical-trace transfer of the first normal representative is
+the nonzero scalar $2/\sqrt 2$ on its one-dimensional bond space.
+
+Source: arXiv:1606.00608, the transfer matrices $\mathcal B_k$ in Definition
+4.7, lines 815--822. -/
+private theorem doubledPhysTraceTransfer_firstBasisTensor :
+    doubledPhysTraceTransfer 3 firstBasisTensor =
+      (2 * invSqrtTwo) • (1 : Matrix (Fin 1) (Fin 1) ℂ) := by
+  ext a b
+  fin_cases a
+  fin_cases b
+  simp [doubledPhysTraceTransfer, firstBasisTensor, Fin.sum_univ_succ,
+    Matrix.smul_apply, finProdFinEquiv]
+  ring
+
+/-- The doubled physical-trace transfer of the second normal representative
+is the identity on its one-dimensional bond space.
+
+Source: arXiv:1606.00608, the transfer matrices $\mathcal B_k$ in Definition
+4.7, lines 815--822. -/
+private theorem doubledPhysTraceTransfer_secondBasisTensor :
+    doubledPhysTraceTransfer 3 secondBasisTensor =
+      (1 : Matrix (Fin 1) (Fin 1) ℂ) := by
+  ext a b
+  fin_cases a
+  fin_cases b
+  simp [doubledPhysTraceTransfer, secondBasisTensor, Fin.sum_univ_succ,
+    finProdFinEquiv]
+
+/-- Neither displayed BNT representative has nilpotent physical-trace
+transfer. This proves only the representative-level nonnilpotency clause and
+does not assert simple canonical form, simplicity, the MPDO property, or SAL.
+
+Source: arXiv:1606.00608, Definition 4.7, lines 815--822. -/
+theorem sectors_basis_doubledPhysTraceTransfer_not_isNilpotent
+    (j : Fin sectors.basisCount) :
+    ¬ IsNilpotent (doubledPhysTraceTransfer 3 (sectors.basis j)) := by
+  change Fin 2 at j
+  change ¬ IsNilpotent (doubledPhysTraceTransfer 3 (basis j))
+  fin_cases j
+  · change ¬ IsNilpotent (doubledPhysTraceTransfer 3 firstBasisTensor)
+    rw [doubledPhysTraceTransfer_firstBasisTensor]
+    intro hnil
+    have htrace := Matrix.isNilpotent_trace_of_isNilpotent hnil
+    apply invSqrtTwo_ne_zero
+    simpa [Matrix.trace] using htrace.eq_zero
+  · change ¬ IsNilpotent (doubledPhysTraceTransfer 3 secondBasisTensor)
+    rw [doubledPhysTraceTransfer_secondBasisTensor]
+    exact not_isNilpotent_one
 
 /-- The ambient physical-trace transfer is literally the identity. -/
 lemma physTraceTransfer_ambient : physTraceTransfer ambient = 1 := by
