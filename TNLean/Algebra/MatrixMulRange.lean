@@ -17,7 +17,8 @@ This file collects basic linear-algebra facts about the range of the linear map
 
 Left multiplication acts independently on columns: `(P * X).col j = P *ᵥ (X.col j)`.
 Consequently, the range of left multiplication consists exactly of matrices whose columns lie
-in `LinearMap.range (Matrix.toLin' P)`, and it has dimension `D * Matrix.rank P`.
+in `LinearMap.range (Matrix.toLin' P)`, and it has dimension `D * Matrix.rank P`. The final
+theorem gives the corresponding rank-one fact for two-sided multiplication.
 -/
 
 open scoped Matrix
@@ -142,5 +143,24 @@ theorem finrank_range_mulLeft
           simp [Module.finrank_pi_fintype, Fintype.card_fin]
     _ = D * Matrix.rank P := by
           rw [Matrix.rank, Matrix.toLin'_apply']
+
+/-- A rank-one matrix belongs to the range of two-sided multiplication when its defining
+vectors belong to the corresponding one-sided ranges. -/
+theorem vecMulVec_mem_range_mulLeft_mulRight
+    (P Q : Matrix (Fin D) (Fin D) ℂ)
+    (φ ψ : Fin D → ℂ)
+    (hφ : φ ∈ LinearMap.range (Matrix.toLin' P))
+    (hψ : ψ ∈ LinearMap.range Q.vecMulLinear) :
+    Matrix.vecMulVec φ ψ ∈
+      LinearMap.range ((LinearMap.mulLeft ℂ P).comp (LinearMap.mulRight ℂ Q)) := by
+  rcases (LinearMap.mem_range).1 hφ with ⟨y, hy⟩
+  rcases (LinearMap.mem_range).1 hψ with ⟨z, hz⟩
+  have hy' : P *ᵥ y = φ := by
+    simpa [Matrix.toLin'_apply] using hy
+  have hz' : z ᵥ* Q = ψ := by
+    simpa [Matrix.vecMulLinear_apply] using hz
+  simpa [LinearMap.comp_apply, Matrix.vecMulVec_mul, Matrix.mul_vecMulVec, hy', hz'] using
+    LinearMap.mem_range_self
+      ((LinearMap.mulLeft ℂ P).comp (LinearMap.mulRight ℂ Q)) (Matrix.vecMulVec y z)
 
 end Matrix
