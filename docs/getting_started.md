@@ -9,8 +9,11 @@ this page is written for you.
 Before writing code, read
 [`.github/CONTRIBUTION_POLICY.md`](../.github/CONTRIBUTION_POLICY.md). Code
 contributions are scoped to an assigned issue and require working knowledge of
-quantum information theory and tensor networks — issues and corrections are
-welcome from anyone, but unsolicited pull requests are not reviewed.
+quantum information theory and tensor networks. Issues and corrections are
+welcome from anyone. Unsolicited agent-generated pull requests from accounts
+with no prior contribution are closed without review; other unsolicited pull
+requests are read, but their authors should expect to be asked to open an issue
+first.
 
 ## 1. What you need
 
@@ -25,6 +28,7 @@ welcome from anyone, but unsolicited pull requests are not reviewed.
   language server, but the extension is the path most contributors use and
   the one these instructions assume.
 - **git**.
+- **Python 3** and **ripgrep** (`rg`), which are used by the local checks below.
 - **About 10 GB of free disk**, mostly for the downloaded Mathlib build
   artifacts and the `.lake` directory; a full local build with cache is
   closer to 20 GB.
@@ -60,8 +64,15 @@ TNLean's own several-hundred modules are not distributed as a cache and
 compile locally; a full build takes a while the first time (subsequent
 builds only recompile what you changed). `lake build` with no arguments
 builds the default target, which is the whole `TNLean` library; you can also
-build just the library with `lake build TNLean`, or type-check a single file
-without building its downstream dependents:
+build just the library with `lake build TNLean`. To verify one module with the
+package's Lean options, including the Mathlib standard linter set, run:
+
+```bash
+lake build TNLean.MPS.FundamentalTheorem.Basic
+```
+
+For a faster elaboration check that does not apply those package options or
+run the standard linter set, use:
 
 ```bash
 lake env lean TNLean/MPS/FundamentalTheorem/Basic.lean
@@ -109,8 +120,8 @@ you start reading:
 
 | Name | What it is | Defined in |
 |---|---|---|
-| `MPSTensor d D` | A `Fin d`-indexed family of `D × D` complex matrices — the tensor `A^i` of a matrix product state. | `TNLean/Kraus/Word.lean` |
-| `evalWord` | The matrix product `A_{i_1} A_{i_2} \cdots A_{i_n}` along a word of physical indices. | `TNLean/Kraus/Word.lean` |
+| `MPSTensor d D` | A `Fin d`-indexed family of `D × D` complex matrices — the tensor `A^i` of a matrix product state. | `TNLean/MPS/Core/Word.lean` |
+| `MPSTensor.evalWord` | The matrix product `A_{i_1} A_{i_2} \cdots A_{i_n}` along a word of physical indices; it specializes `Kraus.evalWord` to matrix product tensors. | `TNLean/MPS/Core/Word.lean` |
 | `IsInjective` | The matrices of a tensor span the full matrix algebra. | `TNLean/Kraus/Injectivity.lean` |
 | `IsNormal` | The tensor becomes injective after blocking sites (eventual full Kraus rank). | `TNLean/Kraus/Injectivity.lean` |
 | `transferMap` | The completely positive map $E_A(X) = \sum_i A_i X A_i^\dagger$. | `TNLean/MPS/Core/Transfer.lean` |
@@ -143,8 +154,9 @@ If your goal is to understand the fundamental theorem of matrix product
 states, this is a concrete path through the source, in reading order,
 alongside the corresponding blueprint chapters:
 
-1. `TNLean/Kraus/Word.lean` — `MPSTensor`, `evalWord`. The basic objects: a
-   tensor is a family of matrices, and a word evaluates to a matrix product.
+1. `TNLean/MPS/Core/Word.lean` — `MPSTensor`, `MPSTensor.evalWord`. The basic
+   objects: a tensor is a family of matrices, and a word evaluates to a matrix
+   product.
 2. `TNLean/MPS/Defs.lean` — `mpv` (the matrix-product-vector coefficient),
    `SameMPV`, `GaugeEquiv`. What it means for two tensors to generate the
    same states, and what a gauge transformation is. Read alongside
@@ -201,9 +213,12 @@ blueprint prose, no software-engineering metaphors ("pipeline", "wrapper",
 to reach for. The banned terms and their replacements are in
 [`docs/prose_style.md`](prose_style.md).
 
-**Local checks.** Before pushing, run what CI will run:
+**Local checks.** Before pushing, run the checks relevant to the change:
 
 ```bash
+# Elaborate one module with the package options and standard linter set.
+lake build TNLean.Path.To.File
+
 # Sorrys and axioms in the files you touched.
 rg -n "sorry|axiom" TNLean/Path/To/File.lean || true
 
