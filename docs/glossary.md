@@ -15,8 +15,8 @@ is deliberately source-faithful.
 ### `MPSTensor.IsNormal`
 
 - **Declaration:** `MPSTensor.IsNormal (A : MPSTensor d D) : Prop`.
-- **Defined in:** `TNLean/Kraus/Injectivity.lean` (still `namespace MPSTensor`;
-  the rename to `namespace Kraus` is pending issue #6560).
+- **Defined in:** `TNLean/MPS/Core/Injectivity.lean`; the finite-family owner is
+  `Kraus.IsNormal` in `TNLean/Kraus/Injectivity.lean`.
 - **Meaning:** there is a positive word length `N` for which the length-`N`
   products of the matrices of `A` span the full `D × D` matrix algebra; equivalently,
   `A` becomes injective after blocking `N` sites.
@@ -248,8 +248,8 @@ interfaces.
 #### `MPSTensor.IsInjective`
 
 - **Declaration:** `MPSTensor.IsInjective (A : MPSTensor d D) : Prop`.
-- **Defined in:** `TNLean/Kraus/Injectivity.lean` (still `namespace MPSTensor`;
-  the rename to `namespace Kraus` is pending issue #6560).
+- **Defined in:** `TNLean/MPS/Core/Injectivity.lean`; the finite-family owner is
+  `Kraus.IsInjective` in `TNLean/Kraus/Injectivity.lean`.
 - **Meaning:** the one-site matrices `{A i}` span the full matrix algebra; this
   is the linear-algebraic injectivity of the tensor as a virtual-to-physical map.
 - **Source:** arXiv:1804.04964 §2,
@@ -265,8 +265,8 @@ interfaces.
 
 - **Declaration:**
   `MPSTensor.IsNBlkInjective (A : MPSTensor d D) (N : ℕ) : Prop`.
-- **Defined in:** `TNLean/Kraus/Injectivity.lean` (still `namespace MPSTensor`;
-  the rename to `namespace Kraus` is pending issue #6560).
+- **Defined in:** `TNLean/MPS/Core/Injectivity.lean`; the finite-family owner is
+  `Kraus.IsNBlkInjective` in `TNLean/Kraus/Injectivity.lean`.
 - **Meaning:** products indexed by all words of exactly length `N` span the full
   matrix algebra.
 - **Source:** arXiv:0909.5347, equation (1) and the following definition of
