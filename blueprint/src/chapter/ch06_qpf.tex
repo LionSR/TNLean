@@ -386,6 +386,23 @@ and~\cite{Evans1978Spectral}.
 
 \section{Uniqueness}
 
+\begin{theorem}[Fixed-point proportionality from boundary definiteness]
+    \label{thm:posdef_fixedpoint_proportional}
+    \lean{exists_smul_eq_of_posDef_fixedPoints_of_fixedPoint_posDef}
+    \leanok
+    Let $E\colon\MN{D}\to\MN{D}$ be linear, and let $\rho$ and $\sigma$ be
+    positive-definite fixed points of $E$. Suppose every nonzero
+    positive-semidefinite fixed point of $E$ is positive definite. Then
+    $\sigma=c\rho$ for some $c\in\C$.
+\end{theorem}
+
+\begin{proof}\leanok
+    Choose the largest $c\geq0$ for which $\sigma-c\rho$ is positive
+    semidefinite. The difference is singular and fixed by $E$. If it were
+    nonzero, the hypothesis would make it positive definite, contradicting
+    maximality. Hence $\sigma-c\rho=0$.
+\end{proof}
+
 \begin{theorem}[Irreducible fixed-point uniqueness --- CP version]
     \label{thm:psd_fp_unique_irred_cp}
     \lean{posSemidef_fixedPoint_unique_of_irreducible_cp}
@@ -397,30 +414,12 @@ and~\cite{Evans1978Spectral}.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:psd_fp_pd_irred}
+    \uses{thm:psd_fp_pd_irred, thm:posdef_fixedpoint_proportional}
     If $\sigma=0$, take $c=0$. Otherwise,
     Theorem~\ref{thm:psd_fp_pd_irred} makes both $\rho$ and $\sigma$
-    positive definite. Write $\rho=SS^\dagger$ and set
-    \begin{align}
-        H
-         & =S^{-1}\sigma(S^\dagger)^{-1}.
-        \notag
-    \end{align}
-    If $c_0>0$ is the smallest eigenvalue of $H$, then
-    $H-c_0\Id\geq0$ and $H-c_0\Id$ is singular. Since $S$ is invertible,
-    congruence by $S$ preserves positivity and singularity and gives
-    \begin{align}
-        \tau
-         & =\sigma-c_0\rho
-        =S(H-c_0\Id)S^\dagger,
-        \notag
-    \end{align}
-    so $\tau$ is positive semidefinite and singular. Linearity makes $\tau$
-    a fixed point. If $\tau\neq0$,
-    Theorem~\ref{thm:psd_fp_pd_irred} would make it positive
-    definite, a contradiction. Thus $\tau=0$ and $\sigma=c_0\rho$.
-    This is the minimal-eigenvalue mechanism of
-    \cite[Theorem~6.3(2)--(3)]{Wolf2012Quantum}.
+    positive definite. The same theorem makes every nonzero
+    positive-semidefinite fixed point positive definite. Apply
+    Theorem~\ref{thm:posdef_fixedpoint_proportional}.
 \end{proof}
 
 \begin{theorem}[Irreducible fixed-point uniqueness]
