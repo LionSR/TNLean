@@ -4,8 +4,8 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.Analysis.OperatorNormConvergence
+import TNLean.Analysis.SpectralRadiusPowerDecay
 import TNLean.Spectral.MPVOverlapTrace
-import TNLean.Spectral.TransferOperatorGapCommon
 
 /-!
 # Rectangular MPV overlap decay from a spectral-radius gap
