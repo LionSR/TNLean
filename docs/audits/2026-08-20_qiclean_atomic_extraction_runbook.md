@@ -143,7 +143,8 @@ such as an inline `smallmatrix`, remains part of its surrounding paragraph.
 An environment containing theorem-like item lines blocks the freeze. Outside
 such environments, blank lines and item boundaries divide the text into
 paragraph-like blocks. A standalone `\input` command is its own block, but a
-standalone input nested inside an atomic environment blocks the freeze. Build
+standalone input nested inside an atomic environment or theorem-like item
+blocks the freeze. Build
 support files remain unchanged apart from this input filtering. A mismatched,
 unmatched, or unterminated TeX environment also blocks the freeze. A
 top-level leaf prose file with no items or inputs, such as the common

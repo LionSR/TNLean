@@ -240,7 +240,7 @@ def blueprint_environments(blueprint_src: Path) -> list[BlueprintEnvironment]:
 def _atomic_non_item_environment_ranges(
     source_lines: list[str], item_spans: list[tuple[int, int]], relative_root: str
 ) -> dict[int, int]:
-    """Return maximal balanced TeX environments lying outside item spans."""
+    """Validate item inputs and return maximal environments outside item spans."""
     stack: list[tuple[str, int]] = []
     ranges: list[tuple[int, int]] = []
     for line_no, line in enumerate(source_lines, start=1):
@@ -267,6 +267,14 @@ def _atomic_non_item_environment_ranges(
             f"unterminated environment {environment} opened at "
             f"{relative_root}:{opened_line}"
         )
+
+    for item_start, item_end in item_spans:
+        for line_no in range(item_start, item_end + 1):
+            if INPUT_LINE_RE.fullmatch(_strip_tex_comments(source_lines[line_no - 1])):
+                raise ValueError(
+                    f"theorem-like item at {relative_root}:{item_start}-{item_end} "
+                    f"contains standalone \\input at line {line_no}"
+                )
 
     candidates: list[tuple[int, int]] = []
     for start, end in ranges:
@@ -315,9 +323,9 @@ def blueprint_non_item_blocks(
     Single-line environments remain in their surrounding paragraph. An outer
     environment containing item lines is rejected because partitioning it at
     the item boundary would produce malformed TeX. A standalone ``\\input``
-    nested inside an atomic environment is rejected because its target-file
-    dependency cannot be separated from that environment. Elsewhere, blank
-    lines and item boundaries split blocks. Router ``\\input`` commands
+    nested inside an atomic environment or a theorem-like item is rejected
+    because its target-file dependency cannot be separated from that span.
+    Elsewhere, blank lines and item boundaries split blocks. Router ``\\input`` commands
     are single-line blocks so each simulated output can prune them without
     pulling in every sibling chapter.
     """

@@ -489,6 +489,22 @@ See Theorem~\ref{thm:tn}.
         ):
             boundary_report(self.root)
 
+    def test_rejects_standalone_input_inside_theorem_item(self) -> None:
+        self.write_blueprint(
+            r"""\begin{theorem}\label{thm:qic}
+\lean{Kraus.moved}
+\input{chapter/picture}
+\end{theorem}
+"""
+        )
+        self.write_blueprint("Picture body.\n", "picture.tex")
+        with self.assertRaisesRegex(
+            ValueError,
+            r"theorem-like item at src/chapter/ch01.tex:1-4 contains "
+            r"standalone \\input at line 3",
+        ):
+            boundary_report(self.root)
+
     def test_rejects_unbalanced_non_item_environment(self) -> None:
         self.write_blueprint(
             r"""\begin{theorem}\label{thm:qic}
