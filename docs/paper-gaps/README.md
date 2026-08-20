@@ -96,7 +96,20 @@ For MPDO renormalization fixed points:
   obtains existential nontriviality from eventual linear independence, a
   non-eventually-zero sector coefficient, gauge transport, and physical
   unblocking; the strengthened predicate still requires positive-length
-  nonvanishing.
+  nonvanishing. The same note records the exact scalar repeated-copy
+  counterexample to Theorem 4.9(iv)$\Rightarrow$(v): weights $1$ and $1/2$
+  satisfy the global convention and every condition-(iv) clause, while the
+  blocked tensor fails Definition 4.1.
+- `cpgsv17_mpdo_theorem_4_9_implication_label.tex` records the cyclic mismatch
+  among the Appendix C proposition labels, the hidden use of the ZCL lemma
+  `lemmus` in the printed proof of `prop3to4`, and the distinction between the
+  refuted literal (iv)$\Rightarrow$(v) statement and the viable source
+  (ii)$\Rightarrow$(v) route.
+- `cpgsv17_pf_rank_one.tex` records the completed normal Case-I rank-one
+  theorem, the false absorbed-normality route in Case II, the exact
+  repeated-copy counterexample to (iv)$\Rightarrow$(v), and the remaining
+  all-sector factorization and projector-controlled assembly needed only after
+  ZCL-derived common-weight absorption in the (ii)-route.
 - `cpsv16_gsnnch_sector_decomposition.tex` records that
   `MPOTensor.GSNNCHData` retains the source orthogonal sectors and natural
   multiplicities. Positive commuting products on supplied orthogonal sectors
@@ -159,7 +172,9 @@ For MPDO renormalization fixed points:
   Definition 4.1 local renormalization equations. Positivity alone admits the
   zero tensor. The horizontal-form theorems are stronger specializations that
   derive the required nonvanishing. This closes only implication
-  $\mathrm{(i)}\Rightarrow\mathrm{(ii)}$; Theorem 4.9 remains partial.
+  $\mathrm{(i)}\Rightarrow\mathrm{(ii)}$. Theorem 4.9 is partial and partly
+  refuted: its literal (iv)$\Rightarrow$(v) implication is false, while the
+  stronger (ii)$\Rightarrow$(v) route remains a missing statement.
 - `hjpw04_ssa_product_marginal_reference.tex` records the singular
   product-marginal evaluation in the relative-entropy form of strong
   subadditivity. The support-compressed tensor logarithm, the bipartite entropy

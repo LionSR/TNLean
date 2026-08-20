@@ -57,9 +57,32 @@ mathematical obstruction.
   blocked normalized tensor. This refutes the broadened implication obtained
   by replacing the paper's literal ZCL diagram with `IsSourceZCL`; it is not an
   unqualified counterexample to Theorem 4.9, because $A$ fails the literal
-  diagram. Thus the exact source implication remains unsettled at the boundary
-  between global BNT normalization and literal physical-trace-transfer
-  normalization.
+  diagram. Thus this four-sector witness leaves the source
+  (ii)$\Rightarrow$(v) route unsettled at the boundary between global BNT
+  normalization and literal physical-trace-transfer normalization.
+
+### Unequal raw copies refute Theorem 4.9(iv)$\Rightarrow$(v)
+
+- Location: `TNLean/MPS/MPDO/CaseIIAbsorptionCounterexample.lean`
+- Main declaration:
+  `MPOTensor.CaseIIAbsorptionCounterexample.printed_theorem49_iv_to_v_is_false`
+- Statement refuted: under the printed standing simple-biCF-BNT and MPDO
+  hypotheses, condition (iv) implies that the two-site-blocked tensor satisfies
+  Definition 4.1.
+- Witness: one scalar normal representative $A=1$, repeated with raw canonical
+  weights $1$ and $1/2$. The conjunction theorem checks the exact canonical
+  assembly and global unit weight, MPDO positivity, nonnilpotence of the sole
+  representative, simultaneous one-letter span, representative MPDO
+  positivity, the distinct-layer equation, and the full physical-sector and
+  neighboring-trace factorization of condition (iv), together with MPDO
+  positivity of the two-site block.
+- Obstruction: the sole local matrix is $K^{00}=\operatorname{diag}(1,1/2)$.
+  Definition 4.1 for $K^{[2]}$ would make its physical-trace transfer
+  idempotent, hence would give $1+2^{-4}=1+2^{-2}$ after taking traces.
+- Scope: this does not refute `prop2to5`, whose hypothesis is condition (ii).
+  The earlier ZCL argument first forces common repeated-copy weights and
+  absorbs them. The all-sector factorization and projector-controlled channel
+  assembly remain missing for that viable route.
 
 ### BiCF does not follow from the other per-copy `HorizontalCFData` fields
 

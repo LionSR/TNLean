@@ -85,12 +85,12 @@ separate public-surface occurrence and therefore appears separately.
 | `ch21_mpdo_rfp_fusion_isometries_fixed_final_comparison.tex` | — | L572, 577 `tntree` → `C-tree` | — |
 | `ch21_mpdo_rfp_fusion_isometries_foundations.tex` | L363, 373, 608, 617, 629, 638, 650, 655 `tenkz` → `P-grid` | — | — |
 | `ch21_mpdo_rfp_fusion_isometries_product_laws.tex` | L45, 61, 65, 491 `tenkz` → `P-grid` | L603, 605 `tntree` → `C-tree` | — |
-| `ch21_mpdo_rfp_renormalization.tex` | L609, 612, 615, 618 `tenkz` → `P-grid` | — | — |
+| `ch21_mpdo_rfp_renormalization.tex` | L613, 616, 619, 622 `tenkz` → `P-grid` | — | — |
 | `ch21_mpdo_rfp_simple_local_closed_sector_contractions.tex` | L282, 288 `tenkz` → `P-grid` | — | — |
 | `ch21_mpdo_rfp_simple_local_inverse_map_factorization.tex` | L44, 49, 53, 70, 78, 130, 265, 270, 275, 282, 287, 486, 704, 710, 714 `tenkz` → `P-grid` | — | — |
 | `ch21_mpdo_rfp_simple_local_neighboring_bond_contractions.tex` | L793, 806, 814, 821, 895, 902 `tenkz` → `P-grid` | — | — |
 | `ch21_mpdo_rfp_simple_local_primitivity_active_trace_matrix.tex` | L189 `tenkz` → `P-grid` | — | — |
-| `ch21_mpdo_rfp_simple_local_refinement_channels_physical_coordinates.tex` | L326, 332, 338, 352, 363, 369 `tenkz` → `P-grid` | — | — |
+| `ch21_mpdo_rfp_simple_local_refinement_channels_physical_coordinates.tex` | L329, 335, 341, 355, 366, 372 `tenkz` → `P-grid` | — | — |
 | `ch21_mpdo_rfp_simple_local_structure_capstone.tex` | L363, 882, 886, 892, 897 `tenkz` → `P-grid` | — | — |
 | `ch23_algebraic_ft_foundations.tex` | L48, 52, 494, 498, 699, 703, 716, 720, 763, 767, 771, 780, 784 `tenkz` → `P-grid` | — | — |
 | `ch24_peps_ft.tex` | L27, 57, 93 `tenkz` → `P-grid` | — | — |

@@ -11,25 +11,34 @@ import TNLean.MPS.MPDO.RFPViaTS
 
 This file composes the physical-coordinate channels of Proposition C.7 twice.
 The resulting channels exchange the two-site and four-site closures of the
-physical-sector tensor. Decoding the physical indices of a two-site block then
-exhibits the two-site blocked physical-sector tensor as a renormalization fixed
-point.
+physical-sector tensor associated with one supplied neighboring trace
+factorization. Decoding the physical indices of a two-site block then exhibits
+that two-site blocked tensor as a renormalization fixed point.
 
 The result concerns the tensor in the physical-sector coordinates selected by
 the isometry in Proposition C.7. Transport through that isometry to the original
 physical tensor is not asserted here.
 
-**Local fix (implication label):** Appendix line 1824 labels the construction
-as direction (iii) implies (v), whereas the theorem statement and the local
-structure used there give direction (iv) implies (v). Documented in
+**Scope restriction (single supplied factorization):** Theorem 4.9(iv) supplies
+this data separately for every outer BNT element. This file assumes one
+`NeighboringTraceFactorization`; it neither assembles the resulting channel
+pairs along the outer physical supports nor proves the full implication to
+Theorem 4.9(v). Documented in
+`docs/paper-gaps/cpgsv17_pf_rank_one.tex`.
+
+**Local fix (cyclic implication labels):** The concluding proof at source
+lines 1822--1824 assigns the wrong conditions to Propositions `prop2to3`,
+`prop3to4`, `prop4to2`, and `prop2to5`. The declarations below cite the
+one-factorization construction of Proposition C.7 and its twice-applied channel
+observation directly, rather than assigning it a false implication label.
+Documented in
 `docs/paper-gaps/cpgsv17_mpdo_theorem_4_9_implication_label.tex`.
 
 ## References
 
 * [Cirac--Perez-Garcia--Schuch--Verstraete 2017] arXiv:1606.00608,
-  Theorem 4.9, direction (iv) implies (v), source lines 851--893; its channel
-  construction at source lines 1821--1825, where the implication is
-  mislabelled; and Proposition C.7, Appendix C.2, source lines 1510--1563
+  Proposition C.7, Appendix C.2, source lines 1510--1563, composed twice as
+  observed at source lines 1821--1825; Theorem 4.9, source lines 851--893
 -/
 
 open scoped Matrix
@@ -41,10 +50,9 @@ variable {d D : ℕ} {K : MPOTensor d D} {F : PhysicalSectorFactorization K}
 /-- The twice-applied physical refinement channel: first refine two physical
 sites to three, then refine the first two of those three sites to obtain four.
 
-This is the map denoted \(\mathcal T^2\) in arXiv:1606.00608, Theorem 4.9,
-direction (iv) implies (v), source lines 851--893, with the channel construction
-at source lines 1821--1825. It is built from the channel of Proposition C.7,
-Appendix C.2, source lines 1510--1545. -/
+This is the map denoted \(\mathcal T^2\) at arXiv:1606.00608, Appendix C.2,
+line 1824. It is the twice-applied refinement channel of Proposition C.7,
+source lines 1510--1545. -/
 noncomputable def NeighboringTraceFactorization.physicalTSquaredMap
     (H : NeighboringTraceFactorization F) :
     Matrix (Fin (Fintype.card (SectorSiteIndex F)) ×
@@ -64,9 +72,8 @@ noncomputable def NeighboringTraceFactorization.physicalTSquaredMap
 /-- The twice-applied physical refinement map is trace-preserving and
 completely positive.
 
-Source: arXiv:1606.00608, Theorem 4.9, direction (iv) implies (v), source
-lines 851--893, with the channel construction at source lines 1821--1825; and
-Proposition C.7, Appendix C.2, source lines 1510--1545. -/
+Source: arXiv:1606.00608, Proposition C.7, source lines 1510--1545, composed
+twice as at Appendix C.2, lines 1821--1825. -/
 theorem NeighboringTraceFactorization.physicalTSquaredMap_isKrausCPTP
     (H : NeighboringTraceFactorization F) :
     IsKrausCPTP H.physicalTSquaredMap := by
@@ -80,9 +87,8 @@ physical-sector tensor to its four-site closure.
 zero-weight preparation branch of the refinement channel. Documented in
 `docs/paper-gaps/cpgsv17_mpdo_zero_weight_preparation_completion.tex`.
 
-Source: arXiv:1606.00608, Theorem 4.9, direction (iv) implies (v), source
-lines 851--893, with the channel construction at source lines 1821--1825; and
-Proposition C.7, Appendix C.2, source lines 1510--1545. -/
+Source: arXiv:1606.00608, Proposition C.7, source lines 1510--1545, composed
+twice as at Appendix C.2, lines 1821--1825. -/
 theorem NeighboringTraceFactorization.physicalTSquaredMap_twoSiteClosure_eq_fourSiteClosure
     (H : NeighboringTraceFactorization F) (X : Matrix (Fin D) (Fin D) ℂ) :
     H.physicalTSquaredMap (physClose2 F.sectorCoordinateTensor X) =
@@ -95,10 +101,9 @@ theorem NeighboringTraceFactorization.physicalTSquaredMap_twoSiteClosure_eq_four
 first three of four physical sites, then coarse-grain the remaining three sites
 to two.
 
-This is the map denoted \(\mathcal S^2\) in arXiv:1606.00608, Theorem 4.9,
-direction (iv) implies (v), source lines 851--893, with the channel construction
-at source lines 1821--1825. It is built from the channel of Proposition C.7,
-Appendix C.2, source lines 1547--1563. -/
+This is the map denoted \(\mathcal S^2\) at arXiv:1606.00608, Appendix C.2,
+line 1824. It is the twice-applied coarse-graining channel of Proposition C.7,
+source lines 1547--1563. -/
 noncomputable def NeighboringTraceFactorization.physicalSSquaredMap
     (H : NeighboringTraceFactorization F) :
     Matrix (Fin (Fintype.card (SectorSiteIndex F)) ×
@@ -118,9 +123,8 @@ noncomputable def NeighboringTraceFactorization.physicalSSquaredMap
 /-- The twice-applied physical coarse-graining map is trace-preserving and
 completely positive.
 
-Source: arXiv:1606.00608, Theorem 4.9, direction (iv) implies (v), source
-lines 851--893, with the channel construction at source lines 1821--1825; and
-Proposition C.7, Appendix C.2, source lines 1547--1563. -/
+Source: arXiv:1606.00608, Proposition C.7, source lines 1547--1563, composed
+twice as at Appendix C.2, lines 1821--1825. -/
 theorem NeighboringTraceFactorization.physicalSSquaredMap_isKrausCPTP
     (H : NeighboringTraceFactorization F) :
     IsKrausCPTP H.physicalSSquaredMap := by
@@ -130,9 +134,8 @@ theorem NeighboringTraceFactorization.physicalSSquaredMap_isKrausCPTP
 /-- The twice-applied physical coarse-graining sends the four-site closure of
 the physical-sector tensor to its two-site closure.
 
-Source: arXiv:1606.00608, Theorem 4.9, direction (iv) implies (v), source
-lines 851--893, with the channel construction at source lines 1821--1825; and
-Proposition C.7, Appendix C.2, source lines 1547--1563. -/
+Source: arXiv:1606.00608, Proposition C.7, source lines 1547--1563, composed
+twice as at Appendix C.2, lines 1821--1825. -/
 theorem NeighboringTraceFactorization.physicalSSquaredMap_fourSiteClosure_eq_twoSiteClosure
     (H : NeighboringTraceFactorization F) (X : Matrix (Fin D) (Fin D) ℂ) :
     H.physicalSSquaredMap (physClose4 F.sectorCoordinateTensor X) =
@@ -144,8 +147,8 @@ theorem NeighboringTraceFactorization.physicalSSquaredMap_fourSiteClosure_eq_two
 /-- The refinement channel on two-site blocked physical indices, obtained from
 \(\mathcal T^2\) by the canonical decoding of one and two blocked sites.
 
-Source: arXiv:1606.00608, Theorem 4.9, direction (iv) implies (v), source
-lines 851--893, with the channel construction at source lines 1821--1825. -/
+Source: arXiv:1606.00608, Appendix C.2, lines 1821--1825, using the refinement
+channel of Proposition C.7, lines 1510--1545. -/
 private noncomputable def NeighboringTraceFactorization.blockedPhysicalTMap
     (H : NeighboringTraceFactorization F) :
     Matrix (Fin (Fintype.card (SectorSiteIndex F) *
@@ -169,8 +172,8 @@ private noncomputable def NeighboringTraceFactorization.blockedPhysicalTMap
 /-- The coarse-graining channel on two-site blocked physical indices, obtained
 from \(\mathcal S^2\) by the canonical decoding of one and two blocked sites.
 
-Source: arXiv:1606.00608, Theorem 4.9, direction (iv) implies (v), source
-lines 851--893, with the channel construction at source lines 1821--1825. -/
+Source: arXiv:1606.00608, Appendix C.2, lines 1821--1825, using the
+coarse-graining channel of Proposition C.7, lines 1547--1563. -/
 private noncomputable def NeighboringTraceFactorization.blockedPhysicalSMap
     (H : NeighboringTraceFactorization F) :
     Matrix (Fin (Fintype.card (SectorSiteIndex F) *
@@ -208,10 +211,15 @@ form. Documented in
 `docs/paper-gaps/cpgsv17_mpdo_blocked_rfp_physical_transport.tex`. Elimination:
 transport the two channels through the two- and four-site physical unitaries.
 
-Source: arXiv:1606.00608, Definition 4.1, source lines 645--659; Theorem 4.9,
-direction (iv) implies (v), source lines 851--893, with the channel construction
-at source lines 1821--1825; and Proposition C.7, Appendix C.2, source lines
-1510--1563. -/
+**Scope restriction (single supplied factorization):** this theorem assumes one
+`NeighboringTraceFactorization`. Theorem 4.9(iv) supplies such a factorization
+separately for every outer BNT element; their projector-controlled channel
+assembly is not proved here. Documented in
+`docs/paper-gaps/cpgsv17_pf_rank_one.tex`.
+
+Source: arXiv:1606.00608, Definition 4.1, lines 645--659; Proposition C.7,
+lines 1510--1563; and the twice-applied channel observation at Appendix C.2,
+lines 1821--1825. -/
 theorem NeighboringTraceFactorization.blockTwo_sectorCoordinateTensor_isRFPViaTS
     (H : NeighboringTraceFactorization F) :
     IsRFPViaTS (blockTwo F.sectorCoordinateTensor) := by

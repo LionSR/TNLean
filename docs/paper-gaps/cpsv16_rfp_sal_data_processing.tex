@@ -100,18 +100,25 @@ $\mathcal T_M^2=\mathcal T_M$. If $\mathcal T_M=0$, then
 contradicting the positive-length nonvanishing hypothesis. Therefore
 $\mathcal T_M\neq0$, and $M$ has source zero correlation length.
 
-Combining this argument with the area-law theorem gives the primary declaration
-\leanid{MPOTensor.isSourceZCL_and_isSAL_of_isRFPViaTS_of_trace_ne_zero} in
-\doclink{TNLean/MPS/MPDO/RFPViaTSSAL}. It states exactly that positive
-semidefinite rings, nonzero trace at every positive length, and the Definition
-4.1 local renormalization equations imply source ZCL and SAL.
+The literal Definition~4.2 equation is the direct theorem
+\leanid{MPOTensor.physTraceTransfer_sq_of_isRFPViaTS} in
+\doclink{TNLean/MPS/MPDO/RFPViaTS}. Combining it with
+\leanid{MPOTensor.isSAL_of_isRFPViaTS_of_trace_ne_zero} gives exactly the
+source-facing forward implication: positive semidefinite rings, nonzero trace
+at every positive length, and the Definition~4.1 local renormalization
+equations imply literal ZCL and SAL. The convenience theorem
+\leanid{MPOTensor.isSourceZCL_and_isSAL_of_isRFPViaTS_of_trace_ne_zero}
+records the broader scale-invariant ZCL corollary and is not used as the
+paper-facing statement.
 
 \section{Horizontal specialization}
 
-The declarations
-\leanid{MPOTensor.isSAL_of_isRFPViaTS} and
-\leanid{MPOTensor.isSourceZCL_and_isSAL_of_isRFPViaTS} are specializations of
-the two explicit-trace theorems. Their normalized BNT-refined horizontal
+The declaration \leanid{MPOTensor.isSAL_of_isRFPViaTS} is the horizontal SAL
+specialization. Together with the same literal theorem
+\leanid{MPOTensor.physTraceTransfer_sq_of_isRFPViaTS}, it yields the
+paper-facing horizontal corollary. The convenience declaration
+\leanid{MPOTensor.isSourceZCL_and_isSAL_of_isRFPViaTS} packages the broader
+scale-invariant conclusion. The normalized BNT-refined horizontal
 hypothesis is stronger than the density-family boundary above. It supplies
 \[
   \operatorname{tr}\rho^{(N)}(M)\neq0
@@ -129,11 +136,15 @@ proposition is stated and proved at its actual density-operator normalization
 boundary, while horizontal form gives a stronger sufficient condition for that
 boundary.
 
-\paragraph{Classification: closed.}
+\paragraph{Classification: boundary condition.}
 Proposition \texttt{propsimple} is complete at the explicit nonzero-trace
-density-family boundary. Theorem~4.9 remains partial for independent reasons:
-the reverse and intermediate implications still include the commuting-form,
-selected-tensor comparison, and false Lemma~C.5 obstructions. No simplicity
-hypothesis is used in the completed forward implication.
+density-family boundary. Theorem~4.9 is partial and partly refuted for
+independent reasons. The normal Case-I form of Lemma~C.5 is complete, while the
+Case-II passage after coefficient absorption remains a missing statement with
+proof-path drift. Separately, unequal raw repeated-copy weights refute the
+literal implication (iv)$\Rightarrow$(v). The viable source
+(ii)$\Rightarrow$(v) route remains open after ZCL-derived common-weight
+absorption and projector-controlled channel assembly. No simplicity hypothesis
+is used in the completed forward implication.
 
 \end{document}

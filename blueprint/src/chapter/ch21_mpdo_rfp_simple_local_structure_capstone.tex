@@ -959,6 +959,57 @@ This is the calculation in
     normal.
 \end{proof}
 
+% The declaration below packages explicit component witnesses for every
+% standing hypothesis used in CPSV16 Theorem 4.9, rather than only the scalar
+% obstruction in thm:mpdo_caseii_absorption_not_normal.
+\begin{theorem}[Counterexample to the printed implication (iv)$\Rightarrow$(v)]
+    \label{thm:mpdo_theorem49_iv_to_v_counterexample}
+    \lean{MPOTensor.CaseIIAbsorptionCounterexample.printed_theorem49_iv_to_v_is_false}
+    \leanok
+    \uses{def:mpdo_two_site_blocking, def:is_rfp_via_ts,
+        def:mpdo_neighboring_trace_factorization, def:sector_bnt_cf}
+    There is a one-letter matrix product density operator $K$ whose BNT
+    canonical presentation has one scalar normal representative $A=1$ and two
+    copies with raw weights
+    \begin{align}
+        \mu_{0,0}&=1,
+        &\mu_{0,1}&=\frac12.
+        \notag
+    \end{align}
+    The presentation satisfies the global unit-weight normalization, $K$
+    generates positive semidefinite operators at every positive length, and
+    the physical-trace transfer of $A$ is nonnilpotent. Thus $K$ satisfies the
+    simplicity clause. The singleton BNT family has simultaneous one-letter
+    span, so the presentation is in biCF. Moreover, $A$ itself generates
+    matrix product density operators, the distinct-layer equation in
+    condition~(iv) holds, and $A$ has a physical-sector factorization with
+    positive neighboring operator and normalized rank-one trace coefficients.
+    Its two-site blocking also generates matrix product density operators.
+    Nevertheless,
+    \begin{align}
+        \neg\operatorname{RFP}\bigl(K^{[2]}\bigr).
+        \notag
+    \end{align}
+    Consequently the literal implication (iv)$\Rightarrow$(v) printed in
+    \cite[Theorem~4.9]{Cirac2016MPDO_arXiv} is false.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    The sole local matrix of $K$ is the two-copy block diagonal matrix with
+    eigenvalues $1$ and $1/2$. Hence every periodic contraction equals
+    $1+2^{-N}>0$. All assertions about the scalar representative reduce to
+    the one-by-one identity matrix; orthogonality is vacuous because there is
+    only one BNT representative. If $K^{[2]}$ satisfied
+    Definition~\ref{def:is_rfp_via_ts}, trace preservation would make its
+    physical-trace transfer idempotent. Taking traces would then give
+    \begin{align}
+        1+2^{-4}=1+2^{-2},
+        \notag
+    \end{align}
+    a contradiction.
+\end{proof}
+
 % CPSV16 Theorem 4.9 (`thm:main-simple`), lines 851--893 and Appendix C.2.
 % Provenance: source-label audit completed in issue #5917.
 % Gap: docs/paper-gaps/cpgsv17_pf_rank_one.tex.
@@ -970,7 +1021,8 @@ This is the calculation in
         def:mpdo_source_gsnnch, def:mpo_source_zcl,
         thm:mpdo_sal_zcl_bnt_sector_structure,
         thm:mpdo_sal_zcl_blocking_channels,
-        thm:mpdo_caseii_absorption_not_normal}
+        thm:mpdo_caseii_absorption_not_normal,
+        thm:mpdo_theorem49_iv_to_v_counterexample}
     Let $K$ be a simple tensor in block-injective canonical form with a basis
     of normal tensors, and let $M=K^{[2]}$.  According to
     \cite[Theorem~4.9]{Cirac2016MPDO_arXiv},
@@ -993,17 +1045,29 @@ This is the calculation in
     normalization does not imply $|\mu_s|=1$ for every sector.
     Theorem~\ref{thm:mpdo_caseii_absorption_not_normal} shows that this
     absorbed-sector normality route is false under the encoded normalization
-    hypotheses. A proof of the implication therefore requires either
-    strengthened hypotheses or an alternative factorization argument that does
-    not use absorbed-sector normality. This obstruction concerns the printed
-    proof route and does not refute Theorem~4.9 itself.
+    hypotheses. Thus implication (ii)$\Rightarrow$(iv) remains a missing
+    statement and the printed normality argument has proof-path drift.
+
+    Independently, Theorem~\ref{thm:mpdo_theorem49_iv_to_v_counterexample}
+    exhibits explicit component witnesses for every standing hypothesis and
+    all clauses of condition~(iv), but fails condition~(v). Hence the literal implication
+    (iv)$\Rightarrow$(v) is refuted and is an unfaithful statement. The viable
+    channel route in Appendix~C.2 is instead (ii)$\Rightarrow$(v): lines
+    1646--1665 first use zero correlation length to make all repeated-copy
+    weights of each BNT representative equal and absorb their common value.
+    After that normalization, the remaining missing statement is the
+    projector-controlled assembly of the Proposition~C.7 channel pairs.
+    Proposition~C.7 starts from one physical-sector factorization of the whole
+    tensor. Separate factorizations of its BNT elements do not by themselves
+    provide the projector-controlled combination required here.
 \end{theorem}
 
 % CPSV16 Examples 4.10--4.12, lines 897--942.
 % Tracking: issues #5984, #6301, and #6302; Example 4.12 remains under #5919.
 % Entropy corrections: docs/paper-gaps/cpsv16_examples_4_10_4_11_entropy.tex.
 % Example 4.11's literal finite periodic family is now proved to fail both SAL
-% and source-facing ZCL. Example 4.12 RFP maps remain open.
+% and source-facing ZCL. Example 4.12's normalized RFP maps and full GSNNCH
+% exclusion remain open.
 \begin{theorem}[Printed mixed-state separation examples]
     \label{thm:cpsv_examples410_412_status}
     \notready
@@ -1054,10 +1118,13 @@ This is the calculation in
     correlation length, is not of the simple commuting form, and is nevertheless
     a renormalization fixed point.  The literal printed tensor is unnormalized:
     its physical-trace transfer squares to twice itself, whereas trace-preserving
-    refinement would force literal idempotence.  Thus the fixed-point assertion
-    is false for the literal representative.  The tensor $(1/2)M$ is the likely
+    refinement would force literal idempotence. Thus the fixed-point assertion
+    is false for the literal representative. The paper's literal ZCL assertion
+    likewise fails for that representative. The tensor $(1/2)M$ is the likely
     intended correction, but its trace-preserving completely positive maps
-    remain unconstructed.
+    remain unconstructed. The claimed exclusion from the full GSNNCH class
+    also remains open; comparing parity at different chain lengths is
+    insufficient because its commuting realization may depend on $N$.
 \end{theorem}
 
 % CPSV16 Example 4.11, lines 907--924.
@@ -1659,7 +1726,7 @@ This is the calculation in
     cut.
 \end{proof}
 
-\begin{theorem}[Scale-two ZCL and the literal RFP obstruction]
+\begin{theorem}[Scale-two transfer relation and the literal ZCL--RFP obstruction]
     \label{thm:cpsv_example412_literal_zcl_rfp_gap}
     \lean{MPOTensor.CPSVExample412Literal.physTraceTransfer_M,
         MPOTensor.CPSVExample412Literal.physTraceTransfer_M_sq,
@@ -1677,10 +1744,12 @@ This is the calculation in
         \mathcal T_M^2=2\mathcal T_M\ne\mathcal T_M.
         \notag
     \end{align}
-    Hence the literal representative has source zero correlation length with
-    scale $2$, but it cannot satisfy the trace-preserving fixed-representative
-    condition.  The tensor $(1/2)M$ is the likely intended correction, but its
-    trace-preserving completely positive maps remain unconstructed.
+    Hence the literal representative satisfies the project's scale-invariant
+    source-ZCL relation with scale $2$, but it fails the paper's literal
+    Definition~4.2 equation. It also cannot satisfy the trace-preserving
+    fixed-representative condition. The tensor $(1/2)M$ is the likely intended
+    RFP correction, but its trace-preserving completely positive maps remain
+    unconstructed.
 \end{theorem}
 \begin{proof}\leanok
     The transfer calculation is immediate from the two diagonal physical
@@ -1693,8 +1762,10 @@ This is the calculation in
 % **All-sector Case-II boundary:**
 % Analytic inheritance is complete for every absorbed BNT representative.
 % The explicit bond-one construction formally refutes preservation of
-% normality under the source's global weight convention. The final structural
-% implication remains not ready; this does not refute Theorem 4.9.
+% normality under the source's global weight convention. Hence implication
+% (ii)=>(iv) remains a missing statement with proof-path drift. Independently,
+% thm:mpdo_theorem49_iv_to_v_counterexample refutes the literal implication
+% (iv)=>(v).
 % Documented in
 % docs/paper-gaps/cpgsv17_pf_rank_one.tex.
 \begin{theorem}[BNT sector structure from SAL and ZCL (all-sector Case-II boundary)]
@@ -1704,7 +1775,8 @@ This is the calculation in
         thm:mpdo_sal_bnt_separating_projectors,
         thm:mpdo_absorbed_bnt_sector_caseii_analytic_properties,
         cor:mpdo_sal_zcl_local_sector_structure,
-        thm:mpdo_caseii_absorption_not_normal}
+        thm:mpdo_caseii_absorption_not_normal,
+        thm:mpdo_theorem49_iv_to_v_counterexample}
     Let $K$ be a simple tensor in block-injective canonical form (biCF),
     equipped with a basis-of-normal-tensors decomposition. Suppose that $K$
     satisfies the strong area law and literal zero correlation length,
@@ -1739,8 +1811,11 @@ This is the calculation in
     weights $(1/\sqrt2,1)$, literal ambient physical-trace idempotence, and a
     first absorbed transfer radius equal to $1/2$. Therefore the printed
     assertion that absorption preserves normality is false. The claimed
-    all-sector conclusion would instead require stronger assumptions or a
-    factorization argument that does not pass through absorbed-sector
-    normality. The counterexample isolates this failed intermediate assertion
-    and does not contradict the final implication of Theorem~4.9.
+    all-sector conclusion would instead require an alternative factorization
+    argument that does not pass through absorbed-sector normality. This is a
+    missing statement in implication (ii)$\Rightarrow$(iv), with proof-path
+    drift in the printed argument. It is distinct from the literal implication
+    (iv)$\Rightarrow$(v), which is refuted by
+    Theorem~\ref{thm:mpdo_theorem49_iv_to_v_counterexample} because condition
+    (iv) does not constrain unequal raw repeated-copy weights.
 \end{theorem}

@@ -31,8 +31,8 @@ closed MPO vanishes.
   simplicity.
 * `MPOTensor.SimpleVanishingCounterexample.M_not_isNonvanishingSourceSimple`: failure of the
   strengthened positive-length nonvanishing interface.
-* `M_isSimple_and_isSourceSimple_and_not_isNonvanishingSourceSimple`: the three
-  conclusions stated together.
+* `M_isSimple_and_isSourceSimple_and_not_isNonvanishingSourceSimple`: deprecated
+  transition theorem stating the three preceding conclusions together.
 -/
 
 open scoped Matrix BigOperators ComplexOrder
@@ -275,6 +275,9 @@ theorem M_not_isNonvanishingSourceSimple : ¬ IsNonvanishingSourceSimple M := by
 satisfy the additional positive-length nonvanishing condition.
 
 Source predicate: arXiv:1606.00608, Definition 4.7, lines 815--822. -/
+@[deprecated
+  "Use `M_isSimple`, `M_isSourceSimple`, and `M_not_isNonvanishingSourceSimple`."
+  (since := "2026-08-20")]
 theorem M_isSimple_and_isSourceSimple_and_not_isNonvanishingSourceSimple :
     IsSimple M ∧ IsSourceSimple M ∧ ¬ IsNonvanishingSourceSimple M :=
   ⟨M_isSimple, M_isSourceSimple, M_not_isNonvanishingSourceSimple⟩

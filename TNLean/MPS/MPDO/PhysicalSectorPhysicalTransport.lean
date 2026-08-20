@@ -8,14 +8,15 @@ import TNLean.MPS.MPDO.PhysicalSectorCoordinateTransport
 /-!
 # Transport of the blocked physical-sector fixed point
 
-This file transports the two-site blocked fixed-point channels from the
-sector coordinates of Proposition C.7 back to the original physical tensor.
+This file transports the two-site blocked fixed-point channels from one
+supplied sector factorization of Proposition C.7 back to the original physical
+tensor.
 
 ## References
 
 * [Cirac--Perez-Garcia--Schuch--Verstraete 2017] arXiv:1606.00608,
-  Theorem 4.9, direction (iv) implies (v), and Appendix C.2, lines 1510--1563
-  and 1821--1825
+  Proposition C.7, Appendix C.2, lines 1510--1563, and the twice-applied
+  channel observation at lines 1821--1825
 -/
 
 open scoped Matrix
@@ -228,14 +229,22 @@ physical isometry of Proposition C.7.
 zero-weight preparation branch. Documented in
 `docs/paper-gaps/cpgsv17_mpdo_zero_weight_preparation_completion.tex`.
 
-**Local fix (implication label):** Appendix line 1824 labels this construction
-as direction (iii) implies (v), while the theorem statement and the local
-structure used here give direction (iv) implies (v). Documented in
+**Local fix (cyclic implication labels):** Appendix lines 1822--1824 assign the
+wrong conditions to the four propositions used in the closing proof. This
+theorem instead follows the one-factorization construction of Proposition C.7
+and the twice-applied channel observation at lines 1821--1825. Documented in
 `docs/paper-gaps/cpgsv17_mpdo_theorem_4_9_implication_label.tex`.
 
-Source: arXiv:1606.00608, Definition 4.1, lines 645--659; Theorem 4.9,
-direction (iv) implies (v), lines 851--893; and Appendix C.2, lines 1510--1563
-and 1821--1825. -/
+**Scope restriction (single supplied factorization):** this theorem constructs
+the channels for one `PhysicalSectorFactorization` and its neighboring trace
+data. Theorem 4.9(iv) supplies such data separately for each outer BNT element;
+assembling the resulting channels by the mutually orthogonal outer physical
+supports is a further, currently unproved step. Documented in
+`docs/paper-gaps/cpgsv17_pf_rank_one.tex`.
+
+Source: arXiv:1606.00608, Definition 4.1, lines 645--659; Proposition C.7,
+lines 1510--1563; and the twice-applied channel observation at lines
+1821--1825. -/
 theorem NeighboringTraceFactorization.blockTwo_isRFPViaTS
     (H : NeighboringTraceFactorization F) : IsRFPViaTS (blockTwo K) := by
   rcases H.blockTwo_sectorCoordinateTensor_isRFPViaTS with
