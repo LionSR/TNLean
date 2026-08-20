@@ -260,6 +260,54 @@ matrices, and let $\E_K$ be its Kraus map.
     $\operatorname{ran}P$, hence $P=\Id$.
 \end{proof}
 
+\begin{lemma}[Hermitian power-fixed point from a peripheral eigenvector]
+    \label{lem:hermitian-power-fixed-point}
+    \lean{MPSTensor.exists_hermitian_ne_zero_trace_zero_pow_fixedPoint}
+    \leanok
+    \uses{def:transfer_map}
+    Let $A$ be a normalized MPS tensor, and suppose
+    $\E_A(X)=\mu X$ with $X\neq0$, $\mu\neq1$, and $\mu^p=1$. Then there is a
+    nonzero Hermitian matrix $H$ such that
+    \begin{align}
+        \tr(H)
+         & =0,
+        \notag\\
+        \E_A^p(H)
+         & =H.
+        \notag
+    \end{align}
+    Moreover, $H$ is not positive semidefinite.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{lem:pow-on-eigenspace}
+    Trace preservation and $\mu\neq1$ give $\tr(X)=0$. At least one of
+    $X+X^\dagger$ and $i(X^\dagger-X)$ is nonzero. Choose that Hermitian part
+    as $H$. Conjugation preserves the eigenvector equation, and
+    Lemma~\ref{lem:pow-on-eigenspace} together with $\mu^p=1$ shows that $H$
+    is fixed by $\E_A^p$. A nonzero positive-semidefinite matrix has positive
+    trace, so $H$ is not positive semidefinite.
+\end{proof}
+
+\begin{theorem}[Uniqueness of power-fixed positive matrices]
+    \label{thm:mps-power-fixed-point-unique-from-spreading}
+    \lean{MPSTensor.posSemidef_pow_fixedPoint_unique_of_isPrimitivePaper}
+    \leanok
+    \uses{def:transfer_map, def:vector_spread_span}
+    Suppose there is a length $q\geq0$ such that
+    $H_q(A,\varphi)=\C^D$ for every nonzero $\varphi\in\C^D$. Let $p>0$.
+    If $\rho$ and $\sigma$ are nonzero positive-semidefinite fixed points of
+    $\E_A^p$, then $\sigma=c\rho$ for some $c\in\C$.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:kraus_power_fixed_point_posdef_from_spreading,
+        thm:posdef_fixedpoint_proportional}
+    The spreading hypothesis makes $\rho$, $\sigma$, and every nonzero
+    positive-semidefinite fixed point of $\E_A^p$ positive definite. Apply
+    Theorem~\ref{thm:posdef_fixedpoint_proportional}.
+\end{proof}
+
 \begin{theorem}[Positive-definite fixed point from vector spreading]
     \label{thm:kraus_posdef_fixed_point_from_tp_spreading}
     \lean{Kraus.exists_posDef_fixedPoint_of_isTP_of_vectorSpreadSpan_eq_top}
