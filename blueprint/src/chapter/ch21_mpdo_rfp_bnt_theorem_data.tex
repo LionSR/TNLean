@@ -1278,17 +1278,32 @@
     (\ref{eq:mpdo_bnt_conditional_scalar_gram}).
 \end{proof}
 
+\begin{theorem}[Normalization of conjugation by a scalar Gram matrix]
+    \label{thm:normalized_conjugation_of_scalar_gram}
+    \lean{Matrix.normalized_conj_eq_conj_inv_of_gram_eq_smul_one}
+    \leanok
+    If an invertible matrix $Z$ satisfies
+    $Z^\dagger Z=\omega\Id$ with $\omega>0$, then conjugation by
+    $\omega^{-1/2}Z$ equals conjugation by $Z$.
+\end{theorem}
+
+\begin{proof}\leanok
+    The Gram identity identifies $Z^{-1}$ with
+    $\omega^{-1}Z^\dagger$; the scalar factors cancel in the conjugation.
+\end{proof}
+
 \begin{theorem}[Conditional unitary conjugacy from the positive-tail reflected
     target]
     \label{thm:mpdo_bnt_conditional_identity_marked_unitary_conjugacy}
-    \lean{Matrix.normalized_conj_eq_conj_inv_of_gram_eq_smul_one}
     \lean{MPOTensor.BNTAlgebraTensorClause.TwoSiteExactSectorGauge.%
         exists_unitary_sector_conjugacy_of_gauge_gram_eq_pos_smul_one}
     \lean{MPOTensor.BNTAlgebraTensorClause.TwoSiteExactSectorGauge.%
         exists_unitary_sector_conjugacy_of_positive_tail_reflected_target}
     \leanok
     \uses{def:mpdo, def:cpsv_canonical_form,
-        def:mpdo_bnt_two_site_exact_sector_gauge}
+        def:mpdo_bnt_two_site_exact_sector_gauge,
+        thm:normalize_scalar_gram_matrix,
+        thm:normalized_conjugation_of_scalar_gram}
     Under the hypotheses of the preceding conditional theorem, define
     \begin{align}
         U_\gamma&=\omega_\gamma^{-1/2}Z_\gamma.
@@ -1318,7 +1333,9 @@
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:mpdo_bnt_conditional_identity_marked_gram}
+    \uses{thm:mpdo_bnt_conditional_identity_marked_gram,
+        thm:normalize_scalar_gram_matrix,
+        thm:normalized_conjugation_of_scalar_gram}
     The preceding theorem gives
     $Z_\gamma^\dagger Z_\gamma=\omega_\gamma\Id$ with
     $\omega_\gamma>0$.  Therefore
