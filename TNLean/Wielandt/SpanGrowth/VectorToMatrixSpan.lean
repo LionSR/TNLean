@@ -96,7 +96,10 @@ theorem vectorSpreadSpan_eq_top_of_cumulativeVectorSpan_eq_top_of_eigenvector
   Kraus.vectorSpreadSpan_eq_top_of_cumulativeVectorSpan_eq_top_of_eigenvector
     A φ n i₀ μ hμ heig htop
 
-/-- Vector spanning and a basis of rank-one operators imply full matrix spanning. -/
+/-- Vector spanning and a basis of rank-one operators imply full matrix spanning.
+
+The channel-generic statement `Kraus.wordSpan_eq_top_of_vectorSpreadSpan_eq_top_of_rankOneBasis`
+records the connection with arXiv:0909.5347, Lemma 2(b). -/
 theorem wordSpan_eq_top_of_vectorSpreadSpan_eq_top_of_rankOneBasis
     (A : MPSTensor d D) (φ : Fin D → ℂ) {n m : ℕ}
     (hVec : vectorSpreadSpan A φ n = ⊤)
