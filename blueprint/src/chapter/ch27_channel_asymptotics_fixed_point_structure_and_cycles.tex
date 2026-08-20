@@ -372,6 +372,47 @@ This section collects criteria and equivalences from
 completely positive exponential characterization corresponding to Wolf's
 Theorem~6.2 appears in Theorem~\ref{thm:wolf_6_2_item_3}.
 
+\begin{definition}[Exact Kraus word spans]
+    \label{def:kraus_exact_word_span}
+    \lean{Kraus.wordSpan}
+    \leanok
+    For a finite Kraus family $K_0,\ldots,K_{d-1}\in\MN{D}$ and
+    $N\in\mathbb N$, define
+    \begin{align}
+        S_N(K)&=\Span\{K_{i_1}\cdots K_{i_N}:0\leq i_j<d\}.
+        \notag
+    \end{align}
+    The empty product is the identity matrix.
+\end{definition}
+
+\begin{definition}[Eventually full exact word spans]
+    \label{def:kraus_eventually_full_word_span}
+    \lean{Kraus.HasEventuallyFullWordSpan}
+    \leanok
+    A finite Kraus family has eventually full word span when
+    $S_N(K)=\MN{D}$ for all sufficiently large $N$.
+\end{definition}
+
+\begin{theorem}[Upward closure of full word spans]
+    \label{thm:kraus_word_span_upward_tp}
+    \lean{Kraus.wordSpan_eq_top_of_ge_of_isTP,
+        Kraus.hasEventuallyFullWordSpan_iff_exists_pos_of_isTP}
+    \leanok
+    \uses{def:kraus_exact_word_span,def:kraus_eventually_full_word_span}
+    Let $K$ be trace preserving. If $S_N(K)=\MN{D}$ and $m\geq N$, then
+    $S_m(K)=\MN{D}$. Consequently, eventual fullness is equivalent to the
+    existence of a positive $N$ such that $S_N(K)=\MN{D}$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    From $\sum_iK_i^\dagger K_i=\Id$, every $X\in\MN{D}$ satisfies
+    $X=\sum_i(XK_i^\dagger)K_i$. Hence $S_n(K)=\MN{D}$ implies
+    $S_{n+1}(K)=S_n(K)S_1(K)=\MN{D}$. Induction proves upward closure.
+    The stated equivalence follows by choosing one positive sufficiently
+    large level in one direction and applying upward closure in the other.
+\end{proof}
+
 \begin{theorem}[Kraus-span equivalence]%
     \label{thm:wolf_6_8_kraus_span}
     \lean{MPSTensor.wolf_theorem_6_8_kraus_span}
