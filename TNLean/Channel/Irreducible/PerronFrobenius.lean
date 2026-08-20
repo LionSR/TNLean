@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.Channel.Irreducible.FixedPointUniqueness
-import TNLean.Channel.Irreducible.Growth
+import TNLean.Channel.Irreducible.Growth.OneStep
 import TNLean.Channel.Irreducible.KrausSetup
 import TNLean.Channel.Irreducible.Scaling
 
@@ -16,8 +16,6 @@ positive maps on `M_D(ℂ)` needed for Wolf's Theorem 6.3, items 2 and 3.
 
 ## Main results
 
-* `posDef_of_posSemidef_eigenvector_irreducible_cp`:
-  nonzero PSD eigenvectors with positive eigenvalue are positive definite.
 * `exists_posDef_eigenvector_of_irreducible_cp`:
   every nonzero irreducible CP map admits a positive-definite eigenvector with
   positive eigenvalue.
@@ -36,29 +34,6 @@ open scoped Matrix MatrixOrder Pointwise ComplexOrder BigOperators
 open Matrix Finset
 
 variable {D : ℕ}
-
-/-! ## PSD eigenvector → PosDef (Wolf 6.3(2), upgrade) -/
-
-/-- **PSD eigenvectors of irreducible CP maps are PosDef** (Wolf Theorem 6.3(2)).
-
-If `E` is an irreducible CP map and `E ρ = r • ρ` with `ρ` PSD nonzero and
-`r > 0`, then `ρ` is positive definite.
-
-The key observation is that `E ρ = r • ρ` with `r > 0` implies
-`ker(ρ) = ker(E(ρ))` (since `ker(r • ρ) = ker(ρ)`). By
-`posDef_of_ker_subset_irreducible_cp`, the inclusion `ker(ρ) ⊆ ker(E(ρ))`
-under irreducible CP forces `ρ` to be PosDef. -/
-theorem posDef_of_posSemidef_eigenvector_irreducible_cp
-    (E : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ)
-    (hCP : IsCPMap E) (hIrr : IsIrreducibleMap E)
-    (ρ : Matrix (Fin D) (Fin D) ℂ) (r : ℝ)
-    (hρ_psd : ρ.PosSemidef) (hρ_ne : ρ ≠ 0) (_ : 0 < r)
-    (hEig : E ρ = (r : ℂ) • ρ) :
-    ρ.PosDef := by
-  apply posDef_of_ker_subset_irreducible_cp E hCP hIrr ρ hρ_psd hρ_ne
-  -- Show ker(ρ) ⊆ ker(E(ρ)): since E(ρ) = r • ρ, (E ρ) *ᵥ v = r • (ρ *ᵥ v) = 0
-  intro v hv
-  rw [hEig, Matrix.smul_mulVec, hv, smul_zero]
 
 /-! ## Existence of PosDef eigenvector (Wolf 6.3(2), existence) -/
 

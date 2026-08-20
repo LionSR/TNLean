@@ -24,6 +24,8 @@ i.e. $A$ is positive definite.
 
 * `posDef_of_ker_subset_irreducible_cp` — structural one-step lemma used in the
   dimension-descent proof of the growth condition.
+* `posDef_of_posSemidef_eigenvector_irreducible_cp` — nonzero PSD eigenvectors
+  with positive eigenvalue are positive definite.
 
 ## References
 
@@ -247,5 +249,28 @@ theorem posDef_of_ker_subset_irreducible_cp
   rcases hQ_zero_or_one with h | h
   · exact hQ_ne_zero h
   · exact hQ_ne_one (by convert h)
+
+/-! ## PSD eigenvector → PosDef (Wolf 6.3(2), upgrade) -/
+
+/-- **PSD eigenvectors of irreducible CP maps are PosDef** (Wolf Theorem 6.3(2)).
+
+If `E` is an irreducible CP map and `E ρ = r • ρ` with `ρ` PSD nonzero and
+`r > 0`, then `ρ` is positive definite.
+
+The key observation is that `E ρ = r • ρ` with `r > 0` implies
+`ker(ρ) = ker(E(ρ))` (since `ker(r • ρ) = ker(ρ)`). By
+`posDef_of_ker_subset_irreducible_cp`, the inclusion `ker(ρ) ⊆ ker(E(ρ))`
+under irreducible CP forces `ρ` to be PosDef. -/
+theorem posDef_of_posSemidef_eigenvector_irreducible_cp
+    (E : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ)
+    (hCP : IsCPMap E) (hIrr : IsIrreducibleMap E)
+    (ρ : Matrix (Fin D) (Fin D) ℂ) (r : ℝ)
+    (hρ_psd : ρ.PosSemidef) (hρ_ne : ρ ≠ 0) (_ : 0 < r)
+    (hEig : E ρ = (r : ℂ) • ρ) :
+    ρ.PosDef := by
+  apply posDef_of_ker_subset_irreducible_cp E hCP hIrr ρ hρ_psd hρ_ne
+  -- Show ker(ρ) ⊆ ker(E(ρ)): since E(ρ) = r • ρ, (E ρ) *ᵥ v = r • (ρ *ᵥ v) = 0
+  intro v hv
+  rw [hEig, Matrix.smul_mulVec, hv, smul_zero]
 
 end OneStep
