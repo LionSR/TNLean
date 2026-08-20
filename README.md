@@ -42,6 +42,10 @@ the fundamental-theorem part that is being released first. The generated
 [API documentation](https://lionsr.github.io/TNLean/docs/) covers every
 declaration in the Lean source.
 
+New to the repository? [`docs/getting_started.md`](docs/getting_started.md)
+walks through building the library, finding your way around the source, and
+making a first contribution.
+
 The agent-driven workflow used to build this library is described in the
 companion paper: S. Lu, E. Tjoa, J. I. Cirac, *Multi-agent Autoformalization
 of Tensor Network Theory*,
