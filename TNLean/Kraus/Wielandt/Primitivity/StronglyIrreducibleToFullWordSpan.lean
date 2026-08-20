@@ -132,11 +132,10 @@ private theorem sum_normSq_trace_conjTranspose_mul_evalWord
   exact congrArg Complex.re hcomplex
 
 
-/-! ### Part 1: RHS bilinear form computation
+/-! ### Fixed-point projection computation
 
-We show that the trace-pairing RHS, when evaluated at the fixed-point projection
-`P_ρ`, equals `tr(B† ρ B) / tr(ρ)`.  This is the limiting value of the
-trace-pairing identity as `E^n → P_ρ`. -/
+We show that the trace-pairing form, when evaluated at the fixed-point projection
+`P_ρ`, equals `tr(B† ρ B) / tr(ρ)`. This is its limiting value as `E^n → P_ρ`. -/
 
 /-- The bilinear form from the trace-pairing identity, evaluated at a linear map `F`.
 This extracts the complex number `∑_{i,k} (B† · F(e_{ik}) · B)_{ik}`. -/
@@ -186,24 +185,20 @@ private theorem tracePairBilin_fixedPointProj [NeZero D]
       Matrix.trace (Bᴴ * ρ * B) / Matrix.trace ρ
   ring
 
-/-! ### Part 2: Nondegeneracy of the PosDef inner product
+/-! ### Full word span from uniform positivity
 
-`tr(B† ρ B) > 0` when `ρ` is positive definite and `B ≠ 0`. -/
+The proof uses the following channel-native argument:
 
-/-! ### Part 3: Main theorem — strong irreducibility → eventually full Kraus rank
+1. Irreducibility supplies a positive-definite fixed density matrix `ρ` for `mapLM K`.
+2. Primitivity makes every eigenvalue of the complementary map `mapLM K - P_ρ`
+   have norm strictly less than one, so its powers tend to zero.
+3. If `wordSpan K n ≠ ⊤`, a nonzero dual functional annihilates every word of
+   length `n`; the trace-pairing identity then vanishes on a corresponding nonzero matrix.
+4. A compactness argument gives a uniform positive lower bound for the fixed-point
+   contribution, which eventually dominates the complementary contribution.
 
-The proof follows the paper's contradiction argument:
-1. From strong irreducibility, derive `IsPrimitiveMPS A ρ` with `ρ.PosDef`.
-2. If `wordSpan K n ≠ ⊤` for all `n`, then for each `n` there exists `B_n ≠ 0`
-   orthogonal to all words of length `n`.
-3. The trace-pairing identity gives `tracePairBilin(E^n)(B_n).re = 0`.
-4. But `E^n → P_ρ`, so the RHS converges to `tr(B_n† ρ B_n) / tr(ρ) > 0`.
-5. The contradiction finishes the proof. -/
-
-/-! ### Part 4: Uniform positivity lemmas
-
-These two lemmas set up the final compactness/uniform-positivity argument for the
-main theorem `hasEventuallyFullKrausRank_of_isStronglyIrreduciblePaper`.
+The next two lemmas provide the span criterion and the uniform error estimate
+used in `hasEventuallyFullWordSpan_of_isPrimitive_irreducible`.
 
 **Lemma A** (`wordSpan_eq_top_of_tracePairBilin_re_pos`): if the trace-pairing
 bilinear form `Q_{E^n}(B).re > 0` for every nonzero `B`, then `wordSpan K n = ⊤`.
@@ -212,7 +207,7 @@ This is the "nondegeneracy → full span" direction.
 **Lemma B** (`norm_tracePairBilin_le`): operator-norm bound on the bilinear form:
 `‖Q_F(B)‖ ≤ D² · ‖Bᴴ‖ · ‖Φ(F)‖ · ‖B‖`,
 where `Φ = Module.End.toContinuousLinearMap` and `‖·‖` is the `l∞`-operator norm
-(the scoped norm in the `MPSTensor` namespace via `TransferOperatorGap.lean`).
+(the scoped norm supplied by `TNOperatorSpace`).
 This bounds the error term `Q_{(E − P_ρ)^n}(B)` uniformly. -/
 
 section UniformPositivity
@@ -328,9 +323,9 @@ private theorem wordSpan_eq_top_of_tracePairBilin_re_pos
 
 /-! #### Lemma B: operator-norm bound on the bilinear form
 
-The norm on `Matrix (Fin D) (Fin D) ℂ` in the `MPSTensor` namespace is the
-`l∞`-operator norm (scoped instance from `TransferOperatorGap.lean`), under which
-matrix multiplication is submultiplicative (`norm_mul_le`).  We prove entry
+The `TNOperatorSpace` norm on `Matrix (Fin D) (Fin D) ℂ` is the
+`l∞`-operator norm, under which matrix multiplication is submultiplicative
+(`norm_mul_le`). We prove entry
 bounds and single-matrix norm bounds directly for this norm. -/
 
 /-- Entry bound for the `l∞`-operator norm: `‖M i j‖ ≤ ‖M‖`.
@@ -451,8 +446,8 @@ private theorem norm_tracePairBilin_le [NeZero D]
 
 /-! #### Step C: Compactness-based uniform lower bound
 
-The **quadratic form** `B ↦ tr(B† ρ B).re` is positive definite when `ρ.PosDef`
-(Part 5 above). Using **compactness of the unit sphere** in the finite-dimensional
+The **quadratic form** `B ↦ tr(B† ρ B).re` is positive definite when `ρ.PosDef`.
+Using **compactness of the unit sphere** in the finite-dimensional
 matrix space, we upgrade pointwise positivity to a uniform lower bound
 `c * ‖B‖² ≤ tr(B† ρ B).re` for some `c > 0`. -/
 
@@ -568,13 +563,10 @@ private theorem trace_conjTranspose_posDef_mul_lower [NeZero D]
 
 end UniformPositivity
 
-/-! ### Part 5: Final construction — (c) → (b)
+/-! ### Primitive irreducible maps have eventually full word span
 
-Combining the trace-pairing identity (Part 1), primitivity implication (Part 2),
-convergence (Part 3), trace-pairing computation (Part 4), PosDef nondegeneracy
-(Part 5), word-span positivity criterion (Lemma A), operator-norm bound (Lemma B),
-and compactness lower bound (Step C), we prove the main theorem:
-strong irreducibility implies eventually full Kraus rank. -/
+The fixed-point decomposition, trace-pairing identity, compactness lower bound,
+and operator-norm error estimate combine to prove the main theorem. -/
 
 section FinalConstruction
 

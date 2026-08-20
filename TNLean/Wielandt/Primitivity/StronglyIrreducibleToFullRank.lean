@@ -8,7 +8,7 @@ import TNLean.MPS.Core.TransferChannel
 import TNLean.Wielandt.Primitivity.PrimitiveBridge
 
 /-!
-# MPS compatibility wrappers for eventual full Kraus rank
+# MPS reformulations of eventual full Kraus rank
 
 The channel-generic proof is in
 `TNLean.Kraus.Wielandt.Primitivity.StronglyIrreducibleToFullWordSpan`. This file

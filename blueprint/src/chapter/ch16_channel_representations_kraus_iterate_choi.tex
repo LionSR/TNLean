@@ -133,14 +133,19 @@ The empty product is the identity matrix.
     \lean{Kraus.hasEventuallyFullWordSpan_of_isIrreducibleMap_of_isPrimitive,
         Kraus.eventually_choiMatrix_mapLM_pow_posDef_of_isIrreducibleMap_of_isPrimitive}
     \leanok
-    \uses{def:kraus_eventually_full_word_span,
-        cor:kraus_iterate_eventual_choi_posdef}
+    \uses{def:kraus_eventually_full_word_span, def:irreducible_cp,
+        def:primitive_channel}
     Suppose that $K$ is trace preserving and that its Kraus map $E$ is
-    irreducible with peripheral spectrum $\{1\}$. Then, for every sufficiently
+    irreducible with peripheral spectrum $\{1\}$. This is the implication from
+    item~1 to items~3 and~4 of
+    \cite[Theorem~6.8(1,3,4)]{Wolf2012Quantum}. Then, for every sufficiently
     large $m$,
     \begin{align}
-        \mathcal S_m&=\MN{D},
-        &
+        \mathcal S_m&=\MN{D}.
+        \notag
+    \end{align}
+    Moreover,
+    \begin{align}
         \tau_{E^m}&>0.
         \notag
     \end{align}
@@ -148,13 +153,39 @@ The empty product is the identity matrix.
 
 \begin{proof}
     \leanok
+    \uses{cor:kraus_iterate_eventual_choi_posdef}
     Irreducibility gives a positive-definite density matrix $\rho$ fixed by
-    $E$. The complementary part
-    $E-P_\rho$, where $P_\rho(X)=\operatorname{tr}(X)\rho$, has spectral radius
-    strictly below one because the only peripheral eigenvalue of $E$ is $1$.
-    Its powers therefore converge to zero. The trace-pairing criterion then
-    gives $\mathcal S_m=\MN{D}$ at one positive length. Trace preservation
-    propagates fullness to every larger length, and
+    $E$. Put $N=E-P_\rho$, where
+    $P_\rho(X)=\operatorname{tr}(X)\rho$, and define
+    \begin{align}
+        Q_F(B)&=\sum_{i,k}(B^\dagger F(e_{ik})B)_{ik}.
+        \notag
+    \end{align}
+    For every word length $m$, expansion of the Kraus-map power gives
+    \begin{align}
+        \sum_{\sigma\in I^m}
+        \left|\operatorname{tr}(B^\dagger K_\sigma)\right|^2
+        &=\operatorname{Re}Q_{E^m}(B).
+        \notag
+    \end{align}
+    The trivial peripheral spectrum implies $\lVert N^m\rVert\to0$, while
+    $E^m=P_\rho+N^m$. Compactness of the unit sphere gives a constant
+    $\delta>0$ such that
+    \begin{align}
+        \operatorname{Re}Q_{P_\rho}(B)&\geq
+        \delta\lVert B\rVert^2,
+        \notag
+    \end{align}
+    and the operator-norm estimate gives
+    \begin{align}
+        \left|\operatorname{Re}Q_{N^m}(B)\right|&\leq
+        D^3\lVert N^m\rVert\lVert B\rVert^2.
+        \notag
+    \end{align}
+    Hence $\operatorname{Re}Q_{E^m}(B)>0$ for every nonzero $B$ and all
+    sufficiently large $m$. The trace-pairing identity then excludes a
+    nonzero functional annihilating $\mathcal S_m$, so
+    $\mathcal S_m=\MN{D}$. Finally,
     Corollary~\ref{cor:kraus_iterate_eventual_choi_posdef} gives the Choi
     statement.
 \end{proof}
