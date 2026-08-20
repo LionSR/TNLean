@@ -85,7 +85,7 @@ separate public-surface occurrence and therefore appears separately.
 | `ch21_mpdo_rfp_fusion_isometries_fixed_final_comparison.tex` | — | L572, 577 `tntree` → `C-tree` | — |
 | `ch21_mpdo_rfp_fusion_isometries_foundations.tex` | L363, 373, 608, 617, 629, 638, 650, 655 `tenkz` → `P-grid` | — | — |
 | `ch21_mpdo_rfp_fusion_isometries_product_laws.tex` | L45, 61, 65, 491 `tenkz` → `P-grid` | L603, 605 `tntree` → `C-tree` | — |
-| `ch21_mpdo_rfp_renormalization.tex` | L613, 616, 619, 622 `tenkz` → `P-grid` | — | — |
+| `ch21_mpdo_rfp_renormalization.tex` | L648, 651, 654, 657 `tenkz` → `P-grid` | — | — |
 | `ch21_mpdo_rfp_simple_local_closed_sector_contractions.tex` | L282, 288 `tenkz` → `P-grid` | — | — |
 | `ch21_mpdo_rfp_simple_local_inverse_map_factorization.tex` | L44, 49, 53, 70, 78, 130, 265, 270, 275, 282, 287, 486, 704, 710, 714 `tenkz` → `P-grid` | — | — |
 | `ch21_mpdo_rfp_simple_local_neighboring_bond_contractions.tex` | L804, 817, 825, 832, 906, 913 `tenkz` → `P-grid` | — | — |
