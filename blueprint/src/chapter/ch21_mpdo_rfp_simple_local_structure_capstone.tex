@@ -82,6 +82,31 @@
     factorization.
 \end{proof}
 
+\begin{theorem}[Blocked renormalization maps from two-to-four maps]
+    \label{thm:mpdo_block_two_rfp_of_two_four_maps}
+    \lean{MPOTensor.blockTwo_isRFPViaTS_of_two_four_maps}
+    \leanok
+    \uses{def:is_rfp_via_ts, def:mpdo_two_site_blocking}
+    Suppose that trace-preserving completely positive maps
+    $S_{24}$ and $T_{24}$ satisfy
+    \begin{align}
+        S_{24}[\mathcal K_4(X)]&=\mathcal K_2(X), &
+        T_{24}[\mathcal K_2(X)]&=\mathcal K_4(X) \notag
+    \end{align}
+    for every virtual matrix $X$. Then the two-site physical blocking
+    $K^{[2]}$ is a renormalization fixed point.
+\end{theorem}
+
+\begin{proof}\leanok
+    Identify the two-site physical space of $K$ with the one-site physical
+    space of $K^{[2]}$, and identify the four-site physical space of $K$ with
+    the two-site physical space of $K^{[2]}$. These identifications merely
+    permute orthonormal coordinates, so conjugating $S_{24}$ and $T_{24}$ by
+    them preserves complete positivity and trace preservation. The two
+    assumed closure identities then become precisely the two defining
+    renormalization identities for $K^{[2]}$.
+\end{proof}
+
 \begin{theorem}[Two-site blocking preserves renormalization maps]
     \label{thm:mpdo_rfp_via_ts_block_two}
     \lean{MPOTensor.IsRFPViaTS.blockTwo}
@@ -100,6 +125,7 @@
 
 \begin{proof}
     \leanok
+    \uses{thm:mpdo_block_two_rfp_of_two_four_maps}
     Apply $T$ twice to the first physical site, first passing from two sites to
     three and then from three sites to four. This gives a trace-preserving
     completely positive map from the two-site closure to the four-site closure.
