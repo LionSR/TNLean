@@ -8,8 +8,8 @@ import TNLean.Algebra.MatrixMulRange
 /-!
 # Compatibility names for matrix left-multiplication ranges
 
-This module provides the original `MPSTensor` names for the neutral matrix API in
-`TNLean.Algebra.MatrixMulRange`, preserving existing rectangular-span arguments.
+This module restates matrix left-multiplication range results for MPS tensors,
+preserving existing rectangular-span arguments.
 -/
 
 open scoped Matrix
