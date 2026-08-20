@@ -37,6 +37,7 @@ ENV_BEGIN_RE = re.compile(r"\\begin\{(" + "|".join(ENVIRONMENTS) + r")\}")
 ENV_END_RE = re.compile(r"\\end\{(" + "|".join(ENVIRONMENTS) + r")\}")
 PROOF_BEGIN_RE = re.compile(r"\\begin\{proof\}")
 PROOF_END_RE = re.compile(r"\\end\{proof\}")
+ENV_TOKEN_RE = re.compile(r"\\(begin|end)\{([^}]+)\}")
 LABEL_RE = re.compile(r"\\label\{([^}]+)\}")
 LEAN_RE = re.compile(r"\\lean\{([^}]*)\}", re.DOTALL)
 USES_RE = re.compile(r"\\uses\{([^}]*)\}", re.DOTALL)
@@ -236,12 +237,62 @@ def blueprint_environments(blueprint_src: Path) -> list[BlueprintEnvironment]:
     return sorted(records, key=lambda item: (item.file, item.line, item.primary_label or ""))
 
 
+def _atomic_non_item_environment_ranges(
+    source_lines: list[str], covered: set[int], relative_root: str
+) -> dict[int, int]:
+    """Return maximal balanced TeX environments that contain no item line."""
+    stack: list[tuple[str, int]] = []
+    ranges: list[tuple[int, int]] = []
+    for line_no, line in enumerate(source_lines, start=1):
+        cleaned_line = _strip_tex_comments(line)
+        for token in ENV_TOKEN_RE.finditer(cleaned_line):
+            action, environment = token.groups()
+            if action == "begin":
+                stack.append((environment, line_no))
+                continue
+            if not stack:
+                raise ValueError(
+                    f"unmatched \\end{{{environment}}} at {relative_root}:{line_no}"
+                )
+            opened, opened_line = stack.pop()
+            if opened != environment:
+                raise ValueError(
+                    f"mismatched environment at {relative_root}:{line_no}: "
+                    f"opened {opened} at line {opened_line}, closed {environment}"
+                )
+            ranges.append((opened_line, line_no))
+    if stack:
+        environment, opened_line = stack[-1]
+        raise ValueError(
+            f"unterminated environment {environment} opened at "
+            f"{relative_root}:{opened_line}"
+        )
+
+    candidates = [
+        (start, end)
+        for start, end in ranges
+        if not any(line in covered for line in range(start, end + 1))
+    ]
+    maximal: list[tuple[int, int]] = []
+    for start, end in sorted(candidates, key=lambda span: (span[0], -span[1])):
+        contained = any(
+            parent_start <= start and end <= parent_end
+            for parent_start, parent_end in maximal
+        )
+        if contained:
+            continue
+        maximal.append((start, end))
+    return dict(maximal)
+
+
 def blueprint_non_item_blocks(
     blueprint_src: Path, environments: list[BlueprintEnvironment]
 ) -> list[NonItemBlock]:
     """Partition text outside item spans into paragraph-like blocks.
 
-    Blank lines and item boundaries split blocks. Router ``\\input`` commands
+    Complete balanced TeX environments containing no item line are atomic,
+    including nested environments and blank or comment-only lines. Elsewhere,
+    blank lines and item boundaries split blocks. Router ``\\input`` commands
     are single-line blocks so each simulated output can prune them without
     pulling in every sibling chapter.
     """
@@ -262,6 +313,11 @@ def blueprint_non_item_blocks(
             covered.update(range(start, end + 1))
 
         current: list[tuple[int, str]] = []
+        atomic_ranges = (
+            _atomic_non_item_environment_ranges(source_lines, covered, relative_root)
+            if is_content_file
+            else {}
+        )
 
         def flush() -> None:
             nonlocal current
@@ -291,9 +347,22 @@ def blueprint_non_item_blocks(
             )
             current = []
 
-        for line_no, line in enumerate(source_lines, start=1):
+        line_no = 1
+        while line_no <= len(source_lines):
+            line = source_lines[line_no - 1]
             if line_no in covered:
                 flush()
+                line_no += 1
+                continue
+            atomic_end = atomic_ranges.get(line_no)
+            if atomic_end is not None:
+                flush()
+                current = [
+                    (atomic_line, source_lines[atomic_line - 1])
+                    for atomic_line in range(line_no, atomic_end + 1)
+                ]
+                flush()
+                line_no = atomic_end + 1
                 continue
             cleaned_line = _strip_tex_comments(line)
             input_match = INPUT_LINE_RE.fullmatch(cleaned_line)
@@ -309,14 +378,18 @@ def blueprint_non_item_blocks(
                         input_payload=input_match.group(1),
                     )
                 )
+                line_no += 1
                 continue
             if not is_content_file:
                 flush()
+                line_no += 1
                 continue
             if not cleaned_line.strip():
                 flush()
+                line_no += 1
                 continue
             current.append((line_no, line))
+            line_no += 1
         flush()
     return sorted(records, key=lambda item: (item.file, item.line, item.end_line))
 

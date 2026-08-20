@@ -136,13 +136,17 @@ disposition. QICLean keeps QIC items and TNLean keeps TN items at the original
 path. Retained item bytes must not change.
 
 The report also simulates the text outside item spans in chapter and appendix
-files. Blank lines and item boundaries divide that text into complete
-paragraph-like blocks. A standalone `\input` command is its own block. Build
-support files remain unchanged apart from this input filtering. A top-level
-leaf prose file with no items or inputs, such as the common introduction, stays
-on both sides. A file defining a non-item label referenced directly by a
-retained item is selected for that side, and the ordinary input ancestor closure
-is then added. This label rule does not select the other inputs of that file.
+files. A complete balanced TeX environment containing no item line is one
+atomic block, including its nested environments and all blank or comment-only
+lines. Outside such environments, blank lines and item boundaries divide the
+text into paragraph-like blocks. A standalone `\input` command is its own
+block. Build support files remain unchanged apart from this input filtering. A
+mismatched, unmatched, or unterminated TeX environment blocks the freeze. A
+top-level leaf prose file with no items or inputs, such as the common
+introduction, stays on both sides. A file defining a non-item label referenced
+directly by a retained item is selected for that side, and the ordinary input
+ancestor closure is then added. This label rule does not select the other inputs
+of that file.
 In a selected file, a non-input block is retained on the maximal set of sides on
 which all its `\ref` and `\eqref` targets resolve. An input block is retained
 exactly on the sides where its target file is selected. References from retained
