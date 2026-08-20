@@ -9,8 +9,8 @@ import TNLean.Wielandt.SpanGrowth.CumulativeSpan
 /-!
 # Bounded rank-one element in a blocked word span
 
-This file preserves the established `MPSTensor` interface to the transfer-free
-two-sided word-span results in `Kraus`.
+This file restates the `Kraus` two-sided word-span results using the `MPSTensor`
+word-span notation.
 -/
 
 open scoped Matrix
@@ -20,7 +20,7 @@ namespace MPSTensor
 variable {d D : ℕ}
 
 /-- Two-sided word span for an MPS tensor. -/
-noncomputable abbrev biRectSpan
+noncomputable def biRectSpan
     (P Q : Matrix (Fin D) (Fin D) ℂ) (B : MPSTensor d D) (n : ℕ) :
     Submodule ℂ (Matrix (Fin D) (Fin D) ℂ) :=
   Kraus.biRectSpan P Q B n
