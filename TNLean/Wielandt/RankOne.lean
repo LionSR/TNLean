@@ -13,6 +13,5 @@ import TNLean.Wielandt.RankOne.Construction
 import TNLean.Wielandt.RankOne.Element
 import TNLean.Wielandt.RankOne.Extraction
 import TNLean.Wielandt.RankOne.ExtractionFull
-import TNLean.Wielandt.RankOne.Manufacture
 import TNLean.Wielandt.RankOne.Products
 import TNLean.Wielandt.RankOne.SpanGrowth

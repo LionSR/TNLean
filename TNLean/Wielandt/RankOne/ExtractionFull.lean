@@ -3,9 +3,9 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import TNLean.Algebra.MatrixMulRange
 import TNLean.Wielandt.RankOne.BoundedWord
 import TNLean.Wielandt.RankOne.Extraction
-import TNLean.Wielandt.RankOne.Manufacture
 import TNLean.Wielandt.RectangularSpan.Basic
 
 /-!
@@ -160,7 +160,7 @@ private theorem BlockedTensorRangeData.rankOne_mem_wordSpan_of_wordSpan_eq_top
       (d := blockPhysDim d L) (D := D) data.P data.Q data.B htop]
     exact biRectSpan_le_wordSpan (d := blockPhysDim d L) (D := D)
       data.B data.P data.Q data.hP data.hQ
-  exact hrange_le (vecMulVec_mem_range_mulLeft_mulRight
+  exact hrange_le (Matrix.vecMulVec_mem_range_mulLeft_mulRight
     data.P data.Q φ ψ data.hφ_range data.hψ_range)
 
 end LinearAlgebraLemmas
