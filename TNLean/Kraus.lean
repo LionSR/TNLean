@@ -15,3 +15,4 @@ import TNLean.Kraus.MapIterate
 import TNLean.Kraus.MultiBlockWord
 import TNLean.Kraus.Wielandt
 import TNLean.Kraus.Word
+import TNLean.Kraus.WordSpan
