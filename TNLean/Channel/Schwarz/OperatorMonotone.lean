@@ -119,8 +119,13 @@ For a positive **unital** map `T` and positive-definite `A`:
 
 This is a direct instance of the concave Jensen inequality for `log`
 (from `OperatorConvexity.lean`). Note: requires unitality (`T 1 = 1`),
-not merely subunitality. -/
-theorem IsPositiveMap.cor52_item3_log_of_subunital
+not merely subunitality.
+
+**Local fix (unital logarithm inequality):** Wolf Corollary 5.2(3) states
+the inequality for a subunital map, but that form is false. The unital
+hypothesis used here is documented in
+`docs/paper-gaps/wolf_ch5_operator_jensen_lieb.tex`. -/
+theorem IsPositiveMap.cor52_item3_log_of_unital
     {T : Mat →ₗ[ℂ] Mat} (hT : IsPositiveMap T) (hUnit : T 1 = (1 : Mat))
     {A : Mat} (hA : A.PosDef) :
     T (CFC.log A) ≤ CFC.log (T A) :=
