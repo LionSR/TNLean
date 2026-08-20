@@ -24,6 +24,21 @@ abstracted — record why, so it is not re-proposed).
 
 ## Promoted
 
+### finite-Kraus transfer-power trace pairing — promoted
+- **Pattern:** expand a Kraus-map or MPS transfer-map power as a sum over words,
+  distribute matrix multiplication through the sum, reduce multiplication by a
+  matrix unit to entries, and identify the resulting product of diagonal sums
+  with a trace times its complex conjugate.
+- **Seen:** two exact proofs, each over 90 lines, in
+  `TNLean/Kraus/Wielandt/Primitivity/StronglyIrreducibleToFullWordSpan.lean` and
+  `TNLean/Wielandt/Primitivity/TracePairing.lean` before promotion (2026-08-20).
+- **Abstraction:** `Kraus.sum_normSq_trace_conjTranspose_mul_evalWord` in
+  `TNLean/Kraus/TracePairing.lean`.
+- **Notes:** the Kraus theorem owns the generic identity. The established
+  `MPSTensor.sum_normSq_trace_conjTranspose_mul_evalWord` statement is a direct
+  reformulation using `Kraus.mapLM_eq_transferMap`; the primitive full-word-span
+  proof applies the Kraus theorem directly.
+
 ### contiguous restriction of open-boundary MPS vectors — promoted
 - **Pattern:** split a full-chain configuration into the words left of, inside,
   and right of a nonwrapping window; absorb both outside words into the boundary
