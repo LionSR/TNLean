@@ -15,11 +15,11 @@ consequences. All declarations are stated in `namespace Kraus`.
 
 ## Main declarations
 
-* `Kraus.wordSpan` — the span of all Kraus words of a fixed length
-* `Kraus.HasEventuallyFullWordSpan` — all sufficiently long word spans are full
-* `Kraus.IsInjective` — the matrices of a Kraus family span the full matrix algebra
-* `Kraus.IsNBlkInjective` — injectivity after blocking `N` letters into words
-* `Kraus.IsNormal` — eventual block injectivity at some positive blocking length
+* `Kraus.wordSpan`: the span of all Kraus words of a fixed length
+* `Kraus.HasEventuallyFullWordSpan`: all sufficiently long word spans are full
+* `Kraus.IsInjective`: the matrices of a Kraus family span the full matrix algebra
+* `Kraus.IsNBlkInjective`: injectivity after blocking `N` letters into words
+* `Kraus.IsNormal`: eventual block injectivity at some positive blocking length
 -/
 
 open scoped Matrix BigOperators

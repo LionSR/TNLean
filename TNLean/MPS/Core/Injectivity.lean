@@ -15,9 +15,9 @@ MPS names.
 
 ## Main declarations
 
-* `MPSTensor.IsInjective` — the one-site matrices span the full matrix algebra
-* `MPSTensor.IsNBlkInjective` — words of length $N$ span the full matrix algebra
-* `MPSTensor.IsNormal` — block injectivity holds at some positive length
+* `MPSTensor.IsInjective`: the one-site matrices span the full matrix algebra
+* `MPSTensor.IsNBlkInjective`: words of length $N$ span the full matrix algebra
+* `MPSTensor.IsNormal`: block injectivity holds at some positive length
 -/
 
 open scoped Matrix
