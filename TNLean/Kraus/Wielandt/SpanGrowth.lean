@@ -9,3 +9,4 @@ Authors: TNLean contributors
 -- Generated aggregator module: TNLean.Kraus.Wielandt.SpanGrowth
 
 import TNLean.Kraus.Wielandt.SpanGrowth.CumulativeSpan
+import TNLean.Kraus.Wielandt.SpanGrowth.EigenvectorSpreading
