@@ -80,9 +80,8 @@ If `P ≠ 0` and `P ≠ 1`, this would witness `HasInvariantProj A`, contradicti
 the irreducibility hypothesis. -/
 theorem isIrreducibleCP_transferMap_of_isIrreducibleTensor
     (A : MPSTensor d D) (hIrr : IsIrreducibleTensor (d := d) (D := D) A) :
-    IsIrreducibleMap (transferMap (d := d) (D := D) A) := by
-  rw [← Kraus.mapLM_eq_transferMap]
-  exact Kraus.isIrreducibleMap_mapLM_of_isIrreducibleTensor A hIrr
+    IsIrreducibleMap (transferMap (d := d) (D := D) A) :=
+  Kraus.isIrreducibleMap_transferMap_of_isIrreducibleTensor A hIrr
 
 /-- **Irreducible CP map ⇒ irreducible tensor.**
 
@@ -96,9 +95,8 @@ this contradicts the irreducibility of `E`. -/
 theorem isIrreducibleTensor_of_isIrreducibleMap
     (A : MPSTensor d D)
     (hIrr : IsIrreducibleMap (transferMap (d := d) (D := D) A)) :
-    IsIrreducibleTensor A := by
-  apply Kraus.isIrreducibleTensor_of_isIrreducibleMap_mapLM A
-  simpa only [Kraus.mapLM_eq_transferMap] using hIrr
+    IsIrreducibleTensor A :=
+  Kraus.isIrreducibleTensor_of_isIrreducibleMap_transferMap A hIrr
 
 /-! ## Part 2: CFII-style diagonal positive-definite fixed point -/
 

@@ -26,9 +26,8 @@ variable {d D D₁ D₂ : ℕ}
 private lemma irreducibleTensor_of_injective
     (A : MPSTensor d D) (hA : IsInjective A) :
     IsIrreducibleTensor A :=
-  Kraus.isIrreducibleTensor_of_isIrreducibleMap_mapLM A
-    (Kraus.isIrreducibleMap_mapLM_of_transferMap A
-      (injective_implies_irreducibleCP A hA))
+  Kraus.isIrreducibleTensor_of_isIrreducibleMap_transferMap A
+    (injective_implies_irreducibleCP A hA)
 
 /-- **Eigenvalue rigidity** for normalized injective tensors. -/
 theorem modulus_one_eigenvalue_implies_gauge

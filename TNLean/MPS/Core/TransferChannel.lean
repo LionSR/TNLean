@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.Channel.Irreducible.Basic
 import TNLean.Channel.KrausMap
+import TNLean.Kraus.InvariantProjection
 import TNLean.MPS.Core.Transfer
 
 /-!
@@ -19,6 +20,9 @@ properties in transfer-map notation.
 * `Kraus.mapLM_eq_transferMap`: the generic Kraus map and the MPS transfer map agree.
 * `Kraus.isIrreducibleMap_mapLM_of_transferMap`: transfer-map irreducibility in Kraus-map
   notation.
+* `Kraus.isIrreducibleMap_transferMap_of_isIrreducibleTensor`: irreducibility of a finite
+  matrix family gives irreducibility of its transfer map.
+* `Kraus.isIrreducibleTensor_of_isIrreducibleMap_transferMap`: the converse implication.
 * `Kraus.isChannel_transferMap`: the MPS transfer map of a trace-preserving Kraus family is
   a channel.
 * `trace_mul_transferMap_adjoint`: the generic Kraus trace-adjoint identity in MPS
@@ -48,6 +52,22 @@ theorem isIrreducibleMap_mapLM_of_transferMap (K : Fin d → Mat)
     (hIrr : IsIrreducibleMap (MPSTensor.transferMap (d := d) (D := D) K)) :
     IsIrreducibleMap (mapLM K) := by
   simpa only [mapLM_eq_transferMap] using hIrr
+
+/-- An irreducible finite matrix family has an irreducible MPS transfer map. -/
+theorem isIrreducibleMap_transferMap_of_isIrreducibleTensor
+    (K : Fin d → Mat) (hIrr : MPSTensor.IsIrreducibleTensor K) :
+    IsIrreducibleMap (MPSTensor.transferMap (d := d) (D := D) K) := by
+  rw [← mapLM_eq_transferMap]
+  exact isIrreducibleMap_mapLM_of_isIrreducibleTensor K hIrr
+
+/-- Irreducibility of the MPS transfer map implies irreducibility of its finite
+matrix family. -/
+theorem isIrreducibleTensor_of_isIrreducibleMap_transferMap
+    (K : Fin d → Mat)
+    (hIrr : IsIrreducibleMap (MPSTensor.transferMap (d := d) (D := D) K)) :
+    MPSTensor.IsIrreducibleTensor K :=
+  isIrreducibleTensor_of_isIrreducibleMap_mapLM K
+    (isIrreducibleMap_mapLM_of_transferMap K hIrr)
 
 /-- The MPS transfer map of a trace-preserving finite Kraus family is a quantum channel. -/
 theorem isChannel_transferMap (K : Fin d → Mat) (h_tp : IsTP K) :

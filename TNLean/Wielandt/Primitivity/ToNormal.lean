@@ -177,9 +177,8 @@ omit [NeZero D] in
 /-- Irreducibility of a tensor gives irreducibility of its transfer map. -/
 theorem isIrreducibleMap_of_isIrreducibleTensor
     (A : MPSTensor d D) (hIrr : IsIrreducibleTensor (d := d) (D := D) A) :
-    IsIrreducibleMap (transferMap (d := d) (D := D) A) := by
-  simpa only [Kraus.mapLM_eq_transferMap] using
-    Kraus.isIrreducibleMap_mapLM_of_isIrreducibleTensor A hIrr
+    IsIrreducibleMap (transferMap (d := d) (D := D) A) :=
+  Kraus.isIrreducibleMap_transferMap_of_isIrreducibleTensor A hIrr
 
 /-- **IsIrreducibleTensor ⟹ PosDef** for primitive tensors.
 

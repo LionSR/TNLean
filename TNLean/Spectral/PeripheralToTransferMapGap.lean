@@ -274,10 +274,8 @@ theorem transferMap_fixedPoint_eq_zero_of_trace_eq_zero_of_irreducible
     (htrX : Matrix.trace X = 0) :
     X = 0 := by
   set E := transferMap (d := d) (D := D) A
-  have hIrrMap : IsIrreducibleMap E := by
-    change IsIrreducibleMap (transferMap (d := d) (D := D) A)
-    rw [← Kraus.mapLM_eq_transferMap]
-    exact Kraus.isIrreducibleMap_mapLM_of_isIrreducibleTensor A hIrr
+  have hIrrMap : IsIrreducibleMap E :=
+    Kraus.isIrreducibleMap_transferMap_of_isIrreducibleTensor A hIrr
   exact transferMap_fixedPoint_eq_zero_of_trace_eq_zero_of_hermitian_zero
     (A := A)
     (hHermitianZero := fun Y hYherm hYfix htrY =>
@@ -433,10 +431,8 @@ theorem spectralRadius_compl_lt_one_of_peripheralPrimitive_of_irreducible
               ((transferMap (d := d) (D := D) A) - fixedPointProj (D := D) ρ htr))
             < 1 := by
   set E := transferMap (d := d) (D := D) A
-  have hIrrMap : IsIrreducibleMap E := by
-    change IsIrreducibleMap (transferMap (d := d) (D := D) A)
-    rw [← Kraus.mapLM_eq_transferMap]
-    exact Kraus.isIrreducibleMap_mapLM_of_isIrreducibleTensor A hIrr
+  have hIrrMap : IsIrreducibleMap E :=
+    Kraus.isIrreducibleMap_transferMap_of_isIrreducibleTensor A hIrr
   have hDpos : 0 < D := Nat.pos_of_ne_zero (NeZero.ne D)
   obtain ⟨ρ, hρ_psd, hρ_ne, hρ_fixE⟩ :=
     (transferMap_isChannel (A := A) hNorm).exists_posSemidef_fixedPoint (E := E) hDpos
