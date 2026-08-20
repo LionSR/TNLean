@@ -81,9 +81,9 @@ theorem IsInjective.mapStar {A : MPSTensor d D} (hA : IsInjective A) :
 private theorem evalWord_mapStar (A : MPSTensor d D) (w : List (Fin d)) :
     evalWord (mapStar A) w = (evalWord A w).map (starRingEnd ℂ) := by
   induction w with
-  | nil => simp [evalWord]
+  | nil => simp [Kraus.evalWord]
   | cons i w ih =>
-      simp only [evalWord, mapStar_apply, ih]
+      simp only [Kraus.evalWord, mapStar_apply, ih]
       exact ((starRingEnd ℂ).mapMatrix.map_mul (A i) (evalWord A w)).symm
 
 /-- Entrywise conjugation preserves positive-length block injectivity, hence normality. -/
