@@ -3,8 +3,9 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.Channel.Peripheral.CesaroRecurrence
+import TNLean.Algebra.EigenspaceMap
 import TNLean.Analysis.WeightedCesaroMean
+import TNLean.Channel.Peripheral.CesaroRecurrence
 
 /-!
 # The phase-weighted Cesàro formula for `T_φ` — Wolf Equation (6.15)
@@ -81,16 +82,6 @@ theorem weightedCesaroMean_apply (f : Module.End ℂ V) (s : Finset ℂ) (N : �
       (N : ℂ)⁻¹ • ∑ n ∈ Finset.Icc 1 N, ∑ μ ∈ s, (((starRingEnd ℂ) μ • f) ^ n) x := by
   simp [weightedCesaroMean]
 
-/-- On the `μ`-eigenspace the `n`-th power acts as the scalar `μ ^ n`. -/
-private theorem pow_apply_of_mem_eigenspace {f : Module.End ℂ V} {μ : ℂ} {x : V}
-    (hx : x ∈ f.eigenspace μ) (n : ℕ) : (f ^ n) x = μ ^ n • x := by
-  induction n with
-  | zero => simp
-  | succ n ih =>
-      rw [pow_succ']
-      change f ((f ^ n) x) = _
-      rw [ih, map_smul, Module.End.mem_eigenspace_iff.mp hx, smul_smul, pow_succ]
-
 end Definition
 
 section Convergence
@@ -122,7 +113,7 @@ theorem tendsto_weightedCesaroMean_apply_self_of_mem_iSup_eigenspace
       refine Finset.sum_congr rfl fun n _ ↦ ?_
       rw [Finset.sum_smul]
       refine Finset.sum_congr rfl fun μ _ ↦ ?_
-      rw [smul_pow, LinearMap.smul_apply, pow_apply_of_mem_eigenspace (v lam).2,
+      rw [smul_pow, LinearMap.smul_apply, Module.End.pow_apply_of_mem_eigenspace (v lam).2,
         smul_smul, ← mul_pow]
     have hlim :=
       (WeightedCesaro.tendsto_cesaro_phase_sum hs hlam).one_smul_const (v lam : V)

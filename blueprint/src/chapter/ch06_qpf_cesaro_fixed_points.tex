@@ -118,6 +118,44 @@
     convergence to zero is preserved by finite sums.
 \end{proof}
 
+\begin{theorem}[Powers on an eigenspace]
+    \label{thm:pow-on-eigenspace}
+    \lean{Module.End.pow_apply_of_mem_eigenspace}
+    \leanok
+    Let $T$ be an endomorphism of a vector space over a field. If
+    $T(x)=\mu x$, then
+    \begin{align}
+        T^n(x)
+         & =\mu^n x
+        \notag
+    \end{align}
+    for every $n\geq0$.
+\end{theorem}
+
+\begin{proof}\leanok
+    Induct on $n$. The induction step follows from linearity:
+    $T(\mu^n x)=\mu^nT(x)=\mu^{n+1}x$.
+\end{proof}
+
+\begin{theorem}[Recurrence on a finite sum of eigenspaces]
+    \label{thm:finite-eigenspace-recurrence}
+    \lean{Module.End.tendsto_pow_apply_self_of_mem_iSup_eigenspace}
+    \leanok
+    Let $T$ be an endomorphism of a complex normed space,
+    let $S\subseteq\C$ be finite, and let $(n_k)_{k\geq0}$ be a sequence of
+    nonnegative integers such that $\mu^{n_k}\to1$ for every $\mu\in S$.
+    If $x$ belongs to the sum of the $\mu$-eigenspaces for $\mu\in S$, then
+    $T^{n_k}(x)\to x$.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:pow-on-eigenspace}
+    Write $x=\sum_{\mu\in S}x_\mu$ with $T(x_\mu)=\mu x_\mu$. By
+    Theorem~\ref{thm:pow-on-eigenspace},
+    $T^{n_k}(x_\mu)=\mu^{n_k}x_\mu\to x_\mu$. The conclusion follows by
+    summing over the finite set $S$.
+\end{proof}
+
 \begin{definition}[Peripheral spectral projections]
     \label{def:peripheral_spectral_projections}
     \lean{Module.End.peripheralProjection,

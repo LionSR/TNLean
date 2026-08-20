@@ -24,6 +24,9 @@ radius) is also a consequence.
 
 * `exists_critical_scalar`: the critical scalar `c₀` with `σ - c₀ • ρ` PSD but
   not positive definite, for positive definite `ρ`, `σ`.
+* `exists_smul_eq_of_posDef_fixedPoints_of_fixedPoint_posDef`:
+  proportionality from the condition that every nonzero positive-semidefinite
+  fixed point is positive definite.
 * `posSemidef_fixedPoint_unique_of_irreducible_cp`: uniqueness of PSD fixed
   points of an irreducible CP map (Wolf Theorem 6.3(2)).
 * `IsChannel.exists_hasUniqueFixedPoint_of_irreducible`: existence and uniqueness
@@ -236,6 +239,28 @@ lemma exists_critical_scalar [Nonempty (Fin D)]
   · rw [h_key, hst]; intro h_pd
     exact hHc_not_pd ((Matrix.IsUnit.posDef_star_right_conjugate_iff hS_unit).mp h_pd)
 
+/-- Two positive-definite fixed points are proportional if every nonzero
+positive-semidefinite fixed point is positive definite. -/
+theorem exists_smul_eq_of_posDef_fixedPoints_of_fixedPoint_posDef
+    (E : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ)
+    (ρ σ : Matrix (Fin D) (Fin D) ℂ)
+    (hρ_pd : ρ.PosDef) (hσ_pd : σ.PosDef)
+    (hρ_fix : E ρ = ρ) (hσ_fix : E σ = σ)
+    (hfixed_posDef : ∀ {τ : Matrix (Fin D) (Fin D) ℂ},
+      τ.PosSemidef → τ ≠ 0 → E τ = τ → τ.PosDef) :
+    ∃ c : ℂ, σ = c • ρ := by
+  classical
+  by_cases hD : D = 0
+  · exact ⟨1, by ext i; exact Fin.elim0 (hD ▸ i)⟩
+  · have : Nonempty (Fin D) := ⟨⟨0, Nat.pos_of_ne_zero hD⟩⟩
+    obtain ⟨c, _, hτ_psd, hτ_not_pd⟩ := exists_critical_scalar hρ_pd hσ_pd
+    let τ := σ - (↑c : ℂ) • ρ
+    have hτ_fix : E τ = τ := by
+      simp only [τ, map_sub, LinearMap.map_smul, hρ_fix, hσ_fix]
+    by_cases hτ_zero : τ = 0
+    · exact ⟨↑c, sub_eq_zero.mp hτ_zero⟩
+    · exact absurd (hfixed_posDef hτ_psd hτ_zero hτ_fix) hτ_not_pd
+
 /-- **Uniqueness under irreducibility** (Wolf Theorem 6.3(2)): any PSD fixed point
 of an irreducible completely positive map is proportional to a fixed nonzero PSD
 fixed point.
@@ -259,18 +284,10 @@ theorem posSemidef_fixedPoint_unique_of_irreducible_cp
     posDef_of_posSemidef_fixedPoint_irreducible_cp E hCP hIrr ρ hρ_psd hρ_ne hρ_fix
   have hσ_pd :=
     posDef_of_posSemidef_fixedPoint_irreducible_cp E hCP hIrr σ hσ_psd hσ_ne hσ_fix
-  by_cases hD : D = 0
-  · exact ⟨1, by ext i; exact (Fin.elim0 (hD ▸ i))⟩
-  · have : Nonempty (Fin D) := ⟨⟨0, Nat.pos_of_ne_zero hD⟩⟩
-    obtain ⟨c₀, _, hτ_psd, hτ_not_pd⟩ := exists_critical_scalar hρ_pd hσ_pd
-    set τ := σ - (↑c₀ : ℂ) • ρ
-    have hτ_fix : E τ = τ := by
-      simp only [τ, map_sub, LinearMap.map_smul, hρ_fix, hσ_fix]
-    by_cases hτ_ne : τ = 0
-    · exact ⟨↑c₀, sub_eq_zero.mp hτ_ne⟩
-    · exact absurd
-        (posDef_of_posSemidef_fixedPoint_irreducible_cp E hCP hIrr τ hτ_psd hτ_ne hτ_fix)
-        hτ_not_pd
+  exact exists_smul_eq_of_posDef_fixedPoints_of_fixedPoint_posDef
+    E ρ σ hρ_pd hσ_pd hρ_fix hσ_fix fun hτ_psd hτ_ne hτ_fix ↦
+      posDef_of_posSemidef_fixedPoint_irreducible_cp
+        E hCP hIrr _ hτ_psd hτ_ne hτ_fix
 
 /-- An irreducible channel on a nontrivial finite matrix algebra has a positive-definite
 fixed point that is unique among positive-semidefinite fixed points up to scalar multiples.

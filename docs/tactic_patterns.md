@@ -24,6 +24,17 @@ abstracted — record why, so it is not re-proposed).
 
 ## Promoted
 
+### Powers on an eigenspace — promoted
+- **Pattern:** prove `(f ^ n) x = μ ^ n • x` from `x ∈ f.eigenspace μ`, either by induction
+  using `Module.End.mem_eigenspace_iff` or by splitting on `x = 0` before applying
+  `HasEigenvector.pow_apply`.
+- **Seen:** 3 occurrences across `TNLean/Channel/Peripheral/WeightedCesaro.lean`,
+  `TNLean/Channel/Peripheral/CesaroRecurrence.lean`, and
+  `TNLean/Kraus/Wielandt/Primitivity/VectorSpreadToPrimitive.lean`.
+- **Abstraction:** `Module.End.pow_apply_of_mem_eigenspace` in
+  `TNLean/Algebra/EigenspaceMap.lean` handles the zero vector directly and is used by all
+  three consumers.
+
 ### finite-Kraus transfer-power trace pairing — promoted
 - **Pattern:** expand a Kraus-map or MPS transfer-map power as a sum over words,
   distribute matrix multiplication through the sum, reduce multiplication by a
@@ -534,6 +545,28 @@ abstracted — record why, so it is not re-proposed).
   `TNLean/MPS/Examples/ZMod2.lean`.
 - **Notes:** each example now supplies only the involution, commutation, and generator
   unitarity facts. The public action and unitarity theorem statements are unchanged.
+
+### critical-scalar uniqueness for positive-definite fixed points — promoted
+- **Pattern:** given two positive-definite fixed points $\rho$ and $\sigma$ of
+  the same linear map, choose a critical scalar $c$, set
+  $\tau=\sigma-c\rho$, and use the hypothesis that every nonzero
+  positive-semidefinite fixed point is positive definite to force $\tau=0$.
+- **Seen:** three occurrences in
+  `TNLean/Channel/Irreducible/FixedPointUniqueness.lean`, theorem
+  `posSemidef_fixedPoint_unique_of_irreducible_cp`, and
+  `TNLean/Kraus/Wielandt/Primitivity/VectorSpreadToPrimitive.lean`, lemma
+  `posSemidef_pow_fixedPoint_unique`, and
+  `TNLean/Wielandt/Primitivity/ImpliesStronglyIrreducibleAux.lean`, theorem
+  `posSemidef_pow_fixedPoint_unique_of_isPrimitivePaper`, before promotion
+  (2026-08-20).
+- **Abstraction:**
+  `exists_smul_eq_of_posDef_fixedPoints_of_fixedPoint_posDef`
+  in `TNLean/Channel/Irreducible/FixedPointUniqueness.lean`.
+- **Notes:** the shared theorem includes the load-bearing hypothesis that every
+  nonzero positive-semidefinite fixed point is positive definite; without this
+  hypothesis the proportionality statement is false for the identity map. The
+  The three callers establish it respectively from irreducibility or from
+  fixed-length vector spreading.
 
 ---
 
@@ -1144,18 +1177,21 @@ abstracted — record why, so it is not re-proposed).
 Seeded from `scripts/tactic_pattern_scan.py` (2026-07-18 scan; re-run for
 current counts and full location lists).
 
-### powers on an eigenspace — candidate
-- **Pattern:** prove `(f ^ n) x = μ ^ n • x` from `x ∈ f.eigenspace μ`, either by induction
-  using `Module.End.mem_eigenspace_iff` or by splitting on `x = 0` before applying
-  `HasEigenvector.pow_apply`.
-- **Seen:** 2 occurrences across `TNLean/Channel/Peripheral/WeightedCesaro.lean` and
-  `TNLean/Channel/Peripheral/CesaroRecurrence.lean` (review on 2026-08-17).
-- **Abstraction (proposed):** if a third occurrence appears, promote the private
-  `pow_apply_of_mem_eigenspace` next to the shared `Module.End.eigenspace` API and refactor
-  the case-split variant to use it.
-- **Notes:** This is below the rule-of-three threshold. The induction handles the zero vector
-  without constructing a `HasEigenvector`; keep the helper private until another independent
-  consumer fixes the useful public location.
+### Hermitian extraction from a finite-order channel eigenvector — candidate
+- **Pattern:** from `E X = μ • X`, `X ≠ 0`, `μ ≠ 1`, and `μ ^ p = 1`,
+  use trace preservation and the Hermitian parts `X + Xᴴ` and
+  `Complex.I • (Xᴴ - X)` to obtain a nonzero Hermitian trace-zero fixed point
+  of `E ^ p`.
+- **Seen:** 2 occurrences before compatibility reduction (2026-08-20):
+  `Kraus.exists_hermitian_ne_zero_trace_zero_pow_fixedPoint` and
+  `MPSTensor.exists_hermitian_ne_zero_trace_zero_pow_fixedPoint`.
+- **Abstraction (proposed):** retain the channel-native Kraus theorem as the
+  proof owner and make the transfer-map statement a direct reformulation via
+  `Kraus.mapLM_eq_transferMap`, adding only the positive-semidefinite
+  consequence required by its established conclusion.
+- **Notes:** the generic theorem keeps the Hermitian-part construction private.
+  The compatibility reduction should preserve the public MPS statement while
+  removing its second implementation.
 
 ### quasi-local translation laws in automorphism-group form — candidate
 - **Pattern:** convert translation composition, symmetry, and identity laws from
