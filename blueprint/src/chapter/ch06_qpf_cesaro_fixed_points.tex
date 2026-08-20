@@ -118,8 +118,8 @@
     convergence to zero is preserved by finite sums.
 \end{proof}
 
-\begin{lemma}[Powers on an eigenspace]
-    \label{lem:pow-on-eigenspace}
+\begin{theorem}[Powers on an eigenspace]
+    \label{thm:pow-on-eigenspace}
     \lean{Module.End.pow_apply_of_mem_eigenspace}
     \leanok
     Let $T$ be an endomorphism of a vector space over a field. If
@@ -130,15 +130,15 @@
         \notag
     \end{align}
     for every $n\geq0$.
-\end{lemma}
+\end{theorem}
 
 \begin{proof}\leanok
     Induct on $n$. The induction step follows from linearity:
     $T(\mu^n x)=\mu^nT(x)=\mu^{n+1}x$.
 \end{proof}
 
-\begin{lemma}[Recurrence on a finite sum of eigenspaces]
-    \label{lem:finite-eigenspace-recurrence}
+\begin{theorem}[Recurrence on a finite sum of eigenspaces]
+    \label{thm:finite-eigenspace-recurrence}
     \lean{Module.End.tendsto_pow_apply_self_of_mem_iSup_eigenspace}
     \leanok
     Let $T$ be an endomorphism of a complex normed space,
@@ -146,12 +146,12 @@
     nonnegative integers such that $\mu^{n_k}\to1$ for every $\mu\in S$.
     If $x$ belongs to the sum of the $\mu$-eigenspaces for $\mu\in S$, then
     $T^{n_k}(x)\to x$.
-\end{lemma}
+\end{theorem}
 
 \begin{proof}\leanok
-    \uses{lem:pow-on-eigenspace}
+    \uses{thm:pow-on-eigenspace}
     Write $x=\sum_{\mu\in S}x_\mu$ with $T(x_\mu)=\mu x_\mu$. By
-    Lemma~\ref{lem:pow-on-eigenspace},
+    Theorem~\ref{thm:pow-on-eigenspace},
     $T^{n_k}(x_\mu)=\mu^{n_k}x_\mu\to x_\mu$. The conclusion follows by
     summing over the finite set $S$.
 \end{proof}

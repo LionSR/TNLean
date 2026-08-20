@@ -260,14 +260,14 @@ matrices, and let $\E_K$ be its Kraus map.
     $\operatorname{ran}P$, hence $P=\Id$.
 \end{proof}
 
-\begin{lemma}[Conjugate eigenmatrix of a positive map]
-    \label{lem:positive-map-conj-eigenvector}
+\begin{theorem}[Conjugate eigenmatrix of a positive map]
+    \label{thm:positive-map-conj-eigenvector}
     \lean{Kraus.conjTranspose_eigenvector}
     \leanok
     \uses{def:positive_map}
     Let $E:\MN{D}\to\MN{D}$ be positive. If $E(X)=\mu X$, then
     $E(X^\dagger)=\overline\mu X^\dagger$.
-\end{lemma}
+\end{theorem}
 
 \begin{proof}\leanok
     \uses{thm:positive_map_conjTranspose}
@@ -275,76 +275,76 @@ matrices, and let $\E_K$ be its Kraus map.
     $E(X)=\mu X$ gives the result.
 \end{proof}
 
-\begin{lemma}[Powers of a transfer-map eigenmatrix]
-    \label{lem:transfer-map-eigenmatrix-power}
+\begin{theorem}[Powers of a transfer-map eigenmatrix]
+    \label{thm:transfer-map-eigenmatrix-power}
     \lean{MPSTensor.transferMap_pow_smul_eigenvector}
     \leanok
     \uses{def:transfer_map}
     If $\E_A(X)=\mu X$, then $\E_A^n(X)=\mu^nX$ for every $n\geq0$.
-\end{lemma}
+\end{theorem}
 
 \begin{proof}\leanok
-    \uses{lem:pow-on-eigenspace}
-    This is Lemma~\ref{lem:pow-on-eigenspace} for the eigenspace of $\mu$.
+    \uses{thm:pow-on-eigenspace}
+    This is Theorem~\ref{thm:pow-on-eigenspace} for the eigenspace of $\mu$.
 \end{proof}
 
-\begin{lemma}[Finite-order eigenmatrix is power-fixed]
-    \label{lem:root-eigenvector-power-fixed}
+\begin{theorem}[Finite-order eigenmatrix is power-fixed]
+    \label{thm:root-eigenvector-power-fixed}
     \lean{Kraus.pow_eigenvector_of_root}
     \leanok
     Let $E:\MN{D}\to\MN{D}$ be linear. If $E(X)=\mu X$ and $\mu^p=1$, then
     $E^p(X)=X$.
-\end{lemma}
+\end{theorem}
 
 \begin{proof}\leanok
-    \uses{lem:pow-on-eigenspace}
-    Lemma~\ref{lem:pow-on-eigenspace} gives $E^p(X)=\mu^pX=X$.
+    \uses{thm:pow-on-eigenspace}
+    Theorem~\ref{thm:pow-on-eigenspace} gives $E^p(X)=\mu^pX=X$.
 \end{proof}
 
-\begin{lemma}[Conjugate finite-order eigenmatrix is power-fixed]
-    \label{lem:positive-map-conj-power-fixed}
+\begin{theorem}[Conjugate finite-order eigenmatrix is power-fixed]
+    \label{thm:positive-map-conj-power-fixed}
     \lean{Kraus.pow_conjTranspose_eigenvector_of_root}
     \leanok
     \uses{def:positive_map}
     Let $E:\MN{D}\to\MN{D}$ be positive. If $E(X)=\mu X$ and $\mu^p=1$,
     then $E^p(X^\dagger)=X^\dagger$.
-\end{lemma}
+\end{theorem}
 
 \begin{proof}\leanok
-    \uses{lem:positive-map-conj-eigenvector,
-        lem:root-eigenvector-power-fixed}
+    \uses{thm:positive-map-conj-eigenvector,
+        thm:root-eigenvector-power-fixed}
     The conjugate eigenvalue is $\overline\mu$, and
     $(\overline\mu)^p=\overline{\mu^p}=1$.
 \end{proof}
 
-\begin{lemma}[Trace of a non-fixed eigenmatrix]
-    \label{lem:trace-preserving-eigenvector-trace-zero}
+\begin{theorem}[Trace of a non-fixed eigenmatrix]
+    \label{thm:trace-preserving-eigenvector-trace-zero}
     \lean{Kraus.trace_eigenvector_eq_zero}
     \leanok
     \uses{def:trace_preserving}
     Let $E:\MN{D}\to\MN{D}$ preserve the trace. If $E(X)=\mu X$ and
     $\mu\neq1$, then $\tr(X)=0$.
-\end{lemma}
+\end{theorem}
 
 \begin{proof}\leanok
     Trace preservation gives $\mu\tr(X)=\tr(E(X))=\tr(X)$. Since
     $\mu-1\neq0$, the trace vanishes.
 \end{proof}
 
-\begin{lemma}[Hermitian power-fixed point from a finite-order eigenmatrix]
-    \label{lem:kraus-hermitian-power-fixed-point}
+\begin{theorem}[Hermitian power-fixed point from a finite-order eigenmatrix]
+    \label{thm:kraus-hermitian-power-fixed-point}
     \lean{Kraus.exists_hermitian_ne_zero_trace_zero_pow_fixedPoint}
     \leanok
     \uses{def:channel}
     Let $E$ be a channel, and suppose $E(X)=\mu X$ with $X\neq0$,
     $\mu\neq1$, and $\mu^p=1$. Then there is a nonzero Hermitian matrix $H$
     such that $\tr(H)=0$ and $E^p(H)=H$.
-\end{lemma}
+\end{theorem}
 
 \begin{proof}\leanok
-    \uses{lem:root-eigenvector-power-fixed,
-        lem:positive-map-conj-power-fixed,
-        lem:trace-preserving-eigenvector-trace-zero}
+    \uses{thm:root-eigenvector-power-fixed,
+        thm:positive-map-conj-power-fixed,
+        thm:trace-preserving-eigenvector-trace-zero}
     At least one of $X+X^\dagger$ and $i(X^\dagger-X)$ is nonzero. Both are
     Hermitian, both have trace zero, and each is fixed by $E^p$.
 \end{proof}
@@ -367,13 +367,13 @@ matrices, and let $\E_K$ be its Kraus map.
     gives proportionality.
 \end{proof}
 
-\begin{lemma}[Powers of channels]
-    \label{lem:channel-natural-power}
+\begin{theorem}[Powers of channels]
+    \label{thm:channel-natural-power}
     \lean{Kraus.isChannel_pow}
     \leanok
     \uses{def:channel}
     If $E$ is a channel, then $E^p$ is a channel for every $p\geq0$.
-\end{lemma}
+\end{theorem}
 
 \begin{proof}\leanok
     Complete positivity and trace preservation are both closed under
@@ -391,7 +391,7 @@ matrices, and let $\E_K$ be its Kraus map.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{lem:channel-natural-power,
+    \uses{thm:channel-natural-power,
         thm:cesaro_fixedpoint,
         thm:kraus-power-fixed-point-unique-from-spreading,
         thm:positive_fixedpoint_decomp}
@@ -400,8 +400,8 @@ matrices, and let $\E_K$ be its Kraus map.
     traces and $\tr(H)=0$ force equal coefficients, hence $H=0$.
 \end{proof}
 
-\begin{lemma}[Hermitian power-fixed point from a peripheral eigenvector]
-    \label{lem:hermitian-power-fixed-point}
+\begin{theorem}[Hermitian power-fixed point from a peripheral eigenvector]
+    \label{thm:hermitian-power-fixed-point}
     \lean{MPSTensor.exists_hermitian_ne_zero_trace_zero_pow_fixedPoint}
     \leanok
     \uses{def:transfer_map}
@@ -417,14 +417,14 @@ matrices, and let $\E_K$ be its Kraus map.
         \notag
     \end{align}
     Moreover, $H$ is not positive semidefinite.
-\end{lemma}
+\end{theorem}
 
 \begin{proof}\leanok
-    \uses{lem:pow-on-eigenspace}
+    \uses{thm:pow-on-eigenspace}
     Trace preservation and $\mu\neq1$ give $\tr(X)=0$. At least one of
     $X+X^\dagger$ and $i(X^\dagger-X)$ is nonzero. Choose that Hermitian part
     as $H$. Conjugation preserves the eigenvector equation, and
-    Lemma~\ref{lem:transfer-map-eigenmatrix-power} together with $\mu^p=1$
+    Theorem~\ref{thm:transfer-map-eigenmatrix-power} together with $\mu^p=1$
     shows that $H$ is fixed by $\E_A^p$. A nonzero positive-semidefinite
     matrix has positive trace, so $H$ is not positive semidefinite.
 \end{proof}
@@ -497,7 +497,7 @@ matrices, and let $\E_K$ be its Kraus map.
 \begin{proof}\leanok
     \uses{thm:cesaro_fixedpoint, thm:kraus_irreducible_from_spreading,
         thm:peripheral_roots_irreducible_channel,
-        lem:kraus-hermitian-power-fixed-point,
+        thm:kraus-hermitian-power-fixed-point,
         thm:kraus-hermitian-power-fixed-point-zero}
     The normalization makes $\E_K$ a channel, so
     Theorem~\ref{thm:cesaro_fixedpoint} gives a nonzero positive-semidefinite
@@ -508,7 +508,7 @@ matrices, and let $\E_K$ be its Kraus map.
     eigenvalue $\mu$ is a root of unity; choose $p>0$ with
     $\mu^p=1$.
 
-    Suppose $\mu\neq1$. Lemma~\ref{lem:kraus-hermitian-power-fixed-point}
+    Suppose $\mu\neq1$. Theorem~\ref{thm:kraus-hermitian-power-fixed-point}
     gives a nonzero Hermitian matrix $H$ with $\tr(H)=0$ and
     $\E_K^p(H)=H$. Theorem~\ref{thm:kraus-hermitian-power-fixed-point-zero}
     gives $H=0$, a contradiction. Thus $\mu=1$.
