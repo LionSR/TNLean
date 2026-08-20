@@ -175,8 +175,8 @@
     $\{A^i\}$.
 \end{proof}
 
-\begin{lemma}[Trace adjointness of a Kraus map]
-    \label{lem:trace_mul_transfer_map_adjoint}
+\begin{theorem}[Trace adjointness of a Kraus map]
+    \label{thm:trace_mul_kraus_map_adjoint}
     \lean{Kraus.trace_mul_mapLM_adjoint}
     \leanok
     \uses{def:kraus_map}
@@ -185,7 +185,7 @@
         \tr\!\left(\rho\sum_i K_iXK_i^\dagger\right)
         &=\tr\!\left(\left(\sum_iK_i^\dagger\rho K_i\right)X\right).
     \end{align}
-\end{lemma}
+\end{theorem}
 
 \begin{proof}\leanok
     \uses{lem:trace_mul_map_eq_trace_adjointMap_mul}
@@ -193,18 +193,19 @@
     map determined by $(K_i)_i$.
 \end{proof}
 
-\begin{lemma}[Trace adjointness of a transfer map]
-    \label{lem:trace_mul_transfer_map_adjoint_mps}
+\begin{theorem}[Trace adjointness of a transfer map]
+    \label{thm:trace_mul_transfer_map_adjoint}
     \lean{trace_mul_transferMap_adjoint}
     \leanok
-    \uses{def:transfer_map, lem:trace_mul_transfer_map_adjoint}
-    The trace-adjoint identity of Lemma~\ref{lem:trace_mul_transfer_map_adjoint}
+    \uses{def:transfer_map, thm:trace_mul_kraus_map_adjoint}
+    The trace-adjoint identity of
+    Theorem~\ref{thm:trace_mul_kraus_map_adjoint}
     holds when the Kraus family is the family of matrices of an MPS tensor and
     the two Kraus maps are written as transfer maps.
-\end{lemma}
+\end{theorem}
 
 \begin{proof}\leanok
-    \uses{lem:trace_mul_transfer_map_adjoint,
+    \uses{thm:trace_mul_kraus_map_adjoint,
         thm:kraus_map_eq_transfer_map}
     Identify the two Kraus maps with the corresponding transfer maps.
 \end{proof}
@@ -239,7 +240,7 @@
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{lem:trace_mul_transfer_map_adjoint}
+    \uses{thm:trace_mul_transfer_map_adjoint}
     Cyclicity of trace gives
     \begin{align}
         \tr(\E_A(X))

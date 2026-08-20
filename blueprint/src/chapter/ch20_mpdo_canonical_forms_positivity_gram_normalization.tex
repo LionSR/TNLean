@@ -341,17 +341,16 @@
     inequality by $d_\alpha^{(N+1)}$ gives $\mu_{\alpha,k}>0$.
 \end{proof}
 
-\begin{lemma}[Unitary normalization of a scalar Gram matrix]
-    \label{lem:normalize_scalar_gram_matrix}
+\begin{theorem}[Unitary normalization of a scalar Gram matrix]
+    \label{thm:normalize_scalar_gram_matrix}
     \lean{Matrix.smul_mem_unitaryGroup_of_conjTranspose_mul_self_eq_smul_one}
     \leanok
-    If $X\ne0$ and $X^\dagger X=\omega\Id$ for a real number $\omega$, then
-    $\omega>0$ and $\omega^{-1/2}X$ is unitary.
-\end{lemma}
+    If $\omega>0$ and $X^\dagger X=\omega\Id$, then
+    $\omega^{-1/2}X$ is unitary.
+\end{theorem}
 
 \begin{proof}\leanok
-    Positivity and nonvanishing of $X^\dagger X$ give $\omega>0$; dividing
-    the Gram identity by $\omega$ gives the unitary identity.
+    Divide the Gram identity by $\omega$.
 \end{proof}
 
 \begin{theorem}[Gram rigidity of normal tensors]
@@ -360,7 +359,7 @@
     \lean{MPSTensor.IsNormal.conjTranspose_mul_self_eq_smul_one_of_commute}
     \lean{MPSTensor.IsNormal.smul_mem_unitaryGroup_of_commute}
     \leanok
-    \uses{def:normal, lem:normalize_scalar_gram_matrix}
+    \uses{def:normal, thm:normalize_scalar_gram_matrix}
     Let $M_\alpha$ be a normal tensor. Any matrix commuting with every
     matrix of $M_\alpha$ is a scalar multiple of the identity. In
     particular, if $X\ne 0$ and $X^\dagger X$ commutes with every matrix

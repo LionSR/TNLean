@@ -216,13 +216,13 @@
     \cite[Appendix~C.2, lines~1381--1439]{Cirac2016MPDO_arXiv}.
 \end{definition}
 
-\begin{lemma}[Projection onto a matrix block]
-    \label{lem:block_inclusion_projection}
+\begin{theorem}[Range projection of a matrix-block inclusion]
+    \label{thm:block_inclusion_projection}
     \lean{Matrix.sigmaBlockInclusion_mul_conjTranspose_eq_blockProjection}
     \leanok
-    The canonical inclusion $V_s$ of a matrix block is an isometry and
+    For the canonical inclusion $V_s$ of a matrix block,
     $V_sV_s^\dagger$ is the projection onto that block.
-\end{lemma}
+\end{theorem}
 
 \begin{proof}\leanok
     Compute the entries of the inclusion and its conjugate transpose.
@@ -237,7 +237,7 @@
       MPSTensor.SectorDecomposition.flatBlockInclusion_conjTranspose_mul_toTensor,
       MPSTensor.SectorDecomposition.flatWeight_smul_flatBasis_eq_compression}
     \leanok
-    \uses{def:sector_weight_data, lem:block_inclusion_projection}
+    \uses{def:sector_weight_data, thm:block_inclusion_projection}
     Let $A=\bigoplus_t \mu_t A_t$ be a weighted block-diagonal tensor in
     flattened virtual coordinates.
     For every block $s$, the canonical inclusion $V_s$ of that block satisfies

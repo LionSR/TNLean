@@ -432,13 +432,13 @@ closing a chain of $N$ copies of $\mathcal U$.
     the ordered diagonal word displayed above.
 \end{proof}
 
-\begin{lemma}[A matrix basis adapted to the trace]
-    \label{lem:identity_traceless_matrix_basis}
+\begin{theorem}[A matrix basis adapted to the trace]
+    \label{thm:identity_traceless_matrix_basis}
     \lean{Matrix.exists_identity_traceless_basis}
     \leanok
     If $d>0$, the identity matrix extends to a basis of $\MN d$ whose other
     elements are traceless.
-\end{lemma}
+\end{theorem}
 
 \begin{proof}\leanok
     The trace functional is nonzero on the identity. Extend the identity by a
@@ -450,7 +450,7 @@ closing a chain of $N$ copies of $\mathcal U$.
     \lean{MPOTensor.exists_identity_add_traceless_decomposition,
         MPOTensor.residualSlice_eq_contractPhysical_tracelessPart}
     \leanok
-    \uses{lem:identity_traceless_matrix_basis}
+    \uses{thm:identity_traceless_matrix_basis}
     Assume $d>0$.  For every double-layer tensor $\mathcal W$, there is a basis
     $\{\sigma_0,\sigma_\alpha\}$ of the physical matrix algebra and virtual
     matrices $E,S_\alpha$ such that $\sigma_0=\Id$ and, for every nonzero
@@ -3734,7 +3734,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     \lean{MPSTensor.leftCanonical_reindexPhysical_equiv}
     \leanok
     \uses{def:blocked_tensor,def:left_canonical_tensor,
-        lem:left_canonical_blocking}
+        thm:left_canonical_blocking}
     Suppose that an MPS tensor $A$ is left-canonical:
     \begin{align}
         \sum_i (A^i)^\dagger A^i&=\Id.
@@ -3756,7 +3756,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
 
 \begin{proof}\leanok
     \uses{def:blocked_tensor,def:left_canonical_tensor,
-        lem:left_canonical_blocking}
+        thm:left_canonical_blocking}
     Expand~(\ref{eq:mpu_left_canonical_blocking}) as a sum over
     length-$L$ words and sum one letter at a time, repeatedly applying the
     one-site left-canonical identity. For $L=0$, the unique empty word
@@ -5791,8 +5791,8 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
   \end{align}
 \end{proof}
 
-\begin{lemma}[Invertible factor for a reduced projection]
-  \label{lem:reduced_projection_invertible_factor}
+\begin{theorem}[Invertible factor for a reduced projection]
+  \label{thm:reduced_projection_invertible_factor}
   \lean{Matrix.exists_units_supportInvExtension_reducedProjection_rightFactor}
   \leanok
   \uses{def:support_proj,def:mpu_matrix_reduced_projection,
@@ -5801,7 +5801,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
   $\widetilde P$ be the reduced projection of $P$ and $Q$. There are
   invertible support-inverse extensions of $L$ and $R$, together with an
   invertible matrix $Y$, such that $PQY=\widetilde P$.
-\end{lemma}
+\end{theorem}
 
 \begin{proof}\leanok
   Extend the inverses on the supports by the identity on their orthogonal
@@ -5819,7 +5819,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
   \uses{def:mpo_family,def:support_proj,def:mpu_virtual_sandwich,
     def:mpu_matrix_reduced_projection,def:mpu_right_rank,def:mpu_left_rank,
     def:mpu_ambient_support_inverse_extension,
-    lem:reduced_projection_invertible_factor}
+    thm:reduced_projection_invertible_factor}
   Let $W=(W^{ij})$ be an MPO tensor, let $L$, $R$, $X$, $Z$, $Y$ be square
   matrices of the same size, let $P$ be an orthogonal projection, let $Q$
   be a square matrix of the same size, and set $\widetilde P$ equal to
