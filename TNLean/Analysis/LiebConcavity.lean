@@ -163,7 +163,7 @@ The remaining Mathlib or local formalization gaps are:
 ## References
 
 * [R. Bhatia, *Matrix Analysis*, Springer GTM 169, Chapter V]
-* [M. Wolf, *Quantum Channels & Operations: Guided Tour*, Theorem 5.1]
+* [M. Wolf, *Quantum Channels & Operations: Guided Tour*, Theorems 5.11 and 5.13]
 * [F. Hansen, G. K. Pedersen, *Jensen's operator inequality*, 2003]
 * [E. H. Lieb, *Convex trace functions and the Wigner--Yanase--Dyson
   conjecture*, 1973]
@@ -285,7 +285,7 @@ private lemma positiveMap_rpowIntegrand₁₂_cfcₙ_jensen
   simpa [cfcₙ_rpowIntegrand₁₂_eq_cfc hA hp ht,
     cfcₙ_rpowIntegrand₁₂_eq_cfc hTA hp ht] using hpoint
 
-/-- **Operator Jensen for concave `rpow`** (Wolf Theorem 5.1, `p ∈ [0, 1]`).
+/-- **Operator Jensen for concave `rpow`** (Wolf Theorem 5.13, `p ∈ [0, 1]`).
 
 For a positive subunital map `T` and `p ∈ [0, 1]`:
   `T(A ^ p) ≤ (T A) ^ p`.
@@ -294,7 +294,7 @@ Follows from operator concavity of `rpow` (Bhatia, Chapter V) combined with
 the Hansen--Pedersen operator Jensen inequality for positive subunital maps.
 
 References:
-* Wolf, Theorem 5.1
+* Wolf, Theorem 5.13
 * Hansen--Pedersen, *Jensen's operator inequality*, 2003 -/
 theorem posMap_rpow_concave_jensen
     {T : Mat →ₗ[ℂ] Mat} (hT : IsPositiveMap T) (hSub : T 1 ≤ (1 : Mat))
@@ -441,7 +441,7 @@ private lemma tendsto_rpow_exponent_two {M : Mat} (hM : 0 ≤ M) :
   case tendsto =>
     exact tendstoUniformlyOn_rpow_exponent_two (spectrum ℝ M) hspec_compact
 
-/-- **Operator Jensen for convex `rpow`** (Wolf Theorem 5.1, `p ∈ [1, 2]`).
+/-- **Operator Jensen for convex `rpow`** (Wolf Theorem 5.11, `p ∈ [1, 2]`).
 
 For a positive subunital map `T` and `p ∈ [1, 2]`:
   `(T A) ^ p ≤ T(A ^ p)`.
@@ -450,7 +450,7 @@ Follows from operator convexity of `rpow` (Bhatia, Chapter V) combined with
 the Hansen--Pedersen operator Jensen inequality for positive subunital maps.
 
 References:
-* Wolf, Theorem 5.1
+* Wolf, Theorem 5.11
 * Hansen--Pedersen, *Jensen's operator inequality*, 2003 -/
 theorem posMap_rpow_convex_jensen
     {T : Mat →ₗ[ℂ] Mat} (hT : IsPositiveMap T) (hSub : T 1 ≤ (1 : Mat))
@@ -540,7 +540,7 @@ theorem posMap_rpow_convex_jensen
     exact le_of_tendsto_of_tendsto hlimF hlimG hle
   · exact hcore p ⟨hp1, hp2⟩
 
-/-- **Operator Jensen for concave `log`** (Wolf Theorem 5.1, log case).
+/-- **Operator Jensen for concave `log`** (Wolf Theorem 5.13, log case).
 
 For a positive **unital** map `T` and positive-definite `A`:
   `T(log A) ≤ log(T A)`.
@@ -551,7 +551,7 @@ Follows by applying the concave real-power theorem to `(A ^ p - 1) / p` for
 subunitality.
 
 References:
-* Wolf, Theorem 5.1
+* Wolf, Theorem 5.13
 * Hansen--Pedersen, *Jensen's operator inequality*, 2003 -/
 theorem posMap_log_concave_jensen
     {T : Mat →ₗ[ℂ] Mat} (hT : IsPositiveMap T) (hUnit : T 1 = (1 : Mat))
