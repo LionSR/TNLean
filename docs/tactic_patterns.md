@@ -1177,6 +1177,22 @@ abstracted — record why, so it is not re-proposed).
 Seeded from `scripts/tactic_pattern_scan.py` (2026-07-18 scan; re-run for
 current counts and full location lists).
 
+### Hermitian extraction from a finite-order channel eigenvector — candidate
+- **Pattern:** from `E X = μ • X`, `X ≠ 0`, `μ ≠ 1`, and `μ ^ p = 1`,
+  use trace preservation and the Hermitian parts `X + Xᴴ` and
+  `Complex.I • (Xᴴ - X)` to obtain a nonzero Hermitian trace-zero fixed point
+  of `E ^ p`.
+- **Seen:** 2 occurrences before compatibility reduction (2026-08-20):
+  `Kraus.exists_hermitian_ne_zero_trace_zero_pow_fixedPoint` and
+  `MPSTensor.exists_hermitian_ne_zero_trace_zero_pow_fixedPoint`.
+- **Abstraction (proposed):** retain the channel-native Kraus theorem as the
+  proof owner and make the transfer-map statement a direct reformulation via
+  `Kraus.mapLM_eq_transferMap`, adding only the positive-semidefinite
+  consequence required by its established conclusion.
+- **Notes:** the generic theorem keeps the Hermitian-part construction private.
+  The compatibility reduction should preserve the public MPS statement while
+  removing its second implementation.
+
 ### quasi-local translation laws in automorphism-group form — candidate
 - **Pattern:** convert translation composition, symmetry, and identity laws from
   `StarAlgEquiv.trans`, `StarAlgEquiv.symm`, and `StarAlgEquiv.refl` into group
