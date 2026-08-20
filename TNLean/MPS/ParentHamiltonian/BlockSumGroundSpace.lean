@@ -31,29 +31,6 @@ namespace BlockSumGroundSpace
 
 variable {r : ℕ} {dim : Fin r → ℕ}
 
-/-- The diagonal block of a boundary matrix written in the dependent direct-sum
-basis. -/
-noncomputable def sigmaDiagonalBlock
-    (X : Matrix ((j : Fin r) × Fin (dim j)) ((j : Fin r) × Fin (dim j)) ℂ)
-    (j : Fin r) : Matrix (Fin (dim j)) (Fin (dim j)) ℂ :=
-  X.submatrix (fun a => ⟨j, a⟩) (fun a => ⟨j, a⟩)
-
-/-- The diagonal block of a boundary matrix on the flattened direct-sum bond. -/
-noncomputable def diagonalBlock
-    (X : Matrix (Fin (∑ j : Fin r, dim j)) (Fin (∑ j : Fin r, dim j)) ℂ)
-    (j : Fin r) : Matrix (Fin (dim j)) (Fin (dim j)) ℂ :=
-  sigmaDiagonalBlock
-    ((Matrix.reindex finSigmaFinEquiv.symm finSigmaFinEquiv.symm) X) j
-
-/-- A block-diagonal matrix only sees the diagonal blocks of an arbitrary
-right boundary matrix under the trace pairing. -/
-theorem trace_blockDiagonal'_mul
-    (M : (j : Fin r) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ)
-    (X : Matrix ((j : Fin r) × Fin (dim j)) ((j : Fin r) × Fin (dim j)) ℂ) :
-    Matrix.trace (Matrix.blockDiagonal' M * X) =
-      ∑ j : Fin r, Matrix.trace (M j * sigmaDiagonalBlock X j) := by
-  simpa only [sigmaDiagonalBlock] using Matrix.trace_blockDiagonal'_mul M X
-
 /-- The boundary parametrization of a block-diagonal tensor is the sum of the block
 boundary parametrizations applied to the diagonal boundary blocks. -/
 theorem groundSpaceMap_toTensorFromBlocks_eq_sum_diagonalBlock
@@ -61,14 +38,14 @@ theorem groundSpaceMap_toTensorFromBlocks_eq_sum_diagonalBlock
     (μ : Fin r → ℂ) (A : (j : Fin r) → MPSTensor d (dim j)) (L : ℕ)
     (X : Matrix (Fin (∑ j : Fin r, dim j)) (Fin (∑ j : Fin r, dim j)) ℂ) :
     groundSpaceMap (toTensorFromBlocks (d := d) (μ := μ) A) L X =
-      ∑ j : Fin r, groundSpaceMap (A j) L ((μ j) ^ L • diagonalBlock X j) := by
+      ∑ j : Fin r, groundSpaceMap (A j) L
+        ((μ j) ^ L • Matrix.finSigmaDiagonalBlock X j) := by
   ext σ
   simp only [groundSpaceMap_apply, Finset.sum_apply]
   rw [trace_evalWord_toTensorFromBlocks_mul]
   apply Finset.sum_congr rfl
   intro j _
-  rw [show Matrix.finSigmaDiagonalBlock X j = diagonalBlock X j by
-    rfl, List.length_ofFn, Matrix.smul_mul, Matrix.mul_smul]
+  rw [List.length_ofFn, Matrix.smul_mul, Matrix.mul_smul]
 
 /-- The boundary parametrization of a block-diagonal tensor on a block-diagonal
 boundary condition is the sum of the corresponding block boundary
@@ -93,7 +70,7 @@ theorem groundSpaceMap_toTensorFromBlocks_eq_sum_blockDiagonal
   intro j _
   congr 1
   ext a b
-  simp [diagonalBlock, sigmaDiagonalBlock]
+  simp [Matrix.finSigmaDiagonalBlock]
 
 /-- A vector in the sum of the open-boundary block spaces has one
 block-diagonal boundary matrix for the weighted direct-sum tensor. The
@@ -169,19 +146,21 @@ theorem groundSpace_block_le_toTensorFromBlocks
   rw [Finset.sum_eq_single j]
   · have hpow : (μ j) ^ L ≠ 0 := pow_ne_zero L hμj
     have hdiag :
-        diagonalBlock ((Matrix.reindex finSigmaFinEquiv finSigmaFinEquiv) Yσ) j =
+        Matrix.finSigmaDiagonalBlock
+            ((Matrix.reindex finSigmaFinEquiv finSigmaFinEquiv) Yσ) j =
           ((μ j) ^ L)⁻¹ • X := by
       ext a b
-      simp [diagonalBlock, sigmaDiagonalBlock, Yσ]
+      simp [Matrix.finSigmaDiagonalBlock, Yσ]
     rw [hdiag]
     simp only [groundSpaceMap_apply]
     rw [smul_smul, mul_inv_cancel₀ hpow]
     simp
   · intro k _ hkj
     have hdiag :
-        diagonalBlock ((Matrix.reindex finSigmaFinEquiv finSigmaFinEquiv) Yσ) k = 0 := by
+        Matrix.finSigmaDiagonalBlock
+            ((Matrix.reindex finSigmaFinEquiv finSigmaFinEquiv) Yσ) k = 0 := by
       ext a b
-      simp [diagonalBlock, sigmaDiagonalBlock, Yσ, hkj]
+      simp [Matrix.finSigmaDiagonalBlock, Yσ, hkj]
     rw [hdiag]
     simp
   · intro hj
@@ -211,7 +190,8 @@ theorem groundSpace_toTensorFromBlocks_eq_iSup
     rw [groundSpaceMap_toTensorFromBlocks_eq_sum_diagonalBlock μ A L X]
     apply Submodule.sum_mem
     intro j _
-    exact Submodule.mem_iSup_of_mem j ⟨(μ j) ^ L • diagonalBlock X j, rfl⟩
+    exact Submodule.mem_iSup_of_mem j
+      ⟨(μ j) ^ L • Matrix.finSigmaDiagonalBlock X j, rfl⟩
   · exact iSup_le fun j => groundSpace_block_le_toTensorFromBlocks μ A (hμ j) L
 
 end MPSTensor
