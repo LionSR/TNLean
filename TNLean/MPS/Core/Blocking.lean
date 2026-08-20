@@ -111,8 +111,8 @@ lemma flattenBlockedWord_cons (d L : ℕ) (i : Fin (blockPhysDim d L))
 
 lemma evalWord_blockTensor (A : Fin d → Matrix (Fin D) (Fin D) ℂ) (L : ℕ) :
     ∀ w : List (Fin (blockPhysDim d L)),
-      evalWord (blockTensor (d := d) (D := D) A L) w =
-        evalWord A (flattenBlockedWord d L w) := by
+      Kraus.evalWord (blockTensor (d := d) (D := D) A L) w =
+        Kraus.evalWord A (flattenBlockedWord d L w) := by
   exact Kraus.evalWord_blockTensor A L
 
 /-- The flattened word has length equal to the number of blocks times the block length. -/
