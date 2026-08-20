@@ -18,6 +18,7 @@ import re
 import sys
 
 from lean_import_syntax import (
+    IMPORT_COMMAND_RE,
     MODULE_NAME,
     pure_import_modules,
     strip_lean_comments,
@@ -128,15 +129,14 @@ def source_imported_modules(path: Path) -> set[str]:
         command = line.strip()
         if not command:
             continue
-        tokens = command.split()
-        if tokens[0] != "import":
-            break
-        imported = tokens[1:]
-        if not imported or any(
-            re.fullmatch(MODULE_NAME, module) is None for module in imported
-        ):
+        match = IMPORT_COMMAND_RE.fullmatch(command)
+        if match is not None:
+            modules.add(match.group(1))
+        elif command.split(maxsplit=1)[0] == "import":
+            # A malformed import makes the ownership path unverifiable.
             return set()
-        modules.update(imported)
+        else:
+            break
     return modules
 
 
