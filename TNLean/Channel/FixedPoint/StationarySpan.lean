@@ -19,7 +19,7 @@ that span it.
 ## Source
 
 * M. Wolf, *Quantum Channels & Operations: Guided Tour*, Corollary 6.5; local
-  source `Notes/WolfNoteTexSource/ch06_spectral_properties.tex`, lines 1204--1218.
+  source `Notes/WolfNoteTexSource/ch06_spectral_properties.tex`, lines 1204--1212.
 -/
 
 open scoped Matrix ComplexOrder MatrixOrder
