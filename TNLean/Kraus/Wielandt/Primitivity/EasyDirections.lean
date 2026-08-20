@@ -21,7 +21,7 @@ vector spreads in Wolf, Theorem 6.8.
   eventual implication from item 3 to item 2.
 -/
 
-open scoped Matrix
+open scoped Matrix BigOperators
 
 namespace Kraus
 
