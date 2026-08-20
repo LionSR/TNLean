@@ -326,18 +326,8 @@ Throughout this section, assume $D_k \ge 1$ for every block~$k$.
 
 \subsection{Block permutation algebra}
 
-\begin{definition}[Block ideal]\label{def:block_ideal}
-    \lean{TwoSidedIdeal.blockIdeal}
-    \leanok
-    Let $\{R_k\}_{k=0}^{r-1}$ be simple rings.
-    The $k$-th \emph{block ideal} in $\prod_{j=0}^{r-1} R_j$ is
-    \begin{align}
-        I_k
-        &:=\left\{x \in \prod_{j=0}^{r-1} R_j :
-            x_j = 0 \text{ for } j \neq k\right\}.
-        \notag
-    \end{align}
-\end{definition}
+The block ideals used below are those of
+Definition~\ref{def:block_ideal}.
 
 \begin{theorem}[Each block ideal is an atom]\label{thm:block_ideal_atom}
     \lean{TwoSidedIdeal.isAtom_blockIdeal}
