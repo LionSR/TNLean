@@ -6,7 +6,6 @@ Authors: TNLean contributors
 import TNLean.Kraus.Wielandt.RectangularSpan.Basic
 import TNLean.Wielandt.RankOne.Construction
 import TNLean.Wielandt.RankOne.Products
-import TNLean.Wielandt.RankOne.Extraction
 import Mathlib.Data.Fin.Tuple.Basic
 
 /-!

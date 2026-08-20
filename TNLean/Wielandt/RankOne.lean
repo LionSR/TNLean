@@ -8,9 +8,6 @@ Authors: TNLean contributors
 -- Import architecture: docs/import_structure.md.
 -- Generated aggregator module: TNLean.Wielandt.RankOne
 
-import TNLean.Wielandt.RankOne.BoundedWord
 import TNLean.Wielandt.RankOne.Construction
-import TNLean.Wielandt.RankOne.Extraction
 import TNLean.Wielandt.RankOne.ExtractionFull
 import TNLean.Wielandt.RankOne.Products
-import TNLean.Wielandt.RankOne.SpanGrowth
