@@ -303,8 +303,9 @@ def blueprint_non_item_blocks(
 ) -> list[NonItemBlock]:
     """Partition text outside item spans into paragraph-like blocks.
 
-    Complete balanced TeX environments containing no item line are atomic,
-    including nested environments and blank or comment-only lines. An outer
+    Multiline balanced TeX environments containing no item line are atomic,
+    including nested environments and blank or comment-only lines. A
+    single-line environment remains in its surrounding paragraph. An outer
     environment containing item lines is rejected because partitioning it at
     the item boundary would produce malformed TeX. Elsewhere, blank lines and
     item boundaries split blocks. Router ``\\input`` commands
@@ -373,6 +374,10 @@ def blueprint_non_item_blocks(
                 continue
             atomic_end = atomic_ranges.get(line_no)
             if atomic_end is not None:
+                if atomic_end == line_no:
+                    current.append((line_no, line))
+                    line_no += 1
+                    continue
                 flush()
                 current = [
                     (atomic_line, source_lines[atomic_line - 1])

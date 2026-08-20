@@ -567,6 +567,31 @@ QIC picture.
         self.assertEqual(report["simulated_output_errors"], [])
 
     @patch("qic_blueprint_boundary_report.source_sha", return_value="a" * 40)
+    def test_inline_environment_stays_in_surrounding_paragraph(
+        self, _source_sha
+    ) -> None:
+        self.write_blueprint(
+            r"""\begin{theorem}\label{thm:qic}
+\lean{Kraus.moved}
+\end{theorem}
+
+The matrix
+$J=\bigl(\begin{smallmatrix}0&1\\-1&0\end{smallmatrix}\bigr)$
+has the property in Theorem~\ref{thm:qic}.
+"""
+        )
+        report = boundary_report(self.root)
+        blocks = [
+            block
+            for block in report["non_item_blocks"]
+            if block["file"] == "src/chapter/ch01.tex"
+        ]
+        self.assertEqual(len(blocks), 1)
+        self.assertEqual((blocks[0]["line"], blocks[0]["end_line"]), (5, 7))
+        self.assertEqual(blocks[0]["references"], ["thm:qic"])
+        self.assertEqual(blocks[0]["disposition"], "qic")
+
+    @patch("qic_blueprint_boundary_report.source_sha", return_value="a" * 40)
     def test_percent_continued_reference_payload_is_normalized(self, _source_sha) -> None:
         self.write_blueprint(
             r"""\begin{theorem}\label{thm:qic}

@@ -136,12 +136,15 @@ disposition. QICLean keeps QIC items and TNLean keeps TN items at the original
 path. Retained item bytes must not change.
 
 The report also simulates the text outside item spans in chapter and appendix
-files. A complete balanced TeX environment containing no item line is one
-atomic block, including its nested environments and all blank or comment-only
-lines. Outside such environments, blank lines and item boundaries divide the
-text into paragraph-like blocks. A standalone `\input` command is its own
-block. Build support files remain unchanged apart from this input filtering. A
-mismatched, unmatched, or unterminated TeX environment blocks the freeze. A
+files. A complete balanced TeX environment containing no item line and spanning
+more than one source line is one atomic block, including its nested
+environments and all blank or comment-only lines. A single-line environment,
+such as an inline `smallmatrix`, remains part of its surrounding paragraph.
+An environment containing theorem-like item lines blocks the freeze. Outside
+such environments, blank lines and item boundaries divide the text into
+paragraph-like blocks. A standalone `\input` command is its own block. Build
+support files remain unchanged apart from this input filtering. A mismatched,
+unmatched, or unterminated TeX environment also blocks the freeze. A
 top-level leaf prose file with no items or inputs, such as the common
 introduction, stays on both sides. A file defining a non-item label referenced
 directly by a retained item is selected for that side, and the ordinary input
