@@ -7,6 +7,7 @@ import Mathlib.Data.Fin.Tuple.Basic
 import Mathlib.Data.List.FinRange
 import Mathlib.Data.Matrix.Mul
 import TNLean.Kraus.Injectivity
+import TNLean.Kraus.Word
 import TNLean.Kraus.Wielandt.SpanGrowth.VectorToMatrixSpan
 
 /-!
@@ -60,18 +61,6 @@ theorem rectSpan_le_wordSpan
   exact (wordSpan_mul_le K m n) (Submodule.mul_mem_mul hP hQ)
 
 /-! ## Transposed word spans -/
-
-/-- Transposing a word product reverses the word. -/
-theorem evalWord_transpose
-    (K : Fin d → Matrix (Fin D) (Fin D) ℂ) :
-    ∀ w : List (Fin d),
-      (MPSTensor.evalWord K w)ᵀ =
-        MPSTensor.evalWord (fun i ↦ (K i)ᵀ) w.reverse := by
-  intro w
-  induction w with
-  | nil => simp [MPSTensor.evalWord]
-  | cons i w ih =>
-      simp [MPSTensor.evalWord, Matrix.transpose_mul, ih, MPSTensor.evalWord_append]
 
 /-- Transposition identifies the fixed-length word spans of a family and its transpose. -/
 private theorem map_transpose_wordSpan
