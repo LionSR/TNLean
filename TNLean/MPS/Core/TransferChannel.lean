@@ -85,7 +85,7 @@ namespace MPSTensor
 variable {d : ℕ}
 
 /-- The standard transfer map preserves trace for a trace-preserving Kraus family. -/
-theorem trace_transferMap (A : MPSTensor d D) (Z : Matrix (Fin D) (Fin D) ℂ)
+lemma trace_transferMap (A : MPSTensor d D) (Z : Matrix (Fin D) (Fin D) ℂ)
     (hA : ∑ i : Fin d, (A i)ᴴ * A i = 1) :
     Matrix.trace (transferMap (d := d) (D := D) A Z) = Matrix.trace Z := by
   rw [← Kraus.mapLM_eq_transferMap]
