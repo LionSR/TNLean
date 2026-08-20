@@ -3,11 +3,12 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.Channel.Peripheral.SpectralProjection
-import TNLean.Channel.FixedPoint.MeanErgodicProjection
-import TNLean.Channel.Semigroup.CPClosure
+import TNLean.Algebra.EigenspaceMap
 import TNLean.Analysis.Dirichlet
 import TNLean.Analysis.OperatorNormConvergence
+import TNLean.Channel.FixedPoint.MeanErgodicProjection
+import TNLean.Channel.Peripheral.SpectralProjection
+import TNLean.Channel.Semigroup.CPClosure
 import Mathlib.Data.Nat.Choose.Bounds
 import Mathlib.Data.Nat.Choose.Sum
 import Mathlib.Analysis.SpecificLimits.Normed
@@ -256,9 +257,7 @@ theorem tendsto_pow_apply_self_of_mem_iSup_eigenspace {f : Module.End ℂ V}
     have hmem : (v μ : V) ∈ f.eigenspace μ := (v μ).2
     have hEq : ∀ i : ℕ, (f ^ n i) (v μ : V) = μ ^ n i • (v μ : V) := by
       intro i
-      rcases eq_or_ne (v μ : V) 0 with hz | hz
-      · rw [hz, map_zero, smul_zero]
-      · exact HasEigenvector.pow_apply ⟨hmem, hz⟩ (n i)
+      exact Module.End.pow_apply_of_mem_eigenspace hmem (n i)
     have hlim : Tendsto (fun i : ℕ ↦ μ ^ n i • (v μ : V)) atTop (𝓝 (v μ : V)) :=
       (hn μ hμ).one_smul_const (v μ : V)
     exact hlim.congr' (Filter.Eventually.of_forall fun i ↦ (hEq i).symm)

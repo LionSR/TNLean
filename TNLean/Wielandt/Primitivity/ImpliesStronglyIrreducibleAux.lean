@@ -3,9 +3,12 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.Wielandt.Primitivity.ImpliesStronglyIrreducible
+import TNLean.Algebra.EigenspaceMap
+import TNLean.Channel.Irreducible.FixedPointUniqueness
+import TNLean.Kraus.Wielandt.Primitivity.VectorSpreadToPrimitive
 import TNLean.MPS.CanonicalForm.BlockingViaAdjoint
 import TNLean.MPS.Core.TransferChannel
+import TNLean.Wielandt.Primitivity.ImpliesStronglyIrreducible
 
 /-!
 # Proposition 3, (a) → (c): Spectral perturbation and conclusion
@@ -81,12 +84,8 @@ theorem transferMap_pow_smul_eigenvector
     (hEig : transferMap (d := d) (D := D) A X = μ • X)
     (n : ℕ) :
     ((transferMap (d := d) (D := D) A) ^ n) X = μ ^ n • X := by
-  induction n with
-  | zero => simp
-  | succ n ih =>
-    -- E^(n+1) = E^n * E, so E^(n+1)(X) = E^n(E(X)) = E^n(μ • X) = μ • E^n(X) = μ^(n+1) • X
-    rw [pow_succ, Module.End.mul_apply, hEig, map_smul, ih, smul_smul]
-    congr 1; ring
+  exact Module.End.pow_apply_of_mem_eigenspace
+    (Module.End.mem_eigenspace_iff.mpr hEig) n
 
 /-- If `E(X) = μ • X` and `μ ^ p = 1`, then `E^p(X) = X`. -/
 theorem transferMap_pow_eigenvector_of_root_of_unity
@@ -229,25 +228,12 @@ theorem exists_hermitian_ne_zero_trace_zero_pow_fixedPoint
       H.IsHermitian ∧ H ≠ 0 ∧ H.trace = 0 ∧
       ((transferMap (d := d) (D := D) A) ^ p) H = H ∧
       ¬H.PosSemidef := by
-  have htr := trace_eigenvector_eq_zero A hNorm hEig hμ_ne
-  rcases hermitianParts_not_both_zero hX_ne with h | h
-  · have htrH : Matrix.trace (X + Xᴴ) = 0 := by
-      rw [Matrix.trace_add, Matrix.trace_conjTranspose, htr, star_zero, add_zero]
-    exact ⟨X + Xᴴ,
-      Matrix.isHermitian_add_transpose_self X, h,
-      htrH,
-      transferMap_pow_hermitianPart_fixedPoint A hEig hroot,
-      not_posSemidef_of_hermitian_ne_zero_trace_eq_zero
-        (Matrix.isHermitian_add_transpose_self X) h htrH⟩
-  · have htrH : Matrix.trace (Complex.I • (Xᴴ - X)) = 0 := by
-      rw [Matrix.trace_smul, Matrix.trace_sub, Matrix.trace_conjTranspose, htr, star_zero,
-        sub_zero, smul_zero]
-    exact ⟨Complex.I • (Xᴴ - X),
-      isHermitian_smul_I_sub_conjTranspose X, h,
-      htrH,
-      transferMap_pow_antiHermitianPart_fixedPoint A hEig hroot,
-      not_posSemidef_of_hermitian_ne_zero_trace_eq_zero
-        (isHermitian_smul_I_sub_conjTranspose X) h htrH⟩
+  obtain ⟨H, hH, hH_ne, hH_trace, hH_fix⟩ :=
+    Kraus.exists_hermitian_ne_zero_trace_zero_pow_fixedPoint
+      (transferMap (d := d) (D := D) A) (Kraus.isChannel_transferMap A hNorm)
+      hEig hX_ne hμ_ne hroot
+  exact ⟨H, hH, hH_ne, hH_trace, hH_fix,
+    not_posSemidef_of_hermitian_ne_zero_trace_eq_zero hH hH_ne hH_trace⟩
 
 
 end SpectralPerturbation
@@ -271,11 +257,9 @@ variable {d D : ℕ}
 If `A` is paper-primitive (with witness `q`), then any two nonzero PSD fixed
 points of `(transferMap A)^p` (with `p > 0`) are proportional.
 
-**Proof**: Upgrade both to PosDef via `posDef_fixedPoint_of_pow_of_isPrimitivePaper`,
-apply `exists_critical_scalar` to find `c₀ > 0` with `τ = σ - c₀ • ρ` PSD but
-not PosDef. Since `τ` is also `E^p`-fixed, if `τ ≠ 0` we get a nonzero PSD
-`E^p`-fixed matrix that is not PosDef — contradicting paper-primitivity. Hence
-`τ = 0` and `σ = c₀ • ρ`. -/
+**Proof**: Upgrade both matrices, and every nonzero positive-semidefinite fixed
+point of the same power, to positive definite matrices. Fixed-point
+proportionality then gives the conclusion. -/
 theorem posSemidef_pow_fixedPoint_unique_of_isPrimitivePaper
     (A : MPSTensor d D)
     {q : ℕ} (hq : ∀ φ : Fin D → ℂ, φ ≠ 0 → vectorSpreadSpan A φ q = ⊤)
@@ -286,25 +270,13 @@ theorem posSemidef_pow_fixedPoint_unique_of_isPrimitivePaper
     (hρ_fix : ((transferMap (d := d) (D := D) A) ^ p) ρ = ρ)
     (hσ_fix : ((transferMap (d := d) (D := D) A) ^ p) σ = σ) :
     ∃ c : ℂ, σ = c • ρ := by
-  -- Step 1: Upgrade both to PosDef
-  have hρ_pd := posDef_fixedPoint_of_pow_of_isPrimitivePaper A hq hρ_psd hρ_ne hp hρ_fix
-  have hσ_pd := posDef_fixedPoint_of_pow_of_isPrimitivePaper A hq hσ_psd hσ_ne hp hσ_fix
-  -- Step 2: Handle trivial dimension case
-  by_cases hD : D = 0
-  · exact ⟨1, by ext i; exact (Fin.elim0 (hD ▸ i))⟩
-  · have : Nonempty (Fin D) := ⟨⟨0, Nat.pos_of_ne_zero hD⟩⟩
-    -- Step 3: Critical scalar — find c₀ > 0 with τ = σ - c₀ • ρ PSD but not PosDef
-    obtain ⟨c₀, _, hτ_psd, hτ_not_pd⟩ := exists_critical_scalar hρ_pd hσ_pd
-    set τ := σ - (↑c₀ : ℂ) • ρ with hτ_def
-    -- Step 4: τ is E^p-fixed
-    have hτ_fix : ((transferMap (d := d) (D := D) A) ^ p) τ = τ := by
-      simp only [τ, map_sub, map_smul, hρ_fix, hσ_fix]
-    -- Step 5: If τ ≠ 0, we get a contradiction
-    by_cases hτ_ne : τ = 0
-    · exact ⟨↑c₀, sub_eq_zero.mp hτ_ne⟩
-    · exact absurd
-        (posDef_fixedPoint_of_pow_of_isPrimitivePaper A hq hτ_psd hτ_ne hp hτ_fix)
-        hτ_not_pd
+  have hρ_fix' : ((Kraus.mapLM A) ^ p) ρ = ρ := by
+    simpa only [Kraus.mapLM_eq_transferMap] using hρ_fix
+  have hσ_fix' : ((Kraus.mapLM A) ^ p) σ = σ := by
+    simpa only [Kraus.mapLM_eq_transferMap] using hσ_fix
+  simpa only [Kraus.mapLM_eq_transferMap] using
+    Kraus.posSemidef_pow_fixedPoint_unique
+      A hq ρ σ hρ_psd hρ_ne hσ_psd hσ_ne hp hρ_fix' hσ_fix'
 
 end Uniqueness
 
