@@ -49,6 +49,14 @@ variable {D : ℕ}
 
 local notation "V" => Matrix (Fin D) (Fin D) ℂ
 
+/-- Compatibility wrapper for `ContinuousLinearMap.tendsto_trace_pow_of_tendsto_zero`. -/
+lemma tendsto_trace_pow_of_tendsto_zero
+    (F : V →L[ℂ] V)
+    (hF : Tendsto (fun n ↦ F ^ n) atTop (nhds 0)) :
+    Tendsto (fun n ↦ LinearMap.trace ℂ V ((F ^ n : V →L[ℂ] V) : V →ₗ[ℂ] V))
+      atTop (nhds 0) :=
+  ContinuousLinearMap.tendsto_trace_pow_of_tendsto_zero F hF
+
 /-- Compatibility wrapper for `LinearMap.trace_pow_tendsto_one_of_spectralRadius_compl_lt_one`. -/
 theorem linearMap_trace_pow_tendsto_one_of_spectralRadius_compl_lt_one
     [NeZero D]

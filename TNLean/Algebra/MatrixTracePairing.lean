@@ -58,7 +58,7 @@ variable {𝕜 : Type*} [CommRing 𝕜]
 /-- Expand the operator trace of an endomorphism of a rectangular matrix space as a sum over
 matrix units. -/
 lemma linearMap_trace_eq_sum_apply_single
-    {D₁ D₂ : ℕ} [NeZero D₁] [NeZero D₂]
+    {D₁ D₂ : ℕ}
     (T : Matrix (Fin D₁) (Fin D₂) 𝕜 →ₗ[𝕜] Matrix (Fin D₁) (Fin D₂) 𝕜) :
     (LinearMap.trace 𝕜 (Matrix (Fin D₁) (Fin D₂) 𝕜)) T =
       ∑ p : Fin D₁, ∑ q : Fin D₂, (T (Matrix.single p q (1 : 𝕜))) p q := by
@@ -88,25 +88,14 @@ lemma linearMap_trace_eq_sum_apply_single
 
 /-- The `(p, q)` entry of `M * Matrix.single p q 1 * N` is `M p p * N q q`. -/
 lemma entry_mul_single_mul
-    {D₁ D₂ : ℕ} [NeZero D₁] [NeZero D₂]
+    {D₁ D₂ : ℕ}
     (M : Matrix (Fin D₁) (Fin D₁) 𝕜) (N : Matrix (Fin D₂) (Fin D₂) 𝕜)
     (p : Fin D₁) (q : Fin D₂) :
     (M * Matrix.single p q (1 : 𝕜) * N) p q = M p p * N q q := by
-  calc
-    (M * Matrix.single p q (1 : 𝕜) * N) p q =
-        Matrix.trace
-          ((M * Matrix.single p q (1 : 𝕜) * N) * Matrix.single q p (1 : 𝕜)) := by
-      symm
-      simpa using Matrix.trace_mul_single
-        (M * Matrix.single p q (1 : 𝕜) * N) q p (1 : 𝕜)
-    _ = Matrix.trace
-        (M * (Matrix.single p q (1 : 𝕜) * N * Matrix.single q p (1 : 𝕜))) := by
-      simp only [Matrix.mul_assoc]
-    _ = Matrix.trace (M * Matrix.single p p (N q q)) := by
-      rw [Matrix.single_mul_mul_single]
-      simp
-    _ = M p p * N q q := by
-      simpa [mul_comm] using Matrix.trace_mul_single M p p (N q q)
+  rw [Matrix.mul_apply]
+  refine (Fintype.sum_eq_single q fun x hx => ?_).trans ?_
+  · simp [hx]
+  · simp
 
 end TraceExpansion
 

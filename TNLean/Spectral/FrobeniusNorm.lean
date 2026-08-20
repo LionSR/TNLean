@@ -20,23 +20,23 @@ namespace MPSTensor
 variable {m n : ℕ}
 
 /-- Compatibility name for the squared Frobenius norm. -/
-noncomputable abbrev frobSq (X : Matrix (Fin m) (Fin n) ℂ) : ℝ :=
+noncomputable def frobSq (X : Matrix (Fin m) (Fin n) ℂ) : ℝ :=
   Matrix.frobeniusNormSq X
 
 /-- Compatibility form of `Matrix.frobeniusNormSq_eq_sum`. -/
 lemma frobSq_eq_sum (X : Matrix (Fin m) (Fin n) ℂ) :
-    frobSq X = ∑ i : Fin m, ∑ j : Fin n, ‖X i j‖ ^ 2 :=
-  Matrix.frobeniusNormSq_eq_sum X
+    frobSq X = ∑ i : Fin m, ∑ j : Fin n, ‖X i j‖ ^ 2 := by
+  simpa only [frobSq] using Matrix.frobeniusNormSq_eq_sum X
 
 /-- Compatibility form of `Matrix.frobeniusNormSq_eq_trace`. -/
 lemma frobSq_trace (X : Matrix (Fin m) (Fin n) ℂ) :
-    frobSq X = (Matrix.trace (Xᴴ * X)).re :=
-  Matrix.frobeniusNormSq_eq_trace X
+    frobSq X = (Matrix.trace (Xᴴ * X)).re := by
+  simpa only [frobSq] using Matrix.frobeniusNormSq_eq_trace X
 
 /-- Compatibility form of `Matrix.frobeniusNormSq_smul`. -/
 lemma frobSq_smul (c : ℂ) (X : Matrix (Fin m) (Fin n) ℂ) :
-    frobSq (c • X) = ‖c‖ ^ 2 * frobSq X :=
-  Matrix.frobeniusNormSq_smul c X
+    frobSq (c • X) = ‖c‖ ^ 2 * frobSq X := by
+  simpa only [frobSq] using Matrix.frobeniusNormSq_smul c X
 
 /-- Compatibility embedding with the original row-column coordinate order. -/
 noncomputable def matToES (M : Matrix (Fin m) (Fin n) ℂ) :
