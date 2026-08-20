@@ -308,7 +308,7 @@ theorem isInjective_of_gaugeEquiv {A B : MPSTensor d D}
     (hA : IsInjective A) (hGauge : GaugeEquiv A B) :
     IsInjective B := by
   obtain ⟨X, hX⟩ := hGauge
-  rw [IsInjective, eq_top_iff]
+  rw [IsInjective, Kraus.IsInjective, eq_top_iff]
   intro M _
   have hM' : ((X⁻¹ : GL _ ℂ) : Matrix _ _ ℂ) * M * (X : Matrix _ _ ℂ) ∈
       Submodule.span ℂ (Set.range A) := hA ▸ Submodule.mem_top
@@ -343,7 +343,7 @@ theorem isNBlkInjective_of_gaugeEquiv {A B : MPSTensor d D} {N : ℕ}
     (hA : IsNBlkInjective A N) (hGauge : GaugeEquiv A B) :
     IsNBlkInjective B N := by
   obtain ⟨X, hX⟩ := hGauge
-  rw [IsNBlkInjective, eq_top_iff]
+  rw [IsNBlkInjective, Kraus.IsNBlkInjective, eq_top_iff]
   intro M _
   have hA' : Submodule.span ℂ
       (Set.range fun σ : Fin N → Fin d => evalWord A (List.ofFn σ)) = ⊤ := by
