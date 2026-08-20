@@ -6,6 +6,7 @@ Authors: TNLean contributors
 import TNLean.Channel.Irreducible.Basic
 import TNLean.Channel.KrausMap
 import TNLean.Kraus.InvariantProjection
+import TNLean.Kraus.MapIterate
 import TNLean.MPS.Core.Transfer
 
 /-!
@@ -25,6 +26,7 @@ properties in transfer-map notation.
 * `Kraus.isIrreducibleTensor_of_isIrreducibleMap_transferMap`: the converse implication.
 * `Kraus.isChannel_transferMap`: the MPS transfer map of a trace-preserving Kraus family is
   a channel.
+* `MPSTensor.transferMap_pow_apply'`: iterates of a transfer map are sums over Kraus words.
 * `trace_mul_transferMap_adjoint`: the generic Kraus trace-adjoint identity in MPS
   transfer-map notation.
 -/
@@ -76,6 +78,21 @@ theorem isChannel_transferMap (K : Fin d → Mat) (h_tp : IsTP K) :
   exact isChannel_mapLM K h_tp
 
 end Kraus
+
+namespace MPSTensor
+
+variable {d : ℕ}
+
+/-- Iterating the transfer map gives the sum over word evaluations. -/
+theorem transferMap_pow_apply' (A : MPSTensor d D) (N : ℕ) :
+    ∀ X : Matrix (Fin D) (Fin D) ℂ,
+      ((transferMap (d := d) (D := D) A) ^ N) X =
+        ∑ σ : Fin N → Fin d,
+          evalWord A (List.ofFn σ) * X * (evalWord A (List.ofFn σ))ᴴ := by
+  rw [← Kraus.mapLM_eq_transferMap]
+  exact Kraus.mapLM_pow_apply A N
+
+end MPSTensor
 
 /-- The adjoint trace-pairing identity in MPS transfer-map notation.
 
