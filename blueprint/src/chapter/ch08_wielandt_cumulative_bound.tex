@@ -420,13 +420,11 @@ matrices, and let $\E_K$ be its Kraus map.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:pow-on-eigenspace}
-    Trace preservation and $\mu\neq1$ give $\tr(X)=0$. At least one of
-    $X+X^\dagger$ and $i(X^\dagger-X)$ is nonzero. Choose that Hermitian part
-    as $H$. Conjugation preserves the eigenvector equation, and
-    Theorem~\ref{thm:transfer-map-eigenmatrix-power} together with $\mu^p=1$
-    shows that $H$ is fixed by $\E_A^p$. A nonzero positive-semidefinite
-    matrix has positive trace, so $H$ is not positive semidefinite.
+    \uses{thm:kraus-hermitian-power-fixed-point}
+    Apply Theorem~\ref{thm:kraus-hermitian-power-fixed-point} to the transfer
+    channel. The resulting matrix is nonzero, Hermitian, trace zero, and fixed
+    by $\E_A^p$. A nonzero positive-semidefinite matrix has positive trace, so
+    this matrix is not positive semidefinite.
 \end{proof}
 
 \begin{theorem}[Uniqueness of power-fixed positive matrices]
@@ -441,11 +439,9 @@ matrices, and let $\E_K$ be its Kraus map.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:kraus_power_fixed_point_posdef_from_spreading,
-        thm:posdef_fixedpoint_proportional}
-    The spreading hypothesis makes $\rho$, $\sigma$, and every nonzero
-    positive-semidefinite fixed point of $\E_A^p$ positive definite. Apply
-    Theorem~\ref{thm:posdef_fixedpoint_proportional}.
+    \uses{thm:kraus-power-fixed-point-unique-from-spreading}
+    This is Theorem~\ref{thm:kraus-power-fixed-point-unique-from-spreading}
+    for the Kraus family formed by the matrices of the tensor.
 \end{proof}
 
 \begin{theorem}[Positive-definite fixed point from vector spreading]

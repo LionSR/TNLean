@@ -227,25 +227,12 @@ theorem exists_hermitian_ne_zero_trace_zero_pow_fixedPoint
       H.IsHermitian ∧ H ≠ 0 ∧ H.trace = 0 ∧
       ((transferMap (d := d) (D := D) A) ^ p) H = H ∧
       ¬H.PosSemidef := by
-  have htr := trace_eigenvector_eq_zero A hNorm hEig hμ_ne
-  rcases hermitianParts_not_both_zero hX_ne with h | h
-  · have htrH : Matrix.trace (X + Xᴴ) = 0 := by
-      rw [Matrix.trace_add, Matrix.trace_conjTranspose, htr, star_zero, add_zero]
-    exact ⟨X + Xᴴ,
-      Matrix.isHermitian_add_transpose_self X, h,
-      htrH,
-      transferMap_pow_hermitianPart_fixedPoint A hEig hroot,
-      not_posSemidef_of_hermitian_ne_zero_trace_eq_zero
-        (Matrix.isHermitian_add_transpose_self X) h htrH⟩
-  · have htrH : Matrix.trace (Complex.I • (Xᴴ - X)) = 0 := by
-      rw [Matrix.trace_smul, Matrix.trace_sub, Matrix.trace_conjTranspose, htr, star_zero,
-        sub_zero, smul_zero]
-    exact ⟨Complex.I • (Xᴴ - X),
-      isHermitian_smul_I_sub_conjTranspose X, h,
-      htrH,
-      transferMap_pow_antiHermitianPart_fixedPoint A hEig hroot,
-      not_posSemidef_of_hermitian_ne_zero_trace_eq_zero
-        (isHermitian_smul_I_sub_conjTranspose X) h htrH⟩
+  obtain ⟨H, hH, hH_ne, hH_trace, hH_fix⟩ :=
+    Kraus.exists_hermitian_ne_zero_trace_zero_pow_fixedPoint
+      (transferMap (d := d) (D := D) A) (Kraus.isChannel_transferMap A hNorm)
+      hEig hX_ne hμ_ne hroot
+  exact ⟨H, hH, hH_ne, hH_trace, hH_fix,
+    not_posSemidef_of_hermitian_ne_zero_trace_eq_zero hH hH_ne hH_trace⟩
 
 
 end SpectralPerturbation
@@ -282,12 +269,9 @@ theorem posSemidef_pow_fixedPoint_unique_of_isPrimitivePaper
     (hρ_fix : ((transferMap (d := d) (D := D) A) ^ p) ρ = ρ)
     (hσ_fix : ((transferMap (d := d) (D := D) A) ^ p) σ = σ) :
     ∃ c : ℂ, σ = c • ρ := by
-  have hρ_pd := posDef_fixedPoint_of_pow_of_isPrimitivePaper A hq hρ_psd hρ_ne hp hρ_fix
-  have hσ_pd := posDef_fixedPoint_of_pow_of_isPrimitivePaper A hq hσ_psd hσ_ne hp hσ_fix
-  exact exists_smul_eq_of_posDef_fixedPoints_of_fixedPoint_posDef
-    ((transferMap (d := d) (D := D) A) ^ p) ρ σ hρ_pd hσ_pd hρ_fix hσ_fix
-      (fun hτ_psd hτ_ne hτ_fix ↦
-        posDef_fixedPoint_of_pow_of_isPrimitivePaper A hq hτ_psd hτ_ne hp hτ_fix)
+  simpa only [Kraus.mapLM_eq_transferMap] using
+    Kraus.posSemidef_pow_fixedPoint_unique
+      A hq ρ σ hρ_psd hρ_ne hσ_psd hσ_ne hp hρ_fix hσ_fix
 
 end Uniqueness
 
