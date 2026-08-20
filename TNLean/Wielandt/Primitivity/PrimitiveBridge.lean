@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.Core.Transfer
 import TNLean.Wielandt.Primitivity.Definitions
-import TNLean.MPS.Overlap.PeripheralToTransferMapGap
+import TNLean.Spectral.PeripheralToTransferMapGap
 import TNLean.MPS.Irreducible.FormII
 import TNLean.Wielandt.Primitivity.ToNormal
 import TNLean.Channel.Primitive

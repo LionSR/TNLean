@@ -7,7 +7,7 @@ import TNLean.Spectral.TransferOperatorGapInjective
 import TNLean.Channel.Peripheral.Spectrum
 import TNLean.Wielandt.Primitivity.EasyDirections
 import TNLean.Wielandt.Primitivity.ImpliesStronglyIrreducibleAux
-import TNLean.MPS.Overlap.PeripheralToTransferMapGap
+import TNLean.Spectral.PeripheralToTransferMapGap
 
 /-!
 # Quantitative transfer-map gap bounds for MPS transfer operators

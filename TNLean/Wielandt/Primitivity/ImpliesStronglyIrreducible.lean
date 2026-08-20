@@ -6,7 +6,7 @@ Authors: TNLean contributors
 import TNLean.Wielandt.Primitivity.Definitions
 import TNLean.Wielandt.Primitivity.Normal
 import TNLean.Kraus.InvariantProjection
-import TNLean.MPS.Overlap.PeripheralToTransferMapGap
+import TNLean.Spectral.PeripheralToTransferMapGap
 import Mathlib.Analysis.InnerProductSpace.Positive
 import Mathlib.Analysis.Matrix.Spectrum
 
