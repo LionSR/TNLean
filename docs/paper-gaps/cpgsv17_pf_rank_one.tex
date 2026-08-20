@@ -1034,9 +1034,11 @@ statement is tracked in \ghissue{6632}, retargeted from the refuted raw
 The arbitrary-boundary part of this construction is now formalized by
 \leanid{MPSTensor.trace_evalWord_gauge_toTensorFromBlocks_mul} and
 \leanid{MPOTensor.%
-physCloseN_eq_sum_commonWeightAbsorbedBasis_of_gauge_toTensor}. If $X$ is an
-arbitrary virtual boundary, the boundary entering a fixed representative is
-the sum of the diagonal copy blocks of $G^{-1}XG$ over that representative.
+physCloseN_eq_sum_commonWeightAbsorbedBasis_of_gauge_toTensor}. Let $G$ be the
+invertible virtual matrix implementing the gauge equivalence between the raw
+tensor and its sector decomposition, and let $X$ be an arbitrary virtual
+boundary. The boundary entering a fixed representative is the sum of the
+diagonal copy blocks of $G^{-1}XG$ over that representative.
 The same transformation is valid at every chain length.  Copy-weight equality
 is used only among copies of one representative, so this calculation imposes
 no relation between distinct BNT coefficients.  The remaining content of
