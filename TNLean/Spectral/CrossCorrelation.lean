@@ -58,16 +58,15 @@ theorem cross_correlation_tendsto_zero
     Filter.Tendsto
       (fun N => Matrix.trace (((mixedTransferMap A B) ^ N) X))
       Filter.atTop (nhds 0) := by
-  -- Compose: F^N(X) → 0 (by the transfer-operator gap) and trace is continuous.
-  have h := mixedTransfer_pow_tendsto_zero A B hA hB hA_norm hB_norm hAB X
-  let tr : Matrix (Fin D) (Fin D) ℂ →L[ℂ] ℂ :=
-    LinearMap.toContinuousLinearMap (Matrix.traceLinearMap (Fin D) ℂ ℂ)
-  have h2 : Filter.Tendsto
-      (fun N => (Matrix.traceLinearMap (Fin D) ℂ ℂ) (((mixedTransferMap A B) ^ N) X))
-      Filter.atTop (nhds 0) := by
-    simpa [tr, Function.comp_def, Matrix.traceLinearMap_apply] using
-      (tr.continuous.tendsto 0).comp h
-  simpa [Matrix.traceLinearMap_apply] using h2
+  have hK : ¬ Kraus.GaugePhaseEquiv A B :=
+    fun h => hAB (gaugePhaseEquiv_of_krausGaugePhaseEquiv h)
+  simpa [mixedTransferMap] using
+    Kraus.cross_correlation_tendsto_zero A B
+      (Kraus.isIrreducibleMap_mapLM_of_transferMap A
+        (injective_implies_irreducibleCP A hA))
+      (Kraus.isIrreducibleMap_mapLM_of_transferMap B
+        (injective_implies_irreducibleCP B hB))
+      hA_norm hB_norm hK X
 
 /-- **Self-correlation persists**: If `ρ` is a fixed point of `E_A`, then
 `tr(E_A^N(ρ)) = tr(ρ)` for all `N`. This is the diagonal counterpart to
@@ -78,11 +77,8 @@ theorem self_correlation_persists
     (hfp : transferMap (d := d) (D := D) A ρ = ρ) :
     ∀ N : ℕ,
       Matrix.trace (((transferMap (d := d) (D := D) A) ^ N) ρ) = Matrix.trace ρ := by
-  intro N
-  suffices hfix : ((transferMap (d := d) (D := D) A) ^ N) ρ = ρ by rw [hfix]
-  induction N with
-  | zero => simp
-  | succ n ih => simp [pow_succ, ih, hfp]
+  rw [← Kraus.mapLM_eq_transferMap] at hfp ⊢
+  exact Kraus.self_correlation_persists A ρ hfp
 
 
 end BlockSeparation
