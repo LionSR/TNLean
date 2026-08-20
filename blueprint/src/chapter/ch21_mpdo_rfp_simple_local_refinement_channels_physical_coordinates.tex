@@ -505,7 +505,7 @@
     \end{align}
     The conjugated boundary $G^{-1}XG$ is independent of the word length.
     This is the arbitrary-boundary form of the block calculation used in
-    \cite[Appendix~C.2, lines~1646--1665 and 1810--1825]
+    \cite[Appendix~C.2, lines~1646--1674 and 1810--1825]
       {Cirac2016MPDO_arXiv}.
 \end{theorem}
 
@@ -528,24 +528,40 @@
       MPOTensor.physCloseN_eq_sum_commonWeightAbsorbedBasis_of_gauge_toTensor}
     \leanok
     \uses{thm:mpdo_canonical_block_sum_arbitrary_boundary,
-      def:mpdo_common_sector_weight_absorption}
-    Let the complete tensor be exactly gauge equivalent, by an invertible
-    virtual matrix $G$, to a canonical BNT sum. Suppose that the repeated-copy
-    weights over each fixed BNT representative are equal, with no equality
-    required between different representatives. Absorb this common weight
-    into its representative. Then, for every length $N$ and every virtual
-    boundary $X$, the closure of the complete tensor is the sum of the
-    absorbed-representative closures. The boundary of a representative is the
-    sum of the diagonal copy blocks of $G^{-1}XG$ lying over that
-    representative. In particular, the same representative boundary map
-    applies at the two lengths entering the two channel equations of
-    Definition~\ref{def:is_rfp_via_ts}.
+      def:mpdo_common_sector_weight_absorption, def:phys_close}
+    Let the complete tensor $B$ be exactly gauge equivalent, by an invertible
+    virtual matrix $G$, to a sector decomposition: a finite family of basis
+    blocks $A_j$, $j=1,\ldots,g$, each carrying a copy multiplicity $r_j$ and
+    nonzero weights $\mu_{j,q}$, with no canonical-form or
+    basis-of-normal-tensors hypothesis imposed on the $A_j$. Suppose that the
+    repeated-copy weights over each basis block are equal, with no equality
+    required between different basis blocks, and absorb this common weight
+    into its representative $\mathcal K_j$ as in
+    Definition~\ref{def:mpdo_common_sector_weight_absorption}. Then, for every
+    length $N$ and every virtual boundary $X$, the physical closure of the
+    complete tensor is the sum of the absorbed-representative closures, with
+    the boundary of a representative given by the sum of the diagonal copy
+    blocks of $G^{-1}XG$ lying over it:
+    \begin{align}
+        B_N(X)
+         & =
+        \sum_{j=1}^g (\mathcal K_j)_N\Bigl(\sum_{q=1}^{r_j}
+          (G^{-1}XG)_{(j,q),(j,q)}\Bigr).
+        \notag
+    \end{align}
+    Neither the conjugation $X\mapsto G^{-1}XG$ nor the subsequent sum of
+    diagonal copy blocks depends on $N$. In particular, the same
+    representative boundary map applies at the two lengths entering the two
+    channel equations of Definition~\ref{def:is_rfp_via_ts}. This is the
+    arbitrary-boundary form of the block calculation used in
+    \cite[Appendix~C.2, lines~1646--1674 and 1810--1825]
+      {Cirac2016MPDO_arXiv}.
 \end{theorem}
 
 \begin{proof}\leanok
     Apply Theorem~\ref{thm:mpdo_canonical_block_sum_arbitrary_boundary} to the
     block sum indexed by the individual copies. Reindex this finite sum by a
-    representative $s$ and a copy label $q$. For fixed $s$, all copy weights
+    representative $j$ and a copy label $q$. For fixed $j$, all copy weights
     are equal, so their common $N$-th power may be absorbed into the length
     $N$ word of the representative tensor. The remaining dependence on $q$
     is linear in the diagonal boundary block. Summing over $q$ therefore
