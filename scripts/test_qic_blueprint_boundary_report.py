@@ -407,6 +407,59 @@ See Theorem~\ref{missing:label}.
         self.assertEqual(report["reference_edge_counts"].get("unclassified"), 1)
 
     @patch("qic_blueprint_boundary_report.source_sha", return_value="a" * 40)
+    def test_nested_non_item_environment_is_atomic_across_comments_and_blanks(
+        self, _source_sha
+    ) -> None:
+        self.write_blueprint(
+            r"""\begin{theorem}\label{thm:qic}
+\lean{Kraus.moved}
+\end{theorem}
+
+\begin{figure}
+Opening material.
+\begin{center}
+% explanatory comment
+
+See Theorem~\ref{thm:tn}.
+\end{center}
+\label{fig:atomic}
+\end{figure}
+
+\begin{theorem}\label{thm:tn}
+\lean{MPSTensor.staying}
+\end{theorem}
+"""
+        )
+        report = boundary_report(self.root)
+        blocks = [
+            block
+            for block in report["non_item_blocks"]
+            if block["file"] == "src/chapter/ch01.tex"
+        ]
+        self.assertEqual(len(blocks), 1)
+        self.assertEqual(blocks[0]["line"], 5)
+        self.assertEqual(blocks[0]["end_line"], 13)
+        self.assertEqual(blocks[0]["labels"], ["fig:atomic"])
+        self.assertEqual(blocks[0]["references"], ["thm:tn"])
+        self.assertEqual(blocks[0]["disposition"], "tn")
+
+    def test_rejects_unbalanced_non_item_environment(self) -> None:
+        self.write_blueprint(
+            r"""\begin{theorem}\label{thm:qic}
+\lean{Kraus.moved}
+\end{theorem}
+
+\begin{figure}
+Body.
+"""
+        )
+        with self.assertRaisesRegex(
+            ValueError,
+            r"unterminated environment figure opened at src/chapter/ch01.tex:5",
+        ):
+            boundary_report(self.root)
+
+    @patch("qic_blueprint_boundary_report.source_sha", return_value="a" * 40)
     def test_unknown_non_item_reference_is_reported(self, _source_sha) -> None:
         self.write_blueprint(
             r"""\begin{theorem}\label{thm:qic}
@@ -450,6 +503,37 @@ This paragraph cites Theorem~\ref{missing:label}.
         self.assertIn(
             "src/chapter/intro.tex", report["simulated_tn_source_files"]
         )
+
+    @patch("qic_blueprint_boundary_report.source_sha", return_value="a" * 40)
+    def test_non_item_environment_is_atomic_across_blank_and_comment_lines(
+        self, _source_sha
+    ) -> None:
+        self.write_blueprint(
+            r"""\begin{theorem}\label{thm:qic}
+\lean{Kraus.moved}
+\end{theorem}
+
+\begin{figure}
+\begin{center}
+QIC picture.
+
+% explanatory comment
+\end{center}
+\caption{See Theorem~\ref{thm:qic}.}
+\end{figure}
+"""
+        )
+        report = boundary_report(self.root)
+        figure_blocks = [
+            block
+            for block in report["non_item_blocks"]
+            if block["file"] == "src/chapter/ch01.tex"
+            and block["line"] == 5
+        ]
+        self.assertEqual(len(figure_blocks), 1)
+        self.assertEqual(figure_blocks[0]["end_line"], 12)
+        self.assertEqual(figure_blocks[0]["disposition"], "qic")
+        self.assertEqual(report["simulated_output_errors"], [])
 
     @patch("qic_blueprint_boundary_report.source_sha", return_value="a" * 40)
     def test_percent_continued_reference_payload_is_normalized(self, _source_sha) -> None:
