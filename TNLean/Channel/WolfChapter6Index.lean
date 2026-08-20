@@ -107,6 +107,47 @@ positive maps alike, since $\operatorname{tr}[1\,T(1)] = d$ in both cases.
 Formerly documented as a scope restriction in
 `docs/paper-gaps/wolf_prop62_jordan_blocks.tex`; that gap is now closed.
 
+### Wolf Proposition 6.3 (Cesàro means) — FORMALIZED
+
+The three clauses of the proposition are represented by:
+
+* `IsPositiveMap.exists_strictMono_tendsto_pow_peripheralProjection` — an
+  increasing sequence $(n_i)$ for which $T^{n_i}\to T_\phi$;
+* `Module.End.peripheralWeightedProjection_eq_comp` —
+  $T_\varphi=T\,T_\phi$;
+* `IsPositiveMap.tendsto_birkhoffAverage_meanErgodicProjection_of_tracePreserving`
+  — the Cesàro means converge to $T_\infty$ for the positive trace-preserving
+  maps of the proposition.
+
+For the positive and trace-preserving conclusions concerning $T_\infty$:
+
+* `IsPositiveMap.meanErgodicProjection_isPositiveMap` — positivity;
+* `IsTracePreservingMap.meanErgodicProjection_isTracePreservingMap` — trace
+  preservation;
+* `IsCPMap.meanErgodicProjection_isCPMap` — complete positivity;
+* `IsChannel.meanErgodicProjection` — the resulting channel.
+
+These results are in `TNLean.Channel.FixedPoint.MeanErgodicProjection`.  For
+the peripheral projection $T_\phi$ and the phase-weighted map $T_\varphi$:
+
+* `IsPositiveMap.peripheralProjection_isPositiveMap` and
+  `IsPositiveMap.peripheralProjection_isTracePreservingMap` — positivity and
+  trace preservation of $T_\phi$;
+* `IsPositiveMap.peripheralWeightedProjection_isPositiveMap` and
+  `IsPositiveMap.peripheralWeightedProjection_isTracePreservingMap` — the same
+  conclusions for $T_\varphi$;
+* `IsPositiveMap.peripheralProjection_isCPMap` — complete positivity of
+  $T_\phi$ under the completely positive hypothesis;
+* `IsChannel.peripheralProjection` and
+  `IsChannel.peripheralWeightedProjection` — both maps are channels in the
+  completely positive case.
+
+These results are in `TNLean.Channel.Peripheral.CesaroRecurrence`.  Thus the
+basic hypothesis is positivity together with trace preservation, exactly as in
+Wolf's statement; complete positivity gives the corresponding stronger
+conclusions.  The boundedness needed to form $T_\infty$ follows from
+`IsPositiveMap.hasBoundedOrbits_of_tracePreserving`.
+
 ## Section 6.2 Irreducible maps and Perron–Frobenius theory
 
 ### Wolf Theorem 6.2 (Irreducible positive maps) — ITEMS 1,2,4 FORMALIZED

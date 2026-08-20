@@ -39,6 +39,8 @@ complex linear combinations of two Hermitian matrices.
   nonincrease imply bounded forward orbits on every matrix.
 * `IsPositiveMap.hasBoundedOrbits_of_tracePreserving`: the trace-preserving
   specialization.
+* `IsPositiveMap.tendsto_birkhoffAverage_meanErgodicProjection_of_tracePreserving`:
+  the Cesàro convergence assertion for positive trace-preserving maps.
 * `IsPositiveMap.meanErgodicProjection_isPositiveMap`: the mean-ergodic
   projection of a positive map is positive.
 * `IsTracePreservingMap.meanErgodicProjection_isTracePreservingMap`: the
@@ -229,6 +231,21 @@ theorem IsPositiveMap.hasBoundedOrbits_of_tracePreserving
     (hT : IsPositiveMap T) (hTP : IsTracePreservingMap T) :
     T.HasBoundedOrbits :=
   hT.hasBoundedOrbits_of_traceNonincreasing hTP.isTraceNonincreasingMap
+
+/-- The Cesàro averages of a positive trace-preserving matrix endomorphism
+converge pointwise to its mean-ergodic projection.
+
+Source: Wolf, Proposition 6.3(iii) and Equation (6.14), local source
+`Notes/WolfNoteTexSource/ch06_spectral_properties.tex`, lines 226--256. -/
+theorem IsPositiveMap.tendsto_birkhoffAverage_meanErgodicProjection_of_tracePreserving
+    {T : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ}
+    (hT : IsPositiveMap T) (hTP : IsTracePreservingMap T)
+    (X : Matrix (Fin D) (Fin D) ℂ) :
+    Tendsto (birkhoffAverage ℂ T _root_.id · X) atTop
+      (𝓝 (LinearMap.meanErgodicProjection T
+        (hT.hasBoundedOrbits_of_tracePreserving hTP) X)) :=
+  LinearMap.HasBoundedOrbits.tendsto_birkhoffAverage_meanErgodicProjection
+    (hT.hasBoundedOrbits_of_tracePreserving hTP) X
 
 /-- The finite-dimensional mean-ergodic projection of a positive matrix
 endomorphism is positive.
