@@ -554,6 +554,100 @@
     sum of diagonal copy blocks depends on $N$.
 \end{proof}
 
+\begin{theorem}[Conditional composition of absorbed BNT channels]
+    \label{thm:mpdo_absorbed_bnt_channel_assembly}
+    \lean{MPOTensor.blockedOneChainEquiv,
+      MPOTensor.blockedTwoChainEquiv,
+      MPOTensor.equivReindexMap_symm_apply_self,
+      MPOTensor.equivReindexMap_physCloseN_two_eq_physClose1_blockTwo,
+      MPOTensor.equivReindexMap_physCloseN_four_eq_physClose2_blockTwo,
+      MPOTensor.blockedFirstSiteProjection,
+      MPOTensor.blockedFirstSiteProjection_eq_reindex_kronecker_one,
+      MPOTensor.firstSiteMatrix_mul_physCloseN_of_mul_physicalSlice,
+      MPOTensor.firstSiteMatrix_mul_physCloseN_eq_zero_of_mul_physicalSlice_eq_zero,
+      MPOTensor.physCloseN_mul_firstSiteMatrix_of_physicalSlice_mul,
+      MPOTensor.singleKrausMap_firstSiteMatrix_physCloseN_of_twoSidedSupport,
+      MPOTensor.firstSiteMatrix_isStarProjection,
+      MPOTensor.sum_firstSiteMatrix_eq_one,
+      MPOTensor.singleKrausMap_firstSiteMatrix_physCloseN_eq_ite,
+      MPOTensor.coarseningMapInChainCoordinates,
+      MPOTensor.refinementMapInChainCoordinates,
+      MPOTensor.coarseningMapInChainCoordinates_isKrausCPTP,
+      MPOTensor.refinementMapInChainCoordinates_isKrausCPTP,
+      MPOTensor.coarseningMapInChainCoordinates_physCloseN,
+      MPOTensor.refinementMapInChainCoordinates_physCloseN,
+      MPOTensor.exists_chainCoordinateRFP_of_projectiveSectorDecomposition,
+      MPOTensor.blockTwo_isRFPViaTS_of_chainCoordinateRFP,
+      MPOTensor.blockTwo_isRFPViaTS_of_commonWeightAbsorbedBNTChannels}
+    \leanok
+    \uses{def:is_rfp_via_ts, def:mpdo_two_site_blocking,
+        def:mpdo_common_sector_weight_absorption,
+        thm:mpdo_absorbed_representative_boundary_decomposition,
+        thm:mpdo_projective_resolution_channel_cptp}
+    Let $K$ be exactly gauge equivalent, by an invertible virtual matrix $G$,
+    to a canonical BNT sum. Suppose that the repeated-copy weights agree
+    within each fixed representative and have been absorbed into tensors
+    $(\mathcal K_s)_s$. Let $(P_s)_s$ be orthogonal projections on the
+    one-site physical space such that
+    \begin{align}
+      \sum_s P_s&=I, & P_sP_t&=0\quad(s\ne t).
+      \notag
+    \end{align}
+    Suppose also that, for every $s$ and every pair of virtual indices
+    $\beta,\alpha$, the corresponding physical slice satisfies
+    \begin{align}
+      P_s\mathcal K_s[\beta,\alpha]
+        &=\mathcal K_s[\beta,\alpha]
+        =\mathcal K_s[\beta,\alpha]P_s .
+      \notag
+    \end{align}
+    If every blocked representative $\mathcal K_s^{[2]}$ is a
+    renormalization fixed point via trace-preserving completely positive maps,
+    then $K^{[2]}$ is also such a renormalization fixed point.
+
+    The global maps first measure the outer sector on the first original site
+    of the blocked input. On one blocked site the corresponding projection is
+    $P_s\otimes I$; on two blocked sites it acts on the first original site
+    and as the identity on the remaining three. For every virtual boundary
+    $X$, the boundary supplied to sector $s$ is the sum of the diagonal copy
+    blocks of $G^{-1}XG$ over that representative. The same boundary is used
+    in the length-two and length-four identities. This is the conditional
+    composition underlying \cite[Appendix~C.2, lines~1646--1665 and
+    1810--1825]{Cirac2016MPDO_arXiv}; it is not the printed implication
+    (iv)$\Rightarrow$(v) of Theorem~4.9.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpdo_absorbed_representative_boundary_decomposition,
+        thm:mpdo_projective_resolution_channel_cptp}
+    Write $\mathcal C_N(A,X)$ for the length-$N$ closure of $A$ with boundary
+    $X$, and write $B_s(X)$ for the boundary supplied to representative $s$.
+    At both relevant lengths the boundary decomposition gives
+    \begin{align}
+      \mathcal C_N(K,X)
+        &=\sum_t \mathcal C_N(\mathcal K_t,B_t(X)),
+        &N&\in\{2,4\}.
+      \notag
+    \end{align}
+    Let $\Phi_{s,N}$ be compression by $P_s$ on the first site and by the
+    identity on the remaining $N$ sites. Two-sided physical support and
+    $P_sP_t=0$ for $s\ne t$ give the selection identity
+    \begin{align}
+      \Phi_{s,N}\bigl(\mathcal C_{N+1}(\mathcal K_t,B_t(X))\bigr)
+        &=
+        \begin{cases}
+          \mathcal C_{N+1}(\mathcal K_t,B_t(X)),&s=t,\\
+          0,&s\ne t.
+        \end{cases}
+      \notag
+    \end{align}
+    Apply the representative channel to the surviving summand and sum over
+    $s$. The projective resolution makes both resulting maps trace-preserving
+    and completely positive. The boundary decomposition then identifies their
+    outputs with the length-two and length-four closures of $K$ carrying the
+    original boundary.
+\end{proof}
+
 \begin{theorem}[Blocking channels after common-weight absorption]
     \label{thm:mpdo_sal_zcl_blocking_channels}
     \notready
@@ -581,7 +675,13 @@
     projects onto the mutually orthogonal outer physical sectors and invokes
     the one-representative channel construction. Thus a faithful proof must
     supply one blocked channel pair for every absorbed representative and
-    combine those pairs through the outer physical projections.
+    derive a complete outer support resolution, or extend the channels on its
+    orthogonal complement after proving that the closures lie in the active
+    corner. Given the complete resolution, the combination through the outer
+    physical projections is
+    Theorem~\ref{thm:mpdo_absorbed_bnt_channel_assembly}. The completeness
+    step remains unproved.
+    % The follow-up is tracked by GitHub issue #6807.
 \end{theorem}
 
 % Correct equation, not a figure: the cited source draws the two-to-three
