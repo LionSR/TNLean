@@ -9,6 +9,7 @@ Authors: TNLean contributors
 -- Generated aggregator module: TNLean.Kraus.Wielandt.RankOne
 
 import TNLean.Kraus.Wielandt.RankOne.BoundedWord
+import TNLean.Kraus.Wielandt.RankOne.Construction
 import TNLean.Kraus.Wielandt.RankOne.Element
 import TNLean.Kraus.Wielandt.RankOne.Extraction
 import TNLean.Kraus.Wielandt.RankOne.Products
