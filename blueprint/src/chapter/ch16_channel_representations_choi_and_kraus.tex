@@ -723,6 +723,31 @@ is summed between the $K_i$ layer and the $K_i^\dagger$ layer:
     $\sum_i K_i^\dagger K_i = \Id$.
 \end{proof}
 
+\begin{theorem}[Normalized Kraus representation of a channel]
+    \label{thm:exists_kraus_map_eq_and_normalized}
+    \lean{IsChannel.exists_kraus_map_eq_and_normalized}
+    \leanok
+    \uses{def:channel, thm:kraus_sum_conjTranspose_mul_of_tp}
+    Every quantum channel $E : \MN{D} \to \MN{D}$ admits a finite family
+    $(K_i)_i$ in $\MN{D}$ such that, for every $X \in \MN{D}$,
+    \[
+        E(X)=\sum_i K_i X K_i^\dagger,
+    \]
+    and
+    \[
+        \sum_i K_i^\dagger K_i=\Id.
+    \]
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{def:channel, thm:kraus_sum_conjTranspose_mul_of_tp}
+    Complete positivity gives a finite Kraus family satisfying
+    $E(X)=\sum_i K_i X K_i^\dagger$. Since $E$ is trace-preserving,
+    Theorem~\ref{thm:kraus_sum_conjTranspose_mul_of_tp} gives
+    $\sum_i K_i^\dagger K_i=\Id$.
+\end{proof}
+
 \begin{theorem}[Kraus normalization implies trace preservation]\label{thm:kraus_tp_of_sum_conjTranspose_mul}
     \lean{kraus_tp_of_sum_conjTranspose_mul}
     \leanok
