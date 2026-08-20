@@ -67,27 +67,32 @@ tensor after blocking.
 
 \section{Affected declarations}
 The declaration
-\leanid{MPOTensor.mpo\_virtualSandwich\_reducedProjection\_eq} assumes the
-letterwise absorptions $W^{ij}P=W^{ij}$ and $QW^{ij}=W^{ij}$.
-\leanid{MPOTensor.transferMap\_virtualSandwich\_reducedProjection} assumes the
+\leanid{MPOTensor.mpo_virtualSandwich_reducedProjection_eq} assumes the
+orthogonal-projection property of $P$ and the letterwise absorptions
+$W^{ij}P=W^{ij}$ and $QW^{ij}=W^{ij}$.
+\leanid{MPOTensor.transferMap_virtualSandwich_reducedProjection} assumes the
 rank-one transfer formula. The declarations
-\leanid{MPOTensor.trace\_compressed\_fixed\_pair\_reducedProjection} and
-\leanid{MPOTensor.compressed\_fixed\_pair\_posDef\_reducedProjection} assume,
-respectively, the two-sided support absorptions of $L$ and $R$ together with
-$\tr(LR)=1$, and the positive pair $L,R\succeq0$ with its support projections;
-the latter also assumes an isometry $V$ onto the range of $T$.
+\leanid{MPOTensor.trace_compressed_fixed_pair_reducedProjection} and
+\leanid{MPOTensor.compressed_fixed_pair_posDef_reducedProjection} assume,
+respectively, that $P$ and $Q$ are orthogonal projections, the two-sided
+support absorptions of $L$ and $R$, and $\tr(LR)=1$; and that
+$L,R\succeq0$ have support projections $P,Q$. The latter also assumes an
+isometry $V$ onto the range of $T$.
 
 The comparison declaration
-\leanid{MPOTensor.virtualSandwich\_hat\_eq\_reducedProjection} assumes the
-factor equations $XL=P$, $RZ=Q$, and $PQY=T$ together with the letterwise
-absorptions. The rank equalities
-\leanid{MPOTensor.rightRank\_hat\_eq\_reducedProjection} and
-\leanid{MPOTensor.leftRank\_hat\_eq\_reducedProjection} use the same supplied
+\leanid{MPOTensor.virtualSandwich_hat_eq_reducedProjection} assumes the
+orthogonal-projection property of $P$, the factor equations $XL=P$, $RZ=Q$,
+and $PQY=T$, and the letterwise absorptions. The rank equalities
+\leanid{MPOTensor.rightRank_hat_eq_reducedProjection} and
+\leanid{MPOTensor.leftRank_hat_eq_reducedProjection} use the same supplied
 data and additionally assume that $X$, $Z$, and $Y$ are invertible. Finally,
-\leanid{MPOTensor.exists\_units\_for\_hat\_reducedProjection} assumes positive
-semidefinite fixed matrices $L$ and $R$ and supplies the invertible ambient
-support-inverse extensions $X$ and $Z$, together with an invertible
-right factor $Y$ satisfying $PQY=T$.
+\leanid{MPOTensor.exists_units_for_hat_reducedProjection} assumes only
+$L,R\succeq0$ and supplies the invertible ambient support-inverse extensions
+$X$ and $Z$, together with an invertible right factor $Y$ satisfying
+$PQY=T$. Its matrix theorem,
+\leanid{Matrix.exists_units_supportInvExtension_reducedProjection_rightFactor},
+has the same positive-semidefinite hypotheses and assumes no fixed-point,
+normalization, or absorption identity.
 
 \section{Elimination plan}
 The restriction is removed by formalizing the missing supplier: the blocking
