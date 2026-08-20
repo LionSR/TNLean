@@ -58,13 +58,16 @@ namespace MPSTensor
 
 variable {d D : ℕ}
 
+/-- The word span at length one equals the span of the tensor matrices. -/
+theorem wordSpan_one_eq_span_range (A : MPSTensor d D) :
+    wordSpan A 1 = Submodule.span ℂ (Set.range A) :=
+  Kraus.wordSpan_one A
+
 /-- An injective MPS tensor has eventually full Kraus rank at index one. -/
-private theorem hasEventuallyFullKrausRank_of_injective (A : MPSTensor d D)
+theorem hasEventuallyFullKrausRank_of_injective (A : MPSTensor d D)
     (hA : IsInjective A) : HasEventuallyFullKrausRank A := by
   refine ⟨1, Nat.zero_lt_one, ?_⟩
-  calc
-    wordSpan A 1 = Submodule.span ℂ (Set.range A) := Kraus.wordSpan_one A
-    _ = ⊤ := hA
+  rw [wordSpan_one_eq_span_range, hA]
 
 /-! ## Convergence rate from a complementary transfer-map gap -/
 

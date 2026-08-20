@@ -22,33 +22,8 @@ The matrix-product-vector overlap consequence is stated in
 `TNLean.MPS.Overlap.PeripheralToTransferMapGap`.
 -/
 
-open scoped Matrix ComplexOrder BigOperators TNOperatorSpace
+open scoped Matrix ComplexOrder BigOperators
 open Matrix
-
-/-- A primitive irreducible channel has spectral radius less than one after subtracting
-the projection onto any nonzero positive semidefinite fixed point. -/
-theorem spectralRadius_compl_lt_one_of_primitive_fixedPoint_of_irreducible_channel
-    {D : ℕ} [NeZero D]
-    (E : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ)
-    (hE : IsChannel E)
-    (hIrr : IsIrreducibleMap E)
-    (hPrim : IsPrimitive E)
-    (ρ : Matrix (Fin D) (Fin D) ℂ)
-    (hρ_psd : ρ.PosSemidef)
-    (hρ_ne : ρ ≠ 0)
-    (hρ_fix : E ρ = ρ) :
-    ∃ htr : Matrix.trace ρ ≠ 0,
-      spectralRadius ℂ
-        ((Module.End.toContinuousLinearMap (Matrix (Fin D) (Fin D) ℂ))
-          (E - fixedPointProj (D := D) ρ htr)) < 1 := by
-  have htr : Matrix.trace ρ ≠ 0 := by
-    intro htr0
-    exact hρ_ne ((Matrix.PosSemidef.trace_eq_zero_iff hρ_psd).1 htr0)
-  refine ⟨htr, spectralRadius_lt_one_of_eigenvalues_lt_one (D := D)
-    (E - fixedPointProj (D := D) ρ htr) ?_⟩
-  intro ν hν
-  exact compl_eigenvalue_norm_lt_one_of_primitive_of_irreducible_channel
-    E hE hIrr ρ hρ_fix hρ_ne htr hPrim ν hν
 
 namespace MPSTensor
 
