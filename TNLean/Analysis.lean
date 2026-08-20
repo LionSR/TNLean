@@ -41,6 +41,8 @@ import TNLean.Analysis.LiebScalarIntegral
 import TNLean.Analysis.LiebSubBoundary
 import TNLean.Analysis.MarginalSupport
 import TNLean.Analysis.MatrixFamilySupport
+import TNLean.Analysis.MatrixFittingRange
+import TNLean.Analysis.MatrixNonzeroTraceEigenvalue
 import TNLean.Analysis.MatrixReducedProjection
 import TNLean.Analysis.MatrixSqrt
 import TNLean.Analysis.MatrixTraceInequalities
