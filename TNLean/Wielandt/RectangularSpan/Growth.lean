@@ -170,7 +170,8 @@ theorem rectSpan_eq_range_of_wordSpan_eq_top
     (P : Matrix (Fin D) (Fin D) ℂ) (A : MPSTensor d D)
     {n : ℕ} (htop : wordSpan A n = ⊤) :
     rectSpan P A n = LinearMap.range (LinearMap.mulLeft ℂ P) := by
-  simp [rectSpan, htop, Submodule.map_top]
+  change Kraus.wordSpan A n = ⊤ at htop
+  simp [Kraus.rectSpan, htop, Submodule.map_top]
 
 /-- Under `IsNormal`, there exists a level at which `rectSpan P A n = range(mulLeft P)`. -/
 theorem exists_rectSpan_eq_range_of_isNormal

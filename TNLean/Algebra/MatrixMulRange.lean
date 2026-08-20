@@ -73,8 +73,9 @@ noncomputable def colRangeSubmodule (P : Matrix (Fin D) (Fin D) ℂ) :
   Submodule.comap (Matrix.transposeLinearEquiv (Fin D) (Fin D) ℂ ℂ).toLinearMap
     (Submodule.pi Set.univ (fun _ : Fin D => LinearMap.range (Matrix.toLin' P)))
 
+/-- Membership in the column-range submodule is columnwise membership in the matrix range. -/
 @[simp]
-private theorem mem_colRangeSubmodule
+theorem mem_colRangeSubmodule
     (P M : Matrix (Fin D) (Fin D) ℂ) :
     M ∈ colRangeSubmodule P ↔
       ∀ j : Fin D, M.col j ∈ LinearMap.range (Matrix.toLin' P) := by

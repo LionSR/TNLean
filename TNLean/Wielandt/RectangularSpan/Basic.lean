@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import TNLean.Kraus.Wielandt.RectangularSpan.Basic
 import TNLean.Wielandt.RankOne.Construction
 import TNLean.Wielandt.RankOne.Element
 import TNLean.Wielandt.RankOne.Products
@@ -180,32 +181,24 @@ theorem blockTensor_transpose_encodeBlock (A : MPSTensor d D) (L : ℕ)
       (evalWord A (List.ofFn σ₀))ᵀ := by
   rw [blockTensor_apply_encodeBlock]
 
-/-! ## Section 3: Rectangular span -/
+/-! ## Section 3: Rectangular span compatibility names -/
 
-/-- The **rectangular span** is the image of `wordSpan A n` under
-left-multiplication by a fixed matrix `P`. -/
-noncomputable def rectSpan (P : Matrix (Fin D) (Fin D) ℂ) (A : MPSTensor d D) (n : ℕ) :
+/-- The rectangular span is the image of `wordSpan A n` under left multiplication by `P`. -/
+noncomputable abbrev rectSpan
+    (P : Matrix (Fin D) (Fin D) ℂ) (A : MPSTensor d D) (n : ℕ) :
     Submodule ℂ (Matrix (Fin D) (Fin D) ℂ) :=
-  Submodule.map (LinearMap.mulLeft ℂ P) (wordSpan A n)
+  Kraus.rectSpan P A n
 
 /-- `rectSpan P A n ≤ wordSpan A (m + n)` when `P ∈ wordSpan A m`. -/
 theorem rectSpan_le_wordSpan (A : MPSTensor d D) {m n : ℕ}
     (P : Matrix (Fin D) (Fin D) ℂ)
     (hP : P ∈ wordSpan A m) :
-    rectSpan P A n ≤ wordSpan A (m + n) := by
-  intro M hM
-  obtain ⟨Q, hQ, rfl⟩ := Submodule.mem_map.mp hM
-  simp only [LinearMap.mulLeft_apply]
-  exact (wordSpan_mul_le A m n) (Submodule.mul_mem_mul hP hQ)
+    rectSpan P A n ≤ wordSpan A (m + n) :=
+  Kraus.rectSpan_le_wordSpan A P hP
 
-/-! ## Section 5: Conditional fixed-length matrix spanning (Lemma 2(b)) -/
+/-! ## Section 5: Conditional fixed-length matrix spanning compatibility name -/
 
-/-- **Lemma 2(b) conditional fixed-length matrix spanning.**
-
-If `IsNormal A`, and we have single-index eigenvectors (column and row)
-and a rank-one element in bounded `wordSpan`, then `wordSpan = ⊤`.
-
-Combines eigenvector spreading, row spreading, and rank-one reduction. -/
+/-- **Lemma 2(b) conditional fixed-length matrix spanning.** -/
 theorem wielandt_lemma2b_conditional [NeZero D]
     (A : MPSTensor d D)
     (hNormal : IsNormal (d := d) (D := D) A)
@@ -217,20 +210,9 @@ theorem wielandt_lemma2b_conditional [NeZero D]
     (heigψ : (A i₁)ᵀ *ᵥ ψ = ν • ψ)
     {m : ℕ}
     (hRankOne : Matrix.vecMulVec φ ψ ∈ wordSpan A m) :
-    wordSpan A ((D - 1) + (m + (D - 1))) = ⊤ := by
-  -- Vector spreading
-  have hCumVec : cumulativeVectorSpan A φ (D - 1) = ⊤ :=
-    eigenvector_spreading A φ hφ i₀ μ hμ heigφ hNormal
-  have hVecSpread : vectorSpreadSpan A φ (D - 1) = ⊤ :=
-    vectorSpreadSpan_eq_top_of_cumulativeVectorSpan_eq_top_of_eigenvector
-      A φ (D - 1) i₀ μ hμ heigφ hCumVec
-  -- Row spreading
-  have hRowSpread : rowSpreadSpan A ψ (D - 1) = ⊤ :=
-    rowSpreadSpan_eq_top_of_isNormal_of_eigenvector_transpose
-      A ψ hψ i₁ ν hν heigψ hNormal
-  -- Combine
-  exact wordSpan_eq_top_of_vectorSpreadSpan_eq_top_of_rankOne
-    A φ ψ hVecSpread hRankOne hRowSpread
+    wordSpan A ((D - 1) + (m + (D - 1))) = ⊤ :=
+  Kraus.wielandt_lemma2b_conditional
+    A hNormal i₀ μ hμ φ hφ heigφ i₁ ν hν ψ hψ heigψ hRankOne
 
 /-! ## Section 6: Blocked fixed-length matrix spanning -/
 
