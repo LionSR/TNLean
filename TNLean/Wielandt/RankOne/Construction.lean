@@ -88,7 +88,7 @@ theorem IsNBlkInjective_transposeTensor
     IsNBlkInjective (d := d) (D := D) (transposeTensor A) N := by
   classical
   -- Unfold the definition: both sides are spans of ranges.
-  unfold IsNBlkInjective at h ⊢
+  unfold IsNBlkInjective Kraus.wordSpan at h ⊢
   -- First, identify the generating set for `transposeTensor A` as the transpose of the
   -- generating set for `A` (up to reindexing by `Fin.rev`).
   have hrange :

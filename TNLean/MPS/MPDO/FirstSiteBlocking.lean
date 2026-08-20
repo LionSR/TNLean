@@ -201,8 +201,11 @@ theorem insertedTensor_eq_of_firstSiteActionOnBlock_blockTensor_eq
       simp [Matrix.mul_add, hM, hN]
     · intro c M _ hM
       simp [hM]
+  have hspan : Submodule.span ℂ
+      (Set.range fun w : Fin L → Fin d => evalWord A (List.ofFn w)) = ⊤ := by
+    simpa [IsNBlkInjective, Kraus.wordSpan] using hInj
   have hOne : Δ * (1 : Matrix (Fin D) (Fin D) ℂ) = 0 :=
-    hzero_span 1 (hInj.symm ▸ Submodule.mem_top)
+    hzero_span 1 (hspan.symm ▸ Submodule.mem_top)
   simpa using hOne
 
 end MPSTensor
