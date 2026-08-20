@@ -539,6 +539,14 @@ abstracted — record why, so it is not re-proposed).
 
 ## Completed refactors
 
+### Reversing `List.ofFn` by `Fin.rev`
+- **Seen:** two former copies in
+  `TNLean/Kraus/Wielandt/RankOne/Construction.lean` and
+  `TNLean/Kraus/Wielandt/RectangularSpan/Basic.lean`.
+- **Abstraction:** `List.ofFn_reverse` in `TNLean/Kraus/Word.lean`.
+- **Result:** both consumers use the shared theorem, reducing the Lean sources by
+  15 lines net.
+
 ### Finite Kraus setup for channels
 - **Seen:** 2 occurrences in `Channel/Peripheral/IrreducibleChannel.lean` and
   `Channel/Semigroup/Primitivity/Helpers.lean` before promotion (issue #6576).
