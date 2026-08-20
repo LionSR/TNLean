@@ -205,7 +205,8 @@ lemma ofFn_blockedConfigEquiv (d N L : ℕ)
     simp [blockedConfigEquiv, Equiv.arrowCongr, Equiv.curry, decodeBlockEquiv_apply,
       Function.comp]
   rw [hfun, List.ofFn_mul]
-  rw [Kraus.flattenBlockedWord, List.map_ofFn]
+  change _ = ((List.ofFn σ).map (Kraus.wordOfBlock d L)).flatten
+  rw [List.map_ofFn]
   congr 1
   refine congrArg List.ofFn (funext fun i => ?_)
   have hsymm : ∀ j : Fin L,
