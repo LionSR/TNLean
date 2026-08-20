@@ -15,6 +15,60 @@ For a word $\sigma=(\sigma_0,\ldots,\sigma_{m-1})\in I^m$, write
 \end{align}
 The empty product is the identity matrix.
 
+\begin{definition}[Eventually full vector spread]
+    \label{def:kraus_eventually_full_vector_spread}
+    \lean{Kraus.HasEventuallyFullVectorSpread}
+    \leanok
+    \uses{def:vector_spread_span}
+    For $\psi\in\C^D$ and $m\in\mathbb N$, define
+    \begin{align}
+        \mathcal H_m(K,\psi)
+        &=\operatorname{span}\{K_\sigma\psi:\sigma\in I^m\}.
+        \notag
+    \end{align}
+    The Kraus family has eventually full vector spread if, for every
+    sufficiently large $m$ and every nonzero $\psi\in\C^D$,
+    $\mathcal H_m(K,\psi)=\C^D$.
+\end{definition}
+
+\begin{theorem}[Full word span gives full vector spread]
+    \label{thm:kraus_vector_spread_of_word_span}
+    \lean{Kraus.vectorSpreadSpan_eq_top_of_wordSpan_eq_top}
+    \leanok
+    \uses{def:kraus_exact_word_span,def:vector_spread_span}
+    If $\mathcal S_m=\MN{D}$, then
+    $\mathcal H_m(K,\psi)=\C^D$ for every nonzero $\psi\in\C^D$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Choose $k$ with $\psi_k\neq0$. For $v\in\C^D$, the matrix
+    \begin{align}
+        X&=\sum_{j=0}^{D-1}\frac{v_j}{\psi_k}E_{jk}
+        \notag
+    \end{align}
+    satisfies $X\psi=v$. Hence the map $X\mapsto X\psi$ from $\MN{D}$ to
+    $\C^D$ is surjective. If $\mathcal S_m=\MN{D}$, its image is precisely
+    $\mathcal H_m(K,\psi)$.
+\end{proof}
+
+\begin{theorem}[Eventually full word span gives eventual vector spread]
+    \label{thm:kraus_eventually_full_vector_spread_of_word_span}
+    \lean{Kraus.hasEventuallyFullVectorSpread_of_hasEventuallyFullWordSpan}
+    \leanok
+    \uses{def:kraus_eventually_full_word_span,
+        def:kraus_eventually_full_vector_spread}
+    If $\mathcal S_m=\MN{D}$ for every sufficiently large $m$, then the
+    Kraus family has eventually full vector spread.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:kraus_vector_spread_of_word_span}
+    Apply Theorem~\ref{thm:kraus_vector_spread_of_word_span} at every
+    sufficiently large length.
+\end{proof}
+
 \begin{theorem}[Positive-definite Choi matrix at a fixed iterate]
     \label{thm:kraus_iterate_choi_posdef_iff_word_span}
     \lean{Kraus.choiMatrix_mapLM_pow_posDef_iff_wordSpan_eq_top}
@@ -71,4 +125,23 @@ The empty product is the identity matrix.
     Apply
     Equation~\eqref{eq:kraus_iterate_choi_posdef_iff_word_span} pointwise for
     every sufficiently large $m$.
+\end{proof}
+
+
+\begin{theorem}[Eventual Choi positivity gives eventual vector spread]
+    \label{thm:kraus_eventually_full_vector_spread_of_choi_posdef}
+    \lean{Kraus.hasEventuallyFullVectorSpread_of_eventually_choiMatrix_mapLM_pow_posDef}
+    \leanok
+    \uses{def:kraus_eventually_full_vector_spread}
+    If $\tau_{E^m}>0$ for every sufficiently large $m$, then the Kraus family
+    has eventually full vector spread.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{cor:kraus_iterate_eventual_choi_posdef,
+        thm:kraus_eventually_full_vector_spread_of_word_span}
+    Corollary~\ref{cor:kraus_iterate_eventual_choi_posdef} gives
+    $\mathcal S_m=\MN{D}$ for every sufficiently large $m$. Apply
+    Theorem~\ref{thm:kraus_eventually_full_vector_spread_of_word_span}.
 \end{proof}
