@@ -213,8 +213,10 @@ theorem hermitian_pow_fixedPoint_eq_zero [NeZero D]
     exact sub_eq_zero.mp ((mul_eq_zero.mp htrace).resolve_right hρ_trace)
   simp [hH_decomp, hc]
 
-/-- A trace-preserving finite Kraus family with a fixed-length full vector spread
-has a positive-definite fixed point. -/
+/-- A trace-preserving finite Kraus family with a fixed-length full vector
+spread has a positive-definite fixed point. This is the fixed-point ingredient
+in Proposition 3(a) to (c) of Sanz, Pérez-García, Wolf, and Cirac,
+arXiv:0909.5347; see also Wolf, Theorem 6.7. -/
 theorem exists_posDef_fixedPoint_of_isTP_of_vectorSpreadSpan_eq_top [NeZero D]
     (K : Fin d → Mat) (hTP : IsTP K) {q : ℕ}
     (hq : ∀ φ : Fin D → ℂ, φ ≠ 0 → vectorSpreadSpan K φ q = ⊤) :
@@ -224,8 +226,10 @@ theorem exists_posDef_fixedPoint_of_isTP_of_vectorSpreadSpan_eq_top [NeZero D]
     hCh.exists_posSemidef_fixedPoint (E := mapLM K) (NeZero.pos D)
   exact ⟨ρ, posDef_fixedPoint_of_vectorSpreadSpan_eq_top K hq hρ hρ_ne hρ_fix, hρ_fix⟩
 
-/-- A trace-preserving finite Kraus family with a fixed-length full vector spread
-has primitive Kraus dynamics. -/
+/-- A trace-preserving finite Kraus family with a fixed-length full vector
+spread has primitive Kraus dynamics. This is Proposition 3(a) to (c) of Sanz,
+Pérez-García, Wolf, and Cirac, arXiv:0909.5347, in finite-Kraus notation; see
+also Wolf, Theorem 6.7. -/
 theorem isPrimitive_mapLM_of_isTP_of_vectorSpreadSpan_eq_top [NeZero D]
     (K : Fin d → Mat) (hTP : IsTP K) {q : ℕ}
     (hq : ∀ φ : Fin D → ℂ, φ ≠ 0 → vectorSpreadSpan K φ q = ⊤) :
