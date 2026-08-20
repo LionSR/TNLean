@@ -107,6 +107,30 @@ positive maps alike, since $\operatorname{tr}[1\,T(1)] = d$ in both cases.
 Formerly documented as a scope restriction in
 `docs/paper-gaps/wolf_prop62_jordan_blocks.tex`; that gap is now closed.
 
+### Wolf Proposition 6.3 (Cesàro means) — FORMALIZED
+
+For the mean-ergodic projection $T_\infty$:
+
+* `IsPositiveMap.meanErgodicProjection_isPositiveMap` — positivity;
+* `IsTracePreservingMap.meanErgodicProjection_isTracePreservingMap` — trace
+  preservation;
+* `IsCPMap.meanErgodicProjection_isCPMap` — complete positivity;
+* `IsChannel.meanErgodicProjection` — the resulting channel.
+
+These results are in `TNLean.Channel.FixedPoint.MeanErgodicProjection`.  For
+the peripheral projection $T_\varphi$ and its phase-weighted companion
+$T_\varphi'$:
+
+* `IsPositiveMap.peripheralProjection_isCPMap` — complete positivity of
+  $T_\varphi$;
+* `IsChannel.peripheralProjection` and
+  `IsChannel.peripheralWeightedProjection` — both maps are channels.
+
+These results are in `TNLean.Channel.Peripheral.CesaroRecurrence`.  Their
+hypotheses are those of Wolf's proposition: complete positivity and trace
+preservation.  The boundedness needed to form $T_\infty$ follows from
+`IsPositiveMap.hasBoundedOrbits_of_tracePreserving`.
+
 ## Section 6.2 Irreducible maps and Perron–Frobenius theory
 
 ### Wolf Theorem 6.2 (Irreducible positive maps) — ITEMS 1,2,4 FORMALIZED
