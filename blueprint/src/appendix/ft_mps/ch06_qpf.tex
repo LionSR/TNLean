@@ -368,7 +368,7 @@ outer square-root factors yields
 
 \begin{proof}\leanok
     \uses{thm:pf_eigenvector_existence, thm:adjoint_transfer_ne_zero,
-        thm:kernel_inclusion_pd_irred, thm:kraus_conjTranspose_irreducible,
+        thm:psd_eigenvector_pd_irred, thm:kraus_conjTranspose_irreducible,
         thm:kraus_map_cp}
     The conjugate-transposed family $\{K_i^\dagger\}$ has the same Kraus map
     as the adjoint of $\mathcal K_K$, so it is completely positive
@@ -379,10 +379,8 @@ outer square-root factors yields
     matrix, and
     Theorem~\ref{thm:pf_eigenvector_existence} applies, giving
     $\sigma \ge 0$, $\sigma \neq 0$, and $r > 0$ with
-    $\sum_i K_i^\dagger \sigma K_i = r\sigma$. Since
-    $\ker\sigma \subseteq \ker\bigl(\sum_i K_i^\dagger \sigma K_i\bigr)$
-    follows immediately from this eigenvector equation,
-    Theorem~\ref{thm:kernel_inclusion_pd_irred} gives that $\sigma$ is
+    $\sum_i K_i^\dagger \sigma K_i = r\sigma$.
+    Theorem~\ref{thm:psd_eigenvector_pd_irred} then gives that $\sigma$ is
     positive definite.
 \end{proof}
 

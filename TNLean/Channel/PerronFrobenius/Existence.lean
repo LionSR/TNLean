@@ -209,8 +209,8 @@ theorem exists_posDef_adjoint_eigenvector
       hcp.isPositiveMap (hNZ := hNZ)
   -- Step 5: Upgrade PSD → PosDef (Wolf Theorem 6.3(2)).
   have hσ_pd : σ.PosDef :=
-    posDef_of_ker_subset_irreducible_cp _ hcp hIrrAdj σ hσ_psd hσ_ne
-      (fun v hv => by rw [hσ_eig, Matrix.smul_mulVec, hv, smul_zero])
+    posDef_of_posSemidef_eigenvector_irreducible_cp
+      _ hcp hIrrAdj σ r hσ_psd hσ_ne hr_pos hσ_eig
   exact ⟨σ, r, hσ_pd, hr_pos, hσ_eig⟩
 
 end Kraus
