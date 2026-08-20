@@ -1,0 +1,74 @@
+\section{Choi positivity and exact Kraus-word spans}
+\label{sec:kraus_iterate_choi}
+
+Let $D\geq1$, let $(K_i)_{i\in I}$ be a finite family in $\MN{D}$, and define
+\begin{align}
+    E(X)&=\sum_{i\in I}K_iXK_i^\dagger.
+    \notag
+\end{align}
+For a word $\sigma=(\sigma_0,\ldots,\sigma_{m-1})\in I^m$, write
+\begin{align}
+    K_\sigma&=K_{\sigma_0}\cdots K_{\sigma_{m-1}},
+    &
+    \mathcal S_m&=\operatorname{span}\{K_\sigma:\sigma\in I^m\}.
+    \notag
+\end{align}
+The empty product is the identity matrix.
+
+\begin{theorem}[Positive-definite Choi matrix at a fixed iterate]
+    \label{thm:kraus_iterate_choi_posdef_iff_word_span}
+    \lean{Kraus.choiMatrix_mapLM_pow_posDef_iff_wordSpan_eq_top}
+    \leanok
+    \uses{thm:kraus_map_iterate_word_expansion,
+        thm:choi_kraus_outer_product,
+        thm:finite_frame_posdef}
+    Let $\tau_{E^m}$ be the normalized Choi matrix of the $m$-fold iterate of
+    $E$. Then
+    \begin{align}
+        \tau_{E^m}>0
+        \quad\Longleftrightarrow\quad
+        \mathcal S_m=\MN{D}.
+        \label{eq:kraus_iterate_choi_posdef_iff_word_span}
+    \end{align}
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:kraus_map_iterate_word_expansion,
+        thm:choi_kraus_outer_product,
+        thm:finite_frame_posdef}
+    The Kraus operators of $E^m$ are the matrices $K_\sigma$ with
+    $\sigma\in I^m$. Hence
+    \begin{align}
+        \tau_{E^m}
+        &=\sum_{\sigma\in I^m}\ketbra{v_\sigma}{v_\sigma},
+        &
+        (v_\sigma)_{(a,b)}
+        &=D^{-1/2}(K_\sigma)_{ab}.
+        \notag
+    \end{align}
+    The matrix indices retain their row--column order. Since $D^{-1/2}\neq0$,
+    the vectors $v_\sigma$ span $\C^{D\times D}$ exactly when the matrices
+    $K_\sigma$ span $\MN{D}$. The finite-frame criterion now gives
+    Equation~\eqref{eq:kraus_iterate_choi_posdef_iff_word_span}.
+\end{proof}
+
+\begin{corollary}[Eventual Choi positivity]
+    \label{cor:kraus_iterate_eventual_choi_posdef}
+    \lean{Kraus.eventually_choiMatrix_mapLM_pow_posDef_iff_hasEventuallyFullWordSpan}
+    \leanok
+    \uses{thm:kraus_iterate_choi_posdef_iff_word_span}
+    The following conditions are equivalent:
+    \begin{enumerate}
+        \item $\tau_{E^m}>0$ for every sufficiently large $m$;
+        \item $\mathcal S_m=\MN{D}$ for every sufficiently large $m$.
+    \end{enumerate}
+\end{corollary}
+
+\begin{proof}
+    \leanok
+    \uses{thm:kraus_iterate_choi_posdef_iff_word_span}
+    Apply
+    Equation~\eqref{eq:kraus_iterate_choi_posdef_iff_word_span} pointwise for
+    every sufficiently large $m$.
+\end{proof}
