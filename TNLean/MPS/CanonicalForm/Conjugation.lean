@@ -92,10 +92,10 @@ theorem IsNormal.mapStar {A : MPSTensor d D} (hA : IsNormal A) :
   obtain ⟨N, hN, hInj⟩ := hA
   refine ⟨N, hN, ?_⟩
   change Kraus.IsNBlkInjective A N at hInj
-  change Kraus.IsNBlkInjective (mapStar A) N
+  change Kraus.IsNBlkInjective (MPSTensor.mapStar A) N
   rw [isNBlkInjective_iff_blockTensor_isInjective] at hInj ⊢
   change IsInjective (blockTensor A N) at hInj
-  change IsInjective (blockTensor (mapStar A) N)
+  change IsInjective (blockTensor (MPSTensor.mapStar A) N)
   have hConj := hInj.mapStar
   convert hConj using 1
   ext σ β α
