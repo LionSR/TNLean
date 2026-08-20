@@ -270,8 +270,9 @@ refer only to the searchable transcription and do not determine numbering.
 The printed chapter confirms all live Chapter 5 numbers except the former
 operator-Jensen references to Theorem 5.1. In the printed notes, Theorem 5.1
 is Douglas' theorem. The subunital Jensen inequality for convex powers is a
-case of Theorem 5.11, while the inequalities for concave powers and the
-logarithm are cases of Theorem 5.13.
+case of Theorem 5.11, and the corresponding inequality for concave powers is
+a case of Theorem 5.13.
+The logarithm inequality is Corollary 5.2(3).
 
 | Former citation | Printed citation | Result title | Archived PDF | Local transcription | Verdict |
 |---|---|---|---:|---:|---|
