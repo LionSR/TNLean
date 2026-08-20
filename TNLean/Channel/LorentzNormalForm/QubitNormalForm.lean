@@ -155,9 +155,10 @@ end LorentzNormalFormQubit
 /-
 ## Connection to transfer-matrix normal forms (Wolf Section 2.3)
 
-The results above are stated at the level of CP maps.  The corresponding
-transfer-matrix formulation (Propositions 2.7-2.8 in the blueprint / TransferMatrix.lean)
-is obtained by applying `transferMatrix` to both sides.  The SVD normal form
+The results above are stated at the level of CP maps. The corresponding
+transfer-matrix formulation is obtained by applying `transferMatrix` to both
+sides; Wolf Section 2.4, lines 1000–1010, gives the qubit Pauli-transfer version
+of the unitary action. The SVD normal form
 (`Matrix.svd_of_isUnit`, `transferMatrix_svd_of_isUnit`) provides the
 algebraic engine: after SL-filterings, the transfer matrix of the doubly-stochastic
 map admits an SVD, which for D = 2 yields the Lorentz normal form decomposition.
