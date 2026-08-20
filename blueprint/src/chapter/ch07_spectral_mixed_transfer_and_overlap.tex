@@ -96,15 +96,13 @@ transfer power.
 
 \section{Eigenvalue bound and transfer-operator gap}
 
-The eigenvalue bound embeds the rectangular mixed transfer into a
-trace-preserving map on a larger square matrix algebra.  Namely, the
-block-diagonal family $C_i=A_i\oplus B_i$ is trace preserving, and its
-Kraus map preserves the subspace of upper-right blocks.  The induced map
-on that subspace is precisely the rectangular mixed transfer.  The general
-eigenvalue bound for trace-preserving Kraus maps therefore applies.  For
-the rigidity theorem, one gauges $A$ and $B$ separately using positive
-fixed points of their transfer maps to obtain unital Kraus families, and
-then applies the Kadison--Schwarz equality argument
+The rectangular eigenvalue bound is the MPS formulation of the generic
+bound for trace-preserving mixed Kraus maps.  Under the identification of
+the rectangular mixed transfer with the mixed Kraus map, the two tensor
+normalizations are precisely the trace-preserving conditions.  For the
+rigidity theorem, one gauges $A$ and $B$ separately using positive fixed
+points of their transfer maps to obtain unital Kraus families, and then
+applies the Kadison--Schwarz equality argument
 (\cite[Theorem~5.3]{Wolf2012Quantum}) to a block embedding of a
 mixed-transfer eigenvector.
 
@@ -136,23 +134,12 @@ mixed-transfer eigenvector.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:kraus_tp_eigenvalue_bound}
-    Set $C_i=A_i\oplus B_i$.  The two normalization identities imply
-    $\sum_i C_i^\dagger C_i=\Id_{D_1+D_2}$, so the Kraus map $E_C$ is
-    trace preserving.  Embed $X\in M_{D_1\times D_2}(\C)$ as the
-    upper-right block
-
-    \[
-        \iota(X)=\begin{pmatrix}0&X\\0&0\end{pmatrix}.
-    \]
-
-    Direct block multiplication gives
-    $E_C(\iota(X))=\iota(F_{AB}^{\mathrm{rect}}(X))$, and $\iota$ is
-    injective.  Thus an eigenvector $X\neq0$ of
-    $F_{AB}^{\mathrm{rect}}$ with eigenvalue $\mu$ gives the nonzero
-    eigenvector $\iota(X)$ of $E_C$ with the same eigenvalue.  Every
-    eigenvalue of a trace-preserving Kraus map lies in the closed unit disk,
-    hence $|\mu|\leq1$.
+    \uses{thm:kraus_mixed_tp_eigenvalue_bound}
+    This is the MPS formulation of
+    Theorem~\ref{thm:kraus_mixed_tp_eigenvalue_bound}: the map
+    $F_{AB}^{\mathrm{rect}}$ is the mixed Kraus map of the two matrix
+    families, and the normalizations of $A$ and $B$ are exactly its two
+    trace-preserving hypotheses.
 \end{proof}
 
 \begin{lemma}[Spectral radius bound]\label{thm:spectral_radius_le_one}

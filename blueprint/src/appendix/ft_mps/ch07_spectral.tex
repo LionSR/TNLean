@@ -2,11 +2,11 @@
 \label{ch:spectral_supporting_results}
 
 This appendix supports Chapter~\ref{ch:spectral}. It proves the algebraic
-mixed-transfer identities, the Frobenius-norm apparatus behind the eigenvalue
-bounds, the peripheral intertwiners behind the gauge-rigidity theorems, the
-Banach-algebra convergence facts behind the overlap-decay theorems, the
-rank-one Perron projection behind the primitive overlap limit, and the
-cyclic-decomposition machinery that removes peripheral periodicity.
+mixed-transfer identities, an auxiliary trace-positivity result, the
+peripheral intertwiners behind the gauge-rigidity theorems, the Banach-algebra
+convergence facts behind the overlap-decay theorems, the rank-one Perron
+projection behind the primitive overlap limit, and the cyclic-decomposition
+machinery that removes peripheral periodicity.
 
 \section{Mixed-transfer powers and overlap traces}
 \label{sec:app_spectral_mixed_trace}
@@ -93,17 +93,7 @@ matrix-unit indices gives
     \notag
 \end{align}
 
-\section{Frobenius estimates and eigenvalue bounds}
-\label{sec:app_spectral_frobenius}
-
-This section proves the trace positivity fact
-(Lemma~\ref{lem:psd_trace_product_nonneg}) and the detailed Frobenius-norm
-estimate behind the rectangular eigenvalue bound
-(Theorem~\ref{thm:eigenvalue_bound_rect}), of which
-Theorem~\ref{thm:eigenvalue_bound} is the equal-bond-dimension case
-$D_1=D_2=D$. The estimate uses the Frobenius (Hilbert--Schmidt) norm
-$\|{\cdot}\|_F$ on rectangular matrices and an isometric embedding into
-Euclidean space.
+\section{Auxiliary trace positivity}
 
 \begin{lemma}[Trace product of positive semidefinite matrices]
     \label{lem:psd_trace_product_nonneg}
@@ -125,62 +115,21 @@ Euclidean space.
     because $U^\dagger AU\geq0$ and $\Lambda_{ii}\geq0$ for every $i$.
 \end{proof}
 
-\begin{definition}[Frobenius norm squared]\label{def:frob_sq}
-    \lean{MPSTensor.frobSq}
-    \leanok
-    For a possibly rectangular matrix $X\in M_{m\times n}(\C)$, its
-    \emph{Frobenius norm squared} is
-    \begin{align}
-        \|X\|_F^2
-         & :=\sum_{i=0}^{m-1}\sum_{j=0}^{n-1}|X_{ij}|^2.
-        \label{eq:spectral_frob_sq}
-    \end{align}
-\end{definition}
-
-\begin{lemma}[Trace formula for Frobenius norm]\label{lem:frob_sq_trace}
-    \lean{MPSTensor.frobSq_trace}
-    \lean{Matrix.trace_conjTranspose_mul_self_re_eq_frobenius_norm_sq}
-    \leanok
-    \uses{def:frob_sq}
-    One has $\|X\|_F^2=\re\tr(X^\dagger X)$.
-\end{lemma}
-
-\begin{proof}\leanok
-    Expand the matrix product and trace entry by entry.
-\end{proof}
-
-\begin{definition}[Euclidean-space embedding]\label{def:mat_to_es}
-    \lean{MPSTensor.matToES}
-    \leanok
-    Flattening matrix entries defines an isometric embedding
-    $\opvec:M_{m\times n}(\C)\to\C^{mn}$ with respect to the Frobenius
-    norm: $\|\opvec(X)\|^2=\|X\|_F^2$.
-\end{definition}
-
-\begin{lemma}[Norm of embedded matrix]\label{lem:norm_mat_to_es}
-    \lean{MPSTensor.norm_matToES_sq}
-    \leanok
-    \uses{def:mat_to_es, def:frob_sq}
-    One has $\|\opvec(X)\|^2=\|X\|_F^2$.
-\end{lemma}
-
-\begin{proof}\leanok
-    Both sides equal $\sum_{i,j}\lVert X_{ij}\rVert^2$: the left side by
-    the Euclidean entry-norm formula and the right side by
-    (\ref{eq:spectral_frob_sq}).
-\end{proof}
+\section{Rectangular spectral-radius formulation}
 
 \begin{lemma}[Rectangular spectral radius bound]\label{thm:spectral_radius_le_one_rect}
     \lean{MPSTensor.spectralRadius_mixedTransfer₂_le_one}
     \leanok
-    \uses{def:mixed_transfer_rect, thm:eigenvalue_bound_rect}
+    \uses{def:mixed_transfer_rect, thm:kraus_mixed_tp_spectral_radius_bound}
     For normalized tensors of bond dimensions $D_1$ and $D_2$,
     $\rho_{\spec}(F_{AB}^{\mathrm{rect}})\leq1$.
 \end{lemma}
 
 \begin{proof}\leanok
-    On a finite-dimensional space every spectral value is an eigenvalue, and
-    each satisfies $|\mu|\leq1$ by Theorem~\ref{thm:eigenvalue_bound_rect}.
+    This is the MPS formulation of
+    Theorem~\ref{thm:kraus_mixed_tp_spectral_radius_bound}: the rectangular
+    mixed transfer is the mixed Kraus map, and the two tensor normalization
+    identities are its trace-preserving hypotheses.
 \end{proof}
 
 \section{Peripheral intertwiners and gauge rigidity}
