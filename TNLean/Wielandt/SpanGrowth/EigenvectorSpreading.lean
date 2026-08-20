@@ -22,8 +22,7 @@ variable {d D : ℕ}
 /-- The span of all length-`n` word products applied to `φ`. -/
 abbrev vectorSpreadSpan (A : MPSTensor d D) (φ : Fin D → ℂ) (n : ℕ) :
     Submodule ℂ (Fin D → ℂ) :=
-  Submodule.span ℂ (Set.range fun σ : Fin n → Fin d =>
-    evalWord A (List.ofFn σ) *ᵥ φ)
+  Kraus.vectorSpreadSpan A φ n
 
 /-- Every evaluated word applied to `φ` belongs to the spread span at its length. -/
 theorem evalWord_mulVec_mem_vectorSpreadSpan (A : MPSTensor d D) (φ : Fin D → ℂ)
@@ -34,8 +33,7 @@ theorem evalWord_mulVec_mem_vectorSpreadSpan (A : MPSTensor d D) (φ : Fin D →
 /-- The span of all word products of length at most `n` applied to `φ`. -/
 abbrev cumulativeVectorSpan (A : MPSTensor d D) (φ : Fin D → ℂ) (n : ℕ) :
     Submodule ℂ (Fin D → ℂ) :=
-  Submodule.span ℂ
-    {v | ∃ w : List (Fin d), w.length ≤ n ∧ v = evalWord A w *ᵥ φ}
+  Kraus.cumulativeVectorSpan A φ n
 
 /-- Every word of length at most `n`, applied to `φ`, belongs to the cumulative span. -/
 theorem mem_cumulativeVectorSpan_generator (A : MPSTensor d D) (φ : Fin D → ℂ) {n : ℕ}

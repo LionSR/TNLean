@@ -57,7 +57,7 @@ theorem map_wordSpan_eq_vectorSpreadSpan
       vectorSpreadSpan A φ n := by
   classical
   -- Unfold everything down to spans of ranges.
-  unfold mulVecLinearMap wordSpan Kraus.wordSpan vectorSpreadSpan
+  unfold mulVecLinearMap wordSpan Kraus.wordSpan vectorSpreadSpan Kraus.vectorSpreadSpan
   -- `Submodule.map` distributes over `Submodule.span`.
   rw [Submodule.map_span]
   -- Rewrite the RHS as an image of a range (so both sides match).
