@@ -435,6 +435,43 @@ preservation by the weighted-trace argument in
     with Theorem~\ref{thm:peripheral_powers}.
 \end{proof}
 
+\begin{lemma}[Unitality of the conjugate-transposed Kraus family]%
+    \label{lem:unital_conjtranspose_tp}
+    \lean{KadisonSchwarz.isUnitalKraus_conjTranspose}
+    \leanok
+    \uses{def:unital_kraus}
+    If a Kraus family $(K_i)_i$ satisfies
+    $\sum_i K_i^\dagger K_i=\Id$, then the family $(K_i^\dagger)_i$ is unital.
+\end{lemma}
+
+\begin{lemma}[Adjoint map of the conjugate-transposed family]%
+    \label{lem:adjoint_map_conjtranspose_family}
+    \lean{Kraus.adjointMap_conjTranspose_eq_map}
+    \leanok
+    \uses{def:kraus_map, def:kraus_adjoint_map}
+    The adjoint Kraus map associated with $(K_i^\dagger)_i$ is the Kraus map
+    associated with $(K_i)_i$.
+\end{lemma}
+
+\begin{lemma}[Irreducibility under conjugate transposition]%
+    \label{lem:irreducible_conjtranspose_family}
+    \lean{Kraus.isIrreducibleMap_mapLM_conjTranspose}
+    \leanok
+    \uses{def:kraus_map, def:irreducible_cp}
+    If the Kraus map associated with $(K_i)_i$ is irreducible, then so is the
+    Kraus map associated with $(K_i^\dagger)_i$.
+\end{lemma}
+
+\begin{lemma}[Peripheral spectrum under conjugate transposition]%
+    \label{lem:peripheral_conjtranspose_family}
+    \lean{Kraus.peripheralEigenvalues_mapLM_conjTranspose}
+    \leanok
+    \uses{def:kraus_map, def:peripheral_eigenvalues}
+    The peripheral spectrum of the Kraus map associated with $(K_i^\dagger)_i$
+    is the complex conjugate of the peripheral spectrum associated with
+    $(K_i)_i$.
+\end{lemma}
+
 \begin{theorem}[Roots of unity for irreducible channels]%
     \label{thm:peripheral_roots_irreducible_channel}
     \lean{peripheral_isRootOfUnity_of_irreducible_channel}
@@ -446,7 +483,9 @@ preservation by the weighted-trace argument in
 
 \begin{proof}\leanok
     \uses{thm:exists_kraus_map_eq_and_normalized, thm:cesaro_fixedpoint,
-        thm:psd_fp_pd_irred, thm:peripheral_roots_irred_fp}
+        thm:psd_fp_pd_irred, thm:peripheral_roots_irred_fp,
+        lem:unital_conjtranspose_tp, lem:adjoint_map_conjtranspose_family,
+        lem:irreducible_conjtranspose_family, lem:peripheral_conjtranspose_family}
     Choose a normalized Kraus representation
     $E(X)=\sum_iK_iXK_i^\dagger$ using
     Theorem~\ref{thm:exists_kraus_map_eq_and_normalized}, and set
