@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import TNLean.Algebra.MatrixMulRange
 import TNLean.Kraus.Wielandt.RectangularSpan.Universality
 import TNLean.Wielandt.RectangularSpan.Growth
 import TNLean.Wielandt.RectangularSpan.UniversalityAux
@@ -127,7 +128,7 @@ theorem rectSpan_nilpIndex_strict_growth_of_isNormal
     ((A i₀) ^ nilpIndex (toLin' (A i₀))) A hN
   have hN_finrank : finrank ℂ (rectSpan ((A i₀) ^ nilpIndex (toLin' (A i₀))) A N) =
       D * ((A i₀) ^ D).rank := by
-    rw [hN_range, finrank_range_mulLeft, Kraus.rank_pow_nilpIndex_eq A i₀]
+    rw [hN_range, Matrix.finrank_range_mulLeft, Kraus.rank_pow_nilpIndex_eq A i₀]
   have hconst := Kraus.rectSpan_nilpIndex_finrank_constant' A i₀ n hfin
     (max n N) (le_max_left _ _)
   have hmono_N := Kraus.rectSpan_nilpIndex_finrank_mono_le A i₀ (le_max_right n N)
