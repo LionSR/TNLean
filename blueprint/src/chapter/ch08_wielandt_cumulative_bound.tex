@@ -264,7 +264,7 @@ matrices, and let $\E_K$ be its Kraus map.
     \label{thm:kraus_posdef_fixed_point_from_tp_spreading}
     \lean{Kraus.exists_posDef_fixedPoint_of_isTP_of_vectorSpreadSpan_eq_top}
     \leanok
-    \uses{thm:psd_fp_exists, thm:kraus_fixed_point_posdef_from_spreading}
+    \uses{def:kraus_map, def:vector_spread_span}
     Let $D>0$, and let $K=\{K^i\}_{i=0}^{d-1}$ be a finite family of
     $D\times D$ matrices satisfying
     \begin{align}
@@ -279,9 +279,11 @@ matrices, and let $\E_K$ be its Kraus map.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:psd_fp_exists, thm:kraus_fixed_point_posdef_from_spreading}
-    Trace preservation gives a nonzero positive-semidefinite fixed point of
-    $\E_K$. The common fixed-length spreading hypothesis makes this fixed
+    \uses{thm:cesaro_fixedpoint,
+        thm:kraus_fixed_point_posdef_from_spreading}
+    The normalization makes $\E_K$ a channel. The Ces\`aro fixed-point theorem,
+    Theorem~\ref{thm:cesaro_fixedpoint}, gives a nonzero positive-semidefinite
+    fixed point. The common fixed-length spreading hypothesis makes this fixed
     point positive definite by
     Theorem~\ref{thm:kraus_fixed_point_posdef_from_spreading}.
 \end{proof}
@@ -290,11 +292,7 @@ matrices, and let $\E_K$ be its Kraus map.
     \label{thm:kraus_primitive_from_tp_spreading}
     \lean{Kraus.isPrimitive_mapLM_of_isTP_of_vectorSpreadSpan_eq_top}
     \leanok
-    \uses{thm:kraus_posdef_fixed_point_from_tp_spreading,
-        thm:kraus_irreducible_from_spreading,
-        thm:peripheral_roots_irred_fp,
-        thm:kraus_power_fixed_point_posdef_from_spreading,
-        thm:positive_fixedpoint_decomp}
+    \uses{def:kraus_map, def:vector_spread_span, def:primitive_channel}
     Let $D>0$, and let $K=\{K^i\}_{i=0}^{d-1}$ be a finite family of
     $D\times D$ matrices satisfying
     \begin{align}
@@ -311,13 +309,14 @@ matrices, and let $\E_K$ be its Kraus map.
 \begin{proof}\leanok
     \uses{thm:kraus_posdef_fixed_point_from_tp_spreading,
         thm:kraus_irreducible_from_spreading,
-        thm:peripheral_roots_irred_fp,
+        thm:peripheral_roots_irreducible_channel,
         thm:kraus_power_fixed_point_posdef_from_spreading,
         thm:positive_fixedpoint_decomp}
     The preceding theorem gives a positive-definite fixed point, and
     Theorem~\ref{thm:kraus_irreducible_from_spreading} gives irreducibility.
-    Hence every peripheral eigenvalue $\mu$ is a root of unity by
-    Theorem~\ref{thm:peripheral_roots_irred_fp}; choose $p>0$ with
+    Thus $\E_K$ is an irreducible channel. By
+    Theorem~\ref{thm:peripheral_roots_irreducible_channel}, every peripheral
+    eigenvalue $\mu$ is a root of unity; choose $p>0$ with
     $\mu^p=1$.
 
     Suppose $\mu\neq1$. A nonzero $\mu$-eigenmatrix has a nonzero real or

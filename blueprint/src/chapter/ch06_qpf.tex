@@ -1082,8 +1082,9 @@ The TP-gauge application follows~\cite[Appendix~A]{Cirac2016MPDO_arXiv}.
 \begin{theorem}[Positive fixed-point decomposition]\label{thm:positive_fixedpoint_decomp}
     \lean{IsPositiveMap.posPart_negPart_fixed_of_fixedPoint}
     \lean{IsPositiveMap.exists_posSemidef_fixedPoints_decomposition}
+    \lean{IsChannel.posSemidef_parts_of_hermitian_fixedPoint}
     \leanok
-    \uses{def:positive_map}
+    \uses{def:positive_map, def:channel}
     Let $E\colon M_D(\mathbb C)\to M_D(\mathbb C)$ be a positive,
     trace-preserving linear map and $X=E(X)$ a fixed point.
     Decompose $X$ into Hermitian and anti-Hermitian parts and then each into
@@ -1091,7 +1092,9 @@ The TP-gauge application follows~\cite[Appendix~A]{Cirac2016MPDO_arXiv}.
     semidefinite operators $P_1,\dots,P_4$.
     Then $E(P_j)=P_j$ for $j=1,\dots,4$;
     in other words, every fixed point is a $\mathbb C$-linear combination
-    of four positive-semidefinite fixed points.
+    of four positive-semidefinite fixed points. In particular, if $E$ is a
+    channel and $H=H^\dagger$ is fixed by $E$, then there are
+    positive-semidefinite fixed points $Q_1,Q_2$ such that $H=Q_1-Q_2$.
 
     This is Wolf Proposition~6.8.
 \end{theorem}
@@ -1100,8 +1103,9 @@ The TP-gauge application follows~\cite[Appendix~A]{Cirac2016MPDO_arXiv}.
     \uses{def:positive_map}
     The proof follows Wolf: first handle Hermitian fixed points by the
     orthogonality argument using the support projection (equation~(6.46)--(6.47)
-    in the source), then decompose an arbitrary fixed point into Hermitian
-    and skew-Hermitian parts and apply the Hermitian case to each.
+    in the source). This gives the two-part decomposition for a Hermitian
+    channel fixed point. Decompose an arbitrary fixed point into Hermitian and
+    skew-Hermitian parts and apply the Hermitian case to each.
 \end{proof}
 
 \begin{corollary}[Linearly independent stationary states]\label{cor:stationary_density_span}

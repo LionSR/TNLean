@@ -435,6 +435,36 @@ preservation by the weighted-trace argument in
     with Theorem~\ref{thm:peripheral_powers}.
 \end{proof}
 
+\begin{theorem}[Roots of unity for irreducible channels]%
+    \label{thm:peripheral_roots_irreducible_channel}
+    \lean{peripheral_isRootOfUnity_of_irreducible_channel}
+    \leanok
+    \uses{def:channel, def:irreducible_cp, def:peripheral_eigenvalues}
+    Let $D\geq1$, and let $E\colon\MN{D}\to\MN{D}$ be an irreducible quantum
+    channel. Then every peripheral eigenvalue of $E$ is a root of unity.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:exists_kraus_map_eq_and_normalized, thm:cesaro_fixedpoint,
+        thm:psd_fp_pd_irred, thm:peripheral_roots_irred_fp}
+    Choose a normalized Kraus representation
+    $E(X)=\sum_iK_iXK_i^\dagger$ using
+    Theorem~\ref{thm:exists_kraus_map_eq_and_normalized}, and set
+    $L_i=K_i^\dagger$. The normalization
+    $\sum_iK_i^\dagger K_i=\Id$ makes the Kraus map associated with $(L_i)_i$
+    unital. Theorem~\ref{thm:cesaro_fixedpoint} gives a nonzero
+    positive-semidefinite fixed point $\rho$ of $E$, and irreducibility makes
+    $\rho$ positive definite by Theorem~\ref{thm:psd_fp_pd_irred}.
+
+    The adjoint of the Kraus map associated with $(L_i)_i$ is $E$, so $\rho$
+    is a positive-definite fixed point of that adjoint map. Irreducibility is
+    preserved on passing from $(K_i)_i$ to $(K_i^\dagger)_i$, while a peripheral
+    eigenvalue $\mu$ of $E$ becomes the peripheral eigenvalue $\overline\mu$ of
+    the latter Kraus map. Theorem~\ref{thm:peripheral_roots_irred_fp} gives
+    $\overline\mu^{\,p}=1$ for some $p>0$. Taking complex conjugates yields
+    $\mu^p=1$.
+\end{proof}
+
 \begin{remark}\label{rem:adjoint_fp_more_general}\leanok
     Lemma~\ref{lem:peripheral_closed_powers_irred_fp}
     and Theorem~\ref{thm:peripheral_roots_irred_fp}
