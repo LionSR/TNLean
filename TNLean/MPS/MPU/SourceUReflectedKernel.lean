@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import TNLean.Kraus.Word
 import TNLean.MPS.MPU.MatchingContractions
 import TNLean.MPS.MPU.SourceUContraction
 import TNLean.MPS.MPU.SuppliedWitnessReblocking
@@ -57,12 +58,8 @@ noncomputable def blockWordReverseEquiv (d K : ℕ) :
       congr 1
       funext k
       simp
-    _ = List.map (MPSTensor.decodeBlock d K i ∘ Fin.rev) (List.finRange K) := by
-      simp [List.ofFn_eq_map]
-    _ = List.map (MPSTensor.decodeBlock d K i) (List.finRange K).reverse := by
-      simp [List.map_map, Function.comp_def, List.finRange_reverse]
-    _ = (List.ofFn (MPSTensor.decodeBlock d K i)).reverse := by
-      simp [List.ofFn_eq_map, List.map_reverse]
+    _ = (List.ofFn (MPSTensor.decodeBlock d K i)).reverse :=
+      (List.ofFn_reverse (MPSTensor.decodeBlock d K i)).symm
 
 @[simp] theorem blockWordReverseEquiv_involutive
     (i : Fin (MPSTensor.blockPhysDim d K)) :
