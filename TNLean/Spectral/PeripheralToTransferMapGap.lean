@@ -256,7 +256,7 @@ private theorem transferMap_hermitian_fixedPoint_eq_zero_of_trace_eq_zero_of_irr
         simpa only [trace_sub, trace_smul, smul_eq_mul, hY_decomp] using htrY
       simpa only [sub_smul, trace_sub, trace_smul, smul_eq_mul] using this
     have hmul : (c₁ - c₂) * Matrix.trace ρ = 0 := by
-      simpa only [mul_eq_zero, trace_smul, smul_eq_mul] using htrace
+      simpa only [trace_smul, smul_eq_mul] using htrace
     have : c₁ - c₂ = 0 := (mul_eq_zero.mp hmul).resolve_right htrρ
     exact sub_eq_zero.mp this
   subst hc
