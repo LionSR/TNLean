@@ -89,7 +89,7 @@ noncomputable def decodeBlockEquiv (d L : ℕ) :
     decodeBlock d L ((decodeBlockEquiv d L).symm w) = w := by
   rw [← decodeBlockEquiv_apply, Equiv.apply_symm_apply]
 
-/-- Block (coarse-grain) an MPS tensor by grouping `L` physical sites into one. -/
+/-- Block a finite matrix family by grouping words of length `L` into one index. -/
 noncomputable def blockTensor (A : Fin d → Matrix (Fin D) (Fin D) ℂ) (L : ℕ) :
     Fin (blockPhysDim d L) → Matrix (Fin D) (Fin D) ℂ :=
   fun i => Kraus.evalWord A (wordOfBlock d L i)
