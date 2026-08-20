@@ -52,50 +52,6 @@ variable {d D : ℕ}
 
 section LinearAlgebraLemmas
 
-/-- An eigenvector with nonzero eigenvalue lies in the range of the matrix. -/
-theorem mem_range_toLin'_of_eigenvector
-    (M : Matrix (Fin D) (Fin D) ℂ) (φ : Fin D → ℂ) (μ : ℂ) (hμ : μ ≠ 0)
-    (heig : M *ᵥ φ = μ • φ) :
-    φ ∈ LinearMap.range (Matrix.toLin' M) := by
-  refine LinearMap.mem_range.mpr ⟨μ⁻¹ • φ, ?_⟩
-  simp only [Matrix.toLin'_apply, Matrix.mulVec_smul, heig, smul_smul,
-    inv_mul_cancel₀ hμ, one_smul]
-
-/-- A transpose eigenvector with nonzero eigenvalue lies in the range of vecMulLinear. -/
-theorem mem_range_vecMulLinear_of_transpose_eigenvector
-    (Q : Matrix (Fin D) (Fin D) ℂ) (ψ : Fin D → ℂ) (ν : ℂ) (hν : ν ≠ 0)
-    (heig : Qᵀ *ᵥ ψ = ν • ψ) :
-    ψ ∈ LinearMap.range (Q.vecMulLinear) := by
-  refine LinearMap.mem_range.mpr ⟨ν⁻¹ • ψ, ?_⟩
-  simp only [Matrix.vecMulLinear_apply]
-  have hvecmul : ψ ᵥ* Q = Qᵀ *ᵥ ψ := by
-    ext j
-    simp [Matrix.vecMul, Matrix.mulVec, dotProduct, Matrix.transpose_apply, mul_comm]
-  calc
-    (ν⁻¹ • ψ) ᵥ* Q = ν⁻¹ • (ψ ᵥ* Q) := by
-      ext j
-      simp [Matrix.vecMul, dotProduct, Finset.mul_sum, mul_assoc]
-    _ = ν⁻¹ • (ν • ψ) := by rw [hvecmul, heig]
-    _ = ψ := by rw [smul_smul, inv_mul_cancel₀ hν, one_smul]
-
-/-- A nonzero eigenvector of `M` lies in the range of the powered matrix `M ^ D`. -/
-theorem mem_range_toLin'_pow_of_eigenvector
-    (M : Matrix (Fin D) (Fin D) ℂ) (φ : Fin D → ℂ) (μ : ℂ) (hμ : μ ≠ 0)
-    (heig : M *ᵥ φ = μ • φ) :
-    φ ∈ LinearMap.range (Matrix.toLin' (M ^ D)) := by
-  exact mem_range_toLin'_of_eigenvector (M := M ^ D) (φ := φ) (μ := μ ^ D)
-    (pow_ne_zero D hμ) (pow_mulVec_eq_smul_of_mulVec_eq_smul M φ μ heig D)
-
-/-- A nonzero transpose eigenvector of `M` lies in the range of `vecMulLinear` for `M ^ D`. -/
-theorem mem_range_vecMulLinear_pow_of_transpose_eigenvector
-    (M : Matrix (Fin D) (Fin D) ℂ) (ψ : Fin D → ℂ) (ν : ℂ) (hν : ν ≠ 0)
-    (heig : Mᵀ *ᵥ ψ = ν • ψ) :
-    ψ ∈ LinearMap.range ((M ^ D).vecMulLinear) := by
-  refine mem_range_vecMulLinear_of_transpose_eigenvector
-    (Q := M ^ D) (ψ := ψ) (ν := ν ^ D) (pow_ne_zero D hν) ?_
-  rw [Matrix.transpose_pow]
-  exact pow_mulVec_eq_smul_of_mulVec_eq_smul Mᵀ ψ ν heig D
-
 /-- `(B i)^D ∈ wordSpan B D`. -/
 theorem pow_single_mem_wordSpan (B : MPSTensor d D) (i : Fin d) :
     (B i) ^ D ∈ wordSpan B D := by
