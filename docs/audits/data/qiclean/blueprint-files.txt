@@ -43,7 +43,6 @@ blueprint/src/chapter/ch07_spectral_mixed_transfer_and_overlap.tex
 blueprint/src/chapter/ch07_spectral_peripheral_refinements_and_primitive_overlap.tex
 blueprint/src/chapter/ch08_wielandt.tex
 blueprint/src/chapter/ch08_wielandt_cumulative_bound.tex
-blueprint/src/chapter/ch08_wielandt_fixed_length_and_normality.tex
 blueprint/src/chapter/ch08_wielandt_word_span_and_block_injectivity.tex
 blueprint/src/chapter/ch09_canonical.tex
 blueprint/src/chapter/ch09_canonical_forms_and_projectors_auxiliary.tex

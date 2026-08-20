@@ -91,10 +91,10 @@ rem:adjoint_fp_more_general,src/chapter/ch04_channels_peripheral_spectrum_and_pr
 rem:aklt_parent_hamiltonian,src/chapter/ch15_examples_parent_hamiltonians.tex,remark,tn,tensor-network example
 rem:aklt_so3_spt,src/chapter/ch15_examples_aklt.tex,remark,tn,tensor-network example
 rem:aklt_z2z2_spt,src/chapter/ch15_examples_aklt.tex,remark,tn,tensor-network example
-rem:aperiodicity,src/appendix/ft_mps/ch08_wielandt.tex,remark,qic,finite Kraus-family aperiodicity
+rem:aperiodicity,src/appendix/ft_mps/ch08_wielandt.tex,remark,tn,MPS normality comparison
 rem:arbitrary_input_reduction_gap,src/chapter/ch10_bnt_sector_canonical_form.tex,remark,tn,matrix-product-state canonical-form statement
 rem:bicanonical_special_case,src/chapter/ch04_channels_peripheral_spectrum_and_primitivity.tex,remark,qic,quantum-channel fixed-point normalization
-rem:blocked_lemma2b_gap,src/chapter/ch08_wielandt_fixed_length_and_normality.tex,remark,qic,finite Kraus-family word-span theorem
+rem:blocked_lemma2b_gap,src/chapter/ch08_wielandt_fixed_length_and_normality.tex,remark,tn,MPS blocked fixed-length construction
 rem:cf_injective_vs_normal,src/chapter/ch02_mps.tex,remark,tn,matrix-product-state statement
 rem:cluster_injective_blocked,src/chapter/ch15_examples_cluster_state.tex,remark,tn,tensor-network example
 rem:cluster_stabilizer_convention,src/chapter/ch15_examples_parent_hamiltonians.tex,remark,tn,tensor-network example
@@ -111,7 +111,7 @@ rem:gauge_conventions,src/chapter/ch07_spectral_mixed_transfer_and_overlap.tex,r
 rem:ghz_parent_interaction,src/chapter/ch15_examples_parent_hamiltonians.tex,remark,tn,tensor-network example
 rem:injective_symmetry_ft_route,src/chapter/ch12_symmetry_virtual_and_cohomology.tex,remark,tn,matrix-product-state symmetry statement
 rem:irreducible_form_higher_periods,src/chapter/ch22_periodic_ft_irreducible_rotation.tex,remark,tn,periodic matrix-product-state statement
-rem:lemma2b_status,src/chapter/ch08_wielandt_fixed_length_and_normality.tex,remark,qic,finite Kraus-family word-span theorem
+rem:lemma2b_status,src/chapter/ch08_wielandt_fixed_length_and_normality.tex,remark,tn,MPS quantitative and blocked rank-one comparison
 rem:majumdar_ghosh_bond_dimension,src/chapter/ch15_examples_majumdar_ghosh.tex,remark,tn,tensor-network example
 rem:mpdo_algebra_tower_to_zcl_gap,src/chapter/ch21_mpdo_rfp_algebra_tower.tex,remark,tn,matrix-product-density-operator statement
 rem:mpdo_bnt_label_length_independent_topological,src/chapter/ch21_mpdo_rfp_bnt_coefficients.tex,remark,tn,matrix-product-density-operator statement
@@ -123,7 +123,7 @@ rem:periodic_vs_blocking_ft,src/chapter/ch22_periodic_ft_overlap_sector_match_an
 rem:periodicity_removal_spectral,src/chapter/ch04_channels_peripheral_spectrum_and_primitivity.tex,remark,qic,quantum-channel peripheral spectrum
 rem:peripheral_conventions_channels,src/chapter/ch04_channels_peripheral_spectrum_and_primitivity.tex,remark,qic,quantum-channel peripheral spectrum
 rem:physRealize_mul_general,src/chapter/ch23_algebraic_ft_foundations.tex,remark,tn,algebraic matrix-product-state statement
-rem:prim_definition_mismatch,src/chapter/ch08_wielandt_fixed_length_and_normality.tex,remark,qic,finite Kraus-family primitivity
+rem:prim_definition_mismatch,src/chapter/ch08_wielandt_fixed_length_and_normality.tex,remark,tn,comparison of MPS primitivity definitions
 rem:primitive_period_one_characterization,src/chapter/ch04_channels_peripheral_spectrum_and_primitivity.tex,remark,qic,quantum-channel primitivity
 rem:proportional_length_scalar_gap,src/chapter/ch11_fundamental_theorem_core.tex,remark,tn,matrix-product-state canonical-form statement
 rem:ring_vs_alg,src/chapter/ch23_algebraic_ft_injective_chains_and_product_algebra.tex,remark,tn,algebraic matrix-product-state statement
