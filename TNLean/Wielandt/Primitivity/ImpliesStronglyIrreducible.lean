@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import TNLean.Algebra.FrameOperator
 import TNLean.Wielandt.Primitivity.Definitions
 import TNLean.Wielandt.Primitivity.Normal
 import TNLean.Kraus.InvariantProjection
@@ -81,76 +82,8 @@ when x ≠ 0 since {vᵢ} spans. -/
 theorem posDef_sum_vecMulVec_of_span_eq_top {ι : Type*} [Fintype ι]
     (v : ι → (Fin D → ℂ))
     (hspan : Submodule.span ℂ (Set.range v) = ⊤) :
-    (∑ i : ι, vecMulVec (v i) (star (v i))).PosDef := by
-  rw [Matrix.posDef_iff_dotProduct_mulVec]
-  constructor
-  · -- Hermitian: (vv†)† = vv†
-    change (∑ i : ι, vecMulVec (v i) (star (v i))).IsHermitian
-    change (∑ i : ι, vecMulVec (v i) (star (v i)))ᴴ = _
-    simp only [conjTranspose_sum, conjTranspose_vecMulVec, star_star]
-  · -- Positive definite: ⟨x, Mx⟩ > 0 for x ≠ 0
-    intro x hx
-    -- Expand: star x ⬝ᵥ (Σ vv† *ᵥ x) = Σ (star x ⬝ᵥ (vv† *ᵥ x))
-    simp only [Matrix.sum_mulVec, dotProduct_sum, vecMulVec_mulVec]
-    -- Each term: star x ⬝ᵥ (op(star v ⬝ᵥ x) • v) = (star v ⬝ᵥ x) * (star x ⬝ᵥ v)
-    -- We'll show each is = ↑(‖star x ⬝ᵥ v i‖²) and the sum is positive
-    -- Step 1: Show the sum is a real number ≥ 0, cast to ℂ
-    suffices h : (0 : ℝ) < ∑ i : ι, ‖star x ⬝ᵥ v i‖ ^ 2 by
-      have heq : ∑ i : ι, star x ⬝ᵥ (MulOpposite.op (star (v i) ⬝ᵥ x) • v i) =
-          ↑(∑ i : ι, ‖star x ⬝ᵥ v i‖ ^ 2) := by
-        push_cast
-        congr 1; ext i
-        -- Goal: star x ⬝ᵥ (op(star v ⬝ᵥ x) • v) = ↑‖star x ⬝ᵥ v‖²
-        -- Simplify MulOpposite scalar action to multiplication
-        rw [show MulOpposite.op (star (v i) ⬝ᵥ x) • v i =
-            (star (v i) ⬝ᵥ x) • v i from by
-          ext j; simp [MulOpposite.smul_eq_mul_unop, mul_comm]]
-        rw [dotProduct_smul, smul_eq_mul]
-        have hconj : star (v i) ⬝ᵥ x = starRingEnd ℂ (star x ⬝ᵥ v i) := by
-          simp [dotProduct, map_sum, mul_comm]
-        rw [hconj, mul_comm, Complex.mul_conj, ← Complex.sq_norm]
-        push_cast; rfl
-      rw [heq]
-      exact_mod_cast h
-    -- Step 2: Show the real sum is positive
-    apply Finset.sum_pos'
-    · intro i _; positivity
-    · -- There exists i with ⟨v i, x⟩ ≠ 0
-      by_contra hall
-      push Not at hall
-      have horth : ∀ i, star x ⬝ᵥ v i = 0 := by
-        intro i
-        have h1 := hall i (Finset.mem_univ i)
-        have h2 : (0 : ℝ) ≤ ‖star x ⬝ᵥ v i‖ ^ 2 := sq_nonneg _
-        have h3 : ‖star x ⬝ᵥ v i‖ ^ 2 = 0 := le_antisymm h1 h2
-        rwa [sq_eq_zero_iff, norm_eq_zero] at h3
-      -- x is orthogonal to span of {v i}
-      have horth_span : ∀ w ∈ Submodule.span ℂ (Set.range v), star x ⬝ᵥ w = 0 := by
-        intro w hw
-        induction hw using Submodule.span_induction with
-        | mem w hw =>
-          obtain ⟨i, rfl⟩ := hw; exact horth i
-        | zero => simp
-        | add w₁ w₂ _ _ h₁ h₂ => rw [dotProduct_add, h₁, h₂, add_zero]
-        | smul c w₁ _ hw₁ => rw [dotProduct_smul, hw₁, smul_zero]
-      -- star x ⬝ᵥ x = 0
-      have hxx : star x ⬝ᵥ x = 0 := horth_span x (hspan ▸ Submodule.mem_top)
-      -- But star x ⬝ᵥ x = Σ |x_j|² > 0 for x ≠ 0
-      have hxx_real : star x ⬝ᵥ x = ↑(∑ j : Fin D, Complex.normSq (x j)) := by
-        simp only [dotProduct, Pi.star_apply]
-        push_cast
-        congr 1; ext j
-        rw [show star (x j) * x j = x j * starRingEnd ℂ (x j) from by
-          simp [mul_comm]]
-        rw [Complex.mul_conj]
-      rw [hxx_real] at hxx
-      have hne : ∃ j, x j ≠ 0 := by
-        by_contra h; push Not at h; exact hx (funext h)
-      obtain ⟨j, hj⟩ := hne
-      have hpos : (0 : ℝ) < ∑ k : Fin D, Complex.normSq (x k) :=
-        Finset.sum_pos' (fun k _ => Complex.normSq_nonneg _)
-          ⟨j, Finset.mem_univ _, Complex.normSq_pos.mpr hj⟩
-      exact absurd (Complex.ofReal_eq_zero.mp hxx) (ne_of_gt hpos)
+    (∑ i : ι, vecMulVec (v i) (star (v i))).PosDef :=
+  (Matrix.posDef_sum_vecMulVec_iff_span_eq_top v).2 hspan
 
 /-! ## Part 4: Transfer map on rank-one is PosDef under primitivity -/
 
