@@ -473,6 +473,42 @@ audit. Each result was checked against
 `Notes/WolfNotePDF/ch07_semigroup_structure.pdf`; the line ranges above refer
 only to the searchable transcription and do not determine numbering.
 
+## Chapter 8: Measures for distances and mixedness
+
+All three cited Chapter 8 numbers agree with the printed notes.
+
+| Citation | Result title | Archived PDF | Local transcription | Verdict |
+|---|---|---:|---:|---|
+| Theorem 8.6 | Birkhoff | PDF page 5; printed page 135 | lines 263--266 | Correct |
+| Theorem 8.16 | Trace-norm contractivity | PDF page 18; printed page 148 | lines 898--918 | Correct |
+| Theorem 8.17 | Quantum version of Doeblin's theorem | PDF page 19; printed page 149 | lines 943--969 | Correct |
+
+### Citing files
+
+**Theorem 8.6**
+
+- `TNLean/Analysis/Birkhoff.lean`
+- `blueprint/src/chapter/ch19_entropy_majorization.tex`
+- `docs/paper-gaps/wolf_ch8_birkhoff_doubly_substochastic_gap.tex`
+
+**Theorem 8.16**
+
+- `TNLean/Analysis/TraceNormContractivity.lean`
+- `blueprint/src/chapter/ch19_entropy_trace_norm.tex`
+
+**Theorem 8.17**
+
+- `TNLean/Analysis/TraceNormContractivity.lean`
+- `TNLean/Channel/ChoiDoeblin.lean`
+- `blueprint/src/chapter/ch19_entropy_trace_norm.tex`
+
+### Reproducibility
+
+The enumeration uses the same directories and exclusions as the Chapter 1
+audit. Each result was checked directly against
+`Notes/WolfNotePDF/ch08_distance_measures.pdf`; the line ranges above refer
+only to the searchable transcription and do not determine numbering.
+
 ## Chapters 4 and 9--11: no live numbered theorem-like citations
 
 No live numbered citation to a theorem-like result in Wolf Chapters 4, 9, 10,
