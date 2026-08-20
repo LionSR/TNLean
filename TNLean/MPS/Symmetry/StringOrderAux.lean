@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.Algebra.ComplexPhasePositivity
+import TNLean.Analysis.MatrixSqrt
 import TNLean.MPS.Symmetry.StringOrderDefs
 import TNLean.MPS.Core.CPPrimitive
 import TNLean.MPS.Core.TPGauge
@@ -57,9 +58,9 @@ lemma transferMap_tpGauge_eq_similarityMap
       similarityMap (D := D) (CFC.sqrt σ)⁻¹ (transferMap A) := by
   set S : Matrix (Fin D) (Fin D) ℂ := CFC.sqrt σ
   have hS_det : IsUnit S.det := by
-    simpa [S] using isUnit_det_cfc_sqrt_of_posDef (D := D) σ hσ
+    simpa [S] using Matrix.PosDef.isUnit_det_cfc_sqrt hσ
   have hS_herm : Sᴴ = S := by
-    simpa [S] using conjTranspose_cfc_sqrt (D := D) σ
+    simpa [S] using Matrix.conjTranspose_cfc_sqrt σ
   have hS_inv_inv : S⁻¹⁻¹ = S := Matrix.nonsing_inv_nonsing_inv S hS_det
   have hS_inv_herm : (S⁻¹)ᴴ = (Sᴴ)⁻¹ := Matrix.conjTranspose_nonsing_inv S
   have hS_inv_herm' : (S⁻¹)ᴴ = S⁻¹ := by simpa [hS_herm] using hS_inv_herm
@@ -93,7 +94,7 @@ lemma isPrimitive_transferMap_tpGauge_iff
       _root_.IsPrimitive (transferMap A) := by
   set S : Matrix (Fin D) (Fin D) ℂ := CFC.sqrt σ
   have hS_det : S.det ≠ 0 := by
-    exact (isUnit_det_cfc_sqrt_of_posDef (D := D) σ hσ).ne_zero
+    exact (Matrix.PosDef.isUnit_det_cfc_sqrt hσ).ne_zero
   rw [transferMap_tpGauge_eq_similarityMap A σ hσ]
   exact IsPrimitive.similarityMap_iff S⁻¹ (by simpa [Matrix.det_nonsing_inv] using hS_det) _
 
@@ -107,7 +108,7 @@ lemma isIrreducibleTensor_tpGauge_of_isIrreducibleMap [NeZero D]
     IsIrreducibleTensor (d := d) (D := D) (tpGauge (d := d) (D := D) A σ) := by
   set S : Matrix (Fin D) (Fin D) ℂ := CFC.sqrt σ
   have hS_det : S.det ≠ 0 := by
-    exact (isUnit_det_cfc_sqrt_of_posDef (D := D) σ hσ).ne_zero
+    exact (Matrix.PosDef.isUnit_det_cfc_sqrt hσ).ne_zero
   have hIrrSim :
       IsIrreducibleMap (similarityMap (D := D) S⁻¹ (transferMap A)) := by
     refine isIrreducibleMap_similarity (D := D) ?_ hIrr
@@ -234,9 +235,9 @@ noncomputable def twistedTPGaugeSetup [NeZero D]
       _ = σ := hσ_fixA
   let S : Matrix (Fin D) (Fin D) ℂ := CFC.sqrt σ
   have hS_herm : Sᴴ = S := by
-    simpa [S] using conjTranspose_cfc_sqrt (D := D) σ
+    simpa [S] using Matrix.conjTranspose_cfc_sqrt σ
   have hS_det : IsUnit (Matrix.det S) := by
-    simpa [S] using isUnit_det_cfc_sqrt_of_posDef (D := D) σ hσ_pd
+    simpa [S] using Matrix.PosDef.isUnit_det_cfc_sqrt hσ_pd
   have hS_mul_inv : S * S⁻¹ = 1 := Matrix.mul_nonsing_inv S hS_det
   have hS_inv_mul : S⁻¹ * S = 1 := Matrix.nonsing_inv_mul S hS_det
   have hS_detT : IsUnit (Matrix.det Sᴴ) := by
