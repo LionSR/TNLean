@@ -274,7 +274,11 @@ theorem posSemidef_fixedPoint_unique_of_irreducible_cp
 
 /-- An irreducible channel on a nontrivial finite matrix algebra has a positive-definite
 fixed point that is unique among positive-semidefinite fixed points up to scalar multiples.
-This is the fixed-point form of Wolf Theorem 6.3(2). -/
+This is the completely positive fixed-point corollary of Wolf Theorem 6.3(2).
+
+**Scope restriction (complete positivity):** Wolf Theorem 6.3(2) assumes only positivity,
+whereas this statement concerns channels and hence assumes complete positivity. See
+`docs/paper-gaps/wolf_thm6_3_positive_map_cp_scope.tex`. -/
 theorem IsChannel.exists_hasUniqueFixedPoint_of_irreducible [DecidableEq (Fin D)]
     {E : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ}
     (hE : IsChannel E) (hIrr : IsIrreducibleMap E) (hD : 0 < D) :
