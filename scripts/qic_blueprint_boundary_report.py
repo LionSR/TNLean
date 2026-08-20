@@ -270,13 +270,19 @@ def _atomic_non_item_environment_ranges(
 
     candidates: list[tuple[int, int]] = []
     for start, end in ranges:
-        span = set(range(start, end + 1))
-        if span & covered:
-            if not span <= covered:
+        has_covered = False
+        has_uncovered = False
+        for line in range(start, end + 1):
+            if line in covered:
+                has_covered = True
+            else:
+                has_uncovered = True
+            if has_covered and has_uncovered:
                 raise ValueError(
                     f"environment at {relative_root}:{start}-{end} contains "
                     "theorem-like item lines"
                 )
+        if has_covered:
             continue
         candidates.append((start, end))
     maximal: list[tuple[int, int]] = []
