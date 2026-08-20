@@ -5,7 +5,6 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.Core.Transfer
 import TNLean.Spectral.TransferOperatorGap
-import TNLean.Spectral.TraceExpansion
 import TNLean.QPF.Assembly
 
 import Mathlib.Analysis.SpecialFunctions.Log.Basic
