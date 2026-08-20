@@ -196,6 +196,24 @@ class ImportDirectionGuardTests(unittest.TestCase):
 
     # -- Extraction report ----------------------------------------------------
 
+    def test_source_sha_rejects_dirty_tree(self) -> None:
+        dirty = subprocess.CompletedProcess([], 0, stdout=" M TNLean/Channel/Foo.lean\n", stderr="")
+        with mock.patch.object(guard.subprocess, "run", return_value=dirty):
+            with self.assertRaisesRegex(ValueError, "dirty source tree"):
+                guard.source_sha(self.root)
+
+    def test_source_sha_reports_git_failure(self) -> None:
+        failure = subprocess.CalledProcessError(128, ["git"], stderr="fatal: not a git repository")
+        with mock.patch.object(guard.subprocess, "run", side_effect=failure):
+            with self.assertRaisesRegex(ValueError, "not a git repository"):
+                guard.source_sha(self.root)
+
+    def test_source_sha_returns_clean_head(self) -> None:
+        clean = subprocess.CompletedProcess([], 0, stdout="", stderr="")
+        head = subprocess.CompletedProcess([], 0, stdout="a" * 40 + "\n", stderr="")
+        with mock.patch.object(guard.subprocess, "run", side_effect=[clean, head]):
+            self.assertEqual(guard.source_sha(self.root), "a" * 40)
+
     def test_report_declaration_read_failure_is_diagnostic(self) -> None:
         missing = self.root / "TNLean/Channel/Missing.lean"
         with self.assertRaisesRegex(ValueError, "cannot read declarations"):

@@ -269,13 +269,27 @@ def namespaced_declarations(path: Path, relative: Path) -> list[dict[str, str | 
 
 
 def source_sha(root: Path) -> str:
-    """Return the exact source commit for the extraction inventory."""
-    result = subprocess.run(
-        ["git", "-C", str(root), "rev-parse", "HEAD"],
-        check=True,
-        stdout=subprocess.PIPE,
-        text=True,
-    )
+    """Return the exact source commit for a clean extraction inventory."""
+    try:
+        status = subprocess.run(
+            ["git", "-C", str(root), "status", "--porcelain", "--untracked-files=all"],
+            check=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            text=True,
+        )
+        if status.stdout:
+            raise ValueError("cannot report a dirty source tree")
+        result = subprocess.run(
+            ["git", "-C", str(root), "rev-parse", "HEAD"],
+            check=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            text=True,
+        )
+    except subprocess.CalledProcessError as error:
+        detail = error.stderr.strip() if error.stderr else str(error)
+        raise ValueError(f"cannot identify the source commit: {detail}") from error
     return result.stdout.strip()
 
 
