@@ -128,6 +128,36 @@ The empty product is the identity matrix.
     every sufficiently large $m$.
 \end{proof}
 
+\begin{theorem}[Primitive irreducible channels]
+    \label{thm:kraus_primitive_irreducible_eventual_span_choi}
+    \lean{Kraus.hasEventuallyFullWordSpan_of_isIrreducibleMap_of_isPrimitive,
+        Kraus.eventually_choiMatrix_mapLM_pow_posDef_of_isIrreducibleMap_of_isPrimitive}
+    \leanok
+    \uses{def:kraus_eventually_full_word_span,
+        cor:kraus_iterate_eventual_choi_posdef}
+    Suppose that $K$ is trace preserving and that its Kraus map $E$ is
+    irreducible with peripheral spectrum $\{1\}$. Then, for every sufficiently
+    large $m$,
+    \begin{align}
+        \mathcal S_m&=\MN{D},
+        &
+        \tau_{E^m}&>0.
+        \notag
+    \end{align}
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Irreducibility gives a positive-definite density matrix $\rho$ fixed by
+    $E$. The complementary part
+    $E-P_\rho$, where $P_\rho(X)=\operatorname{tr}(X)\rho$, has spectral radius
+    strictly below one because the only peripheral eigenvalue of $E$ is $1$.
+    Its powers therefore converge to zero. The trace-pairing criterion then
+    gives $\mathcal S_m=\MN{D}$ at one positive length. Trace preservation
+    propagates fullness to every larger length, and
+    Corollary~\ref{cor:kraus_iterate_eventual_choi_posdef} gives the Choi
+    statement.
+\end{proof}
 
 \begin{theorem}[Eventual Choi positivity gives eventual vector spread]
     \label{thm:kraus_eventually_full_vector_spread_of_choi_posdef}

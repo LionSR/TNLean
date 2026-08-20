@@ -9,3 +9,4 @@ Authors: TNLean contributors
 -- Generated aggregator module: TNLean.Kraus.Wielandt.Primitivity
 
 import TNLean.Kraus.Wielandt.Primitivity.EasyDirections
+import TNLean.Kraus.Wielandt.Primitivity.StronglyIrreducibleToFullWordSpan

@@ -66,6 +66,8 @@ NUMBERED_DEBT_ALLOWLIST: frozenset[str] = frozenset(
 # These suffixes identify mathematical objects or source labels, not the order
 # in which a proof was split.  Each exception is exact and reviewable.
 SEMANTIC_EXCEPTIONS: dict[str, str] = {
+    "TNLean/Channel/WolfTheorem68.lean":
+        "Wolf's theorem 6.8 is the source result formalized by this module.",
     "TNLean/Channel/FixedPoint/WolfTheorem614.lean":
         "Wolf's theorem 6.14 is the source result formalized by this module.",
     "TNLean/MPS/Examples/ZMod2.lean":

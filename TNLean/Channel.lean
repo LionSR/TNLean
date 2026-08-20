@@ -114,3 +114,4 @@ import TNLean.Channel.WolfChapter2Index
 import TNLean.Channel.WolfChapter6Index
 import TNLean.Channel.WolfChapter6Wrappers
 import TNLean.Channel.WolfProps
+import TNLean.Channel.WolfTheorem68
