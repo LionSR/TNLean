@@ -13,6 +13,7 @@ import TNLean.Kraus.Injectivity
 import TNLean.Kraus.InvariantProjection
 import TNLean.Kraus.MapIterate
 import TNLean.Kraus.MixedMap
+import TNLean.Kraus.MixedMap.SpectralRadius
 import TNLean.Kraus.MultiBlockWord
 import TNLean.Kraus.Wielandt
 import TNLean.Kraus.Word
