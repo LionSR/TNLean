@@ -213,7 +213,8 @@ noncomputable def factorization : PhysicalSectorFactorization tensor where
 /-- The four physical basis vectors, indexed by a parity coordinate and a
 quotient coordinate, form one sector with two two-dimensional factors.
 
-Source: arXiv:1606.00608, Appendix C.2, equation `AppUkU=rl`, lines 1381--1388. -/
+Derived from the physical-sector identity in arXiv:1606.00608, Appendix C.2,
+equation `AppUkU=rl`, lines 1381--1388. -/
 noncomputable def oneSectorEquiv :
     Fin 4 ≃ Σ _k : Fin 1, Fin 2 × Fin 2 where
   toFun k :=
@@ -229,21 +230,23 @@ noncomputable def oneSectorEquiv :
 /-- The Pauli \(Z\) eigenvalue attached to a binary coordinate in the
 project-derived one-sector factorization below.
 
-Source comparison: arXiv:1606.00608, Appendix C.2, equation `AppUkU=rl`, lines
-1381--1388. -/
+Derived from the physical-sector identity in arXiv:1606.00608, Appendix C.2,
+equation `AppUkU=rl`, lines 1381--1388. -/
 noncomputable def oneSectorSign (i : Fin 2) : ℂ :=
   if i = 0 then 1 else -1
 
 /-- The left factors \((\frac14 I,Z)\) in the one-sector decomposition.
 
-Source: arXiv:1606.00608, Appendix C.2, equation `AppUkU=rl`, lines 1381--1388. -/
+Derived from the physical-sector identity in arXiv:1606.00608, Appendix C.2,
+equation `AppUkU=rl`, lines 1381--1388. -/
 noncomputable def oneSectorLeftTensor (beta : Fin 2) :
     Matrix (Fin 2) (Fin 2) ℂ :=
   Matrix.diagonal fun i ↦ if beta = 0 then 1 / 4 else oneSectorSign i
 
 /-- The right factors \((I,\frac18 Z)\) in the one-sector decomposition.
 
-Source: arXiv:1606.00608, Appendix C.2, equation `AppUkU=rl`, lines 1381--1388. -/
+Derived from the physical-sector identity in arXiv:1606.00608, Appendix C.2,
+equation `AppUkU=rl`, lines 1381--1388. -/
 noncomputable def oneSectorRightTensor (alpha : Fin 2) :
     Matrix (Fin 2) (Fin 2) ℂ :=
   Matrix.diagonal fun i ↦ if alpha = 0 then 1 else (1 / 8) * oneSectorSign i
@@ -251,8 +254,8 @@ noncomputable def oneSectorRightTensor (alpha : Fin 2) :
 /-- Entries of the left factor in the project-derived one-sector
 factorization are diagonal.
 
-Source comparison: arXiv:1606.00608, Appendix C.2, equation `AppUkU=rl`, lines
-1381--1388. -/
+Derived from the physical-sector identity in arXiv:1606.00608, Appendix C.2,
+equation `AppUkU=rl`, lines 1381--1388. -/
 @[simp] lemma oneSectorLeftTensor_apply (beta i j : Fin 2) :
     oneSectorLeftTensor beta i j =
       if i = j then (if beta = 0 then 1 / 4 else oneSectorSign i) else 0 := by
@@ -261,8 +264,8 @@ Source comparison: arXiv:1606.00608, Appendix C.2, equation `AppUkU=rl`, lines
 /-- Entries of the right factor in the project-derived one-sector
 factorization are diagonal.
 
-Source comparison: arXiv:1606.00608, Appendix C.2, equation `AppUkU=rl`, lines
-1381--1388. -/
+Derived from the physical-sector identity in arXiv:1606.00608, Appendix C.2,
+equation `AppUkU=rl`, lines 1381--1388. -/
 @[simp] lemma oneSectorRightTensor_apply (alpha i j : Fin 2) :
     oneSectorRightTensor alpha i j =
       if i = j then (if alpha = 0 then 1 else (1 / 8) * oneSectorSign i) else 0 := by
@@ -277,7 +280,8 @@ that the selected four-sector inverse-map factorization is nonminimal for this
 tensor.  It does not settle the general factorization assertion documented in
 `docs/paper-gaps/cpgsv17_pf_rank_one.tex`.
 
-Source: arXiv:1606.00608, Appendix C.2, equation `AppUkU=rl`, lines 1381--1388. -/
+Derived from the physical-sector identity in arXiv:1606.00608, Appendix C.2,
+equation `AppUkU=rl`, lines 1381--1388. -/
 noncomputable def oneSectorFactorization : PhysicalSectorFactorization tensor where
   sectorCount := 1
   leftDim := fun _ ↦ 2
@@ -306,8 +310,9 @@ noncomputable def oneSectorFactorization : PhysicalSectorFactorization tensor wh
 /-- The sole neighboring operator of the one-sector factorization is diagonal,
 with eigenvalues \(3/8,1/8,1/8,3/8\).
 
-Source: arXiv:1606.00608, Appendix C.2, equations `Appetakhetc` and `etarl`,
-lines 1387--1389 and 1441--1445. -/
+Derived from the neighboring-operator identities in arXiv:1606.00608,
+Appendix C.2, equations `Appetakhetc` and `etarl`, lines 1387--1389 and
+1441--1445. -/
 lemma oneSector_neighboringOperator_eq
     (k h : Fin oneSectorFactorization.sectorCount) :
     oneSectorFactorization.neighboringOperator k h =
@@ -331,8 +336,9 @@ lemma oneSector_neighboringOperator_eq
 /-- The neighboring operator in the one-sector factorization is positive
 semidefinite.
 
-Source: arXiv:1606.00608, Appendix C.2, equations `Appetakhetc` and `etarl`,
-lines 1387--1389 and 1441--1445. -/
+Derived from the neighboring-operator identities in arXiv:1606.00608,
+Appendix C.2, equations `Appetakhetc` and `etarl`, lines 1387--1389 and
+1441--1445. -/
 lemma oneSector_neighboringOperator_posSemidef
     (k h : Fin oneSectorFactorization.sectorCount) :
     (oneSectorFactorization.neighboringOperator k h).PosSemidef := by
@@ -349,8 +355,8 @@ lemma oneSector_neighboringOperator_posSemidef
 
 /-- The neighboring operator in the one-sector factorization has trace one.
 
-Source: arXiv:1606.00608, Appendix C.2, equations `Apptralktrrk`, `AppPsiPhi`,
-and `etarl`, lines 1389--1403 and 1441--1450. -/
+Derived from the trace identities in arXiv:1606.00608, Appendix C.2, equations
+`Apptralktrrk`, `AppPsiPhi`, and `etarl`, lines 1389--1403 and 1441--1450. -/
 lemma oneSector_neighboringOperator_trace
     (k h : Fin oneSectorFactorization.sectorCount) :
     (oneSectorFactorization.neighboringOperator k h).trace = 1 := by
@@ -370,7 +376,8 @@ that the selected four-sector inverse-map factorization is nonminimal for this
 tensor.  It does not settle the general factorization assertion documented in
 `docs/paper-gaps/cpgsv17_pf_rank_one.tex`.
 
-Source: arXiv:1606.00608, Appendix C.2, lines 1389--1403. -/
+Derived from the neighboring-trace identities in arXiv:1606.00608,
+Appendix C.2, lines 1389--1403. -/
 noncomputable def oneSectorNeighboringTraceFactorization :
     PhysicalSectorFactorization.NeighboringTraceFactorization
       oneSectorFactorization where
@@ -395,7 +402,8 @@ It neither supplies a coarsening result for arbitrary physical-sector
 factorizations nor settles the general assertion documented in
 `docs/paper-gaps/cpgsv17_pf_rank_one.tex`.
 
-Source: arXiv:1606.00608, Appendix C.2, equations `AppUkU=rl` and `etarl`, lines
+Derived from the physical-sector and neighboring-trace identities in
+arXiv:1606.00608, Appendix C.2, equations `AppUkU=rl` and `etarl`, lines
 1381--1403 and 1441--1445. -/
 theorem exists_oneSector_neighboringTraceFactorization :
     ∃ F : PhysicalSectorFactorization tensor,
