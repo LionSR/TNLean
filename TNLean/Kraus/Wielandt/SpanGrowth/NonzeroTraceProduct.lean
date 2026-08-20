@@ -122,28 +122,6 @@ theorem cumulativeSpan_eq_top_of_wordSpan_eq_top_bound [NeZero D]
 /-! ### Nonzero trace product exists -/
 
 
-/-- If `cumulativeSpan K n = ⊤` and every word product of length at most `n`
-has zero trace, then `tr(1) = 0`. -/
-private theorem trace_one_eq_zero_of_all_traces_zero
-    (K : Fin d → Matrix (Fin D) (Fin D) ℂ) {n : ℕ}
-    (htop : cumulativeSpan K n = ⊤)
-    (hall : ∀ w : List (Fin d), w.length ≤ n →
-      Matrix.trace (evalWord K w) = 0) :
-    Matrix.trace (1 : Matrix (Fin D) (Fin D) ℂ) = 0 := by
-  have hvanish : Set.EqOn
-      (Matrix.traceLinearMap (Fin D) ℂ ℂ)
-      (0 : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] ℂ)
-      {M | ∃ w : List (Fin d), w.length ≤ n ∧ M = evalWord K w} := by
-    rintro M ⟨w, hw, rfl⟩
-    simp only [Matrix.traceLinearMap_apply, LinearMap.zero_apply]
-    exact hall w hw
-  have h1 : (1 : Matrix (Fin D) (Fin D) ℂ) ∈ cumulativeSpan K n := by
-    rw [htop]
-    exact Submodule.mem_top
-  have htrace := LinearMap.eqOn_span hvanish h1
-  simpa only [Matrix.traceLinearMap_apply, LinearMap.zero_apply] using htrace
-
-
 /-- **Lemma 1** (arXiv:0909.5347), part (a):
 Assuming some exact word span is full (eventually full word span), the cumulative span
 T_n must reach ⊤ = M_D(ℂ) by step D².
@@ -170,14 +148,9 @@ theorem exists_nonzero_trace_word [NeZero D]
     (K : Fin d → Matrix (Fin D) (Fin D) ℂ) {N : ℕ}
     (hN : wordSpan K N = ⊤) :
     ∃ w : List (Fin d),
-      w.length ≤ D ^ 2 ∧ Matrix.trace (evalWord K w) ≠ 0 := by
-  by_contra hall
-  push Not at hall
-  have htrace := trace_one_eq_zero_of_all_traces_zero K
-    (cumulativeSpan_eq_top K hN) hall
-  rw [Matrix.trace_one] at htrace
-  simp only [Fintype.card_fin, Nat.cast_eq_zero] at htrace
-  exact NeZero.ne D htrace
+      w.length ≤ D ^ 2 ∧ Matrix.trace (evalWord K w) ≠ 0 :=
+  exists_nonzero_trace_word_of_cumulativeSpan_eq_top K
+    (cumulativeSpan_eq_top K hN)
 
 /-! ### Sharp bound: D² − dim(S₁) + 1
 
@@ -357,14 +330,9 @@ theorem exists_nonzero_trace_word_sharp [NeZero D]
     (hN : wordSpan K N = ⊤) :
     ∃ w : List (Fin d),
       w.length ≤ D ^ 2 - Module.finrank ℂ (wordSpan K 1) + 1 ∧
-        Matrix.trace (evalWord K w) ≠ 0 := by
-  by_contra hall
-  push Not at hall
-  have htrace := trace_one_eq_zero_of_all_traces_zero K
-    (cumulativeSpan_eq_top_of_wordSpan_eq_top_sharp K hN) hall
-  rw [Matrix.trace_one] at htrace
-  simp only [Fintype.card_fin, Nat.cast_eq_zero] at htrace
-  exact NeZero.ne D htrace
+        Matrix.trace (evalWord K w) ≠ 0 :=
+  exists_nonzero_trace_word_of_cumulativeSpan_eq_top K
+    (cumulativeSpan_eq_top_of_wordSpan_eq_top_sharp K hN)
 
 /-! ### Positive-length nonzero trace word
 
