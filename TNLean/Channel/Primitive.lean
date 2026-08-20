@@ -3,6 +3,8 @@ Copyright (c) 2025 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import TNLean.Analysis.OperatorNormConvergence
+import TNLean.Analysis.SpectralRadiusPowerDecay
 import TNLean.Channel.Basic
 import Mathlib.LinearAlgebra.Trace
 import Mathlib.LinearAlgebra.Matrix.Trace
@@ -31,6 +33,8 @@ unique fixed state.
 * `fixedPointProj_idempotent`: `P ∘ P = P`
 * `pow_succ_eq_fixedPointProj_add_compl_pow`: `E^(n+1) = P + (E-P)^(n+1)` for all `n`
 * `pow_eq_fixedPointProj_add_compl_pow`: same for all `n ≥ 1`
+* `LinearMap.trace_pow_tendsto_one_of_spectralRadius_compl_lt_one`:
+  convergence of the traces to one under a complementary spectral-radius gap
 
 ## Notation
 
@@ -44,6 +48,7 @@ Within `section ComplementaryDecomposition`, we use local notation:
 -/
 
 open Matrix
+open scoped Matrix ComplexOrder NNReal ENNReal Topology Matrix.Norms.Operator
 
 variable {D : ℕ}
 
@@ -135,3 +140,80 @@ theorem pow_eq_fixedPointProj_add_compl_pow
         pow_succ_eq_fixedPointProj_add_compl_pow (E := E) (ρ := ρ) (htr := htr) hTP hρ n
 
 end ComplementaryDecomposition
+
+namespace LinearMap
+
+open Filter
+
+attribute [local instance]
+  ContinuousLinearMap.toNormedAddCommGroup
+  ContinuousLinearMap.toNormedRing
+  ContinuousLinearMap.toSeminormedRing
+  ContinuousLinearMap.toNormedAlgebra
+
+section TraceConvergence
+
+local notation "V" => Matrix (Fin D) (Fin D) ℂ
+
+/-- Let `P` be the rank-one projection onto a fixed point `ρ` and let `N := E - P`.
+If the spectral radius of `N` is less than one, then `trace(E ^ n)` converges to one. -/
+theorem trace_pow_tendsto_one_of_spectralRadius_compl_lt_one
+    [NeZero D]
+    (E : V →ₗ[ℂ] V) (ρ : V) (htr : Matrix.trace ρ ≠ 0)
+    (hTP : IsTracePreservingMap E) (hρ : E ρ = ρ)
+    (hSpect :
+      spectralRadius ℂ
+          ((Module.End.toContinuousLinearMap V) (E - fixedPointProj (D := D) ρ htr)) < 1) :
+    Tendsto (fun n ↦ (LinearMap.trace ℂ V) (E ^ n)) atTop (𝓝 (1 : ℂ)) := by
+  classical
+  let : FiniteDimensional ℂ V := by infer_instance
+  let : CompleteSpace V := FiniteDimensional.complete ℂ V
+  let : Nontrivial V := by infer_instance
+  let Φ : (V →ₗ[ℂ] V) ≃ₐ[ℂ] (V →L[ℂ] V) := Module.End.toContinuousLinearMap V
+  let : NormedAddCommGroup (V →L[ℂ] V) := ContinuousLinearMap.toNormedAddCommGroup
+  let : SeminormedRing (V →L[ℂ] V) := ContinuousLinearMap.toSeminormedRing
+  let : NormedRing (V →L[ℂ] V) := ContinuousLinearMap.toNormedRing
+  let : NormedSpace ℂ (V →L[ℂ] V) := ContinuousLinearMap.toNormedSpace
+  let : NormedAlgebra ℂ (V →L[ℂ] V) := ContinuousLinearMap.toNormedAlgebra
+  have : FiniteDimensional ℂ (V →L[ℂ] V) := Φ.toLinearEquiv.finiteDimensional
+  have hComplete : CompleteSpace (V →L[ℂ] V) := FiniteDimensional.complete ℂ (V →L[ℂ] V)
+  let : CompleteSpace (V →L[ℂ] V) := hComplete
+  let P : V →ₗ[ℂ] V := fixedPointProj (D := D) ρ htr
+  let N : V →ₗ[ℂ] V := E - P
+  have hSpectN : spectralRadius ℂ (Φ N) < 1 := by
+    change spectralRadius ℂ
+      ((Module.End.toContinuousLinearMap V) (E - fixedPointProj (D := D) ρ htr)) < 1
+    simpa [N, P] using hSpect
+  have hNpow_clm : Tendsto (fun n ↦ (Φ N) ^ n) atTop (𝓝 0) :=
+    @_root_.pow_tendsto_zero_of_spectralRadius_lt_one (V →L[ℂ] V)
+      (ContinuousLinearMap.toNormedRing : NormedRing (V →L[ℂ] V)) hComplete
+      (ContinuousLinearMap.toNormedAlgebra : NormedAlgebra ℂ (V →L[ℂ] V)) (Φ N) hSpectN
+  have hNtrace0' :
+      Tendsto (fun n ↦ LinearMap.trace ℂ V ((Φ N) ^ n : V →L[ℂ] V))
+        atTop (𝓝 (0 : ℂ)) :=
+    ContinuousLinearMap.tendsto_trace_pow_of_tendsto_zero (Φ N) hNpow_clm
+  have hNtrace0 : Tendsto (fun n ↦ LinearMap.trace ℂ V (N ^ n)) atTop (𝓝 (0 : ℂ)) := by
+    refine Tendsto.congr (fun n ↦ ?_) hNtrace0'
+    have hlin : N ^ n = ((Φ N) ^ n : V →L[ℂ] V) :=
+      (show ((Φ (N ^ n) : V →L[ℂ] V) : V →ₗ[ℂ] V) = N ^ n from rfl).symm.trans
+        (congrArg (fun F : V →L[ℂ] V ↦ (F : V →ₗ[ℂ] V)) (map_pow Φ N n))
+    exact (congrArg (LinearMap.trace ℂ V) hlin).symm
+  have h_decomp : ∀ᶠ n in atTop, E ^ n = P + N ^ n := by
+    filter_upwards [eventually_ge_atTop (1 : ℕ)] with n hn
+    exact pow_eq_fixedPointProj_add_compl_pow (E := E) (ρ := ρ) (htr := htr) hTP hρ hn
+  have hP_tr : (LinearMap.trace ℂ V) P = (1 : ℂ) := by
+    simpa [P] using fixedPointProj_trace (D := D) ρ htr
+  have h_main' :
+      Tendsto (fun n ↦ (LinearMap.trace ℂ V) P + (LinearMap.trace ℂ V) (N ^ n))
+        atTop (𝓝 (1 : ℂ)) := by
+    have h := (tendsto_const_nhds :
+        Tendsto (fun _ : ℕ ↦ (LinearMap.trace ℂ V) P) atTop
+          (𝓝 ((LinearMap.trace ℂ V) P))).add hNtrace0
+    simpa [hP_tr] using h
+  refine Tendsto.congr' ?_ h_main'
+  filter_upwards [h_decomp] with n hn
+  simp [hn, hP_tr]
+
+end TraceConvergence
+
+end LinearMap

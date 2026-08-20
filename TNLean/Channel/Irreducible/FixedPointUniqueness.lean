@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.Algebra.HermitianHelpers
+import TNLean.Channel.FixedPoint.Cesaro
 import TNLean.Channel.Irreducible.FixedPoint
 
 /-!
@@ -25,6 +26,8 @@ radius) is also a consequence.
   not positive definite, for positive definite `ρ`, `σ`.
 * `posSemidef_fixedPoint_unique_of_irreducible_cp`: uniqueness of PSD fixed
   points of an irreducible CP map (Wolf Theorem 6.3(2)).
+* `IsChannel.exists_hasUniqueFixedPoint_of_irreducible`: existence and uniqueness
+  of a positive-definite fixed point for an irreducible channel.
 
 ## References
 
@@ -268,5 +271,24 @@ theorem posSemidef_fixedPoint_unique_of_irreducible_cp
     · exact absurd
         (posDef_of_posSemidef_fixedPoint_irreducible_cp E hCP hIrr τ hτ_psd hτ_ne hτ_fix)
         hτ_not_pd
+
+/-- An irreducible channel on a nontrivial finite matrix algebra has a positive-definite
+fixed point that is unique among positive-semidefinite fixed points up to scalar multiples.
+This is the completely positive fixed-point corollary of Wolf Theorem 6.3(2).
+
+**Scope restriction (complete positivity):** Wolf Theorem 6.3(2) assumes only positivity,
+whereas this statement concerns channels and hence assumes complete positivity. See
+`docs/paper-gaps/wolf_thm6_3_positive_map_cp_scope.tex`. -/
+theorem IsChannel.exists_hasUniqueFixedPoint_of_irreducible [DecidableEq (Fin D)]
+    {E : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ}
+    (hE : IsChannel E) (hIrr : IsIrreducibleMap E) (hD : 0 < D) :
+    ∃ ρ : Matrix (Fin D) (Fin D) ℂ, HasUniqueFixedPoint E ρ := by
+  obtain ⟨ρ, hρ_psd, hρ_ne, hρ_fix⟩ := hE.exists_posSemidef_fixedPoint (E := E) hD
+  refine ⟨ρ, ⟨hρ_fix, ?_, ?_⟩⟩
+  · exact posDef_of_posSemidef_fixedPoint_irreducible_cp
+      E hE.cp hIrr ρ hρ_psd hρ_ne hρ_fix
+  · intro σ hσ_psd hσ_fix
+    exact posSemidef_fixedPoint_unique_of_irreducible_cp
+      E hE.cp hIrr ρ σ hρ_psd hρ_ne hσ_psd hρ_fix hσ_fix
 
 end Uniqueness
