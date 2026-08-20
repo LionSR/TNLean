@@ -152,15 +152,105 @@ class NonItemBlock:
         return f"@{self.file}:{self.line}-{self.end_line}"
 
 
+def _balanced_environment_ranges(
+    source_lines: list[str], relative_root: str
+) -> tuple[list[tuple[int, int]], list[tuple[int, int]]]:
+    """Return balanced environment ranges while treating raw text as opaque."""
+    stack: list[tuple[str, int]] = []
+    ranges: list[tuple[int, int]] = []
+    raw_text_ranges: list[tuple[int, int]] = []
+    raw_environment: str | None = None
+    for line_no, line in enumerate(source_lines, start=1):
+        cursor = 0
+        while cursor < len(line):
+            if raw_environment is not None:
+                closing = re.search(
+                    rf"\\end\{{{re.escape(raw_environment)}\}}", line[cursor:]
+                )
+                if closing is None:
+                    break
+                cursor += closing.end()
+                opened, opened_line = stack.pop()
+                ranges.append((opened_line, line_no))
+                raw_text_ranges.append((opened_line, line_no))
+                raw_environment = None
+                continue
+
+            cleaned_suffix = _strip_tex_comments(line[cursor:])
+            token = ENV_TOKEN_RE.search(cleaned_suffix)
+            if token is None:
+                break
+            action, environment = token.groups()
+            cursor += token.end()
+            if action == "begin":
+                stack.append((environment, line_no))
+                if environment in RAW_TEXT_ENVIRONMENTS:
+                    raw_environment = environment
+                continue
+            if not stack:
+                raise ValueError(
+                    f"unmatched \\end{{{environment}}} at {relative_root}:{line_no}"
+                )
+            opened, opened_line = stack.pop()
+            if opened != environment:
+                raise ValueError(
+                    f"mismatched environment at {relative_root}:{line_no}: "
+                    f"opened {opened} at line {opened_line}, closed {environment}"
+                )
+            ranges.append((opened_line, line_no))
+    if stack:
+        environment, opened_line = stack[-1]
+        raise ValueError(
+            f"unterminated environment {environment} opened at "
+            f"{relative_root}:{opened_line}"
+        )
+    return ranges, raw_text_ranges
+
+
+def _raw_text_line_numbers(source_lines: list[str]) -> set[int]:
+    """Return lines whose TeX contents are interpreted as raw text."""
+    raw_environment: str | None = None
+    raw_start = 0
+    raw_lines: set[int] = set()
+    for line_no, line in enumerate(source_lines, start=1):
+        cursor = 0
+        while cursor < len(line):
+            if raw_environment is not None:
+                closing = re.search(
+                    rf"\\end\{{{re.escape(raw_environment)}\}}", line[cursor:]
+                )
+                if closing is None:
+                    break
+                raw_lines.update(range(raw_start, line_no + 1))
+                cursor += closing.end()
+                raw_environment = None
+                continue
+            cleaned_suffix = _strip_tex_comments(line[cursor:])
+            token = ENV_TOKEN_RE.search(cleaned_suffix)
+            if token is None:
+                break
+            action, environment = token.groups()
+            cursor += token.end()
+            if action == "begin" and environment in RAW_TEXT_ENVIRONMENTS:
+                raw_environment = environment
+                raw_start = line_no
+    if raw_environment is not None:
+        raw_lines.update(range(raw_start, len(source_lines) + 1))
+    return raw_lines
+
+
 def blueprint_environments(blueprint_src: Path) -> list[BlueprintEnvironment]:
     """Parse theorem-like items, including an attached proof and intervening lines."""
     records: list[BlueprintEnvironment] = []
     for path in blueprint_content_files(blueprint_src):
         rel = path.relative_to(blueprint_src.parent).as_posix()
         source_lines = path.read_text(errors="replace").splitlines()
+        raw_text_lines = _raw_text_line_numbers(source_lines)
         stack: list[dict[str, object]] = []
         statements: list[dict[str, object]] = []
         for line_no, line in enumerate(source_lines, start=1):
+            if line_no in raw_text_lines:
+                continue
             begin = ENV_BEGIN_RE.search(line)
             if begin is not None:
                 stack.append(
@@ -252,36 +342,9 @@ def _atomic_non_item_environment_ranges(
     source_lines: list[str], item_spans: list[tuple[int, int]], relative_root: str
 ) -> dict[int, int]:
     """Return maximal balanced TeX environments lying outside item spans."""
-    stack: list[tuple[str, int]] = []
-    ranges: list[tuple[int, int]] = []
-    raw_text_ranges: list[tuple[int, int]] = []
-    for line_no, line in enumerate(source_lines, start=1):
-        cleaned_line = _strip_tex_comments(line)
-        for token in ENV_TOKEN_RE.finditer(cleaned_line):
-            action, environment = token.groups()
-            if action == "begin":
-                stack.append((environment, line_no))
-                continue
-            if not stack:
-                raise ValueError(
-                    f"unmatched \\end{{{environment}}} at {relative_root}:{line_no}"
-                )
-            opened, opened_line = stack.pop()
-            if opened != environment:
-                raise ValueError(
-                    f"mismatched environment at {relative_root}:{line_no}: "
-                    f"opened {opened} at line {opened_line}, closed {environment}"
-                )
-            ranges.append((opened_line, line_no))
-            if opened in RAW_TEXT_ENVIRONMENTS:
-                raw_text_ranges.append((opened_line, line_no))
-    if stack:
-        environment, opened_line = stack[-1]
-        raise ValueError(
-            f"unterminated environment {environment} opened at "
-            f"{relative_root}:{opened_line}"
-        )
-
+    ranges, raw_text_ranges = _balanced_environment_ranges(
+        source_lines, relative_root
+    )
     raw_text_lines = {
         line_no
         for start, end in raw_text_ranges

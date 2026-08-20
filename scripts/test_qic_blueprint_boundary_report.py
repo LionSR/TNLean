@@ -530,6 +530,27 @@ See Theorem~\ref{thm:tn}.
             report["simulated_qic_source_files"],
         )
 
+    @patch("qic_blueprint_boundary_report.source_sha", return_value="a" * 40)
+    def test_environment_tokens_in_raw_text_are_ignored(self, _source_sha) -> None:
+        self.write_blueprint(
+            r"""\begin{theorem}\label{thm:qic}
+\lean{Kraus.moved}
+\end{theorem}
+
+\begin{figure}
+\begin{verbatim}
+\begin{theorem}
+Displayed literally.
+\end{theorem}
+\begin{center}
+\end{verbatim}
+\end{figure}
+"""
+        )
+        report = boundary_report(self.root)
+        self.assertEqual(report["environment_count"], 1)
+        self.assertEqual(report["simulated_output_errors"], [])
+
     def test_rejects_unbalanced_non_item_environment(self) -> None:
         self.write_blueprint(
             r"""\begin{theorem}\label{thm:qic}
