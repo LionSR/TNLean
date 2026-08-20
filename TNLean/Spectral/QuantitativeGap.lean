@@ -126,25 +126,6 @@ private theorem spectralRadius_compl_lt_one_of_primitive_fixedPoint [NeZero D]
     exact (NNReal.coe_lt_one).1 this
   exact ⟨htrρ, by simpa [E] using hgap⟩
 
-/-- Pointwise version of `geometric_bound_of_spectralRadius_lt_one`:
-if `spectralRadius(T) < 1`, then `‖T ^ n x‖ ≤ C · r ^ n · ‖x‖`. -/
-private theorem geometric_apply_bound_of_spectralRadius_lt_one
-    {V : Type*} [NormedAddCommGroup V] [NormedSpace ℂ V] [CompleteSpace V]
-    (T : V →L[ℂ] V)
-    (hT : spectralRadius ℂ T < 1) :
-    ∃ C r : ℝ, 0 < C ∧ 0 < r ∧ r < 1 ∧
-      ∀ n : ℕ, ∀ x : V, ‖(T ^ n) x‖ ≤ C * r ^ n * ‖x‖ := by
-  rcases _root_.geometric_bound_of_spectralRadius_lt_one T hT with
-    ⟨C, r, hC, hr_pos, hr_lt_one, hpow⟩
-  refine ⟨C, r, hC, hr_pos, hr_lt_one, ?_⟩
-  intro n x
-  calc
-    ‖(T ^ n) x‖ ≤ ‖T ^ n‖ * ‖x‖ := by
-      simpa using (ContinuousLinearMap.le_opNorm (T ^ n) x)
-    _ ≤ (C * r ^ n) * ‖x‖ := by
-      exact mul_le_mul_of_nonneg_right (hpow n) (norm_nonneg x)
-    _ = C * r ^ n * ‖x‖ := by ring
-
 /-! ## Auxiliary lemmas -/
 
 /-- The word span at length 1 equals the span of the Kraus operators. -/
@@ -210,7 +191,7 @@ theorem exponential_convergence_of_primitive [NeZero D]
           simp [hρ0]
         exact (ne_of_gt hρ_pd.trace_pos) htr0)
       hρ_fix huniq_fp
-  rcases geometric_apply_bound_of_spectralRadius_lt_one (T := Φ N) hgap with
+  rcases _root_.geometric_apply_bound_of_spectralRadius_lt_one (T := Φ N) hgap with
     ⟨C₀, r, hC₀_pos, hr_pos, hr_lt_one, hgeom⟩
   let P' : V →L[ℂ] V := Φ P
   let C : ℝ := C₀ + (1 + ‖P'‖)
@@ -291,7 +272,7 @@ theorem correlation_length_bound [NeZero D]
     ⟨ρ, _hρ_psd, _hρ_ne, hρ_fix, htrρ, hgap⟩
   let P : V →ₗ[ℂ] V := fixedPointProj (D := D) ρ htrρ
   let N : V →ₗ[ℂ] V := E - P
-  rcases geometric_apply_bound_of_spectralRadius_lt_one (T := Φ N) hgap with
+  rcases _root_.geometric_apply_bound_of_spectralRadius_lt_one (T := Φ N) hgap with
     ⟨C₀, r, hC₀_pos, hr_pos, hr_lt_one, hgeom⟩
   let C : ℝ := C₀ + 1
   let ξ : ℝ := 1 / (-Real.log r)
