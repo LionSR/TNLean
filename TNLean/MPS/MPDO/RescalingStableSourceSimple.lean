@@ -88,15 +88,15 @@ the normalized fixed-representative predicate `MPOTensor.IsSimple`.
 
 Source: arXiv:1606.00608, Definition 4.7, lines 815--822. -/
 theorem R_isSourceSimple : MPOTensor.IsSourceSimple R := by
-  refine ⟨R_isMPDO, ⟨1, by norm_num, R_mpo_ne_zero 1 (by norm_num)⟩,
-    1, by norm_num, ?_⟩
   let data := canonicalFormData.reindexPhysical oneSiteDoubledEquiv
   let ref := data.activeBNTRefinement
-  refine ⟨data.activePhaseClasses.g,
-    fun j => ⟨data.dim (data.activeRepresentativeIndex j),
-      data.blocks (data.activeRepresentativeIndex j)⟩, ?_, ?_⟩
+  have hActive : Nonempty data.Active := by
+    change Nonempty { k : Fin 1 // (weight : ℂ) ≠ 0 }
+    refine ⟨⟨0, ?_⟩⟩
+    exact_mod_cast weight_ne
+  refine ⟨R_isMPDO, 1, by norm_num, ref.representativeSectorDecomposition, ?_, ?_⟩
   · rw [toMPSTensor_blockTensor_R_one]
-    exact ref.representativesBNT
+    exact ref.isActiveCPSVBasisOfNormalTensors hActive
   · intro j
     change ¬ IsNilpotent (MPOTensor.doubledPhysTraceTransfer 4
       (MPSTensor.reindexPhysical oneSiteDoubledEquiv retainedBlock))

@@ -112,18 +112,19 @@ same literal fixed-scale RFP equations of Definition~4.1.
 
 The declaration \leanid{MPOTensor.IsSourceSimple} records the
 normalization-free source predicate reflecting the active canonical-block
-convention at lines~217--246 and Definition~4.7. It requires a positive length
+convention at lines~217--246 and Definition~4.7. It asks for some positive
+blocking and an active BNT sector presentation whose representative
+physical-trace transfers are all non-nilpotent. Every displayed copy has
+nonzero weight, so dormant candidates are absent. The theorem
+\leanid{MPOTensor.IsSourceSimple.exists_mpo_ne_zero} derives a positive length
 $N$ for which
 \begin{align}
     \rho_N(M)&\ne0,
     \label{eq:some-positive-length-nonzero}
 \end{align}
-and asks for some positive blocking and a basis of normal tensors whose
-physical-trace transfers are all non-nilpotent. The existential clause excludes
-the identically zero family but permits isolated vanishing lengths. It does not
-in general exclude dormant extra candidates in an arbitrary BNT presentation.
-The predicate does not impose the line-246 unit-weight convention. The
-strengthened project predicate
+from the active presentation; this is not an additional defining assumption.
+Isolated vanishing lengths remain possible. The predicate does not impose the
+line-246 unit-weight convention. The strengthened project predicate
 \leanid{MPOTensor.IsNonvanishingSourceSimple} adds the condition
 \begin{align}
     \rho_N(M)&\ne0 &&\text{for every }N>0.
@@ -137,10 +138,12 @@ permits positive physical blocking, but still asks the resulting blocked tensor
 itself to admit such a normalized witness. Neither declaration is a quotient by
 nonzero scalar rescaling, and no equivalence with either source predicate is
 asserted. The implication \leanid{MPOTensor.IsSimple.isSourceSimple} is
-unconditional. Its proof uses eventual linear independence of the normal
-sectors, a sector coefficient that is not eventually zero, transport through
-the canonical-form gauge, and physical unblocking to obtain
-\eqref{eq:some-positive-length-nonzero}. The strengthened implication
+unconditional. Its normalized sector decomposition is itself an active
+presentation after transport through the canonical-form gauge. Positive-length
+nontriviality in \eqref{eq:some-positive-length-nonzero} then follows from the
+general source-simplicity theorem, whose proof uses eventual linear
+independence, a non-eventually-zero sector coefficient, and physical
+unblocking. The strengthened implication
 \leanid{MPOTensor.IsSimple.isNonvanishingSourceSimple} uses
 \eqref{eq:positive-length-nonzero}.
 
@@ -158,8 +161,8 @@ matrix $(1)$ and is non-nilpotent. Thus
 \leanid{MPOTensor.SimpleVanishingCounterexample.M_isSourceSimple}, and
 \leanid{MPOTensor.SimpleVanishingCounterexample.M_not_isNonvanishingSourceSimple}
 prove that the tensor is normalized-simple and source-simple:
-$\rho_2(M)=2I\ne0$
-supplies existential nontriviality. It is not nonvanishing source-simple because
+$\rho_2(M)=2I\ne0$ exhibits the positive-length nontriviality derived from its
+active presentation. It is not nonvanishing source-simple because
 $\rho_1(M)=0$. This witness does not refute
 Definition~4.7, is not an RFP claim, and gives no rigidity statement for BNT
 structure coefficients. For a fixed tensor, a theorem may also quantify over
@@ -420,8 +423,9 @@ blocking is source-simple, that arbitrary complex rescaling preserves the MPDO
 condition, that positive rescaling preserves the same fixed-scale RFP equations,
 or that the simplicity interfaces are equivalent. The valid comparisons are
 the unconditional implication from normalized simplicity to source simplicity,
-whose proof obtains existential nontriviality by eventual linear independence,
-a non-eventually-zero sector coefficient, gauge transport, and unblocking, and
+whose normalized sector data give an active presentation after gauge transport,
+and the derived positive-length nontriviality theorem, proved by eventual linear
+independence, a non-eventually-zero sector coefficient, and unblocking, and
 the conditional implication to nonvanishing source simplicity using
 \eqref{eq:positive-length-nonzero}, together with strictly positive real
 rescaling invariance of the MPDO and both source predicates.\footnote{Deletion

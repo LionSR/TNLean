@@ -48,15 +48,23 @@ on that algebra is nondegenerate. Consequently,
 \end{align}
 Since the nilpotency index of a nilpotent $D\times D$ matrix is at most $D$,
 the line-819 condition is precisely nilpotency of $\mathcal T_A$. The
-source-facing predicate is \leanid{MPOTensor.IsSourceSimple}: it requires the
-closed MPO to be nonzero at some positive length, existentially quantifies over
-the positive physical blocking required at line~815, chooses a basis of normal
-tensors for the blocked doubled-index tensor, and records this non-nilpotency
-condition for every basis element. The existential nontriviality clause reflects
-the standing active canonical-block convention at lines~217--246 and excludes
-the identically zero family. It permits isolated vanishing lengths and does not
-in general exclude dormant extra candidates in an arbitrary BNT presentation.
-The strengthened project predicate
+source-facing predicate is \leanid{MPOTensor.IsSourceSimple}: it existentially
+quantifies over the positive physical blocking required at line~815 and chooses
+an active BNT sector presentation of the blocked doubled-index tensor. Every
+copy in this presentation has nonzero weight, the representatives are normal
+and eventually linearly independent, and the blocked tensor has the same
+positive-length matrix product vectors as their weighted direct sum. The
+predicate records non-nilpotency for every active representative. Thus dormant
+candidates allowed by the raw coefficient-form predicate
+\leanid{MPSTensor.IsCPSVBasisOfNormalTensors} do not enter the source-facing
+definition.
+
+Positive-length nontriviality is a theorem rather than a defining assumption.
+Indeed, a nonzero copy-weight power sum cannot vanish eventually; at a large
+length where one such coefficient is nonzero, eventual linear independence
+makes the blocked matrix product vector nonzero. Physical unblocking then gives
+\leanid{MPOTensor.IsSourceSimple.exists_mpo_ne_zero}. Isolated vanishing lengths
+remain possible. The strengthened project predicate
 \leanid{MPOTensor.IsNonvanishingSourceSimple} additionally requires the
 generated MPO to be nonzero at every positive chain length; that clause is not
 part of Definition~4.7.
@@ -74,18 +82,24 @@ source's use of that example outside the simple case.
 
 The source states the predicate for ``a BNT'' of the blocked tensor. The basis of
 normal tensors is unique up to gauge, phase, and permutation, so the choice of
-witness is immaterial mathematically. The formal source-facing predicate
-quantifies existentially over a positive blocking and a coefficient-form basis
-of normal tensors, and records non-nilpotency for that witness. It does not
-require a normalized horizontal canonical-form presentation.
+witness is immaterial mathematically. This is now explicit: the theorem
+\leanid{MPSTensor.IsActiveCPSVBasisOfNormalTensors.equiv_of_sameMPV₂Pos}
+matches two active presentations, and
+\leanid{MPOTensor.activeBNT_basis_not_isNilpotent_iff} transports nilpotency
+through the resulting permutation, dimension identification, gauge, and phase.
+The formal source-facing predicate does not require a normalized horizontal
+canonical-form presentation.
 
 \section{Classification}
 
 Verdict: the formal source predicate combines the standing active
 canonical-block convention at lines~217--246 with lines~815--822, under the
 identification of the line-819 partial-trace criterion with matrix nilpotency of
-the physical-trace transfer. It requires existential positive-length
-nontriviality but not nonvanishing at every positive length. The latter is
-available only in the separate strengthened project predicate.
+the physical-trace transfer. It requires an active, nonempty BNT sector
+presentation; positive-length nontriviality follows from that presentation.
+It does not require nonvanishing at every positive length. The latter is
+available only in the separate strengthened project predicate. The previous
+raw coefficient-form witness, together with a separately assumed nonzero MPO,
+was definition drift because it could still contain dormant candidates.
 
 \end{document}

@@ -88,6 +88,48 @@ theorem blocks_not_gaugePhaseEquiv (h : IsActiveCPSVBasisOfNormalTensors A P) :
     BlocksNotGaugePhaseEquiv (d := d) P.basis :=
   h.isCPSVBasisOfNormalTensors.blocks_not_gaugePhaseEquiv
 
+/-- Transport an active presentation along equality of all positive-length matrix-product
+vectors.
+
+Source: arXiv:1606.00608, lines 217--246 and 271--274. -/
+theorem of_sameMPV₂Pos {D₂ : ℕ} {B : MPSTensor d D₂}
+    (h : IsActiveCPSVBasisOfNormalTensors A P) (hBA : SameMPV₂Pos B A) :
+    IsActiveCPSVBasisOfNormalTensors B P :=
+  ⟨h.basisCount_pos, hBA.trans h.sameMPV₂Pos, h.basis_normal, h.eventually_li⟩
+
+/-- An active presentation has a nonzero matrix-product vector at some positive length.
+
+Nonzero copy weights make each sector power sum non-eventually-zero, while eventual linear
+independence prevents a nonzero sector coefficient from cancelling against the other
+representatives.
+
+Source: arXiv:1606.00608, lines 217--246 and Appendix A, lines 1182--1188. -/
+theorem exists_pos_mpvState_ne_zero (h : IsActiveCPSVBasisOfNormalTensors A P) :
+    ∃ N : ℕ, 0 < N ∧ mpvState A N ≠ 0 := by
+  classical
+  obtain ⟨N₀, hLI⟩ := h.eventually_li
+  let j : Fin P.basisCount := ⟨0, h.basisCount_pos⟩
+  have hCoeff : ∃ N : ℕ, N₀ < N ∧ P.coeff N j ≠ 0 := by
+    by_contra hEventuallyZero
+    push Not at hEventuallyZero
+    apply P.coeff_not_eventually_zero j
+    rw [Filter.eventually_atTop]
+    exact ⟨N₀ + 1, fun N hN => hEventuallyZero N (by omega)⟩
+  obtain ⟨N, hN, hCoeffN⟩ := hCoeff
+  have hStateExpansion :
+      mpvState A N =
+        ∑ k : Fin P.basisCount, P.coeff N k • mpvState (P.basis k) N := by
+    refine mpvState_eq_sum_of_decomp A P.basis (P.coeff N) ?_
+    intro σ
+    calc
+      mpv A σ = mpv P.toTensor σ := h.sameMPV₂Pos N (by omega) σ
+      _ = ∑ k : Fin P.basisCount, P.coeff N k * mpv (P.basis k) σ :=
+        P.mpv_toTensor_eq_sum_coeff σ
+  refine ⟨N, by omega, ?_⟩
+  rw [hStateExpansion]
+  intro hZero
+  exact hCoeffN ((Fintype.linearIndependent_iff.mp (hLI N hN)) _ hZero j)
+
 /-- Multiplying every tensor letter and every active copy weight by the same nonzero scalar
 preserves an active basis-of-normal-tensors presentation.
 
@@ -120,7 +162,7 @@ theorem equiv_of_sameMPV₂Pos
     (hAB : SameMPV₂Pos A B) :
     ∃ e : Fin P.basisCount ≃ Fin Q.basisCount, ∀ j : Fin P.basisCount,
       ∃ hdim : P.basisDim j = Q.basisDim (e j),
-        GaugePhaseEquiv
+        UnitGaugePhaseEquiv
           (cast (congr_arg (MPSTensor d) hdim) (P.basis j)) (Q.basis (e j)) := by
   classical
   have : ∀ j, NeZero (P.basisDim j) := fun j =>
@@ -192,8 +234,17 @@ theorem equiv_of_sameMPV₂Pos
     (Fintype.bijective_iff_injective_and_card f).2 ⟨hfInjective, hCard⟩
   let e : Fin P.basisCount ≃ Fin Q.basisCount := Equiv.ofBijective f hfBijective
   refine ⟨e, fun j => ?_⟩
-  exact (hfPhase j).dim_eq_and_gaugePhaseEquiv_of_isNormalTensor
-    (hP.basis_normal j) (hQ.basis_normal (e j))
+  obtain ⟨hdim, X, ζ, _, hrel⟩ :=
+    (hfPhase j).dim_eq_and_gaugePhaseEquiv_of_isNormalTensor
+      (hP.basis_normal j) (hQ.basis_normal (e j))
+  have hζnorm : ‖ζ‖ = 1 :=
+    norm_eq_one_of_gaugePhase_cast_of_isNormalTensor
+      (hP.basis_normal j) (hQ.basis_normal (e j)) hdim hrel
+  have hζunit : ζ * star ζ = 1 := by
+    have hNormSq : ζ * star ζ = ↑(Complex.normSq ζ) := Complex.mul_conj ζ
+    rw [Complex.normSq_eq_norm_sq, hζnorm] at hNormSq
+    simpa using hNormSq
+  exact ⟨hdim, X, ζ, hζunit, hrel⟩
 
 end IsActiveCPSVBasisOfNormalTensors
 
@@ -729,13 +780,17 @@ noncomputable def representativeSectorDecomposition : SectorDecomposition d wher
         (ref.copyPhaseNorm (activeCopy (data := data) j q)))
   }
 
-/-- The active sector decomposition has one basis block for each phase-class representative. -/
+/-- The active sector decomposition has one basis block for each phase-class representative.
+
+Source: arXiv:1606.00608, lines 265--301 and Appendix C.3, lines 1843--1858. -/
 @[simp]
 theorem representativeSectorDecomposition_basisCount :
     ref.representativeSectorDecomposition.basisCount = data.activePhaseClasses.g :=
   rfl
 
-/-- A representative sector retains the chosen normal block's bond dimension. -/
+/-- A representative sector retains the chosen normal block's bond dimension.
+
+Source: arXiv:1606.00608, lines 265--301 and Appendix C.3, lines 1843--1858. -/
 @[simp]
 theorem representativeSectorDecomposition_basisDim
     (j : Fin data.activePhaseClasses.g) :
@@ -743,7 +798,9 @@ theorem representativeSectorDecomposition_basisDim
       data.dim (data.activeRepresentativeIndex j) :=
   rfl
 
-/-- The basis tensor of a representative sector is its chosen normal block. -/
+/-- The basis tensor of a representative sector is its chosen normal block.
+
+Source: arXiv:1606.00608, lines 265--301 and Appendix C.3, lines 1843--1858. -/
 @[simp]
 theorem representativeSectorDecomposition_basis
     (j : Fin data.activePhaseClasses.g) :
@@ -751,7 +808,9 @@ theorem representativeSectorDecomposition_basis
       data.blocks (data.activeRepresentativeIndex j) :=
   rfl
 
-/-- Sector multiplicities are the multiplicities of the active phase classes. -/
+/-- Sector multiplicities are the multiplicities of the active phase classes.
+
+Source: arXiv:1606.00608, lines 265--301 and Appendix C.3, lines 1843--1858. -/
 @[simp]
 theorem representativeSectorDecomposition_copies
     (j : Fin data.activePhaseClasses.g) :
@@ -759,7 +818,9 @@ theorem representativeSectorDecomposition_copies
       data.activePhaseClasses.copies j :=
   rfl
 
-/-- Each active copy has weight equal to its raw listed weight times its phase. -/
+/-- Each active copy has weight equal to its raw listed weight times its phase.
+
+Source: arXiv:1606.00608, lines 265--301 and Appendix C.3, lines 1843--1858. -/
 @[simp]
 theorem representativeSectorDecomposition_weight
     (j : Fin data.activePhaseClasses.g)
@@ -825,17 +886,45 @@ theorem groupedTensor_sameMPV₂Pos_representativeSectorDecomposition :
   rw [mpv_cast_dim (ref.copyDimEq k), hRepresentativeMpv]
   ring
 
-/-- A nonempty family of active displayed blocks yields an active presentation by the chosen
-normal representatives.
+/-- A nonempty family of active displayed blocks yields an active presentation of the grouped
+tensor by the chosen normal representatives.
 
 Source: arXiv:1606.00608, lines 217--225, 265--301, and 1135--1148. -/
-theorem isActiveCPSVBasisOfNormalTensors (hActive : Nonempty data.Active) :
+theorem groupedTensor_isActiveCPSVBasisOfNormalTensors (hActive : Nonempty data.Active) :
     IsActiveCPSVBasisOfNormalTensors ref.groupedTensor
       ref.representativeSectorDecomposition := by
   refine ⟨?_, ref.groupedTensor_sameMPV₂Pos_representativeSectorDecomposition,
     ref.representativeNormal, ref.representativesBNT.eventually_li⟩
   exact data.activePhaseClasses.g_pos_of_r_pos
     (Fintype.card_pos_iff.mpr hActive)
+
+/-- The original tensor and its explicitly grouped active refinement have the same
+positive-length matrix-product vectors.
+
+The original CPSV coisometry first reconstructs the simultaneous gauge conjugate of the
+grouped tensor; cyclicity of trace then removes that gauge.
+
+Source: arXiv:1606.00608, eq. `II_CF1`, lines 237--244, and lines 1080--1117. -/
+theorem source_sameMPV₂Pos_groupedTensor : SameMPV₂Pos A ref.groupedTensor := by
+  let X := globalGaugeOfBlocks ref.listedGauge
+  let B : MPSTensor d (∑ k : Fin data.r, data.dim k) := fun i ↦
+    (X : Matrix _ _ ℂ) * ref.groupedTensor i *
+      (↑(X⁻¹) : Matrix _ _ ℂ)
+  have hCoisometry : SameMPV₂Pos A B :=
+    sameMPV₂Pos_of_coisometry_reconstruction A B ref.ambientCoisometry
+      ref.ambientCoisometric (fun i ↦ ref.reconstructGrouped i)
+  have hGauge : GaugeEquiv ref.groupedTensor B :=
+    ⟨X, fun _ ↦ rfl⟩
+  exact hCoisometry.trans (SameMPV₂.toSameMPV₂Pos hGauge.sameMPV).symm
+
+/-- A nonempty family of active displayed blocks yields an active BNT presentation of the
+original tensor.
+
+Source: arXiv:1606.00608, lines 217--246, 265--301, and 1135--1148. -/
+theorem isActiveCPSVBasisOfNormalTensors (hActive : Nonempty data.Active) :
+    IsActiveCPSVBasisOfNormalTensors A ref.representativeSectorDecomposition :=
+  (ref.groupedTensor_isActiveCPSVBasisOfNormalTensors hActive).of_sameMPV₂Pos
+    ref.source_sameMPV₂Pos_groupedTensor
 
 end ActiveBNTRefinement
 

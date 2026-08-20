@@ -200,29 +200,44 @@ noncomputable def scaleWeights (P : SectorDecomposition d) (c : ℂ) (hc : c ≠
     weight_ne_zero := fun j q => mul_ne_zero hc (P.weight_ne_zero j q)
   }
 
+/-- Scaling weights does not change the number of representatives.
+
+Source: arXiv:1606.00608, eq. `II_CF1`, lines 237--244. -/
 @[simp]
 theorem scaleWeights_basisCount (P : SectorDecomposition d) (c : ℂ) (hc : c ≠ 0) :
     (P.scaleWeights c hc).basisCount = P.basisCount :=
   rfl
 
+/-- Scaling weights does not change representative bond dimensions.
+
+Source: arXiv:1606.00608, eq. `II_CF1`, lines 237--244. -/
 @[simp]
 theorem scaleWeights_basisDim (P : SectorDecomposition d) (c : ℂ) (hc : c ≠ 0)
     (j : Fin P.basisCount) :
     (P.scaleWeights c hc).basisDim j = P.basisDim j :=
   rfl
 
+/-- Scaling weights does not change the representative tensors.
+
+Source: arXiv:1606.00608, eq. `II_CF1`, lines 237--244. -/
 @[simp]
 theorem scaleWeights_basis (P : SectorDecomposition d) (c : ℂ) (hc : c ≠ 0)
     (j : Fin P.basisCount) :
     (P.scaleWeights c hc).basis j = P.basis j :=
   rfl
 
+/-- Scaling weights does not change sector multiplicities.
+
+Source: arXiv:1606.00608, eq. `II_CF1`, lines 237--244. -/
 @[simp]
 theorem scaleWeights_copies (P : SectorDecomposition d) (c : ℂ) (hc : c ≠ 0)
     (j : Fin P.basisCount) :
     (P.scaleWeights c hc).copies j = P.copies j :=
   rfl
 
+/-- Each scaled copy weight is the original weight multiplied by the common scalar.
+
+Source: arXiv:1606.00608, eq. `II_CF1`, lines 237--244. -/
 @[simp]
 theorem scaleWeights_weight (P : SectorDecomposition d) (c : ℂ) (hc : c ≠ 0)
     (j : Fin P.basisCount) (q : Fin (P.copies j)) :

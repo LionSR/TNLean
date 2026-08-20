@@ -250,19 +250,14 @@ theorem M_isSimple : IsSimple M :=
   ⟨M_isMPDO, 2, by norm_num, blockTensor_M_two_isSimpleCanonicalForm⟩
 
 /-- The sign-flip tensor satisfies the source-faithful Definition 4.7 predicate.
-Its exact closed-MPO formula supplies the nonzero length `N = 2`; normalized
-simplicity supplies the blocked BNT and nonnilpotency witness.
+Normalized simplicity supplies the active blocked BNT and nonnilpotency witness.
+Positive-length nontriviality follows from that active presentation; its exact closed-MPO
+formula identifies `N = 2` as one possible nonzero length.
 
 Source: arXiv:1606.00608, canonical-block convention at lines 217--246 and
 Definition 4.7 at lines 815--822. -/
-theorem M_isSourceSimple : IsSourceSimple M := by
-  obtain ⟨hMPDO, -, hBNT⟩ := M_isSimple.isSourceSimple
-  have hMpoTwo : mpo M 2 ≠ 0 := by
-    intro hzero
-    rw [mpo_eq] at hzero
-    have hentry := congrFun (congrFun hzero (fun _ => 0)) (fun _ => 0)
-    norm_num at hentry
-  exact ⟨hMPDO, ⟨2, by norm_num, hMpoTwo⟩, hBNT⟩
+theorem M_isSourceSimple : IsSourceSimple M :=
+  M_isSimple.isSourceSimple
 
 /-- The sign-flip tensor fails the strengthened source-simple interface because
 its one-site closed MPO vanishes. The nonvanishing condition is additional to

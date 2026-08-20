@@ -141,9 +141,9 @@ theorem R_not_isSimple : ¬ MPOTensor.IsSimple R := by
 interfaces: it satisfies normalization-free Definition 4.7 simplicity, while it
 fails the normalized fixed-representative predicate `MPOTensor.IsSimple`.
 
-The first verdict uses the existential one-site BNT witness and does not assert
-simplicity at every positive blocking. The second is the line-246 normalization
-obstruction proved by `R_not_isSimple`.
+The first verdict uses the existential one-site active BNT presentation and does not assert
+simplicity at every positive blocking. The second is the line-246 normalization obstruction
+proved by `R_not_isSimple`.
 
 Source: arXiv:1606.00608, line 246 and Definition 4.7, lines 815--822. -/
 @[deprecated "Use `R_isSourceSimple` and `R_not_isSimple` directly."
