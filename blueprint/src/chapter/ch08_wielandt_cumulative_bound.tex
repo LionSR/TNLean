@@ -128,13 +128,17 @@ eventual exact-word spanning, and spectral strong irreducibility.
     condition by also requiring irreducibility explicitly.
 \end{definition}
 
+The next seven results use the following notation. For nonnegative integers
+$d$ and $D$, let $K=\{K^i\}_{i=0}^{d-1}$ be a finite family of $D\times D$
+matrices, and let $\E_K$ be its Kraus map.
+
 \begin{theorem}[Iterated Kraus map on a rank-one matrix]
     \label{thm:kraus_iterate_rank_one_sum}
     \lean{Kraus.mapLM_pow_rankOne_eq_sum}
     \leanok
     \uses{def:kraus_map}
-    Let $K=\{K^i\}_{i=0}^{d-1}$ be a finite family of $D\times D$ matrices.
-    For every $q\ge0$ and $\varphi\in\C^D$,
+    For every choice of $d$, $D$, and $K$ as above, every $q\ge0$, and every
+    $\varphi\in\C^D$,
     \begin{align}
         \E_K^q(\ketbra{\varphi}{\varphi})
         =\sum_{|w|=q}\ketbra{K^w\varphi}{K^w\varphi}.
@@ -154,9 +158,8 @@ eventual exact-word spanning, and spectral strong irreducibility.
     \lean{Kraus.mapLM_pow_rankOne_posDef_of_vectorSpreadSpan_eq_top}
     \leanok
     \uses{def:kraus_map, def:vector_spread_span}
-    Let $K=\{K^i\}_{i=0}^{d-1}$ be a finite family of $D\times D$ matrices,
-    and let $q\ge0$.
-    Suppose $H_q(K,\varphi)=\C^D$ for every nonzero
+    For every choice of $d$, $D$, and $K$ as above and every $q\ge0$, suppose
+    $H_q(K,\varphi)=\C^D$ for every nonzero
     $\varphi\in\C^D$. Then
     $\E_K^q(\ketbra{\varphi}{\varphi})>0$ for every
     $\varphi\neq0$.
@@ -174,8 +177,8 @@ eventual exact-word spanning, and spectral strong irreducibility.
     \lean{Kraus.mapLM_pow_posSemidef}
     \leanok
     \uses{def:kraus_map}
-    Let $K=\{K^i\}_{i=0}^{d-1}$ be a finite family of $D\times D$ matrices.
-    For every $n\ge0$, the iterate $\E_K^n$ maps positive-semidefinite
+    For every choice of $d$, $D$, and $K$ as above and every $n\ge0$, the
+    iterate $\E_K^n$ maps positive-semidefinite
     matrices to positive-semidefinite matrices.
 \end{theorem}
 
@@ -191,9 +194,8 @@ eventual exact-word spanning, and spectral strong irreducibility.
     \lean{Kraus.mapLM_pow_positivityImproving_of_vectorSpreadSpan_eq_top}
     \leanok
     \uses{def:kraus_map, def:vector_spread_span}
-    Let $K=\{K^i\}_{i=0}^{d-1}$ be a finite family of $D\times D$ matrices,
-    and let $q\ge0$.
-    Suppose $H_q(K,\varphi)=\C^D$ for every nonzero $\varphi$.
+    For every choice of $d$, $D$, and $K$ as above and every $q\ge0$, suppose
+    $H_q(K,\varphi)=\C^D$ for every nonzero $\varphi$.
     Then $\E_K^q(\rho)>0$ for every nonzero positive-semidefinite matrix
     $\rho$.
 \end{theorem}
@@ -211,9 +213,8 @@ eventual exact-word spanning, and spectral strong irreducibility.
     \lean{Kraus.posDef_fixedPoint_of_vectorSpreadSpan_eq_top}
     \leanok
     \uses{def:kraus_map, def:vector_spread_span}
-    Let $K=\{K^i\}_{i=0}^{d-1}$ be a finite family of $D\times D$ matrices,
-    and let $q\ge0$. Suppose $H_q(K,\varphi)=\C^D$ for every nonzero
-    $\varphi$. Then every nonzero
+    For every choice of $d$, $D$, and $K$ as above and every $q\ge0$, suppose
+    $H_q(K,\varphi)=\C^D$ for every nonzero $\varphi$. Then every nonzero
     positive-semidefinite fixed point of $\E_K$ is positive definite.
 \end{theorem}
 
@@ -228,9 +229,9 @@ eventual exact-word spanning, and spectral strong irreducibility.
     \lean{Kraus.posDef_pow_fixedPoint_of_vectorSpreadSpan_eq_top}
     \leanok
     \uses{def:kraus_map, def:vector_spread_span}
-    Let $K=\{K^i\}_{i=0}^{d-1}$ be a finite family of $D\times D$ matrices,
-    and let $q\ge0$. Suppose $H_q(K,\varphi)=\C^D$ for every nonzero
-    $\varphi$, and let $p>0$. Every nonzero
+    For every choice of $d$, $D$, and $K$ as above and every $q\ge0$, suppose
+    $H_q(K,\varphi)=\C^D$ for every nonzero $\varphi$. For every $p>0$, each
+    nonzero
     positive-semidefinite fixed point of $\E_K^p$ is positive definite.
 \end{theorem}
 
@@ -246,9 +247,8 @@ eventual exact-word spanning, and spectral strong irreducibility.
     \lean{Kraus.isIrreducibleMap_mapLM_of_vectorSpreadSpan_eq_top}
     \leanok
     \uses{def:kraus_map, def:vector_spread_span, def:irreducible_cp}
-    Let $K=\{K^i\}_{i=0}^{d-1}$ be a finite family of $D\times D$ matrices,
-    and let $q\ge0$.
-    If $H_q(K,\varphi)=\C^D$ for every nonzero $\varphi$, then the Kraus map
+    For every choice of $d$, $D$, and $K$ as above and every $q\ge0$, if
+    $H_q(K,\varphi)=\C^D$ for every nonzero $\varphi$, then the Kraus map
     $\E_K$ is irreducible.
 \end{theorem}
 
