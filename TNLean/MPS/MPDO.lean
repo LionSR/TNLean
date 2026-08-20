@@ -232,6 +232,7 @@ import TNLean.MPS.MPDO.PhysicalSectorFactorization
 import TNLean.MPS.MPDO.PhysicalSectorGaugeTransport
 import TNLean.MPS.MPDO.PhysicalSectorNormalProductRepresentative
 import TNLean.MPS.MPDO.PhysicalSectorOmegaPreparation
+import TNLean.MPS.MPDO.PhysicalSectorPairPreservingObstruction
 import TNLean.MPS.MPDO.PhysicalSectorPhysicalMaps
 import TNLean.MPS.MPDO.PhysicalSectorPhysicalTransport
 import TNLean.MPS.MPDO.PhysicalSectorPositiveBond

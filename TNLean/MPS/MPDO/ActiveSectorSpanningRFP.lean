@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.MPDO.ActiveSectorSpanningAreaLaw
+import TNLean.MPS.MPDO.PhysicalSectorPairPreservingObstruction
 import TNLean.MPS.MPDO.RFPViaTSBlocking
 
 /-!
@@ -281,6 +282,137 @@ Source: arXiv:1606.00608, Definition 4.1, lines 645--659, and the twice-applied
 channel construction for Theorem 4.9 at lines 1810--1825. -/
 theorem blockTwo_tensor_isRFPViaTS : IsRFPViaTS (MPOTensor.blockTwo tensor) :=
   tensor_isRFPViaTS.blockTwo
+
+/-- The trace matrix of the directly written four-sector factorization is the
+opposite rectangular product `rightPairing * leftPairing`.  The neighboring
+operators of this factorization agree with those of the source-selected
+inverse-map factorization by `inverseMapFactorization_neighboringOperator`.
+
+Source: arXiv:1606.00608, Appendix C.2, equations `etarl` and `Tkn`, lines
+1441--1482. -/
+lemma factorization_neighboringTraceMatrix :
+    factorization.neighboringTraceMatrix = rightPairing * leftPairing := by
+  ext k h
+  rw [PhysicalSectorFactorization.neighboringTraceMatrix_apply]
+  rw [neighboringOperator_eq (show Fin 4 from k) (show Fin 4 from h)]
+  change (∑ _ : Fin 1 × Fin 1, (rightPairing * leftPairing) k h) = _
+  simp
+
+/-- The selected four-sector trace matrix satisfies `C ^ 2 = C ^ 3`, the
+consequence of the rectangular idempotence in the zero-correlation-length
+calculation.
+
+Source: arXiv:1606.00608, Appendix C.2, lines 1490--1497. -/
+lemma factorization_neighboringTraceMatrix_pow_two_eq_pow_three :
+    factorization.neighboringTraceMatrix ^ 2 =
+      factorization.neighboringTraceMatrix ^ 3 := by
+  rw [factorization_neighboringTraceMatrix]
+  apply Matrix.pow_two_eq_pow_three_of_rectangular_idempotent
+    leftPairing rightPairing
+  change (leftPairing * rightPairing) * (leftPairing * rightPairing) =
+    leftPairing * rightPairing
+  rw [← physTraceTransfer_tensor]
+  exact physTraceTransfer_tensor_idempotent
+
+/-- The selected four-sector trace matrix does not satisfy the equality
+`C = C ^ 3` required by a two-to-four-site channel which preserves every
+outer sector pair.
+
+This is a direct calculation for the inverse-map-selected factorization,
+whose neighboring operators are identified at
+`inverseMapFactorization_neighboringOperator`.  The equality `C ^ 2 = C ^ 3`
+coming from literal zero correlation length is strictly weaker here.
+
+Source comparison: arXiv:1606.00608, Appendix C.2, lines 1490--1498 and the
+twice-iterated maps at lines 1821--1825. -/
+lemma factorization_neighboringTraceMatrix_ne_pow_three :
+    factorization.neighboringTraceMatrix ≠
+      factorization.neighboringTraceMatrix ^ 3 := by
+  rw [factorization_neighboringTraceMatrix]
+  intro h
+  apply rightPairing_mul_leftPairing_ne_idempotent
+  have hsq3 := factorization_neighboringTraceMatrix_pow_two_eq_pow_three
+  rw [factorization_neighboringTraceMatrix] at hsq3
+  rw [← pow_two]
+  exact hsq3.trans h.symm
+
+/-- No trace-preserving family can coarse-grain the four-site neighboring
+operator to the two-site neighboring operator while retaining each pair of
+outer labels `k,h` in the selected four-sector factorization.
+
+**Scope restriction (selected four-sector factorization):** this excludes
+only the inverse-map-selected four-sector decomposition.  It does not exclude
+mixing or coarsening those labels, nor a different physical-sector
+factorization.  Documented in `docs/paper-gaps/cpgsv17_pf_rank_one.tex`.
+
+Derived from the sector-controlled, twice-iterated maps in
+arXiv:1606.00608, Appendix C.2, lines 1522--1555 and 1821--1825. -/
+theorem not_exists_pairwise_fourSite_coarsening :
+    ¬ ∃ S : (k h : Fin 4) →
+        Matrix
+            (PhysicalSectorFactorization.FourSiteMiddleIndex factorization k h)
+            (PhysicalSectorFactorization.FourSiteMiddleIndex factorization k h) ℂ →ₗ[ℂ]
+          Matrix
+            (PhysicalSectorFactorization.NeighborIndex factorization k h)
+            (PhysicalSectorFactorization.NeighborIndex factorization k h) ℂ,
+      (∀ k h X, (S k h X).trace = X.trace) ∧
+        ∀ k h,
+          S k h (factorization.fourSiteNeighboringOperator k h) =
+            factorization.neighboringOperator k h := by
+  rintro ⟨S, htrace, hmap⟩
+  exact factorization_neighboringTraceMatrix_ne_pow_three
+    (factorization.neighboringTraceMatrix_eq_pow_three_of_pairwise_coarsening
+      S htrace hmap)
+
+/-- No trace-preserving family can refine the two-site neighboring operator
+to the four-site neighboring operator while retaining each pair of outer
+labels `k,h` in the selected four-sector factorization.
+
+**Scope restriction (selected four-sector factorization):** this excludes
+only the inverse-map-selected four-sector decomposition.  It does not exclude
+mixing or coarsening those labels, nor a different physical-sector
+factorization.  Documented in `docs/paper-gaps/cpgsv17_pf_rank_one.tex`.
+
+Derived from the sector-controlled, twice-iterated maps in
+arXiv:1606.00608, Appendix C.2, lines 1522--1555 and 1821--1825. -/
+theorem not_exists_pairwise_fourSite_refinement :
+    ¬ ∃ T : (k h : Fin 4) →
+        Matrix
+            (PhysicalSectorFactorization.NeighborIndex factorization k h)
+            (PhysicalSectorFactorization.NeighborIndex factorization k h) ℂ →ₗ[ℂ]
+          Matrix
+            (PhysicalSectorFactorization.FourSiteMiddleIndex factorization k h)
+            (PhysicalSectorFactorization.FourSiteMiddleIndex factorization k h) ℂ,
+      (∀ k h X, (T k h X).trace = X.trace) ∧
+        ∀ k h,
+          T k h (factorization.neighboringOperator k h) =
+            factorization.fourSiteNeighboringOperator k h := by
+  rintro ⟨T, htrace, hmap⟩
+  exact factorization_neighboringTraceMatrix_ne_pow_three
+    (factorization.neighboringTraceMatrix_eq_pow_three_of_pairwise_refinement
+      T htrace hmap)
+
+/-- The blocked tensor has trace-preserving completely positive
+renormalization maps even though the selected four-sector trace matrix fails
+`C = C ^ 3`.  The exhibited maps mix or coarsen the selected sector labels;
+concretely, `coarseningMap` merges `(i,j)` to `pairLabel (i,j)`.
+
+This does not contradict the pair-preserving obstructions above: the bare
+`IsRFPViaTS` equations do not require a channel to retain each outer-sector
+pair of a chosen nonminimal decomposition.
+
+**Scope restriction (bare predicate and selected decomposition):** documented
+in `docs/paper-gaps/cpsv16_zcl_canonical_form_normalization.tex` and
+`docs/paper-gaps/cpgsv17_pf_rank_one.tex`.
+
+Source comparison: arXiv:1606.00608, Definition 4.1, lines 645--659, and the
+sector-projected construction at Appendix C.2, lines 1810--1825. -/
+theorem blockTwo_tensor_isRFPViaTS_and_pairwise_trace_obstruction :
+    IsRFPViaTS (MPOTensor.blockTwo tensor) ∧
+      factorization.neighboringTraceMatrix ≠
+        factorization.neighboringTraceMatrix ^ 3 :=
+  ⟨blockTwo_tensor_isRFPViaTS,
+    factorization_neighboringTraceMatrix_ne_pow_three⟩
 
 private lemma physTraceTransfer_blockTwo {d D : ℕ} (M : MPOTensor d D) :
     physTraceTransfer (blockTwo M) = physTraceTransfer M * physTraceTransfer M := by
