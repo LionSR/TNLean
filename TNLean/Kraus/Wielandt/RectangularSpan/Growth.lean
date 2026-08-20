@@ -129,17 +129,6 @@ theorem rectSpan_eq_range_of_wordSpan_eq_top
     rectSpan P K n = LinearMap.range (LinearMap.mulLeft ℂ P) := by
   simp [rectSpan, htop, Submodule.map_top]
 
-/-- A normal finite matrix family has a rectangular span equal to the full range
-of left multiplication at some length. -/
-theorem exists_rectSpan_eq_range_of_isNormal
-    (P : Matrix (Fin D) (Fin D) ℂ) (K : Fin d → Matrix (Fin D) (Fin D) ℂ)
-    (hN : MPSTensor.IsNormal K) :
-    ∃ n, rectSpan P K n = LinearMap.range (LinearMap.mulLeft ℂ P) := by
-  obtain ⟨N₀, _hN₀pos, hN₀⟩ := hN
-  have htop : wordSpan K N₀ = ⊤ := by
-    simpa [wordSpan, MPSTensor.IsNBlkInjective] using hN₀
-  exact ⟨N₀, rectSpan_eq_range_of_wordSpan_eq_top P K htop⟩
-
 /-- A rectangular span equals the range of left multiplication when the two
 submodules have the same finrank. -/
 theorem rectSpan_eq_range_of_finrank_eq_range
