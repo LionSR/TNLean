@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import TNLean.Analysis.OperatorNormConvergence
 import TNLean.Spectral.MPVOverlapTrace
 import TNLean.Spectral.TransferOperatorGapCommon
 
@@ -32,24 +33,14 @@ variable {d D₁ D₂ : ℕ}
 
 local notation "V" => Matrix (Fin D₁) (Fin D₂) ℂ
 
-/-- If `F^n → 0` in operator norm, then `trace(F^n) → 0`. -/
+/-- Rectangular-matrix specialization of
+`ContinuousLinearMap.tendsto_trace_pow_of_tendsto_zero`. -/
 lemma tendsto_trace_pow_of_tendsto_zero_rect
     (F : V →L[ℂ] V)
-    (hF : Tendsto (fun n => F ^ n) atTop (nhds 0)) :
-    Tendsto (fun n => LinearMap.trace ℂ V ((F ^ n : V →L[ℂ] V) : V →ₗ[ℂ] V))
-      atTop (nhds (0 : ℂ)) := by
-  -- continuity of trace on finite-dimensional spaces
-  let traceMap : (V →L[ℂ] V) →ₗ[ℂ] ℂ :=
-    (LinearMap.trace ℂ V).comp (ContinuousLinearMap.coeLM ℂ)
-  have hcont : Continuous traceMap :=
-    LinearMap.continuous_of_finiteDimensional traceMap
-  have h := (hcont.tendsto (0 : V →L[ℂ] V)).comp hF
-  have hzero : traceMap (0 : V →L[ℂ] V) = 0 := by
-    simp [traceMap]
-  change Tendsto (((LinearMap.trace ℂ V) ∘
-      (fun G : V →L[ℂ] V => G.toLinearMap)) ∘ fun n => F ^ n) atTop
-      (nhds (0 : ℂ))
-  simpa [traceMap, ContinuousLinearMap.coeLM, Function.comp_apply, hzero] using h
+    (hF : Tendsto (fun n ↦ F ^ n) atTop (nhds 0)) :
+    Tendsto (fun n ↦ LinearMap.trace ℂ V ((F ^ n : V →L[ℂ] V) : V →ₗ[ℂ] V))
+      atTop (nhds (0 : ℂ)) :=
+  ContinuousLinearMap.tendsto_trace_pow_of_tendsto_zero F hF
 
 /-- If the rectangular mixed transfer map has spectral radius `< 1`, then `mpvOverlap → 0`. -/
 theorem mpvOverlap_tendsto_zero_of_mixedTransferSpectralRadius_lt_one

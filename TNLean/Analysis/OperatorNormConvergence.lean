@@ -6,6 +6,7 @@ Authors: TNLean contributors
 import Mathlib.Analysis.Complex.Basic
 import Mathlib.Analysis.Normed.Module.FiniteDimension
 import Mathlib.LinearAlgebra.FiniteDimensional.Lemmas
+import Mathlib.LinearAlgebra.Trace
 
 /-!
 # Pointwise convergence of endomorphisms in finite dimension
@@ -24,6 +25,8 @@ of the evaluations transports back to convergence of the maps themselves.
 * `ContinuousLinearMap.tendsto_of_tendsto_apply_of_finiteDimensional`: pointwise
   convergence of continuous linear endomorphisms of a finite-dimensional space
   implies convergence in the operator norm.
+* `ContinuousLinearMap.tendsto_trace_pow_of_tendsto_zero`: the traces of powers
+  converge to zero whenever the powers converge to zero in operator norm.
 -/
 
 open Filter
@@ -81,5 +84,19 @@ theorem tendsto_of_tendsto_apply_of_finiteDimensional {S : ℕ → E →L[ℂ] E
     exact e.symm_apply_apply (S n)
   rw [heq] at hb
   simpa only [LinearEquiv.symm_apply_apply] using hb
+
+/-- If the powers of an endomorphism converge to zero in operator norm, then their
+linear-map traces converge to zero. -/
+theorem tendsto_trace_pow_of_tendsto_zero (F : E →L[ℂ] E)
+    (hF : Tendsto (fun n ↦ F ^ n) atTop (𝓝 0)) :
+    Tendsto (fun n ↦ LinearMap.trace ℂ E ((F ^ n : E →L[ℂ] E) : E →ₗ[ℂ] E))
+      atTop (𝓝 0) := by
+  let traceMap : (E →L[ℂ] E) →ₗ[ℂ] ℂ :=
+    (LinearMap.trace ℂ E).comp (ContinuousLinearMap.coeLM ℂ)
+  have hcont : Continuous traceMap := traceMap.continuous_of_finiteDimensional
+  have h := (hcont.tendsto (0 : E →L[ℂ] E)).comp hF
+  change Tendsto (((LinearMap.trace ℂ E) ∘
+      (fun G : E →L[ℂ] E ↦ G.toLinearMap)) ∘ fun n ↦ F ^ n) atTop (𝓝 (0 : ℂ))
+  simpa [traceMap, ContinuousLinearMap.coeLM, Function.comp_apply] using h
 
 end ContinuousLinearMap
