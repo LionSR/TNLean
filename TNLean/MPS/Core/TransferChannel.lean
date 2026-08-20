@@ -61,7 +61,7 @@ theorem isIrreducibleMap_transferMap_of_isIrreducibleTensor
     (K : Fin d → Mat) (hIrr : MPSTensor.IsIrreducibleTensor K) :
     IsIrreducibleMap (MPSTensor.transferMap (d := d) (D := D) K) := by
   rw [← mapLM_eq_transferMap]
-  exact isIrreducibleMap_mapLM_of_isIrreducibleTensor K hIrr
+  exact isIrreducibleMap_mapLM_of_isIrreducibleFamily K hIrr
 
 /-- Irreducibility of the MPS transfer map implies irreducibility of its finite
 matrix family. -/
@@ -69,7 +69,7 @@ theorem isIrreducibleTensor_of_isIrreducibleMap_transferMap
     (K : Fin d → Mat)
     (hIrr : IsIrreducibleMap (MPSTensor.transferMap (d := d) (D := D) K)) :
     MPSTensor.IsIrreducibleTensor K :=
-  isIrreducibleTensor_of_isIrreducibleMap_mapLM K
+  isIrreducibleFamily_of_isIrreducibleMap_mapLM K
     (isIrreducibleMap_mapLM_of_transferMap K hIrr)
 
 /-- The MPS transfer map of a trace-preserving finite Kraus family is a quantum channel. -/

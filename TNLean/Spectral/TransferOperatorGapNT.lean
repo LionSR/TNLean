@@ -38,7 +38,7 @@ theorem gaugePhaseEquiv_of_krausGaugePhaseEquiv
 private theorem irreducibleMap_of_irreducibleTensor
     (A : MPSTensor d D) (hA : IsIrreducibleTensor A) :
     IsIrreducibleMap (Kraus.mapLM A) :=
-  Kraus.isIrreducibleMap_mapLM_of_isIrreducibleTensor A hA
+  Kraus.isIrreducibleMap_mapLM_of_isIrreducibleFamily A hA
 
 /-- If the mixed transfer spectral radius of two irreducible left-canonical tensors is at least
 `1`, then the tensors are gauge-phase equivalent. -/
