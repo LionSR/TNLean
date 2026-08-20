@@ -155,6 +155,31 @@ Body.
         with self.assertRaisesRegex(ValueError, "disposition must be qic or tn"):
             read_disposition_ledger(self.ledger)
 
+    def test_rejects_duplicate_label_within_one_environment(self) -> None:
+        self.write_blueprint(
+            r"""\begin{theorem}\label{thm:qic}
+\label{thm:qic}
+\lean{Kraus.moved}
+\end{theorem}
+"""
+        )
+        with self.assertRaisesRegex(ValueError, "duplicate blueprint label"):
+            boundary_report(self.root)
+
+    @patch("qic_blueprint_boundary_report.source_sha", return_value="a" * 40)
+    def test_external_ledger_path_is_reported(self, _source_sha) -> None:
+        self.write_blueprint(
+            r"""\begin{theorem}\label{thm:qic}
+\lean{Kraus.moved}
+\end{theorem}
+"""
+        )
+        with tempfile.TemporaryDirectory() as directory:
+            external = Path(directory) / "dispositions.csv"
+            external.write_text(",".join(LEDGER_COLUMNS) + "\n")
+            report = boundary_report(self.root, external)
+        self.assertEqual(report["disposition_ledger"], external.as_posix())
+
     def test_rejects_manual_row_for_tagged_item(self) -> None:
         self.write_blueprint(
             r"""\begin{theorem}\label{thm:qic}

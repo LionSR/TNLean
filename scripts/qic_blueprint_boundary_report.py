@@ -204,7 +204,7 @@ def _validate_unique_labels(
     for item in environments:
         for label in item.labels:
             previous = owners.get(label)
-            if previous is not None and previous != item:
+            if previous is not None:
                 raise ValueError(
                     f"duplicate blueprint label {label}: "
                     f"{previous.file}:{previous.line} and {item.file}:{item.line}"
@@ -424,10 +424,14 @@ def boundary_report(root: Path, ledger_path: Path | None = None) -> dict[str, ob
     )
     interface_labels = tn_interface_labels(edges)
     blueprint_files = blueprint_file_manifest(root, items)
+    try:
+        ledger_display = ledger_file.relative_to(root).as_posix()
+    except ValueError:
+        ledger_display = ledger_file.as_posix()
     return {
         "schema_version": 2,
         "source_sha": source_sha(root),
-        "disposition_ledger": ledger_file.relative_to(root).as_posix(),
+        "disposition_ledger": ledger_display,
         "mover_path_count": len(movers),
         "labelled_environment_count": sum(bool(item.labels) for item in environments),
         "manual_disposition_count": len(ledger),
