@@ -29,9 +29,9 @@ word), formerly in `TNLean/MPS/Core/RepeatedWord.lean`, since it is a
 low-level word-product identity of the same flavor as the blocking lemmas
 here.
 
-The MPV-level bridge lemmas that used blocking results (`mpv_blockTensor_one`
+The MPV-level lemmas that use blocking results (`mpv_blockTensor_one`
 and `SameMPV.blockTensor`) stay on the matrix-product-state side, in
-`TNLean/MPS/Core/Blocking.lean`. A third former bridge lemma,
+`TNLean/MPS/Core/Blocking.lean`. A third former compatibility lemma,
 `mpv_blockTensor_eq_mpv`, had zero call sites (repo-wide, including
 generalized field notation) and was deleted rather than carried across the
 split.
