@@ -155,7 +155,7 @@ theorem eigenvector_mem_range_toLin_pow
     (heig : K i₀ *ᵥ φ = μ • φ) :
     φ ∈ LinearMap.range (Matrix.toLin' ((K i₀) ^ D)) := by
   have hpow : (K i₀ ^ D) *ᵥ φ = (μ ^ D) • φ :=
-    MPSTensor.pow_mulVec_eq_smul_of_mulVec_eq_smul (K i₀) φ μ heig D
+    Matrix.pow_mulVec_eq_smul_of_mulVec_eq_smul (K i₀) φ μ heig D
   rw [LinearMap.mem_range]
   refine ⟨(μ⁻¹ ^ D) • φ, ?_⟩
   rw [Matrix.toLin'_apply, Matrix.mulVec_smul, hpow, smul_smul,
@@ -168,7 +168,7 @@ theorem eigenvector_mem_range_toLin_pow'
     (heig : K i₀ *ᵥ φ = μ • φ) :
     φ ∈ LinearMap.range (Matrix.toLin' ((K i₀) ^ k)) := by
   have hpow : (K i₀ ^ k) *ᵥ φ = (μ ^ k) • φ :=
-    MPSTensor.pow_mulVec_eq_smul_of_mulVec_eq_smul (K i₀) φ μ heig k
+    Matrix.pow_mulVec_eq_smul_of_mulVec_eq_smul (K i₀) φ μ heig k
   rw [LinearMap.mem_range]
   refine ⟨(μ⁻¹ ^ k) • φ, ?_⟩
   rw [Matrix.toLin'_apply, Matrix.mulVec_smul, hpow, smul_smul,

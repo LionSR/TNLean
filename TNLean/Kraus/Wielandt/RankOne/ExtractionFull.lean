@@ -74,10 +74,10 @@ private noncomputable def blockedTensorRangeData
       hφ_range := ?_
       hψ_range := ?_ }
   · simpa [hBi₀] using
-      MPSTensor.mem_range_toLin'_pow_of_eigenvector
+      Matrix.mem_range_toLin'_pow_of_eigenvector
         (M := MPSTensor.evalWord K (List.ofFn σ₀)) (φ := φ) (μ := μ) hμ heigφ
   · simpa [hBi₁] using
-      MPSTensor.mem_range_vecMulLinear_pow_of_transpose_eigenvector
+      Matrix.mem_range_vecMulLinear_pow_of_transpose_eigenvector
         (M := MPSTensor.evalWord K (List.ofFn τ₀)) (ψ := ψ) (ν := ν) hν heigψ
 
 private theorem BlockedTensorRangeData.rankOne_mem_wordSpan_of_wordSpan_eq_top

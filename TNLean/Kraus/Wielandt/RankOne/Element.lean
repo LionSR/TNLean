@@ -62,7 +62,7 @@ theorem exists_nonzero_pow_evalWord_mem_wordSpan_range_le
   refine ⟨(MPSTensor.evalWord K w₀) ^ D, ?_, ?_, ?_⟩
   · simpa [Nat.mul_comm] using evalWord_pow_mem_wordSpan K w₀ D
   · have hpow : ((MPSTensor.evalWord K w₀) ^ D) *ᵥ φ = μ ^ D • φ :=
-      MPSTensor.pow_mulVec_eq_smul_of_mulVec_eq_smul
+      Matrix.pow_mulVec_eq_smul_of_mulVec_eq_smul
         (M := MPSTensor.evalWord K w₀) (φ := φ) (μ := μ) heig D
     have hμpow : μ ^ D ≠ 0 := pow_ne_zero _ hμ
     intro hP0
@@ -75,7 +75,7 @@ theorem exists_nonzero_pow_evalWord_mem_wordSpan_range_le
     have hrange :
         LinearMap.range (f ^ D) ≤
           ⨆ (ν : ℂ) (_ : ν ≠ 0), End.maxGenEigenspace f ν :=
-      MPSTensor.WielandtRankOne.range_pow_le_iSup_maxGenEigenspace_ne_zero
+      Module.End.range_pow_le_iSup_maxGenEigenspace_ne_zero
         (D := D) f
     simpa [f, Matrix.toLin'_pow] using hrange
 
