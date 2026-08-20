@@ -200,6 +200,22 @@ abstracted — record why, so it is not re-proposed).
 - **Notes:** the generic theorems use `Kraus.mapLM`; each transfer-map statement
   applies this conversion once before invoking its generic counterpart.
 
+### Transfer-map spectral arguments in Kraus-map notation — promoted
+- **Pattern:** prove eigenvector, fixed-point, and channel-power statements for
+  `MPSTensor.transferMap` by repeating the same argument already available for
+  `Kraus.mapLM`.
+- **Seen:** eleven compatibility declarations in
+  `TNLean/Wielandt/Primitivity/ImpliesStronglyIrreducibleAux.lean` duplicated
+  the channel argument in
+  `TNLean/Kraus/Wielandt/Primitivity/VectorSpreadToPrimitive.lean` before
+  promotion (2026-08-20).
+- **Abstraction:** the reusable channel statements are public in
+  `Kraus.Wielandt.Primitivity.VectorSpreadToPrimitive`; the established MPS
+  declarations rewrite with `Kraus.mapLM_eq_transferMap` and apply them.
+- **Notes:** construction details for Hermitian parts remain private to the
+  channel theorem. The MPS compatibility file retains its public statements
+  but no longer owns a second spectral proof.
+
 ### CFC square-root Hermiticity — promoted
 - **Pattern:** derive `(CFC.sqrt ρ)ᴴ = CFC.sqrt ρ` from `CFC.sqrt_nonneg`,
   `Matrix.nonneg_iff_posSemidef`, and positive-semidefinite Hermiticity.
