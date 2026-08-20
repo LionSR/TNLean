@@ -33,15 +33,6 @@ variable {d D₁ D₂ : ℕ}
 
 local notation "V" => Matrix (Fin D₁) (Fin D₂) ℂ
 
-/-- Rectangular-matrix specialization of
-`ContinuousLinearMap.tendsto_trace_pow_of_tendsto_zero`. -/
-lemma tendsto_trace_pow_of_tendsto_zero_rect
-    (F : V →L[ℂ] V)
-    (hF : Tendsto (fun n ↦ F ^ n) atTop (nhds 0)) :
-    Tendsto (fun n ↦ LinearMap.trace ℂ V ((F ^ n : V →L[ℂ] V) : V →ₗ[ℂ] V))
-      atTop (nhds (0 : ℂ)) :=
-  ContinuousLinearMap.tendsto_trace_pow_of_tendsto_zero F hF
-
 /-- If the rectangular mixed transfer map has spectral radius `< 1`, then `mpvOverlap → 0`. -/
 theorem mpvOverlap_tendsto_zero_of_mixedTransferSpectralRadius_lt_one
     [NeZero D₁] [NeZero D₂]
@@ -74,7 +65,7 @@ theorem mpvOverlap_tendsto_zero_of_mixedTransferSpectralRadius_lt_one
   have htr0 :
       Tendsto (fun n => LinearMap.trace ℂ V ((F' ^ n : V →L[ℂ] V) : V →ₗ[ℂ] V))
         atTop (nhds (0 : ℂ)) :=
-    tendsto_trace_pow_of_tendsto_zero_rect (D₁ := D₁) (D₂ := D₂) (F := F') hpow0
+    ContinuousLinearMap.tendsto_trace_pow_of_tendsto_zero F' hpow0
   -- Identify `trace(F'^n)` with `trace((mixedTransferMap₂ A B)^n)`.
   have htr0' :
       Tendsto
