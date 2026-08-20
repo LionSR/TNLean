@@ -3,19 +3,12 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import Mathlib.Data.Complex.Basic
-import Mathlib.Data.Matrix.Mul
-import Mathlib.LinearAlgebra.Matrix.ToLin
+import TNLean.Algebra.MatrixMulRange
 
 /-!
-# Manufacturing a rank-one matrix in the range of two-sided multiplication
+# Rank-one matrices in ranges of two-sided multiplication
 
-This file proves a lemma used in the rank-one step of the Wielandt proof:
-
-If a column vector `φ` lies in the range of left-multiplication by `P` (as a linear map on
-vectors), and a row vector `ψ` lies in the range of right-multiplication by `Q` (again as a
-linear map on vectors), then the rank-one matrix `Matrix.vecMulVec φ ψ` lies in the range of the
-(two-sided) linear map `X ↦ P * X * Q`.
+The theorem below is used in the rank-one step of the Wielandt proof.
 -/
 
 open scoped Matrix
@@ -24,23 +17,15 @@ namespace MPSTensor
 
 variable {D : ℕ}
 
+/-- A rank-one matrix belongs to the range of two-sided multiplication when its defining
+vectors belong to the corresponding one-sided ranges. -/
 theorem vecMulVec_mem_range_mulLeft_mulRight
     (P Q : Matrix (Fin D) (Fin D) ℂ)
     (φ ψ : Fin D → ℂ)
     (hφ : φ ∈ LinearMap.range (Matrix.toLin' P))
     (hψ : ψ ∈ LinearMap.range (Q.vecMulLinear)) :
     Matrix.vecMulVec φ ψ ∈
-      LinearMap.range ((LinearMap.mulLeft ℂ P).comp (LinearMap.mulRight ℂ Q)) := by
-  -- Pick `y` with `P *ᵥ y = φ` and `z` with `z ᵥ* Q = ψ`.
-  rcases (LinearMap.mem_range).1 hφ with ⟨y, hy⟩
-  rcases (LinearMap.mem_range).1 hψ with ⟨z, hz⟩
-  have hy' : P *ᵥ y = φ := by
-    simpa [Matrix.toLin'_apply] using hy
-  have hz' : z ᵥ* Q = ψ := by
-    simpa [Matrix.vecMulLinear_apply] using hz
-  -- Witness `X := Matrix.vecMulVec y z`.
-  simpa [LinearMap.comp_apply, Matrix.vecMulVec_mul, Matrix.mul_vecMulVec, hy', hz'] using
-    LinearMap.mem_range_self
-      ((LinearMap.mulLeft ℂ P).comp (LinearMap.mulRight ℂ Q)) (Matrix.vecMulVec y z)
+      LinearMap.range ((LinearMap.mulLeft ℂ P).comp (LinearMap.mulRight ℂ Q)) :=
+  Matrix.vecMulVec_mem_range_mulLeft_mulRight P Q φ ψ hφ hψ
 
 end MPSTensor
