@@ -367,6 +367,21 @@ matrices, and let $\E_K$ be its Kraus map.
     gives proportionality.
 \end{proof}
 
+\begin{theorem}[Powers of completely positive maps]
+    \label{thm:cp-map-natural-power}
+    \lean{IsCPMap.pow}
+    \leanok
+    \uses{def:cp_map}
+    If $E$ is completely positive, then $E^p$ is completely positive for every
+    $p\geq0$.
+\end{theorem}
+
+\begin{proof}\leanok
+    Induct on $p$, using complete positivity of the identity map at $p=0$ and
+    closure of completely positive maps under composition for the induction
+    step.
+\end{proof}
+
 \begin{theorem}[Powers of channels]
     \label{thm:channel-natural-power}
     \lean{Kraus.isChannel_pow}
@@ -376,6 +391,7 @@ matrices, and let $\E_K$ be its Kraus map.
 \end{theorem}
 
 \begin{proof}\leanok
+    \uses{thm:cp-map-natural-power}
     Complete positivity and trace preservation are both closed under
     composition and hold for the identity map.
 \end{proof}
