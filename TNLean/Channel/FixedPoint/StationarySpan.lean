@@ -10,7 +10,7 @@ import Mathlib.LinearAlgebra.Dimension.Finite
 /-!
 # Fixed-point subspace spanned by positive-semidefinite fixed points
 
-This file proves Wolf Corollary 6.8 (Linearly independent stationary states)
+This file proves Wolf Corollary 6.5 (Linearly independent stationary states)
 in full: the fixed-point subspace of a positive trace-preserving linear map is
 spanned (over ℂ) by stationary density matrices, and when the subspace has
 dimension `r`, there exist `r` linearly independent stationary density matrices
@@ -18,8 +18,8 @@ that span it.
 
 ## Source
 
-* M. Wolf, *Quantum Channels & Operations: Guided Tour*, Corollary 6.8; local
-  source `Notes/WolfNoteTexSource/ch06_spectral_properties.tex`, lines 1204--1218.
+* M. Wolf, *Quantum Channels & Operations: Guided Tour*, Corollary 6.5; local
+  source `Notes/WolfNoteTexSource/ch06_spectral_properties.tex`, lines 1204--1212.
 -/
 
 open scoped Matrix ComplexOrder MatrixOrder
@@ -141,7 +141,7 @@ lemma stationaryDensity_of_posSemidef_fixedPoint
     fixed_point := h_fix
   }
 
-/-- **Wolf Corollary 6.8, spanning statement.**
+/-- **Wolf Corollary 6.5, spanning statement.**
 
 The fixed-point subspace of a positive trace-preserving linear map is spanned
 (over ℂ) by stationary density matrices (PSD, trace 1, fixed by `E`).
@@ -189,7 +189,7 @@ theorem fixedPointsSubmodule_spanned_by_stationaryDensities
     rw [h_span_P] at h_span_le
     exact h_span_le
 
-/-- **Wolf Corollary 6.8 (Linearly independent stationary states).**
+/-- **Wolf Corollary 6.5 (Linearly independent stationary states).**
 
 Let `E` be a positive trace-preserving linear map on `M_D(ℂ)`.  The fixed-point
 subspace `F_E = {X | E X = X}` is finite-dimensional.  Let `r = dim_ℂ F_E`.
@@ -200,7 +200,7 @@ span equals `F_E`.
 Equivalently, the fixed-point space has a basis consisting entirely of
 stationary density matrices.
 
-Source: Wolf, *Quantum Channels & Operations: Guided Tour*, Corollary 6.8;
+Source: Wolf, *Quantum Channels & Operations: Guided Tour*, Corollary 6.5;
 local source `Notes/WolfNoteTexSource/ch06_spectral_properties.tex`,
 lines 1204--1212. -/
 theorem exists_stationaryDensity_basis_of_fixedPointsSubmodule
