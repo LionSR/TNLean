@@ -170,61 +170,6 @@ Euclidean space.
     (\ref{eq:spectral_frob_sq}).
 \end{proof}
 
-The following estimate records an independent Frobenius-norm argument for
-the rectangular mixed transfer.  The proof of
-Theorem~\ref{thm:eigenvalue_bound_rect} instead uses the block-diagonal
-embedding described there.  We retain this estimate as useful analytic
-background.  Its statement is phrased over normalized MPS tensors of fixed
-bond dimensions, so it belongs alongside
-Definition~\ref{def:mixed_transfer_rect} and Definition~\ref{def:frob_sq}.
-
-\begin{lemma}[Uniform Frobenius bound for the rectangular mixed transfer power]%
-    \label{lem:hs_contraction_rect}
-    \uses{def:mixed_transfer_rect, def:frob_sq}
-    Let $A$ and $B$ be normalized MPS tensors of bond dimensions
-    $D_1\geq1$ and $D_2\geq1$. For every $X\in M_{D_1\times D_2}(\C)$ and
-    $n\geq0$,
-    \begin{align}
-        \|(F_{AB}^{\mathrm{rect}})^n(X)\|_F^2
-         & \leq D_1^2\,\|X\|_F^2.
-        \label{eq:spectral_hs_contraction_rect}
-    \end{align}
-\end{lemma}
-
-\begin{proof}
-    \uses{thm:mixed_pow, lem:norm_mat_to_es}
-    The word expansion (\ref{eq:spectral_mixed_power}) writes
-    $(F_{AB}^{\mathrm{rect}})^n(X)=\sum_\sigma A^\sigma(X(B^\sigma)^\dagger)$,
-    a sum over words $\sigma$ of length $n$. Embedding into Euclidean space by
-    $\opvec$ (Definition~\ref{def:mat_to_es}), the triangle inequality and the
-    Frobenius submultiplicativity $\|MN\|_F\leq\|M\|_F\|N\|_F$ give
-    \begin{align}
-        \|\opvec((F_{AB}^{\mathrm{rect}})^n(X))\|
-         & \leq\sum_\sigma\|A^\sigma\|_F\,\|X(B^\sigma)^\dagger\|_F.
-        \notag
-    \end{align}
-    Cauchy--Schwarz over the word index bounds the right side by
-    $\left(\sum_\sigma\|A^\sigma\|_F^2\right)^{1/2}
-        \left(\sum_\sigma\|X(B^\sigma)^\dagger\|_F^2\right)^{1/2}$.
-    The trace-preserving normalization of $A$ gives
-    $\sum_\sigma(A^\sigma)^\dagger A^\sigma=\Id_{D_1}$, so
-    $\sum_\sigma\|A^\sigma\|_F^2=D_1$; the same normalization for $B$ gives
-    $\sum_\sigma(B^\sigma)^\dagger B^\sigma=\Id_{D_2}$, which forces the
-    exact identity $\sum_\sigma\|X(B^\sigma)^\dagger\|_F^2=\|X\|_F^2$ (both
-    sides equal $\re\tr(X^\dagger X)$ after expanding by the same
-    normalization). Hence
-    $\|(F_{AB}^{\mathrm{rect}})^n(X)\|_F\leq\sqrt{D_1} \|X\|_F\leq
-        D_1\,\|X\|_F$, giving (\ref{eq:spectral_hs_contraction_rect}).
-\end{proof}
-
-Lemma~\ref{lem:hs_contraction_rect} also gives an alternative proof of
-the conclusion of Theorem~\ref{thm:eigenvalue_bound_rect}.  Indeed, if
-$F_{AB}^{\mathrm{rect}}(X)=\mu X$ with $X\neq0$, then
-$(F_{AB}^{\mathrm{rect}})^n(X)=\mu^nX$, and the lemma gives
-$|\mu|^{2n}\|X\|_F^2\leq D_1^2\|X\|_F^2$ for every $n$.  Since
-$\|X\|_F>0$, the case $|\mu|>1$ contradicts
-$|\mu|^{2n}\to\infty$.
-
 \begin{lemma}[Rectangular spectral radius bound]\label{thm:spectral_radius_le_one_rect}
     \lean{MPSTensor.spectralRadius_mixedTransfer₂_le_one}
     \leanok
