@@ -22,6 +22,10 @@ trace-preserving Kraus maps.
 * `Kraus.mixedMapSpectralRadius` — spectral radius of a rectangular mixed map.
 * `Kraus.eigenvalue_norm_le_one_mixedMapLM_of_isTP` — mixed-map eigenvalue bound.
 * `Kraus.mixedMapSpectralRadius_le_one_of_isTP` — mixed-map spectral-radius bound.
+
+## References
+
+* M. M. Wolf, *Quantum Channels & Operations*, Proposition 6.1.
 -/
 
 open scoped Matrix TNOperatorSpace
