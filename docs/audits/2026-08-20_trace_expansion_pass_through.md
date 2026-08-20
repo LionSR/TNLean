@@ -10,8 +10,10 @@ This cleanup uses the repository-local exact pass-through exception in
 | `MPSTensor.linearMap_trace_eq_sum_apply_single` | `Matrix.linearMap_trace_eq_sum_apply_single` |
 | `MPSTensor.entry_mul_single_mul` | `Matrix.entry_mul_single_mul` |
 
-Both removed lemmas were exact forwards to the listed matrix lemmas, with the
-same hypotheses and conclusions. They had no independent mathematical content.
+Both removed lemmas were exact forwards to the listed matrix lemmas and had the
+same conclusions. The compatibility statements carried unused `[NeZero D₁]`
+and `[NeZero D₂]` instances that the more general matrix lemmas do not require.
+They had no independent mathematical content.
 All non-Archive TNLean uses now call the matrix lemmas directly. The sole
 blueprint declaration tag on an old name now cites
 `Matrix.linearMap_trace_eq_sum_apply_single`, and no blueprint tag cites
