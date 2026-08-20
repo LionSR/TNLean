@@ -90,3 +90,25 @@ followed by a number of the form `1.n`. It excludes `docs/audits/`,
 `docs/archive/`, `docs/reviews/`, `docs/slides/`, and `blueprint/comments/`.
 Each result-level file list above was then checked against the matching printed
 statement in `Notes/WolfNotePDF/ch01_deconstructing_quantum.pdf`.
+
+## Chapter 2: Representations of quantum channels
+
+The Chapter 2 audit is in progress. The first correction concerns the unitary
+freedom of Kraus representations.
+
+| Former citation | Printed citation | Result | Archived PDF | Local transcription | Verdict |
+|---|---|---|---:|---:|---|
+| Theorem 2.18 | Theorem 2.1(4), with Equation (2.10) | Kraus representation: freedom of the Kraus family | PDF pages 4--5; printed pages 36--37 | lines 229--253; item (4) at lines 249--251; Equation (2.10) at lines 277--284 | Corrected |
+
+The printed chapter has no Theorem 2.18. Equation (2.18), on printed page 41,
+defines a weighted Hilbert--Schmidt scalar product and is unrelated to Kraus
+freedom.
+
+### Files corrected for Theorem 2.1(4)
+
+- `TNLean/Channel/KrausUnitaryFreedom.lean`
+- `TNLean/Channel/WolfChapter2Index.lean`
+- `TNLean/MPS/Periodic/Applications.lean`
+- `TNLean/MPS/Periodic/Symmetry/Theorem41Forward.lean`
+- `TNLean/MPS/Periodic/Symmetry/Theorem41Reverse.lean`
+- `TNLean/MPS/Symmetry/StringOrderDefs.lean`

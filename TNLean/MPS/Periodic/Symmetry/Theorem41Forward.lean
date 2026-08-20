@@ -52,7 +52,7 @@ every `τ : Fin N → Fin m`,
 This is the coefficient-expansion identity used in both directions of Theorem 4.1:
 in the forward direction it rewrites a refinement witness as `SameMPV` for the
 tensor \(C\), and in the reverse direction it expands the blocked witness
-produced by Wolf Theorem 2.18. -/
+produced by Wolf Theorem 2.1(4). -/
 theorem evalWord_sum_smul_ofFn
     {m : ℕ} (B : MPSTensor d D) (W : Matrix (Fin m) (Fin d) ℂ) :
     ∀ (N : ℕ) (τ : Fin N → Fin m),
