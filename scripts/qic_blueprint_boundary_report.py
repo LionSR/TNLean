@@ -35,6 +35,8 @@ ENVIRONMENTS = (
 )
 ENV_BEGIN_RE = re.compile(r"\\begin\{(" + "|".join(ENVIRONMENTS) + r")\}")
 ENV_END_RE = re.compile(r"\\end\{(" + "|".join(ENVIRONMENTS) + r")\}")
+PROOF_BEGIN_RE = re.compile(r"\\begin\{proof\}")
+PROOF_END_RE = re.compile(r"\\end\{proof\}")
 LABEL_RE = re.compile(r"\\label\{([^}]+)\}")
 LEAN_RE = re.compile(r"\\lean\{([^}]*)\}", re.DOTALL)
 USES_RE = re.compile(r"\\uses\{([^}]*)\}", re.DOTALL)
@@ -91,12 +93,14 @@ class BlueprintEnvironment:
 
 
 def blueprint_environments(blueprint_src: Path) -> list[BlueprintEnvironment]:
-    """Parse theorem-like environments, including every label on each item."""
+    """Parse theorem-like items, including an attached proof and intervening lines."""
     records: list[BlueprintEnvironment] = []
     for path in blueprint_content_files(blueprint_src):
         rel = path.relative_to(blueprint_src.parent).as_posix()
+        source_lines = path.read_text(errors="replace").splitlines()
         stack: list[dict[str, object]] = []
-        for line_no, line in enumerate(path.read_text(errors="replace").splitlines(), start=1):
+        statements: list[dict[str, object]] = []
+        for line_no, line in enumerate(source_lines, start=1):
             begin = ENV_BEGIN_RE.search(line)
             if begin is not None:
                 stack.append(
@@ -115,10 +119,40 @@ def blueprint_environments(blueprint_src: Path) -> list[BlueprintEnvironment]:
             end = ENV_END_RE.search(line)
             if end is None or not stack:
                 continue
-            record = stack.pop()
-            record_lines = record["lines"]
-            assert isinstance(record_lines, list)
-            body = "\n".join(record_lines)
+            statement = stack.pop()
+            statement["end_line"] = line_no
+            statements.append(statement)
+
+        statements.sort(key=lambda item: int(item["line"]))
+        for index, statement in enumerate(statements):
+            start_line = int(statement["line"])
+            statement_end_line = int(statement["end_line"])
+            next_statement_line = (
+                int(statements[index + 1]["line"])
+                if index + 1 < len(statements)
+                else len(source_lines) + 1
+            )
+            item_end_line = statement_end_line
+            proof_depth = 0
+            proof_started = False
+            for line_no in range(statement_end_line + 1, next_statement_line):
+                line = source_lines[line_no - 1]
+                begins = len(PROOF_BEGIN_RE.findall(line))
+                ends = len(PROOF_END_RE.findall(line))
+                if not proof_started:
+                    if begins == 0:
+                        continue
+                    proof_started = True
+                proof_depth += begins - ends
+                if proof_depth == 0:
+                    item_end_line = line_no
+                    break
+            if proof_started and proof_depth != 0:
+                raise ValueError(
+                    f"unterminated proof after {rel}:{statement_end_line}"
+                )
+
+            body = "\n".join(source_lines[start_line - 1 : item_end_line])
             labels = tuple(LABEL_RE.findall(body))
             declarations: list[str] = []
             for payload in LEAN_RE.findall(body):
@@ -128,10 +162,10 @@ def blueprint_environments(blueprint_src: Path) -> list[BlueprintEnvironment]:
                 uses.extend(_split_comma_payload(payload))
             records.append(
                 BlueprintEnvironment(
-                    environment=str(record["environment"]),
-                    file=str(record["file"]),
-                    line=int(record["line"]),
-                    end_line=line_no,
+                    environment=str(statement["environment"]),
+                    file=str(statement["file"]),
+                    line=start_line,
+                    end_line=item_end_line,
                     labels=labels,
                     declarations=tuple(sorted(set(declarations))),
                     uses=tuple(sorted(set(uses))),

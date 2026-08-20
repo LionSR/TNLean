@@ -81,6 +81,45 @@ Body.
             ],
         )
 
+    def test_environment_uses_attaches_intervening_labels_and_proof_dependencies(self) -> None:
+        self.write_blueprint(
+            r"""\begin{theorem}\label{thm:a}
+Body.
+\end{theorem}
+\begin{figure}
+\label{fig:a}
+\end{figure}
+\begin{proof}\leanok
+\uses{thm:b, thm:c}
+Proof.
+\end{proof}
+\begin{theorem}\label{thm:d}
+\uses{thm:e}
+\end{theorem}
+"""
+        )
+        self.assertEqual(
+            environment_uses(self.root / "blueprint" / "src"),
+            [
+                {
+                    "environment": "theorem",
+                    "file": "src/chapter/ch01.tex",
+                    "line": 1,
+                    "label": "thm:a",
+                    "labels": ["thm:a", "fig:a"],
+                    "uses": ["thm:b", "thm:c"],
+                },
+                {
+                    "environment": "theorem",
+                    "file": "src/chapter/ch01.tex",
+                    "line": 11,
+                    "label": "thm:d",
+                    "labels": ["thm:d"],
+                    "uses": ["thm:e"],
+                },
+            ],
+        )
+
     @patch("qic_blueprint_boundary_report.source_sha", return_value="a" * 40)
     def test_manual_rows_and_secondary_label_resolution(self, _source_sha) -> None:
         self.write_blueprint(
@@ -89,9 +128,12 @@ Body.
 \lean{Kraus.moved}
 \end{theorem}
 \begin{remark}\label{rem:tn}
-\uses{eq:qic}
 Body.
 \end{remark}
+\begin{proof}
+\uses{eq:qic}
+Proof.
+\end{proof}
 """
         )
         self.write_ledger(

@@ -126,11 +126,12 @@ For that later split, one item starts with the complete theorem-like
 environment and extends through the next complete proof environment, including
 all intervening lines, provided no other theorem-like environment begins first.
 If another theorem-like environment begins first, the item ends at its own
-closing command and has no attached proof. Every label in the resulting span,
-including labels on intervening figures or displayed equations, belongs to the
-same item and inherits its disposition. QICLean keeps QIC items and TNLean keeps
-TN items at the original path. Retained item bytes must not change. Text outside
-item spans may remain on both sides only when its references resolve in both
+closing command and has no attached proof. The boundary report reads labels,
+Lean declarations, and dependencies from this complete span. Every label in the
+span, including labels on intervening figures or displayed equations, belongs to
+the same item and inherits its disposition. QICLean keeps QIC items and TNLean
+keeps TN items at the original path. Retained item bytes must not change. Text
+outside item spans may remain on both sides only when its references resolve in both
 simulated outputs. Before committing either split, reject overlapping spans,
 detached proofs, duplicate labels, and any retained `\ref` or `\uses` target
 that is absent from that output.

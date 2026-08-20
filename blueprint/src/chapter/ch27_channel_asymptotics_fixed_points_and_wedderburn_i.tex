@@ -214,11 +214,11 @@ following~\cite[Section~6.4, Propositions~6.10--6.11]{Wolf2012Quantum}.
 
 \begin{proof}
     \leanok
-    \uses{lem:lower_zero_invariance}
+    \uses{thm:kraus_lower_zero_invariant_compression}
     Write $E$ in Kraus form $E(X)=\sum_iK_iXK_i^\dagger$.
     The relations $E(\rho)=\rho$ and $\rho\geq0$ imply
     $(\Id-P)K_iP=0$ for every~$i$. Apply
-    Lemma~\ref{lem:lower_zero_invariance}.
+    Theorem~\ref{thm:kraus_lower_zero_invariant_compression}.
 \end{proof}
 
 \begin{definition}[Stationary state]\label{def:stationaryState}
