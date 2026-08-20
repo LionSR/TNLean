@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.Wielandt.Primitivity.ImpliesStronglyIrreducible
 import TNLean.MPS.CanonicalForm.BlockingViaAdjoint
+import TNLean.MPS.Core.TransferChannel
 
 /-!
 # Proposition 3, (a) → (c): Spectral perturbation and conclusion

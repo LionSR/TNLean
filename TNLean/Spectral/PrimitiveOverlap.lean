@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.Channel.Primitive
+import TNLean.MPS.Core.TransferChannel
 import TNLean.Spectral.TransferOperatorGap
 import TNLean.Spectral.MPVOverlapTrace
 
