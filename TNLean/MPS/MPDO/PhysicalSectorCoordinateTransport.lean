@@ -16,8 +16,8 @@ corresponding closures in the original physical coordinates.
 ## References
 
 * [Cirac--Perez-Garcia--Schuch--Verstraete 2017] arXiv:1606.00608,
-  Theorem 4.9, direction (iv) implies (v), and Appendix C.2, lines 1510--1563
-  and 1821--1825
+  Proposition C.7, Appendix C.2, lines 1510--1563, and the twice-applied
+  channel observation at lines 1821--1825
 
 **Scope restriction (active physical support compression):** the explicit
 `changePhysicalBasis` operation and the two-site/four-site closure transport

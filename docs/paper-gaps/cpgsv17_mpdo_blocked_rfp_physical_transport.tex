@@ -13,14 +13,17 @@
 \begin{document}
 \maketitle
 
-\section{Source conclusion and present scope}
+\section{Source construction and present scope}
 
-The proof of Theorem~4.9, direction (iv)$\Rightarrow$(v), constructs the
-channels $\mathcal T^2$ and $\mathcal S^2$ after applying the physical
-isometry of Proposition~C.7; see
+Proposition~\texttt{3to5} constructs the channels $\mathcal T$ and
+$\mathcal S$ from one supplied physical-sector factorization; see
 \cite[Appendix~C.2, lines~1510--1563 and 1821--1825]
-{Cirac2016MPDO_arXiv}.  The theorem itself concerns the original tensor after
-blocking two adjacent sites.
+{Cirac2016MPDO_arXiv}.  The observation at lines~1821--1825 composes each
+channel with an overlapping copy to obtain $\mathcal T^2$ and
+$\mathcal S^2$ for the two-site blocking.  These formulas are local to one
+factorization.  Theorem~4.9 concerns a tensor with a complete BNT
+decomposition and therefore additionally requires the local channel pairs to
+be combined along the mutually orthogonal outer physical supports.
 
 The sector-coordinate theorem
 \path{NeighboringTraceFactorization.blockTwo_sectorCoordinateTensor_isRFPViaTS}
@@ -32,7 +35,7 @@ where $\widehat{\mathcal K}$ is the tensor in the sector coordinates selected
 by the physical isometry.  Its conclusion is exact in these coordinates, but
 it does not yet transport the two channels back to
 $\operatorname{blockTwo}(\mathcal K)$.  It is therefore a scope-restricted
-intermediate result, not the complete formalization of the source implication.
+intermediate result for one supplied factorization.
 
 \section{Transport theorem}
 
@@ -62,9 +65,12 @@ the original physical matrix spaces, and proves
     \bigl(\operatorname{blockTwo}(\mathcal K)\bigr)
 \]
 under the same neighboring-operator trace-factorization hypothesis.  This
-discharges the transport gap.  The scope-restriction marker on the
-sector-coordinate theorem remains as a description of that theorem's narrower
-role, while the source conclusion is represented by the transported theorem.
+discharges the physical-coordinate transport gap for one supplied
+factorization.  It does not construct the projector-controlled direct sum of
+channels associated with all BNT elements, so it does not by itself represent
+the full implication to condition~(v) in Theorem~4.9.  That distinct
+all-sector obligation is documented in
+\path{docs/paper-gaps/cpgsv17_pf_rank_one.tex} and tracked in issue~\#6632.
 
 \bibliographystyle{alpha}
 \bibliography{references}

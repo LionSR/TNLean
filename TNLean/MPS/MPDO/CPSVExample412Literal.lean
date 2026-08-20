@@ -25,10 +25,11 @@ zero.  At every positive length it generates
 The printed tensor is not normalized in the convention used by
 `MPOTensor.IsRFPViaTS`: its physical-trace transfer is $I+\sigma_z$, whose
 square is twice itself rather than itself.  Consequently the literal tensor
-has source ZCL with scale $2$, but is not an RFP via trace-preserving physical
-maps.  The separate likely normalized representative $(1/2)\,M$ is discussed
-in `docs/paper-gaps/cpsv16_example_4_12_normalization.tex` and is not treated
-here.
+satisfies the project's scale-invariant `IsSourceZCL` relation with scale $2$,
+but it fails the paper's literal ZCL equation and is not an RFP via
+trace-preserving physical maps. The separate likely normalized representative
+$(1/2)\,M$ is discussed in
+`docs/paper-gaps/cpsv16_example_4_12_normalization.tex` and is not treated here.
 
 ## References
 
@@ -402,10 +403,16 @@ theorem physTraceTransfer_M :
   fin_cases a <;> fin_cases b <;>
     norm_num [physTraceTransfer, M, sigmaZ, SpinCover.pauli, Fin.sum_univ_two]
 
-/-- The source-ZCL relation for the literal representative has scale
-$\lambda=2$: $(I+\sigma_z)^2=2(I+\sigma_z)$.
+/-- The project's scale-invariant `IsSourceZCL` relation for the literal
+representative has scale $\lambda=2$:
+$(I+\sigma_z)^2=2(I+\sigma_z)$.
 
-Source claim: CPSV16, arXiv:1606.00608, Example 4.12, line 937. -/
+**Local fix (normalization):** Definition 4.2 of the source requires literal
+idempotence, whereas the tensor printed in Example 4.12 satisfies only this
+scale-two relation. See
+`docs/paper-gaps/cpsv16_example_4_12_normalization.tex`.
+
+Source comparison: CPSV16, arXiv:1606.00608, Example 4.12, line 937. -/
 theorem physTraceTransfer_M_sq :
     physTraceTransfer M * physTraceTransfer M =
       (2 : ℂ) • physTraceTransfer M := by
@@ -414,10 +421,16 @@ theorem physTraceTransfer_M_sq :
   fin_cases a <;> fin_cases b <;>
     norm_num [Matrix.mul_apply, Fin.sum_univ_two]
 
-/-- The literal tensor has source zero correlation length with the explicit
-positive scale $\lambda=2$.
+/-- The literal tensor satisfies the project's scale-invariant `IsSourceZCL`
+relation with the explicit positive scale $\lambda=2$.
 
-Source claim: CPSV16, arXiv:1606.00608, Example 4.12, line 937. -/
+**Local fix (normalization):** `IsSourceZCL` allows a positive scale and is
+therefore broader than the literal idempotence in CPSV16 Definition 4.2. This
+theorem records the corrected scale-two relation for the printed tensor, not
+the paper's literal ZCL assertion. See
+`docs/paper-gaps/cpsv16_example_4_12_normalization.tex`.
+
+Source comparison: CPSV16, arXiv:1606.00608, Example 4.12, line 937. -/
 theorem M_isSourceZCL : IsSourceZCL M := by
   refine ⟨?_, 2, by norm_num, physTraceTransfer_M_sq⟩
   rw [physTraceTransfer_M]

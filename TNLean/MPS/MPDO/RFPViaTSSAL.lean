@@ -21,7 +21,9 @@ by transferring one site across a bipartition, applies mutual-information data
 processing in both directions, and then identifies bipartite mutual information
 with the chain quantity I_L.  The one-site normalization condition and the
 vertical-loop trace identities supply the nonzero transfer matrix needed for
-source ZCL.  Simplicity is not used in this implication.
+the broader scale-invariant physical-trace relation. The literal source ZCL
+identity follows directly from the renormalization equations. Simplicity is
+not used in this implication.
 
 Source: arXiv:1606.00608, Appendix C, lines 1333--1341.  See
 `docs/paper-gaps/cpsv16_rfp_sal_data_processing.tex`.
@@ -454,14 +456,20 @@ theorem isSAL_of_isRFPViaTS (M : MPOTensor d D)
       M hHorizontal hM hRFP) hRFP
 
 /-- A matrix product density operator satisfying the local renormalization
-fixed-point equations has source zero correlation length and saturates the area
-law, provided every positive-length ring has nonzero trace.
+fixed-point equations obeys the broader scale-invariant physical-trace
+relation and saturates the area law, provided every positive-length ring has
+nonzero trace.
+
+**Scope restriction (scale-invariant corollary):** the source-facing ZCL
+conclusion is the literal identity `physTraceTransfer_sq_of_isRFPViaTS`. This
+theorem packages the broader `IsSourceZCL` consequence with SAL for later uses. See
+`docs/paper-gaps/cpsv16_zcl_canonical_form_normalization.tex`.
 
 Nonzero positive-length traces are the normalization condition implicit in the
 source's density-operator language.  The one-site instance, together with the
 vertical-loop trace identities, makes the physical trace-transfer matrix
-nonzero and hence yields source ZCL.  The full family normalizes the rings used
-in the area-law argument.
+nonzero and hence yields the broader scale-invariant relation. The full family
+normalizes the rings used in the area-law argument.
 
 Source: arXiv:1606.00608, Proposition `propsimple`, Appendix C,
 lines 1333--1341. -/
@@ -478,12 +486,17 @@ theorem isSourceZCL_and_isSAL_of_isRFPViaTS_of_trace_ne_zero
     isSAL_of_isRFPViaTS_of_trace_ne_zero M hM hTrace hRFP⟩
 
 /-- A matrix product density operator in normalized BNT-refined horizontal
-form satisfying the local renormalization fixed-point equations has source zero
-correlation length and saturates the area law.
+form satisfying the local renormalization fixed-point equations obeys the
+broader scale-invariant physical-trace relation and saturates the area law.
+
+**Scope restriction (scale-invariant corollary):** the source-facing ZCL
+conclusion is the literal identity `physTraceTransfer_sq_of_isRFPViaTS`. This
+theorem packages the broader `IsSourceZCL` consequence with SAL for later uses. See
+`docs/paper-gaps/cpsv16_zcl_canonical_form_normalization.tex`.
 
 Normalized BNT-refined horizontal form supplies the nonzero positive-length
-traces that are implicit in the source's density-operator language.  Source ZCL
-and SAL then follow from
+traces that are implicit in the source's density-operator language. The
+broader scale-invariant relation and SAL then follow from
 `isSourceZCL_and_isSAL_of_isRFPViaTS_of_trace_ne_zero`.
 
 **Scope restriction (BNT-refined horizontal form):** The horizontal hypothesis

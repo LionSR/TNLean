@@ -183,18 +183,21 @@
     Apply the three-to-two-site coarse-graining identity.
 \end{proof}
 
-% **Local fix (implication label):** Appendix line 1824 says
-% (iii) implies (v), but the theorem statement and the local structure used
-% here give (iv) implies (v). Documented in
+% **Local fix (cyclic implication labels):** the concluding proof at source
+% lines 1822--1824 assigns the wrong conditions to the four propositions it
+% invokes. The construction below cites Proposition C.7 and its twice-applied
+% channel observation directly. Documented in
 % docs/paper-gaps/cpgsv17_mpdo_theorem_4_9_implication_label.tex.
 \begin{definition}[Two-step physical refinement]
     \label{def:mpdo_physical_t_squared_map}
     \lean{MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.physicalTSquaredMap}
     \leanok
-    \uses{def:mpdo_physical_t_map,
+    \uses{def:mpdo_neighboring_trace_factorization,
+      def:mpdo_physical_t_map,
       def:mpdo_localized_physical_t_map}
-    Let $\widehat{\mathcal K}$ be the sector-coordinate tensor selected by the
-    physical isometry of Proposition~C.7. Define
+    Let $F$ be a physical-sector factorization whose neighboring operators
+    satisfy Definition~\ref{def:mpdo_neighboring_trace_factorization}, and let
+    $\widehat{\mathcal K}$ be its sector-coordinate tensor. Define
     \begin{align}
       \widehat{\mathcal T}^2
       &=\widehat{\mathcal T}_{(12)3}\circ\widehat{\mathcal T},
@@ -205,8 +208,8 @@
     \end{align}
     Here the second application acts on the first two sites and leaves the
     third site unchanged. Thus the superscript denotes two successive
-    overlapping applications, as in the proof of
-    \cite[Theorem~4.9, (iv)$\Rightarrow$(v)]{Cirac2016MPDO_arXiv}.
+    overlapping applications, as in
+    \cite[Appendix~C.2, lines~1821--1825]{Cirac2016MPDO_arXiv}.
 \end{definition}
 
 \begin{theorem}[The two-step physical refinement is a channel]
@@ -386,13 +389,21 @@
 % **Scope restriction (physical coordinates):** this theorem concerns the
 % sector-coordinate tensor, not yet the original tensor. Documented in
 % docs/paper-gaps/cpgsv17_mpdo_blocked_rfp_physical_transport.tex.
+% **Scope restriction (single supplied factorization):** this theorem assumes
+% one neighboring trace factorization. Theorem 4.9(iv) supplies such data
+% separately for every outer BNT element, but the projector-controlled channel
+% assembly is not yet formalized. Documented in
+% docs/paper-gaps/cpgsv17_pf_rank_one.tex and tracked in issue #6632.
 \begin{theorem}[Blocked sector-coordinate tensor is a renormalization fixed point]
     \label{thm:mpdo_blocked_sector_coordinate_tensor_is_rfp_via_ts}
     \lean{MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.blockTwo_sectorCoordinateTensor_isRFPViaTS}
     \leanok
-    \uses{def:is_rfp_via_ts, def:mpdo_two_site_blocking}
-    Let $\widehat{\mathcal K}^{[2]}$ be the tensor obtained by blocking two
-    adjacent sites of the sector-coordinate tensor $\widehat{\mathcal K}$.
+    \uses{def:is_rfp_via_ts, def:mpdo_two_site_blocking,
+      def:mpdo_neighboring_trace_factorization}
+    Let $F$ be a physical-sector factorization whose neighboring operators
+    satisfy Definition~\ref{def:mpdo_neighboring_trace_factorization}. Let
+    $\widehat{\mathcal K}^{[2]}$ be the tensor obtained by blocking two
+    adjacent sites of its sector-coordinate tensor $\widehat{\mathcal K}$.
     Then $\widehat{\mathcal K}^{[2]}$ is a renormalization fixed point in the
     sense of Definition~\ref{def:is_rfp_via_ts}. More precisely, after the
     canonical identifications of one blocked site with two original sites and
@@ -419,27 +430,36 @@
 % **Local fix (zero-weight quotient):** this theorem uses the completed
 % zero-weight preparation through the two-step refinement identity. Documented
 % in docs/paper-gaps/cpgsv17_mpdo_zero_weight_preparation_completion.tex.
-% **Local fix (implication label):** Appendix line 1824 says
-% (iii) implies (v), but the theorem statement and the local structure used
-% here give (iv) implies (v). Documented in
+% **Local fix (cyclic implication labels):** the concluding proof at source
+% lines 1822--1824 assigns the wrong conditions to the four propositions it
+% invokes. The construction below cites Proposition C.7 and its twice-applied
+% channel observation directly. Documented in
 % docs/paper-gaps/cpgsv17_mpdo_theorem_4_9_implication_label.tex.
-% **Scope restriction (SAL and ZCL):** the theorem starts from a neighboring
-% trace factorization, including the rank-one identity
-% tr(eta_{k,h}) = a_k b_h. It proves the conditional implication (iv) => (v),
-% not Proposition prop2to5 from SAL and ZCL alone. The missing rank-one step is
-% documented in docs/paper-gaps/cpgsv17_pf_rank_one.tex.
+% **Scope restriction (single supplied factorization):** the theorem starts
+% from one neighboring trace factorization, including the rank-one identity
+% tr(eta_{k,h}) = a_k b_h. Theorem 4.9(iv) supplies this data separately for
+% each outer BNT element; the controlled assembly of those channels is not yet
+% formalized. Documented in docs/paper-gaps/cpgsv17_pf_rank_one.tex and tracked
+% in issue #6632.
 \begin{theorem}[Conditional two-site blocking theorem from neighboring trace factorization]
     \label{thm:mpdo_blocked_original_tensor_is_rfp_via_ts}
     \lean{MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.blockTwo_isRFPViaTS}
     \leanok
-    \uses{def:is_rfp_via_ts, def:mpdo_two_site_blocking}
-    Assume that the neighboring operators are positive semidefinite and that
-    there are real families $(a_k)_k,(b_k)_k$ satisfying
+    \uses{def:is_rfp_via_ts, def:mpdo_two_site_blocking,
+        def:mpdo_neighboring_trace_factorization}
+    Let $F$ be a physical-sector factorization of $\mathcal K$ whose
+    neighboring operators satisfy
+    Definition~\ref{def:mpdo_neighboring_trace_factorization}. Thus they are
+    positive semidefinite and there are real families $(a_k)_k,(b_k)_k$ with
     $\tr(\eta_{k,h})=a_kb_h$ and $\sum_k a_kb_k=1$. Let $\mathcal K^{[2]}$ be
     the tensor obtained by blocking two adjacent sites of $\mathcal K$. Then
     $\mathcal K^{[2]}$ is a renormalization fixed point in the sense of
-    Definition~\ref{def:is_rfp_via_ts}. This is
-    \cite[Theorem~4.9, (iv)$\Rightarrow$(v)]{Cirac2016MPDO_arXiv}.
+    Definition~\ref{def:is_rfp_via_ts}. This is the conditional channel
+    construction of \cite[Proposition~C.7]{Cirac2016MPDO_arXiv} for one
+    supplied factorization. The all-BNT implication
+    \cite[Theorem~4.9, (iv)$\Rightarrow$(v)]{Cirac2016MPDO_arXiv} additionally
+    requires the channels to be assembled along the mutually orthogonal outer
+    physical supports.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -457,9 +477,10 @@
 % Positivity, SAL, and literal ZCL descend to every absorbed BNT representative.
 % The printed absorbed-normality bridge is refuted; an alternative all-sector
 % structural factorization is still required.
-% The conditional
-% blocking theorem thm:mpdo_blocked_original_tensor_is_rfp_via_ts instead
-% assumes a neighboring trace factorization.
+% The conditional blocking theorem
+% thm:mpdo_blocked_original_tensor_is_rfp_via_ts instead assumes one
+% neighboring trace factorization. Even after such factorizations are obtained
+% for every BNT element, the outer-sector channel assembly remains open.
 % Documented in docs/paper-gaps/cpgsv17_pf_rank_one.tex.
 \begin{theorem}[Blocking channels from SAL and ZCL (all-sector Case-II boundary)]
     \label{thm:mpdo_sal_zcl_blocking_channels}
@@ -487,10 +508,13 @@
     The analytic hypotheses on every absorbed BNT representative are
     complete: each is injective, positive on every nonempty chain, saturates
     the area law, and retains literal physical-trace idempotence. The remaining
-    input is Theorem~\ref{thm:mpdo_sal_zcl_bnt_sector_structure}, namely the
+    first missing input is
+    Theorem~\ref{thm:mpdo_sal_zcl_bnt_sector_structure}, namely the
     all-sector factorization by physical isometries, closed sector tensors,
-    positive neighboring operators, and rank-one coefficients. Once that
-    factorization is available, Proposition~C.7 gives the two channels.
+    positive neighboring operators, and rank-one coefficients. Proposition
+    C.7 then gives two channels for each BNT element. A second missing step is
+    to combine these channels, using the mutually orthogonal outer physical
+    supports, into single trace-preserving completely positive maps for $K$.
     The explicit bond-one counterexample to absorbed normality does not
     contradict this final statement; it invalidates only the printed route to
     its structural input. Deriving the channels from SAL and literal zero

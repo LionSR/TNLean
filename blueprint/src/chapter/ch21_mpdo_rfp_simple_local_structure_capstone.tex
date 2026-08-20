@@ -995,15 +995,19 @@ This is the calculation in
     absorbed-sector normality route is false under the encoded normalization
     hypotheses. A proof of the implication therefore requires either
     strengthened hypotheses or an alternative factorization argument that does
-    not use absorbed-sector normality. This obstruction concerns the printed
-    proof route and does not refute Theorem~4.9 itself.
+    not use absorbed-sector normality. Even after the per-BNT factorizations
+    are obtained, their channel pairs must still be assembled through the
+    mutually orthogonal outer physical supports. These are distinct missing
+    steps. The absorbed-normality obstruction concerns the printed proof route
+    and does not refute Theorem~4.9 itself.
 \end{theorem}
 
 % CPSV16 Examples 4.10--4.12, lines 897--942.
 % Tracking: issues #5984, #6301, and #6302; Example 4.12 remains under #5919.
 % Entropy corrections: docs/paper-gaps/cpsv16_examples_4_10_4_11_entropy.tex.
 % Example 4.11's literal finite periodic family is now proved to fail both SAL
-% and source-facing ZCL. Example 4.12 RFP maps remain open.
+% and source-facing ZCL. Example 4.12's normalized RFP maps and full GSNNCH
+% exclusion remain open.
 \begin{theorem}[Printed mixed-state separation examples]
     \label{thm:cpsv_examples410_412_status}
     \notready
@@ -1054,10 +1058,13 @@ This is the calculation in
     correlation length, is not of the simple commuting form, and is nevertheless
     a renormalization fixed point.  The literal printed tensor is unnormalized:
     its physical-trace transfer squares to twice itself, whereas trace-preserving
-    refinement would force literal idempotence.  Thus the fixed-point assertion
-    is false for the literal representative.  The tensor $(1/2)M$ is the likely
+    refinement would force literal idempotence. Thus the fixed-point assertion
+    is false for the literal representative. The paper's literal ZCL assertion
+    likewise fails for that representative. The tensor $(1/2)M$ is the likely
     intended correction, but its trace-preserving completely positive maps
-    remain unconstructed.
+    remain unconstructed. The claimed exclusion from the full GSNNCH class
+    also remains open; comparing parity at different chain lengths is
+    insufficient because its commuting realization may depend on $N$.
 \end{theorem}
 
 % CPSV16 Example 4.11, lines 907--924.
@@ -1659,7 +1666,7 @@ This is the calculation in
     cut.
 \end{proof}
 
-\begin{theorem}[Scale-two ZCL and the literal RFP obstruction]
+\begin{theorem}[Scale-two transfer relation and the literal ZCL--RFP obstruction]
     \label{thm:cpsv_example412_literal_zcl_rfp_gap}
     \lean{MPOTensor.CPSVExample412Literal.physTraceTransfer_M,
         MPOTensor.CPSVExample412Literal.physTraceTransfer_M_sq,
@@ -1677,10 +1684,12 @@ This is the calculation in
         \mathcal T_M^2=2\mathcal T_M\ne\mathcal T_M.
         \notag
     \end{align}
-    Hence the literal representative has source zero correlation length with
-    scale $2$, but it cannot satisfy the trace-preserving fixed-representative
-    condition.  The tensor $(1/2)M$ is the likely intended correction, but its
-    trace-preserving completely positive maps remain unconstructed.
+    Hence the literal representative satisfies the project's scale-invariant
+    source-ZCL relation with scale $2$, but it fails the paper's literal
+    Definition~4.2 equation. It also cannot satisfy the trace-preserving
+    fixed-representative condition. The tensor $(1/2)M$ is the likely intended
+    RFP correction, but its trace-preserving completely positive maps remain
+    unconstructed.
 \end{theorem}
 \begin{proof}\leanok
     The transfer calculation is immediate from the two diagonal physical

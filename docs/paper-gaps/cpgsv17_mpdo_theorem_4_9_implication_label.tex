@@ -13,31 +13,58 @@
 \begin{document}
 \maketitle
 
-\section{The inconsistent label}
+\section{The cyclic mismatch}
 
 The statement of Theorem~4.9 in
-\cite[lines~851--893]{Cirac2016MPDO_arXiv} labels the simple local structure as
-condition~(iv) and the renormalization fixed-point property as condition~(v).
-The Appendix construction of the two channels concludes instead with the words
-``(iii)$\Rightarrow$(v)'' at line~1824.  This label is inconsistent with the
-hypothesis used in that construction: Proposition~C.7 supplies precisely the
-neighboring-operator trace factorization belonging to the simple local
-structure in condition~(iv).
+\cite[lines~851--893]{Cirac2016MPDO_arXiv} numbers SAL together with literal
+ZCL as condition~(ii), Gibbs form together with literal ZCL as condition~(iii),
+the BNT physical-sector structure as condition~(iv), and the
+renormalization fixed-point property as condition~(v). The propositions in
+the Appendix have the following literal component conclusions:
+\begin{align*}
+  \mathtt{prop2to3}&:\quad (ii)\Longrightarrow(iv),\\
+  \mathtt{prop3to4}&:\quad (iv)\Longrightarrow
+      \text{the GSNNCH-form clause of (iii)},\\
+  \mathtt{prop4to2}&:\quad \text{the GSNNCH-form clause of (iii)}
+      \Longrightarrow\text{the SAL clause of (ii)},\\
+  \mathtt{prop2to5}&:\quad (ii)\Longrightarrow
+      \text{a channel pair between the two- and three-site tensors}.
+\end{align*}
+These are the displayed statements at source lines~1740--1817. In particular,
+\texttt{prop3to4} does not prove the ZCL conjunct of condition~(iii), and
+\texttt{prop4to2} does not prove that conjunct of condition~(ii); the ZCL
+statement is carried from the surrounding implication. Likewise,
+\texttt{prop2to5} does not itself conclude condition~(v). The concluding proof
+at lines~1819--1825 nevertheless assigns the propositions successively to
+$(ii)\Rightarrow(iii)$, $(iii)\Rightarrow(iv)$,
+$(iv)\Rightarrow(ii)$, and $(iii)\Rightarrow(v)$. Thus the discrepancy concerns
+the proof path and the component conclusions, and is not repaired by changing
+only the last occurrence from ``(iii)'' to ``(iv)''.
 
-Consequently the direct channel argument at lines~1821--1825 establishes
-condition~(iv)$\Rightarrow$(v).  Reading the displayed implication as
-condition~(iii)$\Rightarrow$(v) would detach the construction from the local
-structure established immediately beforehand.
+Proposition~\texttt{3to5} at lines~1510--1563 constructs a pair of channels
+from one supplied physical-sector factorization.  Proposition
+\texttt{prop2to5} then says that the same construction is first performed in
+each locally orthogonal BNT subspace. Its assertion that the corresponding
+maps can be combined is the additional all-BNT step. Lines~1821--1825 then
+apply the two-to-three-site channels twice to obtain the one-to-two-site maps
+for the blocked tensor in condition~(v).
 
 \section{Formal treatment}
 
-The formal development cites the route as
-Theorem~4.9, (iv)$\Rightarrow$(v), while retaining the Appendix line range for
-the explicit channels.  This is a local correction of the implication label;
-it changes neither the hypotheses nor the conclusion of the source theorem.
-A file collecting declarations that use this corrected label should carry a
-file-level \emph{Local fix (implication label)} marker and cite this note; the
-corresponding blueprint block should carry the same marker.
+The formal development therefore does not attach the one-factorization
+construction to any of the incorrect labels in the concluding paragraph.  It
+cites Proposition~\texttt{3to5} and the twice-applied channel observation at
+lines~1821--1825 directly.  The resulting theorem is conditional on one
+supplied factorization and is not the full all-BNT implication of
+Theorem~4.9.  The latter still requires a direct-sum construction controlled
+by the mutually orthogonal outer physical supports.
+
+Files that use the concluding paragraph carry a \emph{Local fix (cyclic
+implication labels)} marker and cite this note. This records proof-path drift
+in the printed proof without altering any mathematical
+hypothesis.  The separate restriction to one supplied factorization is
+recorded in
+\path{docs/paper-gaps/cpgsv17_pf_rank_one.tex} and tracked in issue~\#6632.
 
 \bibliographystyle{alpha}
 \bibliography{references}

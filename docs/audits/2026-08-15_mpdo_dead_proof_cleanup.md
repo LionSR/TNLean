@@ -19,6 +19,12 @@ The substantive component declarations remain public.
 | `MPOTensor.RescalingStableLengthDependentRFP.doubledPhysTraceTransfer_reindexPhysical_oneSiteDoubledEquiv` | The proof is now the local `hTransfer` step inside `R_isSourceSimple`. |
 | `MPSTensor.isLocallyOrthogonal_iff_isTransferIdempotent` | This is `Iff.rfl` from the definition of `IsLocallyOrthogonal`. |
 
+## Follow-up deletions
+
+| Removed declaration | Replacement |
+|---|---|
+| `MPOTensor.BondTwoSingletonBaseModel.gaugeDeformedBaseMPO_algebraClause_canonicalForm_not_isMPDO` | Use `⟨gaugeDeformedBaseMPOBNTAlgebraTensorClause⟩`, `gaugeDeformedBaseMPO_toMPSTensor_isCPSVCanonicalForm`, and `gaugeDeformedBaseMPO_gauge_not_isMPDO`. |
+
 
 ## Retained transition APIs
 
@@ -34,6 +40,7 @@ with dated deprecations instead of being deleted. This includes:
   retained in `BNTTheoremWitnessConsequences`;
 - `MPSTensor.duplicateScalarBlocks_counterexample`;
 - `MPOTensor.RescalingStableLengthDependentRFP.R_isSourceSimple_and_not_isSimple`;
+- `MPOTensor.SimpleVanishingCounterexample.M_isSimple_and_isSourceSimple_and_not_isNonvanishingSourceSimple`;
 - `MPSTensor.bellPairChain_isTransferIdempotent_and_not_isPhysicalCID`;
 - `MPOTensor.RescalingStableLengthDependentRFP.oneSiteDoubledEquiv_diagonal`,
   whose `@[simp]` behavior is part of the public automation API; and
@@ -44,11 +51,31 @@ as the module containing the deprecated witness-packaging APIs. The theorem
 `MPOTensor.HasBNTLabelTheoremWitness.exists_source_chi_trace_equations`
 was relocated to `BNTTheoremWitness` with its paper-facing source citation.
 
-The dead conjunction wrapper
+The physical-gauge conjunction wrapper
 `MPOTensor.BondTwoSingletonBaseModel.gaugeDeformedBaseMPO_algebraClause_canonicalForm_not_isMPDO`
-was initially retained without modification because touching its
+was initially retained because touching its
 `BondTwoSingletonPhysicalGauge` module triggered the repository's 50-second
 changed-module timing limit (62 seconds, then 52 seconds) despite successful full
-Lean builds. The follow-up cleanup places the wrapper on a dated deprecation
-transition. Its three component declarations are preferred at use sites; issue
-#6503 tracks deletion after the compatibility transition.
+Lean builds. PR #6504 placed the wrapper on a dated deprecation transition.
+PR #6544 subsequently removed it; no Blueprint or docstring anchor used the
+wrapper. Its three component replacements are
+`MPOTensor.BondTwoSingletonBaseModel.gaugeDeformedBaseMPOBNTAlgebraTensorClause`,
+`MPOTensor.BondTwoSingletonBaseModel.gaugeDeformedBaseMPO_toMPSTensor_isCPSVCanonicalForm`,
+and
+`MPOTensor.BondTwoSingletonBaseModel.gaugeDeformedBaseMPO_gauge_not_isMPDO`;
+issue #6503 was closed by that deletion. The current development contains no
+remaining Lean declaration, Blueprint anchor, or non-historical use of the
+wrapper.
+
+The chronology did not follow the ordinary compatibility interval: PR #6504
+deprecated the wrapper on 2026-08-16, and PR #6544 deleted it on 2026-08-17.
+The deletion PR did not expressly invoke the exact-pass-through exception, and
+a post-merge changes-requested review identified that disclosure omission.
+This audit records the process discrepancy without restoring the obsolete
+conjunction.
+
+Issue #6545 was closed as not a defect. PR #6551 verified that the
+`InvariantProjection` import supplies the vertical-tensor multiplication
+lemmas `verticalTensor_ketLeftMul` and `verticalTensor_braRightMul` used by the
+physical-gauge proof, so the import is mathematically load-bearing rather than
+obsolete.

@@ -60,9 +60,9 @@ condition; it is a condition on a different transfer object. Even after allowing
 a scalar normalization, idempotence of $\mathcal E_M$ would classify tensors by
 the doubled-index MPS transfer rather than by the MPDO ZCL diagram.
 
-\paragraph{Classification.} This is a wrong-transfer-object gap: the current
-formal predicate records doubled-index CP-transfer idempotence, while the source
-definition uses the physical-trace transfer. The latter is now formalized as
+\paragraph{Classification: definition drift.} The formal predicate records
+doubled-index CP-transfer idempotence, while the source definition uses the
+physical-trace transfer. The latter is now formalized as
 \texttt{MPOTensor.physTraceTransfer}. The predicate
 \texttt{MPOTensor.IsSourceZCL} records this development's scale-invariant
 up-to-scalar repair; it is distinct from the paper's literal diagram and from
@@ -113,15 +113,19 @@ interpretation. It must not be identified with the paper's literal diagram for
 a fixed tensor. For the renormalization condition
 of Definition~4.1, Proposition \texttt{propsimple} is now proved at the explicit
 normalization boundary: every positive-length ring is positive semidefinite and
-has nonzero trace.  The primary declarations are
+has nonzero trace. The primary source-facing declarations are
+\texttt{MPOTensor.physTraceTransfer\_sq\_of\_isRFPViaTS} for literal
+Definition~4.2 ZCL and
+\texttt{MPOTensor.isSAL\_of\_isRFPViaTS\_of\_trace\_ne\_zero} for SAL. The
+conjunction
 \texttt{MPOTensor.isSourceZCL\_and\_isSAL\_of\_isRFPViaTS\_of\_trace\_ne\_zero}
-and \texttt{MPOTensor.isSAL\_of\_isRFPViaTS\_of\_trace\_ne\_zero}.
-The existing horizontal-form declarations
-\texttt{MPOTensor.isSourceZCL\_and\_isSAL\_of\_isRFPViaTS} and
-\texttt{MPOTensor.isSAL\_of\_isRFPViaTS} are stronger specializations that
-derive positive-length nonvanishing.  Positivity by itself admits the zero
-tensor, so the trace condition cannot be omitted.  The PRFP equivalence and the
-reverse implications in Theorem~4.9 remain open.
+is a convenience theorem with the broader scale-invariant conclusion; it is
+not the paper-facing statement. The horizontal source-facing specialization
+uses \texttt{MPOTensor.physTraceTransfer\_sq\_of\_isRFPViaTS} together with
+\texttt{MPOTensor.isSAL\_of\_isRFPViaTS}. The corresponding
+\texttt{IsSourceZCL} conjunction is again convenience-only. Positivity by
+itself admits the zero tensor, so the trace condition cannot be omitted. The
+PRFP equivalence and the reverse implications in Theorem~4.9 remain open.
 
 \paragraph{Amendment for the fixed-tensor implication in Theorem~4.9.}
 Option~1 is scale-invariant at the level of the generated state family, but it
@@ -215,61 +219,43 @@ is a positive example showing that the up-to-scalar condition captures the
 maximally mixed product state. This does not identify that condition with the
 paper's literal fixed-representative diagram.
 
-\paragraph{Finding (classification: unfaithful theorem).} The simple-MPDO
-direction of Theorem~4.9 (paper label \texttt{thm:main-simple},
-\path{Papers/1606.00608/MPDO-22-12-17-2.tex:851}; chain
-$\mathrm{(i)}\Rightarrow\mathrm{(ii)}\Leftrightarrow\mathrm{(iii)}
-\Rightarrow\mathrm{(iv)}\Rightarrow\mathrm{(v)}$ at line~892) is formalized by
-treating a zero-correlation-length hypothesis \emph{as if} it were literal
-idempotence of the doubled-index transfer, in order to build the blocked fusion
-isometry. This identification is valid only while the two notions coincide
-definitionally; under the scale-invariant up-to-scalar physical-trace repair it
-is no longer available, and the source does not supply the missing step. Two
-facts pin this down.
+\paragraph{Historical resolution of the doubled-index coercion.}
+Commit \texttt{43fb8749} introduced the former blocked-RFP construction, whose
+proof treated doubled-index idempotence as the zero-correlation-length clause
+of Theorem~4.9. Commit \texttt{74fb83dd} marked that dependence as unfaithful.
+Commit \texttt{32482c47} then removed the coercion and the paper-facing theorem
+chain, and commit \texttt{fc135934} removed the remaining obsolete module. No
+such coercion route survives in the current development.
 
-First, the source's conclusion is not literal transfer-map idempotence.
-Hypothesis (ii) is ``$K$ has ZCL and SAL'' (line~862), and the terminal
-conclusion (v) is ``$M$ is a RFP'' (line~890) in the mixed-state sense of
-Definition~4.1 (paper label \texttt{RFPMixedTS},
-\path{Papers/1606.00608/MPDO-22-12-17-2.tex:657}): the existence of two
-trace-preserving completely positive maps $\mathcal S,\mathcal T$ on the
-physical indices intertwining the one- and two-site operators. This is a
-structural reversibility condition, not
-$\mathcal E_M\circ\mathcal E_M=\mathcal E_M$; the source notes (line~786) that
-for mixed states zero correlation length is strictly weaker than this
-fixed-point property.
+The present formalization separates the three transfer notions. The literal
+Definition~4.2 conclusion
+$\mathcal T_M^2=\mathcal T_M$ follows directly from Definition~4.1 in
+\leanid{MPOTensor.physTraceTransfer_sq_of_isRFPViaTS}. The broader
+scale-invariant relation is recorded separately by
+\leanid{MPOTensor.IsSourceZCL}, while
+\leanid{MPOTensor.IsZCL} concerns a different doubled-index transfer and is
+not used as the source's ZCL clause. The doubled-index results in
+\path{FusionIsometries.lean}, \path{AlgebraStructure.lean}, and
+\path{CommutingFormBridge.lean} survive only as separately scoped conditional
+helpers. None is a relocated proof of Theorem~4.9. The normal Case-I structural
+conclusion is proved by
+\leanid{MPOTensor.exists_physicalSectorFactorization_rank_one_coefficients_of_isSAL_of_literal_ZCL}.
+Given one such factorization,
+\leanid{MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.blockTwo_isRFPViaTS}
+composes the two physical channels of Proposition~C.7 twice, as observed at
+source lines~1821--1825, and transports them back to the original physical
+coordinates.
 
-Second, the proposed bridge to doubled-index idempotence is false. The witness
-above generates the maximally mixed product state $\rho^{(N)}\propto I$, which
-has vanishing mutual information at every length ($I_1=I_2=\cdots=0$), hence
-satisfies the strong area law (Definition~\texttt{def:area-law},
-\path{Papers/1606.00608/MPDO-22-12-17-2.tex:812}) as well as zero correlation
-length, yet $\mathcal E_M\circ\mathcal E_M=\tfrac14\,\mathrm{id}\neq\mathcal E_M$.
-So the strong area law and zero correlation length together do \emph{not} imply
-literal idempotence of the doubled-index transfer; the missing passage cannot be
-obtained by definitional coercion.
-
-The source-facing obligation discharged by the simple-MPDO direction is
-therefore:
-from zero correlation length \emph{together with} the strong area law, derive
-condition~(iv), the BNT support, positivity, and fusion data of equations
-\texttt{KxKy=0}--\texttt{PsiPhi}; then use the source implication
-$\mathrm{(iv)}\Rightarrow\mathrm{(v)}$ to obtain the structural fixed point of
-Definition~4.1, formalized as \texttt{IsRFPViaTS}. Condition~(iv) is an
-intermediate used to derive that target, not an equivalent name for the target
-itself. The residual passage from the structural fixed point to literal
-doubled-index idempotence $\mathcal E_M^2=\mathcal E_M$ is a separate
-canonical-normalization bridge; as the witness above shows, it does not hold
-for an arbitrary ZCL and SAL tensor.
-
-Accordingly, any Lean theorem that currently obtains doubled-index idempotence
-(\texttt{MPOTensor.IsZCL}) from a zero-correlation-length hypothesis by definitional
-coercion --- the pattern in the simple-MPDO chain that uses an
-\texttt{IsZCL} field directly as \texttt{MPOTensor.IsZCL} --- relies on an intermediate theorem the
-source does not provide, and is \emph{unfaithful} in the sense of the project's
-faithfulness policy. Under the realignment each such theorem must carry an
-in-source \texttt{**Unfaithful:**} marker pointing to this note and naming
-\texttt{IsRFPViaTS}, reached through condition~(iv), as the source target that
-the realignment must instead establish.
+The remaining obligations are genuinely all-sector. First, the Case-II
+argument still needs a replacement for the false claim that coefficient
+absorption preserves normality; this is analyzed in
+\path{docs/paper-gaps/cpgsv17_pf_rank_one.tex}. Second, Theorem~4.9(iv) gives
+the factorization separately for every BNT element. The corresponding channel
+pairs must still be combined, using the mutually orthogonal outer physical
+supports, into a single pair of trace-preserving completely positive maps.
+These are recorded by the two source-faithful \texttt{\string\notready} nodes
+for the all-sector structure and the blocking channels. Thus the earlier
+unfaithful theorem has been removed rather than renamed, and the surviving
+gap is neither a doubled-index bridge nor a change of terminology.
 
 \end{document}

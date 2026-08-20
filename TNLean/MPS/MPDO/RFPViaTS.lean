@@ -47,8 +47,8 @@ the predicate.
   fixed point.
 * `MPOTensor.physTraceTransfer_sq_of_isRFPViaTS`: Definition 4.1 implies
   idempotence of the physical-trace transfer.
-* `MPOTensor.isSourceZCL_of_isRFPViaTS`: the resulting source
-  zero-correlation-length statement when the physical-trace transfer is nonzero.
+* `MPOTensor.isSourceZCL_of_isRFPViaTS`: the resulting broader scale-invariant
+  physical-trace corollary when the physical-trace transfer is nonzero.
 
 ## References
 
@@ -102,8 +102,13 @@ theorem physTraceTransfer_sq_of_isRFPViaTS (M : MPOTensor d D) (h : IsRFPViaTS M
   rw [Matrix.sub_mul, Matrix.trace_sub, ← trace_physClose2_eq M X,
     ← trace_physClose1_eq M X, ← hT_close X, hT.trace_map, sub_self]
 
-/-- Definition 4.1 gives source zero correlation length when the physical-trace
-transfer is nonzero.
+/-- Given a nonzero physical-trace transfer, Definition 4.1 implies the
+project's broader scale-invariant physical-trace relation.
+
+**Scope restriction (scale-invariant corollary):** CPSV16 Definition 4.2 is the
+literal identity proved by `physTraceTransfer_sq_of_isRFPViaTS`. This theorem
+records the resulting, broader `IsSourceZCL` relation for later uses. See
+`docs/paper-gaps/cpsv16_zcl_canonical_form_normalization.tex`.
 
 **Scope restriction (nonzero transfer):** The source assumes that the tensor is
 in canonical form and generates normalized density operators. The bare

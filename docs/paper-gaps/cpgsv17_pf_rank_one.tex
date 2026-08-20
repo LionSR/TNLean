@@ -918,6 +918,21 @@ tensors.  The orientation is the convention of
 \leanid{MPOTensor.PhysicalSectorFactorization}, rather than an identification
 with a separately drawn graphical orientation in the source.
 
+This one-factorization result does not by itself prove the full implication
+Theorem~4.9(iv)$\Rightarrow$(v). Condition~(iv) supplies a separate physical
+factorization for each outer BNT element, together with mutually orthogonal
+outer physical supports. Proposition~C.7 constructs a channel pair within one
+such factorization. The formal development does not yet combine the resulting
+family into one trace-preserving completely positive coarse-graining map and
+one refinement map for the whole BNT sum. A direct concatenation of the inner
+sector labels is not valid: cross-BNT neighboring operators vanish by support
+orthogonality, while a single global rank-one equation
+$\operatorname{tr}(\eta_{k,h})=a_kb_h$ would generally make cross terms
+nonzero. The missing construction must instead use the outer support
+projectors to control a direct sum of channel pairs. This is a separate
+all-sector obligation in addition to the Case-II factorization problem; it is
+tracked in \ghissue{6632}.
+
 The all-cut Markov proof and the source-selected inverse-map calculation show
 that the raw four-sector tensor satisfies the displayed SAL, literal ZCL, and
 inverse-map relations while the asserted factorization

@@ -556,17 +556,18 @@
     Theorem~\ref{thm:mpdo_rfp_implies_sal}.
 \end{proof}
 
-\begin{theorem}[Trace-normalized renormalization fixed points have ZCL and SAL]
+\begin{theorem}[Trace-normalized renormalization fixed points have literal ZCL and SAL]
     \label{thm:mpdo_rfp_implies_zcl_and_sal}
-    \lean{MPOTensor.isSourceZCL_and_isSAL_of_isRFPViaTS_of_trace_ne_zero}
+    \lean{MPOTensor.physTraceTransfer_sq_of_isRFPViaTS,
+      MPOTensor.isSAL_of_isRFPViaTS_of_trace_ne_zero}
     \leanok
-    \uses{thm:rfp_via_ts_source_zcl,
+    \uses{thm:rfp_via_ts_physical_trace_idempotent,
       thm:mpdo_rfp_implies_sal}
     Let $M$ generate positive semidefinite ring operators with
     $\tr[\rho^{(N)}(M)]\neq0$ for every $N\geq1$. If $M$ satisfies the local
-    renormalization fixed-point equations of Definition~4.1, then $M$ has
-    source zero correlation length and saturates the area law. This is the
-    forward implication proved in
+    renormalization fixed-point equations of Definition~4.1, then
+    $\mathcal T_M^2=\mathcal T_M$ and $M$ saturates the area law. This is the
+    literal ZCL and SAL forward implication proved in
     \cite[Appendix~C, lines~1333--1341]{Cirac2016MPDO_arXiv}, at the
     normalization boundary implicit in its density-operator language. Positive
     semidefiniteness alone admits the zero family.
@@ -577,20 +578,21 @@
     $\mathcal T_M^2=\mathcal T_M$ for the physical-trace transfer. If
     $\mathcal T_M=0$, then
     $\tr[\rho^{(1)}(M)]=\tr(\mathcal T_M)=0$, contradicting nonvanishing at
-    length one. Thus $M$ has source zero correlation length, and
+    length one. Thus the literal idempotence is nontrivial, and
     Theorem~\ref{thm:mpdo_rfp_implies_sal} gives saturation of the area law.
 \end{proof}
 
-\begin{corollary}[Horizontal renormalization fixed points have ZCL and SAL]
+\begin{corollary}[Horizontal renormalization fixed points have literal ZCL and SAL]
     \label{cor:mpdo_horizontal_rfp_implies_zcl_and_sal}
-    \lean{MPOTensor.isSourceZCL_and_isSAL_of_isRFPViaTS}
+    \lean{MPOTensor.physTraceTransfer_sq_of_isRFPViaTS,
+      MPOTensor.isSAL_of_isRFPViaTS}
     \leanok
     \uses{lem:mpdo_rfp_positive_length_trace_nonzero,
       thm:mpdo_rfp_implies_zcl_and_sal}
     Let $M$ be in normalized BNT-refined horizontal form, generate positive
     semidefinite ring operators, and satisfy the local renormalization
-    fixed-point equations of Definition~4.1. Then $M$ has source zero
-    correlation length and saturates the area law.
+    fixed-point equations of Definition~4.1. Then
+    $\mathcal T_M^2=\mathcal T_M$ and $M$ saturates the area law.
 \end{corollary}
 
 \begin{proof}\leanok
