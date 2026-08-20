@@ -116,12 +116,23 @@ theorem mpo_verticalBNTMPO_eq_pow_smul_of_unitary_reindex
   have hReindex : MPSTensor.SameMPV₂ A₁ A₁' := by
     mpv_ext
     simp only [MPSTensor.mpv, MPSTensor.coeff]
-    change Matrix.trace (MPSTensor.evalWord A₁ (List.ofFn σ)) =
-      Matrix.trace (MPSTensor.evalWord
+    change Matrix.trace (Kraus.evalWord A₁ (List.ofFn σ)) =
+      Matrix.trace (Kraus.evalWord
         (fun ab => Matrix.reindex (finCongr hDim) (finCongr hDim) (A₁ ab))
         (List.ofFn σ))
-    rw [MPSTensor.evalWord_reindex, Matrix.trace_reindex]
-    simp
+    have hEval := MPSTensor.evalWord_reindex (e := finCongr hDim) (A := A₁)
+      (List.ofFn σ)
+    calc
+      Matrix.trace (Kraus.evalWord A₁ (List.ofFn σ)) =
+          Matrix.trace (_root_.evalWord A₁ (List.ofFn σ)) := by
+            rw [MPSTensor.evalWord_aux_eq]
+      _ = Matrix.trace (Matrix.reindex (finCongr hDim) (finCongr hDim)
+          (_root_.evalWord A₁ (List.ofFn σ))) := by
+            symm
+            apply Matrix.trace_reindex
+      _ = Matrix.trace (Kraus.evalWord
+          (fun ab => Matrix.reindex (finCongr hDim) (finCongr hDim) (A₁ ab))
+          (List.ofFn σ)) := congrArg Matrix.trace hEval.symm
   have hScaled (N : ℕ) (σ : Fin N → Fin (D * D)) :
       MPSTensor.mpv A₂ σ = c ^ N * MPSTensor.mpv A₁' σ := by
     have hA₂ : A₂ = fun ab => c • ((V : Matrix (Fin n₂) (Fin n₂) ℂ) *
