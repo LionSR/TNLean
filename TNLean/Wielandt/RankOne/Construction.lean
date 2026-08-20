@@ -164,7 +164,7 @@ theorem cumulativeSpan_transposeTensor_eq_top_of_cumulativeSpan_eq_top
       Submodule.map (e : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ)
           (cumulativeSpan A N) =
         cumulativeSpan (transposeTensor A) N := by
-    unfold cumulativeSpan
+    unfold cumulativeSpan Kraus.cumulativeSpan
     rw [Submodule.map_span]
     have hset :
         (fun M : Matrix (Fin D) (Fin D) ℂ => Mᵀ) ''
@@ -275,7 +275,7 @@ theorem map_wordSpan_eq_rowSpreadSpan
       rowSpreadSpan A ψ n := by
   classical
   -- Unfold everything down to spans of ranges.
-  unfold vecMulLinearMap wordSpan rowSpreadSpan
+  unfold vecMulLinearMap wordSpan Kraus.wordSpan rowSpreadSpan
   -- `Submodule.map` distributes over `Submodule.span`.
   rw [Submodule.map_span]
   -- Rewrite the RHS as an image of a range (so both sides match).

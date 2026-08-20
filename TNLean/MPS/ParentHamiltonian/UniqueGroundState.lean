@@ -332,7 +332,7 @@ private theorem eq_zero_of_trace_evalWord_mul_eq_zero {A : MPSTensor d D}
       (Matrix.traceLinearMap (Fin D) ℂ ℂ).comp (LinearMap.mulRight ℂ X) = 0 := by
     apply LinearMap.ext_on_range
       (v := fun σ : Fin k → Fin d => evalWord A (List.ofFn σ))
-    · simpa [wordSpan] using hwordK
+    · simpa [wordSpan, Kraus.wordSpan] using hwordK
     · intro σ
       simp [Matrix.traceLinearMap_apply, h σ]
   exact (Matrix.ext_iff_trace_mul_right (A := X) (B := 0)).2 fun N => by

@@ -252,7 +252,7 @@ theorem groundSpaceMap_injective {A : MPSTensor d D} (hA : IsInjective A)
         (Matrix.traceLinearMap (Fin D) ℂ ℂ).comp (LinearMap.mulRight ℂ X) = 0 := by
       apply LinearMap.ext_on_range
         (v := fun σ : Fin L → Fin d => evalWord A (List.ofFn σ))
-      · simpa [wordSpan] using hwordL
+      · simpa [wordSpan, Kraus.wordSpan] using hwordL
       · intro σ
         simpa [groundSpaceMap_apply, Matrix.traceLinearMap_apply] using
           congrArg (fun ψ => ψ σ) hX
@@ -277,7 +277,7 @@ theorem groundSpaceMap_injective_of_wordSpan_eq_top {A : MPSTensor d D}
         (Matrix.traceLinearMap (Fin D) ℂ ℂ).comp (LinearMap.mulRight ℂ X) = 0 := by
       apply LinearMap.ext_on_range
         (v := fun σ : Fin L → Fin d => evalWord A (List.ofFn σ))
-      · simpa [wordSpan] using hWord
+      · simpa [wordSpan, Kraus.wordSpan] using hWord
       · intro σ
         simpa [groundSpaceMap_apply, Matrix.traceLinearMap_apply] using
           congrArg (fun ψ => ψ σ) hX

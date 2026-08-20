@@ -876,7 +876,8 @@ theorem left_witness_unique_of_isNBlkInjective
   have hmul : LinearMap.mulRight ℂ Y₁ = LinearMap.mulRight ℂ Y₂ := by
     apply LinearMap.ext_on_range
       (v := fun σ : Fin L₀ → Fin d => evalWord A (List.ofFn σ))
-    · simpa [wordSpan] using (wordSpan_eq_top_iff_isNBlkInjective A L₀).mpr hInj
+    · simpa [wordSpan, Kraus.wordSpan] using
+        (wordSpan_eq_top_iff_isNBlkInjective A L₀).mpr hInj
     · intro σ
       simpa [LinearMap.mulRight_apply] using hword σ
   have h1 : (1 : Matrix (Fin D) (Fin D) ℂ) * Y₁ =
@@ -931,7 +932,8 @@ theorem boundary_matrix_commutes {A : MPSTensor d D} [NeZero D]
         LinearMap.mulRight ℂ (Y τ) := by
       apply LinearMap.ext_on_range
         (v := fun σ : Fin (L - 1) → Fin d => evalWord A (List.ofFn σ))
-      · simpa [wordSpan] using wordSpan_eq_top_of_isInjective hA (by omega : 0 < L - 1)
+      · simpa [wordSpan, Kraus.wordSpan] using
+          wordSpan_eq_top_of_isInjective hA (by omega : 0 < L - 1)
       · intro σ_tail
         simp only [LinearMap.comp_apply, LinearMap.mulLeft_apply,
                     LinearMap.mulRight_apply]
@@ -967,7 +969,7 @@ theorem boundary_matrix_commutes {A : MPSTensor d D} [NeZero D]
       have hφ : LinearMap.mulLeft ℂ (X * M₁ - M₁ * X) = 0 := by
         apply LinearMap.ext_on_range
           (v := fun f : Fin (M + 1 - L) → Fin d => evalWord A (List.ofFn f))
-        · simpa [wordSpan] using wordSpan_eq_top_of_isInjective hA hML'
+        · simpa [wordSpan, Kraus.wordSpan] using wordSpan_eq_top_of_isInjective hA hML'
         · intro f
           simp only [LinearMap.mulLeft_apply, LinearMap.zero_apply]
           let τ₀ : Fin (M + 1) → Fin d := fun k =>

@@ -370,8 +370,9 @@ theorem rectSpan_succ_eq_iSup_mulRight
   apply le_antisymm
   · -- ≤: generators of rectSpan P A (n+1) decompose via right-multiplication
     change Submodule.map (LinearMap.mulLeft ℂ P) (wordSpan A (n + 1)) ≤ _
-    rw [wordSpan_succ_eq_mul_right, wordSpan, wordSpan, Submodule.span_mul_span,
-        Submodule.map_span]
+    rw [wordSpan_succ_eq_mul_right]
+    unfold wordSpan Kraus.wordSpan
+    rw [Submodule.span_mul_span, Submodule.map_span]
     apply Submodule.span_le.mpr
     rintro _ ⟨_, ⟨M₁, ⟨σ₁, rfl⟩, M₂, ⟨σ₂, rfl⟩, rfl⟩, rfl⟩
     have hM₂ := evalWord_ofFn_one A σ₂
