@@ -9,9 +9,9 @@ import TNLean.Wielandt.Primitivity.PrimitiveBridge
 /-!
 # Primitive tensors with a positive-definite fixed point are irreducible
 
-A primitive MPS transfer map with a positive-definite fixed point is
-irreducible. The corresponding finite matrix family is therefore irreducible
-by the transfer-map comparison theorem.
+The `IsPrimitiveMPS A ρ` hypothesis, together with positive definiteness of
+`ρ`, implies irreducibility of the transfer map. The corresponding finite
+matrix family is therefore irreducible by the transfer-map comparison theorem.
 
 ## Main result
 
