@@ -380,3 +380,93 @@ audit, and also checks grouped citations such as “Theorems 5.10--5.13”. Each
 result was checked against
 `Notes/WolfNotePDF/ch05_operator_inequalities.pdf`; the line ranges above refer
 only to the searchable transcription and do not determine numbering.
+
+## Chapter 7: Semigroup structure
+
+All eleven cited Chapter 7 numbers agree with the printed notes.
+
+| Citation | Result title | Archived PDF | Local transcription | Verdict |
+|---|---|---:|---:|---|
+| Proposition 7.1 | From continuous semigroups to differentiable groups | PDF page 2; printed page 120 | lines 67--69 | Correct |
+| Lemma 7.1 | Duhamel perturbation formula | PDF page 3; printed page 121 | lines 113--118 | Correct |
+| Corollary 7.1 | Perturbation of generators | PDF page 4; printed page 122 | lines 135--141 | Correct |
+| Proposition 7.2 | Conditional complete positivity | PDF page 4; printed page 122 | lines 158--170 | Correct |
+| Proposition 7.3 | Completely positive dynamical semigroups | PDF page 5; printed page 123 | lines 195--201 | Correct |
+| Proposition 7.4 | Freedom in representations of generators | PDF page 6; printed page 124 | lines 223--236 | Correct |
+| Theorem 7.1 | Generators for semigroups of quantum channels | PDF page 7; printed page 125 | lines 245--256 | Correct |
+| Proposition 7.5 | Irreducibility implies primitivity | PDF page 7; printed page 125 | lines 268--277 | Correct |
+| Proposition 7.6 | Reducible quantum dynamical semigroups | PDF page 8; printed page 126 | lines 285--296 | Correct |
+| Corollary 7.2 | Necessary conditions for relaxation | PDF page 9; printed page 127 | lines 313--320 | Correct |
+| Theorem 7.2 | Kernel of the Liouvillian | PDF page 10; printed page 128 | lines 332--338 | Correct |
+
+### Citing files
+
+**Proposition 7.1**
+
+- `TNLean/Channel/Semigroup/Basic.lean`
+- `blueprint/src/chapter/ch17_semigroup_dynamics_and_gksl.tex`
+
+**Lemma 7.1 and Corollary 7.1**
+
+- `TNLean/Channel/Semigroup/Perturbation.lean`
+- `blueprint/src/chapter/ch17_semigroup_dynamics_and_gksl.tex`
+
+**Proposition 7.2**
+
+- `TNLean/Channel/Semigroup/GeneratorDefs.lean`
+- `TNLean/Channel/Semigroup/LindbladForm/ChoiCCP.lean`
+- `TNLean/Channel/Semigroup/LindbladForm/EulerStep.lean`
+- `blueprint/src/chapter/ch17_semigroup_dynamics_and_gksl.tex`
+
+**Proposition 7.3**
+
+- `TNLean/Channel/Semigroup/LindbladForm/EulerStep.lean`
+- `blueprint/src/chapter/ch17_semigroup_dynamics_and_gksl.tex`
+
+**Proposition 7.4**
+
+- `TNLean/Channel/Semigroup/LindbladForm/GKSLTheorem.lean`
+- `TNLean/Channel/Semigroup/LindbladForm/Uniqueness.lean`
+- `blueprint/src/chapter/ch17_semigroup_dynamics_and_gksl.tex`
+
+**Theorem 7.1**
+
+- `TNLean/Channel/Semigroup/KossakowskiForm.lean`
+- `TNLean/Channel/Semigroup/LindbladForm/GKSLTheorem.lean`
+- `blueprint/src/chapter/ch17_semigroup_dynamics_and_gksl.tex`
+
+**Proposition 7.5**
+
+- `TNLean/Channel/Semigroup/Primitivity/Basic.lean`
+- `TNLean/Channel/Semigroup/Primitivity/IrreducibleAnalysis.lean`
+- `TNLean/Channel/Semigroup/Primitivity/MainTheorem.lean`
+- `blueprint/src/chapter/ch17_semigroup_dissipation_and_primitivity.tex`
+
+**Proposition 7.6**
+
+- `TNLean/Channel/Semigroup/ReducibleQDS/Defs.lean`
+- `TNLean/Channel/Semigroup/ReducibleQDS/Equivalence.lean`
+- `TNLean/Channel/Semigroup/ReducibleQDS/FixedDensity.lean`
+- `TNLean/Channel/Semigroup/ReducibleQDS/GeneratorCompression.lean`
+- `TNLean/Channel/Semigroup/ReducibleQDS/SubsequenceAnalysis.lean`
+- `blueprint/src/chapter/ch17_semigroup_adjoint_kernel_and_reducibility.tex`
+- `docs/blueprint_style_guide.md`
+
+**Corollary 7.2**
+
+- `TNLean/Channel/Semigroup/ReducibleQDS/GeneratorCompression.lean`
+- `TNLean/Channel/Semigroup/RelaxationConditions.lean`
+- `blueprint/src/chapter/ch17_semigroup_adjoint_kernel_and_reducibility.tex`
+- `docs/blueprint_style_guide.md`
+
+**Theorem 7.2**
+
+- `TNLean/Channel/Semigroup/LiouvillianKernel.lean`
+- `blueprint/src/chapter/ch17_semigroup_adjoint_kernel_and_reducibility.tex`
+
+### Reproducibility
+
+The enumeration uses the same directories and exclusions as the Chapter 1
+audit. Each result was checked against
+`Notes/WolfNotePDF/ch07_semigroup_structure.pdf`; the line ranges above refer
+only to the searchable transcription and do not determine numbering.
