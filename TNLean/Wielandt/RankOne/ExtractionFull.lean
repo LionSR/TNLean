@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.Kraus.Wielandt.RankOne.ExtractionFull
+import TNLean.Wielandt.RankOne.BoundedWord
 import TNLean.Wielandt.RectangularSpan.Basic
 
 /-!
