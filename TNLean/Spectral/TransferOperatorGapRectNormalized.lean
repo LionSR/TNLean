@@ -6,7 +6,6 @@ Authors: TNLean contributors
 import TNLean.Analysis.SpectralRadiusPowerDecay
 import TNLean.Kraus.MixedMap.SpectralRadius
 import TNLean.Spectral.MixedTransfer
-import Mathlib.Analysis.Normed.Algebra.GelfandFormula
 
 /-!
 # Normalized rectangular transfer-operator bounds
