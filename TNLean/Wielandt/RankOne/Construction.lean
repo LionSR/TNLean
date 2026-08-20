@@ -245,7 +245,7 @@ theorem rowSpreadSpan_eq_vectorSpreadSpan_transpose
   -- Work with `transposeTensor A = fun i => (A i)ᵀ`.
   have htrans : transposeTensor A = (fun i => (A i)ᵀ) := rfl
   -- Unfold both spans.
-  unfold rowSpreadSpan vectorSpreadSpan
+  unfold rowSpreadSpan vectorSpreadSpan Kraus.vectorSpreadSpan
   refine le_antisymm ?_ ?_
   · -- `rowSpreadSpan ≤ vectorSpreadSpan`
     refine Submodule.span_le.mpr ?_

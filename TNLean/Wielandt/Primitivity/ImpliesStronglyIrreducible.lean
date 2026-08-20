@@ -425,7 +425,7 @@ private lemma vectorSpreadSpan_ne_top_of_hasInvariantProj
   have hP_range : LinearMap.range (Matrix.mulVecLin P) = ⊤ := by
     apply le_antisymm le_top
     -- ⊤ ≤ range(P·), using vectorSpreadSpan ⊆ range(P·) and vectorSpreadSpan = ⊤
-    rw [← h_eq_top, vectorSpreadSpan, Submodule.span_le]
+    rw [← h_eq_top, vectorSpreadSpan, Kraus.vectorSpreadSpan, Submodule.span_le]
     intro v hv
     obtain ⟨σ, rfl⟩ := hv
     exact evalWord_mulVec_mem_range_of_proj hP_idem A hinv φ hφ_range (List.ofFn σ)

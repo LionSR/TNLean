@@ -168,7 +168,7 @@ theorem cumulativeVectorSpan_le_vectorSpreadSpan_of_eigenvector
     cumulativeVectorSpan A φ n ≤ vectorSpreadSpan A φ n := by
   classical
   -- It suffices to check the generators of `cumulativeVectorSpan`.
-  unfold cumulativeVectorSpan
+  unfold cumulativeVectorSpan Kraus.cumulativeVectorSpan
   apply Submodule.span_le.mpr
   rintro v ⟨w, hw, rfl⟩
   -- Let `k = n - w.length` and pad `w` to length `n` by appending `i₀`'s.
