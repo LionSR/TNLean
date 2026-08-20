@@ -125,9 +125,15 @@ def source_imported_modules(path: Path) -> set[str]:
     if error is not None:
         return set()
     modules: set[str] = set()
+    header_seen = False
     for line in uncommented.splitlines():
         command = line.strip()
         if not command:
+            continue
+        if command in {"prelude", "module"}:
+            if header_seen or modules:
+                return set()
+            header_seen = True
             continue
         match = IMPORT_COMMAND_RE.fullmatch(command)
         if match is not None:
