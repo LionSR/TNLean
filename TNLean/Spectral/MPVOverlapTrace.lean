@@ -3,10 +3,10 @@ Copyright (c) 2025 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import TNLean.Algebra.MatrixTracePairing
 import TNLean.Channel.TransferMatrix
 import TNLean.MPS.Overlap.Basic
 import TNLean.Spectral.MixedTransfer
-import TNLean.Spectral.TraceExpansion
 
 import Mathlib.LinearAlgebra.Trace
 import Mathlib.LinearAlgebra.StdBasis
@@ -24,8 +24,8 @@ This module proves the key identity (standard in the MPS literature) expressing 
 \]
 as the trace of the $N$-th power of the mixed transfer operator.
 
-The trace-expansion helpers (`linearMap_trace_eq_sum_apply_single`,
-`entry_mul_single_mul`) are provided by `TNLean.Spectral.TraceExpansion`.
+The operator trace is expanded in the standard matrix-unit basis, using
+$(M E_{pq} N)_{pq}=M_{pp}N_{qq}$ to evaluate each summand.
 
 ## Rectangular overlaps for different bond dimensions
 
@@ -33,7 +33,7 @@ The trace-expansion helpers (`linearMap_trace_eq_sum_apply_single`,
 `A : MPSTensor d D₁` and `B : MPSTensor d D₂` may have different bond dimensions and the
 mixed transfer map acts on `Matrix (Fin D₁) (Fin D₂) ℂ`.
 
-The same trace-expansion helpers apply to this rectangular matrix space.
+The same matrix-unit expansion applies to this rectangular matrix space.
 -/
 namespace MPSTensor
 
@@ -52,7 +52,7 @@ theorem trace_mixedTransferMap_pow_eq_mpvOverlap {d D : ℕ} [NeZero D]
       = mpvOverlap (d := d) A B N := by
   classical
   -- Expand the operator trace as a sum over matrix units.
-  rw [linearMap_trace_eq_sum_apply_single (T := ((mixedTransferMap A B) ^ N))]
+  rw [Matrix.linearMap_trace_eq_sum_apply_single (T := ((mixedTransferMap A B) ^ N))]
   -- Expand the iterated mixed transfer map on each matrix unit.
   simp only [mixedTransferMap_pow_apply (A := A) (B := B) (N := N)]
   -- Push the `(p,q)` entry inside the σ-sum, then use the matrix-unit identity
@@ -65,7 +65,7 @@ theorem trace_mixedTransferMap_pow_eq_mpvOverlap {d D : ℕ} [NeZero D]
         = ∑ p : Fin D, ∑ q : Fin D, ∑ σ : Fin N → Fin d,
             evalWord A (List.ofFn σ) p p * (evalWord B (List.ofFn σ))ᴴ q q := by
     refine Fintype.sum_congr _ _ fun p => Fintype.sum_congr _ _ fun q => ?_
-    simp only [Matrix.sum_apply, entry_mul_single_mul]
+    simp only [Matrix.sum_apply, Matrix.entry_mul_single_mul]
   -- Reorder the triple sum so that σ is outermost.
   have hswap :
       (∑ p : Fin D, ∑ q : Fin D, ∑ σ : Fin N → Fin d,
@@ -128,7 +128,7 @@ theorem trace_mixedTransferMap₂_pow_eq_mpvOverlap
       = mpvOverlap (d := d) A B N := by
   classical
   -- Expand the operator trace as a sum over matrix units.
-  rw [linearMap_trace_eq_sum_apply_single (T := ((mixedTransferMap₂ A B) ^ N))]
+  rw [Matrix.linearMap_trace_eq_sum_apply_single (T := ((mixedTransferMap₂ A B) ^ N))]
   -- Expand the iterated mixed transfer map on each matrix unit.
   simp only [mixedTransferMap₂_pow_apply (A := A) (B := B) (N := N)]
   -- Push the `(p,q)` entry inside the σ-sum, then use the matrix-unit identity
@@ -141,7 +141,7 @@ theorem trace_mixedTransferMap₂_pow_eq_mpvOverlap
         = ∑ p : Fin D₁, ∑ q : Fin D₂, ∑ σ : Fin N → Fin d,
             evalWord A (List.ofFn σ) p p * (evalWord B (List.ofFn σ))ᴴ q q := by
     refine Fintype.sum_congr _ _ fun p => Fintype.sum_congr _ _ fun q => ?_
-    simp only [Matrix.sum_apply, entry_mul_single_mul]
+    simp only [Matrix.sum_apply, Matrix.entry_mul_single_mul]
   -- Reorder the triple sum so that σ is outermost.
   have hswap :
       (∑ p : Fin D₁, ∑ q : Fin D₂, ∑ σ : Fin N → Fin d,
