@@ -96,14 +96,15 @@ transfer power.
 
 \section{Eigenvalue bound and transfer-operator gap}
 
-The eigenvalue bound uses the Frobenius (Hilbert--Schmidt) norm
-$\|{\cdot}\|_F$ on the finite-dimensional matrix algebra and the trace
-positivity of two positive semidefinite matrices; both are proved in
-Section~\ref{sec:app_spectral_frobenius}. For the rigidity
-theorem, one gauges $A$ and $B$ separately using positive fixed points of
-their transfer maps to obtain unital Kraus families, and then applies the
-Kadison--Schwarz equality argument (\cite[Theorem~5.3]{Wolf2012Quantum}) to
-a block embedding of a mixed-transfer eigenvector.
+The rectangular eigenvalue bound is the MPS formulation of the generic
+bound for trace-preserving mixed Kraus maps.  Under the identification of
+the rectangular mixed transfer with the mixed Kraus map, the two tensor
+normalizations are precisely the trace-preserving conditions.  For the
+rigidity theorem, one gauges $A$ and $B$ separately using positive fixed
+points of their transfer maps to obtain unital Kraus families, and then
+applies the Kadison--Schwarz equality argument
+(\cite[Theorem~5.3]{Wolf2012Quantum}) to a block embedding of a
+mixed-transfer eigenvector.
 
 \begin{theorem}[Eigenvalue bound]\label{thm:eigenvalue_bound}
     \lean{MPSTensor.eigenvalue_norm_le_one}
@@ -117,11 +118,10 @@ a block embedding of a mixed-transfer eigenvector.
     \leanok
     \uses{thm:eigenvalue_bound_rect}
     This is the equal-bond-dimension case $D_1=D_2=D$ of
-    Theorem~\ref{thm:eigenvalue_bound_rect}, which gives the full
-    Cauchy--Schwarz estimate via the Frobenius-norm apparatus of
-    Section~\ref{sec:app_spectral_frobenius}. The argument uses
-    only the trace-preserving normalization (\ref{eq:spec_tp_normalization})
-    and does not appeal to Perron--Frobenius theory.
+    Theorem~\ref{thm:eigenvalue_bound_rect}.  The argument uses only the
+    trace-preserving normalization (\ref{eq:spec_tp_normalization}) and the
+    general eigenvalue bound for trace-preserving Kraus maps; it does not
+    appeal to Perron--Frobenius theory.
 \end{proof}
 
 \begin{theorem}[Rectangular eigenvalue bound]\label{thm:eigenvalue_bound_rect}
@@ -134,15 +134,12 @@ a block embedding of a mixed-transfer eigenvector.
 \end{theorem}
 
 \begin{proof}\leanok
-    A uniform Frobenius bound
-    $\|(F_{AB}^{\mathrm{rect}})^n(X)\|_F^2\leq D_1^2\|X\|_F^2$ follows from
-    the word expansion, the Frobenius submultiplicativity
-    $\|MN\|_F\leq\|M\|_F\|N\|_F$, and Cauchy--Schwarz applied to the
-    trace-preserving normalization of $A$ and $B$
-    (Section~\ref{sec:app_spectral_frobenius}). If
-    $F_{AB}^{\mathrm{rect}}(X)=\mu X$ with $X\neq0$, iterating gives
-    $|\mu|^{2n}\|X\|_F^2\leq D_1^2\|X\|_F^2$ for every $n$, forcing
-    $|\mu|\leq1$.
+    \uses{thm:kraus_mixed_tp_eigenvalue_bound}
+    This is the MPS formulation of
+    Theorem~\ref{thm:kraus_mixed_tp_eigenvalue_bound}: the map
+    $F_{AB}^{\mathrm{rect}}$ is the mixed Kraus map of the two matrix
+    families, and the normalizations of $A$ and $B$ are exactly its two
+    trace-preserving hypotheses.
 \end{proof}
 
 \begin{lemma}[Spectral radius bound]\label{thm:spectral_radius_le_one}

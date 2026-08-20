@@ -2,11 +2,11 @@
 \label{ch:spectral_supporting_results}
 
 This appendix supports Chapter~\ref{ch:spectral}. It proves the algebraic
-mixed-transfer identities, the Frobenius-norm apparatus behind the eigenvalue
-bounds, the peripheral intertwiners behind the gauge-rigidity theorems, the
-Banach-algebra convergence facts behind the overlap-decay theorems, the
-rank-one Perron projection behind the primitive overlap limit, and the
-cyclic-decomposition machinery that removes peripheral periodicity.
+mixed-transfer identities, an auxiliary trace-positivity result, the
+peripheral intertwiners behind the gauge-rigidity theorems, the Banach-algebra
+convergence facts behind the overlap-decay theorems, the rank-one Perron
+projection behind the primitive overlap limit, and the cyclic-decomposition
+machinery that removes peripheral periodicity.
 
 \section{Mixed-transfer powers and overlap traces}
 \label{sec:app_spectral_mixed_trace}
@@ -93,17 +93,7 @@ matrix-unit indices gives
     \notag
 \end{align}
 
-\section{Frobenius estimates and eigenvalue bounds}
-\label{sec:app_spectral_frobenius}
-
-This section proves the trace positivity fact
-(Lemma~\ref{lem:psd_trace_product_nonneg}) and the detailed Frobenius-norm
-estimate behind the rectangular eigenvalue bound
-(Theorem~\ref{thm:eigenvalue_bound_rect}), of which
-Theorem~\ref{thm:eigenvalue_bound} is the equal-bond-dimension case
-$D_1=D_2=D$. The estimate uses the Frobenius (Hilbert--Schmidt) norm
-$\|{\cdot}\|_F$ on rectangular matrices and an isometric embedding into
-Euclidean space.
+\section{Auxiliary trace positivity}
 
 \begin{lemma}[Trace product of positive semidefinite matrices]
     \label{lem:psd_trace_product_nonneg}
@@ -125,116 +115,21 @@ Euclidean space.
     because $U^\dagger AU\geq0$ and $\Lambda_{ii}\geq0$ for every $i$.
 \end{proof}
 
-\begin{definition}[Frobenius norm squared]\label{def:frob_sq}
-    \lean{MPSTensor.frobSq}
-    \leanok
-    For a possibly rectangular matrix $X\in M_{m\times n}(\C)$, its
-    \emph{Frobenius norm squared} is
-    \begin{align}
-        \|X\|_F^2
-         & :=\sum_{i=0}^{m-1}\sum_{j=0}^{n-1}|X_{ij}|^2.
-        \label{eq:spectral_frob_sq}
-    \end{align}
-\end{definition}
-
-\begin{lemma}[Trace formula for Frobenius norm]\label{lem:frob_sq_trace}
-    \lean{MPSTensor.frobSq_trace}
-    \lean{Matrix.trace_conjTranspose_mul_self_re_eq_frobenius_norm_sq}
-    \leanok
-    \uses{def:frob_sq}
-    One has $\|X\|_F^2=\re\tr(X^\dagger X)$.
-\end{lemma}
-
-\begin{proof}\leanok
-    Expand the matrix product and trace entry by entry.
-\end{proof}
-
-\begin{definition}[Euclidean-space embedding]\label{def:mat_to_es}
-    \lean{MPSTensor.matToES}
-    \leanok
-    Flattening matrix entries defines an isometric embedding
-    $\opvec:M_{m\times n}(\C)\to\C^{mn}$ with respect to the Frobenius
-    norm: $\|\opvec(X)\|^2=\|X\|_F^2$.
-\end{definition}
-
-\begin{lemma}[Norm of embedded matrix]\label{lem:norm_mat_to_es}
-    \lean{MPSTensor.norm_matToES_sq}
-    \leanok
-    \uses{def:mat_to_es, def:frob_sq}
-    One has $\|\opvec(X)\|^2=\|X\|_F^2$.
-\end{lemma}
-
-\begin{proof}\leanok
-    Both sides equal $\sum_{i,j}\lVert X_{ij}\rVert^2$: the left side by
-    the Euclidean entry-norm formula and the right side by
-    (\ref{eq:spectral_frob_sq}).
-\end{proof}
-
-The following internal estimate is folded into a private supporting lemma
-in the formalization and is recorded here, untagged, purely as an
-exposition step toward Theorem~\ref{thm:eigenvalue_bound_rect}. Its
-statement is phrased over normalized MPS tensors of fixed bond dimensions,
-so it belongs with the tensor-network-side rump of this appendix alongside
-Definition~\ref{def:mixed_transfer_rect} and Definition~\ref{def:frob_sq},
-not with the channel-generic material extracted elsewhere in this chapter.
-
-\begin{lemma}[Uniform Frobenius bound for the rectangular mixed transfer power]%
-    \label{lem:hs_contraction_rect}
-    \uses{def:mixed_transfer_rect, def:frob_sq}
-    Let $A$ and $B$ be normalized MPS tensors of bond dimensions
-    $D_1\geq1$ and $D_2\geq1$. For every $X\in M_{D_1\times D_2}(\C)$ and
-    $n\geq0$,
-    \begin{align}
-        \|(F_{AB}^{\mathrm{rect}})^n(X)\|_F^2
-         & \leq D_1^2\,\|X\|_F^2.
-        \label{eq:spectral_hs_contraction_rect}
-    \end{align}
-\end{lemma}
-
-\begin{proof}
-    \uses{thm:mixed_pow, lem:norm_mat_to_es}
-    The word expansion (\ref{eq:spectral_mixed_power}) writes
-    $(F_{AB}^{\mathrm{rect}})^n(X)=\sum_\sigma A^\sigma(X(B^\sigma)^\dagger)$,
-    a sum over words $\sigma$ of length $n$. Embedding into Euclidean space by
-    $\opvec$ (Definition~\ref{def:mat_to_es}), the triangle inequality and the
-    Frobenius submultiplicativity $\|MN\|_F\leq\|M\|_F\|N\|_F$ give
-    \begin{align}
-        \|\opvec((F_{AB}^{\mathrm{rect}})^n(X))\|
-         & \leq\sum_\sigma\|A^\sigma\|_F\,\|X(B^\sigma)^\dagger\|_F.
-        \notag
-    \end{align}
-    Cauchy--Schwarz over the word index bounds the right side by
-    $\left(\sum_\sigma\|A^\sigma\|_F^2\right)^{1/2}
-        \left(\sum_\sigma\|X(B^\sigma)^\dagger\|_F^2\right)^{1/2}$.
-    The trace-preserving normalization of $A$ gives
-    $\sum_\sigma(A^\sigma)^\dagger A^\sigma=\Id_{D_1}$, so
-    $\sum_\sigma\|A^\sigma\|_F^2=D_1$; the same normalization for $B$ gives
-    $\sum_\sigma(B^\sigma)^\dagger B^\sigma=\Id_{D_2}$, which forces the
-    exact identity $\sum_\sigma\|X(B^\sigma)^\dagger\|_F^2=\|X\|_F^2$ (both
-    sides equal $\re\tr(X^\dagger X)$ after expanding by the same
-    normalization). Hence
-    $\|(F_{AB}^{\mathrm{rect}})^n(X)\|_F\leq\sqrt{D_1} \|X\|_F\leq
-        D_1\,\|X\|_F$, giving (\ref{eq:spectral_hs_contraction_rect}).
-\end{proof}
-
-Theorem~\ref{thm:eigenvalue_bound_rect} follows directly from
-Lemma~\ref{lem:hs_contraction_rect}: if $F_{AB}^{\mathrm{rect}}(X)=\mu X$
-with $X\neq0$, iterating gives $(F_{AB}^{\mathrm{rect}})^n(X)=\mu^nX$, and
-Lemma~\ref{lem:hs_contraction_rect} gives $|\mu|^{2n}\|X\|_F^2\leq
-    D_1^2\|X\|_F^2$ for every $n$; since $\|X\|_F>0$, if $|\mu|>1$ then
-$|\mu|^{2n}\to\infty$, contradicting the uniform bound, so $|\mu|\leq1$.
+\section{Rectangular spectral-radius formulation}
 
 \begin{lemma}[Rectangular spectral radius bound]\label{thm:spectral_radius_le_one_rect}
     \lean{MPSTensor.spectralRadius_mixedTransfer₂_le_one}
     \leanok
-    \uses{def:mixed_transfer_rect, thm:eigenvalue_bound_rect}
+    \uses{def:mixed_transfer_rect, thm:kraus_mixed_tp_spectral_radius_bound}
     For normalized tensors of bond dimensions $D_1$ and $D_2$,
     $\rho_{\spec}(F_{AB}^{\mathrm{rect}})\leq1$.
 \end{lemma}
 
 \begin{proof}\leanok
-    On a finite-dimensional space every spectral value is an eigenvalue, and
-    each satisfies $|\mu|\leq1$ by Theorem~\ref{thm:eigenvalue_bound_rect}.
+    This is the MPS formulation of
+    Theorem~\ref{thm:kraus_mixed_tp_spectral_radius_bound}: the rectangular
+    mixed transfer is the mixed Kraus map, and the two tensor normalization
+    identities are its trace-preserving hypotheses.
 \end{proof}
 
 \section{Peripheral intertwiners and gauge rigidity}

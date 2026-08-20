@@ -26,6 +26,7 @@ properties in transfer-map notation.
 * `Kraus.isIrreducibleTensor_of_isIrreducibleMap_transferMap`: the converse implication.
 * `Kraus.isChannel_transferMap`: the MPS transfer map of a trace-preserving Kraus family is
   a channel.
+* `MPSTensor.trace_transferMap`: trace preservation in transfer-map notation.
 * `MPSTensor.transferMap_pow_apply'`: iterates of a transfer map are sums over Kraus words.
 * `trace_mul_transferMap_adjoint`: the generic Kraus trace-adjoint identity in MPS
   transfer-map notation.
@@ -82,6 +83,13 @@ end Kraus
 namespace MPSTensor
 
 variable {d : ℕ}
+
+/-- The standard transfer map preserves trace for a trace-preserving Kraus family. -/
+theorem trace_transferMap (A : MPSTensor d D) (Z : Matrix (Fin D) (Fin D) ℂ)
+    (hA : ∑ i : Fin d, (A i)ᴴ * A i = 1) :
+    Matrix.trace (transferMap (d := d) (D := D) A Z) = Matrix.trace Z := by
+  rw [← Kraus.mapLM_eq_transferMap]
+  exact Kraus.isTracePreservingMap_mapLM_of_isTP A hA Z
 
 /-- Iterating the transfer map gives the sum over word evaluations. -/
 theorem transferMap_pow_apply' (A : MPSTensor d D) (N : ℕ) :
