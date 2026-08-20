@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.Algebra.TraceReindex
 import TNLean.MPS.Defs
-import TNLean.Kraus.MultiBlockWord
+import TNLean.MPS.Core.MultiBlockWord
 
 import Mathlib.Algebra.BigOperators.Fin
 import Mathlib.Data.Matrix.Block
