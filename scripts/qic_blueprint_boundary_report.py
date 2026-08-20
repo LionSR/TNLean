@@ -40,8 +40,8 @@ PROOF_END_RE = re.compile(r"\\end\{proof\}")
 LABEL_RE = re.compile(r"\\label\{([^}]+)\}")
 LEAN_RE = re.compile(r"\\lean\{([^}]*)\}", re.DOTALL)
 USES_RE = re.compile(r"\\uses\{([^}]*)\}", re.DOTALL)
-REFERENCE_RE = re.compile(r"\\(?:ref|eqref)\{([^}]+)\}")
-INPUT_RE = re.compile(r"(?m)^[ \t]*\\input\{([^}]+)\}")
+REFERENCE_RE = re.compile(r"\\(?:ref|eqref)\{([^}]+)\}", re.DOTALL)
+INPUT_LINE_RE = re.compile(r"^[ \t]*\\input\{([^}]+)\}[ \t]*$")
 LEDGER_COLUMNS = ("item_id", "source", "environment", "disposition", "reason")
 DEFAULT_LEDGER = Path("scripts/qic_blueprint_label_dispositions.csv")
 BLUEPRINT_ROOT_SUPPORT = (
@@ -67,6 +67,31 @@ def _split_comma_payload(payload: str) -> list[str]:
     payload = re.sub(r"%[^\n]*$", "", payload)
     normalized = re.sub(r"\s+", " ", payload)
     return [item.strip() for item in normalized.split(",") if item.strip()]
+
+
+def _strip_tex_comments(text: str) -> str:
+    """Remove TeX comments while preserving escaped percent signs."""
+    cleaned: list[str] = []
+    for line in text.splitlines():
+        cut = len(line)
+        for index, character in enumerate(line):
+            if character != "%":
+                continue
+            backslashes = 0
+            cursor = index - 1
+            while cursor >= 0 and line[cursor] == "\\":
+                backslashes += 1
+                cursor -= 1
+            if backslashes % 2 == 0:
+                cut = index
+                break
+        cleaned.append(line[:cut])
+    return "\n".join(cleaned)
+
+
+def _reference_payload(payload: str) -> str:
+    """Normalize a possibly continued TeX label payload."""
+    return re.sub(r"\s+", "", _strip_tex_comments(payload))
 
 
 def blueprint_content_files(blueprint_src: Path) -> list[Path]:
@@ -97,6 +122,22 @@ class BlueprintEnvironment:
     def identifier(self) -> str:
         """Return the label or frozen source-line key that identifies this item."""
         return self.primary_label or f"@{self.file}:{self.line}"
+
+
+@dataclass(frozen=True)
+class NonItemBlock:
+    """One maximal paragraph-like block outside every theorem-like item span."""
+
+    file: str
+    line: int
+    end_line: int
+    labels: tuple[str, ...]
+    references: tuple[str, ...]
+    input_payload: str | None = None
+
+    @property
+    def identifier(self) -> str:
+        return f"@{self.file}:{self.line}-{self.end_line}"
 
 
 def blueprint_environments(blueprint_src: Path) -> list[BlueprintEnvironment]:
@@ -159,18 +200,27 @@ def blueprint_environments(blueprint_src: Path) -> list[BlueprintEnvironment]:
                     f"unterminated proof after {rel}:{statement_end_line}"
                 )
 
-            statement_body = "\n".join(
+            raw_statement_body = "\n".join(
                 source_lines[start_line - 1 : statement_end_line]
             )
-            body = "\n".join(source_lines[start_line - 1 : item_end_line])
+            raw_body = "\n".join(source_lines[start_line - 1 : item_end_line])
+            body = _strip_tex_comments(raw_body)
             labels = tuple(LABEL_RE.findall(body))
             declarations: list[str] = []
-            for payload in LEAN_RE.findall(statement_body):
+            for payload in LEAN_RE.findall(raw_statement_body):
                 declarations.extend(_split_comma_payload(payload))
             uses: list[str] = []
-            for payload in USES_RE.findall(body):
+            for payload in USES_RE.findall(raw_body):
                 uses.extend(_split_comma_payload(payload))
-            references = tuple(sorted(set(REFERENCE_RE.findall(body))))
+            references = tuple(
+                sorted(
+                    {
+                        normalized
+                        for payload in REFERENCE_RE.findall(body)
+                        if (normalized := _reference_payload(payload))
+                    }
+                )
+            )
             records.append(
                 BlueprintEnvironment(
                     environment=str(statement["environment"]),
@@ -184,6 +234,91 @@ def blueprint_environments(blueprint_src: Path) -> list[BlueprintEnvironment]:
                 )
             )
     return sorted(records, key=lambda item: (item.file, item.line, item.primary_label or ""))
+
+
+def blueprint_non_item_blocks(
+    blueprint_src: Path, environments: list[BlueprintEnvironment]
+) -> list[NonItemBlock]:
+    """Partition text outside item spans into paragraph-like blocks.
+
+    Blank lines and item boundaries split blocks. Router ``\\input`` commands
+    are single-line blocks so each simulated output can prune them without
+    pulling in every sibling chapter.
+    """
+    spans_by_file: dict[str, list[tuple[int, int]]] = {}
+    for item in environments:
+        spans_by_file.setdefault(item.file, []).append((item.line, item.end_line))
+
+    records: list[NonItemBlock] = []
+    for path in sorted(blueprint_src.rglob("*.tex")):
+        relative_root = path.relative_to(blueprint_src.parent).as_posix()
+        if Path("blueprint") / relative_root in BLUEPRINT_EXCLUDED_SUPPORT:
+            continue
+        source_lines = path.read_text(errors="replace").splitlines()
+        relative_parts = path.relative_to(blueprint_src).parts
+        is_content_file = "chapter" in relative_parts or "appendix" in relative_parts
+        covered: set[int] = set()
+        for start, end in spans_by_file.get(relative_root, []):
+            covered.update(range(start, end + 1))
+
+        current: list[tuple[int, str]] = []
+
+        def flush() -> None:
+            nonlocal current
+            if not current:
+                return
+            start_line = current[0][0]
+            end_line = current[-1][0]
+            body = _strip_tex_comments("\n".join(line for _, line in current))
+            labels = tuple(LABEL_RE.findall(body))
+            references = tuple(
+                sorted(
+                    {
+                        normalized
+                        for payload in REFERENCE_RE.findall(body)
+                        if (normalized := _reference_payload(payload))
+                    }
+                )
+            )
+            records.append(
+                NonItemBlock(
+                    file=relative_root,
+                    line=start_line,
+                    end_line=end_line,
+                    labels=labels,
+                    references=references,
+                )
+            )
+            current = []
+
+        for line_no, line in enumerate(source_lines, start=1):
+            if line_no in covered:
+                flush()
+                continue
+            cleaned_line = _strip_tex_comments(line)
+            input_match = INPUT_LINE_RE.fullmatch(cleaned_line)
+            if input_match is not None:
+                flush()
+                records.append(
+                    NonItemBlock(
+                        file=relative_root,
+                        line=line_no,
+                        end_line=line_no,
+                        labels=(),
+                        references=(),
+                        input_payload=input_match.group(1),
+                    )
+                )
+                continue
+            if not is_content_file:
+                flush()
+                continue
+            if not cleaned_line.strip():
+                flush()
+                continue
+            current.append((line_no, line))
+        flush()
+    return sorted(records, key=lambda item: (item.file, item.line, item.end_line))
 
 
 def environment_uses(blueprint_src: Path) -> list[dict[str, object]]:
@@ -244,10 +379,10 @@ def read_disposition_ledger(path: Path) -> dict[str, dict[str, str]]:
 
 
 def _validate_unique_labels(
-    environments: list[BlueprintEnvironment],
-) -> dict[str, BlueprintEnvironment]:
-    owners: dict[str, BlueprintEnvironment] = {}
-    for item in environments:
+    environments: list[BlueprintEnvironment], blocks: list[NonItemBlock]
+) -> dict[str, BlueprintEnvironment | NonItemBlock]:
+    owners: dict[str, BlueprintEnvironment | NonItemBlock] = {}
+    for item in [*environments, *blocks]:
         for label in item.labels:
             previous = owners.get(label)
             if previous is not None:
@@ -345,6 +480,264 @@ def _classify_environments(
     return items, disposition_by_label
 
 
+def _blueprint_support_files(root: Path) -> set[str]:
+    blueprint_src = root / "blueprint" / "src"
+    support = {
+        path.relative_to(root / "blueprint").as_posix()
+        for path in blueprint_src.rglob("*")
+        if path.is_file()
+        and "chapter" not in path.relative_to(blueprint_src).parts
+        and "appendix" not in path.relative_to(blueprint_src).parts
+        and path.relative_to(root) not in BLUEPRINT_EXCLUDED_SUPPORT
+    }
+    return support
+
+
+def _input_targets(
+    root: Path, blocks: list[NonItemBlock]
+) -> dict[str, str]:
+    blueprint_src = root / "blueprint" / "src"
+    targets: dict[str, str] = {}
+    for block in blocks:
+        if block.input_payload is None:
+            continue
+        source = root / "blueprint" / block.file
+        resolved = _resolve_input(source, block.input_payload, blueprint_src)
+        if resolved is None:
+            raise ValueError(
+                f"unresolved blueprint input {block.input_payload} at "
+                f"{block.file}:{block.line}"
+            )
+        targets[block.identifier] = resolved.relative_to(root / "blueprint").as_posix()
+    return targets
+
+
+def _add_input_ancestors(
+    selected: set[str], blocks: list[NonItemBlock], input_targets: dict[str, str]
+) -> None:
+    changed = True
+    while changed:
+        changed = False
+        for block in blocks:
+            target = input_targets.get(block.identifier)
+            if target is None or target not in selected or block.file in selected:
+                continue
+            selected.add(block.file)
+            changed = True
+
+
+def _simulate_blueprint_split(
+    root: Path,
+    environments: list[BlueprintEnvironment],
+    blocks: list[NonItemBlock],
+    items: list[dict[str, object]],
+) -> dict[str, object]:
+    """Simulate the item split and deterministic treatment of surrounding text.
+
+    Item spans stay only on their classified side. Outside those spans, complete
+    paragraph-like blocks are retained on every selected side where all of their
+    references resolve. Router input lines are retained exactly when their target
+    file is selected. Files defining non-item labels referenced directly by an
+    item are selected without closing downward over unrelated router inputs.
+    """
+    item_by_id = {str(item["label"]): item for item in items}
+    item_disposition: dict[str, str] = {}
+    for item in items:
+        for label in item["labels"]:
+            item_disposition[str(label)] = str(item["disposition"])
+    block_by_label: dict[str, NonItemBlock] = {
+        label: block for block in blocks for label in block.labels
+    }
+    all_known_labels = set(item_disposition) | set(block_by_label)
+    input_targets = _input_targets(root, blocks)
+    support = _blueprint_support_files(root)
+
+    selected: dict[str, set[str]] = {
+        side: {
+            str(item["file"])
+            for item in items
+            if item["disposition"] == side
+        }
+        | set(support)
+        for side in ("qic", "tn")
+    }
+    item_files = {str(item["file"]) for item in items}
+    files_with_inputs = {
+        block.file for block in blocks if block.input_payload is not None
+    }
+    shared_leaf_prose = {
+        input_targets[block.identifier]
+        for block in blocks
+        if block.file == "src/content.tex"
+        and block.input_payload is not None
+        and input_targets[block.identifier] not in item_files
+        and input_targets[block.identifier] not in files_with_inputs
+    }
+    for side in ("qic", "tn"):
+        selected[side].update(shared_leaf_prose)
+    errors: list[str] = []
+
+    for environment in environments:
+        source = item_by_id[environment.identifier]
+        side = str(source["disposition"])
+        for target in environment.references:
+            target_block = block_by_label.get(target)
+            if target_block is not None:
+                selected[side].add(target_block.file)
+            elif target not in all_known_labels:
+                errors.append(
+                    f"{side} item {environment.identifier} has unknown reference {target}"
+                )
+        for target in environment.uses:
+            if target not in all_known_labels:
+                errors.append(
+                    f"{side} item {environment.identifier} has unknown dependency {target}"
+                )
+    for block in blocks:
+        for target in block.references:
+            if target not in all_known_labels:
+                errors.append(
+                    f"prose {block.identifier} has unknown reference {target}"
+                )
+
+    for side in ("qic", "tn"):
+        _add_input_ancestors(selected[side], blocks, input_targets)
+
+    retained: dict[str, set[str]] = {
+        side: {
+            block.identifier
+            for block in blocks
+            if block.file in selected[side]
+            and (
+                block.input_payload is None
+                or input_targets[block.identifier] in selected[side]
+            )
+        }
+        for side in ("qic", "tn")
+    }
+
+    base_interface = {
+        target
+        for environment in environments
+        if item_by_id[environment.identifier]["disposition"] == "tn"
+        for target in [*environment.uses, *environment.references]
+        if item_disposition.get(target) == "qic"
+    }
+    interface_labels = set(base_interface)
+
+    changed = True
+    while changed:
+        changed = False
+        interface_labels = set(base_interface)
+        for block in blocks:
+            if block.identifier not in retained["tn"]:
+                continue
+            interface_labels.update(
+                target
+                for target in block.references
+                if item_disposition.get(target) == "qic"
+            )
+
+        available = {
+            "qic": {
+                label for label, disposition in item_disposition.items() if disposition == "qic"
+            },
+            "tn": {
+                label for label, disposition in item_disposition.items() if disposition == "tn"
+            }
+            | interface_labels,
+        }
+        for side in ("qic", "tn"):
+            for block in blocks:
+                if block.identifier in retained[side]:
+                    available[side].update(block.labels)
+
+        for side in ("qic", "tn"):
+            for block in blocks:
+                if block.identifier not in retained[side] or block.input_payload is not None:
+                    continue
+                if any(target not in available[side] for target in block.references):
+                    retained[side].remove(block.identifier)
+                    changed = True
+
+    interface_labels = set(base_interface)
+    for block in blocks:
+        if block.identifier in retained["tn"]:
+            interface_labels.update(
+                target
+                for target in block.references
+                if item_disposition.get(target) == "qic"
+            )
+
+    available = {
+        "qic": {
+            label for label, disposition in item_disposition.items() if disposition == "qic"
+        },
+        "tn": {
+            label for label, disposition in item_disposition.items() if disposition == "tn"
+        }
+        | interface_labels,
+    }
+    for side in ("qic", "tn"):
+        for block in blocks:
+            if block.identifier in retained[side]:
+                available[side].update(block.labels)
+
+    for environment in environments:
+        source = item_by_id[environment.identifier]
+        side = str(source["disposition"])
+        for target in [*environment.uses, *environment.references]:
+            if target not in available[side]:
+                errors.append(
+                    f"{side} item {environment.identifier} cannot resolve {target}"
+                )
+
+    for side in ("qic", "tn"):
+        for block in blocks:
+            if block.identifier not in retained[side]:
+                continue
+            if block.input_payload is not None:
+                target = input_targets[block.identifier]
+                if target not in selected[side]:
+                    errors.append(
+                        f"{side} input {block.file}:{block.line} targets omitted {target}"
+                    )
+                continue
+            for target in block.references:
+                if target not in available[side]:
+                    errors.append(
+                        f"{side} prose {block.identifier} cannot resolve {target}"
+                    )
+
+    block_states = Counter()
+    block_state_by_id: dict[str, str] = {}
+    for block in blocks:
+        qic = block.identifier in retained["qic"]
+        tn = block.identifier in retained["tn"]
+        state = "shared" if qic and tn else "qic" if qic else "tn" if tn else "dropped"
+        block_states[state] += 1
+        block_state_by_id[block.identifier] = state
+
+    label_availability: dict[str, str] = dict(item_disposition)
+    for label, block in block_by_label.items():
+        qic = block.identifier in retained["qic"]
+        tn = block.identifier in retained["tn"]
+        label_availability[label] = (
+            "shared" if qic and tn else "qic" if qic else "tn" if tn else "unavailable"
+        )
+
+    return {
+        "errors": sorted(set(errors)),
+        "selected_files": {side: sorted(selected[side]) for side in ("qic", "tn")},
+        "retained_blocks": {side: sorted(retained[side]) for side in ("qic", "tn")},
+        "block_state_counts": dict(sorted(block_states.items())),
+        "block_state_by_id": block_state_by_id,
+        "tn_interface_labels": sorted(interface_labels),
+        "label_availability": label_availability,
+        "input_targets": input_targets,
+    }
+
+
 def _dependency_edges(
     environments: list[BlueprintEnvironment],
     disposition_by_label: dict[str, str],
@@ -355,10 +748,8 @@ def _dependency_edges(
         source_label = record.identifier
         source_disposition = disposition_by_label.get(source_label, "unclassified")
         for target_label in getattr(record, attribute):
-            if attribute == "references" and target_label not in disposition_by_label:
-                continue
             target_disposition = disposition_by_label.get(target_label, "unclassified")
-            if source_disposition == target_disposition:
+            if source_disposition == target_disposition or target_disposition == "shared":
                 direction = "internal"
             elif source_disposition == "qic" and target_disposition == "tn":
                 direction = "qic_to_tn"
@@ -397,6 +788,49 @@ def _reference_edges(
     return _dependency_edges(environments, disposition_by_label, "references")
 
 
+def _non_item_reference_edges(
+    blocks: list[NonItemBlock], simulation: dict[str, object]
+) -> list[dict[str, object]]:
+    availability = simulation["label_availability"]
+    retained = simulation["retained_blocks"]
+    edges: list[dict[str, object]] = []
+    for side in ("qic", "tn"):
+        for block in blocks:
+            if block.identifier not in retained[side]:
+                continue
+            for target in block.references:
+                target_disposition = availability.get(target, "unclassified")
+                if target_disposition in {side, "shared"}:
+                    direction = "internal"
+                elif side == "qic" and target_disposition == "tn":
+                    direction = "qic_to_tn"
+                elif side == "tn" and target_disposition == "qic":
+                    direction = "tn_to_qic"
+                else:
+                    direction = "unclassified"
+                edges.append(
+                    {
+                        "source": block.identifier,
+                        "target": target,
+                        "source_disposition": side,
+                        "target_disposition": target_disposition,
+                        "direction": direction,
+                        "file": block.file,
+                        "line": block.line,
+                    }
+                )
+    return sorted(
+        edges,
+        key=lambda item: (
+            item["source"],
+            item["target"],
+            item["source_disposition"],
+            item["file"],
+            item["line"],
+        ),
+    )
+
+
 def _resolve_input(source: Path, payload: str, blueprint_src: Path) -> Path | None:
     candidate = payload if payload.endswith(".tex") else f"{payload}.tex"
     path = blueprint_src / candidate
@@ -406,44 +840,10 @@ def _resolve_input(source: Path, payload: str, blueprint_src: Path) -> Path | No
     return local if local.is_file() else None
 
 
-def blueprint_file_manifest(root: Path, items: list[dict[str, object]]) -> list[str]:
-    """Return the history-filter blueprint paths needed by the QIC document."""
-    blueprint_src = root / "blueprint" / "src"
-    selected = {
-        root / str(item["file"]).replace("src/", "blueprint/src/", 1)
-        for item in items
-        if item["disposition"] == "qic"
-    }
-
-    tex_files = sorted(blueprint_src.rglob("*.tex"))
-    changed = True
-    while changed:
-        changed = False
-        for source in tex_files:
-            if (
-                source in selected
-                or source.relative_to(root) in BLUEPRINT_EXCLUDED_SUPPORT
-            ):
-                continue
-            targets = {
-                resolved
-                for payload in INPUT_RE.findall(source.read_text(errors="replace"))
-                if (resolved := _resolve_input(source, payload, blueprint_src)) is not None
-            }
-            if targets & selected:
-                selected.add(source)
-                changed = True
-
-    support = {
-        path
-        for path in blueprint_src.rglob("*")
-        if path.is_file()
-        and "chapter" not in path.relative_to(blueprint_src).parts
-        and "appendix" not in path.relative_to(blueprint_src).parts
-        and path.relative_to(root) not in BLUEPRINT_EXCLUDED_SUPPORT
-    }
-    support.update(root / path for path in BLUEPRINT_ROOT_SUPPORT if (root / path).is_file())
-    selected.update(support)
+def blueprint_file_manifest(root: Path, selected_files: list[str]) -> list[str]:
+    """Return history-filter paths for the simulated QIC blueprint output."""
+    selected = {root / "blueprint" / path for path in selected_files}
+    selected.update(root / path for path in BLUEPRINT_ROOT_SUPPORT if (root / path).is_file())
     return sorted(path.relative_to(root).as_posix() for path in selected)
 
 
@@ -466,16 +866,23 @@ def boundary_report(root: Path, ledger_path: Path | None = None) -> dict[str, ob
         raise ValueError("; ".join(manifest_errors))
     movers = mover_files(root, entries)
     environments = blueprint_environments(root / "blueprint" / "src")
-    _validate_unique_labels(environments)
+    non_item_blocks = blueprint_non_item_blocks(root / "blueprint" / "src", environments)
+    _validate_unique_labels(environments, non_item_blocks)
     ledger_file = ledger_path or root / DEFAULT_LEDGER
     ledger = read_disposition_ledger(ledger_file)
     items, disposition_by_label = _classify_environments(root, environments, ledger)
+    simulation = _simulate_blueprint_split(root, environments, non_item_blocks, items)
+    disposition_by_label.update(simulation["label_availability"])
     edges = _uses_edges(environments, disposition_by_label)
     reference_edges = _reference_edges(environments, disposition_by_label)
+    non_item_reference_edges = _non_item_reference_edges(non_item_blocks, simulation)
 
     item_counts = Counter(str(item["disposition"]) for item in items)
     edge_counts = Counter(str(edge["direction"]) for edge in edges)
     reference_edge_counts = Counter(str(edge["direction"]) for edge in reference_edges)
+    non_item_reference_edge_counts = Counter(
+        str(edge["direction"]) for edge in non_item_reference_edges
+    )
     dispositions_by_file: dict[str, set[str]] = {}
     for item in items:
         dispositions_by_file.setdefault(str(item["file"]), set()).add(
@@ -486,38 +893,67 @@ def boundary_report(root: Path, ledger_path: Path | None = None) -> dict[str, ob
         for file, dispositions in dispositions_by_file.items()
         if {"qic", "tn"} <= dispositions
     )
-    interface_labels = tn_interface_labels(edges, reference_edges)
-    blueprint_files = blueprint_file_manifest(root, items)
+    interface_labels = list(simulation["tn_interface_labels"])
+    blueprint_files = blueprint_file_manifest(
+        root, list(simulation["selected_files"]["qic"])
+    )
     try:
         ledger_display = ledger_file.relative_to(root).as_posix()
     except ValueError:
         ledger_display = ledger_file.as_posix()
     return {
-        "schema_version": 3,
+        "schema_version": 4,
         "source_sha": source_sha(root),
         "disposition_ledger": ledger_display,
         "mover_path_count": len(movers),
         "environment_count": len(environments),
         "labelled_environment_count": sum(bool(item.labels) for item in environments),
         "unlabelled_environment_count": sum(not item.labels for item in environments),
+        "non_item_block_count": len(non_item_blocks),
+        "non_item_label_count": sum(len(block.labels) for block in non_item_blocks),
+        "non_item_reference_count": sum(len(block.references) for block in non_item_blocks),
+        "non_item_block_state_counts": simulation["block_state_counts"],
+        "non_item_blocks": [
+            {
+                "file": block.file,
+                "line": block.line,
+                "end_line": block.end_line,
+                "labels": list(block.labels),
+                "references": list(block.references),
+                "input_target": simulation["input_targets"].get(block.identifier),
+                "disposition": simulation["block_state_by_id"][block.identifier],
+            }
+            for block in non_item_blocks
+        ],
+        "simulated_output_errors": simulation["errors"],
         "manual_disposition_count": len(ledger),
         "item_counts": dict(sorted(item_counts.items())),
         "edge_counts": dict(sorted(edge_counts.items())),
         "reference_edge_counts": dict(sorted(reference_edge_counts.items())),
+        "non_item_reference_edge_counts": dict(
+            sorted(non_item_reference_edge_counts.items())
+        ),
         "mixed_physical_file_count": len(mixed_files),
         "mixed_physical_files": mixed_files,
+        "simulated_qic_source_file_count": len(simulation["selected_files"]["qic"]),
+        "simulated_qic_source_files": simulation["selected_files"]["qic"],
+        "simulated_tn_source_file_count": len(simulation["selected_files"]["tn"]),
+        "simulated_tn_source_files": simulation["selected_files"]["tn"],
         "blueprint_file_count": len(blueprint_files),
         "tn_interface_label_count": len(interface_labels),
         "items": items,
         "uses_edges": edges,
         "reference_edges": reference_edges,
+        "non_item_reference_edges": non_item_reference_edges,
         "qic_to_tn_uses_edges": [edge for edge in edges if edge["direction"] == "qic_to_tn"],
         "qic_to_tn_reference_edges": [
-            edge for edge in reference_edges if edge["direction"] == "qic_to_tn"
+            edge
+            for edge in [*reference_edges, *non_item_reference_edges]
+            if edge["direction"] == "qic_to_tn"
         ],
         "tn_to_qic_interface_edges": [
             edge
-            for edge in [*edges, *reference_edges]
+            for edge in [*edges, *reference_edges, *non_item_reference_edges]
             if edge["direction"] == "tn_to_qic"
         ],
         "blueprint_files": blueprint_files,
@@ -556,11 +992,15 @@ def main() -> int:
                 raise ValueError(f"{disposition} blueprint items remain")
         if report["qic_to_tn_uses_edges"] or report["qic_to_tn_reference_edges"]:
             raise ValueError("QIC-to-TN blueprint dependencies remain")
-        if report["edge_counts"].get("unclassified", 0) or report[
-            "reference_edge_counts"
-        ].get("unclassified", 0):
+        if (
+            report["edge_counts"].get("unclassified", 0)
+            or report["reference_edge_counts"].get("unclassified", 0)
+            or report["non_item_reference_edge_counts"].get("unclassified", 0)
+        ):
             raise ValueError("unclassified blueprint dependencies remain")
-    except (OSError, subprocess.CalledProcessError, ValueError) as error:
+        if report["simulated_output_errors"]:
+            raise ValueError("; ".join(report["simulated_output_errors"]))
+    except (csv.Error, OSError, subprocess.CalledProcessError, ValueError) as error:
         print(f"::error title=QIC blueprint boundary report failed::{error}")
         return 1
     if args.mode == "json":

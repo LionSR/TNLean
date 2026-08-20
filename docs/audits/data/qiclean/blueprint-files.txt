@@ -19,6 +19,7 @@ blueprint/src/appendix/full_only/ch25_schmidt_number_and_witnesses.tex
 blueprint/src/appendix/full_only/ch27_channel_asymptotics.tex
 blueprint/src/appendix/full_only_appendices.tex
 blueprint/src/blueprint.sty
+blueprint/src/chapter/ch01_intro.tex
 blueprint/src/chapter/ch02_mps.tex
 blueprint/src/chapter/ch03_single.tex
 blueprint/src/chapter/ch04_channels.tex
@@ -39,6 +40,7 @@ blueprint/src/chapter/ch06_qpf_cesaro_fixed_points.tex
 blueprint/src/chapter/ch06_qpf_weighted_cesaro.tex
 blueprint/src/chapter/ch07_spectral.tex
 blueprint/src/chapter/ch07_spectral_ft_peripheral_cyclic.tex
+blueprint/src/chapter/ch07_spectral_introduction.tex
 blueprint/src/chapter/ch07_spectral_mixed_transfer_and_overlap.tex
 blueprint/src/chapter/ch07_spectral_peripheral_refinements_and_primitive_overlap.tex
 blueprint/src/chapter/ch08_wielandt.tex
@@ -46,6 +48,7 @@ blueprint/src/chapter/ch08_wielandt_cumulative_bound.tex
 blueprint/src/chapter/ch08_wielandt_word_span_and_block_injectivity.tex
 blueprint/src/chapter/ch09_canonical.tex
 blueprint/src/chapter/ch09_canonical_forms_and_projectors_auxiliary.tex
+blueprint/src/chapter/ch10_bnt.tex
 blueprint/src/chapter/ch12_auxiliary_channel_no_information_without_disturbance.tex
 blueprint/src/chapter/ch12_auxiliary_channel_theory.tex
 blueprint/src/chapter/ch12_auxiliary_wolf_ch01.tex

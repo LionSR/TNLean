@@ -336,11 +336,139 @@ Body.
             ],
         )
         self.assertEqual(first["tn_interface_labels"], ["thm:qic"])
+        selected_tex = [
+            path.removeprefix("blueprint/")
+            for path in first["blueprint_files"]
+            if path.startswith("blueprint/src/")
+        ]
         self.assertEqual(
-            blueprint_file_manifest(self.root, first["items"]), first["blueprint_files"]
+            blueprint_file_manifest(self.root, selected_tex), first["blueprint_files"]
         )
         self.assertEqual(
             tn_interface_labels(first["uses_edges"]), first["tn_interface_labels"]
+        )
+
+    @patch("qic_blueprint_boundary_report.source_sha", return_value="a" * 40)
+    def test_referenced_non_item_label_selects_file_without_router_downward_closure(
+        self, _source_sha
+    ) -> None:
+        self.write_blueprint(
+            r"""\begin{theorem}\label{thm:qic}
+\lean{Kraus.moved}
+See Chapter~\ref{ch:aux}.
+\end{theorem}
+"""
+        )
+        self.write_blueprint(
+            r"""\chapter{Auxiliary}\label{ch:aux}
+
+\input{chapter/tn_only}
+""",
+            "router.tex",
+        )
+        self.write_blueprint(
+            r"""\begin{theorem}\label{thm:tn}
+\lean{MPSTensor.staying}
+\end{theorem}
+""",
+            "tn_only.tex",
+        )
+        (self.root / "blueprint" / "src" / "content.tex").write_text(
+            "\\input{chapter/ch01}\n\\input{chapter/router}\n"
+        )
+        report = boundary_report(self.root)
+        self.assertEqual(report["simulated_output_errors"], [])
+        self.assertIn("blueprint/src/chapter/router.tex", report["blueprint_files"])
+        self.assertNotIn("blueprint/src/chapter/tn_only.tex", report["blueprint_files"])
+        self.assertEqual(report["qic_to_tn_reference_edges"], [])
+
+    @patch("qic_blueprint_boundary_report.source_sha", return_value="a" * 40)
+    def test_tn_non_item_prose_extends_interface_and_unknown_item_ref_is_reported(
+        self, _source_sha
+    ) -> None:
+        self.write_blueprint(
+            r"""\begin{theorem}\label{thm:qic}
+\lean{Kraus.moved}
+\end{theorem}
+
+The staying discussion uses Theorem~\ref{thm:qic}.
+
+\begin{theorem}\label{thm:tn}
+\lean{MPSTensor.staying}
+See Theorem~\ref{missing:label}.
+\end{theorem}
+"""
+        )
+        report = boundary_report(self.root)
+        self.assertIn("thm:qic", report["tn_interface_labels"])
+        self.assertTrue(
+            any("unknown reference missing:label" in error for error in report["simulated_output_errors"])
+        )
+        self.assertEqual(report["reference_edge_counts"].get("unclassified"), 1)
+
+    @patch("qic_blueprint_boundary_report.source_sha", return_value="a" * 40)
+    def test_unknown_non_item_reference_is_reported(self, _source_sha) -> None:
+        self.write_blueprint(
+            r"""\begin{theorem}\label{thm:qic}
+\lean{Kraus.moved}
+\end{theorem}
+
+This paragraph cites Theorem~\ref{missing:label}.
+"""
+        )
+        report = boundary_report(self.root)
+        self.assertTrue(
+            any(
+                "prose @src/chapter/ch01.tex:5-5 has unknown reference missing:label"
+                in error
+                for error in report["simulated_output_errors"]
+            )
+        )
+
+    @patch("qic_blueprint_boundary_report.source_sha", return_value="a" * 40)
+    def test_top_level_leaf_prose_is_shared_and_recorded(self, _source_sha) -> None:
+        self.write_blueprint(
+            r"""\begin{theorem}\label{thm:qic}
+\lean{Kraus.moved}
+\end{theorem}
+"""
+        )
+        self.write_blueprint("Shared introduction.\n", "intro.tex")
+        (self.root / "blueprint" / "src" / "content.tex").write_text(
+            "\\input{chapter/intro}\n\\input{chapter/ch01}\n"
+        )
+        report = boundary_report(self.root)
+        intro = next(
+            block
+            for block in report["non_item_blocks"]
+            if block["file"] == "src/chapter/intro.tex"
+        )
+        self.assertEqual(intro["disposition"], "shared")
+        self.assertIn(
+            "src/chapter/intro.tex", report["simulated_qic_source_files"]
+        )
+        self.assertIn(
+            "src/chapter/intro.tex", report["simulated_tn_source_files"]
+        )
+
+    @patch("qic_blueprint_boundary_report.source_sha", return_value="a" * 40)
+    def test_percent_continued_reference_payload_is_normalized(self, _source_sha) -> None:
+        self.write_blueprint(
+            r"""\begin{theorem}\label{thm:qic}
+\lean{Kraus.moved}
+See Theorem~\ref{thm:%
+  target}.
+\end{theorem}
+\begin{theorem}\label{thm:target}
+\lean{Kraus.moved}
+\end{theorem}
+"""
+        )
+        report = boundary_report(self.root)
+        self.assertEqual(report["simulated_output_errors"], [])
+        self.assertEqual(
+            [(edge["source"], edge["target"]) for edge in report["reference_edges"]],
+            [("thm:qic", "thm:target")],
         )
 
     @patch("qic_blueprint_boundary_report.source_sha", return_value="a" * 40)
