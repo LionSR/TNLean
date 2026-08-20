@@ -538,7 +538,15 @@ length-two and length-four closure identities.
 
 This is a project-derived conditional form of the channel assembly in
 arXiv:1606.00608, Appendix C.2, lines 1646--1665 and 1810--1825. It is not the
-printed implication (iv) to (v) of Theorem 4.9. -/
+printed implication (iv) to (v) of Theorem 4.9.
+
+**Scope restriction (conditional channel composition):** In addition to the
+source hypotheses, this theorem assumes that the outer support projections
+resolve the physical identity (`hPsum`) and that every absorbed representative
+already has a blocked renormalization channel pair (`hRFP`). These two
+obligations and their elimination plans are recorded in
+`docs/paper-gaps/cpgsv17_pf_rank_one.tex`: prove projector completeness from
+the source hypotheses and construct the representative channel pairs. -/
 theorem blockTwo_isRFPViaTS_of_commonWeightAbsorbedBNTChannels
     (S : MPSTensor.SectorDecomposition (d * d))
     (hWeight : ∀ (j : Fin S.basisCount) (q q' : Fin (S.copies j)),
