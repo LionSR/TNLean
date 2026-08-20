@@ -274,6 +274,19 @@ matrices, and let $\E_K$ be its Kraus map.
     $E(X)=\mu X$ gives the result.
 \end{proof}
 
+\begin{lemma}[Powers of a transfer-map eigenmatrix]
+    \label{lem:transfer-map-eigenmatrix-power}
+    \lean{MPSTensor.transferMap_pow_smul_eigenvector}
+    \leanok
+    \uses{def:transfer_map}
+    If $\E_A(X)=\mu X$, then $\E_A^n(X)=\mu^nX$ for every $n\geq0$.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{lem:pow-on-eigenspace}
+    This is Lemma~\ref{lem:pow-on-eigenspace} for the eigenspace of $\mu$.
+\end{proof}
+
 \begin{lemma}[Finite-order eigenmatrix is power-fixed]
     \label{lem:root-eigenvector-power-fixed}
     \lean{Kraus.pow_eigenvector_of_root}
