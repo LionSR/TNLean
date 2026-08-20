@@ -3,8 +3,9 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.MPS.Structure.PrimitivityBridge
-import TNLean.Spectral.MixedTransfer
+import TNLean.Kraus.MapIterate
+import TNLean.MPS.Core.TransferChannel
+import TNLean.MPS.Structure.PrimitiveFixedPoint
 
 /-!
 # Primitivity consequences for MPS transfer maps
@@ -56,13 +57,14 @@ theorem transferMap_pow_fixed {A : MPSTensor d D}
     rw [pow_succ, Module.End.mul_apply, hfix, ih]
 
 /-- The iterated transfer map expands as a sum over word products.
-Re-states `transferMap_pow_apply'` in a form convenient for our arguments. -/
+Re-states `Kraus.mapLM_pow_apply` in transfer-map notation. -/
 theorem transferMap_pow_apply_eq_sum (A : MPSTensor d D) (n : ℕ)
     (X : Matrix (Fin D) (Fin D) ℂ) :
     ((transferMap (d := d) (D := D) A) ^ n) X =
       ∑ σ : Fin n → Fin d,
-        evalWord A (List.ofFn σ) * X * (evalWord A (List.ofFn σ))ᴴ :=
-  transferMap_pow_apply' A n X
+        evalWord A (List.ofFn σ) * X * (evalWord A (List.ofFn σ))ᴴ := by
+  rw [← Kraus.mapLM_eq_transferMap]
+  exact Kraus.mapLM_pow_apply A n X
 
 /-! ## Part 2: Nonzero word products from primitivity -/
 
