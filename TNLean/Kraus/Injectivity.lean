@@ -9,27 +9,22 @@ import TNLean.Channel.Schwarz.Basic
 /-!
 # Injectivity and normality of finite Kraus families
 
-This file carries the word-evaluation layer of the channel side: algebraic
-injectivity, block injectivity, and normality of a finite Kraus family, and
-their elementary consequences. It is part of the extraction of a
-Kraus-family-only library out of `TNLean`'s matrix-product-state development.
-
-The exact word-span API is stated in `namespace Kraus`. The established
-injectivity and normality declarations remain in `namespace MPSTensor` until
-the MPS declarations using these predicates are changed simultaneously.
+For a finite matrix family $K = (K_i)_i$, this file defines algebraic
+injectivity, block injectivity, and normality, together with their elementary
+consequences. All declarations are stated in `namespace Kraus`.
 
 ## Main declarations
 
-* `Kraus.wordSpan` — the span of all Kraus words of a fixed length
-* `Kraus.HasEventuallyFullWordSpan` — all sufficiently long word spans are full
-* `IsInjective` — the matrices of a Kraus family span the full matrix algebra
-* `IsNBlkInjective` — injectivity after blocking `N` letters into words
-* `IsNormal` — eventual block injectivity at some positive blocking length
+* `Kraus.wordSpan`: the span of all Kraus words of a fixed length
+* `Kraus.HasEventuallyFullWordSpan`: all sufficiently long word spans are full
+* `Kraus.IsInjective`: the matrices of a Kraus family span the full matrix algebra
+* `Kraus.IsNBlkInjective`: injectivity after blocking `N` letters into words
+* `Kraus.IsNormal`: eventual block injectivity at some positive blocking length
 -/
 
 open scoped Matrix BigOperators
 
-namespace MPSTensor
+namespace Kraus
 
 variable {d D : ℕ}
 
@@ -66,7 +61,7 @@ theorem IsInjective.smul
         simp [hc]
     _ = ⊤ := hA
 
-/-- An injective MPS tensor on `D ≥ 1` bond dimension implies `d ≥ 1`. -/
+/-- An injective finite Kraus family on a bond space of dimension `D ≥ 1` has `d ≥ 1`. -/
 theorem neZero_d_of_isInjective {A : Fin d → Matrix (Fin D) (Fin D) ℂ} [NeZero D]
     (hA : IsInjective A) : NeZero d := by
   by_contra h
@@ -127,12 +122,6 @@ This is the trivial direction: injectivity is `IsNBlkInjective 1`. -/
 lemma IsInjective.isNormal {A : Fin d → Matrix (Fin D) (Fin D) ℂ} (h : IsInjective A) :
     IsNormal A :=
   ⟨1, Nat.zero_lt_one, isNBlkInjective_one_of_isInjective h⟩
-
-end MPSTensor
-
-namespace Kraus
-
-variable {d D : ℕ}
 
 /-! ### Trace-preserving propagation -/
 

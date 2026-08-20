@@ -189,7 +189,7 @@ noncomputable def blockTensor (A : Fin d → Matrix (Fin D) (Fin D) ℂ) (L : �
 /-- Equivalence between `N`-block injectivity and injectivity of the blocked
 tensor `blockTensor A N`. -/
 lemma isNBlkInjective_iff_blockTensor_isInjective (A : Fin d → Matrix (Fin D) (Fin D) ℂ) (N : ℕ) :
-    IsNBlkInjective A N ↔ IsInjective (blockTensor A N) := by
+    Kraus.IsNBlkInjective A N ↔ Kraus.IsInjective (blockTensor A N) := by
   classical
   have hRange :
       Set.range (fun i : Fin (blockPhysDim d N) =>
@@ -202,7 +202,7 @@ lemma isNBlkInjective_iff_blockTensor_isInjective (A : Fin d → Matrix (Fin D) 
     · rintro ⟨σ, rfl⟩
       exact ⟨Fin.cast (blockPhysDim_eq_pow d N).symm (finFunctionFinEquiv σ), by
         simp [decodeBlock, Fin.cast_cast]⟩
-  unfold IsNBlkInjective IsInjective blockTensor
+  unfold Kraus.IsNBlkInjective Kraus.IsInjective blockTensor
   have hSpan :
       Submodule.span ℂ
           (Set.range fun i : Fin (blockPhysDim d N) =>

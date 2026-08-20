@@ -611,7 +611,7 @@ abstracted — record why, so it is not re-proposed).
   `IsNBlkInjective` hypothesis after the predicate was single-sourced through
   `Kraus.wordSpan`.
 - **Reuse:** `MPSTensor.IsNBlkInjective.span_eq_top` in
-  `TNLean/Kraus/Injectivity.lean` supplies the literal span equality.
+  `TNLean/MPS/Core/Injectivity.lean` supplies the literal span equality.
 - **Call sites:** the odd- and even-length Majumdar-Ghosh obstructions and the
   diagonal-restriction non-normality counterexample.
 

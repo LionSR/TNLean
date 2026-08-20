@@ -34,8 +34,8 @@ lemma blockedChain_isInjective (A : MPSTensor d D) (L n : ℕ)
     (hA : MPSTensor.IsNBlkInjective A L) :
     IsInjective (blockedChain A L n) := by
   intro k
-  simpa [blockedChain] using
-    (MPSTensor.isNBlkInjective_iff_blockTensor_isInjective A L).1 hA
+  simp only [blockedChain]
+  exact (MPSTensor.isNBlkInjective_iff_blockTensor_isInjective A L).1 hA
 
 /-- **Fundamental Theorem for blocked chains**.
 
