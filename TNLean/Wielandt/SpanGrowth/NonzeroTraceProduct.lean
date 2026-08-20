@@ -7,10 +7,15 @@ import TNLean.Kraus.Wielandt.SpanGrowth.NonzeroTraceProduct
 import TNLean.Wielandt.SpanGrowth.CumulativeSpan
 
 /-!
-# Compatibility wrappers for bounded nonzero-trace words
+# Nonzero Trace Words at Bounded Length (Lemma 1)
 
-The finite-family results are defined in namespace `Kraus`. This module preserves
-established tensor-network theorem names and statement shapes.
+This file gives tensor consequences of **Lemma 1** of arXiv:0909.5347
+(Sanz, Pérez-García, Wolf, Cirac). If `A` is normal, then some nonempty word product of
+length at most `D² − dim(S₁(A)) + 1` has nonzero trace. For a minimal Kraus family,
+`dim(S₁(A)) = d`, which recovers the paper's bound. The full span-growth argument is
+proved for finite matrix families in
+`TNLean.Kraus.Wielandt.SpanGrowth.NonzeroTraceProduct`; the results below state its
+coarse and sharp consequences for normal matrix product tensors.
 -/
 
 open scoped Matrix
@@ -19,21 +24,25 @@ namespace MPSTensor
 
 variable {d D : ℕ}
 
-/-- Compatibility wrapper for the coarse cumulative-span bound. -/
+/-- If `A` is normal, its cumulative word span equals the full matrix algebra by step `D²`.
+
+Paper: arXiv:0909.5347, Lemma 1, proof paragraphs 1–3. -/
 theorem cumulativeSpan_eq_top_of_isNormal_bound [NeZero D]
     (A : MPSTensor d D) (hN : IsNormal A) :
     cumulativeSpan A (D ^ 2) = ⊤ := by
   obtain ⟨N, _, hN⟩ := hN
   exact Kraus.cumulativeSpan_eq_top_of_wordSpan_eq_top_bound A hN
 
-/-- Compatibility wrapper for the coarse cumulative-span form of Lemma 1. -/
+/-- **Lemma 1, coarse span form** (arXiv:0909.5347): if `A` is normal, its cumulative
+word span equals the full matrix algebra by step `D²`. -/
 theorem cumulativeSpan_eq_top [NeZero D]
     (A : MPSTensor d D) (hN : IsNormal A) :
     cumulativeSpan A (D ^ 2) = ⊤ := by
   obtain ⟨N, _, hN⟩ := hN
   exact Kraus.cumulativeSpan_eq_top A hN
 
-/-- Compatibility wrapper for the coarse nonzero-trace word bound. -/
+/-- A coarse corollary permitting the empty word: if `A` is normal, some word `w` of
+length at most `D²` satisfies `Matrix.trace (evalWord A w) ≠ 0`. -/
 theorem exists_nonzero_trace_word [NeZero D]
     (A : MPSTensor d D) (hN : IsNormal A) :
     ∃ w : List (Fin d),
@@ -41,20 +50,23 @@ theorem exists_nonzero_trace_word [NeZero D]
   obtain ⟨N, _, hN⟩ := hN
   exact Kraus.exists_nonzero_trace_word A hN
 
-/-- Compatibility wrapper for the one-step cumulative-span dimension bound. -/
+/-- The dimension of the cumulative span at step one is at least that of the exact
+one-step word span, as used in the sharp form of arXiv:0909.5347, Lemma 1. -/
 theorem finrank_cumulativeSpan_one_ge_wordSpan_one (A : MPSTensor d D) :
     Module.finrank ℂ (cumulativeSpan A 1) ≥
       Module.finrank ℂ (wordSpan A 1) :=
   Kraus.finrank_cumulativeSpan_one_ge_wordSpan_one A
 
-/-- Compatibility wrapper for the sharp cumulative-span bound. -/
+/-- **Lemma 1, sharp span form** (arXiv:0909.5347): if `A` is normal, its cumulative
+word span is full by step `D² − dim(S₁(A)) + 1`. -/
 theorem cumulativeSpan_eq_top_of_isNormal_sharp [NeZero D]
     (A : MPSTensor d D) (hN : IsNormal A) :
     cumulativeSpan A (D ^ 2 - Module.finrank ℂ (wordSpan A 1) + 1) = ⊤ := by
   obtain ⟨N, _, hN⟩ := hN
   exact Kraus.cumulativeSpan_eq_top_of_wordSpan_eq_top_sharp A hN
 
-/-- Compatibility wrapper for the sharp nonzero-trace word bound. -/
+/-- A sharp corollary permitting the empty word: if `A` is normal, some word `w` of
+length at most `D² − dim(S₁(A)) + 1` has nonzero trace. -/
 theorem exists_nonzero_trace_word_sharp [NeZero D]
     (A : MPSTensor d D) (hN : IsNormal A) :
     ∃ w : List (Fin d),
@@ -63,7 +75,8 @@ theorem exists_nonzero_trace_word_sharp [NeZero D]
   obtain ⟨N, _, hN⟩ := hN
   exact Kraus.exists_nonzero_trace_word_sharp A hN
 
-/-- Compatibility wrapper for the positive-length sharp nonzero-trace word bound. -/
+/-- **Lemma 1, sharp positive-length form** (arXiv:0909.5347): if `A` is normal, some
+nonempty word `w` of length at most `D² − dim(S₁(A)) + 1` has nonzero trace. -/
 theorem exists_nonzero_trace_word_sharp_pos [NeZero D]
     (A : MPSTensor d D) (hN : IsNormal A) :
     ∃ w : List (Fin d),
