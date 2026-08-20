@@ -5,6 +5,7 @@ from __future__ import annotations
 
 import contextlib
 import io
+import json
 import subprocess
 import tempfile
 import unittest
@@ -61,6 +62,22 @@ class ImportDirectionGuardTests(unittest.TestCase):
         self.assertEqual(status, 0)
         self.assertIn("Checked 0 QIC-bound Lean file(s)", output)
 
+    def test_root_aggregators_are_checked(self) -> None:
+        self.write_manifest("")
+        for root_name in ("Channel", "Entropy", "Kraus"):
+            self.write(
+                f"TNLean/{root_name}.lean",
+                f"import TNLean.MPS.From{root_name}\n",
+            )
+        errors, checked = guard.check_import_direction(self.root)
+        self.assertEqual(checked, 3)
+        self.assertEqual(len(errors), 3)
+        for root_name in ("Channel", "Entropy", "Kraus"):
+            self.assertTrue(
+                any(f"TNLean/{root_name}.lean:1" in error for error in errors),
+                root_name,
+            )
+
     # -- Forbidden import -----------------------------------------------------
 
     def test_forbidden_import_reported(self) -> None:
@@ -75,6 +92,14 @@ class ImportDirectionGuardTests(unittest.TestCase):
         self.assertIn("TNLean/Channel/Foo.lean:2", errors[0])
         self.assertIn("TNLean.MPS.Core.TPGauge", errors[0])
         self.assertIn("LionSR/TNLean#6560", errors[0])
+
+    def test_monorepo_root_import_is_rejected(self) -> None:
+        self.write_manifest("")
+        self.write("TNLean/Channel/Foo.lean", "import TNLean\n")
+        errors, checked = guard.check_import_direction(self.root)
+        self.assertEqual(checked, 1)
+        self.assertEqual(len(errors), 1)
+        self.assertIn("forbidden import `TNLean`", errors[0])
 
     def test_every_forbidden_prefix_is_rejected(self) -> None:
         self.write_manifest("")
@@ -132,6 +157,20 @@ class ImportDirectionGuardTests(unittest.TestCase):
         self.assertIn("TNLean/Algebra/QicFoundation.lean:1", errors[0])
         self.assertIn("TNLean.MPS.Core.TPGauge", errors[0])
 
+    def test_unlisted_local_dependency_fails(self) -> None:
+        self.write_manifest("")
+        self.write(
+            "TNLean/Channel/Foo.lean",
+            "import TNLean.Algebra.UnlistedFoundation\n",
+        )
+        self.write("TNLean/Algebra/UnlistedFoundation.lean", "def helper := 1\n")
+        errors, checked = guard.check_import_direction(self.root)
+        self.assertEqual(checked, 1)
+        self.assertEqual(len(errors), 1)
+        self.assertIn("TNLean/Channel/Foo.lean:1", errors[0])
+        self.assertIn("unlisted local dependency", errors[0])
+        self.assertIn("TNLean/Algebra/UnlistedFoundation.lean", errors[0])
+
     def test_manifest_comments_and_blank_lines_are_skipped(self) -> None:
         self.write("TNLean/Algebra/QicFoundation.lean", "def foo := 1\n")
         self.write_manifest(
@@ -154,6 +193,73 @@ class ImportDirectionGuardTests(unittest.TestCase):
         errors, _ = guard.check_import_direction(self.root)
         self.assertEqual(len(errors), 1)
         self.assertIn("manifest file is missing", errors[0])
+
+    # -- Extraction report ----------------------------------------------------
+
+    def test_report_declaration_read_failure_is_diagnostic(self) -> None:
+        missing = self.root / "TNLean/Channel/Missing.lean"
+        with self.assertRaisesRegex(ValueError, "cannot read declarations"):
+            guard.namespaced_declarations(missing, Path("TNLean/Channel/Missing.lean"))
+
+    def test_report_rejects_unlisted_local_dependency(self) -> None:
+        self.write_manifest("")
+        self.write(
+            "TNLean/Channel/Foo.lean",
+            "import TNLean.Algebra.UnlistedFoundation\n",
+        )
+        self.write("TNLean/Algebra/UnlistedFoundation.lean", "def helper := 1\n")
+        with self.assertRaisesRegex(ValueError, "unlisted local dependency"):
+            guard.report_inventory(self.root)
+
+    def test_report_output_is_deterministic(self) -> None:
+        self.write_manifest("TNLean/Algebra/Foundation.lean\n")
+        self.write(
+            "TNLean/Channel.lean",
+            "import TNLean.Channel.Basic\n",
+        )
+        self.write(
+            "TNLean/Channel/Basic.lean",
+            "import TNLean.Algebra.Foundation\n"
+            "namespace MPSTensor\n"
+            "theorem reported : True := by trivial\n"
+            "end MPSTensor\n",
+        )
+        self.write(
+            "TNLean/Algebra/Foundation.lean",
+            "namespace TNLean.Foundation\n"
+            "def value := 1\n"
+            "@[simp] lemma IsCompact.relative : True := by trivial\n"
+            "instance reportedInstance : Inhabited Nat := inferInstance\n"
+            "end TNLean.Foundation\n",
+        )
+        self.write(
+            "TNLean/MPS/Consumer.lean",
+            "import TNLean.Channel.Basic\n",
+        )
+
+        first = json.dumps(guard.report_inventory(self.root), indent=2, sort_keys=True)
+        second = json.dumps(guard.report_inventory(self.root), indent=2, sort_keys=True)
+        self.assertEqual(first, second)
+        report = json.loads(first)
+        self.assertEqual(
+            report["mover_paths"],
+            [
+                "TNLean/Algebra/Foundation.lean",
+                "TNLean/Channel.lean",
+                "TNLean/Channel/Basic.lean",
+            ],
+        )
+        self.assertEqual(len(report["qic_internal_import_rewrites"]), 2)
+        self.assertEqual(len(report["tn_to_qic_import_rewrites"]), 1)
+        self.assertEqual(
+            [entry["name"] for entry in report["namespaced_declarations"]],
+            [
+                "TNLean.Foundation.value",
+                "TNLean.Foundation.IsCompact.relative",
+                "TNLean.Foundation.reportedInstance",
+                "MPSTensor.reported",
+            ],
+        )
 
     # -- Namespace ratchet ------------------------------------------------------
 

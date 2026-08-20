@@ -1,14 +1,17 @@
 #!/usr/bin/env python3
 """Guard the import direction across the channel/tensor-network boundary.
 
-``TNLean/Channel``, ``TNLean/Entropy``, and (once created) ``TNLean/Kraus``
-hold the quantum-channel and entropy theory being prepared for extraction
-into a standalone library, QICLean (issue LionSR/TNLean#6560). Until that
-extraction lands, these directories — together with the foundation modules
-listed in ``scripts/qic_layer0_modules.txt`` — form the QIC-bound set and
-must not import the tensor-network side of the monorepo: ``TNLean.MPS``,
-``TNLean.QPF``, ``TNLean.Wielandt``, ``TNLean.Spectral``, ``TNLean.PEPS``,
-``TNLean.QCA``, or ``TNLean.PiAlgebra``.
+``TNLean/Channel``, ``TNLean/Entropy``, and ``TNLean/Kraus``, including
+their root aggregators, hold the quantum-channel and entropy theory being
+prepared for extraction into a standalone library, QICLean (issue
+LionSR/TNLean#6560). Until that extraction lands, these modules together with
+the foundation modules listed in ``scripts/qic_layer0_modules.txt`` form the
+QIC mover set. Every local import reachable from this set must remain in the
+set, and the set must not import the tensor-network side of the monorepo.
+
+Pass ``--report`` to emit a stable JSON inventory of mover paths, import
+rewrites required on each side of the future package boundary, and declarations
+under the ``TNLean`` or ``MPSTensor`` namespaces. Report mode is read-only.
 
 A secondary, shrinking-only ratchet (the pattern used by
 ``check_numbered_lean_files.py``) forbids new ``namespace MPSTensor``
@@ -20,6 +23,7 @@ from __future__ import annotations
 
 import argparse
 import ast
+import json
 from pathlib import Path
 import re
 import subprocess
@@ -28,10 +32,14 @@ from lean_import_syntax import IMPORT_COMMAND_RE, strip_lean_comments
 
 ISSUE_CITATION = "issue LionSR/TNLean#6560"
 
-# Directories whose entire tree is QIC-bound. `TNLean/Kraus` does not exist
-# yet (Phase 3 of the tracked extraction creates it); scanning tolerates its
-# absence.
+# Directories whose entire tree is QIC-bound, together with their generated
+# root aggregators. Scanning tolerates an absent directory or aggregator.
 QIC_BOUND_DIRECTORIES: tuple[str, ...] = ("TNLean/Channel", "TNLean/Entropy", "TNLean/Kraus")
+QIC_BOUND_ROOTS: tuple[Path, ...] = (
+    Path("TNLean/Channel.lean"),
+    Path("TNLean/Entropy.lean"),
+    Path("TNLean/Kraus.lean"),
+)
 
 # Only these two directories are scanned for the `namespace MPSTensor` ratchet;
 # `TNLean/Kraus` is not yet populated and manifest-only entries are exempt.
@@ -52,6 +60,16 @@ FORBIDDEN_PREFIXES: tuple[str, ...] = (
 )
 
 NAMESPACE_MPSTENSOR_RE = re.compile(r"(?m)^[ \t]*namespace\s+MPSTensor\b")
+NAMESPACE_COMMAND_RE = re.compile(r"^\s*namespace\s+([A-Za-z_][A-Za-z0-9_'.]*)\s*$")
+SECTION_COMMAND_RE = re.compile(r"^\s*section(?:\s+[A-Za-z_][A-Za-z0-9_']*)?\s*$")
+END_COMMAND_RE = re.compile(r"^\s*end(?:\s+[A-Za-z_][A-Za-z0-9_'.]*)?\s*$")
+DECLARATION_RE = re.compile(
+    r"^\s*(?:@\[[^\]]*\]\s*)*"
+    r"(?:(?:private|protected|noncomputable|unsafe|local|scoped)\s+)*"
+    r"(?:def|abbrev|theorem|lemma|structure|class|inductive|coinductive|opaque|axiom|instance)"
+    r"\s+(?:\([^)]*\)\s*)?([A-Za-z_][A-Za-z0-9_'.]*)\b"
+)
+REPORT_NAMESPACE_PREFIXES: tuple[str, ...] = ("TNLean", "MPSTensor")
 
 # Shrinking-only ratchet (see scripts/check_numbered_lean_files.py). The
 # boundary directories carry no `namespace MPSTensor` declarations today, so
@@ -61,7 +79,7 @@ NAMESPACE_ALLOWLIST: frozenset[str] = frozenset()
 
 
 def _forbidden_module(module: str) -> bool:
-    return any(
+    return module == "TNLean" or any(
         module == prefix or module.startswith(f"{prefix}.") for prefix in FORBIDDEN_PREFIXES
     )
 
@@ -99,7 +117,20 @@ def qic_bound_directory_files(root: Path) -> set[Path]:
         if not dir_path.is_dir():
             continue
         files.update(path.relative_to(root) for path in dir_path.rglob("*.lean"))
+    files.update(relative for relative in QIC_BOUND_ROOTS if (root / relative).is_file())
     return files
+
+
+def module_path(module: str) -> Path | None:
+    """Return the repository-relative path for a local ``TNLean`` module name."""
+    if module != "TNLean" and not module.startswith("TNLean."):
+        return None
+    return Path(*module.split(".")).with_suffix(".lean")
+
+
+def module_name(path: Path) -> str:
+    """Return the Lean module name corresponding to a repository-relative path."""
+    return ".".join(path.with_suffix("").parts)
 
 
 def manifest_entries(root: Path) -> tuple[list[tuple[int, Path]], list[str]]:
@@ -132,16 +163,18 @@ def check_manifest_hygiene(root: Path, entries: list[tuple[int, Path]]) -> list[
     return errors
 
 
+def mover_files(root: Path, entries: list[tuple[int, Path]]) -> set[Path]:
+    """Return the complete mover set computed from roots, directories, and manifest."""
+    manifest_files = {relative for _, relative in entries if (root / relative).is_file()}
+    return qic_bound_directory_files(root) | manifest_files
+
+
 def check_import_direction(root: Path) -> tuple[list[str], int]:
-    """Check the forbidden-import rule; return (errors, files checked)."""
+    """Check mover closure and forbidden imports; return (errors, files checked)."""
     manifest_entries_list, manifest_errors = manifest_entries(root)
     errors = list(manifest_errors)
     errors.extend(check_manifest_hygiene(root, manifest_entries_list))
-
-    manifest_files = {
-        relative for _, relative in manifest_entries_list if (root / relative).is_file()
-    }
-    targets = qic_bound_directory_files(root) | manifest_files
+    targets = mover_files(root, manifest_entries_list)
     checked = 0
     for relative in sorted(targets, key=lambda path: path.as_posix()):
         path = root / relative
@@ -153,13 +186,132 @@ def check_import_direction(root: Path) -> tuple[list[str], int]:
             errors.append(f"{relative.as_posix()}: cannot parse imports: {error}")
             continue
         for line_no, module in imports:
+            imported_path = module_path(module)
+            is_unlisted_local = (
+                imported_path is not None
+                and (root / imported_path).is_file()
+                and imported_path not in targets
+            )
             if _forbidden_module(module):
                 errors.append(
                     f"{relative.as_posix()}:{line_no}: forbidden import `{module}` — "
                     "QIC-bound files must not import the tensor-network side of the "
                     f"boundary ({ISSUE_CITATION})"
                 )
+            elif is_unlisted_local:
+                errors.append(
+                    f"{relative.as_posix()}:{line_no}: unlisted local dependency "
+                    f"`{module}` ({imported_path.as_posix()}) — every local TNLean "
+                    "import reachable from the QIC mover seed must belong to the mover "
+                    f"set; add the foundation path to {MANIFEST_PATH} ({ISSUE_CITATION})"
+                )
     return errors, checked
+
+
+def _rewrite_record(source: Path, line_no: int, imported: str) -> dict[str, str | int]:
+    return {
+        "source": source.as_posix(),
+        "line": line_no,
+        "from": imported,
+        "to": f"QICLean{imported.removeprefix('TNLean')}",
+    }
+
+
+def namespaced_declarations(path: Path, relative: Path) -> list[dict[str, str | int]]:
+    """Inventory declarations under ``TNLean`` or ``MPSTensor`` namespaces."""
+    try:
+        source = path.read_text(encoding="utf-8")
+    except (OSError, UnicodeError) as error:
+        raise ValueError(f"{relative.as_posix()}: cannot read declarations: {error}") from error
+    uncommented, error = strip_lean_comments(source)
+    if error is not None:
+        raise ValueError(f"{relative.as_posix()}: cannot parse declarations: {error}")
+
+    scopes: list[tuple[str, tuple[str, ...]]] = []
+    declarations: list[dict[str, str | int]] = []
+    for line_no, line in enumerate(uncommented.splitlines(), start=1):
+        namespace_match = NAMESPACE_COMMAND_RE.fullmatch(line)
+        if namespace_match is not None:
+            scopes.append(("namespace", tuple(namespace_match.group(1).split("."))))
+            continue
+        if SECTION_COMMAND_RE.fullmatch(line) is not None:
+            scopes.append(("section", ()))
+            continue
+        if END_COMMAND_RE.fullmatch(line) is not None:
+            if scopes:
+                scopes.pop()
+            continue
+
+        declaration_match = DECLARATION_RE.match(line)
+        if declaration_match is None:
+            continue
+        declared_name = declaration_match.group(1)
+        if declared_name.startswith("_root_."):
+            qualified_name = declared_name.removeprefix("_root_.")
+        else:
+            namespace_parts: list[str] = []
+            for kind, parts in scopes:
+                if kind != "namespace":
+                    continue
+                if parts and parts[0] == "_root_":
+                    namespace_parts.clear()
+                    namespace_parts.extend(parts[1:])
+                else:
+                    namespace_parts.extend(parts)
+            qualified_name = ".".join((*namespace_parts, *declared_name.split(".")))
+        if any(
+            qualified_name.startswith(f"{prefix}.") for prefix in REPORT_NAMESPACE_PREFIXES
+        ):
+            declarations.append(
+                {"source": relative.as_posix(), "line": line_no, "name": qualified_name}
+            )
+    return declarations
+
+
+def report_inventory(root: Path) -> dict[str, object]:
+    """Return a deterministic, read-only extraction inventory for the mover set."""
+    closure_errors, _ = check_import_direction(root)
+    if closure_errors:
+        raise ValueError("cannot report an invalid mover set: " + "; ".join(closure_errors))
+    entries, _ = manifest_entries(root)
+    movers = mover_files(root, entries)
+    mover_modules = {module_name(path) for path in movers}
+
+    qic_internal: list[dict[str, str | int]] = []
+    declarations: list[dict[str, str | int]] = []
+    for relative in sorted(movers, key=lambda path: path.as_posix()):
+        imports, error = imports_of(root / relative)
+        if error is not None:
+            raise ValueError(f"{relative.as_posix()}: cannot parse imports: {error}")
+        for line_no, imported in imports:
+            if imported in mover_modules:
+                qic_internal.append(_rewrite_record(relative, line_no, imported))
+        declarations.extend(namespaced_declarations(root / relative, relative))
+
+    tn_to_qic: list[dict[str, str | int]] = []
+    tnlean_files = set((root / "TNLean").rglob("*.lean")) if (root / "TNLean").is_dir() else set()
+    if (root / "TNLean.lean").is_file():
+        tnlean_files.add(root / "TNLean.lean")
+    for path in sorted(tnlean_files, key=lambda item: item.relative_to(root).as_posix()):
+        relative = path.relative_to(root)
+        if relative in movers:
+            continue
+        imports, error = imports_of(path)
+        if error is not None:
+            raise ValueError(f"{relative.as_posix()}: cannot parse imports: {error}")
+        for line_no, imported in imports:
+            if imported in mover_modules:
+                tn_to_qic.append(_rewrite_record(relative, line_no, imported))
+
+    return {
+        "schema_version": 1,
+        "mover_paths": [
+            path.as_posix() for path in sorted(movers, key=lambda item: item.as_posix())
+        ],
+        "qic_internal_import_rewrites": qic_internal,
+        "tn_to_qic_import_rewrites": tn_to_qic,
+        "namespaced_declarations": declarations,
+    }
 
 
 def channel_entropy_namespace_offenders(root: Path) -> set[str]:
@@ -309,6 +461,11 @@ def main() -> int:
     )
     parser.add_argument("--root", type=Path, default=Path("."), help="Repository root")
     parser.add_argument(
+        "--report",
+        action="store_true",
+        help="Emit the deterministic extraction inventory as JSON without writing files",
+    )
+    parser.add_argument(
         "--base-ref",
         help=(
             "Pull-request merge-base ref used to enforce that the "
@@ -317,6 +474,13 @@ def main() -> int:
     )
     args = parser.parse_args()
     root = args.root.resolve()
+    if args.report:
+        try:
+            print(json.dumps(report_inventory(root), indent=2, sort_keys=True))
+        except ValueError as error:
+            print(f"::error title=Import-direction report failed::{error}")
+            return 1
+        return 0
     base_allowlist: frozenset[str] | None = None
     if args.base_ref is not None:
         try:
