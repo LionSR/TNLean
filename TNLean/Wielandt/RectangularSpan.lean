@@ -10,7 +10,6 @@ Authors: TNLean contributors
 
 import TNLean.Wielandt.RectangularSpan.Basic
 import TNLean.Wielandt.RectangularSpan.Growth
-import TNLean.Wielandt.RectangularSpan.Ranges
 import TNLean.Wielandt.RectangularSpan.Universality
 import TNLean.Wielandt.RectangularSpan.UniversalityAux
 import TNLean.Wielandt.RectangularSpan.UniversalityAux.Basic
