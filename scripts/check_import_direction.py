@@ -268,6 +268,17 @@ def namespaced_declarations(path: Path, relative: Path) -> list[dict[str, str | 
     return declarations
 
 
+def source_sha(root: Path) -> str:
+    """Return the exact source commit for the extraction inventory."""
+    result = subprocess.run(
+        ["git", "-C", str(root), "rev-parse", "HEAD"],
+        check=True,
+        stdout=subprocess.PIPE,
+        text=True,
+    )
+    return result.stdout.strip()
+
+
 def report_inventory(root: Path) -> dict[str, object]:
     """Return a deterministic, read-only extraction inventory for the mover set."""
     closure_errors, _ = check_import_direction(root)
@@ -305,6 +316,7 @@ def report_inventory(root: Path) -> dict[str, object]:
 
     return {
         "schema_version": 1,
+        "source_sha": source_sha(root),
         "mover_paths": [
             path.as_posix() for path in sorted(movers, key=lambda item: item.as_posix())
         ],

@@ -237,10 +237,12 @@ class ImportDirectionGuardTests(unittest.TestCase):
             "import TNLean.Channel.Basic\n",
         )
 
-        first = json.dumps(guard.report_inventory(self.root), indent=2, sort_keys=True)
-        second = json.dumps(guard.report_inventory(self.root), indent=2, sort_keys=True)
+        with mock.patch.object(guard, "source_sha", return_value="a" * 40):
+            first = json.dumps(guard.report_inventory(self.root), indent=2, sort_keys=True)
+            second = json.dumps(guard.report_inventory(self.root), indent=2, sort_keys=True)
         self.assertEqual(first, second)
         report = json.loads(first)
+        self.assertEqual(report["source_sha"], "a" * 40)
         self.assertEqual(
             report["mover_paths"],
             [
