@@ -6,6 +6,7 @@ Authors: TNLean contributors
 import TNLean.MPS.MPDO.HorizontalBNT
 import TNLean.MPS.MPDO.PhysicalBlocking
 import TNLean.MPS.MPDO.ZCL
+import Mathlib.RingTheory.Nilpotent.Basic
 
 /-!
 # Simple MPO tensors and copy-independent sector weights
@@ -48,6 +49,8 @@ open scoped Matrix BigOperators
 
 namespace MPOTensor
 
+variable {d D : ℕ}
+
 /-- The **physical-trace transfer of a doubled-index tensor**: the single bond
 matrix $\sum_i B^{(i,i)}$ obtained by contracting the ket leg of one tensor
 against its bra leg.  This is the transfer object of the source
@@ -58,7 +61,69 @@ noncomputable def doubledPhysTraceTransfer (d : ℕ) {D' : ℕ} (B : MPSTensor (
     Matrix (Fin D') (Fin D') ℂ :=
   ∑ i : Fin d, B (finProdFinEquiv (i, i))
 
-variable {d D : ℕ}
+/-- Gauge-phase equivalence preserves nilpotency of the doubled physical-trace transfer.
+
+The physical contraction of a gauge-phase transform is the same nonzero scalar multiple of
+the corresponding similarity transform.  This is the presentation-independence required by
+the simplicity definition.
+
+Source: arXiv:1606.00608, Definition 4.7, lines 815--822, and the normal-tensor gauge theorem,
+lines 1080--1117. -/
+theorem isNilpotent_doubledPhysTraceTransfer_of_gaugePhaseEquiv
+    {A B : MPSTensor (d * d) D} (h : MPSTensor.GaugePhaseEquiv A B)
+    (hNil : IsNilpotent (doubledPhysTraceTransfer d A)) :
+    IsNilpotent (doubledPhysTraceTransfer d B) := by
+  classical
+  obtain ⟨X, ζ, _hζ, hrel⟩ := h
+  have hTransfer :
+      doubledPhysTraceTransfer d B =
+        ζ • ((X : Matrix (Fin D) (Fin D) ℂ) * doubledPhysTraceTransfer d A *
+          (↑(X⁻¹) : Matrix (Fin D) (Fin D) ℂ)) := by
+    calc
+      doubledPhysTraceTransfer d B =
+          ∑ i : Fin d, ζ • ((X : Matrix (Fin D) (Fin D) ℂ) *
+            A (finProdFinEquiv (i, i)) *
+              (↑(X⁻¹) : Matrix (Fin D) (Fin D) ℂ)) := by
+        rw [doubledPhysTraceTransfer]
+        apply Finset.sum_congr rfl
+        intro i _
+        exact hrel (finProdFinEquiv (i, i))
+      _ = ζ • ∑ i : Fin d, ((X : Matrix (Fin D) (Fin D) ℂ) *
+            A (finProdFinEquiv (i, i)) *
+              (↑(X⁻¹) : Matrix (Fin D) (Fin D) ℂ)) := by
+        rw [Finset.smul_sum]
+      _ = ζ • ((X : Matrix (Fin D) (Fin D) ℂ) * doubledPhysTraceTransfer d A *
+            (↑(X⁻¹) : Matrix (Fin D) (Fin D) ℂ)) := by
+        rw [doubledPhysTraceTransfer, Finset.mul_sum, Finset.sum_mul]
+  obtain ⟨n, hn⟩ := hNil
+  refine ⟨n, ?_⟩
+  rw [hTransfer, smul_pow, Units.conj_pow, hn]
+  simp
+
+/-- Nilpotency of the doubled physical-trace transfer is invariant under gauge-phase
+equivalence.
+
+Source: arXiv:1606.00608, Definition 4.7, lines 815--822, and the normal-tensor gauge theorem,
+lines 1080--1117. -/
+theorem isNilpotent_doubledPhysTraceTransfer_iff_of_gaugePhaseEquiv
+    {A B : MPSTensor (d * d) D} (h : MPSTensor.GaugePhaseEquiv A B) :
+    IsNilpotent (doubledPhysTraceTransfer d A) ↔
+      IsNilpotent (doubledPhysTraceTransfer d B) :=
+  ⟨isNilpotent_doubledPhysTraceTransfer_of_gaugePhaseEquiv h,
+    isNilpotent_doubledPhysTraceTransfer_of_gaugePhaseEquiv
+      (MPSTensor.gaugePhaseEquiv_symm_same_dim h)⟩
+
+/-- Identifying equal bond dimensions does not change nilpotency of the doubled
+physical-trace transfer.
+
+Source: arXiv:1606.00608, Definition 4.7, lines 815--822. -/
+theorem isNilpotent_doubledPhysTraceTransfer_cast_iff
+    {D₁ D₂ : ℕ} (hdim : D₁ = D₂) (A : MPSTensor (d * d) D₁) :
+    IsNilpotent
+        (doubledPhysTraceTransfer d (cast (congr_arg (MPSTensor (d * d)) hdim) A)) ↔
+      IsNilpotent (doubledPhysTraceTransfer d A) := by
+  subst D₂
+  rfl
 
 /-- On the doubled-index view of an MPO tensor, the doubled physical-trace
 transfer is the physical-trace transfer $\mathcal{T}_M = \sum_i M^{ii}$ of the
@@ -143,8 +208,10 @@ the source blocks a positive number of physical sites at
 arXiv:1606.00608, line 815. This predicate strengthens the source simplicity
 condition of lines 815--822 by requiring the blocked tensor itself to admit the
 normalized canonical-form witness above, including the global unit-weight
-convention of line 246. The source-faithful predicate is
-`MPOTensor.IsSourceSimple` in `TNLean/MPS/MPDO/SourceSimpleTensor.lean`.
+convention of line 246. The documented active canonical-block reading is
+`MPOTensor.IsSourceSimple` in `TNLean/MPS/MPDO/SourceSimpleTensor.lean`; its
+qualification is recorded in
+`docs/paper-gaps/cpsv16_bnt_uniqueness_zero_coefficient.tex`.
 
 **Scope restriction (fixed representative):** This permits a positive physical
 blocking but does not quotient the blocked tensor by nonzero scalar rescaling or

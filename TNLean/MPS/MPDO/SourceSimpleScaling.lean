@@ -3,7 +3,6 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.MPS.CanonicalForm.BNTTransport
 import TNLean.MPS.MPDO.SourceSimpleTensor
 
 /-!
@@ -27,9 +26,9 @@ chain length `N`, the closed operator is multiplied by `c ^ N`, not by
 * `MPOTensor.isMPDO_smul_ofReal_iff`: MPDO is invariant under strictly positive
   real rescaling.
 * `MPOTensor.isSourceSimple_smul_ofReal_iff`: source simplicity is invariant
-  under strictly positive real rescaling, with the same normal-basis blocks.
+  under strictly positive real rescaling, with the same active representatives.
 * `MPOTensor.isNonvanishingSourceSimple_smul_ofReal_iff`: the strengthened
-  nonvanishing interface is invariant under strictly positive real rescaling.
+  nonvanishing predicate is invariant under strictly positive real rescaling.
 
 ## References
 
@@ -115,56 +114,30 @@ theorem isMPDO_smul_ofReal_iff (M : MPOTensor d D) {r : ℝ} (hr : 0 < r) :
 
 end MPOTensor
 
-namespace MPSTensor
-
-variable {d D : ℕ}
-
-/-- Scaling the represented tensor preserves a CPSV basis of normal tensors.
-
-The basis blocks, their normality, and their eventual linear independence are
-unchanged. Only the length-`N` spanning coefficients are multiplied by `c ^ N`.
-
-Project-derived from the CPSV basis-of-normal-tensors definition in
-arXiv:1606.00608, lines 271--274. -/
-theorem IsCPSVBasisOfNormalTensors.smul_left
-    {g : ℕ} {A : MPSTensor d D}
-    {blocks : (j : Fin g) → Σ D' : ℕ, MPSTensor d D'}
-    (hBNT : IsCPSVBasisOfNormalTensors A blocks) (c : ℂ) :
-    IsCPSVBasisOfNormalTensors (c • A) blocks := by
-  refine ⟨hBNT.blocks_normal, ?_, hBNT.eventually_li⟩
-  intro N hN
-  obtain ⟨a, ha⟩ := hBNT.spans_mpv N hN
-  refine ⟨fun j ↦ c ^ N * a j, fun σ ↦ ?_⟩
-  change mpv (fun i ↦ c • A i) σ = _
-  rw [mpv_smul, ha]
-  simp only [Finset.mul_sum, mul_assoc]
-
-end MPSTensor
-
 namespace MPOTensor
 
 variable {d D : ℕ}
 
 /-- Strictly positive real rescaling preserves source simplicity.
 
-The blocking length and normal-basis blocks are unchanged. The represented
-blocked tensor is multiplied by `(r ^ L : ℝ)`, so its length-`N` spanning
-coefficients are multiplied by `(r : ℂ) ^ (L * N)`.
+The blocking length, active normal representatives, and copy multiplicities are unchanged.
+The represented blocked tensor is multiplied by `(r : ℂ) ^ L`, so every active copy weight
+is multiplied by that same nonzero scalar.
 
 Project-derived from source simplicity in arXiv:1606.00608, Definition 4.7,
 lines 815--822. -/
 theorem IsSourceSimple.smul_ofReal {M : MPOTensor d D} (hM : IsSourceSimple M)
     {r : ℝ} (hr : 0 < r) :
     IsSourceSimple ((r : ℂ) • M) := by
-  obtain ⟨hMPDO, ⟨N, hN, hMpo⟩, L, hL, g, blocks, hBNT, hnil⟩ := hM
-  refine ⟨hMPDO.smul_ofReal (le_of_lt hr), ⟨N, hN, ?_⟩,
-    L, hL, g, blocks, ?_, hnil⟩
-  · rw [mpo_smul]
-    exact smul_ne_zero (pow_ne_zero N (Complex.ofReal_ne_zero.mpr hr.ne')) hMpo
+  obtain ⟨hMPDO, L, hL, P, hActive, hNonNil⟩ := hM
+  have hScale : ((r : ℂ) ^ L) ≠ 0 :=
+    pow_ne_zero L (Complex.ofReal_ne_zero.mpr hr.ne')
+  refine ⟨hMPDO.smul_ofReal (le_of_lt hr), L, hL,
+    P.scaleWeights ((r : ℂ) ^ L) hScale, ?_, ?_⟩
   · rw [blockTensor_smul]
-    change MPSTensor.IsCPSVBasisOfNormalTensors
-      (((r : ℂ) ^ L) • (blockTensor M L).toMPSTensor) blocks
-    exact hBNT.smul_left ((r : ℂ) ^ L)
+    exact hActive.smul_left ((r : ℂ) ^ L) hScale
+  · intro j
+    exact hNonNil j
 
 /-- Strictly positive real rescaling preserves source simplicity together with
 positive-length nonvanishing.

@@ -32,63 +32,6 @@ namespace MPSTensor.CPSVCanonicalFormData.ActiveBNTRefinement
 variable {d D e : ℕ} {A : MPSTensor d D}
 variable {data : CPSVCanonicalFormData A} (ref : data.ActiveBNTRefinement)
 
-private noncomputable def activeCopy
-    (j : Fin data.activePhaseClasses.g)
-    (q : Fin (data.activePhaseClasses.copies j)) : data.Active :=
-  data.activeClassCopyEquiv ⟨j, q⟩
-
-/-- The active representative sector decomposition.  Its copy weight is the original raw
-weight times the phase relating that copy to its chosen representative.
-
-Inactive zero-weight listed blocks are absent because `SectorDecomposition` requires every
-stored copy weight to be nonzero.
-
-Source: arXiv:1606.00608, lines 265--301 and Appendix C.3, lines 1843--1858. -/
-noncomputable def representativeSectorDecomposition : SectorDecomposition d where
-  basisCount := data.activePhaseClasses.g
-  basisDim := fun j => data.dim (data.activeRepresentativeIndex j)
-  basis := fun j => data.blocks (data.activeRepresentativeIndex j)
-  sectors := {
-    copies := data.activePhaseClasses.copies
-    copies_pos := data.activePhaseClasses.copies_pos
-    weight := fun j q =>
-      ref.copyWeight (activeCopy (data := data) j q) *
-        ref.copyPhase (activeCopy (data := data) j q)
-    weight_ne_zero := fun j q => mul_ne_zero
-      (by rw [ref.copyWeightEq]; exact (activeCopy (data := data) j q).property)
-      (Complex.ne_zero_of_norm_eq_one (ref.copyPhaseNorm (activeCopy (data := data) j q)))
-  }
-
-/-- The active sector decomposition has one basis block for each phase-class representative. -/
-@[simp] theorem representativeSectorDecomposition_basisCount :
-    ref.representativeSectorDecomposition.basisCount = data.activePhaseClasses.g := rfl
-
-/-- A representative sector retains the chosen normal block's bond dimension. -/
-@[simp] theorem representativeSectorDecomposition_basisDim
-    (j : Fin data.activePhaseClasses.g) :
-    ref.representativeSectorDecomposition.basisDim j =
-      data.dim (data.activeRepresentativeIndex j) := rfl
-
-/-- The basis tensor of a representative sector is its chosen normal block. -/
-@[simp] theorem representativeSectorDecomposition_basis
-    (j : Fin data.activePhaseClasses.g) :
-    ref.representativeSectorDecomposition.basis j =
-      data.blocks (data.activeRepresentativeIndex j) := rfl
-
-/-- Sector multiplicities are the multiplicities of the active phase classes. -/
-@[simp] theorem representativeSectorDecomposition_copies
-    (j : Fin data.activePhaseClasses.g) :
-    ref.representativeSectorDecomposition.copies j =
-      data.activePhaseClasses.copies j := rfl
-
-/-- Each active copy has weight equal to its raw listed weight times its phase. -/
-@[simp] theorem representativeSectorDecomposition_weight
-    (j : Fin data.activePhaseClasses.g)
-    (q : Fin (data.activePhaseClasses.copies j)) :
-    ref.representativeSectorDecomposition.weight j q =
-      ref.copyWeight (data.activeClassCopyEquiv ⟨j, q⟩) *
-        ref.copyPhase (data.activeClassCopyEquiv ⟨j, q⟩) := rfl
-
 /-- The source-native BNT predicate supplies eventual simultaneous word span for the chosen
 representatives.
 
@@ -96,63 +39,6 @@ Source: arXiv:1606.00608, lines 317--345 and Appendix C.3, lines 1848--1858. -/
 theorem eventuallyRepresentativeWordTupleSpan :
     ref.representativeSectorDecomposition.EventuallyRepresentativeWordTupleSpan := by
   exact ref.representativesBNT.eventually_wordTupleSpanTop
-
-/-- The full grouped tensor and the active representative sector tensor have equal closed-chain
-coefficients at every positive length.  Inactive listed coordinates vanish because their raw
-weight is zero.
-
-Source: arXiv:1606.00608, lines 265--301 and Appendix C.3, lines 1843--1858. -/
-theorem groupedTensor_sameMPV₂Pos_representativeSectorDecomposition :
-    SameMPV₂Pos ref.groupedTensor ref.representativeSectorDecomposition.toTensor := by
-  classical
-  mpv_ext
-  let P := ref.representativeSectorDecomposition
-  have hGrouped : ref.groupedTensor =
-      toTensorFromBlocks (d := d) data.weights ref.regroupedBlocks := by
-    funext i
-    exact (ref.regroupedTensor_eq_groupedTensor i).symm
-  rw [hGrouped, mpv_toTensorFromBlocks_eq_sum]
-  rw [P.mpv_toTensor_eq_sum_sectors]
-  simp only [smul_eq_mul]
-  let f : Fin data.r → ℂ := fun k =>
-    data.weights k ^ N * mpv (ref.regroupedBlocks k) σ
-  have hInactive : ∑ k : data.Inactive, f k = 0 := by
-    apply Fintype.sum_eq_zero
-    intro k
-    simp [f, not_ne_iff.mp k.property, Nat.ne_of_gt hN]
-  have hSplit :=
-    Fintype.sum_subtype_add_sum_subtype (fun k : Fin data.r => data.weights k ≠ 0) f
-  have hActiveSum : (∑ k : Fin data.r, f k) = ∑ k : data.Active, f k := by
-    rw [hInactive, add_zero] at hSplit
-    exact hSplit.symm
-  change (∑ k : Fin data.r, f k) =
-    ∑ j : Fin data.activePhaseClasses.g,
-      ∑ q : Fin (data.activePhaseClasses.copies j),
-        (ref.copyWeight (activeCopy (data := data) j q) *
-          ref.copyPhase (activeCopy (data := data) j q)) ^ N *
-          mpv (data.blocks (data.activeRepresentativeIndex j)) σ
-  rw [hActiveSum]
-  rw [← data.activeClassCopyEquiv.sum_comp]
-  rw [← Fintype.sum_sigma']
-  apply Finset.sum_congr rfl
-  intro jq _
-  rcases jq with ⟨j, q⟩
-  let k := activeCopy (data := data) j q
-  change f k = (ref.copyWeight k * ref.copyPhase k) ^ N *
-    mpv (data.blocks (data.activeRepresentativeIndex j)) σ
-  rw [ref.copyWeightEq]
-  have hkclass : data.activeClassCopy k = ⟨j, q⟩ := by
-    simpa [k, activeCopy] using data.activeClassCopy_activeClassCopyEquiv j q
-  have hkfst : (data.activeClassCopy k).1 = j := congrArg Sigma.fst hkclass
-  have hRepresentativeMpv :
-      mpv (data.blocks (data.activeRepresentativeIndex (data.activeClassCopy k).1)) σ =
-        mpv (data.blocks (data.activeRepresentativeIndex j)) σ := by
-    rw [hkfst]
-  change data.weights k ^ N * mpv (ref.regroupedBlocks k) σ = _
-  rw [ref.regroupedBlocksActive k, mpv_smul]
-  rw [mpv_cast_dim (ref.copyDimEq k), hRepresentativeMpv]
-  ring
-
 
 private theorem trace_cast_mul_evalWord_cast
     {n m : ℕ} (h : n = m) (C : MPSTensor e n) (B : MPSTensor d n)

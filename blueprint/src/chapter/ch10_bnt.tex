@@ -2,11 +2,13 @@
 
 A \emph{basis of normal tensors} (BNT) for an MPS tensor $A$ is a finite family
 of normal blocks $\{A_j\}$ whose MPV states $\{\ket{V^{(N)}(A_j)}\}$ span
-$\ket{V^{(N)}(A)}$ at every positive length and are eventually linearly independent. Two
-payoffs follow. First, equal MPV families force a bijective gauge-phase matching
-of the basis sectors $B_k = e^{i\phi_k} X_k A_{j_k} X_k^{-1}$. Second, the sector
-coefficients $c_N^{(j)} = \sum_q \mu_{j,q}^N$ recover the per-copy weight
-multisets by Newton--Girard. The references are \cite{PerezGarcia2007Matrix},
+$\ket{V^{(N)}(A)}$ at every positive length and are eventually linearly
+independent. The literal definition permits a dormant normal tensor with
+coefficient identically zero and therefore does not imply uniqueness. For
+active sector presentations, equal MPV families force a bijective gauge-phase
+matching $B_k = e^{i\phi_k} X_k A_{j_k} X_k^{-1}$, and the sector coefficients
+$c_N^{(j)} = \sum_q \mu_{j,q}^N$ recover the per-copy weight multisets by
+Newton--Girard. The references are \cite{PerezGarcia2007Matrix},
 \cite{Cirac2016MPDO_arXiv}, and~\cite{Cirac2021Matrix}.
 
 \input{chapter/ch10_bnt_foundations}

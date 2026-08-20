@@ -64,13 +64,14 @@ cardinality obstruction explicitly.\footnote{The declaration is
 \leanid{MPSTensor.exists_isCPSVBasisOfNormalTensors_unequal_card} in
 \doclink{TNLean/MPS/CanonicalForm/BNTUniqueness.lean}.}
 
-\section{The missing condition}
+\section{Two restricted uniqueness statements}
 
-The obstruction is the identically zero coefficient. Coverage of the active
-canonical-form blocks gives a map from their gauge-phase classes into the
-candidate family. Pairwise distinction makes this map injective, but neither
-the definition nor Proposition~2.7 says that every candidate represents an
-active canonical-form block. Thus the map need not be surjective.
+The obstruction is the identically zero coefficient. Coverage of the
+canonical-form blocks with nonzero coefficients gives a map from their
+gauge-phase classes into the candidate family. Pairwise distinction makes this
+map injective, but neither the literal definition nor Proposition~2.7 rules out
+a candidate that represents no such block. Thus the map need not be
+surjective.
 
 A valid uniqueness theorem may be obtained by adding the converse coverage
 condition: every candidate must be gauge-phase equivalent to an active block
@@ -88,6 +89,30 @@ declaration is
 \doclink{TNLean/MPS/CanonicalForm/BNTUniqueness.lean}.} This restricted result
 does not alter the counterexample above or validate the unrestricted source
 sentence.
+
+For the documented active canonical-block reading of Definition~4.7, a second
+restricted statement is used. An active BNT sector presentation consists of a
+nonempty family of normal representatives such that every representative has a
+positive number of copies, every copy weight is nonzero, the representative MPV
+states are eventually linearly independent, and the weighted direct sum has the
+same positive-length MPV family as the tensor being represented. Every
+representative is therefore an actual nonzero canonical summand of this direct
+sum.
+
+Two active presentations of the same positive-length MPV family have a
+bijective gauge-phase matching. To prove this, apply
+\cite[Proposition~2.7]{Cirac2016MPDO_arXiv} to the nonzero-weight direct-sum
+tensor of the first presentation, using the representatives of the second as a
+BNT, and then interchange the two presentations. Eventual linear independence
+excludes gauge-phase-equivalent distinct representatives. The resulting
+injections between the two finite index sets give the desired bijection.
+
+This theorem is
+\leanid{MPSTensor.IsActiveCPSVBasisOfNormalTensors.equiv_of_sameMPV₂Pos} in
+\doclink{TNLean/MPS/CanonicalForm/ActiveBNTRefinement.lean}. It is the scope
+restriction used for presentation independence of Definition~4.7. It does not
+formalize the unrestricted sentence at line~1148, and it does not impose the
+unit-modulus normalization at line~246.
 
 \section{The active-only consequence for Figure 11}
 
@@ -116,7 +141,7 @@ unrelated normal tensor with coefficient zero would again satisfy the weak
 spanning clause, but it would not turn that tensor into an active Figure~11
 corner.
 
-Thus the source-facing consequence of BNT comparison is active-only: every
+Thus the corresponding consequence of BNT comparison is active-only: every
 nonzero normal corner of a fixed product pair is gauge-phase equivalent to a
 normal sector $M_\gamma$, while absent sectors are omitted rather than
 represented by zero coefficients.  Equality of the global closed-chain sums
