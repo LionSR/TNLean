@@ -20,11 +20,11 @@ with the canonical `Fin D`-indexed `evalWord`. It is
 part of the extraction of a Kraus-family-only library out of
 `TNLean`'s matrix-product-state development.
 
-**Pending:** `evalWord_aux_eq` and `evalWord_reindex` keep `namespace
-MPSTensor` for now. The rename to `namespace Kraus` is deferred to a
-dedicated mechanical sweep across the ~429 files that reference this
-vocabulary; see
-`TNLean/Kraus/Word.lean`'s module docstring.
+The established names `MPSTensor.evalWord_aux_eq` and
+`MPSTensor.evalWord_reindex` are retained because the MPS development uses
+them throughout. Their statements concern arbitrary finite matrix families;
+a simultaneous change of namespace belongs with the declarations that use
+these names.
 -/
 
 open scoped Matrix BigOperators

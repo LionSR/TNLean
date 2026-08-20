@@ -17,9 +17,10 @@ import TNLean.Kraus.Injectivity
 This file contains the core definitions used throughout the MPS development:
 MPV coefficients, gauge equivalence, and the word-to-state lemmas connecting
 them to word evaluation, injectivity, and normality. The `MPSTensor` abbrev
-itself, together with word evaluation, injectivity, block injectivity, and
-normality, now live in `TNLean/Kraus/Word.lean` and
-`TNLean/Kraus/Injectivity.lean`; this file imports them and keeps only the
+itself and the established MPS word-evaluation names live in
+`TNLean/MPS/Core/Word.lean`. The underlying finite-family word evaluation
+lives in `TNLean/Kraus/Word.lean`, while injectivity, block injectivity, and
+normality live in `TNLean/Kraus/Injectivity.lean`. This file keeps only the
 matrix-product-vector vocabulary and the gauge-invariance lemmas for
 `evalWord`, `SameMPV`, and eventual block injectivity.
 
