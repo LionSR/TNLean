@@ -926,18 +926,18 @@ This is the calculation in
         def:mpo_physical_trace_transfer}
     Let $A_0,A_1$ be the bond-one tensors whose only nonzero doubled-physical
     entries are
-    \[
-        A_0^{00}=A_0^{11}=\frac1{\sqrt2},
-        \qquad A_1^{22}=1.
-    \]
+    \begin{align}
+        A_0^{00}=A_0^{11}&=\frac1{\sqrt2}, \notag\\
+        A_1^{22}&=1. \notag
+    \end{align}
     With $(\mu_0,\mu_1)=(1/\sqrt2,1)$, they are normal and form a normalized
     BNT canonical decomposition. Their simultaneous word-tuple span is the
     full two-block direct sum already at length one, so the representative
     family is in biCF. The ambient tensor is
-    \[
-        M^{ab}=\operatorname{diag}
-            \bigl(\mu_0A_0^{ab},\mu_1A_1^{ab}\bigr),
-    \]
+    \begin{align}
+        M^{ab}&=\operatorname{diag}
+            \bigl(\mu_0A_0^{ab},\mu_1A_1^{ab}\bigr), \notag
+    \end{align}
     both entrywise and as a doubled-index MPS tensor, and is in normalized
     BNT-refined horizontal form. Moreover, the doubled physical-trace
     transfer of neither representative is nilpotent.
@@ -950,27 +950,28 @@ This is the calculation in
 \begin{proof}
     \leanok
     The two ordinary transfer maps satisfy
-    \[
-        \mathcal E_{A_0}=\mathcal E_{A_1}=\operatorname{id}_{\mathbb C}.
-    \]
+    \begin{align}
+        \mathcal E_{A_0}=\mathcal E_{A_1}
+        &=\operatorname{id}_{\mathbb C}. \notag
+    \end{align}
     Their disjoint physical supports exclude equivalence by a virtual gauge
     and a phase. Write $\mathbf A(i)=(A_0^i,A_1^i)$. For every
     $Y=(Y_0,Y_1)\in\mathbb C\oplus\mathbb C$, the two letters $0$ and $8$
     give
-    \[
-        Y=\frac{Y_0}{1/\sqrt2}\,\mathbf A(0)
-          +Y_1\,\mathbf A(8),
-    \]
+    \begin{align}
+        Y&=\frac{Y_0}{1/\sqrt2}\,\mathbf A(0)
+          +Y_1\,\mathbf A(8), \notag
+    \end{align}
     which proves the simultaneous one-letter span. Direct evaluation gives
-    \[
-        M^{ab}=\operatorname{diag}
-            \bigl((1/\sqrt2)A_0^{ab},A_1^{ab}\bigr),
-    \]
+    \begin{align}
+        M^{ab}&=\operatorname{diag}
+            \bigl((1/\sqrt2)A_0^{ab},A_1^{ab}\bigr), \notag
+    \end{align}
     and hence the identity block gauge. Finally,
-    \[
-        \mathcal T_{\mathrm{phys}}(A_0)=\frac2{\sqrt2},
-        \qquad \mathcal T_{\mathrm{phys}}(A_1)=1,
-    \]
+    \begin{align}
+        \mathcal T_{\mathrm{phys}}(A_0)&=\frac2{\sqrt2}, \notag\\
+        \mathcal T_{\mathrm{phys}}(A_1)&=1, \notag
+    \end{align}
     so neither physical-trace transfer is nilpotent.
 \end{proof}
 
