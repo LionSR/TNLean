@@ -84,7 +84,7 @@ theorem rectSpanLeftStep_injective (n : ℕ) :
   have hzRange : (x.1 - y.1) ∈ LinearMap.range (LinearMap.mulLeft ℂ ((K i₀) ^ D)) :=
     Submodule.sub_mem _ (hrect_le_range x.2) (hrect_le_range y.2)
   have hzero : x.1 - y.1 = 0 :=
-    MPSTensor.WielandtRankOne.matrix_eq_zero_of_mul_eq_zero_of_mem_range_mulLeft_pow
+    Matrix.eq_zero_of_mul_eq_zero_of_mem_range_mulLeft_pow
       (D := D) (M := K i₀) (X := x.1 - y.1) hzRange hz
   exact Subtype.ext (by simpa [sub_eq_zero] using hzero)
 

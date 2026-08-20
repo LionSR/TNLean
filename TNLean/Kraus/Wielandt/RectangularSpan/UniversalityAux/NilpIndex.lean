@@ -85,7 +85,7 @@ private theorem matrix_eq_zero_of_mul_nilpIndex
     (hMX : (K i₀) * X = 0) : X = 0 := by
   have hXD : X ∈ LinearMap.range (LinearMap.mulLeft ℂ ((K i₀) ^ D)) :=
     range_mulLeft_pow_nilpIndex_eq K i₀ ▸ hX
-  exact MPSTensor.WielandtRankOne.matrix_eq_zero_of_mul_eq_zero_of_mem_range_mulLeft_pow
+  exact Matrix.eq_zero_of_mul_eq_zero_of_mem_range_mulLeft_pow
     (D := D) (M := K i₀) (X := X) hXD hMX
 
 /-- Linear map sending `rectSpan ((K i₀)^r) K n` to `rectSpan ((K i₀)^r) K (n+1)`
