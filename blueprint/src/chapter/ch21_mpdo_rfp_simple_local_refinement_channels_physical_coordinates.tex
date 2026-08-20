@@ -590,11 +590,15 @@
     $(\mathcal K_s)_s$. Let $(P_s)_s$ be orthogonal projections on the
     one-site physical space such that
     \begin{align}
-      \sum_s P_s&=I, & P_sP_t&=0\quad(s\ne t),
-      \notag\\
-      P_s\widetilde{\mathcal K}_s
-        &=\widetilde{\mathcal K}_s
-        =\widetilde{\mathcal K}_sP_s .
+      \sum_s P_s&=I, & P_sP_t&=0\quad(s\ne t).
+      \notag
+    \end{align}
+    Suppose also that, for every $s$ and every pair of virtual indices
+    $\beta,\alpha$, the corresponding physical slice satisfies
+    \begin{align}
+      P_s\mathcal K_s[\beta,\alpha]
+        &=\mathcal K_s[\beta,\alpha]
+        =\mathcal K_s[\beta,\alpha]P_s .
       \notag
     \end{align}
     If every blocked representative $\mathcal K_s^{[2]}$ is a
@@ -616,14 +620,32 @@
 \begin{proof}\leanok
     \uses{thm:mpdo_absorbed_representative_boundary_decomposition,
         thm:mpdo_projective_resolution_channel_cptp}
-    At each of the two closure lengths, expand the arbitrary-boundary closure
-    as the sum of the absorbed-representative closures. Compression by the
-    first-site projection annihilates every summand except the matching one,
-    by two-sided physical support and $P_sP_t=0$ for $s\ne t$. Apply the
-    corresponding representative channel to this surviving term and sum over
-    $s$. The projective resolution makes both assembled maps trace-preserving
-    and completely positive. The two resulting sums are respectively the
-    length-two and length-four closures of $K$ with the original boundary.
+    Write $\mathcal C_N(A,X)$ for the length-$N$ closure of $A$ with boundary
+    $X$, and write $B_s(X)$ for the boundary supplied to representative $s$.
+    At both relevant lengths the boundary decomposition gives
+    \begin{align}
+      \mathcal C_N(K,X)
+        &=\sum_t \mathcal C_N(\mathcal K_t,B_t(X)),
+        &N&\in\{2,4\}.
+      \notag
+    \end{align}
+    Let $\Phi_{s,N}$ be compression by $P_s$ on the first site and by the
+    identity on the remaining $N$ sites. Two-sided physical support and
+    $P_sP_t=0$ for $s\ne t$ give the selection identity
+    \begin{align}
+      \Phi_{s,N}\bigl(\mathcal C_{N+1}(\mathcal K_t,B_t(X))\bigr)
+        &=
+        \begin{cases}
+          \mathcal C_{N+1}(\mathcal K_t,B_t(X)),&s=t,\\
+          0,&s\ne t.
+        \end{cases}
+      \notag
+    \end{align}
+    Apply the representative channel to the surviving summand and sum over
+    $s$. The projective resolution makes both resulting maps trace-preserving
+    and completely positive. The boundary decomposition then identifies their
+    outputs with the length-two and length-four closures of $K$ carrying the
+    original boundary.
 \end{proof}
 
 \begin{theorem}[Blocking channels after common-weight absorption]
