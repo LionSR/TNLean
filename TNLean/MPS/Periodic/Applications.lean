@@ -160,7 +160,7 @@ theorem zGaugeEquiv_of_isIrreducibleForm_sameMPV_rotatePhysical
 /-- The transfer map is invariant under unitary rotation of the physical index:
 `E_{rotatePhysical u A} = E_A` when `u * uᴴ = 1`.
 
-This follows from unitary freedom of the Kraus representation (Theorem 2.18,
+This follows from unitary freedom of the Kraus representation (Theorem 2.1(4),
 Wolf *Quantum Channels & Operations*). -/
 theorem transferMap_rotatePhysical (A : MPSTensor d D) (u : Matrix (Fin d) (Fin d) ℂ)
     (hu : u * uᴴ = 1) :

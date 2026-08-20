@@ -130,7 +130,7 @@ The proof follows the paper (arXiv:1708.00029 Section 4.1, converse paragraph): 
 canonicalization we obtain `A : MPSTensor d D` with
 `transferMap B = transferMap (blockTensor A p)`; this matches two Kraus representations of
 the same CP map (`blockTensor A p` with `d^p` operators and `B` with `d` operators), so
-Wolf Theorem 2.18 (`kraus_isometry_freedom_iff`) supplies an isometry
+Wolf Theorem 2.1(4) (`kraus_isometry_freedom_iff`) supplies an isometry
 `V : Matrix (Fin (d^p)) (Fin d) ℂ` with `Vᴴ V = 1` and
 `blockTensor A p α = ∑_j V α j • B j`. Expanding `coeff (blockTensor A p) (ofFn τ)` with
 the auxiliary `evalWord_sum_smul_ofFn` and linearity of `trace` produces exactly the
@@ -144,7 +144,7 @@ theorem thm_4_1_p_refinement_reverse
   obtain ⟨A, hTransferEq⟩ := hInverse hB hDivisible
   classical
   -- `d ≤ d^p = blockPhysDim d p` whenever `p ≥ 1`: the Kraus-rank comparison needed by
-  -- Wolf Theorem 2.18.
+  -- Wolf Theorem 2.1(4).
   have hCard : Fintype.card (Fin d) ≤ Fintype.card (Fin (blockPhysDim d p)) := by
     simp only [Fintype.card_fin, blockPhysDim_eq_pow]
     exact Nat.le_self_pow hp.ne' d
@@ -158,7 +158,7 @@ theorem thm_4_1_p_refinement_reverse
     have hEq : transferMap (blockTensor A p) X = transferMap B X := by
       rw [← hTransferEq]
     simpa [transferMap_apply] using hEq
-  -- Extract the isometric mixing matrix `V` from Wolf Theorem 2.18.
+  -- Extract the isometric mixing matrix `V` from Wolf Theorem 2.1(4).
   obtain ⟨V, hV, hBA⟩ :=
     (kraus_isometry_freedom_iff (blockTensor A p) B hCard).mp hKraus
   refine ⟨A, V, hV, ?_⟩

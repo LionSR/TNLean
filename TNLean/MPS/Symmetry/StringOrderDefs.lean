@@ -404,7 +404,7 @@ theorem condC2_iff_condC3 :
 if `u` is unitary then `∑_i (∑_j u_{ij} A_j) X (∑_j u_{ij} A_j)† = ∑_i A_i X A_i†`.
 
 This is a thin adapter over `kraus_same_map_of_unitary_combination` from
-`TNLean.Channel.KrausRepresentation` (Theorem 2.18 in Wolf's "Quantum
+`TNLean.Channel.KrausRepresentation` (Theorem 2.1(4) in Wolf's "Quantum
 Channels & Operations"). -/
 lemma unitary_kraus_mixing
     (A : Fin d → Matrix (Fin D) (Fin D) ℂ)
