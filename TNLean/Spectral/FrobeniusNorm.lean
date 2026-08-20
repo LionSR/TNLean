@@ -39,7 +39,7 @@ lemma frobSq_smul (c : ℂ) (X : Matrix (Fin m) (Fin n) ℂ) :
   Matrix.frobeniusNormSq_smul c X
 
 /-- Compatibility embedding with the original row-column coordinate order. -/
-noncomputable abbrev matToES (M : Matrix (Fin m) (Fin n) ℂ) :
+noncomputable def matToES (M : Matrix (Fin m) (Fin n) ℂ) :
     EuclideanSpace ℂ (Fin m × Fin n) :=
   Matrix.frobeniusEquivEuclidean (Fin n) (Fin m) M.transpose
 
