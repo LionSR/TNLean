@@ -8,9 +8,9 @@ Blueprint `\lean{...}` tag.
 
 | Removed declaration | Existing replacement |
 |---|---|
-| `BlockSumGroundSpace.sigmaDiagonalBlock` | `Matrix.finSigmaDiagonalBlock` after `Matrix.reindex finSigmaFinEquiv finSigmaFinEquiv`; the extraction body is identical |
-| `BlockSumGroundSpace.diagonalBlock` | `Matrix.finSigmaDiagonalBlock` (`TNLean/MPS/SharedInfra/BoundaryDecomposition.lean`); the bodies are definitionally equal, bridged by `rfl` before this removal |
-| `BlockSumGroundSpace.trace_blockDiagonal'_mul` | `Matrix.trace_blockDiagonal'_mul` (`TNLean/Algebra/DependentBlockDiagonal.lean`); the removed theorem was a `simpa` pass-through |
+| `BlockSumGroundSpace.sigmaDiagonalBlock` | the corresponding `Matrix.submatrix` compression |
+| `BlockSumGroundSpace.diagonalBlock` | `Matrix.finSigmaDiagonalBlock` |
+| `BlockSumGroundSpace.trace_blockDiagonal'_mul` | `Matrix.trace_blockDiagonal'_mul` |
 
 All call sites inside `BlockSumGroundSpace.lean` were rewritten to use
 `Matrix.finSigmaDiagonalBlock` directly. No other public declaration was
