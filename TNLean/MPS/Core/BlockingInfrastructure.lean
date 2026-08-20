@@ -539,7 +539,7 @@ theorem reindexPhysical_directToIteratedBlockIndex_blockTensor {D : ℕ}
       rw [blockTensor_blockTensor_eq_reindex A m n]
     _ = blockTensor (d := d) (D := D) A (m * n) := by
       ext i
-      simp [reindexPhysical, iteratedBlockIndex_directToIteratedBlockIndex d m n]
+      simp [Kraus.reindexPhysical, iteratedBlockIndex_directToIteratedBlockIndex d m n]
 
 /-- Refine a tensor already blocked by `p` through a further length-`L` blocking, but expose
 the resulting physical alphabet as the direct length-`p * L` alphabet.

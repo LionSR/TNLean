@@ -48,9 +48,9 @@ lemma left_mul_evalWord_leftSectorTensor_of_commutes
   intro w
   induction w with
   | nil =>
-      simp only [evalWord]
+      simp only [Kraus.evalWord]
   | cons i w ih =>
-      simp only [leftSectorTensor, evalWord]
+      simp only [leftSectorTensor, Kraus.evalWord]
       calc P * (P * A i * evalWord (leftSectorTensor P A) w)
           = P * P * A i * evalWord (leftSectorTensor P A) w := by
             simp only [Matrix.mul_assoc]

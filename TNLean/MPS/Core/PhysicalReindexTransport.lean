@@ -65,7 +65,7 @@ theorem leftCanonical_reindexPhysical_equiv {d₁ d₂ D : ℕ} (e : Fin d₁ �
     (∑ i : Fin d₁,
         (reindexPhysical e A i)ᴴ * reindexPhysical e A i = 1) ↔
       (∑ i : Fin d₂, (A i)ᴴ * A i = 1) := by
-  simp only [reindexPhysical]
+  simp only [Kraus.reindexPhysical]
   have hsum :
       (∑ i : Fin d₁, (A (e i))ᴴ * A (e i)) =
         ∑ i : Fin d₂, (A i)ᴴ * A i :=
@@ -91,7 +91,7 @@ theorem hasInvariantProj_reindexPhysical_equiv {d₁ d₂ D : ℕ} (e : Fin d₁
   · rintro ⟨P, hPproj, hP0, hP1, hLower⟩
     refine ⟨P, hPproj, hP0, hP1, ?_⟩
     intro i
-    simpa [reindexPhysical] using hLower (e.symm i)
+    simpa [Kraus.reindexPhysical] using hLower (e.symm i)
   · rintro ⟨P, hPproj, hP0, hP1, hLower⟩
     exact ⟨P, hPproj, hP0, hP1, fun i => hLower (e i)⟩
 
@@ -111,7 +111,7 @@ theorem isInjective_reindexPhysical_equiv {d₁ d₂ D : ℕ} (e : Fin d₁ ≃ 
     · rintro ⟨i, rfl⟩
       exact ⟨e i, rfl⟩
     · rintro ⟨i, rfl⟩
-      exact ⟨e.symm i, by simp [reindexPhysical]⟩
+      exact ⟨e.symm i, by simp [Kraus.reindexPhysical]⟩
   simp [IsInjective, hRange]
 
 /-- Reindexing both tensors by a physical-index equivalence preserves gauge-phase equivalence. -/
@@ -123,11 +123,11 @@ theorem gaugePhaseEquiv_reindexPhysical_equiv {d₁ d₂ D : ℕ}
   · rintro ⟨X, ζ, hζ, hXB⟩
     refine ⟨X, ζ, hζ, ?_⟩
     intro i
-    simpa [reindexPhysical] using hXB (e.symm i)
+    simpa [Kraus.reindexPhysical] using hXB (e.symm i)
   · rintro ⟨X, ζ, hζ, hXB⟩
     refine ⟨X, ζ, hζ, ?_⟩
     intro i
-    simpa [reindexPhysical] using hXB (e i)
+    simpa [Kraus.reindexPhysical] using hXB (e i)
 
 /-- Reindexing both tensors by a physical-index equivalence preserves their
 closed MPV overlap.

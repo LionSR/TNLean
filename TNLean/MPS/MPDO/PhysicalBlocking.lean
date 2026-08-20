@@ -146,11 +146,9 @@ theorem toMPSTensor_blockTensor (M : MPOTensor d D) {L : ℕ} :
       MPSTensor.reindexPhysical (blockedDoubledIndexEquiv d L)
         (MPSTensor.blockTensor M.toMPSTensor L) := by
   funext ij
-  simp only [toMPSTensor, blockTensor_apply, MPSTensor.reindexPhysical,
-    MPSTensor.blockTensor]
-  simp only [MPSTensor.wordOfBlock, MPOTensor.evalWord_ofFn,
-    MPSTensor.evalWord_ofFn_eq_prod]
-  simp only [toMPSTensor, decodeBlock_blockedDoubledIndexEquiv,
+  simp [toMPSTensor, blockTensor_apply, Kraus.reindexPhysical,
+    MPSTensor.blockTensor, MPSTensor.wordOfBlock, MPOTensor.evalWord_ofFn,
+    MPSTensor.evalWord_ofFn_eq_prod, decodeBlock_blockedDoubledIndexEquiv,
     MPSTensor.finProdFinEquiv_divNat, MPSTensor.finProdFinEquiv_modNat]
 
 /-- Injectivity of an MPO block is the injectivity of the corresponding block
@@ -265,8 +263,8 @@ theorem toMPSTensor_blockTwo (M : MPOTensor d D) :
       MPSTensor.reindexPhysical (twoSiteDoubledIndexEquiv d)
         (MPSTensor.blockTensor M.toMPSTensor 2) := by
   funext ij
-  simp [toMPSTensor, blockTwo, MPSTensor.reindexPhysical,
-    MPSTensor.blockTensor, twoSiteDoubledIndexEquiv, twoSiteBlockEquiv,
+  simp [toMPSTensor, blockTwo, Kraus.reindexPhysical,
+    MPSTensor.blockTensor, Kraus.evalWord, twoSiteDoubledIndexEquiv, twoSiteBlockEquiv,
     blockedDoubledIndexEquiv, MPSTensor.wordOfBlock, Equiv.arrowCongr]
 
 /-- The concrete two-site blocking is the general length-two blocking after
