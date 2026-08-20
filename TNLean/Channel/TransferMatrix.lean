@@ -13,7 +13,7 @@ import Mathlib.LinearAlgebra.Eigenspace.Basic
 import Mathlib.Data.Matrix.Basis
 
 /-!
-# Transfer-matrix representation of channels (Wolf Section 2.2)
+# Transfer-matrix representation of channels (Wolf Section 2.3)
 
 This file defines the **transfer matrix** (matrix representation) of a linear
 map `T : M_D(ℂ) → M_D(ℂ)`. Given an ordered basis `{E_{kl}}` of standard
@@ -59,7 +59,7 @@ with composition. We also relate it to the Kraus representation.
 
 ## References
 
-* [M. Wolf, *Quantum Channels & Operations: Guided Tour*, Section 2.2][Wolf2012QChannels]
+* [M. Wolf, *Quantum Channels & Operations: Guided Tour*, Section 2.3][Wolf2012QChannels]
 -/
 
 open scoped Matrix BigOperators Kronecker MatrixOrder ComplexOrder
@@ -243,7 +243,7 @@ theorem transferMatrix_pow
 /-- Matrix trace of the transfer matrix equals the basis-independent operator trace.
 
 The nonzero bond-dimension assumption records the genuine matrix-algebra setting used in
-Wolf Section 2.2 and in the MPU transfer argument. -/
+Wolf Section 2.3 and in the MPU transfer argument. -/
 theorem trace_transferMatrix_eq_linearMap_trace [NeZero D]
     (T : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ) :
     Matrix.trace (transferMatrix T) =
@@ -324,15 +324,21 @@ theorem transferMatrix_kraus
   simp only [ite_and, mul_ite, mul_one, mul_zero, ite_mul, zero_mul,
     Finset.sum_ite_eq, Finset.mem_univ, ↓reduceIte, mul_comm]
 
-/-! ### Propositions 2.5-2.6: Transfer matrix characterizations of TP, unital, and HP maps -/
+/-! ### Transfer-matrix characterizations of TP, unital, and HP maps
+
+These are entrywise consequences of the transfer-matrix definition in Wolf
+Section 2.3, Equation (2.20), rather than numbered propositions. -/
 
 section TransferMatrixChar
 
-/-- **Proposition 2.6 (TP via transfer matrix)**: `T` is trace-preserving iff
+/-- **Trace preservation via the transfer matrix.** A map `T` is trace-preserving iff
 the column-diagonal sums of the transfer matrix give `δ_{kl}`:
 `∑_i T̂_{(i,i),(l,k)} = δ_{kl}`.
 
-This expresses the TP condition as a partial-trace constraint on `T̂`. -/
+This expresses the TP condition as a partial-trace constraint on `T̂`.
+
+Source: Wolf Section 2.3, Equation (2.20), and the matrix-unit basis discussion
+at `Notes/WolfNoteTexSource/ch02_representations.tex`, lines 560–625. -/
 theorem transferMatrix_tp_iff
     (T : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ) :
     IsTracePreservingMap T ↔
@@ -369,9 +375,12 @@ theorem transferMatrix_tp_iff
             simp_rw [← Matrix.trace_smul, ← Matrix.trace_sum]
             rw [← sum_smul_single_eq X]
 
-/-- **Proposition 2.6 (Unital via transfer matrix)**: `T` is unital (`T 1 = 1`) iff
+/-- **Unitality via the transfer matrix.** A map `T` is unital (`T 1 = 1`) iff
 the row-diagonal sums of the transfer matrix give `δ_{ij}`:
-`∑_k T̂_{(j,i),(k,k)} = δ_{ij}`. -/
+`∑_k T̂_{(j,i),(k,k)} = δ_{ij}`.
+
+Source: Wolf Section 2.3, Equation (2.20), and the matrix-unit basis discussion
+at `Notes/WolfNoteTexSource/ch02_representations.tex`, lines 560–625. -/
 theorem transferMatrix_unital_iff
     (T : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ) :
     T 1 = 1 ↔
@@ -390,9 +399,12 @@ theorem transferMatrix_unital_iff
     simp only [Matrix.sum_apply]
     have := h i j; simp only [transferMatrix_apply] at this; exact this
 
-/-- **Proposition 2.5 (Hermiticity-preserving via transfer matrix)**:
+/-- **Hermiticity preservation via the transfer matrix.**
 `T` preserves Hermiticity (`(T X)ᴴ = T Xᴴ` for all `X`) iff
-`T̂_{(j,i),(k,l)} = conj(T̂_{(i,j),(l,k)})` for all indices. -/
+`T̂_{(j,i),(k,l)} = conj(T̂_{(i,j),(l,k)})` for all indices.
+
+Source: Wolf Section 2.3, Equation (2.20), and the adjoint relation at
+`Notes/WolfNoteTexSource/ch02_representations.tex`, lines 560–576. -/
 theorem transferMatrix_hermiticityPreserving_iff
     (T : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ) :
     (∀ X : Matrix (Fin D) (Fin D) ℂ, (T X)ᴴ = T Xᴴ) ↔
@@ -427,12 +439,12 @@ theorem transferMatrix_hermiticityPreserving_iff
 
 end TransferMatrixChar
 
-/-! ### Unitary conjugation maps (Wolf Section 2.3, preparation for Propositions 2.7-2.8)
+/-! ### Unitary conjugation maps
 
 The unitary conjugation `Ad_U(X) = U X U†` is the basic building block for
-the Lorentz normal form (Proposition 2.7). Its transfer matrix is `Ū ⊗ₖ U`,
-and composing with unitary conjugations transforms the transfer matrix by
-left/right multiplication — the algebraic engine behind normal forms. -/
+the unitary actions used in Wolf Section 2.4 before Proposition 2.11. Its
+transfer matrix is `Ū ⊗ₖ U`, and composing with unitary conjugations
+transforms the transfer matrix by left and right multiplication. -/
 
 section UnitaryConjugation
 
@@ -456,9 +468,13 @@ theorem unitaryConjLM_apply (U : Matrix (Fin D) (Fin D) ℂ)
     (X : Matrix (Fin D) (Fin D) ℂ) :
     unitaryConjLM U X = U * X * Uᴴ := rfl
 
-/-- **Transfer matrix of unitary conjugation** (Wolf Proposition 2.7 ingredient):
+/-- **Transfer matrix of unitary conjugation.**
 `(Ad_U)^ = Ū ⊗ₖ U`, the Kronecker product of the entrywise conjugate
-of `U` with `U`. -/
+of `U` with `U`.
+
+This is the matrix-unit form of the unitary action discussed for qubit Pauli
+transfer matrices in Wolf Section 2.4; see
+`Notes/WolfNoteTexSource/ch02_representations.tex`, lines 1000–1010. -/
 theorem transferMatrix_unitaryConj (U : Matrix (Fin D) (Fin D) ℂ) :
     transferMatrix (unitaryConjLM U) = U.map (starRingEnd ℂ) ⊗ₖ U := by
   have := transferMatrix_kraus (fun _ : Fin 1 => U) (unitaryConjLM U)
@@ -782,30 +798,21 @@ theorem unitaryConjLM_comp_transpose_mapsPSDConeOnto
 
 end ConePreservation
 
-/-! ### Propositions 2.7-2.8: Normal form decomposition via transfer matrix
+/-! ### Unitary conjugation of transfer matrices
 
-**Proposition 2.7** (Lorentz normal form): For any channel `T`, composing with
-unitary conjugations `Ad_{U₁}` and `Ad_{U₂}` yields a transfer matrix
-`(Ū₁ ⊗ U₁) * T̂ * (Ū₂ ⊗ U₂)`. By choosing `U₁, U₂` to diagonalize
-the 3×3 block (for qubits), one obtains the Lorentz normal form.
-
-**Proposition 2.8** (SVD representation): The singular value decomposition of
-the coefficient matrix `[tᵢⱼ]` in the trace-pairing expansion
-`T(ρ) = ∑ᵢⱼ tᵢⱼ σᵢ tr(σⱼ ρ)` yields the SVD representation
-`T(ρ) = ∑ₖ sₖ uₖ tr(vₖ ρ)` with orthonormal `{uₖ}`, `{vₖ}`.
-
-The key algebraic tool is `transferMatrix_unitaryConj_sandwich`, which
-shows how unitary conjugation acts on transfer matrices. -/
+Wolf Section 2.4, lines 1000–1010 of the local transcription, describes the
+left and right action of unitary conjugations on a qubit Pauli transfer matrix.
+The following identity gives its matrix-unit analogue in arbitrary dimension. -/
 
 section NormalForms
 
-/-- **Propositions 2.7-2.8 key identity**: The transfer matrix of `Ad_{U₁} ∘ T ∘ Ad_{U₂}`
+/-- **Transfer matrix under unitary conjugation.** The transfer matrix of
+`Ad_{U₁} ∘ T ∘ Ad_{U₂}`
 is `(Ū₁ ⊗ U₁) * T̂ * (Ū₂ ⊗ U₂)`.
 
-This is the algebraic engine behind the Lorentz normal form (Proposition 2.7)
-and the SVD representation (Proposition 2.8): by choosing unitaries `U₁, U₂`
-appropriately (e.g. via SVD of `T̂`), the transfer matrix can be brought
-to a diagonal or block-diagonal normal form. -/
+This is the matrix-unit analogue of the qubit Pauli-transfer identity in Wolf
+Section 2.4; see `Notes/WolfNoteTexSource/ch02_representations.tex`, lines
+1000–1010. -/
 theorem transferMatrix_unitaryConj_sandwich
     (T : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ)
     (U₁ U₂ : Matrix (Fin D) (Fin D) ℂ) :

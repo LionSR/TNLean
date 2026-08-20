@@ -27,7 +27,7 @@ product/sum form (`pow_card_mul_prod_le_sum_pow`) and its
 positive-semidefinite trace--determinant specialisation
 `Dᴰ · det M ≤ (tr M)ᴰ`, with the equality case characterising scalar matrices.
 These are the eigenvalue estimate underlying the optimality ("AGM iteration")
-step of Wolf, Section 2.3, Proposition 2.8.
+step of Wolf, Section 2.4, Proposition 2.8.
 
 ## References
 
@@ -43,7 +43,7 @@ section AMGM
 /-- **AM–GM in product/sum form.**  For a nonnegative family `f : Fin D → ℝ`,
 `Dᴰ · ∏ f ≤ (∑ f)ᴰ`.  This is the polynomial form of the
 arithmetic–geometric-mean inequality with uniform weights `1 / D`.  Wolf
-Section 2.3 applies it to the eigenvalues of a Choi matrix in the optimality
+Section 2.4 applies it to the eigenvalues of a Choi matrix in the optimality
 ("AGM iteration") step of Proposition 2.8.  Both sides agree when `D = 0`
 (empty product `1`, empty sum `0`, and `0 ^ 0 = 1`). -/
 lemma pow_card_mul_prod_le_sum_pow {D : ℕ} (f : Fin D → ℝ) (hf : ∀ i, 0 ≤ f i) :
@@ -200,7 +200,7 @@ theorem IsHermitian.posSemidef_of_trace_re_nonneg_of_card_sub_one_mul_trace_sq_r
 `D × D` complex matrix `M`, `Dᴰ · det M ≤ (tr M)ᴰ` as real numbers (both
 `det M` and `tr M` are real for a Hermitian matrix).  This is the eigenvalue
 AM–GM estimate underlying the optimality ("AGM iteration") step of Wolf
-Proposition 2.8 (Section 2.3): `det M = ∏ λᵢ` and `tr M = ∑ λᵢ` for the
+Proposition 2.8 (Section 2.4): `det M = ∏ λᵢ` and `tr M = ∑ λᵢ` for the
 nonnegative eigenvalues `λᵢ`, so the bound is `pow_card_mul_prod_le_sum_pow`
 applied to the eigenvalue family. -/
 theorem PosSemidef.pow_card_mul_det_re_le_trace_re_pow {D : ℕ}
@@ -221,7 +221,7 @@ positive-semidefinite `D × D` complex matrix `M`, the bound
 `Matrix.PosSemidef.pow_card_mul_det_re_le_trace_re_pow` is an equality exactly
 when `M` is the scalar matrix `(tr M / D) · 1` — equivalently, when all
 eigenvalues coincide.  This is the equality case of the AM–GM step in Wolf
-Proposition 2.8 (Section 2.3): the "AGM iteration" terminates precisely at
+Proposition 2.8 (Section 2.4): the "AGM iteration" terminates precisely at
 scalar (maximally mixed) blocks. -/
 theorem PosSemidef.pow_card_mul_det_re_eq_trace_re_pow_iff {D : ℕ}
     {M : Matrix (Fin D) (Fin D) ℂ} (hM : M.PosSemidef) :

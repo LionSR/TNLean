@@ -8,11 +8,15 @@ import Mathlib.Analysis.Matrix.PosDef
 import Mathlib.Analysis.Matrix.Order
 
 /-!
-# SVD normal form for (transfer) matrices (Wolf Section 2.3, Eqs. (2.35)-(2.40))
+# Singular value decompositions for (transfer) matrices
 
-This file formalizes the singular value decomposition (SVD) existence result
-from Wolf Section 2.3, which serves as the key technical building block for the
-transfer-matrix normal forms discussed there (Wolf Eqs. (2.38)-(2.40)).
+This file records singular value decomposition (SVD) existence results for
+general complex square matrices and transfer matrices.  They are elementary
+linear-algebraic results used in the normal-form development.
+
+Wolf Section 2.4 uses a real SVD only for the `3 × 3` block of a qubit
+transfer matrix.  The arbitrary-dimensional complex SVD proved here is more
+general and is not attributed to that passage.
 
 * **SVD for PSD matrices.** Every positive semi-definite complex square matrix
   admits a decomposition `M = U * diagonal σ * Uᴴ` with `U` unitary and `σ`
@@ -21,14 +25,14 @@ transfer-matrix normal forms discussed there (Wolf Eqs. (2.38)-(2.40)).
   admits a decomposition `M = U * diagonal σ * Vᴴ` with `U, V` unitary and
   `σ : n → ℝ` strictly positive.
 
-The full Wolf Section 2.3 Lorentz normal form (Proposition 2.9 / Proposition 2.11 for qubit
-channels) requires an optimization / compactness step to show the infimum of
-`tr τ'` over `SL(2, ℂ)` filterings is attained; that iterative argument is out
-of scope for this existence milestone and is tracked in the Chapter 2 index.
+The full Lorentz normal form of Wolf Section 2.4 (Propositions 2.9 and 2.11 for
+qubit channels) also requires a compactness argument showing that the infimum
+of `tr τ'` over `SL(2, ℂ)` filterings is attained.  That argument is developed
+in `TNLean.Channel.LorentzNormalForm`.
 
 The singular values produced here are not sorted and not proven unique;
-downstream Wolf Section 2.3 applications that need the sorted / unique variant will
-require additional work.
+the applications in Wolf Section 2.4 that require ordered or unique singular
+values need corresponding refinements.
 
 ## Main results
 
@@ -38,9 +42,6 @@ require additional work.
 * `transferMatrix_svd_of_isUnit` — SVD existence specialised to invertible
   transfer matrices of linear channel super-operators.
 
-## References
-
-* [M. Wolf, *Quantum Channels & Operations: Guided Tour*, Section 2.3][Wolf2012QChannels]
 -/
 
 open scoped Matrix BigOperators ComplexOrder
@@ -195,7 +196,7 @@ section TransferMatrixSVD
 
 variable {D : ℕ}
 
-/-- **SVD representation of a transfer matrix** (existence, Wolf Section 2.3).
+/-- **SVD representation of a transfer matrix.**
 Every invertible transfer matrix admits a singular value decomposition
 `T̂ = U * diagonal σ * Vᴴ` with `U, V` unitary and `σ` strictly positive.
 
