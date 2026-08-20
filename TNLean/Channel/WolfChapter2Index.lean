@@ -99,9 +99,9 @@ project import.
   - `kraus_rectangular_freedom` / `kraus_rectangular_freedom'`
     — Kraus freedom (necessary direction) ✓
   - `kraus_isometry_freedom_iff`
-    — Wolf Theorem 2.18 in isometric form, including zero-padding of the smaller family ✓
+    — Wolf Theorem 2.1(4) in isometric form, including zero-padding of the smaller family ✓
   - `kraus_unitary_freedom_iff`
-    — Wolf Theorem 2.18 in same-size unitary form ✓
+    — Wolf Theorem 2.1(4) in same-size unitary form ✓
   - `Channel.HasKrausCard` / `Channel.HasKrausRankLE` / `Channel.choiRank` /
     `Channel.hasKrausCard_mono` / `Channel.choiRank_le_of_hasKrausCard` /
     `Channel.hasKrausCard_choiRank_of_cp`
