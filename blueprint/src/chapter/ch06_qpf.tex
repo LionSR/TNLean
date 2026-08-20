@@ -386,6 +386,22 @@ and~\cite{Evans1978Spectral}.
 
 \section{Uniqueness}
 
+\begin{lemma}[Critical scalar for positive-definite matrices]
+    \label{lem:critical_scalar_posdef}
+    \lean{exists_critical_scalar}
+    \leanok
+    Let $D\geq1$, and let $\rho,\sigma\in\MN{D}$ be positive definite. There
+    is a real number $c>0$ such that $\sigma-c\rho$ is positive semidefinite
+    but not positive definite.
+\end{lemma}
+
+\begin{proof}\leanok
+    Write $\rho=SS^\dagger$ with $S$ invertible and set
+    $H=S^{-1}\sigma(S^\dagger)^{-1}$. Take $c$ to be the smallest eigenvalue
+    of $H$. Then $H-c\Id$ is positive semidefinite and singular. Congruence by
+    $S$ gives the corresponding assertions for $\sigma-c\rho$.
+\end{proof}
+
 \begin{theorem}[Fixed-point proportionality from boundary definiteness]
     \label{thm:posdef_fixedpoint_proportional}
     \lean{exists_smul_eq_of_posDef_fixedPoints_of_fixedPoint_posDef}
@@ -397,8 +413,9 @@ and~\cite{Evans1978Spectral}.
 \end{theorem}
 
 \begin{proof}\leanok
-    Choose the largest $c\geq0$ for which $\sigma-c\rho$ is positive
-    semidefinite. The difference is singular and fixed by $E$. If it were
+    \uses{lem:critical_scalar_posdef}
+    Apply Lemma~\ref{lem:critical_scalar_posdef} to choose $c>0$ for which
+    $\sigma-c\rho$ is positive semidefinite but not positive definite. The difference is singular and fixed by $E$. If it were
     nonzero, the hypothesis would make it positive definite, contradicting
     maximality. Hence $\sigma-c\rho=0$.
 \end{proof}
