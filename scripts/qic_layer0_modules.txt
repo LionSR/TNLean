@@ -1,16 +1,125 @@
 # Foundation modules assigned to the extracted quantum-channel library
-# (QICLean; see issue LionSR/TNLean#6560, Phase 3). Each entry is a
-# repository-relative Lean file path, one per line; blank lines and lines
-# starting with `#` are ignored.
+# (QICLean; see issues LionSR/TNLean#6560 and LionSR/TNLean#6617). Each
+# entry is a repository-relative Lean file path, one per line; blank lines
+# and lines starting with `#` are ignored.
 #
-# This manifest is the future single source of truth for the extraction
-# file list. Until the layer-0 foundation modules (Algebra/, Analysis/,
-# Topology/, Axioms/ files that only the channel/entropy layer depends on)
-# are identified and assigned here, this file stays empty: today the
-# channel/tensor-network boundary is enforced only for TNLean/Channel/,
-# TNLean/Entropy/, and TNLean/Kraus/, checked directly by directory in
-# scripts/check_import_direction.py.
+# This manifest contains every module under TNLean/Analysis/ and
+# TNLean/Topology/, their generated aggregators, and exactly the modules under
+# TNLean/Algebra/ in their combined transitive TNLean import closure.
+# TNLean/Algebra.lean is intentionally excluded.
 #
 # scripts/check_import_direction.py additionally enforces that every entry
-# below names a file that still exists (a stale-entry check), so this
-# manifest cannot silently drift from the tree as files move or get renamed.
+# still exists and does not directly import the tensor-network side.
+TNLean/Algebra/DependentBlockDiagonal.lean
+TNLean/Algebra/EqualRangeRightFactor.lean
+TNLean/Algebra/FinSum.lean
+TNLean/Algebra/FrobeniusHilbert.lean
+TNLean/Algebra/HermitianHelpers.lean
+TNLean/Algebra/KroneckerFactorPositivity.lean
+TNLean/Algebra/MatrixAux.lean
+TNLean/Algebra/MatrixFamilySupport.lean
+TNLean/Algebra/MatrixGramUnitary.lean
+TNLean/Algebra/MatrixKroneckerEmbed.lean
+TNLean/Algebra/MatrixOperatorSpace.lean
+TNLean/Algebra/MatrixReindexUnitary.lean
+TNLean/Algebra/MatrixSpectralDecomp.lean
+TNLean/Algebra/MatrixTracePairing.lean
+TNLean/Algebra/MatrixUnitaryBetween.lean
+TNLean/Algebra/OperatorBlock.lean
+TNLean/Algebra/OperatorSchmidt.lean
+TNLean/Algebra/OrthogonalProjection.lean
+TNLean/Algebra/PerronFrobenius/RankOne.lean
+TNLean/Algebra/PosSemidefSupport.lean
+TNLean/Algebra/PositiveSemidefiniteNormalization.lean
+TNLean/Algebra/ScalarCommutant.lean
+TNLean/Algebra/StarSubalgebraBlockDiagonal.lean
+TNLean/Algebra/StarSubalgebraBlockForm.lean
+TNLean/Algebra/StarSubalgebraIntertwinerIsometry.lean
+TNLean/Algebra/StarSubalgebraIrreducibleDecomp.lean
+TNLean/Algebra/StarSubalgebraIsotypic.lean
+TNLean/Algebra/StarSubalgebraIsotypicDecomp.lean
+TNLean/Algebra/StarSubalgebraIsotypicFactorization.lean
+TNLean/Algebra/StarSubalgebraSchur.lean
+TNLean/Algebra/StarSubalgebraSemisimple.lean
+TNLean/Algebra/StarSubalgebraSimpleModule.lean
+TNLean/Algebra/StarSubalgebraSpatial.lean
+TNLean/Algebra/StarSubalgebraUnitaryIntertwiner.lean
+TNLean/Algebra/TraceReindex.lean
+TNLean/Algebra/UnitModulusPowerSum.lean
+TNLean/Algebra/ZModCyclicSums.lean
+TNLean/Analysis.lean
+TNLean/Analysis/AdjointEigenvalues.lean
+TNLean/Analysis/Birkhoff.lean
+TNLean/Analysis/CStarCompletion.lean
+TNLean/Analysis/CStarMatrixKronecker.lean
+TNLean/Analysis/CfcConjugation.lean
+TNLean/Analysis/CfcKronecker.lean
+TNLean/Analysis/CfcLogAdditive.lean
+TNLean/Analysis/CoisometricCompression.lean
+TNLean/Analysis/ConvexHullCompact.lean
+TNLean/Analysis/DeterminantTraceBound.lean
+TNLean/Analysis/Dirichlet.lean
+TNLean/Analysis/Entropy.lean
+TNLean/Analysis/EntropyDecomposition.lean
+TNLean/Analysis/EntropyMarkovForward.lean
+TNLean/Analysis/EntropyMarkovReverse.lean
+TNLean/Analysis/EntropyReindex.lean
+TNLean/Analysis/FiniteRangeKnabe.lean
+TNLean/Analysis/FittingDecomposition.lean
+TNLean/Analysis/HayashiMarkovStructure.lean
+TNLean/Analysis/IdempotentEndomorphism.lean
+TNLean/Analysis/InjectiveRangeProjector.lean
+TNLean/Analysis/IsometricCompression.lean
+TNLean/Analysis/JordanBlockPower.lean
+TNLean/Analysis/KleinInequality.lean
+TNLean/Analysis/KyFanNorm.lean
+TNLean/Analysis/LiebConcavity.lean
+TNLean/Analysis/LiebIntegrandConcave.lean
+TNLean/Analysis/LiebOperatorConcave.lean
+TNLean/Analysis/LiebOperatorIntegral.lean
+TNLean/Analysis/LiebScalarIntegral.lean
+TNLean/Analysis/LiebSubBoundary.lean
+TNLean/Analysis/MarginalSupport.lean
+TNLean/Analysis/MatrixFamilySupport.lean
+TNLean/Analysis/MatrixReducedProjection.lean
+TNLean/Analysis/MatrixSqrt.lean
+TNLean/Analysis/MatrixTraceInequalities.lean
+TNLean/Analysis/MeanErgodic.lean
+TNLean/Analysis/NeumannInverse.lean
+TNLean/Analysis/OperatorConvexity.lean
+TNLean/Analysis/OperatorNormConvergence.lean
+TNLean/Analysis/PosSemidefCommute.lean
+TNLean/Analysis/PositiveGapTransfer.lean
+TNLean/Analysis/ProbabilityEntropy.lean
+TNLean/Analysis/ProjectionGeometry.lean
+TNLean/Analysis/RelativeEntropyResolventIntegral.lean
+TNLean/Analysis/RelativeEntropySupportIntegral.lean
+TNLean/Analysis/RelativeEntropySupportLeftRightQuadratic.lean
+TNLean/Analysis/ResolventFunctionalCalculus.lean
+TNLean/Analysis/RpowConvexity.lean
+TNLean/Analysis/SandwichedRenyi.lean
+TNLean/Analysis/SandwichedRenyiTwo.lean
+TNLean/Analysis/SchattenNorm.lean
+TNLean/Analysis/SpectralQuadraticForm.lean
+TNLean/Analysis/SpectralRadius.lean
+TNLean/Analysis/SpectralRadiusPowerDecay.lean
+TNLean/Analysis/SuperoperatorResolvent.lean
+TNLean/Analysis/SupportCompressedEntropy.lean
+TNLean/Analysis/SupportCompression.lean
+TNLean/Analysis/SupportLogJensen.lean
+TNLean/Analysis/TraceCFC.lean
+TNLean/Analysis/TraceNormAbs.lean
+TNLean/Analysis/TraceNormContractivity.lean
+TNLean/Analysis/TraceNormVariational.lean
+TNLean/Analysis/TwoProjectionAngleBlock.lean
+TNLean/Analysis/TwoProjectionAngleOrthogonality.lean
+TNLean/Analysis/TwoProjectionCompression.lean
+TNLean/Analysis/TwoProjectionCompressionSpectrum.lean
+TNLean/Analysis/TwoProjectionDefectBlockSum.lean
+TNLean/Analysis/TwoProjectionReducedProjection.lean
+TNLean/Analysis/UpperTriangularBound.lean
+TNLean/Analysis/WeightedCesaroMean.lean
+TNLean/Analysis/WeightedPositiveKernel.lean
+TNLean/Topology.lean
+TNLean/Topology/BrouwerProduct.lean
+TNLean/Topology/CompactRetractFixedPoint.lean
