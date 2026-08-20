@@ -41,7 +41,7 @@ variable [DecidableEq a] [DecidableEq b] [DecidableEq c]
 decomposition of two commuting overlapping operators.
 
 Source: Beigi, J. Phys. A 45 (2012) 025306, Lemma 2.1. -/
-def overlappingSpatialBlockEquiv {K : ℕ} {d m : Fin K → ℕ}
+private def overlappingSpatialBlockEquiv {K : ℕ} {d m : Fin K → ℕ}
     (e : ((q : Fin K) × (Fin (m q) × Fin (d q))) ≃ b) :
     (Σ q : Fin K, (a × Fin (d q)) × (Fin (m q) × c)) ≃ ((a × b) × c) where
   toFun x := ((x.2.1.1, e ⟨x.1, (x.2.2.1, x.2.1.2)⟩), x.2.2.2)
@@ -59,54 +59,14 @@ def overlappingSpatialBlockEquiv {K : ℕ} {d m : Fin K → ℕ}
 
 /-- The middle-space decomposition with the left factor written before the
 right factor in every summand. -/
-def overlappingMiddleBlockEquiv {K : ℕ} {d m : Fin K → ℕ}
+private def overlappingMiddleBlockEquiv {K : ℕ} {d m : Fin K → ℕ}
     (e : ((q : Fin K) × (Fin (m q) × Fin (d q))) ≃ b) :
     b ≃ Σ q : Fin K, Fin (d q) × Fin (m q) :=
   e.symm.trans (Equiv.sigmaCongrRight fun _ ↦ Equiv.prodComm _ _)
 
-/-- The left-associated spatial coordinates are the usual tripartite block
-coordinates after reassociation. -/
-theorem overlappingSpatialBlockEquiv_trans_prodAssoc
-    {K : ℕ} {d m : Fin K → ℕ}
-    (e : ((q : Fin K) × (Fin (m q) × Fin (d q))) ≃ b) :
-    (overlappingSpatialBlockEquiv (a := a) (c := c) e).trans
-        (Equiv.prodAssoc a b c) =
-      MarkovDilation.tripartiteBlockEquiv e := by
-  apply Equiv.ext
-  rintro ⟨q, ⟨⟨i, s⟩, ⟨r, k⟩⟩⟩
-  simp [overlappingSpatialBlockEquiv]
-
-/-- Decomposing the middle system in physical tripartite coordinates agrees
-with the direct-sum reassociation used by the HJPW decomposition. -/
-@[simp]
-theorem abcEquiv_overlappingMiddleBlockEquiv_tripartiteBlockEquiv_apply
-    {dA dB dC K : ℕ} {d m : Fin K → ℕ}
-    (e : ((q : Fin K) × (Fin (m q) × Fin (d q))) ≃ Fin dB)
-    (x : Σ q : Fin K,
-      (Fin dA × Fin (d q)) × (Fin (m q) × Fin dC)) :
-    HayashiMarkov.abcEquiv (overlappingMiddleBlockEquiv e)
-        (MarkovDilation.tripartiteBlockEquiv e x) =
-      HayashiMarkov.sigmaAssoc d m x := by
-  rcases x with ⟨q, ⟨⟨i, s⟩, ⟨r, k⟩⟩⟩
-  simp [HayashiMarkov.abcEquiv, overlappingMiddleBlockEquiv,
-    HayashiMarkov.sigmaAssoc]
-
-/-- The physical tripartite block coordinates followed by the HJPW middle
-decomposition are precisely the HJPW direct-sum coordinates. -/
-theorem tripartiteBlockEquiv_trans_abcEquiv_overlappingMiddleBlockEquiv
-    {dA dB dC K : ℕ} {d m : Fin K → ℕ}
-    (e : ((q : Fin K) × (Fin (m q) × Fin (d q))) ≃ Fin dB) :
-    (MarkovDilation.tripartiteBlockEquiv
-        (A := Fin dA) (C := Fin dC) e).trans
-        (HayashiMarkov.abcEquiv (overlappingMiddleBlockEquiv e)) =
-      HayashiMarkov.sigmaAssoc d m := by
-  apply Equiv.ext
-  intro x
-  exact abcEquiv_overlappingMiddleBlockEquiv_tripartiteBlockEquiv_apply e x
-
 /-- Transporting a matrix from physical coordinates to raw spatial blocks and
 then reassociating gives the same matrix as the HJPW middle decomposition. -/
-theorem reindex_abcEquiv_eq_reindex_sigmaAssoc_of_reindex_tripartite
+private theorem reindex_abcEquiv_eq_reindex_sigmaAssoc_of_reindex_tripartite
     {dA dB dC K : ℕ} {d m : Fin K → ℕ}
     (e : ((q : Fin K) × (Fin (m q) × Fin (d q))) ≃ Fin dB)
     (M : Matrix (Fin dA × (Fin dB × Fin dC))
@@ -129,27 +89,35 @@ theorem reindex_abcEquiv_eq_reindex_sigmaAssoc_of_reindex_tripartite
     (overlappingMiddleBlockEquiv e)
   let S := HayashiMarkov.sigmaAssoc
     (dA := dA) (dC := dC) d m
-  have hCoord : T.trans H = S :=
-    tripartiteBlockEquiv_trans_abcEquiv_overlappingMiddleBlockEquiv e
+  have hCoord : T.trans H = S := by
+    apply Equiv.ext
+    rintro ⟨q, ⟨⟨i, s⟩, ⟨r, k⟩⟩⟩
+    simp [T, H, S, HayashiMarkov.abcEquiv,
+      overlappingMiddleBlockEquiv, HayashiMarkov.sigmaAssoc]
   ext x y
   have hx : T (S.symm x) = H.symm x := by
     apply H.injective
     rw [H.apply_symm_apply]
     have hz := congrFun (congrArg Equiv.toFun hCoord) (S.symm x)
-    simpa [T, H, S] using hz
+    change H (T (S.symm x)) = S (S.symm x) at hz
+    rw [S.apply_symm_apply] at hz
+    exact hz
   have hy : T (S.symm y) = H.symm y := by
     apply H.injective
     rw [H.apply_symm_apply]
     have hz := congrFun (congrArg Equiv.toFun hCoord) (S.symm y)
-    simpa [T, H, S] using hz
+    change H (T (S.symm y)) = S (S.symm y) at hz
+    rw [S.apply_symm_apply] at hz
+    exact hz
   have hxy := congrFun (congrFun hM (S.symm x)) (S.symm y)
   change M (H.symm x) (H.symm y) = B (S.symm x) (S.symm y)
   rw [← hx, ← hy]
   simpa only [Matrix.reindex_apply, Matrix.submatrix_apply, Equiv.symm_symm, T]
     using hxy
 
+omit [DecidableEq a] [DecidableEq b] in
 /-- The natural lift on the first two factors preserves multiplication. -/
-theorem leftOverlappingLift_mul (X Y : Matrix (a × b) (a × b) ℂ) :
+private theorem leftOverlappingLift_mul (X Y : Matrix (a × b) (a × b) ℂ) :
     leftOverlappingLift (c := c) (X * Y) =
       leftOverlappingLift X * leftOverlappingLift Y := by
   ext p q
@@ -157,20 +125,23 @@ theorem leftOverlappingLift_mul (X Y : Matrix (a × b) (a × b) ℂ) :
   conv_rhs => rw [Fintype.sum_prod_type]
   simp [Matrix.one_apply]
 
+omit [Fintype a] [Fintype b] [Fintype c]
+    [DecidableEq a] [DecidableEq b] in
 /-- Conjugate transpose commutes with the natural lift on the first two
 factors. -/
-theorem leftOverlappingLift_star (X : Matrix (a × b) (a × b) ℂ) :
+private theorem leftOverlappingLift_star (X : Matrix (a × b) (a × b) ℂ) :
     leftOverlappingLift (c := c) (star X) = star (leftOverlappingLift X) := by
   ext p q
   rcases p with ⟨p, k⟩
   rcases q with ⟨q, k'⟩
   by_cases h : k = k'
   · subst k'
-    simp [leftOverlappingLift, Matrix.one_apply]
-  · simp [leftOverlappingLift, Matrix.one_apply, h, Ne.symm h]
+    simp [leftOverlappingLift]
+  · simp [leftOverlappingLift, h, Ne.symm h]
 
+omit [DecidableEq b] [DecidableEq c] in
 /-- The natural lift on the last two factors preserves multiplication. -/
-theorem rightOverlappingLift_mul (X Y : Matrix (b × c) (b × c) ℂ) :
+private theorem rightOverlappingLift_mul (X Y : Matrix (b × c) (b × c) ℂ) :
     rightOverlappingLift (a := a) (X * Y) =
       rightOverlappingLift X * rightOverlappingLift Y := by
   ext p q
@@ -181,9 +152,11 @@ theorem rightOverlappingLift_mul (X Y : Matrix (b × c) (b × c) ℂ) :
   · simp [Matrix.one_apply, h, Fintype.sum_prod_type]
   · simp [Matrix.one_apply, h]
 
+omit [Fintype a] [Fintype b] [Fintype c]
+    [DecidableEq b] [DecidableEq c] in
 /-- Conjugate transpose commutes with the natural lift on the last two
 factors. -/
-theorem rightOverlappingLift_star (X : Matrix (b × c) (b × c) ℂ) :
+private theorem rightOverlappingLift_star (X : Matrix (b × c) (b × c) ℂ) :
     rightOverlappingLift (a := a) (star X) = star (rightOverlappingLift X) := by
   ext p q
   rcases p with ⟨⟨i, j⟩, k⟩
@@ -193,18 +166,20 @@ theorem rightOverlappingLift_star (X : Matrix (b × c) (b × c) ℂ) :
     simp [rightOverlappingLift]
   · simp [rightOverlappingLift, h, Ne.symm h]
 
+omit [Fintype a] [Fintype b] [Fintype c] [DecidableEq b] in
 /-- The right overlapping lift of a middle-system operator is its three-factor
 Kronecker lift. -/
-theorem rightOverlappingLift_kronecker_one (U : Matrix b b ℂ) :
+private theorem rightOverlappingLift_kronecker_one (U : Matrix b b ℂ) :
     rightOverlappingLift (a := a) (U ⊗ₖ (1 : Matrix c c ℂ)) =
       ((1 : Matrix a a ℂ) ⊗ₖ U) ⊗ₖ (1 : Matrix c c ℂ) := by
   ext p q
   simp [rightOverlappingLift]
   ring
 
+omit [DecidableEq b] in
 /-- Orthogonal middle supports force the product of two overlapping operators
 to vanish. -/
-theorem overlappingLifts_mul_eq_zero_of_middle_mul_eq_zero
+private theorem overlappingLifts_mul_eq_zero_of_middle_mul_eq_zero
     (X : Matrix (a × b) (a × b) ℂ)
     (Y : Matrix (b × c) (b × c) ℂ)
     (P Q : Matrix b b ℂ)
@@ -212,6 +187,7 @@ theorem overlappingLifts_mul_eq_zero_of_middle_mul_eq_zero
     (hQY : (Q ⊗ₖ (1 : Matrix c c ℂ)) * Y = Y)
     (hPQ : P * Q = 0) :
     leftOverlappingLift X * rightOverlappingLift Y = 0 := by
+  classical
   have hMiddle :
       leftOverlappingLift (c := c) ((1 : Matrix a a ℂ) ⊗ₖ P) *
           rightOverlappingLift (a := a)
@@ -239,8 +215,10 @@ theorem overlappingLifts_mul_eq_zero_of_middle_mul_eq_zero
         rightOverlappingLift Y := by simp only [mul_assoc]
     _ = 0 := by rw [hMiddle]; simp
 
+omit [Fintype a] [Fintype b] [Fintype c]
+    [DecidableEq a] [DecidableEq b] in
 /-- The left overlapping lift preserves finite sums. -/
-theorem leftOverlappingLift_sum {I : Type*} [Fintype I]
+private theorem leftOverlappingLift_sum {I : Type*} [Fintype I]
     (X : I → Matrix (a × b) (a × b) ℂ) :
     leftOverlappingLift (c := c) (∑ i, X i) =
       ∑ i, leftOverlappingLift (c := c) (X i) := by
@@ -248,8 +226,10 @@ theorem leftOverlappingLift_sum {I : Type*} [Fintype I]
   simp only [leftOverlappingLift, Matrix.sum_apply]
   rw [Finset.sum_mul]
 
+omit [Fintype a] [Fintype b] [Fintype c]
+    [DecidableEq a] [DecidableEq b] in
 /-- The left overlapping lift preserves scalar multiplication. -/
-theorem leftOverlappingLift_smul (z : ℂ)
+private theorem leftOverlappingLift_smul (z : ℂ)
     (X : Matrix (a × b) (a × b) ℂ) :
     leftOverlappingLift (c := c) (z • X) =
       z • leftOverlappingLift (c := c) X := by
@@ -257,8 +237,10 @@ theorem leftOverlappingLift_smul (z : ℂ)
   simp [leftOverlappingLift]
   ring
 
+omit [Fintype a] [Fintype b] [Fintype c]
+    [DecidableEq b] [DecidableEq c] in
 /-- The right overlapping lift preserves finite sums. -/
-theorem rightOverlappingLift_sum {I : Type*} [Fintype I]
+private theorem rightOverlappingLift_sum {I : Type*} [Fintype I]
     (X : I → Matrix (b × c) (b × c) ℂ) :
     rightOverlappingLift (a := a) (∑ i, X i) =
       ∑ i, rightOverlappingLift (a := a) (X i) := by
@@ -266,8 +248,10 @@ theorem rightOverlappingLift_sum {I : Type*} [Fintype I]
   simp only [rightOverlappingLift, Matrix.sum_apply]
   rw [Finset.mul_sum]
 
+omit [Fintype a] [Fintype b] [Fintype c]
+    [DecidableEq b] [DecidableEq c] in
 /-- The right overlapping lift preserves scalar multiplication. -/
-theorem rightOverlappingLift_smul (z : ℂ)
+private theorem rightOverlappingLift_smul (z : ℂ)
     (X : Matrix (b × c) (b × c) ℂ) :
     rightOverlappingLift (a := a) (z • X) =
       z • rightOverlappingLift (a := a) X := by
@@ -275,9 +259,11 @@ theorem rightOverlappingLift_smul (z : ℂ)
   simp [rightOverlappingLift]
   ring
 
+omit [Fintype a] [Fintype b] [Fintype c]
+    [DecidableEq a] [DecidableEq b] in
 /-- Positivity of a left overlapping lift implies positivity of the local
 operator whenever the complementary factor has a basis element. -/
-theorem posSemidef_of_leftOverlappingLift_posSemidef
+private theorem posSemidef_of_leftOverlappingLift_posSemidef
     (X : Matrix (a × b) (a × b) ℂ) (k : c)
     (hX : (leftOverlappingLift (c := c) X).PosSemidef) : X.PosSemidef := by
   have hPrincipal := hX.submatrix (fun x : a × b ↦ (x, k))
@@ -290,9 +276,11 @@ theorem posSemidef_of_leftOverlappingLift_posSemidef
   rw [hPrincipalEq] at hPrincipal
   exact hPrincipal
 
+omit [Fintype a] [Fintype b] [Fintype c]
+    [DecidableEq b] [DecidableEq c] in
 /-- Positivity of a right overlapping lift implies positivity of the local
 operator whenever the complementary factor has a basis element. -/
-theorem posSemidef_of_rightOverlappingLift_posSemidef
+private theorem posSemidef_of_rightOverlappingLift_posSemidef
     (Y : Matrix (b × c) (b × c) ℂ) (i : a)
     (hY : (rightOverlappingLift (a := a) Y).PosSemidef) : Y.PosSemidef := by
   have hPrincipal := hY.submatrix (fun x : b × c ↦ ((i, x.1), x.2))
@@ -308,7 +296,7 @@ theorem posSemidef_of_rightOverlappingLift_posSemidef
 
 /-- Reassociating the HJPW middle-system lift gives the left-associated
 three-factor Kronecker product. -/
-theorem reindex_prodAssoc_symm_liftB
+private theorem reindex_prodAssoc_symm_liftB
     {dA dB dC : ℕ} (U : Matrix (Fin dB) (Fin dB) ℂ) :
     Matrix.reindex (Equiv.prodAssoc (Fin dA) (Fin dB) (Fin dC)).symm
         (Equiv.prodAssoc (Fin dA) (Fin dB) (Fin dC)).symm
@@ -321,7 +309,7 @@ theorem reindex_prodAssoc_symm_liftB
 
 /-- Reassociating conjugation by the HJPW middle-system lift gives
 conjugation by the corresponding left-associated Kronecker unitary. -/
-theorem reindex_prodAssoc_symm_liftB_conj
+private theorem reindex_prodAssoc_symm_liftB_conj
     {dA dB dC : ℕ} (U : Matrix (Fin dB) (Fin dB) ℂ)
     (ρ : Matrix (Fin dA × (Fin dB × Fin dC))
       (Fin dA × (Fin dB × Fin dC)) ℂ) :
@@ -358,7 +346,7 @@ puts their product into a direct sum of positive tensor products.
 
 Source: Beigi, J. Phys. A 45 (2012) 025306, Lemma 2.1, combined with the
 positive normalization used in HJPW, arXiv:quant-ph/0304007, Appendix A. -/
-theorem exists_unitary_positive_blockProduct_of_overlappingLifts_commute
+private theorem exists_unitary_positive_blockProduct_of_overlappingLifts_commute
     (X : Matrix (a × b) (a × b) ℂ) (Y : Matrix (b × c) (b × c) ℂ)
     (hX : X.PosSemidef) (hY : Y.PosSemidef)
     (hComm : leftOverlappingLift X * rightOverlappingLift Y =
@@ -401,7 +389,7 @@ theorem exists_unitary_positive_blockProduct_of_overlappingLifts_commute
             (fun x : a × Fin (d q) ↦ ⟨q, (x, r)⟩)
             (fun x : a × Fin (d q) ↦ ⟨q, (x, r)⟩) = R q := by
       ext x y
-      simp [Matrix.blockDiagonal'_apply_eq, Matrix.one_apply]
+      simp [Matrix.blockDiagonal'_apply_eq]
     rw [hPrincipalEq] at hPrincipal
     exact hPrincipal
   have hSpos : ∀ q, (S q).PosSemidef := by
@@ -425,7 +413,7 @@ theorem exists_unitary_positive_blockProduct_of_overlappingLifts_commute
             (fun x : Fin (m q) × c ↦ ⟨q, (s, x)⟩)
             (fun x : Fin (m q) × c ↦ ⟨q, (s, x)⟩) = S q := by
       ext x y
-      simp [Matrix.blockDiagonal'_apply_eq, Matrix.one_apply]
+      simp [Matrix.blockDiagonal'_apply_eq]
     rw [hPrincipalEq] at hPrincipal
     exact hPrincipal
   refine ⟨K, d, m, e, U, R, S, hU, hd, hm, hRpos, hSpos, ?_⟩
@@ -454,9 +442,9 @@ theorem exists_unitary_positive_blockProduct_of_overlappingLifts_commute
         (fun z : ℂ ↦ z * (1 : Matrix c c ℂ) k k') hEntry
       by_cases hr : r = r' <;> by_cases hk : k = k'
       all_goals
-        simpa [E, overlappingSpatialBlockEquiv, leftSpatialBlockEquiv,
+        simp [E, overlappingSpatialBlockEquiv, leftSpatialBlockEquiv,
           leftOverlappingLift, Matrix.reindex_apply, Matrix.one_apply,
-          hr, hk] using hScaled
+          hr, hk] at hScaled ⊢ <;> exact hScaled
     · have hEntry := congrFun (congrFun hR ⟨q, ((i, s), r)⟩)
         ⟨q', ((i', s'), r')⟩
       rw [Matrix.blockDiagonal'_apply_ne _ _ _ hq] at hEntry ⊢
@@ -485,9 +473,9 @@ theorem exists_unitary_positive_blockProduct_of_overlappingLifts_commute
         (fun z : ℂ ↦ (1 : Matrix a a ℂ) i i' * z) hEntry
       by_cases hi : i = i' <;> by_cases hs : s = s'
       all_goals
-        simpa [E, overlappingSpatialBlockEquiv, rightSpatialBlockEquiv,
+        simp [E, overlappingSpatialBlockEquiv, rightSpatialBlockEquiv,
           rightOverlappingLift, Matrix.reindex_apply, Matrix.one_apply,
-          hi, hs] using hScaled
+          hi, hs] at hScaled ⊢ <;> exact hScaled
     · have hEntry := congrFun (congrFun hS ⟨q, (s, (r, k))⟩)
         ⟨q', (s', (r', k'))⟩
       rw [Matrix.blockDiagonal'_apply_ne _ _ _ hq] at hEntry ⊢
@@ -534,7 +522,7 @@ one, gives the HJPW quantum Markov decomposition.
 
 Source: Hayden--Jozsa--Petz--Winter, Commun. Math. Phys. 246 (2004),
 Theorem 6, equations (11), (14), and (15). -/
-theorem nonempty_quantumMarkovDecomposition_of_positive_blockProduct
+private theorem nonempty_quantumMarkovDecomposition_of_positive_blockProduct
     {dA dB dC K : ℕ} {d m : Fin K → ℕ}
     (ρ : Matrix (Fin dA × (Fin dB × Fin dC))
       (Fin dA × (Fin dB × Fin dC)) ℂ)
@@ -679,7 +667,7 @@ namespace MPOTensor
 
 /-- Decode the noncontiguous middle subsystem (B=\{1,3\}) from one basis
 label. -/
-def fourCycleMiddlePair (d : ℕ) (b : Fin (d * d)) : Fin d × Fin d :=
+private def fourCycleMiddlePair (d : ℕ) (b : Fin (d * d)) : Fin d × Fin d :=
   (finProdFinEquiv (m := d) (n := d)).symm b
 
 /-- The four-site regrouping (A=\{0\}), (B=\{1,3\}), (C=\{2\}).
@@ -706,14 +694,14 @@ def fourCycleTripartiteEquiv (d : ℕ) :
 
 /-- The same four-site regrouping in the left-associated coordinates used by
 overlapping lifts. -/
-def fourCycleOverlappingEquiv (d : ℕ) :
+private def fourCycleOverlappingEquiv (d : ℕ) :
     ((Fin d × Fin (d * d)) × Fin d) ≃ (Fin 4 → Fin d) :=
   (Equiv.prodAssoc (Fin d) (Fin (d * d)) (Fin d)).trans
     (fourCycleTripartiteEquiv d)
 
 /-- Regroup three consecutive sites ordered as (3,0,1) into the (A B)
 factor of the four-cycle tripartition. -/
-def fourCycleABFactorEquiv (d : ℕ) :
+private def fourCycleABFactorEquiv (d : ℕ) :
     ((Fin d × Fin d) × Fin d) ≃ (Fin d × Fin (d * d)) where
   toFun x := (x.1.2,
     finProdFinEquiv (m := d) (n := d) (x.2, x.1.1))
@@ -731,7 +719,7 @@ def fourCycleABFactorEquiv (d : ℕ) :
 
 /-- Regroup three consecutive sites ordered as (1,2,3) into the (B C)
 factor of the four-cycle tripartition. -/
-def fourCycleBCFactorEquiv (d : ℕ) :
+private def fourCycleBCFactorEquiv (d : ℕ) :
     ((Fin d × Fin d) × Fin d) ≃ (Fin (d * d) × Fin d) where
   toFun x :=
     (finProdFinEquiv (m := d) (n := d) (x.1.1, x.2), x.1.2)
@@ -749,21 +737,21 @@ def fourCycleBCFactorEquiv (d : ℕ) :
 
 /-- The three-site window (3,0,1) written in the (A B) coordinates of the
 four-cycle tripartition. -/
-def fourCycleABWindowEquiv (d : ℕ) :
+private def fourCycleABWindowEquiv (d : ℕ) :
     (Fin d × Fin (d * d)) ≃ (Fin 3 → Fin d) :=
   (fourCycleABFactorEquiv d).symm.trans
     (threeSiteOverlappingEquiv (Fin d)).symm
 
 /-- The three-site window (1,2,3) written in the (B C) coordinates of the
 four-cycle tripartition. -/
-def fourCycleBCWindowEquiv (d : ℕ) :
+private def fourCycleBCWindowEquiv (d : ℕ) :
     (Fin (d * d) × Fin d) ≃ (Fin 3 → Fin d) :=
   (fourCycleBCFactorEquiv d).symm.trans
     (threeSiteOverlappingEquiv (Fin d)).symm
 
 /-- A three-site operator on sites (3,0,1) becomes an (A B)-operator tensored
 with the identity on C in the four-cycle tripartition. -/
-theorem reindex_embedLocalOperator_three_eq_leftOverlappingLift
+private theorem reindex_embedLocalOperator_three_eq_leftOverlappingLift
     (T : Matrix (Fin 3 → Fin d) (Fin 3 → Fin d) ℂ) :
     Matrix.reindex (fourCycleOverlappingEquiv d).symm
         (fourCycleOverlappingEquiv d).symm
@@ -807,7 +795,7 @@ theorem reindex_embedLocalOperator_three_eq_leftOverlappingLift
 
 /-- A three-site operator on sites (1,2,3) becomes a (B C)-operator tensored
 with the identity on A in the four-cycle tripartition. -/
-theorem reindex_embedLocalOperator_three_eq_rightOverlappingLift
+private theorem reindex_embedLocalOperator_three_eq_rightOverlappingLift
     (T : Matrix (Fin 3 → Fin d) (Fin 3 → Fin d) ℂ) :
     Matrix.reindex (fourCycleOverlappingEquiv d).symm
         (fourCycleOverlappingEquiv d).symm
@@ -851,7 +839,7 @@ theorem reindex_embedLocalOperator_three_eq_rightOverlappingLift
 
 /-- Passing a two-site product to ordered-pair coordinates preserves matrix
 multiplication. -/
-theorem pairBondMatrix_mul
+private theorem pairBondMatrix_mul
     (B C : Matrix (Fin 2 → Fin d) (Fin 2 → Fin d) ℂ) :
     pairBondMatrix (B * C) = pairBondMatrix B * pairBondMatrix C := by
   change (Matrix.reindexAlgEquiv ℂ ℂ (finTwoArrowEquiv (Fin d)))
@@ -860,8 +848,7 @@ theorem pairBondMatrix_mul
 
 /-- In ordered-pair coordinates, the two-site sector projection is the
 Kronecker square of the one-site projection. -/
-@[simp]
-theorem pairBondMatrix_twoSiteSectorProjection
+private theorem pairBondMatrix_twoSiteSectorProjection
     (P : Matrix (Fin d) (Fin d) ℂ) :
     pairBondMatrix (twoSiteSectorProjection P) = P ⊗ₖ P := by
   ext ⟨i, j⟩ ⟨i', j'⟩
@@ -885,7 +872,7 @@ namespace GSNNCHData
 variable {d : ℕ}
 
 /-- A sector bond in ordered-pair coordinates. -/
-noncomputable def pairBondFour (data : GSNNCHData d 4)
+private noncomputable def pairBondFour (data : GSNNCHData d 4)
     (x : Fin data.sectorCount) :
     Matrix (Fin d × Fin d) (Fin d × Fin d) ℂ :=
   pairBondMatrix (data.bond x)
@@ -893,7 +880,7 @@ noncomputable def pairBondFour (data : GSNNCHData d 4)
 /-- A sector bond is absorbed on the right by its two-site sector projection.
 
 Source: arXiv:1606.00608, Definition 4.8, lines 838--850. -/
-theorem bond_mul_twoSiteSectorProjection (data : GSNNCHData d 4)
+private theorem bond_mul_twoSiteSectorProjection (data : GSNNCHData d 4)
     (x : Fin data.sectorCount) :
     data.bond x * twoSiteSectorProjection (data.sectorProjection x) =
       data.bond x := by
@@ -913,7 +900,7 @@ theorem bond_mul_twoSiteSectorProjection (data : GSNNCHData d 4)
 /-- A sector bond is absorbed on the left by its two-site sector projection.
 
 Source: arXiv:1606.00608, Definition 4.8, lines 838--850. -/
-theorem twoSiteSectorProjection_mul_bond (data : GSNNCHData d 4)
+private theorem twoSiteSectorProjection_mul_bond (data : GSNNCHData d 4)
     (x : Fin data.sectorCount) :
     twoSiteSectorProjection (data.sectorProjection x) * data.bond x =
       data.bond x := by
@@ -934,7 +921,7 @@ theorem twoSiteSectorProjection_mul_bond (data : GSNNCHData d 4)
 the one-site sector projection.
 
 Source: arXiv:1606.00608, Definition 4.8, lines 838--850. -/
-theorem pairBondFour_mul_rightSectorProjection (data : GSNNCHData d 4)
+private theorem pairBondFour_mul_rightSectorProjection (data : GSNNCHData d 4)
     (x : Fin data.sectorCount) :
     data.pairBondFour x *
         ((1 : Matrix (Fin d) (Fin d) ℂ) ⊗ₖ data.sectorProjection x) =
@@ -945,7 +932,8 @@ theorem pairBondFour_mul_rightSectorProjection (data : GSNNCHData d 4)
   have hBQ : B * (P ⊗ₖ P) = B := by
     have h := congrArg pairBondMatrix
       (data.bond_mul_twoSiteSectorProjection x)
-    simpa [B, P, pairBondFour, pairBondMatrix_mul] using h
+    simpa [B, P, pairBondFour, pairBondMatrix_mul,
+      pairBondMatrix_twoSiteSectorProjection] using h
   have hQright :
       (P ⊗ₖ P) * ((1 : Matrix (Fin d) (Fin d) ℂ) ⊗ₖ P) =
         P ⊗ₖ P := by
@@ -967,7 +955,7 @@ theorem pairBondFour_mul_rightSectorProjection (data : GSNNCHData d 4)
 the one-site sector projection.
 
 Source: arXiv:1606.00608, Definition 4.8, lines 838--850. -/
-theorem leftSectorProjection_mul_pairBondFour (data : GSNNCHData d 4)
+private theorem leftSectorProjection_mul_pairBondFour (data : GSNNCHData d 4)
     (x : Fin data.sectorCount) :
     (data.sectorProjection x ⊗ₖ
         (1 : Matrix (Fin d) (Fin d) ℂ)) * data.pairBondFour x =
@@ -978,7 +966,8 @@ theorem leftSectorProjection_mul_pairBondFour (data : GSNNCHData d 4)
   have hQB : (P ⊗ₖ P) * B = B := by
     have h := congrArg pairBondMatrix
       (data.twoSiteSectorProjection_mul_bond x)
-    simpa [B, P, pairBondFour, pairBondMatrix_mul] using h
+    simpa [B, P, pairBondFour, pairBondMatrix_mul,
+      pairBondMatrix_twoSiteSectorProjection] using h
   have hleftQ :
       (P ⊗ₖ (1 : Matrix (Fin d) (Fin d) ℂ)) * (P ⊗ₖ P) =
         P ⊗ₖ P := by
@@ -999,7 +988,7 @@ theorem leftSectorProjection_mul_pairBondFour (data : GSNNCHData d 4)
 overlapping product.
 
 Source: arXiv:1606.00608, Definition 4.8, lines 838--850. -/
-theorem overlappingLifts_pairBondFour_mul_eq_zero
+private theorem overlappingLifts_pairBondFour_mul_eq_zero
     (data : GSNNCHData d 4) {x y : Fin data.sectorCount} (hxy : x ≠ y) :
     Matrix.leftOverlappingLift (data.pairBondFour x) *
         Matrix.rightOverlappingLift (data.pairBondFour y) = 0 := by
@@ -1014,7 +1003,7 @@ theorem overlappingLifts_pairBondFour_mul_eq_zero
 zero product.
 
 Source: arXiv:1606.00608, Definition 4.8, lines 838--850. -/
-theorem localAdjacentBonds_mul_eq_zero
+private theorem localAdjacentBonds_mul_eq_zero
     (data : GSNNCHData d 4) {x y : Fin data.sectorCount} (hxy : x ≠ y) :
     embedLocalOperator (d := d) 2 3 (by decide) (0 : Fin 3) (data.bond x) *
         embedLocalOperator (d := d) 2 3 (by decide) (1 : Fin 3) (data.bond y) =
@@ -1034,7 +1023,7 @@ theorem localAdjacentBonds_mul_eq_zero
 at site 1 in every distinct sector.
 
 Source: arXiv:1606.00608, Definition 4.8, lines 838--850. -/
-theorem bondAt_zero_mul_one_eq_zero
+private theorem bondAt_zero_mul_one_eq_zero
     (data : GSNNCHData d 4) {x y : Fin data.sectorCount} (hxy : x ≠ y) :
     data.bondAt x 0 * data.bondAt y 1 = 0 := by
   have h := congrArg
@@ -1049,10 +1038,10 @@ theorem bondAt_zero_mul_one_eq_zero
     PhysicalSectorFactorization.embedLocalOperator_two_zero_nested,
     PhysicalSectorFactorization.embedLocalOperator_two_one_nested] using h
 
-/-- Products of the two opposite bond pairs from distinct sectors vanish.
+/-- Complementary adjacent-bond products from distinct sectors vanish.
 
 Source: arXiv:1606.00608, Definition 4.8, lines 838--850. -/
-theorem oppositeBondPairs_mul_eq_zero
+private theorem complementaryAdjacentBondProducts_mul_eq_zero
     (data : GSNNCHData d 4) {x y : Fin data.sectorCount} (hxy : x ≠ y) :
     (data.bondAt x 3 * data.bondAt x 0) *
         (data.bondAt y 1 * data.bondAt y 2) = 0 := by
@@ -1063,11 +1052,11 @@ theorem oppositeBondPairs_mul_eq_zero
   rw [data.bondAt_zero_mul_one_eq_zero hxy]
   simp
 
-/-- For one sector, the two opposite bond pairs multiply to the periodic
-four-bond product.
+/-- For one sector, the complementary adjacent-bond products multiply to the
+periodic four-bond product.
 
 Source: arXiv:1606.00608, equation `rhoNCommv2`, lines 843--850. -/
-theorem oppositeBondPairs_mul_eq_sectorProduct
+private theorem complementaryAdjacentBondProducts_mul_eq_sectorProduct
     (data : GSNNCHData d 4) (x : Fin data.sectorCount) :
     (data.bondAt x 3 * data.bondAt x 0) *
         (data.bondAt x 1 * data.bondAt x 2) =
@@ -1098,7 +1087,7 @@ theorem oppositeBondPairs_mul_eq_sectorProduct
       simp [sectorProduct]
 
 /-- The product of two adjacent sector bonds on three consecutive sites. -/
-noncomputable def threeSiteBondProduct (data : GSNNCHData d 4)
+private noncomputable def threeSiteBondProduct (data : GSNNCHData d 4)
     (x : Fin data.sectorCount) :
     Matrix ((Fin d × Fin d) × Fin d) ((Fin d × Fin d) × Fin d) ℂ :=
   Matrix.leftOverlappingLift (data.pairBondFour x) *
@@ -1106,7 +1095,7 @@ noncomputable def threeSiteBondProduct (data : GSNNCHData d 4)
 
 /-- The two adjacent bonds assigned to the (A B) side of the four-cycle
 tripartition. -/
-noncomputable def fourCycleABFactor (data : GSNNCHData d 4)
+private noncomputable def fourCycleABFactor (data : GSNNCHData d 4)
     (x : Fin data.sectorCount) :
     Matrix (Fin d × Fin (d * d)) (Fin d × Fin (d * d)) ℂ :=
   Matrix.reindex (fourCycleABFactorEquiv d) (fourCycleABFactorEquiv d)
@@ -1114,7 +1103,7 @@ noncomputable def fourCycleABFactor (data : GSNNCHData d 4)
 
 /-- The two adjacent bonds assigned to the (B C) side of the four-cycle
 tripartition. -/
-noncomputable def fourCycleBCFactor (data : GSNNCHData d 4)
+private noncomputable def fourCycleBCFactor (data : GSNNCHData d 4)
     (x : Fin data.sectorCount) :
     Matrix (Fin (d * d) × Fin d) (Fin (d * d) × Fin d) ℂ :=
   Matrix.reindex (fourCycleBCFactorEquiv d) (fourCycleBCFactorEquiv d)
@@ -1122,34 +1111,35 @@ noncomputable def fourCycleBCFactor (data : GSNNCHData d 4)
 
 /-- The weighted (A B) operator obtained by summing the bonds on edges
 (3,0) and (0,1) over the orthogonal sectors. -/
-noncomputable def fourCycleABOperator (data : GSNNCHData d 4) (c : ℝ) :
+private noncomputable def fourCycleABOperator (data : GSNNCHData d 4) (c : ℝ) :
     Matrix (Fin d × Fin (d * d)) (Fin d × Fin (d * d)) ℂ :=
   (c : ℂ) • ∑ x : Fin data.sectorCount,
     (data.multiplicity x : ℂ) • data.fourCycleABFactor x
 
 /-- The (B C) operator obtained by summing the bonds on edges (1,2) and
 (2,3) over the orthogonal sectors. -/
-noncomputable def fourCycleBCOperator (data : GSNNCHData d 4) :
+private noncomputable def fourCycleBCOperator (data : GSNNCHData d 4) :
     Matrix (Fin (d * d) × Fin d) (Fin (d * d) × Fin d) ℂ :=
   ∑ x : Fin data.sectorCount, data.fourCycleBCFactor x
 
-/-- The weighted four-site operator formed from the opposite bond pair
-(3,0),(0,1). -/
-noncomputable def globalABOperator (data : GSNNCHData d 4) (c : ℝ) :
+/-- The weighted four-site lift of the adjacent-bond product
+$B_3^{(x)}B_0^{(x)}$ on the window $(3,0,1)$. -/
+private noncomputable def globalABOperator (data : GSNNCHData d 4) (c : ℝ) :
     ChainOperator d 4 :=
   (c : ℂ) • ∑ x : Fin data.sectorCount,
     (data.multiplicity x : ℂ) •
       (data.bondAt x 3 * data.bondAt x 0)
 
-/-- The four-site operator formed from the opposite bond pair (1,2),(2,3). -/
-noncomputable def globalBCOperator (data : GSNNCHData d 4) :
+/-- The four-site lift of the adjacent-bond product
+$B_1^{(x)}B_2^{(x)}$ on the window $(1,2,3)$. -/
+private noncomputable def globalBCOperator (data : GSNNCHData d 4) :
     ChainOperator d 4 :=
   ∑ x : Fin data.sectorCount,
     data.bondAt x 1 * data.bondAt x 2
 
 /-- The (A B) factor is the adjacent-bond product on the physical window
 (3,0,1), transported to the noncontiguous four-cycle coordinates. -/
-theorem fourCycleABFactor_eq_reindex_windowProduct
+private theorem fourCycleABFactor_eq_reindex_windowProduct
     (data : GSNNCHData d 4) (x : Fin data.sectorCount) :
     data.fourCycleABFactor x =
       Matrix.reindex (fourCycleABWindowEquiv d).symm
@@ -1175,7 +1165,7 @@ theorem fourCycleABFactor_eq_reindex_windowProduct
 
 /-- The (B C) factor is the adjacent-bond product on the physical window
 (1,2,3), transported to the noncontiguous four-cycle coordinates. -/
-theorem fourCycleBCFactor_eq_reindex_windowProduct
+private theorem fourCycleBCFactor_eq_reindex_windowProduct
     (data : GSNNCHData d 4) (x : Fin data.sectorCount) :
     data.fourCycleBCFactor x =
       Matrix.reindex (fourCycleBCWindowEquiv d).symm
@@ -1201,7 +1191,7 @@ theorem fourCycleBCFactor_eq_reindex_windowProduct
 
 /-- In the four-cycle tripartition, the global bonds at sites 3 and 0 are
 the natural lift of the (A B) factor. -/
-theorem reindex_bondAt_three_mul_zero_eq_leftOverlappingLift
+private theorem reindex_bondAt_three_mul_zero_eq_leftOverlappingLift
     (data : GSNNCHData d 4) (x : Fin data.sectorCount) :
     Matrix.reindex (fourCycleOverlappingEquiv d).symm
         (fourCycleOverlappingEquiv d).symm
@@ -1216,7 +1206,7 @@ theorem reindex_bondAt_three_mul_zero_eq_leftOverlappingLift
 
 /-- In the four-cycle tripartition, the global bonds at sites 1 and 2 are
 the natural lift of the (B C) factor. -/
-theorem reindex_bondAt_one_mul_two_eq_rightOverlappingLift
+private theorem reindex_bondAt_one_mul_two_eq_rightOverlappingLift
     (data : GSNNCHData d 4) (x : Fin data.sectorCount) :
     Matrix.reindex (fourCycleOverlappingEquiv d).symm
         (fourCycleOverlappingEquiv d).symm
@@ -1231,7 +1221,7 @@ theorem reindex_bondAt_one_mul_two_eq_rightOverlappingLift
 
 /-- Regrouping the weighted (3,0),(0,1) bond sum gives the natural lift of
 the (A B) operator. -/
-theorem reindex_globalABOperator_eq_leftOverlappingLift
+private theorem reindex_globalABOperator_eq_leftOverlappingLift
     (data : GSNNCHData d 4) (c : ℝ) :
     Matrix.reindex (fourCycleOverlappingEquiv d).symm
         (fourCycleOverlappingEquiv d).symm (data.globalABOperator c) =
@@ -1258,7 +1248,7 @@ theorem reindex_globalABOperator_eq_leftOverlappingLift
 
 /-- Regrouping the (1,2),(2,3) bond sum gives the natural lift of the
 (B C) operator. -/
-theorem reindex_globalBCOperator_eq_rightOverlappingLift
+private theorem reindex_globalBCOperator_eq_rightOverlappingLift
     (data : GSNNCHData d 4) :
     Matrix.reindex (fourCycleOverlappingEquiv d).symm
         (fourCycleOverlappingEquiv d).symm data.globalBCOperator =
@@ -1279,7 +1269,7 @@ theorem reindex_globalBCOperator_eq_rightOverlappingLift
 
 /-- The weighted four-site (A B) bond-pair sum is positive semidefinite for
 a nonnegative normalization constant. -/
-theorem globalABOperator_posSemidef (data : GSNNCHData d 4) {c : ℝ}
+private theorem globalABOperator_posSemidef (data : GSNNCHData d 4) {c : ℝ}
     (hc : 0 ≤ c) : (data.globalABOperator c).PosSemidef := by
   classical
   unfold globalABOperator
@@ -1290,7 +1280,7 @@ theorem globalABOperator_posSemidef (data : GSNNCHData d 4) {c : ℝ}
   exact_mod_cast hc
 
 /-- The four-site (B C) bond-pair sum is positive semidefinite. -/
-theorem globalBCOperator_posSemidef (data : GSNNCHData d 4) :
+private theorem globalBCOperator_posSemidef (data : GSNNCHData d 4) :
     data.globalBCOperator.PosSemidef := by
   classical
   unfold globalBCOperator
@@ -1298,30 +1288,30 @@ theorem globalBCOperator_posSemidef (data : GSNNCHData d 4) :
   exact (data.bondAt_posSemidef x 1).mul_of_commute
     (data.bondAt_posSemidef x 2) (data.bondAt_comm x 1 2)
 
-/-- Multiplying one sector's (A B) bond pair by the full (B C) sum selects
-that sector and gives its periodic product. -/
-theorem oppositeABPair_mul_globalBCOperator
+/-- Multiplying one sector's (A B) adjacent-bond product by the full (B C)
+sum selects that sector and gives its periodic product. -/
+private theorem abBondProduct_mul_globalBCOperator
     (data : GSNNCHData d 4) (x : Fin data.sectorCount) :
     (data.bondAt x 3 * data.bondAt x 0) * data.globalBCOperator =
       data.sectorProduct x := by
   classical
   rw [globalBCOperator, Matrix.mul_sum, Finset.sum_eq_single x]
-  · exact data.oppositeBondPairs_mul_eq_sectorProduct x
+  · exact data.complementaryAdjacentBondProducts_mul_eq_sectorProduct x
   · intro y hy hyx
-    exact data.oppositeBondPairs_mul_eq_zero (Ne.symm hyx)
+    exact data.complementaryAdjacentBondProducts_mul_eq_zero (Ne.symm hyx)
   · simp
 
-/-- The two positive opposite-pair sums multiply to the normalized sector
-sum realized by the GSNNCH data.
+/-- The two positive complementary adjacent-bond sums multiply to the
+normalized sector sum realized by the GSNNCH data.
 
 Source: arXiv:1606.00608, equation `rhoNCommv2`, lines 843--850. -/
-theorem globalABOperator_mul_globalBCOperator
+private theorem globalABOperator_mul_globalBCOperator
     (data : GSNNCHData d 4) {c : ℝ} {rho : ChainOperator d 4}
     (hreal : rho = (c : ℂ) • data.unnormalizedState) :
     data.globalABOperator c * data.globalBCOperator = rho := by
   classical
   rw [globalABOperator, Matrix.smul_mul, Finset.sum_mul]
-  simp_rw [Matrix.smul_mul, data.oppositeABPair_mul_globalBCOperator]
+  simp_rw [Matrix.smul_mul, data.abBondProduct_mul_globalBCOperator]
   exact hreal.symm
 
 end GSNNCHData
@@ -1336,7 +1326,7 @@ theorem fourCycleTripartiteState_posSemidef {rho : ChainOperator d 4}
 
 /-- Regrouping a four-site operator as (A={0}), (B={1,3}), (C={2})
 preserves its trace. -/
-theorem fourCycleTripartiteState_trace {rho : ChainOperator d 4} :
+private theorem fourCycleTripartiteState_trace {rho : ChainOperator d 4} :
     (fourCycleTripartiteState rho).trace = rho.trace := by
   rw [fourCycleTripartiteState, Matrix.trace_reindex]
 
@@ -1480,7 +1470,7 @@ the specialization of the general four-cycle regrouping to binary sites.
 This identifies the coordinate boundary used for CPSV16, arXiv:1606.00608,
 Example 4.12, lines 932--938, with the one used for the four-site consequence
 of Definition 4.8, lines 829--850. -/
-theorem fourCycleTripartiteEquiv_eq_generic :
+private theorem fourCycleTripartiteEquiv_eq_generic :
     fourCycleTripartiteEquiv = MPOTensor.fourCycleTripartiteEquiv 2 := by
   apply Equiv.ext
   rintro ⟨a, b, c⟩
