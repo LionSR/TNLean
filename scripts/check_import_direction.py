@@ -268,6 +268,31 @@ def namespaced_declarations(path: Path, relative: Path) -> list[dict[str, str | 
     return declarations
 
 
+def source_sha(root: Path) -> str:
+    """Return the exact source commit for a clean extraction inventory."""
+    try:
+        status = subprocess.run(
+            ["git", "-C", str(root), "status", "--porcelain", "--untracked-files=all"],
+            check=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            text=True,
+        )
+        if status.stdout:
+            raise ValueError("cannot report a dirty source tree")
+        result = subprocess.run(
+            ["git", "-C", str(root), "rev-parse", "HEAD"],
+            check=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            text=True,
+        )
+    except subprocess.CalledProcessError as error:
+        detail = error.stderr.strip() if error.stderr else str(error)
+        raise ValueError(f"cannot identify the source commit: {detail}") from error
+    return result.stdout.strip()
+
+
 def report_inventory(root: Path) -> dict[str, object]:
     """Return a deterministic, read-only extraction inventory for the mover set."""
     closure_errors, _ = check_import_direction(root)
@@ -305,6 +330,7 @@ def report_inventory(root: Path) -> dict[str, object]:
 
     return {
         "schema_version": 1,
+        "source_sha": source_sha(root),
         "mover_paths": [
             path.as_posix() for path in sorted(movers, key=lambda item: item.as_posix())
         ],
