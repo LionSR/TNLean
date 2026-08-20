@@ -265,7 +265,7 @@ project import.
   analogue of the qubit unitary action: `(Ad_U)^ = Ū ⊗ₖ U` ✓
 * `unitaryConjLM_isChannel_of_unitary` — `Ad_U` is a channel for unitary `U` ✓
 * `transferMatrix_unitaryConj_sandwich` — Section 2.4 unitary-action identity:
-  `(Ad_{U₁} ∘ T ∘ Ad_{U₂})^ = (Ū₁⊗U₁) T̂ (Ū₂⊗U₂)` ✓
+  `(Ad_{U₁} ∘ T ∘ Ad_{U₂})^ = (Ū₁⊗U₁) * T̂ * (Ū₂⊗U₂)` ✓
 
 ### Section 2.4 SVD normal form (existence)
 
@@ -348,11 +348,11 @@ project import.
 
 | Result | Notes |
 |--------|-------|
-| Section 2.3 Lorentz normal form (Proposition 2.11) | Correctly formulated
+| Section 2.4 Lorentz normal form (Proposition 2.11) | Correctly formulated
   statement and proof remain pending. Wolf uses general invertible Kraus-rank-one
   CP filters with scalar freedom; the former determinant-one formulation was
   false and was removed. The proof also needs the Lorentz-orbit classification. |
-| Section 2.3 Sorted singular values | Current SVD is unsorted; later uses want sorted values |
+| Section 2.4 Sorted singular values | Current SVD is unsorted; later uses want sorted values |
 
 ## References
 

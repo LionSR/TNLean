@@ -10,7 +10,7 @@ import TNLean.Channel.Basic
 
 This module collects the Pauli-basis definitions and the three canonical-form
 predicates for qubit channels of Wolf Proposition 2.11
-(`Notes/WolfNoteTexSource/ch02_representations.tex`, Section 2.3): the
+(`Notes/WolfNoteTexSource/ch02_representations.tex`, Section 2.4): the
 diagonal, non-diagonal, and singular Lorentz normal forms.  The existence
 
 theorem is pending; see
@@ -26,7 +26,7 @@ theorem is pending; see
 
 ## References
 
-* [M. Wolf, *Quantum Channels & Operations: Guided Tour*, Section 2.3][Wolf2012QChannels]
+* [M. Wolf, *Quantum Channels & Operations: Guided Tour*, Section 2.4][Wolf2012QChannels]
 -/
 
 open scoped Matrix BigOperators ComplexOrder
@@ -148,12 +148,12 @@ The correctly formulated theorem remains to be formalized. Its proof will need:
 - The Lorentz group classification of the filtering orbits;
 - The complete-positivity condition `λ₁ + λ₂ ≤ 1 + λ₃`.
 
-See Wolf Section 2.3 for the complete proof. -/
+See Wolf Section 2.4 for the complete proof. -/
 
 end LorentzNormalFormQubit
 
 /-
-## Connection to transfer-matrix normal forms (Wolf Section 2.3)
+## Connection to transfer-matrix normal forms (Wolf Section 2.4)
 
 The results above are stated at the level of CP maps. The corresponding
 transfer-matrix formulation is obtained by applying `transferMatrix` to both
