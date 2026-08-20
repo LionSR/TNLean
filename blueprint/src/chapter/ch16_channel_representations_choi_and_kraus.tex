@@ -184,6 +184,28 @@ partial traces.
     vectorization and its inverse.
 \end{proof}
 
+\begin{theorem}[Iterates of a finite Kraus map]
+    \label{thm:kraus_map_iterate_word_expansion}
+    \lean{Kraus.mapLM_pow_apply}
+    \leanok
+    Let $I$ be finite, let $(K_i)_{i\in I}$ be a family in $\MN{D}$, and set
+    $E(X)=\sum_i K_iXK_i^\dagger$. For every non-negative integer $N$,
+    \[
+        E^N(X)=\sum_{\sigma\in I^N}
+        K_{\sigma_0}\cdots K_{\sigma_{N-1}}X
+        K_{\sigma_{N-1}}^\dagger\cdots K_{\sigma_0}^\dagger.
+    \]
+    For $N=0$, the product is the identity matrix.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    The assertion for $N=0$ is immediate. For the induction step, apply $E$
+    to the expansion for $E^N(X)$ and distribute the finite sums. Prepending
+    one letter to each word of length $N$ gives every word of length $N+1$
+    exactly once.
+\end{proof}
+
 \begin{theorem}[Spectral bound for a vectorized unital Kraus map]
     \label{thm:unital_kraus_frobenius_spectral_radius}
     \lean{IsKrausCP.spectralRadius_frobeniusEuclideanMap_le_one_of_map_one_eq_one}
