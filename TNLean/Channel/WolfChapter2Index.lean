@@ -240,7 +240,7 @@ project import.
   - `WolfProps.pureEnsembleDensity_eq_iff_exists_unitary_mixing_fin` —
     the same statement with `Fin (max m n)` as common index set ✓
 
-### Section 2.2 Transfer matrix
+### Section 2.3 Transfer matrix
 
 * `transferMatrix` — the `D² × D²` matrix representing `T` in the
   standard-basis vectorization ✓
@@ -252,28 +252,31 @@ project import.
 * `MPSTensor.transferMatrix_eq` — MPS transfer-operator specialization, stated in
   `TNLean.MPS.Core.TransferMatrix`: `E_A` has transfer matrix `∑ᵢ Āᵢ ⊗ₖ Aᵢ` ✓
 
-### Section 2.2–2.3 Transfer matrix characterizations & normal forms (Propositions 2.5-2.8)
+### Sections 2.3–2.4 Transfer-matrix characterizations and unitary actions
 
-* `transferMatrix_tp_iff` — **Proposition 2.6**: TP ↔ column-diagonal sums = δ ✓
-* `transferMatrix_unital_iff` — **Proposition 2.6**: unital ↔ row-diagonal sums = δ ✓
-* `transferMatrix_hermiticityPreserving_iff` — **Proposition 2.5**: HP ↔ conjugation
-  symmetry of transfer matrix entries ✓
+* `transferMatrix_tp_iff` — Section 2.3, Equation (2.20), entrywise consequence:
+  TP ↔ column-diagonal sums = δ ✓
+* `transferMatrix_unital_iff` — Section 2.3, Equation (2.20), entrywise consequence:
+  unital ↔ row-diagonal sums = δ ✓
+* `transferMatrix_hermiticityPreserving_iff` — Section 2.3, Equation (2.20),
+  entrywise consequence: HP ↔ conjugation symmetry of transfer-matrix entries ✓
 * `unitaryConjLM` — unitary conjugation map `Ad_U(X) = U X U†` ✓
-* `transferMatrix_unitaryConj` — **Proposition 2.7 ingredient**: `(Ad_U)^ = Ū ⊗ₖ U` ✓
+* `transferMatrix_unitaryConj` — Section 2.4, lines 1000–1010, matrix-unit
+  analogue of the qubit unitary action: `(Ad_U)^ = Ū ⊗ₖ U` ✓
 * `unitaryConjLM_isChannel_of_unitary` — `Ad_U` is a channel for unitary `U` ✓
-* `transferMatrix_unitaryConj_sandwich` — **Propositions 2.7-2.8 key identity**:
-  `(Ad_{U₁} ∘ T ∘ Ad_{U₂})^ = (Ū₁⊗U₁) T̂ (Ū₂⊗U₂)` ✓
+* `transferMatrix_unitaryConj_sandwich` — Section 2.4 unitary-action identity:
+  `(Ad_{U₁} ∘ T ∘ Ad_{U₂})^ = (Ū₁⊗U₁) * T̂ * (Ū₂⊗U₂)` ✓
 
-### Section 2.3 SVD normal form (existence)
+### General matrix SVD results
 
 * `Matrix.svd_of_posSemidef` — **SVD for PSD matrices** (spectral theorem
   formulated): `M = U * diagonal σ * Uᴴ` with `σ ≥ 0` ✓
 * `Matrix.svd_of_isUnit` — **SVD existence for invertible complex matrices**:
   `M = U * diagonal σ * Vᴴ` with `U, V` unitary and `σ > 0` ✓
 * `transferMatrix_svd_of_isUnit` — **SVD representation of a transfer
-  matrix** (Wolf Section 2.3): every invertible transfer matrix admits an SVD ✓
+  matrix**: every invertible transfer matrix admits an SVD ✓
 
-### Section 2.3 Lorentz normal form (existence)
+### Section 2.4 Lorentz normal form (existence)
 
 * `Wolf.SLFiltering` — **SL(d, ℂ)-filtering operation**: a CP map
   Φ(X) = S X S† with det(S) = 1 ✓ (definitional)
@@ -345,11 +348,11 @@ project import.
 
 | Result | Notes |
 |--------|-------|
-| Section 2.3 Lorentz normal form (Proposition 2.11) | Correctly formulated
+| Section 2.4 Lorentz normal form (Proposition 2.11) | Correctly formulated
   statement and proof remain pending. Wolf uses general invertible Kraus-rank-one
   CP filters with scalar freedom; the former determinant-one formulation was
   false and was removed. The proof also needs the Lorentz-orbit classification. |
-| Section 2.3 Sorted singular values | Current SVD is unsorted; later uses want sorted values |
+| Section 2.4 Sorted singular values | Current SVD is unsorted; later uses want sorted values |
 
 ## References
 

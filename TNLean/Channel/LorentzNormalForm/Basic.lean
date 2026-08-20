@@ -13,7 +13,7 @@ import TNLean.Analysis.MarginalSupport
 # Lorentz normal form: filtering operations and doubly-stochastic maps
 
 This module collects the shared definitions and matrix-algebra lemmas for the
-normal-form development of Wolf Section 2.3 (Equations (2.35)–(2.37)):
+normal-form development of Wolf Section 2.4 (Equations (2.35)–(2.37)):
 SL-filtering operations, the doubly-stochastic predicates, and the
 Kronecker-conjugation and partial-trace identities used by the minimisation
 argument.
@@ -40,7 +40,7 @@ argument.
 
 ## References
 
-* [M. Wolf, *Quantum Channels & Operations: Guided Tour*, Section 2.3][Wolf2012QChannels]
+* [M. Wolf, *Quantum Channels & Operations: Guided Tour*, Section 2.4][Wolf2012QChannels]
 -/
 
 open scoped Matrix BigOperators ComplexOrder Kronecker
@@ -53,7 +53,7 @@ section FilteringOperations
 
 /-- An `SLFiltering` for `D × D` matrices bundles a matrix `S` with
 `det S = 1` (and `S` invertible) together with its associated CP map
-`Φ(X) = S X S†`.  Such maps are called *filtering operations* in Wolf Section 2.3. -/
+`Φ(X) = S X S†`.  Such maps are called *filtering operations* in Wolf Section 2.4. -/
 structure SLFiltering (D : ℕ) where
   /-- The filtering matrix, with determinant 1. -/
   S : Matrix (Fin D) (Fin D) ℂ

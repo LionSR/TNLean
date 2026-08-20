@@ -93,8 +93,10 @@ statement in `Notes/WolfNotePDF/ch01_deconstructing_quantum.pdf`.
 
 ## Chapter 2: Representations of quantum channels
 
-The Chapter 2 audit is in progress. The first correction concerns the unitary
-freedom of Kraus representations.
+The Chapter 2 audit is in progress. The corrections below concern the unitary
+freedom of Kraus representations and the transfer-matrix documentation.
+
+### Kraus-representation freedom
 
 | Former citation | Printed citation | Result | Archived PDF | Local transcription | Verdict |
 |---|---|---|---:|---:|---|
@@ -112,3 +114,39 @@ freedom.
 - `TNLean/MPS/Periodic/Symmetry/Theorem41Forward.lean`
 - `TNLean/MPS/Periodic/Symmetry/Theorem41Reverse.lean`
 - `TNLean/MPS/Symmetry/StringOrderDefs.lean`
+
+### Transfer matrices and normal forms
+
+The printed notes place linear maps as matrices in Section 2.3 and normal forms
+in Section 2.4. Several former references assigned elementary transfer-matrix
+identities to Propositions 2.5–2.8, but those propositions have different
+statements.
+
+| Former citation | Printed result | Archived PDF | Local transcription | Verdict |
+|---|---|---:|---:|---|
+| Proposition 2.5 | Environment-induced instruments | PDF page 8; printed page 40 | lines 447–456 | Removed from transfer-matrix criteria |
+| Proposition 2.6 | Self-dual channels | PDF page 10; printed page 42 | lines 578–600 | Removed from transfer-matrix criteria |
+| Proposition 2.7 | SIC POVMs | PDF page 14; printed page 46 | lines 790–800 | Removed from unitary-conjugation identities |
+| Proposition 2.8 | Generic normal form for a positive-definite Choi matrix | PDF page 16; printed page 48 | lines 894–899 | Removed from unitary-conjugation identities |
+| Proposition 2.11 | Lorentz normal form for qubit channels | PDF page 18; printed page 50 | lines 1021–1035 | Retained for the actual qubit theorem |
+
+The transfer-matrix criteria are entrywise consequences of Equation (2.20),
+at lines 560–576, rather than numbered propositions. The unitary-conjugation
+formula is the arbitrary-dimensional matrix-unit analogue of the qubit
+Pauli-transfer discussion at lines 1000–1010. The ordinary complex SVD of an
+arbitrary invertible transfer matrix is a general linear-algebraic result; it
+is not the real SVD of the qubit `3 × 3` block discussed in that passage.
+
+### Files corrected
+
+- `TNLean/Channel/TransferMatrix.lean`
+- `TNLean/Channel/WolfChapter2Index.lean`
+- `TNLean/Channel/NormalForm.lean`
+- `TNLean/Channel/LorentzNormalForm.lean`
+- `TNLean/Channel/LorentzNormalForm/Basic.lean`
+- `TNLean/Channel/LorentzNormalForm/Infimum.lean`
+- `TNLean/Channel/LorentzNormalForm/NormalForm.lean`
+- `TNLean/Channel/LorentzNormalForm/QubitNormalForm.lean`
+- `TNLean/Algebra/MatrixAux.lean`
+- `TNLean/Analysis/MatrixTraceInequalities.lean`
+- `blueprint/src/chapter/ch16_channel_representations_normal_forms_and_determinant.tex`

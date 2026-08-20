@@ -9,7 +9,7 @@ import TNLean.Channel.LorentzNormalForm.NormalForm
 import TNLean.Channel.LorentzNormalForm.QubitNormalForm
 
 /-!
-# Lorentz normal form for quantum channels (Wolf Section 2.3, Propositions 2.8–2.11)
+# Lorentz normal form for quantum channels (Wolf Section 2.4, Propositions 2.8–2.11)
 
 Thin module assembling the normal-form development for quantum channels under
 filtering operations from four focused sub-modules.
@@ -29,5 +29,5 @@ filtering operations from four focused sub-modules.
 
 ## References
 
-* [M. Wolf, *Quantum Channels & Operations: Guided Tour*, Section 2.3][Wolf2012QChannels]
+* [M. Wolf, *Quantum Channels & Operations: Guided Tour*, Section 2.4][Wolf2012QChannels]
 -/

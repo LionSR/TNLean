@@ -609,7 +609,7 @@ theorem scalar_of_filtering_min {R : Matrix n n ℂ} (hR : R.PosSemidef)
         have hzero : R i j = 0 := Complex.ext hre him
         simp [hij, hzero]
 
-/-- Wolf §2.3 AM--GM stationarity core: a positive semidefinite matrix whose real trace
+/-- Wolf §2.4 AM--GM stationarity core: a positive semidefinite matrix whose real trace
 pairing is minimized by the identity among determinant-one filters is scalar. -/
 theorem posDef_scalar_of_filtering_min {D : ℕ} {R : Matrix (Fin D) (Fin D) ℂ}
     (hR : R.PosSemidef)

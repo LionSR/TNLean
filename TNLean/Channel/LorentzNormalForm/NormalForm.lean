@@ -26,7 +26,7 @@ square form is the equal-dimension specialization.
 
 ## References
 
-* [M. Wolf, *Quantum Channels & Operations: Guided Tour*, Section 2.3,
+* [M. Wolf, *Quantum Channels & Operations: Guided Tour*, Section 2.4,
   Proposition 2.9][Wolf2012QChannels]
 -/
 
@@ -56,7 +56,7 @@ classification of the possible doubly-stochastic normal forms.
 
 **Scope restriction (square case):** this is the equal-dimension case
 `T : Mₚ(ℂ) → Mₚ(ℂ)` (here `D × D → D × D`) of Wolf Proposition 2.9; the source
-(Wolf, *Quantum Channels & Operations*, Section 2.3) states it for a general
+(Wolf, *Quantum Channels & Operations*, Section 2.4) states it for a general
 `T : M_{d₁}(ℂ) → M_{d₂}(ℂ)` with separate filterings on each factor.  Documented
 in `docs/paper-gaps/wolf_prop28_square_case.tex`. -/
 theorem exists_normal_form_generic
