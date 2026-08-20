@@ -27,7 +27,7 @@ Section~\ref{sec:app_wielandt_cumulative_support}.
 \end{definition}
 
 \begin{definition}[Fixed-length vector span]\label{def:vector_spread_span}
-    \lean{MPSTensor.vectorSpreadSpan}
+    \lean{Kraus.vectorSpreadSpan}
     \leanok
     \uses{def:mps_tensor, def:eval_word}
     The \emph{fixed-length vector span} at length~$n$ is
@@ -38,6 +38,15 @@ Section~\ref{sec:app_wielandt_cumulative_support}.
     \end{align}
     This is $S_n(A)\ket{\varphi}$ in the notation
     of~\cite{Sanz2010Quantum}.
+\end{definition}
+
+\begin{definition}[Fixed-length vector span of an MPS tensor]
+    \label{def:mps_vector_spread_span}
+    \lean{MPSTensor.vectorSpreadSpan}
+    \leanok
+    \uses{def:vector_spread_span}
+    For an MPS tensor $A$, its fixed-length vector span is the fixed-length
+    vector span of the underlying finite matrix family.
 \end{definition}
 
 \subsection{Paper primitivity and indices}
@@ -781,11 +790,11 @@ matrices, and let $\E_K$ be its Kraus map.
 \begin{theorem}[Eigenvector extraction from a full cumulative span]
     \label{thm:eigenvector_from_full_cumulative_span}
     \lean{Kraus.exists_eigenvector_of_cumulativeSpan_eq_top}
-    \lean{MPSTensor.exists_eigenvector_of_cumulativeSpan_eq_top}
     \leanok
-    \uses{def:cumulative_span}
-    Let $D>0$ and suppose $T_N(K)=\MN{D}$. Then there are a word $w$, a
-    nonzero scalar $\mu$, and a nonzero vector $\varphi\in\C^D$ such that
+    Let $T_N(K)$ be the span of the products of at most $N$ matrices from a
+    finite family $K$. If $D>0$ and $T_N(K)=\MN{D}$, then there are a word
+    $w$, a nonzero scalar $\mu$, and a nonzero vector $\varphi\in\C^D$ such
+    that
     \begin{align}
         |w| & \le N, \notag\\
         K^w\varphi & = \mu\varphi. \notag
@@ -799,6 +808,23 @@ matrices, and let $\E_K$ be its Kraus map.
     length at most $N$ has nonzero trace. Such a matrix has a nonzero
     eigenvalue and a corresponding nonzero eigenvector by
     Theorem~\ref{thm:eigenvector_from_trace}.
+\end{proof}
+
+\begin{theorem}[Eigenvector extraction for an MPS tensor]
+    \label{thm:mps_eigenvector_from_full_cumulative_span}
+    \lean{MPSTensor.exists_eigenvector_of_cumulativeSpan_eq_top}
+    \leanok
+    \uses{def:cumulative_span,
+        thm:eigenvector_from_full_cumulative_span}
+    The conclusion of
+    Theorem~\ref{thm:eigenvector_from_full_cumulative_span} holds for the
+    matrix family of an MPS tensor whenever its cumulative span at level $N$
+    is the full matrix algebra.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:eigenvector_from_full_cumulative_span}
+    Apply the finite-family theorem to the matrices of the tensor.
 \end{proof}
 
 \begin{theorem}[Sharp nonzero trace product for a primitive channel]%

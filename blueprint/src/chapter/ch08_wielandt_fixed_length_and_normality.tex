@@ -69,11 +69,27 @@ construction is in Section~\ref{sec:app_wielandt_blocking_support}.
     $S_{n+m}(A)=\MN{D}$.
 \end{proof}
 
-\begin{lemma}[Blocking transfer]\label{lem:blocking_transfer}
-    \lean{MPSTensor.wordSpan_eq_top_of_blockTensor_wordSpan_eq_top}
+\begin{lemma}[Block injectivity and blocked-tensor injectivity]
+    \label{lem:isNBlkInjective_iff_blockTensor_isInjective}
     \lean{MPSTensor.isNBlkInjective_iff_blockTensor_isInjective}
     \leanok
-    \uses{def:word_span, def:blocked_tensor}
+    \uses{def:blocked_tensor, def:injective}
+    A tensor $A$ is $L$-block injective if and only if its $L$-blocked
+    tensor $A^{[L]}$ is injective.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    The blocked physical alphabet is a reindexing of words of length $L$.
+    Decoding blocked indices therefore identifies the two spanning families,
+    and hence the two injectivity conditions are equivalent.
+\end{proof}
+
+\begin{lemma}[Blocking transfer]\label{lem:blocking_transfer}
+    \lean{MPSTensor.wordSpan_eq_top_of_blockTensor_wordSpan_eq_top}
+    \leanok
+    \uses{def:word_span, def:blocked_tensor,
+        lem:isNBlkInjective_iff_blockTensor_isInjective}
     If the blocked tensor $A^{[L]}$ satisfies
     $S_n(A^{[L]})=\MN{D}$, then $S_{nL}(A)=\MN{D}$.
     In particular, $A$ is $L$-block injective if and only if $A^{[L]}$ is
@@ -82,6 +98,7 @@ construction is in Section~\ref{sec:app_wielandt_blocking_support}.
 
 \begin{proof}
     \leanok
+    \uses{lem:isNBlkInjective_iff_blockTensor_isInjective}
     By the blocked-tensor definition (\ref{eq:mps_blocked_tensor}), each
     length-$n$ word in the blocked alphabet
     $\{0,\ldots,d^L-1\}$ decodes to a length-$nL$ word

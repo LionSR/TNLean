@@ -432,12 +432,25 @@ closing a chain of $N$ copies of $\mathcal U$.
     the ordered diagonal word displayed above.
 \end{proof}
 
+\begin{lemma}[A matrix basis adapted to the trace]
+    \label{lem:identity_traceless_matrix_basis}
+    \lean{Matrix.exists_identity_traceless_basis}
+    \leanok
+    If $d>0$, the identity matrix extends to a basis of $\MN d$ whose other
+    elements are traceless.
+\end{lemma}
+
+\begin{proof}\leanok
+    The trace functional is nonzero on the identity. Extend the identity by a
+    basis of the kernel of the trace.
+\end{proof}
+
 \begin{theorem}[Identity plus traceless physical decomposition]
     \label{thm:mpu_WIsom}
-    \lean{Matrix.exists_identity_traceless_basis,
-        MPOTensor.exists_identity_add_traceless_decomposition,
+    \lean{MPOTensor.exists_identity_add_traceless_decomposition,
         MPOTensor.residualSlice_eq_contractPhysical_tracelessPart}
     \leanok
+    \uses{lem:identity_traceless_matrix_basis}
     Assume $d>0$.  For every double-layer tensor $\mathcal W$, there is a basis
     $\{\sigma_0,\sigma_\alpha\}$ of the physical matrix algebra and virtual
     matrices $E,S_\alpha$ such that $\sigma_0=\Id$ and, for every nonzero
@@ -3718,10 +3731,10 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
 
 \begin{theorem}[Left-canonical normalization under blocking and relabeling]
     \label{thm:mpu_left_canonical_blocking_reindexing}
-    \lean{MPSTensor.leftCanonical_blockTensor,
-        MPSTensor.leftCanonical_reindexPhysical_equiv}
+    \lean{MPSTensor.leftCanonical_reindexPhysical_equiv}
     \leanok
-    \uses{def:blocked_tensor,def:left_canonical_tensor}
+    \uses{def:blocked_tensor,def:left_canonical_tensor,
+        lem:left_canonical_blocking}
     Suppose that an MPS tensor $A$ is left-canonical:
     \begin{align}
         \sum_i (A^i)^\dagger A^i&=\Id.
@@ -3742,7 +3755,8 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{def:blocked_tensor,def:left_canonical_tensor}
+    \uses{def:blocked_tensor,def:left_canonical_tensor,
+        lem:left_canonical_blocking}
     Expand~(\ref{eq:mpu_left_canonical_blocking}) as a sum over
     length-$L$ words and sum one letter at a time, repeatedly applying the
     one-site left-canonical identity. For $L=0$, the unique empty word
@@ -5777,17 +5791,35 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
   \end{align}
 \end{proof}
 
+\begin{lemma}[Invertible factor for a reduced projection]
+  \label{lem:reduced_projection_invertible_factor}
+  \lean{Matrix.exists_units_supportInvExtension_reducedProjection_rightFactor}
+  \leanok
+  \uses{def:support_proj,def:mpu_matrix_reduced_projection,
+    def:mpu_ambient_support_inverse_extension}
+  Let $L,R\succeq0$, let $P$ and $Q$ be their support projections, and let
+  $\widetilde P$ be the reduced projection of $P$ and $Q$. There are
+  invertible support-inverse extensions of $L$ and $R$, together with an
+  invertible matrix $Y$, such that $PQY=\widetilde P$.
+\end{lemma}
+
+\begin{proof}\leanok
+  Extend the inverses on the supports by the identity on their orthogonal
+  complements, and choose an invertible right factor for the reduced
+  projection.
+\end{proof}
+
 \begin{theorem}[Source-rank comparison of the hatted and reduced tensors]
   \label{thm:mpu_reduced_to_hat_source_ranks}
   \lean{MPOTensor.virtualSandwich_hat_eq_reducedProjection,
     MPOTensor.rightRank_hat_eq_reducedProjection,
     MPOTensor.leftRank_hat_eq_reducedProjection,
-    MPOTensor.exists_units_for_hat_reducedProjection,
-    Matrix.exists_units_supportInvExtension_reducedProjection_rightFactor}
+    MPOTensor.exists_units_for_hat_reducedProjection}
   \leanok
   \uses{def:mpo_family,def:support_proj,def:mpu_virtual_sandwich,
     def:mpu_matrix_reduced_projection,def:mpu_right_rank,def:mpu_left_rank,
-    def:mpu_ambient_support_inverse_extension}
+    def:mpu_ambient_support_inverse_extension,
+    lem:reduced_projection_invertible_factor}
   Let $W=(W^{ij})$ be an MPO tensor, let $L$, $R$, $X$, $Z$, $Y$ be square
   matrices of the same size, let $P$ be an orthogonal projection, let $Q$
   be a square matrix of the same size, and set $\widetilde P$ equal to
@@ -8628,10 +8660,9 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
   Applying this equality to $A-B$ gives distance preservation.
 \end{proof}
 
-\begin{definition}[Quasi-local observable algebra]
-  \label{def:qca_quasi_local_algebra}
-  \lean{SpinChain.QuasiLocalAlgebra,SpinChain.algebraicToQuasiLocal,
-    UniformSpace.Completion.toComplAlgHom,
+\begin{definition}[C-star structure on a completion]
+  \label{def:completion_cstar_algebra}
+  \lean{UniformSpace.Completion.toComplAlgHom,
     UniformSpace.Completion.toComplStarAlgHom,
     UniformSpace.Completion.coe_toComplStarAlgHom,
     UniformSpace.Completion.instStar,UniformSpace.Completion.coe_star,
@@ -8641,8 +8672,25 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     UniformSpace.Completion.instStarModule,
     UniformSpace.Completion.instCStarAlgebra}
   \leanok
+  The norm completion of a complex normed star algebra satisfying the C-star
+  identity carries the continuously extended involution and a C-star algebra
+  structure. The canonical map into the completion is a star-algebra
+  homomorphism.
+\end{definition}
+
+\begin{proof}\leanok
+  Extend the isometric involution continuously. The algebraic identities and
+  the C-star identity hold on the dense canonical image and hence on the
+  completion.
+\end{proof}
+
+\begin{definition}[Quasi-local observable algebra]
+  \label{def:qca_quasi_local_algebra}
+  \lean{SpinChain.QuasiLocalAlgebra,SpinChain.algebraicToQuasiLocal}
+  \leanok
   \uses{def:qca_algebraic_local_cstar_ring,
-    def:qca_algebraic_local_normed_star_algebra}
+    def:qca_algebraic_local_normed_star_algebra,
+    def:completion_cstar_algebra}
   For $d>0$, the quasi-local observable algebra is the operator-norm
   completion
   \begin{align}
@@ -8709,14 +8757,26 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
   $\iota_\Gamma\circ\iota_{\Lambda,\Gamma}=\iota_\Lambda$.
 \end{proof}
 
+\begin{theorem}[Density of the canonical completion map]
+  \label{thm:completion_map_dense_range}
+  \lean{UniformSpace.Completion.denseRange_toComplStarAlgHom}
+  \leanok
+  The canonical star-algebra homomorphism from a normed star algebra into its
+  completion has dense range.
+\end{theorem}
+
+\begin{proof}\leanok
+  This is the defining density property of the completion.
+\end{proof}
+
 \begin{theorem}[Density of finite-region observables]
   \label{thm:qca_quasi_local_density}
-  \lean{UniformSpace.Completion.denseRange_toComplStarAlgHom,
-    SpinChain.denseRange_algebraicToQuasiLocal,
+  \lean{SpinChain.denseRange_algebraicToQuasiLocal,
     SpinChain.dense_iUnion_range_quasiLocalObservable}
   \leanok
   \uses{def:qca_quasi_local_algebra,def:qca_quasi_local_observable,
-    thm:qca_local_observable_finite_support}
+    thm:qca_local_observable_finite_support,
+    thm:completion_map_dense_range}
   Algebraic local observables are dense in the quasi-local algebra.  Equivalently,
   \begin{align}
     \overline{j(\mathcal A_{\mathrm{loc}})}
