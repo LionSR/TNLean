@@ -1454,6 +1454,70 @@
     zero.
 \end{proof}
 
+\begin{definition}[Explicit transport of vertical BNT representatives]%
+    \label{def:mpdo_vertical_bnt_explicit_transport}
+    \lean{MPOTensor.BNTLabelOperatorFamily.ExplicitVerticalTransport}
+    \leanok
+    \uses{def:mpdo_bnt_label_operator_family}
+    Let $(O_L(\alpha))_{\alpha\in\Lambda}$ and
+    $(O'_L(\alpha))_{\alpha\in\Lambda'}$ be two labelled operator families.
+    An explicit vertical transport consists of a bijection
+    $e:\Lambda'\to\Lambda$, nonzero scalars $s_\alpha$, and algebra
+    isomorphisms $\Phi_L$ between the ambient operator algebras such that
+    \begin{align}
+        O'_L(\alpha)=s_\alpha^L\Phi_L(O_L(e(\alpha)))
+        \notag
+    \end{align}
+    for every length and every target label.
+\end{definition}
+
+\begin{theorem}[Scale covariance of vertically transported BNT coefficients]%
+    \label{thm:mpdo_vertical_bnt_coefficient_covariance}
+    \lean{MPOTensor.BNTAlgebraTensorClause.%
+        coeff_eq_of_explicitVerticalTransport}
+    \leanok
+    \uses{def:mpdo_bnt_algebra_tensor_clause,
+        def:mpdo_vertical_bnt_explicit_transport,
+        def:mpdo_bnt_label_linear_independent,
+        thm:mpdo_bnt_label_coeff_unique,
+        thm:mpdo_vertical_coefficients_not_presentation_invariant}
+    Suppose that two tensor-attached vertical BNT presentations are related
+    by an explicit vertical transport.  At every positive length $L$ at
+    which the target operators are linearly independent, their structure
+    coefficients satisfy
+    \begin{align}
+        {c'}^{(L)}_{\alpha,\beta,\gamma}
+        =\left(\frac{s_\alpha s_\beta}{s_\gamma}\right)^L
+          c^{(L)}_{e(\alpha),e(\beta),e(\gamma)}.
+        \notag
+    \end{align}
+\end{theorem}
+\begin{proof}\leanok
+    Transport the source product expansion through $\Phi_L$ and substitute
+    the three normalization identities.  Reindex the resulting sum by $e$.
+    Since each $s_\gamma$ is nonzero, its length power cancels, leaving the
+    displayed coefficient family.  Uniqueness of the expansion in the
+    linearly independent target operators gives the result.
+\end{proof}
+
+\begin{corollary}[Exact coefficient comparison under compatible normalization]%
+    \label{cor:mpdo_vertical_bnt_coefficient_transport_exact}
+    \lean{MPOTensor.BNTAlgebraTensorClause.%
+        coeff_eq_of_explicitVerticalTransport_of_scale_mul_eq}
+    \leanok
+    \uses{thm:mpdo_vertical_bnt_coefficient_covariance}
+    Under the hypotheses of the preceding theorem, if
+    $s_\alpha s_\beta=s_\gamma$, then
+    \begin{align}
+        {c'}^{(L)}_{\alpha,\beta,\gamma}
+        =c^{(L)}_{e(\alpha),e(\beta),e(\gamma)}.
+        \notag
+    \end{align}
+\end{corollary}
+\begin{proof}\leanok
+    The scale factor in the covariance law is one.
+\end{proof}
+
 % Project-derived counterexample to the cross-presentation assertion formerly
 % proposed in #6395.  CPSV16 does not state this assertion.
 \begin{definition}[Horizontally gauge-equivalent tensors with distinct vertical normalizations]%
