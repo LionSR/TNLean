@@ -291,10 +291,22 @@ dependencies:
   run: |
     test -n "$QICLEAN_DEPLOY_KEY"
     install -d -m 700 "$HOME/.ssh"
-    printf '%s\n' "$QICLEAN_DEPLOY_KEY" > "$HOME/.ssh/id_ed25519"
-    chmod 600 "$HOME/.ssh/id_ed25519"
-    ssh-keyscan -t ed25519 github.com >> "$HOME/.ssh/known_hosts"
+    key_file="$HOME/.ssh/qiclean_deploy_key"
+    hosts_file="$HOME/.ssh/qiclean_known_hosts"
+    printf '%s\n' "$QICLEAN_DEPLOY_KEY" > "$key_file"
+    chmod 600 "$key_file"
+    printf '%s\n' \
+      'github.com ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOMqqnkVzrm0SdG6UOoqKLsabgH5C9okWi0dh2l9GKJl' \
+      > "$hosts_file"
+    chmod 600 "$hosts_file"
+    printf '%s\n' \
+      "GIT_SSH_COMMAND=ssh -i $key_file -o IdentitiesOnly=yes -o UserKnownHostsFile=$hosts_file" \
+      >> "$GITHUB_ENV"
 ```
+
+The pinned host line is GitHub's published Ed25519 key, whose fingerprint is
+`SHA256:+DiY3wvvV6TuJJhbpZisF/zLDA0zPMSvHdkr4UvCOqU`. Update it only after
+checking the replacement against GitHub's published metadata.
 
 The QICLean repository setting must keep this deploy key read-only. The secret
 must be available to push and same-repository pull-request builds. Fork pull
