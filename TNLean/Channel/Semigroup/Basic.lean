@@ -235,7 +235,7 @@ theorem hasDerivAt_expSemigroup_apply
     (X : Matrix (Fin D) (Fin D) ℂ) (t : ℝ) :
     @HasDerivAt ℝ _ (Matrix (Fin D) (Fin D) ℂ)
       Matrix.linftyOpNormedAddCommGroup.toAddCommGroup
-      (TNOperatorSpace.instNormedSpaceRealMatrixComplex_tNLean (Fin D)).toModule
+      (TNOperatorSpace.instNormedSpaceRealMatrixComplex (Fin D)).toModule
       PseudoMetricSpace.toUniformSpace.toTopologicalSpace
       (inferInstance : ContinuousSMul ℝ (Matrix (Fin D) (Fin D) ℂ))
       (fun u : ℝ => expSemigroup L u X) (expSemigroup L t (L X)) t := by
@@ -258,7 +258,7 @@ theorem hasDerivAt_expSemigroup_apply
         (Matrix (Fin D) (Fin D) ℂ)
         Matrix.linftyOpNormedAddCommGroup
         (show NormedSpace ℝ (Matrix (Fin D) (Fin D) ℂ) from
-          TNOperatorSpace.instNormedSpaceRealMatrixComplex_tNLean (Fin D))
+          TNOperatorSpace.instNormedSpaceRealMatrixComplex (Fin D))
         (f := fun u : ℝ => expSemigroupCLM (endEquiv L) u)
         (f' := expSemigroupCLM (endEquiv L) t * endEquiv L)
         (x := t)

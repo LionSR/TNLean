@@ -86,47 +86,47 @@ theorem expSemigroup_apply_eq_self_of_generator_apply_eq_zero
   let : AddCommGroup Mat := Matrix.linftyOpNormedAddCommGroup.toAddCommGroup
   let : NormedAddCommGroup Mat := Matrix.linftyOpNormedAddCommGroup
   let : Module ℝ Mat :=
-    (TNOperatorSpace.instNormedSpaceRealMatrixComplex_tNLean (Fin D)).toModule
+    (TNOperatorSpace.instNormedSpaceRealMatrixComplex (Fin D)).toModule
   let : TopologicalSpace Mat := PseudoMetricSpace.toUniformSpace.toTopologicalSpace
   let : NormedSpace ℝ Mat :=
-    TNOperatorSpace.instNormedSpaceRealMatrixComplex_tNLean (Fin D)
+    TNOperatorSpace.instNormedSpaceRealMatrixComplex (Fin D)
   let : ContinuousSMul ℝ Mat := inferInstance
   intro t _ht
   have hdiff :
       @Differentiable ℝ _ ℝ _ _ _ Mat
         Matrix.linftyOpNormedAddCommGroup.toAddCommGroup
-        (TNOperatorSpace.instNormedSpaceRealMatrixComplex_tNLean (Fin D)).toModule
+        (TNOperatorSpace.instNormedSpaceRealMatrixComplex (Fin D)).toModule
         PseudoMetricSpace.toUniformSpace.toTopologicalSpace
         (fun u : ℝ => expSemigroup L u X) := by
     intro u
     exact @HasDerivAt.differentiableAt ℝ _ Mat
       Matrix.linftyOpNormedAddCommGroup
-      (TNOperatorSpace.instNormedSpaceRealMatrixComplex_tNLean (Fin D))
+      (TNOperatorSpace.instNormedSpaceRealMatrixComplex (Fin D))
       (f := fun u : ℝ => expSemigroup L u X) (f' := (expSemigroup L u) (L X)) (x := u)
       (hasDerivAt_expSemigroup_apply (L := L) X u)
   have hderiv :
       ∀ u : ℝ,
         @deriv ℝ _ Mat
           Matrix.linftyOpNormedAddCommGroup.toAddCommGroup
-          (TNOperatorSpace.instNormedSpaceRealMatrixComplex_tNLean (Fin D)).toModule
+          (TNOperatorSpace.instNormedSpaceRealMatrixComplex (Fin D)).toModule
           PseudoMetricSpace.toUniformSpace.toTopologicalSpace
           (fun s : ℝ => expSemigroup L s X) u = 0 := by
     intro u
     have hu :
         @HasDerivAt ℝ _ Mat
           Matrix.linftyOpNormedAddCommGroup.toAddCommGroup
-          (TNOperatorSpace.instNormedSpaceRealMatrixComplex_tNLean (Fin D)).toModule
+          (TNOperatorSpace.instNormedSpaceRealMatrixComplex (Fin D)).toModule
           PseudoMetricSpace.toUniformSpace.toTopologicalSpace
           (inferInstance : ContinuousSMul ℝ Mat)
           (fun u : ℝ => expSemigroup L u X) 0 u := by
       simpa [hX] using (hasDerivAt_expSemigroup_apply (L := L) X u)
     exact @HasDerivAt.deriv ℝ _ Mat
       Matrix.linftyOpNormedAddCommGroup
-      (TNOperatorSpace.instNormedSpaceRealMatrixComplex_tNLean (Fin D))
+      (TNOperatorSpace.instNormedSpaceRealMatrixComplex (Fin D))
       (f := fun u : ℝ => expSemigroup L u X) (f' := 0) (x := u) hu
   have hconst := @is_const_of_deriv_eq_zero ℝ Mat _
     Matrix.linftyOpNormedAddCommGroup
-    (TNOperatorSpace.instNormedSpaceRealMatrixComplex_tNLean (Fin D))
+    (TNOperatorSpace.instNormedSpaceRealMatrixComplex (Fin D))
     (f := fun u : ℝ => expSemigroup L u X) hdiff hderiv 0 t
   simpa [expSemigroup_zero] using hconst.symm
 
@@ -138,39 +138,39 @@ theorem generator_apply_eq_zero_of_expSemigroup_apply_eq_self
   have hd₁ :
       @HasDerivWithinAt ℝ _ Mat
         Matrix.linftyOpNormedAddCommGroup.toAddCommGroup
-        (TNOperatorSpace.instNormedSpaceRealMatrixComplex_tNLean (Fin D)).toModule
+        (TNOperatorSpace.instNormedSpaceRealMatrixComplex (Fin D)).toModule
         PseudoMetricSpace.toUniformSpace.toTopologicalSpace
         (inferInstance : ContinuousSMul ℝ Mat)
         (fun u : ℝ => expSemigroup L u X) (L X) (Set.Ici 0) 0 := by
     have hAt :
         @HasDerivAt ℝ _ Mat
           Matrix.linftyOpNormedAddCommGroup.toAddCommGroup
-          (TNOperatorSpace.instNormedSpaceRealMatrixComplex_tNLean (Fin D)).toModule
+          (TNOperatorSpace.instNormedSpaceRealMatrixComplex (Fin D)).toModule
           PseudoMetricSpace.toUniformSpace.toTopologicalSpace
           (inferInstance : ContinuousSMul ℝ Mat)
           (fun u : ℝ => expSemigroup L u X) (L X) 0 := by
       simpa [expSemigroup_zero] using hasDerivAt_expSemigroup_apply (L := L) X 0
     exact @HasDerivAt.hasDerivWithinAt ℝ _ Mat
       Matrix.linftyOpNormedAddCommGroup
-      (TNOperatorSpace.instNormedSpaceRealMatrixComplex_tNLean (Fin D))
+      (TNOperatorSpace.instNormedSpaceRealMatrixComplex (Fin D))
       (f := fun u : ℝ => expSemigroup L u X) (f' := L X) (x := 0) (s := Set.Ici 0)
       hAt
   have hd₂' :
       @HasDerivWithinAt ℝ _ Mat
         Matrix.linftyOpNormedAddCommGroup.toAddCommGroup
-        (TNOperatorSpace.instNormedSpaceRealMatrixComplex_tNLean (Fin D)).toModule
+        (TNOperatorSpace.instNormedSpaceRealMatrixComplex (Fin D)).toModule
         PseudoMetricSpace.toUniformSpace.toTopologicalSpace
         (inferInstance : ContinuousSMul ℝ Mat)
         (fun _ : ℝ => X) 0 (Set.Ici 0) 0 := by
     exact @HasDerivAt.hasDerivWithinAt ℝ _ Mat
       Matrix.linftyOpNormedAddCommGroup
-      (TNOperatorSpace.instNormedSpaceRealMatrixComplex_tNLean (Fin D))
+      (TNOperatorSpace.instNormedSpaceRealMatrixComplex (Fin D))
       (f := fun _ : ℝ => X) (f' := 0) (x := 0) (s := Set.Ici 0)
       (hasDerivAt_const (x := 0) (c := X))
   have hd₂ :
       @HasDerivWithinAt ℝ _ Mat
         Matrix.linftyOpNormedAddCommGroup.toAddCommGroup
-        (TNOperatorSpace.instNormedSpaceRealMatrixComplex_tNLean (Fin D)).toModule
+        (TNOperatorSpace.instNormedSpaceRealMatrixComplex (Fin D)).toModule
         PseudoMetricSpace.toUniformSpace.toTopologicalSpace
         (inferInstance : ContinuousSMul ℝ Mat)
         (fun u : ℝ => expSemigroup L u X) 0 (Set.Ici 0) 0 :=
