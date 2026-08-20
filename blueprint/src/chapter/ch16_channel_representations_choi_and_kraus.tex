@@ -209,7 +209,6 @@ partial traces.
 \begin{theorem}[Spectral bound for a vectorized unital Kraus map]
     \label{thm:unital_kraus_frobenius_spectral_radius}
     \lean{IsKrausCP.spectralRadius_frobeniusEuclideanMap_le_one_of_map_one_eq_one}
-    \lean{spectralRadius_le_one_of_forall_eigenvalue_norm_le_one}
     \leanok
     \uses{thm:unital_kraus_eigenvalue_bound,
         def:frobenius_superoperator_transport}
@@ -221,6 +220,7 @@ partial traces.
 \begin{proof}
     \leanok
     \uses{thm:unital_kraus_eigenvalue_bound,
+        thm:kraus_tp_spectral_radius_bound,
         def:frobenius_superoperator_transport}
     A unital completely positive map is contractive in the matrix operator
     norm, so every eigenvalue has modulus at most one.  The spectral radius
@@ -722,7 +722,6 @@ is summed between the $K_i$ layer and the $K_i^\dagger$ layer:
 \end{tenkzequation}
 
 \begin{theorem}[Trace preservation implies Kraus normalization]\label{thm:kraus_sum_conjTranspose_mul_of_tp}
-    \lean{kraus_sum_conjTranspose_mul_of_tp}
     \leanok
     \uses{def:cp_map, def:trace_preserving}
     If $T(X) = \sum_i K_i X K_i^\dagger$ is trace-preserving, then
@@ -731,7 +730,7 @@ is summed between the $K_i$ layer and the $K_i^\dagger$ layer:
 
 \begin{proof}
     \leanok
-    \uses{def:trace_preserving}
+    \uses{def:trace_preserving, thm:kraus_rect_normalization}
     For any $N$,
     \begin{align}
         \tr\left(\left(\sum_i K_i^\dagger K_i\right)N\right)
@@ -810,7 +809,6 @@ extends to isometric mixing between different Kraus index spaces.
 
 \begin{theorem}[Isometric mixing preserves the Kraus map]
     \label{thm:kraus_same_map_of_isometry_combination}
-    \lean{kraus_same_map_of_isometry_combination}
     \leanok
     \uses{def:cp_map}
     Let $W$ be an isometry between two Kraus index spaces, so $W^\dagger W = \Id$.
@@ -820,6 +818,7 @@ extends to isometric mixing between different Kraus index spaces.
 \end{theorem}
 
 \begin{proof}\leanok
+    \uses{thm:kraus_rect_freedom}
     Expand the Kraus sums, interchange the finite summations, and use
     $W^\dagger W = \Id$ to collapse the coefficient matrix.
 \end{proof}
@@ -844,7 +843,6 @@ extends to isometric mixing between different Kraus index spaces.
 \end{proof}
 
 \begin{theorem}[Dual map equality from primal map equality]\label{thm:kraus_dual_eq_of_map_eq}
-    \lean{kraus_dual_eq_of_map_eq}
     \leanok
     \uses{def:cp_map}
     If two Kraus families satisfy
@@ -856,6 +854,7 @@ extends to isometric mixing between different Kraus index spaces.
 
 \begin{proof}
     \leanok
+    \uses{thm:kraus_rect_freedom}
     Use the trace pairing: for all $X$,
     \begin{align}
         \tr\left(X^\dagger
@@ -873,7 +872,6 @@ extends to isometric mixing between different Kraus index spaces.
 \end{proof}
 
 \begin{theorem}[Equal Stinespring Gramians]\label{thm:kraus_conjTranspose_mul_eq_of_map_eq}
-    \lean{kraus_conjTranspose_mul_eq_of_map_eq}
     \leanok
     \uses{thm:kraus_dual_eq_of_map_eq}
     If two Kraus families define the same CPM, then
@@ -882,6 +880,7 @@ extends to isometric mixing between different Kraus index spaces.
 
 \begin{proof}
     \leanok
+    \uses{thm:kraus_rect_freedom, thm:kraus_dual_eq_of_map_eq}
     Specialise Theorem~\ref{thm:kraus_dual_eq_of_map_eq} at $Y = \Id$.
 \end{proof}
 
@@ -902,7 +901,6 @@ extends to isometric mixing between different Kraus index spaces.
 
 \begin{theorem}[Isometric freedom of Kraus representations]
     \label{thm:kraus_isometry_freedom_iff}
-    \lean{kraus_isometry_freedom_iff}
     \leanok
     \uses{thm:kraus_rectangular_freedom'}
     Let $\{B_\alpha\}_{\alpha \in \iota_1}$ and $\{A_j\}_{j \in \iota_2}$
@@ -919,6 +917,7 @@ extends to isometric mixing between different Kraus index spaces.
 
 \begin{proof}
     \leanok
+    \uses{thm:kraus_rect_freedom}
     The implication $(1) \Rightarrow (2)$ is
     Theorem~\ref{thm:kraus_rectangular_freedom'}.
     Conversely, expand $\sum_\alpha B_\alpha X B_\alpha^\dagger$ using
@@ -929,7 +928,6 @@ extends to isometric mixing between different Kraus index spaces.
 
 \begin{theorem}[Unitary freedom of Kraus representations]
     \label{thm:kraus_unitary_freedom_iff}
-    \lean{kraus_unitary_freedom_iff}
     \leanok
     \uses{thm:kraus_isometry_freedom_iff}
     Let $\{B_\alpha\}_{\alpha \in \iota}$ and $\{A_j\}_{j \in \iota}$
@@ -945,6 +943,7 @@ extends to isometric mixing between different Kraus index spaces.
 
 \begin{proof}
     \leanok
+    \uses{thm:kraus_rect_freedom, thm:kraus_isometry_freedom_iff}
     Apply Theorem~\ref{thm:kraus_isometry_freedom_iff} with
     $|\iota| = |\iota|$.
     In the square case an isometry matrix is unitary, and the converse is
@@ -953,14 +952,11 @@ extends to isometric mixing between different Kraus index spaces.
 
 \begin{remark}[Choi rank and minimal Kraus cardinality]
     \label{rem:choi_rank_eq_min_kraus_cardinality}
-    \lean{Channel.HasKrausCard, Channel.HasKrausRankLE, Channel.choiRank,
-        Channel.choiRank_le_of_hasKrausCard,
-        Channel.choiRank_le_of_hasKrausRankLE,
-        Channel.hasKrausCard_choiRank_of_cp,
+    \lean{Channel.choiRank_le_of_hasKrausRankLE,
         Channel.hasKrausRankLE_choiRank_of_cp,
         Channel.hasKrausRankLE_choiRank_of_cptp}
     \leanok
-    \uses{def:choi_matrix, def:cp_map}
+    \uses{def:choi_matrix, def:cp_map, def:kraus_rank_rect}
     If a completely positive map admits a Kraus representation with exactly $r$
     operators, then its Choi matrix is a sum of $r$ rank-one outer products.
     Consequently, $\rank(\tau_E) \le r$.
@@ -972,6 +968,7 @@ extends to isometric mixing between different Kraus index spaces.
 
 \begin{proof}
     \leanok
+    \uses{thm:kraus_rect_rank_minimal}
     For the forward implication, expand the Choi matrix using the Kraus formula
     and write $\tau_E = \sum_j v_j v_j^\dagger$ with one vector $v_j$ for each
     Kraus operator. The column space of this sum lies in the span of the $r$
