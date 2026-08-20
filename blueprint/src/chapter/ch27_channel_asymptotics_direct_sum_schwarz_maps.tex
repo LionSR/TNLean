@@ -163,7 +163,6 @@
 
 \begin{theorem}[Summand matching and dimension preservation]\label{thm:dim_preserved}
     \lean{Matrix.exists_blockEquiv_dim_eq_of_starAlgEquiv_pi_matrix}
-    \lean{MPSTensor.dim_preserved}
     \leanok
     Let $\{D_i\}_{i\in I}$ and $\{E_j\}_{j\in J}$ be positive integers.
     A star-algebra isomorphism
@@ -186,6 +185,22 @@
     between full matrix algebras. Comparing complex dimensions gives
     $D_i^2=E_{\sigma(i)}^2$, and positivity of the block dimensions gives
     $D_i=E_{\sigma(i)}$.
+\end{proof}
+
+\begin{theorem}[Dimension preservation for matched matrix summands]
+    \label{thm:mps_dim_preserved}
+    \lean{MPSTensor.dim_preserved}
+    \leanok
+    \uses{thm:dim_preserved}
+    An algebra automorphism of a product of full matrix algebras preserves
+    the dimension of every pair of summands matched by its induced
+    permutation.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:dim_preserved}
+    Apply Theorem~\ref{thm:dim_preserved} to the corresponding star-algebra
+    isomorphism.
 \end{proof}
 
 \begin{theorem}[Simple-summand matching for inverse CPTP maps]%

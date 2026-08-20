@@ -153,16 +153,31 @@ change of basis. The matrix is not assumed to have trace one.
     Lemma~\ref{lem:phys_close_identity} gives the periodic formula.
 \end{proof}
 
+\begin{lemma}[Rank invariance under unitary conjugation]
+    \label{lem:unitary_single_kraus_rank}
+    \lean{Matrix.rank_singleKrausMap_of_mem_unitaryGroup}
+    \leanok
+    If $V$ is unitary, then
+    \begin{align}
+        \operatorname{rank}(VAV^\dagger)&=\operatorname{rank}A.
+        \label{eq:unitary_single_kraus_rank}
+    \end{align}
+\end{lemma}
+
+\begin{proof}\leanok
+    Left and right multiplication by invertible matrices preserve rank.
+\end{proof}
+
 \begin{theorem}[Geometric periodic rank growth of a strong fixed point]
     \label{thm:mpdo_strong_rfp_periodic_rank_growth}
-    \lean{Matrix.rank_singleKrausMap_of_mem_unitaryGroup,
-      MPOTensor.strongRFP_rank_mpo_add_two,
+    \lean{MPOTensor.strongRFP_rank_mpo_add_two,
       MPOTensor.strongRFP_rank_mpo_add_one,
       MPOTensor.IsStrongRFP.exists_periodic_rank_factor}
     \leanok
     \uses{def:mpdo_strong_rfp,
       thm:mpdo_strong_rfp_phys_close,
-      thm:mpdo_strong_rfp_global_operator_identity}
+      thm:mpdo_strong_rfp_global_operator_identity,
+      lem:unitary_single_kraus_rank}
     Fix witnesses $P\geq0$ and $U$ for the strong fixed-point relation. For
     every $N\geq0$, the ordinary full periodic MPO matrix ranks satisfy
     \begin{align}
@@ -174,11 +189,6 @@ change of basis. The matrix is not assumed to have trace one.
         &=\operatorname{rank}\rho^{(1)}(M)\,
           (\operatorname{rank}P)^N.
         \label{eq:mpdo_strong_rfp_rank_geometric}
-    \end{align}
-    More generally, if $V$ is unitary, then
-    \begin{align}
-      \operatorname{rank}(VAV^\dagger)&=\operatorname{rank}A.
-      \label{eq:unitary_single_kraus_rank}
     \end{align}
     Consequently every strong fixed point admits a single positive witness
     $P$ whose matrix rank is the factor in both formulas. No normalization of

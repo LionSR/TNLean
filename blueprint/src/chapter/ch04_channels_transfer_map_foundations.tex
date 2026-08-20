@@ -175,12 +175,11 @@
     $\{A^i\}$.
 \end{proof}
 
-\begin{lemma}[Trace adjointness of Kraus and transfer maps]
+\begin{lemma}[Trace adjointness of a Kraus map]
     \label{lem:trace_mul_transfer_map_adjoint}
-    \lean{trace_mul_transferMap_adjoint}
     \lean{Kraus.trace_mul_mapLM_adjoint}
     \leanok
-    \uses{def:kraus_map, def:transfer_map}
+    \uses{def:kraus_map}
     For matrices $\rho$ and $X$ and a finite family $(K_i)_i$,
     \begin{align}
         \tr\!\left(\rho\sum_i K_iXK_i^\dagger\right)
@@ -189,11 +188,25 @@
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{lem:trace_mul_map_eq_trace_adjointMap_mul,
-        thm:kraus_map_eq_transfer_map}
+    \uses{lem:trace_mul_map_eq_trace_adjointMap_mul}
     Apply Lemma~\ref{lem:trace_mul_map_eq_trace_adjointMap_mul} to the Kraus
-    map determined by $(K_i)_i$. Identifying this Kraus map and its adjoint
-    with the corresponding transfer maps gives the stated identity.
+    map determined by $(K_i)_i$.
+\end{proof}
+
+\begin{lemma}[Trace adjointness of a transfer map]
+    \label{lem:trace_mul_transfer_map_adjoint_mps}
+    \lean{trace_mul_transferMap_adjoint}
+    \leanok
+    \uses{def:transfer_map, lem:trace_mul_transfer_map_adjoint}
+    The trace-adjoint identity of Lemma~\ref{lem:trace_mul_transfer_map_adjoint}
+    holds when the Kraus family is the family of matrices of an MPS tensor and
+    the two Kraus maps are written as transfer maps.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{lem:trace_mul_transfer_map_adjoint,
+        thm:kraus_map_eq_transfer_map}
+    Identify the two Kraus maps with the corresponding transfer maps.
 \end{proof}
 
 \begin{lemma}[Transfer map under scalar multiplication]
