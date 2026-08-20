@@ -474,6 +474,21 @@ See Theorem~\ref{thm:tn}.
         ):
             boundary_report(self.root)
 
+    def test_rejects_standalone_input_inside_atomic_environment(self) -> None:
+        self.write_blueprint(
+            r"""\begin{figure}
+\input{chapter/picture}
+\end{figure}
+"""
+        )
+        self.write_blueprint("Picture body.\n", "picture.tex")
+        with self.assertRaisesRegex(
+            ValueError,
+            r"atomic environment at src/chapter/ch01.tex:1-3 contains "
+            r"standalone \\input at line 2",
+        ):
+            boundary_report(self.root)
+
     def test_rejects_unbalanced_non_item_environment(self) -> None:
         self.write_blueprint(
             r"""\begin{theorem}\label{thm:qic}

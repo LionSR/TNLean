@@ -295,6 +295,13 @@ def _atomic_non_item_environment_ranges(
         if contained:
             continue
         maximal.append((start, end))
+    for start, end in maximal:
+        for line_no in range(start, end + 1):
+            if INPUT_LINE_RE.fullmatch(_strip_tex_comments(source_lines[line_no - 1])):
+                raise ValueError(
+                    f"atomic environment at {relative_root}:{start}-{end} contains "
+                    f"standalone \\input at line {line_no}"
+                )
     return dict(maximal)
 
 
@@ -307,8 +314,10 @@ def blueprint_non_item_blocks(
     atomic, including nested environments and blank or comment-only lines.
     Single-line environments remain in their surrounding paragraph. An outer
     environment containing item lines is rejected because partitioning it at
-    the item boundary would produce malformed TeX. Elsewhere, blank lines and
-    item boundaries split blocks. Router ``\\input`` commands
+    the item boundary would produce malformed TeX. A standalone ``\\input``
+    nested inside an atomic environment is rejected because its target-file
+    dependency cannot be separated from that environment. Elsewhere, blank
+    lines and item boundaries split blocks. Router ``\\input`` commands
     are single-line blocks so each simulated output can prune them without
     pulling in every sibling chapter.
     """
