@@ -7,6 +7,7 @@ import TNLean.Channel.PerronFrobenius.Existence
 import TNLean.MPS.Core.TransferChannel
 import TNLean.MPS.Core.TPGauge
 import TNLean.MPS.Irreducible.Adjoint
+import TNLean.MPS.Irreducible.FormII
 
 /-!
 # Perron–Frobenius gauges for irreducible MPS tensors

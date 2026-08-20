@@ -137,7 +137,7 @@ We use `MPSTensor.exists_irreducible_blockDecomp` from `Reduction.lean` directly
 ## (2) Perron–Frobenius / trace-preserving gauge for irreducible blocks
 
 We use `MPSTensor.exists_tp_data_of_irreducible` from
-`Channel/PerronFrobenius/Existence.lean` directly below.
+`MPS/Irreducible/PerronGauge.lean` directly below.
 -/
 
 
