@@ -4,6 +4,8 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.Algebra.MatrixKroneckerEmbed
+import TNLean.Algebra.PositiveSemidefiniteNormalization
+import TNLean.Channel.SupportCompletion
 import TNLean.Channel.ProjectiveResolution
 import TNLean.MPS.MPDO.BNTBoundaryDecomposition
 import TNLean.MPS.MPDO.CommonWeightAbsorbedBNTSupport
@@ -26,7 +28,7 @@ renormalization channel.
   Appendix C.2, lines 1646--1665 and 1810--1825.
 -/
 
-open scoped Matrix BigOperators Kronecker
+open scoped Matrix BigOperators ComplexOrder Kronecker
 
 noncomputable section
 
@@ -260,6 +262,47 @@ theorem sum_firstSiteMatrix_eq_one
   ext σ τ
   simp only [Matrix.sum_apply, firstSiteMatrix, Finset.sum_mul]
 
+/-- A finite sum of first-site lifts is the first-site lift of the sum. -/
+theorem sum_firstSiteMatrix
+    {ι : Type*} [Fintype ι] (P : ι → Matrix (Fin d) (Fin d) ℂ) (N : ℕ) :
+    ∑ s, firstSiteMatrix (P s) N = firstSiteMatrix (∑ s, P s) N := by
+  ext σ τ
+  simp only [Matrix.sum_apply, firstSiteMatrix, Finset.sum_mul]
+
+/-- The sum of pairwise orthogonal sector projections supports every physical
+slice belonging to one of the sectors on both sides. -/
+theorem sum_projection_twoSidedSupport_physicalSlice
+    {ι : Type*} [Fintype ι]
+    {bondDim : ι → ℕ} (K : (s : ι) → MPOTensor d (bondDim s))
+    (P : ι → Matrix (Fin d) (Fin d) ℂ)
+    (hOrth : ∀ {s t}, s ≠ t → P s * P t = 0)
+    (hSupport : ∀ s β α,
+      P s * physicalSlice (K s) β α = physicalSlice (K s) β α ∧
+        physicalSlice (K s) β α * P s = physicalSlice (K s) β α)
+    (s : ι) (β α : Fin (bondDim s)) :
+    (∑ t, P t) * physicalSlice (K s) β α = physicalSlice (K s) β α ∧
+      physicalSlice (K s) β α * (∑ t, P t) = physicalSlice (K s) β α := by
+  classical
+  constructor
+  · rw [Matrix.sum_mul, Finset.sum_eq_single s]
+    · exact (hSupport s β α).1
+    · intro t _ hts
+      calc
+        P t * physicalSlice (K s) β α =
+            (P t * P s) * physicalSlice (K s) β α := by
+          rw [Matrix.mul_assoc, (hSupport s β α).1]
+        _ = 0 := by rw [hOrth hts, Matrix.zero_mul]
+    · simp
+  · rw [Matrix.mul_sum, Finset.sum_eq_single s]
+    · exact (hSupport s β α).2
+    · intro t _ hts
+      calc
+        physicalSlice (K s) β α * P t =
+            (physicalSlice (K s) β α * P s) * P t := by
+          rw [(hSupport s β α).2]
+        _ = 0 := by rw [Matrix.mul_assoc, hOrth (Ne.symm hts), Matrix.mul_zero]
+    · simp
+
 /-- Pairwise orthogonal two-sided supports select precisely the matching
 sector in every arbitrary-boundary physical closure.
 
@@ -483,6 +526,176 @@ theorem exists_chainCoordinateRFP_of_projectiveSectorDecomposition
         refinementMapInChainCoordinates_physCloseN
           (K s) (T₀ s) (hT₀close s) (boundary X s)
 
+/-- Assemble sectorwise blocked renormalization channels when the orthogonal
+sector projections need not resolve the identity. The active sums are
+completed trace-preservingly on the orthogonal input complements and agree
+with the uncompleted sums on the physical closures.
+
+This is the physical-complement completion of the projection-first argument
+in arXiv:1606.00608, Appendix C.2, lines 1810--1817. -/
+theorem exists_chainCoordinateRFP_of_orthogonalSectorDecomposition
+    {ι : Type*} [Fintype ι]
+    {bondDim : ι → ℕ}
+    (M : MPOTensor d D) (K : (s : ι) → MPOTensor d (bondDim s))
+    (P : ι → Matrix (Fin d) (Fin d) ℂ)
+    (hProj : ∀ s, IsOrthogonalProjection (P s))
+    (hOrth : ∀ {s t}, s ≠ t → P s * P t = 0)
+    (hSupport : ∀ s β α,
+      P s * physicalSlice (K s) β α = physicalSlice (K s) β α ∧
+        physicalSlice (K s) β α * P s = physicalSlice (K s) β α)
+    (boundary : Matrix (Fin D) (Fin D) ℂ →
+      (s : ι) → Matrix (Fin (bondDim s)) (Fin (bondDim s)) ℂ)
+    (hDecompTwo : ∀ X, physCloseN M 2 X =
+      ∑ s, physCloseN (K s) 2 (boundary X s))
+    (hDecompFour : ∀ X, physCloseN M 4 X =
+      ∑ s, physCloseN (K s) 4 (boundary X s))
+    (hRFP : ∀ s, IsRFPViaTS (blockTwo (K s)))
+    (ρTwo : Matrix (Fin 2 → Fin d) (Fin 2 → Fin d) ℂ)
+    (hρTwo : ρTwo.PosSemidef) (hρTwoTrace : Matrix.trace ρTwo = 1)
+    (ρFour : Matrix (Fin 4 → Fin d) (Fin 4 → Fin d) ℂ)
+    (hρFour : ρFour.PosSemidef) (hρFourTrace : Matrix.trace ρFour = 1) :
+    ∃ (S : Matrix (Fin 4 → Fin d) (Fin 4 → Fin d) ℂ →ₗ[ℂ]
+        Matrix (Fin 2 → Fin d) (Fin 2 → Fin d) ℂ)
+      (T : Matrix (Fin 2 → Fin d) (Fin 2 → Fin d) ℂ →ₗ[ℂ]
+        Matrix (Fin 4 → Fin d) (Fin 4 → Fin d) ℂ),
+      IsKrausCPTP S ∧ IsKrausCPTP T ∧
+      (∀ X, S (physCloseN M 4 X) = physCloseN M 2 X) ∧
+      (∀ X, T (physCloseN M 2 X) = physCloseN M 4 X) := by
+  classical
+  choose S₀ T₀ hS₀ hT₀ hS₀close hT₀close using hRFP
+  let S : ι → Matrix (Fin 4 → Fin d) (Fin 4 → Fin d) ℂ →ₗ[ℂ]
+      Matrix (Fin 2 → Fin d) (Fin 2 → Fin d) ℂ :=
+    fun s ↦ coarseningMapInChainCoordinates (S₀ s)
+  let T : ι → Matrix (Fin 2 → Fin d) (Fin 2 → Fin d) ℂ →ₗ[ℂ]
+      Matrix (Fin 4 → Fin d) (Fin 4 → Fin d) ℂ :=
+    fun s ↦ refinementMapInChainCoordinates (T₀ s)
+  let Q : Matrix (Fin d) (Fin d) ℂ := ∑ s, P s
+  let QFour : Matrix (Fin 4 → Fin d) (Fin 4 → Fin d) ℂ := firstSiteMatrix Q 3
+  let QTwo : Matrix (Fin 2 → Fin d) (Fin 2 → Fin d) ℂ := firstSiteMatrix Q 1
+  let Sactive := ∑ s, S s ∘ₗ singleKrausMap (firstSiteMatrix (P s) 3)
+  let Tactive := ∑ s, T s ∘ₗ singleKrausMap (firstSiteMatrix (P s) 1)
+  let Sglobal := Matrix.supportCompletion Sactive QFour ρTwo
+  let Tglobal := Matrix.supportCompletion Tactive QTwo ρFour
+  have hQ : IsOrthogonalProjection Q :=
+    isOrthogonalProjection_sum_of_pairwise_mul_eq_zero P hProj hOrth
+  have hQFourHerm : QFour.IsHermitian := firstSiteMatrix_isHermitian hQ.1 3
+  have hQFourIdem : QFour * QFour = QFour := by
+    exact (firstSiteMatrix_isStarProjection hQ 3).isIdempotentElem.eq
+  have hQTwoHerm : QTwo.IsHermitian := firstSiteMatrix_isHermitian hQ.1 1
+  have hQTwoIdem : QTwo * QTwo = QTwo := by
+    exact (firstSiteMatrix_isStarProjection hQ 1).isIdempotentElem.eq
+  have hSactiveCP : IsKrausCP Sactive := by
+    exact isKrausCP_sum_comp_singleKrausMap
+      (fun s ↦ firstSiteMatrix (P s) 3) S
+      (fun s ↦ (coarseningMapInChainCoordinates_isKrausCPTP
+        (hS₀ s)).isKrausCP)
+  have hTactiveCP : IsKrausCP Tactive := by
+    exact isKrausCP_sum_comp_singleKrausMap
+      (fun s ↦ firstSiteMatrix (P s) 1) T
+      (fun s ↦ (refinementMapInChainCoordinates_isKrausCPTP
+        (hT₀ s)).isKrausCP)
+  have hSactiveTrace : ∀ X, Matrix.trace (Sactive X) =
+      Matrix.trace (QFour * X) := by
+    intro X
+    rw [trace_sum_comp_singleKrausMap_of_starProjections
+      (fun s ↦ firstSiteMatrix (P s) 3) S
+      (fun s ↦ firstSiteMatrix_isStarProjection (hProj s) 3)
+      (fun s ↦ coarseningMapInChainCoordinates_isKrausCPTP (hS₀ s))]
+    rw [sum_firstSiteMatrix]
+  have hTactiveTrace : ∀ X, Matrix.trace (Tactive X) =
+      Matrix.trace (QTwo * X) := by
+    intro X
+    rw [trace_sum_comp_singleKrausMap_of_starProjections
+      (fun s ↦ firstSiteMatrix (P s) 1) T
+      (fun s ↦ firstSiteMatrix_isStarProjection (hProj s) 1)
+      (fun s ↦ refinementMapInChainCoordinates_isKrausCPTP (hT₀ s))]
+    rw [sum_firstSiteMatrix]
+  have hQSupport : ∀ s β α,
+      Q * physicalSlice (K s) β α = physicalSlice (K s) β α ∧
+        physicalSlice (K s) β α * Q = physicalSlice (K s) β α := by
+    exact sum_projection_twoSidedSupport_physicalSlice K P hOrth hSupport
+  have hFourSupported : ∀ X,
+      QFour * physCloseN M 4 X * QFour = physCloseN M 4 X := by
+    intro X
+    rw [hDecompFour X, Matrix.mul_sum, Matrix.sum_mul]
+    apply Finset.sum_congr rfl
+    intro s _
+    rw [firstSiteMatrix_mul_physCloseN_of_mul_physicalSlice
+      (K s) Q (fun β α ↦ (hQSupport s β α).1) 3]
+    rw [physCloseN_mul_firstSiteMatrix_of_physicalSlice_mul
+      (K s) Q (fun β α ↦ (hQSupport s β α).2) 3]
+  have hTwoSupported : ∀ X,
+      QTwo * physCloseN M 2 X * QTwo = physCloseN M 2 X := by
+    intro X
+    rw [hDecompTwo X, Matrix.mul_sum, Matrix.sum_mul]
+    apply Finset.sum_congr rfl
+    intro s _
+    rw [firstSiteMatrix_mul_physCloseN_of_mul_physicalSlice
+      (K s) Q (fun β α ↦ (hQSupport s β α).1) 1]
+    rw [physCloseN_mul_firstSiteMatrix_of_physicalSlice_mul
+      (K s) Q (fun β α ↦ (hQSupport s β α).2) 1]
+  have hSactiveClose : ∀ X,
+      Sactive (physCloseN M 4 X) = physCloseN M 2 X := by
+    intro X
+    rw [hDecompFour X]
+    simp only [Sactive, LinearMap.sum_apply, LinearMap.comp_apply, map_sum]
+    apply Eq.trans ?_ (hDecompTwo X).symm
+    apply Finset.sum_congr rfl
+    intro s _
+    calc
+      ∑ x, S x (singleKrausMap (firstSiteMatrix (P x) 3)
+          (physCloseN (K s) 4 (boundary X s))) =
+          S s (physCloseN (K s) 4 (boundary X s)) := by
+        simp_rw [singleKrausMap_firstSiteMatrix_physCloseN_eq_ite
+          K P hProj hOrth hSupport]
+        rw [Finset.sum_eq_single s]
+        · simp
+        · intro x _ hxs
+          rw [ite_eq_right hxs, map_zero]
+        · simp
+      _ = physCloseN (K s) 2 (boundary X s) :=
+        coarseningMapInChainCoordinates_physCloseN
+          (K s) (S₀ s) (hS₀close s) (boundary X s)
+  have hTactiveClose : ∀ X,
+      Tactive (physCloseN M 2 X) = physCloseN M 4 X := by
+    intro X
+    rw [hDecompTwo X]
+    simp only [Tactive, LinearMap.sum_apply, LinearMap.comp_apply, map_sum]
+    apply Eq.trans ?_ (hDecompFour X).symm
+    apply Finset.sum_congr rfl
+    intro s _
+    calc
+      ∑ x, T x (singleKrausMap (firstSiteMatrix (P x) 1)
+          (physCloseN (K s) 2 (boundary X s))) =
+          T s (physCloseN (K s) 2 (boundary X s)) := by
+        simp_rw [singleKrausMap_firstSiteMatrix_physCloseN_eq_ite
+          K P hProj hOrth hSupport]
+        rw [Finset.sum_eq_single s]
+        · simp
+        · intro x _ hxs
+          rw [ite_eq_right hxs, map_zero]
+        · simp
+      _ = physCloseN (K s) 4 (boundary X s) :=
+        refinementMapInChainCoordinates_physCloseN
+          (K s) (T₀ s) (hT₀close s) (boundary X s)
+  refine ⟨Sglobal, Tglobal, ?_, ?_, ?_, ?_⟩
+  · exact Matrix.supportCompletion_isKrausCPTP
+      Sactive QFour ρTwo hSactiveCP hQFourHerm hQFourIdem
+      hSactiveTrace hρTwo hρTwoTrace
+  · exact Matrix.supportCompletion_isKrausCPTP
+      Tactive QTwo ρFour hTactiveCP hQTwoHerm hQTwoIdem
+      hTactiveTrace hρFour hρFourTrace
+  · intro X
+    rw [show Sglobal (physCloseN M 4 X) = Sactive (physCloseN M 4 X) by
+      exact Matrix.supportCompletion_apply_of_supported
+        Sactive QFour ρTwo _ hQFourHerm hQFourIdem (hFourSupported X)]
+    exact hSactiveClose X
+  · intro X
+    rw [show Tglobal (physCloseN M 2 X) = Tactive (physCloseN M 2 X) by
+      exact Matrix.supportCompletion_apply_of_supported
+        Tactive QTwo ρFour _ hQTwoHerm hQTwoIdem (hTwoSupported X)]
+    exact hTactiveClose X
+
 /-- Transport a pair of renormalization channels in ordinary length-two and
 length-four chain coordinates to the physical coordinates of a two-site
 blocking.
@@ -578,5 +791,77 @@ theorem blockTwo_isRFPViaTS_of_commonWeightAbsorbedBNTChannels
       hRFP
   exact blockTwo_isRFPViaTS_of_chainCoordinateRFP
     M Schain Tchain hSchain hTchain hSclose hTclose
+
+/-- An exact canonical BNT reconstruction with copy-independent absorbed
+weights has a blocked renormalization channel pair whenever its outer physical
+supports are pairwise orthogonal and every absorbed representative has such a
+pair. The supports need not resolve the ambient physical identity.
+
+The active projector-controlled sums are completed on their orthogonal input
+complements by trace-and-prepare channels. Since every relevant closure is
+supported on the sum of the outer projections, the complementary terms vanish
+on the two channel equations.
+
+This is a project-derived completion of the projection-first construction in
+arXiv:1606.00608, Appendix C.2, lines 1646--1665 and 1810--1825. -/
+theorem blockTwo_isRFPViaTS_of_commonWeightAbsorbedBNTChannels_of_orthogonalSupports
+    (S : MPSTensor.SectorDecomposition (d * d))
+    (hWeight : ∀ (j : Fin S.basisCount) (q q' : Fin (S.copies j)),
+      S.weight j q = S.weight j q')
+    (M : MPOTensor d S.totalDim)
+    (G : GL (Fin S.totalDim) ℂ)
+    (hG : ∀ i, M.toMPSTensor i =
+      (G : Matrix (Fin S.totalDim) (Fin S.totalDim) ℂ) * S.toTensor i *
+        (↑(G⁻¹) : Matrix (Fin S.totalDim) (Fin S.totalDim) ℂ))
+    (P : Fin S.basisCount → Matrix (Fin d) (Fin d) ℂ)
+    (hProj : ∀ s, IsOrthogonalProjection (P s))
+    (hOrth : ∀ {s t}, s ≠ t → P s * P t = 0)
+    (hSupport : ∀ s (β α : Fin (S.basisDim s)),
+      P s * physicalSlice (commonWeightAbsorbedBasisMPOTensor S hWeight s) β α =
+          physicalSlice (commonWeightAbsorbedBasisMPOTensor S hWeight s) β α ∧
+        physicalSlice (commonWeightAbsorbedBasisMPOTensor S hWeight s) β α * P s =
+          physicalSlice (commonWeightAbsorbedBasisMPOTensor S hWeight s) β α)
+    (hRFP : ∀ s, IsRFPViaTS
+      (blockTwo (commonWeightAbsorbedBasisMPOTensor S hWeight s))) :
+    IsRFPViaTS (blockTwo M) := by
+  classical
+  by_cases hd : d = 0
+  · subst d
+    apply blockTwo_isRFPViaTS_of_commonWeightAbsorbedBNTChannels
+      S hWeight M G hG P hProj
+    · exact Subsingleton.elim _ _
+    · exact hOrth
+    · exact hSupport
+    · exact hRFP
+  · let i₀ : Fin d := ⟨0, Nat.pos_of_ne_zero hd⟩
+    let xTwo : Fin 2 → Fin d := fun _ ↦ i₀
+    let xFour : Fin 4 → Fin d := fun _ ↦ i₀
+    let ρTwo : Matrix (Fin 2 → Fin d) (Fin 2 → Fin d) ℂ :=
+      Matrix.normalizePosSemidef xTwo 1
+    let ρFour : Matrix (Fin 4 → Fin d) (Fin 4 → Fin d) ℂ :=
+      Matrix.normalizePosSemidef xFour 1
+    let K : (s : Fin S.basisCount) → MPOTensor d (S.basisDim s) :=
+      fun s ↦ commonWeightAbsorbedBasisMPOTensor S hWeight s
+    let boundary : Matrix (Fin S.totalDim) (Fin S.totalDim) ℂ →
+        (s : Fin S.basisCount) →
+          Matrix (Fin (S.basisDim s)) (Fin (S.basisDim s)) ℂ :=
+      fun X s ↦ representativeBoundary S
+        ((↑(G⁻¹) : Matrix (Fin S.totalDim) (Fin S.totalDim) ℂ) * X *
+          (G : Matrix (Fin S.totalDim) (Fin S.totalDim) ℂ)) s
+    obtain ⟨Schain, Tchain, hSchain, hTchain, hSclose, hTclose⟩ :=
+      exists_chainCoordinateRFP_of_orthogonalSectorDecomposition
+        M K P hProj hOrth hSupport boundary
+        (fun X ↦ physCloseN_eq_sum_commonWeightAbsorbedBasis_of_gauge_toTensor
+          S hWeight M G hG 2 X)
+        (fun X ↦ physCloseN_eq_sum_commonWeightAbsorbedBasis_of_gauge_toTensor
+          S hWeight M G hG 4 X)
+        hRFP ρTwo
+        (Matrix.normalizePosSemidef_posSemidef xTwo Matrix.PosSemidef.one)
+        (Matrix.normalizePosSemidef_trace xTwo Matrix.PosSemidef.one)
+        ρFour
+        (Matrix.normalizePosSemidef_posSemidef xFour Matrix.PosSemidef.one)
+        (Matrix.normalizePosSemidef_trace xFour Matrix.PosSemidef.one)
+    exact blockTwo_isRFPViaTS_of_chainCoordinateRFP
+      M Schain Tchain hSchain hTchain hSclose hTclose
 
 end MPOTensor

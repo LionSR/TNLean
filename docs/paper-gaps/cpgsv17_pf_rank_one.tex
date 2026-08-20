@@ -1042,22 +1042,25 @@ is used only among copies of one representative, so this calculation imposes
 no relation between distinct BNT coefficients. The projector-controlled
 combination is now formalized by
 \leanid{MPOTensor.%
-blockTwo_isRFPViaTS_of_commonWeightAbsorbedBNTChannels}. The outer projectors
-are assumed to form a resolution of the one-site physical identity, and on
-one blocked site the measured projection is the reindexed matrix
-$P_s\otimes I$. Compression selects the matching absorbed representative at
-both required closure lengths; its supplied channel is then applied. This
-leaves two independent gaps in the source implication. First, one blocked
-channel pair must be constructed for every absorbed representative, by either
-\ghissue{6775} or \ghissue{6793}. Second, the projector completeness required
-by the conditional assembly must be derived from the source hypotheses. The
-present Markov-sector theorem identifies the projector sum only with the
-active Markov projection, while the two-sided absorbed-support theorem does
-not prove that this projection is the identity. This completeness problem is
-tracked in \ghissue{6807}. Its elimination may either prove that the active
-Markov projection is the identity, or prove that both relevant closures lie
-in its corner and complete the channels trace-preservingly on the orthogonal
-complement.
+blockTwo_isRFPViaTS_of_commonWeightAbsorbedBNTChannels}. For a complete outer
+projective resolution, the measured projection on one blocked site is the
+reindexed matrix $P_s\otimes I$. Compression selects the matching absorbed
+representative at both required closure lengths; its supplied channel is then
+applied.
+
+The completeness hypothesis is removed by
+\leanid{MPOTensor.%
+blockTwo_isRFPViaTS_of_commonWeightAbsorbedBNTChannels_of_orthogonalSupports}.
+For pairwise orthogonal two-sided supports, $Q=\sum_sP_s$ is an orthogonal
+projection and both relevant closures lie in its first-site corner. The
+projector-controlled active maps are completely positive and preserve the
+trace selected by $Q$. Measuring $I-Q$ and preparing a fixed density matrix
+therefore completes each active map to a channel, while the complementary
+term vanishes on the closures. This resolves \ghissue{6807} without asserting
+that the active Markov projection is the ambient identity. Thus the remaining
+gap in the source implication is only the construction of one blocked channel
+pair for every absorbed representative, by either \ghissue{6775} or
+\ghissue{6793}.
 
 The all-cut Markov proof and the source-selected inverse-map calculation show
 that the raw four-sector tensor satisfies the displayed SAL, literal ZCL, and
@@ -1104,8 +1107,8 @@ refutes the exact printed implication (iv)$\Rightarrow$(v). For the source
 per-representative factorization assertion, while \ghissue{6793} records the
 possible alternative of constructing the blocked channel pair by a genuine
 coarsening or sector-mixing argument. The conditional combination through the
-orthogonal outer physical sectors is formalized in \ghissue{6632}; deriving
-or harmlessly completing the required outer projector resolution remains
+orthogonal outer physical sectors is formalized in \ghissue{6632}, and its
+trace-preserving completion outside the active support resolves
 \ghissue{6807}.
 
 \bibliographystyle{alpha}

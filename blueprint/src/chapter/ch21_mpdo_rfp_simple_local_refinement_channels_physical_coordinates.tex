@@ -604,6 +604,37 @@
     length-two and length-four closures of $K$ with the original boundary.
 \end{proof}
 
+\begin{theorem}[Completion outside the absorbed BNT supports]
+    \label{thm:mpdo_absorbed_bnt_channel_support_completion}
+    \lean{MPOTensor.blockTwo_isRFPViaTS_of_commonWeightAbsorbedBNTChannels_of_orthogonalSupports}
+    \leanok
+    \uses{thm:mpdo_absorbed_representative_boundary_decomposition,
+        thm:mpdo_absorbed_bnt_channel_assembly,
+        def:is_rfp_via_ts}
+    Retain the hypotheses of
+    Theorem~\ref{thm:mpdo_absorbed_bnt_channel_assembly}, except that the
+    pairwise orthogonal outer support projections are not required to sum to
+    the identity. If every blocked absorbed representative is a
+    renormalization fixed point via trace-preserving completely positive maps,
+    then the blocked complete tensor is also such a fixed point.
+\end{theorem}
+
+\begin{proof}\leanok
+    Let $Q=\sum_sP_s$. Pairwise orthogonality makes $Q$ an orthogonal
+    projection. Two-sided support of each absorbed representative implies
+    that the length-two and length-four closures of the complete tensor are
+    supported on the first-site lifts of $Q$.
+
+    On the active corner, sum the representative channels after compression
+    by the corresponding first-site projections. Each sum is completely
+    positive and preserves exactly the trace selected by $Q$. Complete it on
+    the orthogonal input complement by measuring $I-Q$ and preparing any
+    fixed density matrix in the output space. The resulting map is
+    trace-preserving and completely positive. Its complementary term vanishes
+    on the supported closure, so the two channel equations reduce to those of
+    the active sum and hence to the representative equations.
+\end{proof}
+
 \begin{theorem}[Blocking channels after common-weight absorption]
     \label{thm:mpdo_sal_zcl_blocking_channels}
     \notready
@@ -630,14 +661,10 @@
     common value into each representative. The proof at lines~1815--1816 then
     projects onto the mutually orthogonal outer physical sectors and invokes
     the one-representative channel construction. Thus a faithful proof must
-    supply one blocked channel pair for every absorbed representative and
-    derive a complete outer support resolution, or extend the channels on its
-    orthogonal complement after proving that the closures lie in the active
-    corner. Given the complete resolution, the combination through the outer
-    physical projections is
-    Theorem~\ref{thm:mpdo_absorbed_bnt_channel_assembly}. The completeness
-    step remains unproved.
-    % The follow-up is tracked by GitHub issue #6807.
+    supply one blocked channel pair for every absorbed representative. Their
+    combination through the outer physical projections, including the
+    trace-preserving completion outside their sum, is
+    Theorem~\ref{thm:mpdo_absorbed_bnt_channel_support_completion}.
 \end{theorem}
 
 % Correct equation, not a figure: the cited source draws the two-to-three
