@@ -556,7 +556,29 @@
 
 \begin{theorem}[Conditional composition of absorbed BNT channels]
     \label{thm:mpdo_absorbed_bnt_channel_assembly}
-    \lean{MPOTensor.blockTwo_isRFPViaTS_of_commonWeightAbsorbedBNTChannels}
+    \lean{MPOTensor.blockedOneChainEquiv,
+      MPOTensor.blockedTwoChainEquiv,
+      MPOTensor.equivReindexMap_symm_apply_self,
+      MPOTensor.equivReindexMap_physCloseN_two_eq_physClose1_blockTwo,
+      MPOTensor.equivReindexMap_physCloseN_four_eq_physClose2_blockTwo,
+      MPOTensor.blockedFirstSiteProjection,
+      MPOTensor.blockedFirstSiteProjection_eq_reindex_kronecker_one,
+      MPOTensor.firstSiteMatrix_mul_physCloseN_of_mul_physicalSlice,
+      MPOTensor.firstSiteMatrix_mul_physCloseN_eq_zero_of_mul_physicalSlice_eq_zero,
+      MPOTensor.physCloseN_mul_firstSiteMatrix_of_physicalSlice_mul,
+      MPOTensor.singleKrausMap_firstSiteMatrix_physCloseN_of_twoSidedSupport,
+      MPOTensor.firstSiteMatrix_isStarProjection,
+      MPOTensor.sum_firstSiteMatrix_eq_one,
+      MPOTensor.singleKrausMap_firstSiteMatrix_physCloseN_eq_ite,
+      MPOTensor.coarseningMapInChainCoordinates,
+      MPOTensor.refinementMapInChainCoordinates,
+      MPOTensor.coarseningMapInChainCoordinates_isKrausCPTP,
+      MPOTensor.refinementMapInChainCoordinates_isKrausCPTP,
+      MPOTensor.coarseningMapInChainCoordinates_physCloseN,
+      MPOTensor.refinementMapInChainCoordinates_physCloseN,
+      MPOTensor.exists_chainCoordinateRFP_of_projectiveSectorDecomposition,
+      MPOTensor.blockTwo_isRFPViaTS_of_chainCoordinateRFP,
+      MPOTensor.blockTwo_isRFPViaTS_of_commonWeightAbsorbedBNTChannels}
     \leanok
     \uses{def:is_rfp_via_ts, def:mpdo_two_site_blocking,
         def:mpdo_common_sector_weight_absorption,
