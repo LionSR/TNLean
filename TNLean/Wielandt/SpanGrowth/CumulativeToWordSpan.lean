@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import TNLean.Kraus.Wielandt.SpanGrowth.CumulativeToWordSpan
 import TNLean.Wielandt.SpanGrowth.CumulativeSpan
 import TNLean.Wielandt.SpanGrowth.VectorToMatrixSpan
 import TNLean.Wielandt.RankOne.Products
@@ -10,50 +11,28 @@ import TNLean.Algebra.BurnsideMatrix
 import TNLean.Algebra.BurnsideTheorem
 
 /-!
-# From Cumulative Span to Word Span
+# From cumulative span to word span for MPS tensors
 
-This file proves that **cumulative span = ⊤** implies **word span = ⊤** under
-an aperiodicity condition, closing the gap between `cumulativeSpan A N = ⊤`
-(guaranteed by Burnside's theorem for irreducible tensors) and `IsNormal A`
-(needed for the quantum Wielandt bound).
-
-## Key insight: aperiodicity via `1 ∈ wordSpan A 1`
-
-**Without aperiodicity, the implication is false.** Counterexample: `A₁ = e₁₂`,
-`A₂ = e₂₁` generates `M₂(ℂ)` as an algebra (`Matrix.algSpan A = ⊤`), but `wordSpan A n`
-alternates between `span{e₁₁, e₂₂}` (even n ≥ 2) and `span{e₁₂, e₂₁}` (odd n),
-so no single level reaches `⊤`. The **period** of this tensor is 2.
-
-The aperiodicity condition `1 ∈ wordSpan A 1` (the identity matrix lies in the
-span of the Kraus operators) ensures that word spans are **monotone**:
-`wordSpan A n ≤ wordSpan A (n+1)`. Once monotone, the cumulative span collapses
-to the word span at the top level, yielding `wordSpan A N = ⊤`.
-
-In the Proposition 3 proof, this file isolates the last step
-"irreducibility + aperiodicity ⇒ normality". The needed aperiodicity is later
-supplied by strong irreducibility, i.e. peripheral spectrum `{1}`.
+This file gives the MPS-facing consequences of the generic Kraus-family span
+results. The transfer-free statements are compatibility wrappers around the
+corresponding declarations in `Kraus`. The MPS-specific results connect exact
+word-span fullness to block injectivity and normality.
 
 ## Main results
 
-* `exists_nonzero_trace_word_of_cumulativeSpan_eq_top`:
-  From `cumulativeSpan A N = ⊤` and `NeZero D`, extract a word with nonzero trace.
-
-* `wordSpan_mono_of_one_mem_wordSpan`:
-  If `1 ∈ wordSpan A L`, then `wordSpan A n ≤ wordSpan A (n + L)`.
-
-* `cumulativeSpan_eq_wordSpan_of_one_mem_wordSpan_one`:
-  If `1 ∈ wordSpan A 1`, then `cumulativeSpan A n = wordSpan A n`.
-
-* `isNormal_of_cumulativeSpan_eq_top_of_aperiodic`:
-  If `cumulativeSpan A N = ⊤` and `1 ∈ wordSpan A 1`, then `IsNormal A`.
-
-* `isNormal_of_algSpan_eq_top_of_aperiodic`:
-  If `Matrix.algSpan A = ⊤` and `1 ∈ wordSpan A 1`, then `IsNormal A`.
+* `isNBlkInjective_of_ge_of_unital` propagates block injectivity under the
+  equation $\sum_a A_a A_a^\dagger=I$.
+* `isNormal_of_cumulativeSpan_eq_top_of_aperiodic` derives normality from full
+  cumulative span and identity membership in the one-letter span.
+* `isNormal_of_algSpan_eq_top_of_aperiodic` combines this with algebra-span
+  fullness.
+* `exists_eigenvector_of_cumulativeSpan_eq_top` extracts a nonzero-eigenvalue
+  eigenvector from a word with nonzero trace.
 
 ## References
 
 * arXiv:0909.5347, Proposition 3
-* arXiv:1606.00608, Section 2.3 (canonical form + periodicity discussion)
+* arXiv:1606.00608, Section 2.3
 -/
 
 open scoped Matrix
@@ -63,138 +42,66 @@ namespace MPSTensor
 
 variable {d D : ℕ}
 
-/-! ## Part 1: Nonzero-trace word extraction from cumulative span -/
+/-! ## Compatibility wrappers for transfer-free span results -/
 
-/-- If `cumulativeSpan A N = ⊤` and `NeZero D`, there exists a word of length ≤ N
-with nonzero trace.
-
-**Proof**: `I ∈ cumulativeSpan A N = ⊤`, and `tr(I) = D ≠ 0`. Since trace is
-linear and `I` is a combination of word evaluations of length ≤ N, at least one
-such evaluation must have nonzero trace. -/
+/-- If the cumulative span is full, some word of bounded length has nonzero trace. -/
 theorem exists_nonzero_trace_word_of_cumulativeSpan_eq_top [NeZero D]
     (A : MPSTensor d D) {N : ℕ} (hcs : cumulativeSpan A N = ⊤) :
-    ∃ (w : List (Fin d)), w.length ≤ N ∧ Matrix.trace (evalWord A w) ≠ 0 := by
-  by_contra hall
-  push Not at hall
-  -- Set up the trace linear map.
-  set trMap : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] ℂ := Matrix.traceLinearMap (Fin D) ℂ ℂ
-  -- All generators of cumulativeSpan have zero trace → the whole span is in ker(tr).
-  have hker : cumulativeSpan A N ≤ LinearMap.ker trMap := by
-    apply Submodule.span_le.mpr
-    rintro M ⟨w, hw, rfl⟩
-    exact LinearMap.mem_ker.mpr (hall w hw)
-  -- Extract: every element of cumulativeSpan has zero trace.
-  have hzero : ∀ M ∈ cumulativeSpan A N, M.trace = 0 :=
-    fun M hM => LinearMap.mem_ker.mp (hker hM)
-  -- But I ∈ cumulativeSpan A N = ⊤ and tr(I) = D ≠ 0.
-  have hI : (1 : Matrix (Fin D) (Fin D) ℂ) ∈ cumulativeSpan A N :=
-    hcs ▸ Submodule.mem_top
-  have htrI : (1 : Matrix (Fin D) (Fin D) ℂ).trace ≠ 0 := by
-    simp only [Matrix.trace_one, Fintype.card_fin, ne_eq, Nat.cast_eq_zero]
-    exact_mod_cast NeZero.ne D
-  exact htrI (hzero 1 hI)
+    ∃ w : List (Fin d), w.length ≤ N ∧ Matrix.trace (evalWord A w) ≠ 0 :=
+  Kraus.exists_nonzero_trace_word_of_cumulativeSpan_eq_top A hcs
 
-/-! ## Part 2: Monotonicity from identity in word span -/
-
-/-- If `1 ∈ wordSpan A L`, then `wordSpan A n ≤ wordSpan A (n + L)`.
-
-**Proof**: For any `M ∈ wordSpan A n`, `M = M * 1 ∈ wordSpan A n * wordSpan A L ≤
-wordSpan A (n + L)` by `wordSpan_mul_le`. -/
+/-- Identity membership at length `L` embeds each exact word span into the span
+`L` steps later. -/
 theorem wordSpan_mono_of_one_mem_wordSpan
     (A : MPSTensor d D) {L : ℕ}
     (hone : (1 : Matrix (Fin D) (Fin D) ℂ) ∈ wordSpan A L) :
-    ∀ n, wordSpan A n ≤ wordSpan A (n + L) := by
-  intro n M hM
-  have hmul : M * 1 ∈ wordSpan A n * wordSpan A L :=
-    Submodule.mul_mem_mul hM hone
-  rw [Matrix.mul_one] at hmul
-  exact wordSpan_mul_le A n L hmul
+    ∀ n, wordSpan A n ≤ wordSpan A (n + L) :=
+  Kraus.wordSpan_mono_of_one_mem_wordSpan A hone
 
-/-- Monotonicity with step 1: if `1 ∈ wordSpan A 1`, then
-`wordSpan A n ≤ wordSpan A (n + 1)`. -/
+/-- Identity membership in the one-letter span makes every exact word span
+contained in its successor. -/
 theorem wordSpan_mono_succ_of_one_mem_wordSpan_one
     (A : MPSTensor d D)
     (hone : (1 : Matrix (Fin D) (Fin D) ℂ) ∈ wordSpan A 1) :
     ∀ n, wordSpan A n ≤ wordSpan A (n + 1) :=
-  wordSpan_mono_of_one_mem_wordSpan A hone
+  Kraus.wordSpan_mono_succ_of_one_mem_wordSpan_one A hone
 
-/-- Generalized monotonicity: if `1 ∈ wordSpan A 1` and `n ≤ m`,
-then `wordSpan A n ≤ wordSpan A m`. -/
+/-- Identity membership in the one-letter span makes exact word spans
+monotone. -/
 theorem wordSpan_mono'_of_one_mem_wordSpan_one
     (A : MPSTensor d D)
     (hone : (1 : Matrix (Fin D) (Fin D) ℂ) ∈ wordSpan A 1)
     {n m : ℕ} (hnm : n ≤ m) :
-    wordSpan A n ≤ wordSpan A m := by
-  -- Write m = n + k and induct on k via an auxiliary lemma.
-  suffices h : ∀ k, wordSpan A n ≤ wordSpan A (n + k) by
-    obtain ⟨k, rfl⟩ := Nat.exists_eq_add_of_le hnm; exact h k
-  intro k
-  induction k with
-  | zero => simp
-  | succ k ih =>
-    calc wordSpan A n ≤ wordSpan A (n + k) := ih
-      _ ≤ wordSpan A (n + k + 1) :=
-          wordSpan_mono_succ_of_one_mem_wordSpan_one A hone _
-      _ = wordSpan A (n + (k + 1)) := by ring_nf
+    wordSpan A n ≤ wordSpan A m :=
+  Kraus.wordSpan_mono'_of_one_mem_wordSpan_one A hone hnm
 
-/-! ## Part 2b: Propagation from the right-normalized identity -/
-
-/-- If
-\[
-  \sum_a A_a A_a^\dagger = I
-\]
-and the length-`n` word span is the full matrix algebra, then the length-`n+1`
-word span is again full.
-
-This is the propagation step used in PGVWC07, lines 893--898 of the local
-source. The displayed equation is
-\[
-  X = \sum_a A_a(A_a^\dagger X),
-\]
-where every \(A_a^\dagger X\) lies in the full length-`n` word span. -/
+/-- Under $\sum_a A_a A_a^\dagger=I$, fullness of the length-`n` word span
+propagates to length `n + 1`. -/
 theorem wordSpan_succ_eq_top_of_unital_of_wordSpan_eq_top
     (A : MPSTensor d D)
     (hUnital : ∑ a : Fin d, A a * (A a)ᴴ = 1)
     {n : ℕ} (hTop : wordSpan A n = ⊤) :
-    wordSpan A (n + 1) = ⊤ := by
-  rw [eq_top_iff]
-  intro X _
-  have hdecomp : X = ∑ a : Fin d, A a * ((A a)ᴴ * X) := by
-    calc
-      X = (1 : Matrix (Fin D) (Fin D) ℂ) * X := by simp
-      _ = (∑ a : Fin d, A a * (A a)ᴴ) * X := by rw [hUnital]
-      _ = ∑ a : Fin d, A a * ((A a)ᴴ * X) := by
-          rw [Finset.sum_mul]
-          exact Finset.sum_congr rfl fun a _ => by rw [Matrix.mul_assoc]
-  rw [hdecomp]
-  refine Submodule.sum_mem _ fun a _ => ?_
-  have hLeft : A a ∈ wordSpan A 1 := by
-    simpa [evalWord] using evalWord_mem_wordSpan A ([a] : List (Fin d))
-  have hRight : (A a)ᴴ * X ∈ wordSpan A n := by
-    rw [hTop]
-    exact Submodule.mem_top
-  have hProd : A a * ((A a)ᴴ * X) ∈ wordSpan A 1 * wordSpan A n :=
-    Submodule.mul_mem_mul hLeft hRight
-  simpa [Nat.add_comm] using wordSpan_mul_le A 1 n hProd
+    wordSpan A (n + 1) = ⊤ :=
+  Kraus.wordSpan_succ_eq_top_of_unital_of_wordSpan_eq_top A hUnital hTop
 
-/-- Under the normalization
-\[
-  \sum_a A_a A_a^\dagger = I,
-\]
-full homogeneous word span at length `L` propagates to every larger length. -/
+/-- Under $\sum_a A_a A_a^\dagger=I$, fullness at length `L` propagates to every
+length `m ≥ L`. -/
 theorem wordSpan_eq_top_of_ge_of_unital
     (A : MPSTensor d D)
     (hUnital : ∑ a : Fin d, A a * (A a)ᴴ = 1)
     {L m : ℕ} (hL : wordSpan A L = ⊤) (hm : L ≤ m) :
-    wordSpan A m = ⊤ := by
-  obtain ⟨k, rfl⟩ := Nat.exists_eq_add_of_le hm
-  induction k with
-  | zero =>
-      simpa using hL
-  | succ k ih =>
-      have hPrev : wordSpan A (L + k) = ⊤ := ih (by omega)
-      simpa [Nat.add_assoc] using
-        wordSpan_succ_eq_top_of_unital_of_wordSpan_eq_top A hUnital hPrev
+    wordSpan A m = ⊤ :=
+  Kraus.wordSpan_eq_top_of_ge_of_unital A hUnital hL hm
+
+/-- Identity membership in the one-letter span identifies cumulative and exact
+word spans at every length. -/
+theorem cumulativeSpan_eq_wordSpan_of_one_mem_wordSpan_one
+    (A : MPSTensor d D)
+    (hone : (1 : Matrix (Fin D) (Fin D) ℂ) ∈ wordSpan A 1) :
+    ∀ n, cumulativeSpan A n = wordSpan A n :=
+  Kraus.cumulativeSpan_eq_wordSpan_of_one_mem_wordSpan_one A hone
+
+/-! ## MPS-specific consequences -/
 
 /-- PGVWC07 injectivity propagation: for a right-normalized tensor, block
 injectivity at length `L` implies block injectivity at every length `m ≥ L`. -/
@@ -206,36 +113,8 @@ theorem isNBlkInjective_of_ge_of_unital
   rw [← wordSpan_eq_top_iff_isNBlkInjective] at hL ⊢
   exact wordSpan_eq_top_of_ge_of_unital A hUnital hL hm
 
-/-! ## Part 3: Cumulative span equals word span under monotonicity -/
-
-/-- If `1 ∈ wordSpan A 1`, then `cumulativeSpan A n = wordSpan A n`.
-
-**Proof**: The word span is monotone (from Part 2), so the supremum of
-`wordSpan A 0, ..., wordSpan A n` equals `wordSpan A n` (the largest term).
-Since `cumulativeSpan A n` is exactly this supremum, the result follows. -/
-theorem cumulativeSpan_eq_wordSpan_of_one_mem_wordSpan_one
-    (A : MPSTensor d D)
-    (hone : (1 : Matrix (Fin D) (Fin D) ℂ) ∈ wordSpan A 1) :
-    ∀ n, cumulativeSpan A n = wordSpan A n := by
-  intro n
-  apply le_antisymm
-  · -- ≤: each wordSpan A m (m ≤ n) is ≤ wordSpan A n by monotonicity.
-    apply Submodule.span_le.mpr
-    rintro M ⟨w, hw, rfl⟩
-    exact wordSpan_mono'_of_one_mem_wordSpan_one A hone hw
-      (evalWord_mem_wordSpan A w)
-  · -- ≥: wordSpan A n ≤ cumulativeSpan A n always holds.
-    exact wordSpan_le_cumulativeSpan A (le_refl n)
-
-/-! ## Part 4: Main theorems -/
-
-/-- **Main theorem**: if `cumulativeSpan A N = ⊤` and `1 ∈ wordSpan A 1`
-(aperiodicity), then `IsNormal A`.
-
-**Proof**: By monotonicity of cumulative spans and the hypothesis at level `N`,
-`cumulativeSpan A (N + 1) = ⊤`. Monotonicity of word spans, which follows from
-`1 ∈ wordSpan A 1`, identifies this with `wordSpan A (N + 1)`. Hence
-`IsNBlkInjective A (N + 1)`, and the positive witness `N + 1` gives `IsNormal A`. -/
+/-- If `cumulativeSpan A N = ⊤` and the identity belongs to the one-letter span,
+then `A` is normal. -/
 theorem isNormal_of_cumulativeSpan_eq_top_of_aperiodic
     (A : MPSTensor d D) {N : ℕ}
     (hcs : cumulativeSpan A N = ⊤)
@@ -246,10 +125,8 @@ theorem isNormal_of_cumulativeSpan_eq_top_of_aperiodic
   rw [← cumulativeSpan_eq_wordSpan_of_one_mem_wordSpan_one A hone]
   exact eq_top_iff.mpr (hcs.ge.trans (cumulativeSpan_mono A N))
 
-/-- If `Matrix.algSpan A = ⊤` and `1 ∈ wordSpan A 1` (aperiodicity), then `IsNormal A`.
-
-Combines the Noetherian chain stabilization for the algebra span with the
-aperiodicity condition. -/
+/-- If the generated matrix algebra is full and the identity belongs to the
+one-letter span, then `A` is normal. -/
 theorem isNormal_of_algSpan_eq_top_of_aperiodic
     (A : MPSTensor d D)
     (halg : Matrix.algSpan A = ⊤)
@@ -258,14 +135,12 @@ theorem isNormal_of_algSpan_eq_top_of_aperiodic
   obtain ⟨N, hN⟩ := exists_cumulativeSpan_eq_top_of_algSpan_eq_top A halg
   exact isNormal_of_cumulativeSpan_eq_top_of_aperiodic A hN hone
 
-/-! ## Part 5: Eigenvector extraction from a nonzero-trace word -/
+/-! ## Eigenvector extraction from a nonzero-trace word -/
 
-/-- The nonzero-trace word extraction gives an eigenvector with nonzero eigenvalue.
+/-- Full cumulative span gives a bounded-length word with an eigenvector whose
+eigenvalue is nonzero.
 
-Paper anchor: proof of Theorem 1, case (1) in arXiv:0909.5347 — a word
-product A⁽ⁿ⁾₁ of nonzero trace "therefore" has an eigenvector with nonzero
-eigenvalue ("there exists |φ⟩ such that A⁽ⁿ⁾₁|φ⟩ = μ|φ⟩ with μ ≠ 0"); the
-superscript indexes length-`n` word products, not a power of one operator. -/
+Paper anchor: proof of Theorem 1, case (1) in arXiv:0909.5347. -/
 theorem exists_eigenvector_of_cumulativeSpan_eq_top [NeZero D]
     (A : MPSTensor d D) {N : ℕ} (hcs : cumulativeSpan A N = ⊤) :
     ∃ (w : List (Fin d)) (μ : ℂ) (φ : Fin D → ℂ),

@@ -57,7 +57,7 @@ theorem map_wordSpan_eq_vectorSpreadSpan
       vectorSpreadSpan A φ n := by
   classical
   -- Unfold everything down to spans of ranges.
-  unfold mulVecLinearMap wordSpan Kraus.wordSpan vectorSpreadSpan
+  unfold mulVecLinearMap wordSpan Kraus.wordSpan vectorSpreadSpan Kraus.vectorSpreadSpan
   -- `Submodule.map` distributes over `Submodule.span`.
   rw [Submodule.map_span]
   -- Rewrite the RHS as an image of a range (so both sides match).
@@ -168,7 +168,7 @@ theorem cumulativeVectorSpan_le_vectorSpreadSpan_of_eigenvector
     cumulativeVectorSpan A φ n ≤ vectorSpreadSpan A φ n := by
   classical
   -- It suffices to check the generators of `cumulativeVectorSpan`.
-  unfold cumulativeVectorSpan
+  unfold cumulativeVectorSpan Kraus.cumulativeVectorSpan
   apply Submodule.span_le.mpr
   rintro v ⟨w, hw, rfl⟩
   -- Let `k = n - w.length` and pad `w` to length `n` by appending `i₀`'s.
