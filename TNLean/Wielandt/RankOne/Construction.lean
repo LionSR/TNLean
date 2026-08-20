@@ -3,10 +3,10 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.Wielandt.SpanGrowth.VectorToMatrixSpan
-
-import Mathlib.Data.Matrix.Mul
 import Mathlib.Data.List.FinRange
+import Mathlib.Data.Matrix.Mul
+import TNLean.Kraus.Wielandt.RectangularSpan.Basic
+import TNLean.Wielandt.SpanGrowth.VectorToMatrixSpan
 
 /-!
 # Rank-one construction (reductions)
@@ -71,13 +71,9 @@ More precisely, `(evalWord A w)ᵀ` is the evaluation of the pointwise-transpose
 `transposeTensor A` on the reversed word `w.reverse`. -/
 theorem evalWord_transpose (A : MPSTensor d D) :
     ∀ w : List (Fin d), (evalWord A w)ᵀ = evalWord (transposeTensor A) w.reverse := by
-  intro w
-  induction w with
-  | nil =>
-      simp [evalWord]
-  | cons i w ih =>
-      -- `transpose` reverses products and `reverse (i :: w) = reverse w ++ [i]`.
-      simp [evalWord, transposeTensor, Matrix.transpose_mul, ih, evalWord_append, List.reverse_cons]
+  change ∀ w : List (Fin d), (evalWord A w)ᵀ =
+    evalWord (fun i ↦ (A i)ᵀ) w.reverse
+  exact Kraus.evalWord_transpose A
 
 /-! ## Transpose preserves normality -/
 
