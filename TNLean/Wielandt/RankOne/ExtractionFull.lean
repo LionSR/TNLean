@@ -24,9 +24,6 @@ namespace MPSTensor
 
 variable {d D : ℕ}
 
-@[deprecated (since := "2026-08-20")] alias
-  pow_single_mem_wordSpan := Kraus.pow_single_mem_wordSpan
-
 /-- **Full rank-one extraction for Wielandt Lemma 2(b).**
 
 Under a positive normality witness, this produces nonzero right and transpose
