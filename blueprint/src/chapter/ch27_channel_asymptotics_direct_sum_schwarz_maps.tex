@@ -191,16 +191,18 @@
     \label{thm:mps_dim_preserved}
     \lean{MPSTensor.dim_preserved}
     \leanok
-    \uses{thm:dim_preserved}
     An algebra automorphism of a product of full matrix algebras preserves
     the dimension of every pair of summands matched by its induced
     permutation.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:dim_preserved}
-    Apply Theorem~\ref{thm:dim_preserved} to the corresponding star-algebra
-    isomorphism.
+    \uses{thm:mps_component_map_bijective}
+    Restrict the automorphism to the two matched summands. The resulting
+    component map is a bijective complex-linear map by
+    Theorem~\ref{thm:mps_component_map_bijective}. Hence the two matrix
+    spaces have equal complex dimensions, so their sizes have equal squares
+    and therefore are equal.
 \end{proof}
 
 \begin{theorem}[Simple-summand matching for inverse CPTP maps]%
