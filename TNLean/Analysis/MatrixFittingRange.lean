@@ -18,7 +18,7 @@ Fitting summand, the stabilized range of an endomorphism, and injectivity on tha
 open scoped Matrix
 open Module
 
-namespace MPSTensor
+namespace Matrix
 
 variable {D : ℕ}
 
@@ -141,7 +141,9 @@ theorem fitting_nilpotent_pow_eq_zero
     _ = 0 := zero_mul _
 
 
-namespace WielandtRankOne
+end Matrix
+
+namespace Module.End
 
 /-- On `V = Fin D → ℂ`, the zero generalized eigenspace is the kernel of `f ^ D`. -/
 private lemma maxGenEigenspace_zero_eq_ker_pow
@@ -215,9 +217,9 @@ theorem range_pow_le_iSup_maxGenEigenspace_ne_zero
     simpa [map_add] using Submodule.add_mem W hv₁ hv₂
 
 
-end WielandtRankOne
+end Module.End
 
-namespace WielandtRankOne
+namespace Module.End
 
 /-- Coercing a restricted endomorphism back to the ambient space commutes with powers.
 
@@ -337,9 +339,9 @@ theorem range_pow_eq_iSup_maxGenEigenspace_ne_zero
   · exact iSup_maxGenEigenspace_ne_zero_le_range_pow (D := D) f
 
 
-end WielandtRankOne
+end Module.End
 
-namespace WielandtRankOne
+namespace Module.End
 
 /-! ## Invariance of the range of `f^D` under `f` -/
 
@@ -396,7 +398,7 @@ theorem disjoint_ker_range_pow (f : End ℂ (Fin D → ℂ)) :
       (⨆ (μ : ℂ) (_ : μ ≠ 0), f.maxGenEigenspace μ) :=
     disjoint_ker_iSup_maxGenEigenspace_ne_zero (D := D) f
   -- Rewrite the RHS via `range_pow_eq_iSup_maxGenEigenspace_ne_zero`.
-  simpa [WielandtRankOne.range_pow_eq_iSup_maxGenEigenspace_ne_zero (D := D) f] using hdisj
+  simpa [Module.End.range_pow_eq_iSup_maxGenEigenspace_ne_zero (D := D) f] using hdisj
 
 /-- The restriction of `f` to `range (f^D)` has trivial kernel. -/
 theorem ker_restrict_range_pow_eq_bot (f : End ℂ (Fin D → ℂ)) :
@@ -420,9 +422,7 @@ theorem isUnit_restrict_range_pow (f : End ℂ (Fin D → ℂ)) :
     ker_restrict_range_pow_eq_bot (D := D) f
   exact (LinearMap.isUnit_iff_ker_eq_bot (f := f.restrict (mapsTo_range_pow (D := D) f))).2 hker
 
-end WielandtRankOne
-
-end MPSTensor
+end Module.End
 
 /-! ## Matrix corollary -/
 
@@ -437,10 +437,10 @@ by A₁ preserves linear independence 'given that A₁ is invertible on its
 range'. -/
 theorem isUnit_restrict_range_toLin'_pow (M : Matrix (Fin D) (Fin D) ℂ) :
     IsUnit ((Matrix.toLin' M).restrict
-      (MPSTensor.WielandtRankOne.mapsTo_range_pow (D := D) (f := Matrix.toLin' M))) := by
+      (Module.End.mapsTo_range_pow (D := D) (f := Matrix.toLin' M))) := by
   -- Apply the abstract lemma to `f = Matrix.toLin' M`.
   simpa [Matrix.toLin'_pow] using
-    (MPSTensor.WielandtRankOne.isUnit_restrict_range_pow
+    (Module.End.isUnit_restrict_range_pow
       (D := D) (f := Matrix.toLin' M))
 
 /-! ## Pointwise matrix injectivity -/
@@ -455,7 +455,7 @@ theorem vec_eq_zero_of_mulVec_eq_zero_of_mem_range_pow
   classical
   let f : End ℂ (Fin D → ℂ) := Matrix.toLin' M
   have hdisj : Disjoint (LinearMap.ker f) (LinearMap.range (f ^ D)) :=
-    MPSTensor.WielandtRankOne.disjoint_ker_range_pow (D := D) (f := f)
+    Module.End.disjoint_ker_range_pow (D := D) (f := f)
   have hv' : v ∈ LinearMap.range (f ^ D) := by
     simpa only [f, Matrix.toLin'_pow] using hv
   have hker : v ∈ LinearMap.ker f := by
@@ -504,18 +504,3 @@ theorem eq_zero_of_mul_eq_zero_of_mem_range_mulLeft_pow
 
 
 end Matrix
-
-namespace MPSTensor.WielandtRankOne
-
-@[deprecated Matrix.isUnit_restrict_range_toLin'_pow (since := "2026-08-20")]
-alias isUnit_restrict_range_toLin'_pow := Matrix.isUnit_restrict_range_toLin'_pow
-
-@[deprecated Matrix.vec_eq_zero_of_mulVec_eq_zero_of_mem_range_pow (since := "2026-08-20")]
-alias vec_eq_zero_of_mulVec_eq_zero_of_mem_range_pow :=
-  Matrix.vec_eq_zero_of_mulVec_eq_zero_of_mem_range_pow
-
-@[deprecated Matrix.eq_zero_of_mul_eq_zero_of_mem_range_mulLeft_pow (since := "2026-08-20")]
-alias matrix_eq_zero_of_mul_eq_zero_of_mem_range_mulLeft_pow :=
-  Matrix.eq_zero_of_mul_eq_zero_of_mem_range_mulLeft_pow
-
-end MPSTensor.WielandtRankOne

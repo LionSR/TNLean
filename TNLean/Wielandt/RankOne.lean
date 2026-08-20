@@ -10,4 +10,5 @@ Authors: TNLean contributors
 
 import TNLean.Wielandt.RankOne.Construction
 import TNLean.Wielandt.RankOne.ExtractionFull
+import TNLean.Wielandt.RankOne.MatrixFittingRange
 import TNLean.Wielandt.RankOne.Products
