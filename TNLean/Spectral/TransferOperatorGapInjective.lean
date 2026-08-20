@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.Spectral.TransferOperatorGapNT
-import TNLean.Kraus.InvariantProjection
+import TNLean.MPS.Core.InvariantProjection
 import TNLean.MPS.Core.CPPrimitive
 import TNLean.MPS.Core.TransferChannel
 

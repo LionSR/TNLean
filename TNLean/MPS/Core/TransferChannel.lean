@@ -5,8 +5,8 @@ Authors: TNLean contributors
 -/
 import TNLean.Channel.Irreducible.Basic
 import TNLean.Channel.KrausMap
-import TNLean.Kraus.InvariantProjection
 import TNLean.Kraus.MapIterate
+import TNLean.MPS.Core.InvariantProjection
 import TNLean.MPS.Core.Transfer
 
 /-!

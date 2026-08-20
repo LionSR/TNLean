@@ -16,6 +16,7 @@ import TNLean.MPS.Core.CanonicalNormalization
 import TNLean.MPS.Core.CorrelationReduction
 import TNLean.MPS.Core.Correlations
 import TNLean.MPS.Core.CyclicTrace
+import TNLean.MPS.Core.InvariantProjection
 import TNLean.MPS.Core.MultiBlock
 import TNLean.MPS.Core.OrthogonalProjectionInvariance
 import TNLean.MPS.Core.PhysicalReindexTransport

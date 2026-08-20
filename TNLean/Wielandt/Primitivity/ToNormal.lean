@@ -6,7 +6,7 @@ Authors: TNLean contributors
 import TNLean.Analysis.SpectralRadiusPowerDecay
 import TNLean.Channel.Irreducible.FixedPoint
 import TNLean.Channel.Primitive
-import TNLean.Kraus.InvariantProjection
+import TNLean.MPS.Core.InvariantProjection
 import TNLean.MPS.Core.TransferChannel
 import TNLean.MPS.Structure.PrimitiveFixedPoint
 import Mathlib.Analysis.Normed.Operator.CompleteCodomain
