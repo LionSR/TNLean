@@ -6,7 +6,7 @@ Authors: TNLean contributors
 import TNLean.MPS.Core.Transfer
 import TNLean.Wielandt.Primitivity.Definitions
 import TNLean.Spectral.PeripheralToTransferMapGap
-import TNLean.MPS.Irreducible.FormII
+import TNLean.Kraus.InvariantProjection
 import TNLean.Wielandt.Primitivity.ToNormal
 import TNLean.Channel.Primitive
 import TNLean.Channel.Irreducible.FromSpectral
@@ -70,7 +70,8 @@ theorem isPrimitiveMPS_of_isStronglyIrreduciblePaper [NeZero D]
     (hSI : IsStronglyIrreduciblePaper A) :
     ∃ ρ : Matrix (Fin D) (Fin D) ℂ, IsPrimitiveMPS A ρ ∧ ρ.PosDef := by
   obtain ⟨_, _, _, hPrim, hIrrMap⟩ := hSI
-  have hIrrT : IsIrreducibleTensor A := isIrreducibleTensor_of_isIrreducibleMap A hIrrMap
+  have hIrrT : IsIrreducibleTensor A :=
+    Kraus.isIrreducibleTensor_of_isIrreducibleMap_transferMap A hIrrMap
   obtain ⟨ρ', hPrimMPS⟩ :=
     hasPrimitiveFixedPoint_of_peripheralPrimitive_of_irreducible A hIrrT hNorm hPrim
   have hρ'PD : ρ'.PosDef :=

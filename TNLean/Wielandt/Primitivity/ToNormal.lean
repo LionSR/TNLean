@@ -4,8 +4,8 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.Channel.Primitive
+import TNLean.Kraus.InvariantProjection
 import TNLean.MPS.Core.TransferChannel
-import TNLean.MPS.Irreducible.FormII
 import TNLean.MPS.Structure.PrimitivityBridge
 import TNLean.QPF.PosDef
 
@@ -178,7 +178,7 @@ omit [NeZero D] in
 theorem isIrreducibleMap_of_isIrreducibleTensor
     (A : MPSTensor d D) (hIrr : IsIrreducibleTensor (d := d) (D := D) A) :
     IsIrreducibleMap (transferMap (d := d) (D := D) A) :=
-  isIrreducibleCP_transferMap_of_isIrreducibleTensor A hIrr
+  Kraus.isIrreducibleMap_transferMap_of_isIrreducibleTensor A hIrr
 
 /-- **IsIrreducibleTensor ⟹ PosDef** for primitive tensors.
 

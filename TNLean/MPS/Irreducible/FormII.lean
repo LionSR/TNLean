@@ -6,6 +6,7 @@ Authors: TNLean contributors
 import TNLean.MPS.CanonicalForm.Reduction
 import TNLean.Algebra.MatrixAux
 import TNLean.MPS.Core.OrthogonalProjectionInvariance
+import TNLean.MPS.Core.TransferChannel
 import TNLean.QPF.Assembly
 import Mathlib.LinearAlgebra.Matrix.IsDiag
 
@@ -79,15 +80,8 @@ If `P ≠ 0` and `P ≠ 1`, this would witness `HasInvariantProj A`, contradicti
 the irreducibility hypothesis. -/
 theorem isIrreducibleCP_transferMap_of_isIrreducibleTensor
     (A : MPSTensor d D) (hIrr : IsIrreducibleTensor (d := d) (D := D) A) :
-    IsIrreducibleMap (transferMap (d := d) (D := D) A) := by
-  intro P hProj hInv
-  -- Use the invariance to get the lower-zero condition
-  have hLower := invariance_implies_lowerZero A P hProj hInv
-  -- If P ≠ 0 and P ≠ 1, then A has a nontrivial invariant projection
-  by_contra h_neither
-  push Not at h_neither
-  obtain ⟨hP0, hP1⟩ := h_neither
-  exact hIrr ⟨P, hProj, hP0, hP1, hLower⟩
+    IsIrreducibleMap (transferMap (d := d) (D := D) A) :=
+  Kraus.isIrreducibleMap_transferMap_of_isIrreducibleTensor A hIrr
 
 /-- **Irreducible CP map ⇒ irreducible tensor.**
 
@@ -101,14 +95,8 @@ this contradicts the irreducibility of `E`. -/
 theorem isIrreducibleTensor_of_isIrreducibleMap
     (A : MPSTensor d D)
     (hIrr : IsIrreducibleMap (transferMap (d := d) (D := D) A)) :
-    IsIrreducibleTensor A := by
-  intro ⟨P, hProj, hP0, hP1, hLower⟩
-  -- Build the invariance condition from the lower-zero condition
-  have hInv := lowerZero_implies_invariance A P hProj hLower
-  -- Apply irreducibility of the transfer map
-  have hTrivial := hIrr P hProj hInv
-  -- But P is nontrivial: P ≠ 0 and P ≠ 1
-  exact hTrivial.elim hP0 hP1
+    IsIrreducibleTensor A :=
+  Kraus.isIrreducibleTensor_of_isIrreducibleMap_transferMap A hIrr
 
 /-! ## Part 2: CFII-style diagonal positive-definite fixed point -/
 
