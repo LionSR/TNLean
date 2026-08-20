@@ -58,85 +58,13 @@ namespace MPSTensor
 
 variable {d D : ℕ}
 
-/-- If `E` is a primitive channel with fixed point `ρ` and unique trace-zero fixed points,
-then `spectralRadius(E - P) < 1` where `P` is the fixed-point projection. -/
-private theorem spectralRadius_compl_lt_one_of_primitive_fixedPoint [NeZero D]
-    (A : MPSTensor d D)
-    (hNorm : ∑ i : Fin d, (A i)ᴴ * A i = 1)
-    (hPrim : IsPrimitive (transferMap (d := d) (D := D) A))
-    (ρ : Matrix (Fin D) (Fin D) ℂ)
-    (hρ_psd : ρ.PosSemidef)
-    (hρ_ne : ρ ≠ 0)
-    (hρ_fix : transferMap (d := d) (D := D) A ρ = ρ)
-    (huniq_fp :
-      ∀ X : Matrix (Fin D) (Fin D) ℂ,
-        transferMap (d := d) (D := D) A X = X →
-        Matrix.trace X = 0 →
-        X = 0) :
-    ∃ htr : Matrix.trace ρ ≠ 0,
-      spectralRadius ℂ
-        ((Module.End.toContinuousLinearMap (Matrix (Fin D) (Fin D) ℂ))
-          ((transferMap (d := d) (D := D) A) - fixedPointProj (D := D) ρ htr)) < 1 := by
-  set E := transferMap (d := d) (D := D) A
-  have hCh : IsChannel E := transferMap_isChannel (A := A) hNorm
-  have hρ_fixE : E ρ = ρ := by
-    simpa [E] using hρ_fix
-  have htrρ : Matrix.trace ρ ≠ 0 := by
-    intro htr0
-    exact hρ_ne ((Matrix.PosSemidef.trace_eq_zero_iff hρ_psd).1 htr0)
-  have hbound : ∀ μ : ℂ, Module.End.HasEigenvalue E μ → ‖μ‖ ≤ 1 := by
-    intro μ hμ
-    have hμ' : Module.End.HasEigenvalue (mixedTransferMap A A) μ := by
-      simpa [E, mixedTransferMap_self] using hμ
-    simpa [E, mixedTransferMap_self] using
-      eigenvalue_norm_le_one (A := A) (B := A) hNorm hNorm μ hμ'
-  have huniq_fpE :
-      ∀ X : Matrix (Fin D) (Fin D) ℂ,
-        E X = X → Matrix.trace X = 0 → X = 0 := by
-    intro X hXfix htrX
-    exact huniq_fp X (by simpa [E] using hXfix) htrX
-  have hcompl :
-      ∀ ν : ℂ,
-        Module.End.HasEigenvalue (E - fixedPointProj (D := D) ρ htrρ) ν → ‖ν‖ < 1 := by
-    intro ν hν
-    exact _root_.compl_eigenvalue_norm_lt_one_of_primitive
-      (E := E) (ρ := ρ) hρ_fixE hρ_ne htrρ hCh.tp hPrim hbound huniq_fpE ν hν
-  have hgap :
-      spectralRadius ℂ
-        ((Module.End.toContinuousLinearMap (Matrix (Fin D) (Fin D) ℂ))
-          (E - fixedPointProj (D := D) ρ htrρ)) < 1 := by
-    have h_spec :
-        spectrum ℂ
-            ((Module.End.toContinuousLinearMap (Matrix (Fin D) (Fin D) ℂ))
-              (E - fixedPointProj (D := D) ρ htrρ)) =
-          spectrum ℂ (E - fixedPointProj (D := D) ρ htrρ) :=
-      AlgEquiv.spectrum_eq (Module.End.toContinuousLinearMap (Matrix (Fin D) (Fin D) ℂ))
-        (E - fixedPointProj (D := D) ρ htrρ)
-    refine (spectrum.spectralRadius_lt_of_forall_lt
-      (a := (Module.End.toContinuousLinearMap (Matrix (Fin D) (Fin D) ℂ))
-        (E - fixedPointProj (D := D) ρ htrρ))
-      (r := (1 : NNReal)) ?_)
-    intro z hz
-    have hz' : z ∈ spectrum ℂ (E - fixedPointProj (D := D) ρ htrρ) := by
-      exact h_spec ▸ hz
-    have hEig : Module.End.HasEigenvalue (E - fixedPointProj (D := D) ρ htrρ) z :=
-      Module.End.hasEigenvalue_iff_mem_spectrum.mpr hz'
-    have hz_norm : ‖z‖ < 1 := hcompl z hEig
-    have : ((‖z‖₊ : ℝ) < 1) := by simpa using hz_norm
-    exact (NNReal.coe_lt_one).1 this
-  exact ⟨htrρ, by simpa [E] using hgap⟩
-
-/-! ## Auxiliary lemmas -/
-
-/-- The word span at length 1 equals the span of the Kraus operators. -/
-theorem wordSpan_one_eq_span_range (A : MPSTensor d D) :
-    wordSpan A 1 = Submodule.span ℂ (Set.range A) := by
-  exact Kraus.wordSpan_one A
-
-/-- An injective MPS tensor has eventually full Kraus rank (at index 1). -/
-theorem hasEventuallyFullKrausRank_of_injective (A : MPSTensor d D)
-    (hA : IsInjective A) : HasEventuallyFullKrausRank A :=
-  ⟨1, Nat.zero_lt_one, by rw [wordSpan_one_eq_span_range, hA]⟩
+/-- An injective MPS tensor has eventually full Kraus rank at index one. -/
+private theorem hasEventuallyFullKrausRank_of_injective (A : MPSTensor d D)
+    (hA : IsInjective A) : HasEventuallyFullKrausRank A := by
+  refine ⟨1, Nat.zero_lt_one, ?_⟩
+  calc
+    wordSpan A 1 = Submodule.span ℂ (Set.range A) := Kraus.wordSpan_one A
+    _ = ⊤ := hA
 
 /-! ## Convergence rate from a complementary transfer-map gap -/
 
@@ -177,20 +105,18 @@ theorem exponential_convergence_of_primitive [NeZero D]
     isPeripherallyPrimitive_of_isPrimitivePaper A hNorm
       (isPrimitivePaper_of_hasEventuallyFullKrausRank A
         (hasEventuallyFullKrausRank_of_injective A hA))
-  have huniq_fp :
-      ∀ X : V, E X = X → Matrix.trace X = 0 → X = 0 := by
-    intro X hXfix htrX
-    dsimp [E] at hXfix
-    exact transferMap_fixedPoint_eq_zero_of_trace_eq_zero (A := A) hA hNorm X hXfix htrX
+  have hCh : IsChannel E := by
+    simpa only [E] using transferMap_isChannel (A := A) hNorm
+  have hIrr : IsIrreducibleMap E := by
+    simpa only [E] using injective_implies_irreducibleCP A hA
+  have hρ_ne : ρ ≠ 0 := by
+    intro hρ0
+    exact (ne_of_gt hρ_pd.trace_pos) (by simp [hρ0])
+  have hρ_fixE : E ρ = ρ := by
+    simpa only [E] using hρ_fix
   obtain ⟨htrρ, hgap⟩ :=
-    spectralRadius_compl_lt_one_of_primitive_fixedPoint
-      (A := A) hNorm hPrim ρ hρ_pd.posSemidef
-      (by
-        intro hρ0
-        have htr0 : Matrix.trace ρ = 0 := by
-          simp [hρ0]
-        exact (ne_of_gt hρ_pd.trace_pos) htr0)
-      hρ_fix huniq_fp
+    spectralRadius_compl_lt_one_of_primitive_fixedPoint_of_irreducible_channel
+      E hCh hIrr hPrim ρ hρ_pd.posSemidef hρ_ne hρ_fixE
   rcases _root_.geometric_apply_bound_of_spectralRadius_lt_one (T := Φ N) hgap with
     ⟨C₀, r, hC₀_pos, hr_pos, hr_lt_one, hgeom⟩
   let P' : V →L[ℂ] V := Φ P

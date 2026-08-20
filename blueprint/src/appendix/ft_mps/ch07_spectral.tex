@@ -363,6 +363,25 @@ no trace-zero fixed point, every eigenvalue of $N=E-P$ has modulus strictly
 less than $1$, and since $\MN{D}$ is finite-dimensional this bounds the
 spectral radius $\rho_{\spec}(N)$ itself.
 
+\begin{theorem}[Complementary gap at a prescribed fixed point]%
+    \label{thm:primitive_fixedPoint_compl_lt_one_irred_channel}
+    \lean{spectralRadius_compl_lt_one_of_primitive_fixedPoint_of_irreducible_channel}
+    \leanok
+    \uses{def:fixed_point_proj, def:irreducible_cp, def:primitive_channel}
+    Let $E:\MN{D}\to\MN{D}$ be an irreducible primitive channel, and let
+    $\rho\ne0$ be a positive semidefinite fixed point. Then
+    $\tr(\rho)\ne0$ and, for $P=P_\rho$,
+    $\rho_{\spec}(E-P)<1$.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:primitive_compl_lt_one}
+    Positive semidefiniteness and $\rho\ne0$ imply $\tr(\rho)\ne0$.
+    Every eigenvalue of $E-P$ has modulus strictly less than one by
+    irreducibility and primitivity. Since $\MN{D}$ is finite-dimensional,
+    the maximum eigenvalue modulus equals the spectral radius.
+\end{proof}
+
 \begin{theorem}[Complementary spectral-radius gap for irreducible primitive tensors]%
     \label{thm:spectralRadius_compl_lt_one_peripheralPrimitive_irred}
     \lean{MPSTensor.spectralRadius_compl_lt_one_of_peripheralPrimitive_of_irreducible}
@@ -375,29 +394,13 @@ spectral radius $\rho_{\spec}(N)$ itself.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:psd_fp_exists, thm:primitive_compl_lt_one}
+    \uses{thm:psd_fp_exists,
+        thm:primitive_fixedPoint_compl_lt_one_irred_channel}
     The channel fixed-point existence theorem
     (Theorem~\ref{thm:psd_fp_exists}) supplies a nonzero positive
-    semidefinite fixed point $\rho$. To see that every trace-zero fixed
-    point of $\E_A$ vanishes, let $X$ be a (not necessarily Hermitian)
-    fixed point with $\tr(X)=0$. Since
-    $\E_A(X)^\dagger=\E_A(X^\dagger)$, the matrices $H_1:=X+X^\dagger$ and
-    $H_2:=\mathrm{i}(X-X^\dagger)$ are Hermitian fixed points of $\E_A$
-    with $\tr(H_1)=\tr(X)+\overline{\tr(X)}=0$ and
-    $\tr(H_2)=\mathrm{i}(\tr(X)-\overline{\tr(X)})=0$. A nonzero trace-zero
-    Hermitian fixed point would decompose, by the positive-semidefinite
-    splitting of Hermitian fixed points
-    (\cite[Proposition~6.8]{Wolf2012Quantum}), into two nonzero positive
-    semidefinite fixed points; irreducibility of $\E_A$ forces both to be
-    proportional to $\rho$ (Theorem~\ref{thm:psd_fp_unique_irred}), and
-    their difference having zero trace forces the proportionality
-    constants to agree, so the Hermitian fixed point itself vanishes.
-    Applying this to $H_1$ and $H_2$ gives $H_1=H_2=0$, and
-    $X=\tfrac12(H_1-\mathrm{i}H_2)=0$. The complementary spectral-radius
-    theorem for primitive maps (Theorem~\ref{thm:primitive_compl_lt_one})
-    then applies with this trace-zero-fixed-point triviality and the
-    eigenvalue bound $|\mu|\le1$ from the trace-preserving normalization,
-    giving $\rho_{\spec}(N)<1$.
+    semidefinite fixed point $\rho$. Apply
+    Theorem~\ref{thm:primitive_fixedPoint_compl_lt_one_irred_channel} to
+    $\E_A$ and $\rho$.
 \end{proof}
 
 This concretely instantiates the hypothesis of
