@@ -400,4 +400,29 @@ theorem spectralRadius_lt_one_of_eigenvalues_lt_one [NeZero D]
   exact by
     exact_mod_cast hμ_lt
 
+/-- A primitive irreducible channel has spectral radius less than one after subtracting
+the projection onto any nonzero positive semidefinite fixed point. -/
+theorem spectralRadius_compl_lt_one_of_primitive_fixedPoint_of_irreducible_channel
+    [NeZero D]
+    (E : Mat →ₗ[ℂ] Mat)
+    (hE : IsChannel E)
+    (hIrr : IsIrreducibleMap E)
+    (hPrim : IsPrimitive E)
+    (ρ : Mat)
+    (hρ_psd : ρ.PosSemidef)
+    (hρ_ne : ρ ≠ 0)
+    (hρ_fix : E ρ = ρ) :
+    ∃ htr : Matrix.trace ρ ≠ 0,
+      spectralRadius ℂ
+        ((Module.End.toContinuousLinearMap Mat)
+          (E - fixedPointProj (D := D) ρ htr)) < 1 := by
+  have htr : Matrix.trace ρ ≠ 0 := by
+    intro htr0
+    exact hρ_ne ((Matrix.PosSemidef.trace_eq_zero_iff hρ_psd).1 htr0)
+  refine ⟨htr, spectralRadius_lt_one_of_eigenvalues_lt_one (D := D)
+    (E - fixedPointProj (D := D) ρ htr) ?_⟩
+  intro ν hν
+  exact compl_eigenvalue_norm_lt_one_of_primitive_of_irreducible_channel
+    E hE hIrr ρ hρ_fix hρ_ne htr hPrim ν hν
+
 end -- noncomputable section
