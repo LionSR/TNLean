@@ -84,7 +84,7 @@ span, then a fixed-length word span is the full matrix algebra.
 This is the conditional algebraic step in arXiv:0909.5347, Lemma 2(b). -/
 theorem wielandt_lemma2b_conditional [NeZero D]
     (K : Fin d → Matrix (Fin D) (Fin D) ℂ)
-    (hNormal : MPSTensor.IsNormal K)
+    (hNormal : Kraus.IsNormal K)
     (i₀ : Fin d) (μ : ℂ) (hμ : μ ≠ 0)
     (φ : Fin D → ℂ) (hφ : φ ≠ 0)
     (heigφ : K i₀ *ᵥ φ = μ • φ)
@@ -95,7 +95,7 @@ theorem wielandt_lemma2b_conditional [NeZero D]
     wordSpan K ((D - 1) + (m + (D - 1))) = ⊤ := by
   obtain ⟨N, _hNpos, hN⟩ := hNormal
   have hWord : wordSpan K N = ⊤ := by
-    simpa [wordSpan, MPSTensor.IsNBlkInjective] using hN
+    simpa [wordSpan, Kraus.IsNBlkInjective] using hN
   have hCum : cumulativeSpan K N = ⊤ := by
     apply eq_top_iff.mpr
     rw [← hWord]

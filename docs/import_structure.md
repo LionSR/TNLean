@@ -38,7 +38,7 @@ were formerly documented inline in `TNLean.lean`:
 | 2 | `Channel`, `Entropy` | Quantum channels; Choi, Kraus, and Stinespring theory; entropy and recovery. |
 | 2b | `Channel.Schwarz` and related analysis | Schwarz inequalities, operator convexity and monotonicity, and relative-entropy results. |
 | 2c | `Channel.FixedPoint`, `Channel.Irreducible`, `Channel.Peripheral`, `Channel.Semigroup`, `Channel.KoashiImoto`, `QPF`, `Spectral` | Fixed points, quantum Perron--Frobenius theory, peripheral spectrum, spectral gaps, semigroups, and the common invariant algebra of jointly invariant states. |
-| 2d | `Kraus` | Word evaluation, injectivity, block injectivity, normality, and invariant orthogonal projections of a finite Kraus family. Extracted from the matrix-product-state layer (issue #6560, phase 1b); matrix-product-state compatibility predicates remain in `MPS.Core`. |
+| 2d | `Kraus` | Word evaluation, injectivity, block injectivity, normality, and invariant orthogonal projections of a finite Kraus family. These notions are stated in `namespace Kraus`, while the established matrix-product-state compatibility predicates remain in `MPS.Core`. |
 | 3 | `MPS.Chain`, `MPS.Core`, `MPS.Overlap` | Matrix-product tensor definitions, words, blocking, transfer matrices, and overlaps. |
 | 3b | `MPS.MPDO` | MPO, MPDO, and LPDO foundations. |
 | 4 | `MPS.FundamentalTheorem`, `MPS.Symmetry` | The single-block fundamental theorem and symmetry consequences. |

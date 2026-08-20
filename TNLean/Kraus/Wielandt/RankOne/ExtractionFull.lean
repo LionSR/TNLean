@@ -125,7 +125,7 @@ theorem exists_rankOne_mem_wordSpan_blockTensor [NeZero D]
     exact heigψ'
   let data := blockedTensorRangeData K N₀ σ₀ τ₀ φ ψ μ ν hμ hν heigφ heigψ
   have hBtop : wordSpan data.B N₀ = ⊤ := by
-    have hInjective : MPSTensor.IsInjective (MPSTensor.blockTensor K N₀) :=
+    have hInjective : Kraus.IsInjective (MPSTensor.blockTensor K N₀) :=
       (MPSTensor.isNBlkInjective_iff_blockTensor_isInjective K N₀).mp hN₀
     have hB1 : wordSpan data.B 1 = ⊤ := by
       rw [wordSpan_one, data.hB]
