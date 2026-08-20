@@ -16,8 +16,7 @@ Kraus-family-only library out of `TNLean`'s matrix-product-state development.
 
 The exact word-span API is stated in `namespace Kraus`. The established
 injectivity and normality declarations remain in `namespace MPSTensor` until
-a dedicated compatibility rename; see `TNLean/Kraus/Word.lean`'s module
-docstring.
+the MPS declarations using these predicates are changed simultaneously.
 
 ## Main declarations
 

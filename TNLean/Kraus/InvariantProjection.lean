@@ -23,10 +23,9 @@ the cast lemmas, and the iterated block-decomposition capstone
 `exists_irreducible_blockDecomp`) stay on the matrix-product-state side, in
 `TNLean/MPS/CanonicalForm/Reduction.lean`.
 
-**Pending:** these declarations keep `namespace MPSTensor` for now. The
-rename to `namespace Kraus` is deferred to a dedicated mechanical sweep
-across the ~429 files that reference this vocabulary; see
-`TNLean/Kraus/Word.lean`'s module docstring.
+The established predicates remain in `namespace MPSTensor` because the
+canonical-form development uses these names throughout. A change of namespace
+belongs with a simultaneous change of those declarations.
 
 ## Main declarations
 
