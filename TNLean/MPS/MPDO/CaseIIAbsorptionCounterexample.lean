@@ -141,6 +141,10 @@ private lemma secondBasis_transferMap :
   fin_cases b
   simp [MPSTensor.transferMap_apply, secondBasisTensor, Matrix.mul_apply]
 
+/-- Each of the two displayed bond-one representatives is a normal tensor.
+
+Source: arXiv:1606.00608, the normal representatives in the BNT decomposition
+`eq:II_ABasicTensors`, lines 271--301. -/
 lemma basis_isNormalTensor (s : Fin 2) : MPSTensor.IsNormalTensor (basis s) := by
   fin_cases s
   · exact MPSTensor.isNormalTensor_of_bondDim_one_of_transferMap_eq_id
@@ -326,7 +330,10 @@ noncomputable def ambient : MPOTensor 3 2 :=
   else 0
 
 /-- The ambient tensor is literally the bond-diagonal assembly of the two
-weighted representatives. -/
+weighted representatives.
+
+Source: arXiv:1606.00608, the BNT decomposition
+`eq:II_ABasicTensors` and canonical-form assembly `Eq19`, lines 271--308. -/
 lemma ambient_eq_weighted_basis_blocks (i j : Fin 3) :
     ambient i j = Matrix.diagonal fun s : Fin 2 ↦
       if s = 0 then
