@@ -26,8 +26,6 @@ variable {d D : ℕ}
 
 namespace RectSpanGrowth
 
-open Module
-
 variable (K : Fin d → Matrix (Fin D) (Fin D) ℂ) (i₀ : Fin d)
 
 /-- Left multiplication by `K i₀` sends the rectangular span associated with
@@ -67,7 +65,10 @@ noncomputable def rectSpanLeftStep (n : ℕ) :
   map_smul' a x := by ext; simp
 
 /-- The left-step map is injective on every rectangular span associated with
-`(K i₀) ^ D`. -/
+`(K i₀) ^ D`. Every element lies in the range of left multiplication by `(K i₀) ^ D`,
+where the Fitting decomposition makes left multiplication by `K i₀` injective.
+
+This is the injectivity step in the proof of Lemma 2(b) of arXiv:0909.5347. -/
 theorem rectSpanLeftStep_injective (n : ℕ) :
     Function.Injective (rectSpanLeftStep K i₀ n) := by
   intro x y hxy
@@ -110,8 +111,6 @@ theorem rectSpanLeftStep_surjective_of_finrank_eq (n : ℕ)
 end RectSpanGrowth
 
 /-! ## Stabilization -/
-
-open Module
 
 /-- Every rectangular span is contained in the range of left multiplication by
 its fixed matrix. -/

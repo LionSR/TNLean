@@ -7,11 +7,10 @@ import TNLean.Kraus.Wielandt.RectangularSpan.Growth
 import TNLean.Wielandt.RectangularSpan.Basic
 
 /-!
-# Rectangular span growth compatibility names
+# Rectangular span growth for matrix product tensors
 
 The rectangular-span growth and stabilization results hold for arbitrary finite
-matrix families. This module retains their established names for matrix product
-tensors.
+matrix families. This module restates them for matrix product tensors.
 -/
 
 open scoped Matrix
