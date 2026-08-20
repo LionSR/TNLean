@@ -6,7 +6,16 @@
 \DeclareUnicodeCharacter{2099}{\ifmmode{}_{n}\else\textsubscript{n}\fi}
 
 \newcommand{\Lean}{\textsc{Lean}}
-\newcommand{\leanid}[1]{\textsf{\detokenize{#1}}}
+\ExplSyntaxOn
+\NewDocumentCommand{\leanid}{m}{
+  \group_begin:
+  \urlstyle{sf}
+  \tl_set:Nn \l_tmpa_tl {#1}
+  \tl_replace_all:Nnn \l_tmpa_tl {\_} {_}
+  \exp_args:NV \path \l_tmpa_tl
+  \group_end:
+}
+\ExplSyntaxOff
 \providecommand{\tr}{\operatorname{tr}}
 \newcommand{\tnleanIssueBase}{https://github.com/LionSR/TNLean/issues/}
 \newcommand{\tnleanPrBase}{https://github.com/LionSR/TNLean/pull/}
