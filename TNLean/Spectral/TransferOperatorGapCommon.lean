@@ -18,7 +18,6 @@ general spectral-radius results now in `TNLean.Analysis`.
 
 ## Main results
 
-- `MPSTensor.eigenvector_pow`
 - `MPSTensor.word_conjTranspose_mul_sum`
 - `MPSTensor.trace_transferMap`
 - `MPSTensor.sum_frobSq_right`
@@ -30,18 +29,6 @@ open scoped Matrix ComplexOrder BigOperators NNReal ENNReal
 namespace MPSTensor
 
 variable {d D : ℕ}
-
-/-! ### Eigenvector iteration -/
-
-/-- If `F(v) = μ • v`, then `F^n(v) = μ^n • v`. -/
-lemma eigenvector_pow {V : Type*} [AddCommMonoid V] [Module ℂ V]
-    (F : V →ₗ[ℂ] V) (v : V) (μ : ℂ) (h : F v = μ • v) (n : ℕ) :
-    (F ^ n) v = μ ^ n • v := by
-  induction n with
-  | zero => simp
-  | succ n ih =>
-    change (F ^ n) (F v) = _
-    rw [h, map_smul, ih, smul_smul, mul_comm]; ring_nf
 
 /-! ### Hilbert–Schmidt contraction estimates -/
 
