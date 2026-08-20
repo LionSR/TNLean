@@ -220,7 +220,7 @@ theorem evalWord_eq_zero_of_all_zero (A : MPSTensor d D)
   | nil =>
       exact (hw rfl).elim
   | cons i w =>
-      simp only [evalWord, hzero i, zero_mul]
+      simp only [Kraus.evalWord, hzero i, zero_mul]
 
 /-- An all-zero tensor contributes zero to the MPV for every positive system size. -/
 theorem mpv_eq_zero_of_all_zero (A : MPSTensor d D)

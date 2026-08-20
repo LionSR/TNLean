@@ -357,7 +357,8 @@ theorem normalizedFlattening_blockTensor (U : MPOTensor d D) (p : ℕ) :
         (MPSTensor.blockTensor U.normalizedFlattening p) := by
   funext ij
   rw [normalizedFlattening, toMPSTensor_blockTensor]
-  simp only [MPSTensor.reindexPhysical, MPSTensor.blockTensor]
+  simp only [Kraus.reindexPhysical]
+  simp only [MPSTensor.blockTensor]
   change _ = MPSTensor.evalWord
     (fun i => ((Real.sqrt d : ℂ)⁻¹) • U.toMPSTensor i) _
   rw [MPSTensor.evalWord_smul, MPSTensor.length_wordOfBlock]

@@ -134,7 +134,7 @@ theorem mem_cumulativeSpan_of_mem_algSpan (A : MPSTensor d D)
   | mem x hxS =>
     rcases hxS with ⟨i, rfl⟩
     refine ⟨1, ?_⟩
-    simpa only [evalWord, Matrix.mul_one] using
+    simpa only [Kraus.evalWord, Matrix.mul_one] using
       (mem_cumulativeSpan_generator (A := A) (n := 1) (w := [i]) (by simp))
   | algebraMap r =>
     refine ⟨0, ?_⟩
