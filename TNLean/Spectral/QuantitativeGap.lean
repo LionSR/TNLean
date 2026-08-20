@@ -58,17 +58,6 @@ namespace MPSTensor
 
 variable {d D : ℕ}
 
-/-- The word span at length one equals the span of the tensor matrices. -/
-theorem wordSpan_one_eq_span_range (A : MPSTensor d D) :
-    wordSpan A 1 = Submodule.span ℂ (Set.range A) :=
-  Kraus.wordSpan_one A
-
-/-- An injective MPS tensor has eventually full Kraus rank at index one. -/
-theorem hasEventuallyFullKrausRank_of_injective (A : MPSTensor d D)
-    (hA : IsInjective A) : HasEventuallyFullKrausRank A := by
-  refine ⟨1, Nat.zero_lt_one, ?_⟩
-  rw [wordSpan_one_eq_span_range, hA]
-
 /-! ## Convergence rate from a complementary transfer-map gap -/
 
 /-- **Exponential convergence of injective primitive channels.**
@@ -107,7 +96,7 @@ theorem exponential_convergence_of_primitive [NeZero D]
   have hPrim : IsPrimitive E :=
     isPeripherallyPrimitive_of_isPrimitivePaper A hNorm
       (isPrimitivePaper_of_hasEventuallyFullKrausRank A
-        (hasEventuallyFullKrausRank_of_injective A hA))
+        ((MPSTensor.hasEventuallyFullKrausRank_iff_isNormal A).2 hA.isNormal))
   have hCh : IsChannel E := by
     simpa only [E] using transferMap_isChannel (A := A) hNorm
   have hIrr : IsIrreducibleMap E := by
@@ -195,7 +184,7 @@ theorem correlation_length_bound [NeZero D]
   have hPrim : _root_.IsPrimitive E :=
     isPeripherallyPrimitive_of_isPrimitivePaper A hNorm
       (isPrimitivePaper_of_hasEventuallyFullKrausRank A
-        (hasEventuallyFullKrausRank_of_injective A hA))
+        ((MPSTensor.hasEventuallyFullKrausRank_iff_isNormal A).2 hA.isNormal))
   rcases spectralRadius_compl_lt_one_of_peripheralPrimitive
       (A := A) hA hNorm hPrim with
     ⟨ρ, _hρ_psd, _hρ_ne, hρ_fix, htrρ, hgap⟩
@@ -289,7 +278,7 @@ theorem transfer_map_gap_of_injective [NeZero D]
   have hPrim : _root_.IsPrimitive E :=
     isPeripherallyPrimitive_of_isPrimitivePaper A hNorm
       (isPrimitivePaper_of_hasEventuallyFullKrausRank A
-        (hasEventuallyFullKrausRank_of_injective A hA))
+        ((MPSTensor.hasEventuallyFullKrausRank_iff_isNormal A).2 hA.isNormal))
   -- Step 2: every eigenvalue has ‖μ‖ ≤ 1
   have hE_eq : E = mixedTransferMap A A := (mixedTransferMap_self A).symm
   have hbound : ∀ μ : ℂ, Module.End.HasEigenvalue E μ → ‖μ‖ ≤ 1 := by
