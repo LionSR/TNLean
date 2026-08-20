@@ -9,21 +9,21 @@ import TNLean.MPS.MPDO.RescalingStableLengthDependentRFPCanonicalForm
 import TNLean.MPS.MPDO.SourceSimpleTensor
 
 /-!
-# Normalization-free Definition 4.7 simplicity of the dimer tensor
+# Active canonical-block simplicity of the dimer tensor
 
-The rescaling-stable dimer tensor is simple in the normalization-free,
-source-facing sense of arXiv:1606.00608, Definition 4.7. The witness uses
-blocking length one and the active BNT refinement of the tensor's literal CPSV
-canonical form. Its retained block has nonnilpotent ket-against-bra contraction.
+The rescaling-stable dimer tensor is simple under the active canonical-block
+reading of arXiv:1606.00608, Definition 4.7. The witness uses blocking length
+one and the active BNT refinement of the tensor's literal CPSV canonical form.
+Its retained block has nonnilpotent ket-against-bra contraction.
 
 ## Main results
 
 * `toMPSTensor_blockTensor_R_one`: one-site blocking is the canonical physical
   relabeling of the doubled tensor.
-* `R_isSourceSimple`: the dimer satisfies normalization-free Definition 4.7
-  simplicity.
+* `R_isSourceSimple`: the dimer satisfies the active canonical-block reading of
+  Definition 4.7.
 * `R_isNonvanishingSourceSimple`: the dimer also satisfies the strengthened
-  positive-length nonvanishing interface.
+  positive-length nonvanishing predicate.
 
 ## References
 
@@ -75,8 +75,8 @@ private theorem R_mpo_ne_zero (N : ℕ) (hN : 0 < N) : mpo R N ≠ 0 := by
   rw [mpo_R_entry_formula hN] at hentry
   simp [chainIndicator, ChainOK, φ, wN, wMat, bondBit1, bondBit2] at hentry
 
-/-- The rescaling-stable dimer tensor is simple in the normalization-free,
-source-facing sense of Definition 4.7.
+/-- The rescaling-stable dimer tensor is simple under the active canonical-block reading of
+Definition 4.7.
 
 The positive blocking length is $L=1$. The BNT is the representative family
 supplied by the active refinement of `canonicalFormData`; its only retained
@@ -86,17 +86,21 @@ nonnilpotent.
 This theorem neither asserts simplicity for every positive blocking nor changes
 the normalized fixed-representative predicate `MPOTensor.IsSimple`.
 
+**Local fix (dormant BNT candidates):** The active presentation follows the nonzero
+canonical-block construction and excludes candidates with coefficient identically zero.  See
+`docs/paper-gaps/cpsv16_bnt_uniqueness_zero_coefficient.tex`.
+
 Source: arXiv:1606.00608, Definition 4.7, lines 815--822. -/
 theorem R_isSourceSimple : MPOTensor.IsSourceSimple R := by
-  refine ⟨R_isMPDO, ⟨1, by norm_num, R_mpo_ne_zero 1 (by norm_num)⟩,
-    1, by norm_num, ?_⟩
   let data := canonicalFormData.reindexPhysical oneSiteDoubledEquiv
   let ref := data.activeBNTRefinement
-  refine ⟨data.activePhaseClasses.g,
-    fun j => ⟨data.dim (data.activeRepresentativeIndex j),
-      data.blocks (data.activeRepresentativeIndex j)⟩, ?_, ?_⟩
+  have hActive : Nonempty data.Active := by
+    change Nonempty { k : Fin 1 // (weight : ℂ) ≠ 0 }
+    refine ⟨⟨0, ?_⟩⟩
+    exact_mod_cast weight_ne
+  refine ⟨R_isMPDO, 1, by norm_num, ref.representativeSectorDecomposition, ?_, ?_⟩
   · rw [toMPSTensor_blockTensor_R_one]
-    exact ref.representativesBNT
+    exact ref.isActiveCPSVBasisOfNormalTensors hActive
   · intro j
     change ¬ IsNilpotent (MPOTensor.doubledPhysTraceTransfer 4
       (MPSTensor.reindexPhysical oneSiteDoubledEquiv retainedBlock))
@@ -113,9 +117,9 @@ theorem R_isSourceSimple : MPOTensor.IsSourceSimple R := by
     rw [hTransfer]
     exact doubledPhysTraceTransfer_retainedBlock_not_isNilpotent
 
-/-- The dimer is source-simple and its closed MPO is nonzero at every positive
-chain length. The latter follows by evaluating the entry identity at the all-zero
-configuration.
+/-- The dimer satisfies the documented active canonical-block reading of source simplicity,
+and its closed MPO is nonzero at every positive chain length. The latter follows by evaluating
+the entry identity at the all-zero configuration.
 
 The nonvanishing conjunct is additional to CPSV16 Definition 4.7. -/
 theorem R_isNonvanishingSourceSimple : MPOTensor.IsNonvanishingSourceSimple R :=

@@ -416,9 +416,10 @@ Thus the class-copy-plus-inactive coordinates, the dependent coordinate
 permutation, the letterwise block-gauge conjugation, and the ambient
 reconstruction are all explicit and exact.
 
-The active representative sector decomposition is now explicit in
-\path{TNLean/MPS/MPDO/CPSVRepresentativeGroupedLemmaL.lean}.  Its effective
-copy weight is
+The active representative sector decomposition and its positive-length
+matrix-product-vector identity are explicit in
+\path{TNLean/MPS/CanonicalForm/ActiveBNTRefinement.lean}. Its effective copy
+weight is
 \begin{equation}
   \lambda_{\alpha,q}
   =\nu_{k(\alpha,q)}\zeta_{k(\alpha,q)},
@@ -427,17 +428,22 @@ copy weight is
 which is nonzero for every stored copy.  The sector decomposition contains only
 the active class-copy pairs, while the full grouped tensor
 \eqref{eq:completed-grouped-tensor} continues to retain every inactive
-zero-weight listed coordinate.  The theorem
+zero-weight listed coordinate. The definition
 \path{MPSTensor.CPSVCanonicalFormData.ActiveBNTRefinement.%
-representativeSectorDecomposition} defines these sector data, and
-\path{MPSTensor.CPSVCanonicalFormData.ActiveBNTRefinement.%
-eventuallyRepresentativeWordTupleSpan} proves simultaneous representative
-word-tuple span at every sufficiently large length.  The equality
+representativeSectorDecomposition} defines the representatives, copy numbers,
+and weights, and
 \path{MPSTensor.CPSVCanonicalFormData.ActiveBNTRefinement.%
 groupedTensor_sameMPV₂Pos_representativeSectorDecomposition} identifies the
 matrix product vectors of the full grouped tensor and the active sector tensor
-at every positive length.  It does not assert the empty-word identity, which
+at every positive length. It does not assert the empty-word identity, which
 would forget the inactive bond coordinates.
+
+The simultaneous representative word-tuple span and the marked-chain
+consequences remain in
+\path{TNLean/MPS/MPDO/CPSVRepresentativeGroupedLemmaL.lean}. There,
+\path{MPSTensor.CPSVCanonicalFormData.ActiveBNTRefinement.%
+eventuallyRepresentativeWordTupleSpan} proves simultaneous representative
+word-tuple span at every sufficiently large length.
 
 The full-coordinate marked tensor retains the same listed coordinate space.
 An active copy carries the marked block

@@ -17,6 +17,7 @@ here determine the BNT canonical-form conditions below.
 \begin{definition}[Sector weights and sector decomposition]%
     \label{def:sector_weight_data}
     \lean{MPSTensor.SectorWeightData, MPSTensor.SectorDecomposition}
+    \lean{MPSTensor.SectorDecomposition.toTensor}
     \lean{MPSTensor.SectorDecomposition.totalDim}
     \lean{MPSTensor.SectorDecomposition.flatDim_flatIndexEquiv,
         MPSTensor.SectorDecomposition.flatWeight_flatIndexEquiv,
@@ -182,7 +183,9 @@ single family.
 \begin{theorem}[Structured active BNT refinement of CPSV canonical form]
     \label{thm:cpsv_canonical_form_active_bnt_refinement}
     \lean{MPSTensor.CPSVCanonicalFormData.ActiveBNTRefinement,
-        MPSTensor.CPSVCanonicalFormData.exists_activeBNTRefinement}
+        MPSTensor.CPSVCanonicalFormData.exists_activeBNTRefinement,
+        MPSTensor.CPSVCanonicalFormData.activeBNTRefinement}
+    \lean{MPSTensor.CPSVCanonicalFormData.ActiveBNTRefinement.activeCopy}
     \lean{MPSTensor.CPSVCanonicalFormData.activeClassCopyEquiv,
         MPSTensor.CPSVCanonicalFormData.Inactive,
         MPSTensor.CPSVCanonicalFormData.GroupedIndex,
@@ -353,6 +356,71 @@ single family.
     (\ref{eq:cpsv_active_exact_coisometry}).
 \end{proof}
 
+% Source anchors: CPSV16 lines 217--246, 265--301, and Appendix A,
+% lines 1135--1148.
+\begin{definition}[Active BNT sector presentation]
+    \label{def:cpsv_active_bnt_sector_presentation}
+    \lean{MPSTensor.IsActiveCPSVBasisOfNormalTensors}
+    \lean{MPSTensor.IsActiveCPSVBasisOfNormalTensors.%
+        isCPSVBasisOfNormalTensors}
+    \lean{MPSTensor.IsActiveCPSVBasisOfNormalTensors.%
+        blocks_not_gaugePhaseEquiv}
+    \lean{MPSTensor.IsActiveCPSVBasisOfNormalTensors.of_sameMPV₂Pos}
+    \lean{MPSTensor.IsActiveCPSVBasisOfNormalTensors.%
+        exists_pos_mpvState_ne_zero}
+    \leanok
+    \uses{def:sector_weight_data, def:nt_cpsv, def:same_mpv2_pos}
+    An \emph{active BNT sector presentation} of a tensor $A$ is a nonempty
+    sector decomposition $P$ such that every representative has a positive
+    number of copies, every copy has nonzero weight, every representative
+    $C_j$ is normal, the representative matrix product vectors are eventually
+    linearly independent, and, for every $N>0$,
+    \begin{align}
+        V^{(N)}(A)&=V^{(N)}(P).
+        \label{eq:cpsv_active_bnt_sector_presentation}
+    \end{align}
+    This records the nonzero canonical summands constructed at
+    \cite[lines~217--246]{Cirac2016MPDO_arXiv}: dormant candidates are absent,
+    whereas repeated nonzero copies and their weights remain explicit. The
+    condition is stronger than the literal BNT definition, which permits the
+    zero-coefficient candidate of
+    Theorem~\ref{thm:cpsv_bnt_uniqueness_counterexample}.
+    % Local fix (dormant BNT candidates): documented in
+    % docs/paper-gaps/cpsv16_bnt_uniqueness_zero_coefficient.tex.
+\end{definition}
+
+\begin{theorem}[Uniqueness of active BNT presentations]
+    \label{thm:cpsv_active_bnt_presentation_uniqueness}
+    \lean{MPSTensor.IsActiveCPSVBasisOfNormalTensors.%
+        equiv_of_sameMPV₂Pos}
+    \leanok
+    \uses{def:cpsv_active_bnt_sector_presentation, def:same_mpv2_pos}
+    Two active BNT presentations of the same positive-length matrix product
+    vector family have equally many representatives. After a permutation,
+    corresponding representatives have equal bond dimension and are related
+    by an invertible gauge and a unit-modulus phase.
+
+    Only active presentations are compared. The conclusion is false for
+    arbitrary literal BNTs by
+    Theorem~\ref{thm:cpsv_bnt_uniqueness_counterexample}.
+    % Scope restriction (active presentations): documented in
+    % docs/paper-gaps/cpsv16_bnt_uniqueness_zero_coefficient.tex.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:cpsv_bnt_characterization,
+        thm:cpsv_bnt_blocks_not_gaugePhaseEquiv,
+        thm:cpsv_normal_mpv_phase_gauge}
+    Apply Theorem~\ref{thm:cpsv_bnt_characterization} first to the
+    nonzero-weight direct-sum tensor of the first presentation, using the
+    representatives of the second as a BNT, and then with the presentations
+    interchanged. This gives a matching map in each direction. Eventual linear
+    independence excludes gauge-phase-equivalent distinct representatives, so
+    both maps are injective. Since the index sets are finite, they have equal
+    cardinality, and either matching map is a bijection. Normal-tensor gauge
+    rigidity gives the asserted gauge-phase relation for each matched pair.
+\end{proof}
+
 % Source anchors: CPSV16 lines 265--301, 317--345, and Appendix C.3,
 % lines 1835--1858. Inactive listed blocks remain in the full grouped tensor.
 \begin{theorem}[Active representative sector decomposition]
@@ -360,12 +428,29 @@ single family.
     \lean{MPSTensor.CPSVCanonicalFormData.ActiveBNTRefinement.%
         representativeSectorDecomposition}
     \lean{MPSTensor.CPSVCanonicalFormData.ActiveBNTRefinement.%
+        representativeSectorDecomposition_basisCount}
+    \lean{MPSTensor.CPSVCanonicalFormData.ActiveBNTRefinement.%
+        representativeSectorDecomposition_basisDim}
+    \lean{MPSTensor.CPSVCanonicalFormData.ActiveBNTRefinement.%
+        representativeSectorDecomposition_basis}
+    \lean{MPSTensor.CPSVCanonicalFormData.ActiveBNTRefinement.%
+        representativeSectorDecomposition_copies}
+    \lean{MPSTensor.CPSVCanonicalFormData.ActiveBNTRefinement.%
+        representativeSectorDecomposition_weight}
+    \lean{MPSTensor.CPSVCanonicalFormData.ActiveBNTRefinement.%
         eventuallyRepresentativeWordTupleSpan}
     \lean{MPSTensor.CPSVCanonicalFormData.ActiveBNTRefinement.%
         groupedTensor_sameMPV₂Pos_representativeSectorDecomposition}
+    \lean{MPSTensor.CPSVCanonicalFormData.ActiveBNTRefinement.%
+        groupedTensor_isActiveCPSVBasisOfNormalTensors}
+    \lean{MPSTensor.CPSVCanonicalFormData.ActiveBNTRefinement.%
+        source_sameMPV₂Pos_groupedTensor}
+    \lean{MPSTensor.CPSVCanonicalFormData.ActiveBNTRefinement.%
+        isActiveCPSVBasisOfNormalTensors}
     \leanok
     \uses{thm:cpsv_canonical_form_active_bnt_refinement,
-        thm:cpsv_bnt_blocked_simultaneous_span, def:sector_weight_data}
+        thm:cpsv_bnt_blocked_simultaneous_span,
+        def:cpsv_active_bnt_sector_presentation}
     In the notation of
     Theorem~\ref{thm:cpsv_canonical_form_active_bnt_refinement}, let
     $k(j,q)\in K_{\mathrm{act}}$ be the listed block corresponding to the
@@ -383,19 +468,29 @@ single family.
     full grouped tensor $T_{\mathrm{grp}}$ of
     Theorem~\ref{thm:cpsv_canonical_form_active_bnt_refinement} still contains
     every inactive zero-weight listed coordinate. For every positive length
-    $N$, the two tensors generate the same matrix product vector:
+    $N$, the grouped and active-sector tensors generate the same matrix product
+    vector. The original tensor has the same positive-length matrix product
+    vectors as both:
     \begin{align}
         V^{(N)}(T_{\mathrm{grp}})
         &=V^{(N)}(P_{\mathrm{act}}).
         \label{eq:cpsv_active_representative_positive_mpv}
+        \\
+        V^{(N)}(A)
+        &=V^{(N)}(P_{\mathrm{act}}).
+        \label{eq:cpsv_active_representative_source_mpv}
     \end{align}
+    Hence $P_{\mathrm{act}}$ is an active BNT sector presentation of $A$
+    whenever at least one active listed block occurs.
     No equality at length zero is asserted, since deleting inactive bond
     coordinates changes the empty-word coefficient.
 \end{theorem}
 
 \begin{proof}\leanok
     \uses{thm:cpsv_canonical_form_active_bnt_refinement,
-        thm:cpsv_bnt_blocked_simultaneous_span, lem:paper_decomp_formula}
+        thm:cpsv_bnt_blocked_simultaneous_span,
+        thm:coisometry_reconstruction_same_mpv_pos,
+        thm:gauge_invariance, lem:paper_decomp_formula}
     The active class-copy equivalence reindexes the nonzero listed blocks.
     (\ref{eq:cpsv_active_representative_weight}) combines the original
     coefficient with the unit phase relating its block to $C_j$; both factors
@@ -405,6 +500,9 @@ single family.
     length, every inactive contribution contains a positive power of its zero
     coefficient and vanishes. Reindexing the remaining finite sum by $(j,q)$
     gives (\ref{eq:cpsv_active_representative_positive_mpv}).
+    The original coisometric reconstruction and simultaneous block gauge
+    preserve every positive-length closed-chain coefficient, yielding
+    (\ref{eq:cpsv_active_representative_source_mpv}).
 \end{proof}
 
 \begin{definition}[BNT canonical form]%
