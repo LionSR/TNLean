@@ -161,9 +161,23 @@
     Schwarz condition to exclude transposition.
 \end{proof}
 
+\begin{definition}[Block ideal]\label{def:block_ideal}
+    \lean{TwoSidedIdeal.blockIdeal}
+    \leanok
+    Let $\{R_i\}_{i\in I}$ be a finite family of simple rings. The $i$-th
+    \emph{block ideal} in $\prod_{k\in I}R_k$ is
+    \begin{align}
+        I_i
+        &:=\left\{x \in \prod_{k\in I}R_k :
+            x_k = 0 \text{ for } k \neq i\right\}.
+        \notag
+    \end{align}
+\end{definition}
+
 \begin{theorem}[Summand matching and dimension preservation]\label{thm:dim_preserved}
     \lean{Matrix.exists_blockEquiv_dim_eq_of_starAlgEquiv_pi_matrix}
     \leanok
+    \uses{def:block_ideal}
     Let $\{D_i\}_{i\in I}$ and $\{E_j\}_{j\in J}$ be positive integers.
     A star-algebra isomorphism
     \begin{align}
@@ -198,9 +212,13 @@
     \lean{TwoSidedIdeal.blockComponentMap_surjective}
     \lean{TwoSidedIdeal.blockComponentMap_bijective}
     \leanok
-    Let $T : \prod_{i\in I}R_i \to \prod_{j\in J}S_j$ be a ring isomorphism,
-    and suppose that an equivalence $\sigma:I\simeq J$ matches the block ideals
-    in both directions under $T$ and $T^{-1}$. Then, for each $i\in I$, the map
+    \uses{def:block_ideal}
+    Let $I$ and $J$ be finite, and let $\{R_i\}_{i\in I}$ and
+    $\{S_j\}_{j\in J}$ be families of simple rings. Write $I_i$ and $J_j$ for
+    the corresponding block ideals. Suppose that
+    $T : \prod_{i\in I}R_i \to \prod_{j\in J}S_j$ is a ring isomorphism and
+    that an equivalence $\sigma:I\simeq J$ satisfies
+    $T(I_i)=J_{\sigma(i)}$ for every $i\in I$. Then, for each $i\in I$, the map
     \begin{align}
         x
         &\longmapsto
@@ -211,10 +229,10 @@
 \end{theorem}
 
 \begin{proof}\leanok
-    The matching hypotheses force elements supported in the $i$-th block to
+    The matching hypothesis forces elements supported in the $i$-th block to
     remain supported in the $\sigma(i)$-th block. Injectivity follows from
-    injectivity of $T$. For surjectivity, apply the same argument to $T^{-1}$
-    and the inverse matching.
+    injectivity of $T$. The forward block equalities and bijectivity of $T$
+    give the corresponding equalities for $T^{-1}$, which yield surjectivity.
 \end{proof}
 
 \begin{theorem}[Paired component maps for products of matrix algebras]
