@@ -1665,6 +1665,30 @@ spectral split → block extraction → MPV calculation → strict bounds
   the next independent occurrence. Both current occurrences are already in
   `TNLean/Analysis/SpectralRadiusPowerDecay.lean`, so the deferral rests on the
   occurrence count alone, not on any import cost.
+
+### physical-slice support equality at tensor entries — candidate
+- **Pattern:** pass from a matrix identity involving `physicalSlice K β α` to
+  the corresponding identity of tensor-valued sums by applying the matrix
+  equality at physical indices and simplifying `Matrix.mul_apply`:
+  ```lean
+  ext β α
+  simp only [Matrix.sum_apply, Matrix.smul_apply, smul_eq_mul]
+  simpa [physicalSlice, Matrix.mul_apply] using
+    congrFun (congrFun (hP β α) i) j
+  ```
+- **Seen:** 3 occurrences in
+  `TNLean/MPS/MPDO/BNTChannelComposition.lean`, in the proofs of
+  `firstSiteMatrix_mul_physCloseN_of_mul_physicalSlice`,
+  `firstSiteMatrix_mul_physCloseN_eq_zero_of_mul_physicalSlice_eq_zero`, and
+  `physCloseN_mul_firstSiteMatrix_of_physicalSlice_mul`.
+- **Abstraction (proposed):** left- and right-multiplication lemmas expressing
+  the entries of a physical-slice identity as sums of scalar multiples of the
+  tensor matrices. The zero conclusion should be a specialization of the left
+  lemma rather than a separate argument.
+- **Notes:** the three occurrences lie in one file. Promote when a second file
+  needs the same entry-extraction step, choosing the weakest pair of algebraic
+  lemmas that covers both multiplication orientations.
+
 ### star preserves the complex norm — candidate
 - **Pattern:** `simpa only [RCLike.star_def, RCLike.norm_conj]` to close a goal of the
   form `‖star μ‖ = 1` or `‖star μ‖ ≤ 1` from `‖μ‖ = 1` or `‖μ‖ ≤ 1`.

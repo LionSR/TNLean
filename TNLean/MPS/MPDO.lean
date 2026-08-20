@@ -33,6 +33,7 @@ import TNLean.MPS.MPDO.BNTAlgebraTensorClauseSpectrum
 import TNLean.MPS.MPDO.BNTAlgebraTensorClauseTwoSiteAmbientSectorMaps
 import TNLean.MPS.MPDO.BNTAssociativity
 import TNLean.MPS.MPDO.BNTBoundaryDecomposition
+import TNLean.MPS.MPDO.BNTChannelComposition
 import TNLean.MPS.MPDO.BNTClosingSelection
 import TNLean.MPS.MPDO.BNTCoefficients
 import TNLean.MPS.MPDO.BNTFinalSectorFusion
