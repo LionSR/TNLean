@@ -122,15 +122,18 @@ file containing separate QIC and TN items is allowed because it is copied with
 history and split at item level after the filtered history is merged. An
 unclassified `\uses` endpoint or an incomplete manual ledger blocks the freeze.
 
-For that later split, one item is the complete theorem-like environment from
-its opening command through its matching closing command, together with an
-immediately following proof environment. Every label in the statement belongs
-to the same item and inherits its disposition. QICLean keeps QIC items and
-TNLean keeps TN items at the original path. Retained statement and proof bytes
-must not change. Text outside item spans may remain on both sides only when its
-references resolve in both simulated outputs. Before committing either split,
-reject overlapping spans, detached proofs, duplicate labels, and any retained
-`\ref` or `\uses` target that is absent from that output.
+For that later split, one item starts with the complete theorem-like
+environment and extends through the next complete proof environment, including
+all intervening lines, provided no other theorem-like environment begins first.
+If another theorem-like environment begins first, the item ends at its own
+closing command and has no attached proof. Every label in the resulting span,
+including labels on intervening figures or displayed equations, belongs to the
+same item and inherits its disposition. QICLean keeps QIC items and TNLean keeps
+TN items at the original path. Retained item bytes must not change. Text outside
+item spans may remain on both sides only when its references resolve in both
+simulated outputs. Before committing either split, reject overlapping spans,
+detached proofs, duplicate labels, and any retained `\ref` or `\uses` target
+that is absent from that output.
 
 ## 3. Build the history-filter path list
 
