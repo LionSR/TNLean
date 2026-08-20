@@ -19,9 +19,9 @@ a nontrivial invariant orthogonal projection.
 * `Kraus.HasInvariantProj` states that a finite matrix family has a nontrivial
   invariant orthogonal projection.
 * `Kraus.IsIrreducibleFamily` states that no such projection exists.
-* `Kraus.isIrreducibleMap_mapLM_of_isIrreducibleTensor` shows that an irreducible
+* `Kraus.isIrreducibleMap_mapLM_of_isIrreducibleFamily` shows that an irreducible
   family defines an irreducible Kraus map.
-* `Kraus.isIrreducibleTensor_of_isIrreducibleMap_mapLM` proves the converse.
+* `Kraus.isIrreducibleFamily_of_isIrreducibleMap_mapLM` proves the converse.
 -/
 
 namespace Kraus
@@ -44,7 +44,7 @@ def IsIrreducibleFamily (K : Fin d → Mat) : Prop :=
 
 /-- A finite matrix family with no nontrivial invariant orthogonal projection defines an
 irreducible Kraus map. -/
-theorem isIrreducibleMap_mapLM_of_isIrreducibleTensor
+theorem isIrreducibleMap_mapLM_of_isIrreducibleFamily
     (K : Fin d → Mat) (hIrr : IsIrreducibleFamily K) :
     IsIrreducibleMap (mapLM K) := by
   intro P hProj hInv
@@ -57,7 +57,7 @@ theorem isIrreducibleMap_mapLM_of_isIrreducibleTensor
 
 /-- If the finite Kraus map is irreducible, then its matrix family has no nontrivial
 invariant orthogonal projection. -/
-theorem isIrreducibleTensor_of_isIrreducibleMap_mapLM
+theorem isIrreducibleFamily_of_isIrreducibleMap_mapLM
     (K : Fin d → Mat) (hIrr : IsIrreducibleMap (mapLM K)) :
     IsIrreducibleFamily K := by
   intro ⟨P, hProj, hP0, hP1, hLower⟩
