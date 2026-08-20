@@ -10,7 +10,7 @@ import TNLean.MPS.MPDO.SimpleTensor
 import TNLean.MPS.MPDO.StackedLayers
 
 /-!
-# The repeated-copy counterexample to the printed Theorem 4.9 endpoint
+# Unequal repeated-copy weights obstruct the printed fixed-point implication
 
 This file gives the one-sector, two-copy example with raw canonical weights
 $1$ and $1/2$. It satisfies the printed standing hypotheses and condition (iv)

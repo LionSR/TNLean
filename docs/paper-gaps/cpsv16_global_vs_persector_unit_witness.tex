@@ -192,20 +192,24 @@ bond-one construction in
 \path{TNLean/MPS/MPDO/CaseIIAbsorptionCounterexample.lean}.  Its unabsorbed
 representatives have disjoint doubled-physical support and are normal, its
 weights are $(1/\sqrt2,1)$, and the ambient physical-trace transfer is
-literally the identity.  Nevertheless the first absorbed representative has
-transfer spectral radius $1/2$ and hence is not
+literally the identity. The ambient tensor is an MPDO with positive-length
+trace two, satisfies SAL, has normalized fixed-representative simple canonical
+form, and its representatives form a biCF family. Nevertheless the first
+absorbed representative has transfer spectral radius $1/2$ and hence is not
 \leanid{MPSTensor.IsNormalTensor}; see
 \leanid{MPOTensor.CaseIIAbsorptionCounterexample.%
-printed_absorbed_normality_step_is_false}.
+ambient_isSAL_isSimpleCanonicalForm_and_firstAbsorbed_not_isNormalTensor}.
 
-This proves that the printed absorbed-normality inference is false under the
-global normalization convention. This first declaration decides the
-normality inference used in the (ii)$\Rightarrow$(iv) proof; an alternative
-all-sector factorization remains a missing statement.
+This proves that the printed absorbed-normality inference is false under all
+conditions used in the simple Case-II passage, at the normalized
+fixed-representative boundary. The inference is \emph{proof-path drift}; it
+does not refute the claimed all-sector conclusion. An alternative
+factorization remains a missing statement.
 
-A second construction in the same file settles the literal endpoint of the
-printed theorem. The scalar normal representative $A=1$ is repeated with raw
-weights $1$ and $1/2$. The theorem
+A separate construction in
+\path{TNLean/MPS/MPDO/Theorem49RepeatedCopyCounterexample.lean} refutes the
+literal printed implication. The scalar normal representative $A=1$ is
+repeated with raw weights $1$ and $1/2$. The theorem
 \leanid{MPOTensor.CaseIIAbsorptionCounterexample.%
 printed_theorem49_iv_to_v_is_false} packages the exact canonical assembly,
 global unit weight, MPDO and simplicity data, simultaneous one-letter span,

@@ -904,8 +904,8 @@ $\mathcal K_i=P_i\mathcal K_i=\mathcal K_iP_i$.
 This is the calculation in
 \cite[Appendix~C.2, lines~1745--1751]{Cirac2016MPDO_arXiv}.
 
-% This node records the algebraic assertions tracked in #6082. The MPDO, SAL,
-% and complete standing-hypothesis surface remain the separate task #6083.
+% This node records the algebraic package proved separately from the analytic
+% and entropy conditions of the same example.
 % The IsHorizontalCF conclusion uses the normalized BNT-refined notion; its
 % scope relative to the literal source grouping is documented in
 % docs/paper-gaps/cpgsv17_vertical_cf_grouping.tex.
@@ -976,59 +976,114 @@ This is the calculation in
     so neither physical-trace transfer is nilpotent.
 \end{proof}
 
-% The declaration below isolates the scalar-normalization obstruction. It does
-% not assert all standing hypotheses of Theorem 4.9 and therefore does not
-% refute that theorem.
+% Classification: missing statement (repaired). The printed inference that
+% absorption preserves normality remains proof-path drift; the conclusion of
+% Theorem 4.9 is not refuted by this example.
 \begin{theorem}[Coefficient absorption need not preserve normality]
     \label{thm:mpdo_caseii_absorption_not_normal}
-    \lean{MPOTensor.CaseIIAbsorptionCounterexample.printed_absorbed_normality_step_is_false}
+    \lean{MPOTensor.CaseIIAbsorptionCounterexample.ambient_isMPDO,
+        MPOTensor.CaseIIAbsorptionCounterexample.trace_mpo_ambient,
+        MPOTensor.CaseIIAbsorptionCounterexample.trace_mpo_ambient_pos,
+        MPOTensor.CaseIIAbsorptionCounterexample.ambient_isSAL,
+        MPOTensor.CaseIIAbsorptionCounterexample.ambient_isSimpleCanonicalForm,
+        MPOTensor.CaseIIAbsorptionCounterexample.ambient_isSAL_isSimpleCanonicalForm_and_firstAbsorbed_not_isNormalTensor,
+        MPOTensor.CaseIIAbsorptionCounterexample.printed_absorbed_normality_step_is_false}
     \leanok
     \uses{def:nt_cpsv, def:mpdo_common_sector_weight_absorption,
-        def:mpo_physical_trace_transfer}
-    There are two bond-one normal tensors $A_0,A_1$ with disjoint doubled
-    physical supports and globally normalized weights
-    $(\mu_0,\mu_1)=(1/\sqrt2,1)$ such that their weighted bond-diagonal
-    assembly has literal physical-trace idempotence. Writing
-    $\mathcal E_B$ for the transfer map of a tensor $B$, one has
+        def:mpo_physical_trace_transfer, def:is_rfp_via_ts, def:is_sal,
+        def:mpdo_simple_cf_tensor, thm:mpdo_caseii_absorption_algebraic_data,
+        thm:mpdo_rfp_implies_sal}
+    Let $A_0$ have scalar entries $1/\sqrt2$ on doubled symbols $(0,0)$ and
+    $(1,1)$, let $A_1$ have scalar entry $1$ only on $(2,2)$, and take
+    $(\mu_0,\mu_1)=(1/\sqrt2,1)$. Their weighted bond-diagonal assembly has
     \begin{align}
-        \rho(\mathcal E_{\mu_0A_0})&=\frac12.
-        \notag
+        K^{00}=K^{11}&=\operatorname{diag}(1/2,0),
+        &K^{22}&=\operatorname{diag}(0,1).                    \label{eq:caseii-ambient-slices}
     \end{align}
-    In particular, the absorbed representative $\mu_0A_0$ is not normal.
+    For every $N>0$ and physical strings $\sigma,\tau\in\{0,1,2\}^N$,
+    \begin{align}
+        \langle\sigma|\rho^{(N)}(K)|\tau\rangle
+        &=\delta_{\sigma,\tau}\left(
+          2^{-N}\mathbf 1_{\{\sigma_k\in\{0,1\}\ \forall k\}}
+          +\mathbf 1_{\{\sigma_k=2\ \forall k\}}\right),       \label{eq:caseii-ambient-mpo}\\
+        \operatorname{tr}\rho^{(N)}(K)&=2>0.                    \label{eq:caseii-ambient-trace}
+    \end{align}
+    Hence $K$ generates positive semidefinite operators. It satisfies the
+    strong area law and the literal zero-correlation-length equation
+    \begin{align}
+        \mathcal T_K&=I_2,
+        &\mathcal T_K^2&=\mathcal T_K.                           \label{eq:caseii-ambient-zcl}
+    \end{align}
+    Its displayed BNT decomposition has the global unit-weight convention,
+    its representatives form a biCF family, and $K$ has simple canonical form
+    at this normalized fixed representative. Nevertheless,
+    \begin{align}
+        \rho(\mathcal E_{\mu_0A_0})&=\frac12,
+        &\mu_0A_0&\text{ is not normal}.                         \label{eq:caseii-absorbed-radius}
+    \end{align}
+    Copy-weight independence is only within the single copy of each
+    representative; it does not equate $\mu_0$ and $\mu_1$. Thus all
+    conditions used in the Case-II passage are present, but the printed
+    absorbed-normality inference is false
+    \cite[lines~1628--1665 and 1740--1782]{Cirac2016MPDO_arXiv}. This does not
+    refute the asserted all-sector conclusion or Theorem~4.9.
 \end{theorem}
 
 \begin{proof}
     \leanok
-    Let $A_0$ have scalar entries $1/\sqrt2$ on doubled physical symbols
-    $(0,0)$ and $(1,1)$, and let $A_1$ have scalar entry $1$ only on
-    $(2,2)$.  Their supports are disjoint and, on the one-dimensional virtual
-    space,
+    Set
+    \begin{align}
+        P&=\operatorname{diag}(1,1,0),
+        &Q&=I-P=\operatorname{diag}(0,0,1),\notag\\
+        \omega_P&=\frac14(P\otimes P),
+        &\omega_Q&=Q\otimes Q.                                  \label{eq:caseii-pq-states}
+    \end{align}
+    Equations~\eqref{eq:caseii-ambient-slices} and
+    \eqref{eq:caseii-ambient-mpo} follow by multiplying the diagonal slices.
+    There are $2^N$ binary strings and one terminal string, which gives
+    \eqref{eq:caseii-ambient-trace}. For a virtual matrix $X$, the one-site and
+    two-site physical closures are
+    \begin{align}
+        M_1(X)&=\frac{X_{00}}2P+X_{11}Q,
+        &M_2(X)&=X_{00}\omega_P+X_{11}\omega_Q.                 \label{eq:caseii-closures}
+    \end{align}
+    Define
+    \begin{align}
+        \mathcal S(Y)&=\operatorname{tr}_2(Y),\notag\\
+        \mathcal R(Y)&=\operatorname{tr}(PYP)\,\omega_P
+          +\operatorname{tr}(QYQ)\,\omega_Q.                   \label{eq:caseii-channels}
+    \end{align}
+    Both maps are trace-preserving and completely positive, and
+    \begin{align}
+        \mathcal S[M_2(X)]&=M_1(X),
+        &\mathcal R[M_1(X)]&=M_2(X).                            \label{eq:caseii-channel-closures}
+    \end{align}
+    These are the channel equations of Definition~4.1
+    \cite[lines~638--660]{Cirac2016MPDO_arXiv}; with
+    \eqref{eq:caseii-ambient-trace}, they imply the strong area law. Summing
+    the diagonal slices gives \eqref{eq:caseii-ambient-zcl}, the literal
+    diagram of Definition~4.2
+    \cite[lines~735--739]{Cirac2016MPDO_arXiv}.
+
+    The transfer maps of the two unabsorbed representatives obey
     \begin{align}
         \mathcal E_{A_0}(x)&=
             \left(\frac12+\frac12\right)x=x,
         & \mathcal E_{A_1}(x)&=x.
         \notag
     \end{align}
-    Hence both tensors are normal.  Choose
-    $(\mu_0,\mu_1)=(1/\sqrt2,1)$; then $|\mu_s|\leq1$ for both sectors and
-    $|\mu_1|=1$, as required by the global normalization.  The weighted
-    bond-diagonal assembly has nonzero diagonal physical slices
-    \begin{align}
-        K^{00}=K^{11}&=\operatorname{diag}(1/2,0),
-        & K^{22}&=\operatorname{diag}(0,1),
-        \notag
-    \end{align}
-    so its physical-trace transfer is
-    $\mathcal T_K=K^{00}+K^{11}+K^{22}=I$ and therefore
-    $\mathcal T_K^2=\mathcal T_K$.  Absorption nevertheless gives
+    Hence both are normal. The letters $0$ and $8$ separately select the two
+    scalar blocks, proving the simultaneous one-letter span and biCF. The
+    weights satisfy $|\mu_s|\leq1$ and $|\mu_1|=1$, as required by the global
+    canonical normalization at lines~224--246. Absorption nevertheless gives
     \begin{align}
         \mathcal E_{\mu_0A_0}
             &=|\mu_0|^2\mathcal E_{A_0}=\frac12\,\mathrm{id},
         & \rho(\mathcal E_{\mu_0A_0})&=\frac12.
         \notag
     \end{align}
-    A normal tensor has transfer spectral radius one, so $\mu_0A_0$ cannot be
-    normal.
+    A normal tensor has transfer spectral radius one, proving
+    \eqref{eq:caseii-absorbed-radius} and the failure of the printed inference.
 \end{proof}
 
 % The declaration below packages explicit component witnesses for every
@@ -1116,14 +1171,15 @@ This is the calculation in
     multiplies the transfer spectral radius by $|\mu_s|^2$, while the source
     normalization does not imply $|\mu_s|=1$ for every sector.
     Theorem~\ref{thm:mpdo_caseii_absorption_not_normal} shows that this
-    absorbed-sector normality route is false under the encoded normalization
-    hypotheses. Thus implication (ii)$\Rightarrow$(iv) remains a missing
-    statement and the printed normality argument has proof-path drift.
+    absorbed-sector normality route is false even when all conditions used in
+    Appendix~C.2 hold at the normalized fixed-representative boundary. Thus
+    implication (ii)$\Rightarrow$(iv) remains a missing statement and the
+    printed normality argument has proof-path drift.
 
     Independently, Theorem~\ref{thm:mpdo_theorem49_iv_to_v_counterexample}
     exhibits explicit component witnesses for every standing hypothesis and
-    all clauses of condition~(iv), but fails condition~(v). Hence the literal implication
-    (iv)$\Rightarrow$(v) is refuted and is an unfaithful statement. The viable
+    all clauses of condition~(iv), but fails condition~(v). Hence the literal
+    implication (iv)$\Rightarrow$(v) is refuted and is an unfaithful statement. The viable
     channel route in Appendix~C.2 is instead (ii)$\Rightarrow$(v): lines
     1646--1665 first use zero correlation length to make all repeated-copy
     weights of each BNT representative equal and absorb their common value.
@@ -2099,8 +2155,9 @@ This is the calculation in
 % **All-sector Case-II boundary:**
 % Analytic inheritance is complete for every absorbed BNT representative.
 % The explicit bond-one construction formally refutes preservation of
-% normality under the source's global weight convention. Hence implication
-% (ii)=>(iv) remains a missing statement with proof-path drift. Independently,
+% normality under all conditions used in Appendix C.2. Hence implication
+% (ii)=>(iv) remains a missing statement; the printed inference has proof-path
+% drift. Independently,
 % thm:mpdo_theorem49_iv_to_v_counterexample refutes the literal implication
 % (iv)=>(v).
 % Documented in
@@ -2144,10 +2201,12 @@ This is the calculation in
     normality. If $\mathcal K_s=\mu_sA_s$, then the transfer spectral radius is
     multiplied by $|\mu_s|^2$. The global canonical-form normalization gives
     only one unit-modulus coefficient and does not imply $|\mu_s|=1$ for every
-    $s$. Theorem~\ref{thm:mpdo_caseii_absorption_not_normal} gives global
-    weights $(1/\sqrt2,1)$, literal ambient physical-trace idempotence, and a
-    first absorbed transfer radius equal to $1/2$. Therefore the printed
-    assertion that absorption preserves normality is false. The claimed
+    $s$. Theorem~\ref{thm:mpdo_caseii_absorption_not_normal} gives an MPDO of
+    positive normalization with SAL, literal ambient physical-trace
+    idempotence, normalized fixed-representative simple canonical form, and
+    biCF data. Its global weights are $(1/\sqrt2,1)$ and its first absorbed
+    transfer radius is $1/2$. Therefore the printed assertion that absorption
+    preserves normality is false. The claimed
     all-sector conclusion would instead require an alternative factorization
     argument that does not pass through absorbed-sector normality. This is a
     missing statement in implication (ii)$\Rightarrow$(iv), with proof-path

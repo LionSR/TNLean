@@ -61,9 +61,26 @@ mathematical obstruction.
   (ii)$\Rightarrow$(v) route unsettled at the boundary between global BNT
   normalization and literal physical-trace-transfer normalization.
 
-### Unequal raw copies refute Theorem 4.9(iv)$\Rightarrow$(v)
+### Coefficient absorption need not preserve normality
 
 - Location: `TNLean/MPS/MPDO/CaseIIAbsorptionCounterexample.lean`
+- Main declaration:
+  `MPOTensor.CaseIIAbsorptionCounterexample.ambient_isSAL_isSimpleCanonicalForm_and_firstAbsorbed_not_isNormalTensor`
+- Statement refuted: the Case-II step at CPSV16 lines 1646--1665 treats the
+  tensor obtained by absorbing a common copy weight into a normal BNT
+  representative as normal.
+- Witness: the diagonal two-sector MPO has globally normalized weights
+  $(1/\sqrt2,1)$, positive periodic operators of trace two, SAL, literal
+  physical-trace ZCL, normalized fixed-representative simple canonical form,
+  and biCF. The first absorbed representative nevertheless has transfer
+  spectral radius $1/2$ and is not normal.
+- Scope: this is proof-path drift in the printed argument, not a refutation of
+  the asserted all-sector conclusion. The alternative factorization and
+  projector-controlled channel assembly remain open in issue #6632.
+
+### Unequal raw copies refute Theorem 4.9(iv)$\Rightarrow$(v)
+
+- Location: `TNLean/MPS/MPDO/Theorem49RepeatedCopyCounterexample.lean`
 - Main declaration:
   `MPOTensor.CaseIIAbsorptionCounterexample.printed_theorem49_iv_to_v_is_false`
 - Statement refuted: under the printed standing simple-biCF-BNT and MPDO
