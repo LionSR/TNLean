@@ -689,22 +689,55 @@
     are equal. Hence $\sum_sP_s=I$, and
     Theorem~\ref{thm:mpdo_absorbed_bnt_channel_assembly} applies directly.
     Assume from now on that the physical dimension is positive. Fixed basis
-    vectors witness that the two output spaces are nonempty, and normalizing
-    their identity matrices gives maximally mixed density matrices.
+    vectors witness that the two output spaces are nonempty; normalizing
+    their identity matrices gives maximally mixed density matrices
+    $\rho_2\in\MN{q^2}$ and $\rho_4\in\MN{q^4}$.
 
-    Let $Q=\sum_sP_s$. Pairwise orthogonality makes $Q$ an orthogonal
-    projection. Two-sided support of each absorbed representative implies
-    that the length-two and length-four closures of the complete tensor are
-    supported on the first-site lifts of $Q$.
+    Let $Q=\sum_sP_s$, an orthogonal projection by pairwise orthogonality.
+    For $N\in\{2,4\}$ write $Q_N=Q\otimes\Id^{\otimes(N-1)}$ for the lift of
+    $Q$ to the first original site of an $N$-site chain, and likewise
+    $P_{s,N}=P_s\otimes\Id^{\otimes(N-1)}$, so that $Q_N=\sum_sP_{s,N}$.
+    Two-sided support of each absorbed representative carries over to the
+    length-two and length-four closures of the complete tensor $K$,
+    \begin{align}
+        Q_2K_2(X)Q_2&=K_2(X), & Q_4K_4(X)Q_4&=K_4(X),
+        \label{eq:mpdo_support_completion_supported}
+    \end{align}
+    for every virtual boundary $X$.
 
-    On the active corner, sum the representative channels after compression
-    by the corresponding first-site projections. Each sum is completely
-    positive and preserves exactly the trace selected by $Q$. Complete it on
-    the orthogonal input complement by measuring $I-Q$ and preparing the
-    fixed density matrix in the corresponding output space. The resulting map is
-    trace-preserving and completely positive. Its complementary term vanishes
-    on the supported closure, so the two channel equations reduce to those of
-    the active sum and hence to the representative equations.
+    By hypothesis every $\mathcal K_s^{[2]}$ carries trace-preserving
+    completely positive maps $\mathcal S_s,\mathcal T_s$ witnessing its
+    fixed-point property. Sum these channels after compression by the
+    matching first-site projection,
+    $\mathcal S_{\mathrm{act}}(Y)=\sum_s\mathcal S_s(P_{s,4}YP_{s,4})$ and
+    $\mathcal T_{\mathrm{act}}(Z)=\sum_s\mathcal T_s(P_{s,2}ZP_{s,2})$. Each
+    sum is completely positive, and pairwise orthogonality of the $P_s$
+    makes it preserve exactly the trace selected by $Q$,
+    \begin{align}
+        \tr\bigl(\mathcal S_{\mathrm{act}}(Y)\bigr)&=\tr(Q_4Y), &
+        \tr\bigl(\mathcal T_{\mathrm{act}}(Z)\bigr)&=\tr(Q_2Z).
+        \notag
+    \end{align}
+
+    Since $Q_N$ is Hermitian and idempotent, applying
+    Theorem~\ref{thm:matrix_support_completion_cptp} to each active sum
+    with $P=Q_N$ completes it on the orthogonal input complement,
+    \begin{align}
+        \mathcal S_{\mathrm{glob}}(Y)&=\mathcal S_{\mathrm{act}}(Y)
+          +\tr\bigl((I-Q_4)Y\bigr)\rho_2, &
+        \mathcal T_{\mathrm{glob}}(Z)&=\mathcal T_{\mathrm{act}}(Z)
+          +\tr\bigl((I-Q_2)Z\bigr)\rho_4,
+        \notag
+    \end{align}
+    and both global maps are trace-preserving and completely positive. By
+    (\ref{eq:matrix_support_completion_agreement}) and
+    (\ref{eq:mpdo_support_completion_supported}),
+    $\mathcal S_{\mathrm{glob}}(K_4(X))=\mathcal S_{\mathrm{act}}(K_4(X))$ and
+    $\mathcal T_{\mathrm{glob}}(K_2(X))=\mathcal T_{\mathrm{act}}(K_2(X))$ for
+    every virtual boundary $X$, so the two channel equations for
+    $\mathcal S_{\mathrm{glob}},\mathcal T_{\mathrm{glob}}$ reduce to those of
+    $\mathcal S_{\mathrm{act}},\mathcal T_{\mathrm{act}}$ and hence, by
+    construction of the active sums, to the representative equations.
 \end{proof}
 
 \begin{theorem}[Blocking channels after common-weight absorption]
