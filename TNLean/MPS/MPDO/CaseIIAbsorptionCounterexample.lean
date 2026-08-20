@@ -243,8 +243,8 @@ theorem sectors_isBNTCanonicalForm :
 representatives, so their simultaneous one-letter tuple span is the entire
 direct sum.
 
-Source: arXiv:1606.00608, the biCF hypothesis used in Appendix C.2, lines
-1628--1633. -/
+Source: arXiv:1606.00608, Definition `defnbi` of biCF, lines 317--326; the
+condition is used in the Case-II argument in Appendix C.2, lines 1628--1633. -/
 theorem sectors_wordTupleSpanTop_one :
     MPSTensor.WordTupleSpanTop sectors.basis 1 := by
   change MPSTensor.WordTupleSpanTop basis 1
@@ -275,7 +275,8 @@ theorem sectors_wordTupleSpanTop_one :
 /-- The two normal representatives satisfy the biCF condition, witnessed by
 their simultaneous one-letter tuple span.
 
-Source: arXiv:1606.00608, Appendix C.2, lines 1628--1633. -/
+Source: arXiv:1606.00608, Definition `defnbi`, lines 317--326; the condition is
+used in the Case-II argument in Appendix C.2, lines 1628--1633. -/
 theorem sectors_hasBiCF : MPSTensor.HasBiCF sectors.basis :=
   MPSTensor.hasBiCF_of_wordTupleSpanTop sectors.basis sectors_wordTupleSpanTop_one
 
