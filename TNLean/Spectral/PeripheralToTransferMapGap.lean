@@ -7,7 +7,8 @@ import TNLean.MPS.Structure.PrimitivityBridge
 import TNLean.Channel.Peripheral.Spectrum
 import TNLean.Spectral.TransferOperatorGap
 import TNLean.QPF.Assembly
-import TNLean.MPS.Irreducible.FormII
+import TNLean.Kraus.InvariantProjection
+import TNLean.MPS.Core.TransferChannel
 import TNLean.Channel.FixedPoint.Cesaro
 import TNLean.MPS.Core.CPPrimitive
 import Mathlib.Analysis.Normed.Algebra.GelfandFormula
@@ -274,8 +275,9 @@ theorem transferMap_fixedPoint_eq_zero_of_trace_eq_zero_of_irreducible
     X = 0 := by
   set E := transferMap (d := d) (D := D) A
   have hIrrMap : IsIrreducibleMap E := by
-    simpa only using
-      isIrreducibleCP_transferMap_of_isIrreducibleTensor (d := d) (D := D) A hIrr
+    change IsIrreducibleMap (transferMap (d := d) (D := D) A)
+    rw [← Kraus.mapLM_eq_transferMap]
+    exact Kraus.isIrreducibleMap_mapLM_of_isIrreducibleTensor A hIrr
   exact transferMap_fixedPoint_eq_zero_of_trace_eq_zero_of_hermitian_zero
     (A := A)
     (hHermitianZero := fun Y hYherm hYfix htrY =>
@@ -432,8 +434,9 @@ theorem spectralRadius_compl_lt_one_of_peripheralPrimitive_of_irreducible
             < 1 := by
   set E := transferMap (d := d) (D := D) A
   have hIrrMap : IsIrreducibleMap E := by
-    simpa only using
-      isIrreducibleCP_transferMap_of_isIrreducibleTensor (d := d) (D := D) A hIrr
+    change IsIrreducibleMap (transferMap (d := d) (D := D) A)
+    rw [← Kraus.mapLM_eq_transferMap]
+    exact Kraus.isIrreducibleMap_mapLM_of_isIrreducibleTensor A hIrr
   have hDpos : 0 < D := Nat.pos_of_ne_zero (NeZero.ne D)
   obtain ⟨ρ, hρ_psd, hρ_ne, hρ_fixE⟩ :=
     (transferMap_isChannel (A := A) hNorm).exists_posSemidef_fixedPoint (E := E) hDpos
