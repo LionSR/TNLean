@@ -20,6 +20,9 @@ lake exe cache get
 
 # Only after the cache fetch succeeds:
 lake build
+# Linter-bearing verification of one module (uses the package leanOptions):
+lake build TNLean.Path.To.File
+# Optional fast elaboration only; this does not use the package leanOptions:
 lake env lean TNLean/Path/To/File.lean
 ```
 # Check for sorrys/axioms in changed files
