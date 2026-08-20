@@ -385,6 +385,28 @@ eventual exact-word spanning, and spectral strong irreducibility.
     Hence $T_{D^2-d'+1}(A)=\MN{D}$.
 \end{proof}
 
+\begin{theorem}[Eigenvector extraction from a full cumulative span]
+    \label{thm:eigenvector_from_full_cumulative_span}
+    \lean{Kraus.exists_eigenvector_of_cumulativeSpan_eq_top}
+    \lean{MPSTensor.exists_eigenvector_of_cumulativeSpan_eq_top}
+    \leanok
+    \uses{def:cumulative_span, thm:eigenvector_from_trace}
+    Let $D>0$ and suppose $T_N(K)=\MN{D}$. Then there are a word $w$, a
+    nonzero scalar $\mu$, and a nonzero vector $\varphi\in\C^D$ such that
+    \begin{align}
+        |w| & \le N,
+        & K^w\varphi & =\mu\varphi.
+        \notag
+    \end{align}
+\end{theorem}
+
+\begin{proof}\leanok
+    Since the identity lies in $T_N(K)$ and has nonzero trace, some word of
+    length at most $N$ has nonzero trace. Such a matrix has a nonzero
+    eigenvalue and a corresponding nonzero eigenvector by
+    Theorem~\ref{thm:eigenvector_from_trace}.
+\end{proof}
+
 \begin{theorem}[Sharp nonzero trace product for a primitive channel]%
     \label{thm:nonzero_trace_word_primitive_sharp}
     \lean{MPSTensor.exists_nonzero_trace_word_of_isPrimitivePaper_sharp_pos}

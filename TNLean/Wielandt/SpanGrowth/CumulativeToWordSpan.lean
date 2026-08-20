@@ -6,7 +6,6 @@ Authors: TNLean contributors
 import TNLean.Kraus.Wielandt.SpanGrowth.CumulativeToWordSpan
 import TNLean.Wielandt.SpanGrowth.CumulativeSpan
 import TNLean.Wielandt.SpanGrowth.VectorToMatrixSpan
-import TNLean.Wielandt.RankOne.Products
 import TNLean.Algebra.BurnsideMatrix
 import TNLean.Algebra.BurnsideTheorem
 
@@ -145,10 +144,7 @@ theorem exists_eigenvector_of_cumulativeSpan_eq_top [NeZero D]
     (A : MPSTensor d D) {N : ℕ} (hcs : cumulativeSpan A N = ⊤) :
     ∃ (w : List (Fin d)) (μ : ℂ) (φ : Fin D → ℂ),
       w.length ≤ N ∧ μ ≠ 0 ∧ φ ≠ 0 ∧
-      evalWord A w *ᵥ φ = μ • φ := by
-  obtain ⟨w, hw, htr⟩ := exists_nonzero_trace_word_of_cumulativeSpan_eq_top A hcs
-  obtain ⟨μ, φ, hμ, hφ, heig⟩ :=
-    _root_.exists_eigenvector_of_trace_ne_zero _ htr
-  exact ⟨w, μ, φ, hw, hμ, hφ, heig⟩
+      evalWord A w *ᵥ φ = μ • φ :=
+  Kraus.exists_eigenvector_of_cumulativeSpan_eq_top A hcs
 
 end MPSTensor
