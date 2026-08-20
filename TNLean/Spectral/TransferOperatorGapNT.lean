@@ -7,7 +7,9 @@ import TNLean.Spectral.MPVOverlapDecayRect
 import TNLean.Spectral.TransferOperatorGapNormalized
 import TNLean.Spectral.GaugeConstruction
 import TNLean.Channel.PerronFrobenius.Existence
-import TNLean.MPS.Irreducible.FormII
+import TNLean.Kraus.InvariantProjection
+import TNLean.MPS.Core.TransferChannel
+import TNLean.QPF.Assembly
 import Mathlib.LinearAlgebra.Dimension.Finrank
 import Mathlib.LinearAlgebra.Matrix.ToLin
 
@@ -85,7 +87,7 @@ private lemma exists_irreducible_TP_fixedPoint_squareRoot [NeZero D]
         S.det ≠ 0 ∧ S * Sᴴ = ρ := by
   classical
   have hA_irrMap : IsIrreducibleMap (transferMap (d := d) (D := D) A) :=
-    isIrreducibleCP_transferMap_of_isIrreducibleTensor A hA_irr
+    Kraus.isIrreducibleMap_transferMap_of_isIrreducibleTensor A hA_irr
   obtain ⟨ρ, hρ_psd, hρ_ne, hρ_fix⟩ :=
     exists_posSemidef_fixedPoint A hA_left (NeZero.pos D)
   have hρ_pd : ρ.PosDef :=
@@ -322,7 +324,7 @@ private lemma exists_posSemidef_fixedPoint_gauge_of_irreducible_TP {D : ℕ}
   classical
   have hDpos : 0 < D := Nat.pos_of_ne_zero (NeZero.ne D)
   have hIrrA : IsIrreducibleMap (transferMap (d := d) (D := D) A) :=
-    isIrreducibleCP_transferMap_of_isIrreducibleTensor A hA_irr
+    Kraus.isIrreducibleMap_transferMap_of_isIrreducibleTensor A hA_irr
   obtain ⟨ρ, hρ_psd, hρ_ne, hρ_fix⟩ :=
     exists_posSemidef_fixedPoint A hA_left hDpos
   have hρ_pd : ρ.PosDef :=
@@ -481,9 +483,9 @@ private lemma dim_eq_of_gram_fixedPoints_of_irreducible_TP
     D₁ = D₂ := by
   classical
   have hIrrA : IsIrreducibleMap (transferMap (d := d) (D := D₁) A) :=
-    isIrreducibleCP_transferMap_of_isIrreducibleTensor A hA_irr
+    Kraus.isIrreducibleMap_transferMap_of_isIrreducibleTensor A hA_irr
   have hIrrB : IsIrreducibleMap (transferMap (d := d) (D := D₂) B) :=
-    isIrreducibleCP_transferMap_of_isIrreducibleTensor B hB_irr
+    Kraus.isIrreducibleMap_transferMap_of_isIrreducibleTensor B hB_irr
   have hσA_fix_gauge : transferMap (d := d) (D := D₁) (gaugeTensor SA A) σA = σA := by
     simpa only [hA'_eq] using hσA_fix
   have hσB_fix_gauge : transferMap (d := d) (D := D₂) (gaugeTensor SB B) σB = σB := by

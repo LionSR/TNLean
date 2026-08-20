@@ -4,7 +4,9 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.Spectral.TransferOperatorGapNT
+import TNLean.Kraus.InvariantProjection
 import TNLean.MPS.Core.CPPrimitive
+import TNLean.MPS.Core.TransferChannel
 
 /-!
 # Injective transfer-gap corollaries
@@ -24,7 +26,7 @@ variable {d D D₁ D₂ : ℕ}
 private lemma irreducibleTensor_of_injective
     (A : MPSTensor d D) (hA : IsInjective A) :
     IsIrreducibleTensor A :=
-  isIrreducibleTensor_of_isIrreducibleMap A
+  Kraus.isIrreducibleTensor_of_isIrreducibleMap_transferMap A
     (injective_implies_irreducibleCP A hA)
 
 /-- **Eigenvalue rigidity** for normalized injective tensors. -/

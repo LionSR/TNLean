@@ -212,6 +212,24 @@ abstracted — record why, so it is not re-proposed).
   MPS compatibility import instead of `Channel.FixedPoint.MaximalSupport`; this
   intentional import-level change removes the former Channel-to-MPS dependency.
 
+### matrix-family irreducibility in transfer-map notation — promoted
+- **Pattern:** convert between irreducibility of a finite matrix family and
+  irreducibility of its MPS transfer map by passing through `Kraus.mapLM` and
+  `Kraus.mapLM_eq_transferMap`.
+- **Seen:** nine forward conversions and three converse conversions across
+  `MPS/Irreducible/FormII.lean`, `Spectral/PeripheralToTransferMapGap.lean`,
+  `Spectral/TransferOperatorGap{NT,Injective}.lean`, and
+  `Wielandt/Primitivity/{PrimitiveBridge,ToNormal}.lean` before promotion
+  (2026-08-20).
+- **Abstraction:**
+  `Kraus.isIrreducibleMap_transferMap_of_isIrreducibleTensor` and
+  `Kraus.isIrreducibleTensor_of_isIrreducibleMap_transferMap` in
+  `TNLean/MPS/Core/TransferChannel.lean`.
+- **Notes:** the compatibility module is the unique boundary between the
+  Kraus-owned irreducibility equivalence and transfer-map notation. Downstream
+  callers no longer repeat the equality conversion or import
+  `MPS.Irreducible.FormII` solely for this equivalence.
+
 ### pure gauge to heterogeneous repeated blocks — promoted
 - **Pattern:** convert `GaugeEquiv A B` to `HetRepeatedBlocks A B` by passing
   through `EquivalentBlocks`, choosing unit phase, and embedding the
