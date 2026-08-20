@@ -141,21 +141,6 @@ theorem pow_mem_wordSpan' (K : Fin d → Matrix (Fin D) (Fin D) ℂ) (i₀ : Fin
   have h := evalWord_mem_wordSpan K (List.replicate k i₀)
   rwa [MPSTensor.evalWord_replicate, List.length_replicate] at h
 
-/-- Iterating the eigenvalue equation: if `M *ᵥ φ = μ • φ`, then `M^k *ᵥ φ = μ^k • φ`.
-
-This is a general fact about matrix powers and eigenvectors. -/
-private theorem pow_mulVec_eigenvector
-    {M : Matrix (Fin D) (Fin D) ℂ} {φ : Fin D → ℂ} {μ : ℂ}
-    (heig : M *ᵥ φ = μ • φ) (k : ℕ) :
-    (M ^ k) *ᵥ φ = (μ ^ k) • φ := by
-  induction k with
-  | zero => simp [Matrix.one_mulVec]
-  | succ n ih =>
-    -- M^(n+1) = M^n * M, use mulVec_mulVec to decompose
-    rw [pow_succ, ← Matrix.mulVec_mulVec φ (M ^ n) M, heig,
-        Matrix.mulVec_smul, ih, smul_smul]
-    congr 1; ring
-
 /-- **Eigenvector lies in the range of the D-th power.**
 
 If `K i₀ *ᵥ φ = μ • φ` with `μ ≠ 0`, then
@@ -170,7 +155,7 @@ theorem eigenvector_mem_range_toLin_pow
     (heig : K i₀ *ᵥ φ = μ • φ) :
     φ ∈ LinearMap.range (Matrix.toLin' ((K i₀) ^ D)) := by
   have hpow : (K i₀ ^ D) *ᵥ φ = (μ ^ D) • φ :=
-    pow_mulVec_eigenvector heig D
+    MPSTensor.pow_mulVec_eq_smul_of_mulVec_eq_smul (K i₀) φ μ heig D
   rw [LinearMap.mem_range]
   refine ⟨(μ⁻¹ ^ D) • φ, ?_⟩
   rw [Matrix.toLin'_apply, Matrix.mulVec_smul, hpow, smul_smul,
@@ -183,7 +168,7 @@ theorem eigenvector_mem_range_toLin_pow'
     (heig : K i₀ *ᵥ φ = μ • φ) :
     φ ∈ LinearMap.range (Matrix.toLin' ((K i₀) ^ k)) := by
   have hpow : (K i₀ ^ k) *ᵥ φ = (μ ^ k) • φ :=
-    pow_mulVec_eigenvector heig k
+    MPSTensor.pow_mulVec_eq_smul_of_mulVec_eq_smul (K i₀) φ μ heig k
   rw [LinearMap.mem_range]
   refine ⟨(μ⁻¹ ^ k) • φ, ?_⟩
   rw [Matrix.toLin'_apply, Matrix.mulVec_smul, hpow, smul_smul,
