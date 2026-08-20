@@ -60,7 +60,7 @@ theorem normalizedFlattening_physicalAdjointTensor (U : MPOTensor d D) :
   ext ij β α
   rw [show ij = finProdFinEquiv (ij.divNat, ij.modNat) by
     exact (finProdFinEquiv.apply_symm_apply ij).symm]
-  simp [normalizedFlattening, MPSTensor.reindexPhysical, MPSTensor.mapStar,
+  simp [normalizedFlattening, Kraus.reindexPhysical, MPSTensor.mapStar,
     MPOTensor.toMPSTensor, Matrix.smul_apply, Matrix.map_apply, RCLike.star_def]
 
 end MPOTensor
@@ -108,7 +108,7 @@ noncomputable def physicalAdjointNormalizedFlattening
           MPSTensor.toTensorFromBlocks (fun k ↦ star (data.weights k))
             (fun k ↦ MPSTensor.reindexPhysical (MPOTensor.physicalPairSwapEquiv d)
               (MPSTensor.mapStar (data.blocks k))) i := by
-      simp only [MPSTensor.toTensorFromBlocks, MPSTensor.reindexPhysical]
+      simp only [MPSTensor.toTensorFromBlocks, Kraus.reindexPhysical]
       rw [show ((Matrix.reindex finSigmaFinEquiv finSigmaFinEquiv)
           (Matrix.blockDiagonal' fun k => data.weights k •
             data.blocks k (MPOTensor.physicalPairSwapEquiv d i))).map (starRingEnd ℂ) =

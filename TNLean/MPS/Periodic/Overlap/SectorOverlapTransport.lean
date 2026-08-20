@@ -60,7 +60,7 @@ private lemma evalWord_ofFn_eq_init_mul_last {L' : ℕ} (A : MPSTensor d D)
   rw [List.ofFn_succ']
   rw [show (List.ofFn fun i => σ (Fin.castSucc i)) = List.ofFn (Fin.init σ) from rfl]
   rw [List.concat_eq_append, evalWord_append]
-  simp [evalWord_cons, evalWord_nil]
+  simp
 
 /-- **Per-configuration trace covariance** under one-site rotation (eq:Aoffdiag,
 arXiv:1708.00029 lines 985--1002).  Given the single-site off-diagonal shift
@@ -126,8 +126,13 @@ private lemma sectorOverlap_eq_physical_sum {m : ℕ} [NeZero D] [NeZero m]
       (PA u * evalWord A (List.ofFn τ)).trace *
         star ((PB v * evalWord B (List.ofFn τ)).trace))]
   refine Finset.sum_congr rfl fun σ _ => ?_
-  rw [hTraceA u N σ, hTraceB v N σ, ofFn_blockedConfigEquiv,
-    ← evalWord_blockTensor, ← evalWord_blockTensor]
+  rw [hTraceA u N σ, hTraceB v N σ, ofFn_blockedConfigEquiv]
+  change
+    (PA u * Kraus.evalWord (blockTensor A m) (List.ofFn σ)).trace *
+        star ((PB v * Kraus.evalWord (blockTensor B m) (List.ofFn σ)).trace) =
+      (PA u * Kraus.evalWord A (flattenBlockedWord d m (List.ofFn σ))).trace *
+        star ((PB v * Kraus.evalWord B (flattenBlockedWord d m (List.ofFn σ))).trace)
+  rw [← evalWord_blockTensor, ← evalWord_blockTensor]
 
 /-- **One-step transport of the cross sector overlap** (positive lengths,
 arXiv:1708.00029 lines 985--1002).  For `N ≥ 1`, the cross overlap of compressed
