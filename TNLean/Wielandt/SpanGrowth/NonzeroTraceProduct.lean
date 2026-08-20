@@ -65,7 +65,7 @@ theorem cumulativeSpan_eq_top_of_isNormal_sharp [NeZero D]
   obtain ⟨N, _, hN⟩ := hN
   exact Kraus.cumulativeSpan_eq_top_of_wordSpan_eq_top_sharp A hN
 
-/-- **Lemma 1, sharp form** (arXiv:0909.5347): if `A` is normal, some word `w` of
+/-- A sharp corollary permitting the empty word: if `A` is normal, some word `w` of
 length at most `D² − dim(S₁(A)) + 1` has nonzero trace. -/
 theorem exists_nonzero_trace_word_sharp [NeZero D]
     (A : MPSTensor d D) (hN : IsNormal A) :
