@@ -118,6 +118,79 @@
     bounds each of them by $1$.
 \end{proof}
 
+\begin{definition}[Spectral radius of a rectangular mixed Kraus map]
+    \label{def:kraus_mixed_map_spectral_radius}
+    \lean{Kraus.mixedMapSpectralRadius}
+    \leanok
+    Let $\{A_i\}_{i=0}^{d-1}\subseteq\MN{D_1}$ and
+    $\{B_i\}_{i=0}^{d-1}\subseteq\MN{D_2}$. Their rectangular mixed Kraus
+    map is the endomorphism of $M_{D_1\times D_2}(\C)$ given by
+    \begin{align}
+        \mathcal M_{A,B}(X)
+         & =\sum_{i=0}^{d-1}A_iXB_i^\dagger.
+        \notag
+    \end{align}
+    Its spectral radius is denoted by $\varrho(\mathcal M_{A,B})$.
+\end{definition}
+
+\begin{theorem}[Eigenvalue bound for a trace-preserving mixed Kraus map]
+    \label{thm:kraus_mixed_tp_eigenvalue_bound}
+    \lean{Kraus.eigenvalue_norm_le_one_mixedMapLM_of_isTP}
+    \leanok
+    \uses{def:kraus_mixed_map_spectral_radius, def:tp_kraus}
+    Suppose that
+    \begin{align}
+        \sum_{i=0}^{d-1}A_i^\dagger A_i&=\Id_{D_1},
+        \notag\\
+        \sum_{i=0}^{d-1}B_i^\dagger B_i&=\Id_{D_2}.
+        \notag
+    \end{align}
+    Every eigenvalue $\mu$ of $\mathcal M_{A,B}$ satisfies $|\mu|\leq1$.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:kraus_tp_eigenvalue_bound}
+    For each $i$, set
+    $C_i=\begin{psmallmatrix}A_i&0\\0&B_i\end{psmallmatrix}$ and embed a
+    rectangular matrix $X$ as
+    $J(X)=\begin{psmallmatrix}0&X\\0&0\end{psmallmatrix}$. Then
+    \begin{align}
+        \sum_{i=0}^{d-1}C_i^\dagger C_i
+         &=\begin{pmatrix}\Id_{D_1}&0\\0&\Id_{D_2}\end{pmatrix},
+        \notag\\
+        \mathcal K_C(J(X))
+         &=J\bigl(\mathcal M_{A,B}(X)\bigr).
+        \notag
+    \end{align}
+    Hence a nonzero eigenvector $X$ of $\mathcal M_{A,B}$ with eigenvalue
+    $\mu$ gives the nonzero eigenvector $J(X)$ of the trace-preserving Kraus
+    map $\mathcal K_C$ with the same eigenvalue.
+    Theorem~\ref{thm:kraus_tp_eigenvalue_bound} gives $|\mu|\leq1$.
+\end{proof}
+
+\begin{theorem}[Spectral-radius bound for a trace-preserving mixed Kraus map]
+    \label{thm:kraus_mixed_tp_spectral_radius_bound}
+    \lean{Kraus.mixedMapSpectralRadius_le_one_of_isTP}
+    \leanok
+    \uses{def:kraus_mixed_map_spectral_radius, def:tp_kraus}
+    Suppose that
+    \begin{align}
+        \sum_{i=0}^{d-1}A_i^\dagger A_i&=\Id_{D_1},
+        \notag\\
+        \sum_{i=0}^{d-1}B_i^\dagger B_i&=\Id_{D_2}.
+        \notag
+    \end{align}
+    Then $\varrho(\mathcal M_{A,B})\leq1$.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:kraus_mixed_tp_eigenvalue_bound}
+    On the finite-dimensional space $M_{D_1\times D_2}(\C)$, every spectral
+    value is an eigenvalue. Theorem~\ref{thm:kraus_mixed_tp_eigenvalue_bound}
+    bounds the modulus of each spectral value by $1$, so the spectral radius
+    is at most $1$.
+\end{proof}
+
 \section{Fixed-point projection}
 
 \begin{definition}[Fixed-point projection]\label{def:fixed_point_proj}
