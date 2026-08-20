@@ -473,7 +473,7 @@ audit. Each result was checked against
 `Notes/WolfNotePDF/ch07_semigroup_structure.pdf`; the line ranges above refer
 only to the searchable transcription and do not determine numbering.
 
-## Chapters 4 and 9--11: verified absence of live numbered citations
+## Chapters 4 and 9--11: no live numbered theorem-like citations
 
 No live numbered citation to a theorem-like result in Wolf Chapters 4, 9, 10,
 or 11 occurs in the directories examined here.
@@ -498,3 +498,6 @@ number of the form `4.n`, `9.n`, `10.n`, or `11.n`. It excludes
 `docs/audits/`, `docs/archive/`, `docs/reviews/`, `docs/slides/`, and
 `blueprint/comments/`. The Chapter 4 near matches were then checked for a
 nearby occurrence of `Wolf` and for the `Wolf2012Quantum` bibliography key.
+Definitions lie outside this result-numbering audit. In particular,
+`TNLean/Channel/Basic.lean` cites Wolf Definition 4.1; this is the sole live
+numbered Wolf citation from Chapter 4.
