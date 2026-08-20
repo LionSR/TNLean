@@ -595,8 +595,11 @@ matrix-order tools used independently of the Fundamental Theorem.
     \uses{def:positive_map, thm:posMap_rpow_concave_jensen}
     For a positive \emph{unital} map $T$ and positive-definite~$A$, one has
     $T(\log A)\le\log(T(A))$.
-    This is \cite[Theorem~5.13]{Wolf2012Quantum} for~$f=\log$.
-    Requires unitality ($T(\Id)=\Id$), not merely subunitality.
+    This is the unital form of \cite[Corollary~5.2(3)]{Wolf2012Quantum}.
+    % Local fix (unital logarithm inequality): the printed corollary assumes
+    % only subunitality, but that form fails because the logarithm is unbounded
+    % below at zero. See
+    % docs/paper-gaps/wolf_ch5_operator_jensen_lieb.tex.
 \end{theorem}
 
 \begin{proof}\leanok

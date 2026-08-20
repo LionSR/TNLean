@@ -264,3 +264,119 @@ The enumeration uses the same directories and exclusions as the Chapter 1
 audit. Each result was checked against
 `Notes/WolfNotePDF/ch03_positive_not_completely.pdf`; the line ranges above
 refer only to the searchable transcription and do not determine numbering.
+
+## Chapter 5: Operator inequalities
+
+The printed chapter confirms all live Chapter 5 numbers except the former
+operator-Jensen references to Theorem 5.1. In the printed notes, Theorem 5.1
+is Douglas' theorem. The subunital Jensen inequality for convex powers is a
+case of Theorem 5.11, and the corresponding inequality for concave powers is
+a case of Theorem 5.13.
+The logarithm inequality is Corollary 5.2(3).
+
+| Former citation | Printed citation | Result title | Archived PDF | Local transcription | Verdict |
+|---|---|---|---:|---:|---|
+| Theorem 5.1 | Theorem 5.11 | Projection inequality from operator convexity | PDF page 9; printed page 81 | lines 627--655 | Corrected |
+| Theorem 5.1 | Theorem 5.13 | Operator monotonicity and positive maps | PDF page 11; printed page 83 | lines 714--759 | Corrected |
+| Theorem 5.1 | Corollary 5.2(3) | Logarithm inequality for positive maps | PDF page 11; printed page 83 | lines 761--768 | Corrected with unital local fix |
+| Theorem 5.2 | Theorem 5.2 | Block matrices and Schur complements | PDF page 2; printed page 74 | lines 103--118 | Correct |
+| Theorem 5.3 | Theorem 5.3 | Operator Schwarz inequality | PDF page 3; printed page 75 | lines 180--196 | Correct |
+| Proposition 5.1 | Proposition 5.1 | Schwarz inequality for commutative domains | PDF page 4; printed page 76 | lines 245--260 | Correct |
+| Theorem 5.5 | Theorem 5.5 | Schwarz inequality for subnormal operators | PDF page 4; printed page 76 | lines 282--309 | Correct |
+| Theorem 5.6 | Theorem 5.6 | Schwarz inequality for commuting dominant operators | PDF page 5; printed page 77 | lines 311--323 | Correct |
+| Theorem 5.7 | Theorem 5.7 | Multiplicative domains | PDF page 6; printed page 78 | lines 399--407 | Correct |
+| Theorem 5.10 | Theorem 5.10 | Operator convexity from the projection inequality | PDF page 8; printed page 80 | lines 575--625 | Correct |
+| Theorem 5.11 | Theorem 5.11 | Projection inequality from operator convexity | PDF page 9; printed page 81 | lines 627--655 | Correct |
+| Theorem 5.12 | Theorem 5.12 | Operator convexity and unital positive maps | PDF page 10; printed page 82 | lines 657--697 | Correct |
+| Theorem 5.13 | Theorem 5.13 | Operator monotonicity and positive maps | PDF page 11; printed page 83 | lines 714--759 | Correct |
+| Corollary 5.2 | Corollary 5.2 | Power and logarithm inequalities for positive subunital maps | PDF page 11; printed page 83 | lines 761--777 | Correct |
+| Theorem 5.15 | Theorem 5.15 | Ando--Lieb joint concavity and convexity | PDF page 14; printed page 86 | lines 967--991 | Correct |
+| Theorem 5.17 | Theorem 5.17 | Convex functions and positive maps under the trace | PDF page 16; printed page 88 | lines 1039--1083 | Correct |
+| Example 5.3 | Example 5.3 | A Schwarz map which is not 2-positive | PDF page 5; printed page 77 | lines 354--378 | Correct |
+
+The corrected rows distinguish the conclusions that had formerly been
+assigned collectively to Theorem 5.1. For a positive subunital map,
+Theorem 5.11 gives Jensen's inequality for an operator-convex function with
+nonpositive value at zero. Theorem 5.13 gives the reversed inequality for an
+operator-monotone function with nonnegative value at zero. These apply,
+respectively, to powers with exponent in `[1, 2]` and powers with exponent in
+`[0, 1]`. The logarithm inequality is Corollary 5.2(3). Its printed subunital
+form is false because the logarithm is unbounded below at zero, so the Lean
+theorem uses the necessary unital hypothesis, as documented in
+`docs/paper-gaps/wolf_ch5_operator_jensen_lieb.tex`.
+
+### Citing files
+
+**Theorem 5.2**
+
+- `TNLean/Channel/Schwarz/SchurComplement.lean`
+- `TNLean/Channel/Schwarz/TwoVariable.lean`
+- `TNLean/Channel/Schwarz/TwoVariableUnconditional.lean`
+- `blueprint/src/chapter/ch05_schwarz_schur_complement.tex`
+- `docs/paper-gaps/schur_complement_tfae.tex`
+
+**Theorem 5.3**
+
+- `TNLean/Channel/Peripheral/ClosureFixedPointKraus.lean`
+- `TNLean/Channel/Schwarz/TwoVariable.lean`
+- `TNLean/Channel/Schwarz/TwoVariableEquality.lean`
+- `TNLean/Channel/Schwarz/TwoVariableUnconditional.lean`
+- `blueprint/src/chapter/ch07_spectral_mixed_transfer_and_overlap.tex`
+- `docs/paper-gaps/wolf_ch5_two_variable_unconditional.tex`
+
+**Proposition 5.1**
+
+- `TNLean/Channel/Schwarz/PositiveOnAbelian.lean`
+- `TNLean/Channel/Schwarz/PositiveOnAbelian/Basic.lean`
+- `TNLean/Channel/Schwarz/PositiveOnAbelian/Consequences.lean`
+- `TNLean/Channel/Schwarz/SchwarzNormal.lean`
+- `TNLean/Channel/Schwarz/SchwarzSubnormal.lean`
+- `blueprint/src/chapter/ch18_operator_convexity_schwarz_and_jensen.tex`
+
+**Theorems 5.5 and 5.6**
+
+- `TNLean/Channel/Schwarz/SchwarzSubnormal.lean`
+- `blueprint/src/chapter/ch18_operator_convexity_schwarz_and_jensen.tex`
+
+**Theorem 5.7**
+
+- `TNLean/Channel/Schwarz/MultiplicativeDomain.lean`
+- `TNLean/Channel/Schwarz/MultiplicativeDomainFull.lean`
+- `blueprint/src/chapter/ch05_schwarz_abstract_domains_and_order_auxiliary.tex`
+
+**Theorems 5.10--5.13 and Corollary 5.2**
+
+- `TNLean/Analysis/LiebConcavity.lean`
+- `TNLean/Channel/Schwarz/OperatorConvexity.lean`
+- `TNLean/Channel/Schwarz/OperatorJensenAux.lean`
+- `TNLean/Channel/Schwarz/OperatorMonotone.lean`
+- `blueprint/src/chapter/ch18_operator_convexity.tex`
+- `blueprint/src/chapter/ch18_operator_convexity_schwarz_and_jensen.tex`
+- `docs/paper-gaps/wolf_ch5_operator_jensen_lieb.tex`
+
+**Theorem 5.15**
+
+- `TNLean/Analysis/LiebConcavity.lean`
+- `TNLean/Analysis/LiebSubBoundary.lean`
+- `blueprint/src/chapter/ch18_operator_convexity_lieb_and_resolvent.tex`
+- `docs/paper-gaps/wolf_ch5_operator_jensen_lieb.tex`
+
+**Theorem 5.17**
+
+- `TNLean/Analysis/OperatorConvexity.lean`
+
+**Example 5.3**
+
+- `TNLean/Channel/Schwarz/SchwarzNotCP.lean`
+- `blueprint/src/chapter/ch05_schwarz_abstract_domains_and_order_auxiliary.tex`
+- `blueprint/src/chapter/ch27_channel_asymptotics_fixed_point_algebras.tex`
+- `docs/paper-gaps/wolf_lecture_notes_errata.tex`
+- `docs/paper-gaps/wolf_thm6_12_abstract_schwarz_fixed_points.tex`
+
+### Reproducibility
+
+The enumeration uses the same directories and exclusions as the Chapter 1
+audit, and also checks grouped citations such as “Theorems 5.10--5.13”. Each
+result was checked against
+`Notes/WolfNotePDF/ch05_operator_inequalities.pdf`; the line ranges above refer
+only to the searchable transcription and do not determine numbering.
