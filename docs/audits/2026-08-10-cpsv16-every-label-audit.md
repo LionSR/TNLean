@@ -185,9 +185,10 @@ nodes `thm:mpdo_sal_zcl_bnt_sector_structure` and
   tensor, but Definition 4.1 for that block would force
   $1+2^{-4}=1+2^{-2}$. This is an unfaithful statement, not an unfinished
   outer-sector assembly. The viable route from condition (ii) still has the
-  all-sector normality obstruction after coefficient absorption (#5996) and
-  the projector-controlled assembly after ZCL-derived common-weight absorption
-  (#6632). The two `\notready` nodes record these source (ii)-routes. The
+  replacement all-sector factorization after the failure of absorbed normality
+  (#6775) and the projector-controlled assembly after ZCL-derived common-weight
+  absorption (#6632). The two `\notready` nodes record these source
+  (ii)-routes. The
   printed proof of `prop3to4` has separate proof-path drift because it invokes
   the ZCL lemma `lemmus` although its displayed statement assumes only
   condition-(iv) data; the completed Lean proof avoids that hidden hypothesis.

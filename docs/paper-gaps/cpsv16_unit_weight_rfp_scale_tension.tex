@@ -268,6 +268,75 @@ quasi-idempotence of the doubled-index transfer, the line-246 unit-weight copy,
 and trace preservation of its normal representative. It uses none of the
 vertical coefficient identities discussed below.
 
+\section{Coefficient absorption with all Appendix C.2 conditions}
+
+The two-sector coefficient-absorption example realizes the normalization
+tension without dropping the conditions used in the simple Case-II passage
+\cite[lines~1628--1665 and 1740--1782]{Cirac2016MPDO_arXiv}. Its nonzero
+physical slices are
+\begin{align}
+  K^{00}=K^{11}&=\operatorname{diag}(1/2,0),
+  &K^{22}&=\operatorname{diag}(0,1).
+  \label{eq:caseii-full-standing-slices}
+\end{align}
+Thus, for $N>0$,
+\begin{align}
+  \langle\sigma|\rho_N(K)|\tau\rangle
+  &=\delta_{\sigma,\tau}\left(
+    2^{-N}\mathbf 1_{\{\sigma_k\in\{0,1\}\ \forall k\}}
+    +\mathbf 1_{\{\sigma_k=2\ \forall k\}}\right),
+  &\operatorname{tr}\rho_N(K)&=2>0.
+  \label{eq:caseii-full-standing-mpo}
+\end{align}
+The tensor therefore generates positive semidefinite periodic operators with
+nonzero normalization. With
+\begin{align}
+  P&=\operatorname{diag}(1,1,0),
+  &Q&=I-P,\notag\\
+  \omega_P&=\tfrac14(P\otimes P),
+  &\omega_Q&=Q\otimes Q,
+\end{align}
+its physical closures are
+\begin{align}
+  M_1(X)&=\tfrac{X_{00}}2P+X_{11}Q,
+  &M_2(X)&=X_{00}\omega_P+X_{11}\omega_Q.
+\end{align}
+Partial trace and the measure-and-prepare map
+\begin{align}
+  \mathcal S(Y)&=\operatorname{tr}_2(Y),\notag\\
+  \mathcal R(Y)&=\operatorname{tr}(PYP)\omega_P
+    +\operatorname{tr}(QYQ)\omega_Q
+\end{align}
+are trace-preserving completely positive maps satisfying
+\begin{align}
+  \mathcal S[M_2(X)]&=M_1(X),
+  &\mathcal R[M_1(X)]&=M_2(X).
+\end{align}
+These are the explicit Definition~4.1 equations at lines~638--660. They give
+SAL, while the slice sum gives the literal Definition~4.2 identity
+\begin{align}
+  \mathcal T_K&=I_2,
+  &\mathcal T_K^2&=\mathcal T_K.
+\end{align}
+
+The displayed representatives are normal and biCF, the weights
+$(1/\sqrt2,1)$ satisfy the global unit-weight convention, and the ambient
+tensor has normalized fixed-representative simple canonical form. Nevertheless,
+\begin{align}
+  \rho(\mathcal E_{\mu_0A_0})&=\frac12,
+  &\mu_0A_0&\text{ is not normal}.
+\end{align}
+The component results and their conjunction are in
+\path{TNLean/MPS/MPDO/CaseIIAbsorptionCounterexample.lean}, culminating in
+\leanid{MPOTensor.CaseIIAbsorptionCounterexample.%
+ambient_isSAL_isSimpleCanonicalForm_and_firstAbsorbed_not_isNormalTensor}.
+This repairs the previously missing full-condition counterexample statement
+and classifies the printed absorption inference as \emph{proof-path drift}.
+It does not prove or disprove the claimed all-sector factorization. A
+scale-covariant replacement for the failed factorization route remains open in
+\ghissue{6775}; the subsequent projector-controlled channel assembly remains
+open in \ghissue{6632}.
+
 \section{Unequal raw copies refute Theorem~4.9(iv)$\Rightarrow$(v)}
 
 The scale mismatch is decisive even when the source's global unit-weight
@@ -291,7 +360,8 @@ idempotent, so $(K^{00})^4=(K^{00})^2$. Taking traces gives the false equality
 \[
   1+2^{-4}=1+2^{-2}.
 \]
-The declaration
+The declaration in
+\path{TNLean/MPS/MPDO/Theorem49RepeatedCopyCounterexample.lean},
 \leanid{MPOTensor.CaseIIAbsorptionCounterexample.%
 printed_theorem49_iv_to_v_is_false} kernel-checks explicit component witnesses
 for all standing data, MPDO positivity of the blocked tensor, and this failure
