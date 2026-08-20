@@ -309,25 +309,6 @@ theorem linearMarkedTensor_cornerGramCoefficients
     (V * Xiᴴ) c hc0 (fun v ↦ (hScaled v).symm) u
   simpa [cornerGramCoefficients, Xi] using hPhysical
 
-/-- Evaluating the doubled-index MPS view on paired physical letters is the
-same as evaluating the ket and bra words separately. -/
-theorem evalWord_toMPSTensor_ofFn (M : MPOTensor d D) (N : ℕ)
-    (w : Fin N → Fin (d * d)) :
-    MPSTensor.evalWord M.toMPSTensor (List.ofFn w) =
-      evalWord M (List.ofFn fun k ↦ (w k).divNat)
-        (List.ofFn fun k ↦ (w k).modNat) := by
-  induction N with
-  | zero => simp
-  | succ N ih =>
-      rw [List.ofFn_succ, List.ofFn_succ, List.ofFn_succ]
-      change M (w 0).divNat (w 0).modNat *
-          MPSTensor.evalWord M.toMPSTensor (List.ofFn (w ∘ Fin.succ)) =
-        M (w 0).divNat (w 0).modNat *
-          evalWord M (List.ofFn fun k ↦ (w (Fin.succ k)).divNat)
-            (List.ofFn fun k ↦ (w (Fin.succ k)).modNat)
-      rw [ih (w ∘ Fin.succ)]
-      rfl
-
 end MPOTensor
 
 namespace MPOTensor.IsHorizontalCF
