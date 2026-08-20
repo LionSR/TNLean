@@ -270,6 +270,7 @@ matrices, and let $\E_K$ be its Kraus map.
 \end{lemma}
 
 \begin{proof}\leanok
+    \uses{thm:positive_map_conjTranspose}
     Positivity implies that $E$ preserves adjoints. Taking the adjoint of
     $E(X)=\mu X$ gives the result.
 \end{proof}
@@ -391,6 +392,7 @@ matrices, and let $\E_K$ be its Kraus map.
 
 \begin{proof}\leanok
     \uses{lem:channel-natural-power,
+        thm:cesaro_fixedpoint,
         thm:kraus-power-fixed-point-unique-from-spreading,
         thm:positive_fixedpoint_decomp}
     Decompose $H$ as a difference of positive-semidefinite fixed points of the
