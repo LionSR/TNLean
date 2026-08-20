@@ -8,4 +8,5 @@ Authors: TNLean contributors
 -- Import architecture: docs/import_structure.md.
 -- Generated aggregator module: TNLean.Kraus.Wielandt.RectangularSpan.UniversalityAux
 
+import TNLean.Kraus.Wielandt.RectangularSpan.UniversalityAux.Basic
 import TNLean.Kraus.Wielandt.RectangularSpan.UniversalityAux.Quantitative
