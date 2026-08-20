@@ -275,29 +275,31 @@ not tag a PR head that differs from the merged commit.
 ## 8. Private dependency authentication
 
 TNLean's ordinary `GITHUB_TOKEN` cannot clone a different private repository.
-Before opening the TNLean PR, create a fine-grained token or GitHub App token
-with read-only Contents access to `LionSR/QICLean`, and store it in TNLean as
-`QICLEAN_READ_TOKEN`. Never write the token to a file, command trace, PR body,
+QICLean therefore has a read-only deploy key, and TNLean stores the matching
+private key as the Actions secret `QICLEAN_DEPLOY_KEY`. The release dependency
+must use the SSH URL `git@github.com:LionSR/QICLean.git`; public Lake dependencies
+continue to use HTTPS. Never write the private key to a command trace, PR body,
 or Lake configuration.
 
-Every TNLean workflow that invokes Lake must configure authenticated HTTPS
-before Lake resolves dependencies:
+Every TNLean workflow that invokes Lake must install the key before Lake resolves
+dependencies:
 
 ```yaml
 - name: Authenticate private QICLean dependency
   env:
-    QICLEAN_READ_TOKEN: ${{ secrets.QICLEAN_READ_TOKEN }}
+    QICLEAN_DEPLOY_KEY: ${{ secrets.QICLEAN_DEPLOY_KEY }}
   run: |
-    test -n "$QICLEAN_READ_TOKEN"
-    git config --global \
-      url."https://x-access-token:${QICLEAN_READ_TOKEN}@github.com/".insteadOf \
-      "https://github.com/"
+    test -n "$QICLEAN_DEPLOY_KEY"
+    install -d -m 700 "$HOME/.ssh"
+    printf '%s\n' "$QICLEAN_DEPLOY_KEY" > "$HOME/.ssh/id_ed25519"
+    chmod 600 "$HOME/.ssh/id_ed25519"
+    ssh-keyscan -t ed25519 github.com >> "$HOME/.ssh/known_hosts"
 ```
 
-The secret must be available to push and same-repository pull-request builds.
-Fork pull requests do not receive it, so the repository policy must either run
-trusted maintainer builds after review or use a read-only GitHub App that issues
-a short-lived token. Document this limitation in `CONTRIBUTING.md`.
+The QICLean repository setting must keep this deploy key read-only. The secret
+must be available to push and same-repository pull-request builds. Fork pull
+requests do not receive it, so the repository policy must run a trusted
+maintainer build after review. Document this limitation in `CONTRIBUTING.md`.
 
 ## 9. TNLean integration
 
