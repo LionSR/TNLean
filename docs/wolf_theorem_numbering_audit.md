@@ -133,10 +133,20 @@ statements.
 The transfer-matrix criteria are entrywise consequences of Equation (2.20),
 at lines 560–576, rather than numbered propositions. The unitary-conjugation
 formula is the arbitrary-dimensional matrix-unit analogue of the qubit
-Pauli-transfer discussion at lines 1000–1010.
+Pauli-transfer discussion at lines 1000–1010. The ordinary complex SVD of an
+arbitrary invertible transfer matrix is a general linear-algebraic result; it
+is not the real SVD of the qubit `3 × 3` block discussed in that passage.
 
 ### Files corrected
 
 - `TNLean/Channel/TransferMatrix.lean`
 - `TNLean/Channel/WolfChapter2Index.lean`
+- `TNLean/Channel/NormalForm.lean`
+- `TNLean/Channel/LorentzNormalForm.lean`
+- `TNLean/Channel/LorentzNormalForm/Basic.lean`
+- `TNLean/Channel/LorentzNormalForm/Infimum.lean`
+- `TNLean/Channel/LorentzNormalForm/NormalForm.lean`
 - `TNLean/Channel/LorentzNormalForm/QubitNormalForm.lean`
+- `TNLean/Algebra/MatrixAux.lean`
+- `TNLean/Analysis/MatrixTraceInequalities.lean`
+- `blueprint/src/chapter/ch16_channel_representations_normal_forms_and_determinant.tex`

@@ -267,14 +267,14 @@ project import.
 * `transferMatrix_unitaryConj_sandwich` — Section 2.4 unitary-action identity:
   `(Ad_{U₁} ∘ T ∘ Ad_{U₂})^ = (Ū₁⊗U₁) * T̂ * (Ū₂⊗U₂)` ✓
 
-### Section 2.4 SVD normal form (existence)
+### General matrix SVD results
 
 * `Matrix.svd_of_posSemidef` — **SVD for PSD matrices** (spectral theorem
   formulated): `M = U * diagonal σ * Uᴴ` with `σ ≥ 0` ✓
 * `Matrix.svd_of_isUnit` — **SVD existence for invertible complex matrices**:
   `M = U * diagonal σ * Vᴴ` with `U, V` unitary and `σ > 0` ✓
 * `transferMatrix_svd_of_isUnit` — **SVD representation of a transfer
-  matrix** (Wolf Section 2.4): every invertible transfer matrix admits an SVD ✓
+  matrix**: every invertible transfer matrix admits an SVD ✓
 
 ### Section 2.4 Lorentz normal form (existence)
 

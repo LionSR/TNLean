@@ -18,7 +18,7 @@ import Mathlib.Topology.MetricSpace.Bounded
 # Lorentz normal form: infimum attainment and the AM–GM optimality lemmas
 
 This module formalizes the compactness and optimality arguments of Wolf
-Section 2.3 (Equation (2.36)): for a positive-definite operator `τ` on
+Section 2.4 (Equation (2.36)): for a positive-definite operator `τ` on
 `ℂ^{d₂} ⊗ ℂ^{d₁}`, the infimum of `tr[(S₂ ⊗ₖ S₁) τ (S₂ ⊗ₖ S₁)†]` over
 `(S₁, S₂) ∈ SL(d₁, ℂ) × SL(d₂, ℂ)` is attained, and at the minimiser each
 partial trace saturates the trace–determinant AM–GM bound, hence is scalar.
@@ -35,7 +35,7 @@ partial trace saturates the trace–determinant AM–GM bound, hence is scalar.
 
 ## References
 
-* [M. Wolf, *Quantum Channels & Operations: Guided Tour*, Section 2.3][Wolf2012QChannels]
+* [M. Wolf, *Quantum Channels & Operations: Guided Tour*, Section 2.4][Wolf2012QChannels]
 -/
 
 open scoped Matrix BigOperators ComplexOrder Kronecker Matrix.Norms.Frobenius
@@ -52,9 +52,9 @@ variable {D : ℕ}
 `S₁ ∈ SL(d₁, ℂ)`, `S₂ ∈ SL(d₂, ℂ)` is attained.  That is, the continuous
 function `(S₁, S₂) ↦ tr[(S₂ ⊗ₖ S₁) τ (S₂ ⊗ₖ S₁)†]` achieves its minimum on
 the domain SL(d₁, ℂ) × SL(d₂, ℂ) — the two factors may have different
-dimensions (Wolf, Section 2.3, Equation (2.36)).
+dimensions (Wolf, Section 2.4, Equation (2.36)).
 
-**Proof** (Wolf Section 2.3).  Throughout, `‖·‖` denotes the Frobenius
+**Proof** (Wolf Section 2.4).  Throughout, `‖·‖` denotes the Frobenius
 (Hilbert–Schmidt) norm `‖M‖² = tr[M M†]`; the coercivity bounds below are false
 for the operator norm (e.g. `‖I‖_op² = 1 < n`).  Writing `X = S₂ ⊗ₖ S₁`, the
 smallest-eigenvalue bound for a positive-definite matrix gives
