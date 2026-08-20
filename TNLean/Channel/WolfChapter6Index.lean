@@ -115,8 +115,9 @@ The three clauses of the proposition are represented by:
   increasing sequence $(n_i)$ for which $T^{n_i}\to T_\phi$;
 * `Module.End.peripheralWeightedProjection_eq_comp` —
   $T_\varphi=T\,T_\phi$;
-* `LinearMap.HasBoundedOrbits.tendsto_birkhoffAverage_meanErgodicProjection` —
-  the Cesàro means converge to $T_\infty$.
+* `IsPositiveMap.tendsto_birkhoffAverage_meanErgodicProjection_of_tracePreserving`
+  — the Cesàro means converge to $T_\infty$ for the positive trace-preserving
+  maps of the proposition.
 
 For the positive and trace-preserving conclusions concerning $T_\infty$:
 
