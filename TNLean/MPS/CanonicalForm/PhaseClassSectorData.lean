@@ -8,9 +8,9 @@ import TNLean.MPS.CanonicalForm.BNTGrouping
 import TNLean.MPS.CanonicalForm.PhaseCover
 import TNLean.MPS.Overlap.CastDecay
 import TNLean.MPS.Overlap.CastLemmas
+import TNLean.MPS.Overlap.PeripheralToTransferMapGap
 import TNLean.MPS.SharedInfra.GaugePhase
 import TNLean.MPS.SharedInfra.SectorDecomposition
-import TNLean.MPS.Structure.PrimitivityBridge
 import TNLean.Spectral.TransferOperatorGapNT
 
 /-!

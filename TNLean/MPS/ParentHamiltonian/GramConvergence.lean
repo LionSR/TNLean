@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.Algebra.OperatorNormFrobenius
 import TNLean.MPS.ParentHamiltonian.GroundSpaceGram
-import TNLean.MPS.Structure.PrimitivityBridge
+import TNLean.MPS.Structure.PrimitiveFixedPoint
 import TNLean.Spectral.TransferOperatorGapCommon
 
 /-!

@@ -62,7 +62,7 @@ The proof chains:
    → `HasPrimitiveFixedPoint A`
    via `hasPrimitiveFixedPoint_of_peripheralPrimitive_of_irreducible`
 3. every nonzero PSD fixed point of an irreducible transfer map is PosDef, via
-   `posSemidef_fixedPoint_isPosDef_of_irreducible`
+   `posDef_of_isIrreducibleMap_of_isPrimitiveMPS`
 -/
 theorem isPrimitiveMPS_of_isStronglyIrreduciblePaper [NeZero D]
     (A : MPSTensor d D)
@@ -75,8 +75,7 @@ theorem isPrimitiveMPS_of_isStronglyIrreduciblePaper [NeZero D]
   obtain ⟨ρ', hPrimMPS⟩ :=
     hasPrimitiveFixedPoint_of_peripheralPrimitive_of_irreducible A hIrrT hNorm hPrim
   have hρ'PD : ρ'.PosDef :=
-    posSemidef_fixedPoint_isPosDef_of_irreducible A hIrrMap ρ'
-      hPrimMPS.fixedPoint_psd hPrimMPS.fixedPoint_ne_zero hPrimMPS.fixedPoint_is_fixed
+    posDef_of_isIrreducibleMap_of_isPrimitiveMPS hPrimMPS hIrrMap
   exact ⟨ρ', hPrimMPS, hρ'PD⟩
 
 /-- A primitive MPS tensor in the complementary-gap sense is peripherally primitive in
