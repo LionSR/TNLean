@@ -12,3 +12,4 @@ import TNLean.Kraus.Wielandt.Primitivity
 import TNLean.Kraus.Wielandt.RankOne
 import TNLean.Kraus.Wielandt.RectangularSpan
 import TNLean.Kraus.Wielandt.SpanGrowth
+import TNLean.Kraus.Wielandt.WordTranspose

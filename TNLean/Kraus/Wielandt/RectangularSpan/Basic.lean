@@ -3,11 +3,8 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import Mathlib.Data.Fin.Tuple.Basic
-import Mathlib.Data.List.FinRange
-import Mathlib.Data.Matrix.Mul
-import TNLean.Kraus.Injectivity
 import TNLean.Kraus.Wielandt.SpanGrowth.VectorToMatrixSpan
+import TNLean.Kraus.Wielandt.WordTranspose
 
 /-!
 # Rectangular spans of finite matrix families
@@ -18,22 +15,6 @@ from Sanz, Pérez-García, Wolf, and Cirac, arXiv:0909.5347, Lemma 2(b).
 -/
 
 open scoped Matrix
-
-namespace List
-
-/-- Reversing `List.ofFn` precomposes the indexing function with `Fin.rev`. -/
-private theorem ofFn_reverse {n : ℕ} {α : Type*} (f : Fin n → α) :
-    (List.ofFn f).reverse = List.ofFn (f ∘ Fin.rev) := by
-  calc
-    (List.ofFn f).reverse = (List.map f (List.finRange n)).reverse := by
-      simp only [List.ofFn_eq_map]
-    _ = List.map f (List.finRange n).reverse := by simp only [List.map_reverse]
-    _ = List.map f (List.map Fin.rev (List.finRange n)) := by
-      simp only [List.finRange_reverse]
-    _ = List.map (f ∘ Fin.rev) (List.finRange n) := by simp only [List.map_map]
-    _ = List.ofFn (f ∘ Fin.rev) := by simp only [List.ofFn_eq_map]
-
-end List
 
 namespace Kraus
 
@@ -60,18 +41,6 @@ theorem rectSpan_le_wordSpan
   exact (wordSpan_mul_le K m n) (Submodule.mul_mem_mul hP hQ)
 
 /-! ## Transposed word spans -/
-
-/-- Transposing a word product reverses the word. -/
-theorem evalWord_transpose
-    (K : Fin d → Matrix (Fin D) (Fin D) ℂ) :
-    ∀ w : List (Fin d),
-      (MPSTensor.evalWord K w)ᵀ =
-        MPSTensor.evalWord (fun i ↦ (K i)ᵀ) w.reverse := by
-  intro w
-  induction w with
-  | nil => simp [MPSTensor.evalWord]
-  | cons i w ih =>
-      simp [MPSTensor.evalWord, Matrix.transpose_mul, ih, MPSTensor.evalWord_append]
 
 /-- Transposition identifies the fixed-length word spans of a family and its transpose. -/
 private theorem map_transpose_wordSpan

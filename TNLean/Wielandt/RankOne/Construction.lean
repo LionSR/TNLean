@@ -21,7 +21,7 @@ namespace MPSTensor
 variable {d D : ℕ}
 
 /-- The pointwise transpose of an MPS tensor. -/
-noncomputable abbrev transposeTensor (A : MPSTensor d D) : MPSTensor d D :=
+noncomputable def transposeTensor (A : MPSTensor d D) : MPSTensor d D :=
   Kraus.transposeFamily A
 
 /-- Transposing a word product reverses the word. -/
@@ -47,12 +47,12 @@ theorem cumulativeSpan_transposeTensor_eq_top_of_cumulativeSpan_eq_top
   exact Kraus.cumulativeSpan_transposeFamily_eq_top_of_cumulativeSpan_eq_top A h
 
 /-- The linear map `M ↦ ψ ᵥ* M` for a fixed row vector `ψ`. -/
-noncomputable abbrev vecMulLinearMap (ψ : Fin D → ℂ) :
+noncomputable def vecMulLinearMap (ψ : Fin D → ℂ) :
     Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] (Fin D → ℂ) :=
   Kraus.vecMulLinearMap ψ
 
 /-- The span of row vectors obtained by right multiplication with words of length `n`. -/
-noncomputable abbrev rowSpreadSpan
+noncomputable def rowSpreadSpan
     (A : MPSTensor d D) (ψ : Fin D → ℂ) (n : ℕ) :
     Submodule ℂ (Fin D → ℂ) :=
   Kraus.rowSpreadSpan A ψ n
@@ -61,7 +61,7 @@ noncomputable abbrev rowSpreadSpan
 theorem rowSpreadSpan_eq_vectorSpreadSpan_transpose
     (A : MPSTensor d D) (ψ : Fin D → ℂ) (n : ℕ) :
     rowSpreadSpan A ψ n = vectorSpreadSpan (fun i ↦ (A i)ᵀ) ψ n := by
-  simpa [transposeTensor] using
+  simpa [rowSpreadSpan, transposeTensor] using
     Kraus.rowSpreadSpan_eq_vectorSpreadSpan_transpose A ψ n
 
 /-- Mapping `wordSpan` along `M ↦ ψ ᵥ* M` yields `rowSpreadSpan`. -/
