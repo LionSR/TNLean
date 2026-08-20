@@ -61,7 +61,7 @@ theorem IsInjective.smul
         simp [hc]
     _ = ⊤ := hA
 
-/-- An injective MPS tensor on `D ≥ 1` bond dimension implies `d ≥ 1`. -/
+/-- An injective finite Kraus family on a bond space of dimension `D ≥ 1` has `d ≥ 1`. -/
 theorem neZero_d_of_isInjective {A : Fin d → Matrix (Fin D) (Fin D) ℂ} [NeZero D]
     (hA : IsInjective A) : NeZero d := by
   by_contra h
