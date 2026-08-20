@@ -115,12 +115,12 @@ theorem rectSpan_nilpIndex_eq_range_of_strict_growth
     finrank ℂ (LinearMap.range (LinearMap.mulLeft ℂ P))
   rw [hceiling, finrank_range_mulLeft, hrank_eq]
 
-/-! ### Part 3: Unconditional D²-D+1 from strict growth -/
+/-! ### Part 3: D²-D+1 from strict growth -/
 
-/-- **Unconditional D²-D+1 Lemma 2(b) from strict growth.**
+/-- **D²-D+1 Lemma 2(b) from strict growth.**
 
-Under `IsNormal`, `¬IsUnit`, eigenvector, and the strict growth hypothesis:
-every rank-one matrix `vecMulVec φ ψ` lies in `cumulativeSpan K (D² - D + 1)`.
+Under the noninvertibility, eigenvector, and strict-growth hypotheses, every rank-one matrix
+`vecMulVec φ ψ` lies in `cumulativeSpan K (D² - D + 1)`.
 
 Monotonicity is now automatic (via `rectSpan_nilpIndex_finrank_mono`).
 
@@ -158,14 +158,10 @@ the left-step `K i₀ ·` is a bijection from `rectSpan P K n` onto
 `rectSpan P K (n+1)`. In particular, `rectSpan P K (n+1)` is exactly the
 image of `rectSpan P K n` under left-multiplication by `K i₀`.
 
-This means: ALL generators `K i` (not just `i₀`) contribute to `rectSpan` at
-level `n+1` only through the `K i₀` direction (modulo `ker(mulLeft P)`).
-Under `IsNormal` (primitivity), this invariance leads to a contradiction
-unless the finrank equals the ceiling `D · D'`.
-
-Primitivity contradicts this structural invariance: normality eventually forces
-the rectangular span to fill the whole range of left multiplication, while
-stabilization below the ceiling would keep it in a proper invariant subspace. -/
+Thus every generator `K i`, not only `K i₀`, contributes to `rectSpan` at level `n+1`
+through the `K i₀` direction modulo `ker(mulLeft P)`. If a later application establishes
+eventual fullness of the rectangular span, this invariance cannot persist below the ceiling
+`D · D'`. -/
 theorem rectSpan_leftStep_image_eq_of_finrank_eq
     (K : Fin d → Matrix (Fin D) (Fin D) ℂ) (i₀ : Fin d) (n : ℕ)
     (hfin : finrank ℂ (rectSpan ((K i₀) ^ D) K n) =
@@ -235,28 +231,21 @@ theorem rectSpan_nilpIndex_eq_mulLeft_image_of_finrank_eq
 
 end StrictGrowthReduction
 
-/-! ## Section 8h: Exact-level propagation and strict growth
+/-! ## Section 8h: Exact-level propagation and eigenvector padding
 
-The permanence / strict-growth chain that closes the Appendix-K bottleneck.
+This section proves the transfer-free permanence and padding steps in the Appendix-A argument.
 
 ### Mathematical overview
 
-The key insight is the **right-multiplication decomposition**:
-`wordSpan K (n+1) = wordSpan K n * wordSpan K 1`.
-Combined with the **commutativity** of `mulLeft` and `mulRight` on submodules
-(from matrix associativity), this yields:
+The key identity expands `rectSpan P K (n+1)` by right multiplication with one generator.
+Since left and right matrix multiplication commute, this gives:
 
-1. **Right-expansion**: `rectSpan P K (n+1) = ⨆_j mulRight(K j)(rectSpan P K n)`
-2. **Structural permanence**: if `R_{n+1} = K i₀ · R_n` (from finrank stabilization),
-   then `R_{n+2} = K i₀ · R_{n+1}` (by substituting and using commutativity)
-3. **Finrank permanence**:
-   finrank(R_n) = finrank(R_{n+1}) ⟹ finrank(R_{n+1}) = finrank(R_{n+2})
-4. **Constant finrank**:
-   stabilization at level n ⟹ finrank(R_m) = finrank(R_n) ∀ m ≥ n
-5. **Strict growth under IsNormal**: contrapositive of (4) using existence of N
-   with rectSpan P K N = range(mulLeft P)
-6. **Unconditional sharp D²-D+1**:
-   plug (5) into `wielandt_unconditional_sharp_of_strict_growth`
+1. **Right expansion** of the rectangular span.
+2. **Structural permanence** after one equality of consecutive dimensions.
+3. **Permanence of consecutive dimension equality** at every later level.
+4. **Constancy of the dimension** from the first stabilized level onward.
+5. **Dimension monotonicity** across arbitrary length inequalities.
+6. **Eigenvector padding** from one exact word length to every larger length.
 -/
 
 section ExactPropagation
