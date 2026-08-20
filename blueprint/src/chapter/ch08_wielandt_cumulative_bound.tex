@@ -509,6 +509,26 @@ eventual exact-word spanning, and spectral strong irreducibility.
     step $D-1$.
 \end{proof}
 
+\begin{theorem}[Fixed-length spreading from eventual word-span fullness]
+    \label{thm:eigenvector_spreading_eventually_full}
+    \lean{Kraus.vectorSpreadSpan_eq_top_of_hasEventuallyFullWordSpan_of_eigenvector}
+    \leanok
+    \uses{def:vector_spread_span, thm:eigenvector_spreading,
+        lem:eigenvector_padding}
+    Let $K=(K^i)_{i=1}^d$ be a finite family of $D\times D$ matrices, where
+    $D>0$, and suppose that $S_n(K)=\MN{D}$ for every sufficiently large
+    $n$. If $\varphi\neq0$, $\mu\neq0$, and
+    $K^{i_0}\varphi=\mu\varphi$, then
+    $H_{D-1}(K,\varphi)=\C^D$.
+\end{theorem}
+
+\begin{proof}\leanok
+    Eventual fullness gives a level at which the cumulative matrix span is
+    all of $\MN{D}$. The cumulative vector spaces therefore reach $\C^D$ by
+    level $D-1$. The eigenvector relation then pads shorter words to length
+    $D-1$ by nonzero powers of $\mu$.
+\end{proof}
+
 \begin{theorem}[Fixed-length eigenvector spreading for a primitive channel]
     \label{thm:eigenvector_spreading_primitive}
     \lean{MPSTensor.vectorSpreadSpan_eq_top_of_isPrimitivePaper_of_eigenvector}
