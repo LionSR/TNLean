@@ -344,10 +344,13 @@ theorem isNBlkInjective_of_gaugeEquiv {A B : MPSTensor d D} {N : ℕ}
   obtain ⟨X, hX⟩ := hGauge
   rw [IsNBlkInjective, eq_top_iff]
   intro M _
+  have hA' : Submodule.span ℂ
+      (Set.range fun σ : Fin N → Fin d => evalWord A (List.ofFn σ)) = ⊤ := by
+    exact hA.span_eq_top
   have hM' : ((X⁻¹ : GL _ ℂ) : Matrix _ _ ℂ) * M * (X : Matrix _ _ ℂ) ∈
       Submodule.span ℂ
         (Set.range fun σ : Fin N → Fin d => evalWord A (List.ofFn σ)) :=
-    hA ▸ Submodule.mem_top
+    hA' ▸ Submodule.mem_top
   have hConj : ∀ Y ∈ Submodule.span ℂ
       (Set.range fun σ : Fin N → Fin d => evalWord A (List.ofFn σ)),
       (X : Matrix _ _ ℂ) * Y *

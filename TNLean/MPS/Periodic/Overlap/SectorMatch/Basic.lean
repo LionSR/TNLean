@@ -60,7 +60,7 @@ private lemma isNBlkInjective_smul_of_ne
     {e n N : ℕ} (C : MPSTensor e n) (z : ℂ) (hz : z ≠ 0)
     (hC : IsNBlkInjective C N) :
     IsNBlkInjective (fun i => z • C i) N := by
-  rw [IsNBlkInjective, eq_top_iff] at hC ⊢
+  rw [IsNBlkInjective, Kraus.wordSpan, eq_top_iff] at hC ⊢
   intro X hXtop
   clear hXtop
   have hX : X ∈ Submodule.span ℂ

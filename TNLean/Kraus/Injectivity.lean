@@ -82,8 +82,13 @@ theorem neZero_d_of_isInjective {A : MPSTensor d D} [NeZero D]
 
 We index the blocked tensors by `σ : Fin N → Fin d`, i.e. words of length `N`. -/
 def IsNBlkInjective (A : MPSTensor d D) (N : ℕ) : Prop :=
-  Submodule.span ℂ (Set.range fun σ : Fin N → Fin d => evalWord A (List.ofFn σ))
-    = (⊤ : Submodule ℂ (Matrix (Fin D) (Fin D) ℂ))
+  Kraus.wordSpan A N = (⊤ : Submodule ℂ (Matrix (Fin D) (Fin D) ℂ))
+
+/-- The literal-span form of block injectivity, for proofs that act on the generators. -/
+theorem IsNBlkInjective.span_eq_top {A : MPSTensor d D} {N : ℕ}
+    (hA : IsNBlkInjective A N) :
+    Submodule.span ℂ (Set.range fun σ : Fin N → Fin d => evalWord A (List.ofFn σ)) = ⊤ := by
+  simpa only [IsNBlkInjective, Kraus.wordSpan] using hA
 
 /-- Normality means eventual block injectivity at a positive length:
 there exists `N ≥ 1` such that the tensor is `N`-block-injective.
@@ -115,7 +120,7 @@ theorem isNBlkInjective_one_of_isInjective {A : MPSTensor d D}
       refine ⟨fun _ => i, ?_⟩
       simpa only [List.ofFn_succ, List.ofFn_zero,
         evalWord_cons, evalWord_nil, mul_one] using hi
-  rw [hrange]
+  rw [Kraus.wordSpan, hrange]
   exact h
 
 /-- Algebraic injectivity (1-block) implies normality (eventual block injectivity).

@@ -65,7 +65,7 @@ theorem span_range_evalWord_mul_nonzero_mul_evalWord_eq_top {A : MPSTensor d D}
         simpa [LinearMap.mulLeft_apply, Matrix.smul_mul] using
           congrArg (fun M => a • M) (Matrix.mul_assoc R X T) }
   have hspanE : Submodule.span ℂ E = ⊤ := by
-    simpa [E, IsNBlkInjective] using hA
+    simpa [E] using hA.span_eq_top
   have htop_map :
       Submodule.map₂ sandwich
           (⊤ : Submodule ℂ (Matrix (Fin D) (Fin D) ℂ))
