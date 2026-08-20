@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.Algebra.EigenspaceMap
 import TNLean.Channel.Irreducible.FixedPointUniqueness
+import TNLean.Kraus.Wielandt.Primitivity.VectorSpreadToPrimitive
 import TNLean.Wielandt.Primitivity.ImpliesStronglyIrreducible
 import TNLean.MPS.CanonicalForm.BlockingViaAdjoint
 import TNLean.MPS.Core.TransferChannel
