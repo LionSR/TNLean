@@ -18,7 +18,6 @@ import re
 import sys
 
 from lean_import_syntax import (
-    IMPORT_COMMAND_RE,
     MODULE_NAME,
     pure_import_modules,
     strip_lean_comments,
@@ -30,6 +29,9 @@ GENERATED_MARKER_RE = re.compile(
 )
 GENERATED_PROVENANCE_RE = re.compile(
     rf"(?m)^-- Generated aggregator module: ({MODULE_NAME})$"
+)
+SOURCE_IMPORT_COMMAND_RE = re.compile(
+    rf"(?:(?:public\s+)?(?:meta\s+)?)import\s+(?:all\s+)?({MODULE_NAME})"
 )
 GENERATED_NOTICE = (
     "/-\n"
@@ -116,7 +118,7 @@ def delegated_modules(aggregator: str, direct_imports: set[str]) -> set[str]:
 
 
 def source_imported_modules(path: Path) -> set[str]:
-    """Return the one-line imports in an arbitrary Lean source file."""
+    """Return imports from the leading command preamble of a Lean source file."""
     try:
         source = path.read_text(encoding="utf-8")
     except FileNotFoundError:
@@ -125,10 +127,30 @@ def source_imported_modules(path: Path) -> set[str]:
     if error is not None:
         return set()
     modules: set[str] = set()
+    module_header_seen = False
+    prelude_seen = False
     for line in uncommented.splitlines():
-        match = IMPORT_COMMAND_RE.fullmatch(line.strip())
+        command = line.strip()
+        if not command:
+            continue
+        if command == "module":
+            if module_header_seen or prelude_seen or modules:
+                return set()
+            module_header_seen = True
+            continue
+        if command == "prelude":
+            if prelude_seen or modules:
+                return set()
+            prelude_seen = True
+            continue
+        match = SOURCE_IMPORT_COMMAND_RE.fullmatch(command)
         if match is not None:
             modules.add(match.group(1))
+        elif "import" in command.split():
+            # A malformed import makes the ownership path unverifiable.
+            return set()
+        else:
+            break
     return modules
 
 
