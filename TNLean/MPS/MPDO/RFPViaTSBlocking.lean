@@ -17,6 +17,8 @@ the condition.
 
 ## Main result
 
+* `MPOTensor.blockTwo_isRFPViaTS_of_two_four_maps`: two-to-four and four-to-two
+  physical channels give renormalization maps for the two-site block.
 * `MPOTensor.IsRFPViaTS.blockTwo`: a renormalization fixed point remains one
   after two neighboring physical sites are blocked together.
 
@@ -133,24 +135,82 @@ private theorem coarseningSquaredMap_physClose4
   exact LinearMap.congr_fun (physCloseN_two_eq_physClose2 M) X
 
 private noncomputable def blockedRefinementMap
-    (T : Matrix (Fin d) (Fin d) ℂ →ₗ[ℂ]
-      Matrix (Fin d × Fin d) (Fin d × Fin d) ℂ) :
+    (T : Matrix (Fin d × Fin d) (Fin d × Fin d) ℂ →ₗ[ℂ]
+      Matrix (Fin d × (Fin d × (Fin d × Fin d)))
+        (Fin d × (Fin d × (Fin d × Fin d))) ℂ) :
     Matrix (Fin (d * d)) (Fin (d * d)) ℂ →ₗ[ℂ]
       Matrix (Fin (d * d) × Fin (d * d))
         (Fin (d * d) × Fin (d * d)) ℂ :=
   Matrix.equivReindexMap (blockedPairEquiv d).symm ∘ₗ
-    refinementSquaredMap T ∘ₗ
+    T ∘ₗ
       Matrix.equivReindexMap (blockedIndexEquiv d)
 
 private noncomputable def blockedCoarseningMap
-    (S : Matrix (Fin d × Fin d) (Fin d × Fin d) ℂ →ₗ[ℂ]
-      Matrix (Fin d) (Fin d) ℂ) :
+    (S : Matrix (Fin d × (Fin d × (Fin d × Fin d)))
+        (Fin d × (Fin d × (Fin d × Fin d))) ℂ →ₗ[ℂ]
+      Matrix (Fin d × Fin d) (Fin d × Fin d) ℂ) :
     Matrix (Fin (d * d) × Fin (d * d))
         (Fin (d * d) × Fin (d * d)) ℂ →ₗ[ℂ]
       Matrix (Fin (d * d)) (Fin (d * d)) ℂ :=
   Matrix.equivReindexMap (blockedIndexEquiv d).symm ∘ₗ
-    coarseningSquaredMap S ∘ₗ
+    S ∘ₗ
       Matrix.equivReindexMap (blockedPairEquiv d)
+
+/-- Trace-preserving completely positive maps between the two-site and
+four-site physical closures give a renormalization fixed point after two-site
+blocking, once transported through the canonical blocked coordinates.
+
+Source: arXiv:1606.00608, Definition 4.1, lines 645--659, and the blocked
+two-to-four channel equations used at lines 1819--1825. -/
+theorem blockTwo_isRFPViaTS_of_two_four_maps
+    (M : MPOTensor d D)
+    (S₂₄ : Matrix (Fin d × (Fin d × (Fin d × Fin d)))
+        (Fin d × (Fin d × (Fin d × Fin d))) ℂ →ₗ[ℂ]
+      Matrix (Fin d × Fin d) (Fin d × Fin d) ℂ)
+    (T₂₄ : Matrix (Fin d × Fin d) (Fin d × Fin d) ℂ →ₗ[ℂ]
+      Matrix (Fin d × (Fin d × (Fin d × Fin d)))
+        (Fin d × (Fin d × (Fin d × Fin d))) ℂ)
+    (hS : IsKrausCPTP S₂₄) (hT : IsKrausCPTP T₂₄)
+    (hSclose : ∀ X, S₂₄ (physClose4 M X) = physClose2 M X)
+    (hTclose : ∀ X, T₂₄ (physClose2 M X) = physClose4 M X) :
+    IsRFPViaTS (blockTwo M) := by
+  refine ⟨blockedCoarseningMap S₂₄, blockedRefinementMap T₂₄, ?_, ?_, ?_, ?_⟩
+  · exact isKrausCPTP_comp
+      (isKrausCPTP_comp
+        (Matrix.equivReindexMap_isKrausCPTP (blockedPairEquiv d)) hS)
+      (Matrix.equivReindexMap_isKrausCPTP (blockedIndexEquiv d).symm)
+  · exact isKrausCPTP_comp
+      (isKrausCPTP_comp
+        (Matrix.equivReindexMap_isKrausCPTP (blockedIndexEquiv d)) hT)
+      (Matrix.equivReindexMap_isKrausCPTP (blockedPairEquiv d).symm)
+  · intro X
+    change Matrix.reindex (blockedIndexEquiv d).symm (blockedIndexEquiv d).symm
+        (S₂₄
+          (Matrix.reindex (blockedPairEquiv d) (blockedPairEquiv d)
+            (physClose2 (MPOTensor.blockTwo M) X))) =
+      physClose1 (MPOTensor.blockTwo M) X
+    rw [show Matrix.reindex (blockedPairEquiv d) (blockedPairEquiv d)
+        (physClose2 (MPOTensor.blockTwo M) X) = physClose4 M X by
+      exact LinearMap.congr_fun (physClose2_blockTwo_eq_physClose4 M) X]
+    rw [hSclose X]
+    rw [← show Matrix.reindex (blockedIndexEquiv d) (blockedIndexEquiv d)
+        (physClose1 (MPOTensor.blockTwo M) X) = physClose2 M X by
+      exact LinearMap.congr_fun (physClose1_blockTwo_eq_physClose2 M) X]
+    simp
+  · intro X
+    change Matrix.reindex (blockedPairEquiv d).symm (blockedPairEquiv d).symm
+        (T₂₄
+          (Matrix.reindex (blockedIndexEquiv d) (blockedIndexEquiv d)
+            (physClose1 (MPOTensor.blockTwo M) X))) =
+      physClose2 (MPOTensor.blockTwo M) X
+    rw [show Matrix.reindex (blockedIndexEquiv d) (blockedIndexEquiv d)
+        (physClose1 (MPOTensor.blockTwo M) X) = physClose2 M X by
+      exact LinearMap.congr_fun (physClose1_blockTwo_eq_physClose2 M) X]
+    rw [hTclose X]
+    rw [← show Matrix.reindex (blockedPairEquiv d) (blockedPairEquiv d)
+        (physClose2 (MPOTensor.blockTwo M) X) = physClose4 M X by
+      exact LinearMap.congr_fun (physClose2_blockTwo_eq_physClose4 M) X]
+    simp
 
 /-- A tensor satisfying the trace-preserving completely positive map condition
 of Definition 4.1 remains a renormalization fixed point after two neighboring
@@ -163,44 +223,11 @@ twice-applied channel construction for Theorem 4.9 at lines 1810--1825. -/
 theorem IsRFPViaTS.blockTwo {M : MPOTensor d D} (h : IsRFPViaTS M) :
     IsRFPViaTS (blockTwo M) := by
   obtain ⟨S, T, hS, hT, hSclose, hTclose⟩ := h
-  refine ⟨blockedCoarseningMap S, blockedRefinementMap T, ?_, ?_, ?_, ?_⟩
-  · exact isKrausCPTP_comp
-      (isKrausCPTP_comp
-        (Matrix.equivReindexMap_isKrausCPTP (blockedPairEquiv d))
-        (coarseningSquaredMap_isKrausCPTP hS))
-      (Matrix.equivReindexMap_isKrausCPTP (blockedIndexEquiv d).symm)
-  · exact isKrausCPTP_comp
-      (isKrausCPTP_comp
-        (Matrix.equivReindexMap_isKrausCPTP (blockedIndexEquiv d))
-        (refinementSquaredMap_isKrausCPTP hT))
-      (Matrix.equivReindexMap_isKrausCPTP (blockedPairEquiv d).symm)
-  · intro X
-    change Matrix.reindex (blockedIndexEquiv d).symm (blockedIndexEquiv d).symm
-        (coarseningSquaredMap S
-          (Matrix.reindex (blockedPairEquiv d) (blockedPairEquiv d)
-            (physClose2 (MPOTensor.blockTwo M) X))) =
-      physClose1 (MPOTensor.blockTwo M) X
-    rw [show Matrix.reindex (blockedPairEquiv d) (blockedPairEquiv d)
-        (physClose2 (MPOTensor.blockTwo M) X) = physClose4 M X by
-      exact LinearMap.congr_fun (physClose2_blockTwo_eq_physClose4 M) X]
-    rw [coarseningSquaredMap_physClose4 M S hSclose X]
-    rw [← show Matrix.reindex (blockedIndexEquiv d) (blockedIndexEquiv d)
-        (physClose1 (MPOTensor.blockTwo M) X) = physClose2 M X by
-      exact LinearMap.congr_fun (physClose1_blockTwo_eq_physClose2 M) X]
-    simp
-  · intro X
-    change Matrix.reindex (blockedPairEquiv d).symm (blockedPairEquiv d).symm
-        (refinementSquaredMap T
-          (Matrix.reindex (blockedIndexEquiv d) (blockedIndexEquiv d)
-            (physClose1 (MPOTensor.blockTwo M) X))) =
-      physClose2 (MPOTensor.blockTwo M) X
-    rw [show Matrix.reindex (blockedIndexEquiv d) (blockedIndexEquiv d)
-        (physClose1 (MPOTensor.blockTwo M) X) = physClose2 M X by
-      exact LinearMap.congr_fun (physClose1_blockTwo_eq_physClose2 M) X]
-    rw [refinementSquaredMap_physClose2 M T hTclose X]
-    rw [← show Matrix.reindex (blockedPairEquiv d) (blockedPairEquiv d)
-        (physClose2 (MPOTensor.blockTwo M) X) = physClose4 M X by
-      exact LinearMap.congr_fun (physClose2_blockTwo_eq_physClose4 M) X]
-    simp
+  exact blockTwo_isRFPViaTS_of_two_four_maps M
+    (coarseningSquaredMap S) (refinementSquaredMap T)
+    (coarseningSquaredMap_isKrausCPTP hS)
+    (refinementSquaredMap_isKrausCPTP hT)
+    (coarseningSquaredMap_physClose4 M S hSclose)
+    (refinementSquaredMap_physClose2 M T hTclose)
 
 end MPOTensor
