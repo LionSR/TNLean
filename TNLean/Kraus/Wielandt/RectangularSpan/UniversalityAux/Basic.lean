@@ -133,13 +133,13 @@ This is the "power membership" ingredient needed by
 theorem pow_mem_wordSpan (K : Fin d → Matrix (Fin D) (Fin D) ℂ) (i₀ : Fin d) :
     (K i₀) ^ D ∈ wordSpan K D := by
   have h := evalWord_mem_wordSpan K (List.replicate D i₀)
-  rwa [MPSTensor.evalWord_replicate, List.length_replicate] at h
+  rwa [Kraus.evalWord_replicate, List.length_replicate] at h
 
 /-- **More general power membership**: `(K i₀)^k ∈ wordSpan K k` for any `k`. -/
 theorem pow_mem_wordSpan' (K : Fin d → Matrix (Fin D) (Fin D) ℂ) (i₀ : Fin d) (k : ℕ) :
     (K i₀) ^ k ∈ wordSpan K k := by
   have h := evalWord_mem_wordSpan K (List.replicate k i₀)
-  rwa [MPSTensor.evalWord_replicate, List.length_replicate] at h
+  rwa [Kraus.evalWord_replicate, List.length_replicate] at h
 
 /-- **Eigenvector lies in the range of the D-th power.**
 

@@ -39,10 +39,10 @@ theorem pow_single_mem_wordSpan
 private structure BlockedTensorRangeData
     (K : Fin d → Matrix (Fin D) (Fin D) ℂ) (L : ℕ)
     (σ₀ τ₀ : Fin L → Fin d) (φ ψ : Fin D → ℂ) where
-  B : Fin (MPSTensor.blockPhysDim d L) → Matrix (Fin D) (Fin D) ℂ
+  B : Fin (Kraus.blockPhysDim d L) → Matrix (Fin D) (Fin D) ℂ
   P : Matrix (Fin D) (Fin D) ℂ
   Q : Matrix (Fin D) (Fin D) ℂ
-  hB : B = MPSTensor.blockTensor K L
+  hB : B = Kraus.blockTensor K L
   hP : P ∈ wordSpan B D
   hQ : Q ∈ wordSpan B D
   hφ_range : φ ∈ LinearMap.range (Matrix.toLin' P)
@@ -55,15 +55,15 @@ private noncomputable def blockedTensorRangeData
     (heigφ : Kraus.evalWord K (List.ofFn σ₀) *ᵥ φ = μ • φ)
     (heigψ : (Kraus.evalWord K (List.ofFn τ₀))ᵀ *ᵥ ψ = ν • ψ) :
     BlockedTensorRangeData K L σ₀ τ₀ φ ψ := by
-  let B := MPSTensor.blockTensor K L
-  let i₀ : Fin (MPSTensor.blockPhysDim d L) :=
-    (MPSTensor.decodeBlockEquiv d L).symm σ₀
-  let i₁ : Fin (MPSTensor.blockPhysDim d L) :=
-    (MPSTensor.decodeBlockEquiv d L).symm τ₀
+  let B := Kraus.blockTensor K L
+  let i₀ : Fin (Kraus.blockPhysDim d L) :=
+    (Kraus.decodeBlockEquiv d L).symm σ₀
+  let i₁ : Fin (Kraus.blockPhysDim d L) :=
+    (Kraus.decodeBlockEquiv d L).symm τ₀
   have hBi₀ : B i₀ = Kraus.evalWord K (List.ofFn σ₀) := by
-    simp [B, i₀, MPSTensor.blockTensor, MPSTensor.wordOfBlock]
+    simp [B, i₀, Kraus.blockTensor, Kraus.wordOfBlock]
   have hBi₁ : B i₁ = Kraus.evalWord K (List.ofFn τ₀) := by
-    simp [B, i₁, MPSTensor.blockTensor, MPSTensor.wordOfBlock]
+    simp [B, i₁, Kraus.blockTensor, Kraus.wordOfBlock]
   refine
     { B := B
       P := (B i₀) ^ D
@@ -109,7 +109,7 @@ theorem exists_rankOne_mem_wordSpan_blockTensor [NeZero D]
       Kraus.evalWord K (List.ofFn σ₀) *ᵥ φ = μ • φ ∧
       (Kraus.evalWord K (List.ofFn τ₀))ᵀ *ᵥ ψ = ν • ψ ∧
       Matrix.vecMulVec φ ψ ∈
-        wordSpan (MPSTensor.blockTensor K N₀) m_blocked := by
+        wordSpan (Kraus.blockTensor K N₀) m_blocked := by
   classical
   obtain ⟨σ₀, μ, φ, hμ, hφ, heigφ⟩ :=
     exists_eigenvector_of_wordSpan_eq_top K hN₀
@@ -125,8 +125,8 @@ theorem exists_rankOne_mem_wordSpan_blockTensor [NeZero D]
     exact heigψ'
   let data := blockedTensorRangeData K N₀ σ₀ τ₀ φ ψ μ ν hμ hν heigφ heigψ
   have hBtop : wordSpan data.B N₀ = ⊤ := by
-    have hInjective : Kraus.IsInjective (MPSTensor.blockTensor K N₀) :=
-      (MPSTensor.isNBlkInjective_iff_blockTensor_isInjective K N₀).mp hN₀
+    have hInjective : Kraus.IsInjective (Kraus.blockTensor K N₀) :=
+      (Kraus.isNBlkInjective_iff_blockTensor_isInjective K N₀).mp hN₀
     have hB1 : wordSpan data.B 1 = ⊤ := by
       rw [wordSpan_one, data.hB]
       exact hInjective
