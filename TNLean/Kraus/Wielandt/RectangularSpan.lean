@@ -9,3 +9,4 @@ Authors: TNLean contributors
 -- Generated aggregator module: TNLean.Kraus.Wielandt.RectangularSpan
 
 import TNLean.Kraus.Wielandt.RectangularSpan.Basic
+import TNLean.Kraus.Wielandt.RectangularSpan.Growth
