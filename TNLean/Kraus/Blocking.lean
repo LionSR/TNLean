@@ -300,21 +300,6 @@ lemma ofFn_blockedConfigEquiv (d N L : ℕ)
   change (List.ofFn fun j : Fin L => decodeBlock d L (σ i) j) = (wordOfBlock d L ∘ σ) i
   simp [wordOfBlock, Function.comp]
 
-private theorem list_ofFn_comp_fin_rev {L : ℕ} {α : Type*} (σ : Fin L → α) :
-    List.ofFn (σ ∘ Fin.rev) = (List.ofFn σ).reverse := by
-  calc
-    List.ofFn (σ ∘ Fin.rev)
-        = List.map (σ ∘ Fin.rev) (List.finRange L) := by
-          simp [List.ofFn_eq_map]
-    _ = List.map σ (List.map Fin.rev (List.finRange L)) := by
-          simp [List.map_map, Function.comp_def]
-    _ = List.map σ (List.finRange L).reverse := by
-          simp [List.finRange_reverse]
-    _ = (List.map σ (List.finRange L)).reverse := by
-          simp [List.map_reverse]
-    _ = (List.ofFn σ).reverse := by
-          simp [List.ofFn_eq_map]
-
 private theorem evalWord_pointwise_conjTranspose_reverse (A : MPSTensor d D) :
     ∀ w : List (Fin d), (evalWord (fun i => (A i)ᴴ) w)ᴴ = evalWord A w.reverse := by
   intro w
@@ -446,7 +431,7 @@ theorem sum_evalWord_mul_conjTranspose_evalWord
             have hword :
                 List.ofFn (revEquiv ρ) = (List.ofFn ρ).reverse := by
               simpa [revEquiv, Equiv.arrowCongr, Function.comp_def] using
-                list_ofFn_comp_fin_rev (σ := ρ)
+                (List.ofFn_reverse ρ).symm
             have hAdjEval :
                 (evalWord Aadj (List.ofFn (revEquiv ρ)))ᴴ =
                   evalWord A (List.ofFn ρ) := by
