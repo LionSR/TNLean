@@ -40,6 +40,7 @@ import TNLean.Channel.KrausCPTP
 import TNLean.Channel.KrausCornerCompression
 import TNLean.Channel.KrausFreedom
 import TNLean.Channel.KrausGauge
+import TNLean.Channel.KrausIterateChoi
 import TNLean.Channel.KrausMap
 import TNLean.Channel.KrausRank
 import TNLean.Channel.KrausRectangular
