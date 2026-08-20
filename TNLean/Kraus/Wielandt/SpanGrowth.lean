@@ -11,3 +11,4 @@ Authors: TNLean contributors
 import TNLean.Kraus.Wielandt.SpanGrowth.CumulativeSpan
 import TNLean.Kraus.Wielandt.SpanGrowth.CumulativeToWordSpan
 import TNLean.Kraus.Wielandt.SpanGrowth.EigenvectorSpreading
+import TNLean.Kraus.Wielandt.SpanGrowth.NonzeroTraceProduct
