@@ -12,9 +12,9 @@ import TNLean.MPS.MPDO.PhysicalBlocking
 import TNLean.MPS.MPDO.RFPViaTS
 
 /-!
-# Assembly of blocked renormalization channels across BNT sectors
+# Composition of blocked renormalization channels across BNT sectors
 
-This file proves the conditional channel-assembly step in the viable
+This file proves the conditional channel-composition theorem in the viable
 zero-correlation-length route to the all-BNT part of the fundamental theorem
 for matrix product density operators. The construction measures the outer BNT
 sector on the first original physical site and then applies that sector's
@@ -389,7 +389,7 @@ theorem refinementMapInChainCoordinates_physCloseN
   exact (Matrix.reindexLinearEquiv ℂ ℂ (blockedTwoChainEquiv d)
     (blockedTwoChainEquiv d)).symm_apply_apply (physCloseN K 4 X)
 
-/-! ### Projector-controlled assembly -/
+/-! ### Projector-controlled channel composition -/
 
 /-- Assemble sectorwise blocked renormalization channels in ordinary chain
 coordinates. The same sector boundary is used at lengths two and four.
