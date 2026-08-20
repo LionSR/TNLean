@@ -610,6 +610,68 @@ $\mathcal K^{[2]}$. These statements are proved by
 blockTwo_tensor_isRFPViaTS}, and the general blocking theorem
 \leanid{MPOTensor.IsRFPViaTS.blockTwo}.
 
+\subsection{Pair-preserving two-to-four-site maps}
+
+There is a sharp trace obstruction to applying the twice-iterated maps while
+retaining every fixed pair of outer sector labels.  For an arbitrary
+physical-sector factorization, put
+\[
+  C_{k,h}=\operatorname{tr}(\eta_{k,h}),
+  \qquad
+  \Theta_{k,h}
+  =\bigoplus_{l,m}
+    \eta_{k,l}\otimes\eta_{l,m}\otimes\eta_{m,h}.
+\]
+Additivity of trace on direct sums and multiplicativity on tensor products
+give
+\[
+  \operatorname{tr}(\Theta_{k,h})
+  =\sum_{l,m}C_{k,l}C_{l,m}C_{m,h}
+  =(C^3)_{k,h}.
+\]
+It follows that a trace-preserving family which sends every
+$\eta_{k,h}$ to the corresponding $\Theta_{k,h}$, or every
+$\Theta_{k,h}$ to the corresponding $\eta_{k,h}$, forces
+\[
+  C=C^3.
+\]
+This project-derived result is a \emph{conditional helper}: it identifies the
+necessary trace equality for a pair-preserving construction, but it neither
+asserts that the source maps preserve such pairs nor constructs a
+label-mixing alternative.  The trace identity and its two directions are
+proved in
+\leanid{MPOTensor.PhysicalSectorFactorization.%
+trace_fourSiteNeighboringOperator},
+\leanid{MPOTensor.PhysicalSectorFactorization.%
+neighboringTraceMatrix_eq_pow_three_of_pairwise_coarsening}, and
+\leanid{MPOTensor.PhysicalSectorFactorization.%
+neighboringTraceMatrix_eq_pow_three_of_pairwise_refinement}.
+
+For the selected four-sector factorization of the active-spanning witness,
+$C=QL$.  Rectangular idempotence of $LQ$ gives $C^2=C^3$, but the explicit
+entries satisfy $C_{0,1}=1/8$ and $(C^2)_{0,1}=1/4$.  Hence
+\[
+  C^2=C^3,
+  \qquad
+  C\ne C^3,
+\]
+and neither direction of a pair-preserving trace-preserving map can exist for
+these four selected sectors.  This is proved in
+\leanid{MPOTensor.ActiveSectorSpanningCounterexample.%
+not_exists_pairwise_fourSite_coarsening} and
+\leanid{MPOTensor.ActiveSectorSpanningCounterexample.%
+not_exists_pairwise_fourSite_refinement}.
+
+This exclusion is \emph{proof-path drift}, not an obstruction to
+renormalization.  The trace-preserving completely positive maps above use the
+many-to-one rule $f(i,j)$ and therefore coarsen the selected labels; after
+iteration they still prove the renormalization equations for
+$\mathcal K^{[2]}$.  They are not among the fixed-$(k,h)$ families excluded by
+the trace calculation.  Likewise, the one-sector factorization has no such
+four-sector obstruction.  Thus this calculation rules out the selected
+pair-preserving route but does not construct the general coarsened or
+label-mixing maps sought in \ghissue{6793}; that issue remains open.
+
 This positive result is not invariant under the normalization above. Put
 $P=\operatorname{diag}(1,0)$. The physical-trace transfer of the normalized
 representative and that of its two-site blocking are
