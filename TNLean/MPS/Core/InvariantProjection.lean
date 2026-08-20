@@ -26,12 +26,12 @@ variable {d D : ℕ}
 
 /-- A matrix product tensor has a nontrivial invariant orthogonal projection if its
 finite matrix family has one. -/
-def HasInvariantProj (A : MPSTensor d D) : Prop :=
+abbrev HasInvariantProj (A : MPSTensor d D) : Prop :=
   Kraus.HasInvariantProj A
 
 /-- A matrix product tensor is irreducible if its finite matrix family has no nontrivial
 invariant orthogonal projection. -/
-def IsIrreducibleTensor (A : MPSTensor d D) : Prop :=
+abbrev IsIrreducibleTensor (A : MPSTensor d D) : Prop :=
   ¬ HasInvariantProj A
 
 end MPSTensor
