@@ -3,12 +3,12 @@ eq:II_auxcor	358	Corollary 2.11	(?<![A-Za-z0-9])Corollary 2\.11(?![0-9]|\.[0-9])
 AA=A	401	Theorem 3.1	(?<![A-Za-z0-9])Theorem 3\.1(?![0-9]|\.[0-9])	malformed\s+source\s+blocking\s+indices
 III_CFI_RFP	546	Theorem 3.11	(?<![A-Za-z0-9])Theorem 3\.11(?![0-9]|\.[0-9])	repeated\-copy\s+physical\-routing\s+boundary
 eq:III_isometry	551	Theorem 3.11	(?<![A-Za-z0-9])Theorem 3\.11(?![0-9]|\.[0-9])	repeated\-copy\s+physical\-routing\s+boundary
-K=MM	854	Theorem 4.9	(?<![A-Za-z0-9])Theorem 4\.9(?![0-9]|\.[0-9])	all\-sector\s+Case\-II\s+boundary
-KxKy=0	866	Theorem 4.9	(?<![A-Za-z0-9])Theorem 4\.9(?![0-9]|\.[0-9])	all\-sector\s+Case\-II\s+boundary
-UkU=rl	872	Theorem 4.9	(?<![A-Za-z0-9])Theorem 4\.9(?![0-9]|\.[0-9])	all\-sector\s+Case\-II\s+boundary
-etakhetc	877	Theorem 4.9	(?<![A-Za-z0-9])Theorem 4\.9(?![0-9]|\.[0-9])	all\-sector\s+Case\-II\s+boundary
-tralktrrk	882	Theorem 4.9	(?<![A-Za-z0-9])Theorem 4\.9(?![0-9]|\.[0-9])	all\-sector\s+Case\-II\s+boundary
-PsiPhi	887	Theorem 4.9	(?<![A-Za-z0-9])Theorem 4\.9(?![0-9]|\.[0-9])	all\-sector\s+Case\-II\s+boundary
+K=MM	854	Theorem 4.9	(?<![A-Za-z0-9])Theorem 4\.9(?![0-9]|\.[0-9])	two\-site\s+blocking\s+definition\s+boundary
+KxKy=0	866	Theorem 4.9	(?<![A-Za-z0-9])Theorem 4\.9(?![0-9]|\.[0-9])	raw\s+repeated\-copy\-weight\s+boundary
+UkU=rl	872	Theorem 4.9	(?<![A-Za-z0-9])Theorem 4\.9(?![0-9]|\.[0-9])	raw\s+repeated\-copy\-weight\s+boundary
+etakhetc	877	Theorem 4.9	(?<![A-Za-z0-9])Theorem 4\.9(?![0-9]|\.[0-9])	raw\s+repeated\-copy\-weight\s+boundary
+tralktrrk	882	Theorem 4.9	(?<![A-Za-z0-9])Theorem 4\.9(?![0-9]|\.[0-9])	raw\s+repeated\-copy\-weight\s+boundary
+PsiPhi	887	Theorem 4.9	(?<![A-Za-z0-9])Theorem 4\.9(?![0-9]|\.[0-9])	raw\s+repeated\-copy\-weight\s+boundary
 UMU	948	Proposition 4.13	(?<![A-Za-z0-9])Proposition 4\.13(?![0-9]|\.[0-9])	rectangular\-coisometry\s+orientation
 eq:algebra	978	Theorem 4.14	(?i)^(?!.*proof\s+of\s+Theorem 4\.14).*?(?<![A-Za-z0-9])Theorem 4\.14(?![0-9]|\.[0-9])	algebra\s+characterization\s+containing\s+this\s+clause
 idempotent	982	Theorem 4.14	(?i)^(?!.*proof\s+of\s+Theorem 4\.14).*?(?<![A-Za-z0-9])Theorem 4\.14(?![0-9]|\.[0-9])	algebra\s+characterization\s+containing\s+this\s+clause

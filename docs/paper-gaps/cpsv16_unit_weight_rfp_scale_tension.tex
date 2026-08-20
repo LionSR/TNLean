@@ -154,8 +154,11 @@ Since $\operatorname{diag}(1,-1)^2=I$, its two-site blocking has one sector,
 the scalar unit normal representative, two copies of unit weight, and total
 virtual dimension two. The doubled physical-trace transfer is the one-by-one
 matrix $(1)$ and is non-nilpotent. Thus
-\leanid{MPOTensor.SimpleVanishingCounterexample.M_isSimple_and_isSourceSimple_and_not_isNonvanishingSourceSimple} proves that
-the tensor is normalized-simple and source-simple: $\rho_2(M)=2I\ne0$
+\leanid{MPOTensor.SimpleVanishingCounterexample.M_isSimple},
+\leanid{MPOTensor.SimpleVanishingCounterexample.M_isSourceSimple}, and
+\leanid{MPOTensor.SimpleVanishingCounterexample.M_not_isNonvanishingSourceSimple}
+prove that the tensor is normalized-simple and source-simple:
+$\rho_2(M)=2I\ne0$
 supplies existential nontriviality. It is not nonvanishing source-simple because
 $\rho_1(M)=0$. This witness does not refute
 Definition~4.7, is not an RFP claim, and gives no rigidity statement for BNT
@@ -237,6 +240,48 @@ made about every positive blocking. The normalized obstruction instead combines
 quasi-idempotence of the doubled-index transfer, the line-246 unit-weight copy,
 and trace preservation of its normal representative. It uses none of the
 vertical coefficient identities discussed below.
+
+\section{Unequal raw copies refute Theorem~4.9(iv)$\Rightarrow$(v)}
+
+The scale mismatch is decisive even when the source's global unit-weight
+convention is satisfied. Let $A=1$ be the sole scalar BNT representative and
+take two raw copies with weights $1$ and $1/2$. Then the one-letter tensor has
+local virtual matrix
+\[
+  K^{00}=\operatorname{diag}(1,1/2).
+\]
+This is exactly a BNT canonical presentation: both weights have modulus at
+most one and the first has modulus one. Every positive-length contraction is
+$1+2^{-N}>0$, the scalar representative is normal and nonnilpotent, and the
+singleton family has simultaneous one-letter span. Condition~(iv) also holds:
+the representative generates MPDOs, the distinct-layer equation is vacuous,
+and the scalar physical-sector factorization has positive neighboring
+operator and normalized rank-one trace coefficients.
+
+Nevertheless, the sole local matrix of $K^{[2]}$ is $(K^{00})^2$. If the
+blocked tensor satisfied Definition~4.1, its physical-trace transfer would be
+idempotent, so $(K^{00})^4=(K^{00})^2$. Taking traces gives the false equality
+\[
+  1+2^{-4}=1+2^{-2}.
+\]
+The declaration
+\leanid{MPOTensor.CaseIIAbsorptionCounterexample.%
+printed_theorem49_iv_to_v_is_false} kernel-checks explicit component witnesses
+for all standing data, MPDO positivity of the blocked tensor, and this failure
+in one conjunction. Thus the literal implication
+(iv)$\Rightarrow$(v) is refuted and classified as an \emph{unfaithful
+statement}. The printed route has \emph{proof-path drift}: condition~(iv) does
+not constrain repeated-copy weights, so no outer-sector assembly can repair
+the claim.
+
+The source's viable route is instead (ii)$\Rightarrow$(v). In the earlier
+Case-II argument, lines~1646--1665 use literal zero correlation length to make
+all copy weights within each BNT sector equal and absorb their common value.
+The repeated-copy tensor above fails condition~(ii), since
+$\operatorname{diag}(1,1/2)$ is not idempotent. Consequently it does not
+contradict the source proposition \texttt{prop2to5}; the remaining work there
+is the all-sector factorization and projector-controlled channel assembly
+after common-weight absorption.
 
 \section{The vertical one-label identity}
 

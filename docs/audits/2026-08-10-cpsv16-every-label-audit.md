@@ -98,7 +98,7 @@ is unlabelled and is recorded here and in the maintained coverage crosswalk.
 | Example 3.4, `Ex:ZCL` | 453 | CID does not imply a renormalization fixed point | **Complete** in Chapter 15: `def:cpsv16_example_34_tensor`, `thm:cpsv16_example_34_mpv`, `thm:cpsv16_example_34_cid`, and `thm:cpsv16_example_34_not_rfp` |
 | Example 4.10, `ExZCLnoSAL` | 898 | ZCL does not imply SAL | Source reconciled in `docs/paper-gaps/cpsv16_examples_4_10_4_11_entropy.tex`; the integer comparison and log-ratio positivity are certified in `CPSVExamples410411Arithmetic`, while spectra and tensor links remain under issue #6301 |
 | Example 4.11, `ExSALnoZCL` | 908 | SAL does not imply ZCL | Printed SAL claim refuted for the literal finite periodic family; exact spectra, entropy, and effective/ambient non-SAL are formalized, while `CPSVExample411SourceZCL` proves that both physical-trace transfers are nonzero and fail the literal Definition 4.2 idempotence diagram, as well as its scale-invariant repair; no legacy doubled-index ZCL or thermodynamic claim is made |
-| Example 4.12, unlabelled | 929 | The toric-code boundary tensor is claimed to be SAL, ZCL, and RFP, but not of the simple GSNNCH form | Tracked by issue #5919; the MPO formula is explicit, while the trace-preserving maps needed for the printed RFP assertion remain to be constructed |
+| Example 4.12, unlabelled | 932 | The toric-code boundary tensor is claimed to be SAL, ZCL, and RFP, but not of the simple GSNNCH form | The formula, positivity, one-site trace loss, and SAL are complete. The printed tensor satisfies $\mathcal T_M^2=2\mathcal T_M\ne\mathcal T_M$, so literal ZCL and RFP are false for that representative. The normalized RFP problem remains in #6044, and the full GSNNCH exclusion remains in #6045 |
 
 ## Appendix D omissions and corrections
 
@@ -138,12 +138,12 @@ the printed statement.
 | Corollary 3.12 | `cor:cpsv_iii_cor3_status` | active phase-class residual-isometry results in Chapter 26 |
 | Theorem 4.4 | `thm:cpsv_theorem44_printed_status` | local purification equivalences and global counterexamples in Chapter 21 |
 | Proposition 4.5 | `thm:cpsv_prop45_printed_status` | monotonicity and finite-chain bounds; parity counterexample to the limit |
-| Theorem 4.9 | `thm:cpsv_theorem49_printed_status` | completed implications plus the two preserved Case-II not-ready nodes |
+| Theorem 4.9 | `thm:cpsv_theorem49_printed_status`; `thm:mpdo_theorem49_iv_to_v_counterexample` | completed implications; literal (iv)$\Rightarrow$(v) refuted by the exact repeated-copy capstone; the two preserved not-ready nodes record the viable source (ii)$\Rightarrow$(iv) and (ii)$\Rightarrow$(v) routes |
 | Theorem 4.14 | `thm:cpsv_theorem414_printed_status` | algebra equivalence and corrected active-support fusion equivalence |
 | Lemma A.5 | `lem:cpsv_power_sum_printed_status` | `thm:bounded_power_sum_multiset` |
 | Corollary A.6 | `cor:cpsv_corollary_a6_printed_status` | active nonzero unitary refinements in Chapter 11 |
 | Proposition C.14 | `thm:cpsv_prop_c14_printed_status` | `thm:mpdo_canonical_bnt_proportional_sectors_zcl_sal` |
-| Examples 4.10--4.12 | `thm:cpsv_examples410_412_status` | Examples 4.10 and 4.11: issues #6301 and #6302; Example 4.12: issue #5919 |
+| Examples 4.10--4.12 | `thm:cpsv_examples410_412_status` | Examples 4.10 and 4.11: issues #6301 and #6302; Example 4.12: literal normalization resolved, normalized RFP #6044 and full GSNNCH exclusion #6045 open |
 | Appendix D `RFP-gauge` | `thm:cpsv_rfp_gauge_printed_status` | cube-phase obstruction plus active issue #5920 |
 | Appendix D Fibonacci periodic rank formula | `thm:cpsv_fibonacci_periodic_rank`; `thm:cpsv_fibonacci_operator_rank_not_geometric`; `thm:cpsv_fibonacci_not_strong_rfp` | complete periodic rank formula, non-geometricity, and $\lnot\,\mathrm{IsStrongRFP}$ conclusion |
 
@@ -179,9 +179,18 @@ nodes `thm:mpdo_sal_zcl_bnt_sector_structure` and
   positive-length global equations do not detect nilpotent hidden sectors.
 - Proposition 4.5 is complete for monotonicity and finite-chain bounds, but its
   unrestricted thermodynamic-limit clause is false.
-- Theorem 4.9 still has the all-sector Case-II normality obstruction after
-  coefficient absorption.  The existing two `\notready` nodes are the exact
-  downstream statements affected by it.
+- Theorem 4.9(iv)$\Rightarrow$(v) is refuted by the scalar BNT presentation
+  with raw copy weights $1$ and $1/2$: explicit component witnesses establish
+  all standing hypotheses, condition (iv), and MPDO positivity of the blocked
+  tensor, but Definition 4.1 for that block would force
+  $1+2^{-4}=1+2^{-2}$. This is an unfaithful statement, not an unfinished
+  outer-sector assembly. The viable route from condition (ii) still has the
+  all-sector normality obstruction after coefficient absorption (#5996) and
+  the projector-controlled assembly after ZCL-derived common-weight absorption
+  (#6632). The two `\notready` nodes record these source (ii)-routes. The
+  printed proof of `prop3to4` has separate proof-path drift because it invokes
+  the ZCL lemma `lemmus` although its displayed statement assumes only
+  condition-(iv) data; the completed Lean proof avoids that hidden hypothesis.
 - Theorem 4.14 is complete for the algebra clause and for the corrected
   active-support fusion clause.  This is not the unrestricted printed fusion
   statement.

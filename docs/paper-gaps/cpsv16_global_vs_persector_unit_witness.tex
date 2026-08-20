@@ -199,12 +199,22 @@ transfer spectral radius $1/2$ and hence is not
 printed_absorbed_normality_step_is_false}.
 
 This proves that the printed absorbed-normality inference is false under the
-global normalization convention.  The present declaration deliberately does
-not package the full high-level biCF, simplicity, MPDO, and SAL predicates
-used by Theorem~4.9.  Packaging those interfaces remains separate work.
-Accordingly this is not a counterexample to the final theorem: the all-sector
-structural implication and the resulting blocking-channel implication remain
-not ready.
+global normalization convention. This first declaration decides the
+normality inference used in the (ii)$\Rightarrow$(iv) proof; an alternative
+all-sector factorization remains a missing statement.
+
+A second construction in the same file settles the literal endpoint of the
+printed theorem. The scalar normal representative $A=1$ is repeated with raw
+weights $1$ and $1/2$. The theorem
+\leanid{MPOTensor.CaseIIAbsorptionCounterexample.%
+printed_theorem49_iv_to_v_is_false} packages the exact canonical assembly,
+global unit weight, MPDO and simplicity data, simultaneous one-letter span,
+and every support, positivity, and factorization clause of condition~(iv).
+Its two-site block nevertheless fails Definition~4.1, since transfer
+idempotence would force $1+2^{-4}=1+2^{-2}$. Thus (iv)$\Rightarrow$(v) is a
+refuted \emph{unfaithful statement}. The source (ii)$\Rightarrow$(v) route is
+distinct: ZCL first makes copy weights common, after which the all-sector
+factorization and projector-controlled channel assembly remain missing.
 
 \section{Affected declarations}
 

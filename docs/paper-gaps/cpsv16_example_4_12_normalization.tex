@@ -53,8 +53,9 @@ Consequently
   \qquad\text{but}\qquad
   \mathcal T_M^2\ne\mathcal T_M.
 \]
-This proves scale-invariant source zero correlation length with scale $2$.
-However, the trace-preserving maps $\mathcal S$ and $\mathcal T$ in
+This proves the project's scale-invariant relation with scale $2$, but it does
+not prove the literal ZCL equation of Definition~4.2. Indeed, that equation
+fails. Moreover, the trace-preserving maps $\mathcal S$ and $\mathcal T$ in
 Definition~4.1 force equality of the one-site and two-site traces for every
 virtual boundary.  Equivalently, they force literal idempotence
 $\mathcal T_M^2=\mathcal T_M$.  The printed representative therefore cannot
@@ -85,14 +86,17 @@ before that sentence.
 The current formalization keeps the two representatives separate.  For the
 literal printed $M$ it proves the exact positive-length formula, positivity,
 one-site loss of the $\sigma_z$ term, saturation of the area law, source zero
-correlation length with scale $2$, explicit non-idempotence, and hence failure
-of the fixed-representative trace-preserving renormalization condition.
+correlation length only in the project's scale-invariant sense, explicit
+failure of literal ZCL, and hence failure of the fixed-representative
+trace-preserving renormalization condition.
 
 Constructing the parity coarse-graining and refinement channels for
-$\widehat M=(1/2)M$ is a separate task.  Likewise, the claim that the normalized
-family is not of the simple commuting GSNNCH form is separate and remains
-tracked in \ghissue{6045}.  Neither claim is inferred here from the
-unnormalized tensor.
+$\widehat M=(1/2)M$ is a separate task. The full GSNNCH exclusion is already a
+statement about the normalized family because \leanid{MPOTensor.IsGSNNCH}
+quantifies over \leanid{MPOTensor.normalizedMPO}. It may therefore be proved as
+$\neg\operatorname{IsGSNNCH}(M)$ for the printed tensor and remains tracked in
+\ghissue{6045}. Transport to a separately named $\widehat M$ is optional
+packaging rather than a prerequisite for that result.
 
 \section{Verdict}
 
@@ -114,6 +118,10 @@ The normalized tensor $\widehat M=(1/2)M$ is a likely correction because its
 physical-trace transfer is idempotent and it generates the normalized density
 family.  This observation alone does not construct the required
 trace-preserving completely positive maps.  Their construction and proof remain
-open in \ghissue{6044}; no RFP verdict for $\widehat M$ is claimed here.
+open in \ghissue{6044}; no RFP verdict for $\widehat M$ is claimed here. Any
+formal treatment of $\widehat M$ must use tensor-level scalar rescaling and
+\leanid{MPOTensor.mpo_smul} to identify its periodic MPO family with the
+normalization of the printed family, rather than introducing an unrelated
+second tensor definition.
 
 \end{document}
