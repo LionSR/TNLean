@@ -9,10 +9,11 @@ import TNLean.Wielandt.SpanGrowth.CumulativeSpan
 /-!
 # Nonzero Trace Words at Bounded Length (Lemma 1)
 
-This file gives the tensor form of **Lemma 1** of arXiv:0909.5347
-(Sanz, Pérez-García, Wolf, Cirac): if the transfer map of `A` is primitive, then some
-word product of length at most `D² − d + 1` has nonzero trace. The full span-growth
-argument is proved for finite matrix families in
+This file gives tensor consequences of **Lemma 1** of arXiv:0909.5347
+(Sanz, Pérez-García, Wolf, Cirac). If `A` is normal, then some nonempty word product of
+length at most `D² − dim(S₁(A)) + 1` has nonzero trace. For a minimal Kraus family,
+`dim(S₁(A)) = d`, which recovers the paper's bound. The full span-growth argument is
+proved for finite matrix families in
 `TNLean.Kraus.Wielandt.SpanGrowth.NonzeroTraceProduct`; the results below state its
 coarse and sharp consequences for normal matrix product tensors.
 -/
@@ -40,7 +41,7 @@ theorem cumulativeSpan_eq_top [NeZero D]
   obtain ⟨N, _, hN⟩ := hN
   exact Kraus.cumulativeSpan_eq_top A hN
 
-/-- **Lemma 1, coarse form** (arXiv:0909.5347): if `A` is normal, some word `w` of
+/-- A coarse corollary permitting the empty word: if `A` is normal, some word `w` of
 length at most `D²` satisfies `Matrix.trace (evalWord A w) ≠ 0`. -/
 theorem exists_nonzero_trace_word [NeZero D]
     (A : MPSTensor d D) (hN : IsNormal A) :
