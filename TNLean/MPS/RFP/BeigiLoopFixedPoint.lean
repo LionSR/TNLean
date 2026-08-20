@@ -3,11 +3,11 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import TNLean.Algebra.FrobeniusHilbert
 import TNLean.MPS.RFP.BeigiLoopInjectivity
 import TNLean.MPS.RFP.Defs
 import TNLean.MPS.SharedInfra.Scaling
 import TNLean.MPS.Tactic.Basic
-import TNLean.Spectral.FrobeniusNorm
 
 /-!
 # Transfer fixed point of a normalized Beigi loop tensor
@@ -138,8 +138,10 @@ theorem loopBondNorm_eq_frobeniusNorm (F : BeigiSectorGraphData A)
     (l : Loop F.edgeWeight) :
     F.loopBondNorm l =
       ‖Matrix.schmidtCoeffMatrix (F.loopBondVector l)‖ := by
-  rw [loopBondNorm, ← MPSTensor.norm_matToES_eq_frobenius_norm]
-  rfl
+  rw [loopBondNorm]
+  change ‖Matrix.frobeniusEquivEuclidean _ _
+    (Matrix.schmidtCoeffMatrix (F.loopBondVector l)).transpose‖ = _
+  rw [LinearIsometryEquiv.norm_map, Matrix.frobenius_norm_transpose]
 
 /-- The minimal sector-coordinate loop tensor divided by the Euclidean norm
 of its bond vector.
