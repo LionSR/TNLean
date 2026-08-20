@@ -53,7 +53,7 @@ with composition. We also relate it to the Kraus representation.
   preserving after conjugating the input by the invertible `X = T*(1)^{-1/2}`
 * `unitaryConjLM_mapsPSDConeOnto` and
   `unitaryConjLM_comp_transpose_mapsPSDConeOnto`: direction (3) ⇒ (1) of Wolf
-  Chapter 3, Proposition 3.8 — conjugation `X ↦ Y X Y†` and its transpose
+  Chapter 3, Proposition 3.6 — conjugation `X ↦ Y X Y†` and its transpose
   variant `X ↦ Y Xᵀ Y†` by an invertible `Y` map the positive semidefinite
   cone onto itself
 
@@ -720,9 +720,9 @@ theorem IsPositiveMap.comp_unitaryConjLM_inv_cfc_sqrt_traceAdjointMap_one
 
 end UnitaryConjugation
 
-/-! ### Proposition 3.8: automorphisms of the positive semidefinite cone
+/-! ### Proposition 3.6: automorphisms of the positive semidefinite cone
 
-Wolf Chapter 3, §3.5, Proposition 3.8 (Automorphisms and rank preserving maps),
+Wolf Chapter 3, §3.5, Proposition 3.6 (Automorphisms and rank preserving maps),
 `Notes/WolfNoteTexSource/ch03_positive_not_completely.tex`, lines 652--686.
 
 For a linear map `T : M_D(ℂ) → M_D(ℂ)` the following are equivalent:
@@ -741,7 +741,7 @@ and are not formalized here. -/
 section ConePreservation
 
 /-- A linear map `T : M_D(ℂ) → M_D(ℂ)` **maps the positive semidefinite cone onto
-itself** (condition (1) of Wolf Chapter 3, Proposition 3.8) if it sends positive
+itself** (condition (1) of Wolf Chapter 3, Proposition 3.6) if it sends positive
 semidefinite matrices to positive semidefinite matrices and every positive
 semidefinite matrix arises as the image of one. -/
 def MapsPSDConeOnto
@@ -751,7 +751,7 @@ def MapsPSDConeOnto
 
 /-- Conjugation `Ad_Y(X) = Y X Y†` by an invertible matrix maps the positive
 semidefinite cone onto itself. This is the conjugation half of direction
-(3) ⇒ (1) of Wolf Chapter 3, Proposition 3.8. -/
+(3) ⇒ (1) of Wolf Chapter 3, Proposition 3.6. -/
 theorem unitaryConjLM_mapsPSDConeOnto
     (Y : Matrix (Fin D) (Fin D) ℂ) (hY : IsUnit Y.det) :
     MapsPSDConeOnto (unitaryConjLM Y) := by
@@ -767,7 +767,7 @@ theorem unitaryConjLM_mapsPSDConeOnto
 
 /-- The transpose conjugation `X ↦ Y Xᵀ Y†` by an invertible matrix maps the
 positive semidefinite cone onto itself. This is the transpose half of direction
-(3) ⇒ (1) of Wolf Chapter 3, Proposition 3.8. -/
+(3) ⇒ (1) of Wolf Chapter 3, Proposition 3.6. -/
 theorem unitaryConjLM_comp_transpose_mapsPSDConeOnto
     (Y : Matrix (Fin D) (Fin D) ℂ) (hY : IsUnit Y.det) :
     MapsPSDConeOnto
