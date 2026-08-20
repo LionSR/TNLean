@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.MPDO.InverseMapActiveSectorPrimitivity
 import TNLean.MPS.MPDO.ActiveSectorTraceMatrixZCL
+import TNLean.MPS.MPDO.SALTraceTransfer
 
 /-!
 # Zero correlation length on the active inverse-map trace matrix
@@ -139,5 +140,34 @@ theorem exists_activeTraceMatrix_relations_of_isSAL_of_isSourceZCL
           (Classical.choose hSAL) hZCL
   exact ⟨F₀.rephase z, hη.p, lam, hlam, hη.hp_nonneg, hη.hp_sum,
     hpos, hprim, hrel⟩
+
+/-- Every injective MPO tensor satisfying the strong area law and literal
+idempotence of the physical-trace transfer admits the same positive
+physical-sector factorization and primitive normalized active trace matrix as
+in the source-ZCL theorem.
+
+This specialization retains the square--cube relation; it does not assert
+idempotence or rank one for the active trace matrix, and hence does not by
+itself construct the two-to-four-site channels.
+
+Source: arXiv:1606.00608, Appendix C.2, Lemmas C.4--C.5 (`propSN` and
+`SALZCL`), lines 1406--1497. The conclusion stops before the invalid rank-one
+inference at lines 1498--1499. -/
+theorem exists_activeTraceMatrix_relations_of_isSAL_of_literal_ZCL
+    (K : MPOTensor d D) (hK : K.IsInjective) (hSAL : IsSAL K)
+    (hZCL_sq : physTraceTransfer K * physTraceTransfer K = physTraceTransfer K) :
+    ∃ (F : PhysicalSectorFactorization K) (p : Fin F.sectorCount → ℝ) (lam : ℝ),
+      0 < lam ∧
+        (∀ k, 0 ≤ p k) ∧
+          (∑ k, p k) = 1 ∧
+            (∀ k h, (F.neighboringOperator k h).PosSemidef) ∧
+              Matrix.IsPrimitive (F.activeSectorTraceMatrix p) ∧
+                let T := F.activeSectorTraceMatrix p
+                ((lam⁻¹ • T) ^ 2 = (lam⁻¹ • T) ^ 3) ∧
+                  ∀ N : ℕ, 0 < N →
+                    Matrix.trace ((lam⁻¹ • T) ^ N) =
+                      Matrix.trace (lam⁻¹ • T) :=
+  exists_activeTraceMatrix_relations_of_isSAL_of_isSourceZCL K hK hSAL
+    (hSAL.isSourceZCL_of_physTraceTransfer_sq hZCL_sq)
 
 end MPOTensor

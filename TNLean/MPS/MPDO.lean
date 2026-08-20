@@ -288,6 +288,7 @@ import TNLean.MPS.MPDO.RescalingStableSourceSimple
 import TNLean.MPS.MPDO.RetainedClass
 import TNLean.MPS.MPDO.SALArbitraryCut
 import TNLean.MPS.MPDO.SALPhysicalSectorCyclicPositivity
+import TNLean.MPS.MPDO.SALTraceTransfer
 import TNLean.MPS.MPDO.SectorChainFiberContraction
 import TNLean.MPS.MPDO.SectorCompressionSeparation
 import TNLean.MPS.MPDO.SectorEtaContraction
