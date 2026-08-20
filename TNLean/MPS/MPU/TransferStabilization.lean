@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.Algebra.MatrixStabilization
 import TNLean.Algebra.MatrixPosDefTransport
+import TNLean.MPS.Core.TransferChannel
 import TNLean.MPS.MPU.CanonicalForm
 import TNLean.MPS.MPU.TransferMatrix
 
