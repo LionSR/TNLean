@@ -319,11 +319,11 @@ section SupportProj
 /-- The support projector has the same range as the original PSD matrix. -/
 lemma range_mulVecLin_supportProj_eq
     (ρ : Matrix (Fin D) (Fin D) ℂ) (hρ : ρ.PosSemidef) :
-    LinearMap.range (Matrix.mulVecLin (Matrix.supportProj (D := D) ρ hρ)) =
+    LinearMap.range (Matrix.mulVecLin hρ.supportProj) =
       LinearMap.range (Matrix.mulVecLin ρ) := by
   classical
-  let Q : Matrix (Fin D) (Fin D) ℂ := Matrix.supportProj (D := D) ρ hρ
-  have hQρ : Q * ρ = ρ := Matrix.supportProj_mul (D := D) (ρ := ρ) hρ
+  let Q : Matrix (Fin D) (Fin D) ℂ := hρ.supportProj
+  have hQρ : Q * ρ = ρ := hρ.supportProj_mul_self
   -- Range inclusion `range ρ ≤ range Q` from `Q * ρ = ρ`.
   have hrange : LinearMap.range (Matrix.mulVecLin ρ) ≤ LinearMap.range (Matrix.mulVecLin Q) := by
     intro y hy
@@ -333,7 +333,7 @@ lemma range_mulVecLin_supportProj_eq
   -- Kernel inclusion `ker ρ ≤ ker Q` from the kernel lemma.
   have hker : LinearMap.ker (Matrix.mulVecLin ρ) ≤ LinearMap.ker (Matrix.mulVecLin Q) := by
     intro x hx
-    exact Matrix.supportProj_mulVec_eq_zero_of_mulVec_eq_zero (D := D) ρ hρ x hx
+    exact hρ.supportProj_mulVec_eq_zero_of_mulVec_eq_zero x hx
   have hker_fin :
       Module.finrank ℂ ↥(LinearMap.ker (Matrix.mulVecLin ρ)) ≤
         Module.finrank ℂ ↥(LinearMap.ker (Matrix.mulVecLin Q)) :=
@@ -495,9 +495,9 @@ lemma hasInvariantProj_of_hasInvariantProj_unitalize
     have hρ_eq : ρ = (S * P) * (S * P)ᴴ := by
       simpa using hSP.symm
     simpa [hρ_eq] using Matrix.posSemidef_self_mul_conjTranspose (S * P)
-  let Q : Matrix (Fin D) (Fin D) ℂ := Matrix.supportProj (D := D) ρ hρ_psd
+  let Q : Matrix (Fin D) (Fin D) ℂ := hρ_psd.supportProj
   have hQproj : IsOrthogonalProjection Q :=
-    Matrix.isOrthogonalProjection_supportProj (D := D) (ρ := ρ) (hρ := hρ_psd)
+    hρ_psd.isOrthogonalProjection_supportProj
   -- Nontriviality of `Q`.
   have hρ_ne : ρ ≠ 0 := by
     intro h0
@@ -513,7 +513,7 @@ lemma hasInvariantProj_of_hasInvariantProj_unitalize
     have : P = 0 := by
       simpa [hSPS] using h0'
     exact hP0 this
-  have hQ0 : Q ≠ 0 := Matrix.supportProj_ne_zero_of_ne_zero (D := D) ρ hρ_psd hρ_ne
+  have hQ0 : Q ≠ 0 := hρ_psd.supportProj_ne_zero_of_ne_zero hρ_ne
   have hnotPD : ¬ ρ.PosDef := by
     intro hρPD
     have hρunit : IsUnit ρ := Matrix.PosDef.isUnit hρPD
@@ -539,7 +539,7 @@ lemma hasInvariantProj_of_hasInvariantProj_unitalize
       have := congrArg (fun M => M * Pinv) hPP
       simpa [Matrix.mul_assoc, hPinv] using this
     exact hP1 this
-  have hQ1 : Q ≠ 1 := Matrix.supportProj_ne_one_of_not_posDef (D := D) ρ hρ_psd hnotPD
+  have hQ1 : Q ≠ 1 := hρ_psd.supportProj_ne_one_of_not_posDef hnotPD
   -- Range equality: `range(Q) = range(ρ)`.
   have hRange : LinearMap.range (Matrix.mulVecLin Q) = LinearMap.range (Matrix.mulVecLin ρ) := by
     simpa [Q] using (range_mulVecLin_supportProj_eq (D := D) ρ hρ_psd)

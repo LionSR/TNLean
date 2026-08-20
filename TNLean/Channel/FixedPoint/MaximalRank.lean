@@ -101,8 +101,8 @@ theorem maximalSupport_of_maximalRank
     have hQ₀0 : Q₀ = 0 := by
       refine Matrix.ext_of_mulVec_single fun j => ?_
       rw [hQ₀def, Matrix.zero_mulVec]
-      exact Matrix.supportProj_mulVec_eq_zero_of_mulVec_eq_zero
-        (ρ := ρ₀) (hρ := hρ₀_psd) _ (by rw [hρ₀0, Matrix.zero_mulVec])
+      exact hρ₀_psd.supportProj_mulVec_eq_zero_of_mulVec_eq_zero _ (by
+        rw [hρ₀0, Matrix.zero_mulVec])
     intro X hX
     have hX0 : X = 0 := by
       have h := hmax X hX
@@ -175,8 +175,7 @@ theorem maximalSupport_of_maximalRank
       have hsub : P * (1 - Q₀) = 0 := by
         refine Matrix.ext_of_mulVec_single fun j => ?_
         rw [Matrix.zero_mulVec, ← Matrix.mulVec_mulVec]
-        refine Matrix.supportProj_mulVec_eq_zero_of_mulVec_eq_zero
-          (ρ := ρ) (hρ := hρ_psd) _ ?_
+        refine hρ_psd.supportProj_mulVec_eq_zero_of_mulVec_eq_zero _ ?_
         rw [Matrix.mulVec_mulVec,
           show ρ * (1 - Q₀) = 0 by rw [Matrix.mul_sub, Matrix.mul_one, hρQ₀, sub_self],
           Matrix.zero_mulVec]

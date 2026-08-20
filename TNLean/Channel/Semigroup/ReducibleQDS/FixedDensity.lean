@@ -103,13 +103,13 @@ theorem wolf_prop_7_6_one_implies_three
     simpa [hρ_zero] using hρ_mem.2
   have hρ_not_pd : ¬ ρ₀.PosDef :=
     not_posDef_of_proj_sandwich_eq_self hQ_nt.1 hQ_nt.2.2 hQρ
-  let P : Mat := Matrix.supportProj (D := D) ρ₀ hρ_psd
+  let P : Mat := hρ_psd.supportProj
   have hP_proj : IsOrthogonalProjection P :=
-    Matrix.isOrthogonalProjection_supportProj (D := D) (ρ := ρ₀) (hρ := hρ_psd)
+    hρ_psd.isOrthogonalProjection_supportProj
   have hP0 : P ≠ 0 :=
-    Matrix.supportProj_ne_zero_of_ne_zero ρ₀ hρ_psd hρ_ne
+    hρ_psd.supportProj_ne_zero_of_ne_zero hρ_ne
   have hP1 : P ≠ 1 :=
-    Matrix.supportProj_ne_one_of_not_posDef ρ₀ hρ_psd hρ_not_pd
+    hρ_psd.supportProj_ne_one_of_not_posDef hρ_not_pd
   refine ⟨P, ⟨hP_proj, hP0, hP1⟩, ?_⟩
   intro t ht X
   have hChannel : IsChannel (expSemigroup L t) := hGKSL t ht
@@ -117,7 +117,7 @@ theorem wolf_prop_7_6_one_implies_three
       IsOrthogonalProjection P ∧
         (∀ Y : Mat, P * expSemigroup L t (P * Y * P) * P =
           expSemigroup L t (P * Y * P)) := by
-    simpa [P, Kraus.stationaryProj, Matrix.supportProj] using
+    simpa [P, Kraus.stationaryProj] using
       (Kraus.invariantCompression_of_supportProj_fixed_by_cpMap
         hChannel.cp hρ_psd (hρ_fix t ht))
   exact hInv.2 X
