@@ -1077,6 +1077,7 @@ This is the calculation in
         thm:cpsv_example412_literal_formula,
         thm:cpsv_example412_literal_sal,
         thm:cpsv_example412_literal_zcl_rfp_gap,
+        thm:cpsv_example412_four_cycle_ssa_defect,
         thm:cpsv_example412_normalized_rfp_maps}
     The three examples in
     \cite[Examples~4.10--4.12, lines~897--942]{Cirac2016MPDO_arXiv} assert the
@@ -1115,6 +1116,13 @@ This is the calculation in
         \rho^{(N)}&=I^{\otimes N}+\sigma_z^{\otimes N}.
         \notag
     \end{align}
+    For the normalized four-site state, the tripartition
+    $A=\{0\}$, $B=\{1,3\}$, $C=\{2\}$ has a strict
+    strong-subadditivity inequality: the two three-site marginals have entropy
+    $3\log 2$, the middle marginal has entropy $2\log 2$, and the full state
+    has entropy $3\log 2$.  This supplies the finite entropy obstruction; the
+    implication from a simple commuting representation on the four-cycle to
+    equality for this tripartition is a separate assertion.
     The source asserts that this tensor has saturation of the area law and zero
     correlation length, is not of the simple commuting form, and is nevertheless
     a renormalization fixed point.  The literal printed tensor is unnormalized:
@@ -1729,6 +1737,75 @@ This is the calculation in
     entropy of the resulting maximally mixed state is $L\log 2$; the two block
     terms in the mutual information then add to $N\log 2$ independently of the
     cut.
+\end{proof}
+
+% Project-derived four-site consequence of CPSV16 Example 4.12, lines 932--938.
+\begin{definition}[Four-site tripartition in Example 4.12]
+    \label{def:cpsv_example412_four_cycle_tripartition}
+    \lean{MPOTensor.CPSVExample412Literal.fourCycleMiddleBits,
+        MPOTensor.CPSVExample412Literal.siteSignReal,
+        MPOTensor.CPSVExample412Literal.fourCycleTripartiteEquiv,
+        MPOTensor.CPSVExample412Literal.fourCycleTripartiteState,
+        MPOTensor.CPSVExample412Literal.fourCycleWeight}
+    \leanok
+    \uses{def:cpsv_example412_configuration_sign,
+        thm:cpsv_example412_literal_formula}
+    For the state in
+    \cite[Example~4.12, lines~932--938]{Cirac2016MPDO_arXiv}, at $N=4$
+    regard the sites as
+    $A=\{0\}$, $B=\{1,3\}$, and $C=\{2\}$.  Encode the two binary labels
+    $(b_1,b_3)$ as one four-dimensional label $b$, and write
+    $z_a\in\{1,-1\}$ for the eigenvalue of $\sigma_z$ at $a$.  In the basis
+    $(a,b,c)\leftrightarrow(a,b_1,c,b_3)$, let $\rho_{ABC}$ be the normalized
+    four-site state and set
+    \begin{align}
+        w(a,b,c)&=\frac{1+z_a z_{b_1}z_c z_{b_3}}{16}.
+        \notag
+    \end{align}
+\end{definition}
+
+\begin{theorem}[Four-site failure of strong-subadditivity equality]
+    \label{thm:cpsv_example412_four_cycle_ssa_defect}
+    \lean{MPOTensor.CPSVExample412Literal.fourCycleTripartiteState_eq_diagonal,
+        MPOTensor.CPSVExample412Literal.fourCycleTripartiteState_isHermitian,
+        MPOTensor.CPSVExample412Literal.traceC_fourCycleTripartiteState,
+        MPOTensor.CPSVExample412Literal.traceA_fourCycleTripartiteState,
+        MPOTensor.CPSVExample412Literal.traceAC_fourCycleTripartiteState,
+        MPOTensor.CPSVExample412Literal.fourCycleTripartiteState_entropy,
+        MPOTensor.CPSVExample412Literal.traceC_fourCycleTripartiteState_entropy,
+        MPOTensor.CPSVExample412Literal.traceA_fourCycleTripartiteState_entropy,
+        MPOTensor.CPSVExample412Literal.traceAC_fourCycleTripartiteState_entropy,
+        MPOTensor.CPSVExample412Literal.fourCycleTripartiteState_not_isSSAEquality}
+    \leanok
+    \uses{def:cpsv_example412_four_cycle_tripartition, def:ssa_equality}
+    The normalized four-site state is diagonal with probability $1/8$ on the
+    eight even-parity configurations and zero on the eight odd-parity
+    configurations.  Its relevant marginals are
+    \begin{align}
+        \rho_{AB}&=\frac{I_8}{8},
+        &\rho_{BC}&=\frac{I_8}{8},
+        &\rho_B&=\frac{I_4}{4}.
+        \notag
+    \end{align}
+    Consequently,
+    \begin{align}
+        S(ABC)&=3\log 2,
+        &S(B)&=2\log 2,
+        &S(AB)&=S(BC)=3\log 2,
+        \notag
+    \end{align}
+    so $S(ABC)+S(B)=5\log 2<6\log 2=S(AB)+S(BC)$.  Thus equality in
+    strong subadditivity fails for this tripartition.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:cpsv_example412_literal_formula}
+    The diagonal coefficient is
+    $(1+z_a z_{b_1}z_c z_{b_3})/16$.  Summing over either $a$ or $c$ cancels
+    the signed term, giving $I_8/8$; summing over both gives $I_4/4$.
+    There are eight nonzero coefficients, all equal to $1/8$, so the full
+    entropy is $8[-(1/8)\log(1/8)]=3\log 2$.  The three maximally mixed
+    marginals have the displayed entropies, and $\log 2>0$ gives the strict
+    inequality.
 \end{proof}
 
 \begin{theorem}[Scale-two transfer relation and the literal ZCL--RFP obstruction]

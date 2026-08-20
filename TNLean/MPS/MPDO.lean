@@ -90,6 +90,7 @@ import TNLean.MPS.MPDO.CPSVExample411BinarySupport
 import TNLean.MPS.MPDO.CPSVExample411Entropy
 import TNLean.MPS.MPDO.CPSVExample411SourceZCL
 import TNLean.MPS.MPDO.CPSVExample411Spectrum
+import TNLean.MPS.MPDO.CPSVExample412FourCycleEntropy
 import TNLean.MPS.MPDO.CPSVExample412Literal
 import TNLean.MPS.MPDO.CPSVExample412NormalizedRFP
 import TNLean.MPS.MPDO.CPSVExamples410411Arithmetic
