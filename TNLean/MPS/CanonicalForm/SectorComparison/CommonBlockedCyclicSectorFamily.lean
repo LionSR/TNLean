@@ -428,7 +428,7 @@ private theorem blockTensor_eq_commonReindexedBlock_of_word_eq
     blockTensor (d := d) (D := dim k) (blocks k) F.p = F.commonReindexedBlock k := by
   funext i
   rw [commonReindexedBlock, cast_physDim_apply (F.blockPhysDim_nested_eq k)]
-  simp [reindexPhysical, blockTensor, hWord i]
+  simp [Kraus.reindexPhysical, blockTensor, hWord i]
 
 /-- Direct blocking of one original block is the relabeled common block when the
 canonical identification with the iterated alphabet agrees with consecutive grouping of the
