@@ -516,6 +516,28 @@ orthogonal projector is the canonical representative used here.
     constant $C$ absorbs the finitely many remaining powers.
 \end{proof}
 
+\begin{theorem}[Pointwise geometric power bound below unit spectral radius]
+    \label{thm:geometric_apply_bound_of_spectral_radius_lt_one}
+    \lean{geometric_apply_bound_of_spectralRadius_lt_one}
+    \leanok
+    \uses{thm:geometric_bound_of_spectral_radius_lt_one}
+    Let $V$ be a complex Banach space and let $T\colon V\to V$ be a bounded
+    linear operator.  If $\rho_{\mathrm{spec}}(T)<1$, then there are real
+    constants $C,r$ with $C>0$ and $0<r<1$ such that
+    \begin{align}
+      \lVert T^n x\rVert&\leq C r^n\lVert x\rVert
+      \label{eq:geometric_apply_bound_of_spectral_radius_lt_one}
+    \end{align}
+    for every $n\in\N$ and $x\in V$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:geometric_bound_of_spectral_radius_lt_one}
+    Apply Theorem~\ref{thm:geometric_bound_of_spectral_radius_lt_one} and the
+    defining operator-norm inequality to $T^n x$.
+\end{proof}
+
 \begin{theorem}[Transfer--Gram Choi reshuffling]
     \label{thm:ground_space_gram_choi_reshuffling}
     \lean{MPSTensor.inner_single_groundSpaceGram_single_eq_rectangularChoi}
