@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import TNLean.Kraus.Word
 import TNLean.MPS.Defs
 import TNLean.MPS.Core.Transfer
 import Mathlib.LinearAlgebra.Matrix.PosDef
@@ -293,20 +294,6 @@ theorem evalWord_adjointTensor (M : MPOTensor d D) :
               (by simp only [List.length_reverse]; exact hlen.symm),
             evalWord_cons, evalWord_nil, Matrix.mul_one, Matrix.conjTranspose_mul]
 
-/-- Reading a configuration through the index reversal `Fin.rev` reverses the
-associated word. -/
-private theorem ofFn_comp_rev {α : Type*} {N : ℕ} (σ : Fin N → α) :
-    List.ofFn (fun k => σ (Fin.rev k)) = (List.ofFn σ).reverse := by
-  apply List.ext_getElem
-  · simp
-  · intro k h1 h2
-    simp only [List.length_ofFn] at h1
-    rw [List.getElem_ofFn, List.getElem_reverse, List.getElem_ofFn]
-    congr 1
-    ext
-    simp only [Fin.val_rev, List.length_ofFn]
-    omega
-
 /-- The adjoint tensor generates the adjoint operator family up to spatial
 reflection: entrywise,
 $H^{(N)}(M^\dagger)_{\sigma\tau}
@@ -319,7 +306,8 @@ theorem mpo_adjointTensor (M : MPOTensor d D) {N : ℕ} (σ τ : Fin N → Fin d
       star (mpo M N (fun k => τ (Fin.rev k)) (fun k => σ (Fin.rev k))) := by
   simp only [mpo_apply, mpoMatrixEntry]
   rw [evalWord_adjointTensor M _ _ (by simp), ← Matrix.trace_conjTranspose,
-    ofFn_comp_rev, ofFn_comp_rev]
+    List.ofFn_reverse τ, List.ofFn_reverse σ]
+  rfl
 
 /-! ### Transfer map -/
 
