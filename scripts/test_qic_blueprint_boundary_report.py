@@ -402,7 +402,10 @@ See Theorem~\ref{missing:label}.
         report = boundary_report(self.root)
         self.assertIn("thm:qic", report["tn_interface_labels"])
         self.assertTrue(
-            any("unknown reference missing:label" in error for error in report["simulated_output_errors"])
+            any(
+                "unknown reference missing:label" in error
+                for error in report["simulated_output_errors"]
+            )
         )
         self.assertEqual(report["reference_edge_counts"].get("unclassified"), 1)
 
@@ -442,6 +445,60 @@ See Theorem~\ref{thm:tn}.
         self.assertEqual(blocks[0]["labels"], ["fig:atomic"])
         self.assertEqual(blocks[0]["references"], ["thm:tn"])
         self.assertEqual(blocks[0]["disposition"], "tn")
+
+    @patch("qic_blueprint_boundary_report.source_sha", return_value="a" * 40)
+    def test_wrapper_around_mixed_file_items_has_shared_shell(self, _source_sha) -> None:
+        self.write_blueprint(
+            r"""\begin{samepage}
+\begin{theorem}\label{thm:qic}
+\lean{Kraus.moved}
+\end{theorem}
+\begin{theorem}\label{thm:tn}
+\lean{MPSTensor.staying}
+\end{theorem}
+\end{samepage}
+"""
+        )
+        report = boundary_report(self.root)
+        self.assertEqual(report["simulated_output_errors"], [])
+        self.assertEqual(
+            report["structural_wrappers"],
+            [
+                {
+                    "environment": "samepage",
+                    "file": "src/chapter/ch01.tex",
+                    "line": 1,
+                    "end_line": 8,
+                    "items": ["thm:qic", "thm:tn"],
+                    "sides": ["qic", "tn"],
+                }
+            ],
+        )
+        shell_blocks = [
+            block for block in report["non_item_blocks"] if block["wrapper"] is not None
+        ]
+        self.assertEqual(
+            [(block["line"], block["end_line"], block["disposition"]) for block in shell_blocks],
+            [(1, 1, "shared"), (8, 8, "shared")],
+        )
+        self.assertEqual(report["item_counts"], {"qic": 1, "tn": 1})
+
+    @patch("qic_blueprint_boundary_report.source_sha", return_value="a" * 40)
+    def test_wrapper_rejects_unsupported_item_disposition(self, _source_sha) -> None:
+        self.write_blueprint(
+            r"""\begin{samepage}
+\begin{theorem}\label{thm:mixed}
+\lean{Kraus.moved, MPSTensor.staying}
+\end{theorem}
+\end{samepage}
+"""
+        )
+        report = boundary_report(self.root)
+        self.assertIn(
+            "structural wrapper @src/chapter/ch01.tex:1-5:samepage has unsupported "
+            "item dispositions mixed",
+            report["simulated_output_errors"],
+        )
 
     def test_rejects_unbalanced_non_item_environment(self) -> None:
         self.write_blueprint(
@@ -534,6 +591,31 @@ QIC picture.
         self.assertEqual(figure_blocks[0]["end_line"], 12)
         self.assertEqual(figure_blocks[0]["disposition"], "qic")
         self.assertEqual(report["simulated_output_errors"], [])
+
+    @patch("qic_blueprint_boundary_report.source_sha", return_value="a" * 40)
+    def test_inline_environment_stays_in_surrounding_paragraph(
+        self, _source_sha
+    ) -> None:
+        self.write_blueprint(
+            r"""\begin{theorem}\label{thm:qic}
+\lean{Kraus.moved}
+\end{theorem}
+
+The matrix
+$J=\bigl(\begin{smallmatrix}0&1\\-1&0\end{smallmatrix}\bigr)$
+has the property in Theorem~\ref{thm:qic}.
+"""
+        )
+        report = boundary_report(self.root)
+        blocks = [
+            block
+            for block in report["non_item_blocks"]
+            if block["file"] == "src/chapter/ch01.tex"
+        ]
+        self.assertEqual(len(blocks), 1)
+        self.assertEqual((blocks[0]["line"], blocks[0]["end_line"]), (5, 7))
+        self.assertEqual(blocks[0]["references"], ["thm:qic"])
+        self.assertEqual(blocks[0]["disposition"], "qic")
 
     @patch("qic_blueprint_boundary_report.source_sha", return_value="a" * 40)
     def test_percent_continued_reference_payload_is_normalized(self, _source_sha) -> None:

@@ -135,10 +135,26 @@ class NonItemBlock:
     labels: tuple[str, ...]
     references: tuple[str, ...]
     input_payload: str | None = None
+    wrapper_id: str | None = None
 
     @property
     def identifier(self) -> str:
         return f"@{self.file}:{self.line}-{self.end_line}"
+
+
+@dataclass(frozen=True)
+class StructuralWrapper:
+    """A non-item TeX environment containing one or more blueprint items."""
+
+    environment: str
+    file: str
+    line: int
+    end_line: int
+    items: tuple[str, ...]
+
+    @property
+    def identifier(self) -> str:
+        return f"@{self.file}:{self.line}-{self.end_line}:{self.environment}"
 
 
 def blueprint_environments(blueprint_src: Path) -> list[BlueprintEnvironment]:
@@ -237,12 +253,12 @@ def blueprint_environments(blueprint_src: Path) -> list[BlueprintEnvironment]:
     return sorted(records, key=lambda item: (item.file, item.line, item.primary_label or ""))
 
 
-def _atomic_non_item_environment_ranges(
-    source_lines: list[str], covered: set[int], relative_root: str
-) -> dict[int, int]:
-    """Return maximal balanced TeX environments that contain no item line."""
+def _balanced_tex_environment_ranges(
+    source_lines: list[str], relative_root: str
+) -> list[tuple[str, int, int]]:
+    """Return every balanced TeX environment range, rejecting malformed nesting."""
     stack: list[tuple[str, int]] = []
-    ranges: list[tuple[int, int]] = []
+    ranges: list[tuple[str, int, int]] = []
     for line_no, line in enumerate(source_lines, start=1):
         cleaned_line = _strip_tex_comments(line)
         for token in ENV_TOKEN_RE.finditer(cleaned_line):
@@ -260,17 +276,23 @@ def _atomic_non_item_environment_ranges(
                     f"mismatched environment at {relative_root}:{line_no}: "
                     f"opened {opened} at line {opened_line}, closed {environment}"
                 )
-            ranges.append((opened_line, line_no))
+            ranges.append((environment, opened_line, line_no))
     if stack:
         environment, opened_line = stack[-1]
         raise ValueError(
             f"unterminated environment {environment} opened at "
             f"{relative_root}:{opened_line}"
         )
+    return ranges
 
+
+def _atomic_non_item_environment_ranges(
+    ranges: list[tuple[str, int, int]], covered: set[int]
+) -> dict[int, int]:
+    """Return maximal balanced TeX environments that contain no item line."""
     candidates = [
         (start, end)
-        for start, end in ranges
+        for _, start, end in ranges
         if not any(line in covered for line in range(start, end + 1))
     ]
     maximal: list[tuple[int, int]] = []
@@ -285,20 +307,93 @@ def _atomic_non_item_environment_ranges(
     return dict(maximal)
 
 
-def blueprint_non_item_blocks(
+def blueprint_structural_wrappers(
     blueprint_src: Path, environments: list[BlueprintEnvironment]
+) -> list[StructuralWrapper]:
+    """Return movable TeX environments that structurally wrap blueprint items."""
+    items_by_file: dict[str, list[BlueprintEnvironment]] = {}
+    for item in environments:
+        items_by_file.setdefault(item.file, []).append(item)
+
+    wrappers: list[StructuralWrapper] = []
+    item_environment_names = set(ENVIRONMENTS) | {"proof"}
+    for path in blueprint_content_files(blueprint_src):
+        relative_root = path.relative_to(blueprint_src.parent).as_posix()
+        source_lines = path.read_text(errors="replace").splitlines()
+        ranges = _balanced_tex_environment_ranges(source_lines, relative_root)
+        file_items = items_by_file.get(relative_root, [])
+        for environment, start, end in ranges:
+            if environment in item_environment_names:
+                continue
+            overlapping = [
+                item
+                for item in file_items
+                if start <= item.end_line and item.line <= end
+            ]
+            if not overlapping:
+                continue
+            contained = [
+                item
+                for item in overlapping
+                if start <= item.line and item.end_line <= end
+            ]
+            if len(contained) == len(overlapping):
+                covered = {
+                    line
+                    for item in contained
+                    for line in range(item.line, item.end_line + 1)
+                }
+                if start in covered or end in covered:
+                    raise ValueError(
+                        f"structural environment {environment} at "
+                        f"{relative_root}:{start}-{end} shares a boundary line "
+                        "with a blueprint item"
+                    )
+                wrappers.append(
+                    StructuralWrapper(
+                        environment=environment,
+                        file=relative_root,
+                        line=start,
+                        end_line=end,
+                        items=tuple(item.identifier for item in contained),
+                    )
+                )
+                continue
+            if any(item.line <= start and end <= item.end_line for item in overlapping):
+                continue
+            raise ValueError(
+                f"structural environment {environment} at "
+                f"{relative_root}:{start}-{end} crosses a blueprint item boundary"
+            )
+    return sorted(wrappers, key=lambda item: (item.file, item.line, -item.end_line))
+
+
+def blueprint_non_item_blocks(
+    blueprint_src: Path,
+    environments: list[BlueprintEnvironment],
+    wrappers: list[StructuralWrapper] | None = None,
 ) -> list[NonItemBlock]:
     """Partition text outside item spans into paragraph-like blocks.
 
-    Complete balanced TeX environments containing no item line are atomic,
-    including nested environments and blank or comment-only lines. Elsewhere,
-    blank lines and item boundaries split blocks. Router ``\\input`` commands
-    are single-line blocks so each simulated output can prune them without
-    pulling in every sibling chapter.
+    Multiline balanced TeX environments containing no item line are atomic,
+    including nested environments and blank or comment-only lines. Single-line
+    environments remain in their surrounding paragraph. The movable shell of
+    an environment wrapping blueprint items is marked for joint retention.
+    Elsewhere, blank lines and item boundaries split blocks. Router ``\\input``
+    commands are single-line blocks so each simulated output can prune them
+    without pulling in every sibling chapter.
     """
     spans_by_file: dict[str, list[tuple[int, int]]] = {}
     for item in environments:
         spans_by_file.setdefault(item.file, []).append((item.line, item.end_line))
+    structural_wrappers = (
+        blueprint_structural_wrappers(blueprint_src, environments)
+        if wrappers is None
+        else wrappers
+    )
+    wrappers_by_file: dict[str, list[StructuralWrapper]] = {}
+    for wrapper in structural_wrappers:
+        wrappers_by_file.setdefault(wrapper.file, []).append(wrapper)
 
     records: list[NonItemBlock] = []
     for path in sorted(blueprint_src.rglob("*.tex")):
@@ -313,11 +408,27 @@ def blueprint_non_item_blocks(
             covered.update(range(start, end + 1))
 
         current: list[tuple[int, str]] = []
-        atomic_ranges = (
-            _atomic_non_item_environment_ranges(source_lines, covered, relative_root)
+        file_wrappers = wrappers_by_file.get(relative_root, [])
+        wrapper_starts = {wrapper.line for wrapper in file_wrappers}
+        wrapper_ends = {wrapper.end_line for wrapper in file_wrappers}
+        ranges = (
+            _balanced_tex_environment_ranges(source_lines, relative_root)
             if is_content_file
-            else {}
+            else []
         )
+        atomic_ranges = _atomic_non_item_environment_ranges(ranges, covered)
+
+        def containing_wrapper(start: int, end: int) -> StructuralWrapper | None:
+            candidates = [
+                wrapper
+                for wrapper in file_wrappers
+                if wrapper.line <= start and end <= wrapper.end_line
+            ]
+            return min(
+                candidates,
+                key=lambda wrapper: wrapper.end_line - wrapper.line,
+                default=None,
+            )
 
         def flush() -> None:
             nonlocal current
@@ -336,6 +447,7 @@ def blueprint_non_item_blocks(
                     }
                 )
             )
+            wrapper = containing_wrapper(start_line, end_line)
             records.append(
                 NonItemBlock(
                     file=relative_root,
@@ -343,6 +455,7 @@ def blueprint_non_item_blocks(
                     end_line=end_line,
                     labels=labels,
                     references=references,
+                    wrapper_id=wrapper.identifier if wrapper is not None else None,
                 )
             )
             current = []
@@ -350,12 +463,18 @@ def blueprint_non_item_blocks(
         line_no = 1
         while line_no <= len(source_lines):
             line = source_lines[line_no - 1]
+            if line_no in wrapper_starts:
+                flush()
             if line_no in covered:
                 flush()
                 line_no += 1
                 continue
             atomic_end = atomic_ranges.get(line_no)
             if atomic_end is not None:
+                if atomic_end == line_no:
+                    current.append((line_no, line))
+                    line_no += 1
+                    continue
                 flush()
                 current = [
                     (atomic_line, source_lines[atomic_line - 1])
@@ -368,6 +487,7 @@ def blueprint_non_item_blocks(
             input_match = INPUT_LINE_RE.fullmatch(cleaned_line)
             if input_match is not None:
                 flush()
+                wrapper = containing_wrapper(line_no, line_no)
                 records.append(
                     NonItemBlock(
                         file=relative_root,
@@ -376,6 +496,7 @@ def blueprint_non_item_blocks(
                         labels=(),
                         references=(),
                         input_payload=input_match.group(1),
+                        wrapper_id=wrapper.identifier if wrapper is not None else None,
                     )
                 )
                 line_no += 1
@@ -389,6 +510,8 @@ def blueprint_non_item_blocks(
                 line_no += 1
                 continue
             current.append((line_no, line))
+            if line_no in wrapper_ends:
+                flush()
             line_no += 1
         flush()
     return sorted(records, key=lambda item: (item.file, item.line, item.end_line))
@@ -603,21 +726,37 @@ def _simulate_blueprint_split(
     root: Path,
     environments: list[BlueprintEnvironment],
     blocks: list[NonItemBlock],
+    wrappers: list[StructuralWrapper],
     items: list[dict[str, object]],
 ) -> dict[str, object]:
     """Simulate the item split and deterministic treatment of surrounding text.
 
-    Item spans stay only on their classified side. Outside those spans, complete
-    paragraph-like blocks are retained on every selected side where all of their
-    references resolve. Router input lines are retained exactly when their target
-    file is selected. Files defining non-item labels referenced directly by an
-    item are selected without closing downward over unrelated router inputs.
+    Item spans stay only on their classified side. A structural wrapper's whole
+    movable shell stays on every side containing one of its items. Outside those
+    spans, complete paragraph-like blocks are retained on every selected side
+    where all of their references resolve. Router input lines are retained
+    exactly when their target file is selected. Files defining non-item labels
+    referenced directly by an item are selected without closing downward over
+    unrelated router inputs.
     """
     item_by_id = {str(item["label"]): item for item in items}
     item_disposition: dict[str, str] = {}
     for item in items:
         for label in item["labels"]:
             item_disposition[str(label)] = str(item["disposition"])
+    errors: list[str] = []
+    wrapper_sides: dict[str, set[str]] = {}
+    for wrapper in wrappers:
+        dispositions = {
+            str(item_by_id[item_id]["disposition"]) for item_id in wrapper.items
+        }
+        unsupported = sorted(dispositions - {"qic", "tn"})
+        if unsupported:
+            errors.append(
+                f"structural wrapper {wrapper.identifier} has unsupported item "
+                f"dispositions {', '.join(unsupported)}"
+            )
+        wrapper_sides[wrapper.identifier] = dispositions & {"qic", "tn"}
     block_by_label: dict[str, NonItemBlock] = {
         label: block for block in blocks for label in block.labels
     }
@@ -648,7 +787,6 @@ def _simulate_blueprint_split(
     }
     for side in ("qic", "tn"):
         selected[side].update(shared_leaf_prose)
-    errors: list[str] = []
 
     for environment in environments:
         source = item_by_id[environment.identifier]
@@ -676,18 +814,20 @@ def _simulate_blueprint_split(
     for side in ("qic", "tn"):
         _add_input_ancestors(selected[side], blocks, input_targets)
 
-    retained: dict[str, set[str]] = {
-        side: {
-            block.identifier
-            for block in blocks
-            if block.file in selected[side]
-            and (
+    retained: dict[str, set[str]] = {"qic": set(), "tn": set()}
+    for side in ("qic", "tn"):
+        for block in blocks:
+            if block.file not in selected[side]:
+                continue
+            if block.wrapper_id is not None:
+                if side in wrapper_sides[block.wrapper_id]:
+                    retained[side].add(block.identifier)
+                continue
+            if (
                 block.input_payload is None
                 or input_targets[block.identifier] in selected[side]
-            )
-        }
-        for side in ("qic", "tn")
-    }
+            ):
+                retained[side].add(block.identifier)
 
     base_interface = {
         target
@@ -729,9 +869,19 @@ def _simulate_blueprint_split(
             for block in blocks:
                 if block.identifier not in retained[side] or block.input_payload is not None:
                     continue
-                if any(target not in available[side] for target in block.references):
-                    retained[side].remove(block.identifier)
-                    changed = True
+                missing = [
+                    target for target in block.references if target not in available[side]
+                ]
+                if not missing:
+                    continue
+                if block.wrapper_id is not None:
+                    errors.append(
+                        f"{side} structural wrapper {block.wrapper_id} cannot resolve "
+                        + ", ".join(missing)
+                    )
+                    continue
+                retained[side].remove(block.identifier)
+                changed = True
 
     interface_labels = set(base_interface)
     for block in blocks:
@@ -772,15 +922,37 @@ def _simulate_blueprint_split(
             if block.input_payload is not None:
                 target = input_targets[block.identifier]
                 if target not in selected[side]:
-                    errors.append(
-                        f"{side} input {block.file}:{block.line} targets omitted {target}"
-                    )
+                    if block.wrapper_id is not None:
+                        errors.append(
+                            f"{side} structural wrapper {block.wrapper_id} input "
+                            f"{block.file}:{block.line} targets omitted {target}"
+                        )
+                    else:
+                        errors.append(
+                            f"{side} input {block.file}:{block.line} targets omitted {target}"
+                        )
                 continue
             for target in block.references:
                 if target not in available[side]:
                     errors.append(
                         f"{side} prose {block.identifier} cannot resolve {target}"
                     )
+
+    wrapper_blocks: dict[str, set[str]] = {}
+    for block in blocks:
+        if block.wrapper_id is not None:
+            wrapper_blocks.setdefault(block.wrapper_id, set()).add(block.identifier)
+    for wrapper in wrappers:
+        block_ids = wrapper_blocks.get(wrapper.identifier, set())
+        if not block_ids:
+            errors.append(f"structural wrapper {wrapper.identifier} has no movable shell")
+        for side in wrapper_sides[wrapper.identifier]:
+            missing = sorted(block_ids - retained[side])
+            if missing:
+                errors.append(
+                    f"{side} structural wrapper {wrapper.identifier} omits shell blocks "
+                    + ", ".join(missing)
+                )
 
     block_states = Counter()
     block_state_by_id: dict[str, str] = {}
@@ -805,6 +977,9 @@ def _simulate_blueprint_split(
         "retained_blocks": {side: sorted(retained[side]) for side in ("qic", "tn")},
         "block_state_counts": dict(sorted(block_states.items())),
         "block_state_by_id": block_state_by_id,
+        "wrapper_sides": {
+            identifier: sorted(sides) for identifier, sides in sorted(wrapper_sides.items())
+        },
         "tn_interface_labels": sorted(interface_labels),
         "label_availability": label_availability,
         "input_targets": input_targets,
@@ -938,13 +1113,19 @@ def boundary_report(root: Path, ledger_path: Path | None = None) -> dict[str, ob
     if manifest_errors:
         raise ValueError("; ".join(manifest_errors))
     movers = mover_files(root, entries)
-    environments = blueprint_environments(root / "blueprint" / "src")
-    non_item_blocks = blueprint_non_item_blocks(root / "blueprint" / "src", environments)
+    blueprint_src = root / "blueprint" / "src"
+    environments = blueprint_environments(blueprint_src)
+    structural_wrappers = blueprint_structural_wrappers(blueprint_src, environments)
+    non_item_blocks = blueprint_non_item_blocks(
+        blueprint_src, environments, structural_wrappers
+    )
     _validate_unique_labels(environments, non_item_blocks)
     ledger_file = ledger_path or root / DEFAULT_LEDGER
     ledger = read_disposition_ledger(ledger_file)
     items, disposition_by_label = _classify_environments(root, environments, ledger)
-    simulation = _simulate_blueprint_split(root, environments, non_item_blocks, items)
+    simulation = _simulate_blueprint_split(
+        root, environments, non_item_blocks, structural_wrappers, items
+    )
     disposition_by_label.update(simulation["label_availability"])
     edges = _uses_edges(environments, disposition_by_label)
     reference_edges = _reference_edges(environments, disposition_by_label)
@@ -982,6 +1163,18 @@ def boundary_report(root: Path, ledger_path: Path | None = None) -> dict[str, ob
         "environment_count": len(environments),
         "labelled_environment_count": sum(bool(item.labels) for item in environments),
         "unlabelled_environment_count": sum(not item.labels for item in environments),
+        "structural_wrapper_count": len(structural_wrappers),
+        "structural_wrappers": [
+            {
+                "environment": wrapper.environment,
+                "file": wrapper.file,
+                "line": wrapper.line,
+                "end_line": wrapper.end_line,
+                "items": list(wrapper.items),
+                "sides": simulation["wrapper_sides"][wrapper.identifier],
+            }
+            for wrapper in structural_wrappers
+        ],
         "non_item_block_count": len(non_item_blocks),
         "non_item_label_count": sum(len(block.labels) for block in non_item_blocks),
         "non_item_reference_count": sum(len(block.references) for block in non_item_blocks),
@@ -994,6 +1187,7 @@ def boundary_report(root: Path, ledger_path: Path | None = None) -> dict[str, ob
                 "labels": list(block.labels),
                 "references": list(block.references),
                 "input_target": simulation["input_targets"].get(block.identifier),
+                "wrapper": block.wrapper_id,
                 "disposition": simulation["block_state_by_id"][block.identifier],
             }
             for block in non_item_blocks
