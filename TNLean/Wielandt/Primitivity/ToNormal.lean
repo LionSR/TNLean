@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.Channel.Primitive
-import TNLean.MPS.Core.CPPrimitive
+import TNLean.MPS.Core.TransferChannel
 import TNLean.MPS.Irreducible.FormII
 import TNLean.MPS.Structure.PrimitivityBridge
 import TNLean.QPF.PosDef
@@ -147,7 +147,7 @@ theorem IsPrimitiveMPS.transferMap_isChannel
     {A : MPSTensor d D} {ρ : Matrix (Fin D) (Fin D) ℂ}
     (hP : IsPrimitiveMPS A ρ) :
     IsChannel (transferMap (d := d) (D := D) A) :=
-  MPSTensor.transferMap_isChannel A hP.norm
+  Kraus.isChannel_transferMap A hP.norm
 
 /-- Preferred theorem stating that the transfer map attached to
 `IsPrimitiveMPS A ρ` is trace-preserving. -/
