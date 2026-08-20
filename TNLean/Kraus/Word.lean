@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import Mathlib.Data.Complex.Basic
 import Mathlib.Data.List.OfFn
+import Mathlib.Data.Matrix.Mul
 import Mathlib.LinearAlgebra.Matrix.GeneralLinearGroup.Defs
 import Mathlib.LinearAlgebra.Matrix.Trace
 
@@ -140,3 +141,21 @@ lemma trace_conj_eq (X : GL (Fin D) ℂ) (M : Matrix (Fin D) (Fin D) ℂ) :
       (X : Matrix (Fin D) (Fin D) ℂ) M ((X⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ)
 
 end MPSTensor
+
+namespace Kraus
+
+variable {d D : ℕ}
+
+/-- Transposing a word product reverses the word. -/
+theorem evalWord_transpose
+    (K : Fin d → Matrix (Fin D) (Fin D) ℂ) :
+    ∀ w : List (Fin d),
+      (MPSTensor.evalWord K w)ᵀ =
+        MPSTensor.evalWord (fun i ↦ (K i)ᵀ) w.reverse := by
+  intro w
+  induction w with
+  | nil => simp [MPSTensor.evalWord]
+  | cons i w ih =>
+      simp [MPSTensor.evalWord, Matrix.transpose_mul, ih, MPSTensor.evalWord_append]
+
+end Kraus
