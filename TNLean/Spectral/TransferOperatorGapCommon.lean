@@ -5,7 +5,6 @@ Authors: TNLean contributors
 -/
 import TNLean.Analysis.SpectralRadius
 import TNLean.Analysis.SpectralRadiusPowerDecay
-import TNLean.Spectral.MixedTransfer
 
 /-!
 # Common infrastructure for square and rectangular transfer gaps
@@ -20,11 +19,7 @@ spectral-radius results now in `TNLean.Analysis`.
 - `MPSTensor.IsIdempotentElem.eq_zero_of_spectralRadius_lt_one`
 -/
 
-open scoped Matrix ComplexOrder BigOperators NNReal ENNReal
-
 namespace MPSTensor
-
-variable {d D : ℕ}
 
 /-! ### Compatibility aliases for spectral-radius results -/
 
