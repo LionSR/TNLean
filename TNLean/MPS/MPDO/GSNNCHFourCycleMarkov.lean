@@ -7,6 +7,7 @@ import TNLean.Algebra.CommutingOverlappingDecomp
 import TNLean.Algebra.PositiveSemidefiniteNormalization
 import TNLean.Entropy.MarkovChain
 import TNLean.MPS.MPDO.CommutingOverlappingCoordinates
+import TNLean.MPS.MPDO.CPSVExample412FourCycleEntropy
 import TNLean.MPS.MPDO.GSNNCHSectorSum
 import TNLean.MPS.MPDO.PhysicalSectorBondTransport
 import TNLean.MPS.MPDO.PhysicalSupportBondTransport
@@ -683,7 +684,9 @@ def fourCycleMiddlePair (d : ℕ) (b : Fin (d * d)) : Fin d × Fin d :=
 
 /-- The four-site regrouping (A=\{0\}), (B=\{1,3\}), (C=\{2\}).
 
-Source: arXiv:1606.00608, Definition 4.8, lines 829--850. -/
+This is the coordinate boundary used to apply the Markov criterion to the
+four-site instance derived from arXiv:1606.00608, Definition 4.8,
+lines 829--850. -/
 def fourCycleTripartiteEquiv (d : ℕ) :
     (Fin d × (Fin (d * d) × Fin d)) ≃ (Fin 4 → Fin d) where
   toFun x := ![x.1, (fourCycleMiddlePair d x.2.1).1,
@@ -868,7 +871,9 @@ theorem pairBondMatrix_twoSiteSectorProjection
 /-- A four-site chain operator regarded as a tripartite state with
 (A={0}), (B={1,3}), and (C={2}).
 
-Source: arXiv:1606.00608, Definition 4.8 and lines 829--850. -/
+This is the coordinate boundary used to apply the Markov criterion to the
+four-site instance derived from arXiv:1606.00608, Definition 4.8,
+lines 829--850. -/
 noncomputable def fourCycleTripartiteState (rho : ChainOperator d 4) :
     Matrix (Fin d × (Fin (d * d) × Fin d))
       (Fin d × (Fin (d * d) × Fin d)) ℂ :=
@@ -1338,8 +1343,10 @@ theorem fourCycleTripartiteState_trace {rho : ChainOperator d 4} :
 /-- A four-site GSNNCH state has a quantum Markov decomposition for the
 tripartition (A={0}), (B={1,3}), (C={2}).
 
-Source: arXiv:1606.00608, Definition 4.8, lines 829--850, together with the
-four-site Markov decomposition used in Example 4.12. -/
+Derived from arXiv:1606.00608, Definition 4.8, lines 829--850, by applying
+Beigi's spatial decomposition and the Hayden--Jozsa--Petz--Winter Markov
+structure theorem. CPSV16 does not state this four-cycle consequence as a
+separate lemma. -/
 theorem nonempty_quantumMarkovDecomposition_fourCycle_of_isGSNNCHAt
     {rho : ChainOperator d 4} (hrho : IsGSNNCHAt rho) :
     Nonempty (Entropy.QuantumMarkovDecomposition
@@ -1450,7 +1457,9 @@ theorem nonempty_quantumMarkovDecomposition_fourCycle_of_isGSNNCHAt
 /-- A four-site GSNNCH state saturates strong subadditivity after grouping
 (A={0}), (B={1,3}), and (C={2}).
 
-Source: arXiv:1606.00608, Definition 4.8, lines 829--850, and Example 4.12. -/
+Derived from arXiv:1606.00608, Definition 4.8, lines 829--850, through the
+four-cycle Beigi/Hayden--Jozsa--Petz--Winter decomposition above. CPSV16
+does not state this implication as a separate lemma. -/
 theorem isSSAEquality_fourCycle_of_isGSNNCHAt
     {rho : ChainOperator d 4} (hrho : IsGSNNCHAt rho) :
     IsSSAEquality (fourCycleTripartiteState rho)
@@ -1462,3 +1471,50 @@ theorem isSSAEquality_fourCycle_of_isGSNNCHAt
   · rw [fourCycleTripartiteState_trace, hrho.2.1]
 
 end MPOTensor
+
+namespace MPOTensor.CPSVExample412Literal
+
+/-- The basis regrouping used in the literal entropy calculation is exactly
+the specialization of the general four-cycle regrouping to binary sites.
+
+This identifies the coordinate boundary used for CPSV16, arXiv:1606.00608,
+Example 4.12, lines 932--938, with the one used for the four-site consequence
+of Definition 4.8, lines 829--850. -/
+theorem fourCycleTripartiteEquiv_eq_generic :
+    fourCycleTripartiteEquiv = MPOTensor.fourCycleTripartiteEquiv 2 := by
+  apply Equiv.ext
+  rintro ⟨a, b, c⟩
+  funext i
+  fin_cases i <;>
+    simp [fourCycleTripartiteEquiv, MPOTensor.fourCycleTripartiteEquiv,
+      fourCycleMiddleBits, MPOTensor.fourCycleMiddlePair]
+
+/-- The tripartite state used in the literal entropy calculation is the
+binary specialization of the general four-cycle regrouping.
+
+This identifies the normalized state in CPSV16, arXiv:1606.00608,
+Example 4.12, lines 932--938, with the four-site coordinate boundary derived
+from Definition 4.8, lines 829--850. -/
+theorem fourCycleTripartiteState_eq_generic :
+    fourCycleTripartiteState =
+      MPOTensor.fourCycleTripartiteState (normalizedMPO M 4) := by
+  ext x y
+  simp only [fourCycleTripartiteState, MPOTensor.fourCycleTripartiteState,
+    Matrix.reindex_apply, Equiv.symm_symm]
+  rw [fourCycleTripartiteEquiv_eq_generic]
+
+/-- The tensor in CPSV16 Example 4.12 is not GSNNCH.
+
+The four-site specialization of Definition 4.8 would force equality in
+strong subadditivity for (A={0}), (B={1,3}), (C={2}), whereas the
+literal four-site entropy calculation is strict.
+
+Source conclusion: CPSV16, arXiv:1606.00608, Example 4.12, lines 932--938. -/
+theorem M_not_isGSNNCH : ¬ IsGSNNCH M := by
+  intro hGSNNCH
+  have hSSA := MPOTensor.isSSAEquality_fourCycle_of_isGSNNCHAt
+    (hGSNNCH 4 (by decide))
+  apply fourCycleTripartiteState_not_isSSAEquality
+  simpa only [IsSSAEquality, ← fourCycleTripartiteState_eq_generic] using hSSA
+
+end MPOTensor.CPSVExample412Literal
