@@ -122,7 +122,7 @@ theorem exists_verticalComponent_eq_smul_single (p q : Fin 4) :
   simp only [pp, qq, Prod.eta, Equiv.apply_symm_apply]
 
 /-- The normalized vertical component is injective at one site. -/
-theorem verticalComponent_isInjective : verticalComponent.IsInjective := by
+theorem verticalComponent_isInjective : MPSTensor.IsInjective verticalComponent := by
   unfold MPSTensor.IsInjective
   apply le_antisymm le_top
   rw [← (Matrix.stdBasis ℂ (Fin 4) (Fin 4)).span_eq]
@@ -166,7 +166,7 @@ theorem verticalComponent_isLeftCanonical : verticalComponent.IsLeftCanonical :=
     Matrix.submatrix_one_equiv]
 
 /-- Algebraic injectivity makes the normalized vertical component normal. -/
-theorem verticalComponent_isNormal : verticalComponent.IsNormal :=
+theorem verticalComponent_isNormal : MPSTensor.IsNormal verticalComponent :=
   verticalComponent_isInjective.isNormal
 
 /-- The normalized vertical component is a CPSV normal tensor. -/

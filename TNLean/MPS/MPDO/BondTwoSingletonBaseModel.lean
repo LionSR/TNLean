@@ -429,7 +429,7 @@ theorem normalizedSingletonTensor_isNormalTensor :
     MPSTensor.IsNormalTensor normalizedSingletonTensor := by
   have hs : ((singletonScale : ℝ) : ℂ) ≠ 0 := by
     exact_mod_cast ne_of_gt singletonScale_pos
-  have hNormal : normalizedSingletonTensor.IsNormal :=
+  have hNormal : MPSTensor.IsNormal normalizedSingletonTensor :=
     (singletonTensor_isInjective.smul hs).isNormal
   exact MPSTensor.isNormalTensor_of_isNormal_leftCanonical
     normalizedSingletonTensor hNormal normalizedSingletonTensor_isLeftCanonical
