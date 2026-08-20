@@ -367,6 +367,20 @@ matrices, and let $\E_K$ be its Kraus map.
     gives proportionality.
 \end{proof}
 
+\begin{theorem}[Powers of completely positive maps]
+    \label{thm:cp-map-natural-power}
+    \lean{IsCPMap.pow}
+    \leanok
+    \uses{def:cp_map}
+    If $E$ is completely positive, then $E^m$ is completely positive for
+    every $m\geq0$.
+\end{theorem}
+
+\begin{proof}\leanok
+    The identity map is completely positive, and complete positivity is
+    closed under composition; induct on $m$.
+\end{proof}
+
 \begin{theorem}[Powers of channels]
     \label{thm:channel-natural-power}
     \lean{Kraus.isChannel_pow}
@@ -376,8 +390,9 @@ matrices, and let $\E_K$ be its Kraus map.
 \end{theorem}
 
 \begin{proof}\leanok
-    Complete positivity and trace preservation are both closed under
-    composition and hold for the identity map.
+    \uses{thm:cp-map-natural-power}
+    Complete positivity is closed under powers, and trace preservation is
+    closed under composition and holds for the identity map.
 \end{proof}
 
 \begin{theorem}[Vanishing of Hermitian power-fixed points]
