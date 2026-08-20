@@ -7,7 +7,8 @@ identified in issue #6244.  It precedes the corresponding changes to the bluepri
 
 Each Lean declaration has exactly one blueprint entry carrying its `\lean{...}` tag.
 That entry is the one in which the result has its most general mathematical role.  A
-later specialization, application, or recap cites the owning entry through `\uses`:
+later specialization, application, or recap in the same compiled volume cites the
+owning entry through `\uses`:
 
 - a statement cites the owner only when the owned result is needed to formulate the
   statement;
@@ -16,6 +17,13 @@ later specialization, application, or recap cites the owning entry through `\use
 Displayed order alone does not determine ownership.  In particular, a contextual
 application does not acquire ownership merely because it occurs before the general
 discussion in the compiled book.
+
+At present, Chapters 23 and 24 are excluded from `blueprint/src/content.tex`.  A
+dependency edge between one of those chapters and the compiled Chapters 13 or 21 is
+therefore unresolved by `leanblueprint`.  In such a cross-scope case the contextual
+entry relinquishes its duplicate `\lean{...}` tag, but does not acquire an invalid
+`\uses` edge.  The edge should be added when both entries belong to a common compiled
+volume.
 
 ## Channel representations: Chapters 4 and 16
 
@@ -53,16 +61,22 @@ declarations are:
 - `MPSTensor.perBlockLinearExtension_bijective`;
 - `MPSTensor.exists_unitary_conj_of_positive_perBlockLinearExtension`.
 
-The Chapter 21 definition cites the Chapter 23 definition at statement level.  Its two
-structural theorems and the unitary-implementation theorem cite the corresponding
-Chapter 23 results in their proofs.
+These are presently cross-scope cases: Chapter 21 belongs to the full-book router,
+whereas Chapter 23 is excluded from it.  The Chapter 21 entries therefore relinquish
+their duplicate ownership tags without adding unresolved dependencies.  Once Chapter
+23 and Chapter 21 occur in a common compiled volume, the Chapter 21 definition should
+cite the Chapter 23 definition at statement level, and its structural results should
+cite the corresponding Chapter 23 results at proof level.
 
 ## Cyclic trace expansion: Chapters 13 and 24
 
 Chapter 13 owns `MPSTensor.trace_evalWord_eq_sum_cyclic`: it states the general cyclic
 trace expansion for a closed MPS chain.  Chapter 24 uses this identity to identify the
 coefficients of a cycle PEPS tensor, so the proof of that identification cites the
-Chapter 13 theorem.
+Chapter 13 theorem mathematically.  Since Chapter 24 is currently excluded from the
+full-book router, this dependency cannot yet be represented by a resolvable `\uses`
+edge.  The Chapter 24 entry relinquishes its duplicate ownership tag, and the edge
+should be added when the two chapters occur in a common compiled volume.
 
 All eighteen shared declarations therefore have an unambiguous general owner.  No case
 in these three clusters needs to retain two ownership tags.
