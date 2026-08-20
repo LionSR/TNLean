@@ -19,6 +19,10 @@ This file preserves the established matrix-product-tensor blocking interface.
 The finite-family word and blocking identities are the corresponding `Kraus`
 results. Kronecker lifts of physical operators, configuration equivalences,
 canonical normalization, and matrix-product-vector statements remain here.
+
+The established MPS definitions use exactly the formulas of their finite-family
+counterparts. The comparison lemmas below are therefore immediate by reduction
+and make equality of the two formulas an explicit invariant.
 -/
 
 open scoped Matrix
@@ -411,15 +415,12 @@ theorem leftCanonical_blockTensor
                 (by intro i; rfl)
     _ = 1 := sum_evalWord_conjTranspose_mul_evalWord (A := A) hLeft L
 
-
-
 /-! ### Evaluation on repeated words -/
 
 /-- Evaluating a repeated single-letter word gives a matrix power. -/
 lemma evalWord_replicate (A : Fin d → Matrix (Fin D) (Fin D) ℂ) (i : Fin d) (L : ℕ) :
     evalWord A (List.replicate L i) = (A i) ^ L := by
   exact Kraus.evalWord_replicate A i L
-
 
 variable {d D : ℕ}
 
@@ -456,6 +457,5 @@ theorem SameMPV.blockTensor {A B : MPSTensor d D} (hSame : SameMPV A B) (L : ℕ
     mpv (MPSTensor.blockTensor (d := d) (D := D) A L) σ = mpv A σflat := hblock A
     _ = mpv B σflat := hSame (N * L) σflat
     _ = mpv (MPSTensor.blockTensor (d := d) (D := D) B L) σ := (hblock B).symm
-
 
 end MPSTensor
