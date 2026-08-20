@@ -9,7 +9,7 @@ import Mathlib.LinearAlgebra.Matrix.GeneralLinearGroup.Defs
 import Mathlib.LinearAlgebra.Matrix.Trace
 import Mathlib.Order.Filter.AtTopBot.Basic
 import TNLean.MPS.Core.Word
-import TNLean.Kraus.Injectivity
+import TNLean.MPS.Core.Injectivity
 
 /-!
 # Basic definitions for matrix product state tensors
