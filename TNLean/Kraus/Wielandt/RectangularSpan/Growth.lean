@@ -20,6 +20,8 @@ open scoped Matrix
 
 namespace Kraus
 
+open Module
+
 variable {d D : ℕ}
 
 /-! ## One-sided rectangular span growth -/
