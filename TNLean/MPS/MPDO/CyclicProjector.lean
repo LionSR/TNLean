@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import TNLean.Analysis.MatrixSqrt
 import TNLean.MPS.MPDO.StackedLayers
 import TNLean.MPS.CanonicalForm.Reduction
 import TNLean.Channel.Peripheral.CyclicDecomposition.Decomposition
@@ -118,7 +119,7 @@ theorem spectralUnitalGauge_schwarz_setup [NeZero D]
     have hs : Real.sqrt rad ≠ 0 := ne_of_gt (Real.sqrt_pos.mpr hrad)
     exact_mod_cast inv_ne_zero hs
   have hSunit : IsUnit (CFC.sqrt ρ) :=
-    (Matrix.isUnit_iff_isUnit_det _).mpr (isUnit_det_cfc_sqrt_of_posDef ρ hρ)
+    (Matrix.isUnit_iff_isUnit_det _).mpr (Matrix.PosDef.isUnit_det_cfc_sqrt hρ)
   have hIrrK : IsIrreducibleTensor (spectralUnitalGauge B rad ρ) := by
     have h := isIrreducibleTensor_smul_conj B hIrr hSunit hcne
     exact h
@@ -165,8 +166,8 @@ theorem hasEigenvalue_transferMap_spectralUnitalGauge
     Module.End.mem_eigenspace_iff.mp (Module.End.hasEigenvector_iff.mp hX).1
   have hXne : X ≠ 0 := (Module.End.hasEigenvector_iff.mp hX).2
   set S : Matrix (Fin D) (Fin D) ℂ := CFC.sqrt ρ with hS
-  have hSdet : IsUnit S.det := isUnit_det_cfc_sqrt_of_posDef ρ hρ
-  have hSH : Sᴴ = S := conjTranspose_cfc_sqrt ρ
+  have hSdet : IsUnit S.det := Matrix.PosDef.isUnit_det_cfc_sqrt hρ
+  have hSH : Sᴴ = S := Matrix.conjTranspose_cfc_sqrt ρ
   have hSinvH : (S⁻¹)ᴴ = S⁻¹ := by rw [Matrix.conjTranspose_nonsing_inv, hSH]
   set c : ℂ := (↑((Real.sqrt rad)⁻¹) : ℂ) with hc
   have hcstar : star c = c := by rw [hc, RCLike.star_def, Complex.conj_ofReal]
@@ -313,7 +314,7 @@ theorem exists_displaced_invariant_projector_of_periodic_vector
     fun k => by rw [← Kraus.mapLM_eq_transferMap]; exact hcyclicLM k
   -- Notation for the square root of the eigenvector and the scaling factor.
   set S : Matrix (Fin n) (Fin n) ℂ := CFC.sqrt ρ with hS
-  have hSdet : IsUnit S.det := MPSTensor.isUnit_det_cfc_sqrt_of_posDef ρ hρ
+  have hSdet : IsUnit S.det := Matrix.PosDef.isUnit_det_cfc_sqrt hρ
   set c : ℂ := (↑((Real.sqrt rad)⁻¹) : ℂ) with hc
   have hcne : c ≠ 0 := by
     have hs : Real.sqrt rad ≠ 0 := ne_of_gt (Real.sqrt_pos.mpr hrad)
