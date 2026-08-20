@@ -61,18 +61,18 @@
 \end{proof}
 
 %% =========================================================
-\section{SVD normal form (existence)}
+\section{General matrix singular value decompositions}
 \label{sec:svd_normal_form}
 %% =========================================================
 
-\cite[Section~2.4]{Wolf2012Quantum} discusses two families of normal forms for
-the transfer-matrix representation of a quantum channel: the \emph{singular
-    value decomposition} (SVD) and, for qubit channels, the \emph{Lorentz normal
-    form} obtained by general invertible Kraus-rank-one CP filtering operations.
-The SVD normal form is proved below. The Lorentz normal form theorem
-(Theorem~\ref{thm:lorentz_normal_form_qubit}) uses general invertible
-Kraus-rank-one completely positive filterings. Its proof requires the minimisation
-argument and Lorentz-orbit analysis in
+The results in this section are ordinary singular value decompositions in the
+general complex matrix-algebraic setting. They are useful for transfer matrices, but
+they are not the real $3\times3$ singular value decomposition arising from the
+$\SO(3)$ action on the traceless Pauli block of a qubit channel in
+\cite[Section~2.4]{Wolf2012Quantum}. The Lorentz normal form theorem
+(Theorem~\ref{thm:lorentz_normal_form_qubit}) instead uses general invertible
+Kraus-rank-one completely positive filterings. Its proof requires the
+minimisation argument and Lorentz-orbit analysis in
 \cite[Propositions~2.9 and~2.11]{Wolf2012Quantum}; see
 Section~\ref{sec:lorentz_normal_form}.
 
@@ -141,10 +141,9 @@ Section~\ref{sec:lorentz_normal_form}.
     Theorem~\ref{thm:svd_of_isUnit} produces the singular values as an
     unordered family, without the usual convention that $\sigma_i$ are sorted
     in non-increasing order or the statement that they are uniquely determined
-    by $M$. Downstream applications in \cite[Section~2.4]{Wolf2012Quantum},
-    such as trace-norm identities, polar decomposition, and the Lorentz normal
-    form, will typically require the sorted / unique variant; that refinement is
-    future work.
+    by $M$. Applications that distinguish individual singular values may also
+    require a non-increasing ordering and uniqueness of the resulting ordered
+    family. These refinements are not part of the present statement.
 \end{remark}
 
 %% =========================================================

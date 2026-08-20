@@ -158,10 +158,13 @@ end LorentzNormalFormQubit
 The results above are stated at the level of CP maps. The corresponding
 transfer-matrix formulation is obtained by applying `transferMatrix` to both
 sides; Wolf Section 2.4, lines 1000–1010, gives the qubit Pauli-transfer version
-of the unitary action. The SVD normal form
-(`Matrix.svd_of_isUnit`, `transferMatrix_svd_of_isUnit`) provides the
-algebraic engine: after SL-filterings, the transfer matrix of the doubly-stochastic
-map admits an SVD, which for D = 2 yields the Lorentz normal form decomposition.
+of the unitary action. The general complex singular value decompositions
+`Matrix.svd_of_isUnit` and `transferMatrix_svd_of_isUnit` concern invertible
+matrices and arbitrary unitary factors; they do not imply the Lorentz normal
+form and do not cover the singular channels in Wolf Proposition 2.11. A proof
+of the latter must use the restricted `SO(3)` action on the Pauli block, the
+Lorentz action induced by invertible filters, and the complete-positivity
+classification from Wolf Propositions 2.9 and 2.11.
 -/
 
 
