@@ -26,6 +26,7 @@ source-faithfulness requirements.
 - `ci-automation.md`
 - `counterexamples.md`
 - `deploy.md`
+- `getting_started.md`
 - `paper-gaps/`
 - `pr_review_management.md`
 - `prose_style.md`
