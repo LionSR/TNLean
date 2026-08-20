@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.Wielandt.Primitivity.Equivalence
 import TNLean.Wielandt.SpanGrowth.EigenvectorSpreading
+import TNLean.Wielandt.SpanGrowth.VectorToMatrixSpan
 
 /-!
 # Lemma 2(a) — eigenvector spreading (arXiv:0909.5347)
