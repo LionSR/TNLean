@@ -28,9 +28,9 @@ The key observation: since `range((K i₀)^r) = range((K i₀)^D)` (by
 `range_pow_eq_of_nilpIndex_le`), the Fitting disjointness
 `ker(K i₀) ∩ range((K i₀)^r) = {0}` follows from the D-th power version.
 
-This enables removing the `hMono` hypothesis from the strict-growth theorems
-in Section 8g, closing the gap between the proved monotonicity (for `(K i₀)^D`)
-and the needed monotonicity (for `(K i₀)^r`).
+This removes the separate monotonicity hypothesis from the strict-growth theorems
+in Section 8g: the proved monotonicity for \((K_{i_0})^D\) now supplies the needed
+monotonicity for \((K_{i_0})^r\).
 -/
 
 section NilpIndexGrowth
