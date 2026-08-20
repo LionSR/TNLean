@@ -82,15 +82,15 @@ Then the gauged tensor `tpGauge A ρ` satisfies the trace-preserving condition
 
 This is the standard “left-canonical” gauge construction for MPS, derived from
 `Kraus.tpGauge_isTP_of_map_conjTranspose_fixedPoint` by unfolding `transferMap`
-and `Kraus.map` (`MPSTensor d D` is definitionally a finite matrix family, so
-the two coincide). -/
+and `Kraus.mapLM` (`MPSTensor d D` is definitionally a finite matrix family,
+so the two coincide). -/
 theorem tpGauge_isTP_of_transferMap_conjTranspose_fixedPoint
     (A : MPSTensor d D) (ρ : Matrix (Fin D) (Fin D) ℂ)
     (hρ : ρ.PosDef)
     (hfix : transferMap (d := d) (D := D) (fun i => (A i)ᴴ) ρ = ρ) :
     ∑ i : Fin d, (tpGauge (d := d) (D := D) A ρ i)ᴴ * tpGauge (d := d) (D := D) A ρ i = 1 :=
   Kraus.tpGauge_isTP_of_map_conjTranspose_fixedPoint A ρ hρ (by
-    simpa [Kraus.map_apply, MPSTensor.transferMap_apply] using hfix)
+    simpa [Kraus.mapLM_apply, Kraus.map_apply, MPSTensor.transferMap_apply] using hfix)
 
 /-- The gauge-transformed tensor `tpGauge A ρ` is gauge-equivalent to `A`
 (hence has the same MPV). -/

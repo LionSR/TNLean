@@ -60,13 +60,13 @@ This is the standard "left-canonical" gauge construction, the specialization
 theorem tpGauge_isTP_of_map_conjTranspose_fixedPoint
     (K : Fin d → Mat) (ρ : Mat)
     (hρ : ρ.PosDef)
-    (hfix : map (fun i => (K i)ᴴ) ρ = ρ) :
+    (hfix : mapLM (fun i => (K i)ᴴ) ρ = ρ) :
     IsTP (tpGauge K ρ) := by
   have hS_herm : (CFC.sqrt ρ)ᴴ = CFC.sqrt ρ := Matrix.conjTranspose_cfc_sqrt (ρ := ρ)
   have hStS : (CFC.sqrt ρ)ᴴ * CFC.sqrt ρ = ρ := by
     rw [hS_herm]
     simpa using CFC.sqrt_mul_sqrt_self ρ hρ.posSemidef.nonneg
   exact gauged_isTP_of_map_conjTranspose_fixedPoint K (CFC.sqrt ρ) ρ
-    hρ.isUnit_det_cfc_sqrt hStS hfix
+    hρ.isUnit_det_cfc_sqrt hStS (by simpa only [mapLM_apply] using hfix)
 
 end Kraus

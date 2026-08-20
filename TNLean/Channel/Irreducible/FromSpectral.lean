@@ -401,14 +401,13 @@ theorem isIrreducibleMap_of_hasSpectralProperties
   have hS_inv_herm : (S⁻¹)ᴴ = S⁻¹ := by
     simpa [hS_herm] using Matrix.conjTranspose_nonsing_inv S
   set A' : Fin n → Matrix (Fin D) (Fin D) ℂ := fun i => d • K i with hA'_def
-  have hA'_fix : Kraus.map (fun i => (A' i)ᴴ) σ = σ := by
-    simp only [hA'_def, Kraus.map_apply, Matrix.conjTranspose_smul,
+  have hA'_fix : Kraus.mapLM (fun i => (A' i)ᴴ) σ = σ := by
+    simp only [Kraus.mapLM_apply, hA'_def, Kraus.map_apply, Matrix.conjTranspose_smul,
       Matrix.smul_mul, Matrix.mul_smul, smul_smul, star_star]
     simp_rw [hstar_d, hd_sq]
     rw [← Finset.smul_sum]
-    have hsum : ∑ i : Fin n, (K i)ᴴ * σ * ((K i)ᴴ)ᴴ =
-        Kraus.mapLM (fun i => (K i)ᴴ) σ := rfl
-    rw [hsum, hσ_eig, smul_smul, inv_mul_cancel₀, one_smul]
+    change (↑r : ℂ)⁻¹ • Kraus.mapLM (fun i => (K i)ᴴ) σ = σ
+    rw [hσ_eig, smul_smul, inv_mul_cancel₀, one_smul]
     exact_mod_cast hr.ne'
   set B : Fin n → Matrix (Fin D) (Fin D) ℂ := Kraus.tpGauge A' σ with hB_def
   have hB_tp : Kraus.IsTP B :=
