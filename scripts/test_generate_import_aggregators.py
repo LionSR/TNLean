@@ -233,6 +233,37 @@ class ImportAggregatorGeneratorTests(unittest.TestCase):
             for target in targets:
                 self.assertIn(target, missing)
 
+    def test_source_imported_modules_accepts_multiple_modules_per_line(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary_directory:
+            source = self.write(
+                Path(temporary_directory),
+                "Owner.lean",
+                "import TNLean.First TNLean.Second\n"
+                "import TNLean.Third\n\n"
+                "def witness := 1\n",
+            )
+
+            self.assertEqual(
+                GENERATOR.source_imported_modules(source),
+                {"TNLean.First", "TNLean.Second", "TNLean.Third"},
+            )
+
+    def test_source_imported_modules_stops_before_import_shaped_text(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary_directory:
+            source = self.write(
+                Path(temporary_directory),
+                "Owner.lean",
+                "import TNLean.Real\n\n"
+                "def quotedSource := \"\"\"\n"
+                "import TNLean.Inert\n"
+                "\"\"\"\n",
+            )
+
+            self.assertEqual(
+                GENERATOR.source_imported_modules(source),
+                {"TNLean.Real"},
+            )
+
     def test_check_rejects_omitted_import_despite_incidental_reachability(self) -> None:
         with tempfile.TemporaryDirectory() as temporary_directory:
             root = Path(temporary_directory)

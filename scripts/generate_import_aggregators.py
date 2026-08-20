@@ -18,7 +18,6 @@ import re
 import sys
 
 from lean_import_syntax import (
-    IMPORT_COMMAND_RE,
     MODULE_NAME,
     pure_import_modules,
     strip_lean_comments,
@@ -116,7 +115,7 @@ def delegated_modules(aggregator: str, direct_imports: set[str]) -> set[str]:
 
 
 def source_imported_modules(path: Path) -> set[str]:
-    """Return the one-line imports in an arbitrary Lean source file."""
+    """Return imports from the leading command preamble of a Lean source file."""
     try:
         source = path.read_text(encoding="utf-8")
     except FileNotFoundError:
@@ -126,9 +125,18 @@ def source_imported_modules(path: Path) -> set[str]:
         return set()
     modules: set[str] = set()
     for line in uncommented.splitlines():
-        match = IMPORT_COMMAND_RE.fullmatch(line.strip())
-        if match is not None:
-            modules.add(match.group(1))
+        command = line.strip()
+        if not command:
+            continue
+        tokens = command.split()
+        if tokens[0] != "import":
+            break
+        imported = tokens[1:]
+        if not imported or any(
+            re.fullmatch(MODULE_NAME, module) is None for module in imported
+        ):
+            return set()
+        modules.update(imported)
     return modules
 
 
