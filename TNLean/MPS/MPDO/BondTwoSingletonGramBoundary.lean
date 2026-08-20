@@ -63,7 +63,7 @@ lemma singletonTensor_diagonal (a b : I) :
   simp [singletonTensor]
 
 /-- The four diagonal letters span the full bond-two matrix algebra. -/
-lemma singletonTensor_isInjective : singletonTensor.IsInjective := by
+lemma singletonTensor_isInjective : MPSTensor.IsInjective singletonTensor := by
   rw [MPSTensor.IsInjective, eq_top_iff]
   intro M _
   have hsingle : ∀ a b : I, Matrix.single a b (1 : ℂ) ∈
@@ -79,7 +79,7 @@ lemma singletonTensor_isInjective : singletonTensor.IsInjective := by
   exact Submodule.smul_mem _ _ (hsingle a b)
 
 /-- The singleton retained tensor is normal at word length one. -/
-lemma singletonTensor_isNormal : singletonTensor.IsNormal :=
+lemma singletonTensor_isNormal : MPSTensor.IsNormal singletonTensor :=
   singletonTensor_isInjective.isNormal
 
 /-- The terminal all-ones matrix of the singleton tensor. -/
