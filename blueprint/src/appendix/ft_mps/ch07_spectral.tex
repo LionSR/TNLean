@@ -170,13 +170,13 @@ Euclidean space.
     (\ref{eq:spectral_frob_sq}).
 \end{proof}
 
-The following internal estimate is folded into a private supporting lemma
-in the formalization and is recorded here, untagged, purely as an
-exposition step toward Theorem~\ref{thm:eigenvalue_bound_rect}. Its
-statement is phrased over normalized MPS tensors of fixed bond dimensions,
-so it belongs with the tensor-network-side rump of this appendix alongside
-Definition~\ref{def:mixed_transfer_rect} and Definition~\ref{def:frob_sq},
-not with the channel-generic material extracted elsewhere in this chapter.
+The following estimate records an independent Frobenius-norm argument for
+the rectangular mixed transfer.  The proof of
+Theorem~\ref{thm:eigenvalue_bound_rect} instead uses the block-diagonal
+embedding described there.  We retain this estimate as useful analytic
+background.  Its statement is phrased over normalized MPS tensors of fixed
+bond dimensions, so it belongs alongside
+Definition~\ref{def:mixed_transfer_rect} and Definition~\ref{def:frob_sq}.
 
 \begin{lemma}[Uniform Frobenius bound for the rectangular mixed transfer power]%
     \label{lem:hs_contraction_rect}
@@ -217,12 +217,13 @@ not with the channel-generic material extracted elsewhere in this chapter.
         D_1\,\|X\|_F$, giving (\ref{eq:spectral_hs_contraction_rect}).
 \end{proof}
 
-Theorem~\ref{thm:eigenvalue_bound_rect} follows directly from
-Lemma~\ref{lem:hs_contraction_rect}: if $F_{AB}^{\mathrm{rect}}(X)=\mu X$
-with $X\neq0$, iterating gives $(F_{AB}^{\mathrm{rect}})^n(X)=\mu^nX$, and
-Lemma~\ref{lem:hs_contraction_rect} gives $|\mu|^{2n}\|X\|_F^2\leq
-    D_1^2\|X\|_F^2$ for every $n$; since $\|X\|_F>0$, if $|\mu|>1$ then
-$|\mu|^{2n}\to\infty$, contradicting the uniform bound, so $|\mu|\leq1$.
+Lemma~\ref{lem:hs_contraction_rect} also gives an alternative proof of
+the conclusion of Theorem~\ref{thm:eigenvalue_bound_rect}.  Indeed, if
+$F_{AB}^{\mathrm{rect}}(X)=\mu X$ with $X\neq0$, then
+$(F_{AB}^{\mathrm{rect}})^n(X)=\mu^nX$, and the lemma gives
+$|\mu|^{2n}\|X\|_F^2\leq D_1^2\|X\|_F^2$ for every $n$.  Since
+$\|X\|_F>0$, the case $|\mu|>1$ contradicts
+$|\mu|^{2n}\to\infty$.
 
 \begin{lemma}[Rectangular spectral radius bound]\label{thm:spectral_radius_le_one_rect}
     \lean{MPSTensor.spectralRadius_mixedTransfer₂_le_one}
