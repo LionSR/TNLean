@@ -3,6 +3,7 @@ Copyright (c) 2025 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import TNLean.Algebra.MatrixOperatorSpace
 import TNLean.Spectral.TransferOperatorGapRectNormalized
 
 /-!
@@ -72,9 +73,7 @@ theorem spectralRadius_mixedTransfer_le_one
     (A B : MPSTensor d D)
     (hA_norm : ∑ i : Fin d, (A i)ᴴ * A i = 1)
     (hB_norm : ∑ i : Fin d, (B i)ᴴ * B i = 1) :
-    mixedTransferSpectralRadius A B ≤ 1 := by
-  rw [mixedTransferSpectralRadius_eq]
-  simpa [Kraus.mixedMapSpectralRadius, mixedTransferMap] using
-    Kraus.mixedMapSpectralRadius_le_one_of_isTP A B hA_norm hB_norm
+    mixedTransferSpectralRadius A B ≤ 1 :=
+  Kraus.mixedMapSpectralRadius_le_one_of_isTP A B hA_norm hB_norm
 
 end MPSTensor
