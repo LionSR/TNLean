@@ -420,7 +420,15 @@ theorem isUnit_restrict_range_pow (f : End ℂ (Fin D → ℂ)) :
     ker_restrict_range_pow_eq_bot (D := D) f
   exact (LinearMap.isUnit_iff_ker_eq_bot (f := f.restrict (mapsTo_range_pow (D := D) f))).2 hker
 
+end WielandtRankOne
+
+end MPSTensor
+
 /-! ## Matrix corollary -/
+
+namespace Matrix
+
+variable {D : ℕ}
 
 /-- Matrix formulation: `Matrix.toLin' M` restricts to an automorphism of
 `range (Matrix.toLin' (M^D))`.
@@ -429,10 +437,11 @@ by A₁ preserves linear independence 'given that A₁ is invertible on its
 range'. -/
 theorem isUnit_restrict_range_toLin'_pow (M : Matrix (Fin D) (Fin D) ℂ) :
     IsUnit ((Matrix.toLin' M).restrict
-      (mapsTo_range_pow (D := D) (f := Matrix.toLin' M))) := by
+      (MPSTensor.WielandtRankOne.mapsTo_range_pow (D := D) (f := Matrix.toLin' M))) := by
   -- Apply the abstract lemma to `f = Matrix.toLin' M`.
   simpa [Matrix.toLin'_pow] using
-    (isUnit_restrict_range_pow (D := D) (f := Matrix.toLin' M))
+    (MPSTensor.WielandtRankOne.isUnit_restrict_range_pow
+      (D := D) (f := Matrix.toLin' M))
 
 /-! ## Pointwise matrix injectivity -/
 
@@ -446,7 +455,7 @@ theorem vec_eq_zero_of_mulVec_eq_zero_of_mem_range_pow
   classical
   let f : End ℂ (Fin D → ℂ) := Matrix.toLin' M
   have hdisj : Disjoint (LinearMap.ker f) (LinearMap.range (f ^ D)) :=
-    disjoint_ker_range_pow (D := D) (f := f)
+    MPSTensor.WielandtRankOne.disjoint_ker_range_pow (D := D) (f := f)
   have hv' : v ∈ LinearMap.range (f ^ D) := by
     simpa only [f, Matrix.toLin'_pow] using hv
   have hker : v ∈ LinearMap.ker f := by
@@ -461,7 +470,7 @@ theorem vec_eq_zero_of_mulVec_eq_zero_of_mem_range_pow
 /-- Matrix-level injectivity on the range of left multiplication by `M^D`.
 
 If `X ∈ range (mulLeft (M^D))` and `M * X = 0`, then `X = 0`. -/
-theorem matrix_eq_zero_of_mul_eq_zero_of_mem_range_mulLeft_pow
+theorem eq_zero_of_mul_eq_zero_of_mem_range_mulLeft_pow
     (M : Matrix (Fin D) (Fin D) ℂ) {X : Matrix (Fin D) (Fin D) ℂ}
     (hX : X ∈ LinearMap.range (LinearMap.mulLeft ℂ (M ^ D)))
     (hMX : M * X = 0) : X = 0 := by
@@ -494,6 +503,4 @@ theorem matrix_eq_zero_of_mul_eq_zero_of_mem_range_mulLeft_pow
   simpa [hzero] using hcol0 j
 
 
-end WielandtRankOne
-
-end MPSTensor
+end Matrix
