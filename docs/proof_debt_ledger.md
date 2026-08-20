@@ -106,22 +106,20 @@ live mathematics. Tracked under [#4529](https://github.com/LionSR/TNLean/issues/
   211-line dead block in file 5. Net -449 lines, zero consumers, zero
   proof changes to the live capstone.
 
-### S8. Derive injective-tensor Perron-Frobenius as a corollary of the irreducible-CP-map theory — net 400 lines, risk 6/10
-- **Status**: open (#4568)
-- **What**: the injective-only theorem bodies in
-  `QPF/{PosDef,Uniqueness,Assembly}.lean` (~70 ln); the injective-named
-  corollaries in `Spectral/{TransferOperatorGap,TransferOperatorGapRect,MPVOverlapDecay}.lean`
-  (~330 ln, relocated to a new leaf file to dodge an import cycle through
-  `TransferOperatorGapNT.lean`).
+### S8. Derive injective-tensor Perron-Frobenius as a corollary of the irreducible-CP-map theory — completed
+- **Status**: closed 2026-07-23 (#4568; #4594 and #4628)
+- **What**: the injective-only QPF theorem bodies are direct corollaries in
+  `QPF/{PosDef,Uniqueness,Assembly}.lean`; all seven injective-named spectral
+  corollaries now live in `Spectral/TransferOperatorGapInjective.lean`.
 - **Why it's excess**: `IsInjective` strictly implies irreducibility via
   an existing one-composition bridge
   (`injective_implies_irreducibleCP` + `isIrreducibleTensor_of_isIrreducibleMap`),
   and both Wolf Thm 6.3 and the Wolf 6.6 rigidity argument need only
   irreducibility — every injective-hypothesis theorem is a direct
   instance of the already-proven irreducible one.
-- **First PR**: the QPF half only — rewrite the three injective-only
-  bodies as 2-3 line corollaries via the existing bridge. Net -70 lines,
-  zero signature/consumer/blueprint changes.
+- **Outcome**: #4594 removed 61 net lines from the QPF proofs. #4628 completed
+  the spectral relocation within a broader 483-net-line dependency reorganization,
+  preserving all public theorem signatures.
 
 ### Degenerate-case hypothesis: tested and refuted (do not re-propose without new evidence)
 
