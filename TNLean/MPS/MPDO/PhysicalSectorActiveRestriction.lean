@@ -786,10 +786,8 @@ theorem activePhysicalSupportProj_eq_physicalSupportProj
   have hQHerm : Q.IsHermitian :=
     F.isOrthogonalProjection_activePhysicalSupportProj.1
   have hSHerm : S.IsHermitian :=
-    (Matrix.isOrthogonalProjection_supportProj
-      (physicalSliceColumns K * (physicalSliceColumns K)ᴴ)
-      (Matrix.posSemidef_self_mul_conjTranspose
-        (physicalSliceColumns K))).1
+    (Matrix.posSemidef_self_mul_conjTranspose
+      (physicalSliceColumns K)).isOrthogonalProjection_supportProj.1
   have hQS' := congrArg Matrix.conjTranspose hSQ
   have hQSQ : Q * S = Q := by
     simpa [Matrix.conjTranspose_mul, hQHerm.eq, hSHerm.eq] using hQS'

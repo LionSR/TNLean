@@ -115,9 +115,9 @@ theorem isIrreducibleTensor_smul_conj (B : MPSTensor d D)
     exact hXdet.star
   set Y : Matrix (Fin D) (Fin D) ℂ := X * P with hY
   set π : Matrix (Fin D) (Fin D) ℂ :=
-    Matrix.supportProj (D := D) (Y * Yᴴ) (Matrix.posSemidef_self_mul_conjTranspose Y) with hπ
-  refine ⟨π, Matrix.isOrthogonalProjection_supportProj (D := D) (ρ := Y * Yᴴ)
-    (hρ := Matrix.posSemidef_self_mul_conjTranspose Y), ?_, ?_, ?_⟩
+    (Matrix.posSemidef_self_mul_conjTranspose Y).supportProj with hπ
+  refine ⟨π, (Matrix.posSemidef_self_mul_conjTranspose
+    Y).isOrthogonalProjection_supportProj, ?_, ?_, ?_⟩
   · -- `π ≠ 0` because `Y ≠ 0`.
     have hYne : Y ≠ 0 := by
       intro h0
@@ -126,8 +126,7 @@ theorem isIrreducibleTensor_smul_conj (B : MPSTensor d D)
         _ = 0 := by rw [← hY, h0, Matrix.mul_zero]
     have hSne : Y * Yᴴ ≠ 0 := fun h0 =>
       hYne (Matrix.self_mul_conjTranspose_eq_zero.mp h0)
-    exact Matrix.supportProj_ne_zero_of_ne_zero (Y * Yᴴ)
-      (Matrix.posSemidef_self_mul_conjTranspose Y) hSne
+    exact (Matrix.posSemidef_self_mul_conjTranspose Y).supportProj_ne_zero_of_ne_zero hSne
   · -- `π ≠ 1`: a nonzero vector in the kernel of `P` transports to the
     -- kernel of `Y * Yᴴ`, hence of `π`.
     have h1Pne : (1 : Matrix (Fin D) (Fin D) ℂ) - P ≠ 0 := by
@@ -163,8 +162,8 @@ theorem isIrreducibleTensor_smul_conj (B : MPSTensor d D)
       rw [hYY, ← Matrix.mulVec_mulVec, ← Matrix.mulVec_mulVec, hXHv, hPw,
         Matrix.mulVec_zero]
     have hπv : π *ᵥ v = 0 :=
-      Matrix.supportProj_mulVec_eq_zero_of_mulVec_eq_zero (Y * Yᴴ)
-        (Matrix.posSemidef_self_mul_conjTranspose Y) v hSv
+      (Matrix.posSemidef_self_mul_conjTranspose
+        Y).supportProj_mulVec_eq_zero_of_mulVec_eq_zero v hSv
     intro h1
     apply hvne
     rw [← Matrix.one_mulVec v, ← h1, hπv]

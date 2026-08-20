@@ -56,11 +56,11 @@ theorem lowerZero_of_posSemidef_fixedPoint
     (ρ : Matrix (Fin D) (Fin D) ℂ)
     (hρ_psd : ρ.PosSemidef)
     (hρ_fix : transferMap (d := d) (D := D) A ρ = ρ) :
-    let P := Matrix.supportProj (D := D) ρ hρ_psd
+    let P := hρ_psd.supportProj
     IsOrthogonalProjection P ∧ (∀ i : Fin d, (1 - P) * A i * P = 0) := by
   have hρ_fix' : Kraus.map A ρ = ρ := by
     simpa [Kraus.map, transferMap_apply] using hρ_fix
-  simpa [Kraus.stationaryProj, Matrix.supportProj] using
+  simpa [Kraus.stationaryProj] using
     (Kraus.lowerZero_of_posSemidef_fixedPoint A ρ hρ_psd hρ_fix')
 
 /-! ## Nontriviality lemmas for the support projection
@@ -193,7 +193,7 @@ theorem exists_twoBlock_decomp_of_posSemidef_fixedPoint
       (A₁ : MPSTensor d n) (A₂ : MPSTensor d m),
       SameMPV₂ A (twoBlockTensor (d := d) (n := n) (m := m) A₁ A₂) := by
   classical
-  let P : Matrix (Fin D) (Fin D) ℂ := Matrix.supportProj (D := D) ρ hρ_psd
+  let P : Matrix (Fin D) (Fin D) ℂ := hρ_psd.supportProj
   have hP : IsOrthogonalProjection P ∧ (∀ i : Fin d, (1 - P) * A i * P = 0) := by
     simpa [P] using
       (lowerZero_of_posSemidef_fixedPoint (d := d) (D := D) A ρ hρ_psd hρ_fix)
@@ -209,8 +209,8 @@ each iteration strictly reduces the bond dimension.
 
 The proof composes:
 1. `lowerZero_of_posSemidef_fixedPoint` — support projection is invariant,
-2. `Matrix.supportProj_ne_zero_of_ne_zero` — `P ≠ 0` from `ρ ≠ 0`,
-3. `Matrix.supportProj_ne_one_of_not_posDef` — `P ≠ 1` from `¬ρ.PosDef`,
+2. `Matrix.PosSemidef.supportProj_ne_zero_of_ne_zero` — `P ≠ 0` from `ρ ≠ 0`,
+3. `Matrix.PosSemidef.supportProj_ne_one_of_not_posDef` — `P ≠ 1` from `¬ρ.PosDef`,
 4. `exists_twoBlock_decomp_of_lowerZero_strict` — strict dimension bounds.
 
 References:
@@ -232,14 +232,14 @@ theorem exists_twoBlock_decomp_of_posSemidef_fixedPoint_strict
       ∃ (A₁ : MPSTensor d n) (A₂ : MPSTensor d m),
         SameMPV₂ A (twoBlockTensor (d := d) (n := n) (m := m) A₁ A₂) := by
   -- Step 1: obtain the invariant support projection
-  let P : Matrix (Fin D) (Fin D) ℂ := Matrix.supportProj (D := D) ρ hρ_psd
+  let P : Matrix (Fin D) (Fin D) ℂ := hρ_psd.supportProj
   have hP_inv : IsOrthogonalProjection P ∧ (∀ i : Fin d, (1 - P) * A i * P = 0) := by
     simpa [P] using
       (lowerZero_of_posSemidef_fixedPoint (d := d) (D := D) A ρ hρ_psd hρ_fix)
   -- Step 2: P ≠ 0 from ρ ≠ 0
-  have hP0 : P ≠ 0 := Matrix.supportProj_ne_zero_of_ne_zero ρ hρ_psd hρ_ne
+  have hP0 : P ≠ 0 := hρ_psd.supportProj_ne_zero_of_ne_zero hρ_ne
   -- Step 3: P ≠ 1 from ¬ρ.PosDef
-  have hP1 : P ≠ 1 := Matrix.supportProj_ne_one_of_not_posDef ρ hρ_psd hρ_not_pd
+  have hP1 : P ≠ 1 := hρ_psd.supportProj_ne_one_of_not_posDef hρ_not_pd
   -- Step 4: apply strict decomposition
   exact exists_twoBlock_decomp_of_lowerZero_strict A P hP_inv.1 hP_inv.2 hP0 hP1
 

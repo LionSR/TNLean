@@ -71,9 +71,8 @@ theorem exists_etaLocalStructureData_supported_of_twoSidedPhysicalSlice
     mul_physicalSupportProj_eq_self_of_forall_mul_physicalSlice_eq
       K P (fun β α ↦ (hSupport β α).1)
   have hQ : IsOrthogonalProjection Q :=
-    Matrix.isOrthogonalProjection_supportProj
-      (physicalSliceColumns K * (physicalSliceColumns K)ᴴ)
-      (Matrix.posSemidef_self_mul_conjTranspose (physicalSliceColumns K))
+    (Matrix.posSemidef_self_mul_conjTranspose
+      (physicalSliceColumns K)).isOrthogonalProjection_supportProj
   have hQP : Q * P = Q := by
     have h := congrArg Matrix.conjTranspose hPQ
     rwa [Matrix.conjTranspose_mul, hQ.1.eq, hP.1.eq] at h

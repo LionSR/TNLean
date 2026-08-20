@@ -103,9 +103,7 @@ noncomputable def physicalSliceColumns (K : MPOTensor d D) :
 
 /-- The orthogonal projection onto the span of all columns of all physical slices. -/
 noncomputable def physicalSupportProj (K : MPOTensor d D) : Matrix (Fin d) (Fin d) ℂ :=
-  Matrix.supportProj
-    (physicalSliceColumns K * (physicalSliceColumns K)ᴴ)
-    (Matrix.posSemidef_self_mul_conjTranspose (physicalSliceColumns K))
+  (Matrix.posSemidef_self_mul_conjTranspose (physicalSliceColumns K)).supportProj
 
 /-- The product index selects the corresponding virtual pair and physical column. -/
 @[simp] theorem physicalSliceColumns_apply_finProdFinEquiv (K : MPOTensor d D)
@@ -117,10 +115,10 @@ noncomputable def physicalSupportProj (K : MPOTensor d D) : Matrix (Fin d) (Fin 
 theorem supportProj_mul_supportProj_eq_zero_of_conjTranspose_mul_eq_zero
     {k l : ℕ} (Y : Matrix (Fin d) (Fin k) ℂ) (Z : Matrix (Fin d) (Fin l) ℂ)
     (hYZ : Yᴴ * Z = 0) :
-    Matrix.supportProj (Y * Yᴴ) (Matrix.posSemidef_self_mul_conjTranspose Y) *
-      Matrix.supportProj (Z * Zᴴ) (Matrix.posSemidef_self_mul_conjTranspose Z) = 0 := by
-  let πY := Matrix.supportProj (Y * Yᴴ) (Matrix.posSemidef_self_mul_conjTranspose Y)
-  let πZ := Matrix.supportProj (Z * Zᴴ) (Matrix.posSemidef_self_mul_conjTranspose Z)
+    (Matrix.posSemidef_self_mul_conjTranspose Y).supportProj *
+      (Matrix.posSemidef_self_mul_conjTranspose Z).supportProj = 0 := by
+  let πY := (Matrix.posSemidef_self_mul_conjTranspose Y).supportProj
+  let πZ := (Matrix.posSemidef_self_mul_conjTranspose Z).supportProj
   have hπYZ : πY * Z = 0 := by
     ext i j
     have hmat : (Y * Yᴴ) * Z = 0 :=
@@ -129,11 +127,10 @@ theorem supportProj_mul_supportProj_eq_zero_of_conjTranspose_mul_eq_zero
       funext a
       have hEntry := congrArg (fun A : Matrix (Fin d) (Fin l) ℂ ↦ A a j) hmat
       simpa [Matrix.mulVec, dotProduct, Matrix.mul_apply] using hEntry
-    have hsupport := Matrix.supportProj_mulVec_eq_zero_of_mulVec_eq_zero
-      (Y * Yᴴ) (Matrix.posSemidef_self_mul_conjTranspose Y) (fun a ↦ Z a j) hker
+    have hsupport := (Matrix.posSemidef_self_mul_conjTranspose
+      Y).supportProj_mulVec_eq_zero_of_mulVec_eq_zero (fun a ↦ Z a j) hker
     simpa [πY, Matrix.mul_apply, Matrix.mulVec, dotProduct] using congrFun hsupport i
-  obtain ⟨W, hW⟩ := Matrix.exists_supportProj_eq_mul
-    (Z * Zᴴ) (Matrix.posSemidef_self_mul_conjTranspose Z)
+  obtain ⟨W, hW⟩ := (Matrix.posSemidef_self_mul_conjTranspose Z).exists_supportProj_eq_mul
   have hπZ : πZ = Z * Zᴴ * W := by simpa [πZ] using hW
   calc
     πY * πZ = πY * (Z * Zᴴ * W) := by rw [hπZ]
@@ -144,7 +141,10 @@ theorem supportProj_mul_supportProj_eq_zero_of_conjTranspose_mul_eq_zero
 left. -/
 theorem physicalSupportProj_mul_physicalSlice (K : MPOTensor d D) (β α : Fin D) :
     physicalSupportProj K * physicalSlice K β α = physicalSlice K β α := by
-  have hColumns := Matrix.supportProj_mul_left_eq_self (physicalSliceColumns K)
+  have hColumns :
+      physicalSupportProj K * physicalSliceColumns K = physicalSliceColumns K := by
+    simpa [physicalSupportProj, Matrix.PosSemidef.supportProj] using
+      Matrix.supportProj_mul_conjTranspose_mul_self (physicalSliceColumns K)
   ext i j
   have hEntry := congrArg
     (fun A : Matrix (Fin d) (Fin (D * D * d)) ℂ ↦
@@ -166,15 +166,11 @@ theorem mul_physicalSupportProj_eq_self_of_forall_mul_physicalSlice_eq
       P * (physicalSliceColumns K * (physicalSliceColumns K)ᴴ) =
         physicalSliceColumns K * (physicalSliceColumns K)ᴴ := by
     rw [← Matrix.mul_assoc, hColumns]
-  obtain ⟨W, hW⟩ := Matrix.exists_supportProj_eq_mul
-    (physicalSliceColumns K * (physicalSliceColumns K)ᴴ)
-    (Matrix.posSemidef_self_mul_conjTranspose (physicalSliceColumns K))
-  change P * Matrix.supportProj
-      (physicalSliceColumns K * (physicalSliceColumns K)ᴴ)
-      (Matrix.posSemidef_self_mul_conjTranspose (physicalSliceColumns K)) =
-    Matrix.supportProj
-      (physicalSliceColumns K * (physicalSliceColumns K)ᴴ)
-      (Matrix.posSemidef_self_mul_conjTranspose (physicalSliceColumns K))
+  obtain ⟨W, hW⟩ := (Matrix.posSemidef_self_mul_conjTranspose
+      (physicalSliceColumns K)).exists_supportProj_eq_mul
+  change P * (Matrix.posSemidef_self_mul_conjTranspose
+      (physicalSliceColumns K)).supportProj =
+    (Matrix.posSemidef_self_mul_conjTranspose (physicalSliceColumns K)).supportProj
   rw [hW, ← Matrix.mul_assoc, hGram]
 
 /-- Adjoint closure makes the same physical support projection fix every slice on the right. -/
@@ -189,9 +185,8 @@ theorem physicalSlice_mul_physicalSupportProj_of_isInjective_isMPDO
     rw [hAdj β α, Matrix.mul_sum]
     simp_rw [Matrix.mul_sum, Matrix.mul_smul, physicalSupportProj_mul_physicalSlice]
   have hHerm : (physicalSupportProj K).IsHermitian :=
-    (Matrix.isOrthogonalProjection_supportProj
-      (physicalSliceColumns K * (physicalSliceColumns K)ᴴ)
-      (Matrix.posSemidef_self_mul_conjTranspose (physicalSliceColumns K))).1
+    ((Matrix.posSemidef_self_mul_conjTranspose
+      (physicalSliceColumns K)).isOrthogonalProjection_supportProj).1
   have hstar := congrArg Matrix.conjTranspose hleftAdj
   simpa [Matrix.conjTranspose_mul, Matrix.conjTranspose_conjTranspose, hHerm.eq] using hstar
 
@@ -301,9 +296,8 @@ theorem exists_pairwise_orthogonal_twoSided_physicalSupport
   let P : Fin g → Matrix (Fin d) (Fin d) ℂ := fun x ↦ physicalSupportProj (K x)
   refine ⟨P, ?_, ?_, ?_⟩
   · intro x
-    exact Matrix.isOrthogonalProjection_supportProj
-      (physicalSliceColumns (K x) * (physicalSliceColumns (K x))ᴴ)
-      (Matrix.posSemidef_self_mul_conjTranspose (physicalSliceColumns (K x)))
+    exact (Matrix.posSemidef_self_mul_conjTranspose
+        (physicalSliceColumns (K x))).isOrthogonalProjection_supportProj
   · intro x y hxy
     exact supportProj_mul_supportProj_eq_zero_of_conjTranspose_mul_eq_zero
       (physicalSliceColumns (K x)) (physicalSliceColumns (K y))
