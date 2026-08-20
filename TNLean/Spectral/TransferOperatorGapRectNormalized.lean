@@ -129,6 +129,8 @@ theorem eigenvalue_norm_le_one₂ [NeZero D₁] [NeZero D₂]
     ‖μ‖ ≤ 1 := by
   obtain ⟨v, hv_mem, hv_ne⟩ := hμ.exists_hasEigenvector
   have hFv := Module.End.mem_eigenspace_iff.mp hv_mem
+  have hv : Module.End.HasEigenvector (mixedTransferMap₂ A B) μ v :=
+    ⟨Module.End.mem_eigenspace_iff.mpr hFv, hv_ne⟩
   by_contra h_gt; push Not at h_gt
   have h_pos : 0 < frobSq v := by
     rw [frobSq]
@@ -137,7 +139,7 @@ theorem eigenvalue_norm_le_one₂ [NeZero D₁] [NeZero D₂]
     exact sq_pos_of_ne_zero (norm_ne_zero_iff.mpr hv_ne)
   have h_bound : ∀ n : ℕ, ‖μ‖ ^ (2 * n) ≤ (D₁ : ℝ) ^ 2 := fun n => by
     have h1 := hs_contraction_rect A B v hA_norm hB_norm n
-    rw [eigenvector_pow _ v μ hFv n] at h1
+    rw [Module.End.HasEigenvector.pow_apply hv n] at h1
     simp only [frobSq_smul, norm_pow] at h1
     calc ‖μ‖ ^ (2 * n) = (‖μ‖ ^ n) ^ 2 := by ring
     _ ≤ _ := le_of_mul_le_mul_right (by linarith) h_pos
