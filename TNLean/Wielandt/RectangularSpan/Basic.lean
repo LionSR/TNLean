@@ -5,7 +5,6 @@ Authors: TNLean contributors
 -/
 import TNLean.Kraus.Wielandt.RectangularSpan.Basic
 import TNLean.Wielandt.RankOne.Construction
-import TNLean.Wielandt.RankOne.Element
 import TNLean.Wielandt.RankOne.Products
 import TNLean.Wielandt.RankOne.Extraction
 import TNLean.Wielandt.RectangularSpan.Ranges

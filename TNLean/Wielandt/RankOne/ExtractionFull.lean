@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.Algebra.MatrixMulRange
+import TNLean.Kraus.Wielandt.RankOne.Element
 import TNLean.Wielandt.RankOne.BoundedWord
 import TNLean.Wielandt.RankOne.Extraction
 import TNLean.Wielandt.RectangularSpan.Basic
@@ -57,7 +58,7 @@ theorem pow_single_mem_wordSpan (B : MPSTensor d D) (i : Fin d) :
     (B i) ^ D ∈ wordSpan B D := by
   have heq : (B i) = evalWord B [i] := by simp [evalWord]
   have hmem : (evalWord B [i]) ^ D ∈ wordSpan B (D * ([i] : List (Fin d)).length) :=
-    evalWord_pow_mem_wordSpan B [i] D
+    Kraus.evalWord_pow_mem_wordSpan B [i] D
   rw [show D * ([i] : List (Fin d)).length = D from by simp] at hmem
   rwa [← heq] at hmem
 
