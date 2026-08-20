@@ -6,7 +6,7 @@ Authors: TNLean contributors
 import TNLean.Algebra.DependentBlockDiagonal
 import TNLean.Algebra.MatrixAux
 import TNLean.MPS.ParentHamiltonian.GroundSpace
-import TNLean.MPS.SharedInfra.BlockAssembly
+import TNLean.MPS.SharedInfra.BoundaryDecomposition
 
 /-!
 # Local spaces of block-diagonal tensors
@@ -42,7 +42,8 @@ noncomputable def sigmaDiagonalBlock
 noncomputable def diagonalBlock
     (X : Matrix (Fin (∑ j : Fin r, dim j)) (Fin (∑ j : Fin r, dim j)) ℂ)
     (j : Fin r) : Matrix (Fin (dim j)) (Fin (dim j)) ℂ :=
-  sigmaDiagonalBlock ((Matrix.reindex finSigmaFinEquiv.symm finSigmaFinEquiv.symm) X) j
+  sigmaDiagonalBlock
+    ((Matrix.reindex finSigmaFinEquiv.symm finSigmaFinEquiv.symm) X) j
 
 /-- A block-diagonal matrix only sees the diagonal blocks of an arbitrary
 right boundary matrix under the trace pairing. -/
@@ -61,36 +62,13 @@ theorem groundSpaceMap_toTensorFromBlocks_eq_sum_diagonalBlock
     (X : Matrix (Fin (∑ j : Fin r, dim j)) (Fin (∑ j : Fin r, dim j)) ℂ) :
     groundSpaceMap (toTensorFromBlocks (d := d) (μ := μ) A) L X =
       ∑ j : Fin r, groundSpaceMap (A j) L ((μ j) ^ L • diagonalBlock X j) := by
-  classical
   ext σ
   simp only [groundSpaceMap_apply, Finset.sum_apply]
-  let w := List.ofFn σ
-  have hwlen : w.length = L := by simp [w]
-  let e : ((j : Fin r) × Fin (dim j)) ≃ Fin (∑ j : Fin r, dim j) :=
-    finSigmaFinEquiv
-  let Xσ : Matrix ((j : Fin r) × Fin (dim j)) ((j : Fin r) × Fin (dim j)) ℂ :=
-    (Matrix.reindex e.symm e.symm) X
-  have hX : X = (Matrix.reindex e e) Xσ := by
-    ext a b
-    simp [Xσ, e]
-  rw [evalWord_toTensorFromBlocks_eq_reindex_blockDiagonal μ A w, hX]
-  have hmul :
-      (Matrix.reindex e e (Matrix.blockDiagonal' fun k : Fin r =>
-          μ k ^ w.length • (A k).evalWord w)) * (Matrix.reindex e e Xσ) =
-        Matrix.reindex e e
-          ((Matrix.blockDiagonal' fun k : Fin r => μ k ^ w.length • (A k).evalWord w) *
-            Xσ) := by
-    exact Matrix.reindexLinearEquiv_mul ℂ ℂ e e e
-      (Matrix.blockDiagonal' fun k : Fin r => μ k ^ w.length • (A k).evalWord w) Xσ
-  rw [hmul, Matrix.trace_reindex e]
-  rw [trace_blockDiagonal'_mul]
-  refine Finset.sum_congr rfl ?_
+  rw [trace_evalWord_toTensorFromBlocks_mul]
+  apply Finset.sum_congr rfl
   intro j _
-  have hdiag : diagonalBlock ((Matrix.reindex e e) Xσ) j = sigmaDiagonalBlock Xσ j := by
-    ext a b
-    simp [diagonalBlock, sigmaDiagonalBlock, e]
-  rw [hdiag, hwlen]
-  rw [Matrix.smul_mul, Matrix.mul_smul]
+  rw [show Matrix.finSigmaDiagonalBlock X j = diagonalBlock X j by
+    rfl, List.length_ofFn, Matrix.smul_mul, Matrix.mul_smul]
 
 /-- The boundary parametrization of a block-diagonal tensor on a block-diagonal
 boundary condition is the sum of the corresponding block boundary

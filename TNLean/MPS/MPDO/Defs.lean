@@ -164,6 +164,36 @@ lemma evalWord_ofFn (M : MPOTensor d D) {N : ℕ} (σ τ : Fin N → Fin d) :
       congr 1
       exact ih (σ ∘ Fin.succ) (τ ∘ Fin.succ)
 
+/-- Evaluating the doubled-index MPS view on paired physical letters is the
+same as evaluating the ket and bra words separately. -/
+theorem evalWord_toMPSTensor_ofFn (M : MPOTensor d D) (N : ℕ)
+    (w : Fin N → Fin (d * d)) :
+    MPSTensor.evalWord M.toMPSTensor (List.ofFn w) =
+      evalWord M (List.ofFn fun k ↦ (w k).divNat)
+        (List.ofFn fun k ↦ (w k).modNat) := by
+  induction N with
+  | zero => simp
+  | succ N ih =>
+      rw [List.ofFn_succ, List.ofFn_succ, List.ofFn_succ]
+      change M (w 0).divNat (w 0).modNat *
+          MPSTensor.evalWord M.toMPSTensor (List.ofFn (w ∘ Fin.succ)) =
+        M (w 0).divNat (w 0).modNat *
+          evalWord M (List.ofFn fun k ↦ (w (Fin.succ k)).divNat)
+            (List.ofFn fun k ↦ (w (Fin.succ k)).modNat)
+      rw [ih (w ∘ Fin.succ)]
+      rfl
+
+/-- Paired physical configurations give the same word evaluation in the MPO
+and doubled-index MPS descriptions. -/
+@[simp]
+theorem evalWord_toMPSTensor_pairConfig (M : MPOTensor d D) {N : ℕ}
+    (σ τ : Fin N → Fin d) :
+    MPSTensor.evalWord M.toMPSTensor
+        (List.ofFn fun k ↦ finProdFinEquiv (σ k, τ k)) =
+      evalWord M (List.ofFn σ) (List.ofFn τ) := by
+  simpa using evalWord_toMPSTensor_ofFn M N
+    (fun k ↦ finProdFinEquiv (σ k, τ k))
+
 /-- `evalWord` is multiplicative under concatenation of equal-length bra/ket
 prefixes: splitting both words at the same position factors the matrix product.
 -/

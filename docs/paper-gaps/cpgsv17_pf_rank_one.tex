@@ -1031,6 +1031,18 @@ projectors to control a direct sum of channel pairs. This all-sector missing
 statement is tracked in \ghissue{6632}, retargeted from the refuted raw
 (iv)$\Rightarrow$(v) reading.
 
+The arbitrary-boundary part of this construction is now formalized by
+\leanid{MPSTensor.trace_evalWord_gauge_toTensorFromBlocks_mul} and
+\leanid{MPOTensor.%
+physCloseN_eq_sum_commonWeightAbsorbedBasis_of_gauge_toTensor}. If $X$ is an
+arbitrary virtual boundary, the boundary entering a fixed representative is
+the sum of the diagonal copy blocks of $G^{-1}XG$ over that representative.
+The same transformation is valid at every chain length.  Copy-weight equality
+is used only among copies of one representative, so this calculation imposes
+no relation between distinct BNT coefficients.  The remaining content of
+\ghissue{6632} is the projector-controlled combination of the supplied
+per-representative channel pairs.
+
 The all-cut Markov proof and the source-selected inverse-map calculation show
 that the raw four-sector tensor satisfies the displayed SAL, literal ZCL, and
 inverse-map relations while the trace matrix of those four fixed sectors is

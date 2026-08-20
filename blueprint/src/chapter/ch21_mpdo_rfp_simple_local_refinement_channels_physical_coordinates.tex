@@ -487,6 +487,73 @@
 % their composition through the orthogonal outer physical sectors is #6632.
 % The raw implication (iv)=>(v) is separately refuted.  Documented in
 % docs/paper-gaps/cpgsv17_pf_rank_one.tex.
+\begin{theorem}[Arbitrary virtual boundaries of canonical block sums]
+    \label{thm:mpdo_canonical_block_sum_arbitrary_boundary}
+    \lean{MPSTensor.trace_evalWord_toTensorFromBlocks_mul,
+      MPSTensor.trace_evalWord_gauge_mul,
+      MPSTensor.trace_evalWord_gauge_toTensorFromBlocks_mul}
+    \leanok
+    Let a tensor be gauge equivalent, by an invertible virtual matrix $G$, to
+    a finite block sum with component tensors $A_s$ and weights $\mu_s$. For
+    an arbitrary virtual boundary $X$ and an arbitrary word $w$, its closure
+    is the sum of the component closures with boundaries given by the diagonal
+    blocks of $G^{-1}XG$:
+    \begin{align}
+      \tr\bigl(B^wX\bigr)
+      &=\sum_s \mu_s^{|w|}\tr\bigl(A_s^w(G^{-1}XG)_{ss}\bigr).
+      \notag
+    \end{align}
+    The conjugated boundary $G^{-1}XG$ is independent of the word length.
+    This is the arbitrary-boundary form of the block calculation used in
+    \cite[Appendix~C.2, lines~1646--1665 and 1810--1825]
+      {Cirac2016MPDO_arXiv}.
+\end{theorem}
+
+\begin{proof}\leanok
+    A word of length $|w|$ in the block-sum tensor is block diagonal. Its
+    $s$-th diagonal block is $\mu_s^{|w|}A_s^w$. On multiplying by an
+    arbitrary boundary matrix, only the diagonal boundary blocks contribute
+    to the trace, which gives the asserted sum before the gauge change.
+
+    Under the gauge $G$, the word $A^w$ is conjugated to $GA^wG^{-1}$.
+    Cyclicity of the trace moves the two gauge factors to the boundary and
+    replaces $X$ by $G^{-1}XG$. Combining these two identities proves the
+    formula. Since this conjugation depends only on $G$ and $X$, the
+    transformed boundary is the same at every word length.
+\end{proof}
+
+\begin{theorem}[Absorbed-representative boundary decomposition]
+    \label{thm:mpdo_absorbed_representative_boundary_decomposition}
+    \lean{MPOTensor.physCloseN_eq_sum_flatBasis_of_gauge_toTensor,
+      MPOTensor.physCloseN_eq_sum_commonWeightAbsorbedBasis_of_gauge_toTensor}
+    \leanok
+    \uses{thm:mpdo_canonical_block_sum_arbitrary_boundary,
+      def:mpdo_common_sector_weight_absorption}
+    Let the complete tensor be exactly gauge equivalent, by an invertible
+    virtual matrix $G$, to a canonical BNT sum. Suppose that the repeated-copy
+    weights over each fixed BNT representative are equal, with no equality
+    required between different representatives. Absorb this common weight
+    into its representative. Then, for every length $N$ and every virtual
+    boundary $X$, the closure of the complete tensor is the sum of the
+    absorbed-representative closures. The boundary of a representative is the
+    sum of the diagonal copy blocks of $G^{-1}XG$ lying over that
+    representative. In particular, the same representative boundary map
+    applies at the two lengths entering the two channel equations of
+    Definition~\ref{def:is_rfp_via_ts}.
+\end{theorem}
+
+\begin{proof}\leanok
+    Apply Theorem~\ref{thm:mpdo_canonical_block_sum_arbitrary_boundary} to the
+    block sum indexed by the individual copies. Reindex this finite sum by a
+    representative $s$ and a copy label $q$. For fixed $s$, all copy weights
+    are equal, so their common $N$-th power may be absorbed into the length
+    $N$ word of the representative tensor. The remaining dependence on $q$
+    is linear in the diagonal boundary block. Summing over $q$ therefore
+    replaces these blocks by their sum, which is the stated representative
+    boundary. Neither the conjugation $X\mapsto G^{-1}XG$ nor the subsequent
+    sum of diagonal copy blocks depends on $N$.
+\end{proof}
+
 \begin{theorem}[Blocking channels after common-weight absorption]
     \label{thm:mpdo_sal_zcl_blocking_channels}
     \notready
