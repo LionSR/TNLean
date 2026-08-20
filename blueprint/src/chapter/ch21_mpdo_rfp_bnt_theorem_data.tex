@@ -194,8 +194,6 @@
 
 \begin{definition}[Virtual per-block linear extension]%
     \label{def:mpdo_virtual_perBlockLinearExtension}
-    \lean{MPSTensor.perBlockLinearExtension}
-    \lean{MPSTensor.perBlockLinearExtension_spec}
     \leanok
     \uses{def:injective, def:same_mpv}
     For injective families $A_k$ and $B_k$ with the same closed matrix
@@ -206,7 +204,6 @@
 
 \begin{theorem}[Multiplicativity of the virtual per-block extension]%
     \label{thm:mpdo_virtual_perBlockLinearExtension_mul}
-    \lean{MPSTensor.perBlockLinearExtension_mul}
     \leanok
     \uses{def:mpdo_virtual_perBlockLinearExtension}
     The per-block extension satisfies $T_k(MN)=T_k(M)T_k(N)$ for all
@@ -221,7 +218,6 @@
 
 \begin{theorem}[Bijectivity of the virtual per-block extension]%
     \label{thm:mpdo_virtual_perBlockLinearExtension_bijective}
-    \lean{MPSTensor.perBlockLinearExtension_bijective}
     \leanok
     \uses{def:mpdo_virtual_perBlockLinearExtension}
     The per-block extension $T_k$ is bijective.
@@ -238,7 +234,6 @@
 
 \begin{theorem}[Positive virtual per-block extensions are unitarily implemented]%
     \label{thm:mpdo_positive_perBlockLinearExtension_unitary}
-    \lean{MPSTensor.exists_unitary_conj_of_positive_perBlockLinearExtension}
     \leanok
     \uses{def:mpdo_virtual_perBlockLinearExtension}
     If $T_k$ is positive, then there is a unitary matrix $U_k$ such that
