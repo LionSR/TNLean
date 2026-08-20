@@ -45,7 +45,7 @@ below the `D²` ceiling, and the direct eventual-full-word-span hypothesis.
 -/
 
 open scoped Matrix ComplexOrder BigOperators
-open Matrix MPSTensor
+open Matrix
 
 namespace Kraus
 
@@ -68,17 +68,18 @@ theorem wordSpan_finrank_le (K : Fin d → Matrix (Fin D) (Fin D) ℂ) (n : ℕ)
 /-! ## One-step span elements as redundant generators -/
 
 /-- A length-one word evaluates to the corresponding tensor entry. -/
-theorem evalWord_ofFn_one_eq (K : Fin d → Matrix (Fin D) (Fin D) ℂ) (σ : Fin 1 → Fin d) :
-    evalWord K (List.ofFn σ) = K (σ 0) := by
+theorem evalWord_ofFn_one_eq
+    (K : Fin d → Matrix (Fin D) (Fin D) ℂ) (σ : Fin 1 → Fin d) :
+    MPSTensor.evalWord K (List.ofFn σ) = K (σ 0) := by
   have h : List.ofFn σ = [σ 0] := by
     apply List.ext_getElem <;> simp
   rw [h]
-  simp [evalWord]
+  simp [MPSTensor.evalWord]
 
 /-- Every family element belongs to the one-step word span `S₁(K)`. -/
 theorem apply_mem_wordSpan_one (K : Fin d → Matrix (Fin D) (Fin D) ℂ) (i : Fin d) :
     K i ∈ wordSpan K 1 := by
-  simpa [evalWord] using evalWord_mem_wordSpan K ([i] : List (Fin d))
+  simpa [MPSTensor.evalWord] using evalWord_mem_wordSpan K ([i] : List (Fin d))
 
 /-- Add a one-step span element as a redundant first generator.
 
@@ -161,10 +162,10 @@ theorem mulLeft_image_wordSpan_le_succ (K : Fin d → Matrix (Fin D) (Fin D) ℂ
   apply Submodule.map_le_iff_le_comap.mpr
   apply Submodule.span_le.mpr
   rintro M ⟨σ, rfl⟩
-  change (LinearMap.mulLeft ℂ (K i₀)) (evalWord K (List.ofFn σ)) ∈
+  change (LinearMap.mulLeft ℂ (K i₀)) (MPSTensor.evalWord K (List.ofFn σ)) ∈
     wordSpan K (n + 1)
   simp only [LinearMap.mulLeft_apply]
-  change evalWord K (i₀ :: List.ofFn σ) ∈ wordSpan K (n + 1)
+  change MPSTensor.evalWord K (i₀ :: List.ofFn σ) ∈ wordSpan K (n + 1)
   apply Submodule.subset_span
   exact ⟨Fin.cons i₀ σ, by simp [List.ofFn_succ]⟩
 
@@ -315,7 +316,8 @@ right-multiplication image of `S_r` by the invertible generator `K i₀`.
 
 This is an auxiliary step for arXiv:0909.5347, Theorem 1 case (2); Wolf,
 Theorem 6.9. -/
-theorem wordSpan_succ_eq_mulRight_image_of_finrank_eq (K : Fin d → Matrix (Fin D) (Fin D) ℂ)
+theorem wordSpan_succ_eq_mulRight_image_of_finrank_eq
+    (K : Fin d → Matrix (Fin D) (Fin D) ℂ)
     (i₀ : Fin d) (hU : IsUnit (K i₀)) (r : ℕ)
     (hfin : Module.finrank ℂ (wordSpan K r) =
       Module.finrank ℂ (wordSpan K (r + 1))) :
