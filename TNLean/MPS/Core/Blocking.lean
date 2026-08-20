@@ -185,7 +185,6 @@ lemma blockKron_mul_conjTranspose (L : ℕ) (P : Matrix (Fin d) (Fin d) ℂ)
     blockKron L P * (blockKron L P)ᴴ = 1 := by
   rw [blockKron_conjTranspose, ← blockKron_mul, hP, blockKron_one]
 
-
 /-- Blocked configurations of length `N` are equivalent to ordinary configurations of length
 `N * L`.
 
