@@ -326,6 +326,7 @@ import TNLean.MPS.MPDO.VerticalBoundaryContraction
 import TNLean.MPS.MPDO.VerticalCF
 import TNLean.MPS.MPDO.VerticalCanonicalForm
 import TNLean.MPS.MPDO.VerticalCanonicalFormConstruction
+import TNLean.MPS.MPDO.VerticalCoefficientPresentationCounterexample
 import TNLean.MPS.MPDO.VerticalCoisometry
 import TNLean.MPS.MPDO.VerticalCopyBlocks
 import TNLean.MPS.MPDO.VerticalMapTransport
