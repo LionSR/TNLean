@@ -238,9 +238,9 @@ def blueprint_environments(blueprint_src: Path) -> list[BlueprintEnvironment]:
 
 
 def _atomic_non_item_environment_ranges(
-    source_lines: list[str], covered: set[int], relative_root: str
+    source_lines: list[str], item_spans: list[tuple[int, int]], relative_root: str
 ) -> dict[int, int]:
-    """Return maximal balanced TeX environments that contain no item line."""
+    """Return maximal balanced TeX environments lying outside item spans."""
     stack: list[tuple[str, int]] = []
     ranges: list[tuple[int, int]] = []
     for line_no, line in enumerate(source_lines, start=1):
@@ -268,11 +268,24 @@ def _atomic_non_item_environment_ranges(
             f"{relative_root}:{opened_line}"
         )
 
-    candidates = [
-        (start, end)
-        for start, end in ranges
-        if not any(line in covered for line in range(start, end + 1))
-    ]
+    candidates: list[tuple[int, int]] = []
+    for start, end in ranges:
+        contained_in_item = False
+        overlaps_item = False
+        for item_start, item_end in item_spans:
+            if item_start <= start and end <= item_end:
+                contained_in_item = True
+                break
+            if start <= item_end and item_start <= end:
+                overlaps_item = True
+        if contained_in_item:
+            continue
+        if overlaps_item:
+            raise ValueError(
+                f"environment at {relative_root}:{start}-{end} contains "
+                "theorem-like item lines"
+            )
+        candidates.append((start, end))
     maximal: list[tuple[int, int]] = []
     for start, end in sorted(candidates, key=lambda span: (span[0], -span[1])):
         contained = any(
@@ -291,8 +304,10 @@ def blueprint_non_item_blocks(
     """Partition text outside item spans into paragraph-like blocks.
 
     Complete balanced TeX environments containing no item line are atomic,
-    including nested environments and blank or comment-only lines. Elsewhere,
-    blank lines and item boundaries split blocks. Router ``\\input`` commands
+    including nested environments and blank or comment-only lines. An outer
+    environment containing item lines is rejected because partitioning it at
+    the item boundary would produce malformed TeX. Elsewhere, blank lines and
+    item boundaries split blocks. Router ``\\input`` commands
     are single-line blocks so each simulated output can prune them without
     pulling in every sibling chapter.
     """
@@ -314,7 +329,9 @@ def blueprint_non_item_blocks(
 
         current: list[tuple[int, str]] = []
         atomic_ranges = (
-            _atomic_non_item_environment_ranges(source_lines, covered, relative_root)
+            _atomic_non_item_environment_ranges(
+                source_lines, spans_by_file.get(relative_root, []), relative_root
+            )
             if is_content_file
             else {}
         )
