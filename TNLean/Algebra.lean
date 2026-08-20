@@ -48,6 +48,7 @@ import TNLean.Algebra.MatrixCongruence
 import TNLean.Algebra.MatrixCyclicTracePower
 import TNLean.Algebra.MatrixFamilySupport
 import TNLean.Algebra.MatrixGramUnitary
+import TNLean.Algebra.MatrixKernelRigidity
 import TNLean.Algebra.MatrixKroneckerEmbed
 import TNLean.Algebra.MatrixOperatorSpace
 import TNLean.Algebra.MatrixPosDefTransport
