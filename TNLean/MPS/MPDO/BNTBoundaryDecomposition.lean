@@ -19,7 +19,7 @@ transformation applies at every chain length.
 ## References
 
 * Cirac--Perez-Garcia--Schuch--Verstraete, arXiv:1606.00608,
-  bicanonical-form gauge convention at lines 1666--1674, and Appendix C.2,
+  gauge-matrix similarity convention at lines 186--195, and Appendix C.2,
   lines 1646--1665 and 1810--1825.
 -/
 
@@ -79,9 +79,9 @@ The formula holds at every length with one boundary transformation
 \(G^{-1}XG\). In particular, its specializations at the two closure lengths
 in Definition 4.1 use the same representative boundary matrices.
 
-Source: arXiv:1606.00608, canonical form at lines 237--246, bicanonical-form
-gauge convention at lines 1666--1674, and Appendix C.2, lines 1646--1665 and
-1810--1825. -/
+Source: arXiv:1606.00608, canonical form at lines 237--246, gauge-matrix
+similarity convention at lines 186--195, and Appendix C.2, lines 1646--1665
+and 1810--1825. -/
 theorem physCloseN_eq_sum_flatBasis_of_gauge_toTensor
     (S : MPSTensor.SectorDecomposition (d * d))
     (M : MPOTensor d S.totalDim)
