@@ -92,6 +92,41 @@ theorem tpGauge_isTP_of_transferMap_conjTranspose_fixedPoint
   Kraus.tpGauge_isTP_of_map_conjTranspose_fixedPoint A ρ hρ (by
     simpa [Kraus.mapLM_apply, Kraus.map_apply, MPSTensor.transferMap_apply] using hfix)
 
+/-- **TP normalisation from a positive adjoint-transfer-map eigenvector.**
+
+Assume `ρ` is positive definite and
+`E_A†(ρ) = rρ` for a positive real number `r`. Then applying `tpGauge` after
+rescaling `A` by `r^{-1/2}` gives a trace-preserving tensor. -/
+theorem tpGauge_isTP_of_transferMap_conjTranspose_eigenvector
+    (A : MPSTensor d D) (ρ : Matrix (Fin D) (Fin D) ℂ) (r : ℝ)
+    (hρ : ρ.PosDef)
+    (hr : 0 < r)
+    (heig : transferMap (d := d) (D := D) (fun i => (A i)ᴴ) ρ = (r : ℂ) • ρ) :
+    ∑ i : Fin d,
+      (tpGauge (d := d) (D := D)
+        (fun j => (↑((Real.sqrt r)⁻¹) : ℂ) • A j) ρ i)ᴴ *
+      tpGauge (d := d) (D := D)
+        (fun j => (↑((Real.sqrt r)⁻¹) : ℂ) • A j) ρ i = 1 := by
+  let c : ℝ := (Real.sqrt r)⁻¹
+  let A' : MPSTensor d D := fun i => (↑c : ℂ) • A i
+  have hstar_c : star (↑c : ℂ) = (↑c : ℂ) := by
+    rw [RCLike.star_def, Complex.conj_ofReal]
+  have hcc : c * c = r⁻¹ := by
+    rw [show c = (Real.sqrt r)⁻¹ from rfl, ← sq, inv_pow, Real.sq_sqrt hr.le]
+  have hc_sq : (↑c : ℂ) * (↑c : ℂ) = (↑r : ℂ)⁻¹ := by
+    rw [← Complex.ofReal_mul, hcc, Complex.ofReal_inv]
+  have hfix : transferMap (d := d) (D := D) (fun i => (A' i)ᴴ) ρ = ρ := by
+    simp only [A', transferMap_apply, Matrix.conjTranspose_smul, Matrix.smul_mul,
+      Matrix.mul_smul, smul_smul, star_star]
+    simp_rw [hstar_c, hc_sq]
+    rw [← Finset.smul_sum]
+    have hsum : ∑ i : Fin d, (A i)ᴴ * ρ * ((A i)ᴴ)ᴴ =
+        transferMap (d := d) (D := D) (fun i => (A i)ᴴ) ρ := by
+      simp [transferMap_apply]
+    rw [hsum, heig, smul_smul, inv_mul_cancel₀, one_smul]
+    exact_mod_cast hr.ne'
+  exact tpGauge_isTP_of_transferMap_conjTranspose_fixedPoint A' ρ hρ hfix
+
 /-- The gauge-transformed tensor `tpGauge A ρ` is gauge-equivalent to `A`
 (hence has the same MPV). -/
 theorem gaugeEquiv_tpGauge (A : MPSTensor d D) (ρ : Matrix (Fin D) (Fin D) ℂ) (hρ : ρ.PosDef) :
