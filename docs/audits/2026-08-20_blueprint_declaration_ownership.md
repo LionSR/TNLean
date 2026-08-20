@@ -45,8 +45,8 @@ and recap of this earlier channel theory.  The twelve shared declarations are:
 - `spectralRadius_le_one_of_forall_eigenvalue_norm_le_one`.
 
 The Chapter 16 entries cite the appropriate Chapter 4 owner through proof dependencies,
-except for the Choi-rank remark, whose statement depends on the Chapter 4 definition and
-minimality theorem.
+except for the Choi-rank remark: its statement depends on the Chapter 4 rank definition,
+whereas its proof depends on the minimality theorem.
 
 ## Per-block linear extensions: Chapters 21 and 23
 
