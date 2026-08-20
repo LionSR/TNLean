@@ -27,7 +27,7 @@ complementary aperiodicity input is recovered from strong irreducibility
 - Cirac, Pérez-García, Schuch, Verstraete, arXiv:1606.00608, Section 2.3
 -/
 
-open scoped Matrix ComplexOrder BigOperators
+open scoped Matrix Matrix.Norms.L2Operator ComplexOrder BigOperators
 open Matrix Filter MPSTensor
 
 namespace MPSTensor

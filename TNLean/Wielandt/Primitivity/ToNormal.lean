@@ -3,11 +3,13 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import TNLean.Analysis.SpectralRadiusPowerDecay
+import TNLean.Channel.Irreducible.FixedPoint
 import TNLean.Channel.Primitive
 import TNLean.Kraus.InvariantProjection
 import TNLean.MPS.Core.TransferChannel
-import TNLean.MPS.Structure.PrimitivityBridge
-import TNLean.QPF.PosDef
+import TNLean.MPS.Structure.PrimitiveFixedPoint
+import Mathlib.Analysis.Normed.Operator.CompleteCodomain
 
 /-!
 # Preparatory lemmas for the current `IsPrimitiveMPS → IsNormal` route
@@ -55,7 +57,7 @@ not as the final primitive-to-normal theorem.
   arXiv:1606.00608](https://arxiv.org/abs/1606.00608), Appendix A
 -/
 
-open scoped Matrix ComplexOrder BigOperators
+open scoped Matrix ComplexOrder BigOperators Matrix.Norms.L2Operator
 open Matrix Filter MPSTensor
 
 namespace MPSTensor
@@ -163,15 +165,19 @@ theorem IsPrimitiveMPS.transferMap_trace_preserving
 If `ρ` is the PSD fixed point in `IsPrimitiveMPS A ρ` and the transfer
 map is irreducible, then `ρ` is positive definite.
 
-This is the Perron–Frobenius `PosDef` result from `TNLean.QPF.PosDef`
-specialized to the fixed point already present in `IsPrimitiveMPS`. -/
+This is the channel-level Perron–Frobenius `PosDef` result specialized to the
+fixed point already present in `IsPrimitiveMPS`. -/
 theorem posDef_of_isIrreducibleMap_of_isPrimitiveMPS
     {A : MPSTensor d D} {ρ : Matrix (Fin D) (Fin D) ℂ}
     (hP : IsPrimitiveMPS A ρ)
     (hIrr : IsIrreducibleMap (transferMap (d := d) (D := D) A)) :
     ρ.PosDef :=
-  posSemidef_fixedPoint_isPosDef_of_irreducible A hIrr ρ
-    hP.fixedPoint_psd hP.fixedPoint_ne_zero hP.fixedPoint_is_fixed
+  posDef_of_posSemidef_fixedPoint_irreducible_cp
+    (Kraus.mapLM A) (Kraus.isCPMap_mapLM A)
+    (Kraus.isIrreducibleMap_mapLM_of_transferMap A hIrr) ρ
+    hP.fixedPoint_psd hP.fixedPoint_ne_zero
+    (by
+      simpa only [Kraus.mapLM_eq_transferMap] using hP.fixedPoint_is_fixed)
 
 omit [NeZero D] in
 /-- Irreducibility of a tensor gives irreducibility of its transfer map. -/
@@ -182,8 +188,8 @@ theorem isIrreducibleMap_of_isIrreducibleTensor
 
 /-- **IsIrreducibleTensor ⟹ PosDef** for primitive tensors.
 
-Combines the implication `IsIrreducibleTensor → IsIrreducibleMap` with
-`posSemidef_fixedPoint_isPosDef_of_irreducible`. -/
+Combines the implication `IsIrreducibleTensor → IsIrreducibleMap` with the
+channel-level positive-definite fixed-point theorem. -/
 theorem posDef_of_isIrreducibleTensor_of_isPrimitiveMPS
     {A : MPSTensor d D} {ρ : Matrix (Fin D) (Fin D) ℂ}
     (hP : IsPrimitiveMPS A ρ)

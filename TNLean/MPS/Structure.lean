@@ -12,4 +12,5 @@ import TNLean.MPS.Structure.BlockPermutation
 import TNLean.MPS.Structure.InvariantSubspaceDecomp
 import TNLean.MPS.Structure.InvariantSubspaceDecomp.Basic
 import TNLean.MPS.Structure.LinearExtension
+import TNLean.MPS.Structure.PrimitiveFixedPoint
 import TNLean.MPS.Structure.PrimitivityBridge
