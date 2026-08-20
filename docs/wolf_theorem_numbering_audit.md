@@ -87,7 +87,8 @@ examined here.
 The enumeration searches `TNLean/`, `blueprint/src/`, and `docs/` for the
 words `Theorem`, `Proposition`, `Corollary`, `Lemma`, and their abbreviations
 followed by a number of the form `1.n`. It excludes `docs/audits/`,
-`docs/archive/`, `docs/reviews/`, `docs/slides/`, and `blueprint/comments/`.
+`docs/archive/`, `docs/reviews/`, `docs/slides/`,
+`docs/wolf_theorem_numbering_audit.md`, and `blueprint/comments/`.
 Each result-level file list above was then checked against the matching printed
 statement in `Notes/WolfNotePDF/ch01_deconstructing_quantum.pdf`.
 
