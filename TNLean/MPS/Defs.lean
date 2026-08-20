@@ -8,7 +8,7 @@ import Mathlib.Data.List.OfFn
 import Mathlib.LinearAlgebra.Matrix.GeneralLinearGroup.Defs
 import Mathlib.LinearAlgebra.Matrix.Trace
 import Mathlib.Order.Filter.AtTopBot.Basic
-import TNLean.Kraus.Word
+import TNLean.MPS.Core.Word
 import TNLean.Kraus.Injectivity
 
 /-!

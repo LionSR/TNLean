@@ -40,7 +40,6 @@ linearly independent, `dim(S₁(K)) = d` and the bounds coincide.
 -/
 
 open scoped Matrix
-open MPSTensor
 
 namespace Kraus
 
@@ -136,7 +135,7 @@ theorem cumulativeSpan_eq_top [NeZero D]
 
 /-- **Lemma 1** (arXiv:0909.5347), main statement:
 Assuming some exact word span is full, there exists a word `w` of length ≤ D² such
-that `tr(evalWord K w) ≠ 0`.
+that `tr(Kraus.evalWord K w) ≠ 0`.
 
 Paper: "If E_A is primitive, then there exists K^(n) ∈ S_n(K)
 with n ≤ D²−d+1 such that tr(K^(n)) ≠ 0."
@@ -148,7 +147,7 @@ theorem exists_nonzero_trace_word [NeZero D]
     (K : Fin d → Matrix (Fin D) (Fin D) ℂ) {N : ℕ}
     (hN : wordSpan K N = ⊤) :
     ∃ w : List (Fin d),
-      w.length ≤ D ^ 2 ∧ Matrix.trace (evalWord K w) ≠ 0 :=
+      w.length ≤ D ^ 2 ∧ Matrix.trace (Kraus.evalWord K w) ≠ 0 :=
   exists_nonzero_trace_word_of_cumulativeSpan_eq_top K
     (cumulativeSpan_eq_top K hN)
 
@@ -316,7 +315,7 @@ theorem cumulativeSpan_eq_top_of_wordSpan_eq_top_sharp [NeZero D]
 
 /-- **Lemma 1, sharp version** (arXiv:0909.5347):
 Assuming some exact word span is full, there exists a word `w` of length
-≤ D² − dim(S₁(K)) + 1 such that `tr(evalWord K w) ≠ 0`.
+≤ D² − dim(S₁(K)) + 1 such that `tr(Kraus.evalWord K w) ≠ 0`.
 
 Paper: "If E_A is primitive, then there exists K^(n) ∈ S_n(K)
 with n ≤ D²−d+1 such that tr(K^(n)) ≠ 0."
@@ -330,7 +329,7 @@ theorem exists_nonzero_trace_word_sharp [NeZero D]
     (hN : wordSpan K N = ⊤) :
     ∃ w : List (Fin d),
       w.length ≤ D ^ 2 - Module.finrank ℂ (wordSpan K 1) + 1 ∧
-        Matrix.trace (evalWord K w) ≠ 0 :=
+        Matrix.trace (Kraus.evalWord K w) ≠ 0 :=
   exists_nonzero_trace_word_of_cumulativeSpan_eq_top K
     (cumulativeSpan_eq_top_of_wordSpan_eq_top_sharp K hN)
 
@@ -341,20 +340,20 @@ sharp bound. This gives a positive-length word with nonzero trace, which is
 needed for the blocking argument in Theorem 1 case (1).
 
 The key insight is that the positive-level cumulative span
-`V_n = span{evalWord K w : 1 ≤ |w| ≤ n}` satisfies the same growth and
+`V_n = span{Kraus.evalWord K w : 1 ≤ |w| ≤ n}` satisfies the same growth and
 stabilization properties as the full cumulative span `T_n`, so
 `V_{D²−d'+1} = M_D(ℂ)` for positive `D`. -/
 
 /-- **Lemma 1, sharp positive-length version** (arXiv:0909.5347):
 For positive `D`, assume a positive exact word span is full. Then there exists a
 **positive-length** word `w` with
-`|w| ≤ D² − dim(S₁(K)) + 1` such that `tr(evalWord K w) ≠ 0`.
+`|w| ≤ D² − dim(S₁(K)) + 1` such that `tr(Kraus.evalWord K w) ≠ 0`.
 
 This strengthens `exists_nonzero_trace_word_sharp` by additionally requiring
 `1 ≤ w.length`, which is needed for the blocking argument in Theorem 1 case (1).
 
 The proof shows that the positive-level cumulative span
-`V_{D²−d'+1} = span{evalWord K w : 1 ≤ |w| ≤ D²−d'+1}`
+`V_{D²−d'+1} = span{Kraus.evalWord K w : 1 ≤ |w| ≤ D²−d'+1}`
 equals `M_D(ℂ)`, so it cannot be contained in `ker(trace)`. -/
 theorem exists_nonzero_trace_word_sharp_pos [NeZero D]
     (K : Fin d → Matrix (Fin D) (Fin D) ℂ) {N : ℕ}
@@ -362,15 +361,15 @@ theorem exists_nonzero_trace_word_sharp_pos [NeZero D]
     ∃ (w : List (Fin d)),
       1 ≤ w.length ∧
       w.length ≤ D ^ 2 - Module.finrank ℂ (wordSpan K 1) + 1 ∧
-        Matrix.trace (evalWord K w) ≠ 0 := by
+        Matrix.trace (Kraus.evalWord K w) ≠ 0 := by
   by_contra hall
   push Not at hall
-  -- hall : ∀ w, 1 ≤ |w| → |w| ≤ bound → tr(evalWord K w) = 0
+  -- hall : ∀ w, 1 ≤ |w| → |w| ≤ bound → tr(Kraus.evalWord K w) = 0
   -- Define the positive-level cumulative span
   set bound := D ^ 2 - Module.finrank ℂ (wordSpan K 1) + 1 with hbound_def
   set V : ℕ → Submodule ℂ (Matrix (Fin D) (Fin D) ℂ) :=
     fun n => Submodule.span ℂ
-      {M | ∃ w : List (Fin d), 1 ≤ w.length ∧ w.length ≤ n ∧ M = evalWord K w}
+      {M | ∃ w : List (Fin d), 1 ≤ w.length ∧ w.length ≤ n ∧ M = Kraus.evalWord K w}
   -- Step 1: V 1 ≥ wordSpan K 1 (hence dim ≥ krausRank)
   have hV1_ge : wordSpan K 1 ≤ V 1 := by
     apply Submodule.span_le.mpr
@@ -413,10 +412,10 @@ theorem exists_nonzero_trace_word_sharp_pos [NeZero D]
       rw [Submodule.map_le_iff_le_comap]
       apply Submodule.span_le.mpr
       rintro M ⟨w, hw1, hw2, rfl⟩
-      change (LinearMap.mulLeft ℂ (K i)) (evalWord K w) ∈ V n
+      change (LinearMap.mulLeft ℂ (K i)) (Kraus.evalWord K w) ∈ V n
       simp only [LinearMap.mulLeft_apply]
-      -- K i * evalWord K w = evalWord K (i :: w)
-      change evalWord K (i :: w) ∈ V n
+      -- K i * Kraus.evalWord K w = Kraus.evalWord K (i :: w)
+      change Kraus.evalWord K (i :: w) ∈ V n
       by_cases hle : w.length + 1 ≤ n
       · exact Submodule.subset_span ⟨i :: w,
           by
@@ -425,14 +424,14 @@ theorem exists_nonzero_trace_word_sharp_pos [NeZero D]
           by simpa only [List.length_cons] using hle,
           rfl⟩
       · -- |i :: w| = |w| + 1 > n, so |w| = n, |i :: w| = n + 1
-        have : evalWord K (i :: w) ∈ wordSpan K (n + 1) := by
+        have : Kraus.evalWord K (i :: w) ∈ wordSpan K (n + 1) := by
           have hlen : (i :: w).length = n + 1 := by simp [List.length_cons]; omega
           have hmem := evalWord_mem_wordSpan K (i :: w)
           rw [hlen] at hmem; exact hmem
         exact hws this
     -- By induction: all word products of length ≥ 1 are in V n
     have hword_all : ∀ (w : List (Fin d)),
-        1 ≤ w.length → evalWord K w ∈ V n := by
+        1 ≤ w.length → Kraus.evalWord K w ∈ V n := by
       intro w hw1
       by_cases hw2 : w.length ≤ n
       · apply Submodule.subset_span
@@ -458,7 +457,7 @@ theorem exists_nonzero_trace_word_sharp_pos [NeZero D]
                   simpa only [List.length_cons] using
                     Nat.succ_le_succ (Nat.zero_le t.length)
             by_cases hw3 : w.length ≤ n
-            · -- |w| ≤ n, so evalWord K w ∈ V n directly
+            · -- |w| ≤ n, so Kraus.evalWord K w ∈ V n directly
               exact hleft i _ (Submodule.subset_span ⟨w, hw1', hw3, rfl⟩)
             · -- |w| > n, use ih
               exact hleft i _ (ih hw1' hw3)
@@ -565,7 +564,7 @@ theorem exists_nonzero_trace_word_sharp_pos [NeZero D]
       (Matrix.traceLinearMap (Fin D) ℂ ℂ)
       (0 : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] ℂ)
       {M | ∃ w : List (Fin d), 1 ≤ w.length ∧ w.length ≤ bound ∧
-        M = evalWord K w} := by
+        M = Kraus.evalWord K w} := by
     rintro M ⟨w, hw1, hw2, rfl⟩
     simp only [Matrix.traceLinearMap_apply, LinearMap.zero_apply]
     exact hall w hw1 hw2

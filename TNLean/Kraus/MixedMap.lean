@@ -80,8 +80,8 @@ theorem mixedMapLM_pow_apply (A : Fin d → Matrix (Fin D₁) (Fin D₁) ℂ)
     ∀ X : Matrix (Fin D₁) (Fin D₂) ℂ,
       ((mixedMapLM A B) ^ N) X =
         ∑ σ : Fin N → Fin d,
-          MPSTensor.evalWord A (List.ofFn σ) * X *
-            (MPSTensor.evalWord B (List.ofFn σ))ᴴ := by
+          Kraus.evalWord A (List.ofFn σ) * X *
+            (Kraus.evalWord B (List.ofFn σ))ᴴ := by
   classical
   induction N with
   | zero =>

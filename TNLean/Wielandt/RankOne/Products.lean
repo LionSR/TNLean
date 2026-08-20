@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.Kraus.Wielandt.RankOne.Products
 import TNLean.Kraus.Injectivity
+import TNLean.MPS.Core.Word
 
 /-!
 # Eigenvectors from Wielandt word products

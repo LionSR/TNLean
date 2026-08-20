@@ -70,16 +70,16 @@ theorem wordSpan_finrank_le (K : Fin d → Matrix (Fin D) (Fin D) ℂ) (n : ℕ)
 /-- A length-one word evaluates to the corresponding tensor entry. -/
 theorem evalWord_ofFn_one_eq
     (K : Fin d → Matrix (Fin D) (Fin D) ℂ) (σ : Fin 1 → Fin d) :
-    MPSTensor.evalWord K (List.ofFn σ) = K (σ 0) := by
+    Kraus.evalWord K (List.ofFn σ) = K (σ 0) := by
   have h : List.ofFn σ = [σ 0] := by
     apply List.ext_getElem <;> simp
   rw [h]
-  simp [MPSTensor.evalWord]
+  simp [Kraus.evalWord]
 
 /-- Every family element belongs to the one-step word span `S₁(K)`. -/
 theorem apply_mem_wordSpan_one (K : Fin d → Matrix (Fin D) (Fin D) ℂ) (i : Fin d) :
     K i ∈ wordSpan K 1 := by
-  simpa [MPSTensor.evalWord] using evalWord_mem_wordSpan K ([i] : List (Fin d))
+  simpa [Kraus.evalWord] using evalWord_mem_wordSpan K ([i] : List (Fin d))
 
 /-- Add a one-step span element as a redundant first generator.
 
@@ -162,10 +162,10 @@ theorem mulLeft_image_wordSpan_le_succ (K : Fin d → Matrix (Fin D) (Fin D) ℂ
   apply Submodule.map_le_iff_le_comap.mpr
   apply Submodule.span_le.mpr
   rintro M ⟨σ, rfl⟩
-  change (LinearMap.mulLeft ℂ (K i₀)) (MPSTensor.evalWord K (List.ofFn σ)) ∈
+  change (LinearMap.mulLeft ℂ (K i₀)) (Kraus.evalWord K (List.ofFn σ)) ∈
     wordSpan K (n + 1)
   simp only [LinearMap.mulLeft_apply]
-  change MPSTensor.evalWord K (i₀ :: List.ofFn σ) ∈ wordSpan K (n + 1)
+  change Kraus.evalWord K (i₀ :: List.ofFn σ) ∈ wordSpan K (n + 1)
   apply Submodule.subset_span
   exact ⟨Fin.cons i₀ σ, by simp [List.ofFn_succ]⟩
 

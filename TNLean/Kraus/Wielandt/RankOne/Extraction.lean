@@ -24,7 +24,7 @@ variable {d D : ℕ}
 Paper: arXiv:0909.5347, Theorem 1 proof, first paragraph. -/
 theorem exists_nonzero_trace_word_of_wordSpan_eq_top [NeZero D]
     (K : Fin d → Matrix (Fin D) (Fin D) ℂ) {N : ℕ} (htop : wordSpan K N = ⊤) :
-    ∃ σ : Fin N → Fin d, (MPSTensor.evalWord K (List.ofFn σ)).trace ≠ 0 := by
+    ∃ σ : Fin N → Fin d, (Kraus.evalWord K (List.ofFn σ)).trace ≠ 0 := by
   by_contra hall
   push Not at hall
   have hI : (1 : Matrix (Fin D) (Fin D) ℂ) ∈ wordSpan K N :=
@@ -48,7 +48,7 @@ theorem exists_eigenvector_of_wordSpan_eq_top [NeZero D]
     (K : Fin d → Matrix (Fin D) (Fin D) ℂ) {N : ℕ} (htop : wordSpan K N = ⊤) :
     ∃ (σ : Fin N → Fin d) (μ : ℂ) (φ : Fin D → ℂ),
       μ ≠ 0 ∧ φ ≠ 0 ∧
-      MPSTensor.evalWord K (List.ofFn σ) *ᵥ φ = μ • φ := by
+      Kraus.evalWord K (List.ofFn σ) *ᵥ φ = μ • φ := by
   obtain ⟨σ, hσ⟩ := exists_nonzero_trace_word_of_wordSpan_eq_top K htop
   obtain ⟨μ, φ, hμ, hφ, heig⟩ := exists_eigenvector_of_trace_ne_zero _ hσ
   exact ⟨σ, μ, φ, hμ, hφ, heig⟩

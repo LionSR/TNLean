@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.Kraus.Injectivity
 import TNLean.Kraus.Wielandt.SpanGrowth.CumulativeSpan
+import TNLean.MPS.Core.Word
 
 /-!
 # Cumulative word spans and TN injectivity

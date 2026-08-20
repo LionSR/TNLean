@@ -30,8 +30,8 @@ variable {d D : ℕ}
 /-- Evaluation of a nonempty word splits into its first letter and remaining suffix. -/
 theorem evalWord_ofFn_succ (K : Fin d → Matrix (Fin D) (Fin D) ℂ) {n : ℕ}
     (σ : Fin (n + 1) → Fin d) :
-    MPSTensor.evalWord K (List.ofFn σ) =
-      K (σ 0) * MPSTensor.evalWord K (List.ofFn (σ ∘ Fin.succ)) := by
+    Kraus.evalWord K (List.ofFn σ) =
+      K (σ 0) * Kraus.evalWord K (List.ofFn (σ ∘ Fin.succ)) := by
   rw [List.ofFn_succ]
   rfl
 
@@ -53,13 +53,13 @@ theorem wordSpan_succ_eq_mul_left
 def cumulativeSpan (K : Fin d → Matrix (Fin D) (Fin D) ℂ) (n : ℕ) :
     Submodule ℂ (Matrix (Fin D) (Fin D) ℂ) :=
   Submodule.span ℂ
-    {X | ∃ w : List (Fin d), w.length ≤ n ∧ X = MPSTensor.evalWord K w}
+    {X | ∃ w : List (Fin d), w.length ≤ n ∧ X = Kraus.evalWord K w}
 
 /-- An evaluated word of length at most `n` belongs to `cumulativeSpan K n`. -/
 theorem mem_cumulativeSpan_generator
     (K : Fin d → Matrix (Fin D) (Fin D) ℂ) {n : ℕ}
     {w : List (Fin d)} (hw : w.length ≤ n) :
-    MPSTensor.evalWord K w ∈ cumulativeSpan K n :=
+    Kraus.evalWord K w ∈ cumulativeSpan K n :=
   Submodule.subset_span ⟨w, hw, rfl⟩
 
 /-- An exact word span is contained in every sufficiently large cumulative span. -/
@@ -68,7 +68,7 @@ theorem wordSpan_le_cumulativeSpan
     wordSpan K m ≤ cumulativeSpan K n := by
   apply Submodule.span_le.mpr
   rintro X ⟨σ, rfl⟩
-  change MPSTensor.evalWord K (List.ofFn σ) ∈ _
+  change Kraus.evalWord K (List.ofFn σ) ∈ _
   apply mem_cumulativeSpan_generator
   simpa only [List.length_ofFn]
 
@@ -101,10 +101,10 @@ theorem left_mul_mem_cumulativeSpan
     rw [Submodule.map_le_iff_le_comap]
     apply Submodule.span_le.mpr
     rintro _ ⟨w, hw, rfl⟩
-    change (LinearMap.mulLeft ℂ (K i)) (MPSTensor.evalWord K w) ∈
+    change (LinearMap.mulLeft ℂ (K i)) (Kraus.evalWord K w) ∈
       cumulativeSpan K n
     simp only [LinearMap.mulLeft_apply]
-    change MPSTensor.evalWord K (i :: w) ∈ cumulativeSpan K n
+    change Kraus.evalWord K (i :: w) ∈ cumulativeSpan K n
     by_cases hle : w.length + 1 ≤ n
     · exact mem_cumulativeSpan_generator K (by simpa)
     · have hlen : (i :: w).length = n + 1 := by
@@ -127,15 +127,15 @@ theorem cumulativeSpan_stable
         wordSpan_le_cumulativeSpan K le_rfl
       _ = cumulativeSpan K n := h.symm
   have hword_all : ∀ w : List (Fin d), n < w.length →
-      MPSTensor.evalWord K w ∈ cumulativeSpan K n := by
+      Kraus.evalWord K w ∈ cumulativeSpan K n := by
     intro w hw
     induction w with
     | nil => simp at hw
     | cons i w ih =>
-      simp only [MPSTensor.evalWord]
+      simp only [Kraus.evalWord]
       by_cases hw' : n < w.length
       · exact left_mul_mem_cumulativeSpan K hstab i _ (ih hw')
-      · have hmem : MPSTensor.evalWord K w ∈ cumulativeSpan K n :=
+      · have hmem : Kraus.evalWord K w ∈ cumulativeSpan K n :=
           mem_cumulativeSpan_generator K (by omega)
         exact left_mul_mem_cumulativeSpan K hstab i _ hmem
   intro m hm
@@ -173,7 +173,7 @@ theorem cumulativeSpan_finrank_strict_mono
 theorem one_mem_cumulativeSpan
     (K : Fin d → Matrix (Fin D) (Fin D) ℂ) (n : ℕ) :
     (1 : Matrix (Fin D) (Fin D) ℂ) ∈ cumulativeSpan K n :=
-  Submodule.subset_span ⟨[], by simp, by simp [MPSTensor.evalWord]⟩
+  Submodule.subset_span ⟨[], by simp, by simp [Kraus.evalWord]⟩
 
 /-- Zero-length words do not span the full matrix algebra when `2 ≤ D`. -/
 theorem wordSpan_zero_ne_top_of_two_le [NeZero D]

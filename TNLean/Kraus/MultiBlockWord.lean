@@ -13,7 +13,7 @@ import Mathlib.LinearAlgebra.Matrix.Reindex
 # Word evaluation over arbitrary finite index types
 
 This file carries the word-evaluation layer of the channel side: a
-generalization of `MPSTensor.evalWord` to matrices indexed by an arbitrary
+generalization of `Kraus.evalWord` to matrices indexed by an arbitrary
 finite type (in particular, the `Σ`-type indices produced by
 `Matrix.blockDiagonal'`), together with compatibility lemmas identifying it
 with the canonical `Fin D`-indexed `evalWord`. It is
@@ -31,7 +31,7 @@ open scoped Matrix BigOperators
 
 /-- Word evaluation for a family of square matrices indexed by `Fin d`.
 
-This is the same recursion as `MPSTensor.evalWord`, but it works for matrices indexed by an
+This is the same recursion as `Kraus.evalWord`, but it works for matrices indexed by an
 arbitrary finite type (in particular, the `Σ`-type indices produced by `Matrix.blockDiagonal'`). -/
 def evalWord {d : ℕ} {n : Type*} [Fintype n] [DecidableEq n]
     (A : Fin d → Matrix n n ℂ) : List (Fin d) → Matrix n n ℂ
@@ -87,24 +87,24 @@ end BlockDiagonal
 namespace MPSTensor
 
 /-- On `Fin D` indices, the auxiliary `evalWord` from `MultiBlockWord.lean` agrees with
-`MPSTensor.evalWord`. -/
-@[simp] lemma evalWord_aux_eq {d D : ℕ} (A : MPSTensor d D) (w : List (Fin d)) :
-    _root_.evalWord A w = MPSTensor.evalWord A w := by
+`Kraus.evalWord`. -/
+@[simp] lemma evalWord_aux_eq {d D : ℕ} (A : Fin d → Matrix (Fin D) (Fin D) ℂ) (w : List (Fin d)) :
+    _root_.evalWord A w = Kraus.evalWord A w := by
   induction w with
-  | nil => simp [MPSTensor.evalWord, _root_.evalWord]
-  | cons i w ih => simp [MPSTensor.evalWord, _root_.evalWord, ih]
+  | nil => simp [Kraus.evalWord, _root_.evalWord]
+  | cons i w ih => simp [Kraus.evalWord, _root_.evalWord, ih]
 
-/-- `MPSTensor.evalWord` commutes with reindexing along an equivalence. -/
+/-- `Kraus.evalWord` commutes with reindexing along an equivalence. -/
 lemma evalWord_reindex {d D : ℕ} {m : Type*} [Fintype m] [DecidableEq m]
     (e : m ≃ Fin D) (A : Fin d → Matrix m m ℂ) :
     ∀ w : List (Fin d),
-      MPSTensor.evalWord (fun i => (Matrix.reindex e e) (A i)) w =
+      Kraus.evalWord (fun i => (Matrix.reindex e e) (A i)) w =
         (Matrix.reindex e e) (_root_.evalWord A w) := by
   classical
   intro w; induction w with
-  | nil => simp [MPSTensor.evalWord, _root_.evalWord]
+  | nil => simp [Kraus.evalWord, _root_.evalWord]
   | cons _ _ ih =>
-      simp only [MPSTensor.evalWord, _root_.evalWord, ih]
+      simp only [Kraus.evalWord, _root_.evalWord, ih]
       simp [Matrix.submatrix_mul_equiv]
 
 end MPSTensor
