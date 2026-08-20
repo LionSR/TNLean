@@ -81,10 +81,10 @@ theorem expSemigroup_apply_eigenvector
   let : AddCommGroup Mat := Matrix.linftyOpNormedAddCommGroup.toAddCommGroup
   let : NormedAddCommGroup Mat := Matrix.linftyOpNormedAddCommGroup
   let : Module ℝ Mat :=
-    (TNOperatorSpace.instNormedSpaceRealMatrixComplex_tNLean (Fin D)).toModule
+    (TNOperatorSpace.instNormedSpaceRealMatrixComplex (Fin D)).toModule
   let : TopologicalSpace Mat := PseudoMetricSpace.toUniformSpace.toTopologicalSpace
   let : NormedSpace ℝ Mat :=
-    TNOperatorSpace.instNormedSpaceRealMatrixComplex_tNLean (Fin D)
+    TNOperatorSpace.instNormedSpaceRealMatrixComplex (Fin D)
   let : ContinuousSMul ℝ Mat := inferInstance
   let : IsScalarTower ℝ ℂ Mat := by infer_instance
   let c : ℝ → ℂ := fun u => Complex.exp (-((u : ℂ) * μ))
