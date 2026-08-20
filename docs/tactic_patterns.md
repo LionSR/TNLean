@@ -539,6 +539,13 @@ abstracted — record why, so it is not re-proposed).
 
 ## Completed refactors
 
+### Reversing `List.ofFn` by `Fin.rev`
+- **Seen:** five former proofs in `Kraus.Blocking`, `Kraus.Wielandt.RankOne.Construction`,
+  `Kraus.Wielandt.RectangularSpan.Basic`, `MPS.MPDO.Defs`, and
+  `MPS.MPU.SourceUReflectedKernel`.
+- **Abstraction:** `List.ofFn_reverse` in `TNLean/Kraus/Word.lean`.
+- **Result:** all five consumers use the shared theorem directly.
+
 ### Finite Kraus setup for channels
 - **Seen:** 2 occurrences in `Channel/Peripheral/IrreducibleChannel.lean` and
   `Channel/Semigroup/Primitivity/Helpers.lean` before promotion (issue #6576).
