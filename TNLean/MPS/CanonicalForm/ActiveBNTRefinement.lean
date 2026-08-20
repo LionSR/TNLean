@@ -180,9 +180,9 @@ theorem equiv_of_sameMPV₂Pos
         UnitGaugePhaseEquiv
           (cast (congr_arg (MPSTensor d) hdim) (P.basis j)) (Q.basis (e j)) := by
   classical
-  have : ∀ j, NeZero (P.basisDim j) := fun j =>
+  have hPNeZero : ∀ j, NeZero (P.basisDim j) := fun j =>
     ⟨(hP.basis_normal j).bondDim_ne_zero⟩
-  have : ∀ j, NeZero (Q.basisDim j) := fun j =>
+  have hQNeZero : ∀ j, NeZero (Q.basisDim j) := fun j =>
     ⟨(hQ.basis_normal j).bondDim_ne_zero⟩
   have hQBNTOnP :
       IsCPSVBasisOfNormalTensors P.toTensor
