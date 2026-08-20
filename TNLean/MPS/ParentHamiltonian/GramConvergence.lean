@@ -4,10 +4,10 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.Algebra.OperatorNormFrobenius
+import TNLean.Analysis.SpectralRadiusPowerDecay
 import TNLean.MPS.Core.TransferChannel
 import TNLean.MPS.ParentHamiltonian.GroundSpaceGram
 import TNLean.MPS.Structure.PrimitiveFixedPoint
-import TNLean.Spectral.TransferOperatorGapCommon
 
 /-!
 # Convergence of MPS ground-space Gram operators
