@@ -393,7 +393,7 @@ All eleven cited Chapter 7 numbers agree with the printed notes.
 | Corollary 7.1 | Perturbation of generators | PDF page 4; printed page 122 | lines 135--141 | Correct |
 | Proposition 7.2 | Conditional complete positivity | PDF page 4; printed page 122 | lines 158--170 | Correct |
 | Proposition 7.3 | Completely positive dynamical semigroups | PDF page 5; printed page 123 | lines 195--201 | Correct |
-| Proposition 7.4 | Freedom in representations of generators | PDF page 6; printed page 124 | lines 223--236 | Correct |
+| Proposition 7.4 | Freedom in representation of generators | PDF page 6; printed page 124 | lines 223--236 | Correct |
 | Theorem 7.1 | Generators for semigroups of quantum channels | PDF page 7; printed page 125 | lines 245--256 | Correct |
 | Proposition 7.5 | Irreducibility implies primitivity | PDF page 7; printed page 125 | lines 268--277 | Correct |
 | Proposition 7.6 | Reducible quantum dynamical semigroups | PDF page 8; printed page 126 | lines 285--296 | Correct |
