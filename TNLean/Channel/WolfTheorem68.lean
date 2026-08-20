@@ -23,17 +23,6 @@ namespace Kraus
 
 variable {r D : ℕ}
 
-/-- Wolf, Theorem 6.8, item 1 implies item 3: a trace-preserving finite Kraus
-family whose map is irreducible and primitive has eventually full word span. -/
-theorem hasEventuallyFullWordSpan_of_isIrreducibleMap_of_isPrimitive
-    [NeZero D] (K : Fin r → Matrix (Fin D) (Fin D) ℂ)
-    (hTP : IsTP K)
-    (hIrr : IsIrreducibleMap (mapLM K))
-    (hPrim : IsPrimitive (mapLM K)) :
-    HasEventuallyFullWordSpan K :=
-  Kraus.hasEventuallyFullWordSpan_of_isPrimitive_irreducible
-    K hTP hIrr hPrim
-
 /-- Wolf, Theorem 6.8, item 1 implies item 4: under trace preservation,
 irreducibility and primitivity force the Choi matrices of all sufficiently
 large Kraus-map powers to be positive definite. -/

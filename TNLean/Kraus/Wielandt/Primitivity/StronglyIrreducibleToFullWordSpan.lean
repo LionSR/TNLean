@@ -198,7 +198,7 @@ The proof uses the following channel-native argument:
    contribution, which eventually dominates the complementary contribution.
 
 The next two lemmas provide the span criterion and the uniform error estimate
-used in `hasEventuallyFullWordSpan_of_isPrimitive_irreducible`.
+used in `hasEventuallyFullWordSpan_of_isIrreducibleMap_of_isPrimitive`.
 
 **Lemma A** (`wordSpan_eq_top_of_tracePairBilin_re_pos`): if the trace-pairing
 bilinear form `Q_{E^n}(B).re > 0` for every nonzero `B`, then `wordSpan K n = ⊤`.
@@ -619,7 +619,7 @@ private theorem norm_tracePairBilin_le_sq [NeZero D]
 /-- Sanz--Pérez-García--Wolf--Cirac, Proposition 3(c) to (b), in
 channel-native form: a trace-preserving finite Kraus family whose map is both
 irreducible and primitive has eventually full word span. -/
-theorem hasEventuallyFullWordSpan_of_isPrimitive_irreducible [NeZero D]
+theorem hasEventuallyFullWordSpan_of_isIrreducibleMap_of_isPrimitive [NeZero D]
     (K : Fin d → Matrix (Fin D) (Fin D) ℂ)
     (hTP : IsTP K)
     (hIrr : IsIrreducibleMap (mapLM K))
