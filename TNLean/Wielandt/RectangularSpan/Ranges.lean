@@ -32,12 +32,12 @@ theorem mem_range_mulLeft_iff_cols
   Matrix.mem_range_mulLeft_iff_cols P M
 
 /-- Compatibility name for `Matrix.colRangeSubmodule`. -/
-noncomputable def colRangeSubmodule (P : Matrix (Fin D) (Fin D) ℂ) :
+noncomputable abbrev colRangeSubmodule (P : Matrix (Fin D) (Fin D) ℂ) :
     Submodule ℂ (Matrix (Fin D) (Fin D) ℂ) :=
   Matrix.colRangeSubmodule P
 
 /-- Compatibility name for `Matrix.colRangeSubmoduleEquiv`. -/
-noncomputable def colRangeSubmoduleEquiv (P : Matrix (Fin D) (Fin D) ℂ) :
+noncomputable abbrev colRangeSubmoduleEquiv (P : Matrix (Fin D) (Fin D) ℂ) :
     colRangeSubmodule (D := D) P ≃ₗ[ℂ]
       (Fin D → LinearMap.range (Matrix.toLin' P)) :=
   Matrix.colRangeSubmoduleEquiv P
