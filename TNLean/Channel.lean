@@ -83,6 +83,7 @@ import TNLean.Channel.PositiveExamples
 import TNLean.Channel.PositiveFunctional
 import TNLean.Channel.PositiveMapDetection
 import TNLean.Channel.Primitive
+import TNLean.Channel.ProjectiveResolution
 import TNLean.Channel.QuantumSteering
 import TNLean.Channel.RadonNikodym
 import TNLean.Channel.ReductionCriterion
