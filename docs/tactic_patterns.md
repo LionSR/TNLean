@@ -1157,6 +1157,24 @@ current counts and full location lists).
   without constructing a `HasEigenvector`; keep the helper private until another independent
   consumer fixes the useful public location.
 
+### critical-scalar uniqueness for positive-definite fixed points — candidate
+- **Pattern:** given two positive-definite fixed points $\rho$ and $\sigma$ of
+  the same linear map, choose a critical scalar $c$, set
+  $\tau=\sigma-c\rho$, and use positive semidefiniteness together with the
+  failure of positive definiteness of $\tau$ to force $\tau=0$.
+- **Seen:** 2 occurrences in
+  `TNLean/Channel/Irreducible/FixedPointUniqueness.lean`, theorem
+  `posSemidef_fixedPoint_unique_of_irreducible_cp`, and
+  `TNLean/Kraus/Wielandt/Primitivity/VectorSpreadToPrimitive.lean`, lemma
+  `posSemidef_pow_fixedPoint_unique` (review on 2026-08-20).
+- **Abstraction (proposed):** if a third occurrence appears, extract a theorem
+  asserting proportionality of two positive-definite fixed points of one
+  linear map. Each caller should establish positive definiteness by its own
+  hypotheses before applying the common theorem.
+- **Notes:** The two callers obtain positive definiteness from different
+  sources, irreducibility in the first case and fixed-length vector spreading
+  in the second. This is below the rule-of-three promotion threshold.
+
 ### quasi-local translation laws in automorphism-group form — candidate
 - **Pattern:** convert translation composition, symmetry, and identity laws from
   `StarAlgEquiv.trans`, `StarAlgEquiv.symm`, and `StarAlgEquiv.refl` into group
