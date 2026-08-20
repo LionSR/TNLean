@@ -99,8 +99,8 @@ theorem trace_evalWord_toTensorFromBlocks_mul
 
 /-- Moving an invertible virtual gauge from a tensor word to its boundary.
 
-Source: arXiv:1606.00608, canonical gauge convention at lines 237--246 and
-Appendix C.2, lines 1646--1665. -/
+Source: arXiv:1606.00608, gauge-matrix similarity convention at lines
+186--195 and Appendix C.2, lines 1646--1665. -/
 theorem trace_evalWord_gauge_mul
     {A B : MPSTensor d D} (G : GL (Fin D) ℂ)
     (hG : ∀ i, B i =
@@ -138,8 +138,8 @@ The same transformed boundary is used at every word length. This is the
 arbitrary-boundary identity required when the one-site and two-site channel
 equations are combined over canonical sectors.
 
-Source: arXiv:1606.00608, canonical gauge convention at lines 237--246 and
-Appendix C.2, lines 1646--1665 and 1810--1825. -/
+Source: arXiv:1606.00608, gauge-matrix similarity convention at lines
+186--195 and Appendix C.2, lines 1646--1665 and 1810--1825. -/
 theorem trace_evalWord_gauge_toTensorFromBlocks_mul
     (weight : Fin r → ℂ) (A : (j : Fin r) → MPSTensor d (dim j))
     (B : MPSTensor d (∑ j : Fin r, dim j))
