@@ -10,9 +10,10 @@ import TNLean.Kraus.WordSpan
 # Bounded word powers in a finite Kraus family
 
 This file constructs a bounded-length word-span element whose range lies in the
-sum of the generalized eigenspaces for nonzero eigenvalues. It is the Fitting
-decomposition step in Sanz, Pérez-García, Wolf, and Cirac,
-arXiv:0909.5347, Lemma 2(b).
+sum of the generalized eigenspaces for nonzero eigenvalues. It gives only the
+intermediate Fitting-projector-power step $A_1^r = A_1^r P$ in Sanz,
+Pérez-García, Wolf, and Cirac, arXiv:0909.5347, Lemma 2(b), not the final
+rank-one element $|\varphi\rangle\langle\psi|$.
 -/
 
 open scoped Matrix
@@ -43,8 +44,9 @@ theorem evalWord_pow_mem_wordSpan
 /-- A word matrix with a nonzero eigenvalue has a nonzero bounded power whose range lies
 in the sum of its generalized eigenspaces for nonzero eigenvalues.
 
-This is the Fitting-decomposition step $A_1^r = A_1^r P$ in
-arXiv:0909.5347, Lemma 2(b). -/
+This is only the intermediate Fitting-projector-power step
+$A_1^r = A_1^r P$ in arXiv:0909.5347, Lemma 2(b). It is weaker than the
+rank-one-element conclusion of that lemma. -/
 theorem exists_nonzero_pow_evalWord_mem_wordSpan_range_le
     (K : Fin d → Matrix (Fin D) (Fin D) ℂ) (w₀ : List (Fin d))
     (μ : ℂ) (φ : Fin D → ℂ)

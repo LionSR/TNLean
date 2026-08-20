@@ -9,8 +9,8 @@ import TNLean.Wielandt.SpanGrowth.VectorToMatrixSpan
 /-!
 # Bounded word powers for MPS tensors
 
-This file preserves the established MPS tensor interface to the finite-Kraus
-word-power results in `Kraus`.
+This file restates the word-power results of
+`Kraus.Wielandt.RankOne.Element` for an MPS tensor's evaluated words.
 -/
 
 open scoped Matrix
@@ -27,7 +27,11 @@ theorem evalWord_pow_mem_wordSpan (A : MPSTensor d D) (w : List (Fin d)) (k : �
   exact Kraus.evalWord_pow_mem_wordSpan A w k
 
 /-- A word matrix with a nonzero eigenvalue has a nonzero bounded power whose range lies
-in the sum of its generalized eigenspaces for nonzero eigenvalues. -/
+in the sum of its generalized eigenspaces for nonzero eigenvalues.
+
+This is only the intermediate Fitting-projector-power step
+$A_1^r = A_1^r P$ in arXiv:0909.5347, Lemma 2(b). It is weaker than the
+rank-one-element conclusion of that lemma. -/
 theorem exists_nonzero_pow_evalWord_mem_wordSpan_range_le
     (A : MPSTensor d D) (w₀ : List (Fin d))
     (μ : ℂ) (φ : Fin D → ℂ)
