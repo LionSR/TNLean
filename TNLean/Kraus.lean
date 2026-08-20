@@ -11,5 +11,6 @@ Authors: TNLean contributors
 import TNLean.Kraus.Blocking
 import TNLean.Kraus.Injectivity
 import TNLean.Kraus.InvariantProjection
+import TNLean.Kraus.MapIterate
 import TNLean.Kraus.MultiBlockWord
 import TNLean.Kraus.Word
