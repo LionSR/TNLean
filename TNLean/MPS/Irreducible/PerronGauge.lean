@@ -95,43 +95,12 @@ theorem exists_tp_data_of_irreducible
       -- B is gauge-equivalent to the rescaled tensor
       GaugeEquiv (d := d) (D := D)
         (fun i => (↑((Real.sqrt r)⁻¹) : ℂ) • A i) B := by
-  -- Get the PosDef adjoint eigenvector.
   obtain ⟨σ, r, hσ_pd, hr_pos, hσ_eig⟩ :=
     exists_posDef_adjoint_eigenvector A hIrr hA
-  -- Define the rescaled tensor.
-  set c := (Real.sqrt r)⁻¹ with hc_def
-  set A' : MPSTensor d D := fun i => (↑c : ℂ) • A i with hA'_def
-  -- Auxiliary lemma: star of a real-coerced scalar is itself.
-  have hstar_c : star (↑c : ℂ) = (↑c : ℂ) := by
-    rw [RCLike.star_def, Complex.conj_ofReal]
-  -- Key scalar identity.
-  have hcc : (c : ℝ) * c = r⁻¹ := by
-    rw [hc_def, ← sq, inv_pow, Real.sq_sqrt hr_pos.le]
-  have hc_sq : (↑c : ℂ) * (↑c : ℂ) = (↑r : ℂ)⁻¹ := by
-    rw [← Complex.ofReal_mul, hcc, Complex.ofReal_inv]
-  -- σ is a PosDef fixed point of transferMap(fun i => (A' i)ᴴ).
-  have hA'_fix : transferMap (d := d) (D := D) (fun i => (A' i)ᴴ) σ = σ := by
-    simp only [hA'_def, transferMap_apply, Matrix.conjTranspose_smul, Matrix.smul_mul,
-      Matrix.mul_smul, smul_smul, star_star]
-    simp_rw [hstar_c, hc_sq]
-    rw [← Finset.smul_sum]
-    have h_sum : ∑ i : Fin d, (A i)ᴴ * σ * ((A i)ᴴ)ᴴ =
-        transferMap (d := d) (D := D) (fun i => (A i)ᴴ) σ := by
-      simp [transferMap_apply]
-    rw [h_sum, hσ_eig, smul_smul, inv_mul_cancel₀, one_smul]
-    exact_mod_cast hr_pos.ne'
-  -- Apply tpGauge.
-  set B := tpGauge (d := d) (D := D) A' σ with hB_def
-  have hB_tp : ∑ i : Fin d, (B i)ᴴ * B i = 1 :=
-    tpGauge_isTP_of_transferMap_conjTranspose_fixedPoint A' σ hσ_pd hA'_fix
-  have hB_gauge : GaugeEquiv (d := d) (D := D) A' B :=
-    gaugeEquiv_tpGauge A' σ hσ_pd
-  refine ⟨B, r, σ, hσ_pd, hr_pos, ?_, hB_tp, ?_⟩
-  -- Explicit form of B.
-  · intro i
-    rfl
-  -- GaugeEquiv: A' matches the stated rescaled tensor.
-  · convert hB_gauge using 1
+  let A' : MPSTensor d D := fun i => (↑((Real.sqrt r)⁻¹) : ℂ) • A i
+  let B := tpGauge (d := d) (D := D) A' σ
+  refine ⟨B, r, σ, hσ_pd, hr_pos, fun i => rfl, ?_, gaugeEquiv_tpGauge A' σ hσ_pd⟩
+  exact tpGauge_isTP_of_transferMap_conjTranspose_eigenvector A σ r hσ_pd hr_pos hσ_eig
 
 /-- **Unital gauge data for an irreducible MPS tensor.**
 

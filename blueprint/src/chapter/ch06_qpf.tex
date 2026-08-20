@@ -672,6 +672,29 @@ and~\cite{Evans1978Spectral}.
     appears in Section~\ref{sec:app_qpf_gauge}.
 \end{proof}
 
+\begin{theorem}[Square-root trace-preserving gauge from an adjoint eigenvector]%
+    \label{thm:tp_gauge_from_adjoint_eigenvector}
+    \lean{MPSTensor.tpGauge_isTP_of_transferMap_conjTranspose_eigenvector}
+    \leanok
+    \uses{thm:tp_gauge_from_adjoint_fixed}
+    Let $\sigma$ be positive definite and satisfy
+    $\sum_i (A^i)^\dagger \sigma A^i = r\sigma$ for $r>0$.
+    Define
+    \begin{align}
+        B^i
+         & = \sigma^{1/2}(r^{-1/2}A^i)\sigma^{-1/2}.
+        \label{eq:qpf_tp_gauge_eigenvector}
+    \end{align}
+    Then $B$ is trace-preserving:
+    $\sum_i (B^i)^\dagger B^i = \Id$.
+\end{theorem}
+
+\begin{proof}\leanok
+    Rescale $A$ by $r^{-1/2}$. The adjoint transfer map is quadratic in
+    the tensor, so the eigenvector equation becomes a fixed-point equation.
+    Theorem~\ref{thm:tp_gauge_from_adjoint_fixed} then gives the result.
+\end{proof}
+
 
 \begin{remark}\leanok
     The right-canonical gauge of Theorem~\ref{thm:right_canonical_gauge}
@@ -874,15 +897,15 @@ The TP-gauge application follows~\cite[Appendix~A]{Cirac2016MPDO_arXiv}.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:posDef_adjoint_eigenvector, thm:tp_gauge_from_adjoint_fixed,
+    \uses{thm:posDef_adjoint_eigenvector, thm:tp_gauge_from_adjoint_eigenvector,
         lem:tp_gauge_equiv}
     By Theorem~\ref{thm:posDef_adjoint_eigenvector},
     obtain $\sigma$ positive definite and $r > 0$ with
     $\E_A^\dagger(\sigma) = r\sigma$.
     Set $c = r^{-1/2}$ and $A'^i = cA^i$.
     Then $\E_{A'}^\dagger(\sigma) = \sigma$.
-    By the square-root trace-preserving gauge construction
-    (Theorem~\ref{thm:tp_gauge_from_adjoint_fixed}), the tensor defined by
+    By the square-root trace-preserving eigenvector gauge construction
+    (Theorem~\ref{thm:tp_gauge_from_adjoint_eigenvector}), the tensor defined by
     (\ref{eq:qpf_irred_tp_gauge}) satisfies
     $\sum_i (B^i)^\dagger B^i = \Id$.
     Lemma~\ref{lem:tp_gauge_equiv} gives the required gauge equivalence to
