@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import TNLean.Algebra.EigenspaceMap
 import TNLean.Channel.Irreducible.FixedPointUniqueness
 import TNLean.Channel.KrausMap
 import TNLean.Channel.Peripheral.IrreducibleChannel
@@ -42,16 +43,6 @@ variable {d D : ℕ}
 
 local notation "Mat" => Matrix (Fin D) (Fin D) ℂ
 
-private lemma pow_smul_eigenvector
-    (E : Mat →ₗ[ℂ] Mat) {X : Mat} {μ : ℂ} (hEig : E X = μ • X) (n : ℕ) :
-    (E ^ n) X = μ ^ n • X := by
-  induction n with
-  | zero => simp
-  | succ n ih =>
-      rw [pow_succ, Module.End.mul_apply, hEig, LinearMap.map_smul, ih, smul_smul]
-      congr 1
-      ring
-
 private lemma conjTranspose_eigenvector
     (E : Mat →ₗ[ℂ] Mat) (hE : IsPositiveMap E)
     {X : Mat} {μ : ℂ} (hEig : E X = μ • X) :
@@ -65,7 +56,8 @@ private lemma pow_eigenvector_of_root
     (E : Mat →ₗ[ℂ] Mat) {X : Mat} {μ : ℂ} (hEig : E X = μ • X)
     {p : ℕ} (hroot : μ ^ p = 1) :
     (E ^ p) X = X := by
-  rw [pow_smul_eigenvector E hEig p, hroot, one_smul]
+  rw [Module.End.pow_apply_of_mem_eigenspace
+    (Module.End.mem_eigenspace_iff.mpr hEig) p, hroot, one_smul]
 
 private lemma pow_conjTranspose_eigenvector_of_root
     (E : Mat →ₗ[ℂ] Mat) (hE : IsPositiveMap E)

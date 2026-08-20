@@ -24,6 +24,17 @@ abstracted — record why, so it is not re-proposed).
 
 ## Promoted
 
+### Powers on an eigenspace — promoted
+- **Pattern:** prove `(f ^ n) x = μ ^ n • x` from `x ∈ f.eigenspace μ`, either by induction
+  using `Module.End.mem_eigenspace_iff` or by splitting on `x = 0` before applying
+  `HasEigenvector.pow_apply`.
+- **Seen:** 3 occurrences across `TNLean/Channel/Peripheral/WeightedCesaro.lean`,
+  `TNLean/Channel/Peripheral/CesaroRecurrence.lean`, and
+  `TNLean/Kraus/Wielandt/Primitivity/VectorSpreadToPrimitive.lean`.
+- **Abstraction:** `Module.End.pow_apply_of_mem_eigenspace` in
+  `TNLean/Algebra/EigenspaceMap.lean` handles the zero vector directly and is used by all
+  three consumers.
+
 ### finite-Kraus transfer-power trace pairing — promoted
 - **Pattern:** expand a Kraus-map or MPS transfer-map power as a sum over words,
   distribute matrix multiplication through the sum, reduce multiplication by a
@@ -1162,19 +1173,6 @@ abstracted — record why, so it is not re-proposed).
 
 Seeded from `scripts/tactic_pattern_scan.py` (2026-07-18 scan; re-run for
 current counts and full location lists).
-
-### powers on an eigenspace — candidate
-- **Pattern:** prove `(f ^ n) x = μ ^ n • x` from `x ∈ f.eigenspace μ`, either by induction
-  using `Module.End.mem_eigenspace_iff` or by splitting on `x = 0` before applying
-  `HasEigenvector.pow_apply`.
-- **Seen:** 2 occurrences across `TNLean/Channel/Peripheral/WeightedCesaro.lean` and
-  `TNLean/Channel/Peripheral/CesaroRecurrence.lean` (review on 2026-08-17).
-- **Abstraction (proposed):** if a third occurrence appears, promote the private
-  `pow_apply_of_mem_eigenspace` next to the shared `Module.End.eigenspace` API and refactor
-  the case-split variant to use it.
-- **Notes:** This is below the rule-of-three threshold. The induction handles the zero vector
-  without constructing a `HasEigenvector`; keep the helper private until another independent
-  consumer fixes the useful public location.
 
 ### quasi-local translation laws in automorphism-group form — candidate
 - **Pattern:** convert translation composition, symmetry, and identity laws from
