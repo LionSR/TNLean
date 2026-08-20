@@ -188,9 +188,9 @@ private theorem wordSpan_eq_top_of_tracePairBilin_re_pos
     rwa [hMdef, ne_eq, rep_eq_zero_iff]
   -- φ vanishes on generators: tr(M · A_σ) = 0
   have hvanish : ∀ σ : Fin n → Fin d,
-      Matrix.trace (M * MPSTensor.evalWord K (List.ofFn σ)) = 0 := by
+      Matrix.trace (M * Kraus.evalWord K (List.ofFn σ)) = 0 := by
     intro σ
-    rw [← phi_eq_trace_mul φ (MPSTensor.evalWord K (List.ofFn σ))]
+    rw [← phi_eq_trace_mul φ (Kraus.evalWord K (List.ofFn σ))]
     exact (Submodule.mem_dualAnnihilator φ).mp hφmem _
       (Submodule.subset_span ⟨σ, rfl⟩)
   -- Set B = M†, so tr(B† A_σ) = tr(M A_σ) = 0
@@ -198,7 +198,7 @@ private theorem wordSpan_eq_top_of_tracePairBilin_re_pos
   have hBne : B ≠ 0 :=
     fun h => hMne (Matrix.conjTranspose_eq_zero.mp h)
   have hBvanish : ∀ σ : Fin n → Fin d,
-      Matrix.trace (Bᴴ * MPSTensor.evalWord K (List.ofFn σ)) = 0 := by
+      Matrix.trace (Bᴴ * Kraus.evalWord K (List.ofFn σ)) = 0 := by
     intro σ
     rw [hBdef, Matrix.conjTranspose_conjTranspose]
     exact hvanish σ
@@ -209,7 +209,7 @@ private theorem wordSpan_eq_top_of_tracePairBilin_re_pos
     sum_normSq_trace_conjTranspose_mul_evalWord K n B
   -- LHS = 0 since all traces vanish
   have hlhs : (∑ σ : Fin n → Fin d,
-      ‖Matrix.trace (Bᴴ * MPSTensor.evalWord K (List.ofFn σ))‖ ^ 2
+      ‖Matrix.trace (Bᴴ * Kraus.evalWord K (List.ofFn σ))‖ ^ 2
         : ℝ) = 0 := by
     apply Finset.sum_eq_zero; intro σ _; simp [hBvanish σ]
   -- tracePairBilin is definitionally the RHS of the identity

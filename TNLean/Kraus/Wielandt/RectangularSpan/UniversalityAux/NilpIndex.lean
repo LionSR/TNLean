@@ -57,7 +57,7 @@ theorem mulLeft_mem_rectSpan_nilpIndex_succ
     calc M₀ * (M₀ ^ r) = M₀ ^ (r + 1) := by simp [pow_succ']
       _ = (M₀ ^ r) * M₀ := by simp [pow_succ]
   have hM₀ : M₀ ∈ wordSpan K 1 := by
-    simpa [M₀, MPSTensor.evalWord] using
+    simpa [M₀, Kraus.evalWord] using
       evalWord_mem_wordSpan K ([i₀] : List (Fin d))
   have hM₀M : M₀ * M ∈ wordSpan K (n + 1) := by
     have : M₀ * M ∈ (wordSpan K 1) * (wordSpan K n) := Submodule.mul_mem_mul hM₀ hM

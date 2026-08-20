@@ -16,8 +16,7 @@ Kraus-family-only library out of `TNLean`'s matrix-product-state development.
 
 The exact word-span API is stated in `namespace Kraus`. The established
 injectivity and normality declarations remain in `namespace MPSTensor` until
-a dedicated compatibility rename; see `TNLean/Kraus/Word.lean`'s module
-docstring.
+the MPS declarations using these predicates are changed simultaneously.
 
 ## Main declarations
 
@@ -38,17 +37,17 @@ variable {d D : ℕ}
 
 /-- Algebraic injectivity (spanning formulation): the matrices `{A i}` span the full matrix
 algebra `Matrix (Fin D) (Fin D) ℂ`. -/
-def IsInjective (A : MPSTensor d D) : Prop :=
+def IsInjective (A : Fin d → Matrix (Fin D) (Fin D) ℂ) : Prop :=
   Submodule.span ℂ (Set.range A) = (⊤ : Submodule ℂ (Matrix (Fin D) (Fin D) ℂ))
 
 /-- Unfolded form of `IsInjective`: the span of the range of `A` equals `⊤`. -/
-lemma IsInjective.span_eq_top {A : MPSTensor d D} (hA : IsInjective A) :
+lemma IsInjective.span_eq_top {A : Fin d → Matrix (Fin D) (Fin D) ℂ} (hA : IsInjective A) :
     Submodule.span ℂ (Set.range A) = ⊤ := hA
 
 /-- Multiplication of every physical letter by a nonzero scalar preserves
 injectivity. -/
 theorem IsInjective.smul
-    {c : ℂ} {A : MPSTensor d D} (hA : IsInjective A) (hc : c ≠ 0) :
+    {c : ℂ} {A : Fin d → Matrix (Fin D) (Fin D) ℂ} (hA : IsInjective A) (hc : c ≠ 0) :
     IsInjective (fun i ↦ c • A i) := by
   unfold IsInjective at hA ⊢
   calc
@@ -68,7 +67,7 @@ theorem IsInjective.smul
     _ = ⊤ := hA
 
 /-- An injective MPS tensor on `D ≥ 1` bond dimension implies `d ≥ 1`. -/
-theorem neZero_d_of_isInjective {A : MPSTensor d D} [NeZero D]
+theorem neZero_d_of_isInjective {A : Fin d → Matrix (Fin D) (Fin D) ℂ} [NeZero D]
     (hA : IsInjective A) : NeZero d := by
   by_contra h
   simp only [not_neZero] at h
@@ -81,13 +80,13 @@ theorem neZero_d_of_isInjective {A : MPSTensor d D} [NeZero D]
 `A^{i₁} * ⋯ * A^{i_N}` spans the full matrix algebra.
 
 We index the blocked tensors by `σ : Fin N → Fin d`, i.e. words of length `N`. -/
-def IsNBlkInjective (A : MPSTensor d D) (N : ℕ) : Prop :=
+def IsNBlkInjective (A : Fin d → Matrix (Fin D) (Fin D) ℂ) (N : ℕ) : Prop :=
   Kraus.wordSpan A N = (⊤ : Submodule ℂ (Matrix (Fin D) (Fin D) ℂ))
 
 /-- The literal-span form of block injectivity, for proofs that act on the generators. -/
-theorem IsNBlkInjective.span_eq_top {A : MPSTensor d D} {N : ℕ}
+theorem IsNBlkInjective.span_eq_top {A : Fin d → Matrix (Fin D) (Fin D) ℂ} {N : ℕ}
     (hA : IsNBlkInjective A N) :
-    Submodule.span ℂ (Set.range fun σ : Fin N → Fin d => evalWord A (List.ofFn σ)) = ⊤ := by
+    Submodule.span ℂ (Set.range fun σ : Fin N → Fin d => Kraus.evalWord A (List.ofFn σ)) = ⊤ := by
   simpa only [IsNBlkInjective, Kraus.wordSpan] using hA
 
 /-- Normality means eventual block injectivity at a positive length:
@@ -97,35 +96,35 @@ Here the witness is required to be positive in order to exclude the empty word,
 whose value is the identity independently of the tensor. This is consistent with
 the positive word lengths used by Sanz--Pérez-García--Wolf--Cirac,
 arXiv:0909.5347, in the definition following equation (1). -/
-def IsNormal (A : MPSTensor d D) : Prop :=
+def IsNormal (A : Fin d → Matrix (Fin D) (Fin D) ℂ) : Prop :=
   ∃ N : ℕ, 0 < N ∧ IsNBlkInjective (d := d) (D := D) A N
 
-@[simp] lemma isNormal_iff (A : MPSTensor d D) :
+@[simp] lemma isNormal_iff (A : Fin d → Matrix (Fin D) (Fin D) ℂ) :
     IsNormal A ↔ ∃ N, 0 < N ∧ IsNBlkInjective A N := Iff.rfl
 
 /-- Algebraic injectivity gives `1`-block injectivity. -/
-theorem isNBlkInjective_one_of_isInjective {A : MPSTensor d D}
+theorem isNBlkInjective_one_of_isInjective {A : Fin d → Matrix (Fin D) (Fin D) ℂ}
     (h : IsInjective A) : IsNBlkInjective A 1 := by
   unfold IsNBlkInjective
   have hrange : (Set.range fun σ : Fin 1 → Fin d =>
-      evalWord A (List.ofFn σ)) = Set.range A := by
+      Kraus.evalWord A (List.ofFn σ)) = Set.range A := by
     ext M
     simp only [Set.mem_range]
     constructor
     · rintro ⟨σ, hσ⟩
       refine ⟨σ 0, ?_⟩
       simpa only [List.ofFn_succ, List.ofFn_zero,
-        evalWord_cons, evalWord_nil, mul_one] using hσ
+        Kraus.evalWord_cons, Kraus.evalWord_nil, mul_one] using hσ
     · rintro ⟨i, hi⟩
       refine ⟨fun _ => i, ?_⟩
       simpa only [List.ofFn_succ, List.ofFn_zero,
-        evalWord_cons, evalWord_nil, mul_one] using hi
+        Kraus.evalWord_cons, Kraus.evalWord_nil, mul_one] using hi
   rw [Kraus.wordSpan, hrange]
   exact h
 
 /-- Algebraic injectivity (1-block) implies normality (eventual block injectivity).
 This is the trivial direction: injectivity is `IsNBlkInjective 1`. -/
-lemma IsInjective.isNormal {A : MPSTensor d D} (h : IsInjective A) :
+lemma IsInjective.isNormal {A : Fin d → Matrix (Fin D) (Fin D) ℂ} (h : IsInjective A) :
     IsNormal A :=
   ⟨1, Nat.zero_lt_one, isNBlkInjective_one_of_isInjective h⟩
 

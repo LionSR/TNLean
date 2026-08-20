@@ -156,30 +156,30 @@ theorem sameMPV_conj_unitary (A : MPSTensor d D) (U : ↥(Matrix.unitaryGroup (F
     exact Unitary.mul_star_self_of_mem U.2
   -- Word evaluation is conjugated.
   have hEval :
-      MPSTensor.evalWord
+      Kraus.evalWord
           (fun i => star (U : Matrix (Fin D) (Fin D) ℂ) * A i * (U : Matrix _ _ ℂ)) w =
-        star (U : Matrix (Fin D) (Fin D) ℂ) * MPSTensor.evalWord A w * (U : Matrix _ _ ℂ) := by
+        star (U : Matrix (Fin D) (Fin D) ℂ) * Kraus.evalWord A w * (U : Matrix _ _ ℂ) := by
     -- Induction on the word.
     induction w with
     | nil =>
         -- Empty word: `evalWord _ [] = 1`.
-        simp [MPSTensor.evalWord, h_star_mul]
+        simp [Kraus.evalWord, h_star_mul]
     | cons i w ih =>
         -- Unfold one step and rewrite the tail using `ih`.
-        simp only [MPSTensor.evalWord, ih]
+        simp only [Kraus.evalWord, ih]
         -- Now reassociate to expose the factor `U * star U`, then simplify using unitarity.
         calc
           star (U : Matrix (Fin D) (Fin D) ℂ) * A i * (U : Matrix _ _ ℂ) *
-              (star (U : Matrix (Fin D) (Fin D) ℂ) * MPSTensor.evalWord A w * (U : Matrix _ _ ℂ))
+              (star (U : Matrix (Fin D) (Fin D) ℂ) * Kraus.evalWord A w * (U : Matrix _ _ ℂ))
               = star (U : Matrix (Fin D) (Fin D) ℂ) * A i *
                   ((U : Matrix (Fin D) (Fin D) ℂ) * star (U : Matrix (Fin D) (Fin D) ℂ)) *
-                    MPSTensor.evalWord A w * (U : Matrix _ _ ℂ) := by
+                    Kraus.evalWord A w * (U : Matrix _ _ ℂ) := by
                   noncomm_ring
           _ = star (U : Matrix (Fin D) (Fin D) ℂ) * A i *
-                  MPSTensor.evalWord A w * (U : Matrix _ _ ℂ) := by
+                  Kraus.evalWord A w * (U : Matrix _ _ ℂ) := by
                   simp [h_mul_star]
           _ = star (U : Matrix (Fin D) (Fin D) ℂ) *
-                  (A i * MPSTensor.evalWord A w) * (U : Matrix _ _ ℂ) := by
+                  (A i * Kraus.evalWord A w) * (U : Matrix _ _ ℂ) := by
                   noncomm_ring
   -- Trace cyclicity cancels the conjugation.
   calc

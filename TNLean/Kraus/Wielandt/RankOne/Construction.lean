@@ -36,9 +36,9 @@ theorem wordSpan_transposeFamily_eq_top_of_wordSpan_eq_top
   unfold wordSpan at h ⊢
   have hrange :
       Set.range (fun σ : Fin N → Fin d =>
-        MPSTensor.evalWord (transposeFamily K) (List.ofFn σ)) =
+        Kraus.evalWord (transposeFamily K) (List.ofFn σ)) =
         Set.range (fun σ : Fin N → Fin d =>
-          (MPSTensor.evalWord K (List.ofFn σ))ᵀ) := by
+          (Kraus.evalWord K (List.ofFn σ))ᵀ) := by
     ext M
     constructor
     · rintro ⟨σ, rfl⟩
@@ -59,28 +59,28 @@ theorem wordSpan_transposeFamily_eq_top_of_wordSpan_eq_top
       Submodule.map
           (e : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ)
           (Submodule.span ℂ
-            (Set.range fun σ : Fin N → Fin d => MPSTensor.evalWord K (List.ofFn σ))) =
+            (Set.range fun σ : Fin N → Fin d => Kraus.evalWord K (List.ofFn σ))) =
         Submodule.span ℂ
           (Set.range fun σ : Fin N → Fin d =>
-            (MPSTensor.evalWord K (List.ofFn σ))ᵀ) := by
+            (Kraus.evalWord K (List.ofFn σ))ᵀ) := by
     rw [Submodule.map_span]
     have hrange' :
         (fun M : Matrix (Fin D) (Fin D) ℂ => Mᵀ) ''
-            Set.range (fun σ : Fin N → Fin d => MPSTensor.evalWord K (List.ofFn σ)) =
+            Set.range (fun σ : Fin N → Fin d => Kraus.evalWord K (List.ofFn σ)) =
           Set.range fun σ : Fin N → Fin d =>
-            (MPSTensor.evalWord K (List.ofFn σ))ᵀ := by
+            (Kraus.evalWord K (List.ofFn σ))ᵀ := by
       simpa [Function.comp_def] using
         (Set.range_comp (fun M : Matrix (Fin D) (Fin D) ℂ => Mᵀ)
-          (fun σ : Fin N → Fin d => MPSTensor.evalWord K (List.ofFn σ))).symm
+          (fun σ : Fin N → Fin d => Kraus.evalWord K (List.ofFn σ))).symm
     simp [e, hrange']
   calc
     Submodule.span ℂ
         (Set.range fun σ : Fin N → Fin d =>
-          (MPSTensor.evalWord K (List.ofFn σ))ᵀ) =
+          (Kraus.evalWord K (List.ofFn σ))ᵀ) =
         Submodule.map
           (e : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ)
           (Submodule.span ℂ
-            (Set.range fun σ : Fin N → Fin d => MPSTensor.evalWord K (List.ofFn σ))) := by
+            (Set.range fun σ : Fin N → Fin d => Kraus.evalWord K (List.ofFn σ))) := by
       symm
       exact hmap
     _ = Submodule.map
@@ -105,9 +105,9 @@ theorem cumulativeSpan_transposeFamily_eq_top_of_cumulativeSpan_eq_top
     rw [Submodule.map_span]
     have hset :
         (fun M : Matrix (Fin D) (Fin D) ℂ => Mᵀ) ''
-            {M | ∃ w : List (Fin d), w.length ≤ N ∧ M = MPSTensor.evalWord K w} =
+            {M | ∃ w : List (Fin d), w.length ≤ N ∧ M = Kraus.evalWord K w} =
           {M | ∃ w : List (Fin d), w.length ≤ N ∧
-            M = MPSTensor.evalWord (transposeFamily K) w} := by
+            M = Kraus.evalWord (transposeFamily K) w} := by
       ext M
       constructor
       · rintro ⟨M', ⟨w, hw, rfl⟩, hM⟩
@@ -115,7 +115,7 @@ theorem cumulativeSpan_transposeFamily_eq_top_of_cumulativeSpan_eq_top
         rw [← hM]
         simpa [transposeFamily] using evalWord_transpose K w
       · rintro ⟨w, hw, hM⟩
-        refine ⟨MPSTensor.evalWord K w.reverse, ⟨w.reverse, by simpa using hw, rfl⟩, ?_⟩
+        refine ⟨Kraus.evalWord K w.reverse, ⟨w.reverse, by simpa using hw, rfl⟩, ?_⟩
         rw [hM]
         simpa [transposeFamily] using evalWord_transpose K w.reverse
     simp [e, hset]
@@ -144,21 +144,21 @@ noncomputable def rowSpreadSpan
     (K : Fin d → Matrix (Fin D) (Fin D) ℂ) (ψ : Fin D → ℂ) (n : ℕ) :
     Submodule ℂ (Fin D → ℂ) :=
   Submodule.span ℂ (Set.range fun σ : Fin n → Fin d =>
-    Matrix.vecMul ψ (MPSTensor.evalWord K (List.ofFn σ)))
+    Matrix.vecMul ψ (Kraus.evalWord K (List.ofFn σ)))
 
 private theorem vecMul_evalWord_ofFn_eq_evalWord_transposeFamily_mulVec
     (K : Fin d → Matrix (Fin D) (Fin D) ℂ) (ψ : Fin D → ℂ)
     {n : ℕ} (σ : Fin n → Fin d) :
-    Matrix.vecMul ψ (MPSTensor.evalWord K (List.ofFn σ)) =
-      MPSTensor.evalWord (transposeFamily K) (List.ofFn (σ ∘ Fin.rev)) *ᵥ ψ := by
+    Matrix.vecMul ψ (Kraus.evalWord K (List.ofFn σ)) =
+      Kraus.evalWord (transposeFamily K) (List.ofFn (σ ∘ Fin.rev)) *ᵥ ψ := by
   calc
-    Matrix.vecMul ψ (MPSTensor.evalWord K (List.ofFn σ)) =
-        (MPSTensor.evalWord K (List.ofFn σ))ᵀ *ᵥ ψ := by
+    Matrix.vecMul ψ (Kraus.evalWord K (List.ofFn σ)) =
+        (Kraus.evalWord K (List.ofFn σ))ᵀ *ᵥ ψ := by
       simpa using Matrix.vecMul_transpose
-        (A := (MPSTensor.evalWord K (List.ofFn σ))ᵀ) (x := ψ)
-    _ = MPSTensor.evalWord (transposeFamily K) (List.ofFn σ).reverse *ᵥ ψ := by
+        (A := (Kraus.evalWord K (List.ofFn σ))ᵀ) (x := ψ)
+    _ = Kraus.evalWord (transposeFamily K) (List.ofFn σ).reverse *ᵥ ψ := by
       simp [evalWord_transpose]
-    _ = MPSTensor.evalWord (transposeFamily K) (List.ofFn (σ ∘ Fin.rev)) *ᵥ ψ := by
+    _ = Kraus.evalWord (transposeFamily K) (List.ofFn (σ ∘ Fin.rev)) *ᵥ ψ := by
       simp [List.ofFn_reverse]
 
 /-- Row spreading is vector spreading for the pointwise-transposed family. -/
@@ -196,12 +196,12 @@ theorem map_wordSpan_eq_rowSpreadSpan
   rw [Submodule.map_span]
   have hrange :
       (Set.range fun σ : Fin n → Fin d =>
-        Matrix.vecMul ψ (MPSTensor.evalWord K (List.ofFn σ))) =
+        Matrix.vecMul ψ (Kraus.evalWord K (List.ofFn σ))) =
         (fun M : Matrix (Fin D) (Fin D) ℂ => Matrix.vecMul ψ M) ''
-          (Set.range fun σ : Fin n → Fin d => MPSTensor.evalWord K (List.ofFn σ)) := by
+          (Set.range fun σ : Fin n → Fin d => Kraus.evalWord K (List.ofFn σ)) := by
     simpa [Function.comp_def] using
       (Set.range_comp (fun M : Matrix (Fin D) (Fin D) ℂ => Matrix.vecMul ψ M)
-        (fun σ : Fin n → Fin d => MPSTensor.evalWord K (List.ofFn σ)))
+        (fun σ : Fin n → Fin d => Kraus.evalWord K (List.ofFn σ)))
   simp [hrange]
 
 /-- Full row spread realizes every standard basis row by a word-span matrix. -/

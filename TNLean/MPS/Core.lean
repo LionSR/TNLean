@@ -25,4 +25,5 @@ import TNLean.MPS.Core.Transfer
 import TNLean.MPS.Core.TransferChannel
 import TNLean.MPS.Core.TransferMatrix
 import TNLean.MPS.Core.TransferPeripheral
+import TNLean.MPS.Core.Word
 import TNLean.MPS.Core.WordFactor

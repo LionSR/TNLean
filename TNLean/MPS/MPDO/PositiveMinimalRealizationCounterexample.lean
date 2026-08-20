@@ -90,8 +90,8 @@ def gaugedTensor : MPSTensor 4 2 :=
       ((gauge⁻¹ : GL (Fin 2) ℂ) : Matrix (Fin 2) (Fin 2) ℂ)
 
 /-- The four displayed matrices span the full two-by-two matrix algebra. -/
-lemma tensor_isInjective : tensor.IsInjective := by
-  rw [IsInjective, eq_top_iff]
+lemma tensor_isInjective : MPSTensor.IsInjective tensor := by
+  rw [MPSTensor.IsInjective, eq_top_iff]
   intro M _
   have mem : ∀ i : Fin 4, tensor i ∈ Submodule.span ℂ (Set.range tensor) :=
     fun i ↦ Submodule.subset_span ⟨i, rfl⟩
@@ -123,7 +123,7 @@ lemma tensor_isInjective : tensor.IsInjective := by
     (Submodule.smul_mem _ _ (hspan 1 0))) (Submodule.smul_mem _ _ (hspan 1 1))
 
 /-- The source tensor is normal already at word length one. -/
-lemma tensor_isNormal : tensor.IsNormal :=
+lemma tensor_isNormal : MPSTensor.IsNormal tensor :=
   tensor_isInjective.isNormal
 
 /-- The two tensors are related by the displayed nonunitary similarity. -/
@@ -131,11 +131,11 @@ lemma tensor_gaugeEquiv_gaugedTensor : GaugeEquiv tensor gaugedTensor :=
   ⟨gauge, fun _ ↦ rfl⟩
 
 /-- The conjugated tensor remains injective. -/
-lemma gaugedTensor_isInjective : gaugedTensor.IsInjective :=
+lemma gaugedTensor_isInjective : MPSTensor.IsInjective gaugedTensor :=
   isInjective_of_gaugeEquiv tensor_isInjective tensor_gaugeEquiv_gaugedTensor
 
 /-- The conjugated tensor remains normal. -/
-lemma gaugedTensor_isNormal : gaugedTensor.IsNormal :=
+lemma gaugedTensor_isNormal : MPSTensor.IsNormal gaugedTensor :=
   isNormal_of_gaugeEquiv tensor_isNormal tensor_gaugeEquiv_gaugedTensor
 
 /-- The two tensors have identical positive-length closed matrix product
@@ -279,8 +279,8 @@ Both tensors are injective and normal, and they are related by an exact
 invertible gauge.  Nevertheless, no square isometry compresses the second
 tensor to a positive scalar multiple of the first. -/
 theorem sameMPV₂Pos_does_not_force_positive_isometric_realization :
-    tensor.IsInjective ∧ tensor.IsNormal ∧
-      gaugedTensor.IsInjective ∧ gaugedTensor.IsNormal ∧
+    MPSTensor.IsInjective tensor ∧ MPSTensor.IsNormal tensor ∧
+      MPSTensor.IsInjective gaugedTensor ∧ MPSTensor.IsNormal gaugedTensor ∧
       GaugeEquiv tensor gaugedTensor ∧ SameMPV₂Pos tensor gaugedTensor ∧
       ¬ ∃ (c : ℝ) (V : Matrix (Fin 2) (Fin 2) ℂ),
         0 < c ∧ Vᴴ * V = 1 ∧

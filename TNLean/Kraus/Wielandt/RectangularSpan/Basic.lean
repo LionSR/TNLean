@@ -66,7 +66,7 @@ private theorem map_transpose_wordSpan
     simpa [List.ofFn_reverse, hrev] using
       (evalWord_transpose K (List.ofFn σ)).symm
   · rintro ⟨σ, rfl⟩
-    refine ⟨MPSTensor.evalWord K (List.ofFn (σ ∘ Fin.rev)), ⟨σ ∘ Fin.rev, rfl⟩, ?_⟩
+    refine ⟨Kraus.evalWord K (List.ofFn (σ ∘ Fin.rev)), ⟨σ ∘ Fin.rev, rfl⟩, ?_⟩
     have hrev : ((σ ∘ Fin.rev) ∘ Fin.rev) = σ := by
       funext i
       simpa only [Function.comp_apply] using congrArg σ (Fin.rev_rev i)

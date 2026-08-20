@@ -55,12 +55,12 @@ of the rank-one matrices associated with all words of that length. -/
 theorem mapLM_pow_rankOne_eq_sum (K : Fin d → Mat) (q : ℕ) (φ : Fin D → ℂ) :
     ((mapLM K) ^ q) (vecMulVec φ (star φ)) =
       ∑ σ : Fin q → Fin d,
-        vecMulVec (MPSTensor.evalWord K (List.ofFn σ) *ᵥ φ)
-          (star (MPSTensor.evalWord K (List.ofFn σ) *ᵥ φ)) := by
+        vecMulVec (Kraus.evalWord K (List.ofFn σ) *ᵥ φ)
+          (star (Kraus.evalWord K (List.ofFn σ) *ᵥ φ)) := by
   rw [mapLM_pow_apply]
   congr 1
   ext σ : 1
-  exact sandwich_vecMulVec (MPSTensor.evalWord K (List.ofFn σ)) φ
+  exact sandwich_vecMulVec (Kraus.evalWord K (List.ofFn σ)) φ
 
 /-- A fixed-length full vector spread makes the corresponding iterate of the
 Kraus map positive definite on every nonzero rank-one positive matrix. -/
@@ -165,28 +165,28 @@ private lemma mul_proj_eq_of_invariant {P : Mat} (M : Mat)
 private lemma evalWord_mul_proj_eq {P : Mat} (hP_idem : P * P = P)
     (K : Fin d → Mat) (hinv : ∀ i : Fin d, (1 - P) * K i * P = 0)
     (w : List (Fin d)) :
-    MPSTensor.evalWord K w * P = P * MPSTensor.evalWord K w * P := by
+    Kraus.evalWord K w * P = P * Kraus.evalWord K w * P := by
   induction w with
-  | nil => simp [MPSTensor.evalWord, hP_idem]
+  | nil => simp [Kraus.evalWord, hP_idem]
   | cons i w ih =>
-      simp only [MPSTensor.evalWord]
+      simp only [Kraus.evalWord]
       have hi : K i * P = P * K i * P := mul_proj_eq_of_invariant (K i) (hinv i)
       calc
-        K i * MPSTensor.evalWord K w * P
-            = K i * (MPSTensor.evalWord K w * P) := Matrix.mul_assoc _ _ _
-        _ = K i * (P * MPSTensor.evalWord K w * P) := by rw [ih]
-        _ = K i * P * (MPSTensor.evalWord K w * P) := by noncomm_ring
-        _ = P * K i * P * (MPSTensor.evalWord K w * P) := by rw [hi]
-        _ = P * K i * (P * MPSTensor.evalWord K w * P) := by noncomm_ring
-        _ = P * K i * (MPSTensor.evalWord K w * P) := by rw [← ih]
-        _ = P * (K i * MPSTensor.evalWord K w) * P := by noncomm_ring
+        K i * Kraus.evalWord K w * P
+            = K i * (Kraus.evalWord K w * P) := Matrix.mul_assoc _ _ _
+        _ = K i * (P * Kraus.evalWord K w * P) := by rw [ih]
+        _ = K i * P * (Kraus.evalWord K w * P) := by noncomm_ring
+        _ = P * K i * P * (Kraus.evalWord K w * P) := by rw [hi]
+        _ = P * K i * (P * Kraus.evalWord K w * P) := by noncomm_ring
+        _ = P * K i * (Kraus.evalWord K w * P) := by rw [← ih]
+        _ = P * (K i * Kraus.evalWord K w) * P := by noncomm_ring
 
 private lemma evalWord_mulVec_mem_range_of_proj {P : Mat} (hP_idem : P * P = P)
     (K : Fin d → Mat) (hinv : ∀ i : Fin d, (1 - P) * K i * P = 0)
     (φ : Fin D → ℂ) (hφ_range : P *ᵥ φ = φ) (w : List (Fin d)) :
-    MPSTensor.evalWord K w *ᵥ φ ∈ LinearMap.range (Matrix.mulVecLin P) := by
+    Kraus.evalWord K w *ᵥ φ ∈ LinearMap.range (Matrix.mulVecLin P) := by
   rw [LinearMap.mem_range]
-  use (MPSTensor.evalWord K w * P) *ᵥ φ
+  use (Kraus.evalWord K w * P) *ᵥ φ
   simp only [Matrix.mulVecLin_apply]
   rw [Matrix.mulVec_mulVec]
   conv_rhs => rw [← hφ_range, Matrix.mulVec_mulVec]

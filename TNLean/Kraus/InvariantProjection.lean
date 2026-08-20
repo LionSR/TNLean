@@ -23,10 +23,9 @@ the cast lemmas, and the iterated block-decomposition capstone
 `exists_irreducible_blockDecomp`) stay on the matrix-product-state side, in
 `TNLean/MPS/CanonicalForm/Reduction.lean`.
 
-**Pending:** these declarations keep `namespace MPSTensor` for now. The
-rename to `namespace Kraus` is deferred to a dedicated mechanical sweep
-across the ~429 files that reference this vocabulary; see
-`TNLean/Kraus/Word.lean`'s module docstring.
+The established predicates remain in `namespace MPSTensor` because the
+canonical-form development uses these names throughout. A change of namespace
+belongs with a simultaneous change of those declarations.
 
 ## Main declarations
 
@@ -45,13 +44,13 @@ variable {d D : ℕ}
 a Hermitian idempotent `P` with `P ≠ 0`, `P ≠ 1`, and `(1 - P) * A i * P = 0` for every `i`.
 
 This is the negation of "irreducible with respect to invariant subspaces". -/
-def HasInvariantProj (A : MPSTensor d D) : Prop :=
+def HasInvariantProj (A : Fin d → Matrix (Fin D) (Fin D) ℂ) : Prop :=
   ∃ P : Matrix (Fin D) (Fin D) ℂ,
     IsOrthogonalProjection P ∧ P ≠ 0 ∧ P ≠ 1 ∧ (∀ i : Fin d, (1 - P) * A i * P = 0)
 
 /-- `IsIrreducibleTensor A` holds if `A` admits no nontrivial invariant orthogonal projection.
 This is the "irreducible" condition used in the canonical-form reduction. -/
-def IsIrreducibleTensor (A : MPSTensor d D) : Prop :=
+def IsIrreducibleTensor (A : Fin d → Matrix (Fin D) (Fin D) ℂ) : Prop :=
   ¬ HasInvariantProj A
 
 end MPSTensor

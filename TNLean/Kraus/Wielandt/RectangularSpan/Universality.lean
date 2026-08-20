@@ -305,11 +305,11 @@ variable {d D : ℕ}
 
 /-- For a one-letter word \(\sigma\), its evaluation is \(K^{\sigma}=K_{\sigma(0)}\). -/
 private lemma evalWord_ofFn_one (K : Fin d → Matrix (Fin D) (Fin D) ℂ) (σ : Fin 1 → Fin d) :
-    MPSTensor.evalWord K (List.ofFn σ) = K (σ 0) := by
+    Kraus.evalWord K (List.ofFn σ) = K (σ 0) := by
   have h : List.ofFn σ = [σ 0] := by
     apply List.ext_getElem <;> simp
   rw [h]
-  simp [MPSTensor.evalWord]
+  simp [Kraus.evalWord]
 
 /-- Each generator `K j` lies in `wordSpan K 1`. -/
 private lemma gen_mem_wordSpan_one (K : Fin d → Matrix (Fin D) (Fin D) ℂ) (j : Fin d) :
@@ -340,8 +340,8 @@ theorem rectSpan_succ_eq_iSup_mulRight
     simp only [LinearMap.mulLeft_apply, hM₂]
     rw [← Matrix.mul_assoc]
     apply Submodule.mem_iSup_of_mem (σ₂ 0)
-    exact Submodule.mem_map.mpr ⟨P * MPSTensor.evalWord K (List.ofFn σ₁),
-      Submodule.mem_map.mpr ⟨MPSTensor.evalWord K (List.ofFn σ₁),
+    exact Submodule.mem_map.mpr ⟨P * Kraus.evalWord K (List.ofFn σ₁),
+      Submodule.mem_map.mpr ⟨Kraus.evalWord K (List.ofFn σ₁),
         Submodule.subset_span ⟨σ₁, rfl⟩, rfl⟩,
       by simp [LinearMap.mulRight_apply]⟩
   · -- ≥: right-multiplied rectSpan elements lie in rectSpan at next level
@@ -465,7 +465,7 @@ private theorem gen_mul_mem_wordSpan_succ (K : Fin d → Matrix (Fin D) (Fin D) 
     {M : Matrix (Fin D) (Fin D) ℂ} {n : ℕ} (hM : M ∈ wordSpan K n) :
     (K i₀) * M ∈ wordSpan K (n + 1) := by
   have hA : K i₀ ∈ wordSpan K 1 := by
-    simpa [MPSTensor.evalWord] using evalWord_mem_wordSpan K ([i₀] : List (Fin d))
+    simpa [Kraus.evalWord] using evalWord_mem_wordSpan K ([i₀] : List (Fin d))
   have hmul : (K i₀) * M ∈ (wordSpan K 1) * (wordSpan K n) :=
     Submodule.mul_mem_mul hA hM
   simpa [Nat.add_comm] using (wordSpan_mul_le K 1 n) hmul

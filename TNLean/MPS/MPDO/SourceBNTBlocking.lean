@@ -41,8 +41,8 @@ theorem wordTupleSpanTop_blockTensor_one
         blockedConfigEquiv d 1 L σ (Fin.cast (Nat.one_mul L).symm i)
       refine ⟨τ, ?_⟩
       funext j
-      change evalWord (B j) (List.ofFn τ) =
-        evalWord (blockTensor (B j) L) (List.ofFn σ)
+      change Kraus.evalWord (B j) (List.ofFn τ) =
+        Kraus.evalWord (blockTensor (B j) L) (List.ofFn σ)
       rw [evalWord_blockTensor]
       have hτ : List.ofFn τ = flattenBlockedWord d L (List.ofFn σ) := by
         calc
@@ -59,8 +59,8 @@ theorem wordTupleSpanTop_blockTensor_one
         (blockedConfigEquiv d 1 L).symm τ'
       refine ⟨σ, ?_⟩
       funext j
-      change evalWord (blockTensor (B j) L) (List.ofFn σ) =
-        evalWord (B j) (List.ofFn τ)
+      change Kraus.evalWord (blockTensor (B j) L) (List.ofFn σ) =
+        Kraus.evalWord (B j) (List.ofFn τ)
       rw [evalWord_blockTensor]
       have hcfg : blockedConfigEquiv d 1 L σ = τ' := by
         simp [σ]

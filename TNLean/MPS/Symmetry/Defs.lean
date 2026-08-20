@@ -152,7 +152,13 @@ lemma twistedTensor_blockTensor_comm
   funext I
   rw [twistedTensor]
   simp only [blockKronAction_apply, blockKron, blockTensor, wordOfBlock]
-  rw [evalWord_twistedTensor_ofFn A U g (decodeBlock d L I)]
+  have hEval :
+      Kraus.evalWord (twistedTensor A U g) (List.ofFn (decodeBlock d L I)) =
+        ∑ v : Fin L → Fin d,
+          (∏ k : Fin L, (U g) (decodeBlock d L I k) (v k)) •
+            Kraus.evalWord A (List.ofFn v) :=
+    evalWord_twistedTensor_ofFn A U g (decodeBlock d L I)
+  rw [hEval]
   -- Reindex the sum over words by the blocked index.
   rw [← (decodeBlockEquiv d L).sum_comp]
   refine Finset.sum_congr rfl (fun J _ => ?_)

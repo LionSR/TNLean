@@ -14,7 +14,6 @@ nonzero eigenvalue and a corresponding nonzero eigenvector.
 -/
 
 open scoped Matrix
-open MPSTensor
 
 namespace Kraus
 
@@ -34,7 +33,7 @@ theorem exists_word_eigenvector [NeZero D]
       w₀.length ≤ D ^ 2 ∧
       μ ≠ 0 ∧
       φ ≠ 0 ∧
-      evalWord K w₀ *ᵥ φ = μ • φ := by
+      Kraus.evalWord K w₀ *ᵥ φ = μ • φ := by
   obtain ⟨w₀, hw₀_len, hw₀_tr⟩ := exists_nonzero_trace_word K hN
   obtain ⟨μ, φ, hμ, hφ, heig⟩ := exists_eigenvector_of_trace_ne_zero _ hw₀_tr
   exact ⟨w₀, μ, φ, hw₀_len, hμ, hφ, heig⟩

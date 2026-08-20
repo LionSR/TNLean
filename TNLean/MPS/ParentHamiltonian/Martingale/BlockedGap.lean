@@ -67,8 +67,8 @@ private theorem blockedThreeConfigLinearIsometryEquiv_tailBoundaryMapES
   ext σ
   simp only [blockedThreeConfigLinearIsometryEquiv, LinearIsometryEquiv.trans_apply,
     tailBoundaryMapES_apply, reassocTailBoundaryMapES, ContinuousLinearMap.comp_apply]
-  change Matrix.trace (MPSTensor.evalWord (blockTensor A p) (List.ofFn _) * _) =
-    Matrix.trace (MPSTensor.evalWord A (List.ofFn _) * _)
+  change Matrix.trace (Kraus.evalWord (blockTensor A p) (List.ofFn _) * _) =
+    Matrix.trace (Kraus.evalWord A (List.ofFn _) * _)
   congr 2
   rw [evalWord_blockTensor, ← ofFn_blockedConfigEquiv d 2 p]
   congr 1
@@ -107,8 +107,8 @@ private theorem blockedThreeConfigLinearIsometryEquiv_leftBoundaryMapES
   ext σ
   simp only [blockedThreeConfigLinearIsometryEquiv, LinearIsometryEquiv.trans_apply,
     leftBoundaryMapES_apply]
-  change Matrix.trace (MPSTensor.evalWord (blockTensor A p) (List.ofFn _) * _) =
-    Matrix.trace (MPSTensor.evalWord A (List.ofFn _) * _)
+  change Matrix.trace (Kraus.evalWord (blockTensor A p) (List.ofFn _) * _) =
+    Matrix.trace (Kraus.evalWord A (List.ofFn _) * _)
   congr 2
   · rw [evalWord_blockTensor, ← ofFn_blockedConfigEquiv d 2 p]
     congr 1
