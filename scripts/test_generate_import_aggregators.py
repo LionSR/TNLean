@@ -246,7 +246,7 @@ class ImportAggregatorGeneratorTests(unittest.TestCase):
             self.assertEqual(GENERATOR.source_imported_modules(source), set())
 
     def test_source_imported_modules_accepts_lean_header_before_imports(self) -> None:
-        for header in ("prelude", "module"):
+        for header in ("prelude", "module", "module\nprelude"):
             with self.subTest(header=header):
                 with tempfile.TemporaryDirectory() as temporary_directory:
                     source = self.write(
@@ -259,6 +259,32 @@ class ImportAggregatorGeneratorTests(unittest.TestCase):
                         GENERATOR.source_imported_modules(source),
                         {"TNLean.Real"},
                     )
+
+    def test_source_imported_modules_accepts_import_modifiers(self) -> None:
+        commands = (
+            "import TNLean.Ordinary",
+            "public import TNLean.Public",
+            "meta import TNLean.Meta",
+            "public meta import TNLean.PublicMeta",
+            "import all TNLean.All",
+        )
+        with tempfile.TemporaryDirectory() as temporary_directory:
+            source = self.write(
+                Path(temporary_directory),
+                "Owner.lean",
+                "\n".join(commands) + "\n\ndef witness := 1\n",
+            )
+
+            self.assertEqual(
+                GENERATOR.source_imported_modules(source),
+                {
+                    "TNLean.All",
+                    "TNLean.Meta",
+                    "TNLean.Ordinary",
+                    "TNLean.Public",
+                    "TNLean.PublicMeta",
+                },
+            )
 
     def test_source_imported_modules_stops_before_import_shaped_text(self) -> None:
         with tempfile.TemporaryDirectory() as temporary_directory:
