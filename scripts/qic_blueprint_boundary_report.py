@@ -38,6 +38,17 @@ ENV_END_RE = re.compile(r"\\end\{(" + "|".join(ENVIRONMENTS) + r")\}")
 PROOF_BEGIN_RE = re.compile(r"\\begin\{proof\}")
 PROOF_END_RE = re.compile(r"\\end\{proof\}")
 ENV_TOKEN_RE = re.compile(r"\\(begin|end)\{([^}]+)\}")
+RAW_TEXT_ENVIRONMENTS = {
+    "verbatim",
+    "verbatim*",
+    "Verbatim",
+    "BVerbatim",
+    "LVerbatim",
+    "SaveVerbatim",
+    "lstlisting",
+    "minted",
+    "comment",
+}
 LABEL_RE = re.compile(r"\\label\{([^}]+)\}")
 LEAN_RE = re.compile(r"\\lean\{([^}]*)\}", re.DOTALL)
 USES_RE = re.compile(r"\\uses\{([^}]*)\}", re.DOTALL)
@@ -243,6 +254,7 @@ def _atomic_non_item_environment_ranges(
     """Return maximal balanced TeX environments lying outside item spans."""
     stack: list[tuple[str, int]] = []
     ranges: list[tuple[int, int]] = []
+    raw_text_ranges: list[tuple[int, int]] = []
     for line_no, line in enumerate(source_lines, start=1):
         cleaned_line = _strip_tex_comments(line)
         for token in ENV_TOKEN_RE.finditer(cleaned_line):
@@ -261,6 +273,8 @@ def _atomic_non_item_environment_ranges(
                     f"opened {opened} at line {opened_line}, closed {environment}"
                 )
             ranges.append((opened_line, line_no))
+            if opened in RAW_TEXT_ENVIRONMENTS:
+                raw_text_ranges.append((opened_line, line_no))
     if stack:
         environment, opened_line = stack[-1]
         raise ValueError(
@@ -268,8 +282,22 @@ def _atomic_non_item_environment_ranges(
             f"{relative_root}:{opened_line}"
         )
 
+    raw_text_lines = {
+        line_no
+        for start, end in raw_text_ranges
+        for line_no in range(start, end + 1)
+    }
     candidates: list[tuple[int, int]] = []
     for start, end in ranges:
+        for line_no in range(start, end + 1):
+            if line_no in raw_text_lines:
+                continue
+            cleaned_line = _strip_tex_comments(source_lines[line_no - 1])
+            if INPUT_LINE_RE.fullmatch(cleaned_line) is not None:
+                raise ValueError(
+                    f"standalone \\input at {relative_root}:{line_no} is nested "
+                    f"inside TeX environment {start}-{end}"
+                )
         contained_in_item = False
         overlaps_item = False
         for item_start, item_end in item_spans:
@@ -285,13 +313,6 @@ def _atomic_non_item_environment_ranges(
                 f"environment at {relative_root}:{start}-{end} contains "
                 "theorem-like item lines"
             )
-        for line_no in range(start, end + 1):
-            cleaned_line = _strip_tex_comments(source_lines[line_no - 1])
-            if INPUT_LINE_RE.fullmatch(cleaned_line) is not None:
-                raise ValueError(
-                    f"standalone \\input at {relative_root}:{line_no} is nested "
-                    f"inside TeX environment {start}-{end}"
-                )
         candidates.append((start, end))
     maximal: list[tuple[int, int]] = []
     for start, end in sorted(candidates, key=lambda span: (span[0], -span[1])):
@@ -317,8 +338,9 @@ def blueprint_non_item_blocks(
     the item boundary would produce malformed TeX. Elsewhere, blank lines and
     item boundaries split blocks. Top-level router ``\\input`` commands are
     single-line blocks so each simulated output can prune them without pulling
-    in every sibling chapter; an ``\\input`` nested inside an atomic environment
+    in every sibling chapter; an ``\\input`` nested inside a TeX environment
     is rejected because its dependency could not be tracked separately.
+    Commands displayed inside raw-text environments are ignored.
     """
     spans_by_file: dict[str, list[tuple[int, int]]] = {}
     for item in environments:

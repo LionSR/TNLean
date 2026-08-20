@@ -492,6 +492,44 @@ See Theorem~\ref{thm:tn}.
         ):
             boundary_report(self.root)
 
+    def test_rejects_input_nested_in_item_environment(self) -> None:
+        self.write_blueprint(
+            r"""\begin{theorem}\label{thm:qic}
+\lean{Kraus.moved}
+\input{chapter/proof-detail}
+\end{theorem}
+"""
+        )
+        with self.assertRaisesRegex(
+            ValueError,
+            r"standalone \\input at src/chapter/ch01.tex:3 is nested inside "
+            r"TeX environment 1-4",
+        ):
+            boundary_report(self.root)
+
+    @patch("qic_blueprint_boundary_report.source_sha", return_value="a" * 40)
+    def test_literal_input_in_raw_text_environment_is_ignored(
+        self, _source_sha
+    ) -> None:
+        self.write_blueprint(
+            r"""\begin{theorem}\label{thm:qic}
+\lean{Kraus.moved}
+\end{theorem}
+
+\begin{figure}
+\begin{verbatim}
+\input{chapter/displayed-example}
+\end{verbatim}
+\end{figure}
+"""
+        )
+        report = boundary_report(self.root)
+        self.assertEqual(report["simulated_output_errors"], [])
+        self.assertNotIn(
+            "src/chapter/displayed-example.tex",
+            report["simulated_qic_source_files"],
+        )
+
     def test_rejects_unbalanced_non_item_environment(self) -> None:
         self.write_blueprint(
             r"""\begin{theorem}\label{thm:qic}
