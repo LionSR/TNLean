@@ -52,18 +52,18 @@ variable {d D : ℕ}
 
 /-! ### vectorSpreadSpan: H_n(K, φ) -/
 
-/-- H_n(K, φ) = span of {MPSTensor.evalWord K w *ᵥ φ : w has length n}.
+/-- H_n(K, φ) = span of {Kraus.evalWord K w *ᵥ φ : w has length n}.
 Paper: "H_n(K,φ) := S_n(K)|φ⟩" (arXiv:0909.5347, after equation (3)) -/
 def vectorSpreadSpan (K : Fin d → Matrix (Fin D) (Fin D) ℂ) (φ : Fin D → ℂ) (n : ℕ) :
     Submodule ℂ (Fin D → ℂ) :=
   Submodule.span ℂ (Set.range fun σ : Fin n → Fin d =>
-    (MPSTensor.evalWord K (List.ofFn σ)) *ᵥ φ)
+    (Kraus.evalWord K (List.ofFn σ)) *ᵥ φ)
 
 /-- Any word product of correct length applied to φ is in vectorSpreadSpan. -/
 theorem evalWord_mulVec_mem_vectorSpreadSpan
     (K : Fin d → Matrix (Fin D) (Fin D) ℂ) (φ : Fin D → ℂ)
     (w : List (Fin d)) :
-    MPSTensor.evalWord K w *ᵥ φ ∈ vectorSpreadSpan K φ w.length := by
+    Kraus.evalWord K w *ᵥ φ ∈ vectorSpreadSpan K φ w.length := by
   apply Submodule.subset_span
   exact ⟨w.get, by simp [List.ofFn_get]⟩
 
@@ -74,13 +74,13 @@ Paper: $K_n(K, φ) := \operatorname{span}\{H_m(K, φ) : m \le n\}$. -/
 def cumulativeVectorSpan (K : Fin d → Matrix (Fin D) (Fin D) ℂ) (φ : Fin D → ℂ) (n : ℕ) :
     Submodule ℂ (Fin D → ℂ) :=
   Submodule.span ℂ
-    {v | ∃ w : List (Fin d), w.length ≤ n ∧ v = MPSTensor.evalWord K w *ᵥ φ}
+    {v | ∃ w : List (Fin d), w.length ≤ n ∧ v = Kraus.evalWord K w *ᵥ φ}
 
 /-- Membership in the generating set of cumulativeVectorSpan. -/
 theorem mem_cumulativeVectorSpan_generator
     (K : Fin d → Matrix (Fin D) (Fin D) ℂ) (φ : Fin D → ℂ) {n : ℕ}
     {w : List (Fin d)} (hw : w.length ≤ n) :
-    MPSTensor.evalWord K w *ᵥ φ ∈ cumulativeVectorSpan K φ n :=
+    Kraus.evalWord K w *ᵥ φ ∈ cumulativeVectorSpan K φ n :=
   Submodule.subset_span ⟨w, hw, rfl⟩
 
 /-- vectorSpreadSpan K φ m ≤ cumulativeVectorSpan K φ n when m ≤ n. -/
@@ -116,8 +116,8 @@ theorem cumulativeVectorSpan_mono'
 /-- Applying `K i` to a word product vector gives a longer word product vector. -/
 private theorem evalWord_cons_mulVec (K : Fin d → Matrix (Fin D) (Fin D) ℂ) (i : Fin d)
     (w : List (Fin d)) (φ : Fin D → ℂ) :
-    MPSTensor.evalWord K (i :: w) *ᵥ φ = K i *ᵥ (MPSTensor.evalWord K w *ᵥ φ) := by
-  change (K i * MPSTensor.evalWord K w) *ᵥ φ = _
+    Kraus.evalWord K (i :: w) *ᵥ φ = K i *ᵥ (Kraus.evalWord K w *ᵥ φ) := by
+  change (K i * Kraus.evalWord K w) *ᵥ φ = _
   exact (Matrix.mulVec_mulVec _ _ _).symm
 
 /-- Key closure: applying K i to vectors in K_n sends them into K_{n+1},
@@ -132,7 +132,7 @@ private theorem mulVec_Ki_mem_cumulativeVectorSpan_succ
     rw [Submodule.map_le_iff_le_comap]
     apply Submodule.span_le.mpr
     rintro u ⟨w, hw, rfl⟩
-    change (Matrix.mulVecLin (K i)) (MPSTensor.evalWord K w *ᵥ φ) ∈
+    change (Matrix.mulVecLin (K i)) (Kraus.evalWord K w *ᵥ φ) ∈
       cumulativeVectorSpan K φ (n + 1)
     simp only [Matrix.mulVecLin_apply]
     rw [← evalWord_cons_mulVec]
@@ -162,7 +162,7 @@ theorem cumulativeVectorSpan_stable
           vectorSpreadSpan_le_cumulativeVectorSpan K φ (le_refl _)
       _ = cumulativeVectorSpan K φ n := h.symm
   have hword_all : ∀ (w : List (Fin d)),
-      n < w.length → MPSTensor.evalWord K w *ᵥ φ ∈ cumulativeVectorSpan K φ n := by
+      n < w.length → Kraus.evalWord K w *ᵥ φ ∈ cumulativeVectorSpan K φ n := by
     intro w hw
     induction w with
     | nil => simp at hw
@@ -170,7 +170,7 @@ theorem cumulativeVectorSpan_stable
       rw [evalWord_cons_mulVec]
       by_cases hw' : n < w.length
       · exact mulVec_Ki_mem_cumulativeVectorSpan_stable K φ h i (ih hw')
-      · have : MPSTensor.evalWord K w *ᵥ φ ∈ cumulativeVectorSpan K φ n :=
+      · have : Kraus.evalWord K w *ᵥ φ ∈ cumulativeVectorSpan K φ n :=
           mem_cumulativeVectorSpan_generator K φ (by omega)
         exact mulVec_Ki_mem_cumulativeVectorSpan_stable K φ h i this
   intro m hm
@@ -184,11 +184,11 @@ theorem cumulativeVectorSpan_stable
 
 /-! ### Anchor membership -/
 
-/-- φ is in K_n for all n ≥ 0 (since MPSTensor.evalWord K [] *ᵥ φ = φ). -/
+/-- φ is in K_n for all n ≥ 0 (since Kraus.evalWord K [] *ᵥ φ = φ). -/
 theorem phi_mem_cumulativeVectorSpan
     (K : Fin d → Matrix (Fin D) (Fin D) ℂ) (φ : Fin D → ℂ) (n : ℕ) :
     φ ∈ cumulativeVectorSpan K φ n := by
-  simpa [MPSTensor.evalWord] using
+  simpa [Kraus.evalWord] using
     (mem_cumulativeVectorSpan_generator
       (K := K) (φ := φ) (w := []) (n := n) (by simp))
 
@@ -217,7 +217,7 @@ theorem cumulativeVectorSpan_finrank_strict_mono
 /-- If `cumulativeSpan K N = ⊤` (all D×D matrices are linear combinations
 of word products), then `cumulativeVectorSpan K φ N = ⊤` for any nonzero φ.
 
-The argument: since every matrix is a linear combination of MPSTensor.evalWord K w,
+The argument: since every matrix is a linear combination of Kraus.evalWord K w,
 the standard basis matrix `Matrix.single j k 1` is in the span.
 Then `(Matrix.single j k 1) *ᵥ φ = φ k • e_j` is in K_N.
 Since φ ≠ 0, some φ k ≠ 0, so e_j ∈ K_N for all j, hence K_N = ⊤. -/

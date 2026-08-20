@@ -38,7 +38,7 @@ private theorem span_normalized_uncurry_words_eq_top_iff
         (Set.range fun σ : Fin m → Fin r =>
           fun p : Fin D × Fin D =>
             ((1 : ℂ) / ((D : ℝ).sqrt : ℂ)) *
-              MPSTensor.evalWord K (List.ofFn σ) p.1 p.2) = ⊤ ↔
+              Kraus.evalWord K (List.ofFn σ) p.1 p.2) = ⊤ ↔
       wordSpan K m = ⊤ := by
   let e : Matrix (Fin D) (Fin D) ℂ ≃ₗ[ℂ] ((Fin D × Fin D) → ℂ) :=
     (LinearEquiv.curry ℂ ℂ (Fin D) (Fin D)).symm
@@ -52,31 +52,31 @@ private theorem span_normalized_uncurry_words_eq_top_iff
   have hscale :
       Submodule.span ℂ
           (Set.range fun σ : Fin m → Fin r =>
-            c • e (MPSTensor.evalWord K (List.ofFn σ))) =
+            c • e (Kraus.evalWord K (List.ofFn σ))) =
         Submodule.span ℂ
           (Set.range fun σ : Fin m → Fin r =>
-            e (MPSTensor.evalWord K (List.ofFn σ))) := by
+            e (Kraus.evalWord K (List.ofFn σ))) := by
     apply le_antisymm
     · apply Submodule.span_le.mpr
       rintro _ ⟨σ, rfl⟩
       exact Submodule.smul_mem _ _ (Submodule.subset_span ⟨σ, rfl⟩)
     · apply Submodule.span_le.mpr
       rintro _ ⟨σ, rfl⟩
-      change e (MPSTensor.evalWord K (List.ofFn σ)) ∈ _
-      rw [← inv_smul_smul₀ hc (e (MPSTensor.evalWord K (List.ofFn σ)))]
+      change e (Kraus.evalWord K (List.ofFn σ)) ∈ _
+      rw [← inv_smul_smul₀ hc (e (Kraus.evalWord K (List.ofFn σ)))]
       exact Submodule.smul_mem _ _ (Submodule.subset_span ⟨σ, rfl⟩)
   have hmap :
       Submodule.map e.toLinearMap (wordSpan K m) =
         Submodule.span ℂ
           (Set.range fun σ : Fin m → Fin r =>
-            e (MPSTensor.evalWord K (List.ofFn σ))) := by
+            e (Kraus.evalWord K (List.ofFn σ))) := by
     rw [wordSpan, Submodule.map_span]
     congr 1
     ext v
     simp
   change Submodule.span ℂ
       (Set.range fun σ : Fin m → Fin r =>
-        c • e (MPSTensor.evalWord K (List.ofFn σ))) = ⊤ ↔ _
+        c • e (Kraus.evalWord K (List.ofFn σ))) = ⊤ ↔ _
   rw [hscale, ← hmap]
   exact Submodule.map_eq_top_iff
 
@@ -89,7 +89,7 @@ theorem choiMatrix_mapLM_pow_posDef_iff_wordSpan_eq_top
       wordSpan K m = ⊤ := by
   let wordEquiv := Fintype.equivFin (Fin m → Fin r)
   let W : Fin (Fintype.card (Fin m → Fin r)) → Matrix (Fin D) (Fin D) ℂ :=
-    fun j => MPSTensor.evalWord K (List.ofFn (wordEquiv.symm j))
+    fun j => Kraus.evalWord K (List.ofFn (wordEquiv.symm j))
   have hW : ∀ X : Matrix (Fin D) (Fin D) ℂ,
       ((mapLM K) ^ m) X = ∑ j, W j * X * (W j)ᴴ := by
     intro X
@@ -105,7 +105,7 @@ theorem choiMatrix_mapLM_pow_posDef_iff_wordSpan_eq_top
         Set.range (fun σ : Fin m → Fin r =>
           fun p : Fin D × Fin D =>
             ((1 : ℂ) / ((D : ℝ).sqrt : ℂ)) *
-              MPSTensor.evalWord K (List.ofFn σ) p.1 p.2) := by
+              Kraus.evalWord K (List.ofFn σ) p.1 p.2) := by
     ext v
     constructor
     · rintro ⟨j, rfl⟩

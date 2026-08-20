@@ -32,8 +32,8 @@ theorem mapLM_pow_apply (K : Fin d → Mat) (N : ℕ) :
     ∀ X : Mat,
       ((mapLM K) ^ N) X =
         ∑ σ : Fin N → Fin d,
-          MPSTensor.evalWord K (List.ofFn σ) * X *
-            (MPSTensor.evalWord K (List.ofFn σ))ᴴ := by
+          Kraus.evalWord K (List.ofFn σ) * X *
+            (Kraus.evalWord K (List.ofFn σ))ᴴ := by
   induction N with
   | zero =>
       intro X

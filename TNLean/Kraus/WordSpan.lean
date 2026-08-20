@@ -31,12 +31,12 @@ variable {d D : ℕ}
 def wordSpan (K : Fin d → Matrix (Fin D) (Fin D) ℂ) (N : ℕ) :
     Submodule ℂ (Matrix (Fin D) (Fin D) ℂ) :=
   Submodule.span ℂ (Set.range fun σ : Fin N → Fin d =>
-    MPSTensor.evalWord K (List.ofFn σ))
+    Kraus.evalWord K (List.ofFn σ))
 
 /-- Every evaluated word belongs to the word span at its length. -/
 theorem evalWord_mem_wordSpan (K : Fin d → Matrix (Fin D) (Fin D) ℂ)
     (w : List (Fin d)) :
-    MPSTensor.evalWord K w ∈ wordSpan K w.length := by
+    Kraus.evalWord K w ∈ wordSpan K w.length := by
   apply Submodule.subset_span
   exact ⟨w.get, by simp [List.ofFn_get]⟩
 
@@ -62,9 +62,9 @@ theorem evalWord_mem_wordSpan (K : Fin d → Matrix (Fin D) (Fin D) ℂ)
   simp only [Set.mem_range]
   constructor
   · rintro ⟨σ, rfl⟩
-    exact ⟨σ 0, by simp [MPSTensor.evalWord]⟩
+    exact ⟨σ 0, by simp [Kraus.evalWord]⟩
   · rintro ⟨i, rfl⟩
-    exact ⟨fun _ => i, by simp [MPSTensor.evalWord]⟩
+    exact ⟨fun _ => i, by simp [Kraus.evalWord]⟩
 
 /-- Word spans factor exactly under addition of word lengths. -/
 theorem wordSpan_add (K : Fin d → Matrix (Fin D) (Fin D) ℂ) (m n : ℕ) :
@@ -73,18 +73,18 @@ theorem wordSpan_add (K : Fin d → Matrix (Fin D) (Fin D) ℂ) (m n : ℕ) :
   apply le_antisymm
   · apply Submodule.span_le.mpr
     rintro _ ⟨σ, rfl⟩
-    change MPSTensor.evalWord K (List.ofFn σ) ∈ _
+    change Kraus.evalWord K (List.ofFn σ) ∈ _
     let σ₁ : Fin m → Fin d := fun i => σ (Fin.castLE (by omega) i)
     let σ₂ : Fin n → Fin d := fun i => σ (Fin.natAdd m i)
     rw [show List.ofFn σ = List.ofFn σ₁ ++ List.ofFn σ₂ from List.ofFn_add,
-      MPSTensor.evalWord_append]
+      Kraus.evalWord_append]
     exact Submodule.mul_mem_mul
       (Submodule.subset_span ⟨σ₁, rfl⟩)
       (Submodule.subset_span ⟨σ₂, rfl⟩)
   · rw [wordSpan, wordSpan, Submodule.span_mul_span]
     apply Submodule.span_le.mpr
     rintro _ ⟨X, ⟨σ₁, rfl⟩, Y, ⟨σ₂, rfl⟩, rfl⟩
-    simpa [List.length_append, MPSTensor.evalWord_append] using
+    simpa [List.length_append, Kraus.evalWord_append] using
       evalWord_mem_wordSpan K (List.ofFn σ₁ ++ List.ofFn σ₂)
 
 /-- A successor word span is obtained by multiplying on the right by the

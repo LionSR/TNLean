@@ -28,9 +28,9 @@ variable {d D : ℕ}
 theorem pow_single_mem_wordSpan
     (K : Fin d → Matrix (Fin D) (Fin D) ℂ) (i : Fin d) :
     (K i) ^ D ∈ wordSpan K D := by
-  have heq : K i = MPSTensor.evalWord K [i] := by simp [MPSTensor.evalWord]
+  have heq : K i = Kraus.evalWord K [i] := by simp [Kraus.evalWord]
   have hmem :
-      (MPSTensor.evalWord K [i]) ^ D ∈
+      (Kraus.evalWord K [i]) ^ D ∈
         wordSpan K (D * ([i] : List (Fin d)).length) :=
     evalWord_pow_mem_wordSpan K [i] D
   rw [show D * ([i] : List (Fin d)).length = D from by simp] at hmem
@@ -52,17 +52,17 @@ private noncomputable def blockedTensorRangeData
     (K : Fin d → Matrix (Fin D) (Fin D) ℂ) (L : ℕ)
     (σ₀ τ₀ : Fin L → Fin d) (φ ψ : Fin D → ℂ) (μ ν : ℂ)
     (hμ : μ ≠ 0) (hν : ν ≠ 0)
-    (heigφ : MPSTensor.evalWord K (List.ofFn σ₀) *ᵥ φ = μ • φ)
-    (heigψ : (MPSTensor.evalWord K (List.ofFn τ₀))ᵀ *ᵥ ψ = ν • ψ) :
+    (heigφ : Kraus.evalWord K (List.ofFn σ₀) *ᵥ φ = μ • φ)
+    (heigψ : (Kraus.evalWord K (List.ofFn τ₀))ᵀ *ᵥ ψ = ν • ψ) :
     BlockedTensorRangeData K L σ₀ τ₀ φ ψ := by
   let B := MPSTensor.blockTensor K L
   let i₀ : Fin (MPSTensor.blockPhysDim d L) :=
     (MPSTensor.decodeBlockEquiv d L).symm σ₀
   let i₁ : Fin (MPSTensor.blockPhysDim d L) :=
     (MPSTensor.decodeBlockEquiv d L).symm τ₀
-  have hBi₀ : B i₀ = MPSTensor.evalWord K (List.ofFn σ₀) := by
+  have hBi₀ : B i₀ = Kraus.evalWord K (List.ofFn σ₀) := by
     simp [B, i₀, MPSTensor.blockTensor, MPSTensor.wordOfBlock]
-  have hBi₁ : B i₁ = MPSTensor.evalWord K (List.ofFn τ₀) := by
+  have hBi₁ : B i₁ = Kraus.evalWord K (List.ofFn τ₀) := by
     simp [B, i₁, MPSTensor.blockTensor, MPSTensor.wordOfBlock]
   refine
     { B := B
@@ -75,10 +75,10 @@ private noncomputable def blockedTensorRangeData
       hψ_range := ?_ }
   · simpa [hBi₀] using
       Matrix.mem_range_toLin'_pow_of_eigenvector
-        (M := MPSTensor.evalWord K (List.ofFn σ₀)) (φ := φ) (μ := μ) hμ heigφ
+        (M := Kraus.evalWord K (List.ofFn σ₀)) (φ := φ) (μ := μ) hμ heigφ
   · simpa [hBi₁] using
       Matrix.mem_range_vecMulLinear_pow_of_transpose_eigenvector
-        (M := MPSTensor.evalWord K (List.ofFn τ₀)) (ψ := ψ) (ν := ν) hν heigψ
+        (M := Kraus.evalWord K (List.ofFn τ₀)) (ψ := ψ) (ν := ν) hν heigψ
 
 private theorem BlockedTensorRangeData.rankOne_mem_wordSpan_of_wordSpan_eq_top
     {K : Fin d → Matrix (Fin D) (Fin D) ℂ} {L : ℕ}
@@ -106,8 +106,8 @@ theorem exists_rankOne_mem_wordSpan_blockTensor [NeZero D]
     ∃ (σ₀ τ₀ : Fin N₀ → Fin d)
       (φ ψ : Fin D → ℂ) (μ ν : ℂ) (m_blocked : ℕ),
       φ ≠ 0 ∧ ψ ≠ 0 ∧ μ ≠ 0 ∧ ν ≠ 0 ∧
-      MPSTensor.evalWord K (List.ofFn σ₀) *ᵥ φ = μ • φ ∧
-      (MPSTensor.evalWord K (List.ofFn τ₀))ᵀ *ᵥ ψ = ν • ψ ∧
+      Kraus.evalWord K (List.ofFn σ₀) *ᵥ φ = μ • φ ∧
+      (Kraus.evalWord K (List.ofFn τ₀))ᵀ *ᵥ ψ = ν • ψ ∧
       Matrix.vecMulVec φ ψ ∈
         wordSpan (MPSTensor.blockTensor K N₀) m_blocked := by
   classical
@@ -120,7 +120,7 @@ theorem exists_rankOne_mem_wordSpan_blockTensor [NeZero D]
   let τ₀ : Fin N₀ → Fin d := τ₀' ∘ Fin.rev
   have hτ₀_eq : List.ofFn τ₀ = (List.ofFn τ₀').reverse :=
     (List.ofFn_reverse τ₀').symm
-  have heigψ : (MPSTensor.evalWord K (List.ofFn τ₀))ᵀ *ᵥ ψ = ν • ψ := by
+  have heigψ : (Kraus.evalWord K (List.ofFn τ₀))ᵀ *ᵥ ψ = ν • ψ := by
     rw [hτ₀_eq, evalWord_transpose K (List.ofFn τ₀').reverse, List.reverse_reverse]
     exact heigψ'
   let data := blockedTensorRangeData K N₀ σ₀ τ₀ φ ψ μ ν hμ hν heigφ heigψ
