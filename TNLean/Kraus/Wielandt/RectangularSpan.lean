@@ -11,3 +11,7 @@ Authors: TNLean contributors
 import TNLean.Kraus.Wielandt.RectangularSpan.Basic
 import TNLean.Kraus.Wielandt.RectangularSpan.Growth
 import TNLean.Kraus.Wielandt.RectangularSpan.UniversalityAux
+import TNLean.Kraus.Wielandt.RectangularSpan.UniversalityAux.Basic
+import TNLean.Kraus.Wielandt.RectangularSpan.UniversalityAux.NilpIndex
+import TNLean.Kraus.Wielandt.RectangularSpan.UniversalityAux.Quantitative
+import TNLean.Kraus.Wielandt.RectangularSpan.UniversalityAux.Sharp
