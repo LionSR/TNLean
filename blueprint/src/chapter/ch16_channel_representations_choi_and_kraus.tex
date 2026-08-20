@@ -211,7 +211,6 @@ partial traces.
     \lean{IsKrausCP.spectralRadius_frobeniusEuclideanMap_le_one_of_map_one_eq_one}
     \leanok
     \uses{thm:unital_kraus_eigenvalue_bound,
-        thm:kraus_tp_spectral_radius_bound,
         def:frobenius_superoperator_transport}
     Let $E:\mathbb C^{I\times I}\to\mathbb C^{I\times I}$ be a completely
     positive map with $E(\Id)=\Id$.  Then the spectral radius of its
@@ -221,6 +220,7 @@ partial traces.
 \begin{proof}
     \leanok
     \uses{thm:unital_kraus_eigenvalue_bound,
+        thm:kraus_tp_spectral_radius_bound,
         def:frobenius_superoperator_transport}
     A unital completely positive map is contractive in the matrix operator
     norm, so every eigenvalue has modulus at most one.  The spectral radius
