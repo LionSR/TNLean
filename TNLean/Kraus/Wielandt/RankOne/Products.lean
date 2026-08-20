@@ -23,6 +23,9 @@ variable {d D : ℕ}
 /-- If an exact word span is full, some word of length at most `D ^ 2` evaluates to a matrix with
 a nonzero eigenvalue and a corresponding nonzero eigenvector.
 
+The coarse length bound and exact-span hypothesis are inherited from
+`exists_nonzero_trace_word`, where their relation to the paper is documented.
+
 Paper: arXiv:0909.5347, Theorem 1 proof, first paragraph. -/
 theorem exists_word_eigenvector [NeZero D]
     (K : Fin d → Matrix (Fin D) (Fin D) ℂ) {N : ℕ}

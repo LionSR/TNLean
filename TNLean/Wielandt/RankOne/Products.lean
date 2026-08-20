@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.Kraus.Wielandt.RankOne.Products
-import TNLean.Wielandt.SpanGrowth.NonzeroTraceProduct
+import TNLean.Kraus.Injectivity
 
 /-!
 # Eigenvectors from Wielandt word products
