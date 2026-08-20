@@ -34,7 +34,7 @@ Pérez-García, Wolf, and Cirac, arXiv:0909.5347.
 -/
 
 open scoped Matrix ComplexOrder BigOperators
-open Matrix Module
+open Matrix
 
 namespace Kraus
 
@@ -146,19 +146,10 @@ private lemma posSemidef_pow_fixedPoint_unique
     K hq hρ hρ_ne hp hρ_fix
   have hσ_pd := posDef_pow_fixedPoint_of_vectorSpreadSpan_eq_top
     K hq hσ hσ_ne hp hσ_fix
-  by_cases hD : D = 0
-  · exact ⟨1, by ext i; exact Fin.elim0 (hD ▸ i)⟩
-  · have : Nonempty (Fin D) := ⟨⟨0, Nat.pos_of_ne_zero hD⟩⟩
-    obtain ⟨c, _, hτ, hτ_not_pd⟩ := exists_critical_scalar hρ_pd hσ_pd
-    let τ := σ - (↑c : ℂ) • ρ
-    have hτ_fix : ((mapLM K) ^ p) τ = τ := by
-      simp only [τ, map_sub, LinearMap.map_smul, hρ_fix, hσ_fix]
-    by_cases hτ_zero : τ = 0
-    · exact ⟨↑c, sub_eq_zero.mp hτ_zero⟩
-    · exact absurd
-        (posDef_pow_fixedPoint_of_vectorSpreadSpan_eq_top
-          K hq hτ hτ_zero hp hτ_fix)
-        hτ_not_pd
+  exact exists_smul_eq_of_posDef_fixedPoints_of_fixedPoint_posDef
+    ((mapLM K) ^ p) ρ σ hρ_pd hσ_pd hρ_fix hσ_fix fun hτ hτ_ne hτ_fix ↦
+      posDef_pow_fixedPoint_of_vectorSpreadSpan_eq_top
+        K hq hτ hτ_ne hp hτ_fix
 
 private lemma isChannel_pow (E : Mat →ₗ[ℂ] Mat) (hE : IsChannel E) (p : ℕ) :
     IsChannel (E ^ p) := by
