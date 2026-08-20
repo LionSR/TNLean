@@ -118,7 +118,7 @@ private theorem diagBlock_diagonalRestrictionUnits_not_isNormal :
   have hmem : Matrix.single 0 1 (1 : ℂ) ∈
       Submodule.span ℂ (Set.range fun σ : Fin N → Fin 2 =>
         evalWord (diagBlock diagonalRestrictionUnits) (List.ofFn σ)) :=
-    hN ▸ Submodule.mem_top
+    hN.span_eq_top ▸ Submodule.mem_top
   suffices hzero : ∀ M ∈
       Submodule.span ℂ (Set.range fun σ : Fin N → Fin 2 =>
         evalWord (diagBlock diagonalRestrictionUnits) (List.ofFn σ)), M 0 1 = 0 by

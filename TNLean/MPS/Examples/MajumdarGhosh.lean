@@ -277,7 +277,7 @@ theorem majumdarGhosh_not_isNBlkInjective_of_odd {N : ℕ} (hN : Odd N) :
   intro h
   have hmem : Matrix.single (2 : Fin 3) (2 : Fin 3) (1 : ℂ) ∈
       Submodule.span ℂ (Set.range fun σ : Fin N → Fin 2 =>
-        evalWord majumdarGhoshTensor (List.ofFn σ)) := h ▸ Submodule.mem_top
+        evalWord majumdarGhoshTensor (List.ofFn σ)) := h.span_eq_top ▸ Submodule.mem_top
   suffices hzero : ∀ M ∈ Submodule.span ℂ (Set.range fun σ : Fin N → Fin 2 =>
       evalWord majumdarGhoshTensor (List.ofFn σ)), M 2 2 = 0 by
     have h1 := hzero _ hmem
@@ -298,7 +298,7 @@ theorem majumdarGhosh_not_isNBlkInjective_of_even {N : ℕ} (hN : Even N) :
   intro h
   have hmem : Matrix.single (1 : Fin 3) (0 : Fin 3) (1 : ℂ) ∈
       Submodule.span ℂ (Set.range fun σ : Fin N → Fin 2 =>
-        evalWord majumdarGhoshTensor (List.ofFn σ)) := h ▸ Submodule.mem_top
+        evalWord majumdarGhoshTensor (List.ofFn σ)) := h.span_eq_top ▸ Submodule.mem_top
   suffices hzero : ∀ M ∈ Submodule.span ℂ (Set.range fun σ : Fin N → Fin 2 =>
       evalWord majumdarGhoshTensor (List.ofFn σ)), M 1 0 = 0 by
     have h1 := hzero _ hmem

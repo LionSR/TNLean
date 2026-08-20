@@ -386,7 +386,10 @@ theorem matrix_eq_zero_of_isNBlkInjective {L : ℕ} {A : MPSTensor d D}
     intro M
     have hM : M ∈ Submodule.span ℂ (Set.range fun x : Fin L → Fin d =>
         MPSTensor.evalWord A (List.ofFn x)) := by
-      rw [hA]; exact Submodule.mem_top
+      rw [show Submodule.span ℂ (Set.range fun x : Fin L → Fin d =>
+        MPSTensor.evalWord A (List.ofFn x)) = ⊤ by
+          exact hA.span_eq_top]
+      exact Submodule.mem_top
     have hle : Submodule.span ℂ (Set.range fun x : Fin L → Fin d =>
         MPSTensor.evalWord A (List.ofFn x)) ≤
         LinearMap.ker ((Matrix.traceLinearMap (Fin D) ℂ ℂ).comp

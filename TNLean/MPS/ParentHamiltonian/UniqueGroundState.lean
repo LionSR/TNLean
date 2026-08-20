@@ -96,7 +96,7 @@ private theorem neZero_d_of_isNBlkInjective [NeZero D]
       exact (σ ⟨0, hL₀⟩).elim0
     · intro hM
       cases hM
-  rw [IsNBlkInjective, hempty, Submodule.span_empty] at hInj
+  rw [IsNBlkInjective, Kraus.wordSpan, hempty, Submodule.span_empty] at hInj
   exact bot_ne_top hInj
 
 /-- Open-chain intersection property for block-injective tensors.
