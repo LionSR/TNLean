@@ -328,7 +328,8 @@ matrices, and let $\E_K$ be its Kraus map.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{lem:positive-map-conj-power-fixed,
+    \uses{lem:root-eigenvector-power-fixed,
+        lem:positive-map-conj-power-fixed,
         lem:trace-preserving-eigenvector-trace-zero}
     At least one of $X+X^\dagger$ and $i(X^\dagger-X)$ is nonzero. Both are
     Hermitian, both have trace zero, and each is fixed by $E^p$.
@@ -481,8 +482,8 @@ matrices, and let $\E_K$ be its Kraus map.
 \begin{proof}\leanok
     \uses{thm:cesaro_fixedpoint, thm:kraus_irreducible_from_spreading,
         thm:peripheral_roots_irreducible_channel,
-        thm:kraus_power_fixed_point_posdef_from_spreading,
-        thm:positive_fixedpoint_decomp}
+        lem:kraus-hermitian-power-fixed-point,
+        thm:kraus-hermitian-power-fixed-point-zero}
     The normalization makes $\E_K$ a channel, so
     Theorem~\ref{thm:cesaro_fixedpoint} gives a nonzero positive-semidefinite
     fixed point. This supplies the peripheral eigenvalue $1$.
@@ -492,24 +493,10 @@ matrices, and let $\E_K$ be its Kraus map.
     eigenvalue $\mu$ is a root of unity; choose $p>0$ with
     $\mu^p=1$.
 
-    Suppose $\mu\neq1$. A nonzero $\mu$-eigenmatrix has a nonzero real or
-    imaginary Hermitian part $H$ satisfying
-    \begin{align}
-        \E_K^p(H)
-         & =H,
-        \notag \\
-        \tr(H)
-         & =0.
-        \notag
-    \end{align}
-    Apply Theorem~\ref{thm:positive_fixedpoint_decomp} to the channel
-    $\E_K^p$. It writes $H$ as a difference of positive-semidefinite fixed
-    points. Theorem~\ref{thm:kraus_power_fixed_point_posdef_from_spreading}
-    makes every nonzero such fixed point positive definite. The critical
-    scalar argument then shows that any two nonzero positive-semidefinite
-    fixed points of $\E_K^p$ are proportional. Their traces and
-    $\tr(H)=0$ force the same proportionality constant, so $H=0$, a
-    contradiction. Thus $\mu=1$.
+    Suppose $\mu\neq1$. Lemma~\ref{lem:kraus-hermitian-power-fixed-point}
+    gives a nonzero Hermitian matrix $H$ with $\tr(H)=0$ and
+    $\E_K^p(H)=H$. Theorem~\ref{thm:kraus-hermitian-power-fixed-point-zero}
+    gives $H=0$, a contradiction. Thus $\mu=1$.
 \end{proof}
 
 \begin{theorem}[Strengthened form of the primitivity equivalence]
