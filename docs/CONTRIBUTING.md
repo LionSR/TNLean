@@ -64,8 +64,11 @@ Every PR body must contain three sections:
 
 ### Testing
 - What was verified and how.
-- Examples: `lake env lean TNLean/Foo/Bar.lean`, `lake build TNLean`,
-  `rg -n "sorry|axiom" TNLean/Foo/Bar.lean || true`.
+- Examples: `lake build TNLean.Foo.Bar`, `lake build TNLean`,
+  `rg -n "sorry|axiom" TNLean/Foo/Bar.lean || true`. A bare
+  `lake env lean TNLean/Foo/Bar.lean` is a fast elaboration check, but it does
+  not apply the package `leanOptions` and therefore does not run the Mathlib
+  standard linter set.
 
 ---
 Addresses #N
