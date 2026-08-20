@@ -281,7 +281,8 @@ used in the Case-II argument in Appendix C.2, lines 1628--1633. -/
 theorem sectors_hasBiCF : MPSTensor.HasBiCF sectors.basis :=
   MPSTensor.hasBiCF_of_wordTupleSpanTop sectors.basis sectors_wordTupleSpanTop_one
 
-/-- The first representative after the source absorbs its common weight. -/
+/-- The first representative after common-weight absorption.
+Source: arXiv:1606.00608, lines 1646--1665. -/
 noncomputable def firstAbsorbed : MPSTensor (3 * 3) 1 :=
   fun i ↦ invSqrtTwo • basis 0 i
 
@@ -289,7 +290,8 @@ private lemma firstAbsorbed_eq :
     firstAbsorbed = fun i ↦ invSqrtTwo • firstBasisTensor i := by
   rfl
 
-/-- The first absorbed representative has transfer spectral radius exactly $1/2$. -/
+/-- The first absorbed representative has transfer spectral radius exactly $1/2$.
+Source: arXiv:1606.00608, the absorption step at lines 1646--1665. -/
 theorem spectralRadius_transferMap_firstAbsorbed :
     spectralRadius ℂ
         ((Module.End.toContinuousLinearMap (Matrix (Fin 1) (Fin 1) ℂ))
@@ -310,7 +312,8 @@ theorem spectralRadius_transferMap_firstAbsorbed :
     _ = ENNReal.ofNNReal ((2 : NNReal)⁻¹) := congrArg ENNReal.ofNNReal hn
     _ = (2 : ENNReal)⁻¹ := by norm_num
 
-/-- Consequently the first absorbed representative is not a CPSV normal tensor. -/
+/-- Consequently the first absorbed representative is not a CPSV normal tensor.
+Source: arXiv:1606.00608, the claimed absorbed normal form at lines 1646--1665. -/
 theorem firstAbsorbed_not_isNormalTensor :
     ¬ MPSTensor.IsNormalTensor firstAbsorbed := by
   intro h
@@ -318,17 +321,16 @@ theorem firstAbsorbed_not_isNormalTensor :
   rw [spectralRadius_transferMap_firstAbsorbed] at hr
   norm_num at hr
 
-/-- The ambient two-sector MPO.  Its bond diagonal is the direct sum of the two
-absorbed bond-one representatives. -/
+/-- The ambient two-sector MPO, assembled from the absorbed representatives.
+Source: arXiv:1606.00608, lines 1646--1665. -/
 noncomputable def ambient : MPOTensor 3 2 :=
   fun i j ↦ if i = j then Matrix.diagonal fun s ↦
     if s = 0 then (if i = 2 then 0 else (1 / 2 : ℂ))
     else if i = 2 then 1 else 0
   else 0
 
-/-- The scalar carried by one virtual sector and one doubled physical letter of the ambient tensor.
-
-This is the entrywise form of the weighted canonical assembly in
+/-- The scalar on one virtual sector and one doubled physical letter.
+This is the entrywise weighted canonical assembly in
 arXiv:1606.00608, lines 237--246 and 1646--1665. -/
 private noncomputable def ambientVirtualWeight
     (s : Fin 2) (i j : Fin 3) : ℂ :=
@@ -337,16 +339,14 @@ private noncomputable def ambientVirtualWeight
     else if i = 2 then 1 else 0
   else 0
 
-/-- Each physical letter of the ambient tensor is diagonal in the two BNT sector coordinates.
-
+/-- Each ambient letter is diagonal in the two BNT sector coordinates.
 Source: arXiv:1606.00608, canonical assembly at lines 237--246 and
 1646--1665. -/
 private lemma ambient_eq_diagonal (i j : Fin 3) :
     ambient i j = Matrix.diagonal fun s ↦ ambientVirtualWeight s i j := by
   by_cases hij : i = j <;> simp [ambient, ambientVirtualWeight, hij]
 
-/-- Products of ambient letters remain diagonal, with sectorwise products of the scalar weights.
-
+/-- Ambient-letter products remain diagonal, with sectorwise scalar products.
 Source: arXiv:1606.00608, periodic canonical contractions at lines 237--246
 and the absorbed BNT display at lines 1660--1665. -/
 private lemma prod_ambient {N : ℕ} (σ τ : Fin N → Fin 3) :
@@ -366,7 +366,6 @@ private lemma prod_ambient {N : ℕ} (σ τ : Fin N → Fin 3) :
 
 /-- The periodic ambient operator is diagonal in the physical configuration
 basis, with one nonnegative product contribution from each BNT sector.
-
 Source: arXiv:1606.00608, the periodic MPDO contraction at lines 623--630 and
 the absorbed BNT display at lines 1660--1665. -/
 private lemma mpo_ambient_eq_diagonal (N : ℕ) :
@@ -387,7 +386,6 @@ private lemma mpo_ambient_eq_diagonal (N : ℕ) :
 
 /-- The ambient weighted two-sector tensor generates a positive semidefinite operator at every
 positive chain length.
-
 This verifies the standing MPDO hypothesis of the simple Case-II argument in
 arXiv:1606.00608, line 1628, using the density-operator definition at lines
 623--630. -/
@@ -420,7 +418,6 @@ lemma ambient_eq_weighted_basis_blocks (i j : Fin 3) :
 
 /-- Evaluation of the assembled decomposition in its two flattened bond
 coordinates.
-
 Source: arXiv:1606.00608, canonical-form assembly in equation `Eq19`, lines
 304--308. -/
 private theorem sectors_toTensor_apply
@@ -447,7 +444,6 @@ private theorem sectors_toTensor_apply
 
 /-- The assembled sector tensor is the diagonal sum of the two weighted
 bond-one representatives.
-
 Source: arXiv:1606.00608, the BNT display `eq:II_ABasicTensors` and its
 canonical-form assembly `Eq19`, lines 271--308. -/
 private theorem sectors_toTensor_eq_diagonal (p : Fin (3 * 3)) :
@@ -467,7 +463,6 @@ private theorem sectors_toTensor_eq_diagonal (p : Fin (3 * 3)) :
 
 /-- The doubled-index ambient tensor is exactly the source canonical-form
 assembly, not merely an MPO with the same periodic contractions.
-
 Source: arXiv:1606.00608, canonical form at lines 237--246 and equations
 `eq:II_ABasicTensors` and `Eq19`, lines 271--308. -/
 theorem ambient_toMPSTensor_eq_sectors_toTensor :
@@ -484,11 +479,9 @@ theorem ambient_toMPSTensor_eq_sectors_toTensor :
 
 /-- The ambient MPO is in normalized BNT-refined horizontal form, with the
 displayed sector decomposition and identity gauge on both bond-one blocks.
-
 **Scope restriction (BNT-refined horizontal form):** this is the project's
 normalized refinement of the literal CPSV canonical form; see
 `docs/paper-gaps/cpgsv17_vertical_cf_grouping.tex`.
-
 Source: arXiv:1606.00608, canonical form at lines 237--246 and the BNT
 decomposition `eq:II_ABasicTensors` at lines 271--301. -/
 theorem ambient_isHorizontalCF : MPOTensor.IsHorizontalCF ambient := by
@@ -510,7 +503,6 @@ theorem ambient_isHorizontalCF : MPOTensor.IsHorizontalCF ambient := by
 
 /-- The doubled physical-trace transfer of the first normal representative is
 the nonzero scalar $2/\sqrt 2$ on its one-dimensional bond space.
-
 Source: arXiv:1606.00608, the transfer matrices $\mathcal B_k$ in Definition
 4.7, lines 815--822. -/
 private theorem doubledPhysTraceTransfer_firstBasisTensor :
@@ -525,7 +517,6 @@ private theorem doubledPhysTraceTransfer_firstBasisTensor :
 
 /-- The doubled physical-trace transfer of the second normal representative
 is the identity on its one-dimensional bond space.
-
 Source: arXiv:1606.00608, the transfer matrices $\mathcal B_k$ in Definition
 4.7, lines 815--822. -/
 private theorem doubledPhysTraceTransfer_secondBasisTensor :
@@ -540,7 +531,6 @@ private theorem doubledPhysTraceTransfer_secondBasisTensor :
 /-- Neither displayed BNT representative has nilpotent physical-trace
 transfer. This proves only the representative-level nonnilpotency clause and
 does not assert simple canonical form, simplicity, the MPDO property, or SAL.
-
 Source: arXiv:1606.00608, Definition 4.7, lines 815--822. -/
 theorem sectors_basis_doubledPhysTraceTransfer_not_isNilpotent
     (j : Fin sectors.basisCount) :
@@ -562,12 +552,10 @@ theorem sectors_basis_doubledPhysTraceTransfer_not_isNilpotent
 positive periodic operators, its two normal BNT representatives have
 nonnilpotent physical-trace transfer, and their weighted direct sum is exactly
 the ambient doubled-index tensor.
-
 **Scope restriction (normalized fixed representative):** this is the
 project's fixed-representative predicate, which includes the global
 unit-weight convention of arXiv:1606.00608, line 246. See
 `docs/paper-gaps/cpsv16_unit_weight_rfp_scale_tension.tex`.
-
 Source: arXiv:1606.00608, canonical form at lines 224--246, simplicity at
 lines 815--822, and the Case-II standing hypothesis at line 1628. -/
 theorem ambient_isSimpleCanonicalForm : IsSimpleCanonicalForm ambient := by
@@ -588,7 +576,8 @@ theorem ambient_isSimpleCanonicalForm : IsSimpleCanonicalForm ambient := by
   simp only [hGauge, Units.val_one, inv_one, one_mul, mul_one]
   exact (cast_eq _ _).symm
 
-/-- The ambient physical-trace transfer is literally the identity. -/
+/-- The ambient physical-trace transfer is literally the identity.
+Source: arXiv:1606.00608, Definition 4.2, lines 735--739. -/
 lemma physTraceTransfer_ambient : physTraceTransfer ambient = 1 := by
   ext s t
   fin_cases s <;> fin_cases t <;>
@@ -596,7 +585,6 @@ lemma physTraceTransfer_ambient : physTraceTransfer ambient = 1 := by
   all_goals norm_num
 
 /-- Every periodic ambient operator, including the empty contraction, has trace two.
-
 For positive lengths this is the normalization factor implicit in the MPDO
 and SAL standing assumptions of arXiv:1606.00608, lines 623--630, 811--815,
 and 1628. -/
@@ -606,7 +594,6 @@ theorem trace_mpo_ambient (N : ℕ) : Matrix.trace (mpo ambient N) = 2 := by
   simp [Matrix.trace]
 
 /-- The trace used to normalize every positive-length ambient MPDO is strictly positive.
-
 Source: arXiv:1606.00608, density-operator normalization at lines 623--630
 and the SAL definition at lines 811--815. -/
 theorem trace_mpo_ambient_pos (N : ℕ) :
@@ -615,14 +602,12 @@ theorem trace_mpo_ambient_pos (N : ℕ) :
   norm_num
 
 /-- The one-site projection onto the binary physical sector of the ambient example.
-
 This is the two-dimensional sector selected by the first BNT representative
 in the Case-II decomposition of arXiv:1606.00608, lines 1628--1665. -/
 private noncomputable def binaryProjection : Matrix (Fin 3) (Fin 3) ℂ :=
   Matrix.diagonal fun i ↦ if i = 2 then 0 else 1
 
 /-- The binary-sector matrix is positive semidefinite.
-
 Source: arXiv:1606.00608, the orthogonal Case-II sector projections at lines
 1680--1691. -/
 private lemma binaryProjection_posSemidef :
@@ -633,7 +618,6 @@ private lemma binaryProjection_posSemidef :
   fin_cases i <;> simp
 
 /-- The binary-sector projection is idempotent.
-
 Source: arXiv:1606.00608, the orthogonal Case-II sector projections at lines
 1680--1691. -/
 private lemma binaryProjection_mul_self :
@@ -644,7 +628,6 @@ private lemma binaryProjection_mul_self :
   fin_cases i <;> norm_num
 
 /-- The binary physical sector has dimension, and hence projection trace, equal to two.
-
 Source: arXiv:1606.00608, the physical-sector splitting used at lines
 1680--1712. -/
 private lemma trace_binaryProjection : Matrix.trace binaryProjection = 2 := by
@@ -654,14 +637,12 @@ private lemma trace_binaryProjection : Matrix.trace binaryProjection = 2 := by
   norm_num
 
 /-- The complementary one-site projection onto the physical symbol `2`.
-
 This is the second physical sector of the explicit Case-II decomposition,
 corresponding to arXiv:1606.00608, lines 1628--1665. -/
 private noncomputable def terminalProjection : Matrix (Fin 3) (Fin 3) ℂ :=
   Matrix.diagonal fun i ↦ if i = 2 then 1 else 0
 
 /-- The terminal one-site sector is positive semidefinite.
-
 Source: arXiv:1606.00608, the orthogonal Case-II sector projections at lines
 1680--1691. -/
 private lemma terminalProjection_posSemidef :
@@ -672,7 +653,6 @@ private lemma terminalProjection_posSemidef :
   fin_cases i <;> simp
 
 /-- The terminal sector has projection trace one.
-
 Source: arXiv:1606.00608, the physical-sector splitting used at lines
 1680--1712. -/
 private lemma trace_terminalProjection : Matrix.trace terminalProjection = 1 := by
@@ -681,7 +661,6 @@ private lemma trace_terminalProjection : Matrix.trace terminalProjection = 1 := 
   norm_num
 
 /-- The terminal projection is exactly the orthogonal complement of the binary projection.
-
 Source: arXiv:1606.00608, the complete orthogonal sector resolution at lines
 1680--1691. -/
 private lemma one_sub_binaryProjection :
@@ -691,7 +670,6 @@ private lemma one_sub_binaryProjection :
     simp [binaryProjection, terminalProjection]
 
 /-- The normalized two-site state uniformly supported on the four binary physical pairs.
-
 This is the refinement target for the first absorbed sector in the
 Definition 4.1 equations of arXiv:1606.00608, lines 638--660. -/
 private noncomputable def binaryPairState :
@@ -699,7 +677,6 @@ private noncomputable def binaryPairState :
   (1 / 4 : ℂ) • Matrix.kronecker binaryProjection binaryProjection
 
 /-- The binary two-site preparation state is positive semidefinite.
-
 Source: arXiv:1606.00608, the positive two-site physical operator in
 Definition 4.1, lines 638--660. -/
 private lemma binaryPairState_posSemidef : binaryPairState.PosSemidef := by
@@ -707,7 +684,6 @@ private lemma binaryPairState_posSemidef : binaryPairState.PosSemidef := by
     binaryProjection_posSemidef).smul (by norm_num [Complex.nonneg_iff])
 
 /-- The binary two-site preparation state has trace one.
-
 Source: arXiv:1606.00608, trace preservation in Definition 4.1, lines
 638--660. -/
 private lemma trace_binaryPairState : Matrix.trace binaryPairState = 1 := by
@@ -715,7 +691,6 @@ private lemma trace_binaryPairState : Matrix.trace binaryPairState = 1 := by
   norm_num
 
 /-- The pure two-site state supported on the physical pair `(2,2)`.
-
 This is the refinement target for the second absorbed sector in the
 Definition 4.1 equations of arXiv:1606.00608, lines 638--660. -/
 private noncomputable def terminalPairState :
@@ -723,14 +698,12 @@ private noncomputable def terminalPairState :
   Matrix.kronecker terminalProjection terminalProjection
 
 /-- The terminal two-site preparation state is positive semidefinite.
-
 Source: arXiv:1606.00608, the positive two-site physical operator in
 Definition 4.1, lines 638--660. -/
 private lemma terminalPairState_posSemidef : terminalPairState.PosSemidef := by
   exact terminalProjection_posSemidef.kronecker terminalProjection_posSemidef
 
 /-- The terminal two-site preparation state has trace one.
-
 Source: arXiv:1606.00608, trace preservation in Definition 4.1, lines
 638--660. -/
 private lemma trace_terminalPairState : Matrix.trace terminalPairState = 1 := by
@@ -738,7 +711,6 @@ private lemma trace_terminalPairState : Matrix.trace terminalPairState = 1 := by
     trace_terminalProjection]
 
 /-- The two-to-one physical channel obtained by tracing out the second site.
-
 This is an explicit coarse-graining map of the type required by equation
 `eq:Smap` in arXiv:1606.00608, Definition 4.1, lines 638--660. -/
 private noncomputable def ambientCoarseMap :
@@ -747,14 +719,12 @@ private noncomputable def ambientCoarseMap :
   Matrix.partialTraceRightLM
 
 /-- The ambient coarse-graining map is trace preserving and completely positive.
-
 Source: arXiv:1606.00608, Definition 4.1, lines 638--660. -/
 private lemma ambientCoarseMap_isKrausCPTP :
     IsKrausCPTP ambientCoarseMap := by
   exact Matrix.partialTraceRightLM_isKrausCPTP
 
 /-- On the binary one-site sector, measure its trace and prepare the uniform binary two-site state.
-
 This is the active part of an explicit refinement map for equation `eq:Tmap`
 in arXiv:1606.00608, Definition 4.1, lines 638--660. -/
 private noncomputable def ambientRefineActive :
@@ -764,7 +734,6 @@ private noncomputable def ambientRefineActive :
     (singleKrausMap binaryProjection)
 
 /-- The active binary refinement is completely positive.
-
 Source: arXiv:1606.00608, complete positivity in Definition 4.1, lines
 638--660. -/
 private lemma ambientRefineActive_isKrausCP :
@@ -776,7 +745,6 @@ private lemma ambientRefineActive_isKrausCP :
       binaryPairState binaryPairState_posSemidef)
 
 /-- The active refinement preserves exactly the trace selected by the binary projection.
-
 This is the trace identity needed to complete the refinement to a
 trace-preserving map in arXiv:1606.00608, Definition 4.1, lines 638--660. -/
 private lemma trace_ambientRefineActive (X : Matrix (Fin 3) (Fin 3) ℂ) :
@@ -794,7 +762,6 @@ private lemma trace_ambientRefineActive (X : Matrix (Fin 3) (Fin 3) ℂ) :
 
 /-- The trace-preserving refinement map refines the binary sector uniformly and prepares the pure
 `(2,2)` state from the complementary trace.
-
 This explicitly witnesses the map in equation `eq:Tmap` of
 arXiv:1606.00608, Definition 4.1, lines 638--660. -/
 private noncomputable def ambientRefineMap :
@@ -804,7 +771,6 @@ private noncomputable def ambientRefineMap :
     terminalPairState
 
 /-- The completed ambient refinement is trace preserving and completely positive.
-
 Source: arXiv:1606.00608, Definition 4.1, lines 638--660. -/
 private lemma ambientRefineMap_isKrausCPTP :
     IsKrausCPTP ambientRefineMap := by
@@ -816,7 +782,6 @@ private lemma ambientRefineMap_isKrausCPTP :
     terminalPairState_posSemidef trace_terminalPairState
 
 /-- The one-site physical closure separates into its binary and terminal sector weights.
-
 This is the explicit one-site operator in figure `MPDO_XM` and Definition 4.1
 of arXiv:1606.00608, lines 638--660, for the present Case-II tensor. -/
 private lemma physClose1_ambient (X : Matrix (Fin 2) (Fin 2) ℂ) :
@@ -831,7 +796,6 @@ private lemma physClose1_ambient (X : Matrix (Fin 2) (Fin 2) ℂ) :
 
 /-- The two-site physical closure is the corresponding sum of the uniform binary-pair state and the
 pure terminal-pair state.
-
 This is the explicit two-site operator in figure `MPDO_XMM` and Definition
 4.1 of arXiv:1606.00608, lines 638--660, for the present Case-II tensor. -/
 private lemma physClose2_ambient (X : Matrix (Fin 2) (Fin 2) ℂ) :
@@ -847,7 +811,6 @@ private lemma physClose2_ambient (X : Matrix (Fin 2) (Fin 2) ℂ) :
     ring
 
 /-- Tracing out the second physical site carries the two-site closure to the one-site closure.
-
 This is equation `eq:Smap` of arXiv:1606.00608, Definition 4.1, lines
 638--660, for the present Case-II tensor. -/
 private lemma ambientCoarseMap_physClose2 (X : Matrix (Fin 2) (Fin 2) ℂ) :
@@ -862,7 +825,6 @@ private lemma ambientCoarseMap_physClose2 (X : Matrix (Fin 2) (Fin 2) ℂ) :
     ring
 
 /-- The completed preparation channel carries the one-site closure to the two-site closure.
-
 This is equation `eq:Tmap` of arXiv:1606.00608, Definition 4.1, lines
 638--660, for the present Case-II tensor. -/
 private lemma ambientRefineMap_physClose1 (X : Matrix (Fin 2) (Fin 2) ℂ) :
@@ -897,7 +859,6 @@ private lemma ambientRefineMap_physClose1 (X : Matrix (Fin 2) (Fin 2) ℂ) :
 
 /-- The explicit coarse-graining and refinement channels witness the local renormalization
 fixed-point equations.
-
 Source: arXiv:1606.00608, Definition 4.1, equations `eq:Smap` and `eq:Tmap`,
 lines 638--660. -/
 private theorem ambient_isRFPViaTS : IsRFPViaTS ambient := by
@@ -906,7 +867,6 @@ private theorem ambient_isRFPViaTS : IsRFPViaTS ambient := by
     ambientCoarseMap_physClose2, ambientRefineMap_physClose1⟩
 
 /-- The ambient Case-II tensor saturates the area law.
-
 The proof uses the explicit trace-preserving completely positive maps from
 Definition 4.1 and the positive normalization of every nonempty periodic
 operator. Source: arXiv:1606.00608, Definition 4.1, lines 638--660, and
@@ -915,8 +875,8 @@ theorem ambient_isSAL : IsSAL ambient := by
   exact isSAL_of_isRFPViaTS_of_trace_ne_zero ambient ambient_isMPDO
     (fun N _hN => (trace_mpo_ambient_pos N).ne') ambient_isRFPViaTS
 
-/-- Thus the source's literal physical-trace ZCL equation holds, without a
-scale-invariant replacement. -/
+/-- The source's literal physical-trace ZCL equation holds, without rescaling.
+Source: arXiv:1606.00608, Definition 4.2, lines 735--739. -/
 theorem ambient_literal_physTrace_ZCL :
     physTraceTransfer ambient * physTraceTransfer ambient =
       physTraceTransfer ambient := by
@@ -926,10 +886,10 @@ theorem ambient_literal_physTrace_ZCL :
 $(1/\sqrt2,1)$, both unabsorbed blocks are normal, literal physical-trace ZCL
 holds for their ambient direct sum, but the first absorbed block has transfer
 spectral radius $1/2$ and is not normal.
-
 This statement isolates the scalar-normalization step and does not assert the
 standing Case-II biCF, simplicity, MPDO, or SAL hypotheses. It therefore
-refutes the coefficient-absorption step, not CPSV16 Theorem 4.9. -/
+refutes the coefficient-absorption step, not CPSV16 Theorem 4.9.
+Source: arXiv:1606.00608, lines 1646--1665. -/
 theorem printed_absorbed_normality_step_is_false :
     weight 0 = invSqrtTwo ∧ weight 1 = 1 ∧
       (∀ s, ‖weight s‖ ≤ 1) ∧ (∃ s, ‖weight s‖ = 1) ∧
@@ -957,17 +917,14 @@ SAL, has the displayed simple BNT canonical form and biCF representatives,
 and obeys the literal physical-trace zero-correlation equation. Nevertheless,
 absorbing the first representative's common copy weight produces a tensor
 which is not normal.
-
 Copy independence here is only within the copies of one representative; it
 does not equate the two weights `1 / √2` and `1`. Thus the conclusion isolates
 the printed coefficient-absorption inference at lines 1646--1665. It does not
 refute the conclusion of Proposition `prop2to3` or Theorem 4.9.
-
 **Scope restriction (normalized fixed representative):** simplicity is the
 project's fixed-representative predicate, including the line-246 unit-weight
 convention. See
 `docs/paper-gaps/cpsv16_unit_weight_rfp_scale_tension.tex`.
-
 Source: arXiv:1606.00608, canonical normalization at lines 224--246,
 Definition 4.1 at lines 638--660, and the simple Case-II argument at lines
 1628--1665 and 1740--1782. -/
