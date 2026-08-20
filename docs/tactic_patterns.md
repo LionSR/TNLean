@@ -506,6 +506,17 @@ abstracted — record why, so it is not re-proposed).
 
 ## Completed refactors
 
+### Finite Kraus setup for channels
+- **Seen:** 2 occurrences in `Channel/Peripheral/IrreducibleChannel.lean` and
+  `Channel/Semigroup/Primitivity/Helpers.lean` before promotion (issue #6576).
+- **Abstraction:** `IsChannel.exists_kraus_map_eq_and_normalized` in
+  `TNLean/Channel/KrausMap.lean` packages a finite Kraus family, the equality with
+  its Kraus linear map, and the trace-preserving normalization.
+- **Notes:** issue #6576 deliberately promoted this two-copy pattern before a third
+  occurrence because both peripheral arguments require the complete setup. Each
+  caller now uses one `obtain`; the refactor has a net Lean-source delta of
+  6 lines (22 added, 16 removed).
+
 ### Euclidean linear-map multiplicativity
 - **Pattern:** prove that `Matrix.toEuclideanLin (A * B)` is the composition of the
   Euclidean linear maps represented by `A` and `B` by expanding both sides through

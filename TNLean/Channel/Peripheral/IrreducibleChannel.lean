@@ -11,7 +11,7 @@ import TNLean.Channel.Irreducible.AdjointFamily
 import TNLean.Channel.Irreducible.PerronFrobenius
 import TNLean.Channel.Schwarz.KadisonSchwarz
 import TNLean.Channel.Schwarz.PositiveMapProperties
-import TNLean.Channel.KrausRepresentation
+import TNLean.Channel.KrausMap
 import TNLean.Channel.Determinant.Bound
 
 /-!
@@ -165,15 +165,9 @@ theorem peripheral_isRootOfUnity_of_irreducible_channel [NeZero D]
     (hE : IsChannel E) (hIrr : IsIrreducibleMap E) :
     ∀ μ : ℂ, μ ∈ peripheralEigenvalues E → ∃ p : ℕ, 0 < p ∧ μ ^ p = 1 := by
   classical
-  obtain ⟨r, K, hK⟩ := hE.cp
-  have hE_eq : E = Kraus.mapLM K := by
-    apply LinearMap.ext
-    intro X
-    simpa [Kraus.mapLM_apply, Kraus.map_apply] using hK X
+  obtain ⟨r, K, hE_eq, hK_tp⟩ := hE.exists_kraus_map_eq_and_normalized
   have hIrrK : IsIrreducibleMap (Kraus.mapLM K) := by
     simpa [hE_eq] using hIrr
-  have hK_tp : ∑ i : Fin r, (K i)ᴴ * K i = 1 :=
-    kraus_sum_conjTranspose_mul_of_tp K E hK hE.tp
   -- The conjugate-transposed family is unital.
   have hL_unital : KadisonSchwarz.IsUnitalKraus (d := r) (D := D) (fun i => (K i)ᴴ) :=
     KadisonSchwarz.isUnitalKraus_conjTranspose (K := K) hK_tp
