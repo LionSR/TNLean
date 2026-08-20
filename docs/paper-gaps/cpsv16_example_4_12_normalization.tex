@@ -143,13 +143,35 @@ normalized fixed-point maps.
 
 The full GSNNCH exclusion is already a statement about the normalized family
 because \leanid{MPOTensor.IsGSNNCH} quantifies over
-\leanid{MPOTensor.normalizedMPO}. It may therefore be proved as
-$\neg\operatorname{IsGSNNCH}(M)$ for the printed tensor and remains tracked in
-\ghissue{6045}.  The remaining implication from a four-cycle GSNNCH
-representation to the Markov equality is tracked in \ghissue{6072}; only that
-implication is needed to combine the entropy defect with the GSNNCH
-hypothesis.  Transport to the separately named $\widehat M$ is optional
-packaging rather than a prerequisite for that result.
+\leanid{MPOTensor.normalizedMPO}. It is now proved directly for the printed
+tensor. At four sites, the sector sum in Definition~4.8 splits into positive
+factors built from the complementary adjacent-bond products
+$B_3^{(x)}B_0^{(x)}$ and $B_1^{(x)}B_2^{(x)}$, acting respectively on the
+three-site windows $(3,0,1)$ and $(1,2,3)$. Orthogonality of distinct sectors
+removes the cross terms in their product, while commutativity within one sector
+identifies the product of the two factors with the four-bond sector product.
+The resulting positive overlapping factors commute and give the
+quantum Markov decomposition
+\leanid{MPOTensor.nonempty_quantumMarkovDecomposition_fourCycle_of_isGSNNCHAt},
+hence the strong-subadditivity equality
+\leanid{MPOTensor.isSSAEquality_fourCycle_of_isGSNNCHAt}. This derivation uses
+only Definition~4.8 and the Beigi--Hayden--Jozsa--Petz--Winter structure; it
+does not assume zero correlation length, normality, injectivity, primitivity,
+a single sector, or completeness of the sector projections.
+
+The identity
+\leanid{MPOTensor.CPSVExample412Literal.fourCycleTripartiteState_eq_generic}
+shows that this general regrouping is exactly the state used in the literal
+entropy calculation. Consequently
+\leanid{MPOTensor.CPSVExample412Literal.M_not_isGSNNCH} proves
+$\neg\operatorname{IsGSNNCH}(M)$. This discharges the missing and formerly
+unlinked four-cycle task tracked in \ghissue{6072} and the missing
+Example~4.12 conclusion tracked in \ghissue{6045}. The earlier attempt to pass
+through Proposition
+\emph{prop4to2} had proof-path drift: that proposition belongs to a different
+condition-level implication and is not used here. Transport to the separately
+named $\widehat M$ is unnecessary because the GSNNCH predicate already uses
+the normalized family.
 
 \section{Verdict}
 
@@ -175,7 +197,8 @@ bare trace-preserving channel predicate without additional hypotheses,
 discharging the mathematical task tracked in \ghissue{6044}. They do not repair
 the incompatible line-246 unit-weight convention, so the formal verdict must
 remain separated into the false literal claim, the true normalized channel
-equations, and the still-open full GSNNCH exclusion in \ghissue{6045}.
+equations, the unresolved unit-weight boundary, and the now-proved full GSNNCH
+exclusion.
 
 For the normalized four-site state,
 \leanid{MPOTensor.CPSVExample412Literal.fourCycleTripartiteState_not_isSSAEquality}
@@ -184,8 +207,12 @@ marginals
 \leanid{MPOTensor.CPSVExample412Literal.traceC_fourCycleTripartiteState},
 \leanid{MPOTensor.CPSVExample412Literal.traceA_fourCycleTripartiteState}, and
 \leanid{MPOTensor.CPSVExample412Literal.traceAC_fourCycleTripartiteState},
-together with their entropy calculations.  This completes \ghissue{6073} but
-does not by itself assert failure of the GSNNCH form; that final inference still
-depends on \ghissue{6072}.
+together with their entropy calculations, discharging the mathematical task
+tracked in \ghissue{6073}.
+The general four-cycle Markov implication and the exact coordinate identity
+then give
+\leanid{MPOTensor.CPSVExample412Literal.M_not_isGSNNCH}, discharging the tasks
+tracked in \ghissue{6072} and \ghissue{6045} without hypotheses beyond the
+source GSNNCH definition.
 
 \end{document}
