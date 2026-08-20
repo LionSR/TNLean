@@ -272,9 +272,10 @@ Source comparison: arXiv:1606.00608, Appendix C.2, equation `AppUkU=rl`, lines
 parity of the physical index controls the left Pauli \(Z\), while division by
 two controls the right Pauli \(Z\).
 
-This proves only that the selected four-sector inverse-map factorization is
-nonminimal for this tensor.  It does not settle the general factorization
-assertion documented in `docs/paper-gaps/cpgsv17_pf_rank_one.tex`.
+**Scope restriction (one explicit tensor):** This construction proves only
+that the selected four-sector inverse-map factorization is nonminimal for this
+tensor.  It does not settle the general factorization assertion documented in
+`docs/paper-gaps/cpgsv17_pf_rank_one.tex`.
 
 Source: arXiv:1606.00608, Appendix C.2, equation `AppUkU=rl`, lines 1381--1388. -/
 noncomputable def oneSectorFactorization : PhysicalSectorFactorization tensor where
@@ -364,9 +365,10 @@ lemma oneSector_neighboringOperator_trace
 /-- Positivity and the trace factorization \(1=1\cdot1\) for the one-sector
 physical factorization.
 
-This proves only that the selected four-sector inverse-map factorization is
-nonminimal for this tensor.  It does not settle the general factorization
-assertion documented in `docs/paper-gaps/cpgsv17_pf_rank_one.tex`.
+**Scope restriction (one explicit tensor):** This construction proves only
+that the selected four-sector inverse-map factorization is nonminimal for this
+tensor.  It does not settle the general factorization assertion documented in
+`docs/paper-gaps/cpgsv17_pf_rank_one.tex`.
 
 Source: arXiv:1606.00608, Appendix C.2, lines 1389--1403. -/
 noncomputable def oneSectorNeighboringTraceFactorization :
@@ -387,10 +389,11 @@ noncomputable def oneSectorNeighboringTraceFactorization :
 factorization whose neighboring operator is positive semidefinite and whose
 trace factors with normalized product.
 
-This theorem proves only that the selected four-sector inverse-map
-factorization is nonminimal for this tensor.  It neither supplies a coarsening
-result for arbitrary physical-sector factorizations nor settles the general
-assertion documented in `docs/paper-gaps/cpgsv17_pf_rank_one.tex`.
+**Scope restriction (one explicit tensor):** This theorem proves only that the
+selected four-sector inverse-map factorization is nonminimal for this tensor.
+It neither supplies a coarsening result for arbitrary physical-sector
+factorizations nor settles the general assertion documented in
+`docs/paper-gaps/cpgsv17_pf_rank_one.tex`.
 
 Source: arXiv:1606.00608, Appendix C.2, equations `AppUkU=rl` and `etarl`, lines
 1381--1403 and 1441--1445. -/
