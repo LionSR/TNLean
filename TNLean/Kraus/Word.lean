@@ -4,6 +4,8 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import Mathlib.Data.Complex.Basic
+import Mathlib.Data.Fin.Tuple.Basic
+import Mathlib.Data.List.FinRange
 import Mathlib.Data.List.OfFn
 import Mathlib.Data.Matrix.Mul
 import Mathlib.LinearAlgebra.Matrix.GeneralLinearGroup.Defs
@@ -32,12 +34,29 @@ rely on `MPSTensor` being the head symbol of the argument type.
 
 ## Main declarations
 
+* `List.ofFn_reverse` — reversing `List.ofFn` precomposes its function with `Fin.rev`
 * `MPSTensor` — a `Fin d`-indexed family of `D×D` complex matrices
 * `evalWord` — the matrix product associated with a word of physical indices
 * `evalWord_intertwine` — a rectangular letter intertwiner also intertwines every word
 -/
 
 open scoped Matrix
+
+namespace List
+
+/-- Reversing `List.ofFn` precomposes the indexing function with `Fin.rev`. -/
+theorem ofFn_reverse {n : ℕ} {α : Type*} (f : Fin n → α) :
+    (List.ofFn f).reverse = List.ofFn (f ∘ Fin.rev) := by
+  calc
+    (List.ofFn f).reverse = (List.map f (List.finRange n)).reverse := by
+      simp only [List.ofFn_eq_map]
+    _ = List.map f (List.finRange n).reverse := by simp only [List.map_reverse]
+    _ = List.map f (List.map Fin.rev (List.finRange n)) := by
+      simp only [List.finRange_reverse]
+    _ = List.map (f ∘ Fin.rev) (List.finRange n) := by simp only [List.map_map]
+    _ = List.ofFn (f ∘ Fin.rev) := by simp only [List.ofFn_eq_map]
+
+end List
 
 /-- A (periodic, translation-invariant) tensor generating an MPV family:
 a family of `D×D` matrices indexed by a physical index in `Fin d`.
