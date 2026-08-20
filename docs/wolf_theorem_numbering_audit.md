@@ -389,7 +389,7 @@ All eleven cited Chapter 7 numbers agree with the printed notes.
 | Citation | Result title | Archived PDF | Local transcription | Verdict |
 |---|---|---:|---:|---|
 | Proposition 7.1 | From continuous semigroups to differentiable groups | PDF page 2; printed page 120 | lines 67--69 | Correct |
-| Lemma 7.1 | Duhamel perturbation formula | PDF page 3; printed page 121 | lines 113--118 | Correct |
+| Lemma 7.1 | No printed title | PDF page 3; printed page 121 | lines 113--118 | Correct |
 | Corollary 7.1 | Perturbation of generators | PDF page 4; printed page 122 | lines 135--141 | Correct |
 | Proposition 7.2 | Conditional complete positivity | PDF page 4; printed page 122 | lines 158--170 | Correct |
 | Proposition 7.3 | Completely positive dynamical semigroups | PDF page 5; printed page 123 | lines 195--201 | Correct |
