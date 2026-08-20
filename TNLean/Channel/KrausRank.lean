@@ -9,6 +9,7 @@ import Mathlib.Data.Fintype.Card
 import TNLean.Algebra.FinSum
 import TNLean.Algebra.MatrixSpectralDecomp
 import TNLean.Channel.ChoiRectangular
+import TNLean.Channel.Schwarz.Basic
 
 /-!
 # Kraus-cardinality and Choi-rank correspondence
@@ -35,6 +36,8 @@ definitionally `ChoiJamiolkowski.choiMatrix`).
 * `Channel.hasKrausCard_mono` — zero-padding enlarges a Kraus family.
 * `Channel.choiMatrix_eq_sum_vecMulVec_of_kraus` — the Choi matrix of a Kraus
   map is a sum of rank-one outer products.
+* `Channel.choiMatrix_mapLM_eq_sum_vecMulVec` — the square specialization for
+  the concrete finite Kraus linear map.
 * `Channel.choiRank_le_of_hasKrausCard` — any `r`-operator Kraus family gives
   the upper bound `choiRank T ≤ r`.
 * `Channel.choiRank_le_of_hasKrausRankLE` — the same upper bound for bounded
@@ -176,6 +179,21 @@ theorem choiMatrix_eq_sum_vecMulVec_of_kraus {r : ℕ}
     congrArg (fun M => M i₁ j₁)
       (Matrix.mul_single_mul_conjTranspose_eq_vecMulVec
         (K := K x) (c := c) i₂ j₂)
+
+/-- The square Choi matrix of `Kraus.mapLM K` is the normalized sum of the outer
+products of the vectorized Kraus operators. This specializes
+`choiMatrix_eq_sum_vecMulVec_of_kraus` without changing its output-input orientation. -/
+theorem choiMatrix_mapLM_eq_sum_vecMulVec {r D : ℕ}
+    (K : Fin r → Matrix (Fin D) (Fin D) ℂ) :
+    ChoiJamiolkowski.choiMatrix (Kraus.mapLM K) =
+      ∑ j : Fin r,
+        Matrix.vecMulVec
+          (fun p : Fin D × Fin D => ((1 : ℂ) / ((D : ℝ).sqrt : ℂ)) * K j p.1 p.2)
+          (star fun p : Fin D × Fin D =>
+            ((1 : ℂ) / ((D : ℝ).sqrt : ℂ)) * K j p.1 p.2) := by
+  rw [← ChoiRectangular.choiMatrix_eq_choiJamiolkowski]
+  exact choiMatrix_eq_sum_vecMulVec_of_kraus K (Kraus.mapLM K) fun X => by
+    rw [Kraus.mapLM_apply, Kraus.map_apply]
 
 /-- A Choi-matrix decomposition into rank-one outer products yields a Kraus
 family indexed by the same finite type. -/
