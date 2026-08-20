@@ -14,8 +14,8 @@ endomorphism, together with two elementary invertibility criteria for complex ma
 
 ## Main results
 
-- `Matrix.ker_all_of_span_eq_top`: invariance under a spanning matrix family gives
-  invariance under every matrix.
+- `Matrix.ker_all_of_span_eq_top`: invariance under the conjugate transposes of a
+  spanning matrix family gives invariance under every matrix.
 - `Matrix.injective_of_ker_all`: a nonzero matrix whose kernel is invariant under every
   endomorphism has trivial kernel.
 - `Matrix.det_ne_zero_of_ker_all`: the square case has nonzero determinant.
