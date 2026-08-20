@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.Analysis.SpectralRadiusPowerDecay
+import TNLean.Kraus.MixedMap.Gap
 import TNLean.Kraus.MixedMap.SpectralRadius
 import TNLean.Spectral.MixedTransfer
 
@@ -92,42 +92,8 @@ theorem mixedTransferMap₂_pow_tendsto_zero_of_spectralRadius_lt_one
     (h : mixedTransferSpectralRadius₂ A B < 1)
     (X : Matrix (Fin D₁) (Fin D₂) ℂ) :
     Filter.Tendsto (fun n => ((mixedTransferMap₂ A B) ^ n) X)
-      Filter.atTop (nhds 0) := by
-  let V := Matrix (Fin D₁) (Fin D₂) ℂ
-  let Φ : (V →ₗ[ℂ] V) ≃ₐ[ℂ] (V →L[ℂ] V) := Module.End.toContinuousLinearMap V
-  let F : V →L[ℂ] V := Φ (mixedTransferMap₂ A B)
-  let : NormedAddCommGroup (V →L[ℂ] V) := ContinuousLinearMap.toNormedAddCommGroup
-  let : SeminormedRing (V →L[ℂ] V) := ContinuousLinearMap.toSeminormedRing
-  let : NormedRing (V →L[ℂ] V) := ContinuousLinearMap.toNormedRing
-  let : NormedSpace ℂ (V →L[ℂ] V) := ContinuousLinearMap.toNormedSpace
-  let : NormedAlgebra ℂ (V →L[ℂ] V) := ContinuousLinearMap.toNormedAlgebra
-  have : FiniteDimensional ℂ (V →L[ℂ] V) := Φ.toLinearEquiv.finiteDimensional
-  have hComplete : CompleteSpace (V →L[ℂ] V) :=
-    FiniteDimensional.complete ℂ (V →L[ℂ] V)
-  let : CompleteSpace (V →L[ℂ] V) := hComplete
-  have hSpectralRadius : spectralRadius ℂ F < 1 := by
-    change spectralRadius ℂ
-      (((Module.End.toContinuousLinearMap (Matrix (Fin D₁) (Fin D₂) ℂ))
-        (mixedTransferMap₂ A B)) :
-          Matrix (Fin D₁) (Fin D₂) ℂ →L[ℂ] Matrix (Fin D₁) (Fin D₂) ℂ) < 1
-    simpa only [mixedTransferSpectralRadius₂_eq] using h
-  have hF : Filter.Tendsto (fun n => F ^ n) Filter.atTop (nhds 0) :=
-    @_root_.pow_tendsto_zero_of_spectralRadius_lt_one (V →L[ℂ] V)
-      (ContinuousLinearMap.toNormedRing : NormedRing (V →L[ℂ] V)) hComplete
-      (ContinuousLinearMap.toNormedAlgebra : NormedAlgebra ℂ (V →L[ℂ] V))
-      F hSpectralRadius
-  have hEval : Filter.Tendsto (fun n => (F ^ n) X) Filter.atTop (nhds 0) := by
-    apply squeeze_zero_norm' (a := fun n => ‖F ^ n‖ * ‖X‖)
-    · exact Filter.Eventually.of_forall fun n => (F ^ n).le_opNorm X
-    · simpa using (tendsto_norm_zero.comp hF).mul_const ‖X‖
-  have hApply : ∀ n, (F ^ n) X = ((mixedTransferMap₂ A B) ^ n) X := by
-    intro n
-    have hPow :
-        (F ^ n : V →L[ℂ] V) = Φ ((mixedTransferMap₂ A B) ^ n) := by
-      exact (map_pow Φ (mixedTransferMap₂ A B) n).symm
-    rw [hPow]
-    rfl
-  exact hEval.congr hApply
+      Filter.atTop (nhds 0) :=
+  Kraus.mixedMapLM_pow_tendsto_zero_of_spectralRadius_lt_one A B h X
 
 /-!
 Strict dimension-mismatch consequences are intentionally downstream in
