@@ -21,5 +21,4 @@ import TNLean.Spectral.TransferOperatorGap
 import TNLean.Spectral.TransferOperatorGapInjective
 import TNLean.Spectral.TransferOperatorGapNT
 import TNLean.Spectral.TransferOperatorGapNormalized
-import TNLean.Spectral.TransferOperatorGapRect
 import TNLean.Spectral.TransferOperatorGapRectNormalized
