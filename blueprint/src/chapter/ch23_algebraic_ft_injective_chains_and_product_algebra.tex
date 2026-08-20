@@ -379,55 +379,6 @@ Throughout this section, assume $D_k \ge 1$ for every block~$k$.
     gives~$\sigma$.
 \end{proof}
 
-\begin{theorem}[Paired component maps are bijections]\label{thm:component_map_bijective}
-    \lean{TwoSidedIdeal.mem_blockIdeal_iff}
-    \lean{TwoSidedIdeal.pi_single_mem_blockIdeal}
-    \lean{TwoSidedIdeal.blockComponentMap}
-    \lean{TwoSidedIdeal.ringEquiv_maps_single_support_between}
-    \lean{TwoSidedIdeal.ringEquiv_symm_maps_blockIdeal_between}
-    \lean{TwoSidedIdeal.blockComponentMap_injective}
-    \lean{TwoSidedIdeal.blockComponentMap_surjective}
-    \lean{TwoSidedIdeal.blockComponentMap_bijective}
-    \leanok
-    \uses{thm:ring_perm}
-    Under the hypotheses of Theorem~\ref{thm:ring_perm}, for each $i\in I$
-    the map
-    \begin{align}
-        x
-        &\longmapsto
-        (T(0,\ldots,0,x,0,\ldots,0))_{\sigma(i)}
-        \notag
-    \end{align}
-    from $R_i$ to $S_{\sigma(i)}$ is bijective.
-\end{theorem}
-
-\begin{proof}
-    \leanok
-    Theorem~\ref{thm:ring_perm} forces an element supported in the $i$-th
-    block ideal to remain supported in the $\sigma(i)$-th block after
-    applying~$T$.
-    Injectivity follows from injectivity of~$T$.
-    For surjectivity, apply the same argument to $T^{-1}$ and the inverse
-    equivalence.
-\end{proof}
-
-\begin{theorem}[Paired component maps for products of matrix algebras]
-    \label{thm:mps_component_map_bijective}
-    \lean{MPSTensor.ringEquiv_maps_single_support}
-    \lean{MPSTensor.componentMap_surjective}
-    \lean{MPSTensor.componentMap_bijective}
-    \leanok
-    \uses{thm:component_map_bijective}
-    For a ring equivalence between products of full matrix algebras, the map
-    induced between each pair of matched components is bijective.
-\end{theorem}
-
-\begin{proof}\leanok
-    \uses{thm:component_map_bijective}
-    Apply Theorem~\ref{thm:component_map_bijective} to the matched block
-    ideals.
-\end{proof}
-
 \begin{theorem}[Decomposition of automorphisms of $\prod \MN{D_k}$]\label{thm:pi_auto_decomp}
     \lean{MPSTensor.algEquiv_pi_matrix_decomposition}
     \leanok
