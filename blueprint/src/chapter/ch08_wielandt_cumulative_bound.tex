@@ -964,6 +964,42 @@ matrices, and let $\E_K$ be its Kraus map.
     step $D-1$.
 \end{proof}
 
+\begin{theorem}[Cumulative eigenvector spreading for finite families]
+    \label{thm:kraus_cumulative_eigenvector_spreading}
+    \lean{Kraus.eigenvector_spreading_of_cumulativeSpan_eq_top}
+    \leanok
+    \uses{def:kraus_eval_word}
+    Let $K=(K^i)_{i=0}^{d-1}$ be a finite family of $D\times D$ matrices, and
+    let $\varphi\neq0$. If, for some $N$, words in $K$ of length at most $N$
+    span $\MN{D}$, then the vectors $K^w\varphi$ with $|w|\leq D-1$ span
+    $\C^D$.
+\end{theorem}
+
+\begin{proof}\leanok
+    The cumulative vector spaces are monotone and have dimension at most $D$.
+    Once two consecutive spaces agree, the common space is invariant under
+    every $K^i$. Full cumulative matrix span then forces it to contain
+    $\MN{D}\varphi=\C^D$. Since the initial space is nonzero, it reaches
+    dimension $D$ by step $D-1$.
+\end{proof}
+
+\begin{lemma}[Eigenvector padding for finite families]
+    \label{lem:kraus_eigenvector_padding}
+    \lean{Kraus.cumulativeVectorSpan_eq_vectorSpreadSpan_of_eigenvector}
+    \leanok
+    \uses{def:kraus_eval_word, def:vector_spread_span}
+    Suppose $K^{i_0}\varphi=\mu\varphi$ with $\mu\neq0$. For every $n$, the
+    span of $K^w\varphi$ over words with $|w|\leq n$ equals
+    $H_n(K,\varphi)$.
+\end{lemma}
+
+\begin{proof}\leanok
+    Repeating the letter $i_0$ pads a word of length $m\leq n$ to length $n$.
+    Its action on $\varphi$ gains the nonzero factor $\mu^{n-m}$, so every
+    shorter-word vector belongs to the fixed-length span. The reverse inclusion
+    is immediate.
+\end{proof}
+
 \begin{theorem}[Fixed-length spreading from eventual word-span fullness]
     \label{thm:eigenvector_spreading_eventually_full}
     \lean{Kraus.vectorSpreadSpan_eq_top_of_hasEventuallyFullWordSpan_of_eigenvector}
@@ -977,6 +1013,8 @@ matrices, and let $\E_K$ be its Kraus map.
 \end{theorem}
 
 \begin{proof}\leanok
+    \uses{thm:kraus_cumulative_eigenvector_spreading,
+        lem:kraus_eigenvector_padding}
     Eventual fullness gives a level at which the cumulative matrix span is
     all of $\MN{D}$. The cumulative vector spaces therefore reach $\C^D$ by
     level $D-1$. The eigenvector relation then pads shorter words to length

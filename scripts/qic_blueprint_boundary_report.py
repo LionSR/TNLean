@@ -152,10 +152,13 @@ def blueprint_environments(blueprint_src: Path) -> list[BlueprintEnvironment]:
                     f"unterminated proof after {rel}:{statement_end_line}"
                 )
 
+            statement_body = "\n".join(
+                source_lines[start_line - 1 : statement_end_line]
+            )
             body = "\n".join(source_lines[start_line - 1 : item_end_line])
             labels = tuple(LABEL_RE.findall(body))
             declarations: list[str] = []
-            for payload in LEAN_RE.findall(body):
+            for payload in LEAN_RE.findall(statement_body):
                 declarations.extend(_split_comma_payload(payload))
             uses: list[str] = []
             for payload in USES_RE.findall(body):

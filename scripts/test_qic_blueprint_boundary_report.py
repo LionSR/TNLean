@@ -120,6 +120,49 @@ Proof.
             ],
         )
 
+    def test_proof_stops_at_next_statement_and_deduplicates_dependencies(self) -> None:
+        self.write_blueprint(
+            r"""\begin{theorem}\label{thm:a}
+\uses{thm:x}
+\end{theorem}
+\begin{theorem}\label{thm:b}
+\uses{thm:y}
+\end{theorem}
+\begin{proof}
+\uses{thm:y, thm:z}
+\end{proof}
+"""
+        )
+        records = environment_uses(self.root / "blueprint" / "src")
+        self.assertEqual(records[0]["uses"], ["thm:x"])
+        self.assertEqual(records[1]["uses"], ["thm:y", "thm:z"])
+
+    @patch("qic_blueprint_boundary_report.source_sha", return_value="a" * 40)
+    def test_proof_lean_tag_does_not_change_statement_ownership(self, _source_sha) -> None:
+        self.write_blueprint(
+            r"""\begin{theorem}\label{thm:qic}
+\lean{Kraus.moved}
+\end{theorem}
+\begin{proof}
+\lean{MPSTensor.staying}
+\end{proof}
+"""
+        )
+        report = boundary_report(self.root)
+        self.assertEqual(report["item_counts"], {"qic": 1})
+        self.assertEqual(report["items"][0]["declarations"], ["Kraus.moved"])
+
+    def test_rejects_unterminated_attached_proof(self) -> None:
+        self.write_blueprint(
+            r"""\begin{theorem}\label{thm:a}
+\end{theorem}
+\begin{proof}
+Proof.
+"""
+        )
+        with self.assertRaisesRegex(ValueError, "unterminated proof"):
+            environment_uses(self.root / "blueprint" / "src")
+
     @patch("qic_blueprint_boundary_report.source_sha", return_value="a" * 40)
     def test_manual_rows_and_secondary_label_resolution(self, _source_sha) -> None:
         self.write_blueprint(
