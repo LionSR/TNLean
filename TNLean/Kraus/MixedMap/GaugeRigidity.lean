@@ -347,11 +347,6 @@ theorem mapLM_congruence_fixedPoint_of_gauge_fixedPoint
     (hσ : mapLM (gaugeFamily S A) σ = σ) :
     mapLM A (S * σ * Sᴴ) = S * σ * Sᴴ := by
   let A' : Fin d → Matrix (Fin D) (Fin D) ℂ := gaugeFamily S A
-  have hSh_det : (Sᴴ).det ≠ 0 := by
-    simpa [Matrix.det_conjTranspose] using star_ne_zero.mpr hS.ne_zero
-  have hSh_u : IsUnit (Sᴴ).det := Ne.isUnit hSh_det
-  have hSh_inv_mul : (Sᴴ)⁻¹ * Sᴴ = (1 : Matrix (Fin D) (Fin D) ℂ) :=
-    Matrix.nonsing_inv_mul Sᴴ hSh_u
   have hAiS : ∀ i : Fin d, A i * S = S * A' i := by
     intro i
     simpa [A', gaugeFamily, Matrix.mul_assoc] using
