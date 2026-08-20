@@ -150,3 +150,117 @@ is not the real SVD of the qubit `3 × 3` block discussed in that passage.
 - `TNLean/Algebra/MatrixAux.lean`
 - `TNLean/Analysis/MatrixTraceInequalities.lean`
 - `blueprint/src/chapter/ch16_channel_representations_normal_forms_and_determinant.tex`
+
+## Chapter 3: Positive, but not completely positive
+
+The first five live theorem citations agree with the printed notes. Two later
+citations used numbers from a divergent transcription counter: the printed
+numbers are Proposition 3.6 for automorphisms of the positive semidefinite cone
+and Proposition 3.7 for the Lorentz-cone trace inequalities.
+
+| Former citation | Printed citation | Result title | Archived PDF | Local transcription | Verdict |
+|---|---|---|---:|---:|---|
+| Proposition 3.1 | Proposition 3.1 | Choi--Jamiołkowski criterion for n-positive maps | PDF page 2; printed page 54 | lines 89--98 | Correct |
+| Lemma 3.1 | Lemma 3.1 | Maximal overlap with fixed Schmidt rank | PDF page 3; printed page 55 | lines 119--128 | Correct |
+| Proposition 3.2 | Proposition 3.2 | Spectral criterion for n-positivity | PDF page 4; printed page 56 | lines 153--164 | Correct |
+| Proposition 3.3 | Proposition 3.3 | Entanglement witnesses | PDF page 5; printed page 57 | lines 229--233 | Correct |
+| Proposition 3.4 | Proposition 3.4 | Positive maps and entanglement | PDF page 5; printed page 57 | lines 250--253 | Correct |
+| Proposition 3.8 | Proposition 3.6 | Automorphisms and rank-preserving maps | PDF page 13; printed page 65 | lines 652--660 | Corrected |
+| Proposition 3.9 | Proposition 3.7 | Confining Lorentz cones | PDF page 14; printed page 66 | lines 693--699 | Corrected |
+| Example 3.1 | Example 3.1 | Positive maps and entanglement witnesses | PDF pages 6--8; printed pages 58--60 | lines 307--400 | Correct |
+
+The citation “Example 3.1 (Proposition 3.2)” attached to the reduction-map
+positivity theorem has two distinct roles and is retained. Example 3.1 states
+the reduction-map family, whereas Proposition 3.2 supplies the spectral
+criterion used to establish its positivity threshold.
+
+### Citing files
+
+**Proposition 3.1**
+
+- `TNLean/Channel/NPositivitySpectralCriterion.lean`
+- `TNLean/Channel/SchmidtRank.lean`
+- `TNLean/Channel/Schwarz/ChoiCompression.lean`
+- `TNLean/Channel/Schwarz/TwoPositive.lean`
+- `blueprint/src/chapter/ch25_positive_not_cp_npositivity_infimum.tex`
+- `blueprint/src/chapter/ch25_positive_not_cp_two_positive_schmidt_and_choi.tex`
+- `docs/paper-gaps/wolf_prop_3_2_schmidt_rank_reading.tex`
+- `docs/paper-gaps/wolf_prop_3_2_top_index_scope.tex`
+
+**Lemma 3.1**
+
+- `TNLean/Analysis/KyFanNorm.lean`
+- `TNLean/Channel/MaximalOverlap.lean`
+- `TNLean/Channel/NPositivityChainStrict.lean`
+- `TNLean/Channel/NPositivitySpectralCriterion.lean`
+- `TNLean/Channel/SchmidtRank.lean`
+- `blueprint/src/chapter/ch25_positive_not_cp_two_positive_schmidt_and_choi.tex`
+- `docs/paper-gaps/wolf_lemma_3_1_top_index_scope.tex`
+- `docs/paper-gaps/wolf_t_eta_top_index_scope.tex`
+
+**Proposition 3.2**
+
+- `TNLean/Channel/NPositivityChainStrict.lean`
+- `TNLean/Channel/NPositivitySpectralCriterion.lean`
+- `TNLean/Channel/ReductionCriterion.lean`
+- `blueprint/src/chapter/ch25_positive_not_cp_npositivity_infimum.tex`
+- `blueprint/src/chapter/ch25_positive_not_cp_two_positive_schmidt_and_choi.tex`
+- `docs/paper-gaps/wolf_lemma_3_1_top_index_scope.tex`
+- `docs/paper-gaps/wolf_prop_3_2_schmidt_rank_reading.tex`
+- `docs/paper-gaps/wolf_prop_3_2_top_index_scope.tex`
+
+**Proposition 3.3**
+
+- `TNLean/Algebra/MatrixRankClosed.lean`
+- `TNLean/Channel/EntanglementWitness.lean`
+- `TNLean/Channel/PositiveMapDetection.lean`
+- `TNLean/Channel/SchmidtNumber.lean`
+- `TNLean/Channel/SchmidtNumberCompact.lean`
+- `blueprint/src/appendix/full_only/ch25_schmidt_number_and_witnesses.tex`
+- `blueprint/src/chapter/ch25_positive_not_cp_schmidt_number_and_entanglement.tex`
+
+**Proposition 3.4**
+
+- `TNLean/Channel/PositiveMapDetection.lean`
+- `TNLean/Channel/SchmidtNumber.lean`
+- `TNLean/Channel/SchmidtNumberFactors.lean`
+- `TNLean/Channel/Separable.lean`
+- `blueprint/src/appendix/full_only/ch25_schmidt_number_and_witnesses.tex`
+- `blueprint/src/chapter/ch25_positive_not_cp_schmidt_number_and_entanglement.tex`
+
+**Proposition 3.6**
+
+- `TNLean/Channel/TransferMatrix.lean`
+- `blueprint/src/chapter/ch25_positive_not_cp_positivity_reduction_and_breuer_hall.tex`
+
+**Proposition 3.7**
+
+- `TNLean/Analysis/MatrixTraceInequalities.lean`
+- `blueprint/src/chapter/ch25_positive_not_cp_trace_normalization_and_lorentz_cone.tex`
+- `docs/paper-gaps/wolf_ch3_lorentz_cone_trace_sign.tex`
+- `docs/paper-gaps/wolf_lecture_notes_errata.tex`
+
+**Example 3.1**
+
+- `TNLean/Algebra/HermitianHelpers.lean`
+- `TNLean/Channel/BreuerHallIndecomposable.lean`
+- `TNLean/Channel/BreuerHallMap.lean`
+- `TNLean/Channel/ChoiTypeMap.lean`
+- `TNLean/Channel/PartialTranspose.lean`
+- `TNLean/Channel/PositiveExamples.lean`
+- `TNLean/Channel/ReductionCriterion.lean`
+- `TNLean/Channel/SchmidtNumber.lean`
+- `TNLean/Channel/SchmidtNumberFactors.lean`
+- `TNLean/Channel/Separable.lean`
+- `blueprint/src/chapter/ch25_positive_not_cp_choi_and_decomposable_maps.tex`
+- `blueprint/src/chapter/ch25_positive_not_cp_positivity_reduction_and_breuer_hall.tex`
+- `docs/paper-gaps/README.md`
+- `docs/paper-gaps/breuer_hall_even_dim_restriction.tex`
+- `docs/paper-gaps/wolf_ex3_1_choi_positivity_subcase_scope.tex`
+
+### Reproducibility
+
+The enumeration uses the same directories and exclusions as the Chapter 1
+audit. Each result was checked against
+`Notes/WolfNotePDF/ch03_positive_not_completely.pdf`; the line ranges above
+refer only to the searchable transcription and do not determine numbering.
