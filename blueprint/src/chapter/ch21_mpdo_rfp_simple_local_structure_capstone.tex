@@ -904,6 +904,78 @@ $\mathcal K_i=P_i\mathcal K_i=\mathcal K_iP_i$.
 This is the calculation in
 \cite[Appendix~C.2, lines~1745--1751]{Cirac2016MPDO_arXiv}.
 
+% This node records the algebraic assertions tracked in #6082. The MPDO, SAL,
+% and complete standing-hypothesis surface remain the separate task #6083.
+% The IsHorizontalCF conclusion uses the normalized BNT-refined notion; its
+% scope relative to the literal source grouping is documented in
+% docs/paper-gaps/cpgsv17_vertical_cf_grouping.tex.
+\begin{theorem}[Normal BNT representatives, biCF, exact assembly, and
+  nonnilpotence in the Case-II example]
+    \label{thm:mpdo_caseii_absorption_algebraic_data}
+    \lean{MPOTensor.CaseIIAbsorptionCounterexample.basis_isNormalTensor,
+        MPOTensor.CaseIIAbsorptionCounterexample.sectors_isBNTCanonicalForm,
+        MPOTensor.CaseIIAbsorptionCounterexample.sectors_wordTupleSpanTop_one,
+        MPOTensor.CaseIIAbsorptionCounterexample.sectors_hasBiCF,
+        MPOTensor.CaseIIAbsorptionCounterexample.ambient_eq_weighted_basis_blocks,
+        MPOTensor.CaseIIAbsorptionCounterexample.ambient_toMPSTensor_eq_sectors_toTensor,
+        MPOTensor.CaseIIAbsorptionCounterexample.ambient_isHorizontalCF,
+        MPOTensor.CaseIIAbsorptionCounterexample.sectors_basis_doubledPhysTraceTransfer_not_isNilpotent}
+    \leanok
+    \uses{def:nt_cpsv, def:sector_bnt_cf,
+        def:blockwise_product_word_span, rem:word_tuple_span_top,
+        def:horizontal_cf_mpdo,
+        def:mpo_physical_trace_transfer}
+    Let $A_0,A_1$ be the bond-one tensors whose only nonzero doubled-physical
+    entries are
+    \begin{align}
+        A_0^{00}=A_0^{11}&=\frac1{\sqrt2}, \notag\\
+        A_1^{22}&=1. \notag
+    \end{align}
+    With $(\mu_0,\mu_1)=(1/\sqrt2,1)$, they are normal and form a normalized
+    BNT canonical decomposition. Their simultaneous word-tuple span is the
+    full two-block direct sum already at length one, so the representative
+    family is in biCF. The ambient tensor is
+    \begin{align}
+        M^{ab}&=\operatorname{diag}
+            \bigl(\mu_0A_0^{ab},\mu_1A_1^{ab}\bigr), \notag
+    \end{align}
+    both entrywise and as a doubled-index MPS tensor, and is in normalized
+    BNT-refined horizontal form. Moreover, the doubled physical-trace
+    transfer of neither representative is nilpotent.
+
+    Each representative occurs in exactly one copy. Thus independence of the
+    weight from the copy label is vacuous within each representative and does
+    not compare the two representatives or their displayed weights.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    The two ordinary transfer maps satisfy
+    \begin{align}
+        \mathcal E_{A_0}=\mathcal E_{A_1}
+        &=\operatorname{id}_{\mathbb C}. \notag
+    \end{align}
+    Their disjoint physical supports exclude equivalence by a virtual gauge
+    and a phase. Write $\mathbf A(i)=(A_0^i,A_1^i)$. For every
+    $Y=(Y_0,Y_1)\in\mathbb C\oplus\mathbb C$, the two letters $0$ and $8$
+    give
+    \begin{align}
+        Y&=\frac{Y_0}{1/\sqrt2}\,\mathbf A(0)
+          +Y_1\,\mathbf A(8), \notag
+    \end{align}
+    which proves the simultaneous one-letter span. Direct evaluation gives
+    \begin{align}
+        M^{ab}&=\operatorname{diag}
+            \bigl((1/\sqrt2)A_0^{ab},A_1^{ab}\bigr), \notag
+    \end{align}
+    and hence the identity block gauge. Finally,
+    \begin{align}
+        \mathcal T_{\mathrm{phys}}(A_0)&=\frac2{\sqrt2}, \notag\\
+        \mathcal T_{\mathrm{phys}}(A_1)&=1, \notag
+    \end{align}
+    so neither physical-trace transfer is nilpotent.
+\end{proof}
+
 % The declaration below isolates the scalar-normalization obstruction. It does
 % not assert all standing hypotheses of Theorem 4.9 and therefore does not
 % refute that theorem.
