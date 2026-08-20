@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.MPDO.InverseMapActiveSectorZCL
+import TNLean.MPS.MPDO.NeighboringPreparation
 
 /-!
 # Virtual spanning does not remove the active-sector nilpotent remainder
@@ -29,10 +30,18 @@ family satisfies the strong area law mathematically.  The companion
 below with one selected by an explicit Hayashi decomposition, normalized tail,
 and inverse map.
 
+The same tensor also has an explicit one-sector factorization with a positive,
+trace-one neighboring operator.  Thus the selected four-sector factorization is
+nonminimal.  This observation concerns only the displayed tensor and does not
+settle the general absorbed-representative assertion documented in
+`docs/paper-gaps/cpgsv17_pf_rank_one.tex`.
+
 ## Main result
 
 * `virtual_spanning_does_not_force_rectangular_remainder_zero`: the combined
   counterexample to the proposed rectangular-vanishing argument.
+* `exists_oneSector_neighboringTraceFactorization`: the explicit one-sector
+  factorization with positive neighboring operator and normalized trace.
 
 ## Reference
 
@@ -200,6 +209,208 @@ noncomputable def factorization : PhysicalSectorFactorization tensor where
           ⟨k, (0, 0)⟩ ⟨h, (0, 0)⟩
       rw [Matrix.blockDiagonal'_apply_ne _ _ _ hkh]
       simp [tensor, hkh]
+
+/-- The four physical basis vectors, indexed by a parity coordinate and a
+quotient coordinate, form one sector with two two-dimensional factors.
+
+Derived from the physical-sector identity in arXiv:1606.00608, Appendix C.2,
+equation `AppUkU=rl`, lines 1381--1388. -/
+noncomputable def oneSectorEquiv :
+    Fin 4 ≃ Σ _k : Fin 1, Fin 2 × Fin 2 where
+  toFun k :=
+    ⟨0, Prod.swap ((finProdFinEquiv (m := 2) (n := 2)).symm k)⟩
+  invFun q := finProdFinEquiv (Prod.swap q.2)
+  left_inv k := by
+    simp
+  right_inv := by
+    rintro ⟨k, x⟩
+    apply Sigma.ext (Subsingleton.elim _ _)
+    simp
+
+/-- The Pauli \(Z\) eigenvalue attached to a binary coordinate in the
+project-derived one-sector factorization below.
+
+Derived from the physical-sector identity in arXiv:1606.00608, Appendix C.2,
+equation `AppUkU=rl`, lines 1381--1388. -/
+noncomputable def oneSectorSign (i : Fin 2) : ℂ :=
+  if i = 0 then 1 else -1
+
+/-- The left factors \((\frac14 I,Z)\) in the one-sector decomposition.
+
+Derived from the physical-sector identity in arXiv:1606.00608, Appendix C.2,
+equation `AppUkU=rl`, lines 1381--1388. -/
+noncomputable def oneSectorLeftTensor (beta : Fin 2) :
+    Matrix (Fin 2) (Fin 2) ℂ :=
+  Matrix.diagonal fun i ↦ if beta = 0 then 1 / 4 else oneSectorSign i
+
+/-- The right factors \((I,\frac18 Z)\) in the one-sector decomposition.
+
+Derived from the physical-sector identity in arXiv:1606.00608, Appendix C.2,
+equation `AppUkU=rl`, lines 1381--1388. -/
+noncomputable def oneSectorRightTensor (alpha : Fin 2) :
+    Matrix (Fin 2) (Fin 2) ℂ :=
+  Matrix.diagonal fun i ↦ if alpha = 0 then 1 else (1 / 8) * oneSectorSign i
+
+/-- Entries of the left factor in the project-derived one-sector
+factorization are diagonal.
+
+Derived from the physical-sector identity in arXiv:1606.00608, Appendix C.2,
+equation `AppUkU=rl`, lines 1381--1388. -/
+@[simp] lemma oneSectorLeftTensor_apply (beta i j : Fin 2) :
+    oneSectorLeftTensor beta i j =
+      if i = j then (if beta = 0 then 1 / 4 else oneSectorSign i) else 0 := by
+  rw [oneSectorLeftTensor, Matrix.diagonal_apply]
+
+/-- Entries of the right factor in the project-derived one-sector
+factorization are diagonal.
+
+Derived from the physical-sector identity in arXiv:1606.00608, Appendix C.2,
+equation `AppUkU=rl`, lines 1381--1388. -/
+@[simp] lemma oneSectorRightTensor_apply (alpha i j : Fin 2) :
+    oneSectorRightTensor alpha i j =
+      if i = j then (if alpha = 0 then 1 else (1 / 8) * oneSectorSign i) else 0 := by
+  rw [oneSectorRightTensor, Matrix.diagonal_apply]
+
+/-- A one-sector physical factorization of the counterexample tensor.  The
+parity of the physical index controls the left Pauli \(Z\), while division by
+two controls the right Pauli \(Z\).
+
+**Scope restriction (one explicit tensor):** This construction proves only
+that the selected four-sector inverse-map factorization is nonminimal for this
+tensor.  It does not settle the general factorization assertion documented in
+`docs/paper-gaps/cpgsv17_pf_rank_one.tex`.
+
+Derived from the physical-sector identity in arXiv:1606.00608, Appendix C.2,
+equation `AppUkU=rl`, lines 1381--1388. -/
+noncomputable def oneSectorFactorization : PhysicalSectorFactorization tensor where
+  sectorCount := 1
+  leftDim := fun _ ↦ 2
+  rightDim := fun _ ↦ 2
+  leftDim_pos := fun _ ↦ by omega
+  rightDim_pos := fun _ ↦ by omega
+  sectorEquiv := oneSectorEquiv
+  physicalIsometry := 1
+  physicalIsometry_isometry := by simp
+  leftTensor := fun _ ↦ oneSectorLeftTensor
+  rightTensor := fun _ ↦ oneSectorRightTensor
+  factorization := by
+    intro beta alpha
+    ext q r
+    obtain ⟨k, x₁, x₂⟩ := q
+    obtain ⟨h, y₁, y₂⟩ := r
+    fin_cases k
+    fin_cases h
+    fin_cases beta <;> fin_cases alpha <;>
+      fin_cases x₁ <;> fin_cases x₂ <;> fin_cases y₁ <;> fin_cases y₂ <;>
+      norm_num [Matrix.reindex_apply, oneSectorEquiv, physicalSlice, tensor, sectorMatrix,
+        leftPairing, rightPairing, oneSectorLeftTensor, oneSectorRightTensor,
+        oneSectorSign, Matrix.blockDiagonal'_apply_eq, Matrix.kroneckerMap_apply,
+        Matrix.diagonal_apply, finProdFinEquiv]
+
+/-- The sole neighboring operator of the one-sector factorization is diagonal,
+with eigenvalues \(3/8,1/8,1/8,3/8\).
+
+Derived from the neighboring-operator identities in arXiv:1606.00608,
+Appendix C.2, equations `Appetakhetc` and `etarl`, lines 1387--1389 and
+1441--1445. -/
+lemma oneSector_neighboringOperator_eq
+    (k h : Fin oneSectorFactorization.sectorCount) :
+    oneSectorFactorization.neighboringOperator k h =
+      Matrix.diagonal fun x : Fin 2 × Fin 2 ↦
+        if x.1 = x.2 then (3 / 8 : ℂ) else 1 / 8 := by
+  ext x y
+  obtain ⟨x₁, x₂⟩ := x
+  obtain ⟨y₁, y₂⟩ := y
+  fin_cases k
+  fin_cases h
+  change Fin 2 at x₁ x₂ y₁ y₂
+  change (∑ a : Fin 2, oneSectorRightTensor a x₁ y₁ *
+      oneSectorLeftTensor a x₂ y₂) =
+    Matrix.diagonal (fun z : Fin 2 × Fin 2 ↦
+      if z.1 = z.2 then (3 / 8 : ℂ) else 1 / 8) (x₁, x₂) (y₁, y₂)
+  simp only [Fin.sum_univ_two]
+  simp_rw [oneSectorLeftTensor_apply, oneSectorRightTensor_apply]
+  fin_cases x₁ <;> fin_cases x₂ <;> fin_cases y₁ <;> fin_cases y₂ <;>
+    simp [oneSectorSign, Fin.isValue] <;> norm_num
+
+/-- The neighboring operator in the one-sector factorization is positive
+semidefinite.
+
+Derived from the neighboring-operator identities in arXiv:1606.00608,
+Appendix C.2, equations `Appetakhetc` and `etarl`, lines 1387--1389 and
+1441--1445. -/
+lemma oneSector_neighboringOperator_posSemidef
+    (k h : Fin oneSectorFactorization.sectorCount) :
+    (oneSectorFactorization.neighboringOperator k h).PosSemidef := by
+  fin_cases k
+  fin_cases h
+  rw [oneSector_neighboringOperator_eq]
+  apply Matrix.PosSemidef.diagonal
+  intro x
+  change Fin 2 × Fin 2 at x
+  change (0 : ℂ) ≤ if x.1 = x.2 then 3 / 8 else 1 / 8
+  by_cases hx : x.1 = x.2
+  · norm_num [hx, Complex.nonneg_iff]
+  · norm_num [hx, Complex.nonneg_iff]
+
+/-- The neighboring operator in the one-sector factorization has trace one.
+
+Derived from the trace identities in arXiv:1606.00608, Appendix C.2, equations
+`Apptralktrrk`, `AppPsiPhi`, and `etarl`, lines 1389--1403 and 1441--1450. -/
+lemma oneSector_neighboringOperator_trace
+    (k h : Fin oneSectorFactorization.sectorCount) :
+    (oneSectorFactorization.neighboringOperator k h).trace = 1 := by
+  fin_cases k
+  fin_cases h
+  rw [oneSector_neighboringOperator_eq]
+  change (Matrix.diagonal (fun x : Fin 2 × Fin 2 ↦
+    if x.1 = x.2 then (3 / 8 : ℂ) else 1 / 8)).trace = 1
+  rw [Matrix.trace_diagonal, Fintype.sum_prod_type]
+  norm_num [Fin.sum_univ_two]
+
+/-- Positivity and the trace factorization \(1=1\cdot1\) for the one-sector
+physical factorization.
+
+**Scope restriction (one explicit tensor):** This construction proves only
+that the selected four-sector inverse-map factorization is nonminimal for this
+tensor.  It does not settle the general factorization assertion documented in
+`docs/paper-gaps/cpgsv17_pf_rank_one.tex`.
+
+Derived from the neighboring-trace identities in arXiv:1606.00608,
+Appendix C.2, lines 1389--1403. -/
+noncomputable def oneSectorNeighboringTraceFactorization :
+    PhysicalSectorFactorization.NeighboringTraceFactorization
+      oneSectorFactorization where
+  neighboringOperator_pos := oneSector_neighboringOperator_posSemidef
+  a := fun _ ↦ 1
+  b := fun _ ↦ 1
+  trace_neighboringOperator := by
+    intro k h
+    rw [oneSector_neighboringOperator_trace]
+    norm_num
+  sum_mul := by
+    change ∑ _ : Fin 1, (1 : ℝ) * 1 = 1
+    simp
+
+/-- The explicit counterexample tensor admits a one-sector physical
+factorization whose neighboring operator is positive semidefinite and whose
+trace factors with normalized product.
+
+**Scope restriction (one explicit tensor):** This theorem proves only that the
+selected four-sector inverse-map factorization is nonminimal for this tensor.
+It neither supplies a coarsening result for arbitrary physical-sector
+factorizations nor settles the general assertion documented in
+`docs/paper-gaps/cpgsv17_pf_rank_one.tex`.
+
+Derived from the physical-sector and neighboring-trace identities in
+arXiv:1606.00608, Appendix C.2, equations `AppUkU=rl` and `etarl`, lines
+1381--1403 and 1441--1445. -/
+theorem exists_oneSector_neighboringTraceFactorization :
+    ∃ F : PhysicalSectorFactorization tensor,
+      F.sectorCount = 1 ∧
+        Nonempty (PhysicalSectorFactorization.NeighboringTraceFactorization F) :=
+  ⟨oneSectorFactorization, by change (1 : ℕ) = 1; rfl,
+    ⟨oneSectorNeighboringTraceFactorization⟩⟩
 
 /-- The normalized, strictly positive weight of each sector. -/
 noncomputable def p : Fin 4 → ℝ := fun _ => 1 / 4

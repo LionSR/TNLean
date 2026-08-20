@@ -109,9 +109,11 @@ For MPDO renormalization fixed points:
   (ii)$\Rightarrow$(v) route.
 - `cpgsv17_pf_rank_one.tex` records the completed normal Case-I rank-one
   theorem, the false absorbed-normality route in Case II, the exact
-  repeated-copy counterexample to (iv)$\Rightarrow$(v), and the remaining
-  all-sector factorization and projector-controlled assembly needed only after
-  ZCL-derived common-weight absorption in the (ii)-route.
+  repeated-copy counterexample to (iv)$\Rightarrow$(v), the nonminimality of
+  the selected four-sector inverse-map factorization, and the three remaining
+  questions after ZCL-derived common-weight absorption: the printed
+  per-representative factorization, a possible direct blocked-channel
+  construction, and the later outer-sector combination.
 - `cpsv16_gsnnch_sector_decomposition.tex` records that
   `MPOTensor.GSNNCHData` retains the source orthogonal sectors and natural
   multiplicities. Positive commuting products on supplied orthogonal sectors

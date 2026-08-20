@@ -436,6 +436,7 @@
       physTraceTransfer_tensor}
     \lean{MPOTensor.ActiveSectorSpanningCounterexample.%
       reindex_activeSectorTraceMatrix}
+    \lean{MPOTensor.ActiveSectorSpanningCounterexample.factorization}
     \leanok
     \uses{def:mpdo_physical_sector_factorization,
       def:mpdo_active_sector_trace_matrix}
@@ -511,6 +512,64 @@
     The $(0,1)$ entry of $(QL)^2$ is $1/4$, while the corresponding entry of
     $QL$ is $1/8$. Hence $QL$ is not idempotent, and associativity gives
     $Q(1-LQ)L=QL-(QL)^2\ne0$.
+\end{proof}
+
+% This theorem concerns only the explicit witness above.  It proves that its
+% selected four-sector inverse-map factorization is nonminimal; it does not
+% settle the general absorbed-representative assertion tracked in #6775.
+\begin{theorem}[A one-sector factorization of the four-sector witness]
+    \label{thm:mpdo_active_trace_witness_one_sector_factorization}
+    \lean{MPOTensor.ActiveSectorSpanningCounterexample.oneSectorEquiv,
+      MPOTensor.ActiveSectorSpanningCounterexample.oneSectorSign,
+      MPOTensor.ActiveSectorSpanningCounterexample.oneSectorLeftTensor,
+      MPOTensor.ActiveSectorSpanningCounterexample.oneSectorRightTensor,
+      MPOTensor.ActiveSectorSpanningCounterexample.oneSectorLeftTensor_apply,
+      MPOTensor.ActiveSectorSpanningCounterexample.oneSectorRightTensor_apply,
+      MPOTensor.ActiveSectorSpanningCounterexample.oneSectorFactorization,
+      MPOTensor.ActiveSectorSpanningCounterexample.%
+        oneSector_neighboringOperator_eq,
+      MPOTensor.ActiveSectorSpanningCounterexample.%
+        oneSector_neighboringOperator_posSemidef,
+      MPOTensor.ActiveSectorSpanningCounterexample.%
+        oneSector_neighboringOperator_trace,
+      MPOTensor.ActiveSectorSpanningCounterexample.%
+        oneSectorNeighboringTraceFactorization,
+      MPOTensor.ActiveSectorSpanningCounterexample.%
+        exists_oneSector_neighboringTraceFactorization}
+    \leanok
+    \uses{def:mpdo_physical_sector_factorization,
+      def:mpdo_neighboring_trace_factorization,
+      thm:mpdo_virtual_spanning_active_trace_counterexample,
+      thm:mpdo_inverse_map_nonzero_rectangular_remainder}
+    The tensor in
+    Theorem~\ref{thm:mpdo_virtual_spanning_active_trace_counterexample}
+    also admits a physical-sector factorization with one sector.  Write each
+    physical label as a pair $(x,y)\in\{0,1\}^2$ and put
+    $Z=\operatorname{diag}(1,-1)$.  The left and right factors are
+    \begin{align}
+        l_0&=\frac14 I, &l_1&=Z, \notag\\
+        r_0&=I, &r_1&=\frac18 Z. \notag
+    \end{align}
+    Its sole neighboring operator is
+    \begin{align}
+        \eta
+        &=I\otimes\frac14 I+\frac18 Z\otimes Z
+          =\operatorname{diag}\left(\frac38,\frac18,\frac18,\frac38\right).
+        \notag
+    \end{align}
+    In particular, $\eta$ is positive semidefinite and $\tr(\eta)=1$.
+    Taking $a=b=1$ gives the normalized rank-one trace factorization.  Thus
+    the four sectors selected by the inverse-map construction are nonminimal;
+    their non-rank-one trace matrix is not an obstruction to the existence of
+    another physical-sector factorization for this tensor.
+\end{theorem}
+
+\begin{proof}\leanok
+    Reindex the four physical basis vectors by parity and quotient.  The
+    diagonal entries of the tensor then factor as
+    $(l_\beta)_{x,x}(r_\alpha)_{y,y}$, and all off-diagonal entries vanish.
+    Contracting the common virtual label gives the displayed expression for
+    $\eta$.  Its four diagonal entries prove positivity and trace one.
 \end{proof}
 
 % Project derivation preparing the Lemma C.5 route of the eta-local
