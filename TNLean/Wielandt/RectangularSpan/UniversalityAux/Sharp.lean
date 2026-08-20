@@ -7,10 +7,10 @@ import TNLean.Kraus.Wielandt.RectangularSpan.UniversalityAux.Sharp
 import TNLean.Wielandt.RectangularSpan.UniversalityAux.Basic
 
 /-!
-# Sharp rectangular-span universality compatibility names
+# Sharp rectangular-span bounds for matrix product tensors
 
-The sharp nilpotent-index statements hold for arbitrary finite matrix families.
-This module retains their established names for matrix product tensors.
+The sharp nilpotent-index estimates for arbitrary Kraus families imply the corresponding
+rectangular-span bounds for matrix product tensors.
 -/
 
 open scoped Matrix

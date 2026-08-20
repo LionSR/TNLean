@@ -160,7 +160,6 @@ theorem sharp_bound_le (K : Fin d → Matrix (Fin D) (Fin D) ℂ)
   have hrpos : 0 < r :=
     nilpIndex_pos_of_not_isUnit f hNotInv
   have hsle : s ≤ D := by omega
-  have hDpos : 0 < D := by omega
   have hdTilde : dTilde = D - s := by omega
   rw [hdTilde]
   -- Goal: D * (D - s) + r ≤ D^2 - D + 1
