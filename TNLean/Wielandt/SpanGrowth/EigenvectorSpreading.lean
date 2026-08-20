@@ -227,7 +227,7 @@ theorem cumulativeVectorSpan_eq_top_of_cumulativeSpan_eq_top
   -- f maps cumulativeSpan into cumulativeVectorSpan
   have himage : Submodule.map f (cumulativeSpan A N) ≤
       cumulativeVectorSpan A φ N := by
-    rw [cumulativeSpan, Submodule.map_span]
+    rw [cumulativeSpan, Kraus.cumulativeSpan, Submodule.map_span]
     apply Submodule.span_mono
     rintro v ⟨M, ⟨w, hw, rfl⟩, rfl⟩
     exact ⟨w, hw, rfl⟩
