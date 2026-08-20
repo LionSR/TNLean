@@ -187,6 +187,66 @@
     unchanged.
 \end{proof}
 
+% Scope: the inverse-map-selected four-sector factorization of the explicit
+% witness.  Pair-preserving maps for that factorization are excluded, but the
+% coarsened channel pair exists.  This does not close #6793.
+% Taxonomy: proof-path drift.
+\begin{theorem}[Pair-preserving obstruction for the four-sector witness]
+    \label{thm:mpdo_four_sector_pair_preserving_obstruction}
+    \lean{MPOTensor.ActiveSectorSpanningCounterexample.%
+      factorization_neighboringTraceMatrix}
+    \lean{MPOTensor.ActiveSectorSpanningCounterexample.%
+      factorization_neighboringTraceMatrix_pow_two_eq_pow_three}
+    \lean{MPOTensor.ActiveSectorSpanningCounterexample.%
+      factorization_neighboringTraceMatrix_ne_pow_three}
+    \lean{MPOTensor.ActiveSectorSpanningCounterexample.%
+      not_exists_pairwise_fourSite_coarsening}
+    \lean{MPOTensor.ActiveSectorSpanningCounterexample.%
+      not_exists_pairwise_fourSite_refinement}
+    \lean{MPOTensor.ActiveSectorSpanningCounterexample.%
+      blockTwo_tensor_isRFPViaTS_and_pairwise_trace_obstruction}
+    \leanok
+    \uses{thm:mpdo_pair_preserving_trace_obstruction,
+      thm:mpdo_four_sector_witness_rfp,
+      thm:mpdo_inverse_map_nonzero_rectangular_remainder,
+      thm:mpdo_virtual_spanning_active_trace_counterexample}
+    For the inverse-map-selected four-sector factorization of the tensor in
+    Theorem~\ref{thm:mpdo_four_sector_witness_rfp}, let
+    $C_{k,h}=\tr(\eta_{k,h})$.  Then
+    \begin{align}
+        C^2&=C^3,
+        \notag\\
+        C&\ne C^3.
+        \notag
+    \end{align}
+    Consequently there is neither a trace-preserving family which sends each
+    four-site neighboring operator $\Theta_{k,h}$ to $\eta_{k,h}$ while
+    retaining $(k,h)$, nor such a family in the reverse direction.
+
+    Nevertheless, the two-site blocking of this tensor has
+    trace-preserving completely positive renormalization maps.  These maps
+    are obtained from the label-coarsening rule
+    \begin{align}
+        f(i,j)
+        &=(i\bmod2)+2\left\lfloor\frac j2\right\rfloor,
+        \notag
+    \end{align}
+    so they mix or coarsen the selected labels rather than retaining every
+    fixed outer-sector pair.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    For the selected factorization, $C=QL$.  Since $LQ$ is idempotent,
+    associativity gives $C^2=C^3$.  On the other hand, the $(0,1)$ entry of
+    $C$ is $1/8$, whereas that of $C^2$ is $1/4$.  If $C=C^3$, then
+    $C^2=C^3$ would give $C=C^2$, a contradiction.
+    Theorem~\ref{thm:mpdo_pair_preserving_trace_obstruction} therefore
+    excludes both pair-preserving families.  The explicit Kraus maps in
+    Theorem~\ref{thm:mpdo_four_sector_witness_rfp}, applied twice and passed
+    to blocked coordinates, give the remaining assertion.
+\end{proof}
+
 \begin{theorem}[Inverse-map factorization with a nonzero rectangular remainder]
     \label{thm:mpdo_inverse_map_nonzero_rectangular_remainder}
     \lean{MPOTensor.ActiveSectorSpanningCounterexample.normalizedFourSiteTail_tensor}

@@ -572,6 +572,67 @@
     $\eta$.  Its four diagonal entries prove positivity and trace one.
 \end{proof}
 
+% Project-derived from the twice-iterated sector-controlled maps in CPSV16,
+% Appendix C.2; this is not a theorem printed in the source.
+% Taxonomy: conditional helper.
+\begin{theorem}[Pair-preserving trace obstruction]
+    \label{thm:mpdo_pair_preserving_trace_obstruction}
+    \lean{MPOTensor.PhysicalSectorFactorization.FourSiteMiddleIndex}
+    \lean{MPOTensor.PhysicalSectorFactorization.fourSiteNeighboringOperator}
+    \lean{MPOTensor.PhysicalSectorFactorization.neighboringTraceMatrix}
+    \lean{MPOTensor.PhysicalSectorFactorization.neighboringTraceMatrix_apply}
+    \lean{MPOTensor.PhysicalSectorFactorization.%
+      trace_fourSiteNeighboringOperator}
+    \lean{MPOTensor.PhysicalSectorFactorization.%
+      neighboringTraceMatrix_eq_pow_three_of_pairwise_coarsening}
+    \lean{MPOTensor.PhysicalSectorFactorization.%
+      neighboringTraceMatrix_eq_pow_three_of_pairwise_refinement}
+    \leanok
+    \uses{def:mpdo_physical_sector_factorization}
+    Let $\eta_{k,h}$ be the neighboring operators of a physical-sector
+    factorization, and define
+    \begin{align}
+        C_{k,h}
+        &=\tr(\eta_{k,h}),
+        \notag\\
+        \Theta_{k,h}
+        &=\bigoplus_{l,m}
+          \eta_{k,l}\otimes\eta_{l,m}\otimes\eta_{m,h}.
+        \notag
+    \end{align}
+    Then
+    \begin{align}
+        \tr(\Theta_{k,h})
+        &=(C^3)_{k,h}.
+        \notag
+    \end{align}
+    Suppose that, for every fixed pair $(k,h)$, there is either a
+    trace-preserving linear map from the four-site middle algebra to the
+    two-site middle algebra which sends $\Theta_{k,h}$ to $\eta_{k,h}$, or a
+    trace-preserving linear map in the reverse direction which sends
+    $\eta_{k,h}$ to $\Theta_{k,h}$.  If the same direction is chosen for all
+    pairs, then
+    \begin{align}
+        C&=C^3.
+        \notag
+    \end{align}
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Multiplicativity of the trace on tensor products and additivity on direct
+    sums give
+    \begin{align}
+        \tr(\Theta_{k,h})
+        &=\sum_{l,m}C_{k,l}C_{l,m}C_{m,h}
+          =(C^3)_{k,h}.
+        \notag
+    \end{align}
+    Trace preservation identifies this quantity with
+    $\tr(\eta_{k,h})=C_{k,h}$ in either direction.  The entrywise identities
+    give $C=C^3$.
+\end{proof}
+
 % Project derivation preparing the Lemma C.5 route of the eta-local
 % structure note; no CPSV16 statement is claimed.  See
 % docs/paper-gaps/cpgsv17_mpdo_sal_zcl_eta_local_structure.tex.
