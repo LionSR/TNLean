@@ -729,13 +729,13 @@ is summed between the $K_i$ layer and the $K_i^\dagger$ layer:
     \leanok
     \uses{def:channel, thm:kraus_sum_conjTranspose_mul_of_tp}
     Every quantum channel $E : \MN{D} \to \MN{D}$ admits a finite family
-    $K_1,\ldots,K_r \in \MN{D}$ such that, for every $X \in \MN{D}$,
+    $(K_i)_i$ in $\MN{D}$ such that, for every $X \in \MN{D}$,
     \[
-        E(X)=\sum_{i=1}^r K_i X K_i^\dagger,
+        E(X)=\sum_i K_i X K_i^\dagger,
     \]
     and
     \[
-        \sum_{i=1}^r K_i^\dagger K_i=\Id.
+        \sum_i K_i^\dagger K_i=\Id.
     \]
 \end{theorem}
 
