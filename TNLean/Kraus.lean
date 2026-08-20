@@ -17,6 +17,7 @@ import TNLean.Kraus.MixedMap.Gap
 import TNLean.Kraus.MixedMap.GaugeRigidity
 import TNLean.Kraus.MixedMap.SpectralRadius
 import TNLean.Kraus.MultiBlockWord
+import TNLean.Kraus.TracePairing
 import TNLean.Kraus.Wielandt
 import TNLean.Kraus.Word
 import TNLean.Kraus.WordSpan
