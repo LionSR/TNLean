@@ -983,10 +983,14 @@ Its sole neighboring operator is
   I\otimes\tfrac14 I+\tfrac18 Z\otimes Z,
 \]
 which is positive semidefinite and has trace one. Thus the selected inverse-map
-sectors are nonminimal; their non-rank-one trace matrix refutes only that proof
-path. A general coarsening theorem, or a counterexample to the existence of any
-such factorization under the complete absorbed-representative hypotheses,
-remains missing in \ghissue{6775}.
+sectors are nonminimal. This factorization and its normalized trace
+coefficients are formalized in
+\leanid{MPOTensor.ActiveSectorSpanningCounterexample.%
+exists_oneSector_neighboringTraceFactorization}. Their non-rank-one trace
+matrix refutes only the proof path tied to those four selected sectors. A
+general coarsening theorem, or a counterexample to the existence of any such
+factorization under the complete absorbed-representative hypotheses, remains
+missing in \ghissue{6775}.
 
 The same raw tensor is not the injective normal tensor assumed in Case~I, and
 its normal representative loses literal ZCL. It therefore does not refute

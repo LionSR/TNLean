@@ -33,7 +33,8 @@ and inverse map.
 The same tensor also has an explicit one-sector factorization with a positive,
 trace-one neighboring operator.  Thus the selected four-sector factorization is
 nonminimal.  This observation concerns only the displayed tensor and does not
-settle the general assertion in issue #6775.
+settle the general absorbed-representative assertion documented in
+`docs/paper-gaps/cpgsv17_pf_rank_one.tex`.
 
 ## Main result
 
@@ -225,7 +226,11 @@ noncomputable def oneSectorEquiv :
     apply Sigma.ext (Subsingleton.elim _ _)
     simp
 
-/-- The Pauli \(Z\) eigenvalue attached to a binary coordinate. -/
+/-- The Pauli \(Z\) eigenvalue attached to a binary coordinate in the
+project-derived one-sector factorization below.
+
+Source comparison: arXiv:1606.00608, Appendix C.2, equation `AppUkU=rl`, lines
+1381--1388. -/
 noncomputable def oneSectorSign (i : Fin 2) : ℂ :=
   if i = 0 then 1 else -1
 
@@ -243,13 +248,21 @@ noncomputable def oneSectorRightTensor (alpha : Fin 2) :
     Matrix (Fin 2) (Fin 2) ℂ :=
   Matrix.diagonal fun i ↦ if alpha = 0 then 1 else (1 / 8) * oneSectorSign i
 
-/-- Entries of the left factor are diagonal. -/
+/-- Entries of the left factor in the project-derived one-sector
+factorization are diagonal.
+
+Source comparison: arXiv:1606.00608, Appendix C.2, equation `AppUkU=rl`, lines
+1381--1388. -/
 @[simp] lemma oneSectorLeftTensor_apply (beta i j : Fin 2) :
     oneSectorLeftTensor beta i j =
       if i = j then (if beta = 0 then 1 / 4 else oneSectorSign i) else 0 := by
   rw [oneSectorLeftTensor, Matrix.diagonal_apply]
 
-/-- Entries of the right factor are diagonal. -/
+/-- Entries of the right factor in the project-derived one-sector
+factorization are diagonal.
+
+Source comparison: arXiv:1606.00608, Appendix C.2, equation `AppUkU=rl`, lines
+1381--1388. -/
 @[simp] lemma oneSectorRightTensor_apply (alpha i j : Fin 2) :
     oneSectorRightTensor alpha i j =
       if i = j then (if alpha = 0 then 1 else (1 / 8) * oneSectorSign i) else 0 := by
@@ -261,7 +274,7 @@ two controls the right Pauli \(Z\).
 
 This proves only that the selected four-sector inverse-map factorization is
 nonminimal for this tensor.  It does not settle the general factorization
-assertion in issue #6775.
+assertion documented in `docs/paper-gaps/cpgsv17_pf_rank_one.tex`.
 
 Source: arXiv:1606.00608, Appendix C.2, equation `AppUkU=rl`, lines 1381--1388. -/
 noncomputable def oneSectorFactorization : PhysicalSectorFactorization tensor where
@@ -353,7 +366,7 @@ physical factorization.
 
 This proves only that the selected four-sector inverse-map factorization is
 nonminimal for this tensor.  It does not settle the general factorization
-assertion in issue #6775.
+assertion documented in `docs/paper-gaps/cpgsv17_pf_rank_one.tex`.
 
 Source: arXiv:1606.00608, Appendix C.2, lines 1389--1403. -/
 noncomputable def oneSectorNeighboringTraceFactorization :
@@ -376,8 +389,8 @@ trace factors with normalized product.
 
 This theorem proves only that the selected four-sector inverse-map
 factorization is nonminimal for this tensor.  It neither supplies a coarsening
-theorem for arbitrary physical-sector factorizations nor settles the general
-assertion in issue #6775.
+result for arbitrary physical-sector factorizations nor settles the general
+assertion documented in `docs/paper-gaps/cpgsv17_pf_rank_one.tex`.
 
 Source: arXiv:1606.00608, Appendix C.2, equations `AppUkU=rl` and `etarl`, lines
 1381--1403 and 1441--1445. -/
