@@ -166,6 +166,33 @@ structure coefficients. For a fixed tensor, a theorem may also quantify over
 every normalized BNT witness rather than rely on one chosen presentation; the
 dimer obstruction below has precisely this form.
 
+\section{The parity tensor in Example 4.12}
+
+Example~4.12 prints the two physical letters $M^{00}=I$ and
+$M^{11}=\sigma_z$. Its physical-trace transfer satisfies
+\begin{align}
+    \mathcal T_M^2&=2\mathcal T_M,
+\end{align}
+so the two trace-preserving channel equations cannot hold for the printed
+representative. The density-normalized representative
+\begin{align}
+    \widehat M&=\tfrac12 M
+\end{align}
+instead has idempotent physical-trace transfer. Explicit parity
+coarse-graining and refinement channels prove
+\leanid{MPOTensor.CPSVExample412NormalizedRFP.Mhat_isRFPViaTS} without any
+additional hypothesis; the complete calculation is recorded in
+\path{docs/paper-gaps/cpsv16_example_4_12_normalization.tex}.
+
+The doubled-index MPS has two bond-one sectors, with physical vectors
+$(1,0,0,1)$ and $(1,0,0,-1)$. Each vector has squared norm $2$, so its normal
+representative is obtained by division by $\sqrt2$. Consequently the two
+horizontal normal-block weights of $\widehat M$ are both $1/\sqrt2$. Thus the
+scale selected by the channel equations does not supply the global unit-weight
+witness in \eqref{eq:unit-weight}. The formal theorem deliberately records the
+bare channel predicate and does not claim that $\widehat M$ satisfies every
+standing canonical-form convention in Definition~4.1.
+
 \section{The displayed dimer representative}
 
 The project tensor $R$ gives a concrete instance of this tension. Its
