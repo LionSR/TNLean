@@ -516,11 +516,14 @@ or 11 occurs in the directories examined here.
 
 The Chapter 4 search finds many unqualified numerical near matches. Inspection
 shows that they refer to other sources, principally the matrix-product density
-operator paper of Cirac, Pérez-García, Schuch, and Verstraete. The entropy
-development and its blueprint entry cite Riazanov and Vyalyi,
-arXiv:1704.06507, Theorem 4.1. The remaining matches refer to papers by De las
-Cuevas and coauthors or to internal blueprint labels. None is attributed to
-Wolf, and none uses the Wolf bibliography key.
+operator paper of Cirac, Pérez-García, Schuch, and Verstraete. The files
+`TNLean/MPS/MPDO/DiagonalCutRank.lean` and
+`TNLean/MPS/MPDO/DiagonalFiniteChain.lean`, the corresponding blueprint entry
+in `ch21_mpdo_rfp_area_law_diagonal_and_pure_state_bounds.tex`, and the note
+`docs/paper-gaps/cpgsv17_mpdo_mutual_information_bound.tex` cite Riazanov and
+Vyalyi, arXiv:1704.06507, Theorem 4.1. All other matches refer to papers by De
+las Cuevas and coauthors or to internal blueprint labels. None is attributed
+to Wolf, and none uses the Wolf bibliography key.
 
 For Chapters 9--11, the general theorem-like-number search itself has no live
 match. Searches with the word `Wolf` on either side of the number, and searches
