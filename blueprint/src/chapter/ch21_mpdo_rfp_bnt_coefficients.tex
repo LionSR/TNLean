@@ -1584,6 +1584,155 @@
     The first family is constant.  The last two displayed values are unequal.
 \end{proof}
 
+% Positive counterpart of the preceding counterexample: the comparison of
+% vertical BNT coefficients holds once an explicit transport is assumed,
+% with the normalization scale kept explicit.
+\begin{definition}[Explicit vertical transport between labelled operator families]%
+    \label{def:mpdo_bnt_vertical_transport}
+    \lean{MPOTensor.BNTVerticalTransport}
+    \lean{MPOTensor.BNTVerticalTransport.transportedCoefficients}
+    \leanok
+    \uses{def:mpdo_bnt_label_operator_family,
+        def:mpdo_bnt_label_coefficient_family}
+    An \emph{explicit vertical transport} between two BNT-label operator
+    families with operators $O_L$ and $O'_L$ consists of a label
+    equivalence $e$, nonzero scalars $s_\alpha$, and, at each length, an
+    isomorphism $\Phi_L$ of the ambient algebras, such that for every
+    label $\alpha$ and every positive length $L$,
+    \begin{align}
+        O'_L(\alpha)&=s_\alpha^L\,\Phi_L\bigl(O_L(e\alpha)\bigr).
+        \notag
+    \end{align}
+    The \emph{transported coefficient family} of a coefficient system
+    $c^{(L)}_{\alpha,\beta,\gamma}$ has coefficients
+    \begin{align}
+        \left(\frac{s_\alpha s_\beta}{s_\gamma}\right)^{L}
+        c^{(L)}_{e\alpha,e\beta,e\gamma}.
+        \notag
+    \end{align}
+    The scalars $s_\alpha$ keep the normalization explicit, in the way the
+    comparison in \cite[Appendix~C.4]{Cirac2016MPDO_arXiv} retains the
+    positive ratio $m_\alpha/n_{\sigma(\alpha)}$ instead of discarding the
+    normalization scale.
+\end{definition}
+
+\begin{theorem}[Transport of the same-length product law]%
+    \label{thm:mpdo_bnt_vertical_transport_product_form}
+    \lean{MPOTensor.BNTVerticalTransport.%
+        hasSameLengthProductForm_transported}
+    \leanok
+    \uses{def:mpdo_bnt_vertical_transport,
+        def:mpdo_bnt_label_same_length_product_form}
+    Let two BNT-label operator families be related by an explicit vertical
+    transport.  If the source family satisfies the same-length product law
+    with coefficients $c^{(L)}_{\alpha,\beta,\gamma}$, then the target
+    family satisfies the same-length product law with the transported
+    coefficients.
+\end{theorem}
+\begin{proof}\leanok
+    Fix a positive length $L$ and target labels $\alpha$ and $\beta$.
+    Substituting the transport relation and using that $\Phi_L$ is linear
+    and multiplicative,
+    \begin{align}
+        O'_L(\alpha)O'_L(\beta)
+        &=(s_\alpha s_\beta)^L\,
+            \Phi_L\bigl(O_L(e\alpha)O_L(e\beta)\bigr)
+        \notag\\
+        &=(s_\alpha s_\beta)^L
+            \sum_\delta c^{(L)}_{e\alpha,e\beta,\delta}\,
+            \Phi_L\bigl(O_L(\delta)\bigr).
+        \notag
+    \end{align}
+    Reindexing the sum by $\delta=e\gamma$ and inverting the transport
+    relation, $\Phi_L\bigl(O_L(e\gamma)\bigr)=s_\gamma^{-L}O'_L(\gamma)$,
+    so the product equals
+    \begin{align}
+        \sum_\gamma
+        \left(\frac{s_\alpha s_\beta}{s_\gamma}\right)^{L}
+        c^{(L)}_{e\alpha,e\beta,e\gamma}\,O'_L(\gamma).
+        \notag
+    \end{align}
+\end{proof}
+
+\begin{theorem}[Scale covariance of vertical BNT coefficients under explicit transport]%
+    \label{thm:mpdo_bnt_vertical_coefficient_covariance}
+    \lean{MPOTensor.BNTVerticalTransport.%
+        coeff_covariance_of_linearIndependentAt}
+    \lean{MPOTensor.BNTAlgebraTensorClause.%
+        coeff_covariance_of_verticalTransport}
+    \leanok
+    \uses{def:mpdo_bnt_vertical_transport,
+        thm:mpdo_bnt_vertical_transport_product_form,
+        thm:mpdo_bnt_label_coeff_unique,
+        def:mpdo_bnt_label_linear_independent,
+        def:mpdo_bnt_algebra_tensor_clause,
+        thm:mpdo_vertical_coefficients_not_presentation_invariant}
+    Let two BNT-label operator families satisfying the same-length product
+    law, with coefficients $c^{(L)}_{\alpha,\beta,\gamma}$ and
+    ${c'}^{(L)}_{\alpha,\beta,\gamma}$, be related by an explicit vertical
+    transport.  At every positive length $L$ at which the target operators
+    are linearly independent,
+    \begin{align}
+        {c'}^{(L)}_{\alpha,\beta,\gamma}
+        &=\left(\frac{s_\alpha s_\beta}{s_\gamma}\right)^{L}
+            c^{(L)}_{e\alpha,e\beta,e\gamma}.
+        \notag
+    \end{align}
+    The same law holds for the coefficient families of two tensor-attached
+    vertical BNT algebra clauses whose operator families are related by an
+    explicit vertical transport.  This is the positive counterpart of
+    Theorem~\ref{thm:mpdo_vertical_coefficients_not_presentation_invariant}:
+    there the two one-label presentations have scales $1$ and $4/5$, no
+    transport with compatible scales exists, and the coefficients differ,
+    while under an explicit transport the comparison holds with the scale
+    ratio retained.
+\end{theorem}
+\begin{proof}\leanok
+    By Theorem~\ref{thm:mpdo_bnt_vertical_transport_product_form}, the
+    target family satisfies the same-length product law with the
+    transported coefficients as well as with
+    ${c'}^{(L)}_{\alpha,\beta,\gamma}$.  Linear independence of the target
+    operators at length $L$ makes the coefficients of the product expansion
+    unique, by Theorem~\ref{thm:mpdo_bnt_label_coeff_unique}, so the two
+    coefficient systems agree at length $L$.
+\end{proof}
+
+\begin{theorem}[Coefficient equality under compatible normalization scales]%
+    \label{thm:mpdo_bnt_vertical_coefficient_equality}
+    \lean{MPOTensor.BNTVerticalTransport.%
+        coeff_eq_of_linearIndependentAt_of_scale_compatible}
+    \lean{MPOTensor.BNTAlgebraTensorClause.%
+        coeff_eq_of_verticalTransport_of_scale_compatible}
+    \leanok
+    \uses{thm:mpdo_bnt_vertical_coefficient_covariance,
+        def:mpdo_bnt_vertical_transport,
+        def:mpdo_bnt_algebra_tensor_clause}
+    In the setting of
+    Theorem~\ref{thm:mpdo_bnt_vertical_coefficient_covariance}, suppose in
+    addition that the normalization scales satisfy
+    \begin{align}
+        s_\alpha s_\beta&=s_\gamma
+        \notag
+    \end{align}
+    on every triple of labels with
+    $c^{(L)}_{e\alpha,e\beta,e\gamma}\neq 0$.  Then at every positive
+    length $L$ at which the target operators are linearly independent, the
+    coefficients agree after relabelling:
+    \begin{align}
+        {c'}^{(L)}_{\alpha,\beta,\gamma}
+        &=c^{(L)}_{e\alpha,e\beta,e\gamma}.
+        \notag
+    \end{align}
+    The same equality holds for the coefficient families of two
+    tensor-attached vertical BNT algebra clauses.
+\end{theorem}
+\begin{proof}\leanok
+    If $c^{(L)}_{e\alpha,e\beta,e\gamma}=0$, both sides of the covariance
+    law vanish.  Otherwise the compatibility condition makes the scale
+    ratio equal to one, and the covariance law reduces to the displayed
+    equality.
+\end{proof}
+
 \begin{theorem}[Associativity constraint on the structure coefficients]%
     \label{thm:mpdo_bnt_label_coeff_associativity}
     \lean{MPOTensor.BNTLabelOperatorFamily.HasSameLengthProductForm.%

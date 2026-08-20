@@ -511,6 +511,23 @@ canonical presentations, and extending
 separate statements and are not supplied by bare horizontal periodic
 equality.
 
+The transport hypothesis
+\eqref{eq:vertical-coefficient-explicit-transport}, the covariance law
+\eqref{eq:vertical-coefficient-covariance} at every positive length where
+the target operators are linearly independent, and the exact-equality
+corollary under the normalization condition $s_\alpha s_\beta=s_\gamma$ on
+every triple with nonvanishing source coefficient are formalized in
+\path{TNLean/MPS/MPDO/VerticalTransportCoefficientCovariance.lean}: the
+hypothesis is
+\leanid{MPOTensor.BNTVerticalTransport}, the covariance law is
+\leanid{MPOTensor.BNTVerticalTransport.coeff_covariance_of_linearIndependentAt},
+and the corollary is
+\leanid{MPOTensor.BNTVerticalTransport.%
+coeff_eq_of_linearIndependentAt_of_scale_compatible},
+each with a version for two tensor-attached vertical BNT algebra clauses.
+Deriving the transport from two literal horizontal canonical presentations
+and the every-positive-length extension remain unformalized.
+
 \section{Formalization boundary}
 
 \textbf{Verdict: three distinct formal predicates.} The documented active
