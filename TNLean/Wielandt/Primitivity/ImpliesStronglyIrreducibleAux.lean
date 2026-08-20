@@ -82,12 +82,8 @@ theorem transferMap_pow_smul_eigenvector
     (hEig : transferMap (d := d) (D := D) A X = μ • X)
     (n : ℕ) :
     ((transferMap (d := d) (D := D) A) ^ n) X = μ ^ n • X := by
-  induction n with
-  | zero => simp
-  | succ n ih =>
-    -- E^(n+1) = E^n * E, so E^(n+1)(X) = E^n(E(X)) = E^n(μ • X) = μ • E^n(X) = μ^(n+1) • X
-    rw [pow_succ, Module.End.mul_apply, hEig, map_smul, ih, smul_smul]
-    congr 1; ring
+  exact Module.End.pow_apply_of_mem_eigenspace
+    (Module.End.mem_eigenspace_iff.mpr hEig) n
 
 /-- If `E(X) = μ • X` and `μ ^ p = 1`, then `E^p(X) = X`. -/
 theorem transferMap_pow_eigenvector_of_root_of_unity

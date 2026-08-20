@@ -260,6 +260,130 @@ matrices, and let $\E_K$ be its Kraus map.
     $\operatorname{ran}P$, hence $P=\Id$.
 \end{proof}
 
+\begin{lemma}[Conjugate eigenmatrix of a positive map]
+    \label{lem:positive-map-conj-eigenvector}
+    \lean{Kraus.conjTranspose_eigenvector}
+    \leanok
+    \uses{def:positive_map}
+    Let $E:\MN{D}\to\MN{D}$ be positive. If $E(X)=\mu X$, then
+    $E(X^\dagger)=\overline\mu X^\dagger$.
+\end{lemma}
+
+\begin{proof}\leanok
+    Positivity implies that $E$ preserves adjoints. Taking the adjoint of
+    $E(X)=\mu X$ gives the result.
+\end{proof}
+
+\begin{lemma}[Finite-order eigenmatrix is power-fixed]
+    \label{lem:root-eigenvector-power-fixed}
+    \lean{Kraus.pow_eigenvector_of_root}
+    \leanok
+    Let $E:\MN{D}\to\MN{D}$ be linear. If $E(X)=\mu X$ and $\mu^p=1$, then
+    $E^p(X)=X$.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{lem:pow-on-eigenspace}
+    Lemma~\ref{lem:pow-on-eigenspace} gives $E^p(X)=\mu^pX=X$.
+\end{proof}
+
+\begin{lemma}[Conjugate finite-order eigenmatrix is power-fixed]
+    \label{lem:positive-map-conj-power-fixed}
+    \lean{Kraus.pow_conjTranspose_eigenvector_of_root}
+    \leanok
+    \uses{def:positive_map}
+    Let $E:\MN{D}\to\MN{D}$ be positive. If $E(X)=\mu X$ and $\mu^p=1$,
+    then $E^p(X^\dagger)=X^\dagger$.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{lem:positive-map-conj-eigenvector,
+        lem:root-eigenvector-power-fixed}
+    The conjugate eigenvalue is $\overline\mu$, and
+    $(\overline\mu)^p=\overline{\mu^p}=1$.
+\end{proof}
+
+\begin{lemma}[Trace of a non-fixed eigenmatrix]
+    \label{lem:trace-preserving-eigenvector-trace-zero}
+    \lean{Kraus.trace_eigenvector_eq_zero}
+    \leanok
+    \uses{def:trace_preserving}
+    Let $E:\MN{D}\to\MN{D}$ preserve the trace. If $E(X)=\mu X$ and
+    $\mu\neq1$, then $\tr(X)=0$.
+\end{lemma}
+
+\begin{proof}\leanok
+    Trace preservation gives $\mu\tr(X)=\tr(E(X))=\tr(X)$. Since
+    $\mu-1\neq0$, the trace vanishes.
+\end{proof}
+
+\begin{lemma}[Hermitian power-fixed point from a finite-order eigenmatrix]
+    \label{lem:kraus-hermitian-power-fixed-point}
+    \lean{Kraus.exists_hermitian_ne_zero_trace_zero_pow_fixedPoint}
+    \leanok
+    \uses{def:channel}
+    Let $E$ be a channel, and suppose $E(X)=\mu X$ with $X\neq0$,
+    $\mu\neq1$, and $\mu^p=1$. Then there is a nonzero Hermitian matrix $H$
+    such that $\tr(H)=0$ and $E^p(H)=H$.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{lem:positive-map-conj-power-fixed,
+        lem:trace-preserving-eigenvector-trace-zero}
+    At least one of $X+X^\dagger$ and $i(X^\dagger-X)$ is nonzero. Both are
+    Hermitian, both have trace zero, and each is fixed by $E^p$.
+\end{proof}
+
+\begin{theorem}[Uniqueness of power-fixed positive matrices for a Kraus map]
+    \label{thm:kraus-power-fixed-point-unique-from-spreading}
+    \lean{Kraus.posSemidef_pow_fixedPoint_unique}
+    \leanok
+    \uses{def:kraus_map, def:vector_spread_span}
+    Suppose $H_q(K,\varphi)=\C^D$ for every nonzero $\varphi$. If $p>0$ and
+    $\rho,\sigma$ are nonzero positive-semidefinite fixed points of
+    $\E_K^p$, then $\sigma=c\rho$ for some $c\in\C$.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:kraus_power_fixed_point_posdef_from_spreading,
+        thm:posdef_fixedpoint_proportional}
+    Fixed-length spreading makes every nonzero positive-semidefinite fixed
+    point of $\E_K^p$ positive definite. The critical-scalar argument then
+    gives proportionality.
+\end{proof}
+
+\begin{lemma}[Powers of channels]
+    \label{lem:channel-natural-power}
+    \lean{Kraus.isChannel_pow}
+    \leanok
+    \uses{def:channel}
+    If $E$ is a channel, then $E^p$ is a channel for every $p\geq0$.
+\end{lemma}
+
+\begin{proof}\leanok
+    Complete positivity and trace preservation are both closed under
+    composition and hold for the identity map.
+\end{proof}
+
+\begin{theorem}[Vanishing of Hermitian power-fixed points]
+    \label{thm:kraus-hermitian-power-fixed-point-zero}
+    \lean{Kraus.hermitian_pow_fixedPoint_eq_zero}
+    \leanok
+    \uses{def:kraus_map, def:vector_spread_span}
+    Let $K$ be trace-preserving and suppose
+    $H_q(K,\varphi)=\C^D$ for every nonzero $\varphi$. If $p>0$ and
+    $H=H^\dagger$ satisfies $\tr(H)=0$ and $\E_K^p(H)=H$, then $H=0$.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{lem:channel-natural-power,
+        thm:kraus-power-fixed-point-unique-from-spreading,
+        thm:positive_fixedpoint_decomp}
+    Decompose $H$ as a difference of positive-semidefinite fixed points of the
+    channel $\E_K^p$. Both are proportional to one nonzero fixed point. Their
+    traces and $\tr(H)=0$ force equal coefficients, hence $H=0$.
+\end{proof}
+
 \begin{lemma}[Hermitian power-fixed point from a peripheral eigenvector]
     \label{lem:hermitian-power-fixed-point}
     \lean{MPSTensor.exists_hermitian_ne_zero_trace_zero_pow_fixedPoint}
