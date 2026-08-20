@@ -551,19 +551,22 @@ abstracted — record why, so it is not re-proposed).
   the same linear map, choose a critical scalar $c$, set
   $\tau=\sigma-c\rho$, and use the hypothesis that every nonzero
   positive-semidefinite fixed point is positive definite to force $\tau=0$.
-- **Seen:** two occurrences in
+- **Seen:** three occurrences in
   `TNLean/Channel/Irreducible/FixedPointUniqueness.lean`, theorem
   `posSemidef_fixedPoint_unique_of_irreducible_cp`, and
   `TNLean/Kraus/Wielandt/Primitivity/VectorSpreadToPrimitive.lean`, lemma
-  `posSemidef_pow_fixedPoint_unique`, before promotion (2026-08-20).
+  `posSemidef_pow_fixedPoint_unique`, and
+  `TNLean/Wielandt/Primitivity/ImpliesStronglyIrreducibleAux.lean`, theorem
+  `posSemidef_pow_fixedPoint_unique_of_isPrimitivePaper`, before promotion
+  (2026-08-20).
 - **Abstraction:**
   `exists_smul_eq_of_posDef_fixedPoints_of_fixedPoint_posDef`
   in `TNLean/Channel/Irreducible/FixedPointUniqueness.lean`.
 - **Notes:** the shared theorem includes the load-bearing hypothesis that every
   nonzero positive-semidefinite fixed point is positive definite; without this
   hypothesis the proportionality statement is false for the identity map. The
-  two callers establish it respectively from irreducibility and fixed-length
-  vector spreading.
+  The three callers establish it respectively from irreducibility or from
+  fixed-length vector spreading.
 
 ---
 

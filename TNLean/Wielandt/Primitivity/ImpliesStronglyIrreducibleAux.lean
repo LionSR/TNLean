@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import TNLean.Channel.Irreducible.FixedPointUniqueness
 import TNLean.Wielandt.Primitivity.ImpliesStronglyIrreducible
 import TNLean.MPS.CanonicalForm.BlockingViaAdjoint
 import TNLean.MPS.Core.TransferChannel
@@ -271,11 +272,9 @@ variable {d D : ℕ}
 If `A` is paper-primitive (with witness `q`), then any two nonzero PSD fixed
 points of `(transferMap A)^p` (with `p > 0`) are proportional.
 
-**Proof**: Upgrade both to PosDef via `posDef_fixedPoint_of_pow_of_isPrimitivePaper`,
-apply `exists_critical_scalar` to find `c₀ > 0` with `τ = σ - c₀ • ρ` PSD but
-not PosDef. Since `τ` is also `E^p`-fixed, if `τ ≠ 0` we get a nonzero PSD
-`E^p`-fixed matrix that is not PosDef — contradicting paper-primitivity. Hence
-`τ = 0` and `σ = c₀ • ρ`. -/
+**Proof**: Upgrade both matrices, and every nonzero positive-semidefinite fixed
+point of the same power, to positive definite matrices. Fixed-point
+proportionality then gives the conclusion. -/
 theorem posSemidef_pow_fixedPoint_unique_of_isPrimitivePaper
     (A : MPSTensor d D)
     {q : ℕ} (hq : ∀ φ : Fin D → ℂ, φ ≠ 0 → vectorSpreadSpan A φ q = ⊤)
@@ -286,25 +285,12 @@ theorem posSemidef_pow_fixedPoint_unique_of_isPrimitivePaper
     (hρ_fix : ((transferMap (d := d) (D := D) A) ^ p) ρ = ρ)
     (hσ_fix : ((transferMap (d := d) (D := D) A) ^ p) σ = σ) :
     ∃ c : ℂ, σ = c • ρ := by
-  -- Step 1: Upgrade both to PosDef
   have hρ_pd := posDef_fixedPoint_of_pow_of_isPrimitivePaper A hq hρ_psd hρ_ne hp hρ_fix
   have hσ_pd := posDef_fixedPoint_of_pow_of_isPrimitivePaper A hq hσ_psd hσ_ne hp hσ_fix
-  -- Step 2: Handle trivial dimension case
-  by_cases hD : D = 0
-  · exact ⟨1, by ext i; exact (Fin.elim0 (hD ▸ i))⟩
-  · have : Nonempty (Fin D) := ⟨⟨0, Nat.pos_of_ne_zero hD⟩⟩
-    -- Step 3: Critical scalar — find c₀ > 0 with τ = σ - c₀ • ρ PSD but not PosDef
-    obtain ⟨c₀, _, hτ_psd, hτ_not_pd⟩ := exists_critical_scalar hρ_pd hσ_pd
-    set τ := σ - (↑c₀ : ℂ) • ρ with hτ_def
-    -- Step 4: τ is E^p-fixed
-    have hτ_fix : ((transferMap (d := d) (D := D) A) ^ p) τ = τ := by
-      simp only [τ, map_sub, map_smul, hρ_fix, hσ_fix]
-    -- Step 5: If τ ≠ 0, we get a contradiction
-    by_cases hτ_ne : τ = 0
-    · exact ⟨↑c₀, sub_eq_zero.mp hτ_ne⟩
-    · exact absurd
-        (posDef_fixedPoint_of_pow_of_isPrimitivePaper A hq hτ_psd hτ_ne hp hτ_fix)
-        hτ_not_pd
+  exact exists_smul_eq_of_posDef_fixedPoints_of_fixedPoint_posDef
+    ((transferMap (d := d) (D := D) A) ^ p) ρ σ hρ_pd hσ_pd hρ_fix hσ_fix
+      (fun hτ_psd hτ_ne hτ_fix ↦
+        posDef_fixedPoint_of_pow_of_isPrimitivePaper A hq hτ_psd hτ_ne hp hτ_fix)
 
 end Uniqueness
 
