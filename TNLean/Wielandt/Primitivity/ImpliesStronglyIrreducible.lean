@@ -135,7 +135,7 @@ theorem isIrreducibleTensor_of_isPrimitivePaper
     (hPrim : IsPrimitivePaper A) :
     IsIrreducibleTensor A := by
   obtain ⟨q, _, hq⟩ := hPrim
-  exact Kraus.isIrreducibleTensor_of_isIrreducibleMap_mapLM A
+  exact Kraus.isIrreducibleFamily_of_isIrreducibleMap_mapLM A
     (Kraus.isIrreducibleMap_mapLM_of_vectorSpreadSpan_eq_top A hq)
 
 end MPSTensor

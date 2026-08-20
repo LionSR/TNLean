@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.Structure.InvariantSubspaceDecomp
 import TNLean.Algebra.PosSemidefSupport
-import TNLean.Kraus.InvariantProjection
+import TNLean.MPS.Core.InvariantProjection
 
 /-!
 # Iterated invariant-projection splitting: irreducible block decomposition
@@ -63,8 +63,8 @@ variable {d D : ℕ}
 
 /-! ## Irreducibility definitions
 
-`HasInvariantProj` and `IsIrreducibleTensor` now live in
-`TNLean/Kraus/InvariantProjection.lean`. -/
+`HasInvariantProj` and `IsIrreducibleTensor` are the MPS forms of the finite-family
+predicates in `Kraus`. -/
 
 /-- Nonzero scalar rescaling preserves tensor irreducibility. -/
 theorem isIrreducibleTensor_smul

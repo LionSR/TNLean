@@ -6,54 +6,23 @@ Authors: TNLean contributors
 import TNLean.Algebra.OrthogonalProjection
 import TNLean.Channel.FixedPoint.SupportInvariance
 import TNLean.Channel.Irreducible.Basic
-import TNLean.Kraus.Word
 
 /-!
-# Invariant orthogonal projections and irreducibility of a finite Kraus family
+# Invariant orthogonal projections for finite matrix families
 
-This file carries the word-evaluation layer of the channel side:
-`HasInvariantProj` and `IsIrreducibleTensor`, the predicates used by the
-canonical-form iterated block-decomposition argument to detect a nontrivial
-invariant orthogonal projection for a finite Kraus family. It is part of
-the extraction of a Kraus-family-only library out of `TNLean`'s
-matrix-product-state development.
-
-The consequences of these predicates (rescaling and conjugation invariance,
-the cast lemmas, and the iterated block-decomposition capstone
-`exists_irreducible_blockDecomp`) stay on the matrix-product-state side, in
-`TNLean/MPS/CanonicalForm/Reduction.lean`.
-
-The established predicates remain in `namespace MPSTensor` because the
-canonical-form development uses these names throughout. A change of namespace
-belongs with a simultaneous change of those declarations.
+A finite family of square matrices is irreducible when it has no nontrivial
+invariant subspace. In finite dimension, this is equivalent to the absence of
+a nontrivial invariant orthogonal projection.
 
 ## Main declarations
 
-* `HasInvariantProj` — existence of a nontrivial invariant orthogonal projection
-* `IsIrreducibleTensor` — no nontrivial invariant orthogonal projection exists
-* `Kraus.isIrreducibleMap_mapLM_of_isIrreducibleTensor` — tensor irreducibility implies
-  irreducibility of the associated finite Kraus map
-* `Kraus.isIrreducibleTensor_of_isIrreducibleMap_mapLM` — the converse implication
+* `Kraus.HasInvariantProj` states that a finite matrix family has a nontrivial
+  invariant orthogonal projection.
+* `Kraus.IsIrreducibleFamily` states that no such projection exists.
+* `Kraus.isIrreducibleMap_mapLM_of_isIrreducibleFamily` shows that an irreducible
+  family defines an irreducible Kraus map.
+* `Kraus.isIrreducibleFamily_of_isIrreducibleMap_mapLM` proves the converse.
 -/
-
-namespace MPSTensor
-
-variable {d D : ℕ}
-
-/-- `HasInvariantProj A` holds if there is a *nontrivial* invariant orthogonal projection for `A`:
-a Hermitian idempotent `P` with `P ≠ 0`, `P ≠ 1`, and `(1 - P) * A i * P = 0` for every `i`.
-
-This is the negation of "irreducible with respect to invariant subspaces". -/
-def HasInvariantProj (A : Fin d → Matrix (Fin D) (Fin D) ℂ) : Prop :=
-  ∃ P : Matrix (Fin D) (Fin D) ℂ,
-    IsOrthogonalProjection P ∧ P ≠ 0 ∧ P ≠ 1 ∧ (∀ i : Fin d, (1 - P) * A i * P = 0)
-
-/-- `IsIrreducibleTensor A` holds if `A` admits no nontrivial invariant orthogonal projection.
-This is the "irreducible" condition used in the canonical-form reduction. -/
-def IsIrreducibleTensor (A : Fin d → Matrix (Fin D) (Fin D) ℂ) : Prop :=
-  ¬ HasInvariantProj A
-
-end MPSTensor
 
 namespace Kraus
 
@@ -61,10 +30,22 @@ variable {d D : ℕ}
 
 local notation "Mat" => Matrix (Fin D) (Fin D) ℂ
 
-/-- A finite Kraus family with no nontrivial invariant orthogonal projection defines an
+/-- A finite matrix family has a nontrivial invariant orthogonal projection if there is a
+Hermitian idempotent $P$, distinct from $0$ and $1$, such that
+$(1-P)K_iP=0$ for every family index $i$. -/
+def HasInvariantProj (K : Fin d → Mat) : Prop :=
+  ∃ P : Mat,
+    IsOrthogonalProjection P ∧ P ≠ 0 ∧ P ≠ 1 ∧ (∀ i : Fin d, (1 - P) * K i * P = 0)
+
+/-- A finite matrix family is irreducible if it has no nontrivial invariant orthogonal
+projection. -/
+def IsIrreducibleFamily (K : Fin d → Mat) : Prop :=
+  ¬ HasInvariantProj K
+
+/-- A finite matrix family with no nontrivial invariant orthogonal projection defines an
 irreducible Kraus map. -/
-theorem isIrreducibleMap_mapLM_of_isIrreducibleTensor
-    (K : Fin d → Mat) (hIrr : MPSTensor.IsIrreducibleTensor K) :
+theorem isIrreducibleMap_mapLM_of_isIrreducibleFamily
+    (K : Fin d → Mat) (hIrr : IsIrreducibleFamily K) :
     IsIrreducibleMap (mapLM K) := by
   intro P hProj hInv
   have hLower : ∀ i : Fin d, (1 - P) * K i * P = 0 :=
@@ -74,11 +55,11 @@ theorem isIrreducibleMap_mapLM_of_isIrreducibleTensor
   push Not at h_neither
   exact hIrr ⟨P, hProj, h_neither.1, h_neither.2, hLower⟩
 
-/-- If the finite Kraus map is irreducible, then its Kraus family has no nontrivial
+/-- If the finite Kraus map is irreducible, then its matrix family has no nontrivial
 invariant orthogonal projection. -/
-theorem isIrreducibleTensor_of_isIrreducibleMap_mapLM
+theorem isIrreducibleFamily_of_isIrreducibleMap_mapLM
     (K : Fin d → Mat) (hIrr : IsIrreducibleMap (mapLM K)) :
-    MPSTensor.IsIrreducibleTensor K := by
+    IsIrreducibleFamily K := by
   intro ⟨P, hProj, hP0, hP1, hLower⟩
   have hInv : ∀ X, P * mapLM K (P * X * P) * P = mapLM K (P * X * P) := fun X => by
     simpa only [mapLM_apply] using lowerZero_implies_invariance K P hProj hLower X
