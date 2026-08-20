@@ -153,8 +153,8 @@ change of basis. The matrix is not assumed to have trace one.
     Lemma~\ref{lem:phys_close_identity} gives the periodic formula.
 \end{proof}
 
-\begin{lemma}[Rank invariance under unitary conjugation]
-    \label{lem:unitary_single_kraus_rank}
+\begin{theorem}[Rank invariance under unitary conjugation]
+    \label{thm:unitary_single_kraus_rank}
     \lean{Matrix.rank_singleKrausMap_of_mem_unitaryGroup}
     \leanok
     If $V$ is unitary, then
@@ -162,7 +162,7 @@ change of basis. The matrix is not assumed to have trace one.
         \operatorname{rank}(VAV^\dagger)&=\operatorname{rank}A.
         \label{eq:unitary_single_kraus_rank}
     \end{align}
-\end{lemma}
+\end{theorem}
 
 \begin{proof}\leanok
     Left and right multiplication by invertible matrices preserve rank.
@@ -177,7 +177,7 @@ change of basis. The matrix is not assumed to have trace one.
     \uses{def:mpdo_strong_rfp,
       thm:mpdo_strong_rfp_phys_close,
       thm:mpdo_strong_rfp_global_operator_identity,
-      lem:unitary_single_kraus_rank}
+      thm:unitary_single_kraus_rank}
     Fix witnesses $P\geq0$ and $U$ for the strong fixed-point relation. For
     every $N\geq0$, the ordinary full periodic MPO matrix ranks satisfy
     \begin{align}

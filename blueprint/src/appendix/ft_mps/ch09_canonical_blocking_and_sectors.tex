@@ -103,8 +103,8 @@ through its own period agrees with the directly $p$-blocked block.
     If $\E_{A^{[p_0]}}$ is primitive, then $\E_{A^{[p]}}$ is primitive.
 \end{lemma}
 
-\begin{lemma}[Left-canonical normalization under blocking]
-    \label{lem:left_canonical_blocking}
+\begin{theorem}[Left-canonical normalization under blocking]
+    \label{thm:left_canonical_blocking}
     \lean{MPSTensor.leftCanonical_blockTensor}
     \leanok
     \uses{def:blocked_tensor}
@@ -114,22 +114,22 @@ through its own period agrees with the directly $p$-blocked block.
         \notag
     \end{align}
     then every blocked family satisfies the same identity.
-\end{lemma}
+\end{theorem}
 
 \begin{proof}\leanok
     Expand the blocked matrices as products indexed by words and sum one
     letter at a time.
 \end{proof}
 
-\begin{lemma}[Irreducibility from a faithful fixed point]
-    \label{lem:channel_posdef_fixed_point_unique_irreducible}
+\begin{theorem}[Irreducibility from a faithful fixed point]
+    \label{thm:channel_posdef_fixed_point_unique_irreducible}
     \lean{isIrreducibleMap_of_channel_posDef_fixedPoint_unique}
     \leanok
     \uses{def:irreducible_cp}
     Let $E$ be a channel with a positive-definite fixed point. If all nonzero
     positive semidefinite fixed points of $E$ are proportional, then $E$ is
     irreducible.
-\end{lemma}
+\end{theorem}
 
 \begin{proof}\leanok
     A nontrivial invariant projection would produce a positive semidefinite
@@ -145,8 +145,8 @@ through its own period agrees with the directly $p$-blocked block.
     \lean{MPSTensor.isIrreducibleTensor_of_isIrreducibleMap}
     \leanok
     \uses{def:blocked_tensor, def:irreducible_tensor, def:primitive_mps,
-        def:fixed_point_proj, lem:left_canonical_blocking,
-        lem:channel_posdef_fixed_point_unique_irreducible,
+        def:fixed_point_proj, thm:left_canonical_blocking,
+        thm:channel_posdef_fixed_point_unique_irreducible,
         thm:pow_decomp, thm:transfer_channel}
     Let $A$ be left-canonical, tensor-irreducible, and have primitive transfer
     map. Then $A$ has primitive fixed-point data $(\rho,P_\rho,N)$ with
@@ -165,8 +165,8 @@ through its own period agrees with the directly $p$-blocked block.
 
 \begin{proof}\leanok
     \uses{def:primitive_mps, def:fixed_point_proj,
-        lem:left_canonical_blocking,
-        lem:channel_posdef_fixed_point_unique_irreducible,
+        thm:left_canonical_blocking,
+        thm:channel_posdef_fixed_point_unique_irreducible,
         thm:pow_decomp, thm:transfer_channel}
     Peripheral primitivity, tensor irreducibility, and left-canonical
     normalization first give primitive fixed-point data, and tensor
