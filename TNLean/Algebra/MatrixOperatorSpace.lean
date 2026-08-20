@@ -51,7 +51,7 @@ section MatrixInstances
 
 variable (n : Type*) [Fintype n] [DecidableEq n]
 
-instance : NormedSpace ℝ (Matrix n n ℂ) :=
+instance instNormedSpaceRealMatrixComplex : NormedSpace ℝ (Matrix n n ℂ) :=
   NormedSpace.restrictScalars ℝ ℂ (Matrix n n ℂ)
 
 omit [DecidableEq n] [Fintype n] in
