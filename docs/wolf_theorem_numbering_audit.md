@@ -516,7 +516,8 @@ or 11 occurs in the directories examined here.
 
 The Chapter 4 search finds many unqualified numerical near matches. Inspection
 shows that they refer to other sources, principally the matrix-product density
-operator paper of Cirac, Pérez-García, Schuch, and Verstraete. The files
+operator paper of Cirac, Pérez-García, Schuch, and Verstraete. The entropy
+development in `TNLean/Entropy/ClassicalMutualInformation.lean`, the files
 `TNLean/MPS/MPDO/DiagonalCutRank.lean` and
 `TNLean/MPS/MPDO/DiagonalFiniteChain.lean`, the corresponding blueprint entry
 in `ch21_mpdo_rfp_area_law_diagonal_and_pure_state_bounds.tex`, and the note
