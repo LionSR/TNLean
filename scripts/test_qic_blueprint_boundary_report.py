@@ -443,6 +443,21 @@ See Theorem~\ref{thm:tn}.
         self.assertEqual(blocks[0]["references"], ["thm:tn"])
         self.assertEqual(blocks[0]["disposition"], "tn")
 
+    def test_rejects_non_item_environment_containing_item(self) -> None:
+        self.write_blueprint(
+            r"""\begin{figure}
+\begin{theorem}\label{thm:qic}
+\lean{Kraus.moved}
+\end{theorem}
+\end{figure}
+"""
+        )
+        with self.assertRaisesRegex(
+            ValueError,
+            r"environment at src/chapter/ch01.tex:1-5 contains theorem-like item lines",
+        ):
+            boundary_report(self.root)
+
     def test_rejects_unbalanced_non_item_environment(self) -> None:
         self.write_blueprint(
             r"""\begin{theorem}\label{thm:qic}

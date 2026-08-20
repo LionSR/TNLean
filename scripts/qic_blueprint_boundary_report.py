@@ -268,11 +268,17 @@ def _atomic_non_item_environment_ranges(
             f"{relative_root}:{opened_line}"
         )
 
-    candidates = [
-        (start, end)
-        for start, end in ranges
-        if not any(line in covered for line in range(start, end + 1))
-    ]
+    candidates: list[tuple[int, int]] = []
+    for start, end in ranges:
+        span = set(range(start, end + 1))
+        if span & covered:
+            if not span <= covered:
+                raise ValueError(
+                    f"environment at {relative_root}:{start}-{end} contains "
+                    "theorem-like item lines"
+                )
+            continue
+        candidates.append((start, end))
     maximal: list[tuple[int, int]] = []
     for start, end in sorted(candidates, key=lambda span: (span[0], -span[1])):
         contained = any(
@@ -291,8 +297,10 @@ def blueprint_non_item_blocks(
     """Partition text outside item spans into paragraph-like blocks.
 
     Complete balanced TeX environments containing no item line are atomic,
-    including nested environments and blank or comment-only lines. Elsewhere,
-    blank lines and item boundaries split blocks. Router ``\\input`` commands
+    including nested environments and blank or comment-only lines. An outer
+    environment containing item lines is rejected because partitioning it at
+    the item boundary would produce malformed TeX. Elsewhere, blank lines and
+    item boundaries split blocks. Router ``\\input`` commands
     are single-line blocks so each simulated output can prune them without
     pulling in every sibling chapter.
     """
