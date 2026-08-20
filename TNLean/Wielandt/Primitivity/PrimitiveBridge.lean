@@ -6,7 +6,7 @@ Authors: TNLean contributors
 import TNLean.MPS.Core.Transfer
 import TNLean.Wielandt.Primitivity.Definitions
 import TNLean.Spectral.PeripheralToTransferMapGap
-import TNLean.Kraus.InvariantProjection
+import TNLean.MPS.Core.InvariantProjection
 import TNLean.Wielandt.Primitivity.ToNormal
 import TNLean.Channel.Primitive
 import TNLean.Channel.Irreducible.FromSpectral
