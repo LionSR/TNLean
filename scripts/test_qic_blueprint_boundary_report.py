@@ -10,9 +10,13 @@ import unittest
 from unittest.mock import patch
 
 from qic_blueprint_boundary_report import (
+    LEDGER_COLUMNS,
+    blueprint_file_manifest,
     boundary_report,
     environment_uses,
     normalized_relative_path,
+    read_disposition_ledger,
+    tn_interface_labels,
 )
 
 
@@ -32,12 +36,19 @@ class QICBlueprintBoundaryReportTests(unittest.TestCase):
         )
         (self.root / "blueprint" / "src" / "chapter").mkdir(parents=True)
         (self.root / "blueprint" / "src" / "appendix").mkdir(parents=True)
+        self.ledger = self.root / "scripts" / "qic_blueprint_label_dispositions.csv"
+        self.write_ledger([])
 
     def tearDown(self) -> None:
         self.tempdir.cleanup()
 
-    def write_blueprint(self, text: str) -> None:
-        (self.root / "blueprint" / "src" / "chapter" / "ch01.tex").write_text(text)
+    def write_blueprint(self, text: str, name: str = "ch01.tex") -> None:
+        (self.root / "blueprint" / "src" / "chapter" / name).write_text(text)
+
+    def write_ledger(self, rows: list[tuple[str, str, str, str, str]]) -> None:
+        lines = [",".join(LEDGER_COLUMNS)]
+        lines.extend(",".join(row) for row in rows)
+        self.ledger.write_text("\n".join(lines) + "\n")
 
     def test_normalized_relative_path_accepts_windows_separators(self) -> None:
         self.assertEqual(
@@ -45,9 +56,10 @@ class QICBlueprintBoundaryReportTests(unittest.TestCase):
             "TNLean/Channel/Basic.lean",
         )
 
-    def test_environment_uses_parses_multiline_payload(self) -> None:
+    def test_environment_uses_parses_all_labels_and_multiline_payload(self) -> None:
         self.write_blueprint(
             """\\begin{theorem}\\label{thm:a}
+\\label{eq:a}
 \\uses{thm:b,
   % explanation
   thm:c}
@@ -63,22 +75,152 @@ Body.
                     "file": "src/chapter/ch01.tex",
                     "line": 1,
                     "label": "thm:a",
+                    "labels": ["thm:a", "eq:a"],
                     "uses": ["thm:b", "thm:c"],
                 }
             ],
         )
 
     @patch("qic_blueprint_boundary_report.source_sha", return_value="a" * 40)
-    def test_classifies_items_and_cross_boundary_edges(self, _source_sha) -> None:
+    def test_manual_rows_and_secondary_label_resolution(self, _source_sha) -> None:
         self.write_blueprint(
-            r"""\begin{theorem}
-\label{thm:qic}
+            r"""\begin{theorem}\label{thm:qic}
+\label{eq:qic}
+\lean{Kraus.moved}
+\end{theorem}
+\begin{remark}\label{rem:tn}
+\uses{eq:qic}
+Body.
+\end{remark}
+"""
+        )
+        self.write_ledger(
+            [
+                (
+                    "rem:tn",
+                    "src/chapter/ch01.tex",
+                    "remark",
+                    "tn",
+                    "tensor-network statement",
+                )
+            ]
+        )
+        report = boundary_report(self.root)
+        self.assertEqual(report["item_counts"], {"qic": 1, "tn": 1})
+        self.assertEqual(report["edge_counts"], {"tn_to_qic": 1})
+        self.assertEqual(report["tn_interface_labels"], ["eq:qic"])
+        qic_item = next(item for item in report["items"] if item["label"] == "thm:qic")
+        self.assertEqual(qic_item["labels"], ["thm:qic", "eq:qic"])
+        self.assertEqual(qic_item["disposition_source"], "lean")
+        tn_item = next(item for item in report["items"] if item["label"] == "rem:tn")
+        self.assertEqual(tn_item["disposition_source"], "manual")
+
+    def test_manual_ledger_validation_failures(self) -> None:
+        self.write_blueprint(
+            r"""\begin{remark}\label{rem:manual}
+Body.
+\end{remark}
+"""
+        )
+        cases = {
+            "missing": [],
+            "wrong source": [
+                ("rem:manual", "src/chapter/other.tex", "remark", "tn", "reason")
+            ],
+            "wrong environment": [
+                ("rem:manual", "src/chapter/ch01.tex", "theorem", "tn", "reason")
+            ],
+            "stale": [
+                ("rem:manual", "src/chapter/ch01.tex", "remark", "tn", "reason"),
+                ("rem:stale", "src/chapter/ch01.tex", "remark", "tn", "reason"),
+            ],
+        }
+        for name, rows in cases.items():
+            with self.subTest(name=name):
+                self.write_ledger(rows)
+                with self.assertRaises(ValueError):
+                    boundary_report(self.root)
+
+        self.ledger.write_text(
+            ",".join(LEDGER_COLUMNS)
+            + "\nrem:manual,src/chapter/ch01.tex,remark,tn,reason\n"
+            + "rem:manual,src/chapter/ch01.tex,remark,tn,reason\n"
+        )
+        with self.assertRaisesRegex(ValueError, "duplicate label"):
+            read_disposition_ledger(self.ledger)
+
+        self.write_ledger(
+            [("rem:manual", "src/chapter/ch01.tex", "remark", "other", "reason")]
+        )
+        with self.assertRaisesRegex(ValueError, "disposition must be qic or tn"):
+            read_disposition_ledger(self.ledger)
+
+    def test_rejects_manual_row_for_tagged_item(self) -> None:
+        self.write_blueprint(
+            r"""\begin{theorem}\label{thm:qic}
+\lean{Kraus.moved}
+\end{theorem}
+"""
+        )
+        self.write_ledger(
+            [("thm:qic", "src/chapter/ch01.tex", "theorem", "qic", "reason")]
+        )
+        with self.assertRaisesRegex(ValueError, "tagged item"):
+            boundary_report(self.root)
+
+    @patch("qic_blueprint_boundary_report.source_sha", return_value="a" * 40)
+    def test_mixed_physical_files_and_deterministic_artifacts(self, _source_sha) -> None:
+        self.write_blueprint(
+            r"""\begin{theorem}\label{thm:qic}
+\lean{Kraus.moved}
+\end{theorem}
+\begin{theorem}\label{thm:tn}
+\lean{MPSTensor.staying}
+\uses{thm:qic}
+\end{theorem}
+"""
+        )
+        (self.root / "blueprint" / "src" / "content.tex").write_text(
+            "\\input{chapter/ch01}\n"
+        )
+        (self.root / "blueprint" / "src" / "web.tex").write_text(
+            "\\input{content}\n"
+        )
+        (self.root / "blueprint" / "src" / "content_ft_mps.tex").write_text(
+            "\\input{chapter/ch01}\n"
+        )
+        (self.root / "blueprint" / "src" / "print_ft_mps.tex").write_text(
+            "\\input{content_ft_mps}\n"
+        )
+        first = boundary_report(self.root)
+        second = boundary_report(self.root)
+        self.assertEqual(json.dumps(first, sort_keys=True), json.dumps(second, sort_keys=True))
+        self.assertEqual(first["mixed_physical_files"], ["src/chapter/ch01.tex"])
+        self.assertEqual(
+            first["blueprint_files"],
+            [
+                "blueprint/src/chapter/ch01.tex",
+                "blueprint/src/content.tex",
+                "blueprint/src/web.tex",
+            ],
+        )
+        self.assertEqual(first["tn_interface_labels"], ["thm:qic"])
+        self.assertEqual(
+            blueprint_file_manifest(self.root, first["items"]), first["blueprint_files"]
+        )
+        self.assertEqual(
+            tn_interface_labels(first["uses_edges"]), first["tn_interface_labels"]
+        )
+
+    @patch("qic_blueprint_boundary_report.source_sha", return_value="a" * 40)
+    def test_reports_mixed_unresolved_and_cross_boundary_items(self, _source_sha) -> None:
+        self.write_blueprint(
+            r"""\begin{theorem}\label{thm:qic}
 \lean{Kraus.moved}
 \uses{thm:tn}
 \end{theorem}
 \begin{theorem}\label{thm:tn}
 \lean{MPSTensor.staying}
-\uses{thm:qic}
 \end{theorem}
 \begin{theorem}\label{thm:mixed}
 \lean{Kraus.moved, MPSTensor.staying}
@@ -89,26 +231,14 @@ Body.
 """
         )
         report = boundary_report(self.root)
-        second_report = boundary_report(self.root)
-        self.assertEqual(report, second_report)
-        self.assertEqual(report["source_sha"], "a" * 40)
-        self.assertEqual(report["mover_path_count"], 1)
         self.assertEqual(
             report["item_counts"],
             {"mixed": 1, "qic": 1, "tn": 1, "unresolved": 1},
         )
-        self.assertEqual(report["edge_counts"], {"qic_to_tn": 1, "tn_to_qic": 1})
+        self.assertEqual(report["edge_counts"], {"qic_to_tn": 1})
         self.assertEqual(
             [(edge["source"], edge["target"]) for edge in report["qic_to_tn_uses_edges"]],
             [("thm:qic", "thm:tn")],
-        )
-        self.assertEqual(
-            [(edge["source"], edge["target"]) for edge in report["tn_to_qic_interface_edges"]],
-            [("thm:tn", "thm:qic")],
-        )
-        self.assertEqual(
-            json.dumps(report, sort_keys=True),
-            json.dumps(second_report, sort_keys=True),
         )
 
 

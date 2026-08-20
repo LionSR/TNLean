@@ -30,16 +30,25 @@ The freeze commit must contain these deterministic artifacts:
    `scripts/qic_blueprint_boundary_report.py`;
 3. `namespace-decisions.csv`, with one row for every entry in
    `mover-report.json`'s `namespaced_declarations` list;
-4. `blueprint-files.txt`, the sorted list of blueprint files copied to QICLean;
-5. `qic-support-paths.txt`, the sorted list of TNLean scripts, documentation,
+4. `scripts/qic_blueprint_label_dispositions.csv`, with one row for every
+   labelled theorem-like blueprint environment that has no `\lean{}` tag;
+5. `blueprint-files.txt`, the sorted list of blueprint files copied to QICLean;
+6. `qic-support-paths.txt`, the sorted list of TNLean scripts, documentation,
    notes, license, homepage, and docbuild paths copied with history;
-6. `tn-interface-labels.txt`, the sorted set of QIC labels reached by a
+7. `tn-interface-labels.txt`, the sorted set of QIC labels reached by a
    TN-to-QIC `\uses` edge.
 
 Every namespace row has the columns
 `source,line,old_fqn,action,new_fqn`. `action` is exactly `keep`, `rename`, or
 `stay_tn`. A `stay_tn` declaration must not remain in a moved file unless that
 file is split before the freeze. Every `rename` row has a nonempty `new_fqn`.
+
+Every blueprint disposition row has the columns
+`label,source,environment,disposition,reason`. `label` is the first label in the
+environment, `disposition` is exactly `qic` or `tn`, and `source` and
+`environment` verify that the row still names the intended item. Additional
+labels in the same environment inherit this disposition. The report rejects
+missing, duplicate, stale, or mismatched rows.
 
 ## 2. Freeze gates
 
@@ -61,11 +70,29 @@ PYTHONPATH=scripts python3 scripts/check_import_direction.py \
 cmp ../mover-report.json ../mover-report.second.json
 
 PYTHONPATH=scripts python3 scripts/qic_blueprint_boundary_report.py \
-  --root . > ../blueprint-report.json
+  --root . --mode json > ../blueprint-report.json
 PYTHONPATH=scripts python3 scripts/qic_blueprint_boundary_report.py \
-  --root . > ../blueprint-report.second.json
+  --root . --mode json > ../blueprint-report.second.json
 cmp ../blueprint-report.json ../blueprint-report.second.json
-sha256sum ../mover-report.json ../blueprint-report.json
+
+PYTHONPATH=scripts python3 scripts/qic_blueprint_boundary_report.py \
+  --root . --mode blueprint-files > ../blueprint-files.txt
+PYTHONPATH=scripts python3 scripts/qic_blueprint_boundary_report.py \
+  --root . --mode blueprint-files > ../blueprint-files.second.txt
+cmp ../blueprint-files.txt ../blueprint-files.second.txt
+cmp ../blueprint-files.txt \
+  docs/audits/data/qiclean/blueprint-files.txt
+
+PYTHONPATH=scripts python3 scripts/qic_blueprint_boundary_report.py \
+  --root . --mode tn-interface-labels > ../tn-interface-labels.txt
+PYTHONPATH=scripts python3 scripts/qic_blueprint_boundary_report.py \
+  --root . --mode tn-interface-labels > ../tn-interface-labels.second.txt
+cmp ../tn-interface-labels.txt ../tn-interface-labels.second.txt
+cmp ../tn-interface-labels.txt \
+  docs/audits/data/qiclean/tn-interface-labels.txt
+
+sha256sum ../mover-report.json ../blueprint-report.json \
+  ../blueprint-files.txt ../tn-interface-labels.txt
 ```
 
 Stop unless all of the following hold:
@@ -74,19 +101,36 @@ Stop unless all of the following hold:
   import failure;
 - the mover report's source is exactly `TN_SOURCE_SHA`;
 - every namespaced declaration has one namespace decision;
-- the blueprint report has zero `mixed`, `unresolved`, and `qic_to_tn` items or
-  edges after applying the final chapter split;
+- every labelled theorem-like environment without a `\lean{}` tag has exactly
+  one row in `scripts/qic_blueprint_label_dispositions.csv`;
+- the blueprint report has zero `mixed` or `unresolved` items and zero
+  `qic_to_tn` or `unclassified` edges;
+- mixed physical files are listed explicitly and contain no mixed item;
 - every `tn_to_qic_interface_edges` target occurs in
-  `tn-interface-labels.txt`;
+  `tn-interface-labels.txt`, and that file contains no other label;
+- `blueprint-files.txt` is exactly the generated set of QIC-bearing content
+  files, their input ancestors, and the blueprint build support files;
 - the QIC blueprint includes every moved target label, while the TN interface
   blueprint restates every target label still cited by TN content;
 - `\lean{}` names change only according to `namespace-decisions.csv`;
 - the QIC support manifest contains all files referenced by QICLean's Lake
-  configuration, workflows, blueprint, homepage, and docbuild.
+  configuration, workflows, homepage, and docbuild.
 
 The blueprint report is deliberately conservative. An item tagged by both a
-moved and a staying declaration is `mixed` and must be split. An unclassified
-`\uses` endpoint must be assigned manually before the freeze.
+moved and a staying declaration is `mixed` and blocks the freeze. A physical
+file containing separate QIC and TN items is allowed because it is copied with
+history and split at item level after the filtered history is merged. An
+unclassified `\uses` endpoint or an incomplete manual ledger blocks the freeze.
+
+For that later split, one item is the complete theorem-like environment from
+its opening command through its matching closing command, together with an
+immediately following proof environment. Every label in the statement belongs
+to the same item and inherits its disposition. QICLean keeps QIC items and
+TNLean keeps TN items at the original path. Retained statement and proof bytes
+must not change. Text outside item spans may remain on both sides only when its
+references resolve in both simulated outputs. Before committing either split,
+reject overlapping spans, detached proofs, duplicate labels, and any retained
+`\ref` or `\uses` target that is absent from that output.
 
 ## 3. Build the history-filter path list
 
