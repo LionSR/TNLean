@@ -21,6 +21,7 @@ strictly below one converge to zero.  This follows from Gelfand's formula
 
 - `pow_tendsto_zero_of_spectralRadius_lt_one`
 - `geometric_bound_of_spectralRadius_lt_one`
+- `geometric_apply_bound_of_spectralRadius_lt_one`
 - `uniform_eigenvalue_gap_of_finite_lt_one`
 - `uniform_eigenvalue_gap_of_finiteDimensional_lt_one`
 -/
@@ -103,6 +104,18 @@ theorem geometric_bound_of_spectralRadius_lt_one
       ‖T ^ n‖ ≤ S * (r : ℝ) ^ n := hterm'
       _ ≤ C * (r : ℝ) ^ n := by
         gcongr
+
+/-- If `spectralRadius(T) < 1`, then the powers of `T` satisfy the pointwise bound
+`‖T ^ n x‖ ≤ C · r ^ n · ‖x‖` for some `C > 0` and `0 < r < 1`. -/
+theorem geometric_apply_bound_of_spectralRadius_lt_one
+    {V : Type*} [NormedAddCommGroup V] [NormedSpace ℂ V] [CompleteSpace V]
+    (T : V →L[ℂ] V)
+    (hT : spectralRadius ℂ T < 1) :
+    ∃ C r : ℝ, 0 < C ∧ 0 < r ∧ r < 1 ∧
+      ∀ n : ℕ, ∀ x : V, ‖(T ^ n) x‖ ≤ C * r ^ n * ‖x‖ := by
+  rcases geometric_bound_of_spectralRadius_lt_one T hT with
+    ⟨C, r, hC, hr_pos, hr_lt_one, hpow⟩
+  exact ⟨C, r, hC, hr_pos, hr_lt_one, fun n x => (T ^ n).le_of_opNorm_le (hpow n) x⟩
 
 /-! ## Uniform eigenvalue gaps -/
 
