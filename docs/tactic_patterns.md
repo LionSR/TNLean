@@ -1199,7 +1199,7 @@ current counts and full location lists).
   selector identity to retain the matching sector, and finish with the
   sectorwise closure equation.
 - **Seen:** four paired coarse-graining/refinement occurrences in
-  `TNLean/MPS/MPDO/BNTChannelAssembly.lean`, across
+  `TNLean/MPS/MPDO/BNTChannelComposition.lean`, across
   `exists_chainCoordinateRFP_of_projectiveSectorDecomposition` and
   `exists_chainCoordinateRFP_of_orthogonalSectorDecomposition` (2026-08-20).
 - **Abstraction (proposed):** a helper for one direction, parametrized by the
