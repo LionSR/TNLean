@@ -102,6 +102,31 @@ mathematical obstruction.
   absorbs them. The all-sector factorization and projector-controlled channel
   assembly remain missing for that viable route.
 
+### Horizontal periodic equality does not determine vertical BNT coefficients
+
+- Location:
+  `TNLean/MPS/MPDO/VerticalCoefficientPresentationCounterexample.lean`
+- Main declaration:
+  `MPOTensor.VerticalCoefficientPresentationCounterexample.sameMPV₂Pos_and_no_relabelled_coefficient_equality`
+- Statement refuted: two tensor-attached vertical BNT algebra clauses on MPO
+  tensors with the same positive-length horizontal MPV family have equal
+  structure coefficients after relabelling.
+- Witness: the one-letter tensors with sole matrices
+  $P=\left(\begin{smallmatrix}1&0\\0&0\end{smallmatrix}\right)$ and
+  $Q=\left(\begin{smallmatrix}1&3/4\\0&0\end{smallmatrix}\right)$.
+  They satisfy $Q=XPX^{-1}$ for the nonunitary horizontal gauge
+  $X=\left(\begin{smallmatrix}1&-3/4\\0&1\end{smallmatrix}\right)$, and both
+  generate the scalar identity at every positive length. Their normalized
+  vertical representatives are $P$ and $(4/5)Q$, with multiplicity weights
+  $1$ and $5/4$, so their one-label coefficients are $1$ and $(4/5)^L$.
+- Scope: this refutes the bare cross-presentation assertion in issue #6395,
+  even for MPDOs. It does not refute CPSV16 Proposition 4.13 or Theorem 4.14,
+  which begin with a horizontally canonical tensor and choose one vertical
+  presentation. The sheared tensor is not asserted to be a literal horizontal
+  canonical representative. The correct comparison under explicit vertical
+  transport is scale covariant; exact equality requires an additional
+  normalization compatibility condition.
+
 ### BiCF does not follow from the other per-copy `HorizontalCFData` fields
 
 - Location: `TNLean/MPS/MPDO/BiCFDerivation.lean`

@@ -1454,6 +1454,136 @@
     zero.
 \end{proof}
 
+% Project-derived counterexample to the cross-presentation assertion formerly
+% proposed in #6395.  CPSV16 does not state this assertion.
+\begin{definition}[Horizontally gauge-equivalent tensors with distinct vertical normalizations]%
+    \label{def:mpdo_vertical_coefficient_presentation_counterexample}
+    \lean{MPOTensor.VerticalCoefficientPresentationCounterexample.leftMPO}
+    \lean{MPOTensor.VerticalCoefficientPresentationCounterexample.rightMPO}
+    \lean{MPOTensor.VerticalCoefficientPresentationCounterexample.leftClause}
+    \lean{MPOTensor.VerticalCoefficientPresentationCounterexample.rightClause}
+    \leanok
+    \uses{def:mpo_tensor, def:mpdo_bnt_algebra_tensor_clause}
+    Let
+    \begin{align}
+        P&=\begin{pmatrix}1&0\\0&0\end{pmatrix},
+        \notag\\
+        X&=\begin{pmatrix}1&-3/4\\0&1\end{pmatrix},
+        \notag\\
+        Q&=XPX^{-1}
+          =\begin{pmatrix}1&3/4\\0&0\end{pmatrix}.
+        \notag
+    \end{align}
+    Define one-letter MPO tensors by
+    $M_P^{00}=P$ and $M_Q^{00}=Q$.  Equip them with one-label vertical
+    BNT presentations whose normalized representatives and positive
+    multiplicity weights are
+    \begin{align}
+        A_P&=P,
+        &m_P&=1,
+        \notag\\
+        A_Q&=\frac45Q,
+        &m_Q&=\frac54.
+        \notag
+    \end{align}
+    The corresponding positive diagonal matrices in the algebra clause are
+    $[1]$ and $[4/5]$.  No horizontal canonical-form assumption is imposed
+    on the sheared tensor $M_Q$.
+\end{definition}
+
+\begin{theorem}[Bare horizontal periodic equality does not determine vertical BNT coefficients]%
+    \label{thm:mpdo_vertical_coefficients_not_presentation_invariant}
+    \lean{MPOTensor.VerticalCoefficientPresentationCounterexample.%
+        leftMPO_gaugeEquiv_rightMPO}
+    \lean{MPOTensor.VerticalCoefficientPresentationCounterexample.%
+        leftMPO_sameMPV₂Pos_rightMPO}
+    \lean{MPOTensor.VerticalCoefficientPresentationCounterexample.leftMPO_isMPDO}
+    \lean{MPOTensor.VerticalCoefficientPresentationCounterexample.rightMPO_isMPDO}
+    \lean{MPOTensor.VerticalCoefficientPresentationCounterexample.leftClause_coeff}
+    \lean{MPOTensor.VerticalCoefficientPresentationCounterexample.rightClause_coeff}
+    \lean{MPOTensor.VerticalCoefficientPresentationCounterexample.%
+        sameMPV₂Pos_and_no_relabelled_coefficient_equality}
+    \leanok
+    \uses{def:mpdo, def:gauge_equiv, def:same_mpv2_pos,
+        def:mpdo_vertical_coefficient_presentation_counterexample}
+    The tensors $M_P$ and $M_Q$ are related by the nonunitary gauge $X$.
+    For every positive length $N$, their unnormalized periodic operators are
+    equal:
+    \begin{align}
+        \rho_N(M_P)&=\rho_N(M_Q).
+        \notag
+    \end{align}
+    In particular, both tensors generate matrix product density operators.
+    Their chosen vertical presentations nevertheless have structure
+    coefficients
+    \begin{align}
+        c_P^{(L)}&=1,
+        \notag\\
+        c_Q^{(L)}&=\left(\frac45\right)^L.
+        \notag
+    \end{align}
+    Hence there is no relabelling of the singleton label sets for which,
+    at every positive length,
+    \begin{align}
+        c_Q^{(L)}(\alpha,\beta,\gamma)
+        &=c_P^{(L)}(e\alpha,e\beta,e\gamma).
+        \notag
+    \end{align}
+    Indeed, the two sides at length one are $4/5$ and $1$.
+
+    Proposition~4.13 and Theorem~4.14 of
+    \cite{Cirac2016MPDO_arXiv} instead start with one horizontally canonical
+    matrix product density operator and choose its vertical decomposition.
+    The tensor $M_Q$ above is not asserted to be a horizontal canonical
+    representative.  Thus the theorem excludes an additional
+    cross-presentation conclusion under bare periodic equality; it does not
+    alter the source's fixed-presentation characterization.  It also leaves
+    Theorem~\ref{thm:mpdo_bnt_label_coeff_unique} unchanged, since that theorem
+    compares two coefficient systems for the same vertical operator family.
+\end{theorem}
+\begin{proof}\leanok
+    The identities $P^2=P$, $Q^2=Q$, and
+    $\tr(P)=\tr(Q)=1$ prove the periodic equality.  The Frobenius norms of
+    $P$ and $Q$ are $1$ and $5/4$, respectively, which gives the displayed
+    normalized representatives and multiplicity weights.  Their products
+    satisfy
+    \begin{align}
+        A_P^2&=A_P,
+        \notag\\
+        A_Q^2&=\frac45A_Q.
+        \notag
+    \end{align}
+    Taking the $L$-fold vertical operators gives the two displayed
+    coefficient families.  Their values at $L=1$ exclude the only possible
+    relabelling.
+\end{proof}
+
+\begin{theorem}[Length independence is not preserved by bare horizontal periodic equality]%
+    \label{thm:mpdo_vertical_length_independence_not_presentation_invariant}
+    \lean{MPOTensor.VerticalCoefficientPresentationCounterexample.%
+        leftClause_lengthIndependent}
+    \lean{MPOTensor.VerticalCoefficientPresentationCounterexample.%
+        rightClause_not_lengthIndependent}
+    \lean{MPOTensor.VerticalCoefficientPresentationCounterexample.%
+        sameMPV₂Pos_and_lengthIndependent_mismatch}
+    \leanok
+    \uses{def:same_mpv2_pos, def:mpdo_bnt_label_length_independent,
+        def:mpdo_vertical_coefficient_presentation_counterexample}
+    The coefficients in the $P$ presentation are length independent, whereas
+    those in the $Q$ presentation are not.  More precisely,
+    \begin{align}
+        c_P^{(L)}&=1,
+        \notag\\
+        c_Q^{(1)}&=\frac45,
+        \notag\\
+        c_Q^{(2)}&=\frac{16}{25}.
+        \notag
+    \end{align}
+\end{theorem}
+\begin{proof}\leanok
+    The first family is constant.  The last two displayed values are unequal.
+\end{proof}
+
 \begin{theorem}[Associativity constraint on the structure coefficients]%
     \label{thm:mpdo_bnt_label_coeff_associativity}
     \lean{MPOTensor.BNTLabelOperatorFamily.HasSameLengthProductForm.%
