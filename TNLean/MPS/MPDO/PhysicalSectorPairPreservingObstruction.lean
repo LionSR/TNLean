@@ -69,8 +69,7 @@ noncomputable def fourSiteNeighboringOperator
 
 /-- The complex trace matrix \(C_{k,h}=\operatorname{tr}(\eta_{k,h})\).
 
-Source: arXiv:1606.00608, Appendix C.2, equations `Tkn` and `AppPsiPhi`,
-lines 1473--1498. -/
+Source: arXiv:1606.00608, Appendix C.2, equation `StochT`, lines 1452--1456. -/
 noncomputable def neighboringTraceMatrix (F : PhysicalSectorFactorization K) :
     Matrix (Fin F.sectorCount) (Fin F.sectorCount) ℂ :=
   fun k h ↦ (F.neighboringOperator k h).trace
@@ -78,7 +77,7 @@ noncomputable def neighboringTraceMatrix (F : PhysicalSectorFactorization K) :
 /-- The `(k,h)` entry of the trace matrix is
 \(\operatorname{tr}(\eta_{k,h})\).
 
-Source: arXiv:1606.00608, Appendix C.2, equation `Tkn`, lines 1473--1482. -/
+Source: arXiv:1606.00608, Appendix C.2, equation `StochT`, lines 1452--1456. -/
 @[simp] theorem neighboringTraceMatrix_apply
     (F : PhysicalSectorFactorization K) (k h : Fin F.sectorCount) :
     F.neighboringTraceMatrix k h = (F.neighboringOperator k h).trace :=
