@@ -28,7 +28,7 @@ variable {d D : ℕ}
 
 /-- Algebraic injectivity: the tensor matrices span the full matrix algebra. -/
 def IsInjective (A : Fin d → Matrix (Fin D) (Fin D) ℂ) : Prop :=
-  Kraus.IsInjective A
+  Submodule.span ℂ (Set.range A) = (⊤ : Submodule ℂ (Matrix (Fin D) (Fin D) ℂ))
 
 /-- The span of an injective tensor's matrices is the full matrix algebra. -/
 lemma IsInjective.span_eq_top {A : Fin d → Matrix (Fin D) (Fin D) ℂ} (hA : IsInjective A) :
@@ -48,7 +48,7 @@ theorem neZero_d_of_isInjective {A : Fin d → Matrix (Fin D) (Fin D) ℂ} [NeZe
 
 /-- Block injectivity: words of length $N$ span the full matrix algebra. -/
 def IsNBlkInjective (A : Fin d → Matrix (Fin D) (Fin D) ℂ) (N : ℕ) : Prop :=
-  Kraus.IsNBlkInjective A N
+  Kraus.wordSpan A N = (⊤ : Submodule ℂ (Matrix (Fin D) (Fin D) ℂ))
 
 /-- The literal-span form of block injectivity. -/
 theorem IsNBlkInjective.span_eq_top {A : Fin d → Matrix (Fin D) (Fin D) ℂ} {N : ℕ}
@@ -58,7 +58,7 @@ theorem IsNBlkInjective.span_eq_top {A : Fin d → Matrix (Fin D) (Fin D) ℂ} {
 
 /-- Normality means block injectivity at some positive word length. -/
 def IsNormal (A : Fin d → Matrix (Fin D) (Fin D) ℂ) : Prop :=
-  Kraus.IsNormal A
+  ∃ N : ℕ, 0 < N ∧ IsNBlkInjective (d := d) (D := D) A N
 
 @[simp] lemma isNormal_iff (A : Fin d → Matrix (Fin D) (Fin D) ℂ) :
     IsNormal A ↔ ∃ N, 0 < N ∧ IsNBlkInjective A N := Iff.rfl
