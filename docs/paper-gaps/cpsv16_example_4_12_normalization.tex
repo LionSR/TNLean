@@ -90,12 +90,48 @@ correlation length only in the project's scale-invariant sense, explicit
 failure of literal ZCL, and hence failure of the fixed-representative
 trace-preserving renormalization condition.
 
-Constructing the parity coarse-graining and refinement channels for
-$\widehat M=(1/2)M$ is a separate task. The full GSNNCH exclusion is already a
-statement about the normalized family because \leanid{MPOTensor.IsGSNNCH}
-quantifies over \leanid{MPOTensor.normalizedMPO}. It may therefore be proved as
+For $\widehat M=(1/2)M$, let $\pi(a,b)=a\oplus b$ and define Kraus operators
+\[
+  C_{a,b}=|\pi(a,b)\rangle\langle a,b|,
+  \qquad
+  R_{a,b}=2^{-1/2}|a,b\rangle\langle\pi(a,b)|.
+\]
+Each parity fibre has two elements, and hence
+\[
+  \sum_{a,b} C_{a,b}^{\dagger}C_{a,b}=I_4,
+  \qquad
+  \sum_{a,b} R_{a,b}^{\dagger}R_{a,b}=I_2.
+\]
+The corresponding completely positive maps are trace preserving.  Since
+\[
+  \widehat M^{aa}\widehat M^{bb}
+    =\tfrac12\widehat M^{\pi(a,b)\pi(a,b)}
+\]
+and the off-diagonal physical letters vanish, direct substitution proves both
+channel equations of Definition~4.1 for every virtual boundary matrix.  These
+results are recorded by
+\leanid{MPOTensor.CPSVExample412NormalizedRFP.Mhat},
+\leanid{MPOTensor.CPSVExample412NormalizedRFP.mpo_Mhat_eq_normalizedMPO_M},
+\leanid{MPOTensor.CPSVExample412NormalizedRFP.Mhat_isMPDO}, and
+\leanid{MPOTensor.CPSVExample412NormalizedRFP.Mhat_isRFPViaTS}.
+
+This conclusion concerns precisely the two channel equations.  It does not
+settle a second normalization tension in the source.  As a doubled-index MPS,
+$M$ has two bond-one sectors with physical vectors $(1,0,0,1)$ and
+$(1,0,0,-1)$.  Their normal representatives are obtained by division by
+$\sqrt2$.  Consequently the two horizontal normal-block weights of
+$\widehat M$ are both $1/\sqrt2$.  Neither has modulus one, whereas line~246
+assumes that at least one weight does. Thus the proved bare channel predicate
+must not be presented as a proof that $\widehat M$ obeys every standing
+canonical-form convention in Definition~4.1.  This boundary is also recorded
+in
+\path{docs/paper-gaps/cpsv16_unit_weight_rfp_scale_tension.tex}.
+
+The full GSNNCH exclusion is already a statement about the normalized family
+because \leanid{MPOTensor.IsGSNNCH} quantifies over
+\leanid{MPOTensor.normalizedMPO}. It may therefore be proved as
 $\neg\operatorname{IsGSNNCH}(M)$ for the printed tensor and remains tracked in
-\ghissue{6045}. Transport to a separately named $\widehat M$ is optional
+\ghissue{6045}. Transport to the separately named $\widehat M$ is optional
 packaging rather than a prerequisite for that result.
 
 \section{Verdict}
@@ -114,14 +150,14 @@ proves failure of literal idempotence.  Therefore
 \leanid{MPOTensor.CPSVExample412Literal.M_not_isRFPViaTS} proves that the
 fixed-representative RFP assertion is false for the tensor exactly as printed.
 
-The normalized tensor $\widehat M=(1/2)M$ is a likely correction because its
-physical-trace transfer is idempotent and it generates the normalized density
-family.  This observation alone does not construct the required
-trace-preserving completely positive maps.  Their construction and proof remain
-open in \ghissue{6044}; no RFP verdict for $\widehat M$ is claimed here. Any
-formal treatment of $\widehat M$ must use tensor-level scalar rescaling and
-\leanid{MPOTensor.mpo_smul} to identify its periodic MPO family with the
-normalization of the printed family, rather than introducing an unrelated
-second tensor definition.
+The normalized tensor $\widehat M=(1/2)M$ is the likely local correction.  Its
+periodic family is identified with the normalized periodic family of $M$ by
+tensor-level scalar rescaling and \leanid{MPOTensor.mpo_smul}; it is not an
+independent tensor presentation.  The parity Kraus families above prove the
+bare trace-preserving channel predicate without additional hypotheses,
+discharging the mathematical task tracked in \ghissue{6044}. They do not repair
+the incompatible line-246 unit-weight convention, so the formal verdict must
+remain separated into the false literal claim, the true normalized channel
+equations, and the still-open full GSNNCH exclusion in \ghissue{6045}.
 
 \end{document}
