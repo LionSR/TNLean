@@ -808,6 +808,11 @@ supplied rank-one neighboring trace factorization remain valid restricted
 results, but they do not establish the missing normality or the all-sector
 factorization.
 
+The explicit example discussed in the conclusion realizes this normalization
+obstruction under every condition used in the simple Case-II passage, at the
+normalized fixed-representative boundary. It refutes the absorption inference,
+not the claimed alternative all-sector factorization.
+
 \section{Conclusion}
 
 The proof in Appendix C.2 contains an unjustified matrix step as written: a
@@ -885,23 +890,28 @@ changes it to $|\mu_s|^2$. The source's global normalization gives only one
 unit-modulus coefficient across the whole canonical form and does not supply
 $|\mu_s|=1$ for every $s$.
 
-The printed absorbed-normality step is now formally refuted by the reusable
-identity \leanid{MPSTensor.spectralRadius_transferMap_smul} and the explicit
-two-sector, bond-one construction
+The printed absorbed-normality step is now formally refuted under all
+conditions used in Appendix~C.2 by the two-sector, bond-one theorem
 \leanid{MPOTensor.CaseIIAbsorptionCounterexample.%
-printed_absorbed_normality_step_is_false}.  Its normal representatives have
-disjoint doubled-physical support, its global weights are
-$(1/\sqrt2,1)$, its ambient physical-trace transfer is literally idempotent,
-and its first absorbed representative has transfer spectral radius $1/2$ and
-is not normal. This first construction decides the scalar normality inference
-used in Proposition~\texttt{prop2to3}; it is not the counterexample to the
-literal implication (iv)$\Rightarrow$(v).
+ambient_isSAL_isSimpleCanonicalForm_and_firstAbsorbed_not_isNormalTensor}.
+For every $N>0$, its diagonal periodic operator is positive semidefinite and
+has trace two. Explicit trace-preserving completely positive maps witness the
+Definition~4.1 closure equations, hence SAL, and its physical-trace transfer
+is the identity, giving literal ZCL. Its normal representatives have disjoint
+doubled-physical support, global weights $(1/\sqrt2,1)$, normalized
+fixed-representative simple canonical form, and biCF. Nevertheless, the first
+absorbed representative has transfer spectral radius $1/2$ and is not normal.
+This repairs the missing full-condition statement and decides the printed
+normality inference used in Proposition~\texttt{prop2to3}; it does not refute
+the asserted all-sector conclusion or the literal implication
+(iv)$\Rightarrow$(v).
 
 That implication is separately refuted by the one-representative,
 two-copy construction
+in \path{TNLean/MPS/MPDO/Theorem49RepeatedCopyCounterexample.lean},
 \leanid{MPOTensor.CaseIIAbsorptionCounterexample.%
 printed_theorem49_iv_to_v_is_false}. Its raw copy weights are $1$ and $1/2$.
-The capstone packages the exact BNT canonical assembly and global unit-weight
+The theorem packages the exact BNT canonical assembly and global unit-weight
 condition, MPDO positivity, nonnilpotence of the sole BNT representative,
 simultaneous one-letter span, representative MPDO positivity, the
 distinct-layer equation, the physical-sector factorization, and the positive
@@ -980,10 +990,10 @@ scale-invariant \leanid{MPOTensor.IsSourceZCL} relation, while $A^{[2]}$ fails
 the literal idempotence forced by conclusion~(v). The normalized representative
 therefore refutes the broadened implication using that up-to-scalar predicate,
 but it is not an unqualified counterexample to Theorem~4.9 because it fails the
-paper's literal ZCL diagram. Independently, the repeated-copy capstone above
+paper's literal ZCL diagram. Independently, the repeated-copy theorem above
 refutes the exact printed implication (iv)$\Rightarrow$(v). The source
-(ii)$\Rightarrow$(v) route remains open at the common-weight absorption and
-projector-controlled assembly boundary.
+(ii)$\Rightarrow$(v) route still requires an alternative all-sector
+factorization and the subsequent projector-controlled assembly.
 
 \bibliographystyle{alpha}
 \bibliography{references}
