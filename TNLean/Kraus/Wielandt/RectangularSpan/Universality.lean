@@ -12,6 +12,19 @@ import TNLean.Kraus.Wielandt.RectangularSpan.UniversalityAux
 This module proves the transfer-free strict-growth, structural permanence, and
 eigenvector-padding results used in the sharp rectangular-span universality argument.
 All statements are formulated for an arbitrary finite family of square complex matrices.
+
+For \(P=(K_{i_0})^r\), the decisive strict-growth assertion is
+\[
+  \dim R_n < D D' \quad\Longrightarrow\quad \dim R_n < \dim R_{n+1},
+  \qquad R_n=\operatorname{span}_{\mathbb C}\{P K^w:|w|=n\}.
+\]
+If two consecutive dimensions are equal below this ceiling, the structural theorem gives
+\[
+  R_{n+1}=K_{i_0}R_n.
+\]
+Permanence of this identity contradicts eventual fullness and yields the sharp rank-one
+membership bound; the eigenvector relation then raises the word length to the prescribed
+exact level.
 -/
 
 open scoped Matrix
@@ -20,6 +33,17 @@ namespace Kraus
 
 variable {d D : ℕ}
 
+/-! ## Section 8g: Strict growth and the ceiling
+
+For \(P=(K_{i_0})^r\) and
+\(R_n=\operatorname{span}_{\mathbb C}\{P K^w:|w|=n\}\), this section proves
+that strict growth below the ceiling forces \(R_n\) to reach the full
+left-multiplication range. It also proves the stabilization identity
+\[
+  \dim R_n=\dim R_{n+1} \quad\Longrightarrow\quad R_{n+1}=K_{i_0}R_n,
+\]
+which is the algebraic obstruction used in the unconditional argument.
+-/
 
 section StrictGrowthReduction
 
@@ -148,7 +172,7 @@ theorem wielandt_unconditional_sharp_of_strict_growth
     rectSpan_nilpIndex_eq_range_of_strict_growth K i₀ hStrict
   -- Apply conditional sharp theorem
   exact vecMulVec_eigenvector_sharp_of_rectSpan K i₀ hNotInv hμ heig
-    (le_trans hn₀ le_rfl) hstab
+    hn₀ hstab
 
 /-! ### Part 4: Structural consequence of finrank stabilization -/
 
@@ -238,15 +262,39 @@ This section proves the transfer-free permanence and padding steps in the Append
 
 ### Mathematical overview
 
-The key identity expands `rectSpan P K (n+1)` by right multiplication with one generator.
-Since left and right matrix multiplication commute, this gives:
+Put \(R_n=\operatorname{span}_{\mathbb C}\{P K^w:|w|=n\}\). Expanding
+\(R_{n+1}\) by its final letter and using commutativity of left and right
+matrix multiplication gives:
 
-1. **Right expansion** of the rectangular span.
-2. **Structural permanence** after one equality of consecutive dimensions.
-3. **Permanence of consecutive dimension equality** at every later level.
-4. **Constancy of the dimension** from the first stabilized level onward.
-5. **Dimension monotonicity** across arbitrary length inequalities.
-6. **Eigenvector padding** from one exact word length to every larger length.
+1. **Right expansion:**
+   \[
+     R_{n+1}=\bigvee_j R_n K_j.
+   \]
+2. **Structural permanence:**
+   \[
+     R_{n+1}=K_{i_0}R_n \quad\Longrightarrow\quad
+     R_{n+2}=K_{i_0}R_{n+1}.
+   \]
+3. **Permanence of consecutive dimension equality:**
+   \[
+     \dim R_n=\dim R_{n+1} \quad\Longrightarrow\quad
+     \dim R_{n+1}=\dim R_{n+2}.
+   \]
+4. **Constancy after stabilization:** for every \(m\ge n\),
+   \[
+     \dim R_m=\dim R_n.
+   \]
+5. **Dimension monotonicity:** if \(m\le n\), then
+   \[
+     \dim R_m\le\dim R_n.
+   \]
+6. **Eigenvector padding:** suppose \(K_{i_0}\varphi=\mu\varphi\) with
+   \(\mu\ne0\). For every \(m\ge n\),
+   \[
+     \lvert\varphi\rangle\langle\psi\rvert\in S_n(K)
+     \quad\Longrightarrow\quad
+     \lvert\varphi\rangle\langle\psi\rvert\in S_m(K).
+   \]
 -/
 
 section ExactPropagation
@@ -257,7 +305,7 @@ variable {d D : ℕ}
 
 /-! ### Part 1: One-letter words -/
 
-/-- `MPSTensor.evalWord K (List.ofFn σ) = K (σ 0)` for `σ : Fin 1 → Fin d`. -/
+/-- For a one-letter word \(\sigma\), its evaluation is \(K^{\sigma}=K_{\sigma(0)}\). -/
 private lemma evalWord_ofFn_one (K : Fin d → Matrix (Fin D) (Fin D) ℂ) (σ : Fin 1 → Fin d) :
     MPSTensor.evalWord K (List.ofFn σ) = K (σ 0) := by
   have h : List.ofFn σ = [σ 0] := by
