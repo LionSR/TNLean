@@ -1193,6 +1193,25 @@ abstracted — record why, so it is not re-proposed).
 Seeded from `scripts/tactic_pattern_scan.py` (2026-07-18 scan; re-run for
 current counts and full location lists).
 
+### explicit finite-generator word-tuple spanning — candidate
+- **Pattern:** unfold `MPSTensor.WordTupleSpanTop`, place one or more explicit
+  word tuples in the span by `Submodule.subset_span`, express an arbitrary
+  block tuple as their scalar linear combination, and conclude by closure
+  under scalar multiplication and addition.
+- **Seen:** two direct occurrences in
+  `TNLean/MPS/MPDO/CaseIIAbsorptionCounterexample.lean`
+  (`sectors_wordTupleSpanTop_one` and `scalarBNT_wordTupleSpanTop`), together
+  with the related finite-generator reconstruction in
+  `TNLean/MPS/MPDO/ActiveSectorSpanningCounterexample.lean`
+  (`sectorMatrix_span_eq_top`) (2026-08-20).
+- **Abstraction (proposed):** first determine whether a small finite-generator
+  span criterion can cover both dependent block tuples and ordinary matrix
+  families without requiring application-specific coefficient functions.
+- **Notes:** the two word-tuple proofs use different numbers of generators,
+  while the related matrix proof has a different codomain. Record the common
+  reconstruction pattern now; retain the explicit proofs until another
+  direct word-tuple occurrence identifies a materially smaller theorem.
+
 ### Hermitian extraction from a finite-order channel eigenvector — candidate
 - **Pattern:** from `E X = μ • X`, `X ≠ 0`, `μ ≠ 1`, and `μ ^ p = 1`,
   use trace preservation and the Hermitian parts `X + Xᴴ` and
