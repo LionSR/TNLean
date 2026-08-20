@@ -210,11 +210,16 @@ class ImportAggregatorGeneratorTests(unittest.TestCase):
                         original_carrier.replace(f"import {target}\n", ""),
                         encoding="utf-8",
                     )
+                    owner_path.write_text(
+                        f"import {carrier}\nimport {target}\n",
+                        encoding="utf-8",
+                    )
                     self.assertIn(
                         target,
                         GENERATOR.check_manifest_coverage(root, expected, sources),
                     )
                     carrier_path.write_text(original_carrier, encoding="utf-8")
+                    owner_path.write_text(f"import {carrier}\n", encoding="utf-8")
 
             owner_path.write_text("", encoding="utf-8")
             missing = GENERATOR.check_manifest_coverage(root, expected, sources)
