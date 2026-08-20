@@ -36,6 +36,11 @@ LABEL_RE = re.compile(r"\\label\{([^}]+)\}")
 USES_RE = re.compile(r"\\uses\{([^}]*)\}", re.DOTALL)
 
 
+def normalized_relative_path(path: str) -> str:
+    """Return a repository-relative path with platform-independent separators."""
+    return path.replace("\\", "/")
+
+
 def blueprint_content_files(blueprint_src: Path) -> list[Path]:
     """Return theorem-bearing blueprint files in stable order."""
     files = list((blueprint_src / "chapter").glob("*.tex"))
@@ -102,13 +107,18 @@ def boundary_report(root: Path) -> dict[str, object]:
 
     parsed_environments = environment_uses(root / "blueprint" / "src")
     label_by_location = {
-        (str(item["file"]), int(item["line"]), str(item["environment"])): str(item["label"])
+        (
+            normalized_relative_path(str(item["file"])),
+            int(item["line"]),
+            str(item["environment"]),
+        ): str(item["label"])
         for item in parsed_environments
     }
     grouped: dict[tuple[str, int, str | None, str], list[str]] = defaultdict(list)
     for entry in collect_blueprint_entries(root / "blueprint" / "src"):
-        label = entry.label or label_by_location.get((entry.file, entry.line, entry.env_type))
-        grouped[(entry.file, entry.line, label, entry.env_type)].append(entry.lean_decl)
+        file = normalized_relative_path(entry.file)
+        label = entry.label or label_by_location.get((file, entry.line, entry.env_type))
+        grouped[(file, entry.line, label, entry.env_type)].append(entry.lean_decl)
 
     items: list[dict[str, object]] = []
     disposition_by_label: dict[str, str] = {}
@@ -121,8 +131,9 @@ def boundary_report(root: Path) -> dict[str, object]:
             if declaration is None:
                 unresolved.append(name)
                 continue
-            sources.append(declaration.file)
-            moving.append(declaration.file in movers)
+            declaration_file = normalized_relative_path(declaration.file)
+            sources.append(declaration_file)
+            moving.append(declaration_file in movers)
         if unresolved:
             disposition = "unresolved"
         elif moving and all(moving):
