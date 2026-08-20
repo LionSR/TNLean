@@ -31,8 +31,9 @@ element `Matrix.vecMulVec φ ψ` inside a bounded word span of a blocked tensor.
 
 ## Main results
 
-- `exists_nonzero_trace_word_of_wordSpan_eq_top`: nonzero-trace word at any full span level.
-- `exists_eigenvector_of_wordSpan_eq_top`: eigenvector extraction from a full word span.
+The exact-span word and eigenvector inputs are provided by
+`TNLean.Wielandt.RankOne.Extraction`.
+
 - `exists_rankOne_mem_wordSpan_blockTensor`: the rank-one extraction theorem.
 - `wielandt_lemma2b`: the unconditional Lemma 2(b).
 

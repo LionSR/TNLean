@@ -19,7 +19,9 @@ namespace Kraus
 
 variable {d D : ℕ}
 
-/-- If `wordSpan K N = ⊤` and `[NeZero D]`, some word of length `N` has nonzero trace. -/
+/-- If `wordSpan K N = ⊤` and `[NeZero D]`, some word of length `N` has nonzero trace.
+
+Paper: arXiv:0909.5347, Theorem 1 proof, first paragraph. -/
 theorem exists_nonzero_trace_word_of_wordSpan_eq_top [NeZero D]
     (K : Fin d → Matrix (Fin D) (Fin D) ℂ) {N : ℕ} (htop : wordSpan K N = ⊤) :
     ∃ σ : Fin N → Fin d, (MPSTensor.evalWord K (List.ofFn σ)).trace ≠ 0 := by
@@ -39,7 +41,9 @@ theorem exists_nonzero_trace_word_of_wordSpan_eq_top [NeZero D]
   exact htrI (LinearMap.mem_ker.mp (hker hI))
 
 /-- If `wordSpan K N = ⊤` and `[NeZero D]`, some word of length `N` has a nonzero eigenvalue
-and a corresponding nonzero eigenvector. -/
+and a corresponding nonzero eigenvector.
+
+Paper: arXiv:0909.5347, Theorem 1 proof, first paragraph. -/
 theorem exists_eigenvector_of_wordSpan_eq_top [NeZero D]
     (K : Fin d → Matrix (Fin D) (Fin D) ℂ) {N : ℕ} (htop : wordSpan K N = ⊤) :
     ∃ (σ : Fin N → Fin d) (μ : ℂ) (φ : Fin D → ℂ),

@@ -14,6 +14,10 @@ The Fitting range description formerly proved here now lives in
 `TNLean.Analysis.MatrixFittingRange`. The exact-span extraction results are restated from their
 finite-family versions. This module retains the established import surface for downstream rank-one
 extraction files.
+
+## References
+
+- arXiv:0909.5347, Theorem 1 proof, first paragraph
 -/
 
 open scoped Matrix
