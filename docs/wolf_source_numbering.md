@@ -5,19 +5,21 @@ of M. Wolf, *Quantum Channels & Operations: Guided Tour*.  Their automatically
 rendered theorem numbers are not, in general, the theorem numbers of the
 published notes.
 
-The shared declarations in `preamble.tex` use one theorem counter, reset by
-section.  In particular, `ch06_spectral_properties.tex` has been transcribed as
-one section, whereas the published chapter has several sections.  Lemmas,
-propositions, corollaries, examples, problems, and remarks therefore contribute
-to one unbroken local counter.  The two numberings agree near the beginning of
-the chapter and diverge later.
+The shared declarations in `Notes/WolfNoteTexSource/preamble.tex` use one
+theorem counter, reset by section.  Chapter 6 overrides those declarations:
+`ch06_spectral_properties.tex` undefines the shared environments and gives
+propositions, corollaries, lemmas, definitions, examples, and remarks separate
+section-scoped counters.  Since that file is one section numbered 6, its fifth
+corollary is rendered as Corollary 6.5.  Equation numbers have an independent
+counter; in particular, 6.29 is an equation number, not the local number of
+this corollary.
 
 Wolf's own cross-references in the chapter are the primary local evidence for
 the published numbering.  For example, the proof of *Unique fixed points of
 full rank* and the proof of *Asymptotic image* both cite Corollary 6.5 for the
-result *Linearly independent stationary states*.  The local counter renders
-that result as 6.29; neither the local rendering nor the formerly used number
-6.8 is the published citation.
+result *Linearly independent stationary states*.  The local corollary counter
+also renders that result as 6.5; the formerly used number 6.8 is not the
+published citation.
 
 When adding a source reference, use the following order of evidence:
 
