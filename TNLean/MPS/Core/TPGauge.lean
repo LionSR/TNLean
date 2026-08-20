@@ -40,26 +40,6 @@ open Matrix Finset Complex
 
 variable {d D : ℕ}
 
-/-! ## Auxiliary lemmas about `CFC.sqrt` for positive definite matrices -/
-
-/-- For a positive definite matrix `ρ`, the CFC square root satisfies `sqrt ρ * sqrt ρ = ρ`. -/
-lemma cfc_sqrt_mul_self_of_posDef (ρ : Matrix (Fin D) (Fin D) ℂ) (hρ : ρ.PosDef) :
-    CFC.sqrt ρ * CFC.sqrt ρ = ρ := by
-  have hnonneg : (0 : Matrix (Fin D) (Fin D) ℂ) ≤ ρ := hρ.posSemidef.nonneg
-  simpa using (CFC.sqrt_mul_sqrt_self ρ hnonneg)
-
-/-- `CFC.sqrt ρ` is Hermitian (self-adjoint). -/
-lemma conjTranspose_cfc_sqrt (ρ : Matrix (Fin D) (Fin D) ℂ) :
-    (CFC.sqrt ρ)ᴴ = CFC.sqrt ρ :=
-  Matrix.conjTranspose_cfc_sqrt ρ
-
-/-- If `ρ` is positive definite, then `det (CFC.sqrt ρ)` is a unit.
-
-(We will use this to rewrite `S * S⁻¹ = 1` for `S := CFC.sqrt ρ`.) -/
-lemma isUnit_det_cfc_sqrt_of_posDef (ρ : Matrix (Fin D) (Fin D) ℂ) (hρ : ρ.PosDef) :
-    IsUnit (Matrix.det (CFC.sqrt ρ)) :=
-  Matrix.PosDef.isUnit_det_cfc_sqrt hρ
-
 /-! ## TP gauge construction -/
 
 /-- Gauge-transformed tensor `B i = ρ^{1/2} A i ρ^{-1/2}`.
@@ -137,7 +117,7 @@ theorem gaugeEquiv_tpGauge (A : MPSTensor d D) (ρ : Matrix (Fin D) (Fin D) ℂ)
     Matrix.GeneralLinearGroup.mk'' (CFC.sqrt ρ)
       (by
         -- `mk''` needs `IsUnit det`.
-        simpa using isUnit_det_cfc_sqrt_of_posDef (D := D) ρ hρ)
+        simpa using Matrix.PosDef.isUnit_det_cfc_sqrt hρ)
   refine ⟨X, ?_⟩
   intro i
   -- `X⁻¹` coerces to the (nonsingular) matrix inverse.
@@ -195,13 +175,13 @@ theorem spectralUnitalGauge_isUnital_of_transferMap_eigenvector
     rw [show c = (↑((Real.sqrt r)⁻¹) : ℂ) from rfl, ← Complex.ofReal_mul, hcc,
       Complex.ofReal_inv]
   have hS_mul : S * S = ρ := by
-    simpa [S] using cfc_sqrt_mul_self_of_posDef (D := D) ρ hρ
+    simpa [S] using CFC.sqrt_mul_sqrt_self ρ hρ.posSemidef.nonneg
   have hS_herm : Sᴴ = S := by
-    simpa [S] using conjTranspose_cfc_sqrt (D := D) ρ
+    simpa [S] using Matrix.conjTranspose_cfc_sqrt ρ
   have hSS : S * Sᴴ = ρ := by
     simpa [hS_herm] using hS_mul
   have hdet : IsUnit S.det := by
-    simpa [S] using isUnit_det_cfc_sqrt_of_posDef (D := D) ρ hρ
+    simpa [S] using Matrix.PosDef.isUnit_det_cfc_sqrt hρ
   have hSinv_mul : S⁻¹ * S = 1 := Matrix.nonsing_inv_mul S hdet
   have hdetT : IsUnit (Sᴴ.det) := by
     simpa [Matrix.det_conjTranspose] using (IsUnit.star hdet)
@@ -278,7 +258,7 @@ theorem gaugeEquiv_unitalGauge
   let X : GL (Fin D) ℂ :=
     Matrix.GeneralLinearGroup.mk'' (CFC.sqrt ρ)
       (by
-        simpa using isUnit_det_cfc_sqrt_of_posDef (D := D) ρ hρ)
+        simpa using Matrix.PosDef.isUnit_det_cfc_sqrt hρ)
   refine ⟨X⁻¹, ?_⟩
   intro i
   simp [unitalGauge, X]
