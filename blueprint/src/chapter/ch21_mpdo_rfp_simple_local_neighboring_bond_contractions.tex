@@ -216,17 +216,28 @@
     \cite[Appendix~C.2, lines~1381--1439]{Cirac2016MPDO_arXiv}.
 \end{definition}
 
+\begin{theorem}[Range projection of a matrix-block inclusion]
+    \label{thm:block_inclusion_projection}
+    \lean{Matrix.sigmaBlockInclusion_mul_conjTranspose_eq_blockProjection}
+    \leanok
+    For the canonical inclusion $V_s$ of a matrix block,
+    $V_sV_s^\dagger$ is the projection onto that block.
+\end{theorem}
+
+\begin{proof}\leanok
+    Compute the entries of the inclusion and its conjugate transpose.
+\end{proof}
+
 \begin{theorem}[Flattened sector as an isometric virtual corner]
     \label{thm:mpdo_flattened_sector_virtual_compression}
-    \lean{Matrix.sigmaBlockInclusion_mul_conjTranspose_eq_blockProjection,
-      MPSTensor.SectorDecomposition.flatBlockInclusion,
+    \lean{MPSTensor.SectorDecomposition.flatBlockInclusion,
       MPSTensor.SectorDecomposition.flatBlockInclusion_isometry,
       MPSTensor.SectorDecomposition.flatBlockInclusion_mul_conjTranspose,
       MPSTensor.SectorDecomposition.toTensor_mul_flatBlockInclusion,
       MPSTensor.SectorDecomposition.flatBlockInclusion_conjTranspose_mul_toTensor,
       MPSTensor.SectorDecomposition.flatWeight_smul_flatBasis_eq_compression}
     \leanok
-    \uses{def:sector_weight_data}
+    \uses{def:sector_weight_data, thm:block_inclusion_projection}
     Let $A=\bigoplus_t \mu_t A_t$ be a weighted block-diagonal tensor in
     flattened virtual coordinates.
     For every block $s$, the canonical inclusion $V_s$ of that block satisfies
