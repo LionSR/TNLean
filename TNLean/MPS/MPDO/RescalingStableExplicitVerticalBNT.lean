@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import TNLean.Algebra.MatrixTracePairing
 import TNLean.Channel.Separable
 import TNLean.MPS.MPDO.BNTAlgebraTensorClause
 import TNLean.MPS.MPDO.PureAreaLaw
@@ -462,7 +463,7 @@ theorem mpvOverlap_A_eq_wMat_pow_trace (L : ℕ) (hL : 0 < L) :
     MPSTensor.mpvOverlap A A L = (wMat ^ L).trace := by
   rw [← MPSTensor.trace_mixedTransferMap_pow_eq_mpvOverlap A A L,
     MPSTensor.mixedTransferMap_self]
-  rw [MPSTensor.linearMap_trace_eq_sum_apply_single]
+  rw [Matrix.linearMap_trace_eq_sum_apply_single]
   simp only [Matrix.trace]
   apply Finset.sum_congr rfl
   intro i _
