@@ -3,7 +3,8 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.QPF.Assembly
+import TNLean.Channel.Irreducible.FixedPointUniqueness
+import TNLean.MPS.Core.CPPrimitive
 
 /-!
 # Quantum Perron–Frobenius for irreducible transfer maps
@@ -64,9 +65,8 @@ This is strictly more general than `quantum_perron_frobenius`, which requires
 `n` sites, the resulting tensor may not be injective (the Kraus operators
 may not span), but the transfer map can still be irreducible.
 
-**Proof**: Existence of a PSD fixed point follows from the channel fixed-point
-theorem. Positive definiteness follows from `posSemidef_fixedPoint_isPosDef_of_irreducible`.
-Uniqueness follows from `posSemidef_fixedPoint_unique_of_irreducible`. -/
+**Proof**: The normalization makes the transfer map a channel, so channel fixed-point
+existence and uniqueness under irreducibility applies directly. -/
 theorem quantum_perron_frobenius_irreducible [DecidableEq (Fin D)]
     (A : MPSTensor d D)
     (hIrr : IsIrreducibleMap (transferMap (d := d) (D := D) A))
@@ -74,20 +74,7 @@ theorem quantum_perron_frobenius_irreducible [DecidableEq (Fin D)]
     (hD : 0 < D) :
     ∃ ρ : Matrix (Fin D) (Fin D) ℂ,
       HasUniqueFixedPoint (transferMap (d := d) (D := D) A) ρ := by
-  -- Existence of PSD fixed point (via channel theory, does not need injectivity).
-  -- `convert` resolves a `DecidableEq` instance mismatch between the classical
-  -- instance on `Fin D` and the one derived from `instDecidableEqFin`.
-  obtain ⟨ρ, hρ_psd, hρ_ne, hρ_fix⟩ := exists_posSemidef_fixedPoint A (by convert hNorm) hD
-  -- Positive definiteness under irreducibility.
-  have hρ_pd := posSemidef_fixedPoint_isPosDef_of_irreducible A hIrr ρ hρ_psd hρ_ne hρ_fix
-  exact ⟨ρ, {
-    fixed := hρ_fix
-    pos_def := hρ_pd
-    unique := fun σ hσ_psd hσ_fix => by
-      by_cases hσ : σ = 0
-      · exact ⟨0, by simp [hσ]⟩
-      · exact posSemidef_fixedPoint_unique_of_irreducible (A := A) hIrr ρ σ
-          hρ_psd hρ_ne hσ_psd hρ_fix hσ_fix
-  }⟩
+  exact (transferMap_isChannel A (by convert hNorm)).exists_hasUniqueFixedPoint_of_irreducible
+    hIrr hD
 
 end MPSTensor
