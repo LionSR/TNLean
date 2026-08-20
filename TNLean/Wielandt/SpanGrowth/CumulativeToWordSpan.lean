@@ -14,8 +14,8 @@ import TNLean.Algebra.BurnsideTheorem
 # From cumulative span to word span for MPS tensors
 
 This file gives the MPS-facing consequences of the generic Kraus-family span
-results. The transfer-free statements are compatibility wrappers around the
-corresponding declarations in `Kraus`. The MPS-specific results connect exact
+results. The transfer-free statements are MPS restatements of the corresponding
+Kraus-family results. The MPS-specific results connect exact
 word-span fullness to block injectivity and normality.
 
 ## Main results
@@ -42,7 +42,7 @@ namespace MPSTensor
 
 variable {d D : ℕ}
 
-/-! ## Compatibility wrappers for transfer-free span results -/
+/-! ## MPS restatements of transfer-free span results -/
 
 /-- If the cumulative span is full, some word of bounded length has nonzero trace. -/
 theorem exists_nonzero_trace_word_of_cumulativeSpan_eq_top [NeZero D]
