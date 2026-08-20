@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.Channel.FixedPoint.CanonicalGauge
+import TNLean.Channel.Schwarz.Basic
 import TNLean.Kraus.MixedMap
 
 import Mathlib.Analysis.CStarAlgebra.Matrix
@@ -15,7 +16,9 @@ import Mathlib.Data.Matrix.Block
 
 An invertible gauge sends a modulus-one eigenvector of a mixed Kraus map to an eigenvector of
 the gauged map. Weighted Kadison--Schwarz equality gives intertwining relations for the gauged
-matrix families. The resulting intertwining also produces fixed points by matrix congruence.
+matrix families. This is the common argument in Wolf Theorem 6.6 on peripheral spectra of
+irreducible Schwarz maps and Pérez-García et al. (2007), Lemma 5, on mixed-transfer-operator
+gaps. The resulting intertwining also produces fixed points by matrix congruence.
 -/
 
 open scoped Matrix Matrix.Norms.Operator MatrixOrder ComplexOrder BigOperators
@@ -26,12 +29,16 @@ namespace Kraus
 
 variable {d D D₁ D₂ : ℕ}
 
-/-- Gauge a finite square matrix family by `S`. -/
+/-- Gauge a finite square matrix family by `S`.
+
+The corresponding MPS notation is `MPSTensor.gaugeTensor`. -/
 noncomputable def gaugeFamily (S : Matrix (Fin D) (Fin D) ℂ)
     (A : Fin d → Matrix (Fin D) (Fin D) ℂ) : Fin d → Matrix (Fin D) (Fin D) ℂ :=
   fun i ↦ S⁻¹ * A i * S
 
-/-- Transport a rectangular matrix through gauges on its two sides. -/
+/-- Apply the two gauges to a rectangular matrix.
+
+The corresponding MPS notation is `MPSTensor.gaugeEigenvector`. -/
 noncomputable def gaugeMixedEigenvector
     (SA : Matrix (Fin D₁) (Fin D₁) ℂ) (SB : Matrix (Fin D₂) (Fin D₂) ℂ)
     (X : Matrix (Fin D₁) (Fin D₂) ℂ) : Matrix (Fin D₁) (Fin D₂) ℂ :=
@@ -50,7 +57,10 @@ theorem gaugeMixedEigenvector_eq
     gaugeMixedEigenvector SA SB X = SA⁻¹ * X * (SBᴴ)⁻¹ :=
   rfl
 
-/-- A modulus-one mixed-map eigenvector yields intertwining relations after canonical gauges. -/
+/-- A modulus-one mixed-map eigenvector yields intertwining relations after canonical gauges.
+
+This is the finite-family form of `MPSTensor.gauged_intertwining_core` and uses the argument
+from Wolf Theorem 6.6 and Pérez-García et al. (2007), Lemma 5. -/
 theorem gauged_intertwining_of_mixedMapLM_eigenvector
     (A : Fin d → Matrix (Fin D₁) (Fin D₁) ℂ)
     (B : Fin d → Matrix (Fin D₂) (Fin D₂) ℂ)
@@ -283,7 +293,8 @@ theorem gauged_intertwining_of_mixedMapLM_eigenvector
     simpa [A', B', X', gaugeFamily, gaugeMixedEigenvector] using hInter2 i
 
 /-- If `A i * X = μ • X * B i` and `B` is unital, then `X * Xᴴ` is fixed by
-`mapLM A`. -/
+`mapLM A`. The corresponding MPS statement is
+`MPSTensor.self_mul_conjTranspose_fixed_of_intertwining`. -/
 theorem mapLM_self_mul_conjTranspose_fixed_of_intertwining
     (A : Fin d → Matrix (Fin D₁) (Fin D₁) ℂ)
     (B : Fin d → Matrix (Fin D₂) (Fin D₂) ℂ)
@@ -327,7 +338,9 @@ theorem mapLM_self_mul_conjTranspose_fixed_of_intertwining
       simp only [IsUnital] at hB_unital
       simp only [hB_unital, Matrix.mul_one]
 
-/-- A fixed point for a gauged family gives a congruent fixed point for the original family. -/
+/-- A fixed point for a gauged family gives a congruent fixed point for the original family.
+
+The corresponding MPS statement is `MPSTensor.ungauge_transfer_fixedPoint`. -/
 theorem mapLM_congruence_fixedPoint_of_gauge_fixedPoint
     (A : Fin d → Matrix (Fin D) (Fin D) ℂ) (S σ : Matrix (Fin D) (Fin D) ℂ)
     (hS : IsUnit S.det)
