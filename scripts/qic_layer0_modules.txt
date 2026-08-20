@@ -4,34 +4,53 @@
 # and lines starting with `#` are ignored.
 #
 # This manifest contains every module under TNLean/Analysis/ and
-# TNLean/Topology/, their generated aggregators, and exactly the modules under
-# TNLean/Algebra/ in their combined transitive TNLean import closure.
+# TNLean/Topology/, their generated aggregators, and the foundation modules in
+# the transitive TNLean import closure of the complete QIC mover seed.
 # TNLean/Algebra.lean is intentionally excluded.
 #
 # scripts/check_import_direction.py additionally enforces that every entry
-# still exists and does not directly import the tensor-network side.
+# still exists and that the full mover set is closed under local TNLean imports.
+TNLean/Algebra/BlockPermutation.lean
+TNLean/Algebra/ComplexPhasePositivity.lean
+TNLean/Algebra/CornerCompression.lean
 TNLean/Algebra/DependentBlockDiagonal.lean
+TNLean/Algebra/EigenspaceMap.lean
 TNLean/Algebra/EqualRangeRightFactor.lean
 TNLean/Algebra/FinSum.lean
+TNLean/Algebra/FrameOperator.lean
 TNLean/Algebra/FrobeniusHilbert.lean
 TNLean/Algebra/HermitianHelpers.lean
+TNLean/Algebra/HermitianSpectrumMultiplicity.lean
+TNLean/Algebra/HermitianSpectrumPerturbation.lean
+TNLean/Algebra/HermitianSpectrumPreserver.lean
+TNLean/Algebra/HermitianTracePower.lean
+TNLean/Algebra/HermitianUnitaryConjugacy.lean
 TNLean/Algebra/KroneckerFactorPositivity.lean
 TNLean/Algebra/MatrixAux.lean
+TNLean/Algebra/MatrixCongruence.lean
 TNLean/Algebra/MatrixFamilySupport.lean
 TNLean/Algebra/MatrixGramUnitary.lean
 TNLean/Algebra/MatrixKroneckerEmbed.lean
 TNLean/Algebra/MatrixOperatorSpace.lean
+TNLean/Algebra/MatrixRankClosed.lean
 TNLean/Algebra/MatrixReindexUnitary.lean
 TNLean/Algebra/MatrixSpectralDecomp.lean
 TNLean/Algebra/MatrixTracePairing.lean
+TNLean/Algebra/MatrixTracePowerContinuity.lean
 TNLean/Algebra/MatrixUnitaryBetween.lean
+TNLean/Algebra/NewtonGirard.lean
 TNLean/Algebra/OperatorBlock.lean
 TNLean/Algebra/OperatorSchmidt.lean
 TNLean/Algebra/OrthogonalProjection.lean
 TNLean/Algebra/PerronFrobenius/RankOne.lean
 TNLean/Algebra/PosSemidefSupport.lean
 TNLean/Algebra/PositiveSemidefiniteNormalization.lean
+TNLean/Algebra/RectangularChoi.lean
 TNLean/Algebra/ScalarCommutant.lean
+TNLean/Algebra/ShiftedTracePowerSpectrum.lean
+TNLean/Algebra/SkolemNoether.lean
+TNLean/Algebra/SkolemNoetherUnitary.lean
+TNLean/Algebra/SpinCover/Basic.lean
 TNLean/Algebra/StarSubalgebraBlockDiagonal.lean
 TNLean/Algebra/StarSubalgebraBlockForm.lean
 TNLean/Algebra/StarSubalgebraIntertwinerIsometry.lean
@@ -44,6 +63,7 @@ TNLean/Algebra/StarSubalgebraSemisimple.lean
 TNLean/Algebra/StarSubalgebraSimpleModule.lean
 TNLean/Algebra/StarSubalgebraSpatial.lean
 TNLean/Algebra/StarSubalgebraUnitaryIntertwiner.lean
+TNLean/Algebra/TracePowerCharPoly.lean
 TNLean/Algebra/TraceReindex.lean
 TNLean/Algebra/UnitModulusPowerSum.lean
 TNLean/Algebra/ZModCyclicSums.lean
@@ -81,6 +101,8 @@ TNLean/Analysis/LiebScalarIntegral.lean
 TNLean/Analysis/LiebSubBoundary.lean
 TNLean/Analysis/MarginalSupport.lean
 TNLean/Analysis/MatrixFamilySupport.lean
+TNLean/Analysis/MatrixFittingRange.lean
+TNLean/Analysis/MatrixNonzeroTraceEigenvalue.lean
 TNLean/Analysis/MatrixReducedProjection.lean
 TNLean/Analysis/MatrixSqrt.lean
 TNLean/Analysis/MatrixTraceInequalities.lean
