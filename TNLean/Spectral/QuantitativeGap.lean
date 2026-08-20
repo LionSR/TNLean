@@ -150,10 +150,7 @@ private theorem geometric_apply_bound_of_spectralRadius_lt_one
 /-- The word span at length 1 equals the span of the Kraus operators. -/
 theorem wordSpan_one_eq_span_range (A : MPSTensor d D) :
     wordSpan A 1 = Submodule.span ℂ (Set.range A) := by
-  simp only [wordSpan]
-  congr 1; ext y; constructor
-  · rintro ⟨σ, rfl⟩; exact ⟨σ 0, by simp [evalWord]⟩
-  · rintro ⟨i, rfl⟩; exact ⟨fun _ => i, by simp [evalWord]⟩
+  exact Kraus.wordSpan_one A
 
 /-- An injective MPS tensor has eventually full Kraus rank (at index 1). -/
 theorem hasEventuallyFullKrausRank_of_injective (A : MPSTensor d D)

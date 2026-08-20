@@ -57,7 +57,7 @@ theorem map_wordSpan_eq_vectorSpreadSpan
       vectorSpreadSpan A φ n := by
   classical
   -- Unfold everything down to spans of ranges.
-  unfold mulVecLinearMap wordSpan vectorSpreadSpan
+  unfold mulVecLinearMap wordSpan Kraus.wordSpan vectorSpreadSpan
   -- `Submodule.map` distributes over `Submodule.span`.
   rw [Submodule.map_span]
   -- Rewrite the RHS as an image of a range (so both sides match).
@@ -80,26 +80,7 @@ theorem map_wordSpan_eq_vectorSpreadSpan
 /-- Products of length-`m` and length-`n` word spans lie in the length-`m+n` word span. -/
 theorem wordSpan_mul_le (A : MPSTensor d D) (m n : ℕ) :
     wordSpan A m * wordSpan A n ≤ wordSpan A (m + n) := by
-  classical
-  -- Reduce to generators using `span_mul_span`.
-  --
-  -- `wordSpan A k = span (range (σ ↦ evalWord A (List.ofFn σ)))`.
-  -- Therefore the product is the span of products of generators.
-  simp only [wordSpan, Submodule.span_mul_span]
-  -- Now show each generator product is a length-`m+n` word product.
-  apply Submodule.span_le.mpr
-  intro x hx
-  rcases (Set.mem_mul.mp hx) with ⟨x₁, hx₁, x₂, hx₂, rfl⟩
-  rcases hx₁ with ⟨σ₁, rfl⟩
-  rcases hx₂ with ⟨σ₂, rfl⟩
-  -- The product is the evaluation of the concatenated word.
-  have hmem :
-      evalWord A (List.ofFn σ₁ ++ List.ofFn σ₂) ∈ wordSpan A (m + n) := by
-    -- `evalWord_mem_wordSpan` gives membership at the exact length.
-    simpa [List.length_append] using
-      (evalWord_mem_wordSpan A (List.ofFn σ₁ ++ List.ofFn σ₂))
-  -- Rewrite the product using `evalWord_append`.
-  simpa [wordSpan, evalWord_append] using hmem
+  exact le_of_eq (Kraus.wordSpan_add A m n).symm
 
 /-- If `wordSpan A N = ⊤`, then `wordSpan A (k * N) = ⊤` for any `k ≥ 1`. -/
 theorem wordSpan_top_of_mul (A : MPSTensor d D) {N : ℕ}

@@ -42,7 +42,8 @@ theorem boundary_eq_and_commutes_of_isNBlkInjective_of_intertwines
   have hMaps : LinearMap.mulLeft ℂ X = LinearMap.mulRight ℂ Y := by
     apply LinearMap.ext_on_range
       (v := fun α : Fin S → Fin d ↦ evalWord A (List.ofFn α))
-    · simpa [wordSpan] using (wordSpan_eq_top_iff_isNBlkInjective A S).mpr hBlk
+    · simpa [wordSpan, Kraus.wordSpan] using
+        (wordSpan_eq_top_iff_isNBlkInjective A S).mpr hBlk
     · intro α
       simpa only [LinearMap.mulLeft_apply, LinearMap.mulRight_apply] using
         hIntertwine α
