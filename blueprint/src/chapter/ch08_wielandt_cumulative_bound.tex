@@ -284,7 +284,7 @@ matrices, and let $\E_K$ be its Kraus map.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{lem:pow-on-eigenspace}
+    \uses{lem:transfer-map-eigenmatrix-power}
     This is Lemma~\ref{lem:pow-on-eigenspace} for the eigenspace of $\mu$.
 \end{proof}
 
@@ -424,9 +424,9 @@ matrices, and let $\E_K$ be its Kraus map.
     Trace preservation and $\mu\neq1$ give $\tr(X)=0$. At least one of
     $X+X^\dagger$ and $i(X^\dagger-X)$ is nonzero. Choose that Hermitian part
     as $H$. Conjugation preserves the eigenvector equation, and
-    Lemma~\ref{lem:pow-on-eigenspace} together with $\mu^p=1$ shows that $H$
-    is fixed by $\E_A^p$. A nonzero positive-semidefinite matrix has positive
-    trace, so $H$ is not positive semidefinite.
+    Lemma~\ref{lem:transfer-map-eigenmatrix-power} together with $\mu^p=1$
+    shows that $H$ is fixed by $\E_A^p$. A nonzero positive-semidefinite
+    matrix has positive trace, so $H$ is not positive semidefinite.
 \end{proof}
 
 \begin{theorem}[Uniqueness of power-fixed positive matrices]
