@@ -324,3 +324,4 @@ follow-up, not against the temporary `sorry` count.
 | `SpinChain.quasiLocalTranslation_one` | helper theorem | Rewriting the identity automorphism as quasi-local translation by zero | `TNLean/QCA/QuasiLocalTranslation.lean` |
 | `Kraus.map_compressed_fixedPoint` | helper theorem | Preserving a supported fixed point under finite-Kraus compression along an isometry | `TNLean/Channel/KrausCornerCompression.lean` |
 | `MPSTensor.eq_zero_of_forall_trace_mul_right_eq_zero` | helper theorem | Concluding that a matrix is zero from vanishing trace pairings against every one-site matrix of an injective tensor | `TNLean/Algebra/TracePairing.lean` |
+| `MPOTensor.IsSAL.physTraceTransfer_ne_zero` | helper theorem | Deriving nonvanishing of the one-site physical-trace transfer from the positive-length normalization clause in saturation of the area law | `TNLean/MPS/MPDO/SALTraceTransfer.lean` |

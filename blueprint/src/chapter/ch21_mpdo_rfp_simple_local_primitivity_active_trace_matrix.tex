@@ -428,6 +428,37 @@
     identities.
 \end{proof}
 
+\begin{theorem}[Literal-ZCL specialization of the active trace relations]%
+    \label{thm:mpdo_active_trace_matrix_literal_zcl_relations}
+    \lean{MPOTensor.%
+      exists_activeTraceMatrix_relations_of_isSAL_of_literal_ZCL}
+    \leanok
+    \uses{def:is_sal, def:mpdo_source_zcl,
+      thm:mpdo_active_trace_matrix_zcl_relations}
+    Let ${\cal K}$ be injective and satisfy SAL and the literal identity
+    \begin{align}
+        \mathcal B_{\cal K}^2&=\mathcal B_{\cal K}. \notag
+    \end{align}
+    Then ${\cal K}$ admits a physical-sector factorization, nonnegative
+    weights of sum one, and positive semidefinite neighboring operators for
+    which the active trace matrix $T^*$ is primitive. For some
+    $\lambda>0$, the normalized matrix
+    $\widehat T^*=\lambda^{-1}T^*$ satisfies
+    $(\widehat T^*)^2=(\widehat T^*)^3$ and
+    \begin{align}
+        \tr((\widehat T^*)^N)&=\tr(\widehat T^*) \notag
+    \end{align}
+    for every positive integer $N$. No idempotence or rank-one conclusion is
+    asserted.
+\end{theorem}
+
+\begin{proof}\leanok
+    SAL makes the one-site periodic trace nonzero, and hence
+    $\mathcal B_{\cal K}\ne0$. Literal idempotence therefore implies source
+    zero correlation length. Apply
+    Theorem~\ref{thm:mpdo_active_trace_matrix_zcl_relations}.
+\end{proof}
+
 \begin{theorem}[Virtual spanning does not force active-sector idempotence]
     \label{thm:mpdo_virtual_spanning_active_trace_counterexample}
     \lean{MPOTensor.ActiveSectorSpanningCounterexample.%

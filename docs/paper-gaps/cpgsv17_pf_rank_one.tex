@@ -324,6 +324,15 @@ and
 {\scriptsize\leanid{MPOTensor.exists_activeTraceMatrix_relations_of_isSAL_of_isSourceZCL}}
 in \doclink{TNLean/MPS/MPDO/InverseMapActiveSectorZCL}.}
 
+If SAL is accompanied by the paper's literal identity
+$\mathcal B_{\mathcal K}^2=\mathcal B_{\mathcal K}$, the one-site
+normalization clause in SAL first gives $\mathcal B_{\mathcal K}\ne0$.
+Thus literal ZCL implies source ZCL, and the same primitive active trace
+matrix and normalized relations follow without any additional hypothesis.
+This specialization is formalized by
+\leanid{MPOTensor.exists_activeTraceMatrix_relations_of_isSAL_of_literal_ZCL}
+in \doclink{TNLean/MPS/MPDO/InverseMapActiveSectorZCL}.
+
 This conclusion is the scale-invariant consequence of the displayed operator
 equation; it does not imply that the normalized trace matrix is idempotent or
 semisimple, nor that it has rank one.  The remaining pairing route would have
