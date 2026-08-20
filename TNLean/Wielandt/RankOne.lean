@@ -10,7 +10,6 @@ Authors: TNLean contributors
 
 import TNLean.Wielandt.RankOne.BoundedWord
 import TNLean.Wielandt.RankOne.Construction
-import TNLean.Wielandt.RankOne.Element
 import TNLean.Wielandt.RankOne.Extraction
 import TNLean.Wielandt.RankOne.ExtractionFull
 import TNLean.Wielandt.RankOne.Products
