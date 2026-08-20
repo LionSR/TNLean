@@ -5,7 +5,6 @@ Authors: TNLean contributors
 -/
 import TNLean.Analysis.MatrixFittingRange
 import TNLean.Kraus.Wielandt.RankOne.Extraction
-import TNLean.Wielandt.RankOne.Element
 
 /-!
 # Rank-one extraction compatibility module
