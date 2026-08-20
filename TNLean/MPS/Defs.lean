@@ -346,7 +346,7 @@ theorem isNBlkInjective_of_gaugeEquiv {A B : MPSTensor d D} {N : ℕ}
   intro M _
   have hA' : Submodule.span ℂ
       (Set.range fun σ : Fin N → Fin d => evalWord A (List.ofFn σ)) = ⊤ := by
-    simpa [IsNBlkInjective, Kraus.wordSpan] using hA
+    exact hA.span_eq_top
   have hM' : ((X⁻¹ : GL _ ℂ) : Matrix _ _ ℂ) * M * (X : Matrix _ _ ℂ) ∈
       Submodule.span ℂ
         (Set.range fun σ : Fin N → Fin d => evalWord A (List.ofFn σ)) :=

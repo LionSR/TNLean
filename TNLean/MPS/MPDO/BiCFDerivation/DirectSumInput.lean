@@ -232,7 +232,7 @@ theorem leftTraceWordMap_injective_of_isNBlkInjective {A : MPSTensor d D}
       (Matrix.traceLinearMap (Fin D) ℂ ℂ).comp (LinearMap.mulLeft ℂ Z) = 0 := by
     apply LinearMap.ext_on_range
       (v := fun t : Fin L → Fin d => evalWord A (List.ofFn t))
-    · simpa [IsNBlkInjective, Kraus.wordSpan] using hA
+    · exact hA.span_eq_top
     · intro t
       simpa [leftTraceWordMap_apply, Matrix.traceLinearMap_apply] using
         congrArg (fun f => f t) hZ

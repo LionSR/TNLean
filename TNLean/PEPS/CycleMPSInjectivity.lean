@@ -388,7 +388,7 @@ theorem matrix_eq_zero_of_isNBlkInjective {L : ℕ} {A : MPSTensor d D}
         MPSTensor.evalWord A (List.ofFn x)) := by
       rw [show Submodule.span ℂ (Set.range fun x : Fin L → Fin d =>
         MPSTensor.evalWord A (List.ofFn x)) = ⊤ by
-          simpa [MPSTensor.IsNBlkInjective, Kraus.wordSpan] using hA]
+          exact hA.span_eq_top]
       exact Submodule.mem_top
     have hle : Submodule.span ℂ (Set.range fun x : Fin L → Fin d =>
         MPSTensor.evalWord A (List.ofFn x)) ≤

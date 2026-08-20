@@ -203,7 +203,7 @@ theorem insertedTensor_eq_of_firstSiteActionOnBlock_blockTensor_eq
       simp [hM]
   have hspan : Submodule.span ℂ
       (Set.range fun w : Fin L → Fin d => evalWord A (List.ofFn w)) = ⊤ := by
-    simpa [IsNBlkInjective, Kraus.wordSpan] using hInj
+    exact hInj.span_eq_top
   have hOne : Δ * (1 : Matrix (Fin D) (Fin D) ℂ) = 0 :=
     hzero_span 1 (hspan.symm ▸ Submodule.mem_top)
   simpa using hOne

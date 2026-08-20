@@ -236,7 +236,7 @@ theorem wordTupleSpanTop_of_card_eq_one_of_isNBlkInjective
       (Set.range fun w : Fin L → Fin d ↦ evalWord (A k₀) (List.ofFn w)) := by
     rw [show Submodule.span ℂ
       (Set.range fun w : Fin L → Fin d ↦ evalWord (A k₀) (List.ofFn w)) = ⊤ by
-        simpa [IsNBlkInjective, Kraus.wordSpan] using hInj k₀]
+        exact (hInj k₀).span_eq_top]
     exact Submodule.mem_top
   obtain ⟨c, hc⟩ := (Submodule.mem_span_range_iff_exists_fun ℂ).mp hX
   refine (Submodule.mem_span_range_iff_exists_fun ℂ).mpr ⟨c, ?_⟩
@@ -563,7 +563,7 @@ theorem wordTupleSpanTop_of_common_blockInjective_of_blockSelectorWords
     intro k
     rw [show Submodule.span ℂ
       (Set.range fun u : Fin L → Fin d => evalWord (A k) (List.ofFn u)) = ⊤ by
-        simpa [IsNBlkInjective, Kraus.wordSpan] using hInj k]
+        exact (hInj k).span_eq_top]
     exact Submodule.mem_top
   choose prefixCoeffs hprefix using
     fun k =>
