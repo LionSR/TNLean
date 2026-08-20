@@ -40,8 +40,14 @@ TNLean `.olean` files whose declarations no longer match the target source.
 
 At an identical commit, run the desired `lake build` or `lake env lean`
 command and Lake will reuse the full build. After a cross-commit seed, run
-`lake build` first so TNLean is rebuilt against the seeded dependencies; only
-then run targeted `lake env lean` checks.
+`lake build` first so TNLean is rebuilt against the seeded dependencies. For a
+targeted check that applies the package `leanOptions`, including the Mathlib
+standard linter set, run `lake build TNLean.Path.To.File`. Linter diagnostics
+appear only when Lake re-elaborates the module; an unchanged, already-built
+module produces no new diagnostics. A bare
+`lake env lean TNLean/Path/To/File.lean` remains useful for fast elaboration,
+but it does not apply those package options and is not a linter-bearing local
+verification.
 
 ## Sort build timings
 

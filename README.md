@@ -219,7 +219,10 @@ lake build
 # Equivalently, build the public Lean library target.
 lake build TNLean
 
-# Check a single file during development.
+# Verify one module with the package Lean options and Mathlib standard linters.
+lake build TNLean.MPS.FundamentalTheorem.Basic
+
+# Optional fast elaboration only; this does not apply the package Lean options.
 lake env lean TNLean/MPS/FundamentalTheorem/Basic.lean
 ```
 

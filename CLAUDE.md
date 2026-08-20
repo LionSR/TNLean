@@ -20,6 +20,9 @@ lake exe cache get
 
 # Only after the cache fetch succeeds:
 lake build
+# Linter-bearing verification of one module (uses the package leanOptions):
+lake build TNLean.Path.To.File
+# Optional fast elaboration only; this does not use the package leanOptions:
 lake env lean TNLean/Path/To/File.lean
 ```
 # Check for sorrys/axioms in changed files
@@ -44,6 +47,9 @@ cd blueprint && leanblueprint pdf
 
 - `relaxedAutoImplicit = false` — strict implicit arguments, no auto-implicit
 - `pp.unicode.fun = true` — pretty-prints `fun a ↦ b`
+- `weak.linter.mathlibStandardSet = true` — enables Mathlib's standard linters
+  during `lake build`; the `weak.` value is a default that source options may
+  override
 - `maxSynthPendingDepth = 3` — typeclass synthesis depth limit
 
 ## Architecture
