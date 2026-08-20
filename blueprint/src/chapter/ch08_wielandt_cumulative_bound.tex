@@ -5,6 +5,18 @@ Section~\ref{sec:app_wielandt_exact_word_support}. The stabilization and
 spectral linear algebra behind the cumulative estimates are collected in
 Section~\ref{sec:app_wielandt_cumulative_support}.
 
+\begin{definition}[Word evaluation for a finite matrix family]
+    \label{def:kraus_eval_word}
+    \lean{Kraus.evalWord}
+    \leanok
+    Let $K=(K_i)_{i=0}^{d-1}$ be a finite family of $D\times D$ matrices.
+    For a word $w=(i_1,\ldots,i_n)$, its \emph{word evaluation} is
+    \[
+        K^w=K_{i_1}\cdots K_{i_n},
+    \]
+    with the empty word evaluated as the identity matrix.
+\end{definition}
+
 \begin{definition}[Word span]\label{def:word_span}
     \lean{MPSTensor.wordSpan}
     \leanok
@@ -29,7 +41,7 @@ Section~\ref{sec:app_wielandt_cumulative_support}.
 \begin{definition}[Fixed-length vector span]\label{def:vector_spread_span}
     \lean{Kraus.vectorSpreadSpan}
     \leanok
-    \uses{def:eval_word}
+    \uses{def:kraus_eval_word}
     The \emph{fixed-length vector span} at length~$n$ is
     \begin{align}
         H_n(A,\varphi)
