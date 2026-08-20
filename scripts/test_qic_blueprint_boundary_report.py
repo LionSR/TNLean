@@ -474,6 +474,24 @@ See Theorem~\ref{thm:tn}.
         ):
             boundary_report(self.root)
 
+    def test_rejects_input_nested_in_non_item_environment(self) -> None:
+        self.write_blueprint(
+            r"""\begin{theorem}\label{thm:qic}
+\lean{Kraus.moved}
+\end{theorem}
+
+\begin{figure}
+\input{chapter/picture}
+\end{figure}
+"""
+        )
+        with self.assertRaisesRegex(
+            ValueError,
+            r"standalone \\input at src/chapter/ch01.tex:6 is nested inside "
+            r"TeX environment 5-7",
+        ):
+            boundary_report(self.root)
+
     def test_rejects_unbalanced_non_item_environment(self) -> None:
         self.write_blueprint(
             r"""\begin{theorem}\label{thm:qic}

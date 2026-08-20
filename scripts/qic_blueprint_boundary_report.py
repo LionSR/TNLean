@@ -285,6 +285,13 @@ def _atomic_non_item_environment_ranges(
                 f"environment at {relative_root}:{start}-{end} contains "
                 "theorem-like item lines"
             )
+        for line_no in range(start, end + 1):
+            cleaned_line = _strip_tex_comments(source_lines[line_no - 1])
+            if INPUT_LINE_RE.fullmatch(cleaned_line) is not None:
+                raise ValueError(
+                    f"standalone \\input at {relative_root}:{line_no} is nested "
+                    f"inside TeX environment {start}-{end}"
+                )
         candidates.append((start, end))
     maximal: list[tuple[int, int]] = []
     for start, end in sorted(candidates, key=lambda span: (span[0], -span[1])):
@@ -308,9 +315,10 @@ def blueprint_non_item_blocks(
     Single-line environments remain in their surrounding paragraph. An outer
     environment containing item lines is rejected because partitioning it at
     the item boundary would produce malformed TeX. Elsewhere, blank lines and
-    item boundaries split blocks. Router ``\\input`` commands
-    are single-line blocks so each simulated output can prune them without
-    pulling in every sibling chapter.
+    item boundaries split blocks. Top-level router ``\\input`` commands are
+    single-line blocks so each simulated output can prune them without pulling
+    in every sibling chapter; an ``\\input`` nested inside an atomic environment
+    is rejected because its dependency could not be tracked separately.
     """
     spans_by_file: dict[str, list[tuple[int, int]]] = {}
     for item in environments:
