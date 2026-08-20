@@ -472,3 +472,29 @@ The enumeration uses the same directories and exclusions as the Chapter 1
 audit. Each result was checked against
 `Notes/WolfNotePDF/ch07_semigroup_structure.pdf`; the line ranges above refer
 only to the searchable transcription and do not determine numbering.
+
+## Chapters 4 and 9--11: verified absence of live numbered citations
+
+No live numbered citation to a theorem-like result in Wolf Chapters 4, 9, 10,
+or 11 occurs in the directories examined here.
+
+The Chapter 4 search finds many unqualified numerical near matches. Inspection
+shows that they refer to other sources, principally the matrix-product density
+operator paper of Cirac, Pérez-García, Schuch, and Verstraete. Other matches
+refer to papers by De las Cuevas and coauthors or to internal blueprint labels.
+None is attributed to Wolf, and none uses the Wolf bibliography key.
+
+For Chapters 9--11, the general theorem-like-number search itself has no live
+match. Searches with the word `Wolf` on either side of the number, and searches
+requiring the `Wolf2012Quantum` bibliography key, also have no match for any of
+the four chapters.
+
+### Reproducibility
+
+The search covers `TNLean/`, `blueprint/src/`, and `docs/` for singular and
+plural forms of `Theorem`, `Proposition`, `Corollary`, `Lemma`, and `Example`,
+including abbreviated forms and either ordinary or nonbreaking spaces before a
+number of the form `4.n`, `9.n`, `10.n`, or `11.n`. It excludes
+`docs/audits/`, `docs/archive/`, `docs/reviews/`, `docs/slides/`, and
+`blueprint/comments/`. The Chapter 4 near matches were then checked for a
+nearby occurrence of `Wolf` and for the `Wolf2012Quantum` bibliography key.
