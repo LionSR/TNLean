@@ -9,7 +9,6 @@ Authors: TNLean contributors
 -- Generated aggregator module: TNLean.Spectral
 
 import TNLean.Spectral.CrossCorrelation
-import TNLean.Spectral.FrobeniusNorm
 import TNLean.Spectral.GaugeConstruction
 import TNLean.Spectral.MPVOverlapDecay
 import TNLean.Spectral.MPVOverlapDecayRect
