@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.Kraus.Wielandt.SpanGrowth.VectorToMatrixSpan
 import TNLean.Wielandt.SpanGrowth.EigenvectorSpreading
-import TNLean.Kraus.Blocking
+import TNLean.MPS.Core.Blocking
 
 /-!
 # Vector-to-matrix span results for MPS tensors
