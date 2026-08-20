@@ -302,9 +302,11 @@ host-key list:
     printf '%s\n' \
       'github.com ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOMqqnkVzrm0SdG6UOoqKLsabgH5C9okWi0dh2l9GKJl' \
       > "$QICLEAN_SSH_DIR/github_known_hosts"
-    QICLEAN_SSH_COMMAND="ssh -i $QICLEAN_SSH_DIR/deploy_key -o IdentitiesOnly=yes"
-    QICLEAN_SSH_COMMAND+=" -o UserKnownHostsFile=$QICLEAN_SSH_DIR/github_known_hosts"
-    QICLEAN_SSH_COMMAND+=" -o StrictHostKeyChecking=yes"
+    QICLEAN_SSH_COMMAND="ssh -i \"$QICLEAN_SSH_DIR/deploy_key\""
+    QICLEAN_SSH_COMMAND="$QICLEAN_SSH_COMMAND -o IdentitiesOnly=yes"
+    QICLEAN_SSH_COMMAND="$QICLEAN_SSH_COMMAND -o UserKnownHostsFile=\"$QICLEAN_SSH_DIR/github_known_hosts\""
+    QICLEAN_SSH_COMMAND="$QICLEAN_SSH_COMMAND -o GlobalKnownHostsFile=/dev/null"
+    QICLEAN_SSH_COMMAND="$QICLEAN_SSH_COMMAND -o StrictHostKeyChecking=yes"
     printf 'GIT_SSH_COMMAND=%s\n' "$QICLEAN_SSH_COMMAND" >> "$GITHUB_ENV"
 ```
 
