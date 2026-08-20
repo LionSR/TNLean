@@ -7,6 +7,7 @@ import Mathlib.Analysis.Normed.Algebra.GelfandFormula
 import Mathlib.Analysis.Normed.Group.Continuity
 import Mathlib.Analysis.SpecialFunctions.Pow.NNReal
 import Mathlib.Analysis.SpecificLimits.Basic
+import Mathlib.LinearAlgebra.Eigenspace.Minpoly
 
 /-!
 # Power decay below spectral radius one
@@ -20,6 +21,8 @@ strictly below one converge to zero.  This follows from Gelfand's formula
 
 - `pow_tendsto_zero_of_spectralRadius_lt_one`
 - `geometric_bound_of_spectralRadius_lt_one`
+- `uniform_eigenvalue_gap_of_finite_lt_one`
+- `uniform_eigenvalue_gap_of_finiteDimensional_lt_one`
 -/
 
 open scoped ENNReal NNReal
@@ -100,3 +103,47 @@ theorem geometric_bound_of_spectralRadius_lt_one
       ‖T ^ n‖ ≤ S * (r : ℝ) ^ n := hterm'
       _ ≤ C * (r : ℝ) ^ n := by
         gcongr
+
+/-! ## Uniform eigenvalue gaps -/
+
+/-- **Uniform eigenvalue gap from finitely many eigenvalues with modulus below one.**
+
+If an endomorphism has finitely many eigenvalues, and every eigenvalue `μ ≠ 1` satisfies
+`‖μ‖ < 1`, then there is a uniform `δ > 0` such that `‖μ‖ ≤ 1 - δ` for every
+non-unit eigenvalue. -/
+theorem uniform_eigenvalue_gap_of_finite_lt_one
+    {K V : Type*} [NormedField K] [AddCommGroup V] [Module K V]
+    {E : V →ₗ[K] V}
+    (hfin : Set.Finite {μ : K | Module.End.HasEigenvalue E μ})
+    (hlt : ∀ μ, Module.End.HasEigenvalue E μ → μ ≠ 1 → ‖μ‖ < 1) :
+    ∃ δ > 0, ∀ μ, Module.End.HasEigenvalue E μ → μ ≠ 1 → ‖μ‖ ≤ 1 - δ := by
+  classical
+  let S := {μ : K | Module.End.HasEigenvalue E μ ∧ μ ≠ 1}
+  have hSfin : S.Finite := hfin.subset fun μ hμ => hμ.1
+  by_cases hS : S.Nonempty
+  · let norms := hSfin.toFinset.image fun μ => ‖μ‖
+    have hnorms_ne : norms.Nonempty := by
+      obtain ⟨μ₀, hμ₀⟩ := hS
+      exact ⟨‖μ₀‖, Finset.mem_image.mpr ⟨μ₀, hSfin.mem_toFinset.mpr hμ₀, rfl⟩⟩
+    set r := norms.max' hnorms_ne with r_def
+    have hr_lt : r < 1 := by
+      rw [r_def, Finset.max'_lt_iff]
+      intro x hx
+      obtain ⟨μ, hμS, rfl⟩ := Finset.mem_image.mp hx
+      exact hlt μ (hSfin.mem_toFinset.mp hμS).1 (hSfin.mem_toFinset.mp hμS).2
+    refine ⟨1 - r, by linarith, fun μ hμ hne => ?_⟩
+    have hμS : μ ∈ S := ⟨hμ, hne⟩
+    have hμ_norm_mem : ‖μ‖ ∈ norms :=
+      Finset.mem_image.mpr ⟨μ, hSfin.mem_toFinset.mpr hμS, rfl⟩
+    linarith [Finset.le_max' norms ‖μ‖ hμ_norm_mem]
+  · exact ⟨1, one_pos, fun μ hμ hne => absurd ⟨μ, hμ, hne⟩ hS⟩
+
+/-- A finite-dimensional endomorphism whose non-unit eigenvalues have modulus below one
+has a uniform eigenvalue gap. -/
+theorem uniform_eigenvalue_gap_of_finiteDimensional_lt_one
+    {K V : Type*} [NormedField K] [AddCommGroup V] [Module K V]
+    [FiniteDimensional K V]
+    {E : V →ₗ[K] V}
+    (hlt : ∀ μ, Module.End.HasEigenvalue E μ → μ ≠ 1 → ‖μ‖ < 1) :
+    ∃ δ > 0, ∀ μ, Module.End.HasEigenvalue E μ → μ ≠ 1 → ‖μ‖ ≤ 1 - δ :=
+  uniform_eigenvalue_gap_of_finite_lt_one (Module.End.finite_hasEigenvalue E) hlt
