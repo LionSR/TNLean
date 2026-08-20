@@ -8,7 +8,6 @@ import TNLean.MPS.Core.CPPrimitive
 import TNLean.MPS.Irreducible.FormII
 import TNLean.MPS.Structure.PrimitivityBridge
 import TNLean.QPF.PosDef
-import TNLean.Spectral.MixedTransfer
 
 /-!
 # Preparatory lemmas for the current `IsPrimitiveMPS → IsNormal` route

@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.Wielandt.Primitivity.ImpliesStronglyIrreducible
+import TNLean.MPS.CanonicalForm.BlockingViaAdjoint
 
 /-!
 # Proposition 3, (a) → (c): Spectral perturbation and conclusion
