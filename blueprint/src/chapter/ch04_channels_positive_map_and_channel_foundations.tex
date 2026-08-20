@@ -20,6 +20,28 @@
     $Y - X \ge 0$.
 \end{remark}
 
+\begin{theorem}[Finite frame criterion]
+    \label{thm:finite_frame_posdef}
+    \lean{Matrix.posDef_sum_vecMulVec_iff_span_eq_top}
+    \leanok
+    Let $(v_i)_{i\in I}$ be a finite family in $\C^n$. Then
+    \begin{align}
+        \sum_{i\in I}\ketbra{v_i}{v_i}>0
+        \quad\Longleftrightarrow\quad
+        \operatorname{span}\{v_i:i\in I\}=\C^n.
+        \notag
+    \end{align}
+\end{theorem}
+
+\begin{proof}\leanok
+    Let $B:\C^I\to\C^n$ be the synthesis map with columns $v_i$.
+    The frame operator is $BB^\dagger$, while the vectors span exactly when
+    $B$ is surjective. A right inverse of $B$ makes $B^\dagger$ injective,
+    which gives positive definiteness of $BB^\dagger$. Conversely, if
+    $BB^\dagger$ is positive definite, then
+    $B^\dagger(BB^\dagger)^{-1}$ is a right inverse of $B$.
+\end{proof}
+
 \begin{definition}[Completely positive map]\label{def:cp_map}
     \lean{IsCPMap}
     \leanok
