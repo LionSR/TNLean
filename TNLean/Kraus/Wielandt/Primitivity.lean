@@ -10,3 +10,4 @@ Authors: TNLean contributors
 
 import TNLean.Kraus.Wielandt.Primitivity.EasyDirections
 import TNLean.Kraus.Wielandt.Primitivity.StronglyIrreducibleToFullWordSpan
+import TNLean.Kraus.Wielandt.Primitivity.VectorSpreadPositivity

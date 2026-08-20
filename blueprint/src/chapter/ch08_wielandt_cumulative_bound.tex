@@ -128,6 +128,138 @@ eventual exact-word spanning, and spectral strong irreducibility.
     condition by also requiring irreducibility explicitly.
 \end{definition}
 
+The next seven results use the following notation. For nonnegative integers
+$d$ and $D$, let $K=\{K^i\}_{i=0}^{d-1}$ be a finite family of $D\times D$
+matrices, and let $\E_K$ be its Kraus map.
+
+\begin{theorem}[Iterated Kraus map on a rank-one matrix]
+    \label{thm:kraus_iterate_rank_one_sum}
+    \lean{Kraus.mapLM_pow_rankOne_eq_sum}
+    \leanok
+    \uses{def:kraus_map}
+    For every choice of $d$, $D$, and $K$ as above, every $q\ge0$, and every
+    $\varphi\in\C^D$,
+    \begin{align}
+        \E_K^q(\ketbra{\varphi}{\varphi})
+        =\sum_{|w|=q}\ketbra{K^w\varphi}{K^w\varphi}.
+        \notag
+    \end{align}
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:kraus_map_iterate_word_expansion}
+    Expand the Kraus representation of the $q$-fold iterate. Each summand is
+    $K^w\ketbra{\varphi}{\varphi}(K^w)^\dagger
+      =\ketbra{K^w\varphi}{K^w\varphi}$.
+\end{proof}
+
+\begin{theorem}[Positive rank-one image from vector spreading]
+    \label{thm:kraus_rank_one_posdef_from_spreading}
+    \lean{Kraus.mapLM_pow_rankOne_posDef_of_vectorSpreadSpan_eq_top}
+    \leanok
+    \uses{def:kraus_map, def:vector_spread_span}
+    For every choice of $d$, $D$, and $K$ as above and every $q\ge0$, suppose
+    $H_q(K,\varphi)=\C^D$ for every nonzero
+    $\varphi\in\C^D$. Then
+    $\E_K^q(\ketbra{\varphi}{\varphi})>0$ for every
+    $\varphi\neq0$.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:kraus_iterate_rank_one_sum, thm:finite_frame_posdef}
+    The preceding theorem expresses the image as the frame operator of the
+    spanning family $(K^w\varphi)_{|w|=q}$. A finite frame operator is positive
+    definite exactly when its vectors span the ambient space.
+\end{proof}
+
+\begin{theorem}[Positive-semidefinite preservation by Kraus iterates]
+    \label{thm:kraus_iterate_psd}
+    \lean{Kraus.mapLM_pow_posSemidef}
+    \leanok
+    \uses{def:kraus_map}
+    For every choice of $d$, $D$, and $K$ as above and every $n\ge0$, the
+    iterate $\E_K^n$ maps positive-semidefinite
+    matrices to positive-semidefinite matrices.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:kraus_iterate_rank_one_sum}
+    Decompose a positive-semidefinite matrix into a finite sum of rank-one
+    positive matrices and apply Theorem~\ref{thm:kraus_iterate_rank_one_sum}
+    to every summand.
+\end{proof}
+
+\begin{theorem}[Positivity improvement from vector spreading]
+    \label{thm:kraus_positivity_improving_from_spreading}
+    \lean{Kraus.mapLM_pow_positivityImproving_of_vectorSpreadSpan_eq_top}
+    \leanok
+    \uses{def:kraus_map, def:vector_spread_span}
+    For every choice of $d$, $D$, and $K$ as above and every $q\ge0$, suppose
+    $H_q(K,\varphi)=\C^D$ for every nonzero $\varphi$.
+    Then $\E_K^q(\rho)>0$ for every nonzero positive-semidefinite matrix
+    $\rho$.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:kraus_rank_one_posdef_from_spreading, thm:kraus_iterate_psd}
+    Write $\rho$ as a sum of rank-one positive matrices. At least one vector
+    in this decomposition is nonzero, so its image is positive definite by
+    Theorem~\ref{thm:kraus_rank_one_posdef_from_spreading}; all remaining
+    images are positive semidefinite by Theorem~\ref{thm:kraus_iterate_psd}.
+\end{proof}
+
+\begin{theorem}[Definiteness of fixed points from vector spreading]
+    \label{thm:kraus_fixed_point_posdef_from_spreading}
+    \lean{Kraus.posDef_fixedPoint_of_vectorSpreadSpan_eq_top}
+    \leanok
+    \uses{def:kraus_map, def:vector_spread_span}
+    For every choice of $d$, $D$, and $K$ as above and every $q\ge0$, suppose
+    $H_q(K,\varphi)=\C^D$ for every nonzero $\varphi$. Then every nonzero
+    positive-semidefinite fixed point of $\E_K$ is positive definite.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:kraus_positivity_improving_from_spreading}
+    A fixed point of $\E_K$ is fixed by $\E_K^q$, whose action on every
+    nonzero positive-semidefinite matrix is positive definite.
+\end{proof}
+
+\begin{theorem}[Definiteness of fixed points of positive powers]
+    \label{thm:kraus_power_fixed_point_posdef_from_spreading}
+    \lean{Kraus.posDef_pow_fixedPoint_of_vectorSpreadSpan_eq_top}
+    \leanok
+    \uses{def:kraus_map, def:vector_spread_span}
+    For every choice of $d$, $D$, and $K$ as above and every $q\ge0$, suppose
+    $H_q(K,\varphi)=\C^D$ for every nonzero $\varphi$. For every $p>0$, each
+    nonzero
+    positive-semidefinite fixed point of $\E_K^p$ is positive definite.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:kraus_positivity_improving_from_spreading, thm:kraus_iterate_psd}
+    If $\E_K^p(\rho)=\rho$, then $\E_K^{pq}(\rho)=\rho$. Factor this iterate
+    as $\E_K^q\E_K^{(p-1)q}$. The inner image is nonzero and positive
+    semidefinite, so the outer application is positive definite.
+\end{proof}
+
+\begin{theorem}[Irreducibility from vector spreading]
+    \label{thm:kraus_irreducible_from_spreading}
+    \lean{Kraus.isIrreducibleMap_mapLM_of_vectorSpreadSpan_eq_top}
+    \leanok
+    \uses{def:kraus_map, def:vector_spread_span, def:irreducible_cp}
+    For every choice of $d$, $D$, and $K$ as above and every $q\ge0$, if
+    $H_q(K,\varphi)=\C^D$ for every nonzero $\varphi$, then the Kraus map
+    $\E_K$ is irreducible.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:kraus_invariant_compression_lower_zero}
+    Let $P$ be an invariant orthogonal projection. Every word $K^w$ preserves
+    $\operatorname{ran}P$. If $P\neq0$, choose a nonzero vector in this range.
+    Its length-$q$ word orbit spans $\C^D$ by hypothesis and remains in
+    $\operatorname{ran}P$, hence $P=\Id$.
+\end{proof}
+
 \begin{theorem}[Strengthened form of the primitivity equivalence]
     \label{thm:wielandt_proposition_three}
     \lean{MPSTensor.primitivePaper_iff_hasEventuallyFullKrausRank}
