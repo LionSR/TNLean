@@ -428,16 +428,55 @@
     identities.
 \end{proof}
 
+\begin{lemma}[SAL makes the physical-trace transfer nonzero]
+    \label{lem:mpdo_sal_phys_trace_transfer_nonzero}
+    \lean{MPOTensor.IsSAL.physTraceTransfer_ne_zero}
+    \leanok
+    \uses{def:is_sal, def:mpo_physical_trace_transfer}
+    If an MPO tensor ${\cal K}$ satisfies SAL, then its physical-trace
+    transfer is nonzero:
+    \begin{align}
+        \mathcal T_{\cal K}&\ne0. \notag
+    \end{align}
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{lem:mpdo_trace_loop_chain}
+    The SAL normalization at one site gives a nonzero trace for the one-site
+    periodic operator. Lemma~\ref{lem:mpdo_trace_loop_chain} identifies this
+    trace with that of $\mathcal T_{\cal K}$, which therefore cannot vanish.
+\end{proof}
+
+\begin{theorem}[SAL and literal idempotence imply source zero correlation length]
+    \label{thm:mpdo_sal_literal_idempotence_source_zcl}
+    \lean{MPOTensor.IsSAL.isSourceZCL_of_physTraceTransfer_sq}
+    \leanok
+    \uses{def:is_sal, def:mpo_physical_trace_transfer, def:mpo_source_zcl}
+    If ${\cal K}$ satisfies SAL and
+    \begin{align}
+        \mathcal T_{\cal K}^2&=\mathcal T_{\cal K}, \notag
+    \end{align}
+    then ${\cal K}$ has source zero correlation length.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{lem:mpdo_sal_phys_trace_transfer_nonzero,
+      thm:mpo_source_zcl_of_physical_trace_idempotent}
+    The preceding lemma gives $\mathcal T_{\cal K}\ne0$. Apply
+    Theorem~\ref{thm:mpo_source_zcl_of_physical_trace_idempotent}.
+\end{proof}
+
 \begin{theorem}[Literal-ZCL specialization of the active trace relations]%
     \label{thm:mpdo_active_trace_matrix_literal_zcl_relations}
     \lean{MPOTensor.%
       exists_activeTraceMatrix_relations_of_isSAL_of_literal_ZCL}
     \leanok
-    \uses{def:is_sal, def:mpo_source_zcl,
-      thm:mpdo_active_trace_matrix_zcl_relations}
+    \uses{def:injective, def:is_sal, def:mpo_physical_trace_transfer,
+      def:mpdo_physical_sector_factorization,
+      def:mpdo_active_sector_trace_matrix}
     Let ${\cal K}$ be injective and satisfy SAL and the literal identity
     \begin{align}
-        \mathcal B_{\cal K}^2&=\mathcal B_{\cal K}. \notag
+        \mathcal T_{\cal K}^2&=\mathcal T_{\cal K}. \notag
     \end{align}
     Then ${\cal K}$ admits a physical-sector factorization, nonnegative
     weights of sum one, and positive semidefinite neighboring operators for
@@ -453,9 +492,12 @@
 \end{theorem}
 
 \begin{proof}\leanok
+    \uses{thm:mpdo_sal_literal_idempotence_source_zcl,
+      thm:mpdo_active_trace_matrix_zcl_relations}
     SAL makes the one-site periodic trace nonzero, and hence
-    $\mathcal B_{\cal K}\ne0$. Literal idempotence therefore implies source
-    zero correlation length. Apply
+    $\mathcal T_{\cal K}\ne0$.
+    Theorem~\ref{thm:mpdo_sal_literal_idempotence_source_zcl} therefore gives
+    source zero correlation length. Apply
     Theorem~\ref{thm:mpdo_active_trace_matrix_zcl_relations}.
 \end{proof}
 

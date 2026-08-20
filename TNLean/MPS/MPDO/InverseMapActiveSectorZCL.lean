@@ -150,6 +150,14 @@ This specialization retains the square--cube relation; it does not assert
 idempotence or rank one for the active trace matrix, and hence does not by
 itself construct the two-to-four-site channels.
 
+**Local fix (inactive sectors):** Zero-weight sectors remain in the physical
+factorization and are omitted only from the auxiliary trace matrix. See
+`docs/paper-gaps/cpgsv17_mpdo_sal_zcl_eta_local_structure.tex`.
+
+**Local fix (periodicity):** The inherited primitivity proof uses closed walks
+of lengths two and three in place of blocking periodic components. See the
+same paper-gap note.
+
 Source: arXiv:1606.00608, Appendix C.2, Lemmas C.4--C.5 (`propSN` and
 `SALZCL`), lines 1406--1497. The conclusion stops before the invalid rank-one
 inference at lines 1498--1499. -/
