@@ -6,7 +6,6 @@ Authors: TNLean contributors
 import TNLean.Kraus.MixedMap.SpectralRadius
 import TNLean.Spectral.MixedTransfer
 import TNLean.Spectral.TransferOperatorGapCommon
-import Mathlib.Analysis.Normed.Algebra.GelfandFormula
 
 /-!
 # Normalized rectangular transfer-operator bounds
@@ -63,7 +62,7 @@ theorem mixedTransferSpectralRadius₂_eq
 /-! ## Eigenvalue and spectral-radius bounds -/
 
 /-- Every eigenvalue of the rectangular mixed transfer operator has modulus ≤ 1. -/
-theorem eigenvalue_norm_le_one₂ [NeZero D₁] [NeZero D₂]
+theorem eigenvalue_norm_le_one₂
     (A : MPSTensor d D₁) (B : MPSTensor d D₂)
     (hA_norm : ∑ i : Fin d, (A i)ᴴ * A i = 1)
     (hB_norm : ∑ i : Fin d, (B i)ᴴ * B i = 1)
