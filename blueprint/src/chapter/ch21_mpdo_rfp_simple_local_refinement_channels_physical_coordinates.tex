@@ -480,24 +480,19 @@
     $\mathcal K^{[2]}$.
 \end{proof}
 
-% **All-sector Case-II boundary for the viable (ii)=>(v) route:**
-% Positivity, SAL, and literal ZCL descend to every absorbed BNT representative.
-% The printed absorbed-normality bridge is refuted; an alternative all-sector
-% structural factorization is still required.
-% The conditional blocking theorem
-% thm:mpdo_blocked_original_tensor_is_rfp_via_ts instead assumes one
-% neighboring trace factorization. After ZCL-derived equal-copy-weight
-% absorption, the outer-sector channel assembly remains a missing statement.
-% The raw implication (iv)=>(v) is separately refuted. Documented in
-% docs/paper-gaps/cpgsv17_pf_rank_one.tex; issue #6632 is retargeted to this
-% projector-controlled assembly for (ii)=>(v).
-\begin{theorem}[Blocking channels from SAL and ZCL (all-sector Case-II boundary)]
+% **Missing statement; proof-path drift:** Positivity, SAL, and literal ZCL
+% descend to every common-weight absorbed BNT representative.  The printed
+% per-representative factorization remains #6775; a direct sector-coarsening or
+% sector-mixing construction of the same blocked channel pairs is #6793; and
+% their composition through the orthogonal outer physical sectors is #6632.
+% The raw implication (iv)=>(v) is separately refuted.  Documented in
+% docs/paper-gaps/cpgsv17_pf_rank_one.tex.
+\begin{theorem}[Blocking channels after common-weight absorption]
     \label{thm:mpdo_sal_zcl_blocking_channels}
     \notready
-    \uses{def:is_sal, def:mpo_physical_trace_transfer, def:is_rfp_via_ts,
-        def:mpdo_two_site_blocking,
-        thm:mpdo_sal_zcl_bnt_sector_structure,
-        thm:mpdo_theorem49_iv_to_v_counterexample}
+    \uses{def:mpdo_simple_cf_tensor, def:sector_bnt_cf,
+        def:is_sal, def:mpo_physical_trace_transfer, def:is_rfp_via_ts,
+        def:mpdo_two_site_blocking}
     Let $K$ be a simple tensor in block-injective canonical form (biCF),
     equipped with a basis-of-normal-tensors decomposition and satisfying the
     strong area law and literal zero correlation length,
@@ -513,29 +508,13 @@
     \cite[Theorem~4.9 and Appendix~C.2, lines~1810--1825]
       {Cirac2016MPDO_arXiv}. The separate standing biCF and BNT hypotheses are
     imposed at lines~849--850 and restated at line~1628 of the same source.
-    This is not the literal implication (iv)$\Rightarrow$(v), which is
-    refuted by Theorem~\ref{thm:mpdo_theorem49_iv_to_v_counterexample}: that
-    example does not satisfy condition~(ii), since its physical-trace transfer
-    is not idempotent. The printed proof of implication
-    (ii)$\Rightarrow$(v) first uses zero correlation length at lines
-    1646--1665 to make repeated-copy weights independent of the copy label and
-    to absorb their common value. It then refers back to the construction of
-    Proposition~C.7 after projection to each local sector.
-    The analytic hypotheses on every absorbed BNT representative are
-    complete: each is injective, positive on every nonempty chain, saturates
-    the area law, and retains literal physical-trace idempotence. The remaining
-    first missing input is
-    Theorem~\ref{thm:mpdo_sal_zcl_bnt_sector_structure}, namely the
-    all-sector factorization by physical isometries, closed sector tensors,
-    positive neighboring operators, and rank-one coefficients. Proposition
-    C.7 then gives two channels for each BNT element. A second missing step is
-    to combine these channels, using the mutually orthogonal outer physical
-    supports, into single trace-preserving completely positive maps for $K$.
-    The explicit absorbed-normality counterexample does not contradict this
-    source (ii)$\Rightarrow$(v) statement; it invalidates only the printed
-    route to its structural input. Deriving the channels from SAL and literal
-    zero correlation length therefore requires a replacement for that
-    structural step and the projector-controlled assembly.
+    The source first uses zero correlation length at lines~1646--1665 to make
+    repeated-copy weights independent of the copy label and absorbs their
+    common value into each representative. The proof at lines~1815--1816 then
+    projects onto the mutually orthogonal outer physical sectors and invokes
+    the one-representative channel construction. Thus a faithful proof must
+    supply one blocked channel pair for every absorbed representative and
+    combine those pairs through the outer physical projections.
 \end{theorem}
 
 % Correct equation, not a figure: the cited source draws the two-to-three
