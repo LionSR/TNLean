@@ -28,8 +28,8 @@ namespace MPSTensor
 variable {d D L : ℕ}
 
 /-- Blocked physical dimension: the number of length-`L` words over an alphabet of size `d`. -/
-noncomputable abbrev blockPhysDim (d L : ℕ) : ℕ :=
-  Kraus.blockPhysDim d L
+noncomputable def blockPhysDim (d L : ℕ) : ℕ :=
+  Fintype.card (Fin L → Fin d)
 
 lemma blockPhysDim_eq_pow (d L : ℕ) : blockPhysDim d L = d ^ L := by
   exact Kraus.blockPhysDim_eq_pow d L
@@ -40,16 +40,17 @@ instance instNeZeroBlockPhysDim [NeZero d] : NeZero (blockPhysDim d L) := ⟨by
   exact pow_ne_zero L (NeZero.ne d)⟩
 
 /-- The physical alphabet after blocking one site is equivalent to the original alphabet. -/
-noncomputable abbrev singleBlockEquiv (d : ℕ) : Fin (blockPhysDim d 1) ≃ Fin d :=
-  Kraus.singleBlockEquiv d
+noncomputable def singleBlockEquiv (d : ℕ) : Fin (blockPhysDim d 1) ≃ Fin d :=
+  ((finCongr (blockPhysDim_eq_pow d 1)).trans finFunctionFinEquiv.symm).trans
+    (Equiv.funUnique (Fin 1) (Fin d))
 
 /-- Decode a blocked physical index into the corresponding length-`L` word. -/
-noncomputable abbrev decodeBlock (d L : ℕ) : Fin (blockPhysDim d L) → (Fin L → Fin d) :=
-  Kraus.decodeBlock d L
+noncomputable def decodeBlock (d L : ℕ) : Fin (blockPhysDim d L) → (Fin L → Fin d) :=
+  finFunctionFinEquiv.symm ∘ Fin.cast (blockPhysDim_eq_pow d L)
 
 /-- Turn a blocked physical index into a list of length `L`. -/
-noncomputable abbrev wordOfBlock (d L : ℕ) (i : Fin (blockPhysDim d L)) : List (Fin d) :=
-  Kraus.wordOfBlock d L i
+noncomputable def wordOfBlock (d L : ℕ) (i : Fin (blockPhysDim d L)) : List (Fin d) :=
+  List.ofFn (decodeBlock d L i)
 
 @[simp] lemma length_wordOfBlock (d L : ℕ) (i : Fin (blockPhysDim d L)) :
     (wordOfBlock d L i).length = L := by
@@ -60,9 +61,9 @@ noncomputable abbrev wordOfBlock (d L : ℕ) (i : Fin (blockPhysDim d L)) : List
   exact Kraus.wordOfBlock_one d i
 
 /-- The blocked index is equivalent to a word of length `L`. -/
-noncomputable abbrev decodeBlockEquiv (d L : ℕ) :
+noncomputable def decodeBlockEquiv (d L : ℕ) :
     Fin (blockPhysDim d L) ≃ (Fin L → Fin d) :=
-  Kraus.decodeBlockEquiv d L
+  (finCongr (blockPhysDim_eq_pow d L)).trans finFunctionFinEquiv.symm
 
 @[simp] lemma decodeBlockEquiv_apply (d L : ℕ) (I : Fin (blockPhysDim d L)) :
     decodeBlockEquiv d L I = decodeBlock d L I := rfl
@@ -72,9 +73,9 @@ noncomputable abbrev decodeBlockEquiv (d L : ℕ) :
   exact Kraus.decodeBlock_decodeBlockEquiv_symm d L w
 
 /-- Block a matrix product tensor by grouping `L` physical sites. -/
-noncomputable abbrev blockTensor (A : Fin d → Matrix (Fin D) (Fin D) ℂ) (L : ℕ) :
+noncomputable def blockTensor (A : Fin d → Matrix (Fin D) (Fin D) ℂ) (L : ℕ) :
     Fin (blockPhysDim d L) → Matrix (Fin D) (Fin D) ℂ :=
-  Kraus.blockTensor A L
+  fun i => Kraus.evalWord A (wordOfBlock d L i)
 
 @[simp] lemma blockTensor_one_apply (A : Fin d → Matrix (Fin D) (Fin D) ℂ)
     (i : Fin (blockPhysDim d 1)) :
@@ -88,9 +89,9 @@ lemma isNBlkInjective_iff_blockTensor_isInjective
   exact Kraus.isNBlkInjective_iff_blockTensor_isInjective A N
 
 /-- Flatten a word in blocked indices into a word in the original alphabet. -/
-noncomputable abbrev flattenBlockedWord (d L : ℕ) :
-    List (Fin (blockPhysDim d L)) → List (Fin d) :=
-  Kraus.flattenBlockedWord d L
+noncomputable def flattenBlockedWord (d L : ℕ) :
+    List (Fin (blockPhysDim d L)) → List (Fin d)
+  | w => (w.map (wordOfBlock d L)).flatten
 
 @[simp] lemma flattenBlockedWord_nil (d L : ℕ) : flattenBlockedWord d L [] = [] := by
   exact Kraus.flattenBlockedWord_nil d L
@@ -204,8 +205,7 @@ lemma ofFn_blockedConfigEquiv (d N L : ℕ)
     funext k
     simp [blockedConfigEquiv, Equiv.arrowCongr, Equiv.curry, Function.comp]
   rw [hfun, List.ofFn_mul]
-  change _ = ((List.ofFn σ).map (Kraus.wordOfBlock d L)).flatten
-  rw [List.map_ofFn]
+  rw [flattenBlockedWord, List.map_ofFn]
   congr 1
   refine congrArg List.ofFn (funext fun i => ?_)
   have hsymm : ∀ j : Fin L,
@@ -225,7 +225,8 @@ lemma ofFn_blockedConfigEquiv (d N L : ℕ)
     change (i : ℕ) * L + (j : ℕ) = (j : ℕ) + L * (i : ℕ)
     rw [Nat.mul_comm L (i : ℕ), Nat.add_comm]
   simp only [hsymm]
-  rfl
+  change (List.ofFn fun j : Fin L => decodeBlock d L (σ i) j) = (wordOfBlock d L ∘ σ) i
+  simp [wordOfBlock, Function.comp]
 
 private theorem evalWord_pointwise_conjTranspose_reverse (A : Fin d → Matrix (Fin D) (Fin D) ℂ) :
     ∀ w : List (Fin d), (Kraus.evalWord (fun i => (A i)ᴴ) w)ᴴ = Kraus.evalWord A w.reverse := by
