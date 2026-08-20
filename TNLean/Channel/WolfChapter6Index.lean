@@ -109,7 +109,16 @@ Formerly documented as a scope restriction in
 
 ### Wolf Proposition 6.3 (Cesàro means) — FORMALIZED
 
-For the mean-ergodic projection $T_\infty$:
+The three clauses of the proposition are represented by:
+
+* `IsPositiveMap.exists_strictMono_tendsto_pow_peripheralProjection` — an
+  increasing sequence $(n_i)$ for which $T^{n_i}\to T_\phi$;
+* `Module.End.peripheralWeightedProjection_eq_comp` —
+  $T_\varphi=T\,T_\phi$;
+* `LinearMap.HasBoundedOrbits.tendsto_birkhoffAverage_meanErgodicProjection` —
+  the Cesàro means converge to $T_\infty$.
+
+For the positive and trace-preserving conclusions concerning $T_\infty$:
 
 * `IsPositiveMap.meanErgodicProjection_isPositiveMap` — positivity;
 * `IsTracePreservingMap.meanErgodicProjection_isTracePreservingMap` — trace
@@ -118,17 +127,24 @@ For the mean-ergodic projection $T_\infty$:
 * `IsChannel.meanErgodicProjection` — the resulting channel.
 
 These results are in `TNLean.Channel.FixedPoint.MeanErgodicProjection`.  For
-the peripheral projection $T_\varphi$ and its phase-weighted companion
-$T_\varphi'$:
+the peripheral projection $T_\phi$ and the phase-weighted map $T_\varphi$:
 
+* `IsPositiveMap.peripheralProjection_isPositiveMap` and
+  `IsPositiveMap.peripheralProjection_isTracePreservingMap` — positivity and
+  trace preservation of $T_\phi$;
+* `IsPositiveMap.peripheralWeightedProjection_isPositiveMap` and
+  `IsPositiveMap.peripheralWeightedProjection_isTracePreservingMap` — the same
+  conclusions for $T_\varphi$;
 * `IsPositiveMap.peripheralProjection_isCPMap` — complete positivity of
-  $T_\varphi$;
+  $T_\phi$ under the completely positive hypothesis;
 * `IsChannel.peripheralProjection` and
-  `IsChannel.peripheralWeightedProjection` — both maps are channels.
+  `IsChannel.peripheralWeightedProjection` — both maps are channels in the
+  completely positive case.
 
-These results are in `TNLean.Channel.Peripheral.CesaroRecurrence`.  Their
-hypotheses are those of Wolf's proposition: complete positivity and trace
-preservation.  The boundedness needed to form $T_\infty$ follows from
+These results are in `TNLean.Channel.Peripheral.CesaroRecurrence`.  Thus the
+basic hypothesis is positivity together with trace preservation, exactly as in
+Wolf's statement; complete positivity gives the corresponding stronger
+conclusions.  The boundedness needed to form $T_\infty$ follows from
 `IsPositiveMap.hasBoundedOrbits_of_tracePreserving`.
 
 ## Section 6.2 Irreducible maps and Perron–Frobenius theory
