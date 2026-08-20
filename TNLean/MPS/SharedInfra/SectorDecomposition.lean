@@ -182,6 +182,73 @@ theorem basisCount_le_totalDim (P : SectorDecomposition d)
 noncomputable def toTensor (P : SectorDecomposition d) : MPSTensor d P.totalDim :=
   toTensorFromBlocks (d := d) (μ := P.flatWeight) P.flatBasis
 
+/-- Multiply every copy weight in a sector decomposition by the same nonzero scalar.
+
+The representative tensors and their multiplicities are unchanged.  Nonvanishing of the
+new weights is the reason for the hypothesis on the scalar.
+
+Source: arXiv:1606.00608, eq. `II_CF1`, lines 237--244. -/
+noncomputable def scaleWeights (P : SectorDecomposition d) (c : ℂ) (hc : c ≠ 0) :
+    SectorDecomposition d where
+  basisCount := P.basisCount
+  basisDim := P.basisDim
+  basis := P.basis
+  sectors := {
+    copies := P.copies
+    copies_pos := P.copies_pos
+    weight := fun j q => c * P.weight j q
+    weight_ne_zero := fun j q => mul_ne_zero hc (P.weight_ne_zero j q)
+  }
+
+@[simp]
+theorem scaleWeights_basisCount (P : SectorDecomposition d) (c : ℂ) (hc : c ≠ 0) :
+    (P.scaleWeights c hc).basisCount = P.basisCount :=
+  rfl
+
+@[simp]
+theorem scaleWeights_basisDim (P : SectorDecomposition d) (c : ℂ) (hc : c ≠ 0)
+    (j : Fin P.basisCount) :
+    (P.scaleWeights c hc).basisDim j = P.basisDim j :=
+  rfl
+
+@[simp]
+theorem scaleWeights_basis (P : SectorDecomposition d) (c : ℂ) (hc : c ≠ 0)
+    (j : Fin P.basisCount) :
+    (P.scaleWeights c hc).basis j = P.basis j :=
+  rfl
+
+@[simp]
+theorem scaleWeights_copies (P : SectorDecomposition d) (c : ℂ) (hc : c ≠ 0)
+    (j : Fin P.basisCount) :
+    (P.scaleWeights c hc).copies j = P.copies j :=
+  rfl
+
+@[simp]
+theorem scaleWeights_weight (P : SectorDecomposition d) (c : ℂ) (hc : c ≠ 0)
+    (j : Fin P.basisCount) (q : Fin (P.copies j)) :
+    (P.scaleWeights c hc).weight j q = c * P.weight j q :=
+  rfl
+
+/-- Scaling all copy weights scales the assembled tensor by the same scalar.
+
+Source: arXiv:1606.00608, eq. `II_CF1`, lines 237--244. -/
+theorem scaleWeights_toTensor (P : SectorDecomposition d) (c : ℂ) (hc : c ≠ 0) :
+    (P.scaleWeights c hc).toTensor = c • P.toTensor := by
+  classical
+  change toTensorFromBlocks (fun s => c * P.flatWeight s) P.flatBasis =
+    c • toTensorFromBlocks P.flatWeight P.flatBasis
+  funext i
+  ext x y
+  have hblocks :
+      Matrix.blockDiagonal' (fun k => (c * P.flatWeight k) • P.flatBasis k i) =
+        c • Matrix.blockDiagonal' (fun k => P.flatWeight k • P.flatBasis k i) := by
+    rw [← Matrix.blockDiagonal'_smul]
+    congr 1
+    funext k
+    simp only [Pi.smul_apply, smul_smul]
+  exact congrFun (congrFun hblocks (finSigmaFinEquiv.symm x))
+    (finSigmaFinEquiv.symm y)
+
 /-- `toTensor` is `toTensorFromBlocks` for the flattened sector data. -/
 theorem toTensor_eq_toTensorFromBlocks_flat (P : SectorDecomposition d) :
     P.toTensor = toTensorFromBlocks (d := d) (μ := P.flatWeight) P.flatBasis :=
