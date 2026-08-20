@@ -128,9 +128,8 @@ theorem eigenvalue_norm_le_one₂ [NeZero D₁] [NeZero D₂]
     (μ : ℂ) (hμ : Module.End.HasEigenvalue (mixedTransferMap₂ A B) μ) :
     ‖μ‖ ≤ 1 := by
   obtain ⟨v, hv_mem, hv_ne⟩ := hμ.exists_hasEigenvector
-  have hFv := Module.End.mem_eigenspace_iff.mp hv_mem
   have hv : Module.End.HasEigenvector (mixedTransferMap₂ A B) μ v :=
-    ⟨Module.End.mem_eigenspace_iff.mpr hFv, hv_ne⟩
+    ⟨hv_mem, hv_ne⟩
   by_contra h_gt; push Not at h_gt
   have h_pos : 0 < frobSq v := by
     rw [frobSq]
