@@ -18,7 +18,6 @@ import TNLean.Spectral.MixedTransfer
 import TNLean.Spectral.PeripheralToTransferMapGap
 import TNLean.Spectral.PrimitiveOverlap
 import TNLean.Spectral.QuantitativeGap
-import TNLean.Spectral.TraceExpansion
 import TNLean.Spectral.TransferOperatorGap
 import TNLean.Spectral.TransferOperatorGapInjective
 import TNLean.Spectral.TransferOperatorGapNT
