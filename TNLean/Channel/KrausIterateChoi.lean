@@ -5,8 +5,8 @@ Authors: TNLean contributors
 -/
 import TNLean.Algebra.FrameOperator
 import TNLean.Channel.KrausRank
-import TNLean.Kraus.Injectivity
 import TNLean.Kraus.MapIterate
+import TNLean.Kraus.Wielandt.Primitivity.EasyDirections
 
 /-!
 # Positive-definite Choi matrices of finite Kraus-map iterates
@@ -22,6 +22,8 @@ those words span the full matrix algebra.
   fixed iterate.
 * `Kraus.eventually_choiMatrix_mapLM_pow_posDef_iff_hasEventuallyFullWordSpan`
   gives the corresponding eventual statement.
+* `Kraus.hasEventuallyFullVectorSpread_of_eventually_choiMatrix_mapLM_pow_posDef`
+  proves Wolf's implication from item 4 to item 2.
 -/
 
 open scoped Matrix BigOperators ComplexOrder
@@ -129,5 +131,15 @@ theorem eventually_choiMatrix_mapLM_pow_posDef_iff_hasEventuallyFullWordSpan
   · intro h
     filter_upwards [h] with m hm
     exact (choiMatrix_mapLM_pow_posDef_iff_wordSpan_eq_top K m).mpr hm
+
+/-- Wolf, Theorem 6.8, item 4 implies item 2: eventual positive definiteness of
+Kraus-map Choi matrices gives eventual full vector spread. -/
+theorem hasEventuallyFullVectorSpread_of_eventually_choiMatrix_mapLM_pow_posDef
+    [NeZero D] (K : Fin r → Matrix (Fin D) (Fin D) ℂ)
+    (hK : ∀ᶠ m : ℕ in Filter.atTop,
+      (ChoiJamiolkowski.choiMatrix ((mapLM K) ^ m)).PosDef) :
+    HasEventuallyFullVectorSpread K :=
+  hasEventuallyFullVectorSpread_of_hasEventuallyFullWordSpan K
+    ((eventually_choiMatrix_mapLM_pow_posDef_iff_hasEventuallyFullWordSpan K).mp hK)
 
 end Kraus
