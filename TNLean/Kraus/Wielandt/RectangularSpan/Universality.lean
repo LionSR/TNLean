@@ -31,8 +31,6 @@ open scoped Matrix
 
 namespace Kraus
 
-variable {d D : ℕ}
-
 /-! ## Section 8g: Strict growth and the ceiling
 
 For \(P=(K_{i_0})^r\) and
@@ -313,7 +311,7 @@ private lemma evalWord_ofFn_one (K : Fin d → Matrix (Fin D) (Fin D) ℂ) (σ :
   rw [h]
   simp [MPSTensor.evalWord]
 
-/-- K single generator `K j` lies in `wordSpan K 1`. -/
+/-- Each generator `K j` lies in `wordSpan K 1`. -/
 private lemma gen_mem_wordSpan_one (K : Fin d → Matrix (Fin D) (Fin D) ℂ) (j : Fin d) :
     K j ∈ wordSpan K 1 :=
   Submodule.subset_span ⟨fun _ => j, evalWord_ofFn_one K (fun _ => j)⟩
