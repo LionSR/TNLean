@@ -43,6 +43,25 @@ open Matrix Filter
 
 namespace MPSTensor
 
+section Compatibility
+
+variable {D : ℕ}
+
+local notation "V" => Matrix (Fin D) (Fin D) ℂ
+
+/-- Compatibility wrapper for `LinearMap.trace_pow_tendsto_one_of_spectralRadius_compl_lt_one`. -/
+theorem linearMap_trace_pow_tendsto_one_of_spectralRadius_compl_lt_one
+    [NeZero D]
+    (E : V →ₗ[ℂ] V) (ρ : V) (htr : trace ρ ≠ 0)
+    (hTP : IsTracePreservingMap E) (hρ : E ρ = ρ)
+    (hSpect :
+      spectralRadius ℂ
+          ((Module.End.toContinuousLinearMap V) (E - fixedPointProj (D := D) ρ htr)) < 1) :
+    Tendsto (fun n ↦ (LinearMap.trace ℂ V) (E ^ n)) atTop (nhds (1 : ℂ)) :=
+  LinearMap.trace_pow_tendsto_one_of_spectralRadius_compl_lt_one E ρ htr hTP hρ hSpect
+
+end Compatibility
+
 section MPV
 
 variable {d D : ℕ} [NeZero D]

@@ -33,7 +33,7 @@ unique fixed state.
 * `fixedPointProj_idempotent`: `P ∘ P = P`
 * `pow_succ_eq_fixedPointProj_add_compl_pow`: `E^(n+1) = P + (E-P)^(n+1)` for all `n`
 * `pow_eq_fixedPointProj_add_compl_pow`: same for all `n ≥ 1`
-* `MPSTensor.linearMap_trace_pow_tendsto_one_of_spectralRadius_compl_lt_one`:
+* `LinearMap.trace_pow_tendsto_one_of_spectralRadius_compl_lt_one`:
   convergence of the traces to one under a complementary spectral-radius gap
 
 ## Notation
@@ -141,7 +141,7 @@ theorem pow_eq_fixedPointProj_add_compl_pow
 
 end ComplementaryDecomposition
 
-namespace MPSTensor
+namespace LinearMap
 
 open Filter
 
@@ -157,9 +157,9 @@ local notation "V" => Matrix (Fin D) (Fin D) ℂ
 
 /-- Let `P` be the rank-one projection onto a fixed point `ρ` and let `N := E - P`.
 If the spectral radius of `N` is less than one, then `trace(E ^ n)` converges to one. -/
-theorem linearMap_trace_pow_tendsto_one_of_spectralRadius_compl_lt_one
+theorem trace_pow_tendsto_one_of_spectralRadius_compl_lt_one
     [NeZero D]
-    (E : V →ₗ[ℂ] V) (ρ : V) (htr : trace ρ ≠ 0)
+    (E : V →ₗ[ℂ] V) (ρ : V) (htr : Matrix.trace ρ ≠ 0)
     (hTP : IsTracePreservingMap E) (hρ : E ρ = ρ)
     (hSpect :
       spectralRadius ℂ
@@ -216,4 +216,4 @@ theorem linearMap_trace_pow_tendsto_one_of_spectralRadius_compl_lt_one
 
 end TraceConvergence
 
-end MPSTensor
+end LinearMap
