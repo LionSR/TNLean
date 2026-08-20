@@ -536,6 +536,30 @@ This paragraph cites Theorem~\ref{missing:label}.
         )
 
     @patch("qic_blueprint_boundary_report.source_sha", return_value="a" * 40)
+    def test_inline_environment_remains_in_surrounding_paragraph(
+        self, _source_sha
+    ) -> None:
+        self.write_blueprint(
+            r"""\begin{theorem}\label{thm:qic}
+\lean{Kraus.moved}
+\end{theorem}
+
+The sentence begins on this line,
+contains $J=\bigl(\begin{smallmatrix}0&1\\-1&0\end{smallmatrix}\bigr)$ here,
+and ends on this line.
+"""
+        )
+        report = boundary_report(self.root)
+        blocks = [
+            block
+            for block in report["non_item_blocks"]
+            if block["file"] == "src/chapter/ch01.tex"
+        ]
+        self.assertEqual(len(blocks), 1)
+        self.assertEqual(blocks[0]["line"], 5)
+        self.assertEqual(blocks[0]["end_line"], 7)
+
+    @patch("qic_blueprint_boundary_report.source_sha", return_value="a" * 40)
     def test_non_item_environment_is_atomic_across_blank_and_comment_lines(
         self, _source_sha
     ) -> None:
