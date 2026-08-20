@@ -9,5 +9,6 @@ Authors: TNLean contributors
 -- Generated aggregator module: TNLean.Kraus.Wielandt.RectangularSpan.UniversalityAux
 
 import TNLean.Kraus.Wielandt.RectangularSpan.UniversalityAux.Basic
+import TNLean.Kraus.Wielandt.RectangularSpan.UniversalityAux.NilpIndex
 import TNLean.Kraus.Wielandt.RectangularSpan.UniversalityAux.Quantitative
 import TNLean.Kraus.Wielandt.RectangularSpan.UniversalityAux.Sharp
