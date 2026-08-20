@@ -44,7 +44,8 @@ GENERATED_NOTICE = (
 EXCLUDED_TOP_LEVEL_DIRECTORIES = frozenset({"Archive"})
 # Narrow, reviewable exceptions to the rule that handwritten imports do not count
 # toward generated manifest coverage. Each target records the exact handwritten
-# import path from a directly imported owner to the module it covers.
+# import path from a directly imported owner to the module it covers. The tuple
+# lists the owner and intermediate carriers; the mapping key is the final target.
 HANDWRITTEN_IMPORT_OWNERSHIP = {
     "TNLean.MPS.ParentHamiltonian": {
         "TNLean.MPS.ParentHamiltonian.BlockedGroundSpaceTransport": (
