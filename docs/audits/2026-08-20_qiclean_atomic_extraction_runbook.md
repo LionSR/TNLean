@@ -282,7 +282,12 @@ continue to use HTTPS. Never write the private key to a command trace, PR body,
 or Lake configuration.
 
 Every TNLean workflow that invokes Lake must install the key before Lake resolves
-dependencies:
+dependencies. The host key below is GitHub's published Ed25519 key, whose
+published fingerprint is
+`SHA256:+DiY3wvvV6TuJJhbpZisF/zLDA0zPMSvHdkr4UvCOqU`; see
+[GitHub's SSH key fingerprints](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/githubs-ssh-key-fingerprints).
+The dedicated files avoid altering the runner's default SSH identity and shared
+host-key list:
 
 ```yaml
 - name: Authenticate private QICLean dependency
@@ -290,10 +295,17 @@ dependencies:
     QICLEAN_DEPLOY_KEY: ${{ secrets.QICLEAN_DEPLOY_KEY }}
   run: |
     test -n "$QICLEAN_DEPLOY_KEY"
-    install -d -m 700 "$HOME/.ssh"
-    printf '%s\n' "$QICLEAN_DEPLOY_KEY" > "$HOME/.ssh/id_ed25519"
-    chmod 600 "$HOME/.ssh/id_ed25519"
-    ssh-keyscan -t ed25519 github.com >> "$HOME/.ssh/known_hosts"
+    QICLEAN_SSH_DIR="$RUNNER_TEMP/qiclean-ssh"
+    install -d -m 700 "$QICLEAN_SSH_DIR"
+    printf '%s\n' "$QICLEAN_DEPLOY_KEY" > "$QICLEAN_SSH_DIR/deploy_key"
+    chmod 600 "$QICLEAN_SSH_DIR/deploy_key"
+    printf '%s\n' \
+      'github.com ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOMqqnkVzrm0SdG6UOoqKLsabgH5C9okWi0dh2l9GKJl' \
+      > "$QICLEAN_SSH_DIR/github_known_hosts"
+    QICLEAN_SSH_COMMAND="ssh -i $QICLEAN_SSH_DIR/deploy_key -o IdentitiesOnly=yes"
+    QICLEAN_SSH_COMMAND+=" -o UserKnownHostsFile=$QICLEAN_SSH_DIR/github_known_hosts"
+    QICLEAN_SSH_COMMAND+=" -o StrictHostKeyChecking=yes"
+    printf 'GIT_SSH_COMMAND=%s\n' "$QICLEAN_SSH_COMMAND" >> "$GITHUB_ENV"
 ```
 
 The QICLean repository setting must keep this deploy key read-only. The secret
