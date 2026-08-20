@@ -28,7 +28,7 @@ namespace MPSTensor
 variable {d D L : ℕ}
 
 /-- Blocked physical dimension: the number of length-`L` words over an alphabet of size `d`. -/
-noncomputable def blockPhysDim (d L : ℕ) : ℕ :=
+noncomputable abbrev blockPhysDim (d L : ℕ) : ℕ :=
   Kraus.blockPhysDim d L
 
 lemma blockPhysDim_eq_pow (d L : ℕ) : blockPhysDim d L = d ^ L := by
@@ -40,15 +40,15 @@ instance instNeZeroBlockPhysDim [NeZero d] : NeZero (blockPhysDim d L) := ⟨by
   exact pow_ne_zero L (NeZero.ne d)⟩
 
 /-- The physical alphabet after blocking one site is equivalent to the original alphabet. -/
-noncomputable def singleBlockEquiv (d : ℕ) : Fin (blockPhysDim d 1) ≃ Fin d :=
+noncomputable abbrev singleBlockEquiv (d : ℕ) : Fin (blockPhysDim d 1) ≃ Fin d :=
   Kraus.singleBlockEquiv d
 
 /-- Decode a blocked physical index into the corresponding length-`L` word. -/
-noncomputable def decodeBlock (d L : ℕ) : Fin (blockPhysDim d L) → (Fin L → Fin d) :=
+noncomputable abbrev decodeBlock (d L : ℕ) : Fin (blockPhysDim d L) → (Fin L → Fin d) :=
   Kraus.decodeBlock d L
 
 /-- Turn a blocked physical index into a list of length `L`. -/
-noncomputable def wordOfBlock (d L : ℕ) (i : Fin (blockPhysDim d L)) : List (Fin d) :=
+noncomputable abbrev wordOfBlock (d L : ℕ) (i : Fin (blockPhysDim d L)) : List (Fin d) :=
   Kraus.wordOfBlock d L i
 
 @[simp] lemma length_wordOfBlock (d L : ℕ) (i : Fin (blockPhysDim d L)) :
@@ -60,7 +60,7 @@ noncomputable def wordOfBlock (d L : ℕ) (i : Fin (blockPhysDim d L)) : List (F
   exact Kraus.wordOfBlock_one d i
 
 /-- The blocked index is equivalent to a word of length `L`. -/
-noncomputable def decodeBlockEquiv (d L : ℕ) :
+noncomputable abbrev decodeBlockEquiv (d L : ℕ) :
     Fin (blockPhysDim d L) ≃ (Fin L → Fin d) :=
   Kraus.decodeBlockEquiv d L
 
@@ -72,7 +72,7 @@ noncomputable def decodeBlockEquiv (d L : ℕ) :
   exact Kraus.decodeBlock_decodeBlockEquiv_symm d L w
 
 /-- Block a matrix product tensor by grouping `L` physical sites. -/
-noncomputable def blockTensor (A : Fin d → Matrix (Fin D) (Fin D) ℂ) (L : ℕ) :
+noncomputable abbrev blockTensor (A : Fin d → Matrix (Fin D) (Fin D) ℂ) (L : ℕ) :
     Fin (blockPhysDim d L) → Matrix (Fin D) (Fin D) ℂ :=
   Kraus.blockTensor A L
 
@@ -88,7 +88,7 @@ lemma isNBlkInjective_iff_blockTensor_isInjective
   exact Kraus.isNBlkInjective_iff_blockTensor_isInjective A N
 
 /-- Flatten a word in blocked indices into a word in the original alphabet. -/
-noncomputable def flattenBlockedWord (d L : ℕ) :
+noncomputable abbrev flattenBlockedWord (d L : ℕ) :
     List (Fin (blockPhysDim d L)) → List (Fin d) :=
   Kraus.flattenBlockedWord d L
 
@@ -420,14 +420,6 @@ lemma evalWord_replicate (A : Fin d → Matrix (Fin D) (Fin D) ℂ) (i : Fin d) 
     evalWord A (List.replicate L i) = (A i) ^ L := by
   exact Kraus.evalWord_replicate A i L
 
-
-* `mpv_blockTensor_one` transports MPVs through single-site blocking.
-* `SameMPV.blockTensor` transports the `SameMPV` relation through blocking.
--/
-
-open scoped Matrix
-
-namespace MPSTensor
 
 variable {d D : ℕ}
 
