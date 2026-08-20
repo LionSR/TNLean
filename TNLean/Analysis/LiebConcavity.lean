@@ -163,7 +163,8 @@ The remaining Mathlib or local formalization gaps are:
 ## References
 
 * [R. Bhatia, *Matrix Analysis*, Springer GTM 169, Chapter V]
-* [M. Wolf, *Quantum Channels & Operations: Guided Tour*, Theorems 5.11 and 5.13]
+* [M. Wolf, *Quantum Channels & Operations: Guided Tour*, Theorems 5.11 and 5.13,
+  and Corollary 5.2(3)]
 * [F. Hansen, G. K. Pedersen, *Jensen's operator inequality*, 2003]
 * [E. H. Lieb, *Convex trace functions and the Wigner--Yanase--Dyson
   conjecture*, 1973]
@@ -540,7 +541,7 @@ theorem posMap_rpow_convex_jensen
     exact le_of_tendsto_of_tendsto hlimF hlimG hle
   · exact hcore p ⟨hp1, hp2⟩
 
-/-- **Operator Jensen for concave `log`** (Wolf Theorem 5.13, log case).
+/-- **Operator Jensen for concave `log`** (Wolf Corollary 5.2(3)).
 
 For a positive **unital** map `T` and positive-definite `A`:
   `T(log A) ≤ log(T A)`.
@@ -550,8 +551,14 @@ Follows by applying the concave real-power theorem to `(A ^ p - 1) / p` for
 `CFC.tendsto_cfc_rpow_sub_one_log`. Requires unitality (`T 1 = 1`), not merely
 subunitality.
 
+**Local fix (unital logarithm inequality):** Wolf Corollary 5.2(3) states the
+result for a positive subunital map, but that statement fails because `log` is
+unbounded below at zero. The present theorem uses the necessary unital
+hypothesis. This correction is documented in
+`docs/paper-gaps/wolf_ch5_operator_jensen_lieb.tex`.
+
 References:
-* Wolf, Theorem 5.13
+* Wolf, Corollary 5.2(3)
 * Hansen--Pedersen, *Jensen's operator inequality*, 2003 -/
 theorem posMap_log_concave_jensen
     {T : Mat →ₗ[ℂ] Mat} (hT : IsPositiveMap T) (hUnit : T 1 = (1 : Mat))

@@ -49,7 +49,8 @@ These are consumed by the Corollary 5.2 proofs in `OperatorMonotone.lean`.
 
 ## References
 
-* [M. Wolf, *Quantum Channels & Operations: Guided Tour*, Theorems 5.11 and 5.13]
+* [M. Wolf, *Quantum Channels & Operations: Guided Tour*, Theorems 5.11 and 5.13,
+  and Corollary 5.2(3)]
 * [F. Hansen, G. K. Pedersen, *Jensen's operator inequality*, 2003]
 -/
 
@@ -101,7 +102,7 @@ theorem IsPositiveMap.rpow_convex_jensen
     (T A) ^ p ≤ T (A ^ p) :=
   posMap_rpow_convex_jensen hT hSub hp hA
 
-/-- **Operator Jensen for concave `log`** (Wolf Theorem 5.13 applied to `log`).
+/-- **Operator Jensen for concave `log`** (Wolf Corollary 5.2(3)).
 
 For a positive **unital** map `T` and positive-definite `A`:
   `T(log A) ≤ log(T A)`.
@@ -110,6 +111,12 @@ This is obtained as the right limit of the concave real-power Jensen theorem
 for positive subunital maps. Note: unlike the `rpow` variants, the `log`
 Jensen inequality requires unitality (`T 1 = 1`), not merely subunitality
 (`T 1 ≤ 1`).
+
+**Local fix (unital logarithm inequality):** Wolf Corollary 5.2(3) states the
+result for a positive subunital map, but that statement fails because `log` is
+unbounded below at zero. The present theorem uses the necessary unital
+hypothesis. This correction is documented in
+`docs/paper-gaps/wolf_ch5_operator_jensen_lieb.tex`.
 
 Proved from `posMap_log_concave_jensen` in `TNLean.Analysis.LiebConcavity`. -/
 theorem IsPositiveMap.log_concave_jensen

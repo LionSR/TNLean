@@ -277,6 +277,7 @@ logarithm are cases of Theorem 5.13.
 |---|---|---|---:|---:|---|
 | Theorem 5.1 | Theorem 5.11 | Projection inequality from operator convexity | PDF page 9; printed page 81 | lines 627--655 | Corrected |
 | Theorem 5.1 | Theorem 5.13 | Operator monotonicity and positive maps | PDF page 11; printed page 83 | lines 714--759 | Corrected |
+| Theorem 5.1 | Corollary 5.2(3) | Logarithm inequality for positive maps | PDF page 11; printed page 83 | lines 761--768 | Corrected with unital local fix |
 | Theorem 5.2 | Theorem 5.2 | Block matrices and Schur complements | PDF page 2; printed page 74 | lines 103--118 | Correct |
 | Theorem 5.3 | Theorem 5.3 | Operator Schwarz inequality | PDF page 3; printed page 75 | lines 180--196 | Correct |
 | Proposition 5.1 | Proposition 5.1 | Schwarz inequality for commutative domains | PDF page 4; printed page 76 | lines 245--260 | Correct |
@@ -292,13 +293,16 @@ logarithm are cases of Theorem 5.13.
 | Theorem 5.17 | Theorem 5.17 | Convex functions and positive maps under the trace | PDF page 16; printed page 88 | lines 1039--1083 | Correct |
 | Example 5.3 | Example 5.3 | A Schwarz map which is not 2-positive | PDF page 5; printed page 77 | lines 354--378 | Correct |
 
-The two corrected rows distinguish the two conclusions that had formerly
-been assigned collectively to Theorem 5.1. For a positive subunital map,
+The corrected rows distinguish the conclusions that had formerly been
+assigned collectively to Theorem 5.1. For a positive subunital map,
 Theorem 5.11 gives Jensen's inequality for an operator-convex function with
 nonpositive value at zero. Theorem 5.13 gives the reversed inequality for an
 operator-monotone function with nonnegative value at zero. These apply,
-respectively, to powers with exponent in `[1, 2]`, and to powers with exponent
-in `[0, 1]` or the logarithm (with the usual positivity restrictions).
+respectively, to powers with exponent in `[1, 2]` and powers with exponent in
+`[0, 1]`. The logarithm inequality is Corollary 5.2(3). Its printed subunital
+form is false because the logarithm is unbounded below at zero, so the Lean
+theorem uses the necessary unital hypothesis, as documented in
+`docs/paper-gaps/wolf_ch5_operator_jensen_lieb.tex`.
 
 ### Citing files
 
