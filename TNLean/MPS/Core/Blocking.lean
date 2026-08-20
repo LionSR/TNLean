@@ -7,17 +7,17 @@ import TNLean.MPS.Defs
 import TNLean.Kraus.Blocking
 
 /-!
-# Matrix-product-vector bridge for physical blocking
+# Matrix-product vectors under physical blocking
 
 The word-evaluation content of physical blocking (`blockPhysDim`, `wordOfBlock`,
 `blockTensor`, `blockKron`, `evalWord_blockTensor`, canonical-normalization
 propagation, `leftCanonical_blockTensor`) now lives in
 `TNLean/Kraus/Blocking.lean`. This file keeps
-the surviving matrix-product-vector bridge lemmas that transport `mpv`/`SameMPV`
-through physical blocking. `mpv_blockTensor_eq_mpv` was also a bridge lemma
-here; it had zero call sites (repo-wide, including generalized field notation)
-and was deleted rather than carried across the split — the actually-used
-flattened-word `mpv` bridge lives in `TNLean/MPS/Core/BlockingInfrastructure.lean`.
+the surviving matrix-product-vector lemmas that transport `mpv`/`SameMPV`
+through physical blocking. The former compatibility lemma
+`mpv_blockTensor_eq_mpv` had zero call sites (repo-wide, including generalized
+field notation) and was deleted rather than carried across the split. The used
+flattened-word `mpv` lemma lives in `TNLean/MPS/Core/BlockingInfrastructure.lean`.
 
 ## Main results
 
