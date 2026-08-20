@@ -339,10 +339,13 @@ The component results and their conjunction are in
 ambient_isSAL_isSimpleCanonicalForm_and_firstAbsorbed_not_isNormalTensor}.
 This repairs the previously missing full-condition counterexample statement
 and classifies the printed absorption inference as \emph{proof-path drift}.
-It does not prove or disprove the claimed all-sector factorization. A
-scale-covariant replacement for the failed factorization route remains open in
-\ghissue{6775}; the subsequent projector-controlled channel assembly remains
-open in \ghissue{6632}.
+It does not prove or disprove the claimed all-sector factorization.  The
+source assertion that each absorbed representative admits some rank-one
+neighboring-trace factorization remains open in \ghissue{6775}.  A possible
+direct construction of the blocked channel pair, using a genuine coarsening or
+mixing of the physical-sector labels, is tracked separately in
+\ghissue{6793}.  The subsequent combination through the orthogonal outer
+physical sectors remains open in \ghissue{6632}.
 
 \section{Unequal raw copies refute Theorem~4.9(iv)$\Rightarrow$(v)}
 
@@ -384,8 +387,9 @@ all copy weights within each BNT sector equal and absorb their common value.
 The repeated-copy tensor above fails condition~(ii), since
 $\operatorname{diag}(1,1/2)$ is not idempotent. Consequently it does not
 contradict the source proposition \texttt{prop2to5}; the remaining work there
-is the all-sector factorization and projector-controlled channel assembly
-after common-weight absorption.
+is either the printed per-representative factorization or another construction
+of the same blocked channel pairs, followed by their projector-controlled
+combination after common-weight absorption.
 
 \section{The vertical one-label identity}
 

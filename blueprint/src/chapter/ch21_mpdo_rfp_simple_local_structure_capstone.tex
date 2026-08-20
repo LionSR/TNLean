@@ -1184,11 +1184,13 @@ This is the calculation in
     channel route in Appendix~C.2 is instead (ii)$\Rightarrow$(v): lines
     1646--1665 first use zero correlation length to make all repeated-copy
     weights of each BNT representative equal and absorb their common value.
-    After that normalization, the remaining missing statement is the
-    projector-controlled assembly of the Proposition~C.7 channel pairs.
-    Proposition~C.7 starts from one physical-sector factorization of the whole
-    tensor. Separate factorizations of its BNT elements do not by themselves
-    provide the projector-controlled combination required here.
+    The printed continuation still requires a suitable physical-sector
+    factorization for every absorbed representative. A direct construction of
+    the same blocked channel pairs by coarsening or mixing the sector labels
+    would also suffice for condition~(v). Once one channel pair is available
+    for each absorbed representative, those pairs must be combined through
+    the orthogonal outer physical sectors. Proposition~C.7 supplies only the
+    pair belonging to one factorization of one tensor.
 \end{theorem}
 
 % CPSV16 Examples 4.10--4.12, lines 897--942.
@@ -2153,66 +2155,51 @@ This is the calculation in
     Kraus sums proves both equations entrywise.
 \end{proof}
 
-% **All-sector Case-II boundary:**
-% Analytic inheritance is complete for every absorbed BNT representative.
-% The explicit bond-one construction formally refutes preservation of
-% normality under all conditions used in Appendix C.2. Hence implication
-% (ii)=>(iv) remains a missing statement; the printed inference has proof-path
-% drift. Independently,
+% **Missing statement; proof-path drift:** Analytic inheritance is complete
+% for every common-weight absorbed BNT representative, but the explicit
+% bond-one construction refutes preservation of normality under all conditions
+% used in Appendix C.2.  The printed implication (ii)=>(iv) therefore needs a
+% factorization argument that does not use absorbed normality; tracked in
+% #6775.  Direct per-representative blocked channels are a separate possible
+% route to (ii)=>(v), tracked in #6793, and their outer-sector composition is
+% tracked in #6632.  Independently,
 % thm:mpdo_theorem49_iv_to_v_counterexample refutes the literal implication
-% (iv)=>(v).
-% Documented in
-% docs/paper-gaps/cpgsv17_pf_rank_one.tex.
-\begin{theorem}[BNT sector structure from SAL and ZCL (all-sector Case-II boundary)]
+% (iv)=>(v).  Documented in docs/paper-gaps/cpgsv17_pf_rank_one.tex.
+\begin{theorem}[Physical sector structure of absorbed BNT representatives]
     \label{thm:mpdo_sal_zcl_bnt_sector_structure}
     \notready
-    \uses{def:is_sal, def:mpo_physical_trace_transfer,
-        thm:mpdo_sal_bnt_separating_projectors,
-        thm:mpdo_absorbed_bnt_sector_caseii_analytic_properties,
-        cor:mpdo_sal_zcl_local_sector_structure,
-        thm:mpdo_caseii_absorption_not_normal,
-        thm:mpdo_theorem49_iv_to_v_counterexample}
+    \uses{def:mpdo_simple_cf_tensor, def:sector_bnt_cf,
+        def:is_sal, def:mpo_physical_trace_transfer,
+        def:mpdo_physical_sector_factorization,
+        def:mpdo_neighboring_trace_factorization}
     Let $K$ be a simple tensor in block-injective canonical form (biCF),
-    equipped with a basis-of-normal-tensors decomposition. Suppose that $K$
-    satisfies the strong area law and literal zero correlation length,
+    with BNT representatives $A_s$ and canonical coefficients $\mu_{s,q}$.
+    Suppose that $K$ generates positive semidefinite periodic operators,
+    satisfies the strong area law, and has literal zero correlation length,
     \begin{align}
         \mathcal T_K^2&=\mathcal T_K.
         \notag
     \end{align}
-    Then its basis tensors have mutually orthogonal physical supports.
-    Moreover, each basis tensor
-    has an inverse-map sector decomposition with positive neighboring
-    operators $\eta_{k,h}$ and real families $(a_k)_k,(b_k)_k$ satisfying
+    Then $\mu_{s,q}$ is independent of $q$ for each fixed $s$.  Absorb this
+    common value into $A_s$ and write $\mathcal K_s=\mu_sA_s$.  The tensors
+    $\mathcal K_s$ have mutually orthogonal physical supports and each
+    generates positive semidefinite periodic operators.  For every $s$, there
+    is a physical-sector factorization
     \begin{align}
-        \tr(\eta_{k,h})&=a_kb_h, \notag\\
-        \sum_k a_kb_k&=1. \notag
+        \C^d&\simeq\bigoplus_k(B^L_{s,k}\otimes B^R_{s,k}),
+        \notag\\
+        U_s\kappa^{(s)}_{\beta,\alpha}U_s^\dagger
+        &=\bigoplus_k(l_{s,k})_\beta\otimes(r_{s,k})_\alpha,
+        \notag
+    \end{align}
+    whose neighboring operators $\eta^{(s)}_{k,h}$ are positive semidefinite.
+    There are real families $(a_{s,k})_k,(b_{s,k})_k$ satisfying
+    \begin{align}
+        \tr(\eta^{(s)}_{k,h})&=a_{s,k}b_{s,h}, \notag\\
+        \sum_k a_{s,k}b_{s,k}&=1. \notag
     \end{align}
     This is implication (ii)$\Rightarrow$(iv) of
     \cite[Theorem~4.9 and Appendix~C.2, lines~1740--1782]
       {Cirac2016MPDO_arXiv}. The separate standing biCF and BNT hypotheses are
     imposed at line~849 and restated at line~1628 of the same source.
-    The orthogonal-support conclusion uses the injectivity supplied by biCF,
-    the positive neighboring operators in each sector factorization, and the
-    unstarred layer identities. The remaining identities specify the local
-    factorization and its rank-one normalization.
-    Theorem~\ref{thm:mpdo_absorbed_bnt_sector_caseii_analytic_properties}
-    proves that every absorbed BNT representative is injective, generates
-    positive semidefinite operators, saturates the area law, and retains
-    literal physical-trace idempotence. The remaining obstruction is
-    normality. If $\mathcal K_s=\mu_sA_s$, then the transfer spectral radius is
-    multiplied by $|\mu_s|^2$. The global canonical-form normalization gives
-    only one unit-modulus coefficient and does not imply $|\mu_s|=1$ for every
-    $s$. Theorem~\ref{thm:mpdo_caseii_absorption_not_normal} gives an MPDO of
-    positive normalization with SAL, literal ambient physical-trace
-    idempotence and normalized fixed-representative simple canonical form; its
-    representatives are in biCF. Its global weights are $(1/\sqrt2,1)$, and
-    the first absorbed transfer radius is $1/2$. Therefore the printed assertion that absorption
-    preserves normality is false. The claimed
-    all-sector conclusion would instead require an alternative factorization
-    argument that does not pass through absorbed-sector normality. This is a
-    missing statement in implication (ii)$\Rightarrow$(iv), with proof-path
-    drift in the printed argument. It is distinct from the literal implication
-    (iv)$\Rightarrow$(v), which is refuted by
-    Theorem~\ref{thm:mpdo_theorem49_iv_to_v_counterexample} because condition
-    (iv) does not constrain unequal raw repeated-copy weights.
 \end{theorem}

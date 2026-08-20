@@ -203,8 +203,11 @@ ambient_isSAL_isSimpleCanonicalForm_and_firstAbsorbed_not_isNormalTensor}.
 This proves that the printed absorbed-normality inference is false under all
 conditions used in the simple Case-II passage, at the normalized
 fixed-representative boundary. The inference is \emph{proof-path drift}; it
-does not refute the claimed all-sector conclusion. An alternative
-factorization remains a missing statement.
+does not refute the claimed all-sector conclusion. The remaining assertion is
+that every absorbed representative admits some physical-sector factorization
+with positive neighboring operators and normalized rank-one trace
+coefficients. It does not require the particular inverse-map sectors to have
+a rank-one trace matrix.
 
 A separate construction in
 \path{TNLean/MPS/MPDO/Theorem49RepeatedCopyCounterexample.lean} refutes the
@@ -217,8 +220,11 @@ and every support, positivity, and factorization clause of condition~(iv).
 Its two-site block nevertheless fails Definition~4.1, since transfer
 idempotence would force $1+2^{-4}=1+2^{-2}$. Thus (iv)$\Rightarrow$(v) is a
 refuted \emph{unfaithful statement}. The source (ii)$\Rightarrow$(v) route is
-distinct: ZCL first makes copy weights common, after which the all-sector
-factorization and projector-controlled channel assembly remain missing.
+distinct: ZCL first makes copy weights common. The printed factorization
+question is tracked in \ghissue{6775}; a possible direct construction of the
+blocked channel pair by coarsening or mixing the physical-sector labels is
+tracked in \ghissue{6793}; and the subsequent outer-sector combination is
+tracked in \ghissue{6632}.
 
 \section{Affected declarations}
 
