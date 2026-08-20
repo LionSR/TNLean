@@ -127,11 +127,28 @@ canonical-form convention in Definition~4.1.  This boundary is also recorded
 in
 \path{docs/paper-gaps/cpsv16_unit_weight_rfp_scale_tension.tex}.
 
+The independent four-site entropy calculation is also complete.  For the
+normalized state, regroup the sites as $A=\{0\}$, $B=\{1,3\}$, and
+$C=\{2\}$.  The $AB$ and $BC$ marginals are $I_8/8$, the $B$ marginal is
+$I_4/4$, and the full state is uniform on eight even-parity configurations.
+Thus
+\[
+  S(ABC)=3\log 2,
+  \qquad S(B)=2\log 2,
+  \qquad S(AB)=S(BC)=3\log 2,
+\]
+so equality in strong subadditivity fails by the strictly positive defect
+$\log 2$.  This proves the state-specific Markov obstruction without using the
+normalized fixed-point maps.
+
 The full GSNNCH exclusion is already a statement about the normalized family
 because \leanid{MPOTensor.IsGSNNCH} quantifies over
 \leanid{MPOTensor.normalizedMPO}. It may therefore be proved as
 $\neg\operatorname{IsGSNNCH}(M)$ for the printed tensor and remains tracked in
-\ghissue{6045}. Transport to the separately named $\widehat M$ is optional
+\ghissue{6045}.  The remaining implication from a four-cycle GSNNCH
+representation to the Markov equality is tracked in \ghissue{6072}; only that
+implication is needed to combine the entropy defect with the GSNNCH
+hypothesis.  Transport to the separately named $\widehat M$ is optional
 packaging rather than a prerequisite for that result.
 
 \section{Verdict}
@@ -159,5 +176,16 @@ discharging the mathematical task tracked in \ghissue{6044}. They do not repair
 the incompatible line-246 unit-weight convention, so the formal verdict must
 remain separated into the false literal claim, the true normalized channel
 equations, and the still-open full GSNNCH exclusion in \ghissue{6045}.
+
+For the normalized four-site state,
+\leanid{MPOTensor.CPSVExample412Literal.fourCycleTripartiteState_not_isSSAEquality}
+proves the strict strong-subadditivity defect.  Its proof uses the exact
+marginals
+\leanid{MPOTensor.CPSVExample412Literal.traceC_fourCycleTripartiteState},
+\leanid{MPOTensor.CPSVExample412Literal.traceA_fourCycleTripartiteState}, and
+\leanid{MPOTensor.CPSVExample412Literal.traceAC_fourCycleTripartiteState},
+together with their entropy calculations.  This completes \ghissue{6073} but
+does not by itself assert failure of the GSNNCH form; that final inference still
+depends on \ghissue{6072}.
 
 \end{document}
