@@ -307,12 +307,13 @@ matrices, and let $\E_K$ be its Kraus map.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:kraus_posdef_fixed_point_from_tp_spreading,
-        thm:kraus_irreducible_from_spreading,
+    \uses{thm:cesaro_fixedpoint, thm:kraus_irreducible_from_spreading,
         thm:peripheral_roots_irreducible_channel,
         thm:kraus_power_fixed_point_posdef_from_spreading,
         thm:positive_fixedpoint_decomp}
-    The preceding theorem gives a positive-definite fixed point, and
+    The normalization makes $\E_K$ a channel, so
+    Theorem~\ref{thm:cesaro_fixedpoint} gives a nonzero positive-semidefinite
+    fixed point. This supplies the peripheral eigenvalue $1$.
     Theorem~\ref{thm:kraus_irreducible_from_spreading} gives irreducibility.
     Thus $\E_K$ is an irreducible channel. By
     Theorem~\ref{thm:peripheral_roots_irreducible_channel}, every peripheral
