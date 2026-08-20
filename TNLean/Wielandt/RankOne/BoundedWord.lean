@@ -7,7 +7,7 @@ import TNLean.Kraus.Wielandt.RankOne.BoundedWord
 import TNLean.Wielandt.SpanGrowth.CumulativeSpan
 
 /-!
-# Bounded rank-one element in a blocked word span
+# Bounded two-sided MPS word spans
 
 This file restates the `Kraus` two-sided word-span results using the `MPSTensor`
 word-span notation.

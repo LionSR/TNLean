@@ -6,7 +6,7 @@ Authors: TNLean contributors
 import TNLean.Kraus.WordSpan
 
 /-!
-# Bounded rank-one element in a word span
+# Bounded two-sided word spans
 
 This file introduces the two-sided span
 
