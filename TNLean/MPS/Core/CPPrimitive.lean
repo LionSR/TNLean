@@ -112,8 +112,8 @@ theorem transferMap_isChannel
 
 /-! ### Iterated transfer map
 
-The iterated transfer map identity (iterating the transfer map `n` times gives
-the sum over word evaluations) is proved in `TNLean.Spectral.MixedTransfer` as
-`transferMap_pow_apply'`, using the more general mixed transfer map framework. -/
+The iterated transfer map identity is `transferMap_pow_apply'` in
+`TNLean.MPS.Core.TransferChannel`. It follows from the finite Kraus map word expansion
+`Kraus.mapLM_pow_apply`. -/
 
 end MPSTensor
