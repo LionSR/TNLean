@@ -174,6 +174,60 @@ class ImportAggregatorGeneratorTests(unittest.TestCase):
             self.assertIn("absent from the generated import frontier", output.getvalue())
             self.assertFalse((root / "TNLean.lean").exists())
 
+    def test_handwritten_ownership_requires_declared_import_path(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary_directory:
+            root = Path(temporary_directory)
+            owner = "TNLean.MPS.ParentHamiltonian.Martingale"
+            carrier = f"{owner}.BlockedGap"
+            targets = (
+                "TNLean.MPS.ParentHamiltonian.BlockedGroundSpaceTransport",
+                "TNLean.MPS.ParentHamiltonian.LocalSupportTransport",
+            )
+            owner_path = self.write(
+                root,
+                "TNLean/MPS/ParentHamiltonian/Martingale.lean",
+                f"import {carrier}\n",
+            )
+            carrier_path = self.write(
+                root,
+                "TNLean/MPS/ParentHamiltonian/Martingale/BlockedGap.lean",
+                "".join(f"import {target}\n" for target in targets),
+            )
+            for target in targets:
+                target_path = f"{target.replace('.', '/')}.lean"
+                self.write(root, target_path, "def witness := 1\n")
+
+            expected, sources = GENERATOR.build_expected_files(root)
+            aggregator = root / "TNLean/MPS/ParentHamiltonian.lean"
+            for target in targets:
+                self.assertNotIn(f"import {target}\n", expected[aggregator])
+            self.assertEqual(GENERATOR.check_manifest_coverage(root, expected, sources), [])
+
+            original_carrier = carrier_path.read_text(encoding="utf-8")
+            for target in targets:
+                with self.subTest(target=target):
+                    carrier_path.write_text(
+                        original_carrier.replace(f"import {target}\n", ""),
+                        encoding="utf-8",
+                    )
+                    self.assertIn(
+                        target,
+                        GENERATOR.check_manifest_coverage(root, expected, sources),
+                    )
+                    carrier_path.write_text(original_carrier, encoding="utf-8")
+
+            owner_path.write_text("", encoding="utf-8")
+            missing = GENERATOR.check_manifest_coverage(root, expected, sources)
+            for target in targets:
+                self.assertIn(target, missing)
+            owner_path.write_text(f"import {carrier}\n", encoding="utf-8")
+
+            expected[aggregator] = expected[aggregator].replace(f"import {owner}\n", "")
+            missing = GENERATOR.check_manifest_coverage(root, expected, sources)
+            self.assertIn(owner, missing)
+            for target in targets:
+                self.assertIn(target, missing)
+
     def test_check_rejects_omitted_import_despite_incidental_reachability(self) -> None:
         with tempfile.TemporaryDirectory() as temporary_directory:
             root = Path(temporary_directory)
