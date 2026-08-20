@@ -75,8 +75,9 @@ mathematical obstruction.
   and biCF. The first absorbed representative nevertheless has transfer
   spectral radius $1/2$ and is not normal.
 - Scope: this is proof-path drift in the printed argument, not a refutation of
-  the asserted all-sector conclusion. The alternative factorization and
-  projector-controlled channel assembly remain open in issue #6632.
+  the asserted all-sector conclusion. The alternative factorization remains
+  open in issue #6775, and the subsequent projector-controlled channel
+  assembly remains open in issue #6632.
 
 ### Unequal raw copies refute Theorem 4.9(iv)$\Rightarrow$(v)
 

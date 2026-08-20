@@ -1198,10 +1198,11 @@ current counts and full location lists).
   word tuples in the span by `Submodule.subset_span`, express an arbitrary
   block tuple as their scalar linear combination, and conclude by closure
   under scalar multiplication and addition.
-- **Seen:** two direct occurrences in
-  `TNLean/MPS/MPDO/CaseIIAbsorptionCounterexample.lean`
-  (`sectors_wordTupleSpanTop_one` and `scalarBNT_wordTupleSpanTop`), together
-  with the related finite-generator reconstruction in
+- **Seen:** two direct occurrences: `sectors_wordTupleSpanTop_one` in
+  `TNLean/MPS/MPDO/CaseIIAbsorptionCounterexample.lean` and
+  `scalarBNT_wordTupleSpanTop` in
+  `TNLean/MPS/MPDO/Theorem49RepeatedCopyCounterexample.lean`, together with
+  the related finite-generator reconstruction in
   `TNLean/MPS/MPDO/ActiveSectorSpanningCounterexample.lean`
   (`sectorMatrix_span_eq_top`) (2026-08-20).
 - **Abstraction (proposed):** first determine whether a small finite-generator
