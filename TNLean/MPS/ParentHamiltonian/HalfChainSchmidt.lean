@@ -72,7 +72,7 @@ positive diagonal dual fixed point `Λ` appears as the fixed point of
 -/
 
 open scoped Matrix Matrix.Norms.L2Operator ComplexOrder
-open Matrix Polynomial
+open Polynomial
 
 namespace MPSTensor
 
