@@ -26,8 +26,9 @@ three, and four consecutive spins, and their natural-logarithm entropies.  The
 mutual-information defect of these weight families equals one sixteenth of the
 exact logarithm certified in the arithmetic module, hence is strictly positive.
 
-The weight families list precisely the values displayed for the reduced
-density operators in the source at flip probability one quarter.  Identifying
+The weight families list precisely the reduced-state spectra computed in the
+paper-gap note at flip probability one quarter; the source prints only the
+channel and the four entropy decimals.  Identifying
 them with the spectra of the reductions of a corrected tensor, and proving the
 zero-correlation-length and area-law clauses of the example, are the remaining
 operator-level obligations.
@@ -77,7 +78,7 @@ flipped Bell state exactly when the flips at spins $n$ and $n+1$ disagree,
 with spin five identified with spin one.
 
 Derived from the Bell-pair ring of CPSV16, arXiv:1606.00608, Example 4.10,
-lines 897--899. -/
+line 900. -/
 def bondPattern (s : Bool × Bool × Bool × Bool) : Bool × Bool × Bool × Bool :=
   (xor s.1 s.2.1, xor s.2.1 s.2.2.1, xor s.2.2.1 s.2.2.2, xor s.2.2.2 s.1)
 
@@ -203,23 +204,29 @@ theorem twoBondWeight_eq_marginal (u v : Bool) :
 /-- The weight family of a one-spin window: the two boundary bond halves are
 maximally mixed, giving the uniform distribution on four labels.
 
-Displayed one-spin reduction: CPSV16, arXiv:1606.00608, Example 4.10,
-lines 897--905. -/
+Spectrum of the one-spin reduction computed in
+`docs/paper-gaps/cpsv16_examples_4_10_4_11_entropy.tex`; the source states only
+the channel and the entropy values (CPSV16, arXiv:1606.00608, Example 4.10,
+lines 900--904). -/
 noncomputable def windowWeightOne : Bool × Bool → ℝ := fun _ ↦ 1 / 4
 
 /-- The weight family of a two-spin window: one interior bond label together
 with two maximally mixed boundary bond halves.
 
-Displayed two-spin reduction: CPSV16, arXiv:1606.00608, Example 4.10,
-lines 897--905. -/
+Spectrum of the two-spin reduction computed in
+`docs/paper-gaps/cpsv16_examples_4_10_4_11_entropy.tex`; the source states only
+the channel and the entropy values (CPSV16, arXiv:1606.00608, Example 4.10,
+lines 900--904). -/
 noncomputable def windowWeightTwo (x : Bool × Bool × Bool) : ℝ :=
   oneBondWeight x.2.1 / 4
 
 /-- The weight family of a three-spin window: two consecutive interior bond
 labels together with two maximally mixed boundary bond halves.
 
-Displayed three-spin reduction: CPSV16, arXiv:1606.00608, Example 4.10,
-lines 897--905. -/
+Spectrum of the three-spin reduction computed in
+`docs/paper-gaps/cpsv16_examples_4_10_4_11_entropy.tex`; the source states only
+the channel and the entropy values (CPSV16, arXiv:1606.00608, Example 4.10,
+lines 900--904). -/
 noncomputable def windowWeightThree (x : Bool × Bool × Bool × Bool) : ℝ :=
   twoBondWeight x.2.1 x.2.2.1 / 4
 
@@ -246,25 +253,25 @@ theorem sum_windowWeightThree :
 
 /-- The natural-logarithm entropy of the one-spin window weights.
 
-Displayed value: CPSV16, arXiv:1606.00608, Example 4.10, lines 900--903. -/
+Displayed value: CPSV16, arXiv:1606.00608, Example 4.10, line 904. -/
 noncomputable def entropyOne : ℝ := ∑ x : Bool × Bool, negMulLog (windowWeightOne x)
 
 /-- The natural-logarithm entropy of the two-spin window weights.
 
-Displayed value: CPSV16, arXiv:1606.00608, Example 4.10, lines 900--903. -/
+Displayed value: CPSV16, arXiv:1606.00608, Example 4.10, line 904. -/
 noncomputable def entropyTwo : ℝ :=
   ∑ x : Bool × Bool × Bool, negMulLog (windowWeightTwo x)
 
 /-- The natural-logarithm entropy of the three-spin window weights.
 
-Displayed value: CPSV16, arXiv:1606.00608, Example 4.10, lines 900--903. -/
+Displayed value: CPSV16, arXiv:1606.00608, Example 4.10, line 904. -/
 noncomputable def entropyThree : ℝ :=
   ∑ x : Bool × Bool × Bool × Bool, negMulLog (windowWeightThree x)
 
 /-- The natural-logarithm entropy of the bond pattern distribution, the
 four-spin window weights.
 
-Displayed value: CPSV16, arXiv:1606.00608, Example 4.10, lines 900--903. -/
+Displayed value: CPSV16, arXiv:1606.00608, Example 4.10, line 904. -/
 noncomputable def entropyFour : ℝ :=
   ∑ t : Bool × Bool × Bool × Bool, negMulLog (bondWeight t)
 
@@ -327,7 +334,7 @@ private lemma negMulLog_nine_128ths :
 
 /-- The one-spin entropy is $2\ln 2$, that is, two bits.
 
-Displayed value: CPSV16, arXiv:1606.00608, Example 4.10, lines 900--903. -/
+Displayed value: CPSV16, arXiv:1606.00608, Example 4.10, line 904. -/
 theorem entropyOne_eq : entropyOne = 2 * log 2 := by
   rw [entropyOne]
   norm_num [windowWeightOne, Fintype.sum_prod_type, Fintype.sum_bool, negMulLog_quarter]
@@ -336,7 +343,7 @@ theorem entropyOne_eq : entropyOne = 2 * log 2 := by
 /-- The exact two-spin entropy in natural logarithms; divided by $\ln 2$ it is
 the displayed decimal $2.9544$.
 
-Displayed value: CPSV16, arXiv:1606.00608, Example 4.10, lines 900--903. -/
+Displayed value: CPSV16, arXiv:1606.00608, Example 4.10, line 904. -/
 theorem entropyTwo_eq :
     entropyTwo = 5 * log 2 - 5 / 8 * log 5 - 3 / 8 * log 3 := by
   rw [entropyTwo]
@@ -348,7 +355,7 @@ theorem entropyTwo_eq :
 /-- The exact three-spin entropy in natural logarithms; divided by $\ln 2$ it
 is the displayed decimal $3.8802$.
 
-Displayed value: CPSV16, arXiv:1606.00608, Example 4.10, lines 900--903. -/
+Displayed value: CPSV16, arXiv:1606.00608, Example 4.10, line 904. -/
 theorem entropyThree_eq :
     entropyThree = 6 * log 2 - 7 / 16 * log 7 - 9 / 16 * log 3 := by
   rw [entropyThree]
@@ -360,7 +367,7 @@ theorem entropyThree_eq :
 /-- The exact four-spin entropy in natural logarithms; divided by $\ln 2$ it is
 the displayed decimal $2.7839$.
 
-Displayed value: CPSV16, arXiv:1606.00608, Example 4.10, lines 900--903. -/
+Displayed value: CPSV16, arXiv:1606.00608, Example 4.10, line 904. -/
 theorem entropyFour_eq :
     entropyFour =
       7 * log 2 - 41 / 128 * log 41 - 57 / 64 * log 3 - 15 / 32 * log 5 := by
