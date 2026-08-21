@@ -1,0 +1,11 @@
+% Negative: a wire restyle that moves the drawn geometry is refused; the
+% wire-ink record cannot follow a canvas transform.
+\documentclass{standalone}
+\usepackage{tenkz}
+\tikzset{bond/.append style={transform canvas={xshift=10pt}}}
+\begin{document}
+\tenkzkernel
+\begin{tenkz}[rows={wire}, cols=2, bonds=none]
+  \tnwire{(1,1)}{(1,2)}
+\end{tenkz}
+\end{document}

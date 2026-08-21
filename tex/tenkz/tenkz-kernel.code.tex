@@ -51,6 +51,13 @@
   { [TKZ-LANG-UNKNOWN-KEY]~'#1'~is~not~a~#2~key~(record~#3). }
 \msg_new:nnn {tenkz}{kernel-choice}
   { [TKZ-LANG-CHOICE]~#1=#2~is~not~in~the~alphabet~#3~(record~#4). }
+\msg_new:nnn {tenkz}{kernel-restyle-transform}
+  {
+    [TKZ-WIRE-RESTYLE-TRANSFORM]~a~restyle~of~'#1'~moves~the~drawn~
+    geometry~(a~transform~canvas~class~key):~the~wire-ink~record~cannot~
+    follow~it,~so~the~audit~would~read~the~wrong~route.~Restyle~ink~--~
+    hue,~width,~dash~--~not~geometry.
+  }
 \msg_new:nnn {tenkz}{kernel-tombstone}
   { [TKZ-LANG-TOMBSTONE]~#1=#2~retired~from~the~alphabet:~#3~(record~#4). }
 \msg_new:nnn {tenkz}{kernel-wire-arity}
@@ -21115,6 +21122,33 @@
     \cs_set_eq:NN \tn \__tenkz_kernel_tn_cmd
     \cs_set_eq:NN \\ \__tenkz_kernel_newrow:
   }
+% The wire restyling surface is ink-only: hue, width, dash.  A restyle
+% that moves the drawn geometry -- the transform canvas class -- would
+% leave every wire-ink record at the route's own coordinates while the
+% stroke lands elsewhere, so the audit would read the wrong page.  Such
+% a key funnels its canvas sync into the class style's deferred path
+% options, so each restylable class is applied once in a throwaway
+% group at picture begin and refused if its deferred options carry the
+% sync (#6358); marking decorations sync the canvas too, but during
+% path processing, not in a class's own option list, so a directed wire
+% passes.
+\cs_new_protected:Npn \__tenkz_kernel_r_restyle_guard:
+  {
+    \clist_map_inline:nn { bond , physical~leg , trace }
+      {
+        \group_begin:
+        \cs_set_eq:NN \tikz@options \prg_do_nothing:
+        \tikzset {##1}
+        % the sync hides inside the deferred option's own group, which a
+        % token-level search cannot enter: read the options as a string
+        \tl_set:Ne \l__tenkz_kernel_scratch_tl
+          { \tl_to_str:N \tikz@options }
+        \str_if_in:NnT \l__tenkz_kernel_scratch_tl
+          { pgflowlevelsynccm }
+          { \msg_error:nnn {tenkz}{kernel-restyle-transform} {##1} }
+        \group_end:
+      }
+  }
 \cs_new_protected:Npn \__tenkz_kernel_end:
   {
     \__tenkz_kernel_basis_policy_validate:
@@ -21136,6 +21170,7 @@
     % as ink.  The renderer's topology prepass derives route crossings before
     % it freezes and emits the model.
     \int_gincr:N \g__tenkz_kernel_picture_int
+    \__tenkz_kernel_r_restyle_guard:
     \__tenkz_kernel_render_prepare:
     \__tenkz_kernel_render:
     % The measuring run reads extents and asserts nothing: its panels are
