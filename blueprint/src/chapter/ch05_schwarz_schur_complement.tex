@@ -1,6 +1,6 @@
 \section{Block Schur Complements}\label{sec:schur_complement}
 
-\begin{theorem}[Block Schur complement]\label{thm:schur_tfae}
+\begin{theorem}[Wolf's printed block Schur complement statement]\label{thm:schur_tfae}
   \notready
   \uses{def:schurComplement, def:blockMatrix}
   Let $P \in \MN{D_1}$, $R \in \MN{D_2}$ be positive semi-definite
@@ -17,10 +17,10 @@
   inverse square roots are extended by zero on the respective kernels.
 
   \textbf{Local fix (Wolf Theorem 5.2, condition (3)):}
-  The third condition is false as printed when $P$ is singular. For
-  $P=0$ and $Q=R=1$ in dimension one, the printed condition holds but the
-  block matrix is not positive semi-definite. The missing condition is
-  $\ker(P)\subseteq\ker(Q^\dagger)$; see
+  The third condition is false as printed when $P$ is singular. It becomes
+  equivalent to the first two after adjoining
+  $\ker(P)\subseteq\ker(Q^\dagger)$. The counterexample and corrected theorem
+  are recorded below and in
   \texttt{docs/paper-gaps/schur\_complement\_tfae.tex}.
 \end{theorem}
 
@@ -65,6 +65,20 @@
   \uses{def:pinv}
   The pseudoinverse Schur complement $P - Q R^+ Q^\dagger$.
 \end{definition}
+
+\begin{theorem}[Block quadratic form]
+  \label{thm:block_quadratic_form}
+  \lean{SchurComplement.block_quadratic_form}
+  \leanok
+  \uses{def:blockMatrix}
+  For vectors $x$ and $y$,
+  \begin{align}
+    \begin{pmatrix}x\\y\end{pmatrix}^{\!\dagger}
+    \begin{pmatrix}P&Q\\Q^\dagger&R\end{pmatrix}
+    \begin{pmatrix}x\\y\end{pmatrix}
+    =x^\dagger Px+x^\dagger Qy+y^\dagger Q^\dagger x+y^\dagger Ry.
+  \end{align}
+\end{theorem}
 
 \begin{theorem}[Support absorption under kernel inclusion]
   \label{thm:support_absorption_of_kernel_inclusion}
@@ -208,8 +222,7 @@
 
   \textbf{Scope restriction (Wolf Theorem 5.2, conditions (1) and (2)):}
   This proves exactly the first two conditions of the source theorem. The
-  printed contraction condition (3) is false in the singular case; its
-  corrected form remains to be formalized, as recorded in
+  printed contraction condition (3) is false in the singular case, as recorded in
   \texttt{docs/paper-gaps/schur\_complement\_tfae.tex}.
 \end{theorem}
 
@@ -220,4 +233,147 @@
   The forward implication combines kernel inclusion with positivity of the
   Schur complement. The reverse implication is
   Theorem~\ref{thm:block_psd_of_schur_complement_psd}.
+\end{proof}
+
+\begin{theorem}[Pseudoinverse as inverse on the support]
+  \label{thm:schur_pinv_eq_support_inverse}
+  \lean{SchurComplement.pinv_eq_supportInv}
+  \leanok
+  \uses{def:pinv, thm:schur_pinv_support_identities}
+  If $R$ is positive semi-definite, then its Moore--Penrose pseudoinverse
+  agrees with the inverse obtained by inverting $R$ on its support and setting
+  it to zero on the kernel.
+\end{theorem}
+
+\begin{definition}[Support-normalized off-diagonal block]
+  \label{def:schur_contraction}
+  \lean{SchurComplement.schurContraction}
+  \leanok
+  For positive semi-definite $P$ and $R$, define
+  \begin{align}
+    K=P^{-1/2}QR^{-1/2},
+  \end{align}
+  where both inverse square roots vanish on the respective kernels.
+\end{definition}
+
+\begin{theorem}[Normalized Schur term]
+  \label{thm:schur_contraction_mul_adjoint}
+  \lean{SchurComplement.schurContraction_mul_conjTranspose}
+  \leanok
+  \uses{def:schur_contraction, thm:schur_pinv_eq_support_inverse}
+  The support-normalized off-diagonal block satisfies
+  \begin{align}
+    KK^\dagger=P^{-1/2}(QR^+Q^\dagger)P^{-1/2}.
+  \end{align}
+\end{theorem}
+
+\begin{theorem}[Positivity of the Schur term]
+  \label{thm:schur_term_psd}
+  \lean{SchurComplement.schurTerm_posSemidef}
+  \leanok
+  \uses{thm:schur_pinv_eq_support_inverse}
+  If $R$ is positive semi-definite, then $QR^+Q^\dagger$ is positive
+  semi-definite.
+\end{theorem}
+
+\begin{theorem}[Congruence criterion for domination]
+  \label{thm:psd_congruence_norm_criterion}
+  \lean{Matrix.PosSemidef.sub_smul_posSemidef_iff}
+  \leanok
+  Let $A$ and $B$ be positive semi-definite, let $c>0$, and suppose that
+  $\ker(A)\subseteq\ker(B)$. Then
+  \begin{align}
+    A-cB\ge0
+    \quad\Longleftrightarrow\quad
+    c\lVert A^{-1/2}BA^{-1/2}\rVert_\infty\le1,
+  \end{align}
+  where the inverse square root vanishes on $\ker(A)$.
+\end{theorem}
+
+\begin{theorem}[Left support from Schur-complement positivity]
+  \label{thm:left_support_of_schur_complement_psd}
+  \lean{SchurComplement.ker_conjTranspose_subset_of_schurComplement_posSemidef}
+  \leanok
+  \uses{def:schurComplement, thm:schur_term_psd,
+    thm:support_absorption_of_kernel_inclusion}
+  Suppose that $P$ and $R$ are positive semi-definite,
+  $\ker(R)\subseteq\ker(Q)$, and $P-QR^+Q^\dagger$ is positive
+  semi-definite. Then $\ker(P)\subseteq\ker(Q^\dagger)$.
+\end{theorem}
+
+\begin{theorem}[Corrected Schur-complement contraction criterion]
+  \label{thm:schur_complement_psd_iff_corrected_contraction}
+  \lean{SchurComplement.schurComplement_posSemidef_iff_contraction}
+  \leanok
+  \uses{def:schurComplement, def:schur_contraction}
+  Let $P$ and $R$ be positive semi-definite and suppose that
+  $\ker(R)\subseteq\ker(Q)$. Then
+  \begin{align}
+    P-QR^+Q^\dagger\ge0
+    \quad\Longleftrightarrow\quad
+    \ker(P)\subseteq\ker(Q^\dagger)
+    \ \text{and}\ \lVert P^{-1/2}QR^{-1/2}\rVert_\infty\le1.
+  \end{align}
+
+  \textbf{Local fix (Wolf Theorem 5.2, condition (3)):}
+  The left-support condition is necessary and is absent from the printed
+  statement. See
+  \texttt{docs/paper-gaps/schur\_complement\_tfae.tex}.
+\end{theorem}
+
+\begin{proof}\leanok
+  \uses{thm:psd_congruence_norm_criterion,
+    thm:schur_contraction_mul_adjoint, thm:schur_term_psd,
+    thm:left_support_of_schur_complement_psd}
+  Put $B=QR^+Q^\dagger$ and $K=P^{-1/2}QR^{-1/2}$. The two support conditions
+  allow congruence by $P^{-1/2}$ to identify $P-B\ge0$ with
+  $\lVert P^{-1/2}BP^{-1/2}\rVert_\infty\le1$. By
+  Theorem~\ref{thm:schur_contraction_mul_adjoint}, the matrix inside this norm
+  is $KK^\dagger$, whose norm is $\lVert K\rVert_\infty^2$.
+\end{proof}
+
+\begin{theorem}[Counterexample to Wolf's printed condition (3)]
+  \label{thm:wolf_schur_condition_three_counterexample}
+  \lean{SchurComplement.wolf_condition_three_not_sufficient}
+  \leanok
+  \uses{def:blockMatrix, def:schur_contraction,
+    thm:block_quadratic_form}
+  For the scalar blocks $P=0$ and $Q=R=1$, the printed kernel condition and
+  contraction bound hold, but
+  $\begin{pmatrix}P&Q\\Q^\dagger&R\end{pmatrix}$ is not positive
+  semi-definite.
+\end{theorem}
+
+\begin{proof}\leanok
+  The normalized off-diagonal block vanishes because $P^{-1/2}=0$. However,
+  the quadratic form of $\begin{pmatrix}0&1\\1&1\end{pmatrix}$ at $(1,-1)$
+  equals $-1$.
+\end{proof}
+
+\begin{theorem}[Corrected block contraction criterion]
+  \label{thm:block_psd_iff_corrected_contraction}
+  \lean{SchurComplement.blockMatrix_posSemidef_iff_contraction}
+  \leanok
+  \uses{def:blockMatrix, def:schur_contraction}
+  Let $P$ and $R$ be positive semi-definite. Then
+  \begin{align}
+    \begin{pmatrix}P&Q\\Q^\dagger&R\end{pmatrix}\ge0
+    \quad\Longleftrightarrow\quad
+    &\ker(R)\subseteq\ker(Q),\\
+    &\ker(P)\subseteq\ker(Q^\dagger),\\
+    &\lVert P^{-1/2}QR^{-1/2}\rVert_\infty\le1.
+  \end{align}
+
+  \textbf{Local fix (Wolf Theorem 5.2, condition (3)):}
+  This is the source statement with its missing left-support condition restored.
+  See \texttt{docs/paper-gaps/schur\_complement\_tfae.tex}.
+\end{theorem}
+
+\begin{proof}\leanok
+  \uses{thm:block_psd_kernel_inclusion,
+    thm:schur_complement_psd_of_block_psd,
+    thm:block_psd_of_schur_complement_psd,
+    thm:schur_complement_psd_iff_corrected_contraction}
+  Combine the pseudoinverse Schur-complement criterion with the corrected
+  contraction criterion.
 \end{proof}
