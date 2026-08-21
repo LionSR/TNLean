@@ -28,6 +28,7 @@ import TNLean.Algebra.EqualRangeRightFactor
 import TNLean.Algebra.EventuallyConstantCycleWeights
 import TNLean.Algebra.FinSum
 import TNLean.Algebra.FinTupleEquiv
+import TNLean.Algebra.FiniteCauchySchwarz
 import TNLean.Algebra.FiniteCycleCoboundary
 import TNLean.Algebra.FrameOperator
 import TNLean.Algebra.FrobeniusHilbert

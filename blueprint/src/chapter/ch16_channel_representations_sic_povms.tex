@@ -1,0 +1,31 @@
+\section{Finite Cauchy--Schwarz equality}
+
+\begin{theorem}[Equality in finite Cauchy--Schwarz]
+    \label{thm:finite_cauchy_schwarz_equality}
+    \lean{Finset.sq_sum_eq_card_mul_sum_sq_iff}
+    \leanok
+    Let $S$ be a finite set and let $(x_i)_{i\in S}$ be real numbers. Then
+    \[
+        \left(\sum_{i\in S}x_i\right)^2
+        =|S|\sum_{i\in S}x_i^2
+    \]
+    if and only if $x_i=x_j$ for every $i,j\in S$.
+\end{theorem}
+
+\begin{proof}\leanok
+    The variance identity gives
+    \[
+        \sum_{i,j\in S}(x_i-x_j)^2
+        =2\left(
+          |S|\sum_{i\in S}x_i^2-
+          \left(\sum_{i\in S}x_i\right)^2
+        \right).
+    \]
+    Since every summand on the left is non-negative, equality in
+    Cauchy--Schwarz holds precisely when every difference $x_i-x_j$ vanishes.
+    This argument also includes the empty and singleton cases.
+\end{proof}
+
+This criterion is the equality condition invoked for the off-diagonal overlaps
+and for the eigenvalues in \cite[Chapter~2, Proposition ``SIC POVMs'',
+equations~(2.31)--(2.32)]{Wolf2012Quantum}.
