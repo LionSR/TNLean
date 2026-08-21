@@ -953,6 +953,76 @@
     \end{align}
 \end{proof}
 
+\begin{theorem}[Unit closure traces from a neighboring trace factorization]
+    \label{thm:mpdo_neighboring_trace_unit_closure}
+    \lean{MPOTensor.PhysicalSectorFactorization.leftTraceMatrix,
+      MPOTensor.PhysicalSectorFactorization.rightTraceMatrix,
+      MPOTensor.PhysicalSectorFactorization.physTraceTransfer_eq_leftTraceMatrix_mul_rightTraceMatrix,
+      MPOTensor.PhysicalSectorFactorization.rightTraceMatrix_mul_leftTraceMatrix_apply,
+      MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.trace_physTraceTransfer_pow_eq_one,
+      MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.trace_physTraceTransfer_eq_one,
+      MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.trace_mpo_eq_one}
+    \leanok
+    \uses{def:mpdo_physical_sector_factorization,
+      def:mpdo_neighboring_trace_factorization,
+      def:mpo_physical_trace_transfer, def:mpo_family}
+    Let $M$ be an MPO tensor admitting a physical-sector factorization whose
+    neighboring operators satisfy the trace factorization of
+    Definition~\ref{def:mpdo_neighboring_trace_factorization}. Closing the
+    physical legs of the factorized slices writes the physical-trace transfer
+    as a rectangular product
+    \begin{align}
+        \mathcal T_M&=LQ,
+        &L_{\beta,k}&=\tr\bigl((l_k)_\beta\bigr),
+        &Q_{k,\alpha}&=\tr\bigl((r_k)_\alpha\bigr),
+        \notag
+    \end{align}
+    whose opposite product is the rank-one coefficient matrix
+    \begin{align}
+        (QL)_{k,h}&=\tr(\eta_{k,h})=a_kb_h.
+        \notag
+    \end{align}
+    Consequently every positive power of the physical-trace transfer and
+    every nonempty closed chain has unit trace:
+    \begin{align}
+        \tr\bigl(\mathcal T_M^{\,N}\bigr)&=1,
+        &\tr\rho^{(N)}(M)&=1,
+        &N&\geq1.
+        \notag
+    \end{align}
+    In particular, a tensor whose closed chains do not all have unit trace
+    admits no physical-sector factorization with positive neighboring
+    operators and normalized rank-one trace coefficients. The normalization
+    $\tr(T)=1$ invoked in
+    \cite[Appendix~C.2, line~1498]{Cirac2016MPDO_arXiv} is therefore a
+    constraint on the tensor rather than a convention, and the ambient
+    normalization at
+    \cite[Appendix~C.2, lines~1755--1759]{Cirac2016MPDO_arXiv} constrains
+    only the weighted sum over the representatives of a basis of normal
+    tensors, not each representative separately.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{def:mpdo_neighboring_trace_factorization}
+    Closing the physical legs of each factorized slice and using unitary
+    invariance of the trace expresses each entry of the physical-trace
+    transfer as $\sum_k\tr((l_k)_\beta)\tr((r_k)_\alpha)$, which is the
+    rectangular product $LQ$. The entries of the opposite product are the
+    contractions
+    \begin{align}
+        (QL)_{k,h}
+        &=\sum_\alpha\tr\bigl((r_k)_\alpha\bigr)\tr\bigl((l_h)_\alpha\bigr)
+         =\tr(\eta_{k,h})=a_kb_h.
+        \notag
+    \end{align}
+    Cyclic invariance of the trace gives
+    $\tr((LQ)^N)=\tr((QL)^N)$ for every $N\geq1$, and every positive power
+    of the rank-one matrix $(a_kb_h)_{k,h}$ with $\sum_ka_kb_k=1$ equals the
+    matrix itself, of trace one. The closed chain of length $N$ has trace
+    $\tr(\mathcal T_M^{\,N})$.
+\end{proof}
+
 \begin{theorem}[Partial traces of the sector closures]
     \label{thm:mpdo_sector_closure_partial_traces}
     \lean{MPOTensor.PhysicalSectorFactorization.partialTraceRight_twoSiteSectorClosure}
