@@ -57,12 +57,16 @@ private lemma sum_posSemidef (P : Fin n → Matrix (Fin d) (Fin d) ℂ)
   exact Finset.sum_induction _ Matrix.PosSemidef (fun A B hA hB ↦ hA.add hB)
     Matrix.PosSemidef.zero (fun i _ ↦ hP i)
 
-private lemma offDiag_card_fin (hn : 2 ≤ n) :
+private lemma offDiag_card_fin :
     ((Finset.univ : Finset (Fin n)).offDiag.card : ℝ) =
       (n : ℝ) * ((n : ℝ) - 1) := by
   rw [Finset.offDiag_card]
   simp only [Finset.card_univ, Fintype.card_fin]
-  rw [Nat.cast_sub (by nlinarith : n ≤ n * n)]
+  have hnle : n ≤ n * n := by
+    by_cases hn0 : n = 0
+    · simp [hn0]
+    · exact Nat.le_mul_of_pos_right n (Nat.pos_of_ne_zero hn0)
+  rw [Nat.cast_sub hnle]
   push_cast
   ring
 
@@ -125,7 +129,7 @@ private lemma offDiag_overlap_eq_of_cauchySchwarz_eq
     apply (Finset.sq_sum_eq_card_mul_sum_sq_iff
       (s := (Finset.univ : Finset (Fin n)).offDiag)
       (f := fun ij ↦ (P ij.1 * P ij.2).trace.re)).mp
-    rw [offDiag_card_fin hn]
+    rw [offDiag_card_fin]
     simpa [mul_assoc] using hcsEq
   intro i j hij
   have hijmem : (i, j) ∈ (Finset.univ : Finset (Fin n)).offDiag := by simp [hij]
@@ -143,7 +147,7 @@ private lemma offDiag_overlap_eq_of_cauchySchwarz_eq
         intro kl hkl
         exact hconst kl hkl (i, j) hijmem
       _ = _ := by simp
-  rw [offDiag_card_fin hn] at hsumconst
+  rw [offDiag_card_fin] at hsumconst
   apply (eq_div_iff (by positivity : ((n : ℝ) - 1) * d ≠ 0)).2
   nlinarith
 
@@ -164,7 +168,7 @@ private lemma sicPOVM_bound_eq_of_offDiag_overlap_eq
       field_simp
     _ = ((Finset.univ : Finset (Fin n)).offDiag.card : ℝ) *
           (((n : ℝ) - d) / (((n : ℝ) - 1) * d)) ^ 2 := by
-      rw [offDiag_card_fin hn]
+      rw [offDiag_card_fin]
     _ = ∑ _ij ∈ (Finset.univ : Finset (Fin n)).offDiag,
           (((n : ℝ) - d) / (((n : ℝ) - 1) * d)) ^ 2 := by simp
     _ = _ := by
@@ -220,7 +224,7 @@ theorem sicPOVM_offDiag_overlap_sq_bound
     have h := sq_sum_le_card_mul_sum_sq
       (s := (Finset.univ : Finset (Fin n)).offDiag)
       (f := fun ij ↦ (P ij.1 * P ij.2).trace.re)
-    rw [offDiag_card_fin hn] at h
+    rw [offDiag_card_fin] at h
     simpa [T, S, mul_assoc] using h
   have hnum0 : 0 ≤ (n : ℝ) * ((n : ℝ) - d) := by
     have hdn' : (d : ℝ) ≤ n := by exact_mod_cast hdn
@@ -296,7 +300,7 @@ theorem sicPOVM_offDiag_overlap_sq_eq_iff
     have h := sq_sum_le_card_mul_sum_sq
       (s := (Finset.univ : Finset (Fin n)).offDiag)
       (f := fun ij ↦ (P ij.1 * P ij.2).trace.re)
-    rw [offDiag_card_fin hn] at h
+    rw [offDiag_card_fin] at h
     simpa [T, S, mul_assoc] using h
   constructor
   · intro heq
