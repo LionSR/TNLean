@@ -206,15 +206,15 @@ note = "Kernel migration (wave 1B), Fable-verified against the author panel: eac
 
 [[verdict]]
 id = "rmp-ii-spectrum-fixed-points"
-status = "cosmetic-gap"
+status = "faithful"
 pairing = "verified"
 pairing_by = "codex-pairing-sweep-2026-07-24"
-defects = ["open-closure"]
-case_sha256 = "850c3bb9e1c7765b4f3dba0d136d0d6733920bec0b0635919c5425b1e393de1f"
-reviewed = "2026-08-05"
-renderer = "kernel-migration-wave1b-source-review-2026-08-04-200dpi"
-second_viewer = "fable-w1b-vision-verification-2026-08-05-600dpi"
-note = "Kernel migration (wave 1B), Fable-verified: each side carries both fixed-point factors as one wires=2 ring atom in the source order, each closed on its own doubled port pair, with two open virtual ends on the far side; matches the K2 promotion's topology. The self-loop wire between an atom's own two slots draws flush with the glyph boundary, so the fold the K2-verified grid render inked as a protruding cup arc is not visible at all (index wires draw straight-only; via and route=arc are recorded but not inked -- K1); until the renderer inks that fold, the closed side is indistinguishable from a portless side, so the verdict is cosmetic-gap, not faithful."
+defects = []
+case_sha256 = "14861c03957f7378a7dddefbff0651fc6ab26d5863168090bebb46d349d2bb75"
+reviewed = "2026-08-22"
+renderer = "fable-arc-route-before-after-2026-08-22-200dpi"
+second_viewer = "fable-arc-route-source-recheck-2026-08-22"
+note = "Arc-route landing (#6201), Fable-verified against the fig9-3 source block: the two self-closures now write route=arc and each draws the protruding fold on its own side -- west of the first panel's rho^R, east of the second's -- restoring the closure ink the 2026-08-04 faithful promotion was regressed on. Topology unchanged from the wave-1B review: each factor is one wires=2 ring atom closed on its own doubled port pair with two open virtual ends on the far side. The source steps its fold out with rounded corners; the drawn half-circle fold is the house form of the same closure."
 
 [[verdict]]
 id = "rmp-ii-blocking"
@@ -702,7 +702,7 @@ pairing_by = "pairing-sweep-two-viewers-2026-07-23"
 case_sha256 = "beec562735963ce7542c5c7655a014b6846f9f4b503a6247cbe4ea9378f98081"
 reviewed = "2026-08-04"
 renderer = "kimi-kernel-mpo-source-review-2026-08-04-200dpi"
-note = "Kernel stock MPO skin (#5362); ring topology preserved under the equation audit, hatching and hue still lost, the ring reads as straight chords, and the physical leg takes its own bearing instead of overlapping the north leg."
+note = "Kernel stock MPO skin (#5362); ring topology preserved under the equation audit. The arc-route landing (#6201, re-checked 2026-08-22 on the before/after pair) closes the ring as the drawn circle, so the straight-chord residue is gone; hatching and hue are still lost, and the physical leg takes its own bearing instead of overlapping the north leg."
 
 [[verdict]]
 id = "rmp-iii-a-torus-one"
@@ -868,14 +868,14 @@ note = "the kernel plane bilayer keeps both 6x4 sheets, all 40 perimeter opening
 
 [[verdict]]
 id = "rmp-iv-ground-space-1d"
-status = "cosmetic-gap"
+status = "faithful"
 pairing = "verified"
 pairing_by = "pairing-sweep-two-viewers-2026-07-23"
 case_sha256 = "d571d451f311e63a183b58fe6fd70e0383f81c0c5002ca2b4db11c64babe6d72"
-reviewed = "2026-08-05"
-renderer = "fable-w4-section-iv-migration-2026-08-05-200dpi"
-second_viewer = "fable-w4-second-pass-2026-08-05-400dpi"
-note = "kernel migration: the traced word returns below the row through corner junctions with the author's square X inserted on the return, and X is now the stock box at the standard size, closing the old small-glyph gap. Residue: the recorded corner arcs of the return ink as straight diagonals (the boundary-algebra family limitation), where the source draws a square-cornered rectangle. Second 400dpi pass confirmed the four legs, the elision, and the trace closure."
+reviewed = "2026-08-22"
+renderer = "fable-arc-route-before-after-2026-08-22-200dpi"
+second_viewer = "fable-arc-route-source-recheck-2026-08-22"
+note = "Arc-route landing (#6201), re-reviewed as the old note's own trigger asked: the recorded corner arcs of the return now ink as rounded turns leaving the row's east face and entering the junctions' north faces, so the return reads as the closed loop below the row. The source (Section IV lines 46-54) rules a square-cornered rectangle; the rounded return is the house racetrack form of the same closure, the form the trace machinery draws everywhere else. X remains the stock box on the return; four legs and the elision confirmed on the before/after pair."
 
 [[verdict]]
 id = "rmp-iv-ground-space-2d"
@@ -1430,7 +1430,7 @@ pairing_by = "codex-pairing-sweep-2026-07-24"
 case_sha256 = "447c6784df2f8422b68302ecde35cbb5551741acaf15cc92cb997d4ca94e309e"
 reviewed = "2026-08-04"
 renderer = "kimi-kernel-mpo-source-review-2026-08-04-200dpi"
-note = "Kernel stock MPO skin (#5362); the abstraction still drops the source's hatching, red hue, and centered star, and the ring reads as straight chords since bond ink does not yet carry arc curvature."
+note = "Kernel stock MPO skin (#5362); the abstraction still drops the source's hatching, red hue, and centered star. The arc-route landing (#6201, re-checked 2026-08-22 on the before/after pair) draws the ring as the circle, so the straight-chord residue is gone."
 
 [[verdict]]
 id = "rmp-workbench-iii-eq60-now"

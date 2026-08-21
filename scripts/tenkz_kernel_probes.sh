@@ -1924,7 +1924,7 @@ command -v pdftoppm >/dev/null 2>&1 || {
   exit 1
 }
 for pixel_fixture in \
-    k_plane k_skin_pairings r_bracket_trace_return r_dir_open_bearings \
+    k_arc k_plane k_skin_pairings r_bracket_trace_return r_dir_open_bearings \
     r_hull_live r_ink_semantics r_label_turn r_metrics_compact \
     r_mpo_skin_box r_mpo_skin_prelude r_parallel_lanes r_physical_dir \
     r_pill_skin_prelude r_pill_skin_roundrect r_region_diagonal \
@@ -1993,6 +1993,7 @@ python3 -c \
 for path in sys.argv[1:]:
     data = open(path, "rb").read()
     print(hashlib.sha256(data).hexdigest(), "", path.rsplit("/", 1)[-1])' \
+  "$WORK/k_arc.png" \
   "$WORK/k_skin_pairings.png" "$WORK/r_hull_live.png" \
   "$WORK/k_plane.png" "$WORK/r_bracket_trace_return.png" \
   "$WORK/r_dir_open_bearings.png" \

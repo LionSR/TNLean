@@ -12,15 +12,17 @@
   % Both fixed points ride the doubled virtual wire: the product is the
   % object whose spectrum is taken, and the cup is the fold at which the
   % two orders differ.  Each factor is one wires=2 atom, closed on its own
-  % west (or east) pair of ports by a hand-written wire between its own
-  % two slots -- the same construction on both sides.
+  % west (or east) pair of ports by a hand-written arc between its own
+  % two slots -- the same construction on both sides.  The arc leaves and
+  % enters along the shared face, so the closure draws as the protruding
+  % fold the source paints.
   \mathrm{eig}\left(
   \begin{tenkz}[rows={wire,wire}, cols=2, bonds=none]
     \tn[name=R, skin=ring, wires=2,
       ports={180@1:virtual, 180@2:virtual, 0@1:virtual, 0@2:virtual}]{\rho^R} &
     \tn[name=L, skin=ring, wires=2,
       ports={180@1:virtual, 180@2:virtual, 0@1:virtual, 0@2:virtual}]{\rho^L}
-    \tnwire{R.180@1}{R.180@2}
+    \tnwire[route=arc]{R.180@1}{R.180@2}
     \tnwire{R.0@1}{L.180@1}
     \tnwire{R.0@2}{L.180@2}
     \tnwire{L.0@1}{open e}
@@ -38,7 +40,7 @@
     \tnwire{open w}{L.180@2}
     \tnwire{L.0@1}{R.180@1}
     \tnwire{L.0@2}{R.180@2}
-    \tnwire{R.0@1}{R.0@2}
+    \tnwire[route=arc]{R.0@1}{R.0@2}
   \end{tenkz}
   \right)
 \]
