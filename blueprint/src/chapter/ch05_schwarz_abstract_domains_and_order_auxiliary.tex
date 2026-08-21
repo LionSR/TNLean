@@ -494,7 +494,8 @@ positivity.
     \label{thm:two_variable_operator_schwarz}
     \lean{SchwarzTwoVariable.schwarz_two_variable_unconditional_of_traceAdjointMap}
     \leanok
-    \uses{def:2positive_map, def:pinv}
+    \uses{def:2positive_map, def:pinv,
+        thm:k_positive_trace_pairing_adjoint}
     Let $E:\MN{D_{\rm in}}\to\MN{D_{\rm out}}$ be positive and suppose
     that $E=T^*$ for a two-positive map
     $T:\MN{D_{\rm out}}\to\MN{D_{\rm in}}$. For every
@@ -511,7 +512,13 @@ positivity.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{lem:two_variable_operator_schwarz_conditional, thm:EBB_mul_pinv_mul_EBA_eq}
+    \uses{lem:two_variable_operator_schwarz_conditional,
+        thm:EBB_mul_pinv_mul_EBA_eq,
+        thm:k_positive_trace_pairing_adjoint}
+    By trace-adjoint invariance of two-positivity
+    (Theorem~\ref{thm:k_positive_trace_pairing_adjoint}), $E=T^*$ is
+    two-positive. Hence the preceding conditional and range-inclusion
+    results apply to $E$ with its rectangular input and output dimensions.
     For every $v$, the vector $w = E(B^\dagger B)^{+}E(B^\dagger A)\,v$
     satisfies the side condition $E(B^\dagger B)\,w = E(B^\dagger A)\,v$ of
     the conditional lemma

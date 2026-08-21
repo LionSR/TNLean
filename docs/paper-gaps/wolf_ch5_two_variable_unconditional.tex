@@ -16,9 +16,11 @@
 
 \section{Source statement}
 
-Let $E\colon M_{d'}(\mathbb C)\to M_d(\mathbb C)$ be a two-positive linear
-map.  Theorem~5.3 of Wolf's \emph{Quantum Channels \& Operations: Guided
-Tour}, Chapter~5, asserts that for every $A,B\in M_{d'}(\mathbb C)$,
+Let $E=T^*\colon M_{d'}(\mathbb C)\to M_d(\mathbb C)$ be a positive linear
+map, where the reverse-direction map
+$T\colon M_d(\mathbb C)\to M_{d'}(\mathbb C)$ is two-positive.
+Theorem~5.3 of Wolf's \emph{Quantum Channels \& Operations: Guided Tour},
+Chapter~5, asserts that for every $A,B\in M_{d'}(\mathbb C)$,
 \begin{align}
   E(A^\dagger B)\,E(B^\dagger B)^{-1}\,E(B^\dagger A)
   &\leq E(A^\dagger A),
@@ -29,9 +31,10 @@ source is
 \path{Notes/WolfNoteTexSource/ch05_schwarz_inequalities.tex}, lines
 180--190.
 
-The formal theorem has the same independent input and output dimensions and
-does not assume an additional witness.  The inverse on the range is represented
-by the Moore--Penrose inverse.
+Rectangular two-positivity is invariant under the trace adjoint, so $E=T^*$
+is two-positive. The formal theorem records Wolf's hypotheses with the same
+independent input and output dimensions and does not assume an additional
+witness. The inverse on the range is represented by the Moore--Penrose inverse.
 
 \section{The range inverse}
 

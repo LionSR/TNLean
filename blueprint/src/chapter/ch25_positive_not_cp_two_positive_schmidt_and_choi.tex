@@ -752,8 +752,9 @@ Section~\ref{sec:app_positive_not_cp_k_positive_closure}.
     \leanok
     \uses{def:blockwise_ampliation, def:trace_pairing_adjoint,
         thm:trace_pairing_adjoint_identity}
-    For every linear map $E : \MN{D}\to\MN{D}$, the trace-pairing adjoint
-    commutes with ampliation:
+    For every linear map
+    $E : \MN{D_{\rm in}}\to\MN{D_{\rm out}}$, the trace-pairing adjoint
+    commutes with the rectangular ampliation:
     \begin{align}
         (E^{(k)})^*
          & =(E^*)^{(k)}.
@@ -763,8 +764,9 @@ Section~\ref{sec:app_positive_not_cp_k_positive_closure}.
 
 \begin{proof}
     \leanok
-    For block matrices write $\rho_{pq}$ and $X_{pq}$ for their
-    $\MN{D}$-valued blocks. Expanding the trace by blocks and applying
+    For block matrices write $\rho_{pq}\in\MN{D_{\rm out}}$ and
+    $X_{pq}\in\MN{D_{\rm in}}$ for their blocks. Expanding the trace by
+    blocks and applying
     (\ref{eq:schwarz_trace_adjoint_pairing}) gives
     \begin{align}
         \tr((E^*)^{(k)}(\rho)X)
@@ -783,7 +785,8 @@ Section~\ref{sec:app_positive_not_cp_k_positive_closure}.
     \leanok
     \uses{def:k_positive_map, thm:trace_pairing_adjoint_ampliation,
         thm:trace_pairing_adjoint_positive}
-    If $E$ is $k$-positive, then $E^*$ is $k$-positive.
+    If $E:\MN{D_{\rm in}}\to\MN{D_{\rm out}}$ is $k$-positive, then
+    $E^*:\MN{D_{\rm out}}\to\MN{D_{\rm in}}$ is $k$-positive.
 \end{theorem}
 
 \begin{proof}
@@ -800,8 +803,9 @@ Section~\ref{sec:app_positive_not_cp_k_positive_closure}.
     \leanok
     \uses{thm:k_positive_trace_pairing_adjoint,
         thm:trace_pairing_adjoint_involutive}
-    A linear map is $k$-positive if and only if its trace-pairing adjoint is
-    $k$-positive.
+    A linear map $E:\MN{D_{\rm in}}\to\MN{D_{\rm out}}$ is $k$-positive
+    if and only if its trace-pairing adjoint
+    $E^*:\MN{D_{\rm out}}\to\MN{D_{\rm in}}$ is $k$-positive.
 \end{theorem}
 
 \begin{proof}
