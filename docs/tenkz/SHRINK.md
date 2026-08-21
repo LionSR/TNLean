@@ -3274,3 +3274,12 @@ the corresponding key's issue with the figure as the demand evidence.
 | flag:consumers:key:kernel-wire:bend | retired: sentenced session 1, executable once route=arc drew (#6201); zero consumers; permanent |
 | flag:consumers:key:kernel-wire:around | retired: zero consumers and no render read; a detour is a side of a selection; permanent |
 | flag:lonely-type:address-list | dies with its last carrier: `via=` is sentenced (session 1, tracker #4709 item 1) and the type leaves the census when its parser row does; expiry 0.9 |
+
+Review sweep, same session: the address-validation pass no longer
+enumerates `around` as a field to check, so the model field truly has no
+reader; the string tier's detour machinery
+(`\__tenkz_string_declare_around:nnnnnn`, its obstacle sequence, and one
+hundred lines of clearance-envelope geometry), reachable only from a
+direct-call test after the key left, is demolished with that test and its
+two golden rows -- the string-probe suite stands at 28 artifacts,
+byte-identical.
