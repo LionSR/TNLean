@@ -36,6 +36,7 @@ import TNLean.MPS.MPDO.BNTBoundaryDecomposition
 import TNLean.MPS.MPDO.BNTChannelComposition
 import TNLean.MPS.MPDO.BNTClosingSelection
 import TNLean.MPS.MPDO.BNTCoefficients
+import TNLean.MPS.MPDO.BNTFactorizationChannels
 import TNLean.MPS.MPDO.BNTFinalSectorFusion
 import TNLean.MPS.MPDO.BNTFixedFinalUnitarity
 import TNLean.MPS.MPDO.BNTFourfoldFusionIndices
