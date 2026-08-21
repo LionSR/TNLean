@@ -5,9 +5,9 @@ Authors: TNLean contributors
 -/
 import Mathlib.LinearAlgebra.Matrix.Charpoly.Basic
 import TNLean.Algebra.OperatorNormFrobenius
-import TNLean.Analysis.SpectralRadiusPowerDecay
-import TNLean.Channel.Primitive
-import TNLean.MPS.Core.TransferChannel
+import QICLean.Analysis.SpectralRadiusPowerDecay
+import QICLean.Channel.Primitive
+import QICLean.MPS.Core.TransferChannel
 import TNLean.MPS.Overlap.Basic
 
 /-!
