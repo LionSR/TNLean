@@ -110,48 +110,10 @@ theorem isKrausCPTP_sum_comp_singleKrausMap_of_starProjectionResolution
     (hPsum : ∑ i, P i = (1 : Matrix α α ℂ))
     (hS : ∀ i, IsKrausCPTP (S i)) :
     IsKrausCPTP (∑ i, S i ∘ₗ singleKrausMap (P i)) := by
-  classical
-  choose r A hA hAres using hS
-  let B : (Σ i, Fin (r i)) → Matrix β α ℂ :=
-    fun p ↦ A p.1 p.2 * P p.1
-  have hBres : ∑ p, (B p)ᴴ * B p = (1 : Matrix α α ℂ) := by
-    rw [Fintype.sum_sigma]
-    calc
-      ∑ i, ∑ a, (B ⟨i, a⟩)ᴴ * B ⟨i, a⟩ =
-          ∑ i, (P i)ᴴ * (∑ a, (A i a)ᴴ * A i a) * P i := by
-        apply Finset.sum_congr rfl
-        intro i _
-        rw [Matrix.mul_sum, Matrix.sum_mul]
-        apply Finset.sum_congr rfl
-        intro a _
-        simp only [B, Matrix.conjTranspose_mul, Matrix.mul_assoc]
-      _ = ∑ i, (P i)ᴴ * P i := by
-        apply Finset.sum_congr rfl
-        intro i _
-        rw [hAres i, Matrix.mul_one]
-      _ = ∑ i, P i := by
-        apply Finset.sum_congr rfl
-        intro i _
-        rw [show (P i)ᴴ = P i by
-          simpa [Matrix.star_eq_conjTranspose] using (hP i).isSelfAdjoint.star_eq,
-          (hP i).isIdempotentElem.eq]
-      _ = 1 := hPsum
-  rw [← show Matrix.rectangularKrausMap B =
-      ∑ i, S i ∘ₗ singleKrausMap (P i) by
-    apply LinearMap.ext
-    intro X
-    simp only [Matrix.rectangularKrausMap, LinearMap.sum_apply,
-      LinearMap.comp_apply, singleKrausMap_apply]
-    change (∑ p : Σ i, Fin (r i), B p * X * (B p)ᴴ) =
-      ∑ i, S i (P i * X * (P i)ᴴ)
-    rw [Fintype.sum_sigma]
-    apply Finset.sum_congr rfl
-    intro i _
-    rw [hA i]
-    apply Finset.sum_congr rfl
-    intro a _
-    simp only [B, Matrix.conjTranspose_mul, Matrix.mul_assoc]]
-  exact Matrix.rectangularKrausMap_isKrausCPTP B hBres
+  refine isKrausCPTP_of_isKrausCP_trace_preserving
+    (isKrausCP_sum_comp_singleKrausMap P S fun i ↦ (hS i).isKrausCP) fun X ↦ ?_
+  rw [trace_sum_comp_singleKrausMap_of_starProjections P S hP hS X, hPsum,
+    Matrix.one_mul]
 
 /-- Let `(P i)` be a finite projective resolution of the identity on one
 matrix algebra, and let `(S i)` be trace-preserving completely positive maps
