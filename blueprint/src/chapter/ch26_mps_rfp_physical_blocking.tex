@@ -10,7 +10,7 @@
     $i_1,i_2$,
     \begin{align}
         A^{i_1}A^{i_2}
-        &=\sum_{j=0}^{d-1}V_{(i_1,i_2),j}A^j.
+         & =\sum_{j=0}^{d-1}V_{(i_1,i_2),j}A^j.
         \label{eq:corr_physical_blocking_isometry}
     \end{align}
     This is the relation $AA=A$ in
@@ -35,7 +35,7 @@
     that
     \begin{align}
         A^{i_1}A^{i_2}
-        &=\sum_{j=0}^{d-1}V_{(i_1,i_2),j}A^j
+         & =\sum_{j=0}^{d-1}V_{(i_1,i_2),j}A^j
         \label{eq:corr_kraus_isometry_decomp}
     \end{align}
     for all $i_1,i_2\in\{0,\ldots,d-1\}$.
@@ -46,16 +46,16 @@
     the double Kraus sum gives, for every bond matrix $X$,
     \begin{align}
         \E_A^2(X)
-        &=\sum_{i_1,i_2}(A^{i_1}A^{i_2})X
-            (A^{i_1}A^{i_2})^\dagger
-        \notag\\
-        &=\sum_{j,k}\left(\sum_{i_1,i_2}
-            V_{(i_1,i_2),j}\overline{V_{(i_1,i_2),k}}\right)A^jX(A^k)^\dagger
-        \notag\\
-        &=\sum_{j,k}(V^\dagger V)_{j,k}A^jX(A^k)^\dagger
-          =\sum_{j,k}\delta_{j,k}A^jX(A^k)^\dagger
-          =\sum_jA^jX(A^j)^\dagger
-          =\E_A(X).
+         & =\sum_{i_1,i_2}(A^{i_1}A^{i_2})X
+        (A^{i_1}A^{i_2})^\dagger
+        \notag                                             \\
+         & =\sum_{j,k}\left(\sum_{i_1,i_2}
+        V_{(i_1,i_2),j}\overline{V_{(i_1,i_2),k}}\right)A^jX(A^k)^\dagger
+        \notag                                             \\
+         & =\sum_{j,k}(V^\dagger V)_{j,k}A^jX(A^k)^\dagger
+        =\sum_{j,k}\delta_{j,k}A^jX(A^k)^\dagger
+        =\sum_jA^jX(A^j)^\dagger
+        =\E_A(X).
         \notag
     \end{align}
     Hence $\E_A^2=\E_A$.
@@ -71,7 +71,7 @@
     $V_{(i_1,i_2),j}$ with $V^\dagger V=\Id$, such that
     \begin{align}
         A^{i_1}A^{i_2}
-        &=\sum_{j=0}^{d-1}V_{(i_1,i_2),j}A^j
+         & =\sum_{j=0}^{d-1}V_{(i_1,i_2),j}A^j
         \label{eq:corr_AA_isometry}
     \end{align}
     for all $i_1,i_2\in\{0,\ldots,d-1\}$.
@@ -84,7 +84,7 @@
     every $X$,
     \begin{align}
         \sum_{i_1,i_2}(A^{i_1}A^{i_2})X(A^{i_1}A^{i_2})^\dagger
-        &=\sum_jA^jX(A^j)^\dagger.
+         & =\sum_jA^jX(A^j)^\dagger.
         \notag
     \end{align}
     the corresponding theorem in the companion quantum-channel volume then supplies the isometry $V$
@@ -117,7 +117,7 @@
     $B=(B^a)_{a=0}^{e-1}$ of the same bond dimension $D$ such that
     \begin{align}
         \widehat{\E}_B^{\,2^n}
-        &\longrightarrow \widehat{\E}_A.
+         & \longrightarrow \widehat{\E}_A.
         \notag
     \end{align}
     Here $\widehat{\E}_A$ and $\widehat{\E}_B$ are the transfer matrices, and
@@ -198,13 +198,13 @@
         \begin{tenkz}[rows={op,wire}, cols=3, bonds=none]
             \tn[skin=pill, wide=3, name=V,
                 ports={90@1:physical:$i_1$, 90@3:physical:$i_2$,
-                       270@2:physical}]{V} \\
+                        270@2:physical}]{V} \\
             & \tn[name=A,
-                  ports={180:virtual, 0:virtual, 90:physical:$j$}]{A^j} &
+                ports={180:virtual, 0:virtual, 90:physical:$j$}]{A^j} &
             \tnwire{A.90}{V.270@2}
         \end{tenkz}
     \end{center}
-        \begin{center}
+    \begin{center}
         % sum_{i_1,i_2} (V^dagger)^j_{i_1 i_2} A^{i_1} A^{i_2} = A^j
         % (CPSV16 Thm 3.1, lines 396--412, source image II_UAAA.png):
         % V^dagger has one open upper port j and two lower ports, at the
@@ -224,7 +224,7 @@
     \end{center}
     \begin{align}
         \sum_{i_1,i_2}(V^\dagger)^j_{i_1,i_2}A^{i_1}A^{i_2}
-        &=A^j.
+         & =A^j.
         \label{eq:corr_AA_isometry_adjoint}
     \end{align}
     \caption{The fusion identity of the renormalization fixed-point

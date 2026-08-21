@@ -21,7 +21,7 @@ boundary conventions.
     $\sigma=(\sigma_0,\ldots,\sigma_{n-1})$, its coefficient is
     \begin{align}
         c_{A,\sigma}
-        &:=\tr\!\left(A_0^{\sigma_0}A_1^{\sigma_1}\cdots A_{n-1}^{\sigma_{n-1}}\right).
+         & :=\tr\!\left(A_0^{\sigma_0}A_1^{\sigma_1}\cdots A_{n-1}^{\sigma_{n-1}}\right).
         \notag
     \end{align}
     Two such chains generate the \emph{same chain state} if these coefficients
@@ -33,7 +33,7 @@ boundary conventions.
     $k$ and physical index $i$,
     \begin{align}
         B_k^i
-        &=Z_kA_k^iZ_{k+1}^{-1},
+         & =Z_kA_k^iZ_{k+1}^{-1},
         \notag
     \end{align}
     with indices understood modulo $n$, so that $Z_n=Z_0$. Locally, this
@@ -81,10 +81,10 @@ boundary conventions.
     $\sigma=(\sigma_0,\ldots,\sigma_{N-1})$, define
     \begin{align}
         c_A(\sigma)
-        &:=\sum_{\alpha_0=0}^{D_0-1}\cdots
-          \sum_{\alpha_N=0}^{D_N-1}
-          \prod_{k=0}^{N-1}
-          (A_k^{\sigma_k})_{\alpha_k,\alpha_{k+1}}.
+         & :=\sum_{\alpha_0=0}^{D_0-1}\cdots
+        \sum_{\alpha_N=0}^{D_N-1}
+        \prod_{k=0}^{N-1}
+        (A_k^{\sigma_k})_{\alpha_k,\alpha_{k+1}}.
         \label{eq:varying_bond_obc_coeff}
     \end{align}
     Since $D_0=D_N=1$, this is the scalar matrix product in
@@ -100,7 +100,7 @@ boundary conventions.
     Let $N\geq1$. For $s\in\mathbb Z/N\mathbb Z$, the cyclic translation of
     a physical configuration is
     \begin{align}
-        (T_s\sigma)_k&=\sigma_{k+s}.
+        (T_s\sigma)_k & =\sigma_{k+s}.
         \label{eq:varying_bond_obc_translation}
     \end{align}
     Only the physical configuration is translated. The dimensions
@@ -117,7 +117,7 @@ boundary conventions.
     translation-invariant state at length $N$ if, for every
     $s\in\mathbb Z/N\mathbb Z$ and every physical configuration $\sigma$,
     \begin{align}
-        c_A(T_s\sigma)&=c_A(\sigma).
+        c_A(T_s\sigma) & =c_A(\sigma).
         \label{eq:varying_bond_obc_ti}
     \end{align}
     This condition compares coefficients at one fixed length. It does not
@@ -214,9 +214,9 @@ boundary conventions.
     chain of bond dimension $D$. For every physical configuration $\sigma$,
     \begin{align}
         c_{B,\sigma}
-        &=\sum_{g\colon\mathbb Z/N\mathbb Z\to\{0,\ldots,D-1\}}
-          \prod_{k\in\mathbb Z/N\mathbb Z}
-          (B_k^{\sigma_k})_{g(k),g(k+1)}.
+         & =\sum_{g\colon\mathbb Z/N\mathbb Z\to\{0,\ldots,D-1\}}
+        \prod_{k\in\mathbb Z/N\mathbb Z}
+        (B_k^{\sigma_k})_{g(k),g(k+1)}.
         \label{eq:chain_coeff_sum_cyclic}
     \end{align}
 \end{theorem}
@@ -236,8 +236,8 @@ boundary conventions.
     Let $N\geq1$. For every physical configuration $\sigma$,
     \begin{align}
         \tr\!\left(\widetilde A_0^{\sigma_0}\cdots
-          \widetilde A_{N-1}^{\sigma_{N-1}}\right)
-        &=c_A(\sigma).
+        \widetilde A_{N-1}^{\sigma_{N-1}}\right)
+         & =c_A(\sigma).
         \label{eq:varying_bond_obc_zero_pad_coeff}
     \end{align}
     No positivity assumption is imposed on the intermediate dimensions. The
@@ -284,8 +284,8 @@ boundary conventions.
     $P(e_a\otimes e_k)=e_a\otimes e_{k-1}$. For each physical index $i$, set
     \begin{align}
         B^i
-        &=N^{-1/N}\operatorname{diag}
-            \left(A_0^i,\ldots,A_{N-1}^i\right)P
+         & =N^{-1/N}\operatorname{diag}
+        \left(A_0^i,\ldots,A_{N-1}^i\right)P
         \in\MN{ND}.
         \label{eq:chain_cyclic_block_tensor}
     \end{align}
@@ -304,7 +304,7 @@ boundary conventions.
     Definition~\ref{def:chain_cyclic_block_tensor} is
     \begin{align}
         V^{(N)}(B)_\sigma
-        &=\frac{1}{N}\sum_{k=0}^{N-1}c_{A^{(k)},\sigma}.
+         & =\frac{1}{N}\sum_{k=0}^{N-1}c_{A^{(k)},\sigma}.
         \label{eq:chain_cyclic_block_average}
     \end{align}
     Reindexing the finite sum and cyclically permuting factors under the trace
@@ -321,16 +321,16 @@ boundary conventions.
     a block diagonal gives
     \begin{align}
         P\operatorname{diag}(M_0,\ldots,M_{N-1})
-        &=\operatorname{diag}(M_1,\ldots,M_0)P.
+         & =\operatorname{diag}(M_1,\ldots,M_0)P.
         \label{eq:chain_cyclic_block_commute}
     \end{align}
     Repeated use of~(\ref{eq:chain_cyclic_block_commute}), followed by
     $P^N=I$, yields
     \begin{align}
         D_{\sigma_0}P\cdots D_{\sigma_{N-1}}P
-        &=\operatorname{diag}\left(
-            \prod_{j=0}^{N-1}A_{j+k}^{\sigma_j}
-          \right)_{k=0}^{N-1}.
+         & =\operatorname{diag}\left(
+        \prod_{j=0}^{N-1}A_{j+k}^{\sigma_j}
+        \right)_{k=0}^{N-1}.
         \label{eq:chain_cyclic_block_product}
     \end{align}
     Taking the trace of~(\ref{eq:chain_cyclic_block_product}) sums the traces
@@ -364,7 +364,7 @@ boundary conventions.
     The cyclic rotation of the padded square chain satisfies
     \begin{align}
         c_{(\widetilde A)^{(k)},\sigma}
-        &=c_A(\tau_{-k}\sigma),
+         & =c_A(\tau_{-k}\sigma),
         \label{eq:pgvwc07_zero_pad_rotation}
     \end{align}
     where $(\tau_s\sigma)_j=\sigma_{j+s}$. To prove
@@ -473,7 +473,7 @@ used in the virtual bond gauge.
     $O_A(X)\in\MN{d}$ by
     \begin{align}
         O_A(X)_{ij}
-        &:=(\Psi_A(A^iX))_j,
+         & :=(\Psi_A(A^iX))_j,
         \notag
     \end{align}
     so that row~$i$ of $O_A(X)$ contains the decomposition coefficients
@@ -507,7 +507,7 @@ used in the virtual bond gauge.
     For every $X\in\MN{D}$ and every physical index $i$,
     \begin{align}
         A^iX
-        &=\sum_{j=0}^{d-1}O_A(X)_{ij}A^j.
+         & =\sum_{j=0}^{d-1}O_A(X)_{ij}A^j.
         \notag
     \end{align}
 \end{lemma}
@@ -539,14 +539,14 @@ used in the virtual bond gauge.
     gives
     \begin{align}
         \Psi_A(A^iXY)
-        &=\sum_{j=0}^{d-1}O_A(X)_{ij}\Psi_A(A^jY).
+         & =\sum_{j=0}^{d-1}O_A(X)_{ij}\Psi_A(A^jY).
         \notag
     \end{align}
     Taking the $k$th component of both sides gives
     \begin{align}
         O_A(XY)_{ik}
-        &=\sum_{j=0}^{d-1}O_A(X)_{ij}O_A(Y)_{jk}
-          =(O_A(X)O_A(Y))_{ik}.
+         & =\sum_{j=0}^{d-1}O_A(X)_{ij}O_A(Y)_{jk}
+        =(O_A(X)O_A(Y))_{ik}.
         \notag
     \end{align}
     Since this holds for all $i$ and $k$, the matrices are equal.
@@ -590,7 +590,7 @@ $\MN{D}$ consists of scalars.
     Then the blocked tensor
     \begin{align}
         (A_0\otimes\cdots\otimes A_{m-1})^{(i_0,\ldots,i_{m-1})}
-        &:=A_0^{i_0}A_1^{i_1}\cdots A_{m-1}^{i_{m-1}}
+         & :=A_0^{i_0}A_1^{i_1}\cdots A_{m-1}^{i_{m-1}}
         \notag
     \end{align}
     is again injective.
@@ -625,7 +625,7 @@ insertion data.
     after conjugation:
     \begin{align}
         \tr\!\left(A_0^{i_0}X A_1^{i_1}A_2^{i_2}\right)
-        &=\tr\!\left(B_0^{i_0}Z^{-1}XZ B_1^{i_1}B_2^{i_2}\right).
+         & =\tr\!\left(B_0^{i_0}Z^{-1}XZ B_1^{i_1}B_2^{i_2}\right).
         \notag
     \end{align}
 
@@ -643,7 +643,7 @@ insertion data.
     equality of the virtual-insertion trace coefficients
     \begin{align}
         \tr\!\left(A_0^{i_0}X A_1^{i_1}A_2^{i_2}\right)
-        &=\tr\!\left(B_0^{i_0}Y B_1^{i_1}B_2^{i_2}\right)
+         & =\tr\!\left(B_0^{i_0}Y B_1^{i_1}B_2^{i_2}\right)
         \notag
     \end{align}
     for some $Y$ depending on $X$.
@@ -677,10 +677,10 @@ shows that this agreement forces the local tensors to be proportional.
     all $Y\in\MN{D}$ on the external bond, and all physical indices $i,j$,
     \begin{align}
         \tr\!\left(A_1^iX A_2^j\right)
-        &=\tr\!\left(B_1^iX B_2^j\right),
-        \label{eq:internal_bond}\\
+         & =\tr\!\left(B_1^iX B_2^j\right),
+        \label{eq:internal_bond}            \\
         \tr\!\left(A_2^jY A_1^i\right)
-        &=\tr\!\left(B_2^jY B_1^i\right).
+         & =\tr\!\left(B_2^jY B_1^i\right).
         \label{eq:external_bond}
     \end{align}
     Diagrammatically, inserting $X$ on the bond between the two sites,
@@ -723,10 +723,10 @@ shows that this agreement forces the local tensors to be proportional.
     that, for all physical indices $i,j$,
     \begin{align}
         A_1^i
-        &=\lambda B_1^i,
-        \notag\\
+         & =\lambda B_1^i,
+        \notag                 \\
         A_2^j
-        &=\lambda^{-1}B_2^j.
+         & =\lambda^{-1}B_2^j.
         \notag
     \end{align}
 \end{lemma}
@@ -739,10 +739,10 @@ shows that this agreement forces the local tensors to be proportional.
     and (\ref{eq:external_bond}) give, for all physical indices $i,j$,
     \begin{align}
         A_2^jA_1^i
-        &=B_2^jB_1^i,
-        \label{eq:aft_product_identities_a}\\
+         & =B_2^jB_1^i,
+        \label{eq:aft_product_identities_a} \\
         A_1^iA_2^j
-        &=B_1^iB_2^j.
+         & =B_1^iB_2^j.
         \label{eq:aft_product_identities_b}
     \end{align}
     Write $\Id_D=\sum_jc_jA_2^j$ using the decomposition map

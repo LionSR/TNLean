@@ -5,25 +5,25 @@
     Under the hypotheses of Theorem~
     \ref{thm:mpdo_transported_vertical_sector_composites_identity}, write
     \begin{align}
-      \mathcal A_1&=\prod_{\alpha}\MN{D^{(1)}_\alpha},
-      &
-      \mathcal A_2&=\prod_{\beta}\MN{D^{(2)}_\beta}.
-      \notag
+        \mathcal A_1 & =\prod_{\alpha}\MN{D^{(1)}_\alpha},
+                     &
+        \mathcal A_2 & =\prod_{\beta}\MN{D^{(2)}_\beta}.
+        \notag
     \end{align}
     There are an equivalence $\sigma$ of the two sector index sets, equalities
     $D^{(1)}_\alpha=D^{(2)}_{\sigma(\alpha)}$, and unitaries
     $V_\alpha\in \MN{D^{(2)}_{\sigma(\alpha)}}$ such that
     \begin{align}
-      \widetilde T(0,\ldots,0,X,0,\ldots,0)
-      &=(0,\ldots,0,V_\alpha\,\iota_\alpha(X)\,V_\alpha^*,0,\ldots,0),
-      \notag
+        \widetilde T(0,\ldots,0,X,0,\ldots,0)
+         & =(0,\ldots,0,V_\alpha\,\iota_\alpha(X)\,V_\alpha^*,0,\ldots,0),
+        \notag
     \end{align}
     where the nonzero entry on the right is in position $\sigma(\alpha)$, and
     \begin{align}
-      \widetilde S(0,\ldots,0,Y,0,\ldots,0)
-      &=(0,\ldots,0,\iota_\alpha^{-1}
+        \widetilde S(0,\ldots,0,Y,0,\ldots,0)
+         & =(0,\ldots,0,\iota_\alpha^{-1}
         (V_\alpha^*YV_\alpha),0,\ldots,0),
-      \notag
+        \notag
     \end{align}
     where the entries on the left and right are in positions $\sigma(\alpha)$
     and $\alpha$, respectively. These identities hold for every
@@ -58,19 +58,19 @@
     $m_\alpha=\tr(\mu_\alpha)$ and $n_\beta=\tr(\nu_\beta)$.
     For every horizontal bond matrix $X$ and every sector $\alpha$,
     \begin{align}
-      A^{(2)}_{\sigma(\alpha)}(X)
-      &=\frac{m_\alpha}{n_{\sigma(\alpha)}}
+        A^{(2)}_{\sigma(\alpha)}(X)
+         & =\frac{m_\alpha}{n_{\sigma(\alpha)}}
         V_\alpha
         \iota_\alpha(A^{(1)}_\alpha(X))V_\alpha^*.
-      \notag
+        \notag
     \end{align}
     Consequently, for every tensor letter $a$,
     \begin{align}
-      A^{(2)}_{\sigma(\alpha),a}
-      &=\frac{m_\alpha}{n_{\sigma(\alpha)}}
+        A^{(2)}_{\sigma(\alpha),a}
+         & =\frac{m_\alpha}{n_{\sigma(\alpha)}}
         V_\alpha\,\iota_\alpha
-          (A^{(1)}_{\alpha,a})V_\alpha^*.
-      \notag
+        (A^{(1)}_{\alpha,a})V_\alpha^*.
+        \notag
     \end{align}
     This is the coefficient identity in
     \cite[Appendix~C.4, lines~2001--2008]{Cirac2016MPDO_arXiv}. It compares
@@ -83,10 +83,10 @@
     Decompose the weighted contraction family into its individual matrix
     summands. At the summand paired with $\alpha$, the unitary formula gives
     \begin{align}
-      m_\alpha V_\alpha
+        m_\alpha V_\alpha
         \iota_\alpha(A^{(1)}_\alpha(X))V_\alpha^*
-      &=n_{\sigma(\alpha)}A^{(2)}_{\sigma(\alpha)}(X).
-      \notag
+         & =n_{\sigma(\alpha)}A^{(2)}_{\sigma(\alpha)}(X).
+        \notag
     \end{align}
     Positivity of $\nu_{\sigma(\alpha)}$ makes
     $n_{\sigma(\alpha)}$ nonzero, so division gives the first identity.
@@ -111,19 +111,19 @@
     equivalence $\sigma$, dimension identifications, and unitaries appearing
     in the tensor-letter identity satisfy
     \begin{align}
-      O_L(B)
-      &=\sum_\alpha
+        O_L(B)
+         & =\sum_\alpha
         \left(\frac{m_\alpha}{n_{\sigma(\alpha)}}\right)^L
         \tr\!\left(\nu_{\sigma(\alpha)}^L\right)
         O_L\!\left(A^{(1)}_\alpha\right),
-      \notag\\
-      O_L(B)
-      &=\sum_{\alpha,\beta}
+        \notag                  \\
+        O_L(B)
+         & =\sum_{\alpha,\beta}
         \tr(\mu_\alpha^L)
         \tr(\mu_\beta^L)
         O_L\!\left(A^{(1)}_\alpha\right)
         O_L\!\left(A^{(1)}_\beta\right).
-      \notag
+        \notag
     \end{align}
     These are the two representations in
     \cite[Appendix~C.4, lines~2011--2018]{Cirac2016MPDO_arXiv}.
@@ -138,7 +138,7 @@
     \uses{thm:mpdo_operator_product_mpo, lem:mpv_vertical_assembled, thm:mpdo_transported_vertical_sector_coefficient_comparison, thm:coisometry_reconstruction_same_mpv_pos}
     The two-site vertical canonical form first gives
     $O_L(B)=\sum_\delta\tr(\nu_\delta^L)
-    O_L(A^{(2)}_\delta)$.
+        O_L(A^{(2)}_\delta)$.
     Reindex this sum by $\delta=\sigma(\alpha)$. The tensor-letter identity
     from the preceding theorem multiplies every letter of
     $A^{(1)}_\alpha$ by
@@ -152,7 +152,7 @@
     chains turn this tensor product into multiplication of operators. Expand
     each copy by the one-site vertical canonical form,
     $O_L(\widetilde M)=\sum_\alpha
-    \tr(\mu_\alpha^L)O_L(A^{(1)}_\alpha)$,
+        \tr(\mu_\alpha^L)O_L(A^{(1)}_\alpha)$,
     and distribute the product of the two finite sums.
 \end{proof}
 
@@ -364,18 +364,18 @@
     set. The resulting coefficients are positive, the blocks are normal, and
     the inclusion ranges are pairwise orthogonal. For every tensor letter,
     \begin{align}
-      C^i
-      &=\sum_j W_j(\lambda_j A_j^i)W_j^\dagger,
-      \notag\\
-      W_j^\dagger W_l
-      &=\delta_{jl},
-      \notag\\
-      C^iW_j
-      &=W_j(\lambda_jA_j^i),
-      \notag\\
-      W_j^\dagger C^i
-      &=(\lambda_jA_j^i)W_j^\dagger.
-      \notag
+        C^i
+         & =\sum_j W_j(\lambda_j A_j^i)W_j^\dagger,
+        \notag                                      \\
+        W_j^\dagger W_l
+         & =\delta_{jl},
+        \notag                                      \\
+        C^iW_j
+         & =W_j(\lambda_jA_j^i),
+        \notag                                      \\
+        W_j^\dagger C^i
+         & =(\lambda_jA_j^i)W_j^\dagger.
+        \notag
     \end{align}
     Each compression $W_j^\dagger C^iW_j$ is
     $\lambda_jA_j^i$, and $C$ has the same positive-length closed chains as
@@ -397,10 +397,10 @@
 \begin{theorem}[Coverage of active product corners by the blocked BNT]
     \label{thm:mpdo_active_product_corner_blocked_bnt_coverage}
     \lean{MPOTensor.RetainedProductSpectralFamily.%
-exists_blockedBNT_gaugePhase_of_flatBlock}
+        exists_blockedBNT_gaugePhase_of_flatBlock}
     \lean{MPOTensor.RetainedProductSpectralFamily.FlatBlockedBNTComparison}
     \lean{MPOTensor.RetainedProductSpectralFamily.%
-exists_flatBlockedBNTComparison}
+        exists_flatBlockedBNTComparison}
     \leanok
     \uses{thm:mpdo_retained_product_flat_reconstruction, thm:mpdo_retained_vertical_product_canonical_hypotheses, thm:cpsv_bnt_characterization}
     Suppose that the one-site vertical tensor has the stated exact
@@ -411,9 +411,9 @@ exists_flatBlockedBNTComparison}
     one such that, after transporting the blocked tensor along the dimension
     equality,
     \begin{align}
-      A_j^i
-      &=\zeta_jX_jA^{(2),i}_{\gamma(j)}X_j^{-1}.
-      \notag
+        A_j^i
+         & =\zeta_jX_jA^{(2),i}_{\gamma(j)}X_j^{-1}.
+        \notag
     \end{align}
     The choices may be made simultaneously. No converse coverage or
     surjectivity of $j\mapsto\gamma(j)$ is asserted.
@@ -450,7 +450,7 @@ exists_flatBlockedBNTComparison}
     \lean{MPOTensor.blockedReference_compression}
     \lean{MPOTensor.RetainedProductSpectralFamily.FlatBlockedBNTComparison.referenceInclusion}
     \lean{MPOTensor.RetainedProductSpectralFamily.FlatBlockedBNTComparison.%
-referenceInclusion_isometry}
+        referenceInclusion_isometry}
     \lean{MPOTensor.RetainedProductSpectralFamily.FlatBlockedBNTComparison.reference_compression}
     \leanok
     \uses{thm:mpdo_active_product_corner_blocked_bnt_coverage, lem:matrix_sigma_block_inclusion}
@@ -476,7 +476,7 @@ referenceInclusion_isometry}
 \begin{theorem}[Active product positivity from sector separation]
     \label{thm:mpdo_active_product_coefficient_phase_pos_of_sector_separation}
     \lean{MPOTensor.RetainedProductSpectralFamily.FlatBlockedBNTComparison.%
-activeCoefficient_mul_phase_pos_of_sectorCompression_separation}
+        activeCoefficient_mul_phase_pos_of_sectorCompression_separation}
     \leanok
     \uses{def:mpdo, thm:mpdo_active_product_corner_blocked_bnt_coverage, thm:mpdo_blocked_reference_corners, thm:mpdo_retained_product_spectral_family_exists, thm:mpdo_sector_weight_pos}
     Assume that $M$ generates matrix product density operators and that the
@@ -499,7 +499,7 @@ activeCoefficient_mul_phase_pos_of_sectorCompression_separation}
 \begin{theorem}[Positivity of active product coefficients]
     \label{thm:mpdo_active_product_coefficient_phase_pos}
     \lean{MPOTensor.RetainedProductSpectralFamily.FlatBlockedBNTComparison.%
-activeCoefficient_mul_phase_pos}
+        activeCoefficient_mul_phase_pos}
     \leanok
     \uses{thm:mpdo_active_product_corner_blocked_bnt_coverage, thm:mpdo_blocked_reference_corners, thm:mpdo_retained_product_spectral_family_exists, thm:mpdo_grouped_sector_compression_nonzero, thm:mpdo_sector_weight_pos, thm:mpdo_active_product_coefficient_phase_pos_of_sector_separation}
     Suppose that $M$ is in normalized BNT-refined horizontal form and generates
@@ -518,7 +518,7 @@ activeCoefficient_mul_phase_pos}
 \begin{theorem}[Literal positivity of active product coefficients]
     \label{thm:mpdo_literal_cpsv_active_product_coefficient_phase_pos}
     \lean{MPOTensor.RetainedProductSpectralFamily.FlatBlockedBNTComparison.%
-activeCoefficient_mul_phase_pos_of_cpsvCanonicalForm}
+        activeCoefficient_mul_phase_pos_of_cpsvCanonicalForm}
     \leanok
     \uses{def:mpdo, def:cpsv_canonical_form, thm:mpdo_active_product_corner_blocked_bnt_coverage, thm:mpdo_blocked_reference_corners, thm:cpsv_literal_sector_compression_nonzero, thm:mpdo_sector_weight_pos, thm:mpdo_active_product_coefficient_phase_pos_of_sector_separation}
     Suppose that the doubled-index MPS tensor of $M$ is in literal CPSV
@@ -539,18 +539,18 @@ activeCoefficient_mul_phase_pos_of_cpsvCanonicalForm}
 \begin{theorem}[Unitary normalization of active product gauges]
     \label{thm:mpdo_active_product_gauge_unitary_normalization}
     \lean{MPOTensor.RetainedProductSpectralFamily.FlatBlockedBNTComparison.%
-exists_unitaryNormalization}
+        exists_unitaryNormalization}
     \leanok
     \uses{thm:mpdo_active_product_corner_blocked_bnt_coverage, thm:mpdo_retained_product_spectral_family_exists, lem:mpdo_horizontal_cf_block_two, thm:mpdo_block_two_as_positive_blocking, thm:mpdo_active_product_coefficient_phase_pos, thm:mpdo_blocked_reference_corners, thm:mpdo_pairwise_vertical_gram_conjugation, thm:normal_tensor_gram_rigidity}
     Under the hypotheses of the preceding positivity theorem, for every
     active product corner $j$ there is a real number $\omega_j>0$ such that
     \begin{align}
-      X_j^\dagger X_j
-      &=\omega_j\Id,
-      \notag\\
-      \omega_j^{-1/2}X_j
-      &\in\mathrm{U}(D_j).
-      \notag
+        X_j^\dagger X_j
+         & =\omega_j\Id,
+        \notag                 \\
+        \omega_j^{-1/2}X_j
+         & \in\mathrm{U}(D_j).
+        \notag
     \end{align}
     This is the gauge normalization used in
     \cite[Appendix~C.4, lines~2025--2029]{Cirac2016MPDO_arXiv}.
@@ -568,19 +568,19 @@ exists_unitaryNormalization}
 \begin{theorem}[Literal unitary normalization of active product gauges]
     \label{thm:mpdo_literal_cpsv_active_product_gauge_unitary_normalization}
     \lean{MPOTensor.RetainedProductSpectralFamily.FlatBlockedBNTComparison.%
-exists_unitaryNormalization_of_cpsvCanonicalForm}
+        exists_unitaryNormalization_of_cpsvCanonicalForm}
     \leanok
     \uses{def:mpdo, def:cpsv_canonical_form, thm:mpdo_active_product_corner_blocked_bnt_coverage, thm:mpdo_blocked_reference_corners, thm:mpdo_literal_cpsv_active_product_coefficient_phase_pos, thm:cpsv_literal_positive_relative_gram_scalar}
     Under the hypotheses of the preceding literal positivity theorem, for
     every active product corner $j$ there is a real number $\omega_j>0$ such
     that
     \begin{align}
-      X_j^\dagger X_j
-      &=\omega_j\Id,
-      \notag\\
-      \omega_j^{-1/2}X_j
-      &\in\mathrm{U}(D_j).
-      \notag
+        X_j^\dagger X_j
+         & =\omega_j\Id,
+        \notag                 \\
+        \omega_j^{-1/2}X_j
+         & \in\mathrm{U}(D_j).
+        \notag
     \end{align}
 \end{theorem}
 
@@ -625,10 +625,10 @@ exists_unitaryNormalization_of_cpsvCanonicalForm}
     pair has an original-label corner family. Its coefficient at an active
     corner is
     \begin{align}
-      \frac{\lambda_j\zeta_j}{w_{\alpha,q}w_{\beta,r}}
-      \frac{\tr D_{\gamma(j)}}
-           {\tr D^{(2)}_{\sigma(\gamma(j))}},
-      \notag
+        \frac{\lambda_j\zeta_j}{w_{\alpha,q}w_{\beta,r}}
+        \frac{\tr D_{\gamma(j)}}
+        {\tr D^{(2)}_{\sigma(\gamma(j))}},
+        \notag
     \end{align}
     which is positive. The normalized inclusions are isometries with
     pairwise orthogonal ranges, intertwine the raw product tensor with these
@@ -658,7 +658,7 @@ exists_unitaryNormalization_of_cpsvCanonicalForm}
 \begin{theorem}[Fusion coisometries from original-label corners]
     \label{thm:mpdo_original_corner_family_to_fusion_coisometry}
     \lean{MPOTensor.RetainedProductSpectralFamily.OriginalCornerFamily.%
-toBNTFusionCoisometryFamily}
+        toBNTFusionCoisometryFamily}
     \leanok
     \uses{def:mpdo_original_corner_family, def:mpdo_bnt_fusion_coisometry_family, thm:vertical_sector_coisometry}
     Given an original-label corner family, choose the distinguished retained
@@ -670,26 +670,26 @@ toBNTFusionCoisometryFamily}
     of the corner inclusions, regrouped by these label fibers, defines a
     fusion coisometry. It satisfies
     \begin{align}
-      \chi_{\alpha,\beta,\gamma;r}
-      &>0,
-      \notag\\
-      U_{\alpha,\beta}U_{\alpha,\beta}^\dagger
-      &=1,
-      \notag\\
-      U_{\alpha,\beta}(M_\alpha M_\beta)^{ij}
+        \chi_{\alpha,\beta,\gamma;r}
+         & >0,
+        \notag               \\
+        U_{\alpha,\beta}U_{\alpha,\beta}^\dagger
+         & =1,
+        \notag               \\
+        U_{\alpha,\beta}(M_\alpha M_\beta)^{ij}
         U_{\alpha,\beta}^\dagger
-      &=\bigoplus_\gamma
-          \chi_{\alpha,\beta,\gamma}\otimes M_\gamma^{ij},
-      \notag
+         & =\bigoplus_\gamma
+        \chi_{\alpha,\beta,\gamma}\otimes M_\gamma^{ij},
+        \notag
     \end{align}
     together with the exact reconstruction
     \begin{align}
-      (M_\alpha M_\beta)^{ij}
-      &=U_{\alpha,\beta}^\dagger
-          \left(\bigoplus_\gamma
-            \chi_{\alpha,\beta,\gamma}\otimes M_\gamma^{ij}\right)
-          U_{\alpha,\beta}.
-      \notag
+        (M_\alpha M_\beta)^{ij}
+         & =U_{\alpha,\beta}^\dagger
+        \left(\bigoplus_\gamma
+        \chi_{\alpha,\beta,\gamma}\otimes M_\gamma^{ij}\right)
+        U_{\alpha,\beta}.
+        \notag
     \end{align}
     Empty label fibers contribute zero-dimensional diagonal blocks.
     This is the decomposition of CPSV16, Appendix C.4, lines 2020--2029.
@@ -723,7 +723,7 @@ toBNTFusionCoisometryFamily}
 \begin{theorem}[Fusion coisometries from normalized product corners]
     \label{thm:mpdo_normalized_product_corners_to_fusion_coisometry}
     \lean{MPOTensor.RetainedProductSpectralFamily.%
-exists_bntFusionCoisometryFamily}
+        exists_bntFusionCoisometryFamily}
     \leanok
     \uses{thm:mpdo_original_corner_family_exists, thm:mpdo_original_corner_family_to_fusion_coisometry}
     Suppose that every active product corner has positive gauge--phase
@@ -770,23 +770,23 @@ exists_bntFusionCoisometryFamily}
     $\chi_{\alpha,\beta,\gamma}$ and matrices $U_{\alpha,\beta}$ such that
     every diagonal entry is positive and
     \begin{align}
-      U_{\alpha,\beta}U_{\alpha,\beta}^{\dagger}
-      &=1,
-      \notag\\
-      U_{\alpha,\beta}(M_\alpha M_\beta)^{ij}
+        U_{\alpha,\beta}U_{\alpha,\beta}^{\dagger}
+         & =1,
+        \notag               \\
+        U_{\alpha,\beta}(M_\alpha M_\beta)^{ij}
         U_{\alpha,\beta}^{\dagger}
-      &=\bigoplus_\gamma
-          \chi_{\alpha,\beta,\gamma}\otimes M_\gamma^{ij},
-      \notag
+         & =\bigoplus_\gamma
+        \chi_{\alpha,\beta,\gamma}\otimes M_\gamma^{ij},
+        \notag
     \end{align}
     while the exact reconstruction is
     \begin{align}
-      (M_\alpha M_\beta)^{ij}
-      &=U_{\alpha,\beta}^{\dagger}
-          \left(\bigoplus_\gamma
-            \chi_{\alpha,\beta,\gamma}\otimes M_\gamma^{ij}\right)
-          U_{\alpha,\beta}.
-      \notag
+        (M_\alpha M_\beta)^{ij}
+         & =U_{\alpha,\beta}^{\dagger}
+        \left(\bigoplus_\gamma
+        \chi_{\alpha,\beta,\gamma}\otimes M_\gamma^{ij}\right)
+        U_{\alpha,\beta}.
+        \notag
     \end{align}
     This is the positive fusion decomposition of CPSV16, Appendix C.4,
     lines 2020--2029.
@@ -822,7 +822,7 @@ exists_bntFusionCoisometryFamily}
 \begin{theorem}[Positive fusion from literal CPSV canonical form]
     \label{thm:mpdo_literal_cpsv_vertical_product_positive_fusion_decomposition}
     \lean{MPOTensor.%
-exists_positiveFusionDecomposition_of_unitaryBlockEquiv_of_cpsvCanonicalForm}
+        exists_positiveFusionDecomposition_of_unitaryBlockEquiv_of_cpsvCanonicalForm}
     \leanok
     \uses{def:mpdo, def:cpsv_canonical_form, thm:mpdo_transported_vertical_sector_coefficient_comparison, thm:mpdo_literal_cpsv_retained_product_spectral_family, thm:mpdo_active_product_corner_blocked_bnt_coverage, thm:mpdo_literal_cpsv_active_product_coefficient_phase_pos, thm:mpdo_literal_cpsv_active_product_gauge_unitary_normalization, thm:mpdo_original_corner_family_exists, thm:mpdo_original_corner_family_to_fusion_coisometry, thm:mpdo_normalized_product_corners_to_fusion_coisometry}
     Let $M$ generate matrix product density operators, and suppose that its
@@ -831,20 +831,20 @@ exists_positiveFusionDecomposition_of_unitaryBlockEquiv_of_cpsvCanonicalForm}
     unitary sector correspondence, there are positive diagonal matrices
     $\chi_{\alpha,\beta,\gamma}$ and matrices $U_{\alpha,\beta}$ such that
     \begin{align}
-      U_{\alpha,\beta}U_{\alpha,\beta}^{\dagger}
-      &=1,
-      \notag\\
-      U_{\alpha,\beta}(M_\alpha M_\beta)^{ij}
+        U_{\alpha,\beta}U_{\alpha,\beta}^{\dagger}
+         & =1,
+        \notag                         \\
+        U_{\alpha,\beta}(M_\alpha M_\beta)^{ij}
         U_{\alpha,\beta}^{\dagger}
-      &=\bigoplus_\gamma
+         & =\bigoplus_\gamma
         \chi_{\alpha,\beta,\gamma}\otimes M_\gamma^{ij},
-      \notag\\
-      (M_\alpha M_\beta)^{ij}
-      &=U_{\alpha,\beta}^{\dagger}
+        \notag                         \\
+        (M_\alpha M_\beta)^{ij}
+         & =U_{\alpha,\beta}^{\dagger}
         \left(\bigoplus_\gamma
-          \chi_{\alpha,\beta,\gamma}\otimes M_\gamma^{ij}\right)
+        \chi_{\alpha,\beta,\gamma}\otimes M_\gamma^{ij}\right)
         U_{\alpha,\beta}.
-      \notag
+        \notag
     \end{align}
     Every diagonal entry of $\chi_{\alpha,\beta,\gamma}$ is positive.
     This is the positive fusion decomposition in
@@ -888,10 +888,10 @@ exists_positiveFusionDecomposition_of_unitaryBlockEquiv_of_cpsvCanonicalForm}
     representations of
     Theorem~\ref{thm:mpdo_blocked_vertical_operator_representations}, then
     \begin{align}
-      m_\gamma
-      &=\sum_{\alpha,\beta}
+        m_\gamma
+         & =\sum_{\alpha,\beta}
         \tr(\chi_{\alpha,\beta,\gamma})m_\alpha m_\beta.
-      \notag
+        \notag
     \end{align}
     This is the idempotent coefficient identity in
     \cite[Appendix~C.4, lines~2030--2042]{Cirac2016MPDO_arXiv}.
@@ -903,15 +903,15 @@ exists_positiveFusionDecomposition_of_unitaryBlockEquiv_of_cpsvCanonicalForm}
     BNT operators and the two blocked representations then identify, for
     every $\gamma$, the two positive power sums
     \begin{align}
-      \tr\!\left[
-        \left(\frac{m_\gamma}{n_{\sigma(\gamma)}}
-          \nu_{\sigma(\gamma)}\right)^L\right]
-      &=
-      \sum_{\alpha,\beta}
         \tr\!\left[
-          \left(\mu_\alpha\otimes\mu_\beta\otimes
+            \left(\frac{m_\gamma}{n_{\sigma(\gamma)}}
+            \nu_{\sigma(\gamma)}\right)^L\right]
+         & =
+        \sum_{\alpha,\beta}
+        \tr\!\left[
+            \left(\mu_\alpha\otimes\mu_\beta\otimes
             \chi_{\alpha,\beta,\gamma}\right)^L\right].
-      \notag
+        \notag
     \end{align}
     The eventual power-sum comparison identifies the two multisets of positive
     entries. Summing this multiset equality and cancelling
@@ -931,20 +931,20 @@ exists_positiveFusionDecomposition_of_unitaryBlockEquiv_of_cpsvCanonicalForm}
     $U_{\alpha,\beta}$. Every diagonal entry of
     $\chi_{\alpha,\beta,\gamma}$ is positive, and
     \begin{align}
-      U_{\alpha,\beta}U_{\alpha,\beta}^{\dagger}
-      &=1,
-      \notag\\
-      U_{\alpha,\beta}(M_\alpha M_\beta)^{ij}
+        U_{\alpha,\beta}U_{\alpha,\beta}^{\dagger}
+         & =1,
+        \notag                         \\
+        U_{\alpha,\beta}(M_\alpha M_\beta)^{ij}
         U_{\alpha,\beta}^{\dagger}
-      &=\bigoplus_\gamma
-          \chi_{\alpha,\beta,\gamma}\otimes M_\gamma^{ij},
-      \notag\\
-      (M_\alpha M_\beta)^{ij}
-      &=U_{\alpha,\beta}^{\dagger}
-          \left(\bigoplus_\gamma
-            \chi_{\alpha,\beta,\gamma}\otimes M_\gamma^{ij}\right)
-          U_{\alpha,\beta}.
-      \notag
+         & =\bigoplus_\gamma
+        \chi_{\alpha,\beta,\gamma}\otimes M_\gamma^{ij},
+        \notag                         \\
+        (M_\alpha M_\beta)^{ij}
+         & =U_{\alpha,\beta}^{\dagger}
+        \left(\bigoplus_\gamma
+        \chi_{\alpha,\beta,\gamma}\otimes M_\gamma^{ij}\right)
+        U_{\alpha,\beta}.
+        \notag
     \end{align}
     Thus the renormalization fixed-point and matrix-product-density-operator
     assumptions, together with normalized BNT-refined horizontal form, imply

@@ -105,8 +105,8 @@ uniform in $h$.
     $i$ and then over $j$ gives
     \begin{align}
         \sum_{j,i}K_{j,i}XK_{j,i}^\dagger
-        &=\sum_j\ketbra{j}{j}\tr(SXS)
-          =\tr(\sigma X)\Id.
+         & =\sum_j\ketbra{j}{j}\tr(SXS)
+        =\tr(\sigma X)\Id.
         \label{eq:spectral_scalar_ce_kraus}
     \end{align}
     Here cyclicity of the trace and $S^2=\sigma$ were used. Thus
@@ -170,8 +170,8 @@ uniform in $h$.
     Direct computation gives
     \begin{align}
         \tr\!\left(\sigma\frac{\tr(\sigma X)}{\tr(\sigma)}\Id\right)
-        &=\frac{\tr(\sigma X)}{\tr(\sigma)}\tr(\sigma)
-          =\tr(\sigma X).
+         & =\frac{\tr(\sigma X)}{\tr(\sigma)}\tr(\sigma)
+        =\tr(\sigma X).
         \notag
     \end{align}
 \end{proof}
@@ -331,7 +331,7 @@ sector is positive definite.
     \begin{align}
         PA_iP
          & =A_i,
-        \notag        \\
+        \notag   \\
         \sum_i A_i^\dagger A_i
          & =P.
         \label{eq:spectral_supported_kraus_normalization}
@@ -342,19 +342,19 @@ sector is positive definite.
     \begin{align}
         V^\dagger V
          & =\Id_n,
-        \notag        \\
+        \notag              \\
         VV^\dagger
          & =P,
-        \notag        \\
+        \notag              \\
         C_i
          & =V^\dagger A_iV,
-        \notag        \\
+        \notag              \\
         \varphi(X)
          & =VXV^\dagger,
-        \notag        \\
+        \notag              \\
         \varphi(C_i)
          & =A_i,
-        \notag        \\
+        \notag              \\
         \sum_i C_i^\dagger C_i
          & =\Id_n.
         \label{eq:spectral_supported_kraus_compression}
@@ -365,10 +365,10 @@ sector is positive definite.
     \begin{align}
         \varphi(T_C^*(X))
          & =T_A^*(\varphi(X)),
-        \notag                              \\
+        \notag                    \\
         \varphi(XY)
          & =\varphi(X)\varphi(Y),
-        \notag                              \\
+        \notag                    \\
         \varphi(X^\dagger)
          & =\varphi(X)^\dagger.
         \label{eq:spectral_supported_kraus_intertwining}
@@ -383,8 +383,8 @@ sector is positive definite.
     \begin{align}
         \sum_i C_i^\dagger C_i
          & =V^\dagger\left(\sum_iA_i^\dagger A_i\right)V
-          =V^\dagger PV
-          =\Id_n.
+        =V^\dagger PV
+        =\Id_n.
         \notag
     \end{align}
     Inserting $VV^\dagger=P$ and using $PA_iP=A_i$ gives the intertwining,
@@ -531,7 +531,7 @@ mutually orthogonal invariant pieces rather than merely into a direct sum.
     therefore $A^\dagger W\subseteq W$. For $v\in W^\perp$ and $w\in W$,
     \begin{align}
         \langle w,Av\rangle
-        &=\langle A^\dagger w,v\rangle=0.
+         & =\langle A^\dagger w,v\rangle=0.
         \notag
     \end{align}
     Hence $Av\in W^\perp$.
@@ -623,7 +623,7 @@ matrices, making $\C^D$ a module over the algebra $S$.
 \begin{lemma}[Irreducible invariant subspaces are the simple submodules]%
     \label{lem:starSubalgebra_irreducible_iff_simple}
     \lean{StarSubalgebra.isInvariantSubspace_iff_exists_restrictScalars,
-      StarSubalgebra.isIrreducibleSubspace_restrictScalars_iff}
+        StarSubalgebra.isIrreducibleSubspace_restrictScalars_iff}
     \leanok
     \uses{def:starSubalgebra_irreducibleSubspace}
     Let $S$ be a $*$-subalgebra of $\MN{D}$ acting on $\C^D$. A complex
@@ -748,7 +748,7 @@ isometry.
     number $c\geq0$ such that, for all $x,y\in W$,
     \begin{align}
         \langle f(x),f(y)\rangle
-        &=c\langle x,y\rangle.
+         & =c\langle x,y\rangle.
         \label{eq:spectral_intertwiner_inner_scale}
     \end{align}
 \end{lemma}
@@ -765,7 +765,7 @@ isometry.
     $gx=\lambda x$ on $W$. Pairing with $y\in W$ and using that $P_W$ is
     invisible against $W$ gives
     $\langle f(x),f(y)\rangle
-    =\overline{\lambda}\langle x,y\rangle$.
+        =\overline{\lambda}\langle x,y\rangle$.
     Taking $x=y\neq0$ shows that
     $c=\overline{\lambda}=\lVert f(x)\rVert^2/\lVert x\rVert^2$ is
     non-negative, proving (\ref{eq:spectral_intertwiner_inner_scale}).
@@ -883,9 +883,9 @@ isometry.
     $W$. For every $A\in S$ and $w\in W'$,
     \begin{align}
         g(Aw)
-        &=f^{-1}(Aw)
-          =f^{-1}\!\left(Af(f^{-1}w)\right)
-          =A\,g(w).
+         & =f^{-1}(Aw)
+        =f^{-1}\!\left(Af(f^{-1}w)\right)
+        =A\,g(w).
         \notag
     \end{align}
     Thus $g$ is an intertwiner from $W'$ into $W$, injective on $W'$ with
@@ -910,9 +910,9 @@ isometry.
     For every $A\in S$ and $x\in W$,
     \begin{align}
         (g\circ f)(Ax)
-        &=g(f(Ax))
-          =g(Af(x))
-          =A(g\circ f)(x).
+         & =g(f(Ax))
+        =g(Af(x))
+        =A(g\circ f)(x).
         \notag
     \end{align}
     Thus $g\circ f$ is an intertwiner from $W$ into $W''$, injective on
@@ -938,8 +938,8 @@ isometry.
     Lemma~\ref{lem:starSubalgebra_orthogonal_reducibility}. Therefore
     \begin{align}
         P(Ax)
-        &=P(APx+AP^\perp x)
-          =APx.
+         & =P(APx+AP^\perp x)
+        =APx.
         \notag
     \end{align}
 \end{proof}
@@ -965,9 +965,9 @@ isometry.
     $W$. Thus $P_{W'}x=0$ for $x\in W$. For $x\in W$ and $y\in W'$,
     \begin{align}
         \langle x,y\rangle
-        &=\langle x,P_{W'}y\rangle
-          =\langle P_{W'}x,y\rangle
-          =0.
+         & =\langle x,P_{W'}y\rangle
+        =\langle P_{W'}x,y\rangle
+        =0.
         \notag
     \end{align}
 \end{proof}
@@ -987,7 +987,7 @@ family, so the components span $\C^D$.
     $\mathcal D_2$, then
     \begin{align}
         \bigvee_{W\in\mathcal D_1}W
-        &\perp
+         & \perp
         \bigvee_{W'\in\mathcal D_2}W'.
         \notag
     \end{align}

@@ -12,9 +12,9 @@ symmetry-protected topological (SPT) order.
     Set $d = 3$ (spin-1) and $D = 2$. The AKLT tensor is the family
     $\{A^0, A^1, A^2\} \subset \MN{2}$ defined via the Pauli matrices by
     \begin{align}
-        A^0 &= \frac{1}{\sqrt{3}} \sigma_z,
-        & A^1 &= \frac{\sqrt{2}}{\sqrt{3}} \ketbra{0}{1},
-        & A^2 &= -\frac{\sqrt{2}}{\sqrt{3}} \ketbra{1}{0}.
+        A^0 & = \frac{1}{\sqrt{3}} \sigma_z,
+            & A^1                            & = \frac{\sqrt{2}}{\sqrt{3}} \ketbra{0}{1},
+            & A^2                            & = -\frac{\sqrt{2}}{\sqrt{3}} \ketbra{1}{0}.
         \notag
     \end{align}
     Here $\sigma_z = \ketbra{0}{0} - \ketbra{1}{1}$, so equivalently
@@ -208,19 +208,19 @@ symmetry-protected topological (SPT) order.
     $A^{i_1}A^{i_2}$. In particular, the blocked transfer map is unital:
     \begin{align}
         \E_{A^{[2]}}(\Id)
-        &= \sum_{i_1,i_2}
-            A^{i_1}A^{i_2}(A^{i_2})^\dagger(A^{i_1})^\dagger
-         = \Id.
+         & = \sum_{i_1,i_2}
+        A^{i_1}A^{i_2}(A^{i_2})^\dagger(A^{i_1})^\dagger
+        = \Id.
         \notag
     \end{align}
     Moreover, $\Lambda = \tfrac{1}{2}\Id$ is a fixed point of the adjoint
     transfer map:
     \begin{align}
         \E_{A^{[2]}}^\dagger(\Lambda)
-        &= \sum_{i_1,i_2}
-            (A^{i_2})^\dagger(A^{i_1})^\dagger
-            \Lambda A^{i_1}A^{i_2}
-         = \Lambda.
+         & = \sum_{i_1,i_2}
+        (A^{i_2})^\dagger(A^{i_1})^\dagger
+        \Lambda A^{i_1}A^{i_2}
+        = \Lambda.
         \notag
     \end{align}
     The first identity sums the right-canonical relation
@@ -262,12 +262,12 @@ symmetry-protected topological (SPT) order.
     $\mathrm{SU}(2)$ generator:
     \begin{align}
         \diag(e^{-i\theta/2},e^{i\theta/2})
-        &\mapsto R_z(\theta), \notag\\
+         & \mapsto R_z(\theta), \notag \\
         \begin{pmatrix}
-            \cos(\beta/2) & -i\sin(\beta/2) \\
+            \cos(\beta/2)   & -i\sin(\beta/2) \\
             -i\sin(\beta/2) & \cos(\beta/2)
         \end{pmatrix}
-        &\mapsto R_x(\beta).
+         & \mapsto R_x(\beta).
         \notag
     \end{align}
 \end{proof}
@@ -312,8 +312,8 @@ correlations decay as $(\tfrac13)^n$.
     Each of the three Pauli matrices $\sigma_x$, $\sigma_y$, $\sigma_z$ is an
     eigenvector of the AKLT transfer map with eigenvalue $-\tfrac13$:
     \begin{align}
-        \E_A(\sigma_k) &= -\tfrac13\,\sigma_k,
-        & k &\in \{x,y,z\}.
+        \E_A(\sigma_k) & = -\tfrac13\,\sigma_k,
+                       & k                      & \in \{x,y,z\}.
         \notag
     \end{align}
 \end{theorem}
@@ -345,8 +345,8 @@ correlations decay as $(\tfrac13)^n$.
     $\lambda_2 = -\tfrac13$, equals
     \begin{align}
         \xi
-        &= -\frac{1}{\log|\lambda_2|}
-         = \frac{1}{\log 3}.
+         & = -\frac{1}{\log|\lambda_2|}
+        = \frac{1}{\log 3}.
         \notag
     \end{align}
     It is finite and positive.

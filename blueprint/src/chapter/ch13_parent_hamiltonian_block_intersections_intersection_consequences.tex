@@ -5,24 +5,24 @@
     Let $A^1,\ldots,A^g$ be block tensors. If
     $\psi\in(\C^d)^{\otimes(n+2)}$ satisfies
     \begin{align}
-        \psi(a,-)&\in\bigvee_jG_{n+1}(A^j),
-        \notag\\
-        \psi(-,b)&\in\bigvee_jG_{n+1}(A^j)
+        \psi(a,-) & \in\bigvee_jG_{n+1}(A^j),
+        \notag                                \\
+        \psi(-,b) & \in\bigvee_jG_{n+1}(A^j)
         \notag
     \end{align}
     for every physical index $a,b$, then there are matrices $C^j_a$ and
     $D^j_b$ such that
     \begin{align}
-        \psi&=\sum_j\alpha_j, \notag\\
+        \psi & =\sum_j\alpha_j, \notag \\
         \alpha_j(i_1,\ldots,i_{n+2})
-        &=
+             & =
         \tr\!\left(A^j_{i_{n+2}}C^j_{i_1}
-            A^j_{i_2}\cdots A^j_{i_{n+1}}\right), \notag
+        A^j_{i_2}\cdots A^j_{i_{n+1}}\right), \notag
     \end{align}
     and, for every middle word $w$ of length $n$,
     \begin{align}
         \sum_j\tr\!\left(A^j_bC^j_aA^j_w\right)
-        &=
+         & =
         \sum_j\tr\!\left(D^j_bA^j_aA^j_w\right). \notag
     \end{align}
 \end{lemma}
@@ -32,44 +32,44 @@
     Choose finite decompositions of the fixed-boundary vectors:
     \begin{align}
         \psi(a,i_2,\ldots,i_{n+2})
-        &=
+         & =
         \sum_j
-        \tr\!\left(A^j_{i_2}\cdots A^j_{i_{n+2}}C^j_a\right), \notag\\
+        \tr\!\left(A^j_{i_2}\cdots A^j_{i_{n+2}}C^j_a\right), \notag \\
         \psi(i_1,\ldots,i_{n+1},b)
-        &=
+         & =
         \sum_j
         \tr\!\left(A^j_{i_1}\cdots A^j_{i_{n+1}}D^j_b\right). \notag
     \end{align}
     For every middle word $w$,
     \begin{align}
         \psi(a,w,b)
-        &=
+         & =
         \sum_j\tr\!\left(A^j_wA^j_bC^j_a\right) =
         \sum_j\tr\!\left(A^j_bC^j_aA^j_w\right), \notag
     \end{align}
     and the second decomposition gives
     \begin{align}
         \psi(a,w,b)
-        &=
+         & =
         \sum_j\tr\!\left(A^j_aA^j_wD^j_b\right) =
         \sum_j\tr\!\left(D^j_bA^j_aA^j_w\right). \notag
     \end{align}
     Hence
     \begin{align}
         \sum_j\tr\!\left(A^j_bC^j_aA^j_w\right)
-        &=
+         & =
         \sum_j\tr\!\left(D^j_bA^j_aA^j_w\right). \notag
     \end{align}
     For an arbitrary word $(i_1,\ldots,i_{n+2})$, the first decomposition
     gives
     \begin{align}
         \psi(i_1,\ldots,i_{n+2})
-        &=
+         & =
         \sum_j
         \tr\!\left(A^j_{i_2}\cdots A^j_{i_{n+2}}C^j_{i_1}\right) =
         \sum_j
         \tr\!\left(A^j_{i_{n+2}}C^j_{i_1}
-            A^j_{i_2}\cdots A^j_{i_{n+1}}\right), \notag
+        A^j_{i_2}\cdots A^j_{i_{n+1}}\right), \notag
     \end{align}
     by cyclicity of the trace.
 \end{proof}
@@ -84,9 +84,9 @@
     $\sum_a A^j_aA^{j\,\dagger}_a=\Id$ for every block $j$. If
     $\psi\in(\C^d)^{\otimes(n+2)}$ satisfies
     \begin{align}
-        \psi(a,-)&\in\bigvee_jG_{n+1}(A^j),
-        \notag\\
-        \psi(-,b)&\in\bigvee_jG_{n+1}(A^j)
+        \psi(a,-) & \in\bigvee_jG_{n+1}(A^j),
+        \notag                                \\
+        \psi(-,b) & \in\bigvee_jG_{n+1}(A^j)
         \notag
     \end{align}
     for every physical index $a,b$, then
@@ -98,11 +98,11 @@
     Choose finite decompositions of the fixed-boundary vectors:
     \begin{align}
         \psi(a,i_2,\ldots,i_{n+2})
-        &=
+         & =
         \sum_j
-        \tr\!\left(A^j_{i_2}\cdots A^j_{i_{n+2}}C^j_a\right), \notag\\
+        \tr\!\left(A^j_{i_2}\cdots A^j_{i_{n+2}}C^j_a\right), \notag \\
         \psi(i_1,\ldots,i_{n+1},b)
-        &=
+         & =
         \sum_j
         \tr\!\left(A^j_{i_1}\cdots A^j_{i_{n+1}}D^j_b\right). \notag
     \end{align}
@@ -110,16 +110,16 @@
     $n$, gives
     \begin{align}
         \sum_j\tr\!\left(A^j_bC^j_aA^j_w\right)
-        &=
+         & =
         \sum_j\tr\!\left(D^j_bA^j_aA^j_w\right). \notag
     \end{align}
     The first decomposition also gives
     \begin{align}
-        \psi&=\sum_j\alpha_j, \notag\\
+        \psi & =\sum_j\alpha_j, \notag \\
         \alpha_j(i_1,\ldots,i_{n+2})
-        &=
+             & =
         \tr\!\left(A^j_{i_{n+2}}C^j_{i_1}
-            A^j_{i_2}\cdots A^j_{i_{n+1}}\right). \notag
+        A^j_{i_2}\cdots A^j_{i_{n+1}}\right). \notag
     \end{align}
     Lemma~\ref{lem:left_boundary_trace_decomposition_mem_block_ground_spaces}
     therefore gives $\psi\in\bigvee_jG_{n+2}(A^j)$.
@@ -135,9 +135,9 @@
     $(n+2)$-site vector satisfies
     $\psi\in\bigvee_jG_{n+2}(A^j)$ if and only if
     \begin{align}
-        \psi(a,-)&\in\bigvee_jG_{n+1}(A^j),
-        \notag\\
-        \psi(-,b)&\in\bigvee_jG_{n+1}(A^j)
+        \psi(a,-) & \in\bigvee_jG_{n+1}(A^j),
+        \notag                                \\
+        \psi(-,b) & \in\bigvee_jG_{n+1}(A^j)
         \notag
     \end{align}
     for every physical index $a,b$.
@@ -149,16 +149,16 @@
     Lemma~\ref{lem:block_restrictions_mem_block_ground_spaces}. For the
     forward implication, write
     \begin{align}
-        \psi&=\sum_j\gamma_j,
-        \notag\\
-        \gamma_j&\in G_{n+2}(A^j).
+        \psi     & =\sum_j\gamma_j,
+        \notag                       \\
+        \gamma_j & \in G_{n+2}(A^j).
         \notag
     \end{align}
     Each $\gamma_j$ has fixed-boundary restrictions in $G_{n+1}(A^j)$:
     \begin{align}
-        \gamma_j(a,-)&\in G_{n+1}(A^j),
-        \notag\\
-        \gamma_j(-,b)&\in G_{n+1}(A^j).
+        \gamma_j(a,-) & \in G_{n+1}(A^j),
+        \notag                            \\
+        \gamma_j(-,b) & \in G_{n+1}(A^j).
         \notag
     \end{align}
     Taking the finite sum over $j$ gives the two restrictions of $\psi$ in
@@ -177,7 +177,7 @@
         \left\{\psi:\forall b,\ \psi(-,b)\in S_n\right\}
         \cap
         \left\{\psi:\forall a,\ \psi(a,-)\in S_n\right\}
-        &=
+         & =
         \bigvee_jG_{n+2}(A^j). \notag
     \end{align}
 \end{lemma}
@@ -214,7 +214,7 @@ direct.
         \left\{\psi:\forall b,\ \psi(-,b)\in S_n\right\}
         \cap
         \left\{\psi:\forall a,\ \psi(a,-)\in S_n\right\}
-        &=
+         & =
         \bigvee_jG_{n+2}(A^j). \notag
     \end{align}
 \end{lemma}
@@ -238,9 +238,9 @@ direct.
     addition the normalization
     $\sum_a A^j_aA^{j\,\dagger}_a=\Id$ for every block $j$. Let
     \begin{align}
-        n&=(L_0+1)+(r-1)3(L_0+1),
-        \notag\\
-        S_n&=\bigvee_jG_{n+1}(A^j).
+        n   & =(L_0+1)+(r-1)3(L_0+1),
+        \notag                        \\
+        S_n & =\bigvee_jG_{n+1}(A^j).
         \notag
     \end{align}
     Then
@@ -248,7 +248,7 @@ direct.
         \left\{\psi:\forall b,\ \psi(-,b)\in S_n\right\}
         \cap
         \left\{\psi:\forall a,\ \psi(a,-)\in S_n\right\}
-        &=
+         & =
         \bigvee_jG_{n+2}(A^j). \notag
     \end{align}
 \end{lemma}
@@ -274,11 +274,11 @@ direct.
     for every block $j$,
     \begin{align}
         \spn\{A^j_a:a=0,\ldots,d-1\}
-        &=\MN{D_j}, \notag\\
+         & =\MN{D_j}, \notag \\
         \spn\{A^j_u:|u|=L\}
-        &=\MN{D_j}, \notag\\
+         & =\MN{D_j}, \notag \\
         \spn\{A^j_v:|v|=3L\}
-        &=\MN{D_j}. \notag
+         & =\MN{D_j}. \notag
     \end{align}
     Set $S=3L$ and $q=(r-1)S$. Suppose that $p>0$ and let $s_0$ be a
     starting length. Assume that, for every block $j$,
@@ -293,7 +293,7 @@ direct.
         \left\{\psi:\forall b,\ \psi(-,b)\in S_n\right\}
         \cap
         \left\{\psi:\forall a,\ \psi(a,-)\in S_n\right\}
-        &=
+         & =
         \bigvee_jG_{n+2}(A^j). \notag
     \end{align}
 \end{lemma}
@@ -304,18 +304,18 @@ direct.
     blocks $k\ne j$, coefficients $c^{k,j}_\omega$ of length $S$ such that
     \begin{align}
         \sum_{|\omega|=S} c^{k,j}_\omega A^k_\omega
-        &=\Id, \notag\\
+         & =\Id, \notag \\
         \sum_{|\omega|=S} c^{k,j}_\omega A^j_\omega
-        &=0. \notag
+         & =0. \notag
     \end{align}
     Multiplying these equations over the $r-1$ blocks $j\ne k$ gives
     coefficients $c^{(k)}_\omega$ of total length $q$ satisfying
     \begin{align}
         \sum_{|\omega|=q}c^{(k)}_\omega A^j_\omega
-        &=
+         & =
         \begin{cases}
-            \Id, & j=k, \\
-            0, & j\ne k.
+            \Id, & j=k,    \\
+            0,   & j\ne k.
         \end{cases} \notag
     \end{align}
     Combining this block-separating equation with block injectivity at length
@@ -379,7 +379,7 @@ direct.
         m\ge L
         \quad\Longrightarrow\quad
         \spn\{A^j_u:|u|=m\}
-        &=\MN{D_j}. \notag
+         & =\MN{D_j}. \notag
     \end{align}
     For $n\ge L+(r-1)S$, take $m=n-(r-1)S$. Combining the length-$m$ block
     span with the $r-1$ block-separating equations gives the displayed product
@@ -451,20 +451,20 @@ direct.
     that, for every $j$,
     \begin{align}
         \spn\{A^j_w:|w|=L_0\}
-        &=\MN{D_j}, \notag\\
+         & =\MN{D_j}, \notag \\
         \spn\{A^j_w:|w|=L_0+1\}
-        &=\MN{D_j}, \notag\\
+         & =\MN{D_j}, \notag \\
         \spn\{A^j_w:|w|=3(L_0+1)\}
-        &=\MN{D_j}. \notag
+         & =\MN{D_j}. \notag
     \end{align}
     For every $j$, let $\Lambda^j$ be positive definite and satisfy
     \begin{align}
-        \sum_a(A^j_a)^\dagger\Lambda^jA^j_a&=\Lambda^j. \notag
+        \sum_a(A^j_a)^\dagger\Lambda^jA^j_a & =\Lambda^j. \notag
     \end{align}
     Then
     \begin{align}
         \spn\{(A^1_w,\ldots,A^r_w):|w|=3(r-1)(L_0+1)\}
-        &=\prod_j\MN{D_j}. \notag
+         & =\prod_j\MN{D_j}. \notag
     \end{align}
     Diagonality of $\Lambda^j$ is not needed.
 \end{theorem}
@@ -474,23 +474,23 @@ direct.
     \uses{lem:tp_gauge_equiv, thm:tp_gauge_from_adjoint_fixed, thm:irreducible_tensor_to_transfer_map, lem:tp_gauge_preserves_irreducibility, lem:gauge_phase_equiv_transport_left_right, lem:gauge_invariance_block_injective, thm:is_normal_tensor_of_is_normal_left_canonical, thm:cpsv_normal_mpv_phase_gauge, lem:bnt_direct_sum_block_separation_word_span, thm:word_tuple_span_gauge_invariance}
     Define the prepared blocks by
     \begin{align}
-        B^j_a&=(\Lambda^j)^{1/2}A^j_a(\Lambda^j)^{-1/2}. \notag
+        B^j_a & =(\Lambda^j)^{1/2}A^j_a(\Lambda^j)^{-1/2}. \notag
     \end{align}
     Positive definiteness makes this an invertible gauge, while the dual
     fixed-point equation gives
     \begin{align}
-        \sum_a(B^j_a)^\dagger B^j_a&=\Id. \notag
+        \sum_a(B^j_a)^\dagger B^j_a & =\Id. \notag
     \end{align}
     Gauge transport preserves irreducibility, the three fixed-length
     injectivity statements, and pairwise inequivalence up to gauge and phase.
     Thus every $B^j$ is algebraically normal and left-canonical, so
     \begin{align}
-        O_{B^jB^j}(N)&\longrightarrow1. \notag
+        O_{B^jB^j}(N) & \longrightarrow1. \notag
     \end{align}
     The sharp separation theorem now gives
     \begin{align}
         \spn\{(B^1_w,\ldots,B^r_w):|w|=3(r-1)(L_0+1)\}
-        &=\prod_j\MN{D_j}. \notag
+         & =\prod_j\MN{D_j}. \notag
     \end{align}
     Theorem~\ref{thm:word_tuple_span_gauge_invariance} transports this equality
     back to the source representatives.
@@ -506,17 +506,17 @@ direct.
     blocks of the same bond dimension are gauge-phase equivalent. Let $L_0>0$,
     and suppose every block is injective at length $L_0$:
     \begin{align}
-        \spn\{A^j_w:|w|=L_0\}&=\MN{D_j}. \notag
+        \spn\{A^j_w:|w|=L_0\} & =\MN{D_j}. \notag
     \end{align}
     For every $j$, let $\Lambda^j$ be positive definite and assume the canonical
     identities from \cite{PerezGarcia2007Matrix}:
     \begin{align}
-        \sum_aA^j_aA^{j\,\dagger}_a&=\Id,
-        &\sum_a(A^j_a)^\dagger\Lambda^jA^j_a&=\Lambda^j. \notag
+        \sum_aA^j_aA^{j\,\dagger}_a & =\Id,
+                                    & \sum_a(A^j_a)^\dagger\Lambda^jA^j_a & =\Lambda^j. \notag
     \end{align}
     For every $n\ge 3(r-1)(L_0+1)$,
     \begin{align}
-        \spn\{(A^1_w,\ldots,A^r_w):|w|=n\}&=\prod_j\MN{D_j}. \notag
+        \spn\{(A^1_w,\ldots,A^r_w):|w|=n\} & =\prod_j\MN{D_j}. \notag
     \end{align}
     No identity $\sum_a(A^j_a)^\dagger A^j_a=\Id$ is assumed for the source
     blocks. This is the simultaneous spanning estimate used in
@@ -529,10 +529,10 @@ direct.
     Theorem~\ref{thm:wordspan_propagation_unital} first gives
     \begin{align}
         \spn\{A^j_w:|w|=L_0\}=\MN{D_j}
-        &\Longrightarrow
+         & \Longrightarrow
         \spn\{A^j_w:|w|=L_0+1\}=\MN{D_j}
-        \notag\\
-        &\Longrightarrow
+        \notag             \\
+         & \Longrightarrow
         \spn\{A^j_w:|w|=3(L_0+1)\}=\MN{D_j}. \notag
     \end{align}
     Theorem~\ref{thm:pgvwc_prepared_gauge_product_span} gives the full
@@ -559,7 +559,7 @@ direct.
     $\sum_j\phi_j=0$. The simultaneous spanning equality gives
     \begin{align}
         \sum_j \Gamma_n^{A^j}(X_j)=0
-        &\Longrightarrow
+         & \Longrightarrow
         \left(\forall (M_j)_j,\ \sum_j\tr(X_jM_j)=0\right)
         \Longrightarrow
         \forall j,\ X_j=0. \notag
@@ -579,7 +579,7 @@ direct.
         \C^d\otimes\left(\sum_jG_m(A^j)\right)
         \cap
         \left(\sum_jG_m(A^j)\right)\otimes\C^d
-        &=
+         & =
         \sum_jG_{m+1}(A^j). \notag
     \end{align}
     Theorem~\ref{thm:pgvwc_block_space_independence_source_length} also shows
@@ -598,7 +598,7 @@ direct.
     coefficients obey
     \begin{align}
         \sum_j\tr\!\left((A_b^jC_a^j)A_w^j\right)
-        &=
+         & =
         \sum_j\tr\!\left((D_b^jA_a^j)A_w^j\right). \notag
     \end{align}
     The simultaneous product span at length $m-1$ and nondegeneracy of the
@@ -621,12 +621,12 @@ direct.
     inequivalent up to gauge and phase, and are injective at a common length
     $L_0>0$. Assume both normalization identities
     \begin{align}
-        \sum_aA^j_aA^{j\,\dagger}_a&=\Id,
-        &\sum_a(A^j_a)^\dagger A^j_a&=\Id. \notag
+        \sum_aA^j_aA^{j\,\dagger}_a & =\Id,
+                                    & \sum_a(A^j_a)^\dagger A^j_a & =\Id. \notag
     \end{align}
     Then for every $n\ge3(r-1)(L_0+1)$,
     \begin{align}
-        \spn\{(A^1_w,\ldots,A^r_w):|w|=n\}&=\prod_j\MN{D_j}. \notag
+        \spn\{(A^1_w,\ldots,A^r_w):|w|=n\} & =\prod_j\MN{D_j}. \notag
     \end{align}
 \end{theorem}
 
@@ -664,7 +664,7 @@ direct.
     \begin{align}
         \C^d\otimes\left(\sum_jG_m(A^j)\right)
         \cap\left(\sum_jG_m(A^j)\right)\otimes\C^d
-        &=\sum_jG_{m+1}(A^j). \notag
+         & =\sum_jG_{m+1}(A^j). \notag
     \end{align}
 \end{theorem}
 
@@ -685,9 +685,9 @@ direct.
     $\spn\{(A^1_w,\ldots,A^r_w):|w|=n\} = \prod_j\MN{D_j}$.
     Then the sum of the local spaces $G_n(A^j)$ is direct: if
     \begin{align}
-        \phi_j&\in G_n(A^j),
-        \notag\\
-        \sum_j\phi_j&=0,
+        \phi_j       & \in G_n(A^j),
+        \notag                       \\
+        \sum_j\phi_j & =0,
         \notag
     \end{align}
     then $\phi_j=0$ for every $j$. In particular, for the normalized BNT

@@ -1,8 +1,8 @@
 \begin{definition}[Parent commuting Hamiltonian on the tripartite space]
     \label{def:tripartite_parent_commuting_hamiltonian}
     \lean{TripartiteDecorrelation.HasGroundSpaceIntersection,
-      TripartiteDecorrelation.CommutingParentHamiltonian,
-      TripartiteDecorrelation.HasCommutingParentHamiltonian}
+        TripartiteDecorrelation.CommutingParentHamiltonian,
+        TripartiteDecorrelation.HasCommutingParentHamiltonian}
     \leanok
     \uses{def:tripartite_local_lifts}
     There are orthogonal projectors $P_{AX}$ and $P_{XB}$ on the two local
@@ -17,9 +17,9 @@
 \begin{theorem}[Ground-space intersection and projector product]
     \label{thm:tripartite_ground_space_intersection_iff_product}
     \lean{TripartiteDecorrelation.range_mul_eq_inter,
-      TripartiteDecorrelation.hermitian_idempotent_eq_of_range_eq,
-      TripartiteDecorrelation.hasGroundSpaceIntersection_iff_product_eq,
-      TripartiteDecorrelation.CommutingParentHamiltonian.hproduct}
+        TripartiteDecorrelation.hermitian_idempotent_eq_of_range_eq,
+        TripartiteDecorrelation.hasGroundSpaceIntersection_iff_product_eq,
+        TripartiteDecorrelation.CommutingParentHamiltonian.hproduct}
     \leanok
     \uses{def:tripartite_parent_commuting_hamiltonian}
     Let $P$, $P_{AX}$, and $P_{XB}$ be orthogonal projectors, and write their
@@ -28,7 +28,7 @@
     $\widehat P_{XB}=\Id_A\otimes P_{XB}$.
     Suppose that the lifted projectors commute,
     $\widehat P_{AX}\widehat P_{XB}
-    =\widehat P_{XB}\widehat P_{AX}$.
+        =\widehat P_{XB}\widehat P_{AX}$.
     Then
     \begin{align}
         \ran P
@@ -48,7 +48,7 @@
     $\widehat P_{AX}\widehat P_{XB}$ precisely when it is fixed by both
     commuting idempotents. Hence
     $\ran(\widehat P_{AX}\widehat P_{XB})
-    =\ran\widehat P_{AX}\cap\ran\widehat P_{XB}$.
+        =\ran\widehat P_{AX}\cap\ran\widehat P_{XB}$.
     The product is again an orthogonal projector. Orthogonal projectors with
     equal ranges are equal, giving the forward implication in
     (\ref{eq:parent_tripartite_projector_product}); the reverse implication
@@ -58,8 +58,8 @@
 \begin{theorem}[Parent commuting Hamiltonian--complex-linear decorrelation equivalence]
     \label{thm:tripartite_parent_iff_complex_linear_decorrelated}
     \lean{TripartiteDecorrelation.CommutingParentHamiltonian.isDecorrelated,
-      TripartiteDecorrelation.IsDecorrelated.hasCommutingParentHamiltonian,
-      TripartiteDecorrelation.parentHamiltonian_iff_decorrelated}
+        TripartiteDecorrelation.IsDecorrelated.hasCommutingParentHamiltonian,
+        TripartiteDecorrelation.parentHamiltonian_iff_decorrelated}
     \leanok
     \uses{def:tripartite_decorrelation, def:tripartite_parent_commuting_hamiltonian, thm:tripartite_support_products, thm:tripartite_ground_space_intersection_iff_product}
     Let $P=P^\dagger=P^2$. Then $P$ is the ground-space projector of a
@@ -76,15 +76,15 @@
     Starting from commuting parent projectors, first use the ground-space
     intersection theorem to write
     $P=\widehat P_{AX}\widehat P_{XB}
-    =\widehat P_{XB}\widehat P_{AX}$. Locality gives
+        =\widehat P_{XB}\widehat P_{AX}$. Locality gives
     $[O_A,\widehat P_{XB}]=[O_B,\widehat P_{AX}]=0$, while
     $\widehat P_{XB}(\Id-P)\widehat P_{AX}=0$.
     Therefore, using the two locality commutators,
     \begin{align}
         P O_A(\Id-P)O_B P
-        &=\widehat P_{AX}O_A
-          [\widehat P_{XB}(\Id-P)\widehat P_{AX}]
-          O_B\widehat P_{XB}=0.
+         & =\widehat P_{AX}O_A
+        [\widehat P_{XB}(\Id-P)\widehat P_{AX}]
+        O_B\widehat P_{XB}=0.
         \notag
     \end{align}
 \end{proof}
@@ -162,7 +162,7 @@
     The cancellation is the computation
     \begin{align}
         Q(\Id-PQ)P
-        &=QP-QPQP =QP-QPPQ =QP-QP =0,
+         & =QP-QPQP =QP-QPPQ =QP-QP =0,
         \notag
     \end{align}
     using commutativity and idempotence.
@@ -200,7 +200,7 @@
     Using $P_K=P_{AX}\circ P_{XB}$ and the idempotence of $P_{AX}$,
     \begin{align}
         P_{AX}\circ P_K
-        &=P_{AX}\circ P_{AX}\circ P_{XB} =P_{AX}\circ P_{XB} =P_K.
+         & =P_{AX}\circ P_{AX}\circ P_{XB} =P_{AX}\circ P_{XB} =P_K.
         \notag
     \end{align}
 \end{proof}
@@ -220,7 +220,7 @@
     Using $P_K=P_{AX}\circ P_{XB}$ and the idempotence of $P_{XB}$,
     \begin{align}
         P_K\circ P_{XB}
-        &=P_{AX}\circ P_{XB}\circ P_{XB} =P_{AX}\circ P_{XB} =P_K.
+         & =P_{AX}\circ P_{XB}\circ P_{XB} =P_{AX}\circ P_{XB} =P_K.
         \notag
     \end{align}
 \end{proof}
@@ -240,7 +240,7 @@
     By commutativity and the idempotence of $P_{XB}$,
     \begin{align}
         P_{XB}\circ P_K
-        &=P_{XB}\circ P_{AX}\circ P_{XB} =P_{AX}\circ P_{XB}\circ P_{XB} =P_{AX}\circ P_{XB} =P_K.
+         & =P_{XB}\circ P_{AX}\circ P_{XB} =P_{AX}\circ P_{XB}\circ P_{XB} =P_{AX}\circ P_{XB} =P_K.
         \notag
     \end{align}
 \end{proof}
@@ -260,7 +260,7 @@
     By commutativity and the idempotence of $P_{AX}$,
     \begin{align}
         P_K\circ P_{AX}
-        &=P_{AX}\circ P_{XB}\circ P_{AX} =P_{AX}\circ P_{AX}\circ P_{XB} =P_{AX}\circ P_{XB} =P_K.
+         & =P_{AX}\circ P_{XB}\circ P_{AX} =P_{AX}\circ P_{AX}\circ P_{XB} =P_{AX}\circ P_{XB} =P_K.
         \notag
     \end{align}
 \end{proof}
@@ -323,11 +323,11 @@
     $O_B\circ P_{AX}=P_{AX}\circ O_B$ gives
     \begin{align}
         P_K\circ O_A\circ(\Id-P_K)\circ O_B\circ P_K
-        &=
+         & =
         P_{AX}\circ O_A\circ
         \bigl[
-          P_{XB}\circ(\Id-P_{AX}\circ P_{XB})\circ P_{AX}
-        \bigr]
+            P_{XB}\circ(\Id-P_{AX}\circ P_{XB})\circ P_{AX}
+            \bigr]
         \circ O_B\circ P_{XB} =0.
         \notag
     \end{align}
@@ -422,7 +422,7 @@
     ($\Rightarrow$) If $P_Kv=v$, then
     \begin{align}
         P_{AX}(P_Kv)
-        &=(P_{AX}\circ P_K)v =P_Kv =v
+         & =(P_{AX}\circ P_K)v =P_Kv =v
         \notag
     \end{align}
     by left absorption, and similarly for $P_{XB}$.
@@ -430,7 +430,7 @@
     ($\Leftarrow$) If $P_{AX}v=v$ and $P_{XB}v=v$, then
     \begin{align}
         P_Kv
-        &=(P_{AX}\circ P_{XB})v =P_{AX}(P_{XB}v) =P_{AX}v =v.
+         & =(P_{AX}\circ P_{XB})v =P_{AX}(P_{XB}v) =P_{AX}v =v.
         \notag
     \end{align}
     This proves (\ref{eq:parent_ground_space_membership}).

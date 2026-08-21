@@ -21,7 +21,7 @@ $\prod_{e\ni v}c_{v,e}=1$.
     \begin{tenkz}[rows={wire}, cols=1, bonds=none]
         \tn[name=balanceVertex, label pos=w,
             ports={225:virtual, 270:virtual, 315:virtual,
-                   90:physical}]{v}
+                    90:physical}]{v}
         \tn[at=1 sw of balanceVertex, name=balanceFirst, skin=ring,
             species=operator, label pos=w,
             ports={45:virtual, 225:virtual}]{c_{v,e_1}}
@@ -29,8 +29,8 @@ $\prod_{e\ni v}c_{v,e}=1$.
             species=operator, label pos=e,
             ports={90:virtual, 270:virtual}]{c_{v,e_k}}
         \tn[at=1 se of balanceVertex, name=balanceLast, skin=ring,
-            species=operator, label pos=e,
-            ports={135:virtual, 315:virtual}]{c_{v,e_{\deg(v)}}}
+        species=operator, label pos=e,
+        ports={135:virtual, 315:virtual}]{c_{v,e_{\deg(v)}}}
         \tnwire{balanceVertex.225}{balanceFirst.45}
         \tnwire{balanceVertex.270}{balanceTypical.90}
         \tnwire{balanceVertex.315}{balanceLast.135}
@@ -110,8 +110,8 @@ constant.
 \begin{proof}\leanok
     For every vertex $v$,
     $\prod_{e\ni v}(cd)_{v,e}
-    =(\prod_{e\ni v}c_{v,e})(\prod_{e\ni v}d_{v,e})
-    =1\cdot 1=1$.
+        =(\prod_{e\ni v}c_{v,e})(\prod_{e\ni v}d_{v,e})
+        =1\cdot 1=1$.
 \end{proof}
 
 \begin{theorem}[Inverse of balanced edge scalars]%
@@ -126,7 +126,7 @@ constant.
 \begin{proof}\leanok
     For every vertex $v$,
     $\prod_{e\ni v}(c^{-1})_{v,e}
-    =(\prod_{e\ni v}c_{v,e})^{-1}=1^{-1}=1$.
+        =(\prod_{e\ni v}c_{v,e})^{-1}=1^{-1}=1$.
 \end{proof}
 
 \begin{theorem}[Reflexivity of balanced edge-scalar equivalence]%
@@ -335,7 +335,7 @@ remaining $v$-incident edges determine $\eta$ completely.
     index $\sigma$:
     \begin{align}
         A_v(\eta,\sigma)
-        &=\frac{c_S}{c_R}\,C_v(\eta,\sigma).
+         & =\frac{c_S}{c_R}\,C_v(\eta,\sigma).
         \label{eq:peps_inserted_ratio}
     \end{align}
 \end{theorem}
@@ -348,7 +348,7 @@ remaining $v$-incident edges determine $\eta$ completely.
     $R$ over the local configurations consistent with $\mu$:
     \begin{align}
         m\,A_S(\mu,\sigma)
-        &=
+         & =
         \sum_{\eta\ \text{consistent with}\ \mu}
         A_v(\eta,\sigma(v))
         A_R(b(\mu,\eta),\sigma|_R),
@@ -381,7 +381,7 @@ remaining $v$-incident edges determine $\eta$ completely.
     per-vertex gauge relation
     \begin{align}
         A_v(\eta,\sigma)
-        &=\frac{c_S}{c_R}\,C_v(\eta,\sigma)
+         & =\frac{c_S}{c_R}\,C_v(\eta,\sigma)
         \label{eq:peps_vertex_gauge_ratio}
     \end{align}
     holds at every local configuration $\eta$ at $v$ and every physical index

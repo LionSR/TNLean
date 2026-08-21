@@ -7,7 +7,7 @@
     and fix a chain length $N$. Write
     \begin{align}
         \widehat\rho^{(N)}(M)
-        &=
+         & =
         \tr\!\left[\rho^{(N)}(M)\right]^{-1}\rho^{(N)}(M),
         \notag
     \end{align}
@@ -16,7 +16,7 @@
     $\ket{V^{(N)}(M)}=c\ket{V^{(N)}(C)}$. Then
     \begin{align}
         \widehat\rho^{(N)}(M)
-        &=
+         & =
         \widehat\rho^{(N)}(C).
         \notag
     \end{align}
@@ -34,7 +34,7 @@
     \begin{align}
         \bigl(c\tr[\rho^{(N)}(C)]\bigr)^{-1}
         c\rho^{(N)}(C)
-        &=
+         & =
         \tr[\rho^{(N)}(C)]^{-1}\rho^{(N)}(C).
         \notag
     \end{align}
@@ -51,7 +51,7 @@
     $L\leq N$ the reduced operators on the first $L$ sites agree:
     \begin{align}
         \tr_{N-L}\!\left[\widehat\rho^{(N)}(M)\right]
-        &=
+         & =
         \tr_{N-L}\!\left[\widehat\rho^{(N)}(C)\right].
         \notag
     \end{align}
@@ -67,14 +67,14 @@
 \begin{theorem}[Eventual equality of normalized finite-chain operators]
     \label{thm:mpdo_eventual_normalized_proportionality}
     \lean{MPSTensor.EventuallyNonzeroProportionalMPV₂.%
-      eventually_normalizedMPO_eq}
+        eventually_normalizedMPO_eq}
     \leanok
     \uses{def:eventually_nonzero_proportional_mpv, def:mpo_tensor, def:mpo_to_mps}
     If the doubled-index tensors of $M$ and $C$ are eventually nonzero
     proportional, then, for every sufficiently large $N$,
     \begin{align}
         \widehat\rho^{(N)}(M)
-        &=
+         & =
         \widehat\rho^{(N)}(C).
         \notag
     \end{align}
@@ -90,7 +90,7 @@
 \begin{theorem}[Eventual equality of fixed-size reduced marginals]
     \label{thm:mpdo_eventual_reduced_proportionality}
     \lean{MPSTensor.EventuallyNonzeroProportionalMPV₂.%
-      eventually_reducedBlockState_eq}
+        eventually_reducedBlockState_eq}
     \leanok
     \uses{def:eventually_nonzero_proportional_mpv, def:mpo_to_mps}
     If the doubled-index tensors of $M$ and $C$ are eventually nonzero
@@ -98,7 +98,7 @@
     $N\geq L$,
     \begin{align}
         \tr_{N-L}\!\left[\widehat\rho^{(N)}(M)\right]
-        &=
+         & =
         \tr_{N-L}\!\left[\widehat\rho^{(N)}(C)\right].
         \notag
     \end{align}
@@ -117,9 +117,9 @@
 \begin{lemma}[Marginal stability under source zero correlation length]
     \label{lem:mpdo_source_zcl_marginal_stability}
     \lean{MPOTensor.%
-      reducedBlockState_apply_eq_trace_evalWord_mul_verticalLoop_pow}
+        reducedBlockState_apply_eq_trace_evalWord_mul_verticalLoop_pow}
     \lean{MPOTensor.%
-      reducedBlockState_succ_succ_eq_succ_of_isSourceZCL}
+        reducedBlockState_succ_succ_eq_succ_of_isSourceZCL}
     \leanok
     \uses{def:mpo_source_zcl, lem:mpdo_trace_loop_chain}
     Let $M$ have source zero correlation length. For every $N\geq0$, the
@@ -173,11 +173,11 @@
     \label{def:mpdo_suffix_sector_contraction}
     \lean{MPOTensor.PhysicalSectorFactorization.suffixSectorContraction}
     \lean{MPOTensor.PhysicalSectorFactorization.%
-      oneSuffixSectorContraction}
+        oneSuffixSectorContraction}
     \lean{MPOTensor.PhysicalSectorFactorization.%
-      twoSuffixSectorContraction}
+        twoSuffixSectorContraction}
     \lean{MPOTensor.PhysicalSectorFactorization.%
-      threeSuffixSectorContraction}
+        threeSuffixSectorContraction}
     \leanok
     \uses{def:mpdo_physical_sector_chain_coordinates}
     Let $S$ be the finite set of physical sectors and let
@@ -185,7 +185,7 @@
     $R\geq1$ and $x,y\in I_k$, define
     \begin{align}
         \Gamma_k^{(R)}(x,y)
-        &=
+         & =
         \sum_{t\in S^R}\ \sum_{z\in I_t}
         \Omega_{kt}(xz,yz),
         \notag
@@ -198,22 +198,22 @@
 \begin{theorem}[Contraction of a sector-chain fiber]
     \label{thm:mpdo_sector_chain_fiber_contraction}
     \lean{MPOTensor.PhysicalSectorFactorization.%
-      sum_sectorChainFiber_neighboringOperator_diag}
+        sum_sectorChainFiber_neighboringOperator_diag}
     \leanok
     \uses{def:mpdo_physical_sector_chain_coordinates}
     Let $t=(t_0,\ldots,t_m)$ be a nonempty sector word. For functions
     $a$ on the left coordinate of $t_0$ and $b$ on the right coordinate of
     $t_m$,
     \begin{align}
-      &\sum_{z\in I_t}
+         & \sum_{z\in I_t}
         a(z_0^{\mathrm L})
         \prod_{i=0}^{m-1}
-          \eta_{t_i,t_{i+1}}
-          \bigl((z_i^{\mathrm R},z_{i+1}^{\mathrm L}),
-                (z_i^{\mathrm R},z_{i+1}^{\mathrm L})\bigr)
+        \eta_{t_i,t_{i+1}}
+        \bigl((z_i^{\mathrm R},z_{i+1}^{\mathrm L}),
+        (z_i^{\mathrm R},z_{i+1}^{\mathrm L})\bigr)
         b(z_m^{\mathrm R})
-        \notag\\
-      &\qquad=
+        \notag             \\
+         & \qquad=
         \left(\sum_u a(u)\right)
         \left(\prod_{i=0}^{m-1}\tr(\eta_{t_i,t_{i+1}})\right)
         \left(\sum_v b(v)\right).
@@ -224,19 +224,19 @@
     Write $z_i=(\ell_i,r_i)$. Finite distributivity separates the left and
     right coordinates:
     \begin{align}
-      &\sum_{\ell,r}
+         & \sum_{\ell,r}
         a(\ell_0)
         \prod_{i=0}^{m-1}
-          \eta_{t_i,t_{i+1}}
-          \bigl((r_i,\ell_{i+1}),(r_i,\ell_{i+1})\bigr)
+        \eta_{t_i,t_{i+1}}
+        \bigl((r_i,\ell_{i+1}),(r_i,\ell_{i+1})\bigr)
         b(r_m)
-        \notag\\
-      &\qquad=
+        \notag           \\
+         & \qquad=
         \left(\sum_{\ell_0}a(\ell_0)\right)
         \prod_{i=0}^{m-1}
-          \left(\sum_{r_i,\ell_{i+1}}
-            \eta_{t_i,t_{i+1}}
-            \bigl((r_i,\ell_{i+1}),(r_i,\ell_{i+1})\bigr)\right)
+        \left(\sum_{r_i,\ell_{i+1}}
+        \eta_{t_i,t_{i+1}}
+        \bigl((r_i,\ell_{i+1}),(r_i,\ell_{i+1})\bigr)\right)
         \left(\sum_{r_m}b(r_m)\right).
     \end{align}
     The internal double sum is
@@ -247,7 +247,7 @@
 \begin{theorem}[Contraction of a nonempty suffix fiber]
     \label{thm:mpdo_nonempty_suffix_fiber_contraction}
     \lean{MPOTensor.PhysicalSectorFactorization.%
-      sum_suffixFiber_cyclicNeighboringProduct}
+        sum_suffixFiber_cyclicNeighboringProduct}
     \leanok
     \uses{thm:mpdo_sector_chain_fiber_contraction}
     Let $k=(k_0,\ldots,k_n)$ be a nonempty retained sector word and
@@ -255,17 +255,17 @@
     coordinates $x=(x_{\mathrm{int}},x_{\partial})$ and
     $y=(y_{\mathrm{int}},y_{\partial})$,
     \begin{align}
-      \sum_{z\in I_t}\Omega_{kt}(xz,yz)
-      &=
-      \left(
+        \sum_{z\in I_t}\Omega_{kt}(xz,yz)
+         & =
+        \left(
         \prod_{j=0}^{n-1}\eta_{k_j,k_{j+1}}
-      \right)(x_{\mathrm{int}},y_{\mathrm{int}})
-      \left(
+        \right)(x_{\mathrm{int}},y_{\mathrm{int}})
+        \left(
         \tr_{\mathrm R}(\eta_{k_n,t_0})
         \otimes
         \tr_{\mathrm L}(\eta_{t_m,k_0})
-      \right)(x_{\partial},y_{\partial})
-      \prod_{i=0}^{m-1}\tr(\eta_{t_i,t_{i+1}}).
+        \right)(x_{\partial},y_{\partial})
+        \prod_{i=0}^{m-1}\tr(\eta_{t_i,t_{i+1}}).
     \end{align}
 \end{theorem}
 
@@ -284,13 +284,13 @@
 \begin{theorem}[Sector decomposition of a suffix marginal]
     \label{thm:mpdo_suffix_marginal_block_expansion}
     \lean{MPOTensor.PhysicalSectorFactorization.%
-      reindex_reducedBlockState_add_eq_suffixSectorContraction}
+        reindex_reducedBlockState_add_eq_suffixSectorContraction}
     \lean{MPOTensor.PhysicalSectorFactorization.%
-      reindex_reducedBlockState_add_one_eq_oneSuffixSectorContraction}
+        reindex_reducedBlockState_add_one_eq_oneSuffixSectorContraction}
     \lean{MPOTensor.PhysicalSectorFactorization.%
-      reindex_reducedBlockState_add_two_eq_twoSuffixSectorContraction}
+        reindex_reducedBlockState_add_two_eq_twoSuffixSectorContraction}
     \lean{MPOTensor.PhysicalSectorFactorization.%
-      reindex_reducedBlockState_add_three_eq_threeSuffixSectorContraction}
+        reindex_reducedBlockState_add_three_eq_threeSuffixSectorContraction}
     \leanok
     \uses{def:mpdo_suffix_sector_contraction, def:mpdo_physical_sector_chain_coordinates}
     Let $\widetilde{\mathcal K}$ be the tensor in physical-sector
@@ -299,12 +299,12 @@
     \begin{align}
         \reindex_{\Phi_L}\!
         \left(
-          \tr_R\!\left[\widehat\rho^{(L+R)}
-          (\widetilde{\mathcal K})\right]
+        \tr_R\!\left[\widehat\rho^{(L+R)}
+            (\widetilde{\mathcal K})\right]
         \right)
-        &=
+         & =
         \tr\!\left[\rho^{(L+R)}
-          (\widetilde{\mathcal K})\right]^{-1}
+            (\widetilde{\mathcal K})\right]^{-1}
         \bigoplus_{k\in S^L}\Gamma_k^{(R)}.
         \notag
     \end{align}
@@ -322,7 +322,7 @@
     \begin{align}
         \sum_{t\in S^R}\ \sum_{z\in I_t}
         \Omega_{kt}(xz,yz)
-        &=\Gamma_k^{(R)}(x,y).
+         & =\Gamma_k^{(R)}(x,y).
         \notag
     \end{align}
     Multiplication by the inverse trace of the length-$L+R$ operator gives
@@ -336,9 +336,9 @@
     A rank-one trace factorization of neighboring matrices $\eta_{q,h}$
     consists of real numbers $a_q,b_h$ such that
     \begin{align}
-        \tr(\eta_{q,h})&=a_qb_h,
-        \notag\\
-        \sum_q a_qb_q&=1.
+        \tr(\eta_{q,h}) & =a_qb_h,
+        \notag                     \\
+        \sum_q a_qb_q   & =1.
         \notag
     \end{align}
     The factorization is an explicit assumption; it is not deduced from zero
@@ -356,15 +356,15 @@
     Suppose $\eta_{q,h}$ has a rank-one trace factorization. For fixed
     boundary sectors $u,v$, set
     \begin{align}
-        R_{u,q}&=\tr_{H_{q,l}}(\eta_{u,q}),
-        \notag\\
-        L_{h,v}&=\tr_{H_{h,r}}(\eta_{h,v}).
+        R_{u,q} & =\tr_{H_{q,l}}(\eta_{u,q}),
+        \notag                                \\
+        L_{h,v} & =\tr_{H_{h,r}}(\eta_{h,v}).
         \notag
     \end{align}
     Then
     \begin{align}
         \sum_{q,h}\tr(\eta_{q,h})(R_{u,q}\otimes L_{h,v})
-        &=
+         & =
         \left(\sum_q a_qR_{u,q}\right)\otimes
         \left(\sum_h b_hL_{h,v}\right).
         \notag
@@ -393,24 +393,24 @@
     $H_{q,r}\otimes H_{h,l}$ with a rank-one trace factorization. For a
     nonempty retained sector word $k=(k_0,\ldots,k_{L-1})$, write
     \begin{align}
-        P_k&=\bigotimes_{n=0}^{L-2}\eta_{k_n,k_{n+1}},
-        \notag\\
-        R_{u,q}&=\tr_{H_{q,l}}(\eta_{u,q}),
-        \notag\\
-        L_{h,v}&=\tr_{H_{h,r}}(\eta_{h,v}).
+        P_k     & =\bigotimes_{n=0}^{L-2}\eta_{k_n,k_{n+1}},
+        \notag                                               \\
+        R_{u,q} & =\tr_{H_{q,l}}(\eta_{u,q}),
+        \notag                                               \\
+        L_{h,v} & =\tr_{H_{h,r}}(\eta_{h,v}).
         \notag
     \end{align}
     The edge contraction corresponding to tracing the two boundary sites of
     the longer cyclic chain is
     \begin{align}
-        &\bigoplus_k P_k\otimes
-          \sum_{q,h}\tr(\eta_{q,h})
-            (R_{k_{L-1},q}\otimes L_{h,k_0})
-        \notag\\
-        &\quad=
-          \bigoplus_k P_k\otimes
-          \left(\sum_q a_qR_{k_{L-1},q}\right)\otimes
-          \left(\sum_h b_hL_{h,k_0}\right).
+         & \bigoplus_k P_k\otimes
+        \sum_{q,h}\tr(\eta_{q,h})
+        (R_{k_{L-1},q}\otimes L_{h,k_0})
+        \notag                    \\
+         & \quad=
+        \bigoplus_k P_k\otimes
+        \left(\sum_q a_qR_{k_{L-1},q}\right)\otimes
+        \left(\sum_h b_hL_{h,k_0}\right).
         \notag
     \end{align}
     This is the edge-coordinate interpretation of the displayed
@@ -437,7 +437,7 @@
 \begin{theorem}[A nonminimal sector factorization need not be primitive]
     \label{thm:mpdo_commuting_bond_trace_matrix_primitivity_obstruction}
     \lean{MPOTensor.CommutingBondTraceMatrixObstruction.%
-      normal_sourceZCL_fixed_commutingBond_does_not_force_traceMatrix_primitive}
+        normal_sourceZCL_fixed_commutingBond_does_not_force_traceMatrix_primitive}
     \leanok
     \uses{def:mpdo_eta_local_structure_data, def:mpo_source_zcl, def:mpdo, def:injective, def:normal}
     There is an injective normal tensor $\mathcal K$, of physical dimension two
@@ -446,12 +446,12 @@
     translates commute. For every $N\geq2$,
     \begin{align}
         \sigma^{(N)}(\mathcal K)
-        &=\prod_{i=0}^{N-1}B_{i,i+1},
+         & =\prod_{i=0}^{N-1}B_{i,i+1},
         \notag
     \end{align}
     while the trace matrix of a chosen two-sector Beigi factorization is
     \begin{align}
-        T&=\begin{pmatrix}1&0\\0&0\end{pmatrix}.
+        T & =\begin{pmatrix}1&0\\0&0\end{pmatrix}.
         \notag
     \end{align}
     In particular, $T$ is not primitive.
@@ -471,11 +471,11 @@
     $X\in M_1(\mathbb C)$, the doubled-index transfer $\mathcal E_{\mathcal K}$
     and the physical-trace transfer $P_{\mathcal K}$ satisfy
     \begin{align}
-        \mathcal E_{\mathcal K}(X)&=X,
-        \notag\\
-        P_{\mathcal K}&=I_1,
-        \notag\\
-        P_{\mathcal K}^2&=P_{\mathcal K}.
+        \mathcal E_{\mathcal K}(X) & =X,
+        \notag                                        \\
+        P_{\mathcal K}             & =I_1,
+        \notag                                        \\
+        P_{\mathcal K}^2           & =P_{\mathcal K}.
         \notag
     \end{align}
     Hence $\mathcal K$ is injective and normal and has source zero correlation
@@ -485,34 +485,34 @@
     are
     \begin{align}
         \eta_{k,h}
-        &=w_kw_h I_1
-          =\delta_{k,0}\delta_{h,0}I_1
-          \succeq0.
+         & =w_kw_h I_1
+        =\delta_{k,0}\delta_{h,0}I_1
+        \succeq0.
         \notag
     \end{align}
     In the sector coordinates the corresponding physical bond is
     \begin{align}
         B
-        &=\sum_{k,h}\Id_{H_L^{(k)}}\otimes\eta_{k,h}\otimes
-          \Id_{H_R^{(h)}}
-        \notag\\
-        &=\Id_{H_L^{(0)}}\otimes I_1\otimes\Id_{H_R^{(0)}}.
+         & =\sum_{k,h}\Id_{H_L^{(k)}}\otimes\eta_{k,h}\otimes
+        \Id_{H_R^{(h)}}
+        \notag                                                \\
+         & =\Id_{H_L^{(0)}}\otimes I_1\otimes\Id_{H_R^{(0)}}.
         \notag
     \end{align}
     Since only the all-zero physical-index word contributes, the
     factorization identity is
     \begin{align}
         \sigma^{(N)}(\mathcal K)
-        &=\prod_{i=0}^{N-1}B_{i,i+1}.
+         & =\prod_{i=0}^{N-1}B_{i,i+1}.
         \notag
     \end{align}
     Consequently,
     \begin{align}
         T_{k,h}
-        &=\tr(\eta_{k,h})
-          =\delta_{k,0}\delta_{h,0},
-        \notag\\
-        T&=\begin{pmatrix}1&0\\0&0\end{pmatrix}.
+          & =\tr(\eta_{k,h})
+        =\delta_{k,0}\delta_{h,0},
+        \notag                                     \\
+        T & =\begin{pmatrix}1&0\\0&0\end{pmatrix}.
         \notag
     \end{align}
     For every $n\geq1$,
@@ -521,9 +521,9 @@
     primitive. For the alternative factorization, take one sector
     $B^L=\mathbb C^2$ and $B^R=\mathbb C$, with
     \begin{align}
-        l&=\begin{pmatrix}1&0\\0&0\end{pmatrix},
-        \notag\\
-        r&=(1).
+        l & =\begin{pmatrix}1&0\\0&0\end{pmatrix},
+        \notag                                     \\
+        r & =(1).
         \notag
     \end{align}
     Its sole neighboring operator is
@@ -556,7 +556,7 @@
     positive-length directed cycles, in the sense of
     \cite[Section~III]{Beigi2012Classification}. Define, for $k,h\in C$,
     \begin{align}
-        T_{k,h}&=\re\tr(\eta_{k,h}).
+        T_{k,h} & =\re\tr(\eta_{k,h}).
         \notag
     \end{align}
     For positive semidefinite neighboring operators the trace is real, so
@@ -575,7 +575,7 @@
     \lean{MPOTensor.PhysicalSectorFactorization.cyclicNeighboringProduct_eq_zero_of_not_isCyclicActiveSector}
     \lean{MPOTensor.PhysicalSectorFactorization.cyclicNeighboringProduct_eq_zero_of_not_forall_isCyclicActiveSector}
     \lean{MPOTensor.PhysicalSectorFactorization.%
-      map_cyclicNeighboringProduct_eq_zero_of_not_forall_isCyclicActiveSector}
+        map_cyclicNeighboringProduct_eq_zero_of_not_forall_isCyclicActiveSector}
     \leanok
     \uses{def:mpdo_cyclic_active_sector, def:mpdo_physical_sector_chain_coordinates}
     Let $N\geq1$ and let $k=(k_0,\ldots,k_{N-1})$ be a cyclic sector
@@ -603,38 +603,38 @@
 \begin{theorem}[Trace-visible recurrence of selected fixed-product sectors]
     \label{thm:mpdo_selected_fixed_product_cyclic_recurrence}
     \lean{MPOTensor.EtaLocalStructureData.%
-      exists_positive_scalar_mpo_changePhysicalBasis_eq_smul_selected}
+        exists_positive_scalar_mpo_changePhysicalBasis_eq_smul_selected}
     \lean{MPOTensor.PhysicalSectorFactorization.%
-      changePhysicalBasis_physicalCoordinateMatrix_isInjective}
+        changePhysicalBasis_physicalCoordinateMatrix_isInjective}
     \lean{MPOTensor.PhysicalSectorFactorization.%
-      trace_sectorCoordinateTensor_mul_eq_zero_of_not_isCyclicActiveSector}
+        trace_sectorCoordinateTensor_mul_eq_zero_of_not_isCyclicActiveSector}
     \lean{MPOTensor.PhysicalSectorFactorization.%
-      changePhysicalBasis_apply_ne_eq_zero_of_mpo_two_eq_smul}
+        changePhysicalBasis_apply_ne_eq_zero_of_mpo_two_eq_smul}
     \lean{MPOTensor.PhysicalSectorFactorization.%
-      changePhysicalBasis_apply_eq_zero_of_not_isCyclicActiveSector}
+        changePhysicalBasis_apply_eq_zero_of_not_isCyclicActiveSector}
     \lean{MPOTensor.PhysicalSectorFactorization.%
-      changePhysicalBasis_mul_eq_zero_of_neighboringOperator_eq_zero}
+        changePhysicalBasis_mul_eq_zero_of_neighboringOperator_eq_zero}
     \lean{MPOTensor.PhysicalSectorFactorization.retainedBulkProduct}
     \lean{MPOTensor.PhysicalSectorFactorization.%
-      exists_retainedBulkProduct_diag_ne_zero_of_neighboringOperator_ne_zero}
+        exists_retainedBulkProduct_diag_ne_zero_of_neighboringOperator_ne_zero}
     \lean{MPOTensor.PhysicalSectorFactorization.%
-      exists_cyclicNeighboringProduct_diag_ne_zero_of_neighboringOperator_ne_zero}
+        exists_cyclicNeighboringProduct_diag_ne_zero_of_neighboringOperator_ne_zero}
     \lean{MPOTensor.PhysicalSectorFactorization.%
-      exists_retainedBulkProduct_diag_ne_zero_of_isCyclicActiveSector}
+        exists_retainedBulkProduct_diag_ne_zero_of_isCyclicActiveSector}
     \lean{MPOTensor.PhysicalSectorFactorization.%
-      exists_cyclicNeighboringProduct_diag_ne_zero_of_isCyclicActiveSector}
+        exists_cyclicNeighboringProduct_diag_ne_zero_of_isCyclicActiveSector}
     \lean{MPOTensor.PhysicalSectorFactorization.%
-      exists_changePhysicalBasis_apply_ne_zero_of_isCyclicActiveSector}
+        exists_changePhysicalBasis_apply_ne_zero_of_isCyclicActiveSector}
     \lean{MPOTensor.PhysicalSectorFactorization.%
-      CyclicActiveOriginalEntryIndex}
+        CyclicActiveOriginalEntryIndex}
     \lean{MPOTensor.PhysicalSectorFactorization.%
-      cyclicActiveOriginalOneSiteMatrixFamily}
+        cyclicActiveOriginalOneSiteMatrixFamily}
     \lean{MPOTensor.PhysicalSectorFactorization.%
-      cyclicActiveOriginalOneSiteMatrixFamily_span_eq_top}
+        cyclicActiveOriginalOneSiteMatrixFamily_span_eq_top}
     \lean{MPOTensor.PhysicalSectorFactorization.%
-      cyclicActive_reflTransGen_neighboringOperator_ne_zero_of_closed_mpo}
+        cyclicActive_reflTransGen_neighboringOperator_ne_zero_of_closed_mpo}
     \lean{MPOTensor.EtaLocalStructureData.%
-      selectedFixedProduct_cyclicActive_reflTransGen_neighboringOperator_ne_zero}
+        selectedFixedProduct_cyclicActive_reflTransGen_neighboringOperator_ne_zero}
     \leanok
     \uses{def:injective, def:mpdo_eta_local_structure_data, thm:mpdo_eta_fixed_bond_product_tensor, thm:mpdo_fixed_bond_positive_physical_sector_representative, def:mpdo_physical_sector_factorization, def:mpdo_cyclic_active_sector}
     Let $K$ be an injective tensor with an eta-local structure. Let $C$ be the
@@ -671,7 +671,7 @@
 \begin{theorem}[Selected fixed-product reduced states]
     \label{thm:mpdo_selected_fixed_product_reduced_states}
     \lean{MPOTensor.EtaLocalStructureData.%
-      selectedFixedProduct_reducedBlockState_eq_changePhysicalBasis}
+        selectedFixedProduct_reducedBlockState_eq_changePhysicalBasis}
     \leanok
     \uses{def:mpdo_eta_local_structure_data, thm:mpdo_fixed_bond_positive_physical_sector_representative}
     Let $K$ have an eta-local structure, let $F$ be the positive
@@ -685,8 +685,8 @@
     \uses{thm:mpdo_finite_chain_normalized_proportionality}
     At length $N$, the unnormalized periodic operators satisfy
     \[
-      \rho^{(N)}(K_F)=c_N\,\rho^{(N)}(C_F),
-      \qquad c_N>0.
+        \rho^{(N)}(K_F)=c_N\,\rho^{(N)}(C_F),
+        \qquad c_N>0.
     \]
     The scalar cancels under trace normalization, and taking the prescribed
     partial trace preserves the equality.
@@ -695,7 +695,7 @@
 \begin{theorem}[Adjacent selected fixed-product marginals]
     \label{thm:mpdo_selected_fixed_product_adjacent_marginals}
     \lean{MPOTensor.EtaLocalStructureData.%
-      selectedFixedProduct_reducedBlockState_succ_succ_eq_succ_of_isSourceZCL}
+        selectedFixedProduct_reducedBlockState_succ_succ_eq_succ_of_isSourceZCL}
     \leanok
     \uses{def:mpo_source_zcl, def:mpdo_eta_local_structure_data, thm:mpdo_selected_fixed_product_reduced_states}
     Let $K$ have an eta-local structure and source zero correlation length,
@@ -715,7 +715,7 @@
 \begin{theorem}[Iterated selected fixed-product marginals]
     \label{thm:mpdo_selected_fixed_product_iterated_marginals}
     \lean{MPOTensor.EtaLocalStructureData.%
-      selectedFixedProduct_reducedBlockState_add_three_eq_succ_of_isSourceZCL}
+        selectedFixedProduct_reducedBlockState_add_three_eq_succ_of_isSourceZCL}
     \leanok
     \uses{def:mpo_source_zcl, def:mpdo_eta_local_structure_data, thm:mpdo_selected_fixed_product_reduced_states, thm:mpdo_source_zcl_iterated_marginal_stability}
     Under the preceding hypotheses, for every $L>0$, the normalized
@@ -732,7 +732,7 @@
 \begin{theorem}[Positive traces of the selected fixed product]
     \label{thm:mpdo_selected_fixed_product_positive_traces}
     \lean{MPOTensor.EtaLocalStructureData.%
-      exists_pos_trace_mpo_selectedFixedProduct_of_isSourceZCL}
+        exists_pos_trace_mpo_selectedFixedProduct_of_isSourceZCL}
     \leanok
     \uses{def:mpo_source_zcl, def:mpdo_eta_local_structure_data, thm:mpdo_fixed_bond_positive_physical_sector_representative}
     Let $K$ have an eta-local structure and source zero correlation length.
@@ -751,7 +751,7 @@
 \begin{theorem}[Stabilization of the support of an irreducible square]
     \label{thm:matrix_irreducible_square_support_stabilization}
     \lean{Matrix.IsIrreducible.%
-      pow_two_pos_of_pow_two_support_eq_pow_three_support}
+        pow_two_pos_of_pow_two_support_eq_pow_three_support}
     \leanok
     Let $T$ be a nonnegative irreducible real matrix on a finite index set.
     Suppose that
@@ -781,7 +781,7 @@
 \begin{theorem}[Strict positivity from adjacent cyclic-sector marginals]
     \label{thm:mpdo_cyclic_active_square_positive_adjacent_marginals}
     \lean{MPOTensor.PhysicalSectorFactorization.%
-      cyclicActiveSectorTraceMatrix_pow_two_pos_of_adjacent_marginals}
+        cyclicActiveSectorTraceMatrix_pow_two_pos_of_adjacent_marginals}
     \leanok
     \uses{def:mpdo_physical_sector_factorization, def:mpdo_cyclic_active_sector}
     Let $F$ be a physical-sector factorization whose neighboring operators are
@@ -814,7 +814,7 @@
 \begin{theorem}[Normalization from adjacent cyclic-sector marginals]
     \label{thm:mpdo_cyclic_active_square_cube_adjacent_marginals}
     \lean{MPOTensor.PhysicalSectorFactorization.%
-      exists_normalized_cyclicActiveSectorTraceMatrix_pow_two_eq_pow_three_of_adjacent_marginals}
+        exists_normalized_cyclicActiveSectorTraceMatrix_pow_two_eq_pow_three_of_adjacent_marginals}
     \leanok
     \uses{def:mpdo_physical_sector_factorization, def:mpdo_cyclic_active_sector}
     Let $F$ be a physical-sector factorization whose neighboring operators are
@@ -827,7 +827,7 @@
     number $\lambda>0$ such that
     \begin{align}
         (\lambda^{-1}T_C)^2
-        &=(\lambda^{-1}T_C)^3.
+         & =(\lambda^{-1}T_C)^3.
         \notag
     \end{align}
 \end{theorem}
@@ -842,7 +842,7 @@
     adjacent marginals at retained length three gives
     \begin{align}
         (T_C^3)_{q,h}
-        &=\frac{Z_5}{Z_4}(T_C^2)_{q,h}.
+         & =\frac{Z_5}{Z_4}(T_C^2)_{q,h}.
         \notag
     \end{align}
     The ratio is independent of $q,h$. Taking $\lambda=Z_5/Z_4$ proves the
@@ -857,7 +857,7 @@
 \begin{theorem}[Selected fixed-product square--cube identity]
     \label{thm:mpdo_selected_fixed_product_square_cube}
     \lean{MPOTensor.EtaLocalStructureData.%
-      exists_normalized_selectedFixedProduct_cyclicActiveSectorTraceMatrix_pow_two_eq_pow_three}
+        exists_normalized_selectedFixedProduct_cyclicActiveSectorTraceMatrix_pow_two_eq_pow_three}
     \leanok
     \uses{def:injective, def:mpo_source_zcl, def:mpdo_eta_local_structure_data, def:mpdo_physical_sector_factorization, thm:mpdo_eta_fixed_bond_product_tensor, thm:mpdo_fixed_bond_positive_physical_sector_representative, def:mpdo_cyclic_active_sector}
     Let $K$ be an injective tensor with an eta-local structure and source zero
@@ -887,7 +887,7 @@
 \begin{theorem}[Markov cuts from the selected fixed product]
     \label{thm:mpdo_selected_fixed_product_markov_cuts}
     \lean{MPOTensor.EtaLocalStructureData.%
-      exists_hayashiMarkovDecomposition_selectedPhysicalCut_of_isSourceZCL}
+        exists_hayashiMarkovDecomposition_selectedPhysicalCut_of_isSourceZCL}
     \leanok
     \uses{def:injective, def:mpo_source_zcl, def:mpdo_eta_local_structure_data, thm:mpdo_fixed_bond_positive_physical_sector_representative}
     Let $K$ be an injective tensor with an eta-local structure and source zero
@@ -941,9 +941,9 @@
     nonempty and the matrix $T$ is primitive. More precisely, $T$ is
     irreducible and every $k\in C$ satisfies
     \begin{align}
-        (T^2)_{k,k}&>0,
-        \notag\\
-        (T^3)_{k,k}&>0.
+        (T^2)_{k,k} & >0,
+        \notag            \\
+        (T^3)_{k,k} & >0.
         \notag
     \end{align}
 \end{theorem}
@@ -962,9 +962,9 @@
     $C$, let $V_{C_i}$ denote the span of the virtual matrices in $C_i$.
     Absence of an edge across the cut gives
     \begin{align}
-        V_{C_1}V_{C_2}&=\{0\},
-        \notag\\
-        V_{C_1}+V_{C_2}&=M_D(\mathbb C).
+        V_{C_1}V_{C_2}  & =\{0\},
+        \notag                             \\
+        V_{C_1}+V_{C_2} & =M_D(\mathbb C).
         \notag
     \end{align}
     Both spaces contain a nonzero matrix. This contradicts the one-sided
@@ -997,9 +997,9 @@
     the physical-trace transfer has source zero correlation length. There is
     a number $\lambda>0$ such that, with $\widehat T=\lambda^{-1}T$,
     \begin{align}
-        \widehat T^2&=\widehat T^3,
-        \notag\\
-        \rank(\widehat T^2)&=1,
+        \widehat T^2        & =\widehat T^3,
+        \notag                               \\
+        \rank(\widehat T^2) & =1,
         \notag
     \end{align}
     and $\tr(\widehat T^m)=\tr(\widehat T)$ for every $m\geq1$.
@@ -1028,20 +1028,20 @@
 \begin{theorem}[Cyclic-active three-boundary trace coefficient]
     \label{thm:mpdo_cyclic_active_three_boundary_trace}
     \lean{MPOTensor.PhysicalSectorFactorization.%
-      sum_cyclicActive_trace_mul_trace_eq_pow_two}
+        sum_cyclicActive_trace_mul_trace_eq_pow_two}
     \lean{MPOTensor.PhysicalSectorFactorization.%
-      neighboringOperator_trace_eq_cyclicActiveSectorTraceMatrix}
+        neighboringOperator_trace_eq_cyclicActiveSectorTraceMatrix}
     \lean{MPOTensor.PhysicalSectorFactorization.%
-      sum_cyclicActive_normalized_trace_mul_trace_eq_pow_two}
+        sum_cyclicActive_normalized_trace_mul_trace_eq_pow_two}
     \lean{MPOTensor.PhysicalSectorFactorization.%
-      sum_cyclicActive_partialTraceRight_threeSiteSectorClosure}
+        sum_cyclicActive_partialTraceRight_threeSiteSectorClosure}
     \leanok
     \uses{def:mpdo_cyclic_active_sector, thm:mpdo_sector_closure_partial_traces}
     Let $C$ be the set of cyclic-active sectors and suppose that every
     neighboring operator is positive semidefinite. For $q,h\in C$,
     \begin{align}
         \sum_{r\in C}\tr(\eta_{q,r})\tr(\eta_{r,h})
-        &=(T_C^2)_{q,h}.
+         & =(T_C^2)_{q,h}.
         \notag
     \end{align}
     More generally, if $B_{q,h}(X)$ denotes the outer boundary operator in
@@ -1049,7 +1049,7 @@
     \begin{align}
         \sum_{r\in C}\tr_{\mathrm{mid}}
         (B_{q,h}(X)\otimes\eta_{q,r}\otimes\eta_{r,h})
-        &=(T_C^2)_{q,h}B_{q,h}(X).
+         & =(T_C^2)_{q,h}B_{q,h}(X).
         \notag
     \end{align}
     Here $\tr_{\mathrm{mid}}$ traces both neighboring factors. No equality
@@ -1062,7 +1062,7 @@
         \sum_{r\in C}
         \lambda^{-1}\tr(\eta_{q,r})
         \lambda^{-1}\tr(\eta_{r,h})
-        &=(\widehat T_C^2)_{q,h}.
+         & =(\widehat T_C^2)_{q,h}.
         \notag
     \end{align}
 \end{theorem}
@@ -1072,8 +1072,8 @@
     multiplication gives
     \begin{align}
         (T_C^2)_{q,h}
-        &=\sum_{r\in C}(T_C)_{q,r}(T_C)_{r,h}
-         =\sum_{r\in C}\tr(\eta_{q,r})\tr(\eta_{r,h}).
+         & =\sum_{r\in C}(T_C)_{q,r}(T_C)_{r,h}
+        =\sum_{r\in C}\tr(\eta_{q,r})\tr(\eta_{r,h}).
         \notag
     \end{align}
     The partial trace of the fixed-sector three-site closure is
@@ -1085,7 +1085,7 @@
 \begin{theorem}[Fourth-region blocks from an explicit factorization]
     \label{thm:mpdo_cyclic_active_explicit_fourth_region_blocks}
     \lean{MPOTensor.PhysicalSectorFactorization.%
-      reindex_reducedBlockState_add_three_eq_cyclicActiveFourthRegionBlock}
+        reindex_reducedBlockState_add_three_eq_cyclicActiveFourthRegionBlock}
     \leanok
     \uses{def:mpdo_physical_sector_factorization, def:mpdo_cyclic_active_sector}
     Let $F$ be a physical-sector factorization with positive semidefinite
@@ -1116,7 +1116,7 @@
 \begin{theorem}[Cyclic-active fourth-region factorization]
     \label{thm:mpdo_cyclic_active_fourth_region_factorization}
     \lean{MPOTensor.PhysicalSectorFactorization.%
-      exists_cyclicActiveFourthRegion_formula_of_isSourceZCL}
+        exists_cyclicActiveFourthRegion_formula_of_isSourceZCL}
     \leanok
     \uses{thm:mpdo_source_zcl_iterated_marginal_stability, thm:mpdo_cyclic_active_explicit_fourth_region_blocks, thm:mpdo_cyclic_active_three_boundary_trace, thm:mpdo_cyclic_active_deletion}
     Let $\mathcal K$ be injective and have source zero correlation length,
@@ -1145,7 +1145,7 @@
 \begin{theorem}[Markov decomposition from an explicit fourth-region formula]
     \label{thm:mpdo_cyclic_active_markov_of_fourth_region}
     \lean{MPOTensor.PhysicalSectorFactorization.%
-      exists_hayashiMarkovDecomposition_cyclicActiveCut_of_fourthRegion}
+        exists_hayashiMarkovDecomposition_cyclicActiveCut_of_fourthRegion}
     \leanok
     \uses{def:mpdo_physical_sector_factorization, def:mpdo_cyclic_active_sector}
     Let $F$ be a positive-dimensional physical-sector factorization whose
@@ -1172,7 +1172,7 @@
 \begin{theorem}[Cyclic-active Markov decomposition at every cut]
     \label{thm:mpdo_cyclic_active_markov_all_cuts}
     \lean{MPOTensor.PhysicalSectorFactorization.%
-      exists_hayashiMarkovDecomposition_cyclicActiveCut_of_isSourceZCL}
+        exists_hayashiMarkovDecomposition_cyclicActiveCut_of_isSourceZCL}
     \leanok
     \uses{thm:mpdo_cyclic_active_fourth_region_factorization, thm:mpdo_cyclic_active_markov_of_fourth_region}
     Under the hypotheses of
@@ -1239,7 +1239,7 @@
     $N\geq2$, a constant $c_N>0$ such that
     \begin{align}
         \sigma^{(N)}(\mathcal K)
-        &=c_N\prod_{i=0}^{N-1}B_{i,i+1}.
+         & =c_N\prod_{i=0}^{N-1}B_{i,i+1}.
         \notag
     \end{align}
     If the physical-trace transfer of $\mathcal K$ has zero correlation
@@ -1316,22 +1316,22 @@
     factorization whose neighboring operators $\eta_{k,h}$ are simultaneously
     positive semidefinite. The associated two-site bond is
     \begin{align}
-        B&=\sum_{k,h}
+        B & =\sum_{k,h}
         \Id_{H_L^{(k)}}\otimes
         \eta_{k,h}\otimes
         \Id_{H_R^{(h)}},
-        \label{eq:mpdo_eta_bond_assembly}\\
-        B&\geq0,
+        \label{eq:mpdo_eta_bond_assembly} \\
+        B & \geq0,
         \notag
     \end{align}
     and, for every $N\geq2$,
     \begin{align}
         \sigma^{(N)}(K)
-        &=c_N\prod_{n=1}^{N}B_{n,n+1},
-        \label{eq:mpdo_eta_product_form}\\
-        c_N&>0,
-        \notag\\
-        [B_{i,i+1},B_{j,j+1}]&=0.
+                              & =c_N\prod_{n=1}^{N}B_{n,n+1},
+        \label{eq:mpdo_eta_product_form}                      \\
+        c_N                   & >0,
+        \notag                                                \\
+        [B_{i,i+1},B_{j,j+1}] & =0.
         \notag
     \end{align}
     Under this hypothesis,

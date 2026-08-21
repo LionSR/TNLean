@@ -87,7 +87,7 @@
     \begin{align}
         \sum_{\sigma}
         M^{\sigma_0\sigma_0}\cdots M^{\sigma_{N-1}\sigma_{N-1}}
-        &=E^N,
+         & =E^N,
         \notag
     \end{align}
     and hence $\tr H^{(N)}=\tr(E^N)$.
@@ -109,7 +109,7 @@
     For every matrix $P\in\MN{d}$ and every chain length $N+1$,
     \begin{align}
         \tr(P_1H^{(N+1)})
-        &=\tr(E_P E^N).
+         & =\tr(E_P E^N).
         \label{eq:mpdo_first_site_trace}
     \end{align}
     The marked site closes to the loop with $P$ inserted, and the remaining
@@ -124,7 +124,7 @@
     Expanding at the first site gives
     \begin{align}
         (P_1H^{(N+1)})_{(a,\rho)(a,\rho)}
-        &=\sum_i P_{ai} \tr(M^{ia}E_\rho^{(N)}).
+         & =\sum_i P_{ai} \tr(M^{ia}E_\rho^{(N)}).
         \notag
     \end{align}
     Summing over $a$ and $\rho$ and collecting closes the remaining loops
@@ -147,8 +147,8 @@
     In the vertical decomposition
     \begin{align}
         \widetilde M
-        &=\bigoplus_{\alpha,k}
-          \mu_{\alpha,k}X_{\alpha,k}M_\alpha X_{\alpha,k}^{-1},
+         & =\bigoplus_{\alpha,k}
+        \mu_{\alpha,k}X_{\alpha,k}M_\alpha X_{\alpha,k}^{-1},
         \notag
     \end{align}
     of the vertically viewed tensor, carried by the
@@ -173,7 +173,7 @@
     two-sided corner, then some finite-chain first-site compression is nonzero:
     \begin{align}
         \left(\exists v,\;P\widetilde M_vP\ne0\right)
-        &\Longrightarrow
+         & \Longrightarrow
         \left(\exists N\geq0,\;P_1H^{(N+1)}P_1\ne0\right),
         \label{eq:cpsv_literal_sector_compression_separation}
     \end{align}
@@ -194,7 +194,7 @@
     their inserted tensors. For every vertical letter $v$, the insertion
     identity then gives
     \begin{align}
-        P\widetilde M_vP&=0.
+        P\widetilde M_vP & =0.
         \label{eq:cpsv_literal_sector_compression_zero_corner}
     \end{align}
     This contradicts the hypothesis in
@@ -213,12 +213,12 @@
     that, for every vertical letter $v$,
     \begin{align}
         \omega X A_v X^{-1}
-        &=V^\dagger\widetilde M_vV.
+         & =V^\dagger\widetilde M_vV.
         \label{eq:mpdo_gauge_corner}
     \end{align}
     Then the range projector $VV^\dagger$ has a nonzero vertical corner:
     \begin{align}
-        (VV^\dagger)\widetilde M_v(VV^\dagger)&\ne 0
+        (VV^\dagger)\widetilde M_v(VV^\dagger) & \ne 0
         \label{eq:mpdo_range_projector_corner}
     \end{align}
     for some $v$.
@@ -270,7 +270,7 @@
     $E_\alpha$. Then for every chain length $N+1$,
     \begin{align}
         \tr(P_1H^{(N+1)}P_1)
-        &=\mu\,d_\alpha^{(N+1)}.
+         & =\mu\,d_\alpha^{(N+1)}.
         \label{eq:mpdo_sector_trace}
     \end{align}
     Once spectral normalization and grouping identify the reducing
@@ -301,11 +301,11 @@
     $E_\alpha$, and suppose $\mu_{\alpha,0}>0$. If the compression of
     $H^{(N+1)}$ by $P$ at the first site is nonzero, then
     \begin{align}
-        \mu_{\alpha,k}\,d_\alpha^{(N+1)}&>0,
-        \notag\\
-        d_\alpha^{(N+1)}&>0,
-        \notag\\
-        \mu_{\alpha,k}&>0.
+        \mu_{\alpha,k}\,d_\alpha^{(N+1)} & >0,
+        \notag                                 \\
+        d_\alpha^{(N+1)}                 & >0,
+        \notag                                 \\
+        \mu_{\alpha,k}                   & >0.
         \notag
     \end{align}
     Granted such sector projectors, this yields the conclusion of the trace
@@ -390,8 +390,8 @@
     equal-length tail words $\sigma,\tau$,
     \begin{align}
         \tr\!\left(\mc{R}(A)^{rs}
-            M^{\sigma_1\tau_1}\cdots M^{\sigma_L\tau_L}\right)
-        &=
+        M^{\sigma_1\tau_1}\cdots M^{\sigma_L\tau_L}\right)
+         & =
         \tr\!\left(\mc{R}(A^\sharp)^{rs}
             (M^\dagger)^{\sigma_L\tau_L}\cdots
             (M^\dagger)^{\sigma_1\tau_1}\right).
@@ -423,8 +423,8 @@
     and suppose that one vertical corner is a positive scalar multiple of a
     similarity of a tensor $A$,
     \begin{align}
-        V^\dagger\widetilde M^vV&=c\,X A^vX^{-1},
-        &c&>0.
+        V^\dagger\widetilde M^vV & =c\,X A^vX^{-1},
+                                 & c                & >0.
         \notag
     \end{align}
     Then the marked-chain coefficient of the Gram-dressed tensor
@@ -458,20 +458,20 @@
     $A$:
     \begin{align}
         V_X^\dagger\widetilde M^vV_X
-        &=c_X X A^vX^{-1},
-        &
-        c_X&>0,
-        \notag\\
+            & =c_X X A^vX^{-1},
+            &
+        c_X & >0,
+        \notag                  \\
         V_Y^\dagger\widetilde M^vV_Y
-        &=c_Y Y A^vY^{-1},
-        &
-        c_Y&>0.
+            & =c_Y Y A^vY^{-1},
+            &
+        c_Y & >0.
         \notag
     \end{align}
     Then the two Gram conjugations agree for every vertical letter,
     \begin{align}
         (X^\dagger X)A^v(X^\dagger X)^{-1}
-        &=(Y^\dagger Y)A^v(Y^\dagger Y)^{-1}.
+         & =(Y^\dagger Y)A^v(Y^\dagger Y)^{-1}.
         \label{eq:mpdo_pairwise_gram_conj}
     \end{align}
     Normality of $A$ is not required for this equality; it enters only in
@@ -501,7 +501,7 @@
     These marks lie in the physical-letter span. Indeed, with
     $L_X=V_XX$ and $R_X=V_X(X^{-1})^\dagger$, their coefficients are
     $f^X_{(r,s),(i,j)}
-    =c_X^{-1}\overline{(L_X)_{ir}}(R_X)_{js}$, and similarly for $Y$.
+        =c_X^{-1}\overline{(L_X)_{ir}}(R_X)_{js}$, and similarly for $Y$.
     The corner identities show that these linear combinations are precisely
     the horizontal slices of the two Gram-dressed tensors. Physical-letter
     marked separation therefore identifies every slice, hence every vertical
@@ -519,16 +519,16 @@
     for every vertical letter $v$, the following two corner identities hold:
     \begin{align}
         V_X^\dagger\widetilde M^vV_X
-        &=c_X X A^vX^{-1},
-        \notag\\
+         & =c_X X A^vX^{-1},
+        \notag               \\
         V_Y^\dagger\widetilde M^vV_Y
-        &=c_Y Y A^vY^{-1}
+         & =c_Y Y A^vY^{-1}
         \notag
     \end{align}
     Then, for every vertical letter $v$,
     \begin{align}
         (X^\dagger X)A^v(X^\dagger X)^{-1}
-        &=(Y^\dagger Y)A^v(Y^\dagger Y)^{-1}.
+         & =(Y^\dagger Y)A^v(Y^\dagger Y)^{-1}.
         \label{eq:grouped_corner_gram_dressing}
     \end{align}
 \end{definition}
@@ -542,7 +542,7 @@
     $c_{\alpha,q}$, corner identities
     \begin{align}
         V_{\alpha,q}^\dagger\widetilde M^vV_{\alpha,q}
-        &=c_{\alpha,q}X_{\alpha,q}A_{\alpha,q}^vX_{\alpha,q}^{-1},
+         & =c_{\alpha,q}X_{\alpha,q}A_{\alpha,q}^vX_{\alpha,q}^{-1},
         \notag
     \end{align}
     and distinguished gauges $X_{\alpha,0}=\Id$. Fix a class $\alpha$ and a
@@ -551,7 +551,7 @@
     $c_{\alpha,0}>0$ such that, for every vertical letter $v$,
     \begin{align}
         W_{\alpha,q}^\dagger\widetilde M^vW_{\alpha,q}
-        &=c_{\alpha,0}A_{\alpha,q}^v.
+         & =c_{\alpha,0}A_{\alpha,q}^v.
         \label{eq:distinguished_grouped_reference_corner}
     \end{align}
 \end{theorem}
@@ -561,13 +561,13 @@
     Identify the distinguished bond space with that of copy $q$ and define
     the transported physical map by
     \begin{align}
-        W_{\alpha,q}&=V_{\alpha,0}.
+        W_{\alpha,q} & =V_{\alpha,0}.
         \notag
     \end{align}
     The distinguished gauge is the identity, so its corner equation becomes
     \begin{align}
         W_{\alpha,q}^\dagger\widetilde M^vW_{\alpha,q}
-        &=c_{\alpha,0}A_{\alpha,q}^v.
+         & =c_{\alpha,0}A_{\alpha,q}^v.
         \notag
     \end{align}
     Positivity of the distinguished effective coefficient gives
@@ -584,8 +584,8 @@
     $c_{\alpha,q}$ and corner identities
     \begin{align}
         V_{\alpha,q}^\dagger\widetilde M^vV_{\alpha,q}
-        &=c_{\alpha,q}X_{\alpha,q}A_{\alpha,q}^v
-          X_{\alpha,q}^{-1}.
+         & =c_{\alpha,q}X_{\alpha,q}A_{\alpha,q}^v
+        X_{\alpha,q}^{-1}.
         \notag
     \end{align}
     Assume that the distinguished copy in each class has identity gauge and
@@ -594,7 +594,7 @@
     \begin{align}
         (X_{\alpha,q}^\dagger X_{\alpha,q})A_{\alpha,q}^v
         (X_{\alpha,q}^\dagger X_{\alpha,q})^{-1}
-        &=A_{\alpha,q}^v.
+         & =A_{\alpha,q}^v.
         \label{eq:grouped_sector_gram_conj_of_dressing}
     \end{align}
 \end{theorem}
@@ -607,8 +607,8 @@
     \begin{align}
         (X_{\alpha,0}^\dagger X_{\alpha,0})A_{\alpha,q}^v
         (X_{\alpha,0}^\dagger X_{\alpha,0})^{-1}
-        &=(X_{\alpha,q}^\dagger X_{\alpha,q})A_{\alpha,q}^v
-          (X_{\alpha,q}^\dagger X_{\alpha,q})^{-1}.
+         & =(X_{\alpha,q}^\dagger X_{\alpha,q})A_{\alpha,q}^v
+        (X_{\alpha,q}^\dagger X_{\alpha,q})^{-1}.
     \end{align}
     The left side is $A_{\alpha,q}^v$ because $X_{\alpha,0}=\Id$. This gives
     (\ref{eq:grouped_sector_gram_conj_of_dressing}).
@@ -628,7 +628,7 @@
         (X_{\alpha,q}^\dagger X_{\alpha,q})
         A_{\alpha,q}^v
         (X_{\alpha,q}^\dagger X_{\alpha,q})^{-1}
-        &=A_{\alpha,q}^v.
+         & =A_{\alpha,q}^v.
         \label{eq:mpdo_grouped_gram_conj}
     \end{align}
     This is Figure~8 for the actual witnesses of the grouped decomposition.
@@ -656,7 +656,7 @@
         (X_{\alpha,q}^\dagger X_{\alpha,q})
         A_{\alpha,q}^v
         (X_{\alpha,q}^\dagger X_{\alpha,q})^{-1}
-        &=A_{\alpha,q}^v.
+         & =A_{\alpha,q}^v.
         \label{eq:cpsv_literal_grouped_gram_conj}
     \end{align}
 \end{theorem}
@@ -671,7 +671,7 @@
     \begin{align}
         (X_{\alpha,q}^\dagger X_{\alpha,q})A_{\alpha,q}^v
         (X_{\alpha,q}^\dagger X_{\alpha,q})^{-1}
-        &=A_{\alpha,q}^v.
+         & =A_{\alpha,q}^v.
         \label{eq:cpsv_prop_4_13_gram_conjugation}
     \end{align}
 \end{proof}
@@ -688,13 +688,13 @@
     Let $X$ be invertible and suppose that $B$ and a target $C$ satisfy
     \begin{align}
         XBX^{-1}
-        &=(X^{-1})^\dagger C X^\dagger.
+         & =(X^{-1})^\dagger C X^\dagger.
         \notag
     \end{align}
     Then conjugation by the Gram matrix carries $B$ to $C$,
     \begin{align}
         (X^\dagger X)B(X^\dagger X)^{-1}
-        &=C.
+         & =C.
         \label{eq:mpdo_gram_target}
     \end{align}
     Hence any two gauges satisfying this conditional identity with the same
@@ -750,9 +750,9 @@
     \caption{Equality of the Gram conjugations for two copies of the same
     vertical normal tensor:
     $(X_{\alpha,k}^{\dagger}X_{\alpha,k})M_\alpha
-    (X_{\alpha,k}^{\dagger}X_{\alpha,k})^{-1}
-    =(X_{\alpha,0}^{\dagger}X_{\alpha,0})M_\alpha
-    (X_{\alpha,0}^{\dagger}X_{\alpha,0})^{-1}$.
+        (X_{\alpha,k}^{\dagger}X_{\alpha,k})^{-1}
+        =(X_{\alpha,0}^{\dagger}X_{\alpha,0})M_\alpha
+        (X_{\alpha,0}^{\dagger}X_{\alpha,0})^{-1}$.
     Theorem~\ref{thm:mpdo_pairwise_vertical_gram_conjugation} gives this
     equality from self-adjointness of the corresponding sector compressions
     and horizontal marked separation. Normality is used only in the
@@ -776,7 +776,7 @@
     $M_\alpha^v$. Then there is a positive real number $\omega$ such that
     \begin{align}
         X^\dagger X
-        &=\omega\,Y^\dagger Y,
+         & =\omega\,Y^\dagger Y,
         \label{eq:mpdo_gram_proportionality}
     \end{align}
     and $\omega^{-1/2}XY^{-1}$ is unitary.
@@ -816,7 +816,7 @@
     there is a real number $\omega_{\alpha,q}>0$ such that
     \begin{align}
         X_{\alpha,q}^\dagger X_{\alpha,q}
-        &=\omega_{\alpha,q}\Id.
+         & =\omega_{\alpha,q}\Id.
         \label{eq:grouped_sector_gram_scalar_of_dressing}
     \end{align}
 \end{theorem}
@@ -844,10 +844,10 @@
     number $\omega_{\alpha,k}$ such that
     \begin{align}
         X_{\alpha,k}^\dagger X_{\alpha,k}
-        &=\omega_{\alpha,k}\Id,
-        \notag\\
+         & =\omega_{\alpha,k}\Id,
+        \notag                                    \\
         U_{\alpha,k}
-        &=\omega_{\alpha,k}^{-1/2}X_{\alpha,k},
+         & =\omega_{\alpha,k}^{-1/2}X_{\alpha,k},
         \notag
     \end{align}
     and $U_{\alpha,k}$ is unitary. This is the normalization in
@@ -881,7 +881,7 @@
     $\omega_{\alpha,q}$ such that
     \begin{align}
         X_{\alpha,q}^\dagger X_{\alpha,q}
-        &=\omega_{\alpha,q}\Id.
+         & =\omega_{\alpha,q}\Id.
         \label{eq:cpsv_literal_grouped_gram_scalar}
     \end{align}
     Consequently
@@ -900,7 +900,7 @@
     phase-class grouping to obtain
     \begin{align}
         X_{\alpha,q}^\dagger X_{\alpha,q}
-        &=\omega_{\alpha,q}\Id.
+         & =\omega_{\alpha,q}\Id.
         \label{eq:cpsv_prop_4_13_gram}
     \end{align}
     Dividing each gauge by the positive square root of its Gram scalar gives
@@ -915,7 +915,7 @@
     define its normalized physical map by
     \begin{align}
         W_{\alpha,q}
-        &=V_{\alpha,q}\omega_{\alpha,q}^{-1/2}X_{\alpha,q}.
+         & =V_{\alpha,q}\omega_{\alpha,q}^{-1/2}X_{\alpha,q}.
         \notag
     \end{align}
 \end{definition}
@@ -934,7 +934,7 @@
     for every class $\alpha$ and copy $q$, $\omega_{\alpha,q}>0$ and
     \begin{align}
         X_{\alpha,q}^\dagger X_{\alpha,q}
-        &=\omega_{\alpha,q}\Id.
+         & =\omega_{\alpha,q}\Id.
         \notag
     \end{align}
     Suppose also that the maps $V_{\alpha,q}$
@@ -944,20 +944,20 @@
     of $\widetilde M$. Then there are maps $W_{\alpha,q}$ such that, for every
     class $\alpha$ and copy $q$,
     \begin{align}
-        W_{\alpha,q}^\dagger W_{\alpha,q}&=\Id.
+        W_{\alpha,q}^\dagger W_{\alpha,q} & =\Id.
     \end{align}
     For distinct pairs $(\alpha,q)\ne(\beta,p)$,
     \begin{align}
-        W_{\alpha,q}^\dagger W_{\beta,p}&=0.
+        W_{\alpha,q}^\dagger W_{\beta,p} & =0.
     \end{align}
     For every vertical letter $v$, these maps also satisfy
     \begin{align}
         \widetilde M_vW_{\alpha,q}
-        &=W_{\alpha,q}(c_{\alpha,q}M_\alpha^v),
-        \notag\\
+         & =W_{\alpha,q}(c_{\alpha,q}M_\alpha^v),
+        \notag                                    \\
         \widetilde M_v
-        &=\sum_\alpha\sum_q
-          W_{\alpha,q}(c_{\alpha,q}M_\alpha^v)W_{\alpha,q}^\dagger.
+         & =\sum_\alpha\sum_q
+        W_{\alpha,q}(c_{\alpha,q}M_\alpha^v)W_{\alpha,q}^\dagger.
         \label{eq:normalized_grouped_sector_maps_of_gram}
     \end{align}
 \end{theorem}
@@ -968,19 +968,19 @@
     define
     \begin{align}
         Q_{\alpha,q}
-        &=\omega_{\alpha,q}^{-1/2}X_{\alpha,q},
-        \notag\\
+         & =\omega_{\alpha,q}^{-1/2}X_{\alpha,q},
+        \notag                                    \\
         W_{\alpha,q}
-        &=V_{\alpha,q}Q_{\alpha,q}.
+         & =V_{\alpha,q}Q_{\alpha,q}.
         \notag
     \end{align}
     Since $\omega_{\alpha,q}>0$, the Gram identity implies
     \begin{align}
         X_{\alpha,q}^\dagger
-        &=\omega_{\alpha,q}X_{\alpha,q}^{-1},
-        \notag\\
+         & =\omega_{\alpha,q}X_{\alpha,q}^{-1},
+        \notag                                  \\
         Q_{\alpha,q}^\dagger Q_{\alpha,q}
-        &=\Id.
+         & =\Id.
         \notag
     \end{align}
     Hence $W_{\alpha,q}^\dagger W_{\alpha,q}=\Id$, and inserting the two
@@ -988,23 +988,23 @@
     preserves pairwise orthogonality. The original intertwining identity gives
     \begin{align}
         \widetilde M_vW_{\alpha,q}
-        &=W_{\alpha,q}(c_{\alpha,q}M_\alpha^v).
+         & =W_{\alpha,q}(c_{\alpha,q}M_\alpha^v).
         \notag
     \end{align}
     The same Gram identity and the positive square-root normalization give
     the corner equality
     \begin{align}
         Q_{\alpha,q}(c_{\alpha,q}M_\alpha^v)Q_{\alpha,q}^\dagger
-        &=c_{\alpha,q}X_{\alpha,q}M_\alpha^vX_{\alpha,q}^{-1}.
+         & =c_{\alpha,q}X_{\alpha,q}M_\alpha^vX_{\alpha,q}^{-1}.
         \label{eq:normalized_grouped_sector_corner}
     \end{align}
     Multiplying (\ref{eq:normalized_grouped_sector_corner}) on the left by
     $V_{\alpha,q}$ and on the right by $V_{\alpha,q}^\dagger$ gives
     \begin{align}
         W_{\alpha,q}(c_{\alpha,q}M_\alpha^v)W_{\alpha,q}^\dagger
-        &=V_{\alpha,q}
-          (c_{\alpha,q}X_{\alpha,q}M_\alpha^vX_{\alpha,q}^{-1})
-          V_{\alpha,q}^\dagger.
+         & =V_{\alpha,q}
+        (c_{\alpha,q}X_{\alpha,q}M_\alpha^vX_{\alpha,q}^{-1})
+        V_{\alpha,q}^\dagger.
     \end{align}
     Summing these physical-space identities over all copies and classes, then
     applying the original grouped reconstruction, proves
@@ -1019,20 +1019,20 @@
     In the grouped vertical decomposition, put
     \begin{align}
         Q_{\alpha,q}
-        &=\omega_{\alpha,q}^{-1/2}X_{\alpha,q},
-        \notag\\
+         & =\omega_{\alpha,q}^{-1/2}X_{\alpha,q},
+        \notag                                    \\
         W_{\alpha,q}
-        &=V_{\alpha,q}Q_{\alpha,q},
+         & =V_{\alpha,q}Q_{\alpha,q},
         \notag
     \end{align}
     and identify the bond space of each copy with that of its chosen
     representative. Then
     \begin{align}
         W_{\alpha,q}^\dagger W_{\alpha,q}
-        &=\Id,
-        \notag\\
+         & =\Id,
+        \notag   \\
         W_{\alpha,q}^\dagger W_{\beta,p}
-        &=0
+         & =0
         \quad((\alpha,q)\ne(\beta,p)).
         \notag
     \end{align}
@@ -1040,15 +1040,15 @@
     maps satisfy
     \begin{align}
         \widetilde M_vW_{\alpha,q}
-        &=W_{\alpha,q}(c_{\alpha,q}M_\alpha^v),
+         & =W_{\alpha,q}(c_{\alpha,q}M_\alpha^v),
         \notag
     \end{align}
     and retain the literal reconstruction
     \begin{align}
         \widetilde M_v
-        &=\sum_\alpha\sum_q
-          W_{\alpha,q}(c_{\alpha,q}M_\alpha^v)
-          W_{\alpha,q}^\dagger.
+         & =\sum_\alpha\sum_q
+        W_{\alpha,q}(c_{\alpha,q}M_\alpha^v)
+        W_{\alpha,q}^\dagger.
         \label{eq:mpdo_normalized_reconstruction}
     \end{align}
     These are the normalized sector identities in
@@ -1075,22 +1075,22 @@
     $W_{\alpha,q}=V_{\alpha,q}Q_{\alpha,q}$, after identifying the bond space
     of each copy with that of its representative. Then
     \begin{align}
-        W_{\alpha,q}^\dagger W_{\alpha,q}&=\Id,
-        \notag\\
-        W_{\alpha,q}^\dagger W_{\beta,p}&=0
+        W_{\alpha,q}^\dagger W_{\alpha,q} & =\Id,
+        \notag                                                                     \\
+        W_{\alpha,q}^\dagger W_{\beta,p}  & =0
         \quad((\alpha,q)\ne(\beta,p)),
-        \notag\\
+        \notag                                                                     \\
         \widetilde M_vW_{\alpha,q}
-        &=W_{\alpha,q}(c_{\alpha,q}M_\alpha^v),
+                                          & =W_{\alpha,q}(c_{\alpha,q}M_\alpha^v),
         \notag
     \end{align}
     where $c_{\alpha,q}=\nu_{\alpha,q}\zeta_{\alpha,q}>0$. Moreover, every
     vertical letter is reconstructed exactly:
     \begin{align}
         \widetilde M_v
-        &=\sum_\alpha\sum_q
-          W_{\alpha,q}(c_{\alpha,q}M_\alpha^v)
-          W_{\alpha,q}^\dagger.
+         & =\sum_\alpha\sum_q
+        W_{\alpha,q}(c_{\alpha,q}M_\alpha^v)
+        W_{\alpha,q}^\dagger.
         \label{eq:cpsv_literal_normalized_reconstruction}
     \end{align}
 \end{theorem}

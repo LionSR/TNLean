@@ -8,7 +8,7 @@
     $\sigma=(\sigma_v)_v$,
     \begin{align}
         \bigotimes_{v=0}^{m-1} A_v^{\sigma_v}
-        &=
+         & =
         z\,\bigotimes_{v=0}^{m-1} B_v^{\sigma_v}.
         \notag
     \end{align}
@@ -17,9 +17,9 @@
     $(B_v^{i_v})_{r_v,c_v}\ne 0$. Then there are scalars
     $\kappa_v\in\C$ such that
     \begin{align}
-        \prod_{v=0}^{m-1}\kappa_v&=z,
-        \notag\\
-        A_v^i&=\kappa_v B_v^i
+        \prod_{v=0}^{m-1}\kappa_v & =z,
+        \notag                                      \\
+        A_v^i                     & =\kappa_v B_v^i
         \notag
     \end{align}
     for every sector $v$ and every letter $i$.
@@ -54,7 +54,7 @@
     size. Suppose that for every choice of letters $\sigma=(\sigma_v)_v$,
     \begin{align}
         \bigotimes_{v=0}^{m-1} A_v^{\sigma_v}
-        &=
+         & =
         z\,\bigotimes_{v=0}^{m-1} B_v^{\sigma_v}.
         \notag
     \end{align}
@@ -62,9 +62,9 @@
     entry $(r_v,c_v)$ with $(B_v^{i_v})_{r_v,c_v}\ne0$. Then there are scalars
     $\kappa_v\in\C$ such that
     \begin{align}
-        \prod_{v=0}^{m-1}\kappa_v&=1,
-        \notag\\
-        A_v^i&=\kappa_v\xi\,B_v^i
+        \prod_{v=0}^{m-1}\kappa_v & =1,
+        \notag                                          \\
+        A_v^i                     & =\kappa_v\xi\,B_v^i
         \notag
     \end{align}
     for every sector $v$ and every letter $i$.
@@ -96,9 +96,9 @@
 \begin{proof}\leanok
     The two left-canonical equations give
     \begin{align}
-        \sum_i (A^i)^\dagger A^i&=\Id,
-        \notag\\
-        \sum_i (cA^i)^\dagger(cA^i)&=\Id.
+        \sum_i (A^i)^\dagger A^i    & =\Id,
+        \notag                              \\
+        \sum_i (cA^i)^\dagger(cA^i) & =\Id.
         \notag
     \end{align}
     Substituting the first equation into the second gives
@@ -178,7 +178,7 @@
     identities and the shift relation give
     \begin{align}
         \Phi_K(P_{k+1}^\dagger P_{k+1})
-        &=
+         & =
         \Phi_K(P_{k+1})^\dagger\Phi_K(P_{k+1}),
         \notag
     \end{align}
@@ -244,7 +244,7 @@
     For a word $\mathbf i=(i_1,\ldots,i_\ell)$, define
     \begin{align}
         F_u^{\mathbf i}
-        &=
+         & =
         A_u^{i_1}A_{u+1}^{i_2}\cdots A_{u+\ell-1}^{i_\ell}.
         \notag
     \end{align}
@@ -262,7 +262,7 @@
     If the sector maps $P_u$ are orthogonal projections, then for any two
     words $\mathbf i$ and $\mathbf j$,
     $F_u^{\mathbf i\mathbf j}
-    =F_u^{\mathbf i}F_{u+|\mathbf i|}^{\mathbf j}$, where indices are taken
+        =F_u^{\mathbf i}F_{u+|\mathbf i|}^{\mathbf j}$, where indices are taken
     cyclically modulo~$m$.
 \end{lemma}
 
@@ -284,7 +284,7 @@
     and suppose the $m$-block product identity
     \begin{align}
         A_u^{i_1}\cdots A_{u+m-1}^{i_m}
-        &=
+         & =
         c_u\, B_{u+q}^{i_1}\cdots B_{u+q+m-1}^{i_m}
         \notag
     \end{align}
@@ -320,7 +320,7 @@
         \sum_{\boldsymbol\rho}
         \left(\prod_k (\Omega_{k+1}(X_k))_{\rho_k}\right)
         \prod_k A_k^{\sigma_k}\,F_{k+1}^{\rho_k}
-        &=
+         & =
         \prod_k A_k^{\sigma_k}\,X_k.
         \notag
     \end{align}
@@ -334,12 +334,12 @@
     \uses{def:periodic_corner_product}
     Expand each
     $A_k^{\sigma_k}X_k
-    =\sum_{\mathbf j}(\Omega_{k+1}(X_k))_{\mathbf j}
-    A_k^{\sigma_k}F_{k+1}^{\mathbf j}$ using the right inverse, apply the
+        =\sum_{\mathbf j}(\Omega_{k+1}(X_k))_{\mathbf j}
+        A_k^{\sigma_k}F_{k+1}^{\mathbf j}$ using the right inverse, apply the
     noncommutative distributivity identity
     \begin{align}
         \prod_k\left(\sum_{\mathbf j} f_{k,\mathbf j}\right)
-        &=
+         & =
         \sum_{\boldsymbol\rho}\prod_k f_{k,\rho_k},
         \notag
     \end{align}
@@ -375,7 +375,7 @@
     through its intermediate projectors:
     \begin{align}
         F_u^{\mathbf i}
-        &=
+         & =
         P_u\,A^{\mathbf i}\,P_{u+|\mathbf i|},
         \notag
     \end{align}
@@ -449,7 +449,7 @@
     corner-transition product is the corner image of the word evaluation,
     \begin{align}
         F_k^{\widehat W}
-        &=
+         & =
         \varphi_k(\bar A_k^{\,W}),
         \notag
     \end{align}
@@ -464,7 +464,7 @@
     $\varphi$ reassembles the letters:
     \begin{align}
         F_k^{\widehat W}
-        &=
+         & =
         \prod_{I\in W}\varphi_k(\bar A_k^I)
         =
         \varphi_k\left(\prod_{I\in W}\bar A_k^I\right)
@@ -487,8 +487,8 @@
     For every corner-supported $Y$, that is, $P_kYP_k=Y$,
     \begin{align}
         \sum_{\mathbf j\in[d]^{mL}}
-            (\hat\Omega_k(Y))_{\mathbf j}\,F_k^{\mathbf j}
-        &=
+        (\hat\Omega_k(Y))_{\mathbf j}\,F_k^{\mathbf j}
+         & =
         Y.
         \notag
     \end{align}
@@ -501,9 +501,9 @@
     flattened word,
     \begin{align}
         \sum_{W}(\hat\Omega_k(Y))_{\widehat W}\,F_k^{\widehat W}
-        &=
+         & =
         \varphi_k\Bigl(        \sum_{W}(\Omega_k(\varphi_k^{-1}(Y)))_{W}
-            \bar A_k^{\,W}
+        \bar A_k^{\,W}
         \Bigr)
         =
         \varphi_k(\varphi_k^{-1}(Y))
@@ -526,7 +526,7 @@
         \sum_{\boldsymbol\rho}
         \left(\prod_k(\hat\Omega_{k+1}(X_k))_{\rho_k}\right)
         \prod_k A_k^{\sigma_k}F_{k+1}^{\rho_k}
-        &=
+         & =
         \prod_k A_k^{\sigma_k}X_k.
         \notag
     \end{align}

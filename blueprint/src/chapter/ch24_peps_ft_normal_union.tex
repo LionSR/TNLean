@@ -161,10 +161,10 @@ every finite union of injective regions.
     \cite[Section~4]{Molnar2018NormalPEPS}. If
     \begin{align}
         \mathcal C_{\{0,1,2\}}(X)=0
-        &\Longrightarrow \mathcal C_{\{2\}}(X)=0,
-        \notag\\
+         & \Longrightarrow \mathcal C_{\{2\}}(X)=0,
+        \notag                                        \\
         \mathcal C_{\{2\}}(X)=0
-        &\Longrightarrow \mathcal C_{\{1,2\}}(X)=0,
+         & \Longrightarrow \mathcal C_{\{1,2\}}(X)=0,
         \notag
     \end{align}
     and $\mathcal C_{\{1,2\}}(X)=0\Longrightarrow X=0$, then
@@ -211,17 +211,17 @@ every finite union of injective regions.
         \begin{tenkz}[rows={wire}, cols=1, bonds=none]
             \tn[at=(1,1), name=unionLeft, label pos=w,
                 ports={45:virtual, 0:virtual, -45:virtual,
-                       90:physical}]{A\setminus B}
+                        90:physical}]{A\setminus B}
             \tn[at=1.3 ne of unionLeft, name=unionOverlap, label pos=e,
                 ports={-135:virtual, -35:virtual, -70:virtual,
-                       90:physical}]{A\cap B}
+                        90:physical}]{A\cap B}
             \tn[at=3.5 e of unionLeft, name=unionRight, label pos=e,
                 ports={180:virtual, 135:virtual, -135:virtual,
-                       90:physical}]{B\setminus A}
+                        90:physical}]{B\setminus A}
             \tn[at=2.25 e of 1.4 s of unionLeft, name=unionOutside,
                 label pos=s,
                 ports={150:virtual, 110:virtual, 45:virtual,
-                       90:physical}]{(A\cup B)^c}
+                        90:physical}]{(A\cup B)^c}
             \tnwire{unionLeft.45}{unionOverlap.-135}
             \tnwire[name=unionAcross]{unionLeft.0}{unionRight.180}
             \tnwire{unionLeft.-45}{unionOutside.150}
@@ -230,7 +230,7 @@ every finite union of injective regions.
             % declared order is the drawing's, not the mathematics'.
             \tnwire[name=unionDown,
                 cross={under at crossing of unionDown and unionAcross}]
-                {unionOverlap.-70}{unionOutside.110}
+            {unionOverlap.-70}{unionOutside.110}
             \tnwire{unionRight.-135}{unionOutside.45}
         \end{tenkz}
     \end{center}
@@ -260,15 +260,15 @@ every finite union of injective regions.
         \begin{tenkz}[rows={wire}, cols=1, bonds=none]
             \tn[at=(1,1), name=proofZeroLeft, label pos=w,
                 ports={45:virtual, 0:virtual, -45:virtual,
-                       90:physical}]{P_0}
+                        90:physical}]{P_0}
             \tn[at=1 ne of proofZeroLeft, name=proofZeroOverlap,
                 label pos=e,
                 ports={-135:virtual, -45:virtual, -90:virtual,
-                       90:physical}]{P_1}
+                        90:physical}]{P_1}
             \tn[at=2 e of proofZeroLeft, name=proofZeroRight,
                 label pos=e,
                 ports={180:virtual, 135:virtual, -135:virtual,
-                       90:physical}]{P_2}
+                        90:physical}]{P_2}
             \tn[at=1 se of proofZeroLeft, name=proofZeroX, label pos=s,
                 ports={135:virtual, 90:virtual, 45:virtual}]{X}
             \tnwire{proofZeroLeft.45}{proofZeroOverlap.-135}
@@ -279,14 +279,14 @@ every finite union of injective regions.
             % drawing's choice.
             \tnwire[name=proofDown,
                 cross={under at crossing of proofDown and proofAcross}]
-                {proofZeroOverlap.-90}{proofZeroX.90}
+            {proofZeroOverlap.-90}{proofZeroX.90}
             \tnwire{proofZeroRight.-135}{proofZeroX.45}
         \end{tenkz}
         \,$=0$\quad$\xrightarrow{A^{-1}}$\quad
         \begin{tenkz}[rows={wire}, cols=1, bonds=none]
             \tn[at=(1,1), name=proofOneRight, label pos=e,
                 ports={-135:virtual, 135:virtual, -90:virtual,
-                       90:physical}]{P_2}
+                        90:physical}]{P_2}
             % X stands off the -135 bearing of P_2, so the open -135 stub
             % of P_2 is not swallowed by the bond running down to X.
             \tn[at=1.2 s of 0.6 w of proofOneRight, name=proofOneX,
@@ -298,11 +298,11 @@ every finite union of injective regions.
         \begin{tenkz}[rows={wire}, cols=1, bonds=none]
             \tn[at=(1,1), name=proofTwoOverlap, label pos=e,
                 ports={-135:virtual, -90:virtual, -45:virtual,
-                       90:physical}]{P_1}
+                        90:physical}]{P_1}
             \tn[at=0.9 e of 0.75 s of proofTwoOverlap,
                 name=proofTwoRight, label pos=e,
                 ports={135:virtual, -135:virtual, 180:virtual,
-                       90:physical}]{P_2}
+                        90:physical}]{P_2}
             \tn[at=1.5 s of proofTwoOverlap, name=proofTwoX, label pos=s,
                 ports={90:virtual, 45:virtual, 135:virtual}]{X}
             \tnwire{proofTwoOverlap.-90}{proofTwoX.90}
@@ -326,10 +326,10 @@ every finite union of injective regions.
     $\mathcal C_{\{0,1,2\}}(X)=0$. Since $P_0\cup P_1=A$ is injective, its
     left inverse gives
     $\mathcal C_{\{0,1,2\}}(X)=0\Longrightarrow
-    \mathcal C_{\{2\}}(X)=0$.
+        \mathcal C_{\{2\}}(X)=0$.
     The remaining two steps are
     $\mathcal C_{\{2\}}(X)=0\Longrightarrow
-    \mathcal C_{\{1,2\}}(X)=0$ and
+        \mathcal C_{\{1,2\}}(X)=0$ and
     $\mathcal C_{\{1,2\}}(X)=0\Longrightarrow X=0$.
     The first implication is obtained by contracting with the tensor on
     $P_1$, and the second is the left inverse for the injective region
@@ -488,7 +488,7 @@ every finite union of injective regions.
     is
     \begin{align}
         T_{\widetilde B,R}^{\mu}(\tau)
-        &=
+         & =
         \sum_{\zeta}
         \left(\prod_{f\in\partial R}G_f^X(\mu_f,\zeta_f)\right)
         \prod_{v\in R}B_v(\zeta|_{\inc(v)},\tau_v),
@@ -502,7 +502,7 @@ every finite union of injective regions.
     half-edge gauge factors on every edge internal to $R$ combine as
     \begin{align}
         \sum_a (X_e)_{\alpha,a}(X_e^{-1})_{a,\beta}
-        &=
+         & =
         (X_eX_e^{-1})_{\alpha,\beta}
         =
         \delta_{\alpha,\beta}.
@@ -524,7 +524,7 @@ every finite union of injective regions.
     the boundary-coupling matrix:
     \begin{align}
         T_{\widetilde B,R}^{\mu}(\tau)
-        &=
+         & =
         \sum_{\nu}K_R^X(\mu,\nu)\,T_{B,R}^{\nu}(\tau).
         \label{eq:peps_boundary_coupling}
     \end{align}
@@ -538,7 +538,7 @@ every finite union of injective regions.
         \sum_{\zeta}
         K_R^X(\mu,\zeta|_{\partial R})
         \prod_{v\in R}B_v(\zeta|_{\inc(v)},\tau_v)
-        &=
+         & =
         \sum_{\nu}K_R^X(\mu,\nu)\,T_{B,R}^{\nu}(\tau).
         \notag
     \end{align}
@@ -551,13 +551,13 @@ every finite union of injective regions.
     Let
     $K_R^X(\mu,\nu)=\prod_{f\in\partial R}G_f^X(\mu_f,\nu_f)$ and
     $(K_R^X)^{-1}(\nu,\rho)
-    =\prod_{f\in\partial R}(G_f^X)^{-1}(\nu_f,\rho_f)$.
+        =\prod_{f\in\partial R}(G_f^X)^{-1}(\nu_f,\rho_f)$.
     Then, for boundary configurations $\mu$ and $\rho$,
     \begin{align}
         \sum_{\nu}K_R^X(\mu,\nu)\,(K_R^X)^{-1}(\nu,\rho)
-        &=
+         & =
         \begin{cases}
-            1, & \mu=\rho,\\
+            1, & \mu=\rho,    \\
             0, & \mu\neq\rho.
         \end{cases}
         \label{eq:peps_boundary_coupling_inverse}
@@ -567,7 +567,7 @@ every finite union of injective regions.
     Exchange the finite sum over $\nu$ with the product over boundary edges:
     \begin{align}
         \sum_{\nu}K_R^X(\mu,\nu)\,(K_R^X)^{-1}(\nu,\rho)
-        &=
+         & =
         \prod_{f\in\partial R}
         \sum_a G_f^X(\mu_f,a)\,(G_f^X)^{-1}(a,\rho_f).
         \notag
@@ -575,7 +575,7 @@ every finite union of injective regions.
     Since
     \begin{align}
         \sum_a G_f^X(\mu_f,a)\,(G_f^X)^{-1}(a,\rho_f)
-        &=
+         & =
         (G_f^X(G_f^X)^{-1})_{\mu_f,\rho_f}
         =
         \delta_{\mu_f,\rho_f},
@@ -599,7 +599,7 @@ every finite union of injective regions.
 \begin{proof}\leanok
     By (\ref{eq:peps_boundary_coupling}),
     $T_{\widetilde B,R}^{\mu}
-    =\sum_{\nu}K_R^X(\mu,\nu)\,T_{B,R}^{\nu}$.
+        =\sum_{\nu}K_R^X(\mu,\nu)\,T_{B,R}^{\nu}$.
     Suppose $\sum_\mu c_\mu T_{\widetilde B,R}^{\mu}=0$. Substituting
     (\ref{eq:peps_boundary_coupling}) and using the linear independence of
     $\{T_{B,R}^{\nu}\}_{\nu}$ gives
@@ -608,7 +608,7 @@ every finite union of injective regions.
     every $\rho$,
     \begin{align}
         c_\rho
-        &=
+         & =
         \sum_{\nu}
         \left(\sum_{\mu}c_\mu K_R^X(\mu,\nu)\right)
         (K_R^X)^{-1}(\nu,\rho)
@@ -628,7 +628,7 @@ every finite union of injective regions.
     Let $A$ be vertex-injective, and assume that every virtual bond dimension is
     positive. Then every finite region $R$ has an injective blocked tensor:
     $\inj(R)$.
-% Paper-gap note: docs/paper-gaps/peps_injective_ft_section3_route.tex.
+    % Paper-gap note: docs/paper-gaps/peps_injective_ft_section3_route.tex.
 \end{theorem}
 \begin{proof}\leanok
     Let $(c_\rho)_\rho$ be a finitely supported coefficient family on the
@@ -651,7 +651,7 @@ every finite union of injective regions.
     concrete region-injectivity predicate of $A$ satisfies union closure: for
     any two finite regions $R$ and $S$,
     $\inj(R)\wedge\inj(S)\Longrightarrow\inj(R\cup S)$.
-% Paper-gap note: docs/paper-gaps/peps_injective_ft_section3_route.tex.
+    % Paper-gap note: docs/paper-gaps/peps_injective_ft_section3_route.tex.
 \end{theorem}
 \begin{proof}\leanok
     The kernel descent theorem gives $\inj(Q)$ for every finite region $Q$.

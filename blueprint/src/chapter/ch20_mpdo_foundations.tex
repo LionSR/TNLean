@@ -40,7 +40,7 @@
     $\{0,\ldots,d{-}1\}^N$, the \emph{word evaluation} is
     \begin{align}
         M^{u,v}
-        &:=M^{i_1j_1}M^{i_2j_2}\cdots M^{i_Nj_N}\in\MN{D}.
+         & :=M^{i_1j_1}M^{i_2j_2}\cdots M^{i_Nj_N}\in\MN{D}.
         \label{eq:mpdo_word_eval}
     \end{align}
     The empty pair of words evaluates to the identity,
@@ -63,9 +63,9 @@
     $v_1=jv$, then
     \begin{align}
         M^{iuu_2,\,jvv_2}
-        &=M^{ij}M^{uu_2,\,vv_2}
-          =M^{ij}M^{u,v}M^{u_2,v_2}
-          =M^{iu,jv}M^{u_2,v_2},
+         & =M^{ij}M^{uu_2,\,vv_2}
+        =M^{ij}M^{u,v}M^{u_2,v_2}
+        =M^{iu,jv}M^{u_2,v_2},
         \notag
     \end{align}
     using associativity of matrix multiplication.
@@ -87,9 +87,9 @@
     $M^{au,\,bv}=M^{ab}M^{u,v}$. Hence, by cyclicity of the trace,
     \begin{align}
         \tr\!\left(M^{ua,\,vb}\right)
-        &=\tr\!\left(M^{u,v}M^{ab}\right)
-          =\tr\!\left(M^{ab}M^{u,v}\right)
-          =\tr\!\left(M^{au,\,bv}\right).
+         & =\tr\!\left(M^{u,v}M^{ab}\right)
+        =\tr\!\left(M^{ab}M^{u,v}\right)
+        =\tr\!\left(M^{au,\,bv}\right).
         \notag
     \end{align}
 \end{proof}
@@ -103,7 +103,7 @@
     $\sigma,\tau\in\{0,\ldots,d{-}1\}^N$ and given by
     \begin{align}
         \rho^{(N)}(M)_{\sigma,\tau}
-        &=\tr(M^{\sigma,\tau}).
+         & =\tr(M^{\sigma,\tau}).
         \label{eq:mpdo_family}
     \end{align}
 \end{definition}
@@ -152,20 +152,20 @@ Diagrammatically,
 \begin{proof}\leanok
     The entry is a closed bond trace,
     $\rho^{(N)}(M)_{\sigma,\tau}
-    =\tr(M^{\sigma_1\tau_1}\cdots M^{\sigma_N\tau_N})$.
+        =\tr(M^{\sigma_1\tau_1}\cdots M^{\sigma_N\tau_N})$.
     Shifting both configurations by $r$ rotates the matrix product by one factor,
     and the trace is invariant under that cyclic rotation:
     \begin{align}
         \tr\bigl(        M^{\sigma_2\tau_2}\cdots
-            M^{\sigma_N\tau_N}M^{\sigma_1\tau_1}
+        M^{\sigma_N\tau_N}M^{\sigma_1\tau_1}
         \bigr)
-        &=
+         & =
         \tr\bigl(        M^{\sigma_1\tau_1}\cdots M^{\sigma_N\tau_N}
         \bigr),
         \notag
     \end{align}
     so $\rho^{(N)}(M)_{r\sigma,\,r\tau}
-    =\rho^{(N)}(M)_{\sigma,\tau}$.
+        =\rho^{(N)}(M)_{\sigma,\tau}$.
 \end{proof}
 
 \begin{definition}[Hermitian MPO tensor]\label{def:mpo_hermitian}
@@ -201,10 +201,10 @@ Diagrammatically,
     reflection: entrywise,
     \begin{align}
         \rho^{(N)}(M^\dagger)_{\sigma,\tau}
-        &=
+         & =
         \overline{
-            \rho^{(N)}(M)_{\tau\circ\mathrm{rev},
-            \sigma\circ\mathrm{rev}}
+        \rho^{(N)}(M)_{\tau\circ\mathrm{rev},
+        \sigma\circ\mathrm{rev}}
         },
         \label{eq:mpdo_coeff_adjoint_reflection}
     \end{align}
@@ -212,7 +212,7 @@ Diagrammatically,
     the conjugation disappears:
     \begin{align}
         \rho^{(N)}(M^\dagger)_{\sigma,\tau}
-        &=
+         & =
         \rho^{(N)}(M)_{\sigma\circ\mathrm{rev},
         \tau\circ\mathrm{rev}},
         \label{eq:mpdo_adjoint_mpdo}
@@ -226,7 +226,7 @@ Diagrammatically,
     reverses the factors, so
     \begin{align}
         (M^\dagger)^{\sigma,\tau}
-        &=
+         & =
         \bigl(        M^{\tau\circ\mathrm{rev},
             \sigma\circ\mathrm{rev}}
         \bigr)^\dagger.
@@ -235,24 +235,24 @@ Diagrammatically,
     Taking traces gives the entrywise identity
     \begin{align}
         \rho^{(N)}(M^\dagger)_{\sigma,\tau}
-        &=
+         & =
         \tr\!\bigl(        (M^{\tau\circ\mathrm{rev},
-            \sigma\circ\mathrm{rev}})^\dagger
+                \sigma\circ\mathrm{rev}})^\dagger
         \bigr)
         =
         \overline{
-            \rho^{(N)}(M)_{\tau\circ\mathrm{rev},
-            \sigma\circ\mathrm{rev}}
+        \rho^{(N)}(M)_{\tau\circ\mathrm{rev},
+        \sigma\circ\mathrm{rev}}
         }.
         \notag
     \end{align}
     For an MPDO, $\rho^{(N)}(M)$ is Hermitian, so
     \begin{align}
         \overline{
-            \rho^{(N)}(M)_{\tau\circ\mathrm{rev},
-            \sigma\circ\mathrm{rev}}
+        \rho^{(N)}(M)_{\tau\circ\mathrm{rev},
+        \sigma\circ\mathrm{rev}}
         }
-        &=
+         & =
         \rho^{(N)}(M)_{\sigma\circ\mathrm{rev},
         \tau\circ\mathrm{rev}};
         \notag
@@ -271,7 +271,7 @@ Diagrammatically,
     $\E_M:\MN{D}\to\MN{D}$ defined by
     \begin{align}
         \E_M(X)
-        &=\sum_{i,j=0}^{d-1}M^{ij}X(M^{ij})^\dagger.
+         & =\sum_{i,j=0}^{d-1}M^{ij}X(M^{ij})^\dagger.
         \label{eq:mpdo_transfer_map}
     \end{align}
 \end{definition}
@@ -291,7 +291,7 @@ Diagrammatically,
     pair $(i,j)$, for every $X\in\MN{D}$,
     \begin{align}
         \E_{M^{\mathrm{MPS}}}(X)
-        &=
+         & =
         \sum_{(i,j)}
         M^{\mathrm{MPS}}_{(i,j)}X
         (M^{\mathrm{MPS}}_{(i,j)})^\dagger
@@ -327,7 +327,7 @@ Diagrammatically,
     An MPO tensor is an \emph{MPDO} if, for every $N\geq1$,
     \begin{align}
         \rho^{(N)}(M)
-        &\ge0.
+         & \ge0.
         \label{eq:mpdo_positivity}
     \end{align}
     This is the global positivity condition of
@@ -341,15 +341,15 @@ Diagrammatically,
     An MPO tensor is an \emph{LPDO} if there exist a Kraus dimension $d_K$,
     an inner bond dimension $D'$, a bond-space identification
     $e:\{0,\ldots,D-1\}\simeq
-    \{0,\ldots,D'-1\}\times\{0,\ldots,D'-1\}$
+        \{0,\ldots,D'-1\}\times\{0,\ldots,D'-1\}$
     (equivalently, $D$ and $(D')^2$
     have the same cardinality), and matrices $A^{(i,k)}\in\MN{D'}$ such that,
     for all physical indices $i,j$,
     \begin{align}
         M^{ij}
-        &=
+         & =
         \left(\sum_{k=0}^{d_K-1}
-            A^{(i,k)}\otimes\overline{A^{(j,k)}}\right)_{e,e},
+        A^{(i,k)}\otimes\overline{A^{(j,k)}}\right)_{e,e},
         \label{eq:mpdo_lpdo_factorization}
     \end{align}
     where $\otimes$ denotes the Kronecker product, $\overline{(\cdot)}$
@@ -399,22 +399,22 @@ Diagrammatically,
     bond-space identification $e$:
     \begin{align}
         M^{\sigma_1\tau_1}\cdots M^{\sigma_N\tau_N}
-        &=
+         & =
         \left(\sum_{\kappa}
-            P_\kappa\otimes\overline{Q_\kappa}\right)\big|_e,
+        P_\kappa\otimes\overline{Q_\kappa}\right)\big|_e,
         \notag
     \end{align}
     where
     $P_\kappa
-    =A^{(\sigma_1,\kappa_1)}\cdots A^{(\sigma_N,\kappa_N)}$
+        =A^{(\sigma_1,\kappa_1)}\cdots A^{(\sigma_N,\kappa_N)}$
     and
     $Q_\kappa
-    =A^{(\tau_1,\kappa_1)}\cdots A^{(\tau_N,\kappa_N)}$.
+        =A^{(\tau_1,\kappa_1)}\cdots A^{(\tau_N,\kappa_N)}$.
     Since the trace is invariant under the reindexing by~$e$, we apply
     $\tr(X\otimes Y)=\tr(X)\tr(Y)$ to obtain
     \begin{align}
         \rho^{(N)}(M)_{\sigma,\tau}
-        &=
+         & =
         \sum_\kappa
         \tr(P_\kappa)\overline{\tr(Q_\kappa)}
         =
@@ -425,5 +425,5 @@ Diagrammatically,
     where $\psi_\kappa(\sigma)=\tr(P_\kappa)$.
     Hence
     $\rho^{(N)}(M)
-    =\sum_\kappa\ketbra{\psi_\kappa}{\psi_\kappa}\ge0$.
+        =\sum_\kappa\ketbra{\psi_\kappa}{\psi_\kappa}\ge0$.
 \end{proof}

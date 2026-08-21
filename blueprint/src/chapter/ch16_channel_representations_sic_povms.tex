@@ -17,8 +17,8 @@
     \[
         \sum_{i,j\in S}(x_i-x_j)^2
         =2\left(
-          |S|\sum_{i\in S}x_i^2-
-          \left(\sum_{i\in S}x_i\right)^2
+        |S|\sum_{i\in S}x_i^2-
+        \left(\sum_{i\in S}x_i\right)^2
         \right).
     \]
     Since every summand on the left is non-negative, equality in
@@ -28,7 +28,7 @@
 
 This criterion is the equality condition invoked for the off-diagonal overlaps
 and for the eigenvalues in \cite[Chapter~2, Proposition ``SIC POVMs'',
-equations~(2.31)--(2.32)]{Wolf2012Quantum}.
+    equations~(2.31)--(2.32)]{Wolf2012Quantum}.
 
 \section{Trace-square and purity equality}
 
@@ -162,9 +162,9 @@ equations~(2.31)--(2.32)]{Wolf2012Quantum}.
     Under the hypotheses of Theorem~\ref{thm:sic_povm_overlap_bound}, equality
     holds in~(\ref{eq:sic_povm_overlap_bound}) if and only if
     \begin{align}
-        &P_i\text{ is a rank-one orthogonal projection for every }i,\\
-        &\sum_iP_i=\frac nd\Id,\\
-        &\tr(P_iP_j)=\frac{n-d}{(n-1)d}\qquad(i\ne j).
+         & P_i\text{ is a rank-one orthogonal projection for every }i, \\
+         & \sum_iP_i=\frac nd\Id,                                      \\
+         & \tr(P_iP_j)=\frac{n-d}{(n-1)d}\qquad(i\ne j).
     \end{align}
 \end{theorem}
 
@@ -188,7 +188,7 @@ equations~(2.31)--(2.32)]{Wolf2012Quantum}.
 
     \textbf{Local fix (one-dimensional equality families):} The corresponding
     assertion printed in \cite[Chapter~2, Proposition ``SIC POVMs'',
-    lines~816--823]{Wolf2012Quantum} is false when $d=1<n$: every $P_i$ then
+        lines~816--823]{Wolf2012Quantum} is false when $d=1<n$: every $P_i$ then
     equals $[1]$. This deviation is recorded in
     \path{docs/paper-gaps/wolf_sic_povm_linear_independence.tex}.
 \end{theorem}
@@ -306,8 +306,8 @@ equations~(2.31)--(2.32)]{Wolf2012Quantum}.
     For every $j$, the constant-overlap identity and $\sum_iP_i=d\Id$ give
     \begin{align}
         F(P_j)
-        &=P_j+\frac1{d+1}\sum_{i\ne j}P_i\\
-        &=\frac{d}{d+1}(P_j+\Id).
+         & =P_j+\frac1{d+1}\sum_{i\ne j}P_i \\
+         & =\frac{d}{d+1}(P_j+\Id).
     \end{align}
     The operator-basis property therefore yields
     \begin{align}

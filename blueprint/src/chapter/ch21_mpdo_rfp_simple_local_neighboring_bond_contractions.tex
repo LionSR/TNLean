@@ -13,7 +13,7 @@
     virtual bond they share:
     \begin{align}
         \eta_{k,h}
-        &=\sum_{\gamma}(r_k)_{\gamma}\otimes(l_h)_{\gamma}.
+         & =\sum_{\gamma}(r_k)_{\gamma}\otimes(l_h)_{\gamma}.
         \notag
     \end{align}
     It acts on the neighboring bond space $B_k^{R}\otimes B_h^{L}$. This is
@@ -31,11 +31,11 @@
     shared virtual bond of two neighboring factorized slices leaves the
     neighboring operator between the outer sector tensors:
     \begin{align}
-        &\sum_{\gamma}
+         & \sum_{\gamma}
         \left[U_B\kappa_{\beta_1,\gamma}U_B^\dagger\right]_{(k,l_1,r_1),(k,l_1',r_1')}
         \left[U_B\kappa_{\gamma,\alpha_3}U_B^\dagger\right]_{(h,l_2,r_2),(h,l_2',r_2')}
-        \notag\\
-        &\quad =
+        \notag           \\
+         & \quad =
         \left[(l_k)_{\beta_1}\right]_{l_1,l_1'}
         \left[\eta_{k,h}\right]_{(r_1,l_2),(r_1',l_2')}
         \left[(r_h)_{\alpha_3}\right]_{r_2,r_2'}.
@@ -57,7 +57,7 @@
         \sum_{\gamma}
         [(r_k)_{\gamma}]_{r_1,r_1'}
         [(l_h)_{\gamma}]_{l_2,l_2'}
-        &=
+         & =
         [\eta_{k,h}]_{(r_1,l_2),(r_1',l_2')},
         \notag
     \end{align}
@@ -67,23 +67,23 @@
 \begin{definition}[Source-minimal physical-sector factorization]
     \label{def:mpdo_physical_sector_factorization}
     \lean{MPOTensor.PhysicalSectorFactorization,
-      MPOTensor.PhysicalSectorFactorization.transformedPhysicalSlice,
-      MPOTensor.PhysicalSectorFactorization.transformedPhysicalSlice_eq,
-      MPOTensor.PhysicalSectorFactorization.sectorFinEquiv,
-      MPOTensor.PhysicalSectorFactorization.sectorCoordinateTensor,
-      MPOTensor.PhysicalSectorFactorization.neighborIndex_nonempty}
+        MPOTensor.PhysicalSectorFactorization.transformedPhysicalSlice,
+        MPOTensor.PhysicalSectorFactorization.transformedPhysicalSlice_eq,
+        MPOTensor.PhysicalSectorFactorization.sectorFinEquiv,
+        MPOTensor.PhysicalSectorFactorization.sectorCoordinateTensor,
+        MPOTensor.PhysicalSectorFactorization.neighborIndex_nonempty}
     \lean{MPOTensor.PhysicalSectorFactorization.sectorCoordinateTensor_apply,
-      MPOTensor.PhysicalSectorFactorization.sectorCoordinateTensor_apply_same,
-      MPOTensor.PhysicalSectorFactorization.sectorCoordinateTensor_apply_ne}
+        MPOTensor.PhysicalSectorFactorization.sectorCoordinateTensor_apply_same,
+        MPOTensor.PhysicalSectorFactorization.sectorCoordinateTensor_apply_ne}
     \lean{MPOTensor.PhysicalSectorFactorization.transformedPhysicalSlice_apply_same,
-      MPOTensor.PhysicalSectorFactorization.transformedPhysicalSlice_apply_ne}
+        MPOTensor.PhysicalSectorFactorization.transformedPhysicalSlice_apply_ne}
     \leanok
     \uses{def:mpo_tensor}
     A physical-sector factorization of an MPO tensor $\mc K$ consists of a
     finite decomposition
     \begin{align}
         \C^d
-        &\simeq\bigoplus_k(B_k^L\otimes B_k^R),
+         & \simeq\bigoplus_k(B_k^L\otimes B_k^R),
         \notag
     \end{align}
     whose left and right factors are nonzero,
@@ -91,7 +91,7 @@
     $(l_k)_\beta$ and $(r_k)_\alpha$ such that every physical slice satisfies
     \begin{align}
         U\kappa_{\beta,\alpha}U^\dagger
-        &=\bigoplus_k(l_k)_\beta\otimes(r_k)_\alpha.
+         & =\bigoplus_k(l_k)_\beta\otimes(r_k)_\alpha.
         \notag
     \end{align}
     No positivity, trace factorization, or quantum-Markov decomposition is
@@ -102,14 +102,14 @@
 \begin{definition}[Algebraic neighboring contraction]
     \label{def:mpdo_minimal_neighboring_operator}
     \lean{MPOTensor.PhysicalSectorFactorization.neighboringOperator,
-      MPOTensor.PhysicalSectorFactorization.neighboringOperator_apply}
+        MPOTensor.PhysicalSectorFactorization.neighboringOperator_apply}
     \leanok
     \uses{def:mpdo_physical_sector_factorization}
     For sectors $k,h$, contract the common virtual index of the right and
     left sector tensors:
     \begin{align}
         \eta_{k,h}
-        &=\sum_a(r_k)_a\otimes(l_h)_a.
+         & =\sum_a(r_k)_a\otimes(l_h)_a.
         \notag
     \end{align}
     This is an operator on $B_k^R\otimes B_h^L$. Positivity is not part of
@@ -119,15 +119,15 @@
 \begin{definition}[Matrix-weighted neighboring contraction]
     \label{def:mpdo_matrix_weighted_neighboring_operator}
     \lean{MPOTensor.PhysicalSectorFactorization.neighboringOperatorWithMatrix,
-      MPOTensor.PhysicalSectorFactorization.neighboringOperatorWithMatrix_apply,
-      MPOTensor.PhysicalSectorFactorization.neighboringOperatorWithMatrix_one}
+        MPOTensor.PhysicalSectorFactorization.neighboringOperatorWithMatrix_apply,
+        MPOTensor.PhysicalSectorFactorization.neighboringOperatorWithMatrix_one}
     \leanok
     \uses{def:mpdo_physical_sector_factorization, def:mpdo_minimal_neighboring_operator}
     For a virtual matrix $P$, define
     \begin{align}
         \eta_{k,h}(P)
-        &=\sum_{\delta,\gamma}P_{\delta,\gamma}
-          (r_k)_\delta\otimes(l_h)_\gamma.
+         & =\sum_{\delta,\gamma}P_{\delta,\gamma}
+        (r_k)_\delta\otimes(l_h)_\gamma.
         \notag
     \end{align}
     The ordinary neighboring contraction is the case $P=I$.
@@ -143,17 +143,17 @@
     $Y\in M_{D\times E}(\C)$ satisfy the following identity for every
     physical index $i$:
     \begin{align}
-        L^i&=XK^iY.
+        L^i & =XK^iY.
         \notag
     \end{align}
     Every physical-sector factorization of $K$ induces one of $L$ with the
     same physical decomposition.  Its virtual tensor families are
     \begin{align}
         (l_k^L)_\beta
-        &=\sum_\gamma X_{\beta,\gamma}(l_k^K)_\gamma,
-        &
+         & =\sum_\gamma X_{\beta,\gamma}(l_k^K)_\gamma,
+         &
         (r_k^L)_\alpha
-        &=\sum_\delta Y_{\delta,\alpha}(r_k^K)_\delta.
+         & =\sum_\delta Y_{\delta,\alpha}(r_k^K)_\delta.
         \notag
     \end{align}
     This construction abstracts the virtual corner in
@@ -170,7 +170,7 @@
     The neighboring operators of the transported factorization satisfy
     \begin{align}
         \eta^L_{k,h}
-        &=\eta^K_{k,h}(YX).
+         & =\eta^K_{k,h}(YX).
         \notag
     \end{align}
     This identity combines the virtual corner in
@@ -187,7 +187,7 @@
     virtual index gives
     \begin{align}
         \sum_\beta Y_{\delta,\beta}X_{\beta,\gamma}
-        &=(YX)_{\delta,\gamma},
+         & =(YX)_{\delta,\gamma},
         \notag
     \end{align}
     which proves the neighboring-operator identity.
@@ -202,7 +202,7 @@
     suppose that a rectangular matrix $V\in M_{D\times E}(\C)$ satisfies the
     following identity for every physical index $i$:
     \begin{align}
-        L^i&=V^\dagger K^iV.
+        L^i & =V^\dagger K^iV.
         \notag
     \end{align}
     Every physical-sector factorization of $K$ induces one of $L$ with the
@@ -228,30 +228,30 @@
 \begin{theorem}[Flattened sector as an isometric virtual corner]
     \label{thm:mpdo_flattened_sector_virtual_compression}
     \lean{MPSTensor.SectorDecomposition.flatBlockInclusion,
-      MPSTensor.SectorDecomposition.flatBlockInclusion_isometry,
-      MPSTensor.SectorDecomposition.flatBlockInclusion_mul_conjTranspose,
-      MPSTensor.SectorDecomposition.toTensor_mul_flatBlockInclusion,
-      MPSTensor.SectorDecomposition.flatBlockInclusion_conjTranspose_mul_toTensor,
-      MPSTensor.SectorDecomposition.flatWeight_smul_flatBasis_eq_compression}
+        MPSTensor.SectorDecomposition.flatBlockInclusion_isometry,
+        MPSTensor.SectorDecomposition.flatBlockInclusion_mul_conjTranspose,
+        MPSTensor.SectorDecomposition.toTensor_mul_flatBlockInclusion,
+        MPSTensor.SectorDecomposition.flatBlockInclusion_conjTranspose_mul_toTensor,
+        MPSTensor.SectorDecomposition.flatWeight_smul_flatBasis_eq_compression}
     \leanok
     \uses{def:sector_weight_data, thm:block_inclusion_projection}
     Let $A=\bigoplus_t \mu_t A_t$ be a weighted block-diagonal tensor in
     flattened virtual coordinates.
     For every block $s$, the canonical inclusion $V_s$ of that block satisfies
     \begin{align}
-        V_s^\dagger V_s&=1, \notag\\
-        V_sV_s^\dagger&=P_s, \notag\\
-        V_s^\dagger A^iV_s&=\mu_s A_s^i. \notag
+        V_s^\dagger V_s    & =1, \notag           \\
+        V_sV_s^\dagger     & =P_s, \notag         \\
+        V_s^\dagger A^iV_s & =\mu_s A_s^i. \notag
     \end{align}
     Here $P_s$ is the corresponding block projection, transported to the
     flattened coordinates.  Moreover,
     \begin{align}
-        A^iV_s&=V_s(\mu_sA_s^i), \notag\\
-        V_s^\dagger A^i&=(\mu_sA_s^i)V_s^\dagger. \notag
+        A^iV_s          & =V_s(\mu_sA_s^i), \notag         \\
+        V_s^\dagger A^i & =(\mu_sA_s^i)V_s^\dagger. \notag
     \end{align}
     This is the exact blockwise virtual-corner identity from
     \cite[Section~2.3, equation \emph{II\_Aiplusk1},
-      lines~195--219]{Cirac2016MPDO_arXiv}.  Appendix~C.2, Case~I,
+        lines~195--219]{Cirac2016MPDO_arXiv}.  Appendix~C.2, Case~I,
     lines~1374--1450 and 1571--1619 is the downstream application context;
     no positivity after insertion of $P_s$ is asserted here.
 \end{theorem}
@@ -264,23 +264,23 @@
     is the reindexing of $E_s$, while $P_s$ is the reindexing of $Q_s$.
     Multiplicativity of reindexing transports
     \begin{align}
-        E_s^\dagger E_s&=1, \notag\\
-        E_sE_s^\dagger&=Q_s
+        E_s^\dagger E_s & =1, \notag \\
+        E_sE_s^\dagger  & =Q_s
         \notag
     \end{align}
     to the two corresponding identities for $V_s$.  If
     $B_t^i=\mu_tA_t^i$, block diagonality gives
     \begin{align}
-        A^iV_s&=V_sB_s^i, \notag\\
-        V_s^\dagger A^i&=B_s^iV_s^\dagger.
+        A^iV_s          & =V_sB_s^i, \notag  \\
+        V_s^\dagger A^i & =B_s^iV_s^\dagger.
         \notag
     \end{align}
     Therefore
     \begin{align}
         V_s^\dagger A^iV_s
-        &=V_s^\dagger V_sB_s^i
-         =B_s^i
-         =\mu_sA_s^i.
+         & =V_s^\dagger V_sB_s^i
+        =B_s^i
+        =\mu_sA_s^i.
         \notag
     \end{align}
 \end{proof}
@@ -294,7 +294,7 @@
     compression satisfy
     \begin{align}
         \eta^L_{k,h}
-        &=\eta^K_{k,h}(VV^\dagger).
+         & =\eta^K_{k,h}(VV^\dagger).
         \notag
     \end{align}
     No positivity of the right-hand side is asserted.
@@ -313,9 +313,9 @@
 \begin{theorem}[Virtual-gauge invariance of physical-sector factorizations]
     \label{thm:mpdo_physical_sector_factorization_gauge}
     \lean{MPOTensor.PhysicalSectorFactorization.ofGaugeEquiv,
-      MPOTensor.PhysicalSectorFactorization.ofGaugeEquiv_eq_ofVirtualMatrices,
-      MPOTensor.PhysicalSectorFactorization.ofGaugeEquiv_neighboringOperator,
-      MPOTensor.PhysicalSectorFactorization.ofGaugeEquiv_neighboringOperator_posSemidef}
+        MPOTensor.PhysicalSectorFactorization.ofGaugeEquiv_eq_ofVirtualMatrices,
+        MPOTensor.PhysicalSectorFactorization.ofGaugeEquiv_neighboringOperator,
+        MPOTensor.PhysicalSectorFactorization.ofGaugeEquiv_neighboringOperator_posSemidef}
     \leanok
     \uses{def:mpdo_physical_sector_factorization, def:mpdo_minimal_neighboring_operator, def:mpdo_physical_sector_factorization_virtual_matrices}
     Suppose that two MPO tensors of the same virtual dimension differ by an
@@ -338,7 +338,7 @@
 \begin{definition}[One-site matrix spaces of sector sets]%
     \label{def:mpdo_one_site_sector_matrix_space}
     \lean{MPOTensor.PhysicalSectorFactorization.oneSiteSectorMatrix,
-      MPOTensor.PhysicalSectorFactorization.oneSiteSectorSpace}
+        MPOTensor.PhysicalSectorFactorization.oneSiteSectorSpace}
     \leanok
     \uses{def:mpdo_physical_sector_factorization}
     For a sector $k$ and physical matrix indices $x,y$ in its summand, let
@@ -346,7 +346,7 @@
     sector-coordinate tensor. For a set $S$ of sectors, define
     \begin{align}
         \mc A_S
-        &=\spn\{A_{k;x,y}:k\in S\}.
+         & =\spn\{A_{k;x,y}:k\in S\}.
         \notag
     \end{align}
     These are the matrix spaces associated with the physical projections in
@@ -356,7 +356,7 @@
 \begin{theorem}[Directed-cut annihilation of one-site matrix spaces]%
     \label{thm:mpdo_directed_cut_one_site_spaces}
     \lean{MPOTensor.PhysicalSectorFactorization.%
-      oneSiteSectorMatrix_mul_eq_zero_of_neighboringOperator_eq_zero}
+        oneSiteSectorMatrix_mul_eq_zero_of_neighboringOperator_eq_zero}
     \lean{MPOTensor.PhysicalSectorFactorization.oneSiteSectorSpace_mul_eq_zero}
     \leanok
     \uses{def:mpdo_minimal_neighboring_operator, def:mpdo_one_site_sector_matrix_space}
@@ -389,9 +389,9 @@
     \uses{def:mpdo_physical_sector_factorization, def:mpdo_minimal_neighboring_operator}
     Let $z_k\in\C$ satisfy $|z_k|=1$ for every sector. Replacing
     \begin{align}
-        (l_k)_a&\longmapsto z_k(l_k)_a,
-        \notag\\
-        (r_k)_a&\longmapsto z_k^{-1}(r_k)_a
+        (l_k)_a & \longmapsto z_k(l_k)_a,
+        \notag                                \\
+        (r_k)_a & \longmapsto z_k^{-1}(r_k)_a
         \notag
     \end{align}
     leaves every physical-slice factorization unchanged.
@@ -403,7 +403,7 @@
     \lean{MPOTensor.PhysicalSectorFactorization.rephase_cyclicNeighboringProduct}
     \lean{MPOTensor.PhysicalSectorFactorization.rephase_sectorVirtualMatrix}
     \lean{MPOTensor.PhysicalSectorFactorization.%
-      rephase_neighboringOperator_ne_zero_iff}
+        rephase_neighboringOperator_ne_zero_iff}
     \leanok
     \uses{def:mpdo_physical_sector_rephasing, def:mpdo_minimal_neighboring_operator}
     Vertex rephasing transforms the neighboring operators by
@@ -424,12 +424,12 @@
     and suppose that $(l_k)_\beta=0$ for every $k\notin S$ and every $\beta$.
     Retain every physical summand and define
     \begin{align}
-        \widehat l_k&=l_k,
-        \notag\\
-        \widehat r_k&=
+        \widehat l_k & =l_k,
+        \notag               \\
+        \widehat r_k & =
         \begin{cases}
-            r_k,&k\in S,\\
-            0,&k\notin S.
+            r_k, & k\in S,    \\
+            0,   & k\notin S.
         \end{cases}
         \notag
     \end{align}
@@ -438,10 +438,10 @@
     operators become
     \begin{align}
         \widehat\eta_{k,h}
-        &=
+         & =
         \begin{cases}
-            \eta_{k,h},&k\in S,\\
-            0,&k\notin S.
+            \eta_{k,h}, & k\in S,    \\
+            0,          & k\notin S.
         \end{cases}
         \notag
     \end{align}
@@ -466,7 +466,7 @@
     conclusions rather than hypotheses. No positivity of the neighboring
     operators is asserted. This gives the factorization in
     \cite[Appendix~C.2, equations \texttt{AppUkU=rl} and \texttt{formK},
-    lines~1383--1387 and~1434--1439]{Cirac2016MPDO_arXiv}.
+        lines~1383--1387 and~1434--1439]{Cirac2016MPDO_arXiv}.
 \end{definition}
 
 \begin{theorem}[Identification of the neighboring operators]
@@ -478,7 +478,7 @@
     physical-sector factorization is the inverse-map operator
     \begin{align}
         \eta_{k,h}
-        &=\sum_\gamma (r_k)_\gamma\otimes(l_h)_\gamma.
+         & =\sum_\gamma (r_k)_\gamma\otimes(l_h)_\gamma.
         \notag
     \end{align}
     This is equation \texttt{etarl} in
@@ -493,12 +493,12 @@
     In the inverse-map factorization, retain every physical sector and its
     factor spaces, and set
     \begin{align}
-        \widehat l_k&=l_k,
-        \notag\\
-        \widehat r_k&=
+        \widehat l_k & =l_k,
+        \notag               \\
+        \widehat r_k & =
         \begin{cases}
-            r_k,&p_k\ne0,\\
-            0,&p_k=0.
+            r_k, & p_k\ne0, \\
+            0,   & p_k=0.
         \end{cases}
         \notag
     \end{align}
@@ -516,10 +516,10 @@
     The neighboring operators of the reparameterized factorization are
     \begin{align}
         \widehat\eta_{k,h}
-        &=
+         & =
         \begin{cases}
-            \eta_{k,h},&p_k\ne0,\\
-            0,&p_k=0.
+            \eta_{k,h}, & p_k\ne0, \\
+            0,          & p_k=0.
         \end{cases}
         \notag
     \end{align}
@@ -550,30 +550,30 @@
 \begin{definition}[Finite-chain coordinates of a physical-sector factorization]
     \label{def:mpdo_physical_sector_chain_coordinates}
     \lean{MPOTensor.PhysicalSectorFactorization.SectorChainFiber,
-      MPOTensor.PhysicalSectorFactorization.SectorChainIndex,
-      MPOTensor.PhysicalSectorFactorization.sectorChainEquiv,
-      MPOTensor.PhysicalSectorFactorization.cyclicNeighboringProduct}
+        MPOTensor.PhysicalSectorFactorization.SectorChainIndex,
+        MPOTensor.PhysicalSectorFactorization.sectorChainEquiv,
+        MPOTensor.PhysicalSectorFactorization.cyclicNeighboringProduct}
     \leanok
     \uses{def:mpdo_physical_sector_factorization, def:mpdo_minimal_neighboring_operator}
     Let $N\geq1$. For a cyclic sector configuration
     $k=(k_0,\ldots,k_{N-1})$, write
     \begin{align}
         I_k
-        &=\prod_{n=0}^{N-1}(B_{k_n}^L\times B_{k_n}^R).
+         & =\prod_{n=0}^{N-1}(B_{k_n}^L\times B_{k_n}^R).
         \notag
     \end{align}
     Applying the one-site sector decomposition at every site gives a
     bijection
     \begin{align}
         \Phi_N:\Fin{d}^{\,N}
-        &\longrightarrow
+         & \longrightarrow
         \coprod_{k_0,\ldots,k_{N-1}}I_k.
         \notag
     \end{align}
     On $I_k$, define the cyclic neighboring product by
     \begin{align}
         \Omega_k(x,y)
-        &=\prod_{n=0}^{N-1}
+         & =\prod_{n=0}^{N-1}
         \eta_{k_n,k_{n+1}}
         ((x_n^R,x_{n+1}^L),(y_n^R,y_{n+1}^L)),
         \notag
@@ -584,7 +584,7 @@
 \begin{theorem}[Finite-chain decomposition of a physical-sector factorization]
     \label{thm:mpdo_physical_sector_chain_decomposition}
     \lean{MPOTensor.PhysicalSectorFactorization.mpo_submatrix_sector_eq_cyclicNeighboringProduct,
-      MPOTensor.PhysicalSectorFactorization.mpo_reindex_sectorChainEquiv_eq_blockDiagonal}
+        MPOTensor.PhysicalSectorFactorization.mpo_reindex_sectorChainEquiv_eq_blockDiagonal}
     \leanok
     \uses{def:mpdo_physical_sector_chain_coordinates}
     Suppose that the physical-sector factorization is given. For every
@@ -592,7 +592,7 @@
     sector configurations, and
     \begin{align}
         \reindex_{\Phi_N}(M_N(\widetilde{\mc K}))
-        &=\bigoplus_{k_0,\ldots,k_{N-1}}\Omega_k.
+         & =\bigoplus_{k_0,\ldots,k_{N-1}}\Omega_k.
         \notag
     \end{align}
     This is the all-length algebraic decomposition in
@@ -628,7 +628,7 @@
     configuration $k=(k_0,\ldots,k_{N-1})$ with $k_N=k_0$,
     \begin{align}
         \bigotimes_{n=0}^{N-1}\eta_{k_n,k_{n+1}}
-        &\geq0.
+         & \geq0.
         \notag
     \end{align}
     This is the projected-chain inequality in
@@ -648,17 +648,17 @@
 \begin{definition}[Boundary contraction against a virtual matrix]
     \label{def:mpdo_sector_boundary_operator}
     \lean{MPOTensor.PhysicalSectorFactorization.boundaryOperator,
-      MPOTensor.PhysicalSectorFactorization.boundaryOperator_apply,
-      MPOTensor.PhysicalSectorFactorization.boundaryOperator_zero,
-      MPOTensor.PhysicalSectorFactorization.boundaryOperator_add,
-      MPOTensor.PhysicalSectorFactorization.boundaryOperator_smul}
+        MPOTensor.PhysicalSectorFactorization.boundaryOperator_apply,
+        MPOTensor.PhysicalSectorFactorization.boundaryOperator_zero,
+        MPOTensor.PhysicalSectorFactorization.boundaryOperator_add,
+        MPOTensor.PhysicalSectorFactorization.boundaryOperator_smul}
     \leanok
     \uses{def:mpdo_physical_sector_factorization}
     For an arbitrary virtual matrix $X$, define the outer boundary operator
     on $B_k^L\otimes B_h^R$ by
     \begin{align}
         B_{k,h}(X)
-        &=\sum_{a,b}X_{b,a}\,(l_k)_a\otimes(r_h)_b.
+         & =\sum_{a,b}X_{b,a}\,(l_k)_a\otimes(r_h)_b.
         \notag
     \end{align}
     The map $X\mapsto B_{k,h}(X)$ is complex-linear. No positivity of $X$ or
@@ -668,9 +668,9 @@
 \begin{definition}[Regrouped two-site sector closure]
     \label{def:mpdo_two_site_sector_closure}
     \lean{MPOTensor.PhysicalSectorFactorization.twoSiteRegroupEquiv,
-      MPOTensor.PhysicalSectorFactorization.twoSiteRegroupEquiv_symm_apply,
-      MPOTensor.PhysicalSectorFactorization.twoSiteSectorEmbedding,
-      MPOTensor.PhysicalSectorFactorization.twoSiteSectorClosure}
+        MPOTensor.PhysicalSectorFactorization.twoSiteRegroupEquiv_symm_apply,
+        MPOTensor.PhysicalSectorFactorization.twoSiteSectorEmbedding,
+        MPOTensor.PhysicalSectorFactorization.twoSiteSectorClosure}
     \leanok
     \uses{def:phys_close, def:mpdo_physical_sector_factorization}
     First pass to the physical basis selected by $U$, so that each slice is
@@ -680,7 +680,7 @@
     physical sectors $(k,h)$, and reindex its physical factors by
     \begin{align}
         ((L_k,R_k),(L_h,R_h))
-        &\longmapsto ((L_k,R_h),(R_k,L_h)).
+         & \longmapsto ((L_k,R_h),(R_k,L_h)).
         \notag
     \end{align}
     Denote the resulting matrix by $\mc K_{2;k,h}(X)$.
@@ -694,7 +694,7 @@
     For every virtual matrix $X$ and every sector pair $(k,h)$,
     \begin{align}
         \mc K_{2;k,h}(X)
-        &=B_{k,h}(X)\otimes\eta_{k,h}.
+         & =B_{k,h}(X)\otimes\eta_{k,h}.
         \notag
     \end{align}
 \end{theorem}
@@ -720,9 +720,9 @@
 \begin{definition}[Regrouped three-site sector closure]
     \label{def:mpdo_three_site_sector_closure}
     \lean{MPOTensor.PhysicalSectorFactorization.threeSiteRegroupEquiv,
-      MPOTensor.PhysicalSectorFactorization.threeSiteRegroupEquiv_symm_apply,
-      MPOTensor.PhysicalSectorFactorization.threeSiteSectorEmbedding,
-      MPOTensor.PhysicalSectorFactorization.threeSiteSectorClosure}
+        MPOTensor.PhysicalSectorFactorization.threeSiteRegroupEquiv_symm_apply,
+        MPOTensor.PhysicalSectorFactorization.threeSiteSectorEmbedding,
+        MPOTensor.PhysicalSectorFactorization.threeSiteSectorClosure}
     \leanok
     \uses{def:phys_close, def:mpdo_physical_sector_factorization}
     First pass to the physical basis selected by $U$ and form the three-site
@@ -730,7 +730,7 @@
     to the sectors $(k,l,h)$ and reindex its physical factors by
     \begin{align}
         ((L_k,R_k),((L_l,R_l),(L_h,R_h)))
-        &\longmapsto
+         & \longmapsto
         ((L_k,R_h),((R_k,L_l),(R_l,L_h))).
         \notag
     \end{align}
@@ -745,7 +745,7 @@
     For every virtual matrix $X$ and fixed sectors $(k,l,h)$,
     \begin{align}
         \mc K_{3;k,l,h}(X)
-        &=B_{k,h}(X)\otimes
+         & =B_{k,h}(X)\otimes
         (\eta_{k,l}\otimes\eta_{l,h}).
         \notag
     \end{align}
@@ -770,12 +770,12 @@
         \begin{tenkz}[rows={wire}, cols=6, west=none, east=none]
             \tn[skin=pill, wide=6,
                 ports={90@1:physical:$L_k$, 90@2:physical:$R_h$,
-                  90@3:physical:$R_k$, 90@4:physical:$L_l$,
-                  90@5:physical:$R_l$, 90@6:physical:$L_h$,
-                  270@1:physical:$L_k$, 270@2:physical:$R_h$,
-                  270@3:physical:$R_k$, 270@4:physical:$L_l$,
-                  270@5:physical:$R_l$, 270@6:physical:$L_h$}]
-              {{\cal K}_{3;k,l,h}(X)}
+                        90@3:physical:$R_k$, 90@4:physical:$L_l$,
+                        90@5:physical:$R_l$, 90@6:physical:$L_h$,
+                        270@1:physical:$L_k$, 270@2:physical:$R_h$,
+                        270@3:physical:$R_k$, 270@4:physical:$L_l$,
+                        270@5:physical:$R_l$, 270@6:physical:$L_h$}]
+            {{\cal K}_{3;k,l,h}(X)}
         \end{tenkz}
         $\;=\;$
         % B_{k,h}(X): l_k and r_h flank the virtual matrix X on the
@@ -830,7 +830,7 @@
     For every outer-sector pair $(k,h)$, define
     \begin{align}
         \Omega_{k,h}
-        &=\bigoplus_l
+         & =\bigoplus_l
         (\eta_{k,l}\otimes\eta_{l,h}).
         \notag
     \end{align}
@@ -842,60 +842,60 @@
 \begin{figure}[ht]
     \centering
     \begin{minipage}{0.41\textwidth}
-      \centering
-      \begin{align}
-          \mathfrak R_2(\mc K_2(X))_{k,h}
-          &=a_kb_hB_{k,h}(X).
-          \notag
-      \end{align}
-      \begin{center}
-          \tenkzkernel
-          % R_2(K_2(X))_{k,h} = a_kb_h B_{k,h}(X): the two-site
-          % closure, restricted to sector pair (k,h) and traced over
-          % its inner bond space R_k (x) L_h, factors into the scalar
-          % a_kb_h = tr(eta_{k,h}) times the boundary operator
-          % B_{k,h}(X) = sum_{a,b} X_{b,a} (l_k)_a (x) (r_h)_b.
-          % Ink-to-index correspondence: the left pill is the
-          % already-traced closure, its up/down legs the row/column
-          % indices of L_k, R_h; on the right, l_k and r_h are the
-          % sector-coordinate tensors of
-          % Definition~\ref{def:mpdo_sector_boundary_operator}, X the
-          % virtual matrix riding the bond between their own
-          % horizontal indices a, b, and its two ends are sealed --
-          % no further horizontal index survives. Both sides carry
-          % the same boundary signature (virtual-west=0 |
-          % virtual-east=0 | physical-up=2 | physical-down=2).
-          \begin{tenkz}[rows={wire}, cols=2, west=none, east=none]
-              \tn[skin=pill, wide=2,
-                  ports={90@1:physical:$L_k$, 90@2:physical:$R_h$,
-                    270@1:physical:$L_k$, 270@2:physical:$R_h$}]
+        \centering
+        \begin{align}
+            \mathfrak R_2(\mc K_2(X))_{k,h}
+             & =a_kb_hB_{k,h}(X).
+            \notag
+        \end{align}
+        \begin{center}
+            \tenkzkernel
+            % R_2(K_2(X))_{k,h} = a_kb_h B_{k,h}(X): the two-site
+            % closure, restricted to sector pair (k,h) and traced over
+            % its inner bond space R_k (x) L_h, factors into the scalar
+            % a_kb_h = tr(eta_{k,h}) times the boundary operator
+            % B_{k,h}(X) = sum_{a,b} X_{b,a} (l_k)_a (x) (r_h)_b.
+            % Ink-to-index correspondence: the left pill is the
+            % already-traced closure, its up/down legs the row/column
+            % indices of L_k, R_h; on the right, l_k and r_h are the
+            % sector-coordinate tensors of
+            % Definition~\ref{def:mpdo_sector_boundary_operator}, X the
+            % virtual matrix riding the bond between their own
+            % horizontal indices a, b, and its two ends are sealed --
+            % no further horizontal index survives. Both sides carry
+            % the same boundary signature (virtual-west=0 |
+            % virtual-east=0 | physical-up=2 | physical-down=2).
+            \begin{tenkz}[rows={wire}, cols=2, west=none, east=none]
+                \tn[skin=pill, wide=2,
+                    ports={90@1:physical:$L_k$, 90@2:physical:$R_h$,
+                            270@1:physical:$L_k$, 270@2:physical:$R_h$}]
                 {\mathfrak R_2({\cal K}_2(X))_{k,h}}
-          \end{tenkz}
-          $\;=\;a_kb_h\;$
-          \begin{tenkz}[rows={wire}, cols=3, west=none, east=none]
-              \tn[label pos=225, ports={90:physical:$L_k$, 270:physical:$L_k$}]{l_k} &
-              \tn[skin=ring]{X} &
-              \tn[label pos=225, ports={90:physical:$R_h$, 270:physical:$R_h$}]{r_h}
-          \end{tenkz}
-      \end{center}
+            \end{tenkz}
+            $\;=\;a_kb_h\;$
+            \begin{tenkz}[rows={wire}, cols=3, west=none, east=none]
+                \tn[label pos=225, ports={90:physical:$L_k$, 270:physical:$L_k$}]{l_k} &
+                \tn[skin=ring]{X} &
+                \tn[label pos=225, ports={90:physical:$R_h$, 270:physical:$R_h$}]{r_h}
+            \end{tenkz}
+        \end{center}
     \end{minipage}\hfill
     \begin{minipage}{0.56\textwidth}
-      \centering
-      \begin{align}
-          \mathfrak R_3(\mc K_3(X))_{k,l,h}
-          &=B_{k,h}(X)\otimes\eta_{k,l}\otimes\eta_{l,h}.
-          \notag
-      \end{align}
+        \centering
+        \begin{align}
+            \mathfrak R_3(\mc K_3(X))_{k,l,h}
+             & =B_{k,h}(X)\otimes\eta_{k,l}\otimes\eta_{l,h}.
+            \notag
+        \end{align}
     \end{minipage}
     \caption{First each slice is conjugated by $U$ and expressed in the
-    corresponding sector coordinates. After restriction to fixed sectors and
-    the displayed regroupings, the arbitrary-$X$ two- and three-site closures
-    separate into the boundary factor and respectively one or two neighboring
-    contractions. The displayed identities do not assert positivity,
-    preparation, recovery, or the full conclusion of Proposition~C.7. They
-    follow the contractions in
-    \cite[lines~638--655 and Appendix~C.2, lines~1435--1448]
-      {Cirac2016MPDO_arXiv}.}
+        corresponding sector coordinates. After restriction to fixed sectors and
+        the displayed regroupings, the arbitrary-$X$ two- and three-site closures
+        separate into the boundary factor and respectively one or two neighboring
+        contractions. The displayed identities do not assert positivity,
+        preparation, recovery, or the full conclusion of Proposition~C.7. They
+        follow the contractions in
+        \cite[lines~638--655 and Appendix~C.2, lines~1435--1448]
+        {Cirac2016MPDO_arXiv}.}
     \label{fig:mpdo_sector_closure_factorizations}
 \end{figure}
 
@@ -903,16 +903,16 @@
     \label{def:mpdo_neighboring_trace_factorization}
     \lean{MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization}
     \lean{MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.weight_nonneg,
-      MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.neighboringOperator_eq_zero_of_mul_eq_zero,
-      MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.neighborIndex_nonempty_of_mul_ne_zero}
+        MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.neighboringOperator_eq_zero_of_mul_eq_zero,
+        MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.neighborIndex_nonempty_of_mul_ne_zero}
     \leanok
     \uses{def:mpdo_minimal_neighboring_operator}
     Suppose that every neighboring operator is positive semidefinite and that
     there are real numbers $a_k,b_h$ such that
     \begin{align}
-        \tr(\eta_{k,h})&=a_kb_h,
-        \notag\\
-        \sum_k a_kb_k&=1.
+        \tr(\eta_{k,h}) & =a_kb_h,
+        \notag                     \\
+        \sum_k a_kb_k   & =1.
         \notag
     \end{align}
     These are precisely the remaining hypotheses used in the construction of
@@ -923,7 +923,7 @@
 \begin{theorem}[Trace of the three-site neighboring operator]
     \label{thm:mpdo_physical_sector_three_site_neighboring_operator_trace}
     \lean{MPOTensor.PhysicalSectorFactorization.trace_threeSiteNeighboringOperator,
-      MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.trace_threeSiteNeighboringOperator}
+        MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.trace_threeSiteNeighboringOperator}
     \leanok
     \uses{def:mpdo_physical_sector_three_site_neighboring_operator, def:mpdo_neighboring_trace_factorization}
     Assume the neighboring-operator trace factorization of
@@ -931,8 +931,8 @@
     outer-sector pair $(k,h)$,
     \begin{align}
         \tr(\Omega_{k,h})
-        &=\sum_l\tr(\eta_{k,l})\tr(\eta_{l,h})
-         =a_kb_h.
+         & =\sum_l\tr(\eta_{k,l})\tr(\eta_{l,h})
+        =a_kb_h.
         \notag
     \end{align}
     This is the normalization used in the coarse-graining channel of
@@ -946,9 +946,9 @@
     trace of a tensor product is the product of the traces. Hence
     \begin{align}
         \tr(\Omega_{k,h})
-        &=\sum_l(a_kb_l)(a_lb_h)
-         =a_kb_h\sum_l a_lb_l
-         =a_kb_h.
+         & =\sum_l(a_kb_l)(a_lb_h)
+        =a_kb_h\sum_l a_lb_l
+        =a_kb_h.
         \notag
     \end{align}
 \end{proof}
@@ -964,15 +964,15 @@
     For every virtual matrix $X$,
     \begin{align}
         \tr_{R_k\otimes L_h}\!\left(\mc K_{2;k,h}(X)\right)
-        &=\tr(\eta_{k,h})B_{k,h}(X)
-         =a_kb_h B_{k,h}(X).
+         & =\tr(\eta_{k,h})B_{k,h}(X)
+        =a_kb_h B_{k,h}(X).
         \notag
     \end{align}
     Similarly,
     \begin{align}
         \tr_{(R_k\otimes L_l)\otimes(R_l\otimes L_h)}
         \!\left(\mc K_{3;k,l,h}(X)\right)
-        &=\tr(\eta_{k,l})\tr(\eta_{l,h})B_{k,h}(X),
+         & =\tr(\eta_{k,l})\tr(\eta_{l,h})B_{k,h}(X),
         \notag
     \end{align}
     and summing the scalar coefficient over $l$ gives $a_kb_h$.
@@ -985,8 +985,8 @@
     follows immediately. For three sites, the coefficient is
     \begin{align}
         \sum_l (a_kb_l)(a_lb_h)
-        &=a_k\left(\sum_l a_lb_l\right)b_h
-         =a_kb_h.
+         & =a_k\left(\sum_l a_lb_l\right)b_h
+        =a_kb_h.
         \notag
     \end{align}
 \end{proof}

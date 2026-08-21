@@ -25,7 +25,7 @@ recorded in the route note
     site $s$ is
     \begin{align}
         A_{(s)}^{x}
-        &=A_s^{x_1}A_{s+1}^{x_2}\cdots A_{s+\ell-1}^{x_\ell},
+         & =A_s^{x_1}A_{s+1}^{x_2}\cdots A_{s+\ell-1}^{x_\ell},
         \notag
     \end{align}
     with site indices read cyclically. The chain is \emph{window injective
@@ -93,10 +93,10 @@ recorded in the route note
     $u$ on the $L+1$ sites covered by the two windows, and every suffix
     $s$ on the remaining sites,
     \begin{align}
-        &\tr\bigl(A_{(r)}^p C_j(u_1\cdots u_L)
+         & \tr\bigl(A_{(r)}^p C_j(u_1\cdots u_L)
         A_{r+j+L}^{u_{L+1}}A_{(r+j+L+1)}^s\bigr)
-        \notag\\
-        &\qquad
+        \notag                                   \\
+         & \qquad
         =\tr\bigl(A_{(r)}^p A_{r+j}^{u_1}
         C_{j+1}(u_2\cdots u_{L+1})A_{(r+j+L+1)}^s\bigr).
         \notag
@@ -117,7 +117,7 @@ recorded in the route note
     Lemma~\ref{lem:isWindowInjective_arc_span}, strips the state equality
     to the letter level:
     $C_j(u_1\cdots u_L)A_{r+j+L}^{u_{L+1}}
-    =A_{r+j}^{u_1}C_{j+1}(u_2\cdots u_{L+1})$ on every window of
+        =A_{r+j}^{u_1}C_{j+1}(u_2\cdots u_{L+1})$ on every window of
     $L+1$ sites. Chaining the $L$ relations along the $2L$ sites
     flanking the bond turns the leftmost window into the rightmost one:
     $C_0(a)A_{(r+L)}^b=A_{(r)}^aC_L(b)$ for all length-$L$
@@ -388,7 +388,7 @@ recorded in the route note
     $\sigma$,
     \begin{align}
         \tr\!\left(A_0^{\sigma_0}\cdots A_{n-1}^{\sigma_{n-1}}\right)
-        &=
+         & =
         \tr\!\left(B^{\sigma_0}\cdots B^{\sigma_{n-1}}\right).
         \notag
     \end{align}
@@ -451,7 +451,7 @@ recorded in the route note
     edge, invertible $D_h\times D_h$ gauges $X_h^{(j,k)}$ with
     \begin{align}
         A^{(j+1,k)}
-        &=
+         & =
         (X_h^{(j,k)})^{-1}
         A^{(j,k)}X_h^{(j+1,k)},
         \notag
@@ -461,7 +461,7 @@ recorded in the route note
     $D_v\times D_v$ gauges $X_v^{(j,k)}$ with
     \begin{align}
         A^{(j,k+1)}
-        &=
+         & =
         (X_v^{(j,k)})^{-1}
         A^{(j,k)}X_v^{(j,k+1)}.
         \notag
@@ -470,16 +470,16 @@ recorded in the route note
     leftmost one:
     \begin{align}
         A^{(j,k)}
-        &=
+         & =
         (L_h^{(j,k)})^{-1}
         A^{(0,k)}R_h^{(j,k)},
-        \notag\\
+        \notag \\
         L_h^{(j,k)}
-        &=
+         & =
         X_h^{(0,k)}\cdots X_h^{(j-1,k)},
-        \notag\\
+        \notag \\
         R_h^{(j,k)}
-        &=
+         & =
         X_h^{(1,k)}\cdots X_h^{(j,k)},
         \notag
     \end{align}
@@ -489,7 +489,7 @@ recorded in the route note
     \begin{align}
         R_h^{(j,k)}
         (L_h^{(j+1,k)})^{-1}
-        &=
+         & =
         (X_h^{(0,k)})^{-1}.
         \notag
     \end{align}
@@ -498,7 +498,7 @@ recorded in the route note
     a single repeated tensor
     \begin{align}
         B
-        &=
+         & =
         (X_v^{(0,0)})^{-1}
         (X_h^{(0,0)})^{-1}
         A^{(0,0)},
@@ -511,12 +511,12 @@ recorded in the route note
     horizontal and vertical operations by
     \begin{align}
         H_{j,k}
-        &=
+         & =
         R_h^{(j,k)}
         (L_h^{(j+1,k)})^{-1},
-        \notag\\
+        \notag \\
         V_{j,k}
-        &=
+         & =
         R_v^{(j,k)}
         (L_v^{(j,k+1)})^{-1}.
         \notag
@@ -529,7 +529,7 @@ recorded in the route note
     nonzero scalars $\lambda_{j,k}$,
     \begin{align}
         (H_k\otimes\Id_{D_v})(\Id_{D_h}\otimes V_{j+1})
-        &=
+         & =
         \lambda_{j,k}
         (\Id_{D_h}\otimes V_j)(H_{k+1}\otimes\Id_{D_v}).
         \notag
@@ -537,10 +537,10 @@ recorded in the route note
     The scalar phases must also close around the two periodic seams:
     \begin{align}
         \prod_{k\in\Z/N_v\Z}\lambda_{j,k}
-        &=1,
-        \notag\\
+         & =1,
+        \notag \\
         \prod_{j\in\Z/N_h\Z}\lambda_{j,k}
-        &=1.
+         & =1.
         \notag
     \end{align}
     These identities are then absorbed into this single repeated 2D tensor.

@@ -26,7 +26,7 @@ norm estimate is derived here.
     For every boundary matrix $X\in\MN{D}$ and every suffix $\tau$,
     \begin{align}
         P_\tau\bigl(\Gamma_{K+L}(X)\bigr)
-        &=\Gamma_K\bigl(A^\tau X\bigr).
+         & =\Gamma_K\bigl(A^\tau X\bigr).
     \end{align}
 \end{lemma}
 
@@ -37,7 +37,7 @@ norm estimate is derived here.
     factor $A^{\sigma,\tau}=A^\sigma A^\tau$ by
     Lemma~\ref{lem:eval_word_append}, and reassociate:
     $\tr((A^\sigma A^\tau)X)=\tr(A^\sigma(A^\tau X))
-    =\Gamma_K(A^\tau X)(\sigma)$.
+        =\Gamma_K(A^\tau X)(\sigma)$.
 \end{proof}
 
 \begin{definition}[Tail boundary map]\label{def:tail_boundary_map}
@@ -53,7 +53,7 @@ norm estimate is derived here.
     defined for every family $Y\colon(\Fin K\to\Fin d)\to\MN{D}$ by
     \begin{align}
         \Gamma^{\mathrm{tail}}_{K,L}(Y)(u,\tau)
-        &=\tr\bigl(A^\tau\,Y_u\bigr),
+         & =\tr\bigl(A^\tau\,Y_u\bigr),
     \end{align}
     where $u\colon\Fin K\to\Fin d$ is the prefix and
     $\tau\colon\Fin L\to\Fin d$ is the suffix.
@@ -73,7 +73,7 @@ norm estimate is derived here.
     defined for every family $Z\colon(\Fin L\to\Fin d)\to\MN{D}$ by
     \begin{align}
         \Gamma^{\mathrm{left}}_{K,L}(Z)(u,\tau)
-        &=\tr\bigl(A^{u}\,Z_{\tau}\bigr),
+         & =\tr\bigl(A^{u}\,Z_{\tau}\bigr),
     \end{align}
     where $u\colon\Fin K\to\Fin d$ is the prefix and
     $\tau\colon\Fin L\to\Fin d$ is the suffix.
@@ -87,7 +87,7 @@ norm estimate is derived here.
     For every prefix $u\colon\Fin K\to\Fin d$ and suffix $\tau\colon\Fin L\to\Fin d$,
     \begin{align}
         \Gamma^{\mathrm{tail}}_{K,L}(Y)(u,\tau)
-        &=\Gamma_L(Y_u)(\tau).
+         & =\Gamma_L(Y_u)(\tau).
     \end{align}
 \end{theorem}
 
@@ -108,7 +108,7 @@ norm estimate is derived here.
     $u\in\Fin d^K$ recovers $\Gamma_L(Y_u)$:
     \begin{align}
         R^{\mathrm{tail}}_u\bigl(\Gamma^{\mathrm{tail}}_{K,L}(Y)\bigr)
-        &=\Gamma_L(Y_u).
+         & =\Gamma_L(Y_u).
     \end{align}
 \end{theorem}
 
@@ -126,7 +126,7 @@ norm estimate is derived here.
     The standard length-$(K+L)$ boundary map factors through the tail boundary map:
     \begin{align}
         \Gamma_{K+L}(X)
-        &=\Gamma^{\mathrm{tail}}_{K,L}\bigl(u\mapsto X A^{u}\bigr)
+         & =\Gamma^{\mathrm{tail}}_{K,L}\bigl(u\mapsto X A^{u}\bigr)
     \end{align}
     for every $X\in\MN{D}$.
 \end{theorem}
@@ -150,9 +150,9 @@ norm estimate is derived here.
     The range of the tail boundary map is exactly the tail ground space:
     \begin{align}
         \range\bigl(\Gamma^{\mathrm{tail}}_{K,L}\bigr)
-        &=\bigl\{\psi\in\C^{\Fin d^{K+L}}
-            \mid \forall u\in\Fin d^K,\;
-            R^{\mathrm{tail}}_u\psi\in G_L(A)\bigr\}.
+         & =\bigl\{\psi\in\C^{\Fin d^{K+L}}
+        \mid \forall u\in\Fin d^K,\;
+        R^{\mathrm{tail}}_u\psi\in G_L(A)\bigr\}.
     \end{align}
 \end{theorem}
 
@@ -166,7 +166,7 @@ norm estimate is derived here.
     choose for each $u$ a matrix $Y_u\in\MN{D}$ with
     $\Gamma_L(Y_u)=R^{\mathrm{tail}}_u\psi$.  Then
     $\Gamma^{\mathrm{tail}}_{K,L}(Y)(u,\tau)=\tr(A^\tau Y_u)
-    =\Gamma_L(Y_u)(\tau)=(R^{\mathrm{tail}}_u\psi)(\tau)=\psi(u,\tau)$,
+        =\Gamma_L(Y_u)(\tau)=(R^{\mathrm{tail}}_u\psi)(\tau)=\psi(u,\tau)$,
     so $\psi$ lies in the range.
 \end{proof}
 
@@ -177,7 +177,7 @@ norm estimate is derived here.
     For every prefix $u\colon\Fin K\to\Fin d$ and suffix $\tau\colon\Fin L\to\Fin d$,
     \begin{align}
         \Gamma^{\mathrm{left}}_{K,L}(Z)(u,\tau)
-        &=\Gamma_K(Z_\tau)(u).
+         & =\Gamma_K(Z_\tau)(u).
     \end{align}
 \end{theorem}
 
@@ -197,7 +197,7 @@ norm estimate is derived here.
     $\tau\in\Fin d^L$ recovers $\Gamma_K(Z_\tau)$:
     \begin{align}
         P_\tau\bigl(\Gamma^{\mathrm{left}}_{K,L}(Z)\bigr)
-        &=\Gamma_K(Z_\tau).
+         & =\Gamma_K(Z_\tau).
     \end{align}
 \end{theorem}
 
@@ -215,7 +215,7 @@ norm estimate is derived here.
     The standard length-$(K+L)$ boundary map factors through the left boundary map:
     \begin{align}
         \Gamma_{K+L}(X)
-        &=\Gamma^{\mathrm{left}}_{K,L}\bigl(\tau\mapsto A^{\tau}X\bigr)
+         & =\Gamma^{\mathrm{left}}_{K,L}\bigl(\tau\mapsto A^{\tau}X\bigr)
     \end{align}
     for every $X\in\MN{D}$.
 \end{theorem}
@@ -237,9 +237,9 @@ norm estimate is derived here.
     The range of the left boundary map is exactly the left ground space:
     \begin{align}
         \range\bigl(\Gamma^{\mathrm{left}}_{K,L}\bigr)
-        &=\bigl\{\psi\in\C^{\Fin d^{K+L}}
-            \mid \forall \tau\in\Fin d^L,\;
-            P_\tau\psi\in G_K(A)\bigr\}.
+         & =\bigl\{\psi\in\C^{\Fin d^{K+L}}
+        \mid \forall \tau\in\Fin d^L,\;
+        P_\tau\psi\in G_K(A)\bigr\}.
     \end{align}
 \end{theorem}
 
@@ -252,7 +252,7 @@ norm estimate is derived here.
     Conversely, given $\psi$ with $P_\tau\psi\in G_K(A)$ for every $\tau$, choose
     $Z_\tau$ with $\Gamma_K(Z_\tau)=P_\tau\psi$; then
     $\Gamma^{\mathrm{left}}_{K,L}(Z)(u,\tau)=\tr(A^u Z_\tau)
-    =\Gamma_K(Z_\tau)(u)=(P_\tau\psi)(u)=\psi(u,\tau)$.
+        =\Gamma_K(Z_\tau)(u)=(P_\tau\psi)(u)=\psi(u,\tau)$.
 \end{proof}
 
 \begin{lemma}[Prefix restriction at $L=1$]\label{lem:prefix_restrict_one_eq_restrict_last}
@@ -282,7 +282,7 @@ norm estimate is derived here.
     identifies it with the open-chain tail ground submodule:
     \begin{align}
         \iota_{K+L}\bigl(\range(\Gamma^{\mathrm{tail}}_{K,L})\bigr)
-        &=\mathcal V_{K,L}(A).
+         & =\mathcal V_{K,L}(A).
     \end{align}
     Concretely, a vector $v$ in the $(K+L)$-site Euclidean space belongs to
     $\mathcal V_{K,L}(A)$ exactly when the corresponding function satisfies the
@@ -310,7 +310,7 @@ norm estimate is derived here.
     it with the open-chain left ground submodule:
     \begin{align}
         \iota_{K+1}\bigl(\range(\Gamma^{\mathrm{left}}_{K,1})\bigr)
-        &=\mathcal U_K(A).
+         & =\mathcal U_K(A).
     \end{align}
     Concretely, a vector $v$ in the $(K+1)$-site Euclidean space belongs to
     $\mathcal U_K(A)$ exactly when the corresponding function satisfies the
@@ -360,8 +360,8 @@ norm estimate is derived here.
     Moreover, if $J^{\mathrm{tail}}_K(X)_u=XA^u$ and
     $J^{\mathrm{left}}_L(X)_\tau=A^\tau X$, then
     \begin{align}
-      \Gamma^{\mathrm{tail}}_{K,L}J^{\mathrm{tail}}_K&=\Gamma_{K+L},&
-      \Gamma^{\mathrm{left}}_{K,L}J^{\mathrm{left}}_L&=\Gamma_{K+L}.
+        \Gamma^{\mathrm{tail}}_{K,L}J^{\mathrm{tail}}_K & =\Gamma_{K+L}, &
+        \Gamma^{\mathrm{left}}_{K,L}J^{\mathrm{left}}_L & =\Gamma_{K+L}.
     \end{align}
 \end{theorem}
 \begin{proof}
@@ -420,7 +420,7 @@ norm estimate is derived here.
     boundary family $x=(x_s)_{s\in S}$ by
     $(G^{\oplus S}x)_s=Gx_s$, then
     \begin{align}
-      \lVert G^{\oplus S}\rVert\leq \lVert G\rVert .
+        \lVert G^{\oplus S}\rVert\leq \lVert G\rVert .
     \end{align}
     This estimate also holds when $S$ is empty.
 \end{theorem}
@@ -466,13 +466,13 @@ norm estimate is derived here.
     the tail window of length $l+q$ and the left window with a $q$-site
     increment is
     \begin{align}
-      \left\langle X,
+        \left\langle X,
         (\Gamma^{\mathrm{tail}}_{K,l+q})^\dagger
         \Gamma^{\mathrm{left}}_{K+l,q}Z\right\rangle
-      &=\sum_{u\in\Fin d^K}\sum_{j\in\Fin d^q}
+         & =\sum_{u\in\Fin d^K}\sum_{j\in\Fin d^q}
         \left\langle
-          U(A^jX_u),\,
-          \mathcal K_l\,U(Z_jA^u)
+        U(A^jX_u),\,
+        \mathcal K_l\,U(Z_jA^u)
         \right\rangle,
     \end{align}
     where $U$ is Frobenius vectorization and
@@ -495,8 +495,8 @@ norm estimate is derived here.
     the two boundary vectors.  For each $(u,\tau,j)$, word multiplicativity
     and trace cyclicity give
     \begin{align}
-      \tr(A^{\tau,j}X_u)&=\tr(A^\tau(A^jX_u)),&
-      \tr(A^{u,\tau}Z_j)&=\tr(A^\tau(Z_jA^u)).
+        \tr(A^{\tau,j}X_u) & =\tr(A^\tau(A^jX_u)), &
+        \tr(A^{u,\tau}Z_j) & =\tr(A^\tau(Z_jA^u)).
     \end{align}
     For fixed $(u,j)$, summing the resulting inner products over $\tau$ is
     exactly the boundary-map Gram pairing
@@ -516,18 +516,18 @@ norm estimate is derived here.
     $\rho\in\MN{D}$ has nonzero trace and
     $\mathcal K_\infty=\mathscr R(P_\rho)$, then
     \begin{align}
-      &\left\langle X,
+         & \left\langle X,
         (\Gamma^{\mathrm{tail}}_{K,l+1})^\dagger
         \Gamma^{\mathrm{left}}_{K+l,1}Z\right\rangle
         -\sum_{u,j}\left\langle
-          U(A^jX_u),\mathcal K_\infty U(Z_jA^u)\right\rangle \\
-      &\qquad=\sum_{u,j}\left\langle
-          U(A^jX_u),(\mathcal K_l-\mathcal K_\infty)U(Z_jA^u)
+        U(A^jX_u),\mathcal K_\infty U(Z_jA^u)\right\rangle \\
+         & \qquad=\sum_{u,j}\left\langle
+        U(A^jX_u),(\mathcal K_l-\mathcal K_\infty)U(Z_jA^u)
         \right\rangle .
     \end{align}
     Here
     $\mathcal K_\infty U(Z_jA^u)
-      =U((\tr\rho)^{-1}Z_jA^u\rho)$,
+        =U((\tr\rho)^{-1}Z_jA^u\rho)$,
     so the limiting multiplication is on the right and is generally not the
     identity.
 \end{theorem}
@@ -549,19 +549,19 @@ norm estimate is derived here.
     For arbitrary virtual dimension, the adjoints of the tail and left virtual
     maps are
     \begin{align}
-      (J^{\mathrm{tail}}_K)^\dagger(X_u)_u
-        &=U\!\left(\sum_u X_u(A^u)^\dagger\right),&
-      (J^{\mathrm{left}}_L)^\dagger(Z_\tau)_\tau
-        &=U\!\left(\sum_\tau(A^\tau)^\dagger Z_\tau\right).
+        (J^{\mathrm{tail}}_K)^\dagger(X_u)_u
+         & =U\!\left(\sum_u X_u(A^u)^\dagger\right),          &
+        (J^{\mathrm{left}}_L)^\dagger(Z_\tau)_\tau
+         & =U\!\left(\sum_\tau(A^\tau)^\dagger Z_\tau\right).
     \end{align}
     If, in addition, $D>0$ and $\rho\in\MN{D}$ is positive definite, set
     $\mathcal K_\infty=\mathscr R(P_\rho)$ and
     $S_\infty=\mathcal K_\infty^{-1}$.  Then
     \begin{align}
-      \mathcal K_\infty U(X)
-        &=U\!\left((\tr\rho)^{-1}X\rho\right),&
-      S_\infty U(X)
-        &=U\!\left((\tr\rho)X\rho^{-1}\right).
+        \mathcal K_\infty U(X)
+         & =U\!\left((\tr\rho)^{-1}X\rho\right), &
+        S_\infty U(X)
+         & =U\!\left((\tr\rho)X\rho^{-1}\right).
     \end{align}
 \end{theorem}
 \begin{proof}
@@ -570,13 +570,13 @@ norm estimate is derived here.
     For the tail adjoint, test against an arbitrary matrix $Y$ and use the
     Hilbert--Schmidt trace pairing fiberwise:
     \begin{align}
-      \sum_u\langle U(YA^u),U(X_u)\rangle
+        \sum_u\langle U(YA^u),U(X_u)\rangle
         =\left\langle U(Y),
-          U\!\left(\sum_uX_u(A^u)^\dagger\right)\right\rangle.
+        U\!\left(\sum_uX_u(A^u)^\dagger\right)\right\rangle.
     \end{align}
     The left formula follows in the same way from
     $\langle U(A^\tau Y),U(Z_\tau)\rangle
-      =\langle U(Y),U((A^\tau)^\dagger Z_\tau)\rangle$.
+        =\langle U(Y),U((A^\tau)^\dagger Z_\tau)\rangle$.
 
     Under the additional positive-definiteness hypothesis, the forward action
     of $\mathcal K_\infty$ is the exact limiting-metric formula and the
@@ -601,23 +601,23 @@ norm estimate is derived here.
     in the exact tail-after-left C3 projector factorization has the telescoping
     decomposition
     \begin{align}
-      &M_l-\mathcal K_{l+1}^{\oplus K}J_{\rm t}S_{K+l+1}
-          J_{\rm l}^\dagger\mathcal K_{K+l}^{\oplus 1} \\
-      &=\left(M_l-\mathcal K_\infty^{\oplus K}J_{\rm t}S_\infty
-          J_{\rm l}^\dagger\mathcal K_\infty^{\oplus 1}\right) \\
-      &\quad-(\mathcal K_{l+1}^{\oplus K}
-          -\mathcal K_\infty^{\oplus K})J_{\rm t}S_{K+l+1}
-          J_{\rm l}^\dagger\mathcal K_{K+l}^{\oplus 1} \\
-      &\quad-\mathcal K_\infty^{\oplus K}J_{\rm t}
-          (S_{K+l+1}-S_\infty)J_{\rm l}^\dagger
-          \mathcal K_{K+l}^{\oplus 1} \\
-      &\quad-\mathcal K_\infty^{\oplus K}J_{\rm t}S_\infty
-          J_{\rm l}^\dagger(\mathcal K_{K+l}^{\oplus 1}
-          -\mathcal K_\infty^{\oplus 1}),
+         & M_l-\mathcal K_{l+1}^{\oplus K}J_{\rm t}S_{K+l+1}
+        J_{\rm l}^\dagger\mathcal K_{K+l}^{\oplus 1}                \\
+         & =\left(M_l-\mathcal K_\infty^{\oplus K}J_{\rm t}S_\infty
+        J_{\rm l}^\dagger\mathcal K_\infty^{\oplus 1}\right)        \\
+         & \quad-(\mathcal K_{l+1}^{\oplus K}
+        -\mathcal K_\infty^{\oplus K})J_{\rm t}S_{K+l+1}
+        J_{\rm l}^\dagger\mathcal K_{K+l}^{\oplus 1}                \\
+         & \quad-\mathcal K_\infty^{\oplus K}J_{\rm t}
+        (S_{K+l+1}-S_\infty)J_{\rm l}^\dagger
+        \mathcal K_{K+l}^{\oplus 1}                                 \\
+         & \quad-\mathcal K_\infty^{\oplus K}J_{\rm t}S_\infty
+        J_{\rm l}^\dagger(\mathcal K_{K+l}^{\oplus 1}
+        -\mathcal K_\infty^{\oplus 1}),
     \end{align}
     where
     $M_l=(\Gamma^{\rm tail}_{K,l+1})^\dagger
-      \Gamma^{\rm left}_{K+l,1}$ and the superscript $\oplus$ denotes the
+        \Gamma^{\rm left}_{K+l,1}$ and the superscript $\oplus$ denotes the
     corresponding fiberwise spectator operator.  Substituting this equality
     into the exact inverse-Gram factorization gives the same decomposition of
     the physical projector residual, sandwiched between the tail boundary map,
@@ -626,11 +626,11 @@ norm estimate is derived here.
     The limiting product in the first parenthesis has, without an additional
     hypothesis, the explicit limiting mixed pairing
     \begin{align}
-      &\left\langle X,
+         & \left\langle X,
         \mathcal K_\infty^{\oplus K}J_{\rm t}S_\infty
-          J_{\rm l}^\dagger\mathcal K_\infty^{\oplus 1}Z
-        \right\rangle \\
-      &\qquad=\sum_{u,j}\left\langle
+        J_{\rm l}^\dagger\mathcal K_\infty^{\oplus 1}Z
+        \right\rangle                    \\
+         & \qquad=\sum_{u,j}\left\langle
         U(A^jX_u),\mathcal K_\infty U(Z_jA^u)\right\rangle .
     \end{align}
     Consequently, pairing the first parenthesis against boundary families is
@@ -652,10 +652,10 @@ norm estimate is derived here.
     It remains to identify the leading limiting product.  In Frobenius
     coordinates the limiting metric and its inverse act by
     \begin{align}
-      \mathcal K_\infty U(X)
-        &=U\!\left((\tr\rho)^{-1}X\rho\right),&
-      S_\infty U(X)
-        &=U\!\left((\tr\rho)X\rho^{-1}\right).
+        \mathcal K_\infty U(X)
+         & =U\!\left((\tr\rho)^{-1}X\rho\right), &
+        S_\infty U(X)
+         & =U\!\left((\tr\rho)X\rho^{-1}\right).
     \end{align}
     The adjoint left virtual map sends a family $W=(W_j)_j$ to
     $U(\sum_j(A^j)^\dagger W_j)$.  For
@@ -664,7 +664,7 @@ norm estimate is derived here.
     metric cancel exactly through $S_\infty$.  Applying the tail virtual map and the
     tail limiting spectator metric leaves, in the fiber indexed by $u$,
     \begin{align}
-      U\!\left((\tr\rho)^{-1}
+        U\!\left((\tr\rho)^{-1}
         \sum_j (A^j)^\dagger Z_jA^u\rho\right).
     \end{align}
     Its inner product with $X_u$, followed by summation over $u$, is the
@@ -687,24 +687,24 @@ norm estimate is derived here.
     and column sums at most one away from the diagonal, and that, for $i\ne j$
     and every $v$,
     \begin{align}
-        &\re\langle P_i v,P_jv\rangle
-          +\re\langle P_jv,P_iv\rangle \\
-        &\qquad\ge
+         & \re\langle P_i v,P_jv\rangle
+        +\re\langle P_jv,P_iv\rangle    \\
+         & \qquad\ge
         -(1-\gamma)c_{ij}
         \bigl(\re\langle P_iv,v\rangle
-             +\re\langle P_jv,v\rangle\bigr).
+        +\re\langle P_jv,v\rangle\bigr).
         \label{eq:ph_martingale_condition}
     \end{align}
     Then
     \begin{align}
         \gamma\,\re\langle Hv,v\rangle
-        &\le \re\langle Hv,Hv\rangle
+         & \le \re\langle Hv,Hv\rangle
         \notag
     \end{align}
     for every $v$.  Consequently, for every
     $v\in(\ker H)^\perp$,
     \begin{align}
-        \gamma\lVert v\rVert&\le\lVert Hv\rVert.
+        \gamma\lVert v\rVert & \le\lVert Hv\rVert.
         \notag
     \end{align}
 \end{theorem}
@@ -727,7 +727,7 @@ norm estimate is derived here.
     projectors onto $U$ and $V$. Suppose that $\eta\ge0$ and
     \begin{align}
         |\langle x,y\rangle|
-        &\le \eta\,\|x\|\,\|y\|
+         & \le \eta\,\|x\|\,\|y\|
         \label{eq:ph_reduced_friedrichs_overlap}
     \end{align}
     whenever $x\in U\cap W^\perp$ and $y\in V\cap W^\perp$. Define the
@@ -736,10 +736,10 @@ norm estimate is derived here.
     \begin{align}
         \re\langle h_Uv,h_Vv\rangle
         +\re\langle h_Vv,h_Uv\rangle
-        &\ge
+         & \ge
         -\eta\bigl(
-            \re\langle h_Uv,v\rangle
-            +\re\langle h_Vv,v\rangle
+        \re\langle h_Uv,v\rangle
+        +\re\langle h_Vv,v\rangle
         \bigr).
         \label{eq:ph_friedrichs_excitation_anticommutator}
     \end{align}
@@ -780,13 +780,13 @@ $N=L$. They give no gap estimate for $N>L$ and no periodic coercivity.
     \uses{rem:euclidean_local_projector_ingredients}
     For $L,N\in\N$, let
     \begin{align}
-        I_{L,N}&=\{i\in\{0,\ldots,N-1\}\mid i+L\leq N\}.
+        I_{L,N} & =\{i\in\{0,\ldots,N-1\}\mid i+L\leq N\}.
     \end{align}
     The compatible length-$N$ open-chain parent Hamiltonian of interaction
     length $L$ is
     \begin{align}
         H^{\mathrm{open}}_{N,L}(A)
-        &=\sum_{i\in I_{L,N}}h_{i,\mathrm{ES}}(A,L).
+         & =\sum_{i\in I_{L,N}}h_{i,\mathrm{ES}}(A,L).
         \label{eq:open_parent_hamiltonian_es}
     \end{align}
     Thus no summand crosses the two endpoints of the interval. For
@@ -802,7 +802,7 @@ $N=L$. They give no gap estimate for $N>L$ and no periodic coercivity.
     If $L>0$, then
     \begin{align}
         H^{\mathrm{open}}_{L,L}(A)
-        &=P_L^{\mathrm{ES}}(A).
+         & =P_L^{\mathrm{ES}}(A).
         \label{eq:open_parent_hamiltonian_full_window}
     \end{align}
 \end{theorem}
@@ -812,23 +812,23 @@ $N=L$. They give no gap estimate for $N>L$ and no periodic coercivity.
     \uses{def:open_parent_hamiltonian_es, rem:cyclic_window_operators, def:extract_window, rem:euclidean_local_projector_ingredients}
     The interaction has one window:
     \begin{align}
-        I_{L,L}&=\{0\}.
+        I_{L,L} & =\{0\}.
     \end{align}
     The outside region is empty, so it has a unique configuration $\tau$.
     Cyclic restriction to the sole window is the identity:
     \begin{align}
-        R_{0,\tau}v&=v.
+        R_{0,\tau}v & =v.
     \end{align}
     Likewise,
     \begin{align}
-        \sigma|_{[0,L-1]}&=\sigma.
+        \sigma|_{[0,L-1]} & =\sigma.
     \end{align}
     Therefore
     \begin{align}
         H^{\mathrm{open}}_{L,L}(A)
-        &=\sum_{i\in I_{L,L}}h_{i,\mathrm{ES}}(A,L)
-          =h_{0,\mathrm{ES}}(A,L)
-          =P_L^{\mathrm{ES}}(A).
+         & =\sum_{i\in I_{L,L}}h_{i,\mathrm{ES}}(A,L)
+        =h_{0,\mathrm{ES}}(A,L)
+        =P_L^{\mathrm{ES}}(A).
     \end{align}
 \end{proof}
 
@@ -842,13 +842,13 @@ $N=L$. They give no gap estimate for $N>L$ and no periodic coercivity.
     $v\in(\ker H^{\mathrm{open}}_{L,L}(A))^\perp$, then
     \begin{align}
         \lVert H^{\mathrm{open}}_{L,L}(A)v\rVert
-        &=\lVert v\rVert.
+         & =\lVert v\rVert.
         \label{eq:open_parent_hamiltonian_full_window_norm}
     \end{align}
     In particular,
     \begin{align}
         \lVert v\rVert
-        &\leq\lVert H^{\mathrm{open}}_{L,L}(A)v\rVert.
+         & \leq\lVert H^{\mathrm{open}}_{L,L}(A)v\rVert.
     \end{align}
     Thus $\gamma_{l+1}=1$ at the full-window volume $N=L=l+1$ in
     \cite[Theorem~2.1(i)]{Nachtergaele1996Spectral}. This neither asserts that
@@ -861,19 +861,19 @@ $N=L$. They give no gap estimate for $N>L$ and no periodic coercivity.
     The full-window identity and the local kernel formula give
     \begin{align}
         \ker H^{\mathrm{open}}_{L,L}(A)
-        &=\ker P_L^{\mathrm{ES}}(A)=G_L^{\mathrm{ES}}(A).
+         & =\ker P_L^{\mathrm{ES}}(A)=G_L^{\mathrm{ES}}(A).
     \end{align}
     Hence $v$ belongs to $(G_L^{\mathrm{ES}}(A))^\perp$, where the orthogonal
     projector $P_L^{\mathrm{ES}}(A)$ acts as the identity. Thus
     \begin{align}
         \left\lVert H^{\mathrm{open}}_{L,L}(A)v\right\rVert
-        &=\left\lVert P_L^{\mathrm{ES}}(A)v\right\rVert
-          =\lVert v\rVert.
+         & =\left\lVert P_L^{\mathrm{ES}}(A)v\right\rVert
+        =\lVert v\rVert.
     \end{align}
     Consequently,
     \begin{align}
         \lVert v\rVert
-        &\leq\left\lVert H^{\mathrm{open}}_{L,L}(A)v\right\rVert.
+         & \leq\left\lVert H^{\mathrm{open}}_{L,L}(A)v\right\rVert.
     \end{align}
 \end{proof}
 
@@ -899,7 +899,7 @@ $N=L$. They give no gap estimate for $N>L$ and no periodic coercivity.
     \uses{def:open_parent_hamiltonian_es}
     If $H^{\mathrm{open}}_{N,L}(A)v=0$, then, for every $i\in I_{L,N}$,
     \begin{align}
-        h_{i,\mathrm{ES}}(A,L)v&=0.
+        h_{i,\mathrm{ES}}(A,L)v & =0.
     \end{align}
 \end{theorem}
 
@@ -910,7 +910,7 @@ $N=L$. They give no gap estimate for $N>L$ and no periodic coercivity.
     \begin{align}
         \sum_{i\in I_{L,N}}\re
         \langle h_{i,\mathrm{ES}}(A,L)v,v\rangle
-        &=\re\langle H^{\mathrm{open}}_{N,L}(A)v,v\rangle=0.
+         & =\re\langle H^{\mathrm{open}}_{N,L}(A)v,v\rangle=0.
     \end{align}
     Each summand is the squared norm of the image of $v$ under an orthogonal
     projection. Hence every local term annihilates $v$.
@@ -924,7 +924,7 @@ $N=L$. They give no gap estimate for $N>L$ and no periodic coercivity.
     Assume $s+L\leq N$. For every boundary matrix $X$ and complementary
     configuration $\tau$,
     \begin{align}
-        \Res^\tau_{s,L}\Gamma_N^A(X)&\in G_L(A).
+        \Res^\tau_{s,L}\Gamma_N^A(X) & \in G_L(A).
     \end{align}
 \end{theorem}
 
@@ -933,26 +933,26 @@ $N=L$. They give no gap estimate for $N>L$ and no periodic coercivity.
     \uses{lem:ground_space_map_apply, lem:eval_word_append}
     For the fixed words
     \begin{align}
-        w_L&=(\tau_0,\ldots,\tau_{s-1}),
+        w_L & =(\tau_0,\ldots,\tau_{s-1}),
     \end{align}
     and
     \begin{align}
-        w_R&=(\tau_{s+L},\ldots,\tau_{N-1}),
+        w_R & =(\tau_{s+L},\ldots,\tau_{N-1}),
     \end{align}
     the word of a configuration obtained by inserting the window word $\omega$
     is
     \begin{align}
-        A^{w_L\omega w_R}&=A^{w_L}A^\omega A^{w_R}.
+        A^{w_L\omega w_R} & =A^{w_L}A^\omega A^{w_R}.
     \end{align}
     Cyclicity of the trace gives
     \begin{align}
         \operatorname{tr}\!\left(A^{w_L}A^\omega A^{w_R}X\right)
-        &=\operatorname{tr}\!\left(A^\omega A^{w_R}XA^{w_L}\right),
+         & =\operatorname{tr}\!\left(A^\omega A^{w_R}XA^{w_L}\right),
     \end{align}
     and hence
     \begin{align}
         \Res^\tau_{s,L}\Gamma_N^A(X)
-        &=\Gamma_L^A\!\left(A^{w_R}XA^{w_L}\right)\in G_L(A).
+         & =\Gamma_L^A\!\left(A^{w_R}XA^{w_L}\right)\in G_L(A).
     \end{align}
 \end{proof}
 
@@ -964,7 +964,7 @@ $N=L$. They give no gap estimate for $N>L$ and no periodic coercivity.
     For every $A$, $L$, and $N$,
     \begin{align}
         G_N^{\mathrm{ES}}(A)
-        &\subseteq \ker H^{\mathrm{open}}_{N,L}(A).
+         & \subseteq \ker H^{\mathrm{open}}_{N,L}(A).
     \end{align}
 \end{theorem}
 
@@ -975,18 +975,18 @@ $N=L$. They give no gap estimate for $N>L$ and no periodic coercivity.
     non-wrapping window $[s,s+L-1]$ and complementary configuration $\tau$,
     Theorem~\ref{thm:contiguous_restriction_ground_space_map} gives
     \begin{align}
-        \Res^\tau_{s,L}\Gamma_N^A(X)&\in G_L(A).
+        \Res^\tau_{s,L}\Gamma_N^A(X) & \in G_L(A).
     \end{align}
     The non-wrapping identification and
     Lemma~\ref{lem:mem_ground_space_es} then give
     \begin{align}
         R_{s,\tau}v
-        &=\iota_L\!\left(\Res^\tau_{s,L}\Gamma_N^A(X)\right)
-          \in G_L^{\mathrm{ES}}(A).
+         & =\iota_L\!\left(\Res^\tau_{s,L}\Gamma_N^A(X)\right)
+        \in G_L^{\mathrm{ES}}(A).
     \end{align}
     The local kernel criterion therefore gives
     \begin{align}
-        h_{s,\mathrm{ES}}(A,L)v&=0.
+        h_{s,\mathrm{ES}}(A,L)v & =0.
     \end{align}
     Thus every compatible local term annihilates $v$.
 \end{proof}
@@ -1000,7 +1000,7 @@ $N=L$. They give no gap estimate for $N>L$ and no periodic coercivity.
     $L_0$-block-injective, then
     \begin{align}
         \ker H^{\mathrm{open}}_{N,L_0+1}(A)
-        &\subseteq G_N^{\mathrm{ES}}(A).
+         & \subseteq G_N^{\mathrm{ES}}(A).
     \end{align}
 \end{theorem}
 
@@ -1012,11 +1012,11 @@ $N=L$. They give no gap estimate for $N>L$ and no periodic coercivity.
     The three ingredients give
     \begin{align}
         H^{\mathrm{open}}_{N,L_0+1}(A)v=0
-        &\Longrightarrow
-          \bigl(\forall s,\ h_{s,\mathrm{ES}}(A,L_0+1)v=0\bigr)
+         & \Longrightarrow
+        \bigl(\forall s,\ h_{s,\mathrm{ES}}(A,L_0+1)v=0\bigr)
         \Longrightarrow
-          \bigl(\forall s,\tau,\
-            \Res^\tau_{s,L_0+1}v\in G_{L_0+1}^{\mathrm{ES}}(A)\bigr)
+        \bigl(\forall s,\tau,\
+        \Res^\tau_{s,L_0+1}v\in G_{L_0+1}^{\mathrm{ES}}(A)\bigr)
         \Longrightarrow v\in G_N^{\mathrm{ES}}(A).
     \end{align}
     The middle implication is the local kernel criterion, and the last is the
@@ -1032,7 +1032,7 @@ $N=L$. They give no gap estimate for $N>L$ and no periodic coercivity.
     $L_0$-block-injective, then
     \begin{align}
         \ker H^{\mathrm{open}}_{N,L_0+1}(A)
-        &=G_N^{\mathrm{ES}}(A).
+         & =G_N^{\mathrm{ES}}(A).
         \label{eq:open_parent_hamiltonian_kernel_ground_space}
     \end{align}
     This is the canonical MPS instance of the ground-state property in
@@ -1055,22 +1055,22 @@ $N=L$. They give no gap estimate for $N>L$ and no periodic coercivity.
     Assume $D\ge1$ and let $A$ be $L_0$-block-injective with $L_0>0$. Set
     $n=K+L_0$ and $l=L_0$, and write
     \begin{align}
-        S&=\mathcal U_{K+L_0}(A), &
-        T&=\mathcal V_{K,L_0+1}(A). \notag
+        S & =\mathcal U_{K+L_0}(A),          &
+        T & =\mathcal V_{K,L_0+1}(A). \notag
     \end{align}
     Thus $S$ and $T$ are the left and tail ground spaces in the Hilbert space
     on $\Lambda_{n+1}$. Let $q_S=P_{S^\perp}$ and $q_T=P_{T^\perp}$ be the
     complementary excitation projections. If
     \begin{align}
         \|G_{\Lambda_{n+1}\setminus\Lambda_{n-l}}G_{\Lambda_n}
-          -G_{\Lambda_{n+1}}\|&\le\eta, \notag
+        -G_{\Lambda_{n+1}}\| & \le\eta, \notag
     \end{align}
     then every vector $v$ in the Hilbert space on $\Lambda_{n+1}$ satisfies
     \begin{align}
         -\eta\bigl(
-          \re\langle q_Tv,v\rangle+\re\langle q_Sv,v\rangle\bigr)
-        &\le
-          \re\langle q_Tv,q_Sv\rangle+\re\langle q_Sv,q_Tv\rangle. \notag
+        \re\langle q_Tv,v\rangle+\re\langle q_Sv,v\rangle\bigr)
+         & \le
+        \re\langle q_Tv,q_Sv\rangle+\re\langle q_Sv,q_Tv\rangle. \notag
     \end{align}
 \end{theorem}
 
@@ -1093,7 +1093,7 @@ $N=L$. They give no gap estimate for $N>L$ and no periodic coercivity.
     $J_K=J^{\mathrm{tail}}_K$ be its length-$K$ tail virtual map.  Then there is
     a constant $C>0$ such that, for every $K\in\N$,
     \begin{align}
-        \lVert J_K\rVert&\leq C.
+        \lVert J_K\rVert & \leq C.
     \end{align}
     No positive-definiteness hypothesis on the fixed point is required.
 \end{theorem}
@@ -1104,13 +1104,13 @@ $N=L$. They give no gap estimate for $N>L$ and no periodic coercivity.
     Reconstruct the norm infrastructure from the exact adjoint--self identity
     \begin{align}
         J_K^\dagger J_K U(X)
-        &=U\!\left(X\,\mathcal E_A^K(\mathbf 1)\right).
+         & =U\!\left(X\,\mathcal E_A^K(\mathbf 1)\right).
     \end{align}
     The Hilbert--Schmidt product estimate then gives the fourth-power bound
     \begin{align}
         \lVert J_K\rVert^4
-        &\leq \sum_{i,j}\left\lvert
-          \mathcal E_A^K(\mathbf 1)_{ij}\right\rvert^2.
+         & \leq \sum_{i,j}\left\lvert
+        \mathcal E_A^K(\mathbf 1)_{ij}\right\rvert^2.
     \end{align}
     For $K\geq1$, decompose the transfer power into its fixed-point projection
     and the $K$-th power of the complementary map.  The complementary powers
@@ -1131,7 +1131,7 @@ $N=L$. They give no gap estimate for $N>L$ and no periodic coercivity.
     \uses{def:eval_word}
     If $A$ is left-canonical, then for every $Q\in\N$,
     \begin{align}
-        \sum_{j\in\Omega_Q}(A^j)^\dagger A^j&=\mathbf 1,
+        \sum_{j\in\Omega_Q}(A^j)^\dagger A^j & =\mathbf 1,
     \end{align}
     where $\Omega_Q=\Fin(d^Q)$ is the set of physical words of length $Q$.
 \end{theorem}
@@ -1153,8 +1153,8 @@ $N=L$. They give no gap estimate for $N>L$ and no periodic coercivity.
     If $A$ is left-canonical, then the length-$Q$ left virtual map
     $J_Q^{\mathrm{left}}$ preserves the Hilbert--Schmidt norm.  In particular,
     \begin{align}
-        \lVert J_Q^{\mathrm{left}}X\rVert&=\lVert X\rVert,\\
-        \lVert J_Q^{\mathrm{left}}\rVert&\leq1.
+        \lVert J_Q^{\mathrm{left}}X\rVert & =\lVert X\rVert, \\
+        \lVert J_Q^{\mathrm{left}}\rVert  & \leq1.
     \end{align}
 \end{theorem}
 
@@ -1173,7 +1173,7 @@ $N=L$. They give no gap estimate for $N>L$ and no periodic coercivity.
     For $K,L,Q\in\N$, let
     \begin{align}
         \mathscr A_{K,L,Q}\colon
-        \ell^2(\Omega_{K+(L+Q)})&\longrightarrow
+        \ell^2(\Omega_{K+(L+Q)}) & \longrightarrow
         \ell^2(\Omega_{(K+L)+Q})
     \end{align}
     be the unitary coordinate map induced by associativity of addition.
@@ -1187,7 +1187,7 @@ $N=L$. They give no gap estimate for $N>L$ and no periodic coercivity.
     For every $K,L,Q\in\N$,
     \begin{align}
         \mathscr A_{K,L,Q}\Gamma_{K+(L+Q)}^{\mathrm{ES}}
-        &=\Gamma_{K+L+Q}^{\mathrm{ES}}.
+         & =\Gamma_{K+L+Q}^{\mathrm{ES}}.
     \end{align}
 \end{theorem}
 
@@ -1207,7 +1207,7 @@ $N=L$. They give no gap estimate for $N>L$ and no periodic coercivity.
     Define the tail boundary map in the common $(K+L+Q)$-site coordinates by
     \begin{align}
         \widetilde\Gamma^{\mathrm{tail}}_{K;L,Q}
-        &:=\mathscr A_{K,L,Q}\Gamma^{\mathrm{tail}}_{K,L+Q}.
+         & :=\mathscr A_{K,L,Q}\Gamma^{\mathrm{tail}}_{K,L+Q}.
     \end{align}
 \end{definition}
 
@@ -1219,8 +1219,8 @@ $N=L$. They give no gap estimate for $N>L$ and no periodic coercivity.
     The reassociated tail map satisfies
     \begin{align}
         \widetilde\Gamma^{\mathrm{tail}}_{K;L,Q}
-          J_K^{\mathrm{tail}}
-        &=\Gamma_{K+L+Q}^{\mathrm{ES}}.
+        J_K^{\mathrm{tail}}
+         & =\Gamma_{K+L+Q}^{\mathrm{ES}}.
     \end{align}
 \end{theorem}
 
@@ -1261,10 +1261,10 @@ $N=L$. They give no gap estimate for $N>L$ and no periodic coercivity.
     With the notation of
     Theorem~\ref{thm:spectator_boundary_mixed_gram},
     \begin{align}
-      \left\langle X,
+        \left\langle X,
         (\widetilde\Gamma^{\mathrm{tail}}_{K;L,Q})^\dagger
         \Gamma^{\mathrm{left}}_{K+L,Q}Z\right\rangle
-      &=\sum_{u\in\Omega_K}\sum_{j\in\Omega_Q}
+         & =\sum_{u\in\Omega_K}\sum_{j\in\Omega_Q}
         \left\langle U(A^jX_u),\mathcal K_LU(Z_jA^u)\right\rangle.
     \end{align}
 \end{theorem}
@@ -1284,14 +1284,14 @@ $N=L$. They give no gap estimate for $N>L$ and no periodic coercivity.
     Let $\rho\in\MN{D}$ have nonzero trace and set
     $\mathcal K_\infty=\mathscr R(P_\rho)$.  Then
     \begin{align}
-      &\left\langle X,
+         & \left\langle X,
         (\widetilde\Gamma^{\mathrm{tail}}_{K;L,Q})^\dagger
         \Gamma^{\mathrm{left}}_{K+L,Q}Z\right\rangle
         -\sum_{u,j}\left\langle U(A^jX_u),
-          \mathcal K_\infty U(Z_jA^u)\right\rangle\\
-      &\qquad=
+        \mathcal K_\infty U(Z_jA^u)\right\rangle \\
+         & \qquad=
         \sum_{u,j}\left\langle U(A^jX_u),
-          (\mathcal K_L-\mathcal K_\infty)U(Z_jA^u)\right\rangle.
+        (\mathcal K_L-\mathcal K_\infty)U(Z_jA^u)\right\rangle.
     \end{align}
 \end{theorem}
 
@@ -1308,7 +1308,7 @@ $N=L$. They give no gap estimate for $N>L$ and no periodic coercivity.
     \leanok
     For $X=(X_u)_{u\in\Omega_K}$, define
     \begin{align}
-        (F_{K,Q}X)_{u,j}&:=A^jX_u.
+        (F_{K,Q}X)_{u,j} & :=A^jX_u.
     \end{align}
 \end{definition}
 
@@ -1318,7 +1318,7 @@ $N=L$. They give no gap estimate for $N>L$ and no periodic coercivity.
     \leanok
     For $Z=(Z_j)_{j\in\Omega_Q}$, define
     \begin{align}
-        (G_{K,Q}Z)_{u,j}&:=Z_jA^u.
+        (G_{K,Q}Z)_{u,j} & :=Z_jA^u.
     \end{align}
 \end{definition}
 
@@ -1358,8 +1358,8 @@ $N=L$. They give no gap estimate for $N>L$ and no periodic coercivity.
     \uses{def:whole_increment_left_overlap_factor, def:whole_increment_right_overlap_factor}
     The overlap factors satisfy
     \begin{align}
-      \lVert F_{K,Q}\rVert&\leq\lVert J_Q^{\mathrm{left}}\rVert,\\
-      \lVert G_{K,Q}\rVert&\leq\lVert J_K^{\mathrm{tail}}\rVert.
+        \lVert F_{K,Q}\rVert & \leq\lVert J_Q^{\mathrm{left}}\rVert, \\
+        \lVert G_{K,Q}\rVert & \leq\lVert J_K^{\mathrm{tail}}\rVert.
     \end{align}
 \end{theorem}
 
@@ -1379,11 +1379,11 @@ $N=L$. They give no gap estimate for $N>L$ and no periodic coercivity.
     Assume $\operatorname{tr}(\rho)\neq 0$ and let
     $\mathcal K_\infty=\mathscr R(P_\rho)$.  Define
     \begin{align}
-      R_{K,L,Q}
-      &:=(\widetilde\Gamma^{\mathrm{tail}}_{K;L,Q})^\dagger
-          \Gamma^{\mathrm{left}}_{K+L,Q}
+        R_{K,L,Q}
+         & :=(\widetilde\Gamma^{\mathrm{tail}}_{K;L,Q})^\dagger
+        \Gamma^{\mathrm{left}}_{K+L,Q}
         -F_{K,Q}^\dagger
-          \mathcal K_\infty^{\oplus(\Omega_K\times\Omega_Q)}G_{K,Q}.
+        \mathcal K_\infty^{\oplus(\Omega_K\times\Omega_Q)}G_{K,Q}.
     \end{align}
 \end{definition}
 
@@ -1394,10 +1394,10 @@ $N=L$. They give no gap estimate for $N>L$ and no periodic coercivity.
     \uses{def:whole_increment_centered_residual, thm:whole_increment_left_overlap_factor_apply, thm:whole_increment_right_overlap_factor_apply, thm:whole_increment_mixed_gram_centered}
     The centered residual factors as
     \begin{align}
-      R_{K,L,Q}
-      &=F_{K,Q}^\dagger
+        R_{K,L,Q}
+         & =F_{K,Q}^\dagger
         (\mathcal K_L-\mathcal K_\infty)^{\oplus
-          (\Omega_K\times\Omega_Q)}G_{K,Q}.
+            (\Omega_K\times\Omega_Q)}G_{K,Q}.
     \end{align}
 \end{theorem}
 
@@ -1415,8 +1415,8 @@ $N=L$. They give no gap estimate for $N>L$ and no periodic coercivity.
     \uses{thm:whole_increment_centered_factorization, thm:whole_increment_overlap_factor_norms, thm:boundary_fiberwise_map_norm}
     The factorization gives
     \begin{align}
-      \lVert R_{K,L,Q}\rVert
-      &\leq\lVert J_Q^{\mathrm{left}}\rVert
+        \lVert R_{K,L,Q}\rVert
+         & \leq\lVert J_Q^{\mathrm{left}}\rVert
         \lVert\mathcal K_L-\mathcal K_\infty\rVert
         \lVert J_K^{\mathrm{tail}}\rVert.
     \end{align}
@@ -1436,8 +1436,8 @@ $N=L$. They give no gap estimate for $N>L$ and no periodic coercivity.
     \uses{thm:whole_increment_centered_residual_bound, thm:whole_increment_left_virtual_norm}
     If $A$ is left-canonical, then
     \begin{align}
-      \lVert R_{K,L,Q}\rVert
-      &\leq\lVert\mathcal K_L-\mathcal K_\infty\rVert
+        \lVert R_{K,L,Q}\rVert
+         & \leq\lVert\mathcal K_L-\mathcal K_\infty\rVert
         \lVert J_K^{\mathrm{tail}}\rVert.
     \end{align}
 \end{theorem}
@@ -1492,9 +1492,9 @@ $N=L$. They give no gap estimate for $N>L$ and no periodic coercivity.
     \uses{def:reassociated_tail_boundary_map, thm:spectator_boundary_direct_sum_gram}
     Reassociation preserves the tail Gram:
     \begin{align}
-      (\widetilde\Gamma^{\mathrm{tail}}_{K;L,Q})^\dagger
+        (\widetilde\Gamma^{\mathrm{tail}}_{K;L,Q})^\dagger
         \widetilde\Gamma^{\mathrm{tail}}_{K;L,Q}
-      &=\mathcal K_{L+Q}^{\oplus\Omega_K}.
+         & =\mathcal K_{L+Q}^{\oplus\Omega_K}.
     \end{align}
 \end{theorem}
 
@@ -1532,19 +1532,19 @@ $N=L$. They give no gap estimate for $N>L$ and no periodic coercivity.
     If $\Gamma_{K+L}^{\mathrm{ES}}$ and
     $\Gamma_{L+Q}^{\mathrm{ES}}$ are injective, respectively, then
     \begin{align}
-      (J_Q^{\mathrm{left}})^\dagger
+        (J_Q^{\mathrm{left}})^\dagger
         \mathcal K_{K+L}^{\oplus\Omega_Q}
         (\mathcal K_{K+L}^{-1})^{\oplus\Omega_Q}
         (\Gamma_{K+L,Q}^{\mathrm{left}})^\dagger
-      &=(\Gamma_{K+L+Q}^{\mathrm{ES}})^\dagger.
+         & =(\Gamma_{K+L+Q}^{\mathrm{ES}})^\dagger.
     \end{align}
     Moreover,
     \begin{align}
-      (J_K^{\mathrm{tail}})^\dagger
+        (J_K^{\mathrm{tail}})^\dagger
         \mathcal K_{L+Q}^{\oplus\Omega_K}
         (\mathcal K_{L+Q}^{-1})^{\oplus\Omega_K}
         (\widetilde\Gamma_{K;L,Q}^{\mathrm{tail}})^\dagger
-      &=(\Gamma_{K+L+Q}^{\mathrm{ES}})^\dagger.
+         & =(\Gamma_{K+L+Q}^{\mathrm{ES}})^\dagger.
     \end{align}
 \end{theorem}
 
@@ -1595,10 +1595,10 @@ $N=L$. They give no gap estimate for $N>L$ and no periodic coercivity.
     \uses{thm:reassociated_tail_inverse_gram, thm:boundary_fiberwise_map_norm}
     If $\Gamma_{L+Q}^{\mathrm{ES}}$ is injective, then
     \begin{align}
-      \left\lVert\widetilde\Gamma^{\mathrm{tail}}_{K;L,Q}
+        \left\lVert\widetilde\Gamma^{\mathrm{tail}}_{K;L,Q}
         \bigl((\widetilde\Gamma^{\mathrm{tail}}_{K;L,Q})^\dagger
-          \widetilde\Gamma^{\mathrm{tail}}_{K;L,Q}\bigr)^{-1}\right\rVert
-      &\leq\sqrt{\lVert\mathcal K_{L+Q}^{-1}\rVert}.
+        \widetilde\Gamma^{\mathrm{tail}}_{K;L,Q}\bigr)^{-1}\right\rVert
+         & \leq\sqrt{\lVert\mathcal K_{L+Q}^{-1}\rVert}.
     \end{align}
 \end{theorem}
 
@@ -1626,15 +1626,15 @@ $N=L$. They give no gap estimate for $N>L$ and no periodic coercivity.
     $J_\ell^\dagger=(J_Q^{\mathrm{left}})^\dagger$.  Then the exact virtual
     residual satisfies
     \begin{align}
-      &(\widetilde\Gamma_{K;L,Q}^{\mathrm{tail}})^\dagger
-          \Gamma_{K+L,Q}^{\mathrm{left}}
-        -K_tJ_tI_fJ_\ell^\dagger K_\ell\\
-      &\quad=R_{K,L,Q}
+         & (\widetilde\Gamma_{K;L,Q}^{\mathrm{tail}})^\dagger
+        \Gamma_{K+L,Q}^{\mathrm{left}}
+        -K_tJ_tI_fJ_\ell^\dagger K_\ell                       \\
+         & \quad=R_{K,L,Q}
         -(K_t-K_t^\infty)J_tI_fJ_\ell^\dagger K_\ell
-        -K_t^\infty J_t(I_f-I_\infty)J_\ell^\dagger K_\ell\\
-      &\qquad\phantom{=R_{K,L,Q}}
+        -K_t^\infty J_t(I_f-I_\infty)J_\ell^\dagger K_\ell    \\
+         & \qquad\phantom{=R_{K,L,Q}}
         -K_t^\infty J_tI_\infty J_\ell^\dagger
-          (K_\ell-K_\ell^\infty).
+        (K_\ell-K_\ell^\infty).
     \end{align}
 \end{theorem}
 
@@ -1666,13 +1666,13 @@ $N=L$. They give no gap estimate for $N>L$ and no periodic coercivity.
     $\Gamma_{L+Q}^{\mathrm{ES}}$ and $\Gamma_{K+L}^{\mathrm{ES}}$ are
     injective.  Put
     \begin{align}
-      I_t&=\mathcal K_{L+Q}^{-1},&
-      I_\ell&=\mathcal K_{K+L}^{-1}.
+        I_t    & =\mathcal K_{L+Q}^{-1}, &
+        I_\ell & =\mathcal K_{K+L}^{-1}.
     \end{align}
     Then the centered physical sandwich $\widehat R_{K,L,Q}$ satisfies
     \begin{align}
-      \lVert\widehat R_{K,L,Q}\rVert
-      &\leq \sqrt{\lVert I_t\rVert}\,
+        \lVert\widehat R_{K,L,Q}\rVert
+         & \leq \sqrt{\lVert I_t\rVert}\,
         \lVert R_{K,L,Q}\rVert\,
         \sqrt{\lVert I_\ell\rVert}.
     \end{align}
@@ -1722,16 +1722,16 @@ $N=L$. They give no gap estimate for $N>L$ and no periodic coercivity.
     required to define the indicated inverse Grams, the tail, full, and left
     corrections $C_t,C_f,C_\ell$ satisfy
     \begin{align}
-      \lVert C_t\rVert
-      &\leq \sqrt{\lVert I_t\rVert}
+        \lVert C_t\rVert
+         & \leq \sqrt{\lVert I_t\rVert}
         \lVert\mathcal K_{L+Q}-\mathcal K_\infty\rVert
         \lVert J_K^{\mathrm{tail}}\rVert
         \sqrt{\lVert I_f\rVert}.
     \end{align}
     The full correction satisfies
     \begin{align}
-      \lVert C_f\rVert
-      &\leq \sqrt{\lVert I_t\rVert}
+        \lVert C_f\rVert
+         & \leq \sqrt{\lVert I_t\rVert}
         \lVert\mathcal K_\infty\rVert
         \lVert J_K^{\mathrm{tail}}\rVert
         \lVert I_\infty\rVert
@@ -1740,8 +1740,8 @@ $N=L$. They give no gap estimate for $N>L$ and no periodic coercivity.
     \end{align}
     The left correction satisfies
     \begin{align}
-      \lVert C_\ell\rVert
-      &\leq \sqrt{\lVert I_t\rVert}
+        \lVert C_\ell\rVert
+         & \leq \sqrt{\lVert I_t\rVert}
         \lVert\mathcal K_\infty\rVert
         \lVert J_K^{\mathrm{tail}}\rVert
         \lVert I_\infty\rVert
@@ -1772,14 +1772,14 @@ $N=L$. They give no gap estimate for $N>L$ and no periodic coercivity.
     $\mathcal B_K=\bigoplus_{u\in\Omega_K}\MN{D}$ with its
     Hilbert--Schmidt direct-sum norm.  Define
     \begin{align}
-        F_K&:\mathcal B_K\longrightarrow
-          \bigoplus_{(u,j)\in\Omega_K\times\Omega_1}\MN{D}
+        F_K & :\mathcal B_K\longrightarrow
+        \bigoplus_{(u,j)\in\Omega_K\times\Omega_1}\MN{D}
     \end{align}
     by applying the one-site left virtual map independently to each prefix
     fiber.  Define
     \begin{align}
-        G_K&:\mathcal B_1\longrightarrow
-          \bigoplus_{(u,j)\in\Omega_K\times\Omega_1}\MN{D}
+        G_K & :\mathcal B_1\longrightarrow
+        \bigoplus_{(u,j)\in\Omega_K\times\Omega_1}\MN{D}
     \end{align}
     by applying the length-$K$ tail virtual map independently to each
     final-site fiber.  These definitions make sense without any nonemptiness
@@ -1789,7 +1789,7 @@ $N=L$. They give no gap estimate for $N>L$ and no periodic coercivity.
     $\mathcal K_\infty=\mathscr R(P_\rho)$ and define the centered virtual
     residual by
     \begin{align}
-      R_{K,l}={}&(\Gamma^{\mathrm{tail}}_{K,l+1})^\dagger
+        R_{K,l}={} & (\Gamma^{\mathrm{tail}}_{K,l+1})^\dagger
         \Gamma^{\mathrm{left}}_{K+l,1}
         -\mathcal K_\infty^{\oplus\Omega_K}J^{\mathrm{tail}}_K
         \mathcal K_\infty^{-1}(J^{\mathrm{left}}_1)^\dagger
@@ -1810,13 +1810,13 @@ $N=L$. They give no gap estimate for $N>L$ and no periodic coercivity.
     \uses{def:c3_centered_overlap_factors_residual, def:ground_space_gram, def:primitive_mps, thm:whole_increment_left_overlap_factor_apply, thm:whole_increment_right_overlap_factor_apply, thm:whole_increment_overlap_factor_norms}
     For every $K\in\N$, the common overlap factors have fiber formulas
     \begin{align}
-        (F_KX)_{u,j}&=A^jX_u,&
-        (G_KZ)_{u,j}&=Z_jA^u,
+        (F_KX)_{u,j} & =A^jX_u, &
+        (G_KZ)_{u,j} & =Z_jA^u,
     \end{align}
     and norm bounds
     \begin{align}
-        \lVert F_K\rVert&\leq\lVert J^{\mathrm{left}}_1\rVert,&
-        \lVert G_K\rVert&\leq\lVert J^{\mathrm{tail}}_K\rVert.
+        \lVert F_K\rVert & \leq\lVert J^{\mathrm{left}}_1\rVert, &
+        \lVert G_K\rVert & \leq\lVert J^{\mathrm{tail}}_K\rVert.
     \end{align}
     The formulas and bounds remain valid for empty direct sums and incur no
     factor depending on the number of configurations.
@@ -1825,15 +1825,15 @@ $N=L$. They give no gap estimate for $N>L$ and no periodic coercivity.
     centered residual of Definition~\ref{def:c3_centered_overlap_factors_residual}
     factors exactly at the generally nonidentity limiting metric as
     \begin{align}
-      R_{K,l}
-      &=F_K^\dagger
+        R_{K,l}
+         & =F_K^\dagger
         (\mathcal K_l-\mathcal K_\infty)^{\oplus
-          (\Omega_K\times\Omega_1)}G_K,
+            (\Omega_K\times\Omega_1)}G_K,
     \end{align}
     and hence
     \begin{align}
-      \lVert R_{K,l}\rVert
-      &\leq \lVert J^{\mathrm{left}}_1\rVert
+        \lVert R_{K,l}\rVert
+         & \leq \lVert J^{\mathrm{left}}_1\rVert
         \lVert\mathcal K_l-\mathcal K_\infty\rVert
         \lVert J^{\mathrm{tail}}_K\rVert.
     \end{align}
@@ -1841,8 +1841,8 @@ $N=L$. They give no gap estimate for $N>L$ and no periodic coercivity.
     there are constants $C>0$ and $0<r<1$ such that, for every $K\in\N$ and
     every $l\geq1$,
     \begin{align}
-      \lVert R_{K,l}\rVert^2
-      &\leq D^3\bigl(Cr^l\bigr)^2.
+        \lVert R_{K,l}\rVert^2
+         & \leq D^3\bigl(Cr^l\bigr)^2.
     \end{align}
     All formulas in this theorem are reconstructed algebra.  They are not
     sourced formulas and assert neither a full projector-defect estimate nor
@@ -1871,7 +1871,7 @@ $N=L$. They give no gap estimate for $N>L$ and no periodic coercivity.
     Let $S$ be a finite set and let $G,H\colon V\to V$ be continuous linear
     endomorphisms of the virtual Euclidean space.  Then
     \begin{align}
-      (G-H)^{\oplus S}&=G^{\oplus S}-H^{\oplus S}.
+        (G-H)^{\oplus S} & =G^{\oplus S}-H^{\oplus S}.
     \end{align}
 \end{theorem}
 
@@ -1887,7 +1887,7 @@ $N=L$. They give no gap estimate for $N>L$ and no periodic coercivity.
     \uses{def:ground_space_gram}
     If the ground-space map $\Gamma_n^{\mathrm{ES}}$ is injective, then its Gram
     endomorphism $\mathcal K_n=(\Gamma_n^{\mathrm{ES}})^\dagger
-    \Gamma_n^{\mathrm{ES}}$ is invertible.
+        \Gamma_n^{\mathrm{ES}}$ is invertible.
 \end{theorem}
 
 \begin{proof}
@@ -1910,8 +1910,8 @@ $N=L$. They give no gap estimate for $N>L$ and no periodic coercivity.
     $\Gamma_n^{\mathrm{ES}}$ is injective and
     $S_n=\mathcal K_n^{-1}$, then
     \begin{align}
-      S_n-S_\infty
-      &=S_\infty(\mathcal K_\infty-\mathcal K_n)S_n.
+        S_n-S_\infty
+         & =S_\infty(\mathcal K_\infty-\mathcal K_n)S_n.
     \end{align}
 \end{theorem}
 
@@ -1931,10 +1931,10 @@ $N=L$. They give no gap estimate for $N>L$ and no periodic coercivity.
     Suppose that $\Gamma_K^{\mathrm{ES}}$ is injective and write
     $S_K=\mathcal K_K^{-1}$.  Then
     \begin{align}
-      (J_L^{\mathrm{left}})^\dagger
-      \mathcal K_K^{\oplus\Omega_L}S_K^{\oplus\Omega_L}
-      (\Gamma_{K,L}^{\mathrm{left}})^\dagger
-      &=(\Gamma_{K+L}^{\mathrm{ES}})^\dagger.
+        (J_L^{\mathrm{left}})^\dagger
+        \mathcal K_K^{\oplus\Omega_L}S_K^{\oplus\Omega_L}
+        (\Gamma_{K,L}^{\mathrm{left}})^\dagger
+         & =(\Gamma_{K+L}^{\mathrm{ES}})^\dagger.
     \end{align}
 \end{theorem}
 
@@ -1944,7 +1944,7 @@ $N=L$. They give no gap estimate for $N>L$ and no periodic coercivity.
     The direct-sum Gram and inverse Gram cancel fiberwise.  The remaining
     composition is the adjoint of
     $\Gamma_{K,L}^{\mathrm{left}}J_L^{\mathrm{left}}
-      =\Gamma_{K+L}^{\mathrm{ES}}$.
+        =\Gamma_{K+L}^{\mathrm{ES}}$.
 \end{proof}
 
 \begin{theorem}[Tail spectator pseudoinverse bound]
@@ -1954,9 +1954,9 @@ $N=L$. They give no gap estimate for $N>L$ and no periodic coercivity.
     \uses{def:tail_boundary_map, def:inverse_gram}
     If $\Gamma_L^{\mathrm{ES}}$ is injective, then
     \begin{align}
-      \left\lVert\Gamma_{K,L}^{\mathrm{tail}}
+        \left\lVert\Gamma_{K,L}^{\mathrm{tail}}
         S_{\Gamma_{K,L}^{\mathrm{tail}}}\right\rVert
-      &\leq\sqrt{\lVert S_L\rVert}.
+         & \leq\sqrt{\lVert S_L\rVert}.
     \end{align}
 \end{theorem}
 
@@ -1976,9 +1976,9 @@ $N=L$. They give no gap estimate for $N>L$ and no periodic coercivity.
     \uses{def:left_boundary_map, def:inverse_gram}
     If $\Gamma_K^{\mathrm{ES}}$ is injective, then
     \begin{align}
-      \left\lVert S_{\Gamma_{K,L}^{\mathrm{left}}}
+        \left\lVert S_{\Gamma_{K,L}^{\mathrm{left}}}
         (\Gamma_{K,L}^{\mathrm{left}})^\dagger\right\rVert
-      &\leq\sqrt{\lVert S_K\rVert}.
+         & \leq\sqrt{\lVert S_K\rVert}.
     \end{align}
 \end{theorem}
 
@@ -2003,24 +2003,24 @@ $N=L$. They give no gap estimate for $N>L$ and no periodic coercivity.
     $\Gamma_{l+1}^{\mathrm{ES}}$, $\Gamma_{K+l}^{\mathrm{ES}}$, and
     $\Gamma_{K+l+1}^{\mathrm{ES}}$ are injective, and write
     \begin{align}
-      T&=\Gamma^{\mathrm{tail}}_{K,l+1},\\
-      L&=\Gamma^{\mathrm{left}}_{K+l,1},\\
-      C&=\Gamma_{K+l+1}^{\mathrm{ES}}.
+        T & =\Gamma^{\mathrm{tail}}_{K,l+1}, \\
+        L & =\Gamma^{\mathrm{left}}_{K+l,1}, \\
+        C & =\Gamma_{K+l+1}^{\mathrm{ES}}.
     \end{align}
     The three correction sandwiches in
     Theorem~\ref{thm:c3_projector_gram_error_telescope} are
     \begin{align}
-      Q_1={}&T S_{l+1}^{\oplus\Omega_K}
+        Q_1={} & T S_{l+1}^{\oplus\Omega_K}
         (\mathcal K_{l+1}-\mathcal K_\infty)^{\oplus\Omega_K}
         J_K^{\mathrm{tail}}S_{K+l+1}(J_1^{\mathrm{left}})^\dagger
         \mathcal K_{K+l}^{\oplus\Omega_1}
-        S_{K+l}^{\oplus\Omega_1}L^\dagger,\\
-      Q_2={}&T S_{l+1}^{\oplus\Omega_K}
+        S_{K+l}^{\oplus\Omega_1}L^\dagger,  \\
+        Q_2={} & T S_{l+1}^{\oplus\Omega_K}
         \mathcal K_\infty^{\oplus\Omega_K}J_K^{\mathrm{tail}}
         (S_{K+l+1}-S_\infty)(J_1^{\mathrm{left}})^\dagger
         \mathcal K_{K+l}^{\oplus\Omega_1}
-        S_{K+l}^{\oplus\Omega_1}L^\dagger,\\
-      Q_3={}&T S_{l+1}^{\oplus\Omega_K}
+        S_{K+l}^{\oplus\Omega_1}L^\dagger,  \\
+        Q_3={} & T S_{l+1}^{\oplus\Omega_K}
         \mathcal K_\infty^{\oplus\Omega_K}J_K^{\mathrm{tail}}S_\infty
         (J_1^{\mathrm{left}})^\dagger
         (\mathcal K_{K+l}-\mathcal K_\infty)^{\oplus\Omega_1}
@@ -2039,14 +2039,14 @@ $N=L$. They give no gap estimate for $N>L$ and no periodic coercivity.
     Definition~\ref{def:c3_correction_sandwiches}, the three corrections have
     the exact factorizations
     \begin{align}
-      Q_1={}&T S_{l+1}^{\oplus\Omega_K}
+        Q_1={} & T S_{l+1}^{\oplus\Omega_K}
         (\mathcal K_{l+1}-\mathcal K_\infty)^{\oplus\Omega_K}
-        J_K^{\mathrm{tail}}S_{K+l+1}C^\dagger,\\
-      Q_2={}&T S_{l+1}^{\oplus\Omega_K}
+        J_K^{\mathrm{tail}}S_{K+l+1}C^\dagger, \\
+        Q_2={} & T S_{l+1}^{\oplus\Omega_K}
         \mathcal K_\infty^{\oplus\Omega_K}J_K^{\mathrm{tail}}S_\infty
         (\mathcal K_\infty-\mathcal K_{K+l+1})
-        S_{K+l+1}C^\dagger,\\
-      Q_3={}&T S_{l+1}^{\oplus\Omega_K}
+        S_{K+l+1}C^\dagger,                    \\
+        Q_3={} & T S_{l+1}^{\oplus\Omega_K}
         \mathcal K_\infty^{\oplus\Omega_K}J_K^{\mathrm{tail}}S_\infty
         (J_1^{\mathrm{left}})^\dagger
         (\mathcal K_{K+l}-\mathcal K_\infty)^{\oplus\Omega_1}
@@ -2062,8 +2062,8 @@ $N=L$. They give no gap estimate for $N>L$ and no periodic coercivity.
     replaces the final product in $Q_1$ and $Q_2$ by $C^\dagger$.
     For $Q_2$, apply the resolvent identity
     \begin{align}
-      S_{K+l+1}-S_\infty
-      &=S_\infty(\mathcal K_\infty-\mathcal K_{K+l+1})S_{K+l+1}.
+        S_{K+l+1}-S_\infty
+         & =S_\infty(\mathcal K_\infty-\mathcal K_{K+l+1})S_{K+l+1}.
     \end{align}
     Fiberwise subtraction gives the displayed Gram differences.  The
     factorization of $Q_3$ leaves the left pseudoinverse adjacent to
@@ -2082,20 +2082,20 @@ $N=L$. They give no gap estimate for $N>L$ and no periodic coercivity.
     Under the hypotheses of
     Definition~\ref{def:c3_correction_sandwiches},
     \begin{align}
-      \lVert Q_1\rVert
-      &\leq \sqrt{\lVert S_{l+1}\rVert}
+        \lVert Q_1\rVert
+         & \leq \sqrt{\lVert S_{l+1}\rVert}
         \lVert\mathcal K_{l+1}-\mathcal K_\infty\rVert
         \lVert J_K^{\mathrm{tail}}\rVert
-        \sqrt{\lVert S_{K+l+1}\rVert},\\
-      \lVert Q_2\rVert
-      &\leq \sqrt{\lVert S_{l+1}\rVert}
+        \sqrt{\lVert S_{K+l+1}\rVert},      \\
+        \lVert Q_2\rVert
+         & \leq \sqrt{\lVert S_{l+1}\rVert}
         \lVert\mathcal K_\infty\rVert
         \lVert J_K^{\mathrm{tail}}\rVert
         \lVert S_\infty\rVert
         \lVert\mathcal K_{K+l+1}-\mathcal K_\infty\rVert
-        \sqrt{\lVert S_{K+l+1}\rVert},\\
-      \lVert Q_3\rVert
-      &\leq \sqrt{\lVert S_{l+1}\rVert}
+        \sqrt{\lVert S_{K+l+1}\rVert},      \\
+        \lVert Q_3\rVert
+         & \leq \sqrt{\lVert S_{l+1}\rVert}
         \lVert\mathcal K_\infty\rVert
         \lVert J_K^{\mathrm{tail}}\rVert
         \lVert S_\infty\rVert
@@ -2124,8 +2124,8 @@ $N=L$. They give no gap estimate for $N>L$ and no periodic coercivity.
     Let $R_{K,l}$ be the centered virtual residual and let $S_n$ be the inverse
     Gram at length $n$.  The centered physical sandwich is
     \begin{align}
-      \widehat R_{K,l}
-      =\Gamma^{\mathrm{tail}}_{K,l+1}S_{l+1}^{\oplus\Omega_K}
+        \widehat R_{K,l}
+        =\Gamma^{\mathrm{tail}}_{K,l+1}S_{l+1}^{\oplus\Omega_K}
         R_{K,l}S_{K+l}^{\oplus\Omega_1}
         (\Gamma^{\mathrm{left}}_{K+l,1})^\dagger.
     \end{align}
@@ -2139,14 +2139,14 @@ $N=L$. They give no gap estimate for $N>L$ and no periodic coercivity.
     \uses{def:c3_centered_physical_sandwich, def:c3_correction_sandwiches, def:open_chain_ground_subspaces_es, def:ground_space_es}
     Whenever the three finite Grams are invertible, the common-ambient defect is
     \begin{align}
-      P^{\mathrm{tail}}_{K,l+1}P^{\mathrm{left}}_{K+l}
+        P^{\mathrm{tail}}_{K,l+1}P^{\mathrm{left}}_{K+l}
         -P_{\mathcal G_{K+l+1}^{\mathrm{ES}}(A)}
-      &=\widehat R_{K,l}-Q_1-Q_2-Q_3,
+         & =\widehat R_{K,l}-Q_1-Q_2-Q_3,
     \end{align}
     and
     \begin{align}
-      \lVert\widehat R_{K,l}\rVert
-      &\leq \sqrt{\lVert S_{l+1}\rVert}\,
+        \lVert\widehat R_{K,l}\rVert
+         & \leq \sqrt{\lVert S_{l+1}\rVert}\,
         \lVert R_{K,l}\rVert\sqrt{\lVert S_{K+l}\rVert}.
     \end{align}
 \end{theorem}
@@ -2176,7 +2176,7 @@ $N=L$. They give no gap estimate for $N>L$ and no periodic coercivity.
         P^{\mathrm{tail}}_{K,l+1}P^{\mathrm{left}}_{K+l}
         -P_{\mathcal G_{K+l+1}^{\mathrm{ES}}(A)}
         \right\|
-        &\leq \frac{Cr^l}{1-cr^l}.
+         & \leq \frac{Cr^l}{1-cr^l}.
         \notag
     \end{align}
     The constants are independent of $K$.
@@ -2191,13 +2191,13 @@ $N=L$. They give no gap estimate for $N>L$ and no periodic coercivity.
     $c=\lVert\mathcal I_\infty\rVert g$, and choose
     $T>0$ with $\lVert J_K^{\mathrm{tail}}\rVert\leq T$ for every $K$.  With
     \begin{align}
-      J&=\lVert J_1^{\mathrm{left}}\rVert,&
-      M&=\lVert\mathcal K_\infty\rVert
+        J & =\lVert J_1^{\mathrm{left}}\rVert, &
+        M & =\lVert\mathcal K_\infty\rVert
         \lVert\mathcal I_\infty\rVert,
     \end{align}
     take
     \begin{align}
-      C=4\lVert\mathcal I_\infty\rVert T g(J+1)(M+1).
+        C=4\lVert\mathcal I_\infty\rVert T g(J+1)(M+1).
     \end{align}
     The condition $cr^l<1$ implies the same condition at $l+1$, $K+l$, and
     $K+l+1$.  Hence every inverse Gram in the exact telescope is bounded by
@@ -2206,7 +2206,7 @@ $N=L$. They give no gap estimate for $N>L$ and no periodic coercivity.
     pseudoinverse factors gives this denominator only once.  The centered term
     and each of the three correction terms are then at most
     \begin{align}
-      (1-cr^l)^{-1}\frac{C}{4}r^l.
+        (1-cr^l)^{-1}\frac{C}{4}r^l.
     \end{align}
     The triangle inequality gives the displayed estimate.  Finally, the exact
     range identities replace the three inverse-Gram range projectors by the
@@ -2226,11 +2226,11 @@ $N=L$. They give no gap estimate for $N>L$ and no periodic coercivity.
     bond dimension.  There are constants $C,c,r>0$, with $r<1$, such that for
     all $K,L,Q\in\mathbb N$ with $L\geq1$ and $cr^L<1$,
     \begin{align}
-      &\left\lVert
+         & \left\lVert
         P^{\mathrm{tail}}_{K;L,Q}P^{\mathrm{left}}_{K+L,Q}
         -P_{\mathcal G_{K+L+Q}^{\mathrm{ES}}(A)}
-      \right\rVert
-      \leq \frac{Cr^L}{1-cr^L}.
+        \right\rVert
+        \leq \frac{Cr^L}{1-cr^L}.
     \end{align}
     Here $P^{\mathrm{tail}}_{K;L,Q}$ is the range projector of the
     reassociated tail boundary map and $P^{\mathrm{left}}_{K+L,Q}$ is the
@@ -2257,11 +2257,11 @@ $N=L$. They give no gap estimate for $N>L$ and no periodic coercivity.
     bond dimension.  There is an integer $p>0$, measured in sites of $A$, such
     that $A$ is $p$-block injective and, for every $K\in\mathbb N$,
     \begin{align}
-      \left\lVert
+        \left\lVert
         P^{\mathrm{tail}}_{K;p,p}P^{\mathrm{left}}_{K+p,p}
         -P_{\mathcal G_{K+2p}^{\mathrm{ES}}(A)}
-      \right\rVert
-      &\leq \frac{7}{16}.
+        \right\rVert
+         & \leq \frac{7}{16}.
     \end{align}
 \end{theorem}
 
@@ -2282,11 +2282,11 @@ $N=L$. They give no gap estimate for $N>L$ and no periodic coercivity.
     Under the same hypotheses, there is an integer $p>0$, measured in sites of
     $A$, such that $A$ is $p$-block injective and
     \begin{align}
-      \left\lVert
+        \left\lVert
         P^{\mathrm{tail}}_{p;p,p}P^{\mathrm{left}}_{2p,p}
         -P_{\mathcal G_{3p}^{\mathrm{ES}}(A)}
-      \right\rVert
-      &\leq \frac{7}{16}.
+        \right\rVert
+         & \leq \frac{7}{16}.
     \end{align}
 \end{theorem}
 
@@ -2309,7 +2309,7 @@ $N=L$. They give no gap estimate for $N>L$ and no periodic coercivity.
     $l$-block injective, the projector defect is bounded
     uniformly in the left length $K$ by $\varepsilon_l$, and
     \begin{align}
-        \varepsilon_l&<\frac{1}{\sqrt{l+1}}.
+        \varepsilon_l & <\frac{1}{\sqrt{l+1}}.
         \notag
     \end{align}
     Nachtergaele's projector-defect identity following condition C3
@@ -2323,11 +2323,11 @@ $N=L$. They give no gap estimate for $N>L$ and no periodic coercivity.
     \uses{thm:fnw_overlapping_window_contraction, thm:normal_from_primitive_posdef, thm:wordspan_blk_inj_succ, thm:nachtergaele_open_chain_projector_defect}
     The geometric projector estimate supplies $C,c,r>0$ with $r<1$.  Since
     \begin{align}
-        \sqrt{n+1}\,r^n&\longrightarrow0,
+        \sqrt{n+1}\,r^n & \longrightarrow0,
     \end{align}
     continuity of inversion at $1$ gives
     \begin{align}
-        \frac{Cr^n}{1-cr^n}\sqrt{n+1}&\longrightarrow0.
+        \frac{Cr^n}{1-cr^n}\sqrt{n+1} & \longrightarrow0.
     \end{align}
     Normality supplies a positive block-injectivity length.  Choose $l$ above
     that length and above $1$ so that $cr^l<1$ and the last display is less
@@ -2346,25 +2346,25 @@ $N=L$. They give no gap estimate for $N>L$ and no periodic coercivity.
     blocking length, and set $B=\operatorname{block}_p(A)$.  Then
     \begin{align}
         \left\lVert
-          P^{\mathrm{tail}}_{1,2}(B)P^{\mathrm{left}}_2(B)
-          -P_{\mathcal G_3^{\mathrm{ES}}(B)}
+        P^{\mathrm{tail}}_{1,2}(B)P^{\mathrm{left}}_2(B)
+        -P_{\mathcal G_3^{\mathrm{ES}}(B)}
         \right\rVert
-        &=\left\lVert
-          P^{\mathrm{tail}}_{p;p,p}P^{\mathrm{left}}_{2p,p}
-          -P_{\mathcal G_{3p}^{\mathrm{ES}}(A)}
+         & =\left\lVert
+        P^{\mathrm{tail}}_{p;p,p}P^{\mathrm{left}}_{2p,p}
+        -P_{\mathcal G_{3p}^{\mathrm{ES}}(A)}
         \right\rVert.
     \end{align}
     If $B$ is injective, then the bound on either side
     \begin{align}
         \left\lVert
-          P^{\mathrm{tail}}_{1,2}(B)P^{\mathrm{left}}_2(B)
-          -P_{\mathcal G_3^{\mathrm{ES}}(B)}
+        P^{\mathrm{tail}}_{1,2}(B)P^{\mathrm{left}}_2(B)
+        -P_{\mathcal G_3^{\mathrm{ES}}(B)}
         \right\rVert
-        &\leq \frac{7}{16}
+         & \leq \frac{7}{16}
     \end{align}
     gives the adjacent three-site anticommutator inequality
     \begin{align}
-        h_0h_1+h_1h_0&\geq-\frac{7}{16}(h_0+h_1).
+        h_0h_1+h_1h_0 & \geq-\frac{7}{16}(h_0+h_1).
     \end{align}
     The same quadratic-form inequality holds for every forward or backward
     adjacent pair of cyclic range-two terms on every chain of length at least
@@ -2384,7 +2384,7 @@ $N=L$. They give no gap estimate for $N>L$ and no periodic coercivity.
     $v\in(\ker H_{N,2}(B))^\perp$,
     \begin{align}
         \frac{1}{8}\lVert v\rVert
-        &\leq \lVert H_{N,2}(B)v\rVert.
+         & \leq \lVert H_{N,2}(B)v\rVert.
     \end{align}
 \end{theorem}
 
@@ -2407,7 +2407,7 @@ $N=L$. They give no gap estimate for $N>L$ and no periodic coercivity.
     \begin{align}
         \operatorname{Re}\langle Pv,Qv\rangle
         +\operatorname{Re}\langle Qv,Pv\rangle
-        &\leq \operatorname{Re}\langle Pv,v\rangle
+         & \leq \operatorname{Re}\langle Pv,v\rangle
         +\operatorname{Re}\langle Qv,v\rangle.
     \end{align}
 \end{theorem}
@@ -2417,12 +2417,12 @@ $N=L$. They give no gap estimate for $N>L$ and no periodic coercivity.
     Positivity of the inner product gives
     \begin{align}
         0
-        &\leq \operatorname{Re}\langle(P-Q)v,(P-Q)v\rangle,\\
+         & \leq \operatorname{Re}\langle(P-Q)v,(P-Q)v\rangle, \\
         \operatorname{Re}\langle(P-Q)v,(P-Q)v\rangle
-        &=\operatorname{Re}\langle Pv,v\rangle
-          -\operatorname{Re}\langle Pv,Qv\rangle
-          -\operatorname{Re}\langle Qv,Pv\rangle
-          +\operatorname{Re}\langle Qv,v\rangle.
+         & =\operatorname{Re}\langle Pv,v\rangle
+        -\operatorname{Re}\langle Pv,Qv\rangle
+        -\operatorname{Re}\langle Qv,Pv\rangle
+        +\operatorname{Re}\langle Qv,v\rangle.
     \end{align}
     Symmetry and idempotence expand the left-hand side into the second line;
     rearranging it proves the claim.
@@ -2444,22 +2444,22 @@ $N=L$. They give no gap estimate for $N>L$ and no periodic coercivity.
     \leanok
     Let $h_i$, with $i\in\mathbb Z/N\mathbb Z$, be orthogonal projections. Define
     \begin{align}
-        H&=\sum_i h_i,\\
-        A_s&=\sum_{a=0}^{m-1}h_{s+a},\\
-        Q_q&=\sum_i\bigl(h_i h_{i+q}+h_i h_{i-q}\bigr),\\
-        C_q(v)&=\sum_i\bigl(\operatorname{Re}\langle h_i v,h_{i+q}v\rangle
-            +\operatorname{Re}\langle h_i v,h_{i-q}v\rangle\bigr)
-            =\operatorname{Re}\langle Q_qv,v\rangle.
+        H      & =\sum_i h_i,                                                \\
+        A_s    & =\sum_{a=0}^{m-1}h_{s+a},                                   \\
+        Q_q    & =\sum_i\bigl(h_i h_{i+q}+h_i h_{i-q}\bigr),                 \\
+        C_q(v) & =\sum_i\bigl(\operatorname{Re}\langle h_i v,h_{i+q}v\rangle
+        +\operatorname{Re}\langle h_i v,h_{i-q}v\rangle\bigr)
+        =\operatorname{Re}\langle Q_qv,v\rangle.
     \end{align}
     Then, for every vector $v$,
     \begin{align}
         \sum_s A_s^2
-        &=mH+\sum_{q=1}^{m-1}(m-q)Q_q,\label{eq:cyclic_knabe_window_square}\\
+         & =mH+\sum_{q=1}^{m-1}(m-q)Q_q,\label{eq:cyclic_knabe_window_square}   \\
         \sum_s\operatorname{Re}\langle A_sv,A_sv\rangle
-        &=m\operatorname{Re}\langle Hv,v\rangle
-        +\sum_{q=1}^{m-1}(m-q)C_q(v),\label{eq:cyclic_knabe_window_square_form}\\
+         & =m\operatorname{Re}\langle Hv,v\rangle
+        +\sum_{q=1}^{m-1}(m-q)C_q(v),\label{eq:cyclic_knabe_window_square_form} \\
         \sum_s\operatorname{Re}\langle A_s v,v\rangle
-        &=m\operatorname{Re}\langle Hv,v\rangle.
+         & =m\operatorname{Re}\langle Hv,v\rangle.
     \end{align}
 \end{theorem}
 
@@ -2468,7 +2468,7 @@ $N=L$. They give no gap estimate for $N>L$ and no periodic coercivity.
     For fixed offsets $a,b\in\{0,\ldots,m-1\}$, translation by $a$ gives
     \begin{align}
         \sum_s h_{s+a}h_{s+b}
-        &=\sum_i h_i h_{i+b-a}.\label{eq:cyclic_knabe_reindex}
+         & =\sum_i h_i h_{i+b-a}.\label{eq:cyclic_knabe_reindex}
     \end{align}
     The case $a=b$ contributes $mH$, while each of the differences
     $b-a=q$ and $b-a=-q$ contributes $(m-q)Q_q$. Summing
@@ -2479,7 +2479,7 @@ $N=L$. They give no gap estimate for $N>L$ and no periodic coercivity.
     (\ref{eq:cyclic_knabe_window_square_form}). Translation invariance also gives
     \begin{align}
         \sum_s \operatorname{Re}\langle A_s v,v\rangle
-        &=m\operatorname{Re}\langle Hv,v\rangle.
+         & =m\operatorname{Re}\langle Hv,v\rangle.
         \label{eq:cyclic_knabe_window_linear}
     \end{align}
 \end{proof}
@@ -2495,7 +2495,7 @@ $N=L$. They give no gap estimate for $N>L$ and no periodic coercivity.
     For $Q_q$ as in Theorem~\ref{thm:cyclic_knabe_double_counting},
     \begin{align}
         \operatorname{Re}\langle Q_qv,v\rangle
-        &\leq2\operatorname{Re}\langle Hv,v\rangle.
+         & \leq2\operatorname{Re}\langle Hv,v\rangle.
     \end{align}
     Suppose that $h_i$ and $h_{i+d}$ commute whenever
     $R\leq d\leq N-R$. Then the cross term is nonnegative for these offsets.
@@ -2503,7 +2503,7 @@ $N=L$. They give no gap estimate for $N>L$ and no periodic coercivity.
     \begin{align}
         \operatorname{Re}\langle Hv,v\rangle
         +\sum_{q=1}^{m-1}\operatorname{Re}\langle Q_qv,v\rangle
-        &\leq\operatorname{Re}\langle Hv,Hv\rangle.
+         & \leq\operatorname{Re}\langle Hv,Hv\rangle.
     \end{align}
 \end{theorem}
 
@@ -2513,24 +2513,24 @@ $N=L$. They give no gap estimate for $N>L$ and no periodic coercivity.
     Translation of the reversed leg gives
     \begin{align}
         \sum_i\operatorname{Re}\langle h_{i+q}v,h_i v\rangle
-        &=\sum_i\operatorname{Re}\langle h_i v,h_{i-q}v\rangle.
+         & =\sum_i\operatorname{Re}\langle h_i v,h_{i-q}v\rangle.
         \label{eq:cyclic_knabe_reversed_leg}
     \end{align}
     Summing Theorem~\ref{thm:projection_anticommutator_upper_bound} over $i$
     and using (\ref{eq:cyclic_knabe_reversed_leg}) proves the upper bound.
     If $h_i$ and $h_{i+d}$ commute, their symmetry and idempotence give
     \begin{align}
-        0&\leq\operatorname{Re}\langle h_i v,h_{i+d}v\rangle.
+        0 & \leq\operatorname{Re}\langle h_i v,h_{i+d}v\rangle.
         \label{eq:cyclic_knabe_commuting_nonnegative}
     \end{align}
     Partitioning the nonzero cyclic offsets into $1\leq q<m$, their
     reflections $N-q$, and $m\leq k\leq N-m$ gives
     \begin{align}
         \operatorname{Re}\langle Hv,Hv\rangle
-        &=\operatorname{Re}\langle Hv,v\rangle
-          +\sum_{q=1}^{m-1}\operatorname{Re}\langle Q_qv,v\rangle
-          +\sum_{k=m}^{N-m}\sum_i
-            \operatorname{Re}\langle h_i v,h_{i+k}v\rangle.
+         & =\operatorname{Re}\langle Hv,v\rangle
+        +\sum_{q=1}^{m-1}\operatorname{Re}\langle Q_qv,v\rangle
+        +\sum_{k=m}^{N-m}\sum_i
+        \operatorname{Re}\langle h_i v,h_{i+k}v\rangle.
         \label{eq:cyclic_knabe_offset_partition}
     \end{align}
     The last sum in (\ref{eq:cyclic_knabe_offset_partition}) is nonnegative by
@@ -2547,16 +2547,16 @@ $N=L$. They give no gap estimate for $N>L$ and no periodic coercivity.
     $R\leq d\leq N-R$. Suppose that, for every $s$ and $v$,
     \begin{align}
         \gamma\operatorname{Re}\langle A_sv,v\rangle
-        &\leq\operatorname{Re}\langle A_sv,A_sv\rangle.
+         & \leq\operatorname{Re}\langle A_sv,A_sv\rangle.
     \end{align}
     If $(R-1)^2<m\gamma$, then, with
     \begin{align}
-        \delta&=\frac{m\gamma-(R-1)^2}{m-R+1}>0,
+        \delta & =\frac{m\gamma-(R-1)^2}{m-R+1}>0,
     \end{align}
     one has
     \begin{align}
         \delta\operatorname{Re}\langle Hv,v\rangle
-        &\leq\operatorname{Re}\langle Hv,Hv\rangle.
+         & \leq\operatorname{Re}\langle Hv,Hv\rangle.
     \end{align}
     The coefficient for general $R$ is derived here and is not attributed to
     the cited papers.
@@ -2571,7 +2571,7 @@ $N=L$. They give no gap estimate for $N>L$ and no periodic coercivity.
     Theorem~\ref{thm:cyclic_knabe_double_counting} gives
     \begin{align}
         m\gamma\operatorname{Re}\langle Hv,v\rangle
-        &\leq\sum_s\operatorname{Re}\langle A_sv,A_sv\rangle.
+         & \leq\sum_s\operatorname{Re}\langle A_sv,A_sv\rangle.
     \end{align}
     Decompose $m-q=c+(R-1-q)$ and expand
     (\ref{eq:cyclic_knabe_window_square_form}): the weights $q\leq R-2$
@@ -2580,21 +2580,21 @@ $N=L$. They give no gap estimate for $N>L$ and no periodic coercivity.
     nonnegative, so those summands are bounded by $c\,C_q(v)$. For the
     positive parts, the anticommutator bound and the triangular identity
     \begin{align}
-        2\sum_{q=1}^{R-1}(R-1-q)&=(R-1)(R-2)
+        2\sum_{q=1}^{R-1}(R-1-q) & =(R-1)(R-2)
     \end{align}
     combine with the decomposition
     \begin{align}
-        m-c+(R-1)(R-2)&=(R-1)^2,
+        m-c+(R-1)(R-2) & =(R-1)^2,
         \qquad c=m-R+1,
         \label{eq:cyclic_knabe_coefficient}
     \end{align}
     so that
     \begin{align}
         \sum_s\operatorname{Re}\langle A_sv,A_sv\rangle
-        &\leq\bigl(m+(R-1)(R-2)\bigr)\operatorname{Re}\langle Hv,v\rangle
+         & \leq\bigl(m+(R-1)(R-2)\bigr)\operatorname{Re}\langle Hv,v\rangle
         +c\sum_{q=1}^{m-1}C_q(v)
-        \notag\\
-        &\leq\bigl(m+(R-1)(R-2)\bigr)\operatorname{Re}\langle Hv,v\rangle
+        \notag                                                              \\
+         & \leq\bigl(m+(R-1)(R-2)\bigr)\operatorname{Re}\langle Hv,v\rangle
         +c\bigl(\operatorname{Re}\langle Hv,Hv\rangle
         -\operatorname{Re}\langle Hv,v\rangle\bigr).
         \notag
@@ -2602,8 +2602,8 @@ $N=L$. They give no gap estimate for $N>L$ and no periodic coercivity.
     The cyclic cross-term estimate therefore gives
     \begin{align}
         \sum_s\operatorname{Re}\langle A_sv,A_sv\rangle
-        &\leq c\operatorname{Re}\langle Hv,Hv\rangle
-          +(R-1)^2\operatorname{Re}\langle Hv,v\rangle.
+         & \leq c\operatorname{Re}\langle Hv,Hv\rangle
+        +(R-1)^2\operatorname{Re}\langle Hv,v\rangle.
     \end{align}
     Rearranging and dividing by $c>0$ proves the claim.
 \end{proof}
@@ -2617,7 +2617,7 @@ $N=L$. They give no gap estimate for $N>L$ and no periodic coercivity.
     $R=2$, if $1<m\gamma$, then
     \begin{align}
         \frac{m\gamma-1}{m-1}\operatorname{Re}\langle Hv,v\rangle
-        &\leq\operatorname{Re}\langle Hv,Hv\rangle.
+         & \leq\operatorname{Re}\langle Hv,Hv\rangle.
     \end{align}
     Equivalently, the open-window threshold is $\gamma>1/m$. This is Knabe's
     nearest-neighbor threshold~\cite{Knabe1988Energy}, quoted in
@@ -2641,17 +2641,17 @@ $N=L$. They give no gap estimate for $N>L$ and no periodic coercivity.
     $\gamma\geq0$.  Suppose that $P$ is positive and
     \begin{align}
         \gamma\lVert v\rVert
-        &\leq\lVert Pv\rVert
+         & \leq\lVert Pv\rVert
     \end{align}
     for every $v\in(\ker P)^\perp$.  Then
     \begin{align}
         \gamma\lVert v\rVert^2
-        &\leq\operatorname{Re}\langle Pv,v\rangle
+         & \leq\operatorname{Re}\langle Pv,v\rangle
     \end{align}
     on $(\ker P)^\perp$.  If also $P\leq Q$ and $\ker P=\ker Q$, then
     \begin{align}
         \gamma\lVert v\rVert
-        &\leq\lVert Qv\rVert
+         & \leq\lVert Qv\rVert
     \end{align}
     for every $v\in(\ker Q)^\perp$.
 \end{lemma}
@@ -2718,7 +2718,7 @@ $N=L$. They give no gap estimate for $N>L$ and no periodic coercivity.
     $w_i\leq1$ for every $i$, then
     \begin{align}
         \sum_{i\in I}w_iP_i
-        &\leq\sum_{i\in I}P_i
+         & \leq\sum_{i\in I}P_i
     \end{align}
     in Loewner order.  This is the comparison step of the blocked-sum
     argument in the source cited in
@@ -2747,12 +2747,12 @@ $N=L$. They give no gap estimate for $N>L$ and no periodic coercivity.
     $0<w_i\leq1$, and let $\gamma\geq0$.  If
     \begin{align}
         \gamma\lVert v\rVert
-        &\leq\Bigl\lVert\Bigl(\sum_{i\in I}w_iP_i\Bigr)v\Bigr\rVert
+         & \leq\Bigl\lVert\Bigl(\sum_{i\in I}w_iP_i\Bigr)v\Bigr\rVert
     \end{align}
     for every $v\in\bigl(\ker\sum_{i\in I}w_iP_i\bigr)^\perp$, then
     \begin{align}
         \gamma\lVert v\rVert
-        &\leq\Bigl\lVert\Bigl(\sum_{i\in I}P_i\Bigr)v\Bigr\rVert
+         & \leq\Bigl\lVert\Bigl(\sum_{i\in I}P_i\Bigr)v\Bigr\rVert
     \end{align}
     for every $v\in\bigl(\ker\sum_{i\in I}P_i\bigr)^\perp$.
 \end{theorem}
@@ -2780,17 +2780,17 @@ $N=L$. They give no gap estimate for $N>L$ and no periodic coercivity.
     chain of length $Np$.  For every blocked site $i$,
     \begin{align}
         U h^{B,2}_i U^{-1}
-        &=h^{A,2p}_{pi}.
+         & =h^{A,2p}_{pi}.
     \end{align}
     Hence the conjugated blocked Hamiltonian is the aligned sparse sum
     \begin{align}
         U H_{N,2}(B)U^{-1}
-        &=\sum_{i=0}^{N-1}h^{A,2p}_{pi},
+         & =\sum_{i=0}^{N-1}h^{A,2p}_{pi},
     \end{align}
     and
     \begin{align}
         U H_{N,2}(B)U^{-1}
-        &\leq H_{Np,2p}(A)
+         & \leq H_{Np,2p}(A)
         \label{eq:blocked-original-loewner}
     \end{align}
     in Loewner order.
@@ -2807,7 +2807,7 @@ $N=L$. They give no gap estimate for $N>L$ and no periodic coercivity.
     $v\in(\ker H_{Np,2p}(A))^\perp$,
     \begin{align}
         \frac18\lVert v\rVert
-        &\leq \lVert H_{Np,2p}(A)v\rVert.
+         & \leq \lVert H_{Np,2p}(A)v\rVert.
     \end{align}
     % The quantified length $Np$ records the restriction to block-divisible chains.
 \end{theorem}
@@ -2820,19 +2820,19 @@ $N=L$. They give no gap estimate for $N>L$ and no periodic coercivity.
     gives, for every blocked site $i$,
     \begin{align}
         U h^{B,2}_i U^{-1}
-        &=h^{A,2p}_{pi},
+         & =h^{A,2p}_{pi},
     \end{align}
     and therefore
     \begin{align}
         U H_{N,2}(B)U^{-1}
-        &=\sum_{i=0}^{N-1}h^{A,2p}_{pi}
+         & =\sum_{i=0}^{N-1}h^{A,2p}_{pi}
         \leq\sum_{j=0}^{Np-1}h^{A,2p}_j
         =H_{Np,2p}(A).
     \end{align}
     Block injectivity identifies the two ground-state lines under $U$, hence
     \begin{align}
         \ker\!\left(U H_{N,2}(B)U^{-1}\right)
-        &=\ker H_{Np,2p}(A).
+         & =\ker H_{Np,2p}(A).
     \end{align}
     Theorem~\ref{thm:martingale_mps} gives the norm gap $1/8$ for
     $H_{N,2}(B)$.  Since $U$ is isometric, the same bound holds for its
@@ -2851,7 +2851,7 @@ $N=L$. They give no gap estimate for $N>L$ and no periodic coercivity.
     $v\in(\ker H_{N,L}(A))^\perp$,
     \begin{align}
         \gamma\lVert v\rVert
-        &\le \lVert H_{N,L}(A)v\rVert.
+         & \le \lVert H_{N,L}(A)v\rVert.
         \notag
     \end{align}
     Theorem~\ref{thm:martingale_mps_original_site_multiples} proves the estimate
@@ -2879,7 +2879,7 @@ $N=L$. They give no gap estimate for $N>L$ and no periodic coercivity.
     every overlapping off-diagonal pair of cyclic length-$L$ windows,
     \begin{align}
         \|h_{i,\mathrm{ES}}(h_{j,\mathrm{ES}}v)\|
-        &\le
+         & \le
         \left(1-\frac{1}{4L}\right)\frac{1}{2(L-1)}
         \|h_{i,\mathrm{ES}}v\|.
         \notag
@@ -2937,7 +2937,7 @@ $N=L$. They give no gap estimate for $N>L$ and no periodic coercivity.
     \begin{align}
         h_{i,\mathrm{ES}}h_{j,\mathrm{ES}}
         +h_{j,\mathrm{ES}}h_{i,\mathrm{ES}}
-        &\ge
+         & \ge
         -\left(1-\frac{1}{4L}\right)\frac{1}{2(L-1)}
         (h_{i,\mathrm{ES}}+h_{j,\mathrm{ES}})
         \notag
@@ -2967,7 +2967,7 @@ $N=L$. They give no gap estimate for $N>L$ and no periodic coercivity.
     overlapping off-diagonal pair of cyclic length-$L$ windows,
     \begin{align}
         \|h_{i,\mathrm{ES}}(h_{j,\mathrm{ES}}v)\|
-        &\le
+         & \le
         \eta\,\|h_{i,\mathrm{ES}}v\|.
         \notag
     \end{align}
@@ -2982,7 +2982,7 @@ $N=L$. They give no gap estimate for $N>L$ and no periodic coercivity.
     $\gamma=1-\eta m$, applies to the displayed hypothesis
     \begin{align}
         \|h_{i,\mathrm{ES}}(h_{j,\mathrm{ES}}v)\|
-        &\le
+         & \le
         \eta\,\|h_{i,\mathrm{ES}}v\|.
         \notag
     \end{align}
@@ -3001,7 +3001,7 @@ $N=L$. They give no gap estimate for $N>L$ and no periodic coercivity.
     pair of cyclic length-$L$ windows,
     \begin{align}
         \|h_{i,\mathrm{ES}}(h_{j,\mathrm{ES}}v)\|
-        &\le
+         & \le
         \eta\,\|h_{j,\mathrm{ES}}v\|,
         \notag
     \end{align}
@@ -3063,7 +3063,7 @@ $N=L$. They give no gap estimate for $N>L$ and no periodic coercivity.
     overlapping off-diagonal pair of cyclic length-$L$ windows,
     \begin{align}
         \|h_{i,\mathrm{ES}}(h_{j,\mathrm{ES}}v)\|
-        &\le
+         & \le
         \eta\,\|h_{i,\mathrm{ES}}v\|.
         \notag
     \end{align}
@@ -3088,7 +3088,7 @@ $N=L$. They give no gap estimate for $N>L$ and no periodic coercivity.
     overlapping off-diagonal pair of cyclic length-$L$ windows,
     \begin{align}
         \|h_{i,\mathrm{ES}}(h_{j,\mathrm{ES}}v)\|
-        &\le
+         & \le
         \eta\,\|h_{j,\mathrm{ES}}v\|.
         \notag
     \end{align}
