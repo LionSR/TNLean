@@ -351,8 +351,8 @@ the coefficient argument of Chapter~\ref{ch:bnt}.
     Conjugating the left-canonical identity gives
     \begin{align}
         \sum_i(\overline{A^i})^\dagger\overline{A^i}
-        &=\overline{\sum_i(A^i)^\dagger A^i}
-         =\overline{\Id}=\Id.
+         & =\overline{\sum_i(A^i)^\dagger A^i}
+        =\overline{\Id}=\Id.
     \end{align}
     Entrywise conjugation maps the span of the length-$N$ products of $A$
     onto the span of those of $\overline A$, so it preserves positive-length
@@ -368,7 +368,7 @@ the coefficient argument of Chapter~\ref{ch:bnt}.
 \end{proof}
 
 \begin{theorem}[Transfer maps and positive diagonal matrices under
-    entrywise conjugation]
+        entrywise conjugation]
     \label{thm:cpsv_map_star_transfer_fixed_point}
     \lean{MPSTensor.transferMap_mapStar_eq_entrywiseConjTransport}
     \lean{MPSTensor.transferMap_mapStar}
@@ -379,18 +379,18 @@ the coefficient argument of Chapter~\ref{ch:bnt}.
     operators on the matrix space,
     \begin{align}
         \E_{\overline A}
-        &=\sigma\circ\E_A\circ\sigma;
+         & =\sigma\circ\E_A\circ\sigma;
         \label{eq:cpsv_map_star_transfer_operator}
     \end{align}
     evaluating at $\overline X$ gives, for every matrix $X$,
     \begin{align}
         \E_{\overline A}(\overline X)
-        &=\overline{\E_A(X)}.
+         & =\overline{\E_A(X)}.
         \label{eq:cpsv_map_star_transfer}
     \end{align}
     If $\Lambda$ is positive definite and diagonal, then
     \begin{align}
-        \overline\Lambda&=\Lambda.
+        \overline\Lambda & =\Lambda.
         \label{eq:cpsv_map_star_posdef_diag}
     \end{align}
 \end{theorem}
@@ -442,7 +442,7 @@ the coefficient argument of Chapter~\ref{ch:bnt}.
     \begin{align}
         UU^\dagger
          & =\Id_S,
-        \notag\\
+        \notag                                                    \\
         A^i
          & =U^\dagger\!\left(\bigoplus_{k=1}^r\mu_kA_k^i\right)U.
         \tag{CF}\label{eq:cpsv_canonical_form}
@@ -455,7 +455,7 @@ the coefficient argument of Chapter~\ref{ch:bnt}.
     \begin{align}
         |\mu_k|
          & \le1\quad\text{for every }k,
-        \notag\\
+        \notag                                   \\
         A\ne0
          & \Longrightarrow\exists k,\ |\mu_k|=1.
         \label{eq:cpsv_weight_normalization}
@@ -479,8 +479,8 @@ the coefficient argument of Chapter~\ref{ch:bnt}.
     $\sigma$,
     \begin{align}
         \sum_{k=1}^r \mu_k^N V^{(N)}(A_k)_\sigma
-        &=\sum_{k\in K_{\mathrm{act}}}
-            \mu_k^N V^{(N)}(A_k)_\sigma.
+         & =\sum_{k\in K_{\mathrm{act}}}
+        \mu_k^N V^{(N)}(A_k)_\sigma.
         \label{eq:cpsv_remove_zero_weight_blocks}
     \end{align}
     The restriction to positive lengths is essential: at length zero, a
@@ -509,8 +509,8 @@ the coefficient argument of Chapter~\ref{ch:bnt}.
     put $K_{\mathrm{act}}=\{k:\mu_k\ne0\}$. Then
     \begin{align}
         \mc{V}^+(A)
-        &=\mc{V}^+\!\left(
-            \bigoplus_{k\in K_{\mathrm{act}}}\mu_kA_k\right).
+         & =\mc{V}^+\!\left(
+        \bigoplus_{k\in K_{\mathrm{act}}}\mu_kA_k\right).
         \label{eq:cpsv_active_blocks_same_mpv}
     \end{align}
     This conclusion uses no weight normalization. The bounds and unit-modulus
@@ -538,7 +538,7 @@ the coefficient argument of Chapter~\ref{ch:bnt}.
     Let $e:\{0,\ldots,d'-1\}\to\{0,\ldots,d-1\}$ be a bijection and set
     \begin{align}
         (e^*A)^j
-        &= A^{e(j)}.
+         & = A^{e(j)}.
         \label{eq:cpsv_physical_reindexing_tensor}
     \end{align}
     The transfer maps of $A$ and $e^*A$ agree. In particular, physical
@@ -546,15 +546,15 @@ the coefficient argument of Chapter~\ref{ch:bnt}.
     $A$ has canonical-form data
     \begin{align}
         A^i
-        &=U^\dagger\!\left(\bigoplus_{k=1}^r\mu_kA_k^i\right)U,
+         & =U^\dagger\!\left(\bigoplus_{k=1}^r\mu_kA_k^i\right)U,
         \notag
     \end{align}
     then $e^*A$ has the same weights and coisometry and the relabeled normal
     blocks:
     \begin{align}
         (e^*A)^j
-        &=U^\dagger\!\left(\bigoplus_{k=1}^r
-            \mu_k(e^*A_k)^j\right)U.
+         & =U^\dagger\!\left(\bigoplus_{k=1}^r
+        \mu_k(e^*A_k)^j\right)U.
         \label{eq:cpsv_physical_reindexing_cf}
     \end{align}
 \end{theorem}
@@ -577,7 +577,7 @@ the coefficient argument of Chapter~\ref{ch:bnt}.
     invertible matrix $C$ such that
     \begin{align}
         \E_B(Y)
-        &=C^{-1}\E_A(CYC^\dagger)(C^\dagger)^{-1}.
+         & =C^{-1}\E_A(CYC^\dagger)(C^\dagger)^{-1}.
         \notag
     \end{align}
 \end{theorem}
@@ -652,7 +652,7 @@ the coefficient argument of Chapter~\ref{ch:bnt}.
     Let $X$ be invertible and suppose
     \begin{align}
         B^i
-        &=XA^iX^{-1}
+         & =XA^iX^{-1}
         \notag
     \end{align}
     for every physical index $i$. If $B$ is a CPSV normal tensor, then $A$ is
@@ -664,7 +664,7 @@ the coefficient argument of Chapter~\ref{ch:bnt}.
     With $S_X(Y)=XYX^\dagger$, the transfer maps satisfy
     \begin{align}
         \E_B
-        &= S_X\circ\E_A\circ S_X^{-1}.
+         & = S_X\circ\E_A\circ S_X^{-1}.
         \label{eq:cpsv_transfer_similarity}
     \end{align}
     Similarity preserves the spectral radius and the peripheral spectrum.
@@ -694,7 +694,7 @@ the coefficient argument of Chapter~\ref{ch:bnt}.
     Choose a trace-preserving gauge $B^i=XA^iX^{-1}$. Positive blocking gives
     \begin{align}
         (B^{[L]})^I
-        &=X(A^{[L]})^IX^{-1}.
+         & =X(A^{[L]})^IX^{-1}.
         \label{eq:cpsv_blocking_gauge}
     \end{align}
     The trace-preserving primitive and irreducible structure of $B$ is
@@ -715,7 +715,7 @@ the coefficient argument of Chapter~\ref{ch:bnt}.
     Let $A$ have canonical-form data
     \begin{align}
         A^i
-        &=U^\dagger\!\left(\bigoplus_{k=1}^r\mu_kA_k^i\right)U,
+         & =U^\dagger\!\left(\bigoplus_{k=1}^r\mu_kA_k^i\right)U,
         \qquad
         UU^\dagger=\Id.
         \notag
@@ -725,8 +725,8 @@ the coefficient argument of Chapter~\ref{ch:bnt}.
     $\mu_k^L$:
     \begin{align}
         (A^{[L]})^I
-        &=U^\dagger\!\left(\bigoplus_{k=1}^r
-            \mu_k^L(A_k^{[L]})^I\right)U.
+         & =U^\dagger\!\left(\bigoplus_{k=1}^r
+        \mu_k^L(A_k^{[L]})^I\right)U.
         \label{eq:cpsv_literal_blocking_cf}
     \end{align}
 \end{theorem}
@@ -738,13 +738,13 @@ the coefficient argument of Chapter~\ref{ch:bnt}.
     $A^{i_1}\cdots A^{i_L}$ gives
     \begin{align}
         A^{i_1}\cdots A^{i_L}
-        &=
+         & =
         U^\dagger\!\left(\bigoplus_{k=1}^r
-            \mu_k^L A_k^{i_1}\cdots A_k^{i_L}\right)U
-        \notag\\
-        &=
+        \mu_k^L A_k^{i_1}\cdots A_k^{i_L}\right)U
+        \notag \\
+         & =
         U^\dagger\!\left(\bigoplus_{k=1}^r
-            \mu_k^L(A_k^{[L]})^I\right)U.
+        \mu_k^L(A_k^{[L]})^I\right)U.
         \notag
     \end{align}
     The preceding theorem gives CPSV normality of every blocked block
@@ -827,7 +827,7 @@ the coefficient argument of Chapter~\ref{ch:bnt}.
     \begin{align}
         A^w
          & =U^\dagger
-            \left(\bigoplus_{k=1}^{r}\mu_k^N A_k^w\right)U.
+        \left(\bigoplus_{k=1}^{r}\mu_k^N A_k^w\right)U.
         \label{eq:cpsv_canonical_form_word_reconstruction}
     \end{align}
     Applying cyclicity of the trace and $UU^\dagger=\Id_S$ to
@@ -835,9 +835,9 @@ the coefficient argument of Chapter~\ref{ch:bnt}.
     \begin{align}
         \tr(A^w)
          & =\tr\!\left(
-            \left(\bigoplus_{k=1}^{r}\mu_k^N A_k^w\right)UU^\dagger
-            \right)
-          =\tr\!\left(\bigoplus_{k=1}^{r}\mu_k^N A_k^w\right).
+        \left(\bigoplus_{k=1}^{r}\mu_k^N A_k^w\right)UU^\dagger
+        \right)
+        =\tr\!\left(\bigoplus_{k=1}^{r}\mu_k^N A_k^w\right).
         \label{eq:cpsv_canonical_form_trace_reconstruction}
     \end{align}
     Applying Theorem~\ref{thm:mpv_decomposition} to the right-hand side of
@@ -857,13 +857,13 @@ the coefficient argument of Chapter~\ref{ch:bnt}.
     $K_{\mathrm{act}}=\{k:\mu_k\ne0\}$, the family $(B_j)_{j=1}^{g}$ is a
     basis of normal tensors for $A$ if and only if
     \begin{align}
-        &\bigl(\forall j,\ B_j\text{ is normal}\bigr)
-        \notag\\
-        &\quad\land
+         & \bigl(\forall j,\ B_j\text{ is normal}\bigr)
+        \notag                                          \\
+         & \quad\land
         \bigl(\forall k\in K_{\mathrm{act}},\ \exists j,X_k,\phi_k,\
         \forall i,\ A_k^i=e^{i\phi_k}X_kB_j^iX_k^{-1}\bigr)
-        \notag\\
-        &\quad\land
+        \notag                                          \\
+         & \quad\land
         \bigl(\forall j\ne j',\ \nexists X,\phi,\ \forall i,\
         B_{j'}^i=e^{i\phi}XB_j^iX^{-1}\bigr).
         \label{eq:cpsv_cf_bnt_characterization}

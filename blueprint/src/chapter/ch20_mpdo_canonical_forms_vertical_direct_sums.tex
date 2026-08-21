@@ -8,7 +8,7 @@
     doubled-index tensor $\widehat{M}$ evaluated on the diagonal-paired configuration
     $k\mapsto(\sigma_k,\sigma_k)$:
     $V^{(N)}(i\mapsto M^{ii})(\sigma)
-    =V^{(N)}(\widehat{M})(k\mapsto(\sigma_k,\sigma_k))$.
+        =V^{(N)}(\widehat{M})(k\mapsto(\sigma_k,\sigma_k))$.
 \end{lemma}
 \begin{proof}\leanok
     At each site value $i$, the diagonal tensor agrees with the doubled-index tensor
@@ -35,8 +35,8 @@
     For every $N\geq1$,
     \begin{align}
         V^{(N)}(i\mapsto M^{ii})(\sigma)
-        &=V^{(N)}\Bigl(\textstyle\bigoplus_k
-          \mu_kA_k^{\mathrm{diag}}\Bigr)(\sigma).
+         & =V^{(N)}\Bigl(\textstyle\bigoplus_k
+        \mu_kA_k^{\mathrm{diag}}\Bigr)(\sigma).
         \notag
     \end{align}
 \end{lemma}
@@ -60,11 +60,11 @@
     hypothesis whose restriction to the diagonal physical pairs is not normal.
     On bond space $\C^2$, take
     \begin{align}
-        A^{(a,b)}&=c_aE_{ab},
-        &
-        c_0&=\frac35,
-        &
-        c_1&=\frac45.
+        A^{(a,b)} & =c_aE_{ab},
+                  &
+        c_0       & =\frac35,
+                  &
+        c_1       & =\frac45.
         \notag
     \end{align}
     Then the four matrices $A^{(a,b)}$ span $\MN{2}$ and
@@ -72,9 +72,9 @@
     For a single block, injectivity also gives finite-length block separation.
     The diagonal restriction, however, consists only of
     \begin{align}
-        A^{\mathrm{diag}}(0)&=\frac35E_{00},
-        &
-        A^{\mathrm{diag}}(1)&=\frac45E_{11}.
+        A^{\mathrm{diag}}(0) & =\frac35E_{00},
+                             &
+        A^{\mathrm{diag}}(1) & =\frac45E_{11}.
         \notag
     \end{align}
     Every product of these two matrices is diagonal, so no blocking length spans
@@ -111,7 +111,7 @@
     the diagonal tensor equals the diagonal entry of the generated operator:
     \begin{align}
         V^{(N)}(i\mapsto M^{ii})(\sigma)
-        &=\bra{\sigma}\rho^{(N)}(M)\ket{\sigma}.
+         & =\bra{\sigma}\rho^{(N)}(M)\ket{\sigma}.
         \label{eq:mpdo_diagonal_density}
     \end{align}
     Both sides of (\ref{eq:mpdo_diagonal_density}) equal
@@ -157,8 +157,8 @@
     \begin{align}
         V^{(N)}\Bigl(\textstyle\bigoplus_\alpha\bigoplus_j
         \omega_{\alpha j}A_\alpha\Bigr)(\sigma)
-        &=\sum_\alpha\sum_j(\omega_{\alpha j})^N
-          V^{(N)}(A_\alpha)(\sigma).
+         & =\sum_\alpha\sum_j(\omega_{\alpha j})^N
+        V^{(N)}(A_\alpha)(\sigma).
         \label{eq:mpdo_vertical_mpv_sum}
     \end{align}
 \end{lemma}
@@ -171,14 +171,14 @@
     \begin{align}
         V^{(N)}\Bigl(\textstyle\bigoplus_q
         \widetilde\omega_q\widetilde A_q\Bigr)(\sigma)
-        &=\sum_q(\widetilde\omega_q)^N
-          V^{(N)}(\widetilde A_q)(\sigma).
+         & =\sum_q(\widetilde\omega_q)^N
+        V^{(N)}(\widetilde A_q)(\sigma).
         \notag
     \end{align}
     The flattening identifies $q$ with the pair $(\alpha,j)$ via the bijection
     \begin{align}
         \{(\alpha,j):0\leq\alpha<g,\ 0\leq j<\mult_\alpha\}
-        &\simeq
+         & \simeq
         \{0,\ldots,\textstyle\sum_\alpha\mult_\alpha-1\},
         \notag
     \end{align}
@@ -196,7 +196,7 @@
     and let $(A_\alpha)_{\alpha\in J}$ be a finite family of representative
     blocks. Suppose there is a bijection
     \begin{align}
-        e:I&\simeq\{(\alpha,j):\alpha\in J,\ 0\leq j<m_\alpha\}
+        e:I & \simeq\{(\alpha,j):\alpha\in J,\ 0\leq j<m_\alpha\}
         \notag
     \end{align}
     such that, writing $e(k)=(\alpha,j)$, one has
@@ -204,9 +204,9 @@
     $V^{(N)}(B_k)=V^{(N)}(A_\alpha)$. Then
     \begin{align}
         V^{(N)}\left(\textstyle\bigoplus_{k\in I}\nu_kB_k\right)
-        &=
+         & =
         V^{(N)}\Bigl(      \textstyle\bigoplus_{\alpha\in J}
-          \bigoplus_{j=0}^{m_\alpha-1}\omega_{\alpha j}A_\alpha
+        \bigoplus_{j=0}^{m_\alpha-1}\omega_{\alpha j}A_\alpha
         \Bigr)
         \notag
     \end{align}
@@ -219,7 +219,7 @@
     For $N>0$ and every configuration $\sigma$, the two sides expand as
     \begin{align}
         \sum_{k\in I}\nu_k^NV^{(N)}(B_k)(\sigma),
-        \notag\\
+        \notag \\
         \sum_{\alpha\in J}\sum_{j=0}^{m_\alpha-1}
         \omega_{\alpha j}^NV^{(N)}(A_\alpha)(\sigma).
         \notag
@@ -240,7 +240,7 @@
     orthogonal projection $P$ satisfies
     $P\widetilde M_v=P\widetilde M_vP$ for every vertical letter $v$, then
     \begin{align}
-        \widetilde M_vP&=P\widetilde M_vP
+        \widetilde M_vP & =P\widetilde M_vP
         \label{eq:cpsv_literal_vertical_projector_closure}
     \end{align}
     for every $v$. Thus the vertically viewed tensor has
@@ -253,21 +253,21 @@
     $P_1H^{(N)}=P_1H^{(N)}P_1$ at every positive length. Since $H^{(N)}$ is
     positive and $P=P^\dagger$,
     \begin{align}
-        P_1H^{(N)}&=P_1H^{(N)}P_1=H^{(N)}P_1.
+        P_1H^{(N)} & =P_1H^{(N)}P_1=H^{(N)}P_1.
         \label{eq:cpsv_literal_first_site_commutation}
     \end{align}
     The matrix coefficients of
     (\ref{eq:cpsv_literal_first_site_commutation}) give agreement of the
     corresponding first-site actions. In particular,
     \begin{align}
-        P_1H^{(N)}&=H^{(N)}P_1.
+        P_1H^{(N)} & =H^{(N)}P_1.
         \label{eq:cpsv_prop_4_13_first_site}
     \end{align}
     The original-coordinate marked Lemma~L gives equality of their inserted
     tensors on the original bond space. Reading this equality as a vertical
     one-site action yields
     \begin{align}
-        \widetilde M_vP&=P\widetilde M_vP.
+        \widetilde M_vP & =P\widetilde M_vP.
         \label{eq:cpsv_prop_4_13_projector_closure}
     \end{align}
 \end{proof}
@@ -304,20 +304,20 @@
     integers $d_k$, tensors $B_k$ of bond dimension $d_k$, and isometries
     $V_k:\C^{d_k}\to\C^d$ such that
     \begin{align}
-        V_k^\dagger V_k&=\Id,
-        \notag\\
-        \sum_kV_kV_k^\dagger&=\Id,
-        \notag\\
-        V_k^\dagger V_l&=0\quad(k\ne l).
+        V_k^\dagger V_k      & =\Id,
+        \notag                                  \\
+        \sum_kV_kV_k^\dagger & =\Id,
+        \notag                                  \\
+        V_k^\dagger V_l      & =0\quad(k\ne l).
         \notag
     \end{align}
     Every $B_k$ is irreducible, and for every vertical letter $v$,
     \begin{align}
-        \widetilde M_vV_k&=V_kB_k^v,
-        \notag\\
-        V_k^\dagger\widetilde M_v&=B_k^vV_k^\dagger,
-        \notag\\
-        B_k^v&=V_k^\dagger\widetilde M_vV_k.
+        \widetilde M_vV_k         & =V_kB_k^v,
+        \notag                                                     \\
+        V_k^\dagger\widetilde M_v & =B_k^vV_k^\dagger,
+        \notag                                                     \\
+        B_k^v                     & =V_k^\dagger\widetilde M_vV_k.
         \notag
     \end{align}
     Moreover, $\widetilde M$ and the unit-weight direct sum
@@ -341,11 +341,11 @@
     are complete and pairwise orthogonal and, for every vertical letter $v$,
     reduce the corresponding letter:
     \begin{align}
-        \sum_kP_k&=\Id,
-        \notag\\
-        P_kP_l&=0\quad(k\ne l),
-        \notag\\
-        \widetilde M_vP_k&=P_k\widetilde M_v.
+        \sum_kP_k         & =\Id,
+        \notag                                  \\
+        P_kP_l            & =0\quad(k\ne l),
+        \notag                                  \\
+        \widetilde M_vP_k & =P_k\widetilde M_v.
         \notag
     \end{align}
 \end{theorem}
@@ -363,13 +363,13 @@
     \centering
     $U\mathcal K U^\dagger=\bigoplus_\alpha M_\alpha$.
     \caption{The vertically viewed tensor decomposes through complete
-    orthogonal physical sectors. Each $V_k$ embeds the irreducible tensor
-    $B_k$, while $P_k=V_kV_k^\dagger$ is its reducing range projection. The
-    displayed identity is equivalent, for every vertical letter $v$, to
-    $\widetilde M_v=\sum_kV_kB_{k,v}V_k^\dagger$.
-    This is the iterated invariant-subspace construction in
-    \cite[lines~200--219]{Cirac2016MPDO_arXiv}, applied to the reduction in
-    \cite[Proposition~4.13, lines~1873--1887]{Cirac2016MPDO_arXiv}.}
+        orthogonal physical sectors. Each $V_k$ embeds the irreducible tensor
+        $B_k$, while $P_k=V_kV_k^\dagger$ is its reducing range projection. The
+        displayed identity is equivalent, for every vertical letter $v$, to
+        $\widetilde M_v=\sum_kV_kB_{k,v}V_k^\dagger$.
+        This is the iterated invariant-subspace construction in
+        \cite[lines~200--219]{Cirac2016MPDO_arXiv}, applied to the reduction in
+        \cite[Proposition~4.13, lines~1873--1887]{Cirac2016MPDO_arXiv}.}
     \label{fig:mpdo_vertical_reducing_sectors}
 \end{figure}
 
@@ -383,17 +383,17 @@
     isometries $V_k:\C^{d_k}\to\C^d$ with pairwise orthogonal ranges. For
     every sector $k$ and every vertical letter $v$,
     \begin{align}
-        \widetilde M_vV_k&=V_k(\nu_kB_k^v),
-        \notag\\
-        V_k^\dagger\widetilde M_v&=(\nu_kB_k^v)V_k^\dagger,
-        \notag\\
-        \nu_kB_k^v&=V_k^\dagger\widetilde M_vV_k.
+        \widetilde M_vV_k         & =V_k(\nu_kB_k^v),
+        \notag                                                     \\
+        V_k^\dagger\widetilde M_v & =(\nu_kB_k^v)V_k^\dagger,
+        \notag                                                     \\
+        \nu_kB_k^v                & =V_k^\dagger\widetilde M_vV_k.
         \notag
     \end{align}
     Moreover, every vertical letter is reconstructed literally by
     \begin{align}
         \widetilde M_v
-        &=\sum_kV_k(\nu_kB_k^v)V_k^\dagger.
+         & =\sum_kV_k(\nu_kB_k^v)V_k^\dagger.
         \label{eq:mpdo_vertical_normal_reconstruction}
     \end{align}
 \end{theorem}
@@ -426,17 +426,17 @@
     $V_k:\C^{d_k}\to\C^d$ with pairwise orthogonal ranges. For every sector
     $k$ and every vertical letter $v$,
     \begin{align}
-        \widetilde M_vV_k&=V_k(\nu_kB_k^v),
-        \notag\\
-        V_k^\dagger\widetilde M_v&=(\nu_kB_k^v)V_k^\dagger,
-        \notag\\
-        \nu_kB_k^v&=V_k^\dagger\widetilde M_vV_k.
+        \widetilde M_vV_k         & =V_k(\nu_kB_k^v),
+        \notag                                                     \\
+        V_k^\dagger\widetilde M_v & =(\nu_kB_k^v)V_k^\dagger,
+        \notag                                                     \\
+        \nu_kB_k^v                & =V_k^\dagger\widetilde M_vV_k.
         \notag
     \end{align}
     Every vertical letter is reconstructed by
     \begin{align}
         \widetilde M_v
-        &=\sum_kV_k(\nu_kB_k^v)V_k^\dagger.
+         & =\sum_kV_k(\nu_kB_k^v)V_k^\dagger.
         \label{eq:mpdo_literal_normal_vertical_reconstruction}
     \end{align}
     The omitted orthogonal complement is an all-zero sector. This is the
@@ -458,7 +458,7 @@
     reconstruction is
     \begin{align}
         \widetilde M_v
-        &=\sum_kV_k(\nu_kB_k^v)V_k^\dagger.
+         & =\sum_kV_k(\nu_kB_k^v)V_k^\dagger.
         \label{eq:cpsv_prop_4_13_normal_corners}
     \end{align}
 \end{proof}
@@ -469,17 +469,17 @@
     \leanok
     \uses{def:vertical_tensor_mpdo, def:mpv_phase_class_data, def:bnt_cpsv, def:mpdo_sector_projector, def:mpdo_vertical_loops}
     An MPO tensor $M$ has a \emph{grouped vertical BNT decomposition with
-    physical isometries} if there are positive bond dimensions $d_k$, positive
+        physical isometries} if there are positive bond dimensions $d_k$, positive
     weights $\mu_k$, normal tensors $B_k$, and isometries
     $V_k\colon\C^{d_k}\to\C^d$ with pairwise orthogonal ranges such that
     \begin{align}
-        \widetilde M_vV_k&=V_k(\mu_kB_k^v),
-        \notag\\
-        V_k^\dagger\widetilde M_v&=(\mu_kB_k^v)V_k^\dagger,
-        \notag\\
-        \mu_kB_k^v&=V_k^\dagger\widetilde M_vV_k,
-        \notag\\
-        \widetilde M_v&=\sum_kV_k(\mu_kB_k^v)V_k^\dagger.
+        \widetilde M_vV_k         & =V_k(\mu_kB_k^v),
+        \notag                                                         \\
+        V_k^\dagger\widetilde M_v & =(\mu_kB_k^v)V_k^\dagger,
+        \notag                                                         \\
+        \mu_kB_k^v                & =V_k^\dagger\widetilde M_vV_k,
+        \notag                                                         \\
+        \widetilde M_v            & =\sum_kV_k(\mu_kB_k^v)V_k^\dagger.
         \notag
     \end{align}
     Let $k=(\alpha,q)$ be the phase-class enumeration. There are equalities of
@@ -488,7 +488,7 @@
     with $X_{\alpha,0}=\Id$ and $\zeta_{\alpha,0}=1$, such that
     \begin{align}
         B_{\alpha,q}^v
-        &=\zeta_{\alpha,q}X_{\alpha,q}M_\alpha^vX_{\alpha,q}^{-1}.
+         & =\zeta_{\alpha,q}X_{\alpha,q}M_\alpha^vX_{\alpha,q}^{-1}.
         \notag
     \end{align}
     The representatives $M_\alpha$ form a basis of normal tensors for the
@@ -508,10 +508,10 @@
     grouped corner identity, and reconstruct each vertical letter exactly:
     \begin{align}
         \widetilde M_v
-        &=\sum_\alpha\sum_q
-          V_{\alpha,q}
-          \bigl(c_{\alpha,q}X_{\alpha,q}M_\alpha^v
-          X_{\alpha,q}^{-1}\bigr)V_{\alpha,q}^\dagger.
+         & =\sum_\alpha\sum_q
+        V_{\alpha,q}
+        \bigl(c_{\alpha,q}X_{\alpha,q}M_\alpha^v
+        X_{\alpha,q}^{-1}\bigr)V_{\alpha,q}^\dagger.
         \label{eq:vertical_bnt_grouping_with_isometry}
     \end{align}
 \end{definition}
@@ -529,8 +529,8 @@
     with $X_{\alpha,0}=\Id$ and $\zeta_{\alpha,0}=1$, such that
     \begin{align}
         B_{\alpha,q}^v
-        &=\zeta_{\alpha,q}X_{\alpha,q}
-          M_\alpha^vX_{\alpha,q}^{-1}.
+         & =\zeta_{\alpha,q}X_{\alpha,q}
+        M_\alpha^vX_{\alpha,q}^{-1}.
         \label{eq:mpdo_vertical_gauge_phase}
     \end{align}
     The representatives are pairwise gauge-phase distinct and form a basis of
@@ -542,11 +542,11 @@
     and the literal reconstruction
     \begin{align}
         \widetilde M_v
-        &=\sum_\alpha\sum_q
-          V_{\alpha,q}
-          \bigl(\nu_{\alpha,q}\zeta_{\alpha,q}
-          X_{\alpha,q}M_\alpha^vX_{\alpha,q}^{-1}\bigr)
-          V_{\alpha,q}^\dagger.
+         & =\sum_\alpha\sum_q
+        V_{\alpha,q}
+        \bigl(\nu_{\alpha,q}\zeta_{\alpha,q}
+        X_{\alpha,q}M_\alpha^vX_{\alpha,q}^{-1}\bigr)
+        V_{\alpha,q}^\dagger.
         \label{eq:mpdo_vertical_grouped_reconstruction}
     \end{align}
     For each pair $(\alpha,q)$, the range projector of $V_{\alpha,q}$ obeys
@@ -591,8 +591,8 @@
     with $X_{\alpha,0}=\Id$ and $\zeta_{\alpha,0}=1$, such that
     \begin{align}
         B_{\alpha,q}^v
-        &=\zeta_{\alpha,q}X_{\alpha,q}
-          M_\alpha^vX_{\alpha,q}^{-1}.
+         & =\zeta_{\alpha,q}X_{\alpha,q}
+        M_\alpha^vX_{\alpha,q}^{-1}.
         \label{eq:cpsv_literal_vertical_gauge_phase}
     \end{align}
     The representatives are pairwise gauge-phase distinct and form a basis of
@@ -604,11 +604,11 @@
     and the literal reconstruction
     \begin{align}
         \widetilde M_v
-        &=\sum_\alpha\sum_q
-          V_{\alpha,q}
-          \bigl(\nu_{\alpha,q}\zeta_{\alpha,q}
-          X_{\alpha,q}M_\alpha^vX_{\alpha,q}^{-1}\bigr)
-          V_{\alpha,q}^\dagger.
+         & =\sum_\alpha\sum_q
+        V_{\alpha,q}
+        \bigl(\nu_{\alpha,q}\zeta_{\alpha,q}
+        X_{\alpha,q}M_\alpha^vX_{\alpha,q}^{-1}\bigr)
+        V_{\alpha,q}^\dagger.
         \label{eq:cpsv_literal_vertical_grouped_reconstruction}
     \end{align}
     For each pair $(\alpha,q)$, the range projector of $V_{\alpha,q}$ obeys
@@ -660,28 +660,28 @@
     \uses{def:vertical_sector_block_row}
     Suppose that
     \begin{align}
-        W_k^\dagger W_k&=\Id,
-        \notag\\
-        W_k^\dagger W_l&=0\quad(k\ne l),
+        W_k^\dagger W_k & =\Id,
+        \notag                             \\
+        W_k^\dagger W_l & =0\quad(k\ne l),
         \notag
     \end{align}
     and, for every letter $v$ and every sector $k$,
     $T_vW_k=W_kB_k^v$. Then the block-row map $U$ is a coisometry and
     conjugates $T$ to the direct sum of the sector tensors:
     \begin{align}
-        UU^\dagger&=\Id,
-        \notag\\
-        UT_vU^\dagger&=\bigoplus_kB_k^v.
+        UU^\dagger    & =\Id,
+        \notag                             \\
+        UT_vU^\dagger & =\bigoplus_kB_k^v.
         \notag
     \end{align}
     If the letters also satisfy the literal sector decomposition
     \begin{align}
-        T_v&=\sum_kW_kB_k^vW_k^\dagger,
+        T_v & =\sum_kW_kB_k^vW_k^\dagger,
         \label{eq:mpdo_sector_literal_decomposition}
     \end{align}
     then
     \begin{align}
-        T_v&=U^\dagger\!\left(\bigoplus_kB_k^v\right)U.
+        T_v & =U^\dagger\!\left(\bigoplus_kB_k^v\right)U.
         \notag
     \end{align}
     This last equality is a conditional consequence of
@@ -714,21 +714,21 @@
     $\omega_{\alpha,q}>0$ for $0\leq q<r_\alpha$, and let
     $W_{\alpha,q}:\C^{D_\alpha}\to\C^d$ satisfy
     \begin{align}
-        W_{\alpha,q}^\dagger W_{\alpha,q}&=\Id,
-        \notag\\
-        W_{\alpha,q}^\dagger W_{\beta,p}&=0
+        W_{\alpha,q}^\dagger W_{\alpha,q} & =\Id,
+        \notag                                    \\
+        W_{\alpha,q}^\dagger W_{\beta,p}  & =0
         \quad((\alpha,q)\ne(\beta,p)).
         \notag
     \end{align}
     Suppose that, for every vertical letter $v$ and every pair $(\alpha,q)$,
     $\widetilde M_vW_{\alpha,q}
-    =W_{\alpha,q}(\omega_{\alpha,q}A_\alpha^v)$, and that the letters have
+        =W_{\alpha,q}(\omega_{\alpha,q}A_\alpha^v)$, and that the letters have
     the exact sector decomposition
     \begin{align}
         \widetilde M_v
-        &=\sum_{\alpha=0}^{g-1}\sum_{q=0}^{r_\alpha-1}
-          W_{\alpha,q}(\omega_{\alpha,q}A_\alpha^v)
-          W_{\alpha,q}^\dagger.
+         & =\sum_{\alpha=0}^{g-1}\sum_{q=0}^{r_\alpha-1}
+        W_{\alpha,q}(\omega_{\alpha,q}A_\alpha^v)
+        W_{\alpha,q}^\dagger.
         \notag
     \end{align}
     Then $M$ is in vertical canonical form.
@@ -743,13 +743,13 @@
     $W_{\alpha,q}^\dagger$. Theorem~\ref{thm:vertical_sector_coisometry}
     gives
     \begin{align}
-        UU^\dagger&=\Id,
-        \notag\\
+        UU^\dagger & =\Id,
+        \notag                                                                                  \\
         U\widetilde M_vU^\dagger
-        &=\bigoplus_{\alpha,q}\omega_{\alpha,q}A_\alpha^v,
-        \notag\\
+                   & =\bigoplus_{\alpha,q}\omega_{\alpha,q}A_\alpha^v,
+        \notag                                                                                  \\
         \widetilde M_v
-        &=U^\dagger\!\left(\bigoplus_{\alpha,q}\omega_{\alpha,q}A_\alpha^v\right)U.
+                   & =U^\dagger\!\left(\bigoplus_{\alpha,q}\omega_{\alpha,q}A_\alpha^v\right)U.
         \notag
     \end{align}
     Identifying the dependent pairs $(\alpha,q)$ and their bond indices with
@@ -816,9 +816,9 @@
     $V_k:\C^{d_k}\to\C^d$ be an isometry for $0\leq k<r$. Assume, for every
     vertical letter $v$, that
     \begin{align}
-        V_k^\dagger T_v&=(\mu_kB_k^v)V_k^\dagger,
-        \notag\\
-        T_v&=\sum_{k=0}^{r-1}V_k(\mu_kB_k^v)V_k^\dagger.
+        V_k^\dagger T_v & =(\mu_kB_k^v)V_k^\dagger,
+        \notag                                                         \\
+        T_v             & =\sum_{k=0}^{r-1}V_k(\mu_kB_k^v)V_k^\dagger.
         \notag
     \end{align}
     Partition the tensors $B_k$ into matrix-product-vector phase classes and
@@ -842,11 +842,11 @@
     cyclicity of trace, and $V_k^\dagger V_k=\Id$ therefore give
     \begin{align}
         \tr(T^w)
-        &=\sum_k\tr\!\left(V_kC_k^vV_k^\dagger T^{w'}\right)
-        \notag\\
-        &=\sum_k\tr(C_k^vC_k^{w'})
-          =\sum_k\mu_k^{|w|}\tr(B_k^w)
-          =V^{(|w|)}(A_{\mathrm{ret}})_w.
+         & =\sum_k\tr\!\left(V_kC_k^vV_k^\dagger T^{w'}\right)
+        \notag                                                 \\
+         & =\sum_k\tr(C_k^vC_k^{w'})
+        =\sum_k\mu_k^{|w|}\tr(B_k^w)
+        =V^{(|w|)}(A_{\mathrm{ret}})_w.
         \notag
     \end{align}
     Thus $T$ and $A_{\mathrm{ret}}$ have the same matrix product vectors at
@@ -868,20 +868,20 @@
     invertible matrices, and suppose that two vertical corners satisfy
     \begin{align}
         V_X^\dagger\widetilde M^vV_X
-        &=c_X X A^vX^{-1},
-        &
-        c_X&>0,
-        \notag\\
+            & =c_X X A^vX^{-1},
+            &
+        c_X & >0,
+        \notag                  \\
         V_Y^\dagger\widetilde M^vV_Y
-        &=c_Y Y A^vY^{-1},
-        &
-        c_Y&>0.
+            & =c_Y Y A^vY^{-1},
+            &
+        c_Y & >0.
         \notag
     \end{align}
     Then the Gram-dressed tensors agree:
     \begin{align}
         (X^\dagger X)A^v(X^\dagger X)^{-1}
-        &=(Y^\dagger Y)A^v(Y^\dagger Y)^{-1}
+         & =(Y^\dagger Y)A^v(Y^\dagger Y)^{-1}
         \label{eq:cpsv_literal_pairwise_gram_conj}
     \end{align}
     for every vertical letter $v$.
@@ -892,8 +892,8 @@
     For $Z=X,Y$, set
     \begin{align}
         f^Z_{(r,s),(i,j)}
-        &=c_Z^{-1}\overline{(V_Z Z)_{ir}}
-          \bigl(V_Z(Z^{-1})^\dagger\bigr)_{js}.
+         & =c_Z^{-1}\overline{(V_Z Z)_{ir}}
+        \bigl(V_Z(Z^{-1})^\dagger\bigr)_{js}.
         \notag
     \end{align}
     The corner identity identifies the mark with coefficients $f^Z$ with the
@@ -915,19 +915,19 @@
     invertible matrices, and suppose that
     \begin{align}
         V_X^\dagger\widetilde M^vV_X
-        &=c_X X A^vX^{-1},
-        &
-        c_X&>0,
-        \notag\\
+            & =c_X X A^vX^{-1},
+            &
+        c_X & >0,
+        \notag                  \\
         V_Y^\dagger\widetilde M^vV_Y
-        &=c_Y Y A^vY^{-1},
-        &
-        c_Y&>0.
+            & =c_Y Y A^vY^{-1},
+            &
+        c_Y & >0.
         \notag
     \end{align}
     Then there is a real number $\omega>0$ such that
     \begin{align}
-        X^\dagger X&=\omega\,Y^\dagger Y.
+        X^\dagger X & =\omega\,Y^\dagger Y.
         \label{eq:cpsv_literal_positive_relative_gram}
     \end{align}
 \end{theorem}
@@ -986,15 +986,15 @@
     nonzero sectors. Writing
     $B=\bigoplus_\alpha\mu_\alpha\otimes M_\alpha$, one has
     \begin{align}
-        UU^\dagger&=\Id.
+        UU^\dagger & =\Id.
         \label{eq:cpsv_prop_4_13_coisometry}
     \end{align}
     \begin{align}
-        U\widetilde M U^\dagger&=B.
+        U\widetilde M U^\dagger & =B.
         \label{eq:cpsv_prop_4_13_vertical_form}
     \end{align}
     \begin{align}
-        \widetilde M&=U^\dagger BU.
+        \widetilde M & =U^\dagger BU.
         \label{eq:cpsv_prop_4_13_reconstruction}
     \end{align}
     The source explicitly displays
@@ -1036,11 +1036,11 @@
     retained nonzero sectors. Writing
     $B=\bigoplus_\alpha\mu_\alpha\otimes M_\alpha$, one has
     \begin{align}
-        UU^\dagger&=\Id,
-        \notag\\
-        U\widetilde MU^\dagger&=B,
-        \notag\\
-        \widetilde M&=U^\dagger BU.
+        UU^\dagger             & =\Id,
+        \notag                                  \\
+        U\widetilde MU^\dagger & =B,
+        \notag                                  \\
+        \widetilde M           & =U^\dagger BU.
         \notag
     \end{align}
     The conclusion includes the basis-of-normal-tensors condition in

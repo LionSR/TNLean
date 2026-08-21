@@ -10,7 +10,7 @@
     of blocks, the $(j,j')$ bond block of the transfer sum
     \begin{align}
         \sum_i \left(\bigoplus_k B_k^i\right)X
-            \left(\bigoplus_k B_k^i\right)^\dagger
+        \left(\bigoplus_k B_k^i\right)^\dagger
         \notag
     \end{align}
     equals $\E_{j,j'}$ applied to the $(j,j')$ bond block of $X$.
@@ -20,9 +20,9 @@
     of the product is
     \begin{align}
         \left(\sum_i \left(\bigoplus_k B_k^i\right)X
-            \left(\bigoplus_k B_k^i\right)^\dagger\right)_{j,j'}
-        &= \sum_i B_j^i X_{j,j'}(B_{j'}^i)^\dagger
-         = \E_{j,j'}(X_{j,j'}).
+        \left(\bigoplus_k B_k^i\right)^\dagger\right)_{j,j'}
+         & = \sum_i B_j^i X_{j,j'}(B_{j'}^i)^\dagger
+        = \E_{j,j'}(X_{j,j'}).
         \notag
     \end{align}
 \end{proof}
@@ -37,7 +37,7 @@
     and let $\mathcal S_B$ be the block transfer sum. Then, for every block
     matrix $Y$,
     \begin{align}
-        \E_{\oplus_k B_k}(\Phi(Y))&=\Phi(\mathcal S_B(Y)).
+        \E_{\oplus_k B_k}(\Phi(Y)) & =\Phi(\mathcal S_B(Y)).
         \notag
     \end{align}
 \end{theorem}
@@ -47,14 +47,14 @@
     gives
     \begin{align}
         \E_{\oplus_k B_k}(\Phi(Y))
-        &=\sum_i\Phi\!\left(\bigoplus_k B_k^i\right)\Phi(Y)
-            \Phi\!\left(\bigoplus_k B_k^i\right)^\dagger
-        \notag\\
-        &=\Phi\!\left(\sum_i
-            \left(\bigoplus_k B_k^i\right)Y
-            \left(\bigoplus_k B_k^i\right)^\dagger\right)
-        \notag\\
-        &=\Phi(\mathcal S_B(Y)).
+         & =\sum_i\Phi\!\left(\bigoplus_k B_k^i\right)\Phi(Y)
+        \Phi\!\left(\bigoplus_k B_k^i\right)^\dagger
+        \notag                                                \\
+         & =\Phi\!\left(\sum_i
+        \left(\bigoplus_k B_k^i\right)Y
+        \left(\bigoplus_k B_k^i\right)^\dagger\right)
+        \notag                                                \\
+         & =\Phi(\mathcal S_B(Y)).
         \notag
     \end{align}
 \end{proof}
@@ -66,13 +66,13 @@
     \uses{def:transfer_map}
     Let $(B_k)_k$ be a family of tensors and let $c\in\C$. If
     \begin{align}
-        \E_{\oplus_k B_k}^2&=c\E_{\oplus_k B_k},
+        \E_{\oplus_k B_k}^2 & =c\E_{\oplus_k B_k},
         \notag
     \end{align}
     then the corresponding block transfer sum $\mathcal S_B$ satisfies, for
     every bond matrix $Y$,
     \begin{align}
-        \mathcal S_B(\mathcal S_B(Y))&=c\mathcal S_B(Y).
+        \mathcal S_B(\mathcal S_B(Y)) & =c\mathcal S_B(Y).
         \notag
     \end{align}
 \end{theorem}
@@ -93,13 +93,13 @@
     \uses{def:mixed_transfer_rect, def:transfer_map}
     Let $(B_k)_k$ be a family of tensors and let $c\in\C$. If
     \begin{align}
-        \E_{\oplus_k B_k}^2&=c\E_{\oplus_k B_k},
+        \E_{\oplus_k B_k}^2 & =c\E_{\oplus_k B_k},
         \notag
     \end{align}
     then, for every ordered pair of blocks $(j,j')$ whose two bond dimensions
     are positive,
     \begin{align}
-        \E_{j,j'}^2&=c\E_{j,j'}.
+        \E_{j,j'}^2 & =c\E_{j,j'}.
         \notag
     \end{align}
 \end{theorem}
@@ -114,9 +114,9 @@
     $\mathcal S_B^2=c\mathcal S_B$, and hence
     \begin{align}
         \E_{j,j'}(\E_{j,j'}(Z))
-        &=[\mathcal S_B(\mathcal S_B(Y))]_{j,j'}
-         =[c\mathcal S_B(Y)]_{j,j'}
-         =c\E_{j,j'}(Z).
+         & =[\mathcal S_B(\mathcal S_B(Y))]_{j,j'}
+        =[c\mathcal S_B(Y)]_{j,j'}
+        =c\E_{j,j'}(Z).
         \notag
     \end{align}
 \end{proof}
@@ -135,9 +135,9 @@
     block satisfies
     \begin{align}
         (\mathcal S_B^2(X))_{j,j'}
-        &= \E_{j,j'}^2(X_{j,j'})
-         = \E_{j,j'}(X_{j,j'})
-         = (\mathcal S_B(X))_{j,j'}.
+         & = \E_{j,j'}^2(X_{j,j'})
+        = \E_{j,j'}(X_{j,j'})
+        = (\mathcal S_B(X))_{j,j'}.
         \notag
     \end{align}
     Equality on every block gives the asserted equality on the total bond
@@ -166,9 +166,9 @@
     idempotence gives
     \begin{align}
         (\E_{\oplus_k B_k}^2(X))_{j,j'}
-        &= \E_{j,j'}^2(X_{j,j'})
-         = \E_{j,j'}(X_{j,j'})
-         = (\E_{\oplus_k B_k}(X))_{j,j'}
+         & = \E_{j,j'}^2(X_{j,j'})
+        = \E_{j,j'}(X_{j,j'})
+        = (\E_{\oplus_k B_k}(X))_{j,j'}
         \notag
     \end{align}
     for every pair of blocks, and hence gives idempotence on the total bond
@@ -180,9 +180,9 @@
     idempotence gives
     \begin{align}
         \E_{j,j'}^2(M)
-        &= (\E_{\oplus_k B_k}^2(Y))_{j,j'}
-         = (\E_{\oplus_k B_k}(Y))_{j,j'}
-         = \E_{j,j'}(M).
+         & = (\E_{\oplus_k B_k}^2(Y))_{j,j'}
+        = (\E_{\oplus_k B_k}(Y))_{j,j'}
+        = \E_{j,j'}(M).
         \notag
     \end{align}
 \end{proof}
@@ -198,7 +198,7 @@
 \begin{proof}\leanok
     Conjugate transposition changes the second scalar to its complex conjugate:
     $\sum_i(cA^i)X(eB^i)^\dagger
-    =c\overline e\sum_iA^iX(B^i)^\dagger$.
+        =c\overline e\sum_iA^iX(B^i)^\dagger$.
 \end{proof}
 
 \begin{theorem}[Phase coherence for literal repeated blocks]%
@@ -218,15 +218,15 @@
     Lemma~\ref{lem:mixed_transfer_rect_smul} and
     $\E_{A,A}=\E_A$ give
     $\E_{\mu_qA,\mu_{q'}A}
-    =\mu_q\overline{\mu_{q'}}\E_{A,A}
-    =\mu_q\overline{\mu_{q'}}\E_A$.
+        =\mu_q\overline{\mu_{q'}}\E_{A,A}
+        =\mu_q\overline{\mu_{q'}}\E_A$.
     Hence $(\mu_q\overline{\mu_{q'}})\E_A$ is idempotent. Since $\E_A$ is
     nonzero and
     $|\mu_q\overline{\mu_{q'}}|=|\mu_q||\mu_{q'}|=1$,
     \begin{align}
         (\mu_q\overline{\mu_{q'}})^2\E_A
         =\mu_q\overline{\mu_{q'}}\E_A
-        &\quad\Longrightarrow\quad
+         & \quad\Longrightarrow\quad
         \mu_q\overline{\mu_{q'}}
         (\mu_q\overline{\mu_{q'}}-1)=0
         \quad\Longrightarrow\quad
@@ -236,14 +236,14 @@
     Since $|\mu_{q'}|=1$ gives
     $\overline{\mu_{q'}}\mu_{q'}=1$, one has
     $\mu_q
-    =\mu_q(\overline{\mu_{q'}}\mu_{q'})
-    =(\mu_q\overline{\mu_{q'}})\mu_{q'}
-    =\mu_{q'}$.
+        =\mu_q(\overline{\mu_{q'}}\mu_{q'})
+        =(\mu_q\overline{\mu_{q'}})\mu_{q'}
+        =\mu_{q'}$.
 
-% Scope note: this is the corrected literal-block conclusion from
-% \cite[Theorem~3.11, lines~543--563]{Cirac2016MPDO_arXiv}; the printed
-% independent-phase statement requires a physical-space construction not
-% specified by an equation in that passage.
+    % Scope note: this is the corrected literal-block conclusion from
+    % \cite[Theorem~3.11, lines~543--563]{Cirac2016MPDO_arXiv}; the printed
+    % independent-phase statement requires a physical-space construction not
+    % specified by an equation in that passage.
 \end{proof}
 
 \begin{theorem}[Cross-block transfer vanishing for a direct-sum fixed point]%
@@ -260,7 +260,7 @@
     of \cite[Theorem~3.11 and Corollary~3.12]{Cirac2016MPDO_arXiv} at the level of
     the normal-tensor blocks. The passage to the residual tensors $U_j$ is given
     by Theorem~\ref{thm:residual_isometry_of_rfp_direct_sum}.
-% The U-level conversion is recorded in docs/paper-gaps/cpsv16_rfp_isometry_scope.tex.
+    % The U-level conversion is recorded in docs/paper-gaps/cpsv16_rfp_isometry_scope.tex.
 \end{theorem}
 \begin{proof}\leanok
     \uses{lem:block_diagonal_transfer_sum_to_block, thm:transfer_operator_gap_irr_tp, thm:transfer_operator_gap_rect_irr_tp, lem:idempotent_spectral_radius_zero}
@@ -290,8 +290,8 @@
     A family $(U_j)_j$ satisfies the \emph{joint isometry condition} when
     \begin{align}
         \sum_i(U_j^i)_{\alpha,\beta}
-            \overline{(U_{j'}^i)_{\alpha',\beta'}}
-        &=\delta_{j,j'}\delta_{\alpha,\alpha'}\delta_{\beta,\beta'}.
+        \overline{(U_{j'}^i)_{\alpha',\beta'}}
+         & =\delta_{j,j'}\delta_{\alpha,\alpha'}\delta_{\beta,\beta'}.
         \notag
     \end{align}
     Each block satisfies the within-block pair-index orthonormality, and the
@@ -328,7 +328,7 @@
     factors:
     \begin{align}
         \E_{A,B}(Y)
-        &=X_AD_A\,\E_{U,V}\!\left(X_A^{-1}Y(X_B^{-1})^\dagger\right)(X_BD_B)^\dagger.
+         & =X_AD_A\,\E_{U,V}\!\left(X_A^{-1}Y(X_B^{-1})^\dagger\right)(X_BD_B)^\dagger.
         \notag
     \end{align}
 \end{lemma}
@@ -363,7 +363,7 @@
     \begin{align}
         \sum_i(U^i)_{\alpha,\beta}
         \overline{(V^i)_{\alpha',\beta'}}
-        &=0.
+         & =0.
         \notag
     \end{align}
 \end{lemma}
@@ -399,17 +399,17 @@
     Then there are invertible matrices $X_j$, trace-one positive diagonal
     matrices $\rho_j=\diag(\lambda_{j,\alpha})$, and tensors $U_j$ with
     \begin{align}
-        A_j^i&=X_j\sqrt{\rho_j}\,U_j^iX_j^{-1},
+        A_j^i & =X_j\sqrt{\rho_j}\,U_j^iX_j^{-1},
         \notag
     \end{align}
     such that $(U_j)_j$ satisfies the joint isometry condition. These are the
     isometry equations of \cite[Corollary~3.12]{Cirac2016MPDO_arXiv} for the
     direct sum of distinct normal-tensor blocks.
-% Scope restriction: the Lean theorem takes the per-block normality,
-% irreducibility, left-canonical condition, and gauge-phase distinctness as
-% explicit hypotheses; extracting these from a single canonical-form RFP
-% predicate is the remaining step
-% (docs/paper-gaps/cpsv16_rfp_isometry_scope.tex).
+    % Scope restriction: the Lean theorem takes the per-block normality,
+    % irreducibility, left-canonical condition, and gauge-phase distinctness as
+    % explicit hypotheses; extracting these from a single canonical-form RFP
+    % predicate is the remaining step
+    % (docs/paper-gaps/cpsv16_rfp_isometry_scope.tex).
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:bnt_locally_orthogonal_of_rfp_direct_sum, thm:isometry_canonical_form_of_rfp_nt, lem:mixed_transfer_conj_apply, lem:isrfp_block_of_rfp_direct_sum, lem:mixed_transfer_eq_zero_of_conj, lem:residual_isometry_entry}
@@ -425,7 +425,7 @@
     factors $\E_{U_j,U_{j'}}=0$, and reading the entry of this operator at a
     matrix unit yields the cross-block sum
     $\sum_i(U_j^i)_{\alpha,\beta}
-    \overline{(U_{j'}^i)_{\alpha',\beta'}}=0$.
+        \overline{(U_{j'}^i)_{\alpha',\beta'}}=0$.
 \end{proof}
 
 \begin{theorem}[Direct sum of square-root fixed-point blocks]%
@@ -442,9 +442,9 @@
     distinct-blocks case where each normal tensor appears once; the cross-block
     vanishing is the $j\ne j'$ part of the isometry condition of that
     characterization, so it is part of the source joint isometry condition.
-% Scope restriction (multiplicity-one): the source canonical form allows each
-% normal tensor to repeat with a multiplicity and a phase; this is the
-% single-copy case (docs/paper-gaps/cpsv16_rfp_isometry_scope.tex).
+    % Scope restriction (multiplicity-one): the source canonical form allows each
+    % normal tensor to repeat with a multiplicity and a phase; this is the
+    % single-copy case (docs/paper-gaps/cpsv16_rfp_isometry_scope.tex).
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:is_rfp_of_isometry_canonical_form, lem:block_diagonal_transfer_sum_to_block}
@@ -458,9 +458,9 @@
     block,
     \begin{align}
         [\E_{\bigoplus B}^2(Y)]_{j,j'}
-        &=\E_{j,j'}\!(\E_{j,j'}(Y_{j,j'}))
-         =\E_{j,j'}(Y_{j,j'})
-         =[\E_{\bigoplus B}(Y)]_{j,j'},
+         & =\E_{j,j'}\!(\E_{j,j'}(Y_{j,j'}))
+        =\E_{j,j'}(Y_{j,j'})
+        =[\E_{\bigoplus B}(Y)]_{j,j'},
         \notag
     \end{align}
     so $\E_{\bigoplus B}^2=\E_{\bigoplus B}$ and the direct
@@ -479,7 +479,7 @@
     operators between distinct blocks vanish:
     \begin{align}
         \left(\bigoplus_k B_k\text{ is a RFP}\right)
-        &\iff
+         & \iff
         \left(\forall k,\ B_k\text{ in square-root form}\right)
         \wedge
         \left(\forall j\ne j',\ \E_{j,j'}=0\right).
@@ -489,11 +489,11 @@
     structural characterization of pure-state renormalization fixed points
     \cite[Theorem~3.11]{Cirac2016MPDO_arXiv}, combining its forward and backward
     directions.
-% Scope restriction (multiplicity-one): the source canonical form
-% A^i = \oplus_j \oplus_q mu_{j,q} X_{j,q} Lambda_j U^i_j X_{j,q}^{-1} allows
-% each normal tensor to repeat with multiplicity r_j and a unit-modulus phase
-% mu_{j,q}; this is the single-copy case
-% (docs/paper-gaps/cpsv16_rfp_isometry_scope.tex).
+    % Scope restriction (multiplicity-one): the source canonical form
+    % A^i = \oplus_j \oplus_q mu_{j,q} X_{j,q} Lambda_j U^i_j X_{j,q}^{-1} allows
+    % each normal tensor to repeat with multiplicity r_j and a unit-modulus phase
+    % mu_{j,q}; this is the single-copy case
+    % (docs/paper-gaps/cpsv16_rfp_isometry_scope.tex).
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:isometry_canonical_form_of_rfp_nt, lem:isrfp_block_of_rfp_direct_sum, thm:bnt_locally_orthogonal_of_rfp_direct_sum, thm:is_rfp_of_isometry_canonical_form_direct_sum}
@@ -530,8 +530,8 @@
     $B_j^i=X_j\sqrt{\rho_j}\,U_j^iX_j^{-1}$, and the family $(U_j)_j$
     satisfies the joint isometry condition, including the cross-block
     equations for $j\ne j'$.
-% The physical-space construction of the repeated-copy index is recorded in
-% docs/paper-gaps/cpsv16_rfp_isometry_scope.tex.
+    % The physical-space construction of the repeated-copy index is recorded in
+    % docs/paper-gaps/cpsv16_rfp_isometry_scope.tex.
 \end{corollary}
 \begin{proof}\leanok
     \uses{thm:rfp_directSumTensor_iff, thm:postblocked_representative_grouped_insert_eq, thm:normal_tp_primitive_irred}
@@ -543,9 +543,9 @@
     used in Theorem~\ref{thm:postblocked_representative_grouped_insert_eq} give,
     along the same subsequence,
     \begin{align}
-        \lim_{k\to\infty}O_{B_jB_j}(m_jk)&=1,
-        \notag\\
-        \lim_{k\to\infty}O_{B_jB_j}(m_jk)&=m_j.
+        \lim_{k\to\infty}O_{B_jB_j}(m_jk) & =1,
+        \notag                                    \\
+        \lim_{k\to\infty}O_{B_jB_j}(m_jk) & =m_j.
         \notag
     \end{align}
     Hence $m_j=1$. The transfer map is primitive by
@@ -568,7 +568,7 @@
     $U\in\C^{R\times D}$ satisfies $UU^\dagger=I_R$ and, for every physical
     index $i$,
     \begin{align}
-        A^i&=U^\dagger B^iU.
+        A^i & =U^\dagger B^iU.
         \notag
     \end{align}
     Then $A$ is a renormalization fixed point if and only if $B$ is a
@@ -578,7 +578,7 @@
     For every bond matrix $X$,
     \begin{align}
         \E_A(X)
-        &=U^\dagger\E_B(UXU^\dagger)U.
+         & =U^\dagger\E_B(UXU^\dagger)U.
         \notag
     \end{align}
     The identity $UU^\dagger=I_R$ gives
@@ -594,8 +594,8 @@
     Let $B$ be a normal tensor and let $c\in\C\setminus\{0\}$. If $cB$ is a
     renormalization fixed point, then
     \begin{align}
-        |c|&=1,
-        &\E_B^2&=\E_B.
+        |c| & =1,
+            & \E_B^2 & =\E_B.
         \notag
     \end{align}
 \end{theorem}
@@ -620,15 +620,15 @@
     Suppose $A$ has CPSV canonical-form data
     \begin{align}
         A^i
-        &=U^\dagger\!\left(\bigoplus_{k=1}^r\mu_kA_k^i\right)U,
-        &UU^\dagger&=I,
+         & =U^\dagger\!\left(\bigoplus_{k=1}^r\mu_kA_k^i\right)U,
+         & UU^\dagger                                             & =I,
         \notag
     \end{align}
     where every $A_k$ is normal. If $A$ is a renormalization fixed point, then
     every active block $k$, characterized by $\mu_k\ne0$, satisfies
     \begin{align}
-        |\mu_k|&=1,
-        &\E_{A_k}^2&=\E_{A_k}.
+        |\mu_k| & =1,
+                & \E_{A_k}^2 & =\E_{A_k}.
         \notag
     \end{align}
 \end{theorem}
@@ -656,12 +656,12 @@
     $U_j$ such that
     \begin{align}
         C_j^i
-        &=X_j\diag\!\left(\sqrt{\lambda_{j,\alpha}}\right)
-          U_j^iX_j^{-1},
-        \notag\\
+         & =X_j\diag\!\left(\sqrt{\lambda_{j,\alpha}}\right)
+        U_j^iX_j^{-1},
+        \notag                                                         \\
         \sum_i(U_j^i)_{\alpha,\beta}
-          \overline{(U_{j'}^i)_{\alpha',\beta'}}
-        &=\delta_{j,j'}\delta_{\alpha,\alpha'}\delta_{\beta,\beta'}.
+        \overline{(U_{j'}^i)_{\alpha',\beta'}}
+         & =\delta_{j,j'}\delta_{\alpha,\alpha'}\delta_{\beta,\beta'}.
         \notag
     \end{align}
     The conclusion also covers the case in which there are no active classes.
@@ -672,8 +672,8 @@
     representative, Theorem~\ref{thm:cpsv_active_weight_norm_one_and_block_rfp}
     gives
     \begin{align}
-        |\mu_j|&=1,
-        &\E_{C_j}^2&=\E_{C_j}.
+        |\mu_j| & =1,
+                & \E_{C_j}^2 & =\E_{C_j}.
         \notag
     \end{align}
     The normal-tensor characterization supplies the displayed square-root form.
@@ -683,7 +683,7 @@
     restricts to every mixed pair. Hence
     Theorem~\ref{thm:bnt_locally_orthogonal_of_rfp_direct_sum} gives
     \begin{align}
-        \E_{\mu_jC_j,\mu_{j'}C_{j'}}&=0
+        \E_{\mu_jC_j,\mu_{j'}C_{j'}} & =0
         \qquad (j\ne j').
         \notag
     \end{align}
@@ -704,9 +704,9 @@
     square-root decomposition with a joint residual isometry. One may take
     bond dimension one and
     \begin{align}
-        A^0=A_0^0&=1,
-        &A^1=A_0^1&=0,
-        &A_1^0=A_1^1&=\frac{1}{\sqrt2}.
+        A^0=A_0^0 & =1,
+                  & A^1=A_0^1   & =0,
+                  & A_1^0=A_1^1 & =\frac{1}{\sqrt2}.
         \notag
     \end{align}
     The BNT coefficients are $1$ on $A_0$ and $0$ on $A_1$ at every length.
@@ -720,7 +720,7 @@
     $A_0$ and $A_1$. Their cross inner product is
     \begin{align}
         \sum_{i=0}^1 A_0^i\overline{A_1^i}
-        &=\frac{1}{\sqrt2}\ne0,
+         & =\frac{1}{\sqrt2}\ne0,
         \notag
     \end{align}
     contradicting the off-diagonal joint-isometry equation.
@@ -745,22 +745,22 @@
     point if and only if it can be written as
     \begin{align}
         A^i
-        &=\bigoplus_{j=1}^g\bigoplus_{q=1}^{r_j}
-          \mu_{j,q}X_{j,q}\sqrt{\rho_j}\,U_j^iX_{j,q}^{-1},
+         & =\bigoplus_{j=1}^g\bigoplus_{q=1}^{r_j}
+        \mu_{j,q}X_{j,q}\sqrt{\rho_j}\,U_j^iX_{j,q}^{-1},
         \notag
     \end{align}
     where $|\mu_{j,q}|=1$, each $\rho_j$ is positive diagonal with
     $\tr(\rho_j)=1$, and
     \begin{align}
         \sum_i(U_j^i)_{\alpha,\beta}
-          \overline{(U_{j'}^i)_{\alpha',\beta'}}
-        &=\delta_{j,j'}\delta_{\alpha,\alpha'}\delta_{\beta,\beta'}.
+        \overline{(U_{j'}^i)_{\alpha',\beta'}}
+         & =\delta_{j,j'}\delta_{\alpha,\alpha'}\delta_{\beta,\beta'}.
         \notag
     \end{align}
     The source specifies that $\bigoplus_{j,q}$ is a simultaneous direct sum in
     the physical and virtual spaces, not an ordinary virtual block diagonal at
     each fixed physical letter $i$ \cite[Theorem~3.11,
-    lines~561--562]{Cirac2016MPDO_arXiv}. It does not provide a coordinate map
+        lines~561--562]{Cirac2016MPDO_arXiv}. It does not provide a coordinate map
     for the physical routing of $q$, a corresponding dimension hypothesis, or
     a $q$-indexed isometry equation. Consequently the display does not yet
     determine a source-faithful coordinate-level predicate. Under the naive
@@ -788,11 +788,11 @@
     with $\tr(\rho_j)=1$, and tensors $U_j$ such that
     \begin{align}
         A_j^i
-        &=X_j\sqrt{\rho_j}\,U_j^iX_j^{-1},
-        \notag\\
+         & =X_j\sqrt{\rho_j}\,U_j^iX_j^{-1},
+        \notag                                                         \\
         \sum_i(U_j^i)_{\alpha,\beta}
-          \overline{(U_{j'}^i)_{\alpha',\beta'}}
-        &=\delta_{j,j'}\delta_{\alpha,\alpha'}\delta_{\beta,\beta'}.
+        \overline{(U_{j'}^i)_{\alpha',\beta'}}
+         & =\delta_{j,j'}\delta_{\alpha,\alpha'}\delta_{\beta,\beta'}.
         \notag
     \end{align}
     The assertion is false for an arbitrary BNT. Such a BNT may contain a
@@ -804,8 +804,8 @@
     occurring with nonzero weights $\mu_k$ in literal CPSV canonical-form data,
     Theorem~\ref{thm:cpsv_active_weight_norm_one_and_block_rfp} proves
     \begin{align}
-        |\mu_k|&=1,
-        &\E_{A_k}^2&=\E_{A_k}.
+        |\mu_k| & =1,
+                & \E_{A_k}^2 & =\E_{A_k}.
         \notag
     \end{align}
     After choosing one representative $C_j$ from each active phase class,
@@ -813,11 +813,11 @@
     invertible $X_j$, positive trace-one diagonal data $\rho_j$, and tensors
     $U_j$ such that
     \begin{align}
-        C_j^i&=X_j\sqrt{\rho_j}\,U_j^iX_j^{-1},
-        \notag\\
+        C_j^i & =X_j\sqrt{\rho_j}\,U_j^iX_j^{-1},
+        \notag                                                              \\
         \sum_i(U_j^i)_{\alpha,\beta}
-          \overline{(U_{j'}^i)_{\alpha',\beta'}}
-        &=\delta_{j,j'}\delta_{\alpha,\alpha'}\delta_{\beta,\beta'}.
+        \overline{(U_{j'}^i)_{\alpha',\beta'}}
+              & =\delta_{j,j'}\delta_{\alpha,\alpha'}\delta_{\beta,\beta'}.
         \notag
     \end{align}
     Thus both the diagonal square-root forms and the simultaneous off-diagonal
@@ -840,7 +840,7 @@
     Let $B$ be the one-letter, one-dimensional tensor $B^0=(1)$, and form two
     block-diagonal copies with phases $1$ and $-1$:
     \begin{align}
-        A^0&=\begin{pmatrix}1&0\\0&-1\end{pmatrix}.
+        A^0 & =\begin{pmatrix}1&0\\0&-1\end{pmatrix}.
         \notag
     \end{align}
     The representative $B$ is in the square-root fixed-point form, and both copy
@@ -851,10 +851,10 @@
     physical direct sum: there is no scalar $v$ such that
     $(A^0)^2=vA^0$. In particular, $A$ is not a renormalization fixed point
     in the sense of Definition~\ref{def:mps_transfer_idempotence}.
-% Source ambiguity: equation III_CFI_RFP at lines 543--554 admits this literal
-% virtual-block substitution, while lines 559--563 require j,q to contribute
-% to both physical and virtual direct sums; see
-% docs/paper-gaps/cpsv16_rfp_isometry_scope.tex.
+    % Source ambiguity: equation III_CFI_RFP at lines 543--554 admits this literal
+    % virtual-block substitution, while lines 559--563 require j,q to contribute
+    % to both physical and virtual direct sums; see
+    % docs/paper-gaps/cpsv16_rfp_isometry_scope.tex.
 \end{theorem}
 \begin{proof}\leanok
     Taking the witness data of

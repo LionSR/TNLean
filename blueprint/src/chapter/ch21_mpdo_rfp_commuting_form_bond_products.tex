@@ -22,7 +22,7 @@
     for every chain length $N\ge2$, a constant $c>0$ such that
     \begin{align}
         \rho^{(N)}(M)
-        &=c\prod_{i=0}^{N-1}B_{i,i+1}.
+         & =c\prod_{i=0}^{N-1}B_{i,i+1}.
         \notag
     \end{align}
     The bond acts on the full two-site space.
@@ -60,11 +60,11 @@
     \lean{MPOTensor.reindex_embedLocalOperator_one_eq_rightOverlappingLift}
     \lean{MPOTensor.TranslationInvariantBondData.pairBond_isHermitian}
     \lean{MPOTensor.TranslationInvariantBondData.%
-      reindex_bondAt_zero_eq_leftOverlappingLift}
+        reindex_bondAt_zero_eq_leftOverlappingLift}
     \lean{MPOTensor.TranslationInvariantBondData.%
-      reindex_bondAt_one_eq_rightOverlappingLift}
+        reindex_bondAt_one_eq_rightOverlappingLift}
     \lean{MPOTensor.TranslationInvariantBondData.%
-      overlappingLifts_pairBond_comm}
+        overlappingLifts_pairBond_comm}
     \lean{MPOTensor.EtaLocalStructureData.pairBond_isHermitian}
     \lean{MPOTensor.EtaLocalStructureData.reindex_bondAt_zero_eq_leftOverlappingLift}
     \lean{MPOTensor.EtaLocalStructureData.reindex_bondAt_one_eq_rightOverlappingLift}
@@ -76,10 +76,10 @@
     Under the same three-site identification for both translates,
     \begin{align}
         B_{0,1}
-        &=\widehat B\otimes\Id,
-        \notag\\
+         & =\widehat B\otimes\Id,
+        \notag                    \\
         B_{1,2}
-        &=\Id\otimes\widehat B.
+         & =\Id\otimes\widehat B.
         \notag
     \end{align}
     Thus these two operators are respectively the left and right overlapping
@@ -96,28 +96,28 @@
     configurations $x$ and $y$, the two outside-window conditions are
     \begin{align}
         (\forall r\notin\{0,1\},\ x_r=y_r)
-        &\Longleftrightarrow x_2=y_2,
-        \notag\\
+         & \Longleftrightarrow x_2=y_2,
+        \notag                          \\
         (\forall r\notin\{1,2\},\ x_r=y_r)
-        &\Longleftrightarrow x_0=y_0.
+         & \Longleftrightarrow x_0=y_0.
         \notag
     \end{align}
     Hence evaluation at a pair of left-associated triples gives
     \begin{align}
         (B_{0,1})_{(i,j,k),(i',j',k')}
-        &=\widehat B_{(i,j),(i',j')}\delta_{k,k'}
-          =(\widehat B\otimes\Id)_{(i,j,k),(i',j',k')},
-        \notag\\
+         & =\widehat B_{(i,j),(i',j')}\delta_{k,k'}
+        =(\widehat B\otimes\Id)_{(i,j,k),(i',j',k')},
+        \notag                                      \\
         (B_{1,2})_{(i,j,k),(i',j',k')}
-        &=\delta_{i,i'}\widehat B_{(j,k),(j',k')}
-          =(\Id\otimes\widehat B)_{(i,j,k),(i',j',k')}.
+         & =\delta_{i,i'}\widehat B_{(j,k),(j',k')}
+        =(\Id\otimes\widehat B)_{(i,j,k),(i',j',k')}.
         \notag
     \end{align}
     Positivity of $B$ gives $\widehat B^*=\widehat B$. Finally, matrix
     reindexing is multiplicative, so $\Phi(XY)=\Phi(X)\Phi(Y)$, and
     \begin{align}
         B_0B_1=B_1B_0
-        &\Longrightarrow
+         & \Longrightarrow
         \Phi(B_0)\Phi(B_1)=\Phi(B_1)\Phi(B_0).
         \notag
     \end{align}
@@ -141,7 +141,7 @@
     $[B_{i,i+1},B_{j,j+1}]=0$, and there exists $c>0$ with
     \begin{align}
         \rho^{(N)}(M)
-        &=c\prod_{i=0}^{N-1}B_{i,i+1}.
+         & =c\prod_{i=0}^{N-1}B_{i,i+1}.
         \notag
     \end{align}
     This is the one-bond product conclusion used in
@@ -189,7 +189,7 @@
 \begin{theorem}[A commuting bond admits unitary block actions]
     \label{thm:mpdo_eta_local_pair_bond_unitary_block_actions}
     \lean{MPOTensor.TranslationInvariantBondData.%
-      exists_unitary_blockActions_of_pairBond}
+        exists_unitary_blockActions_of_pairBond}
     \lean{MPOTensor.EtaLocalStructureData.exists_unitary_blockActions_of_pairBond}
     \leanok
     \uses{def:mpdo_three_site_overlapping_coordinates, thm:mpdo_eta_bond_overlapping_lifts, thm:commuting_overlapping_unitary_block_actions}
@@ -201,30 +201,30 @@
     $H_{q,r}\otimes H$ such that
     \begin{align}
         (\Id_H\otimes U^*)\widehat B(\Id_H\otimes U)
-        &=\bigoplus_{q=0}^{K-1}
-          (R_q\otimes\Id_{H_{q,r}}),
-        \notag\\
+         & =\bigoplus_{q=0}^{K-1}
+        (R_q\otimes\Id_{H_{q,r}}),
+        \notag                    \\
         (U^*\otimes\Id_H)\widehat B(U\otimes\Id_H)
-        &=\bigoplus_{q=0}^{K-1}
-          (\Id_{H_{q,l}}\otimes S_q).
+         & =\bigoplus_{q=0}^{K-1}
+        (\Id_{H_{q,l}}\otimes S_q).
         \notag
     \end{align}
     The basis bijection for each sector enumerates the numerical indices in
     right--left order,
     \begin{align}
         \bigsqcup_q\bigl(\{0,\ldots,d_{r,q}-1\}
-            \times\{0,\ldots,d_{l,q}-1\}\bigr)
-        &\cong\{0,\ldots,d-1\}.
+        \times\{0,\ldots,d_{l,q}-1\}\bigr)
+         & \cong\{0,\ldots,d-1\}.
         \notag
     \end{align}
     Writing $e(q,(r,s))$ for this basis bijection, the left and right spatial
     coordinates are respectively
     \begin{align}
         (q,((i,s),r))
-        &\longmapsto(i,e(q,(r,s))),
-        \notag\\
+         & \longmapsto(i,e(q,(r,s))),
+        \notag                        \\
         (q,(s,(r,k)))
-        &\longmapsto(e(q,(r,s)),k).
+         & \longmapsto(e(q,(r,s)),k).
         \notag
     \end{align}
     Hence the tensor factors in the displayed block actions occur in
@@ -241,9 +241,9 @@
 \begin{theorem}[Positive neighboring operators from the commuting bond]
     \label{thm:mpdo_commuting_bond_positive_eta_decomposition}
     \lean{MPOTensor.TranslationInvariantBondData.%
-      exists_positive_eta_pairBond_decomposition}
+        exists_positive_eta_pairBond_decomposition}
     \lean{MPOTensor.EtaLocalStructureData.%
-      exists_positive_eta_pairBond_decomposition}
+        exists_positive_eta_pairBond_decomposition}
     \leanok
     \uses{thm:mpdo_eta_local_pair_bond_unitary_block_actions}
     Let $B$ be a pair-indexed positive bond whose periodic translates commute.
@@ -256,8 +256,8 @@
     and in these regrouped coordinates
     \begin{align}
         (U^*\otimes U^*)B(U\otimes U)
-        &=\bigoplus_{q,h}
-          \Id_{H_{q,l}}\otimes\eta_{q,h}\otimes\Id_{H_{h,r}}.
+         & =\bigoplus_{q,h}
+        \Id_{H_{q,l}}\otimes\eta_{q,h}\otimes\Id_{H_{h,r}}.
         \notag
     \end{align}
     The unitary and the neighboring operators depend only on the fixed bond,
@@ -273,9 +273,9 @@
     $B'=(U^*\otimes U^*)B(U\otimes U)$. The neighboring operator has entries
     \begin{align}
         (\eta_{q,h})_{(r,\ell),(r',\ell')}
-        &=
+         & =
         B'_{(q,r,\ell_q^0;h,r_h^0,\ell),
-          (q,r',\ell_q^0;h,r_h^0,\ell')}.
+        (q,r',\ell_q^0;h,r_h^0,\ell')}.
         \notag
     \end{align}
     Thus $\eta_{q,h}$ is a principal compression of the positive operator
@@ -285,7 +285,7 @@
 \begin{theorem}[Cyclic product of a locally decomposed bond]
     \label{thm:mpdo_eta_pair_bond_cyclic_product_transport}
     \lean{MPOTensor.%
-      reindex_product_embedLocalOperator_of_etaPair_decomposition}
+        reindex_product_embedLocalOperator_of_etaPair_decomposition}
     \leanok
     Suppose that, in one fixed coordinate decomposition
     $H\cong\bigoplus_q H_{q,r}\otimes H_{q,l}$,
@@ -293,23 +293,23 @@
     a two-site operator has the form
     \begin{align}
         B
-        &=\bigoplus_{q,h}
-          \Id_{H_{q,l}}\otimes\eta_{q,h}\otimes\Id_{H_{h,r}}.
+         & =\bigoplus_{q,h}
+        \Id_{H_{q,l}}\otimes\eta_{q,h}\otimes\Id_{H_{h,r}}.
         \notag
     \end{align}
     For every $N\ge2$, regroup the cyclic chain as
     \begin{align}
         H^{\otimes N}
-        &\cong
+         & \cong
         \bigoplus_{k:\Z/N\Z\to\{0,\ldots,K-1\}}
         \bigotimes_{n\in\Z/N\Z}
-          \left(H_{k_n,r}\otimes H_{k_{n+1},l}\right).
+        \left(H_{k_n,r}\otimes H_{k_{n+1},l}\right).
         \notag
     \end{align}
     Then, in these coordinates and with $k_N=k_0$,
     \begin{align}
         \prod_{n=0}^{N-1}B_{n,n+1}
-        &=
+         & =
         \bigoplus_k\bigotimes_{n=0}^{N-1}\eta_{k_n,k_{n+1}}.
         \notag
     \end{align}
@@ -339,7 +339,7 @@
     \lean{MPOTensor.sitewisePhysicalMatrix_mul_conjTranspose}
     \lean{MPOTensor.singleKrausMap_bondProduct_of_unitary}
     \lean{MPOTensor.EtaLocalStructureData.%
-      exists_positive_cyclic_eta_block_decomposition}
+        exists_positive_cyclic_eta_block_decomposition}
     \leanok
     \uses{def:mpdo_eta_local_structure_data, thm:mpdo_commuting_bond_positive_eta_decomposition, thm:mpdo_eta_pair_bond_cyclic_product_transport}
     Let $\sigma^{(N)}(\mathcal K)$ be realized, for every $N\ge2$, by
@@ -349,10 +349,10 @@
     is a constant $c_N>0$ satisfying, with $k_N=k_0$,
     \begin{align}
         E_N^*(U^*)^{\otimes N}\sigma^{(N)}(\mathcal K)
-          U^{\otimes N}E_N
-        &=
+        U^{\otimes N}E_N
+         & =
         c_N\bigoplus_{k_0,\ldots,k_{N-1}}
-          \bigotimes_{n=0}^{N-1}\eta_{k_n,k_{n+1}}.
+        \bigotimes_{n=0}^{N-1}\eta_{k_n,k_{n+1}}.
         \notag
     \end{align}
     Here $E_N$ is the cyclic regrouping from the edge factors
@@ -383,9 +383,9 @@
     the two-site bond to be the scalar $B=1$. Then
     \begin{align}
         \sigma^{(N)}
-        &=\tr(I_2^N)=2
-          =c_N\prod_{n=0}^{N-1}B_{n,n+1},
-        &c_N&=2.
+         & =\tr(I_2^N)=2
+        =c_N\prod_{n=0}^{N-1}B_{n,n+1},
+         & c_N           & =2.
         \notag
     \end{align}
     Any positive neighboring decomposition of the one-dimensional physical
@@ -427,9 +427,9 @@
     operator of the cyclic edge-weight tensor is
     \begin{align}
         \rho^{(N)}_{\sigma,\tau}
-        &=
+         & =
         \prod_{n=0}^{N-1}
-          w(\sigma_n,\tau_n;\sigma_{n+1},\tau_{n+1}).
+        w(\sigma_n,\tau_n;\sigma_{n+1},\tau_{n+1}).
         \notag
     \end{align}
     In the virtual trace there is precisely one potentially nonzero cyclic
@@ -441,7 +441,7 @@
     \lean{MPOTensor.TranslationInvariantBondData.FixedProductTensorData}
     \lean{MPOTensor.TranslationInvariantBondData.CyclicEdgeWeightForm}
     \lean{MPOTensor.TranslationInvariantBondData.CyclicEdgeWeightForm.%
-      toFixedProductTensorData}
+        toFixedProductTensorData}
     \leanok
     \uses{def:mpdo_translation_invariant_bond_data, thm:mpdo_cyclic_edge_weight_tensor}
     A fixed tensor for a bond-product family consists of a positive virtual
@@ -449,7 +449,7 @@
     that, for every $N\ge2$,
     \begin{align}
         \rho^{(N)}(C)
-        &=\prod_{n=0}^{N-1}B_{n,n+1}.
+         & =\prod_{n=0}^{N-1}B_{n,n+1}.
         \notag
     \end{align}
     If $d>0$, a cyclic scalar edge-weight expression for the entries of the
@@ -459,9 +459,9 @@
 \begin{theorem}[Fixed tensor representation of a commuting bond]
     \label{thm:mpdo_eta_fixed_bond_product_tensor}
     \lean{MPOTensor.%
-      reindex_mpo_cyclicEdgeWeightTensor_etaCyclicEdgeWeight}
+        reindex_mpo_cyclicEdgeWeightTensor_etaCyclicEdgeWeight}
     \lean{MPOTensor.TranslationInvariantBondData.%
-      nonempty_fixedProductTensorData}
+        nonempty_fixedProductTensorData}
     \lean{MPOTensor.TranslationInvariantBondData.fixedProductTensorData}
     \lean{MPOTensor.EtaLocalStructureData.nonempty_fixedProductTensorData}
     \lean{MPOTensor.EtaLocalStructureData.fixedProductTensorData}
@@ -473,7 +473,7 @@
     $N\ge2$,
     \begin{align}
         \rho^{(N)}(C)
-        &=\prod_{n=0}^{N-1}B_{n,n+1}.
+         & =\prod_{n=0}^{N-1}B_{n,n+1}.
         \notag
     \end{align}
     The construction gives a positive $R$ independent of $N$. No normality,
@@ -487,7 +487,7 @@
     $\mathcal A$, write
     \begin{align}
         \eta_{q,h}((r,l),(r',l'))
-        &=
+         & =
         \sum_{a\in\mathcal A}
         R_a(q)_{r,r'}L_a(h)_{l,l'}.
         \notag
@@ -508,22 +508,22 @@
 \begin{theorem}[Positive physical sectors of the selected fixed tensor]
     \label{thm:mpdo_fixed_bond_positive_physical_sector_representative}
     \lean{MPOTensor.TranslationInvariantBondData.%
-      exists_positive_physicalSectorFactorization_fixedProductTensorData}
+        exists_positive_physicalSectorFactorization_fixedProductTensorData}
     \lean{MPOTensor.TranslationInvariantBondData.%
-      PositivePhysicalSectorFixedProductTensorData}
+        PositivePhysicalSectorFixedProductTensorData}
     \lean{MPOTensor.TranslationInvariantBondData.%
-      nonempty_positivePhysicalSectorFixedProductTensorData}
+        nonempty_positivePhysicalSectorFixedProductTensorData}
     \lean{MPOTensor.TranslationInvariantBondData.%
-      positivePhysicalSectorFixedProductTensorData}
+        positivePhysicalSectorFixedProductTensorData}
     \lean{MPOTensor.TranslationInvariantBondData.%
-      fixedProductTensorDataPhysicalSectorFactorization}
+        fixedProductTensorDataPhysicalSectorFactorization}
     \lean{MPOTensor.TranslationInvariantBondData.%
-      fixedProductTensorDataPhysicalSectorFactorization_physicalBond_eq}
+        fixedProductTensorDataPhysicalSectorFactorization_physicalBond_eq}
     \lean{MPOTensor.TranslationInvariantBondData.%
-      fixedProductTensorDataPhysicalSectorFactorization_neighboring_pos}
+        fixedProductTensorDataPhysicalSectorFactorization_neighboring_pos}
     \lean{MPOTensor.PhysicalSectorFactorization.etaSectorFinEquiv}
     \lean{MPOTensor.PhysicalSectorFactorization.%
-      sectorCoordinateBond_etaPair_decomposition}
+        sectorCoordinateBond_etaPair_decomposition}
     \leanok
     \uses{thm:mpdo_eta_fixed_bond_product_tensor}
     Let $C$ be the selected fixed tensor of the preceding theorem. There are
@@ -534,9 +534,9 @@
     indices,
     \begin{align}
         U C_{\beta,\alpha}U^\dagger
-        &=
+         & =
         \bigoplus_{q=0}^{K-1}
-          L_\beta(q)\otimes R_\alpha(q).
+        L_\beta(q)\otimes R_\alpha(q).
         \notag
     \end{align}
     The neighboring operators
@@ -545,10 +545,10 @@
     of coordinates, then
     \begin{align}
         B
-        &=
+         & =
         U_2^\dagger
         \left[\bigoplus_{q,h}
-          \Id_{H_q^L\otimes H_h^R}\otimes\eta_{q,h}\right]
+            \Id_{H_q^L\otimes H_h^R}\otimes\eta_{q,h}\right]
         U_2.
         \notag
     \end{align}
@@ -561,7 +561,7 @@
     one-site identity is
     \begin{align}
         U C_{\beta,\alpha}U^\dagger
-        &=
+         & =
         \bigoplus_q L_\beta(q)\otimes R_\alpha(q).
         \notag
     \end{align}
@@ -571,10 +571,10 @@
     the retained bond identity is
     \begin{align}
         B
-        &=
+         & =
         U_2^\dagger
         \left[\bigoplus_{q,h}
-          \Id_{H_q^L\otimes H_h^R}\otimes\eta_{q,h}\right]
+            \Id_{H_q^L\otimes H_h^R}\otimes\eta_{q,h}\right]
         U_2.
         \notag
     \end{align}
@@ -589,7 +589,7 @@
         \bra{0^N}
         \left(\prod_n B_{n,n+1}\right)
         \ket{0^N}
-        &=2.
+         & =2.
         \notag
     \end{align}
     At $N=2$ the periodic product is $B^2=2B$; for $N\ge3$, the empty edge
@@ -604,7 +604,7 @@
 \begin{theorem}[Eventual proportionality from a fixed product tensor]
     \label{thm:mpdo_eta_fixed_product_tensor_eventual_proportionality}
     \lean{MPOTensor.EtaLocalStructureData.%
-      eventuallyNonzeroProportionalMPV₂_fixedProductTensor}
+        eventuallyNonzeroProportionalMPV₂_fixedProductTensor}
     \leanok
     \uses{def:mpdo_eta_local_structure_data, def:mpdo_fixed_bond_product_tensor, thm:mpdo_eta_fixed_bond_product_tensor}
     Suppose one fixed tensor $C$ generates the products of the bond carried
@@ -623,7 +623,7 @@
 \begin{theorem}[A normal rescaling gives a geometric phase]
     \label{thm:mpdo_eta_normal_rescaling_geometric_phase}
     \lean{MPOTensor.EtaLocalStructureData.%
-      exists_unit_phase_power_mpo_eq_product_of_normal_smul}
+        exists_unit_phase_power_mpo_eq_product_of_normal_smul}
     \leanok
     \uses{def:mpdo_eta_local_structure_data, def:mpdo_fixed_bond_product_tensor, def:nt_cpsv}
     Let $A$ be the normal doubled-index source tensor of positive bond
@@ -632,7 +632,7 @@
     complex number $\zeta$, with $|\zeta|=1$, such that, for every $N\ge2$,
     \begin{align}
         \rho^{(N)}(A)
-        &=
+         & =
         (\zeta s)^N\prod_{n=0}^{N-1}B_{n,n+1}.
         \notag
     \end{align}
@@ -648,16 +648,16 @@
     $V^{(N)}(A)_\sigma=c_NV^{(N)}(C)_\sigma$ becomes
     \begin{align}
         V^{(N)}(A)_\sigma
-        &=
+         & =
         \frac{c_N}{s^N}V^{(N)}(sC)_\sigma,
-        &\frac{c_N}{s^N}&\ne0.
+         & \frac{c_N}{s^N} & \ne0.
         \notag
     \end{align}
     The normal-tensor overlap dichotomy gives one $\zeta\in\C$, with
     $|\zeta|=1$, such that, at every positive length,
     \begin{align}
         V^{(N)}(A)_\sigma
-        &=
+         & =
         \zeta^N V^{(N)}(sC)_\sigma
         =(\zeta s)^N V^{(N)}(C)_\sigma.
         \notag
@@ -667,7 +667,7 @@
 \begin{theorem}[A normal rescaling forces the positive geometric law]
     \label{thm:mpdo_eta_normal_rescaling_positive_geometric_law}
     \lean{MPOTensor.EtaLocalStructureData.%
-      mpo_eq_positive_power_product_of_normal_smul}
+        mpo_eq_positive_power_product_of_normal_smul}
     \leanok
     \uses{def:mpdo_eta_local_structure_data, def:mpdo_fixed_bond_product_tensor, def:nt_cpsv}
     Let $A$ be the normal doubled-index source tensor of positive bond
@@ -676,7 +676,7 @@
     trivial. For every $N\ge2$,
     \begin{align}
         \rho^{(N)}(A)
-        &=
+         & =
         s^N\prod_{n=0}^{N-1}B_{n,n+1}.
         \notag
     \end{align}

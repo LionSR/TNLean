@@ -12,8 +12,8 @@
     injective matrix product density operator tensor satisfying the strong area
     law and zero correlation length has real families $(a_k)_k,(b_k)_k$ with
     \begin{align}
-        T_{k,h}=\tr(\eta_{k,h})&=a_kb_h, \notag\\
-        \sum_k a_kb_k&=1. \notag
+        T_{k,h}=\tr(\eta_{k,h}) & =a_kb_h, \notag \\
+        \sum_k a_kb_k           & =1. \notag
     \end{align}
     The lemma is proved inside Case~I, where the tensor is also assumed to be
     an injective normal tensor. The raw four-sector tensor below has the source
@@ -32,13 +32,13 @@
     \label{thm:mpdo_sal_zcl_rank_one_normalization_obstruction}
     \lean{MPOTensor.ActiveSectorSpanningCounterexample.tensor_isSAL}
     \lean{MPOTensor.ActiveSectorSpanningCounterexample.%
-      physTraceTransfer_tensor_idempotent}
+        physTraceTransfer_tensor_idempotent}
     \lean{MPOTensor.ActiveSectorSpanningCounterexample.%
-      activeSectorTraceMatrix_not_rankOne}
+        activeSectorTraceMatrix_not_rankOne}
     \lean{MPOTensor.ActiveSectorSpanningCounterexample.%
-      tensor_has_sal_sourceZCL_and_non_rankOne_activeTraceMatrix}
+        tensor_has_sal_sourceZCL_and_non_rankOne_activeTraceMatrix}
     \lean{MPOTensor.ActiveSectorSpanningCounterexample.%
-      rectangular_remainder_eq_mul_sub_sq}
+        rectangular_remainder_eq_mul_sub_sq}
     \leanok
     \uses{def:is_sal, def:mpo_source_zcl, thm:mpdo_all_cut_markov_implies_sal, thm:mpdo_inverse_map_nonzero_rectangular_remainder}
     There is an injective matrix product density operator tensor satisfying
@@ -60,8 +60,8 @@
     middle physical label gives, at every admissible cut,
     \begin{align}
         \rho_{ABC}
-        &=\bigoplus_{k=0}^{3}\frac14
-          \rho^{L}_{A,k}\otimes\rho^{R}_{k,C}. \notag
+         & =\bigoplus_{k=0}^{3}\frac14
+        \rho^{L}_{A,k}\otimes\rho^{R}_{k,C}. \notag
     \end{align}
     Thus the reduced state has a four-sector quantum-Markov decomposition and
     the tensor satisfies the strong area law. Its physical-trace
@@ -72,9 +72,9 @@
     $T=ab^\top$, then
     \begin{align}
         T^2
-        &=a(b^\top a)b^\top
-          =\left(\sum_k a_kb_k\right)T
-          =T, \notag
+         & =a(b^\top a)b^\top
+        =\left(\sum_k a_kb_k\right)T
+        =T, \notag
     \end{align}
     where the last equality uses $\tr(T)=1$. Hence $T$ has no rank-one
     factorization.
@@ -89,8 +89,8 @@
     maps $S_{24}$ and $T_{24}$ satisfy the following identities for every
     virtual matrix $X$:
     \begin{align}
-        S_{24}[\mathcal K_4(X)]&=\mathcal K_2(X), &
-        T_{24}[\mathcal K_2(X)]&=\mathcal K_4(X). \notag
+        S_{24}[\mathcal K_4(X)] & =\mathcal K_2(X),        &
+        T_{24}[\mathcal K_2(X)] & =\mathcal K_4(X). \notag
     \end{align}
     Then the two-site physical blocking $K^{[2]}$ is a renormalization fixed
     point.
@@ -115,8 +115,8 @@
     Suppose that a tensor $K$ has trace-preserving completely positive maps
     $S,T$ satisfying
     \begin{align}
-        S[\mathcal K_2(X)]&=\mathcal K_1(X), &
-        T[\mathcal K_1(X)]&=\mathcal K_2(X) \notag
+        S[\mathcal K_2(X)] & =\mathcal K_1(X),       &
+        T[\mathcal K_1(X)] & =\mathcal K_2(X) \notag
     \end{align}
     for every virtual matrix $X$. Then the two-site physical blocking
     $K^{[2]}$ has maps satisfying the same two identities and is therefore a
@@ -136,14 +136,14 @@
 \end{proof}
 
 \begin{theorem}[Renormalization maps and normalization obstruction for the
-    four-sector witness]
+        four-sector witness]
     \label{thm:mpdo_four_sector_witness_rfp}
     \lean{MPOTensor.ActiveSectorSpanningCounterexample.normalizedTensor}
     \lean{MPOTensor.ActiveSectorSpanningCounterexample.tensor_isRFPViaTS}
     \lean{MPOTensor.ActiveSectorSpanningCounterexample.%
-      blockTwo_tensor_isRFPViaTS}
+        blockTwo_tensor_isRFPViaTS}
     \lean{MPOTensor.ActiveSectorSpanningCounterexample.%
-      blockTwo_normalizedTensor_not_isRFPViaTS}
+        blockTwo_normalizedTensor_not_isRFPViaTS}
     \leanok
     \uses{def:is_rfp_via_ts, def:mpdo_two_site_blocking, thm:mpdo_sal_zcl_rank_one_normalization_obstruction, thm:mpdo_rfp_via_ts_block_two}
     The four-sector tensor in
@@ -151,14 +151,14 @@
     trace-preserving completely positive maps $S,T$ such that, for every
     virtual matrix $X$,
     \begin{align}
-        S[\mathcal K_2(X)]&=\mathcal K_1(X), &
-        T[\mathcal K_1(X)]&=\mathcal K_2(X). \notag
+        S[\mathcal K_2(X)] & =\mathcal K_1(X),        &
+        T[\mathcal K_1(X)] & =\mathcal K_2(X). \notag
     \end{align}
     Its two-site physical blocking has maps satisfying the same two identities
     and is therefore also a renormalization fixed point. On the other hand,
     for the source-normalized scalar representative
     \begin{align}
-        A&=\frac4{\sqrt5}\mathcal K, \notag
+        A & =\frac4{\sqrt5}\mathcal K, \notag
     \end{align}
     the two-site blocking $A^{[2]}$ is not a renormalization fixed point.
 
@@ -175,15 +175,15 @@
     \leanok
     Let $\tau=QL$ be the neighboring transition matrix and set
     \begin{align}
-        f(i,j)&=(i\bmod 2)+2\left\lfloor\frac j2\right\rfloor. \notag
+        f(i,j) & =(i\bmod 2)+2\left\lfloor\frac j2\right\rfloor. \notag
     \end{align}
     Direct multiplication of the sector matrices gives
     \begin{align}
-        S_iS_j&=\tau_{ij}S_{f(i,j)}. \notag
+        S_iS_j & =\tau_{ij}S_{f(i,j)}. \notag
     \end{align}
     For each $k$, the transition weights on the fibre of $f$ satisfy
     \begin{align}
-        \sum_{(i,j):f(i,j)=k}\tau_{ij}&=1. \notag
+        \sum_{(i,j):f(i,j)=k}\tau_{ij} & =1. \notag
     \end{align}
     The refinement channel has Kraus operators
     $\sqrt{\tau_{ij}}\lvert i,j\rangle\langle f(i,j)\rvert$; the
@@ -199,7 +199,7 @@
     normalized representative is $(4/\sqrt5)P$, while that of its two-site
     blocking is
     \begin{align}
-        \mathcal B_{A^{[2]}}&=\frac{16}{5}P. \notag
+        \mathcal B_{A^{[2]}} & =\frac{16}{5}P. \notag
     \end{align}
     If $A^{[2]}$ admitted the two trace-preserving maps of Definition~4.1,
     trace preservation of the refinement identity would force
@@ -218,26 +218,26 @@
 \begin{theorem}[Pair-preserving obstruction for the four-sector witness]
     \label{thm:mpdo_four_sector_pair_preserving_obstruction}
     \lean{MPOTensor.ActiveSectorSpanningCounterexample.%
-      factorization_neighboringTraceMatrix}
+        factorization_neighboringTraceMatrix}
     \lean{MPOTensor.ActiveSectorSpanningCounterexample.%
-      factorization_neighboringTraceMatrix_pow_two_eq_pow_three}
+        factorization_neighboringTraceMatrix_pow_two_eq_pow_three}
     \lean{MPOTensor.ActiveSectorSpanningCounterexample.%
-      factorization_neighboringTraceMatrix_ne_pow_three}
+        factorization_neighboringTraceMatrix_ne_pow_three}
     \lean{MPOTensor.ActiveSectorSpanningCounterexample.%
-      not_exists_pairwise_fourSite_coarsening}
+        not_exists_pairwise_fourSite_coarsening}
     \lean{MPOTensor.ActiveSectorSpanningCounterexample.%
-      not_exists_pairwise_fourSite_refinement}
+        not_exists_pairwise_fourSite_refinement}
     \lean{MPOTensor.ActiveSectorSpanningCounterexample.%
-      blockTwo_tensor_isRFPViaTS_and_pairwise_trace_obstruction}
+        blockTwo_tensor_isRFPViaTS_and_pairwise_trace_obstruction}
     \leanok
     \uses{thm:mpdo_pair_preserving_trace_obstruction, thm:mpdo_four_sector_witness_rfp, thm:mpdo_inverse_map_nonzero_rectangular_remainder, thm:mpdo_virtual_spanning_active_trace_counterexample}
     For the inverse-map-selected four-sector factorization of the tensor in
     Theorem~\ref{thm:mpdo_four_sector_witness_rfp}, let
     $C_{k,h}=\tr(\eta_{k,h})$.  Then
     \begin{align}
-        C^2&=C^3,
-        \notag\\
-        C&\ne C^3.
+        C^2 & =C^3,
+        \notag         \\
+        C   & \ne C^3.
         \notag
     \end{align}
     Consequently there is neither a trace-preserving family which sends each
@@ -249,7 +249,7 @@
     are obtained from the label-coarsening rule
     \begin{align}
         f(i,j)
-        &=(i\bmod2)+2\left\lfloor\frac j2\right\rfloor,
+         & =(i\bmod2)+2\left\lfloor\frac j2\right\rfloor,
         \notag
     \end{align}
     so they mix or coarsen the selected labels rather than retaining every
@@ -281,10 +281,10 @@
     \lean{MPOTensor.ActiveSectorSpanningCounterexample.sectorTensorR_hayashiData}
     \lean{MPOTensor.ActiveSectorSpanningCounterexample.inverseMapFactorization}
     \lean{MPOTensor.ActiveSectorSpanningCounterexample.%
-      inverseMapFactorization_neighboringOperator}
+        inverseMapFactorization_neighboringOperator}
     \lean{MPOTensor.ActiveSectorSpanningCounterexample.rectangular_remainder_ne_zero}
     \lean{MPOTensor.ActiveSectorSpanningCounterexample.%
-      inverseMap_provenance_preserves_rectangular_remainder}
+        inverseMap_provenance_preserves_rectangular_remainder}
     \leanok
     \uses{def:mpdo_zero_weight_reparameterized_inverse_map_factorization, thm:mpdo_inverse_map_hayashi_sector_comparison}
     There is a four-sector, bond-dimension-two tensor with a refined Hayashi
@@ -292,8 +292,8 @@
     $1/4$. Its three-site state is diagonal, with
     \begin{align}
         \rho(i,j,k;i',j',k')
-        &=\delta_{(i,j,k),(i',j',k')}
-          \frac14(QL)_{i,j}(QL)_{j,k}. \notag
+         & =\delta_{(i,j,k),(i',j',k')}
+        \frac14(QL)_{i,j}(QL)_{j,k}. \notag
     \end{align}
     The normalized four-site tail is $LQ$. For this tail, the inverse-map
     construction recovers the closed sector tensors $L$ and $Q$ exactly. Its
@@ -308,15 +308,15 @@
     Write $S_i=L_{\mathord\bullet i}Q_{i\mathord\bullet}$ for the four physical
     slices, and let $f_i(a,b)$ be their dual coefficients, so that
     \begin{align}
-        \sum_{i=0}^{3}f_i(a,b)S_i&=E_{ab}. \notag
+        \sum_{i=0}^{3}f_i(a,b)S_i & =E_{ab}. \notag
     \end{align}
     With $T=QL$, $p_k=1/4$, and $(LQ)_{00}=1$, the two inverse-map contractions
     are
     \begin{align}
         (LQ)_{00}^{-1}p_k\sum_{i=0}^{3}f_i(0,\beta)T_{ik}
-        &=\frac14(4L_{\beta k})=L_{\beta k}, \notag\\
+         & =\frac14(4L_{\beta k})=L_{\beta k}, \notag \\
         \sum_{i=0}^{3}f_i(\alpha,0)T_{ki}
-        &=Q_{k\alpha}. \notag
+         & =Q_{k\alpha}. \notag
     \end{align}
     Hence the neighboring operators are those obtained directly from $L$ and
     $Q$, and direct multiplication gives $Q(1-LQ)L\ne0$.
@@ -337,29 +337,29 @@
     Let $\mathcal K$ be an injective normal matrix product density operator
     tensor satisfying the strong area law and literal zero correlation length,
     \begin{align}
-        \mathcal T_{\mathcal K}^2&=\mathcal T_{\mathcal K}.
+        \mathcal T_{\mathcal K}^2 & =\mathcal T_{\mathcal K}.
         \notag
     \end{align}
     Then there is a physical-sector factorization
     \begin{align}
-        \C^d&\simeq\bigoplus_k(B_k^L\otimes B_k^R),
+        \C^d & \simeq\bigoplus_k(B_k^L\otimes B_k^R),
         \notag
     \end{align}
     with
     \begin{align}
         U\kappa_{\beta,\alpha}U^\dagger
-        &=\bigoplus_k(l_k)_\beta\otimes(r_k)_\alpha,
+         & =\bigoplus_k(l_k)_\beta\otimes(r_k)_\alpha,
         \notag
     \end{align}
     positive semidefinite neighboring operators $\eta_{k,h}$, and real
     families $(a_k)_k,(b_k)_k$ such that
     \begin{align}
-        \tr(\eta_{k,h})&=a_kb_h,
+        \tr(\eta_{k,h}) & =a_kb_h,
         \notag
     \end{align}
     and
     \begin{align}
-        \sum_k a_kb_k&=1.
+        \sum_k a_kb_k & =1.
         \notag
     \end{align}
     The orientation of $U$ is the physical-sector-factorization convention
@@ -391,7 +391,7 @@
     $\eta_{q,h}$. If $\eta_{q,h}\geq0$ for every pair $(q,h)$, then for every
     $N\geq1$,
     \begin{align}
-        \rho^{(N)}(K)&\geq0.
+        \rho^{(N)}(K) & \geq0.
         \notag
     \end{align}
 \end{theorem}
@@ -417,7 +417,7 @@
     $x\ne y$,
     \begin{align}
         \mathcal K_y[\beta_y,\alpha_y]\,
-        \mathcal K_x[\beta_x,\alpha_x]&=0
+        \mathcal K_x[\beta_x,\alpha_x] & =0
         \label{eq:mpdo_bnt_layer_unstarred}
     \end{align}
     for every choice of virtual indices. Equivalently, for all physical
@@ -425,7 +425,7 @@
     \begin{align}
         \sum_{k=0}^{d-1}
         (\mathcal K_y)^{ik}_{\beta_y\alpha_y}
-        (\mathcal K_x)^{kj}_{\beta_x\alpha_x}&=0.
+        (\mathcal K_x)^{kj}_{\beta_x\alpha_x} & =0.
         \notag
     \end{align}
     The factor order is exactly $\mathcal K_y\mathcal K_x$; no adjoint occurs.
@@ -454,14 +454,14 @@
     For an MPO tensor $K$, define $K^\sharp$ by
     \begin{align}
         (K^\sharp)^{ij}_{\beta\alpha}
-        &=\overline{K^{ji}_{\beta\alpha}}.
+         & =\overline{K^{ji}_{\beta\alpha}}.
         \notag
     \end{align}
     Thus $K^\sharp[\beta,\alpha]=K[\beta,\alpha]^*$, while the virtual
     indices retain their order. For every periodic chain,
     \begin{align}
         \rho^{(N)}(K^\sharp)_{\sigma,\tau}
-        &=\overline{\rho^{(N)}(K)_{\tau,\sigma}}.
+         & =\overline{\rho^{(N)}(K)_{\tau,\sigma}}.
         \notag
     \end{align}
 \end{definition}
@@ -478,8 +478,8 @@
     conjugate transpose. More precisely, there is $X\in\GL_D(\C)$ such that
     \begin{align}
         K[\beta,\alpha]^*
-        &=\sum_{\nu,\mu=0}^{D-1}
-          X_{\beta\mu}(X^{-1})_{\nu\alpha}K[\mu,\nu]
+         & =\sum_{\nu,\mu=0}^{D-1}
+        X_{\beta\mu}(X^{-1})_{\nu\alpha}K[\mu,\nu]
         \notag
     \end{align}
     for all virtual indices $\beta,\alpha$.
@@ -527,22 +527,22 @@
     column-support projections, then
     \begin{align}
         P_k^L l_{k,\beta}
-        &=l_{k,\beta}
-         =l_{k,\beta}P_k^L,
-        &
+         & =l_{k,\beta}
+        =l_{k,\beta}P_k^L,
+         &
         P_k^R r_{k,\alpha}
-        &=r_{k,\alpha}
-         =r_{k,\alpha}P_k^R,
-        \notag\\
+         & =r_{k,\alpha}
+        =r_{k,\alpha}P_k^R,
+        \notag                  \\
         \operatorname{supp}
         \{l_{k,\beta}\otimes r_{k,\alpha}\}_{\beta,\alpha}
-        &=P_k^L\otimes P_k^R.
+         & =P_k^L\otimes P_k^R.
         \notag
     \end{align}
     Moreover, there are positive integers $p_k,q_k$ and isometries
     \begin{align}
         V_k^L:\C^{p_k}\longrightarrow\C^{d_k^L},
-        \qquad&
+        \qquad &
         V_k^R:\C^{q_k}\longrightarrow\C^{d_k^R}
         \notag
     \end{align}
@@ -560,7 +560,7 @@
     sector gives coefficients $c_{k,\beta,\alpha}(\mu,\nu)$ such that
     \begin{align}
         (l_{k,\beta}\otimes r_{k,\alpha})^*
-        &=
+         & =
         \sum_{\mu,\nu}c_{k,\beta,\alpha}(\mu,\nu)\,
         l_{k,\mu}\otimes r_{k,\nu}.
         \label{eq:mpdo_active_sector_product_adjoint_closure}
@@ -572,11 +572,11 @@
     matrix entry and dividing by $z$ yields
     \begin{align}
         l_{k,\beta}^*
-        &=
+         & =
         \sum_\mu
         \left(
-            z^{-1}\sum_\nu
-            c_{k,\beta,\alpha}(\mu,\nu)r_{k,\nu}(v,u)
+        z^{-1}\sum_\nu
+        c_{k,\beta,\alpha}(\mu,\nu)r_{k,\nu}(v,u)
         \right)l_{k,\mu}.
     \end{align}
     Interchanging the two factors gives the corresponding identity for
@@ -593,13 +593,13 @@
         MPOTensor.PhysicalSectorFactorization.physicalSupportInclusion,
         MPOTensor.PhysicalSectorFactorization.physicalSupportInclusion_isometry,
         MPOTensor.PhysicalSectorFactorization.%
-          physicalSupportInclusion_range_eq_physicalSupportProj,
+        physicalSupportInclusion_range_eq_physicalSupportProj,
         MPOTensor.PhysicalSectorFactorization.%
-          reindex_physicalSlice_activePhysicalSupportRestriction,
+        reindex_physicalSlice_activePhysicalSupportRestriction,
         MPOTensor.PhysicalSectorFactorization.%
-          changePhysicalBasis_physicalSupportInclusion_activePhysicalSupportRestriction,
+        changePhysicalBasis_physicalSupportInclusion_activePhysicalSupportRestriction,
         MPOTensor.PhysicalSectorFactorization.%
-          activePhysicalSupportRestrictionData}
+        activePhysicalSupportRestrictionData}
     \leanok
     \uses{def:mpdo_physical_support_restriction, thm:mpdo_active_physical_sector_factor_supports}
     Let $K$ be injective and let
@@ -621,7 +621,7 @@
     $P_K$ of the physical slices of $K$.  The restricted tensor
     $K_{\mathrm{act}}=V^*KV$ is injective, satisfies
     \begin{align}
-        VK_{\mathrm{act}}V^*&=K,
+        VK_{\mathrm{act}}V^* & =K,
         \notag
     \end{align}
     and, in the dependent sector coordinates, has physical slices
@@ -654,14 +654,14 @@
     \label{thm:mpdo_active_physical_sector_neighboring_positivity}
     \lean{MPOTensor.PhysicalSectorFactorization.FactorActiveSector,
         MPOTensor.PhysicalSectorFactorization.%
-          activeRestrictedPhysicalSectorFactorization,
+        activeRestrictedPhysicalSectorFactorization,
         MPOTensor.PhysicalSectorFactorization.%
-          activeRestrictedPhysicalSectorFactorization_neighboringOperator_eq_congruence,
+        activeRestrictedPhysicalSectorFactorization_neighboringOperator_eq_congruence,
         MPOTensor.PhysicalSectorFactorization.%
-          activeRestrictedPhysicalSectorFactorization_neighboringOperator_posSemidef,
+        activeRestrictedPhysicalSectorFactorization_neighboringOperator_posSemidef,
         MPOTensor.PhysicalSectorFactorization.ActivePhysicalCompressionWitness,
         MPOTensor.PhysicalSectorFactorization.%
-          ActivePhysicalCompressionWitness.factorizationForRestrictionData}
+        ActivePhysicalCompressionWitness.factorizationForRestrictionData}
     \leanok
     \uses{thm:mpdo_active_physical_sector_restriction}
     In the setting of
@@ -718,15 +718,15 @@
     length. If, for every pair $x\ne y$, the unstarred identities
     \begin{align}
         \mathcal K_y[\beta_y,\alpha_y]\,
-        \mathcal K_x[\beta_x,\alpha_x]&=0
+        \mathcal K_x[\beta_x,\alpha_x] & =0
         \notag
     \end{align}
     hold for all virtual indices, then there are pairwise orthogonal
     projections $P_x\in M_d(\C)$ such that
     \begin{align}
         P_x\mathcal K_x[\beta,\alpha]
-        &=\mathcal K_x[\beta,\alpha]
-         =\mathcal K_x[\beta,\alpha]P_x
+         & =\mathcal K_x[\beta,\alpha]
+        =\mathcal K_x[\beta,\alpha]P_x
         \notag
     \end{align}
     for every $x,\beta,\alpha$. Conversely, any pairwise annihilating family
@@ -743,8 +743,8 @@
     support identity. For $x\ne y$, (\ref{eq:mpdo_bnt_layer_unstarred}) and
     adjoint closure give
     \begin{align}
-        C_x^*C_y&=0,
-        &P_xP_y&=0.
+        C_x^*C_y & =0,
+                 & P_xP_y & =0.
         \notag
     \end{align}
 \end{proof}
@@ -762,8 +762,8 @@
     projections $P_s$ such that
     \begin{align}
         P_s\mathcal K_s[\beta,\alpha]
-        &=\mathcal K_s[\beta,\alpha]
-         =\mathcal K_s[\beta,\alpha]P_s
+         & =\mathcal K_s[\beta,\alpha]
+        =\mathcal K_s[\beta,\alpha]P_s
         \notag
     \end{align}
     for every $s,\beta,\alpha$.
@@ -785,7 +785,7 @@
     \lean{MPOTensor.PhysicalSectorFactorization.%
         exists_etaLocalStructureData_supported_of_twoSidedPhysicalSlice,
         MPOTensor.%
-          nonempty_orthogonalCommutingSectorFamily_of_ambientPhysicalSectorFactorization}
+        nonempty_orthogonalCommutingSectorFamily_of_ambientPhysicalSectorFactorization}
     \leanok
     \uses{thm:mpdo_active_physical_sector_neighboring_positivity}
     Let $K$ be injective and admit a physical-sector factorization with
@@ -793,17 +793,17 @@
     $P$ satisfies
     \begin{align}
         PK[\beta,\alpha]
-        &=K[\beta,\alpha]
-         =K[\beta,\alpha]P
+         & =K[\beta,\alpha]
+        =K[\beta,\alpha]P
         \notag
     \end{align}
     for every $\beta,\alpha$, then there is a positive two-site operator $B$
     whose periodic translates commute and such that
     \begin{align}
-        (P\otimes P)B(P\otimes P)&=B,
-        \notag\\
+        (P\otimes P)B(P\otimes P) & =B,
+        \notag                                                  \\
         \operatorname{mpo}(K,N)
-        &=\prod_{j=0}^{N-1}\tau_j(B)
+                                  & =\prod_{j=0}^{N-1}\tau_j(B)
         \qquad (N\geq2).
         \notag
     \end{align}
@@ -848,21 +848,21 @@
     product of the virtual matrix algebras.  Assume also that, for distinct
     $x,y$,
     \begin{align}
-        A_x[\beta,\alpha]A_y[\beta',\alpha']&=0
+        A_x[\beta,\alpha]A_y[\beta',\alpha'] & =0
         \notag
     \end{align}
     for all virtual indices.  For every $x$, suppose that $A_x$ has the
     physical-sector factorization
     \begin{align}
-        U_xA_xU_x^*&=\bigoplus_k l_{x,k}\otimes r_{x,k},
+        U_xA_xU_x^* & =\bigoplus_k l_{x,k}\otimes r_{x,k},
         \notag
     \end{align}
     with positive neighboring operators $\eta^x_{k,h}$ and real numbers
     $a^x_k,b^x_k$ satisfying
     \begin{align}
-        \tr(\eta^x_{k,h})&=a^x_kb^x_h,
-        &
-        \sum_k a^x_kb^x_k&=1.
+        \tr(\eta^x_{k,h}) & =a^x_kb^x_h,
+                          &
+        \sum_k a^x_kb^x_k & =1.
         \notag
     \end{align}
     Then the matrix product density operators generated by $M$ have the
@@ -878,9 +878,9 @@
     projections $P_x$ supporting the raw representatives on both sides.
     Fix $N\geq2$ and write
     \begin{align}
-        q_x(N)&=\sum_{q=0}^{n_x-1}\mu_{x,q}^{N},
-        &
-        \rho^{(N)}(M)&=\sum_x q_x(N)\rho^{(N)}(A_x).
+        q_x(N)        & =\sum_{q=0}^{n_x-1}\mu_{x,q}^{N},
+                      &
+        \rho^{(N)}(M) & =\sum_x q_x(N)\rho^{(N)}(A_x).
         \notag
     \end{align}
     Sitewise compression by $P_x^{\otimes N}$ isolates
@@ -895,7 +895,7 @@
     $\rho^{(N)}(A_x)$.  Replace it at this chain length by
     \begin{align}
         \widetilde B_{x,N}
-        &=\left(\frac{q_x(N)}{n_x}\right)^{1/N}B_x.
+         & =\left(\frac{q_x(N)}{n_x}\right)^{1/N}B_x.
         \notag
     \end{align}
     Then its multiplicity-weighted periodic product is exactly
@@ -916,9 +916,9 @@
     projections support both tensors on both sides. One may take both labels
     to have the single physical slice
     \begin{align}
-        A&=|0\rangle\langle1|,
-        &A\ne0,
-        &A^2=0.
+        A & =|0\rangle\langle1|,
+          & A\ne0,
+          & A^2=0.
         \notag
     \end{align}
 \end{theorem}
@@ -939,9 +939,9 @@ identity on both physical indices and using the sector projector relations
 leaves only the diagonal term:
 \begin{align}
     \mathcal K_i
-    &=\sum_{j,j'}P_j\,\mathcal K_i\,P_{j'}
-      =P_i\,\mathcal K_i
-      =\mathcal K_i\,P_i. \notag
+     & =\sum_{j,j'}P_j\,\mathcal K_i\,P_{j'}
+    =P_i\,\mathcal K_i
+    =\mathcal K_i\,P_i. \notag
 \end{align}
 \begin{center}
     \tenkzkernel
@@ -984,7 +984,7 @@ This is the calculation in
 % scope relative to the literal source grouping is documented in
 % docs/paper-gaps/cpgsv17_vertical_cf_grouping.tex.
 \begin{theorem}[Normal BNT representatives, biCF, exact assembly, and
-  nonnilpotence in the Case-II example]
+        nonnilpotence in the Case-II example]
     \label{thm:mpdo_caseii_absorption_algebraic_data}
     \lean{MPOTensor.CaseIIAbsorptionCounterexample.basis_isNormalTensor,
         MPOTensor.CaseIIAbsorptionCounterexample.sectors_isBNTCanonicalForm,
@@ -999,16 +999,16 @@ This is the calculation in
     Let $A_0,A_1$ be the bond-one tensors whose only nonzero doubled-physical
     entries are
     \begin{align}
-        A_0^{00}=A_0^{11}&=\frac1{\sqrt2}, \notag\\
-        A_1^{22}&=1. \notag
+        A_0^{00}=A_0^{11} & =\frac1{\sqrt2}, \notag \\
+        A_1^{22}          & =1. \notag
     \end{align}
     With $(\mu_0,\mu_1)=(1/\sqrt2,1)$, they are normal and form a normalized
     BNT canonical decomposition. Their simultaneous word-tuple span is the
     full two-block direct sum already at length one, so the representative
     family is in biCF. The ambient tensor is
     \begin{align}
-        M^{ab}&=\operatorname{diag}
-            \bigl(\mu_0A_0^{ab},\mu_1A_1^{ab}\bigr), \notag
+        M^{ab} & =\operatorname{diag}
+        \bigl(\mu_0A_0^{ab},\mu_1A_1^{ab}\bigr), \notag
     \end{align}
     both entrywise and as a doubled-index MPS tensor, and is in normalized
     BNT-refined horizontal form. Moreover, the doubled physical-trace
@@ -1024,25 +1024,25 @@ This is the calculation in
     The two ordinary transfer maps satisfy
     \begin{align}
         \mathcal E_{A_0}=\mathcal E_{A_1}
-        &=\operatorname{id}_{\mathbb C}. \notag
+         & =\operatorname{id}_{\mathbb C}. \notag
     \end{align}
     Their disjoint physical supports exclude equivalence by a virtual gauge
     and a phase. Write $\mathbf A(i)=(A_0^i,A_1^i)$. For every
     $Y=(Y_0,Y_1)\in\mathbb C\oplus\mathbb C$, the two letters $0$ and $8$
     give
     \begin{align}
-        Y&=\frac{Y_0}{1/\sqrt2}\,\mathbf A(0)
-          +Y_1\,\mathbf A(8), \notag
+        Y & =\frac{Y_0}{1/\sqrt2}\,\mathbf A(0)
+        +Y_1\,\mathbf A(8), \notag
     \end{align}
     which proves the simultaneous one-letter span. Direct evaluation gives
     \begin{align}
-        M^{ab}&=\operatorname{diag}
-            \bigl((1/\sqrt2)A_0^{ab},A_1^{ab}\bigr), \notag
+        M^{ab} & =\operatorname{diag}
+        \bigl((1/\sqrt2)A_0^{ab},A_1^{ab}\bigr), \notag
     \end{align}
     and hence the identity block gauge. Finally,
     \begin{align}
-        \mathcal T_{\mathrm{phys}}(A_0)&=\frac2{\sqrt2}, \notag\\
-        \mathcal T_{\mathrm{phys}}(A_1)&=1, \notag
+        \mathcal T_{\mathrm{phys}}(A_0) & =\frac2{\sqrt2}, \notag \\
+        \mathcal T_{\mathrm{phys}}(A_1) & =1, \notag
     \end{align}
     so neither physical-trace transfer is nilpotent.
 \end{proof}
@@ -1065,29 +1065,29 @@ This is the calculation in
     $(1,1)$, let $A_1$ have scalar entry $1$ only on $(2,2)$, and take
     $(\mu_0,\mu_1)=(1/\sqrt2,1)$. Their weighted bond-diagonal assembly has
     \begin{align}
-        K^{00}=K^{11}&=\operatorname{diag}(1/2,0),
-        &K^{22}&=\operatorname{diag}(0,1).                    \label{eq:caseii-ambient-slices}
+        K^{00}=K^{11} & =\operatorname{diag}(1/2,0),
+                      & K^{22}                       & =\operatorname{diag}(0,1).                    \label{eq:caseii-ambient-slices}
     \end{align}
     For every $N>0$ and physical strings $\sigma,\tau\in\{0,1,2\}^N$,
     \begin{align}
         \langle\sigma|\rho^{(N)}(K)|\tau\rangle
-        &=\delta_{\sigma,\tau}\left(
-          2^{-N}\mathbf 1_{\{\sigma_k\in\{0,1\}\ \forall k\}}
-          +\mathbf 1_{\{\sigma_k=2\ \forall k\}}\right),       \label{eq:caseii-ambient-mpo}\\
-        \operatorname{tr}\rho^{(N)}(K)&=2>0.                    \label{eq:caseii-ambient-trace}
+                                       & =\delta_{\sigma,\tau}\left(
+        2^{-N}\mathbf 1_{\{\sigma_k\in\{0,1\}\ \forall k\}}
+        +\mathbf 1_{\{\sigma_k=2\ \forall k\}}\right),       \label{eq:caseii-ambient-mpo}        \\
+        \operatorname{tr}\rho^{(N)}(K) & =2>0.                    \label{eq:caseii-ambient-trace}
     \end{align}
     Hence $K$ generates positive semidefinite operators. It satisfies the
     strong area law and the literal zero-correlation-length equation
     \begin{align}
-        \mathcal T_K&=I_2,
-        &\mathcal T_K^2&=\mathcal T_K.                           \label{eq:caseii-ambient-zcl}
+        \mathcal T_K & =I_2,
+                     & \mathcal T_K^2 & =\mathcal T_K.                           \label{eq:caseii-ambient-zcl}
     \end{align}
     Its displayed BNT decomposition has the global unit-weight convention,
     its representatives form a biCF family, and $K$ has simple canonical form
     at this normalized fixed representative. Nevertheless,
     \begin{align}
-        \rho(\mathcal E_{\mu_0A_0})&=\frac12,
-        &\mu_0A_0&\text{ is not normal}.                         \label{eq:caseii-absorbed-radius}
+        \rho(\mathcal E_{\mu_0A_0}) & =\frac12,
+                                    & \mu_0A_0  & \text{ is not normal}.                         \label{eq:caseii-absorbed-radius}
     \end{align}
     Copy-weight independence is only within the single copy of each
     representative; it does not equate $\mu_0$ and $\mu_1$. Thus all
@@ -1101,10 +1101,10 @@ This is the calculation in
     \leanok
     Set
     \begin{align}
-        P&=\operatorname{diag}(1,1,0),
-        &Q&=I-P=\operatorname{diag}(0,0,1),\notag\\
-        \omega_P&=\frac14(P\otimes P),
-        &\omega_Q&=Q\otimes Q.                                  \label{eq:caseii-pq-states}
+        P        & =\operatorname{diag}(1,1,0),
+                 & Q                            & =I-P=\operatorname{diag}(0,0,1),\notag                                    \\
+        \omega_P & =\frac14(P\otimes P),
+                 & \omega_Q                     & =Q\otimes Q.                                  \label{eq:caseii-pq-states}
     \end{align}
     Equations~\eqref{eq:caseii-ambient-slices} and
     \eqref{eq:caseii-ambient-mpo} follow by multiplying the diagonal slices.
@@ -1112,19 +1112,19 @@ This is the calculation in
     \eqref{eq:caseii-ambient-trace}. For a virtual matrix $X$, the one-site and
     two-site physical closures are
     \begin{align}
-        M_1(X)&=\frac{X_{00}}2P+X_{11}Q,
-        &M_2(X)&=X_{00}\omega_P+X_{11}\omega_Q.                 \label{eq:caseii-closures}
+        M_1(X) & =\frac{X_{00}}2P+X_{11}Q,
+               & M_2(X)                    & =X_{00}\omega_P+X_{11}\omega_Q.                 \label{eq:caseii-closures}
     \end{align}
     Define
     \begin{align}
-        \mathcal S(Y)&=\operatorname{tr}_2(Y),\notag\\
-        \mathcal R(Y)&=\operatorname{tr}(PYP)\,\omega_P
-          +\operatorname{tr}(QYQ)\,\omega_Q.                   \label{eq:caseii-channels}
+        \mathcal S(Y) & =\operatorname{tr}_2(Y),\notag    \\
+        \mathcal R(Y) & =\operatorname{tr}(PYP)\,\omega_P
+        +\operatorname{tr}(QYQ)\,\omega_Q.                   \label{eq:caseii-channels}
     \end{align}
     Both maps are trace-preserving and completely positive, and
     \begin{align}
-        \mathcal S[M_2(X)]&=M_1(X),
-        &\mathcal R[M_1(X)]&=M_2(X).                            \label{eq:caseii-channel-closures}
+        \mathcal S[M_2(X)] & =M_1(X),
+                           & \mathcal R[M_1(X)] & =M_2(X).                            \label{eq:caseii-channel-closures}
     \end{align}
     These are the channel equations of Definition~4.1
     \cite[lines~638--660]{Cirac2016MPDO_arXiv}; with
@@ -1135,9 +1135,9 @@ This is the calculation in
 
     The transfer maps of the two unabsorbed representatives obey
     \begin{align}
-        \mathcal E_{A_0}(x)&=
-            \left(\frac12+\frac12\right)x=x,
-        & \mathcal E_{A_1}(x)&=x.
+        \mathcal E_{A_0}(x) & =
+        \left(\frac12+\frac12\right)x=x,
+                            & \mathcal E_{A_1}(x) & =x.
         \notag
     \end{align}
     Hence both are normal. The letters $0$ and $8$ separately select the two
@@ -1146,8 +1146,8 @@ This is the calculation in
     canonical normalization at lines~224--246. Absorption nevertheless gives
     \begin{align}
         \mathcal E_{\mu_0A_0}
-            &=|\mu_0|^2\mathcal E_{A_0}=\frac12\,\mathrm{id},
-        & \rho(\mathcal E_{\mu_0A_0})&=\frac12.
+         & =|\mu_0|^2\mathcal E_{A_0}=\frac12\,\mathrm{id},
+         & \rho(\mathcal E_{\mu_0A_0})                      & =\frac12.
         \notag
     \end{align}
     A normal tensor has transfer spectral radius one, proving
@@ -1166,8 +1166,8 @@ This is the calculation in
     canonical presentation has one scalar normal representative $A=1$ and two
     copies with raw weights
     \begin{align}
-        \mu_{0,0}&=1,
-        &\mu_{0,1}&=\frac12.
+        \mu_{0,0} & =1,
+                  & \mu_{0,1} & =\frac12.
         \notag
     \end{align}
     The presentation satisfies the global unit-weight normalization, $K$
@@ -1215,10 +1215,10 @@ This is the calculation in
     of normal tensors, and let $M=K^{[2]}$.  According to
     \cite[Theorem~4.9]{Cirac2016MPDO_arXiv},
     \begin{align}
-        \textnormal{(i)}&\Longrightarrow\textnormal{(ii)}, &
-        \textnormal{(ii)}&\Longleftrightarrow\textnormal{(iii)}, &
-        \textnormal{(iii)}&\Longrightarrow\textnormal{(iv)}, &
-        \textnormal{(iv)}&\Longrightarrow\textnormal{(v)},
+        \textnormal{(i)}   & \Longrightarrow\textnormal{(ii)},      &
+        \textnormal{(ii)}  & \Longleftrightarrow\textnormal{(iii)}, &
+        \textnormal{(iii)} & \Longrightarrow\textnormal{(iv)},      &
+        \textnormal{(iv)}  & \Longrightarrow\textnormal{(v)},
         \notag
     \end{align}
     where the conditions are respectively the fixed-point condition, SAL with
@@ -1287,7 +1287,7 @@ This is the calculation in
 
     Example~4.11 uses the bond-weight matrix
     \begin{align}
-        W&=\begin{pmatrix}1&1/2\\1/2&1\end{pmatrix}
+        W & =\begin{pmatrix}1&1/2\\1/2&1\end{pmatrix}
         \notag
     \end{align}
     and claims saturation without zero correlation length.  For the literal
@@ -1306,7 +1306,7 @@ This is the calculation in
 
     Example~4.12 uses a two-dimensional tensor generating
     \begin{align}
-        \rho^{(N)}&=I^{\otimes N}+\sigma_z^{\otimes N}.
+        \rho^{(N)} & =I^{\otimes N}+\sigma_z^{\otimes N}.
         \notag
     \end{align}
     For the normalized four-site state, the tripartition
@@ -1354,7 +1354,7 @@ This is the calculation in
     operators printed in
     \cite[Example~4.11, lines~907--924]{Cirac2016MPDO_arXiv} is
     \begin{align}
-        W&=\begin{pmatrix}1&1/2\\1/2&1\end{pmatrix}.
+        W & =\begin{pmatrix}1&1/2\\1/2&1\end{pmatrix}.
         \notag
     \end{align}
     In the effective binary encoding, the supported label $k\in\{0,1\}$
@@ -1362,9 +1362,9 @@ This is the calculation in
     cyclic-edge tensor for the ket--bra diagonal edge coefficient induced by
     $W$.  For a positive cycle length $N$, define
     \begin{align}
-        c_N(\sigma)&=\prod_{n\in\mathbb Z/N\mathbb Z}
-            W_{\sigma_n,\sigma_{n+1}},
-        &Z_N&=\sum_{\sigma}c_N(\sigma).
+        c_N(\sigma) & =\prod_{n\in\mathbb Z/N\mathbb Z}
+        W_{\sigma_n,\sigma_{n+1}},
+                    & Z_N                               & =\sum_{\sigma}c_N(\sigma).
         \notag
     \end{align}
     This is a physical-dimension-$2$ support model.  The ambient
@@ -1385,8 +1385,8 @@ This is the calculation in
     For every positive $N$ and binary words $\sigma,\tau$,
     \begin{align}
         \operatorname{mpo}(M,N)_{\sigma,\tau}
-        &=\delta_{\sigma,\tau}c_N(\sigma),
-        &Z_N&=\operatorname{tr}(W^N)=\frac{3^N+1}{2^N}.
+         & =\delta_{\sigma,\tau}c_N(\sigma),
+         & Z_N                               & =\operatorname{tr}(W^N)=\frac{3^N+1}{2^N}.
         \notag
     \end{align}
     These identities first concern the effective binary support model.  The
@@ -1431,10 +1431,10 @@ This is the calculation in
     Let $1\leq L\leq N$ and let $x\in\{0,1\}^L$.  The effective-binary block
     state is diagonal, and its entry at $x$ is
     \begin{align}
-      \mu_{N,L}(x)
-      &=\frac{2^L\bigl(3^{N-L+1}+(-1)^{t(x)}\bigr)}
+        \mu_{N,L}(x)
+         & =\frac{2^L\bigl(3^{N-L+1}+(-1)^{t(x)}\bigr)}
         {2^{t(x)+2}(3^N+1)}.
-      \notag
+        \notag
     \end{align}
     This includes $L=1$ and $L=N$.  It is a project-derived consequence of the
     finite periodic model, not a formula stated in CPSV16.
@@ -1472,9 +1472,9 @@ This is the calculation in
     Identify the ambient one-site basis with
     $\{|a,b\rangle:a,b\in\{0,1\}\}$.  Define
     \begin{align}
-        \iota(k)&=|k,k\rangle,
-        &V_{i,k}&=\delta_{i,\iota(k)},
-        &\widetilde M&=V M V^*.
+        \iota(k) & =|k,k\rangle,
+                 & V_{i,k}       & =\delta_{i,\iota(k)},
+                 & \widetilde M  & =V M V^*.
         \notag
     \end{align}
     Then $\iota$ is injective and $V^*V=I_2$.  For a binary configuration
@@ -1496,9 +1496,9 @@ This is the calculation in
     positive $N$,
     \begin{align}
         \operatorname{mpo}(\widetilde M,N)
-        &=V^{\otimes N}\operatorname{mpo}(M,N)(V^{\otimes N})^*,
-        &\operatorname{mpo}(\widetilde M,N)_{\iota\sigma,\iota\tau}
-        &=\delta_{\sigma,\tau}c_N(\sigma).
+         & =V^{\otimes N}\operatorname{mpo}(M,N)(V^{\otimes N})^*,
+         & \operatorname{mpo}(\widetilde M,N)_{\iota\sigma,\iota\tau}
+         & =\delta_{\sigma,\tau}c_N(\sigma).
         \notag
     \end{align}
 \end{theorem}
@@ -1523,8 +1523,8 @@ This is the calculation in
     function:
     \begin{align}
         \operatorname{tr}(\operatorname{mpo}(\widetilde M,N))
-        &=\operatorname{tr}(\operatorname{mpo}(M,N))
-         =Z_N=\frac{3^N+1}{2^N}.
+         & =\operatorname{tr}(\operatorname{mpo}(M,N))
+        =Z_N=\frac{3^N+1}{2^N}.
         \notag
     \end{align}
 \end{theorem}
@@ -1556,8 +1556,8 @@ This is the calculation in
     effective binary model on the periodic ring of length $N$.  For the
     constant-zero word,
     \begin{align}
-        \rho^{(4)}_2(00,00)&=\frac{14}{41},
-        &\rho^{(3)}_2(00,00)&=\frac{5}{14}.
+        \rho^{(4)}_2(00,00) & =\frac{14}{41},
+                            & \rho^{(3)}_2(00,00) & =\frac{5}{14}.
         \notag
     \end{align}
     The same values occur at the corresponding supported entries of the
@@ -1565,10 +1565,10 @@ This is the calculation in
     its ambient realization has source zero correlation length.  Moreover,
     their one-site traces give
     \begin{align}
-        \mathcal T_M&\ne0,
-        &\mathcal T_M^2&\ne\mathcal T_M,
-        &\mathcal T_{\widetilde M}&\ne0,
-        &\mathcal T_{\widetilde M}^2&\ne\mathcal T_{\widetilde M}.
+        \mathcal T_M & \ne0,
+                     & \mathcal T_M^2              & \ne\mathcal T_M,
+                     & \mathcal T_{\widetilde M}   & \ne0,
+                     & \mathcal T_{\widetilde M}^2 & \ne\mathcal T_{\widetilde M}.
         \notag
     \end{align}
     Thus both displayed tensors fail the literal diagram in
@@ -1592,19 +1592,19 @@ This is the calculation in
     ambient partition functions give
     \begin{align}
         \operatorname{tr}(\operatorname{mpo}(M,1))
-        &=\operatorname{tr}(\mathcal T_M^1)
-         =\operatorname{tr}(\mathcal T_M)=2,
-        \notag\\
+         & =\operatorname{tr}(\mathcal T_M^1)
+        =\operatorname{tr}(\mathcal T_M)=2,
+        \notag                                             \\
         \operatorname{tr}(\operatorname{mpo}(\widetilde M,1))
-        &=\operatorname{tr}(\mathcal T_{\widetilde M}^1)
-         =\operatorname{tr}(\mathcal T_{\widetilde M})=2.
+         & =\operatorname{tr}(\mathcal T_{\widetilde M}^1)
+        =\operatorname{tr}(\mathcal T_{\widetilde M})=2.
         \notag
     \end{align}
     Hence both physical-trace transfers are nonzero.  For either
     $X\in\{M,\widetilde M\}$, literal idempotence would give
     \begin{align}
         \mathcal T_X\ne0,\quad \mathcal T_X^2=\mathcal T_X
-        &\Longrightarrow
+         & \Longrightarrow
         \mathcal T_X^2=\lambda\,\mathcal T_X
         \quad\text{with }\lambda=1>0,
         \notag
@@ -1631,15 +1631,15 @@ This is the calculation in
     $\rho_L:=\rho_L^{(4)}(M)$ be the effective-binary reduced state, and let
     $\chi_A$ denote the characteristic polynomial of a matrix $A$.  Then
     \begin{align}
-      \operatorname{roots}(\chi_{\rho_1})
-        &=\{(1/2)^{[2]}\},\\
-      \operatorname{roots}(\chi_{\rho_2})
-        &=\{(14/41)^{[2]},(13/82)^{[2]}\},\\
-      \operatorname{roots}(\chi_{\rho_3})
-        &=\{(10/41)^{[2]},(4/41)^{[4]},(5/82)^{[2]}\},\\
-      \operatorname{roots}(\chi_{\rho_4})
-        &=\{(8/41)^{[2]},(2/41)^{[12]},(1/82)^{[2]}\}.
-      \notag
+        \operatorname{roots}(\chi_{\rho_1})
+         & =\{(1/2)^{[2]}\},                             \\
+        \operatorname{roots}(\chi_{\rho_2})
+         & =\{(14/41)^{[2]},(13/82)^{[2]}\},             \\
+        \operatorname{roots}(\chi_{\rho_3})
+         & =\{(10/41)^{[2]},(4/41)^{[4]},(5/82)^{[2]}\}, \\
+        \operatorname{roots}(\chi_{\rho_4})
+         & =\{(8/41)^{[2]},(2/41)^{[12]},(1/82)^{[2]}\}.
+        \notag
     \end{align}
     Here $a^{[m]}$ denotes a root $a$ of multiplicity $m$.  These are the
     effective nonzero spectra, not the full ambient root multisets.
@@ -1651,16 +1651,16 @@ This is the calculation in
     The reduced-state formula is diagonal.  For a binary word with $t$ internal
     transitions, its diagonal probability is
     \begin{align}
-      p_{L,t}
-      &=\frac{2^L\bigl(3^{5-L}+(-1)^t\bigr)}{2^{t+2}\cdot82}.
-      \notag
+        p_{L,t}
+         & =\frac{2^L\bigl(3^{5-L}+(-1)^t\bigr)}{2^{t+2}\cdot82}.
+        \notag
     \end{align}
     For example, at $L=2$ and $t=0$,
     \begin{align}
-      p_{2,0}
-      &=\frac{2^2(3^3+1)}{2^2\cdot82}
+        p_{2,0}
+         & =\frac{2^2(3^3+1)}{2^2\cdot82}
         =\frac{112}{328}=\frac{14}{41}.
-      \notag
+        \notag
     \end{align}
     Enumerating words of lengths one through four gives transition-count
     multiplicities $(2)$, $(2,2)$, $(2,4,2)$, and $(2,6,6,2)$, respectively.
@@ -1682,9 +1682,9 @@ This is the calculation in
     state and $\widetilde\rho_L:=\rho_L^{(4)}(\widetilde M)$ the ambient reduced
     state.  Let $\chi_A$ denote the characteristic polynomial of $A$.  Then
     \begin{align}
-      \chi_{\widetilde\rho_L}(X)
-      &=X^{4^L-2^L}\chi_{\rho_L}(X).
-      \notag
+        \chi_{\widetilde\rho_L}(X)
+         & =X^{4^L-2^L}\chi_{\rho_L}(X).
+        \notag
     \end{align}
     For the positive block lengths $L=1$, $2$, $3$, and $4$, the full ambient
     root multiset is the effective multiset together with zero of multiplicity
@@ -1698,11 +1698,11 @@ This is the calculation in
     $\widetilde\rho_L=V^{\otimes L}\rho_L(V^{\otimes L})^*$.  Applying
     characteristic-polynomial cyclicity to the rectangular factors gives
     \begin{align}
-      \chi_{V^{\otimes L}\rho_L(V^{\otimes L})^*}(X)
-      &=X^{4^L-2^L}
-        \chi_{\rho_L(V^{\otimes L})^*V^{\otimes L}}(X)\\
-      &=X^{4^L-2^L}\chi_{\rho_L}(X),
-      \notag
+        \chi_{V^{\otimes L}\rho_L(V^{\otimes L})^*}(X)
+         & =X^{4^L-2^L}
+        \chi_{\rho_L(V^{\otimes L})^*V^{\otimes L}}(X) \\
+         & =X^{4^L-2^L}\chi_{\rho_L}(X),
+        \notag
     \end{align}
     where $(V^{\otimes L})^*V^{\otimes L}=I$.  The ambient and effective
     dimensions are $4^L$ and $2^L$, so their difference gives the stated zero
@@ -1724,11 +1724,11 @@ This is the calculation in
     operators.  On the ring of length four, write $S_L=S(\rho_L)$.  With
     $h(x)=-x\log x$, where $\log$ is the natural logarithm,
     \begin{align}
-      S_1&=\log 2,\notag\\
-      S_2&=2h(14/41)+2h(13/82),\notag\\
-      S_3&=2h(10/41)+4h(4/41)+2h(5/82),\notag\\
-      S_4&=2h(8/41)+12h(2/41)+2h(1/82).
-      \notag
+        S_1 & =\log 2,\notag                      \\
+        S_2 & =2h(14/41)+2h(13/82),\notag         \\
+        S_3 & =2h(10/41)+4h(4/41)+2h(5/82),\notag \\
+        S_4 & =2h(8/41)+12h(2/41)+2h(1/82).
+        \notag
     \end{align}
 \end{theorem}
 
@@ -1752,9 +1752,9 @@ This is the calculation in
     \leanok
     The exact scalar ratio from the four-site calculation satisfies
     \[
-      \log\!\left(
+        \log\!\left(
         \frac{41^{82}5^{50}}{2^{48}13^{52}7^{112}}
-      \right)>0.
+        \right)>0.
     \]
 \end{theorem}
 
@@ -1774,10 +1774,10 @@ This is the calculation in
     \uses{def:is_sal, thm:cpsv_example411_length_four_effective_entropies}
     For $I_L=S_L+S_{4-L}-S_4$,
     \begin{align}
-      I_2-I_1
-      &=\frac1{82}\log\!\left(
+        I_2-I_1
+         & =\frac1{82}\log\!\left(
         \frac{41^{82}5^{50}}{2^{48}13^{52}7^{112}}\right)>0.
-      \notag
+        \notag
     \end{align}
     Consequently, the effective binary tensor does not satisfy saturation of
     the area law.
@@ -1919,7 +1919,7 @@ This is the calculation in
     $(a,b,c)\leftrightarrow(a,b_1,c,b_3)$, let $\rho_{ABC}$ be the normalized
     four-site state and set
     \begin{align}
-        w(a,b,c)&=\frac{1+z_a z_{b_1}z_c z_{b_3}}{16}.
+        w(a,b,c) & =\frac{1+z_a z_{b_1}z_c z_{b_3}}{16}.
         \notag
     \end{align}
 \end{definition}
@@ -1942,16 +1942,16 @@ This is the calculation in
     eight even-parity configurations and zero on the eight odd-parity
     configurations.  Its relevant marginals are
     \begin{align}
-        \rho_{AB}&=\frac{I_8}{8},
-        &\rho_{BC}&=\frac{I_8}{8},
-        &\rho_B&=\frac{I_4}{4}.
+        \rho_{AB} & =\frac{I_8}{8},
+                  & \rho_{BC}       & =\frac{I_8}{8},
+                  & \rho_B          & =\frac{I_4}{4}.
         \notag
     \end{align}
     Consequently,
     \begin{align}
-        S(ABC)&=3\log 2,
-        &S(B)&=2\log 2,
-        &S(AB)&=S(BC)=3\log 2,
+        S(ABC) & =3\log 2,
+               & S(B)      & =2\log 2,
+               & S(AB)     & =S(BC)=3\log 2,
         \notag
     \end{align}
     so $S(ABC)+S(B)=5\log 2<6\log 2=S(AB)+S(BC)$.  Thus equality in
@@ -2027,8 +2027,8 @@ This is the calculation in
     Write $B_j^{(x)}$ for the four translated bonds in sector $x$, $n_x$
     for its multiplicity, and $c>0$ for the common normalization. Set
     \begin{align}
-        L&=c\sum_x n_x B_3^{(x)}B_0^{(x)},
-        &R&=\sum_x B_1^{(x)}B_2^{(x)}.
+        L & =c\sum_x n_x B_3^{(x)}B_0^{(x)},
+          & R                                & =\sum_x B_1^{(x)}B_2^{(x)}.
         \notag
     \end{align}
     Orthogonality of the one-site sector projections makes each cross-sector
@@ -2123,31 +2123,31 @@ This is the calculation in
     \uses{def:cpsv_example412_literal_tensor, def:is_rfp_via_ts, thm:cpsv_example412_literal_formula}
     Let
     \begin{align}
-        \widehat M&=\frac12 M.
+        \widehat M & =\frac12 M.
         \notag
     \end{align}
     For every $N>0$, its periodic operator is the normalized periodic operator
     of the printed tensor and has trace one:
     \begin{align}
         \rho^{(N)}(\widehat M)
-        &=2^{-N}\rho^{(N)}(M)
-          =\frac{\rho^{(N)}(M)}{\operatorname{tr}\rho^{(N)}(M)},
-        &\operatorname{tr}\rho^{(N)}(\widehat M)&=1.
+         & =2^{-N}\rho^{(N)}(M)
+        =\frac{\rho^{(N)}(M)}{\operatorname{tr}\rho^{(N)}(M)},
+         & \operatorname{tr}\rho^{(N)}(\widehat M) & =1.
         \notag
     \end{align}
     It generates positive semidefinite operators. For
     $p=(a,b)\in\{0,1\}^2$, set $\pi(p)=a\mathbin\oplus b$ and
     \begin{align}
-        C_p&=|\pi(p)\rangle\langle p|,
-        &R_p&=2^{-1/2}|p\rangle\langle\pi(p)|.
+        C_p & =|\pi(p)\rangle\langle p|,
+            & R_p                        & =2^{-1/2}|p\rangle\langle\pi(p)|.
         \notag
     \end{align}
     The Kraus families $(C_p)_p$ and $(R_p)_p$ define trace-preserving
     completely positive maps $\mathcal S$ and $\mathcal T$, respectively, and
     for every virtual matrix $X$ they satisfy
     \begin{align}
-        \mathcal S[\widehat M_2(X)]&=\widehat M_1(X),
-        &\mathcal T[\widehat M_1(X)]&=\widehat M_2(X).
+        \mathcal S[\widehat M_2(X)] & =\widehat M_1(X),
+                                    & \mathcal T[\widehat M_1(X)] & =\widehat M_2(X).
         \notag
     \end{align}
     This proves the two channel equations in Definition~4.1 without further
@@ -2160,7 +2160,7 @@ This is the calculation in
     $\sum_p R_p^\dagger R_p=I_2$. The diagonal tensor products obey
     \begin{align}
         \widehat M^{aa}\widehat M^{bb}
-        &=\frac12\widehat M^{\pi(a,b)\pi(a,b)},
+         & =\frac12\widehat M^{\pi(a,b)\pi(a,b)},
         \notag
     \end{align}
     while all off-diagonal physical letters vanish. Substitution into the two
@@ -2212,7 +2212,7 @@ This is the calculation in
     Suppose that $K$ generates positive semidefinite periodic operators,
     satisfies the strong area law, and has literal zero correlation length,
     \begin{align}
-        \mathcal T_K^2&=\mathcal T_K.
+        \mathcal T_K^2 & =\mathcal T_K.
         \notag
     \end{align}
     Then $\mu_{s,q}$ is independent of $q$ for each fixed $s$.  Absorb this
@@ -2221,20 +2221,20 @@ This is the calculation in
     generates positive semidefinite periodic operators.  For every $s$, there
     is a physical-sector factorization
     \begin{align}
-        \C^d&\simeq\bigoplus_k(B^L_{s,k}\otimes B^R_{s,k}),
-        \notag\\
+        \C^d & \simeq\bigoplus_k(B^L_{s,k}\otimes B^R_{s,k}),
+        \notag                                                     \\
         U_s\kappa^{(s)}_{\beta,\alpha}U_s^\dagger
-        &=\bigoplus_k(l_{s,k})_\beta\otimes(r_{s,k})_\alpha,
+             & =\bigoplus_k(l_{s,k})_\beta\otimes(r_{s,k})_\alpha,
         \notag
     \end{align}
     whose neighboring operators $\eta^{(s)}_{k,h}$ are positive semidefinite.
     There are real families $(a_{s,k})_k,(b_{s,k})_k$ satisfying
     \begin{align}
-        \tr(\eta^{(s)}_{k,h})&=a_{s,k}b_{s,h}, \notag\\
-        \sum_k a_{s,k}b_{s,k}&=1. \notag
+        \tr(\eta^{(s)}_{k,h}) & =a_{s,k}b_{s,h}, \notag \\
+        \sum_k a_{s,k}b_{s,k} & =1. \notag
     \end{align}
     This is implication (ii)$\Rightarrow$(iv) of
     \cite[Theorem~4.9 and Appendix~C.2, lines~1740--1782]
-      {Cirac2016MPDO_arXiv}. The separate standing biCF and BNT hypotheses are
+    {Cirac2016MPDO_arXiv}. The separate standing biCF and BNT hypotheses are
     imposed at line~849 and restated at line~1628 of the same source.
 \end{theorem}

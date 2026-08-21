@@ -15,8 +15,8 @@
     by
     \begin{align}
         Q_{\alpha,\beta}
-        &=\bigoplus_\gamma
-          \chi_{\alpha,\beta,\gamma}\otimes P_\gamma.
+         & =\bigoplus_\gamma
+        \chi_{\alpha,\beta,\gamma}\otimes P_\gamma.
         \label{eq:rfp_one_fusion}
     \end{align}
     The source terminal matrices are
@@ -26,9 +26,9 @@
     \begin{align}
         U_{\alpha,\beta}\tr(M_\alpha M_\beta)
         U_{\alpha,\beta}^{\dagger}
-        &=\bigoplus_\gamma
-          \chi_{\alpha,\beta,\gamma}\otimes
-          \tr(M_\gamma).
+         & =\bigoplus_\gamma
+        \chi_{\alpha,\beta,\gamma}\otimes
+        \tr(M_\gamma).
         \label{eq:rfp_terminal_trace}
     \end{align}
     Indeed, summing the forward fusion identity over equal horizontal
@@ -65,8 +65,8 @@
     this family is independent of the positive chain length. Then
     \begin{align}
         Q_{\alpha,\beta}
-        &=\bigoplus_\gamma
-          1_{r_{\alpha,\beta}^{\gamma}}\otimes P_\gamma
+         & =\bigoplus_\gamma
+        1_{r_{\alpha,\beta}^{\gamma}}\otimes P_\gamma
         \notag
     \end{align}
     is self-adjoint and idempotent. This is the single recursive fusion step in
@@ -81,12 +81,12 @@
     $\chi_{\alpha,\beta,\gamma}=1$. Hence
     \begin{align}
         Q_{\alpha,\beta}^{\dagger}
-        &=\bigoplus_\gamma(1\otimes P_\gamma^{\dagger})
-          =Q_{\alpha,\beta},
-        \notag\\
+         & =\bigoplus_\gamma(1\otimes P_\gamma^{\dagger})
+        =Q_{\alpha,\beta},
+        \notag                                            \\
         Q_{\alpha,\beta}^{2}
-        &=\bigoplus_\gamma(1\otimes P_\gamma^{2})
-          =Q_{\alpha,\beta}.
+         & =\bigoplus_\gamma(1\otimes P_\gamma^{2})
+        =Q_{\alpha,\beta}.
         \notag
     \end{align}
     Finally, the coisometry identity
@@ -113,14 +113,14 @@
     multiplicity space. If $h$ ends at $\gamma(h)$, let
     \begin{align}
         w(h)
-        &=\prod_r
-          (\chi_{\gamma_{r-1},\beta_r,\gamma_r})_{k_r,k_r}.
+         & =\prod_r
+        (\chi_{\gamma_{r-1},\beta_r,\gamma_r})_{k_r,k_r}.
         \label{eq:rfp_history_weight}
     \end{align}
     For terminal bond operators $P_\gamma$, define
     \begin{align}
         Q_N(P)
-        &=\bigoplus_h w(h)P_{\gamma(h)}.
+         & =\bigoplus_h w(h)P_{\gamma(h)}.
         \label{eq:rfp_recursive_q}
     \end{align}
     The associated sequential map is obtained by tensoring the preceding
@@ -151,26 +151,26 @@
     left-associated product tensor to the recursive direct sum:
     \begin{align}
         W_N M_{\alpha,\boldsymbol\beta}^{i,j}W_N^\dagger
-        &=Q_N((M_\gamma^{i,j})_\gamma).
+         & =Q_N((M_\gamma^{i,j})_\gamma).
         \label{eq:rfp_recursive_fusion}
     \end{align}
     Consequently, after closing the horizontal operator index,
     \begin{align}
         W_N\tr(M_{\alpha,\boldsymbol\beta})W_N^\dagger
-        &=Q_N((\tr(M_\gamma))_\gamma).
+         & =Q_N((\tr(M_\gamma))_\gamma).
         \label{eq:rfp_recursive_trace}
     \end{align}
     Exact reconstruction gives the reverse identities
     \begin{align}
         M_{\alpha,\boldsymbol\beta}^{i,j}
-        &=W_N^\dagger
-          Q_N((M_\gamma^{i,j})_\gamma)
-          W_N,
-        \label{eq:rfp_reverse_fusion}\\
+         & =W_N^\dagger
+        Q_N((M_\gamma^{i,j})_\gamma)
+        W_N,
+        \label{eq:rfp_reverse_fusion} \\
         \tr(M_{\alpha,\boldsymbol\beta})
-        &=W_N^\dagger
-          Q_N((\tr(M_\gamma))_\gamma)
-          W_N.
+         & =W_N^\dagger
+        Q_N((\tr(M_\gamma))_\gamma)
+        W_N.
         \label{eq:rfp_reverse_trace}
     \end{align}
     If the positive trace-power coefficients are independent of the positive
@@ -263,7 +263,7 @@
     $L$ appended labels after the initial site. Define
     \begin{align}
         m(\boldsymbol\alpha,\boldsymbol q)
-        &=\prod_{j=0}^{N-1}(\mu_{\alpha_j})_{q_j,q_j}.
+         & =\prod_{j=0}^{N-1}(\mu_{\alpha_j})_{q_j,q_j}.
         \label{eq:rfp_multiplicity_weight}
     \end{align}
     The first label is the initial label of the recursive fusion, while the
@@ -278,7 +278,7 @@
     and set $Q_{N,c}=Q_N((\tr(M_\gamma))_\gamma)$.
     The corresponding density block is
     $m(\boldsymbol\alpha,\boldsymbol q)
-    W_{N,c}^\dagger Q_{N,c}W_{N,c}$.
+        W_{N,c}^\dagger Q_{N,c}W_{N,c}$.
     Thus the embedding $\widetilde U$ in the source formula is
     $W_{N,c}^\dagger$.
     The all-label recursive density operator is the direct sum of these blocks
@@ -286,13 +286,13 @@
     On the same direct-sum coordinates, define
     \begin{align}
         A_N
-        &=\bigoplus_c m(c)I_c,
-        \notag\\
+         & =\bigoplus_c m(c)I_c,
+        \notag                                           \\
         T_N
-        &=\bigoplus_c W_{N,c}^{\dagger}Q_{N,c}W_{N,c},
-        \notag\\
+         & =\bigoplus_c W_{N,c}^{\dagger}Q_{N,c}W_{N,c},
+        \notag                                           \\
         R_N
-        &=A_NT_N.
+         & =A_NT_N.
         \label{eq:rfp_density_factors}
     \end{align}
     Its scalar coefficients are precisely the selected diagonal coefficients
@@ -302,7 +302,7 @@
 \end{definition}
 
 \begin{theorem}[All-label density decomposition from an active-sector fusion
-    clause]%
+        clause]%
     \label{thm:mpdo_fusion_clause_topological_density_decomposition}
     \lean{MPOTensor.BNTFusionTensorClause.%
         singleKrausMap_verticalCoisometry_mpo_eq_topologicalDensityOperatorSucc}
@@ -317,10 +317,10 @@
     all-label recursive density operator $R_N$ satisfy
     \begin{align}
         V^{\otimes N}\rho^{(N)}(M)(V^{\otimes N})^\dagger
-        &=R_N,
-        \notag\\
+         & =R_N,
+        \notag             \\
         ((V^\dagger)^{\otimes N})R_NV^{\otimes N}
-        &=\rho^{(N)}(M).
+         & =\rho^{(N)}(M).
         \notag
     \end{align}
 
@@ -365,10 +365,10 @@
     coisometry $V$ satisfies the two exact equations
     \begin{align}
         V^{\otimes N}\rho^{(N)}(M)(V^{\otimes N})^\dagger
-        &=R_N,
-        \label{eq:rfp_density_forward}\\
+         & =R_N,
+        \label{eq:rfp_density_forward} \\
         ((V^\dagger)^{\otimes N})R_NV^{\otimes N}
-        &=\rho^{(N)}(M).
+         & =\rho^{(N)}(M).
         \label{eq:rfp_density_reverse}
     \end{align}
     No additional compatibility hypothesis is imposed. The statement is
@@ -406,7 +406,7 @@
 \end{proof}
 
 \begin{corollary}[All-label density-factor commutator from an active-sector
-    fusion clause]%
+        fusion clause]%
     \label{cor:mpdo_fusion_clause_topological_density_factor_commutator}
     \lean{MPOTensor.BNTFusionTensorClause.%
         topologicalDensityOperatorSucc_eq_multiplicityWeight_mul_recursiveFactor}
@@ -421,9 +421,9 @@
     For any active-sector fusion clause and every $N>0$, its all-label
     recursive density operator factors as
     \begin{align}
-        R_N&=A_NT_N,
-        \notag\\
-        A_NT_N&=T_NA_N.
+        R_N    & =A_NT_N,
+        \notag            \\
+        A_NT_N & =T_NA_N.
         \notag
     \end{align}
     Thus the multiplicity-weight factor commutes with the reconstructed
@@ -448,10 +448,10 @@
     coisometries satisfies, for every $N>0$,
     \begin{align}
         R_N
-        &=A_NT_N,
-        \label{eq:rfp_factorization}\\
+         & =A_NT_N,
+        \label{eq:rfp_factorization} \\
         A_NT_N
-        &=T_NA_N.
+         & =T_NA_N.
         \label{eq:rfp_factor_commutation}
     \end{align}
     Equivalently, $[A_N,T_N]=0$, as asserted in
@@ -477,7 +477,7 @@
 \end{proof}
 
 \begin{definition}[Terminal spectral refinement for an active-sector fusion
-    clause]%
+        clause]%
     \label{def:mpdo_fusion_clause_terminal_spectral_refinement}
     \lean{MPOTensor.BNTFusionTensorClause.terminalMatrix}
     \lean{MPOTensor.BNTFusionTensorClause.TerminalSpectralIndex}
@@ -543,7 +543,7 @@
 \end{definition}
 
 \begin{theorem}[Terminal spectral projectors from an active-sector fusion
-    clause]%
+        clause]%
     \label{thm:mpdo_fusion_clause_terminal_spectral_projector_refinement}
     \lean{MPOTensor.BNTFusionTensorClause.terminalEigenvalue_nonneg}
     \lean{MPOTensor.BNTFusionTensorClause.%
@@ -566,11 +566,11 @@
     $\lambda_s$ is non-negative. For every $N>0$, the operators
     $P_s^{(N)}$ are pairwise orthogonal projections and
     \begin{align}
-        T_N&=\sum_s\lambda_sP_s^{(N)},
-        \notag\\
-        A_NP_s^{(N)}&=P_s^{(N)}A_N,
-        \notag\\
-        R_N&=\sum_s\lambda_sA_NP_s^{(N)}.
+        T_N          & =\sum_s\lambda_sP_s^{(N)},
+        \notag                                       \\
+        A_NP_s^{(N)} & =P_s^{(N)}A_N,
+        \notag                                       \\
+        R_N          & =\sum_s\lambda_sA_NP_s^{(N)}.
         \notag
     \end{align}
     This is the terminal spectral decomposition of
@@ -601,7 +601,7 @@
 \end{proof}
 
 \begin{theorem}[Terminal spectral projectors for a length-independent RFP
-    MPDO]%
+        MPDO]%
     \label{thm:mpdo_terminal_spectral_projector_refinement}
     \lean{MPOTensor.terminalSpectralProjectorRefinement_of_isRFPViaTS}
     \leanok
@@ -616,31 +616,31 @@
     where $n\in\mathbb{N}$ is its predecessor. For every $N>0$,
     \begin{align}
         (P_s^{(N)})^\dagger
-        &=P_s^{(N)},
-        \notag\\
+         & =P_s^{(N)},
+        \notag         \\
         (P_s^{(N)})^2
-        &=P_s^{(N)}.
+         & =P_s^{(N)}.
         \notag
     \end{align}
     For distinct spectral indices $s$ and $t$,
     \begin{align}
         P_s^{(N)}P_t^{(N)}
-        &=0.
+         & =0.
         \notag
     \end{align}
     The recursive factor and multiplicity weights satisfy
     \begin{align}
         T_N
-        &=\sum_s\lambda_s P_s^{(N)},
-        \label{eq:rfp_terminal_spectral_sum}\\
+         & =\sum_s\lambda_s P_s^{(N)},
+        \label{eq:rfp_terminal_spectral_sum} \\
         A_NP_s^{(N)}
-        &=P_s^{(N)}A_N.
+         & =P_s^{(N)}A_N.
         \label{eq:rfp_spectral_commutation}
     \end{align}
     Consequently,
     \begin{align}
         R_N
-        &=\sum_s\lambda_s A_NP_s^{(N)}.
+         & =\sum_s\lambda_s A_NP_s^{(N)}.
         \label{eq:rfp_density_spectral_sum}
     \end{align}
     The length-independence assumption here is clause-relative: it is stated
@@ -671,10 +671,10 @@
     identity $W_{N,c}W_{N,c}^\dagger=1$ gives
     \begin{align}
         (W_{N,c}^\dagger Q_{N,c,s}W_{N,c})^\dagger
-        &=W_{N,c}^\dagger Q_{N,c,s}W_{N,c},
-        \notag\\
+         & =W_{N,c}^\dagger Q_{N,c,s}W_{N,c},
+        \notag                                \\
         (W_{N,c}^\dagger Q_{N,c,s}W_{N,c})^2
-        &=W_{N,c}^\dagger Q_{N,c,s}W_{N,c}.
+         & =W_{N,c}^\dagger Q_{N,c,s}W_{N,c}.
         \notag
     \end{align}
     Thus transport through the adjoint sequential coisometry preserves the
@@ -726,7 +726,7 @@
 \end{definition}
 
 \begin{theorem}[Active-sector fusion gives a retained-coordinate commuting
-    Gibbs decomposition above one site]%
+        Gibbs decomposition above one site]%
     \label{thm:mpdo_fusion_clause_topological_gibbs_at_least_two}
     \lean{MPOTensor.BNTFusionTensorClause.%
         topologicalGibbsLocalTerm_isHermitian}
@@ -754,20 +754,20 @@
     Hermitian, its periodic translates commute pairwise, and
     \begin{align}
         H_L
-        &=\sum_{j=1}^{L}h_{j,j+1},
-        \label{eq:rfp_gibbs_hamiltonian}\\
+         & =\sum_{j=1}^{L}h_{j,j+1},
+        \label{eq:rfp_gibbs_hamiltonian} \\
         e^{-H_L}
-        &=\mu^{\otimes L}.
+         & =\mu^{\otimes L}.
         \label{eq:rfp_gibbs_factor}
     \end{align}
     There are orthogonal projections
     $P_1^{(L)},\ldots,P_d^{(L)}$ such that
     \begin{align}
         [P_i^{(L)},e^{-H_L}]
-        &=0,
-        \label{eq:rfp_gibbs_projector_commutation}\\
+         & =0,
+        \label{eq:rfp_gibbs_projector_commutation}    \\
         R_L
-        &=\sum_{i=1}^{d}\lambda_iP_i^{(L)}e^{-H_L}.
+         & =\sum_{i=1}^{d}\lambda_iP_i^{(L)}e^{-H_L}.
         \label{eq:rfp_retained_gibbs_sum}
     \end{align}
     Applying the adjoint retained-row map at every site reconstructs
@@ -821,7 +821,7 @@
 \end{proof}
 
 \begin{theorem}[Retained-coordinate commuting Gibbs decomposition above one
-    site]%
+        site]%
     \label{thm:mpdo_topological_gibbs_at_least_two}
     \lean{MPOTensor.topologicalGibbsDecomposition_of_isRFPViaTS}
     \leanok
@@ -859,7 +859,7 @@
 \end{proof}
 
 \begin{theorem}[Active-sector fusion gives a physical-coordinate commuting
-    Gibbs decomposition above one site]%
+        Gibbs decomposition above one site]%
     \label{thm:mpdo_fusion_clause_physical_coordinate_gibbs_at_least_two}
     \lean{MPOTensor.BNTFusionTensorClause.%
         hasPhysicalTopologicalGibbsDecomposition}
@@ -878,14 +878,14 @@
     chain such that
     \begin{align}
         [\widehat h_{j-1,j},\widehat h_{j,j+1}]
-        &=0,
-        \notag\\
+         & =0,
+        \notag                                        \\
         [\widehat P_i^{(L)},e^{-\widehat H_L}]
-        &=0,
-        \notag\\
+         & =0,
+        \notag                                        \\
         \rho^{(L)}(M)
-        &=\sum_{i=1}^{d}\lambda_i\widehat P_i^{(L)}
-          e^{-\widehat H_L}.
+         & =\sum_{i=1}^{d}\lambda_i\widehat P_i^{(L)}
+        e^{-\widehat H_L}.
         \label{eq:rfp_physical_gibbs_sum}
     \end{align}
     This is the fusion-clause implication in the proof of~
@@ -924,7 +924,7 @@
     $K=V^\dagger kV$ is Hermitian and
     \begin{align}
         e^{-K}
-        &=V^\dagger e^{-k}V+(I-V^\dagger V).
+         & =V^\dagger e^{-k}V+(I-V^\dagger V).
         \label{eq:rfp_physical_weight}
     \end{align}
     Taking the fixed two-site term $K\otimes I$, its periodic translates act
@@ -942,7 +942,7 @@
 \end{proof}
 
 \begin{theorem}[Physical-coordinate commuting Gibbs decomposition above one
-    site]%
+        site]%
     \label{thm:mpdo_physical_coordinate_gibbs_at_least_two}
     \lean{MPOTensor.physicalTopologicalGibbsDecomposition_of_isRFPViaTS}
     \leanok
@@ -1006,10 +1006,10 @@
 \end{definition}
 
 \begin{theorem}[Literal CPSV physical-coordinate commuting Gibbs decomposition
-    above one site]%
+        above one site]%
     \label{thm:mpdo_literal_cpsv_physical_coordinate_gibbs_at_least_two}
     \lean{MPOTensor.%
-physicalTopologicalGibbsDecomposition_of_isRFPViaTS_of_cpsvCanonicalForm}
+        physicalTopologicalGibbsDecomposition_of_isRFPViaTS_of_cpsvCanonicalForm}
     \leanok
     \uses{def:mpdo, def:cpsv_canonical_form, def:is_rfp_via_ts, def:mpdo_bnt_fusion_tensor_clause, def:mpdo_literal_cpsv_rfp_bnt_fusion_tensor_clause, def:mpdo_topological_gibbs_data_at_least_two, thm:mpdo_literal_cpsv_rfp_to_bnt_fusion_tensor, thm:mpdo_fusion_clause_physical_coordinate_gibbs_at_least_two}
     Let $M$ generate matrix product density operators, suppose that its
@@ -1029,14 +1029,14 @@ physicalTopologicalGibbsDecomposition_of_isRFPViaTS_of_cpsvCanonicalForm}
     that
     \begin{align}
         [\widehat h_{j-1,j},\widehat h_{j,j+1}]
-        &=0,
-        \notag\\
+         & =0,
+        \notag                                        \\
         [\widehat P_i^{(L)},e^{-\widehat H_L}]
-        &=0,
-        \notag\\
+         & =0,
+        \notag                                        \\
         \rho^{(L)}(M)
-        &=\sum_{i=1}^{d}\lambda_i\widehat P_i^{(L)}
-          e^{-\widehat H_L}.
+         & =\sum_{i=1}^{d}\lambda_i\widehat P_i^{(L)}
+        e^{-\widehat H_L}.
         \notag
     \end{align}
     This is the physical-coordinate conclusion of~

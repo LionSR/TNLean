@@ -6,7 +6,7 @@
     configurations:
     \begin{align}
         \tr(A^{\sigma_0}\cdots A^{\sigma_{L-1}})
-        &=
+         & =
         \sum_{\alpha_0,\ldots,\alpha_{L-1}}
         \prod_{t=0}^{L-1}
         (A^{\sigma_t})_{\alpha_t,\alpha_{t+1}},
@@ -20,7 +20,7 @@
     The trace is the diagonal sum:
     \begin{align}
         \tr(A^{\sigma_0}\cdots A^{\sigma_{L-1}})
-        &=
+         & =
         \sum_{\alpha_0}
         (A^{\sigma_0}\cdots A^{\sigma_{L-1}})_{\alpha_0,\alpha_0}.
         \notag
@@ -28,7 +28,7 @@
     For prescribed endpoints, the matrix product entry expands as
     \begin{align}
         (A^{\sigma_0}\cdots A^{\sigma_{L-1}})_{\alpha_0,\alpha_L}
-        &=
+         & =
         \sum_{\alpha_1,\ldots,\alpha_{L-1}}
         \prod_{t=0}^{L-1}
         (A^{\sigma_t})_{\alpha_t,\alpha_{t+1}}.
@@ -51,10 +51,10 @@
     $U^i_{\alpha,\beta}$ define maps
     \begin{align}
         U\colon \mathcal H_a\otimes\mathcal H_b
-        &\longrightarrow \mathcal H_{\mathrm{phys}},
-        \notag\\
+         & \longrightarrow \mathcal H_{\mathrm{phys}},
+        \notag                                         \\
         (Uv)_i
-        &=
+         & =
         \sum_{\alpha,\beta}
         U^i_{\alpha,\beta}v_{\alpha,\beta},
         \notag
@@ -62,7 +62,7 @@
     and
     \begin{align}
         (U^*\psi)_{\alpha,\beta}
-        &=
+         & =
         \sum_i\overline{U^i_{\alpha,\beta}} \psi_i.
         \notag
     \end{align}
@@ -80,7 +80,7 @@
     \begin{align}
         \sum_i\overline{U^i_{\alpha,\beta}}
         U^i_{\alpha',\beta'}
-        &=
+         & =
         \delta_{\alpha,\alpha'}\delta_{\beta,\beta'}
         \notag
     \end{align}
@@ -93,10 +93,10 @@
     the two finite sums gives
     \begin{align}
         (U^*Uv)_{\alpha,\beta}
-        &=
+         & =
         \sum_{\alpha',\beta'}
         \left(\sum_i\overline{U^i_{\alpha,\beta}}
-            U^i_{\alpha',\beta'}\right)
+        U^i_{\alpha',\beta'}\right)
         v_{\alpha',\beta'} =
         v_{\alpha,\beta}.
         \notag
@@ -114,27 +114,27 @@
     \begin{align}
         U^{\otimes N}\colon
         (\mathcal H_a\otimes\mathcal H_b)^{\otimes N}
-        &\longrightarrow
+         & \longrightarrow
         \mathcal H_{\mathrm{phys}}^{\otimes N},
         \notag
     \end{align}
     with
     \begin{align}
         (U^{\otimes N}v)_\sigma
-        &=
+         & =
         \sum_{p_0,\ldots,p_{N-1}}
         \left(\prod_{t=0}^{N-1}
-            U^{\sigma_t}_{(p_t)_a,(p_t)_b}\right)
+        U^{\sigma_t}_{(p_t)_a,(p_t)_b}\right)
         v_{p_0,\ldots,p_{N-1}}.
         \notag
     \end{align}
     The conjugate coefficient map is
     \begin{align}
         (U^{*\otimes N}\psi)_p
-        &=
+         & =
         \sum_\sigma
         \left(\prod_{t=0}^{N-1}
-            \overline{U^{\sigma_t}_{(p_t)_a,(p_t)_b}}\right)
+        \overline{U^{\sigma_t}_{(p_t)_a,(p_t)_b}}\right)
         \psi_\sigma.
         \notag
     \end{align}
@@ -161,7 +161,7 @@
         \prod_t
         \overline{U^{\sigma_t}_{(p_t)_a,(p_t)_b}}
         U^{\sigma_t}_{(q_t)_a,(q_t)_b}
-        &=
+         & =
         \prod_t
         \sum_i
         \overline{U^i_{(p_t)_a,(p_t)_b}}
@@ -213,7 +213,7 @@
     bond is the map $I_\varphi$ defined by
     \begin{align}
         (I_\varphi v)_{(a,b),(b',c)}
-        &=
+         & =
         \delta_{b,b'}\lambda_bv_{a,c}.
         \notag
     \end{align}
@@ -237,7 +237,7 @@
     The orthogonal projector onto $\C\varphi$ has pair-index coefficients
     \begin{align}
         (P_\varphi v)_{b,b'}
-        &=
+         & =
         \delta_{b,b'}\frac{\lambda_b}{s}
         \sum_k\lambda_kv_{k,k}.
         \notag
@@ -281,9 +281,9 @@
             \tn[skin=box]{U_2}
             \tndeclare{species}{support}{hue=source:red}
             \tnmark[form=enclosure, species=support, tint, label pos=s]
-                {(1,2)}{$\supp(P_{01})$}
+            {(1,2)}{$\supp(P_{01})$}
             \tnmark[form=enclosure, species=support, tint, label pos=s]
-                {(1,4)}{$\supp(P_{12})$}
+            {(1,4)}{$\supp(P_{12})$}
         \end{tenkz}
     \end{center}
 \end{theorem}
@@ -351,16 +351,16 @@
     The projector $P_2$ satisfies
     \begin{align}
         P_2^2
-        &=
+         & =
         P_2,
-        \notag\\
+        \notag \\
         \ran(P_2)
-        &=
+         & =
         \ran(U^{\otimes2}I_\varphi) =
         G_2(\Lambda U),
-        \notag\\
+        \notag \\
         P_2
-        &=
+         & =
         1-q_2(\Lambda U).
         \notag
     \end{align}
@@ -378,7 +378,7 @@
     $q_2(\Lambda U)^2=q_2(\Lambda U)$,
     \begin{align}
         P_2^2
-        &=
+         & =
         (1-q_2(\Lambda U))^2 =
         1-q_2(\Lambda U) =
         P_2.
@@ -388,11 +388,11 @@
     $\psi\in G_2(\Lambda U)=\ker q_2(\Lambda U)$, and therefore
     \begin{align}
         q_2(\Lambda U)\psi
-        &=
+         & =
         0,
-        \notag\\
+        \notag \\
         P_2\psi
-        &=
+         & =
         (1-q_2(\Lambda U))\psi =
         \psi.
         \notag
@@ -421,7 +421,7 @@
     \begin{align}
         I_{\mathrm{res}}\colon
         \prod_j\C^{D_j\times D_j}
-        &\longrightarrow
+         & \longrightarrow
         (\C^d)^{\otimes2}.
         \notag
     \end{align}
@@ -444,12 +444,12 @@
     equal-sector bond embedding and the physical support projector satisfy
     \begin{align}
         \ran(I_{\mathrm{res}})
-        &=
+         & =
         \sum_j G_2(B_j) =
         G_2\!\left(\bigoplus_j B_j\right),
-        \notag\\
+        \notag \\
         \ran(P_{2,\mathrm{res}})
-        &=
+         & =
         \ran(I_{\mathrm{res}}),
         \notag
     \end{align}
@@ -458,8 +458,8 @@
     If the $B_j$ form a basis of normal tensors and their direct sum is a
     renormalization fixed point, the sectorwise Appendix~B decompositions and
     the common residual isometry required above exist.
-% Scope restriction (multiplicity-one canonical form): repeated copies remain
-% outside this statement; see docs/paper-gaps/cpsv16_rfp_isometry_scope.tex.
+    % Scope restriction (multiplicity-one canonical form): repeated copies remain
+    % outside this statement; see docs/paper-gaps/cpsv16_rfp_isometry_scope.tex.
 \end{theorem}
 
 \begin{proof}

@@ -10,17 +10,17 @@
     positive diagonal matrices $\chi_{\alpha,\beta,\gamma}$ such that, for
     every $L>0$,
     $c^{(L)}_{\alpha,\beta,\gamma}
-    =\tr(\chi_{\alpha,\beta,\gamma}^{L})$, the same-length product law holds,
+        =\tr(\chi_{\alpha,\beta,\gamma}^{L})$, the same-length product law holds,
     \begin{align}
         O_L(M_\alpha)O_L(M_\beta)
-        &=\sum_\gamma c^{(L)}_{\alpha,\beta,\gamma}O_L(M_\gamma),
+         & =\sum_\gamma c^{(L)}_{\alpha,\beta,\gamma}O_L(M_\gamma),
         \notag
     \end{align}
     and the trace scalars satisfy
     \begin{align}
         m_\gamma
-        &=\sum_{\alpha,\beta}
-          c^{(1)}_{\alpha,\beta,\gamma}m_\alpha m_\beta.
+         & =\sum_{\alpha,\beta}
+        c^{(1)}_{\alpha,\beta,\gamma}m_\alpha m_\beta.
         \notag
     \end{align}
     This is the algebra statement in
@@ -41,20 +41,20 @@
     Choose a vertical canonical decomposition
     \begin{align}
         U\widetilde M U^\dagger
-        &=\bigoplus_\alpha \mu_\alpha\otimes M_\alpha,
-        \notag\\
+         & =\bigoplus_\alpha \mu_\alpha\otimes M_\alpha,
+        \notag                                                          \\
         \mu_\alpha
-        &=\diag(\omega_{\alpha,0},\ldots,\omega_{\alpha,r_\alpha-1}).
+         & =\diag(\omega_{\alpha,0},\ldots,\omega_{\alpha,r_\alpha-1}).
         \notag
     \end{align}
     Separating the two factors of the doubled physical index of
     $M_\alpha$ gives an MPO tensor $\widehat M_\alpha$. Define
     \begin{align}
         O_L(M_\alpha)
-        &=\operatorname{mpo}(\widehat M_\alpha,L),
-        \notag\\
+         & =\operatorname{mpo}(\widehat M_\alpha,L),
+        \notag                                       \\
         m_\alpha
-        &=\sum_q\omega_{\alpha,q}=\tr(\mu_\alpha).
+         & =\sum_q\omega_{\alpha,q}=\tr(\mu_\alpha).
         \notag
     \end{align}
     The chosen decomposition satisfies the tensor-attached BNT algebra clause
@@ -79,7 +79,7 @@
     these legs gives the bond matrix
     \begin{align}
         T_\gamma
-        &=\sum_{a=0}^{D-1}M_\gamma^{(a,a)}.
+         & =\sum_{a=0}^{D-1}M_\gamma^{(a,a)}.
         \label{eq:rfp_algebra_terminal_transfer}
     \end{align}
     Then $T_\gamma\succeq0$. This is a necessary consequence of the
@@ -109,9 +109,9 @@
     $X=\diag(2,1)$, and set $B^v=XA^vX^{-1}$. After separating the doubled
     physical index, their terminal transfer matrices are
     \begin{align}
-        T_A&=\begin{pmatrix}1&0\\1&1\end{pmatrix},
-        \notag\\
-        T_B&=\begin{pmatrix}1&0\\\tfrac12&1\end{pmatrix}.
+        T_A & =\begin{pmatrix}1&0\\1&1\end{pmatrix},
+        \notag                                              \\
+        T_B & =\begin{pmatrix}1&0\\\tfrac12&1\end{pmatrix}.
         \notag
     \end{align}
 \end{lemma}
@@ -286,25 +286,25 @@
     $\MN{2}$. Define a tensor $A$ by
     \begin{align}
         A^{((a,b),(c,d))}
-        &=\begin{cases}
-            E_{a,b},&(a,b)=(c,d),\\
-            0,&(a,b)\ne(c,d).
-          \end{cases}
+         & =\begin{cases}
+                E_{a,b}, & (a,b)=(c,d),   \\
+                0,       & (a,b)\ne(c,d).
+            \end{cases}
         \notag
     \end{align}
     Its terminal matrix is
     \begin{align}
-        J&=\begin{pmatrix}1&1\\1&1\end{pmatrix}.
+        J & =\begin{pmatrix}1&1\\1&1\end{pmatrix}.
         \notag
     \end{align}
     Independently, define the companion Bell projector by
     \begin{align}
-        \ket{\Phi}&=\ket{0,0}+\ket{1,1},
+        \ket{\Phi} & =\ket{0,0}+\ket{1,1},
         \notag
     \end{align}
     and
     \begin{align}
-        P&=\ket{\Phi}\!\bra{\Phi}.
+        P & =\ket{\Phi}\!\bra{\Phi}.
         \notag
     \end{align}
     The tensor $A$ is the retained vertical tensor of the ambient model in
@@ -314,12 +314,12 @@
     For $X=\frac12\begin{pmatrix}3&1\\1&3\end{pmatrix}$, set
     $B^v=XA^vX^{-1}$ and define
     \begin{align}
-        J_X&=XJX^{-1}.
+        J_X & =XJX^{-1}.
         \notag
     \end{align}
     Separately, define
     \begin{align}
-        P_X&=(X\otimes X)P(X^{-1}\otimes X^{-1}).
+        P_X & =(X\otimes X)P(X^{-1}\otimes X^{-1}).
         \notag
     \end{align}
 \end{definition}
@@ -349,9 +349,9 @@
     every positive length. Nevertheless,
     \begin{align}
         \sum_a A^{(a,a)}
-        &=\sum_a B^{(a,a)}=J\succeq0,
-        \notag\\
-        J_X&=J,
+            & =\sum_a B^{(a,a)}=J\succeq0,
+        \notag                             \\
+        J_X & =J,
         \notag
     \end{align}
     The matrix $P$ is positive semidefinite while $P_X$ is not Hermitian.
@@ -387,7 +387,7 @@
     $(Y\otimes Y)P(Y^{-1}\otimes Y^{-1})$ are Hermitian, then there is a
     real number $\omega>0$ such that
     \begin{align}
-        Y^\dagger Y&=\omega\Id.
+        Y^\dagger Y & =\omega\Id.
         \notag
     \end{align}
     The comparisons in
@@ -419,7 +419,7 @@
     Let $I=\{0,1\}$ and identify $I\times I$ with four bond coordinates.
     Define the bond-four MPO tensor $M$ by
     \begin{align}
-        M^{i,j}&=E_{(i,j),(i,j)}.
+        M^{i,j} & =E_{(i,j),(i,j)}.
         \notag
     \end{align}
     This test model is motivated by
@@ -461,7 +461,7 @@
     Then
     \begin{align}
         \rho_N(M)
-        &=\ket{\mathrm{GHZ}_N}\!\bra{\mathrm{GHZ}_N}.
+         & =\ket{\mathrm{GHZ}_N}\!\bra{\mathrm{GHZ}_N}.
         \notag
     \end{align}
     Hence $M$ is an MPDO tensor. The displayed operator is an unnormalized
@@ -487,7 +487,7 @@
     \begin{align}
         \operatorname{reindex}_{\varepsilon,\varepsilon}
         \bigl(\rho_2(M)\bigr)
-        &=\ket{\Phi}\!\bra{\Phi}.
+         & =\ket{\Phi}\!\bra{\Phi}.
         \notag
     \end{align}
     Thus the companion Bell matrix is exactly the two-site ambient operator in
@@ -507,7 +507,7 @@
     $X^{-1}$ to the bra index of $M$:
     \begin{align}
         M_X^{i,j}
-        &=\sum_{a,b\in I}X_{i,a}(X^{-1})_{b,j}M^{a,b}.
+         & =\sum_{a,b\in I}X_{i,a}(X^{-1})_{b,j}M^{a,b}.
         \notag
     \end{align}
     This family is motivated by the sector comparison in
@@ -525,7 +525,7 @@
     \uses{def:mpdo_bond_two_singleton_physical_deformation, thm:mpdo_bond_two_singleton_vertical_identity}
     For every vertical letter $v$,
     \begin{align}
-        \widetilde M_X^v&=XA^vX^{-1}.
+        \widetilde M_X^v & =XA^vX^{-1}.
         \notag
     \end{align}
 \end{theorem}
@@ -545,7 +545,7 @@
     After identifying one-site words with their single letters in $I$, the
     one-site operator of $M_X$ is
     \begin{align}
-        \operatorname{reindex}\bigl(\rho_1(M_X)\bigr)&=XJX^{-1}.
+        \operatorname{reindex}\bigl(\rho_1(M_X)\bigr) & =XJX^{-1}.
         \notag
     \end{align}
 \end{theorem}
@@ -565,7 +565,7 @@
     \begin{align}
         \operatorname{reindex}_{\varepsilon,\varepsilon}
         \bigl(\rho_2(M_X)\bigr)
-        &=(X\otimes X)P(X^{-1}\otimes X^{-1}).
+         & =(X\otimes X)P(X^{-1}\otimes X^{-1}).
         \notag
     \end{align}
 \end{theorem}
@@ -584,7 +584,7 @@
     If $M_X$ is a matrix product density operator, then there is a real number
     $\omega>0$ such that
     \begin{align}
-        X^\dagger X&=\omega\Id.
+        X^\dagger X & =\omega\Id.
         \notag
     \end{align}
     Thus this natural physical-similarity family is excluded whenever
@@ -605,7 +605,7 @@
     For $X=\frac12\begin{pmatrix}3&1\\1&3\end{pmatrix}$ and every
     $\omega\in\R$,
     \begin{align}
-        X^\dagger X&\ne\omega\Id.
+        X^\dagger X & \ne\omega\Id.
         \notag
     \end{align}
 \end{lemma}
@@ -675,12 +675,12 @@
     $q_N(w)$ indicate that consecutive edges in $w$ meet cyclically. The raw
     retained closed operator is
     \begin{align}
-        Q_N&=\operatorname{diag}(q_N).
+        Q_N & =\operatorname{diag}(q_N).
         \notag
     \end{align}
     It satisfies
     \begin{align}
-        Q_N^\dagger&=Q_N=Q_N^2.
+        Q_N^\dagger & =Q_N=Q_N^2.
         \notag
     \end{align}
     Thus $Q_N$ is a $*$-projection and obeys the one-label coefficient-one
@@ -725,12 +725,12 @@
     $s^{-1}$, and $\chi=(s)$, the length-$L$ coefficient is $s^L$. For
     $L\geq1$,
     \begin{align}
-        \widehat Q_L&=s^LQ_L.
+        \widehat Q_L & =s^LQ_L.
         \notag
     \end{align}
     Moreover,
     \begin{align}
-        \widehat Q_L^2&=s^L\widehat Q_L.
+        \widehat Q_L^2 & =s^L\widehat Q_L.
         \notag
     \end{align}
     These data reconstruct $A$ and satisfy the positive-$\chi$,
@@ -760,17 +760,17 @@
     The unique label and copy identify the retained coordinate with $I$. The
     corresponding permutation matrix $W$ satisfies, for every $Z\in\MN{2}$,
     \begin{align}
-        WW^\dagger&=\Id.
+        WW^\dagger & =\Id.
         \notag
     \end{align}
     Conjugation by $W$ gives
     \begin{align}
-        WZW^\dagger&=\operatorname{reindex}(Z),
+        WZW^\dagger & =\operatorname{reindex}(Z),
         \notag
     \end{align}
     and the adjoint reconstructs the original matrix:
     \begin{align}
-        W^\dagger\operatorname{reindex}(Z)W&=Z.
+        W^\dagger\operatorname{reindex}(Z)W & =Z.
         \notag
     \end{align}
 \end{theorem}
@@ -818,7 +818,7 @@
     multiplicity spectrum consists of a vertical canonical decomposition
     \begin{align}
         \widetilde{M^{(2)}}
-        &=\bigoplus_\delta \nu_\delta\otimes A_\delta,
+         & =\bigoplus_\delta \nu_\delta\otimes A_\delta,
         \notag
     \end{align}
     a bijection $\sigma$ from the one-site sectors to its sectors such that
@@ -827,9 +827,9 @@
     equality
     \begin{align}
         \bigl\{\nu_{\sigma(\gamma),r}:r\bigr\}
-        &=
+         & =
         \bigl\{\mu_{\alpha,i}\mu_{\beta,j}
-          \chi_{\alpha,\beta,\gamma,k}:\alpha,\beta,i,j,k\bigr\}.
+        \chi_{\alpha,\beta,\gamma,k}:\alpha,\beta,i,j,k\bigr\}.
         \notag
     \end{align}
     This is the decomposition and comparison retained in
@@ -847,7 +847,7 @@
     $Z_\gamma\in\GL(d_\gamma,\C)$ such that, for every physical index $i$,
     \begin{align}
         A_{\sigma(\gamma)}^i
-        &=Z_\gamma M_\gamma^i Z_\gamma^{-1}.
+         & =Z_\gamma M_\gamma^i Z_\gamma^{-1}.
         \notag
     \end{align}
     Thus the matched normal tensors have no residual scalar phase. This is the
@@ -858,7 +858,7 @@
 \end{definition}
 
 \begin{theorem}[The two-site multiplicity spectrum from the BNT algebra
-    clause]%
+        clause]%
     \label{thm:mpdo_bnt_algebra_tensor_clause_spectrum}
     \lean{MPOTensor.BNTAlgebraTensorClause.%
         toTwoSiteExactSectorGauge}
@@ -872,7 +872,7 @@
     There is a vertical canonical decomposition of the two-site blocking,
     \begin{align}
         \widetilde{M^{(2)}}
-        &=\bigoplus_\delta \nu_\delta\otimes A_\delta.
+         & =\bigoplus_\delta \nu_\delta\otimes A_\delta.
         \notag
     \end{align}
     Its normal-tensor sectors are in bijection, via $\sigma$, with the sectors
@@ -881,9 +881,9 @@
     positive length and, for every $\gamma$,
     \begin{align}
         \bigl\{\nu_{\sigma(\gamma),r}:r\bigr\}
-        &=
+         & =
         \bigl\{\mu_{\alpha,i}\mu_{\beta,j}
-          \chi_{\alpha,\beta,\gamma,k}:\alpha,\beta,i,j,k\bigr\}
+        \chi_{\alpha,\beta,\gamma,k}:\alpha,\beta,i,j,k\bigr\}
         \label{eq:rfp_multiplicity_spectrum}
     \end{align}
     as multisets. Thus this two-site decomposition and relabelling realize
@@ -892,7 +892,7 @@
     and there are invertible matrices $Z_\gamma$ satisfying
     \begin{align}
         A_{\sigma(\gamma)}^i
-        &=Z_\gamma M_\gamma^i Z_\gamma^{-1}
+         & =Z_\gamma M_\gamma^i Z_\gamma^{-1}
         \label{eq:rfp_sector_conjugacy}
     \end{align}
     exactly. This is only the invertible-gauge sub-result of
@@ -908,7 +908,7 @@
     \begin{align}
         \sum_{\alpha,\beta,i,j,k}
         \bigl(\mu_{\alpha,i}\mu_{\beta,j}
-          \chi_{\alpha,\beta,\gamma,k}\bigr)^L.
+        \chi_{\alpha,\beta,\gamma,k}\bigr)^L.
         \notag
     \end{align}
     All these coefficients are positive. Hence every basis sector occurs,
@@ -941,7 +941,7 @@
     space and a scalar $c_\gamma>0$ such that, for every vertical letter $v$,
     \begin{align}
         V_\gamma^\dagger\widetilde{M^{(2)}}^vV_\gamma
-        &=c_\gamma Z_\gamma M_\gamma^vZ_\gamma^{-1}.
+         & =c_\gamma Z_\gamma M_\gamma^vZ_\gamma^{-1}.
         \label{eq:mpdo_bnt_exact_sector_gauge_blocked_corner}
     \end{align}
     If, in addition, $M$ generates matrix product density operators, then for
@@ -966,7 +966,7 @@
     \begin{align}
         (Z_\gamma^\dagger Z_\gamma)M_\gamma^v
         (Z_\gamma^\dagger Z_\gamma)^{-1}
-        &=M_\gamma^v.
+         & =M_\gamma^v.
         \notag
     \end{align}
     This restriction is documented in
@@ -999,7 +999,7 @@
     $a_\gamma>0$ such that
     \begin{align}
         W_\gamma^\dagger\widetilde M^vW_\gamma
-        &=a_\gamma M_\gamma^v
+         & =a_\gamma M_\gamma^v
         \label{eq:mpdo_bnt_exact_sector_one_site_raw_corner}
     \end{align}
     for every vertical letter $v$.  Here the bond space of $M_\gamma$ is
@@ -1007,7 +1007,7 @@
     distinguished positive-weight copy in the one-site vertical
     decomposition of
     \cite[Proposition~4.13, statement lines~943--951, and Appendix~C.4,
-    lines~2046--2057]{Cirac2016MPDO_arXiv}.
+        lines~2046--2057]{Cirac2016MPDO_arXiv}.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -1031,8 +1031,8 @@
     blocking a positive multiple of an invertible conjugate of $A$:
     \begin{align}
         V^\dagger\widetilde{M^{(2)}}^vV
-        &=b\,X A^vX^{-1},
-        &b&>0.
+         & =b\,X A^vX^{-1},
+         & b                & >0.
         \label{eq:mpdo_two_site_prefix_gauge_corner}
     \end{align}
     For every pair of open bond indices and every pair of equal-length words
@@ -1079,21 +1079,21 @@
     (\ref{eq:mpdo_bnt_exact_sector_gauge_blocked_corner}), and set
     \begin{align}
         L_\gamma
-        &=V_\gamma(Z_\gamma^{-1})^\dagger,
-        &
+         & =V_\gamma(Z_\gamma^{-1})^\dagger,
+         &
         R_\gamma
-        &=V_\gamma Z_\gamma.
+         & =V_\gamma Z_\gamma.
         \label{eq:mpdo_bnt_identity_oblique_maps}
     \end{align}
     Then, for every vertical letter $v$,
     \begin{align}
         L_\gamma^\dagger\widetilde{M^{(2)}}^vR_\gamma
-        &=c_\gamma M_\gamma^v,
-        \label{eq:mpdo_bnt_identity_oblique_compression}\\
+         & =c_\gamma M_\gamma^v,
+        \label{eq:mpdo_bnt_identity_oblique_compression} \\
         R_\gamma^\dagger\widetilde{M^{(2)}}^vL_\gamma
-        &=c_\gamma
-          (Z_\gamma^\dagger Z_\gamma)M_\gamma^v
-          (Z_\gamma^\dagger Z_\gamma)^{-1}.
+         & =c_\gamma
+        (Z_\gamma^\dagger Z_\gamma)M_\gamma^v
+        (Z_\gamma^\dagger Z_\gamma)^{-1}.
         \label{eq:mpdo_bnt_identity_oblique_opposite}
     \end{align}
     Write $\mc{R}(M_\gamma)^{rs}$ for the horizontal slice
@@ -1101,15 +1101,15 @@
     physical indices $i,j$, define
     \begin{align}
         f^\gamma_{(r,s),(i,j)}
-        &=c_\gamma^{-1}
-          \overline{(L_\gamma)_{ir}}(R_\gamma)_{js}.
+         & =c_\gamma^{-1}
+        \overline{(L_\gamma)_{ir}}(R_\gamma)_{js}.
         \label{eq:mpdo_bnt_identity_physical_coefficients}
     \end{align}
     These coefficients realize every identity-dressed horizontal slice in
     the physical-letter span of the two-site blocking:
     \begin{align}
         \sum_{i,j}f^\gamma_{(r,s),(i,j)}(M^{[2]})^{ij}
-        &=\mc{R}(M_\gamma)^{rs}.
+         & =\mc{R}(M_\gamma)^{rs}.
         \label{eq:mpdo_bnt_identity_physical_span}
     \end{align}
     This supplies the physical-letter span needed for the direct comparison
@@ -1129,7 +1129,7 @@
     \begin{align}
         (Z_\gamma^\dagger Z_\gamma)M_\gamma^v
         (Z_\gamma^\dagger Z_\gamma)^{-1}
-        &=M_\gamma^v.
+         & =M_\gamma^v.
         \notag
     \end{align}
     This is the obstruction in the direct two-site argument.  The mixed-prefix
@@ -1143,10 +1143,10 @@
     (\ref{eq:mpdo_bnt_exact_sector_gauge_blocked_corner}) gives
     \begin{align}
         L_\gamma^\dagger\widetilde{M^{(2)}}^vR_\gamma
-        &=Z_\gamma^{-1}
-          \bigl(V_\gamma^\dagger\widetilde{M^{(2)}}^vV_\gamma\bigr)
-          Z_\gamma
-         =c_\gamma M_\gamma^v.
+         & =Z_\gamma^{-1}
+        \bigl(V_\gamma^\dagger\widetilde{M^{(2)}}^vV_\gamma\bigr)
+        Z_\gamma
+        =c_\gamma M_\gamma^v.
         \notag
     \end{align}
     Reversing the two maps instead gives
@@ -1154,7 +1154,7 @@
     $(r,s)$ matrix entry of a general two-sided compression yields
     \begin{align}
         \bigl[L^\dagger\widetilde{M^{(2)}}^vR\bigr]_{rs}
-        &=\sum_{i,j}\overline{L_{ir}}R_{js}(M^{[2]})^{ij}_v.
+         & =\sum_{i,j}\overline{L_{ir}}R_{js}(M^{[2]})^{ij}_v.
         \notag
     \end{align}
     Divide by $c_\gamma$ and use
@@ -1187,13 +1187,13 @@
     \begin{align}
         (Z_\gamma^\dagger Z_\gamma)M_\gamma^v
         (Z_\gamma^\dagger Z_\gamma)^{-1}
-        &=M_\gamma^v
+         & =M_\gamma^v
         \label{eq:mpdo_bnt_conditional_identity_marked_gram}
     \end{align}
     Consequently, there is a real number $\omega_\gamma>0$ such that
     \begin{align}
         Z_\gamma^\dagger Z_\gamma
-        &=\omega_\gamma\Id.
+         & =\omega_\gamma\Id.
         \label{eq:mpdo_bnt_conditional_scalar_gram}
     \end{align}
 
@@ -1242,7 +1242,7 @@
 \end{proof}
 
 \begin{theorem}[Conditional unitary conjugacy from the positive-tail reflected
-    target]
+        target]
     \label{thm:mpdo_bnt_conditional_identity_marked_unitary_conjugacy}
     \lean{MPOTensor.BNTAlgebraTensorClause.TwoSiteExactSectorGauge.%
         exists_unitary_sector_conjugacy_of_gauge_gram_eq_pos_smul_one}
@@ -1252,13 +1252,13 @@
     \uses{def:mpdo, def:cpsv_canonical_form, def:mpdo_bnt_two_site_exact_sector_gauge, thm:normalize_scalar_gram_matrix, thm:normalized_conjugation_of_scalar_gram}
     Under the hypotheses of the preceding conditional theorem, define
     \begin{align}
-        U_\gamma&=\omega_\gamma^{-1/2}Z_\gamma.
+        U_\gamma & =\omega_\gamma^{-1/2}Z_\gamma.
         \notag
     \end{align}
     Then $U_\gamma$ is unitary and, for every physical index $i$,
     \begin{align}
         A_{\sigma(\gamma)}^i
-        &=U_\gamma M_\gamma^i U_\gamma^\dagger.
+         & =U_\gamma M_\gamma^i U_\gamma^\dagger.
         \label{eq:mpdo_bnt_conditional_unitary_conjugacy}
     \end{align}
     More generally, the same conclusion follows from any exact invertible
@@ -1312,19 +1312,19 @@
     \begin{align}
         (Z_\gamma^\dagger Z_\gamma)M_\gamma^v
         (Z_\gamma^\dagger Z_\gamma)^{-1}
-        &=M_\gamma^v.
+         & =M_\gamma^v.
         \label{eq:mpdo_bnt_mixed_prefix_gram_identity}
     \end{align}
     Consequently there is a real number $\omega_\gamma>0$ such that
     \begin{align}
         Z_\gamma^\dagger Z_\gamma
-        &=\omega_\gamma\Id,
+         & =\omega_\gamma\Id,
         \label{eq:mpdo_bnt_mixed_prefix_scalar_gram}
     \end{align}
     and there is a unitary $U_\gamma$ satisfying
     \begin{align}
         A_{\sigma(\gamma)}^v
-        &=U_\gamma M_\gamma^vU_\gamma^\dagger.
+         & =U_\gamma M_\gamma^vU_\gamma^\dagger.
         \label{eq:mpdo_bnt_mixed_prefix_unitary_conjugacy}
     \end{align}
     The identity-dressed marked chains therefore also have the positive-tail
@@ -1353,7 +1353,7 @@
     $(W_\gamma,W_\gamma)$, whereas the Gram-dressed mark is obtained from
     \begin{align}
         \bigl(W_\gamma G_\gamma^\dagger,
-              W_\gamma G_\gamma^{-1}\bigr).
+        W_\gamma G_\gamma^{-1}\bigr).
         \notag
     \end{align}
     Their marked traces agree against every positive-length tail.  The
@@ -1375,9 +1375,9 @@
     coefficient family determined by its diagonal chi matrices:
     \begin{align}
         m_\gamma
-        &=\sum_{\alpha,\beta}
-          \tr(\chi_{\alpha,\beta,\gamma})
-          m_\alpha m_\beta.
+         & =\sum_{\alpha,\beta}
+        \tr(\chi_{\alpha,\beta,\gamma})
+        m_\alpha m_\beta.
         \notag
     \end{align}
 \end{lemma}
@@ -1385,11 +1385,11 @@
 \begin{proof}\leanok
     The chi representation at length one gives
     $c^{(1)}_{\alpha,\beta,\gamma}
-    =\tr(\chi_{\alpha,\beta,\gamma})$.
+        =\tr(\chi_{\alpha,\beta,\gamma})$.
     Substitution into the idempotent law
     $m_\gamma
-    =\sum_{\alpha,\beta}
-    c^{(1)}_{\alpha,\beta,\gamma}m_\alpha m_\beta$
+        =\sum_{\alpha,\beta}
+        c^{(1)}_{\alpha,\beta,\gamma}m_\alpha m_\beta$
     gives the stated identity.
 \end{proof}
 
@@ -1406,10 +1406,10 @@
     If, for every $\gamma$ and all sufficiently large $L$,
     \begin{align}
         \sum_r \nu_{\gamma,r}^{L}
-        &=
+         & =
         \sum_{\alpha,\beta,i,j,k}
         \bigl(\mu_{\alpha,i}\mu_{\beta,j}
-          \chi_{\alpha,\beta,\gamma,k}\bigr)^L,
+        \chi_{\alpha,\beta,\gamma,k}\bigr)^L,
         \notag
     \end{align}
     then the entries on the two sides agree as multisets. Together with the
@@ -1421,10 +1421,10 @@
     sums of geometric sequences gives, for every $L\geq 1$,
     \begin{align}
         \sum_r \nu_{\gamma,r}^{L}
-        &=
+         & =
         \sum_{\alpha,\beta,i,j,k}
         \bigl(\mu_{\alpha,i}\mu_{\beta,j}
-          \chi_{\alpha,\beta,\gamma,k}\bigr)^L.
+        \chi_{\alpha,\beta,\gamma,k}\bigr)^L.
         \notag
     \end{align}
     The finite power-sum identity determines both the cardinality and the
@@ -1432,7 +1432,7 @@
 \end{definition}
 
 \begin{theorem}[Multiplicity trace normalization from the spectrum comparison
-    and BNT algebra clause]%
+        and BNT algebra clause]%
     \label{thm:mpdo_bnt_multiplicity_trace_normalization}
     \lean{MPOTensor.BNTMultiplicitySpectrumComparison.sum_twoEntry_eq_sum_products}
     \lean{MPOTensor.BNTMultiplicitySpectrumComparison.sum_products_eq}
@@ -1445,12 +1445,12 @@
     Then every two-site multiplicity matrix has the prescribed trace:
     \begin{align}
         \tr(\nu_\gamma)
-        &=\sum_{\alpha,\beta,i,j,k}
-          \mu_{\alpha,i}\mu_{\beta,j}
-          \chi_{\alpha,\beta,\gamma,k}
-         =\sum_{\alpha,\beta}
-          c^{(1)}_{\alpha,\beta,\gamma}m_\alpha m_\beta
-         =m_\gamma.
+         & =\sum_{\alpha,\beta,i,j,k}
+        \mu_{\alpha,i}\mu_{\beta,j}
+        \chi_{\alpha,\beta,\gamma,k}
+        =\sum_{\alpha,\beta}
+        c^{(1)}_{\alpha,\beta,\gamma}m_\alpha m_\beta
+        =m_\gamma.
         \label{eq:rfp_trace_normalization}
     \end{align}
     This is the normalization used for the preparation matrix
@@ -1462,8 +1462,8 @@
     $\alpha,\beta,\gamma$, the resulting product sum satisfies
     \begin{align}
         \sum_{i,j,k}
-          \mu_{\alpha,i}\mu_{\beta,j}\chi_{\alpha,\beta,\gamma,k}
-        &=
+        \mu_{\alpha,i}\mu_{\beta,j}\chi_{\alpha,\beta,\gamma,k}
+         & =
         \left(\sum_i\mu_{\alpha,i}\right)
         \left(\sum_j\mu_{\beta,j}\right)
         \left(\sum_k\chi_{\alpha,\beta,\gamma,k}\right).
@@ -1472,21 +1472,21 @@
     The identities
     \begin{align}
         \sum_i\mu_{\alpha,i}
-        &=m_\alpha,
-        \notag\\
+         & =m_\alpha,
+        \notag                            \\
         \sum_j\mu_{\beta,j}
-        &=m_\beta,
-        \notag\\
+         & =m_\beta,
+        \notag                            \\
         \sum_k\chi_{\alpha,\beta,\gamma,k}
-        &=c^{(1)}_{\alpha,\beta,\gamma}
+         & =c^{(1)}_{\alpha,\beta,\gamma}
         \notag
     \end{align}
     therefore give
     \begin{align}
         \tr(\nu_\gamma)
-        &=\sum_{\alpha,\beta}
-          m_\alpha m_\beta c^{(1)}_{\alpha,\beta,\gamma}
-         =m_\gamma,
+         & =\sum_{\alpha,\beta}
+        m_\alpha m_\beta c^{(1)}_{\alpha,\beta,\gamma}
+        =m_\gamma,
         \notag
     \end{align}
     where the final equality is the length-one idempotent law.
@@ -1521,22 +1521,22 @@
     Explicitly, for every $L>0$ the product law is
     \begin{align}
         O_L(M_\alpha)O_L(M_\beta)
-        &=\sum_\gamma
-          c^{(L)}_{\alpha,\beta,\gamma}O_L(M_\gamma),
+         & =\sum_\gamma
+        c^{(L)}_{\alpha,\beta,\gamma}O_L(M_\gamma),
         \notag
     \end{align}
     while the idempotent scalar law is
     \begin{align}
         m_\gamma
-        &=\sum_{\alpha,\beta}
-          c^{(1)}_{\alpha,\beta,\gamma}m_\alpha m_\beta.
+         & =\sum_{\alpha,\beta}
+        c^{(1)}_{\alpha,\beta,\gamma}m_\alpha m_\beta.
         \notag
     \end{align}
     For every positive blocked length $n$ and blocked-basis indices $i,j,k$,
     the source and target label maps $\sigma_n,\tau_n$ give the comparison
     \begin{align}
         c^{(n)}_{i,j,k}
-        &=c^{(n)}_{\sigma_n(i),\sigma_n(j),\tau_n(k)}.
+         & =c^{(n)}_{\sigma_n(i),\sigma_n(j),\tau_n(k)}.
         \notag
     \end{align}
     They also determine the pulled-back blocked-basis $\chi$-family. These
@@ -1565,8 +1565,8 @@
     the theorem data. For every $L>0$,
     \begin{align}
         c^{(L)}_{\alpha,\beta,\gamma}
-        &=c^{\chi,(L)}_{\alpha,\beta,\gamma}
-         =\tr\!\left(\chi_{\alpha,\beta,\gamma}^{\,L}\right),
+         & =c^{\chi,(L)}_{\alpha,\beta,\gamma}
+        =\tr\!\left(\chi_{\alpha,\beta,\gamma}^{\,L}\right),
         \notag
     \end{align}
     where $c^{\chi}$ is the canonical coefficient family determined by
@@ -1575,24 +1575,24 @@
     every $L>0$, the same-length product identity reads
     \begin{align}
         O_L(M_\alpha)O_L(M_\beta)
-        &=\sum_\gamma
-          \tr\!\left(\chi_{\alpha,\beta,\gamma}^{\,L}\right)
-          O_L(M_\gamma),
+         & =\sum_\gamma
+        \tr\!\left(\chi_{\alpha,\beta,\gamma}^{\,L}\right)
+        O_L(M_\gamma),
         \notag
     \end{align}
     and, at $L=1$, the idempotent identity reads
     \begin{align}
         m_\gamma
-        &=\sum_{\alpha,\beta}
-          \tr(\chi_{\alpha,\beta,\gamma})
-          m_\alpha m_\beta.
+         & =\sum_{\alpha,\beta}
+        \tr(\chi_{\alpha,\beta,\gamma})
+        m_\alpha m_\beta.
         \notag
     \end{align}
 \end{theorem}
 \begin{proof}\leanok
     The positive trace-power witness gives
     $c^{(L)}_{\alpha,\beta,\gamma}
-    =\tr(\chi_{\alpha,\beta,\gamma}^{\,L})$.
+        =\tr(\chi_{\alpha,\beta,\gamma}^{\,L})$.
     Substitution into the product law and its length-one idempotent
     specialization gives the stated formulas.
 \end{proof}
@@ -1614,7 +1614,7 @@
     along the blocked-basis comparison maps: writing $\chi_{n,i,j,k}$ for the
     resulting blocked-basis diagonal matrix at a positive blocked length $n$,
     $\chi_{n,i,j,k}
-    =\chi_{\sigma_n(i),\sigma_n(j),\tau_n(k)}$.
+        =\chi_{\sigma_n(i),\sigma_n(j),\tau_n(k)}$.
     Thus the two matrices have equal size, diagonal entries, and traces of all
     powers.
 \end{theorem}
@@ -1635,9 +1635,9 @@
     pulled-back blocked-basis matrices $\chi_{n,i,j,k}$:
     \begin{align}
         c^{(n)}_{i,j,k}
-        &=
+         & =
         \tr\!\left(\chi_{\sigma_n(i),\sigma_n(j),\tau_n(k)}^{\,n}\right)
-         =\tr(\chi_{n,i,j,k}^{\,n}).
+        =\tr(\chi_{n,i,j,k}^{\,n}).
         \notag
     \end{align}
 \end{corollary}

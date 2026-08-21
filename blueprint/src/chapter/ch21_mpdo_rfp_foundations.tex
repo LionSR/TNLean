@@ -10,7 +10,7 @@
     obtained by contracting the ket and bra physical legs of one tensor:
     \begin{align}
         \mathcal T_M
-        &=\sum_i M^{ii}.
+         & =\sum_i M^{ii}.
         \notag
     \end{align}
     % Gap documented in docs/paper-gaps/cpsv16_zcl_canonical_form_normalization.tex.
@@ -26,9 +26,9 @@
     An MPO tensor satisfies the nonzero up-to-scalar physical-trace relation
     when, for some real number $\lambda>0$, the following conditions hold:
     \begin{align}
-        \mathcal T_M&\ne 0,
-        \notag\\
-        \mathcal T_M^2&=\lambda\,\mathcal T_M.
+        \mathcal T_M   & \ne 0,
+        \notag                                   \\
+        \mathcal T_M^2 & =\lambda\,\mathcal T_M.
         \notag
     \end{align}
     The nonzero condition excludes the degenerate zero transfer, and the
@@ -42,7 +42,7 @@
 \end{definition}
 
 \begin{theorem}[The nonzero physical-trace relation requires a nonzero bond
-    space]
+        space]
     \label{thm:mpo_source_zcl_bond_dim_ne_zero}
     \lean{MPOTensor.IsSourceZCL.bondDim_ne_zero}
     \leanok
@@ -58,7 +58,7 @@
 \end{proof}
 
 \begin{theorem}[Literal idempotence gives the up-to-scalar physical-trace
-    relation]
+        relation]
     \label{thm:mpo_source_zcl_of_physical_trace_idempotent}
     \lean{MPOTensor.isSourceZCL_of_physTraceTransfer_sq}
     \leanok
@@ -73,7 +73,7 @@
 \end{proof}
 
 \begin{align}
-    \mathcal T_M&=\mathcal T_M^2.
+    \mathcal T_M & =\mathcal T_M^2.
     \notag
 \end{align}
 \begin{center}
@@ -86,12 +86,12 @@
     % (virtual-west=1 | virtual-east=1 | physical-up=0 | physical-down=0).
     \tenkzkernel
     \begin{tenkz}[rows={wire}, cols=1, west=open, east=open, trace=physical,
-        physical=updown]
+            physical=updown]
         \tn[skin=mpo]{M}
     \end{tenkz}
     $ = $
     \begin{tenkz}[rows={wire}, cols=2, west=open, east=open, trace=physical,
-        physical=updown]
+            physical=updown]
         \tn[skin=mpo]{M} & \tn[skin=mpo]{M}
     \end{tenkz}
 \end{center}
@@ -115,8 +115,8 @@ Definition~\ref{def:mpo_source_zcl} permits the positive factor $\lambda$.
     $\mathcal T_M^2=\lambda\,\mathcal T_M$. Then
     \begin{align}
         (\lambda^{-1}\mathcal T_M)^2
-        &=\lambda^{-2}\mathcal T_M^2
-          =\lambda^{-1}\mathcal T_M.
+         & =\lambda^{-2}\mathcal T_M^2
+        =\lambda^{-1}\mathcal T_M.
         \notag
     \end{align}
 \end{proof}
@@ -129,7 +129,7 @@ Definition~\ref{def:mpo_source_zcl} permits the positive factor $\lambda$.
     An MPO tensor $M$ satisfies the doubled-index transfer condition when its
     completely positive transfer map is idempotent:
     \begin{align}
-        \E_M\circ\E_M&=\E_M.
+        \E_M\circ\E_M & =\E_M.
         \notag
     \end{align}
     % Gap documented in docs/paper-gaps/cpsv16_zcl_canonical_form_normalization.tex.
@@ -173,9 +173,9 @@ Definition~\ref{def:mpo_source_zcl} permits the positive factor $\lambda$.
     \leanok
     For every virtual matrix $X$, the one-site and two-site closures satisfy
     \begin{align}
-        \tr M_1(X)&=\tr(\mathcal T_M X),
-        \notag\\
-        \tr M_2(X)&=\tr(\mathcal T_M^2 X).
+        \tr M_1(X) & =\tr(\mathcal T_M X),
+        \notag                               \\
+        \tr M_2(X) & =\tr(\mathcal T_M^2 X).
         \notag
     \end{align}
     Write $\Phi$ for the one-to-two trace-preserving map $\mathcal T$ of
@@ -184,10 +184,10 @@ Definition~\ref{def:mpo_source_zcl} permits the positive factor $\lambda$.
     $\Phi[M_1(X)]=M_2(X)$, and hence
     \begin{align}
         \tr(\mathcal T_M^2 X)
-        &=\tr M_2(X)
-          =\tr\Phi[M_1(X)]
-          =\tr M_1(X)
-          =\tr(\mathcal T_M X).
+         & =\tr M_2(X)
+        =\tr\Phi[M_1(X)]
+        =\tr M_1(X)
+        =\tr(\mathcal T_M X).
         \notag
     \end{align}
     Nondegeneracy of the trace pairing now gives
@@ -195,57 +195,57 @@ Definition~\ref{def:mpo_source_zcl} permits the positive factor $\lambda$.
 \end{proof}
 
 \begin{theorem}[An idempotent physical-trace transfer without fixed-tensor
-    renormalization maps]
+        renormalization maps]
     \label{thm:kato_deformed_mpdo_fixed_tensor_obstruction}
     \lean{MPOTensor.KatoDeformedRFPObstruction.pauliZ,
-      MPOTensor.KatoDeformedRFPObstruction.siteSign,
-      MPOTensor.KatoDeformedRFPObstruction.tensor,
-      MPOTensor.KatoDeformedRFPObstruction.configurationSign,
-      MPOTensor.KatoDeformedRFPObstruction.mpo_tensor_eq_diagonal,
-      MPOTensor.KatoDeformedRFPObstruction.tensor_isMPDO,
-      MPOTensor.KatoDeformedRFPObstruction.trace_mpo_tensor,
-      MPOTensor.KatoDeformedRFPObstruction.physTraceTransfer_tensor,
-      MPOTensor.KatoDeformedRFPObstruction.%
+        MPOTensor.KatoDeformedRFPObstruction.siteSign,
+        MPOTensor.KatoDeformedRFPObstruction.tensor,
+        MPOTensor.KatoDeformedRFPObstruction.configurationSign,
+        MPOTensor.KatoDeformedRFPObstruction.mpo_tensor_eq_diagonal,
+        MPOTensor.KatoDeformedRFPObstruction.tensor_isMPDO,
+        MPOTensor.KatoDeformedRFPObstruction.trace_mpo_tensor,
+        MPOTensor.KatoDeformedRFPObstruction.physTraceTransfer_tensor,
+        MPOTensor.KatoDeformedRFPObstruction.%
         physTraceTransfer_tensor_idempotent,
-      MPOTensor.KatoDeformedRFPObstruction.physClose1_tensor,
-      MPOTensor.KatoDeformedRFPObstruction.physClose2_tensor,
-      MPOTensor.KatoDeformedRFPObstruction.obstructionBoundary,
-      MPOTensor.KatoDeformedRFPObstruction.%
+        MPOTensor.KatoDeformedRFPObstruction.physClose1_tensor,
+        MPOTensor.KatoDeformedRFPObstruction.physClose2_tensor,
+        MPOTensor.KatoDeformedRFPObstruction.obstructionBoundary,
+        MPOTensor.KatoDeformedRFPObstruction.%
         physClose1_obstructionBoundary,
-      MPOTensor.KatoDeformedRFPObstruction.%
+        MPOTensor.KatoDeformedRFPObstruction.%
         physClose2_obstructionBoundary,
-      MPOTensor.KatoDeformedRFPObstruction.%
+        MPOTensor.KatoDeformedRFPObstruction.%
         physClose2_obstructionBoundary_posSemidef,
-      MPOTensor.KatoDeformedRFPObstruction.%
+        MPOTensor.KatoDeformedRFPObstruction.%
         physClose1_obstructionBoundary_not_posSemidef,
-      MPOTensor.KatoDeformedRFPObstruction.tensor_not_isRFPViaTS}
+        MPOTensor.KatoDeformedRFPObstruction.tensor_not_isRFPViaTS}
     \leanok
     \uses{def:mpdo, def:phys_close, def:mpo_physical_trace_transfer, def:is_rfp_via_ts}
     Let $Z=\operatorname{diag}(1,-1)$ and let $K$ be the bond-two MPO tensor
     whose nonzero physical letters are
     \begin{align}
-        K^{00}&=\operatorname{diag}(1/2,1/4), &
-        K^{11}&=\operatorname{diag}(1/2,-1/4).
+        K^{00} & =\operatorname{diag}(1/2,1/4),  &
+        K^{11} & =\operatorname{diag}(1/2,-1/4).
         \notag
     \end{align}
     For every $N\geq1$, its closed operator is
     \begin{align}
-        \rho_N(K)&=2^{-N}I+4^{-N}Z^{\otimes N}\geq0, &
-        \tr\rho_N(K)&=1.
+        \rho_N(K)    & =2^{-N}I+4^{-N}Z^{\otimes N}\geq0, &
+        \tr\rho_N(K) & =1.
         \notag
     \end{align}
     Its physical-trace transfer is
     \begin{align}
-        \mathcal T_K&=\operatorname{diag}(1,0), &
-        \mathcal T_K^2&=\mathcal T_K.
+        \mathcal T_K   & =\operatorname{diag}(1,0), &
+        \mathcal T_K^2 & =\mathcal T_K.
         \notag
     \end{align}
     For every virtual matrix $X$, the physical closures satisfy
     \begin{align}
-        K_1(X)&=\frac{X_{00}}2I+\frac{X_{11}}4Z,
-        \notag\\
-        K_2(X)&=\frac{X_{00}}4I\otimes I
-          +\frac{X_{11}}{16}Z\otimes Z.
+        K_1(X) & =\frac{X_{00}}2I+\frac{X_{11}}4Z,
+        \notag                                     \\
+        K_2(X) & =\frac{X_{00}}4I\otimes I
+        +\frac{X_{11}}{16}Z\otimes Z.
         \notag
     \end{align}
     Nevertheless, $K$ is not a renormalization fixed point in the sense of
@@ -280,9 +280,9 @@ Definition~\ref{def:mpo_source_zcl} permits the positive factor $\lambda$.
     Direct contraction with a virtual matrix $X$ gives the two closure
     formulas. Set $X_* = \operatorname{diag}(2,8)$. Then
     \begin{align}
-        K_2(X_*)&=\frac12(I\otimes I+Z\otimes Z)\geq0,
-        \notag\\
-        K_1(X_*)&=I+2Z=\operatorname{diag}(3,-1)\not\geq0.
+        K_2(X_*) & =\frac12(I\otimes I+Z\otimes Z)\geq0,
+        \notag                                               \\
+        K_1(X_*) & =I+2Z=\operatorname{diag}(3,-1)\not\geq0.
         \notag
     \end{align}
     If the coarse-graining channel $\mathcal S$ of
@@ -292,13 +292,13 @@ Definition~\ref{def:mpo_source_zcl} permits the positive factor $\lambda$.
 \end{proof}
 
 \begin{theorem}[A canonical-form, area-law-saturating MPDO without
-    fixed-tensor renormalization maps]
+        fixed-tensor renormalization maps]
     \label{thm:kato_deformed_mpdo_cf_sal_capstone}
     \lean{MPOTensor.KatoDeformedRFPObstruction.%
-      tensor_toMPSTensor_isCPSVCanonicalForm,
-      MPOTensor.KatoDeformedRFPObstruction.tensor_isSAL,
-      MPOTensor.KatoDeformedRFPObstruction.%
-      exists_isCPSVCanonicalForm_isMPDO_idempotent_isSAL_not_isRFPViaTS}
+        tensor_toMPSTensor_isCPSVCanonicalForm,
+        MPOTensor.KatoDeformedRFPObstruction.tensor_isSAL,
+        MPOTensor.KatoDeformedRFPObstruction.%
+        exists_isCPSVCanonicalForm_isMPDO_idempotent_isSAL_not_isRFPViaTS}
     \leanok
     \uses{thm:kato_deformed_mpdo_fixed_tensor_obstruction, def:mpdo, def:mpo_physical_trace_transfer, def:is_rfp_via_ts, def:is_sal, def:cpsv_canonical_form}
     Let $K$ be the bond-two MPO tensor of
@@ -309,24 +309,24 @@ Definition~\ref{def:mpo_source_zcl} permits the positive factor $\lambda$.
     $A_K^{(i,j)}=\mu_0A_0^{(i,j)}\oplus\mu_1A_1^{(i,j)}$ for
     $i,j\in\{0,1\}$, with weights and bond-one normal tensors
     \begin{align}
-        \mu_0&=\frac1{\sqrt2}, &
-        \mu_1&=\frac1{2\sqrt2},
-        \notag\\
-        A_0^{(i,j)}&=\frac{\delta_{ij}}{\sqrt2}, &
-        A_1^{(i,j)}&=(-1)^i\,\frac{\delta_{ij}}{\sqrt2}.
+        \mu_0       & =\frac1{\sqrt2},                     &
+        \mu_1       & =\frac1{2\sqrt2},
+        \notag                                               \\
+        A_0^{(i,j)} & =\frac{\delta_{ij}}{\sqrt2},         &
+        A_1^{(i,j)} & =(-1)^i\,\frac{\delta_{ij}}{\sqrt2}.
         \notag
     \end{align}
     Moreover, $K$ saturates the area law: for every $N\geq2$ and every
     $1\leq L<N$, the reduced state of the first $L$ sites is maximally
     mixed,
     \begin{align}
-        \rho_L^{(N)}(K)&=2^{-L}I, &
-        S_L^{(N)}(K)&=L\log2.
+        \rho_L^{(N)}(K) & =2^{-L}I, &
+        S_L^{(N)}(K)    & =L\log2.
         \notag
     \end{align}
     Hence the mutual information
     $I_L^{(N)}=S_L^{(N)}(K)+S_{N-L}^{(N)}(K)-S_N^{(N)}(K)
-    =N\log2-S_N^{(N)}(K)$ is constant in $L$, giving
+        =N\log2-S_N^{(N)}(K)$ is constant in $L$, giving
     $I_1=I_2=\cdots=I_{\lfloor N/2\rfloor}$.
     Consequently, there is a bond-two MPO tensor whose doubled-index MPS
     tensor is in literal CPSV canonical form, which generates an MPDO, whose
@@ -347,8 +347,8 @@ Definition~\ref{def:mpo_source_zcl} permits the positive factor $\lambda$.
     Every letter of $A_K$ is diagonal and the block letters are scalars, so
     the weighted direct sum is the entrywise check
     \begin{align}
-        \mu_0A_0^{(i,i)}&=\frac12, &
-        \mu_1A_1^{(i,i)}&=\frac{(-1)^i}4,
+        \mu_0A_0^{(i,i)} & =\frac12,        &
+        \mu_1A_1^{(i,i)} & =\frac{(-1)^i}4,
         \notag
     \end{align}
     whose right-hand sides are the two virtual diagonal entries of $K^{ii}$;
@@ -379,7 +379,7 @@ Definition~\ref{def:mpo_source_zcl} permits the positive factor $\lambda$.
 \end{proof}
 
 \begin{theorem}[Renormalization fixed points satisfy the up-to-scalar
-    physical-trace relation]
+        physical-trace relation]
     \label{thm:rfp_via_ts_source_zcl}
     \lean{MPOTensor.isSourceZCL_of_isRFPViaTS}
     \leanok
@@ -418,17 +418,17 @@ Definition~\ref{def:mpo_source_zcl} permits the positive factor $\lambda$.
     defined by
     \begin{align}
         [\rho^{(N)}_p(A)]_{\sigma,\tau}
-        &=
+         & =
         \sum_{\kappa}
         \psi_A(\sigma,\kappa)
         \overline{\psi_A(\tau,\kappa)},
-        \notag\\
+        \notag \\
         \psi_A(\sigma,\kappa)
-        &=
+         & =
         \tr\!\left(A^{(\sigma_0,\kappa_0)}
-            A^{(\sigma_1,\kappa_1)}
-            \cdots
-            A^{(\sigma_{N-1},\kappa_{N-1})}\right).
+        A^{(\sigma_1,\kappa_1)}
+        \cdots
+        A^{(\sigma_{N-1},\kappa_{N-1})}\right).
         \notag
     \end{align}
     This is the coefficient form of the ancillary trace in
@@ -443,7 +443,7 @@ Definition~\ref{def:mpo_source_zcl} permits the positive factor $\lambda$.
     For a matrix $X$ on the spin--ancilla space, the ancillary trace map is
     \begin{align}
         [\tr_a(X)]_{ij}
-        &=
+         & =
         \sum_k X_{(i,k),(j,k)}.
         \notag
     \end{align}
@@ -477,7 +477,7 @@ Definition~\ref{def:mpo_source_zcl} permits the positive factor $\lambda$.
     Equivalently, for every positive length $N$,
     \begin{align}
         \rho^{(N)}(M)
-        &=
+         & =
         \tr_a
         \bigl(        \ketbra{\Psi^{(N)}(A)}{\Psi^{(N)}(A)}
         \bigr),
@@ -538,7 +538,7 @@ Definition~\ref{def:mpo_source_zcl} permits the positive factor $\lambda$.
     such that, for every positive length $N$,
     \begin{align}
         \rho^{(N)}(M)
-        &=
+         & =
         \tr_a
         \bigl(        \ketbra{\Psi^{(N)}(A)}{\Psi^{(N)}(A)}
         \bigr),
@@ -566,7 +566,7 @@ Definition~\ref{def:mpo_source_zcl} permits the positive factor $\lambda$.
 \begin{lemma}[Forgetting the recorded spin reduction]
     \label{lem:mpdo_prfp_trace_preserving_spin_reduction_iff}
     \lean{MPOTensor.IsPRFPWithTracePreservingSpinReduction.isPRFP,
-      MPOTensor.IsPRFP.withTracePreservingSpinReduction}
+        MPOTensor.IsPRFP.withTracePreservingSpinReduction}
     \leanok
     \uses{def:mpdo_prfp_trace_preserving_spin_reduction}
     Recording the trace-preserving ancillary reduction does not change the
@@ -590,7 +590,7 @@ Definition~\ref{def:mpo_source_zcl} permits the positive factor $\lambda$.
     Thus
     \begin{align}
         M^{ij}
-        &=
+         & =
         \left(\sum_{k} A^{(i,k)} \otimes
         \overline{A^{(j,k)}}\right)_{e,e}.
         \notag
@@ -663,8 +663,8 @@ Definition~\ref{def:mpo_source_zcl} permits the positive factor $\lambda$.
     For the maximally mixed witness $M_{\mathrm w}$, closing the ket and bra
     physical legs gives
     $\mathcal T_{M_{\mathrm w}}
-      =M_{\mathrm w}^{00}+M_{\mathrm w}^{11}
-      =\tfrac12+\tfrac12=1$.
+        =M_{\mathrm w}^{00}+M_{\mathrm w}^{11}
+        =\tfrac12+\tfrac12=1$.
 \end{lemma}
 
 \begin{proof}
@@ -674,7 +674,7 @@ Definition~\ref{def:mpo_source_zcl} permits the positive factor $\lambda$.
 \end{proof}
 
 \begin{theorem}[The maximally mixed witness satisfies the nonzero
-    physical-trace relation]
+        physical-trace relation]
     \label{thm:witness_source_zcl}
     \lean{MPOTensor.isSourceZCL_witnessM}
     \leanok
@@ -698,7 +698,7 @@ Definition~\ref{def:mpo_source_zcl} permits the positive factor $\lambda$.
     tensor $A$ through a bond identification $e$:
     \begin{align}
         M^{ij}
-        &=
+         & =
         \left(\sum_k A^{(i,k)}\otimes
         \overline{A^{(j,k)}}\right)_{e,e}.
         \notag
@@ -715,25 +715,25 @@ Definition~\ref{def:mpo_source_zcl} permits the positive factor $\lambda$.
     two Kronecker factors, and let $K$ denote the same Kronecker sum in the
     physical ordering. The local contraction gives
     \begin{align}
-        \mathcal T_M&=K_e,
-        \notag\\
-        K&=(K')_s.
+        \mathcal T_M & =K_e,
+        \notag                  \\
+        K            & =(K')_s.
         \notag
     \end{align}
     Since both reindexings are bijective and commute with matrix
     multiplication,
     \begin{align}
         (K')^2=K'
-        \quad&\Longleftrightarrow\quad
+        \quad & \Longleftrightarrow\quad
         \mathcal T_M^2=\mathcal T_M.
         \notag
     \end{align}
     Injectivity of the transfer-matrix representation gives
     \begin{align}
         (K')^2=K'
-        \quad&\Longleftrightarrow\quad
+        \quad & \Longleftrightarrow\quad
         \E_{\widehat A}\circ\E_{\widehat A}
-          =\E_{\widehat A}.
+        =\E_{\widehat A}.
         \notag
     \end{align}
 \end{proof}
@@ -765,7 +765,7 @@ Definition~\ref{def:mpo_source_zcl} permits the positive factor $\lambda$.
     it has a local purification and its physical-trace transfer is idempotent:
     \begin{align}
         \mathrm{LocalPRFP}(M)
-        \quad&\Longleftrightarrow\quad
+        \quad & \Longleftrightarrow\quad
         \mathrm{LPDO}(M)\ \text{and}\ \mathcal T_M^2=\mathcal T_M.
         \notag
     \end{align}
@@ -787,9 +787,9 @@ Definition~\ref{def:mpo_source_zcl} permits the positive factor $\lambda$.
     and only if it is a local purification density operator
     (Definition~\ref{def:lpdo}) and
     \begin{align}
-        \mathcal T_M&\ne0,
-        \notag\\
-        \mathcal T_M^2&=\mathcal T_M.
+        \mathcal T_M   & \ne0,
+        \notag                          \\
+        \mathcal T_M^2 & =\mathcal T_M.
         \notag
     \end{align}
     This is the normalized, nonzero structural characterization used in the
@@ -804,7 +804,7 @@ Definition~\ref{def:mpo_source_zcl} permits the positive factor $\lambda$.
 \end{proof}
 
 \begin{theorem}[Local purification RFP with nonzero physical-trace transfer
-    satisfies the up-to-scalar relation]
+        satisfies the up-to-scalar relation]
     \label{thm:source_zcl_of_local_purification_rfp}
     \lean{MPOTensor.isSourceZCL_of_isLocalPurificationRFP}
     \leanok
@@ -814,17 +814,17 @@ Definition~\ref{def:mpo_source_zcl} permits the positive factor $\lambda$.
     condition. If the physical-trace transfer $\mathcal T_M=\sum_i M^{ii}$ is
     nonzero, then $M$ satisfies the nonzero up-to-scalar physical-trace
     relation.
-% Scope restriction: this is a local analogue (predicate
-% \ref{def:is_local_purification_rfp}) of the forward implication of the source
-% theorem (arXiv:1606.00608, lines 775--786), not that implication itself; it
-% does not cover a purification renormalization fixed point known only through
-% the global purification equation and the definition at arXiv:1606.00608,
-% line 758.
-% Normalization restriction: the unconditional implication fails -- the zero
-% tensor in bond dimension one is a counterexample -- and the hypothesis
-% $\mathcal T_M \neq 0$ reflects the source purification renormalization fixed
-% point being a normalized fixed point with leading eigenvalue 1.
-% See docs/paper-gaps/cpsv16_purification_rfp_definition.tex.
+    % Scope restriction: this is a local analogue (predicate
+    % \ref{def:is_local_purification_rfp}) of the forward implication of the source
+    % theorem (arXiv:1606.00608, lines 775--786), not that implication itself; it
+    % does not cover a purification renormalization fixed point known only through
+    % the global purification equation and the definition at arXiv:1606.00608,
+    % line 758.
+    % Normalization restriction: the unconditional implication fails -- the zero
+    % tensor in bond dimension one is a counterexample -- and the hypothesis
+    % $\mathcal T_M \neq 0$ reflects the source purification renormalization fixed
+    % point being a normalized fixed point with leading eigenvalue 1.
+    % See docs/paper-gaps/cpsv16_purification_rfp_definition.tex.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -836,7 +836,7 @@ Definition~\ref{def:mpo_source_zcl} permits the positive factor $\lambda$.
 \end{proof}
 
 \begin{theorem}[A nondegenerate purification RFP satisfies the nonzero
-    physical-trace relation]
+        physical-trace relation]
     \label{thm:nondegenerate_prfp_source_zcl}
     \lean{MPOTensor.IsNondegeneratePRFP.isSourceZCL}
     \leanok
@@ -862,7 +862,7 @@ Definition~\ref{def:mpo_source_zcl} permits the positive factor $\lambda$.
     through a bond identification $e$, so that
     \begin{align}
         M^{ij}
-        &=
+         & =
         \left(\sum_{k} A^{(i,k)}\otimes
         \overline{A^{(j,k)}}\right)_{e,e}.
         \notag
@@ -882,10 +882,10 @@ Definition~\ref{def:mpo_source_zcl} permits the positive factor $\lambda$.
     \begin{align}
         \prod_{l=0}^{N-1}
         \left(\sum_{k}
-            A^{(\sigma_l,k)}
-            \otimes
-            \overline{A^{(\tau_l,k)}}\right)
-        &=
+        A^{(\sigma_l,k)}
+        \otimes
+        \overline{A^{(\tau_l,k)}}\right)
+         & =
         \sum_{\kappa\colon[N]\to[d_K]}
         \left(\prod_l A^{(\sigma_l,\kappa_l)}\right)
         \otimes
@@ -957,7 +957,7 @@ Definition~\ref{def:mpo_source_zcl} permits the positive factor $\lambda$.
 \end{theorem}
 
 \begin{theorem}[The bare global PRFP predicate does not imply the nonzero
-    physical-trace relation]
+        physical-trace relation]
     \label{thm:global_prfp_not_source_zcl}
     \lean{MPOTensor.exists_isPRFP_not_isSourceZCL}
     \leanok
@@ -977,7 +977,7 @@ Definition~\ref{def:mpo_source_zcl} permits the positive factor $\lambda$.
 \end{proof}
 
 \begin{theorem}[A nonzero global PRFP need not satisfy the up-to-scalar
-    physical-trace relation]
+        physical-trace relation]
     \label{thm:nonzero_global_prfp_not_source_zcl}
     \lean{MPOTensor.exists_isPRFP_isMPDO_physTraceTransfer_ne_zero_not_isSourceZCL}
     \leanok
@@ -991,11 +991,11 @@ Definition~\ref{def:mpo_source_zcl} permits the positive factor $\lambda$.
     \leanok
     Take one physical state and bond dimension three, with the only tensor entry
     \begin{align}
-        Q&=
+        Q & =
         \begin{pmatrix}
-            1&0&0\\
-            0&0&1\\
-            0&0&0
+            1 & 0 & 0 \\
+            0 & 0 & 1 \\
+            0 & 0 & 0
         \end{pmatrix}.
         \notag
     \end{align}

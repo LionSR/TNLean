@@ -10,13 +10,13 @@
     family constitutes explicit neighboring $\eta$-data. The source obtains
     the positivity from the projected chain identity: writing
     $\tilde\sigma
-    = U^{\dagger\otimes N} \sigma^{(N)}({\cal K})\,U^{\otimes N}$
+        = U^{\dagger\otimes N} \sigma^{(N)}({\cal K})\,U^{\otimes N}$
     for the $N$-site operator in the sector basis and $Q_k$ for the
     projector onto the $k$-th sector of the physical splitting, every
     cyclic sector assignment $k_1,\ldots,k_N$ (with $k_{N+1}=k_1$) satisfies
     \begin{align}
         0
-        &\leq
+         & \leq
         [Q_{k_1}\otimes\cdots\otimes Q_{k_N}]
         \tilde\sigma
         [Q_{k_1}\otimes\cdots\otimes Q_{k_N}]
@@ -47,7 +47,7 @@
     tensors:
     \begin{align}
         T_{k,h}
-        &=\tr(\eta_{k,h})=(r_k|l_h).
+         & =\tr(\eta_{k,h})=(r_k|l_h).
         \notag
     \end{align}
 \end{theorem}
@@ -62,7 +62,7 @@
 \begin{theorem}[Primitivity from returns of lengths two and three]%
     \label{thm:matrix_primitive_of_two_three_returns}
     \lean{Matrix.IsIrreducible.%
-      isPrimitive_of_pow_two_diagonal_pos_of_pow_three_diagonal_pos}
+        isPrimitive_of_pow_two_diagonal_pos_of_pow_three_diagonal_pos}
     \leanok
     Let $T$ be a non-negative irreducible matrix on a finite index set. If
     $(T^2)_{k,k}>0$ and $(T^3)_{k,k}>0$ for every index $k$, then $T$ is
@@ -81,10 +81,10 @@
 \begin{definition}[Nonzero-weight sector trace matrix]%
     \label{def:mpdo_active_sector_trace_matrix}
     \lean{MPOTensor.PhysicalSectorFactorization.ActiveSector,
-      MPOTensor.PhysicalSectorFactorization.ActiveSectorEntryIndex}
+        MPOTensor.PhysicalSectorFactorization.ActiveSectorEntryIndex}
     \lean{MPOTensor.PhysicalSectorFactorization.activeSectorOneSiteMatrixFamily,
-      MPOTensor.PhysicalSectorFactorization.activeSectorSet,
-      MPOTensor.PhysicalSectorFactorization.activeSectorOneSiteSpace}
+        MPOTensor.PhysicalSectorFactorization.activeSectorSet,
+        MPOTensor.PhysicalSectorFactorization.activeSectorOneSiteSpace}
     \lean{MPOTensor.PhysicalSectorFactorization.activeSectorTraceMatrix}
     \leanok
     \uses{def:mpdo_one_site_sector_matrix_space, def:mpdo_minimal_neighboring_operator}
@@ -92,16 +92,16 @@
     and their spaces on $I_*$ are
     \begin{align}
         A_{k;x,y},
-        \notag\\
+        \notag                        \\
         {\cal A}_S
-        &=\spn\{A_{k;x,y}:k\in S\},
+         & =\spn\{A_{k;x,y}:k\in S\},
         \qquad S\subseteq I_*.
         \notag
     \end{align}
     The real trace matrix on this index set is
     \begin{align}
         T^*_{k,h}
-        &=\re\tr(\eta_{k,h}),
+         & =\re\tr(\eta_{k,h}),
         \qquad k,h\in I_*.
         \notag
     \end{align}
@@ -112,9 +112,9 @@
 \begin{theorem}[Identification and spanning of active one-site matrices]%
     \label{thm:mpdo_active_one_site_matrix_spanning}
     \lean{MPOTensor.PhysicalSectorFactorization.%
-      oneSiteSectorMatrix_eq_sectorVirtualMatrix}
+        oneSiteSectorMatrix_eq_sectorVirtualMatrix}
     \lean{MPOTensor.PhysicalSectorFactorization.%
-      activeSectorOneSiteMatrixFamily_span_eq_top}
+        activeSectorOneSiteMatrixFamily_span_eq_top}
     \leanok
     \uses{def:mpdo_active_sector_trace_matrix, thm:mpdo_sector_virtual_matrix_spanning}
     For every sector entry, the one-site matrix used in the directed-cut
@@ -127,10 +127,10 @@
 \begin{theorem}[Complementary active-sector spaces]%
     \label{thm:mpdo_active_sector_complementary_spaces}
     \lean{MPOTensor.PhysicalSectorFactorization.%
-      activeSectorOneSiteSpace_sup_compl_eq_top}
+        activeSectorOneSiteSpace_sup_compl_eq_top}
     \lean{MPOTensor.PhysicalSectorFactorization.activeSectorOneSiteSpace_ne_bot}
     \lean{MPOTensor.PhysicalSectorFactorization.%
-      mul_eq_zero_of_mem_activeSectorOneSiteSpace}
+        mul_eq_zero_of_mem_activeSectorOneSiteSpace}
     \leanok
     \uses{def:mpdo_active_sector_trace_matrix, thm:mpdo_active_one_site_matrix_spanning, thm:mpdo_directed_cut_one_site_spaces}
     Suppose that the active one-site matrices span $\MN{D}$ and each active
@@ -144,9 +144,9 @@
 \begin{theorem}[Strong connectivity of the active neighboring support]%
     \label{thm:mpdo_active_neighboring_support_strongly_connected}
     \lean{MPOTensor.PhysicalSectorFactorization.%
-      activeSector_reflTransGen_neighboringOperator_ne_zero}
+        activeSector_reflTransGen_neighboringOperator_ne_zero}
     \lean{MPOTensor.PhysicalSectorFactorization.%
-      exists_active_neighboringOperator_ne_zero}
+        exists_active_neighboringOperator_ne_zero}
     \leanok
     \uses{thm:mpdo_active_sector_complementary_spaces, lem:matrix_one_sided_product_obstruction}
     Suppose that the active one-site matrices span $\MN{D}$ and each active
@@ -165,7 +165,7 @@
     \centering
     \begin{align}
         P_j\mathcal K_iP_{j^\prime}
-        &=0\quad\text{unless }i=j=j^\prime.
+         & =0\quad\text{unless }i=j=j^\prime.
         \notag
     \end{align}
     \begin{center}
@@ -227,16 +227,16 @@
     \label{thm:mpdo_active_sector_two_step_return}
     \lean{MPOTensor.PhysicalSectorFactorization.exists_active_two_cycle}
     \lean{MPOTensor.PhysicalSectorFactorization.%
-      activeSectorTraceMatrix_pow_two_diag_pos}
+        activeSectorTraceMatrix_pow_two_diag_pos}
     \leanok
     \uses{thm:mpdo_active_one_site_matrix_spanning, thm:mpdo_active_trace_matrix_positive_entries}
     Suppose that the active one-site matrices span $\MN{D}$ and each active
     sector contains a nonzero such matrix. For every $k\in I_*$ there is an
     $h\in I_*$ such that
     \begin{align}
-        \eta_{k,h}&\ne0,
-        \notag\\
-        \eta_{h,k}&\ne0.
+        \eta_{k,h} & \ne0,
+        \notag             \\
+        \eta_{h,k} & \ne0.
         \notag
     \end{align}
     If the neighboring operators are positive semidefinite, then
@@ -260,9 +260,9 @@
 \begin{theorem}[Three-step returns and a common positive power]%
     \label{thm:mpdo_active_sector_three_step_return_and_primitivity}
     \lean{MPOTensor.PhysicalSectorFactorization.%
-      activeSectorTraceMatrix_pow_three_diag_pos}
+        activeSectorTraceMatrix_pow_three_diag_pos}
     \lean{MPOTensor.PhysicalSectorFactorization.%
-      activeSectorTraceMatrix_isPrimitive}
+        activeSectorTraceMatrix_isPrimitive}
     \leanok
     \uses{thm:matrix_primitive_of_two_three_returns, thm:mpdo_active_sector_two_step_return, thm:mpdo_active_trace_matrix_irreducible, thm:mpdo_sector_support_triangle_closure}
     Suppose that the neighboring operators are positive semidefinite, the
@@ -284,7 +284,7 @@
     \label{thm:mpdo_inverse_map_active_sector_witnesses}
     \lean{MPOTensor.zeroWeightReparameterized_sectorVirtualMatrix_eq_zero}
     \lean{MPOTensor.%
-      exists_rephased_inverseMap_activeSectorTraceMatrix_primitivity_witnesses}
+        exists_rephased_inverseMap_activeSectorTraceMatrix_primitivity_witnesses}
     \leanok
     \uses{def:mpdo, def:injective, def:mpdo_eta_structure, def:mpdo_three_site_closure, def:mpdo_zero_weight_reparameterized_inverse_map_factorization}
     Let ${\cal K}$ be an injective tensor generating MPDOs, let $R$ close a
@@ -317,9 +317,9 @@
 \begin{theorem}[Primitivity of the active sector trace matrix]%
     \label{thm:mpdo_sector_trace_matrix_primitive}
     \lean{MPOTensor.%
-      exists_rephased_inverseMap_activeSectorTraceMatrix_isPrimitive}
+        exists_rephased_inverseMap_activeSectorTraceMatrix_isPrimitive}
     \lean{MPOTensor.%
-      exists_positive_physicalSectorFactorization_activeSectorTraceMatrix_isPrimitive_of_isSAL}
+        exists_positive_physicalSectorFactorization_activeSectorTraceMatrix_isPrimitive_of_isSAL}
     \leanok
     \uses{def:mpdo, def:injective, def:is_sal, def:mpdo_active_sector_trace_matrix}
     Let ${\cal K}$ be an injective tensor that generates MPDOs and satisfies
@@ -330,7 +330,7 @@
     non-negative, and the matrix
     \begin{align}
         T^*_{k,h}
-        &=\re\tr(\eta_{k,h})
+         & =\re\tr(\eta_{k,h})
         \notag
     \end{align}
     is primitive. Zero-weight summands remain in the physical direct sum but
@@ -358,11 +358,11 @@
 \begin{theorem}[Zero-correlation-length relations on the primitive active trace matrix]%
     \label{thm:mpdo_active_trace_matrix_zcl_relations}
     \lean{MPOTensor.PhysicalSectorFactorization.%
-      activeSectorTraceMatrix_normalized_relations_of_isSourceZCL}
+        activeSectorTraceMatrix_normalized_relations_of_isSourceZCL}
     \lean{MPOTensor.%
-      exists_rephased_inverseMap_activeSectorTraceMatrix_normalized_relations}
+        exists_rephased_inverseMap_activeSectorTraceMatrix_normalized_relations}
     \lean{MPOTensor.%
-      exists_activeTraceMatrix_relations_of_isSAL_of_isSourceZCL}
+        exists_activeTraceMatrix_relations_of_isSAL_of_isSourceZCL}
     \leanok
     \uses{def:mpdo_active_sector_trace_matrix, thm:mpdo_sector_trace_matrix_primitive, thm:mpdo_closed_sector_pairing_normalized_idempotent}
     Let ${\cal K}$ be injective and suppose that it satisfies SAL and source
@@ -371,7 +371,7 @@
     neighboring operators $\eta_{k,h}$ such that the active trace matrix
     \begin{align}
         T^*_{k,h}
-        &=\re\tr(\eta_{k,h}),
+         & =\re\tr(\eta_{k,h}),
         \qquad k,h\in I_*:=\{j:p_j\ne0\},
         \notag
     \end{align}
@@ -406,7 +406,7 @@
     If an MPO tensor ${\cal K}$ satisfies SAL, then its physical-trace
     transfer is nonzero:
     \begin{align}
-        \mathcal T_{\cal K}&\ne0. \notag
+        \mathcal T_{\cal K} & \ne0. \notag
     \end{align}
 \end{lemma}
 
@@ -424,7 +424,7 @@
     \uses{def:is_sal, def:mpo_physical_trace_transfer, def:mpo_source_zcl}
     If ${\cal K}$ satisfies SAL and
     \begin{align}
-        \mathcal T_{\cal K}^2&=\mathcal T_{\cal K}, \notag
+        \mathcal T_{\cal K}^2 & =\mathcal T_{\cal K}, \notag
     \end{align}
     then ${\cal K}$ has source zero correlation length.
 \end{theorem}
@@ -438,12 +438,12 @@
 \begin{theorem}[Literal-ZCL specialization of the active trace relations]%
     \label{thm:mpdo_active_trace_matrix_literal_zcl_relations}
     \lean{MPOTensor.%
-      exists_activeTraceMatrix_relations_of_isSAL_of_literal_ZCL}
+        exists_activeTraceMatrix_relations_of_isSAL_of_literal_ZCL}
     \leanok
     \uses{def:injective, def:is_sal, def:mpo_physical_trace_transfer, def:mpdo_physical_sector_factorization, def:mpdo_active_sector_trace_matrix}
     Let ${\cal K}$ be injective and satisfy SAL and the literal identity
     \begin{align}
-        \mathcal T_{\cal K}^2&=\mathcal T_{\cal K}. \notag
+        \mathcal T_{\cal K}^2 & =\mathcal T_{\cal K}. \notag
     \end{align}
     Then ${\cal K}$ admits a physical-sector factorization, nonnegative
     weights of sum one, and positive semidefinite neighboring operators for
@@ -452,7 +452,7 @@
     $\widehat T^*=\lambda^{-1}T^*$ satisfies
     $(\widehat T^*)^2=(\widehat T^*)^3$ and, for every positive integer $N$,
     \begin{align}
-        \tr((\widehat T^*)^N)&=\tr(\widehat T^*). \notag
+        \tr((\widehat T^*)^N) & =\tr(\widehat T^*). \notag
     \end{align}
     No idempotence or rank-one conclusion is asserted.
 \end{theorem}
@@ -469,11 +469,11 @@
 \begin{theorem}[Virtual spanning does not force active-sector idempotence]
     \label{thm:mpdo_virtual_spanning_active_trace_counterexample}
     \lean{MPOTensor.ActiveSectorSpanningCounterexample.%
-      virtual_spanning_does_not_force_rectangular_remainder_zero}
+        virtual_spanning_does_not_force_rectangular_remainder_zero}
     \lean{MPOTensor.ActiveSectorSpanningCounterexample.%
-      physTraceTransfer_tensor}
+        physTraceTransfer_tensor}
     \lean{MPOTensor.ActiveSectorSpanningCounterexample.%
-      reindex_activeSectorTraceMatrix}
+        reindex_activeSectorTraceMatrix}
     \lean{MPOTensor.ActiveSectorSpanningCounterexample.factorization}
     \leanok
     \uses{def:mpdo_physical_sector_factorization, def:mpdo_active_sector_trace_matrix}
@@ -483,11 +483,11 @@
     length; its physical-trace transfer is idempotent; for every
     $k\in\{0,1,2,3\}$, the weights satisfy
     \begin{align}
-        p_k&=\frac14,
-        \notag\\
-        0&\leq p_k,
-        \notag\\
-        \sum_{k=0}^{3}p_k&=1;
+        p_k               & =\frac14,
+        \notag                        \\
+        0                 & \leq p_k,
+        \notag                        \\
+        \sum_{k=0}^{3}p_k & =1;
         \notag
     \end{align}
     its sector virtual matrices span $\MN{2}$; every neighboring operator is
@@ -502,17 +502,17 @@
     \leanok
     Take
     \begin{align}
-        L&=\begin{pmatrix}
-            \frac14&\frac14&\frac14&\frac14\\
-            1&-1&1&-1
-        \end{pmatrix},
-        \notag\\
-        Q&=\begin{pmatrix}
-            1&\frac18\\
-            1&\frac18\\
-            1&-\frac18\\
-            1&-\frac18
-        \end{pmatrix}.
+        L & =\begin{pmatrix}
+                 \frac14 & \frac14 & \frac14 & \frac14 \\
+                 1       & -1      & 1       & -1
+             \end{pmatrix},
+        \notag                                     \\
+        Q & =\begin{pmatrix}
+                 1 & \frac18  \\
+                 1 & \frac18  \\
+                 1 & -\frac18 \\
+                 1 & -\frac18
+             \end{pmatrix}.
         \notag
     \end{align}
     For each $k$, the $k$th sector virtual matrix is the outer product of the
@@ -527,18 +527,18 @@
     Direct multiplication gives
     \begin{align}
         LQ
-        &=\begin{pmatrix}
-            1&0\\
-            0&0
-        \end{pmatrix},
-        \notag\\
+         & =\begin{pmatrix}
+                1 & 0 \\
+                0 & 0
+            \end{pmatrix},
+        \notag                                    \\
         QL
-        &=\begin{pmatrix}
-            \frac38&\frac18&\frac38&\frac18\\
-            \frac38&\frac18&\frac38&\frac18\\
-            \frac18&\frac38&\frac18&\frac38\\
-            \frac18&\frac38&\frac18&\frac38
-        \end{pmatrix}.
+         & =\begin{pmatrix}
+                \frac38 & \frac18 & \frac38 & \frac18 \\
+                \frac38 & \frac18 & \frac38 & \frac18 \\
+                \frac18 & \frac38 & \frac18 & \frac38 \\
+                \frac18 & \frac38 & \frac18 & \frac38
+            \end{pmatrix}.
         \notag
     \end{align}
     Thus $LQ$ is idempotent, whereas every entry of $QL$ is strictly positive,
@@ -557,21 +557,21 @@
 \begin{theorem}[A one-sector factorization of the four-sector witness]
     \label{thm:mpdo_active_trace_witness_one_sector_factorization}
     \lean{MPOTensor.ActiveSectorSpanningCounterexample.oneSectorEquiv,
-      MPOTensor.ActiveSectorSpanningCounterexample.oneSectorSign,
-      MPOTensor.ActiveSectorSpanningCounterexample.oneSectorLeftTensor,
-      MPOTensor.ActiveSectorSpanningCounterexample.oneSectorRightTensor,
-      MPOTensor.ActiveSectorSpanningCounterexample.oneSectorLeftTensor_apply,
-      MPOTensor.ActiveSectorSpanningCounterexample.oneSectorRightTensor_apply,
-      MPOTensor.ActiveSectorSpanningCounterexample.oneSectorFactorization,
-      MPOTensor.ActiveSectorSpanningCounterexample.%
+        MPOTensor.ActiveSectorSpanningCounterexample.oneSectorSign,
+        MPOTensor.ActiveSectorSpanningCounterexample.oneSectorLeftTensor,
+        MPOTensor.ActiveSectorSpanningCounterexample.oneSectorRightTensor,
+        MPOTensor.ActiveSectorSpanningCounterexample.oneSectorLeftTensor_apply,
+        MPOTensor.ActiveSectorSpanningCounterexample.oneSectorRightTensor_apply,
+        MPOTensor.ActiveSectorSpanningCounterexample.oneSectorFactorization,
+        MPOTensor.ActiveSectorSpanningCounterexample.%
         oneSector_neighboringOperator_eq,
-      MPOTensor.ActiveSectorSpanningCounterexample.%
+        MPOTensor.ActiveSectorSpanningCounterexample.%
         oneSector_neighboringOperator_posSemidef,
-      MPOTensor.ActiveSectorSpanningCounterexample.%
+        MPOTensor.ActiveSectorSpanningCounterexample.%
         oneSector_neighboringOperator_trace,
-      MPOTensor.ActiveSectorSpanningCounterexample.%
+        MPOTensor.ActiveSectorSpanningCounterexample.%
         oneSectorNeighboringTraceFactorization,
-      MPOTensor.ActiveSectorSpanningCounterexample.%
+        MPOTensor.ActiveSectorSpanningCounterexample.%
         exists_oneSector_neighboringTraceFactorization}
     \leanok
     \uses{def:mpdo_physical_sector_factorization, def:mpdo_neighboring_trace_factorization, thm:mpdo_virtual_spanning_active_trace_counterexample, thm:mpdo_inverse_map_nonzero_rectangular_remainder}
@@ -581,14 +581,14 @@
     physical label as a pair $(x,y)\in\{0,1\}^2$ and put
     $Z=\operatorname{diag}(1,-1)$.  The left and right factors are
     \begin{align}
-        l_0&=\frac14 I, &l_1&=Z, \notag\\
-        r_0&=I, &r_1&=\frac18 Z. \notag
+        l_0 & =\frac14 I, & l_1 & =Z, \notag         \\
+        r_0 & =I,         & r_1 & =\frac18 Z. \notag
     \end{align}
     Its sole neighboring operator is
     \begin{align}
         \eta
-        &=I\otimes\frac14 I+\frac18 Z\otimes Z
-          =\operatorname{diag}\left(\frac38,\frac18,\frac18,\frac38\right).
+         & =I\otimes\frac14 I+\frac18 Z\otimes Z
+        =\operatorname{diag}\left(\frac38,\frac18,\frac18,\frac38\right).
         \notag
     \end{align}
     In particular, $\eta$ is positive semidefinite and $\tr(\eta)=1$.
@@ -616,28 +616,28 @@
     \lean{MPOTensor.PhysicalSectorFactorization.neighboringTraceMatrix}
     \lean{MPOTensor.PhysicalSectorFactorization.neighboringTraceMatrix_apply}
     \lean{MPOTensor.PhysicalSectorFactorization.%
-      trace_fourSiteNeighboringOperator}
+        trace_fourSiteNeighboringOperator}
     \lean{MPOTensor.PhysicalSectorFactorization.%
-      neighboringTraceMatrix_eq_pow_three_of_pairwise_coarsening}
+        neighboringTraceMatrix_eq_pow_three_of_pairwise_coarsening}
     \lean{MPOTensor.PhysicalSectorFactorization.%
-      neighboringTraceMatrix_eq_pow_three_of_pairwise_refinement}
+        neighboringTraceMatrix_eq_pow_three_of_pairwise_refinement}
     \leanok
     \uses{def:mpdo_physical_sector_factorization}
     Let $\eta_{k,h}$ be the neighboring operators of a physical-sector
     factorization, and define
     \begin{align}
         C_{k,h}
-        &=\tr(\eta_{k,h}),
-        \notag\\
+         & =\tr(\eta_{k,h}),
+        \notag               \\
         \Theta_{k,h}
-        &=\bigoplus_{l,m}
-          \eta_{k,l}\otimes\eta_{l,m}\otimes\eta_{m,h}.
+         & =\bigoplus_{l,m}
+        \eta_{k,l}\otimes\eta_{l,m}\otimes\eta_{m,h}.
         \notag
     \end{align}
     Then
     \begin{align}
         \tr(\Theta_{k,h})
-        &=(C^3)_{k,h}.
+         & =(C^3)_{k,h}.
         \notag
     \end{align}
     Suppose that, for every fixed pair $(k,h)$, there is either a
@@ -647,7 +647,7 @@
     $\eta_{k,h}$ to $\Theta_{k,h}$.  If the same direction is chosen for all
     pairs, then
     \begin{align}
-        C&=C^3.
+        C & =C^3.
         \notag
     \end{align}
 \end{theorem}
@@ -658,8 +658,8 @@
     sums give
     \begin{align}
         \tr(\Theta_{k,h})
-        &=\sum_{l,m}C_{k,l}C_{l,m}C_{m,h}
-          =(C^3)_{k,h}.
+         & =\sum_{l,m}C_{k,l}C_{l,m}C_{m,h}
+        =(C^3)_{k,h}.
         \notag
     \end{align}
     Trace preservation identifies this quantity with
@@ -673,7 +673,7 @@
 \begin{theorem}[Doubled-index self-overlap is the Hilbert--Schmidt trace]
     \label{thm:mpdo_doubled_overlap_hilbert_schmidt}
     \lean{MPOTensor.pairCfgEquiv,
-      MPOTensor.mpvOverlap_toMPSTensor_self}
+        MPOTensor.mpvOverlap_toMPSTensor_self}
     \leanok
     \uses{def:mpv_overlap, def:mpo_to_mps, def:mpo_family}
     Let $K$ be an MPO tensor. For every chain length $N$, the
@@ -681,7 +681,7 @@
     Hilbert--Schmidt trace of the closed operator:
     \begin{align}
         O_{K^{\mathrm{MPS}}K^{\mathrm{MPS}}}(N)
-        &=\tr\!\left(\rho^{(N)}(K)\,\rho^{(N)}(K)^\dagger\right).
+         & =\tr\!\left(\rho^{(N)}(K)\,\rho^{(N)}(K)^\dagger\right).
         \notag
     \end{align}
     This is a project derivation preparing the Lemma~C.5 route of
@@ -700,21 +700,21 @@
     trace of the product gives the Frobenius inner product
     \begin{align}
         \tr\!\left(\rho^{(N)}(K)\,\rho^{(N)}(K)^\dagger\right)
-        &=\sum_{\sigma,\tau}
-          \rho^{(N)}(K)_{\sigma,\tau}\,
-          \overline{\rho^{(N)}(K)_{\sigma,\tau}}
+         & =\sum_{\sigma,\tau}
+        \rho^{(N)}(K)_{\sigma,\tau}\,
+        \overline{\rho^{(N)}(K)_{\sigma,\tau}}
         \notag
     \end{align}
     over pairs $(\sigma,\tau)$ of ket and bra configurations, while the
     overlap sums
     $V^{(N)}(K^{\mathrm{MPS}})_\rho\,
-    \overline{V^{(N)}(K^{\mathrm{MPS}})_\rho}$ over doubled-index words
+        \overline{V^{(N)}(K^{\mathrm{MPS}})_\rho}$ over doubled-index words
     $\rho$. The product encoding of Definition~\ref{def:mpo_to_mps}
     reindexes each configuration pair $(\sigma,\tau)$ as the
     doubled-index word $n\mapsto(\sigma_n,\tau_n)$, and decoding each
     doubled index as a ket--bra pair identifies the summands:
     $V^{(N)}(K^{\mathrm{MPS}})_{(\sigma,\tau)}
-    =\rho^{(N)}(K)_{\sigma,\tau}$.
+        =\rho^{(N)}(K)_{\sigma,\tau}$.
 \end{proof}
 
 \begin{corollary}[Self-overlap as the trace of the square for an MPDO]
@@ -725,7 +725,7 @@
     If $K$ generates MPDOs and $N\geq1$, then
     \begin{align}
         O_{K^{\mathrm{MPS}}K^{\mathrm{MPS}}}(N)
-        &=\tr\!\left(\rho^{(N)}(K)\,\rho^{(N)}(K)\right).
+         & =\tr\!\left(\rho^{(N)}(K)\,\rho^{(N)}(K)\right).
         \notag
     \end{align}
 \end{corollary}
@@ -741,7 +741,7 @@
 \end{proof}
 
 \begin{corollary}[Real part of the self-overlap is the squared Frobenius
-    norm]
+        norm]
     \label{cor:mpdo_doubled_overlap_frobenius}
     \lean{MPOTensor.mpvOverlap_toMPSTensor_self_re_eq_frobenius_norm_sq}
     \leanok
@@ -749,9 +749,9 @@
     For every MPO tensor $K$ and every chain length $N$,
     \begin{align}
         \re O_{K^{\mathrm{MPS}}K^{\mathrm{MPS}}}(N)
-        &=\|\rho^{(N)}(K)\|_F^2
-          =\sum_{\sigma,\tau}
-          \left|\rho^{(N)}(K)_{\sigma,\tau}\right|^2.
+         & =\|\rho^{(N)}(K)\|_F^2
+        =\sum_{\sigma,\tau}
+        \left|\rho^{(N)}(K)_{\sigma,\tau}\right|^2.
         \notag
     \end{align}
 \end{corollary}
@@ -767,9 +767,9 @@
 \begin{theorem}[Trace factorization of the cyclic neighboring product]
     \label{thm:mpdo_cyclic_neighboring_trace_products}
     \lean{MPOTensor.PhysicalSectorFactorization.%
-      trace_cyclicNeighboringProduct_eq_prod_trace,
-      MPOTensor.PhysicalSectorFactorization.%
-      trace_cyclicNeighboringProduct_sq_eq_prod_trace_sq}
+        trace_cyclicNeighboringProduct_eq_prod_trace,
+        MPOTensor.PhysicalSectorFactorization.%
+        trace_cyclicNeighboringProduct_sq_eq_prod_trace_sq}
     \leanok
     \uses{def:mpdo_physical_sector_chain_coordinates}
     Let $N\geq1$ and let $k=(k_0,\ldots,k_{N-1})$ be a cyclic sector
@@ -778,11 +778,11 @@
     neighboring traces, and so does the trace of its square:
     \begin{align}
         \tr(\Omega_k)
-        &=\prod_{n=0}^{N-1}\tr\!\left(\eta_{k_n,k_{n+1}}\right),
-        \notag\\
+         & =\prod_{n=0}^{N-1}\tr\!\left(\eta_{k_n,k_{n+1}}\right),
+        \notag                                                     \\
         \tr\!\left(\Omega_k^2\right)
-        &=\prod_{n=0}^{N-1}
-          \tr\!\left(\eta_{k_n,k_{n+1}}^2\right),
+         & =\prod_{n=0}^{N-1}
+        \tr\!\left(\eta_{k_n,k_{n+1}}^2\right),
         \notag
     \end{align}
     with site labels read modulo $N$. These are the
@@ -799,10 +799,10 @@
     diagonal entries of the neighboring factors. Hence
     \begin{align}
         \tr(\Omega_k)
-        &=\sum_x\prod_{n=0}^{N-1}
-          \eta_{k_n,k_{n+1}}(x_n,x_n)
-          =\prod_{n=0}^{N-1}\sum_{x_n}
-          \eta_{k_n,k_{n+1}}(x_n,x_n),
+         & =\sum_x\prod_{n=0}^{N-1}
+        \eta_{k_n,k_{n+1}}(x_n,x_n)
+        =\prod_{n=0}^{N-1}\sum_{x_n}
+        \eta_{k_n,k_{n+1}}(x_n,x_n),
         \notag
     \end{align}
     expanding the product of sums. For the square, write
@@ -814,8 +814,8 @@
 \begin{lemma}[Trace-squared matrix of the neighboring operators]
     \label{lem:mpdo_active_sector_trace_sq_matrix}
     \lean{MPOTensor.activeSectorTraceSqMatrix,
-      MPOTensor.activeSectorTraceSqMatrix_nonneg,
-      MPOTensor.activeSectorTraceSqMatrix_le_activeSectorTraceMatrix_sq}
+        MPOTensor.activeSectorTraceSqMatrix_nonneg,
+        MPOTensor.activeSectorTraceSqMatrix_le_activeSectorTraceMatrix_sq}
     \leanok
     \uses{def:mpdo_active_sector_trace_matrix}
     Let ${\cal K}$ be an MPO tensor with a physical-sector factorization
@@ -824,13 +824,13 @@
     sector set $I_*$, define the trace-squared matrix
     \begin{align}
         S^*_{k,h}
-        &:=\re\tr\!\left(\eta_{k,h}^2\right),
+         & :=\re\tr\!\left(\eta_{k,h}^2\right),
         \qquad k,h\in I_*.
         \notag
     \end{align}
     Then, entrywise,
     \begin{align}
-        0&\leq S^*_{k,h}\leq\left(T^*_{k,h}\right)^2.
+        0 & \leq S^*_{k,h}\leq\left(T^*_{k,h}\right)^2.
         \notag
     \end{align}
     This matrix is a project derivation preparing the Case-I route
@@ -850,11 +850,11 @@
 \end{proof}
 
 \begin{theorem}[Literal zero correlation length stabilizes the active
-    trace matrix]
+        trace matrix]
     \label{thm:mpdo_active_trace_matrix_literal_zcl_powers}
     \lean{MPOTensor.%
-      activeSectorTraceMatrix_pow_two_eq_pow_three_of_literal_ZCL,
-      MPOTensor.activeSectorTraceMatrix_pow_two_pos}
+        activeSectorTraceMatrix_pow_two_eq_pow_three_of_literal_ZCL,
+        MPOTensor.activeSectorTraceMatrix_pow_two_pos}
     \leanok
     \uses{def:mpdo_active_sector_trace_matrix, def:mpo_physical_trace_transfer}
     Let ${\cal K}$ be an MPO tensor with a physical-sector factorization
@@ -862,14 +862,14 @@
     is positive semidefinite, that the physical-trace transfer is
     literally idempotent,
     \begin{align}
-        \mathcal T_{\cal K}^2&=\mathcal T_{\cal K},
+        \mathcal T_{\cal K}^2 & =\mathcal T_{\cal K},
         \notag
     \end{align}
     as in \cite[Definition~4.2, lines~735--741]{Cirac2016MPDO_arXiv},
     and that the left tensor of every zero-weight sector vanishes. Then
     the active trace matrix stabilizes after the second power:
     \begin{align}
-        \left(T^*\right)^2&=\left(T^*\right)^3.
+        \left(T^*\right)^2 & =\left(T^*\right)^3.
         \notag
     \end{align}
     If, in addition, the active one-site matrices span $\MN{D}$, each
@@ -894,9 +894,9 @@
     On the active sectors, collect the left and right sector-tensor
     traces into rectangular matrices $L$ and $Q$ with
     \begin{align}
-        L_{\beta,h}&=\tr\!\left((l_h)_\beta\right),
-        &
-        Q_{k,\alpha}&=\tr\!\left((r_k)_\alpha\right).
+        L_{\beta,h}  & =\tr\!\left((l_h)_\beta\right),
+                     &
+        Q_{k,\alpha} & =\tr\!\left((r_k)_\alpha\right).
         \notag
     \end{align}
     The left tensor vanishes on every zero-weight sector, so the
@@ -904,7 +904,7 @@
     literal zero correlation length makes $LQ$ idempotent.
     Associativity then gives
     \begin{align}
-        (QL)^2&=Q(LQ)L=Q(LQ)(LQ)L=(QL)^3.
+        (QL)^2 & =Q(LQ)L=Q(LQ)(LQ)L=(QL)^3.
         \notag
     \end{align}
     Positivity of the neighboring operators makes their traces real,
@@ -918,8 +918,8 @@
     entries. Stabilization gives $(T^*)^{2m}=(T^*)^2$, so
     \begin{align}
         \left((T^*)^2\right)_{k,h}
-        &=\sum_j\left((T^*)^m\right)_{k,j}
-          \left((T^*)^m\right)_{j,h}>0,
+         & =\sum_j\left((T^*)^m\right)_{k,j}
+        \left((T^*)^m\right)_{j,h}>0,
         \notag
     \end{align}
     which is the positivity argument of
@@ -934,8 +934,8 @@
     indexed by a finite set $I$, and let $N\geq0$. Then, for $a,b\in I$,
     \begin{align}
         \left(S^N\right)_{a,b}
-        &=\sum_{\substack{v:\{0,\ldots,N\}\to I\\ v_0=a,\ v_N=b}}
-          \ \prod_{i=0}^{N-1}S_{v_i,v_{i+1}},
+         & =\sum_{\substack{v:\{0,\ldots,N\}\to I \\ v_0=a,\ v_N=b}}
+        \ \prod_{i=0}^{N-1}S_{v_i,v_{i+1}},
         \notag
     \end{align}
     the sum, over length-$N$ walks $v$ in $I$ from $a$ to $b$, of the
@@ -949,7 +949,7 @@
     Induction on $N$: the base case is the identity-matrix entry
     $\delta_{a,b}$, indexed by the unique length-$0$ walk; the
     inductive step expands $\left(S^{N+1}\right)_{a,b}
-    =\sum_c\left(S^N\right)_{a,c}S_{c,b}$ and reindexes the
+        =\sum_c\left(S^N\right)_{a,c}S_{c,b}$ and reindexes the
     walk-and-endpoint pair $(v,c)$ as the length-$(N+1)$ walk obtained
     by appending $c$ to $v$.
 \end{proof}
@@ -963,8 +963,8 @@
     indexed by a finite set $I$, and let $N\geq1$. Then
     \begin{align}
         \tr\!\left(S^N\right)
-        &=\sum_{k:\{0,\ldots,N-1\}\to I}
-          \ \prod_{i=0}^{N-1}S_{k_i,k_{i+1}},
+         & =\sum_{k:\{0,\ldots,N-1\}\to I}
+        \ \prod_{i=0}^{N-1}S_{k_i,k_{i+1}},
         \notag
     \end{align}
     with indices read modulo $N$, the sum over labelings $k$ of the
@@ -990,14 +990,14 @@
 \begin{lemma}[Trace invariance under the physical basis change]
     \label{lem:mpdo_trace_conjugate_physical_invariant}
     \lean{MPOTensor.sitewise_prod_conjTranspose_mul_self,
-      MPOTensor.trace_mpo_conjugatePhysical_mul_self}
+        MPOTensor.trace_mpo_conjugatePhysical_mul_self}
     \leanok
     \uses{def:mpo_family}
     Let $K$ be an MPO tensor and $U$ an isometry on the physical space,
     $U^\dagger U=1$. Then
     \begin{align}
         \tr\!\left(\rho^{(N)}(\widetilde K)\,\rho^{(N)}(\widetilde K)\right)
-        &=\tr\!\left(\rho^{(N)}(K)\,\rho^{(N)}(K)\right),
+         & =\tr\!\left(\rho^{(N)}(K)\,\rho^{(N)}(K)\right),
         \notag
     \end{align}
     where $\widetilde K$ is $K$ conjugated by $U$ at every physical site.
@@ -1012,7 +1012,7 @@
     The sitewise product matrix $W_{\sigma,\sigma'}=\prod_n U(\sigma_n,\sigma'_n)$
     satisfies $W^\dagger W=1$ because $U$ does: expanding $W^\dagger W$ as a sum
     over intermediate configurations and using $\sum_x\overline{U(x,a)}\,U(x,b)
-    =\delta_{a,b}$ site by site gives the identity. Since
+        =\delta_{a,b}$ site by site gives the identity. Since
     $\rho^{(N)}(\widetilde K)=W\,\rho^{(N)}(K)\,W^\dagger$, cyclicity of the
     trace and $W^\dagger W=1$ cancel the $W$'s from
     $\tr\!\left(W\rho^{(N)}(K)\rho^{(N)}(K)W^\dagger\right)$.
@@ -1021,8 +1021,8 @@
 \begin{lemma}[Reduction to the active sector]
     \label{lem:mpdo_sum_prod_traceSq_active}
     \lean{MPOTensor.neighboringOperator_eq_zero_of_inactive_right,
-      MPOTensor.prod_traceSq_eq_zero_of_not_forall_active,
-      MPOTensor.sum_prod_traceSq_eq_sum_active}
+        MPOTensor.prod_traceSq_eq_zero_of_not_forall_active,
+        MPOTensor.sum_prod_traceSq_eq_sum_active}
     \leanok
     \uses{def:mpdo_active_sector_trace_matrix, thm:mpdo_cyclic_neighboring_trace_products}
     Let ${\cal K}$ be an MPO tensor with a physical-sector factorization
@@ -1032,9 +1032,9 @@
     sum over active-sector labelings:
     \begin{align}
         \sum_{k:\{0,\ldots,N-1\}\to I}\ \prod_{i=0}^{N-1}
-          \tr\!\left(\eta_{k_i,k_{i+1}}^2\right)
-        &=\sum_{k:\{0,\ldots,N-1\}\to I_*}\ \prod_{i=0}^{N-1}
-          \tr\!\left(\eta_{k_i,k_{i+1}}^2\right).
+        \tr\!\left(\eta_{k_i,k_{i+1}}^2\right)
+         & =\sum_{k:\{0,\ldots,N-1\}\to I_*}\ \prod_{i=0}^{N-1}
+        \tr\!\left(\eta_{k_i,k_{i+1}}^2\right).
         \notag
     \end{align}
     This is the reconciliation, flagged as an open reconciliation gap when
@@ -1066,7 +1066,7 @@
     vanishes. Then, for $N\geq1$,
     \begin{align}
         O_{{\cal K}^{\mathrm{MPS}}{\cal K}^{\mathrm{MPS}}}(N)
-        &=\tr\!\left((S^*)^N\right).
+         & =\tr\!\left((S^*)^N\right).
         \notag
     \end{align}
     This is a project derivation completing the first step of the Case-I
@@ -1084,31 +1084,31 @@
     The overlap unwinds into a chain of trace identities:
     \begin{align}
         O_{{\cal K}^{\mathrm{MPS}}{\cal K}^{\mathrm{MPS}}}(N)
-        &=\tr(\rho\,\rho)
-        &&\text{Theorem~\ref{thm:mpdo_doubled_overlap_hilbert_schmidt}}
-        \notag\\
-        &=\tr(\widetilde\rho\,\widetilde\rho)
-        &&\text{Lemma~\ref{lem:mpdo_trace_conjugate_physical_invariant}}
-        \notag\\
-        &=\tr\!\left(\Bigl(\bigoplus_{k}\Omega_k\Bigr)^{\!2}\right)
-        &&\text{block-diagonal product realization}
-        \notag\\
-        &=\sum_{k:\{0,\ldots,N-1\}\to I}\tr\!\left(\Omega_k^2\right)
-        &&\text{trace of a block-diagonal matrix}
-        \notag\\
-        &=\sum_{k:\{0,\ldots,N-1\}\to I}\ \prod_{i=0}^{N-1}
-          \tr\!\left(\eta_{k_i,k_{i+1}}^2\right)
-        &&\text{Theorem~\ref{thm:mpdo_cyclic_neighboring_trace_products}}
-        \notag\\
-        &=\sum_{k:\{0,\ldots,N-1\}\to I_*}\ \prod_{i=0}^{N-1}
-          \tr\!\left(\eta_{k_i,k_{i+1}}^2\right)
-        &&\text{Lemma~\ref{lem:mpdo_sum_prod_traceSq_active}}
-        \notag\\
-        &=\sum_{k:\{0,\ldots,N-1\}\to I_*}\ \prod_{i=0}^{N-1}S^*_{k_i,k_{i+1}}
-        &&\text{Hermiticity, }\tr(A)=\re\tr(A)\text{ for }A=A^\dagger
-        \notag\\
-        &=\tr\!\left((S^*)^N\right)
-        &&\text{Theorem~\ref{thm:mpdo_trace_pow_cyclic_product}}
+         & =\tr(\rho\,\rho)
+         &                                                                       & \text{Theorem~\ref{thm:mpdo_doubled_overlap_hilbert_schmidt}}
+        \notag                                                                                                                                     \\
+         & =\tr(\widetilde\rho\,\widetilde\rho)
+         &                                                                       & \text{Lemma~\ref{lem:mpdo_trace_conjugate_physical_invariant}}
+        \notag                                                                                                                                     \\
+         & =\tr\!\left(\Bigl(\bigoplus_{k}\Omega_k\Bigr)^{\!2}\right)
+         &                                                                       & \text{block-diagonal product realization}
+        \notag                                                                                                                                     \\
+         & =\sum_{k:\{0,\ldots,N-1\}\to I}\tr\!\left(\Omega_k^2\right)
+         &                                                                       & \text{trace of a block-diagonal matrix}
+        \notag                                                                                                                                     \\
+         & =\sum_{k:\{0,\ldots,N-1\}\to I}\ \prod_{i=0}^{N-1}
+        \tr\!\left(\eta_{k_i,k_{i+1}}^2\right)
+         &                                                                       & \text{Theorem~\ref{thm:mpdo_cyclic_neighboring_trace_products}}
+        \notag                                                                                                                                     \\
+         & =\sum_{k:\{0,\ldots,N-1\}\to I_*}\ \prod_{i=0}^{N-1}
+        \tr\!\left(\eta_{k_i,k_{i+1}}^2\right)
+         &                                                                       & \text{Lemma~\ref{lem:mpdo_sum_prod_traceSq_active}}
+        \notag                                                                                                                                     \\
+         & =\sum_{k:\{0,\ldots,N-1\}\to I_*}\ \prod_{i=0}^{N-1}S^*_{k_i,k_{i+1}}
+         &                                                                       & \text{Hermiticity, }\tr(A)=\re\tr(A)\text{ for }A=A^\dagger
+        \notag                                                                                                                                     \\
+         & =\tr\!\left((S^*)^N\right)
+         &                                                                       & \text{Theorem~\ref{thm:mpdo_trace_pow_cyclic_product}}
         \notag
     \end{align}
     The third step combines the block-diagonal product realization of
@@ -1125,13 +1125,13 @@
     Let $I$ be a finite index set, let $S\in\mathbb R^{I\times I}$, and
     let $v\in\mathbb R^I$ satisfy $v_i>0$ for every $i\in I$. Put
     \begin{align}
-        D&=\diag(v_i^2).
+        D & =\diag(v_i^2).
         \notag
     \end{align}
     Then, for every $N\geq0$,
     \begin{align}
         \tr\!\left((D^{-1}SD)^N\right)
-        &=\tr(S^N).
+         & =\tr(S^N).
         \notag
     \end{align}
     This project lemma isolates the diagonal-conjugation calculation used in
@@ -1144,7 +1144,7 @@
     Every diagonal entry of $D$ is nonzero, so $D$ is invertible. Induction
     on $N$ gives
     \begin{align}
-        (D^{-1}SD)^N&=D^{-1}S^ND.
+        (D^{-1}SD)^N & =D^{-1}S^ND.
         \notag
     \end{align}
     Cyclicity of trace and $DD^{-1}=1$ then give the claimed equality.
@@ -1158,12 +1158,12 @@
     $P,S\in\mathbb R^{I\times I}$. Suppose that $P$ is primitive and
     row-stochastic, and that, for all $i,j\in I$,
     \begin{align}
-        0\leq S_{i,j}&\leq(P\odot P)_{i,j}=P_{i,j}^2.
+        0\leq S_{i,j} & \leq(P\odot P)_{i,j}=P_{i,j}^2.
         \notag
     \end{align}
     Then, as $N\to\infty$,
     \begin{align}
-        \tr(S^N)&\longrightarrow0.
+        \tr(S^N) & \longrightarrow0.
         \notag
     \end{align}
     This project matrix-theoretic lemma is used in the Case-I argument. It
@@ -1175,7 +1175,7 @@
     Entrywise non-negativity gives $\tr(S^N)\geq0$. Entrywise domination is
     preserved by matrix powers, and hence
     \begin{align}
-        \tr(S^N)&\leq\tr\!\left((P\odot P)^N\right).
+        \tr(S^N) & \leq\tr\!\left((P\odot P)^N\right).
         \notag
     \end{align}
     Every power of $P\odot P$ has $L^\infty$ operator norm at most one.
@@ -1195,7 +1195,7 @@
     $I_*=\{k:p_k\ne0\}$. Suppose that every neighboring operator
     $\eta_{k,h}$ is positive semidefinite,
     \begin{align}
-        \spn_{\C}\{A_{k;x,y}:k\in I_*\}&=\MN{D},
+        \spn_{\C}\{A_{k;x,y}:k\in I_*\} & =\MN{D},
         \notag
     \end{align}
     and, for every $k\in I_*$, some virtual matrix $A_{k;x,y}$ is nonzero.
@@ -1203,14 +1203,14 @@
     $j\in I_*$ such that $\eta_{h,j}\ne0$ and $\eta_{j,k}\ne0$, that the
     physical-trace transfer is literally idempotent,
     \begin{align}
-        \mathcal T_{\cal K}^2&=\mathcal T_{\cal K},
+        \mathcal T_{\cal K}^2 & =\mathcal T_{\cal K},
         \notag
     \end{align}
     that $p_k=0$ implies that the left tensor of sector $k$ vanishes, that
     the underlying tensor is normal in the sense of
     Definition~\ref{def:nt_cpsv}, and that $I_*$ is nonempty. Then
     \begin{align}
-        \left|I_*\right|&=1.
+        \left|I_*\right| & =1.
         \notag
     \end{align}
     This is a project derivation completing the Case-I route toward
@@ -1245,7 +1245,7 @@
     $I_*=\{k:p_k\ne0\}$. Suppose that every neighboring operator
     $\eta_{k,h}$ is positive semidefinite,
     \begin{align}
-        \spn_{\C}\{A_{k;x,y}:k\in I_*\}&=\MN{D},
+        \spn_{\C}\{A_{k;x,y}:k\in I_*\} & =\MN{D},
         \notag
     \end{align}
     and, for every $k\in I_*$, some virtual matrix $A_{k;x,y}$ is nonzero.
@@ -1253,14 +1253,14 @@
     $j\in I_*$ such that $\eta_{h,j}\ne0$ and $\eta_{j,k}\ne0$, that the
     physical-trace transfer is literally idempotent,
     \begin{align}
-        \mathcal T_{\cal K}^2&=\mathcal T_{\cal K},
+        \mathcal T_{\cal K}^2 & =\mathcal T_{\cal K},
         \notag
     \end{align}
     that $p_k=0$ implies that the left tensor of sector $k$ vanishes, that
     the underlying tensor is normal in the sense of
     Definition~\ref{def:nt_cpsv}, and that $I_*$ is nonempty. Then
     \begin{align}
-        \left(T^*\right)^2&=T^*.
+        \left(T^*\right)^2 & =T^*.
         \notag
     \end{align}
     This is the Case-I input to the proof of Lemma~C.5
@@ -1285,12 +1285,12 @@
     Theorem~\ref{thm:mpdo_active_trace_matrix_pow_two_eq}, there are real
     functions $a,b:I_*\to\mathbb R$ such that, for all $k,h\in I_*$,
     \begin{align}
-        T^*_{k,h}&=a_kb_h,
+        T^*_{k,h} & =a_kb_h,
         \notag
     \end{align}
     and
     \begin{align}
-        \sum_{k\in I_*}a_kb_k&=1.
+        \sum_{k\in I_*}a_kb_k & =1.
         \notag
     \end{align}
     This is the normal Case-I active-sector packaging of the displayed
@@ -1306,7 +1306,7 @@
     Write $I_*=\{k_0\}$. Strict positivity of $(T^*)^2$ and
     $(T^*)^2=T^*$ give
     \begin{align}
-        0&<(T^*_{k_0,k_0})^2=T^*_{k_0,k_0}.
+        0 & <(T^*_{k_0,k_0})^2=T^*_{k_0,k_0}.
         \notag
     \end{align}
     Thus the sole entry is $T^*_{k_0,k_0}=1$. Taking $a_k=b_k=1$ gives
@@ -1323,7 +1323,7 @@
     that ${\cal K}$ satisfies the strong area law, that its physical-trace
     transfer is literally idempotent,
     \begin{align}
-        \mathcal T_{\cal K}^2&=\mathcal T_{\cal K},
+        \mathcal T_{\cal K}^2 & =\mathcal T_{\cal K},
         \notag
     \end{align}
     and that the underlying tensor is normal in the sense of
@@ -1333,12 +1333,12 @@
     $a,b$ on
     $I_*=\{k:p_k\ne0\}$. For all $k,h\in I_*$,
     \begin{align}
-        T^*_{k,h}&=a_kb_h,
+        T^*_{k,h} & =a_kb_h,
         \notag
     \end{align}
     and
     \begin{align}
-        \sum_{k\in I_*}a_kb_k&=1.
+        \sum_{k\in I_*}a_kb_k & =1.
         \notag
     \end{align}
     This is the active-sector part of the normal Case-I conclusion of
@@ -1370,7 +1370,7 @@
     sector rephasing, and let $(p_k)_k$ be its Hayashi weights. If
     $p_k=0$ or $p_h=0$, then
     \begin{align}
-        \eta_{k,h}&=0.
+        \eta_{k,h} & =0.
         \notag
     \end{align}
     The reparameterization makes the right tensor of an inactive source sector
@@ -1384,7 +1384,7 @@
     \uses{thm:mpdo_physical_sector_rephasing_invariance, thm:mpdo_zero_weight_reparameterized_neighboring_operator, lem:mpdo_sector_tensor_left_zero_of_weight_zero}
     Rephasing changes a neighboring operator by
     \begin{align}
-        (\eta_z)_{k,h}&=z_k^{-1}z_h\eta_{k,h}.
+        (\eta_z)_{k,h} & =z_k^{-1}z_h\eta_{k,h}.
         \notag
     \end{align}
     Hence \(\eta_{k,h}=0\) implies \((\eta_z)_{k,h}=0\). If \(p_k=0\),
@@ -1405,24 +1405,24 @@
     semidefinite neighboring operators $\eta_{k,h}$, and real functions
     $a,b$ on $I_*=\{k:p_k\ne0\}$. For all $k,h\in I_*$,
     \begin{align}
-        T^*_{k,h}&=a_kb_h,
+        T^*_{k,h} & =a_kb_h,
         \notag
     \end{align}
     and
     \begin{align}
-        \sum_{k\in I_*}a_kb_k&=1.
+        \sum_{k\in I_*}a_kb_k & =1.
         \notag
     \end{align}
     For all ambient sector labels $k,h$,
     \begin{align}
-        p_k=0\ \text{or}\ p_h=0&\implies \eta_{k,h}=0.
+        p_k=0\ \text{or}\ p_h=0 & \implies \eta_{k,h}=0.
         \notag
     \end{align}
     The incident-vanishing clause belongs to this chosen reparameterized and
     rephased factorization, not to the raw inverse-map factors. This is the
     normal Case-I construction from
     \cite[Appendix~C.2, Case~I, Lemmas~C.4--C.5,
-    lines~1374--1505]{Cirac2016MPDO_arXiv}; the incident-vanishing clause is the
+        lines~1374--1505]{Cirac2016MPDO_arXiv}; the incident-vanishing clause is the
     chosen zero-weight convention for inactive summands.
 \end{theorem}
 
@@ -1446,7 +1446,7 @@
     Let ${\cal K}$ be an injective normal MPO tensor satisfying the strong area
     law and literal physical-trace idempotence,
     \begin{align}
-        \mathcal T_{\cal K}^2&=\mathcal T_{\cal K}.
+        \mathcal T_{\cal K}^2 & =\mathcal T_{\cal K}.
         \notag
     \end{align}
     Then there is a physical-sector factorization with nonnegative weights
@@ -1454,15 +1454,15 @@
     operators $\eta_{k,h}$, and real families $(a_k)_k,(b_k)_k$ indexed by all
     sector labels. For all $k,h$,
     \begin{align}
-        \operatorname{Re}\tr(\eta_{k,h})&=a_kb_h, \notag\\
-        \sum_k a_kb_k&=1. \notag
+        \operatorname{Re}\tr(\eta_{k,h}) & =a_kb_h, \notag \\
+        \sum_k a_kb_k                    & =1. \notag
     \end{align}
     On the nonzero-weight sectors these are the coefficient families of
     Theorem~\ref{thm:mpdo_casei_rephased_inverse_map_coefficient_witness}; if
     $p_k=0$,
     then $a_k=b_k=0$. This is a project-derived realization of the all-index
     coefficient statement in \cite[Appendix~C.2, Lemma~C.5,
-    lines~1473--1499]{Cirac2016MPDO_arXiv}. The source does not introduce the
+        lines~1473--1499]{Cirac2016MPDO_arXiv}. The source does not introduce the
     active--inactive split or ambient filler sectors used here. This theorem
     concerns literal zero correlation length only; it makes no assertion for
     the scale-invariant source-ZCL condition or in Case~II.
@@ -1479,8 +1479,8 @@
     nonzero-weight sectors gives
     \begin{align}
         \sum_k a_kb_k
-        &=\sum_{k:p_k\ne0}a_kb_k
-         =1.
+         & =\sum_{k:p_k\ne0}a_kb_k
+        =1.
         \notag
     \end{align}
 \end{proof}
@@ -1494,13 +1494,13 @@
     Theorem~\ref{thm:mpdo_active_trace_matrix_pow_two_eq}, define the
     rectangular trace-pairing matrices
     \begin{align}
-        L_{\beta,h}&=\tr\!\left((l_h)_\beta\right),
-        &Q_{k,\alpha}&=\tr\!\left((r_k)_\alpha\right).
+        L_{\beta,h} & =\tr\!\left((l_h)_\beta\right),
+                    & Q_{k,\alpha}                    & =\tr\!\left((r_k)_\alpha\right).
         \notag
     \end{align}
     Then
     \begin{align}
-        Q(1-LQ)L&=0.
+        Q(1-LQ)L & =0.
         \notag
     \end{align}
     This is a project-derived rectangular form, in project notation, of the
@@ -1515,9 +1515,9 @@
     The trace pairing gives $QL=T^*$. Therefore
     \begin{align}
         Q(1-LQ)L
-        &=QL-(QL)^2
-         =T^*-(T^*)^2
-         =0,
+         & =QL-(QL)^2
+        =T^*-(T^*)^2
+        =0,
         \notag
     \end{align}
     where the last equality is

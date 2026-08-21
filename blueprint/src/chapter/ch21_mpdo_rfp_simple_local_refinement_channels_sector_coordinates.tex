@@ -6,9 +6,9 @@
 \begin{theorem}[Positivity and zero-weight neighboring operators]
     \label{thm:mpdo_physical_sector_three_site_neighboring_operator_properties}
     \lean{MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.sector_nonempty,
-      MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.threeSiteMiddleIndex_nonempty}
+        MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.threeSiteMiddleIndex_nonempty}
     \lean{MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.threeSiteNeighboringOperator_pos,
-      MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.threeSiteNeighboringOperator_eq_zero_of_mul_eq_zero}
+        MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.threeSiteNeighboringOperator_eq_zero_of_mul_eq_zero}
     \leanok
     \uses{def:mpdo_physical_sector_three_site_neighboring_operator, def:mpdo_neighboring_trace_factorization, thm:mpdo_physical_sector_three_site_neighboring_operator_trace}
     The sector set and every middle-subspin space are nonempty. Each
@@ -42,12 +42,12 @@
 \begin{theorem}[Properties of the three-site neighboring densities]
     \label{thm:mpdo_physical_sector_t1_density_properties}
     \lean{MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.normalizedThreeSiteNeighboringDensity_pos,
-      MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.trace_normalizedThreeSiteNeighboringDensity}
+        MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.trace_normalizedThreeSiteNeighboringDensity}
     \lean{MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.inactiveThreeSiteNeighboringDensity_posDef,
-      MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.inactiveThreeSiteNeighboringDensity_trace}
+        MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.inactiveThreeSiteNeighboringDensity_trace}
     \lean{MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.completedThreeSiteNeighboringDensity_pos,
-      MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.trace_completedThreeSiteNeighboringDensity,
-      MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.completedThreeSiteNeighboringDensity_eq_normalized}
+        MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.trace_completedThreeSiteNeighboringDensity,
+        MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.completedThreeSiteNeighboringDensity_eq_normalized}
     \lean{MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.completedThreeSitePreparationMap_eq_normalized}
     \lean{MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.completedThreeSiteControlledMap_sameBlock_apply}
     \leanok
@@ -116,27 +116,27 @@ $\mathfrak R_2(\mathcal K_2(X))_{k,h}$ to
 $a_kb_hB_{k,h}(X)$ on $B_k^L\otimes B_h^R$. The preparation
 $\mathcal T_1$ then adjoins
 \begin{align}
-  \widehat\Omega_{k,h}
-  &=(a_kb_h)^{-1}\bigoplus_l
+    \widehat\Omega_{k,h}
+     & =(a_kb_h)^{-1}\bigoplus_l
     (\eta_{k,l}\otimes\eta_{l,h}),
-  \notag
+    \notag
 \end{align}
 and $\mathcal T_2$ orders the result as
 \begin{align}
-  (B_k^L\otimes B_k^R)\otimes(B_l^L\otimes B_l^R)
-  \otimes(B_h^L\otimes B_h^R).
-  \notag
+    (B_k^L\otimes B_k^R)\otimes(B_l^L\otimes B_l^R)
+    \otimes(B_h^L\otimes B_h^R).
+    \notag
 \end{align}
 The refinement uses the sitewise sector coordinates $\mathfrak R_2$ and
 $\mathfrak R_3$
 \cite[Appendix~C.2, lines~1510--1516 and~1522--1545]
-  {Cirac2016MPDO_arXiv}.
+{Cirac2016MPDO_arXiv}.
 For each outer pair, write
 \begin{align}
-  \mathcal H^{\Omega}_{k,h}
-  &=\bigoplus_l
+    \mathcal H^{\Omega}_{k,h}
+     & =\bigoplus_l
     (B_k^R\otimes B_l^L)\otimes(B_l^R\otimes B_h^L)
-  \notag
+    \notag
 \end{align}
 for the carrier Hilbert space of $\Omega_{k,h}$. The symbols
 $\widehat\Omega_{k,h}$ and $\overline\Omega_{k,h}$ denote respectively its
@@ -147,45 +147,45 @@ With the matrix algebras introduced above, the refinement stages have type
 % T_2 : A_Omega -> A_3. Ink: each blue stroke denotes a channel, its label
 % names the stage, and the fixed left-to-right axis records composition.
 \par\noindent\hfil
-  \begin{tikzcd}[channel, column sep=large]
+\begin{tikzcd}[channel, column sep=large]
     \mathcal A_2 \arrow[r, "\mathcal T_0"] &
     \mathcal A_{\partial} \arrow[r, "\mathcal T_1"] &
     \mathcal A_{\Omega} \arrow[r, "\mathcal T_2"] &
     \mathcal A_3
-  \end{tikzcd}
+\end{tikzcd}
 \hfil\par
 Here $\mathcal T_1$ adjoins $\overline\Omega_{k,h}$ on each diagonal
 outer-sector summand. The composite channel has type
 % Formula: T = T_2 T_1 T_0 : A_2 -> A_3. Ink: the blue stroke denotes the
 % composite channel T; its endpoints are matrix algebras, not matrices.
 \par\noindent\hfil
-  \begin{tikzcd}[channel, column sep=large]
+\begin{tikzcd}[channel, column sep=large]
     \mathcal A_2 \arrow[r, "\mathcal T"] & \mathcal A_3
-  \end{tikzcd}
+\end{tikzcd}
 \hfil\par
 
 \begin{definition}[The neighboring-state preparation $\mathcal S_1$]
     \label{def:mpdo_physical_sector_s1_map}
     \lean{MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.normalizedNeighboringDensity}
     \lean{MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.normalizedNeighboringDensity_pos,
-      MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.trace_normalizedNeighboringDensity,
-      MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.normalizedNeighboringPreparationMap_isKrausCPTP}
+        MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.trace_normalizedNeighboringDensity,
+        MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.normalizedNeighboringPreparationMap_isKrausCPTP}
     \lean{MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.inactiveNeighboringDensity,
-      MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.inactiveNeighboringDensity_posDef,
-      MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.inactiveNeighboringDensity_trace}
+        MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.inactiveNeighboringDensity_posDef,
+        MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.inactiveNeighboringDensity_trace}
     \lean{MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.completedNeighboringDensity}
     \lean{MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.completedNeighboringDensity_pos,
-      MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.trace_completedNeighboringDensity,
-      MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.completedNeighboringDensity_eq_normalized}
+        MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.trace_completedNeighboringDensity,
+        MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.completedNeighboringDensity_eq_normalized}
     \lean{MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.completedNeighboringPreparationMap,
-      MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.completedNeighboringPreparationMap_isKrausCPTP,
-      MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.completedNeighboringPreparationMap_eq_normalized}
+        MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.completedNeighboringPreparationMap_isKrausCPTP,
+        MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.completedNeighboringPreparationMap_eq_normalized}
     \lean{MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.completedNeighboringControlledMap}
     \lean{MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.completedNeighboringControlledMap_sameBlock_apply}
     \lean{MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.completedNeighboringPreparationMap_smul}
     \lean{MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.s1Map}
     \lean{MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.s1Map_block_eq_kronecker,
-      MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.s1Map_apply_of_ne}
+        MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.s1Map_apply_of_ne}
     \leanok
     \uses{def:mpdo_neighboring_trace_factorization}
     On a sector pair with $a_kb_h\ne0$, let
@@ -233,9 +233,9 @@ outer-sector summand. The composite channel has type
 \begin{definition}[Two- and three-site sector coordinates]
     \label{def:mpdo_physical_sector_closure_coordinates}
     \lean{MPOTensor.PhysicalSectorFactorization.twoSiteSectorCoordinateEquiv,
-      MPOTensor.PhysicalSectorFactorization.twoSiteSectorCoordinateEquiv_symm_apply,
-      MPOTensor.PhysicalSectorFactorization.threeSiteSectorCoordinateEquiv,
-      MPOTensor.PhysicalSectorFactorization.threeSiteSectorCoordinateEquiv_symm_apply}
+        MPOTensor.PhysicalSectorFactorization.twoSiteSectorCoordinateEquiv_symm_apply,
+        MPOTensor.PhysicalSectorFactorization.threeSiteSectorCoordinateEquiv,
+        MPOTensor.PhysicalSectorFactorization.threeSiteSectorCoordinateEquiv_symm_apply}
     \leanok
     \uses{def:mpdo_two_site_sector_closure, def:mpdo_three_site_sector_closure}
     The coordinate equivalences used by the coarse-graining channel expose
@@ -249,10 +249,10 @@ outer-sector summand. The composite channel has type
     the two outer subspins before the neighboring subspins. If
     $R_{\Phi_2}$ and $R_{\Phi_3}$ denote the two regrouping maps, then
     \begin{align}
-      \mathfrak G_2&=R_{\Phi_2}\mathfrak R_2,
-      \notag\\
-      \mathfrak G_3&=R_{\Phi_3}\mathfrak R_3.
-      \notag
+        \mathfrak G_2 & =R_{\Phi_2}\mathfrak R_2,
+        \notag                                    \\
+        \mathfrak G_3 & =R_{\Phi_3}\mathfrak R_3.
+        \notag
     \end{align}
 \end{definition}
 
@@ -263,9 +263,9 @@ outer-sector summand. The composite channel has type
     \uses{def:phys_close, def:mpdo_sector_boundary_operator, def:mpdo_physical_sector_three_site_neighboring_operator, def:mpdo_physical_sector_closure_coordinates, def:mpdo_three_site_subspin_regrouping}
     For every virtual matrix $X$ and outer-sector pair $(k,h)$,
     \begin{align}
-      \left[R_{\Phi_3}\mathfrak R_3(\mathcal K_3(X))\right]_{(k,h),(k,h)}
-      &=B_{k,h}(X)\otimes\Omega_{k,h}.
-      \notag
+        \left[R_{\Phi_3}\mathfrak R_3(\mathcal K_3(X))\right]_{(k,h),(k,h)}
+         & =B_{k,h}(X)\otimes\Omega_{k,h}.
+        \notag
     \end{align}
 \end{theorem}
 
@@ -303,9 +303,9 @@ outer-sector summand. The composite channel has type
     \uses{thm:mpdo_two_site_sector_closure_factorization, def:mpdo_physical_sector_closure_coordinates, def:mpdo_two_site_subspin_regrouping}
     For every virtual matrix $X$ and outer-sector pair $(k,h)$,
     \begin{align}
-      \left[R_{\Phi_2}\mathfrak R_2(\mathcal K_2(X))\right]_{(k,h),(k,h)}
-      &=B_{k,h}(X)\otimes\eta_{k,h}.
-      \notag
+        \left[R_{\Phi_2}\mathfrak R_2(\mathcal K_2(X))\right]_{(k,h),(k,h)}
+         & =B_{k,h}(X)\otimes\eta_{k,h}.
+        \notag
     \end{align}
 \end{theorem}
 
@@ -325,11 +325,11 @@ outer-sector summand. The composite channel has type
     For every two-site matrix $Y$, outer-sector pair $(k,h)$, and boundary
     indices $a,b$,
     \begin{align}
-      [\mathcal T_0(Y)]_{(k,h,a),(k,h,b)}
-      &=
-      \left[\tr_{R_k\otimes L_h}
-          \left([R_{\Phi_2}Y]_{(k,h),(k,h)}\right)\right]_{a,b}.
-      \notag
+        [\mathcal T_0(Y)]_{(k,h,a),(k,h,b)}
+         & =
+        \left[\tr_{R_k\otimes L_h}
+            \left([R_{\Phi_2}Y]_{(k,h),(k,h)}\right)\right]_{a,b}.
+        \notag
     \end{align}
 \end{theorem}
 
@@ -367,7 +367,7 @@ outer-sector summand. The composite channel has type
     For every outer-sector pair $(k,h)$ and boundary matrix $B$, the completed
     sectorwise preparation satisfies
     $\overline{\mathcal T}_{k,h}(a_kb_hB)
-    =B\otimes\Omega_{k,h}$.
+        =B\otimes\Omega_{k,h}$.
 \end{theorem}
 
 \begin{proof}
@@ -385,7 +385,7 @@ outer-sector summand. The composite channel has type
     \uses{def:mpdo_physical_sector_t1_preparation, thm:mpdo_t1_scaled_block_preparation}
     If the $(k,h)$ diagonal block of a boundary matrix $Y$ is $a_kb_hB$, then
     $[\mathcal T_1(Y)]_{(k,h),(k,h)}
-    =B\otimes\Omega_{k,h}$.
+        =B\otimes\Omega_{k,h}$.
 \end{theorem}
 
 \begin{proof}
@@ -435,13 +435,13 @@ outer-sector summand. The composite channel has type
     virtual matrix $X$, in the canonical physical-sector coordinates selected
     by the isometry $U$, the refinement channel satisfies
     \begin{align}
-      \mathcal T(\mathfrak R_2(\mathcal K_2(X)))
-      &=\mathfrak R_3(\mathcal K_3(X)).
-      \label{eq:rfp_t_closure}
+        \mathcal T(\mathfrak R_2(\mathcal K_2(X)))
+         & =\mathfrak R_3(\mathcal K_3(X)).
+        \label{eq:rfp_t_closure}
     \end{align}
     This is the refinement half of Proposition~C.7
     \cite[Appendix~C.2, lines~1510--1516 and~1522--1545]
-      {Cirac2016MPDO_arXiv}.
+    {Cirac2016MPDO_arXiv}.
 \end{theorem}
 
 \begin{proof}
@@ -451,18 +451,18 @@ outer-sector summand. The composite channel has type
     $\mathfrak R_2$ into $\mathfrak G_2$. On the $(k,h)$ diagonal block, the
     partial trace then gives
     \begin{align}
-      \mathcal T_0
+        \mathcal T_0
         (\mathfrak R_2(\mathcal K_2(X)))_{k,h}
-      &=a_kb_hB_{k,h}(X).
-      \notag
+         & =a_kb_hB_{k,h}(X).
+        \notag
     \end{align}
     On an active pair, $\mathcal T_1$ adjoins
     $(a_kb_h)^{-1}\Omega_{k,h}$, and hence
     \begin{align}
-      \mathcal T_1\mathcal T_0
+        \mathcal T_1\mathcal T_0
         (\mathfrak R_2(\mathcal K_2(X)))_{k,h}
-      &=B_{k,h}(X)\otimes\Omega_{k,h}.
-      \notag
+         & =B_{k,h}(X)\otimes\Omega_{k,h}.
+        \notag
     \end{align}
     If $a_kb_h=0$, both sides vanish because
     $\Omega_{k,h}=0$. After the canonical reassociation of the intermediate
@@ -485,9 +485,9 @@ outer-sector summand. The composite channel has type
     coordinates selected by the isometry $U$, the coarse-graining channel
     satisfies
     \begin{align}
-      \mathcal S(\mathfrak R_3(\mathcal K_3(X)))
-      &=\mathfrak R_2(\mathcal K_2(X)).
-      \label{eq:rfp_s_closure}
+        \mathcal S(\mathfrak R_3(\mathcal K_3(X)))
+         & =\mathfrak R_2(\mathcal K_2(X)).
+        \label{eq:rfp_s_closure}
     \end{align}
 \end{theorem}
 
@@ -497,16 +497,16 @@ outer-sector summand. The composite channel has type
     On the $(k,h)$ diagonal block, $\mathcal S_0$ traces
     $\Omega_{k,h}$ and gives $a_kb_hB_{k,h}(X)$. On an active sector pair,
     $\mathcal S_1((a_kb_h)B_{k,h}(X))
-    =B_{k,h}(X)\otimes\eta_{k,h}$.
+        =B_{k,h}(X)\otimes\eta_{k,h}$.
     If $a_kb_h=0$, positivity and zero trace give $\eta_{k,h}=0$, so both
     sides of this identity vanish. Finally, $\mathcal S_2$ regroups the four
     factors into two physical sites. For distinct sector pairs
     $(k,h)\ne(p,q)$,
     \begin{align}
-      (\mathcal S_1Y)_{(k,h),(p,q)}&=0,
-      \notag\\
-      [\mathfrak R_2(\mathcal K_2(X))]_{(k,h),(p,q)}&=0.
-      \notag
+        (\mathcal S_1Y)_{(k,h),(p,q)}                  & =0,
+        \notag                                               \\
+        [\mathfrak R_2(\mathcal K_2(X))]_{(k,h),(p,q)} & =0.
+        \notag
     \end{align}
     These diagonal and off-diagonal identities give
     (\ref{eq:rfp_s_closure}).

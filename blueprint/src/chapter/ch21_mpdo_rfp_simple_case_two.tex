@@ -3,16 +3,16 @@
 \begin{lemma}[Blockwise zero-correlation-length equation]
     \label{lem:mpdo_simple_blockwise_zcl_equation}
     \lean{MPOTensor.%
-      exists_weighted_basis_physTraceTransfer_sq_of_isSourceZCL}
+        exists_weighted_basis_physTraceTransfer_sq_of_isSourceZCL}
     \leanok
     \uses{def:mpo_source_zcl, def:mpdo_doubled_phys_trace_transfer, lem:mpdo_doubled_phys_trace_transfer_to_mps, lem:mpdo_doubled_phys_trace_transfer_blockwise}
     Suppose a tensor with zero correlation length is gauge-equivalent, through
     block-diagonal copy gauges, to an assembled sector decomposition. There
     is a scalar $\lambda>0$ such that every copy satisfies
     \begin{align}
-      (\mu_{j,q}\mathcal T_{A_j})^2
-        &=\lambda\mu_{j,q}\mathcal T_{A_j}.
-      \label{eq:rfp_block_zcl}
+        (\mu_{j,q}\mathcal T_{A_j})^2
+         & =\lambda\mu_{j,q}\mathcal T_{A_j}.
+        \label{eq:rfp_block_zcl}
     \end{align}
     This is the block equation in
     \cite[Appendix~C.2, lines~1652--1657]{Cirac2016MPDO_arXiv}.
@@ -51,10 +51,10 @@
     descends to every copy:
     \begin{align}
         \mu_{j,q}^{2}\mathcal T_{A_j}^{2}
-        &=\lambda\mu_{j,q}\mathcal T_{A_j},
-        \notag\\
+         & =\lambda\mu_{j,q}\mathcal T_{A_j},
+        \notag                                         \\
         \mathcal T_{A_j}^{2}
-        &=\frac{\lambda}{\mu_{j,q}}\mathcal T_{A_j}.
+         & =\frac{\lambda}{\mu_{j,q}}\mathcal T_{A_j}.
         \notag
     \end{align}
     The left side does not depend on $q$, and
@@ -89,12 +89,12 @@
     index. Choose the common weight $\mu_j$ from any copy over $j$ and absorb
     it into the representative:
     \begin{align}
-        \mathcal K_j&=\mu_j A_j.
+        \mathcal K_j & =\mu_j A_j.
         \notag
     \end{align}
     This is the convention of
     \cite[Appendix~C.2, equation~CFK, lines~1660--1665]
-      {Cirac2016MPDO_arXiv}.
+    {Cirac2016MPDO_arXiv}.
 \end{definition}
 
 \begin{lemma}[Every copy has the common weight]
@@ -118,7 +118,7 @@
     Let $r_j$ be the number of horizontal copies of representative $j$. Then
     its coefficient on a chain of length $N$ is
     \begin{align}
-        \sum_q\mu_{j,q}^{N}&=r_j\mu_j^{N}.
+        \sum_q\mu_{j,q}^{N} & =r_j\mu_j^{N}.
         \notag
     \end{align}
     Thus the natural multiplicity is the horizontal copy count $r_j$.
@@ -136,7 +136,7 @@
     \uses{def:sector_weight_data, thm:mpdo_common_weight_coefficient}
     The common weight is nonzero, and hence for every chain length $N$,
     \begin{align}
-        q_j=\sum_q\mu_{j,q}^{N}&=r_j\mu_j^{N}\ne0.
+        q_j=\sum_q\mu_{j,q}^{N} & =r_j\mu_j^{N}\ne0.
         \notag
     \end{align}
     This is the coefficient nonvanishing used in the choice
@@ -154,11 +154,11 @@
 \begin{theorem}[Common nonzero BNT tail selection]
     \label{thm:mpdo_common_nonzero_bnt_tail_selection}
     \lean{MPSTensor.SectorDecomposition.%
-      exists_common_nonzero_physicalTraceTail_entry}
+        exists_common_nonzero_physicalTraceTail_entry}
     \lean{MPSTensor.SectorDecomposition.%
-      exists_common_nonzero_threeSiteClosingMatrix_entry}
+        exists_common_nonzero_threeSiteClosingMatrix_entry}
     \lean{MPSTensor.SectorDecomposition.%
-      exists_common_threeSiteClosingMatrix_ne_zero}
+        exists_common_threeSiteClosingMatrix_ne_zero}
     \leanok
     \uses{def:mpdo_simple_tensor, thm:mpdo_common_weight_coefficient_ne_zero}
     Suppose the weights over each representative are independent of the copy
@@ -171,10 +171,10 @@
     $q_j=\sum_q\mu_{j,q}^{L+3}\ne0$. Thus the three-site closing matrix
     satisfies
     \begin{align}
-        R_j&=q_j\mathcal B_j^L,
-        \notag\\
+        R_j & =q_j\mathcal B_j^L,
+        \notag                        \\
         (R_j)_{\alpha,\beta}
-        &=q_j\widetilde m_j\ne0.
+            & =q_j\widetilde m_j\ne0.
         \notag
     \end{align}
     This is the traced-tail selection made in
@@ -197,7 +197,7 @@
     After absorbing the common weight, the matrix product vector of the
     assembled tensor is
     \begin{align}
-        \mathcal V_N(S)&=\sum_j r_j\mathcal V_N(\mathcal K_j).
+        \mathcal V_N(S) & =\sum_j r_j\mathcal V_N(\mathcal K_j).
         \notag
     \end{align}
     This is equation~CFK of
@@ -222,8 +222,8 @@
     A three-site operator is a family closure when
     \begin{align}
         \rho_{i_1i_2i_3,j_1j_2j_3}
-        &=\sum_s\tr\!\left(\mathcal K_s^{i_1j_1}\mathcal K_s^{i_2j_2}
-          \mathcal K_s^{i_3j_3}R_s\right).
+         & =\sum_s\tr\!\left(\mathcal K_s^{i_1j_1}\mathcal K_s^{i_2j_2}
+        \mathcal K_s^{i_3j_3}R_s\right).
         \notag
     \end{align}
     Given a simultaneous left inverse $C$ as in
@@ -232,9 +232,9 @@
     inverse contraction
     \begin{align}
         (\Gamma_{x,y})_{i_2j_2}
-        &=\sum_{i_1,j_1,i_3,j_3}
-          C_{x,(i_1,j_1)}C_{y,(i_3,j_3)}
-          \rho_{(i_1,i_2,i_3),(j_1,j_2,j_3)}.
+         & =\sum_{i_1,j_1,i_3,j_3}
+        C_{x,(i_1,j_1)}C_{y,(i_3,j_3)}
+        \rho_{(i_1,i_2,i_3),(j_1,j_2,j_3)}.
         \notag
     \end{align}
     The closure is the sector-sum form of the displayed equation for
@@ -252,9 +252,9 @@
     \lean{MPSTensor.SectorDecomposition.basisMPOTensor}
     \lean{MPSTensor.SectorDecomposition.normalizedThreeSiteClosingMatrix}
     \lean{MPOTensor.%
-      reducedBlockState_reindex_isThreeSiteFamilyClosure_of_sameMPV₂Pos}
+        reducedBlockState_reindex_isThreeSiteFamilyClosure_of_sameMPV₂Pos}
     \lean{MPOTensor.%
-      reducedBlockState_four_threeSiteFamilyClosure_nonzero_closing}
+        reducedBlockState_four_threeSiteFamilyClosure_nonzero_closing}
     \leanok
     \uses{def:mpdo_three_site_family_closure, thm:mpdo_common_nonzero_bnt_tail_selection}
     Suppose that the doubled-index tensor has the horizontal BNT
@@ -265,17 +265,17 @@
     ordered triples, the normalized three-site marginal of the four-site
     state is the family closure
     \begin{align}
-      (\sigma^{(4)}_3)_{i_1i_2i_3,j_1j_2j_3}
-      &=\sum_j\tr\!\left(A_j^{i_1j_1}A_j^{i_2j_2}A_j^{i_3j_3}\widehat R_j\right),
-      \notag
+        (\sigma^{(4)}_3)_{i_1i_2i_3,j_1j_2j_3}
+         & =\sum_j\tr\!\left(A_j^{i_1j_1}A_j^{i_2j_2}A_j^{i_3j_3}\widehat R_j\right),
+        \notag
     \end{align}
     where
     \begin{align}
-      \widehat R_j
-      &=\tr(\rho^{(4)})^{-1}q_j\mathcal B_j,
-      \notag\\
-      q_j&=\sum_q\mu_{j,q}^{4}.
-      \notag
+        \widehat R_j
+            & =\tr(\rho^{(4)})^{-1}q_j\mathcal B_j,
+        \notag                                      \\
+        q_j & =\sum_q\mu_{j,q}^{4}.
+        \notag
     \end{align}
     Every $\widehat R_j$ is nonzero. More generally, a tail of length $L$
     gives
@@ -297,7 +297,7 @@
 \begin{theorem}[Collapse of the outer inverse contraction]
     \label{thm:mpdo_bnt_three_site_outer_inverse_collapse}
     \lean{MPOTensor.%
-      isMPOBlockLeftInverse_outer_inverse_threeSite_collapse}
+        isMPOBlockLeftInverse_outer_inverse_threeSite_collapse}
     \leanok
     \uses{def:mpdo_three_site_family_closure, def:mpdo_block_left_inverse}
     Let $x=(s,\alpha_1,\beta_1)$ and
@@ -305,7 +305,7 @@
     simultaneous left inverse, the outer inverse contraction vanishes when
     $s\ne t$. When $s=t$, it is
     $(\mathcal K_s^{i_2j_2})_{\beta_1,\alpha_3}
-    (R_s)_{\beta_3,\alpha_1}$.
+        (R_s)_{\beta_3,\alpha_1}$.
     In particular, the contraction retains precisely one entry of the middle
     physical slice and one entry of the closing matrix, with the orientation
     shown above. This is the sector-family form of the Case I contraction in
@@ -323,19 +323,19 @@
     sums. For $x=(x_s,x_\alpha,x_\beta)$, the inverse identity is
     \begin{align}
         \sum_{i,j} C_{x,(i,j)}\mathcal K_s^{ij}
-        &=
+         & =
         \begin{cases}
-          E_{x_\alpha,x_\beta},&x_s=s,\\
-          0,&x_s\ne s.
+            E_{x_\alpha,x_\beta}, & x_s=s,    \\
+            0,                    & x_s\ne s.
         \end{cases}
         \notag
     \end{align}
     Hence distinct labels give zero. For equal labels, the remaining trace is
     \begin{align}
         \tr\!\left(E_{\alpha_1,\beta_1}\mathcal K_s^{i_2j_2}
-          E_{\alpha_3,\beta_3}R_s\right)
-        &=(\mathcal K_s^{i_2j_2})_{\beta_1,\alpha_3}
-          (R_s)_{\beta_3,\alpha_1}.
+        E_{\alpha_3,\beta_3}R_s\right)
+         & =(\mathcal K_s^{i_2j_2})_{\beta_1,\alpha_3}
+        (R_s)_{\beta_3,\alpha_1}.
         \notag
     \end{align}
 \end{proof}
@@ -343,7 +343,7 @@
 \begin{corollary}[Three-site collapse from the one-letter span]
     \label{cor:mpdo_bnt_three_site_outer_inverse_collapse}
     \lean{MPOTensor.%
-      exists_isMPOBlockLeftInverse_outer_inverse_threeSite_collapse}
+        exists_isMPOBlockLeftInverse_outer_inverse_threeSite_collapse}
     \leanok
     \uses{thm:mpdo_one_letter_simultaneous_inverse, thm:mpdo_bnt_three_site_outer_inverse_collapse}
     Under the one-letter product-algebra spanning hypothesis, there is a

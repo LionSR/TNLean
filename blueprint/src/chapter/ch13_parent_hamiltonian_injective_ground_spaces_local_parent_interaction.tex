@@ -5,10 +5,10 @@ length $L\ge 1$. For a word $w=(i_1,\ldots,i_L)$, write
 $A^w:=A^{i_1}\cdots A^{i_L}$. The boundary-condition parametrization is
 \begin{align}
     \Gamma_L
-    &\colon \MN{D}\longrightarrow(\Fin{d}^{L}\to\C),
-    \label{eq:parent_gamma}\\
+     & \colon \MN{D}\longrightarrow(\Fin{d}^{L}\to\C),
+    \label{eq:parent_gamma}                            \\
     \Gamma_L(X)(\sigma)
-    &:=\tr\!\left(A^\sigma X\right).
+     & :=\tr\!\left(A^\sigma X\right).
     \notag
 \end{align}
 Here $A^\sigma$ abbreviates
@@ -103,11 +103,11 @@ $\tr(XA^\sigma)$ for the local space $\mathcal G_L^A$.
 The canonical parent interaction at range $L$ is
 \begin{align}
     h_L(A)
-    &=\Id-\Pi_{G_L(A)}
-      =\Pi_{G_L(A)^\perp},
-    \label{eq:parent_interaction}\\
+     & =\Id-\Pi_{G_L(A)}
+    =\Pi_{G_L(A)^\perp},
+    \label{eq:parent_interaction} \\
     \ker h_L(A)
-    &=G_L(A).
+     & =G_L(A).
     \notag
 \end{align}
 The sources also allow any positive local interaction with this kernel; the
@@ -121,7 +121,7 @@ orthogonal projector is the canonical representative used here.
     canonical computational-basis identification. The local ground space under
     this $\ell^2$ identification is
     $G_L^{\mathrm{ES}}(A):=\iota_L(G_L(A))
-    \subseteq\ell^2(\Fin{d}^{L})$.
+        \subseteq\ell^2(\Fin{d}^{L})$.
 \end{definition}
 
 \begin{lemma}[Membership under the canonical \texorpdfstring{$\ell^2$}{l2} identification]\label{lem:mem_ground_space_es}
@@ -147,10 +147,10 @@ orthogonal projector is the canonical representative used here.
     vectorization in column--row coordinates.  The Hilbert-space boundary map
     is
     \begin{align}
-      \Gamma_L^{\mathrm{ES}}
-      &:=\iota_L\circ\Gamma_L\circ U^{-1}
-      \colon\ell^2(\Fin{D}\times\Fin{D})
-      \longrightarrow\ell^2(\Fin{d}^{L}).
+        \Gamma_L^{\mathrm{ES}}
+         & :=\iota_L\circ\Gamma_L\circ U^{-1}
+        \colon\ell^2(\Fin{D}\times\Fin{D})
+        \longrightarrow\ell^2(\Fin{d}^{L}).
     \end{align}
     Thus $\Gamma_L^{\mathrm{ES}}$ has a Euclidean coordinate-space domain,
     whereas the original map $\Gamma_L$ has matrix domain $\MN{D}$.
@@ -269,9 +269,9 @@ orthogonal projector is the canonical representative used here.
     For a complex-linear map $\mathcal L\colon\MN{D}\to\MN{D}$, let
     $R(\mathcal L)$ be the matrix with entries
     \begin{align}
-      R(\mathcal L)_{(b,a),(e,c)}
-      &:=J(\mathcal L)_{(c,e),(a,b)}.
-      \label{eq:gram_reshuffle_matrix_entries}
+        R(\mathcal L)_{(b,a),(e,c)}
+         & :=J(\mathcal L)_{(c,e),(a,b)}.
+        \label{eq:gram_reshuffle_matrix_entries}
     \end{align}
     The operator $\mathscr R(\mathcal L)$ on
     $\ell^2(\Fin{D}\times\Fin{D})$ is represented by the matrix $R(\mathcal L)$
@@ -288,9 +288,9 @@ orthogonal projector is the canonical representative used here.
     For complex-linear maps
     $\mathcal L,\mathcal M\colon\MN{D}\to\MN{D}$,
     \begin{align}
-      \mathscr R(\mathcal L-\mathcal M)
-      &=\mathscr R(\mathcal L)-\mathscr R(\mathcal M).
-      \label{eq:gram_reshuffle_sub}
+        \mathscr R(\mathcal L-\mathcal M)
+         & =\mathscr R(\mathcal L)-\mathscr R(\mathcal M).
+        \label{eq:gram_reshuffle_sub}
     \end{align}
 \end{theorem}
 
@@ -309,10 +309,10 @@ orthogonal projector is the canonical representative used here.
     $\mathbf e_{(j,i)}$ be the standard unit vector at $(j,i)$.  For all
     $a,b,c,e\in\Fin{D}$,
     \begin{align}
-      \bigl\langle \mathbf e_{(b,a)},
+        \bigl\langle \mathbf e_{(b,a)},
         \mathscr R(\mathcal L)\mathbf e_{(e,c)}\bigr\rangle_{\ell^2}
-      &=J(\mathcal L)_{(c,e),(a,b)}.
-      \label{eq:gram_reshuffle_single}
+         & =J(\mathcal L)_{(c,e),(a,b)}.
+        \label{eq:gram_reshuffle_single}
     \end{align}
     This is the coordinate identity in
     (\ref{eq:gram_reshuffle_matrix_entries}); it is not a Hilbert--Schmidt pairing of
@@ -333,9 +333,9 @@ orthogonal projector is the canonical representative used here.
     Let $I$ be a finite index set and let $B=(B_{ij})_{i,j\in I}$ be a complex
     matrix.  Then the squared operator norm of $B$ on $\ell^2(I)$ satisfies
     \begin{align}
-      \lVert B\rVert_{\ell^2(I)\to\ell^2(I)}^2
-      &\leq \sum_{(i,j)\in I\times I}\lvert B_{ij}\rvert^2.
-      \label{eq:euclidean_operator_norm_sq_le_frobenius}
+        \lVert B\rVert_{\ell^2(I)\to\ell^2(I)}^2
+         & \leq \sum_{(i,j)\in I\times I}\lvert B_{ij}\rvert^2.
+        \label{eq:euclidean_operator_norm_sq_le_frobenius}
     \end{align}
 \end{theorem}
 
@@ -352,9 +352,9 @@ orthogonal projector is the canonical representative used here.
     Let $I$ be a finite index set, let $A=(A_{ij})_{i,j\in I}$ be a complex
     matrix, and let $j\in I$.  Then
     \begin{align}
-      \sum_{i\in I}\lvert A_{ij}\rvert^2
-      &\leq \lVert A\rVert_{\ell^2(I)\to\ell^2(I)}^2.
-      \label{eq:sum_column_norm_sq_le_l2_operator_norm_sq}
+        \sum_{i\in I}\lvert A_{ij}\rvert^2
+         & \leq \lVert A\rVert_{\ell^2(I)\to\ell^2(I)}^2.
+        \label{eq:sum_column_norm_sq_le_l2_operator_norm_sq}
     \end{align}
 \end{theorem}
 
@@ -371,10 +371,10 @@ orthogonal projector is the canonical representative used here.
     Let $I$ be a finite index set and let $A=(A_{ij})_{i,j\in I}$ be a complex
     matrix.  Then
     \begin{align}
-      \sum_{(i,j)\in I\times I}\lvert A_{ij}\rvert^2
-      &\leq |I|\,
+        \sum_{(i,j)\in I\times I}\lvert A_{ij}\rvert^2
+         & \leq |I|\,
         \lVert A\rVert_{\ell^2(I)\to\ell^2(I)}^2.
-      \label{eq:sum_entry_norm_sq_le_card_mul_l2_operator_norm_sq}
+        \label{eq:sum_entry_norm_sq_le_card_mul_l2_operator_norm_sq}
     \end{align}
 \end{theorem}
 
@@ -392,8 +392,8 @@ orthogonal projector is the canonical representative used here.
     Let $I$ be a finite index set.  For every $i,j\in I$, the matrix unit
     $E_{ij}$ satisfies
     \begin{align}
-      \lVert E_{ij}\rVert_{\ell^2(I)\to\ell^2(I)}=1.
-      \label{eq:l2_operator_norm_matrix_unit}
+        \lVert E_{ij}\rVert_{\ell^2(I)\to\ell^2(I)}=1.
+        \label{eq:l2_operator_norm_matrix_unit}
     \end{align}
 \end{theorem}
 
@@ -412,12 +412,12 @@ orthogonal projector is the canonical representative used here.
     of squared entry norms of $R(\mathcal L)$ equals that of the rectangular
     Choi matrix:
     \begin{align}
-      \sum_{p:(\Fin{D}\times\Fin{D})\times(\Fin{D}\times\Fin{D})}
-      \bigl\|R(\mathcal L)_{p_1,p_2}\bigr\|^2
-      &=
-      \sum_{p:(\Fin{D}\times\Fin{D})\times(\Fin{D}\times\Fin{D})}
-      \bigl\|J(\mathcal L)_{p_1,p_2}\bigr\|^2.
-      \label{eq:gram_reshuffle_matrix_norm_sq}
+        \sum_{p:(\Fin{D}\times\Fin{D})\times(\Fin{D}\times\Fin{D})}
+        \bigl\|R(\mathcal L)_{p_1,p_2}\bigr\|^2
+         & =
+        \sum_{p:(\Fin{D}\times\Fin{D})\times(\Fin{D}\times\Fin{D})}
+        \bigl\|J(\mathcal L)_{p_1,p_2}\bigr\|^2.
+        \label{eq:gram_reshuffle_matrix_norm_sq}
     \end{align}
     The two matrices differ only by a reshuffling of indices; the equality is
     entrywise Frobenius, not operator norm.
@@ -440,12 +440,12 @@ orthogonal projector is the canonical representative used here.
     $\mathcal L\colon\mathbb C^{I\times I}\to\mathbb C^{I\times I}$ be
     complex-linear.  Then
     \begin{align}
-      \bigl\lVert\mathscr R(\mathcal L)\bigr\rVert_{
-        \ell^2(I\times I)\to\ell^2(I\times I)}^2
-      &\leq
-      \sum_{u,v\in I\times I}
+        \bigl\lVert\mathscr R(\mathcal L)\bigr\rVert_{
+            \ell^2(I\times I)\to\ell^2(I\times I)}^2
+         & \leq
+        \sum_{u,v\in I\times I}
         \bigl\lvert J(\mathcal L)_{u,v}\bigr\rvert^2.
-      \label{eq:gram_reshuffle_norm_sq_le_rectangular_choi}
+        \label{eq:gram_reshuffle_norm_sq_le_rectangular_choi}
     \end{align}
 \end{theorem}
 
@@ -469,11 +469,11 @@ orthogonal projector is the canonical representative used here.
     complex-linear.  Denote the operator norm of $\mathcal L$ for these matrix
     norms by $\lVert\mathcal L\rVert_{\mathrm{op},L^2}$.  Then
     \begin{align}
-      \bigl\lVert\mathscr R(\mathcal L)\bigr\rVert_{
-        \ell^2(I\times I)\to\ell^2(I\times I)}^2
-      &\leq |I|^3\,
+        \bigl\lVert\mathscr R(\mathcal L)\bigr\rVert_{
+            \ell^2(I\times I)\to\ell^2(I\times I)}^2
+         & \leq |I|^3\,
         \lVert\mathcal L\rVert_{\mathrm{op},L^2}^2.
-      \label{eq:gram_reshuffle_norm_sq_le_card_cube_mul_operator_norm_sq}
+        \label{eq:gram_reshuffle_norm_sq_le_card_cube_mul_operator_norm_sq}
     \end{align}
 \end{theorem}
 
@@ -496,8 +496,8 @@ orthogonal projector is the canonical representative used here.
     linear operator.  If $\rho_{\mathrm{spec}}(T)<1$, then there are real
     constants $C,r$ with $C>0$ and $0<r<1$ such that
     \begin{align}
-      \lVert T^n\rVert&\leq C r^n
-      \label{eq:geometric_bound_of_spectral_radius_lt_one}
+        \lVert T^n\rVert & \leq C r^n
+        \label{eq:geometric_bound_of_spectral_radius_lt_one}
     \end{align}
     for every $n\in\N$.
 \end{theorem}
@@ -518,8 +518,8 @@ orthogonal projector is the canonical representative used here.
     linear operator.  If $\rho_{\mathrm{spec}}(T)<1$, then there are real
     constants $C,r$ with $C>0$ and $0<r<1$ such that
     \begin{align}
-      \lVert T^n x\rVert&\leq C r^n\lVert x\rVert
-      \label{eq:geometric_apply_bound_of_spectral_radius_lt_one}
+        \lVert T^n x\rVert & \leq C r^n\lVert x\rVert
+        \label{eq:geometric_apply_bound_of_spectral_radius_lt_one}
     \end{align}
     for every $n\in\N$ and $x\in V$.
 \end{theorem}
@@ -540,9 +540,9 @@ orthogonal projector is the canonical representative used here.
     standard unit vector in $\ell^2(\Fin{D}\times\Fin{D})$, and let
     $\mathcal E_A$ be the transfer map.  Then
     \begin{align}
-      \bigl\langle \mathbf e_{(b,a)},
+        \bigl\langle \mathbf e_{(b,a)},
         \mathcal K_L(\mathbf e_{(e,c)})\bigr\rangle_{\ell^2}
-      &=J(\mathcal E_A^L)_{(c,e),(a,b)}.
+         & =J(\mathcal E_A^L)_{(c,e),(a,b)}.
     \end{align}
     Under Frobenius vectorization, $\mathbf e_{(b,a)}=U(E_{ab})$ and
     $\mathbf e_{(e,c)}=U(E_{ce})$, explaining the reversed coordinate order.
@@ -562,8 +562,8 @@ orthogonal projector is the canonical representative used here.
     $(A^\sigma)_{ec}\,\overline{(A^\sigma)_{ba}}$.  On the other hand,
     expanding the transfer power on $E_{ca}$ gives
     \begin{align}
-      \bigl(\mathcal E_A^L(E_{ca})\bigr)_{eb}
-      &=\sum_\sigma (A^\sigma)_{ec}\,
+        \bigl(\mathcal E_A^L(E_{ca})\bigr)_{eb}
+         & =\sum_\sigma (A^\sigma)_{ec}\,
         \overline{(A^\sigma)_{ba}}.
     \end{align}
     The defining Choi indexing
@@ -579,9 +579,9 @@ orthogonal projector is the canonical representative used here.
     The ground-space Gram operator is exactly the operator-level reshuffling of
     the Choi matrix of the iterated transfer map:
     \begin{align}
-      \mathcal K_L
-      &=\mathscr R\!\left(\mathcal E_A^L\right).
-      \label{eq:ground_space_gram_eq_gram_reshuffle}
+        \mathcal K_L
+         & =\mathscr R\!\left(\mathcal E_A^L\right).
+        \label{eq:ground_space_gram_eq_gram_reshuffle}
     \end{align}
     The equality is an equality of operators on
     $\ell^2(\Fin{D}\times\Fin{D})$.  Its entries are those in
@@ -604,19 +604,19 @@ orthogonal projector is the canonical representative used here.
     Let $A$ be an MPS tensor of bond dimension $D$, let $\rho\in\MN{D}$ satisfy
     $\tr(\rho)\neq0$, and let $P_\rho$ be the fixed-point projection
     \begin{align}
-      P_\rho(X)&=\frac{\tr(X)}{\tr(\rho)}\rho.
+        P_\rho(X) & =\frac{\tr(X)}{\tr(\rho)}\rho.
     \end{align}
     Suppose that $\mathcal E_A$ is trace-preserving,
     $\mathcal E_A(\rho)=\rho$, and
     \begin{align}
-      \rho_{\mathrm{spec}}(\mathcal E_A-P_\rho)&<1.
+        \rho_{\mathrm{spec}}(\mathcal E_A-P_\rho) & <1.
     \end{align}
     Then there are real constants $C,r$ with $C>0$ and $0<r<1$ such that,
     for every $n\geq1$,
     \begin{align}
-      \bigl\lVert\mathcal K_n-\mathscr R(P_\rho)\bigr\rVert^2
-      &\leq D^3\bigl(Cr^n\bigr)^2.
-      \label{eq:ground_space_gram_geometric_fixed_point}
+        \bigl\lVert\mathcal K_n-\mathscr R(P_\rho)\bigr\rVert^2
+         & \leq D^3\bigl(Cr^n\bigr)^2.
+        \label{eq:ground_space_gram_geometric_fixed_point}
     \end{align}
     No positivity, injectivity, or uniqueness hypothesis is imposed.
 \end{theorem}
@@ -642,8 +642,8 @@ orthogonal projector is the canonical representative used here.
     are real constants $C,r$ with $C>0$ and $0<r<1$ such that, for every
     $n\geq1$,
     \begin{align}
-      \bigl\lVert\mathcal K_n-\mathscr R(P_\rho)\bigr\rVert^2
-      &\leq D^3\bigl(Cr^n\bigr)^2.
+        \bigl\lVert\mathcal K_n-\mathscr R(P_\rho)\bigr\rVert^2
+         & \leq D^3\bigl(Cr^n\bigr)^2.
     \end{align}
 \end{theorem}
 
@@ -668,8 +668,8 @@ orthogonal projector is the canonical representative used here.
     $\mathcal E_A(\rho)=\rho$, and
     $\rho_{\mathrm{spec}}(\mathcal E_A-P_\rho)<1$, then
     \begin{align}
-      \mathcal K_n&\longrightarrow\mathscr R(P_\rho)
-      \label{eq:ground_space_gram_tendsto_fixed_point}
+        \mathcal K_n & \longrightarrow\mathscr R(P_\rho)
+        \label{eq:ground_space_gram_tendsto_fixed_point}
     \end{align}
     in operator norm as $n\to\infty$.
 \end{theorem}
@@ -689,7 +689,7 @@ orthogonal projector is the canonical representative used here.
     \uses{def:primitive_mps, thm:ground_space_gram_tendsto_fixed_point}
     If $A$ is a primitive MPS tensor with fixed-point witness $\rho$, then
     \begin{align}
-      \mathcal K_n&\longrightarrow\mathscr R(P_\rho)
+        \mathcal K_n & \longrightarrow\mathscr R(P_\rho)
     \end{align}
     in operator norm as $n\to\infty$.
 \end{theorem}
@@ -721,12 +721,12 @@ windows.
     Let $\rho\in\MN{D}$ have nonzero trace and define
     $P_\rho(X):=(\tr X/\tr\rho)\rho$.  Then
     \begin{align}
-      R(P_\rho)
-      &=(\tr\rho)^{-1}(\rho^{\mathsf T}\otimes I_D),
-      \label{eq:fixed_point_gram_metric_matrix}\\
-      \mathscr R(P_\rho)U(X)
-      &=U\!\left((\tr\rho)^{-1}X\rho\right).
-      \label{eq:fixed_point_gram_metric_action}
+        R(P_\rho)
+         & =(\tr\rho)^{-1}(\rho^{\mathsf T}\otimes I_D),
+        \label{eq:fixed_point_gram_metric_matrix}        \\
+        \mathscr R(P_\rho)U(X)
+         & =U\!\left((\tr\rho)^{-1}X\rho\right).
+        \label{eq:fixed_point_gram_metric_action}
     \end{align}
 \end{theorem}
 
@@ -735,8 +735,8 @@ windows.
     \uses{def:gram_reshuffle}
     For matrix units $E_{ca}$, direct evaluation gives
     \begin{align}
-      R(P_\rho)_{(b,a),(e,c)}
-      &=(\tr\rho)^{-1}\rho_{eb}\,\delta_{ca}.
+        R(P_\rho)_{(b,a),(e,c)}
+         & =(\tr\rho)^{-1}\rho_{eb}\,\delta_{ca}.
     \end{align}
     These are exactly the entries in
     (\ref{eq:fixed_point_gram_metric_matrix}).  Applying that Kronecker product
@@ -762,8 +762,8 @@ windows.
     Positive definiteness gives $\tr\rho>0$.  By
     (\ref{eq:fixed_point_gram_metric_matrix}),
     \begin{align}
-      R(P_\rho)
-      &=(\tr\rho)^{-1}(\rho^{\mathsf T}\otimes I_D)>0.
+        R(P_\rho)
+         & =(\tr\rho)^{-1}(\rho^{\mathsf T}\otimes I_D)>0.
     \end{align}
     Hence its associated operator $\mathscr R(P_\rho)$ is invertible.
 \end{proof}
@@ -776,14 +776,14 @@ windows.
     Let $K_0$ be invertible in a normed ring with convergent geometric series
     and $\lVert I\rVert=1$.  If $a<1$ and
     \begin{align}
-      \lVert K_0^{-1}(K-K_0)\rVert&\le a,
-      \label{eq:arbitrary_base_relative_perturbation}
+        \lVert K_0^{-1}(K-K_0)\rVert & \le a,
+        \label{eq:arbitrary_base_relative_perturbation}
     \end{align}
     then $K$ is invertible and
     \begin{align}
-      \lVert K^{-1}\rVert
-      &\le(1-a)^{-1}\lVert K_0^{-1}\rVert.
-      \label{eq:arbitrary_base_inverse_bound}
+        \lVert K^{-1}\rVert
+         & \le(1-a)^{-1}\lVert K_0^{-1}\rVert.
+        \label{eq:arbitrary_base_inverse_bound}
     \end{align}
     The same conclusion follows from
     $\lVert K_0^{-1}\rVert\,\lVert K-K_0\rVert\le a$.
@@ -795,10 +795,10 @@ windows.
     Put $E:=K_0^{-1}(K-K_0)$.  Then
     $K=K_0(I+E)$ and $\lVert E\rVert<1$, so
     \begin{align}
-      K^{-1}&=(I+E)^{-1}K_0^{-1},\\
-      \lVert K^{-1}\rVert
-      &\le\lVert(I+E)^{-1}\rVert\,\lVert K_0^{-1}\rVert
-       \le(1-a)^{-1}\lVert K_0^{-1}\rVert.
+        K^{-1} & =(I+E)^{-1}K_0^{-1},                             \\
+        \lVert K^{-1}\rVert
+               & \le\lVert(I+E)^{-1}\rVert\,\lVert K_0^{-1}\rVert
+        \le(1-a)^{-1}\lVert K_0^{-1}\rVert.
     \end{align}
     Submultiplicativity reduces the product-form hypothesis to
     (\ref{eq:arbitrary_base_relative_perturbation}).
@@ -813,9 +813,9 @@ windows.
     and $\lVert I\rVert=1$.  If $a<1$ and
     (\ref{eq:arbitrary_base_relative_perturbation}) holds, then
     \begin{align}
-      \lVert K^{-1}-K_0^{-1}\rVert
-      &\le(1-a)^{-1}a\,\lVert K_0^{-1}\rVert.
-      \label{eq:arbitrary_base_inverse_displacement}
+        \lVert K^{-1}-K_0^{-1}\rVert
+         & \le(1-a)^{-1}a\,\lVert K_0^{-1}\rVert.
+        \label{eq:arbitrary_base_inverse_displacement}
     \end{align}
     The same estimate follows from
     $\lVert K_0^{-1}\rVert\,\lVert K-K_0\rVert\le a$.
@@ -826,8 +826,8 @@ windows.
     \uses{thm:neumann_inverse_norm_bound}
     With $E:=K_0^{-1}(K-K_0)$, the resolvent identity is
     \begin{align}
-      K^{-1}-K_0^{-1}
-      &=-(I+E)^{-1}E K_0^{-1}.
+        K^{-1}-K_0^{-1}
+         & =-(I+E)^{-1}E K_0^{-1}.
     \end{align}
     Since $\lVert(I+E)^{-1}\rVert\le(1-a)^{-1}$ and
     $\lVert E\rVert\le a$, taking norms gives
@@ -842,7 +842,7 @@ windows.
     Let $K_i$ be a net in a normed ring with convergent geometric series.  If
     $K_i\to K_0$ and $K_0$ is invertible, then
     \begin{align}
-      K_i^{-1}&\longrightarrow K_0^{-1}.
+        K_i^{-1} & \longrightarrow K_0^{-1}.
     \end{align}
 \end{theorem}
 
@@ -877,16 +877,16 @@ windows.
     continuous linear map, then the inverse Gram operator is a two-sided
     inverse of the Gram endomorphism:
     \begin{align}
-      S_T(T^\dagger T)&=I_E,
-      \label{eq:inverse_gram_left}\\
-      (T^\dagger T)S_T&=I_E.
-      \label{eq:inverse_gram_right}
+        S_T(T^\dagger T) & =I_E,
+        \label{eq:inverse_gram_left} \\
+        (T^\dagger T)S_T & =I_E.
+        \label{eq:inverse_gram_right}
     \end{align}
     Consequently, $S_T$ is both the canonical inverse and the ring inverse of
     $T^\dagger T$.  The two pseudoinverse factors satisfy
     \begin{align}
-      \lVert TS_T\rVert&=\sqrt{\lVert S_T\rVert},\\
-      \lVert S_TT^\dagger\rVert&=\sqrt{\lVert S_T\rVert}.
+        \lVert TS_T\rVert         & =\sqrt{\lVert S_T\rVert}, \\
+        \lVert S_TT^\dagger\rVert & =\sqrt{\lVert S_T\rVert}.
     \end{align}
 \end{theorem}
 
@@ -918,25 +918,25 @@ windows.
     Let $A$ be a primitive MPS tensor of nonzero bond dimension whose
     fixed-point witness $\rho$ is positive definite.  Put
     \begin{align}
-      \mathcal K_\infty&=\mathscr R(P_\rho),&
-      \mathcal I_\infty&=\mathcal K_\infty^{-1}.
+        \mathcal K_\infty & =\mathscr R(P_\rho),     &
+        \mathcal I_\infty & =\mathcal K_\infty^{-1}.
     \end{align}
     There are constants $g,c,r>0$ with $r<1$ and
     $c=\lVert\mathcal I_\infty\rVert g$ such that, for every $n\geq1$,
     \begin{align}
-      \lVert\mathcal K_n-\mathcal K_\infty\rVert
-      &\leq gr^n.
-      \label{eq:primitive_ground_space_gram_geometric_bound}
+        \lVert\mathcal K_n-\mathcal K_\infty\rVert
+         & \leq gr^n.
+        \label{eq:primitive_ground_space_gram_geometric_bound}
     \end{align}
     Whenever $cr^n<1$, the operator $\mathcal K_n$ is invertible and
     \begin{align}
-      \lVert\mathcal K_n^{-1}\rVert
-      &\leq\frac{\lVert\mathcal I_\infty\rVert}{1-cr^n},
-      \label{eq:primitive_ground_space_gram_geometric_inverse_norm}\\
-      \lVert\mathcal K_n^{-1}-\mathcal I_\infty\rVert
-      &\leq\frac{cr^n}{1-cr^n}\,
+        \lVert\mathcal K_n^{-1}\rVert
+         & \leq\frac{\lVert\mathcal I_\infty\rVert}{1-cr^n},
+        \label{eq:primitive_ground_space_gram_geometric_inverse_norm} \\
+        \lVert\mathcal K_n^{-1}-\mathcal I_\infty\rVert
+         & \leq\frac{cr^n}{1-cr^n}\,
         \lVert\mathcal I_\infty\rVert.
-      \label{eq:primitive_ground_space_gram_geometric_inverse_displacement}
+        \label{eq:primitive_ground_space_gram_geometric_inverse_displacement}
     \end{align}
 \end{theorem}
 
@@ -945,7 +945,7 @@ windows.
     \uses{thm:primitive_ground_space_gram_geometric_fixed_point, thm:fixed_point_gram_metric_is_unit, thm:arbitrary_base_neumann_inverse_bound, thm:arbitrary_base_neumann_inverse_displacement}
     Start from the squared estimate
     $\lVert\mathcal K_n-\mathcal K_\infty\rVert^2
-      \leq D^3(Cr^n)^2$.
+        \leq D^3(Cr^n)^2$.
     Taking square roots gives
     $g=\sqrt{D^3}\,C$ without any additional dimension loss, and hence
     (\ref{eq:primitive_ground_space_gram_geometric_bound}).  Positive
@@ -970,10 +970,10 @@ windows.
     $\Gamma_n^{\mathrm{ES}}$ is injective, its inverse Gram operator equals
     $\mathcal K_n^{-1}$, and
     \begin{align}
-      \lVert S_{\Gamma_n^{\mathrm{ES}}}\rVert
-      &\leq\frac{\lVert\mathcal I_\infty\rVert}{1-cr^n},\\
-      \lVert S_{\Gamma_n^{\mathrm{ES}}}-\mathcal I_\infty\rVert
-      &\leq\frac{cr^n}{1-cr^n}\,
+        \lVert S_{\Gamma_n^{\mathrm{ES}}}\rVert
+         & \leq\frac{\lVert\mathcal I_\infty\rVert}{1-cr^n}, \\
+        \lVert S_{\Gamma_n^{\mathrm{ES}}}-\mathcal I_\infty\rVert
+         & \leq\frac{cr^n}{1-cr^n}\,
         \lVert\mathcal I_\infty\rVert.
     \end{align}
 \end{theorem}
@@ -995,9 +995,9 @@ windows.
     Let $c>0$, let $0<r<1$, and let $l,K\in\mathbb N$.  If $cr^l<1$,
     then
     \begin{align}
-      cr^{l+1}&<1,\\
-      cr^{K+l}&<1,\\
-      cr^{K+l+1}&<1.
+        cr^{l+1}   & <1, \\
+        cr^{K+l}   & <1, \\
+        cr^{K+l+1} & <1.
     \end{align}
 \end{theorem}
 
@@ -1018,12 +1018,12 @@ windows.
     $\mathcal K_\infty=\mathscr R(P_\rho)$.  For every $0<a<1$, all
     sufficiently large $n$ satisfy
     \begin{align}
-      \mathcal K_n&\in\operatorname{GL},
-      \notag\\
-      \bigl\lVert\mathcal K_n^{-1}-\mathcal K_\infty^{-1}\bigr\rVert
-      &\leq
-      \frac{a}{1-a}\,\bigl\lVert\mathcal K_\infty^{-1}\bigr\rVert.
-      \label{eq:primitive_ground_space_gram_eventual_inverse_bound}
+        \mathcal K_n & \in\operatorname{GL},
+        \notag                               \\
+        \bigl\lVert\mathcal K_n^{-1}-\mathcal K_\infty^{-1}\bigr\rVert
+                     & \leq
+        \frac{a}{1-a}\,\bigl\lVert\mathcal K_\infty^{-1}\bigr\rVert.
+        \label{eq:primitive_ground_space_gram_eventual_inverse_bound}
     \end{align}
 \end{theorem}
 
@@ -1033,8 +1033,8 @@ windows.
     The positive-definite fixed point makes
     $\mathcal K_\infty$ invertible.  Gram convergence implies that eventually
     \begin{align}
-      \bigl\lVert\mathcal K_\infty^{-1}\bigr\rVert
-      \bigl\lVert\mathcal K_n-\mathcal K_\infty\bigr\rVert&\leq a.
+        \bigl\lVert\mathcal K_\infty^{-1}\bigr\rVert
+        \bigl\lVert\mathcal K_n-\mathcal K_\infty\bigr\rVert & \leq a.
     \end{align}
     Factoring $\mathcal K_n$ around the invertible base
     $\mathcal K_\infty$ and applying the arbitrary-base Neumann estimate gives
@@ -1048,8 +1048,8 @@ windows.
     \uses{def:primitive_mps, thm:primitive_ground_space_gram_tendsto_fixed_point}
     Under the same primitive-MPS and positive-definite fixed-point hypotheses,
     \begin{align}
-      \mathcal K_n^{-1}&\longrightarrow\mathcal K_\infty^{-1}
-      \label{eq:primitive_ground_space_gram_inverse_tendsto}
+        \mathcal K_n^{-1} & \longrightarrow\mathcal K_\infty^{-1}
+        \label{eq:primitive_ground_space_gram_inverse_tendsto}
     \end{align}
     in operator norm.
 \end{theorem}
@@ -1071,10 +1071,10 @@ windows.
     $n$, the physical boundary map $\Gamma_n^{\mathrm{ES}}$ is injective and
     its inverse Gram operator is $\mathcal K_n^{-1}$.  Moreover,
     \begin{align}
-      \bigl\lVert S_{\Gamma_n^{\mathrm{ES}}}
+        \bigl\lVert S_{\Gamma_n^{\mathrm{ES}}}
         -\mathcal K_\infty^{-1}\bigr\rVert
-      &\leq
-      \frac{a}{1-a}\,\bigl\lVert\mathcal K_\infty^{-1}\bigr\rVert.
+         & \leq
+        \frac{a}{1-a}\,\bigl\lVert\mathcal K_\infty^{-1}\bigr\rVert.
     \end{align}
 \end{theorem}
 
@@ -1105,7 +1105,7 @@ windows.
     If $T$ is an injective map from a finite-dimensional Hilbert space into a
     complete Hilbert space, then
     \begin{align}
-      P_{\range T}&=T(T^\dagger T)^{-1}T^\dagger.
+        P_{\range T} & =T(T^\dagger T)^{-1}T^\dagger.
     \end{align}
 \end{theorem}
 
@@ -1132,8 +1132,8 @@ windows.
     $\Gamma_L^{\mathrm{ES}}$ is the physical orthogonal projector onto the
     local ground space:
     \begin{align}
-      Q_{\Gamma_L^{\mathrm{ES}}}
-      &=P_{G_L^{\mathrm{ES}}(A)}.
+        Q_{\Gamma_L^{\mathrm{ES}}}
+         & =P_{G_L^{\mathrm{ES}}(A)}.
     \end{align}
     In particular, this is the physical range projector on the local Hilbert
     space, not the virtual transfer fixed-point projector.
@@ -1157,10 +1157,10 @@ windows.
     $L\ge L_0$.  Then the physical orthogonal projector onto the local ground
     space is
     \begin{align}
-      P_{G_L^{\mathrm{ES}}(A)}
-      &=\Gamma_L^{\mathrm{ES}}
+        P_{G_L^{\mathrm{ES}}(A)}
+         & =\Gamma_L^{\mathrm{ES}}
         \left((\Gamma_L^{\mathrm{ES}})^\dagger
-              \Gamma_L^{\mathrm{ES}}\right)^{-1}
+        \Gamma_L^{\mathrm{ES}}\right)^{-1}
         (\Gamma_L^{\mathrm{ES}})^\dagger.
     \end{align}
     Thus the displayed operator is the physical range projector on
@@ -1182,7 +1182,7 @@ windows.
     If $\lVert t\rVert\le a<1$ in a normed ring with convergent geometric
     series and $\lVert 1\rVert=1$, then
     \begin{align}
-      \lVert(1-t)^{-1}\rVert&\le(1-a)^{-1}.
+        \lVert(1-t)^{-1}\rVert & \le(1-a)^{-1}.
     \end{align}
 \end{theorem}
 
@@ -1192,10 +1192,10 @@ windows.
     $(1-t)^{-1}=\sum_{n\ge0}t^n$.  The triangle inequality and
     submultiplicativity give
     \begin{align}
-      \left\lVert\sum_{n\ge0}t^n\right\rVert
-      &\le \sum_{n\ge0}\lVert t\rVert^n
-       =(1-\lVert t\rVert)^{-1}
-       \le(1-a)^{-1},
+        \left\lVert\sum_{n\ge0}t^n\right\rVert
+         & \le \sum_{n\ge0}\lVert t\rVert^n
+        =(1-\lVert t\rVert)^{-1}
+        \le(1-a)^{-1},
     \end{align}
     where the last step uses monotonicity of the reciprocal on the positive
     reals.
@@ -1211,11 +1211,11 @@ windows.
     complete $\mathbb K$-Hilbert space.  Let $T\colon E\to F$ be an injective
     continuous linear map.  If $a\in\mathbb R$ satisfies $a<1$ and
     \begin{align}
-      \lVert I_E-T^\dagger T\rVert&\le a,
+        \lVert I_E-T^\dagger T\rVert & \le a,
     \end{align}
     then
     \begin{align}
-      \lVert S_T\rVert&\le(1-a)^{-1}.
+        \lVert S_T\rVert & \le(1-a)^{-1}.
     \end{align}
 \end{theorem}
 
@@ -1283,13 +1283,13 @@ windows.
     $\sigma^{[i,i+L-1]\leftarrow\tau}$ for the configuration defined by
     \begin{align}
         \sigma^{[i,i+L-1]\leftarrow\tau}(k)
-        &=
+         & =
         \begin{cases}
             \tau(r),
-            & k\equiv i+r\pmod N
-              \text{ for some }0\le r<L, \\
+             & k\equiv i+r\pmod N
+            \text{ for some }0\le r<L, \\
             \sigma(k),
-            & \text{otherwise}.
+             & \text{otherwise}.
         \end{cases}
         \notag
     \end{align}
@@ -1329,7 +1329,7 @@ windows.
     the second prescription:
     \begin{align}
         \left(\sigma^{[i,i+L-1]\leftarrow\tau}\right)^{[i,i+L-1]\leftarrow\upsilon}
-        &=
+         & =
         \sigma^{[i,i+L-1]\leftarrow\upsilon}.
         \notag
     \end{align}
@@ -1352,15 +1352,15 @@ translated copies of the local interaction.
     by
     \begin{align}
         (h_i\psi)(\sigma)
-        &=
+         & =
         \begin{cases}
             \left[h_L(A)
                 \left(\tau\mapsto
-                    \psi\left(\sigma^{[i,i+L-1]\leftarrow\tau}\right)\right)\right]
+                \psi\left(\sigma^{[i,i+L-1]\leftarrow\tau}\right)\right)\right]
             \left(\sigma|_{[i,i+L-1]}\right),
-            & L\le N, \\
+             & L\le N, \\
             0,
-            & L>N.
+             & L>N.
         \end{cases}
         \label{eq:parent_local_term}
     \end{align}
@@ -1374,10 +1374,10 @@ translated copies of the local interaction.
     parent interaction on the chosen cyclic window:
     \begin{align}
         (h_i(A,L)\psi)(\sigma)
-        &=
+         & =
         \left[h_L(A)
             \left(\tau\mapsto
-                \psi\left(\sigma^{[i,i+L-1]\leftarrow\tau}\right)\right)\right]
+            \psi\left(\sigma^{[i,i+L-1]\leftarrow\tau}\right)\right)\right]
         \left(\sigma|_{[i,i+L-1]}\right).
         \notag
     \end{align}
@@ -1399,13 +1399,13 @@ translated copies of the local interaction.
     \leanok
     If $L>N$, the translated term is zero. Suppose $L\le N$ and put
     $f_{\sigma,i}(\tau)
-    :=\psi(\sigma^{[i,i+L-1]\leftarrow\tau})$.
+        :=\psi(\sigma^{[i,i+L-1]\leftarrow\tau})$.
     The pointwise formula for translated terms, together with
     Lemmas~\ref{lem:extract_window_replace_window} and
     \ref{lem:replace_window_replace_window_same}, gives
     \begin{align}
         (h_i(A,L)^2\psi)(\sigma)
-        &=
+         & =
         (h_L(A)^2f_{\sigma,i})
         \left(\sigma|_{[i,i+L-1]}\right) =
         (h_L(A)f_{\sigma,i})
@@ -1424,7 +1424,7 @@ translated copies of the local interaction.
     The chain Hamiltonian is
     \begin{align}
         H_N(A,L)
-        &:=\sum_{i=0}^{N-1}h_i.
+         & :=\sum_{i=0}^{N-1}h_i.
         \label{eq:parent_hamiltonian}
     \end{align}
 \end{definition}
@@ -1588,7 +1588,7 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
     Direct computation gives
     \begin{align}
         \psi(\sigma_1,\ldots,\sigma_L,j)
-        &=
+         & =
         \tr\!\left(A^{\sigma_1}\cdots A^{\sigma_L}A^jX\right)
         =
         \Gamma_L(A^jX)(\sigma).
@@ -1630,7 +1630,7 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
     By trace cyclicity,
     \begin{align}
         \psi(i,\sigma_1,\ldots,\sigma_L)
-        &=
+         & =
         \tr(A^iA^\sigma X)
         =
         \tr(A^\sigma XA^i)

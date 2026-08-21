@@ -23,10 +23,10 @@
     trace-and-prepare map and its complementary restriction by
     \begin{align}
         \mathcal D_\rho(X)
-        &=\tr(X)\rho,
-        &
+         & =\tr(X)\rho,
+         &
         \mathcal C_{P,\rho}(X)
-        &=\mathcal D_\rho\bigl((I-P)X(I-P)^\dagger\bigr).
+         & =\mathcal D_\rho\bigl((I-P)X(I-P)^\dagger\bigr).
         \label{eq:matrix_support_complement_map}
     \end{align}
     Both maps are completely positive, and $\mathcal D_\rho$ is
@@ -38,7 +38,7 @@
     for every $X\in\MN{m}$, then the completion
     \begin{align}
         \widehat{\mathcal E}(X)
-        &=\mathcal E(X)+\mathcal C_{P,\rho}(X)
+         & =\mathcal E(X)+\mathcal C_{P,\rho}(X)
         \label{eq:matrix_support_completion}
     \end{align}
     is trace-preserving and completely positive.  It agrees with
@@ -60,7 +60,7 @@
     Since $P=P^\dagger=P^2$,
     \begin{align}
         \tr\bigl(\mathcal C_{P,\rho}(X)\bigr)
-        &=\tr((I-P)X).
+         & =\tr((I-P)X).
         \notag
     \end{align}
     Adding this identity to~(\ref{eq:matrix_support_map_trace}) gives
@@ -120,36 +120,36 @@
     a relabelling $\sigma$ and unitaries $U_\gamma$ satisfying
     \begin{align}
         A_{\sigma(\gamma)}^i
-        &=U_\gamma M_\gamma^i U_\gamma^\dagger
+         & =U_\gamma M_\gamma^i U_\gamma^\dagger
         \label{eq:mpdo_bnt_physical_channel_unitary_conjugacy}
     \end{align}
     for every sector $\gamma$ and every vertical letter $i$.  With the maps of
     the preceding two subsections, set
     \begin{align}
         \mathcal T_0
-        &=\widetilde R_2\circ\widetilde T\circ R_1,
-        &
+         & =\widetilde R_2\circ\widetilde T\circ R_1,
+         &
         \mathcal S_0
-        &=\widetilde R_1\circ\widetilde S\circ R_2.
+         & =\widetilde R_1\circ\widetilde S\circ R_2.
         \label{eq:mpdo_bnt_active_physical_maps}
     \end{align}
     Let
     \begin{align}
-        P_1&=W_1^\dagger W_1,
-        &
-        P_2&=\kappa_\ast(W_2^\dagger W_2),
-        &
-        Q_i&=I-P_i.
+        P_1 & =W_1^\dagger W_1,
+            &
+        P_2 & =\kappa_\ast(W_2^\dagger W_2),
+            &
+        Q_i & =I-P_i.
         \label{eq:mpdo_bnt_physical_active_projections}
     \end{align}
     The matrices $P_1$ and $P_2$ are orthogonal projections.  If $d>0$, put
     $\tau_1=d^{-1}I_d$ and $\tau_2=d^{-2}I_{d^2}$, and define
     \begin{align}
         \mathcal T(X)
-        &=\mathcal T_0(X)+\tr(Q_1XQ_1)\tau_2,
-        \notag\\
+         & =\mathcal T_0(X)+\tr(Q_1XQ_1)\tau_2,
+        \notag                                  \\
         \mathcal S(Y)
-        &=\mathcal S_0(Y)+\tr(Q_2YQ_2)\tau_1.
+         & =\mathcal S_0(Y)+\tr(Q_2YQ_2)\tau_1.
         \label{eq:mpdo_bnt_completed_physical_maps}
     \end{align}
     If $d=0$, take both maps to be zero; their domain and codomain matrix
@@ -158,9 +158,9 @@
     maps on the full physical matrix algebras.  For every virtual matrix $Z$,
     they satisfy
     \begin{align}
-        \mathcal T[M_1(Z)]&=M_2(Z),
-        &
-        \mathcal S[M_2(Z)]&=M_1(Z).
+        \mathcal T[M_1(Z)] & =M_2(Z),
+                           &
+        \mathcal S[M_2(Z)] & =M_1(Z).
         \label{eq:mpdo_bnt_completed_physical_map_actions}
     \end{align}
     Hence $M$ is a renormalization fixed point in the sense of
@@ -190,9 +190,9 @@
     conjugations gives complete positivity of $\mathcal T_0$ and
     $\mathcal S_0$.  Their traces are
     \begin{align}
-        \tr(\mathcal T_0(X))&=\tr(P_1X),
-        &
-        \tr(\mathcal S_0(Y))&=\tr(P_2Y).
+        \tr(\mathcal T_0(X)) & =\tr(P_1X),
+                             &
+        \tr(\mathcal S_0(Y)) & =\tr(P_2Y).
         \label{eq:mpdo_bnt_active_physical_map_traces}
     \end{align}
     Suppose first that $d>0$.  Since $Q_i$ is a projection and $\tau_i$ has
@@ -205,9 +205,9 @@
 
     The reconstruction identities for the two vertical decompositions imply
     \begin{align}
-        P_1M_1(Z)P_1&=M_1(Z),
-        &
-        P_2M_2(Z)P_2&=M_2(Z).
+        P_1M_1(Z)P_1 & =M_1(Z),
+                     &
+        P_2M_2(Z)P_2 & =M_2(Z).
         \label{eq:mpdo_bnt_physical_closure_support}
     \end{align}
     Thus both complementary terms vanish on the corresponding physical
@@ -220,7 +220,7 @@
 \end{proof}
 
 \begin{theorem}[Renormalization fixed point from positive-tail reflected
-    sector targets]
+        sector targets]
     \label{thm:mpdo_bnt_conditional_rfp_from_reflected_targets}
     \lean{MPOTensor.BNTAlgebraTensorClause.TwoSiteExactSectorGauge.%
         isRFPViaTS_of_positive_tail_reflected_target}
@@ -274,16 +274,16 @@
     canonical form.  If $M$ has a tensor-attached BNT algebra clause, then
     there are trace-preserving completely positive maps
     \begin{align}
-        \mathcal T\colon\MN d&\longrightarrow\MN{d^2},
-        &
-        \mathcal S\colon\MN{d^2}&\longrightarrow\MN d
+        \mathcal T\colon\MN d    & \longrightarrow\MN{d^2},
+                                 &
+        \mathcal S\colon\MN{d^2} & \longrightarrow\MN d
         \notag
     \end{align}
     such that, for every virtual matrix $X$,
     \begin{align}
-        \mathcal T[M_1(X)]&=M_2(X),
-        &
-        \mathcal S[M_2(X)]&=M_1(X).
+        \mathcal T[M_1(X)] & =M_2(X),
+                           &
+        \mathcal S[M_2(X)] & =M_1(X).
         \label{eq:mpdo_bnt_algebra_tensor_rfp_maps}
     \end{align}
     Thus $M$ is a renormalization fixed point in the sense of

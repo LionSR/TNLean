@@ -35,7 +35,7 @@ on decay rates.
     and is unique up to scaling; we normalize it so that $\tr(\rho^R)=1$.
     For an auxiliary-space insertion $X\in\MN{D}$, define
     \begin{align}
-        \langle X_0 \rangle &= \tr(X\rho^R). \notag
+        \langle X_0 \rangle & = \tr(X\rho^R). \notag
     \end{align}
 \end{definition}
 
@@ -46,7 +46,7 @@ on decay rates.
     For auxiliary-space insertions $X,Y\in\MN{D}$ and $n\ge0$, define
     \begin{align}
         \langle X_0 Y_n \rangle
-        &= \tr\!\left(Y\,\E_A^n(X\rho^R)\right). \notag
+         & = \tr\!\left(Y\,\E_A^n(X\rho^R)\right). \notag
     \end{align}
     Equivalently, insert $X$ at site $0$, propagate by $\E_A^n$, then insert
     $Y$ and take the trace.
@@ -66,7 +66,7 @@ on decay rates.
         % Boundary signature: (virtual-west=0 | virtual-east=0 |
         % physical-up=0 | physical-down=0).
         \begin{tenkz}[rows={wire,wire}, cols=3,
-            west={cup=$Y$}, east={cup=$X\rho^R$}]
+                west={cup=$Y$}, east={cup=$X\rho^R$}]
             \tn[at=(1,2), skin=ring, wires=2]{\E_A^n}
         \end{tenkz}
     \end{center}
@@ -79,7 +79,7 @@ on decay rates.
     The connected two-point function is
     \begin{align}
         C(X,Y;n)
-        &= \langle X_0Y_n\rangle
+         & = \langle X_0Y_n\rangle
         - \langle X_0\rangle\langle Y_0\rangle. \notag
     \end{align}
 \end{definition}
@@ -92,7 +92,7 @@ on decay rates.
     $X\in\MN{D}$, define
     \begin{align}
         Z_\rho(X)
-        &= X\rho-\tr(X\rho)\rho.
+         & = X\rho-\tr(X\rho)\rho.
         \label{eq:correlator_traceless_part}
     \end{align}
     When $\tr(\rho)=1$, this removes the trace component of $X\rho$.
@@ -105,7 +105,7 @@ on decay rates.
     \uses{def:correlator_traceless_part}
     If $\tr(\rho)=1$, then
     \begin{align}
-        \tr\!\bigl(Z_\rho(X)\bigr)&=0.
+        \tr\!\bigl(Z_\rho(X)\bigr) & =0.
     \end{align}
 \end{lemma}
 
@@ -115,8 +115,8 @@ on decay rates.
     By linearity of the trace,
     \begin{align}
         \tr\!\bigl(Z_\rho(X)\bigr)
-        &=\tr(X\rho)-\tr(X\rho)\tr(\rho)
-         =0.
+         & =\tr(X\rho)-\tr(X\rho)\tr(\rho)
+        =0.
     \end{align}
 \end{proof}
 
@@ -129,7 +129,7 @@ on decay rates.
     $\E_A(\rho)=\rho$.  Then, for every $n\geq0$,
     \begin{align}
         C(X,Y;n)
-        &=\tr\!\left(Y\,\E_A^n\bigl(Z_\rho(X)\bigr)\right).
+         & =\tr\!\left(Y\,\E_A^n\bigl(Z_\rho(X)\bigr)\right).
         \label{eq:connected_correlator_traceless_reduction}
     \end{align}
     When moreover $\tr(\rho)=1$, the preceding lemma shows that
@@ -144,7 +144,7 @@ on decay rates.
     Linearity therefore gives
     \begin{align}
         \tr\!\left(Y\,\E_A^n\bigl(Z_\rho(X)\bigr)\right)
-        &=
+         & =
         \tr\!\left(Y\,\E_A^n(X\rho)\right)
         -\tr(X\rho)\tr(Y\rho),
     \end{align}
@@ -162,7 +162,7 @@ on decay rates.
     $j=1,\ldots,D^2-1$, satisfy, for all $n\ge 0$,
     \begin{align}
         C(X,Y;n)
-        &= \sum_{j=1}^{D^2-1} c_j\,\lambda_j^n,
+         & = \sum_{j=1}^{D^2-1} c_j\,\lambda_j^n,
         \label{eq:correlations_spectral_expansion}
     \end{align}
     then the connected correlator equals the stated sum of exponentials.
@@ -203,7 +203,7 @@ on decay rates.
     $n\ge0$,
     \begin{align}
         |C(X,Y;n)|
-        &\le C_{XY}\,|\lambda_2|^n,
+         & \le C_{XY}\,|\lambda_2|^n,
         \label{eq:correlations_decay_bound}
     \end{align}
     then the connected correlator satisfies that exponential decay bound.
@@ -263,7 +263,7 @@ on decay rates.
     quantity by
     \begin{align}
         \xi
-        &= -\frac{1}{\log|\lambda_2|}. \notag
+         & = -\frac{1}{\log|\lambda_2|}. \notag
     \end{align}
     For a nonzero subleading eigenvalue in the physical range
     $0<|\lambda_2|<1$, this quantity is positive. If all subleading spectral
@@ -301,7 +301,7 @@ single-tensor transfer map $\E_A$.
     Let
     \begin{align}
         P(X)
-        &= \frac{\tr(X)}{\tr(\rho)}\rho
+         & = \frac{\tr(X)}{\tr(\rho)}\rho
         \label{eq:correlations_fixed_point_projection}
     \end{align}
     be the corresponding fixed-point projection.
@@ -309,7 +309,7 @@ single-tensor transfer map $\E_A$.
     $n\ge 0$ and $X\in\MN{D}$,
     \begin{align}
         \|\E_A^n(X)-P(X)\|
-        &\le C(1-\delta)^n\|X\|.
+         & \le C(1-\delta)^n\|X\|.
         \label{eq:correlations_channel_convergence}
     \end{align}
     The transfer-map gap $\delta$ exists by primitivity
@@ -339,7 +339,7 @@ single-tensor transfer map $\E_A$.
     traceless $X\in\MN{D}$, i.e.\ $\tr(X)=0$,
     \begin{align}
         \|\E_A^n(X)\|
-        &\le C e^{-n/\xi}\|X\|.
+         & \le C e^{-n/\xi}\|X\|.
         \label{eq:correlations_traceless_decay}
     \end{align}
     Traceless matrices lie in $\ker P$, where $P$ is the fixed-point

@@ -5,8 +5,8 @@
     \uses{def:mpdo_controlled_kraus_map, def:mpdo_right_partial_trace_map}
     Let
     \begin{align}
-        H&=\bigoplus_{i\in I}(A_i\otimes B_i), \notag\\
-        K&=\bigoplus_{i\in I}A_i. \notag
+        H & =\bigoplus_{i\in I}(A_i\otimes B_i), \notag \\
+        K & =\bigoplus_{i\in I}A_i. \notag
     \end{align}
     The controlled dependent partial trace discards the off-diagonal blocks
     between distinct $i$ and applies $\tr_{B_i}$ to the $i$th diagonal block.
@@ -27,13 +27,13 @@
     diagonal-block formula gives
     \begin{align}
         [\mathcal C_{\tr}(X)]_{ii}
-        &=\sum_j K_{i,j}X_{ii}K_{i,j}^\dagger
-          =\tr_{B_i}(X_{ii}). \notag
+         & =\sum_j K_{i,j}X_{ii}K_{i,j}^\dagger
+        =\tr_{B_i}(X_{ii}). \notag
     \end{align}
 \end{proof}
 
 \begin{theorem}[The controlled dependent partial trace is trace-preserving
-    completely positive]
+        completely positive]
     \label{thm:mpdo_controlled_dependent_partial_trace_cptp}
     \lean{Matrix.controlledPartialTraceRightLM_isKrausCPTP}
     \leanok
@@ -49,9 +49,9 @@
     satisfies
     \begin{align}
         \sum_{i,a}\widetilde V_{i,a}^{\dagger}\widetilde V_{i,a}
-        &=\bigoplus_i\left(\sum_aV_{i,a}^{\dagger}V_{i,a}\right)
-          =\bigoplus_i \Id_{A_i\otimes B_i}
-          =\Id_H. \notag
+         & =\bigoplus_i\left(\sum_aV_{i,a}^{\dagger}V_{i,a}\right)
+        =\bigoplus_i \Id_{A_i\otimes B_i}
+        =\Id_H. \notag
     \end{align}
     Its Kraus form gives complete positivity, and the displayed resolution of
     the identity gives trace preservation.
@@ -75,19 +75,19 @@
     In sector-adapted coordinates, regroup two sites by
     \begin{align}
         ((l_k,r_k),(l_h,r_h))
-        &\longmapsto ((l_k,r_h),(r_k,l_h)). \notag
+         & \longmapsto ((l_k,r_h),(r_k,l_h)). \notag
     \end{align}
     Globally this gives the dependent-sum equivalence
     \begin{align}
         \left(\bigoplus_k L_k\otimes R_k\right)^{\!\otimes2}
-        &\simeq
-          \bigoplus_{k,h}(L_k\otimes R_h)\otimes(R_k\otimes L_h). \notag
+         & \simeq
+        \bigoplus_{k,h}(L_k\otimes R_h)\otimes(R_k\otimes L_h). \notag
     \end{align}
     The forward equivalence prepares the neighboring factors
     $R_k\otimes L_h$ for the partial trace in $\mathcal T_0$; its inverse is
     the shift $\mathcal S_2$. These are the reorderings in
     \cite[Appendix~C.2, lines~1521--1522 and~1555--1559]
-      {Cirac2016MPDO_arXiv}.
+    {Cirac2016MPDO_arXiv}.
 \end{definition}
 
 \begin{definition}[The two-site partial-trace map $\mathcal T_0$]
@@ -102,7 +102,7 @@
     for the regrouping reindexing,
     \begin{align}
         \mathcal T_0
-        &=\CTr_{(R_k\otimes L_h)_{k,h}}\circ R_{\Phi_2}.
+         & =\CTr_{(R_k\otimes L_h)_{k,h}}\circ R_{\Phi_2}.
         \label{eq:rfp_t0_factorization}
     \end{align}
 \end{definition}
@@ -130,15 +130,15 @@
     \label{def:mpdo_s2_map}
     \lean{MPOTensor.ExplicitEtaOperators.s2Map}
     \lean{MPOTensor.PhysicalSectorFactorization.s2ShiftEquiv,
-      MPOTensor.PhysicalSectorFactorization.s2Map,
-      MPOTensor.PhysicalSectorFactorization.s2Map_apply}
+        MPOTensor.PhysicalSectorFactorization.s2Map,
+        MPOTensor.PhysicalSectorFactorization.s2Map_apply}
     \leanok
     \uses{def:mpdo_two_site_subspin_regrouping, def:mpdo_equiv_reindex_map}
     The map $\mathcal S_2$ is matrix reindexing along the inverse two-site
     equivalence. Thus
     \begin{align}
         ((l_k,r_h),(r_k,l_h))
-        &\longmapsto ((l_k,r_k),(l_h,r_h)). \notag
+         & \longmapsto ((l_k,r_k),(l_h,r_h)). \notag
     \end{align}
 \end{definition}
 
@@ -166,36 +166,36 @@
     \lean{MPOTensor.ExplicitEtaOperators.omegaShiftEquiv}
     \lean{MPOTensor.ExplicitEtaOperators.t2ShiftEquiv}
     \lean{MPOTensor.PhysicalSectorFactorization.ThreeSiteMiddleIndex,
-      MPOTensor.PhysicalSectorFactorization.S0PreparationIndex,
-      MPOTensor.PhysicalSectorFactorization.s0RegroupEquiv,
-      MPOTensor.PhysicalSectorFactorization.t2ShiftEquiv}
+        MPOTensor.PhysicalSectorFactorization.S0PreparationIndex,
+        MPOTensor.PhysicalSectorFactorization.s0RegroupEquiv,
+        MPOTensor.PhysicalSectorFactorization.t2ShiftEquiv}
     \leanok
     \uses{def:mpdo_two_site_subspin_regrouping, def:mpdo_eta_omega, def:mpdo_physical_sector_factorization}
     Regroup three sites by
     \begin{align}
         ((l_k,r_k),((l_l,r_l),(l_h,r_h)))
-        &\longmapsto
-          ((l_k,r_h),((r_k,l_l),(r_l,l_h))). \notag
+         & \longmapsto
+        ((l_k,r_h),((r_k,l_l),(r_l,l_h))). \notag
     \end{align}
     Equivalently,
     \begin{align}
         \left(\bigoplus_k L_k\otimes R_k\right)^{\!\otimes3}
-        &\simeq
-          \bigoplus_{k,h}(L_k\otimes R_h)\otimes
-          \left[\bigoplus_l
+         & \simeq
+        \bigoplus_{k,h}(L_k\otimes R_h)\otimes
+        \left[\bigoplus_l
             (R_k\otimes L_l)\otimes(R_l\otimes L_h)\right]. \notag
     \end{align}
     The forward equivalence prepares the four middle subspins for
     $\mathcal S_0$; its inverse is the shift $\mathcal T_2$ in
     \cite[Appendix~C.2, lines~1535--1540 and~1547]
-      {Cirac2016MPDO_arXiv}.
+    {Cirac2016MPDO_arXiv}.
 \end{definition}
 
 \begin{definition}[The three-site partial-trace map $\mathcal S_0$]
     \label{def:mpdo_s0_map}
     \lean{MPOTensor.ExplicitEtaOperators.s0Map}
     \lean{MPOTensor.PhysicalSectorFactorization.s0Map,
-      MPOTensor.PhysicalSectorFactorization.s0Map_sameBlock_apply}
+        MPOTensor.PhysicalSectorFactorization.s0Map_sameBlock_apply}
     \leanok
     \uses{def:mpdo_three_site_subspin_regrouping, def:mpdo_controlled_dependent_partial_trace, def:mpdo_equiv_reindex_map}
     Define $\mathcal S_0$ by the three-site regrouping followed, for every
@@ -206,7 +206,7 @@
     Thus, writing $R_{\Phi_3}$ for the regrouping reindexing,
     \begin{align}
         \mathcal S_0
-        &=\CTr_{\left(\bigoplus_l(R_k\otimes L_l)\otimes(R_l\otimes L_h)\right)_{k,h}}\circ R_{\Phi_3}.
+         & =\CTr_{\left(\bigoplus_l(R_k\otimes L_l)\otimes(R_l\otimes L_h)\right)_{k,h}}\circ R_{\Phi_3}.
         \label{eq:rfp_s0_factorization}
     \end{align}
 \end{definition}
@@ -244,8 +244,8 @@
     equivalence. On each summand it sends
     \begin{align}
         ((l_k,r_h),((r_k,l_l),(r_l,l_h)))
-        &\longmapsto
-          ((l_k,r_k),((l_l,r_l),(l_h,r_h))). \notag
+         & \longmapsto
+        ((l_k,r_k),((l_l,r_l),(l_h,r_h))). \notag
     \end{align}
 \end{definition}
 
@@ -279,7 +279,7 @@
 \end{definition}
 
 \begin{theorem}[The fiberwise partial traces are trace-preserving completely
-    positive]
+        positive]
     \label{thm:mpdo_fiberwise_partial_trace_maps_cptp}
     \lean{MPOTensor.ExplicitEtaOperators.t0SectorMap_isKrausCPTP}
     \lean{MPOTensor.ExplicitEtaOperators.s0SectorMap_isKrausCPTP}
@@ -294,10 +294,10 @@
     The fiberwise forms factor as
     \begin{align}
         \mathcal T_0^{(k,h)}
-        &=\tr_{R_k\otimes L_h}\circ R_{\phi_{k,h}}, \notag\\
+         & =\tr_{R_k\otimes L_h}\circ R_{\phi_{k,h}}, \notag \\
         \mathcal S_0^{(k,l,h)}
-        &=\tr_{(R_k\otimes L_l)\otimes(R_l\otimes L_h)}
-          \circ R_{\phi_{k,l,h}}, \notag
+         & =\tr_{(R_k\otimes L_l)\otimes(R_l\otimes L_h)}
+        \circ R_{\phi_{k,l,h}}, \notag
     \end{align}
     where $\phi_{k,h}$ is the two-site equivalence of
     Definition~\ref{def:mpdo_two_site_subspin_regrouping} on the $(k,h)$
@@ -340,33 +340,33 @@
 To record the domains and codomains, set
 \begin{align}
     \mathcal H^{\Omega}_{k,h}
-    &=\bigoplus_l
-      (B_k^R\otimes B_l^L)\otimes(B_l^R\otimes B_h^L), \notag
+     & =\bigoplus_l
+    (B_k^R\otimes B_l^L)\otimes(B_l^R\otimes B_h^L), \notag
 \end{align}
 and introduce the matrix algebras
 \begin{align}
     \mathcal A_2
-    &=\End\!\left(\left[\bigoplus_j(B_j^L\otimes B_j^R)\right]^{\!\otimes2}\right),
-    &
+     & =\End\!\left(\left[\bigoplus_j(B_j^L\otimes B_j^R)\right]^{\!\otimes2}\right),
+     &
     \mathcal A_{\partial}
-    &=\End\!\left(\bigoplus_{k,h}B_k^L\otimes B_h^R\right), \notag\\
+     & =\End\!\left(\bigoplus_{k,h}B_k^L\otimes B_h^R\right), \notag                  \\
     \mathcal A_{\eta}
-    &=\End\!\left(\bigoplus_{k,h}\bigl[(B_k^L\otimes B_h^R)\otimes
-          (B_k^R\otimes B_h^L)\bigr]\right),
-    &
+     & =\End\!\left(\bigoplus_{k,h}\bigl[(B_k^L\otimes B_h^R)\otimes
+            (B_k^R\otimes B_h^L)\bigr]\right),
+     &
     \mathcal A_{\Omega}
-    &=\End\!\left(\bigoplus_{k,h}\bigl[(B_k^L\otimes B_h^R)\otimes
-          \mathcal H^{\Omega}_{k,h}\bigr]\right), \notag\\
+     & =\End\!\left(\bigoplus_{k,h}\bigl[(B_k^L\otimes B_h^R)\otimes
+    \mathcal H^{\Omega}_{k,h}\bigr]\right), \notag                                    \\
     \mathcal A_3
-    &=\End\!\left(\left[\bigoplus_j(B_j^L\otimes B_j^R)\right]^{\!\otimes3}\right).
+     & =\End\!\left(\left[\bigoplus_j(B_j^L\otimes B_j^R)\right]^{\!\otimes3}\right).
     \notag
 \end{align}
 Thus the global maps have types
 \begin{align}
-    \mathcal T_0&:\mathcal A_2\to\mathcal A_{\partial}, \notag\\
-    \mathcal S_2&:\mathcal A_{\eta}\to\mathcal A_2, \notag\\
-    \mathcal S_0&:\mathcal A_3\to\mathcal A_{\partial}, \notag\\
-    \mathcal T_2&:\mathcal A_{\Omega}\to\mathcal A_3. \notag
+    \mathcal T_0 & :\mathcal A_2\to\mathcal A_{\partial}, \notag \\
+    \mathcal S_2 & :\mathcal A_{\eta}\to\mathcal A_2, \notag     \\
+    \mathcal S_0 & :\mathcal A_3\to\mathcal A_{\partial}, \notag \\
+    \mathcal T_2 & :\mathcal A_{\Omega}\to\mathcal A_3. \notag
 \end{align}
 The controlled maps $\mathcal T_0$ and $\mathcal S_0$ discard coherences
 between distinct outer-sector pairs. For fixed $(k,h)$, the global map
@@ -378,22 +378,22 @@ global reindexings, with all displayed tensor factors present at their inputs
 For the fiberwise maps, write
 \begin{align}
     \mathcal A_2^{k,h}
-    &=\End\!\left((B_k^L\otimes B_k^R)\otimes(B_h^L\otimes B_h^R)\right),
-    &
+     & =\End\!\left((B_k^L\otimes B_k^R)\otimes(B_h^L\otimes B_h^R)\right),
+     &
     \mathcal A_{\partial}^{k,h}
-    &=\End(B_k^L\otimes B_h^R), \notag\\
+     & =\End(B_k^L\otimes B_h^R), \notag                                                \\
     \mathcal A_{\eta}^{k,h}
-    &=\End\!\left((B_k^L\otimes B_h^R)\otimes(B_k^R\otimes B_h^L)\right),
-    &
+     & =\End\!\left((B_k^L\otimes B_h^R)\otimes(B_k^R\otimes B_h^L)\right),
+     &
     \mathcal A_{\Omega}^{k,h}
-    &=\End\!\left((B_k^L\otimes B_h^R)\otimes\mathcal H^{\Omega}_{k,h}\right), \notag\\
+     & =\End\!\left((B_k^L\otimes B_h^R)\otimes\mathcal H^{\Omega}_{k,h}\right), \notag \\
     \mathcal A_3^{k,l,h}
-    &=\End\!\left((B_k^L\otimes B_k^R)\otimes(B_l^L\otimes B_l^R)
-          \otimes(B_h^L\otimes B_h^R)\right), \notag\\
+     & =\End\!\left((B_k^L\otimes B_k^R)\otimes(B_l^L\otimes B_l^R)
+    \otimes(B_h^L\otimes B_h^R)\right), \notag                                          \\
     \mathcal A_3^{k,\bullet,h}
-    &=\End\!\left(\bigoplus_l
-        \bigl[(B_k^L\otimes B_k^R)\otimes(B_l^L\otimes B_l^R)
-          \otimes(B_h^L\otimes B_h^R)\bigr]\right). \notag
+     & =\End\!\left(\bigoplus_l
+    \bigl[(B_k^L\otimes B_k^R)\otimes(B_l^L\otimes B_l^R)
+            \otimes(B_h^L\otimes B_h^R)\bigr]\right). \notag
 \end{align}
 The map $\mathcal S_0^{(k,l,h)}$ fixes the middle sector $l$ before taking the
 partial trace; it is therefore distinct from the fixed-$(k,h)$ restriction of
@@ -402,14 +402,14 @@ the global controlled map $\mathcal S_0$. The four fiberwise types are
 % matrix-algebra domains and codomains. Ink: every blue stroke denotes a
 % trace-preserving completely positive map, and its label specifies the map.
 \par\noindent\hfil
-  \begin{tikzcd}[channel, column sep=16mm, row sep=6mm]
+\begin{tikzcd}[channel, column sep=16mm, row sep=6mm]
     \mathcal A_2^{k,h} \arrow[r, "\mathcal T_0^{(k,h)}"] &
-      \mathcal A_{\partial}^{k,h} \\
+    \mathcal A_{\partial}^{k,h} \\
     \mathcal A_{\eta}^{k,h} \arrow[r, "\mathcal S_2^{(k,h)}"] &
-      \mathcal A_2^{k,h} \\
+    \mathcal A_2^{k,h} \\
     \mathcal A_3^{k,l,h} \arrow[r, "\mathcal S_0^{(k,l,h)}"] &
-      \mathcal A_{\partial}^{k,h} \\
+    \mathcal A_{\partial}^{k,h} \\
     \mathcal A_{\Omega}^{k,h} \arrow[r, "\mathcal T_2^{(k,h)}"] &
-      \mathcal A_3^{k,\bullet,h}
-  \end{tikzcd}
+    \mathcal A_3^{k,\bullet,h}
+\end{tikzcd}
 \hfil\par

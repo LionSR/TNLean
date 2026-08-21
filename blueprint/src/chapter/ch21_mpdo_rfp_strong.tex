@@ -16,8 +16,8 @@ change of basis. The matrix is not assumed to have trace one.
     $i=(i_1,i_2)$ and $j=(j_1,j_2)$,
     \begin{align}
         M^{i_1j_1}M^{i_2j_2}
-        &=\sum_{a,b}
-          U_{i,a}P_{a_2b_2}\overline{U_{j,b}}\,M^{a_1b_1}.
+         & =\sum_{a,b}
+        U_{i,a}P_{a_2b_2}\overline{U_{j,b}}\,M^{a_1b_1}.
         \label{eq:mpdo_strong_rfp_tensor}
     \end{align}
     Equivalently, the literal orientation of the source diagram is
@@ -30,7 +30,7 @@ change of basis. The matrix is not assumed to have trace one.
 \begin{theorem}[Physical closures of the strong fixed-point relation]
     \label{thm:mpdo_strong_rfp_phys_close}
     \lean{MPOTensor.strongRFP_tensor_relation_iff_physClose,
-      MPOTensor.isStrongRFP_iff_physClose}
+        MPOTensor.isStrongRFP_iff_physClose}
     \leanok
     \uses{def:mpdo_strong_rfp, def:phys_close}
     For fixed matrices $P$ and $U$, the tensor identity
@@ -38,7 +38,7 @@ change of basis. The matrix is not assumed to have trace one.
     matrix $X$ satisfies
     \begin{align}
         M_2(X)
-        &=U\bigl(M_1(X)\otimes P\bigr)U^\dagger.
+         & =U\bigl(M_1(X)\otimes P\bigr)U^\dagger.
         \label{eq:mpdo_strong_rfp_closure}
     \end{align}
     Hence the strong renormalization fixed-point relation is equivalent to the
@@ -52,8 +52,8 @@ change of basis. The matrix is not assumed to have trace one.
     taking the virtual trace gives, entrywise,
     \begin{align}
         \tr\!\left(M^{i_1j_1}M^{i_2j_2}X\right)
-        &=\sum_{a,b}U_{i,a}P_{a_2b_2}\overline{U_{j,b}}
-          \tr\!\left(M^{a_1b_1}X\right),
+         & =\sum_{a,b}U_{i,a}P_{a_2b_2}\overline{U_{j,b}}
+        \tr\!\left(M^{a_1b_1}X\right),
         \notag
     \end{align}
     which is (\ref{eq:mpdo_strong_rfp_closure}). Conversely, subtract the
@@ -71,16 +71,16 @@ change of basis. The matrix is not assumed to have trace one.
     After $R_1$ separates the first physical coordinate from the $N$
     spectator coordinates, define
     \begin{align}
-      \Sigma_N:\bigl((i,u),p\bigr)&\longmapsto\bigl((i,p),u\bigr),
-      \label{eq:mpdo_first_site_preparation_shuffle}
+        \Sigma_N:\bigl((i,u),p\bigr) & \longmapsto\bigl((i,p),u\bigr),
+        \label{eq:mpdo_first_site_preparation_shuffle}
     \end{align}
     where $i,p\in\{0,\ldots,d-1\}$ and
     $u\in\{0,\ldots,d-1\}^N$. Thus, for a matrix $Z$ indexed by
     $((i,u),p)$,
     \begin{align}
-      \bigl(\Sigma_N[Z]\bigr)_{((i,p),u),((j,q),v)}
-        &=Z_{((i,u),p),((j,v),q)}.
-      \label{eq:mpdo_first_site_preparation_shuffle_matrix}
+        \bigl(\Sigma_N[Z]\bigr)_{((i,p),u),((j,q),v)}
+         & =Z_{((i,u),p),((j,v),q)}.
+        \label{eq:mpdo_first_site_preparation_shuffle_matrix}
     \end{align}
 \end{definition}
 
@@ -91,9 +91,9 @@ change of basis. The matrix is not assumed to have trace one.
     \uses{def:mpdo_first_site_preparation_shuffle}
     Localizing the preparation $Y\mapsto Y\otimes P$ at the first site gives
     \begin{align}
-      (\operatorname{prep}_P\otimes\id)[Y]
-        &=\Sigma_N[Y\otimes P].
-      \label{eq:mpdo_localized_preparation_shuffle}
+        (\operatorname{prep}_P\otimes\id)[Y]
+         & =\Sigma_N[Y\otimes P].
+        \label{eq:mpdo_localized_preparation_shuffle}
     \end{align}
 \end{lemma}
 
@@ -107,9 +107,9 @@ change of basis. The matrix is not assumed to have trace one.
 \begin{theorem}[Global operator identity for fixed strong fixed-point witnesses]
     \label{thm:mpdo_strong_rfp_global_operator_identity}
     \lean{MPOTensor.strongRFP_physCloseN_eq_localized_preparation,
-      MPOTensor.strongRFP_physCloseN_eq_reindex_singleKrausMap_kronecker,
-      MPOTensor.strongRFP_mpo_eq_localized_preparation,
-      MPOTensor.strongRFP_mpo_eq_reindex_singleKrausMap_kronecker}
+        MPOTensor.strongRFP_physCloseN_eq_reindex_singleKrausMap_kronecker,
+        MPOTensor.strongRFP_mpo_eq_localized_preparation,
+        MPOTensor.strongRFP_mpo_eq_reindex_singleKrausMap_kronecker}
     \leanok
     \uses{thm:mpdo_strong_rfp_phys_close, thm:mpdo_global_renormalization_maps, def:finite_tuple_regroupings, def:mpdo_first_site_preparation_shuffle, lem:mpdo_localized_first_site_preparation, lem:phys_close_identity}
     Fix witnesses $P$ and $U$ in
@@ -117,11 +117,11 @@ change of basis. The matrix is not assumed to have trace one.
     matrix $X$, write $R_1$ and $R_2$ for the initial-coordinate regroupings
     of lengths $N+1$ and $N+2$. Then
     \begin{align}
-      R_2[M_{N+2}(X)]
-        &=(U\otimes\Id)\,
-          \Sigma_N\!\left(R_1[M_{N+1}(X)]\otimes P\right)
-          (U^\dagger\otimes\Id).
-      \label{eq:mpdo_strong_rfp_global_closure}
+        R_2[M_{N+2}(X)]
+         & =(U\otimes\Id)\,
+        \Sigma_N\!\left(R_1[M_{N+1}(X)]\otimes P\right)
+        (U^\dagger\otimes\Id).
+        \label{eq:mpdo_strong_rfp_global_closure}
     \end{align}
     Equivalently, applying $R_2^{-1}$ to the right-hand side gives the
     $(N+2)$-site closure in its original physical coordinates. The same
@@ -148,7 +148,7 @@ change of basis. The matrix is not assumed to have trace one.
     \leanok
     If $V$ is unitary, then
     \begin{align}
-        \operatorname{rank}(VAV^\dagger)&=\operatorname{rank}A.
+        \operatorname{rank}(VAV^\dagger) & =\operatorname{rank}A.
         \label{eq:unitary_single_kraus_rank}
     \end{align}
 \end{theorem}
@@ -160,20 +160,20 @@ change of basis. The matrix is not assumed to have trace one.
 \begin{theorem}[Geometric periodic rank growth of a strong fixed point]
     \label{thm:mpdo_strong_rfp_periodic_rank_growth}
     \lean{MPOTensor.strongRFP_rank_mpo_add_two,
-      MPOTensor.strongRFP_rank_mpo_add_one,
-      MPOTensor.IsStrongRFP.exists_periodic_rank_factor}
+        MPOTensor.strongRFP_rank_mpo_add_one,
+        MPOTensor.IsStrongRFP.exists_periodic_rank_factor}
     \leanok
     \uses{def:mpdo_strong_rfp, thm:mpdo_strong_rfp_phys_close, thm:mpdo_strong_rfp_global_operator_identity, thm:unitary_single_kraus_rank}
     Fix witnesses $P\geq0$ and $U$ for the strong fixed-point relation. For
     every $N\geq0$, the ordinary full periodic MPO matrix ranks satisfy
     \begin{align}
-      \operatorname{rank}\rho^{(N+2)}(M)
-        &=\operatorname{rank}\rho^{(N+1)}(M)\,
-          \operatorname{rank}P,
-        \label{eq:mpdo_strong_rfp_rank_recurrence}\\
-      \operatorname{rank}\rho^{(N+1)}(M)
-        &=\operatorname{rank}\rho^{(1)}(M)\,
-          (\operatorname{rank}P)^N.
+        \operatorname{rank}\rho^{(N+2)}(M)
+         & =\operatorname{rank}\rho^{(N+1)}(M)\,
+        \operatorname{rank}P,
+        \label{eq:mpdo_strong_rfp_rank_recurrence} \\
+        \operatorname{rank}\rho^{(N+1)}(M)
+         & =\operatorname{rank}\rho^{(1)}(M)\,
+        (\operatorname{rank}P)^N.
         \label{eq:mpdo_strong_rfp_rank_geometric}
     \end{align}
     Consequently every strong fixed point admits a single positive witness

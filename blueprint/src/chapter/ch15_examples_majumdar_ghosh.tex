@@ -4,7 +4,7 @@
 The Majumdar--Ghosh state is the exact dimer ground state of the spin-$\tfrac12$
 chain
 $H=\sum \boldsymbol{S}_i\cdot\boldsymbol{S}_{i+1}
-+\tfrac12\sum\boldsymbol{S}_i\cdot\boldsymbol{S}_{i+2}$.
+    +\tfrac12\sum\boldsymbol{S}_i\cdot\boldsymbol{S}_{i+2}$.
 On an even periodic chain it is the symmetric superposition of the two
 nearest-neighbour singlet coverings $(1,2)(3,4)\cdots$ and
 $(2,3)(4,5)\cdots(N,1)$, the one-dimensional analog of a
@@ -17,18 +17,18 @@ resonating valence-bond state.
     Set $d = 2$ (spin-$\tfrac12$) and $D = 3$. The Majumdar--Ghosh tensor is
     the family $\{A^0, A^1\} \subset \MN{3}$ defined by
     \begin{align}
-        A^0 &=
+        A^0 & =
         \begin{pmatrix}
-            0 & 1 & 0 \\
-            0 & 0 & 0 \\
+            0               & 1 & 0 \\
+            0               & 0 & 0 \\
             \tfrac1{\sqrt2} & 0 & 0
         \end{pmatrix},
         \qquad
         A^1 =
         \begin{pmatrix}
-            0 & 0 & 1 \\
+            0                & 0 & 1 \\
             -\tfrac1{\sqrt2} & 0 & 0 \\
-            0 & 0 & 0
+            0                & 0 & 0
         \end{pmatrix}.
         \notag
     \end{align}
@@ -41,7 +41,7 @@ resonating valence-bond state.
 \end{definition}
 
 \begin{theorem}[Majumdar--Ghosh tensor is in left-canonical form]%
-\label{thm:majumdar_ghosh_left_canonical}
+    \label{thm:majumdar_ghosh_left_canonical}
     \lean{MPSTensor.majumdarGhosh_left_canonical}
     \leanok
     \uses{def:majumdar_ghosh_tensor}
@@ -57,7 +57,7 @@ resonating valence-bond state.
 \end{proof}
 
 \begin{theorem}[Transfer map of the Majumdar--Ghosh tensor]%
-\label{thm:majumdar_ghosh_transfer}
+    \label{thm:majumdar_ghosh_transfer}
     \lean{MPSTensor.majumdarGhosh_transferMap_one}
     \leanok
     \uses{def:majumdar_ghosh_tensor, def:transfer_map}
@@ -72,7 +72,7 @@ resonating valence-bond state.
 \end{proof}
 
 \begin{theorem}[Majumdar--Ghosh tensor is not injective]%
-\label{thm:majumdar_ghosh_not_injective}
+    \label{thm:majumdar_ghosh_not_injective}
     \lean{MPSTensor.majumdarGhosh_not_isInjective}
     \leanok
     \uses{def:majumdar_ghosh_tensor, def:injective}
@@ -88,7 +88,7 @@ resonating valence-bond state.
 \end{proof}
 
 \begin{theorem}[Majumdar--Ghosh tensor is not normal]%
-\label{thm:majumdar_ghosh_not_normal}
+    \label{thm:majumdar_ghosh_not_normal}
     \lean{MPSTensor.majumdarGhosh_not_isNormal}
     \leanok
     \uses{def:majumdar_ghosh_tensor, def:normal}
@@ -102,8 +102,8 @@ resonating valence-bond state.
     \leanok
     The bond carries a two-periodic grading with complementary support sets
     \begin{align}
-        &\{(0,1),(0,2),(1,0),(2,0)\}, \notag\\
-        &\{(0,0),(1,1),(1,2),(2,1),(2,2)\}.
+         & \{(0,1),(0,2),(1,0),(2,0)\}, \notag \\
+         & \{(0,0),(1,1),(1,2),(2,1),(2,2)\}.
         \notag
     \end{align}
     Left multiplication with a generator exchanges these sets. Let $E_{ij}$
@@ -111,13 +111,13 @@ resonating valence-bond state.
     unit. Then, for every blocking length $N$,
     \begin{align}
         N\text{ odd}
-        &\Rightarrow
+         & \Rightarrow
         (\forall w,\ |w|=N \Rightarrow (A^w)_{22}=0)
         \Rightarrow
         E_{22}\notin\spn_{\C}\{A^w: |w|=N\},
-        \notag\\
+        \notag         \\
         N\text{ even}
-        &\Rightarrow
+         & \Rightarrow
         (\forall w,\ |w|=N \Rightarrow (A^w)_{10}=0)
         \Rightarrow
         E_{10}\notin\spn_{\C}\{A^w: |w|=N\}.
@@ -153,7 +153,7 @@ single-state result. Thus the relevant target is the following range-three
 periodic ground-space statement.
 
 \begin{theorem}[Two-fold dimer degeneracy of the Majumdar--Ghosh ground space]%
-\label{thm:majumdar_ghosh_ground_space}
+    \label{thm:majumdar_ghosh_ground_space}
     \notready
     \uses{def:majumdar_ghosh_tensor, thm:majumdar_ghosh_not_normal, def:ground_space_parent}
     On an even periodic chain of length $N = 2m\ge4$, let

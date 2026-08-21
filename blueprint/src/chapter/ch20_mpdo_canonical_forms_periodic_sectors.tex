@@ -9,10 +9,10 @@
     $Q_1=Q\otimes\Id^{\otimes N}$ acting on the first site,
     \begin{align}
         Q_1H^{(N+1)}
-        &\ne H^{(N+1)}Q_1,
-        \label{eq:mpdo_periodic_noncommute}\\
+         & \ne H^{(N+1)}Q_1,
+        \label{eq:mpdo_periodic_noncommute} \\
         Q_1[H^{(N+1)}]^p
-        &=[H^{(N+1)}]^pQ_1.
+         & =[H^{(N+1)}]^pQ_1.
         \label{eq:mpdo_periodic_commute_power}
     \end{align}
     These are the commutation identities that the proof of
@@ -22,7 +22,7 @@
 \end{definition}
 
 \begin{theorem}[No periodic-sector projector for a matrix product density
-    operator]
+        operator]
     \label{thm:mpdo_no_periodic_sector_projector}
     \lean{MPOTensor.isEmpty_periodicSectorProjector}
     \leanok
@@ -227,7 +227,7 @@
 \end{definition}
 
 \begin{theorem}[Reduction of the periodic-sector step to the cyclic
-    decomposition]
+        decomposition]
     \label{thm:mpdo_cyclic_projector_reduction}
     \lean{MPOTensor.periodicVectorYieldsProjector_of_cyclic}
     \lean{MPOTensor.hasNoPeriodicVectors_verticalTensor_of_cyclicProjector}
@@ -254,7 +254,7 @@
 \end{proof}
 
 \begin{theorem}[The displaced invariant projector of a nontrivial periodic
-    vector]
+        vector]
     \label{thm:mpdo_displaced_invariant_projector}
     \lean{MPOTensor.exists_displaced_invariant_projector_of_periodic_vector}
     \leanok
@@ -314,7 +314,7 @@
     $Q\widetilde M\ne Q\widetilde M Q$, then there is an integer $N\geq0$
     such that, for $Q_1=Q\otimes\Id^{\otimes N}$,
     \begin{align}
-        Q_1H^{(N+1)}&\ne H^{(N+1)}Q_1.
+        Q_1H^{(N+1)} & \ne H^{(N+1)}Q_1.
         \label{eq:cpsv_literal_displaced_noncommutation}
     \end{align}
     Thus a displaced idempotent has a noncommuting chain length. The
@@ -330,8 +330,8 @@
     Idempotence gives
     \begin{align}
         Q_1H^{(N+1)}
-        &=Q_1^2H^{(N+1)}
-         =Q_1H^{(N+1)}Q_1.
+         & =Q_1^2H^{(N+1)}
+        =Q_1H^{(N+1)}Q_1.
         \notag
     \end{align}
     Taking matrix coefficients yields equality of the one-sided first-site
@@ -364,12 +364,12 @@
     Theorem~\ref{thm:cpsv_literal_displaced_noncommutation}, there is a length
     $N+1$ for which
     \begin{align}
-        Q_1H^{(N+1)}&\ne H^{(N+1)}Q_1.
+        Q_1H^{(N+1)} & \ne H^{(N+1)}Q_1.
         \notag
     \end{align}
     The word invariance and the vertical-stack identity give
     \begin{align}
-        Q_1[H^{(N+1)}]^p&=[H^{(N+1)}]^pQ_1.
+        Q_1[H^{(N+1)}]^p & =[H^{(N+1)}]^pQ_1.
         \notag
     \end{align}
     Since $H^{(N+1)}$ is positive semidefinite,
@@ -448,7 +448,7 @@
 \end{definition}
 
 \begin{theorem}[Reduction of the periodic-sector step to the
-    non-commutation family]
+        non-commutation family]
     \label{thm:mpdo_cyclic_projector_of_noncommutation}
     \lean{MPOTensor.periodicVectorYieldsCyclicProjector_of_noncommutation}
     \lean{MPOTensor.hasNoPeriodicVectors_verticalTensor_of_noncommutation}
@@ -475,7 +475,7 @@
 \end{proof}
 
 \begin{theorem}[Commutation at chain length two forces letter invariance, for
-    an injective tensor]
+        an injective tensor]
     \label{thm:mpdo_commute_of_isInjective}
     \lean{MPOTensor.ketLeftMul_eq_braRightMul_of_commute_of_isInjective}
     \leanok
@@ -498,7 +498,7 @@
 \end{proof}
 
 \begin{theorem}[No periodic vectors for an injective matrix product density
-    operator]
+        operator]
     \label{thm:mpdo_vertical_no_periodic_vectors_injective}
     \lean{MPOTensor.hasNoPeriodicVectors_verticalTensor_of_isInjective}
     \leanok

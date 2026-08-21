@@ -38,7 +38,7 @@
     \uses{def:mpdo_retained_vertical_sector_coordinates}
     For every retained-coordinate matrix $Z$,
     $P(Z)_{(\alpha,a,i),(\alpha,b,j)}
-    =Z_{(\alpha,a,i),(\alpha,b,j)}$.
+        =Z_{(\alpha,a,i),(\alpha,b,j)}$.
 \end{lemma}
 
 \begin{proof}\leanok
@@ -101,8 +101,8 @@
     Flattening the index triple $(\alpha,a,i)$ gives the entry formula
     \begin{align}
         B(X)_{(\alpha,a,i),(\beta,b,j)}
-          &=\delta_{\alpha\beta}\delta_{ab}
-            \mu_{\alpha,a}M_\alpha(X)_{ij}.
+         & =\delta_{\alpha\beta}\delta_{ab}
+        \mu_{\alpha,a}M_\alpha(X)_{ij}.
         \notag
     \end{align}
 \end{proof}
@@ -114,7 +114,7 @@
     Let $A$ be a tensor whose physical label is a pair $(a,b)$ of horizontal
     bond indices. For a bond matrix $X$, define
     \begin{align}
-        A(X)&=\sum_{a,b}X_{ba}A_{ab}.
+        A(X) & =\sum_{a,b}X_{ba}A_{ab}.
         \notag
     \end{align}
     The order of the entries of $X$ is chosen so that
@@ -135,7 +135,7 @@
     Distributivity of matrix multiplication over finite sums gives
     \begin{align}
         \sum_{a,b}X_{ba}\left(LA_{ab}K\right)
-          &=L\left(\sum_{a,b}X_{ba}A_{ab}\right)K.
+         & =L\left(\sum_{a,b}X_{ba}A_{ab}\right)K.
         \notag
     \end{align}
 \end{proof}
@@ -154,10 +154,10 @@
     Since each tensor letter is block diagonal,
     \begin{align}
         \sum_{a,b}X_{ba}
-          \left(\bigoplus_\alpha\mu_\alpha A_\alpha\right)_{ab}
-          &=\bigoplus_\alpha\mu_\alpha
-            \sum_{a,b}X_{ba}(A_\alpha)_{ab}
-           =\bigoplus_\alpha\mu_\alpha A_\alpha(X).
+        \left(\bigoplus_\alpha\mu_\alpha A_\alpha\right)_{ab}
+         & =\bigoplus_\alpha\mu_\alpha
+        \sum_{a,b}X_{ba}(A_\alpha)_{ab}
+        =\bigoplus_\alpha\mu_\alpha A_\alpha(X).
         \notag
     \end{align}
 \end{proof}
@@ -176,9 +176,9 @@
     For every pair of physical indices,
     \begin{align}
         \widetilde M(X)_{ij}
-          &=\sum_{a,b}X_{ba}M^{ij}_{ab}
-           =\tr(M^{ij}X)
-           =M(X)_{ij}.
+         & =\sum_{a,b}X_{ba}M^{ij}_{ab}
+        =\tr(M^{ij}X)
+        =M(X)_{ij}.
         \notag
     \end{align}
 \end{proof}
@@ -192,7 +192,7 @@
     diagonal of the sector contractions:
     \begin{align}
         \left(\bigoplus_\alpha\mu_\alpha\otimes M_\alpha\right)(X)
-          &=\bigoplus_\alpha\mu_\alpha\otimes M_\alpha(X).
+         & =\bigoplus_\alpha\mu_\alpha\otimes M_\alpha(X).
         \notag
     \end{align}
 \end{lemma}
@@ -202,7 +202,7 @@
     $\bigoplus_\alpha\mu_\alpha\otimes M_\alpha$ of the assembled tensor gives
     \begin{align}
         \left(\bigoplus_\alpha\mu_\alpha\otimes M_\alpha\right)(X)
-          &=\bigoplus_\alpha\mu_\alpha\otimes M_\alpha(X).
+         & =\bigoplus_\alpha\mu_\alpha\otimes M_\alpha(X).
         \notag
     \end{align}
 \end{proof}
@@ -221,11 +221,11 @@
     By the definition of bond-matrix contraction,
     \begin{align}
         U M(X)U^\dagger
-          &=U\left(\sum_{a,b}X_{ba}\widetilde M_{ab}\right)U^\dagger
-           =\sum_{a,b}X_{ba}
-             \left(U\widetilde M_{ab}U^\dagger\right)
-           =\sum_{a,b}X_{ba}B_{ab}
-           =B(X).
+         & =U\left(\sum_{a,b}X_{ba}\widetilde M_{ab}\right)U^\dagger
+        =\sum_{a,b}X_{ba}
+        \left(U\widetilde M_{ab}U^\dagger\right)
+        =\sum_{a,b}X_{ba}B_{ab}
+        =B(X).
         \notag
     \end{align}
 \end{proof}
@@ -244,10 +244,10 @@
     Contracting the letterwise identity gives
     \begin{align}
         M(X)
-          &=\sum_{a,b}X_{ba}\widetilde M_{ab}
-           =\sum_{a,b}X_{ba}\left(U^\dagger B_{ab}U\right)
-           =U^\dagger\left(\sum_{a,b}X_{ba}B_{ab}\right)U
-           =U^\dagger B(X)U.
+         & =\sum_{a,b}X_{ba}\widetilde M_{ab}
+        =\sum_{a,b}X_{ba}\left(U^\dagger B_{ab}U\right)
+        =U^\dagger\left(\sum_{a,b}X_{ba}B_{ab}\right)U
+        =U^\dagger B(X)U.
         \notag
     \end{align}
 \end{proof}
@@ -261,21 +261,21 @@
     Suppose that
     \begin{align}
         U\widetilde M_{ab}U^\dagger
-          &=\left(\bigoplus_\alpha\mu_\alpha\otimes M_\alpha\right)_{ab}
+         & =\left(\bigoplus_\alpha\mu_\alpha\otimes M_\alpha\right)_{ab}
         \notag
     \end{align}
     is a one-site vertical canonical-form identity. Contracting against an
     arbitrary bond matrix $X$ gives
     \begin{align}
         U M(X)U^\dagger
-          &=\bigoplus_\alpha\mu_\alpha\otimes M_\alpha(X).
+         & =\bigoplus_\alpha\mu_\alpha\otimes M_\alpha(X).
         \notag
     \end{align}
     If the reverse letterwise identity is also given, then
     \begin{align}
         M(X)
-          &=U^\dagger
-            \left(\bigoplus_\alpha\mu_\alpha\otimes M_\alpha(X)\right)U.
+         & =U^\dagger
+        \left(\bigoplus_\alpha\mu_\alpha\otimes M_\alpha(X)\right)U.
         \notag
     \end{align}
     These are the contracted canonical-form identities used in
@@ -290,33 +290,33 @@
     gives
     \begin{align}
         U\left(\sum_{a,b}X_{ba}\widetilde M_{ab}\right)U^\dagger
-          &=\sum_{a,b}X_{ba}
-            \left(U\widetilde M_{ab}U^\dagger\right).
+         & =\sum_{a,b}X_{ba}
+        \left(U\widetilde M_{ab}U^\dagger\right).
         \notag
     \end{align}
     Substituting the forward hypothesis into this equality gives
     \begin{align}
         U M(X)U^\dagger
-          &=\sum_{a,b}X_{ba}
-            \left(\bigoplus_\alpha\mu_\alpha\otimes M_\alpha\right)_{ab}
-           =\left(\bigoplus_\alpha\mu_\alpha\otimes M_\alpha\right)(X).
+         & =\sum_{a,b}X_{ba}
+        \left(\bigoplus_\alpha\mu_\alpha\otimes M_\alpha\right)_{ab}
+        =\left(\bigoplus_\alpha\mu_\alpha\otimes M_\alpha\right)(X).
         \notag
     \end{align}
     Applied blockwise, the same calculation gives
     \begin{align}
         \left(\bigoplus_\alpha \mu_\alpha\otimes M_\alpha\right)(X)
-          &=\bigoplus_\alpha \mu_\alpha\otimes M_\alpha(X).
+         & =\bigoplus_\alpha \mu_\alpha\otimes M_\alpha(X).
         \notag
     \end{align}
     If the reverse letterwise identity is given, the same calculation yields
     \begin{align}
         M(X)
-          &=\sum_{a,b}X_{ba}\widetilde M_{ab}
-        \notag\\
-          &=U^\dagger\left(\sum_{a,b}X_{ba}
-              \left(\bigoplus_\alpha\mu_\alpha\otimes M_\alpha\right)_{ab}\right)U
-        \notag\\
-          &=U^\dagger\left(\bigoplus_\alpha\mu_\alpha\otimes M_\alpha(X)\right)U.
+         & =\sum_{a,b}X_{ba}\widetilde M_{ab}
+        \notag                                                                    \\
+         & =U^\dagger\left(\sum_{a,b}X_{ba}
+        \left(\bigoplus_\alpha\mu_\alpha\otimes M_\alpha\right)_{ab}\right)U
+        \notag                                                                    \\
+         & =U^\dagger\left(\bigoplus_\alpha\mu_\alpha\otimes M_\alpha(X)\right)U.
         \notag
     \end{align}
 \end{proof}
@@ -329,7 +329,7 @@
     operator $K_4(X)$ whose matrix coefficients are
     \begin{align}
         K_4(X)_{(i_0,(i_1,(i_2,i_3))),(j_0,(j_1,(j_2,j_3)))}
-          &=\tr\!\left(K^{i_0j_0}K^{i_1j_1}K^{i_2j_2}K^{i_3j_3}X\right).
+         & =\tr\!\left(K^{i_0j_0}K^{i_1j_1}K^{i_2j_2}K^{i_3j_3}X\right).
         \notag
     \end{align}
 \end{definition}
@@ -341,10 +341,10 @@
     The canonical four-coordinate regrouping and its inverse satisfy
     \begin{align}
         R_4(\sigma)
-          &=(\sigma_0,(\sigma_1,(\sigma_2,\sigma_3))),
-        \notag\\
+         & =(\sigma_0,(\sigma_1,(\sigma_2,\sigma_3))),
+        \notag                                         \\
         R_4^{-1}(i_0,(i_1,(i_2,i_3)))
-          &=(i_0,i_1,i_2,i_3).
+         & =(i_0,i_1,i_2,i_3).
         \notag
     \end{align}
 \end{lemma}
@@ -363,7 +363,7 @@
     configurations with quadruples of physical indices,
     \begin{align}
         K_4(X)_{(i_0,(i_1,(i_2,i_3))),(j_0,(j_1,(j_2,j_3)))}
-          &=\tr\!\left(K^{i_0j_0}K^{i_1j_1}K^{i_2j_2}K^{i_3j_3}X\right).
+         & =\tr\!\left(K^{i_0j_0}K^{i_1j_1}K^{i_2j_2}K^{i_3j_3}X\right).
         \notag
     \end{align}
 \end{theorem}
@@ -400,10 +400,10 @@
     index. For the refinement and coarse-graining maps $T$ and $S$, define
     \begin{align}
         T_{\mathrm v}(Z)
-          &=U_2 J\!\left(T(U_1^\dagger ZU_1)\right)U_2^\dagger,
-        \notag\\
+         & =U_2 J\!\left(T(U_1^\dagger ZU_1)\right)U_2^\dagger,
+        \notag                                                       \\
         S_{\mathrm v}(W)
-          &=U_1 S\!\left(J^{-1}(U_2^\dagger WU_2)\right)U_1^\dagger.
+         & =U_1 S\!\left(J^{-1}(U_2^\dagger WU_2)\right)U_1^\dagger.
         \notag
     \end{align}
     These are the physical maps after absorbing the two vertical coordinate
@@ -425,28 +425,28 @@
     respectively, and write
     \begin{align}
         B_1(X)
-          &=\bigoplus_\alpha\mu_\alpha\otimes M_\alpha(X),
-        \notag\\
+         & =\bigoplus_\alpha\mu_\alpha\otimes M_\alpha(X),
+        \notag                                             \\
         B_2(X)
-          &=\bigoplus_\beta\nu_\beta\otimes A_\beta(X)
+         & =\bigoplus_\beta\nu_\beta\otimes A_\beta(X)
         \notag
     \end{align}
     for the contracted one-site and two-site vertical canonical forms. If
     \begin{align}
         T(\mathcal M^{(1)}(X))
-          &=\mathcal M^{(2)}(X),
-        \notag\\
+         & =\mathcal M^{(2)}(X),
+        \notag                   \\
         S(\mathcal M^{(2)}(X))
-          &=\mathcal M^{(1)}(X),
+         & =\mathcal M^{(1)}(X),
         \notag
     \end{align}
     then
     \begin{align}
         T_{\mathrm v}(B_1(X))
-          &=B_2(X),
-        \notag\\
+         & =B_2(X),
+        \notag      \\
         S_{\mathrm v}(B_2(X))
-          &=B_1(X).
+         & =B_1(X).
         \notag
     \end{align}
     These are the physical-coordinate identities which, after composition
@@ -462,18 +462,18 @@
     forward blocked canonical-form identity gives
     \begin{align}
         T_{\mathrm v}(B_1(X))
-          &=U_2J(T(\mathcal M^{(1)}(X)))U_2^\dagger
-           =U_2J(\mathcal M^{(2)}(X))U_2^\dagger
-           =B_2(X).
+         & =U_2J(T(\mathcal M^{(1)}(X)))U_2^\dagger
+        =U_2J(\mathcal M^{(2)}(X))U_2^\dagger
+        =B_2(X).
         \notag
     \end{align}
     The reverse blocked canonical-form identity and the equation for $S$
     give, in the other direction,
     \begin{align}
         S_{\mathrm v}(B_2(X))
-          &=U_1S(\mathcal M^{(2)}(X))U_1^\dagger
-           =U_1\mathcal M^{(1)}(X)U_1^\dagger
-           =B_1(X).
+         & =U_1S(\mathcal M^{(2)}(X))U_1^\dagger
+        =U_1\mathcal M^{(1)}(X)U_1^\dagger
+        =B_1(X).
         \notag
     \end{align}
 \end{proof}
@@ -487,10 +487,10 @@
     Define maps between the one-site and two-site simple-sector algebras by
     \begin{align}
         \widetilde T
-          &=\widetilde R_2T_{\mathrm v}R_1,
-        \notag\\
+         & =\widetilde R_2T_{\mathrm v}R_1,
+        \notag                              \\
         \widetilde S
-          &=\widetilde R_1S_{\mathrm v}R_2.
+         & =\widetilde R_1S_{\mathrm v}R_2.
         \notag
     \end{align}
     The partial trace and diagonal-summand extraction define these maps on the
@@ -512,7 +512,7 @@
     $X_\alpha$ is positive semidefinite. Its total sector trace is
     \begin{align}
         \Trsec(X)
-          &=\sum_\alpha\tr(X_\alpha).
+         & =\sum_\alpha\tr(X_\alpha).
         \notag
     \end{align}
 \end{definition}
@@ -559,7 +559,7 @@
     of $\mu_\alpha$ is positive. For $m_\alpha=\tr(\mu_\alpha)$,
     \begin{align}
         R_\mu\!\left(\bigoplus_\alpha m_\alpha X_\alpha\right)
-          &=\bigoplus_\alpha\mu_\alpha\otimes X_\alpha.
+         & =\bigoplus_\alpha\mu_\alpha\otimes X_\alpha.
         \notag
     \end{align}
 \end{lemma}
@@ -568,8 +568,8 @@
     In each sector,
     \begin{align}
         R_\mu(m_\alpha X_\alpha)
-          &=m_\alpha^{-1}m_\alpha(\mu_\alpha\otimes X_\alpha)
-           =\mu_\alpha\otimes X_\alpha.
+         & =m_\alpha^{-1}m_\alpha(\mu_\alpha\otimes X_\alpha)
+        =\mu_\alpha\otimes X_\alpha.
         \notag
     \end{align}
 \end{proof}
@@ -582,7 +582,7 @@
     For $m_\alpha=\tr(\mu_\alpha)$,
     \begin{align}
         \widetilde R_\mu\!\left(\bigoplus_\alpha\mu_\alpha\otimes X_\alpha\right)
-          &=\bigoplus_\alpha m_\alpha X_\alpha.
+         & =\bigoplus_\alpha m_\alpha X_\alpha.
         \notag
     \end{align}
 \end{lemma}
@@ -591,8 +591,8 @@
     Taking the partial trace over the multiplicity factor gives
     \begin{align}
         \widetilde R_\mu(\mu_\alpha\otimes X_\alpha)
-          &=\tr(\mu_\alpha)X_\alpha
-           =m_\alpha X_\alpha.
+         & =\tr(\mu_\alpha)X_\alpha
+        =m_\alpha X_\alpha.
         \notag
     \end{align}
 \end{proof}
@@ -607,10 +607,10 @@
     Let $U:\C^n\to\C^r$ satisfy $UU^\dagger=1$. If $Z\geq0$, then
     \begin{align}
         \tr(UZU^\dagger)
-          &\leq\tr(Z),
-        \notag\\
+         & \leq\tr(Z),
+        \notag                                 \\
         \tr(UZU^\dagger)=\tr(Z)
-          &\Longleftrightarrow U^\dagger UZ=Z.
+         & \Longleftrightarrow U^\dagger UZ=Z.
         \notag
     \end{align}
     For every $W\in\C^{r\times r}$, one also has
@@ -622,10 +622,10 @@
     projections, and
     \begin{align}
         \tr(UZU^\dagger)
-          &=\tr(PZ),
-        \notag\\
+         & =\tr(PZ),
+        \notag                \\
         \tr(Z)-\tr(PZ)
-          &=\tr((1-P)Z)\geq0.
+         & =\tr((1-P)Z)\geq0.
         \notag
     \end{align}
     The last trace vanishes precisely when $(1-P)Z=0$. The formula for $W$
@@ -659,19 +659,19 @@
     $Z_S(Y)$ are positive and
     \begin{align}
         \tr(Z_T(X))
-          &=\Trsec(X),
-        \notag\\
+         & =\Trsec(X),
+        \notag         \\
         \tr(Z_S(Y))
-          &=\Trsec(Y).
+         & =\Trsec(Y).
         \notag
     \end{align}
     After the final compression and sectorwise partial trace,
     \begin{align}
         \Trsec(\widetilde T(X))
-          &=\tr(U_2Z_T(X)U_2^\dagger),
-        \notag\\
+         & =\tr(U_2Z_T(X)U_2^\dagger),
+        \notag                         \\
         \Trsec(\widetilde S(Y))
-          &=\tr(U_1Z_S(Y)U_1^\dagger).
+         & =\tr(U_1Z_S(Y)U_1^\dagger).
         \notag
     \end{align}
 \end{lemma}
@@ -704,19 +704,19 @@
     $X\in\mathcal A_1$ and $Y\in\mathcal A_2$, their total sector traces obey
     \begin{align}
         \Trsec(\widetilde T(X))
-          &\leq \Trsec(X),
-        \notag\\
+         & \leq \Trsec(X),
+        \notag             \\
         \Trsec(\widetilde S(Y))
-          &\leq \Trsec(Y).
+         & \leq \Trsec(Y).
         \notag
     \end{align}
     The trace loss vanishes precisely when
     \begin{align}
         U_2^\dagger U_2 Z_T(X)
-          &=Z_T(X),
-        \notag\\
+         & =Z_T(X),
+        \notag      \\
         U_1^\dagger U_1 Z_S(Y)
-          &=Z_S(Y),
+         & =Z_S(Y),
         \notag
     \end{align}
     respectively.
@@ -735,8 +735,8 @@
     $P=U^\dagger U$. Then
     \begin{align}
         \tr(UZU^\dagger)
-          &=\tr(PZ)
-           \leq\tr(Z).
+         & =\tr(PZ)
+        \leq\tr(Z).
         \notag
     \end{align}
     Since $1-P$ is an orthogonal projection, equality is equivalent to

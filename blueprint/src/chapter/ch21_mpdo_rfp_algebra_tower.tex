@@ -14,8 +14,8 @@
     inclusion maps $\iota_n : \mathcal{A}_n \to \mathcal{A}_{n+1}$ realized,
     inside the ambient bond-space matrix algebra, by
     \begin{align}
-        m_n(x,y) &= xy, \notag\\
-        \iota_n(x) &= x.
+        m_n(x,y)   & = xy, \notag \\
+        \iota_n(x) & = x.
         \notag
     \end{align}
 \end{definition}
@@ -29,7 +29,7 @@
     here when there exist blocked fixed-point-algebra data such that, for every
     positive blocking size $n$,
     \begin{align}
-        \mathcal{A}_n &= \Fix(E_n^{\dagger}),
+        \mathcal{A}_n & = \Fix(E_n^{\dagger}),
         \notag
     \end{align}
     where $E_n$ is the blocked transfer map. This is a nontrivial algebraic
@@ -47,7 +47,7 @@
     positive-definite fixed point. If $E_1^2 = E_1$, then there is a stationary
     family of support algebras
     \begin{align}
-        \mathcal{A}_n &= \Fix(E_1^{\dagger}),
+        \mathcal{A}_n & = \Fix(E_1^{\dagger}),
         \notag
     \end{align}
     with multiplication $m_n(x,y) = xy$ and inclusion $\iota_n(x) = x$.
@@ -110,7 +110,7 @@ fixed-point algebras compared in
     Assume the doubled tensor is trace-preserving and the transfer map admits a
     positive-definite fixed point. If, for every positive blocked size $n$,
     \begin{align}
-        \Fix(E_n^{\dagger}) &= \Fix(E_1^{\dagger}),
+        \Fix(E_n^{\dagger}) & = \Fix(E_1^{\dagger}),
         \notag
     \end{align}
     then the blocked fixed-point-algebra tower holds.
@@ -138,10 +138,10 @@ family, and the corresponding multiplication / inclusion coefficient arrays.
     \uses{def:mpdo_algebra_structure_data}
     For each blocked size $n$, fix a basis $\{b_i\}_{i \in I_n}$ of
     $\mathcal{A}_n$ over a finite index set $I_n$. The \emph{blocked
-    coefficients} of $x \in \mathcal{A}_n$ are the coordinates
+        coefficients} of $x \in \mathcal{A}_n$ are the coordinates
     $(x_i)_{i \in I_n} \in \C^{I_n}$ with
     \begin{align}
-        x &= \sum_{i \in I_n} x_i\, b_i.
+        x & = \sum_{i \in I_n} x_i\, b_i.
         \notag
     \end{align}
 \end{definition}
@@ -169,7 +169,7 @@ family, and the corresponding multiplication / inclusion coefficient arrays.
     $m_n(b_i,b_j) \in \mathcal{A}_{2n}$:
     \begin{align}
         m_n(b_i,b_j)
-        &= \sum_{k \in I_{2n}} c^{(n)}_{i,j,k}\, b_k.
+         & = \sum_{k \in I_{2n}} c^{(n)}_{i,j,k}\, b_k.
         \notag
     \end{align}
 \end{definition}
@@ -198,7 +198,7 @@ family, and the corresponding multiplication / inclusion coefficient arrays.
     $\iota_n(b_i) \in \mathcal{A}_{n+1}$:
     \begin{align}
         \iota_n(b_i)
-        &= \sum_{j \in I_{n+1}} d_{ij}\, b_j.
+         & = \sum_{j \in I_{n+1}} d_{ij}\, b_j.
         \notag
     \end{align}
 \end{definition}
@@ -279,10 +279,10 @@ family, and the corresponding multiplication / inclusion coefficient arrays.
     $E_{n+1}=E_n\circ E_1$, hence
     \begin{align}
         E_{n+1}^{\dagger}X
-        &= E_1^{\dagger}E_n^{\dagger}X
-         = E_1^{\dagger}(\lambda^n X)
-         = \lambda^n E_1^{\dagger}X
-         = \lambda^{n+1}X.
+         & = E_1^{\dagger}E_n^{\dagger}X
+        = E_1^{\dagger}(\lambda^n X)
+        = \lambda^n E_1^{\dagger}X
+        = \lambda^{n+1}X.
         \notag
     \end{align}
 \end{proof}
@@ -344,9 +344,9 @@ family, and the corresponding multiplication / inclusion coefficient arrays.
     $K_0=\frac35 I$ and $K_1=\frac45 Z$. Its transfer map satisfies
     \begin{align}
         E(X)_{ij}
-        &=
+         & =
         \begin{cases}
-            X_{ij}, & i=j, \\
+            X_{ij},            & i=j,     \\
             -\frac7{25}X_{ij}, & i\neq j.
         \end{cases}
         \notag
@@ -373,12 +373,12 @@ family, and the corresponding multiplication / inclusion coefficient arrays.
     $E(X)=\varepsilon X+(1-\varepsilon)\Pi_{\mathrm{diag}}(X)$, so that
     \begin{align}
         E^n(X)
-        &= \Pi_{\mathrm{diag}}(X)
-          + \varepsilon^n(X-\Pi_{\mathrm{diag}}(X)),
-        \notag\\
+         & = \Pi_{\mathrm{diag}}(X)
+        + \varepsilon^n(X-\Pi_{\mathrm{diag}}(X)),
+        \notag                           \\
         E^2-E
-        &= (\varepsilon^2-\varepsilon)
-           (\id-\Pi_{\mathrm{diag}}).
+         & = (\varepsilon^2-\varepsilon)
+        (\id-\Pi_{\mathrm{diag}}).
         \notag
     \end{align}
     The fixed-point algebra is diagonal for every $n>0$, but $E^2\ne E$.
@@ -388,7 +388,7 @@ family, and the corresponding multiplication / inclusion coefficient arrays.
     product law
     \begin{align}
         O_L(M_\alpha)O_L(M_\beta)
-        &=
+         & =
         \sum_\gamma
         \tr(\chi_{\alpha,\beta,\gamma}^{\,L})
         O_L(M_\gamma)
@@ -397,7 +397,7 @@ family, and the corresponding multiplication / inclusion coefficient arrays.
     and the length-one idempotent trace identity
     \begin{align}
         m_\gamma
-        &=
+         & =
         \sum_{\alpha,\beta}
         \tr(\chi_{\alpha,\beta,\gamma})
         m_\alpha m_\beta.
@@ -409,24 +409,24 @@ family, and the corresponding multiplication / inclusion coefficient arrays.
     \cite[lines~1155--1163]{Cirac2016MPDO_arXiv} to give
     \begin{align}
         \{\nu_{\gamma,k}\}_k
-        &=
+         & =
         \{\mu_{\alpha,k_1}\mu_{\beta,k_2}
         \chi_{\alpha,\beta,\gamma,k_3}\}_{\alpha,\beta,k_1,k_2,k_3},
-        \notag\\
+        \notag        \\
         \tr(\nu_\gamma)
-        &=m_\gamma.
+         & =m_\gamma.
         \label{eq:mpdo_nu_chi_witness}
     \end{align}
     The reconstruction maps in \cite[lines~2065--2085]{Cirac2016MPDO_arXiv}
     then use
     \begin{align}
         \widetilde R_2\left(\bigoplus_\gamma X_\gamma\right)
-        &= \bigoplus_\gamma
-           \frac{\nu_\gamma}{m_\gamma}\otimes X_\gamma,
-        \notag\\
+         & = \bigoplus_\gamma
+        \frac{\nu_\gamma}{m_\gamma}\otimes X_\gamma,
+        \notag                \\
         \widetilde R_1\left(\bigoplus_\gamma X_\gamma\right)
-        &= \bigoplus_\gamma
-           \frac{\mu_\gamma}{m_\gamma}\otimes X_\gamma.
+         & = \bigoplus_\gamma
+        \frac{\mu_\gamma}{m_\gamma}\otimes X_\gamma.
         \label{eq:mpdo_reconstruction_maps}
     \end{align}
     Thus $\tr(\nu_\gamma)=m_\gamma$ and the defining equality
@@ -463,14 +463,14 @@ the elementary trace-power identity for diagonal matrices.
     $(\alpha,\beta,\gamma)$ drawn from a common index type, consisting of a
     size $r_{\alpha,\beta,\gamma} \in \N$ and diagonal entries
     $\chi_{\alpha,\beta,\gamma,1}, \ldots,
-    \chi_{\alpha,\beta,\gamma,r_{\alpha,\beta,\gamma}} \in \C$ for each
+        \chi_{\alpha,\beta,\gamma,r_{\alpha,\beta,\gamma}} \in \C$ for each
     triple, giving the diagonal matrix
     \begin{align}
         \chi_{\alpha,\beta,\gamma}
-        &=
+         & =
         \diag\bigl(        \chi_{\alpha,\beta,\gamma,1},
-            \ldots,
-            \chi_{\alpha,\beta,\gamma,r_{\alpha,\beta,\gamma}}
+        \ldots,
+        \chi_{\alpha,\beta,\gamma,r_{\alpha,\beta,\gamma}}
         \bigr).
         \notag
     \end{align}
@@ -487,7 +487,7 @@ the elementary trace-power identity for diagonal matrices.
     has size $r_{\alpha,\beta,\gamma}$, then for every $L \ge 0$,
     \begin{align}
         \tr(\chi_{\alpha,\beta,\gamma}^{L})
-        &=
+         & =
         \sum_{k=1}^{r_{\alpha,\beta,\gamma}}
         \chi_{\alpha,\beta,\gamma,k}^{L},
         \notag
@@ -509,9 +509,9 @@ the elementary trace-power identity for diagonal matrices.
     pair $(c, \chi)$ is said to be in \emph{trace-power form} when
     \begin{align}
         c^{(L)}_{\alpha,\beta,\gamma}
-        &=
+         & =
         \tr(\chi_{\alpha,\beta,\gamma}^{L})
-         =
+        =
         \sum_{k=1}^{r_{\alpha,\beta,\gamma}}
         \chi_{\alpha,\beta,\gamma,k}^{L}
         \notag

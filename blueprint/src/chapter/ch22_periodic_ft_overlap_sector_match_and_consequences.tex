@@ -19,12 +19,12 @@
     after absorbing these sector gauges into the $B$-sectors: with $Q_v$ the
     cyclic sector projectors of $B$, it writes
     $\widetilde B_v^i
-    =U_v Q_v B^i Q_{v+1} U_{v+1}^{\dagger}$.
+        =U_v Q_v B^i Q_{v+1} U_{v+1}^{\dagger}$.
     The contraction input is then, for every physical block
     $(i_1,\ldots,i_m)$,
     \begin{align}
         A_u^{i_1}A_{u+1}^{i_2}\cdots A_{u+m-1}^{i_m}
-        &=
+         & =
         e^{i\lambda_{u+q}}
         \widetilde B_{u+q}^{i_1}\widetilde B_{u+q+1}^{i_2}
         \cdots\widetilde B_{u+q+m-1}^{i_m}.
@@ -36,7 +36,7 @@
     $\mathbf i=(i_1,\ldots,i_{mN_0})$, form the repeated product
     \begin{align}
         F_u^{\mathbf i}
-        &=
+         & =
         (A_u^{i_1}\cdots A_{u+m-1}^{i_m})
         \cdots
         (A_u^{i_{m(N_0-1)+1}}\cdots A_{u+m-1}^{i_{mN_0}}),
@@ -46,7 +46,7 @@
     \begin{align}
         \sum_{\mathbf i}(\Omega_u^{\mathbf i})_{\alpha,\beta}
         (F_u^{\mathbf i})_{\alpha',\beta'}
-        &=
+         & =
         \delta_{\alpha,\alpha'}\delta_{\beta,\beta'}.
         \notag
     \end{align}
@@ -56,11 +56,11 @@
     $r\in\mathbb Z_m$, the block identity gives
     \begin{align}
         F_{u+r}^{\mathbf i}
-        &=
+         & =
         e^{iN_0\lambda_{u+q+r}}\widetilde F_{u+q+r}^{\mathbf i},
-        \notag\\
+        \notag \\
         \widetilde F_{u+q+r}^{\mathbf i}
-        &=
+         & =
         e^{-iN_0\lambda_{u+q+r}}F_{u+r}^{\mathbf i}.
         \notag
     \end{align}
@@ -71,12 +71,12 @@
     one for each inserted repeated product. Sum each $\mathbf i_r$ in the
     contraction by the right-inverse relation for $\Omega_{u+r}$:
     \begin{align}
-        &A_u^{i_1}F_{u+1}^{\mathbf i_1}
+         & A_u^{i_1}F_{u+1}^{\mathbf i_1}
         A_{u+1}^{i_2}F_{u+2}^{\mathbf i_2}
         \cdots
         A_{u+m-1}^{i_m}F_u^{\mathbf i_m}
-        \notag\\
-        &\quad\xrightarrow{\ \Omega_{u+1}\otimes\cdots\otimes\Omega_{u+m-1}
+        \notag                                                                \\
+         & \quad\xrightarrow{\ \Omega_{u+1}\otimes\cdots\otimes\Omega_{u+m-1}
             \otimes\Omega_u\ }
         A_u^{i_1}\otimes A_{u+1}^{i_2}\otimes\cdots\otimes A_{u+m-1}^{i_m}.
         \notag
@@ -89,12 +89,12 @@
     Hence every consecutive $m$-site block begins at the sector $u$, and the
     interleaved word is
     \begin{align}
-        &A_u^{i_1}F_{u+1}^{\mathbf i_1}
+         & A_u^{i_1}F_{u+1}^{\mathbf i_1}
         A_{u+1}^{i_2}F_{u+2}^{\mathbf i_2}
         \cdots
         A_{u+m-1}^{i_m}F_u^{\mathbf i_m}
-        \notag\\
-        &\quad=
+        \notag                            \\
+         & \quad=
         (A_u^{j_{0,1}}\cdots A_{u+m-1}^{j_{0,m}})
         \cdots
         (A_u^{j_{mN_0,1}}\cdots A_{u+m-1}^{j_{mN_0,m}}).
@@ -103,12 +103,12 @@
     Applying the block identity at the sector $u$ to each of these $m$-site
     blocks gives
     \begin{align}
-        &A_u^{i_1}F_{u+1}^{\mathbf i_1}
+         & A_u^{i_1}F_{u+1}^{\mathbf i_1}
         A_{u+1}^{i_2}F_{u+2}^{\mathbf i_2}
         \cdots
         A_{u+m-1}^{i_m}F_u^{\mathbf i_m}
-        \notag\\
-        &\quad=
+        \notag                            \\
+         & \quad=
         e^{i\lambda_{u+q}(mN_0+1)}
         \widetilde B_{u+q}^{i_1}\widetilde F_{u+q+1}^{\mathbf i_1}
         \widetilde B_{u+q+1}^{i_2}\widetilde F_{u+q+2}^{\mathbf i_2}
@@ -119,33 +119,33 @@
     For each $r\in\mathbb Z_m$, substituting $\mathbf i=\mathbf i_r$ in
     (\ref{eq:pft_intermediate_block_identity}) gives
     $\widetilde F_{u+q+r}^{\mathbf i_r}
-    =e^{-iN_0\lambda_{u+q+r}}F_{u+r}^{\mathbf i_r}$.
+        =e^{-iN_0\lambda_{u+q+r}}F_{u+r}^{\mathbf i_r}$.
     Therefore the right-inverse relation gives the per-sector contraction
     identity
     \begin{align}
         \sum_{\mathbf i_r}
         (\Omega_{u+r}^{\mathbf i_r})_{\alpha,\beta}
         (\widetilde F_{u+q+r}^{\mathbf i_r})_{\alpha',\beta'}
-        &=
+         & =
         e^{-iN_0\lambda_{u+q+r}}
         \delta_{\alpha,\alpha'}\delta_{\beta,\beta'}.
         \notag
     \end{align}
     Since $r\mapsto u+q+r$ is a permutation of $\mathbb Z_m$,
     $\sum_{r\in\mathbb Z_m}\lambda_{u+q+r}
-    =\sum_{r\in\mathbb Z_m}\lambda_r$.
+        =\sum_{r\in\mathbb Z_m}\lambda_r$.
     Applying
     $\Omega_{u+1}\otimes\cdots\otimes\Omega_{u+m-1}\otimes\Omega_u$ to both
     sides of (\ref{eq:pft_intermediate_block_identity}) and collecting the
     sector phases gives
     \begin{align}
         A_u^{i_1}\otimes A_{u+1}^{i_2}\otimes\cdots\otimes A_{u+m-1}^{i_m}
-        &=
+         & =
         e^{i\lambda_{u+q}(mN_0+1)-iN_0\sum_{r\in\mathbb Z_m}\lambda_r}
         \widetilde B_{u+q}^{i_1}\otimes\widetilde B_{u+q+1}^{i_2}
         \otimes\cdots\otimes\widetilde B_{u+q+m-1}^{i_m}
-        \notag\\
-        &=
+        \notag \\
+         & =
         e^{i\eta_{u+q}}
         \widetilde B_{u+q}^{i_1}\otimes\widetilde B_{u+q+1}^{i_2}
         \otimes\cdots\otimes\widetilde B_{u+q+m-1}^{i_m}.
@@ -153,7 +153,7 @@
     \end{align}
     Here
     $\eta_{u+q}=\lambda_{u+q}(mN_0+1)
-    -N_0\sum_{r\in\mathbb Z_m}\lambda_r$.
+        -N_0\sum_{r\in\mathbb Z_m}\lambda_r$.
     Then there are a scalar $\xi$ with $|\xi|=1$ and a unitary matrix $U$
     such that
     $A^i=\xi UB^iU^\dagger$ for every physical index $i$.
@@ -209,9 +209,9 @@
 
     Choose period-blocked sector decompositions
     \begin{align}
-        \bar A&\sim\bigoplus_{u\in\mathbb Z_m}A_u,
-        \notag\\
-        \bar B&\sim\bigoplus_{v\in\mathbb Z_m}B_v.
+        \bar A & \sim\bigoplus_{u\in\mathbb Z_m}A_u,
+        \notag                                       \\
+        \bar B & \sim\bigoplus_{v\in\mathbb Z_m}B_v.
         \notag
     \end{align}
     If no pair $(u,v)$ satisfies
@@ -261,9 +261,9 @@
     positive integer $p$,
     there is $N_0$ such that for every $N \ge N_0$, the map
     \begin{align}
-        \Phi_N\colon\C^J&\longrightarrow(\C^d)^{\otimes pN},
-        \notag\\
-        (c_j)_{j\in J}&\longmapsto
+        \Phi_N\colon\C^J & \longrightarrow(\C^d)^{\otimes pN},
+        \notag                                                 \\
+        (c_j)_{j\in J}   & \longmapsto
         \sum_{j\in J}c_j\ket{V^{(pN)}(A_j)}
         \notag
     \end{align}
@@ -307,16 +307,16 @@
               following \cite{Cirac2016MPDO_arXiv}):
               for a common multiple $p$ of the periods,
               \begin{align}
-                  A^{[p]}&\sim\bigoplus_a C_a,
-                  \notag\\
-                  B^{[p]}&\sim\bigoplus_b D_b,
+                  A^{[p]} & \sim\bigoplus_a C_a,
+                  \notag                         \\
+                  B^{[p]} & \sim\bigoplus_b D_b,
                   \notag
               \end{align}
               with all $C_a,D_b$ normal. The Fundamental Theorem gives, after a
               permutation of the normal summands,
               \begin{align}
                   D_{\pi(a)}^\alpha
-                  &=
+                   & =
                   X_a C_a^\alpha X_a^{-1}.
                   \notag
               \end{align}
@@ -327,16 +327,16 @@
               following \cite{DeLasCuevas2017Irreducible}):
               keep the cyclic sectors
               \begin{align}
-                  A^i&=\sum_{u\in\mathbb Z_m}P_uA^iP_{u+1},
-                  \notag\\
-                  B^i&=\sum_{v\in\mathbb Z_m}Q_vB^iQ_{v+1}.
+                  A^i & =\sum_{u\in\mathbb Z_m}P_uA^iP_{u+1},
+                  \notag                                      \\
+                  B^i & =\sum_{v\in\mathbb Z_m}Q_vB^iQ_{v+1}.
                   \notag
               \end{align}
               Sector matching gives phases $\phi_v$, a shift $q$, and unitaries
               $U_v$ such that
               \begin{align}
                   P_uA^iP_{u+1}
-                  &=
+                   & =
                   e^{i\xi}e^{i\phi_{u+q}}
                   U_{u+q}Q_{u+q}B^iQ_{u+q+1}U_{u+q+1}^{\dagger}
                   e^{-i\phi_{u+q+1}}.
@@ -369,7 +369,7 @@
     equality of the MPV families gives, for every $N>0$,
     \begin{align}
         \braket{V^{(N)}(A)}{V^{(N)}(B)}
-        &=
+         & =
         \braket{V^{(N)}(A)}{V^{(N)}(A)}.
         \label{eq:pft_decay_mpv_equality}
     \end{align}
@@ -377,7 +377,7 @@
     would imply
     \begin{align}
         0
-        &=
+         & =
         \lim_{N\to\infty}
         \braket{V^{(m_aN)}(A)}{V^{(m_aN)}(B)}
         =
@@ -442,16 +442,16 @@
 \end{proof}
 
 \begin{theorem}[Non-decaying mixed overlaps for normalized bases of periodic
-    tensors]
+        tensors]
     \label{thm:periodic_multiplicity_nondecaying_overlap}
     \lean{MPSTensor.PeriodicOverlapHypothesis.ofSectorDecompositions}
     \leanok
     \uses{def:nonzero_proportional_mpv}
     Let
     \begin{align}
-        A^i&=\bigoplus_{j\in J}(R_j\otimes A_j^i),
-        \notag\\
-        B^i&=\bigoplus_{k\in K}(S_k\otimes B_k^i),
+        A^i & =\bigoplus_{j\in J}(R_j\otimes A_j^i),
+        \notag                                       \\
+        B^i & =\bigoplus_{k\in K}(S_k\otimes B_k^i),
         \notag
     \end{align}
     where $R_j=\operatorname{diag}(\mu_{j,1},\ldots,\mu_{j,r_j})$ and
@@ -476,7 +476,7 @@
     matrix $Y$ and a scalar $\zeta$ with $|\zeta|=1$ such that, for every
     physical index $i$,
     \begin{align}
-        A_j^i&=\zeta YB_k^iY^{-1}.
+        A_j^i & =\zeta YB_k^iY^{-1}.
         \notag
     \end{align}
 
@@ -506,7 +506,7 @@
 
     Choose a common positive multiple $p$ of all periods. Along the lengths
     $pN$, define the coproduct-indexed family $w_N\colon T\amalg K\to
-    (\mathbb C^d)^{\otimes pN}$ by
+        (\mathbb C^d)^{\otimes pN}$ by
     $w_N(\operatorname{inl}(j))=\ket{V^{(pN)}(A_j)}$ and
     $w_N(\operatorname{inr}(k))=\ket{V^{(pN)}(B_k)}$. This family is eventually
     linearly independent. Indeed, distinct vectors within either summand have
@@ -516,8 +516,8 @@
     Expand the proportionality relation at length $pN$ using the grouped
     coefficients
     \begin{align}
-        \operatorname{tr}(R_j^{pN})&=\sum_q(\mu_{j,q}^{p})^N,&
-        \operatorname{tr}(S_k^{pN})&=\sum_r(\nu_{k,r}^{p})^N.
+        \operatorname{tr}(R_j^{pN}) & =\sum_q(\mu_{j,q}^{p})^N, &
+        \operatorname{tr}(S_k^{pN}) & =\sum_r(\nu_{k,r}^{p})^N.
         \notag
     \end{align}
     Replace each term indexed by $j\notin T$ by its scalar multiple of the
@@ -541,8 +541,8 @@
     \uses{def:nonzero_proportional_mpv, def:spectral_periodic_tensor}
     Let
     \begin{align}
-        A^i&=\bigoplus_{j\in J}(R_j\otimes A_j^i),&
-        B^i&=\bigoplus_{k\in K}(S_k\otimes B_k^i),
+        A^i & =\bigoplus_{j\in J}(R_j\otimes A_j^i), &
+        B^i & =\bigoplus_{k\in K}(S_k\otimes B_k^i),
         \notag
     \end{align}
     where the diagonal entries of every $R_j$ and $S_k$ are nonzero.  Suppose
@@ -553,7 +553,7 @@
     $\{z\in\C:z^{m_j}=1\}$ or $\{z\in\C:z^{n_k}=1\}$.  If, for every positive
     $N$, there is a scalar $c_N\ne0$ such that
     \begin{align}
-        \ket{V^{(N)}(A)}&=c_N\ket{V^{(N)}(B)},
+        \ket{V^{(N)}(A)} & =c_N\ket{V^{(N)}(B)},
         \notag
     \end{align}
     then every representative in either family has a representative in the
@@ -614,9 +614,9 @@
     \uses{def:nonzero_proportional_mpv}
     Let $A$ and $B$ have multiplicity-bearing irreducible forms
     \begin{align}
-        A^i&=\bigoplus_{j\in J}(R_j\otimes A_j^i),
-        \notag\\
-        B^i&=\bigoplus_{k\in K}(S_k\otimes B_k^i),
+        A^i & =\bigoplus_{j\in J}(R_j\otimes A_j^i),
+        \notag                                       \\
+        B^i & =\bigoplus_{k\in K}(S_k\otimes B_k^i),
         \notag
     \end{align}
     where $R_j$ and $S_k$ are diagonal with nonzero diagonal entries and the
@@ -628,7 +628,7 @@
     are a unit-modulus scalar $\xi_j$ and an invertible matrix $Y_j$ such that,
     for every physical index $i$,
     \begin{align}
-        A_j^i&=\xi_jY_jB_{\pi(j)}^iY_j^{-1}.
+        A_j^i & =\xi_jY_jB_{\pi(j)}^iY_j^{-1}.
         \notag
     \end{align}
     Each $B_k$ occurs for exactly one $j$. This is

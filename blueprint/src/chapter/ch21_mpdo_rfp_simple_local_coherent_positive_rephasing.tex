@@ -51,7 +51,7 @@
     entries
     \begin{align}
         \left(\bigotimes_{n=0}^{N-1}A_n\right)_{x,y}
-        &=\prod_{n=0}^{N-1}(A_n)_{x_n,y_n}.
+         & =\prod_{n=0}^{N-1}(A_n)_{x_n,y_n}.
         \notag
     \end{align}
 \end{definition}
@@ -113,9 +113,9 @@
     product is positive semidefinite, then there are nonzero scalars
     $c_0,\ldots,c_{N-1}$ such that
     \begin{align}
-        \prod_{n=0}^{N-1}c_n&=1,
-        \notag\\
-        c_nA_n&\geq0 \quad (0\leq n<N).
+        \prod_{n=0}^{N-1}c_n & =1,
+        \notag                                          \\
+        c_nA_n               & \geq0 \quad (0\leq n<N).
         \notag
     \end{align}
 \end{theorem}
@@ -153,7 +153,7 @@
     $E_1\in\mathcal A_1$ and $E_2\in\mathcal A_2$. The one-sided product
     hypothesis gives
     \begin{align}
-        XE_{pq}Y&=X(E_1Y)+(XE_2)Y=0.
+        XE_{pq}Y & =X(E_1Y)+(XE_2)Y=0.
         \notag
     \end{align}
     Its $(i,j)$ entry is $X_{ip}Y_{qj}\ne0$, a contradiction.
@@ -196,7 +196,7 @@
     Let ${\cal K}$ be injective and let
     \begin{align}
         U\kappa_{\beta,\alpha}U^\dagger
-        &=\bigoplus_k(l_k)_\beta\otimes(r_k)_\alpha
+         & =\bigoplus_k(l_k)_\beta\otimes(r_k)_\alpha
         \notag
     \end{align}
     be a physical-sector factorization. Then the virtual matrices
@@ -218,9 +218,9 @@
     \label{thm:mpdo_sector_support_triangle_closure}
     \lean{MPOTensor.PhysicalSectorFactorization.sectorVirtualMatrix_mul_apply}
     \lean{MPOTensor.PhysicalSectorFactorization.%
-      sectorVirtualMatrix_mul_eq_zero_of_neighboringOperator_eq_zero}
+        sectorVirtualMatrix_mul_eq_zero_of_neighboringOperator_eq_zero}
     \lean{MPOTensor.PhysicalSectorFactorization.%
-      exists_two_edge_return_of_neighboringOperator_ne_zero_of_endpoints}
+        exists_two_edge_return_of_neighboringOperator_ne_zero_of_endpoints}
     \lean{MPOTensor.PhysicalSectorFactorization.exists_two_edge_return_of_neighboringOperator_ne_zero}
     \lean{MPOTensor.PhysicalSectorFactorization.neighboringOperator_reaches_of_ne_zero}
     \leanok
@@ -232,9 +232,9 @@
     matrix of this form. Then every nonzero $\eta_{k,h}$ admits a two-edge
     return: there is a sector $j$ for which
     \begin{align}
-        \eta_{h,j}&\ne0,
-        \notag\\
-        \eta_{j,k}&\ne0.
+        \eta_{h,j} & \ne0,
+        \notag             \\
+        \eta_{j,k} & \ne0.
         \notag
     \end{align}
     In particular, the nonzero neighboring support is recurrent.
@@ -325,7 +325,7 @@
     For a cyclic sector assignment $(k_n)_{n\in\mathbb Z/N\mathbb Z}$, the
     horizontal bond fiber at $n$ is
     \begin{align}
-        H_n&=B^R_{k_n}\times B^L_{k_{n+1}}.
+        H_n & =B^R_{k_n}\times B^L_{k_{n+1}}.
         \notag
     \end{align}
     Shifting the left component by one site identifies
@@ -361,9 +361,9 @@
     product is positive semidefinite, then there are nonzero scalars $c_n$
     satisfying
     \begin{align}
-        \prod_{n=0}^{N-1}c_n&=1,
-        \notag\\
-        c_n\eta_{k_n,k_{n+1}}&\geq0 \quad (0\leq n<N).
+        \prod_{n=0}^{N-1}c_n  & =1,
+        \notag                                           \\
+        c_n\eta_{k_n,k_{n+1}} & \geq0 \quad (0\leq n<N).
         \notag
     \end{align}
     This is a choice on one fixed cycle. It does not assert that choices made
@@ -380,7 +380,7 @@
 \end{proof}
 
 \begin{corollary}[Positive rescaling of the concrete sector operators around
-    one cycle]%
+        one cycle]%
     \label{cor:mpdo_sector_eta_cycle_positive_rescaling}
     \lean{MPOTensor.exists_pi_smul_posSemidef_of_sectorEta_cycle}
     \leanok
@@ -391,9 +391,9 @@
     concrete operator $\eta_{k_n,k_{n+1}}$ obtained from these data is
     nonzero. Then there are nonzero scalars $c_n$ such that
     \begin{align}
-        \prod_{n=0}^{N-1}c_n&=1,
-        \notag\\
-        c_n\eta_{k_n,k_{n+1}}&\geq0 \quad (0\leq n<N).
+        \prod_{n=0}^{N-1}c_n  & =1,
+        \notag                                           \\
+        c_n\eta_{k_n,k_{n+1}} & \geq0 \quad (0\leq n<N).
         \notag
     \end{align}
     This is the specialization of
@@ -419,8 +419,8 @@
     For every matrix $U$ on the physical space and every $N\ge1$,
     \begin{align}
         \rho^{(N)}(\widetilde{\cal K})
-        &=U^{\otimes N} \rho^{(N)}({\cal K})
-          (U^{\otimes N})^\dagger.
+         & =U^{\otimes N} \rho^{(N)}({\cal K})
+        (U^{\otimes N})^\dagger.
         \notag
     \end{align}
     In particular $\rho^{(N)}(\widetilde{\cal K})\ge0$ whenever
@@ -434,13 +434,13 @@
     indices:
     \begin{align}
         [\rho^{(N)}(\widetilde{\cal K})]_{\sigma,\tau}
-        &=\sum_{g}\prod_{n=1}^{N}
-            \widetilde\kappa_{g_n,g_{n+1}}^{\,\sigma_n\tau_n}
-        \notag\\
-        &=\sum_{g}\prod_{n=1}^{N}\sum_{p_n,q_n}
-            U_{\sigma_n p_n}
-            \kappa_{g_n,g_{n+1}}^{\,p_n q_n}
-            \overline{U_{\tau_n q_n}}.
+         & =\sum_{g}\prod_{n=1}^{N}
+        \widetilde\kappa_{g_n,g_{n+1}}^{\,\sigma_n\tau_n}
+        \notag                                    \\
+         & =\sum_{g}\prod_{n=1}^{N}\sum_{p_n,q_n}
+        U_{\sigma_n p_n}
+        \kappa_{g_n,g_{n+1}}^{\,p_n q_n}
+        \overline{U_{\tau_n q_n}}.
         \notag
     \end{align}
     Distributing the site product over the physical sums factors the two
@@ -459,11 +459,11 @@
     cyclic sector assignment $k_1,\ldots,k_N$ with $k_{N+1}=k_1$,
     \begin{align}
         0
-        &\leq
+         & \leq
         [Q_{k_1}\otimes\cdots\otimes Q_{k_N}]\,\tilde\sigma
         [Q_{k_1}\otimes\cdots\otimes Q_{k_N}]
-        \notag\\
-        &=\bigotimes_{n=1}^{N}\eta_{k_n,k_{n+1}}.
+        \notag                                      \\
+         & =\bigotimes_{n=1}^{N}\eta_{k_n,k_{n+1}}.
         \notag
     \end{align}
     This is the positivity half of the display at
@@ -484,7 +484,7 @@
 \end{proof}
 
 \begin{theorem}[Positivity of the diagonal and paired neighboring
-    operators]%
+        operators]%
     \label{thm:mpdo_sector_eta_pair_posSemidef}
     \lean{MPOTensor.sectorEta_self_posSemidef}
     \lean{MPOTensor.sectorEta_kronecker_posSemidef}
@@ -499,9 +499,9 @@
         \item $\eta_{k,k}\ge0$;
         \item $\eta_{k,h}\otimes\eta_{h,k}\ge0$;
         \item if $\eta_{k,h}\ne0$ and $\eta_{h,k}\ne0$, there is a scalar
-            $c\ne0$ with $c\,\eta_{k,h}\ge0$, $c^{-1}\eta_{h,k}\ge0$, and
-            $(c\,\eta_{k,h})\otimes(c^{-1}\eta_{h,k})=\eta_{k,h}\otimes
-            \eta_{h,k}$.
+              $c\ne0$ with $c\,\eta_{k,h}\ge0$, $c^{-1}\eta_{h,k}\ge0$, and
+              $(c\,\eta_{k,h})\otimes(c^{-1}\eta_{h,k})=\eta_{k,h}\otimes
+                  \eta_{h,k}$.
     \end{enumerate}
 \end{theorem}
 

@@ -41,28 +41,28 @@
     term of this same tensor $A$ at $i$. Suppose that, for
     every three-site vector $w$,
     \begin{align}
-      -c(\re\langle h_0^{(3)}w,w\rangle+\re\langle h_1^{(3)}w,w\rangle)
-      &\leq
-      \re\langle h_0^{(3)}w,h_1^{(3)}w\rangle
-      +\re\langle h_1^{(3)}w,h_0^{(3)}w\rangle.
-      \label{eq:three_site_anticommutator_transport_hypothesis}
+        -c(\re\langle h_0^{(3)}w,w\rangle+\re\langle h_1^{(3)}w,w\rangle)
+         & \leq
+        \re\langle h_0^{(3)}w,h_1^{(3)}w\rangle
+        +\re\langle h_1^{(3)}w,h_0^{(3)}w\rangle.
+        \label{eq:three_site_anticommutator_transport_hypothesis}
     \end{align}
     Then, for every $N\geq3$, every site $i\in\Fin{N}$, and every $N$-site
     vector $v$, the forward pair satisfies
     \begin{align}
-      -c\bigl(\re\langle h_i^{(N)}v,v\rangle
-          +\re\langle h_{i+1}^{(N)}v,v\rangle\bigr)
-      &\leq \re\langle h_i^{(N)}v,h_{i+1}^{(N)}v\rangle
-          +\re\langle h_{i+1}^{(N)}v,h_i^{(N)}v\rangle,
-      \label{eq:three_site_anticommutator_transport_forward}
+        -c\bigl(\re\langle h_i^{(N)}v,v\rangle
+        +\re\langle h_{i+1}^{(N)}v,v\rangle\bigr)
+         & \leq \re\langle h_i^{(N)}v,h_{i+1}^{(N)}v\rangle
+        +\re\langle h_{i+1}^{(N)}v,h_i^{(N)}v\rangle,
+        \label{eq:three_site_anticommutator_transport_forward}
     \end{align}
     and the backward pair satisfies
     \begin{align}
-      -c\bigl(\re\langle h_i^{(N)}v,v\rangle
-          +\re\langle h_{i-1}^{(N)}v,v\rangle\bigr)
-      &\leq \re\langle h_i^{(N)}v,h_{i-1}^{(N)}v\rangle
-          +\re\langle h_{i-1}^{(N)}v,h_i^{(N)}v\rangle.
-      \label{eq:three_site_anticommutator_transport_backward}
+        -c\bigl(\re\langle h_i^{(N)}v,v\rangle
+        +\re\langle h_{i-1}^{(N)}v,v\rangle\bigr)
+         & \leq \re\langle h_i^{(N)}v,h_{i-1}^{(N)}v\rangle
+        +\re\langle h_{i-1}^{(N)}v,h_i^{(N)}v\rangle.
+        \label{eq:three_site_anticommutator_transport_backward}
     \end{align}
     All site indices are taken modulo $N$, so these conclusions include pairs
     and three-site windows crossing the periodic cut.
@@ -79,35 +79,35 @@
     cyclic restriction operators of Remark~\ref{rem:cyclic_window_operators}
     give the fiber decomposition
     \begin{align}
-      \re\langle u,v\rangle
-      &=\sum_{\tau\in\mathcal C_{N-3}}
+        \re\langle u,v\rangle
+         & =\sum_{\tau\in\mathcal C_{N-3}}
         \re\left\langle R_{i,\tau}^{(3)}u,
-          R_{i,\tau}^{(3)}v\right\rangle.
-      \label{eq:three_site_anticommutator_fiber_decomposition}
+        R_{i,\tau}^{(3)}v\right\rangle.
+        \label{eq:three_site_anticommutator_fiber_decomposition}
     \end{align}
     The restriction identities in
     Theorem~\ref{thm:three_site_commutator_chain_transport} intertwine the two
     adjacent terms:
     \begin{align}
-      R_{i,\tau}^{(3)}h_i^{(N)}
-      &=h_0^{(3)}R_{i,\tau}^{(3)},
-      &
-      R_{i,\tau}^{(3)}h_{i+1}^{(N)}
-      &=h_1^{(3)}R_{i,\tau}^{(3)}.
-      \label{eq:three_site_anticommutator_restriction_intertwining}
+        R_{i,\tau}^{(3)}h_i^{(N)}
+         & =h_0^{(3)}R_{i,\tau}^{(3)},
+         &
+        R_{i,\tau}^{(3)}h_{i+1}^{(N)}
+         & =h_1^{(3)}R_{i,\tau}^{(3)}.
+        \label{eq:three_site_anticommutator_restriction_intertwining}
     \end{align}
     Applying
     (\ref{eq:three_site_anticommutator_transport_hypothesis}) to
     $w_\tau=R_{i,\tau}^{(3)}v$ and summing over the complement gives
     \begin{align}
-      \sum_{\tau\in\mathcal C_{N-3}}
+        \sum_{\tau\in\mathcal C_{N-3}}
         -c\bigl(\re\langle h_0^{(3)}w_\tau,w_\tau\rangle
-          +\re\langle h_1^{(3)}w_\tau,w_\tau\rangle\bigr)
-      &\leq
-      \sum_{\tau\in\mathcal C_{N-3}}
+        +\re\langle h_1^{(3)}w_\tau,w_\tau\rangle\bigr)
+         & \leq
+        \sum_{\tau\in\mathcal C_{N-3}}
         \bigl(\re\langle h_0^{(3)}w_\tau,h_1^{(3)}w_\tau\rangle
-          +\re\langle h_1^{(3)}w_\tau,h_0^{(3)}w_\tau\rangle\bigr),
-      \label{eq:three_site_anticommutator_fiber_sum}
+        +\re\langle h_1^{(3)}w_\tau,h_0^{(3)}w_\tau\rangle\bigr),
+        \label{eq:three_site_anticommutator_fiber_sum}
     \end{align}
     By the fiber decomposition
     (\ref{eq:three_site_anticommutator_fiber_decomposition}) and restriction
@@ -128,7 +128,7 @@
     $h_{i,\mathrm{ES}}$ satisfy the ordered row-sum estimate
     \begin{align}
         \re\langle h_{i,\mathrm{ES}} v,h_{j,\mathrm{ES}}v\rangle
-        &\ge -(1-\gamma)c_{ij}\re\langle h_{i,\mathrm{ES}}v,v\rangle
+         & \ge -(1-\gamma)c_{ij}\re\langle h_{i,\mathrm{ES}}v,v\rangle
         \qquad (i\ne j),
         \label{eq:ph_ordered_rowsum_estimate}
     \end{align}
@@ -136,7 +136,7 @@
     Hilbert-space parent Hamiltonian satisfies
     \begin{align}
         \gamma\re\langle H_{N,L}^{\mathrm{ES}}v,v\rangle
-        &\le
+         & \le
         \re\langle H_{N,L}^{\mathrm{ES}}v,
         H_{N,L}^{\mathrm{ES}}v\rangle
         \notag
@@ -187,7 +187,7 @@
     \begin{align}
         \re\langle h_{i,\mathrm{ES}}v,h_{j,\mathrm{ES}}v\rangle
         +\re\langle h_{j,\mathrm{ES}}v,h_{i,\mathrm{ES}}v\rangle
-        &\ge
+         & \ge
         -c_{ij}\left(1-\frac{1}{4L}\right)
         \bigl(    \re\langle h_{i,\mathrm{ES}}v,v\rangle
         +\re\langle h_{j,\mathrm{ES}}v,v\rangle
@@ -222,7 +222,7 @@
     \begin{align}
         \re\langle h_{i,\mathrm{ES}}v,h_{j,\mathrm{ES}}v\rangle
         +\re\langle h_{j,\mathrm{ES}}v,h_{i,\mathrm{ES}}v\rangle
-        &\ge
+         & \ge
         -\left(1-\frac{1}{4L}\right)\frac{1}{m}
         \bigl(    \re\langle h_{i,\mathrm{ES}}v,v\rangle
         +\re\langle h_{j,\mathrm{ES}}v,v\rangle
@@ -254,7 +254,7 @@
     the one-sided ordered cross-term estimate
     \begin{align}
         \re\langle h_{i,\mathrm{ES}}v,h_{j,\mathrm{ES}}v\rangle
-        &\ge -(1-\gamma)\frac{1}{m}
+         & \ge -(1-\gamma)\frac{1}{m}
         \re\langle h_{i,\mathrm{ES}}v,v\rangle,
         \notag
     \end{align}
@@ -282,7 +282,7 @@
     and overlapping local terms satisfy
     \begin{align}
         \|h_{i,\mathrm{ES}}(h_{j,\mathrm{ES}}v)\|
-        &\le (1-\gamma)\frac{1}{m}\|h_{i,\mathrm{ES}}v\|.
+         & \le (1-\gamma)\frac{1}{m}\|h_{i,\mathrm{ES}}v\|.
         \notag
     \end{align}
     Then $H_{N,L}^{\mathrm{ES}}{}^2\ge\gamma H_{N,L}^{\mathrm{ES}}$ as a
@@ -417,7 +417,7 @@
     $N\ge2L$ that overlapping off-diagonal terms satisfy
     \begin{align}
         \re\langle h_{i,\mathrm{ES}}v,h_{j,\mathrm{ES}}v\rangle
-        &\ge -(1-\tfrac{1}{4L})\frac{1}{2(L-1)}
+         & \ge -(1-\tfrac{1}{4L})\frac{1}{2(L-1)}
         \re\langle h_{i,\mathrm{ES}}v,v\rangle.
         \label{eq:ph_cyclic_window_overlap_estimate}
     \end{align}
@@ -451,7 +451,7 @@
     $N\ge2L$ that overlapping off-diagonal terms satisfy
     \begin{align}
         \re\langle h_{i,\mathrm{ES}}v,h_{j,\mathrm{ES}}v\rangle
-        &\ge -(1-\tfrac{1}{4L})\frac{1}{2(L-1)}
+         & \ge -(1-\tfrac{1}{4L})\frac{1}{2(L-1)}
         \re\langle h_{i,\mathrm{ES}}v,v\rangle.
         \label{eq:ph_cyclic_overlap_ordered_cross_term}
     \end{align}
@@ -481,7 +481,7 @@
     \begin{align}
         \re\langle h_{i,\mathrm{ES}}v,h_{j,\mathrm{ES}}v\rangle
         +\re\langle h_{j,\mathrm{ES}}v,h_{i,\mathrm{ES}}v\rangle
-        &\ge
+         & \ge
         -\left(1-\frac{1}{4L}\right)\frac{1}{2(L-1)}
         \bigl(    \re\langle h_{i,\mathrm{ES}}v,v\rangle
         +\re\langle h_{j,\mathrm{ES}}v,v\rangle
@@ -511,7 +511,7 @@
     off-diagonal pair that
     \begin{align}
         \|h_{i,\mathrm{ES}}(h_{j,\mathrm{ES}}v)\|
-        &\le (1-\tfrac{1}{4L})\frac{1}{2(L-1)}
+         & \le (1-\tfrac{1}{4L})\frac{1}{2(L-1)}
         \|h_{i,\mathrm{ES}}v\|.
         \notag
     \end{align}
@@ -526,17 +526,17 @@
     $h_{i,\mathrm{ES}}^2=h_{i,\mathrm{ES}}$ give
     \begin{align}
         \re\langle h_{i,\mathrm{ES}}v,h_{j,\mathrm{ES}}v\rangle
-        &= \re\langle h_{i,\mathrm{ES}}v,
-            h_{i,\mathrm{ES}}h_{j,\mathrm{ES}}v\rangle
-        \notag\\
-        &\ge -\|h_{i,\mathrm{ES}}v\|
-            \|h_{i,\mathrm{ES}}h_{j,\mathrm{ES}}v\|
-        \notag\\
-        &\ge -\left(1-\frac{1}{4L}\right)\frac{1}{2(L-1)}
-            \|h_{i,\mathrm{ES}}v\|^2
-        \notag\\
-        &= -\left(1-\frac{1}{4L}\right)\frac{1}{2(L-1)}
-            \re\langle h_{i,\mathrm{ES}}v,v\rangle.
+         & = \re\langle h_{i,\mathrm{ES}}v,
+        h_{i,\mathrm{ES}}h_{j,\mathrm{ES}}v\rangle
+        \notag                                              \\
+         & \ge -\|h_{i,\mathrm{ES}}v\|
+        \|h_{i,\mathrm{ES}}h_{j,\mathrm{ES}}v\|
+        \notag                                              \\
+         & \ge -\left(1-\frac{1}{4L}\right)\frac{1}{2(L-1)}
+        \|h_{i,\mathrm{ES}}v\|^2
+        \notag                                              \\
+         & = -\left(1-\frac{1}{4L}\right)\frac{1}{2(L-1)}
+        \re\langle h_{i,\mathrm{ES}}v,v\rangle.
         \notag
     \end{align}
     This is the ordered lower bound used by the preceding overlapping-cyclic
@@ -553,7 +553,7 @@
     overlapping off-diagonal pair that
     \begin{align}
         \|h_{i,\mathrm{ES}}(h_{j,\mathrm{ES}}v)\|
-        &\le \eta\,\|h_{i,\mathrm{ES}}v\|.
+         & \le \eta\,\|h_{i,\mathrm{ES}}v\|.
         \notag
     \end{align}
     If $\gamma>0$, $\gamma\le1$, and $\eta\le(1-\gamma)/m$, then $0<\gamma$
@@ -594,7 +594,7 @@
     overlapping off-diagonal pair that
     \begin{align}
         \|h_{i,\mathrm{ES}}(h_{j,\mathrm{ES}}v)\|
-        &\le \eta\,\|h_{j,\mathrm{ES}}v\|,
+         & \le \eta\,\|h_{j,\mathrm{ES}}v\|,
         \notag
     \end{align}
     that is, a bound $\|h_{i,\mathrm{ES}}h_{j,\mathrm{ES}}\|\le\eta$ on the

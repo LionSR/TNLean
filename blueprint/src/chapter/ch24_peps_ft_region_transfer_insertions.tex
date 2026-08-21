@@ -62,8 +62,8 @@
     $M\in\MN{D_f}$. The region insertion coefficient is
     \begin{align}
         C_A(R,f,M;\sigma,\tau)
-        &=
-        \sum_{\substack{\mu,\nu\\
+         & =
+        \sum_{\substack{\mu,\nu \\
         \mu|_{\partial R\setminus\{f\}}
         =\nu|_{\partial R\setminus\{f\}}}}
         M_{\mu_f,\nu_f}
@@ -106,8 +106,8 @@
     $I_{A,R,f,M}$ is the insert on $R$ defined by
     \begin{align}
         (I_{A,R,f,M})_{\nu,\sigma}
-        &=
-        \sum_{\substack{\mu\in\partial R\\
+         & =
+        \sum_{\substack{\mu\in\partial R \\
         \mu|_{\partial R\setminus\{f\}}
         =\nu|_{\partial R\setminus\{f\}}}}
         M_{\mu_f,\nu_f}\,T_{A,R}^{\mu}(\sigma).
@@ -128,14 +128,14 @@
     $V\setminus R$, the deformed state of the bond-inserted region insert is
     the region insertion coefficient:
     $\Psi_{A,R,I_{A,R,f,M}}(\sigma,\tau)
-    =C_A(R,f,M;\sigma,\tau)$.
+        =C_A(R,f,M;\sigma,\tau)$.
 \end{theorem}
 \begin{proof}
     \leanok
     Expanding the deformed state gives
     \begin{align}
         \Psi_{A,R,I_{A,R,f,M}}(\sigma,\tau)
-        &=
+         & =
         \sum_{\nu\in\partial R}
         I_{A,R,f,M}(\nu,\sigma)
         T_{A,V\setminus R}^{\nu^c}(\tau).
@@ -145,9 +145,9 @@
     sums gives
     \begin{align}
         \Psi_{A,R,I_{A,R,f,M}}(\sigma,\tau)
-        &=
+         & =
         \sum_{\nu\in\partial R}
-        \left(\sum_{\substack{\mu\in\partial R\\
+        \left(\sum_{\substack{\mu\in\partial R \\
         \mu|_{\partial R\setminus\{f\}}
         =\nu|_{\partial R\setminus\{f\}}}}
         M_{\mu_f,\nu_f}\,T_{A,R}^{\mu}(\sigma)\right)
@@ -162,10 +162,10 @@ configuration $\tau$ on $V\setminus R$, write $\omega_{R,\sigma,\tau}$ for the
 physical configuration on $V$ with
 \begin{align}
     \omega_{R,\sigma,\tau}(v)
-    &=
+     & =
     \begin{cases}
-        \sigma(v), & v\in R,\\
-        \tau(v), & v\notin R.
+        \sigma(v), & v\in R,    \\
+        \tau(v),   & v\notin R.
     \end{cases}
     \notag
 \end{align}
@@ -183,7 +183,7 @@ physical configuration on $V$ with
     coefficient:
     \begin{align}
         C_B(R,f,N;\sigma,\tau)
-        &=
+         & =
         p_B(R)
         E_B(f,\omega_{R,\sigma,\tau},\mathcal O_{R,f}(N)).
         \notag
@@ -202,15 +202,15 @@ physical configuration on $V$ with
     such an open-edge configuration $\xi$ gives
     \begin{align}
         C_B(R,f,N;\sigma,\tau)
-        &=
+         & =
         \sum_{\xi\in\mathcal C_{R,f}(\sigma,\tau)}
         \#\operatorname{Fib}_{R,f}(\xi)
         N_{\xi_{R,f}^{(1)},\xi_{R,f}^{(2)}}
         \prod_{v\in V}
         B_v(\xi_v,\omega_{R,\sigma,\tau}(v)),
-        \notag\\
+        \notag \\
         \#\operatorname{Fib}_{R,f}(\xi)
-        &=
+         & =
         \prod_{g\notin\partial R}D_B(g)
         =p_B(R).
         \notag
@@ -218,14 +218,14 @@ physical configuration on $V$ with
     Substituting this fibre cardinality gives
     \begin{align}
         C_B(R,f,N;\sigma,\tau)
-        &=
+         & =
         p_B(R)
         \sum_{\xi\in\mathcal C_{R,f}(\sigma,\tau)}
         N_{\xi_{R,f}^{(1)},\xi_{R,f}^{(2)}}
         \prod_{v\in V}
         B_v(\xi_v,\omega_{R,\sigma,\tau}(v))
-        \notag\\
-        &=
+        \notag \\
+         & =
         p_B(R)
         E_B(f,\omega_{R,\sigma,\tau},\mathcal O_{R,f}(N)).
         \notag
@@ -243,9 +243,9 @@ physical configuration on $V$ with
     For every global physical configuration $\sigma$,
     \begin{align}
         C_A(R,f,M;\sigma|_R,\sigma|_{V\setminus R})
-        &=
+         & =
         \Psi_{A,S,
-        \Ext_{R\subseteq S}(I_{A,R,f,M})}(\sigma).
+            \Ext_{R\subseteq S}(I_{A,R,f,M})}(\sigma).
         \notag
     \end{align}
     In particular, the one-bond insertion on $R$ may be read after extending
@@ -256,9 +256,9 @@ physical configuration on $V$ with
     The preceding theorem and state preservation for corner extension give
     \begin{align}
         C_A(R,f,M;\sigma|_R,\sigma|_{V\setminus R})
-        &=
+         & =
         \Psi_{A,R,I_{A,R,f,M}}
-            (\sigma|_R,\sigma|_{V\setminus R})
+        (\sigma|_R,\sigma|_{V\setminus R})
         =
         \Psi_{A,S,
             \Ext_{R\subseteq S}(I_{A,R,f,M})}(\sigma).
@@ -275,7 +275,7 @@ physical configuration on $V$ with
     $(B_{A,R},B_{A,R^c})$ is the region insertion coefficient:
     \begin{align}
         C_{B_{A,R},B_{A,R^c}}(f,M;*,*,\sigma,\tau)
-        &=
+         & =
         C_A(R,f,M;\sigma,\tau).
         \notag
     \end{align}
@@ -294,7 +294,7 @@ physical configuration on $V$ with
     the region insertion coefficient is transported by the induced
     matrix-algebra identification on the inserted bond:
     $C_{B^h}(R,f,N;\sigma,\tau)
-    =C_B(R,f,\phi_f(N);\sigma,\tau)$.
+        =C_B(R,f,\phi_f(N);\sigma,\tau)$.
 \end{theorem}
 \begin{proof}\leanok
     Reindex both boundary-configuration sums by the bond-dimension
@@ -323,10 +323,10 @@ physical configuration on $V$ with
     coefficients and use the bond-dimension transport formula:
     \begin{align}
         C_{B_{A,R},B_{A,R^c}}(f,N;*,*,\sigma,\tau)
-        &=C_A(R,f,N;\sigma,\tau)
+         & =C_A(R,f,N;\sigma,\tau)
         =C_B(R,f,\phi_f(N);\sigma,\tau)
-        \notag\\
-        &=C_{B_{B^h,R},B_{B^h,R^c}}(f,N;*,*,\sigma,\tau).
+        \notag                                              \\
+         & =C_{B_{B^h,R},B_{B^h,R^c}}(f,N;*,*,\sigma,\tau).
         \notag
     \end{align}
 \end{proof}
@@ -340,7 +340,7 @@ physical configuration on $V$ with
     contracting $B_2$ against $B_1$ with the transposed insertion:
     \begin{align}
         C_{B_1,B_2}(f,X;\eta_1,\eta_2,\sigma_1,\sigma_2)
-        &=
+         & =
         C_{B_2,B_1}(f,X^T;\eta_2,\eta_1,\sigma_2,\sigma_1).
         \notag
     \end{align}
@@ -360,7 +360,7 @@ physical configuration on $V$ with
     read by contracting the complement block first:
     \begin{align}
         C_A(R,f,X;\sigma,\tau)
-        &=
+         & =
         C_{A,R^c;R}(f,X^T;\tau,\sigma).
         \notag
     \end{align}
@@ -401,7 +401,7 @@ physical configuration on $V$ with
     physical operator obtained by inserting $X^T$ on $f$. Then for every
     local virtual coefficient $c$,
     $\mathcal T_{B,v}(Wc)
-    =O_{A,R,f}(X^T) \mathcal T_{B,v}(c)$.
+        =O_{A,R,f}(X^T) \mathcal T_{B,v}(c)$.
 \end{theorem}
 \begin{proof}\leanok
     The physical endpoint operator preserves the image of
@@ -455,7 +455,7 @@ physical configuration on $V$ with
     With $f'$ the boundary edge $f$ read on $V\setminus R$, one has
     \begin{align}
         C_A(R,f,X;\sigma,\tau)
-        &=
+         & =
         C_A(V\setminus R,f',X^T;\tau,\sigma^{cc}),
         \notag
     \end{align}
@@ -494,7 +494,7 @@ physical configuration on $V$ with
     the same inserted coefficient give
     \begin{align}
         P_R\,O^{\mathrm{in}}_f(X) \Psi_B(R;\sigma,\tau)
-        &=
+         & =
         P_{R^c}\,O^{\mathrm{out}}_f(X)
         \Psi_B(R^c;\tau,\sigma^{cc}).
         \notag
@@ -503,22 +503,22 @@ physical configuration on $V$ with
     row functions, one has
     \begin{align}
         C_A(R,f,X;\sigma,-)
-        &=
+         & =
         T_{A,R^c}\!\left(\rho^{R^c}_{X,\sigma}\right),
-        \notag\\
+        \notag \\
         C_A(R,f,X;-,\tau)
-        &=
+         & =
         T_{A,R}\!\left(\rho^{R}_{X,\tau}\right).
         \notag
     \end{align}
     Hence the blocked left inverses read off the rows:
     \begin{align}
         L_{A,R^c}\!\left(C_A(R,f,X;\sigma,-)\right)
-        &=
+         & =
         \rho^{R^c}_{X,\sigma},
-        \notag\\
+        \notag \\
         L_{A,R}\!\left(C_A(R,f,X;-,\tau)\right)
-        &=
+         & =
         \rho^{R}_{X,\tau}.
         \notag
     \end{align}

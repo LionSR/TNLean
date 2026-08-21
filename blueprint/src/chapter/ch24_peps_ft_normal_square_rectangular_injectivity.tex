@@ -135,15 +135,15 @@
     decomposition is
     \begin{align}
         A_3
-        &=T \cup (\{0,1,2\}\times\{5,6\})
-          \cup (\{2,3,4\}\times\{5,6\}).
+         & =T \cup (\{0,1,2\}\times\{5,6\})
+        \cup (\{2,3,4\}\times\{5,6\}).
         \notag
     \end{align}
     For the vertical block, the decomposition is
     \begin{align}
         A_3^{\mathrm v}
-        &=T^{\mathrm v} \cup (\{5,6\}\times\{0,1,2\})
-          \cup (\{5,6\}\times\{2,3,4\}).
+         & =T^{\mathrm v} \cup (\{5,6\}\times\{0,1,2\})
+        \cup (\{5,6\}\times\{2,3,4\}).
         \notag
     \end{align}
 \end{proof}
@@ -189,7 +189,7 @@
         % the exact local formal decomposition in NormalEdgeComplementCover.lean.
         \tenkzkernel
         \begin{tenkz}[rows={wire,wire,wire,wire,wire,wire,wire}, cols=5,
-            west=open, east=open, north=open, south=open]
+                west=open, east=open, north=open, south=open]
             \tn[skin=dot]{} & \tn[skin=dot]{} & \tn[skin=dot]{} &
             \tn[skin=dot]{} & \tn[skin=dot]{} \\
             \tn[skin=dot]{} & \tn[skin=dot]{} & \tn[skin=dot]{} &
@@ -205,14 +205,14 @@
             \tn[skin=dot]{} & \tn[skin=dot]{} & \tn[skin=dot]{} &
             \tn[skin=dot]{} & \tn[skin=dot]{}
             \tnmark[form=enclosure, slot=selected, tint, label pos=n]
-                {(1,1) .. (6,5) - (3,1) .. (5,2) - (2,3) .. (3,5)}{$T$}
+            {(1,1) .. (6,5) - (3,1) .. (5,2) - (2,3) .. (3,5)}{$T$}
             \tnmark[form=enclosure, slot=collar]{(6,1) .. (7,3)}{$C_1$}
             \tnmark[form=enclosure, slot=collar, inset=1]
-                {(6,3) .. (7,5)}{$C_2$}
+            {(6,3) .. (7,5)}{$C_2$}
         \end{tenkz}
         $ = $
         \begin{tenkz}[rows={wire,wire,wire,wire,wire,wire,wire}, cols=5,
-            west=open, east=open, north=open, south=open]
+                west=open, east=open, north=open, south=open]
             \tn[skin=dot]{} & \tn[skin=dot]{} & \tn[skin=dot]{} &
             \tn[skin=dot]{} & \tn[skin=dot]{} \\
             \tn[skin=dot]{} & \tn[skin=dot]{} & \tn[skin=dot]{} &
@@ -228,7 +228,7 @@
             \tn[skin=dot]{} & \tn[skin=dot]{} & \tn[skin=dot]{} &
             \tn[skin=dot]{} & \tn[skin=dot]{}
             \tnmark[form=enclosure, slot=complement, tint, label pos=n]
-                {(1,1) .. (7,5) - (3,1) .. (5,2) - (2,3) .. (3,5)}{$A_3$}
+            {(1,1) .. (7,5) - (3,1) .. (5,2) - (2,3) .. (3,5)}{$A_3$}
         \end{tenkz}
     \end{tenkzequation}
 \end{lemma}
@@ -493,7 +493,7 @@
     The equality is derived from the one-edge blocking data built from the
     rectangular injectivity --- the source's Lemma \emph{inj\_isomorph}
     (\cite[Section~3, lines~560--583 and
-    1407--1500]{Molnar2018NormalPEPS}) ---
+        1407--1500]{Molnar2018NormalPEPS}) ---
     together with the same-state and positive-bond assumptions; the bond
     dimension at the edge is not assumed.
     \begin{proof}
@@ -510,7 +510,7 @@
         edge crossing between the red and blue regions:
         \begin{align}
             \{\,g:\ \text{$g$ joins the red block to the blue block}\,\}
-                =\{e'\}.
+            =\{e'\}.
             \notag
         \end{align}
         The one-edge comparison of
