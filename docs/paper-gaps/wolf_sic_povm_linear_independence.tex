@@ -1,0 +1,83 @@
+\documentclass{article}
+
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+\setlength{\emergencystretch}{2em}
+
+\input{command}
+
+\title{SIC--POVM Equality Families: the One-Dimensional Degeneracy}
+\author{}
+\date{2026-08-21}
+
+\begin{document}
+\maketitle
+
+\section{Source passage}
+
+Let $P_1,\ldots,P_n\in\MN{d}$ be positive semidefinite matrices satisfying
+$\tr(P_i^2)=1$, where $d\le n$. Chapter~2 of
+\cite{Wolf2012Quantum}, Proposition ``SIC POVMs'', proves the bound
+\begin{align}
+  \sum_{i\ne j}|\tr(P_iP_j)|^2
+  \ge \frac{n(n-d)^2}{(n-1)d^2}.
+  \label{eq:wolf-sic-bound}
+\end{align}
+At equality, the argument gives
+\begin{align}
+  P_i^2&=P_i, & \operatorname{rank}(P_i)&=1, \\
+  \sum_iP_i&=\frac nd\Id, &
+  \tr(P_iP_j)&=\frac{n-d}{(n-1)d}\qquad(i\ne j).
+  \label{eq:wolf-sic-equality}
+\end{align}
+The source then asserts, at lines 816--823 of the local Chapter~2 source file,
+that the matrices in an equality family are linearly independent.
+
+\section{The deviation}
+
+The concluding assertion fails when $d=1$ and $n>1$. In one dimension the
+unit-purity and positivity hypotheses force every $P_i$ to be the matrix
+$[1]$. This family attains equality in~\eqref{eq:wolf-sic-bound}: both sides
+are $n(n-1)$. It is nevertheless linearly dependent as soon as it contains
+more than one member.
+
+The coefficient calculation in the source also isolates the precise
+degeneracy. If $\sum_i c_iP_i=0$, taking the trace and then pairing with
+$P_j$ gives
+\begin{align}
+  \sum_i c_i&=0, \\
+  \left(1-\frac{n-d}{(n-1)d}\right)c_j&=0.
+\end{align}
+For $n>1$, the prefactor vanishes exactly when $d=1$. Thus an equality family
+is linearly independent under the corrected condition $d>1$. When $n=1$,
+Equation~\eqref{eq:wolf-sic-bound} is not stated because of its denominator,
+but the singleton family is linearly independent whenever its sole matrix has
+unit purity.
+
+\section{Formalized interpretation}
+
+The formalization separates three statements. The inequality
+\leanid{Matrix.sicPOVM_offDiag_overlap_sq_bound} and its equality criterion
+\leanid{Matrix.sicPOVM_offDiag_overlap_sq_eq_iff} retain the source's
+nondegenerate hypotheses $n\ge2$ and $1\le d\le n$; in particular, their
+validity at $d=1$ is preserved. The corrected consequence
+\leanid{Matrix.sicPOVM_linearIndependent_of_overlap_bound_eq} assumes $d\ge2$.
+The complementary singleton statement is
+\leanid{Matrix.singleton_linearIndependent_of_trace_sq_eq_one}.
+
+Consequently, the combined nondegeneracy condition for linear independence is
+$d>1$ or $n=1$, while the equality theorem itself is not artificially
+restricted.
+
+\section{Verdict}
+
+\textbf{Verdict: resolved local fix (one-dimensional equality family).}
+Wolf's overlap bound and equality characterization are correct in one
+dimension. Only the final linear-independence consequence requires the
+qualification $d>1$, with the singleton case treated separately.
+
+\bibliographystyle{alpha}
+\bibliography{references}
+
+\end{document}

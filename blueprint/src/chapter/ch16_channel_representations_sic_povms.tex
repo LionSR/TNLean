@@ -121,3 +121,105 @@ equations~(2.31)--(2.32)]{Wolf2012Quantum}.
     a rank-one orthogonal projection has one unit eigenvalue and all remaining
     eigenvalues zero, so its trace is one.
 \end{proof}
+
+\section{The SIC--POVM overlap bound}
+
+\begin{theorem}[SIC--POVM overlap bound]
+    \label{thm:sic_povm_overlap_bound}
+    \lean{Matrix.sicPOVM_offDiag_overlap_sq_bound}
+    \leanok
+    Suppose that $2\le n$, $1\le d\le n$, and that
+    $P_1,\ldots,P_n\in\MN{d}$ are positive semidefinite matrices satisfying
+    $\tr(P_i^2)=1$. Then
+    \begin{align}
+        \sum_{i\ne j}\tr(P_iP_j)^2
+        \ge \frac{n(n-d)^2}{(n-1)d^2}.
+        \label{eq:sic_povm_overlap_bound}
+    \end{align}
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:sic_hermitian_trace_square, thm:sic_psd_unit_purity_trace}
+    Put $Q=\sum_iP_i$ and
+    $T=\sum_{i\ne j}\tr(P_iP_j)$. Positivity gives
+    $\tr(P_iP_j)\ge0$ and $\tr(P_i)\ge1$. Hence
+    \begin{align}
+        n^2
+        \le \tr(Q)^2
+        \le d\tr(Q^2)
+        =d(n+T),
+    \end{align}
+    so $T\ge n(n-d)/d$. Finite Cauchy--Schwarz, applied to the
+    $n(n-1)$ off-diagonal overlaps, gives
+    \begin{align}
+        T^2\le n(n-1)\sum_{i\ne j}\tr(P_iP_j)^2.
+    \end{align}
+    Combining the two estimates proves~(\ref{eq:sic_povm_overlap_bound}).
+\end{proof}
+
+\begin{theorem}[Equality in the SIC--POVM overlap bound]
+    \label{thm:sic_povm_overlap_bound_equality}
+    \lean{Matrix.sicPOVM_offDiag_overlap_sq_eq_iff}
+    \leanok
+    \uses{def:sic_rank_one_orthogonal_projection}
+    Under the hypotheses of Theorem~\ref{thm:sic_povm_overlap_bound}, equality
+    holds in~(\ref{eq:sic_povm_overlap_bound}) if and only if
+    \begin{align}
+        &P_i\text{ is a rank-one orthogonal projection for every }i,\\
+        &\sum_iP_i=\frac nd\Id,\\
+        &\tr(P_iP_j)=\frac{n-d}{(n-1)d}\qquad(i\ne j).
+    \end{align}
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:finite_cauchy_schwarz_equality,
+      thm:sic_hermitian_trace_square_equality,
+      thm:sic_psd_unit_purity_equality}
+    Equality in the final estimate forces equality at every preceding step.
+    Thus $\tr(P_i)=1$ for every $i$, so each $P_i$ is a rank-one orthogonal
+    projection. Equality in the trace-square inequality makes $Q$ scalar; its
+    trace is $n$, whence $Q=(n/d)\Id$. Equality in finite
+    Cauchy--Schwarz makes all off-diagonal overlaps equal, and their sum then
+    fixes their common value as $(n-d)/((n-1)d)$. Conversely, these three
+    conditions give equality by direct substitution.
+\end{proof}
+
+\begin{theorem}[Linear independence of nondegenerate equality families]
+    \label{thm:sic_povm_equality_linear_independent}
+    \lean{Matrix.sicPOVM_linearIndependent_of_overlap_bound_eq}
+    \leanok
+    Suppose, in addition, that $d\ge2$. Any family attaining equality
+    in~(\ref{eq:sic_povm_overlap_bound}) is linearly independent.
+
+    \textbf{Local fix (one-dimensional equality families):} The corresponding
+    assertion printed in \cite[Chapter~2, Proposition ``SIC POVMs'',
+    lines~816--823]{Wolf2012Quantum} is false when $d=1<n$: every $P_i$ then
+    equals $[1]$. This deviation is recorded in
+    \path{docs/paper-gaps/wolf_sic_povm_linear_independence.tex}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:sic_povm_overlap_bound_equality}
+    Suppose $\sum_i c_iP_i=0$. Taking the trace gives $\sum_i c_i=0$.
+    Taking the trace after multiplication by $P_j$ gives
+    \begin{align}
+        0
+        =c_j+\frac{n-d}{(n-1)d}\sum_{i\ne j}c_i
+        =\left(1-\frac{n-d}{(n-1)d}\right)c_j.
+    \end{align}
+    For $n\ge2$ this prefactor is nonzero precisely when $d>1$. Hence every
+    $c_j$ vanishes.
+\end{proof}
+
+\begin{theorem}[The singleton case]
+    \label{thm:sic_povm_singleton_linear_independent}
+    \lean{Matrix.singleton_linearIndependent_of_trace_sq_eq_one}
+    \leanok
+    A singleton family whose sole matrix $P$ satisfies $\tr(P^2)=1$ is
+    linearly independent.
+\end{theorem}
+
+\begin{proof}\leanok
+    The unit-purity identity implies $P\ne0$, and a singleton containing a
+    nonzero vector is linearly independent.
+\end{proof}
