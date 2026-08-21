@@ -2367,11 +2367,14 @@ This is the calculation in
 % **Missing statement; proof-path drift:** Analytic inheritance is complete
 % for every common-weight absorbed BNT representative, but the explicit
 % bond-one construction refutes preservation of normality under all conditions
-% used in Appendix C.2.  The printed implication (ii)=>(iv) therefore needs a
-% factorization argument that does not use absorbed normality; tracked in
-% #6775.  Direct per-representative blocked channels are a separate possible
-% route to (ii)=>(v), tracked in #6793, and their outer-sector composition is
-% tracked in #6632.  Independently,
+% used in Appendix C.2.  The
+% non-Cartesian four-letter construction below shows that the resulting local
+% analytic properties do not alone imply a neighboring trace factorization.
+% It does not supply the ambient biCF witness required to refute the printed
+% implication (ii)=>(iv).  The source-context factorization remains #6775,
+% while direct per-representative blocked channels remain the alternative route
+% tracked in #6793; their outer-sector composition is formalized in #6632.
+% Independently,
 % thm:mpdo_theorem49_iv_to_v_counterexample refutes the literal implication
 % (iv)=>(v).  Documented in docs/paper-gaps/cpgsv17_pf_rank_one.tex.
 \begin{theorem}[Physical sector structure of absorbed BNT representatives]
@@ -2409,3 +2412,48 @@ This is the calculation in
     {Cirac2016MPDO_arXiv}. The separate standing biCF and BNT hypotheses are
     imposed at line~849 and restated at line~1628 of the same source.
 \end{theorem}
+
+\begin{theorem}[Counterexample to the low-level absorbed-sector implication]
+    \label{thm:mpdo_sal_zcl_bnt_sector_structure_counterexample}
+    \lean{MPOTensor.NonCartesianActiveSectorCandidate.full_lowLevel_counterexample}
+    \leanok
+    \uses{def:is_sal, def:mpo_physical_trace_transfer,
+        def:mpdo_physical_sector_factorization,
+        def:mpdo_neighboring_trace_factorization}
+    There are tensors $K,A$ of physical dimension four and virtual dimension
+    two, and a nonzero scalar $\mu$, such that $K=\mu A$, the tensor $A$ is
+    normal, and $K$ is injective, satisfies the strong area law, and obeys
+    \begin{align}
+        \mathcal T_K^2&=\mathcal T_K.
+        \notag
+    \end{align}
+    Nevertheless, no physical-sector factorization of $K$ has positive
+    neighboring operators whose traces are of the form $a_kb_h$ with
+    $\sum_k a_kb_k=1$. Hence these local analytic hypotheses do not by
+    themselves imply the asserted factorization. This does not refute the
+    all-sector assertion in
+    \cite[Theorem~4.9 and Appendix~C.2, lines~1647--1782]
+      {Cirac2016MPDO_arXiv}, whose hypotheses include an ambient simple tensor
+    in biCF and its canonical reconstruction.
+\end{theorem}
+
+\begin{proof}\leanok
+    Take
+    \begin{align}
+      L&=\begin{pmatrix}1&1&1&1\\1&2&-7&4\end{pmatrix}, &
+      R&=\begin{pmatrix}
+        1/4&-3/100\\1/4&-1/100\\1/4&1/100\\1/4&3/100
+      \end{pmatrix},
+    \end{align}
+    and let the four diagonal physical slices be the outer products of the
+    corresponding columns of $L$ and rows of $R$. Then
+    $LR=\operatorname{diag}(1,0)$, whereas $RL$ has rank two. The scalar
+    slice and two simple-spectrum slices force every summand in any
+    physical-sector factorization to have one-dimensional left and right
+    factors. The resulting neighboring trace matrix has a nonzero
+    two-by-two minor, so it cannot equal $(a_kb_h)_{k,h}$. The four slices
+    span the full two-by-two matrix algebra, and their displayed scalar
+    neighboring operators are positive. Finally, Perron normalization and a
+    canonical gauge express the tensor as a nonzero scalar multiple of a
+    normal tensor.
+\end{proof}

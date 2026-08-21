@@ -340,13 +340,17 @@ The component results and their conjunction are in
 ambient_isSAL_isSimpleCanonicalForm_and_firstAbsorbed_not_isNormalTensor}.
 This repairs the previously missing full-condition counterexample statement
 and classifies the printed absorption inference as \emph{proof-path drift}.
-It does not prove or disprove the claimed all-sector factorization.  The
-source assertion that each absorbed representative admits some rank-one
-neighboring-trace factorization remains open in \ghissue{6775}.  A possible
-direct construction of the blocked channel pair, using a genuine coarsening or
-mixing of the physical-sector labels, is tracked separately in
-\ghissue{6793}.  The subsequent combination through the orthogonal outer
-physical sectors remains open in \ghissue{6632}.
+It does not itself decide the claimed all-sector factorization. The
+non-Cartesian witness in
+\path{TNLean/MPS/MPDO/NonCartesianActiveSectorCounterexample.lean} refutes the
+implication from injectivity, SAL, literal ZCL, and scalar relation to a normal
+tensor. Its singleton coefficient has modulus $\sqrt r>1$, so it does not obey
+the line-246 unit-weight convention, which cannot be restored without losing
+literal ZCL. Thus \ghissue{6775} remains open at the ambient source-context
+boundary. The alternative direct construction of the blocked channel pair,
+using a genuine coarsening or mixing of physical-sector labels, remains in
+\ghissue{6793}. The subsequent combination through the orthogonal outer
+physical sectors is formalized in \ghissue{6632}.
 
 \section{Unequal raw copies refute Theorem~4.9(iv)$\Rightarrow$(v)}
 

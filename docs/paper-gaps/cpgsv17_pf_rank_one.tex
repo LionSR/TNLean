@@ -1070,10 +1070,10 @@ projector-controlled active maps are completely positive and preserve the
 trace selected by $Q$. Measuring $I-Q$ and preparing a fixed density matrix
 therefore completes each active map to a channel, while the complementary
 term vanishes on the closures. This resolves \ghissue{6807} without asserting
-that the active Markov projection is the ambient identity. Thus the remaining
-gap in the source implication is only the construction of one blocked channel
-pair for every absorbed representative, by either \ghissue{6775} or
-\ghissue{6793}.
+that the active Markov projection is the ambient identity. Thus two routes to
+the source implication remain: the source-context factorization in
+\ghissue{6775}, or the direct construction of one blocked channel pair for
+every absorbed representative in \ghissue{6793}.
 
 The composition from supplied factorization data is complete end to end.
 Given, for every absorbed representative, a physical-sector factorization
@@ -1109,20 +1109,59 @@ sectors are nonminimal. This factorization and its normalized trace
 coefficients are formalized in
 \leanid{MPOTensor.ActiveSectorSpanningCounterexample.%
 exists_oneSector_neighboringTraceFactorization}. Their non-rank-one trace
-matrix refutes only the proof path tied to those four selected sectors. A
-general coarsening theorem, or a counterexample to the existence of any such
-factorization under the complete absorbed-representative hypotheses, remains
-missing in \ghissue{6775}.
+matrix refutes only the proof path tied to those four selected sectors.
 
-The same raw tensor is not the injective normal tensor assumed in Case~I, and
-its normal representative loses literal ZCL. It therefore does not refute
-Lemma~C.5 under its complete standing hypotheses. The completed normal Case-I
+The corresponding low-level implication is refuted by a different four-letter
+tensor.  Let
+\[
+ L=\begin{pmatrix}1&1&1&1\\1&2&-7&4\end{pmatrix},\qquad
+ R=\begin{pmatrix}
+  1/4&-3/100\\1/4&-1/100\\1/4&1/100\\1/4&3/100
+ \end{pmatrix},
+\]
+and take the four diagonal physical slices to be the outer products of the
+corresponding columns and rows.  Then $LR=\operatorname{diag}(1,0)$, so the
+physical trace transfer is literally idempotent, while $RL$ has rank two.
+The four slices span $M_2(\mathbb C)$, and the displayed scalar sector
+factorization has positive neighboring operators.  Hence the tensor is
+injective and satisfies SAL.  Perron normalization expresses it as a nonzero
+scalar multiple of a normal tensor.
+
+The obstruction applies to every physical-sector factorization, not merely
+to the displayed one.  The scalar slice and the two slices with simple spectra
+$1,2,-7,4$ and $-3,-1,1,3$ force every left and right sector factor to be
+one-dimensional.  The physical isometry then assigns each physical label to
+a unique sector.  The neighboring trace matrix consequently contains a
+nonzero two-by-two minor, whereas a factorization
+$\operatorname{tr}(\eta_{k,h})=a_kb_h$ has rank at most one.  This is
+formalized in
+\leanid{MPOTensor.NonCartesianActiveSectorCandidate.%
+full_lowLevel_counterexample}.  Thus the local properties already inherited
+by an absorbed representative do not suffice to prove the factorization.
+Precisely, the formal theorem supplies injectivity, SAL (and hence MPDO
+generation), literal physical-trace idempotence, and an expression
+$\mathcal K=\mu A$ with $A$ normal and $\mu\ne0$. It does not package an
+ambient simple tensor in biCF whose canonical reconstruction contains
+$\mathcal K$. Moreover, for the singleton normalization produced here,
+$|\mu|=\sqrt r$, where $r$ is the Perron value of the unnormalized transfer.
+The trace of that transfer is $11619/2500$, so $r\ge11619/10000>1$ and
+$|\mu|>1$. Thus the line-246 convention $|\mu|\le1$, with at least one unit
+coefficient, fails; rescaling to unit weight destroys literal ZCL. This is the
+scale tension recorded in
+\path{docs/paper-gaps/cpsv16_unit_weight_rfp_scale_tension.tex}.
+Consequently the construction does not resolve \ghissue{6775} or refute the
+printed source-context assertion.
+
+The non-Cartesian tensor is not itself the normal tensor assumed in Case~I,
+and its normal representative loses literal ZCL. It therefore does not refute
+Lemma~C.5 under its complete Case-I hypotheses. The completed normal Case-I
 corollary does not replace literal ZCL by TNLean's scale-invariant
 \leanid{MPOTensor.IsSourceZCL} predicate. The completed Case-II analytic
 inheritance likewise does not prove that coefficient absorption preserves
 normality.
 
-The raw witness $\mathcal K$ nevertheless has explicit trace-preserving
+By contrast, the earlier four-sector active-trace witness $\mathcal K$ has
+explicit trace-preserving
 completely positive renormalization maps, both before and after two-site
 blocking, but its sole BNT coefficient is strictly subunit. Its globally
 normalized representative $A=(4/\sqrt5)\mathcal K$ retains SAL and TNLean's
@@ -1131,14 +1170,13 @@ the literal idempotence forced by conclusion~(v). The normalized representative
 therefore refutes the broadened implication using that up-to-scalar predicate,
 but it is not an unqualified counterexample to Theorem~4.9 because it fails the
 paper's literal ZCL diagram. Independently, the repeated-copy theorem above
-refutes the exact printed implication (iv)$\Rightarrow$(v). For the source
-(ii)$\Rightarrow$(v) route, \ghissue{6775} retains the printed
-per-representative factorization assertion, while \ghissue{6793} records the
-possible alternative of constructing the blocked channel pair by a genuine
-coarsening or sector-mixing argument. The conditional combination through the
-orthogonal outer physical sectors is formalized in \ghissue{6632}, and its
-trace-preserving completion outside the active support resolves
-\ghissue{6807}.
+refutes the exact printed implication (iv)$\Rightarrow$(v). The source-context
+(ii)$\Rightarrow$(iv) factorization remains \ghissue{6775}; the direct
+coarsening or sector-mixing construction of the blocked channel pair in
+\ghissue{6793} is an alternative route to (ii)$\Rightarrow$(v).
+The conditional combination through the orthogonal outer physical sectors is
+formalized in \ghissue{6632}, and its trace-preserving completion outside the
+active support resolves \ghissue{6807}.
 
 \bibliographystyle{alpha}
 \bibliography{references}
