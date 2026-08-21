@@ -36,7 +36,7 @@ variable {Λ Λ' : Type*} {O O' : ℕ → Type*}
 
 The label equivalence identifies sectors, the nonzero scalars record the
 normalization of their representatives, and the algebra isomorphism identifies
-the ambient operator algebras at each length.
+the ambient operator algebras at each positive length.
 
 Source: arXiv:1606.00608, Appendix C.4, lines 1997--2008; see also
 `docs/paper-gaps/cpsv16_unit_weight_rfp_scale_tension.tex`, equations
@@ -52,12 +52,13 @@ structure ExplicitVerticalTransport
   scale : Λ' → ℂ
   /-- Every relative normalization is nonzero. -/
   scale_ne_zero : ∀ α, scale α ≠ 0
-  /-- Identification of the ambient operator algebras at each length. -/
-  algebraEquiv : ∀ L, O L ≃ₐ[ℂ] O' L
+  /-- Identification of the ambient operator algebras at each positive length. -/
+  algebraEquiv : ∀ L, 0 < L → O L ≃ₐ[ℂ] O' L
   /-- The target representative is the transported source representative,
   multiplied by the corresponding length power of its normalization. -/
-  operator_eq : ∀ L α,
-    op'.operator L α = scale α ^ L • algebraEquiv L (op.operator L (labelEquiv α))
+  operator_eq : ∀ L (hL : 0 < L) α,
+    op'.operator L α =
+      scale α ^ L • algebraEquiv L hL (op.operator L (labelEquiv α))
 
 /-- The coefficient family obtained by explicit vertical transport.
 
@@ -86,7 +87,7 @@ theorem ExplicitVerticalTransport.hasSameLengthProductForm_verticalTransport
     (T : ExplicitVerticalTransport op op') (h : op.HasSameLengthProductForm c) :
     op'.HasSameLengthProductForm (verticalTransportCoefficients c T.labelEquiv T.scale) := by
   intro L hL α β
-  rw [T.operator_eq, T.operator_eq]
+  rw [T.operator_eq L hL α, T.operator_eq L hL β]
   rw [smul_mul_smul, ← map_mul]
   rw [h L hL]
   simp only [map_sum, map_smul]
@@ -94,7 +95,7 @@ theorem ExplicitVerticalTransport.hasSameLengthProductForm_verticalTransport
   rw [← T.labelEquiv.sum_comp]
   apply Finset.sum_congr rfl
   intro γ _
-  rw [T.operator_eq]
+  rw [T.operator_eq L hL γ]
   simp only [verticalTransportCoefficients, smul_smul]
   congr 1
   have hscalePow :
