@@ -200,8 +200,7 @@ conjugate-transposed tensor.
     \label{thm:half_chain_gram_geometric}
     \lean{MPSTensor.exists_geometric_bound_halfChainGram_sub_fixedPointProj}
     \leanok
-    \uses{def:half_chain_gram, def:transfer_map, def:fixed_point_proj,
-        def:trace_preserving}
+    \uses{def:half_chain_gram, def:transfer_map}
     Let $A$ have trace-preserving transfer map $\E_A$ with fixed point
     $\Lambda$, $\tr(\Lambda)\neq0$, and suppose
     \begin{align}
@@ -230,7 +229,7 @@ conjugate-transposed tensor.
 
 \begin{proof}
     \leanok
-    \uses{lem:half_chain_gram_transfer, thm:pow_decomp,
+    \uses{lem:half_chain_gram_transfer,
         thm:geometric_bound_of_spectral_radius_lt_one}
     Write $\E_A^{L}=P_{\Lambda}+(\E_A-P_{\Lambda})^{L}$ for $L\geq1$ by the
     power decomposition. By (\ref{eq:half_chain_gram_transfer}) the deviation
@@ -244,7 +243,6 @@ conjugate-transposed tensor.
     \label{lem:half_chain_gram_limit_diagonal}
     \lean{MPSTensor.fixedPointProj_single_entry_diagonal}
     \leanok
-    \uses{def:fixed_point_proj}
     For a diagonal fixed point
     $\Lambda=\operatorname{diag}(\lambda_1,\ldots,\lambda_D)$ with
     $\tr(\Lambda)\neq0$, the limiting overlaps form a diagonal matrix in the
@@ -272,8 +270,7 @@ conjugate-transposed tensor.
     \label{thm:half_chain_comparison_geometric}
     \lean{MPSTensor.exists_geometric_bound_halfChainComparison_sub_diagonal}
     \leanok
-    \uses{def:half_chain_gram, def:transfer_map, def:fixed_point_proj,
-        def:trace_preserving}
+    \uses{def:half_chain_gram, def:transfer_map}
     Let $A$ have trace-preserving transfer map with diagonal fixed point
     $\Lambda=\operatorname{diag}(\lambda_1,\ldots,\lambda_D)$,
     $\tr(\Lambda)\neq0$, satisfying the spectral condition
