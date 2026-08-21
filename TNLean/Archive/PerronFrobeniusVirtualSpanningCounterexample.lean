@@ -252,11 +252,18 @@ theorem mpoTensor_isInjective : MPSTensor.IsInjective mpoTensor.toMPSTensor := b
 lemma physTraceTransfer_mpoTensor :
     MPOTensor.physTraceTransfer mpoTensor =
       Matrix.map pairingProjection Complex.ofReal := by
+  have hsum : (∑ k, virtualMatrix k) = pairingProjection := by
+    rw [← pairingL_mul_pairingQ]
+    ext i j
+    simp [virtualMatrix, Matrix.vecMulVec_apply, Matrix.mul_apply,
+      Matrix.sum_apply]
+  have hpt : MPOTensor.physTraceTransfer mpoTensor
+      = ∑ k, complexVirtualMatrix k := by
+    simp [MPOTensor.physTraceTransfer, mpoTensor]
   ext i j
-  fin_cases i <;> fin_cases j <;>
-    simp [MPOTensor.physTraceTransfer, mpoTensor, complexVirtualMatrix,
-      virtualMatrix, pairingL, pairingQ, pairingProjection,
-      Fin.sum_univ_four] <;> ring
+  rw [hpt, Matrix.map_apply, ← hsum]
+  simp only [Matrix.sum_apply, complexVirtualMatrix, Matrix.map_apply,
+    Complex.ofReal_sum]
 
 /-- The injective diagonal tensor has source zero correlation length because
 its physical-trace transfer is the idempotent `L Q`. -/
