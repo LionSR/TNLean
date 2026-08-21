@@ -272,18 +272,20 @@ equations~(2.31)--(2.32)]{Wolf2012Quantum}.
     \label{thm:sic_povm_operator_basis}
     \lean{SICPOVM.linearIndependent_projector}
     \leanok
-    \uses{thm:sic_povm_overlap_bound_equality,
-      thm:sic_povm_equality_linear_independent,
-      thm:sic_povm_singleton_linear_independent}
+    \uses{def:sic_povm_family}
     The $d^2$ projectors in a symmetric informationally complete family form a
     basis of $\MN{d}$.
 \end{theorem}
 
 \begin{proof}\leanok
-    For $d\ge2$, the family realizes equality in the SIC--POVM overlap bound,
-    so Theorem~\ref{thm:sic_povm_equality_linear_independent} gives linear
-    independence. For $d=1$, the family is a nonzero singleton. Since
-    $\dim\MN{d}=d^2$, linear independence implies the basis property.
+    Suppose that $\sum_i c_iP_i=0$. Taking the trace gives
+    $\sum_i c_i=0$. Pairing with $P_j$ and using the constant overlaps gives
+    \begin{align}
+        0=c_j+\frac1{d+1}\sum_{i\ne j}c_i
+        =\frac d{d+1}c_j.
+    \end{align}
+    Since $d\ge1$, every $c_j$ vanishes. Thus the projectors are linearly
+    independent. Since $\dim\MN{d}=d^2$, they form a basis.
 \end{proof}
 
 \begin{theorem}[Diagonal representation]

@@ -4,8 +4,8 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.Algebra.RankOneSandwich
-import TNLean.Algebra.SICPOVMBound
 import TNLean.Algebra.PerronFrobenius.RankOne
+import TNLean.Algebra.TracePurity
 import TNLean.Channel.KrausMap
 import TNLean.Channel.POVM
 
@@ -114,39 +114,61 @@ theorem kraus_conjTranspose (i : Fin (d ^ 2)) :
 
 /-- The unscaled projectors of a SIC measurement are linearly independent. -/
 theorem linearIndependent_projector : LinearIndependent ℂ S.projector := by
-  by_cases hd1 : d = 1
-  · subst d
-    simpa using Matrix.singleton_linearIndependent_of_trace_sq_eq_one
-      S.projector (S.projector_purity 0)
-  · have hdpos := S.dim_pos
-    have hd2 : 2 ≤ d := by omega
-    have hn2 : 2 ≤ d ^ 2 := by nlinarith
-    have hdn : d ≤ d ^ 2 := by nlinarith [S.dim_pos]
-    have heq := (Matrix.sicPOVM_offDiag_overlap_sq_eq_iff
-      S.projector hn2 S.dim_pos hdn S.projector_posSemidef S.projector_purity).mpr
-      (by
-        refine ⟨S.rank_one, ?_, ?_⟩
-        · rw [S.sum_projector]
-          ext i j
-          by_cases hij : i = j
-          · subst j
-            simp only [Nat.cast_pow, Matrix.smul_apply, Matrix.one_apply_eq,
-              smul_eq_mul]
-            field_simp
-            push_cast
-            norm_num
-          · simp [Matrix.smul_apply, hij]
-        · intro i j hij
-          rw [S.overlap i j hij]
-          simp only [Complex.ofReal_re, Nat.cast_pow]
-          have hdR : (0 : ℝ) < d := by exact_mod_cast S.dim_pos
-          have hd2R : (2 : ℝ) ≤ d := by exact_mod_cast hd2
-          rw [show (d : ℝ) ^ 2 - d = d * (d - 1) by ring,
-            show (d : ℝ) ^ 2 - 1 = (d - 1) * (d + 1) by ring]
-          field_simp [hdR.ne', show (d : ℝ) - 1 ≠ 0 by nlinarith [hd2R],
-            show (d : ℝ) + 1 ≠ 0 by positivity])
-    exact Matrix.sicPOVM_linearIndependent_of_overlap_bound_eq
-      S.projector hn2 hd2 hdn S.projector_posSemidef S.projector_purity heq
+  classical
+  apply Fintype.linearIndependent_iff.mpr
+  intro c hc j
+  have hsumc : ∑ i, c i = 0 := by
+    have h := congrArg Matrix.trace hc
+    simp only [Matrix.trace_sum, Matrix.trace_smul, S.projector_trace,
+      Matrix.trace_zero, smul_eq_mul, mul_one] at h
+    exact h
+  have hsumErase :
+      ∑ i ∈ (Finset.univ : Finset (Fin (d ^ 2))).erase j, c i = -c j := by
+    have hsplit := Finset.add_sum_erase (Finset.univ : Finset (Fin (d ^ 2))) c
+      (Finset.mem_univ j)
+    rw [hsumc] at hsplit
+    linear_combination hsplit
+  have hpair : ∑ i, c i * (S.projector j * S.projector i).trace = 0 := by
+    have h := congrArg (fun X ↦ Matrix.trace (S.projector j * X)) hc
+    simpa only [Matrix.mul_sum, Matrix.mul_smul, Matrix.trace_sum,
+      Matrix.trace_smul, Matrix.mul_zero, Matrix.trace_zero, smul_eq_mul] using h
+  have hpairSplit :
+      c j * (S.projector j * S.projector j).trace +
+        ∑ i ∈ (Finset.univ : Finset (Fin (d ^ 2))).erase j,
+          c i * (S.projector j * S.projector i).trace = 0 := by
+    rw [Finset.add_sum_erase (Finset.univ : Finset (Fin (d ^ 2)))
+      (fun i ↦ c i * (S.projector j * S.projector i).trace) (Finset.mem_univ j)]
+    exact hpair
+  let a : ℂ := ((((d : ℝ) + 1)⁻¹ : ℝ) : ℂ)
+  have hcoeff : (1 - a) * c j = 0 := by
+    rw [show (S.projector j * S.projector j).trace = 1 by
+      rw [S.projector_mul_self, S.projector_trace]] at hpairSplit
+    have hoff :
+        (∑ i ∈ (Finset.univ : Finset (Fin (d ^ 2))).erase j,
+          c i * (S.projector j * S.projector i).trace) = a * (-c j) := by
+      calc
+        _ = ∑ i ∈ (Finset.univ : Finset (Fin (d ^ 2))).erase j, c i * a := by
+          apply Finset.sum_congr rfl
+          intro i hi
+          rw [S.overlap j i (Finset.ne_of_mem_erase hi).symm]
+        _ = a * ∑ i ∈ (Finset.univ : Finset (Fin (d ^ 2))).erase j, c i := by
+          rw [Finset.mul_sum]
+          apply Finset.sum_congr rfl
+          intro i hi
+          ring
+        _ = a * (-c j) := by rw [hsumErase]
+    rw [hoff] at hpairSplit
+    linear_combination hpairSplit
+  have ha_ne : 1 - a ≠ 0 := by
+    intro ha
+    have haone := congrArg Complex.re (sub_eq_zero.mp ha)
+    simp only [a, Complex.one_re, Complex.ofReal_re] at haone
+    have hdR : (0 : ℝ) < d := by exact_mod_cast S.dim_pos
+    have hinv : ((d : ℝ) + 1)⁻¹ < 1 := by
+      rw [inv_lt_one₀ (by positivity)]
+      nlinarith
+    linarith
+  exact (mul_eq_zero.mp hcoeff).resolve_left ha_ne
 
 /-- The SIC projectors span the full matrix algebra. -/
 theorem span_projector_eq_top :
