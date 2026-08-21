@@ -13,5 +13,6 @@ import TNLean.MPS
 import TNLean.PEPS
 import TNLean.PiAlgebra
 import TNLean.QCA
+import TNLean.QICLeanInterface
 import TNLean.Spectral
 import TNLean.Wielandt
