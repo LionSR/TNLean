@@ -44,13 +44,13 @@
     \cite[lines~962--967]{Cirac2016MPDO_arXiv}:
     \begin{align}
         [O_L(M_\alpha)]_{\mathbf a,\mathbf b}
-        &=
+                  & =
         \tr\!\left(\widehat M_\alpha^{a_1b_1}\cdots
-            \widehat M_\alpha^{a_Lb_L}\right),
-        \notag\\
-        \mathbf a&=(a_1,\ldots,a_L),
-        \notag\\
-        \mathbf b&=(b_1,\ldots,b_L).
+        \widehat M_\alpha^{a_Lb_L}\right),
+        \notag                         \\
+        \mathbf a & =(a_1,\ldots,a_L),
+        \notag                         \\
+        \mathbf b & =(b_1,\ldots,b_L).
         \notag
     \end{align}
 \end{definition}
@@ -65,7 +65,7 @@
     same-length product form when, for every positive length $L$,
     \begin{align}
         O_L(M_\alpha)O_L(M_\beta)
-        &=
+         & =
         \sum_\gamma
         c^{(L)}_{\alpha,\beta,\gamma} O_L(M_\gamma).
         \notag
@@ -94,7 +94,7 @@
     idempotent coefficient form when, for every BNT label $\gamma$,
     \begin{align}
         m_\gamma
-        &=
+         & =
         \sum_{\alpha,\beta}
         c^{(1)}_{\alpha,\beta,\gamma}m_\alpha m_\beta.
         \notag
@@ -130,7 +130,7 @@
     with the equality
     \begin{align}
         c^{(n)}_{i,j,k}
-        &=
+         & =
         c^{(n)}_{\sigma_n(i),\sigma_n(j),\tau_n(k)}.
         \notag
     \end{align}
@@ -148,7 +148,7 @@
     compatible when, for every positive length $L$,
     \begin{align}
         c^{(L)}_{\alpha,\beta,\gamma}
-        &=
+         & =
         \tr(\chi_{\alpha,\beta,\gamma}^{L}).
         \notag
     \end{align}
@@ -223,7 +223,7 @@
     for every $L>0$,
     \begin{align}
         O_L(M_\alpha)O_L(M_\beta)
-        &=
+         & =
         \sum_\gamma
         \tr(\chi_{\alpha,\beta,\gamma}^{\,L})
         O_L(M_\gamma).
@@ -245,7 +245,7 @@
     $L>0$,
     \begin{align}
         O_L(M_\alpha)O_L(M_\beta)
-        &=
+         & =
         \sum_\gamma
         \tr(\chi_{\alpha,\beta,\gamma}^{\,L})
         O_L(M_\gamma).
@@ -267,7 +267,7 @@
     $\chi$-witness, then
     \begin{align}
         m_\gamma
-        &=
+         & =
         \sum_{\alpha,\beta}
         \tr(\chi_{\alpha,\beta,\gamma})
         m_\alpha m_\beta.
@@ -289,7 +289,7 @@
     $\chi$-family, then
     \begin{align}
         m_\gamma
-        &=
+         & =
         \sum_{\alpha,\beta}
         \tr(\chi_{\alpha,\beta,\gamma})
         m_\alpha m_\beta.
@@ -317,7 +317,7 @@
     $\chi$-matrix:
     \begin{align}
         c^{(n)}_{i,j,k}
-        &=
+         & =
         \tr\!\left(\chi_{\sigma_n(i),\sigma_n(j),\tau_n(k)}^{\,n}\right).
         \notag
     \end{align}
@@ -344,10 +344,10 @@
     diagonal matrix
     \begin{align}
         \chi_{n,i,j,k}
-        &=
+         & =
         \diag\bigl(        \chi_{n,i,j,k,1},
-            \ldots,
-            \chi_{n,i,j,k,r_{n,i,j,k}}
+        \ldots,
+        \chi_{n,i,j,k,r_{n,i,j,k}}
         \bigr).
         \notag
     \end{align}
@@ -595,7 +595,7 @@
 \end{proof}
 
 \begin{theorem}[A length-dependent coefficient family stable under every
-    uniform block rescaling]%
+        uniform block rescaling]%
     \label{thm:mpdo_bnt_label_rescaling_stable_length_dependence}
     \lean{MPOTensor.RescalingStableLengthDependentRFP.A}
     \lean{MPOTensor.RescalingStableLengthDependentRFP.R}
@@ -624,10 +624,10 @@
     positive rescaling of the block. The four letter matrices are the
     scaled matrix units of $\MN{2}$
     \begin{align}
-        A^0&=\frac45E_{00}, &
-        A^1&=\frac45E_{11}, &
-        A^2&=\frac35E_{01}, &
-        A^3&=\frac35E_{10}.
+        A^0 & =\frac45E_{00}, &
+        A^1 & =\frac45E_{11}, &
+        A^2 & =\frac35E_{01}, &
+        A^3 & =\frac35E_{10}.
         \notag
     \end{align}
     Identify the physical index set $\{0,1,2,3\}$ with
@@ -635,15 +635,15 @@
     obtained by undoing the vertical reading of the letters
     $B^{ab}=A^a\otimes\overline{A^b}$:
     \begin{align}
-        R^{pq}_{ab}&=\frac{25}{32}
-            \left(A^a\otimes\overline{A^b}\right)_{p,q},
+        R^{pq}_{ab} & =\frac{25}{32}
+        \left(A^a\otimes\overline{A^b}\right)_{p,q},
         \notag
     \end{align}
     with $(p,q)$ the physical indices and $(a,b)$ the bond indices. Its
     physical-trace transfer is the rank-one projection
     \begin{align}
-        \mathcal T_R&=\frac{25}{32}\ketbra{t}{t}, &
-        t&=\left(\frac45,\frac45,0,0\right),
+        \mathcal T_R & =\frac{25}{32}\ketbra{t}{t},       &
+        t            & =\left(\frac45,\frac45,0,0\right),
         \notag
     \end{align}
     where $t_a=\tr(A^a)$; it satisfies $\mathcal T_R^2=\mathcal T_R$,
@@ -652,15 +652,15 @@
     hand-defined one-label coefficient model is in trace-power form with
     $\chi=\operatorname{diag}(1,\frac{7}{25})$:
     \begin{align}
-        c^{(L)}&=\tr(\chi^L)=1+\left(\frac{7}{25}\right)^L.
+        c^{(L)} & =\tr(\chi^L)=1+\left(\frac{7}{25}\right)^L.
         \notag
     \end{align}
     Hence $c^{(1)}\ne c^{(2)}$, so the family is not length independent.
     For every real number $s>0$, the rescaled block
     $s\chi=\operatorname{diag}(s,\frac{7s}{25})$ has coefficient
     \begin{align}
-        c_s^{(L)}&=\tr\!\left((s\chi)^L\right)
-            =s^L\left(1+\left(\frac{7}{25}\right)^L\right),
+        c_s^{(L)} & =\tr\!\left((s\chi)^L\right)
+        =s^L\left(1+\left(\frac{7}{25}\right)^L\right),
         \notag
     \end{align}
     which is again not length independent: if $c_s$ were constant in
@@ -690,8 +690,8 @@
     Write $\lambda=\frac{7}{25}$. If $c_s$ were length independent,
     comparing lengths one and two and lengths two and three would give
     \begin{align}
-        s&=\frac{1+\lambda}{1+\lambda^2}, &
-        s&=\frac{1+\lambda^2}{1+\lambda^3},
+        s & =\frac{1+\lambda}{1+\lambda^2},   &
+        s & =\frac{1+\lambda^2}{1+\lambda^3},
         \notag
     \end{align}
     hence $(1+\lambda)(1+\lambda^3)=(1+\lambda^2)^2$, that is,
@@ -710,14 +710,14 @@
     Moreover, this bond matrix is the rank-one outer product
     \begin{align}
         R^{pq}_{ab}
-        &=\frac{25}{32}A^a_{p_1q_1}A^b_{p_2q_2},
+         & =\frac{25}{32}A^a_{p_1q_1}A^b_{p_2q_2},
         \notag
     \end{align}
     or equivalently
     \begin{align}
-        R^{pq}&=\frac{25}{32}u_{pq}v_{pq}^{\mathsf T}, &
-        u_{pq}(a)&=A^a_{p_1q_1}, &
-        v_{pq}(b)&=A^b_{p_2q_2}.
+        R^{pq}    & =\frac{25}{32}u_{pq}v_{pq}^{\mathsf T}, &
+        u_{pq}(a) & =A^a_{p_1q_1},                          &
+        v_{pq}(b) & =A^b_{p_2q_2}.
         \notag
     \end{align}
 \end{lemma}
@@ -737,17 +737,17 @@
     \uses{thm:mpdo_bnt_label_rescaling_stable_length_dependence}
     Set
     \begin{align}
-        s&=\left(\frac45,\frac45,\frac35,\frac35\right), &
-        F&=\diag(s_0^2,s_1^2,s_2^2,s_3^2),
-        \notag\\
-        \lambda(X)&=\left(\frac{25}{32}\right)^2
-            \sum_{b=0}^3s_b^2X_{bb}.
+        s          & =\left(\frac45,\frac45,\frac35,\frac35\right), &
+        F          & =\diag(s_0^2,s_1^2,s_2^2,s_3^2),
+        \notag                                                        \\
+        \lambda(X) & =\left(\frac{25}{32}\right)^2
+        \sum_{b=0}^3s_b^2X_{bb}.
         \notag
     \end{align}
     Then the transfer map of $R$ has rank-one form
     \begin{align}
-        \E_R(X)&=\lambda(X)F,
-        &\lambda(F)&=\frac{337}{512}.
+        \E_R(X) & =\lambda(X)F,
+                & \lambda(F)    & =\frac{337}{512}.
         \notag
     \end{align}
 \end{lemma}
@@ -771,7 +771,7 @@
     \uses{thm:mpdo_bnt_label_rescaling_stable_length_dependence}
     The transfer map of the dimer tensor $R$ satisfies
     \begin{align}
-        \E_R^2&=\frac{337}{512}\E_R.
+        \E_R^2 & =\frac{337}{512}\E_R.
         \notag
     \end{align}
 \end{lemma}
@@ -781,8 +781,8 @@
     By Lemma~\ref{lem:mpdo_bnt_label_rescaling_stable_transfer_rank_one},
     \begin{align}
         \E_R(\E_R(X))
-        &=\lambda(X)\lambda(F)F
-         =\frac{337}{512}\E_R(X).
+         & =\lambda(X)\lambda(F)F
+        =\frac{337}{512}\E_R(X).
         \notag
     \end{align}
 \end{proof}
@@ -801,7 +801,7 @@
     every integer $L\geq0$, the transfer map of its $L$-site blocking satisfies
     \begin{align}
         \mathcal E_{R^{[L]}}^2
-        &=\left(\frac{337}{512}\right)^L\mathcal E_{R^{[L]}}.
+         & =\left(\frac{337}{512}\right)^L\mathcal E_{R^{[L]}}.
         \notag
     \end{align}
     For every positive integer $L$, the blocking $R^{[L]}$ admits no normalized
@@ -829,7 +829,7 @@
     integer $L\geq0$,
     \begin{align}
         \E_{R^{[L]}}^2
-        &=\left(\frac{337}{512}\right)^L\E_{R^{[L]}}.
+         & =\left(\frac{337}{512}\right)^L\E_{R^{[L]}}.
         \notag
     \end{align}
     Now fix $L>0$ and suppose that the $L$-site blocking has a normalized
@@ -858,9 +858,9 @@
     $(\sigma,\tau)$ collapses entrywise to
     \begin{align}
         \rho^{(N)}(R)_{\sigma\tau}
-            &=\left(\frac{25}{32}\right)^{N}
-            \mathbb 1[\text{cyclic bond match}](\sigma,\tau)\,
-            \prod_{n}W(\sigma_n,\tau_n),
+         & =\left(\frac{25}{32}\right)^{N}
+        \mathbb 1[\text{cyclic bond match}](\sigma,\tau)\,
+        \prod_{n}W(\sigma_n,\tau_n),
         \notag
     \end{align}
     where the indicator is one exactly when both $\sigma$ and $\tau$
@@ -878,7 +878,7 @@
     matrices via the rank-one contraction identity
     \begin{align}
         \tr\bigl((u_1v_1^{\mathsf T})\cdots(u_Nv_N^{\mathsf T})\bigr)
-            &=(v_N^{\mathsf T}u_1)\prod_{n=1}^{N-1}(v_n^{\mathsf T}u_{n+1}),
+         & =(v_N^{\mathsf T}u_1)\prod_{n=1}^{N-1}(v_n^{\mathsf T}u_{n+1}),
         \notag
     \end{align}
     where $u_n,v_n$ are the letter-column vectors of the $n$-th bond
@@ -891,7 +891,7 @@
 \end{proof}
 
 \begin{theorem}[Spectral identification of the local factor and the
-    per-site transfer map]%
+        per-site transfer map]%
     \label{thm:mpdo_bnt_label_rescaling_stable_spectral}
     \lean{MPOTensor.RescalingStableLengthDependentRFP.%
         wMat_eigenvalue_eq_oneLabelChi_entry}
@@ -914,19 +914,19 @@
     $2\times2$ matrix $W$,
     \begin{align}
         W\begin{pmatrix}1\\1\end{pmatrix}
-            &=1\cdot\begin{pmatrix}1\\1\end{pmatrix}, &
+         & =1\cdot\begin{pmatrix}1\\1\end{pmatrix},             &
         W\begin{pmatrix}1\\-1\end{pmatrix}
-            &=\frac{7}{25}\cdot\begin{pmatrix}1\\-1\end{pmatrix},
+         & =\frac{7}{25}\cdot\begin{pmatrix}1\\-1\end{pmatrix},
         \notag
     \end{align}
     and the identity, the traceless diagonal, and the two off-diagonal
     matrix units are eigenvectors of $\varphi$ by direct expansion of the
     letter matrices,
     \begin{align}
-        \varphi(1)&=1, &
+        \varphi(1)      & =1,                                     &
         \varphi(\operatorname{diag}(1,-1))
-            &=\frac{7}{25}\operatorname{diag}(1,-1), &
-        \varphi(E_{01})&=\varphi(E_{10})=0.
+                        & =\frac{7}{25}\operatorname{diag}(1,-1), &
+        \varphi(E_{01}) & =\varphi(E_{10})=0.
         \notag
     \end{align}
 \end{proof}
@@ -945,7 +945,7 @@
     matrix units of the bond algebra $\C^{4\times4}$: the outer-product
     structure of $R^{pq}$ collapses to a single matrix-unit letter because
     each factor $A^a$, $A^b$ of the vertical letters $B^{ab}=A^a\otimes
-    \overline{A^b}$ is itself a scaled matrix unit of $\C^{2\times2}$.
+        \overline{A^b}$ is itself a scaled matrix unit of $\C^{2\times2}$.
     Hence the standard matrix-unit basis lies in the span of the letters.
 \end{proof}
 
@@ -977,7 +977,7 @@
     exactly idempotent, hence primitive with spectral radius one (all
     other eigenvalues of the rank-one map are exactly zero). Together with
     algebraic injectivity this gives a CPSV normal tensor, and $A=\mu\cdot
-    (\mu^{-1}A)$ pointwise gives the reconstruction equation with the
+        (\mu^{-1}A)$ pointwise gives the reconstruction equation with the
     trivial (identity) coisometry.
 \end{proof}
 
@@ -995,9 +995,9 @@
     block in the displayed canonical form, where
     $\mu=\sqrt{337/512}$. Then
     \begin{align}
-        \mathcal T_{\widehat R}&=\mu^{-1}\mathcal T_R, &
-        \mathcal T_R^2&=\mathcal T_R, &
-        (\mathcal T_R)_{00}&=\frac12.
+        \mathcal T_{\widehat R} & =\mu^{-1}\mathcal T_R, &
+        \mathcal T_R^2          & =\mathcal T_R,         &
+        (\mathcal T_R)_{00}     & =\frac12.
         \notag
     \end{align}
     Consequently neither $\mathcal T_R$ nor
@@ -1011,7 +1011,7 @@
     unit-weight convention of \cite[line~246]{Cirac2016MPDO_arXiv}.
     For every scalar $c$, the physical-trace transfer scales as
     \begin{align}
-        \mathcal T_{cM}&=c\mathcal T_M.
+        \mathcal T_{cM} & =c\mathcal T_M.
         \notag
     \end{align}
     Hence literal idempotence at two nonzero representatives pins the scale:
@@ -1019,7 +1019,7 @@
         \mathcal T_M^2=\mathcal T_M\ne0,
         \quad
         \mathcal T_{cM}^2=\mathcal T_{cM}\ne0
-        \quad&\Longrightarrow\quad c=1.
+        \quad & \Longrightarrow\quad c=1.
         \notag
     \end{align}
     Replacing $R$ by the normalized block uses the nontrivial scale
@@ -1034,8 +1034,8 @@
     $\mathcal T_R$ is
     \begin{align}
         \frac{25}{32}\tr(A^0)^2
-            =\frac{25}{32}\left(\frac45\right)^2
-            =\frac12,
+        =\frac{25}{32}\left(\frac45\right)^2
+        =\frac12,
         \notag
     \end{align}
     so $\mathcal T_R$ is not nilpotent. The diagonal physical contraction is
@@ -1089,9 +1089,9 @@
     configuration gives
     \begin{align}
         \rho^{(N)}(R)_{\vec 0,\vec 0}
-        &=\left(\frac{25}{32}\right)^N
-          \left(\frac{16}{25}\right)^N
-          =\left(\frac12\right)^N\ne0.
+         & =\left(\frac{25}{32}\right)^N
+        \left(\frac{16}{25}\right)^N
+        =\left(\frac12\right)^N\ne0.
         \notag
     \end{align}
     Hence the closed operator does not vanish.
@@ -1117,7 +1117,7 @@
 \end{proof}
 
 \begin{theorem}[The rescaling-stable tensor is a renormalization fixed
-    point]%
+        point]%
     \label{thm:mpdo_bnt_label_rescaling_stable_is_rfp_via_ts}
     \lean{MPOTensor.RescalingStableLengthDependentRFP.isRFPViaTS_R}
     \leanok
@@ -1144,8 +1144,8 @@
     pullback of the one-site physical operator along $\ast$:
     \begin{align}
         M_2(X)_{(i_1,i_2)(j_1,j_2)}
-            &=\frac{25}{32}\,\mathbb 1[i_1''=i_2']\,\mathbb 1[j_1''=j_2']\,
-              W(i_1'',j_1'')\,M_1(X)_{i_1\ast i_2,\,j_1\ast j_2},
+         & =\frac{25}{32}\,\mathbb 1[i_1''=i_2']\,\mathbb 1[j_1''=j_2']\,
+        W(i_1'',j_1'')\,M_1(X)_{i_1\ast i_2,\,j_1\ast j_2},
         \notag
     \end{align}
     vanishing whenever either indicator fails. Write $e_0=(1,1)$,
@@ -1157,8 +1157,8 @@
     factor from the eigendecomposition of $W$,
     \begin{align}
         \sum_{s\in\{0,1\}}\frac{25}{64}\lambda_s\,e_s(b)\,e_s(b')
-            &=\frac{25}{32}\,W(b,b'), &
-        b,b'&\in\{0,1\},
+             & =\frac{25}{32}\,W(b,b'), &
+        b,b' & \in\{0,1\},
         \notag
     \end{align}
     which is exactly the coefficient displayed above. The coarse-graining
@@ -1167,8 +1167,8 @@
     bond-matching pairs is the single identity
     \begin{align}
         \frac12\sum_{s\in\{0,1\}}e_s(b)\,e_s(b')
-            &=\begin{cases}1,&b=b',\\0,&b\ne b',\end{cases} &
-        b,b'&\in\{0,1\}:
+             & =\begin{cases}1,&b=b',\\0,&b\ne b',\end{cases} &
+        b,b' & \in\{0,1\}:
         \notag
     \end{align}
     the case $b=b'$ is the trace-preserving normalization and the case
@@ -1191,33 +1191,33 @@
     The tensor $R$ has a one-label vertical BNT presentation. Its component
     has $16$ physical letters, bond dimension $4$, and
     \begin{align}
-        M_0^{(a,b)}&=A^a\otimes\overline{A^b}.
+        M_0^{(a,b)} & =A^a\otimes\overline{A^b}.
         \notag
     \end{align}
     The $1\times1$ multiplicity matrix and the $2\times2$ positive coefficient matrix are
     \begin{align}
-        \mu_0&=\begin{pmatrix}\frac{25}{32}\end{pmatrix},
-        \notag\\
-        \chi_{0,0,0}&=\operatorname{diag}\!\left(1,\frac{7}{25}\right).
+        \mu_0        & =\begin{pmatrix}\frac{25}{32}\end{pmatrix},
+        \notag                                                            \\
+        \chi_{0,0,0} & =\operatorname{diag}\!\left(1,\frac{7}{25}\right).
         \notag
     \end{align}
     The vertical tensor is reconstructed exactly by
     \begin{align}
-        \operatorname{vertical}(R)&=\frac{25}{32}M_0.
+        \operatorname{vertical}(R) & =\frac{25}{32}M_0.
         \notag
     \end{align}
     For every $L>0$, its closed component operator satisfies
     \begin{align}
         O_L(M_0)^2
-            &=\left(1+\left(\frac{7}{25}\right)^L\right)O_L(M_0)
-             =\tr\!\left(\chi_{0,0,0}^{L}\right)O_L(M_0).
+         & =\left(1+\left(\frac{7}{25}\right)^L\right)O_L(M_0)
+        =\tr\!\left(\chi_{0,0,0}^{L}\right)O_L(M_0).
         \notag
     \end{align}
     At length one, $m_0=\tr(\mu_0)=25/32$ and
     $c^{(1)}_{0,0,0}=32/25$, so the idempotent identity is
     \begin{align}
         \frac{25}{32}
-            &=\frac{32}{25}\left(\frac{25}{32}\right)^2.
+         & =\frac{32}{25}\left(\frac{25}{32}\right)^2.
         \notag
     \end{align}
 \end{theorem}
@@ -1245,8 +1245,8 @@
     two four-valued indices. Then
     \begin{align}
         \rho^{(L)}\!\left(
-            \operatorname{rot}(\operatorname{vertical}(R))\right)
-            &=\left(\frac{25}{32}\right)^L O_L(M_0).
+        \operatorname{rot}(\operatorname{vertical}(R))\right)
+         & =\left(\frac{25}{32}\right)^L O_L(M_0).
         \notag
     \end{align}
     This is a rotated vertical contraction, not the original horizontal tensor
@@ -1270,7 +1270,7 @@
     For every positive chain length $N$, the closed operator of $R$
     factors literally as
     \begin{align}
-        \rho^{(N)}(R)&=\left(\frac{25}{32}\right)^N B\,W_N\,B^{\mathsf T},
+        \rho^{(N)}(R) & =\left(\frac{25}{32}\right)^N B\,W_N\,B^{\mathsf T},
         \notag
     \end{align}
     where $B$ is the boundary partial isometry sending a chain of first
@@ -1280,8 +1280,8 @@
     The Walsh--Hadamard change of basis
     $H=\begin{pmatrix}1&1\\1&-1\end{pmatrix}$ diagonalizes $W$ exactly:
     \begin{align}
-        H\chi H&=2W, &
-        \chi&=\operatorname{diag}(1,\tfrac{7}{25}).
+        H\chi H & =2W,                                   &
+        \chi    & =\operatorname{diag}(1,\tfrac{7}{25}).
         \notag
     \end{align}
     Thus the matrix $\chi$ diagonalizes the local factor $W$ in the horizontal
@@ -1304,7 +1304,7 @@
 \end{proof}
 
 \begin{theorem}[Uniform $\chi$-trace-power form of the explicit one-label
-    model]%
+        model]%
     \label{thm:mpdo_bnt_label_rescaling_stable_chi_uniform}
     \lean{MPOTensor.RescalingStableLengthDependentRFP.oneLabelChiTracePowerForm}
     \lean{MPOTensor.RescalingStableLengthDependentRFP.%
@@ -1318,13 +1318,13 @@
     (Definition~\ref{def:mpdo_positive_bnt_label_chi_trace_power_form}) with
     $\chi=\operatorname{diag}(1,\tfrac{7}{25})$. For every $L>0$,
     \begin{align}
-        c^{(L)}&=\tr(\chi^L).
+        c^{(L)} & =\tr(\chi^L).
         \notag
     \end{align}
     The matrix $\chi$ diagonalizes the local factor $W$ in
     Theorem~\ref{thm:mpdo_bnt_label_rescaling_stable_chi_attachment}, so
     \begin{align}
-        \tr(\chi^L)&=\tr(W^L).
+        \tr(\chi^L) & =\tr(W^L).
         \notag
     \end{align}
     Hence $c^{(L)}=\tr(W^L)=1+(7/25)^L$. Here $W^L$ is the ordinary
@@ -1375,7 +1375,7 @@
     Applying the same-length product law to both coefficient systems gives
     \begin{align}
         \sum_\delta c^{(L)}_{\alpha,\beta,\delta}\,O_L(M_\delta)
-        &=
+         & =
         O_L(M_\alpha)O_L(M_\beta)
         =
         \sum_\delta c'^{(L)}_{\alpha,\beta,\delta}\,O_L(M_\delta).
@@ -1414,8 +1414,8 @@
     the transported coefficient family is
     \begin{align}
         \widetilde c^{(L)}_{\alpha,\beta,\gamma}
-        &=\left(\frac{s_\alpha s_\beta}{s_\gamma}\right)^L
-          c^{(L)}_{e(\alpha),e(\beta),e(\gamma)}.
+         & =\left(\frac{s_\alpha s_\beta}{s_\gamma}\right)^L
+        c^{(L)}_{e(\alpha),e(\beta),e(\gamma)}.
         \notag
     \end{align}
     Here division is totalized by the convention $z/0=0$.
@@ -1435,24 +1435,24 @@
     representatives and the source product law give
     \begin{align}
         O'_L(\alpha)O'_L(\beta)
-        &=(s_\alpha s_\beta)^L
-          \Phi_L\bigl(O_L(e(\alpha))O_L(e(\beta))\bigr)
-        \notag\\
-        &=(s_\alpha s_\beta)^L
-          \sum_\delta c^{(L)}_{e(\alpha),e(\beta),\delta}
-          \Phi_L(O_L(\delta)).
+         & =(s_\alpha s_\beta)^L
+        \Phi_L\bigl(O_L(e(\alpha))O_L(e(\beta))\bigr)
+        \notag                   \\
+         & =(s_\alpha s_\beta)^L
+        \sum_\delta c^{(L)}_{e(\alpha),e(\beta),\delta}
+        \Phi_L(O_L(\delta)).
         \notag
     \end{align}
     Reindexing by $\delta=e(\gamma)$ and using $s_\gamma\ne0$ yields
     \begin{align}
         O'_L(\alpha)O'_L(\beta)
-        &=\sum_\gamma
-          \left(\frac{s_\alpha s_\beta}{s_\gamma}\right)^L
-          c^{(L)}_{e(\alpha),e(\beta),e(\gamma)}
-          \,s_\gamma^L\Phi_L(O_L(e(\gamma)))
-        \notag\\
-        &=\sum_\gamma
-          \widetilde c^{(L)}_{\alpha,\beta,\gamma}O'_L(\gamma).
+         & =\sum_\gamma
+        \left(\frac{s_\alpha s_\beta}{s_\gamma}\right)^L
+        c^{(L)}_{e(\alpha),e(\beta),e(\gamma)}
+        \,s_\gamma^L\Phi_L(O_L(e(\gamma)))
+        \notag          \\
+         & =\sum_\gamma
+        \widetilde c^{(L)}_{\alpha,\beta,\gamma}O'_L(\gamma).
         \notag
     \end{align}
 \end{proof}
@@ -1474,9 +1474,9 @@
     Theorem~\ref{thm:mpdo_vertical_bnt_product_transport} give
     \begin{align}
         \sum_\gamma c'^{(L)}_{\alpha,\beta,\gamma}O'_L(\gamma)
-        &=O'_L(\alpha)O'_L(\beta)
+         & =O'_L(\alpha)O'_L(\beta)
         =\sum_\gamma
-          \widetilde c^{(L)}_{\alpha,\beta,\gamma}O'_L(\gamma).
+        \widetilde c^{(L)}_{\alpha,\beta,\gamma}O'_L(\gamma).
         \notag
     \end{align}
     Linear independence of the target operators identifies the two
@@ -1495,8 +1495,8 @@
     coefficients satisfy
     \begin{align}
         {c'}^{(L)}_{\alpha,\beta,\gamma}
-        &=\left(\frac{s_\alpha s_\beta}{s_\gamma}\right)^L
-          c^{(L)}_{e(\alpha),e(\beta),e(\gamma)}.
+         & =\left(\frac{s_\alpha s_\beta}{s_\gamma}\right)^L
+        c^{(L)}_{e(\alpha),e(\beta),e(\gamma)}.
         \notag
     \end{align}
     Theorem~\ref{thm:mpdo_vertical_coefficients_not_presentation_invariant}
@@ -1508,9 +1508,9 @@
     abstract covariance theorem.  Hence
     \begin{align}
         {c'}^{(L)}_{\alpha,\beta,\gamma}
-        &=\widetilde c^{(L)}_{\alpha,\beta,\gamma}
+         & =\widetilde c^{(L)}_{\alpha,\beta,\gamma}
         =\left(\frac{s_\alpha s_\beta}{s_\gamma}\right)^L
-          c^{(L)}_{e(\alpha),e(\beta),e(\gamma)}.
+        c^{(L)}_{e(\alpha),e(\beta),e(\gamma)}.
         \notag
     \end{align}
 \end{proof}
@@ -1525,7 +1525,7 @@
     $s_\alpha s_\beta=s_\gamma$, then
     \begin{align}
         {c'}^{(L)}_{\alpha,\beta,\gamma}
-        &=c^{(L)}_{e(\alpha),e(\beta),e(\gamma)}.
+         & =c^{(L)}_{e(\alpha),e(\beta),e(\gamma)}.
         \notag
     \end{align}
 \end{theorem}
@@ -1533,7 +1533,7 @@
     The compatible normalization and $s_\gamma\ne0$ give
     \begin{align}
         \left(\frac{s_\alpha s_\beta}{s_\gamma}\right)^L
-        &=\left(\frac{s_\gamma}{s_\gamma}\right)^L=1.
+         & =\left(\frac{s_\gamma}{s_\gamma}\right)^L=1.
         \notag
     \end{align}
     Substitution in the abstract covariance law gives the result.
@@ -1549,7 +1549,7 @@
     $s_\alpha s_\beta=s_\gamma$, then
     \begin{align}
         {c'}^{(L)}_{\alpha,\beta,\gamma}
-        &=c^{(L)}_{e(\alpha),e(\beta),e(\gamma)}.
+         & =c^{(L)}_{e(\alpha),e(\beta),e(\gamma)}.
         \notag
     \end{align}
 \end{theorem}
@@ -1557,8 +1557,8 @@
     The tensor-attached exact comparison is the specialization
     \begin{align}
         {c'}^{(L)}_{\alpha,\beta,\gamma}
-        &=\left(\frac{s_\alpha s_\beta}{s_\gamma}\right)^L
-          c^{(L)}_{e(\alpha),e(\beta),e(\gamma)}
+         & =\left(\frac{s_\alpha s_\beta}{s_\gamma}\right)^L
+        c^{(L)}_{e(\alpha),e(\beta),e(\gamma)}
         =c^{(L)}_{e(\alpha),e(\beta),e(\gamma)},
         \notag
     \end{align}
@@ -1578,12 +1578,12 @@
     \uses{def:mpo_tensor, def:mpdo_bnt_algebra_tensor_clause}
     Let
     \begin{align}
-        P&=\begin{pmatrix}1&0\\0&0\end{pmatrix},
-        \notag\\
-        X&=\begin{pmatrix}1&-3/4\\0&1\end{pmatrix},
-        \notag\\
-        Q&=XPX^{-1}
-          =\begin{pmatrix}1&3/4\\0&0\end{pmatrix}.
+        P & =\begin{pmatrix}1&0\\0&0\end{pmatrix},
+        \notag                                        \\
+        X & =\begin{pmatrix}1&-3/4\\0&1\end{pmatrix},
+        \notag                                        \\
+        Q & =XPX^{-1}
+        =\begin{pmatrix}1&3/4\\0&0\end{pmatrix}.
         \notag
     \end{align}
     Define one-letter MPO tensors by
@@ -1591,11 +1591,11 @@
     BNT presentations whose normalized representatives and positive
     multiplicity weights are
     \begin{align}
-        A_P&=P,
-        &m_P&=1,
-        \notag\\
-        A_Q&=\frac45Q,
-        &m_Q&=\frac54.
+        A_P & =P,
+            & m_P        & =1,
+        \notag                       \\
+        A_Q & =\frac45Q,
+            & m_Q        & =\frac54.
         \notag
     \end{align}
     The corresponding positive diagonal matrices in the algebra clause are
@@ -1621,23 +1621,23 @@
     For every positive length $N$, their unnormalized periodic operators are
     equal:
     \begin{align}
-        \rho_N(M_P)&=\rho_N(M_Q).
+        \rho_N(M_P) & =\rho_N(M_Q).
         \notag
     \end{align}
     In particular, both tensors generate matrix product density operators.
     Their chosen vertical presentations nevertheless have structure
     coefficients
     \begin{align}
-        c_P^{(L)}&=1,
-        \notag\\
-        c_Q^{(L)}&=\left(\frac45\right)^L.
+        c_P^{(L)} & =1,
+        \notag                               \\
+        c_Q^{(L)} & =\left(\frac45\right)^L.
         \notag
     \end{align}
     Hence there is no relabelling of the singleton label sets for which,
     at every positive length,
     \begin{align}
         c_Q^{(L)}(\alpha,\beta,\gamma)
-        &=c_P^{(L)}(e\alpha,e\beta,e\gamma).
+         & =c_P^{(L)}(e\alpha,e\beta,e\gamma).
         \notag
     \end{align}
     Indeed, the two sides at length one are $4/5$ and $1$.
@@ -1659,9 +1659,9 @@
     normalized representatives and multiplicity weights.  Their products
     satisfy
     \begin{align}
-        A_P^2&=A_P,
-        \notag\\
-        A_Q^2&=\frac45A_Q.
+        A_P^2 & =A_P,
+        \notag               \\
+        A_Q^2 & =\frac45A_Q.
         \notag
     \end{align}
     Taking the $L$-fold vertical operators gives the two displayed
@@ -1682,11 +1682,11 @@
     The coefficients in the $P$ presentation are length independent, whereas
     those in the $Q$ presentation are not.  More precisely,
     \begin{align}
-        c_P^{(L)}&=1,
-        \notag\\
-        c_Q^{(1)}&=\frac45,
-        \notag\\
-        c_Q^{(2)}&=\frac{16}{25}.
+        c_P^{(L)} & =1,
+        \notag                      \\
+        c_Q^{(1)} & =\frac45,
+        \notag                      \\
+        c_Q^{(2)} & =\frac{16}{25}.
         \notag
     \end{align}
 \end{theorem}
@@ -1707,7 +1707,7 @@
         \sum_\delta
         c^{(L)}_{\alpha,\beta,\delta}
         c^{(L)}_{\delta,\gamma,\epsilon}
-        &=
+         & =
         \sum_\delta
         c^{(L)}_{\beta,\gamma,\delta}
         c^{(L)}_{\alpha,\delta,\epsilon}.
@@ -1721,19 +1721,19 @@
     Applying the same-length product law twice in each order gives
     \begin{align}
         (O_L(M_\alpha)O_L(M_\beta))O_L(M_\gamma)
-        &=
+         & =
         \sum_{\varepsilon'}
         \left(\sum_\delta
-            c^{(L)}_{\alpha,\beta,\delta}
-            c^{(L)}_{\delta,\gamma,\varepsilon'}\right)
+        c^{(L)}_{\alpha,\beta,\delta}
+        c^{(L)}_{\delta,\gamma,\varepsilon'}\right)
         O_L(M_{\varepsilon'}),
-        \notag\\
+        \notag \\
         O_L(M_\alpha)(O_L(M_\beta)O_L(M_\gamma))
-        &=
+         & =
         \sum_{\varepsilon'}
         \left(\sum_\delta
-            c^{(L)}_{\beta,\gamma,\delta}
-            c^{(L)}_{\alpha,\delta,\varepsilon'}\right)
+        c^{(L)}_{\beta,\gamma,\delta}
+        c^{(L)}_{\alpha,\delta,\varepsilon'}\right)
         O_L(M_{\varepsilon'}).
         \notag
     \end{align}
@@ -1757,7 +1757,7 @@
         \sum_\delta
         \tr(\chi_{\alpha,\beta,\delta}^{\,L})
         \tr(\chi_{\delta,\gamma,\epsilon}^{\,L})
-        &=
+         & =
         \sum_\delta
         \tr(\chi_{\beta,\gamma,\delta}^{\,L})
         \tr(\chi_{\alpha,\delta,\epsilon}^{\,L}).
@@ -1783,7 +1783,7 @@
     whose structure coefficients depend on the positive chain length.  One
     may take $M=R$ and the one-label presentation above, for which
     \begin{align}
-        c^{(L)}_{0,0,0}&=1+\left(\frac{7}{25}\right)^L.
+        c^{(L)}_{0,0,0} & =1+\left(\frac{7}{25}\right)^L.
         \notag
     \end{align}
     This gives a normalization-free variant of the question after

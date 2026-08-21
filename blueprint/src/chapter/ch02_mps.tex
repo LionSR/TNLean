@@ -38,7 +38,7 @@ boundary conditions (PBC).
     the \emph{word evaluation} is the matrix product
     \begin{align}
         A^w
-        &:= A^{i_1} A^{i_2} \cdots A^{i_L} \in \MN{D}.
+         & := A^{i_1} A^{i_2} \cdots A^{i_L} \in \MN{D}.
         \label{eq:mps_word_eval}
     \end{align}
     The empty word evaluates to the identity, $A^\varnothing = \Id_D$.
@@ -73,7 +73,7 @@ boundary conditions (PBC).
     For a configuration $\sigma=(\sigma_0,\ldots,\sigma_{N-1})$, let
     $w_\sigma=[\sigma_0,\ldots,\sigma_{N-1}]$. Then
     $A^{w_\sigma}
-    =A^{\sigma_0}A^{\sigma_1}\cdots A^{\sigma_{N-1}}$.
+        =A^{\sigma_0}A^{\sigma_1}\cdots A^{\sigma_{N-1}}$.
 \end{lemma}
 
 \begin{proof}
@@ -118,7 +118,7 @@ boundary conditions (PBC).
     every $i\in I$,
     \begin{align}
         (\Id_{m_1}\otimes A_i)C
-        &=C(\Id_{m_2}\otimes A_i).
+         & =C(\Id_{m_2}\otimes A_i).
         \notag
     \end{align}
     Then there is a matrix $F:\C^{m_2}\to\C^{m_1}$ such that
@@ -140,7 +140,7 @@ boundary conditions (PBC).
     at system size~$N$ is the vector
     \begin{align}
         \ket{V^{(N)}(A)}
-        &=
+         & =
         \sum_{i_1, \ldots, i_N = 0}^{d-1}
         \tr\!(A^{i_1} A^{i_2} \cdots A^{i_N})
         \ket{i_1, \ldots, i_N}
@@ -151,7 +151,7 @@ boundary conditions (PBC).
     $\sigma = (i_1, \ldots, i_N) \in \{0,\ldots,d{-}1\}^N$, we write
     \begin{align}
         V^{(N)}(A)_\sigma
-        &:= \tr\!(A^{i_1} A^{i_2} \cdots A^{i_N}).
+         & := \tr\!(A^{i_1} A^{i_2} \cdots A^{i_N}).
         \label{eq:mps_mpv_component}
     \end{align}
     The coefficient function
@@ -192,7 +192,7 @@ boundary conditions (PBC).
     linear map $\E_A : \MN{D} \to \MN{D}$ defined by
     \begin{align}
         \E_A(X)
-        &= \sum_{i=0}^{d-1} A^i X (A^i)^\dagger.
+         & = \sum_{i=0}^{d-1} A^i X (A^i)^\dagger.
         \label{eq:mps_transfer_map}
     \end{align}
     Diagrammatically, the transfer map is the double-layer contraction
@@ -263,7 +263,7 @@ boundary conditions (PBC).
     $X \in \GL_D(\C)$ such that, for every $i \in \{0,\ldots,d{-}1\}$,
     \begin{align}
         B^i
-        &= X A^i X^{-1}.
+         & = X A^i X^{-1}.
         \label{eq:mps_gauge_equiv}
     \end{align}
     In tensor-network notation, (\ref{eq:mps_gauge_equiv}) is represented by
@@ -450,7 +450,7 @@ boundary conditions (PBC).
     such that, for every physical index~$i$,
     \begin{align}
         B^i
-        &= \zeta X A^i X^{-1}.
+         & = \zeta X A^i X^{-1}.
         \label{eq:mps_gauge_phase_equiv}
     \end{align}
 \end{definition}
@@ -492,15 +492,15 @@ boundary conditions (PBC).
     $\zeta_1,\zeta_2\ne0$, and that, for every physical index $i$,
     \begin{align}
         B^i
-        &=\zeta_1X_1A^iX_1^{-1},\notag\\
+         & =\zeta_1X_1A^iX_1^{-1},\notag \\
         C^i
-        &=\zeta_2X_2A^iX_2^{-1}.
+         & =\zeta_2X_2A^iX_2^{-1}.
         \notag
     \end{align}
     Then
     \begin{align}
         C^i
-        &=(\zeta_2\zeta_1^{-1})(X_2X_1^{-1})
+         & =(\zeta_2\zeta_1^{-1})(X_2X_1^{-1})
         B^i(X_1X_2^{-1}),
         \label{eq:mps_gauge_phase_compose}
     \end{align}
@@ -573,7 +573,7 @@ The inverse-tensor characterization of injectivity says that $A$ is
 injective exactly when there is a tensor $A^{-1}$ such that
 \begin{align}
     \sum_i (A^i)_{\alpha,\beta}(A^{-1,i})_{\alpha',\beta'}
-    &=
+     & =
     \delta_{\alpha,\alpha'}\delta_{\beta,\beta'}.
     \label{eq:mps_injective_inverse}
 \end{align}
@@ -594,7 +594,7 @@ $A^{-1}A=\Id$. This is the identity used in
     \begin{align}
         \spn_{\C}\{A^{i_1} \cdots A^{i_L}
         : (i_1,\ldots,i_L) \in \{0,\ldots,d{-}1\}^L\}
-        &= \MN{D}.
+         & = \MN{D}.
         \label{eq:mps_block_injective}
     \end{align}
     An injective tensor is $1$-block injective.
@@ -697,7 +697,7 @@ $A^{-1}A=\Id$. This is the identity used in
     The associated tensor is the block-diagonal tensor
     \begin{align}
         A^i
-        &= \bigoplus_{k=1}^{r} \mu_k A_k^i.
+         & = \bigoplus_{k=1}^{r} \mu_k A_k^i.
         \label{eq:mps_canonical_form}
     \end{align}
     This block-injective formulation of the canonical form is used in
@@ -776,7 +776,7 @@ $A^{-1}A=\Id$. This is the identity used in
     total bond dimension $D = \sum_{k=1}^r D_k$ defined by
     \begin{align}
         A^i
-        &= \bigoplus_{k=1}^{r} \mu_k A_k^i.
+         & = \bigoplus_{k=1}^{r} \mu_k A_k^i.
         \notag
     \end{align}
 \end{definition}
@@ -790,7 +790,7 @@ $A^{-1}A=\Id$. This is the identity used in
     block diagonal:
     \begin{align}
         A^w
-        &= \bigoplus_k \mu_k^{|w|} A_k^w.
+         & = \bigoplus_k \mu_k^{|w|} A_k^w.
         \label{eq:mps_block_word_eval}
     \end{align}
 \end{lemma}
@@ -807,13 +807,13 @@ $A^{-1}A=\Id$. This is the identity used in
     The MPV of a block-diagonal tensor decomposes as
     \begin{align}
         \ket{V^{(N)}(A)}
-        &= \sum_{k=1}^{r} \mu_k^N \ket{V^{(N)}(A_k)}.
+         & = \sum_{k=1}^{r} \mu_k^N \ket{V^{(N)}(A_k)}.
         \label{eq:mps_mpv_decomposition}
     \end{align}
     Equivalently, for each configuration $\sigma$ one has
     \begin{align}
         V^{(N)}(A)_\sigma
-        &= \sum_{k=1}^{r} \mu_k^N V^{(N)}(A_k)_\sigma.
+         & = \sum_{k=1}^{r} \mu_k^N V^{(N)}(A_k)_\sigma.
         \notag
     \end{align}
 \end{theorem}
@@ -839,7 +839,7 @@ $A^{-1}A=\Id$. This is the identity used in
     $(i_1, \ldots, i_L) \in \{0,\ldots,d{-}1\}^L$:
     \begin{align}
         (A^{[L]})^{(i_1, \ldots, i_L)}
-        &= A^{i_1} A^{i_2} \cdots A^{i_L}.
+         & = A^{i_1} A^{i_2} \cdots A^{i_L}.
         \label{eq:mps_blocked_tensor}
     \end{align}
     Blocking coarse-grains $L$ neighbouring sites into one tensor: the inner
@@ -894,10 +894,10 @@ $A^{-1}A=\Id$. This is the identity used in
     the blocked system, where each $\sigma_k$ is an $L$-tuple in
     $\{0, \ldots, d{-}1\}^L$, there exists a basis state
     $\widetilde{\sigma}
-    = (\widetilde{\sigma}_1, \ldots, \widetilde{\sigma}_{NL})$
+        = (\widetilde{\sigma}_1, \ldots, \widetilde{\sigma}_{NL})$
     of the original system such that
     $V^{(N)}(A^{[L]})_\sigma
-    = V^{(NL)}(A)_{\widetilde{\sigma}}$.
+        = V^{(NL)}(A)_{\widetilde{\sigma}}$.
 \end{lemma}
 
 \begin{proof}\leanok
@@ -950,7 +950,7 @@ $A^{-1}A=\Id$. This is the identity used in
     at system size~$N$ is
     \begin{align}
         \braket{V^{(N)}(A)}{V^{(N)}(B)}
-        &:=
+         & :=
         \sum_{\sigma \in \{0,\ldots,d{-}1\}^N}
         \overline{V^{(N)}(A)_\sigma} V^{(N)}(B)_\sigma,
         \label{eq:mps_inner_product}
@@ -968,7 +968,7 @@ $A^{-1}A=\Id$. This is the identity used in
     at system size~$N$ is
     \begin{align}
         O_{AB}(N)
-        &:=
+         & :=
         \sum_{\sigma \in \{0,\ldots,d{-}1\}^N}
         V^{(N)}(A)_\sigma \overline{V^{(N)}(B)_\sigma}.
         \label{eq:mps_overlap}
@@ -1006,7 +1006,7 @@ $A^{-1}A=\Id$. This is the identity used in
     \leanok
     \uses{def:mpv_overlap, def:mpv_inner}
     $O_{AB}(N)
-    = \overline{\braket{V^{(N)}(A)}{V^{(N)}(B)}}$.
+        = \overline{\braket{V^{(N)}(A)}{V^{(N)}(B)}}$.
 \end{lemma}
 
 \begin{proof}\leanok

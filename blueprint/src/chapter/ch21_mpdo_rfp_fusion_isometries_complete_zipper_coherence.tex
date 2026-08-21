@@ -8,16 +8,16 @@
     $B_a^{ij}\in\MN{D_a}$, fusion multiplicities $N_{ab}^{c}$,
     and matrices
     \begin{align}
-        X^c_{ab,\mu}&:\C^{D_c}\longrightarrow
-          \C^{D_a}\otimes\C^{D_b}, \notag\\
-        X^{c+}_{ab,\mu}&:\C^{D_a}\otimes\C^{D_b}
-          \longrightarrow\C^{D_c}. \notag
+        X^c_{ab,\mu}    & :\C^{D_c}\longrightarrow
+        \C^{D_a}\otimes\C^{D_b}, \notag            \\
+        X^{c+}_{ab,\mu} & :\C^{D_a}\otimes\C^{D_b}
+        \longrightarrow\C^{D_c}. \notag
     \end{align}
     The matrices $X^{c+}_{ab,\mu}$ are independently chosen left inverses,
     not adjoints. For all labels and multiplicity indices,
     \begin{align}
         X^{d+}_{ab,\nu}X^c_{ab,\mu}
-        &=\delta_{cd}\delta_{\mu\nu}\Id_{D_c}.
+         & =\delta_{cd}\delta_{\mu\nu}\Id_{D_c}.
         \label{eq:rfp_fusion_biorthogonality}
     \end{align}
     The opposite product
@@ -26,17 +26,17 @@
     space. Every product-MPO letter is reconstructed on this support:
     \begin{align}
         B_{ab}^{ik}
-        &=\sum_{c,\mu}X^c_{ab,\mu}B_c^{ik}X^{c+}_{ab,\mu}.
+         & =\sum_{c,\mu}X^c_{ab,\mu}B_c^{ik}X^{c+}_{ab,\mu}.
         \label{eq:rfp_fusion_reconstruction}
     \end{align}
     Writing $B_{ab}^{ik}=\sum_j B_a^{ij}\otimes B_b^{jk}$, the two zipper
     identities are
     \begin{align}
         B_{ab}^{ik}X^c_{ab,\mu}
-        &=X^c_{ab,\mu}B_c^{ik},
-        \label{eq:rfp_zipper_synthesis}\\
+         & =X^c_{ab,\mu}B_c^{ik},
+        \label{eq:rfp_zipper_synthesis} \\
         X^{c+}_{ab,\mu}B_{ab}^{ik}
-        &=B_c^{ik}X^{c+}_{ab,\mu}.
+         & =B_c^{ik}X^{c+}_{ab,\mu}.
         \label{eq:rfp_zipper_analysis}
     \end{align}
     Each block is injective, and the labelled block-letter matrix has a common
@@ -64,7 +64,7 @@
     its synthesis map is the adjoint of $U_{\alpha,\beta}$, and its analysis
     map is $U_{\alpha,\beta}$, after the canonical identification
     $\C^{D_\alpha D_\beta}
-      \cong\C^{D_\alpha}\otimes\C^{D_\beta}$.
+        \cong\C^{D_\alpha}\otimes\C^{D_\beta}$.
     In particular, the two zipper identities, literal reconstruction,
     injectivity, and the simultaneous block-letter inverse are conclusions;
     none is an additional hypothesis.
@@ -93,7 +93,7 @@
     the simultaneous block inverse defines
     \begin{align}
         s_d(i,j)
-        &=\sum_{x=0}^{D_d-1}C_{(d,x,x),(i,j)}. \notag
+         & =\sum_{x=0}^{D_d-1}C_{(d,x,x),(i,j)}. \notag
     \end{align}
     Here $C_{(d,x,y),(i,j)}$ denotes the coefficient of the simultaneous
     block inverse corresponding to the matrix unit $E_{xy}$ in block $d$.
@@ -108,10 +108,10 @@
     The one-letter selector satisfies
     \begin{align}
         \sum_{i,j}s_d(i,j)B_e^{ij}
-        &=
+         & =
         \begin{cases}
-            \Id_{D_d},&e=d,\\
-            0,&e\ne d.
+            \Id_{D_d}, & e=d,    \\
+            0,         & e\ne d.
         \end{cases} \notag
     \end{align}
     Thus one physical letter selects the identity on the chosen final block
@@ -137,17 +137,17 @@
     \begin{align}
         F^{abc}_d:
         \bigoplus_e\C^{N_{ab}^{e}}\otimes\C^{N_{ec}^{d}}
-        &\longrightarrow
+         & \longrightarrow
         \bigoplus_f\C^{N_{bc}^{f}}\otimes\C^{N_{af}^{d}} \notag
     \end{align}
     whose rows are indexed by $(f,\lambda,\sigma)$ and whose columns are
     indexed by $(e,\mu,\nu)$. Its entries satisfy
     \begin{align}
         (X^e_{ab,\mu}\otimes\Id)X^d_{ec,\nu}
-        &=
+         & =
         \sum_{f,\lambda,\sigma}
-          (F^{abc}_d)^{f\lambda\sigma}_{e\mu\nu}
-          (\Id\otimes X^f_{bc,\lambda})X^d_{af,\sigma}.
+        (F^{abc}_d)^{f\lambda\sigma}_{e\mu\nu}
+        (\Id\otimes X^f_{bc,\lambda})X^d_{af,\sigma}.
         \label{eq:rfp_printed_fmove}
     \end{align}
     The matrix in the opposite orientation is its two-sided inverse. This is
@@ -161,8 +161,8 @@
     decompositions gives
     \begin{align}
         B_{abc}^{il}
-        &=L D_{\mathrm L}^{il}L^+
-          =R D_{\mathrm R}^{il}R^+.
+         & =L D_{\mathrm L}^{il}L^+
+        =R D_{\mathrm R}^{il}R^+.
         \label{eq:rfp_triple_reconstruction}
     \end{align}
     Contracting (\ref{eq:rfp_triple_reconstruction}) with the one-letter
@@ -171,20 +171,20 @@
     direct sums $D_{\mathrm L}$ and $D_{\mathrm R}$ both contract to the
     identity. Consequently,
     \begin{align}
-        P&:=LL^+=RR^+,
-        \label{eq:rfp_triple_support}\\
-        L^+L&=R^+R=\Id. \notag
+        P    & :=LL^+=RR^+,
+        \label{eq:rfp_triple_support} \\
+        L^+L & =R^+R=\Id. \notag
     \end{align}
     Hence $R^+L$ changes left-tree coordinates into right-tree coordinates and
     \begin{align}
         R(R^+L)
-        &=(RR^+)L=PL=(LL^+)L=L. \notag
+         & =(RR^+)L=PL=(LL^+)L=L. \notag
     \end{align}
     Its opposite-oriented comparison is $L^+R$. Using
     (\ref{eq:rfp_triple_support}),
     \begin{align}
-        (R^+L)(L^+R)&=R^+PR=\Id, \notag\\
-        (L^+R)(R^+L)&=L^+PL=\Id. \notag
+        (R^+L)(L^+R) & =R^+PR=\Id, \notag \\
+        (L^+R)(R^+L) & =L^+PL=\Id. \notag
     \end{align}
     The zipper identities (\ref{eq:rfp_zipper_synthesis}) and
     (\ref{eq:rfp_zipper_analysis}) show that $R^+L$ intertwines the direct
@@ -207,10 +207,10 @@
     % charge and the multiplicity coordinate of the second fusion.
     \begin{align}
         \tntree{((a\,b)_{e,\mu}\,c)_{d,\nu}}
-        &=
+         & =
         \sum_{f,\lambda,\sigma}
-          (F^{abc}_{d})^{f\lambda\sigma}_{e\mu\nu}
-          \tntree{(a\,(b\,c)_{f,\lambda})_{d,\sigma}}. \notag
+        (F^{abc}_{d})^{f\lambda\sigma}_{e\mu\nu}
+        \tntree{(a\,(b\,c)_{f,\lambda})_{d,\sigma}}. \notag
     \end{align}
     \caption{The source-oriented $F$-move. The left-associated fusion tensor
         is expanded in the right-associated fusion basis. The upper indices
@@ -283,11 +283,11 @@
     % Tree subscripts are precisely the intermediate fusion charges
     % carried by the corresponding internal edges.
     \begin{tikzcd}[column sep=tiny]
-      & \tntree{(a\,((b\,c)_h\,d)_i)_e} \arrow[dr, "F^{bcd}_{i}"] & \\
-      \tntree{((a\,(b\,c)_h)_g\,d)_e} \arrow[ur, "F^{ahd}_{e}"] & &
+        & \tntree{(a\,((b\,c)_h\,d)_i)_e} \arrow[dr, "F^{bcd}_{i}"] & \\
+        \tntree{((a\,(b\,c)_h)_g\,d)_e} \arrow[ur, "F^{ahd}_{e}"] & &
         \tntree{(a\,(b\,(c\,d)_j)_i)_e} \\
-      \tntree{(((a\,b)_f\,c)_g\,d)_e} \arrow[u, "F^{abc}_{g}"]
-          \arrow[rr, "F^{fcd}_{e}"'] & &
+        \tntree{(((a\,b)_f\,c)_g\,d)_e} \arrow[u, "F^{abc}_{g}"]
+        \arrow[rr, "F^{fcd}_{e}"'] & &
         \tntree{((a\,b)_f\,(c\,d)_j)_e} \arrow[u, "F^{abj}_{e}"']
     \end{tikzcd}
     \caption{The five complete zipper fusion trees of
@@ -311,11 +311,11 @@
     $F$-matrices are also equal. In the upper/lower convention of
     \cite[equation~(33)]{Bultinck2017Anyons}, the latter equality is
     \begin{align}
-      &\sum_{h,\sigma,\lambda,\omega}
+         & \sum_{h,\sigma,\lambda,\omega}
         (F^{abc}_{g})^{f\mu\nu}_{h\sigma\lambda}
         (F^{ahd}_{e})^{g\lambda\rho}_{i\omega\kappa}
-        (F^{bcd}_{i})^{h\sigma\omega}_{j\gamma\delta} \notag\\
-      &\hspace{3em}=
+        (F^{bcd}_{i})^{h\sigma\omega}_{j\gamma\delta} \notag \\
+         & \hspace{3em}=
         \sum_{\tau}
         (F^{fcd}_{e})^{g\nu\rho}_{j\gamma\tau}
         (F^{abj}_{e})^{f\mu\tau}_{i\delta\kappa}.
@@ -352,29 +352,29 @@
     $D=\{1,\ldots,D_\delta\}$ for their bond-coordinate sets. Let
     \begin{align}
         r_{X,Y,Z}:((X\times Y)\times Z)
-        &\longrightarrow X\times(Y\times Z) \notag
+         & \longrightarrow X\times(Y\times Z) \notag
     \end{align}
     denote the canonical reassociation. Define
     \begin{align}
-        r_1&=r_{A,B,C}\times\Id_D, \notag\\
-        r_2&=r_{A,B\times C,D}, \notag\\
-        r_3&=\Id_A\times r_{B,C,D}, \notag\\
-        s_1&=r_{A\times B,C,D}, \notag\\
-        s_2&=r_{A,B,C\times D}. \notag
+        r_1 & =r_{A,B,C}\times\Id_D, \notag  \\
+        r_2 & =r_{A,B\times C,D}, \notag     \\
+        r_3 & =\Id_A\times r_{B,C,D}, \notag \\
+        s_1 & =r_{A\times B,C,D}, \notag     \\
+        s_2 & =r_{A,B,C\times D}. \notag
     \end{align}
     The three-edge and two-edge reassociations from
     $(((A\times B)\times C)\times D)$ to
     $A\times(B\times(C\times D))$ coincide:
     \begin{align}
         r_3\circ r_2\circ r_1
-        &=s_2\circ s_1.
+         & =s_2\circ s_1.
         \label{eq:rfp_bond_reassociation}
     \end{align}
     If $P(r)_{x,y}=1$ when $r(x)=y$ and is zero otherwise, then the
     corresponding coordinate-permutation matrices satisfy
     \begin{align}
         P(r_1)P(r_2)P(r_3)
-        &=P(s_1)P(s_2).
+         & =P(s_1)P(s_2).
         \label{eq:rfp_bond_permutation}
     \end{align}
     These are equalities of Cartesian bond-coordinate identifications only;
@@ -396,10 +396,10 @@
     % s_1,s_2 trace L -> P -> R.  The vertices are Cartesian
     % parenthesizations, not fusion trees.
     \begin{tikzcd}[column sep=small]
-      & (A\times((B\times C)\times D)) \arrow[dr, "r_3"] & \\
-      ((A\times(B\times C))\times D) \arrow[ur, "r_2"] & &
+        & (A\times((B\times C)\times D)) \arrow[dr, "r_3"] & \\
+        ((A\times(B\times C))\times D) \arrow[ur, "r_2"] & &
         (A\times(B\times(C\times D))) \\
-      (((A\times B)\times C)\times D) \arrow[u, "r_1"] \arrow[rr, "s_1"'] & &
+        (((A\times B)\times C)\times D) \arrow[u, "r_1"] \arrow[rr, "s_1"'] & &
         ((A\times B)\times(C\times D)) \arrow[u, "s_2"']
     \end{tikzcd}
     \caption{The five parenthesizations of four bond-coordinate factors.

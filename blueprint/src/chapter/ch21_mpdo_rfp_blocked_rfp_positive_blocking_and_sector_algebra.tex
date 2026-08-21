@@ -18,7 +18,7 @@ The two-site block is the virtual contraction of two copies of $K$:
     \tenkzkernel
     \begin{tenkz}[rows={wire}, cols=1, west=open, east=open]
         \tn[skin=mpo, ports={90:physical:{$(i_1,i_2)$},
-            270:physical:{$(j_1,j_2)$}}]{M}
+        270:physical:{$(j_1,j_2)$}}]{M}
     \end{tenkz}
     \qquad$=$\qquad
     \begin{tenkz}[rows={wire}, cols=2, west=open, east=open]
@@ -41,7 +41,7 @@ physical indices, as in
     $J=(j_1,\ldots,j_L)$ as its physical indices, and
     \begin{align}
         (M^{[L]})^{I,J}
-        &=M^{i_1j_1}\cdots M^{i_Lj_L}.
+         & =M^{i_1j_1}\cdots M^{i_Lj_L}.
         \notag
     \end{align}
     Thus the ket and bra words are grouped separately. For $L=0$, both
@@ -65,10 +65,10 @@ physical indices, as in
     gives the canonical identification
     \begin{align}
         \operatorname{Fin}(d^L)\times\operatorname{Fin}(d^L)
-        &\simeq
+         & \simeq
         \bigl(\operatorname{Fin}(d)\times\operatorname{Fin}(d)\bigr)
-          ^{\operatorname{Fin}(L)}
-         \simeq \operatorname{Fin}((d^2)^L).
+        ^{\operatorname{Fin}(L)}
+        \simeq \operatorname{Fin}((d^2)^L).
     \end{align}
     Under this identification, the doubled-index MPS tensor of $M^{[L]}$
     is the physical reindexing of the $L$-blocked doubled-index MPS tensor
@@ -112,14 +112,14 @@ physical indices, as in
     \begin{align}
         \Phi_{N,L}\colon
         \{0,\ldots,d^L-1\}^N
-        &\longrightarrow \{0,\ldots,d-1\}^{NL}
+         & \longrightarrow \{0,\ldots,d-1\}^{NL}
         \notag
     \end{align}
     concatenate the $N$ blocked words. For blocked configurations
     $\sigma$ and $\tau$,
     \begin{align}
         \rho^{(N)}(M^{[L]})_{\sigma,\tau}
-        &=\rho^{(NL)}(M)_{\Phi_{N,L}(\sigma),\Phi_{N,L}(\tau)}.
+         & =\rho^{(NL)}(M)_{\Phi_{N,L}(\sigma),\Phi_{N,L}(\tau)}.
         \notag
     \end{align}
     The algebraic identity holds for every $L\in\N$. For $L\geq1$, positivity
@@ -136,14 +136,14 @@ physical indices, as in
     Write $\sigma_k=(\sigma_{k,0},\ldots,\sigma_{k,L-1})$ and
     $\tau_k=(\tau_{k,0},\ldots,\tau_{k,L-1})$. For each $k$,
     $(M^{[L]})^{\sigma_k,\tau_k}
-    =\prod_{j=0}^{L-1}M^{\sigma_{k,j},\tau_{k,j}}$.
+        =\prod_{j=0}^{L-1}M^{\sigma_{k,j},\tau_{k,j}}$.
     Taking both products in increasing index order gives
     \begin{align}
         \prod_{k=0}^{N-1}(M^{[L]})^{\sigma_k,\tau_k}
-        &=\prod_{k=0}^{N-1}\prod_{j=0}^{L-1}
-            M^{\sigma_{k,j},\tau_{k,j}}
-          =\prod_{r=0}^{NL-1}
-            M^{(\Phi_{N,L}(\sigma))_r,(\Phi_{N,L}(\tau))_r}.
+         & =\prod_{k=0}^{N-1}\prod_{j=0}^{L-1}
+        M^{\sigma_{k,j},\tau_{k,j}}
+        =\prod_{r=0}^{NL-1}
+        M^{(\Phi_{N,L}(\sigma))_r,(\Phi_{N,L}(\tau))_r}.
         \notag
     \end{align}
     Taking the virtual trace gives the equality in the theorem. The map
@@ -159,7 +159,7 @@ physical indices, as in
     indices $(i_0,i_1)$ and $(j_0,j_1)$ and matrices
     \begin{align}
         (K^{[2]})^{(i_0,i_1),(j_0,j_1)}
-        &=K^{i_0j_0}K^{i_1j_1}.
+         & =K^{i_0j_0}K^{i_1j_1}.
         \notag
     \end{align}
     This is the blocking used in
@@ -174,9 +174,9 @@ physical indices, as in
     \leanok
     \uses{def:mpdo_physical_blocking, def:mpdo_two_site_blocking, def:mpdo}
     Let $\varphi:\{0,\ldots,d^2-1\}\to
-    \{0,\ldots,d-1\}^2$ be the canonical bijection. Then
+        \{0,\ldots,d-1\}^2$ be the canonical bijection. Then
     $(K^{[2]})^{i,j}
-    =(K^{[L]})^{\varphi(i),\varphi(j)}\bigm|_{L=2}$.
+        =(K^{[L]})^{\varphi(i),\varphi(j)}\bigm|_{L=2}$.
     Consequently, for every nonempty chain length $N$, the closed MPO of
     $K^{[2]}$ is obtained from the closed MPO of the general length-two block by
     applying $\varphi$ independently at every ket and bra site. In
@@ -210,7 +210,7 @@ physical indices, as in
     ket and bra words, a physical relabeling of $A_M^{[L]}$:
     \begin{align}
         A_{M^{[L]}}
-        &=\psi_L^*(A_M^{[L]}).
+         & =\psi_L^*(A_M^{[L]}).
         \label{eq:mpdo_cpsv_block_tensor_reindex}
     \end{align}
     Theorem~\ref{thm:cpsv_literal_canonical_form_positive_blocking} gives
@@ -235,17 +235,17 @@ physical indices, as in
     writing
     \begin{align}
         B_v
-        &=\bigoplus_\alpha\bigoplus_{q=0}^{r_\alpha-1}
-          c_{\alpha,q}A_\alpha^v,
+         & =\bigoplus_\alpha\bigoplus_{q=0}^{r_\alpha-1}
+        c_{\alpha,q}A_\alpha^v,
         \label{eq:mpdo_literal_cpsv_vertical_decomposition_block}
     \end{align}
     one has
     \begin{align}
-        UU^\dagger&=\Id,
-        \notag\\
-        U\widetilde M_vU^\dagger&=B_v,
-        \notag\\
-        \widetilde M_v&=U^\dagger B_vU.
+        UU^\dagger               & =\Id,
+        \notag                                      \\
+        U\widetilde M_vU^\dagger & =B_v,
+        \notag                                      \\
+        \widetilde M_v           & =U^\dagger B_vU.
         \label{eq:mpdo_literal_cpsv_vertical_decomposition}
     \end{align}
 \end{theorem}
@@ -275,16 +275,16 @@ physical indices, as in
     there are normal tensors $\widehat A_\alpha$, $r^{[2]}_\alpha>0$,
     $c^{[2]}_{\alpha,q}>0$, and a coisometry $U^{[2]}$ such that
     \begin{align}
-        U^{[2]}(U^{[2]})^\dagger&=\Id,
-        \notag\\
+        U^{[2]}(U^{[2]})^\dagger & =\Id,
+        \notag                                                             \\
         U^{[2]}\widetilde{M^{[2]}}_v(U^{[2]})^\dagger
-        &=\bigoplus_{\alpha,q}c^{[2]}_{\alpha,q}
-          \widehat A_\alpha^v,
-        \notag\\
+                                 & =\bigoplus_{\alpha,q}c^{[2]}_{\alpha,q}
+        \widehat A_\alpha^v,
+        \notag                                                             \\
         \widetilde{M^{[2]}}_v
-        &=(U^{[2]})^\dagger
-          \left(\bigoplus_{\alpha,q}c^{[2]}_{\alpha,q}
-          \widehat A_\alpha^v\right)U^{[2]}.
+                                 & =(U^{[2]})^\dagger
+        \left(\bigoplus_{\alpha,q}c^{[2]}_{\alpha,q}
+        \widehat A_\alpha^v\right)U^{[2]}.
         \label{eq:mpdo_literal_cpsv_vertical_decomposition_block_two}
     \end{align}
     The tensors $\widehat A_\alpha$ form a CPSV basis of normal tensors for
@@ -381,23 +381,23 @@ physical indices, as in
     algebra $M_{d_\alpha}$ and positive diagonal multiplicity matrix
     \begin{align}
         \mu_\alpha
-        &=\diag(\mu_{\alpha,0},\ldots,\mu_{\alpha,r_\alpha-1}).
+         & =\diag(\mu_{\alpha,0},\ldots,\mu_{\alpha,r_\alpha-1}).
         \notag
     \end{align}
     Write $m_\alpha=\tr(\mu_\alpha)$. The normalized
     embedding and the left partial trace are
     \begin{align}
         R_\mu\!\left(\bigoplus_\alpha X_\alpha\right)
-        &=\bigoplus_\alpha
-          \frac{\mu_\alpha}{m_\alpha}\otimes X_\alpha,
-        \notag\\
+         & =\bigoplus_\alpha
+        \frac{\mu_\alpha}{m_\alpha}\otimes X_\alpha,
+        \notag                                              \\
         \widetilde R_\mu\!\left(\bigoplus_\alpha Y_\alpha\right)
-        &=\bigoplus_\alpha \tr_{\mathrm{mult}}(Y_\alpha).
+         & =\bigoplus_\alpha \tr_{\mathrm{mult}}(Y_\alpha).
         \notag
     \end{align}
     On a weighted sector,
     $\widetilde R_\mu(\lambda_\alpha\mu_\alpha\otimes X_\alpha)
-    =\lambda_\alpha m_\alpha X_\alpha$.
+        =\lambda_\alpha m_\alpha X_\alpha$.
     Thus the partial trace is the canonical extension to the full block
     matrix space of the inverse map displayed in
     \cite[Appendix~C.4, lines~1957--1971]{Cirac2016MPDO_arXiv}.
@@ -415,20 +415,20 @@ physical indices, as in
     $\mu_\alpha$ is positive. Then the normalized embedding
     \begin{align}
         R_\mu\colon\bigoplus_\alpha M_{d_\alpha}(\C)
-        &\longrightarrow \bigoplus_\alpha M_{r_\alpha d_\alpha}(\C),
-        \notag\\
+         & \longrightarrow \bigoplus_\alpha M_{r_\alpha d_\alpha}(\C),
+        \notag                                                              \\
         R_\mu((X_\alpha)_\alpha)
-        &=\left(\frac{\mu_\alpha}{m_\alpha}\otimes X_\alpha\right)_\alpha
+         & =\left(\frac{\mu_\alpha}{m_\alpha}\otimes X_\alpha\right)_\alpha
         \notag
     \end{align}
     is a direct-sum Kraus map. Without any condition on the multiplicities,
     the map
     \begin{align}
         \widetilde R\colon\bigoplus_\alpha M_{r_\alpha d_\alpha}(\C)
-        &\longrightarrow \bigoplus_\alpha M_{d_\alpha}(\C),
-        \notag\\
+         & \longrightarrow \bigoplus_\alpha M_{d_\alpha}(\C),
+        \notag                                                \\
         \widetilde R((Y_\alpha)_\alpha)
-        &=(\tr_{\mathrm{mult}}(Y_\alpha))_\alpha
+         & =(\tr_{\mathrm{mult}}(Y_\alpha))_\alpha
         \notag
     \end{align}
     is a direct-sum Kraus map. Its restriction to the weighted sectors is
@@ -448,11 +448,11 @@ physical indices, as in
     \begin{align}
         [\mathcal P(Z)]_{\langle\alpha,(i,q)\rangle,
             \langle\beta,(j,s)\rangle}
-        &=
+         & =
         \begin{cases}
             Z_{\langle\alpha,i\rangle,\langle\alpha,j\rangle}
-            \rho_\alpha(q,s), & \alpha=\beta,\\
-            0, & \alpha\ne\beta.
+            \rho_\alpha(q,s), & \alpha=\beta,   \\
+            0,                & \alpha\ne\beta.
         \end{cases}
         \notag
     \end{align}
@@ -464,16 +464,16 @@ physical indices, as in
     \begin{align}
         [\widehat R_\mu(Z)]_{\langle\alpha,(q,i)\rangle,
             \langle\beta,(s,j)\rangle}
-        &=
+         & =
         \begin{cases}
             \rho_\alpha(q,s)
             Z_{\langle\alpha,i\rangle,\langle\alpha,j\rangle},
-            & \alpha=\beta,\\
+               & \alpha=\beta,   \\
             0, & \alpha\ne\beta,
         \end{cases}
-        \notag\\
+        \notag                         \\
         \widehat R_\mu
-        &=R_{w^{-1}}\circ\mathcal P.
+         & =R_{w^{-1}}\circ\mathcal P.
         \notag
     \end{align}
     This proves complete positivity of the normalized embedding.
@@ -485,11 +485,11 @@ physical indices, as in
     \begin{align}
         [\widehat{\widetilde R}(Y)]_{\langle\alpha,i\rangle,
             \langle\beta,j\rangle}
-        &=
+         & =
         \begin{cases}
             \sum_{q=0}^{r_\alpha-1}
             Y_{\langle\alpha,(q,i)\rangle,\langle\alpha,(q,j)\rangle},
-            & \alpha=\beta,\\
+               & \alpha=\beta,   \\
             0, & \alpha\ne\beta.
         \end{cases}
         \notag
@@ -521,8 +521,8 @@ physical indices, as in
     \begin{align}
         \tr_{\mathrm{mult}}
         \left(m_\alpha^{-1}\mu_\alpha\otimes X_\alpha\right)
-        &=m_\alpha^{-1}\tr(\mu_\alpha)X_\alpha
-          =X_\alpha.
+         & =m_\alpha^{-1}\tr(\mu_\alpha)X_\alpha
+        =X_\alpha.
         \notag
     \end{align}
 \end{proof}
@@ -538,18 +538,18 @@ physical indices, as in
     $M_{d_\alpha}$ and a family of complex scalars $(c_\alpha)_\alpha$, define
     \begin{align}
         V_c(X)
-        &=\bigoplus_\alpha c_\alpha M_\alpha(X),
-        \notag\\
+         & =\bigoplus_\alpha c_\alpha M_\alpha(X),
+        \notag                                     \\
         M_\alpha(X)
-        &=\sum_{a,b}X_{ba}M_{\alpha,ab}.
+         & =\sum_{a,b}X_{ba}M_{\alpha,ab}.
         \notag
     \end{align}
     For each $L\geq0$, let
     \begin{align}
         C_L(V_c)
-        &=\spn_{\C}\left\{V_c(X_1)\cdots V_c(X_L):
-            X_1,\ldots,X_L\in M_D\right\}
-          \subseteq \prod_\alpha M_{d_\alpha}.
+         & =\spn_{\C}\left\{V_c(X_1)\cdots V_c(X_L):
+        X_1,\ldots,X_L\in M_D\right\}
+        \subseteq \prod_\alpha M_{d_\alpha}.
         \notag
     \end{align}
     Write $V_m$ for the specialization obtained by taking
@@ -583,10 +583,10 @@ physical indices, as in
     For scalars $c_\alpha\ne0$, the map
     \begin{align}
         \varphi_c\colon\prod_\alpha M_{d_\alpha}
-        &\longrightarrow\prod_\alpha M_{d_\alpha},
-        \notag\\
+         & \longrightarrow\prod_\alpha M_{d_\alpha},
+        \notag                                       \\
         (X_\alpha)_\alpha
-        &\longmapsto(c_\alpha X_\alpha)_\alpha
+         & \longmapsto(c_\alpha X_\alpha)_\alpha
         \notag
     \end{align}
     is a linear equivalence.
@@ -600,7 +600,7 @@ physical indices, as in
     For a word $w=((a_1,b_1),\ldots,(a_L,b_L))$,
     \begin{align}
         V_c(E_{b_1a_1})\cdots V_c(E_{b_La_L})
-        &=\bigoplus_\alpha c_\alpha^L M_\alpha^w.
+         & =\bigoplus_\alpha c_\alpha^L M_\alpha^w.
         \notag
     \end{align}
 \end{lemma}
@@ -656,7 +656,7 @@ physical indices, as in
     Since every multiplicity space is nonzero and every diagonal entry is
     positive,
     $m_\alpha
-    =\sum_{q=0}^{\mult(\alpha)-1}\mu_{\alpha,q}>0$.
+        =\sum_{q=0}^{\mult(\alpha)-1}\mu_{\alpha,q}>0$.
     Apply the preceding theorem to the nonzero family
     $c_\alpha=m_\alpha=\tr(\mu_\alpha)$.
 \end{proof}
@@ -672,7 +672,7 @@ physical indices, as in
     $X_1,\ldots,X_L$,
     \begin{align}
         F(V_c(X_1)\cdots V_c(X_L))
-        &=V_c(X_1)\cdots V_c(X_L).
+         & =V_c(X_1)\cdots V_c(X_L).
         \notag
     \end{align}
     Then $F$ is the identity.
@@ -684,11 +684,11 @@ physical indices, as in
     $Y=\sum_i\lambda_iV_c(X_1^{(i)})\cdots V_c(X_L^{(i)})$. Hence
     \begin{align}
         F(Y)
-        &=\sum_i\lambda_i
-          F\!\left(V_c(X_1^{(i)})\cdots V_c(X_L^{(i)})\right)
-          =\sum_i\lambda_i
-          V_c(X_1^{(i)})\cdots V_c(X_L^{(i)})
-          =Y.
+         & =\sum_i\lambda_i
+        F\!\left(V_c(X_1^{(i)})\cdots V_c(X_L^{(i)})\right)
+        =\sum_i\lambda_i
+        V_c(X_1^{(i)})\cdots V_c(X_L^{(i)})
+        =Y.
         \notag
     \end{align}
     Thus $F$ is the identity.
@@ -703,7 +703,7 @@ physical indices, as in
     $\mathcal F=\{X\in\mathcal A:F(X)=X\}$. For $L\geq0$, define
     \begin{align}
         C_L(\mathcal F)
-        &=\spn_{\C}\{X_1\cdots X_L:X_1,\ldots,X_L\in\mathcal F\}.
+         & =\spn_{\C}\{X_1\cdots X_L:X_1,\ldots,X_L\in\mathcal F\}.
         \notag
     \end{align}
     This is the product space used in the dimension argument of
@@ -739,7 +739,7 @@ physical indices, as in
     positive definite fixed point. The fixed points therefore have the form
     \begin{align}
         U\left(\bigoplus_k\sigma_k\otimes X_k\right)U^*,
-        \qquad X_k&\in M_{h_k}(\C),
+        \qquad X_k & \in M_{h_k}(\C),
         \notag
     \end{align}
     where $\tr(\sigma_k)=1$. The parametrization
@@ -748,7 +748,7 @@ physical indices, as in
     in the range of
     \begin{align}
         (Y_k)_k
-        &\longmapsto
+         & \longmapsto
         U\left(\bigoplus_k\sigma_k^L\otimes Y_k\right)U^*.
         \notag
     \end{align}
@@ -759,9 +759,9 @@ physical indices, as in
     diagonal compression give the dimension chain
     \begin{align}
         \dim C_L(\mathcal F)
-        &\leq \dim C_L(\mathcal E)
-          \leq \dim\mathcal E
-          \leq \dim\mathcal F.
+         & \leq \dim C_L(\mathcal E)
+        \leq \dim\mathcal E
+        \leq \dim\mathcal F.
         \notag
     \end{align}
 \end{proof}
@@ -776,11 +776,11 @@ physical indices, as in
     $\mathcal A=\prod_\alpha M_{d_\alpha}$. Suppose that the following three
     conditions hold, with the second required for every bond matrix $X$:
     \begin{align}
-        C_L(V_c)&=\mathcal A,
-        \notag\\
-        F(V_c(X))&=V_c(X),
-        \notag\\
-        \dim C_L(\mathcal F)&\leq\dim\mathcal F,
+        C_L(V_c)             & =\mathcal A,
+        \notag                                     \\
+        F(V_c(X))            & =V_c(X),
+        \notag                                     \\
+        \dim C_L(\mathcal F) & \leq\dim\mathcal F,
         \qquad
         \mathcal F=\{Y\in\mathcal A:F(Y)=Y\}.
         \notag
@@ -799,13 +799,13 @@ physical indices, as in
     $C_L(V_c)$ belongs to $C_L(\mathcal F)$. Hence
     \begin{align}
         \mathcal A=C_L(V_c)
-        &\subseteq C_L(\mathcal F)\subseteq\mathcal A,
+         & \subseteq C_L(\mathcal F)\subseteq\mathcal A,
         \notag
     \end{align}
     so $C_L(\mathcal F)=\mathcal A$. Therefore
     \begin{align}
         \dim\mathcal A=\dim C_L(\mathcal F)
-        &\leq\dim\mathcal F\leq\dim\mathcal A.
+         & \leq\dim\mathcal F\leq\dim\mathcal A.
         \notag
     \end{align}
     Thus $\mathcal F=\mathcal A$, and $F$ is the identity.
@@ -845,10 +845,10 @@ physical indices, as in
     Fixed points of the extension are block diagonal. Thus
     \begin{align}
         \widehat\rho
-        &=\bigoplus_\alpha\rho_\alpha,
-        \notag\\
+         & =\bigoplus_\alpha\rho_\alpha,
+        \notag                           \\
         F(\rho)
-        &=\rho.
+         & =\rho.
         \notag
     \end{align}
     Every diagonal block $\rho_\alpha$ of the positive-definite matrix

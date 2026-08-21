@@ -51,7 +51,7 @@ form $\MN{d_k}\otimes\Id_{m_k}$ of
     there is a matrix $B\in\MN{d}$ satisfying
     \begin{align}
         A f_{i,j}
-        &=\sum_{j'=0}^{d-1}B_{j'j}f_{i,j'}
+         & =\sum_{j'=0}^{d-1}B_{j'j}f_{i,j'}
         \label{eq:spectral_adapted_action}
     \end{align}
     for all $i<m$ and $j<d$. In the adapted basis, $A$ acts on $C$ by the matrix $B$ on the irreducible index, identically across the multiplicity
@@ -75,10 +75,10 @@ form $\MN{d_k}\otimes\Id_{m_k}$ of
     $B_{j'j}=\langle e_{j'},Ae_j\rangle$. The intertwining identity gives
     \begin{align}
         A f_{i,j}
-        &=A\,u_i(e_j)
-          =u_i(Ae_j)
-          =\sum_{j'}B_{j'j}u_i(e_{j'})
-          =\sum_{j'}B_{j'j}f_{i,j'}.
+         & =A\,u_i(e_j)
+        =u_i(Ae_j)
+        =\sum_{j'}B_{j'j}u_i(e_{j'})
+        =\sum_{j'}B_{j'j}f_{i,j'}.
         \notag
     \end{align}
     This is (\ref{eq:spectral_adapted_action}).
@@ -93,7 +93,7 @@ form $\MN{d_k}\otimes\Id_{m_k}$ of
     multiplicity index $i<m$ and an irreducible index $j<d$, such that every $A\in S$ acts by
     \begin{align}
         A f_{i,j}
-        &=\sum_{j'=0}^{d-1}B_{j'j}f_{i,j'}
+         & =\sum_{j'=0}^{d-1}B_{j'j}f_{i,j'}
         \notag
     \end{align}
     for a matrix $B\in\MN{d}$ depending only on $A$ and the component. In the adapted bases, the action of $S$ on each component is by
@@ -123,7 +123,7 @@ is the unital case of the block representation invoked by~\cite[Theorem~6.14]{Wo
     $A\in S$ there are matrices $B_k\in\MN{d_k}$ satisfying
     \begin{align}
         A f_{k,i,j}
-        &=\sum_{j'=0}^{d_k-1}(B_k)_{j'j}f_{k,i,j'}
+         & =\sum_{j'=0}^{d_k-1}(B_k)_{j'j}f_{k,i,j'}
         \label{eq:spectral_global_action}
     \end{align}
     for all $k<K$, $i<m_k$, and $j<d_k$. In this basis, $A$ acts on the $k$-th component as $\Id_{m_k}\otimes B_k$. Each row
@@ -176,13 +176,13 @@ blockwise on the basis to a block-diagonal matrix.
     by
     \begin{align}
         A f_{k,i,j}
-        &=\sum_{j'=0}^{d_k-1}(B_k)_{j'j}f_{k,i,j'}
+         & =\sum_{j'=0}^{d_k-1}(B_k)_{j'j}f_{k,i,j'}
         \notag
     \end{align}
     for matrices $B_k\in\MN{d_k}$ satisfies
     \begin{align}
         U^\dagger A U
-        &=\bigoplus_{k=0}^{K-1}\Id_{m_k}\otimes B_k.
+         & =\bigoplus_{k=0}^{K-1}\Id_{m_k}\otimes B_k.
         \label{eq:spectral_basis_block}
     \end{align}
 \end{lemma}
@@ -198,9 +198,9 @@ blockwise on the basis to a block-diagonal matrix.
     $(f_{k,i,j})$, with entries
     \begin{align}
         \langle f_{k',i',j'},Af_{k,i,j}\rangle
-        &=\sum_{j''}(B_k)_{j''j}
-          \langle f_{k',i',j'},f_{k,i,j''}\rangle
-          =\delta_{k'k}\delta_{i'i}(B_k)_{j'j}.
+         & =\sum_{j''}(B_k)_{j''j}
+        \langle f_{k',i',j'},f_{k,i,j''}\rangle
+        =\delta_{k'k}\delta_{i'i}(B_k)_{j'j}.
         \notag
     \end{align}
     This is the block-diagonal matrix in
@@ -218,7 +218,7 @@ blockwise on the basis to a block-diagonal matrix.
     every $A\in S$ satisfies
     \begin{align}
         U^\dagger A U
-        &=\bigoplus_{k=0}^{K-1}\Id_{m_k}\otimes B_k
+         & =\bigoplus_{k=0}^{K-1}\Id_{m_k}\otimes B_k
         \label{eq:spectral_subalg_containment}
     \end{align}
     for matrices $B_k\in\MN{d_k}$ depending on $A$. Up to reordering the
@@ -284,15 +284,15 @@ subalgebra.
     their middle-factor coefficient matrices by
     \begin{align}
         (X_{aa'})_{bb'}
-        &:=(X_{AB})_{(a,b),(a',b')}, \notag\\
+         & :=(X_{AB})_{(a,b),(a',b')}, \notag \\
         (Y_{cc'})_{bb'}
-        &:=(Y_{BC})_{(b,c),(b',c')}.
+         & :=(Y_{BC})_{(b,c),(b',c')}.
         \notag
     \end{align}
     If
     \begin{align}
         (X_{AB}\otimes\Id_C)(\Id_A\otimes Y_{BC})
-        &=(\Id_A\otimes Y_{BC})(X_{AB}\otimes\Id_C),
+         & =(\Id_A\otimes Y_{BC})(X_{AB}\otimes\Id_C),
         \label{eq:spectral_overlap_commute}
     \end{align}
     then $X_{aa'}Y_{cc'}=Y_{cc'}X_{aa'}$ for every $a,a',c,c'$. This is
@@ -307,7 +307,7 @@ subalgebra.
     sums over the first and third intermediate indices, leaving
     \begin{align}
         \sum_r(X_{aa'})_{br}(Y_{cc'})_{rb'}
-        &=\sum_r(Y_{cc'})_{br}(X_{aa'})_{rb'}.
+         & =\sum_r(Y_{cc'})_{br}(X_{aa'})_{rb'}.
         \notag
     \end{align}
     This is the $(b,b')$ entry of
@@ -324,13 +324,13 @@ subalgebra.
     acts by
     \begin{align}
         A f_{k,i,j}
-        &=\sum_{j'=0}^{d_k-1}(B_k)_{j'j}f_{k,i,j'},
+         & =\sum_{j'=0}^{d_k-1}(B_k)_{j'j}f_{k,i,j'},
         \label{eq:spec_subalgebra_action}
     \end{align}
     while every $T\in\MN{D}$ commuting with all members of $S$ acts by
     \begin{align}
         T f_{k,i,j}
-        &=\sum_{i'=0}^{m_k-1}(C_k)_{i'i}f_{k,i',j}.
+         & =\sum_{i'=0}^{m_k-1}(C_k)_{i'i}f_{k,i',j}.
         \label{eq:spec_commutant_action}
     \end{align}
     Thus the same orthonormal identification realizes $S$ on the second
@@ -347,7 +347,7 @@ subalgebra.
     property. If $T$ commutes with $S$, the row transport
     \begin{align}
         \tau_{k,i',i}(v)
-        &:=\sum_j\langle f_{k,i',j},v\rangle f_{k,i,j}
+         & :=\sum_j\langle f_{k,i',j},v\rangle f_{k,i,j}
         \notag
     \end{align}
     also commutes with $S$, and so does $\tau_{k,i',i}T$. Schur's lemma
@@ -374,9 +374,9 @@ subalgebra.
     decomposition,
     \begin{align}
         X_{aa'}e_{q,r,s}
-        &=\sum_{s'}(B^{aa'}_q)_{s's}e_{q,r,s'}, \notag\\
+         & =\sum_{s'}(B^{aa'}_q)_{s's}e_{q,r,s'}, \notag \\
         Y_{cc'}e_{q,r,s}
-        &=\sum_{r'}(C^{cc'}_q)_{r'r}e_{q,r',s}.
+         & =\sum_{r'}(C^{cc'}_q)_{r'r}e_{q,r',s}.
         \label{eq:spectral_overlap_coeff_actions}
     \end{align}
     The source lemma assumes that both overlapping operators are Hermitian;
@@ -416,11 +416,11 @@ subalgebra.
     $S_q\in\mathbf L(H_{q,r}\otimes H_C)$ such that
     \begin{align}
         (\Id_A\otimes U^\dagger)X_{AB}(\Id_A\otimes U)
-        &=\bigoplus_{q=0}^{K-1}
-          (R_q\otimes\Id_{H_{q,r}}), \notag\\
+         & =\bigoplus_{q=0}^{K-1}
+        (R_q\otimes\Id_{H_{q,r}}), \notag \\
         (U^\dagger\otimes\Id_C)Y_{BC}(U\otimes\Id_C)
-        &=\bigoplus_{q=0}^{K-1}
-          (\Id_{H_{q,l}}\otimes S_q).
+         & =\bigoplus_{q=0}^{K-1}
+        (\Id_{H_{q,l}}\otimes S_q).
         \label{eq:spectral_overlap_block_actions}
     \end{align}
     This is the explicit coordinate form of the two block-action identities
@@ -459,15 +459,15 @@ subalgebra.
     $S_q\in\mathbf L(H_{q,r}\otimes H_C)$ such that
     \begin{align}
         X_{AB}
-        &=(\Id_A\otimes U)
-          \left(\bigoplus_{q=0}^{K-1}
-          R_q\otimes\Id_{H_{q,r}}\right)
-          (\Id_A\otimes U^\dagger), \notag\\
+         & =(\Id_A\otimes U)
+        \left(\bigoplus_{q=0}^{K-1}
+        R_q\otimes\Id_{H_{q,r}}\right)
+        (\Id_A\otimes U^\dagger), \notag \\
         Y_{BC}
-        &=(U\otimes\Id_C)
-          \left(\bigoplus_{q=0}^{K-1}
-          \Id_{H_{q,l}}\otimes S_q\right)
-          (U^\dagger\otimes\Id_C).
+         & =(U\otimes\Id_C)
+        \left(\bigoplus_{q=0}^{K-1}
+        \Id_{H_{q,l}}\otimes S_q\right)
+        (U^\dagger\otimes\Id_C).
         \label{eq:spectral_overlap_block_sums}
     \end{align}
     In these formulas the two direct sums are transported to the original
@@ -483,9 +483,9 @@ subalgebra.
     Theorem~\ref{thm:commuting_overlapping_unitary_block_actions} gives
     \begin{align}
         V_A^\dagger X_{AB}V_A
-        &=\bigoplus_qR_q\otimes\Id_{H_{q,r}}, \notag\\
+         & =\bigoplus_qR_q\otimes\Id_{H_{q,r}}, \notag \\
         V_C^\dagger Y_{BC}V_C
-        &=\bigoplus_q\Id_{H_{q,l}}\otimes S_q.
+         & =\bigoplus_q\Id_{H_{q,l}}\otimes S_q.
         \notag
     \end{align}
     Since $V_AV_A^\dagger=\Id$ and $V_CV_C^\dagger=\Id$, conjugating these
@@ -511,15 +511,15 @@ equals the block algebra $\bigoplus_k\Id_{m_k}\otimes\MN{d_k}$.
     a matrix $A\in\MN{D}$ belongs to $S$ exactly when
     \begin{align}
         U^\dagger A U
-        &=\bigoplus_{k=0}^{K-1}\Id_{m_k}\otimes B_k
+         & =\bigoplus_{k=0}^{K-1}\Id_{m_k}\otimes B_k
         \label{eq:spectral_full_block}
     \end{align}
     for some matrices $B_k\in\MN{d_k}$; that is, up to reordering the two
     tensor factors of each block,
     \begin{align}
         S
-        &=U\left(\bigoplus_{k=0}^{K-1}
-          \Id_{m_k}\otimes\MN{d_k}\right)U^\dagger.
+         & =U\left(\bigoplus_{k=0}^{K-1}
+        \Id_{m_k}\otimes\MN{d_k}\right)U^\dagger.
         \notag
     \end{align}
     This is the block representation of a finite-dimensional $*$-algebra in
@@ -547,7 +547,7 @@ equals the block algebra $\bigoplus_k\Id_{m_k}\otimes\MN{d_k}$.
     $S$. For a component index $k$ and multiplicity indices $i,i'$, consider
     \begin{align}
         \tau(v)
-        &:=\sum_j\langle f_{k,i',j},v\rangle f_{k,i,j}.
+         & :=\sum_j\langle f_{k,i',j},v\rangle f_{k,i,j}.
         \notag
     \end{align}
     Because every member of $S$ acts on the rows $(k,i')$ and $(k,i)$ by
@@ -560,7 +560,7 @@ equals the block algebra $\bigoplus_k\Id_{m_k}\otimes\MN{d_k}$.
     $x=f_{k,i,j}$ gives
     \begin{align}
         \langle f_{k,i',j'},g f_{k,i,j}\rangle
-        &=\gamma^{(k)}_{i'i}\delta_{j'j}.
+         & =\gamma^{(k)}_{i'i}\delta_{j'j}.
         \label{eq:spectral_commutant_coeff}
     \end{align}
 
@@ -574,7 +574,7 @@ equals the block algebra $\bigoplus_k\Id_{m_k}\otimes\MN{d_k}$.
     (\ref{eq:spectral_commutant_coeff}) therefore gives
     \begin{align}
         g f_{k,i,j}
-        &=\sum_{i'}\gamma^{(k)}_{i'i}f_{k,i',j}.
+         & =\sum_{i'}\gamma^{(k)}_{i'i}f_{k,i',j}.
         \notag
     \end{align}
     Thus $g$ has blocks $C_k\otimes\Id_{d_k}$ in the adapted basis,
@@ -692,15 +692,15 @@ equals the block algebra $\bigoplus_k\Id_{m_k}\otimes\MN{d_k}$.
     a matrix $X\in\MN{D}$ satisfies $E^*(X)=X$ exactly when
     \begin{align}
         U^\dagger XU
-        &=\bigoplus_{k=0}^{n-1}\Id_{m_k}\otimes B_k
+         & =\bigoplus_{k=0}^{n-1}\Id_{m_k}\otimes B_k
         \notag
     \end{align}
     for some matrices $B_k\in\MN{d_k}$; that is, up to reordering the two
     tensor factors of each block,
     \begin{align}
         \Fix(E^*)
-        &=U\left(\bigoplus_{k=0}^{n-1}
-          \Id_{m_k}\otimes\MN{d_k}\right)U^\dagger.
+         & =U\left(\bigoplus_{k=0}^{n-1}
+        \Id_{m_k}\otimes\MN{d_k}\right)U^\dagger.
         \label{eq:spectral_adjoint_fixed_blocks}
     \end{align}
     The positive definite fixed point removes the zero block: this is the
@@ -735,7 +735,7 @@ equals the block algebra $\bigoplus_k\Id_{m_k}\otimes\MN{d_k}$.
     $X\in\MN{D}$ satisfies $E(X)=X$ exactly when
     \begin{align}
         U^\dagger XU
-        &=\bigoplus_{k=0}^{n-1}\Id_{m_k}\otimes B_k
+         & =\bigoplus_{k=0}^{n-1}\Id_{m_k}\otimes B_k
         \notag
     \end{align}
     for some matrices $B_k\in\MN{d_k}$. This is
@@ -764,9 +764,9 @@ equals the block algebra $\bigoplus_k\Id_{m_k}\otimes\MN{d_k}$.
     Let
     \begin{align}
         \mathcal A
-        &=\bigoplus_{k\in I}\MN{n_k}, \notag\\
+         & =\bigoplus_{k\in I}\MN{n_k}, \notag \\
         \mathcal B
-        &=\bigoplus_{l\in J}\MN{m_l},
+         & =\bigoplus_{l\in J}\MN{m_l},
         \notag
     \end{align}
     and let $\mathcal H_A=\bigoplus_{k\in I}\C^{n_k}$ and
@@ -776,15 +776,15 @@ equals the block algebra $\bigoplus_k\Id_{m_k}\otimes\MN{d_k}$.
     $T:\mathcal A\to\mathcal B$, its canonical full-matrix extension is
     \begin{align}
         \widehat T
-        &:=\iota_B\circ T\circ\pi_A:
-          \End(\mathcal H_A)\longrightarrow\End(\mathcal H_B).
+         & :=\iota_B\circ T\circ\pi_A:
+        \End(\mathcal H_A)\longrightarrow\End(\mathcal H_B).
         \label{eq:spectral_direct_sum_extension}
     \end{align}
     For $X\in\mathcal A$ and $Y\in\mathcal B$, the trace adjoint
     $T^*:\mathcal B\to\mathcal A$ is defined by
     \begin{align}
         \sum_{k\in I}\tr(T^*(Y)_kX_k)
-        &=\sum_{l\in J}\tr(Y_lT(X)_l).
+         & =\sum_{l\in J}\tr(Y_lT(X)_l).
         \label{eq:spectral_direct_sum_adjoint}
     \end{align}
     This is the block-diagonal realization needed for the fixed-point and
@@ -804,9 +804,9 @@ equals the block algebra $\bigoplus_k\Id_{m_k}\otimes\MN{d_k}$.
     linear endomorphism $T:\mathcal A\to\mathcal A$,
     \begin{align}
         \pi_A(\iota_A(A))
-        &=A, \notag\\
+         & =A, \notag             \\
         \widehat T(X)
-        &=\iota_A(T(\pi_A(X))).
+         & =\iota_A(T(\pi_A(X))).
         \notag
     \end{align}
 \end{theorem}
@@ -840,7 +840,7 @@ equals the block algebra $\bigoplus_k\Id_{m_k}\otimes\MN{d_k}$.
     of matrix algebras. For every $A\in\mathcal A$,
     \begin{align}
         \widehat T(\iota_A(A))=\iota_A(A)
-        &\quad\Longleftrightarrow\quad T(A)=A.
+         & \quad\Longleftrightarrow\quad T(A)=A.
         \notag
     \end{align}
 \end{theorem}
@@ -850,7 +850,7 @@ equals the block algebra $\bigoplus_k\Id_{m_k}\otimes\MN{d_k}$.
     Diagonal compression is a left inverse of block-diagonal embedding. Hence
     \begin{align}
         \widehat T(\iota_A(A))
-        &=\iota_A(T(A)).
+         & =\iota_A(T(A)).
         \notag
     \end{align}
     If this equals $\iota_A(A)$, applying diagonal compression gives
@@ -885,13 +885,13 @@ present result.
     $S:\mathcal B\to\mathcal C$, trace adjoints satisfy
     \begin{align}
         \id_{\mathcal A}^*
-        &=\id_{\mathcal A}, \notag\\
+         & =\id_{\mathcal A}, \notag \\
         (S\circ T)^*
-        &=T^*\circ S^*, \notag\\
+         & =T^*\circ S^*, \notag     \\
         (T^*)^*
-        &=T, \notag\\
+         & =T, \notag                \\
         (\widehat T)^*
-        &=\widehat{T^*}.
+         & =\widehat{T^*}.
         \label{eq:spectral_direct_sum_adjoint_laws}
     \end{align}
     If $T$ preserves the total trace, then
@@ -913,8 +913,8 @@ present result.
     gives, for every $X\in\mathcal A$,
     \begin{align}
         \sum_{k\in I}\tr(T^*(\Id_{\mathcal B})_kX_k)
-        &=\sum_{l\in J}\tr(T(X)_l)
-          =\sum_{k\in I}\tr(X_k),
+         & =\sum_{l\in J}\tr(T(X)_l)
+        =\sum_{k\in I}\tr(X_k),
         \notag
     \end{align}
     so $T^*(\Id_{\mathcal B})=\Id_{\mathcal A}$. Finally, if
@@ -940,8 +940,8 @@ present result.
     preservation give
     \begin{align}
         \sum_j\tr(A_j\Phi(B)_j)
-        &=\sum_j\tr\!\left(\Phi(\Phi^{-1}(A)B)_j\right)
-          =\sum_i\tr(\Phi^{-1}(A)_iB_i).
+         & =\sum_j\tr\!\left(\Phi(\Phi^{-1}(A)B)_j\right)
+        =\sum_i\tr(\Phi^{-1}(A)_iB_i).
         \notag
     \end{align}
     Nondegeneracy of the trace pairing gives $\Phi^*=\Phi^{-1}$.
@@ -969,13 +969,13 @@ present result.
     $\End(\mathcal H)$. Finally,
     \begin{align}
         \Fix(\widehat T)
-        &=\iota(\Fix(T)).
+         & =\iota(\Fix(T)).
         \label{eq:spectral_extension_fixed_points}
     \end{align}
     Equivalently, for every $X\in\End(\mathcal H)$,
     \begin{align}
         \widehat T(X)=X
-        &\quad\Longleftrightarrow\quad
+         & \quad\Longleftrightarrow\quad
         \exists A\in\mathcal A,\quad
         T(A)=A\ \text{ and }\ X=\iota(A).
         \notag
@@ -989,7 +989,7 @@ present result.
     $k$-th diagonal block, diagonal compression satisfies
     \begin{align}
         \pi(A^*A)_k-\pi(A)_k^*\pi(A)_k
-        &=R_k^*R_k\succeq0.
+         & =R_k^*R_k\succeq0.
         \notag
     \end{align}
     Block-diagonal embedding is a positive algebra homomorphism and converts
@@ -998,7 +998,7 @@ present result.
     pass to $\widehat T$. The embedding and compression satisfy
     \begin{align}
         \tr(\iota(A)X)
-        &=\sum_k\tr(A_k\pi(X)_k).
+         & =\sum_k\tr(A_k\pi(X)_k).
         \notag
     \end{align}
     Substituting (\ref{eq:spectral_direct_sum_extension}) and using
@@ -1008,20 +1008,20 @@ present result.
     Since $\pi\circ\iota=\id$, one fixed-point implication follows from
     \begin{align}
         T(\pi(X))
-        &=\pi(\widehat T(X))
-          =\pi(X), \notag\\
+         & =\pi(\widehat T(X))
+        =\pi(X), \notag        \\
         X
-        &=\widehat T(X)
-          =\iota(T(\pi(X)))
-          =\iota(\pi(X)),
+         & =\widehat T(X)
+        =\iota(T(\pi(X)))
+        =\iota(\pi(X)),
         \notag
     \end{align}
     whenever $\widehat T(X)=X$. Conversely, if $T(A)=A$, then
     \begin{align}
         \widehat T(\iota(A))
-        &=\iota(T(\pi(\iota(A))))
-          =\iota(T(A))
-          =\iota(A).
+         & =\iota(T(\pi(\iota(A))))
+        =\iota(T(A))
+        =\iota(A).
         \notag
     \end{align}
     These implications prove

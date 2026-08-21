@@ -5,17 +5,17 @@ The parent-Hamiltonian construction of \cite[lines~1988--2000]{Cirac2021Matrix},
 reviewed in Chapter~\ref{ch:parent_hamiltonian}, is recorded here in the form
 \begin{align}
     \mathcal G_L(A)
-    &=
+     & =
     \left\{\sum_{i_1,\ldots,i_L}
-        \tr(A^{i_1}\cdots A^{i_L}X)
-        \ket{i_1\cdots i_L}
-        : X\in \MN{D}\right\}.
+    \tr(A^{i_1}\cdots A^{i_L}X)
+    \ket{i_1\cdots i_L}
+    : X\in \MN{D}\right\}.
     \notag
 \end{align}
 Thus
 \begin{align}
-    \ker h_L &= \mathcal G_L(A), \notag\\
-    H_N^{(L)} &= \sum_i (h_L)_i.
+    \ker h_L  & = \mathcal G_L(A), \notag \\
+    H_N^{(L)} & = \sum_i (h_L)_i.
     \notag
 \end{align}
 We write $\GS(H)=\ker(H-E_0(H)\Id)$ for the ground eigenspace.
@@ -27,7 +27,7 @@ We write $\GS(H)=\ker(H-E_0(H)\Id)$ for the ground eigenspace.
     For the GHZ tensor $A$ of Definition~\ref{def:ghz_tensor},
     \begin{align}
         \mathcal G_2(A)
-        &=
+         & =
         \spn_{\C}\{\ket{00},\ket{11}\}.
         \notag
     \end{align}
@@ -38,7 +38,7 @@ We write $\GS(H)=\ker(H-E_0(H)\Id)$ for the ground eigenspace.
     \uses{def:ghz_tensor, def:ground_space_map, def:ground_space_parent, def:two_site_ket}
     By definition,
     $\Gamma_2(X)(\sigma_1,\sigma_2)
-    =\tr(A^{\sigma_1}A^{\sigma_2}X)$.
+        =\tr(A^{\sigma_1}A^{\sigma_2}X)$.
     For the GHZ matrices $A^0=\diag(1,0)$ and $A^1=\diag(0,1)$, whenever
     $\sigma_1\ne\sigma_2$, one has $A^{\sigma_1}A^{\sigma_2}=0$. Hence
     $\Gamma_2(X)=X_{00}\ket{00}+X_{11}\ket{11}$, and the image of~$\Gamma_2$
@@ -63,7 +63,7 @@ We write $\GS(H)=\ker(H-E_0(H)\Id)$ for the ground eigenspace.
     constant, hence $R_{i,\tau}(b,c)=0$. Therefore
     \begin{align}
         R_{i,\tau}
-        &\in
+         & \in
         \{v:v(0,1)=v(1,0)=0\}
         =
         \spn_{\C}\{\ket{00},\ket{11}\}
@@ -83,10 +83,10 @@ We write $\GS(H)=\ker(H-E_0(H)\Id)$ for the ground eigenspace.
     tensor satisfies
     \begin{align}
         \mathcal G_{N,2}(A_{\mathrm{GHZ}})
-        &=
+         & =
         \spn_{\C}\{
-            \ket{0}^{\otimes N},
-            \ket{1}^{\otimes N}
+        \ket{0}^{\otimes N},
+        \ket{1}^{\otimes N}
         \}.
         \notag
     \end{align}
@@ -101,7 +101,7 @@ We write $\GS(H)=\ker(H-E_0(H)\Id)$ for the ground eigenspace.
     nearest-neighbour window and outside assignment $\tau$, one has
     \begin{align}
         \left.\psi\right|_{[i,i+1],\tau}
-        &\in
+         & \in
         \mathcal G_2(A_{\mathrm{GHZ}})
         =
         \spn_{\C}\{\ket{00},\ket{11}\}.
@@ -109,16 +109,16 @@ We write $\GS(H)=\ker(H-E_0(H)\Id)$ for the ground eigenspace.
     \end{align}
     Taking the outside assignment from the word $\sigma$ gives
     $\left.\psi\right|_{[i,i+1],\sigma}
-    (\sigma_i,\sigma_{i+1})=\psi(\sigma)$.
+        (\sigma_i,\sigma_{i+1})=\psi(\sigma)$.
     Hence a mixed nearest-neighbour word has zero coefficient:
     $\sigma_i\ne\sigma_{i+1}\Longrightarrow\psi(\sigma)=0$.
     A nonconstant binary cyclic word has a mixed edge:
     $\sigma\notin\{(0,\ldots,0),(1,\ldots,1)\}
-    \Longrightarrow\exists i,\ \sigma_i\ne\sigma_{i+1}$.
+        \Longrightarrow\exists i,\ \sigma_i\ne\sigma_{i+1}$.
     Therefore
     \begin{align}
         \psi
-        &=
+         & =
         \psi(0,\ldots,0)\ket{0}^{\otimes N}
         +
         \psi(1,\ldots,1)\ket{1}^{\otimes N}.
@@ -127,7 +127,7 @@ We write $\GS(H)=\ker(H-E_0(H)\Id)$ for the ground eigenspace.
     Conversely, Theorem~\ref{thm:constant_ket_mem_ghz_chain_ground_space}
     gives
     $\ket{0}^{\otimes N},\ket{1}^{\otimes N}
-    \in\mathcal G_{N,2}(A_{\mathrm{GHZ}})$, and hence their span lies in
+        \in\mathcal G_{N,2}(A_{\mathrm{GHZ}})$, and hence their span lies in
     $\mathcal G_{N,2}(A_{\mathrm{GHZ}})$.
 \end{proof}
 
@@ -135,23 +135,23 @@ We write $\GS(H)=\ker(H-E_0(H)\Id)$ for the ground eigenspace.
     For the GHZ tensor of Definition~\ref{def:ghz_tensor},
     \begin{align}
         \mathcal G_2(A)
-        &= \spn\{\ket{00},\ket{11}\}, \notag\\
+         & = \spn\{\ket{00},\ket{11}\}, \notag \\
         h_{\mathrm{GHZ}}
-        &= \ketbra{01}{01}+\ketbra{10}{10}
+         & = \ketbra{01}{01}+\ketbra{10}{10}
         = \Id-\ketbra{00}{00}-\ketbra{11}{11}.
         \notag
     \end{align}
     The periodic nearest-neighbour parent Hamiltonian therefore satisfies
     \begin{align}
         H_{\mathrm{GHZ},N}
-        &= \sum_i (h_{\mathrm{GHZ}})_i, \notag\\
+         & = \sum_i (h_{\mathrm{GHZ}})_i, \notag              \\
         \ker H_{\mathrm{GHZ},N}
-        &= \spn\{\ket{0}^{\otimes N},\ket{1}^{\otimes N}\},
+         & = \spn\{\ket{0}^{\otimes N},\ket{1}^{\otimes N}\},
         \notag
     \end{align}
     using the cyclic-window equality
     $\mathcal G_{N,2}(A_{\mathrm{GHZ}})
-    =\spn\{\ket{0}^{\otimes N},\ket{1}^{\otimes N}\}$ from
+        =\spn\{\ket{0}^{\otimes N},\ket{1}^{\otimes N}\}$ from
     Theorem~\ref{thm:ghz_chain_ground_space_two}.
     This is the ferromagnetic Ising parent Hamiltonian
     \cite[lines~1194--1196 and line~2205]{Cirac2021Matrix};
@@ -167,11 +167,11 @@ We write $\GS(H)=\ker(H-E_0(H)\Id)$ for the ground eigenspace.
     The corresponding positive parent interaction is
     \begin{align}
         h_i^{ZXZ}
-        &= \frac12(\Id-K_i^{ZXZ}), \notag\\
+         & = \frac12(\Id-K_i^{ZXZ}), \notag \\
         H_{\mathrm{cl},N}^{ZXZ}
-        &= \sum_i h_i^{ZXZ}, \notag\\
+         & = \sum_i h_i^{ZXZ}, \notag       \\
         \dim\ker H_{\mathrm{cl},N}^{ZXZ}
-        &= 1
+         & = 1
         \notag
     \end{align}
     \cite[local TeX lines~374--387]{PerezGarcia2007Matrix}. Thus an $XZX$
@@ -179,9 +179,9 @@ We write $\GS(H)=\ker(H-E_0(H)\Id)$ for the ground eigenspace.
     equivalence such as
     \begin{align}
         U H_{\mathrm{cl},N}^{ZXZ} U^\dagger
-        &= H_{\mathrm{cl},N}^{XZX}, \notag\\
+         & = H_{\mathrm{cl},N}^{XZX}, \notag \\
         T H_{\mathrm{cl},N}^{ZXZ} T^{-1}
-        &= H_{\mathrm{cl},N}^{XZX}.
+         & = H_{\mathrm{cl},N}^{XZX}.
         \notag
     \end{align}
 \end{remark}
@@ -193,7 +193,7 @@ We write $\GS(H)=\ker(H-E_0(H)\Id)$ for the ground eigenspace.
     \begin{align}
         (\mathcal G_{[1,2]}\otimes\mathcal H_3)
         \cap(\mathcal H_1\otimes\mathcal G_{[2,3]})
-        &= \mathcal G_{[1,3]}.
+         & = \mathcal G_{[1,3]}.
         \notag
     \end{align}
     This is the dimensionally explicit form of the identity in
@@ -201,10 +201,10 @@ We write $\GS(H)=\ker(H-E_0(H)\Id)$ for the ground eigenspace.
     Hamiltonian is
     \begin{align}
         H_{\mathrm{AKLT},N}
-        &=
+         & =
         \sum_i
         \left(\vec S_i\cdot\vec S_{i+1}
-            +\frac13(\vec S_i\cdot\vec S_{i+1})^2\right),
+        +\frac13(\vec S_i\cdot\vec S_{i+1})^2\right),
         \notag
     \end{align}
     up to an additive constant
@@ -213,21 +213,21 @@ We write $\GS(H)=\ker(H-E_0(H)\Id)$ for the ground eigenspace.
     is related to the polynomial Hamiltonian by the spin-addition identity
     \begin{align}
         P^{(2)}_{i,i+1}
-        &=
+         & =
         \frac12
         \left(\vec S_i\cdot\vec S_{i+1}
-            +\frac13(\vec S_i\cdot\vec S_{i+1})^2
-            +\frac23\Id\right)
+        +\frac13(\vec S_i\cdot\vec S_{i+1})^2
+        +\frac23\Id\right)
         \notag
     \end{align}
     for two spin-$1$ particles. For open boundary conditions and $N\geq2$,
     \begin{align}
         \dim\GS(H_{\mathrm{AKLT},N}^{\mathrm{open}})
-        &= 4, \notag\\
+         & = 4, \notag \\
         \dim\bigl(\GS(H_{\mathrm{AKLT},N}^{\mathrm{open}})
-            \cap\mathcal H_{S=0}
+        \cap\mathcal H_{S=0}
         \bigr)
-        &= 1
+         & = 1
         \notag
     \end{align}
     \cite[lines~1169--1174]{Cirac2021Matrix}.

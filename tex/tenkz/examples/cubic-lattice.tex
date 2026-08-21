@@ -13,69 +13,69 @@
 \usepackage{tenkz}
 \begin{document}
 \begin{tenkz}[
-    rows={wire,wire,wire}, cols=3, bonds=none,
-    west=none, east=none, north=none, south=none,
-    frame={plane,basis={
-      wire at (0,0), wire at (-3,5), wire at (-6,10)}}]
-  % Column-axis contractions (18).  The coloured middle-layer contraction
-  % is one of these records, not an additional edge.
-  \tnwire{(1,1,1)}{(1,2,1)}
-  \tnwire{(1,2,1)}{(1,3,1)}
-  \tnwire{(2,1,1)}{(2,2,1)}
-  \tnwire{(2,2,1)}{(2,3,1)}
-  \tnwire{(3,1,1)}{(3,2,1)}
-  \tnwire{(3,2,1)}{(3,3,1)}
-  \tnwire{(1,1,2)}{(1,2,2)}
-  \tnwire{(1,2,2)}{(1,3,2)}
-  \tnwire[species=marked]{(2,1,2)}{(2,2,2)}
-  \tnwire{(2,2,2)}{(2,3,2)}
-  \tnwire{(3,1,2)}{(3,2,2)}
-  \tnwire{(3,2,2)}{(3,3,2)}
-  \tnwire{(1,1,3)}{(1,2,3)}
-  \tnwire{(1,2,3)}{(1,3,3)}
-  \tnwire{(2,1,3)}{(2,2,3)}
-  \tnwire{(2,2,3)}{(2,3,3)}
-  \tnwire{(3,1,3)}{(3,2,3)}
-  \tnwire{(3,2,3)}{(3,3,3)}
+        rows={wire,wire,wire}, cols=3, bonds=none,
+        west=none, east=none, north=none, south=none,
+        frame={plane,basis={
+                        wire at (0,0), wire at (-3,5), wire at (-6,10)}}]
+    % Column-axis contractions (18).  The coloured middle-layer contraction
+    % is one of these records, not an additional edge.
+    \tnwire{(1,1,1)}{(1,2,1)}
+    \tnwire{(1,2,1)}{(1,3,1)}
+    \tnwire{(2,1,1)}{(2,2,1)}
+    \tnwire{(2,2,1)}{(2,3,1)}
+    \tnwire{(3,1,1)}{(3,2,1)}
+    \tnwire{(3,2,1)}{(3,3,1)}
+    \tnwire{(1,1,2)}{(1,2,2)}
+    \tnwire{(1,2,2)}{(1,3,2)}
+    \tnwire[species=marked]{(2,1,2)}{(2,2,2)}
+    \tnwire{(2,2,2)}{(2,3,2)}
+    \tnwire{(3,1,2)}{(3,2,2)}
+    \tnwire{(3,2,2)}{(3,3,2)}
+    \tnwire{(1,1,3)}{(1,2,3)}
+    \tnwire{(1,2,3)}{(1,3,3)}
+    \tnwire{(2,1,3)}{(2,2,3)}
+    \tnwire{(2,2,3)}{(2,3,3)}
+    \tnwire{(3,1,3)}{(3,2,3)}
+    \tnwire{(3,2,3)}{(3,3,3)}
 
-  % Row-axis contractions (18).
-  \tnwire{(1,1,1)}{(2,1,1)}
-  \tnwire{(2,1,1)}{(3,1,1)}
-  \tnwire{(1,2,1)}{(2,2,1)}
-  \tnwire{(2,2,1)}{(3,2,1)}
-  \tnwire{(1,3,1)}{(2,3,1)}
-  \tnwire{(2,3,1)}{(3,3,1)}
-  \tnwire{(1,1,2)}{(2,1,2)}
-  \tnwire{(2,1,2)}{(3,1,2)}
-  \tnwire{(1,2,2)}{(2,2,2)}
-  \tnwire{(2,2,2)}{(3,2,2)}
-  \tnwire{(1,3,2)}{(2,3,2)}
-  \tnwire{(2,3,2)}{(3,3,2)}
-  \tnwire{(1,1,3)}{(2,1,3)}
-  \tnwire{(2,1,3)}{(3,1,3)}
-  \tnwire{(1,2,3)}{(2,2,3)}
-  \tnwire{(2,2,3)}{(3,2,3)}
-  \tnwire{(1,3,3)}{(2,3,3)}
-  \tnwire{(2,3,3)}{(3,3,3)}
+    % Row-axis contractions (18).
+    \tnwire{(1,1,1)}{(2,1,1)}
+    \tnwire{(2,1,1)}{(3,1,1)}
+    \tnwire{(1,2,1)}{(2,2,1)}
+    \tnwire{(2,2,1)}{(3,2,1)}
+    \tnwire{(1,3,1)}{(2,3,1)}
+    \tnwire{(2,3,1)}{(3,3,1)}
+    \tnwire{(1,1,2)}{(2,1,2)}
+    \tnwire{(2,1,2)}{(3,1,2)}
+    \tnwire{(1,2,2)}{(2,2,2)}
+    \tnwire{(2,2,2)}{(3,2,2)}
+    \tnwire{(1,3,2)}{(2,3,2)}
+    \tnwire{(2,3,2)}{(3,3,2)}
+    \tnwire{(1,1,3)}{(2,1,3)}
+    \tnwire{(2,1,3)}{(3,1,3)}
+    \tnwire{(1,2,3)}{(2,2,3)}
+    \tnwire{(2,2,3)}{(3,2,3)}
+    \tnwire{(1,3,3)}{(2,3,3)}
+    \tnwire{(2,3,3)}{(3,3,3)}
 
-  % Receding-axis contractions between adjacent basis members (18).
-  \tnwire{(1,1,1)}{(1,1,2)}
-  \tnwire{(1,1,2)}{(1,1,3)}
-  \tnwire{(1,2,1)}{(1,2,2)}
-  \tnwire{(1,2,2)}{(1,2,3)}
-  \tnwire{(1,3,1)}{(1,3,2)}
-  \tnwire{(1,3,2)}{(1,3,3)}
-  \tnwire{(2,1,1)}{(2,1,2)}
-  \tnwire{(2,1,2)}{(2,1,3)}
-  \tnwire{(2,2,1)}{(2,2,2)}
-  \tnwire{(2,2,2)}{(2,2,3)}
-  \tnwire{(2,3,1)}{(2,3,2)}
-  \tnwire{(2,3,2)}{(2,3,3)}
-  \tnwire{(3,1,1)}{(3,1,2)}
-  \tnwire{(3,1,2)}{(3,1,3)}
-  \tnwire{(3,2,1)}{(3,2,2)}
-  \tnwire{(3,2,2)}{(3,2,3)}
-  \tnwire{(3,3,1)}{(3,3,2)}
-  \tnwire{(3,3,2)}{(3,3,3)}
+    % Receding-axis contractions between adjacent basis members (18).
+    \tnwire{(1,1,1)}{(1,1,2)}
+    \tnwire{(1,1,2)}{(1,1,3)}
+    \tnwire{(1,2,1)}{(1,2,2)}
+    \tnwire{(1,2,2)}{(1,2,3)}
+    \tnwire{(1,3,1)}{(1,3,2)}
+    \tnwire{(1,3,2)}{(1,3,3)}
+    \tnwire{(2,1,1)}{(2,1,2)}
+    \tnwire{(2,1,2)}{(2,1,3)}
+    \tnwire{(2,2,1)}{(2,2,2)}
+    \tnwire{(2,2,2)}{(2,2,3)}
+    \tnwire{(2,3,1)}{(2,3,2)}
+    \tnwire{(2,3,2)}{(2,3,3)}
+    \tnwire{(3,1,1)}{(3,1,2)}
+    \tnwire{(3,1,2)}{(3,1,3)}
+    \tnwire{(3,2,1)}{(3,2,2)}
+    \tnwire{(3,2,2)}{(3,2,3)}
+    \tnwire{(3,3,1)}{(3,3,2)}
+    \tnwire{(3,3,2)}{(3,3,3)}
 \end{tenkz}
 \end{document}

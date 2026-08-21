@@ -49,8 +49,8 @@ together with the local inverse it provides.
         \begin{tenkz}[rows={wire}, cols=1, bonds=none]
             \tn[label pos=w,
                 ports={210:virtual:$e_1$, 270:virtual:$e_k$,
-                       330:virtual:$e_{\deg(v)}$,
-                       90:physical:$\sigma(v)$}]{A_v}
+                        330:virtual:$e_{\deg(v)}$,
+                        90:physical:$\sigma(v)$}]{A_v}
         \end{tenkz}
     \end{center}
 \end{definition}
@@ -211,9 +211,9 @@ transformation that leaves the generated state unchanged.
     % (V,P)=(deg(u)+deg(w)-2,2).  The exact convention is therefore kept as algebra.
     \begin{align}
         X_{v,e}
-        &=
+         & =
         \begin{cases}
-            X_e, & v=u,\\
+            X_e,             & v=u, \\
             (X_e^{-1})^\top, & v=w.
         \end{cases}
         \notag
@@ -236,10 +236,10 @@ transformation that leaves the generated state unchanged.
     % valence-independent equation rather than asserting a universal star picture.
     \begin{align}
         (A^X)_v(\eta,\sigma)
-        &=
+         & =
         \sum_{\eta'}
         \left(\prod_{ie\ni v}
-            M_{ie}(\eta(ie),\eta'(ie))\right)A_v(\eta',\sigma).
+        M_{ie}(\eta(ie),\eta'(ie))\right)A_v(\eta',\sigma).
         \notag
     \end{align}
 \end{definition}
@@ -318,7 +318,7 @@ transformation that leaves the generated state unchanged.
     % old two-star drawing introduced unrelated external legs.
     \begin{align}
         \sum_j X_e(j,i)((X_e^{-1})^\top)(j,k)
-        &=\delta_{ik}.
+         & =\delta_{ik}.
         \notag
     \end{align}
 \end{theorem}
@@ -377,7 +377,7 @@ sections.
         \begin{tenkz}[rows={wire}, cols=1, bonds=none]
             \tn[skin=box,
                 ports={180:virtual:$\bigotimes_{e\ni v}\C^{D_e}$,
-                       0:physical:$\C^d$}]{A_v}
+                        0:physical:$\C^d$}]{A_v}
         \end{tenkz}
         \qquad $\ker A_v=\{0\}$.
     \end{center}
@@ -708,7 +708,7 @@ which is the starting point for the edge-middle reduction of the next section.
     in a commutative monoid $M$,
     \begin{align}
         \prod_{x\in V}f(x)
-        &=f(u)\left(\prod_{x\in V\setminus\{u,v\}}f(x)\right)f(v).
+         & =f(u)\left(\prod_{x\in V\setminus\{u,v\}}f(x)\right)f(v).
         \notag
     \end{align}
 \end{theorem}

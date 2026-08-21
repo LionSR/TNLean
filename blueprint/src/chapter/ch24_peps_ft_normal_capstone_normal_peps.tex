@@ -42,7 +42,7 @@ product states, and the square lattice.
         \tenkzkernel
         \tndeclare{species}{blocked-edge}{hue=source:red!65!black}
         \begin{tenkz}[rows={wire,wire,wire,wire,wire,wire,wire}, cols=7,
-            west=open, east=open, north=open, south=open]
+                west=open, east=open, north=open, south=open]
             \tn[skin=dot]{} & \tn[skin=dot]{} & \tn[skin=dot]{} &
             \tn[skin=dot]{} & \tn[skin=dot]{} & \tn[skin=dot]{} &
             \tn[skin=dot]{} \\
@@ -66,11 +66,11 @@ product states, and the square lattice.
             \tn[skin=dot]{}
             \tnwire[species=blocked-edge]{(4,3)}{(4,4)}
             \tnmark[form=enclosure, slot=selected, tint]
-                {(4,2) .. (6,3)}{$A_1$}
+            {(4,2) .. (6,3)}{$A_1$}
             \tnmark[form=enclosure, slot=secondary, tint]
-                {(3,4) .. (4,6)}{$A_2$}
+            {(3,4) .. (4,6)}{$A_2$}
             \tnmark[form=enclosure, slot=complement, label pos=n]
-                {(1,1) .. (7,7) - (4,2) .. (6,3) - (3,4) .. (4,6)}{$A_3$}
+            {(1,1) .. (7,7) - (4,2) .. (6,3) - (3,4) .. (4,6)}{$A_3$}
         \end{tenkz}
         $\qquad\text{edge blocking}$
     \end{tenkzequation}
@@ -89,7 +89,7 @@ product states, and the square lattice.
         \tenkzkernel
         \tndeclare{species}{marked-site}{hue=source:blue}
         \begin{tenkz}[rows={wire,wire,wire,wire,wire}, cols=5,
-            west=open, east=open, north=open, south=open]
+                west=open, east=open, north=open, south=open]
             \tn[skin=dot]{} & \tn[skin=dot]{} & \tn[skin=dot]{} &
             \tn[skin=dot]{} & \tn[skin=dot]{} \\
             \tn[skin=dot]{} & \tn[skin=dot]{} & \tn[skin=dot]{} &
@@ -101,11 +101,11 @@ product states, and the square lattice.
             \tn[skin=dot]{} & \tn[skin=dot]{} & \tn[skin=dot]{} &
             \tn[skin=dot]{} & \tn[skin=dot]{}
             \tnmark[form=enclosure, slot=selected, tint, label pos=nw]
-                {(2,2) .. (4,4) - (4,4)}{$R$}
+            {(2,2) .. (4,4) - (4,4)}{$R$}
         \end{tenkz}
         $\qquad\subset\qquad$
         \begin{tenkz}[rows={wire,wire,wire,wire,wire}, cols=5,
-            west=open, east=open, north=open, south=open]
+                west=open, east=open, north=open, south=open]
             \tn[skin=dot]{} & \tn[skin=dot]{} & \tn[skin=dot]{} &
             \tn[skin=dot]{} & \tn[skin=dot]{} \\
             \tn[skin=dot]{} & \tn[skin=dot]{} & \tn[skin=dot]{} &
@@ -117,7 +117,7 @@ product states, and the square lattice.
             \tn[skin=dot]{} & \tn[skin=dot]{} & \tn[skin=dot]{} &
             \tn[skin=dot]{} & \tn[skin=dot]{}
             \tnmark[form=enclosure, slot=selected, tint, label pos=nw]
-                {(2,2) .. (4,4)}{$S$}
+            {(2,2) .. (4,4)}{$S$}
         \end{tenkz}
         $\qquad S=R\cup\{v\}$
     \end{tenkzequation}
@@ -267,10 +267,10 @@ product states, and the square lattice.
     isomorphism argument satisfies
     \begin{align}
         C_A(R_1,e,X;\sigma,\tau)
-        &=C_B(R_1,e,T_e(X);\sigma,\tau),
-        \notag\\
+         & =C_B(R_1,e,T_e(X);\sigma,\tau),
+        \notag                             \\
         T_e(X)
-        &=Z_e\,\iota_e(X)\,Z_e^{-1},
+         & =Z_e\,\iota_e(X)\,Z_e^{-1},
         \notag
     \end{align}
     for an invertible $Z_e$ and every virtual insertion $X$ on $e$.

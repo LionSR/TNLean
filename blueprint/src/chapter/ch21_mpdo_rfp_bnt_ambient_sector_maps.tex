@@ -28,23 +28,23 @@
     Let
     \begin{align}
         \mathcal A_1
-        &=\bigoplus_\gamma \MN{d_\gamma},
-        &
+         & =\bigoplus_\gamma \MN{d_\gamma},
+         &
         \mathcal A_2^\sigma
-        &=\bigoplus_\gamma \MN{\widetilde d_{\sigma(\gamma)}}
+         & =\bigoplus_\gamma \MN{\widetilde d_{\sigma(\gamma)}}
         \notag
     \end{align}
     be the one-site sector algebra and the relabelled two-site sector algebra.
     Their retained physical spaces are
     \begin{align}
         \mathcal K_1
-        &=\bigoplus_\gamma
-          \left(\C^{r_\gamma}\otimes\C^{d_\gamma}\right),
-        &
+         & =\bigoplus_\gamma
+        \left(\C^{r_\gamma}\otimes\C^{d_\gamma}\right),
+         &
         \mathcal K_2^\sigma
-        &=\bigoplus_\gamma
-          \left(\C^{\widetilde r_{\sigma(\gamma)}}
-            \otimes\C^{\widetilde d_{\sigma(\gamma)}}\right).
+         & =\bigoplus_\gamma
+        \left(\C^{\widetilde r_{\sigma(\gamma)}}
+        \otimes\C^{\widetilde d_{\sigma(\gamma)}}\right).
         \notag
     \end{align}
     Let $W_1\colon\C^d\to\mathcal K_1$ and
@@ -55,7 +55,7 @@
     $\sigma(\gamma)$-summand of $\mathcal K_2^\sigma$.  Let
     \begin{align}
         \kappa_\ast\colon\MN{d^2}
-        &\longrightarrow \MN{d}\otimes\MN{d}
+         & \longrightarrow \MN{d}\otimes\MN{d}
         \notag
     \end{align}
     be the canonical relabelling of a pair of physical indices.  For the
@@ -63,43 +63,43 @@
     $\nu_{\sigma(\gamma)}$, set
     \begin{align}
         m_\gamma
-        &=\tr(\mu_\gamma)
-         =\tr(\nu_{\sigma(\gamma)}).
+         & =\tr(\mu_\gamma)
+        =\tr(\nu_{\sigma(\gamma)}).
         \label{eq:mpdo_bnt_ambient_sector_trace_weights}
     \end{align}
     Define
     \begin{align}
-        R_1\colon\MN{d}&\longrightarrow\mathcal A_1,
-        &
+        R_1\colon\MN{d}                  & \longrightarrow\mathcal A_1,
+                                         &
         [R_1(X)]_\gamma
-        &=\tr_{\mathrm{mult}}
-          \left(\Pi_{1,\gamma}W_1XW_1^\dagger\Pi_{1,\gamma}\right),
+                                         & =\tr_{\mathrm{mult}}
+        \left(\Pi_{1,\gamma}W_1XW_1^\dagger\Pi_{1,\gamma}\right),
         \label{eq:mpdo_bnt_ambient_sector_R1}
         \\
-        R_2\colon\MN{d}\otimes\MN{d}&\longrightarrow\mathcal A_2^\sigma,
-        &
+        R_2\colon\MN{d}\otimes\MN{d}     & \longrightarrow\mathcal A_2^\sigma,
+                                         &
         [R_2(Y)]_\gamma
-        &=\tr_{\mathrm{mult}}
-          \left(\Pi_{2,\gamma}^\sigma W_2\kappa_\ast^{-1}(Y)W_2^\dagger
-            \Pi_{2,\gamma}^\sigma\right),
+                                         & =\tr_{\mathrm{mult}}
+        \left(\Pi_{2,\gamma}^\sigma W_2\kappa_\ast^{-1}(Y)W_2^\dagger
+        \Pi_{2,\gamma}^\sigma\right),
         \label{eq:mpdo_bnt_ambient_sector_R2}
         \\
-        \widetilde R_1\colon\mathcal A_1&\longrightarrow\MN{d},
-        &
+        \widetilde R_1\colon\mathcal A_1 & \longrightarrow\MN{d},
+                                         &
         \widetilde R_1((X_\gamma)_\gamma)
-        &=W_1^\dagger
-          \left(\bigoplus_\gamma
-            \frac{\mu_\gamma}{m_\gamma}\otimes X_\gamma\right)W_1,
+                                         & =W_1^\dagger
+        \left(\bigoplus_\gamma
+        \frac{\mu_\gamma}{m_\gamma}\otimes X_\gamma\right)W_1,
         \label{eq:mpdo_bnt_ambient_sector_R1_tilde}
         \\
         \widetilde R_2\colon\mathcal A_2^\sigma
-          &\longrightarrow\MN{d}\otimes\MN{d},
-        &
+                                         & \longrightarrow\MN{d}\otimes\MN{d},
+                                         &
         \widetilde R_2((Y_\gamma)_\gamma)
-        &=\kappa_\ast\!\left[
-          W_2^\dagger\left(\bigoplus_\gamma
+                                         & =\kappa_\ast\!\left[
+            W_2^\dagger\left(\bigoplus_\gamma
             \frac{\nu_{\sigma(\gamma)}}{m_\gamma}\otimes Y_\gamma\right)W_2
-          \right].
+            \right].
         \label{eq:mpdo_bnt_ambient_sector_R2_tilde}
     \end{align}
     In Appendix~C.4 of \cite{Cirac2016MPDO_arXiv}, lines~2067--2068 define
@@ -184,30 +184,30 @@
     $Y\in\MN{d}\otimes\MN{d}$,
     \begin{align}
         \Trsec(R_1(X))
-        &=\tr(W_1XW_1^\dagger),
+         & =\tr(W_1XW_1^\dagger),
         \label{eq:mpdo_bnt_ambient_sector_R1_trace}
         \\
         \Trsec(R_2(Y))
-        &=\tr\!\left(W_2\kappa_\ast^{-1}(Y)W_2^\dagger\right).
+         & =\tr\!\left(W_2\kappa_\ast^{-1}(Y)W_2^\dagger\right).
         \label{eq:mpdo_bnt_ambient_sector_R2_trace}
     \end{align}
     If $X$ and $Y$ are positive semidefinite, then
     \begin{align}
         \Trsec(R_1(X))
-        &\leq\tr(X),
-        &
+         & \leq\tr(X),
+         &
         \Trsec(R_2(Y))
-        &\leq\tr(Y).
+         & \leq\tr(Y).
         \label{eq:mpdo_bnt_ambient_sector_trace_loss}
     \end{align}
     In the other direction, for $Z\in\mathcal A_1$ and
     $Z'\in\mathcal A_2^\sigma$,
     \begin{align}
         \tr(\widetilde R_1(Z))
-        &=\Trsec(Z),
-        &
+         & =\Trsec(Z),
+         &
         \tr(\widetilde R_2(Z'))
-        &=\Trsec(Z').
+         & =\Trsec(Z').
         \label{eq:mpdo_bnt_ambient_sector_embedding_trace}
     \end{align}
     Hence the canonical full-matrix representatives of $\widetilde R_1$ and
@@ -232,7 +232,7 @@
     $P_i=W_i^\dagger W_i$, cyclicity of trace gives
     \begin{align}
         \tr(W_i ZW_i^\dagger)
-        &=\tr(P_i Z)\leq\tr(Z)
+         & =\tr(P_i Z)\leq\tr(Z)
         \notag
     \end{align}
     when $Z\succeq0$.  The relabelling $\kappa_\ast$ preserves positivity and
@@ -256,10 +256,10 @@
     The raw retractions are left inverses of their normalized embeddings:
     \begin{align}
         R_1\widetilde R_1
-        &=\id_{\mathcal A_1},
-        &
+         & =\id_{\mathcal A_1},
+         &
         R_2\widetilde R_2
-        &=\id_{\mathcal A_2^\sigma}.
+         & =\id_{\mathcal A_2^\sigma}.
         \label{eq:mpdo_bnt_ambient_sector_retractions}
     \end{align}
     No identity is asserted for either reverse composite on the full ambient
@@ -273,11 +273,11 @@
     \begin{align}
         \tr_{\mathrm{mult}}
         \left(\frac{\mu_\gamma}{m_\gamma}\otimes X_\gamma\right)
-        &=X_\gamma,
-        &
+         & =X_\gamma,
+         &
         \tr_{\mathrm{mult}}
         \left(\frac{\nu_{\sigma(\gamma)}}{m_\gamma}\otimes Y_\gamma\right)
-        &=Y_\gamma,
+         & =Y_\gamma,
         \notag
     \end{align}
     where the second equality uses
@@ -302,19 +302,19 @@
     For every vertical letter $v$, the one-site maps satisfy
     \begin{align}
         R_1(\widetilde M_v)
-        &=\bigl(m_\gamma M_\gamma^v\bigr)_\gamma,
-        &
+         & =\bigl(m_\gamma M_\gamma^v\bigr)_\gamma,
+         &
         \widetilde R_1\bigl((m_\gamma M_\gamma^v)_\gamma\bigr)
-        &=\widetilde M_v.
+         & =\widetilde M_v.
         \label{eq:mpdo_bnt_ambient_sector_one_site_letters}
     \end{align}
     The relabelled two-site maps satisfy
     \begin{align}
         R_2\!\left(\kappa_\ast(\widetilde{M^{[2]}}_v)\right)
-        &=\bigl(m_\gamma A_{\sigma(\gamma)}^v\bigr)_\gamma,
-        \notag\\
+         & =\bigl(m_\gamma A_{\sigma(\gamma)}^v\bigr)_\gamma,
+        \notag                                                \\
         \widetilde R_2\bigl((m_\gamma A_{\sigma(\gamma)}^v)_\gamma\bigr)
-        &=\kappa_\ast(\widetilde{M^{[2]}}_v).
+         & =\kappa_\ast(\widetilde{M^{[2]}}_v).
         \label{eq:mpdo_bnt_ambient_sector_two_site_letters}
     \end{align}
     The first and second one-site identities combine the one-site weighted
@@ -336,12 +336,12 @@
     The vertical reconstruction identities give
     \begin{align}
         \widetilde M_v
-        &=W_1^\dagger\left(\bigoplus_\gamma
-          \mu_\gamma\otimes M_\gamma^v\right)W_1,
-        \notag\\
+         & =W_1^\dagger\left(\bigoplus_\gamma
+        \mu_\gamma\otimes M_\gamma^v\right)W_1,
+        \notag                                \\
         \widetilde{M^{[2]}}_v
-        &=W_2^\dagger\left(\bigoplus_\gamma
-          \nu_{\sigma(\gamma)}\otimes A_{\sigma(\gamma)}^v\right)W_2.
+         & =W_2^\dagger\left(\bigoplus_\gamma
+        \nu_{\sigma(\gamma)}\otimes A_{\sigma(\gamma)}^v\right)W_2.
         \notag
     \end{align}
     Compression removes the two outer coisometries, and partial trace over the

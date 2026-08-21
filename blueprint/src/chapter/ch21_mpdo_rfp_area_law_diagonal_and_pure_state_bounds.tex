@@ -1,18 +1,18 @@
 \begin{theorem}[Rank of diagonal coefficients across a periodic cut]
     \label{thm:mpo_diagonal_cut_rank}
     \lean{MPOTensor.diagonalCutMatrix,
-      MPOTensor.diagonalCutMatrix_rank_le}
+        MPOTensor.diagonalCutMatrix_rank_le}
     \leanok
     \uses{def:mpo_tensor}
     Split a periodic chain into consecutive blocks of lengths $L$ and $R$.
     For words $x\in\{0,\ldots,d-1\}^L$ and
     $y\in\{0,\ldots,d-1\}^R$, set
     \begin{align}
-      P_{x,y}
-      &=
-      \tr\!\left(M^{x_0x_0}\cdots M^{x_{L-1}x_{L-1}}
+        P_{x,y}
+         & =
+        \tr\!\left(M^{x_0x_0}\cdots M^{x_{L-1}x_{L-1}}
         M^{y_0y_0}\cdots M^{y_{R-1}y_{R-1}}\right).
-      \notag
+        \notag
     \end{align}
     Then the ordinary complex rank of $P$ satisfies
     $\rank_{\C}P\le D^2$.
@@ -23,10 +23,10 @@
     $A_x=M^{x_0x_0}\cdots M^{x_{L-1}x_{L-1}}$ and
     $B_y=M^{y_0y_0}\cdots M^{y_{R-1}y_{R-1}}$. The identity
     \begin{align}
-      P_{x,y}
-      &=\tr(A_xB_y)
-       =\sum_{a,b=0}^{D-1}(A_x)_{ab}(B_y)_{ba}
-      \notag
+        P_{x,y}
+         & =\tr(A_xB_y)
+        =\sum_{a,b=0}^{D-1}(A_x)_{ab}(B_y)_{ba}
+        \notag
     \end{align}
     factors $P$ through the $D^2$-dimensional space indexed by pairs $(a,b)$.
 \end{proof}
@@ -50,30 +50,30 @@
 \begin{definition}[Joint probability distribution and marginals]
     \label{def:finite_joint_distribution_marginals}
     \lean{Matrix.IsJointDistribution,
-      Matrix.rowMarginal,
-      Matrix.columnMarginal}
+        Matrix.rowMarginal,
+        Matrix.columnMarginal}
     \leanok
     Let $X$ and $Y$ be finite sets. A matrix
     $P=(P_{x,y})_{x\in X,y\in Y}$ is a joint probability distribution if
     $P_{x,y}\geq0$ for every $x\in X$ and $y\in Y$, and
     \begin{align}
-      \sum_{x\in X}\sum_{y\in Y}P_{x,y}
-      &=1.
-      \notag
+        \sum_{x\in X}\sum_{y\in Y}P_{x,y}
+         & =1.
+        \notag
     \end{align}
     Its row and column marginals are respectively
     \begin{align}
-      p_x&=\sum_{y\in Y}P_{x,y},
-      \notag\\
-      q_y&=\sum_{x\in X}P_{x,y}.
-      \notag
+        p_x & =\sum_{y\in Y}P_{x,y},
+        \notag                       \\
+        q_y & =\sum_{x\in X}P_{x,y}.
+        \notag
     \end{align}
 \end{definition}
 
 \begin{definition}[Entropy and classical mutual information]
     \label{def:finite_classical_mutual_information}
     \lean{Entropy.probabilityEntropy,
-      Entropy.classicalMutualInformation}
+        Entropy.classicalMutualInformation}
     \leanok
     \uses{def:finite_joint_distribution_marginals}
     For $t>0$, set $h(t)=-t\log t$, and set $h(0)=0$. The entropy of a
@@ -81,10 +81,10 @@
     $H(a)=\sum_{z\in Z}h(a_z)$. For a joint probability distribution $P$
     with row and column marginals $p$ and $q$, put
     \begin{align}
-      H(P)&=\sum_{x\in X}\sum_{y\in Y}h(P_{x,y}),
-      \notag\\
-      I(X:Y)_P&=H(p)+H(q)-H(P).
-      \notag
+        H(P)     & =\sum_{x\in X}\sum_{y\in Y}h(P_{x,y}),
+        \notag                                            \\
+        I(X:Y)_P & =H(p)+H(q)-H(P).
+        \notag
     \end{align}
 \end{definition}
 
@@ -96,23 +96,23 @@
     Let $p=(p_z)_{z\in Z}$ be a probability distribution on a finite set $Z$.
     Define $h(t)=-t\log t$ for $t>0$ and $h(0)=0$. Then
     \begin{align}
-      \sum_{z\in Z}h(p_z)
-      &\leq
-      \log\left\lvert\{z\in Z:p_z\neq0\}\right\rvert.
-      \notag
+        \sum_{z\in Z}h(p_z)
+         & \leq
+        \log\left\lvert\{z\in Z:p_z\neq0\}\right\rvert.
+        \notag
     \end{align}
 \end{lemma}
 \begin{proof}\leanok
     Let $k=\lvert\{z\in Z:p_z\neq0\}\rvert$. Jensen's inequality for the
     concave function $h$, with uniform weights on the support, gives
     \begin{align}
-      \frac{1}{k}\sum_{\substack{z\in Z\\p_z\neq0}}h(p_z)
-      &\leq
-      h\left(\frac{1}{k}
-        \sum_{\substack{z\in Z\\p_z\neq0}}p_z\right)
-       =h\left(\frac{1}{k}\right)
-       =\frac{\log k}{k}.
-      \notag
+        \frac{1}{k}\sum_{\substack{z\in Z \\p_z\neq0}}h(p_z)
+         & \leq
+        h\left(\frac{1}{k}
+        \sum_{\substack{z\in Z            \\p_z\neq0}}p_z\right)
+        =h\left(\frac{1}{k}\right)
+        =\frac{\log k}{k}.
+        \notag
     \end{align}
     Multiplication by $k$ proves the result, since values outside the support
     contribute $h(0)=0$.
@@ -137,23 +137,23 @@
     $1+\varepsilon\beta_x$ gives two endpoint distributions. For every
     $y\in Y$, the row relation gives
     \begin{align}
-      \sum_x(1+\varepsilon\beta_x)P_{x,y}
-      &=\sum_xP_{x,y}
+        \sum_x(1+\varepsilon\beta_x)P_{x,y}
+         & =\sum_xP_{x,y}
         +\varepsilon\underbrace{\sum_x\beta_xP_{x,y}}_{=0}
-       =\sum_xP_{x,y}.
-      \notag
+        =\sum_xP_{x,y}.
+        \notag
     \end{align}
     Thus each endpoint preserves every column marginal, removes at least one
     row, and has no larger rank.
     Write $h(t)=-t\log t$ for $t>0$, with $h(0)=0$, and put
     $m=\min_x\beta_x<0<M=\max_x\beta_x$. Then
     \begin{align}
-      I(X:Y)_{P^{(\varepsilon)}}
-      &=I(X:Y)_P+\varepsilon S(\beta),
-      \notag\\
-      S(\beta)
-      &=\sum_x\beta_x\left(h(p_x)-\sum_y h(P_{x,y})\right).
-      \notag
+        I(X:Y)_{P^{(\varepsilon)}}
+         & =I(X:Y)_P+\varepsilon S(\beta),
+        \notag                                                  \\
+        S(\beta)
+         & =\sum_x\beta_x\left(h(p_x)-\sum_y h(P_{x,y})\right).
+        \notag
     \end{align}
     If $S(\beta)\geq0$, choose $\varepsilon=-m^{-1}\geq0$; otherwise choose
     $\varepsilon=-M^{-1}\leq0$. In either case
@@ -191,10 +191,10 @@
 \begin{definition}[Normalized diagonal distribution at fixed length]
     \label{def:mpo_normalized_diagonal_cut_distribution}
     \lean{MPOTensor.IsDiagonalAt,
-      MPOTensor.IsDiagonal,
-      MPOTensor.diagonalCutRealMatrix,
-      MPOTensor.diagonalCutMass,
-      MPOTensor.normalizedDiagonalCutDistribution}
+        MPOTensor.IsDiagonal,
+        MPOTensor.diagonalCutRealMatrix,
+        MPOTensor.diagonalCutMass,
+        MPOTensor.normalizedDiagonalCutDistribution}
     \leanok
     \uses{def:mpo_tensor}
     For a chain of length $N=L+R$, call $\rho^{(N)}(M)$ diagonal if
@@ -202,12 +202,12 @@
     $\rho^{(N)}(M)$ is diagonal for every $N>0$. For configurations $x$ and
     $y$ on the two consecutive blocks, define
     \begin{align}
-      W_{x,y}&=\re\rho^{(L+R)}(M)_{(x,y),(x,y)},
-      \notag\\
-      Z&=\sum_{x,y}W_{x,y},
-      \notag\\
-      \widehat P&=Z^{-1}W.
-      \notag
+        W_{x,y}    & =\re\rho^{(L+R)}(M)_{(x,y),(x,y)},
+        \notag                                          \\
+        Z          & =\sum_{x,y}W_{x,y},
+        \notag                                          \\
+        \widehat P & =Z^{-1}W.
+        \notag
     \end{align}
 \end{definition}
 
@@ -223,21 +223,21 @@
     Pairing each configuration $\sigma$ on $L+R$ sites with its unique block
     split $(x,y)$ on $L$ and $R$ sites gives
     \begin{align}
-      Z
-      &=\sum_{x,y}W_{x,y}
-       =\sum_\sigma\re\rho^{(L+R)}(M)_{\sigma,\sigma}
-       =\re\tr\rho^{(L+R)}(M).
-      \notag
+        Z
+         & =\sum_{x,y}W_{x,y}
+        =\sum_\sigma\re\rho^{(L+R)}(M)_{\sigma,\sigma}
+        =\re\tr\rho^{(L+R)}(M).
+        \notag
     \end{align}
 \end{proof}
 
 \begin{theorem}[Classical estimate for a positive diagonal finite-chain operator]
     \label{thm:mpo_diagonal_finite_chain_classical_mutual_information}
     \lean{MPOTensor.diagonalCutMatrix_apply_eq_mpo,
-      MPOTensor.diagonalCutRealMatrix_map_ofReal_of_posSemidef,
-      MPOTensor.diagonalCutRealMatrix_nonneg_of_posSemidef,
-      MPOTensor.normalizedDiagonalCutDistribution_isJointDistribution,
-      MPOTensor.diagonalFiniteChain_classicalMutualInformation_le_two_log}
+        MPOTensor.diagonalCutRealMatrix_map_ofReal_of_posSemidef,
+        MPOTensor.diagonalCutRealMatrix_nonneg_of_posSemidef,
+        MPOTensor.normalizedDiagonalCutDistribution_isJointDistribution,
+        MPOTensor.diagonalFiniteChain_classicalMutualInformation_le_two_log}
     \leanok
     \uses{def:mpo_normalized_diagonal_cut_distribution, thm:mpo_diagonal_cut_rank}
     Let $D\geq1$. Suppose that $\rho^{(L+R)}(M)$ is diagonal and positive
@@ -253,7 +253,7 @@
     so $W_{x,y}\geq0$ and its scalar extension recovers the complex diagonal
     cut matrix. Since $Z$ is the sum of the entries of $W$,
     $\sum_{x,y}\widehat P_{x,y}
-      =Z^{-1}\sum_{x,y}W_{x,y}=1$.
+        =Z^{-1}\sum_{x,y}W_{x,y}=1$.
     Thus $\widehat P$ is a joint probability distribution. Diagonality says
     that these coefficients constitute the full classical finite-chain state,
     and Theorem~\ref{thm:mpo_diagonal_cut_classical_mutual_information} gives
@@ -275,10 +275,10 @@
     Theorem~\ref{thm:mpo_diagonal_finite_chain_classical_mutual_information}.
     Since the chain operator is diagonal,
     \begin{align}
-      Z
-      &=\sum_{x,y}W_{x,y}
-       =\re\tr\rho^{(L+R)}(M),
-      \notag
+        Z
+         & =\sum_{x,y}W_{x,y}
+        =\re\tr\rho^{(L+R)}(M),
+        \notag
     \end{align}
     so the trace positivity hypothesis supplies the required normalization.
 \end{proof}
@@ -295,7 +295,7 @@
     \emph{operator-Schmidt rank} is the least integer $r$ for which there are
     matrices $A_t\in\MN{d_A}$ and $B_t\in\MN{d_B}$ satisfying
     \begin{align}
-        \rho&=\sum_{t=1}^{r}A_t\otimes B_t.
+        \rho & =\sum_{t=1}^{r}A_t\otimes B_t.
         \notag
     \end{align}
     No Hermiticity or positivity condition is imposed on the factors. This is
@@ -310,7 +310,7 @@
     \uses{def:bipartite_operator_schmidt_rank}
     Every nonzero finite-dimensional bipartite operator $X$ satisfies
     \begin{align}
-        0&<\operatorname{OSR}(X).
+        0 & <\operatorname{OSR}(X).
         \notag
     \end{align}
     This includes zero-dimensional factors, where the nonzero hypothesis is
@@ -326,34 +326,34 @@
 \begin{theorem}[Two virtual boundaries bound the operator-Schmidt rank]
     \label{thm:mpdo_periodic_cut_operator_schmidt_rank}
     \lean{MPOTensor.periodicCutLeftFactor,
-      MPOTensor.periodicCutRightFactor,
-      MPOTensor.bipartitionedNormalizedMPO_hasOperatorSchmidtDecomposition,
-      MPOTensor.operatorSchmidtRank_bipartitionedNormalizedMPO_le}
+        MPOTensor.periodicCutRightFactor,
+        MPOTensor.bipartitionedNormalizedMPO_hasOperatorSchmidtDecomposition,
+        MPOTensor.operatorSchmidtRank_bipartitionedNormalizedMPO_le}
     \leanok
     \uses{def:mpdo_split_normalized_mpo, def:bipartite_operator_schmidt_rank}
     Let $M$ be an MPO tensor of operator bond dimension $D$, and let
     $N=L+K$. Opening the two virtual bonds at the consecutive cut gives
     \begin{align}
         \sigma^{(N)}_{L:K}
-        &=\sum_{a,b=0}^{D-1} X_{ab}\otimes Y_{ab},
+         & =\sum_{a,b=0}^{D-1} X_{ab}\otimes Y_{ab},
         \notag
     \end{align}
     and
     \begin{align}
-        \operatorname{OSR}(\sigma^{(N)}_{L:K})&\leq D^2.
+        \operatorname{OSR}(\sigma^{(N)}_{L:K}) & \leq D^2.
         \notag
     \end{align}
     For left-block words $x,x'$ and right-block words $y,y'$, the factors are
     \begin{align}
         (X_{ab})_{x,x'}
-        &=\tr[\rho^{(N)}(M)]^{-1}
-          \bigl(M^{x_0x'_0}\cdots M^{x_{L-1}x'_{L-1}}\bigr)_{ab},
+         & =\tr[\rho^{(N)}(M)]^{-1}
+        \bigl(M^{x_0x'_0}\cdots M^{x_{L-1}x'_{L-1}}\bigr)_{ab},
         \notag
     \end{align}
     and
     \begin{align}
         (Y_{ab})_{y,y'}
-        &=\bigl(M^{y_0y'_0}\cdots M^{y_{K-1}y'_{K-1}}\bigr)_{ba}.
+         & =\bigl(M^{y_0y'_0}\cdots M^{y_{K-1}y'_{K-1}}\bigr)_{ba}.
         \notag
     \end{align}
     This is the identity
@@ -381,7 +381,7 @@
 \begin{theorem}[Coefficient-space characterization of operator-Schmidt rank]
     \label{thm:operator_schmidt_coefficient_space}
     \lean{Matrix.range_operatorSchmidtMap_eq_operatorBlockSpan,
-      Matrix.operatorSchmidtRank_eq_finrank_operatorBlockSpan}
+        Matrix.operatorSchmidtRank_eq_finrank_operatorBlockSpan}
     \leanok
     \uses{def:bipartite_operator_schmidt_rank}
     Write $\rho_{ij}\in\MN{d_B}$ for the blocks determined by a basis
@@ -389,8 +389,8 @@
     $\mathcal R_\rho(X)=\sum_{i,j}X_{ij}\rho_{ij}$. Then
     \begin{align}
         \operatorname{OSR}(\rho)
-        &=\dim\range\mathcal R_\rho
-         =\dim\spn\{\rho_{ij}:1\leq i,j\leq d_A\}.
+         & =\dim\range\mathcal R_\rho
+        =\dim\spn\{\rho_{ij}:1\leq i,j\leq d_A\}.
         \notag
     \end{align}
 \end{theorem}
@@ -410,7 +410,7 @@
 \begin{theorem}[Operator-Schmidt rank under local isometries]
     \label{thm:operator_schmidt_rank_local_isometry}
     \lean{Matrix.operatorSchmidtRank_local_mul_le,
-      Matrix.operatorSchmidtRank_local_isometry_conj}
+        Matrix.operatorSchmidtRank_local_isometry_conj}
     \leanok
     \uses{def:bipartite_operator_schmidt_rank}
     Let $V_A:\mathcal H_A\to\mathcal K_A$ and
@@ -418,10 +418,10 @@
     complex spaces. For every operator $X$ on
     $\mathcal H_A\otimes\mathcal H_B$,
     \begin{align}
-      \operatorname{OSR}\!\left(
+        \operatorname{OSR}\!\left(
         (V_A\otimes V_B)X(V_A\otimes V_B)^\dagger\right)
-      &=\operatorname{OSR}(X).
-      \notag
+         & =\operatorname{OSR}(X).
+        \notag
     \end{align}
     This remains valid when one or more of the spaces have dimension zero.
 \end{theorem}
@@ -441,8 +441,8 @@
     \leanok
     Let $\rho_{AB}\succeq0$, with marginals $\rho_A$ and $\rho_B$. Then
     \begin{align}
-      \ker(\rho_A\otimes\rho_B)&\subseteq\ker\rho_{AB}.
-      \notag
+        \ker(\rho_A\otimes\rho_B) & \subseteq\ker\rho_{AB}.
+        \notag
     \end{align}
     Equivalently, the support of $\rho_{AB}$ is contained in
     $\supp(\rho_A)\otimes\supp(\rho_B)$. This remains valid when either
@@ -460,7 +460,7 @@
 \begin{theorem}[Compression to both marginal supports]
     \label{thm:operator_schmidt_rank_marginal_support_compression}
     \lean{Matrix.PosSemidef.eq_marginalSupport_expansion_compression,
-      Matrix.PosSemidef.operatorSchmidtRank_marginalSupport_compression}
+        Matrix.PosSemidef.operatorSchmidtRank_marginalSupport_compression}
     \leanok
     \uses{def:bipartite_operator_schmidt_rank}
     Let $\rho\geq0$ be an operator on $H_A\otimes H_B$. Let
@@ -469,9 +469,9 @@
     two marginals. Set $W=V_A\otimes V_B$ and
     $\rho_c=W^\dagger\rho W$. Then
     \begin{align}
-      W\rho_cW^\dagger&=\rho,
-      &\operatorname{OSR}(\rho_c)&=\operatorname{OSR}(\rho).
-      \notag
+        W\rho_cW^\dagger & =\rho,
+                         & \operatorname{OSR}(\rho_c) & =\operatorname{OSR}(\rho).
+        \notag
     \end{align}
     No marginal is required to be faithful, and zero-dimensional coordinate
     spaces are permitted.
@@ -480,15 +480,15 @@
     \uses{thm:operator_schmidt_rank_local_isometry}
     The four marginal-support absorption identities give
     \begin{align}
-      (P_A\otimes P_B)\rho&=\rho,
-      &\rho(P_A\otimes P_B)&=\rho.
-      \notag
+        (P_A\otimes P_B)\rho & =\rho,
+                             & \rho(P_A\otimes P_B) & =\rho.
+        \notag
     \end{align}
     Since $WW^\dagger=P_A\otimes P_B$, associativity yields
     \begin{align}
-      W\rho_cW^\dagger
-      &=(WW^\dagger)\rho(WW^\dagger)=\rho.
-      \notag
+        W\rho_cW^\dagger
+         & =(WW^\dagger)\rho(WW^\dagger)=\rho.
+        \notag
     \end{align}
     The local-isometry theorem applied to $\rho_c$ gives
     $\operatorname{OSR}(W\rho_cW^\dagger)=\operatorname{OSR}(\rho_c)$.
@@ -498,21 +498,21 @@
 \begin{lemma}[Partial traces under product isometries]
     \label{lem:partial_trace_product_isometry}
     \lean{Matrix.partialTraceRight_kronecker_conj_of_right_isometry,
-      Matrix.partialTraceLeft_kronecker_conj_of_left_isometry}
+        Matrix.partialTraceLeft_kronecker_conj_of_left_isometry}
     \leanok
     Let $A:H_A\to K_A$ and $B:H_B\to K_B$ be linear maps between
     finite-dimensional complex spaces, and let $X$ be an operator on
     $H_A\otimes H_B$. If $B^\dagger B=1$, then
     \begin{align}
-      \tr_{K_B}\!\left((A\otimes B)X(A\otimes B)^\dagger\right)
-      &=A(\tr_{H_B}X)A^\dagger.
-      \notag
+        \tr_{K_B}\!\left((A\otimes B)X(A\otimes B)^\dagger\right)
+         & =A(\tr_{H_B}X)A^\dagger.
+        \notag
     \end{align}
     If $A^\dagger A=1$, then, symmetrically,
     \begin{align}
-      \tr_{K_A}\!\left((A\otimes B)X(A\otimes B)^\dagger\right)
-      &=B(\tr_{H_A}X)B^\dagger.
-      \notag
+        \tr_{K_A}\!\left((A\otimes B)X(A\otimes B)^\dagger\right)
+         & =B(\tr_{H_A}X)B^\dagger.
+        \notag
     \end{align}
     The identities include zero-dimensional spaces.
 \end{lemma}
@@ -527,20 +527,20 @@
 \begin{theorem}[Faithful marginals after simultaneous support compression]
     \label{thm:faithful_marginals_support_compression}
     \lean{Matrix.PosSemidef.partialTraceRight_marginalSupport_compression,
-      Matrix.PosSemidef.partialTraceLeft_marginalSupport_compression,
-      Matrix.PosSemidef.marginalSupport_compression_marginals_posDef}
+        Matrix.PosSemidef.partialTraceLeft_marginalSupport_compression,
+        Matrix.PosSemidef.marginalSupport_compression_marginals_posDef}
     \leanok
     \uses{thm:operator_schmidt_rank_marginal_support_compression}
     In the setting of
     Theorem~\ref{thm:operator_schmidt_rank_marginal_support_compression}, the
     two marginals of $\rho_c$ satisfy
     \begin{align}
-      \tr_{\widehat H_B}\rho_c
-      &=V_A^\dagger(\tr_{H_B}\rho)V_A,
-      &
-      \tr_{\widehat H_A}\rho_c
-      &=V_B^\dagger(\tr_{H_A}\rho)V_B.
-      \notag
+        \tr_{\widehat H_B}\rho_c
+         & =V_A^\dagger(\tr_{H_B}\rho)V_A,
+         &
+        \tr_{\widehat H_A}\rho_c
+         & =V_B^\dagger(\tr_{H_A}\rho)V_B.
+        \notag
     \end{align}
     Both compressed marginals are positive definite, including when one of
     their spaces has dimension zero.
@@ -558,9 +558,9 @@
 \begin{theorem}[Channel of a faithful bipartite marginal]
     \label{thm:supported_marginal_channel}
     \lean{Matrix.finrank_range_supportedMarginalMap,
-      Matrix.supportedMarginalMap_isKrausCPTP,
-      Matrix.supportedMarginalMap_diagonal,
-      Matrix.supportedMarginalReconstruction_eq}
+        Matrix.supportedMarginalMap_isKrausCPTP,
+        Matrix.supportedMarginalMap_diagonal,
+        Matrix.supportedMarginalReconstruction_eq}
     \leanok
     \uses{def:bipartite_operator_schmidt_rank, thm:operator_schmidt_coefficient_space}
     Let $\rho\geq0$ be a bipartite complex matrix whose first marginal is
@@ -569,15 +569,15 @@
     every $p_i>0$, and define the linear map $\Phi_\rho$ on matrix units by
     \begin{align}
         \Phi_\rho(E_{ij})
-        &=\frac{\rho_{ij}}{\sqrt{p_ip_j}}.
+         & =\frac{\rho_{ij}}{\sqrt{p_ip_j}}.
         \notag
     \end{align}
     Write $\sigma=\diag(p_1,\ldots,p_{d_A})$ and
     $\tau=\tr_A\rho$. Then $\Phi_\rho$ is completely positive and trace
     preserving,
     \begin{align}
-        \Phi_\rho(\sigma)&=\tau,
-        &\dim\range\Phi_\rho&=\operatorname{OSR}(\rho),
+        \Phi_\rho(\sigma) & =\tau,
+                          & \dim\range\Phi_\rho & =\operatorname{OSR}(\rho),
         \notag
     \end{align}
     and application of
@@ -606,13 +606,13 @@
 \begin{definition}[Isometric conjugation into a larger matrix algebra]
     \label{def:isometric_nonunital_conjugation}
     \lean{Matrix.isometryConjNonUnitalStarAlgHom,
-      Matrix.isometryConjNonUnitalStarAlgHom_apply}
+        Matrix.isometryConjNonUnitalStarAlgHom_apply}
     \leanok
     Let $V:\C^k\to\C^D$ be an isometry, so that
     $V^\dagger V=\Id_k$. Define $\iota_V:\MN{k}\to\MN{D}$ by
     \begin{align}
-      \iota_V(A)&=VAV^\dagger.
-      \label{eq:mpdo_isometric_conjugation}
+        \iota_V(A) & =VAV^\dagger.
+        \label{eq:mpdo_isometric_conjugation}
     \end{align}
     The map $\iota_V$ is complex-linear, multiplicative, and $*$-preserving.
     In general it is not unital:
@@ -626,8 +626,8 @@
     Let $A\in\MN{k}$ be Hermitian, let $V:\C^k\to\C^D$ satisfy
     $V^\dagger V=\Id_k$, and let $f:\R\to\R$ satisfy $f(0)=0$. Then
     \begin{align}
-      f(VAV^\dagger)&=Vf(A)V^\dagger,
-      \label{eq:mpdo_cfc_isometric_conjugation}
+        f(VAV^\dagger) & =Vf(A)V^\dagger,
+        \label{eq:mpdo_cfc_isometric_conjugation}
     \end{align}
     where both sides use the continuous functional calculus on the respective
     finite spectra.
@@ -647,8 +647,8 @@
     Let $V:\C^k\to\C^D$ satisfy $V^\dagger V=\Id_k$. For every
     $A\in\MN{k}$,
     \begin{align}
-      \tr(VAV^\dagger)&=\tr(A).
-      \label{eq:mpdo_isometric_trace}
+        \tr(VAV^\dagger) & =\tr(A).
+        \label{eq:mpdo_isometric_trace}
     \end{align}
 \end{theorem}
 
@@ -664,8 +664,8 @@
     Let $V:\C^k\to\C^D$ satisfy $V^\dagger V=\Id_k$. For every
     $A\in\MN{k}$,
     \begin{align}
-      V^\dagger(VAV^\dagger)V&=A.
-      \label{eq:mpdo_isometric_compression_expansion}
+        V^\dagger(VAV^\dagger)V & =A.
+        \label{eq:mpdo_isometric_compression_expansion}
     \end{align}
 \end{theorem}
 
@@ -682,8 +682,8 @@
     $\ker\omega\subseteq\ker\rho$. If
     $V:\C^k\to\C^D$ satisfies $VV^\dagger=P_{\supp(\omega)}$, then
     \begin{align}
-      V(V^\dagger\rho V)V^\dagger&=\rho.
-      \label{eq:mpdo_support_reconstruction}
+        V(V^\dagger\rho V)V^\dagger & =\rho.
+        \label{eq:mpdo_support_reconstruction}
     \end{align}
     No condition on $V^\dagger V$ is needed for this identity.
 \end{theorem}
@@ -703,15 +703,15 @@
     Let $\rho,\omega\in\MN{D}$ be positive semidefinite with
     $\ker\omega\subseteq\ker\rho$. Let $V:\C^k\to\C^D$ satisfy
     \begin{align}
-      V^\dagger V&=\Id_k,\\
-      VV^\dagger&=P_{\supp(\omega)}.
-      \label{eq:mpdo_reference_support_isometry}
+        V^\dagger V & =\Id_k,             \\
+        VV^\dagger  & =P_{\supp(\omega)}.
+        \label{eq:mpdo_reference_support_isometry}
     \end{align}
     Then
     \begin{align}
-      D(\rho\Vert\omega)
-      &=D(V^\dagger\rho V\Vert V^\dagger\omega V).
-      \label{eq:mpdo_relative_entropy_support_compression}
+        D(\rho\Vert\omega)
+         & =D(V^\dagger\rho V\Vert V^\dagger\omega V).
+        \label{eq:mpdo_relative_entropy_support_compression}
     \end{align}
     The logarithm is totalized by $\log 0=0$ on the kernel.
 \end{theorem}
@@ -735,20 +735,20 @@
     \leanok
     If $A\in\MN{n}$ is Hermitian and $f:\R\to\R$, then
     \begin{align}
-      f(A)^T&=f(A^T).
-      \label{eq:mpdo_cfc_transpose}
+        f(A)^T & =f(A^T).
+        \label{eq:mpdo_cfc_transpose}
     \end{align}
     In particular,
     \begin{align}
-      \log(A^T)&=(\log A)^T, &
-      P_{A^T}&=P_A^T.
-      \label{eq:mpdo_log_support_transpose}
+        \log(A^T) & =(\log A)^T, &
+        P_{A^T}   & =P_A^T.
+        \label{eq:mpdo_log_support_transpose}
     \end{align}
     If $A$ is positive semidefinite, then for every $r\in\R$,
     \begin{align}
-      (A^T)^r&=(A^r)^T, &
-      \sqrt{A^T}&=(\sqrt A)^T.
-      \label{eq:mpdo_power_sqrt_transpose}
+        (A^T)^r    & =(A^r)^T,     &
+        \sqrt{A^T} & =(\sqrt A)^T.
+        \label{eq:mpdo_power_sqrt_transpose}
     \end{align}
     These identities include singular matrices and matrices whose index set is
     empty. They are project-derived rather than statements of CPSV16.
@@ -770,9 +770,9 @@
     Let $A$ and $B$ be positive semidefinite, with $P_A$ and $P_B$ the
     orthogonal projections onto their respective ranges. Then
     \begin{align}
-      \log(A\otimes B)
-      &=(\log A)\otimes P_B+P_A\otimes(\log B).
-      \label{eq:mpdo_support_log_tensor_product}
+        \log(A\otimes B)
+         & =(\log A)\otimes P_B+P_A\otimes(\log B).
+        \label{eq:mpdo_support_log_tensor_product}
     \end{align}
     Here the logarithm is extended by zero on the kernel. Neither matrix is
     required to be positive definite, and either index set may be empty.
@@ -784,10 +784,10 @@
     Diagonalize $A$ and $B$. On a product eigenvector with eigenvalues
     $a,b\geq0$, equation~(\ref{eq:mpdo_support_log_tensor_product}) becomes
     \begin{align}
-      \log(ab)
-      &=\log(a)\mathbf 1_{b\ne0}
+        \log(ab)
+         & =\log(a)\mathbf 1_{b\ne0}
         +\mathbf 1_{a\ne0}\log(b).
-      \notag
+        \notag
     \end{align}
     If $a,b>0$, this is the ordinary product identity for the logarithm. If
     either eigenvalue is zero, both sides vanish. Conjugating the resulting
@@ -800,8 +800,8 @@
     \leanok
     If $\rho\succeq0$, then
     \begin{align}
-      \log\sqrt{\rho}&=\frac12\log\rho.
-      \label{eq:mpdo_log_sqrt}
+        \log\sqrt{\rho} & =\frac12\log\rho.
+        \label{eq:mpdo_log_sqrt}
     \end{align}
 \end{theorem}
 
@@ -817,8 +817,8 @@
     \leanok
     If $A\succ0$, then, for every $s\in\R$,
     \begin{align}
-      \log(A^s)&=s\log A.
-      \label{eq:mpdo_log_rpow}
+        \log(A^s) & =s\log A.
+        \label{eq:mpdo_log_rpow}
     \end{align}
 \end{theorem}
 
@@ -835,9 +835,9 @@
     Let $A\in\MN{n}$ be positive semidefinite and let $v\in\C^n$ satisfy
     $\langle v,v\rangle=1$ and $P_{\supp(A)}v=v$. Then
     \begin{align}
-      \re\langle v,(\log A)v\rangle
-      &\leq\log\!\left(\re\langle v,Av\rangle\right).
-      \label{eq:mpdo_support_log_jensen}
+        \re\langle v,(\log A)v\rangle
+         & \leq\log\!\left(\re\langle v,Av\rangle\right).
+        \label{eq:mpdo_support_log_jensen}
     \end{align}
     Here $\log A$ is defined by the continuous functional calculus with
     $\log 0=0$. Compare the finite-dimensional vector-state Jensen argument
@@ -851,11 +851,11 @@
     Thus $p_i\geq0$ for every $i\in S=\{i:\mu_i>0\}$ and
     $\sum_{i\in S}p_i=1$. The spectral formulas give
     \begin{align}
-      \re\langle v,(\log A)v\rangle
-      &=\sum_{i\in S}p_i\log\mu_i, \notag\\
-      \re\langle v,Av\rangle
-      &=\sum_{i\in S}p_i\mu_i.
-      \notag
+        \re\langle v,(\log A)v\rangle
+         & =\sum_{i\in S}p_i\log\mu_i, \notag \\
+        \re\langle v,Av\rangle
+         & =\sum_{i\in S}p_i\mu_i.
+        \notag
     \end{align}
     Scalar concavity of the logarithm on $(0,\infty)$ now gives
     (\ref{eq:mpdo_support_log_jensen}). No concavity assertion at zero and no
@@ -868,11 +868,11 @@
     \leanok
     For square matrices $\rho$ and $\omega$ of the same size, define
     \begin{align}
-      Q_2(\rho,\omega)
-      &=\re\tr\left[
-        \left(\omega^{-1/4}\rho\,\omega^{-1/4}\right)^2
-      \right].
-      \label{eq:mpdo_sandwiched_two_trace}
+        Q_2(\rho,\omega)
+         & =\re\tr\left[
+            \left(\omega^{-1/4}\rho\,\omega^{-1/4}\right)^2
+            \right].
+        \label{eq:mpdo_sandwiched_two_trace}
     \end{align}
     The negative power is defined by functional calculus and vanishes on the
     kernel of $\omega$. On trace-one positive semidefinite matrices satisfying
@@ -903,10 +903,10 @@
     \uses{def:sandwiched_renyi_two_trace}
     If $\omega\succ0$, then, for every square matrix $\rho$ of the same size,
     \begin{align}
-      Q_2(\rho,\omega)
-      &=\re\tr\left(\rho\,\omega^{-1/2}
+        Q_2(\rho,\omega)
+         & =\re\tr\left(\rho\,\omega^{-1/2}
         \rho\,\omega^{-1/2}\right).
-      \label{eq:mpdo_sandwiched_two_weighted}
+        \label{eq:mpdo_sandwiched_two_weighted}
     \end{align}
 \end{theorem}
 
@@ -924,8 +924,8 @@
     Let $\rho,\omega\in\MN{D}$ satisfy $\rho\succeq0$, $\omega\succ0$, and
     $\tr\rho=1$. Then
     \begin{align}
-      D(\rho\Vert\omega)&\leq\log Q_2(\rho,\omega).
-      \label{eq:mpdo_relative_q2_posdef}
+        D(\rho\Vert\omega) & \leq\log Q_2(\rho,\omega).
+        \label{eq:mpdo_relative_q2_posdef}
     \end{align}
     No normalization of $\omega$ is required.
 \end{theorem}
@@ -936,23 +936,23 @@
     $\Delta=R^T\otimes T$, and $v=\operatorname{vec}(R)$. The vectorization
     is column-stacking, with factor order
     \begin{align}
-      (B\otimes A)\operatorname{vec}(X)
-      &=\operatorname{vec}(AXB^T).
-      \label{eq:mpdo_column_vec_kronecker}
+        (B\otimes A)\operatorname{vec}(X)
+         & =\operatorname{vec}(AXB^T).
+        \label{eq:mpdo_column_vec_kronecker}
     \end{align}
     Hence $\Delta v=\operatorname{vec}(T\rho)$, and cyclicity of the trace
     identifies its first moment with
     \begin{align}
-      m=\re\langle v,\Delta v\rangle
-      &=\langle R,RTR\rangle_{\mathrm{HS}}.
-      \label{eq:mpdo_relative_modular_half_moment}
+        m=\re\langle v,\Delta v\rangle
+         & =\langle R,RTR\rangle_{\mathrm{HS}}.
+        \label{eq:mpdo_relative_modular_half_moment}
     \end{align}
     The support projection of $\Delta$ fixes $v$:
     \begin{align}
-      P_{\supp(\Delta)}v
-      &=(P_{\supp(R^T)}\otimes P_{\supp(T)})\operatorname{vec}(R)
-       =\operatorname{vec}(R)=v.
-      \label{eq:mpdo_relative_modular_support_fixing}
+        P_{\supp(\Delta)}v
+         & =(P_{\supp(R^T)}\otimes P_{\supp(T)})\operatorname{vec}(R)
+        =\operatorname{vec}(R)=v.
+        \label{eq:mpdo_relative_modular_support_fixing}
     \end{align}
     Indeed, $T$ is positive definite, so $P_{\supp(T)}=1$, while the support
     projection of $R^T$ fixes $R^T$ and hence
@@ -965,26 +965,26 @@
     \ref{thm:log_sqrt_possemidef}, \ref{thm:log_rpow_posdef}, and
     \ref{thm:cfc_transpose_hermitian} give
     \begin{align}
-      \re\langle v,(\log\Delta)v\rangle
-      &=\frac12 D(\rho\Vert\omega).
-      \label{eq:mpdo_relative_modular_log_moment}
+        \re\langle v,(\log\Delta)v\rangle
+         & =\frac12 D(\rho\Vert\omega).
+        \label{eq:mpdo_relative_modular_log_moment}
     \end{align}
     Theorem~\ref{thm:support_log_vector_jensen} therefore yields
     $\frac12D(\rho\Vert\omega)\leq\log m$. Since
     $\|R\|_{\mathrm{HS}}^2=\tr\rho=1$, Hilbert--Schmidt
     Cauchy--Schwarz gives
     \begin{align}
-      m^2
-      &\leq\|R\|_{\mathrm{HS}}^2\|RTR\|_{\mathrm{HS}}^2
-       =Q_2(\rho,\omega).
-      \label{eq:mpdo_relative_modular_cauchy_schwarz}
+        m^2
+         & \leq\|R\|_{\mathrm{HS}}^2\|RTR\|_{\mathrm{HS}}^2
+        =Q_2(\rho,\omega).
+        \label{eq:mpdo_relative_modular_cauchy_schwarz}
     \end{align}
     Positivity of $m$ now gives
     $D(\rho\Vert\omega)\leq\log(m^2)\leq\log Q_2(\rho,\omega)$.
 
     The auxiliary divergence and its vector-state Jensen argument are adapted
     from \cite[arXiv:1306.3142v4, Definition~5 and Lemma~19, used in the proof
-      of Theorem~7]{MullerLennert2013Renyi}.  Only the direct order-two endpoint
+        of Theorem~7]{MullerLennert2013Renyi}.  Only the direct order-two endpoint
     is used here; the final Cauchy--Schwarz estimate is not an application of
     Beigi's interpolation theorem.
 \end{proof}
@@ -998,9 +998,9 @@
     $\ker\omega\subseteq\ker\rho$. Let $V:\C^k\to\C^D$ satisfy
     (\ref{eq:mpdo_reference_support_isometry}). Then
     \begin{align}
-      Q_2(\rho,\omega)
-      &=Q_2(V^\dagger\rho V,V^\dagger\omega V).
-      \label{eq:mpdo_sandwiched_two_support_compression}
+        Q_2(\rho,\omega)
+         & =Q_2(V^\dagger\rho V,V^\dagger\omega V).
+        \label{eq:mpdo_sandwiched_two_support_compression}
     \end{align}
 \end{theorem}
 
@@ -1021,13 +1021,13 @@
     with $\ker\omega\subseteq\ker\rho$. Assume that for every dimension and
     every pair of trace-one matrices $A\succeq0$ and $B\succ0$,
     \begin{align}
-      D(A\Vert B)&\leq\log Q_2(A,B).
-      \label{eq:mpdo_faithful_relative_q2_hypothesis}
+        D(A\Vert B) & \leq\log Q_2(A,B).
+        \label{eq:mpdo_faithful_relative_q2_hypothesis}
     \end{align}
     Then
     \begin{align}
-      D(\rho\Vert\omega)&\leq\log Q_2(\rho,\omega).
-      \label{eq:mpdo_singular_relative_q2_comparison}
+        D(\rho\Vert\omega) & \leq\log Q_2(\rho,\omega).
+        \label{eq:mpdo_singular_relative_q2_comparison}
     \end{align}
     Thus this theorem reduces the singular-reference case to the faithful
     comparison. Theorem~\ref{thm:relative_entropy_q2_posdef} supplies the
@@ -1055,8 +1055,8 @@
     Let $\rho,\omega\in\MN{D}$ be positive semidefinite matrices of trace one.
     If $\ker\omega\subseteq\ker\rho$, then
     \begin{align}
-      D(\rho\Vert\omega)&\leq\log Q_2(\rho,\omega).
-      \label{eq:mpdo_relative_q2_support}
+        D(\rho\Vert\omega) & \leq\log Q_2(\rho,\omega).
+        \label{eq:mpdo_relative_q2_support}
     \end{align}
 \end{theorem}
 
@@ -1085,7 +1085,7 @@ terms of operator-Schmidt rank.
     defined by
     \begin{align}
         C(\mathcal L)_{(a,b),(i,j)}
-        &=(\mathcal L(E_{ij}))_{ab}.
+         & =(\mathcal L(E_{ij}))_{ab}.
         \label{eq:rectangular_choi_coefficient_matrix}
     \end{align}
 \end{definition}
@@ -1099,8 +1099,8 @@ terms of operator-Schmidt rank.
     rectangular Choi matrix $J(\mathcal L)\in\MN{de}$ is the reshaping
     \begin{align}
         J(\mathcal L)_{(i,a),(j,b)}
-        &=C(\mathcal L)_{(a,b),(i,j)}
-         =(\mathcal L(E_{ij}))_{ab}.
+         & =C(\mathcal L)_{(a,b),(i,j)}
+        =(\mathcal L(E_{ij}))_{ab}.
         \label{eq:rectangular_choi_entries}
     \end{align}
     When $d=e$, this is $d$ times the normalized Choi matrix convention in
@@ -1115,7 +1115,7 @@ terms of operator-Schmidt rank.
     For every complex-linear map $\mathcal L:\MN{d}\to\MN{e}$,
     \begin{align}
         \re\tr\!\left(J(\mathcal L)^\dagger J(\mathcal L)\right)
-        &=
+         & =
         \re\tr\!\left(C(\mathcal L)^\dagger C(\mathcal L)\right).
         \label{eq:rectangular_choi_parseval}
     \end{align}
@@ -1140,7 +1140,7 @@ terms of operator-Schmidt rank.
     For every complex-linear map $\mathcal L:\MN{d}\to\MN{e}$,
     \begin{align}
         \re\tr\!\left(J(\mathcal L)^\dagger J(\mathcal L)\right)
-        &=
+         & =
         \sum_{i,j=0}^{d-1}\sum_{a,b=0}^{e-1}
         \left|(\mathcal L(E_{ij}))_{ab}\right|^2.
         \label{eq:rectangular_choi_parseval_matrix_units}
@@ -1162,7 +1162,7 @@ terms of operator-Schmidt rank.
     \emph{Hilbert--Schmidt contraction} if, for every $X\in\MN{d}$,
     \begin{align}
         \re\tr\!\left((\mathcal L(X))^\dagger\mathcal L(X)\right)
-        &\leq \re\tr(X^\dagger X).
+         & \leq \re\tr(X^\dagger X).
         \label{eq:rectangular_hilbert_schmidt_contraction}
     \end{align}
 \end{definition}
@@ -1175,7 +1175,7 @@ terms of operator-Schmidt rank.
     If $\mathcal L:\MN{d}\to\MN{e}$ is a Hilbert--Schmidt contraction, then
     \begin{align}
         \left\|J(\mathcal L)\right\|_F^2
-        &\leq\dim_{\C}\range\mathcal L.
+         & \leq\dim_{\C}\range\mathcal L.
         \label{eq:rectangular_choi_rank_bound}
     \end{align}
 \end{theorem}
@@ -1187,9 +1187,9 @@ terms of operator-Schmidt rank.
     positive semidefinite matrix $G$ is at most one. Hence
     \begin{align}
         \tr G
-        &\leq\#\{k:\lambda_k(G)\neq0\}
-         =\rank C(\mathcal L)
-         =\dim_{\C}\range\mathcal L.
+         & \leq\#\{k:\lambda_k(G)\neq0\}
+        =\rank C(\mathcal L)
+        =\dim_{\C}\range\mathcal L.
         \notag
     \end{align}
     Theorem~\ref{thm:rectangular_choi_parseval} identifies the left-hand side
@@ -1199,8 +1199,8 @@ terms of operator-Schmidt rank.
 \begin{theorem}[Full-support eigenbasis whitening as a Choi matrix]
     \label{thm:full_support_eigenbasis_whitening_choi}
     \lean{Matrix.rectangularChoi_singleKrausMap_comp_comp,
-      Matrix.supportedMarginalWhitenedState_eq_rectangularChoi,
-      Matrix.finrank_range_weightedHilbertSchmidtMap}
+        Matrix.supportedMarginalWhitenedState_eq_rectangularChoi,
+        Matrix.finrank_range_weightedHilbertSchmidtMap}
     \leanok
     \uses{thm:supported_marginal_channel, def:rectangular_choi}
     Let $\rho_{AB}\geq0$, and choose an eigenbasis of its faithful first
@@ -1209,17 +1209,17 @@ terms of operator-Schmidt rank.
     marginal $\tau$ is positive definite.  For the supported-marginal channel
     $\Phi_\rho$, set
     \begin{align}
-      L(X)&=\tau^{-1/4}
-        \Phi_\rho(\sigma^{1/4}X\sigma^{1/4})\tau^{-1/4},\\
-      W&=(\sigma^T\otimes\tau)^{-1/4}\rho_{AB}
+        L(X) & =\tau^{-1/4}
+        \Phi_\rho(\sigma^{1/4}X\sigma^{1/4})\tau^{-1/4}, \\
+        W    & =(\sigma^T\otimes\tau)^{-1/4}\rho_{AB}
         (\sigma^T\otimes\tau)^{-1/4}.
         \notag
     \end{align}
     Then
     \begin{align}
-      W&=J(L),
-      &\dim_{\C}\range L&=\dim_{\C}\range\Phi_\rho.
-      \notag
+        W & =J(L),
+          & \dim_{\C}\range L & =\dim_{\C}\range\Phi_\rho.
+        \notag
     \end{align}
     Here $\sigma^T=\sigma$ because the chosen basis diagonalizes $\sigma$.
 \end{theorem}
@@ -1229,9 +1229,9 @@ terms of operator-Schmidt rank.
     For arbitrary congruence matrices $A$ and $B$, the matrix-unit convention
     for the Choi matrix gives
     \begin{align}
-      J(\Gamma_B\circ\Phi\circ\Gamma_A)
-      &=\Gamma_{A^T\otimes B}(J(\Phi)).
-      \notag
+        J(\Gamma_B\circ\Phi\circ\Gamma_A)
+         & =\Gamma_{A^T\otimes B}(J(\Phi)).
+        \notag
     \end{align}
     Apply this identity to the inverse-square-root scaling in
     $\Phi_\rho$ and to the two fourth-root factors defining $L$.
@@ -1245,23 +1245,23 @@ terms of operator-Schmidt rank.
 \begin{theorem}[Full-support eigenbasis whitened Choi estimate]
     \label{thm:full_support_eigenbasis_whitened_choi_bound}
     \lean{Matrix.supportedMarginalWhitenedState_posSemidef,
-      Matrix.supportedMarginalWhitenedState_frobenius_sq_le_operatorSchmidtRank,
-      Matrix.supportedMarginalWhitenedState_trace_sq_re_le_operatorSchmidtRank}
+        Matrix.supportedMarginalWhitenedState_frobenius_sq_le_operatorSchmidtRank,
+        Matrix.supportedMarginalWhitenedState_trace_sq_re_le_operatorSchmidtRank}
     \leanok
     \uses{thm:full_support_eigenbasis_whitening_choi, thm:rectangular_choi_rank_bound}
     Under the hypotheses of
     Theorem~\ref{thm:full_support_eigenbasis_whitening_choi},
     the matrix
     \begin{align}
-      W=(\sigma^T\otimes\tau)^{-1/4}\rho_{AB}
+        W=(\sigma^T\otimes\tau)^{-1/4}\rho_{AB}
         (\sigma^T\otimes\tau)^{-1/4}
         \notag
     \end{align}
     is positive semidefinite, and
     \begin{align}
-      \tr(W^2)=\|W\|_F^2
-      &\leq \operatorname{OSR}(\rho_{AB}).
-      \notag
+        \tr(W^2)=\|W\|_F^2
+         & \leq \operatorname{OSR}(\rho_{AB}).
+        \notag
     \end{align}
     This is the faithful-marginal-support form of the order-two estimate
     obtained from \cite[Theorem~6, Equation~(18)]{Beigi2013Sandwiched}.
@@ -1278,10 +1278,10 @@ terms of operator-Schmidt rank.
     is the whitened state by the preceding theorem, while invertibility of
     the modular congruences and the supported-marginal correspondence give
     \begin{align}
-      \dim_{\C}\range L
-      &=\dim_{\C}\range\Phi_\rho
-       =\operatorname{OSR}(\rho_{AB}).
-      \notag
+        \dim_{\C}\range L
+         & =\dim_{\C}\range\Phi_\rho
+        =\operatorname{OSR}(\rho_{AB}).
+        \notag
     \end{align}
     The rectangular Choi range-dimension estimate now proves the claim.
 \end{proof}
@@ -1292,8 +1292,8 @@ terms of operator-Schmidt rank.
     \leanok
     Let $A\succeq0$, let $s\in\R$, and let $U$ be unitary. Then
     \begin{align}
-      (UAU^\dagger)^s&=UA^sU^\dagger.
-      \notag
+        (UAU^\dagger)^s & =UA^sU^\dagger.
+        \notag
     \end{align}
 \end{theorem}
 
@@ -1307,8 +1307,8 @@ terms of operator-Schmidt rank.
     \leanok
     Let $A\succeq0$ and $B\succeq0$. For every $s\in\R$,
     \begin{align}
-      (A\otimes B)^s&=A^s\otimes B^s.
-      \notag
+        (A\otimes B)^s & =A^s\otimes B^s.
+        \notag
     \end{align}
 \end{theorem}
 
@@ -1324,8 +1324,8 @@ terms of operator-Schmidt rank.
     \leanok
     If $A\succ0$, then
     \begin{align}
-      A^{-1/4}&=\left(\sqrt{\sqrt A}\right)^{-1}.
-      \notag
+        A^{-1/4} & =\left(\sqrt{\sqrt A}\right)^{-1}.
+        \notag
     \end{align}
 \end{theorem}
 
@@ -1343,9 +1343,9 @@ terms of operator-Schmidt rank.
     Let $\omega\succeq0$, let $\rho$ be a square matrix of the same size, and
     let $U$ be unitary. Then
     \begin{align}
-      Q_2(U\rho U^\dagger,U\omega U^\dagger)
-      &=Q_2(\rho,\omega).
-      \notag
+        Q_2(U\rho U^\dagger,U\omega U^\dagger)
+         & =Q_2(\rho,\omega).
+        \notag
     \end{align}
 \end{theorem}
 
@@ -1365,9 +1365,9 @@ terms of operator-Schmidt rank.
     Let $\rho$ be a square matrix and let $\omega\succeq0$ have the same finite
     index set. Let $e$ be a bijection onto another finite index set. Then
     \begin{align}
-      Q_2(\rho_{e^{-1},e^{-1}},\omega_{e^{-1},e^{-1}})
-      &=Q_2(\rho,\omega).
-      \notag
+        Q_2(\rho_{e^{-1},e^{-1}},\omega_{e^{-1},e^{-1}})
+         & =Q_2(\rho,\omega).
+        \notag
     \end{align}
 \end{theorem}
 
@@ -1386,9 +1386,9 @@ terms of operator-Schmidt rank.
     Let $\rho_{AB}\succeq0$ have positive definite marginals $\rho_A$ and
     $\rho_B$. Then
     \begin{align}
-      Q_2(\rho_{AB},\rho_A\otimes\rho_B)
-      &\leq\operatorname{OSR}(\rho_{AB}).
-      \label{eq:mpdo_faithful_q2_osr}
+        Q_2(\rho_{AB},\rho_A\otimes\rho_B)
+         & \leq\operatorname{OSR}(\rho_{AB}).
+        \label{eq:mpdo_faithful_q2_osr}
     \end{align}
     No trace normalization is required.
 \end{theorem}
@@ -1418,9 +1418,9 @@ terms of operator-Schmidt rank.
     \uses{def:sandwiched_renyi_two_trace, def:bipartite_operator_schmidt_rank}
     Let $\rho_{AB}\succeq0$ be any finite-dimensional bipartite operator. Then
     \begin{align}
-      Q_2(\rho_{AB},\rho_A\otimes\rho_B)
-      &\leq\operatorname{OSR}(\rho_{AB}).
-      \label{eq:mpdo_support_q2_osr}
+        Q_2(\rho_{AB},\rho_A\otimes\rho_B)
+         & \leq\operatorname{OSR}(\rho_{AB}).
+        \label{eq:mpdo_support_q2_osr}
     \end{align}
     No trace normalization or positive-dimension hypothesis is required. The
     statement includes the cases in which either marginal support has
@@ -1465,10 +1465,10 @@ logarithmic divergence, or a comparison with relative entropy.
     set
     \begin{align}
         \widetilde Q_\alpha(\rho\Vert\omega)
-        &=\re\tr\!\left[
-          \left(\omega^{(1-\alpha)/(2\alpha)}
-          \rho\,\omega^{(1-\alpha)/(2\alpha)}\right)^\alpha
-          \right].
+         & =\re\tr\!\left[
+            \left(\omega^{(1-\alpha)/(2\alpha)}
+            \rho\,\omega^{(1-\alpha)/(2\alpha)}\right)^\alpha
+            \right].
         \label{eq:sandwiched_renyi_trace}
     \end{align}
     Real powers are defined by continuous functional calculus, with negative
@@ -1488,7 +1488,7 @@ logarithmic divergence, or a comparison with relative entropy.
     \uses{def:sandwiched_renyi_trace}
     If $\rho\geq0$ and $\omega>0$, then, for every $\alpha\in\R$,
     \begin{align}
-        0&\leq\widetilde Q_\alpha(\rho\Vert\omega).
+        0 & \leq\widetilde Q_\alpha(\rho\Vert\omega).
         \notag
     \end{align}
 \end{theorem}
@@ -1507,7 +1507,7 @@ logarithmic divergence, or a comparison with relative entropy.
     \uses{def:sandwiched_renyi_trace}
     If $\rho\geq0$ and $\omega>0$, then
     \begin{align}
-        \widetilde Q_1(\rho\Vert\omega)&=\re\tr(\rho).
+        \widetilde Q_1(\rho\Vert\omega) & =\re\tr(\rho).
         \notag
     \end{align}
 \end{theorem}
@@ -1526,7 +1526,7 @@ logarithmic divergence, or a comparison with relative entropy.
     \uses{def:sandwiched_renyi_trace, def:sandwiched_renyi_two_trace}
     If $\rho\geq0$ and $\omega>0$, then
     \begin{align}
-        \widetilde Q_2(\rho\Vert\omega)&=Q_2(\rho,\omega).
+        \widetilde Q_2(\rho\Vert\omega) & =Q_2(\rho,\omega).
         \notag
     \end{align}
 \end{theorem}
@@ -1565,12 +1565,12 @@ logarithmic divergence, or a comparison with relative entropy.
     side with mutual information. Thus, with
     $q=Q_2(\rho_{AB},\omega)$,
     \begin{align}
-      I(A:B)_\rho
-      &=D(\rho_{AB}\Vert\omega)
-      \leq\log q,
-      \notag\\
-      0&\leq q\leq\operatorname{OSR}(\rho_{AB}).
-      \notag
+        I(A:B)_\rho
+          & =D(\rho_{AB}\Vert\omega)
+        \leq\log q,
+        \notag                                       \\
+        0 & \leq q\leq\operatorname{OSR}(\rho_{AB}).
+        \notag
     \end{align}
     The second inequality is
     Theorem~\ref{thm:sandwiched_renyi_two_osr_support}. Since
@@ -1592,7 +1592,7 @@ logarithmic divergence, or a comparison with relative entropy.
     length $N$ and a cut with $0\leq L\leq N$. If the corresponding
     finite-chain operator is positive semidefinite and has nonzero trace, then
     \begin{align}
-        I_L^{(N)}&\leq 2\log D.
+        I_L^{(N)} & \leq 2\log D.
         \notag
     \end{align}
     No global positivity, local purification, canonical form, or separate
@@ -1605,11 +1605,11 @@ logarithmic divergence, or a comparison with relative entropy.
     Reindex the normalized chain operator across the consecutive cut. Its
     trace is one, and its positivity is preserved by this reindexing. Hence
     \begin{align}
-      I_L^{(N)}
-      &\leq \log\operatorname{OSR}(\sigma^{(N)}_{L:N-L})
-       \leq \log D^2
-       =2\log D.
-      \notag
+        I_L^{(N)}
+         & \leq \log\operatorname{OSR}(\sigma^{(N)}_{L:N-L})
+        \leq \log D^2
+        =2\log D.
+        \notag
     \end{align}
     Nonzero trace makes the normalized operator nonzero, so its
     operator-Schmidt rank is positive. If $D=0$, then every finite-chain trace
@@ -1625,7 +1625,7 @@ logarithmic divergence, or a comparison with relative entropy.
     $D$. For every positive chain length $N$, every cut $0\leq L\leq N$, and
     every nonzero finite-chain trace,
     \begin{align}
-        I_L^{(N)}&\leq 4\log D.
+        I_L^{(N)} & \leq 4\log D.
         \notag
     \end{align}
     This is the finite-chain estimate invoked in the proof of
@@ -1650,9 +1650,9 @@ logarithmic divergence, or a comparison with relative entropy.
     processing and the pure-state boundary estimate give
     \begin{align}
         I(A:B)_{\rho}
-        &\leq I(A:B)_{\ketbra{\Psi}{\Psi}}
-         =2S(A)_{\ketbra{\Psi}{\Psi}}
-         \leq2\lvert\partial A\rvert\log D.
+         & \leq I(A:B)_{\ketbra{\Psi}{\Psi}}
+        =2S(A)_{\ketbra{\Psi}{\Psi}}
+        \leq2\lvert\partial A\rvert\log D.
         \notag
     \end{align}
     A periodic one-dimensional interval has two boundary bonds, and hence the
@@ -1698,11 +1698,11 @@ logarithmic divergence, or a comparison with relative entropy.
     For an MPS tensor $A$, a system size $N$, and a block length $L\le N$, let
     \begin{align}
         \sigma^{(N)}(A)
-        &=
+         & =
         \frac{\ketbra{V^{(N)}(A)}{V^{(N)}(A)}}{\|V^{(N)}(A)\|^2},
-        \notag\\
+        \notag                                    \\
         \rho_L^{(N)}(A)
-        &=\tr_{N\setminus L}\![\sigma^{(N)}(A)]
+         & =\tr_{N\setminus L}\![\sigma^{(N)}(A)]
         \notag
     \end{align}
     denote the normalized state and the reduced state of the first $L$ spins.
@@ -1735,7 +1735,7 @@ logarithmic divergence, or a comparison with relative entropy.
     dimension $D^2$:
     \begin{align}
         \rho^{(N)}(A\otimes\bar A)
-        &=\ketbra{V^{(N)}(A)}{V^{(N)}(A)}.
+         & =\ketbra{V^{(N)}(A)}{V^{(N)}(A)}.
         \notag
     \end{align}
     This is the single-ancilla case of the purification picture of
@@ -1748,8 +1748,8 @@ logarithmic divergence, or a comparison with relative entropy.
     $M^{\sigma,\tau}=A^\sigma\otimes\overline{A^\tau}$,
     so its trace factors as
     $\tr(M^{\sigma,\tau})
-      =\tr(A^\sigma) \overline{\tr(A^\tau)}
-      =\overline{V^{(N)}(A)_\tau}\,V^{(N)}(A)_\sigma$,
+        =\tr(A^\sigma) \overline{\tr(A^\tau)}
+        =\overline{V^{(N)}(A)_\tau}\,V^{(N)}(A)_\sigma$,
     the corresponding matrix element of
     $\ketbra{V^{(N)}(A)}{V^{(N)}(A)}$.
 \end{proof}
@@ -1769,7 +1769,7 @@ logarithmic divergence, or a comparison with relative entropy.
     $\rho^{(N)}(M)=\ketbra{V^{(N)}(A)}{V^{(N)}(A)}$, hence
     \begin{align}
         \sigma^{(N)}(M)
-        &=
+         & =
         \frac{\rho^{(N)}(M)}{\tr[\rho^{(N)}(M)]}
         =
         \frac{\ketbra{V^{(N)}(A)}{V^{(N)}(A)}}{\|V^{(N)}(A)\|^2}
@@ -1780,7 +1780,7 @@ logarithmic divergence, or a comparison with relative entropy.
     Therefore the reduced block states agree:
     \begin{align}
         \rho_L^{(N)}(M)
-        &=
+         & =
         \tr_{N\setminus L}\![\sigma^{(N)}(M)]
         =
         \tr_{N\setminus L}\![\sigma^{(N)}(A)]
@@ -1790,9 +1790,9 @@ logarithmic divergence, or a comparison with relative entropy.
     \end{align}
     Thus
     $S_L^{(N)}(M)
-      =S(\rho_L^{(N)}(M))
-      =S(\rho_L^{(N)}(A))
-      =S_L^{(N)}(A)$.
+        =S(\rho_L^{(N)}(M))
+        =S(\rho_L^{(N)}(A))
+        =S_L^{(N)}(A)$.
 \end{proof}
 
 \begin{lemma}[Schmidt symmetry of the block entropy]\label{lem:schmidt_symmetry}
@@ -1847,21 +1847,21 @@ logarithmic divergence, or a comparison with relative entropy.
     operator-Schmidt factors as
     \begin{align}
         (L_\ell)_{\sigma,(a_1,a_2)}
-        &=(A^\sigma)_{a_1a_2},
-        \notag\\
+         & =(A^\sigma)_{a_1a_2},
+        \notag                   \\
         (R_m)_{(p_1,p_2),\tau}
-        &=(A^\tau)_{p_2p_1}.
+         & =(A^\tau)_{p_2p_1}.
         \notag
     \end{align}
     The $D^2\times D^2$ Gram matrix of the left factor equals the $\ell$-fold
     transfer map evaluated on a matrix unit:
     \begin{align}
         (L_\ell^\dagger L_\ell)_{(a_1,a_2),(b_1,b_2)}
-        &=
+         & =
         \sum_{\sigma}\overline{(A^\sigma)_{a_1a_2}}
-            (A^\sigma)_{b_1b_2}
-        \notag\\
-        &=
+        (A^\sigma)_{b_1b_2}
+        \notag \\
+         & =
         (\E_A^{\,\ell}(\ketbra{b_2}{a_2}))_{b_1,a_1},
         \notag
     \end{align}
@@ -1870,11 +1870,11 @@ logarithmic divergence, or a comparison with relative entropy.
     identity
     \begin{align}
         (R_mR_m^\dagger)_{(p_1,p_2),(q_1,q_2)}
-        &=
+         & =
         \sum_{\tau}(A^\tau)_{p_2p_1}
-            \overline{(A^\tau)_{q_2q_1}}
-        \notag\\
-        &=
+        \overline{(A^\tau)_{q_2q_1}}
+        \notag \\
+         & =
         (\E_A^{\,m}(\ketbra{p_1}{q_1}))_{p_2,q_2},
         \notag
     \end{align}
@@ -1886,7 +1886,7 @@ logarithmic divergence, or a comparison with relative entropy.
     by definition of $L_\ell$. Expanding
     \begin{align}
         \E_A^{\,\ell}(\ketbra{b_2}{a_2})
-        &=
+         & =
         \sum_\sigma
         A^\sigma\ketbra{b_2}{a_2}(A^\sigma)^\dagger
         \notag
@@ -1895,7 +1895,7 @@ logarithmic divergence, or a comparison with relative entropy.
     \begin{align}
         \bigl(      A^\sigma\ketbra{b_2}{a_2}(A^\sigma)^\dagger
         \bigr)_{b_1,a_1}
-        &=
+         & =
         (A^\sigma)_{b_1b_2}
         \overline{(A^\sigma)_{a_1a_2}}.
         \notag
@@ -1916,9 +1916,9 @@ logarithmic divergence, or a comparison with relative entropy.
     $m\ge1$, the operator-Schmidt Grams of the $L$-block and of the
     $m$-site complement are the one-site Grams:
     \begin{align}
-        L_L^\dagger L_L&=L_1^\dagger L_1,
-        \notag\\
-        R_mR_m^\dagger&=R_1R_1^\dagger.
+        L_L^\dagger L_L & =L_1^\dagger L_1,
+        \notag                              \\
+        R_mR_m^\dagger  & =R_1R_1^\dagger.
         \notag
     \end{align}
 \end{lemma}
@@ -1939,10 +1939,10 @@ logarithmic divergence, or a comparison with relative entropy.
     charpoly-root entropy sum of the $D^2\times D^2$ bond environment:
     \begin{align}
         S_L^{(N)}(A)
-        &=
+         & =
         \sum_{\lambda\in
             \operatorname{roots}\chi_{c\,(R_mR_m^\dagger)(L_L^\dagger L_L)}}
-            -\re(\lambda)\log\re(\lambda).
+        -\re(\lambda)\log\re(\lambda).
         \notag
     \end{align}
     The roots are counted with algebraic multiplicity.
@@ -1951,14 +1951,14 @@ logarithmic divergence, or a comparison with relative entropy.
     The reduced block state has the exact factorization
     \begin{align}
         \rho_L^{(N)}(A)
-        &=
+         & =
         c\,L_L(R_mR_m^\dagger)L_L^\dagger.
         \notag
     \end{align}
     Cyclic invariance of the charpoly-root entropy sum gives
     \begin{align}
         S(c\,L_L(R_mR_m^\dagger)L_L^\dagger)
-        &=
+         & =
         S(c\,(R_mR_m^\dagger)(L_L^\dagger L_L)),
         \notag
     \end{align}
@@ -1985,11 +1985,11 @@ logarithmic divergence, or a comparison with relative entropy.
     computes the entropy from the bond environment:
     \begin{align}
         S_L^{(N)}(A)
-        &=
+         & =
         \sum_{\lambda\in
-            \operatorname{roots}\chi_{c\,(R_{N-L}R_{N-L}^\dagger)
-                (L_L^\dagger L_L)}}
-            -\re(\lambda)\log\re(\lambda).
+        \operatorname{roots}\chi_{c\,(R_{N-L}R_{N-L}^\dagger)
+        (L_L^\dagger L_L)}}
+        -\re(\lambda)\log\re(\lambda).
         \notag
     \end{align}
     Since $1\le L<\lfloor N/2\rfloor$, the four lengths
@@ -1997,25 +1997,25 @@ logarithmic divergence, or a comparison with relative entropy.
     gives
     \begin{align}
         L_L^\dagger L_L
-        &=L_1^\dagger L_1,
-        \notag\\
+         & =L_1^\dagger L_1,
+        \notag               \\
         L_{L+1}^\dagger L_{L+1}
-        &=L_1^\dagger L_1,
-        \notag\\
+         & =L_1^\dagger L_1,
+        \notag               \\
         R_{N-L}R_{N-L}^\dagger
-        &=R_1R_1^\dagger,
-        \notag\\
+         & =R_1R_1^\dagger,
+        \notag               \\
         R_{N-(L+1)}R_{N-(L+1)}^\dagger
-        &=R_1R_1^\dagger.
+         & =R_1R_1^\dagger.
         \notag
     \end{align}
     Therefore the two bond environments agree:
     \begin{align}
         (R_{N-L}R_{N-L}^\dagger)(L_L^\dagger L_L)
-        &=
+         & =
         (R_1R_1^\dagger)(L_1^\dagger L_1)
-        \notag\\
-        &=
+        \notag \\
+         & =
         (R_{N-(L+1)}R_{N-(L+1)}^\dagger)
         (L_{L+1}^\dagger L_{L+1}).
         \notag
@@ -2033,9 +2033,9 @@ logarithmic divergence, or a comparison with relative entropy.
     in the range $1\le L\le\lfloor N/2\rfloor$ coincide:
     \begin{align}
         S_1^{(N)}(A)
-        &=S_2^{(N)}(A)
-         =\cdots
-         =S_{\lfloor N/2\rfloor}^{(N)}(A).
+         & =S_2^{(N)}(A)
+        =\cdots
+        =S_{\lfloor N/2\rfloor}^{(N)}(A).
         \notag
     \end{align}
     This is the explicit constant-entropy chain of the area-law saturation
@@ -2061,11 +2061,11 @@ logarithmic divergence, or a comparison with relative entropy.
     The reduced state is $\rho_L\propto WW^\dagger$, where the amplitude matrix
     \begin{align}
         W(u,w)
-        &=
+         & =
         \bra{u\,w}V^{(N)}(A)\rangle
         =
         \tr\!\bigl(      A^{u_1}\cdots A^{u_L}
-          A^{w_1}\cdots A^{w_{N-L}}
+        A^{w_1}\cdots A^{w_{N-L}}
         \bigr)
         \notag
     \end{align}

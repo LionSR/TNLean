@@ -57,18 +57,18 @@
     \quad$=\sum_\gamma$\quad
     \begin{tabular}[c]{@{}c@{}}
         {\begin{tenkz}[cols=4, west=trace, east=trace]
-            \tn[skin=box]{\chi} & \tn[skin=box]{\chi} & \tn[skin=dots]{} &
-            \tn[skin=box]{\chi}
-        \end{tenkz}} \\
+             \tn[skin=box]{\chi} & \tn[skin=box]{\chi} & \tn[skin=dots]{} &
+             \tn[skin=box]{\chi}
+         \end{tenkz}} \\
         {\begin{tenkz}[cols=4, west=trace, east=trace]
-            \tn[skin=mpo,
-                ports={90:physical:$i_1$, 270:physical:$j_1$}]{M_\gamma} &
-            \tn[skin=mpo, ports={90:physical, 270:physical}]{M_\gamma} &
-            \tn[skin=dots]{} &
-            \tn[skin=mpo,
-                ports={90:physical:$i_L$, 270:physical:$j_L$}]{M_\gamma}
-            \tnmark[form=bracket]{(1,1) .. (1,4)}{$L\text{ sites}$}
-        \end{tenkz}}
+             \tn[skin=mpo,
+                 ports={90:physical:$i_1$, 270:physical:$j_1$}]{M_\gamma} &
+             \tn[skin=mpo, ports={90:physical, 270:physical}]{M_\gamma} &
+             \tn[skin=dots]{} &
+             \tn[skin=mpo,
+                 ports={90:physical:$i_L$, 270:physical:$j_L$}]{M_\gamma}
+             \tnmark[form=bracket]{(1,1) .. (1,4)}{$L\text{ sites}$}
+         \end{tenkz}}
     \end{tabular}
     \caption{Closing an $L$-site chain of the local fusion identity. On the
         left, the bra legs of the $M_\alpha$ operator are contracted with the
@@ -77,7 +77,7 @@
         $\tr(\chi_{\alpha,\beta,\gamma}^{L})$. Thus the diagram is
         the trace-power product law of
         \cite[Theorem~4.14(ii)--(iii), equations~(87) and~(89),
-        lines~962--991]{Cirac2016MPDO_arXiv}.}
+            lines~962--991]{Cirac2016MPDO_arXiv}.}
     \label{fig:mpdo_fusion_trace_power}
 \end{figure}
 
@@ -94,8 +94,8 @@
     length $L\ge 1$,
     \begin{align}
         O_L(M_\alpha)O_L(M_\beta)
-        &=\sum_{\gamma}
-          \tr(\chi_{\alpha,\beta,\gamma}^{L})O_L(M_\gamma).
+         & =\sum_{\gamma}
+        \tr(\chi_{\alpha,\beta,\gamma}^{L})O_L(M_\gamma).
         \label{eq:rfp_same_length_product}
     \end{align}
     This derives the product law of
@@ -114,7 +114,7 @@
     $U_{\alpha,\beta}U_{\alpha,\beta}^\dagger=1$ removes the outer maps. In
     the full-support case one may equivalently use the isometric orientation:
     $\tr(U_{\alpha,\beta}WU_{\alpha,\beta}^\dagger)
-      =\tr(WU_{\alpha,\beta}^\dagger U_{\alpha,\beta})=\tr(W)$.
+        =\tr(WU_{\alpha,\beta}^\dagger U_{\alpha,\beta})=\tr(W)$.
     By the fusion identity the
     conjugated letters are the block-diagonal tensor-product letters of the
     weighted direct sum. Their word product splits block by block with the
@@ -139,12 +139,12 @@
     assumed idempotent condition are, respectively,
     \begin{align}
         O_L(M_\alpha)O_L(M_\beta)
-        &=\sum_\gamma
-          c^{(L)}_{\alpha,\beta,\gamma}O_L(M_\gamma),
-        \notag\\
+         & =\sum_\gamma
+        c^{(L)}_{\alpha,\beta,\gamma}O_L(M_\gamma),
+        \notag                  \\
         m_\gamma
-        &=\sum_{\alpha,\beta}
-          c^{(1)}_{\alpha,\beta,\gamma}m_\alpha m_\beta.
+         & =\sum_{\alpha,\beta}
+        c^{(1)}_{\alpha,\beta,\gamma}m_\alpha m_\beta.
         \notag
     \end{align}
     This construction realizes implication (iii)$\Rightarrow$(ii) of
@@ -161,7 +161,7 @@
     Choose a vertical canonical decomposition
     \begin{align}
         U\widetilde M U^\dagger
-        &=\bigoplus_\alpha \mu_\alpha\otimes M_\alpha.
+         & =\bigoplus_\alpha \mu_\alpha\otimes M_\alpha.
         \notag
     \end{align}
     The fusion clause for this decomposition consists of positive diagonal
@@ -170,18 +170,18 @@
     \begin{align}
         U_{\alpha,\beta}(M_\alpha M_\beta)^{ij}
         U_{\alpha,\beta}^\dagger
-        &=\bigoplus_\gamma
-          \chi_{\alpha,\beta,\gamma}\otimes M_\gamma^{ij}.
+         & =\bigoplus_\gamma
+        \chi_{\alpha,\beta,\gamma}\otimes M_\gamma^{ij}.
         \label{eq:rfp_active_fusion}
     \end{align}
     They obey $U_{\alpha,\beta}U_{\alpha,\beta}^\dagger=1$, and the active
     direct sum reconstructs the product tensor:
     \begin{align}
         (M_\alpha M_\beta)^{ij}
-        &=U_{\alpha,\beta}^\dagger
-          \left(\bigoplus_\gamma
-            \chi_{\alpha,\beta,\gamma}\otimes M_\gamma^{ij}\right)
-          U_{\alpha,\beta}.
+         & =U_{\alpha,\beta}^\dagger
+        \left(\bigoplus_\gamma
+        \chi_{\alpha,\beta,\gamma}\otimes M_\gamma^{ij}\right)
+        U_{\alpha,\beta}.
         \notag
     \end{align}
     The trace scalars $m_\alpha=\tr(\mu_\alpha)$ satisfy the
@@ -193,10 +193,10 @@
 \end{definition}
 
 \begin{theorem}[Fusion clause from paired decompositions with supplied fusion matrices
-    and coisometries]%
+        and coisometries]%
     \label{thm:mpdo_paired_vertical_decompositions_fusion}
     \lean{MPOTensor.HasBNTFusionTensorClause.%
-of_verticalDecompositions_of_unitaryBlockEquiv}
+        of_verticalDecompositions_of_unitaryBlockEquiv}
     \leanok
     \uses{def:mpdo_bnt_fusion_tensor_clause}
     Let $\mathcal D_1$ and $\mathcal D_2$ be positive vertical canonical
@@ -207,17 +207,17 @@ of_verticalDecompositions_of_unitaryBlockEquiv}
     coisometries $U_{\alpha,\beta}$ are supplied, with
     $U_{\alpha,\beta}U_{\alpha,\beta}^{\dagger}=1$, and satisfy both
     \begin{align}
-      U_{\alpha,\beta}(M_\alpha M_\beta)^{ij}
+        U_{\alpha,\beta}(M_\alpha M_\beta)^{ij}
         U_{\alpha,\beta}^{\dagger}
-      &=\bigoplus_\gamma
+         & =\bigoplus_\gamma
         \chi_{\alpha,\beta,\gamma}\otimes M_\gamma^{ij},
-      \notag\\
-      (M_\alpha M_\beta)^{ij}
-      &=U_{\alpha,\beta}^{\dagger}
+        \notag                         \\
+        (M_\alpha M_\beta)^{ij}
+         & =U_{\alpha,\beta}^{\dagger}
         \left(\bigoplus_\gamma
-          \chi_{\alpha,\beta,\gamma}\otimes M_\gamma^{ij}\right)
+        \chi_{\alpha,\beta,\gamma}\otimes M_\gamma^{ij}\right)
         U_{\alpha,\beta}.
-      \notag
+        \notag
     \end{align}
     Then the simultaneous blocked representations yield the missing
     length-one idempotent trace-scalar law and complete the tensor-attached
@@ -233,7 +233,7 @@ of_verticalDecompositions_of_unitaryBlockEquiv}
     coefficients. Equality of the resulting positive power sums identifies
     the multiplicity multisets, and summing their entries gives
     $m_\gamma=\sum_{\alpha,\beta}
-      \tr(\chi_{\alpha,\beta,\gamma})m_\alpha m_\beta$.
+        \tr(\chi_{\alpha,\beta,\gamma})m_\alpha m_\beta$.
 \end{proof}
 
 \begin{theorem}[Literal CPSV renormalization fixed points have active-sector fusion]%
@@ -248,10 +248,10 @@ of_verticalDecompositions_of_unitaryBlockEquiv}
     vertical canonical decomposition of $M$ has the active-sector fusion
     clause. In particular, its positive diagonal fusion matrices satisfy
     \begin{align}
-      m_\gamma
-      &=\sum_{\alpha,\beta}
+        m_\gamma
+         & =\sum_{\alpha,\beta}
         \tr(\chi_{\alpha,\beta,\gamma})m_\alpha m_\beta.
-      \notag
+        \notag
     \end{align}
     This is the corrected active-support formulation of implication
     (i)$\Rightarrow$(iii) in
@@ -329,12 +329,12 @@ of_verticalDecompositions_of_unitaryBlockEquiv}
     Iterating the fusion identity along $L$ sites and taking the closed trace
     gives
     $O_L(M_\alpha)O_L(M_\beta)
-      =\sum_\gamma
+        =\sum_\gamma
         \tr(\chi_{\alpha,\beta,\gamma}^{L})O_L(M_\gamma)$.
     Writing $m_\alpha=\tr(\mu_\alpha)$, the assumed length-one
     idempotent identity is
     $m_\gamma=\sum_{\alpha,\beta}
-      \tr(\chi_{\alpha,\beta,\gamma})m_\alpha m_\beta$.
+        \tr(\chi_{\alpha,\beta,\gamma})m_\alpha m_\beta$.
     These are the product and idempotent identities of the algebra clause.
     Retaining the chosen vertical decomposition and the same diagonal matrices
     gives the tensor-attached algebra clause.
@@ -375,13 +375,13 @@ of_verticalDecompositions_of_unitaryBlockEquiv}
         \item[(i)] $M$ is a renormalization fixed point;
         \item[(ii)] $M$ has a tensor-attached BNT algebra clause;
         \item[(iii$_{\mathrm{act}}$)] $M$ has the active-support BNT fusion
-            clause.
+              clause.
     \end{enumerate}
     Then
     \begin{align}
-        \textnormal{(i)}&\iff\textnormal{(ii)},
-        &
-        \textnormal{(i)}&\iff\textnormal{(iii}_{\mathrm{act}}\textnormal{)}.
+        \textnormal{(i)} & \iff\textnormal{(ii)},
+                         &
+        \textnormal{(i)} & \iff\textnormal{(iii}_{\mathrm{act}}\textnormal{)}.
         \label{eq:mpdo_cpsv_bnt_rfp_equivalence}
     \end{align}
     The first equivalence is the equivalence of (i) and (ii) in
@@ -455,7 +455,7 @@ of_verticalDecompositions_of_unitaryBlockEquiv}
     \ensuremath{Q={}}
     \tenkzkernel
     \begin{tenkz}[rows={wire,wire,wire,wire,wire,wire}, cols=19, bonds=none,
-                  metrics=compact]
+            metrics=compact]
         % Nineteen columns at the base metric outrun the compiled page and
         % lose the terminal trace; the compact profile keeps the whole
         % recursion on one line.
@@ -486,7 +486,7 @@ of_verticalDecompositions_of_unitaryBlockEquiv}
         \tn[at=(4,18), name=sel, ports={90:physical, 270:physical, 0:physical}]{}
         \tn[at={1 e of sel}, skin=box, name=M,
             ports={180:physical, 90:virtual, 270:virtual,
-        225:physical, 315:physical}]{M_{\gamma_r}}
+                    225:physical, 315:physical}]{M_{\gamma_r}}
         \tn[at=(5,19), skin=none, name=tr, ports={135:physical, 45:physical}]{}
         \tn[at={midway (2,12) and (3,13)}, skin=dots, name=dd]{}
         \tnwire{X1.45}{k1.180}
@@ -567,7 +567,7 @@ separate step.
     % internal edges, while epsilon labels the common root edge.
     \begin{align}
         \tntree{((\alpha\,\beta)_\delta\,\gamma)_\varepsilon}
-        &\xrightarrow{F_{\varepsilon}^{\alpha\beta\gamma}}
+         & \xrightarrow{F_{\varepsilon}^{\alpha\beta\gamma}}
         \tntree{(\alpha\,(\beta\,\gamma)_\eta)_\varepsilon}.
         \notag
     \end{align}
@@ -619,15 +619,15 @@ separate step.
     \uses{def:mpdo_left_fusion_isometry, def:mpdo_operator_product, lem:matrix_block_conjugation_restriction}
     Site by site,
     \begin{align}
-        &U^{\mathrm L}_{\alpha,\beta,\gamma}
+         & U^{\mathrm L}_{\alpha,\beta,\gamma}
         ((M_\alpha M_\beta)M_\gamma)^{ij}
         (U^{\mathrm L}_{\alpha,\beta,\gamma})^\dagger
-        \notag\\
-        &\qquad
+        \notag                                 \\
+         & \qquad
         =\bigoplus_{\delta}\bigoplus_{\varepsilon}
         \chi_{\alpha,\beta,\delta}
         \otimes\bigl(\chi_{\delta,\gamma,\varepsilon}
-          \otimes M_\varepsilon^{ij}\bigr).
+        \otimes M_\varepsilon^{ij}\bigr).
         \notag
     \end{align}
 \end{theorem}
@@ -681,15 +681,15 @@ separate step.
     \uses{def:mpdo_right_fusion_isometry, def:mpdo_operator_product, lem:matrix_block_conjugation_restriction}
     Site by site,
     \begin{align}
-        &U^{\mathrm R}_{\alpha,\beta,\gamma}
+         & U^{\mathrm R}_{\alpha,\beta,\gamma}
         (M_\alpha(M_\beta M_\gamma))^{ij}
         (U^{\mathrm R}_{\alpha,\beta,\gamma})^\dagger
-        \notag\\
-        &\qquad
+        \notag                                 \\
+         & \qquad
         =\bigoplus_{\delta}\bigoplus_{\varepsilon}
         \chi_{\beta,\gamma,\delta}
         \otimes\bigl(\chi_{\alpha,\delta,\varepsilon}
-          \otimes M_\varepsilon^{ij}\bigr).
+        \otimes M_\varepsilon^{ij}\bigr).
         \notag
     \end{align}
 \end{theorem}
@@ -700,7 +700,7 @@ separate step.
     factor with the bond space of $M_\alpha$. Blockwise conjugation regroups
     the contraction as
     $\chi_{\beta,\gamma,\delta}\otimes
-      (M_\alpha M_\delta)^{ij}$.
+        (M_\alpha M_\delta)^{ij}$.
     The fusion identity for $U_{\alpha,\delta}$ gives the sum over
     $\varepsilon$.
 \end{proof}
@@ -714,9 +714,9 @@ separate step.
     left-associated full direct sum is
     \begin{align}
         C_{\alpha,\beta,\gamma}
-        &=U^{\mathrm L}_{\alpha,\beta,\gamma}
-          A_{D_\alpha,D_\beta,D_\gamma}
-          (U^{\mathrm R}_{\alpha,\beta,\gamma})^\dagger.
+         & =U^{\mathrm L}_{\alpha,\beta,\gamma}
+        A_{D_\alpha,D_\beta,D_\gamma}
+        (U^{\mathrm R}_{\alpha,\beta,\gamma})^\dagger.
         \label{eq:rfp_triple_comparison}
     \end{align}
     Both intermediate labels and the final label remain in the direct sums.
@@ -737,8 +737,8 @@ separate step.
     projection of the left iterated fusion isometry:
     \begin{align}
         C_{\alpha,\beta,\gamma}C_{\alpha,\beta,\gamma}^{\dagger}
-        &=U^{\mathrm L}_{\alpha,\beta,\gamma}
-          (U^{\mathrm L}_{\alpha,\beta,\gamma})^{\dagger}.
+         & =U^{\mathrm L}_{\alpha,\beta,\gamma}
+        (U^{\mathrm L}_{\alpha,\beta,\gamma})^{\dagger}.
         \notag
     \end{align}
     The right side is not asserted to be the identity. Surjectivity of the
@@ -764,8 +764,8 @@ separate step.
     iterated fusion isometry:
     \begin{align}
         C_{\alpha,\beta,\gamma}^{\dagger}C_{\alpha,\beta,\gamma}
-        &=U^{\mathrm R}_{\alpha,\beta,\gamma}
-          (U^{\mathrm R}_{\alpha,\beta,\gamma})^{\dagger}.
+         & =U^{\mathrm R}_{\alpha,\beta,\gamma}
+        (U^{\mathrm R}_{\alpha,\beta,\gamma})^{\dagger}.
         \notag
     \end{align}
     The right side is not asserted to be the identity. Surjectivity of the
@@ -791,10 +791,10 @@ separate step.
     positive chain length. For every pair of physical indices $i,k$, let
     \begin{align}
         D^{\mathrm L}_{ik}
-        &=\bigoplus_{\delta,\varepsilon}
-          1_{r_{\alpha,\beta}^{\delta}}\otimes
-          \bigl(1_{r_{\delta,\gamma}^{\varepsilon}}
-            \otimes M_\varepsilon^{ik}\bigr),
+         & =\bigoplus_{\delta,\varepsilon}
+        1_{r_{\alpha,\beta}^{\delta}}\otimes
+        \bigl(1_{r_{\delta,\gamma}^{\varepsilon}}
+        \otimes M_\varepsilon^{ik}\bigr),
         \notag
     \end{align}
     and define $D^{\mathrm R}_{ik}$ by the right-associated multiplicities
@@ -802,7 +802,7 @@ separate step.
     $r_{\alpha,\delta}^{\varepsilon}$. Then
     \begin{align}
         D^{\mathrm L}_{ik}C_{\alpha,\beta,\gamma}
-        &=C_{\alpha,\beta,\gamma}D^{\mathrm R}_{ik}.
+         & =C_{\alpha,\beta,\gamma}D^{\mathrm R}_{ik}.
         \notag
     \end{align}
     This is an identity on the full direct sums. It neither extracts a
@@ -825,10 +825,10 @@ separate step.
     words $w$ of length $S$ in the doubled physical alphabet, such that
     \begin{align}
         \sum_{|w|=S}c_\varepsilon(w)M_\varepsilon^w
-        &=1,
-        \notag\\
+         & =1,
+        \notag \\
         \sum_{|w|=S}c_\varepsilon(w)M_{\varepsilon'}^w
-        &=0
+         & =0
         \quad\text{if }\varepsilon'\ne\varepsilon.
         \notag
     \end{align}
@@ -854,9 +854,9 @@ separate step.
     For a word $w$ of the positive selector length, the identity
     $U_{\alpha,\beta}^{\dagger}U_{\alpha,\beta}=1$ gives
     $D^w=U_{\alpha,\beta}(M_\alpha M_\beta)^w
-      U_{\alpha,\beta}^{\dagger}$, where
+        U_{\alpha,\beta}^{\dagger}$, where
     $D=\bigoplus_\gamma
-      1_{r_{\alpha,\beta}^{\gamma}}\otimes M_\gamma$.
+        1_{r_{\alpha,\beta}^{\gamma}}\otimes M_\gamma$.
     Hence the range projection
     $P=U_{\alpha,\beta}U_{\alpha,\beta}^{\dagger}$ satisfies $PD^w=D^w$.
     Summing the selector polynomials over the final label gives the identity

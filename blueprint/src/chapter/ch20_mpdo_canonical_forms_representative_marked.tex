@@ -6,11 +6,11 @@
     \uses{def:sector_weight_data, rem:word_tuple_span_top}
     Let $(A_j)_{j=0}^{g-1}$ be the basis representatives of a sector
     decomposition. They have \emph{representative word-tuple separation at
-    length $L$} when
+        length $L$} when
     \begin{align}
         \spn_{\C}\bigl\{(A_j^w)_{j=0}^{g-1}:
         w\in\{0,\ldots,d{-}1\}^{L}\bigr\}
-        &=\prod_{j=0}^{g-1}\MN{D_j}.
+         & =\prod_{j=0}^{g-1}\MN{D_j}.
         \label{eq:mpdo_rep_tuple_sep}
     \end{align}
     They have \emph{eventual representative word-tuple separation} when this
@@ -60,7 +60,7 @@
     \begin{align}
         \sum_{j=0}^{g-1}
         \tr\!\left(c_j^{(L+1)}(YA_j-ZA_j)A_j^w\right)
-        &=0.
+         & =0.
         \notag
     \end{align}
     Representative word-tuple separation therefore forces each matrix
@@ -85,8 +85,8 @@
     Let
     \begin{align}
         A_{\mathrm{tot}}^i
-        &=\bigoplus_{j=0}^{g-1}\bigoplus_{q=0}^{r_j-1}
-          \mu_{j,q}A_j^i,
+         & =\bigoplus_{j=0}^{g-1}\bigoplus_{q=0}^{r_j-1}
+        \mu_{j,q}A_j^i,
         \label{eq:mpdo_sector_direct_sum}
     \end{align}
     be the tensor of a sector decomposition. Let $s$ range over a second
@@ -95,8 +95,8 @@
     letter is
     \begin{align}
         C_{\mathrm{tot}}^s
-        &=\bigoplus_{j=0}^{g-1}\bigoplus_{q=0}^{r_j-1}
-          \mu_{j,q}C_j^s.
+         & =\bigoplus_{j=0}^{g-1}\bigoplus_{q=0}^{r_j-1}
+        \mu_{j,q}C_j^s.
         \label{eq:mpdo_marked_direct_sum}
     \end{align}
     The marked alphabet need not coincide with the alphabet of the unmarked
@@ -113,11 +113,11 @@
     For every marked index $s$ and every unmarked word $w$,
     \begin{align}
         \tr\!\left(C_{\mathrm{tot}}^s A_{\mathrm{tot}}^w\right)
-        &=\sum_{j=0}^{g-1}c_j^{(|w|+1)}
-          \tr\!\left(C_j^s A_j^w\right),
-        \label{eq:mpdo_marked_trace_expansion}\\
+         & =\sum_{j=0}^{g-1}c_j^{(|w|+1)}
+        \tr\!\left(C_j^s A_j^w\right),
+        \label{eq:mpdo_marked_trace_expansion} \\
         c_j^{(N)}
-        &=\sum_{q=0}^{r_j-1}\mu_{j,q}^N.
+         & =\sum_{q=0}^{r_j-1}\mu_{j,q}^N.
         \notag
     \end{align}
     The exponent $|w|+1$ includes the weight at the marked site.
@@ -142,7 +142,7 @@
     index $s$ and every unmarked word $w$ of length $L$,
     \begin{align}
         \tr\!\left(C_{\mathrm{tot}}^s A_{\mathrm{tot}}^w\right)
-        &=\tr\!\left(E_{\mathrm{tot}}^s A_{\mathrm{tot}}^w\right).
+         & =\tr\!\left(E_{\mathrm{tot}}^s A_{\mathrm{tot}}^w\right).
         \notag
     \end{align}
     If representative word-tuple separation holds at length $L$ and
@@ -202,10 +202,10 @@
     For every marked letter $s$ and every unmarked word $w$, one has
     \begin{align}
         \tr\!\left(\widehat C_{\mathrm{grp}}^sT_{\mathrm{grp}}^w\right)
-        &=\tr\!\left(C_{\mathrm{act}}^sP_{\mathrm{act}}^w\right)
-        \notag\\
-        &=\sum_j\left(\sum_q\lambda_{j,q}^{|w|+1}\right)
-          \tr\!\left(C_j^sC_j^w\right).
+         & =\tr\!\left(C_{\mathrm{act}}^sP_{\mathrm{act}}^w\right)
+        \notag                                                     \\
+         & =\sum_j\left(\sum_q\lambda_{j,q}^{|w|+1}\right)
+        \tr\!\left(C_j^sC_j^w\right).
         \label{eq:cpsv_full_coordinate_marked_trace_identity}
     \end{align}
     The exponent $|w|+1$ includes the factor at the marked site. Inactive
@@ -236,7 +236,7 @@
     the inactive listed coordinates as zero blocks. If
     \begin{align}
         \tr\!\left(\widehat C_{\mathrm{grp}}^sT_{\mathrm{grp}}^w\right)
-        &=\tr\!\left(\widehat E_{\mathrm{grp}}^sT_{\mathrm{grp}}^w\right)
+         & =\tr\!\left(\widehat E_{\mathrm{grp}}^sT_{\mathrm{grp}}^w\right)
         \label{eq:cpsv_retained_marked_trace_agreement}
     \end{align}
     for every $s$ and every word $w$ of positive length, then $C_j=E_j$ for
@@ -245,7 +245,7 @@
     In particular, let $Y,Z\in\MN{d}$. If their first-site actions agree on
     the positive-length matrix product vectors of $T_{\mathrm{grp}}$, then
     \begin{align}
-        (YC_j)^i&=(ZC_j)^i
+        (YC_j)^i & =(ZC_j)^i
         \label{eq:cpsv_retained_first_site_action}
     \end{align}
     for every active representative $j$ and every physical letter $i$.
@@ -265,7 +265,7 @@
     Theorem~\ref{thm:representative_grouped_insert_eq} gives
     (\ref{eq:cpsv_retained_first_site_action}), namely
     \begin{align}
-        (YC_j)^i&=(ZC_j)^i.
+        (YC_j)^i & =(ZC_j)^i.
         \label{eq:cpsv_prop_4_13_active_separation}
     \end{align}
 \end{proof}
@@ -287,9 +287,9 @@
     Let $A$ be in literal CPSV canonical form. For canonical-form data and
     its active BNT refinement, write
     \begin{align}
-        A^i&=V^\dagger B^iV,
-        \notag\\
-        VV^\dagger&=\Id.
+        A^i        & =V^\dagger B^iV,
+        \notag                        \\
+        VV^\dagger & =\Id.
         \label{eq:cpsv_original_coisometry_reconstruction}
     \end{align}
     where $B^i=GT_{\mathrm{grp}}^iG^{-1}$, $G$ is the listed block gauge,
@@ -297,7 +297,7 @@
     weight zero. If marked matrices satisfy $C=V^\dagger EV$, then for every
     word $w$, including the empty word,
     \begin{align}
-        \tr(CA^w)&=\tr(EB^w).
+        \tr(CA^w) & =\tr(EB^w).
         \label{eq:cpsv_original_marked_trace}
     \end{align}
     The marked matrix makes the closed chain nonempty; no equality of
@@ -312,7 +312,7 @@
     $F_A^u=\sum_i f_{ui}A^i$ and $G_A^u=\sum_i g_{ui}A^i$. If
     \begin{align}
         \tr\!\left(F_A^uA^w\right)
-        &=\tr\!\left(G_A^uA^w\right)
+         & =\tr\!\left(G_A^uA^w\right)
         \label{eq:cpsv_original_linear_marked_agreement}
     \end{align}
     for every marked letter $u$ and every word $w$ of positive length, then
@@ -353,7 +353,7 @@
     the blocked physical space is
     \begin{align}
         Y^{[L+1]}_{I,J}
-        &=Y_{i_0,j_0}\prod_{k=1}^{L}\delta_{i_k,j_k}.
+         & =Y_{i_0,j_0}\prod_{k=1}^{L}\delta_{i_k,j_k}.
         \label{eq:mpdo_first_site_block}
     \end{align}
 \end{definition}
@@ -377,7 +377,7 @@
     the blocked tensor satisfies
     \begin{align}
         (Y^{[L+1]}A^{[L+1]})^I
-        &=(YA)^{i_0}A^{i_1}\cdots A^{i_L}.
+         & =(YA)^{i_0}A^{i_1}\cdots A^{i_L}.
         \label{eq:mpdo_blocked_insertion}
     \end{align}
     Hence equality of the first-site actions of $Y,Z$ on the MPV family of
@@ -387,7 +387,7 @@
     The first-site actions of $Y,Z$ agree at every length if and only if
     \begin{align}
         \tr((YA)^i A^w)
-        &=\tr((ZA)^i A^w),
+         & =\tr((ZA)^i A^w),
         \label{eq:mpdo_marked_first_site_trace}
     \end{align}
     for every physical index $i$ and every finite word $w$.
@@ -480,10 +480,10 @@
     from $A_j$ gives coefficients $c_w^{(j)}$ satisfying
     \begin{align}
         \sum_{|w|=6(g-1)}c_w^{(j)}A_k^w
-        &=
+         & =
         \begin{cases}
-            \Id, & k=j,\\
-            0, & k\neq j.
+            \Id, & k=j,     \\
+            0,   & k\neq j.
         \end{cases}.
         \label{eq:mpdo_rep_selectors}
     \end{align}
@@ -516,10 +516,10 @@
     hypothesis give, along the same subsequence,
     \begin{align}
         \lim_{k\to\infty}O_{A_jA_j}(m_jk)
-        &=m_j,
-        \notag\\
+         & =m_j,
+        \notag   \\
         \lim_{k\to\infty}O_{A_jA_j}(m_jk)
-        &=1.
+         & =1.
         \notag
     \end{align}
     Hence $m_j=1$.
@@ -591,12 +591,12 @@
     decomposition one has
     \begin{align}
         C_{\mathrm{tot}}^u
-        &=\bigoplus_{j,q}\mu_{j,q}
-          \sum_z f_{u,z}A_j^z,
-        \notag\\
+         & =\bigoplus_{j,q}\mu_{j,q}
+        \sum_z f_{u,z}A_j^z,
+        \notag                       \\
         E_{\mathrm{tot}}^u
-        &=\bigoplus_{j,q}\mu_{j,q}
-          \sum_z g_{u,z}A_j^z.
+         & =\bigoplus_{j,q}\mu_{j,q}
+        \sum_z g_{u,z}A_j^z.
         \notag
     \end{align}
     Corollary~\ref{cor:bnt_marked_representative_separation} identifies the

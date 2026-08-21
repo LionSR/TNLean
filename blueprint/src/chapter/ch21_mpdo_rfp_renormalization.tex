@@ -25,9 +25,9 @@ section.
     Let $H$ and $K$ be finite-dimensional complex vector spaces, and let
     $V:H\to K$ satisfy $V^\dagger V=I_H$. Then the map
     \begin{align}
-        \Phi_V:\End_{\C}(H)&\longrightarrow\End_{\C}(K),
-        \notag\\
-        \Phi_V(X)&=VXV^\dagger,
+        \Phi_V:\End_{\C}(H) & \longrightarrow\End_{\C}(K),
+        \notag                                             \\
+        \Phi_V(X)           & =VXV^\dagger,
         \notag
     \end{align}
     is trace-preserving and completely positive. This is the general
@@ -46,7 +46,7 @@ section.
     \leanok
     For a rectangular matrix $V:H\to K$, define the linear map
     \begin{align}
-        \Phi_V(X)&=VXV^\dagger.
+        \Phi_V(X) & =VXV^\dagger.
         \notag
     \end{align}
 \end{definition}
@@ -86,7 +86,7 @@ section.
     $R_e:\C^{I\times I}\to\C^{J\times J}$ determined by
     \begin{align}
         [R_e(X)]_{j,j'}
-        &=X_{e^{-1}(j),e^{-1}(j')}.
+         & =X_{e^{-1}(j),e^{-1}(j')}.
         \notag
     \end{align}
 \end{definition}
@@ -123,11 +123,11 @@ section.
     The Kraus form of the composite and its resolution of the identity are
     \begin{align}
         (\mathcal{S}\circ\mathcal{T})(X)
-        &=\sum_{i,j}(A_iB_j)X(A_iB_j)^\dagger,
-        \notag\\
+         & =\sum_{i,j}(A_iB_j)X(A_iB_j)^\dagger,
+        \notag                                                       \\
         \sum_{i,j}(A_iB_j)^\dagger(A_iB_j)
-        &=\sum_j B_j^\dagger\left(\sum_i A_i^\dagger A_i\right)B_j
-          =\sum_j B_j^\dagger B_j=I.
+         & =\sum_j B_j^\dagger\left(\sum_i A_i^\dagger A_i\right)B_j
+        =\sum_j B_j^\dagger B_j=I.
         \notag
     \end{align}
 \end{proof}
@@ -152,11 +152,11 @@ section.
     and let $R$ be another finite-dimensional space. Then
     \begin{align}
         \mathcal S\otimes\id_R:
-        \End_{\C}(H\otimes R)&\longrightarrow
+        \End_{\C}(H\otimes R) & \longrightarrow
         \End_{\C}(K\otimes R),
-        \notag\\
+        \notag                                  \\
         \id_R\otimes\mathcal S:
-        \End_{\C}(R\otimes H)&\longrightarrow
+        \End_{\C}(R\otimes H) & \longrightarrow
         \End_{\C}(R\otimes K)
         \notag
     \end{align}
@@ -169,8 +169,8 @@ section.
     $\tau_K:K\otimes R\simeq R\otimes K$ be the canonical factor swaps. Then
     \begin{align}
         \id_R\otimes\mathcal S
-        &=\mathcal R_{\tau_K}\circ
-          (\mathcal S\otimes\id_R)\circ\mathcal R_{\tau_H},
+         & =\mathcal R_{\tau_K}\circ
+        (\mathcal S\otimes\id_R)\circ\mathcal R_{\tau_H},
         \notag
     \end{align}
     where $\mathcal R_\tau$ denotes reindexing both matrix coordinates along
@@ -187,7 +187,7 @@ section.
     $(A_a\in\C^{J\times I})_a$ be a finite family of matrices. Its
     rectangular Kraus map is
     \begin{align}
-        \Phi_A(X)&=\sum_a A_aXA_a^\dagger.
+        \Phi_A(X) & =\sum_a A_aXA_a^\dagger.
         \notag
     \end{align}
 \end{definition}
@@ -228,7 +228,7 @@ section.
     \leanok
     Reindexing the finite sum gives
     $\sum_{b\in I'}A_{e^{-1}(b)}XA_{e^{-1}(b)}^\dagger
-    =\sum_{a\in I}A_aXA_a^\dagger$.
+        =\sum_{a\in I}A_aXA_a^\dagger$.
 \end{proof}
 
 \begin{definition}[Orthogonally controlled Kraus map]
@@ -242,13 +242,13 @@ section.
     every other summand. The orthogonally controlled Kraus map is
     \begin{align}
         \mathcal C(X)
-        &=\sum_{k,a}\widetilde A_{k,a}X\widetilde A_{k,a}^\dagger.
+         & =\sum_{k,a}\widetilde A_{k,a}X\widetilde A_{k,a}^\dagger.
         \notag
     \end{align}
     In particular, $\mathcal C(X)_{kl}=0$ for $k\ne l$. This is the sector
     control in the definitions of $\mathcal T_1$ and $\mathcal S_1$ in
     \cite[Appendix~C.2, lines~1523--1535 and~1548--1555]
-      {Cirac2016MPDO_arXiv}.
+    {Cirac2016MPDO_arXiv}.
 \end{definition}
 
 \begin{theorem}[Diagonal blocks of an orthogonally controlled map]
@@ -259,8 +259,8 @@ section.
     Let $X_{kk}:H_k\to H_k$ denote the $k$th diagonal block of $X$. Then
     \begin{align}
         \mathcal C(X)_{kk}
-        &=\sum_a A_{k,a}X_{kk}A_{k,a}^\dagger
-          =\Phi_{A_k}(X_{kk}).
+         & =\sum_a A_{k,a}X_{kk}A_{k,a}^\dagger
+        =\Phi_{A_k}(X_{kk}).
         \notag
     \end{align}
 \end{theorem}
@@ -302,8 +302,8 @@ section.
     Each embedded operator has support in one summand, and therefore
     \begin{align}
         \sum_{k,a}\widetilde A_{k,a}^\dagger\widetilde A_{k,a}
-        &=\bigoplus_k\left(\sum_a A_{k,a}^\dagger A_{k,a}\right)
-          =\bigoplus_k I_{H_k}=I_H.
+         & =\bigoplus_k\left(\sum_a A_{k,a}^\dagger A_{k,a}\right)
+        =\bigoplus_k I_{H_k}=I_H.
         \notag
     \end{align}
     Apply Theorem~\ref{thm:mpdo_rectangular_kraus_map_cptp} to the combined
@@ -318,7 +318,7 @@ section.
     Let $(P_i)_i$ be finitely many operators on $H$ and let each
     $\Phi_i:\End_{\C}(H)\to\End_{\C}(K)$ be completely positive. Then
     \begin{align}
-        X&\mapsto\sum_i\Phi_i(P_iXP_i^\dagger)
+        X & \mapsto\sum_i\Phi_i(P_iXP_i^\dagger)
         \notag
     \end{align}
     is completely positive. No completeness or orthogonality condition on
@@ -341,7 +341,7 @@ section.
     completely positive. Then, for every $X$,
     \begin{align}
         \tr\Bigl(\sum_i\Phi_i(P_iXP_i)\Bigr)
-        &=\tr\Bigl(\Bigl(\sum_iP_i\Bigr)X\Bigr).
+         & =\tr\Bigl(\Bigl(\sum_iP_i\Bigr)X\Bigr).
         \notag
     \end{align}
 \end{lemma}
@@ -366,7 +366,7 @@ section.
     $\Phi_s:\End_{\C}(H)\to\End_{\C}(K)$ be trace-preserving and completely
     positive. Then
     \begin{align}
-        \Phi(X)&=\sum_s\Phi_s(P_sXP_s)
+        \Phi(X) & =\sum_s\Phi_s(P_sXP_s)
         \notag
     \end{align}
     is trace-preserving and completely positive.
@@ -378,9 +378,9 @@ section.
     $B_{s,a}=A_{s,a}P_s$. These operators give the displayed map, and
     \begin{align}
         \sum_{s,a}B_{s,a}^\dagger B_{s,a}
-        &=\sum_sP_s^\dagger
-          \left(\sum_aA_{s,a}^\dagger A_{s,a}\right)P_s
-          =\sum_sP_s=I_H.
+         & =\sum_sP_s^\dagger
+        \left(\sum_aA_{s,a}^\dagger A_{s,a}\right)P_s
+        =\sum_sP_s=I_H.
         \notag
     \end{align}
     Apply Theorem~\ref{thm:mpdo_rectangular_kraus_map_cptp}.
@@ -394,7 +394,7 @@ section.
     from matrices on $A\otimes B$ to matrices on $A$ given by
     \begin{align}
         [\tr_B(X)]_{ij}
-        &=\sum_k X_{(i,k),(j,k)}.
+         & =\sum_k X_{(i,k),(j,k)}.
         \notag
     \end{align}
     After the retained and discarded subspins have been regrouped as
@@ -415,7 +415,7 @@ section.
     \leanok
     For all $i,j$,
     $[\tr_B(X\otimes Y)]_{ij}
-    =\sum_t X_{ij}Y_{tt}=\tr(Y)X_{ij}$.
+        =\sum_t X_{ij}Y_{tt}=\tr(Y)X_{ij}$.
 \end{proof}
 
 \begin{lemma}[The right partial trace is trace-preserving completely positive]
@@ -434,9 +434,9 @@ section.
     $V_k:A\otimes B\to A$ by
     $V_k(e_i\otimes e_\ell)=\delta_{k\ell}e_i$. Then
     \begin{align}
-        \sum_k V_kXV_k^\dagger&=\tr_B(X),
-        \notag\\
-        \sum_k V_k^\dagger V_k&=I_{A\otimes B}.
+        \sum_k V_kXV_k^\dagger & =\tr_B(X),
+        \notag                                    \\
+        \sum_k V_k^\dagger V_k & =I_{A\otimes B}.
         \notag
     \end{align}
     Theorem~\ref{thm:mpdo_rectangular_kraus_map_cptp} applies.
@@ -466,7 +466,7 @@ Chapter~\ref{ch:aux_channel_theory}.
     \uses{def:mpdo_rectangular_kraus_map, def:mpdo_state_preparation_kraus}
     If $\rho\succeq0$ and $A_j(e_a)=e_a\otimes\sqrt\rho\,e_j$, then
     \begin{align}
-        \sum_j A_jXA_j^\dagger&=X\otimes\rho.
+        \sum_j A_jXA_j^\dagger & =X\otimes\rho.
         \notag
     \end{align}
 \end{theorem}
@@ -476,7 +476,7 @@ Chapter~\ref{ch:aux_channel_theory}.
     $((a,s),(b,t))$ entry of the left-hand side is
     \begin{align}
         X_{ab}\sum_jR_{sj}\overline{R_{tj}}
-        &=X_{ab}(R^2)_{st}=X_{ab}\rho_{st}.
+         & =X_{ab}(R^2)_{st}=X_{ab}\rho_{st}.
         \notag
     \end{align}
 \end{proof}
@@ -493,7 +493,7 @@ Chapter~\ref{ch:aux_channel_theory}.
     \leanok
     Since $R$ is Hermitian and $R^2=\rho$, the diagonal entries of the sum are
     $\sum_{j,t}\overline{R_{tj}}R_{tj}
-    =\tr(R^2)=\tr(\rho)=1$, while its off-diagonal entries vanish.
+        =\tr(R^2)=\tr(\rho)=1$, while its off-diagonal entries vanish.
 \end{proof}
 
 \begin{lemma}[Positive state preparation is completely positive]
@@ -528,15 +528,15 @@ Chapter~\ref{ch:aux_channel_theory}.
 \begin{definition}[Physical closure maps]
     \label{def:phys_close}
     \lean{MPOTensor.physCloseN, MPOTensor.physCloseN_apply,
-      MPOTensor.physClose1,
-      MPOTensor.physClose2, MPOTensor.physClose3}
+        MPOTensor.physClose1,
+        MPOTensor.physClose2, MPOTensor.physClose3}
     \leanok
     \uses{def:mpo_eval_word}
     For an MPO tensor $M$, a length $N$, and a virtual operator $X$, define the
     physical operator $M_N(X)$ by
     \begin{align}
         M_N(X)_{\boldsymbol i,\boldsymbol j}
-        &=
+         & =
         \tr\!\left(M^{i_0j_0}M^{i_1j_1}\cdots M^{i_{N-1}j_{N-1}}X\right).
         \notag
     \end{align}
@@ -563,9 +563,9 @@ Chapter~\ref{ch:aux_channel_theory}.
     For every pair of physical words $\sigma,\tau$,
     \begin{align}
         M_N(1)_{\sigma,\tau}
-        &=\tr\!\left(M^{\sigma,\tau}\cdot1\right)
-          =\tr\!\left(M^{\sigma,\tau}\right)
-          =\rho^{(N)}(M)_{\sigma,\tau}.
+         & =\tr\!\left(M^{\sigma,\tau}\cdot1\right)
+        =\tr\!\left(M^{\sigma,\tau}\right)
+        =\rho^{(N)}(M)_{\sigma,\tau}.
         \notag
     \end{align}
 \end{proof}
@@ -573,7 +573,7 @@ Chapter~\ref{ch:aux_channel_theory}.
 \begin{theorem}[One- and two-site physical closures]
     \label{thm:phys_close_one_two}
     \lean{MPOTensor.physCloseN_one_eq_physClose1,
-      MPOTensor.physCloseN_two_eq_physClose2}
+        MPOTensor.physCloseN_two_eq_physClose2}
     \leanok
     \uses{def:phys_close}
     Under the canonical identifications of one-site configurations with
@@ -581,10 +581,10 @@ Chapter~\ref{ch:aux_channel_theory}.
     indices,
     \begin{align}
         M_1(X)_{i,j}
-        &=\tr(M^{ij}X),
-        \notag\\
+         & =\tr(M^{ij}X),
+        \notag                          \\
         M_2(X)_{(i_0,i_1),(j_0,j_1)}
-        &=\tr(M^{i_0j_0}M^{i_1j_1}X).
+         & =\tr(M^{i_0j_0}M^{i_1j_1}X).
         \notag
     \end{align}
 \end{theorem}
@@ -597,13 +597,13 @@ Chapter~\ref{ch:aux_channel_theory}.
 \begin{lemma}[Three-site physical closure]
     \label{lem:phys_close_three}
     \lean{MPOTensor.physCloseN_three_apply, MPOTensor.physClose3_apply,
-      MPOTensor.physCloseN_three_eq_physClose3}
+        MPOTensor.physCloseN_three_eq_physClose3}
     \leanok
     \uses{def:phys_close, def:three_coordinate_identification}
     The general three-site physical closure has coefficients
     \begin{align}
         M_3(X)_{(i_0,(i_1,i_2)),(j_0,(j_1,j_2))}
-        &=\tr(M^{i_0j_0}M^{i_1j_1}M^{i_2j_2}X).
+         & =\tr(M^{i_0j_0}M^{i_1j_1}M^{i_2j_2}X).
         \notag
     \end{align}
     For $M=\mathcal K$, this is the operator $\mathcal K_3(X)$ in
@@ -633,7 +633,7 @@ the remaining sites unchanged.
     $\mathcal{T}[M_1(X)]=M_2(X)$ for every virtual operator $X$, where
     $M_1(X)_{ij}=\tr(M^{ij}X)$ and
     $M_2(X)_{(i_1i_2)(j_1j_2)}
-    =\tr(M^{i_1j_1}M^{i_2j_2}X)$ are the one-
+        =\tr(M^{i_1j_1}M^{i_2j_2}X)$ are the one-
     and two-site physical operators obtained by closing one or two tensors with
     $X$. This condition is distinct from idempotence of the doubled-index
     transfer map for general mixed states. Its source zero-correlation-length
@@ -669,52 +669,52 @@ the remaining sites unchanged.
     % between the complete objects at its endpoints, never a tensor contraction.
     \par\noindent\hfil
     {\tenkzkernel
-    \begin{tikzcd}[channel, ampersand replacement=\&,
-        column sep=10mm, row sep=8mm]
-      {\begin{tenkz}[cols=1, west=open, east=open, physical=updown]
-        \tn[skin=mpo]{M}
-      \end{tenkz}} \arrow[r, "\mathcal T"] \&
-      {\begin{tenkz}[cols=2, west=open, east=open, physical=updown]
-        \tn[skin=mpo]{M} & \tn[skin=mpo]{M}
-      \end{tenkz}} \\
-      {\begin{tenkz}[cols=2, west=open, east=open, physical=updown]
-        \tn[skin=mpo]{M} & \tn[skin=mpo]{M}
-      \end{tenkz}} \arrow[r, "\mathcal S"] \&
-      {\begin{tenkz}[cols=1, west=open, east=open, physical=updown]
-        \tn[skin=mpo]{M}
-      \end{tenkz}}
-    \end{tikzcd}}
+        \begin{tikzcd}[channel, ampersand replacement=\&,
+                column sep=10mm, row sep=8mm]
+            {\begin{tenkz}[cols=1, west=open, east=open, physical=updown]
+                    \tn[skin=mpo]{M}
+                \end{tenkz}} \arrow[r, "\mathcal T"] \&
+            {\begin{tenkz}[cols=2, west=open, east=open, physical=updown]
+                        \tn[skin=mpo]{M} & \tn[skin=mpo]{M}
+                    \end{tenkz}} \\
+            {\begin{tenkz}[cols=2, west=open, east=open, physical=updown]
+                \tn[skin=mpo]{M} & \tn[skin=mpo]{M}
+            \end{tenkz}} \arrow[r, "\mathcal S"] \&
+            {\begin{tenkz}[cols=1, west=open, east=open, physical=updown]
+                        \tn[skin=mpo]{M}
+                    \end{tenkz}}
+        \end{tikzcd}}
     \hfil\par
 \end{definition}
 
 \begin{theorem}[Pure-state specialization of the physical-map fixed point]
     \label{thm:pure_doubled_tensor_rfp_via_ts}
     \lean{MPSTensor.doubledTensor_isRFPViaTS_iff_isTransferIdempotent,
-      MPSTensor.doubledTensor_isRFPViaTS_iff_hasPhysicalBlockingIsometry}
+        MPSTensor.doubledTensor_isRFPViaTS_iff_hasPhysicalBlockingIsometry}
     \leanok
     \uses{def:is_rfp_via_ts, def:mps_transfer_idempotence, def:physical_blocking_isometry}
     Let $A=(A^i)_{i=0}^{d-1}$ be an MPS tensor, and let
     $M(A)^{ij}=A^i\otimes\overline{A^j}$ be its doubled MPO tensor. Then
     \begin{align}
         M(A)\text{ satisfies Definition~\ref{def:is_rfp_via_ts}}
-        &\quad\Longleftrightarrow\quad \E_A^2=\E_A
-        \notag\\
-        &\quad\Longleftrightarrow\quad
+         & \quad\Longleftrightarrow\quad \E_A^2=\E_A
+        \notag                                       \\
+         & \quad\Longleftrightarrow\quad
         A\text{ has a physical blocking isometry}.
         \notag
     \end{align}
     More explicitly, if $V\colon\C^d\to\C^{d^2}$ is the blocking isometry,
     the refinement channel has the orientation
     \begin{align}
-        \mathcal T(X)&=VXV^\dagger.
+        \mathcal T(X) & =VXV^\dagger.
         \notag
     \end{align}
     If $d>0$, put $P=VV^\dagger$ and choose a density matrix $\rho_0$ on the
     one-site space. A trace-preserving coarse-graining channel is
     \begin{align}
         \mathcal S(Y)
-        &=V^\dagger YV
-          +\tr\!\bigl((\Id-P)Y(\Id-P)\bigr)\rho_0.
+         & =V^\dagger YV
+        +\tr\!\bigl((\Id-P)Y(\Id-P)\bigr)\rho_0.
         \notag
     \end{align}
     On the range of $V$, the second term vanishes and this agrees with the
@@ -724,7 +724,7 @@ the remaining sites unchanged.
     unique zero maps give $\mathcal S$ and $\mathcal T$. This is the
     pure-state specialization stated at
     \cite[line~668, labels \texttt{Def-equiv-pure} and
-    \texttt{T-and-S-mixed-equiv-pure}, lines~675--687]
+        \texttt{T-and-S-mixed-equiv-pure}, lines~675--687]
     {Cirac2016MPDO_arXiv}.
 \end{theorem}
 \begin{proof}
@@ -733,25 +733,25 @@ the remaining sites unchanged.
     The blocking relation
     $A^{i_1}A^{i_2}=\sum_jV_{(i_1,i_2),j}A^j$ implies
     \begin{align}
-        M_2(X)&=V M_1(X)V^\dagger.
+        M_2(X) & =V M_1(X)V^\dagger.
         \notag
     \end{align}
     For $d>0$, the refinement identity follows directly:
     \begin{align}
         \mathcal T(M_1(X))
-        &=V M_1(X)V^\dagger
-         =M_2(X).
+         & =V M_1(X)V^\dagger
+        =M_2(X).
         \notag
     \end{align}
     For the coarse-graining identity, put $P=VV^\dagger$. Since
     $V^\dagger V=\Id$ and $(\Id-P)V=0$, substitution gives
     \begin{align}
         \mathcal S(M_2(X))
-        &=V^\dagger(VM_1(X)V^\dagger)V
-          +\tr\!\bigl((\Id-P)(VM_1(X)V^\dagger)(\Id-P)\bigr)\rho_0
-        \notag\\
-        &=M_1(X)+0
-         =M_1(X).
+         & =V^\dagger(VM_1(X)V^\dagger)V
+        +\tr\!\bigl((\Id-P)(VM_1(X)V^\dagger)(\Id-P)\bigr)\rho_0
+        \notag                           \\
+         & =M_1(X)+0
+        =M_1(X).
         \notag
     \end{align}
     If $d=0$, the unique zero channels satisfy both identities. Conversely,
@@ -768,11 +768,11 @@ the remaining sites unchanged.
 \begin{definition}[Fibonacci vacuum-sector support tensor]
     \label{def:cpsv_fibonacci_support_tensor}
     \lean{MPSTensor.FibonacciBoundary.ExactlyTwoZero,
-      MPSTensor.FibonacciBoundary.FusionWeights,
-      MPSTensor.FibonacciBoundary.canonicalFusionWeights,
-      MPSTensor.FibonacciBoundary.physicalTriple,
-      MPSTensor.FibonacciBoundary.tensor,
-      MPSTensor.FibonacciBoundary.canonicalTensor}
+        MPSTensor.FibonacciBoundary.FusionWeights,
+        MPSTensor.FibonacciBoundary.canonicalFusionWeights,
+        MPSTensor.FibonacciBoundary.physicalTriple,
+        MPSTensor.FibonacciBoundary.tensor,
+        MPSTensor.FibonacciBoundary.canonicalTensor}
     \leanok
     \uses{def:mps_tensor}
     This is the concrete tensor in
@@ -781,13 +781,13 @@ the remaining sites unchanged.
     $\alpha,\beta\in\{0,1\}$.  The fusion weights satisfy
     \begin{align}
         N_{ijk}=0
-        &\iff (i,j,k)\in\{(0,0,1),(0,1,0),(1,0,0)\}.
+         & \iff (i,j,k)\in\{(0,0,1),(0,1,0),(1,0,0)\}.
         \label{eq:cpsv_fib_support}
     \end{align}
     Every weight outside this zero set is positive, and
     \begin{align}
         A^{ijk}_{\alpha\beta}
-        &=\delta_{i,\alpha}\delta_{k,\beta}N_{ijk}.
+         & =\delta_{i,\alpha}\delta_{k,\beta}N_{ijk}.
         \notag
     \end{align}
     The canonical support tensor takes every nonzero $N_{ijk}$ to be one.
@@ -800,7 +800,7 @@ the remaining sites unchanged.
     The transition matrix from
     \cite[Appendix~D, lines~2146--2149]{Cirac2016MPDO_arXiv} is
     \begin{align}
-        B&=\begin{pmatrix}1&1\\1&2\end{pmatrix}.
+        B & =\begin{pmatrix}1&1\\1&2\end{pmatrix}.
         \notag
     \end{align}
 \end{definition}
@@ -812,7 +812,7 @@ the remaining sites unchanged.
     \uses{def:cpsv_fibonacci_transition_matrix}
     For $n\in\N$ and $\alpha,\beta\in\{0,1\}$, define
     \begin{align}
-        x^n_{\alpha\beta}&=(B^n)_{\alpha\beta}.
+        x^n_{\alpha\beta} & =(B^n)_{\alpha\beta}.
         \label{eq:cpsv_fib_counts}
     \end{align}
     These are the transition counts governed by the recurrence in
@@ -822,13 +822,13 @@ the remaining sites unchanged.
 \begin{theorem}[Fibonacci boundary transition recurrence]
     \label{thm:cpsv_fibonacci_boundary_recurrence}
     \lean{MPSTensor.FibonacciBoundary.x_one,
-      MPSTensor.FibonacciBoundary.x_succ}
+        MPSTensor.FibonacciBoundary.x_succ}
     \leanok
     \uses{def:cpsv_fibonacci_boundary_counts}
     In the order $(00,01,10,11)$, one has $x^1=(1,1,1,2)$ and
     \begin{align}
-        x^{n+1}_{\alpha0}&=x^n_{\alpha0}+x^n_{\alpha1},&
-        x^{n+1}_{\alpha1}&=x^n_{\alpha0}+2x^n_{\alpha1}.
+        x^{n+1}_{\alpha0} & =x^n_{\alpha0}+x^n_{\alpha1},  &
+        x^{n+1}_{\alpha1} & =x^n_{\alpha0}+2x^n_{\alpha1}.
         \notag
     \end{align}
     This is the recurrence in
@@ -848,7 +848,7 @@ the remaining sites unchanged.
     \uses{def:cpsv_fibonacci_boundary_counts}
     Closing the two boundary labels gives the transition count
     \begin{align}
-        a_N&=x^N_{00}+x^N_{11}=\tr(B^N).
+        a_N & =x^N_{00}+x^N_{11}=\tr(B^N).
         \notag
     \end{align}
     This is the boundary-label closure used in
@@ -862,7 +862,7 @@ the remaining sites unchanged.
     \uses{def:cpsv_fibonacci_periodic_count}
     For every $N\in\N$,
     \begin{align}
-        a_{N+2}+a_N&=3a_{N+1}.
+        a_{N+2}+a_N & =3a_{N+1}.
         \notag
     \end{align}
 \end{theorem}
@@ -878,7 +878,7 @@ the remaining sites unchanged.
 \begin{theorem}[First periodic Fibonacci transition counts]
     \label{thm:cpsv_fibonacci_periodic_count_values}
     \lean{MPSTensor.FibonacciBoundary.periodicTransitionCount_one,
-      MPSTensor.FibonacciBoundary.periodicTransitionCount_two}
+        MPSTensor.FibonacciBoundary.periodicTransitionCount_two}
     \leanok
     \uses{def:cpsv_fibonacci_periodic_count, thm:cpsv_fibonacci_boundary_recurrence}
     The first two periodic transition counts are $a_1=3$ and $a_2=7$.
@@ -899,7 +899,7 @@ the remaining sites unchanged.
     Set $\tau_+=(1+\sqrt5)/2$ and $\tau_-=(1-\sqrt5)/2$. For every
     $N\in\N$,
     \begin{align}
-        a_N&=\tau_+^{2N}+\tau_-^{2N}.
+        a_N & =\tau_+^{2N}+\tau_-^{2N}.
         \notag
     \end{align}
     This is the transition-count formula in
@@ -937,17 +937,17 @@ the remaining sites unchanged.
 \begin{definition}[Open-boundary Fibonacci operator]
     \label{def:cpsv_fibonacci_open_boundary_operator}
     \lean{MPSTensor.FibonacciBoundary.openBoundaryOperator,
-      MPSTensor.FibonacciBoundary.openBoundaryOperator_apply}
+        MPSTensor.FibonacciBoundary.openBoundaryOperator_apply}
     \leanok
     \uses{def:cpsv_fibonacci_support_tensor}
     For $n>0$ and $\alpha,\beta\in\{0,1\}$, define the matrix
     $\rho^{(n)}_{\alpha\beta}(A)$, indexed by physical words $\sigma$ and $\tau$, by
     \begin{align}
         \bigl(\rho^{(n)}_{\alpha\beta}(A)\bigr)_{\sigma,\tau}
-        &=\begin{cases}
-            (\alpha|A^{\sigma_1}\cdots A^{\sigma_n}|\beta),&\sigma=\tau,\\
-            0,&\sigma\ne\tau.
-          \end{cases}
+         & =\begin{cases}
+                (\alpha|A^{\sigma_1}\cdots A^{\sigma_n}|\beta), & \sigma=\tau,   \\
+                0,                                              & \sigma\ne\tau.
+            \end{cases}
     \end{align}
 \end{definition}
 
@@ -959,7 +959,7 @@ the remaining sites unchanged.
     For $n>0$ and $\alpha,\beta\in\{0,1\}$,
     \begin{align}
         \operatorname{rank}\rho^{(n)}_{\alpha\beta}(A)
-        &=x^n_{\alpha\beta}.
+         & =x^n_{\alpha\beta}.
     \end{align}
     This is \cite[Appendix~D, lines~2127--2130]{Cirac2016MPDO_arXiv}.
 \end{theorem}
@@ -979,7 +979,7 @@ the remaining sites unchanged.
 \begin{theorem}[Fibonacci periodic operator-rank formula]
     \label{thm:cpsv_fibonacci_periodic_rank}
     \lean{MPSTensor.FibonacciBoundary.rank_mpo_toMPOTensor_eq_periodicTransitionCount,
-      MPSTensor.FibonacciBoundary.rank_mpo_toMPOTensor_eq_goldenRatio}
+        MPSTensor.FibonacciBoundary.rank_mpo_toMPOTensor_eq_goldenRatio}
     \leanok
     \uses{def:cpsv_fibonacci_support_tensor, def:cpsv_fibonacci_periodic_count}
     Let $A$ be obtained from any positive choice of fusion weights with the
@@ -988,12 +988,12 @@ the remaining sites unchanged.
     \cite[Appendix~D, line~2125]{Cirac2016MPDO_arXiv}. For every $N>0$,
     \begin{align}
         \operatorname{rank}\rho^{(N)}(A)
-        &=a_N=x^N_{00}+x^N_{11}
-         =\tau_+^{2N}+\tau_-^{2N}.
+         & =a_N=x^N_{00}+x^N_{11}
+        =\tau_+^{2N}+\tau_-^{2N}.
         \label{eq:cpsv_fib_periodic_rank}
     \end{align}
     This is \cite[Appendix~D, lines~2122--2125 and
-    2157--2176]{Cirac2016MPDO_arXiv}.
+        2157--2176]{Cirac2016MPDO_arXiv}.
 \end{theorem}
 
 \begin{proof}
@@ -1046,8 +1046,8 @@ the remaining sites unchanged.
     fixed-point relation. Then, for every $N>0$, the periodic ranks satisfy
     \begin{align}
         \operatorname{rank}\rho^{(N)}(A)
-        &=\operatorname{rank}\rho^{(1)}(A)
-          \bigl(\operatorname{rank}P\bigr)^{N-1}.
+         & =\operatorname{rank}\rho^{(1)}(A)
+        \bigl(\operatorname{rank}P\bigr)^{N-1}.
         \label{eq:cpsv_fib_strong_rfp_rank}
     \end{align}
     (\ref{eq:cpsv_fib_strong_rfp_rank}) contradicts the
@@ -1057,7 +1057,7 @@ the remaining sites unchanged.
 \begin{definition}[Initial-coordinate regroupings]
     \label{def:finite_tuple_regroupings}
     \lean{finSuccArrowEquiv,
-      finAddTwoArrowEquiv}
+        finAddTwoArrowEquiv}
     \leanok
     Let $R_1$ identify an $(N+1)$-tuple with its first coordinate and the
     remaining $N$-tuple. Let $R_2$ identify an $(N+2)$-tuple with its first
@@ -1067,17 +1067,17 @@ the remaining sites unchanged.
 \begin{definition}[Renormalization maps on a longer ring]
     \label{def:mpdo_global_renormalization_maps}
     \lean{MPOTensor.refineFirstSite,
-      MPOTensor.coarsenFirstTwoSites}
+        MPOTensor.coarsenFirstTwoSites}
     \leanok
     \uses{def:finite_tuple_regroupings}
     Let $N$ count the sites that are left unchanged. For physical maps
     $\mathcal T:M_d\to M_{d^2}$ and $\mathcal S:M_{d^2}\to M_d$, define
     \begin{align}
         \widehat{\mathcal T}_N
-        &=\mathcal T\otimes\id_{d^N},
-        \notag\\
+         & =\mathcal T\otimes\id_{d^N},
+        \notag                          \\
         \widehat{\mathcal S}_N
-        &=\mathcal S\otimes\id_{d^N},
+         & =\mathcal S\otimes\id_{d^N},
         \notag
     \end{align}
     using $R_1$ and $R_2$. Thus $N=0$ leaves no spectator site, but the
@@ -1087,28 +1087,28 @@ the remaining sites unchanged.
 \begin{lemma}[Regrouping the first physical sites]
     \label{lem:mpdo_global_renormalization_regrouping}
     \lean{finSuccArrowEquiv_apply,
-      finSuccArrowEquiv_symm_apply,
-      finAddTwoArrowEquiv_apply,
-      finAddTwoArrowEquiv_symm_apply}
+        finSuccArrowEquiv_symm_apply,
+        finAddTwoArrowEquiv_apply,
+        finAddTwoArrowEquiv_symm_apply}
     \leanok
     \uses{def:finite_tuple_regroupings}
     For a physical word $\sigma$ of length $N+1$,
     \begin{align}
         R_1(\sigma)
-        &=(\sigma_0,(\sigma_1,\ldots,\sigma_N)),
-        \notag\\
+         & =(\sigma_0,(\sigma_1,\ldots,\sigma_N)),
+        \notag                                     \\
         R_1^{-1}(i,(a_1,\ldots,a_N))
-        &=(i,a_1,\ldots,a_N).
+         & =(i,a_1,\ldots,a_N).
         \notag
     \end{align}
     For a physical word $\sigma$ of length $N+2$,
     \begin{align}
         R_2(\sigma)
-        &=\bigl((\sigma_0,\sigma_1),
-            (\sigma_2,\ldots,\sigma_{N+1})\bigr),
-        \notag\\
+         & =\bigl((\sigma_0,\sigma_1),
+        (\sigma_2,\ldots,\sigma_{N+1})\bigr),
+        \notag                         \\
         R_2^{-1}((i,j),(a_1,\ldots,a_N))
-        &=(i,j,a_1,\ldots,a_N).
+         & =(i,j,a_1,\ldots,a_N).
         \notag
     \end{align}
 \end{lemma}
@@ -1121,7 +1121,7 @@ the remaining sites unchanged.
 \begin{lemma}[Localized renormalization maps are channels]
     \label{lem:mpdo_global_renormalization_maps_cptp}
     \lean{MPOTensor.refineFirstSite_isKrausCPTP,
-      MPOTensor.coarsenFirstTwoSites_isKrausCPTP}
+        MPOTensor.coarsenFirstTwoSites_isKrausCPTP}
     \leanok
     \uses{def:mpdo_global_renormalization_maps}
     If $\mathcal S$ and $\mathcal T$ are trace-preserving completely positive,
@@ -1136,8 +1136,8 @@ the remaining sites unchanged.
     $K_j\otimes I_{d^N}$, and
     \begin{align}
         \sum_j(K_j\otimes I_{d^N})^\dagger(K_j\otimes I_{d^N})
-        &=\left(\sum_j K_j^\dagger K_j\right)\otimes I_{d^N}
-          =I_d\otimes I_{d^N}.
+         & =\left(\sum_j K_j^\dagger K_j\right)\otimes I_{d^N}
+        =I_d\otimes I_{d^N}.
         \notag
     \end{align}
     The two regroupings are unitary conjugations and preserve complete
@@ -1147,10 +1147,10 @@ the remaining sites unchanged.
 \begin{theorem}[Global action of the renormalization maps]
     \label{thm:mpdo_global_renormalization_maps}
     \lean{MPOTensor.refineFirstSite_physCloseN,
-      MPOTensor.coarsenFirstTwoSites_physCloseN,
-      MPOTensor.refineFirstSite_mpo,
-      MPOTensor.coarsenFirstTwoSites_mpo,
-      MPOTensor.exists_global_renormalization_maps}
+        MPOTensor.coarsenFirstTwoSites_physCloseN,
+        MPOTensor.refineFirstSite_mpo,
+        MPOTensor.coarsenFirstTwoSites_mpo,
+        MPOTensor.exists_global_renormalization_maps}
     \leanok
     \uses{def:phys_close, def:is_rfp_via_ts, def:mpdo_global_renormalization_maps}
     Suppose that $\mathcal S[M_2(X)]=M_1(X)$ and
@@ -1158,10 +1158,10 @@ the remaining sites unchanged.
     every $N$ and $X$,
     \begin{align}
         \widehat{\mathcal S}_N[M_{N+2}(X)]
-        &=M_{N+1}(X),
-        \notag\\
+         & =M_{N+1}(X),
+        \notag          \\
         \widehat{\mathcal T}_N[M_{N+1}(X)]
-        &=M_{N+2}(X).
+         & =M_{N+2}(X).
         \notag
     \end{align}
     In particular, these identities hold for every periodic MPO operator.
@@ -1178,14 +1178,14 @@ the remaining sites unchanged.
     operator $Y$ on the first $r$ sites. Regrouping the first site gives
     \begin{align}
         [M_{N+1}(X)]^{(1)}_{u,v}
-        &=M_1(M^{u,v}X).
+         & =M_1(M^{u,v}X).
         \notag
     \end{align}
     Therefore
     \begin{align}
         \mathcal T([M_{N+1}(X)]^{(1)}_{u,v})
-        &=M_2(M^{u,v}X)
-          =[M_{N+2}(X)]^{(2)}_{u,v}.
+         & =M_2(M^{u,v}X)
+        =[M_{N+2}(X)]^{(2)}_{u,v}.
         \notag
     \end{align}
     Equality of all blocks proves the refinement identity. Interchanging
@@ -1195,10 +1195,10 @@ the remaining sites unchanged.
     (Lemma~\ref{lem:phys_close_identity}) gives the periodic-ring identities
     \begin{align}
         \widehat{\mathcal T}_N[\rho^{(N+1)}(M)]
-        &=\rho^{(N+2)}(M),
-        \notag\\
+         & =\rho^{(N+2)}(M),
+        \notag               \\
         \widehat{\mathcal S}_N[\rho^{(N+2)}(M)]
-        &=\rho^{(N+1)}(M).
+         & =\rho^{(N+1)}(M).
         \notag
     \end{align}
 \end{proof}
@@ -1212,7 +1212,7 @@ the remaining sites unchanged.
     An MPS tensor $A=\{A^i\}_{i=0}^{d-1}$ determines an MPO tensor by
     placing $A^i$ on the diagonal in the bra and ket indices:
     \begin{align}
-        M^{ij}&=\delta_{ij}A^i.
+        M^{ij} & =\delta_{ij}A^i.
         \notag
     \end{align}
     Equivalently, $M^{ii}=A^i$ and $M^{ij}=0$ for $i\ne j$.
@@ -1221,17 +1221,17 @@ the remaining sites unchanged.
 \begin{theorem}[Operator and rank of the diagonal pure-state embedding]
     \label{thm:to_mpo_diagonal_rank}
     \lean{MPSTensor.evalWord_toMPOTensor,
-      MPSTensor.mpo_toMPOTensor,
-      MPSTensor.rank_mpo_toMPOTensor}
+        MPSTensor.mpo_toMPOTensor,
+        MPSTensor.rank_mpo_toMPOTensor}
     \leanok
     \uses{def:to_mpo_tensor, def:mpo_family, def:mpv}
     For every $N$, the embedded MPO is diagonal with diagonal
     $V^{(N)}(A)$, and hence
     \begin{align}
         \rho^{(N)}(A^{\mathrm{MPO}})
-        &=\operatorname{diag}V^{(N)}(A),&
+         & =\operatorname{diag}V^{(N)}(A),      &
         \operatorname{rank}\rho^{(N)}(A^{\mathrm{MPO}})
-        &=\#\{\sigma:V^{(N)}(A)_\sigma\ne0\}.
+         & =\#\{\sigma:V^{(N)}(A)_\sigma\ne0\}.
         \notag
     \end{align}
 \end{theorem}
@@ -1272,7 +1272,7 @@ the remaining sites unchanged.
     \begin{align}
         \E_{A^{\mathrm{MPO}}}\circ\E_{A^{\mathrm{MPO}}}
         =\E_{A^{\mathrm{MPO}}}
-        &\iff
+         & \iff
         \E_A\circ\E_A=\E_A.
         \notag
     \end{align}

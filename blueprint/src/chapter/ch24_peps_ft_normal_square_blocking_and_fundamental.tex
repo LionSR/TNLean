@@ -19,17 +19,17 @@
         % tensor boundary signature; the boundary legs are cut lattice edges.
         \tenkzkernel
         \begin{tenkz}[rows={ket,ket,ket,ket,ket}, cols=5,
-            west=open, east=open, north=open, south=open]
+                west=open, east=open, north=open, south=open]
             \tn[at=(4,4), species=marked, name=vSite, label pos=sw]{v}
             \tnmark[form=enclosure, slot=selected, tint, label pos=nw]
-                {(2,2) .. (4,4) - (4,4)}{$R$}
+            {(2,2) .. (4,4) - (4,4)}{$R$}
         \end{tenkz}
         $\qquad$
         \begin{tenkz}[rows={ket,ket,ket,ket,ket}, cols=5,
-            west=open, east=open, north=open, south=open]
+                west=open, east=open, north=open, south=open]
             \tn[at=(4,4), species=marked, name=vSite, label pos=sw]{v}
             \tnmark[form=enclosure, slot=selected, tint, label pos=nw]
-                {(2,2) .. (4,4)}{$S$}
+            {(2,2) .. (4,4)}{$S$}
         \end{tenkz}
         $\qquad R\subset S=R\cup\{v\}$
     \end{tenkzequation}
@@ -84,15 +84,15 @@
         % exposed, so each panel has (V,P)=(20,0).
         \tenkzkernel
         \begin{tenkz}[rows={ket,ket,ket,ket,ket}, cols=5,
-            west=open, east=open, north=open, south=open]
+                west=open, east=open, north=open, south=open]
             \tnmark[form=enclosure, slot=selected, tint, label pos=nw]
-                {(2,2) .. (4,4) - (4,4)}{$R$}
+            {(2,2) .. (4,4) - (4,4)}{$R$}
         \end{tenkz}
         $\qquad\text{and}\qquad$
         \begin{tenkz}[rows={ket,ket,ket,ket,ket}, cols=5,
-            west=open, east=open, north=open, south=open]
+                west=open, east=open, north=open, south=open]
             \tnmark[form=enclosure, slot=selected, tint, label pos=nw]
-                {(2,2) .. (4,4)}{$S$}
+            {(2,2) .. (4,4)}{$S$}
         \end{tenkz}
     \end{tenkzequation}
     \begin{tenkzequation}
@@ -110,9 +110,9 @@
         % cell set of normalSquareRegionT rather than the source's rounded ink.
         \tenkzkernel
         \begin{tenkz}[rows={ket,ket,ket,ket,ket,ket}, cols=5,
-            west=open, east=open, north=open, south=open]
+                west=open, east=open, north=open, south=open]
             \tnmark[form=enclosure, slot=selected, tint, label pos=n]
-                {(1,1) .. (6,5) - (3,1) .. (5,2) - (2,3) .. (3,5)}{$T$}
+            {(1,1) .. (6,5) - (3,1) .. (5,2) - (2,3) .. (3,5)}{$T$}
         \end{tenkz}
     \end{tenkzequation}
 \end{definition}
@@ -142,15 +142,15 @@
         % arXiv:1804.04964, paper_normal.tex:1475--1499.
         \tenkzkernel
         \begin{tenkz}[rows={ket,ket,ket,ket,ket,ket,ket}, cols=7,
-            west=open, east=open, north=open, south=open]
+                west=open, east=open, north=open, south=open]
             % The authored marked wire restates the (4,3)--(4,4) grid bond.
             \tnwire[species=marked]{(4,3)}{(4,4)}
             \tnmark[form=enclosure, slot=selected, tint]
-                {(4,2) .. (6,3)}{$A_1$}
+            {(4,2) .. (6,3)}{$A_1$}
             \tnmark[form=enclosure, slot=secondary, tint]
-                {(3,4) .. (4,6)}{$A_2$}
+            {(3,4) .. (4,6)}{$A_2$}
             \tnmark[form=enclosure, slot=complement, label pos=n]
-                {(1,1) .. (7,7) - (4,2) .. (6,3) - (3,4) .. (4,6)}{$A_3$}
+            {(1,1) .. (7,7) - (4,2) .. (6,3) - (3,4) .. (4,6)}{$A_3$}
         \end{tenkz}
         $\quad\Rightarrow\quad$
         \begin{tenkz}[rows={ket}, cols=3, physical=up, boundary=periodic]
@@ -185,13 +185,13 @@
         \begin{tenkz}[rows={wire}, cols=1, bonds=none]
             \tn[label pos=sw,
                 ports={180:virtual, 0:virtual, 90:virtual, 270:virtual,
-                       45:physical}]{B}
+                        45:physical}]{B}
         \end{tenkz}
         $ = \lambda $
         \begin{tenkz}[rows={wire}, cols=1, bonds=none]
             \tn[name=tiAbsA, label pos=sw,
                 ports={180:virtual, 0:virtual, 90:virtual, 270:virtual,
-                       45:physical}]{A}
+                        45:physical}]{A}
             \tn[at=1 w of tiAbsA, name=tiAbsX, skin=ring, species=operator,
                 ports={0:virtual, 180:virtual}]{X}
             \tn[at=1 e of tiAbsA, name=tiAbsXinv, skin=ring,

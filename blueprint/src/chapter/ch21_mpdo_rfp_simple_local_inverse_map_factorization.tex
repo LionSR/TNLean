@@ -32,7 +32,7 @@ physical index identifies the corresponding virtual legs. In components,
 this is the matrix-unit identity
 \begin{align}
     \sum_p(K^{-1})^{\alpha,\beta}_p(K^p)_{\alpha',\beta'}
-    &=\delta_{\alpha,\alpha'}\delta_{\beta,\beta'}.
+     & =\delta_{\alpha,\alpha'}\delta_{\beta,\beta'}.
     \label{eq:rfp_inverse_matrix_units}
 \end{align}
 Its two Kronecker factors are the two bare cups:
@@ -91,9 +91,9 @@ This is the single-block identity in
     $Z_4=\tr[\rho^{(4)}(\mathcal K)]$. Its normalized fourth-site virtual tail is
     \begin{align}
         R_4
-        &:=Z_4^{-1}\mathcal T_{\mathcal K}
-          =\tr[\rho^{(4)}(\mathcal K)]^{-1}
-          \sum_{i_4=0}^{d-1}\mathcal K^{i_4i_4}.
+         & :=Z_4^{-1}\mathcal T_{\mathcal K}
+        =\tr[\rho^{(4)}(\mathcal K)]^{-1}
+        \sum_{i_4=0}^{d-1}\mathcal K^{i_4i_4}.
         \label{eq:rfp_normalized_tail}
     \end{align}
     Thus the contraction of the fourth ket and bra indices is incorporated into
@@ -112,9 +112,9 @@ This is the single-block identity in
     normalized four-site periodic operator is
     \begin{align}
         \sigma_3^{(4)}(\mathcal K)_{u,v}
-        &=\tr\!\left(\mathcal K^{u,v}R_4\right)
-          =\tr\!\left(\mathcal K^{i_1j_1}\mathcal K^{i_2j_2}
-          \mathcal K^{i_3j_3}R_4\right).
+         & =\tr\!\left(\mathcal K^{u,v}R_4\right)
+        =\tr\!\left(\mathcal K^{i_1j_1}\mathcal K^{i_2j_2}
+        \mathcal K^{i_3j_3}R_4\right).
         \label{eq:rfp_three_site_marginal}
     \end{align}
 \end{theorem}
@@ -134,12 +134,12 @@ This is the single-block identity in
         \tn[skin=ring]{R_4}
     \end{tenkz}
     \caption{Tracing the fourth site of the normalized four-site periodic MPO
-    leaves the physical legs of sites $1,2,3$ open and replaces the fourth site
-    by the virtual closing operator
-    $R_4=\tr[\rho^{(4)}(\mathcal K)]^{-1}
-    \sum_{i_4}\mathcal K^{i_4 i_4}$; compare the normalization convention and
-    three-site marginal in
-    \cite[lines~792--793 and 1343--1348]{Cirac2016MPDO_arXiv}.}
+        leaves the physical legs of sites $1,2,3$ open and replaces the fourth site
+        by the virtual closing operator
+        $R_4=\tr[\rho^{(4)}(\mathcal K)]^{-1}
+            \sum_{i_4}\mathcal K^{i_4 i_4}$; compare the normalization convention and
+        three-site marginal in
+        \cite[lines~792--793 and 1343--1348]{Cirac2016MPDO_arXiv}.}
     \label{fig:mpdo_normalized_four_site_tail}
 \end{figure}
 
@@ -150,17 +150,17 @@ This is the single-block identity in
     length-four word at its last letter gives
     \begin{align}
         \sigma_3^{(4)}(\mathcal K)_{u,v}
-        &=Z_4^{-1}\sum_{i_4=0}^{d-1}
-          \tr\!\left(\mathcal K^{u,v}\mathcal K^{i_4i_4}\right).
+         & =Z_4^{-1}\sum_{i_4=0}^{d-1}
+        \tr\!\left(\mathcal K^{u,v}\mathcal K^{i_4i_4}\right).
         \notag
     \end{align}
     Linearity of the trace and (\ref{eq:rfp_normalized_tail}) now yield
     \begin{align}
         Z_4^{-1}\sum_{i_4=0}^{d-1}
-          \tr\!\left(\mathcal K^{u,v}\mathcal K^{i_4i_4}\right)
-        &=\tr\!\left(\mathcal K^{u,v}
-          \left(Z_4^{-1}\sum_{i_4=0}^{d-1}\mathcal K^{i_4i_4}\right)\right)
-          =\tr\!\left(\mathcal K^{u,v}R_4\right).
+        \tr\!\left(\mathcal K^{u,v}\mathcal K^{i_4i_4}\right)
+         & =\tr\!\left(\mathcal K^{u,v}
+        \left(Z_4^{-1}\sum_{i_4=0}^{d-1}\mathcal K^{i_4i_4}\right)\right)
+        =\tr\!\left(\mathcal K^{u,v}R_4\right).
         \notag
     \end{align}
 \end{proof}
@@ -211,7 +211,7 @@ This is the single-block identity in
     $\alpha_1,\beta_1,\alpha_3,\beta_3$, define
     \begin{align}
         C_{\alpha_1,\beta_1,\alpha_3,\beta_3}(p_2;R)
-        &:=
+         & :=
         \sum_{p_1,p_3}
         (\mathcal K^{-1})^{\alpha_1,\beta_1}_{p_1}
         (\mathcal K^{-1})^{\alpha_3,\beta_3}_{p_3}
@@ -232,8 +232,8 @@ This is the single-block identity in
     For every middle physical index $p_2$,
     \begin{align}
         C_{\alpha_1,\beta_1,\alpha_3,\beta_3}(p_2;R)
-        &=\mathcal K^{p_2}_{\beta_1,\alpha_3}
-          R_{\beta_3,\alpha_1}.
+         & =\mathcal K^{p_2}_{\beta_1,\alpha_3}
+        R_{\beta_3,\alpha_1}.
         \label{eq:rfp_inverse_contraction_eval}
     \end{align}
     % Local fix (tail index): the source display repeats the third-site left
@@ -244,50 +244,50 @@ This is the single-block identity in
 
 \begin{figure}[ht]
     \centering
-        % (\mathcal K^{-1} (x) Id (x) \mathcal K^{-1}) \mathcal K_3
-        %   = \mathcal K^{p_2}_{beta_1,alpha_3} R_{beta_3,alpha_1}
-        % (arXiv:1606.00608, Appendix C.2, lines 1415--1438; paper
-        % figures MPDO_Xab.png, MPDO_kappaab.png, and MPDO_mba.png).
-        %
-        % LHS: the two \mathcal K^{-1} boxes expose virtual pairs
-        % (alpha_1,beta_1) and (alpha_3,beta_3).  Their physical indices
-        % p_1,p_3 match the first and third legs of the three-site chain
-        % closed against R; p_2 remains open.  RHS: \mathcal K carries beta_1 west,
-        % p_2 up, and alpha_3 east, while R carries beta_3 west and
-        % alpha_1 east.  There is no surviving sum: the identity is
-        % pointwise in all four virtual indices.  Both sides have aggregate
-        % boundary signature (virtual-west=2 | physical-up=1 |
-        % virtual-east=2).
-        \begin{tenkzequation}
-            \tenkzkernel
-            $\Bigl($
-            \begin{tenkz}[cols=1, size=s]
-                \tn[label pos=n, ports={180:virtual:$\alpha_1$,
-                    0:virtual:$\beta_1$, 270:physical:$p_1$}]{\mathcal K^{-1}}
-            \end{tenkz}%
-            $\;\otimes\;\Id\;\otimes\;$%
-            \begin{tenkz}[cols=1, size=s]
-                \tn[label pos=n, ports={180:virtual:$\alpha_3$,
-                    0:virtual:$\beta_3$, 270:physical:$p_3$}]{\mathcal K^{-1}}
-            \end{tenkz}
-            $\Bigr)$
-            \begin{tenkz}[cols=4, boundary=periodic, size=s]
-                \tn[label pos=s, ports={90:physical:$p_1$}]{\mathcal K} &
-                \tn[label pos=s, ports={90:physical:$p_2$}]{\mathcal K} &
-                \tn[label pos=s, ports={90:physical:$p_3$}]{\mathcal K} &
-                \tn[skin=ring]{R}
-            \end{tenkz}
-            $ = $
-            \begin{tenkz}[cols=1, size=s]
-                \tn[label pos=s, ports={180:virtual:$\beta_1$,
-                    0:virtual:$\alpha_3$, 90:physical:$p_2$}]{\mathcal K}
-            \end{tenkz}
-            $ \otimes $
-            \begin{tenkz}[cols=1, size=s]
-                \tn[skin=ring, ports={180:virtual:$\beta_3$,
-                    0:virtual:$\alpha_1$}]{R}
-            \end{tenkz}
-        \end{tenkzequation}
+    % (\mathcal K^{-1} (x) Id (x) \mathcal K^{-1}) \mathcal K_3
+    %   = \mathcal K^{p_2}_{beta_1,alpha_3} R_{beta_3,alpha_1}
+    % (arXiv:1606.00608, Appendix C.2, lines 1415--1438; paper
+    % figures MPDO_Xab.png, MPDO_kappaab.png, and MPDO_mba.png).
+    %
+    % LHS: the two \mathcal K^{-1} boxes expose virtual pairs
+    % (alpha_1,beta_1) and (alpha_3,beta_3).  Their physical indices
+    % p_1,p_3 match the first and third legs of the three-site chain
+    % closed against R; p_2 remains open.  RHS: \mathcal K carries beta_1 west,
+    % p_2 up, and alpha_3 east, while R carries beta_3 west and
+    % alpha_1 east.  There is no surviving sum: the identity is
+    % pointwise in all four virtual indices.  Both sides have aggregate
+    % boundary signature (virtual-west=2 | physical-up=1 |
+    % virtual-east=2).
+    \begin{tenkzequation}
+        \tenkzkernel
+        $\Bigl($
+        \begin{tenkz}[cols=1, size=s]
+            \tn[label pos=n, ports={180:virtual:$\alpha_1$,
+                        0:virtual:$\beta_1$, 270:physical:$p_1$}]{\mathcal K^{-1}}
+        \end{tenkz}%
+        $\;\otimes\;\Id\;\otimes\;$%
+        \begin{tenkz}[cols=1, size=s]
+            \tn[label pos=n, ports={180:virtual:$\alpha_3$,
+                        0:virtual:$\beta_3$, 270:physical:$p_3$}]{\mathcal K^{-1}}
+        \end{tenkz}
+        $\Bigr)$
+        \begin{tenkz}[cols=4, boundary=periodic, size=s]
+            \tn[label pos=s, ports={90:physical:$p_1$}]{\mathcal K} &
+            \tn[label pos=s, ports={90:physical:$p_2$}]{\mathcal K} &
+            \tn[label pos=s, ports={90:physical:$p_3$}]{\mathcal K} &
+            \tn[skin=ring]{R}
+        \end{tenkz}
+        $ = $
+        \begin{tenkz}[cols=1, size=s]
+            \tn[label pos=s, ports={180:virtual:$\beta_1$,
+                        0:virtual:$\alpha_3$, 90:physical:$p_2$}]{\mathcal K}
+        \end{tenkz}
+        $ \otimes $
+        \begin{tenkz}[cols=1, size=s]
+            \tn[skin=ring, ports={180:virtual:$\beta_3$,
+                        0:virtual:$\alpha_1$}]{R}
+        \end{tenkz}
+    \end{tenkzequation}
     \caption{Applying $\mathcal K^{-1}$ at the first and third sites collapses
     the three-site contraction to
     $\mathcal K^{p_2}_{\beta_1,\alpha_3}R_{\beta_3,\alpha_1}$, where
@@ -301,16 +301,16 @@ This is the single-block identity in
     Move the two finite sums through the trace. By the inverse-map identity
     \begin{align}
         \sum_p(\mathcal K^{-1})^{\alpha,\beta}_p\,\mathcal K^p
-        &=E_{\alpha,\beta},
+         & =E_{\alpha,\beta},
         \notag
     \end{align}
     which is the matrix form of (\ref{eq:rfp_inverse_matrix_units}), the double
     sum collapses to
     \begin{align}
         \tr\!\left(E_{\alpha_1,\beta_1}\mathcal K^{p_2}
-          E_{\alpha_3,\beta_3}R\right)
-        &=\mathcal K^{p_2}_{\beta_1,\alpha_3}
-          R_{\beta_3,\alpha_1}.
+        E_{\alpha_3,\beta_3}R\right)
+         & =\mathcal K^{p_2}_{\beta_1,\alpha_3}
+        R_{\beta_3,\alpha_1}.
         \notag
     \end{align}
 \end{proof}
@@ -324,8 +324,8 @@ This is the single-block identity in
     operator $\rho$ is the three-site closure of $\mathcal K$ against $R$ if
     \begin{align}
         \rho_{i_1i_2i_3,j_1j_2j_3}
-        &=\tr\!\left(\mathcal K^{i_1j_1}\mathcal K^{i_2j_2}
-          \mathcal K^{i_3j_3}R\right).
+         & =\tr\!\left(\mathcal K^{i_1j_1}\mathcal K^{i_2j_2}
+        \mathcal K^{i_3j_3}R\right).
         \label{eq:rfp_three_site_closure}
     \end{align}
     This is the algebraic form of the three-site reduced operator in
@@ -344,13 +344,13 @@ This is the single-block identity in
     For a Hayashi sector $k$, define the two inverse factors
     \begin{align}
         A^{(k)}_{\alpha_1,\beta_1}(l,l')
-        &:=
+         & :=
         \sum_{i_1,j_1}
         (\mathcal K^{-1})^{\alpha_1,\beta_1}_{(i_1,j_1)}
         (\rho_{A b_1}^{(k)})_{(i_1,l),(j_1,l')},
-        \notag\\
+        \notag \\
         B^{(k)}_{\alpha_3,\beta_3}(r,r')
-        &:=
+         & :=
         \sum_{i_3,j_3}
         (\mathcal K^{-1})^{\alpha_3,\beta_3}_{(i_3,j_3)}
         (\rho_{b_2 C}^{(k)})_{(r,i_3),(r',j_3)}.
@@ -371,22 +371,22 @@ This is the single-block identity in
     the closure to one entry of the middle physical slice and one entry of the
     tail:
     \begin{align}
-        &\sum_{i_1,j_1,i_3,j_3}
+         & \sum_{i_1,j_1,i_3,j_3}
         (\mathcal K^{-1})^{\alpha_1,\beta_1}_{(i_1,j_1)}
         (\mathcal K^{-1})^{\alpha_3,\beta_3}_{(i_3,j_3)}
         \rho_{i_1i_2i_3,j_1j_2j_3}
-        \notag\\
-        &\qquad
+        \notag                    \\
+         & \qquad
         =\mathcal K^{i_2j_2}_{\beta_1,\alpha_3}
         R_{\beta_3,\alpha_1}.
         \label{eq:rfp_outer_collapse}
     \end{align}
     Consequently, for any matrix $U$ on the middle site,
     \begin{align}
-        &R_{\beta_3,\alpha_1}
+         & R_{\beta_3,\alpha_1}
         (U\kappa_{\beta_1,\alpha_3}U^\dagger)_{b,b'}
-        \notag\\
-        &\qquad
+        \notag                  \\
+         & \qquad
         =\sum_{i_1,j_1,i_3,j_3}
         (\mathcal K^{-1})^{\alpha_1,\beta_1}_{(i_1,j_1)}
         (\mathcal K^{-1})^{\alpha_3,\beta_3}_{(i_3,j_3)}
@@ -407,15 +407,15 @@ This is the single-block identity in
     Theorem~\ref{thm:mpdo_inverse_map_three_site_contraction} then gives
     \begin{align}
         C_{\alpha_1,\beta_1,\alpha_3,\beta_3}((i_2,j_2);R)
-        &=\mathcal K^{i_2j_2}_{\beta_1,\alpha_3}
-          R_{\beta_3,\alpha_1},
+         & =\mathcal K^{i_2j_2}_{\beta_1,\alpha_3}
+        R_{\beta_3,\alpha_1},
         \notag
     \end{align}
     which is (\ref{eq:rfp_outer_collapse}). The second identity follows by
     expanding the matrix product entrywise,
     \begin{align}
         (U\kappa_{\beta_1,\alpha_3}U^\dagger)_{b,b'}
-        &=\sum_{i_2,j_2}
+         & =\sum_{i_2,j_2}
         U_{b,i_2} \kappa_{\beta_1,\alpha_3}(i_2,j_2)
         \overline{U_{b',j_2}},
         \notag
@@ -424,7 +424,7 @@ This is the single-block identity in
     \begin{align}
         R_{\beta_3,\alpha_1}
         \kappa_{\beta_1,\alpha_3}(i_2,j_2)
-        &=\sum_{i_1,j_1,i_3,j_3}
+         & =\sum_{i_1,j_1,i_3,j_3}
         (\mathcal K^{-1})^{\alpha_1,\beta_1}_{(i_1,j_1)}
         (\mathcal K^{-1})^{\alpha_3,\beta_3}_{(i_3,j_3)}
         \rho_{i_1i_2i_3,j_1j_2j_3},
@@ -442,8 +442,8 @@ This is the single-block identity in
     against $R$, and a Hayashi decomposition of $\rho$ has been chosen. Write
     \begin{align}
         \widetilde\kappa^{(k)}_{\beta_1,\alpha_3}
-          ((l,r),(l',r'))
-        &:=
+        ((l,r),(l',r'))
+         & :=
         \left[U_B\kappa_{\beta_1,\alpha_3}U_B^\dagger\right]_{(k,l,r),(k,l',r')}.
         \notag
     \end{align}
@@ -451,9 +451,9 @@ This is the single-block identity in
     \begin{align}
         R_{\beta_3,\alpha_1}
         \widetilde\kappa^{(k)}_{\beta_1,\alpha_3}
-          ((l,r),(l',r'))
-        &=p_k A^{(k)}_{\alpha_1,\beta_1}(l,l')
-          B^{(k)}_{\alpha_3,\beta_3}(r,r').
+        ((l,r),(l',r'))
+         & =p_k A^{(k)}_{\alpha_1,\beta_1}(l,l')
+        B^{(k)}_{\alpha_3,\beta_3}(r,r').
         \label{eq:rfp_sector_comparison}
     \end{align}
     The probability $p_k$ remains explicit because both sector density
@@ -479,15 +479,15 @@ For fixed $k,\alpha_1,\beta_3$, the identity
 % of MPDO-22-12-17-2.tex, fixes the one-tensor four-leg topology.  The
 % normalized formula is Theorem thm:mpdo_inverse_map_hayashi_sector_comparison.
 \begin{tenkzequation}
-\tenkzkernel
-$R_{\beta_3,\alpha_1}\,$
-\begin{tenkz}[cols=1]
-    \tn[skin=mpo, ports={90:physical:$(l{,}r)$, 270:physical:$(l'{,}r')$,
+    \tenkzkernel
+    $R_{\beta_3,\alpha_1}\,$
+    \begin{tenkz}[cols=1]
+        \tn[skin=mpo, ports={90:physical:$(l{,}r)$, 270:physical:$(l'{,}r')$,
         180:virtual:$\beta_1$, 0:virtual:$\alpha_3$}]{\widetilde\kappa^{(k)}}
-\end{tenkz}
-$ = $
-$p_k\,A^{(k)}_{\alpha_1,\beta_1}(l,l')
-B^{(k)}_{\alpha_3,\beta_3}(r,r')$.
+    \end{tenkz}
+    $ = $
+    $p_k\,A^{(k)}_{\alpha_1,\beta_1}(l,l')
+        B^{(k)}_{\alpha_3,\beta_3}(r,r')$.
 \end{tenkzequation}
 
 \begin{proof}
@@ -495,72 +495,72 @@ B^{(k)}_{\alpha_3,\beta_3}(r,r')$.
     \uses{thm:mpdo_closure_outer_contraction}
     At fixed indices $(k,l,r)$ and $(k,l',r')$, the Hayashi block equality is
     \begin{align}
-        &\sum_{i_2,j_2}
+         & \sum_{i_2,j_2}
         [U_B]_{(k,l,r),i_2}
         \rho_{i_1i_2i_3,j_1j_2j_3}
         \overline{[U_B]_{(k,l',r'),j_2}}
-        \notag\\
-        &\qquad
+        \notag            \\
+         & \qquad
         =p_k(\rho_{A b_1}^{(k)})_{(i_1,l),(j_1,l')}
-          (\rho_{b_2 C}^{(k)})_{(r,i_3),(r',j_3)}.
+        (\rho_{b_2 C}^{(k)})_{(r,i_3),(r',j_3)}.
         \notag
     \end{align}
     For each $i_2,j_2$, the preceding theorem gives
     \begin{align}
-        &\sum_{i_1,j_1,i_3,j_3}
+         & \sum_{i_1,j_1,i_3,j_3}
         (\mathcal K^{-1})^{\alpha_1,\beta_1}_{(i_1,j_1)}
         (\mathcal K^{-1})^{\alpha_3,\beta_3}_{(i_3,j_3)}
         \rho_{i_1i_2i_3,j_1j_2j_3}
-        \notag\\
-        &\qquad
+        \notag                    \\
+         & \qquad
         =\mathcal K^{i_2j_2}_{\beta_1,\alpha_3}
-          R_{\beta_3,\alpha_1}.
+        R_{\beta_3,\alpha_1}.
         \notag
     \end{align}
     Apply
     \begin{align}
         \sum_{i_1,j_1,i_3,j_3}
-        &(\mathcal K^{-1})^{\alpha_1,\beta_1}_{(i_1,j_1)}
+         & (\mathcal K^{-1})^{\alpha_1,\beta_1}_{(i_1,j_1)}
         (\mathcal K^{-1})^{\alpha_3,\beta_3}_{(i_3,j_3)}\,(-)
         \notag
     \end{align}
     to the Hayashi block equality. Substituting the preceding display and
     interchanging the finite sums gives
     \begin{align}
-        &\sum_{i_1,j_1,i_3,j_3}
-          (\mathcal K^{-1})^{\alpha_1,\beta_1}_{(i_1,j_1)}
-          (\mathcal K^{-1})^{\alpha_3,\beta_3}_{(i_3,j_3)}
-        \notag\\
-        &\qquad{}\times\left(\sum_{i_2,j_2}
-          [U_B]_{(k,l,r),i_2}
-          \rho_{i_1i_2i_3,j_1j_2j_3}
-          \overline{[U_B]_{(k,l',r'),j_2}}\right)
-        \notag\\
-        &\qquad
+         & \sum_{i_1,j_1,i_3,j_3}
+        (\mathcal K^{-1})^{\alpha_1,\beta_1}_{(i_1,j_1)}
+        (\mathcal K^{-1})^{\alpha_3,\beta_3}_{(i_3,j_3)}
+        \notag                                \\
+         & \qquad{}\times\left(\sum_{i_2,j_2}
+        [U_B]_{(k,l,r),i_2}
+        \rho_{i_1i_2i_3,j_1j_2j_3}
+        \overline{[U_B]_{(k,l',r'),j_2}}\right)
+        \notag                                \\
+         & \qquad
         =\sum_{i_2,j_2}
-          [U_B]_{(k,l,r),i_2}
-          \mathcal K^{i_2j_2}_{\beta_1,\alpha_3}
-          R_{\beta_3,\alpha_1}
-          \overline{[U_B]_{(k,l',r'),j_2}}.
+        [U_B]_{(k,l,r),i_2}
+        \mathcal K^{i_2j_2}_{\beta_1,\alpha_3}
+        R_{\beta_3,\alpha_1}
+        \overline{[U_B]_{(k,l',r'),j_2}}.
         \notag
     \end{align}
     The right-hand side is
     \begin{align}
-        &R_{\beta_3,\alpha_1}
+         & R_{\beta_3,\alpha_1}
         \sum_{i_2,j_2}
         [U_B]_{(k,l,r),i_2}
         \kappa_{\beta_1,\alpha_3}(i_2,j_2)
         \overline{[U_B]_{(k,l',r'),j_2}}
-        \notag\\
-        &\qquad
+        \notag                  \\
+         & \qquad
         =R_{\beta_3,\alpha_1}
         \widetilde\kappa^{(k)}_{\beta_1,\alpha_3}
-          ((l,r),(l',r')).
+        ((l,r),(l',r')).
         \notag
     \end{align}
     The contraction of the right-hand side of the Hayashi block equality is
     $p_k A^{(k)}_{\alpha_1,\beta_1}(l,l')
-    B^{(k)}_{\alpha_3,\beta_3}(r,r')$.
+        B^{(k)}_{\alpha_3,\beta_3}(r,r')$.
     Since the Hayashi block equality holds, equating the two contractions
     gives (\ref{eq:rfp_sector_comparison}).
 \end{proof}
@@ -583,8 +583,8 @@ B^{(k)}_{\alpha_3,\beta_3}(r,r')$.
     $(i_1,i_2,i_3)$, gives
     \begin{align}
         \rho_{i_1i_2i_3,j_1j_2j_3}
-        &=\tr\!\left(\mathcal K^{i_1j_1}\mathcal K^{i_2j_2}
-          \mathcal K^{i_3j_3}R_4\right),
+         & =\tr\!\left(\mathcal K^{i_1j_1}\mathcal K^{i_2j_2}
+        \mathcal K^{i_3j_3}R_4\right),
         \notag
     \end{align}
     which is the three-site closure condition
@@ -602,7 +602,7 @@ B^{(k)}_{\alpha_3,\beta_3}(r,r')$.
     \begin{align}
         R_{\beta_3,\alpha_1}
         \left[U_B\kappa_{\beta_1,\alpha_3}U_B^\dagger\right]_{(k,l,r),(k',l',r')}
-        &=0.
+         & =0.
         \label{eq:rfp_offdiagonal_vanishing}
     \end{align}
     Together with the diagonal comparison this gives the direct-sum structure
@@ -619,7 +619,7 @@ B^{(k)}_{\alpha_3,\beta_3}(r,r')$.
         \sum_{i_2,j_2}(U_B)_{b,i_2}
         \rho_{i_1i_2i_3,j_1j_2j_3}
         \overline{(U_B)_{b',j_2}}
-        &=0.
+         & =0.
         \notag
     \end{align}
     Substituting this vanishing into the expansion of
@@ -637,11 +637,11 @@ B^{(k)}_{\alpha_3,\beta_3}(r,r')$.
     The sector tensors are
     \begin{align}
         (l_k)_{\beta_1}
-        &:=R_{\beta_3,\alpha_1}^{-1}\,p_k
-          A^{(k)}_{\alpha_1,\beta_1},
-        \notag\\
+         & :=R_{\beta_3,\alpha_1}^{-1}\,p_k
+        A^{(k)}_{\alpha_1,\beta_1},
+        \notag                              \\
         (r_k)_{\alpha_3}
-        &:=B^{(k)}_{\alpha_3,\beta_3}.
+         & :=B^{(k)}_{\alpha_3,\beta_3}.
         \notag
     \end{align}
     % The source (arXiv:1606.00608, Appendix C.2, lines 1435--1448) leaves the
@@ -679,8 +679,8 @@ B^{(k)}_{\alpha_3,\beta_3}(r,r')$.
     indices $\beta_1,\alpha_3$,
     \begin{align}
         U_B\,\kappa_{\beta_1,\alpha_3}\,U_B^\dagger
-        &=\bigoplus_k
-          (l_k)_{\beta_1}\otimes(r_k)_{\alpha_3}.
+         & =\bigoplus_k
+        (l_k)_{\beta_1}\otimes(r_k)_{\alpha_3}.
         \label{eq:rfp_sector_factorization}
     \end{align}
     The direct sum refers to the physical indices and is inherited from the
@@ -719,7 +719,7 @@ In the middle-site basis selected by $U_B$, the same factorization
     \uses{thm:mpdo_inverse_map_hayashi_sector_comparison, thm:mpdo_inverse_map_hayashi_sector_offdiagonal}
     On a diagonal sector, the sectorwise comparison gives
     $R_{\beta_3,\alpha_1}\widetilde\kappa^{(k)}
-    =p_kA^{(k)}B^{(k)}$, and dividing by the nonzero entry
+        =p_kA^{(k)}B^{(k)}$, and dividing by the nonzero entry
     $R_{\beta_3,\alpha_1}$ produces
     $(l_k)_{\beta_1}\otimes(r_k)_{\alpha_3}$.
     On an off-diagonal sector, the product with $R_{\beta_3,\alpha_1}$
@@ -739,8 +739,8 @@ In the middle-site basis selected by $U_B$, the same factorization
     $\beta_1,\alpha_3$,
     \begin{align}
         U_B\,\kappa_{\beta_1,\alpha_3}\,U_B^\dagger
-        &=\bigoplus_k
-          (l_k)_{\beta_1}\otimes(r_k)_{\alpha_3}.
+         & =\bigoplus_k
+        (l_k)_{\beta_1}\otimes(r_k)_{\alpha_3}.
         \notag
     \end{align}
     The neighboring operators $\eta_{k,h}$ are assembled from these tensors

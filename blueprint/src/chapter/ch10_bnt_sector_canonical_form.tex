@@ -203,11 +203,11 @@ single family.
     \uses{def:cpsv_canonical_form, def:mpv_phase_class_data, thm:cpsv_canonical_form_bnt_characterization, thm:cpsv_normal_mpv_phase_gauge, def:block_diagonal_tensor, def:global_gauge_of_blocks}
     Let
     \begin{align}
-        A^i&=U^\dagger\left(\bigoplus_{k=1}^{r}\mu_kA_k^i\right)U.
+        A^i & =U^\dagger\left(\bigoplus_{k=1}^{r}\mu_kA_k^i\right)U.
         \label{eq:cpsv_active_refinement_original}
     \end{align}
     \begin{align}
-        UU^\dagger&=\Id.
+        UU^\dagger & =\Id.
         \label{eq:cpsv_active_refinement_coisometry}
     \end{align}
     be literal CPSV canonical-form data. Put
@@ -217,7 +217,7 @@ single family.
     \begin{align}
         \mathcal G
         :=\{(j,q):1\leq q\leq r_j\}\sqcup K_0
-        &\simeq\{1,\ldots,r\}.
+         & \simeq\{1,\ldots,r\}.
         \label{eq:cpsv_active_refinement_grouped_equiv}
     \end{align}
     Its active restriction identifies the class-copy pairs with
@@ -226,7 +226,7 @@ single family.
     equals that of $C_j$ and there are $\zeta_k\in\C$, with $|\zeta_k|=1$,
     and $X_k\in\GL_{D_k}(\C)$ such that
     \begin{align}
-        A_k^i&=\zeta_kX_kC_j^iX_k^{-1}.
+        A_k^i & =\zeta_kX_kC_j^iX_k^{-1}.
         \label{eq:cpsv_active_refinement_copy}
     \end{align}
     The copy retains the original coefficient $\mu_k$, and the representatives
@@ -236,7 +236,7 @@ single family.
     dependent grouped block coordinates and the original flattened listed
     coordinates gives
     \begin{align}
-        \sum_{x\in\mathcal G}D_x&=\sum_{k=1}^{r}D_k.
+        \sum_{x\in\mathcal G}D_x & =\sum_{k=1}^{r}D_k.
         \label{eq:cpsv_active_refinement_total_dim}
     \end{align}
     For $x=(j,q)$, let $\widehat\mu_x$ be the original weight of that copy and
@@ -245,21 +245,21 @@ single family.
     original block $\widehat B_x=A_x$. Define the grouped tensor by
     \begin{align}
         T_{\mathrm{grp}}^i
-        &=\operatorname{reindex}_{\Phi}
-          \left(\bigoplus_{x\in\mathcal G}
-          \widehat\mu_x\widehat B_x^i\right).
+         & =\operatorname{reindex}_{\Phi}
+        \left(\bigoplus_{x\in\mathcal G}
+        \widehat\mu_x\widehat B_x^i\right).
         \label{eq:cpsv_active_refinement_grouped_tensor}
     \end{align}
     If $G=\bigoplus_kY_k$ is the block-diagonal gauge, with $Y_k=X_k$ on
     active indices and $Y_k=\Id$ on $K_0$, then, letter by letter,
     \begin{align}
         \bigoplus_{k=1}^{r}\mu_kA_k^i
-        &=GT_{\mathrm{grp}}^iG^{-1},
+         & =GT_{\mathrm{grp}}^iG^{-1},
         \label{eq:cpsv_active_refinement_regroup}
     \end{align}
     and
     \begin{align}
-        A^i&=U^\dagger GT_{\mathrm{grp}}^iG^{-1}U.
+        A^i & =U^\dagger GT_{\mathrm{grp}}^iG^{-1}U.
         \label{eq:cpsv_active_refinement_reconstruction}
     \end{align}
     Thus the class-copy coordinates and the inactive complement are explicit,
@@ -289,13 +289,13 @@ single family.
     are
     \begin{align}
         \bigoplus_{k=1}^{r}\mu_kA_k^i
-        &=GT_{\mathrm{grp}}^iG^{-1},
-        \label{eq:cpsv_prop_4_13_active_bnt}\\
+         & =GT_{\mathrm{grp}}^iG^{-1},
+        \label{eq:cpsv_prop_4_13_active_bnt}            \\
         A^i
-        &=U^\dagger GT_{\mathrm{grp}}^iG^{-1}U,
-        \label{eq:cpsv_prop_4_13_active_reconstruction}\\
+         & =U^\dagger GT_{\mathrm{grp}}^iG^{-1}U,
+        \label{eq:cpsv_prop_4_13_active_reconstruction} \\
         UU^\dagger
-        &=\Id.
+         & =\Id.
         \label{eq:cpsv_prop_4_13_original_coisometry}
     \end{align}
 \end{proof}
@@ -311,9 +311,9 @@ single family.
     \uses{def:cpsv_canonical_form, def:block_diagonal_tensor}
     Suppose the literal CPSV canonical-form data are
     \begin{align}
-        A^i&=V^\dagger\left(\bigoplus_{k=1}^{r}\mu_kA_k^i\right)V,
-        \label{eq:cpsv_active_exact_listed}\\
-        VV^\dagger&=\Id.
+        A^i        & =V^\dagger\left(\bigoplus_{k=1}^{r}\mu_kA_k^i\right)V,
+        \label{eq:cpsv_active_exact_listed}                                 \\
+        VV^\dagger & =\Id.
         \label{eq:cpsv_active_exact_listed_coisometry}
     \end{align}
     Put $K_{\mathrm{act}}=\{k:\mu_k\ne0\}$ and
@@ -321,10 +321,10 @@ single family.
     $U\in\C^{D_{\mathrm{act}}\times D}$ such that the following identities
     hold, the second for every physical index $i$:
     \begin{align}
-        UU^\dagger&=\Id,
-        \label{eq:cpsv_active_exact_coisometry}\\
-        A^i&=U^\dagger
-          \left(\bigoplus_{k\in K_{\mathrm{act}}}\mu_kA_k^i\right)U.
+        UU^\dagger & =\Id,
+        \label{eq:cpsv_active_exact_coisometry} \\
+        A^i        & =U^\dagger
+        \left(\bigoplus_{k\in K_{\mathrm{act}}}\mu_kA_k^i\right)U.
         \label{eq:cpsv_active_exact_reconstruction}
     \end{align}
 \end{theorem}
@@ -338,8 +338,8 @@ single family.
     zero, and therefore
     \begin{align}
         \bigoplus_{k=1}^{r}\mu_kA_k^i
-        &=S^\dagger\left(
-          \bigoplus_{k\in K_{\mathrm{act}}}\mu_kA_k^i\right)S.
+         & =S^\dagger\left(
+        \bigoplus_{k\in K_{\mathrm{act}}}\mu_kA_k^i\right)S.
         \label{eq:cpsv_active_exact_selector}
     \end{align}
     Set $U=SV$. Equations~(\ref{eq:cpsv_active_exact_listed}) and
@@ -369,7 +369,7 @@ single family.
     $C_j$ is normal, the representative matrix product vectors are eventually
     linearly independent, and, for every $N>0$,
     \begin{align}
-        V^{(N)}(A)&=V^{(N)}(P).
+        V^{(N)}(A) & =V^{(N)}(P).
         \label{eq:cpsv_active_bnt_sector_presentation}
     \end{align}
     This records the nonzero canonical summands constructed at
@@ -447,7 +447,7 @@ single family.
     decomposition $P_{\mathrm{act}}$ with copy weights
     \begin{align}
         \lambda_{j,q}
-        &=\nu_{k(j,q)}\zeta_{k(j,q)}.
+         & =\nu_{k(j,q)}\zeta_{k(j,q)}.
         \label{eq:cpsv_active_representative_weight}
     \end{align}
     Every copy weight in $P_{\mathrm{act}}$ is nonzero. The representatives have simultaneous
@@ -462,11 +462,11 @@ single family.
     vectors as both:
     \begin{align}
         V^{(N)}(T_{\mathrm{grp}})
-        &=V^{(N)}(P_{\mathrm{act}}).
+         & =V^{(N)}(P_{\mathrm{act}}).
         \label{eq:cpsv_active_representative_positive_mpv}
         \\
         V^{(N)}(A)
-        &=V^{(N)}(P_{\mathrm{act}}).
+         & =V^{(N)}(P_{\mathrm{act}}).
         \label{eq:cpsv_active_representative_source_mpv}
     \end{align}
     Hence $P_{\mathrm{act}}$ is an active BNT sector presentation of $A$
@@ -557,7 +557,7 @@ single family.
     The identity
     \begin{align}
         O_{AA}(N)
-        &=\left\lVert V^{(N)}(A)\right\rVert^2
+         & =\left\lVert V^{(N)}(A)\right\rVert^2
         \longrightarrow 1\ne0.
     \end{align}
     shows that $V^{(N)}(A)$ is nonzero for all sufficiently large $N$.
@@ -587,7 +587,7 @@ single family.
     $\sigma$,
     \begin{align}
         V^{(N)}(A)_\sigma
-        &=V^{(N)}(B)_\sigma
+         & =V^{(N)}(B)_\sigma
         =1^N V^{(N)}(B)_\sigma
         =V^{(N)}(P)_\sigma.
     \end{align}
@@ -972,13 +972,13 @@ give $O_{YX}(N)\to 0$, a contradiction.
     and every physical word $\sigma$,
     \begin{align}
         V^{(N)}(Y)_\sigma
-        &=\zeta^N V^{(N)}(X)_\sigma.
+         & =\zeta^N V^{(N)}(X)_\sigma.
         \label{eq:prepared_phase_equiv_fixed_scalar}
     \end{align}
     Then, after identifying the bond spaces, there exists
     $G\in\GL_{D_Y}(\C)$ such that, for every physical index $i$,
     \begin{align}
-        Y^i&=\zeta G X^i G^{-1}.
+        Y^i & =\zeta G X^i G^{-1}.
         \label{eq:prepared_phase_equiv_fixed_scalar_gauge}
     \end{align}
 \end{lemma}
@@ -1007,10 +1007,10 @@ give $O_{YX}(N)\to 0$, a contradiction.
     sector decomposition $P$ such that
     \begin{align}
         \mc{V}^+(P)
-        &=\mc{V}^+\!\left(\bigoplus_{k=1}^r\mu_kB_k\right),
-        \notag\\
+         & =\mc{V}^+\!\left(\bigoplus_{k=1}^r\mu_kB_k\right),
+        \notag                                                \\
         D_{\mathrm{tot}}(P)
-        &=\sum_{k=1}^r D_k.
+         & =\sum_{k=1}^r D_k.
         \label{eq:paperbnt_prepared_total_dim}
     \end{align}
 \end{theorem}
@@ -1037,7 +1037,7 @@ give $O_{YX}(N)\to 0$, a contradiction.
     block. Suppose that, for every block and physical index,
     \begin{align}
         \mu_kA_k^i
-        &=Q_k^\dagger\left(\mu'_{e(k)}B_{e(k)}^i\right)Q_k.
+         & =Q_k^\dagger\left(\mu'_{e(k)}B_{e(k)}^i\right)Q_k.
         \label{eq:heterogeneous_block_local}
     \end{align}
     The induced equivalence $E$ of flattened dependent block coordinates has a
@@ -1045,8 +1045,8 @@ give $O_{YX}(N)\to 0$, a contradiction.
     columns indexed by the unprimed coordinates. For every physical index $i$,
     \begin{align}
         \bigoplus_{k=1}^{r}\mu_kA_k^i
-        &=Q_E^\dagger\left(\bigoplus_{\ell=1}^{r'}
-          \mu'_{\ell}B_{\ell}^i\right)Q_E.
+         & =Q_E^\dagger\left(\bigoplus_{\ell=1}^{r'}
+        \mu'_{\ell}B_{\ell}^i\right)Q_E.
         \label{eq:heterogeneous_block_global}
     \end{align}
 \end{theorem}
@@ -1072,10 +1072,10 @@ give $O_{YX}(N)\to 0$, a contradiction.
     whose columns are indexed by the original block coordinates. The first
     identity below holds, and the second holds for every physical index $i$:
     \begin{align}
-        D_{\mathrm{tot}}(P)&=\sum_{k=1}^{r}D_k,
-        \label{eq:prepared_exact_total_dim}\\
+        D_{\mathrm{tot}}(P) & =\sum_{k=1}^{r}D_k,
+        \label{eq:prepared_exact_total_dim}                           \\
         \bigoplus_{k=1}^{r}\mu_kB_k^i
-        &=Q_E^\dagger\left(XP^iX^{-1}\right)Q_E.
+                            & =Q_E^\dagger\left(XP^iX^{-1}\right)Q_E.
         \label{eq:prepared_exact_reconstruction}
     \end{align}
 \end{theorem}
@@ -1087,7 +1087,7 @@ give $O_{YX}(N)\to 0$, a contradiction.
     chosen in the weight $\zeta_{j,q}\mu_{j,q}$. The normal-tensor phase
     theorem supplies an invertible $G_{j,q}$ with
     \begin{align}
-        B_{j,q}^i&=\zeta_{j,q}G_{j,q}C_j^iG_{j,q}^{-1}.
+        B_{j,q}^i & =\zeta_{j,q}G_{j,q}C_j^iG_{j,q}^{-1}.
         \label{eq:prepared_exact_copy_gauge}
     \end{align}
     Thus the original weighted block equals the corresponding sector copy after
@@ -1141,10 +1141,10 @@ give $O_{YX}(N)\to 0$, a contradiction.
     $K_{\mathrm{act}}=\{k:\mu_k\ne0\}$. Then there is a BNT canonical-form
     sector decomposition $P$ such that
     \begin{align}
-        \mc{V}^+(A)&=\mc{V}^+(P),
-        \notag\\
+        \mc{V}^+(A) & =\mc{V}^+(P),
+        \notag                                          \\
         D_{\mathrm{tot}}(P)
-        &=\sum_{k\in K_{\mathrm{act}}}D_k.
+                    & =\sum_{k\in K_{\mathrm{act}}}D_k.
         \label{eq:cpsv_active_sector_total_dim}
     \end{align}
     Thus the dimension is the total dimension of the active blocks, not the
@@ -1178,11 +1178,11 @@ give $O_{YX}(N)\to 0$, a contradiction.
     and the third holds for every physical index $i$:
     \begin{align}
         D_{\mathrm{tot}}(P)
-        &=\sum_{k\in K_{\mathrm{act}}}D_k,
-        \label{eq:cpsv_active_exact_bnt_dim}\\
-        UU^\dagger&=\Id,
-        \label{eq:cpsv_active_exact_bnt_coisometry}\\
-        A^i&=U^\dagger\left(XP^iX^{-1}\right)U.
+                   & =\sum_{k\in K_{\mathrm{act}}}D_k,
+        \label{eq:cpsv_active_exact_bnt_dim}             \\
+        UU^\dagger & =\Id,
+        \label{eq:cpsv_active_exact_bnt_coisometry}      \\
+        A^i        & =U^\dagger\left(XP^iX^{-1}\right)U.
         \label{eq:cpsv_active_exact_bnt_reconstruction}
     \end{align}
 \end{theorem}
@@ -1192,9 +1192,9 @@ give $O_{YX}(N)\to 0$, a contradiction.
     By Theorem~\ref{thm:cpsv_exact_active_reconstruction}, the original tensor
     has the exact active reconstruction
     \begin{align}
-        A^i&=V^\dagger T_{\mathrm{act}}^iV,
-        \label{eq:cpsv_active_exact_bnt_start}\\
-        VV^\dagger&=\Id.
+        A^i        & =V^\dagger T_{\mathrm{act}}^iV,
+        \label{eq:cpsv_active_exact_bnt_start}       \\
+        VV^\dagger & =\Id.
         \label{eq:cpsv_active_exact_bnt_start_coisometry}
     \end{align}
     Put every active normal block into a trace-preserving primitive irreducible
@@ -1204,9 +1204,9 @@ give $O_{YX}(N)\to 0$, a contradiction.
     $QQ^\dagger=\Id$. Reindexing $Y$ by the same equivalence gives an
     invertible matrix $W$ on the bond space of $P$ and the identities
     \begin{align}
-        QY&=WQ,
-        \label{eq:cpsv_active_exact_bnt_intertwining}\\
-        Y^{-1}Q^\dagger&=Q^\dagger W^{-1}.
+        QY              & =WQ,
+        \label{eq:cpsv_active_exact_bnt_intertwining} \\
+        Y^{-1}Q^\dagger & =Q^\dagger W^{-1}.
         \label{eq:cpsv_active_exact_bnt_intertwining_inv}
     \end{align}
     If $X_0$ is the prepared-block gauge, set
@@ -1215,7 +1215,7 @@ give $O_{YX}(N)\to 0$, a contradiction.
     (\ref{eq:cpsv_active_exact_bnt_reconstruction}), while
     \begin{align}
         UU^\dagger
-        &=Q(VV^\dagger)Q^\dagger=\Id.
+         & =Q(VV^\dagger)Q^\dagger=\Id.
         \notag
     \end{align}
     This proves (\ref{eq:cpsv_active_exact_bnt_coisometry}). The active
@@ -1239,23 +1239,23 @@ give $O_{YX}(N)\to 0$, a contradiction.
     Then there are BNT canonical-form sector decompositions $P$ and $Q$ such
     that
     \begin{align}
-        \mc{V}^+(A)&=\mc{V}^+(P),
-        \notag\\
-        \mc{V}^+(B)&=\mc{V}^+(Q),
-        \notag\\
-        D_{\mathrm{tot}}(P)&=\sum_{k\in K_A}D_k^A,
-        \notag\\
-        D_{\mathrm{tot}}(Q)&=\sum_{k\in K_B}D_k^B,
-        \notag\\
-        D_{\mathrm{tot}}(P)&=D_{\mathrm{tot}}(Q),
-        \notag\\
-        \sum_{k\in K_A}D_k^A&=\sum_{k\in K_B}D_k^B.
+        \mc{V}^+(A)          & =\mc{V}^+(P),
+        \notag                                        \\
+        \mc{V}^+(B)          & =\mc{V}^+(Q),
+        \notag                                        \\
+        D_{\mathrm{tot}}(P)  & =\sum_{k\in K_A}D_k^A,
+        \notag                                        \\
+        D_{\mathrm{tot}}(Q)  & =\sum_{k\in K_B}D_k^B,
+        \notag                                        \\
+        D_{\mathrm{tot}}(P)  & =D_{\mathrm{tot}}(Q),
+        \notag                                        \\
+        \sum_{k\in K_A}D_k^A & =\sum_{k\in K_B}D_k^B.
         \label{eq:cpsv_active_core_equal_dims}
     \end{align}
     After identifying the two total bond spaces by their equality, there is
     an invertible matrix $X$ such that, for every physical index $i$,
     \begin{align}
-        Q^i&=X P^iX^{-1}.
+        Q^i & =X P^iX^{-1}.
         \label{eq:cpsv_active_core_equal_gauge}
     \end{align}
     The conclusion concerns the extracted active tensors $P$ and $Q$. It does
@@ -1289,23 +1289,23 @@ give $O_{YX}(N)\to 0$, a contradiction.
     Then there are BNT canonical-form sector decompositions $P$ and $Q$ such
     that
     \begin{align}
-        \mc{V}^+(A)&=\mc{V}^+(P),
-        \notag\\
-        \mc{V}^+(B)&=\mc{V}^+(Q),
-        \notag\\
-        D_{\mathrm{tot}}(P)&=\sum_{k\in K_A}D_k^A,
-        \notag\\
-        D_{\mathrm{tot}}(Q)&=\sum_{k\in K_B}D_k^B,
-        \notag\\
-        D_{\mathrm{tot}}(P)&=D_{\mathrm{tot}}(Q),
-        \notag\\
-        \sum_{k\in K_A}D_k^A&=\sum_{k\in K_B}D_k^B.
+        \mc{V}^+(A)          & =\mc{V}^+(P),
+        \notag                                        \\
+        \mc{V}^+(B)          & =\mc{V}^+(Q),
+        \notag                                        \\
+        D_{\mathrm{tot}}(P)  & =\sum_{k\in K_A}D_k^A,
+        \notag                                        \\
+        D_{\mathrm{tot}}(Q)  & =\sum_{k\in K_B}D_k^B,
+        \notag                                        \\
+        D_{\mathrm{tot}}(P)  & =D_{\mathrm{tot}}(Q),
+        \notag                                        \\
+        \sum_{k\in K_A}D_k^A & =\sum_{k\in K_B}D_k^B.
         \label{eq:cpsv_active_core_unitary_dims}
     \end{align}
     After identifying the two total bond spaces, there is a unitary matrix $U$
     such that, for every physical index $i$,
     \begin{align}
-        Q^i&=U P^iU^\dagger.
+        Q^i & =U P^iU^\dagger.
         \label{eq:cpsv_active_core_unitary_gauge}
     \end{align}
     This is the unitary choice noted in
@@ -1323,7 +1323,7 @@ give $O_{YX}(N)\to 0$, a contradiction.
     $P$ and $Q$, their BNT canonical-form properties, the first four identities
     in~(\ref{eq:cpsv_active_core_unitary_dims}), and
     \begin{align}
-        \mc{V}^+(P)&=\mc{V}^+(Q).
+        \mc{V}^+(P) & =\mc{V}^+(Q).
         \notag
     \end{align}
     Corollary~\ref{cor:sector_bnt_equal_unitary_global_gauge} gives the fifth
@@ -1347,7 +1347,7 @@ give $O_{YX}(N)\to 0$, a contradiction.
     there is
     $G\in\GL_D(\C)$ such that, for every physical index $i$,
     \begin{align}
-        B^i&=GA^iG^{-1}.
+        B^i & =GA^iG^{-1}.
         \label{eq:cpsv_equal_ambient_gauge}
     \end{align}
     Zero-weight listed blocks and unused ambient coordinates are allowed. The
@@ -1365,16 +1365,16 @@ Theorem~\ref{thm:coisometry_reconstruction_gauge_equiv}.
     BNT canonical forms $P,Q$, coisometries $U_A,U_B$, and retained-space
     gauges $X_A,X_B$ with
     \begin{align}
-        A^i&=U_A^\dagger X_AP^iX_A^{-1}U_A,
-        \notag\\
-        B^i&=U_B^\dagger X_BQ^iX_B^{-1}U_B.
+        A^i & =U_A^\dagger X_AP^iX_A^{-1}U_A,
+        \notag                                \\
+        B^i & =U_B^\dagger X_BQ^iX_B^{-1}U_B.
         \label{eq:cpsv_equal_ambient_reconstructions}
     \end{align}
     Theorem~\ref{thm:coisometry_reconstruction_same_mpv_pos}, gauge invariance,
     and the hypothesis give
     \begin{align}
         \mc{V}^+(P)
-        &=\mc{V}^+(A)=\mc{V}^+(B)=\mc{V}^+(Q).
+         & =\mc{V}^+(A)=\mc{V}^+(B)=\mc{V}^+(Q).
         \label{eq:cpsv_equal_ambient_active_mpv}
     \end{align}
     Theorem~\ref{thm:cpgsv_equal_case_source} therefore identifies the retained

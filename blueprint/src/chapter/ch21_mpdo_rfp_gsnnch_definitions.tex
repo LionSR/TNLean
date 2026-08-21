@@ -12,11 +12,11 @@
     nearest-neighbor commuting Hamiltonian if
     \begin{align}
         \rho^{(N)}
-        &\propto
+            & \propto
         \bigoplus_x n_x
         \exp\!\left(-\sum_{j=1}^N\tau_j(h^{(x)})\right),
-        \notag\\
-        n_x&\in\N,
+        \notag        \\
+        n_x & \in\N,
         \notag
     \end{align}
     where the one-site spaces belonging to distinct labels $x$ are
@@ -26,11 +26,11 @@
     equivalently
     \begin{align}
         \rho^{(N)}
-        &\propto
+                & \propto
         \bigoplus_x n_x
         \prod_{j=1}^N\tau_j(B^{(x)}),
-        \notag\\
-        B^{(x)}&\geq0,
+        \notag            \\
+        B^{(x)} & \geq0,
         \notag
     \end{align}
     with commuting neighboring translates. The orthogonal sum and the
@@ -67,7 +67,7 @@ Definition~\ref{def:mpdo_source_gsnnch}; the converse comparison is not used.
     that
     \begin{align}
         \rho^{(N)}(M)
-        &=c\prod_{i=0}^{N-1}B_{i,i+1}.
+         & =c\prod_{i=0}^{N-1}B_{i,i+1}.
         \notag
     \end{align}
     The bond in this chainwise condition may depend on $N$. It is therefore
@@ -88,13 +88,13 @@ Definition~\ref{def:mpdo_source_gsnnch}; the converse comparison is not used.
     bond on the full two-site space and one positive normalization such that
     \begin{align}
         \rho^{(N)}(M)
-        &=c\prod_{i=0}^{N-1}B_{i,i+1},
-        \notag\\
-        c&>0,
-        \notag\\
-        B&\ge0,
-        \notag\\
-        [B_{i,i+1},B_{j,j+1}]&=0.
+                              & =c\prod_{i=0}^{N-1}B_{i,i+1},
+        \notag                                                \\
+        c                     & >0,
+        \notag                                                \\
+        B                     & \ge0,
+        \notag                                                \\
+        [B_{i,i+1},B_{j,j+1}] & =0.
         \notag
     \end{align}
     This auxiliary condition contains no explicit sector labels or
@@ -170,9 +170,9 @@ Definition~\ref{def:mpdo_source_gsnnch}; the converse comparison is not used.
     support restriction consists of a dimension $e$ and an isometry
     $V:\C^e\longrightarrow\C^d$ such that
     \begin{align}
-        V^*V&=\Id,
-        \notag\\
-        VV^*&=P,
+        V^*V & =\Id,
+        \notag       \\
+        VV^* & =P,
         \notag
     \end{align}
     for which the restricted tensor $K_P=V^*KV$ is injective and its
@@ -192,10 +192,10 @@ Definition~\ref{def:mpdo_source_gsnnch}; the converse comparison is not used.
     $\mathcal K_s$ admits a physical support restriction to the range of
     $P_s$. In particular, for some isometry $V_s$,
     \begin{align}
-        V_sV_s^*&=P_s,
-        \notag\\
+        V_sV_s^* & =P_s,
+        \notag                                      \\
         \mathcal K_s
-        &=V_s(V_s^*\mathcal K_sV_s)V_s^*,
+                 & =V_s(V_s^*\mathcal K_sV_s)V_s^*,
         \notag
     \end{align}
     and the restricted tensor $V_s^*\mathcal K_sV_s$ is injective.
@@ -209,14 +209,14 @@ Definition~\ref{def:mpdo_source_gsnnch}; the converse comparison is not used.
     $K_{P_s}=V_s^*\mathcal K_sV_s$. Each ambient matrix slice satisfies
     \begin{align}
         (\mathcal K_s)_{ij}
-        &=\sum_{p,q}(V_s)_{ip}
-          \overline{(V_s)_{jq}}\,(K_{P_s})_{pq}.
+         & =\sum_{p,q}(V_s)_{ip}
+        \overline{(V_s)_{jq}}\,(K_{P_s})_{pq}.
         \notag
     \end{align}
     Hence
     \begin{align}
         \spn_{\C}\{(\mathcal K_s)_{ij}\}_{i,j}
-        &\subseteq
+         & \subseteq
         \spn_{\C}\{(K_{P_s})_{pq}\}_{p,q}.
         \notag
     \end{align}
@@ -233,9 +233,9 @@ Definition~\ref{def:mpdo_source_gsnnch}; the converse comparison is not used.
     tensor $K$ by conjugating each physical matrix by $V$.  The normalized
     periodic operators satisfy
     \begin{align}
-      \sigma^{(N)}(K^V)
-      &=V^{\otimes N}\sigma^{(N)}(K)(V^{\otimes N})^*.
-      \notag
+        \sigma^{(N)}(K^V)
+         & =V^{\otimes N}\sigma^{(N)}(K)(V^{\otimes N})^*.
+        \notag
     \end{align}
 \end{theorem}
 
@@ -244,18 +244,18 @@ Definition~\ref{def:mpdo_source_gsnnch}; the converse comparison is not used.
     \uses{lem:mpdo_sitewise_physical_coordinate_congruence}
     Since $(V^{\otimes N})^*V^{\otimes N}=I$, cyclicity of the trace gives
     \begin{align}
-      \tr\!\left[
-        V^{\otimes N}\rho^{(N)}(K)(V^{\otimes N})^*\right]
-      &=\tr\!\left[\rho^{(N)}(K)\right].
-      \notag
+        \tr\!\left[
+            V^{\otimes N}\rho^{(N)}(K)(V^{\otimes N})^*\right]
+         & =\tr\!\left[\rho^{(N)}(K)\right].
+        \notag
     \end{align}
     Therefore the scalar normalization commutes with the congruence:
     \begin{align}
-      \sigma^{(N)}(K^V)
-      &=\frac{V^{\otimes N}\rho^{(N)}(K)(V^{\otimes N})^*}
+        \sigma^{(N)}(K^V)
+         & =\frac{V^{\otimes N}\rho^{(N)}(K)(V^{\otimes N})^*}
         {\tr[\rho^{(N)}(K)]}
-       =V^{\otimes N}\sigma^{(N)}(K)(V^{\otimes N})^*.
-      \notag
+        =V^{\otimes N}\sigma^{(N)}(K)(V^{\otimes N})^*.
+        \notag
     \end{align}
 \end{proof}
 
@@ -276,12 +276,12 @@ Definition~\ref{def:mpdo_source_gsnnch}; the converse comparison is not used.
     $V^{\otimes L}\otimes V^{\otimes K}$.  Since
     $(V^{\otimes K})^*V^{\otimes K}=I$, the partial trace satisfies
     \begin{align}
-      &\tr_K\!\left[
-        \bigl(V^{\otimes L}\otimes V^{\otimes K}\bigr)X
-        \bigl(V^{\otimes L}\otimes V^{\otimes K}\bigr)^*\right]
-        \notag\\
-      &\qquad=V^{\otimes L}\tr_K[X](V^{\otimes L})^*.
-      \notag
+         & \tr_K\!\left[
+            \bigl(V^{\otimes L}\otimes V^{\otimes K}\bigr)X
+            \bigl(V^{\otimes L}\otimes V^{\otimes K}\bigr)^*\right]
+        \notag                                            \\
+         & \qquad=V^{\otimes L}\tr_K[X](V^{\otimes L})^*.
+        \notag
     \end{align}
 \end{proof}
 
@@ -291,8 +291,8 @@ Definition~\ref{def:mpdo_source_gsnnch}; the converse comparison is not used.
     Let $A$ be an $e\times d$ matrix and $B$ a $d\times e$ matrix, with
     $d\leq e$. Then
     \begin{align}
-      \chi_{AB}(X)&=X^{e-d}\chi_{BA}(X).
-      \notag
+        \chi_{AB}(X) & =X^{e-d}\chi_{BA}(X).
+        \notag
     \end{align}
 \end{lemma}
 
@@ -306,8 +306,8 @@ Definition~\ref{def:mpdo_source_gsnnch}; the converse comparison is not used.
     Let $V:\C^d\to\C^e$ satisfy $V^*V=I_d$, and let $A$ be a $d\times d$
     matrix. Then $d\leq e$ and
     \begin{align}
-      \chi_{VAV^*}(X)&=X^{e-d}\chi_A(X).
-      \notag
+        \chi_{VAV^*}(X) & =X^{e-d}\chi_A(X).
+        \notag
     \end{align}
     Equivalently, the roots of $\chi_{VAV^*}$ are the roots of $\chi_A$
     together with zero of multiplicity $e-d$.
@@ -317,18 +317,18 @@ Definition~\ref{def:mpdo_source_gsnnch}; the converse comparison is not used.
     Write $VAV^*=V(AV^*)$. Characteristic-polynomial cyclicity for rectangular
     factors gives
     \begin{align}
-      \chi_{V(AV^*)}(X)
-      &=X^{e-d}\chi_{(AV^*)V}(X)
-       =X^{e-d}\chi_A(X),
-      \notag
+        \chi_{V(AV^*)}(X)
+         & =X^{e-d}\chi_{(AV^*)V}(X)
+        =X^{e-d}\chi_A(X),
+        \notag
     \end{align}
     where the last equality uses $V^*V=I_d$. Taking roots of the product gives
     \begin{align}
-      \operatorname{roots}(\chi_{VAV^*})
-      &=\operatorname{roots}(X^{e-d}\chi_A)\\
-      &=\operatorname{roots}(X^{e-d})+\operatorname{roots}(\chi_A)\\
-      &=(e-d)\cdot\{0\}+\operatorname{roots}(\chi_A).
-      \notag
+        \operatorname{roots}(\chi_{VAV^*})
+         & =\operatorname{roots}(X^{e-d}\chi_A)                        \\
+         & =\operatorname{roots}(X^{e-d})+\operatorname{roots}(\chi_A) \\
+         & =(e-d)\cdot\{0\}+\operatorname{roots}(\chi_A).
+        \notag
     \end{align}
     The middle equality applies because $X^{e-d}$ is nonzero and the monic
     polynomial $\chi_A$ is nonzero.
@@ -343,8 +343,8 @@ Definition~\ref{def:mpdo_source_gsnnch}; the converse comparison is not used.
     tensor $K$ by conjugating each physical matrix by $V$.  For every
     $0\leq L\leq N$, the contiguous reduced states satisfy
     \begin{align}
-      \rho_L^{(N)}(K^V)=V^{\otimes L}\rho_L^{(N)}(K)(V^{\otimes L})^*.
-      \notag
+        \rho_L^{(N)}(K^V)=V^{\otimes L}\rho_L^{(N)}(K)(V^{\otimes L})^*.
+        \notag
     \end{align}
 \end{theorem}
 
@@ -354,12 +354,12 @@ Definition~\ref{def:mpdo_source_gsnnch}; the converse comparison is not used.
     congruence.  Splitting the chain into the retained interval and its
     complement gives
     \begin{align}
-      &\tr_{N\setminus L}\!\left[
-        \bigl(V^{\otimes L}\otimes V^{\otimes(N-L)}\bigr)
-        \sigma^{(N)}(K)
-        \bigl(V^{\otimes L}\otimes V^{\otimes(N-L)}\bigr)^*\right]\\
-      &\qquad=V^{\otimes L}\rho_L^{(N)}(K)(V^{\otimes L})^*.
-      \notag
+         & \tr_{N\setminus L}\!\left[
+            \bigl(V^{\otimes L}\otimes V^{\otimes(N-L)}\bigr)
+            \sigma^{(N)}(K)
+        \bigl(V^{\otimes L}\otimes V^{\otimes(N-L)}\bigr)^*\right] \\
+         & \qquad=V^{\otimes L}\rho_L^{(N)}(K)(V^{\otimes L})^*.
+        \notag
     \end{align}
     Here $(V^{\otimes(N-L)})^*V^{\otimes(N-L)}=I$, so the isometry on the
     traced factor disappears under the partial trace.
@@ -377,7 +377,7 @@ Definition~\ref{def:mpdo_source_gsnnch}; the converse comparison is not used.
     tensor $K$ by conjugating each physical matrix by $V$. For every $N\geq1$,
     \begin{align}
         \tr\bigl(\sigma^{(N)}(K^V)\bigr)
-        &=\tr\bigl(\sigma^{(N)}(K)\bigr).
+         & =\tr\bigl(\sigma^{(N)}(K)\bigr).
         \notag
     \end{align}
     If the periodic operators of $K^V$ are positive semidefinite, then those
@@ -419,7 +419,7 @@ Definition~\ref{def:mpdo_source_gsnnch}; the converse comparison is not used.
     $V^{\otimes N}$ is an isometry and
     \begin{align}
         \rho^{(N)}(K)
-        &=V^{\otimes N}\rho^{(N)}(K_P)(V^{\otimes N})^*.
+         & =V^{\otimes N}\rho^{(N)}(K_P)(V^{\otimes N})^*.
         \notag
     \end{align}
     The trace is therefore unchanged. After a contiguous marginal is
@@ -446,7 +446,7 @@ Definition~\ref{def:mpdo_source_gsnnch}; the converse comparison is not used.
     Moreover, for every $N\geq2$ one has the exact identity
     \begin{align}
         \rho^{(N)}(K)
-        &=\prod_{i=0}^{N-1}B_{i,i+1}.
+         & =\prod_{i=0}^{N-1}B_{i,i+1}.
         \notag
     \end{align}
 \end{theorem}
@@ -488,17 +488,17 @@ Definition~\ref{def:mpdo_source_gsnnch}; the converse comparison is not used.
     operators $B^{(x)}$ such that
     \begin{align}
         (P_x\otimes P_x)B^{(x)}(P_x\otimes P_x)
-        &=B^{(x)},
-        \notag\\
+         & =B^{(x)},
+        \notag       \\
         [\tau_i(B^{(x)}),\tau_j(B^{(x)})]
-        &=0.
+         & =0.
         \notag
     \end{align}
     For every sector $x$ and every $N\geq2$, there is a number
     $a_{x,N}>0$ such that
     \begin{align}
         \rho^{(N)}(K_x)
-        &=a_{x,N}\prod_{i=0}^{N-1}\tau_i(B^{(x)}).
+         & =a_{x,N}\prod_{i=0}^{N-1}\tau_i(B^{(x)}).
         \notag
     \end{align}
 \end{definition}
@@ -506,9 +506,9 @@ Definition~\ref{def:mpdo_source_gsnnch}; the converse comparison is not used.
 \begin{theorem}[One-site positivity completes proportional sector positivity]
     \label{thm:mpdo_proportional_commuting_sector_positivity}
     \lean{MPOTensor.ProportionalOrthogonalCommutingSectorFamily.%
-      mpo_posSemidef_of_two_le}
+        mpo_posSemidef_of_two_le}
     \lean{MPOTensor.ProportionalOrthogonalCommutingSectorFamily.%
-      isMPDO_of_mpo_one_pos}
+        isMPDO_of_mpo_one_pos}
     \leanok
     \uses{def:mpdo_proportional_orthogonal_commuting_sector_family, def:mpdo}
     Every sector operator of length $N\geq2$ in a proportionally realized
@@ -536,16 +536,16 @@ Definition~\ref{def:mpdo_source_gsnnch}; the converse comparison is not used.
     operators $B^{(x)}$ such that
     \begin{align}
         (P_x\otimes P_x)B^{(x)}(P_x\otimes P_x)
-        &=B^{(x)},
-        \notag\\
+         & =B^{(x)},
+        \notag       \\
         [\tau_i(B^{(x)}),\tau_j(B^{(x)})]
-        &=0,
+         & =0,
         \notag
     \end{align}
     and, for every $N\geq2$,
     \begin{align}
         \rho^{(N)}(K_x)
-        &=\prod_{i=0}^{N-1}\tau_i(B^{(x)}).
+         & =\prod_{i=0}^{N-1}\tau_i(B^{(x)}).
         \notag
     \end{align}
     Together with natural multiplicities $n_x$, these objects determine the
@@ -579,7 +579,7 @@ Definition~\ref{def:mpdo_source_gsnnch}; the converse comparison is not used.
     every physical slice is absorbed on both sides:
     \begin{align}
         P_x\mathcal K_x[\beta,\alpha]
-        &=\mathcal K_x[\beta,\alpha]
+         & =\mathcal K_x[\beta,\alpha]
         =\mathcal K_x[\beta,\alpha]P_x.
         \notag
     \end{align}
@@ -589,14 +589,14 @@ Definition~\ref{def:mpdo_source_gsnnch}; the converse comparison is not used.
     there are positive bonds $B^{(x)}$ such that
     \begin{align}
         (P_x\otimes P_x)B^{(x)}(P_x\otimes P_x)
-        &=B^{(x)}
+         & =B^{(x)}
         \notag
     \end{align}
     and all translates of each $B^{(x)}$ commute pairwise. For every
     $N\geq2$,
     \begin{align}
         \rho^{(N)}(\mathcal K_x)
-        &=\prod_{i=0}^{N-1}\tau_i(B^{(x)}).
+         & =\prod_{i=0}^{N-1}\tau_i(B^{(x)}).
         \notag
     \end{align}
     Thus these bonds form an orthogonally supported family of commuting
@@ -623,14 +623,14 @@ Definition~\ref{def:mpdo_source_gsnnch}; the converse comparison is not used.
     that the projections $P_x$ are pairwise orthogonal,
     \begin{align}
         (P_x\otimes P_x)B^{(x)}(P_x\otimes P_x)
-        &=B^{(x)},
+         & =B^{(x)},
         \notag
     \end{align}
     all cyclic translates of each $B^{(x)}$ commute pairwise, and, for every
     $N\geq2$,
     \begin{align}
         \rho^{(N)}(\mathcal K_x)
-        &=\prod_{i=0}^{N-1}\tau_i(B^{(x)}).
+         & =\prod_{i=0}^{N-1}\tau_i(B^{(x)}).
         \notag
     \end{align}
     Thus the absorbed BNT representatives have an orthogonally supported
@@ -658,9 +658,9 @@ Definition~\ref{def:mpdo_source_gsnnch}; the converse comparison is not used.
     of commuting sector products and that, for every $N\geq2$,
     \begin{align}
         \rho^{(N)}(M)
-        &=\sum_{x=0}^{g-1}n_x\rho^{(N)}(K_x),
-        \notag\\
-        n_x&\in\N.
+            & =\sum_{x=0}^{g-1}n_x\rho^{(N)}(K_x),
+        \notag                                     \\
+        n_x & \in\N.
         \notag
     \end{align}
     Then $M$ has the explicit GSNNCH sector form with outer sectors $x$ and
@@ -671,9 +671,9 @@ Definition~\ref{def:mpdo_source_gsnnch}; the converse comparison is not used.
     For each $N\geq2$, the represented unnormalized sector sum is
     \begin{align}
         \sum_{x=0}^{g-1}n_x
-          \prod_{i=0}^{N-1}\tau_i(B^{(x)})
-        &=\sum_{x=0}^{g-1}n_x\rho^{(N)}(K_x)
-         =\rho^{(N)}(M).
+        \prod_{i=0}^{N-1}\tau_i(B^{(x)})
+         & =\sum_{x=0}^{g-1}n_x\rho^{(N)}(K_x)
+        =\rho^{(N)}(M).
         \notag
     \end{align}
     Thus the positive proportionality constant in
@@ -694,7 +694,7 @@ Definition~\ref{def:mpdo_source_gsnnch}; the converse comparison is not used.
     For every $N\geq2$, let $c_x(N)\geq0$ and suppose that
     \begin{align}
         \rho^{(N)}(M)
-        &=\sum_{x=0}^{g-1}c_x(N)\rho^{(N)}(K_x).
+         & =\sum_{x=0}^{g-1}c_x(N)\rho^{(N)}(K_x).
         \notag
     \end{align}
     Then $M$ has the explicit GSNNCH sector form.
@@ -704,15 +704,15 @@ Definition~\ref{def:mpdo_source_gsnnch}; the converse comparison is not used.
     Fix $N\geq2$. Replace the bond in sector $x$ by
     \begin{align}
         \widetilde B^{(x)}_N
-        &=\left(\frac{c_x(N)}{n_x}\right)^{1/N}B^{(x)}.
+         & =\left(\frac{c_x(N)}{n_x}\right)^{1/N}B^{(x)}.
         \notag
     \end{align}
     This bond is positive, has the same support, and its translates commute.
     Its periodic product is
     \begin{align}
         n_x\prod_{i=0}^{N-1}\tau_i(\widetilde B^{(x)}_N)
-        &=c_x(N)\prod_{i=0}^{N-1}\tau_i(B^{(x)})
-         =c_x(N)\rho^{(N)}(K_x).
+         & =c_x(N)\prod_{i=0}^{N-1}\tau_i(B^{(x)})
+        =c_x(N)\rho^{(N)}(K_x).
         \notag
     \end{align}
     Taking $n_x$ as the sector multiplicity gives the required decomposition,
@@ -730,7 +730,7 @@ Definition~\ref{def:mpdo_source_gsnnch}; the converse comparison is not used.
     a number $c_N>0$ such that
     \begin{align}
         \rho^{(N)}(M)
-        &=c_N\sum_{x=0}^{g-1}n_x\rho^{(N)}(K_x).
+         & =c_N\sum_{x=0}^{g-1}n_x\rho^{(N)}(K_x).
         \notag
     \end{align}
     For $N\geq2$ and $1\leq L\leq N$, write
@@ -738,8 +738,8 @@ Definition~\ref{def:mpdo_source_gsnnch}; the converse comparison is not used.
     $\rho^{(N)}(K_x)$ on the first $L$ sites. Assume that
     \begin{align}
         (P_x\otimes\Id^{\otimes(L-1)})
-          \widehat\rho_{x,N,L}
-        &=\widehat\rho_{x,N,L}.
+        \widehat\rho_{x,N,L}
+         & =\widehat\rho_{x,N,L}.
         \notag
     \end{align}
     If every $K_x$ satisfies SAL, then $M$ satisfies SAL.
@@ -754,17 +754,17 @@ Definition~\ref{def:mpdo_source_gsnnch}; the converse comparison is not used.
 \begin{proof}\leanok
     For fixed $N$, put
     \begin{align}
-        S_N&=\sum_x n_x\rho^{(N)}(K_x),
-        \notag\\
-        p_x&=\frac{c_N n_x\tr(\rho^{(N)}(K_x))}
-          {\tr(\rho^{(N)}(M))}.
+        S_N & =\sum_x n_x\rho^{(N)}(K_x),
+        \notag                                    \\
+        p_x & =\frac{c_N n_x\tr(\rho^{(N)}(K_x))}
+        {\tr(\rho^{(N)}(M))}.
         \notag
     \end{align}
     Trace linearity and $\rho^{(N)}(M)=c_NS_N$ give
     \begin{align}
         \tr(\rho^{(N)}(M))^{-1}\rho^{(N)}(M)
-        &=\tr(S_N)^{-1}S_N
-         =\sum_x p_x\widehat\rho_{x,N,N}.
+         & =\tr(S_N)^{-1}S_N
+        =\sum_x p_x\widehat\rho_{x,N,N}.
         \notag
     \end{align}
     Thus the common positive scalar cancels from the normalized chain and from
@@ -775,13 +775,13 @@ Definition~\ref{def:mpdo_source_gsnnch}; the converse comparison is not used.
     $x\ne y$ gives $Q_xQ_y=0$. The entropy of a nonempty marginal is therefore
     \begin{align}
         S_L(M)
-        &=\sum_x\bigl(-p_x\log p_x+p_xS_L(K_x)\bigr).
+         & =\sum_x\bigl(-p_x\log p_x+p_xS_L(K_x)\bigr).
         \notag
     \end{align}
     Substitution in $I_L=S_L+S_{N-L}-S_N$ gives
     \begin{align}
         I_L(M)
-        &=-\sum_x p_x\log p_x+\sum_x p_xI_L(K_x).
+         & =-\sum_x p_x\log p_x+\sum_x p_xI_L(K_x).
         \notag
     \end{align}
     The probabilities depend on $N$ but not on $L$. Sectorwise SAL therefore
@@ -798,7 +798,7 @@ Definition~\ref{def:mpdo_source_gsnnch}; the converse comparison is not used.
     orthogonal one-site projections. Suppose that, for every $N>0$,
     \begin{align}
         \rho^{(N)}(M)
-        &=\sum_{x=0}^{g-1}n_x\rho^{(N)}(K_x).
+         & =\sum_{x=0}^{g-1}n_x\rho^{(N)}(K_x).
         \notag
     \end{align}
     For $N\geq2$ and $1\leq L\leq N$, write
@@ -807,8 +807,8 @@ Definition~\ref{def:mpdo_source_gsnnch}; the converse comparison is not used.
     visible on the first retained site:
     \begin{align}
         (P_x\otimes\Id^{\otimes(L-1)})
-          \widehat\rho_{x,N,L}
-        &=\widehat\rho_{x,N,L}.
+        \widehat\rho_{x,N,L}
+         & =\widehat\rho_{x,N,L}.
         \notag
     \end{align}
     If every $K_x$ satisfies SAL, then $M$ satisfies SAL.
@@ -830,7 +830,7 @@ Definition~\ref{def:mpdo_source_gsnnch}; the converse comparison is not used.
 \begin{theorem}[Proportional commuting sector products have normalized-chain support]
     \label{thm:mpdo_proportional_orthogonal_commuting_sector_normalized_support}
     \lean{MPOTensor.ProportionalOrthogonalCommutingSectorFamily.%
-firstSiteMatrix_mul_normalizedMPO}
+        firstSiteMatrix_mul_normalizedMPO}
     \leanok
     \uses{def:mpdo_proportional_orthogonal_commuting_sector_family, def:mpdo_vertical_one_site_actions}
     Let $\{K_x\}_{x=0}^{g-1}$ have a proportionally realized orthogonal
@@ -838,7 +838,7 @@ firstSiteMatrix_mul_normalizedMPO}
     bonds $B^{(x)}$. Then, for every sector $x$ and every $N\geq2$,
     \begin{align}
         (P_x\otimes\Id^{\otimes(N-1)})\widehat\rho_{x,N,N}
-        &=\widehat\rho_{x,N,N}.
+         & =\widehat\rho_{x,N,N}.
         \notag
     \end{align}
 \end{theorem}
@@ -848,37 +848,37 @@ firstSiteMatrix_mul_normalizedMPO}
     $P_x\otimes P_x$,
     \begin{align}
         (P_x\otimes\Id)B^{(x)}
-        &=B^{(x)}.
+         & =B^{(x)}.
         \notag
     \end{align}
     Thus the first translated bond, and hence the full product, satisfy
     \begin{align}
         (P_x\otimes\Id^{\otimes(N-1)})\tau_0(B^{(x)})
-        &=\tau_0(B^{(x)}),
-        \notag\\
+         & =\tau_0(B^{(x)}),
+        \notag                                \\
         (P_x\otimes\Id^{\otimes(N-1)})
-          \prod_{i=0}^{N-1}\tau_i(B^{(x)})
-        &=\prod_{i=0}^{N-1}\tau_i(B^{(x)}).
+        \prod_{i=0}^{N-1}\tau_i(B^{(x)})
+         & =\prod_{i=0}^{N-1}\tau_i(B^{(x)}).
         \notag
     \end{align}
     Multiplying the second identity by $a_{x,N}$ gives
     \begin{align}
         (P_x\otimes\Id^{\otimes(N-1)})\rho^{(N)}(K_x)
-        &=\rho^{(N)}(K_x).
+         & =\rho^{(N)}(K_x).
         \notag
     \end{align}
     Multiplying this identity by the scalar
     $\bigl(\operatorname{tr}\rho^{(N)}(K_x)\bigr)^{-1}$ gives
     \begin{align}
-        &(P_x\otimes\Id^{\otimes(N-1)})
-          \left[
+         & (P_x\otimes\Id^{\otimes(N-1)})
+        \left[
             \bigl(\operatorname{tr}\rho^{(N)}(K_x)\bigr)^{-1}
             \rho^{(N)}(K_x)
-          \right]
-        \notag\\
-        &\quad=
-          \bigl(\operatorname{tr}\rho^{(N)}(K_x)\bigr)^{-1}
-          \rho^{(N)}(K_x).
+            \right]
+        \notag                            \\
+         & \quad=
+        \bigl(\operatorname{tr}\rho^{(N)}(K_x)\bigr)^{-1}
+        \rho^{(N)}(K_x).
         \notag
     \end{align}
     The scalar multiples on both sides are the normalized chain states. This
@@ -888,7 +888,7 @@ firstSiteMatrix_mul_normalizedMPO}
 \begin{theorem}[Proportional commuting sector products have prefix-marginal support]
     \label{thm:mpdo_proportional_orthogonal_commuting_sector_marginal_support}
     \lean{MPOTensor.ProportionalOrthogonalCommutingSectorFamily.%
-firstSiteMatrix_mul_reducedBlockState}
+        firstSiteMatrix_mul_reducedBlockState}
     \leanok
     \uses{def:mpdo_proportional_orthogonal_commuting_sector_family, def:mpdo_vertical_one_site_actions}
     Let $\{K_x\}_{x=0}^{g-1}$ have a proportionally realized orthogonal
@@ -897,7 +897,7 @@ firstSiteMatrix_mul_reducedBlockState}
     $1\leq L\leq N$,
     \begin{align}
         (P_x\otimes\Id^{\otimes(L-1)})\widehat\rho_{x,N,L}
-        &=\widehat\rho_{x,N,L}.
+         & =\widehat\rho_{x,N,L}.
         \notag
     \end{align}
 \end{theorem}
@@ -908,25 +908,25 @@ firstSiteMatrix_mul_reducedBlockState}
     final $N-L$ sites. By definition,
     \begin{align}
         \widehat\rho_{x,N,L}
-        &=\operatorname{Tr}_{L+1,\ldots,N}
-          \bigl(\widehat\rho_{x,N,N}\bigr).
+         & =\operatorname{Tr}_{L+1,\ldots,N}
+        \bigl(\widehat\rho_{x,N,N}\bigr).
         \notag
     \end{align}
     The first-site action commutes with this partial trace. The preceding
     theorem therefore gives
     \begin{align}
-        &(P_x\otimes\Id^{\otimes(L-1)})\widehat\rho_{x,N,L}
-        \notag\\
-        &\quad=
+         & (P_x\otimes\Id^{\otimes(L-1)})\widehat\rho_{x,N,L}
+        \notag                                                \\
+         & \quad=
         \operatorname{Tr}_{L+1,\ldots,N}
         \left(
-          (P_x\otimes\Id^{\otimes(N-1)})
-          \widehat\rho_{x,N,N}
+        (P_x\otimes\Id^{\otimes(N-1)})
+        \widehat\rho_{x,N,N}
         \right)
-        \notag\\
-        &\quad=
+        \notag                                                \\
+         & \quad=
         \operatorname{Tr}_{L+1,\ldots,N}
-          \bigl(\widehat\rho_{x,N,N}\bigr)
+        \bigl(\widehat\rho_{x,N,N}\bigr)
         =\widehat\rho_{x,N,L}.
         \notag
     \end{align}
@@ -943,8 +943,8 @@ firstSiteMatrix_mul_reducedBlockState}
     marginal of $K_x$ on the first $L$ sites satisfies
     \begin{align}
         (P_x\otimes\Id^{\otimes(L-1)})
-          \widehat\rho_{x,N,L}
-        &=\widehat\rho_{x,N,L}.
+        \widehat\rho_{x,N,L}
+         & =\widehat\rho_{x,N,L}.
         \notag
     \end{align}
 \end{lemma}
@@ -965,7 +965,7 @@ firstSiteMatrix_mul_reducedBlockState}
     that
     \begin{align}
         \rho^{(N)}(M)
-        &=c_N\sum_x n_x\rho^{(N)}(K_x).
+         & =c_N\sum_x n_x\rho^{(N)}(K_x).
         \notag
     \end{align}
     If every $K_x$ satisfies SAL, then $M$ satisfies SAL.
@@ -990,7 +990,7 @@ firstSiteMatrix_mul_reducedBlockState}
     Suppose that, for every $N>0$,
     \begin{align}
         \rho^{(N)}(M)
-        &=\sum_x n_x\rho^{(N)}(K_x).
+         & =\sum_x n_x\rho^{(N)}(K_x).
         \notag
     \end{align}
     If every $K_x$ satisfies SAL, then $M$ satisfies SAL.
@@ -1016,7 +1016,7 @@ firstSiteMatrix_mul_reducedBlockState}
     every $N\geq2$, suppose that there is a number $a_{x,N}>0$ such that
     \begin{align}
         \rho^{(N)}(K_x)
-        &=a_{x,N}\prod_{i=0}^{N-1}\tau_i(B^{(x)}).
+         & =a_{x,N}\prod_{i=0}^{N-1}\tau_i(B^{(x)}).
         \notag
     \end{align}
     Suppose also that every $K_x$ has source zero correlation length. Let
@@ -1024,7 +1024,7 @@ firstSiteMatrix_mul_reducedBlockState}
     there is a number $c_N>0$ such that
     \begin{align}
         \rho^{(N)}(M)
-        &=c_N\sum_x n_x\rho^{(N)}(K_x).
+         & =c_N\sum_x n_x\rho^{(N)}(K_x).
         \notag
     \end{align}
     Then $M$ satisfies SAL.
@@ -1070,7 +1070,7 @@ firstSiteMatrix_mul_reducedBlockState}
 \begin{theorem}[A compatible sector decomposition with ambient ZCL satisfies SAL]
     \label{thm:mpdo_canonical_bnt_proportional_sectors_zcl_sal}
     \lean{MPOTensor.%
-      isSAL_of_commonWeightAbsorbedBasisMPOTensor_of_proportionalSectors_of_isSourceZCL}
+        isSAL_of_commonWeightAbsorbedBasisMPOTensor_of_proportionalSectors_of_isSourceZCL}
     \leanok
     \uses{def:mpo_tensor, def:sector_weight_data, def:global_gauge_of_blocks, def:same_mpv2_pos, def:blockwise_product_word_span, def:mpdo_doubled_phys_trace_transfer, def:mpdo_common_sector_weight_absorption, def:mpdo_proportional_orthogonal_commuting_sector_family, def:mpo_source_zcl, def:is_sal}
     Let $S$ be a nonempty sector decomposition with representatives $A_x$,
@@ -1125,7 +1125,7 @@ firstSiteMatrix_mul_reducedBlockState}
     and suppose that, for every $N>0$,
     \begin{align}
         \rho^{(N)}(M)
-        &=\sum_x n_x\rho^{(N)}(K_x).
+         & =\sum_x n_x\rho^{(N)}(K_x).
         \notag
     \end{align}
     Then $M$ satisfies SAL.
@@ -1182,7 +1182,7 @@ firstSiteMatrix_mul_reducedBlockState}
     commuting sector products, then
     \begin{align}
         \rho^{(N)}(M)
-        &=\sum_x n_x\rho^{(N)}(\mathcal K_x).
+         & =\sum_x n_x\rho^{(N)}(\mathcal K_x).
         \notag
     \end{align}
     Hence the BNT copy numbers $n_x$ are the natural multiplicities of the
@@ -1208,7 +1208,7 @@ firstSiteMatrix_mul_reducedBlockState}
     Equivalently, for every $N>0$,
     \begin{align}
         \rho^{(N)}(M)
-        &=\sum_x n_x\rho^{(N)}(\mathcal K_x).
+         & =\sum_x n_x\rho^{(N)}(\mathcal K_x).
         \notag
     \end{align}
     Under the BNT projector-selection hypotheses, if every $\mathcal K_x$
@@ -1233,7 +1233,7 @@ firstSiteMatrix_mul_reducedBlockState}
     operator to its translate at the shifted base site:
     \begin{align}
         \tau_i(B)[\sigma\circ r, \eta\circ r]
-        &=\tau_{r(i)}(B)[\sigma,\eta].
+         & =\tau_{r(i)}(B)[\sigma,\eta].
         \notag
     \end{align}
 \end{lemma}
@@ -1283,7 +1283,7 @@ firstSiteMatrix_mul_reducedBlockState}
     chain, the embedded operator decomposes as
     \begin{align}
         \tau_i(B)
-        &\cong B\otimes\Id_{\mathrm{comp}},
+         & \cong B\otimes\Id_{\mathrm{comp}},
         \notag
     \end{align}
     where the identity acts on the cyclic complement of the window. A tensor

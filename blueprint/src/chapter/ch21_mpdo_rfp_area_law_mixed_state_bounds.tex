@@ -8,9 +8,9 @@
     such that $\rho^{(N)}(M)$ is positive semidefinite, let
     \begin{align}
         \sigma^{(N)}(M)
-        &=\frac{\rho^{(N)}(M)}{\tr[\rho^{(N)}(M)]}, \notag\\
+         & =\frac{\rho^{(N)}(M)}{\tr[\rho^{(N)}(M)]}, \notag \\
         \rho_L^{(N)}(M)
-        &=\tr_{N\setminus L}\![\sigma^{(N)}(M)]
+         & =\tr_{N\setminus L}\![\sigma^{(N)}(M)]
         \notag
     \end{align}
     denote the normalized state and the reduced state of the first $L$ of $N$
@@ -83,10 +83,10 @@
     sites as a tripartite state on $A\otimes B\otimes C$, its four entropies in
     strong subadditivity are
     \begin{align}
-        S(ABC)&=S_{a+b+c}, &
-        S(AB)&=S_{a+b}, \notag\\
-        S(B)&=S_b, &
-        S(BC)&=S_{b+c}.
+        S(ABC) & =S_{a+b+c},      &
+        S(AB)  & =S_{a+b}, \notag   \\
+        S(B)   & =S_b,            &
+        S(BC)  & =S_{b+c}.
         \notag
     \end{align}
 \end{theorem}
@@ -100,8 +100,8 @@
     while tracing out $A$ leaves the final $b+c$ sites; translation invariance
     gives
     \begin{align}
-        \tr_{A,C}(\rho_{ABC})&\cong\rho^{(b)}, \notag\\
-        \tr_A(\rho_{ABC})&\cong\rho^{(b+c)}.
+        \tr_{A,C}(\rho_{ABC}) & \cong\rho^{(b)}, \notag \\
+        \tr_A(\rho_{ABC})     & \cong\rho^{(b+c)}.
         \notag
     \end{align}
     Hence $S(B)=S_b$ and $S(BC)=S_{b+c}$.
@@ -157,10 +157,10 @@
     \uses{def:mpo_tensor}
     Let $M$ have physical dimension two and bond dimension three, with
     \begin{align}
-        M^{00}&=\diag(1,0,0), &
-        M^{11}&=\diag(0,1,-1), \notag\\
-        M^{01}&=0, &
-        M^{10}&=0.
+        M^{00} & =\diag(1,0,0),         &
+        M^{11} & =\diag(0,1,-1), \notag   \\
+        M^{01} & =0,                    &
+        M^{10} & =0.
         \notag
     \end{align}
 \end{definition}
@@ -168,21 +168,21 @@
 \begin{theorem}[A periodic MPDO without a thermodynamic limit]
     \label{thm:parity_mpdo_no_thermodynamic_limit}
     \lean{MPOTensor.ThermodynamicLimitCounterexample.mpo_parityTensor_eq_diagonal,
-      MPOTensor.ThermodynamicLimitCounterexample.parityTensor_isMPDO,
-      MPOTensor.ThermodynamicLimitCounterexample.trace_mpo_parityTensor,
-      MPOTensor.ThermodynamicLimitCounterexample.normalizedMPO_zeroConfig_of_odd,
-      MPOTensor.ThermodynamicLimitCounterexample.normalizedMPO_zeroConfig_of_even,
-      MPOTensor.ThermodynamicLimitCounterexample.reducedBlockState_one_zero_zero_of_odd,
-      MPOTensor.ThermodynamicLimitCounterexample.reducedBlockState_one_zero_zero_of_even,
-      MPOTensor.ThermodynamicLimitCounterexample.not_exists_tendsto_reducedBlockState_one_zero_zero}
+        MPOTensor.ThermodynamicLimitCounterexample.parityTensor_isMPDO,
+        MPOTensor.ThermodynamicLimitCounterexample.trace_mpo_parityTensor,
+        MPOTensor.ThermodynamicLimitCounterexample.normalizedMPO_zeroConfig_of_odd,
+        MPOTensor.ThermodynamicLimitCounterexample.normalizedMPO_zeroConfig_of_even,
+        MPOTensor.ThermodynamicLimitCounterexample.reducedBlockState_one_zero_zero_of_odd,
+        MPOTensor.ThermodynamicLimitCounterexample.reducedBlockState_one_zero_zero_of_even,
+        MPOTensor.ThermodynamicLimitCounterexample.not_exists_tendsto_reducedBlockState_one_zero_zero}
     \leanok
     \uses{def:mpdo, def:parity_mpdo_counterexample}
     The tensor in Definition~\ref{def:parity_mpdo_counterexample} generates the
     positive operators
     \begin{align}
         \rho^{(N)}
-        &=\ketbra{0^N}{0^N}
-          +(1+(-1)^N)\ketbra{1^N}{1^N}.
+         & =\ketbra{0^N}{0^N}
+        +(1+(-1)^N)\ketbra{1^N}{1^N}.
         \notag
     \end{align}
     Their traces are $2+(-1)^N$. The all-zero diagonal entry of the normalized
@@ -217,31 +217,31 @@
 \begin{theorem}[Mutual information without a thermodynamic limit]
     \label{thm:parity_mpdo_no_mutual_info_limit}
     \lean{MPOTensor.ThermodynamicLimitCounterexample.normalizedMPO_parityTensor_of_odd,
-      MPOTensor.ThermodynamicLimitCounterexample.normalizedMPO_parityTensor_of_even,
-      MPOTensor.ThermodynamicLimitCounterexample.reducedBlockState_parityTensor_of_odd,
-      MPOTensor.ThermodynamicLimitCounterexample.reducedBlockState_parityTensor_of_even,
-      MPOTensor.ThermodynamicLimitCounterexample.blockEntropy_parityTensor_of_odd,
-      MPOTensor.ThermodynamicLimitCounterexample.blockEntropy_parityTensor_of_even,
-      MPOTensor.ThermodynamicLimitCounterexample.mutualInfoChain_parityTensor_of_odd,
-      MPOTensor.ThermodynamicLimitCounterexample.mutualInfoChain_parityTensor_of_even,
-      MPOTensor.ThermodynamicLimitCounterexample.binEntropy_one_div_three_pos,
-      MPOTensor.ThermodynamicLimitCounterexample.parityMutualInfoAfterCut,
-      MPOTensor.ThermodynamicLimitCounterexample.not_exists_tendsto_parityMutualInfoAfterCut}
+        MPOTensor.ThermodynamicLimitCounterexample.normalizedMPO_parityTensor_of_even,
+        MPOTensor.ThermodynamicLimitCounterexample.reducedBlockState_parityTensor_of_odd,
+        MPOTensor.ThermodynamicLimitCounterexample.reducedBlockState_parityTensor_of_even,
+        MPOTensor.ThermodynamicLimitCounterexample.blockEntropy_parityTensor_of_odd,
+        MPOTensor.ThermodynamicLimitCounterexample.blockEntropy_parityTensor_of_even,
+        MPOTensor.ThermodynamicLimitCounterexample.mutualInfoChain_parityTensor_of_odd,
+        MPOTensor.ThermodynamicLimitCounterexample.mutualInfoChain_parityTensor_of_even,
+        MPOTensor.ThermodynamicLimitCounterexample.binEntropy_one_div_three_pos,
+        MPOTensor.ThermodynamicLimitCounterexample.parityMutualInfoAfterCut,
+        MPOTensor.ThermodynamicLimitCounterexample.not_exists_tendsto_parityMutualInfoAfterCut}
     \leanok
     \uses{def:mutual_info_chain, def:parity_mpdo_counterexample}
     Fix $L\geq1$. For every $N>L$, the tensor in
     Definition~\ref{def:parity_mpdo_counterexample} satisfies
     \begin{align}
         I_L^{(N)}
-        &=
+         & =
         \begin{cases}
-            0, & N\text{ odd},\\
+            0,        & N\text{ odd},  \\
             h_2(1/3), & N\text{ even},
         \end{cases}
-        \notag\\
+        \notag                          \\
         h_2(1/3)
-        &=-\frac{1}{3}\log\frac{1}{3}
-          -\frac{2}{3}\log\frac{2}{3}>0.
+         & =-\frac{1}{3}\log\frac{1}{3}
+        -\frac{2}{3}\log\frac{2}{3}>0.
         \notag
     \end{align}
     Consequently the sequence $K\mapsto I_L^{(L+K+1)}$ does not converge,
@@ -267,8 +267,8 @@
     For a linear map $\Psi_B$ and a bipartite matrix $\rho_{AB}$, define
     \begin{align}
         (\id_A\otimes\Psi_B)(\rho_{AB})
-        &=\Sigma_{B'A}\bigl((\Psi_B\otimes\id_A)
-          (\Sigma_{AB}(\rho_{AB}))\bigr),
+         & =\Sigma_{B'A}\bigl((\Psi_B\otimes\id_A)
+        (\Sigma_{AB}(\rho_{AB}))\bigr),
         \notag
     \end{align}
     where $\Sigma$ denotes the canonical exchange of the two tensor factors.
@@ -282,8 +282,8 @@
     For linear maps $\Phi_A$ and $\Psi_B$, set
     \begin{align}
         (\Phi_A\otimes\Psi_B)(\rho)
-        &=(\id_{A'}\otimes\Psi_B)
-          ((\Phi_A\otimes\id_B)(\rho)).
+         & =(\id_{A'}\otimes\Psi_B)
+        ((\Phi_A\otimes\id_B)(\rho)).
         \notag
     \end{align}
 \end{definition}
@@ -334,16 +334,16 @@
     $\omega_{A'EB}=W\rho_{AB}W^\dagger$. Since
     $W=V_A\otimes\id_B$ and $V_A^\dagger V_A=\id_A$, its marginals satisfy
     \begin{align}
-        \omega_{A'E}&=V_A\rho_A V_A^\dagger, \notag\\
-        \omega_B&=\rho_B.
+        \omega_{A'E} & =V_A\rho_A V_A^\dagger, \notag \\
+        \omega_B     & =\rho_B.
         \notag
     \end{align}
     Entropy is preserved by the isometry $W$, and also by $V_A$ on the first
     marginal. Therefore
     \begin{align}
-        S(\omega_{A'EB})&=S(\rho_{AB}), \notag\\
-        S(\omega_{A'E})&=S(\rho_A), \notag\\
-        S(\omega_B)&=S(\rho_B).
+        S(\omega_{A'EB}) & =S(\rho_{AB}), \notag \\
+        S(\omega_{A'E})  & =S(\rho_A), \notag    \\
+        S(\omega_B)      & =S(\rho_B).
         \notag
     \end{align}
     Hence $I(A'E:B)_\omega=I(A:B)_\rho$. The defining Stinespring identity is
@@ -388,13 +388,13 @@
 \begin{definition}[Normalized state across a consecutive bipartition]
     \label{def:mpdo_split_normalized_mpo}
     \lean{MPOTensor.chainBipartitionEquiv,
-      MPOTensor.bipartitionedNormalizedMPO,
-      MPOTensor.bipartitionedNormalizedMPO_posSemidef,
-      MPOTensor.bipartitionedNormalizedMPO_trace,
-      MPOTensor.refineFirstBlock,
-      MPOTensor.coarsenFirstBlock,
-      MPOTensor.refineFirstBlock_isKrausCPTP,
-      MPOTensor.coarsenFirstBlock_isKrausCPTP}
+        MPOTensor.bipartitionedNormalizedMPO,
+        MPOTensor.bipartitionedNormalizedMPO_posSemidef,
+        MPOTensor.bipartitionedNormalizedMPO_trace,
+        MPOTensor.refineFirstBlock,
+        MPOTensor.coarsenFirstBlock,
+        MPOTensor.refineFirstBlock_isKrausCPTP,
+        MPOTensor.coarsenFirstBlock_isKrausCPTP}
     \leanok
     For $N=L+K$, split a physical configuration into consecutive intervals of
     lengths $L$ and $K$, flatten each interval to a finite index, and denote the
@@ -407,9 +407,9 @@
 \begin{lemma}[Chain mutual information across a consecutive cut]
     \label{lem:mpdo_chain_mutual_information_bipartition}
     \lean{MPOTensor.reducedBlockState_full,
-      MPOTensor.bipartitionedNormalizedMPO_traceRight,
-      MPOTensor.bipartitionedNormalizedMPO_traceLeft,
-      MPOTensor.mutualInfoChain_eq_mutualInformation}
+        MPOTensor.bipartitionedNormalizedMPO_traceRight,
+        MPOTensor.bipartitionedNormalizedMPO_traceLeft,
+        MPOTensor.mutualInfoChain_eq_mutualInformation}
     \leanok
     \uses{def:mpdo_split_normalized_mpo}
     Across the consecutive cut after the first $L$ sites, the two marginals
@@ -430,7 +430,7 @@
 \begin{lemma}[Renormalization maps transfer one site across a cut]
     \label{lem:mpdo_rfp_transfer_across_cut}
     \lean{MPOTensor.tensorMapBoth_bipartitionedNormalizedMPO,
-      MPOTensor.tensorMapBoth_bipartitionedNormalizedMPO_reverse}
+        MPOTensor.tensorMapBoth_bipartitionedNormalizedMPO_reverse}
     \leanok
     \uses{def:mpdo_split_normalized_mpo, thm:mpdo_global_renormalization_maps}
     Suppose that $N=(a+1)+(b+2)=(a+2)+(b+1)$. The local closure equations
@@ -438,11 +438,11 @@
     \begin{align}
         (\widehat{\mathcal T}_a\otimes\widehat{\mathcal S}_b)
         (\sigma^{(N)}_{a+1:b+2})
-        &=\sigma^{(N)}_{a+2:b+1},
-        \notag\\
+         & =\sigma^{(N)}_{a+2:b+1},
+        \notag                      \\
         (\widehat{\mathcal S}_a\otimes\widehat{\mathcal T}_b)
         (\sigma^{(N)}_{a+2:b+1})
-        &=\sigma^{(N)}_{a+1:b+2}.
+         & =\sigma^{(N)}_{a+1:b+2}.
         \notag
     \end{align}
 \end{lemma}
@@ -460,13 +460,13 @@
 \begin{theorem}[Conditional RFP mutual-information equality]
     \label{thm:mpdo_rfp_split_mutual_information_eq}
     \lean{MPOTensor.mutualInformation_bipartition_eq_of_local_transfers,
-      MPOTensor.mutualInformation_bipartition_eq_of_isRFPViaTS}
+        MPOTensor.mutualInformation_bipartition_eq_of_isRFPViaTS}
     \leanok
     \uses{lem:mpdo_rfp_transfer_across_cut, thm:mpdo_mutual_information_data_processing}
     Let $M$ be a renormalization fixed point. If its $N$-site operator is
     positive semidefinite and has nonzero trace, then
     $I(\sigma^{(N)}_{a+1:b+2})
-    =I(\sigma^{(N)}_{a+2:b+1})$.
+        =I(\sigma^{(N)}_{a+2:b+1})$.
     This is the channel calculation in
     \cite[Appendix~C, lines~1333--1341]{Cirac2016MPDO_arXiv}. It depends only
     on positivity, nonzero trace, and the local renormalization equations; no
@@ -483,7 +483,7 @@
 \begin{lemma}[Nonvanishing of positive-length BNT-refined RFP rings]
     \label{lem:mpdo_rfp_positive_length_trace_nonzero}
     \lean{MPOTensor.firstSiteMatrix_one,
-      MPOTensor.trace_mpo_ne_zero_of_isHorizontalCF_isMPDO_isRFPViaTS}
+        MPOTensor.trace_mpo_ne_zero_of_isHorizontalCF_isMPDO_isRFPViaTS}
     \leanok
     \uses{def:is_rfp_via_ts}
     Let $M$ be in normalized BNT-refined horizontal form, generate positive
@@ -544,7 +544,7 @@
 \begin{theorem}[Trace-normalized renormalization fixed points have literal ZCL and SAL]
     \label{thm:mpdo_rfp_implies_zcl_and_sal}
     \lean{MPOTensor.physTraceTransfer_sq_of_isRFPViaTS,
-      MPOTensor.isSAL_of_isRFPViaTS_of_trace_ne_zero}
+        MPOTensor.isSAL_of_isRFPViaTS_of_trace_ne_zero}
     \leanok
     \uses{thm:rfp_via_ts_physical_trace_idempotent, thm:mpdo_rfp_implies_sal}
     Let $M$ generate positive semidefinite ring operators with
@@ -569,7 +569,7 @@
 \begin{corollary}[Horizontal renormalization fixed points have literal ZCL and SAL]
     \label{cor:mpdo_horizontal_rfp_implies_zcl_and_sal}
     \lean{MPOTensor.physTraceTransfer_sq_of_isRFPViaTS,
-      MPOTensor.isSAL_of_isRFPViaTS}
+        MPOTensor.isSAL_of_isRFPViaTS}
     \leanok
     \uses{lem:mpdo_rfp_positive_length_trace_nonzero, thm:mpdo_rfp_implies_zcl_and_sal}
     Let $M$ be in normalized BNT-refined horizontal form, generate positive
@@ -686,16 +686,16 @@
 \begin{definition}[Ancillary trace on a block]
     \label{def:block_ancillary_trace}
     \lean{MPOTensor.blockSpinAncillaEquiv,
-      MPOTensor.blockSpinAncillaEquiv_symm_apply,
-      MPOTensor.blockSpinAncillaEquiv_symm_decode,
-      MPOTensor.blockAncillaryTraceMap}
+        MPOTensor.blockSpinAncillaEquiv_symm_apply,
+        MPOTensor.blockSpinAncillaEquiv_symm_decode,
+        MPOTensor.blockAncillaryTraceMap}
     \leanok
     \uses{def:mpdo_ancillary_trace_map}
     For a block of $L$ spin--ancilla pairs, regroup
     \begin{align}
         (\C^d\otimes\C^{d_K})^{\otimes L}
-        &\cong(\C^d)^{\otimes L}
-          \otimes(\C^{d_K})^{\otimes L}
+         & \cong(\C^d)^{\otimes L}
+        \otimes(\C^{d_K})^{\otimes L}
         \notag
     \end{align}
     and trace the ancillary factor. Denote this map by
@@ -723,23 +723,23 @@
 \begin{theorem}[Coefficients of the ancillary traces]
     \label{thm:block_ancillary_trace_coefficients}
     \lean{MPOTensor.blockAncillaryTraceMap_apply,
-      MPOTensor.tensorMapBoth_blockAncillaryTraceMap_apply}
+        MPOTensor.tensorMapBoth_blockAncillaryTraceMap_apply}
     \leanok
     \uses{def:block_ancillary_trace}
     If $X$ is an operator on a spin--ancilla block, then for
     $i,j\in[d]^L$,
     \begin{align}
         \Tr_{\mathrm{anc},L}(X)_{i,j}
-        &=\sum_{\kappa\in[d_K]^L}X_{(i,\kappa),(j,\kappa)}.
+         & =\sum_{\kappa\in[d_K]^L}X_{(i,\kappa),(j,\kappa)}.
         \notag
     \end{align}
     For $i,j\in[d]^L$ and $x,y\in[d]^K$, applying the ancillary traces to
     both blocks across the cut $L\mid K$ gives
     \begin{align}
         \bigl[(\Tr_{\mathrm{anc},L}\otimes
-          \Tr_{\mathrm{anc},K})(X)\bigr]_{(i,x),(j,y)}
-        &=\sum_{\kappa\in[d_K]^L}\sum_{\lambda\in[d_K]^K}
-          X_{((i,\kappa),(x,\lambda)),((j,\kappa),(y,\lambda))}.
+            \Tr_{\mathrm{anc},K})(X)\bigr]_{(i,x),(j,y)}
+         & =\sum_{\kappa\in[d_K]^L}\sum_{\lambda\in[d_K]^K}
+        X_{((i,\kappa),(x,\lambda)),((j,\kappa),(y,\lambda))}.
         \notag
     \end{align}
 \end{theorem}
@@ -755,15 +755,15 @@
 \begin{theorem}[Local purification as a block-channel image]
     \label{thm:lpdo_block_channel_image}
     \lean{MPOTensor.blockAncillaryTraceMap_pureState_purificationTensor,
-      MPOTensor.trace_purificationDensity_eq_pureState,
-      MPOTensor.bipartitionedNormalizedMPO_eq_tensorMapBoth_blockAncillaryTraceMap}
+        MPOTensor.trace_purificationDensity_eq_pureState,
+        MPOTensor.bipartitionedNormalizedMPO_eq_tensorMapBoth_blockAncillaryTraceMap}
     \leanok
     \uses{def:block_ancillary_trace, def:mpdo_purification_tensor, def:mpdo_purification_density, def:mpdo_split_normalized_mpo}
     Fix a local-purification representation
     \begin{align}
         M^{ij}
-        &=\left(\sum_{k=0}^{d_K-1}
-          A^{(i,k)}\otimes\overline{A^{(j,k)}}\right)_{e,e},
+         & =\left(\sum_{k=0}^{d_K-1}
+        A^{(i,k)}\otimes\overline{A^{(j,k)}}\right)_{e,e},
         \notag
     \end{align}
     with purifying MPS tensor $\widetilde A$ of physical dimension $d d_K$
@@ -771,29 +771,29 @@
     degrees of freedom gives
     \begin{align}
         \rho^{(N)}(M)
-        &=\Tr_{\mathrm{anc},N}
-          \left(\ketbra{V^{(N)}(\widetilde A)}
-            {V^{(N)}(\widetilde A)}\right), \notag\\
+         & =\Tr_{\mathrm{anc},N}
+        \left(\ketbra{V^{(N)}(\widetilde A)}
+        {V^{(N)}(\widetilde A)}\right), \notag               \\
         \tr\rho^{(N)}(M)
-        &=\left\lVert V^{(N)}(\widetilde A)\right\rVert^2.
+         & =\left\lVert V^{(N)}(\widetilde A)\right\rVert^2.
         \notag
     \end{align}
 
     Define the normalized-form purifying operator by
     \begin{align}
         \pi_{\widetilde A}^{(N)}
-        &:=\left\lVert V^{(N)}(\widetilde A)\right\rVert^{-2}
-          \ketbra{V^{(N)}(\widetilde A)}
-            {V^{(N)}(\widetilde A)},
+         & :=\left\lVert V^{(N)}(\widetilde A)\right\rVert^{-2}
+        \ketbra{V^{(N)}(\widetilde A)}
+        {V^{(N)}(\widetilde A)},
         \notag
     \end{align}
     where the inverse scalar is taken with the convention $0^{-1}=0$. After
     reindexing across the cut $L\mid K$,
     \begin{align}
         \sigma^{(N)}_{L:K}(M)
-        &=\left(\Tr_{\mathrm{anc},L}\otimes
-          \Tr_{\mathrm{anc},K}\right)
-          \left(\left(\pi_{\widetilde A}^{(N)}\right)_{L:K}\right).
+         & =\left(\Tr_{\mathrm{anc},L}\otimes
+        \Tr_{\mathrm{anc},K}\right)
+        \left(\left(\pi_{\widetilde A}^{(N)}\right)_{L:K}\right).
         \notag
     \end{align}
     This identity also holds when the common trace vanishes, in which case both
@@ -808,14 +808,14 @@
     \uses{thm:block_ancillary_trace_coefficients, thm:block_ancillary_trace_channel, thm:mpo_eq_purification_density}
     The coefficient formula for one block gives
     \begin{align}
-        &\Tr_{\mathrm{anc},N}
-          \left(\ketbra{V^{(N)}(\widetilde A)}
-            {V^{(N)}(\widetilde A)}\right)_{\sigma,\tau}
-        \notag\\
-        &\quad
+         & \Tr_{\mathrm{anc},N}
+        \left(\ketbra{V^{(N)}(\widetilde A)}
+        {V^{(N)}(\widetilde A)}\right)_{\sigma,\tau}
+        \notag                  \\
+         & \quad
         =\sum_{\kappa\in[d_K]^N}
-          V^{(N)}(\widetilde A)_{(\sigma,\kappa)}
-          \overline{V^{(N)}(\widetilde A)_{(\tau,\kappa)}}
+        V^{(N)}(\widetilde A)_{(\sigma,\kappa)}
+        \overline{V^{(N)}(\widetilde A)_{(\tau,\kappa)}}
         =\rho^{(N)}(M)_{\sigma,\tau}.
         \notag
     \end{align}
@@ -829,7 +829,7 @@
 \begin{theorem}[LPDOs admit a block-channel representation]
     \label{thm:lpdo_exists_block_channel_image}
     \lean{MPOTensor.IsLPDO.%
-      exists_bipartitionedNormalizedMPO_eq_blockAncillaryTrace}
+        exists_bipartitionedNormalizedMPO_eq_blockAncillaryTrace}
     \leanok
     \uses{def:lpdo, thm:lpdo_block_channel_image}
     Let $M$ be an LPDO. For every decomposition $N=L+K$, there exist an
@@ -838,9 +838,9 @@
     purifying MPS tensor. Then
     \begin{align}
         \sigma^{(N)}_{L:K}(M)
-        &=\left(\Tr_{\mathrm{anc},L}\otimes
-          \Tr_{\mathrm{anc},K}\right)
-          \left(\left(\pi_{\widetilde A}^{(N)}\right)_{L:K}\right).
+         & =\left(\Tr_{\mathrm{anc},L}\otimes
+        \Tr_{\mathrm{anc},K}\right)
+        \left(\left(\pi_{\widetilde A}^{(N)}\right)_{L:K}\right).
         \notag
     \end{align}
 \end{theorem}
@@ -854,7 +854,7 @@
 \begin{theorem}[LPDOs admit a cut-uniform block-channel representation]
     \label{thm:lpdo_exists_cut_uniform_block_channel_image}
     \lean{MPOTensor.IsLPDO.%
-      exists_forall_bipartitionedNormalizedMPO_eq_blockAncillaryTrace}
+        exists_forall_bipartitionedNormalizedMPO_eq_blockAncillaryTrace}
     \leanok
     \uses{def:lpdo, thm:lpdo_block_channel_image}
     Let $M$ be an LPDO. There exist an ancillary dimension $d_K$, a
@@ -862,9 +862,9 @@
     independent of the cut, such that for every decomposition $N=L+K$,
     \begin{align}
         \sigma^{(N)}_{L:K}(M)
-        &=\left(\Tr_{\mathrm{anc},L}\otimes
-          \Tr_{\mathrm{anc},K}\right)
-          \left(\left(\pi_{\widetilde A}^{(N)}\right)_{L:K}\right),
+         & =\left(\Tr_{\mathrm{anc},L}\otimes
+        \Tr_{\mathrm{anc},K}\right)
+        \left(\left(\pi_{\widetilde A}^{(N)}\right)_{L:K}\right),
         \notag
     \end{align}
     where $\widetilde A$ is the purifying MPS tensor associated with $A$.
@@ -890,9 +890,9 @@
     the two blocks:
     \begin{align}
         \sigma^{(N)}_{L:N-L}(M)
-        &=(\Phi_L\otimes\Phi_R)
-          \left(\frac{\ketbra{V^{(N)}(A)}{V^{(N)}(A)}}
-              {\lVert V^{(N)}(A)\rVert^2}\right)_{L:N-L}.
+         & =(\Phi_L\otimes\Phi_R)
+        \left(\frac{\ketbra{V^{(N)}(A)}{V^{(N)}(A)}}
+        {\lVert V^{(N)}(A)\rVert^2}\right)_{L:N-L}.
         \notag
     \end{align}
     Then $I_L(M)\leq4\log D'$.
@@ -903,7 +903,7 @@
     $L\mid(N-L)$ bipartition. Then
     \begin{align}
         I_L(M)
-        &=I\!\left((\Phi_L\otimes\Phi_R)(\sigma_A^{(N)})\right)
+         & =I\!\left((\Phi_L\otimes\Phi_R)(\sigma_A^{(N)})\right)
         \leq I(\sigma_A^{(N)})
         \leq4\log D'.
         \notag
@@ -916,8 +916,8 @@
 \begin{theorem}[Mutual-information bound for a locally purified tensor]
     \label{thm:lpdo_mutual_info_bound}
     \lean{MPOTensor.purifyingBondDimension_pos_of_trace_ne_zero,
-      MPOTensor.mutualInfoChain_le_of_lpdoWitness,
-      MPOTensor.IsLPDO.exists_mutualInfoChain_le_purifyingBond}
+        MPOTensor.mutualInfoChain_le_of_lpdoWitness,
+        MPOTensor.IsLPDO.exists_mutualInfoChain_le_purifyingBond}
     \leanok
     \uses{def:lpdo, def:mutual_info_chain, thm:lpdo_block_channel_image}
     Fix a local-purification representation with purifying MPS bond dimension
@@ -936,11 +936,11 @@
     By Theorem~\ref{thm:lpdo_block_channel_image},
     \begin{align}
         I_L(M)
-        &=I\!\left((\Tr_{\mathrm{anc},L}\otimes
-            \Tr_{\mathrm{anc},N-L})
-          \left(\left(\pi_{\widetilde A}^{(N)}\right)_{L:N-L}\right)\right)
-        \notag\\
-        &\leq I\!\left(\left(\pi_{\widetilde A}^{(N)}\right)_{L:N-L}\right)
+         & =I\!\left((\Tr_{\mathrm{anc},L}\otimes
+        \Tr_{\mathrm{anc},N-L})
+        \left(\left(\pi_{\widetilde A}^{(N)}\right)_{L:N-L}\right)\right)
+        \notag                                                                \\
+         & \leq I\!\left(\left(\pi_{\widetilde A}^{(N)}\right)_{L:N-L}\right)
         \leq4\log D'.
         \notag
     \end{align}

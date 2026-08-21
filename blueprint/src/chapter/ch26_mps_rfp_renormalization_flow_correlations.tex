@@ -54,10 +54,10 @@
     Let $\omega=e^{2\pi i/3}$ and consider the tensor with one physical
     component
     \begin{align}
-        A^1&=
+        A^1 & =
         \begin{pmatrix}
-            1&0\\
-            0&\omega
+            1 & 0      \\
+            0 & \omega
         \end{pmatrix}.
         \notag
     \end{align}
@@ -65,7 +65,7 @@
     components of weights $1$ and $\omega$. For the matrix unit $e_{21}$,
     \begin{align}
         \E_A^{2^n}(e_{21})
-        &=\omega^{2^n}e_{21}.
+         & =\omega^{2^n}e_{21}.
         \notag
     \end{align}
     The right-hand side alternates between
@@ -92,13 +92,13 @@
     \uses{thm:cpsv_canonical_form_flow_phase_obstruction, def:mps_transfer_idempotence}
     Let $\omega=e^{2\pi i/3}$, let
     \begin{align}
-        A&=\begin{pmatrix}1&0\\0&\omega\end{pmatrix}, &
-        S&=\begin{pmatrix}0&1\\1&0\end{pmatrix}.
+        A & =\begin{pmatrix}1&0\\0&\omega\end{pmatrix}, &
+        S & =\begin{pmatrix}0&1\\1&0\end{pmatrix}.
         \notag
     \end{align}
     Then
     \begin{align}
-        A&=\omega S A^2S^{-1}.
+        A & =\omega S A^2S^{-1}.
         \notag
     \end{align}
     Thus blocking returns $A$ up to the swap gauge and a phase.  Nevertheless,
@@ -123,7 +123,7 @@
     by simultaneous similarity on the virtual indices. For a pure tensor $A$,
     this condition is imposed on the doubled tensor
     \begin{align}
-        M&=A\otimes\overline A.
+        M & =A\otimes\overline A.
         \notag
     \end{align}
     Both physical matrix algebras are one-dimensional, so every physical
@@ -141,7 +141,7 @@
     are an invertible matrix $X$ and a scalar $\zeta$ with $|\zeta|=1$ such
     that
     \begin{align}
-        A&=\zeta X A^{[2]}X^{-1}.
+        A & =\zeta X A^{[2]}X^{-1}.
         \notag
     \end{align}
     % This MPS-level witness is sufficient but is not the source condition itself.
@@ -162,7 +162,7 @@
     \uses{def:ft_perm_gl}
     The permutation matrix
     \begin{align}
-        S&=\begin{pmatrix}0&1\\1&0\end{pmatrix}
+        S & =\begin{pmatrix}0&1\\1&0\end{pmatrix}
         \notag
     \end{align}
     defines an invertible virtual gauge that exchanges the $1$ and $\omega$
@@ -200,13 +200,13 @@
     \uses{def:blocked_tensor, def:doubled_tensor, def:mpdo, def:one_letter_mpdo_virtual_gauge_rfp, def:cube_phase_swap_gauge, def:cpsv_canonical_form, def:mps_transfer_idempotence}
     Let $\omega=e^{2\pi i/3}$, and set
     \begin{align}
-        A&=\begin{pmatrix}1&0\\0&\omega\end{pmatrix},
-        &S&=\begin{pmatrix}0&1\\1&0\end{pmatrix}.
+        A & =\begin{pmatrix}1&0\\0&\omega\end{pmatrix},
+          & S                                           & =\begin{pmatrix}0&1\\1&0\end{pmatrix}.
         \notag
     \end{align}
     Then $\omega^3=1$, $\omega\ne1$, and
     \begin{align}
-        A&=\omega S A^2S^{-1}.
+        A & =\omega S A^2S^{-1}.
         \notag
     \end{align}
     The doubled MPO tensor generates positive semidefinite operators on every
@@ -234,13 +234,13 @@
     \begin{align}
         (\omega S A^{[2]}S^{-1})\otimes
         (\overline\omega\,\overline S\,\overline{A^{[2]}}\,\overline S^{-1})
-        &=(S\otimes\overline S)M^{[2]}(S\otimes\overline S)^{-1},
+         & =(S\otimes\overline S)M^{[2]}(S\otimes\overline S)^{-1},
         \notag
     \end{align}
     since $\omega\overline\omega=1$. For every $n\geq0$, idempotence would imply
     \begin{align}
         \E_A^2=\E_A
-        &\Longrightarrow \E_A^{2^n}=\E_A.
+         & \Longrightarrow \E_A^{2^n}=\E_A.
         \notag
     \end{align}
     The dyadic powers would therefore form a constant, hence convergent,
@@ -282,9 +282,9 @@
     map on the virtual matrix space by
     \begin{align}
         \E_O(X)
-        &=\sum_{\boldsymbol i,\boldsymbol j}
-          \bra{\boldsymbol j}O\ket{\boldsymbol i}
-          A^{\boldsymbol i}X(A^{\boldsymbol j})^\dagger.
+         & =\sum_{\boldsymbol i,\boldsymbol j}
+        \bra{\boldsymbol j}O\ket{\boldsymbol i}
+        A^{\boldsymbol i}X(A^{\boldsymbol j})^\dagger.
         \notag
     \end{align}
     This is the observable transfer map of
@@ -319,7 +319,7 @@
     $n_1+n_2=m_1+m_2$, one has
     \begin{align}
         \Tr_{\MN{D}}\!\left(\E_{O_2}\circ\E_A^{n_2}\circ\E_{O_1}\circ\E_A^{n_1}\right)
-        &=
+         & =
         \Tr_{\MN{D}}\!\left(\E_{O_2}\circ\E_A^{m_2}\circ\E_{O_1}\circ\E_A^{m_1}\right).
         \notag
     \end{align}
@@ -336,9 +336,9 @@
     For an observable $O$ on a block of $L$ physical spins, write
     \begin{align}
         \E_O(X)
-        &=\sum_{\boldsymbol i,\boldsymbol j}
-          \bra{\boldsymbol j}O\ket{\boldsymbol i}
-          A^{\boldsymbol i}X(A^{\boldsymbol j})^\dagger.
+         & =\sum_{\boldsymbol i,\boldsymbol j}
+        \bra{\boldsymbol j}O\ket{\boldsymbol i}
+        A^{\boldsymbol i}X(A^{\boldsymbol j})^\dagger.
         \notag
     \end{align}
     Place two observables $O_1,O_2$ on nonempty finite blocks of a periodic
@@ -348,13 +348,13 @@
     $n_1+n_2=m_1+m_2$:
     \begin{align}
         \Tr_{\MN{D}}\!\left(\E_{O_2}\circ\E_A^{n_2}\circ\E_{O_1}\circ\E_A^{n_1}\right)
-        &=
+         & =
         \Tr_{\MN{D}}\!\left(\E_{O_2}\circ\E_A^{m_2}\circ\E_{O_1}\circ\E_A^{m_1}\right).
         \notag
     \end{align}
     This positive-gap restriction is the transfer-matrix form of
     \cite[Definition~3.3 and the correlation formula preceding
-    Theorem~3.8]{Cirac2016MPDO_arXiv}, restricted to positive complementary
+        Theorem~3.8]{Cirac2016MPDO_arXiv}, restricted to positive complementary
     gaps. It excludes adjacent regions.
 \end{definition}
 
@@ -384,10 +384,10 @@
     transfer formula gives
     \begin{align}
         \Tr_{\MN{D}}\!\left(\E_{O_2}\circ\E_A^{n_2}\circ\E_{O_1}\circ\E_A^{n_1}\right)
-        &=
+         & =
         \Tr_{\MN{D}}\!\left(\E_{O_2}\circ\E_A\circ\E_{O_1}\circ\E_A\right)
-        \notag\\
-        &=
+        \notag \\
+         & =
         \Tr_{\MN{D}}\!\left(\E_{O_2}\circ\E_A^{m_2}\circ\E_{O_1}\circ\E_A^{m_1}\right).
         \notag
     \end{align}
@@ -443,13 +443,13 @@
     matrices $X,Y$, and every $n\geq 1$,
     \begin{align}
         C(X,Y;n)
-        &=\tr\!\left(Y\E_A^n(X\rho^R)\right)
-          -\tr(X\rho^R)\tr(Y\rho^R)
-        \notag\\
-        &=\tr\!\left(Y\E_A(X\rho^R)\right)
-          -\tr(X\rho^R)\tr(Y\rho^R)
-        \notag\\
-        &=C(X,Y;1).
+         & =\tr\!\left(Y\E_A^n(X\rho^R)\right)
+        -\tr(X\rho^R)\tr(Y\rho^R)
+        \notag                                 \\
+         & =\tr\!\left(Y\E_A(X\rho^R)\right)
+        -\tr(X\rho^R)\tr(Y\rho^R)
+        \notag                                 \\
+         & =C(X,Y;1).
         \notag
     \end{align}
     Thus the connected correlator is independent of every positive

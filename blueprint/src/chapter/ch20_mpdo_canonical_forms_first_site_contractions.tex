@@ -38,7 +38,7 @@
     literal CPSV canonical form. If the first-site actions of $Y,Z\in\MN{d}$
     agree on every positive-length matrix product vector of $A$, then
     \begin{align}
-        YA&=ZA
+        YA & =ZA
         \label{eq:cpsv_literal_first_site_inserted}
     \end{align}
     on the original bond space. In particular, suppose that $M$ generates
@@ -98,14 +98,14 @@
     For $Y\in \MN{d}$, write
     \begin{align}
         (YA_k)^i
-        &:= \sum_{j=0}^{d-1}Y_{i,j}A_k^j
+         & := \sum_{j=0}^{d-1}Y_{i,j}A_k^j
         \notag
     \end{align}
     for the physical-index insertion of $Y$ into block $A_k$, and for a
     configuration $\sigma=(i_1,\ldots,i_N)$ write
     \begin{align}
         (Y_1V^{(N)}(A))_{(i_1,\ldots,i_N)}
-        &:= \sum_{j=0}^{d-1}Y_{i_1,j}
+         & := \sum_{j=0}^{d-1}Y_{i_1,j}
         V^{(N)}(A)_{(j,i_2,\ldots,i_N)}
         \notag
     \end{align}
@@ -157,7 +157,7 @@
             \tnwire{Z.270}{M.90}
         \end{tenkz}
     \end{center}
-        \begin{center}
+    \begin{center}
         $YA_k=ZA_k$
 
         % Y A_k = Z A_k: the one-site insertions of Y and Z agree on
@@ -204,7 +204,7 @@
     word $w$ of length~$L$,
     \begin{align}
         \sum_k \tr(\mu_k^{L+1}\Delta_k A_k^w)
-        &=0.
+         & =0.
         \notag
     \end{align}
     The finite block-separation hypothesis applied to the tuple
@@ -282,10 +282,10 @@ the proof of Lemma~L,
     first physical index of the MPV. If, for every $N\geq1$,
     \begin{align}
         (Y_L)_1V^{(N)}(A)
-        &=(Y_C)_1V^{(N)}(A),
-        \notag\\
+         & =(Y_C)_1V^{(N)}(A),
+        \notag                 \\
         (Y_L)_1V^{(N)}(A)
-        &=(Y_R)_1V^{(N)}(A),
+         & =(Y_R)_1V^{(N)}(A),
         \notag
     \end{align}
     then $Y_RA_j=Y_CA_j$ for every minimal representative $A_j$. This is the
@@ -316,13 +316,13 @@ the proof of Lemma~L,
     $PH^{(N)}$, $H^{(N)}P$, and $PH^{(N)}P$ are
     \begin{align}
         (Y_L)_{p,q}
-        &=P_{a,c}\delta_{b,e},
-        \notag\\
+         & =P_{a,c}\delta_{b,e},
+        \notag                   \\
         (Y_R)_{p,q}
-        &=\delta_{a,c}P_{e,b},
-        \notag\\
+         & =\delta_{a,c}P_{e,b},
+        \notag                   \\
         (Y_C)_{p,q}
-        &=P_{a,c}P_{e,b}.
+         & =P_{a,c}P_{e,b}.
         \notag
     \end{align}
 \end{definition}
@@ -362,19 +362,19 @@ tensor. This is the contraction in
     \uses{def:mpo_family, def:mpdo_three_first_site_contractions}
     For ket and bra configurations $\sigma,\tau$,
     $V^{(N)}(\widehat M)_{(\sigma,\tau)}
-    =H^{(N)}(M)_{\sigma,\tau}$.
+        =H^{(N)}(M)_{\sigma,\tau}$.
     If $p_0=(a,b)$ is the first doubled index and $\sigma',\tau'$ are the
     ket and bra configurations on the remaining $N$ sites, contraction with
     $Y_L$, $Y_R$, and $Y_C$ gives, respectively,
     \begin{align}
         \sum_c P_{a,c}H^{(N+1)}_{(c,\sigma'),(b,\tau')}
-        &,
-        \label{eq:mpdo_contraction_coefficients}\\
+         & ,
+        \label{eq:mpdo_contraction_coefficients} \\
         \sum_e H^{(N+1)}_{(a,\sigma'),(e,\tau')}P_{e,b}
-        &,
-        \notag\\
+         & ,
+        \notag                                   \\
         \sum_{c,e}P_{a,c}H^{(N+1)}_{(c,\sigma'),(e,\tau')}P_{e,b}
-        &.
+         & .
         \notag
     \end{align}
 \end{lemma}
@@ -415,33 +415,33 @@ tensor. This is the contraction in
 
 \begin{figure}[ht]
     \centering
-        % PH^{(N+1)} = PH^{(N+1)}P = H^{(N+1)}P for a projector P with
-        % P\widetilde M=P\widetilde MP (arXiv:1606.00608, proof of
-        % Proposition 4.13, eq. eq1:proof.IV.12, lines 1881--1887;
-        % paper figure DAVID_Fig3.png).  The picture reproduces the one
-        % network drawn by the source; the two further equalities remain in
-        % this comment and in the surrounding blueprint statement.
-        %
-        % Each \widetilde M box is one site tensor.  Its up leg is the ket
-        % index, its down leg the bra index, and the horizontal ring is the
-        % traced virtual index.  P is contracted with the ket leg of the
-        % source's rightmost displayed site; its outer leg is the operator's
-        % open ket index.  The ring leaves no virtual stubs.  The schematic
-        % boundary signature is therefore (virtual-west=0 | virtual-east=0 |
-        % physical-up=N+1 | physical-down=N+1).
-        $PH^{(N+1)} = $
-        \tenkzkernel
-        \begin{tenkz}[cols=4, boundary=periodic, physical=updown, size=s]
-            \tn[skin=mpo]{\widetilde M} & \tn[skin=mpo]{\widetilde M} & \tn[skin=dots]{} &
-            \tn[skin=mpo, name=M, physical=down, ports={90:physical}]{\widetilde M}
-            \tn[at=1 n of M, name=P, label pos=w, ports={270:physical, 90:physical}]{P}
-            \tnwire{P.270}{M.90}
-        \end{tenkz}
+    % PH^{(N+1)} = PH^{(N+1)}P = H^{(N+1)}P for a projector P with
+    % P\widetilde M=P\widetilde MP (arXiv:1606.00608, proof of
+    % Proposition 4.13, eq. eq1:proof.IV.12, lines 1881--1887;
+    % paper figure DAVID_Fig3.png).  The picture reproduces the one
+    % network drawn by the source; the two further equalities remain in
+    % this comment and in the surrounding blueprint statement.
+    %
+    % Each \widetilde M box is one site tensor.  Its up leg is the ket
+    % index, its down leg the bra index, and the horizontal ring is the
+    % traced virtual index.  P is contracted with the ket leg of the
+    % source's rightmost displayed site; its outer leg is the operator's
+    % open ket index.  The ring leaves no virtual stubs.  The schematic
+    % boundary signature is therefore (virtual-west=0 | virtual-east=0 |
+    % physical-up=N+1 | physical-down=N+1).
+    $PH^{(N+1)} = $
+    \tenkzkernel
+    \begin{tenkz}[cols=4, boundary=periodic, physical=updown, size=s]
+        \tn[skin=mpo]{\widetilde M} & \tn[skin=mpo]{\widetilde M} & \tn[skin=dots]{} &
+        \tn[skin=mpo, name=M, physical=down, ports={90:physical}]{\widetilde M}
+        \tn[at=1 n of M, name=P, label pos=w, ports={270:physical, 90:physical}]{P}
+        \tnwire{P.270}{M.90}
+    \end{tenkz}
     \caption{The periodic contraction representing $PH^{(N+1)}$. The
-    analogous contractions with $Y_R$ and $Y_C$ place $P$ on the bra leg or
-    on both legs and represent $H^{(N+1)}P$ and $PH^{(N+1)}P$. These are the
-    three first-site contractions in
-    \cite[Proposition~4.13, lines~1881--1887]{Cirac2016MPDO_arXiv}.}
+        analogous contractions with $Y_R$ and $Y_C$ place $P$ on the bra leg or
+        on both legs and represent $H^{(N+1)}P$ and $PH^{(N+1)}P$. These are the
+        three first-site contractions in
+        \cite[Proposition~4.13, lines~1881--1887]{Cirac2016MPDO_arXiv}.}
     \label{fig:mpdo_first_site_contractions}
 \end{figure}
 
@@ -455,10 +455,10 @@ tensor. This is the contraction in
     entrywise at every positive length,
     \begin{align}
         PH^{(N)}
-        &=PH^{(N)}P,
-        \notag\\
+         & =PH^{(N)}P,
+        \notag         \\
         PH^{(N)}
-        &=H^{(N)}P,
+         & =H^{(N)}P,
         \notag
     \end{align}
     then for every minimal representative $A_j$ the insertions associated
@@ -494,10 +494,10 @@ tensor. This is the contraction in
     tensor by
     \begin{align}
         (PM)^{ij}
-        &=\sum_k P_{ik}\,M^{kj},
-        \notag\\
+         & =\sum_k P_{ik}\,M^{kj},
+        \notag                     \\
         (MP)^{ij}
-        &=\sum_k P_{kj}\,M^{ik},
+         & =\sum_k P_{kj}\,M^{ik},
         \notag
     \end{align}
     and on an $(N+1)$-site chain by the first-spin operator
@@ -528,7 +528,7 @@ tensor. This is the contraction in
     Put $L=N+1$. Splitting off the first site of a density-operator entry gives
     \begin{align}
         H^{(N+1)}_{(i,\sigma),(j,\tau)}
-        &=\tr\bigl(M^{ij}M^{\sigma_0\tau_0}\cdots
+         & =\tr\bigl(M^{ij}M^{\sigma_0\tau_0}\cdots
         M^{\sigma_{N-1}\tau_{N-1}}\bigr).
         \notag
     \end{align}
@@ -599,7 +599,7 @@ tensor. This is the contraction in
     hypothesis by $U$ gives, entrywise for $Q'=U^\dagger QU$,
     \begin{align}
         Q'_{ij} \lambda_j^{\,p}
-        &=\lambda_i^{\,p}\,Q'_{ij}.
+         & =\lambda_i^{\,p}\,Q'_{ij}.
         \notag
     \end{align}
     Since $x\mapsto x^p$ is injective on the non-negative reals, every entry

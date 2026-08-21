@@ -30,7 +30,7 @@ counterpart in Theorem~\ref{thm:cyclic_sector_decomp_after_blocking}.
     has local matrices
     \begin{align}
         B_{u,j}^i
-        &=Q_{u+j}A^iQ_{u+j+1},
+         & =Q_{u+j}A^iQ_{u+j+1},
         \label{eq:pgvwc07_projector_component_chain}
     \end{align}
     where sector indices are read modulo $p$. It has the same bond dimension
@@ -48,14 +48,14 @@ counterpart in Theorem~\ref{thm:cyclic_sector_decomp_after_blocking}.
     $\sigma=(i_0,\ldots,i_{N-1})$, define the boundary product
     \begin{align}
         F_u(\sigma)
-        &=Q_uA^{i_0}Q_{u+1}A^{i_1}\cdots
-          Q_{u+N-1}A^{i_{N-1}}Q_{u+N}.
+         & =Q_uA^{i_0}Q_{u+1}A^{i_1}\cdots
+        Q_{u+N-1}A^{i_{N-1}}Q_{u+N}.
         \label{eq:pgvwc07_boundary_product}
     \end{align}
     At every length $N\geq 0$,
     \begin{align}
         V^{(N)}(A)_\sigma
-        &=\sum_{u\in\mathbb Z/p\mathbb Z}\tr F_u(\sigma).
+         & =\sum_{u\in\mathbb Z/p\mathbb Z}\tr F_u(\sigma).
         \label{eq:pgvwc07_boundary_coefficient_decomposition}
     \end{align}
     If $N>0$, then $\tr F_u(\sigma)$ is the coefficient of the explicit
@@ -63,7 +63,7 @@ counterpart in Theorem~\ref{thm:cyclic_sector_decomp_after_blocking}.
     At $N=0$, the boundary product is $F_u(\varnothing)=Q_u$, so
     \begin{align}
         \tr(\Id)
-        &=\sum_{u\in\mathbb Z/p\mathbb Z}\tr(Q_u).
+         & =\sum_{u\in\mathbb Z/p\mathbb Z}\tr(Q_u).
         \label{eq:pgvwc07_empty_boundary_decomposition}
     \end{align}
     This is not the sum of the ordinary empty component-chain coefficients:
@@ -78,9 +78,9 @@ counterpart in Theorem~\ref{thm:cyclic_sector_decomp_after_blocking}.
     $F_u(\sigma)=Q_uA^{i_0}\cdots A^{i_{N-1}}$. Hence
     \begin{align}
         \tr(A^{i_0}\cdots A^{i_{N-1}})
-        &=\tr\!\left(\left(\sum_uQ_u\right)
-          A^{i_0}\cdots A^{i_{N-1}}\right)
-          =\sum_u\tr F_u(\sigma).
+         & =\tr\!\left(\left(\sum_uQ_u\right)
+        A^{i_0}\cdots A^{i_{N-1}}\right)
+        =\sum_u\tr F_u(\sigma).
     \end{align}
     For $N>0$, multiplying the local matrices in
     (\ref{eq:pgvwc07_projector_component_chain}) gives
@@ -107,14 +107,14 @@ counterpart in Theorem~\ref{thm:cyclic_sector_decomp_after_blocking}.
     decomposition
     \begin{align}
         V^{(N)}(A)_\sigma
-        &=\sum_{u\in\mathbb Z/p\mathbb Z}\tr F_u(\sigma).
+         & =\sum_{u\in\mathbb Z/p\mathbb Z}\tr F_u(\sigma).
         \label{eq:pgvwc07_periodic_boundary_decomposition}
     \end{align}
     For $N>0$, this becomes the source's decomposition into the $p$ explicit
     component chains:
     \begin{align}
         \ket{V^{(N)}(A)}
-        &=\sum_{u\in\mathbb Z/p\mathbb Z}\ket{V^{(N)}(B_u)}.
+         & =\sum_{u\in\mathbb Z/p\mathbb Z}\ket{V^{(N)}(B_u)}.
         \label{eq:pgvwc07_periodic_state_vector_decomposition}
     \end{align}
     Each $B_u$ is a $p$-periodic MPS of bond dimension $D$ with local matrices

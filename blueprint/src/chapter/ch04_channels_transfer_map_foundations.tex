@@ -67,18 +67,18 @@
     Let $A>0$ be a square complex matrix and let $V$ be a possibly rectangular
     matrix satisfying $VV^\dagger=\Id$. Then
     \begin{align}
-        VAV^\dagger&>0.
+        VAV^\dagger & >0.
     \end{align}
 \end{theorem}
 
 \begin{proof}\leanok
     For a row vector $x$, one has
     \begin{align}
-        x(VAV^\dagger)x^\dagger&=(xV)A(xV)^\dagger.
+        x(VAV^\dagger)x^\dagger & =(xV)A(xV)^\dagger.
     \end{align}
     Moreover, $xV=0$ implies
     \begin{align}
-        x&=x(VV^\dagger)=0.
+        x & =x(VV^\dagger)=0.
     \end{align}
     Thus every nonzero $x$ gives $xV\ne0$, and positive definiteness of $A$
     makes the displayed quadratic form strictly positive.
@@ -91,7 +91,7 @@
     For every square complex matrix $X$,
     \begin{align}
         \operatorname{vec}(\Id)\mathbin{\boldsymbol\cdot}
-            \operatorname{vec}(X)&=\tr(X).
+        \operatorname{vec}(X) & =\tr(X).
     \end{align}
 \end{theorem}
 
@@ -99,9 +99,9 @@
     Expanding column stacking gives
     \begin{align}
         \sum_{i,j}(\Id)_{ij}X_{ij}
-        &=\sum_{i,j}\delta_{ij}X_{ij}
-         =\sum_iX_{ii}
-         =\tr(X).
+         & =\sum_{i,j}\delta_{ij}X_{ij}
+        =\sum_iX_{ii}
+        =\tr(X).
     \end{align}
 \end{proof}
 
@@ -181,7 +181,7 @@
     For matrices $\rho$ and $X$ and a finite family $(K_i)_i$,
     \begin{align}
         \tr\!\left(\rho\sum_i K_iXK_i^\dagger\right)
-        &=\tr\!\left(\left(\sum_iK_i^\dagger\rho K_i\right)X\right).
+         & =\tr\!\left(\left(\sum_iK_i^\dagger\rho K_i\right)X\right).
     \end{align}
 \end{theorem}
 
@@ -213,7 +213,7 @@
     \uses{def:transfer_map}
     Let $A$ be an MPS tensor and let $w\in\C$. Then, for every bond matrix $X$,
     \begin{align}
-        \E_{wA}(X)&=w\overline w\,\E_A(X).
+        \E_{wA}(X) & =w\overline w\,\E_A(X).
         \notag
     \end{align}
 \end{lemma}
@@ -230,7 +230,7 @@
     \uses{def:transfer_map, def:left_canonical_tensor}
     If $A$ is left canonical, then, for every bond matrix $X$,
     \begin{align}
-        \tr(\E_A(X))&=\tr(X).
+        \tr(\E_A(X)) & =\tr(X).
         \notag
     \end{align}
 \end{lemma}
@@ -240,8 +240,8 @@
     Cyclicity of trace gives
     \begin{align}
         \tr(\E_A(X))
-        &=\tr\!\left(\left(\sum_i(A^i)^\dagger A^i\right)X\right)
-         =\tr(X),
+         & =\tr\!\left(\left(\sum_i(A^i)^\dagger A^i\right)X\right)
+        =\tr(X),
         \notag
     \end{align}
     since left canonicity makes the sum in parentheses equal to the identity.

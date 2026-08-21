@@ -821,11 +821,8 @@ jobs:
           find blueprint/src tex/tenkz/examples -name '*.tex' -not -path '*/Packages/*' -print0 \
             | xargs -0 -r chktex -q -l blueprint/.chktexrc
 
-      # TODO: drop continue-on-error after a separate mechanical PR has run
-      # `latexindent -l blueprint/latexindent.yaml -w -s` over blueprint/src.
       - name: Check LaTeX formatting (latexindent)
         if: env.TEX_CHANGED == 'true'
-        continue-on-error: true
         timeout-minutes: 5
         run: |
           set -e

@@ -16,7 +16,7 @@ construction; they are not attributed to a source theorem.
     Grouping each consecutive $p$-tuple of physical indices defines a canonical
     computational-basis unitary satisfying
     \begin{align}
-        W_{N,p}&:\ell^2\!\left(\Fin{d^p}^{N}\right)
+        W_{N,p} & :\ell^2\!\left(\Fin{d^p}^{N}\right)
         \longrightarrow\ell^2\!\left(\Fin{d}^{Np}\right).
         \label{eq:blocked_configuration_isometry}
     \end{align}
@@ -34,7 +34,7 @@ construction; they are not attributed to a source theorem.
     intertwine with the blocked-configuration isometry:
     \begin{align}
         W_{N,p}\Gamma_N^{\mathrm{ES},A^{[p]}}(x)
-        &=\Gamma_{Np}^{\mathrm{ES},A}(x).
+         & =\Gamma_{Np}^{\mathrm{ES},A}(x).
         \label{eq:blocked_boundary_map_transport}
     \end{align}
 \end{lemma}
@@ -46,11 +46,11 @@ construction; they are not attributed to a source theorem.
     $\sigma$, and a boundary matrix $X\in\MN{D}$, blocked-word evaluation gives
     \begin{align}
         (A^{[p]})^{J}
-        &=A^{\sigma_1}\cdots A^{\sigma_{Np}},
-        \label{eq:blocked_word_flattening}\\
+         & =A^{\sigma_1}\cdots A^{\sigma_{Np}},
+        \label{eq:blocked_word_flattening}                        \\
         \Gamma_N^{A^{[p]}}(X)(J)
-        &=\tr\!\left(A^{\sigma_1}\cdots A^{\sigma_{Np}}X\right)
-         =\Gamma_{Np}^{A}(X)(\sigma).
+         & =\tr\!\left(A^{\sigma_1}\cdots A^{\sigma_{Np}}X\right)
+        =\Gamma_{Np}^{A}(X)(\sigma).
         \label{eq:blocked_boundary_map_transport_coefficients}
     \end{align}
     Applying the Frobenius transport formula to the coefficient identity yields
@@ -69,13 +69,13 @@ construction; they are not attributed to a source theorem.
     original Euclidean local space:
     \begin{align}
         W_{N,p}G_N^{\mathrm{ES}}(A^{[p]})
-        &=G_{Np}^{\mathrm{ES}}(A).
+         & =G_{Np}^{\mathrm{ES}}(A).
         \label{eq:blocked_local_ground_space_transport}
     \end{align}
     Hence their orthogonal projectors satisfy
     \begin{align}
         P_{G_{Np}^{\mathrm{ES}}(A)}
-        &=W_{N,p}P_{G_N^{\mathrm{ES}}(A^{[p]})}W_{N,p}^{*}.
+         & =W_{N,p}P_{G_N^{\mathrm{ES}}(A^{[p]})}W_{N,p}^{*}.
         \label{eq:blocked_ground_projector_conjugacy}
     \end{align}
     These statements include $N=0$ or $p=0$; in those cases the same explicit
@@ -95,13 +95,13 @@ construction; they are not attributed to a source theorem.
     (\ref{eq:blocked_boundary_map_transport}) give
     \begin{align}
         W_{N,p}\operatorname{range}\!\left(\Gamma_N^{\mathrm{ES},A^{[p]}}\right)
-        &=\operatorname{range}\!\left(\Gamma_{Np}^{\mathrm{ES},A}\right),
+         & =\operatorname{range}\!\left(\Gamma_{Np}^{\mathrm{ES},A}\right),
         \label{eq:blocked_boundary_map_range_transport}
     \end{align}
     which is (\ref{eq:blocked_local_ground_space_transport}). For every
     subspace $K$, orthogonal projection under the unitary $W_{N,p}$ satisfies
     \begin{align}
-        P_{W_{N,p}(K)}&=W_{N,p}P_KW_{N,p}^{*}.
+        P_{W_{N,p}(K)} & =W_{N,p}P_KW_{N,p}^{*}.
         \label{eq:projection_under_blocked_isometry}
     \end{align}
     Taking $K=G_N^{\mathrm{ES}}(A^{[p]})$ gives
