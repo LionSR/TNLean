@@ -4,8 +4,8 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.Periodic.SectorIrreducibility.HLiftCore
-import TNLean.Channel.Schwarz.MultiplicativeDomainFull
-import TNLean.Channel.Peripheral.CyclicDecomposition.Primitivity
+import QICLean.Channel.Schwarz.MultiplicativeDomainFull
+import QICLean.Channel.Peripheral.CyclicDecomposition.Primitivity
 
 /-!
 # Sector irreducibility: the `hLift` construction

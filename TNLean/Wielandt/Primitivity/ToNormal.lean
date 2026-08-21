@@ -3,11 +3,11 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.Analysis.SpectralRadiusPowerDecay
-import TNLean.Channel.Irreducible.FixedPoint
-import TNLean.Channel.Primitive
-import TNLean.MPS.Core.InvariantProjection
-import TNLean.MPS.Core.TransferChannel
+import QICLean.Analysis.SpectralRadiusPowerDecay
+import QICLean.Channel.Irreducible.FixedPoint
+import QICLean.Channel.Primitive
+import QICLean.MPS.Core.InvariantProjection
+import QICLean.MPS.Core.TransferChannel
 import TNLean.MPS.Structure.PrimitiveFixedPoint
 import Mathlib.Analysis.Normed.Operator.CompleteCodomain
 

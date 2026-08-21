@@ -8,12 +8,12 @@ import TNLean.Spectral.TransferOperatorGap
 import TNLean.Spectral.TransferOperatorGapNT
 import TNLean.Spectral.MPVOverlapDecay
 import TNLean.Spectral.PrimitiveOverlap
-import TNLean.QPF.Assembly
+import QICLean.QPF.Assembly
 import TNLean.MPS.CanonicalForm.Reduction
 import TNLean.MPS.FundamentalTheorem.Proportional
 import TNLean.MPS.Irreducible.FormII
 import TNLean.MPS.Overlap.PeripheralToTransferMapGap
-import TNLean.Channel.Peripheral.Spectrum
+import QICLean.Channel.Peripheral.Spectrum
 import Mathlib.Analysis.Complex.Basic
 
 /-!

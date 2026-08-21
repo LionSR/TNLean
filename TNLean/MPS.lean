@@ -12,7 +12,7 @@ import TNLean.MPS.BNT
 import TNLean.MPS.CanonicalForm
 import TNLean.MPS.Chain
 import TNLean.MPS.Core
-import TNLean.MPS.Defs
+import QICLean.MPS.Defs
 import TNLean.MPS.Examples
 import TNLean.MPS.FundamentalTheorem
 import TNLean.MPS.Irreducible

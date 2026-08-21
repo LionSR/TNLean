@@ -3,8 +3,8 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.MPS.Defs
-import TNLean.MPS.Core.Transfer
+import QICLean.MPS.Defs
+import QICLean.MPS.Core.Transfer
 
 /-!
 # Majumdar-Ghosh state as a Matrix Product State

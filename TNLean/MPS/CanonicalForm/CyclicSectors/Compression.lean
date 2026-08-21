@@ -3,9 +3,9 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.Channel.KrausCornerCompression
-import TNLean.Channel.Peripheral.CyclicDecomposition
-import TNLean.MPS.Core.Transfer
+import QICLean.Channel.KrausCornerCompression
+import QICLean.Channel.Peripheral.CyclicDecomposition
+import QICLean.MPS.Core.Transfer
 
 /-!
 # Compression to cyclic sectors

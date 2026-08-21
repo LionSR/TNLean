@@ -3,8 +3,8 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.Analysis.EntropyDecomposition
-import TNLean.Algebra.HermitianHelpers
+import QICLean.Analysis.EntropyDecomposition
+import QICLean.Algebra.HermitianHelpers
 import TNLean.MPS.MPDO.AreaLaw
 import TNLean.MPS.MPDO.FirstSite
 

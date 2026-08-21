@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.Algebra.CornerSkolemNoether
-import TNLean.Channel.PositiveConditionalExpectationDirectSum
+import QICLean.Channel.PositiveConditionalExpectationDirectSum
 import TNLean.MPS.CanonicalForm.SectorComparison.NormalityChain
 import TNLean.MPS.CanonicalForm.NormalTensorGauge
 import TNLean.MPS.Chain.OneSidedInverse

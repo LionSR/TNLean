@@ -9,16 +9,16 @@ Authors: TNLean contributors
 -- Generated aggregator module: TNLean.Spectral
 
 import TNLean.Spectral.CrossCorrelation
-import TNLean.Spectral.GaugeConstruction
+import QICLean.Spectral.GaugeConstruction
 import TNLean.Spectral.MPVOverlapDecay
 import TNLean.Spectral.MPVOverlapDecayRect
 import TNLean.Spectral.MPVOverlapTrace
-import TNLean.Spectral.MixedTransfer
+import QICLean.Spectral.MixedTransfer
 import TNLean.Spectral.PeripheralToTransferMapGap
 import TNLean.Spectral.PrimitiveOverlap
 import TNLean.Spectral.QuantitativeGap
 import TNLean.Spectral.TransferOperatorGap
 import TNLean.Spectral.TransferOperatorGapInjective
 import TNLean.Spectral.TransferOperatorGapNT
-import TNLean.Spectral.TransferOperatorGapNormalized
-import TNLean.Spectral.TransferOperatorGapRectNormalized
+import QICLean.Spectral.TransferOperatorGapNormalized
+import QICLean.Spectral.TransferOperatorGapRectNormalized

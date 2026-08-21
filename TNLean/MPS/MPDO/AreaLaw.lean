@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.Algebra.NatInterval
-import TNLean.Analysis.Entropy
+import QICLean.Analysis.Entropy
 import TNLean.MPS.MPDO.Defs
 import Mathlib.Data.List.Rotate
 import Mathlib.Logic.Equiv.Fin.Rotate

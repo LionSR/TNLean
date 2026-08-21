@@ -3,8 +3,8 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.Channel.FixedPoint.TraceNonincreasingDirectSum
-import TNLean.Channel.PositiveConditionalExpectationDirectSum
+import QICLean.Channel.FixedPoint.TraceNonincreasingDirectSum
+import QICLean.Channel.PositiveConditionalExpectationDirectSum
 import TNLean.MPS.MPDO.BNTAlgebraTensorClauseSpectrum
 import TNLean.MPS.MPDO.VerticalSectorRetractions
 

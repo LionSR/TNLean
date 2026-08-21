@@ -4,8 +4,8 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.MPDO.PhysicalSectorFactorization
-import TNLean.Channel.KrausCPTP
-import TNLean.Algebra.MatrixAux
+import QICLean.Channel.KrausCPTP
+import QICLean.Algebra.MatrixAux
 
 /-!
 # Preparations of neighboring physical sectors

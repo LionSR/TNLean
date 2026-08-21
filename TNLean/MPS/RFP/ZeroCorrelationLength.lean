@@ -5,9 +5,9 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.CanonicalForm.Definitions
 import TNLean.MPS.Core.Correlations
-import TNLean.MPS.Core.Transfer
+import QICLean.MPS.Core.Transfer
 import TNLean.MPS.RFP.Defs
-import TNLean.Spectral.MixedTransfer
+import QICLean.Spectral.MixedTransfer
 
 /-!
 # Zero correlation length (ZCL) for MPS tensors

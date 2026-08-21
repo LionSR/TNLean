@@ -6,7 +6,7 @@ Authors: TNLean contributors
 import TNLean.MPS.MPDO.AreaLaw
 import TNLean.MPS.MPDO.MutualInfoMonotone
 import TNLean.MPS.MPDO.SectorTrace
-import TNLean.Analysis.EntropyDecomposition
+import QICLean.Analysis.EntropyDecomposition
 import Mathlib.Algebra.BigOperators.Fin
 import Mathlib.Analysis.SpecialFunctions.BinaryEntropy
 import Mathlib.Topology.MetricSpace.Pseudo.Defs

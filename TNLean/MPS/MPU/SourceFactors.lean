@@ -4,8 +4,8 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.Algebra.CompactSVD
-import TNLean.Algebra.MatrixUnitaryBetween
-import TNLean.Analysis.MatrixSqrt
+import QICLean.Algebra.MatrixUnitaryBetween
+import QICLean.Analysis.MatrixSqrt
 import TNLean.MPS.MPU.SourceCuts
 import Mathlib.Analysis.Matrix.Order
 import Mathlib.LinearAlgebra.Matrix.IsDiag

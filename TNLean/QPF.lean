@@ -8,7 +8,7 @@ Authors: TNLean contributors
 -- Import architecture: docs/import_structure.md.
 -- Generated aggregator module: TNLean.QPF
 
-import TNLean.QPF.Assembly
-import TNLean.QPF.PosDef
-import TNLean.QPF.Primitive
-import TNLean.QPF.Uniqueness
+import QICLean.QPF.Assembly
+import QICLean.QPF.PosDef
+import QICLean.QPF.Primitive
+import QICLean.QPF.Uniqueness

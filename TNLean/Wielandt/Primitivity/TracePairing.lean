@@ -3,8 +3,8 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.Kraus.TracePairing
-import TNLean.MPS.Core.TransferChannel
+import QICLean.Kraus.TracePairing
+import QICLean.MPS.Core.TransferChannel
 
 /-!
 # Trace-pairing identity for the Wielandt primitivity route

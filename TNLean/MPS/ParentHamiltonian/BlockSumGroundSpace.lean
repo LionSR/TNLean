@@ -3,8 +3,8 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.Algebra.DependentBlockDiagonal
-import TNLean.Algebra.MatrixAux
+import QICLean.Algebra.DependentBlockDiagonal
+import QICLean.Algebra.MatrixAux
 import TNLean.MPS.ParentHamiltonian.GroundSpace
 import TNLean.MPS.SharedInfra.BoundaryDecomposition
 

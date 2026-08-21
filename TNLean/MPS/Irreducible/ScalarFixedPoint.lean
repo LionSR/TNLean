@@ -3,9 +3,9 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.MPS.Core.TransferChannel
+import QICLean.MPS.Core.TransferChannel
 import TNLean.MPS.Irreducible.FormII
-import TNLean.Channel.Peripheral.CyclicDecomposition.PeripheralUnitary
+import QICLean.Channel.Peripheral.CyclicDecomposition.PeripheralUnitary
 
 /-!
 # Scalar fixed points for irreducible unital MPS transfer maps

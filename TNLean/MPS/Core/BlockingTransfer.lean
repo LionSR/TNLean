@@ -4,8 +4,8 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.Core.Blocking
-import TNLean.MPS.Core.Transfer
-import TNLean.Spectral.MixedTransfer
+import QICLean.MPS.Core.Transfer
+import QICLean.Spectral.MixedTransfer
 
 import Mathlib.LinearAlgebra.Eigenspace.Basic
 

@@ -3,12 +3,12 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.Algebra.FrobeniusHilbert
-import TNLean.Algebra.RectangularChoi
-import TNLean.Analysis.InjectiveRangeProjector
+import QICLean.Algebra.FrobeniusHilbert
+import QICLean.Algebra.RectangularChoi
+import QICLean.Analysis.InjectiveRangeProjector
 import TNLean.MPS.ParentHamiltonian.BlockStrip
 import TNLean.MPS.ParentHamiltonian.Defs
-import TNLean.Spectral.MixedTransfer
+import QICLean.Spectral.MixedTransfer
 
 /-!
 # Gram operators for MPS ground-space maps

@@ -7,7 +7,7 @@ import Mathlib.Algebra.Algebra.Bilinear
 import Mathlib.Analysis.Matrix.Order
 import Mathlib.LinearAlgebra.Basis.VectorSpace
 import Mathlib.LinearAlgebra.FiniteDimensional.Defs
-import TNLean.Channel.FixedPoint.Algebra
+import QICLean.Channel.FixedPoint.Algebra
 import TNLean.MPS.CanonicalForm.BlockingViaAdjoint
 import TNLean.MPS.MPDO.FusionIsometries
 

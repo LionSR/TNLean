@@ -8,16 +8,16 @@ Authors: TNLean contributors
 -- Import architecture: docs/import_structure.md.
 -- Generated aggregator module: TNLean.Kraus
 
-import TNLean.Kraus.Blocking
-import TNLean.Kraus.Injectivity
-import TNLean.Kraus.InvariantProjection
-import TNLean.Kraus.MapIterate
-import TNLean.Kraus.MixedMap
-import TNLean.Kraus.MixedMap.Gap
-import TNLean.Kraus.MixedMap.GaugeRigidity
-import TNLean.Kraus.MixedMap.SpectralRadius
-import TNLean.Kraus.MultiBlockWord
-import TNLean.Kraus.TracePairing
-import TNLean.Kraus.Wielandt
-import TNLean.Kraus.Word
-import TNLean.Kraus.WordSpan
+import QICLean.Kraus.Blocking
+import QICLean.Kraus.Injectivity
+import QICLean.Kraus.InvariantProjection
+import QICLean.Kraus.MapIterate
+import QICLean.Kraus.MixedMap
+import QICLean.Kraus.MixedMap.Gap
+import QICLean.Kraus.MixedMap.GaugeRigidity
+import QICLean.Kraus.MixedMap.SpectralRadius
+import QICLean.Kraus.MultiBlockWord
+import QICLean.Kraus.TracePairing
+import QICLean.Kraus.Wielandt
+import QICLean.Kraus.Word
+import QICLean.Kraus.WordSpan

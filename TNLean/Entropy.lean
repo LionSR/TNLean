@@ -8,14 +8,14 @@ Authors: TNLean contributors
 -- Import architecture: docs/import_structure.md.
 -- Generated aggregator module: TNLean.Entropy
 
-import TNLean.Entropy.ClassicalMutualInformation
-import TNLean.Entropy.MarkovChain
-import TNLean.Entropy.MutualInformation
-import TNLean.Entropy.MutualInformationBasic
-import TNLean.Entropy.MutualInformationDataProcessing
-import TNLean.Entropy.MutualInformationOperatorSchmidt
-import TNLean.Entropy.ProductMarginals
-import TNLean.Entropy.SSAEqualityCharacterization
-import TNLean.Entropy.StrongSubadditivity
-import TNLean.Entropy.TripartiteTrace
-import TNLean.Entropy.VonNeumann
+import QICLean.Entropy.ClassicalMutualInformation
+import QICLean.Entropy.MarkovChain
+import QICLean.Entropy.MutualInformation
+import QICLean.Entropy.MutualInformationBasic
+import QICLean.Entropy.MutualInformationDataProcessing
+import QICLean.Entropy.MutualInformationOperatorSchmidt
+import QICLean.Entropy.ProductMarginals
+import QICLean.Entropy.SSAEqualityCharacterization
+import QICLean.Entropy.StrongSubadditivity
+import QICLean.Entropy.TripartiteTrace
+import QICLean.Entropy.VonNeumann

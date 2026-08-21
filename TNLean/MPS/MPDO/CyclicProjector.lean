@@ -3,20 +3,20 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.Analysis.MatrixSqrt
+import QICLean.Analysis.MatrixSqrt
 import TNLean.MPS.MPDO.StackedLayers
 import TNLean.MPS.CanonicalForm.Reduction
-import TNLean.Channel.Peripheral.CyclicDecomposition.Decomposition
-import TNLean.Channel.Peripheral.CyclicDecomposition.LetterShift
+import QICLean.Channel.Peripheral.CyclicDecomposition.Decomposition
+import QICLean.Channel.Peripheral.CyclicDecomposition.LetterShift
 import TNLean.MPS.Core.TransferPeripheral
-import TNLean.Channel.Peripheral.GroupStructure
+import QICLean.Channel.Peripheral.GroupStructure
 import TNLean.MPS.Core.TPGauge
-import TNLean.MPS.Core.CPPrimitive
+import QICLean.MPS.Core.CPPrimitive
 import TNLean.MPS.Irreducible.FixedPointProjection
 import TNLean.MPS.Irreducible.Adjoint
 import TNLean.MPS.Irreducible.FormII
-import TNLean.Channel.FixedPoint.Cesaro
-import TNLean.QPF.PosDef
+import QICLean.Channel.FixedPoint.Cesaro
+import QICLean.QPF.PosDef
 import TNLean.MPS.MPDO.HorizontalBNT
 
 /-!

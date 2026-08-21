@@ -9,7 +9,7 @@ Authors: TNLean contributors
 -- Generated aggregator module: TNLean
 
 import TNLean.Algebra
-import TNLean.Analysis
+import QICLean.Analysis
 import TNLean.Channel
 import TNLean.Entropy
 import TNLean.Kraus
@@ -19,5 +19,5 @@ import TNLean.PiAlgebra
 import TNLean.QCA
 import TNLean.QPF
 import TNLean.Spectral
-import TNLean.Topology
+import QICLean.Topology
 import TNLean.Wielandt

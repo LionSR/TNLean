@@ -4,11 +4,11 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.CanonicalForm.CyclicSectors
-import TNLean.Algebra.MatrixAux
+import QICLean.Algebra.MatrixAux
 import TNLean.MPS.Irreducible.FormII
 import TNLean.MPS.Irreducible.Adjoint
 import TNLean.MPS.Irreducible.PeriodicBlocking
-import TNLean.Channel.Semigroup.CPClosure
+import QICLean.Channel.Semigroup.CPClosure
 
 /-!
 # Sector irreducibility: projection orthogonality and corner preservation

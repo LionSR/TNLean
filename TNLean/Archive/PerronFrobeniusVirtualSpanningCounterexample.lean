@@ -11,7 +11,7 @@ import Mathlib.LinearAlgebra.Matrix.Trace
 import Mathlib.Tactic.FinCases
 import Mathlib.Tactic.NormNum
 import Mathlib.Tactic.Ring
-import TNLean.Algebra.PerronFrobenius.RankOne
+import QICLean.Algebra.PerronFrobenius.RankOne
 import TNLean.MPS.MPDO.ZCL
 
 /-!

@@ -8,11 +8,11 @@ import TNLean.MPS.Periodic.Applications
 import TNLean.MPS.Symmetry.Defs
 import TNLean.MPS.Core.Blocking
 import TNLean.MPS.Core.BlockingTransfer
-import TNLean.MPS.Core.CPPrimitive
-import TNLean.Channel.Basic
-import TNLean.Channel.KrausRepresentation
-import TNLean.Channel.KrausUnitaryFreedom
-import TNLean.Channel.Peripheral.CyclicDecomposition
+import QICLean.MPS.Core.CPPrimitive
+import QICLean.Channel.Basic
+import QICLean.Channel.KrausRepresentation
+import QICLean.Channel.KrausUnitaryFreedom
+import QICLean.Channel.Peripheral.CyclicDecomposition
 
 /-!
 # Periodic equal-case Fundamental Theorem hypothesis

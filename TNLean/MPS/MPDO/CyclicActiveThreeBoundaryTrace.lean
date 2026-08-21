@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.MPDO.CyclicActiveSectorRestriction
 import TNLean.MPS.MPDO.PhysicalSectorTraceActions
-import TNLean.Channel.MaximalOverlap
+import QICLean.Channel.MaximalOverlap
 
 /-!
 # Three-boundary trace on cyclic-active sectors

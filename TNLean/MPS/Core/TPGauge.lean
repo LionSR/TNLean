@@ -3,9 +3,9 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.Analysis.MatrixSqrt
-import TNLean.Channel.KrausGauge
-import TNLean.MPS.Core.Transfer
+import QICLean.Analysis.MatrixSqrt
+import QICLean.Channel.KrausGauge
+import QICLean.MPS.Core.Transfer
 
 import Mathlib.Analysis.CStarAlgebra.ContinuousFunctionalCalculus.Basic
 import Mathlib.Analysis.Matrix.Order

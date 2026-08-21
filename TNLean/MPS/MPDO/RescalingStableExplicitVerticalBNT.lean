@@ -3,8 +3,8 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.Algebra.MatrixTracePairing
-import TNLean.Channel.Separable
+import QICLean.Algebra.MatrixTracePairing
+import QICLean.Channel.Separable
 import TNLean.MPS.MPDO.BNTAlgebraTensorClause
 import TNLean.MPS.MPDO.PureAreaLaw
 import TNLean.MPS.MPDO.RescalingStableChiUniformity

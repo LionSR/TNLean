@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.Algebra.MatrixRankKronecker
-import TNLean.Algebra.TraceReindex
+import QICLean.Algebra.TraceReindex
 import TNLean.MPS.MPU.Basic
 import TNLean.MPS.MPU.SourceCuts
 
