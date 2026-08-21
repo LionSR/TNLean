@@ -1072,8 +1072,8 @@ This is the calculation in
     \begin{align}
         \langle\sigma|\rho^{(N)}(K)|\tau\rangle
                                        & =\delta_{\sigma,\tau}\left(
-        2^{-N}\mathbf 1_{\{\sigma_k\in\{0,1\}\ \forall k\}}
-        +\mathbf 1_{\{\sigma_k=2\ \forall k\}}\right),       \label{eq:caseii-ambient-mpo}        \\
+                                                              2^{-N}\mathbf 1_{\{\sigma_k\in\{0,1\}\ \forall k\}}
+        +\mathbf 1_{\{\sigma_k=2\ \forall k\}}\right),       \label{eq:caseii-ambient-mpo}                        \\
         \operatorname{tr}\rho^{(N)}(K) & =2>0.                    \label{eq:caseii-ambient-trace}
     \end{align}
     Hence $K$ generates positive semidefinite operators. It satisfies the
@@ -1362,8 +1362,8 @@ This is the calculation in
     flip with flip probability one quarter.  A joint flip configuration
     $s\in\{0,1\}^4$ has probability
     \begin{align}
-        P(s)&=\prod_{n=1}^4\left(\tfrac14\right)^{s_n}
-            \left(\tfrac34\right)^{1-s_n},
+        P(s) & =\prod_{n=1}^4\left(\tfrac14\right)^{s_n}
+        \left(\tfrac34\right)^{1-s_n},
         \notag
     \end{align}
     and its bond pattern $t\in\{0,1\}^4$ is $t_n=s_n\oplus s_{n+1}$, with
@@ -1434,11 +1434,11 @@ This is the calculation in
     weight family for $k$ consecutive spins, with $h(x)=-x\log x$ and $\log$
     the natural logarithm.  Then
     \begin{align}
-        \tilde S_1&=2\log 2,\notag\\
-        \tilde S_2&=5\log 2-\tfrac58\log 5-\tfrac38\log 3,\notag\\
-        \tilde S_3&=6\log 2-\tfrac7{16}\log 7-\tfrac9{16}\log 3,\notag\\
-        \tilde S_4&=7\log 2-\tfrac{41}{128}\log 41
-            -\tfrac{57}{64}\log 3-\tfrac{15}{32}\log 5.
+        \tilde S_1 & =2\log 2,\notag                                     \\
+        \tilde S_2 & =5\log 2-\tfrac58\log 5-\tfrac38\log 3,\notag       \\
+        \tilde S_3 & =6\log 2-\tfrac7{16}\log 7-\tfrac9{16}\log 3,\notag \\
+        \tilde S_4 & =7\log 2-\tfrac{41}{128}\log 41
+        -\tfrac{57}{64}\log 3-\tfrac{15}{32}\log 5.
         \notag
     \end{align}
     Divided by $\log 2$ these are the printed decimals $2$, $2.9544$,
@@ -1465,9 +1465,9 @@ This is the calculation in
     \leanok
     The exact scalar ratio from the four-site calculation satisfies
     \[
-      \log\!\left(
+        \log\!\left(
         \frac{2^{32}7^7}{3^3 5^{20}}
-      \right)>0.
+        \right)>0.
     \]
 \end{theorem}
 
@@ -1492,8 +1492,8 @@ This is the calculation in
     $\tilde I_2=2\tilde S_2-\tilde S_4$,
     \begin{align}
         \tilde I_2-\tilde I_1
-        &=\frac1{16}\log\!\left(
-            \frac{2^{32}7^7}{3^3 5^{20}}\right)>0.
+         & =\frac1{16}\log\!\left(
+        \frac{2^{32}7^7}{3^3 5^{20}}\right)>0.
         \notag
     \end{align}
 \end{theorem}
@@ -1604,7 +1604,7 @@ This is the calculation in
     \begin{align}
         \mu_{N,L}(x)
          & =\frac{2^L\bigl(3^{N-L+1}+(-1)^{t(x)}\bigr)}
-        {2^{t(x)+2}(3^N+1)}.
+            {2^{t(x)+2}(3^N+1)}.
         \notag
     \end{align}
     This includes $L=1$ and $L=N$.  It is a project-derived consequence of the
