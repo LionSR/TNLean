@@ -13,17 +13,22 @@ import TNLean.MPS.Overlap.Basic
 /-!
 # Half-chain Schmidt reduction for a translation-invariant MPS ring
 
-On a ring of `2 L` sites the translation-invariant MPS coefficient at a split
-configuration `(σ, τ)` is `tr(A_σ A_τ) = ∑_{α,β} ⟨α|A_σ|β⟩ ⟨β|A_τ|α⟩`, so the
+On a ring of \(2L\) sites the translation-invariant MPS coefficient at a split
+configuration \((\sigma, \tau)\) is
+\(\mathrm{tr}(A^\sigma A^\tau)
+  = \sum_{\alpha,\beta} \langle\alpha|A^\sigma|\beta\rangle
+    \langle\beta|A^\tau|\alpha\rangle\), so the
 state is the image of a boundary pairing under the two half-chain families
-`|Ψ_{α,β}⟩ = ∑_σ ⟨α|A_σ|β⟩ |σ⟩`.  This file formalizes the
+\(|\Psi_{\alpha,\beta}\rangle
+  = \sum_\sigma \langle\alpha|A^\sigma|\beta\rangle\,|\sigma\rangle\).
+This file formalizes the
 Schmidt-decomposition calculation behind the half-chain interpretation of the
 dual fixed point: the unnormalized half-chain reduced density matrix factors
 exactly through the half-chain overlap Gram matrix, its characteristic
-polynomial agrees (away from zero) with that of a `D² × D²` comparison matrix
-built from the `L`-fold transfer map, and the Gram entries converge
-geometrically to the entries of the rank-one fixed-point projection, with rate
-controlled by the subleading spectrum of the transfer map.
+polynomial agrees (away from zero) with that of a \(D^2 \times D^2\)
+comparison matrix built from the \(L\)-fold transfer map, and the Gram entries
+converge geometrically to the entries of the rank-one fixed-point projection,
+with rate controlled by the subleading spectrum of the transfer map.
 
 Source: PGVWC07, arXiv:quant-ph/0608197, Theorem 6 ("Interpretation of
 `Λ`", `MPSarchive.tex` lines 987--993) and the Schmidt-decomposition
@@ -38,21 +43,32 @@ positive diagonal dual fixed point `Λ` appears as the fixed point of
 - `MPSTensor.halfChainKernel_eq_mul`: the ring coefficient kernel factors
   through the half-chain families (lines 970--976).
 - `MPSTensor.halfChainGram_apply_eq_transferMap_pow`: the half-chain overlap
-  Gram entries are matrix elements of the `L`-fold transfer map on matrix
-  units (the display `⟨Ψ_{α,β}|Ψ_{α',β'}⟩ = ⟨α'|E^{N/2}(|β'⟩⟨β|)|α⟩`,
+  Gram entries are matrix elements of the \(L\)-fold transfer map on matrix
+  units (the display
+  \(\langle\Psi_{\alpha,\beta}|\Psi_{\alpha',\beta'}\rangle
+    = \langle\alpha'|\mathcal E^{N/2}(|\beta'\rangle\langle\beta|)
+      |\alpha\rangle\),
   lines 977--979).
 - `MPSTensor.halfChainReducedMatrix_eq_mul_swap_gram`: the unnormalized
-  half-chain reduced density matrix equals `Ψ W Ψᴴ` with `W` the
-  index-swapped Gram matrix of the complementary half (lines 979--985).
+  half-chain reduced density matrix equals \(\Psi W \Psi^\dagger\) with
+  \(W\) the index-swapped Gram matrix of the complementary half
+  (lines 979--985).
 - `MPSTensor.charpoly_halfChainReducedMatrix`: away from zero, the spectrum
-  of the half-chain reduced density matrix is that of the `D² × D²`
-  comparison matrix `W · G`.
+  of the half-chain reduced density matrix is that of the
+  \(D^2 \times D^2\) comparison matrix \(WG\).
 - `MPSTensor.exists_geometric_bound_halfChainGram_sub_fixedPointProj`: the
-  transfer-error term, geometric in `L` under a complementary spectral-radius
-  gap (the correction "of the order `|ν₂|^{N/2}`", lines 979--981).
-- `MPSTensor.fixedPointProj_single_entry_diagonal`: for diagonal `Λ` the
-  limiting Gram matrix is the diagonal matrix of eigenvalues of `Λ`
-  (the display `λ_α δ_{α,α'} δ_{β,β'}`, line 979).
+  transfer-error term, geometric in \(L\) under a complementary
+  spectral-radius gap (the correction of the order \(|\nu_2|^{N/2}\),
+  lines 979--981).
+- `MPSTensor.fixedPointProj_single_entry_diagonal`: for diagonal \(\Lambda\)
+  the limiting Gram matrix is the diagonal matrix of eigenvalues of
+  \(\Lambda\) (the display
+  \(\lambda_\alpha \delta_{\alpha,\alpha'} \delta_{\beta,\beta'}\),
+  line 979).
+- `MPSTensor.exists_geometric_bound_halfChainComparison_sub_diagonal`: the
+  comparison matrix converges entrywise, geometrically in \(L\), to the
+  diagonal matrix with entries
+  \(\lambda_\alpha \lambda_\beta / \mathrm{tr}(\Lambda)^2\).
 -/
 
 open scoped Matrix Matrix.Norms.L2Operator ComplexOrder
@@ -63,7 +79,9 @@ namespace MPSTensor
 variable {d D : ℕ}
 
 /-- The half-chain family of PGVWC07: the matrix whose column at boundary pair
-`(α, β)` is the half-chain vector `|Ψ_{α,β}⟩ = ∑_σ ⟨α|A_σ|β⟩ |σ⟩`.
+\((\alpha, \beta)\) is the half-chain vector
+\(|\Psi_{\alpha,\beta}\rangle
+  = \sum_\sigma \langle\alpha|A^\sigma|\beta\rangle\,|\sigma\rangle\).
 Source: arXiv:quant-ph/0608197, lines 970--976. -/
 noncomputable def halfChainMatrix (A : MPSTensor d D) (L : ℕ) :
     Matrix (Cfg d L) (Fin D × Fin D) ℂ :=
@@ -75,8 +93,10 @@ theorem halfChainMatrix_apply (A : MPSTensor d D) (L : ℕ) (σ : Cfg d L)
     halfChainMatrix A L σ p = evalWord A (List.ofFn σ) p.1 p.2 := rfl
 
 /-- The complementary half-chain family with swapped boundary indices: the row
-at `(α, β)` is the vector `|Ψ_{β,α}⟩` appearing on the second half of the ring
-in `|ψ⟩ = ∑_{α,β} |Ψ_{α,β}⟩ |Ψ_{β,α}⟩`.
+at \((\alpha, \beta)\) is the vector \(|\Psi_{\beta,\alpha}\rangle\) appearing
+on the second half of the ring in
+\(|\psi\rangle = \sum_{\alpha,\beta}
+  |\Psi_{\alpha,\beta}\rangle |\Psi_{\beta,\alpha}\rangle\).
 Source: arXiv:quant-ph/0608197, lines 970--976. -/
 noncomputable def halfChainSwapMatrix (A : MPSTensor d D) (L : ℕ) :
     Matrix (Fin D × Fin D) (Cfg d L) ℂ :=
@@ -87,9 +107,10 @@ theorem halfChainSwapMatrix_apply (A : MPSTensor d D) (L : ℕ)
     (p : Fin D × Fin D) (τ : Cfg d L) :
     halfChainSwapMatrix A L p τ = evalWord A (List.ofFn τ) p.2 p.1 := rfl
 
-/-- The coefficient kernel of the ring of `2 L` sites, read as a matrix over
-the two half-chain configuration spaces: the entry at `(σ, τ)` is the MPS
-coefficient `tr(A_σ A_τ)` of the joined configuration.
+/-- The coefficient kernel of the ring of \(2L\) sites, read as a matrix over
+the two half-chain configuration spaces: the entry at \((\sigma, \tau)\) is
+the MPS coefficient \(\mathrm{tr}(A^\sigma A^\tau)\) of the joined
+configuration.
 Source: arXiv:quant-ph/0608197, lines 970--976. -/
 noncomputable def halfChainKernel (A : MPSTensor d D) (L : ℕ) :
     Matrix (Cfg d L) (Cfg d L) ℂ :=
@@ -102,7 +123,8 @@ theorem halfChainKernel_apply (A : MPSTensor d D) (L : ℕ) (σ τ : Cfg d L) :
 /-- Splitting the ring trace at the two boundaries: the coefficient kernel is
 the product of the half-chain family with its index-swapped complement.  This
 is the resolution of the identity producing
-`|ψ⟩ = ∑_{α,β} |Ψ_{α,β}⟩ |Ψ_{β,α}⟩`.
+\(|\psi\rangle = \sum_{\alpha,\beta}
+  |\Psi_{\alpha,\beta}\rangle |\Psi_{\beta,\alpha}\rangle\).
 Source: arXiv:quant-ph/0608197, lines 970--976. -/
 theorem halfChainKernel_eq_mul (A : MPSTensor d D) (L : ℕ) :
     halfChainKernel A L = halfChainMatrix A L * halfChainSwapMatrix A L := by
@@ -112,8 +134,8 @@ theorem halfChainKernel_eq_mul (A : MPSTensor d D) (L : ℕ) :
   simp [Matrix.trace, Matrix.mul_apply, Fintype.sum_prod_type]
 
 /-- The unnormalized half-chain reduced density matrix of the ring state on
-`2 L` sites: the second half of the ring is traced out from the rank-one state
-built from the coefficient kernel.
+\(2L\) sites: the second half of the ring is traced out from the rank-one
+state built from the coefficient kernel.
 Source: arXiv:quant-ph/0608197, lines 979--985. -/
 noncomputable def halfChainReducedMatrix (A : MPSTensor d D) (L : ℕ) :
     Matrix (Cfg d L) (Cfg d L) ℂ :=
@@ -132,14 +154,18 @@ theorem posSemidef_halfChainReducedMatrix (A : MPSTensor d D) (L : ℕ) :
   Matrix.posSemidef_self_mul_conjTranspose _
 
 /-- The half-chain overlap Gram matrix
-`G_{(α,β),(α',β')} = ⟨Ψ_{α,β}|Ψ_{α',β'}⟩`.
+\(G_{(\alpha,\beta),(\alpha',\beta')}
+  = \langle\Psi_{\alpha,\beta}|\Psi_{\alpha',\beta'}\rangle\).
 Source: arXiv:quant-ph/0608197, lines 977--979. -/
 noncomputable def halfChainGram (A : MPSTensor d D) (L : ℕ) :
     Matrix (Fin D × Fin D) (Fin D × Fin D) ℂ :=
   (halfChainMatrix A L)ᴴ * halfChainMatrix A L
 
 /-- The half-chain overlap is a matrix element of the iterated transfer map on
-a matrix unit: `⟨Ψ_{α,β}|Ψ_{α',β'}⟩ = (E^L(|β'⟩⟨β|))_{α',α}`.
+a matrix unit:
+\(\langle\Psi_{\alpha,\beta}|\Psi_{\alpha',\beta'}\rangle
+  = \langle\alpha'|\mathcal E^{L}(|\beta'\rangle\langle\beta|)
+    |\alpha\rangle\).
 Source: arXiv:quant-ph/0608197, the display at lines 977--979. -/
 theorem halfChainGram_apply_eq_transferMap_pow (A : MPSTensor d D) (L : ℕ)
     (p q : Fin D × Fin D) :
@@ -178,9 +204,10 @@ theorem halfChainSwapMatrix_mul_conjTranspose (A : MPSTensor d D) (L : ℕ) :
   exact Finset.sum_congr rfl fun τ _ => mul_comm _ _
 
 /-- The Schmidt-decomposition calculation of PGVWC07: the unnormalized
-half-chain reduced density matrix factors exactly as `Ψ (S Gᵀ S) Ψᴴ`, where
-`Ψ` is the half-chain family, `G` the half-chain Gram matrix, and `S` the swap
-of the two boundary indices.
+half-chain reduced density matrix factors exactly as
+\(\Psi (S G^{\mathsf T} S) \Psi^\dagger\), where \(\Psi\) is the half-chain
+family, \(G\) the half-chain Gram matrix, and \(S\) the swap of the two
+boundary indices.
 Source: arXiv:quant-ph/0608197, lines 979--985. -/
 theorem halfChainReducedMatrix_eq_mul_swap_gram (A : MPSTensor d D) (L : ℕ) :
     halfChainReducedMatrix A L =
@@ -192,10 +219,11 @@ theorem halfChainReducedMatrix_eq_mul_swap_gram (A : MPSTensor d D) (L : ℕ) :
   simp only [Matrix.mul_assoc]
 
 /-- Away from zero, the spectrum of the half-chain reduced density matrix is
-computed by the `D² × D²` comparison matrix `(S Gᵀ S) · G` built from the
-half-chain Gram matrix: the two characteristic polynomials agree after
-matching the trivial kernel factors.  This reduces the half-chain spectral
-comparison of PGVWC07, Theorem 6, to the boundary comparison matrix.
+computed by the \(D^2 \times D^2\) comparison matrix
+\((S G^{\mathsf T} S) G\) built from the half-chain Gram matrix: the two
+characteristic polynomials agree after matching the trivial kernel factors.
+This reduces the half-chain spectral comparison of PGVWC07, Theorem 6, to the
+boundary comparison matrix.
 Source: arXiv:quant-ph/0608197, lines 979--993. -/
 theorem charpoly_halfChainReducedMatrix (A : MPSTensor d D) (L : ℕ) :
     X ^ (D * D) * (halfChainReducedMatrix A L).charpoly =
@@ -211,11 +239,12 @@ theorem charpoly_halfChainReducedMatrix (A : MPSTensor d D) (L : ℕ) :
 section Convergence
 
 /-- Transfer-error control for the half-chain overlaps: if the transfer map is
-trace preserving with fixed point `Λ` and the complementary part of the
-transfer map has spectral radius below one, then every half-chain Gram entry
-converges geometrically to the corresponding entry of the rank-one fixed-point
-projection, uniformly in the boundary indices.  This is the correction term
-"of the order `|ν₂|^{N/2}`" controlled by the subleading spectrum.
+trace preserving with fixed point \(\Lambda\) and the complementary part of
+the transfer map has spectral radius below one, then every half-chain Gram
+entry converges geometrically to the corresponding entry of the rank-one
+fixed-point projection, uniformly in the boundary indices.  This is the
+correction term of the order \(|\nu_2|^{N/2}\) controlled by the subleading
+spectrum.
 Source: arXiv:quant-ph/0608197, lines 977--981. -/
 theorem exists_geometric_bound_halfChainGram_sub_fixedPointProj
     (A : MPSTensor d D) (Λ : Matrix (Fin D) (Fin D) ℂ)
@@ -265,10 +294,13 @@ theorem exists_geometric_bound_halfChainGram_sub_fixedPointProj
     _ ≤ ‖T ^ L‖ := hop
     _ ≤ C * r ^ L := hbound L
 
-/-- For a positive diagonal fixed point `Λ = diag(λ_1, …, λ_D)` the limiting
-Gram entries reproduce the source's display `λ_α δ_{α,α'} δ_{β,β'}` up to the
+/-- For a positive diagonal fixed point
+\(\Lambda = \mathrm{diag}(\lambda_1, \ldots, \lambda_D)\) the limiting Gram
+entries reproduce the source's display
+\(\lambda_\alpha \delta_{\alpha,\alpha'} \delta_{\beta,\beta'}\) up to the
 trace normalization: the limiting Gram matrix is diagonal in the boundary
-pairs with entry `λ_α / tr Λ` at `(α, β)`.
+pairs with entry \(\lambda_\alpha / \mathrm{tr}(\Lambda)\) at
+\((\alpha, \beta)\).
 Source: arXiv:quant-ph/0608197, line 979. -/
 theorem fixedPointProj_single_entry_diagonal
     (lam : Fin D → ℂ) (htr : Matrix.trace (Matrix.diagonal lam) ≠ 0)
@@ -295,9 +327,10 @@ theorem fixedPointProj_single_entry_diagonal
       Matrix.diagonal_apply_ne _ (fun h => hb ((Prod.ext_iff.mp h).2).symm)]
 
 /-- Entrywise perturbation bound for a matrix product: if both factors are
-entrywise within `ε` of limiting matrices whose entries are bounded by `B`,
-then the product is entrywise within `card n * (ε * (B + ε) + B * ε)` of the
-limiting product. -/
+entrywise within \(\varepsilon\) of limiting matrices whose entries are
+bounded by \(B\), then the product is entrywise within
+\(|n| (\varepsilon (B + \varepsilon) + B \varepsilon)\) of the limiting
+product, where \(|n|\) is the size of the index type. -/
 private theorem entrywise_mul_bound {n : Type*} [Fintype n]
     (X X₀ Y Y₀ : Matrix n n ℂ) {ε B : ℝ} (hε : 0 ≤ ε) (hB : 0 ≤ B)
     (hX : ∀ p q, ‖X p q - X₀ p q‖ ≤ ε) (hY : ∀ p q, ‖Y p q - Y₀ p q‖ ≤ ε)
@@ -331,14 +364,17 @@ private theorem entrywise_mul_bound {n : Type*} [Fintype n]
 
 /-- The boundary comparison matrix of the half-chain Schmidt calculation
 converges entrywise, geometrically in the half-chain length, to the diagonal
-matrix with entries `λ_α λ_β / (tr Λ)²`: the trace normalization of
-`Λ ⊗ Λ` for the positive diagonal fixed point `Λ = diag(λ_1, …, λ_D)`.
+matrix with entries
+\(\lambda_\alpha \lambda_\beta / \mathrm{tr}(\Lambda)^2\): the trace
+normalization of \(\Lambda \otimes \Lambda\) for the positive diagonal fixed
+point \(\Lambda = \mathrm{diag}(\lambda_1, \ldots, \lambda_D)\).
 Together with `charpoly_halfChainReducedMatrix` this expresses the half-chain
-interpretation of `Λ` at the level of the boundary comparison matrix: the
-nonzero spectrum of the half-chain reduced density matrix is that of a matrix
-converging geometrically to `Λ ⊗ Λ` up to the trace normalization.
-Source: arXiv:quant-ph/0608197, Theorem 6 ("Interpretation of `Λ`",
-`MPSarchive.tex` lines 987--993). -/
+interpretation of \(\Lambda\) at the level of the boundary comparison matrix:
+the nonzero spectrum of the half-chain reduced density matrix is that of a
+matrix converging geometrically to \(\Lambda \otimes \Lambda\) up to the
+trace normalization.
+Source: arXiv:quant-ph/0608197, Theorem 6 ("Interpretation of \(\Lambda\)"),
+`MPSarchive.tex` lines 987--993. -/
 theorem exists_geometric_bound_halfChainComparison_sub_diagonal
     (A : MPSTensor d D) (lam : Fin D → ℂ)
     (htr : Matrix.trace (Matrix.diagonal lam) ≠ 0)
