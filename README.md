@@ -15,19 +15,22 @@
 
 TNLean is a [Lean 4](https://lean-lang.org/) library, built on
 [Mathlib](https://github.com/leanprover-community/mathlib4), that formalizes
-the mathematics of tensor networks: matrix product states (MPS), the quantum
-channels and transfer operators that govern them, and the theorems relating
-the two. Every result is checked by Lean down to the axioms it assumes.
+the mathematics of tensor networks: matrix product states (MPS), their
+canonical forms and gauge structure, and the theorems that classify them. The
+quantum-information theory this rests on lives in the companion library
+[QICLean](https://github.com/LionSR/QICLean), which TNLean builds on. Every
+result is checked by Lean down to the axioms it assumes.
 
 The first released part of the library is the **fundamental theorem of matrix
 product states** (Pérez-García, Verstraete, Wolf, Cirac 2007; Cirac,
 Pérez-García, Schuch, Verstraete 2017): two tensors generate the same quantum
 states at every system size exactly when an invertible change of basis on the
 bond indices, a gauge transformation, relates them. Proving this required
-formalizing the quantum-information theory the proof rests on, following
-Wolf's *Quantum Channels & Operations*: channel representations, Schwarz
-inequalities, quantum Perron-Frobenius theory, and the quantum Wielandt
-inequality. The library also contains material beyond the fundamental
+formalizing the quantum-information theory the proof rests on — channel
+representations, Schwarz inequalities, quantum Perron-Frobenius theory, and
+the quantum Wielandt inequality — now developed in
+[QICLean](https://github.com/LionSR/QICLean) following Wolf's *Quantum
+Channels & Operations*. The library also contains material beyond the fundamental
 theorem, at varying levels of completeness; the sections below say what is
 proved and what is not.
 
@@ -96,29 +99,14 @@ whose cohomology class is a well-defined invariant of the symmetric tensor.
 This is the MPS ingredient in the classification of one-dimensional
 symmetry-protected topological phases.
 
-### Quantum channels and Perron-Frobenius theory
+### The quantum-information layer
 
-Following Wolf's *Quantum Channels & Operations*, the library develops
-quantum channels on finite-dimensional matrix algebras: the Choi, Kraus, and
-Stinespring representations, Kadison-Schwarz inequalities with their equality
-case and the multiplicative domain, fixed-point structure, irreducibility,
-peripheral spectra, and quantum Markov semigroups. The chapters most relevant
-to MPS are the most developed.
-
-A recurring tool is the quantum Perron-Frobenius theorem: every positive map
-has a positive-semidefinite eigenvector with positive eigenvalue. The proof
-runs through a Brouwer fixed-point argument on density matrices; Brouwer's
-theorem itself is imported from an external Lean formalization (via Scarf's
-lemma) rather than assumed.
-
-```lean
-theorem exists_posSemidef_eigenvector [NeZero D]
-    (E : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ)
-    (hpos : IsPositiveMap E)
-    (hNZ : ∀ {ρ : Matrix (Fin D) (Fin D) ℂ}, ρ.PosSemidef → ρ ≠ 0 → E ρ ≠ 0) :
-    ∃ (ρ : Matrix (Fin D) (Fin D) ℂ) (r : ℝ),
-      ρ.PosSemidef ∧ ρ ≠ 0 ∧ 0 < r ∧ E ρ = (r : ℂ) • ρ
-```
+The quantum channels, Kadison-Schwarz inequalities, quantum Perron-Frobenius
+theory, and spectral results that MPS theory runs on are developed in
+[QICLean](https://github.com/LionSR/QICLean), which TNLean imports as an
+ordinary Lake dependency. TNLean keeps the tensor-side statements: transfer
+operators of MPS tensors, their spectral gaps, and the overlap and
+correlation-decay estimates phrased in terms of states.
 
 ### Quantum Wielandt theory
 
@@ -134,7 +122,9 @@ theorem cumulativeSpan_eq_top_of_isNormal_bound [NeZero D]
     cumulativeSpan A (D ^ 2) = ⊤
 ```
 
-Sharpening this bound to match the constants in the literature is ongoing.
+The channel-generic form of this theory lives in QICLean; TNLean keeps the
+tensor-typed statements the canonical-form machinery consumes. Sharpening
+the bound to match the constants in the literature is ongoing.
 
 ## What is in progress
 
@@ -151,8 +141,8 @@ each at an earlier stage.
 - **Projected entangled pair states (PEPS).** The two-dimensional
   generalization of MPS, with fundamental-theorem results for normal PEPS on
   finite graphs.
-- **Entropy.** Von Neumann entropy, strong subadditivity, and quantum Markov
-  chains.
+- **Matrix-product unitaries and quantum cellular automata.** Standard forms
+  of MPU tensors and finite-propagation automorphisms of spin chains.
 - **Examples.** Concrete states such as AKLT, GHZ, even parity, and the
   $\mathbb{Z}/2\mathbb{Z}$ models, alongside algebraic variants of the
   fundamental theorem.
@@ -177,17 +167,16 @@ Archive policy. The source is grouped as follows.
 
 | Path | Contents |
 |---|---|
-| `TNLean/Algebra`, `TNLean/Analysis`, `TNLean/Topology` | Linear algebra of matrices: traces, Gram matrices, Frobenius norms, Skolem-Noether, and convergence and fixed-point results. |
-| `TNLean/Entropy` | Von Neumann entropy, strong subadditivity, mutual information, and quantum Markov chains. |
-| `TNLean/Channel` | Quantum channels: representations, Schwarz theory, fixed points, irreducibility, peripheral spectra, and semigroups. |
-| `TNLean/QPF`, `TNLean/Spectral` | Perron-Frobenius theory, spectral gaps, and correlation-decay estimates. |
+| `TNLean/Algebra` | Matrix algebra specific to the fundamental theorem: trace pairings, Gram matrices, Skolem-Noether, Burnside's theorem, and cocycle cohomology. |
+| `TNLean/Spectral` | Transfer-operator spectral gaps, overlap matrices, and correlation-decay estimates for MPS. |
 | `TNLean/MPS/Core`, `TNLean/MPS/Chain`, `TNLean/MPS/Overlap` | Matrix product states: tensors, words, blocking, transfer maps, and overlap matrices. |
 | `TNLean/MPS/FundamentalTheorem`, `.../BNT`, `.../CanonicalForm`, `.../Periodic`, `.../Structure`, `.../Irreducible` | The fundamental theorem in its single-block, multi-block, canonical-form, and periodic versions. |
 | `TNLean/MPS/Symmetry` | On-site and virtual symmetry, cohomology of cocycles, and string order. |
 | `TNLean/MPS/ParentHamiltonian` | Parent Hamiltonians, their ground spaces, and uniqueness of the ground state. |
 | `TNLean/MPS/MPDO`, `TNLean/MPS/RFP` | Matrix-product density operators and renormalization fixed points. |
 | `TNLean/MPS/Examples` | Worked examples (AKLT, GHZ, even parity, $\mathbb{Z}/2\mathbb{Z}$). |
-| `TNLean/Wielandt` | The quantum Wielandt inequality and primitivity. |
+| `TNLean/MPS/MPU`, `TNLean/QCA` | Matrix-product unitaries and quantum cellular automata. |
+| `TNLean/Wielandt` | The quantum Wielandt inequality and primitivity for MPS tensors. |
 | `TNLean/PEPS` | Projected entangled pair states on finite graphs. |
 | `TNLean/PiAlgebra` | Algebraic variants of the fundamental theorem. |
 | `blueprint/`, `docs/` | The mathematical companion text, conventions, and notes on gaps from the sources. |
