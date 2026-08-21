@@ -452,7 +452,8 @@ proof of the uniqueness theorem \cite[Theorem~7]{PerezGarcia2007Matrix}.
 
 \begin{lemma}[Nonzero combination along a shifted chain]
     \label{lem:pgvwc07_chain_combination}
-    \lean{pgvwc07ChainCoeff, pgvwc07_chainCoeff_combination_spec}
+    \lean{pgvwc07ChainCoeff, pgvwc07ChainCoeff_succ,
+        pgvwc07_chainCoeff_combination_spec}
     \leanok
     Let $T,S$ be linear maps defined on the same vector spaces, and let
     $Y_0,\ldots,Y_n$ be vectors such that $T(Y_k)=S(Y_{k+1})$ for every
@@ -524,6 +525,43 @@ proof of the uniqueness theorem \cite[Theorem~7]{PerezGarcia2007Matrix}.
     $BX_{ab}$. For the consequence, a nonzero $W$ has a nonzero slice.
 \end{proof}
 
+\begin{lemma}[Chain of intertwiners between two solutions]
+    \label{lem:pgvwc07_solution_chain}
+    \lean{MPSTensor.QuadraticReconstructionSolution.chainIntertwiner,
+        MPSTensor.QuadraticReconstructionSolution.isUnit_chainIntertwiner,
+        MPSTensor.QuadraticReconstructionSolution.chainIntertwiner_mul_kronecker}
+    \leanok
+    \uses{def:pgvwc07_quadratic_system, lem:pgvwc07_quadratic_system_units}
+    Let two solutions of the quadratic reconstruction system over the same
+    window be given, with row unknowns $Y_j$, $Y'_j$, column unknowns $Z_j$,
+    $Z'_j$, and tensors $B_i$, $C_i$. For every window site $j$ carrying an
+    inversion equation, the matrix
+    \begin{align}
+        W_{j+1} &= Y'_{j+1}Z_j = Y'_{j+1}Y_{j+1}^{-1}
+        \label{eq:solution_chain_intertwiner}
+    \end{align}
+    is invertible, and whenever the neighbouring site also carries an
+    inversion equation,
+    \begin{align}
+        W_{j+1}(B_i\otimes\Id) &= (C_i\otimes\Id)W_{j+2} &&\forall\, i.
+        \label{eq:solution_chain_relation}
+    \end{align}
+    This is the chain of invertible intertwiners produced at the start of the
+    proof of \cite[Theorem~8]{PerezGarcia2007Matrix} by reasoning as in the
+    uniqueness theorem, and it is the input to
+    Lemma~\ref{lem:pgvwc07_chain_combination}.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Both solutions express $B_i\otimes\Id$ and $C_i\otimes\Id$ through the
+    same window matrix at site $j+1$; substituting one expression into the
+    other and cancelling the paired gauges with
+    (\ref{eq:quadratic_system_inverse}) gives
+    (\ref{eq:solution_chain_relation}). Invertibility follows from
+    Lemma~\ref{lem:pgvwc07_quadratic_system_units}.
+\end{proof}
+
 \begin{theorem}[Obtaining the translation-invariant canonical form]
     \label{thm:pgvwc07_quadratic_reconstruction}
     \uses{def:pgvwc07_quadratic_system}
@@ -532,21 +570,27 @@ proof of the uniqueness theorem \cite[Theorem~7]{PerezGarcia2007Matrix}.
     successive spins is bounded by $D^2$, and form the quadratic system of
     Definition~\ref{def:pgvwc07_quadratic_system} over the window of $D^4$
     open-boundary canonical matrices starting after the injectivity onset.
-    Then a translation-invariant matrix product representation satisfying
-    condition C1 exists if and only if the system has a solution, and the
-    tensor of any solution is a translation-invariant representation of the
-    state, related to the canonical one by a unitary $U$ through
-    $A_i=UB_iU^{\dagger}$. This is \cite[Theorem~8]{PerezGarcia2007Matrix};
-    its formalization is not yet complete.
+    \begin{enumerate}
+        \item If the state admits a translation-invariant matrix product
+              representation satisfying condition C1, then the system has a
+              solution.
+        \item The tensor of any solution is a translation-invariant
+              matrix product representation of the state with matrices of
+              size $D\times D$, related to the canonical one by a unitary
+              $U$ through $A_i=UB_iU^{\dagger}$.
+    \end{enumerate}
+    This is \cite[Theorem~8]{PerezGarcia2007Matrix}; its formalization is
+    not yet complete.
 \end{theorem}
 
 \begin{proof}
     \uses{lem:pgvwc07_chain_combination, lem:pgvwc07_kronecker_intertwiner,
-        lem:pgvwc07_quadratic_system_units}
+        lem:pgvwc07_quadratic_system_units, lem:pgvwc07_solution_chain}
     The canonical representation solves the system by the freedom in the
     open-boundary representation. Conversely, comparing a solution with the
-    canonical representation along the window produces a chain of invertible
-    matrices intertwining consecutive amplified tensors; the combination of
+    canonical representation along the window produces the chain of
+    invertible intertwiners of Lemma~\ref{lem:pgvwc07_solution_chain}; the
+    combination of
     Lemma~\ref{lem:pgvwc07_chain_combination} and the slice extraction of
     Lemma~\ref{lem:pgvwc07_kronecker_intertwiner} produce a nonzero matrix
     $R$ and a scalar $x\neq0$ with $RB_i=\tfrac1x A_iR$. The normalization

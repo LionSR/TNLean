@@ -44,6 +44,10 @@ to the canonical one. Its proof reduces, as in the uniqueness theorem
   `Matrix.exists_nonzero_intertwiner_of_kronecker_one_intertwines` - PGVWC07
   Lemma `lem-horn` in multiplicity-slice form, and the nonzero-intertwiner
   consequence used at line 1094.
+* `MPSTensor.QuadraticReconstructionSolution.chainIntertwiner`,
+  `MPSTensor.QuadraticReconstructionSolution.chainIntertwiner_mul_kronecker` -
+  the invertible chain of intertwiners comparing two solutions of system (S),
+  the first step of the reconstruction proof (lines 1168-1179).
 -/
 
 open scoped Matrix Kronecker
@@ -225,7 +229,7 @@ structure QuadraticReconstructionSolution
   rightGauge : Fin m → Matrix (Fin D × Fin D) (Fin D × Fin D) ℂ
   /-- The translation-invariant tensor unknowns `B i` of system (S). -/
   tensor : MPSTensor d D
-  /-- The quadratic equations `B i ⊗ 1 = Y j * A i j * Z (j + 1)` of system
+  /-- The quadratic equations `B i ⊗ 1 = Y j * A j i * Z (j + 1)` of system
   (S), MPSarchive.tex lines 1147-1149. -/
   kronecker_eq : ∀ (i : Fin d) (j : Fin m),
     tensor i ⊗ₖ (1 : Matrix (Fin D) (Fin D) ℂ) = leftGauge j * A j i * rightGauge j
@@ -260,6 +264,60 @@ theorem isUnit_rightGauge (s : QuadraticReconstructionSolution A)
     IsUnit (s.rightGauge j) :=
   (Matrix.isUnit_iff_isUnit_det _).mpr
     (Matrix.isUnit_det_of_left_inverse (s.leftGauge_mul_rightGauge j h))
+
+/-- The intertwiner comparing two solutions of system (S) at a window site:
+with row unknowns `Y`, `Y'` and column unknowns `Z`, `Z'` of the two solutions,
+the matrix attached to site `j + 1` is `W = Y' (j + 1) * Z j`, which equals
+`Y' (j + 1) * (Y (j + 1))⁻¹` by the inversion equations. This is the chain of
+invertible matrices `W_k` in the reconstruction proof of PGVWC07
+(arXiv:quant-ph/0608197, MPSarchive.tex lines 1168-1179), obtained there by
+reasoning as in the uniqueness theorem `thm-uniq` (lines 1080-1091). -/
+def chainIntertwiner (s t : QuadraticReconstructionSolution A) (j : ℕ) (h : j + 1 < m) :
+    Matrix (Fin D × Fin D) (Fin D × Fin D) ℂ :=
+  t.leftGauge ⟨j + 1, h⟩ * s.rightGauge ⟨j, Nat.lt_of_succ_lt h⟩
+
+/-- Each chain intertwiner comparing two solutions of system (S) is invertible,
+as the product of a row unknown and a column unknown that are each paired by an
+inversion equation. This is the invertibility of the matrices `W_k` in the
+reconstruction proof of PGVWC07 (arXiv:quant-ph/0608197, MPSarchive.tex lines
+1168-1179). -/
+theorem isUnit_chainIntertwiner (s t : QuadraticReconstructionSolution A)
+    {j : ℕ} (h : j + 1 < m) :
+    IsUnit (chainIntertwiner s t j h) :=
+  (t.isUnit_leftGauge (j := ⟨j, Nat.lt_of_succ_lt h⟩) h).mul
+    (s.isUnit_rightGauge (j := ⟨j, Nat.lt_of_succ_lt h⟩) h)
+
+/-- **Chain relation between two solutions of system (S)** (PGVWC07,
+arXiv:quant-ph/0608197, MPSarchive.tex lines 1168-1179): the invertible
+intertwiners `W` of `chainIntertwiner` satisfy
+`W (j + 1) * (B i ⊗ 1) = (C i ⊗ 1) * W (j + 2)` for the tensors `B`, `C` of
+the two solutions, at every window site where both inversion equations are
+available. This is the input to the combination lemma `lem-same-matr` in the
+reconstruction proof, where the source writes the chain as
+`W_k (C_i ⊗ 1) = (B_i ⊗ 1) W_{k+1}` (lines 1080-1091). -/
+theorem chainIntertwiner_mul_kronecker (s t : QuadraticReconstructionSolution A)
+    (i : Fin d) {j : ℕ} (h1 : j + 1 < m) (h2 : j + 2 < m) :
+    chainIntertwiner s t j h1 * (s.tensor i ⊗ₖ (1 : Matrix (Fin D) (Fin D) ℂ)) =
+      (t.tensor i ⊗ₖ (1 : Matrix (Fin D) (Fin D) ℂ)) * chainIntertwiner s t (j + 1) h2 := by
+  have hs := s.kronecker_eq i ⟨j + 1, h1⟩
+  have ht := t.kronecker_eq i ⟨j + 1, h1⟩
+  have hsflip : s.rightGauge ⟨j, Nat.lt_of_succ_lt h1⟩ * s.leftGauge ⟨j + 1, h1⟩ = 1 :=
+    mul_eq_one_comm.mp (s.leftGauge_mul_rightGauge ⟨j, Nat.lt_of_succ_lt h1⟩ h1)
+  have htflip : t.rightGauge ⟨j + 1, h1⟩ * t.leftGauge ⟨j + 1 + 1, h2⟩ = 1 :=
+    mul_eq_one_comm.mp (t.leftGauge_mul_rightGauge ⟨j + 1, h1⟩ h2)
+  have hcancel : ∀ X : Matrix (Fin D × Fin D) (Fin D × Fin D) ℂ,
+      s.rightGauge ⟨j, Nat.lt_of_succ_lt h1⟩ * (s.leftGauge ⟨j + 1, h1⟩ * X) = X := fun X ↦ by
+    rw [← Matrix.mul_assoc, hsflip, Matrix.one_mul]
+  have tcancel : ∀ X : Matrix (Fin D × Fin D) (Fin D × Fin D) ℂ,
+      t.rightGauge ⟨j + 1, h1⟩ * (t.leftGauge ⟨j + 1 + 1, h2⟩ * X) = X := fun X ↦ by
+    rw [← Matrix.mul_assoc, htflip, Matrix.one_mul]
+  change t.leftGauge ⟨j + 1, h1⟩ * s.rightGauge ⟨j, Nat.lt_of_succ_lt h1⟩ *
+      (s.tensor i ⊗ₖ (1 : Matrix (Fin D) (Fin D) ℂ)) =
+    (t.tensor i ⊗ₖ (1 : Matrix (Fin D) (Fin D) ℂ)) *
+      (t.leftGauge ⟨j + 1 + 1, h2⟩ * s.rightGauge ⟨j + 1, h1⟩)
+  rw [hs, ht]
+  simp only [Matrix.mul_assoc]
+  rw [hcancel, tcancel]
 
 end QuadraticReconstructionSolution
 
