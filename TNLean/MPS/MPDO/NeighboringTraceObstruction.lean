@@ -24,8 +24,8 @@ The normalization $\operatorname{tr}(T)=1$ invoked at line 1498 of the
 source is therefore not a convention but a genuine constraint on the tensor:
 a tensor whose closed chains do not all have unit trace admits no
 factorization of the required form.  The ambient normalization of the
-density operators constrains only the weighted sum over basis-of-normal-
-tensors representatives (arXiv:1606.00608, lines 1755--1759), not each
+density operators constrains only the weighted sum over the representatives
+of a basis of normal tensors (arXiv:1606.00608, lines 1755--1759), not each
 representative separately, so the per-representative assertion of
 Theorem 4.9 carries this unit-trace normalization as an implicit hypothesis
 on each absorbed representative.
