@@ -79,6 +79,7 @@ import TNLean.Algebra.ProjectionTriangularTrace
 import TNLean.Algebra.ProjectiveRepresentation
 import TNLean.Algebra.RankOneSandwich
 import TNLean.Algebra.RectangularChoi
+import TNLean.Algebra.SICPOVMBound
 import TNLean.Algebra.ScalarCommutant
 import TNLean.Algebra.ScalarPowerSumIdentity
 import TNLean.Algebra.ShiftedTracePowerSpectrum
