@@ -221,11 +221,14 @@ and every support, positivity, and factorization clause of condition~(iv).
 Its two-site block nevertheless fails Definition~4.1, since transfer
 idempotence would force $1+2^{-4}=1+2^{-2}$. Thus (iv)$\Rightarrow$(v) is a
 refuted \emph{unfaithful statement}. The source (ii)$\Rightarrow$(v) route is
-distinct: ZCL first makes copy weights common. The printed factorization
-question is tracked in \ghissue{6775}; a possible direct construction of the
-blocked channel pair by coarsening or mixing the physical-sector labels is
-tracked in \ghissue{6793}; and the subsequent outer-sector combination is
-tracked in \ghissue{6632}.
+distinct: ZCL first makes copy weights common. The non-Cartesian witness in
+\path{TNLean/MPS/MPDO/NonCartesianActiveSectorCounterexample.lean} shows that
+the inherited local analytic properties do not alone imply the printed
+factorization, but it has no ambient simple-biCF witness. Thus
+\ghissue{6775} retains the source-context factorization, while \ghissue{6793}
+tracks the alternative direct construction of the blocked channel pair by
+coarsening or mixing physical-sector labels. The subsequent outer-sector
+combination is formalized in \ghissue{6632}.
 
 \section{Affected declarations}
 

@@ -184,12 +184,15 @@ nodes `thm:mpdo_sal_zcl_bnt_sector_structure` and
   all standing hypotheses, condition (iv), and MPDO positivity of the blocked
   tensor, but Definition 4.1 for that block would force
   $1+2^{-4}=1+2^{-2}$. This is an unfaithful statement, not an unfinished
-  outer-sector assembly. The viable route from condition (ii) still has the
-  printed per-representative factorization after the failure of absorbed
-  normality (#6775), a possible direct blocked-channel construction through
-  genuine sector coarsening or mixing (#6793), and the later projector-controlled
-  outer-sector combination (#6632). The two `\notready` nodes record these
-  source (ii)-routes. The
+  outer-sector assembly. The printed per-representative factorization after
+  coefficient absorption is also refuted: the non-Cartesian four-letter
+  witness satisfies the full low-level hypotheses but no factorization has
+  normalized rank-one neighboring traces (#6775). The viable route from
+  condition (ii) is therefore the direct blocked-channel construction through
+  genuine sector coarsening or mixing (#6793), followed by the formalized
+  projector-controlled outer-sector combination (#6632). The two
+  `\notready` nodes preserve the false factorization statement and the
+  unfinished direct-channel statement separately. The
   printed proof of `prop3to4` has separate proof-path drift because it invokes
   the ZCL lemma `lemmus` although its displayed statement assumes only
   condition-(iv) data; the completed Lean proof avoids that hidden hypothesis.
