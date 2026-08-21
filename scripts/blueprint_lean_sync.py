@@ -509,6 +509,62 @@ def print_missing_blueprint_warnings(missing: list[LeanDecl]) -> None:
     print()
 
 
+def _dependency_fetch_enabled() -> bool:
+    """Whether a missing dependency's Lean sources may be fetched over the network.
+
+    The TeX-only "Check blueprint compiles without errors" CI job has no Lean
+    toolchain and never runs ``lake exe cache get``, so a cross-volume citation
+    into the QICLean dependency (LionSR/TNLean#6622) has no checkout to resolve
+    against and reads as missing. Enabling a lightweight, source-only fetch in
+    that environment lets the sync check resolve those citations without a full
+    Lean build. Off by default locally so a plain checker run never touches the
+    network; opt in with ``BLUEPRINT_SYNC_FETCH_DEPS=1``.
+    """
+    return (
+        os.getenv("GITHUB_ACTIONS") == "true"
+        or os.getenv("BLUEPRINT_SYNC_FETCH_DEPS") == "1"
+    )
+
+
+def _fetch_dependency_sources(
+    package_dir: Path, url: str, rev: str, input_rev: str | None
+) -> bool:
+    """Shallow-fetch a Lake git dependency's sources at the manifest-pinned rev.
+
+    Only the Lean sources are needed (the sync checker greps declarations, it
+    does not build), so this checks the repository out without invoking Lake.
+    Returns ``True`` on success; on any failure it prints a one-line reason and
+    returns ``False`` so the caller degrades gracefully.
+    """
+    package_dir.mkdir(parents=True, exist_ok=True)
+
+    def git(*args: str) -> int:
+        return subprocess.run(
+            ["git", *args],
+            cwd=package_dir,
+            stdout=subprocess.DEVNULL,
+            stderr=subprocess.DEVNULL,
+        ).returncode
+
+    if git("init", "-q") != 0:
+        print(f"  (could not initialise git repository in {package_dir})")
+        return False
+    git("remote", "remove", "origin")
+    if git("remote", "add", "origin", url) != 0:
+        print(f"  (could not add remote {url})")
+        return False
+    # Prefer the pinned commit; fall back to the input ref (tag/branch) when the
+    # host refuses a bare-SHA fetch, then check the exact commit out.
+    for ref in (rev, input_rev):
+        if not ref:
+            continue
+        if git("fetch", "-q", "--depth", "1", "origin", ref) == 0:
+            if git("checkout", "-q", "FETCH_HEAD") == 0:
+                return True
+    print(f"  (could not fetch {url} at {rev})")
+    return False
+
+
 def _resolve_dependency_lean_root(root: Path, package_name: str) -> Path | None:
     """Resolve a Lake dependency's own Lean source root from lake-manifest.json.
 
@@ -547,11 +603,23 @@ def _resolve_dependency_lean_root(root: Path, package_name: str) -> Path | None:
         return None
     package_dir = root / packages_dir / package_name
     if not package_dir.is_dir():
-        print(
-            f"  (dependency '{package_name}' skipped: {package_dir} is not "
-            "checked out yet -- run `lake exe cache get` first)"
-        )
-        return None
+        url = entry.get("url")
+        rev = entry.get("rev")
+        if _dependency_fetch_enabled() and entry.get("type") == "git" and url and rev:
+            print(
+                f"  (dependency '{package_name}' not checked out; fetching "
+                f"sources from {url})"
+            )
+            if not _fetch_dependency_sources(
+                package_dir, url, rev, entry.get("inputRev")
+            ):
+                return None
+        else:
+            print(
+                f"  (dependency '{package_name}' skipped: {package_dir} is not "
+                "checked out yet -- run `lake exe cache get` first)"
+            )
+            return None
 
     lib_name: str | None = None
     lakefile = package_dir / "lakefile.toml"
