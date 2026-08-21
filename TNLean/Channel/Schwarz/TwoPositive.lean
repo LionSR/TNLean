@@ -263,7 +263,11 @@ private theorem traceAdjointMap_map_isHermitian_of_isPositiveMap
 
 omit [Fintype n] [DecidableEq n] in
 /-- The trace-pairing adjoint of a positive map between finite matrix algebras
-is positive. -/
+is positive.
+
+This is the rectangular trace-adjoint positivity used in Wolf, *Quantum
+Channels & Operations*, Chapter 3, lines 722--735 of
+`Notes/WolfNoteTexSource/ch03_positive_not_completely.tex`. -/
 theorem IsPositiveMap.traceAdjointMap
     [Finite n] [Fintype p] {E : Matrix n n ℂ →ₗ[ℂ] Matrix p p ℂ}
     (hE : IsPositiveMap E) : IsPositiveMap (Matrix.traceAdjointMap E) := by
@@ -276,7 +280,10 @@ theorem IsPositiveMap.traceAdjointMap
   exact Matrix.PosSemidef.trace_mul_nonneg hX (hE B hB)
 
 omit [Fintype n] [DecidableEq n] in
-/-- Positivity is invariant under the trace-pairing adjoint. -/
+/-- Positivity is invariant under the trace-pairing adjoint.
+
+Source: Wolf, *Quantum Channels & Operations*, Chapter 3, lines 722--735 of
+`Notes/WolfNoteTexSource/ch03_positive_not_completely.tex`. -/
 theorem isPositiveMap_traceAdjointMap_iff
     [Finite n] [Fintype p]
     {E : Matrix n n ℂ →ₗ[ℂ] Matrix p p ℂ} :
@@ -325,7 +332,11 @@ private theorem trace_mul_eq_sum_trace_blocks
 
 omit [Fintype n] [DecidableEq n] in
 /-- The trace-pairing adjoint commutes with the blockwise ampliation:
-`(E^{(k)})^* = (E^*)^{(k)}`. -/
+`(E^{(k)})^* = (E^*)^{(k)}`.
+
+This is the rectangular ampliation identity underlying Wolf, *Quantum
+Channels & Operations*, Theorem 5.3; see
+`Notes/WolfNoteTexSource/ch05_schwarz_inequalities.tex`, lines 180--193. -/
 theorem nPositiveAmpliation_traceAdjointMap
     [Finite n] [Fintype p] (k : ℕ) (E : Matrix n n ℂ →ₗ[ℂ] Matrix p p ℂ) :
     nPositiveAmpliation k (Matrix.traceAdjointMap E) =
@@ -355,7 +366,11 @@ theorem nPositiveAmpliation_traceAdjointMap
 
 omit [Fintype n] [DecidableEq n] in
 /-- The trace-pairing adjoint of a `k`-positive map between finite matrix
-algebras is `k`-positive. -/
+algebras is `k`-positive.
+
+For `k = 2`, this is the trace-adjoint step in Wolf, *Quantum Channels &
+Operations*, Theorem 5.3; see
+`Notes/WolfNoteTexSource/ch05_schwarz_inequalities.tex`, lines 180--193. -/
 theorem IsNPositiveMap.traceAdjointMap
     [Finite n] [Fintype p] {k : ℕ} {E : Matrix n n ℂ →ₗ[ℂ] Matrix p p ℂ}
     (hE : IsNPositiveMap k E) : IsNPositiveMap k (Matrix.traceAdjointMap E) := by
@@ -365,7 +380,10 @@ theorem IsNPositiveMap.traceAdjointMap
   exact hE.traceAdjointMap
 
 omit [Fintype n] [DecidableEq n] in
-/-- `k`-positivity is invariant under the trace-pairing adjoint. -/
+/-- `k`-positivity is invariant under the trace-pairing adjoint.
+
+Source context: Wolf, *Quantum Channels & Operations*, Theorem 5.3,
+`Notes/WolfNoteTexSource/ch05_schwarz_inequalities.tex`, lines 180--193. -/
 theorem isNPositiveMap_traceAdjointMap_iff
     [Finite n] [Fintype p]
     {k : ℕ} {E : Matrix n n ℂ →ₗ[ℂ] Matrix p p ℂ} :
