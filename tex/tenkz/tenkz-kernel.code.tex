@@ -11610,17 +11610,27 @@
 % thread of the same review forbids.  Instead this covers it honestly, on
 % the same envelope doctrine as a dashed wire's gap: a short segment,
 % centred on the mark's own arc-length station, along the route's local
-% chord there, stroked to the barb's own configured reach.  The station is
-% arc length along the route's resolved geometry -- its straight segments
-% exactly, a cubic segment by its chord, an underestimate that can only
-% shift the found station toward the route's own drawn middle, never off
-% the route -- read off the SAME points sequence the centreline walk above
-% just built, so no path is re-saved and no style is re-executed.
+% direction there, stroked to the barb's own configured reach.  The
+% station is arc length along the route's resolved geometry -- straight
+% segments exactly, a cubic by sixteen sub-chords of the true curve, so
+% the cover sits on a bowed segment's drawn bow rather than on the chord
+% between its ends (#6360) -- read off the SAME points sequence the
+% centreline walk above just built, so no path is re-saved and no style
+% is re-executed.
 \fp_new:N \l__tenkz_kernel_ink_mark_total_fp
 \fp_new:N \l__tenkz_kernel_ink_mark_target_fp
 \fp_new:N \l__tenkz_kernel_ink_mark_run_fp
 \fp_new:N \l__tenkz_kernel_ink_mark_len_fp
 \fp_new:N \l__tenkz_kernel_ink_mark_step_fp
+\fp_new:N \l__tenkz_kernel_ink_mark_ox_fp
+\fp_new:N \l__tenkz_kernel_ink_mark_oy_fp
+\fp_new:N \l__tenkz_kernel_ink_mark_cax_fp
+\fp_new:N \l__tenkz_kernel_ink_mark_cay_fp
+\fp_new:N \l__tenkz_kernel_ink_mark_cbx_fp
+\fp_new:N \l__tenkz_kernel_ink_mark_cby_fp
+\fp_new:N \l__tenkz_kernel_ink_mark_wx_fp
+\fp_new:N \l__tenkz_kernel_ink_mark_wy_fp
+\bool_new:N \l__tenkz_kernel_ink_mark_cubic_bool
 \fp_new:N \l__tenkz_kernel_ink_mark_px_fp
 \fp_new:N \l__tenkz_kernel_ink_mark_py_fp
 \fp_new:N \l__tenkz_kernel_ink_mark_qx_fp
@@ -11659,19 +11669,29 @@
           { \dim_to_fp:n { \tl_item:nn {#1} {5} } }
         \fp_set:Nn \l__tenkz_kernel_ink_mark_qy_fp
           { \dim_to_fp:n { \tl_item:nn {#1} {6} } }
+        \bool_set_false:N \l__tenkz_kernel_ink_mark_cubic_bool
         \bool_set_true:N \l__tenkz_kernel_ink_mark_drawn_bool
       }
       {
         \tl_if_eq:NNTF \l__tenkz_kernel_ink_final_tl \c_spath_curveto_tl
           {
-            \fp_set:Nn \l__tenkz_kernel_ink_mark_px_fp
+            \fp_set:Nn \l__tenkz_kernel_ink_mark_ox_fp
               { \dim_to_fp:n { \tl_item:nn {#1} {2} } }
-            \fp_set:Nn \l__tenkz_kernel_ink_mark_py_fp
+            \fp_set:Nn \l__tenkz_kernel_ink_mark_oy_fp
               { \dim_to_fp:n { \tl_item:nn {#1} {3} } }
-            \fp_set:Nn \l__tenkz_kernel_ink_mark_qx_fp
+            \fp_set:Nn \l__tenkz_kernel_ink_mark_cax_fp
+              { \dim_to_fp:n { \tl_item:nn {#1} {5} } }
+            \fp_set:Nn \l__tenkz_kernel_ink_mark_cay_fp
+              { \dim_to_fp:n { \tl_item:nn {#1} {6} } }
+            \fp_set:Nn \l__tenkz_kernel_ink_mark_cbx_fp
+              { \dim_to_fp:n { \tl_item:nn {#1} {8} } }
+            \fp_set:Nn \l__tenkz_kernel_ink_mark_cby_fp
+              { \dim_to_fp:n { \tl_item:nn {#1} {9} } }
+            \fp_set:Nn \l__tenkz_kernel_ink_mark_wx_fp
               { \dim_to_fp:n { \tl_item:nn {#1} {11} } }
-            \fp_set:Nn \l__tenkz_kernel_ink_mark_qy_fp
+            \fp_set:Nn \l__tenkz_kernel_ink_mark_wy_fp
               { \dim_to_fp:n { \tl_item:nn {#1} {12} } }
+            \bool_set_true:N \l__tenkz_kernel_ink_mark_cubic_bool
             \bool_set_true:N \l__tenkz_kernel_ink_mark_drawn_bool
           }
           { \bool_set_false:N \l__tenkz_kernel_ink_mark_drawn_bool }
@@ -11699,6 +11719,51 @@
           / \l__tenkz_kernel_ink_mark_len_fp
           : 0
       }
+  }
+% The cubic's point at parameter #1, from the controls the bounds kept.
+\cs_new_protected:Npn \__tenkz_kernel_r_wire_ink_mark_point:nNN #1#2#3
+  {
+    \fp_set:Nn #2
+      {
+        ( 1 - (#1) ) ^ 3 * \l__tenkz_kernel_ink_mark_ox_fp
+        + 3 * ( 1 - (#1) ) ^ 2 * (#1) * \l__tenkz_kernel_ink_mark_cax_fp
+        + 3 * ( 1 - (#1) ) * (#1) ^ 2 * \l__tenkz_kernel_ink_mark_cbx_fp
+        + (#1) ^ 3 * \l__tenkz_kernel_ink_mark_wx_fp
+      }
+    \fp_set:Nn #3
+      {
+        ( 1 - (#1) ) ^ 3 * \l__tenkz_kernel_ink_mark_oy_fp
+        + 3 * ( 1 - (#1) ) ^ 2 * (#1) * \l__tenkz_kernel_ink_mark_cay_fp
+        + 3 * ( 1 - (#1) ) * (#1) ^ 2 * \l__tenkz_kernel_ink_mark_cby_fp
+        + (#1) ^ 3 * \l__tenkz_kernel_ink_mark_wy_fp
+      }
+  }
+% Run one bounded segment through #1 (a step over the standing p/q chord).
+% A straight segment is its own chord; a cubic walks sixteen sub-chords of
+% the true curve, so the station and the tangent settle on the drawn bow,
+% not on the chord between its ends (#6360) -- the same dyadic subdivision
+% doctrine the auditor's cubic walk certifies.
+\cs_new_protected:Npn \__tenkz_kernel_r_wire_ink_mark_seg:n #1
+  {
+    \bool_if:NTF \l__tenkz_kernel_ink_mark_cubic_bool
+      {
+        \fp_set_eq:NN \l__tenkz_kernel_ink_mark_qx_fp
+          \l__tenkz_kernel_ink_mark_ox_fp
+        \fp_set_eq:NN \l__tenkz_kernel_ink_mark_qy_fp
+          \l__tenkz_kernel_ink_mark_oy_fp
+        \int_step_inline:nn {16}
+          {
+            \fp_set_eq:NN \l__tenkz_kernel_ink_mark_px_fp
+              \l__tenkz_kernel_ink_mark_qx_fp
+            \fp_set_eq:NN \l__tenkz_kernel_ink_mark_py_fp
+              \l__tenkz_kernel_ink_mark_qy_fp
+            \__tenkz_kernel_r_wire_ink_mark_point:nNN { ##1 / 16 }
+              \l__tenkz_kernel_ink_mark_qx_fp
+              \l__tenkz_kernel_ink_mark_qy_fp
+            #1
+          }
+      }
+      { #1 }
   }
 % One segment of the settling pass: extend the running length by this
 % segment, or, once the target arc length falls inside it, interpolate the
@@ -11814,13 +11879,16 @@
         \__tenkz_kernel_r_wire_ink_mark_bounds:n {##1}
         \bool_if:NT \l__tenkz_kernel_ink_mark_drawn_bool
           {
-            \fp_add:Nn \l__tenkz_kernel_ink_mark_total_fp
+            \__tenkz_kernel_r_wire_ink_mark_seg:n
               {
-                sqrt(
-                  ( \l__tenkz_kernel_ink_mark_qx_fp
-                    - \l__tenkz_kernel_ink_mark_px_fp ) ^ 2
-                  + ( \l__tenkz_kernel_ink_mark_qy_fp
-                      - \l__tenkz_kernel_ink_mark_py_fp ) ^ 2 )
+                \fp_add:Nn \l__tenkz_kernel_ink_mark_total_fp
+                  {
+                    sqrt(
+                      ( \l__tenkz_kernel_ink_mark_qx_fp
+                        - \l__tenkz_kernel_ink_mark_px_fp ) ^ 2
+                      + ( \l__tenkz_kernel_ink_mark_qy_fp
+                          - \l__tenkz_kernel_ink_mark_py_fp ) ^ 2 )
+                  }
               }
           }
       }
@@ -11839,7 +11907,14 @@
               {
                 \__tenkz_kernel_r_wire_ink_mark_bounds:n {##1}
                 \bool_if:NT \l__tenkz_kernel_ink_mark_drawn_bool
-                  { \__tenkz_kernel_r_wire_ink_mark_settle: }
+                  {
+                    \__tenkz_kernel_r_wire_ink_mark_seg:n
+                      {
+                        \bool_if:NF
+                          \l__tenkz_kernel_ink_mark_found_bool
+                          { \__tenkz_kernel_r_wire_ink_mark_settle: }
+                      }
+                  }
               }
           }
         \__tenkz_kernel_r_wire_ink_mark_emit:
