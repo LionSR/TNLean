@@ -490,12 +490,11 @@ positivity.
     support projection, the displayed identity follows.
 \end{proof}
 
-\begin{lemma}[Two-variable Schwarz inequality for a two-positive map]
-    \label{lem:two_variable_operator_schwarz_two_positive}
+\begin{theorem}[Two-variable Schwarz inequality for a two-positive map]
+    \label{thm:two_variable_operator_schwarz_two_positive}
     \lean{SchwarzTwoVariable.schwarz_two_variable_unconditional}
     \leanok
-    \uses{lem:two_variable_operator_schwarz_conditional,
-        thm:EBB_mul_pinv_mul_EBA_eq}
+    \uses{def:2positive_map, def:pinv}
     Let $E:\MN{D_{\rm in}}\to\MN{D_{\rm out}}$ be two-positive. Then, for
     every $A,B\in\MN{D_{\rm in}}$,
     \begin{align}
@@ -503,9 +502,11 @@ positivity.
          & \le E(A^\dagger A).
         \notag
     \end{align}
-\end{lemma}
+\end{theorem}
 
 \begin{proof}\leanok
+    \uses{lem:two_variable_operator_schwarz_conditional,
+        thm:EBB_mul_pinv_mul_EBA_eq}
     The range inclusion gives
     $E(B^\dagger B)E(B^\dagger B)^+E(B^\dagger A)=E(B^\dagger A)$.
     Thus, for every vector $v$, the choice
@@ -517,9 +518,7 @@ positivity.
     \label{thm:two_variable_operator_schwarz}
     \lean{SchwarzTwoVariable.schwarz_two_variable_unconditional_of_traceAdjointMap}
     \leanok
-    \uses{def:2positive_map, def:pinv,
-        lem:two_variable_operator_schwarz_two_positive,
-        thm:k_positive_trace_pairing_adjoint}
+    \uses{def:2positive_map, def:pinv}
     Let $E:\MN{D_{\rm in}}\to\MN{D_{\rm out}}$ be positive and suppose
     that $E=T^*$ for a two-positive map
     $T:\MN{D_{\rm out}}\to\MN{D_{\rm in}}$. For every
@@ -536,12 +535,12 @@ positivity.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{lem:two_variable_operator_schwarz_two_positive,
+    \uses{thm:two_variable_operator_schwarz_two_positive,
         thm:k_positive_trace_pairing_adjoint}
     By trace-adjoint invariance of two-positivity
     (Theorem~\ref{thm:k_positive_trace_pairing_adjoint}), $E=T^*$ is
     two-positive. Hence
-    Lemma~\ref{lem:two_variable_operator_schwarz_two_positive} applies to
+    Theorem~\ref{thm:two_variable_operator_schwarz_two_positive} applies to
     $E$ with its rectangular input and output dimensions. The resulting
     inequality is precisely the displayed conclusion.
 \end{proof}
