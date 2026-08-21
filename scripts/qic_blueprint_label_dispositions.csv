@@ -12,8 +12,8 @@ item_id,source,environment,disposition,reason
 @src/chapter/ch08_wielandt_fixed_length_and_normality.tex:426,src/chapter/ch08_wielandt_fixed_length_and_normality.tex,remark,tn,tensor-network remark
 @src/chapter/ch08_wielandt_word_span_and_block_injectivity.tex:111,src/chapter/ch08_wielandt_word_span_and_block_injectivity.tex,remark,tn,tensor-network remark
 @src/chapter/ch09_canonical_forms_and_projectors_auxiliary.tex:314,src/chapter/ch09_canonical_forms_and_projectors_auxiliary.tex,remark,tn,tensor-network remark
-@src/chapter/ch09_canonical_forms_and_projectors_auxiliary.tex:913,src/chapter/ch09_canonical_forms_and_projectors_auxiliary.tex,remark,tn,tensor-network remark
-@src/chapter/ch09_canonical_forms_and_projectors_auxiliary.tex:925,src/chapter/ch09_canonical_forms_and_projectors_auxiliary.tex,remark,tn,tensor-network remark
+@src/chapter/ch09_canonical_forms_and_projectors_auxiliary.tex:946,src/chapter/ch09_canonical_forms_and_projectors_auxiliary.tex,remark,tn,tensor-network remark
+@src/chapter/ch09_canonical_forms_and_projectors_auxiliary.tex:958,src/chapter/ch09_canonical_forms_and_projectors_auxiliary.tex,remark,tn,tensor-network remark
 @src/chapter/ch09_canonical_normal_forms_and_support_auxiliary.tex:415,src/chapter/ch09_canonical_normal_forms_and_support_auxiliary.tex,remark,tn,tensor-network remark
 @src/chapter/ch15_examples_ghz.tex:154,src/chapter/ch15_examples_ghz.tex,remark,tn,tensor-network remark
 @src/chapter/ch16_channel_representations_normal_forms_and_determinant.tex:140,src/chapter/ch16_channel_representations_normal_forms_and_determinant.tex,remark,qic,quantum-information remark

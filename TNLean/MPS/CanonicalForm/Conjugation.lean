@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import TNLean.Channel.Peripheral.AntilinearConjugation
 import TNLean.MPS.CanonicalForm.NormalTensorGauge
 
 /-!
@@ -21,6 +22,9 @@ and the transfer-map fixed-point equations used in canonical forms.
 * `MPSTensor.IsNormal.mapStar`: conjugation preserves normality.
 * `MPSTensor.IsLeftCanonical.mapStar`: conjugation preserves left-canonical normalization.
 * `MPSTensor.GaugeEquiv.mapStar`: conjugation preserves gauge equivalence.
+* `MPSTensor.transferMap_mapStar_eq_entrywiseConjTransport`: conjugating the tensor
+  conjugates its transfer map anti-linearly, as an operator identity.
+* `MPSTensor.IsIrreducibleTensor.mapStar`: conjugation preserves irreducibility.
 * `MPSTensor.IsNormalTensor.mapStar`: conjugation preserves normalized normal tensors.
 -/
 
@@ -68,10 +72,7 @@ theorem IsInjective.mapStar {A : MPSTensor d D} (hA : IsInjective A) :
             exact Matrix.map_add _ (map_add (starRingEnd ℂ)) Y Z]
         exact Submodule.add_mem _ hY hZ
     | smul c Y _ hY =>
-        rw [show (c • Y).map (starRingEnd ℂ) =
-          star c • Y.map (starRingEnd ℂ) by
-            ext i j
-            simp [Matrix.map_apply]]
+        rw [Matrix.map_smul_starRingEnd]
         exact Submodule.smul_mem _ (star c) hY
   have := hconj _ hmem
   convert this using 1
@@ -132,24 +133,6 @@ theorem GaugeEquiv.mapStar {A B : MPSTensor d D} (h : GaugeEquiv A B) :
   rw [mapStar_apply, mapStar_apply, hX i, Matrix.map_mul, Matrix.map_mul]
   rfl
 
-/-- Entrywise complex conjugation preserves CPSV normal tensors.
-
-The proof uses the pure trace-preserving Perron gauge associated with the
-normal tensor, conjugates that gauge, and transports normality back. Entrywise
-conjugation transports the spectral-radius-one normalization of
-arXiv:1606.00608, lines 224--235, together with the gauge relation at lines
-264--268. -/
-theorem IsNormalTensor.mapStar {A : MPSTensor d D} (hA : IsNormalTensor A) :
-    IsNormalTensor (mapStar A) := by
-  let : NeZero D := ⟨hA.bondDim_ne_zero⟩
-  obtain ⟨σ, _hσ, _hσfix, hLeft, hGauge, _hPrim, _hIrr⟩ := hA.exists_tpGauge
-  have hGaugeNormal : IsNormalTensor (tpGauge (d := d) (D := D) A σ) :=
-    hA.of_gaugeEquiv hGauge.symm
-  have hGaugeStarNormal :
-      IsNormalTensor (MPSTensor.mapStar (tpGauge (d := d) (D := D) A σ)) :=
-    isNormalTensor_of_isNormal_leftCanonical _ hGaugeNormal.isNormal.mapStar hLeft.mapStar
-  exact hGaugeStarNormal.of_gaugeEquiv hGauge.mapStar
-
 /-- A diagonal positive-definite complex matrix is fixed by entrywise conjugation. -/
 theorem map_star_eq_self_of_posDef_isDiag
     {n : ℕ} {Λ : Matrix (Fin n) (Fin n) ℂ} (hΛpos : Λ.PosDef) (hΛdiag : Λ.IsDiag) :
@@ -160,21 +143,75 @@ theorem map_star_eq_self_of_posDef_isDiag
     simpa [Matrix.map_apply] using hΛpos.1.apply i i
   · simp [Matrix.map_apply, hΛdiag hij]
 
+/-- The transfer map of an entrywise-conjugated tensor is the anti-linear conjugate of the
+original transfer map: as operators on the matrix space, conjugating the tensor conjugates
+the transfer map of arXiv:1606.00608, lines 219--225, by the entrywise-conjugation
+involution on both sides. -/
+theorem transferMap_mapStar_eq_entrywiseConjTransport (A : MPSTensor d D) :
+    transferMap (mapStar A) =
+      entrywiseConjTransport (transferMap (d := d) (D := D) A) := by
+  classical
+  apply LinearMap.ext
+  intro X
+  rw [entrywiseConjTransport_apply]
+  simp only [transferMap_apply]
+  rw [show (∑ i, A i * X.map (starRingEnd ℂ) * (A i)ᴴ).map (starRingEnd ℂ) =
+      ∑ i, (A i * X.map (starRingEnd ℂ) * (A i)ᴴ).map (starRingEnd ℂ) by
+    exact map_sum ((starRingEnd ℂ).mapMatrix) _ Finset.univ]
+  apply Finset.sum_congr rfl
+  intro i _
+  rw [Matrix.map_mul, Matrix.map_mul, Matrix.map_starRingEnd_map_starRingEnd,
+    Matrix.conjTranspose_map (starRingEnd ℂ) (by simp [Function.Semiconj])]
+  rfl
+
 /-- The transfer map of an entrywise-conjugated tensor is the conjugate of the original
-transfer map on conjugated inputs. -/
+transfer map on conjugated inputs: the pointwise form of the operator identity
+`transferMap_mapStar_eq_entrywiseConjTransport` (arXiv:1606.00608, lines 219--225). -/
 theorem transferMap_mapStar (A : MPSTensor d D)
     (X : Matrix (Fin D) (Fin D) ℂ) :
     transferMap (mapStar A) (X.map (starRingEnd ℂ)) =
       (transferMap A X).map (starRingEnd ℂ) := by
-  classical
-  simp only [transferMap_apply]
-  rw [show (∑ i, A i * X * (A i)ᴴ).map (starRingEnd ℂ) =
-      ∑ i, (A i * X * (A i)ᴴ).map (starRingEnd ℂ) by
-    exact map_sum ((starRingEnd ℂ).mapMatrix) _ Finset.univ]
-  apply Finset.sum_congr rfl
-  intro i _
-  rw [Matrix.map_mul, Matrix.map_mul,
-    Matrix.conjTranspose_map (starRingEnd ℂ) (by simp [Function.Semiconj])]
-  rfl
+  rw [transferMap_mapStar_eq_entrywiseConjTransport, entrywiseConjTransport_apply,
+    Matrix.map_starRingEnd_map_starRingEnd]
+
+/-- Entrywise conjugation preserves irreducibility: an invariant orthogonal projection of
+the conjugated tensor conjugates entrywise to an invariant orthogonal projection of the
+original tensor. Transports the no-nontrivial-invariant-projection clause of the
+normal-tensor definition, arXiv:1606.00608, lines 233--235. -/
+theorem IsIrreducibleTensor.mapStar {A : MPSTensor d D} (hA : IsIrreducibleTensor A) :
+    IsIrreducibleTensor (mapStar A) := by
+  rintro ⟨P, ⟨hHerm, hIdem⟩, hP0, hP1, hLower⟩
+  refine hA ⟨P.map (starRingEnd ℂ), ⟨?_, ?_⟩, ?_, ?_, fun i ↦ ?_⟩
+  · exact (hHerm.map (starRingEnd ℂ) (by simp [Function.Semiconj])).eq
+  · rw [← Matrix.map_mul, hIdem]
+  · intro h0
+    apply hP0
+    have := congrArg (fun M => M.map (starRingEnd ℂ)) h0
+    simpa using this
+  · intro h1
+    apply hP1
+    have := congrArg (fun M => M.map (starRingEnd ℂ)) h1
+    simpa using this
+  · have hi := congrArg ((starRingEnd ℂ).mapMatrix) (hLower i)
+    simp only [map_mul, map_sub, map_one, map_zero, RingHom.mapMatrix_apply] at hi
+    simpa using hi
+
+/-- Entrywise complex conjugation preserves CPSV normal tensors.
+
+The proof is the direct spectral one: entrywise conjugation of the tensor conjugates the
+transfer map anti-linearly, which conjugates its spectrum, preserves its spectral radius,
+preserves primitivity, and preserves irreducibility. This transports both clauses of the
+normal-tensor definition of arXiv:1606.00608, lines 224--235, across entrywise
+conjugation. -/
+theorem IsNormalTensor.mapStar {A : MPSTensor d D} (hA : IsNormalTensor A) :
+    IsNormalTensor (mapStar A) where
+  no_invariant_proj := hA.no_invariant_proj.mapStar
+  spectral_radius_one := by
+    rw [transferMap_mapStar_eq_entrywiseConjTransport,
+      spectralRadius_entrywiseConjTransport]
+    exact hA.spectral_radius_one
+  primitive_transfer := by
+    rw [transferMap_mapStar_eq_entrywiseConjTransport]
+    exact (IsPrimitive.entrywiseConjTransport_iff _).2 hA.primitive_transfer
 
 end MPSTensor
