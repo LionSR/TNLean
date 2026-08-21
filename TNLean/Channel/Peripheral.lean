@@ -9,6 +9,7 @@ Authors: TNLean contributors
 -- Generated aggregator module: TNLean.Channel.Peripheral
 
 import TNLean.Channel.Peripheral.AdjointSpectrum
+import TNLean.Channel.Peripheral.AntilinearConjugation
 import TNLean.Channel.Peripheral.AsymptoticImage
 import TNLean.Channel.Peripheral.CesaroRecurrence
 import TNLean.Channel.Peripheral.ClosureFixedPointKraus
