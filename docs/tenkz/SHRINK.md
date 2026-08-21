@@ -3287,3 +3287,27 @@ hundred lines of clearance-envelope geometry), reachable only from a
 direct-call test after the key left, is demolished with that test and its
 two golden rows -- the string-probe suite stands at 28 artifacts,
 byte-identical.
+
+### 2026-08-22 — the sentenced nudge= pair is retired
+
+The two displacement keys sentenced by amendment seven — `nudge=` on atoms
+and on marks — held live parser rows and registry rows while the amendment's
+mechanism was already the law: extent comes from counts, and a label takes
+its station against measured ink, the `label pos=` auto ordering standing on
+the first free face since #6168. Both keys were read by no render code and
+written by no case, blueprint figure, manual example, or slide, so this is
+the retirement bookkeeping the sentenced-key header promised, performed as
+for `up=`/`down=` (#6335) and the inert-key triple above. The refusal
+fixtures `n_atom_nudge_key.tex` and `n_mark_nudge_key.tex` pin the
+unknown-key answer, and the contract's section 10 row for the pair is
+unchanged: a basis member, an ordinary address, or the label station rule.
+
+Meters: m1 kernel 60 → 58 (census 83 → 81), m2 parser paths 72 → 70;
+`tests/tenkz/census-baseline.json` moves in this change.
+Extension-gate: #6356 — the parser-leaf identity change is the two
+removals themselves; no key is added.
+
+| flag | verdict |
+|---|---|
+| flag:consumers:key:kernel-atom:nudge | retired: sentenced by amendment seven, read by nothing, written by nothing; permanent |
+| flag:consumers:key:kernel-mark:nudge | retired: sentenced by amendment seven, the label station rule landed in #6168; permanent |
