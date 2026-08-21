@@ -216,6 +216,12 @@ noncomputable def complexVirtualMatrix (k : Fin 4) :
     Matrix (Fin 2) (Fin 2) ℂ :=
   Matrix.map (virtualMatrix k) Complex.ofReal
 
+/-- Each entry of a complexified sector virtual matrix is the real-to-complex
+cast of the corresponding real entry. -/
+lemma complexVirtualMatrix_apply (k : Fin 4) (i j : Fin 2) :
+    complexVirtualMatrix k i j = (virtualMatrix k i j : ℂ) :=
+  rfl
+
 /-- A physical-diagonal MPO tensor whose four diagonal matrices are the sector
 virtual matrices above. -/
 noncomputable def mpoTensor : MPOTensor 4 2 :=
@@ -225,8 +231,8 @@ theorem complexVirtualMatrix_reconstruction (X : Matrix (Fin 2) (Fin 2) ℂ) :
     ∑ k, reconstructionCoefficients X k • complexVirtualMatrix k = X := by
   ext i j
   fin_cases i <;> fin_cases j <;>
-    simp [reconstructionCoefficients, complexVirtualMatrix, virtualMatrix,
-      pairingL, pairingQ, Fin.sum_univ_four] <;> ring
+    simp [reconstructionCoefficients, complexVirtualMatrix_apply, virtualMatrix,
+      pairingL, pairingQ, Fin.sum_univ_four] <;> push_cast <;> ring
 
 lemma complexVirtualMatrix_mem_tensor_span (k : Fin 4) :
     complexVirtualMatrix k ∈
