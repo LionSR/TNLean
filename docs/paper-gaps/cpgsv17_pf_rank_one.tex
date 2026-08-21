@@ -1074,6 +1074,22 @@ gap in the source implication is only the construction of one blocked channel
 pair for every absorbed representative, by either \ghissue{6775} or
 \ghissue{6793}.
 
+The composition from supplied factorization data is complete end to end.
+Given, for every absorbed representative, a physical-sector factorization
+with positive semidefinite neighboring operators and normalized rank-one
+trace coefficients, the theorem
+\leanid{MPOTensor.%
+blockTwo_isRFPViaTS_of_bntLayerOrthogonal_of_physicalSectorFactorization%
+_of_commonWeight} constructs the pairwise orthogonal outer supports from
+layer orthogonality and one-site spanning, produces each representative
+channel pair by Proposition~C.7, and assembles them into the blocked channel
+pair of the complete tensor. The coarsest merging is packaged generically by
+\leanid{MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.%
+ofOneSector}: a single-sector factorization whose sole neighboring operator
+is positive semidefinite of unit trace suffices. The sole remaining
+obligation of the source implication (ii)$\Rightarrow$(v) is therefore the
+existence of these per-representative factorizations.
+
 The all-cut Markov proof and the source-selected inverse-map calculation show
 that the raw four-sector tensor satisfies the displayed SAL, literal ZCL, and
 inverse-map relations while the trace matrix of those four fixed sectors is
