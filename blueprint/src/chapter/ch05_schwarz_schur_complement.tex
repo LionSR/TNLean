@@ -53,6 +53,12 @@
   \end{align}
 \end{theorem}
 
+\begin{proof}\leanok
+  Multiplication by the block matrix sends $(x,y)$ to
+  $(Px+Qy,Q^\dagger x+Ry)$. Taking the inner product with $(x,y)$ and
+  distributing over both sums gives the four displayed terms.
+\end{proof}
+
 \begin{definition}[Schur complement]\label{def:schurComplement}
   \lean{SchurComplement.schurComplement}
   \leanok
@@ -148,7 +154,8 @@
 
 \begin{proof}\leanok
   \uses{thm:block_psd_kernel_inclusion,
-    thm:schur_complement_quadratic_form}
+    thm:schur_complement_quadratic_form,
+    thm:schur_pinv_support_identities}
   By Theorem~\ref{thm:block_psd_kernel_inclusion},
   $\ker(R)\subseteq\ker(Q)$. In
   Theorem~\ref{thm:schur_complement_quadratic_form}, take
