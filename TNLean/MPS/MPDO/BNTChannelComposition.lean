@@ -249,6 +249,13 @@ theorem firstSiteMatrix_isStarProjection
     by simpa [Matrix.star_eq_conjTranspose] using
       (firstSiteMatrix_isHermitian hP.1 N).eq⟩
 
+/-- A finite sum of first-site lifts is the first-site lift of the sum. -/
+theorem sum_firstSiteMatrix
+    {ι : Type*} [Fintype ι] (P : ι → Matrix (Fin d) (Fin d) ℂ) (N : ℕ) :
+    ∑ s, firstSiteMatrix (P s) N = firstSiteMatrix (∑ s, P s) N := by
+  ext σ τ
+  simp only [Matrix.sum_apply, firstSiteMatrix, Finset.sum_mul]
+
 /-- A resolution of the one-site identity remains a resolution after acting
 on the first site of a longer chain.
 
@@ -258,16 +265,7 @@ theorem sum_firstSiteMatrix_eq_one
     {ι : Type*} [Fintype ι] (P : ι → Matrix (Fin d) (Fin d) ℂ)
     (hPsum : ∑ s, P s = 1) (N : ℕ) :
     ∑ s, firstSiteMatrix (P s) N = 1 := by
-  rw [← firstSiteMatrix_one N, ← hPsum]
-  ext σ τ
-  simp only [Matrix.sum_apply, firstSiteMatrix, Finset.sum_mul]
-
-/-- A finite sum of first-site lifts is the first-site lift of the sum. -/
-theorem sum_firstSiteMatrix
-    {ι : Type*} [Fintype ι] (P : ι → Matrix (Fin d) (Fin d) ℂ) (N : ℕ) :
-    ∑ s, firstSiteMatrix (P s) N = firstSiteMatrix (∑ s, P s) N := by
-  ext σ τ
-  simp only [Matrix.sum_apply, firstSiteMatrix, Finset.sum_mul]
+  rw [sum_firstSiteMatrix, hPsum, firstSiteMatrix_one]
 
 /-- The sum of pairwise orthogonal sector projections supports every physical
 slice belonging to one of the sectors on both sides. -/
@@ -434,6 +432,86 @@ theorem refinementMapInChainCoordinates_physCloseN
 
 /-! ### Projector-controlled channel composition -/
 
+/-- One direction of the projector-controlled channel assembly, for sectorwise
+channels from length-`n + 1` to length-`m + 1` chains. The assembled sum of
+projector-compressed sector channels is completely positive, preserves the
+trace selected by the completed outer projection, and maps the length-`n + 1`
+closures to the length-`m + 1` closures, which are supported on the completed
+outer projection.
+
+This is the common core of the coarse-graining and refinement directions of
+the projective-measurement step in arXiv:1606.00608, Appendix C.2,
+lines 1810--1825. -/
+private theorem sum_comp_singleKrausMap_firstSiteMatrix_properties
+    {ι : Type*} [Fintype ι]
+    {bondDim : ι → ℕ}
+    (M : MPOTensor d D) (K : (s : ι) → MPOTensor d (bondDim s))
+    (P : ι → Matrix (Fin d) (Fin d) ℂ)
+    (hProj : ∀ s, IsOrthogonalProjection (P s))
+    (hOrth : ∀ {s t}, s ≠ t → P s * P t = 0)
+    (hSupport : ∀ s β α,
+      P s * physicalSlice (K s) β α = physicalSlice (K s) β α ∧
+        physicalSlice (K s) β α * P s = physicalSlice (K s) β α)
+    (boundary : Matrix (Fin D) (Fin D) ℂ →
+      (s : ι) → Matrix (Fin (bondDim s)) (Fin (bondDim s)) ℂ)
+    (n m : ℕ)
+    (hDecompIn : ∀ X, physCloseN M (n + 1) X =
+      ∑ s, physCloseN (K s) (n + 1) (boundary X s))
+    (hDecompOut : ∀ X, physCloseN M (m + 1) X =
+      ∑ s, physCloseN (K s) (m + 1) (boundary X s))
+    (F : ι → Matrix (Fin (n + 1) → Fin d) (Fin (n + 1) → Fin d) ℂ →ₗ[ℂ]
+      Matrix (Fin (m + 1) → Fin d) (Fin (m + 1) → Fin d) ℂ)
+    (hF : ∀ s, IsKrausCPTP (F s))
+    (hFclose : ∀ s Y, F s (physCloseN (K s) (n + 1) Y) =
+      physCloseN (K s) (m + 1) Y) :
+    IsKrausCP (∑ s, F s ∘ₗ singleKrausMap (firstSiteMatrix (P s) n)) ∧
+      (∀ X, Matrix.trace
+          ((∑ s, F s ∘ₗ singleKrausMap (firstSiteMatrix (P s) n)) X) =
+        Matrix.trace (firstSiteMatrix (∑ s, P s) n * X)) ∧
+      (∀ X, firstSiteMatrix (∑ s, P s) n * physCloseN M (n + 1) X *
+          firstSiteMatrix (∑ s, P s) n = physCloseN M (n + 1) X) ∧
+      (∀ X, (∑ s, F s ∘ₗ singleKrausMap (firstSiteMatrix (P s) n))
+          (physCloseN M (n + 1) X) = physCloseN M (m + 1) X) := by
+  classical
+  have hQSupport : ∀ s β α,
+      (∑ t, P t) * physicalSlice (K s) β α = physicalSlice (K s) β α ∧
+        physicalSlice (K s) β α * (∑ t, P t) = physicalSlice (K s) β α :=
+    sum_projection_twoSidedSupport_physicalSlice K P hOrth hSupport
+  refine ⟨?_, ?_, ?_, ?_⟩
+  · exact isKrausCP_sum_comp_singleKrausMap
+      (fun s ↦ firstSiteMatrix (P s) n) F (fun s ↦ (hF s).isKrausCP)
+  · intro X
+    rw [trace_sum_comp_singleKrausMap_of_starProjections
+      (fun s ↦ firstSiteMatrix (P s) n) F
+      (fun s ↦ firstSiteMatrix_isStarProjection (hProj s) n) hF,
+      sum_firstSiteMatrix]
+  · intro X
+    rw [hDecompIn X, Matrix.mul_sum, Matrix.sum_mul]
+    apply Finset.sum_congr rfl
+    intro s _
+    rw [firstSiteMatrix_mul_physCloseN_of_mul_physicalSlice
+      (K s) (∑ t, P t) (fun β α ↦ (hQSupport s β α).1) n]
+    rw [physCloseN_mul_firstSiteMatrix_of_physicalSlice_mul
+      (K s) (∑ t, P t) (fun β α ↦ (hQSupport s β α).2) n]
+  · intro X
+    rw [hDecompIn X]
+    simp only [LinearMap.sum_apply, LinearMap.comp_apply, map_sum]
+    apply Eq.trans ?_ (hDecompOut X).symm
+    apply Finset.sum_congr rfl
+    intro s _
+    calc
+      ∑ x, F x (singleKrausMap (firstSiteMatrix (P x) n)
+          (physCloseN (K s) (n + 1) (boundary X s))) =
+          F s (physCloseN (K s) (n + 1) (boundary X s)) := by
+        simp_rw [singleKrausMap_firstSiteMatrix_physCloseN_eq_ite
+          K P hProj hOrth hSupport]
+        rw [Finset.sum_eq_single s]
+        · simp
+        · intro x _ hxs
+          rw [ite_eq_right hxs, map_zero]
+        · simp
+      _ = physCloseN (K s) (m + 1) (boundary X s) := hFclose s (boundary X s)
+
 /-- Assemble sectorwise blocked renormalization channels in ordinary chain
 coordinates. The same sector boundary is used at lengths two and four.
 
@@ -485,46 +563,16 @@ theorem exists_chainCoordinateRFP_of_projectiveSectorDecomposition
       (fun s ↦ firstSiteMatrix_isStarProjection (hProj s) 1)
       (sum_firstSiteMatrix_eq_one P hPsum 1)
       (fun s ↦ refinementMapInChainCoordinates_isKrausCPTP (hT₀ s))
-  · intro X
-    rw [hDecompFour X]
-    simp only [Sglobal, LinearMap.sum_apply, LinearMap.comp_apply, map_sum]
-    apply Eq.trans ?_ (hDecompTwo X).symm
-    apply Finset.sum_congr rfl
-    intro s _
-    calc
-      ∑ x, S x (singleKrausMap (firstSiteMatrix (P x) 3)
-          (physCloseN (K s) 4 (boundary X s))) =
-          S s (physCloseN (K s) 4 (boundary X s)) := by
-        simp_rw [singleKrausMap_firstSiteMatrix_physCloseN_eq_ite
-          K P hProj hOrth hSupport]
-        rw [Finset.sum_eq_single s]
-        · simp
-        · intro x _ hxs
-          rw [ite_eq_right hxs, map_zero]
-        · simp
-      _ = physCloseN (K s) 2 (boundary X s) :=
-        coarseningMapInChainCoordinates_physCloseN
-          (K s) (S₀ s) (hS₀close s) (boundary X s)
-  · intro X
-    rw [hDecompTwo X]
-    simp only [Tglobal, LinearMap.sum_apply, LinearMap.comp_apply, map_sum]
-    apply Eq.trans ?_ (hDecompFour X).symm
-    apply Finset.sum_congr rfl
-    intro s _
-    calc
-      ∑ x, T x (singleKrausMap (firstSiteMatrix (P x) 1)
-          (physCloseN (K s) 2 (boundary X s))) =
-          T s (physCloseN (K s) 2 (boundary X s)) := by
-        simp_rw [singleKrausMap_firstSiteMatrix_physCloseN_eq_ite
-          K P hProj hOrth hSupport]
-        rw [Finset.sum_eq_single s]
-        · simp
-        · intro x _ hxs
-          rw [ite_eq_right hxs, map_zero]
-        · simp
-      _ = physCloseN (K s) 4 (boundary X s) :=
-        refinementMapInChainCoordinates_physCloseN
-          (K s) (T₀ s) (hT₀close s) (boundary X s)
+  · exact (sum_comp_singleKrausMap_firstSiteMatrix_properties M K P hProj
+      hOrth hSupport boundary 3 1 hDecompFour hDecompTwo S
+      (fun s ↦ coarseningMapInChainCoordinates_isKrausCPTP (hS₀ s))
+      (fun s Y ↦ coarseningMapInChainCoordinates_physCloseN
+        (K s) (S₀ s) (hS₀close s) Y)).2.2.2
+  · exact (sum_comp_singleKrausMap_firstSiteMatrix_properties M K P hProj
+      hOrth hSupport boundary 1 3 hDecompTwo hDecompFour T
+      (fun s ↦ refinementMapInChainCoordinates_isKrausCPTP (hT₀ s))
+      (fun s Y ↦ refinementMapInChainCoordinates_physCloseN
+        (K s) (T₀ s) (hT₀close s) Y)).2.2.2
 
 /-- Assemble sectorwise blocked renormalization channels when the orthogonal
 sector projections need not resolve the identity. The active sums are
@@ -584,100 +632,18 @@ theorem exists_chainCoordinateRFP_of_orthogonalSectorDecomposition
   have hQTwoHerm : QTwo.IsHermitian := firstSiteMatrix_isHermitian hQ.1 1
   have hQTwoIdem : QTwo * QTwo = QTwo := by
     exact (firstSiteMatrix_isStarProjection hQ 1).isIdempotentElem.eq
-  have hSactiveCP : IsKrausCP Sactive := by
-    exact isKrausCP_sum_comp_singleKrausMap
-      (fun s ↦ firstSiteMatrix (P s) 3) S
-      (fun s ↦ (coarseningMapInChainCoordinates_isKrausCPTP
-        (hS₀ s)).isKrausCP)
-  have hTactiveCP : IsKrausCP Tactive := by
-    exact isKrausCP_sum_comp_singleKrausMap
-      (fun s ↦ firstSiteMatrix (P s) 1) T
-      (fun s ↦ (refinementMapInChainCoordinates_isKrausCPTP
-        (hT₀ s)).isKrausCP)
-  have hSactiveTrace : ∀ X, Matrix.trace (Sactive X) =
-      Matrix.trace (QFour * X) := by
-    intro X
-    rw [trace_sum_comp_singleKrausMap_of_starProjections
-      (fun s ↦ firstSiteMatrix (P s) 3) S
-      (fun s ↦ firstSiteMatrix_isStarProjection (hProj s) 3)
-      (fun s ↦ coarseningMapInChainCoordinates_isKrausCPTP (hS₀ s))]
-    rw [sum_firstSiteMatrix]
-  have hTactiveTrace : ∀ X, Matrix.trace (Tactive X) =
-      Matrix.trace (QTwo * X) := by
-    intro X
-    rw [trace_sum_comp_singleKrausMap_of_starProjections
-      (fun s ↦ firstSiteMatrix (P s) 1) T
-      (fun s ↦ firstSiteMatrix_isStarProjection (hProj s) 1)
-      (fun s ↦ refinementMapInChainCoordinates_isKrausCPTP (hT₀ s))]
-    rw [sum_firstSiteMatrix]
-  have hQSupport : ∀ s β α,
-      Q * physicalSlice (K s) β α = physicalSlice (K s) β α ∧
-        physicalSlice (K s) β α * Q = physicalSlice (K s) β α := by
-    exact sum_projection_twoSidedSupport_physicalSlice K P hOrth hSupport
-  have hFourSupported : ∀ X,
-      QFour * physCloseN M 4 X * QFour = physCloseN M 4 X := by
-    intro X
-    rw [hDecompFour X, Matrix.mul_sum, Matrix.sum_mul]
-    apply Finset.sum_congr rfl
-    intro s _
-    rw [firstSiteMatrix_mul_physCloseN_of_mul_physicalSlice
-      (K s) Q (fun β α ↦ (hQSupport s β α).1) 3]
-    rw [physCloseN_mul_firstSiteMatrix_of_physicalSlice_mul
-      (K s) Q (fun β α ↦ (hQSupport s β α).2) 3]
-  have hTwoSupported : ∀ X,
-      QTwo * physCloseN M 2 X * QTwo = physCloseN M 2 X := by
-    intro X
-    rw [hDecompTwo X, Matrix.mul_sum, Matrix.sum_mul]
-    apply Finset.sum_congr rfl
-    intro s _
-    rw [firstSiteMatrix_mul_physCloseN_of_mul_physicalSlice
-      (K s) Q (fun β α ↦ (hQSupport s β α).1) 1]
-    rw [physCloseN_mul_firstSiteMatrix_of_physicalSlice_mul
-      (K s) Q (fun β α ↦ (hQSupport s β α).2) 1]
-  have hSactiveClose : ∀ X,
-      Sactive (physCloseN M 4 X) = physCloseN M 2 X := by
-    intro X
-    rw [hDecompFour X]
-    simp only [Sactive, LinearMap.sum_apply, LinearMap.comp_apply, map_sum]
-    apply Eq.trans ?_ (hDecompTwo X).symm
-    apply Finset.sum_congr rfl
-    intro s _
-    calc
-      ∑ x, S x (singleKrausMap (firstSiteMatrix (P x) 3)
-          (physCloseN (K s) 4 (boundary X s))) =
-          S s (physCloseN (K s) 4 (boundary X s)) := by
-        simp_rw [singleKrausMap_firstSiteMatrix_physCloseN_eq_ite
-          K P hProj hOrth hSupport]
-        rw [Finset.sum_eq_single s]
-        · simp
-        · intro x _ hxs
-          rw [ite_eq_right hxs, map_zero]
-        · simp
-      _ = physCloseN (K s) 2 (boundary X s) :=
-        coarseningMapInChainCoordinates_physCloseN
-          (K s) (S₀ s) (hS₀close s) (boundary X s)
-  have hTactiveClose : ∀ X,
-      Tactive (physCloseN M 2 X) = physCloseN M 4 X := by
-    intro X
-    rw [hDecompTwo X]
-    simp only [Tactive, LinearMap.sum_apply, LinearMap.comp_apply, map_sum]
-    apply Eq.trans ?_ (hDecompFour X).symm
-    apply Finset.sum_congr rfl
-    intro s _
-    calc
-      ∑ x, T x (singleKrausMap (firstSiteMatrix (P x) 1)
-          (physCloseN (K s) 2 (boundary X s))) =
-          T s (physCloseN (K s) 2 (boundary X s)) := by
-        simp_rw [singleKrausMap_firstSiteMatrix_physCloseN_eq_ite
-          K P hProj hOrth hSupport]
-        rw [Finset.sum_eq_single s]
-        · simp
-        · intro x _ hxs
-          rw [ite_eq_right hxs, map_zero]
-        · simp
-      _ = physCloseN (K s) 4 (boundary X s) :=
-        refinementMapInChainCoordinates_physCloseN
-          (K s) (T₀ s) (hT₀close s) (boundary X s)
+  obtain ⟨hSactiveCP, hSactiveTrace, hFourSupported, hSactiveClose⟩ :=
+    sum_comp_singleKrausMap_firstSiteMatrix_properties M K P hProj hOrth
+      hSupport boundary 3 1 hDecompFour hDecompTwo S
+      (fun s ↦ coarseningMapInChainCoordinates_isKrausCPTP (hS₀ s))
+      (fun s Y ↦ coarseningMapInChainCoordinates_physCloseN
+        (K s) (S₀ s) (hS₀close s) Y)
+  obtain ⟨hTactiveCP, hTactiveTrace, hTwoSupported, hTactiveClose⟩ :=
+    sum_comp_singleKrausMap_firstSiteMatrix_properties M K P hProj hOrth
+      hSupport boundary 1 3 hDecompTwo hDecompFour T
+      (fun s ↦ refinementMapInChainCoordinates_isKrausCPTP (hT₀ s))
+      (fun s Y ↦ refinementMapInChainCoordinates_physCloseN
+        (K s) (T₀ s) (hT₀close s) Y)
   refine ⟨Sglobal, Tglobal, ?_, ?_, ?_, ?_⟩
   · exact Matrix.supportCompletion_isKrausCPTP
       Sactive QFour ρTwo hSactiveCP hQFourHerm hQFourIdem
