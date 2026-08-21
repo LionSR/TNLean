@@ -17,9 +17,80 @@ identity.
 
 * `isKrausCPTP_sum_comp_singleKrausMap_of_starProjectionResolution`
 * `isKrausCPTP_sum_comp_singleKrausMap_of_projectiveResolution`
+* `isKrausCP_sum_comp_singleKrausMap`
+* `trace_sum_comp_singleKrausMap_of_starProjections`
 -/
 
 open scoped Matrix BigOperators
+
+/-- Compressing by finitely many matrices, applying completely positive maps,
+and summing gives a completely positive map. No completeness or orthogonality
+condition on the compressing matrices is required. -/
+theorem isKrausCP_sum_comp_singleKrausMap
+    {ι α β : Type*} [Fintype ι] [Fintype α] [DecidableEq α]
+    [Fintype β] [DecidableEq β]
+    (P : ι → Matrix α α ℂ)
+    (S : ι → Matrix α α ℂ →ₗ[ℂ] Matrix β β ℂ)
+    (hS : ∀ i, IsKrausCP (S i)) :
+    IsKrausCP (∑ i, S i ∘ₗ singleKrausMap (P i)) := by
+  classical
+  choose r A hA using hS
+  let B : (Σ i, Fin (r i)) → Matrix β α ℂ :=
+    fun p ↦ A p.1 p.2 * P p.1
+  rw [← show Matrix.rectangularKrausMap B =
+      ∑ i, S i ∘ₗ singleKrausMap (P i) by
+    apply LinearMap.ext
+    intro X
+    simp only [Matrix.rectangularKrausMap, LinearMap.sum_apply,
+      LinearMap.comp_apply, singleKrausMap_apply]
+    change (∑ p : Σ i, Fin (r i), B p * X * (B p)ᴴ) =
+      ∑ i, S i (P i * X * (P i)ᴴ)
+    rw [Fintype.sum_sigma]
+    apply Finset.sum_congr rfl
+    intro i _
+    rw [hA i]
+    apply Finset.sum_congr rfl
+    intro a _
+    simp only [B, Matrix.conjTranspose_mul, Matrix.mul_assoc]]
+  exact Matrix.rectangularKrausMap_isKrausCP B
+
+/-- The projector-controlled sum of trace-preserving completely positive maps
+preserves precisely the trace selected by the sum of the projections. The
+projections need not resolve the identity. -/
+theorem trace_sum_comp_singleKrausMap_of_starProjections
+    {ι α β : Type*} [Fintype ι] [Fintype α] [DecidableEq α]
+    [Fintype β] [DecidableEq β]
+    (P : ι → Matrix α α ℂ)
+    (S : ι → Matrix α α ℂ →ₗ[ℂ] Matrix β β ℂ)
+    (hP : ∀ i, IsStarProjection (P i))
+    (hS : ∀ i, IsKrausCPTP (S i)) (X : Matrix α α ℂ) :
+    Matrix.trace ((∑ i, S i ∘ₗ singleKrausMap (P i)) X) =
+      Matrix.trace ((∑ i, P i) * X) := by
+  classical
+  simp only [LinearMap.sum_apply, LinearMap.comp_apply, Matrix.trace_sum]
+  calc
+    ∑ i, Matrix.trace (S i (singleKrausMap (P i) X)) =
+        ∑ i, Matrix.trace (singleKrausMap (P i) X) := by
+      apply Finset.sum_congr rfl
+      intro i _
+      exact (hS i).trace_map _
+    _ = ∑ i, Matrix.trace (P i * X) := by
+      apply Finset.sum_congr rfl
+      intro i _
+      rw [singleKrausMap_apply]
+      have hHerm : (P i)ᴴ = P i := by
+        simpa [Matrix.star_eq_conjTranspose] using
+          (hP i).isSelfAdjoint.star_eq
+      rw [hHerm]
+      calc
+        Matrix.trace (P i * X * P i) =
+            Matrix.trace ((P i * P i) * X) := by
+          simpa only [Matrix.mul_assoc] using
+            Matrix.trace_mul_cycle (P i) X (P i)
+        _ = Matrix.trace (P i * X) := by
+          rw [(hP i).isIdempotentElem.eq]
+    _ = Matrix.trace ((∑ i, P i) * X) := by
+      rw [Matrix.sum_mul, Matrix.trace_sum]
 
 /-- Let `(P i)` be a finite resolution of the identity by star projections on
 one matrix algebra, and let `(S i)` be trace-preserving completely positive
