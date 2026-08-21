@@ -24,6 +24,20 @@ abstracted — record why, so it is not re-proposed).
 
 ## Promoted
 
+### SAL nonvanishing of the physical-trace transfer — promoted
+- **Pattern:** contradict the positive-length trace clause in `IsSAL` at one
+  site by rewriting the periodic trace as the trace of the vertical loop and
+  then setting the physical-trace transfer equal to zero.
+- **Seen:** two duplicated proofs in `TNLean/MPS/MPDO/BNTSectorAreaLaw.lean`
+  and `TNLean/MPS/MPDO/RFPViaTSSAL.lean`; the literal-idempotence bridge in
+  `TNLean/MPS/MPDO/SALTraceTransfer.lean` supplied the third use at promotion
+  (2026-08-21).
+- **Abstraction:** `MPOTensor.IsSAL.physTraceTransfer_ne_zero` in
+  `TNLean/MPS/MPDO/SALTraceTransfer.lean`.
+- **Notes:** the two duplicated proofs now use the common theorem. The same
+  module records the immediate bridge from SAL and literal idempotence to
+  source zero correlation length.
+
 ### Powers on an eigenspace — promoted
 - **Pattern:** prove `(f ^ n) x = μ ^ n • x` from `x ∈ f.eigenspace μ`, either by induction
   using `Module.End.mem_eigenspace_iff` or by splitting on `x = 0` before applying
