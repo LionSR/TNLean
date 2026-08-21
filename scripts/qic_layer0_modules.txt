@@ -17,6 +17,7 @@ TNLean/Algebra/DependentBlockDiagonal.lean
 TNLean/Algebra/EigenspaceMap.lean
 TNLean/Algebra/EqualRangeRightFactor.lean
 TNLean/Algebra/FinSum.lean
+TNLean/Algebra/FiniteCauchySchwarz.lean
 TNLean/Algebra/FrameOperator.lean
 TNLean/Algebra/FrobeniusHilbert.lean
 TNLean/Algebra/HermitianHelpers.lean
@@ -46,6 +47,7 @@ TNLean/Algebra/OrthogonalProjection.lean
 TNLean/Algebra/PerronFrobenius/RankOne.lean
 TNLean/Algebra/PosSemidefSupport.lean
 TNLean/Algebra/PositiveSemidefiniteNormalization.lean
+TNLean/Algebra/RankOneSandwich.lean
 TNLean/Algebra/RectangularChoi.lean
 TNLean/Algebra/ScalarCommutant.lean
 TNLean/Algebra/ShiftedTracePowerSpectrum.lean
@@ -65,6 +67,7 @@ TNLean/Algebra/StarSubalgebraSimpleModule.lean
 TNLean/Algebra/StarSubalgebraSpatial.lean
 TNLean/Algebra/StarSubalgebraUnitaryIntertwiner.lean
 TNLean/Algebra/TracePowerCharPoly.lean
+TNLean/Algebra/TracePurity.lean
 TNLean/Algebra/TraceReindex.lean
 TNLean/Algebra/UnitModulusPowerSum.lean
 TNLean/Algebra/ZModCyclicSums.lean

@@ -20,6 +20,7 @@ import TNLean.Channel.RadonNikodym
 import TNLean.Channel.OpenSystem
 import TNLean.Channel.POVM
 import TNLean.Channel.POVM.RankOneNaimark
+import TNLean.Channel.POVM.SIC
 import TNLean.Channel.POVM.Uniqueness
 import TNLean.Channel.TransferMatrix
 import TNLean.Channel.WolfProps
@@ -185,6 +186,16 @@ project import.
     of identity on a dilation pulls back to a POVM ✓
   - `Instrument` — quantum-instrument structure + `total_isChannel`,
     `sum_probability`, `posteriorState` interface ✓
+
+* **Proposition “SIC POVMs” and Equations (2.33)--(2.34)**:
+  - `SICPOVM` — the unscaled rank-one projectors, with
+    `∑ᵢ Pᵢ = d𝟙` and off-diagonal overlap `1/(d+1)` ✓
+  - `SICPOVM.toPOVM` — the effects `Pᵢ/d` form a POVM ✓
+  - `SICPOVM.linearIndependent_projector` — the `d²` projectors form an
+    operator basis ✓
+  - `SICPOVM.diagonal_representation` — Wolf Equation (2.33) ✓
+  - `SICPOVM.krausMap_eq` / `SICPOVM.isChannel_krausMap` — the Kraus
+    operators `Pᵢ/√d` define the channel in Wolf Equation (2.34) ✓
 
 ### Section 2.1 Representation corollaries (Propositions 2.2–2.4)
 
