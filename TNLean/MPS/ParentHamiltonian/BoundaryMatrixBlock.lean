@@ -60,7 +60,7 @@ theorem boundary_matrix_commutes_of_isNBlkInjective_of_block_matEq
         = LinearMap.mulRight ℂ (Y σ_comp) := by
       apply LinearMap.ext_on_range
         (v := fun σ : Fin L₀ → Fin d => evalWord A (List.ofFn σ))
-      · simpa [wordSpan, Kraus.wordSpan] using
+      · simpa [Kraus.wordSpan, Kraus.wordSpan] using
           (wordSpan_eq_top_iff_isNBlkInjective A L₀).mpr hInj
       · intro σ_tail
         simp only [LinearMap.comp_apply, LinearMap.mulLeft_apply,

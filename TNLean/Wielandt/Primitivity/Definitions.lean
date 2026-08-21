@@ -21,7 +21,7 @@ The definitions are stated in the notation of the theorem: `S_n(A)`, `i(A)`,
 
 ## Main definitions
 
-* `krausRank A`: the dimension of `S₁(A) = wordSpan A 1`, i.e.
+* `krausRank A`: the dimension of `S₁(A) = Kraus.wordSpan A 1`, i.e.
   `dim(span{A₁,…,Aₐ})`.
 * `HasEventuallyFullKrausRank A`: `∃ i ≥ 1, S_i(A) = M_D(ℂ)`, i.e. `IsNormal A`.
 * `IsPrimitivePaper A`: spreading primitivity — there exists `q ≥ 1` such that
@@ -91,7 +91,7 @@ variable {d D : ℕ}
 Paper notation: this is `dim(S₁(A))`.
 (arXiv:0909.5347, Section II) -/
 noncomputable def krausRank (A : MPSTensor d D) : ℕ :=
-  Module.finrank ℂ (wordSpan A 1)
+  Module.finrank ℂ (Kraus.wordSpan A 1)
 
 /-! ## Eventually full Kraus rank -/
 
@@ -104,7 +104,7 @@ there exists `i` such that `S_i(A) = M_D(ℂ)`."
 
 This is equivalent to `IsNormal A` (see `hasEventuallyFullKrausRank_iff_isNormal`). -/
 def HasEventuallyFullKrausRank (A : MPSTensor d D) : Prop :=
-  ∃ i : ℕ, 0 < i ∧ wordSpan A i = ⊤
+  ∃ i : ℕ, 0 < i ∧ Kraus.wordSpan A i = ⊤
 
 /-- `HasEventuallyFullKrausRank` is equivalent to `IsNormal`. -/
 theorem hasEventuallyFullKrausRank_iff_isNormal (A : MPSTensor d D) :
@@ -129,7 +129,7 @@ Note: The full equivalence of all three Proposition 3 conditions is assembled
 in `Primitivity/Equivalence.lean`; see `primitivePaper_iff_hasEventuallyFullKrausRank` and
 `primitivePaper_iff_stronglyIrreducible`. -/
 def IsPrimitivePaper (A : MPSTensor d D) : Prop :=
-  ∃ q : ℕ, 0 < q ∧ ∀ φ : Fin D → ℂ, φ ≠ 0 → vectorSpreadSpan A φ q = ⊤
+  ∃ q : ℕ, 0 < q ∧ ∀ φ : Fin D → ℂ, φ ≠ 0 → Kraus.vectorSpreadSpan A φ q = ⊤
 
 /-! ## Index definitions -/
 
@@ -140,11 +140,11 @@ Paper: "i(A) := min{n : S_n(A) = M_D(ℂ)}."
 (arXiv:0909.5347, after Proposition 3)
 
 The paper takes its word lengths in `ℕ = {1, 2, …}`.  Accordingly this is
-defined as `sInf {n | 0 < n ∧ wordSpan A n = ⊤}`, matching
+defined as `sInf {n | 0 < n ∧ Kraus.wordSpan A n = ⊤}`, matching
 `HasEventuallyFullKrausRank`.  It returns 0 if no such `n` exists (as per
 `Nat.sInf ∅ = 0`). -/
 noncomputable def iIndex (A : MPSTensor d D) : ℕ :=
-  sInf {n : ℕ | 0 < n ∧ wordSpan A n = ⊤}
+  sInf {n : ℕ | 0 < n ∧ Kraus.wordSpan A n = ⊤}
 
 /-- **Primitivity index** `q(E_A)`: the smallest positive `q` such that for all nonzero φ,
 `H_q(A,φ) = ℂ^D`.
@@ -153,10 +153,11 @@ Paper: "q(E_A) := min{q : ∀ |φ⟩ ≠ 0, H_q(A,φ) = ℂ^D}."
 (arXiv:0909.5347, Proposition 3)
 
 The paper uses the same positive word-length convention as for `i(A)`.  Accordingly this
-is `sInf {q | 0 < q ∧ ∀ φ ≠ 0, vectorSpreadSpan A φ q = ⊤}`. It returns 0 if no such
+is `sInf {q | 0 < q ∧ ∀ φ ≠ 0, Kraus.vectorSpreadSpan A φ q = ⊤}`. It returns 0 if no such
 `q` exists. -/
 noncomputable def qIndex (A : MPSTensor d D) : ℕ :=
-  sInf {q : ℕ | 0 < q ∧ ∀ φ : Fin D → ℂ, φ ≠ 0 → vectorSpreadSpan A φ q = ⊤}
+  sInf {q : ℕ | 0 < q ∧ ∀ φ : Fin D → ℂ, φ ≠ 0 →
+    Kraus.vectorSpreadSpan A φ q = ⊤}
 
 /-! ## Peripheral primitivity (transfer-map formulation) -/
 
@@ -180,12 +181,6 @@ Paper: "E_A is primitive" means `1` is the only eigenvalue with `|λ| = 1`.
 Wolf Chapter 6 Definition 6.2(2). -/
 def IsPeripherallyPrimitive (A : MPSTensor d D) : Prop :=
   _root_.IsPrimitive (transferMap (d := d) (D := D) A)
-
-/-- Unfold `IsPeripherallyPrimitive` to the peripheral-spectrum equation. -/
-theorem isPeripherallyPrimitive_iff (A : MPSTensor d D) :
-    IsPeripherallyPrimitive A ↔
-      peripheralEigenvalues (transferMap (d := d) (D := D) A) = {1} :=
-  Iff.rfl
 
 /-! ## Strong irreducibility (Proposition 3(c)) -/
 

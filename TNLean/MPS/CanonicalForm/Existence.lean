@@ -83,7 +83,7 @@ The formal statement:
 
 > `Wielandt.Primitivity.StronglyIrreducibleToFullRank` proves the implication
 > `IsStronglyIrreduciblePaper A → krausRank A = D` (equivalently,
-> `wordSpan A 1 = ⊤`).  This proves the hardest direction
+> `Kraus.wordSpan A 1 = ⊤`).  This proves the hardest direction
 > in the Sanz–Pérez-García–Wolf–Cirac primitivity equivalence.
 
 ## External input — invariant subspace decomposition in the canonical-form proof

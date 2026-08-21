@@ -148,7 +148,11 @@ theorem boundary_witness_product_of_adjacent_overlaps
         have h := hStep (Fin.succ r)
         simpa [Ytail, atail, btail] using h
       have htail := ih Ytail atail btail hStepTail
-      rw [evalWord_ofFn_succ A a, evalWord_ofFn_succ A b]
+      have ea : evalWord A (List.ofFn a) = A (a 0) * evalWord A (List.ofFn (a ∘ Fin.succ)) :=
+        Kraus.evalWord_ofFn_succ A a
+      have eb : evalWord A (List.ofFn b) = A (b 0) * evalWord A (List.ofFn (b ∘ Fin.succ)) :=
+        Kraus.evalWord_ofFn_succ A b
+      rw [ea, eb]
       calc
         Y 0 * (A (a 0) * evalWord A (List.ofFn (a ∘ Fin.succ)))
             = (Y 0 * A (a 0)) * evalWord A (List.ofFn (a ∘ Fin.succ)) := by

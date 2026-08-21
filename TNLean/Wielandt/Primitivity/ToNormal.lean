@@ -31,7 +31,6 @@ basic transfer-map compatibility lemmas. It stops short of proving any
 ### Transfer-map compatibility
 
 * `IsPrimitiveMPS.transferMap_isChannel`
-* `IsPrimitiveMPS.transferMap_trace_preserving`
 
 ### PosDef consequences under irreducibility
 
@@ -151,15 +150,6 @@ theorem IsPrimitiveMPS.transferMap_isChannel
     IsChannel (transferMap (d := d) (D := D) A) :=
   Kraus.isChannel_transferMap A hP.norm
 
-/-- Preferred theorem stating that the transfer map attached to
-`IsPrimitiveMPS A ρ` is trace-preserving. -/
-theorem IsPrimitiveMPS.transferMap_trace_preserving
-    {A : MPSTensor d D} {ρ : Matrix (Fin D) (Fin D) ℂ}
-    (hP : IsPrimitiveMPS A ρ)
-    (X : Matrix (Fin D) (Fin D) ℂ) :
-    trace (transferMap (d := d) (D := D) A X) = trace X :=
-  hP.transferMap_isChannel.tp X
-
 /-- **Irreducible transfer map implies a positive-definite fixed point.**
 
 If `ρ` is the PSD fixed point in `IsPrimitiveMPS A ρ` and the transfer
@@ -197,30 +187,5 @@ theorem posDef_of_isIrreducibleTensor_of_isPrimitiveMPS
     ρ.PosDef :=
   posDef_of_isIrreducibleMap_of_isPrimitiveMPS hP
     (isIrreducibleMap_of_isIrreducibleTensor A hIrr)
-
-/-! ## Part 3: Documented roadmap
-
-This file intentionally stops before any `IsNormal` theorem.
-
-What it does provide is the preparatory material reused by the later implication:
-
-1. `fixedPoint_unique`: the `1`-eigenspace of the transfer map is spanned by
-   `ρ`
-2. `complement_pow_tendsto_zero`: the complementary part of the transfer map
-   decays to `0`
-3. `posDef_of_isIrreducibleTensor_of_isPrimitiveMPS`: irreducibility upgrades
-   the primitive fixed point to `PosDef`
-4. `isIrreducibleMap_of_isIrreducibleTensor`: tensor irreducibility implies
-   transfer-map irreducibility
-
-The key conceptual mismatch remains that our `IsPrimitiveMPS` hypothesis does
-not force `ρ.PosDef`; the standard rank-deficient `2 × 2` example still applies.
-So the paper's primitive condition is stronger than the bare complementary-gap data
-formalized here.
-
-For the actual `IsPrimitiveMPS + PosDef → IsNormal` implication, see
-`Primitivity/StronglyIrreducibleToFullRank.lean`.
--/
-
 
 end MPSTensor

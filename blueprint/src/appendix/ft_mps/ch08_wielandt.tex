@@ -14,7 +14,7 @@ Theorem~\ref{thm:lemma2b_assembly}, and
 Theorem~\ref{thm:tp_primitive_irred_block_injective}.
 
 \begin{lemma}[Word span products]\label{lem:word_span_mul}
-    \lean{MPSTensor.wordSpan_mul_le}
+    \lean{Kraus.wordSpan_mul_le}
     \leanok
     \uses{def:word_span}
     One has $S_m(A)S_n(A)\subseteq S_{m+n}(A)$:
@@ -30,7 +30,7 @@ Theorem~\ref{thm:tp_primitive_irred_block_injective}.
 
 \begin{lemma}[Zero-length word span]
     \label{lem:wordspan_zero_ne_top}
-    \lean{MPSTensor.wordSpan_zero_ne_top_of_two_le}
+    \lean{Kraus.wordSpan_zero_ne_top_of_two_le}
     \leanok
     \uses{def:word_span}
     If $D\ge2$, then $S_0(A)\neq\MN{D}$.
@@ -222,7 +222,7 @@ span used throughout Chapter~\ref{ch:wielandt}.
 \end{proof}
 
 \begin{theorem}[Nonzero trace product]\label{thm:nonzero_trace_word}
-    \lean{MPSTensor.exists_nonzero_trace_word}
+    \lean{Kraus.exists_nonzero_trace_word}
     \leanok
     \uses{def:normal}
     Let $D>0$. If $A$ is normal, then there exists a word $w$ of length at
@@ -257,7 +257,7 @@ span used throughout Chapter~\ref{ch:wielandt}.
 \end{proof}
 
 \begin{theorem}[Eigenvalue extraction]\label{thm:eigenvalue_extraction}
-    \lean{MPSTensor.exists_word_eigenvector}
+    \lean{Kraus.exists_word_eigenvector}
     \leanok
     \uses{def:normal}
     Let $D>0$. If $A$ is normal, then there exist a word $w_0$ with
@@ -275,7 +275,7 @@ span used throughout Chapter~\ref{ch:wielandt}.
 \end{proof}
 
 \begin{theorem}[Vector span stabilisation]\label{thm:vector_span_stable}
-    \lean{MPSTensor.cumulativeVectorSpan_stable}
+    \lean{Kraus.cumulativeVectorSpan_stable}
     \leanok
     \uses{def:cumulative_vector_span}
     If $K_n(A,\varphi)=K_{n+1}(A,\varphi)$, then
@@ -288,7 +288,7 @@ span used throughout Chapter~\ref{ch:wielandt}.
 \end{proof}
 
 \begin{lemma}[Vector span from matrix span]\label{lem:vector_span_from_matrix}
-    \lean{MPSTensor.cumulativeVectorSpan_eq_top_of_cumulativeSpan_eq_top}
+    \lean{Kraus.cumulativeVectorSpan_eq_top_of_cumulativeSpan_eq_top}
     \leanok
     \uses{def:cumulative_vector_span, def:cumulative_span}
     If $T_N(A)=\MN{D}$ and $\varphi\neq0$, then
@@ -310,7 +310,7 @@ Theorem~\ref{thm:wielandt_case2_one_step_span} and
 Theorem~\ref{thm:wielandt_case3_one_step_span}.
 
 \begin{definition}[One-step augmentation]\label{def:one_step_augment}
-    \lean{MPSTensor.oneStepAugment}
+    \lean{Kraus.oneStepAugment}
     \leanok
     \uses{def:mps_tensor}
     Let $A$ be an MPS tensor with Kraus family
@@ -329,7 +329,7 @@ Theorem~\ref{thm:wielandt_case3_one_step_span}.
 \end{definition}
 
 \begin{lemma}[Kraus operators lie in the one-step span]\label{lem:kraus_mem_word_span_one}
-    \lean{MPSTensor.apply_mem_wordSpan_one}
+    \lean{Kraus.apply_mem_wordSpan_one}
     \leanok
     \uses{def:word_span}
     Every Kraus operator $A^i$ belongs to the one-step span $S_1(A)$.
@@ -341,9 +341,9 @@ Theorem~\ref{thm:wielandt_case3_one_step_span}.
 \end{proof}
 
 \begin{lemma}[Redundant one-step augmentation]\label{lem:one_step_augment_word_span}
-    \lean{MPSTensor.oneStepAugment_apply_mem_wordSpan_one,
-        MPSTensor.wordSpan_oneStepAugment_one,
-        MPSTensor.wordSpan_oneStepAugment_eq}
+    \lean{Kraus.oneStepAugment_apply_mem_wordSpan_one,
+        Kraus.wordSpan_oneStepAugment_one,
+        Kraus.wordSpan_oneStepAugment_eq}
     \leanok
     \uses{def:one_step_augment, def:word_span, lem:kraus_mem_word_span_one}
     Let $X\in S_1(A)$, and let $\widetilde A$ be the one-step
@@ -819,7 +819,7 @@ alone does not imply normality.
 
 \begin{theorem}[Word-span monotonicity from one-step padding]%
     \label{thm:wordspan_mono_aperiodic}
-    \lean{MPSTensor.wordSpan_mono_succ_of_one_mem_wordSpan_one}
+    \lean{Kraus.wordSpan_mono_succ_of_one_mem_wordSpan_one}
     \leanok
     \uses{def:word_span}
     If $\Id\in S_1(A)$, then $S_n(A)\le S_{n+1}(A)$ for every~$n$.
@@ -833,7 +833,7 @@ alone does not imply normality.
 
 \begin{theorem}[Cumulative span equals word span under one-step padding]%
     \label{thm:cumspan_eq_wordspan}
-    \lean{MPSTensor.cumulativeSpan_eq_wordSpan_of_one_mem_wordSpan_one}
+    \lean{Kraus.cumulativeSpan_eq_wordSpan_of_one_mem_wordSpan_one}
     \leanok
     \uses{def:cumulative_span, def:word_span}
     If $\Id\in S_1(A)$, then $T_n(A)=S_n(A)$ for every~$n$.

@@ -43,13 +43,13 @@ The key mathematical consequence used here is:
 
 In MPS notation after blocking: for an injective tensor `A` (which is
 automatically normal up to a gauge), the finite-length word span
-`wordSpan A n` reaches the full matrix algebra $M_D(\mathbb C)$ for some explicit
+`Kraus.wordSpan A n` reaches the full matrix algebra $M_D(\mathbb C)$ for some explicit
 bound `n`.  This exact-word-span conclusion is obtained from the cumulative
 Wielandt span estimates:
 
 > `Wielandt.SpanGrowth.CumulativeToWordSpan` supplies the transition from
-> the cumulative Wielandt bound to a word-span theorem that `∃ n, wordSpan A n = ⊤`
-> (or more precisely, that `cumulativeSpan A n = ⊤` for some `n`).
+> the cumulative Wielandt bound to a word-span theorem that `∃ n, Kraus.wordSpan A n = ⊤`
+> (or more precisely, that `Kraus.cumulativeSpan A n = ⊤` for some `n`).
 
 The formal Lean import is `TNLean.Wielandt.SpanGrowth.CumulativeSpan`, which
 provides `Wielandt.cumulativeSpan_eq_top_of_...` and the cumulative-to-word-span
@@ -93,23 +93,23 @@ lemma SameMPVFrom.trace_evalWord_of_length_ge
 
 /-! ## Auxiliary: word span for injective tensors -/
 
-/-- For an injective tensor, `wordSpan A n = ⊤` for all `n ≥ 1`. -/
+/-- For an injective tensor, `Kraus.wordSpan A n = ⊤` for all `n ≥ 1`. -/
 theorem wordSpan_eq_top_of_isInjective
     {A : MPSTensor d D} (hA : IsInjective A)
-    {n : ℕ} (hn : 0 < n) : wordSpan A n = ⊤ := by
+    {n : ℕ} (hn : 0 < n) : Kraus.wordSpan A n = ⊤ := by
   classical
   obtain ⟨c, hc⟩ := hA.exists_decomposition 1
   induction n with
   | zero => omega
   | succ n ih =>
     rcases n.eq_zero_or_pos with rfl | hn'
-    · -- Base case: wordSpan A 1 = span(range A) = ⊤
+    · -- Base case: Kraus.wordSpan A 1 = span(range A) = ⊤
       rw [eq_top_iff, ← hA.span_eq_top]
       apply Submodule.span_le.mpr
       rintro _ ⟨i, rfl⟩
       have : A i = evalWord A [i] := by simp
-      rw [this]; exact evalWord_mem_wordSpan A [i]
-    · -- Inductive step: wordSpan A n ≤ wordSpan A (n+1)
+      rw [this]; exact Kraus.evalWord_mem_wordSpan A [i]
+    · -- Inductive step: Kraus.wordSpan A n ≤ Kraus.wordSpan A (n+1)
       rw [eq_top_iff, ← ih hn']
       apply Submodule.span_le.mpr
       rintro _ ⟨σ, rfl⟩
@@ -124,7 +124,7 @@ theorem wordSpan_eq_top_of_isInjective
           ∑ i, c i • Kraus.evalWord A (List.ofFn σ ++ [i]) from key]
       exact Submodule.sum_mem _ fun i _ =>
         Submodule.smul_mem _ _ (by
-          have := evalWord_mem_wordSpan A (List.ofFn σ ++ [i])
+          have := Kraus.evalWord_mem_wordSpan A (List.ofFn σ ++ [i])
           rwa [show (List.ofFn σ ++ [i]).length = n + 1 from by simp] at this)
 
 /-! ## Main results -/
@@ -132,7 +132,7 @@ theorem wordSpan_eq_top_of_isInjective
 /-- **Finite-length agreement implies full agreement** for injective tensors.
 
 If `SameMPVFrom N₀ A B` with `A` injective, then `SameMPV A B`.  The proof
-proceeds in three steps: (1) `wordSpan B N₀ = ⊤` by composition identity
+proceeds in three steps: (1) `Kraus.wordSpan B N₀ = ⊤` by composition identity
 and finrank transfer; (2) `S = Σ cᵢ Bⁱ = 1` by trace nondegeneracy;
 (3) downward induction on word length using the `A`-decomposition of `1`. -/
 theorem sameMPV_of_sameMPVFrom_of_injective [NeZero D]
@@ -146,8 +146,8 @@ theorem sameMPV_of_sameMPVFrom_of_injective [NeZero D]
   -- N₀ ≥ 1. Set up decomposition.
   classical
   obtain ⟨c, hc⟩ := hA.exists_decomposition 1
-  -- ── Step 1: wordSpan B N₀ = ⊤ (composition identity) ──
-  have hWB : wordSpan B N₀ = ⊤ := by
+  -- ── Step 1: Kraus.wordSpan B N₀ = ⊤ (composition identity) ──
+  have hWB : Kraus.wordSpan B N₀ = ⊤ := by
     let genA := fun σ : Fin N₀ → Fin d => evalWord A (List.ofFn σ)
     let genB := fun σ : Fin N₀ → Fin d => evalWord B (List.ofFn σ)
     let lcA := Fintype.linearCombination ℂ genA
@@ -207,7 +207,7 @@ theorem sameMPV_of_sameMPVFrom_of_injective [NeZero D]
     suffices h : S - 1 = 0 from sub_eq_zero.mp h
     apply (Matrix.ext_iff_trace_mul_right (A := S - 1) (B := 0)).2
     intro N
-    -- The linear functional tr((S−1) · _) vanishes on wordSpan B N₀ = ⊤
+    -- The linear functional tr((S−1) · _) vanishes on Kraus.wordSpan B N₀ = ⊤
     have hf : (Matrix.traceLinearMap (Fin D) ℂ ℂ).comp
         (LinearMap.mulLeft ℂ (S - 1)) = 0 := by
       apply LinearMap.ext_on_range

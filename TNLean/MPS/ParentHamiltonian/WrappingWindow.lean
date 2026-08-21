@@ -766,10 +766,10 @@ zero-product relation obtained for a short complement word can be multiplied by
 all padding words up to any length whose exact word span is \(\top\). -/
 theorem eq_zero_of_mul_evalWord_eq_zero_of_wordSpan_eq_top
     {A : MPSTensor d D} {k n : ℕ} {Z : Matrix (Fin D) (Fin D) ℂ}
-    (htop : wordSpan A n = ⊤) (hkn : k ≤ n)
+    (htop : Kraus.wordSpan A n = ⊤) (hkn : k ≤ n)
     (hzero : ∀ σ : Fin k → Fin d, Z * evalWord A (List.ofFn σ) = 0) :
     Z = 0 := by
-  have hzero_span : ∀ M ∈ wordSpan A n, Z * M = 0 := by
+  have hzero_span : ∀ M ∈ Kraus.wordSpan A n, Z * M = 0 := by
     apply Submodule.span_induction
     · intro M hM
       rcases hM with ⟨σ, rfl⟩
@@ -814,7 +814,7 @@ theorem eq_zero_of_mul_evalWord_eq_zero_of_isNBlkInjective_of_le_mul
     Z = 0 := by
   exact eq_zero_of_mul_evalWord_eq_zero_of_wordSpan_eq_top
     (A := A) (k := k) (n := q * L₀)
-    (wordSpan_top_of_mul A ((wordSpan_eq_top_iff_isNBlkInjective A L₀).mpr hInj) q hq)
+    (Kraus.wordSpan_top_of_mul A ((wordSpan_eq_top_iff_isNBlkInjective A L₀).mpr hInj) q hq)
     hkq hzero
 
 /-- A right boundary witness is unique once its products with all one-site
@@ -876,7 +876,7 @@ theorem left_witness_unique_of_isNBlkInjective
   have hmul : LinearMap.mulRight ℂ Y₁ = LinearMap.mulRight ℂ Y₂ := by
     apply LinearMap.ext_on_range
       (v := fun σ : Fin L₀ → Fin d => evalWord A (List.ofFn σ))
-    · simpa [wordSpan, Kraus.wordSpan] using
+    · simpa [Kraus.wordSpan, Kraus.wordSpan] using
         (wordSpan_eq_top_iff_isNBlkInjective A L₀).mpr hInj
     · intro σ
       simpa [LinearMap.mulRight_apply] using hword σ
@@ -921,7 +921,7 @@ theorem boundary_matrix_commutes {A : MPSTensor d D} [NeZero D]
   choose Y hY using hGS
   -- Matrix equation from wrapping_window_matEq
   have hMatEq := wrapping_window_matEq hA hL hM (by omega) Y (fun τ σ_w => hY τ σ_w)
-  -- Extend to all M₁ via spanning in σ_tail (wordSpan(L-1) = ⊤)
+  -- Extend to all M₁ via spanning in σ_tail (Kraus.wordSpan(L-1) = ⊤)
   have hMatEq2 : ∀ (M₁ : Matrix (Fin D) (Fin D) ℂ) (τ : Fin (M + 1) → Fin d),
       X * M₁ * evalWord A (List.ofFn (fun k : Fin (M + 1 - L) =>
         τ ⟨k.val + L - 1, by omega⟩)) = M₁ * Y τ := by
@@ -932,7 +932,7 @@ theorem boundary_matrix_commutes {A : MPSTensor d D} [NeZero D]
         LinearMap.mulRight ℂ (Y τ) := by
       apply LinearMap.ext_on_range
         (v := fun σ : Fin (L - 1) → Fin d => evalWord A (List.ofFn σ))
-      · simpa [wordSpan, Kraus.wordSpan] using
+      · simpa [Kraus.wordSpan, Kraus.wordSpan] using
           wordSpan_eq_top_of_isInjective hA (by omega : 0 < L - 1)
       · intro σ_tail
         simp only [LinearMap.comp_apply, LinearMap.mulLeft_apply,
@@ -969,7 +969,7 @@ theorem boundary_matrix_commutes {A : MPSTensor d D} [NeZero D]
       have hφ : LinearMap.mulLeft ℂ (X * M₁ - M₁ * X) = 0 := by
         apply LinearMap.ext_on_range
           (v := fun f : Fin (M + 1 - L) → Fin d => evalWord A (List.ofFn f))
-        · simpa [wordSpan, Kraus.wordSpan] using wordSpan_eq_top_of_isInjective hA hML'
+        · simpa [Kraus.wordSpan, Kraus.wordSpan] using wordSpan_eq_top_of_isInjective hA hML'
         · intro f
           simp only [LinearMap.mulLeft_apply, LinearMap.zero_apply]
           let τ₀ : Fin (M + 1) → Fin d := fun k =>

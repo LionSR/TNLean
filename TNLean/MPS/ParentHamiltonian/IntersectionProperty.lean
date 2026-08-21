@@ -229,7 +229,7 @@ theorem groundSpaceMap_injective {A : MPSTensor d D} (hA : IsInjective A)
   have hker : (groundSpaceMap A L).ker = ⊥ := by
     apply (LinearMap.ker_eq_bot').2
     intro X hX
-    have hword1 : wordSpan A 1 = ⊤ := by
+    have hword1 : Kraus.wordSpan A 1 = ⊤ := by
       have hRange :
           Set.range (fun σ : Fin 1 → Fin d => evalWord A (List.ofFn σ)) = Set.range A := by
         ext M
@@ -241,18 +241,18 @@ theorem groundSpaceMap_injective {A : MPSTensor d D} (hA : IsInjective A)
       change Submodule.span ℂ (Set.range fun σ : Fin 1 → Fin d => evalWord A (List.ofFn σ)) = ⊤
       rw [hRange]
       exact hA
-    have hone : (1 : Matrix (Fin D) (Fin D) ℂ) ∈ wordSpan A 1 := by
+    have hone : (1 : Matrix (Fin D) (Fin D) ℂ) ∈ Kraus.wordSpan A 1 := by
       rw [hword1]
       exact Submodule.mem_top
-    have hwordL : wordSpan A L = ⊤ := by
-      have hmono : wordSpan A 1 ≤ wordSpan A L :=
-        wordSpan_mono'_of_one_mem_wordSpan_one A hone (by omega)
+    have hwordL : Kraus.wordSpan A L = ⊤ := by
+      have hmono : Kraus.wordSpan A 1 ≤ Kraus.wordSpan A L :=
+        Kraus.wordSpan_mono'_of_one_mem_wordSpan_one A hone (by omega)
       exact eq_top_iff.mpr (by simpa [hword1] using hmono)
     have hφ :
         (Matrix.traceLinearMap (Fin D) ℂ ℂ).comp (LinearMap.mulRight ℂ X) = 0 := by
       apply LinearMap.ext_on_range
         (v := fun σ : Fin L → Fin d => evalWord A (List.ofFn σ))
-      · simpa [wordSpan, Kraus.wordSpan] using hwordL
+      · simpa [Kraus.wordSpan, Kraus.wordSpan] using hwordL
       · intro σ
         simpa [groundSpaceMap_apply, Matrix.traceLinearMap_apply] using
           congrArg (fun ψ => ψ σ) hX
@@ -268,7 +268,7 @@ theorem groundSpaceMap_injective {A : MPSTensor d D} (hA : IsInjective A)
 /-- If words of length \(L\) span the full matrix algebra, then `groundSpaceMap A L`
 has trivial kernel. -/
 theorem groundSpaceMap_injective_of_wordSpan_eq_top {A : MPSTensor d D}
-    {L : ℕ} (hWord : wordSpan A L = ⊤) :
+    {L : ℕ} (hWord : Kraus.wordSpan A L = ⊤) :
     Function.Injective (groundSpaceMap A L) := by
   have hker : (groundSpaceMap A L).ker = ⊥ := by
     apply (LinearMap.ker_eq_bot').2
@@ -277,7 +277,7 @@ theorem groundSpaceMap_injective_of_wordSpan_eq_top {A : MPSTensor d D}
         (Matrix.traceLinearMap (Fin D) ℂ ℂ).comp (LinearMap.mulRight ℂ X) = 0 := by
       apply LinearMap.ext_on_range
         (v := fun σ : Fin L → Fin d => evalWord A (List.ofFn σ))
-      · simpa [wordSpan, Kraus.wordSpan] using hWord
+      · simpa [Kraus.wordSpan, Kraus.wordSpan] using hWord
       · intro σ
         simpa [groundSpaceMap_apply, Matrix.traceLinearMap_apply] using
           congrArg (fun ψ => ψ σ) hX
