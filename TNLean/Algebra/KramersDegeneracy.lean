@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import Mathlib.Analysis.Matrix.Spectrum
+import Mathlib.Analysis.Normed.Operator.LinearIsometry
 import Mathlib.LinearAlgebra.Dimension.Finite
 import Mathlib.LinearAlgebra.Eigenspace.Matrix
 import Mathlib.LinearAlgebra.LinearIndependent.Lemmas
@@ -14,11 +15,11 @@ import Mathlib.LinearAlgebra.Matrix.DotProduct
 
 Wolf, *Quantum Channels & Operations*, Chapter 3, states Kramers' theorem for a
 Hermitian $H$ commuting with an antiunitary $T$ of square $-1$: every eigenvalue of
-$H$ is at least two-fold degenerate.  Wolf reduces the statement to matrices in the
-same breath: writing $T = \Gamma V$ with $\Gamma$ complex conjugation and $V$ unitary,
-the commutation $[H, T] = 0$ becomes $H V^\dagger = V^\dagger H^T$ and the condition
-$T^2 = -1$ becomes antisymmetry $V^T = -V$.  This file formalizes Wolf's reduced
-matrix form, which is what his printed proof actually manipulates.
+$H$ is at least two-fold degenerate. Wolf then reduces the statement to matrices:
+writing $T = \Gamma V$ with $\Gamma$ complex conjugation and $V$ unitary, the
+commutation $[H, T] = 0$ becomes $H V^\dagger = V^\dagger H^T$ and the condition
+$T^2 = -1$ becomes antisymmetry $V^T = -V$. This file formalizes both the printed
+antiunitary theorem and Wolf's reduced matrix form.
 
 Degeneracy is expressed as `2 ≤ Module.finrank ℂ (Module.End.eigenspace H.toLin' μ)`.
 Wolf's proof exhibits two orthogonal eigenvectors for the same eigenvalue, so the
@@ -34,6 +35,8 @@ lost against the phrase "two-fold degenerate".
   eigenvectors for one eigenvalue bound the eigenspace dimension below by two.
 * `Matrix.IsHermitian.two_le_finrank_eigenspace_of_antisymmetric_unitary`: Kramers'
   theorem in Wolf's matrix form.
+* `Matrix.IsHermitian.two_le_finrank_eigenspace_of_antiunitary`: Kramers' theorem
+  with Wolf's antiunitary hypotheses.
 
 ## References
 
@@ -162,5 +165,65 @@ theorem two_le_finrank_eigenspace_of_antisymmetric_unitary {H V : Matrix n n ℂ
     Matrix.dotProduct_mulVec_self_eq_zero_of_transpose_eq_neg hVHanti (star ψ)
   exact Matrix.two_le_finrank_eigenspace_of_linearIndependent_pair hψ hφ
     (Matrix.linearIndependent_pair_of_dotProduct_star_eq_zero hψne hφne horth)
+
+/-- **Kramers' theorem** in Wolf's printed antiunitary form.
+
+Let $H$ be Hermitian and let $T$ be antiunitary. If $H$ commutes with $T$ and
+$T^2=-\Id$, then every eigenspace of $H$ has dimension at least two. Here
+antiunitarity is represented by a conjugate-linear isometric equivalence; the two
+operator identities are stated pointwise, without choosing a matrix factorization
+of $T$.
+
+Indeed, if $H\psi=\mu\psi$, then Hermiticity makes $\mu$ real and commutation gives
+$H(T\psi)=\mu T\psi$. The vectors $\psi$ and $T\psi$ are independent: a relation
+$T\psi=a\psi$ would imply $-\psi=T^2\psi=\overline a a\psi$, contradicting
+$\overline a a=|a|^2\geq 0$.
+
+Source: Wolf, *Quantum Channels & Operations*, Chapter 3, Kramers' theorem;
+`Notes/WolfNoteTexSource/ch03_positive_not_completely.tex`, lines 500--505. -/
+theorem two_le_finrank_eigenspace_of_antiunitary
+    {H : Matrix n n ℂ} (hH : H.IsHermitian)
+    (T : (n → ℂ) ≃ₗᵢ⋆[ℂ] (n → ℂ))
+    (hcomm : ∀ ψ, H *ᵥ T ψ = T (H *ᵥ ψ))
+    (hsq : ∀ ψ, T (T ψ) = -ψ)
+    {μ : ℂ} (hμ : Module.End.HasEigenvalue (Matrix.toLin' H) μ) :
+    2 ≤ Module.finrank ℂ (Module.End.eigenspace (Matrix.toLin' H) μ) := by
+  obtain ⟨ψ, hψmem, hψne⟩ := hμ.exists_hasEigenvector
+  have hψ : H *ᵥ ψ = μ • ψ := by
+    have := Module.End.mem_eigenspace_iff.mp hψmem
+    rwa [Matrix.toLin'_apply] at this
+  have hconj : star μ = μ := by
+    simpa using conj_eq_self_of_hasEigenvalue hH hμ
+  let φ : n → ℂ := T ψ
+  have hφ : H *ᵥ φ = μ • φ := by
+    calc
+      H *ᵥ φ = T (H *ᵥ ψ) := hcomm ψ
+      _ = T (μ • ψ) := by rw [hψ]
+      _ = star μ • φ := T.map_smulₛₗ μ ψ
+      _ = μ • φ := by rw [hconj]
+  have hφne : φ ≠ 0 := by
+    intro hzero
+    apply hψne
+    exact T.injective (by simpa [φ] using hzero)
+  have hLI : LinearIndependent ℂ ![ψ, φ] := by
+    rw [LinearIndependent.pair_iff' hψne]
+    intro a ha
+    have hscalar : star a * a = -1 := by
+      apply smul_left_injective ℂ hψne
+      calc
+        (star a * a) • ψ = star a • a • ψ := by rw [smul_smul]
+        _ = star a • φ := by rw [ha]
+        _ = T (a • ψ) := by
+          simpa [φ] using (T.map_smulₛₗ a ψ).symm
+        _ = T φ := by rw [ha]
+        _ = -ψ := hsq ψ
+        _ = (-1 : ℂ) • ψ := by simp
+    have hnormSq : (Complex.normSq a : ℂ) = -1 := by
+      rw [Complex.normSq_eq_conj_mul_self]
+      exact hscalar
+    have hre := congrArg Complex.re hnormSq
+    norm_num at hre
+    exact (not_lt_of_ge (Complex.normSq_nonneg a)) (by linarith)
+  exact Matrix.two_le_finrank_eigenspace_of_linearIndependent_pair hψ hφ hLI
 
 end Matrix.IsHermitian
