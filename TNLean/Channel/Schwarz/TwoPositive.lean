@@ -77,7 +77,7 @@ so the theorem here applies strictly beyond the CP case.
 open scoped Matrix ComplexOrder MatrixOrder BigOperators
 open Matrix Finset
 
-variable {n : Type*} [Fintype n] [DecidableEq n]
+variable {n p : Type*} [Fintype n] [DecidableEq n]
 
 /-- The equivalence `α × Fin 2 ≃ α ⊕ α` that sends `(a, 0)` to `Sum.inl a`
 and `(a, 1)` to `Sum.inr a`.  Used to reindex block matrices between the
@@ -114,8 +114,8 @@ theorem finTwoSumEquiv_symm_inr {α : Type*} (a : α) :
 
 /-! ## Definitions of n-positivity -/
 
-/-- A linear map `E : M_n(ℂ) → M_n(ℂ)` is **k-positive** if the ampliation
-`E ⊗ id_k : M_n(ℂ) ⊗ M_k(ℂ) → M_n(ℂ) ⊗ M_k(ℂ)` is a positive map.
+/-- A linear map `E : M_n(ℂ) → M_p(ℂ)` is **k-positive** if the ampliation
+`E ⊗ id_k : M_n(ℂ) ⊗ M_k(ℂ) → M_p(ℂ) ⊗ M_k(ℂ)` is a positive map.
 
 We represent `M_n(ℂ) ⊗ M_k(ℂ)` as `M_{n×k}(ℂ)` via the Kronecker product
 identification, and the ampliation acts blockwise:
@@ -128,27 +128,30 @@ matches the block-matrix arguments used in `KadisonSchwarz.lean`. A
 definition but would require additional formalization to connect with the
 existing Kraus-based proofs.
 
-**Index convention**: We use `(n × Fin k)` indexing where `n` is the inner
-(algebra) index and `Fin k` is the outer (ampliation) index. This is the
-transpose of the standard Kronecker convention `(Fin k × n)`, but is
-mathematically equivalent (PSD-ness is invariant under simultaneous row/column
-permutation). -/
-def IsNPositiveMap (k : ℕ) (E : Matrix n n ℂ →ₗ[ℂ] Matrix n n ℂ) : Prop :=
+**Index convention**: The domain uses `(n × Fin k)` and the codomain uses
+`(p × Fin k)`, with the matrix-algebra index first and the ampliation index
+second. This is the transpose of the standard Kronecker convention, and is
+equivalent to it by simultaneous row and column permutation.
+
+This is Wolf, *Quantum Channels & Operations*, Chapter 3, Section 3.1. -/
+def IsNPositiveMap (k : ℕ) (E : Matrix n n ℂ →ₗ[ℂ] Matrix p p ℂ) : Prop :=
   ∀ X : Matrix (n × Fin k) (n × Fin k) ℂ,
     X.PosSemidef →
-    (Matrix.of fun (ip : n × Fin k) (jq : n × Fin k) =>
+    (Matrix.of fun (ip : p × Fin k) (jq : p × Fin k) =>
       (E (Matrix.of fun i j => X (i, ip.2) (j, jq.2))) ip.1 jq.1).PosSemidef
 
-/-- A linear map is **2-positive** if `E ⊗ id₂` is positive. -/
-def Is2PositiveMap (E : Matrix n n ℂ →ₗ[ℂ] Matrix n n ℂ) : Prop :=
+/-- A linear map is **2-positive** if `E ⊗ id₂` is positive; see Wolf,
+*Quantum Channels & Operations*, Chapter 3, Section 3.1. -/
+def Is2PositiveMap (E : Matrix n n ℂ →ₗ[ℂ] Matrix p p ℂ) : Prop :=
   IsNPositiveMap 2 E
 
 /-- The explicit blockwise ampliation `E ⊗ id_k` used in the definition of
-`k`-positivity. -/
-def nPositiveAmpliation (k : ℕ) (E : Matrix n n ℂ →ₗ[ℂ] Matrix n n ℂ) :
+`k`-positivity from Wolf, *Quantum Channels & Operations*, Chapter 3,
+Section 3.1. -/
+def nPositiveAmpliation (k : ℕ) (E : Matrix n n ℂ →ₗ[ℂ] Matrix p p ℂ) :
     Matrix (n × Fin k) (n × Fin k) ℂ →ₗ[ℂ]
-      Matrix (n × Fin k) (n × Fin k) ℂ where
-  toFun X := Matrix.of fun (ip : n × Fin k) (jq : n × Fin k) =>
+      Matrix (p × Fin k) (p × Fin k) ℂ where
+  toFun X := Matrix.of fun (ip : p × Fin k) (jq : p × Fin k) =>
     (E (Matrix.of fun i j => X (i, ip.2) (j, jq.2))) ip.1 jq.1
   map_add' X Y := by
     ext ip jq
@@ -166,7 +169,7 @@ def nPositiveAmpliation (k : ℕ) (E : Matrix n n ℂ →ₗ[ℂ] Matrix n n ℂ
 omit [Fintype n] [DecidableEq n] in
 /-- The definition of `k`-positivity is positivity of the blockwise ampliation. -/
 theorem isNPositiveMap_iff_isPositiveMap_nPositiveAmpliation
-    (k : ℕ) (E : Matrix n n ℂ →ₗ[ℂ] Matrix n n ℂ) :
+    (k : ℕ) (E : Matrix n n ℂ →ₗ[ℂ] Matrix p p ℂ) :
     IsNPositiveMap k E ↔ IsPositiveMap (nPositiveAmpliation k E) := by
   rfl
 
@@ -176,7 +179,7 @@ Operations*, Proposition 3.1: `k`-positivity can be tested on pure states of the
 ampliated system. -/
 theorem isNPositiveMap_iff_forall_ampliation_rank_one_posSemidef
     [Finite n]
-    (k : ℕ) (E : Matrix n n ℂ →ₗ[ℂ] Matrix n n ℂ) :
+    (k : ℕ) (E : Matrix n n ℂ →ₗ[ℂ] Matrix p p ℂ) :
     IsNPositiveMap k E ↔
       ∀ φ : n × Fin k → ℂ,
         (nPositiveAmpliation k E (Matrix.vecMulVec φ (star φ))).PosSemidef := by
@@ -199,7 +202,7 @@ theorem isNPositiveMap_iff_forall_ampliation_rank_one_posSemidef
 omit [Fintype n] [DecidableEq n] in
 /-- One-positive maps are exactly positive maps. -/
 theorem isNPositiveMap_one_iff_isPositiveMap
-    {E : Matrix n n ℂ →ₗ[ℂ] Matrix n n ℂ} :
+    {E : Matrix n n ℂ →ₗ[ℂ] Matrix p p ℂ} :
     IsNPositiveMap 1 E ↔ IsPositiveMap E := by
   constructor
   · intro hE X hX
@@ -210,7 +213,7 @@ theorem isNPositiveMap_one_iff_isPositiveMap
       ext ip jq
       rfl
     have hY := hE X' hX'
-    let emb : n → n × Fin 1 := fun i => (i, 0)
+    let emb : p → p × Fin 1 := fun i => (i, 0)
     convert hY.submatrix emb using 1
     ext i j
     simp only [emb, X', Matrix.submatrix_apply, Matrix.of_apply]
@@ -218,17 +221,18 @@ theorem isNPositiveMap_one_iff_isPositiveMap
   · intro hE
     rw [isNPositiveMap_iff_isPositiveMap_nPositiveAmpliation]
     intro X hX
-    let e : n × Fin 1 ≃ n := Equiv.prodUnique n (Fin 1)
-    have hY : (Matrix.of fun (ip : n × Fin 1) (jq : n × Fin 1) =>
+    let eIn : n × Fin 1 ≃ n := Equiv.prodUnique n (Fin 1)
+    let eOut : p × Fin 1 ≃ p := Equiv.prodUnique p (Fin 1)
+    have hY : (Matrix.of fun (ip : p × Fin 1) (jq : p × Fin 1) =>
         E (Matrix.of fun i j => X (i, 0) (j, 0)) ip.1 jq.1).PosSemidef := by
       have hblock : (Matrix.of fun i j => X (i, 0) (j, 0)).PosSemidef := by
-        convert hX.submatrix e.symm using 1
+        convert hX.submatrix eIn.symm using 1
         ext i j
-        simp [e]
+        simp [eIn]
       have hEblock := hE _ hblock
-      convert hEblock.submatrix e using 1
+      convert hEblock.submatrix eOut using 1
       ext ip jq
-      simp [e]
+      simp [eOut]
     convert hY using 1
     ext ip jq
     have hip : ip.2 = 0 := Subsingleton.elim ip.2 0
@@ -654,9 +658,11 @@ omit [DecidableEq n] [Fintype n] in
 /-- 2-positive maps are positive.
 
 Apply the definition with `k = 1` embedded into `k = 2`: given PSD `X`,
-embed it as `diag(X, 0)` in `M_n ⊗ M_2`, apply 2-positivity to get PSD
-output, then extract the (0,0)-block which equals `E(X)`. -/
-theorem Is2PositiveMap.isPositiveMap {E : Matrix n n ℂ →ₗ[ℂ] Matrix n n ℂ}
+embed it as `diag(X, 0)` in the ampliated domain, apply 2-positivity, and
+extract the `(0,0)` block of the ampliated codomain, which equals `E(X)`.
+This is the positivity consequence used in Wolf, *Quantum Channels &
+Operations*, Theorem 5.3. -/
+theorem Is2PositiveMap.isPositiveMap {E : Matrix n n ℂ →ₗ[ℂ] Matrix p p ℂ}
     (h : Is2PositiveMap E) : IsPositiveMap E := by
   intro X hX
   let e : n × Fin 2 ≃ n ⊕ n := finTwoSumEquiv n
@@ -667,7 +673,7 @@ theorem Is2PositiveMap.isPositiveMap {E : Matrix n n ℂ →ₗ[ℂ] Matrix n n 
       posSemidef_fromBlocks_zero_zero hX
     simpa [X', Matrix.reindex_apply] using hdiag.submatrix e
   have hY' := h X' hX'
-  let emb : n → n × Fin 2 := fun i => (i, 0)
+  let emb : p → p × Fin 2 := fun i => (i, 0)
   convert hY'.submatrix emb using 1
   ext i j
   simp [emb, X', Matrix.reindex_apply, e]

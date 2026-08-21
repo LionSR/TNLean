@@ -394,8 +394,9 @@ positivity.
     \lean{SchwarzTwoVariable.schwarz_two_variable}
     \leanok
     \uses{def:2positive_map}
-    Let $E:\MN{D}\to\MN{D}$ be a $2$-positive complex-linear map.
-    For every $A,B\in\MN{D}$ and all vectors $v,w$ such that
+    Let $E:\MN{D_{\rm in}}\to\MN{D_{\rm out}}$ be a $2$-positive
+    complex-linear map. For every $A,B\in\MN{D_{\rm in}}$ and all vectors
+    $v,w\in\mathbb C^{D_{\rm out}}$ such that
     $E(B^\dagger B)\,w = E(B^\dagger A)\,v$, we have
     \begin{align}
         v^\dagger\,E(A^\dagger A)\,v
@@ -430,8 +431,8 @@ positivity.
     \lean{SchwarzTwoVariable.map_EBA_eq_conjTranspose_EAB}
     \leanok
     \uses{def:2positive_map}
-    Let $E:\MN{D}\to\MN{D}$ be a $2$-positive complex-linear map. For every
-    $A,B\in\MN{D}$,
+    Let $E:\MN{D_{\rm in}}\to\MN{D_{\rm out}}$ be a $2$-positive
+    complex-linear map. For every $A,B\in\MN{D_{\rm in}}$,
     \begin{align}
         E(B^\dagger A) & = E(A^\dagger B)^\dagger.
         \notag
@@ -449,8 +450,9 @@ positivity.
     \lean{SchwarzTwoVariable.ker_EBB_le_ker_EAB}
     \leanok
     \uses{def:2positive_map, thm:map_EBA_eq_conjTranspose_EAB}
-    Let $E:\MN{D}\to\MN{D}$ be a $2$-positive complex-linear map. For every
-    $A,B\in\MN{D}$, $\ker(E(B^\dagger B))\subseteq\ker(E(A^\dagger B))$.
+    Let $E:\MN{D_{\rm in}}\to\MN{D_{\rm out}}$ be a $2$-positive
+    complex-linear map. For every $A,B\in\MN{D_{\rm in}}$,
+    $\ker(E(B^\dagger B))\subseteq\ker(E(A^\dagger B))$.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -471,8 +473,8 @@ positivity.
     \lean{SchwarzTwoVariable.EBB_mul_pinv_mul_EBA_eq}
     \leanok
     \uses{def:2positive_map, def:pinv, thm:ker_EBB_le_ker_EAB}
-    Let $E:\MN{D}\to\MN{D}$ be a $2$-positive complex-linear map. For every
-    $A,B\in\MN{D}$,
+    Let $E:\MN{D_{\rm in}}\to\MN{D_{\rm out}}$ be a $2$-positive
+    complex-linear map. For every $A,B\in\MN{D_{\rm in}}$,
     \begin{align}
         E(B^\dagger B)\bigl(E(B^\dagger B)^{+}E(B^\dagger A)\bigr)
          & = E(B^\dagger A).
@@ -493,17 +495,17 @@ positivity.
     \lean{SchwarzTwoVariable.schwarz_two_variable_unconditional}
     \leanok
     \uses{def:2positive_map, def:pinv}
-    Let $E:\MN{D}\to\MN{D}$ be a $2$-positive complex-linear map. For every
-    $A,B\in\MN{D}$,
+    Let $E:\MN{D_{\rm in}}\to\MN{D_{\rm out}}$ be a $2$-positive
+    complex-linear map. For every $A,B\in\MN{D_{\rm in}}$,
     \begin{align}
         E(A^\dagger B)\,E(B^\dagger B)^{+}\,E(B^\dagger A)
          & \le E(A^\dagger A),
         \notag
     \end{align}
     where $(\cdot)^+$ is the Moore--Penrose pseudoinverse, i.e.\ the
-    inverse taken on the range. This is the equal-dimensional specialization
-    of \cite[Eq.~(5.4)]{Wolf2012Quantum}, unconditional: no vector is assumed
-    to exist. The cited theorem permits different input and output dimensions.
+    inverse taken on the range. This is \cite[Eq.~(5.4)]{Wolf2012Quantum},
+    with its independent input and output dimensions and without an assumed
+    witness vector.
 \end{theorem}
 
 \begin{proof}\leanok

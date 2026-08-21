@@ -12,8 +12,10 @@ rank-$k$ projection forms of the same condition.
 \begin{definition}[$k$-positive map]\label{def:k_positive_map}
     \lean{IsNPositiveMap}
     \leanok
-    A linear map $E : \MN{D} \to \MN{D}$ is $k$-positive if
-    $E \otimes \id_{k}$ is positive on $\MN{D} \otimes \MN{k}$.
+    A linear map $E : \MN{D_{\rm in}} \to \MN{D_{\rm out}}$ is $k$-positive
+    if $E \otimes \id_{k}$ is positive from
+    $\MN{D_{\rm in}} \otimes \MN{k}$ to
+    $\MN{D_{\rm out}} \otimes \MN{k}$.
 \end{definition}
 
 \begin{definition}[Two-positive map]
