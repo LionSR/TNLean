@@ -126,8 +126,9 @@ duality used by the positive-retraction and fixed-point arguments.
     \lean{IsPositiveMap.traceAdjointMap}
     \leanok
     \uses{def:trace_pairing_adjoint, thm:psd_trace_pairing_self_dual}
-    If $E : \MN{D}\to\MN{D}$ is positive, then its trace-pairing adjoint $E^*$
-    is positive.
+    If $E : \MN{D}\to\MN{D'}$ is positive, then its
+    trace-pairing adjoint
+    $E^* : \MN{D'}\to\MN{D}$ is positive.
 \end{theorem}
 
 \begin{proof}
@@ -155,8 +156,9 @@ duality used by the positive-retraction and fixed-point arguments.
     \lean{isPositiveMap_traceAdjointMap_iff}
     \leanok
     \uses{thm:trace_pairing_adjoint_positive, thm:trace_pairing_adjoint_involutive}
-    A linear map is positive if and only if its trace-pairing adjoint is
-    positive.
+    A linear map $E:\MN{D}\to\MN{D'}$ is positive if and
+    only if its trace-pairing adjoint
+    $E^*:\MN{D'}\to\MN{D}$ is positive.
 \end{theorem}
 
 \begin{proof}

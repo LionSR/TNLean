@@ -11,7 +11,8 @@ import Mathlib.Data.Matrix.Block
 # Two-variable operator Schwarz inequality
 
 This file proves the two-variable operator Schwarz inequality for 2-positive
-linear maps (Wolf, Theorem 5.3).
+linear maps between matrix algebras of independent finite dimensions (Wolf,
+Theorem 5.3).
 
 ## Main results
 
@@ -33,16 +34,17 @@ open Matrix Finset Complex
 
 namespace SchwarzTwoVariable
 
-variable {n : Type*} [Fintype n] [DecidableEq n]
+variable {m n : Type*} [Fintype m] [DecidableEq m] [Fintype n] [DecidableEq n]
 
-local notation "Mat" => Matrix n n ℂ
+local notation "MatIn" => Matrix m m ℂ
+local notation "MatOut" => Matrix n n ℂ
 
-omit [DecidableEq n] in
+omit [DecidableEq m] in
 /-- The block matrix `C†C` for `C = [A B]` (horizontal concatenation) is PSD. -/
-lemma blockMatrix_CtC_posSemidef (A B : Mat) :
+lemma blockMatrix_CtC_posSemidef (A B : MatIn) :
     (Matrix.fromBlocks (Aᴴ * A) (Aᴴ * B) (Bᴴ * A) (Bᴴ * B) :
-      Matrix (n ⊕ n) (n ⊕ n) ℂ).PosSemidef := by
-  let C : Matrix n (n ⊕ n) ℂ := fun i j =>
+      Matrix (m ⊕ m) (m ⊕ m) ℂ).PosSemidef := by
+  let C : Matrix m (m ⊕ m) ℂ := fun i j =>
     match j with
     | Sum.inl a => A i a
     | Sum.inr b => B i b
@@ -62,29 +64,30 @@ lemma blockMatrix_CtC_posSemidef (A B : Mat) :
 
 /-! ### 2-positivity ampliation of the block matrix -/
 
-omit [DecidableEq n] in
+omit [DecidableEq m] [Fintype n] [DecidableEq n] in
 /-- The 2-positivity ampliation applied to the block matrix `C†C` yields a PSD
 `2×2` block matrix of the form `[[E(A†A), E(A†B)], [E(B†A), E(B†B)]]`. -/
-lemma ampliated_block_matrix_posSemidef (E : Mat →ₗ[ℂ] Mat) (h2pos : Is2PositiveMap E)
-    (A B : Mat) :
+lemma ampliated_block_matrix_posSemidef
+    (E : MatIn →ₗ[ℂ] MatOut) (h2pos : Is2PositiveMap E) (A B : MatIn) :
     (Matrix.fromBlocks (E (Aᴴ * A)) (E (Aᴴ * B)) (E (Bᴴ * A)) (E (Bᴴ * B)) :
       Matrix (n ⊕ n) (n ⊕ n) ℂ).PosSemidef := by
-  let P : Matrix (n ⊕ n) (n ⊕ n) ℂ :=
+  let P : Matrix (m ⊕ m) (m ⊕ m) ℂ :=
     Matrix.fromBlocks (Aᴴ * A) (Aᴴ * B) (Bᴴ * A) (Bᴴ * B)
   have hP : P.PosSemidef := blockMatrix_CtC_posSemidef A B
-  let e : n × Fin 2 ≃ n ⊕ n := finTwoSumEquiv n
-  let P' : Matrix (n × Fin 2) (n × Fin 2) ℂ := Matrix.reindex e.symm e.symm P
+  let eIn : m × Fin 2 ≃ m ⊕ m := finTwoSumEquiv m
+  let P' : Matrix (m × Fin 2) (m × Fin 2) ℂ := Matrix.reindex eIn.symm eIn.symm P
   have hP' : P'.PosSemidef := by
-    simpa [P', Matrix.reindex_apply] using hP.submatrix e
+    simpa [P', Matrix.reindex_apply] using hP.submatrix eIn
   have hY' := h2pos P' hP'
   set Y : Matrix (n × Fin 2) (n × Fin 2) ℂ :=
     Matrix.of fun (ip : n × Fin 2) (jq : n × Fin 2) =>
       (E (Matrix.of fun i j => P' (i, ip.2) (j, jq.2))) ip.1 jq.1
     with hY_def
   have hY_psd : Y.PosSemidef := hY'
-  let Q : Matrix (n ⊕ n) (n ⊕ n) ℂ := Matrix.reindex e e Y
+  let eOut : n × Fin 2 ≃ n ⊕ n := finTwoSumEquiv n
+  let Q : Matrix (n ⊕ n) (n ⊕ n) ℂ := Matrix.reindex eOut eOut Y
   have hQ_psd : Q.PosSemidef := by
-    have hsub := hY_psd.submatrix e.symm
+    have hsub := hY_psd.submatrix eOut.symm
     simpa [Q, Matrix.reindex_apply, Matrix.submatrix_apply] using hsub
   have hP'Block (p q : Fin 2) :
       Matrix.of (fun i j => P' (i, p) (j, q)) =
@@ -94,21 +97,22 @@ lemma ampliated_block_matrix_posSemidef (E : Mat →ₗ[ℂ] Mat) (h2pos : Is2Po
         | 1, 0 => Bᴴ * A
         | 1, 1 => Bᴴ * B := by
     fin_cases p <;> fin_cases q <;>
-      ext i j <;> simp [P', Matrix.reindex_apply, P, e, finTwoSumEquiv, finTwoEquiv]
+      ext i j <;> simp [P', Matrix.reindex_apply, P, eIn, finTwoSumEquiv, finTwoEquiv]
   have hQ_eq : Q =
       Matrix.fromBlocks (E (Aᴴ * A)) (E (Aᴴ * B)) (E (Bᴴ * A)) (E (Bᴴ * B)) := by
     ext i j
     rcases i with (i | i) <;> rcases j with (j | j) <;>
-      simp [Q, Y, hP'Block, e, Matrix.reindex_apply, Matrix.submatrix_apply, Matrix.of_apply]
+      simp [Q, Y, hP'Block, eOut, Matrix.reindex_apply, Matrix.submatrix_apply,
+        Matrix.of_apply]
   rw [hQ_eq] at hQ_psd
   exact hQ_psd
 
 /-! ### Real-valued auxiliary lemmas -/
 
 -- (Uses `linear_eq_zero_of_quadratic_nonneg` from AbstractMultiplicativeDomain)
-omit [DecidableEq n] in
+omit [DecidableEq m] [DecidableEq n] in
 /-- A complex number `z† A z` for a PSD matrix `A` is nonnegative. -/
-private lemma dotProduct_mulVec_nonneg_of_posSemidef_block {A C B : Mat}
+private lemma dotProduct_mulVec_nonneg_of_posSemidef_block {A C B : MatOut}
     (h : (Matrix.fromBlocks A C Cᴴ B : Matrix (n ⊕ n) (n ⊕ n) ℂ).PosSemidef)
     (z : n → ℂ) :
     0 ≤ star z ⬝ᵥ (A.mulVec z) := by
@@ -127,7 +131,7 @@ omit [DecidableEq n] in
 
 For M = [[A, B], [C, D]] and x = (v, w), we have
 x† M x = v†A v + v†B w + w†C v + w†D w. -/
-private lemma fromBlocks_quadratic_form {A B C D : Mat} (v w : n → ℂ) :
+private lemma fromBlocks_quadratic_form {A B C D : MatOut} (v w : n → ℂ) :
     star (Sum.elim v w) ⬝ᵥ ((Matrix.fromBlocks A B C D).mulVec (Sum.elim v w)) =
     star v ⬝ᵥ (A.mulVec v) + star v ⬝ᵥ (B.mulVec w) +
     star w ⬝ᵥ (C.mulVec v) + star w ⬝ᵥ (D.mulVec w) := by
@@ -157,7 +161,7 @@ and Schur complements): the kernel of the bottom-right block is contained in
 the kernel of the off-diagonal block. It is the Schur-complement fact
 underlying the range-inclusion and well-definedness steps of the two-variable
 Schwarz inequality. -/
-lemma ker_inclusion_of_fromBlocks_posSemidef {A C B : Mat}
+lemma ker_inclusion_of_fromBlocks_posSemidef {A C B : MatOut}
     (h : (Matrix.fromBlocks A C Cᴴ B : Matrix (n ⊕ n) (n ⊕ n) ℂ).PosSemidef)
     (y : n → ℂ) (hy : B.mulVec y = 0) : C.mulVec y = 0 := by
   set z := C.mulVec y with hz_def
@@ -262,7 +266,7 @@ satisfying `Bmat * w = CstarMat * v`, the quadratic form yields
 `v† Amat v ≥ v† Cmat w`.  When the block matrix is Hermitian (as it is when PSD),
 `CstarMat = Cmat†` and this specializes to Wolf's Schur complement
 characterization (Theorem 5.2). -/
-lemma schwarz_inequality_of_fromBlocks_posSemidef {Amat Cmat CstarMat Bmat : Mat}
+lemma schwarz_inequality_of_fromBlocks_posSemidef {Amat Cmat CstarMat Bmat : MatOut}
     (h : (Matrix.fromBlocks Amat Cmat CstarMat Bmat :
       Matrix (n ⊕ n) (n ⊕ n) ℂ).PosSemidef)
     (v w : n → ℂ) (hwB : Bmat.mulVec w = CstarMat.mulVec v) :
@@ -296,16 +300,18 @@ lemma schwarz_inequality_of_fromBlocks_posSemidef {Amat Cmat CstarMat Bmat : Mat
 
 /-! ### Main theorem -/
 
-omit [DecidableEq n] in
+omit [DecidableEq m] [DecidableEq n] in
 /-- **Two-variable operator Schwarz inequality** (Wolf, Theorem 5.3).
 
-For a 2-positive linear map `E` and all matrices `A, B`, for all vectors `v, w`
-with `E(B†B) w = E(B†A) v`, we have `v† E(A†A) v ≥ v† E(A†B) w`.
+For a 2-positive linear map `E : M_m(ℂ) → M_n(ℂ)`, matrices `A, B ∈ M_m(ℂ)`,
+and vectors `v, w ∈ ℂⁿ` with `E(B†B) w = E(B†A) v`, we have
+`v† E(A†A) v ≥ v† E(A†B) w`.
 
 This is the pseudoinverse-free formulation of Wolf's Eq. (5.4):
 `E(A†B) E(B†B)⁻¹ E(B†A) ≤ E(A†A)` where the inverse is taken on the range. -/
-theorem schwarz_two_variable (E : Mat →ₗ[ℂ] Mat) (h2pos : Is2PositiveMap E)
-    (A B : Mat) (v w : n → ℂ) (hw : (E (Bᴴ * B)).mulVec w = (E (Bᴴ * A)).mulVec v) :
+theorem schwarz_two_variable (E : MatIn →ₗ[ℂ] MatOut) (h2pos : Is2PositiveMap E)
+    (A B : MatIn) (v w : n → ℂ)
+    (hw : (E (Bᴴ * B)).mulVec w = (E (Bᴴ * A)).mulVec v) :
     star v ⬝ᵥ ((E (Aᴴ * A)).mulVec v) ≥ star v ⬝ᵥ ((E (Aᴴ * B)).mulVec w) := by
   have h_block_psd := ampliated_block_matrix_posSemidef E h2pos A B
   exact schwarz_inequality_of_fromBlocks_posSemidef h_block_psd v w hw
