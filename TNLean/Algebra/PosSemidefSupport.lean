@@ -153,9 +153,10 @@ theorem mul_supportProj_self (hA : A.IsHermitian) : A * hA.supportProj = A := by
 matrix \(B\), then the support projection of \(A\) absorbs \(B\) on the
 right. -/
 theorem mul_supportProj_eq_self_of_mulVec_kernel_le
-    (hA : A.IsHermitian) {B : Matrix n n ℂ}
+    {m : Type*} [Finite m] (hA : A.IsHermitian) {B : Matrix m n ℂ}
     (hker : ∀ v : n → ℂ, A *ᵥ v = 0 → B *ᵥ v = 0) :
     B * hA.supportProj = B := by
+  let := Fintype.ofFinite m
   have hAcomp : A * (1 - hA.supportProj) = 0 := by
     rw [Matrix.mul_sub, Matrix.mul_one, hA.mul_supportProj_self, sub_self]
   have hBcomp : B * (1 - hA.supportProj) = 0 := by
